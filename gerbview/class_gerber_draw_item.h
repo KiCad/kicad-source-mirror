@@ -221,7 +221,7 @@ public:
      * Function DrawGbrPoly
      * a helper function used to draw the polygon stored in m_PolyCorners
      */
-    void DrawGbrPoly( EDA_RECT* aClipBox, wxDC* aDC, EDA_COLOR_T aColor,
+    void DrawGbrPoly( EDA_RECT* aClipBox, wxDC* aDC, COLOR4D aColor,
                       const wxPoint& aOffset, bool aFilledShape );
 
     /* divers */

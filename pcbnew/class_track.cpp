@@ -546,7 +546,7 @@ TRACK* TRACK::GetEndNetCode( int NetCode )
 }
 
 void TRACK::DrawShortNetname( EDA_DRAW_PANEL* panel,
-        wxDC* aDC, GR_DRAWMODE aDrawMode, EDA_COLOR_T aBgColor )
+        wxDC* aDC, GR_DRAWMODE aDrawMode, COLOR4D aBgColor )
 {
     if( ! panel )
         return;
@@ -636,8 +636,8 @@ void TRACK::DrawShortNetname( EDA_DRAW_PANEL* panel,
 void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
                   const wxPoint& aOffset )
 {
-    BOARD * brd = GetBoard( );
-    EDA_COLOR_T color = brd->GetLayerColor(m_Layer);
+    BOARD* brd = GetBoard();
+    COLOR4D color = brd->GetLayerColor( m_Layer );
 
     if( brd->IsLayerVisible( m_Layer ) == false && !( aDrawMode & GR_HIGHLIGHT ) )
         return;
@@ -655,15 +655,13 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
         if( !IsOnLayer( curr_layer ) )
-            ColorTurnToDarkDarkGray( &color );
+            color = COLOR4D( DARKDARKGRAY );
     }
 
-    if( aDrawMode & GR_HIGHLIGHT )
-        ColorChangeHighlightFlag( &color, !(aDrawMode & GR_AND) );
+    if( ( aDrawMode & GR_HIGHLIGHT ) && !( aDrawMode & GR_AND ) )
+        color.SetToLegacyHighlightColor();
 
-    ColorApplyHighlightFlag( &color );
-
-    SetAlpha( &color, 150 );
+    color.a = 0.588;
 
     GRSetDrawMode( aDC, aDrawMode );
 
@@ -708,8 +706,8 @@ void SEGZONE::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     if( displ_opts->m_DisplayZonesMode != 0 )
         return;
 
-    BOARD * brd = GetBoard( );
-    EDA_COLOR_T color = brd->GetLayerColor(m_Layer);
+    BOARD* brd = GetBoard();
+    COLOR4D color = brd->GetLayerColor( m_Layer );
 
     if( brd->IsLayerVisible( m_Layer ) == false && !( aDrawMode & GR_HIGHLIGHT ) )
         return;
@@ -725,15 +723,13 @@ void SEGZONE::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
         if( !IsOnLayer( curr_layer ) )
-            ColorTurnToDarkDarkGray( &color );
+            color = COLOR4D( DARKDARKGRAY );
     }
 
-    if( aDrawMode & GR_HIGHLIGHT )
-        ColorChangeHighlightFlag( &color, !(aDrawMode & GR_AND) );
+    if( ( aDrawMode & GR_HIGHLIGHT ) && !( aDrawMode & GR_AND ) )
+        color.SetToLegacyHighlightColor();
 
-    ColorApplyHighlightFlag( &color );
-
-    SetAlpha( &color, 150 );
+    color.a = 0.588;
 
     GRSetDrawMode( aDC, aDrawMode );
 
@@ -800,11 +796,11 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
     GRSetDrawMode( aDC, aDrawMode );
 
     BOARD * brd =  GetBoard();
-    EDA_COLOR_T color = brd->GetVisibleElementColor( VIAS_VISIBLE + GetViaType() );
+    COLOR4D color = brd->GetVisibleElementColor( VIAS_VISIBLE + GetViaType() );
 
     if( brd->IsElementVisible( PCB_VISIBLE(VIAS_VISIBLE + GetViaType()) ) == false
-        && ( color & HIGHLIGHT_FLAG ) != HIGHLIGHT_FLAG )
-        return;
+        && !( aDrawMode & GR_HIGHLIGHT ) )
+       return;
 
     // Only draw the via if at least one of the layers it crosses is being displayed
     if( !( brd->GetVisibleLayers() & GetLayerSet() ).any() )
@@ -813,15 +809,13 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
     if( displ_opts->m_ContrastModeDisplay )
     {
         if( !IsOnLayer( curr_layer ) )
-            ColorTurnToDarkDarkGray( &color );
+            color = COLOR4D( DARKDARKGRAY );
     }
 
-    if( aDrawMode & GR_HIGHLIGHT )
-        ColorChangeHighlightFlag( &color, !(aDrawMode & GR_AND) );
+    if( ( aDrawMode & GR_HIGHLIGHT ) && !( aDrawMode & GR_AND ) )
+        color.SetToLegacyHighlightColor();
 
-    ColorApplyHighlightFlag( &color );
-
-    SetAlpha( &color, 150 );
+    color.a = 0.588;
 
 
     radius = m_Width >> 1;

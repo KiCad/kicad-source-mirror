@@ -27,6 +27,8 @@
 
 #include <wx/panel.h>
 #include <wx/sizer.h>
+#include <wx/colordlg.h>
+#include <wx/clrpicker.h>
 
 class wxBoxSizer;
 class wxStaticLine;
@@ -41,7 +43,7 @@ class WIDGET_EESCHEMA_COLOR_CONFIG : public wxPanel
 {
 private:
     EDA_DRAW_FRAME*         m_drawFrame;
-    wxRadioBox*             m_SelBgColor;
+    wxColourPickerCtrl*     m_SelBgColor;
     wxBoxSizer*             m_mainBoxSizer;
 
     // Creates the controls and sizers

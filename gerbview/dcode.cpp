@@ -151,7 +151,7 @@ int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 
 
 void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
-                                EDA_RECT* aClipBox, wxDC* aDC, EDA_COLOR_T aColor,
+                                EDA_RECT* aClipBox, wxDC* aDC, COLOR4D aColor,
                                 wxPoint aShapePos, bool aFilledShape )
 {
     int radius;
@@ -268,7 +268,7 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
 
 void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent,
                                  EDA_RECT* aClipBox, wxDC* aDC,
-                                 EDA_COLOR_T aColor, bool aFilled,
+                                 COLOR4D aColor, bool aFilled,
                                  const wxPoint& aPosition )
 {
     if( m_PolyCorners.size() == 0 )

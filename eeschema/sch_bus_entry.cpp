@@ -182,12 +182,12 @@ int SCH_BUS_BUS_ENTRY::GetPenSize() const
 
 
 void SCH_BUS_ENTRY_BASE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                          GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
+                          GR_DRAWMODE aDrawMode, COLOR4D aColor )
 {
-    EDA_COLOR_T color;
+    COLOR4D color;
     EDA_RECT* clipbox = aPanel->GetClipBox();
 
-    if( aColor >= 0 )
+    if( aColor != UNSPECIFIED_COLOR4D )
         color = aColor;
     else
         color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );

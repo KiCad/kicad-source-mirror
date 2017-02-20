@@ -26,10 +26,11 @@
 #define CLASS_LAYER_BOX_SELECTOR_H 1
 
 #include <wx/bmpcbox.h>
-#include <colors.h>     // EDA_COLOR_T definition
+#include <gal/color4d.h>
 #include <layers_id_colors_and_visibility.h>
 
 struct EDA_HOTKEY_CONFIG;
+using KIGFX::COLOR4D;
 
 /* Basic class to build a layer list.
  * this is an basic abstract class to build a layer list selector.
@@ -49,7 +50,7 @@ public:
 
     // Returns a color index from the layer id
     // Virtual function because GerbView uses its own functions in a derived class
-    virtual EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const = 0;
+    virtual COLOR4D GetLayerColor( LAYER_NUM aLayer ) const = 0;
 
     // Returns the name of the layer id
     // Virtual pure function because GerbView uses its own functions in a derived class

@@ -109,7 +109,7 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
 
     SetLayoutDirection( wxLayout_LeftToRight );
 
-    SetBackgroundColour( MakeColour( parent->GetDrawBgColor() ) );
+    SetBackgroundColour( parent->GetDrawBgColor().ToColour() );
 
 #if KICAD_USE_BUFFERED_DC || KICAD_USE_BUFFERED_PAINTDC
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
@@ -212,7 +212,7 @@ wxPoint EDA_DRAW_PANEL::ToLogicalXY( const wxPoint& pos )
 }
 
 
-void EDA_DRAW_PANEL::DrawCrossHair( wxDC* aDC, EDA_COLOR_T aColor )
+void EDA_DRAW_PANEL::DrawCrossHair( wxDC* aDC, COLOR4D aColor )
 {
     if( m_cursorLevel != 0 || aDC == NULL || !m_showCrossHair )
         return;
@@ -554,7 +554,7 @@ void EDA_DRAW_PANEL::EraseScreen( wxDC* DC )
 {
     GRSetDrawMode( DC, GR_COPY );
 
-    EDA_COLOR_T bgColor = GetParent()->GetDrawBgColor();
+    COLOR4D bgColor = GetParent()->GetDrawBgColor();
 
     GRSFilledRect( NULL, DC, m_ClipBox.GetX(), m_ClipBox.GetY(),
                    m_ClipBox.GetRight(), m_ClipBox.GetBottom(),
@@ -611,12 +611,10 @@ void EDA_DRAW_PANEL::ReDraw( wxDC* DC, bool erasebg )
     if( Screen == NULL )
         return;
 
-    EDA_COLOR_T bgColor = GetParent()->GetDrawBgColor();
+    COLOR4D bgColor = GetParent()->GetDrawBgColor();
 
-    if( ( bgColor != WHITE ) && ( bgColor != BLACK ) )
-        bgColor = BLACK;
-
-    if( bgColor == WHITE )
+    // TODO(JE): Is this correct?
+    if( bgColor.GetBrightness() > 0.5 )
     {
         g_XorMode    = GR_NXOR;
         g_GhostColor = BLACK;
@@ -629,7 +627,7 @@ void EDA_DRAW_PANEL::ReDraw( wxDC* DC, bool erasebg )
 
     GRResetPenAndBrush( DC );
 
-    DC->SetBackground( bgColor == BLACK ? *wxBLACK_BRUSH : *wxWHITE_BRUSH );
+    DC->SetBackground( wxBrush( bgColor.ToColour() ) );
     DC->SetBackgroundMode( wxSOLID );
 
     if( erasebg )
@@ -666,7 +664,7 @@ void EDA_DRAW_PANEL::SetEnableZoomNoCenter( bool aEnable )
 
 void EDA_DRAW_PANEL::DrawBackGround( wxDC* DC )
 {
-    EDA_COLOR_T axis_color = BLUE;
+    COLOR4D axis_color = COLOR4D( BLUE );
 
     GRSetDrawMode( DC, GR_COPY );
 
@@ -756,7 +754,7 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
         const double h = aDC->DeviceToLogicalYRel( gsz );
 
         // Use our own pen
-        wxPen pen( MakeColour( GetParent()->GetGridColor() ), h );
+        wxPen pen( GetParent()->GetGridColor(), h );
         pen.SetCap( wxCAP_BUTT );
         gc->SetPen( pen );
 
@@ -801,7 +799,7 @@ void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, GR_DRAWMODE aDrawMode )
     if( origin == wxPoint( 0, 0 ) )
         return;
 
-    EDA_COLOR_T color = RED;
+    COLOR4D color = COLOR4D( RED );
 
     GRSetDrawMode( aDC, aDrawMode );
 
@@ -837,7 +835,7 @@ void EDA_DRAW_PANEL::DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoi
     if( !GetParent()->m_showGridAxis || ( !aGridOrigin.x && !aGridOrigin.y ) )
         return;
 
-    EDA_COLOR_T color    = GetParent()->GetGridColor();
+    COLOR4D color = GetParent()->GetGridColor();
 
     GRSetDrawMode( aDC, aDrawMode );
 

@@ -287,11 +287,11 @@ int LIB_FIELD::GetPenSize() const
 
 
 void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                             EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
+                             COLOR4D aColor, GR_DRAWMODE aDrawMode, void* aData,
                              const TRANSFORM& aTransform )
 {
     wxPoint  text_pos;
-    int      color;
+    COLOR4D color = UNSPECIFIED_COLOR4D;
     int      linewidth = GetPenSize();
 
     if( IsBold() )
@@ -299,11 +299,11 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
     else
         linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
 
-    if( !IsVisible() &&  aColor < 0 )
+    if( !IsVisible() && ( aColor == UNSPECIFIED_COLOR4D ) )
     {
         color = GetInvisibleItemColor();
     }
-    else if( IsSelected() &&  aColor < 0 )
+    else if( IsSelected() && ( aColor == UNSPECIFIED_COLOR4D ) )
     {
         color = GetItemSelectedColor();
     }
@@ -312,7 +312,7 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
         color = aColor;
     }
 
-    if( color < 0 )
+    if( color == UNSPECIFIED_COLOR4D )
         color = GetDefaultColor();
 
     text_pos = aTransform.TransformCoordinate( GetTextPos() ) + aOffset;
@@ -326,7 +326,8 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
 
     GRSetDrawMode( aDC, aDrawMode );
     EDA_RECT* clipbox = aPanel? aPanel->GetClipBox() : NULL;
-    DrawGraphicText( clipbox, aDC, text_pos, (EDA_COLOR_T) color, text,
+
+    DrawGraphicText( clipbox, aDC, text_pos, color, text,
                      GetTextAngle(), GetTextSize(),
                      GetHorizJustify(), GetVertJustify(),
                      linewidth, IsItalic(), IsBold() );
@@ -569,9 +570,9 @@ const EDA_RECT LIB_FIELD::GetBoundingBox() const
 }
 
 
-EDA_COLOR_T LIB_FIELD::GetDefaultColor()
+COLOR4D LIB_FIELD::GetDefaultColor()
 {
-    EDA_COLOR_T color;
+    COLOR4D color;
 
     switch( m_id )
     {

@@ -42,7 +42,7 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <layers_id_colors_and_visibility.h>
-#include <colors.h>
+#include <gal/color4d.h>
 
 #define LYR_COLUMN_COUNT        4           ///< Layer tab column count
 #define RND_COLUMN_COUNT        2           ///< Rendering tab column count
@@ -52,6 +52,7 @@
 #define COLUMN_COLOR_LYR_CB 2
 #define COLUMN_COLOR_LYRNAME 3
 
+using KIGFX::COLOR4D;
 
 /**
  * Class LAYER_WIDGET
@@ -84,11 +85,11 @@ public:
     {
         wxString    rowName;    ///< the prompt or layername
         int         id;         ///< either a layer or "visible element" id
-        EDA_COLOR_T color;      ///< -1 if none.
+        COLOR4D     color;      ///< UNSPECIFIED_COLOR4D if none.
         bool        state;      ///< initial wxCheckBox state
         wxString    tooltip;    ///< if not empty, use this tooltip on row
 
-        ROW( const wxString& aRowName, int aId, EDA_COLOR_T aColor = UNSPECIFIED_COLOR,
+        ROW( const wxString& aRowName, int aId, COLOR4D aColor = UNSPECIFIED_COLOR4D,
             const wxString& aTooltip = wxEmptyString, bool aState = true )
         {
             rowName = aRowName;
@@ -120,7 +121,7 @@ protected:
     int                 m_CurrentRow;           ///< selected row of layer list
     int                 m_PointSize;
 
-    static wxBitmap makeBitmap( EDA_COLOR_T aColor );
+    static wxBitmap makeBitmap( COLOR4D aColor );
 
     /**
      * Virtual Function useAlternateBitmap
@@ -131,6 +132,12 @@ protected:
      * (alternate bitmaps to show layers in use, normal fo others)
      */
     virtual bool useAlternateBitmap(int aRow) { return false; }
+
+    /**
+     * Subclasses can override this to provide logic for allowing
+     * arbitrary color selection via wxColourPicker instead of DisplayColorFrame.
+     */
+    virtual bool AreArbitraryColorsAllowed() { return false; }
 
     /**
      * Function encodeId
@@ -153,7 +160,7 @@ protected:
      * Function makeColorButton
      * creates a wxBitmapButton and assigns it a solid color and a control ID
      */
-    wxBitmapButton* makeColorButton( wxWindow* aParent, EDA_COLOR_T aColor, int aID );
+    wxBitmapButton* makeColorButton( wxWindow* aParent, COLOR4D aColor, int aID );
 
     void OnLeftDownLayers( wxMouseEvent& event );
 
@@ -332,13 +339,13 @@ public:
      * Function SetLayerColor
      * changes the color of \a aLayer
      */
-    void SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor );
+    void SetLayerColor( LAYER_NUM aLayer, COLOR4D aColor );
 
     /**
      * Function GetLayerColor
      * returns the color of the layer ROW associated with \a aLayer id.
      */
-    EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const;
+    COLOR4D GetLayerColor( LAYER_NUM aLayer ) const;
 
     /**
      * Function SetRenderState
@@ -385,7 +392,7 @@ public:
      * @param aLayer is the board layer to change
      * @param aColor is the new color
      */
-    virtual void OnLayerColorChange( int aLayer, EDA_COLOR_T aColor ) = 0;
+    virtual void OnLayerColorChange( int aLayer, COLOR4D aColor ) = 0;
 
     /**
      * Function OnLayerSelect
@@ -416,7 +423,7 @@ public:
      * via the AddRenderRow() function.
      * @param aColor is the new color
      */
-    virtual void OnRenderColorChange( int aId, EDA_COLOR_T aColor ) = 0;
+    virtual void OnRenderColorChange( int aId, COLOR4D aColor ) = 0;
 
     /**
      * Function OnRenderEnable

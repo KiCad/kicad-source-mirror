@@ -76,6 +76,7 @@ target_link_libraries( pl_editor
     # There's way too much crap coming in from common yet.
     common
     bitmaps
+    gal
     ${wxWidgets_LIBRARIES}
     )
 

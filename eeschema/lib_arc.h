@@ -61,13 +61,13 @@ class LIB_ARC : public LIB_ITEM
      * Draws the arc.
      */
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                      EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
+                      COLOR4D aColor, GR_DRAWMODE aDrawMode, void* aData,
                       const TRANSFORM& aTransform ) override;
 
     /**
      * Draw the graphics when the arc is being edited.
      */
-    void drawEditGraphics( EDA_RECT* aClipBox, wxDC* aDC, EDA_COLOR_T aColor ) override;
+    void drawEditGraphics( EDA_RECT* aClipBox, wxDC* aDC, COLOR4D aColor ) override;
 
     /**
      * Calculates the center, radius, and angles at \a aPosition when the arc is being edited.

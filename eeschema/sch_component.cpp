@@ -347,7 +347,7 @@ int SCH_COMPONENT::GetUnitCount() const
 
 
 void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                          GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor,
+                          GR_DRAWMODE aDrawMode, COLOR4D aColor,
                           bool aDrawPinText )
 {
     auto opts = PART_DRAW_OPTIONS::Default();

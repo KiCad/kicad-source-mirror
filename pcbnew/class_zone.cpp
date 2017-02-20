@@ -175,9 +175,9 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
     LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     BOARD*      brd   = GetBoard();
 
-    EDA_COLOR_T color = brd->GetLayerColor( m_Layer );
+    COLOR4D     color = brd->GetLayerColor( m_Layer );
 
-    if( brd->IsLayerVisible( m_Layer ) == false && ( color & HIGHLIGHT_FLAG ) != HIGHLIGHT_FLAG )
+    if( brd->IsLayerVisible( m_Layer ) == false && !( aDrawMode & GR_HIGHLIGHT ) )
         return;
 
     GRSetDrawMode( DC, aDrawMode );
@@ -186,15 +186,13 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
     if( displ_opts->m_ContrastModeDisplay )
     {
         if( !IsOnLayer( curr_layer ) )
-            ColorTurnToDarkDarkGray( &color );
+            color = COLOR4D( DARKDARKGRAY );
     }
 
-    if( aDrawMode & GR_HIGHLIGHT )
-        ColorChangeHighlightFlag( &color, !(aDrawMode & GR_AND) );
+    if( ( aDrawMode & GR_HIGHLIGHT ) && !( aDrawMode & GR_AND ) )
+        color.SetToLegacyHighlightColor();
 
-    ColorApplyHighlightFlag( &color );
-
-    SetAlpha( &color, 150 );
+    color.a = 0.588;
 
     // draw the lines
     int i_start_contour = 0;
@@ -258,9 +256,9 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
 
     BOARD*      brd = GetBoard();
     LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-    EDA_COLOR_T color = brd->GetLayerColor( m_Layer );
+    COLOR4D     color = brd->GetLayerColor( m_Layer );
 
-    if( brd->IsLayerVisible( m_Layer ) == false && ( color & HIGHLIGHT_FLAG ) != HIGHLIGHT_FLAG )
+    if( brd->IsLayerVisible( m_Layer ) == false && !( aDrawMode & GR_HIGHLIGHT ) )
         return;
 
     GRSetDrawMode( DC, aDrawMode );
@@ -268,15 +266,13 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
     if( displ_opts->m_ContrastModeDisplay )
     {
         if( !IsOnLayer( curr_layer ) )
-            ColorTurnToDarkDarkGray( &color );
+            color = COLOR4D( DARKDARKGRAY );
     }
 
-    if( aDrawMode & GR_HIGHLIGHT )
-        ColorChangeHighlightFlag( &color, !(aDrawMode & GR_AND) );
+    if( ( aDrawMode & GR_HIGHLIGHT ) && !( aDrawMode & GR_AND ) )
+        color.SetToLegacyHighlightColor();
 
-    ColorApplyHighlightFlag( &color );
-
-    SetAlpha( &color, 150 );
+    color.a = 0.588;
 
 
     for ( int ic = 0; ic < m_FilledPolysList.OutlineCount(); ic++ )
@@ -386,13 +382,13 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC,
 
     LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     BOARD*      brd   = GetBoard();
-    EDA_COLOR_T color = brd->GetLayerColor( m_Layer );
+    COLOR4D     color = brd->GetLayerColor( m_Layer );
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
 
     if( displ_opts->m_ContrastModeDisplay )
     {
         if( !IsOnLayer( curr_layer ) )
-            ColorTurnToDarkDarkGray( &color );
+            color = COLOR4D( DARKDARKGRAY );
     }
 
     // draw the lines

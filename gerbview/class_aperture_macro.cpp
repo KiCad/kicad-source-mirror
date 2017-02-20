@@ -712,7 +712,7 @@ int AM_PRIMITIVE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
  */
 void APERTURE_MACRO::DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent,
                                              EDA_RECT* aClipBox, wxDC* aDC,
-                                             EDA_COLOR_T aColor,
+                                             COLOR4D aColor,
                                              wxPoint aShapePos, bool aFilledShape )
 {
     SHAPE_POLY_SET shapeBuffer;

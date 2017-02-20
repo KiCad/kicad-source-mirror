@@ -219,7 +219,7 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
 
     // Plot title  "Info"
     wxString Text = wxT( "Drill Map:" );
-    plotter->Text( wxPoint( plotX, plotY ), UNSPECIFIED_COLOR, Text, 0,
+    plotter->Text( wxPoint( plotX, plotY ), UNSPECIFIED_COLOR4D, Text, 0,
                    wxSize( KiROUND( charSize * charScale ),
                            KiROUND( charSize * charScale ) ),
                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
@@ -266,7 +266,7 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
         if( tool.m_Hole_NotPlated )
             msg += wxT( " (not plated)" );
 
-        plotter->Text( wxPoint( plotX, y ), UNSPECIFIED_COLOR, msg, 0,
+        plotter->Text( wxPoint( plotX, y ), UNSPECIFIED_COLOR4D, msg, 0,
                        wxSize( KiROUND( charSize * charScale ),
                                KiROUND( charSize * charScale ) ),
                        GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,

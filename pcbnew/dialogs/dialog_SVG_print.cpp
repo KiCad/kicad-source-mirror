@@ -336,7 +336,7 @@ bool DIALOG_SVG_PRINT::CreateSVGFile( const wxString& aFullFileName, bool aOnlyO
     plot_opts.SetMirror( m_printMirror );
     plot_opts.SetFormat( PLOT_FORMAT_SVG );
 
-    EDA_COLOR_T color = UNSPECIFIED_COLOR;      // Used layer color to plot ref and value
+    COLOR4D color = UNSPECIFIED_COLOR4D;      // Used layer color to plot ref and value
 
     plot_opts.SetReferenceColor( color );
     plot_opts.SetValueColor( color );

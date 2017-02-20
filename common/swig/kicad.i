@@ -106,6 +106,7 @@ principle should be easily implemented by adapting the current STL containers.
 %include class_eda_rect.h
 %include common.h
 %include class_title_block.h
+%include gal/color4d.h
 %include class_colors_design_settings.h
 %include class_marker_base.h
 %include eda_text.h

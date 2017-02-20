@@ -29,9 +29,13 @@
 #include <wxstruct.h>
 #include <kiway_player.h>
 #include <climits>
+#include <gal/gal_display_options.h>
+#include <gal/color4d.h>
 
 class wxSingleInstanceChecker;
 class EDA_HOTKEY;
+
+using KIGFX::COLOR4D;
 
 namespace KIGFX
 {
@@ -75,8 +79,8 @@ protected:
                                             // a wxCommand ID = ID_POPUP_GRID_LEVEL_1000.
     bool        m_drawGrid;                 // hide/Show grid
     bool        m_showPageLimits;           ///< true to display the page limits
-    EDA_COLOR_T m_gridColor;                // Grid color
-    EDA_COLOR_T m_drawBgColor;              ///< the background color of the draw canvas
+    COLOR4D     m_gridColor;                ///< Grid color
+    COLOR4D     m_drawBgColor;              ///< the background color of the draw canvas
                                             ///< BLACK for Pcbnew, BLACK or WHITE for eeschema
     double      m_zoomLevelCoeff;           ///< a suitable value to convert the internal zoom scaling factor
                                             // to a zoom level value which rougly gives 1.0 when the board/schematic
@@ -282,14 +286,14 @@ public:
     // the background color of the draw canvas:
     // Virtual because some frames can have a specific way to get/set the bg color
     /**
-     * @return the EDA_COLOR_T for the canvas background
+     * @return the COLOR4D for the canvas background
      */
-    virtual EDA_COLOR_T GetDrawBgColor() const { return m_drawBgColor; }
+    virtual COLOR4D GetDrawBgColor() const { return m_drawBgColor; }
 
     /**
-     * @param aColor: the EDA_COLOR_T for the canvas background
+     * @param aColor: the COLOR4D for the canvas background
      */
-    virtual void SetDrawBgColor( EDA_COLOR_T aColor) { m_drawBgColor= aColor ; }
+    virtual void SetDrawBgColor( COLOR4D aColor) { m_drawBgColor= aColor ; }
 
     int GetCursorShape() const { return m_cursorShape; }
 
@@ -437,7 +441,7 @@ public:
      * Function GetGridColor() , virtual
      * @return the color of the grid
      */
-    virtual EDA_COLOR_T GetGridColor() const
+    virtual COLOR4D GetGridColor() const
     {
         return m_gridColor;
     }
@@ -446,7 +450,7 @@ public:
      * Function SetGridColor() , virtual
      * @param aColor = the new color of the grid
      */
-    virtual void SetGridColor( EDA_COLOR_T aColor )
+    virtual void SetGridColor( COLOR4D aColor )
     {
         m_gridColor = aColor;
     }
@@ -718,7 +722,7 @@ public:
      * @param pad - Number of spaces to pad between messages (default = 4).
      */
     void AppendMsgPanel( const wxString& textUpper, const wxString& textLower,
-                         EDA_COLOR_T color, int pad = 6 );
+                         COLOR4D color, int pad = 6 );
 
     /**
      * Clear all messages from the message panel.

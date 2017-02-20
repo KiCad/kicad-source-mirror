@@ -187,7 +187,7 @@ void SVG_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 }
 
 
-void SVG_PLOTTER::SetColor( EDA_COLOR_T color )
+void SVG_PLOTTER::SetColor( COLOR4D color )
 {
     PSLIKE_PLOTTER::SetColor( color );
 
@@ -602,7 +602,7 @@ bool SVG_PLOTTER::EndPlot()
 
 
 void SVG_PLOTTER::Text( const wxPoint&              aPos,
-                        enum EDA_COLOR_T            aColor,
+                        const COLOR4D               aColor,
                         const wxString&             aText,
                         double                      aOrient,
                         const wxSize&               aSize,

@@ -581,18 +581,18 @@ wxPoint SCH_SHEET::GetFileNamePosition()
 
 
 void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                      const wxPoint& aOffset, GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
+                      const wxPoint& aOffset, GR_DRAWMODE aDrawMode, COLOR4D aColor )
 {
-    EDA_COLOR_T txtcolor;
+    COLOR4D txtcolor;
     wxString Text;
-    EDA_COLOR_T color;
+    COLOR4D color;
     int      name_orientation;
     wxPoint  pos_sheetname,pos_filename;
     wxPoint  pos = m_pos + aOffset;
     int      lineWidth = GetPenSize();
     EDA_RECT* clipbox  = aPanel? aPanel->GetClipBox() : NULL;
 
-    if( aColor >= 0 )
+    if( aColor != UNSPECIFIED_COLOR4D )
         color = aColor;
     else
         color = GetLayerColor( m_Layer );
@@ -611,7 +611,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
         name_orientation = TEXT_ANGLE_HORIZ;
 
     /* Draw text : SheetName */
-    if( aColor > 0 )
+    if( aColor != UNSPECIFIED_COLOR4D )
         txtcolor = aColor;
     else
         txtcolor = GetLayerColor( LAYER_SHEETNAME );
@@ -624,7 +624,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                      false, false );
 
     /* Draw text : FileName */
-    if( aColor >= 0 )
+    if( aColor != UNSPECIFIED_COLOR4D )
         txtcolor = aColor;
     else
         txtcolor = GetLayerColor( LAYER_SHEETFILENAME );
@@ -1138,7 +1138,7 @@ void SCH_SHEET::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
 
 void SCH_SHEET::Plot( PLOTTER* aPlotter )
 {
-    EDA_COLOR_T txtcolor = UNSPECIFIED_COLOR;
+    COLOR4D    txtcolor = UNSPECIFIED_COLOR4D;
     wxSize      size;
     wxString    Text;
     int         name_orientation;

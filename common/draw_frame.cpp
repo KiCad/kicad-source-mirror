@@ -157,10 +157,10 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_cursorShape         = 0;
     m_LastGridSizeId      = 0;
     m_drawGrid            = true;       // hide/Show grid. default = show
-    m_gridColor           = DARKGRAY;   // Default grid color
+    m_gridColor           = COLOR4D( DARKGRAY );   // Default grid color
     m_showPageLimits      = false;
-    m_drawBgColor         = BLACK;      // the background color of the draw canvas:
-                                        // BLACK for Pcbnew, BLACK or WHITE for eeschema
+    m_drawBgColor         = COLOR4D( BLACK );   // the background color of the draw canvas:
+                                                // BLACK for Pcbnew, BLACK or WHITE for eeschema
     m_snapToGrid          = true;
     m_MsgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight();
     m_movingCursorWithKeyboard = false;
@@ -210,7 +210,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_messagePanel  = new EDA_MSG_PANEL( this, -1, wxPoint( 0, m_FrameSize.y ),
                                          wxSize( m_FrameSize.x, m_MsgFrameHeight ) );
 
-    m_messagePanel->SetBackgroundColour( MakeColour( LIGHTGRAY ) );
+    m_messagePanel->SetBackgroundColour( COLOR4D( LIGHTGRAY ).ToColour() );
 }
 
 
@@ -728,7 +728,8 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     aCfg->Write( baseCfgName + CursorShapeEntryKeyword, m_cursorShape );
     aCfg->Write( baseCfgName + ShowGridEntryKeyword, IsGridVisible() );
-    aCfg->Write( baseCfgName + GridColorEntryKeyword, ( long ) GetGridColor() );
+    aCfg->Write( baseCfgName + GridColorEntryKeyword,
+                 GetGridColor().ToColour().GetAsString( wxC2S_CSS_SYNTAX ) );
     aCfg->Write( baseCfgName + LastGridSizeIdKeyword, ( long ) m_LastGridSizeId );
 
     if( GetScreen() )
@@ -740,7 +741,7 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
 
 void EDA_DRAW_FRAME::AppendMsgPanel( const wxString& textUpper,
                                      const wxString& textLower,
-                                     EDA_COLOR_T color, int pad )
+                                     COLOR4D color, int pad )
 {
     if( m_messagePanel == NULL )
         return;

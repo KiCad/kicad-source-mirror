@@ -969,7 +969,7 @@ void FOOTPRINT_EDIT_FRAME::OnVerticalToolbar( wxCommandEvent& aEvent )
 }
 
 
-EDA_COLOR_T FOOTPRINT_EDIT_FRAME::GetGridColor() const
+COLOR4D FOOTPRINT_EDIT_FRAME::GetGridColor() const
 {
     return g_ColorsSettings.GetItemColor( GRID_VISIBLE );
 }

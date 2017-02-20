@@ -109,7 +109,7 @@ void EDA_MSG_PANEL::OnPaint( wxPaintEvent& aEvent )
 
 void EDA_MSG_PANEL::AppendMessage( const wxString& aUpperText,
                                    const wxString& aLowerText,
-                                   EDA_COLOR_T aColor, int aPad )
+                                   COLOR4D aColor, int aPad )
 {
     wxString    text;
     wxSize      drawSize = GetClientSize();
@@ -143,7 +143,7 @@ void EDA_MSG_PANEL::AppendMessage( const wxString& aUpperText,
 
 
 void EDA_MSG_PANEL::SetMessage( int aXPosition, const wxString& aUpperText,
-                                const wxString& aLowerText, EDA_COLOR_T aColor )
+                                const wxString& aLowerText, COLOR4D aColor )
 {
     wxPoint pos;
     wxSize drawSize = GetClientSize();
@@ -196,13 +196,9 @@ void EDA_MSG_PANEL::SetMessage( int aXPosition, const wxString& aUpperText,
 
 void EDA_MSG_PANEL::showItem( wxDC& aDC, const MSG_PANEL_ITEM& aItem )
 {
-    EDA_COLOR_T color = aItem.m_Color;
+    COLOR4D color = aItem.m_Color;
 
-    if( color >= 0 )
-    {
-        color = ColorGetBase( color );
-        aDC.SetTextForeground( MakeColour( color ) );
-    }
+    aDC.SetTextForeground( color.ToColour() );
 
     if( !aItem.m_UpperText.IsEmpty() )
     {
@@ -230,7 +226,7 @@ void EDA_MSG_PANEL::erase( wxDC* aDC )
     wxBrush brush;
 
     wxSize  size  = GetClientSize();
-    wxColor color = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
+    wxColour color = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
 
     pen.SetColour( color );
 

@@ -520,9 +520,9 @@ public:
      * returns the color of a pcb visible element.
      * @see enum PCB_VISIBLE
      */
-    EDA_COLOR_T GetVisibleElementColor( int aPCB_VISIBLE );
+    COLOR4D GetVisibleElementColor( int aPCB_VISIBLE );
 
-    void SetVisibleElementColor( int aPCB_VISIBLE, EDA_COLOR_T aColor );
+    void SetVisibleElementColor( int aPCB_VISIBLE, COLOR4D aColor );
 
     /**
      * Function GetDesignSettings
@@ -685,13 +685,13 @@ public:
      * Function SetLayerColor
      * changes a layer color for any valid layer, including non-copper ones.
      */
-    void SetLayerColor( LAYER_ID aLayer, EDA_COLOR_T aColor );
+    void SetLayerColor( LAYER_ID aLayer, COLOR4D aColor );
 
     /**
      * Function GetLayerColor
      * gets a layer color for any valid layer, including non-copper ones.
      */
-    EDA_COLOR_T GetLayerColor( LAYER_ID aLayer ) const;
+    COLOR4D GetLayerColor( LAYER_ID aLayer ) const;
 
     /** Functions to get some items count */
     int GetNumSegmTrack() const;

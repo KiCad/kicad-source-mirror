@@ -121,8 +121,7 @@ static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
         return;
 
     segment = (SCH_LINE*) s_wires.begin();
-    EDA_COLOR_T color = GetLayerColor( segment->GetLayer() );
-    ColorChangeHighlightFlag( &color, !(color & HIGHLIGHT_FLAG) );
+    COLOR4D color = GetLayerColor( segment->GetLayer() );
 
     if( aErase )
     {

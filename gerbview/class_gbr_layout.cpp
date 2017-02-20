@@ -155,8 +155,8 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     wxPoint dev_org = aDC->GetDeviceOrigin();
     wxPoint logical_org = aDC->GetLogicalOrigin( );
 
-    wxColour bgColor = MakeColour( aDisplayOptions->m_BgDrawColor );
-    wxBrush  bgBrush( bgColor, wxBRUSHSTYLE_SOLID );
+    COLOR4D bgColor = aDisplayOptions->m_BgDrawColor;
+    wxBrush  bgBrush( bgColor.ToColour(), wxBRUSHSTYLE_SOLID );
 
     if( useBufferBitmap )
     {
@@ -233,7 +233,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
                     // Use the layer bitmap itself as a mask when blitting.  The bitmap
                     // cannot be referenced by a device context when setting the mask.
                     layerDC.SelectObject( wxNullBitmap );
-                    layerBitmap->SetMask( new wxMask( *layerBitmap, bgColor ) );
+                    layerBitmap->SetMask( new wxMask( *layerBitmap, bgColor.ToColour() ) );
                     layerDC.SelectObject( *layerBitmap );
                     screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight, &layerDC, 0, 0, wxCOPY, true );
                 }
@@ -264,7 +264,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         if( gerber->m_ImageNegative )
         {
             // Draw background negative (i.e. in graphic layer color) for negative images.
-            EDA_COLOR_T neg_color = gerber->GetPositiveDrawColor();
+            COLOR4D neg_color = gerber->GetPositiveDrawColor();
 
             GRSetDrawMode( &layerDC, GR_COPY );
             GRFilledRect( &drawBox, plotDC, drawBox.GetX(), drawBox.GetY(),
@@ -328,7 +328,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         if( aDrawMode == GR_COPY )
         {
             layerDC.SelectObject( wxNullBitmap );
-            layerBitmap->SetMask( new wxMask( *layerBitmap, bgColor ) );
+            layerBitmap->SetMask( new wxMask( *layerBitmap, bgColor.ToColour() ) );
             layerDC.SelectObject( *layerBitmap );
             screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight, &layerDC, 0, 0, wxCOPY, true );
 
@@ -364,7 +364,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
 
 void GBR_LAYOUT::DrawItemsDCodeID( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                                   GR_DRAWMODE aDrawMode, EDA_COLOR_T aDrawColor )
+                                   GR_DRAWMODE aDrawMode, COLOR4D aDrawColor )
 {
     wxPoint     pos;
     int         width;

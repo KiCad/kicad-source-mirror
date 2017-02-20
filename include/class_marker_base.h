@@ -55,7 +55,7 @@ public:
 protected:
     TYPEMARKER            m_MarkerType;          ///< The type of marker (useful to filter markers)
     MARKER_SEVERITY       m_ErrorLevel;          ///< Specify the severity of the error
-    EDA_COLOR_T           m_Color;               ///< color
+    COLOR4D               m_Color;               ///< color
     EDA_RECT              m_ShapeBoundingBox;    ///< Bounding box of the graphic symbol, relative
                                                  ///< to the position of the shape, used for Hit
                                                  ///< Tests
@@ -122,7 +122,7 @@ public:
      * Function SetColor
      * Set the color of this marker
      */
-    void SetColor( EDA_COLOR_T aColor )
+    void SetColor( COLOR4D aColor )
     {
         m_Color = aColor;
     }

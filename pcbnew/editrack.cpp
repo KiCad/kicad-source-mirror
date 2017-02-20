@@ -660,7 +660,7 @@ inline void DrawViaCirclesWhenEditingNewTrack( EDA_RECT* aPanelClipBox,
                                                wxDC* aDC, const wxPoint& aPos,
                                                int aViaRadius,
                                                int aViaRadiusWithClearence,
-                                               EDA_COLOR_T aColor)
+                                               COLOR4D aColor)
 {
     //Current viasize clearence circle
     GRCircle( aPanelClipBox, aDC, aPos.x, aPos.y, aViaRadiusWithClearence, aColor );
@@ -706,7 +706,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
 
         if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )
         {
-            EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( g_CurrentTrackSegment->GetLayer() );
+            COLOR4D color = g_ColorsSettings.GetLayerColor( g_CurrentTrackSegment->GetLayer() );
             DrawViaCirclesWhenEditingNewTrack( panelClipBox, aDC, g_CurrentTrackSegment->GetEnd(),
                                                boardViaRadius, viaRadiusWithClearence, color);
         }
@@ -773,7 +773,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
 
     if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )
     {
-        EDA_COLOR_T color = g_ColorsSettings.GetLayerColor(g_CurrentTrackSegment->GetLayer());
+        COLOR4D color = g_ColorsSettings.GetLayerColor(g_CurrentTrackSegment->GetLayer());
 
         //Via diameter must have taken what we are using, rather than netclass value.
         DrawViaCirclesWhenEditingNewTrack( panelClipBox, aDC, g_CurrentTrackSegment->GetEnd(),

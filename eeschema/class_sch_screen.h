@@ -218,7 +218,7 @@ public:
      * @param aColor The drawing color.
      */
     void Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode,
-               EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
+               COLOR4D aColor = UNSPECIFIED_COLOR4D );
 
     /**
      * Function Plot

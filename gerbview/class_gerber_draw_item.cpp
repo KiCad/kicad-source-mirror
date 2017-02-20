@@ -282,12 +282,10 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
     if( d_codeDescr == NULL )
         d_codeDescr = &dummyD_CODE;
 
-    EDA_COLOR_T color = m_GerberImageFile->GetPositiveDrawColor();
+    COLOR4D color = m_GerberImageFile->GetPositiveDrawColor();
 
-    if( aDrawMode & GR_HIGHLIGHT )
-        ColorChangeHighlightFlag( &color, !(aDrawMode & GR_AND) );
-
-    ColorApplyHighlightFlag( &color );
+    if( ( aDrawMode & GR_HIGHLIGHT ) && !( aDrawMode & GR_AND ) )
+        color.SetToLegacyHighlightColor();
 
     /* isDark is true if flash is positive and should use a drawing
      *   color other than the background color, else use the background color
@@ -479,7 +477,7 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( )
 
 void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_RECT*      aClipBox,
                                     wxDC*          aDC,
-                                    EDA_COLOR_T    aColor,
+                                    COLOR4D        aColor,
                                     const wxPoint& aOffset,
                                     bool           aFilledShape )
 {

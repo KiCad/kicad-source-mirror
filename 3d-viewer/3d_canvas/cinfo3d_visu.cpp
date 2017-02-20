@@ -532,16 +532,9 @@ SFVEC3F CINFO3D_VISU::GetLayerColor( LAYER_ID aLayerId ) const
 {
     wxASSERT( aLayerId < LAYER_ID_COUNT );
 
-    const EDA_COLOR_T color = g_ColorsSettings.GetLayerColor( aLayerId );
-    const StructColors &colordata = g_ColorRefs[ColorGetBase( color )];
+    const COLOR4D color = g_ColorsSettings.GetLayerColor( aLayerId );
 
-    static const float inv_255 = 1.0f / 255.0f;
-
-    const float red     = colordata.m_Red   * inv_255;
-    const float green   = colordata.m_Green * inv_255;
-    const float blue    = colordata.m_Blue  * inv_255;
-
-    return SFVEC3F( red, green, blue );
+    return SFVEC3F( color.r, color.g, color.b );
 }
 
 
@@ -551,15 +544,7 @@ SFVEC3F CINFO3D_VISU::GetItemColor( int aItemId ) const
 }
 
 
-SFVEC3F CINFO3D_VISU::GetColor( EDA_COLOR_T aColor ) const
+SFVEC3F CINFO3D_VISU::GetColor( COLOR4D aColor ) const
 {
-    const StructColors &colordata = g_ColorRefs[ColorGetBase( aColor )];
-
-    static const float inv_255 = 1.0f / 255.0f;
-
-    const float red     = colordata.m_Red   * inv_255;
-    const float green   = colordata.m_Green * inv_255;
-    const float blue    = colordata.m_Blue  * inv_255;
-
-    return SFVEC3F( red, green, blue );
+    return SFVEC3F( aColor.r, aColor.g, aColor.b );
 }

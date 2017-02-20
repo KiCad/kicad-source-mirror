@@ -689,7 +689,7 @@ WORKSHEET_DATAITEM* PL_EDITOR_FRAME::Locate( const wxPoint& aPosition )
 {
     const PAGE_INFO&    pageInfo = GetPageSettings();
     TITLE_BLOCK         t_block = GetTitleBlock();
-    EDA_COLOR_T         color = RED;    // Needed, not used
+    COLOR4D             color = COLOR4D( RED );    // Needed, not used
     PL_EDITOR_SCREEN*   screen = (PL_EDITOR_SCREEN*) GetScreen();
 
     screen-> m_ScreenNumber = GetPageNumberOption() ? 1 : 2;

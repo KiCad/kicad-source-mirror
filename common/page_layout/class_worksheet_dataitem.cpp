@@ -61,6 +61,8 @@
 #include <worksheet_shape_builder.h>
 #include <class_worksheet_dataitem.h>
 
+using KIGFX::COLOR4D;
+
 
 // Static members of class WORKSHEET_DATAITEM:
 double WORKSHEET_DATAITEM::m_WSunits2Iu = 1.0;
@@ -70,9 +72,9 @@ double WORKSHEET_DATAITEM::m_DefaultLineWidth = 0.0;
 DSIZE  WORKSHEET_DATAITEM::m_DefaultTextSize( TB_DEFAULT_TEXTSIZE, TB_DEFAULT_TEXTSIZE );
 double WORKSHEET_DATAITEM::m_DefaultTextThickness = 0.0;
 bool WORKSHEET_DATAITEM::m_SpecialMode = false;
-EDA_COLOR_T WORKSHEET_DATAITEM::m_Color = RED;              // the default color to draw items
-EDA_COLOR_T WORKSHEET_DATAITEM::m_AltColor = RED;           // an alternate color to draw items
-EDA_COLOR_T WORKSHEET_DATAITEM::m_SelectedColor = BROWN;   // the color to draw selected items
+COLOR4D WORKSHEET_DATAITEM::m_Color = COLOR4D( RED );            // the default color to draw items
+COLOR4D WORKSHEET_DATAITEM::m_AltColor = COLOR4D( RED );         // an alternate color to draw items
+COLOR4D WORKSHEET_DATAITEM::m_SelectedColor = COLOR4D( BROWN );  // the color to draw selected items
 
 
 // The constructor:

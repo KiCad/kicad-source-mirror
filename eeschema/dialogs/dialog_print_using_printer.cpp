@@ -455,7 +455,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
 
     aScreen->m_IsPrinting = true;
 
-    EDA_COLOR_T bg_color = m_parent->GetDrawBgColor();
+    COLOR4D bgColor = m_parent->GetDrawBgColor();
 
     aScreen->Draw( panel, dc, (GR_DRAWMODE) 0 );
 
@@ -463,7 +463,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
         m_parent->DrawWorkSheet( dc, aScreen, GetDefaultLineThickness(),
                 IU_PER_MILS, aScreen->GetFileName() );
 
-    m_parent->SetDrawBgColor( bg_color );
+    m_parent->SetDrawBgColor( bgColor );
     aScreen->m_IsPrinting = false;
     panel->SetClipBox( oldClipBox );
 

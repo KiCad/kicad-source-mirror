@@ -111,6 +111,11 @@ set(3D-VIEWER_SRCS
 add_library(3d-viewer STATIC ${3D-VIEWER_SRCS})
 add_dependencies( 3d-viewer pcbcommon )
 
-target_link_libraries( 3d-viewer ${Boost_} ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES} kicad_3dsg )
+target_link_libraries( 3d-viewer
+                       gal
+                       ${Boost_}
+                       ${wxWidgets_LIBRARIES}
+                       ${OPENGL_LIBRARIES}
+                       kicad_3dsg )
 
 add_subdirectory( 3d_cache )

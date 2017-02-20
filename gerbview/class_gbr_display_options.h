@@ -31,8 +31,6 @@
 #ifndef CLASS_GBR_DISPLAY_OPTIONS_H
 #define CLASS_GBR_DISPLAY_OPTIONS_H
 
-#include <colors.h>
-
 /**
  * @note Some of these parameters are used only for printing, some others only
  * for drawing on screen.
@@ -49,10 +47,10 @@ public:
     bool    m_DisplayNegativeObjects;   ///< Option to draw negative objects in a specific color
     bool    m_IsPrinting;               ///< true when printing a page, false when drawing on screen
     bool    m_ForceBlackAndWhite;       ///< Option print in blackand white (ont used id draw mode
-    EDA_COLOR_T m_NegativeDrawColor;    ///< The color used to draw negative objects, usually the
+    COLOR4D m_NegativeDrawColor;        ///< The color used to draw negative objects, usually the
                                         ///< background color, but not always, when negative objects
                                         ///< must be visible
-    EDA_COLOR_T m_BgDrawColor;          ///< The background color
+    COLOR4D m_BgDrawColor;              ///< The background color
 
 public:
     GBR_DISPLAY_OPTIONS()
@@ -65,8 +63,8 @@ public:
         m_IsPrinting = false;
         m_DisplayNegativeObjects = false;
         m_ForceBlackAndWhite    = false;
-        m_NegativeDrawColor     = DARKGRAY;
-        m_BgDrawColor = BLACK;
+        m_NegativeDrawColor     = COLOR4D( DARKGRAY );
+        m_BgDrawColor = COLOR4D_BLACK;
     }
 };
 

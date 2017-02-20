@@ -287,7 +287,7 @@ void BITMAP_BASE::Rotate( bool aRotateCCW )
 
 void BITMAP_BASE::PlotImage( PLOTTER*       aPlotter,
                              const wxPoint& aPos,
-                             EDA_COLOR_T    aDefaultColor,
+                             COLOR4D        aDefaultColor,
                              int            aDefaultPensize )
 {
     if( m_image == NULL )

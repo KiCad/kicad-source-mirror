@@ -34,7 +34,7 @@
 #include <general.h>
 
 
-void DrawDanglingSymbol( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& pos, EDA_COLOR_T Color )
+void DrawDanglingSymbol( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& pos, COLOR4D Color )
 {
     BASE_SCREEN* screen = panel->GetScreen();
 

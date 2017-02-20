@@ -938,7 +938,7 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
 }
 
 
-void GERBER_PLOTTER::Text( const wxPoint& aPos, enum EDA_COLOR_T aColor,
+void GERBER_PLOTTER::Text( const wxPoint& aPos, const COLOR4D aColor,
                            const wxString& aText, double aOrient, const wxSize& aSize,
                            enum EDA_TEXT_HJUSTIFY_T aH_justify, enum EDA_TEXT_VJUSTIFY_T aV_justify,
                            int aWidth, bool aItalic, bool aBold, bool aMultilineAllowed,

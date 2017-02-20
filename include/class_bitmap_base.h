@@ -222,7 +222,7 @@ public:
      * @param aDefaultPensize = the pen size used to plot the rectangle when bitmap is not supported
      */
     void PlotImage( PLOTTER* aPlotter, const wxPoint& aPos,
-                    EDA_COLOR_T aDefaultColor, int aDefaultPensize );
+                    COLOR4D aDefaultColor, int aDefaultPensize );
 };
 
 

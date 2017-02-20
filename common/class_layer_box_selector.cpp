@@ -26,7 +26,6 @@
 #include <colors_selection.h>
 #include <layers_id_colors_and_visibility.h>
 #include <bitmaps.h>
-#include <colors.h>
 
 #include <wx/wx.h>
 #include <wx/ownerdrw.h>
@@ -56,7 +55,7 @@ void LAYER_SELECTOR::SetBitmapLayer( wxBitmap& aLayerbmp, LAYER_NUM aLayer )
 
     // Prepare Bitmap
     bmpDC.SelectObject( aLayerbmp );
-    brush.SetColour( MakeColour( GetLayerColor( aLayer ) ) );
+    brush.SetColour( GetLayerColor( aLayer ).ToColour() );
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
 
     bmpDC.SetBrush( brush );

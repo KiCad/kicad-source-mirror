@@ -412,7 +412,7 @@ end_of_tst:
 void drawPlacementRoutingMatrix( BOARD* aBrd, wxDC* DC )
 {
     int         ii, jj;
-    EDA_COLOR_T color;
+    COLOR4D     color;
     int         ox, oy;
     MATRIX_CELL top_state, bottom_state;
 
@@ -425,21 +425,21 @@ void drawPlacementRoutingMatrix( BOARD* aBrd, wxDC* DC )
         for( jj = 0; jj < RoutingMatrix.m_Ncols; jj++ )
         {
             ox      = RoutingMatrix.m_BrdBox.GetX() + (jj * RoutingMatrix.m_GridRouting);
-            color   = BLACK;
+            color   = COLOR4D_BLACK;
 
             top_state       = RoutingMatrix.GetCell( ii, jj, TOP );
             bottom_state    = RoutingMatrix.GetCell( ii, jj, BOTTOM );
 
             if( top_state & CELL_is_ZONE )
-                color = BLUE;
+                color = COLOR4D( BLUE );
 
             // obstacles
             if( ( top_state & CELL_is_EDGE ) || ( bottom_state & CELL_is_EDGE ) )
-                color = WHITE;
+                color = COLOR4D_WHITE;
             else if( top_state & ( HOLE | CELL_is_MODULE ) )
-                color = LIGHTRED;
+                color = COLOR4D( LIGHTRED );
             else if( bottom_state & (HOLE | CELL_is_MODULE) )
-                color = LIGHTGREEN;
+                color = COLOR4D( LIGHTGREEN );
             else    // Display the filling and keep out regions.
             {
                 if( RoutingMatrix.GetDist( ii, jj, TOP )
@@ -605,13 +605,15 @@ void genModuleOnRoutingMatrix( MODULE* Module )
     CreateKeepOutRectangle( ox, oy, fx, fy, margin, KEEP_OUT_MARGIN, layerMask );
 }
 
+
 // A minor helper function to draw a bounding box:
-inline void draw_FootprintRect(EDA_RECT * aClipBox, wxDC* aDC, EDA_RECT& fpBBox, EDA_COLOR_T aColor)
+inline void draw_FootprintRect( EDA_RECT* aClipBox, wxDC* aDC, EDA_RECT& fpBBox, COLOR4D aColor )
 {
 #ifndef USE_WX_OVERLAY
     GRRect( aClipBox, aDC, fpBBox, 0, aColor );
 #endif
 }
+
 
 int getOptimalModulePlacement( PCB_EDIT_FRAME* aFrame, MODULE* aModule, wxDC* aDC )
 {
@@ -676,7 +678,7 @@ int getOptimalModulePlacement( PCB_EDIT_FRAME* aFrame, MODULE* aModule, wxDC* aD
     }
 
     // Draw the initial bounding box position
-    EDA_COLOR_T color = BROWN;
+    COLOR4D color = COLOR4D( BROWN );
     fpBBox.SetOrigin( fpBBoxOrg + CurrPosition );
     draw_FootprintRect(aFrame->GetCanvas()->GetClipBox(), aDC, fpBBox, color);
 

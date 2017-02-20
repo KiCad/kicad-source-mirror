@@ -125,7 +125,7 @@ public:
      * @param aDrawColor = the color of dcode texts
      */
     void DrawItemsDCodeID( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                           GR_DRAWMODE aDrawMode, EDA_COLOR_T aDrawColor );
+                           GR_DRAWMODE aDrawMode, COLOR4D aDrawColor );
 
 
     /**

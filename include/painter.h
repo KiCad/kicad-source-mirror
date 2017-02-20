@@ -31,7 +31,6 @@
 #include <set>
 
 #include <gal/color4d.h>
-#include <colors.h>
 #include <worksheet_shape_builder.h>
 #include <layers_id_colors_and_visibility.h>
 #include <memory>
@@ -179,16 +178,6 @@ public:
     }
 
     /**
-     * Function TranslateColor
-     * Returns the color responding to the one of EDA_COLOR_T enum values.
-     * @param aColor equivalent.
-     */
-    inline const COLOR4D& TranslateColor( EDA_COLOR_T aColor )
-    {
-        return m_legacyColorMap[aColor];
-    }
-
-    /**
      * Function GetBackgroundColor
      * Returns current background color settings.
      * @return Background color.
@@ -270,9 +259,6 @@ protected:
     float   m_worksheetLineWidth;   ///< Line width used when drawing worksheet
 
     COLOR4D m_backgroundColor;      ///< The background color
-
-    /// Map of colors that were usually used for display
-    std::map<EDA_COLOR_T, COLOR4D> m_legacyColorMap;
 };
 
 

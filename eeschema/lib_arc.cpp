@@ -389,7 +389,7 @@ int LIB_ARC::GetPenSize() const
 }
 
 
-void LIB_ARC::drawEditGraphics( EDA_RECT* aClipBox, wxDC* aDC, EDA_COLOR_T aColor )
+void LIB_ARC::drawEditGraphics( EDA_RECT* aClipBox, wxDC* aDC, COLOR4D aColor )
 {
     // The edit indicators only get drawn when a new arc is being drawn.
     if( !IsNew() )
@@ -410,7 +410,7 @@ void LIB_ARC::drawEditGraphics( EDA_RECT* aClipBox, wxDC* aDC, EDA_COLOR_T aColo
 
 
 void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                           EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
+                           COLOR4D aColor, GR_DRAWMODE aDrawMode, void* aData,
                            const TRANSFORM& aTransform )
 {
     // Don't draw the arc until the end point is selected.  Only the edit indicators
@@ -419,9 +419,9 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
         return;
 
     wxPoint pos1, pos2, posc;
-    EDA_COLOR_T color = GetLayerColor( LAYER_DEVICE );
+    COLOR4D color = GetLayerColor( LAYER_DEVICE );
 
-    if( aColor < 0 )       // Used normal color or selected color
+    if( aColor == UNSPECIFIED_COLOR4D )       // Used normal color or selected color
     {
         if( IsSelected() )
             color = GetItemSelectedColor();
@@ -448,7 +448,7 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
 
-    if( aColor >= 0 )
+    if( aColor != UNSPECIFIED_COLOR4D )
         fill = NO_FILL;
 
     EDA_RECT* const clipbox  = aPanel? aPanel->GetClipBox() : NULL;

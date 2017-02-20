@@ -285,12 +285,12 @@ int LIB_BEZIER::GetPenSize() const
 
 
 void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                              EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
+                              COLOR4D aColor, GR_DRAWMODE aDrawMode, void* aData,
                               const TRANSFORM& aTransform )
 {
     std::vector<wxPoint> PolyPointsTraslated;
 
-    EDA_COLOR_T color = GetLayerColor( LAYER_DEVICE );
+    COLOR4D color = GetLayerColor( LAYER_DEVICE );
 
     m_PolyPoints = Bezier2Poly( m_BezierPoints[0],
                                 m_BezierPoints[1],
@@ -303,7 +303,7 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
         PolyPointsTraslated.push_back( aTransform.TransformCoordinate( m_PolyPoints[i] ) +
                                        aOffset );
 
-    if( aColor < 0 )                // Used normal color or selected color
+    if( aColor == UNSPECIFIED_COLOR4D )                // Used normal color or selected color
     {
         if( IsSelected() )
             color = GetItemSelectedColor();
@@ -315,7 +315,7 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
 
-    if( aColor >= 0 )
+    if( aColor != UNSPECIFIED_COLOR4D )
         fill = NO_FILL;
 
     GRSetDrawMode( aDC, aDrawMode );

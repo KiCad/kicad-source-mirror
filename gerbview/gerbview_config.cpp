@@ -103,15 +103,15 @@ PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings()
                                                     false ) );
 
     // Default colors for layers 0 to 31
-    static const EDA_COLOR_T color_default[] = {
-        GREEN,     BLUE,         LIGHTGRAY, MAGENTA,
-        RED,       DARKGREEN,    BROWN,     MAGENTA,
-        LIGHTGRAY, BLUE,         GREEN,     CYAN,
-        LIGHTRED,  LIGHTMAGENTA, YELLOW,    RED,
-        BLUE,      BROWN,        LIGHTCYAN, RED,
-        MAGENTA,   CYAN,         BROWN,     MAGENTA,
-        LIGHTGRAY, BLUE,         GREEN,     DARKCYAN,
-        YELLOW,    LIGHTMAGENTA, YELLOW,    LIGHTGRAY,
+    static const COLOR4D color_default[] = {
+        COLOR4D( GREEN ),     COLOR4D( BLUE ),         COLOR4D( LIGHTGRAY ), COLOR4D( MAGENTA ),
+        COLOR4D( RED ),       COLOR4D( DARKGREEN ),    COLOR4D( BROWN ),     COLOR4D( MAGENTA ),
+        COLOR4D( LIGHTGRAY ), COLOR4D( BLUE ),         COLOR4D( GREEN ),     COLOR4D( CYAN ),
+        COLOR4D( LIGHTRED ),  COLOR4D( LIGHTMAGENTA ), COLOR4D( YELLOW ),    COLOR4D( RED ),
+        COLOR4D( BLUE ),      COLOR4D( BROWN ),        COLOR4D( LIGHTCYAN ), COLOR4D( RED ),
+        COLOR4D( MAGENTA ),   COLOR4D( CYAN ),         COLOR4D( BROWN ),     COLOR4D( MAGENTA ),
+        COLOR4D( LIGHTGRAY ), COLOR4D( BLUE ),         COLOR4D( GREEN ),     COLOR4D( DARKCYAN ),
+        COLOR4D( YELLOW ),    COLOR4D( LIGHTMAGENTA ), COLOR4D( YELLOW ),    COLOR4D( LIGHTGRAY ),
     };
 
     // List of keywords used as identifiers in config.
@@ -134,7 +134,7 @@ PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings()
 
     for( unsigned i = 0; i < DIM(keys);  ++i )
     {
-        EDA_COLOR_T* prm = &g_ColorsSettings.m_LayersColors[i];
+        COLOR4D* prm = &g_ColorsSettings.m_LayersColors[i];
 
         PARAM_CFG_SETCOLOR* prm_entry =
             new PARAM_CFG_SETCOLOR( true, keys[i], prm, color_default[i] );

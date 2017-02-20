@@ -734,7 +734,7 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
     if( text->IsMirrored() )
         size.x = -size.x;
 
-    EDA_COLOR_T color = BLACK;  // not actually used, but needed by DrawGraphicText
+    COLOR4D color = COLOR4D_BLACK;  // not actually used, but needed by DrawGraphicText
 
     if( text->IsMultilineAllowed() )
     {

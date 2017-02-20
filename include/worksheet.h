@@ -26,13 +26,15 @@
 #ifndef WORKSHEET_H_
 #define WORKSHEET_H_
 
-#include <colors.h>     // EDA_COLOR_T definition
+#include <gal/color4d.h>
 #include <class_page_info.h>
 
 // Forward declarations:
 class EDA_DRAW_PANEL;
 class EDA_RECT;
 class TITLE_BLOCK;
+
+using KIGFX::COLOR4D;
 
 /**
  * Function DrawPageLayout is a core function to draw the page layout with
@@ -63,7 +65,7 @@ void DrawPageLayout( wxDC* aDC, EDA_RECT* aClipBox,
                      TITLE_BLOCK& aTitleBlock,
                      int aSheetCount, int aSheetNumber,
                      int aPenWidth, double aScalar,
-                     EDA_COLOR_T aColor, EDA_COLOR_T aAltColor,
+                     COLOR4D aColor, COLOR4D aAltColor,
                      const wxString& aSheetLayer = wxEmptyString );
 
 

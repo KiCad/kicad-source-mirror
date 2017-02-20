@@ -558,7 +558,7 @@ void SCH_SCREEN::CheckComponentsToPartsLinks()
 }
 
 
-void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
+void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode, COLOR4D aColor )
 {
     /* note: SCH_SCREEN::Draw is useful only for schematic.
      * library editor and library viewer do not use m_drawList, and therefore
@@ -927,7 +927,9 @@ bool SCH_SCREEN::TestDanglingEnds()
     for( item = m_drawList.begin(); item; item = item->Next() )
     {
         if( item->IsDanglingStateChanged( endPoints ) )
+        {
             hasStateChanged = true;
+        }
     }
 
     return hasStateChanged;

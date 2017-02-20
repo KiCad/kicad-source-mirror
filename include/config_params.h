@@ -34,8 +34,10 @@
 #include <wx/confbase.h>
 #include <wx/fileconf.h>
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <colors.h>
+#include <gal/color4d.h>
 #include <limits>
+
+using KIGFX::COLOR4D;
 
 /// Names of sub sections where to store project info in *.pro project config files
 #define GROUP_PCB           wxT( "/pcbnew" )            /// parameters for Pcbnew/Modedit
@@ -183,14 +185,14 @@ public:
 class PARAM_CFG_SETCOLOR : public PARAM_CFG_BASE
 {
 public:
-    EDA_COLOR_T* m_Pt_param;    ///<  Pointer to the parameter value
-    EDA_COLOR_T  m_Default;     ///<  The default value of the parameter
+    COLOR4D* m_Pt_param;    ///<  Pointer to the parameter value
+    COLOR4D  m_Default;     ///<  The default value of the parameter
 
 public:
-    PARAM_CFG_SETCOLOR( const wxString& ident, EDA_COLOR_T* ptparam,
-                        EDA_COLOR_T default_val, const wxChar* group = NULL );
-    PARAM_CFG_SETCOLOR( bool Insetup, const wxString& ident, EDA_COLOR_T* ptparam,
-                        EDA_COLOR_T default_val, const wxChar* group = NULL );
+    PARAM_CFG_SETCOLOR( const wxString& ident, COLOR4D* ptparam,
+                        COLOR4D default_val, const wxChar* group = NULL );
+    PARAM_CFG_SETCOLOR( bool Insetup, const wxString& ident, COLOR4D* ptparam,
+                        COLOR4D default_val, const wxChar* group = NULL );
 
     virtual void ReadParam( wxConfigBase* aConfig ) const override;
     virtual void SaveParam( wxConfigBase* aConfig ) const override;

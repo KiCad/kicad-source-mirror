@@ -379,7 +379,7 @@ public:
      * Virtual function, from the base class SCH_ITEM::Draw
      */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) override
+               GR_DRAWMODE aDrawMode, COLOR4D aColor = UNSPECIFIED_COLOR4D ) override
     {
         Draw( aPanel, aDC, aOffset, aDrawMode, aColor, true );
     }
@@ -392,12 +392,12 @@ public:
      * @param aOffset drawing Offset (usually wxPoint(0,0),
      *  but can be different when moving an object)
      * @param aDrawMode GR_OR, GR_XOR, ...
-     * @param aColor UNSPECIFIED_COLOR to use the normal body item color, or use this color if >= 0
+     * @param aColor UNSPECIFIED_COLOR4D to use the normal body item color, or use this color if >= 0
      * @param aDrawPinText = true to draw pin texts, false to draw only the pin shape
      *  usually false to draw a component when moving it, and true otherwise.
      */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor,
+               GR_DRAWMODE aDrawMode, COLOR4D aColor,
                bool aDrawPinText );
 
     void SwapData( SCH_ITEM* aItem ) override;

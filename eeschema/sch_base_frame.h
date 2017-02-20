@@ -114,8 +114,8 @@ public:
 
     // Virtual from EDA_DRAW_FRAME
     // the background color of the draw canvas:
-    EDA_COLOR_T GetDrawBgColor() const override;
-    void SetDrawBgColor( EDA_COLOR_T aColor) override;
+    COLOR4D GetDrawBgColor() const override;
+    void SetDrawBgColor( COLOR4D aColor) override;
 
     const TITLE_BLOCK& GetTitleBlock() const override;
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;

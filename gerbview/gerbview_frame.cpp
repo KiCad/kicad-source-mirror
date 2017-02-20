@@ -607,9 +607,9 @@ bool GERBVIEW_FRAME::IsLayerVisible( int aLayer ) const
 }
 
 
-EDA_COLOR_T GERBVIEW_FRAME::GetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible ) const
+COLOR4D GERBVIEW_FRAME::GetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible ) const
 {
-    EDA_COLOR_T color = UNSPECIFIED_COLOR;
+    COLOR4D color = UNSPECIFIED_COLOR4D;
 
     switch( aItemIdVisible )
     {
@@ -639,7 +639,7 @@ void GERBVIEW_FRAME::SetGridVisibility( bool aVisible )
 
 
 void GERBVIEW_FRAME::SetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible,
-                                             EDA_COLOR_T aColor )
+                                             COLOR4D aColor )
 {
     switch( aItemIdVisible )
     {
@@ -659,7 +659,7 @@ void GERBVIEW_FRAME::SetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible,
     }
 }
 
-EDA_COLOR_T GERBVIEW_FRAME::GetNegativeItemsColor() const
+COLOR4D GERBVIEW_FRAME::GetNegativeItemsColor() const
 {
     if( IsElementVisible( NEGATIVE_OBJECTS_VISIBLE ) )
         return GetVisibleElementColor( NEGATIVE_OBJECTS_VISIBLE );
@@ -668,13 +668,13 @@ EDA_COLOR_T GERBVIEW_FRAME::GetNegativeItemsColor() const
 }
 
 
-EDA_COLOR_T GERBVIEW_FRAME::GetLayerColor( int aLayer ) const
+COLOR4D GERBVIEW_FRAME::GetLayerColor( int aLayer ) const
 {
     return m_colorsSettings->GetLayerColor( aLayer );
 }
 
 
-void GERBVIEW_FRAME::SetLayerColor( int aLayer, EDA_COLOR_T aColor )
+void GERBVIEW_FRAME::SetLayerColor( int aLayer, COLOR4D aColor )
 {
     m_colorsSettings->SetLayerColor( aLayer, aColor );
 }

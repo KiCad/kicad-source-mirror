@@ -84,14 +84,14 @@ class LIB_ITEM : public EDA_ITEM
      * @param aDC A pointer to the device context used to draw the object.
      * @param aOffset A reference to a wxPoint object containing the offset where to draw
      *                from the object's current position.
-     * @param aColor An #EDA_COLOR_T to draw the object or -1 to draw the object in it's
-     *               default color.
+     * @param aColor A COLOR4D to draw the object or UNSPECIFIED_COLOR4D to draw
+     *               the object in it's default color.
      * @param aDrawMode The mode used to perform the draw (#GR_OR, #GR_COPY, etc.).
      * @param aData A pointer to any object specific data required to perform the draw.
      * @param aTransform A reference to a #TRANSFORM object containing drawing transform.
      */
     virtual void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                              const wxPoint& aOffset, EDA_COLOR_T aColor,
+                              const wxPoint& aOffset, COLOR4D aColor,
                               GR_DRAWMODE aDrawMode, void* aData,
                               const TRANSFORM& aTransform ) = 0;
 
@@ -100,9 +100,9 @@ class LIB_ITEM : public EDA_ITEM
      *
      * @param aClipBox Clip box of the current device context.
      * @param aDC The device context to draw on.
-     * @param aColor The index of the color to draw.
+     * @param aColor Draw color
      */
-    virtual void drawEditGraphics( EDA_RECT* aClipBox, wxDC* aDC, EDA_COLOR_T aColor ) {}
+    virtual void drawEditGraphics( EDA_RECT* aClipBox, wxDC* aDC, COLOR4D aColor ) {}
 
     /**
      * Calculates the attributes of an item at \a aPosition when it is being edited.
@@ -207,7 +207,7 @@ public:
      * @param aPanel DrawPanel to use (can be null) mainly used for clipping purposes.
      * @param aDC Device Context (can be null)
      * @param aOffset Offset to draw
-     * @param aColor -1 to use the normal body item color, or use this color if >= 0
+     * @param aColor Draw color, or UNSPECIFIED_COLOR4D to use the normal body item color
      * @param aDrawMode GR_OR, GR_XOR, ...
      * @param aData Value or pointer used to pass others parameters, depending on body items.
      *              Used for some items to force to force no fill mode ( has meaning only for
@@ -216,7 +216,7 @@ public:
      * @param aTransform Transform Matrix (rotation, mirror ..)
      */
     virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint &aOffset,
-                       EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
+                       COLOR4D aColor, GR_DRAWMODE aDrawMode, void* aData,
                        const TRANSFORM& aTransform );
 
     /**
@@ -405,7 +405,7 @@ public:
 
     void SetEraseLastDrawItem( bool aErase = true ) { m_eraseLastDrawItem = aErase; }
 
-    virtual EDA_COLOR_T GetDefaultColor();
+    virtual COLOR4D GetDefaultColor();
 
     void SetUnit( int aUnit ) { m_Unit = aUnit; }
 

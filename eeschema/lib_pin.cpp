@@ -905,7 +905,7 @@ int LIB_PIN::GetPenSize() const
 void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
                            wxDC*            aDC,
                            const wxPoint&   aOffset,
-                           EDA_COLOR_T      aColor,
+                           COLOR4D          aColor,
                            GR_DRAWMODE      aDrawMode,
                            void*            aData,
                            const TRANSFORM& aTransform )
@@ -982,7 +982,7 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
                              const wxPoint&  aPinPos,
                              int             aOrient,
                              GR_DRAWMODE     aDrawMode,
-                             EDA_COLOR_T     aColor,
+                             COLOR4D         aColor,
                              bool            aDrawDangling,
                              bool            aOnlyTarget )
 {
@@ -991,9 +991,9 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
     int       posX    = aPinPos.x, posY = aPinPos.y, len = m_length;
     EDA_RECT* clipbox = aPanel ? aPanel->GetClipBox() : NULL;
 
-    EDA_COLOR_T color = GetLayerColor( LAYER_PIN );
+    COLOR4D color = GetLayerColor( LAYER_PIN );
 
-    if( aColor < 0 )       // Used normal color or selected color
+    if( aColor == UNSPECIFIED_COLOR4D )       // Used normal color or selected color
     {
         if( IsSelected() )
             color = GetItemSelectedColor();
@@ -1183,7 +1183,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                             int             TextInside,
                             bool            DrawPinNum,
                             bool            DrawPinName,
-                            EDA_COLOR_T     Color,
+                            COLOR4D         Color,
                             GR_DRAWMODE     DrawMode )
 {
     if( !DrawPinName && !DrawPinNum )
@@ -1210,13 +1210,13 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
     EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
 
     /* Get the num and name colors */
-    if( (Color < 0) && IsSelected() )
+    if( ( Color == UNSPECIFIED_COLOR4D ) && IsSelected() )
         Color = GetItemSelectedColor();
 
-    EDA_COLOR_T NameColor = Color == UNSPECIFIED_COLOR ?
-                                GetLayerColor( LAYER_PINNAM ) : Color;
-    EDA_COLOR_T NumColor  = Color == UNSPECIFIED_COLOR ?
-                                GetLayerColor( LAYER_PINNUM ) : Color;
+    COLOR4D NameColor = Color == UNSPECIFIED_COLOR4D ?
+                            GetLayerColor( LAYER_PINNAM ) : Color;
+    COLOR4D NumColor  = Color == UNSPECIFIED_COLOR4D ?
+                            GetLayerColor( LAYER_PINNUM ) : Color;
 
     /* Create the pin num string */
     PinStringNum( StringPinNum );
@@ -1396,7 +1396,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
 
 void LIB_PIN::DrawPinElectricalTypeName( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                          wxPoint& aPosition, int aOrientation,
-                                         EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode )
+                                         COLOR4D aColor, GR_DRAWMODE aDrawMode )
 {
     wxString    etypeName = GetElectricalTypeName();
 
@@ -1411,7 +1411,7 @@ void LIB_PIN::DrawPinElectricalTypeName( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     int pensize = etextSize/6;
 
     // Get a suitable color
-    if( (aColor < 0) && IsSelected() )
+    if( ( aColor == UNSPECIFIED_COLOR4D ) && IsSelected() )
         aColor = GetItemSelectedColor();
     else if( !IsVisible() )
         aColor = GetInvisibleItemColor();
@@ -1459,7 +1459,7 @@ void LIB_PIN::DrawPinElectricalTypeName( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrientation )
 {
     int         MapX1, MapY1, x1, y1;
-    EDA_COLOR_T color = GetLayerColor( LAYER_PIN );
+    COLOR4D     color = GetLayerColor( LAYER_PIN );
 
     aPlotter->SetColor( color );
     aPlotter->SetCurrentLineWidth( GetPenSize() );
@@ -1639,8 +1639,8 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int  orient,
                          ( numLineWidth + GetDefaultLineThickness() ) / 2;
 
     /* Get the num and name colors */
-    EDA_COLOR_T NameColor = GetLayerColor( LAYER_PINNAM );
-    EDA_COLOR_T NumColor  = GetLayerColor( LAYER_PINNUM );
+    COLOR4D NameColor = GetLayerColor( LAYER_PINNAM );
+    COLOR4D NumColor  = GetLayerColor( LAYER_PINNUM );
 
     int x1 = pin_pos.x;
     int y1 = pin_pos.y;

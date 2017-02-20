@@ -100,10 +100,10 @@ public:
     void ReFillRender();
 
     //-----<implement LAYER_WIDGET abstract callback functions>-----------
-    void OnLayerColorChange( int aLayer, EDA_COLOR_T aColor ) override;
+    void OnLayerColorChange( int aLayer, COLOR4D aColor ) override;
     bool OnLayerSelect( int aLayer ) override;
     void OnLayerVisible( int aLayer, bool isVisible, bool isFinal ) override;
-    void OnRenderColorChange( int aId, EDA_COLOR_T aColor ) override;
+    void OnRenderColorChange( int aId, COLOR4D aColor ) override;
     void OnRenderEnable( int aId, bool isEnabled ) override;
 
     /**

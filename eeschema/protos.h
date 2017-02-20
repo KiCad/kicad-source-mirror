@@ -26,8 +26,6 @@
 #ifndef __PROTOS_H__
 #define __PROTOS_H__
 
-#include <colors.h>
-
 class EDA_DRAW_PANEL;
 class PICKED_ITEMS_LIST;
 class SCH_ITEM;
@@ -52,7 +50,7 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct, bool aClone = false );
 /* EEREDRAW.CPP */
 /****************/
 void DrawDanglingSymbol( EDA_DRAW_PANEL* panel, wxDC* DC,
-                         const wxPoint& pos, EDA_COLOR_T Color );
+                         const wxPoint& pos, COLOR4D Color );
 
 
 #endif  /* __PROTOS_H__ */

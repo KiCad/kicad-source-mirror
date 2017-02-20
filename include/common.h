@@ -40,7 +40,7 @@
 #include <wx/fileconf.h>
 
 #include <richio.h>
-#include <colors.h>
+#include <gal/color4d.h>
 
 #include <atomic>
 
@@ -181,7 +181,7 @@ enum EDA_UNITS_T {
 extern EDA_UNITS_T  g_UserUnit;     ///< display units
 
 /// Draw color for moving objects.
-extern EDA_COLOR_T  g_GhostColor;
+extern KIGFX::COLOR4D  g_GhostColor;
 
 
 /**

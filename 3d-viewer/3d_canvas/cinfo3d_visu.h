@@ -270,7 +270,7 @@ class CINFO3D_VISU
      * @param aColor: the color mapped
      * @return the color in SFVEC3F format
      */
-    SFVEC3F GetColor( EDA_COLOR_T aColor ) const;
+    SFVEC3F GetColor( COLOR4D aColor ) const;
 
     /**
      * @brief GetLayerTopZpos3DU - Get the top z position

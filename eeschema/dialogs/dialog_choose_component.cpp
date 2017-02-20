@@ -331,9 +331,9 @@ void DIALOG_CHOOSE_COMPONENT::renderPreview( LIB_PART* aComponent, int aUnit )
 
     GRResetPenAndBrush( &dc );
 
-    EDA_COLOR_T bgcolor = m_parent->GetDrawBgColor();
+    COLOR4D bgColor = m_parent->GetDrawBgColor();
 
-    dc.SetBackground( bgcolor == BLACK ? *wxBLACK_BRUSH : *wxWHITE_BRUSH );
+    dc.SetBackground( wxBrush( bgColor.ToColour() ) );
     dc.Clear();
 
     if( aComponent == NULL )

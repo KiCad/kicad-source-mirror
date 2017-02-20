@@ -25,6 +25,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <trigo.h>
@@ -68,7 +69,7 @@ void DXF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 
     SetDefaultLineWidth( 0 );               // No line width on DXF
     m_plotMirror = false;                     // No mirroring on DXF
-    m_currentColor = BLACK;
+    m_currentColor = COLOR4D_BLACK;
 }
 
 /**
@@ -275,17 +276,17 @@ bool DXF_PLOTTER::EndPlot()
 /**
  * The DXF exporter handles 'colors' as layers...
  */
-void DXF_PLOTTER::SetColor( EDA_COLOR_T color )
+void DXF_PLOTTER::SetColor( COLOR4D color )
 {
     wxASSERT( outputFile );
-    if( ( color >= 0 && colorMode )
-       || ( color == BLACK )
-       || ( color == WHITE ) )
+    if( ( colorMode )
+       || ( color == COLOR4D_BLACK )
+       || ( color == COLOR4D_WHITE ) )
     {
         m_currentColor = color;
     }
     else
-        m_currentColor = BLACK;
+        m_currentColor = COLOR4D_BLACK;
 }
 
 /**
@@ -315,14 +316,16 @@ void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill, int 
     DPOINT centre_dev = userToDeviceCoordinates( centre );
     if( radius > 0 )
     {
-        wxString cname( ColorGetName( m_currentColor ) );
-        if (!fill)
+        wxString cname( m_currentColor.ToColour().GetAsString( wxC2S_CSS_SYNTAX ) );
+
+        if( !fill )
         {
             fprintf( outputFile, "0\nCIRCLE\n8\n%s\n10\n%g\n20\n%g\n40\n%g\n",
                     TO_UTF8( cname ),
                     centre_dev.x, centre_dev.y, radius );
         }
-        if (fill == FILLED_SHAPE)
+
+        if( fill == FILLED_SHAPE )
         {
             double r = radius*0.5;
             fprintf( outputFile, "0\nPOLYLINE\n");
@@ -462,7 +465,7 @@ void DXF_PLOTTER::PenTo( const wxPoint& pos, char plume )
     if( penLastpos != pos && plume == 'D' )
     {
         // DXF LINE
-        wxString cname( ColorGetName( m_currentColor ) );
+        wxString cname( m_currentColor.ToColour().GetAsString( wxC2S_CSS_SYNTAX ) );
         fprintf( outputFile, "0\nLINE\n8\n%s\n10\n%g\n20\n%g\n11\n%g\n21\n%g\n",
                  TO_UTF8( cname ),
                  pen_lastpos_dev.x, pen_lastpos_dev.y, pos_dev.x, pos_dev.y );
@@ -509,7 +512,7 @@ void DXF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
     double radius_dev = userToDeviceSize( radius );
 
     // Emit a DXF ARC entity
-    wxString cname( ColorGetName( m_currentColor ) );
+    wxString cname( m_currentColor.ToColour().GetAsString( wxC2S_CSS_SYNTAX ) );
     fprintf( outputFile,
              "0\nARC\n8\n%s\n10\n%g\n20\n%g\n40\n%g\n50\n%g\n51\n%g\n",
              TO_UTF8( cname ),
@@ -699,7 +702,7 @@ bool containsNonAsciiChars( const wxString& string )
 }
 
 void DXF_PLOTTER::Text( const wxPoint&              aPos,
-                        enum EDA_COLOR_T            aColor,
+                        COLOR4D                     aColor,
                         const wxString&             aText,
                         double                      aOrient,
                         const wxSize&               aSize,
@@ -729,7 +732,7 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
            more useful as a CAD object */
         DPOINT origin_dev = userToDeviceCoordinates( aPos );
         SetColor( aColor );
-        wxString cname( ColorGetName( m_currentColor ) );
+        wxString cname( m_currentColor.ToColour().GetAsString( wxC2S_CSS_SYNTAX ) );
         DPOINT size_dev = userToDeviceSize( aSize );
         int h_code = 0, v_code = 0;
         switch( aH_justify )

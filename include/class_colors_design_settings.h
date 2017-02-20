@@ -29,9 +29,10 @@
 
 #ifndef COLORS_DESIGN_SETTING_H
 #define COLORS_DESIGN_SETTING_H
-#include <colors.h>     // definition of EDA_COLOR_T
+#include <gal/color4d.h>
 #include <layers_id_colors_and_visibility.h>
 
+using KIGFX::COLOR4D;
 
 /**
  * Class COLORS_DESIGN_SETTINGS
@@ -43,10 +44,10 @@ public:
     // Color options for screen display of the Printed Board and schematic:
 
     // Common to Eeschema, Pcbnew, GerbView
-    EDA_COLOR_T m_LayersColors[LAYER_ID_COUNT];     ///< Layer colors (tracks and graphic items)
+    COLOR4D m_LayersColors[LAYER_ID_COUNT];     ///< Layer colors (tracks and graphic items)
 
     // Common to Eeschema, Pcbnew
-    EDA_COLOR_T m_ItemsColors[32];                  ///< All others items but layers
+    COLOR4D m_ItemsColors[32];                  ///< All others items but layers
 
 public:
     COLORS_DESIGN_SETTINGS();
@@ -56,35 +57,35 @@ public:
      * @return the color for aLayer which is one of the layer indices given
      * in pcbstruct.h or in schematic
      */
-    EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const;
+    COLOR4D GetLayerColor( LAYER_NUM aLayer ) const;
 
     /**
      * Function SetLayerColor
      * sets the color for aLayer which is one of the layer indices given
      * in pcbstruct.h or in schematic
      */
-    void SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor );
+    void SetLayerColor( LAYER_NUM aLayer, COLOR4D aColor );
 
     /**
      * Function GetItemColor
      * @return the color for an item which is one of the item indices given
      * in pcbstruct.h, enum PCB_VISIBLE or in schematic
      */
-    EDA_COLOR_T GetItemColor( int aItemIdx ) const;
+    COLOR4D GetItemColor( int aItemIdx ) const;
 
     /**
      * Function SetItemColor
      * sets the color for an item which is one of the item indices given
      * in pcbstruct.h, enum PCB_VISIBLE or in schematic
      */
-    void SetItemColor( int aItemIdx, EDA_COLOR_T aColor );
+    void SetItemColor( int aItemIdx, COLOR4D aColor );
 
     /**
      * Function SetAllColorsAs
      * sets alls colors to aColor
      * Usefull to create a monochrome color selection for printing purpose
      */
-    void SetAllColorsAs( EDA_COLOR_T aColor);
+    void SetAllColorsAs( COLOR4D aColor );
 };
 
 #endif  //  COLORS_DESIGN_SETTING_H

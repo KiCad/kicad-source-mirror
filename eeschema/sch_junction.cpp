@@ -111,11 +111,11 @@ const EDA_RECT SCH_JUNCTION::GetBoundingBox() const
 
 
 void SCH_JUNCTION::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                         GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
+                         GR_DRAWMODE aDrawMode, COLOR4D aColor )
 {
-    EDA_COLOR_T color;
+    COLOR4D color;
 
-    if( aColor >= 0 )
+    if( aColor != UNSPECIFIED_COLOR4D )
         color = aColor;
     else
         color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );

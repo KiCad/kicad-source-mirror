@@ -112,17 +112,17 @@ void SetDefaultLineThickness( int aThickness )
 
 
 // Color to draw selected items
-EDA_COLOR_T GetItemSelectedColor()
+COLOR4D GetItemSelectedColor()
 {
-    return BROWN;
+    return COLOR4D( BROWN );
 }
 
 
 // Color to draw items flagged invisible, in libedit (they are invisible
 // in Eeschema
-EDA_COLOR_T GetInvisibleItemColor()
+COLOR4D GetInvisibleItemColor()
 {
-    return DARKGRAY;
+    return COLOR4D( DARKGRAY );
 }
 
 

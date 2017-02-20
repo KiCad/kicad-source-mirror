@@ -75,7 +75,7 @@ class BLOCK_SELECTOR : public EDA_RECT
     BLOCK_STATE_T     m_state;                    //< State (enum BLOCK_STATE_T) of the block.
     BLOCK_COMMAND_T   m_command;                  //< Command (enum BLOCK_COMMAND_T) operation.
     PICKED_ITEMS_LIST m_items;                    //< List of items selected in this block.
-    EDA_COLOR_T       m_color;                    //< Block Color (for drawings).
+    COLOR4D           m_color;                    //< Block Color (for drawings).
     wxPoint           m_moveVector;               //< Move distance to move the block.
     wxPoint           m_lastCursorPosition;       //< Last Mouse position in block command
                                                   //< last cursor position in move commands
@@ -93,9 +93,9 @@ public:
 
     BLOCK_COMMAND_T GetCommand() const { return m_command; }
 
-    void SetColor( EDA_COLOR_T aColor ) { m_color = aColor; }
+    void SetColor( COLOR4D aColor ) { m_color = aColor; }
 
-    EDA_COLOR_T GetColor() const { return m_color; }
+    COLOR4D GetColor() const { return m_color; }
 
     /**
      * Function SetLastCursorPosition
@@ -128,7 +128,7 @@ public:
                wxDC*           aDC,
                const wxPoint&  aOffset,
                GR_DRAWMODE     aDrawMode,
-               EDA_COLOR_T     aColor );
+               COLOR4D         aColor );
 
     /**
      * Function PushItem

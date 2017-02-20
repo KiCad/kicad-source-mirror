@@ -334,21 +334,21 @@ public:
      * Function GetVisibleElementColor
      * returns the color of a gerber visible element.
      */
-    EDA_COLOR_T GetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible ) const;
+    COLOR4D GetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible ) const;
 
-    void    SetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible, EDA_COLOR_T aColor );
+    void    SetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible, COLOR4D aColor );
 
     /**
      * Function GetLayerColor
      * gets a layer color for any valid layer.
      */
-    EDA_COLOR_T GetLayerColor( int aLayer ) const;
+    COLOR4D GetLayerColor( int aLayer ) const;
 
     /**
      * Function SetLayerColor
      * changes a layer color for any valid layer.
      */
-    void    SetLayerColor( int aLayer, EDA_COLOR_T aColor );
+    void    SetLayerColor( int aLayer, COLOR4D aColor );
 
     /**
      * Function GetNegativeItemsColor
@@ -356,7 +356,7 @@ public:
      * This is usually the background color, but can be an other color
      * in order to see negative objects
      */
-    EDA_COLOR_T GetNegativeItemsColor() const;
+    COLOR4D GetNegativeItemsColor() const;
 
     /**
      * Function DisplayLinesSolidMode

@@ -117,6 +117,12 @@ protected:
      */
     void enableGALSpecificMenus();
 
+    /**
+     * Helper function to coerce all colors to legacy-compatible when
+     * switching from GAL to legacy canvas
+     */
+    void forceColorsToLegacy();
+
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     /**
      * Function RebuildActionPluginMenus
@@ -356,13 +362,13 @@ public:
      * Function GetGridColor() , virtual
      * @return the color of the grid
      */
-    virtual EDA_COLOR_T GetGridColor() const override;
+    virtual COLOR4D GetGridColor() const override;
 
     /**
      * Function SetGridColor() , virtual
      * @param aColor = the new color of the grid
      */
-    virtual void SetGridColor( EDA_COLOR_T aColor ) override;
+    virtual void SetGridColor( COLOR4D aColor ) override;
 
     ///> @copydoc EDA_DRAW_FRAME::SetCursorShape()
     virtual void SetCursorShape( int aCursorShape ) override;

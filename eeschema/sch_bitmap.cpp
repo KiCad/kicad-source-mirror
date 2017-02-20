@@ -191,11 +191,11 @@ const EDA_RECT SCH_BITMAP::GetBoundingBox() const
 
 
 void SCH_BITMAP::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                       GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
+                       GR_DRAWMODE aDrawMode, COLOR4D aColor )
 {
     wxPoint pos = m_pos + aOffset;
 
-    if( aColor < 0 )    // Use normal drawing function
+    if( aColor == UNSPECIFIED_COLOR4D )    // Use normal drawing function
     {
         // https://bugs.launchpad.net/kicad/+bug/1529163
         // "Moving images in eeschema on OS X uses

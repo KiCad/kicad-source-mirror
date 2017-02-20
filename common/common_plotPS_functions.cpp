@@ -56,21 +56,14 @@ void PSLIKE_PLOTTER::SetDefaultLineWidth( int width )
 }
 
 
-void PSLIKE_PLOTTER::SetColor( EDA_COLOR_T color )
+void PSLIKE_PLOTTER::SetColor( COLOR4D color )
 {
-    // Return at invalid color index
-    if( color < 0 )
-        return;
-
     if( colorMode )
     {
-        double r = g_ColorRefs[color].m_Red / 255.0;
-        double g = g_ColorRefs[color].m_Green / 255.0;
-        double b = g_ColorRefs[color].m_Blue / 255.0;
         if( negativeMode )
-            emitSetRGBColor( 1 - r, 1 - g, 1 - b );
+            emitSetRGBColor( 1 - color.r, 1 - color.g, 1 - color.b );
         else
-            emitSetRGBColor( r, g, b );
+            emitSetRGBColor( color.r, color.g, color.b );
     }
     else
     {
@@ -79,7 +72,7 @@ void PSLIKE_PLOTTER::SetColor( EDA_COLOR_T color )
          * holes in white on pads in black
          */
         double k = 1; // White
-        if( color != WHITE )
+        if( color != COLOR4D_WHITE )
             k = 0;
         if( negativeMode )
             emitSetRGBColor( 1 - k, 1 - k, 1 - k );
@@ -927,7 +920,7 @@ bool PS_PLOTTER::EndPlot()
 
 
 void PS_PLOTTER::Text( const wxPoint&       aPos,
-                enum EDA_COLOR_T            aColor,
+                const COLOR4D               aColor,
                 const wxString&             aText,
                 double                      aOrient,
                 const wxSize&               aSize,

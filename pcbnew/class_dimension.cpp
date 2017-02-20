@@ -316,7 +316,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
 void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
                       const wxPoint& offset )
 {
-    EDA_COLOR_T gcolor;
+    COLOR4D     gcolor;
     BOARD*      brd = GetBoard();
 
     if( brd->IsLayerVisible( m_Layer ) == false )

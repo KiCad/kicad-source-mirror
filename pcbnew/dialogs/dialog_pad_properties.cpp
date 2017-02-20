@@ -167,7 +167,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     wxPaintDC    dc( m_panelShowPad );
     PAD_DRAWINFO drawInfo;
 
-    EDA_COLOR_T color = BLACK;
+    COLOR4D color = COLOR4D_BLACK;
 
     if( m_dummyPad->GetLayerSet()[F_Cu] )
     {
@@ -176,7 +176,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 
     if( m_dummyPad->GetLayerSet()[B_Cu] )
     {
-        color = ColorMix( color, m_board->GetVisibleElementColor( PAD_BK_VISIBLE ) );
+        color = color.LegacyMix( m_board->GetVisibleElementColor( PAD_BK_VISIBLE ) );
     }
 
     // What could happen: the pad color is *actually* black, or no

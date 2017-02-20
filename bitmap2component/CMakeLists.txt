@@ -47,6 +47,7 @@ target_link_libraries( bitmap2component
     common
     polygon
     bitmaps
+    gal
     ${wxWidgets_LIBRARIES}
     potrace
     )

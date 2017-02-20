@@ -177,7 +177,7 @@ extern int LibraryEntryCompare( const LIB_ALIAS* aItem1, const LIB_ALIAS* aItem2
 struct PART_DRAW_OPTIONS
 {
     GR_DRAWMODE draw_mode;      ///< Device context drawing mode, see wxDC
-    EDA_COLOR_T color;          ///< Color to draw part in
+    COLOR4D color;              ///< Color to draw part in
     TRANSFORM transform;        ///< Coordinate adjustment settings
     bool show_pin_text;         ///< Whether to show pin texts
     bool draw_visible_fields;   ///< Whether to draw "visible" fields

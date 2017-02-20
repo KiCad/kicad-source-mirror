@@ -132,7 +132,7 @@ public:
     virtual wxPoint GetSchematicTextOffset() const;
 
     virtual void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-                       GR_DRAWMODE draw_mode, EDA_COLOR_T Color = UNSPECIFIED_COLOR ) override;
+                       GR_DRAWMODE draw_mode, COLOR4D Color = UNSPECIFIED_COLOR4D ) override;
 
     /**
      * Function CreateGraphicShape
@@ -228,7 +228,7 @@ public:
     ~SCH_LABEL() { }
 
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-               GR_DRAWMODE draw_mode, EDA_COLOR_T Color = UNSPECIFIED_COLOR ) override;
+               GR_DRAWMODE draw_mode, COLOR4D Color = UNSPECIFIED_COLOR4D ) override;
 
     wxString GetClass() const override
     {
@@ -274,7 +274,7 @@ public:
     ~SCH_GLOBALLABEL() { }
 
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-               GR_DRAWMODE draw_mode, EDA_COLOR_T Color = UNSPECIFIED_COLOR ) override;
+               GR_DRAWMODE draw_mode, COLOR4D Color = UNSPECIFIED_COLOR4D ) override;
 
     wxString GetClass() const override
     {
@@ -324,7 +324,7 @@ public:
     ~SCH_HIERLABEL() { }
 
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-               GR_DRAWMODE draw_mode, EDA_COLOR_T Color = UNSPECIFIED_COLOR ) override;
+               GR_DRAWMODE draw_mode, COLOR4D Color = UNSPECIFIED_COLOR4D ) override;
 
     wxString GetClass() const override
     {

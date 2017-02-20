@@ -57,7 +57,7 @@ class BASIC_GAL: public KIGFX::GAL
 {
 public:
     wxDC* m_DC;
-    EDA_COLOR_T m_Color;
+    COLOR4D m_Color;
 
 private:
     TRANSFORM_PRM m_transform;

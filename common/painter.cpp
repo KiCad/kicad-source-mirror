@@ -41,15 +41,6 @@ RENDER_SETTINGS::RENDER_SETTINGS()
     m_highlightNetcode      = -1;
     m_outlineWidth          = 1;
     m_worksheetLineWidth    = 100000;
-
-    // Store the predefined colors used in KiCad in format used by GAL
-    for( int i = 0; i < NBCOLORS; i++ )
-    {
-        m_legacyColorMap[g_ColorRefs[i].m_Numcolor] = COLOR4D( (double) g_ColorRefs[i].m_Red / 255.0,
-                                                               (double) g_ColorRefs[i].m_Green / 255.0,
-                                                               (double) g_ColorRefs[i].m_Blue / 255.0,
-                                                               m_layerOpacity );
-    }
 }
 
 

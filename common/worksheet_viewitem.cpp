@@ -92,8 +92,7 @@ void WORKSHEET_VIEWITEM::ViewDraw( int aLayer, VIEW* aView ) const
     drawList.SetSheetName( sheetName );
 
     COLOR4D color = settings->GetColor( this, aLayer );
-    EDA_COLOR_T edaColor = ColorFindNearest( color.r * 255, color.g * 255, color.b * 255 );
-    drawList.BuildWorkSheetGraphicList( *m_pageInfo, *m_titleBlock, edaColor, edaColor );
+    drawList.BuildWorkSheetGraphicList( *m_pageInfo, *m_titleBlock, color, color );
 
     // Draw all the components that make the page layout
     WS_DRAW_ITEM_BASE* item = drawList.GetFirst();

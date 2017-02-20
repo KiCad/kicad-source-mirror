@@ -72,7 +72,7 @@ void SCH_SHEET_PIN::Draw( EDA_DRAW_PANEL* aPanel,
                           wxDC*           aDC,
                           const wxPoint&  aOffset,
                           GR_DRAWMODE     aDraw_mode,
-                          EDA_COLOR_T     aColor )
+                          COLOR4D         aColor )
 {
     // The icon selection is handle by the virtual method CreateGraphicShape
     // called by ::Draw

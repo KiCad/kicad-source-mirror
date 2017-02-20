@@ -93,13 +93,13 @@ static const char s_BitmapLayerIcon[BM_LAYERICON_SIZE][BM_LAYERICON_SIZE] =
 void PCB_EDIT_FRAME::PrepareLayerIndicator()
 {
     int        ii, jj;
-    EDA_COLOR_T active_layer_color, Route_Layer_TOP_color,
+    COLOR4D    active_layer_color, Route_Layer_TOP_color,
                Route_Layer_BOTTOM_color, via_color;
     bool       change = false;
     bool first_call = LayerPairBitmap == NULL;
 
-    static int previous_active_layer_color, previous_Route_Layer_TOP_color,
-               previous_Route_Layer_BOTTOM_color, previous_via_color;
+    static COLOR4D previous_active_layer_color, previous_Route_Layer_TOP_color,
+                   previous_Route_Layer_BOTTOM_color, previous_via_color;
 
     /* get colors, and redraw bitmap button only on changes */
     active_layer_color = GetBoard()->GetLayerColor(GetActiveLayer());
@@ -164,19 +164,19 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
                 {
                 default:
                 case 0:
-                    pen.SetColour( MakeColour( active_layer_color ) );
+                    pen.SetColour( active_layer_color.ToColour() );
                     break;
 
                 case 1:
-                    pen.SetColour( MakeColour( Route_Layer_TOP_color) );
+                    pen.SetColour( Route_Layer_TOP_color.ToColour() );
                     break;
 
                 case 2:
-                    pen.SetColour( MakeColour( Route_Layer_BOTTOM_color ) );
+                    pen.SetColour( Route_Layer_BOTTOM_color.ToColour() );
                     break;
 
                 case 3:
-                    pen.SetColour( MakeColour( via_color ) );
+                    pen.SetColour( via_color.ToColour() );
                     break;
                 }
 

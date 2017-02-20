@@ -31,7 +31,6 @@
 #ifndef  PANEL_WXSTRUCT_H
 #define  PANEL_WXSTRUCT_H
 
-#include <colors.h>
 #include <base_struct.h>
 #include <gr_basic.h>
 
@@ -368,7 +367,7 @@ public:
      * @param aDC - the device context to draw the cursor
      * @param aColor - the color to draw the cursor
      */
-    void DrawCrossHair( wxDC* aDC, EDA_COLOR_T aColor = WHITE );
+    void DrawCrossHair( wxDC* aDC, COLOR4D aColor = COLOR4D_WHITE );
 
     // Hide the cross hair.
     void CrossHairOff( wxDC* DC );

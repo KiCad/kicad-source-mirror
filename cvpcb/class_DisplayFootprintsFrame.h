@@ -87,7 +87,7 @@ public:
      * Function GetGridColor() , virtual
      * @return the color of the grid
      */
-    virtual EDA_COLOR_T GetGridColor() const override;
+    virtual COLOR4D GetGridColor() const override;
 
     void    OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
     void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) override;

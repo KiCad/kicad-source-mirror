@@ -105,44 +105,44 @@ public:
     };
 
 protected:
-    WS_ItemType       m_type;
-    int               m_flags;
+    WS_ItemType    m_type;
+    int            m_flags;
 
 public:
-    wxString          m_Name;               // a item name used in page layout
+    wxString       m_Name;                  // a item name used in page layout
                                             // editor to identify items
-    wxString          m_Info;               // a comment, only useful in page
+    wxString       m_Info;                  // a comment, only useful in page
                                             // layout editor
-    POINT_COORD       m_Pos;
-    POINT_COORD       m_End;
-    double            m_LineWidth;
-    int               m_RepeatCount;        // repeat count for duplicate items
-    DPOINT            m_IncrementVector;    // For duplicate items: move vector
+    POINT_COORD    m_Pos;
+    POINT_COORD    m_End;
+    double         m_LineWidth;
+    int            m_RepeatCount;           // repeat count for duplicate items
+    DPOINT         m_IncrementVector;       // For duplicate items: move vector
                                             // for position increment
-    int               m_IncrementLabel;
+    int            m_IncrementLabel;
 
     // These variables are static, because these values are common to all
     // instances of WORKSHEET_DATAITEM.
     // They are default or common values.
-    static double     m_WSunits2Iu;         // conversion factor between
+    static double  m_WSunits2Iu;            // conversion factor between
                                             // ws units (mils) and draw/plot units
-    static DPOINT     m_RB_Corner;          // cordinates of the right bottom corner
+    static DPOINT  m_RB_Corner;             // cordinates of the right bottom corner
                                             // (ws units)
-    static DPOINT     m_LT_Corner;          // cordinates of the left top corner
+    static DPOINT  m_LT_Corner;             // cordinates of the left top corner
                                             // (ws units)
-    static double     m_DefaultLineWidth;   // Default line width,
+    static double  m_DefaultLineWidth;      // Default line width,
                                             // when not defined inside a line
                                             // or a rect
-    static DSIZE      m_DefaultTextSize;    // Default text size,
+    static DSIZE   m_DefaultTextSize;       // Default text size,
                                             // when not defined inside a tbtext
-    static double     m_DefaultTextThickness;// Default text thickness,
+    static double  m_DefaultTextThickness;  // Default text thickness,
                                             // when not defined inside a tbtext
-    static bool       m_SpecialMode;        // Used in page layout editor
+    static bool    m_SpecialMode;           // Used in page layout editor
                                             // When set to true, base texts
                                             // instead of full texts are displayed
-    static EDA_COLOR_T m_Color;             // the default color to draw items
-    static EDA_COLOR_T m_AltColor;          // an alternate color to draw items
-    static EDA_COLOR_T m_SelectedColor;     // the color to draw selected items
+    static COLOR4D m_Color;                 // the default color to draw items
+    static COLOR4D m_AltColor;              // an alternate color to draw items
+    static COLOR4D m_SelectedColor;         // the color to draw selected items
                                             // (used in page layout editor
 
 
@@ -279,7 +279,7 @@ public:
 
     bool UseAltColor() {return m_flags & USE_ALT_COLOR; }
 
-    EDA_COLOR_T GetItemColor()
+    COLOR4D GetItemColor()
     {
         if( IsSelected() )
             return m_SelectedColor;

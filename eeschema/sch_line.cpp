@@ -212,12 +212,12 @@ int SCH_LINE::GetPenSize() const
 
 
 void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-                     GR_DRAWMODE DrawMode, EDA_COLOR_T Color )
+                     GR_DRAWMODE DrawMode, COLOR4D Color )
 {
-    EDA_COLOR_T color;
+    COLOR4D color;
     int width = GetPenSize();
 
-    if( Color >= 0 )
+    if( Color != UNSPECIFIED_COLOR4D )
         color = Color;
     else
         color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );

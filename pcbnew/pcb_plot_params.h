@@ -152,9 +152,9 @@ private:
     int         m_HPGLPenNum;           ///< HPGL only: pen number selection(1 to 9)
     int         m_HPGLPenSpeed;         ///< HPGL only: pen speed, always in cm/s (1 to 99 cm/s)
     int         m_HPGLPenDiam;          ///< HPGL only: pen diameter in MILS, useful to fill areas
-    EDA_COLOR_T m_color;                ///< Color for plotting the current layer
-    EDA_COLOR_T m_referenceColor;       ///< Color for plotting references
-    EDA_COLOR_T m_valueColor;           ///< Color for plotting values
+    COLOR4D     m_color;                ///< Color for plotting the current layer
+    COLOR4D     m_referenceColor;       ///< Color for plotting references
+    COLOR4D     m_valueColor;           ///< Color for plotting values
 
 public:
     PCB_PLOT_PARAMS();
@@ -169,14 +169,14 @@ public:
     bool        operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
     bool        operator!=( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
 
-    void        SetColor( EDA_COLOR_T aVal ) { m_color = aVal; }
-    EDA_COLOR_T GetColor() const { return m_color; }
+    void        SetColor( COLOR4D aVal ) { m_color = aVal; }
+    COLOR4D     GetColor() const { return m_color; }
 
-    void        SetReferenceColor( EDA_COLOR_T aVal ) { m_referenceColor = aVal; }
-    EDA_COLOR_T GetReferenceColor() const { return m_referenceColor; }
+    void        SetReferenceColor( COLOR4D aVal ) { m_referenceColor = aVal; }
+    COLOR4D     GetReferenceColor() const { return m_referenceColor; }
 
-    void        SetValueColor( EDA_COLOR_T aVal ) { m_valueColor = aVal; }
-    EDA_COLOR_T GetValueColor() const { return m_valueColor; }
+    void        SetValueColor( COLOR4D aVal ) { m_valueColor = aVal; }
+    COLOR4D     GetValueColor() const { return m_valueColor; }
 
     void        SetTextMode( PlotTextMode aVal ) { m_textMode = aVal; }
     PlotTextMode GetTextMode() const { return m_textMode; }

@@ -33,9 +33,6 @@
 
 #include "widget_eeschema_color_config.h"
 
-// See selcolor.cpp:
-extern EDA_COLOR_T DisplayColorFrame( wxWindow* aParent, EDA_COLOR_T aOldColor );
-
 // Specify the width and height of every (color-displaying / bitmap) button
 const int BUTT_SIZE_X = 16;
 const int BUTT_SIZE_Y = 16;
@@ -107,8 +104,9 @@ static BUTTONINDEX buttonGroups[] = {
     { wxT( "" ), NULL }
 };
 
+static COLORBUTTON bgColorButton = { _( "" ), LAYER_BACKGROUND };
 
-static EDA_COLOR_T currentColors[ LAYERSCH_ID_COUNT ];
+static COLOR4D currentColors[ LAYERSCH_ID_COUNT ];
 
 
 WIDGET_EESCHEMA_COLOR_CONFIG::WIDGET_EESCHEMA_COLOR_CONFIG( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFrame ) :
@@ -153,28 +151,16 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
             rowBoxSizer = new wxBoxSizer( wxHORIZONTAL );
             columnBoxSizer->Add( rowBoxSizer, 0, wxGROW | wxALL, 0 );
 
-            wxMemoryDC iconDC;
-            wxBitmap   bitmap( BUTT_SIZE_X, BUTT_SIZE_Y );
-
-            iconDC.SelectObject( bitmap );
-
-            EDA_COLOR_T color = GetLayerColor( LAYERSCH_ID( buttons->m_Layer ) );
+            COLOR4D color = GetLayerColor( LAYERSCH_ID( buttons->m_Layer ) );
             currentColors[ buttons->m_Layer ] = color;
 
-            iconDC.SetPen( *wxBLACK_PEN );
+            wxColourPickerCtrl* colourPicker = new wxColourPickerCtrl(
+                                    this, buttonId, color.ToColour(), wxDefaultPosition,
+                                    wxSize( BUTT_SIZE_X+20, BUTT_SIZE_Y+20 ) );
 
-            wxBrush brush;
-            ColorSetBrush( &brush, color );
-            brush.SetStyle( wxBRUSHSTYLE_SOLID );
-            iconDC.SetBrush( brush );
-            iconDC.DrawRectangle( 0, 0, BUTT_SIZE_X, BUTT_SIZE_Y );
+            colourPicker->SetClientData( (void*) buttons );
 
-            wxBitmapButton* bitmapButton = new wxBitmapButton(
-                                    this, buttonId, bitmap, wxDefaultPosition,
-                                    wxSize( BUTT_SIZE_X+8, BUTT_SIZE_Y+6 ) );
-            bitmapButton->SetClientData( (void*) buttons );
-
-            rowBoxSizer->Add( bitmapButton, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 5 );
+            rowBoxSizer->Add( colourPicker, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 5 );
 
             label = new wxStaticText( this, wxID_ANY, wxGetTranslation( buttons->m_Name ) );
             rowBoxSizer->Add( label, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 5 );
@@ -185,25 +171,38 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
         groups++;
     }
 
-    Connect( 1800, buttonId - 1, wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect( 1800, buttonId - 1, wxEVT_COLOURPICKER_CHANGED,
              wxCommandEventHandler( WIDGET_EESCHEMA_COLOR_CONFIG::SetColor ) );
 
-    wxArrayString selBgColorStrings;
+    /*wxArrayString selBgColorStrings;
     selBgColorStrings.Add( _( "White" ) );
     selBgColorStrings.Add( _( "Black" ) );
     m_SelBgColor = new wxRadioBox( this, wxID_ANY, _( "Background Color" ),
                                    wxDefaultPosition, wxDefaultSize,
                                    selBgColorStrings, 1, wxRA_SPECIFY_COLS );
     m_SelBgColor->SetSelection( ( GetDrawFrame()->GetDrawBgColor() == BLACK ) ? 1 : 0 );
+    */
+
+    COLOR4D bgColor = GetDrawFrame()->GetDrawBgColor();
+    m_SelBgColor = new wxColourPickerCtrl(
+                        this, buttonId, bgColor.ToColour(), wxDefaultPosition,
+                        wxSize( BUTT_SIZE_X+20, BUTT_SIZE_Y+20 ) );
+
+    wxStaticText* bgColorLabel = new wxStaticText( this, wxID_ANY, _( "Background Color" ) );
+    wxFont font( bgColorLabel->GetFont() );
+    font.SetWeight( wxFONTWEIGHT_BOLD );
+    bgColorLabel->SetFont( font );
 
     if( columnBoxSizer )
     {
         // Add a spacer to improve appearance.
         columnBoxSizer->AddSpacer( 5 );
-        columnBoxSizer->Add( m_SelBgColor, 1, wxGROW | wxRIGHT | wxTOP | wxBOTTOM, 5 );
+        columnBoxSizer->Add( bgColorLabel, 1, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
+        columnBoxSizer->Add( m_SelBgColor, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 5 );
     }
 
-    currentColors[ LAYER_BACKGROUND ] =  GetDrawFrame()->GetDrawBgColor();
+    // TODO(jon) fix currentColors
+    //currentColors[ LAYER_BACKGROUND ] =  GetDrawFrame()->GetDrawBgColor();
 
     // Dialog now needs to be resized, but the associated command is found elsewhere.
 }
@@ -211,37 +210,21 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
 
 void WIDGET_EESCHEMA_COLOR_CONFIG::SetColor( wxCommandEvent& event )
 {
-    wxBitmapButton* button = (wxBitmapButton*) event.GetEventObject();
+    wxColourPickerCtrl* picker = (wxColourPickerCtrl*) event.GetEventObject();
 
-    wxCHECK_RET( button != NULL, wxT( "Color button event object is NULL." ) );
+    wxCHECK_RET( picker != NULL, wxT( "Color picker event object is NULL." ) );
 
-    COLORBUTTON* colorButton = (COLORBUTTON*) button->GetClientData();
+    COLORBUTTON* colorButton = (COLORBUTTON*) picker->GetClientData();
 
     wxCHECK_RET( colorButton != NULL, wxT( "Client data not set for color button." ) );
 
-    EDA_COLOR_T color = DisplayColorFrame( this, currentColors[colorButton->m_Layer] );
+    // DisplayColorFrame( this, currentColors[colorButton->m_Layer] );
+    COLOR4D color = COLOR4D( picker->GetColour() );
 
-    if( color < 0 || currentColors[ colorButton->m_Layer ] == color )
+    if( color == UNSPECIFIED_COLOR4D || currentColors[ colorButton->m_Layer ] == color )
         return;
 
     currentColors[ colorButton->m_Layer ] = color;
-
-    wxMemoryDC iconDC;
-
-    wxBitmap bitmap = button->GetBitmapLabel();
-    iconDC.SelectObject( bitmap );
-    iconDC.SetPen( *wxBLACK_PEN );
-
-    wxBrush  brush;
-
-    ColorSetBrush( &brush, color);
-
-    brush.SetStyle( wxBRUSHSTYLE_SOLID );
-
-    iconDC.SetBrush( brush );
-    iconDC.DrawRectangle( 0, 0, BUTT_SIZE_X, BUTT_SIZE_Y );
-    button->SetBitmapLabel( bitmap );
-    button->Refresh();
 
     Refresh( false );
 }
@@ -254,10 +237,7 @@ bool WIDGET_EESCHEMA_COLOR_CONFIG::TransferDataFromControl()
     // Check for color conflicts with background color to give user a chance to bail
     // out before making changes.
 
-    EDA_COLOR_T bgcolor = WHITE;
-
-    if( m_SelBgColor->GetSelection() > 0 )
-        bgcolor =  BLACK;
+    COLOR4D bgcolor = m_SelBgColor->GetColour();
 
     for( LAYERSCH_ID clyr = LAYER_WIRE; clyr < LAYERSCH_ID_COUNT; ++clyr )
     {

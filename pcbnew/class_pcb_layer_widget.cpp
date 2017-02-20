@@ -67,17 +67,17 @@ const LAYER_WIDGET::ROW PCB_LAYER_WIDGET::s_render_rows[] = {
     RR( _( "Pads Front" ),      PAD_FR_VISIBLE,         WHITE,      _( "Show footprint pads on board's front" ) ),
     RR( _( "Pads Back" ),       PAD_BK_VISIBLE,         WHITE,      _( "Show footprint pads on board's back" ) ),
 
-    RR( _( "Text Front" ),      MOD_TEXT_FR_VISIBLE,    UNSPECIFIED_COLOR,  _( "Show footprint text on board's front" ) ),
-    RR( _( "Text Back" ),       MOD_TEXT_BK_VISIBLE,    UNSPECIFIED_COLOR,  _( "Show footprint text on board's back" ) ),
+    RR( _( "Text Front" ),      MOD_TEXT_FR_VISIBLE,    UNSPECIFIED_COLOR4D,  _( "Show footprint text on board's front" ) ),
+    RR( _( "Text Back" ),       MOD_TEXT_BK_VISIBLE,    UNSPECIFIED_COLOR4D,  _( "Show footprint text on board's back" ) ),
     RR( _( "Hidden Text" ),     MOD_TEXT_INVISIBLE,     WHITE,      _( "Show footprint text marked as invisible" ) ),
 
     RR( _( "Anchors" ),         ANCHOR_VISIBLE,         WHITE,      _( "Show footprint and text origins as a cross" ) ),
     RR( _( "Grid" ),            GRID_VISIBLE,           WHITE,      _( "Show the (x,y) grid dots" ) ),
-    RR( _( "No-Connects" ),     NO_CONNECTS_VISIBLE,    UNSPECIFIED_COLOR,  _( "Show a marker on pads which have no net connected" ) ),
-    RR( _( "Footprints Front" ),   MOD_FR_VISIBLE,         UNSPECIFIED_COLOR,  _( "Show footprints that are on board's front") ),
-    RR( _( "Footprints Back" ),    MOD_BK_VISIBLE,         UNSPECIFIED_COLOR,  _( "Show footprints that are on board's back") ),
-    RR( _( "Values" ),          MOD_VALUES_VISIBLE,     UNSPECIFIED_COLOR,  _( "Show footprint's values") ),
-    RR( _( "References" ),      MOD_REFERENCES_VISIBLE, UNSPECIFIED_COLOR,  _( "Show footprint's references") ),
+    RR( _( "No-Connects" ),     NO_CONNECTS_VISIBLE,    UNSPECIFIED_COLOR4D,  _( "Show a marker on pads which have no net connected" ) ),
+    RR( _( "Footprints Front" ),   MOD_FR_VISIBLE,         UNSPECIFIED_COLOR4D,  _( "Show footprints that are on board's front") ),
+    RR( _( "Footprints Back" ),    MOD_BK_VISIBLE,         UNSPECIFIED_COLOR4D,  _( "Show footprints that are on board's back") ),
+    RR( _( "Values" ),          MOD_VALUES_VISIBLE,     UNSPECIFIED_COLOR4D,  _( "Show footprint's values") ),
+    RR( _( "References" ),      MOD_REFERENCES_VISIBLE, UNSPECIFIED_COLOR4D,  _( "Show footprint's references") ),
 };
 
 static int s_allowed_in_FpEditor[] =
@@ -112,6 +112,12 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwn
         wxCommandEventHandler( PCB_LAYER_WIDGET::onPopupSelection ), NULL, this );
     // install the right click handler into each control at end of ReFill()
     // using installRightLayerClickHandler
+}
+
+
+bool PCB_LAYER_WIDGET::AreArbitraryColorsAllowed()
+{
+    return myframe->IsGalCanvasActive();
 }
 
 
@@ -293,7 +299,7 @@ void PCB_LAYER_WIDGET::ReFillRender()
         renderRow.tooltip = wxGetTranslation( s_render_rows[row].tooltip );
         renderRow.rowName = wxGetTranslation( s_render_rows[row].rowName );
 
-        if( renderRow.color != -1 )       // does this row show a color?
+        if( renderRow.color != UNSPECIFIED_COLOR4D )       // does this row show a color?
         {
             // this window frame must have an established BOARD, i.e. after SetBoard()
             renderRow.color = board->GetVisibleElementColor( renderRow.id );
@@ -437,7 +443,7 @@ void PCB_LAYER_WIDGET::ReFill()
 
 //-----<LAYER_WIDGET callbacks>-------------------------------------------
 
-void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, EDA_COLOR_T aColor )
+void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
 {
     myframe->GetBoard()->SetLayerColor( ToLAYER_ID( aLayer ), aColor );
 
@@ -509,7 +515,7 @@ void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal 
 }
 
 
-void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, EDA_COLOR_T aColor )
+void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
 {
     myframe->GetBoard()->SetVisibleElementColor( aId, aColor );
 

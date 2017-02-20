@@ -120,7 +120,7 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     if( m_DisplayOptions.m_DisplayDCodes )
     {
-        EDA_COLOR_T dcode_color = GetVisibleElementColor( DCODES_VISIBLE );
+        COLOR4D dcode_color = GetVisibleElementColor( DCODES_VISIBLE );
         GetGerberLayout()->DrawItemsDCodeID( m_canvas, DC, GR_COPY, dcode_color );
     }
 

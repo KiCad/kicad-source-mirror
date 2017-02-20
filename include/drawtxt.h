@@ -86,7 +86,7 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool italic, b
  *  @param aClipBox = the clipping rect, or NULL if no clipping
  *  @param aDC = the current Device Context. NULL if draw within a 3D GL Canvas
  *  @param aPos = text position (according to h_justify, v_justify)
- *  @param aColor (enum EDA_COLOR_T) = text color
+ *  @param aColor (COLOR4D) = text color
  *  @param aText = text to draw
  *  @param aOrient = angle in 0.1 degree
  *  @param aSize = text size (size.x or size.y can be < 0 for mirrored texts)
@@ -105,7 +105,7 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool italic, b
 void DrawGraphicText( EDA_RECT* aClipBox,
                       wxDC * aDC,
                       const wxPoint &aPos,
-                      enum EDA_COLOR_T aColor,
+                      const COLOR4D aColor,
                       const wxString &aText,
                       double aOrient,
                       const wxSize &aSize,
@@ -127,9 +127,9 @@ void DrawGraphicText( EDA_RECT* aClipBox,
 void DrawGraphicHaloText( EDA_RECT* aClipBox,
                           wxDC * aDC,
                           const wxPoint &aPos,
-                          enum EDA_COLOR_T aBgColor,
-                          enum EDA_COLOR_T aColor1,
-                          enum EDA_COLOR_T aColor2,
+                          const COLOR4D aBgColor,
+                          COLOR4D aColor1,
+                          COLOR4D aColor2,
                           const wxString &aText,
                           double aOrient,
                           const wxSize &aSize,

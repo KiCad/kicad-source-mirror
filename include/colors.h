@@ -22,6 +22,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * NOTE: EDA_COLOR_T is deprecated and is kept around for compatibility with
+ *       legacy canvas.  Once there is no need for legacy support, the color
+ *       table g_ColorRefs in colors.cpp can be re-written in COLOR4D and this
+ *       file can go away.
+ *
+ *       Please use COLOR4D instead of including this file.
+ */
+
 #ifndef COLORS_H_
 #define COLORS_H_
 

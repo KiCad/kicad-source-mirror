@@ -756,7 +756,7 @@ void PCB_BASE_FRAME::TraceModuleRatsNest( wxDC* DC )
     if( ( m_Pcb->m_Status_Pcb & RATSNEST_ITEM_LOCAL_OK ) == 0 )
         return;
 
-    EDA_COLOR_T tmpcolor = g_ColorsSettings.GetItemColor(RATSNEST_VISIBLE);
+    COLOR4D tmpcolor = g_ColorsSettings.GetItemColor( RATSNEST_VISIBLE );
 
     for( unsigned ii = 0; ii < m_Pcb->m_LocalRatsnest.size(); ii++ )
     {

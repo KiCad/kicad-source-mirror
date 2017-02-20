@@ -144,7 +144,7 @@ public:
         return currentPenWidth;
     }
 
-    virtual void SetColor( EDA_COLOR_T color ) = 0;
+    virtual void SetColor( COLOR4D color ) = 0;
 
     virtual void SetDash( bool dashed ) = 0;
 
@@ -364,7 +364,7 @@ public:
      * for specific plotters (GERBER) aData is used to pass extra parameters
      */
     virtual void Text( const wxPoint&              aPos,
-                       enum EDA_COLOR_T            aColor,
+                       const COLOR4D               aColor,
                        const wxString&             aText,
                        double                      aOrient,
                        const wxSize&               aSize,
@@ -581,7 +581,7 @@ public:
     virtual void SetDefaultLineWidth( int width ) override {}
     virtual void SetDash( bool dashed ) override;
 
-    virtual void SetColor( EDA_COLOR_T color ) override {}
+    virtual void SetColor( COLOR4D color ) override {}
 
     virtual void SetPenSpeed( int speed )
     {
@@ -686,7 +686,7 @@ public:
      * The PSLIKE computes the rgb values, the subclass emits the
      * operator to actually do it
      */
-    virtual void SetColor( EDA_COLOR_T color ) override;
+    virtual void SetColor( COLOR4D color ) override;
 
 protected:
     void computeTextParameters( const wxPoint&           aPos,
@@ -771,7 +771,7 @@ public:
 
     virtual void PenTo( const wxPoint& pos, char plume ) override;
     virtual void Text( const wxPoint&              aPos,
-                       enum EDA_COLOR_T            aColor,
+                       const COLOR4D               aColor,
                        const wxString&             aText,
                        double                      aOrient,
                        const wxSize&               aSize,
@@ -842,7 +842,7 @@ public:
     virtual void PenTo( const wxPoint& pos, char plume ) override;
 
     virtual void Text( const wxPoint&              aPos,
-                       enum EDA_COLOR_T            aColor,
+                       const COLOR4D               aColor,
                        const wxString&             aText,
                        double                      aOrient,
                        const wxSize&               aSize,
@@ -890,7 +890,7 @@ public:
         return PLOT_FORMAT_SVG;
     }
 
-    virtual void SetColor( EDA_COLOR_T color ) override;
+    virtual void SetColor( COLOR4D color ) override;
     virtual bool StartPlot() override;
     virtual bool EndPlot() override;
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
@@ -914,7 +914,7 @@ public:
 
     virtual void PenTo( const wxPoint& pos, char plume ) override;
     virtual void Text( const wxPoint&              aPos,
-                       enum EDA_COLOR_T            aColor,
+                       const COLOR4D               aColor,
                        const wxString&             aText,
                        double                      aOrient,
                        const wxSize&               aSize,
@@ -1009,7 +1009,7 @@ public:
 
     // RS274X has no dashing, nor colours
     virtual void SetDash( bool dashed ) override {}
-    virtual void SetColor( EDA_COLOR_T color ) override {}
+    virtual void SetColor( COLOR4D color ) override {}
     // Currently, aScale and aMirror are not used in gerber plotter
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                           double aScale, bool aMirror ) override;
@@ -1040,7 +1040,7 @@ public:
     virtual void PenTo( const wxPoint& pos, char plume ) override;
 
     virtual void Text( const wxPoint&              aPos,
-                       enum EDA_COLOR_T            aColor,
+                       const COLOR4D               aColor,
                        const wxString&             aText,
                        double                      aOrient,
                        const wxSize&               aSize,
@@ -1209,7 +1209,7 @@ public:
     DXF_PLOTTER() : textAsLines( false )
     {
         textAsLines = true;
-        m_currentColor = BLACK;
+        m_currentColor = COLOR4D_BLACK;
     }
 
     virtual PlotFormat GetPlotterType() const override
@@ -1248,7 +1248,7 @@ public:
 
     virtual void SetDash( bool dashed ) override;
 
-    virtual void SetColor( EDA_COLOR_T color ) override;
+    virtual void SetColor( COLOR4D color ) override;
 
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror ) override;
@@ -1280,7 +1280,7 @@ public:
                                  double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode, void* aData ) override;
 
     virtual void Text( const wxPoint&              aPos,
-                       enum EDA_COLOR_T            aColor,
+                       const COLOR4D               aColor,
                        const wxString&             aText,
                        double                      aOrient,
                        const wxSize&               aSize,
@@ -1294,7 +1294,7 @@ public:
 
 protected:
     bool textAsLines;
-    EDA_COLOR_T m_currentColor;
+    COLOR4D m_currentColor;
 };
 
 class TITLE_BLOCK;

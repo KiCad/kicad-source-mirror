@@ -37,18 +37,18 @@
 
 #include <macros.h>
 #include <common.h>
-#include <colors.h>
 #include <wx/colour.h>
+#include <wx/colordlg.h>
 
 #include <algorithm>
 
 
 #define BUTT_SIZE_X             20
 #define BUTT_SIZE_Y             18
-#define BUTT_VOID               4
+#define BUTT_VOID               2
 
 // See selcolor.cpp:
-extern EDA_COLOR_T DisplayColorFrame( wxWindow* aParent, EDA_COLOR_T aOldColor );
+extern COLOR4D DisplayColorFrame( wxWindow* aParent, COLOR4D aOldColor );
 
 const wxEventType LAYER_WIDGET::EVT_LAYER_COLOR_CHANGE = wxNewEventType();
 
@@ -152,14 +152,12 @@ static const char * rightarrow_alternate_xpm[] = {
 
 /**
  * Function makeColorTxt
- * returns a string containing the numeric value of the color.
- * in a form like 0x00000000.  (Color is currently an index, not RGB).
+ * returns a string representing the color in CSS format
+ * For example: "rgba(255, 0, 0, 255)"
  */
-static wxString makeColorTxt( EDA_COLOR_T aColor )
+static wxString makeColorTxt( COLOR4D aColor )
 {
-    wxString txt;
-    txt.Printf( wxT("0x%08x"), aColor );
-    return txt;
+    return aColor.ToWxString( wxC2S_CSS_SYNTAX );
 }
 
 
@@ -189,7 +187,7 @@ LAYER_NUM LAYER_WIDGET::getDecodedId( int aControlId )
 }
 
 
-wxBitmap LAYER_WIDGET::makeBitmap( EDA_COLOR_T aColor )
+wxBitmap LAYER_WIDGET::makeBitmap( COLOR4D aColor )
 {
     // the bitmap will be BUTT_VOID*2 pixels smaller than the button, leaving a
     // border of BUTT_VOID pixels on each side.
@@ -199,7 +197,7 @@ wxBitmap LAYER_WIDGET::makeBitmap( EDA_COLOR_T aColor )
 
     iconDC.SelectObject( bitmap );
 
-    brush.SetColour( MakeColour( aColor ) );
+    brush.SetColour( aColor.ToColour() );
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
 
     iconDC.SetBrush( brush );
@@ -210,7 +208,7 @@ wxBitmap LAYER_WIDGET::makeBitmap( EDA_COLOR_T aColor )
 }
 
 
-wxBitmapButton* LAYER_WIDGET::makeColorButton( wxWindow* aParent, EDA_COLOR_T aColor, int aID )
+wxBitmapButton* LAYER_WIDGET::makeColorButton( wxWindow* aParent, COLOR4D aColor, int aID )
 {
     // dynamically make a wxBitMap and brush it with the appropriate color,
     // then create a wxBitmapButton from it.
@@ -283,14 +281,31 @@ void LAYER_WIDGET::OnMiddleDownLayerColor( wxMouseEvent& aEvent )
 
     wxString colorTxt = eventSource->GetName();
 
-    EDA_COLOR_T oldColor = ColorFromInt( strtoul( TO_UTF8(colorTxt), NULL, 0 ) );
-    EDA_COLOR_T newColor = DisplayColorFrame( this, oldColor );
+    COLOR4D oldColor;
+    wxASSERT( oldColor.SetFromWxString( colorTxt ) );
+    COLOR4D newColor = UNSPECIFIED_COLOR4D;
 
-    if( newColor >= 0 )
+    if( AreArbitraryColorsAllowed() )
+    {
+        wxColourData colourData;
+        colourData.SetColour( oldColor.ToColour() );
+        wxColourDialog* dialog = new wxColourDialog( m_LayerScrolledWindow, &colourData );
+
+        if( dialog->ShowModal() == wxID_OK )
+        {
+            newColor = COLOR4D( dialog->GetColourData().GetColour() );
+        }
+    }
+    else
+    {
+        newColor = DisplayColorFrame( this, oldColor );
+    }
+
+    if( newColor != UNSPECIFIED_COLOR4D )
     {
         eventSource->SetName( makeColorTxt( newColor ) );
 
-        wxBitmap bm = makeBitmap( newColor );
+        wxBitmap bm = makeBitmap( newColor.ToColour() );
         eventSource->SetBitmapLabel( bm );
 
         LAYER_NUM layer = getDecodedId( eventSource->GetId() );
@@ -322,10 +337,27 @@ void LAYER_WIDGET::OnMiddleDownRenderColor( wxMouseEvent& event )
 
     wxString colorTxt = eventSource->GetName();
 
-    EDA_COLOR_T oldColor = ColorFromInt( strtoul( TO_UTF8(colorTxt), NULL, 0 ) );
-    EDA_COLOR_T newColor = DisplayColorFrame( this, oldColor );
+    COLOR4D oldColor;
+    wxASSERT( oldColor.SetFromWxString( colorTxt ) );
+    COLOR4D newColor = UNSPECIFIED_COLOR4D;
 
-    if( newColor >= 0 )
+    if( AreArbitraryColorsAllowed() )
+    {
+        wxColourData colourData;
+        colourData.SetColour( oldColor.ToColour() );
+        wxColourDialog *dialog = new wxColourDialog( m_LayerScrolledWindow, &colourData );
+
+        if( dialog->ShowModal() == wxID_OK )
+        {
+            newColor = COLOR4D( dialog->GetColourData().GetColour() );
+        }
+    }
+    else
+    {
+        newColor = DisplayColorFrame( this, oldColor );
+    }
+
+    if( newColor != UNSPECIFIED_COLOR4D )
     {
         eventSource->SetName( makeColorTxt( newColor ) );
 
@@ -427,6 +459,7 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
 
     // column 1 (COLUMN_COLORBM)
     col = COLUMN_COLORBM;
+
     wxBitmapButton* bmb = makeColorButton( m_LayerScrolledWindow, aSpec.color, encodeId( col, aSpec.id ) );
     bmb->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
     bmb->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownLayerColor ), NULL, this );
@@ -462,7 +495,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
 
     // column 0
     col = 0;
-    if( aSpec.color != -1 )
+    if( aSpec.color != UNSPECIFIED_COLOR4D )
     {
         wxBitmapButton* bmb = makeColorButton( m_RenderScrolledWindow, aSpec.color, encodeId( col, aSpec.id ) );
         bmb->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownRenderColor ), NULL, this );
@@ -764,7 +797,7 @@ bool LAYER_WIDGET::IsLayerVisible( LAYER_NUM aLayer )
 }
 
 
-void LAYER_WIDGET::SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor )
+void LAYER_WIDGET::SetLayerColor( LAYER_NUM aLayer, COLOR4D aColor )
 {
     int row = findLayerRow( aLayer );
     if( row >= 0 )
@@ -781,7 +814,7 @@ void LAYER_WIDGET::SetLayerColor( LAYER_NUM aLayer, EDA_COLOR_T aColor )
 }
 
 
-EDA_COLOR_T LAYER_WIDGET::GetLayerColor( LAYER_NUM aLayer ) const
+COLOR4D LAYER_WIDGET::GetLayerColor( LAYER_NUM aLayer ) const
 {
     int row = findLayerRow( aLayer );
     if( row >= 0 )
@@ -794,7 +827,7 @@ EDA_COLOR_T LAYER_WIDGET::GetLayerColor( LAYER_NUM aLayer ) const
         return ColorFromInt( strtoul( TO_UTF8(colorTxt), NULL, 0 ) );
     }
 
-    return UNSPECIFIED_COLOR;   // it's caller fault, gave me a bad layer
+    return UNSPECIFIED_COLOR4D;   // it's caller fault, gave me a bad layer
 }
 
 
@@ -860,7 +893,7 @@ class MYFRAME : public wxFrame
         {
         }
 
-        void OnLayerColorChange( int aLayer, EDA_COLOR_T aColor )
+        void OnLayerColorChange( int aLayer, COLOR4D aColor )
         {
             printf( "OnLayerColorChange( aLayer:%d, aColor:%d )\n", aLayer, aColor );
 
@@ -884,7 +917,7 @@ class MYFRAME : public wxFrame
             printf( "OnLayerVisible( aLayer:%d, isVisible:%d isFinal:%d)\n", aLayer, isVisible, isFinal );
         }
 
-        void OnRenderColorChange( int aId, EDA_COLOR_T aColor )
+        void OnRenderColorChange( int aId, COLOR4D aColor )
         {
             printf( "OnRenderColorChange( aId:%d, aColor:%d )\n", aId, aColor );
         }
@@ -918,7 +951,7 @@ public:
 
         // add some render rows
         static const LAYER_WIDGET::ROW renderRows[] = {
-            LAYER_WIDGET::ROW( wxT("With Very Large Ears"), 0, UNSPECIFIED_COLOR, wxT("Spock here") ),
+            LAYER_WIDGET::ROW( wxT("With Very Large Ears"), 0, UNSPECIFIED_COLOR4D, wxT("Spock here") ),
             LAYER_WIDGET::ROW( wxT("With Legs"), 1, YELLOW ),
             LAYER_WIDGET::ROW( wxT("With Oval Eyes"), 1, BROWN, wxT("My eyes are upon you") ),
         };

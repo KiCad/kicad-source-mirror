@@ -680,7 +680,7 @@ void FOOTPRINT_VIEWER_FRAME::Update3D_Frame( bool aForceReloadFootprint )
 }
 
 
-EDA_COLOR_T FOOTPRINT_VIEWER_FRAME::GetGridColor() const
+COLOR4D FOOTPRINT_VIEWER_FRAME::GetGridColor() const
 {
     return g_ColorsSettings.GetItemColor( GRID_VISIBLE );
 }

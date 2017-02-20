@@ -432,9 +432,9 @@ void DISPLAY_FOOTPRINTS_FRAME::SetGridVisibility(bool aVisible)
 }
 
 
-EDA_COLOR_T DISPLAY_FOOTPRINTS_FRAME::GetGridColor() const
+COLOR4D DISPLAY_FOOTPRINTS_FRAME::GetGridColor() const
 {
-    return DARKGRAY;
+    return COLOR4D( DARKGRAY );
 }
 
 

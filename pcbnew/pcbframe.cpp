@@ -718,6 +718,37 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
     PCB_BASE_EDIT_FRAME::UseGalCanvas( aEnable );
 
     enableGALSpecificMenus();
+
+    // Force colors to be legacy-compatible in case they were changed in GAL
+    if( !aEnable )
+    {
+        forceColorsToLegacy();
+        Refresh();
+    }
+
+    // Re-create the layer manager to allow arbitrary colors when GAL is enabled
+    ReFillLayerWidget();
+    m_Layers->ReFillRender();
+}
+
+
+void PCB_EDIT_FRAME::forceColorsToLegacy()
+{
+    COLORS_DESIGN_SETTINGS *cds = GetBoard()->GetColorsSettings();
+
+    for( int i = 0; i < LAYER_ID_COUNT; i++ )
+    {
+        COLOR4D c = cds->GetLayerColor( i );
+        c.SetToNearestLegacyColor();
+        cds->SetLayerColor( i, c );
+    }
+
+    for( unsigned int i = 0; i < DIM( cds->m_ItemsColors ); i++ )
+    {
+        COLOR4D c = cds->GetItemColor( i );
+        c.SetToNearestLegacyColor();
+        cds->SetItemColor( i, c );
+    }
 }
 
 
@@ -818,26 +849,20 @@ void PCB_EDIT_FRAME::SetGridVisibility(bool aVisible)
 }
 
 
-EDA_COLOR_T PCB_EDIT_FRAME::GetGridColor() const
+COLOR4D PCB_EDIT_FRAME::GetGridColor() const
 {
     return GetBoard()->GetVisibleElementColor( GRID_VISIBLE );
 }
 
 
-void PCB_EDIT_FRAME::SetGridColor( EDA_COLOR_T aColor )
+void PCB_EDIT_FRAME::SetGridColor( COLOR4D aColor )
 {
 
     GetBoard()->SetVisibleElementColor( GRID_VISIBLE, aColor );
 
     if( IsGalCanvasActive() )
     {
-        StructColors c = g_ColorRefs[ aColor ];
-        KIGFX::COLOR4D color(  (double) c.m_Red / 255.0,
-                        (double) c.m_Green / 255.0,
-                        (double) c.m_Blue / 255.0,
-                        0.7 );
-
-         GetGalCanvas()->GetGAL()->SetGridColor( color );
+        GetGalCanvas()->GetGAL()->SetGridColor( aColor );
     }
 }
 

@@ -66,7 +66,7 @@
 void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
                        const PAGE_INFO& aPageInfo,
                        const TITLE_BLOCK& aTitleBlock,
-                       EDA_COLOR_T aColor, EDA_COLOR_T aAltColor )
+                       COLOR4D aColor, COLOR4D aAltColor )
 {
     WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
 
@@ -122,7 +122,7 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
             && m_sheetNumber > 1 )
             continue;
 
-        EDA_COLOR_T color = wsItem->GetItemColor();
+        COLOR4D color = wsItem->GetItemColor();
 
         pensize = wsItem->GetPenSizeUi();
 

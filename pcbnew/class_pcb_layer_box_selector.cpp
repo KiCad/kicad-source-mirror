@@ -146,7 +146,7 @@ LSET PCB_LAYER_BOX_SELECTOR::getEnabledLayers() const
 
 
 // Returns a color index from the layer id
-EDA_COLOR_T PCB_LAYER_BOX_SELECTOR::GetLayerColor( LAYER_NUM aLayer ) const
+COLOR4D PCB_LAYER_BOX_SELECTOR::GetLayerColor( LAYER_NUM aLayer ) const
 {
     wxASSERT( m_boardFrame );
     BOARD* board = m_boardFrame->GetBoard();

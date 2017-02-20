@@ -33,8 +33,11 @@
 #include <vector>
 
 #include <base_struct.h>
+#include <gal/color4d.h>
 
+using KIGFX::COLOR4D;
 
+class wxDC;
 class GERBER_DRAW_ITEM;
 
 
@@ -173,7 +176,7 @@ public:
      * @param aFilledShape = true to draw in filled mode, false to draw in sketch mode
      */
     void DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox,
-                           wxDC* aDC, EDA_COLOR_T aColor,
+                           wxDC* aDC, COLOR4D aColor,
                            wxPoint aShapePos, bool aFilledShape );
 
     /**
@@ -190,7 +193,7 @@ public:
      * @param aPosition = the actual shape position
      */
     void DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent,
-                             EDA_RECT* aClipBox, wxDC* aDC, EDA_COLOR_T aColor,
+                             EDA_RECT* aClipBox, wxDC* aDC, COLOR4D aColor,
                              bool aFilled, const wxPoint& aPosition );
 
     /**

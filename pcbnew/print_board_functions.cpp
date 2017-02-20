@@ -223,7 +223,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
             int         radius = track->GetWidth() / 2;
             const VIA*  via = static_cast<const VIA*>( track );
 
-            EDA_COLOR_T color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + via->GetViaType() );
+            COLOR4D color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + via->GetViaType() );
 
             GRFilledCircle( m_canvas->GetClipBox(), aDC,
                             via->GetStart().x,
@@ -272,7 +272,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     if( drillShapeOpt != PRINT_PARAMETERS::NO_DRILL_SHAPE )
     {
         TRACK*      track = Pcb->m_Track;
-        EDA_COLOR_T color = WHITE;
+        COLOR4D     color = COLOR4D_WHITE;
 
         bool blackpenstate = GetGRForceBlackPenState();
 

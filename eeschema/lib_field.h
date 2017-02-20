@@ -74,7 +74,7 @@ class LIB_FIELD : public LIB_ITEM, public EDA_TEXT
      * </p>
      */
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                      EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
+                      COLOR4D aColor, GR_DRAWMODE aDrawMode, void* aData,
                       const TRANSFORM& aTransform ) override;
 
     /**
@@ -191,7 +191,7 @@ public:
      */
     wxString GetFullText( int unit = 1 ) const;
 
-    EDA_COLOR_T GetDefaultColor() override;
+    COLOR4D GetDefaultColor() override;
 
     void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) ) override;
 

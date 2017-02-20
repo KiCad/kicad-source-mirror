@@ -148,7 +148,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 {
     BASE_SCREEN* screen = aPanel->GetScreen();
 
-    EDA_COLOR_T Color = YELLOW;
+    COLOR4D Color = COLOR4D( YELLOW );
 
     if( aErase )
     {

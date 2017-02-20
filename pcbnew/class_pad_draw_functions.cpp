@@ -130,7 +130,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     else
         drawInfo.m_ShowPadFilled = true;
 
-    EDA_COLOR_T color = BLACK;
+    COLOR4D color = COLOR4D_BLACK;
 
     if( m_layerMask[F_Cu] )
     {
@@ -139,7 +139,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
 
     if( m_layerMask[B_Cu] )
     {
-        color = ColorMix( color, brd->GetVisibleElementColor( PAD_BK_VISIBLE ) );
+        color = color.LegacyMix( brd->GetVisibleElementColor( PAD_BK_VISIBLE ) );
     }
 
     if( color == BLACK ) // Not on a visible copper layer (i.e. still nothing to show)
@@ -189,7 +189,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
                 )
             {
                 if( !IsOnLayer( screen->m_Active_Layer ) )
-                    ColorTurnToDarkDarkGray( &color );
+                    color = COLOR4D( DARKDARKGRAY );
             }
             // else routing between an internal signal layer and some other
             // layer.  Grey out all PAD_ATTRIB_SMD pads not on current or the single
@@ -198,7 +198,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
                     && !IsOnLayer( routeTop )
                     && !IsOnLayer( routeBot ) )
             {
-                ColorTurnToDarkDarkGray( &color );
+                color = COLOR4D( DARKDARKGRAY );
             }
         }
         // when not edting tracks, show PAD_ATTRIB_SMD components not on active layer
@@ -206,7 +206,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
         else
         {
             if( !IsOnLayer( screen->m_Active_Layer ) )
-                ColorTurnToDarkDarkGray( &color );
+                color = COLOR4D( DARKDARKGRAY );
         }
     }
 
@@ -264,11 +264,8 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
             color = DARKDARKGRAY;
     }
 
-
-    if( aDraw_mode & GR_HIGHLIGHT )
-        ColorChangeHighlightFlag( &color, !(aDraw_mode & GR_AND) );
-
-    ColorApplyHighlightFlag( &color );
+    if( ( aDraw_mode & GR_HIGHLIGHT ) && !( aDraw_mode & GR_AND ) )
+        color.SetToLegacyHighlightColor();
 
     bool DisplayIsol = displ_opts && displ_opts->m_DisplayPadIsol;
 
@@ -288,7 +285,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     drawInfo.m_Mask_margin = mask_margin;
     drawInfo.m_ShowNCMark  = brd->IsElementVisible( PCB_VISIBLE( NO_CONNECTS_VISIBLE ) );
     drawInfo.m_IsPrinting  = screen->m_IsPrinting;
-    SetAlpha( &color, 170 );
+    color.a = 0.666;
 
     /* Get the pad clearance. This has a meaning only for Pcbnew.
      *  for CvPcb GetClearance() creates debug errors because
@@ -488,7 +485,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             GRSetDrawMode( aDC, ( aDrawInfo.m_DrawMode != GR_XOR ) ? GR_COPY : GR_XOR );
         }
 
-        EDA_COLOR_T hole_color = aDrawInfo.m_HoleColor;
+        COLOR4D hole_color = aDrawInfo.m_HoleColor;
 
         if( aDrawInfo. m_ShowNotPlatedHole )    // Draw a specific hole color
             hole_color = aDrawInfo.m_NPHoleColor;
@@ -524,7 +521,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     if( GetNetCode() == 0 && aDrawInfo.m_ShowNCMark )
     {
         int dx0 = std::min( halfsize.x, halfsize.y );
-        EDA_COLOR_T nc_color = BLUE;
+        COLOR4D nc_color = COLOR4D( BLUE );
 
         if( m_layerMask[F_Cu] )    /* Draw \ */
             GRLine( aClipBox, aDC, holepos.x - dx0, holepos.y - dx0,

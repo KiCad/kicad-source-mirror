@@ -46,7 +46,7 @@ public:
 
     // Returns a color index from the layer id
     // Virtual function
-    EDA_COLOR_T GetLayerColor( int aLayer ) const override;
+    COLOR4D GetLayerColor( int aLayer ) const override;
 
     // Returns true if the layer id is enabled (i.e. is it should be displayed)
     // Virtual function

@@ -73,6 +73,7 @@ else()
         common
         bitmaps
         polygon
+        gal
         ${wxWidgets_LIBRARIES}
         ${GDI_PLUS_LIBRARIES}
         )

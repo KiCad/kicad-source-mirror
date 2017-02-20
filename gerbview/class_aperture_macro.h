@@ -195,7 +195,7 @@ struct APERTURE_MACRO
      * @param aFilledShape = true to draw in filled mode, false to draw in skecth mode
      */
     void DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                                 EDA_COLOR_T aColor, wxPoint aShapePos, bool aFilledShape );
+                                 COLOR4D aColor, wxPoint aShapePos, bool aFilledShape );
 
     /**
      * Function GetShapeDim

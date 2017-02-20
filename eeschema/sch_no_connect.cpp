@@ -128,7 +128,7 @@ int SCH_NO_CONNECT::GetPenSize() const
 
 
 void SCH_NO_CONNECT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                           GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor )
+                           GR_DRAWMODE aDrawMode, COLOR4D aColor )
 {
     int pX, pY;
     int delta = m_size.x / 2;
@@ -137,8 +137,9 @@ void SCH_NO_CONNECT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
     pX = m_pos.x + aOffset.x;
     pY = m_pos.y + aOffset.y;
 
-    EDA_COLOR_T color;
-    if( aColor >= 0 )
+    COLOR4D color;
+
+    if( aColor != UNSPECIFIED_COLOR4D )
         color = aColor;
     else
         color = GetLayerColor( LAYER_NOCONNECT );

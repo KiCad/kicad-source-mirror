@@ -79,7 +79,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
      */
     double   iusPerMil = plotter->GetIUsPerDecimil() * 10.0;
 
-    EDA_COLOR_T plotColor = plotter->GetColorMode() ? RED : BLACK;
+    COLOR4D plotColor = plotter->GetColorMode() ? COLOR4D( RED ) : COLOR4D_BLACK;
     plotter->SetColor( plotColor );
     WS_DRAW_ITEM_LIST drawList;
 

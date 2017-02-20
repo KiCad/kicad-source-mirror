@@ -34,7 +34,7 @@
 #include <fctsys.h>
 #include <wxstruct.h>
 #include <common.h>
-#include <colors.h>
+#include <gal/color4d.h>
 #include <macros.h>
 
 #include <pgm_base.h>

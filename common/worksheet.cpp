@@ -53,7 +53,7 @@ void DrawPageLayout( wxDC* aDC, EDA_RECT* aClipBox,
                      TITLE_BLOCK& aTitleBlock,
                      int aSheetCount, int aSheetNumber,
                      int aPenWidth, double aScalar,
-                     EDA_COLOR_T aColor, EDA_COLOR_T aAltColor,
+                     COLOR4D aColor, COLOR4D aAltColor,
                      const wxString& aSheetLayer )
 {
     WS_DRAW_ITEM_LIST drawList;
@@ -94,7 +94,7 @@ void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWi
     }
 
     TITLE_BLOCK t_block = GetTitleBlock();
-    EDA_COLOR_T color = RED;
+    COLOR4D color = COLOR4D( RED );
 
     wxPoint origin = aDC->GetDeviceOrigin();
 

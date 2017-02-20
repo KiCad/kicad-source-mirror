@@ -708,7 +708,7 @@ static void moveItemWithMouseCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     if( aErase )
     {
         if( cmp )   // Use fast mode (do not draw pin texts)
-            cmp->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, UNSPECIFIED_COLOR, false );
+            cmp->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, UNSPECIFIED_COLOR4D, false );
         else
             item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
     }
@@ -723,7 +723,7 @@ static void moveItemWithMouseCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     item->SetWireImage();  // While moving, the item may choose to render differently
 
     if( cmp )   // Use fast mode (do not draw pin texts)
-        cmp->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, UNSPECIFIED_COLOR, false );
+        cmp->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, UNSPECIFIED_COLOR4D, false );
     else
         item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 }

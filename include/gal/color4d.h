@@ -77,6 +77,65 @@ public:
      * @param aColor is the color type used by wxWidgets.
      */
     COLOR4D( const wxColour& aColor );
+
+    /**
+     * Function SetFromWxString
+     * Sets color values by parsing a string using wxColour::Set()
+     *
+     * @param aColorString is a color string that wxColour can understand
+     * @return true if color was set successfully
+     */
+    bool SetFromWxString( const wxString& aColorString );
+
+    wxString ToWxString( long flags );
+
+    wxColour ToColour() const
+    {
+        wxColour colour( r * 255, g * 255, b * 255, a * 255 );
+        return colour;
+    }
+
+    /**
+     * Function LegacyMix()
+     * Mixes this COLOR4D with an input COLOR4D using the OR-mixing of legacy canvas.
+     *
+     * Can be removed once legacy canvas is removed.
+     * Depends on wxColour for simplicity, but could be re-written to avoid
+     * this dependency if desired.
+     *
+     * @param aColor The color to mix with this one
+     */
+    COLOR4D LegacyMix( COLOR4D aColor ) const;
+
+    /**
+     * Function SetToLegacyHighlightColor()
+     * Sets the color to the "light" version of the nearest matching
+     * legacy color (see g_ColorRefs in colors.cpp).
+     */
+    COLOR4D& SetToLegacyHighlightColor();
+
+    /**
+     * Function SetToNearestLegacyColor()
+     * Sets the color to the nearest matching
+     * legacy color (see g_ColorRefs in colors.cpp).
+     */
+    COLOR4D& SetToNearestLegacyColor();
+
+    /**
+     * Packs the color into an unsigned int for compatibility with legacy canvas.
+     * Note that this is a lossy downsampling and also that the alpha channel is lost.
+     */
+    unsigned int ToU32() const;
+
+    /**
+     * Unpacks from a unsigned int in the legacy EDA_COLOR_T format.
+     */
+    void FromU32( unsigned int aPackedColor );
+
+    /**
+     * Determines the "nearest" EDA_COLOR_T according to ColorFindNearest
+     */
+    static EDA_COLOR_T GetNearestLegacyColor( COLOR4D &aColor );
 #endif /* WX_COMPATIBLITY */
 
     /**
@@ -205,18 +264,27 @@ public:
      */
     void FromHSV( double aInH, double aInS, double aInV );
 
-    /// @brief Equality operator, are two colors equal
-    const bool operator==( const COLOR4D& aColor );
-
-    /// @brief Not equality operator, are two colors not equal
-    const bool operator!=( const COLOR4D& aColor );
-
     // Color components: red, green, blue, alpha
     double r; ///< Red component
     double g; ///< Green component
     double b; ///< Blue component
     double a; ///< Alpha component
 };
+
+/// @brief Equality operator, are two colors equal
+const bool operator==( const COLOR4D& lhs, const COLOR4D& rhs );
+
+/// @brief Not equality operator, are two colors not equal
+const bool operator!=( const COLOR4D& lhs, const COLOR4D& rhs );
+
 } // namespace KIGFX
+
+/// For legacy support; used as a value to indicate color hasn't been set yet
+#define UNSPECIFIED_COLOR4D ( KIGFX::COLOR4D( 0, 0, 0, 0 ) )
+
+/// Declare a few color shortcuts that are used for comparisons frequently
+#define COLOR4D_WHITE ( KIGFX::COLOR4D( 1, 1, 1, 1 ) )
+#define COLOR4D_BLACK ( KIGFX::COLOR4D( 0, 0, 0, 1 ) )
+
 
 #endif /* COLOR4D_H_ */

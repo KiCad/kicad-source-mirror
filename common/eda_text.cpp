@@ -289,8 +289,8 @@ bool EDA_TEXT::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy
 
 
 void EDA_TEXT::Draw( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-                     EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode,
-                     EDA_DRAW_MODE_T aFillMode, EDA_COLOR_T aAnchor_color )
+                     COLOR4D aColor, GR_DRAWMODE aDrawMode,
+                     EDA_DRAW_MODE_T aFillMode, COLOR4D aAnchor_color )
 {
     if( IsMultilineAllowed() )
     {
@@ -314,7 +314,7 @@ void EDA_TEXT::Draw( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
                            aDrawMode, aFillMode, GetShownText(), GetTextPos() );
 
     // Draw text anchor, if requested
-    if( aAnchor_color != UNSPECIFIED_COLOR )
+    if( aAnchor_color != UNSPECIFIED_COLOR4D )
     {
         GRDrawAnchor( aClipBox, aDC,
                       GetTextPos().x + aOffset.x, GetTextPos().y + aOffset.y,
@@ -366,7 +366,7 @@ void EDA_TEXT::GetPositionsOfLinesOfMultilineText(
 }
 
 void EDA_TEXT::drawOneLineOfText( EDA_RECT* aClipBox, wxDC* aDC,
-                                  const wxPoint& aOffset, EDA_COLOR_T aColor,
+                                  const wxPoint& aOffset, COLOR4D aColor,
                                   GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aFillMode,
                                   const wxString& aText, const wxPoint &aPos )
 {
@@ -511,7 +511,7 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
         size.x = -size.x;
 
     s_cornerBuffer = &aCornerBuffer;
-    EDA_COLOR_T color = BLACK;  // not actually used, but needed by DrawGraphicText
+    COLOR4D color = COLOR4D_BLACK;  // not actually used, but needed by DrawGraphicText
 
     if( IsMultilineAllowed() )
     {

@@ -98,13 +98,13 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 if( !( masklayer & layersmask_plotpads ).any() )
                     continue;
 
-                EDA_COLOR_T color = ColorFromInt( 0 );
+                COLOR4D color = COLOR4D_BLACK;
 
                 if( layersmask_plotpads[B_SilkS] )
                    color = aBoard->GetLayerColor( B_SilkS );
 
                 if( layersmask_plotpads[F_SilkS] )
-                    color = ColorFromInt( color | aBoard->GetLayerColor( F_SilkS ) );
+                    color = ( color == COLOR4D_BLACK) ? aBoard->GetLayerColor( F_SilkS ) : color;
 
                 itemplotter.PlotPad( pad, color, SKETCH );
             }
@@ -408,13 +408,13 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             if( padPlotsSize.x <= 0 || padPlotsSize.y <= 0 )
                 continue;
 
-            EDA_COLOR_T color = BLACK;
+            COLOR4D color = COLOR4D_BLACK;
 
             if( pad->GetLayerSet()[B_Cu] )
                color = aBoard->GetVisibleElementColor( PAD_BK_VISIBLE );
 
             if( pad->GetLayerSet()[F_Cu] )
-                color = ColorFromInt( color | aBoard->GetVisibleElementColor( PAD_FR_VISIBLE ) );
+                color = color.LegacyMix( aBoard->GetVisibleElementColor( PAD_FR_VISIBLE ) );
 
             // Temporary set the pad size to the required plot size:
             wxSize tmppadsize = pad->GetSize();
@@ -507,7 +507,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
         gbr_metadata.SetNetName( Via->GetNetname() );
 
-        EDA_COLOR_T color = aBoard->GetVisibleElementColor(VIAS_VISIBLE + Via->GetViaType());
+        COLOR4D color = aBoard->GetVisibleElementColor( VIAS_VISIBLE + Via->GetViaType() );
         // Set plot color (change WHITE to LIGHTGRAY because
         // the white items are not seen on a white paper or screen
         aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);

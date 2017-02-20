@@ -334,12 +334,12 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
     wxPoint pos = aTransform.TransformCoordinate( txtpos ) + offset;
 
     // Get color
-    EDA_COLOR_T     color;
+    COLOR4D color;
 
     if( plotter->GetColorMode() )       // Used normal color or selected color
         color = IsSelected() ? GetItemSelectedColor() : GetDefaultColor();
     else
-        color = BLACK;
+        color = COLOR4D_BLACK;
 
     plotter->Text( pos, color, GetShownText(),
                    t1 ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT,
@@ -367,12 +367,12 @@ int LIB_TEXT::GetPenSize() const
 
 
 void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                            EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
+                            COLOR4D aColor, GR_DRAWMODE aDrawMode, void* aData,
                             const TRANSFORM& aTransform )
 {
-    EDA_COLOR_T color = GetDefaultColor();
+    COLOR4D color = GetDefaultColor();
 
-    if( aColor < 0 )       // Used normal color or selected color
+    if( aColor == UNSPECIFIED_COLOR4D )       // Used normal color or selected color
     {
         if( IsSelected() )
             color = GetItemSelectedColor();

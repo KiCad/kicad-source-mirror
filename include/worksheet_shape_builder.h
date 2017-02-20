@@ -63,13 +63,13 @@ public:
 
 protected:
     WS_DRAW_TYPE    m_type; // wsg_line, wsg_rect, wsg_poly, wsg_text
-    EDA_COLOR_T     m_color;
+    COLOR4D         m_color;
     WORKSHEET_DATAITEM*  m_parent;  // an unique identifier, used as link
                                     // to the parent WORKSHEET_DATAITEM item,
                                     // in page layout editor
 
     WS_DRAW_ITEM_BASE( WORKSHEET_DATAITEM*  aParent,
-                       WS_DRAW_TYPE aType, EDA_COLOR_T aColor )
+                       WS_DRAW_TYPE aType, COLOR4D aColor )
     {
         m_type  = aType;
         m_color = aColor;
@@ -81,7 +81,7 @@ public:
     virtual ~WS_DRAW_ITEM_BASE() {}
 
     // Accessors:
-    EDA_COLOR_T GetColor() const { return m_color; }
+    COLOR4D GetColor() const { return m_color; }
     WS_DRAW_TYPE GetType() const { return m_type; };
 
     WORKSHEET_DATAITEM* GetParent() const { return m_parent; }
@@ -91,13 +91,13 @@ public:
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC)
     {
         wxPoint offset( 0, 0 );
-        DrawWsItem( aClipBox, aDC, offset, UNSPECIFIED_DRAWMODE, UNSPECIFIED_COLOR );
+        DrawWsItem( aClipBox, aDC, offset, UNSPECIFIED_DRAWMODE, UNSPECIFIED_COLOR4D );
     }
 
     /// More advanced version of DrawWsItem. This is what must be
     /// defined in the derived type.
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) = 0;
+            GR_DRAWMODE aDrawMode, COLOR4D aColor = UNSPECIFIED_COLOR4D ) = 0;
 
     /**
      * Abstract function: should exist for derived items
@@ -143,7 +143,7 @@ class WS_DRAW_ITEM_LINE : public WS_DRAW_ITEM_BASE
 public:
     WS_DRAW_ITEM_LINE( WORKSHEET_DATAITEM* aParent,
                        wxPoint aStart, wxPoint aEnd,
-                       int aPenWidth, EDA_COLOR_T aColor ) :
+                       int aPenWidth, COLOR4D aColor ) :
         WS_DRAW_ITEM_BASE( aParent, wsg_line, aColor )
     {
         m_start     = aStart;
@@ -159,7 +159,7 @@ public:
     /** The function to draw a WS_DRAW_ITEM_LINE
      */
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) override;
+            GR_DRAWMODE aDrawMode, COLOR4D aColor = UNSPECIFIED_COLOR4D ) override;
 
     /**
      * Virtual function
@@ -200,7 +200,7 @@ public:
 
 public:
     WS_DRAW_ITEM_POLYGON( WORKSHEET_DATAITEM* aParent, wxPoint aPos,
-                          bool aFill, int aPenWidth, EDA_COLOR_T aColor ) :
+                          bool aFill, int aPenWidth, COLOR4D aColor ) :
         WS_DRAW_ITEM_BASE( aParent, wsg_poly, aColor )
     {
         m_penWidth = aPenWidth;
@@ -216,7 +216,7 @@ public:
     /** The function to draw a WS_DRAW_ITEM_POLYGON
      */
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) override;
+            GR_DRAWMODE aDrawMode, COLOR4D aColor = UNSPECIFIED_COLOR4D ) override;
 
     /**
      * Virtual function
@@ -242,7 +242,7 @@ class WS_DRAW_ITEM_RECT : public WS_DRAW_ITEM_LINE
 public:
     WS_DRAW_ITEM_RECT( WORKSHEET_DATAITEM* aParent,
                        wxPoint aStart, wxPoint aEnd,
-                       int aPenWidth, EDA_COLOR_T aColor ) :
+                       int aPenWidth, COLOR4D aColor ) :
         WS_DRAW_ITEM_LINE( aParent, aStart, aEnd, aPenWidth, aColor )
     {
         m_type = wsg_rect;
@@ -251,7 +251,7 @@ public:
     /** The function to draw a WS_DRAW_ITEM_RECT
      */
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) override;
+            GR_DRAWMODE aDrawMode, COLOR4D aColor = UNSPECIFIED_COLOR4D ) override;
 
     /**
      * Virtual function
@@ -286,13 +286,13 @@ class WS_DRAW_ITEM_TEXT : public WS_DRAW_ITEM_BASE, public EDA_TEXT
 public:
     WS_DRAW_ITEM_TEXT( WORKSHEET_DATAITEM* aParent,
                        wxString& aText, wxPoint aPos, wxSize aSize,
-                       int aPenWidth, EDA_COLOR_T aColor,
+                       int aPenWidth, COLOR4D aColor,
                        bool aItalic = false, bool aBold = false );
 
     /** The function to draw a WS_DRAW_ITEM_TEXT
      */
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) override;
+            GR_DRAWMODE aDrawMode, COLOR4D aColor = UNSPECIFIED_COLOR4D ) override;
 
     // Accessors:
     int GetPenWidth() { return GetThickness(); }
@@ -327,13 +327,13 @@ class WS_DRAW_ITEM_BITMAP : public WS_DRAW_ITEM_BASE
 
 public:
     WS_DRAW_ITEM_BITMAP( WORKSHEET_DATAITEM* aParent, wxPoint aPos )
-        :WS_DRAW_ITEM_BASE( aParent, wsg_bitmap, UNSPECIFIED_COLOR )
+        :WS_DRAW_ITEM_BASE( aParent, wsg_bitmap, UNSPECIFIED_COLOR4D )
     {
         m_pos = aPos;
     }
 
     WS_DRAW_ITEM_BITMAP()
-        :WS_DRAW_ITEM_BASE( NULL, wsg_bitmap, UNSPECIFIED_COLOR )
+        :WS_DRAW_ITEM_BASE( NULL, wsg_bitmap, UNSPECIFIED_COLOR4D )
     {
     }
 
@@ -342,7 +342,7 @@ public:
     /** The function to draw a WS_DRAW_ITEM_BITMAP
      */
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) override;
+            GR_DRAWMODE aDrawMode, COLOR4D aColor = UNSPECIFIED_COLOR4D ) override;
 
     /**
      * Virtual function
@@ -557,7 +557,7 @@ public:
      */
     void BuildWorkSheetGraphicList( const PAGE_INFO& aPageInfo,
                                     const TITLE_BLOCK& aTitleBlock,
-                                    EDA_COLOR_T aColor, EDA_COLOR_T aAltColor );
+                                    COLOR4D aColor, COLOR4D aAltColor );
     /**
      * Function BuildFullText
      * returns the full text corresponding to the aTextbase,

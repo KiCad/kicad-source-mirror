@@ -83,7 +83,7 @@ private:
      * creates the colored rectangle bitmaps used in the layer selection widget.
      * @param aColor is the color to fill the rectangle with.
      */
-    wxBitmap makeLayerBitmap( EDA_COLOR_T aColor );
+    wxBitmap makeLayerBitmap( COLOR4D aColor );
 };
 
 
@@ -164,7 +164,7 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
 
         msg = board->GetLayerName( layer );
 
-        EDA_COLOR_T layerColor = board->GetLayerColor( layer );
+        COLOR4D layerColor = board->GetLayerColor( layer );
 
         imageList->Add( makeLayerBitmap( layerColor ) );
 
@@ -255,14 +255,14 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::AcceptOptionsForKeepOut()
 }
 
 
-wxBitmap DIALOG_KEEPOUT_AREA_PROPERTIES::makeLayerBitmap( EDA_COLOR_T aColor )
+wxBitmap DIALOG_KEEPOUT_AREA_PROPERTIES::makeLayerBitmap( COLOR4D aColor )
 {
     wxBitmap    bitmap( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
     wxBrush     brush;
     wxMemoryDC  iconDC;
 
     iconDC.SelectObject( bitmap );
-    brush.SetColour( MakeColour( aColor ) );
+    brush.SetColour( aColor.ToColour() );
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
 
     iconDC.SetBrush( brush );

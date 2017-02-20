@@ -59,7 +59,7 @@ protected:
 
     // Returns a color index from the layer id
     // Virtual function
-    EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const override
+    COLOR4D GetLayerColor( LAYER_NUM aLayer ) const override
     {
         return m_brd->GetLayerColor( ToLAYER_ID( aLayer ) );
     }
@@ -138,7 +138,7 @@ void PCB_ONE_LAYER_SELECTOR::buildList()
         if( m_notAllowedLayersMask[layerid] )
             continue;
 
-        wxColour color = MakeColour( GetLayerColor( layerid ) );
+        COLOR4D color = GetLayerColor( layerid );
         layername = GetLayerName( layerid );
 
         if( IsCopperLayer( layerid ) )
@@ -147,7 +147,7 @@ void PCB_ONE_LAYER_SELECTOR::buildList()
                 m_leftGridLayers->AppendRows( 1 );
 
             m_leftGridLayers->SetCellBackgroundColour ( left_row, COLOR_COLNUM,
-                                                        color );
+                                                        color.ToColour() );
             m_leftGridLayers->SetCellValue( left_row, LAYERNAME_COLNUM,
                                             layername );
 
@@ -156,7 +156,7 @@ void PCB_ONE_LAYER_SELECTOR::buildList()
                 m_leftGridLayers->SetCellValue( left_row, SELECT_COLNUM,
                                                 wxT("X") );
                 m_leftGridLayers->SetCellBackgroundColour ( left_row, SELECT_COLNUM,
-                                                        color );
+                                                        color.ToColour() );
                 m_leftGridLayers->SetGridCursor( left_row, LAYERNAME_COLNUM );
             }
 
@@ -169,7 +169,7 @@ void PCB_ONE_LAYER_SELECTOR::buildList()
                 m_rightGridLayers->AppendRows( 1 );
 
             m_rightGridLayers->SetCellBackgroundColour ( right_row, COLOR_COLNUM,
-                                                         color );
+                                                         color.ToColour() );
             m_rightGridLayers->SetCellValue( right_row, LAYERNAME_COLNUM,
                                              layername );
 
@@ -178,7 +178,7 @@ void PCB_ONE_LAYER_SELECTOR::buildList()
                 m_rightGridLayers->SetCellValue( right_row, SELECT_COLNUM,
                                                  wxT("X") );
                 m_rightGridLayers->SetCellBackgroundColour ( right_row, SELECT_COLNUM,
-                                                         color );
+                                                         color.ToColour() );
                 m_rightGridLayers->SetGridCursor( right_row, LAYERNAME_COLNUM );
             }
 
@@ -338,14 +338,14 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::buildList()
         if( !IsCopperLayer( layerid ) )
             break;
 
-        wxColour color = MakeColour( GetLayerColor( layerid ) );
+        COLOR4D color = GetLayerColor( layerid );
 
         layername = GetLayerName( layerid );
 
         if( row )
             m_leftGridLayers->AppendRows( 1 );
 
-        m_leftGridLayers->SetCellBackgroundColour( row, COLOR_COLNUM, color );
+        m_leftGridLayers->SetCellBackgroundColour( row, COLOR_COLNUM, color.ToColour() );
         m_leftGridLayers->SetCellValue( row, LAYERNAME_COLNUM, layername );
         m_layersId.push_back( layerid );
 
@@ -358,7 +358,7 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::buildList()
         if( row )
             m_rightGridLayers->AppendRows( 1 );
         m_rightGridLayers->SetCellBackgroundColour ( row, COLOR_COLNUM,
-                                                     color );
+                                                     color.ToColour() );
         m_rightGridLayers->SetCellValue( row, LAYERNAME_COLNUM,
                                          layername );
 
@@ -384,9 +384,9 @@ void SELECT_COPPER_LAYERS_PAIR_DIALOG::SetGridCursor( wxGrid* aGrid, int aRow,
     if( aEnable )
     {
         LAYER_ID  layerid = m_layersId[aRow];
-        wxColour color = MakeColour( GetLayerColor( layerid ) );
+        COLOR4D color = GetLayerColor( layerid );
         aGrid->SetCellValue( aRow, SELECT_COLNUM, wxT("X") );
-        aGrid->SetCellBackgroundColour( aRow, SELECT_COLNUM, color );
+        aGrid->SetCellBackgroundColour( aRow, SELECT_COLNUM, color.ToColour() );
         aGrid->SetGridCursor( aRow, LAYERNAME_COLNUM );
     }
     else

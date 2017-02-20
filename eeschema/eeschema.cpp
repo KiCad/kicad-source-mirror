@@ -161,15 +161,15 @@ PGM_BASE& Pgm()
 }
 
 
-static EDA_COLOR_T s_layerColor[LAYERSCH_ID_COUNT];
+static COLOR4D s_layerColor[LAYERSCH_ID_COUNT];
 
-EDA_COLOR_T GetLayerColor( LAYERSCH_ID aLayer )
+COLOR4D GetLayerColor( LAYERSCH_ID aLayer )
 {
     wxASSERT( unsigned( aLayer ) < DIM( s_layerColor ) );
     return s_layerColor[aLayer];
 }
 
-void SetLayerColor( EDA_COLOR_T aColor, LAYERSCH_ID aLayer )
+void SetLayerColor( COLOR4D aColor, LAYERSCH_ID aLayer )
 {
     wxASSERT( unsigned( aLayer ) < DIM( s_layerColor ) );
     s_layerColor[aLayer] = aColor;
@@ -188,32 +188,32 @@ static PARAM_CFG_ARRAY& cfg_params()
 #define CLR(x, y, z)\
     ca.push_back( new PARAM_CFG_SETCOLOR( true, wxT( x ), &s_layerColor[y], z ) );
 
-        CLR( "ColorWireEx",             LAYER_WIRE,             GREEN )
-        CLR( "ColorBusEx",              LAYER_BUS,              BLUE )
-        CLR( "ColorConnEx",             LAYER_JUNCTION,         GREEN )
-        CLR( "ColorLLabelEx",           LAYER_LOCLABEL,         BLACK )
-        CLR( "ColorHLabelEx",           LAYER_HIERLABEL,        BROWN )
-        CLR( "ColorGLabelEx",           LAYER_GLOBLABEL,        RED )
-        CLR( "ColorPinNumEx",           LAYER_PINNUM,           RED )
-        CLR( "ColorPinNameEx",          LAYER_PINNAM,           CYAN )
-        CLR( "ColorFieldEx",            LAYER_FIELDS,           MAGENTA )
-        CLR( "ColorReferenceEx",        LAYER_REFERENCEPART,    CYAN )
-        CLR( "ColorValueEx",            LAYER_VALUEPART,        CYAN )
-        CLR( "ColorNoteEx",             LAYER_NOTES,            LIGHTBLUE )
-        CLR( "ColorBodyEx",             LAYER_DEVICE,           RED )
-        CLR( "ColorBodyBgEx",           LAYER_DEVICE_BACKGROUND,LIGHTYELLOW )
-        CLR( "ColorNetNameEx",          LAYER_NETNAM,           DARKGRAY )
-        CLR( "ColorPinEx",              LAYER_PIN,              RED )
-        CLR( "ColorSheetEx",            LAYER_SHEET,            MAGENTA )
-        CLR( "ColorSheetFileNameEx",    LAYER_SHEETFILENAME,    BROWN )
-        CLR( "ColorSheetNameEx",        LAYER_SHEETNAME,        CYAN )
-        CLR( "ColorSheetLabelEx",       LAYER_SHEETLABEL,       BROWN )
-        CLR( "ColorNoConnectEx",        LAYER_NOCONNECT,        BLUE )
-        CLR( "ColorErcWEx",             LAYER_ERC_WARN,         GREEN )
-        CLR( "ColorErcEEx",             LAYER_ERC_ERR,          RED )
-        CLR( "ColorGridEx",             LAYER_GRID,             DARKGRAY )
-        CLR( "ColorBgCanvasEx",         LAYER_BACKGROUND,       WHITE )
-        CLR( "ColorBrighenedEx",        LAYER_BRIGHTENED,       PUREMAGENTA )
+        CLR( "ColorWireEx",             LAYER_WIRE,              COLOR4D( GREEN ) )
+        CLR( "ColorBusEx",              LAYER_BUS,               COLOR4D( BLUE ) )
+        CLR( "ColorConnEx",             LAYER_JUNCTION,          COLOR4D( GREEN ) )
+        CLR( "ColorLLabelEx",           LAYER_LOCLABEL,          COLOR4D( BLACK ) )
+        CLR( "ColorHLabelEx",           LAYER_HIERLABEL,         COLOR4D( BROWN ) )
+        CLR( "ColorGLabelEx",           LAYER_GLOBLABEL,         COLOR4D( RED ) )
+        CLR( "ColorPinNumEx",           LAYER_PINNUM,            COLOR4D( RED ) )
+        CLR( "ColorPinNameEx",          LAYER_PINNAM,            COLOR4D( CYAN ) )
+        CLR( "ColorFieldEx",            LAYER_FIELDS,            COLOR4D( MAGENTA ) )
+        CLR( "ColorReferenceEx",        LAYER_REFERENCEPART,     COLOR4D( CYAN ) )
+        CLR( "ColorValueEx",            LAYER_VALUEPART,         COLOR4D( CYAN ) )
+        CLR( "ColorNoteEx",             LAYER_NOTES,             COLOR4D( LIGHTBLUE ) )
+        CLR( "ColorBodyEx",             LAYER_DEVICE,            COLOR4D( RED ) )
+        CLR( "ColorBodyBgEx",           LAYER_DEVICE_BACKGROUND, COLOR4D( LIGHTYELLOW ) )
+        CLR( "ColorNetNameEx",          LAYER_NETNAM,            COLOR4D( DARKGRAY ) )
+        CLR( "ColorPinEx",              LAYER_PIN,               COLOR4D( RED ) )
+        CLR( "ColorSheetEx",            LAYER_SHEET,             COLOR4D( MAGENTA ) )
+        CLR( "ColorSheetFileNameEx",    LAYER_SHEETFILENAME,     COLOR4D( BROWN ) )
+        CLR( "ColorSheetNameEx",        LAYER_SHEETNAME,         COLOR4D( CYAN ) )
+        CLR( "ColorSheetLabelEx",       LAYER_SHEETLABEL,        COLOR4D( BROWN ) )
+        CLR( "ColorNoConnectEx",        LAYER_NOCONNECT,         COLOR4D( BLUE ) )
+        CLR( "ColorErcWEx",             LAYER_ERC_WARN,          COLOR4D( GREEN ) )
+        CLR( "ColorErcEEx",             LAYER_ERC_ERR,           COLOR4D( RED ) )
+        CLR( "ColorGridEx",             LAYER_GRID,              COLOR4D( DARKGRAY ) )
+        CLR( "ColorBgCanvasEx",         LAYER_BACKGROUND,        COLOR4D( WHITE ) )
+        CLR( "ColorBrighenedEx",        LAYER_BRIGHTENED,        COLOR4D( PUREMAGENTA ) )
     }
 
     return ca;
@@ -231,9 +231,9 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     // Give a default colour for all layers
     // (actual color will be initialized by config)
     for( LAYERSCH_ID ii = LAYER_FIRST; ii < LAYERSCH_ID_COUNT; ++ii )
-        SetLayerColor( DARKGRAY, ii );
+        SetLayerColor( COLOR4D( DARKGRAY ), ii );
 
-    SetLayerColor( WHITE, LAYER_BACKGROUND );
+    SetLayerColor( COLOR4D_WHITE, LAYER_BACKGROUND );
 
     // Must be called before creating the main frame in order to
     // display the real hotkeys in menus or tool tips

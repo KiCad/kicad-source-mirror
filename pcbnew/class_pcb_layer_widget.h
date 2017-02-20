@@ -88,10 +88,10 @@ public:
     void SetLayersManagerTabsText();
 
     //-----<implement LAYER_WIDGET abstract callback functions>-----------
-    void OnLayerColorChange( int aLayer, EDA_COLOR_T aColor ) override;
+    void OnLayerColorChange( int aLayer, COLOR4D aColor ) override;
     bool OnLayerSelect( int aLayer ) override;
     void OnLayerVisible( int aLayer, bool isVisible, bool isFinal ) override;
-    void OnRenderColorChange( int aId, EDA_COLOR_T aColor ) override;
+    void OnRenderColorChange( int aId, COLOR4D aColor ) override;
     void OnRenderEnable( int aId, bool isEnabled ) override;
     //-----</implement LAYER_WIDGET abstract callback functions>----------
 
@@ -125,6 +125,7 @@ protected:
 #define ID_SHOW_NO_LAYERS                           (wxID_HIGHEST+4)
 #define ID_SHOW_ALL_LAYERS                          (wxID_HIGHEST+5)
 
+    virtual bool AreArbitraryColorsAllowed() override;
 
     /**
      * Function isAllowedInFpMode

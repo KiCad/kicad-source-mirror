@@ -755,7 +755,7 @@ bool PDF_PLOTTER::EndPlot()
 }
 
 void PDF_PLOTTER::Text( const wxPoint&              aPos,
-                        enum EDA_COLOR_T            aColor,
+                        const COLOR4D               aColor,
                         const wxString&             aText,
                         double                      aOrient,
                         const wxSize&               aSize,

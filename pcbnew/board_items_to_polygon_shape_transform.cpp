@@ -445,7 +445,7 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
     s_cornerBuffer = &aCornerBuffer;
     s_textWidth  = GetThickness() + ( 2 * aClearanceValue );
     s_textCircle2SegmentCount = aCircleToSegmentsCount;
-    EDA_COLOR_T color = BLACK;  // not actually used, but needed by DrawGraphicText
+    COLOR4D color = COLOR4D_BLACK;  // not actually used, but needed by DrawGraphicText
 
     if( IsMultilineAllowed() )
     {

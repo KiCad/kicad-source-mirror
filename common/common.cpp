@@ -42,6 +42,8 @@
 
 #include <pgm_base.h>
 
+using KIGFX::COLOR4D;
+
 
 /**
  * Global variables definitions.
@@ -53,7 +55,7 @@
 
 bool           g_ShowPageLimits = true;
 EDA_UNITS_T    g_UserUnit;
-EDA_COLOR_T    g_GhostColor;
+COLOR4D        g_GhostColor;
 
 
 /* Class LOCALE_IO

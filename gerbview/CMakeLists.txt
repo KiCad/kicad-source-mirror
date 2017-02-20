@@ -102,6 +102,7 @@ target_link_libraries( gerbview
     # There's way too much crap coming in from common yet.
     common
     bitmaps
+    gal
     ${wxWidgets_LIBRARIES}
     )
 

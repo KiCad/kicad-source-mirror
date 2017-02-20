@@ -26,13 +26,16 @@
 /* Dialog for selecting color from the palette of available colors.
  */
 
+
 #include <fctsys.h>
 #include <common.h>
-#include <colors.h>
+#include <gal/color4d.h>
 
 #include <wx/statline.h>
 
 #include <algorithm>
+
+using KIGFX::COLOR4D;
 
 
 enum colors_id {
@@ -43,16 +46,16 @@ enum colors_id {
 class CHOOSE_COLOR_DLG : public wxDialog
 {
 public:
-    CHOOSE_COLOR_DLG( wxWindow* aParent, EDA_COLOR_T aOldColor );
+    CHOOSE_COLOR_DLG( wxWindow* aParent, COLOR4D aOldColor );
     ~CHOOSE_COLOR_DLG() {};
 
-    EDA_COLOR_T GetSelectedColor() { return m_color; }
+    COLOR4D GetSelectedColor() { return m_color; }
 
 private:
     void init_Dialog();
     void selColor( wxCommandEvent& event );
 
-    EDA_COLOR_T m_color;
+    COLOR4D m_color;
 
     DECLARE_EVENT_TABLE()
 };
@@ -65,7 +68,7 @@ BEGIN_EVENT_TABLE( CHOOSE_COLOR_DLG, wxDialog )
 END_EVENT_TABLE()
 
 
-EDA_COLOR_T DisplayColorFrame( wxWindow* aParent, EDA_COLOR_T aOldColor )
+COLOR4D DisplayColorFrame( wxWindow* aParent, COLOR4D aOldColor )
 {
     CHOOSE_COLOR_DLG dlg( aParent, aOldColor );
 
@@ -74,11 +77,11 @@ EDA_COLOR_T DisplayColorFrame( wxWindow* aParent, EDA_COLOR_T aOldColor )
         return dlg.GetSelectedColor();
     }
 
-    return UNSPECIFIED_COLOR;
+    return UNSPECIFIED_COLOR4D;
 }
 
 
-CHOOSE_COLOR_DLG::CHOOSE_COLOR_DLG( wxWindow* aParent, EDA_COLOR_T aOldColor ) :
+CHOOSE_COLOR_DLG::CHOOSE_COLOR_DLG( wxWindow* aParent, COLOR4D aOldColor ) :
     wxDialog( aParent, wxID_ANY, _( "Colors" ), wxDefaultPosition, wxDefaultSize,
               wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
@@ -131,10 +134,10 @@ void CHOOSE_COLOR_DLG::init_Dialog()
 
         iconDC.SelectObject( ButtBitmap );
 
-        EDA_COLOR_T buttcolor = g_ColorRefs[ii].m_Numcolor;
+        COLOR4D buttcolor = COLOR4D( g_ColorRefs[ii].m_Numcolor );
 
         iconDC.SetPen( *wxBLACK_PEN );
-        ColorSetBrush( &brush, buttcolor );
+        brush.SetColour( buttcolor.ToColour() );
         brush.SetStyle( wxBRUSHSTYLE_SOLID );
 
         iconDC.SetBrush( brush );
@@ -154,7 +157,8 @@ void CHOOSE_COLOR_DLG::init_Dialog()
         if( m_color == buttcolor )
             focusedButton = bitmapButton;
 
-        wxStaticText* label = new wxStaticText( this, -1, wxGetTranslation( ColorGetName( buttcolor ) ),
+        EDA_COLOR_T edaColor = ColorFindNearest( buttcolor.ToColour() );
+        wxStaticText* label = new wxStaticText( this, -1, wxGetTranslation( ColorGetName( edaColor ) ),
                                         wxDefaultPosition, wxDefaultSize, 0 );
         FlexColumnBoxSizer->Add( label, 1,
                                  wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |

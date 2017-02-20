@@ -115,7 +115,7 @@ bool LIB_ITEM::operator<( const LIB_ITEM& aOther ) const
 
 
 void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                     const wxPoint& aOffset, EDA_COLOR_T aColor,
+                     const wxPoint& aOffset, COLOR4D aColor,
                      GR_DRAWMODE aDrawMode, void* aData,
                      const TRANSFORM& aTransform )
 {
@@ -123,7 +123,7 @@ void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     {
         // Temporarily disable filling while the item is being edited.
         FILL_T fillMode = m_Fill;
-        EDA_COLOR_T color = GetDefaultColor();
+        COLOR4D color = GetDefaultColor();
 
         m_Fill = NO_FILL;
 
@@ -154,7 +154,7 @@ void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 }
 
 
-EDA_COLOR_T LIB_ITEM::GetDefaultColor()
+COLOR4D LIB_ITEM::GetDefaultColor()
 {
     return GetLayerColor( LAYER_DEVICE );
 }

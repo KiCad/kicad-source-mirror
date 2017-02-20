@@ -24,6 +24,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <map>
+
 #include <gal/color4d.h>
 
 using namespace KIGFX;
@@ -40,23 +42,251 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
 #ifdef WX_COMPATIBILITY
     COLOR4D::COLOR4D( const wxColour& aColor )
     {
-        r = aColor.Red();
-        g = aColor.Green();
-        b = aColor.Blue();
-        a = aColor.Alpha();
+        r = aColor.Red() / 255.0;
+        g = aColor.Green() / 255.0;
+        b = aColor.Blue() / 255.0;
+        a = aColor.Alpha() / 255.0;
+    }
+
+
+    bool COLOR4D::SetFromWxString( const wxString& aColorString )
+    {
+        wxColour c;
+
+        if( c.Set( aColorString ) )
+        {
+            r = c.Red() / 255.0;
+            g = c.Green() / 255.0;
+            b = c.Blue() / 255.0;
+            a = c.Alpha() / 255.0;
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+    wxString COLOR4D::ToWxString( long flags )
+    {
+        wxColour c = ToColour();
+        return c.GetAsString( flags );
+    }
+
+
+    COLOR4D COLOR4D::LegacyMix( COLOR4D aColor ) const
+    {
+        /* Memoization storage. This could be potentially called for each
+         * color merge so a cache is useful (there are few colours anyway) */
+        static std::map< std::pair< uint32_t, uint32_t >, uint32_t > mix_cache;
+
+        // First easy thing: a black gives always the other colour
+        if( *this == COLOR4D_BLACK )
+            return aColor;
+
+        if( aColor == COLOR4D_BLACK )
+            return *this;
+
+        uint32_t myPackedColor = ToU32();
+        uint32_t aPackedColor = aColor.ToU32();
+
+        /* Now we are sure that black can't occur, so the rule is:
+         * BLACK means not computed yet. If we're lucky we already have
+         * an answer */
+        auto search = mix_cache.find( std::pair< uint32_t, uint32_t >( myPackedColor,
+                                                                       aPackedColor ) );
+        COLOR4D candidate = COLOR4D_BLACK;
+        if( search != mix_cache.end() )
+            candidate.FromU32( search->second );
+
+        if( candidate != COLOR4D_BLACK )
+            return candidate;
+
+        // Blend the two colors (i.e. OR the RGB values)
+        COLOR4D mixed( ( (uint8_t)( 255.0 * this->r ) | (uint8_t)( 255.0 * aColor.r ) ) / 255.0,
+                       ( (uint8_t)( 255.0 * this->g ) | (uint8_t)( 255.0 * aColor.g ) ) / 255.0,
+                       ( (uint8_t)( 255.0 * this->b ) | (uint8_t)( 255.0 * aColor.b ) ) / 255.0,
+                       1.0 );
+        candidate = mixed;
+
+        /* Here, BLACK is *not* a good answer, since it would recompute the next time.
+         * Even theorically its not possible (with the current rules), but
+         * maybe the metric will change in the future */
+        if( candidate == COLOR4D_BLACK )
+            candidate = COLOR4D( DARKDARKGRAY );
+
+        // Store the result in the cache. The operation is commutative, too
+        mix_cache.insert( std::pair< std::pair< uint32_t, uint32_t >, uint32_t >
+                          ( std::pair< uint32_t, uint32_t >( myPackedColor, aPackedColor ),
+                            candidate.ToU32() ) );
+        mix_cache.insert( std::pair< std::pair< uint32_t, uint32_t >, uint32_t >
+                          ( std::pair< uint32_t, uint32_t >( aPackedColor, myPackedColor ),
+                            candidate.ToU32() ) );
+
+        return candidate;
+    }
+
+
+    COLOR4D& COLOR4D::SetToLegacyHighlightColor()
+    {
+        EDA_COLOR_T legacyColor = GetNearestLegacyColor( *this );
+        EDA_COLOR_T highlightColor = g_ColorRefs[legacyColor].m_LightColor;
+
+        r = g_ColorRefs[highlightColor].m_Red / 255.0;
+        g = g_ColorRefs[highlightColor].m_Green / 255.0;
+        b = g_ColorRefs[highlightColor].m_Blue / 255.0;
+        a = 1.0;
+
+        return *this;
+    }
+
+
+    COLOR4D& COLOR4D::SetToNearestLegacyColor()
+    {
+        EDA_COLOR_T legacyColor = GetNearestLegacyColor( *this );
+
+        r = g_ColorRefs[legacyColor].m_Red / 255.0;
+        g = g_ColorRefs[legacyColor].m_Green / 255.0;
+        b = g_ColorRefs[legacyColor].m_Blue / 255.0;
+        a = 1.0;
+
+        return *this;
+    }
+
+
+    unsigned int COLOR4D::ToU32() const
+    {
+        return ToColour().GetRGB();
+    }
+
+
+    void COLOR4D::FromU32( unsigned int aPackedColor )
+    {
+        wxColour c;
+        c.SetRGB( aPackedColor );
+        r = c.Red();
+        g = c.Green();
+        b = c.Blue();
+        a = c.Alpha();
+    }
+
+
+    EDA_COLOR_T COLOR4D::GetNearestLegacyColor( COLOR4D &aColor )
+    {
+        // Cache layer implemented here, because all callers are using wxColour
+        static std::map< unsigned int, unsigned int > nearestCache;
+        static double hues[NBCOLORS];
+        static double values[NBCOLORS];
+
+        unsigned int colorInt = aColor.ToU32();
+
+        auto search = nearestCache.find( colorInt );
+
+        if( search != nearestCache.end() )
+            return static_cast<EDA_COLOR_T>( search->second );
+
+        // First use ColorFindNearest to check for exact matches
+        EDA_COLOR_T nearest = ColorFindNearest( aColor.r * 255.0, aColor.g * 255.0, aColor.b * 255.0 );
+
+        if( COLOR4D( nearest ) == aColor )
+        {
+            nearestCache.insert( std::pair< unsigned int, unsigned int >(
+                                 colorInt, static_cast<unsigned int>( nearest ) ) );
+            return nearest;
+        }
+
+        // If not, use hue and value to match.
+        // Hue will be NAN for grayscale colors.
+        // The legacy color palette is a grid across hue and value.
+        // We can exploit that to find a good match -- hue is most apparent to the user.
+        // So, first we determine the closest hue match, and then the closest value from that
+        // "grid row" in the legacy palette.
+
+        double h, s, v;
+        aColor.ToHSV( h, s, v );
+
+        double minDist = 360.0;
+        double legacyHue = 0.0;
+
+        if( std::isnan( h ) )
+        {
+            legacyHue = NAN;
+        }
+        else
+        {
+            for( EDA_COLOR_T candidate = BLACK; candidate < NBCOLORS; candidate = NextColor(candidate) )
+            {
+                double ch, cs, cv;
+
+                if( hues[candidate] == 0.0 && values[candidate] == 0.0 )
+                {
+                    COLOR4D candidate4d( candidate );
+
+                    candidate4d.ToHSV( ch, cs, cv );
+
+                    values[candidate] = cv;
+                    // Set the hue to non-zero for black so that we won't do this more than once
+                    hues[candidate] = ( cv == 0.0 ) ? 1.0 : ch;
+                }
+                else
+                {
+                    ch = hues[candidate];
+                    cv = values[candidate];
+                    cv = 0.0;
+                }
+
+                if( fabs( ch - h ) < minDist )
+                {
+                    minDist = fabs( ch - h );
+                    legacyHue = ch;
+                }
+            }
+        }
+
+        // Now we have the desired hue; let's find the nearest value
+        minDist = 1.0;
+        for( EDA_COLOR_T candidate = BLACK; candidate < NBCOLORS; candidate = NextColor(candidate) )
+        {
+            // If the target hue is NAN, we didn't extract the value for any colors above
+            if( std::isnan( legacyHue ) )
+            {
+                double ch, cs, cv;
+                COLOR4D candidate4d( candidate );
+                candidate4d.ToHSV( ch, cs, cv );
+                values[candidate] = cv;
+                hues[candidate] = ( cv == 0.0 ) ? 1.0 : ch;
+            }
+
+            if( ( std::isnan( legacyHue ) != std::isnan( hues[candidate] ) ) || hues[candidate] != legacyHue )
+                continue;
+
+            if( fabs( values[candidate] - v ) < minDist )
+            {
+                minDist = fabs( values[candidate] - v );
+                nearest = candidate;
+            }
+        }
+
+        nearestCache.insert( std::pair< unsigned int, unsigned int >(
+                             colorInt, static_cast<unsigned int>( nearest ) ) );
+
+        return nearest;
     }
 #endif
 
+namespace KIGFX {
 
-const bool COLOR4D::operator==( const COLOR4D& aColor )
+const bool operator==( const COLOR4D& lhs, const COLOR4D& rhs )
 {
-    return a == aColor.a && r == aColor.r && g == aColor.g && b == aColor.b;
+    return lhs.a == rhs.a && lhs.r == rhs.r && lhs.g == rhs.g && lhs.b == rhs.b;
 }
 
 
-const bool COLOR4D::operator!=( const COLOR4D& aColor )
+const bool operator!=( const COLOR4D& lhs, const COLOR4D& rhs )
 {
-    return a != aColor.a || r != aColor.r || g != aColor.g || b != aColor.b;
+    return !( lhs == rhs );
+}
+
 }
 
 
