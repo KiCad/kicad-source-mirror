@@ -41,6 +41,7 @@ using namespace std::placeholders;
 #include <base_units.h>
 #include <hotkeys.h>
 #include <confirm.h>
+#include <bitmaps.h>
 
 #include <tool/context_menu.h>
 #include <tool/tool_manager.h>

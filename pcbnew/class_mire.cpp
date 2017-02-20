@@ -38,6 +38,7 @@
 #include <trigo.h>
 #include <macros.h>
 #include <richio.h>
+#include <bitmaps.h>
 
 #include <class_board.h>
 #include <class_mire.h>
@@ -194,6 +195,11 @@ wxString PCB_TARGET::GetSelectMenuText() const
     return text;
 }
 
+
+BITMAP_DEF PCB_TARGET::GetMenuImage() const
+{
+    return  add_mires_xpm;
+}
 
 EDA_ITEM* PCB_TARGET::Clone() const
 {

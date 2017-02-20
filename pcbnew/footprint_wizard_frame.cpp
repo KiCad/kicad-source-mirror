@@ -36,6 +36,7 @@
 #include <3d_viewer/eda_3d_viewer.h>
 #include <msgpanel.h>
 #include <macros.h>
+#include <bitmaps.h>
 
 #include <class_board.h>
 #include <class_module.h>

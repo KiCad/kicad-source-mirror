@@ -28,6 +28,7 @@
 #include <draw_frame.h>
 #include <class_base_screen.h>
 #include <tools/common_actions.h>
+#include <bitmaps.h>
 
 #include <functional>
 using namespace std::placeholders;

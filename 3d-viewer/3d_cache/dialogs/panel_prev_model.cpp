@@ -32,6 +32,7 @@
 #include <common_ogl/cogl_att_list.h>
 #include <cstdlib>
 #include <limits.h>
+#include <bitmaps.h>
 
 #include <wx/valnum.h>
 #include <wx/tglbtn.h>

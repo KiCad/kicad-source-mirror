@@ -43,6 +43,7 @@
 #include <macros.h>
 #include <schframe.h>
 #include <plot_common.h>
+#include <bitmaps.h>
 
 #include <general.h>
 #include <class_library.h>

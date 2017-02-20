@@ -34,6 +34,7 @@
 #include <class_drawpanel.h>
 #include <schframe.h>
 #include <msgpanel.h>
+#include <bitmaps.h>
 
 #include <general.h>
 #include <viewlib_frame.h>

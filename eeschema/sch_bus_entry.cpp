@@ -35,6 +35,7 @@
 #include <common.h>
 #include <richio.h>
 #include <plot_common.h>
+#include <bitmaps.h>
 
 #include <eeschema_config.h>
 #include <general.h>
@@ -338,6 +339,11 @@ wxString SCH_BUS_WIRE_ENTRY::GetSelectMenuText() const
 wxString SCH_BUS_BUS_ENTRY::GetSelectMenuText() const
 {
     return wxString( _( "Bus to Bus Entry" ) );
+}
+
+BITMAP_DEF SCH_BUS_ENTRY_BASE::GetMenuImage() const
+{
+    return add_entry_xpm;
 }
 
 

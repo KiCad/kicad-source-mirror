@@ -35,6 +35,7 @@
 #include <macros.h>
 #include <msgpanel.h>
 #include <base_units.h>
+#include <bitmaps.h>
 
 #include <pcbnew.h>
 
@@ -909,6 +910,12 @@ wxString D_PAD::GetSelectMenuText() const
     }
 
     return text;
+}
+
+
+BITMAP_DEF D_PAD::GetMenuImage() const
+{
+    return pad_xpm;
 }
 
 

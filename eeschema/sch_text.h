@@ -192,7 +192,7 @@ public:
 
     virtual wxString GetSelectMenuText() const override;
 
-    virtual BITMAP_DEF GetMenuImage() const override { return  add_text_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const override;
 
     virtual void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
                                  SCH_SHEET_PATH*      aSheetPath ) override;
@@ -253,7 +253,7 @@ public:
 
     wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const override { return  add_line_label_xpm; }
+    BITMAP_DEF GetMenuImage() const override;
 
     bool IsReplaceable() const override { return true; }
 
@@ -303,7 +303,7 @@ public:
 
     wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const override { return  add_glabel_xpm; }
+    BITMAP_DEF GetMenuImage() const override;
 
     EDA_ITEM* Clone() const override;
 
@@ -353,7 +353,7 @@ public:
 
     wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const override { return  add_hierarchical_label_xpm; }
+    BITMAP_DEF GetMenuImage() const override;
 
     EDA_ITEM* Clone() const override;
 

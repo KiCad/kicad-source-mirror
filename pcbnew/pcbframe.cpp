@@ -41,6 +41,7 @@
 #include <3d_viewer/eda_3d_viewer.h>
 #include <msgpanel.h>
 #include <fp_lib_table.h>
+#include <bitmaps.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>

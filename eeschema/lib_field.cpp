@@ -38,6 +38,7 @@
 #include <trigo.h>
 #include <base_units.h>
 #include <msgpanel.h>
+#include <bitmaps.h>
 
 #include <general.h>
 #include <class_libentry.h>
@@ -799,4 +800,10 @@ void LIB_FIELD::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
     // Display field text:
     aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetShownText(), BROWN ) );
+}
+
+
+BITMAP_DEF LIB_FIELD::GetMenuImage() const
+{
+    return move_field_xpm;
 }

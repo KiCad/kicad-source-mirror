@@ -36,6 +36,7 @@
 #include <richio.h>
 #include <base_units.h>
 #include <msgpanel.h>
+#include <bitmaps.h>
 
 #include <general.h>
 #include <lib_rectangle.h>
@@ -334,6 +335,12 @@ wxString LIB_RECTANGLE::GetSelectMenuText() const
                              GetChars( CoordinateToString( m_Pos.y ) ),
                              GetChars( CoordinateToString( m_End.x ) ),
                              GetChars( CoordinateToString( m_End.y ) ) );
+}
+
+
+BITMAP_DEF LIB_RECTANGLE::GetMenuImage() const
+{
+    return add_rectangle_xpm;
 }
 
 

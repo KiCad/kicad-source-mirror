@@ -43,6 +43,7 @@
 #include <wizard_add_fplib.h>
 #include <fp_lib_table.h>
 #include <confirm.h>
+#include <bitmaps.h>
 
 #include <class_module.h>
 

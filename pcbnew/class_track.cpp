@@ -45,7 +45,7 @@
 #include <pcbnew.h>
 #include <base_units.h>
 #include <msgpanel.h>
-
+#include <bitmaps.h>
 
 /**
  * Function ShowClearance
@@ -149,6 +149,12 @@ wxString SEGZONE::GetSelectMenuText() const
 }
 
 
+BITMAP_DEF SEGZONE::GetMenuImage() const
+{
+    return add_zone_xpm;
+}
+
+
 VIA::VIA( BOARD_ITEM* aParent ) :
     TRACK( aParent, PCB_VIA_T )
 {
@@ -208,6 +214,12 @@ wxString VIA::GetSelectMenuText() const
     }
 
     return text;
+}
+
+
+BITMAP_DEF VIA::GetMenuImage() const
+{
+    return via_sketch_xpm;
 }
 
 
@@ -1578,6 +1590,12 @@ wxString TRACK::GetSelectMenuText() const
                  GetChars( ::LengthDoubleToString( GetLength() ) ) );
 
     return text;
+}
+
+
+BITMAP_DEF TRACK:: GetMenuImage() const
+{
+    return showtrack_xpm;
 }
 
 

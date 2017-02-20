@@ -37,6 +37,7 @@
 #include <colors_selection.h>
 #include <class_gbr_layer_box_selector.h>
 #include <msgpanel.h>
+#include <bitmaps.h>
 
 #include <gerbview.h>
 #include <gerbview_frame.h>

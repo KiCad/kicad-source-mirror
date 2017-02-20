@@ -1077,6 +1077,12 @@ wxString SCH_SHEET::GetSelectMenuText() const
 }
 
 
+BITMAP_DEF SCH_SHEET::GetMenuImage() const
+{
+    return add_hierarchical_subsheet_xpm;
+}
+
+
 bool SCH_SHEET::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     EDA_RECT rect = GetBoundingBox();

@@ -294,7 +294,7 @@ public:
 
     virtual wxString GetSelectMenuText() const override;
 
-    virtual BITMAP_DEF GetMenuImage() const override { return  showtrack_xpm; }
+    BITMAP_DEF GetMenuImage() const override;
 
     virtual EDA_ITEM* Clone() const override;
 
@@ -366,7 +366,7 @@ public:
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset ) override;
 
-    BITMAP_DEF GetMenuImage() const override { return  add_zone_xpm; }
+    BITMAP_DEF GetMenuImage() const override;
 
     EDA_ITEM* Clone() const override;
 
@@ -426,7 +426,7 @@ public:
 
     wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const override { return  via_sketch_xpm; }
+    BITMAP_DEF GetMenuImage() const override;
 
     EDA_ITEM* Clone() const override;
 

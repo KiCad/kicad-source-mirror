@@ -30,6 +30,8 @@
 #include <class_drawpanel.h>
 #include <trigo.h>
 #include <macros.h>
+#include <bitmaps.h>
+
 #include <sch_bitmap.h>
 
 #include <wx/mstream.h>
@@ -308,4 +310,10 @@ bool SCH_BITMAP::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy 
 void SCH_BITMAP::Plot( PLOTTER* aPlotter )
 {
     m_image->PlotImage( aPlotter, m_pos, GetLayerColor( GetLayer() ), GetPenSize() );
+}
+
+
+BITMAP_DEF SCH_BITMAP::GetMenuImage() const
+{
+    return image_xpm;
 }

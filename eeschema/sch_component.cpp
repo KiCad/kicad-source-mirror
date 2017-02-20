@@ -36,6 +36,7 @@
 #include <schframe.h>
 #include <plot_common.h>
 #include <msgpanel.h>
+#include <bitmaps.h>
 
 #include <general.h>
 #include <class_library.h>
@@ -1573,6 +1574,12 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
         aList.push_back( MSG_PANEL_ITEM( _( "Description" ), alias->GetDescription(), DARKCYAN ) );
         aList.push_back( MSG_PANEL_ITEM( _( "Key Words" ), alias->GetKeyWords(), DARKCYAN ) );
     }
+}
+
+
+BITMAP_DEF SCH_COMPONENT::GetMenuImage() const
+{
+    return add_component_xpm;
 }
 
 

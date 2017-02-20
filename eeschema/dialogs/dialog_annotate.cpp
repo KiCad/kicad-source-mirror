@@ -31,6 +31,7 @@
 #include <fctsys.h>
 #include <schframe.h>
 #include <class_drawpanel.h>
+#include <bitmaps.h>
 
 #include <invoke_sch_dialog.h>
 #include <dialog_annotate_base.h>

@@ -46,6 +46,7 @@
 #include <zones_functions_for_undo_redo.h>
 #include <board_commit.h>
 #include <confirm.h>
+#include <bitmaps.h>
 
 #include <view/view_group.h>
 #include <view/view_controls.h>

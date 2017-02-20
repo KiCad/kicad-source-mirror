@@ -109,7 +109,7 @@ public:
 
     wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const override { return  drc_xpm; }
+    BITMAP_DEF GetMenuImage() const override;
 
     const BOX2I ViewBBox() const override
     {

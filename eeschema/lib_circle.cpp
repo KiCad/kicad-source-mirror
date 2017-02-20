@@ -37,6 +37,7 @@
 #include <richio.h>
 #include <base_units.h>
 #include <msgpanel.h>
+#include <bitmaps.h>
 
 #include <general.h>
 #include <lib_circle.h>
@@ -294,6 +295,12 @@ wxString LIB_CIRCLE::GetSelectMenuText() const
                              GetChars( CoordinateToString( m_Pos.x ) ),
                              GetChars( CoordinateToString( m_Pos.y ) ),
                              GetChars( CoordinateToString( m_Radius ) ) );
+}
+
+
+BITMAP_DEF LIB_CIRCLE::GetMenuImage() const
+{
+    return add_circle_xpm;
 }
 
 

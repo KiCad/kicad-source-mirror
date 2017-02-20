@@ -41,6 +41,7 @@
 #include <wxBasePcbFrame.h>
 #include <msgpanel.h>
 #include <base_units.h>
+#include <bitmaps.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -402,6 +403,12 @@ wxString TEXTE_MODULE::GetSelectMenuText() const
     }
 
     return text;
+}
+
+
+BITMAP_DEF TEXTE_MODULE::GetMenuImage() const
+{
+    return footprint_text_xpm;
 }
 
 

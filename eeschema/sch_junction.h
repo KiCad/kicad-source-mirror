@@ -85,7 +85,7 @@ public:
 
     wxString GetSelectMenuText() const override { return wxString( _( "Junction" ) ); }
 
-    BITMAP_DEF GetMenuImage() const override { return  add_junction_xpm; }
+    BITMAP_DEF GetMenuImage() const override;
 
     void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PATH* aSheetPath ) override;
 

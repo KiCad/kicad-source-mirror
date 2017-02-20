@@ -36,6 +36,7 @@
 #include <richio.h>
 #include <base_units.h>
 #include <msgpanel.h>
+#include <bitmaps.h>
 
 #include <lib_draw_item.h>
 #include <general.h>
@@ -506,6 +507,12 @@ wxString LIB_TEXT::GetSelectMenuText() const
     wxString msg;
     msg.Printf( _( "Graphic Text %s" ), GetChars( ShortenedShownText() ) );
     return msg;
+}
+
+
+BITMAP_DEF LIB_TEXT::GetMenuImage() const
+{
+    return add_text_xpm;
 }
 
 

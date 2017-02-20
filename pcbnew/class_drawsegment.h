@@ -237,7 +237,7 @@ public:
 
     virtual wxString GetSelectMenuText() const override;
 
-    virtual BITMAP_DEF GetMenuImage() const override { return  add_dashed_line_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const override;
 
     virtual EDA_ITEM* Clone() const override;
 

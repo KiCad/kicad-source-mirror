@@ -39,6 +39,7 @@
 #include <macros.h>
 #include <wxBasePcbFrame.h>
 #include <msgpanel.h>
+#include <bitmaps.h>
 
 #include <class_board.h>
 #include <class_zone.h>
@@ -850,4 +851,10 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
                  GetChars( GetLayerName() ) );
 
     return msg;
+}
+
+
+BITMAP_DEF ZONE_CONTAINER::GetMenuImage() const
+{
+    return add_zone_xpm;
 }

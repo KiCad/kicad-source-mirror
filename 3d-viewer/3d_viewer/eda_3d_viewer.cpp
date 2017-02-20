@@ -37,6 +37,7 @@
 #include  "../common_ogl/cogl_att_list.h"
 #include <hotkeys_basic.h>
 #include <wx/toolbar.h>
+#include <bitmaps.h>
 
 /**
  *  Trace mask used to enable or disable the trace output of this class.

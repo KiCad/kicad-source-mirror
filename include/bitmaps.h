@@ -26,47 +26,7 @@
 #ifndef BITMAPS_H_
 #define BITMAPS_H_
 
-//FIXME: cannot include only this file in wxWidgets 2.9.3
-// test if it works under stable release
-// #include <wx/bitmap.h>   // only to define wxBitmap
-class wxBitmap;     // only to define wxBitmap
-
-#include <config.h>
-
-
-/// PNG memory record (file in memory).
-struct BITMAP_OPAQUE
-{
-    const unsigned char* png;
-    int         byteCount;
-    const char* name;       // for debug, or future lazy dynamic linking
-};
-
-// declared as single element _array_, so its name assigns to pointer
-#define EXTERN_BITMAP(x) extern const BITMAP_OPAQUE x[1];
-
-
-/// a BITMAP_DEF is really a const pointer to an opaque
-/// structure.  So you should never need to use 'const' with it.
-typedef const BITMAP_OPAQUE *BITMAP_DEF;
-
-
-/**
- * Function KiBitmap
- * constructs a wxBitmap from a memory record, held in a
- * BITMAP_DEF.
- */
-wxBitmap KiBitmap( BITMAP_DEF aBitmap );
-
-
-/**
- * Function KiBitmapNew
- * allocates a wxBitmap on heap from a memory record, held in a
- * BITMAP_DEF.
- *
- * @return wxBitmap* - caller owns it.
- */
-wxBitmap* KiBitmapNew( BITMAP_DEF aBitmap );
+#include <bitmap_types.h>
 
 
 // may eventually generate this file automatically.

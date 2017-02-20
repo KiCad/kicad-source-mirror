@@ -37,6 +37,7 @@
 #include <dialog_helpers.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
+#include <bitmaps.h>
 
 
 void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()

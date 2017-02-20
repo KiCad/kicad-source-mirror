@@ -113,7 +113,7 @@ public:
 
     void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
 
-    BITMAP_DEF GetMenuImage() const override { return  add_entry_xpm; }
+    BITMAP_DEF GetMenuImage() const override;
 
     wxPoint GetPosition() const override { return m_pos; }
 

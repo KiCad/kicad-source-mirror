@@ -38,6 +38,7 @@
 #include <wxPcbStruct.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
+#include <bitmaps.h>
 
 #include <class_board.h>
 

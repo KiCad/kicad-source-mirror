@@ -39,6 +39,7 @@
 #include <fp_lib_table.h>
 #include <lib_id.h>
 #include <confirm.h>
+#include <bitmaps.h>
 
 #include <class_board.h>
 #include <class_module.h>

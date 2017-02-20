@@ -43,6 +43,7 @@
 #include <filter_reader.h>
 #include <macros.h>
 #include <msgpanel.h>
+#include <bitmaps.h>
 
 #include <class_board.h>
 #include <class_edge_mod.h>
@@ -798,6 +799,12 @@ wxString MODULE::GetSelectMenuText() const
                  GetChars ( GetLayerName() ) );
 
     return text;
+}
+
+
+BITMAP_DEF MODULE::GetMenuImage() const
+{
+    return module_xpm;
 }
 
 

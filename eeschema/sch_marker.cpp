@@ -32,6 +32,7 @@
 #include <class_drawpanel.h>
 #include <trigo.h>
 #include <msgpanel.h>
+#include <bitmaps.h>
 
 #include <general.h>
 #include <sch_marker.h>
@@ -141,6 +142,12 @@ void SCH_MARKER::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "Electronics Rule Check Error" ),
                                      GetReporter().GetErrorText(), DARKRED ) );
+}
+
+
+BITMAP_DEF SCH_MARKER::GetMenuImage() const
+{
+    return erc_xpm;
 }
 
 

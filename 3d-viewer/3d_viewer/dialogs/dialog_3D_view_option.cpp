@@ -25,6 +25,7 @@
 #include "dialog_3D_view_option_base.h"
 #include <3d_viewer/eda_3d_viewer.h>
 #include <3d_canvas/cinfo3d_visu.h>
+#include <bitmaps.h>
 
 class DIALOG_3D_VIEW_OPTIONS : public DIALOG_3D_VIEW_OPTIONS_BASE
 {

@@ -33,6 +33,7 @@
 #include <class_drawpanel.h>
 #include <common.h>
 #include <plot_common.h>
+#include <bitmaps.h>
 
 #include <general.h>
 #include <sch_no_connect.h>
@@ -248,5 +249,11 @@ void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter )
     aPlotter->FinishTo( wxPoint( pX + delta, pY + delta ) );
     aPlotter->MoveTo( wxPoint( pX + delta, pY - delta ) );
     aPlotter->FinishTo( wxPoint( pX - delta, pY + delta ) );
+}
+
+
+BITMAP_DEF SCH_NO_CONNECT::GetMenuImage() const
+{
+    return noconn_xpm;
 }
 

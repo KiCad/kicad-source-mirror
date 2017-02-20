@@ -35,7 +35,7 @@
 #include <core/typeinfo.h>
 
 #include <colors.h>
-#include <bitmaps.h>
+#include <bitmap_types.h>
 #include <richio.h>
 #include <view/view_item.h>
 #include <class_eda_rect.h>

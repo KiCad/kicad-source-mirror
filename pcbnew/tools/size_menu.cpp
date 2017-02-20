@@ -23,6 +23,8 @@
 
 #include <class_board.h>
 #include <pcbnew_id.h>
+#include <bitmaps.h>
+
 
 TRACK_VIA_SIZE_MENU::TRACK_VIA_SIZE_MENU( bool aTrackSizes, bool aViaSizes ) :
     m_tracks( aTrackSizes ), m_vias( aViaSizes )

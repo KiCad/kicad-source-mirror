@@ -130,7 +130,7 @@ public:
 
     wxString GetSelectMenuText() const override { return wxString( _( "Image" ) ); }
 
-    BITMAP_DEF GetMenuImage() const override { return image_xpm; }
+    BITMAP_DEF GetMenuImage() const override;
 
     wxPoint GetPosition() const override { return m_pos; }
 

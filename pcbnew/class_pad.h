@@ -514,7 +514,7 @@ public:
 
     wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const override { return pad_xpm; }
+    BITMAP_DEF GetMenuImage() const override;
 
     /**
      * Function ShowPadShape

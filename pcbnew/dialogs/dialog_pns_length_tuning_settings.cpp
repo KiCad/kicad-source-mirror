@@ -25,6 +25,7 @@
 
 #include "dialog_pns_length_tuning_settings.h"
 #include <router/pns_meander_placer.h>
+#include <bitmaps.h>
 
 DIALOG_PNS_LENGTH_TUNING_SETTINGS::DIALOG_PNS_LENGTH_TUNING_SETTINGS( wxWindow* aParent,
                         PNS::MEANDER_SETTINGS& aSettings, PNS::ROUTER_MODE aMode )

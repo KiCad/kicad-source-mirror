@@ -38,6 +38,7 @@
 #include <plot_common.h>
 #include <msgpanel.h>
 #include <gal/stroke_font.h>
+#include <bitmaps.h>
 
 #include <protos.h>
 #include <sch_text.h>
@@ -618,6 +619,12 @@ wxString SCH_TEXT::GetSelectMenuText() const
 }
 
 
+BITMAP_DEF SCH_TEXT::GetMenuImage() const
+{
+    return add_text_xpm;
+}
+
+
 void SCH_TEXT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
                                SCH_SHEET_PATH*      aSheetPath )
 {
@@ -1007,6 +1014,12 @@ wxString SCH_LABEL::GetSelectMenuText() const
     wxString msg;
     msg.Printf( _( "Label %s" ), GetChars( ShortenedShownText() ) );
     return msg;
+}
+
+
+BITMAP_DEF SCH_LABEL::GetMenuImage() const
+{
+    return add_line_label_xpm;
 }
 
 
@@ -1467,6 +1480,12 @@ wxString SCH_GLOBALLABEL::GetSelectMenuText() const
 }
 
 
+BITMAP_DEF SCH_GLOBALLABEL::GetMenuImage() const
+{
+    return add_glabel_xpm;
+}
+
+
 
 SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
     SCH_TEXT( pos, text, aType )
@@ -1816,4 +1835,10 @@ wxString SCH_HIERLABEL::GetSelectMenuText() const
     wxString msg;
     msg.Printf( _( "Hierarchical Label %s" ), GetChars( ShortenedShownText() ) );
     return msg;
+}
+
+
+BITMAP_DEF SCH_HIERLABEL::GetMenuImage() const
+{
+    return add_hierarchical_label_xpm;
 }

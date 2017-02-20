@@ -32,6 +32,7 @@
 #include <confirm.h>
 #include <id.h>
 #include <schframe.h>
+#include <bitmaps.h>
 
 #include <general.h>
 #include <sch_sheet.h>

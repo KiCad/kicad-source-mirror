@@ -34,6 +34,7 @@
 #include <wxstruct.h>
 #include <trigo.h>
 #include <msgpanel.h>
+#include <bitmaps.h>
 
 #include <pcbnew.h>
 #include <class_marker_pcb.h>
@@ -134,6 +135,12 @@ wxString MARKER_PCB::GetSelectMenuText() const
     text.Printf( _( "Marker @(%d,%d)" ), GetPos().x, GetPos().y );
 
     return text;
+}
+
+
+BITMAP_DEF MARKER_PCB::GetMenuImage() const
+{
+    return drc_xpm;
 }
 
 

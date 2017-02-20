@@ -42,6 +42,7 @@
 #include <base_units.h>
 #include <project.h>
 #include <board_commit.h>
+#include <bitmaps.h>
 
 #include <class_module.h>
 #include <class_text_mod.h>

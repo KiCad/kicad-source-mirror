@@ -34,6 +34,7 @@
 #include <macros.h>
 #include <base_units.h>
 #include <msgpanel.h>
+#include <bitmaps.h>
 
 #include <pl_editor_frame.h>
 #include <pl_editor_id.h>

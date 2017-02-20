@@ -34,6 +34,7 @@
 #include <schframe.h>
 #include <menus_helpers.h>
 #include <msgpanel.h>
+#include <bitmaps.h>
 
 #include <eeschema_id.h>
 #include <general.h>

@@ -44,6 +44,7 @@
 #include <validators.h>
 #include <kicad_string.h>
 #include <board_commit.h>
+#include <bitmaps.h>
 
 #include <class_module.h>
 #include <class_text_mod.h>

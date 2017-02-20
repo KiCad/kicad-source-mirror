@@ -196,7 +196,7 @@ public:
 
     wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const override { return  add_hierar_pin_xpm; }
+    BITMAP_DEF GetMenuImage() const override;
 
     void SetPosition( const wxPoint& aPosition ) override { ConstrainOnEdge( aPosition ); }
 
@@ -572,7 +572,7 @@ public:
 
     wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const override { return add_hierarchical_subsheet_xpm; }
+    BITMAP_DEF GetMenuImage() const override;
 
     void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
                          SCH_SHEET_PATH*      aSheetPath ) override;

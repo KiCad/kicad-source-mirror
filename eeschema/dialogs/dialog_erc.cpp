@@ -38,6 +38,7 @@
 #include <invoke_sch_dialog.h>
 #include <project.h>
 #include <kiface_i.h>
+#include <bitmaps.h>
 
 #include <netlist.h>
 #include <class_netlist_object.h>

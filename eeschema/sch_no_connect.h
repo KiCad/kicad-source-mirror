@@ -87,7 +87,7 @@ public:
 
     wxString GetSelectMenuText() const override { return wxString( _( "No Connect" ) ); }
 
-    BITMAP_DEF GetMenuImage() const override { return noconn_xpm; }
+    BITMAP_DEF GetMenuImage() const override;
 
     void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PATH* aSheetPath ) override;
 

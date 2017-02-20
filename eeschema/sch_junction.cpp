@@ -34,6 +34,7 @@
 #include <common.h>
 #include <richio.h>
 #include <plot_common.h>
+#include <bitmaps.h>
 
 #include <sch_junction.h>
 #include <class_netlist_object.h>
@@ -232,4 +233,9 @@ void SCH_JUNCTION::Plot( PLOTTER* aPlotter )
 {
     aPlotter->SetColor( GetLayerColor( GetLayer() ) );
     aPlotter->Circle( m_pos, GetSymbolSize(), FILLED_SHAPE );
+}
+
+BITMAP_DEF SCH_JUNCTION::GetMenuImage() const
+{
+    return add_junction_xpm;
 }

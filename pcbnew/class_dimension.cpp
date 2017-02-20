@@ -37,6 +37,7 @@
 #include <colors_selection.h>
 #include <kicad_string.h>
 #include <richio.h>
+#include <bitmaps.h>
 
 #include <class_board.h>
 #include <class_pcb_text.h>
@@ -481,6 +482,12 @@ wxString DIMENSION::GetSelectMenuText() const
                 GetChars( GetText() ), GetChars( GetLayerName() ) );
 
     return text;
+}
+
+
+BITMAP_DEF DIMENSION::GetMenuImage() const
+{
+    return add_dimension_xpm;
 }
 
 

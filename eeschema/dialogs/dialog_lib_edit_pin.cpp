@@ -26,6 +26,7 @@
 #include <macros.h>
 #include <gr_basic.h>
 #include <base_units.h>
+#include <bitmaps.h>
 
 #include <libeditframe.h>
 #include <class_libentry.h>

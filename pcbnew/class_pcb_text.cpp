@@ -42,6 +42,7 @@
 #include <wxBasePcbFrame.h>
 #include <msgpanel.h>
 #include <base_units.h>
+#include <bitmaps.h>
 
 #include <class_board.h>
 #include <class_pcb_text.h>
@@ -183,6 +184,12 @@ wxString TEXTE_PCB::GetSelectMenuText() const
                  GetChars ( ShortenedShownText() ), GetChars( GetLayerName() ) );
 
     return text;
+}
+
+
+BITMAP_DEF TEXTE_PCB::GetMenuImage() const
+{
+    return add_text_xpm;
 }
 
 

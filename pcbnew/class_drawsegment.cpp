@@ -39,6 +39,7 @@
 #include <colors_selection.h>
 #include <trigo.h>
 #include <msgpanel.h>
+#include <bitmaps.h>
 
 #include <pcbnew.h>
 
@@ -581,6 +582,12 @@ wxString DRAWSEGMENT::GetSelectMenuText() const
                  GetChars( temp ), GetChars( GetLayerName() ) );
 
     return text;
+}
+
+
+BITMAP_DEF DRAWSEGMENT::GetMenuImage() const
+{
+    return add_dashed_line_xpm;
 }
 
 

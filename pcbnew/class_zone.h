@@ -515,11 +515,11 @@ public:
         m_FillSegmList.insert( m_FillSegmList.end(), aSegments.begin(), aSegments.end() );
     }
 
-    virtual wxString GetSelectMenuText() const override;
+    wxString GetSelectMenuText() const override;
 
-    virtual BITMAP_DEF GetMenuImage() const override { return  add_zone_xpm; }
+    BITMAP_DEF GetMenuImage() const override;
 
-    virtual EDA_ITEM* Clone() const override;
+    EDA_ITEM* Clone() const override;
 
     /**
      * Accessors to parameters used in Keepout zones:

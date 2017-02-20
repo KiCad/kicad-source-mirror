@@ -41,6 +41,7 @@
 #include <class_gbr_layer_box_selector.h>
 #include <class_DCodeSelectionbox.h>
 #include <dialog_helpers.h>
+#include <bitmaps.h>
 
 #include <wx/wupdlock.h>
 

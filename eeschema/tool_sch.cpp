@@ -31,6 +31,7 @@
 #include <class_drawpanel.h>
 #include <schframe.h>
 #include <kiface_i.h>
+#include <bitmaps.h>
 
 #include <general.h>
 #include <hotkeys.h>

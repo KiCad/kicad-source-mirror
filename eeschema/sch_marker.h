@@ -99,7 +99,7 @@ public:
 
     wxString GetSelectMenuText() const override { return wxString( _( "ERC Marker" ) ); }
 
-    BITMAP_DEF GetMenuImage() const override { return  erc_xpm; }
+    BITMAP_DEF GetMenuImage() const override;
 
     wxPoint GetPosition() const override { return m_Pos; }
 

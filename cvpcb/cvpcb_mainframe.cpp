@@ -41,6 +41,7 @@
 #include <wildcards_and_files_ext.h>
 #include <fp_lib_table.h>
 #include <netlist_reader.h>
+#include <bitmaps.h>
 
 #include <cvpcb_mainframe.h>
 #include <cvpcb.h>

@@ -36,6 +36,7 @@
 #include <richio.h>
 #include <base_units.h>
 #include <msgpanel.h>
+#include <bitmaps.h>
 
 #include <general.h>
 #include <lib_polyline.h>
@@ -417,6 +418,12 @@ wxString LIB_POLYLINE::GetSelectMenuText() const
                              GetChars( CoordinateToString( m_PolyPoints[0].x ) ),
                              GetChars( CoordinateToString( m_PolyPoints[0].y ) ),
                              int( m_PolyPoints.size() ) );
+}
+
+
+BITMAP_DEF LIB_POLYLINE::GetMenuImage() const
+{
+    return add_polygon_xpm;
 }
 
 
