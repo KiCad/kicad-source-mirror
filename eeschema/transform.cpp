@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,19 +27,6 @@
 #include <transform.h>
 #include <common.h>
 #include <class_eda_rect.h>
-
-
-TRANSFORM& TRANSFORM::operator=( const TRANSFORM& aTransform )
-{
-    if( this == &aTransform )       // Check for self assingnemt;
-        return *this;
-
-    x1 = aTransform.x1;
-    y1 = aTransform.y1;
-    x2 = aTransform.x2;
-    y2 = aTransform.y2;
-    return *this;
-}
 
 
 bool TRANSFORM::operator==( const TRANSFORM& aTransform ) const
