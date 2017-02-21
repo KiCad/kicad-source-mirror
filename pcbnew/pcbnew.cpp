@@ -148,6 +148,7 @@ static struct IFACE : public KIFACE_I
 
         case FRAME_PCB_FOOTPRINT_PREVIEW:
             frame = dynamic_cast< wxWindow* >( FOOTPRINT_PREVIEW_PANEL::New( aKiway, aParent ) );
+            break;
 
         default:
             break;
