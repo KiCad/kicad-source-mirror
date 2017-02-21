@@ -102,12 +102,22 @@ public:
      * scoring component at the top and selected. If a preselect node is set, this
      * is displayed. Does not take ownership of the tree.
      *
+     * After calling SetTree(), UpdateSearchTerm( wxEmptyString ) should be
+     * called. Note the warning with respsect to calling UpdateSearchTerm() in
+     * dialog constructors.
+     *
      * @param aTree that is to be modified on search updates.
      */
     void SetTree( TWO_COLUMN_TREE_LIST* aTree );
 
     /** Function UpdateSearchTerm
      * Update the search string provided by the user and narrow down the result list.
+     *
+     * XXX WARNING: Do not call this method in a dialog constructor until the
+     * dialog has been otherwise fully initialized (i.e. this should be the last
+     * thing called in the constructor). Some wx ports pump the event loop inside
+     * this method, which can result in event handlers being called before things
+     * they access are initialized.
      *
      * This string is a space-separated list of terms, each of which
      * is applied to the components list to narrow it down. Results are scored by

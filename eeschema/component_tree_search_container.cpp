@@ -146,8 +146,6 @@ void COMPONENT_TREE_SEARCH_CONTAINER::SetTree( TWO_COLUMN_TREE_LIST* aTree )
         m_tree->AppendColumn( _( "Description" ), 100, wxALIGN_LEFT, wxCOL_RESIZABLE );
         m_tree->SetRubberBandColumn( 1 );
     }
-
-    UpdateSearchTerm( wxEmptyString );
 }
 
 
@@ -506,11 +504,15 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
 
     if( first_match && ( !preselected_node || override_preselect ) )
     {
+        // This is the wx call that pumps the event loop on some ports (namely
+        // macOS). TODO: find a way to avoid that.
         m_tree->Select( first_match->TreeId );
         //m_tree->EnsureVisible( first_match->TreeId );
     }
     else if( preselected_node )
     {
+        // This is the wx call that pumps the event loop on some ports (namely
+        // macOS). TODO: find a way to avoid that.
         m_tree->Select( preselected_node->TreeId );
         //m_tree->EnsureVisible( preselected_node->TreeId );
     }

@@ -44,7 +44,8 @@ static wxTreeListItem GetPrevSibling( const wxTreeListCtrl& tree, const wxTreeLi
 DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
                                                   COMPONENT_TREE_SEARCH_CONTAINER* const aContainer,
                                                   int aDeMorganConvert )
-    : DIALOG_CHOOSE_COMPONENT_BASE( aParent, wxID_ANY, aTitle ), m_search_container( aContainer )
+    : DIALOG_CHOOSE_COMPONENT_BASE( aParent, wxID_ANY, aTitle ), m_search_container( aContainer ),
+      m_footprintPreviewPanel( nullptr )
 {
     m_parent = aParent;
     m_deMorganConvert = aDeMorganConvert >= 0 ? aDeMorganConvert : 0;
@@ -52,7 +53,6 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     m_received_doubleclick_in_tree = false;
     m_search_container->SetTree( m_libraryComponentTree );
     m_componentView->SetLayoutDirection( wxLayout_LeftToRight );
-    m_footprintPreviewPanel = NULL;
 
     // Initialize footprint preview through Kiway
     m_footprintPreviewPanel =
@@ -71,6 +71,10 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
 
     Layout();
     Centre();
+
+    // Per warning in component_tree_search_container.h, this must be called
+    // near the end of the constructor.
+    m_search_container->UpdateSearchTerm( wxEmptyString );
     updateSelection();
 }
 
