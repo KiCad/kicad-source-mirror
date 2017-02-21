@@ -121,8 +121,6 @@ protected:
     int                 m_CurrentRow;           ///< selected row of layer list
     int                 m_PointSize;
 
-    static wxBitmap makeBitmap( COLOR4D aColor );
-
     /**
      * Virtual Function useAlternateBitmap
      * @return true if bitmaps shown in Render layer list
@@ -155,12 +153,6 @@ protected:
      * is used for other things than layers, too)
      */
     static LAYER_NUM getDecodedId( int aControlId );
-
-    /**
-     * Function makeColorButton
-     * creates a wxBitmapButton and assigns it a solid color and a control ID
-     */
-    wxBitmapButton* makeColorButton( wxWindow* aParent, COLOR4D aColor, int aID );
 
     void OnLeftDownLayers( wxMouseEvent& event );
 

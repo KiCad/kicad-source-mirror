@@ -26,7 +26,7 @@
 
 
 /*  This source module implements the layer visibility and selection widget
-    @todo make the bitmapbutton a staticbitmap, and make dependent on the point size.
+    @todo make bitmap size dependent on the point size.
 */
 
 
@@ -43,9 +43,8 @@
 #include <algorithm>
 
 
-#define BUTT_SIZE_X             20
-#define BUTT_SIZE_Y             18
-#define BUTT_VOID               2
+const static int SWATCH_SIZE_X = 14;
+const static int SWATCH_SIZE_Y = 12;
 
 // See selcolor.cpp:
 extern COLOR4D DisplayColorFrame( wxWindow* aParent, COLOR4D aOldColor );
@@ -161,6 +160,45 @@ static wxString makeColorTxt( COLOR4D aColor )
 }
 
 
+static wxBitmap makeBitmap( COLOR4D aColor )
+{
+    wxBitmap    bitmap( SWATCH_SIZE_X, SWATCH_SIZE_Y );
+    wxBrush     brush;
+    wxMemoryDC  iconDC;
+
+    iconDC.SelectObject( bitmap );
+
+    brush.SetColour( aColor.ToColour() );
+    brush.SetStyle( wxBRUSHSTYLE_SOLID );
+
+    iconDC.SetBrush( brush );
+
+    iconDC.DrawRectangle( 0, 0, SWATCH_SIZE_X, SWATCH_SIZE_Y );
+
+    return bitmap;
+}
+
+
+/**
+ * Function makeColorButton
+ * creates a wxStaticBitmap and assigns it a solid color and a control ID
+ */
+static std::unique_ptr<wxStaticBitmap> makeColorSwatch( wxWindow* aParent,
+                                                        COLOR4D aColor, int aID )
+{
+    // dynamically make a wxBitMap and brush it with the appropriate color,
+    // then create a wxBitmapButton from it.
+    wxBitmap bitmap = makeBitmap( aColor );
+
+    // save the color value in the name, no where else to put it.
+    auto ret = std::make_unique<wxStaticBitmap>( aParent, aID, bitmap );
+
+    ret->SetName( makeColorTxt( aColor ) );
+
+    return ret;
+}
+
+
 /**
  * Function shrinkFont
  * reduces the size of the wxFont associated with \a aControl
@@ -184,46 +222,6 @@ LAYER_NUM LAYER_WIDGET::getDecodedId( int aControlId )
 {
     int id = aControlId / LYR_COLUMN_COUNT;    // rounding is OK.
     return id;
-}
-
-
-wxBitmap LAYER_WIDGET::makeBitmap( COLOR4D aColor )
-{
-    // the bitmap will be BUTT_VOID*2 pixels smaller than the button, leaving a
-    // border of BUTT_VOID pixels on each side.
-    wxBitmap    bitmap( BUTT_SIZE_X - 2 * BUTT_VOID, BUTT_SIZE_Y - 2 * BUTT_VOID );
-    wxBrush     brush;
-    wxMemoryDC  iconDC;
-
-    iconDC.SelectObject( bitmap );
-
-    brush.SetColour( aColor.ToColour() );
-    brush.SetStyle( wxBRUSHSTYLE_SOLID );
-
-    iconDC.SetBrush( brush );
-
-    iconDC.DrawRectangle( 0, 0, BUTT_SIZE_X - 2 * BUTT_VOID, BUTT_SIZE_Y - 2 * BUTT_VOID );
-
-    return bitmap;
-}
-
-
-wxBitmapButton* LAYER_WIDGET::makeColorButton( wxWindow* aParent, COLOR4D aColor, int aID )
-{
-    // dynamically make a wxBitMap and brush it with the appropriate color,
-    // then create a wxBitmapButton from it.
-    wxBitmap bitmap = makeBitmap( aColor );
-
-#ifdef __WXMAC__
-    wxBitmapButton* ret = new wxBitmapButton( aParent, aID, bitmap,
-        wxDefaultPosition, wxSize(BUTT_SIZE_X, BUTT_SIZE_Y), wxBORDER_NONE );
-#else
-    wxBitmapButton* ret = new wxBitmapButton( aParent, aID, bitmap,
-        wxDefaultPosition, wxSize(BUTT_SIZE_X, BUTT_SIZE_Y), wxBORDER_RAISED );
-#endif
-    // save the color value in the name, no where else to put it.
-    ret->SetName( makeColorTxt( aColor ) );
-    return ret;
 }
 
 
@@ -277,7 +275,7 @@ void LAYER_WIDGET::OnLeftDownLayers( wxMouseEvent& event )
 
 void LAYER_WIDGET::OnMiddleDownLayerColor( wxMouseEvent& aEvent )
 {
-    wxBitmapButton* eventSource = (wxBitmapButton*) aEvent.GetEventObject();
+    auto eventSource = static_cast<wxStaticBitmap*>( aEvent.GetEventObject() );
 
     wxString colorTxt = eventSource->GetName();
 
@@ -306,7 +304,7 @@ void LAYER_WIDGET::OnMiddleDownLayerColor( wxMouseEvent& aEvent )
         eventSource->SetName( makeColorTxt( newColor ) );
 
         wxBitmap bm = makeBitmap( newColor.ToColour() );
-        eventSource->SetBitmapLabel( bm );
+        eventSource->SetBitmap( bm );
 
         LAYER_NUM layer = getDecodedId( eventSource->GetId() );
 
@@ -331,9 +329,9 @@ void LAYER_WIDGET::OnLayerCheckBox( wxCommandEvent& event )
 }
 
 
-void LAYER_WIDGET::OnMiddleDownRenderColor( wxMouseEvent& event )
+void LAYER_WIDGET::OnMiddleDownRenderColor( wxMouseEvent& aEvent )
 {
-    wxBitmapButton* eventSource = (wxBitmapButton*) event.GetEventObject();
+    auto eventSource = static_cast<wxStaticBitmap*>( aEvent.GetEventObject() );
 
     wxString colorTxt = eventSource->GetName();
 
@@ -362,7 +360,7 @@ void LAYER_WIDGET::OnMiddleDownRenderColor( wxMouseEvent& event )
         eventSource->SetName( makeColorTxt( newColor ) );
 
         wxBitmap bm = makeBitmap( newColor );
-        eventSource->SetBitmapLabel( bm );
+        eventSource->SetBitmap( bm );
 
         LAYER_NUM id = getDecodedId( eventSource->GetId() );
 
@@ -460,12 +458,12 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     // column 1 (COLUMN_COLORBM)
     col = COLUMN_COLORBM;
 
-    wxBitmapButton* bmb = makeColorButton( m_LayerScrolledWindow, aSpec.color, encodeId( col, aSpec.id ) );
+    auto bmb = makeColorSwatch( m_LayerScrolledWindow, aSpec.color, encodeId( col, aSpec.id ) );
     bmb->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
     bmb->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownLayerColor ), NULL, this );
     bmb->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownLayerColor ), NULL, this );
     bmb->SetToolTip( _("Left double click or middle click for color change, right click for menu" ) );
-    m_LayersFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );
+    m_LayersFlexGridSizer->wxSizer::Insert( index+col, bmb.release(), 0, flags );
 
     // column 2 (COLUMN_COLOR_LYR_CB)
     col = COLUMN_COLOR_LYR_CB;
@@ -497,11 +495,13 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
     col = 0;
     if( aSpec.color != COLOR4D::UNSPECIFIED )
     {
-        wxBitmapButton* bmb = makeColorButton( m_RenderScrolledWindow, aSpec.color, encodeId( col, aSpec.id ) );
+        auto bmb = makeColorSwatch(m_RenderScrolledWindow, aSpec.color, encodeId( col, aSpec.id ) );
+
+        //makeColorSwatch( m_RenderScrolledWindow, aSpec.color, encodeId( col, aSpec.id ) );
         bmb->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownRenderColor ), NULL, this );
         bmb->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownRenderColor ), NULL, this );
         bmb->SetToolTip( _( "Left double click or middle click for color change" ) );
-        m_RenderFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );
+        m_RenderFlexGridSizer->wxSizer::Insert( index+col, bmb.release(), 0, flags );
 
         // could add a left click handler on the color button that toggles checkbox.
     }
