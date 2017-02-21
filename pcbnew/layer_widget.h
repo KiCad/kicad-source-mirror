@@ -157,10 +157,10 @@ protected:
     void OnLeftDownLayers( wxMouseEvent& event );
 
     /**
-     * Function OnMiddleDownLayerColor
-     * is called only from a color button when user right clicks.
+     * Function OnSwatchChanged()
+     * is called when a user changes a swatch color
      */
-    void OnMiddleDownLayerColor( wxMouseEvent& event );
+    void OnLayerSwatchChanged( wxCommandEvent& aEvent );
 
     /**
      * Function OnLayerCheckBox
@@ -169,7 +169,11 @@ protected:
      */
     void OnLayerCheckBox( wxCommandEvent& event );
 
-    void OnMiddleDownRenderColor( wxMouseEvent& event );
+    /**
+     * Function OnRenderSwatchChanged
+     * Called when user has changed the swatch color of a render entry
+     */
+    void OnRenderSwatchChanged( wxCommandEvent& aEvent );
 
     void OnRenderCheckBox( wxCommandEvent& event );
 

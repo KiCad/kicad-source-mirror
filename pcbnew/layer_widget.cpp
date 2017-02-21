@@ -37,17 +37,11 @@
 
 #include <macros.h>
 #include <common.h>
-#include <wx/colour.h>
-#include <wx/colordlg.h>
+
+#include <widgets/color_swatch.h>
 
 #include <algorithm>
 
-
-const static int SWATCH_SIZE_X = 14;
-const static int SWATCH_SIZE_Y = 12;
-
-// See selcolor.cpp:
-extern COLOR4D DisplayColorFrame( wxWindow* aParent, COLOR4D aOldColor );
 
 const wxEventType LAYER_WIDGET::EVT_LAYER_COLOR_CHANGE = wxNewEventType();
 
@@ -150,56 +144,6 @@ static const char * rightarrow_alternate_xpm[] = {
 
 
 /**
- * Function makeColorTxt
- * returns a string representing the color in CSS format
- * For example: "rgba(255, 0, 0, 255)"
- */
-static wxString makeColorTxt( COLOR4D aColor )
-{
-    return aColor.ToWxString( wxC2S_CSS_SYNTAX );
-}
-
-
-static wxBitmap makeBitmap( COLOR4D aColor )
-{
-    wxBitmap    bitmap( SWATCH_SIZE_X, SWATCH_SIZE_Y );
-    wxBrush     brush;
-    wxMemoryDC  iconDC;
-
-    iconDC.SelectObject( bitmap );
-
-    brush.SetColour( aColor.ToColour() );
-    brush.SetStyle( wxBRUSHSTYLE_SOLID );
-
-    iconDC.SetBrush( brush );
-
-    iconDC.DrawRectangle( 0, 0, SWATCH_SIZE_X, SWATCH_SIZE_Y );
-
-    return bitmap;
-}
-
-
-/**
- * Function makeColorButton
- * creates a wxStaticBitmap and assigns it a solid color and a control ID
- */
-static std::unique_ptr<wxStaticBitmap> makeColorSwatch( wxWindow* aParent,
-                                                        COLOR4D aColor, int aID )
-{
-    // dynamically make a wxBitMap and brush it with the appropriate color,
-    // then create a wxBitmapButton from it.
-    wxBitmap bitmap = makeBitmap( aColor );
-
-    // save the color value in the name, no where else to put it.
-    auto ret = std::make_unique<wxStaticBitmap>( aParent, aID, bitmap );
-
-    ret->SetName( makeColorTxt( aColor ) );
-
-    return ret;
-}
-
-
-/**
  * Function shrinkFont
  * reduces the size of the wxFont associated with \a aControl
  */
@@ -273,48 +217,20 @@ void LAYER_WIDGET::OnLeftDownLayers( wxMouseEvent& event )
 }
 
 
-void LAYER_WIDGET::OnMiddleDownLayerColor( wxMouseEvent& aEvent )
+void LAYER_WIDGET::OnLayerSwatchChanged( wxCommandEvent& aEvent )
 {
-    auto eventSource = static_cast<wxStaticBitmap*>( aEvent.GetEventObject() );
+    auto eventSource = static_cast<COLOR_SWATCH*>( aEvent.GetEventObject() );
 
-    wxString colorTxt = eventSource->GetName();
+    COLOR4D newColor = eventSource->GetSwatchColor();
 
-    COLOR4D oldColor;
-    wxASSERT( oldColor.SetFromWxString( colorTxt ) );
-    COLOR4D newColor = COLOR4D::UNSPECIFIED;
+    LAYER_NUM layer = getDecodedId( eventSource->GetId() );
 
-    if( AreArbitraryColorsAllowed() )
-    {
-        wxColourData colourData;
-        colourData.SetColour( oldColor.ToColour() );
-        wxColourDialog* dialog = new wxColourDialog( m_LayerScrolledWindow, &colourData );
+    // tell the client code.
+    OnLayerColorChange( layer, newColor );
 
-        if( dialog->ShowModal() == wxID_OK )
-        {
-            newColor = COLOR4D( dialog->GetColourData().GetColour() );
-        }
-    }
-    else
-    {
-        newColor = DisplayColorFrame( this, oldColor );
-    }
-
-    if( newColor != COLOR4D::UNSPECIFIED )
-    {
-        eventSource->SetName( makeColorTxt( newColor ) );
-
-        wxBitmap bm = makeBitmap( newColor.ToColour() );
-        eventSource->SetBitmap( bm );
-
-        LAYER_NUM layer = getDecodedId( eventSource->GetId() );
-
-        // tell the client code.
-        OnLayerColorChange( layer, newColor );
-
-        // notify others
-        wxCommandEvent event( EVT_LAYER_COLOR_CHANGE );
-        wxPostEvent( this, event );
-    }
+    // notify others
+    wxCommandEvent event( EVT_LAYER_COLOR_CHANGE );
+    wxPostEvent( this, event );
 
     passOnFocus();
 }
@@ -329,44 +245,17 @@ void LAYER_WIDGET::OnLayerCheckBox( wxCommandEvent& event )
 }
 
 
-void LAYER_WIDGET::OnMiddleDownRenderColor( wxMouseEvent& aEvent )
+void LAYER_WIDGET::OnRenderSwatchChanged( wxCommandEvent& aEvent )
 {
-    auto eventSource = static_cast<wxStaticBitmap*>( aEvent.GetEventObject() );
+    auto eventSource = static_cast<COLOR_SWATCH*>( aEvent.GetEventObject() );
 
-    wxString colorTxt = eventSource->GetName();
+    COLOR4D newColor = eventSource->GetSwatchColor();
 
-    COLOR4D oldColor;
-    wxASSERT( oldColor.SetFromWxString( colorTxt ) );
-    COLOR4D newColor = COLOR4D::UNSPECIFIED;
+    LAYER_NUM id = getDecodedId( eventSource->GetId() );
 
-    if( AreArbitraryColorsAllowed() )
-    {
-        wxColourData colourData;
-        colourData.SetColour( oldColor.ToColour() );
-        wxColourDialog *dialog = new wxColourDialog( m_LayerScrolledWindow, &colourData );
+    // tell the client code.
+    OnRenderColorChange( id, newColor );
 
-        if( dialog->ShowModal() == wxID_OK )
-        {
-            newColor = COLOR4D( dialog->GetColourData().GetColour() );
-        }
-    }
-    else
-    {
-        newColor = DisplayColorFrame( this, oldColor );
-    }
-
-    if( newColor != COLOR4D::UNSPECIFIED )
-    {
-        eventSource->SetName( makeColorTxt( newColor ) );
-
-        wxBitmap bm = makeBitmap( newColor );
-        eventSource->SetBitmap( bm );
-
-        LAYER_NUM id = getDecodedId( eventSource->GetId() );
-
-        // tell the client code.
-        OnRenderColorChange( id, newColor );
-    }
     passOnFocus();
 }
 
@@ -458,12 +347,12 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     // column 1 (COLUMN_COLORBM)
     col = COLUMN_COLORBM;
 
-    auto bmb = makeColorSwatch( m_LayerScrolledWindow, aSpec.color, encodeId( col, aSpec.id ) );
-    bmb->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
-    bmb->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownLayerColor ), NULL, this );
-    bmb->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownLayerColor ), NULL, this );
+    auto bmb = new COLOR_SWATCH( m_LayerScrolledWindow, aSpec.color, encodeId( col, aSpec.id ),
+                                 AreArbitraryColorsAllowed() );
+    bmb->Bind( wxEVT_LEFT_DOWN, &LAYER_WIDGET::OnLeftDownLayers, this );
+    bmb->Bind( COLOR_SWATCH_CHANGED, &LAYER_WIDGET::OnLayerSwatchChanged, this );
     bmb->SetToolTip( _("Left double click or middle click for color change, right click for menu" ) );
-    m_LayersFlexGridSizer->wxSizer::Insert( index+col, bmb.release(), 0, flags );
+    m_LayersFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );
 
     // column 2 (COLUMN_COLOR_LYR_CB)
     col = COLUMN_COLOR_LYR_CB;
@@ -495,13 +384,11 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
     col = 0;
     if( aSpec.color != COLOR4D::UNSPECIFIED )
     {
-        auto bmb = makeColorSwatch(m_RenderScrolledWindow, aSpec.color, encodeId( col, aSpec.id ) );
-
-        //makeColorSwatch( m_RenderScrolledWindow, aSpec.color, encodeId( col, aSpec.id ) );
-        bmb->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownRenderColor ), NULL, this );
-        bmb->Connect( wxEVT_MIDDLE_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownRenderColor ), NULL, this );
+        auto bmb = new COLOR_SWATCH( m_RenderScrolledWindow, aSpec.color, encodeId( col, aSpec.id ),
+                                     AreArbitraryColorsAllowed() );
+        bmb->Bind( COLOR_SWATCH_CHANGED, &LAYER_WIDGET::OnRenderSwatchChanged, this );
         bmb->SetToolTip( _( "Left double click or middle click for color change" ) );
-        m_RenderFlexGridSizer->wxSizer::Insert( index+col, bmb.release(), 0, flags );
+        m_RenderFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );
 
         // could add a left click handler on the color button that toggles checkbox.
     }
@@ -803,13 +690,10 @@ void LAYER_WIDGET::SetLayerColor( LAYER_NUM aLayer, COLOR4D aColor )
     if( row >= 0 )
     {
         int col = 1;    // bitmap button is column 1
-        wxBitmapButton* bmb = (wxBitmapButton*) getLayerComp( row, col );
+        auto bmb = static_cast<COLOR_SWATCH*>( getLayerComp( row, col ) );
         wxASSERT( bmb );
 
-        wxBitmap bm = makeBitmap( aColor );
-
-        bmb->SetBitmapLabel( bm );
-        bmb->SetName( makeColorTxt( aColor ) ); // save color value in name as string
+        bmb->SetSwatchColor( aColor, false );
     }
 }
 
