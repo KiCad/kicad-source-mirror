@@ -341,7 +341,7 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     wxStaticBitmap* sbm = new wxStaticBitmap( m_LayerScrolledWindow, encodeId( col, aSpec.id ),
                             useAlternateBitmap(aRow) ? *m_BlankAlternateBitmap : *m_BlankBitmap,
                             wxDefaultPosition, m_BitmapSize );
-    sbm->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
+    sbm->Bind( wxEVT_LEFT_DOWN, &LAYER_WIDGET::OnLeftDownLayers, this );
     m_LayersFlexGridSizer->wxSizer::Insert( index+col, sbm, 0, flags );
 
     // column 1 (COLUMN_COLORBM)
@@ -358,7 +358,7 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     col = COLUMN_COLOR_LYR_CB;
     wxCheckBox* cb = new wxCheckBox( m_LayerScrolledWindow, encodeId( col, aSpec.id ), wxEmptyString );
     cb->SetValue( aSpec.state );
-    cb->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( LAYER_WIDGET::OnLayerCheckBox ), NULL, this );
+    cb->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED, &LAYER_WIDGET::OnLayerCheckBox, this );
     cb->SetToolTip( _( "Enable this for visibility" ) );
     m_LayersFlexGridSizer->wxSizer::Insert( index+col, cb, 0, flags );
 
@@ -366,7 +366,7 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     col = COLUMN_COLOR_LYRNAME;
     wxStaticText* st = new wxStaticText( m_LayerScrolledWindow, encodeId( col, aSpec.id ), aSpec.rowName );
     shrinkFont( st, m_PointSize );
-    st->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
+    st->Bind( wxEVT_LEFT_DOWN, &LAYER_WIDGET::OnLeftDownLayers, this );
     st->SetToolTip( aSpec.tooltip );
     m_LayersFlexGridSizer->wxSizer::Insert( index+col, st, 0, flags );
 }
@@ -405,8 +405,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
                         aSpec.rowName, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
     shrinkFont( cb, m_PointSize );
     cb->SetValue( aSpec.state );
-    cb->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED,
-        wxCommandEventHandler( LAYER_WIDGET::OnRenderCheckBox ), NULL, this );
+    cb->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED, &LAYER_WIDGET::OnRenderCheckBox, this );
     cb->SetToolTip( aSpec.tooltip );
     m_RenderFlexGridSizer->wxSizer::Insert( index+col, cb, 0, flags );
 }
@@ -503,8 +502,7 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPoint
     m_BitmapSize = wxSize(m_BlankBitmap->GetWidth(), m_BlankBitmap->GetHeight());
 
     // trap the tab changes so that we can call passOnFocus().
-    m_notebook->Connect( -1, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
-        wxNotebookEventHandler( LAYER_WIDGET::OnTabChange ), NULL, this );
+    m_notebook->Bind( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, &LAYER_WIDGET::OnTabChange, this );
 
     Layout();
 }
