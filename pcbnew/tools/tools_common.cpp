@@ -37,12 +37,12 @@
 #include <tools/pcb_editor_control.h>
 #include <tools/placement_tool.h>
 #include <tools/pad_tool.h>
-#include <tools/common_actions.h>
+#include <tools/pcb_actions.h>
 
 #include <router/router_tool.h>
 #include <router/length_tuner_tool.h>
 
-void registerAllTools( TOOL_MANAGER* aToolManager )
+void PCB_ACTIONS::RegisterAllTools( TOOL_MANAGER* aToolManager )
 {
     aToolManager->RegisterTool( new SELECTION_TOOL );
     aToolManager->RegisterTool( new ZOOM_TOOL );

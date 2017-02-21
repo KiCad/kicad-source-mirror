@@ -41,7 +41,7 @@ using namespace std::placeholders;
 #include <bitmaps.h>
 
 #include <tool/context_menu.h>
-#include <tools/common_actions.h>
+#include <tools/pcb_actions.h>
 #include <tools/grid_helper.h>
 
 #include <ratsnest_data.h>

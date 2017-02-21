@@ -302,7 +302,7 @@ set( PCBNEW_CLASS_SRCS
     tools/pcb_editor_control.cpp
     tools/module_editor_tools.cpp
     tools/placement_tool.cpp
-    tools/common_actions.cpp
+    tools/pcb_actions.cpp
     tools/grid_helper.cpp
     tools/pad_tool.cpp
     tools/picker_tool.cpp

@@ -28,7 +28,7 @@
 #include <pcb_netlist.h>
 #include <dialogs/dialog_update_pcb.h>
 
-#include <tools/common_actions.h>
+#include <tools/pcb_actions.h>
 #include <tool/tool_manager.h>
 #include <pcb_draw_panel_gal.h>
 
@@ -135,7 +135,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     {
         if( IsGalCanvasActive() )
         {
-            GetToolManager()->RunAction( COMMON_ACTIONS::crossProbeSchToPcb,
+            GetToolManager()->RunAction( PCB_ACTIONS::crossProbeSchToPcb,
                 true,
                 pad ?
                     static_cast<BOARD_ITEM*>( pad ) :

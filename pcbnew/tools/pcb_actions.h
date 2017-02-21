@@ -23,22 +23,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __COMMON_ACTIONS_H
-#define __COMMON_ACTIONS_H
+#ifndef __PCB_ACTIONS_H
+#define __PCB_ACTIONS_H
 
 #include <tool/tool_action.h>
+#include <tool/actions.h>
 #include <boost/optional.hpp>
 
 class TOOL_EVENT;
 class TOOL_MANAGER;
 
 /**
- * Class COMMON_ACTIONS
+ * Class PCB_ACTIONS
  *
- * Gathers all the actions that are shared by tools. The instance of COMMON_ACTION is created
+ * Gathers all the actions that are shared by tools. The instance of PCB_ACTIONS is created
  * inside of ACTION_MANAGER object that registers the actions.
  */
-class COMMON_ACTIONS
+class PCB_ACTIONS : public ACTIONS
 {
 public:
     // Selection Tool
@@ -355,23 +356,11 @@ public:
     static TOOL_ACTION globalEditPads;
 
 
-    /**
-     * Function TranslateLegacyId()
-     * Translates legacy tool ids to the corresponding TOOL_ACTION name.
-     * @param aId is legacy tool id to be translated.
-     * @return std::string is name of the corresponding TOOL_ACTION. It may be empty, if there is
-     * no corresponding TOOL_ACTION.
-     */
-    static boost::optional<TOOL_EVENT> TranslateLegacyId( int aId );
+    ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
+    virtual boost::optional<TOOL_EVENT> TranslateLegacyId( int aId ) override;
 
-    ///> Cursor control event types
-    enum CURSOR_EVENT_TYPE { CURSOR_UP, CURSOR_DOWN, CURSOR_LEFT, CURSOR_RIGHT,
-                             CURSOR_CLICK, CURSOR_DBL_CLICK, CURSOR_FAST_MOVE = 0x8000 };
-
-    ///> Remove event modifier flags
-    enum class REMOVE_FLAGS { NORMAL = 0x00, ALT = 0x01 };
+    ///> @copydoc COMMON_ACTIONS::RegisterAllTools()
+    virtual void RegisterAllTools( TOOL_MANAGER* aToolManager ) override;
 };
-
-void registerAllTools( TOOL_MANAGER* aToolManager );
 
 #endif

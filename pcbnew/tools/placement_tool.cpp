@@ -23,7 +23,7 @@
  */
 
 #include "placement_tool.h"
-#include "common_actions.h"
+#include "pcb_actions.h"
 #include "selection_tool.h"
 #include <tool/tool_manager.h>
 
@@ -63,13 +63,13 @@ bool PLACEMENT_TOOL::Init()
     m_placementMenu->SetTitle( _( "Align/distribute" ) );
 
     // Add all align/distribute commands
-    m_placementMenu->Add( COMMON_ACTIONS::alignTop );
-    m_placementMenu->Add( COMMON_ACTIONS::alignBottom );
-    m_placementMenu->Add( COMMON_ACTIONS::alignLeft );
-    m_placementMenu->Add( COMMON_ACTIONS::alignRight );
+    m_placementMenu->Add( PCB_ACTIONS::alignTop );
+    m_placementMenu->Add( PCB_ACTIONS::alignBottom );
+    m_placementMenu->Add( PCB_ACTIONS::alignLeft );
+    m_placementMenu->Add( PCB_ACTIONS::alignRight );
     m_placementMenu->AppendSeparator();
-    m_placementMenu->Add( COMMON_ACTIONS::distributeHorizontally );
-    m_placementMenu->Add( COMMON_ACTIONS::distributeVertically );
+    m_placementMenu->Add( PCB_ACTIONS::distributeHorizontally );
+    m_placementMenu->Add( PCB_ACTIONS::distributeVertically );
 
     m_selectionTool->GetToolMenu().GetMenu().AddMenu( m_placementMenu, false,
             SELECTION_CONDITIONS::MoreThan( 1 ) );
@@ -318,11 +318,11 @@ int PLACEMENT_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
 
 void PLACEMENT_TOOL::SetTransitions()
 {
-    Go( &PLACEMENT_TOOL::AlignTop,    COMMON_ACTIONS::alignTop.MakeEvent() );
-    Go( &PLACEMENT_TOOL::AlignBottom, COMMON_ACTIONS::alignBottom.MakeEvent() );
-    Go( &PLACEMENT_TOOL::AlignLeft,   COMMON_ACTIONS::alignLeft.MakeEvent() );
-    Go( &PLACEMENT_TOOL::AlignRight,  COMMON_ACTIONS::alignRight.MakeEvent() );
+    Go( &PLACEMENT_TOOL::AlignTop,    PCB_ACTIONS::alignTop.MakeEvent() );
+    Go( &PLACEMENT_TOOL::AlignBottom, PCB_ACTIONS::alignBottom.MakeEvent() );
+    Go( &PLACEMENT_TOOL::AlignLeft,   PCB_ACTIONS::alignLeft.MakeEvent() );
+    Go( &PLACEMENT_TOOL::AlignRight,  PCB_ACTIONS::alignRight.MakeEvent() );
 
-    Go( &PLACEMENT_TOOL::DistributeHorizontally,  COMMON_ACTIONS::distributeHorizontally.MakeEvent() );
-    Go( &PLACEMENT_TOOL::DistributeVertically,    COMMON_ACTIONS::distributeVertically.MakeEvent() );
+    Go( &PLACEMENT_TOOL::DistributeHorizontally,  PCB_ACTIONS::distributeHorizontally.MakeEvent() );
+    Go( &PLACEMENT_TOOL::DistributeVertically,    PCB_ACTIONS::distributeVertically.MakeEvent() );
 }

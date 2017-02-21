@@ -54,6 +54,7 @@
 #include <gal/gal_display_options.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
+#include <tool/actions.h>
 
 /**
  * Definition for enabling and disabling scroll bar setting trace output.  See the
@@ -142,6 +143,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_canvas              = NULL;
     m_galCanvas           = NULL;
     m_galCanvasActive     = false;
+    m_actions             = NULL;
     m_toolManager         = NULL;
     m_toolDispatcher      = NULL;
     m_messagePanel        = NULL;
@@ -214,6 +216,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
 EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 {
+    delete m_actions;
     delete m_toolManager;
     delete m_toolDispatcher;
     delete m_galCanvas;

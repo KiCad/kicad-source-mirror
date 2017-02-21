@@ -51,7 +51,7 @@ using namespace std::placeholders;
 #include "selection_tool.h"
 #include "selection_area.h"
 #include "bright_box.h"
-#include "common_actions.h"
+#include "pcb_actions.h"
 
 class SELECT_MENU: public CONTEXT_MENU
 {
@@ -59,10 +59,10 @@ public:
     SELECT_MENU()
     {
         SetTitle( _( "Select..." ) );
-        Add( COMMON_ACTIONS::selectConnection );
-        Add( COMMON_ACTIONS::selectCopper );
-        Add( COMMON_ACTIONS::selectNet );
-        Add( COMMON_ACTIONS::selectSameSheet );
+        Add( PCB_ACTIONS::selectConnection );
+        Add( PCB_ACTIONS::selectCopper );
+        Add( PCB_ACTIONS::selectNet );
+        Add( PCB_ACTIONS::selectSameSheet );
     }
 
 private:
@@ -79,10 +79,10 @@ private:
         bool sheetSelEnabled = ( SELECTION_CONDITIONS::OnlyType( PCB_MODULE_T ) )
                               ( selTool->GetSelection() );
 
-        Enable( getMenuId( COMMON_ACTIONS::selectNet ), selEnabled );
-        Enable( getMenuId( COMMON_ACTIONS::selectCopper ), selEnabled );
-        Enable( getMenuId( COMMON_ACTIONS::selectConnection ), selEnabled );
-        Enable( getMenuId( COMMON_ACTIONS::selectSameSheet ), sheetSelEnabled );
+        Enable( getMenuId( PCB_ACTIONS::selectNet ), selEnabled );
+        Enable( getMenuId( PCB_ACTIONS::selectCopper ), selEnabled );
+        Enable( getMenuId( PCB_ACTIONS::selectConnection ), selEnabled );
+        Enable( getMenuId( PCB_ACTIONS::selectSameSheet ), sheetSelEnabled );
     }
     CONTEXT_MENU* create() const override
     {
@@ -170,7 +170,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( evt->Modifier( MD_CTRL ) && !m_editModules )
             {
-                m_toolMgr->RunAction( COMMON_ACTIONS::highlightNet, true );
+                m_toolMgr->RunAction( PCB_ACTIONS::highlightNet, true );
             }
             else
             {
@@ -200,7 +200,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( m_selection.Empty() )
                 selectPoint( evt->Position() );
 
-            m_toolMgr->RunAction( COMMON_ACTIONS::properties );
+            m_toolMgr->RunAction( PCB_ACTIONS::properties );
         }
 
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
@@ -468,17 +468,17 @@ bool SELECTION_TOOL::selectMultiple()
 
 void SELECTION_TOOL::SetTransitions()
 {
-    Go( &SELECTION_TOOL::Main, COMMON_ACTIONS::selectionActivate.MakeEvent() );
-    Go( &SELECTION_TOOL::CursorSelection, COMMON_ACTIONS::selectionCursor.MakeEvent() );
-    Go( &SELECTION_TOOL::ClearSelection, COMMON_ACTIONS::selectionClear.MakeEvent() );
-    Go( &SELECTION_TOOL::SelectItem, COMMON_ACTIONS::selectItem.MakeEvent() );
-    Go( &SELECTION_TOOL::UnselectItem, COMMON_ACTIONS::unselectItem.MakeEvent() );
-    Go( &SELECTION_TOOL::find, COMMON_ACTIONS::find.MakeEvent() );
-    Go( &SELECTION_TOOL::findMove, COMMON_ACTIONS::findMove.MakeEvent() );
-    Go( &SELECTION_TOOL::selectConnection, COMMON_ACTIONS::selectConnection.MakeEvent() );
-    Go( &SELECTION_TOOL::selectCopper, COMMON_ACTIONS::selectCopper.MakeEvent() );
-    Go( &SELECTION_TOOL::selectNet, COMMON_ACTIONS::selectNet.MakeEvent() );
-    Go( &SELECTION_TOOL::selectSameSheet, COMMON_ACTIONS::selectSameSheet.MakeEvent() );
+    Go( &SELECTION_TOOL::Main, PCB_ACTIONS::selectionActivate.MakeEvent() );
+    Go( &SELECTION_TOOL::CursorSelection, PCB_ACTIONS::selectionCursor.MakeEvent() );
+    Go( &SELECTION_TOOL::ClearSelection, PCB_ACTIONS::selectionClear.MakeEvent() );
+    Go( &SELECTION_TOOL::SelectItem, PCB_ACTIONS::selectItem.MakeEvent() );
+    Go( &SELECTION_TOOL::UnselectItem, PCB_ACTIONS::unselectItem.MakeEvent() );
+    Go( &SELECTION_TOOL::find, PCB_ACTIONS::find.MakeEvent() );
+    Go( &SELECTION_TOOL::findMove, PCB_ACTIONS::findMove.MakeEvent() );
+    Go( &SELECTION_TOOL::selectConnection, PCB_ACTIONS::selectConnection.MakeEvent() );
+    Go( &SELECTION_TOOL::selectCopper, PCB_ACTIONS::selectCopper.MakeEvent() );
+    Go( &SELECTION_TOOL::selectNet, PCB_ACTIONS::selectNet.MakeEvent() );
+    Go( &SELECTION_TOOL::selectSameSheet, PCB_ACTIONS::selectSameSheet.MakeEvent() );
 }
 
 

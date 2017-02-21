@@ -54,7 +54,7 @@
 #include <modview_frame.h>
 #include <collectors.h>
 #include <tool/tool_manager.h>
-#include <tools/common_actions.h>
+#include <tools/pcb_actions.h>
 
 #include <dialog_edit_module_for_Modedit.h>
 #include <dialog_move_exact.h>
@@ -436,8 +436,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 break;
             }
 
-            m_toolManager->RunAction( COMMON_ACTIONS::selectionClear, true );
-            pcbframe->GetToolManager()->RunAction( COMMON_ACTIONS::selectionClear, true );
+            m_toolManager->RunAction( PCB_ACTIONS::selectionClear, true );
+            pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
             BOARD_COMMIT commit( pcbframe );
 
             // Create the "new" module

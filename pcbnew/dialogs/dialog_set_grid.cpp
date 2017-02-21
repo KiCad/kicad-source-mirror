@@ -37,7 +37,7 @@
 #include <class_draw_panel_gal.h>
 
 #include <gal/graphics_abstraction_layer.h>
-#include <tools/common_actions.h>
+#include <tools/pcb_actions.h>
 #include <tool/tool_manager.h>
 
 #include <limits.h>
@@ -154,7 +154,7 @@ bool DIALOG_SET_GRID::TransferDataFromWindow()
         mgr->RunAction( "common.Control.gridPreset", true,
                 screen->GetGridCmdId() - ID_POPUP_GRID_LEVEL_1000 );
 
-        TOOL_EVENT gridOriginUpdate = COMMON_ACTIONS::gridSetOrigin.MakeEvent();
+        TOOL_EVENT gridOriginUpdate = PCB_ACTIONS::gridSetOrigin.MakeEvent();
         gridOriginUpdate.SetParameter( new VECTOR2D( gridOrigin ) );
         mgr->ProcessEvent( gridOriginUpdate );
     }

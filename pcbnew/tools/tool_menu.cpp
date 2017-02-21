@@ -25,7 +25,7 @@
 
 #include <tool/context_menu.h>
 
-#include "common_actions.h"
+#include "pcb_actions.h"
 #include "zoom_menu.h"
 #include "grid_menu.h"
 #include "selection_tool.h"    // For SELECTION
@@ -91,10 +91,10 @@ using S_C = SELECTION_CONDITIONS;
 
 void TOOL_MENU::AddStandardSubMenus( EDA_DRAW_FRAME& aFrame )
 {
-    m_menu.AddItem( COMMON_ACTIONS::zoomCenter, S_C::ShowAlways, 1000 );
-    m_menu.AddItem( COMMON_ACTIONS::zoomIn, S_C::ShowAlways, 1000  );
-    m_menu.AddItem( COMMON_ACTIONS::zoomOut, S_C::ShowAlways, 1000 );
-    m_menu.AddItem( COMMON_ACTIONS::zoomFitScreen, S_C::ShowAlways, 1000 );
+    m_menu.AddItem( PCB_ACTIONS::zoomCenter, S_C::ShowAlways, 1000 );
+    m_menu.AddItem( PCB_ACTIONS::zoomIn, S_C::ShowAlways, 1000  );
+    m_menu.AddItem( PCB_ACTIONS::zoomOut, S_C::ShowAlways, 1000 );
+    m_menu.AddItem( PCB_ACTIONS::zoomFitScreen, S_C::ShowAlways, 1000 );
 
     m_menu.AddSeparator(SELECTION_CONDITIONS::ShowAlways, 1000 );
 

@@ -70,7 +70,7 @@
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
-#include <tools/common_actions.h>
+#include <tools/pcb_actions.h>
 
 #include <wildcards_and_files_ext.h>
 
@@ -566,10 +566,11 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
                                    GetGalCanvas()->GetViewControls(), this );
-    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
+    m_actions = new PCB_ACTIONS();
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
     // Register tools
-    registerAllTools( m_toolManager );
+    m_actions->RegisterAllTools( m_toolManager );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
@@ -883,7 +884,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( LAYER_ID aLayer )
 
     if( IsGalCanvasActive() )
     {
-        m_toolManager->RunAction( COMMON_ACTIONS::layerChanged );       // notify other tools
+        m_toolManager->RunAction( PCB_ACTIONS::layerChanged );       // notify other tools
         GetGalCanvas()->SetFocus();                 // otherwise hotkeys are stuck somewhere
 
         GetGalCanvas()->SetHighContrastLayer( aLayer );

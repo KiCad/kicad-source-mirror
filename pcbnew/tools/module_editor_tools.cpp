@@ -24,7 +24,7 @@
 
 #include "module_editor_tools.h"
 #include "selection_tool.h"
-#include "common_actions.h"
+#include "pcb_actions.h"
 #include <tool/tool_manager.h>
 
 #include <class_draw_panel_gal.h>
@@ -104,7 +104,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
     preview.Add( pad );
     m_view->Add( &preview );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -130,7 +130,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
                 pad->Rotate( pad->GetPosition(), rotationAngle );
                 m_view->Update( &preview );
             }
-            else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
+            else if( evt->IsAction( &PCB_ACTIONS::flip ) )
             {
                 pad->Flip( pad->GetPosition() );
                 m_view->Update( &preview );
@@ -210,7 +210,7 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 
     Activate();
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     VECTOR2I oldCursorPos = m_controls->GetCursorPosition();
     std::list<D_PAD*> selectedPads;
@@ -418,7 +418,7 @@ int MODULE_EDITOR_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
     preview.Add( pastedModule );
     m_view->Add( &preview );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
     m_controls->SetAutoPan( true );
@@ -445,7 +445,7 @@ int MODULE_EDITOR_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
                 pastedModule->Rotate( pastedModule->GetPosition(), rotationAngle );
                 m_view->Update( &preview );
             }
-            else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
+            else if( evt->IsAction( &PCB_ACTIONS::flip ) )
             {
                 pastedModule->Flip( pastedModule->GetPosition() );
                 m_view->Update( &preview );
@@ -575,10 +575,10 @@ int MODULE_EDITOR_TOOLS::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
 
 void MODULE_EDITOR_TOOLS::SetTransitions()
 {
-    Go( &MODULE_EDITOR_TOOLS::PlacePad,            COMMON_ACTIONS::placePad.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::EnumeratePads,       COMMON_ACTIONS::enumeratePads.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::CopyItems,           COMMON_ACTIONS::copyItems.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::PasteItems,          COMMON_ACTIONS::pasteItems.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::ModuleTextOutlines,  COMMON_ACTIONS::moduleTextOutlines.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::ModuleEdgeOutlines,  COMMON_ACTIONS::moduleEdgeOutlines.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::PlacePad,            PCB_ACTIONS::placePad.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::EnumeratePads,       PCB_ACTIONS::enumeratePads.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::CopyItems,           PCB_ACTIONS::copyItems.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::PasteItems,          PCB_ACTIONS::pasteItems.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::ModuleTextOutlines,  PCB_ACTIONS::moduleTextOutlines.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::ModuleEdgeOutlines,  PCB_ACTIONS::moduleEdgeOutlines.MakeEvent() );
 }

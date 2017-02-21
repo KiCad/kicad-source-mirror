@@ -84,6 +84,7 @@ class TITLE_BLOCK;
 class MSG_PANEL_ITEM;
 class TOOL_MANAGER;
 class TOOL_DISPATCHER;
+class ACTIONS;
 
 
 enum id_librarytype {

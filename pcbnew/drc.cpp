@@ -45,7 +45,7 @@
 #include <ratsnest_data.h>
 
 #include <tool/tool_manager.h>
-#include <tools/common_actions.h>
+#include <tools/pcb_actions.h>
 
 #include <pcbnew.h>
 #include <drc_stuff.h>
@@ -70,7 +70,7 @@ void DRC::ShowDRCDialog( wxWindow* aParent )
 
     if( !m_drcDialog )
     {
-        m_pcbEditorFrame->GetToolManager()->RunAction( COMMON_ACTIONS::selectionClear, true );
+        m_pcbEditorFrame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
         m_drcDialog = new DIALOG_DRC_CONTROL( this, m_pcbEditorFrame, aParent );
         updatePointers();
 

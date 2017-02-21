@@ -46,7 +46,7 @@ using namespace std::placeholders;
 #include <tool/context_menu.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_settings.h>
-#include <tools/common_actions.h>
+#include <tools/pcb_actions.h>
 #include <tools/size_menu.h>
 #include <tools/selection_tool.h>
 #include <tools/edit_tool.h>
@@ -204,7 +204,7 @@ protected:
             bds.UseCustomTrackViaSize( useCustomTrackViaSize );
         }
 
-        return OPT_TOOL_EVENT( COMMON_ACTIONS::trackViaSizeChanged.MakeEvent() );
+        return OPT_TOOL_EVENT( PCB_ACTIONS::trackViaSizeChanged.MakeEvent() );
     }
 
 private:
@@ -272,7 +272,7 @@ bool ROUTER_TOOL::Init()
     // Track & via dragging menu entry
     auto selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     CONDITIONAL_MENU& menu = selectionTool->GetToolMenu().GetMenu();
-    menu.AddItem( COMMON_ACTIONS::routerInlineDrag, SELECTION_CONDITIONS::Count( 1 )
+    menu.AddItem( PCB_ACTIONS::routerInlineDrag, SELECTION_CONDITIONS::Count( 1 )
             && SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_VIA_T, EOT } ) );
 
     m_savedSettings.Load( GetSettings() );
@@ -586,7 +586,7 @@ void ROUTER_TOOL::performRouting()
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );        // refresh
         }
-        else if( evt->IsAction( &COMMON_ACTIONS::layerChanged ) )
+        else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
             m_router->SwitchLayer( m_frame->GetActiveLayer() );
             updateEndItem( *evt );
@@ -639,11 +639,11 @@ int ROUTER_TOOL::SettingsDialog( const TOOL_EVENT& aEvent )
 
 void ROUTER_TOOL::SetTransitions()
 {
-    Go( &ROUTER_TOOL::RouteSingleTrace, COMMON_ACTIONS::routerActivateSingle.MakeEvent() );
-    Go( &ROUTER_TOOL::RouteDiffPair, COMMON_ACTIONS::routerActivateDiffPair.MakeEvent() );
-    Go( &ROUTER_TOOL::DpDimensionsDialog, COMMON_ACTIONS::routerActivateDpDimensionsDialog.MakeEvent() );
-    Go( &ROUTER_TOOL::SettingsDialog, COMMON_ACTIONS::routerActivateSettingsDialog.MakeEvent() );
-    Go( &ROUTER_TOOL::InlineDrag, COMMON_ACTIONS::routerInlineDrag.MakeEvent() );
+    Go( &ROUTER_TOOL::RouteSingleTrace, PCB_ACTIONS::routerActivateSingle.MakeEvent() );
+    Go( &ROUTER_TOOL::RouteDiffPair, PCB_ACTIONS::routerActivateDiffPair.MakeEvent() );
+    Go( &ROUTER_TOOL::DpDimensionsDialog, PCB_ACTIONS::routerActivateDpDimensionsDialog.MakeEvent() );
+    Go( &ROUTER_TOOL::SettingsDialog, PCB_ACTIONS::routerActivateSettingsDialog.MakeEvent() );
+    Go( &ROUTER_TOOL::InlineDrag, PCB_ACTIONS::routerInlineDrag.MakeEvent() );
 
     Go( &ROUTER_TOOL::onViaCommand, ACT_PlaceThroughVia.MakeEvent() );
     Go( &ROUTER_TOOL::onViaCommand, ACT_PlaceBlindVia.MakeEvent() );
@@ -654,7 +654,7 @@ void ROUTER_TOOL::SetTransitions()
     Go( &ROUTER_TOOL::DpDimensionsDialog, ACT_SetDpDimensions.MakeEvent() );
 
     Go( &ROUTER_TOOL::CustomTrackWidthDialog, ACT_CustomTrackWidth.MakeEvent() );
-    Go( &ROUTER_TOOL::onTrackViaSizeChanged, COMMON_ACTIONS::trackViaSizeChanged.MakeEvent() );
+    Go( &ROUTER_TOOL::onTrackViaSizeChanged, PCB_ACTIONS::trackViaSizeChanged.MakeEvent() );
 }
 
 
@@ -678,7 +678,7 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
     BOARD* board = getModel<BOARD>();
 
     // Deselect all items
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     Activate();
 
@@ -721,13 +721,13 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
         }
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
-            m_toolMgr->RunAction( COMMON_ACTIONS::layerToggle, true );
+            m_toolMgr->RunAction( PCB_ACTIONS::layerToggle, true );
         }
-        else if( evt->IsAction( &COMMON_ACTIONS::remove ) )
+        else if( evt->IsAction( &PCB_ACTIONS::remove ) )
         {
             deleteTraces( m_startItem, true );
         }
-        else if( evt->IsAction( &COMMON_ACTIONS::removeAlt ) )
+        else if( evt->IsAction( &PCB_ACTIONS::removeAlt ) )
         {
             deleteTraces( m_startItem, false );
         }
@@ -800,7 +800,7 @@ void ROUTER_TOOL::performDragging()
 int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 {
     // Get the item under the cursor
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionCursor, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
     const auto& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
 
     if( selection.Size() != 1 )
@@ -813,7 +813,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     Activate();
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_router->SyncWorld();
     m_startItem = m_router->GetWorld()->FindItemByParent( item );
 
@@ -873,7 +873,7 @@ int ROUTER_TOOL::CustomTrackWidthDialog( const TOOL_EVENT& aEvent )
     if( sizeDlg.ShowModal() )
     {
         bds.UseCustomTrackViaSize( true );
-        m_toolMgr->RunAction( COMMON_ACTIONS::trackViaSizeChanged );
+        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
     }
 
     return 0;

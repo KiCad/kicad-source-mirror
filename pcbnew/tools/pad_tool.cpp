@@ -37,7 +37,7 @@
 
 #include <dialogs/dialog_global_pads_edition.h>
 
-#include "common_actions.h"
+#include "pcb_actions.h"
 #include "selection_tool.h"
 #include "selection_conditions.h"
 #include "edit_tool.h"
@@ -56,16 +56,16 @@ public:
         SetIcon( pad_xpm );
         SetTitle( _( "Pads" ) );
 
-        Add( COMMON_ACTIONS::copyPadSettings );
-        Add( COMMON_ACTIONS::applyPadSettings );
-        Add( COMMON_ACTIONS::pushPadSettings );
+        Add( PCB_ACTIONS::copyPadSettings );
+        Add( PCB_ACTIONS::applyPadSettings );
+        Add( PCB_ACTIONS::pushPadSettings );
 
         // show modedit-specific items
         if( m_editingFootprint )
         {
             AppendSeparator();
 
-            Add( COMMON_ACTIONS::enumeratePads );
+            Add( PCB_ACTIONS::enumeratePads );
         }
     }
 
@@ -114,9 +114,9 @@ private:
 
         auto enablements = getEnablements( selection );
 
-        Enable( getMenuId( COMMON_ACTIONS::applyPadSettings ), enablements.canImport );
-        Enable( getMenuId( COMMON_ACTIONS::copyPadSettings ), enablements.canExport );
-        Enable( getMenuId( COMMON_ACTIONS::pushPadSettings ), enablements.canPush );
+        Enable( getMenuId( PCB_ACTIONS::applyPadSettings ), enablements.canImport );
+        Enable( getMenuId( PCB_ACTIONS::copyPadSettings ), enablements.canExport );
+        Enable( getMenuId( PCB_ACTIONS::pushPadSettings ), enablements.canPush );
     }
 
     bool m_editingFootprint;
@@ -204,7 +204,7 @@ int PAD_TOOL::applyPadSettings( const TOOL_EVENT& aEvent )
 
     commit.Push( _( "Apply Pad Settings" ) );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::editModifiedSelection, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::editModifiedSelection, true );
     frame.Refresh();
 
     return 0;
@@ -357,7 +357,7 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 
     commit.Push( _( "Apply Pad Settings" ) );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::editModifiedSelection, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::editModifiedSelection, true );
     frame.Refresh();
 
     return 0;
@@ -366,7 +366,7 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 
 void PAD_TOOL::SetTransitions()
 {
-    Go( &PAD_TOOL::applyPadSettings, COMMON_ACTIONS::applyPadSettings.MakeEvent() );
-    Go( &PAD_TOOL::copyPadSettings,  COMMON_ACTIONS::copyPadSettings.MakeEvent() );
-    Go( &PAD_TOOL::pushPadSettings,  COMMON_ACTIONS::pushPadSettings.MakeEvent() );
+    Go( &PAD_TOOL::applyPadSettings, PCB_ACTIONS::applyPadSettings.MakeEvent() );
+    Go( &PAD_TOOL::copyPadSettings,  PCB_ACTIONS::copyPadSettings.MakeEvent() );
+    Go( &PAD_TOOL::pushPadSettings,  PCB_ACTIONS::pushPadSettings.MakeEvent() );
 }

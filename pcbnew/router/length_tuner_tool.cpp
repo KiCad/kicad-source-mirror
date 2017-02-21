@@ -33,7 +33,7 @@
 
 #include <tool/context_menu.h>
 #include <tool/tool_manager.h>
-#include <tools/common_actions.h>
+#include <tools/pcb_actions.h>
 
 #include "pns_segment.h"
 #include "pns_router.h"
@@ -110,9 +110,9 @@ void LENGTH_TUNER_TOOL::Reset( RESET_REASON aReason )
 {
     TOOL_BASE::Reset( aReason );
 
-    Go( &LENGTH_TUNER_TOOL::TuneSingleTrace, COMMON_ACTIONS::routerActivateTuneSingleTrace.MakeEvent() );
-    Go( &LENGTH_TUNER_TOOL::TuneDiffPair, COMMON_ACTIONS::routerActivateTuneDiffPair.MakeEvent() );
-    Go( &LENGTH_TUNER_TOOL::TuneDiffPairSkew, COMMON_ACTIONS::routerActivateTuneDiffPairSkew.MakeEvent() );
+    Go( &LENGTH_TUNER_TOOL::TuneSingleTrace, PCB_ACTIONS::routerActivateTuneSingleTrace.MakeEvent() );
+    Go( &LENGTH_TUNER_TOOL::TuneDiffPair, PCB_ACTIONS::routerActivateTuneDiffPair.MakeEvent() );
+    Go( &LENGTH_TUNER_TOOL::TuneDiffPairSkew, PCB_ACTIONS::routerActivateTuneDiffPairSkew.MakeEvent() );
 }
 
 
@@ -239,7 +239,7 @@ void LENGTH_TUNER_TOOL::SetTransitions()
 int LENGTH_TUNER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
 {
     // Deselect all items
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     Activate();
 

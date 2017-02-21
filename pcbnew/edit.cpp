@@ -58,7 +58,7 @@
 #include <dialog_move_exact.h>
 
 #include <tool/tool_manager.h>
-#include <tools/common_actions.h>
+#include <tools/pcb_actions.h>
 
 // Handles the selection of command events.
 void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )

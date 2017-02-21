@@ -24,7 +24,7 @@
  */
 
 #include "drawing_tool.h"
-#include "common_actions.h"
+#include "pcb_actions.h"
 
 #include <wxPcbStruct.h>
 #include <class_draw_panel_gal.h>
@@ -200,7 +200,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     SELECTION preview;
     m_view->Add( &preview );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
     // do not capture or auto-pan until we start placing some text
@@ -247,7 +247,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 text->Rotate( text->GetPosition(), rotationAngle );
                 m_view->Update( &preview );
             }
-            else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
+            else if( evt->IsAction( &PCB_ACTIONS::flip ) )
             {
                 text->Flip( text->GetPosition() );
                 m_view->Update( &preview );
@@ -372,7 +372,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     SELECTION preview;
     m_view->Add( &preview );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -412,14 +412,14 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 break;
         }
 
-        else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) && step != SET_ORIGIN )
+        else if( evt->IsAction( &PCB_ACTIONS::incWidth ) && step != SET_ORIGIN )
         {
             m_lineWidth += WIDTH_STEP;
             dimension->SetWidth( m_lineWidth );
             m_view->Update( &preview );
         }
 
-        else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) && step != SET_ORIGIN )
+        else if( evt->IsAction( &PCB_ACTIONS::decWidth ) && step != SET_ORIGIN )
         {
             if( m_lineWidth > WIDTH_STEP )
             {
@@ -606,7 +606,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     BOARD_ITEM* firstItem = preview.Front();
     m_view->Add( &preview );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -645,7 +645,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
 
                 m_view->Update( &preview );
             }
-            else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
+            else if( evt->IsAction( &PCB_ACTIONS::flip ) )
             {
                 for( auto item : preview )
                     item->Flip( wxPoint( cursorPos.x, cursorPos.y ) );
@@ -827,7 +827,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
     SELECTION preview;
     m_view->Add( &preview );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -890,7 +890,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             aGraphic = NULL;
             break;
         }
-        else if( evt->IsAction( &COMMON_ACTIONS::layerChanged ) )
+        else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
             aGraphic->SetLayer( getDrawingLayer() );
             m_view->Update( &preview );
@@ -961,7 +961,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             m_view->Update( &preview );
         }
 
-        else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) )
+        else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
             m_lineWidth += WIDTH_STEP;
             aGraphic->SetWidth( m_lineWidth );
@@ -969,7 +969,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             m_view->Update( &preview );
         }
 
-        else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) && ( m_lineWidth > WIDTH_STEP ) )
+        else if( evt->IsAction( &PCB_ACTIONS::decWidth ) && ( m_lineWidth > WIDTH_STEP ) )
         {
             m_lineWidth -= WIDTH_STEP;
             aGraphic->SetWidth( m_lineWidth );
@@ -1004,7 +1004,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
     SELECTION preview;
     m_view->Add( &preview );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -1125,21 +1125,21 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             m_view->Update( &preview );
         }
 
-        else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) )
+        else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
             m_lineWidth += WIDTH_STEP;
             aGraphic->SetWidth( m_lineWidth );
             m_view->Update( &preview );
         }
 
-        else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) && m_lineWidth > WIDTH_STEP )
+        else if( evt->IsAction( &PCB_ACTIONS::decWidth ) && m_lineWidth > WIDTH_STEP )
         {
             m_lineWidth -= WIDTH_STEP;
             aGraphic->SetWidth( m_lineWidth );
             m_view->Update( &preview );
         }
 
-        else if( evt->IsAction( &COMMON_ACTIONS::arcPosture ) )
+        else if( evt->IsAction( &PCB_ACTIONS::arcPosture ) )
         {
             if( clockwise )
                 aGraphic->SetAngle( aGraphic->GetAngle() - 3600.0 );
@@ -1230,7 +1230,7 @@ bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER*& aZo
     const SELECTION& selection = selTool->GetSelection();
 
     if( selection.Empty() )
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionCursor, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
 
     // we want a single zone
     if( selection.Size() != 1 )
@@ -1269,7 +1269,7 @@ void DRAWING_TOOL::performZoneCutout( ZONE_CONTAINER& aExistingZone, ZONE_CONTAI
         selection.Clear();
         selection.Add( &aExistingZone );
 
-        m_toolMgr->RunAction( COMMON_ACTIONS::zoneFill, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::zoneFill, true );
     }
 }
 
@@ -1290,7 +1290,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
     SELECTION preview;
     m_view->Add( &preview );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -1504,17 +1504,17 @@ void DRAWING_TOOL::make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper ) 
 
 void DRAWING_TOOL::SetTransitions()
 {
-    Go( &DRAWING_TOOL::DrawLine,         COMMON_ACTIONS::drawLine.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawCircle,       COMMON_ACTIONS::drawCircle.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawArc,          COMMON_ACTIONS::drawArc.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawDimension,    COMMON_ACTIONS::drawDimension.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawZone,         COMMON_ACTIONS::drawZone.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawKeepout,      COMMON_ACTIONS::drawKeepout.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawZoneCutout,   COMMON_ACTIONS::drawZoneCutout.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawSimilarZone,  COMMON_ACTIONS::drawSimilarZone.MakeEvent() );
-    Go( &DRAWING_TOOL::PlaceText,        COMMON_ACTIONS::placeText.MakeEvent() );
-    Go( &DRAWING_TOOL::PlaceDXF,         COMMON_ACTIONS::placeDXF.MakeEvent() );
-    Go( &DRAWING_TOOL::SetAnchor,        COMMON_ACTIONS::setAnchor.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawLine,         PCB_ACTIONS::drawLine.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawCircle,       PCB_ACTIONS::drawCircle.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawArc,          PCB_ACTIONS::drawArc.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawDimension,    PCB_ACTIONS::drawDimension.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawZone,         PCB_ACTIONS::drawZone.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawKeepout,      PCB_ACTIONS::drawKeepout.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawZoneCutout,   PCB_ACTIONS::drawZoneCutout.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawSimilarZone,  PCB_ACTIONS::drawSimilarZone.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceText,        PCB_ACTIONS::placeText.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceDXF,         PCB_ACTIONS::placeDXF.MakeEvent() );
+    Go( &DRAWING_TOOL::SetAnchor,        PCB_ACTIONS::setAnchor.MakeEvent() );
 }
 
 

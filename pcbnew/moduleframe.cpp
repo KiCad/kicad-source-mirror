@@ -69,7 +69,7 @@
 #include "tools/placement_tool.h"
 #include "tools/picker_tool.h"
 #include "tools/pad_tool.h"
-#include "tools/common_actions.h"
+#include "tools/pcb_actions.h"
 
 
 BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
@@ -808,7 +808,7 @@ void FOOTPRINT_EDIT_FRAME::updateView()
 {
     static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayBoard( GetBoard() );
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-    m_toolManager->RunAction( COMMON_ACTIONS::zoomFitScreen, true );
+    m_toolManager->RunAction( PCB_ACTIONS::zoomFitScreen, true );
 }
 
 
@@ -945,7 +945,8 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( GetBoard(), drawPanel->GetView(),
                                    drawPanel->GetViewControls(), this );
-    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
+    m_actions = new PCB_ACTIONS();
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
     drawPanel->SetEventDispatcher( m_toolDispatcher );
 

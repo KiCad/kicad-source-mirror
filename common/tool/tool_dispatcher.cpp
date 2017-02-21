@@ -27,7 +27,7 @@
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
-#include <tools/common_actions.h>
+#include <tool/actions.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 
@@ -114,8 +114,9 @@ struct TOOL_DISPATCHER::BUTTON_STATE
 };
 
 
-TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr ) :
-    m_toolMgr( aToolMgr )
+TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr, ACTIONS *aActions ) :
+    m_toolMgr( aToolMgr ),
+    m_actions( aActions )
 {
     m_buttons.push_back( new BUTTON_STATE( BUT_LEFT, wxEVT_LEFT_DOWN,
                          wxEVT_LEFT_UP, wxEVT_LEFT_DCLICK ) );
@@ -341,7 +342,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
 void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
 {
-    boost::optional<TOOL_EVENT> evt = COMMON_ACTIONS::TranslateLegacyId( aEvent.GetId() );
+    boost::optional<TOOL_EVENT> evt = m_actions->TranslateLegacyId( aEvent.GetId() );
 
     if( evt )
         m_toolMgr->ProcessEvent( *evt );

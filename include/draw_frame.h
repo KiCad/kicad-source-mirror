@@ -89,6 +89,7 @@ protected:
 
     TOOL_MANAGER*       m_toolManager;
     TOOL_DISPATCHER*    m_toolDispatcher;
+    ACTIONS*            m_actions;
 
     /// Tool ID of previously active draw tool bar button.
     int     m_lastDrawToolId;
