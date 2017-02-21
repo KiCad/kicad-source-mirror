@@ -118,12 +118,15 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                             KiBitmap( save_library_xpm ),
                             _( "Save current library to disk" ) );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_DELETE_PART, wxEmptyString, KiBitmap( delete_xpm ),
-                            _( "Delete component in current library" ) );
+    m_mainToolBar->AddTool( CreateNewLibAndSavePartId, wxEmptyString, KiBitmap( new_library_xpm ),
+                            _( "Save current component to new library" ) );
 
-    m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_TO_LIBVIEW, wxEmptyString, KiBitmap( library_browse_xpm ),
                             HELP_RUN_LIB_VIEWER );
+
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_LIBEDIT_DELETE_PART, wxEmptyString, KiBitmap( delete_xpm ),
+                            _( "Delete component in current library" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString, KiBitmap( new_component_xpm ),
@@ -146,9 +149,6 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddTool( ExportPartId, wxEmptyString, KiBitmap( export_xpm ),
                             _( "Export component" ) );
-
-    m_mainToolBar->AddTool( CreateNewLibAndSavePartId, wxEmptyString, KiBitmap( new_library_xpm ),
-                            _( "Save current component to new library" ) );
 
     m_mainToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Undo last command" ), g_Libedit_Hokeys_Descr, HK_UNDO, IS_COMMENT );
