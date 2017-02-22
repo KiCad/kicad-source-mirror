@@ -273,11 +273,11 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
         {
             if( aReporter )
             {
-                msg.Printf( _( "* Warning: component '%s': board footprint '%s', netlist footprint '%s'\n" ),
+                msg.Printf( _( "Footprint of component '%s' changed: board footprint '%s', netlist footprint '%s'\n" ),
                             GetChars( component->GetReference() ),
                             GetChars( fpOnBoard->GetFPID().Format() ),
                             GetChars( component->GetFPID().Format() ) );
-                aReporter->Report( msg );
+                aReporter->Report( msg, REPORTER::RPT_WARNING );
             }
 
             continue;
