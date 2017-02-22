@@ -467,6 +467,12 @@ SCENEGRAPH* S3D_PLUGIN_MANAGER::Load3DModel( const wxString& aFileName, std::str
     wxFileName raw( aFileName );
     wxString ext = raw.GetExt();
 
+    #ifdef WIN32
+    // note: plugins only have a lowercase filter within Windows; including an uppercase
+    // filter will result in duplicate file entries and should be avoided.
+    ext.LowerCase();
+    #endif
+
     std::pair < std::multimap< const wxString, KICAD_PLUGIN_LDR_3D* >::iterator,
         std::multimap< const wxString, KICAD_PLUGIN_LDR_3D* >::iterator > items;
 

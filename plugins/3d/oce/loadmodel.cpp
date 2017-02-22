@@ -28,10 +28,11 @@
 #include <cstring>
 #include <map>
 #include <vector>
+#include <wx/string.h>
+#include <wx/wfstream.h>
 
 #if ( defined( DEBUG_OCE ) && DEBUG_OCE > 3 )
 #include <wx/filename.h>
-#include <wx/string.h>
 #endif
 
 #include <TDocStd_Document.hxx>
@@ -268,16 +269,15 @@ enum FormatType
 
 FormatType fileType( const char* aFileName )
 {
-    std::ifstream ifile;
-    ifile.open( aFileName );
+    wxString fname( wxString::FromUTF8Unchecked( aFileName ) );
+    wxFileInputStream ifile( fname );
 
-    if( !ifile.is_open() )
+    if( !ifile.IsOk() )
         return FMT_NONE;
 
     char iline[82];
     memset( iline, 0, 82 );
-    ifile.getline( iline, 82 );
-    ifile.close();
+    ifile.Read( iline, 82 );
     iline[81] = 0;  // ensure NULL termination when string is too long
 
     // check for STEP in Part 21 format
