@@ -125,13 +125,6 @@ public:
     bool OnLayerSelected();     // postprocess after an active layer selection
                                 // ensure active layer visible if
                                 // m_alwaysShowActiveCopperLayer is true;
-
-    /**
-     * Function UpdateLayerIcons
-     * Update the layer manager icons (layers only)
-     * Useful when loading a file or clearing a layer because they change
-     */
-    void UpdateLayerIcons();
 };
 
 #endif  // _CLASS_GERBER_LAYER_WIDGET_H_

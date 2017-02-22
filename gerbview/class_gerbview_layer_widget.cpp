@@ -314,24 +314,3 @@ bool GERBER_LAYER_WIDGET::useAlternateBitmap(int aRow)
 {
     return GetImagesList()->GetGbrImage( aRow ) != NULL;
 }
-
-/*
- * Update the layer manager icons (layers only)
- * Useful when loading a file or clearing a layer because they change
- */
-void GERBER_LAYER_WIDGET::UpdateLayerIcons()
-{
-    int row_count = GetLayerRowCount();
-    for( int row = 0; row < row_count ; row++ )
-    {
-        wxStaticBitmap* bm = (wxStaticBitmap*) getLayerComp( row, COLUMN_ICON_ACTIVE );
-        if( bm == NULL)
-            continue;
-
-        if( row == m_CurrentRow )
-            bm->SetBitmap( useAlternateBitmap(row) ? *m_RightArrowAlternateBitmap :
-                           *m_RightArrowBitmap );
-        else
-            bm->SetBitmap( useAlternateBitmap(row) ? *m_BlankAlternateBitmap : *m_BlankBitmap );
-    }
-}

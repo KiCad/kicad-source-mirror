@@ -113,11 +113,6 @@ protected:
     wxFlexGridSizer*    m_RenderFlexGridSizer;
 
     wxWindow*           m_FocusOwner;
-    wxBitmap*           m_BlankBitmap;
-    wxBitmap*           m_BlankAlternateBitmap;
-    wxBitmap*           m_RightArrowBitmap;
-    wxBitmap*           m_RightArrowAlternateBitmap;
-    wxSize              m_BitmapSize;
     int                 m_CurrentRow;           ///< selected row of layer list
     int                 m_PointSize;
 
@@ -362,6 +357,14 @@ public:
     bool GetRenderState( int aId );
 
     void UpdateLayouts();
+
+    /**
+     * Function UpdateLayerIcons
+     * Update all layer manager icons (layers only)
+     * Useful when loading a file or clearing a layer because they change,
+     * and the indicator arrow icon needs to be updated
+     */
+    void UpdateLayerIcons();
 
 /*  did not help:
     void Freeze()

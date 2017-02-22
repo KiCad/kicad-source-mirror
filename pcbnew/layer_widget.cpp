@@ -39,109 +39,18 @@
 #include <common.h>
 
 #include <widgets/color_swatch.h>
+#include <widgets/indicator_icon.h>
 
 #include <algorithm>
 
 
 const wxEventType LAYER_WIDGET::EVT_LAYER_COLOR_CHANGE = wxNewEventType();
 
-/* XPM
- * This bitmap is used for not selected layers
+/*
+ * Icon providers for the row icons
  */
-static const char * clear_xpm[] = {
-"10 14 1 1",
-" 	c None",
-"          ",
-"          ",
-"          ",
-"          ",
-"          ",
-"          ",
-"          ",
-"          ",
-"          ",
-"          ",
-"          ",
-"          ",
-"          ",
-"          "};
-
-/* XPM
- * This bitmap can be used to show a not selected layer
- * with special property (mainly not selected layers not in use in GerbView)
- */
-static const char * clear_alternate_xpm[] = {
-"10 14 4 1",
-"       c None",
-"X      c #008080",
-"o      c GREEN",
-"O      c #00B080",
-"          ",
-"          ",
-"          ",
-"          ",
-"    X     ",
-"   XXX    ",
-"  XXXXX   ",
-" OOOOOOO  ",
-"  ooooo   ",
-"   ooo    ",
-"    o     ",
-"          ",
-"          ",
-"          "};
-
-
-/* XPM
- * This bitmap  is used for a normale selected layer
- */
-static const char * rightarrow_xpm[] = {
-"10 14 4 1",
-"       c None",
-"X      c #8080ff",
-"o      c BLUE",
-"O      c gray56",
-"  X       ",
-"  XX      ",
-"  XXX     ",
-"  XXXX    ",
-"  XXXXX   ",
-"  XXXXXX  ",
-"  XXXXXXX ",
-"  oooooooO",
-"  ooooooO ",
-"  oooooO  ",
-"  ooooO   ",
-"  oooO    ",
-"  ooO     ",
-"  oO      "};
-
-/* XPM
- * This bitmap can be used to show the selected layer
- * with special property (mainly a layer in use in GerbView)
- */
-static const char * rightarrow_alternate_xpm[] = {
-"10 14 5 1",
-"       c None",
-".      c #00B000",
-"X      c #8080ff",
-"o      c BLUE",
-"O      c gray56",
-"..X       ",
-"..XX      ",
-"..XXX     ",
-"..XXXX    ",
-"..XXXXX   ",
-"..XXXXXX  ",
-"..XXXXXXX ",
-"..oooooooO",
-"..ooooooO ",
-"..oooooO  ",
-"..ooooO   ",
-"..oooO    ",
-"..ooO     ",
-"..oO      "};
-
+static ROW_ICON_PROVIDER defaultRowIcons( false );
+static ROW_ICON_PROVIDER alternativeRowIcons( true );
 
 /**
  * Function shrinkFont
@@ -336,11 +245,13 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     int         index = aRow * LYR_COLUMN_COUNT;
     const int   flags = wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT;
 
+    auto& iconProvider = useAlternateBitmap(aRow) ? alternativeRowIcons : defaultRowIcons;
+
     // column 0
-    col = 0;
-    wxStaticBitmap* sbm = new wxStaticBitmap( m_LayerScrolledWindow, encodeId( col, aSpec.id ),
-                            useAlternateBitmap(aRow) ? *m_BlankAlternateBitmap : *m_BlankBitmap,
-                            wxDefaultPosition, m_BitmapSize );
+    col = COLUMN_ICON_ACTIVE;
+    auto sbm = new INDICATOR_ICON( m_LayerScrolledWindow, iconProvider,
+                                   ROW_ICON_PROVIDER::STATE::OFF,
+                                   encodeId( col, aSpec.id ) );
     sbm->Bind( wxEVT_LEFT_DOWN, &LAYER_WIDGET::OnLeftDownLayers, this );
     m_LayersFlexGridSizer->wxSizer::Insert( index+col, sbm, 0, flags );
 
@@ -494,13 +405,6 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPoint
 
     m_CurrentRow = -1;  // hide the arrow initially
 
-    m_RightArrowBitmap = new wxBitmap( rightarrow_xpm );
-    m_RightArrowAlternateBitmap = new wxBitmap( rightarrow_alternate_xpm );
-
-    m_BlankBitmap = new wxBitmap( clear_xpm );     // translucent
-    m_BlankAlternateBitmap = new wxBitmap( clear_alternate_xpm );
-    m_BitmapSize = wxSize(m_BlankBitmap->GetWidth(), m_BlankBitmap->GetHeight());
-
     // trap the tab changes so that we can call passOnFocus().
     m_notebook->Bind( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, &LAYER_WIDGET::OnTabChange, this );
 
@@ -510,10 +414,6 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPoint
 
 LAYER_WIDGET::~LAYER_WIDGET()
 {
-    delete m_BlankBitmap;
-    delete m_BlankAlternateBitmap;
-    delete m_RightArrowBitmap;
-    delete m_RightArrowAlternateBitmap;
 }
 
 
@@ -616,14 +516,14 @@ void LAYER_WIDGET::SelectLayerRow( int aRow )
     // enable the layer tab at index 0
     m_notebook->SetSelection( 0 );
 
-    wxStaticBitmap* oldbm = (wxStaticBitmap*) getLayerComp( m_CurrentRow, 0 );
-    if( oldbm )
-        oldbm->SetBitmap( useAlternateBitmap(m_CurrentRow) ? *m_BlankAlternateBitmap : *m_BlankBitmap );
+    INDICATOR_ICON* oldIndicator = (INDICATOR_ICON*) getLayerComp( m_CurrentRow, 0 );
+    if( oldIndicator )
+        oldIndicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::OFF );
 
-    wxStaticBitmap* newbm = (wxStaticBitmap*) getLayerComp( aRow, 0 );
-    if( newbm )
+    INDICATOR_ICON* newIndicator = (INDICATOR_ICON*) getLayerComp( aRow, 0 );
+    if( newIndicator )
     {
-        newbm->SetBitmap( useAlternateBitmap(aRow) ? *m_RightArrowAlternateBitmap : *m_RightArrowBitmap );
+        newIndicator->SetIndicatorState( ROW_ICON_PROVIDER::STATE::ON );
 
         // Make sure the desired layer row is visible.
         // It seems that as of 2.8.2, setting the focus does this.
@@ -748,6 +648,24 @@ void LAYER_WIDGET::UpdateLayouts()
     m_RenderingPanel->Layout();
     FitInside();
 }
+
+
+void LAYER_WIDGET::UpdateLayerIcons()
+{
+    int rowCount = GetLayerRowCount();
+    for( int row = 0; row < rowCount ; row++ )
+    {
+        INDICATOR_ICON* indicator = (INDICATOR_ICON*) getLayerComp( row, COLUMN_ICON_ACTIVE );
+
+        if( indicator )
+        {
+            auto state = ( row == m_CurrentRow ) ? ROW_ICON_PROVIDER::STATE::ON
+                                                 : ROW_ICON_PROVIDER::STATE::OFF;
+            indicator->SetIndicatorState( state );
+        }
+    }
+}
+
 
 #if defined(STAND_ALONE)
 

@@ -170,6 +170,7 @@ set( COMMON_WIDGET_SRCS
     widgets/widget_hotkey_list.cpp
     widgets/two_column_tree_list.cpp
     widgets/footprint_preview_panel.cpp
+    widgets/indicator_icon.cpp
     )
 
 set( COMMON_PAGE_LAYOUT_SRCS
