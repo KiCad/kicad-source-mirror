@@ -53,6 +53,7 @@
  */
 
 #include <fctsys.h>
+#include <class_eda_rect.h>
 #include <drawtxt.h>
 #include <worksheet.h>
 #include <class_title_block.h>

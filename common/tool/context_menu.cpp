@@ -27,6 +27,7 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_interactive.h>
 #include <tool/context_menu.h>
+#include <wx/log.h>
 
 #include <functional>
 using namespace std::placeholders;

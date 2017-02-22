@@ -34,6 +34,7 @@
 
 
 #include <base_struct.h>
+#include <class_eda_rect.h>
 #include <layers_id_colors_and_visibility.h>
 
 

@@ -42,6 +42,7 @@
 #include <class_gbr_display_options.h>
 
 #include <gr_basic.h>
+#include <class_eda_rect.h>
 
 class GERBER_FILE_IMAGE_LIST;
 

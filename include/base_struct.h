@@ -34,13 +34,8 @@
 
 #include <core/typeinfo.h>
 
-#include <colors.h>
 #include <bitmap_types.h>
-#include <richio.h>
 #include <view/view_item.h>
-#include <class_eda_rect.h>
-#include <functional>
-
 
 #if defined(DEBUG)
 #include <iostream>         // needed for Show()
@@ -305,17 +300,7 @@ public:
      * system.
      * It is OK to overestimate the size by a few counts.
      */
-    virtual const EDA_RECT GetBoundingBox() const
-    {
-#if defined(DEBUG)
-        printf( "Missing GetBoundingBox()\n" );
-        Show( 0, std::cout ); // tell me which classes still need GetBoundingBox support
-#endif
-
-        // return a zero-sized box per default. derived classes should override
-        // this
-        return EDA_RECT( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
-    }
+    virtual const EDA_RECT GetBoundingBox() const;
 
     /**
      * Function Clone

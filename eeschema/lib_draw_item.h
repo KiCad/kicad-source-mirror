@@ -32,6 +32,7 @@
 #define _LIB_ITEM_H_
 
 #include <base_struct.h>
+#include <class_eda_rect.h>
 #include <transform.h>
 #include <gr_basic.h>
 

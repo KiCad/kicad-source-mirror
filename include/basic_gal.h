@@ -26,6 +26,7 @@
 #define BASIC_GAL_H
 
 #include <plot_common.h>
+#include <class_eda_rect.h>
 
 #include <gal/stroke_font.h>
 #include <gal/graphics_abstraction_layer.h>

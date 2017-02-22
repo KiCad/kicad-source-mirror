@@ -37,6 +37,7 @@
 #include <vector>
 #include <memory>
 
+class EDA_RECT;
 class LINE_READER;
 class OUTPUTFORMATTER;
 class PART_LIB;

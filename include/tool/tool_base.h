@@ -36,6 +36,7 @@
 
 class EDA_ITEM;
 class TOOL_MANAGER;
+class wxWindow;
 
 namespace KIGFX
 {

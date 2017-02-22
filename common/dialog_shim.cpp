@@ -26,6 +26,7 @@
 #include <kiway_player.h>
 #include <wx/evtloop.h>
 #include <pgm_base.h>
+#include <class_eda_rect.h>
 
 
 /// Toggle a window's "enable" status to disabled, then enabled on destruction.

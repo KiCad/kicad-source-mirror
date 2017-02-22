@@ -109,6 +109,19 @@ void EDA_ITEM::SetModified()
 }
 
 
+const EDA_RECT EDA_ITEM::GetBoundingBox() const
+{
+#if defined(DEBUG)
+    printf( "Missing GetBoundingBox()\n" );
+    Show( 0, std::cout ); // tell me which classes still need GetBoundingBox support
+#endif
+
+    // return a zero-sized box per default. derived classes should override
+    // this
+    return EDA_RECT( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
+}
+
+
 EDA_ITEM* EDA_ITEM::Clone() const
 {
     wxCHECK_MSG( false, NULL, wxT( "Clone not implemented in derived class " ) + GetClass() +

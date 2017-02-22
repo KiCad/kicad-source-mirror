@@ -33,6 +33,7 @@
 
 #include <base_struct.h>
 #include <gr_basic.h>
+#include <class_eda_rect.h>
 
 
 class BASE_SCREEN;

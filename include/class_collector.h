@@ -35,6 +35,7 @@
 #include <fctsys.h>
 #include <base_struct.h>    // SEARCH_RESULT
 #include <common.h>         // GetNewTimeStamp()
+#include <class_eda_rect.h>
 
 
 class EDA_ITEM;

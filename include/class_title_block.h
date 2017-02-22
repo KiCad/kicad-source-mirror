@@ -25,11 +25,9 @@
 #define CLASS_TITLE_BLOCK_H_
 
 #include <wx/string.h>
-
+#include <ki_exception.h>
 
 class OUTPUTFORMATTER;
-class IO_ERROR;
-
 
 /**
  * Class TITLE_BLOCK
