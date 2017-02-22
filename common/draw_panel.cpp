@@ -754,7 +754,7 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
         const double h = aDC->DeviceToLogicalYRel( gsz );
 
         // Use our own pen
-        wxPen pen( GetParent()->GetGridColor(), h );
+        wxPen pen( GetParent()->GetGridColor().ToColour(), h );
         pen.SetCap( wxCAP_BUTT );
         gc->SetPen( pen );
 
