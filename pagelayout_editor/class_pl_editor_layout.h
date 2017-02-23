@@ -84,12 +84,12 @@ public:
      * may be called soon after ComputeBoundingBox() to return the same EDA_RECT,
      * as long as the CLASS_PL_EDITOR_LAYOUT has not changed.
      */
-    const EDA_RECT GetBoundingBox() const { return m_BoundingBox; }    // override
+    const EDA_RECT GetBoundingBox() const { return m_BoundingBox; }
 
     void SetBoundingBox( const EDA_RECT& aBox ) { m_BoundingBox = aBox; }
 
 #if defined(DEBUG)
-    void    Show( int nestLevel, std::ostream& os ) const;  // overload
+    void    Show( int nestLevel, std::ostream& os ) const;
 
 #endif
 };

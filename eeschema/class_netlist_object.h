@@ -131,7 +131,7 @@ private:
 public:
 
 #if defined(DEBUG)
-    void Show( std::ostream& out, int ndx ) const;      // override
+    void Show( std::ostream& out, int ndx ) const;
 
 #endif
 
