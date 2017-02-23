@@ -70,7 +70,7 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
     const PAGE_INFO& page_info =  m_pageInfo ? *m_pageInfo : dummy;
 
     // Calculate dimensions and center of PCB
-    EDA_RECT        bbbox = m_pcb->ComputeBoundingBox( true );
+    EDA_RECT        bbbox = m_pcb->GetBoardEdgesBoundingBox();
 
     // Calculate the scale for the format type, scale 1 in HPGL, drawing on
     // an A4 sheet in PS, + text description of symbols

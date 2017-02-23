@@ -1054,7 +1054,7 @@ unsigned BOARD::GetNodesCount() const
 }
 
 
-EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
+EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
 {
     bool hasItems = false;
     EDA_RECT area;
@@ -2364,6 +2364,7 @@ ZONE_CONTAINER* BOARD::InsertArea( int netcode, int iarea, LAYER_ID layer, int x
         m_ZoneDescriptorList.push_back( new_area );
 
     new_area->Outline()->Start( layer, x, y, hatch );
+
     return new_area;
 }
 
@@ -2425,7 +2426,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
     if( !IsEmpty() )
     {
         // Position new components below any existing board features.
-        EDA_RECT bbbox = ComputeBoundingBox( true );
+        EDA_RECT bbbox = GetBoardEdgesBoundingBox();
 
         if( bbbox.GetWidth() || bbbox.GetHeight() )
         {

@@ -98,6 +98,69 @@ int COMMON_TOOLS::ZoomCenter( const TOOL_EVENT& aEvent )
 }
 
 
+int COMMON_TOOLS::ZoomFitScreen( const TOOL_EVENT& aEvent )
+{
+    KIGFX::VIEW* view = getView();
+    EDA_DRAW_PANEL_GAL* galCanvas = m_frame->GetGalCanvas();
+    EDA_ITEM* model = getModel<EDA_ITEM>();
+
+    BOX2I bBox = model->ViewBBox();
+    VECTOR2D scrollbarSize = VECTOR2D( galCanvas->GetSize() - galCanvas->GetClientSize() );
+    VECTOR2D screenSize = view->ToWorld( galCanvas->GetClientSize(), false );
+
+    if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
+    {
+        // Empty view
+        view->SetScale( 17.0 );     // works fine for the standard worksheet frame
+
+        view->SetCenter( screenSize / 2.0 );
+    }
+    else
+    {
+        VECTOR2D vsize = bBox.GetSize();
+        double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
+                                                    fabs( vsize.y / screenSize.y ) );
+
+        view->SetScale( scale );
+        view->SetCenter( bBox.Centre() );
+    }
+
+
+    // Take scrollbars into account
+    VECTOR2D worldScrollbarSize = view->ToWorld( scrollbarSize, false );
+    view->SetCenter( view->GetCenter() + worldScrollbarSize / 2.0 );
+
+    return 0;
+}
+
+
+int COMMON_TOOLS::ZoomPreset( const TOOL_EVENT& aEvent )
+{
+    unsigned int idx = aEvent.Parameter<intptr_t>();
+    std::vector<double>& zoomList = m_frame->GetScreen()->m_ZoomList;
+    KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
+    KIGFX::GAL* gal = m_frame->GetGalCanvas()->GetGAL();
+
+    m_frame->SetPresetZoom( idx );
+
+    if( idx == 0 )      // Zoom Auto
+    {
+        return ZoomFitScreen( aEvent );
+    }
+    else if( idx >= zoomList.size() )
+    {
+        assert( false );
+        return 0;
+    }
+
+    double selectedZoom = zoomList[idx];
+    double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
+    view->SetScale( 1.0 / ( zoomFactor * selectedZoom ) );
+
+    return 0;
+}
+
+
 // Grid control
 int COMMON_TOOLS::GridNext( const TOOL_EVENT& aEvent )
 {
@@ -135,6 +198,8 @@ void COMMON_TOOLS::SetTransitions()
     Go( &COMMON_TOOLS::ZoomInOutCenter,    ACTIONS::zoomInCenter.MakeEvent() );
     Go( &COMMON_TOOLS::ZoomInOutCenter,    ACTIONS::zoomOutCenter.MakeEvent() );
     Go( &COMMON_TOOLS::ZoomCenter,         ACTIONS::zoomCenter.MakeEvent() );
+    Go( &COMMON_TOOLS::ZoomFitScreen,      ACTIONS::zoomFitScreen.MakeEvent() );
+    Go( &COMMON_TOOLS::ZoomPreset,         ACTIONS::zoomPreset.MakeEvent() );
 
     Go( &COMMON_TOOLS::GridNext,           ACTIONS::gridNext.MakeEvent() );
     Go( &COMMON_TOOLS::GridPrev,           ACTIONS::gridPrev.MakeEvent() );

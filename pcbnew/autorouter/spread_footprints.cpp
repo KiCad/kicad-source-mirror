@@ -177,7 +177,7 @@ void PCB_EDIT_FRAME::SpreadFootprints( std::vector<MODULE*>* aFootprints,
                                        wxPoint aSpreadAreaPosition,
                                        bool aPrepareUndoCommand )
 {
-    EDA_RECT bbox = GetBoard()->ComputeBoundingBox( true );
+    EDA_RECT bbox = GetBoard()->GetBoardEdgesBoundingBox();
     bool     edgesExist = bbox.GetWidth() || bbox.GetHeight();
     // if aFootprintsOutsideBoardOnly is true, and if board outline exists,
     // we have to filter footprints to move:

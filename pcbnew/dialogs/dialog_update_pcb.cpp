@@ -70,7 +70,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
 
     // keep trace of the initial baord area, if we want to place new footprints
     // outside the existinag board
-    EDA_RECT bbox = board->ComputeBoundingBox( false );
+    EDA_RECT bbox = board->GetBoundingBox();
 
     if( !aDryRun )
     {

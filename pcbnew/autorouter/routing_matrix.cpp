@@ -69,10 +69,8 @@ MATRIX_ROUTING_HEAD::~MATRIX_ROUTING_HEAD()
 
 bool MATRIX_ROUTING_HEAD::ComputeMatrixSize( BOARD* aPcb, bool aUseBoardEdgesOnly )
 {
-    aPcb->ComputeBoundingBox( aUseBoardEdgesOnly );
-
     // The boundary box must have its start point on routing grid:
-    m_BrdBox = aPcb->GetBoundingBox();
+    m_BrdBox = aUseBoardEdgesOnly ? aPcb->GetBoardEdgesBoundingBox() : aPcb->GetBoundingBox();
 
     m_BrdBox.SetX( m_BrdBox.GetX() - ( m_BrdBox.GetX() % m_GridRouting ) );
     m_BrdBox.SetY( m_BrdBox.GetY() - ( m_BrdBox.GetY() % m_GridRouting ) );

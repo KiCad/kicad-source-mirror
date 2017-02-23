@@ -79,7 +79,7 @@ wxPoint BOARD_NETLIST_UPDATER::estimateComponentInsertionPosition()
     if( !m_board->IsEmpty() )
     {
         // Position new components below any existing board features.
-        EDA_RECT bbox = m_board->ComputeBoundingBox( true );
+        EDA_RECT bbox = m_board->GetBoardEdgesBoundingBox();
 
         if( bbox.GetWidth() || bbox.GetHeight() )
         {

@@ -1396,7 +1396,7 @@ bool SPECCTRA_DB::GetBoardPolygonOutlines( BOARD* aBoard,
         if( aErrorText )
             *aErrorText = ioe.What();
 
-        EDA_RECT bbbox = aBoard->ComputeBoundingBox( true );
+        EDA_RECT bbbox = aBoard->GetBoardEdgesBoundingBox();
 
         // Ensure non null area. If happen, gives a minimal size.
         if( ( bbbox.GetWidth() ) == 0 || ( bbbox.GetHeight() == 0 ) )

@@ -294,7 +294,7 @@ EDA_RECT PCB_BASE_FRAME::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 {
     wxASSERT( m_Pcb );
 
-    EDA_RECT area = m_Pcb->ComputeBoundingBox( aBoardEdgesOnly );
+    EDA_RECT area = aBoardEdgesOnly ? m_Pcb->GetBoardEdgesBoundingBox() : m_Pcb->GetBoundingBox();
 
     if( area.GetWidth() == 0 && area.GetHeight() == 0 )
     {

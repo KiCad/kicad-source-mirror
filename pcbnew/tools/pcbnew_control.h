@@ -48,10 +48,6 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    // View controls
-    int ZoomFitScreen( const TOOL_EVENT& aEvent );
-    int ZoomPreset( const TOOL_EVENT& aEvent );
-
     // Display modes
     int TrackDisplayMode( const TOOL_EVENT& aEvent );
     int PadDisplayMode( const TOOL_EVENT& aEvent );

@@ -459,7 +459,7 @@ int genPlacementRoutingMatrix( BOARD* aBrd, EDA_MSG_PANEL* messagePanel )
 
     RoutingMatrix.UnInitRoutingMatrix();
 
-    EDA_RECT bbox = aBrd->ComputeBoundingBox( true );
+    EDA_RECT bbox = aBrd->GetBoardEdgesBoundingBox();
 
     if( bbox.GetWidth() == 0 || bbox.GetHeight() == 0 )
     {

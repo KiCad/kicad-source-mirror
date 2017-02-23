@@ -199,7 +199,7 @@ UseBoundingBox:
     // there is always some uncertainty in the board dimensions
     // computed via ComputeBoundingBox() since this depends on the
     // individual module entities.
-    EDA_RECT bbbox = aPcb->ComputeBoundingBox( true );
+    EDA_RECT bbbox = aPcb->GetBoardEdgesBoundingBox();
 
     // convert to mm and compensate for an assumed LINE_WIDTH line thickness
     double  x   = ( bbbox.GetOrigin().x + LINE_WIDTH / 2 ) * scale + offX;

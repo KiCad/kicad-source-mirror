@@ -48,6 +48,8 @@ public:
     int ZoomInOut( const TOOL_EVENT& aEvent );
     int ZoomInOutCenter( const TOOL_EVENT& aEvent );
     int ZoomCenter( const TOOL_EVENT& aEvent );
+    int ZoomFitScreen( const TOOL_EVENT& aEvent );
+    int ZoomPreset( const TOOL_EVENT& aEvent );
 
     // Grid control
     int GridNext( const TOOL_EVENT& aEvent );
