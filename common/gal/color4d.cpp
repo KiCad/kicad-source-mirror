@@ -76,53 +76,13 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
 
     COLOR4D COLOR4D::LegacyMix( COLOR4D aColor ) const
     {
-        /* Memoization storage. This could be potentially called for each
-         * color merge so a cache is useful (there are few colours anyway) */
-        static std::map< std::pair< uint32_t, uint32_t >, uint32_t > mix_cache;
-
-        // First easy thing: a black gives always the other colour
-        if( *this == COLOR4D::BLACK )
-            return aColor;
-
-        if( aColor == COLOR4D::BLACK )
-            return *this;
-
-        uint32_t myPackedColor = ToU32();
-        uint32_t aPackedColor = aColor.ToU32();
-
-        /* Now we are sure that black can't occur, so the rule is:
-         * BLACK means not computed yet. If we're lucky we already have
-         * an answer */
-        auto search = mix_cache.find( std::pair< uint32_t, uint32_t >( myPackedColor,
-                                                                       aPackedColor ) );
-        COLOR4D candidate = COLOR4D::BLACK;
-
-        if( search != mix_cache.end() )
-            candidate.FromU32( search->second );
-
-        if( candidate != COLOR4D::BLACK )
-            return candidate;
+        COLOR4D candidate;
 
         // Blend the two colors (i.e. OR the RGB values)
-        COLOR4D mixed( ( (uint8_t)( 255.0 * this->r ) | (uint8_t)( 255.0 * aColor.r ) ) / 255.0,
-                       ( (uint8_t)( 255.0 * this->g ) | (uint8_t)( 255.0 * aColor.g ) ) / 255.0,
-                       ( (uint8_t)( 255.0 * this->b ) | (uint8_t)( 255.0 * aColor.b ) ) / 255.0,
-                       1.0 );
-        candidate = mixed;
-
-        /* Here, BLACK is *not* a good answer, since it would recompute the next time.
-         * Even theorically its not possible (with the current rules), but
-         * maybe the metric will change in the future */
-        if( candidate == COLOR4D::BLACK )
-            candidate = COLOR4D( DARKDARKGRAY );
-
-        // Store the result in the cache. The operation is commutative, too
-        mix_cache.insert( std::pair< std::pair< uint32_t, uint32_t >, uint32_t >
-                          ( std::pair< uint32_t, uint32_t >( myPackedColor, aPackedColor ),
-                            candidate.ToU32() ) );
-        mix_cache.insert( std::pair< std::pair< uint32_t, uint32_t >, uint32_t >
-                          ( std::pair< uint32_t, uint32_t >( aPackedColor, myPackedColor ),
-                            candidate.ToU32() ) );
+        candidate.r = ( (unsigned)( 255.0 * r ) | (unsigned)( 255.0 * aColor.r ) ) / 255.0,
+        candidate.g = ( (unsigned)( 255.0 * g ) | (unsigned)( 255.0 * aColor.g ) ) / 255.0,
+        candidate.b = ( (unsigned)( 255.0 * b ) | (unsigned)( 255.0 * aColor.b ) ) / 255.0,
+        candidate.a = 1.0;
 
         return candidate;
     }
