@@ -7,8 +7,11 @@ GAL canvases.
 
 # Introduction # {#intro}
 
-The GAL framework provides a powerful method of easily adding tools to
-KiCad. A GAL "tool" is a class which provides one or more "actions"
+The GAL (Graphics Abstraction Layer) framework provides a powerful
+method of easily adding tools to KiCad. Compared to the older "legacy"
+canvas, GAL tools are more flexible, powerful and much easier to write.
+
+A GAL "tool" is a class which provides one or more "actions"
 to perform. An action can be a simple one-off action (e.g. "zoom in"
 or "flip object"), or an interactive process (e.g. "manually edit
 polygon points").
@@ -29,11 +32,11 @@ Some examples of tools in the Pcbnew GAL are:
   (pcbnew/tools/drawing_tool.cpp,pcbnew/tools/drawing_tool.h)
 * The zoom tool - allows the user to zoom in and out
 
-## Major parts of a tool
+# Major parts of a tool # {#major-parts}
 
 There are two main aspects to tools: the actions and the the tool class.
 
-### Tool actions
+## Tool actions {#tool-actions}
 
 The `TOOL_ACTION` class acts as a handle for the GAL framework to
 call on actions provided by tools. Generally, every action, interactive
@@ -61,7 +64,7 @@ or not, has a `TOOL_ACTION` instance. This provides:
 * A parameter, which allows different actions to call the same function
   with different effects, for example "step left" and "step right".
 
-### The tool class
+## The tool class {#tool-class}
 
 GAL tools inherit the `TOOL_BASE` class. A Pcbnew tool will generally
 inherit from `PCB_TOOL`, which is a `TOOL_INTERACTIVE`, which is
@@ -72,12 +75,17 @@ The tool class for a tool can be fairly lightweight - much of the
 functionality is inherited from the tool's base classes. These base
 classes provide access to several things, particularly:
 
-* Access to the `PCB_EDIT_FRAME`, which can be used to modify the
-  viewport, set cursors and status bar content, etc.
+* Access to the parent frame (a `wxWindow`, which can be used to
+  modify the viewport, set cursors and status bar content, etc.
+    * Use the function `getEditFrame<T>()`, where `T` is the frame
+      subclass you want. In `PCB_TOOL`, this is likely `PCB_EDIT_FRAME`.
 * Access to the `TOOL_MANAGER` which can be used to access other tools'
   actions.
-* Access to the `BOARD` object which is used to modify the PCB content.
-* Access to the `KIGFX::VIEW`, which is used to manipulate the GAL canvas.
+* Access to the "model" (some sort of `EDA_ITEM`) which backs the tool.
+    * Access with  `getModel<T>()`. In `PCB_TOOL`, the model type `T` is
+     `BOARD`, which can be used to access and modify the PCB content.
+* Access to the `KIGFX::VIEW` and `KIGFX::VIEW_CONTROLS`, which are
+  used to manipulate the GAL canvas.
 
 The major parts of tool's implementation are the functions used by the
 `TOOL_MANAGER` to set up and manage the tool:
@@ -107,7 +115,7 @@ The major parts of tool's implementation are the functions used by the
       by any other code, but are invoked by the tool manager's coroutine
       framework according to the `SetTransitions()` map.
 
-#### Interactive actions
+### Interactive actions {#interactive-actions}
 
 The action handlers for an interactive actions handle repeated actions
 from the tool manager in a loop, until an action indicating that the
@@ -153,7 +161,7 @@ a cursor change and by setting a status string.
         return 0;
     }
 
-### The tool menu
+## The tool menu {#tool-menu}
 
 Top level tools, i.e. tools that the user enters directly, usually
 provide their own context menu. Tools that are called only from other
@@ -184,7 +192,58 @@ this menu will trigger the action - there is no further action
 needed in your tool's event loop.
 
 
-# Tutorial: Adding a new tool
+## Commit objects {#commits}
+
+The `COMMIT` class manages changes to `EDA_ITEMS`, which combines
+changes on any number of items into a single undo/redo action.
+When editing PCBs, changes to the PCB are managed by the derived
+`BOARD_COMMIT` class.
+
+This class takes either a `PCB_BASE_FRAME` or a `PCB_TOOL` as an
+argument. Using `PCB_TOOL` is more appropriate for a GAL tool, since
+there's no need to go though a frame class if not required.
+
+The procedure of a commit is:
+
+* Construct an appropriate `COMMIT` object
+* Before modifying any item, add it to the commit with `Modify( item )`
+  so that the current item state can be stored as an undo point.
+* When adding a new item, call `Add( item )`. The commit object now
+  owns that item, do not delete it.
+* When removing an item, call `Remove( item )`.
+* Finalise the commit with `Push( "Description" )`. If you performed
+  no modifications, additions or removals, this is a no-op, so you
+  don't need to check if you made any changes before pushing.
+
+If you want to abort a commit, you can just destruct it, without
+calling `Push()`. The underlying model won't be updated.
+
+As an example:
+
+    // Construct commit from current PCB_TOOL
+    BOARD_COMMIT commit( this );
+
+    BOARD_ITEM* modifiedItem = getSomeItemToModify();
+
+    // tell the commit we're going to change the item
+    commit.Modify( modifiedItem );
+
+    // update the item
+    modifiedItem->Move( x, y );
+
+    // create a new item
+    DRAWSEGMENT* newItem = new DRAWSEGMENT;
+
+    // ... set up item here
+
+    // add to commit
+    commit.Add( newItem );
+
+    // update the model and add the undo point
+    commit.Push( "Modified one item, added another" );
+
+
+# Tutorial: Adding a new tool {#tutorial}
 
 Without getting too heavily into the details of how the GAL tool framework
 is implemented under the surface, let's look at how you could add a
@@ -200,7 +259,7 @@ useless) functions:
     * A way to invoke the non-interactive "unfill all zones" tool from
       the PCB_EDITOR_CONTROL tool.
 
-## Add tool actions
+## Declare tool actions {#declare-actions}
 
 The first step is to add tool actions. We will implement two actions
 named:
@@ -211,13 +270,26 @@ named:
 The "unfill tool" already exists with the name
 `pcbnew.EditorControl.zoneUnfillAll`.
 
-In `pcbnew/tools/common_action.h`, we add the following to the
-`COMMON_ACTION` class, which declares our tools:
+This guide assumes we will be adding a tool to Pcbnew, but the
+procedure for other GAL-capable canvases will be similar.
+
+In `pcbnew/tools/pcb_actions.h`, we add the following to the
+`PCB_ACTIONS` class, which declares our tools:
 
     static TOOL_ACTION uselessMoveItemLeft;
     static TOOL_ACTION uselessFixedCircle;
 
-In `pcbnew/tools/common_action.cpp`, we then define the actions:
+Definitions of actions generally happen in the .cpp of the relevant tool.
+It doesn't actually matter where the defintion occurs (the declaration
+is enough to use the action), as long as it's linked in the end.
+Similar tools should always be defined together.
+
+In our case, since we're making a new tool, this will be in
+`pcbnew/tools/useless_tool.cpp`. If adding actions to existing tools,
+the prefix of the tool string (e.g. `"Pcbnew.UselessTool"`) will
+be a strong indicator as to where to define the tool.
+
+The tools definitions look like this:
 
     TOOL_ACTION COMMON_ACTIONS::uselessMoveItemLeft(
             "pcbnew.UselessTool.MoveItemLeft",
@@ -231,11 +303,12 @@ In `pcbnew/tools/common_action.cpp`, we then define the actions:
             add_circle_xpm );
 
 We have defined hotkeys for each action, and they are both global. This
-means you can use `Shift+Ctrl+L` and `Shift-Ctrl-R` to access each tool
+means you can use `Shift+Ctrl+L` and `Shift-Ctrl-C` to access each tool
 respectively.
 
 We defined an icon for one of the tools, which should appear in any
-menu the item is added to.
+menu the item is added to, along with the given label and explanatory
+tooltip.
 
 We now have two actions defined, but they are not connected to anything.
 We need to define a functions which implement the right actions.
@@ -246,7 +319,7 @@ and give you more scope for adding tool state.
 
 We will write our own tool to demonstrate the process.
 
-## Add tool class declaration
+## Add tool class declaration {#declare-tool-class}
 
 Add a new tool class header `pcbnew/tools/useless_tool.h` containing
 the following class:
@@ -280,7 +353,7 @@ the following class:
         TOOL_MENU m_menu;
     };
 
-## Implement tool class methods:
+## Implement tool class methods {#implement-tool}
 
 In the `pcbnew/tools/useless_tool.cpp`, implement the required methods.
 In this file, you might also add free function helpers, other classes,
@@ -293,21 +366,44 @@ Below you will find the contents of useless_tool.cpp:
 
     #include "useless_tool.h"
 
-    #include <wxPcbStruct.h>
     #include <class_draw_panel_gal.h>
     #include <view/view_controls.h>
     #include <view/view.h>
     #include <tool/tool_manager.h>
-
-    #include <pcbnew_id.h>
-
-    #include <class_board_item.h>
-    #include <class_drawsegment.h>
     #include <board_commit.h>
 
-    #include "common_actions.h"
+    // For frame ToolID values
+    #include <pcbnew_id.h>
+
+    // For action icons
+    #include <bitmaps.h>
+
+    // Items tool can act on
+    #include <class_board_item.h>
+    #include <class_drawsegment.h>
+
+    // Access to other PCB actions and tools
+    #include "pcb_actions.h"
     #include "selection_tool.h"
 
+
+    /*
+     * Tool-specific action defintions
+     */
+    TOOL_ACTION PCB_ACTIONS::uselessMoveItemLeft(
+            "pcbnew.UselessTool.MoveItemLeft",
+            AS_GLOBAL, MD_CTRL + MD_SHIFT + int( 'L' ),
+            _( "Move item left" ), _( "Select and move item left" ) );
+
+    TOOL_ACTION PCB_ACTIONS::uselessFixedCircle(
+            "pcbnew.UselessTool.FixedCircle",
+            AS_GLOBAL, MD_CTRL + MD_SHIFT + int( 'C' ),
+            _( "Fixed circle" ), _( "Add a fixed size circle in a fixed place" ),
+            add_circle_xpm );
+
+    /*
+     * USELESS_TOOL implementation
+     */
 
     USELESS_TOOL::USELESS_TOOL() :
             PCB_TOOL( "pcbnew.UselessTool" ),
@@ -330,16 +426,15 @@ Below you will find the contents of useless_tool.cpp:
         auto& menu = m_menu.GetMenu();
 
         // add our own tool's action
-        menu.AddItem( COMMON_ACTIONS::uselessFixedCircle);
+        menu.AddItem( PCB_ACTIONS::uselessFixedCircle);
         // add the PCB_EDITOR_CONTROL's zone unfill all action
-        menu.AddItem( COMMON_ACTIONS::zoneUnfillAll);
+        menu.AddItem( PCB_ACTIONS::zoneUnfillAll);
 
         // Add standard zoom and grid tool actions
         m_menu.AddStandardSubMenus( *getEditFrame<PCB_BASE_FRAME>() );
 
         return true;
     }
-
 
     void USELESS_TOOL::moveLeftInt()
     {
@@ -349,8 +444,8 @@ Below you will find the contents of useless_tool.cpp:
         assert( selectionTool );
 
         // call the actions
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionCursor, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
         selectionTool->SanitizeSelection();
 
         const SELECTION& selection = selectionTool->GetSelection();
@@ -359,20 +454,25 @@ Below you will find the contents of useless_tool.cpp:
         if( selection.Empty() )
             return;
 
+        BOARD_COMMIT commit( this );
+
         // iterate BOARD_ITEM* container, moving each item
         for( auto item : selection )
         {
+            commit.Modify( item );
             item->Move( wxPoint(-5 * IU_PER_MM, 0) );
         }
-    }
 
+        // push commit - if selection were empty, this is a no-op
+        commit.Push( "Move left" );
+    }
 
     int USELESS_TOOL::moveLeft( const TOOL_EVENT& aEvent )
     {
         auto& frame = *getEditFrame<PCB_EDIT_FRAME>();
 
         // set tool hint and cursor (actually looks like a crosshair)
-        frame.SetToolID( ID_PCB_SHOW_1_RATSNEST_BUTT,
+        frame.SetToolID( ID_NO_TOOL_SELECTED,
                 wxCURSOR_PENCIL, _( "Select item to move left" ) );
 
         getViewControls()->ShowCursor( true );
@@ -412,8 +512,6 @@ Below you will find the contents of useless_tool.cpp:
 
     int USELESS_TOOL::fixedCircle( const TOOL_EVENT& aEvent )
     {
-        auto& frame = *getEditFrame<PCB_EDIT_FRAME>();
-
         // new circle to add (ideally use a smart pointer)
         DRAWSEGMENT* circle = new DRAWSEGMENT;
 
@@ -425,7 +523,7 @@ Below you will find the contents of useless_tool.cpp:
         circle->SetLayer(  LAYER_ID::F_SilkS );
 
         // commit the circle to the BOARD
-        BOARD_COMMIT commit( &frame );
+        BOARD_COMMIT commit( this );
         commit.Add( circle );
         commit.Push( _( "Draw a circle" ) );
 
@@ -435,11 +533,12 @@ Below you will find the contents of useless_tool.cpp:
 
     void USELESS_TOOL::SetTransitions()
     {
-        Go( &USELESS_TOOL::fixedCircle, COMMON_ACTIONS::uselessFixedCircle.MakeEvent() );
-        Go( &USELESS_TOOL::moveLeft,  COMMON_ACTIONS::uselessMoveItemLeft.MakeEvent() );
+        Go( &USELESS_TOOL::fixedCircle, PCB_ACTIONS::uselessFixedCircle.MakeEvent() );
+        Go( &USELESS_TOOL::moveLeft,    PCB_ACTIONS::uselessMoveItemLeft.MakeEvent() );
     }
 
-## Register the tool
+
+## Register the tool {#register-tool}
 
 The last step is to register the tool in the tool manager.
 
@@ -456,15 +555,18 @@ This is done by adding a new instance of the tool to the
         ....
     }
 
-## Build and run
+If your new tool applies in the module editor, you also need to do this
+in `FOOTPRINT_EDIT_FRAME::setupTools()`. Generally, each kind of
+`EDA_DRAW_FRAME` that can use GAL will have a place to do this.
+
+## Build and run {#tutorial-summary}
 
 When this is all done, you should have modified the following files:
 
 * `pcbnew/tools/common_actions.h` - action declarations
-* `pcbnew/tools/common_actions.cpp` - action definitions
-* `pcbnew/tools/useless_tool.h` - your tool header
-* `pcbnew/tools/useless_tool.cpp` - your tool implementation
-* `pcbnew/tools/tools_common.cpp` - registration of your tool
+* `pcbnew/tools/useless_tool.h` - tool header
+* `pcbnew/tools/useless_tool.cpp` - action definitions and tool implementation
+* `pcbnew/tools/tools_common.cpp` - registration of the tool
 * `pcbnew/CMakeLists.txt` - for building the new .cpp files
 
 When you run Pcbnew, you should be able to press `Shift+Ctrl+L` to
@@ -473,7 +575,7 @@ and "Select item to move left" appears in the bottom right corner.
 
 When you right-click, you get a menu, which contains an entry for
 our "create fixed circle" tool and one for the existing "unfill all
-zones" tool which we added to the menu. You can also use `Shift+Ctrl+R`
+zones" tool which we added to the menu. You can also use `Shift+Ctrl+C`
 to access the fixed circle action.
 
 Congratulations, you have just created your first KiCad tool!
