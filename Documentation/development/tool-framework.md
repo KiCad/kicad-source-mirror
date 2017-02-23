@@ -208,9 +208,10 @@ The procedure of a commit is:
 * Construct an appropriate `COMMIT` object
 * Before modifying any item, add it to the commit with `Modify( item )`
   so that the current item state can be stored as an undo point.
-* When adding a new item, call `Add( item )`. The commit object now
-  owns that item, do not delete it.
-* When removing an item, call `Remove( item )`.
+* When adding a new item, call `Add( item )`. Do not delete the added item,
+  unless you are going to abort the commit.
+* When removing an item, call `Remove( item )`. You should not delete the
+  removed item, it will be stored in the undo buffer.
 * Finalise the commit with `Push( "Description" )`. If you performed
   no modifications, additions or removals, this is a no-op, so you
   don't need to check if you made any changes before pushing.
@@ -426,9 +427,9 @@ Below you will find the contents of useless_tool.cpp:
         auto& menu = m_menu.GetMenu();
 
         // add our own tool's action
-        menu.AddItem( PCB_ACTIONS::uselessFixedCircle);
+        menu.AddItem( PCB_ACTIONS::uselessFixedCircle );
         // add the PCB_EDITOR_CONTROL's zone unfill all action
-        menu.AddItem( PCB_ACTIONS::zoneUnfillAll);
+        menu.AddItem( PCB_ACTIONS::zoneUnfillAll );
 
         // Add standard zoom and grid tool actions
         m_menu.AddStandardSubMenus( *getEditFrame<PCB_BASE_FRAME>() );
@@ -460,7 +461,7 @@ Below you will find the contents of useless_tool.cpp:
         for( auto item : selection )
         {
             commit.Modify( item );
-            item->Move( wxPoint(-5 * IU_PER_MM, 0) );
+            item->Move( wxPoint( -5 * IU_PER_MM, 0 ) );
         }
 
         // push commit - if selection were empty, this is a no-op
