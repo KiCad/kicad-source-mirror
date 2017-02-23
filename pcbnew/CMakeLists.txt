@@ -341,6 +341,13 @@ set( PCBNEW_SCRIPTING_PYTHON_HELPERS
     swig/pcbnew_action_plugins.cpp
     )
 
+
+# .cpp files are compiled with extra ${WSHADOW_FLAGS}, but not .cxx files
+set_source_files_properties(
+    ${PCBNEW_SRCS} ${PCBNEW_COMMON_SRCS} ${PCBNEW_SCRIPTING_DIALOGS} ${PCBNEW_SCRIPTING_PYTHON_HELPERS}
+    PROPERTIES COMPILE_FLAGS ${WSHADOW_FLAGS}
+)
+
 if( KICAD_SCRIPTING )
     set( PCBNEW_SCRIPTING_SRCS
         ${PCBNEW_SCRIPTING_DIALOGS}
@@ -356,7 +363,6 @@ if( KICAD_SCRIPTING )
             PROPERTIES COMPILE_FLAGS -Wno-suggest-override
         )
     endif()
-
 endif()
 
 
