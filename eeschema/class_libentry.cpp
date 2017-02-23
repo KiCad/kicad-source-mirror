@@ -733,14 +733,6 @@ bool LIB_PART::Save( OUTPUTFORMATTER& aFormatter )
     // Save data
     aFormatter.Print( 0, "DEF" );
 
-#if 0 && defined(DEBUG)
-    if( value.GetText() == wxT( "R" ) )
-    {
-        int breakhere = 1;
-        (void) breakhere;
-    }
-#endif
-
     if( value.IsVisible() )
     {
         aFormatter.Print( 0, " %s", TO_UTF8( value.GetText() ) );

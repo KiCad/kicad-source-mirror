@@ -1797,14 +1797,6 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     // as far forward as needed until the first double quote.
     txt_end = data + ReadDelimitedText( &m_field, data );
 
-#if 1 && defined(DEBUG)
-    if( m_field == wxT( "ARM_C8" ) )
-    {
-        int breakhere = 1;
-        (void) breakhere;
-    }
-#endif
-
     aText->SetText( m_field );
 
     // after switching to strtok, there's no easy coming back because of the
@@ -3319,15 +3311,6 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
 
             // set the footprint name first thing, so exceptions can use name.
             module->SetFPID( LIB_ID( footprintName ) );
-
-#if 0 && defined( DEBUG )
-            printf( "%s\n", footprintName.c_str() );
-            if( footprintName == "QFN40" )
-            {
-                int breakhere = 1;
-                (void) breakhere;
-            }
-#endif
 
             m_owner->loadMODULE( module.get() );
 

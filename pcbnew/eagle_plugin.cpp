@@ -1471,13 +1471,6 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
         }
         else if( gr->first == "text" )
         {
-#if defined(DEBUG)
-            if( gr->second.data() == "ATMEGA328" )
-            {
-                int breakhere = 1;
-                (void) breakhere;
-            }
-#endif
             m_xpath->push( "text" );
 
             ETEXT       t( gr->second );
@@ -1729,13 +1722,6 @@ void EAGLE_PLUGIN::loadLibrary( CPTREE& aLib, const string* aLibName )
 
         ReplaceIllegalFileNameChars( &pack_name );
 
-#if 0 && defined(DEBUG)
-        if( pack_name == "TO220H" )
-        {
-            int breakhere = 1;
-            (void) breakhere;
-        }
-#endif
         m_xpath->Value( pack_name.c_str() );
 
         string key = aLibName ? makeKey( *aLibName, pack_name ) : pack_name;
@@ -1820,13 +1806,6 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
             THROW_IO_ERROR( emsg );
         }
 
-#if defined(DEBUG)
-        if( e.name == "ARM_C8" )
-        {
-            int breakhere = 1;
-            (void) breakhere;
-        }
-#endif
         // copy constructor to clone the template
         MODULE* m = new MODULE( *mi->second );
         m_board->Add( m, ADD_APPEND );
@@ -2625,13 +2604,6 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 
         m_xpath->Value( nname.c_str() );
 
-#if defined(DEBUG)
-        if( netName == wxT( "N$8" ) )
-        {
-            int breakhere = 1;
-            (void) breakhere;
-        }
-#endif
         // (contactref | polygon | wire | via)*
         for( CITER it = net->second.begin();  it != net->second.end();  ++it )
         {
