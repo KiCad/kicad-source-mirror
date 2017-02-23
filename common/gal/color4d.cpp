@@ -32,6 +32,12 @@ using namespace KIGFX;
 
 COLOR4D::COLOR4D( EDA_COLOR_T aColor )
 {
+    if( aColor <= UNSPECIFIED_COLOR || aColor >= NBCOLORS )
+    {
+        *this = COLOR4D::UNSPECIFIED;
+        return;
+    }
+
     r = g_ColorRefs[aColor].m_Red / 255.0;
     g = g_ColorRefs[aColor].m_Green / 255.0;
     b = g_ColorRefs[aColor].m_Blue / 255.0;
