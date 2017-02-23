@@ -186,16 +186,20 @@ struct APP_SINGLE_TOP : public wxApp
         return ret;
     }
 
+#ifdef __WXMAC__
+
     /**
      * Function MacOpenFile
      * is specific to MacOSX (not used under Linux or Windows).
      * MacOSX requires it for file association.
      * @see http://wiki.wxwidgets.org/WxMac-specific_topics
      */
-    void MacOpenFile( const wxString& aFileName )   // overload wxApp virtual
+    void MacOpenFile( const wxString& aFileName ) override
     {
         Pgm().MacOpenFile( aFileName );
     }
+
+#endif
 };
 
 IMPLEMENT_APP( APP_SINGLE_TOP );
