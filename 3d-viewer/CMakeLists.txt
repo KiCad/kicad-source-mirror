@@ -1,9 +1,6 @@
 #add_definitions(-DPRINT_STATISTICS_3D_VIEWER)
 add_definitions(-DPCBNEW)
 
-set( CMAKE_C_FLAGS_RELEASE   "-O3" )
-set( CMAKE_CXX_FLAGS_RELEASE "-O3" )
-
 include_directories(BEFORE ${INC_BEFORE})
 include_directories(
     ../pcbnew
