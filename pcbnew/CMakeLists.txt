@@ -342,11 +342,14 @@ set( PCBNEW_SCRIPTING_PYTHON_HELPERS
     )
 
 
-# .cpp files are compiled with extra ${WSHADOW_FLAGS}, but not .cxx files
-set_source_files_properties(
-    ${PCBNEW_SRCS} ${PCBNEW_COMMON_SRCS} ${PCBNEW_SCRIPTING_DIALOGS} ${PCBNEW_SCRIPTING_PYTHON_HELPERS}
-    PROPERTIES COMPILE_FLAGS ${WSHADOW_FLAGS}
-)
+if( COMPILER_SUPPORTS_WSHADOW )
+    # .cpp files are compiled with extra ${WSHADOW_FLAGS}, but not .cxx files
+    set_source_files_properties(
+        ${PCBNEW_SRCS} ${PCBNEW_COMMON_SRCS} ${PCBNEW_SCRIPTING_DIALOGS} ${PCBNEW_SCRIPTING_PYTHON_HELPERS}
+        PROPERTIES COMPILE_FLAGS ${WSHADOW_FLAGS}
+    )
+endif()
+
 
 if( KICAD_SCRIPTING )
     set( PCBNEW_SCRIPTING_SRCS
