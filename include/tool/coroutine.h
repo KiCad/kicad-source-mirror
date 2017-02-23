@@ -326,7 +326,7 @@ public:
     /**
      * Function ReturnValue()
      *
-     * Returns the yielded value (the argument Yield() was called with)
+     * Returns the yielded value (the argument KiYield() was called with)
      */
     const ReturnType& ReturnValue() const
     {

@@ -491,7 +491,7 @@ optional<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
 {
     TOOL_STATE* st = m_toolState[aTool];
 
-    assert( !st->pendingWait ); // everything collapses on two Yield() in a row
+    assert( !st->pendingWait ); // everything collapses on two KiYield() in a row
 
     // indicate to the manager that we are going to sleep and we shall be
     // woken up when an event matching aConditions arrive
