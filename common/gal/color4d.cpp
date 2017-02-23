@@ -96,6 +96,7 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
         auto search = mix_cache.find( std::pair< uint32_t, uint32_t >( myPackedColor,
                                                                        aPackedColor ) );
         COLOR4D candidate = COLOR4D::BLACK;
+
         if( search != mix_cache.end() )
             candidate.FromU32( search->second );
 
@@ -164,10 +165,10 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
     {
         wxColour c;
         c.SetRGB( aPackedColor );
-        r = c.Red();
-        g = c.Green();
-        b = c.Blue();
-        a = c.Alpha();
+        r = c.Red() / 255.0;
+        g = c.Green() / 255.0;
+        b = c.Blue() / 255.0;
+        a = c.Alpha() / 255.0;
     }
 
 
