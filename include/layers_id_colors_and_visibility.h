@@ -154,9 +154,8 @@ public:
     {}
 
     template <class InputIterator>
-    LSEQ( InputIterator start, InputIterator end ) :
-        BASE_SEQ( start, end ),
-        m_index( 0 )
+    LSEQ( InputIterator aStart, InputIterator aEnd ) :
+        BASE_SEQ( aStart, aEnd ), m_index( 0 )
     {}
 
     void Rewind()           { m_index = 0; }

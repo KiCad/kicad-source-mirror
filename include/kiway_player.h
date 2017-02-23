@@ -214,7 +214,7 @@ public:
 protected:
 
     bool IsModal()                      { return m_modal; }
-    void SetModal( bool IsModal )       { m_modal = IsModal; }
+    void SetModal( bool aIsModal )       { m_modal = aIsModal; }
 
     /**
      * Function IsDismissed
