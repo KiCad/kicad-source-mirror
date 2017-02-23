@@ -33,6 +33,9 @@
 #include <class_board.h>
 #include <view/view_group.h>
 
+#include <functional>
+
+
 /**
  * Class PCB_TOOL
  *
@@ -78,6 +81,30 @@ public:
     }
 
 protected:
+
+    /**
+     * Callable that returns a new board item.
+     *
+     * The event that triggered it is provided, so you can check modifier
+     * keys, position, etc, if required
+     */
+    using ITEM_CREATOR = std::function< std::unique_ptr< BOARD_ITEM >( const TOOL_EVENT& aEvt ) >;
+
+    /**
+     * Helper function for performing a common interactive idiom:
+     * wait for a left click, place an item there (perhaps with a
+     * dialog or other user interaction), then have it move with
+     * the mouse and respond to rotate/flip, etc
+     *
+     * More complex interactive processes are not supported here, you
+     * should implement a customised event loop for those.
+     *
+     * @param aItemCreator the callable that will attempt to create the item
+     * @param aCommitMessage the message used on a successful commit
+     */
+    void doInteractiveItemPlacement( ITEM_CREATOR aItemCreator,
+                                     const wxString& aCommitMessage );
+
     KIGFX::VIEW* view() const { return getView(); }
     PCB_EDIT_FRAME* frame() const { return getEditFrame<PCB_EDIT_FRAME>(); }
     BOARD* board() const { return getModel<BOARD>(); }

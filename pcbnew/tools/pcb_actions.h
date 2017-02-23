@@ -294,6 +294,17 @@ public:
     /// Copy the current pad's settings to other pads in the module or on the board
     static TOOL_ACTION pushPadSettings;
 
+    // Microwave tools
+    static TOOL_ACTION microwaveCreateGap;
+
+    static TOOL_ACTION microwaveCreateStub;
+
+    static TOOL_ACTION microwaveCreateStubArc;
+
+    static TOOL_ACTION microwaveCreateFunctionShape;
+
+    static TOOL_ACTION microwaveCreateLine;
+
     /// Cursor control with keyboard
     static TOOL_ACTION cursorUp;
     static TOOL_ACTION cursorDown;

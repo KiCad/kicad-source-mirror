@@ -163,6 +163,21 @@ boost::optional<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_PCB_SHOW_1_RATSNEST_BUTT:
         return PCB_ACTIONS::toBeDone.MakeEvent();
+
+    case ID_PCB_MUWAVE_TOOL_GAP_CMD:
+        return PCB_ACTIONS::microwaveCreateGap.MakeEvent();
+
+    case ID_PCB_MUWAVE_TOOL_STUB_CMD:
+        return PCB_ACTIONS::microwaveCreateStub.MakeEvent();
+
+    case ID_PCB_MUWAVE_TOOL_STUB_ARC_CMD:
+        return PCB_ACTIONS::microwaveCreateStubArc.MakeEvent();
+
+    case ID_PCB_MUWAVE_TOOL_FUNCTION_SHAPE_CMD:
+        return PCB_ACTIONS::microwaveCreateFunctionShape.MakeEvent();
+
+    case ID_PCB_MUWAVE_TOOL_SELF_CMD:
+        return PCB_ACTIONS::microwaveCreateLine.MakeEvent();
     }
 
     return boost::optional<TOOL_EVENT>();

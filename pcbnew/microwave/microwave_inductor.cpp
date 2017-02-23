@@ -307,10 +307,10 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
 
     // Enter the desired length.
     msg = StringFromValue( g_UserUnit, inductorPattern.m_length );
-    wxTextEntryDialog dlg( NULL, wxEmptyString, _( "Length of Trace:" ), msg );
+    wxTextEntryDialog dlg( nullptr, wxEmptyString, _( "Length of Trace:" ), msg );
 
     if( dlg.ShowModal() != wxID_OK )
-        return NULL; // canceled by user
+        return nullptr; // canceled by user
 
     msg = dlg.GetValue();
     inductorPattern.m_length = ValueFromString( g_UserUnit, msg );
@@ -319,7 +319,7 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
     if( inductorPattern.m_length < min_len )
     {
         aErrorMessage = _( "Requested length < minimum length" );
-        return NULL;
+        return nullptr;
     }
 
     // Calculate the elements.
@@ -331,16 +331,16 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
     if( !ll )
     {
         aErrorMessage = _( "Requested length too large" );
-        return NULL;
+        return nullptr;
     }
 
     // Generate footprint. the value is also used as footprint name.
-    msg.Empty();
-    wxTextEntryDialog cmpdlg( NULL, wxEmptyString, _( "Component Value:" ), msg );
+    msg = "L";
+    wxTextEntryDialog cmpdlg( nullptr, wxEmptyString, _( "Component Value:" ), msg );
     cmpdlg.SetTextValidator( FILE_NAME_CHAR_VALIDATOR( &msg ) );
 
     if( ( cmpdlg.ShowModal() != wxID_OK ) || msg.IsEmpty() )
-        return NULL;    //  Aborted by user
+        return nullptr;    //  Aborted by user
 
     MODULE* module = aPcbFrame->CreateNewModule( msg );
 
