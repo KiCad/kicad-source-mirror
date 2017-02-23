@@ -58,7 +58,9 @@
 #include <invoke_pcb_dialog.h>
 
 #include <tool/tool_manager.h>
+#include <tool/common_tools.h>
 #include <tool/tool_dispatcher.h>
+
 #include "tools/selection_tool.h"
 #include "tools/zoom_tool.h"
 #include "tools/edit_tool.h"
@@ -950,6 +952,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
 
     drawPanel->SetEventDispatcher( m_toolDispatcher );
 
+    m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new SELECTION_TOOL );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->RegisterTool( new EDIT_TOOL );
