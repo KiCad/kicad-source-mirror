@@ -191,7 +191,7 @@ struct PART_DRAW_OPTIONS
     {
         PART_DRAW_OPTIONS def;
         def.draw_mode = GR_DEFAULT_DRAWMODE;
-        def.color     = UNSPECIFIED_COLOR;
+        def.color     = COLOR4D::UNSPECIFIED;
         def.transform = DefaultTransform;
         def.show_pin_text       = true;
         def.draw_visible_fields = true;
