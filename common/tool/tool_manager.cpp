@@ -45,7 +45,6 @@
 #include <tool/action_manager.h>
 
 #include <wxPcbStruct.h>
-#include <confirm.h>
 #include <class_draw_panel_gal.h>
 
 using boost::optional;
@@ -437,7 +436,7 @@ void TOOL_MANAGER::InitTools()
 
         if( !tool->Init() )
         {
-            DisplayError( nullptr,
+            wxMessageBox(
                     wxString::Format( "Initialization of tool '%s' failed", tool->GetName() ) );
 
             // Unregister the tool
@@ -500,7 +499,7 @@ optional<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
     st->waitEvents = aConditions;
 
     // switch context back to event dispatcher loop
-    st->cofunc->Yield();
+    st->cofunc->KiYield();
 
     return st->wakeupEvent;
 }

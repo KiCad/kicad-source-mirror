@@ -208,24 +208,24 @@ public:
 
 public:
     /**
-     * Function Yield()
+     * Function KiYield()
      *
      * Stops execution of the coroutine and returns control to the caller.
      * After a yield, Call() or Resume() methods invoked by the caller will
      * immediately return true, indicating that we are not done yet, just asleep.
      */
-    void Yield()
+    void KiYield()
     {
         jumpOut();
     }
 
     /**
-     * Function Yield()
+     * Function KiYield()
      *
-     * Yield with a value - passes a value of given type to the caller.
+     * KiYield with a value - passes a value of given type to the caller.
      * Useful for implementing generator objects.
      */
-    void Yield( ReturnType& aRetVal )
+    void KiYield( ReturnType& aRetVal )
     {
         m_retVal = aRetVal;
         jumpOut();
