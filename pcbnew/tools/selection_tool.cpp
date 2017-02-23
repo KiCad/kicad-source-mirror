@@ -128,21 +128,19 @@ private:
 
     void update() override
     {
-        SELECTION_TOOL* selTool = getToolManager()->GetTool<SELECTION_TOOL>();
+        using S_C = SELECTION_CONDITIONS;
 
-        // lines like this make me really think about a better name for SELECTION_CONDITIONS class
-        bool selEnabled =  ( SELECTION_CONDITIONS::OnlyType( PCB_VIA_T )
-                || SELECTION_CONDITIONS::OnlyType( PCB_TRACE_T ) )
-                              ( selTool->GetSelection() );
+        const auto& selection = getToolManager()->GetTool<SELECTION_TOOL>()->GetSelection();
 
-        bool sheetSelEnabled = ( SELECTION_CONDITIONS::OnlyType( PCB_MODULE_T ) )
-                              ( selTool->GetSelection() );
+        bool connItem = ( S_C::OnlyType( PCB_VIA_T ) || S_C::OnlyType( PCB_TRACE_T ) )( selection );
+        bool sheetSelEnabled = ( S_C::OnlyType( PCB_MODULE_T ) )( selection );
 
-        Enable( getMenuId( PCB_ACTIONS::selectNet ), selEnabled );
-        Enable( getMenuId( PCB_ACTIONS::selectCopper ), selEnabled );
-        Enable( getMenuId( PCB_ACTIONS::selectConnection ), selEnabled );
+        Enable( getMenuId( PCB_ACTIONS::selectNet ), connItem );
+        Enable( getMenuId( PCB_ACTIONS::selectCopper ), connItem );
+        Enable( getMenuId( PCB_ACTIONS::selectConnection ), connItem );
         Enable( getMenuId( PCB_ACTIONS::selectSameSheet ), sheetSelEnabled );
     }
+
     CONTEXT_MENU* create() const override
     {
         return new SELECT_MENU();
@@ -179,22 +177,15 @@ SELECTION_TOOL::~SELECTION_TOOL()
 
 bool SELECTION_TOOL::Init()
 {
-    using S_C = SELECTION_CONDITIONS;
-
-    auto showSelectMenuFunctor = ( S_C::OnlyType( PCB_VIA_T ) ||
-            S_C::OnlyType( PCB_TRACE_T ) ||
-            S_C::OnlyType( PCB_MODULE_T ) ) &&
-            S_C::Count( 1 );
-
     auto selectMenu = std::make_shared<SELECT_MENU>();
     selectMenu->SetTool( this );
     m_menu.AddSubMenu( selectMenu );
 
     auto& menu = m_menu.GetMenu();
 
-    menu.AddMenu( selectMenu.get(), false, showSelectMenuFunctor );
+    menu.AddMenu( selectMenu.get(), false, SELECTION_CONDITIONS::NotEmpty );
     // only show separator if there is a Select menu to show above it
-    menu.AddSeparator( showSelectMenuFunctor, 1000 );
+    menu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 1000 );
 
     m_menu.AddStandardSubMenus( *getEditFrame<PCB_BASE_FRAME>() );
 
