@@ -55,7 +55,7 @@ static void prepareToolsMenu( wxMenu* aParentMenu );
 // Build the help menu
 static void prepareHelpMenu( wxMenu* aParentMenu );
 
-// Build the help submenu
+// Build the import/export submenu
 static void prepareImportExportMenu( wxMenu* aParentMenu );
 
 // Build the edit menu

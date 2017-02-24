@@ -196,10 +196,10 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
     iconDC.DrawRectangle( 0, 0, BUTT_SIZE_X, BUTT_SIZE_Y );
 
     buttonId++;
-    wxBitmapButton* m_SelBgColor = new wxBitmapButton(
+    wxBitmapButton* selBgColorBtn = new wxBitmapButton(
                             this, buttonId, bitmap, wxDefaultPosition,
                             wxSize( BUTT_SIZE_X + 8, BUTT_SIZE_Y + 6 ) );
-    m_SelBgColor->SetClientData( (void*) &bgColorButton );
+    selBgColorBtn->SetClientData( (void*) &bgColorButton );
 
     Connect( 1800, buttonId, wxEVT_COMMAND_BUTTON_CLICKED,
              wxCommandEventHandler( WIDGET_EESCHEMA_COLOR_CONFIG::SetColor ) );
@@ -214,7 +214,7 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
         // Add a spacer to improve appearance.
         columnBoxSizer->AddSpacer( 5 );
         columnBoxSizer->Add( bgColorLabel, 1, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
-        columnBoxSizer->Add( m_SelBgColor, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 5 );
+        columnBoxSizer->Add( selBgColorBtn, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 5 );
     }
 
     currentColors[ LAYER_BACKGROUND ] = bgColor;
