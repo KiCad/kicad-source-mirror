@@ -89,7 +89,7 @@ void TWO_COLUMN_TREE_LIST::OnSize( wxSizeEvent& aEvent )
         if( width > clamped_column_width )
             clamped_column_width = width;
 
-        width = WidthFor( GetItemText( item, m_rubber_band_column ) );
+        width = MemoWidthFor( GetItemText( item, m_rubber_band_column ) );
         if( width > rubber_max_width )
             rubber_max_width = width;
     }
@@ -119,3 +119,24 @@ void TWO_COLUMN_TREE_LIST::OnSize( wxSizeEvent& aEvent )
     }
 }
 
+
+int TWO_COLUMN_TREE_LIST::MemoWidthFor( const wxString& aStr )
+{
+    int width;
+    auto found = m_width_cache.find( aStr );
+
+    if( found == m_width_cache.end() )
+    {
+        width = WidthFor( aStr );
+        m_width_cache[aStr] = width;
+    }
+    else
+    {
+        width = found->second;
+    }
+
+    return width;
+}
+
+
+std::map<wxString, int> TWO_COLUMN_TREE_LIST::m_width_cache;

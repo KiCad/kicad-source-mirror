@@ -142,7 +142,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::SetTree( TWO_COLUMN_TREE_LIST* aTree )
 
     if( m_tree )
     {
-        m_tree->AppendColumn( _( "Part" ), wxCOL_WIDTH_AUTOSIZE, wxALIGN_LEFT, wxCOL_RESIZABLE );
+        m_tree->AppendColumn( _( "Part" ), 100, wxALIGN_LEFT, wxCOL_RESIZABLE );
         m_tree->AppendColumn( _( "Description" ), 100, wxALIGN_LEFT, wxCOL_RESIZABLE );
         m_tree->SetRubberBandColumn( 1 );
     }

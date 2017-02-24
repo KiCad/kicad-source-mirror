@@ -27,6 +27,7 @@
  */
 
 #include <wx/treelist.h>
+#include <map>
 
 #ifndef __two_column_tree_list__
 #define __two_column_tree_list__
@@ -79,8 +80,17 @@ class TWO_COLUMN_TREE_LIST : public wxTreeListCtrl
         void OnSize( wxSizeEvent& aEvent );
 
     protected:
+
+        /**
+         * Memoized version of wx WidthFor(), which returns the width in pixels
+         * required to display a string. This function is REALLY SLOW on macOS.
+         */
+        int MemoWidthFor( const wxString& aStr );
+
         int m_rubber_band_column;
         int m_clamped_min_width;
+
+        static std::map<wxString, int> m_width_cache;
 };
 
 #endif // __two_column_tree_list__
