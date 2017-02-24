@@ -51,7 +51,6 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     m_parent = aParent;
     m_deMorganConvert = aDeMorganConvert >= 0 ? aDeMorganConvert : 0;
     m_external_browser_requested = false;
-    m_received_doubleclick_in_tree = false;
     m_search_container->SetTree( m_libraryComponentTree );
     m_componentView->SetLayoutDirection( wxLayout_LeftToRight );
     m_dbl_click_timer = std::make_unique<wxTimer>( this );
@@ -171,24 +170,23 @@ void DIALOG_CHOOSE_COMPONENT::OnTreeSelect( wxTreeListEvent& aEvent )
 
 void DIALOG_CHOOSE_COMPONENT::OnDoubleClickTreeActivation( wxTreeListEvent& aEvent )
 {
-    if( !updateSelection() )
-        return;
-
-    // Ok, got selection. We don't just end the modal dialog here, but
-    // wait for the MouseUp event to occur. Otherwise something (broken?)
-    // happens: the dialog will close and will deliver the 'MouseUp' event
-    // to the eeschema canvas, that will immediately place the component.
-    //
-    // NOW, here's where it gets really fun. wxTreeListCtrl eats MouseUp.
-    // This isn't really feasible to bypass without a fully custom
-    // wxDataViewCtrl implementation, and even then might not be fully
-    // possible (docs are vague). To get around this, we use a one-shot
-    // timer to schedule the dialog close.
-    //
-    // See DIALOG_CHOOSE_COMPONENT::OnCloseTimer for the other end of this
-    // spaghetti noodle.
-    m_received_doubleclick_in_tree = true;
-    m_dbl_click_timer->StartOnce( DIALOG_CHOOSE_COMPONENT::DblClickDelay );
+    if( updateSelection() )
+    {
+        // Ok, got selection. We don't just end the modal dialog here, but
+        // wait for the MouseUp event to occur. Otherwise something (broken?)
+        // happens: the dialog will close and will deliver the 'MouseUp' event
+        // to the eeschema canvas, that will immediately place the component.
+        //
+        // NOW, here's where it gets really fun. wxTreeListCtrl eats MouseUp.
+        // This isn't really feasible to bypass without a fully custom
+        // wxDataViewCtrl implementation, and even then might not be fully
+        // possible (docs are vague). To get around this, we use a one-shot
+        // timer to schedule the dialog close.
+        //
+        // See DIALOG_CHOOSE_COMPONENT::OnCloseTimer for the other end of this
+        // spaghetti noodle.
+        m_dbl_click_timer->StartOnce( DIALOG_CHOOSE_COMPONENT::DblClickDelay );
+    }
 }
 
 
@@ -206,11 +204,12 @@ void DIALOG_CHOOSE_COMPONENT::OnCloseTimer( wxTimerEvent& aEvent )
         // purpose of this timer is defeated.
         m_dbl_click_timer->StartOnce( DIALOG_CHOOSE_COMPONENT::DblClickDelay );
     }
-    else if( m_received_doubleclick_in_tree )
+    else
     {
         EndModal( wxID_OK );
     }
 }
+
 
 // Test strategy to see if OnInterceptTreeEnter() works:
 //  - search for an item.

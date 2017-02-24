@@ -41,7 +41,6 @@ class DIALOG_CHOOSE_COMPONENT : public DIALOG_CHOOSE_COMPONENT_BASE
     COMPONENT_TREE_SEARCH_CONTAINER* const m_search_container;
     int             m_deMorganConvert;
     bool            m_external_browser_requested;
-    bool            m_received_doubleclick_in_tree;
 
 public:
     /**
