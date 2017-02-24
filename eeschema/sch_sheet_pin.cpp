@@ -208,9 +208,6 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
         if( GetTextPos().x > (sheet->m_pos.x + sheet->m_size.x) )
             SetTextX( sheet->m_pos.x + sheet->m_size.x );
     }
-
-    printf( "centre %d %d, pos %d %d, pinpos %d %d, edge %d\n",
-        center.x, center.y, Pos.x, Pos.y, GetTextPos().x, GetTextPos().y, m_edge);
 }
 
 
