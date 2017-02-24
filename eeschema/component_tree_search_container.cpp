@@ -151,14 +151,18 @@ void COMPONENT_TREE_SEARCH_CONTAINER::SetTree( TWO_COLUMN_TREE_LIST* aTree )
 
 void COMPONENT_TREE_SEARCH_CONTAINER::AddLibrary( PART_LIB& aLib )
 {
-    wxArrayString all_aliases;
-
     if( m_filter == CMP_FILTER_POWER )
+    {
+        wxArrayString all_aliases;
         aLib.GetEntryTypePowerNames( all_aliases );
+        AddAliasList( aLib.GetName(), all_aliases, &aLib );
+    }
     else
-        aLib.GetAliasNames( all_aliases );
-
-    AddAliasList( aLib.GetName(), all_aliases, &aLib );
+    {
+        std::vector<LIB_ALIAS*> all_aliases;
+        aLib.GetAliases( all_aliases );
+        AddAliasList( aLib.GetName(), all_aliases, &aLib );
+    }
 
     ++m_libraries_added;
 }
@@ -168,11 +172,9 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
                                                     const wxArrayString& aAliasNameList,
                                                     PART_LIB* aOptionalLib )
 {
-    TREE_NODE* const lib_node = new TREE_NODE( TREE_NODE::TYPE_LIB,  NULL, NULL,
-                                               aNodeName, wxEmptyString, wxEmptyString );
-    m_nodes.push_back( lib_node );
+    std::vector<LIB_ALIAS*> alias_list;
 
-    for( const wxString& aName : aAliasNameList )
+    for( const wxString& aName: aAliasNameList )
     {
         LIB_ALIAS* a;
 
@@ -181,9 +183,26 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
         else
             a = m_libs->FindLibraryAlias( LIB_ID( wxEmptyString, aName ), wxEmptyString );
 
-        if( a == NULL )
-            continue;
+        if( a )
+        {
+            alias_list.push_back( a );
+        }
+    }
 
+    AddAliasList( aNodeName, alias_list, aOptionalLib );
+}
+
+
+void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
+                                                    const std::vector<LIB_ALIAS*>& aAliasList,
+                                                    PART_LIB* aOptionalLib )
+{
+    TREE_NODE* const lib_node = new TREE_NODE( TREE_NODE::TYPE_LIB,  NULL, NULL,
+                                               aNodeName, wxEmptyString, wxEmptyString );
+    m_nodes.push_back( lib_node );
+
+    for( auto a: aAliasList )
+    {
         wxString search_text;
         search_text = ( a->GetKeyWords().empty() ) ? wxT("        ") : a->GetKeyWords();
         search_text += a->GetDescription();

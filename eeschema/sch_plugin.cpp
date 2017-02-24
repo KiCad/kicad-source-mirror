@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -81,6 +81,15 @@ size_t SCH_PLUGIN::GetSymbolLibCount( const wxString&   aLibraryPath,
 
 
 void SCH_PLUGIN::EnumerateSymbolLib( wxArrayString&    aAliasNameList,
+                                     const wxString&   aLibraryPath,
+                                     const PROPERTIES* aProperties )
+{
+    // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
+    not_implemented( this, __FUNCTION__ );
+}
+
+
+void SCH_PLUGIN::EnumerateSymbolLib( std::vector<LIB_ALIAS*>& aAliasList,
                                      const wxString&   aLibraryPath,
                                      const PROPERTIES* aProperties )
 {

@@ -27,6 +27,7 @@
  * @file class_library.cpp
  */
 
+#include <algorithm>
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <gr_basic.h>
@@ -135,6 +136,16 @@ void PART_LIB::GetAliasNames( wxArrayString& aNames )
     m_plugin->EnumerateSymbolLib( aNames, fileName.GetFullPath() );
 
     aNames.Sort();
+}
+
+
+void PART_LIB::GetAliases( std::vector<LIB_ALIAS*>& aAliases )
+{
+    m_plugin->EnumerateSymbolLib( aAliases, fileName.GetFullPath() );
+
+    std::sort( aAliases.begin(), aAliases.end(),
+            [](LIB_ALIAS *lhs, LIB_ALIAS *rhs) -> bool
+                { return lhs->GetName() < rhs->GetName(); });
 }
 
 

@@ -297,6 +297,26 @@ public:
                                      const PROPERTIES* aProperties = NULL );
 
     /**
+     * Function EnumerateSymbolLib
+     *
+     * returns a list of #LIB_PART aliases contained within the library @a aLibraryPath.
+     *
+     * @param aAliasList is an array to populate with the #LIB_ALIAS pointers associated with
+     *                   the library.
+     * @param aLibraryPath is a locator for the "library", usually a directory, file,
+     *                     or URL containing one or more #LIB_PART objects.
+     * @param aProperties is an associative array that can be used to tell the plugin anything
+     *                    needed about how to perform with respect to @a aLibraryPath.  The
+     *                    caller continues to own this object (plugin may not delete it), and
+     *                    plugins should expect it to be optionally NULL.
+     *
+     * @throw IO_ERROR if the library cannot be found, the part library cannot be loaded.
+     */
+    virtual void EnumerateSymbolLib( std::vector<LIB_ALIAS*>& aAliasList,
+                                     const wxString&   aLibraryPath,
+                                     const PROPERTIES* aProperties = NULL );
+
+    /**
      * Function LoadSymbol
      *
      * loads a #LIB_ALIAS object having @a aAliasName from the @a aLibraryPath containing

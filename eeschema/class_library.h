@@ -401,6 +401,13 @@ public:
     void GetAliasNames( wxArrayString& aNames );
 
     /**
+     * Load a vector with all the entries in this library.
+     *
+     * @param aAliases - vector to receive the aliases.
+     */
+    void GetAliases( std::vector<LIB_ALIAS*>& aAliases );
+
+    /**
      * Load a string array with the names of  entries of type POWER in this library.
      *
      * @param aNames - String array to place entry names into.

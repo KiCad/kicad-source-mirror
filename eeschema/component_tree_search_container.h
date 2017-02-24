@@ -70,7 +70,7 @@ public:
      */
     void AddLibrary( PART_LIB& aLib );
 
-    /** Function AddComponentList
+    /**
      * Add the given list of components, given by name, to be searched.
      * To be called in the setup phase to fill this container.
      *
@@ -79,6 +79,17 @@ public:
      * @param aOptionalLib       Library to look up the component names (if NULL: global lookup)
      */
     void AddAliasList( const wxString& aNodeName, const wxArrayString& aAliasNameList,
+                       PART_LIB* aOptionalLib );
+
+    /**
+     * Add the given list of components, given by alias, to be searched.
+     * To be called in the setup phase to fill this container.
+     *
+     * @param aNodeName          The parent node name the components will show up as leaf.
+     * @param aAliasList         List of aliases.
+     * @param aOptionalLib       Library to look up the component names (if NULL: global lookup)
+     */
+    void AddAliasList( const wxString& aNodeName, const std::vector<LIB_ALIAS*>& aAliasList,
                        PART_LIB* aOptionalLib );
 
     /** Function SetPreselectNode

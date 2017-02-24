@@ -107,6 +107,9 @@ public:
     void EnumerateSymbolLib( wxArrayString&    aAliasNameList,
                              const wxString&   aLibraryPath,
                              const PROPERTIES* aProperties = NULL ) override;
+    void EnumerateSymbolLib( std::vector<LIB_ALIAS*>& aAliasList,
+                             const wxString&   aLibraryPath,
+                             const PROPERTIES* aProperties = NULL ) override;
     LIB_ALIAS* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
                            const PROPERTIES* aProperties = NULL ) override;
     void SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,

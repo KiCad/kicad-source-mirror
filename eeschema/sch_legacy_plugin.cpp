@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -3426,6 +3426,23 @@ void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( wxArrayString&    aAliasNameList,
 
     for( LIB_ALIAS_MAP::const_iterator it = aliases.begin();  it != aliases.end();  ++it )
         aAliasNameList.Add( it->first );
+}
+
+
+void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( std::vector<LIB_ALIAS*>& aAliasList,
+                                            const wxString&   aLibraryPath,
+                                            const PROPERTIES* aProperties )
+{
+    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
+
+    m_props = aProperties;
+
+    cacheLib( aLibraryPath );
+
+    const LIB_ALIAS_MAP& aliases = m_cache->m_aliases;
+
+    for( LIB_ALIAS_MAP::const_iterator it = aliases.begin();  it != aliases.end();  ++it )
+        aAliasList.push_back( it->second );
 }
 
 
