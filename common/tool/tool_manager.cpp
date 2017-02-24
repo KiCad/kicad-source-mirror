@@ -625,55 +625,68 @@ bool TOOL_MANAGER::dispatchActivation( const TOOL_EVENT& aEvent )
 
 void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
 {
+    // Store the current tool ID to decide whether to restore the cursor position
+    TOOL_ID activeTool = GetCurrentToolId();
+
     for( TOOL_ID toolId : m_activeTools )
     {
         TOOL_STATE* st = m_toolIdIndex[toolId];
 
         // the tool requested a context menu. The menu is activated on RMB click (CMENU_BUTTON mode)
         // or immediately (CMENU_NOW) mode. The latter is used for clarification lists.
-        if( st->contextMenuTrigger != CMENU_OFF )
+        if( st->contextMenuTrigger == CMENU_OFF )
+            continue;
+
+        if( st->contextMenuTrigger == CMENU_BUTTON && !aEvent.IsClick( BUT_RIGHT ) )
+            break;
+
+        st->pendingWait = true;
+        st->waitEvents = TOOL_EVENT( TC_ANY, TA_ANY );
+
+        // Store the menu pointer in case it is changed by the TOOL when handling menu events
+        CONTEXT_MENU* m = st->contextMenu;
+
+        if( st->contextMenuTrigger == CMENU_NOW )
+            st->contextMenuTrigger = CMENU_OFF;
+
+        VECTOR2D cursor = m_viewControls->GetCursorPosition();
+
+        // Temporarily store the cursor position, so the tools could execute actions
+        // using the point where the user has invoked a context menu
+        if( m_viewControls->ForcedCursorPosition() )
+            m_origCursor = cursor;
+
+        m_viewControls->ForceCursorPosition( true, cursor );
+
+        // Display a copy of menu
+        std::unique_ptr<CONTEXT_MENU> menu( m->Clone() );
+
+        // Run update handlers on the created copy
+        menu->UpdateAll();
+        GetEditFrame()->PopupMenu( menu.get() );
+
+        // If nothing was chosen from the context menu, we must notify the tool as well
+        if( menu->GetSelected() < 0 )
         {
-            if( st->contextMenuTrigger == CMENU_BUTTON && !aEvent.IsClick( BUT_RIGHT ) )
-                break;
-
-            st->pendingWait = true;
-            st->waitEvents = TOOL_EVENT( TC_ANY, TA_ANY );
-
-            // Store the menu pointer in case it is changed by the TOOL when handling menu events
-            CONTEXT_MENU* m = st->contextMenu;
-
-            if( st->contextMenuTrigger == CMENU_NOW )
-                st->contextMenuTrigger = CMENU_OFF;
-
-            // Temporarily store the cursor position, so the tools could execute actions
-            // using the point where the user has invoked a context menu
-            bool forcedCursor = m_viewControls->IsCursorPositionForced();
-            VECTOR2D cursorPos = m_viewControls->GetCursorPosition();
-            m_viewControls->ForceCursorPosition( true, m_viewControls->GetCursorPosition() );
-
-            // Display a copy of menu
-            std::unique_ptr<CONTEXT_MENU> menu( m->Clone() );
-
-            // Run update handlers on the created copy
-            menu->UpdateAll();
-            GetEditFrame()->PopupMenu( menu.get() );
-
-            // If nothing was chosen from the context menu, we must notify the tool as well
-            if( menu->GetSelected() < 0 )
-            {
-                TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CHOICE, -1 );
-                evt.SetParameter( m );
-                dispatchInternal( evt );
-            }
-
-            // Notify the tools that menu has been closed
-            TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CLOSED );
+            TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CHOICE, -1 );
             evt.SetParameter( m );
             dispatchInternal( evt );
-
-            m_viewControls->ForceCursorPosition( forcedCursor, cursorPos );
-            break;
         }
+
+        // Notify the tools that menu has been closed
+        TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CLOSED );
+        evt.SetParameter( m );
+        dispatchInternal( evt );
+
+        // Restore the cursor settings if the tool is still active
+        if( activeTool == GetCurrentToolId() )
+        {
+            m_viewControls->ForceCursorPosition( (bool) m_origCursor,
+                    m_origCursor.value_or( VECTOR2D( 0, 0 ) ) );
+        }
+
+        m_origCursor = boost::none;
+        break;
     }
 }
 
@@ -684,7 +697,17 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 
     // Store the current VIEW_CONTROLS settings
     if( TOOL_STATE* state = GetCurrentToolState() )
+    {
         state->vcSettings = m_viewControls->GetSettings();
+
+        // If context menu has overridden the cursor position, restore the original one
+        // (see dispatchContextMenu())
+        if( m_origCursor )
+        {
+            state->vcSettings.m_forceCursorPosition = true;
+            state->vcSettings.m_forcedPosition = *m_origCursor;
+        }
+    }
 
     if( !aState->Pop() )
     {

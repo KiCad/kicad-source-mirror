@@ -468,6 +468,9 @@ private:
     /// Instance of ACTION_MANAGER that handles TOOL_ACTIONs
     ACTION_MANAGER* m_actionMgr;
 
+    /// Original cursor position, if overridden by the context menu handler
+    boost::optional<VECTOR2D> m_origCursor;
+
     EDA_ITEM* m_model;
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_CONTROLS* m_viewControls;

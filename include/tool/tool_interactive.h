@@ -64,7 +64,6 @@ public:
      */
     void SetContextMenu( CONTEXT_MENU* aMenu, CONTEXT_MENU_TRIGGER aTrigger = CMENU_BUTTON );
 
-
     /**
      * Function RunMainStack()
      *

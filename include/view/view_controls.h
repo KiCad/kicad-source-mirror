@@ -140,6 +140,16 @@ public:
     }
 
     /**
+     * Function ForcedCursorPosition()
+     * Returns true if the current cursor position is forced to a specific location, ignoring
+     * the mouse cursor position.
+     */
+    bool ForcedCursorPosition() const
+    {
+        return m_settings.m_forceCursorPosition;
+    }
+
+    /**
      * Function ShowCursor()
      * Enables or disables display of cursor.
      * @param aEnabled decides if the cursor should be shown.
