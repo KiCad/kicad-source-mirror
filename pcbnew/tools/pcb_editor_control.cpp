@@ -228,7 +228,7 @@ public:
 
 
 PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
-    TOOL_INTERACTIVE( "pcbnew.EditorControl" ),
+    PCB_TOOL( "pcbnew.EditorControl" ),
     m_frame( nullptr )
 {
     m_placeOrigin = new KIGFX::ORIGIN_VIEWITEM( KIGFX::COLOR4D( 0.8, 0.0, 0.0, 1.0 ),
@@ -645,16 +645,23 @@ int PCB_EDITOR_CONTROL::ZoneFill( const TOOL_EVENT& aEvent )
     const auto& selection = selTool->GetSelection();
     RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
 
+    BOARD_COMMIT commit( this );
+
     for( auto item : selection )
     {
         assert( item->Type() == PCB_ZONE_AREA_T );
 
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*> ( item );
+
+        commit.Modify( zone );
+
         m_frame->Fill_Zone( zone );
         zone->SetIsFilled( true );
         ratsnest->Update( zone );
         getView()->Update( zone );
     }
+
+    commit.Push( _( "Fill Zone" ) );
 
     ratsnest->Recalculate();
 
@@ -667,14 +674,21 @@ int PCB_EDITOR_CONTROL::ZoneFillAll( const TOOL_EVENT& aEvent )
     BOARD* board = getModel<BOARD>();
     RN_DATA* ratsnest = board->GetRatsnest();
 
+    BOARD_COMMIT commit( this );
+
     for( int i = 0; i < board->GetAreaCount(); ++i )
     {
         ZONE_CONTAINER* zone = board->GetArea( i );
+
+        commit.Modify( zone );
+
         m_frame->Fill_Zone( zone );
         zone->SetIsFilled( true );
         ratsnest->Update( zone );
         getView()->Update( zone );
     }
+
+    commit.Push( _( "Fill All Zones" ) );
 
     ratsnest->Recalculate();
 
@@ -688,16 +702,23 @@ int PCB_EDITOR_CONTROL::ZoneUnfill( const TOOL_EVENT& aEvent )
     const auto& selection = selTool->GetSelection();
     RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
 
+    BOARD_COMMIT commit( this );
+
     for( auto item : selection )
     {
         assert( item->Type() == PCB_ZONE_AREA_T );
 
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
+
+        commit.Modify( zone );
+
         zone->SetIsFilled( false );
         zone->ClearFilledPolysList();
         ratsnest->Update( zone );
         getView()->Update( zone );
     }
+
+    commit.Push( _( "Unfill Zone" ) );
 
     ratsnest->Recalculate();
 
@@ -710,14 +731,21 @@ int PCB_EDITOR_CONTROL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
     BOARD* board = getModel<BOARD>();
     RN_DATA* ratsnest = board->GetRatsnest();
 
+    BOARD_COMMIT commit( this );
+
     for( int i = 0; i < board->GetAreaCount(); ++i )
     {
         ZONE_CONTAINER* zone = board->GetArea( i );
+
+        commit.Modify( zone );
+
         zone->SetIsFilled( false );
         zone->ClearFilledPolysList();
         ratsnest->Update( zone );
         getView()->Update( zone );
     }
+
+    commit.Push( _( "Unfill All Zones" ) );
 
     ratsnest->Recalculate();
 
