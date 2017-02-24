@@ -55,12 +55,12 @@ class DIALOG_CHOOSE_COMPONENT_BASE : public DIALOG_SHIM
 		wxButton* m_stdButtonsCancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnIdle( wxIdleEvent& event ) { event.Skip(); }
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnInterceptSearchBoxKey( wxKeyEvent& event ) { event.Skip(); }
-		virtual void OnSearchBoxChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSearchBoxEnter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSearchBoxChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnInterceptTreeEnter( wxKeyEvent& event ) { event.Skip(); }
-		virtual void OnTreeMouseUp( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnDoubleClickTreeActivation( wxTreeListEvent& event ) { event.Skip(); }
 		virtual void OnTreeSelect( wxTreeListEvent& event ) { event.Skip(); }
 		virtual void OnDatasheetClick( wxHtmlLinkEvent& event ) { event.Skip(); }
