@@ -68,6 +68,8 @@ void TOOL_INTERACTIVE::SetContextMenu( CONTEXT_MENU* aMenu, CONTEXT_MENU_TRIGGER
 {
     if( aMenu )
         aMenu->SetTool( this );
+    else
+        aTrigger = CMENU_OFF;
 
     m_toolMgr->ScheduleContextMenu( this, aMenu, aTrigger );
 }
