@@ -469,6 +469,8 @@ void POINT_EDITOR::updateItem() const
             outline->SetY( i, point.y );
         }
 
+        outline->Hatch();
+
         break;
     }
 

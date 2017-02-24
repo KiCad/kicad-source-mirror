@@ -1440,6 +1440,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
 
                     zone->Outline()->CloseLastContour();
                     zone->Outline()->RemoveNullSegments();
+                    zone->Outline()->Hatch();
 
                     if( !aKeepout )
                         static_cast<PCB_EDIT_FRAME*>( m_frame )->Fill_Zone( zone.get() );

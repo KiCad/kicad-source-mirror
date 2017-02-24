@@ -966,6 +966,12 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
             m_gal->DrawPolyline( corners );
             corners.clear();
         }
+
+        for( unsigned ic = 0; ic < polygon->m_HatchLines.size(); ic++ )
+        {
+            auto& hatchLine = polygon->m_HatchLines[ic];
+            m_gal->DrawLine( hatchLine.m_Start, hatchLine.m_End );
+        }
     }
 
     // Draw the filling

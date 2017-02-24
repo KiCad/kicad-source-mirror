@@ -34,6 +34,7 @@
 #include <confirm.h>
 #include <wxPcbStruct.h>
 #include <board_commit.h>
+#include <view/view.h>
 
 #include <class_board.h>
 #include <class_zone.h>
@@ -854,7 +855,6 @@ static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     zone->DrawWhileCreateOutline( aPanel, aDC );
 }
 
-
 void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
 {
     ZONE_EDIT_T     edited;
@@ -914,6 +914,11 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     {
         ZONE_CONTAINER* edge_zone = GetBoard()->GetArea( ii );
         edge_zone->Draw( m_canvas, DC, GR_XOR );
+
+        if( IsGalCanvasActive() )
+        {
+            GetGalCanvas()->GetView()->Update( edge_zone );
+        }
     }
 
     zoneInfo.ExportSetting( *aZone );
@@ -928,6 +933,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
 
     // Redraw the real new zone outlines
     GetBoard()->RedrawAreasOutlines( m_canvas, DC, GR_OR, UNDEFINED_LAYER );
+
 
     UpdateCopyOfZonesList( s_PickedList, s_AuxiliaryList, GetBoard() );
     commit.Stage( s_PickedList );
