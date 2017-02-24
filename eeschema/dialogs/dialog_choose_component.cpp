@@ -55,6 +55,23 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     m_componentView->SetLayoutDirection( wxLayout_LeftToRight );
     m_dbl_click_timer = std::make_unique<wxTimer>( this );
 
+    // Search box styling. wxSearchBox can handle this, but it's buggy...
+    m_searchBox->SetHint( _( "Search" ) );
+    #if defined( __WXMAC__ ) || defined( __WINDOWS__ )
+    {
+        // On Linux, the "Search" hint disappears when the dialog is focused,
+        // meaning it's not present initially when the dialog opens. To ensure
+        // the box is understood, a search icon is also provided.
+        //
+        // The icon provided by wx is ugly on macOS and Windows, *plus* these
+        // ports display the "Search" hint in the empty field even when the
+        // field is focused. Therefore, the icon is not required on these
+        // platforms.
+        m_searchBoxIcon->Hide();
+        m_searchBoxIcon->GetParent()->Layout();
+    }
+    #endif // __WXMAC__
+
     // Initialize footprint preview through Kiway
     m_footprintPreviewPanel =
         FOOTPRINT_PREVIEW_PANEL::InstallOnPanel( Kiway(), m_footprintView, true );
@@ -68,6 +85,7 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
 #ifndef KICAD_FOOTPRINT_SELECTOR
     // Footprint chooser isn't implemented yet or isn't selected, don't show it.
     m_chooseFootprint->Hide();
+    m_chooseFootprint->GetParent()->Layout();
 #endif
 
     Bind( wxEVT_TIMER, &DIALOG_CHOOSE_COMPONENT::OnCloseTimer, this );

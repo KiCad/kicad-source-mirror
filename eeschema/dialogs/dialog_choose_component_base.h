@@ -15,15 +15,19 @@ class DIALOG_SHIM;
 class TWO_COLUMN_TREE_LIST;
 
 #include "dialog_shim.h"
-#include <wx/string.h>
-#include <wx/srchctrl.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/statbmp.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/string.h>
+#include <wx/textctrl.h>
+#include <wx/sizer.h>
 #include <wx/treelist.h>
 #include <wx/html/htmlwin.h>
-#include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/choice.h>
 #include <wx/splitter.h>
@@ -43,7 +47,8 @@ class DIALOG_CHOOSE_COMPONENT_BASE : public DIALOG_SHIM
 	protected:
 		wxSplitterWindow* m_splitter1;
 		wxPanel* m_panel3;
-		wxSearchCtrl* m_searchBox;
+		wxStaticBitmap* m_searchBoxIcon;
+		wxTextCtrl* m_searchBox;
 		TWO_COLUMN_TREE_LIST* m_libraryComponentTree;
 		wxHtmlWindow* m_componentDetails;
 		wxPanel* m_panel4;
@@ -58,8 +63,8 @@ class DIALOG_CHOOSE_COMPONENT_BASE : public DIALOG_SHIM
 		virtual void OnIdle( wxIdleEvent& event ) { event.Skip(); }
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnInterceptSearchBoxKey( wxKeyEvent& event ) { event.Skip(); }
-		virtual void OnSearchBoxEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSearchBoxChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSearchBoxEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnInterceptTreeEnter( wxKeyEvent& event ) { event.Skip(); }
 		virtual void OnDoubleClickTreeActivation( wxTreeListEvent& event ) { event.Skip(); }
 		virtual void OnTreeSelect( wxTreeListEvent& event ) { event.Skip(); }
