@@ -783,7 +783,7 @@ void PCB_PARSER::parseLayer( LAYER* aLayer ) throw( IO_ERROR, PARSE_ERROR )
     // this layer_num is not used, we DO depend on LAYER_T however.
     LAYER_NUM layer_num = parseInt( "layer index" );
 
-    NeedSYMBOL();
+    NeedSYMBOLorNUMBER();
     name = CurText();
 
     NeedSYMBOL();
