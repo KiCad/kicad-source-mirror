@@ -1176,7 +1176,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* bSizerPanelColorCode;
 	bSizerPanelColorCode = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxString m_rbToleranceSelectionChoices[] = { _("10%"), _("5%"), _("2%"), _("1%"), _("0.5%"), _("0.25%"), _("0.1%"), _("0.05%") };
+	wxString m_rbToleranceSelectionChoices[] = { _("10% / 5%"), _("<= 2%") };
 	int m_rbToleranceSelectionNChoices = sizeof( m_rbToleranceSelectionChoices ) / sizeof( wxString );
 	m_rbToleranceSelection = new wxRadioBox( m_panelColorCode, wxID_ANY, _("Tolerance"), wxDefaultPosition, wxDefaultSize, m_rbToleranceSelectionNChoices, m_rbToleranceSelectionChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbToleranceSelection->SetSelection( 0 );
@@ -1199,7 +1199,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_staticText35->Wrap( -1 );
 	fgSizerColoCode->Add( m_staticText35, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_Band4Label = new wxStaticText( m_panelColorCode, wxID_ANY, _("4rd Band"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Band4Label = new wxStaticText( m_panelColorCode, wxID_ANY, _("4th Band"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Band4Label->Wrap( -1 );
 	fgSizerColoCode->Add( m_Band4Label, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	

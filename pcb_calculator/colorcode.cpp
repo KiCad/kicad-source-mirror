@@ -36,25 +36,27 @@ void PCB_CALCULATOR_FRAME::OnToleranceSelection( wxCommandEvent& event )
 
 void PCB_CALCULATOR_FRAME::ToleranceSelection( int aSelection )
 {
-    /* For tolerance = 5 or 10 %, there are 3 ring for the value
-     * but for tolerance < 5 %, there are 4 ring
+    /* For tolerance = 5 or 10 %, there are 3 bands for the value
+     * but for tolerance < 5 %, there are 4 bands
      */
-    bool enable = true;
+    bool show4thBand;
     switch( aSelection )
     {
-        case 0:
-        case 1:
-            enable = false;
+        case 0: // 5 or 10 %
+            show4thBand = false;
             break;
-
-        default:
+        case 1: // < 5 %
+            show4thBand = true;
+            break;
+        default: // Show 4th band if something went wrong
+            show4thBand = true;
             break;
     }
     bool oldstate = m_Band4Label->IsShown();
-    if( oldstate != enable )
+    if( oldstate != show4thBand )
     {
-        m_Band4bitmap->Show(enable);
-        m_Band4Label->Show(enable);
+        m_Band4bitmap->Show(show4thBand);
+        m_Band4Label->Show(show4thBand);
         // m_Band4Label visibility has changed:
         // The new size must be taken in account
         m_panelColorCode->GetSizer()->Layout();

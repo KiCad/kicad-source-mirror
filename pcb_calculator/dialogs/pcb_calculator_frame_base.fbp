@@ -17732,7 +17732,7 @@
                                             <property name="caption"></property>
                                             <property name="caption_visible">1</property>
                                             <property name="center_pane">0</property>
-                                            <property name="choices">&quot;10%&quot; &quot;5%&quot; &quot;2%&quot; &quot;1%&quot; &quot;0.5%&quot; &quot;0.25%&quot; &quot;0.1%&quot; &quot;0.05%&quot;</property>
+                                            <property name="choices">&quot;10% / 5%&quot; &quot;&lt;= 2%&quot;</property>
                                             <property name="close_button">1</property>
                                             <property name="context_help"></property>
                                             <property name="context_menu">1</property>
@@ -18101,7 +18101,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_ANY</property>
-                                                    <property name="label">4rd Band</property>
+                                                    <property name="label">4th Band</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
