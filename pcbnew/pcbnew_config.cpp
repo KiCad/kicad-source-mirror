@@ -87,7 +87,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
         GetMenuBar()->SetLabel( ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR,
                                 m_show_microwave_tools ?
-                                _( "Hide Microwave Toolbar" ): _( "Show Microwave Toolbar" ));
+                                _( "Hide Microwa&ve Toolbar" ): _( "Show Microwa&ve Toolbar" ));
         break;
 
 

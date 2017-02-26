@@ -104,7 +104,7 @@ static BUTTONINDEX buttonGroups[] = {
     { wxT( "" ), NULL }
 };
 
-static COLORBUTTON bgColorButton = { _( "" ), LAYER_BACKGROUND };
+static COLORBUTTON bgColorButton = { "", LAYER_BACKGROUND };
 
 static COLOR4D currentColors[ LAYERSCH_ID_COUNT ];
 
