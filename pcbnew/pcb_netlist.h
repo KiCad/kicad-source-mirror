@@ -1,16 +1,9 @@
-#ifndef PCB_NETLIST_H
-#define PCB_NETLIST_H
-
-/**
- * @file pcb_netlist.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras.
  * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>.
- * Copyright (C) 2012-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +22,14 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#ifndef PCB_NETLIST_H
+#define PCB_NETLIST_H
+
+/**
+ * @file pcb_netlist.h
+ */
+
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <wx/arrstr.h>
@@ -179,7 +180,7 @@ public:
      * @return true if \a aFootprintName matches any of the footprint filters or no footprint
      *         filters are defined.
      */
-    bool MatchesFootprintFilters( const wxString& aFootprintName ) const;
+    bool MatchesFootprintFilters( const wxString& aLibraryName, const wxString& aFootprintName ) const;
 
     MODULE* GetModule( bool aRelease = false )
     {

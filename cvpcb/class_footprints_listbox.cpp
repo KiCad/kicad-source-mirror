@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,29 +150,40 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
             continue;
         }
 
+        // Filter footprints by selected library
         if( (aFilterType & FILTERING_BY_LIBRARY) && !aLibName.IsEmpty()
             && !aList.GetItem( ii ).InLibrary( aLibName ) )
             continue;
 
+        // Filter footprints by symbol fp-filters
         if( (aFilterType & FILTERING_BY_COMPONENT_KEYWORD) && aComponent
-            && !aComponent->MatchesFootprintFilters( aList.GetItem( ii ).GetFootprintName() ) )
+            && !aComponent->MatchesFootprintFilters( aList.GetItem( ii ).GetNickname(), aList.GetItem( ii ).GetFootprintName() ) )
             continue;
 
+        // Filter footprints by symbol pin-count
         if( (aFilterType & FILTERING_BY_PIN_COUNT) && aComponent
             && aComponent->GetNetCount() != aList.GetItem( ii ).GetUniquePadCount() )
             continue;
 
-        // We can search (Using case insensitive search) in full LIB_ID or only
-        // in the fp name itself.
-        // After tests, only in the fp name itself looks better.
-        // However, the code to take in account the nickname is just commented, no removed.
-        wxString currname = //aList.GetItem( ii ).GetNickname().Lower() + ":" +
-                            aList.GetItem( ii ).GetFootprintName().Lower();
-
-        if( (aFilterType & FILTERING_BY_NAME) && !aFootPrintFilterPattern.IsEmpty()
-            && patternFilter.Find( currname ) == EDA_PATTERN_NOT_FOUND )
+        // Filter footprints by text-input
+        if( (aFilterType & FILTERING_BY_NAME ) && !aFootPrintFilterPattern.IsEmpty() )
         {
-            continue;
+            wxString currname = "";
+
+            // If the search string contains a ':' character,
+            // include the library name in the search string
+            // e.g. LibName:FootprintName
+            if( aFootPrintFilterPattern.Contains( ":" ) )
+            {
+                currname = aList.GetItem( ii ).GetNickname().Lower() + ":";
+            }
+
+            currname += aList.GetItem( ii ).GetFootprintName().Lower();
+
+            if( patternFilter.Find( currname ) == EDA_PATTERN_NOT_FOUND )
+            {
+                continue;
+            }
         }
 
         msg.Printf( wxT( "%3d %s:%s" ), int( newList.GetCount() + 1 ),
