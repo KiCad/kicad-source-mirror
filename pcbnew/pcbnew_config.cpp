@@ -70,12 +70,12 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG:
+    case ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER:
         m_show_layer_manager_tools = ! m_show_layer_manager_tools;
         m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
         m_auimgr.Update();
 
-        GetMenuBar()->SetLabel( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+        GetMenuBar()->SetLabel( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER,
                                 m_show_layer_manager_tools ?
                                 _("Hide &Layers Manager" ) : _("Show &Layers Manager" ));
         break;

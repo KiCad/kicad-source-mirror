@@ -125,12 +125,12 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     preparePreferencesMenu( configmenu );
 
     // Update menu labels:
-    configmenu->SetLabel( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+    configmenu->SetLabel( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER,
                           m_show_layer_manager_tools ?
                           _( "Hide La&yers Manager" ) : _("Show La&yers Manager" ) );
     configmenu->SetLabel( ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR,
-                          m_show_layer_manager_tools ?
-                          _( "Hide Microwa&ve Toolbar" ): _( "Show Microwave Toolbar" ) );
+                          m_show_microwave_tools ?
+                          _( "Hide Microwa&ve Toolbar" ): _( "Show Microwa&ve Toolbar" ) );
 
 
     //--- dimensions submenu ------------------------------------------------------
@@ -192,13 +192,13 @@ void prepareDesignRulesMenu( wxMenu* aParentMenu )
 // Build the preferences menu
 void preparePreferencesMenu( wxMenu* aParentMenu )
 {
-    AddMenuItem( aParentMenu, ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
-                 wxEmptyString,     // The actual label will be set later
+    AddMenuItem( aParentMenu, ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER,
+                 _( "Hide La&yers Manager" ),
                  HELP_SHOW_HIDE_LAYERMANAGER,
                  KiBitmap( layers_manager_xpm ) );
 
     AddMenuItem( aParentMenu, ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR,
-                 wxEmptyString,     // The actual label will be set later
+                 _( "Hide Microwa&ve Toolbar" ),
                  HELP_SHOW_HIDE_MICROWAVE_TOOLS,
                  KiBitmap( mw_toolbar_xpm ) );
 #ifdef __WXMAC__
