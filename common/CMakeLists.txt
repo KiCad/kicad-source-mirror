@@ -193,6 +193,8 @@ set( COMMON_PREVIEW_ITEMS_SRCS
     preview_items/simple_overlay_item.cpp
     preview_items/selection_area.cpp
     preview_items/bright_box.cpp
+    preview_items/polygon_geom_manager.cpp
+    preview_items/polygon_item.cpp
     )
 
 set( COMMON_SRCS

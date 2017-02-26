@@ -38,6 +38,7 @@ namespace KIGFX
 class BOARD;
 class PCB_BASE_EDIT_FRAME;
 class DRAWSEGMENT;
+class POLYGON_GEOM_MANAGER;
 
 /**
  * Class DRAWING_TOOL
@@ -216,27 +217,6 @@ private:
     int drawZone( bool aKeepout, ZONE_MODE aMode );
 
     /**
-     * Function createNewZone()
-     *
-     * Prompt the user for new zone settings, and create a new zone with
-     * those settings
-     *
-     * @param aKeepout should the zone be a keepout
-     * @return the new zone, can be null if the user aborted
-     */
-    std::unique_ptr<ZONE_CONTAINER> createNewZone( bool aKeepout );
-
-    /**
-     * Function createZoneFromExisting
-     *
-     * Create a new zone with the settings from an existing zone
-     *
-     * @param aSrcZone the zone to copy settings from
-     * @return the new zone
-     */
-    std::unique_ptr<ZONE_CONTAINER> createZoneFromExisting( const ZONE_CONTAINER& aSrcZone );
-
-    /**
      * Function getSourceZoneForAction()
      *
      * Gets a source zone item for an action that takes an existing zone
@@ -252,15 +232,11 @@ private:
     bool getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER*& aZone );
 
     /**
-     * Function performZoneCutout()
-     *
-     * Cut one zone out of another one (i.e. subtraction) and
-     * update the zone.
-     *
-     * @param aExistingZone the zone to removed area from
-     * @param aCutout the area to remove
+     * Run the event loop for polygon creation, sending user input
+     * on to the given POLYGON_GEOM_MANAGER for processing into a
+     * complete polygon.
      */
-    void performZoneCutout( ZONE_CONTAINER& aExistingZone, ZONE_CONTAINER& aCutout );
+    void runPolygonEventLoop( POLYGON_GEOM_MANAGER& aPolyGeomMgr );
 
     /**
      * Function make45DegLine()
@@ -291,6 +267,10 @@ private:
 
     // How does line width change after one -/+ key press.
     static const unsigned int WIDTH_STEP;
+
+
+    // give internal access to drawing helper classes
+    friend class ZONE_CREATE_HELPER;
 };
 
 #endif /* __DRAWING_TOOL_H */
