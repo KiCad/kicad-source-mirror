@@ -47,6 +47,8 @@
 #include <bitmaps.h>
 #include <hotkeys.h>
 
+#include <preview_items/arc_assistant.h>
+
 #include <class_board.h>
 #include <class_edge_mod.h>
 #include <class_pcb_text.h>
@@ -119,6 +121,16 @@ TOOL_ACTION PCB_ACTIONS::arcPosture( "pcbnew.InteractiveDrawing.arcPosture",
         AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_POSTURE ),
         _( "Switch Arc Posture" ), _( "Switch the arc posture" ) );
 
+/*
+ * Contextual actions
+ */
+
+static TOOL_ACTION deleteLastPoint( "pcbnew.InteractiveDrawing.deleteLastPoint",
+        AS_CONTEXT, WXK_BACK,
+        _( "Delete Last Point" ), _( "Delete the last point added to the current item" ),
+        undo_xpm );
+
+
 DRAWING_TOOL::DRAWING_TOOL() :
     PCB_TOOL( "pcbnew.InteractiveDrawing" ),
     m_view( nullptr ), m_controls( nullptr ),
@@ -140,10 +152,18 @@ bool DRAWING_TOOL::Init()
         return m_mode != MODE::NONE;
     };
 
+    auto canUndoPoint = [ this ] ( const SELECTION& aSel ) {
+        return m_mode == MODE::ARC;
+    };
+
     auto& ctxMenu = m_menu.GetMenu();
 
     // cancel current toool goes in main context menu at the top if present
     ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolFunctor, 1000 );
+
+    // some interactive drawing tools can undo the last point
+    ctxMenu.AddItem( deleteLastPoint, canUndoPoint, 1000 );
+
     ctxMenu.AddSeparator( activeToolFunctor, 1000 );
 
     // Drawing type-specific options will be added by the PCB control tool
@@ -1039,138 +1059,98 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 }
 
 
+/**
+ * Update an arc DRAWSEGMENT from the current state
+ * of an Arc Geoemetry Manager
+ */
+static void updateArcFromConstructionMgr(
+        const KIGFX::PREVIEW::ARC_GEOM_MANAGER& aMgr,
+        DRAWSEGMENT& aArc )
+{
+    auto vec = aMgr.GetOrigin();
+
+    aArc.SetCenter( { vec.x, vec.y } );
+
+    vec = aMgr.GetStartRadiusEnd();
+    aArc.SetArcStart( { vec.x, vec.y } );
+
+    aArc.SetAngle( RAD2DECIDEG( -aMgr.GetSubtended() ) );
+}
+
+
 bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
 {
-    bool clockwise = true;      // drawing direction of the arc
-    double startAngle = 0.0f;   // angle of the first arc line
-    VECTOR2I cursorPos = m_controls->GetCursorPosition();
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    // Line from the arc center to its origin, to visualize its radius
-    DRAWSEGMENT helperLine;
-    helperLine.SetShape( S_SEGMENT );
-    helperLine.SetLayer( Dwgs_User );
-    helperLine.SetWidth( 1 );
+    // Arc geometric construction manager
+    KIGFX::PREVIEW::ARC_GEOM_MANAGER arcManager;
+
+    // Arc drawing assistant overlay
+    KIGFX::PREVIEW::ARC_ASSISTANT arcAsst( arcManager );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     SELECTION preview;
     m_view->Add( &preview );
+    m_view->Add( &arcAsst );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
     Activate();
 
-    enum ARC_STEPS
-    {
-        SET_ORIGIN = 0,
-        SET_END,
-        SET_ANGLE,
-        FINISHED
-    };
-    int step = SET_ORIGIN;
+    bool firstPoint = false;
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        cursorPos = m_controls->GetCursorPosition();
+        const VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( evt->IsClick( BUT_LEFT ) )
+        {
+            if( !firstPoint )
+            {
+                m_controls->SetAutoPan( true );
+                m_controls->CaptureCursor( true );
+
+                LAYER_ID layer = getDrawingLayer();
+
+                // Init the new item attributes
+                // (non-geometric, those are handled by the manager)
+                aGraphic->SetShape( S_ARC );
+                aGraphic->SetWidth( m_lineWidth );
+                aGraphic->SetLayer( layer );
+
+                preview.Add( aGraphic );
+                firstPoint = true;
+            }
+
+            arcManager.AddPoint( cursorPos, true );
+        }
+
+        else if( evt->IsAction( &deleteLastPoint ) )
+        {
+            arcManager.RemoveLastPoint();
+        }
+
+        else if( evt->IsMotion() )
+        {
+            // set angle snap
+            arcManager.SetAngleSnap( evt->Modifier( MD_CTRL ) );
+
+            // update, but don't step the manager state
+            arcManager.AddPoint( cursorPos, false );
+        }
+
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             preview.Clear();
             delete aGraphic;
-            aGraphic = NULL;
+            aGraphic = nullptr;
             break;
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu();
-        }
-        else if( evt->IsClick( BUT_LEFT ) )
-        {
-            switch( step )
-            {
-            case SET_ORIGIN:
-            {
-                LAYER_ID layer = getDrawingLayer();
-
-                // Init the new item attributes
-                aGraphic->SetShape( S_ARC );
-                aGraphic->SetAngle( 0.0 );
-                aGraphic->SetWidth( m_lineWidth );
-                aGraphic->SetCenter( wxPoint( cursorPos.x, cursorPos.y ) );
-                aGraphic->SetLayer( layer );
-
-                helperLine.SetStart( aGraphic->GetCenter() );
-                helperLine.SetEnd( aGraphic->GetCenter() );
-
-                preview.Add( aGraphic );
-                preview.Add( &helperLine );
-
-                m_controls->SetAutoPan( true );
-                m_controls->CaptureCursor( true );
-            }
-            break;
-
-            case SET_END:
-            {
-                if( wxPoint( cursorPos.x, cursorPos.y ) != aGraphic->GetCenter() )
-                {
-                    VECTOR2D startLine( aGraphic->GetArcStart() - aGraphic->GetCenter() );
-                    startAngle = startLine.Angle();
-                    aGraphic->SetArcStart( wxPoint( cursorPos.x, cursorPos.y ) );
-                }
-                else
-                    --step;     // one another chance to draw a proper arc
-            }
-            break;
-
-            case SET_ANGLE:
-            {
-                if( wxPoint( cursorPos.x, cursorPos.y ) != aGraphic->GetArcStart() && aGraphic->GetAngle() != 0 )
-                {
-                    assert( aGraphic->GetArcStart() != aGraphic->GetArcEnd() );
-                    assert( aGraphic->GetWidth() > 0 );
-
-                    preview.Remove( aGraphic );
-                    preview.Remove( &helperLine );
-                }
-                else
-                    --step;     // one another chance to draw a proper arc
-            }
-            break;
-            }
-
-            if( ++step == FINISHED )
-                break;
-        }
-
-        else if( evt->IsMotion() )
-        {
-            switch( step )
-            {
-            case SET_END:
-                helperLine.SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
-                aGraphic->SetArcStart( wxPoint( cursorPos.x, cursorPos.y ) );
-                break;
-
-            case SET_ANGLE:
-            {
-                VECTOR2D endLine( wxPoint( cursorPos.x, cursorPos.y ) - aGraphic->GetCenter() );
-                double newAngle = RAD2DECIDEG( endLine.Angle() - startAngle );
-
-                // Adjust the new angle to (counter)clockwise setting
-                if( clockwise && newAngle < 0.0 )
-                    newAngle += 3600.0;
-                else if( !clockwise && newAngle > 0.0 )
-                    newAngle -= 3600.0;
-
-                aGraphic->SetAngle( newAngle );
-            }
-            break;
-            }
-
-            m_view->Update( &preview );
         }
 
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
@@ -1189,19 +1169,26 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
 
         else if( evt->IsAction( &PCB_ACTIONS::arcPosture ) )
         {
-            if( clockwise )
-                aGraphic->SetAngle( aGraphic->GetAngle() - 3600.0 );
-            else
-                aGraphic->SetAngle( aGraphic->GetAngle() + 3600.0 );
+            arcManager.ToggleClockwise();
+        }
 
-            clockwise = !clockwise;
+        if( arcManager.IsComplete() )
+        {
+            break;
+        }
+        else if( arcManager.HasGeometryChanged() )
+        {
+            updateArcFromConstructionMgr( arcManager, *aGraphic );
             m_view->Update( &preview );
+            m_view->Update( &arcAsst );
         }
     }
 
+    preview.Remove( aGraphic );
+    m_view->Remove( &arcAsst );
     m_view->Remove( &preview );
 
-    return ( step > SET_ORIGIN );
+    return !arcManager.IsReset();
 }
 
 
