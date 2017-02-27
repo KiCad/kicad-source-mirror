@@ -28,11 +28,12 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::InstallOnPanel(
 {
     FOOTPRINT_PREVIEW_PANEL* fpp = NULL;
 
-    KIFACE* kiface = aKiway.KiFACE( KIWAY::FACE_PCB );
-    if( !kiface )
-        return NULL;
-
     try {
+        KIFACE* kiface = aKiway.KiFACE( KIWAY::FACE_PCB );
+
+        if( !kiface )
+            return NULL;
+
         fpp = static_cast<FOOTPRINT_PREVIEW_PANEL*>(
                 kiface->CreateWindow( aPanel, FRAME_PCB_FOOTPRINT_PREVIEW, &aKiway ) );
     } catch( ... )
