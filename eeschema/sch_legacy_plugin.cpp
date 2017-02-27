@@ -2905,42 +2905,46 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr< LIB_PART >& aPart,
         if( parseInt( aReader, line, &line ) > 0 )
             text->SetBold( true );
 
-        switch( parseChar( aReader, line, &line ) )
+        // Some old libaries version > 2.0 do not have these options for text justification:
+        if( !is_eol( *line ) )
         {
-        case 'L':
-            text->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-            break;
+            switch( parseChar( aReader, line, &line ) )
+            {
+            case 'L':
+                text->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                break;
 
-        case 'C':
-            text->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
-            break;
+            case 'C':
+                text->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+                break;
 
-        case 'R':
-            text->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-            break;
+            case 'R':
+                text->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                break;
 
-        default:
-            SCH_PARSE_ERROR( _( "invalid horizontal text justication parameter, expected L, C, or R" ),
-                             aReader, line );
-        }
+            default:
+                SCH_PARSE_ERROR( _( "invalid horizontal text justication parameter, expected L, C, or R" ),
+                                 aReader, line );
+            }
 
-        switch( parseChar( aReader, line, &line ) )
-        {
-        case 'T':
-            text->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-            break;
+            switch( parseChar( aReader, line, &line ) )
+            {
+            case 'T':
+                text->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+                break;
 
-        case 'C':
-            text->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
-            break;
+            case 'C':
+                text->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+                break;
 
-        case 'B':
-            text->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-            break;
+            case 'B':
+                text->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+                break;
 
-        default:
-            SCH_PARSE_ERROR( _( "invalid vertical text justication parameter, expected T, C, or B" ),
-                             aReader, line );
+            default:
+                SCH_PARSE_ERROR( _( "invalid vertical text justication parameter, expected T, C, or B" ),
+                                 aReader, line );
+            }
         }
     }
 
