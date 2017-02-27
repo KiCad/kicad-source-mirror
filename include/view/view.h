@@ -79,9 +79,11 @@ public:
     /**
      * Function Add()
      * Adds a VIEW_ITEM to the view.
+     * Set aDrawPriority to -1 to assign sequential priorities.
      * @param aItem: item to be added. No ownership is given
+     * @param aDrawPriority: priority to draw this item on its layer, lowest first.
      */
-    void Add( VIEW_ITEM* aItem );
+    void Add( VIEW_ITEM* aItem, int aDrawPriority = -1 );
 
     /**
      * Function Remove()
@@ -617,6 +619,24 @@ public:
 
     const BOX2I CalculateExtents() ;
 
+    /**
+     * Function IsUsingDrawPriority()
+     * @return true if draw priority is being respected while redrawing.
+     */
+    bool IsUsingDrawPriority() const
+    {
+        return m_useDrawPriority;
+    }
+
+    /**
+     * Function UseDrawPriority()
+     * @param aFlag is true if draw priority should be respected while redrawing.
+     */
+    void UseDrawPriority( bool aFlag )
+    {
+        m_useDrawPriority = aFlag;
+    }
+
     static const int VIEW_MAX_LAYERS = 256;      ///< maximum number of layers that may be shown
 
 private:
@@ -776,6 +796,12 @@ private:
 
     /// Flat list of all items
     std::vector<VIEW_ITEM*> m_allItems;
+
+    /// Flag to respect draw priority when drawing items
+    bool m_useDrawPriority;
+
+    /// The next sequential drawing priority
+    int m_nextDrawPriority;
 };
 } // namespace KIGFX
 

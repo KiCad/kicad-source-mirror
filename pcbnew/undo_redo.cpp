@@ -477,7 +477,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* newModule = static_cast<MODULE*>( item );
-                newModule->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1 ) );
+                newModule->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1, -1 ) );
                 newModule->RunOnChildren( std::bind( &BOARD_ITEM::ClearFlags, _1, EDA_ITEM_ALL_FLAGS ));
             }
 
@@ -508,7 +508,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* module = static_cast<MODULE*>( item );
-                module->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1) );
+                module->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1, -1 ) );
             }
 
             view->Add( item );

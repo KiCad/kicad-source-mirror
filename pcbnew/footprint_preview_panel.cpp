@@ -202,7 +202,7 @@ void FOOTPRINT_PREVIEW_PANEL::renderFootprint(  MODULE *module )
     Freeze();
     GetView()->Clear();
     module->SetParent ( &*m_dummyBoard );
-    module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, GetView(), _1 ) );
+    module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, GetView(), _1, -1 ) );
 
     GetView()->Add ( module );
 

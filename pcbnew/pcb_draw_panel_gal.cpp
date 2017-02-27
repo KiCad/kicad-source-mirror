@@ -150,7 +150,7 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( const BOARD* aBoard )
     // Load modules and its additional elements
     for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
     {
-        module->RunOnChildren( std::bind( &KIGFX::VIEW::Add, m_view, _1 ) );
+        module->RunOnChildren( std::bind( &KIGFX::VIEW::Add, m_view, _1, -1 ) );
         m_view->Add( module );
     }
 

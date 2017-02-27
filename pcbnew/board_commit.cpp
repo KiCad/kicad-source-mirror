@@ -117,7 +117,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
                     if( boardItem->Type() == PCB_MODULE_T )
                     {
                         MODULE* mod = static_cast<MODULE*>( boardItem );
-                        mod->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1 ) );
+                        mod->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1, -1 ) );
                     }
                 }
                 else
@@ -327,7 +327,7 @@ void BOARD_COMMIT::Revert()
             {
                 MODULE* newModule = static_cast<MODULE*>( item );
                 newModule->RunOnChildren( std::bind( &EDA_ITEM::ClearFlags, _1, SELECTED ) );
-                newModule->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1 ) );
+                newModule->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1, -1 ) );
             }
 
             view->Add( item );
@@ -355,7 +355,7 @@ void BOARD_COMMIT::Revert()
             {
                 MODULE* newModule = static_cast<MODULE*>( item );
                 newModule->RunOnChildren( std::bind( &EDA_ITEM::ClearFlags, _1, SELECTED ) );
-                newModule->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1 ) );
+                newModule->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1, -1 ) );
             }
 
             view->Add( item );
