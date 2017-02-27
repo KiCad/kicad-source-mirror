@@ -2393,9 +2393,6 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::loadPart( FILE_LINE_READER& aReader )
     if( !part->HasAlias( part->GetName() ) )
         part->AddAlias( part->GetName() );
 
-    // Add the root alias to the cache alias list.
-    m_aliases[ part->GetName() ] = part->GetAlias( part->GetName() );
-
     LIB_FIELD& reference = part->GetReferenceField();
 
     if( prefix == "~" )
@@ -2461,6 +2458,8 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::loadPart( FILE_LINE_READER& aReader )
             loadFootprintFilters( part, aReader );
         else if( strCompare( "ENDDEF", line, &line ) )   // End of part description
         {
+            // Now all is good, Add the root alias to the cache alias list.
+            m_aliases[ part->GetName() ] = part->GetAlias( part->GetName() );
             return part.release();
         }
 
