@@ -3392,12 +3392,7 @@ bool SCH_LEGACY_PLUGIN::writeDocFile( const PROPERTIES* aProperties )
 
 bool SCH_LEGACY_PLUGIN::isBuffering( const PROPERTIES* aProperties )
 {
-    std::string propName( SCH_LEGACY_PLUGIN::PropBuffering );
-
-    if( aProperties && aProperties->find( propName ) != aProperties->end() )
-        return true;
-
-    return false;
+    return ( aProperties && aProperties->Exists( SCH_LEGACY_PLUGIN::PropBuffering ) );
 }
 
 

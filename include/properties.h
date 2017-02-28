@@ -36,6 +36,15 @@ class PROPERTIES : public std::map< std::string, UTF8 >
     // alphabetical tuple of name and value hereby defined.
 
 public:
+    bool Clear( const std::string& aProperty )
+    {
+        return erase( aProperty ) > 0;
+    }
+
+    bool Exists( const std::string& aProperty ) const
+    {
+        return count( aProperty ) > 0;
+    }
 
     /**
      * Function Value
