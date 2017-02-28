@@ -21,14 +21,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "tool_menu.h"
+#include <draw_frame.h>
+
+#include <tool/tool_menu.h>
+#include <tool/tool_interactive.h>
 
 #include <tool/context_menu.h>
 
-#include "pcb_actions.h"
-#include "zoom_menu.h"
-#include "grid_menu.h"
-#include "selection_tool.h"    // For SELECTION
+#include <tool/actions.h>
+#include <tool/zoom_menu.h>
+#include <tool/grid_menu.h>
+#include <tool/selection.h>
 
 
 TOOL_MENU::TOOL_MENU( TOOL_INTERACTIVE& aTool ) :

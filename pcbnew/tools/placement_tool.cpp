@@ -133,8 +133,10 @@ int PLACEMENT_TOOL::AlignTop( const TOOL_EVENT& aEvent )
     }
 
     // Move the selected items
-    for( auto item : selection )
+    for( auto i : selection )
     {
+        auto item = static_cast<BOARD_ITEM*>( i );
+
         int difference = top - item->GetBoundingBox().GetY();
 
         item->Move( wxPoint( 0, difference ) );
@@ -168,8 +170,10 @@ int PLACEMENT_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
     }
 
     // Move the selected items
-    for( auto item : selection )
+    for( auto i : selection )
     {
+        auto item = static_cast<BOARD_ITEM*>( i );
+
         int difference = bottom - item->GetBoundingBox().GetBottom();
 
         item->Move( wxPoint( 0, difference ) );
@@ -203,8 +207,10 @@ int PLACEMENT_TOOL::AlignLeft( const TOOL_EVENT& aEvent )
     }
 
     // Move the selected items
-    for( auto item : selection )
+    for( auto i : selection )
     {
+        auto item = static_cast<BOARD_ITEM*>( i );
+
         int difference = left - item->GetBoundingBox().GetX();
 
         item->Move( wxPoint( difference, 0 ) );
@@ -238,8 +244,10 @@ int PLACEMENT_TOOL::AlignRight( const TOOL_EVENT& aEvent )
     }
 
     // Move the selected items
-    for( auto item : selection )
+    for( auto i : selection )
     {
+        auto item = static_cast<BOARD_ITEM*>( i );
+
         int difference = right - item->GetBoundingBox().GetRight();
 
         item->Move( wxPoint( difference, 0 ) );
@@ -277,7 +285,7 @@ int PLACEMENT_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
     std::vector<BOARD_ITEM*> itemsList;
 
     for( auto item : selection )
-        itemsList.push_back( item );
+        itemsList.push_back( static_cast<BOARD_ITEM*>( item ) );
 
     // Sort items by X coordinate
     std::sort(itemsList.begin(), itemsList.end(), compareX );
@@ -320,7 +328,7 @@ int PLACEMENT_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
     std::vector<BOARD_ITEM*> itemsList;
 
     for( auto item : selection )
-        itemsList.push_back( item );
+        itemsList.push_back( static_cast<BOARD_ITEM*>( item ) );
 
     // Sort items by Y coordinate
     std::sort( itemsList.begin(), itemsList.end(), compareY );

@@ -974,7 +974,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     // Start dragging the appended board
     SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     const SELECTION& selection = selectionTool->GetSelection();
-    VECTOR2D v( selection.Front()->GetPosition() );
+    VECTOR2D v( static_cast<BOARD_ITEM*>( selection.Front() )->GetPosition() );
     getViewControls()->WarpCursor( v, true, true );
     m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
 

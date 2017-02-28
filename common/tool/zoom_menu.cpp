@@ -3,7 +3,6 @@
  *
  * Copyright (C) 2015 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,49 +22,52 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "grid_menu.h"
+#include <tool/zoom_menu.h>
 #include <id.h>
 #include <draw_frame.h>
 #include <class_base_screen.h>
-#include <tools/pcb_actions.h>
+#include <tool/actions.h>
 #include <bitmaps.h>
 
 #include <functional>
 using namespace std::placeholders;
 
-GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) : m_parent( aParent )
+ZOOM_MENU::ZOOM_MENU( EDA_DRAW_FRAME* aParent ) : m_parent( aParent )
 {
     BASE_SCREEN* screen = aParent->GetScreen();
 
-    SetTitle( _( "Grid" ) );
-    SetIcon( grid_select_xpm );
+    SetTitle( _( "Zoom" ) );
+    SetIcon( zoom_selection_xpm );
 
-    wxArrayString gridsList;
-    screen->BuildGridsChoiceList( gridsList, g_UserUnit != INCHES );
+    //int zoom = screen->GetZoom();
+    int maxZoomIds = std::min( ID_POPUP_ZOOM_LEVEL_END - ID_POPUP_ZOOM_LEVEL_START,
+                               (int) screen->m_ZoomList.size() );
 
-    for( unsigned int i = 0; i < gridsList.GetCount(); ++i )
+    for( int i = 0; i < maxZoomIds; ++i )
     {
-        GRID_TYPE& grid = screen->GetGrid( i );
-        Append( grid.m_CmdId, gridsList[i], wxEmptyString, wxITEM_CHECK );
+        Append( ID_POPUP_ZOOM_LEVEL_START + i,
+            wxString::Format( _( "Zoom: %.2f" ), aParent->GetZoomLevelCoeff() / screen->m_ZoomList[i] ),
+            wxEmptyString, wxITEM_CHECK );
     }
 }
 
 
-OPT_TOOL_EVENT GRID_MENU::eventHandler( const wxMenuEvent& aEvent )
+OPT_TOOL_EVENT ZOOM_MENU::eventHandler( const wxMenuEvent& aEvent )
 {
-    OPT_TOOL_EVENT event( ACTIONS::gridPreset.MakeEvent() );
-    intptr_t idx = aEvent.GetId() - ID_POPUP_GRID_SELECT - 1;
+    OPT_TOOL_EVENT event( ACTIONS::zoomPreset.MakeEvent() );
+    intptr_t idx = aEvent.GetId() - ID_POPUP_ZOOM_LEVEL_START;
     event->SetParameter( idx );
 
     return event;
 }
 
 
-void GRID_MENU::update()
+void ZOOM_MENU::update()
 {
-    for( unsigned int i = 0; i < GetMenuItemCount(); ++i )
-        Check( ID_POPUP_GRID_SELECT + 1 + i, false );
+    double zoom = m_parent->GetScreen()->GetZoom();
+    const std::vector<double>& zoomList = m_parent->GetScreen()->m_ZoomList;
 
-    // Check the current grid size
-    Check( m_parent->GetScreen()->GetGridCmdId(), true );
+    // Check the current zoom
+    for( unsigned int i = 0; i < GetMenuItemCount(); ++i )
+        Check( ID_POPUP_ZOOM_LEVEL_START + i, std::fabs( zoomList[i] - zoom ) < 1e-6 );
 }

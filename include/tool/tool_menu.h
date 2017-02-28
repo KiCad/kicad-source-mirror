@@ -24,8 +24,8 @@
 #ifndef TOOLS_TOOL_MENU__H_
 #define TOOLS_TOOL_MENU__H_
 
-#include "conditional_menu.h"
-#include "pcb_tool.h"
+#include <tool/conditional_menu.h>
+#include <tool/tool_event.h>
 
 #include <vector>
 #include <memory>

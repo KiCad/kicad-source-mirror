@@ -337,7 +337,7 @@ SELECTION& SELECTION_TOOL::GetSelection()
     // Filter out not modifiable items
     for( auto item : items )
     {
-        if( !modifiable( item ) )
+        if( !modifiable( static_cast<BOARD_ITEM*>( item ) ) )
         {
             m_selection.Remove( item );
         }
@@ -506,7 +506,7 @@ bool SELECTION_TOOL::selectMultiple()
             }
 
             if( m_selection.Size() == 1 )
-                m_frame->SetCurItem( m_selection.Front() );
+                m_frame->SetCurItem( static_cast<BOARD_ITEM*>( m_selection.Front() ) );
             else
                 m_frame->SetCurItem( NULL );
 
@@ -687,8 +687,9 @@ int SELECTION_TOOL::selectCopper( const TOOL_EVENT& aEvent )
     // copy the selection, since we're going to iterate and modify
     auto selection = m_selection.GetItems();
 
-    for( auto item : selection )
+    for( auto i : selection )
     {
+        auto item = static_cast<BOARD_ITEM*>( i );
         // only connected items can be traversed in the ratsnest
         if ( item->IsConnected() )
         {
@@ -751,8 +752,9 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
     // copy the selection, since we're going to iterate and modify
     auto selection = m_selection.GetItems();
 
-    for( auto item : selection )
+    for( auto i : selection )
     {
+        auto item = static_cast<BOARD_ITEM*>( i );
         // only connected items get a net code
         if( item->IsConnected() )
         {
@@ -794,19 +796,19 @@ int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
     std::list<MODULE*> modList;
 
     // store all modules that are on that sheet
-    for( MODULE* item = modules; item; item = item->Next() )
+    for( MODULE* mitem = modules; mitem; mitem = mitem->Next() )
     {
-        if ( item != NULL && item->GetPath().Contains( sheetPath ) )
+        if ( mitem != NULL && mitem->GetPath().Contains( sheetPath ) )
         {
-            modList.push_back( item );
+            modList.push_back( mitem );
         }
     }
 
     //Generate a list of all pads, and of all nets they belong to.
     std::list<int> netcodeList;
-    for( MODULE* mod : modList )
+    for( MODULE* mmod : modList )
     {
-        for( D_PAD* pad = mod->Pads().GetFirst(); pad; pad = pad->Next() )
+        for( D_PAD* pad = mmod->Pads().GetFirst(); pad; pad = pad->Next() )
         {
             if( pad->IsConnected() )
             {
@@ -828,9 +830,9 @@ int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
     {
         std::list<BOARD_CONNECTED_ITEM*> netPads;
         ratsnest->GetNetItems( netCode, netPads, (RN_ITEM_TYPE)( RN_PADS ) );
-        for( BOARD_CONNECTED_ITEM* item : netPads )
+        for( BOARD_CONNECTED_ITEM* mitem : netPads )
         {
-            bool found = ( std::find( modList.begin(), modList.end(), item->GetParent() ) != modList.end() );
+            bool found = ( std::find( modList.begin(), modList.end(), mitem->GetParent() ) != modList.end() );
             if( !found )
             {
                 // if we cannot find the module of the pad in the modList
@@ -1044,8 +1046,9 @@ int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
 
     // copy selection items from the saved selection
     // according to the dialog options
-    for( auto item : selection )
+    for( auto i : selection )
     {
+        auto item = static_cast<BOARD_ITEM*>( i );
         bool include = itemIsIncludedByFilter( *item, board, layerMask, opts );
 
         if( include )
@@ -1063,7 +1066,7 @@ void SELECTION_TOOL::clearSelection()
         return;
 
     for( auto item : m_selection )
-        unselectVisually( item );
+        unselectVisually( static_cast<BOARD_ITEM*>( item ) );
 
     m_selection.Clear();
 
@@ -1704,8 +1707,9 @@ bool SELECTION_TOOL::SanitizeSelection()
 
     if( !m_editModules )
     {
-        for( auto item : m_selection )
+        for( auto i : m_selection )
         {
+            auto item = static_cast<BOARD_ITEM*>( i );
             if( item->Type() == PCB_PAD_T )
             {
                 MODULE* mod = static_cast<MODULE*>( item->GetParent() );
@@ -1748,13 +1752,14 @@ bool SELECTION_TOOL::SanitizeSelection()
 }
 
 
+// TODO(JE) Only works for BOARD_ITEM
 VECTOR2I SELECTION::GetCenter() const
 {
     VECTOR2I centre;
 
     if( Size() == 1 )
     {
-        centre = Front()->GetCenter();
+        centre = static_cast<BOARD_ITEM*>( Front() )->GetCenter();
     }
     else
     {

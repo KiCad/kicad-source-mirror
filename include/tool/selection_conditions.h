@@ -29,7 +29,7 @@
 #include <core/typeinfo.h>
 #include <vector>
 
-struct SELECTION;
+#include <tool/selection.h>
 
 ///> Functor type that checks a specific condition for selected items.
 typedef std::function<bool (const SELECTION&)> SELECTION_CONDITION;
@@ -65,33 +65,6 @@ public:
      * @return True if there is at least one item selected.
      */
     static bool NotEmpty( const SELECTION& aSelection );
-
-    /**
-     * Function OnlyConnectedItems
-     * Tests if selection contains exclusively connected items (pads, tracks, vias, zones).
-     * @param aSelection is the selection to be tested.
-     * @return True if there are only connected items connected.
-     */
-    static bool OnlyConnectedItems( const SELECTION& aSelection );
-
-    /**
-     * Function SameNet
-     * Creates a functor that tests if selection contains items belonging to the same net or are
-     * unconnected if aAllowUnconnected == true.
-     * @param aAllowUnconnected determines if unconnected items (with no net code assigned) should
-     * be treated as connected to the same net.
-     * @return Functor testing if selected items are belonging to the same net.
-     */
-    static SELECTION_CONDITION SameNet( bool aAllowUnconnected = false );
-
-    /**
-     * Function SameLayer
-     * Creates a functor that tests if selection contains items that belong exclusively to the same
-     * layer. In case of items belonging to multiple layers, it is enough to have a single common
-     * layer with other items.
-     * @return Functor testing if selected items share at least one common layer.
-     */
-    static SELECTION_CONDITION SameLayer();
 
     /**
      * Function HasType
@@ -154,12 +127,6 @@ public:
     static SELECTION_CONDITION LessThan( int aNumber );
 
 private:
-    ///> Helper function used by SameNet()
-    static bool sameNetFunc( const SELECTION& aSelection, bool aAllowUnconnected );
-
-    ///> Helper function used by SameLayer()
-    static bool sameLayerFunc( const SELECTION& aSelection );
-
     ///> Helper function used by HasType()
     static bool hasTypeFunc( const SELECTION& aSelection, KICAD_T aType );
 

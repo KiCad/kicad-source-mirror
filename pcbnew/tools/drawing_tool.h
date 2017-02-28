@@ -28,7 +28,7 @@
 #include <tools/pcb_tool.h>
 #include <boost/optional.hpp>
 
-#include "tool_menu.h"
+#include <tool/tool_menu.h>
 
 namespace KIGFX
 {

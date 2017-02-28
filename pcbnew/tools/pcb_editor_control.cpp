@@ -199,8 +199,8 @@ private:
         // lines like this make me really think about a better name for SELECTION_CONDITIONS class
         bool mergeEnabled = ( SELECTION_CONDITIONS::MoreThan( 1 ) &&
                               /*SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T ) &&*/
-                              SELECTION_CONDITIONS::SameNet( true ) &&
-                              SELECTION_CONDITIONS::SameLayer() )( selTool->GetSelection() );
+                              PCB_SELECTION_CONDITIONS::SameNet( true ) &&
+                              PCB_SELECTION_CONDITIONS::SameLayer() )( selTool->GetSelection() );
 
         Enable( getMenuId( PCB_ACTIONS::zoneMerge ), mergeEnabled );
     }
@@ -523,8 +523,9 @@ int PCB_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 
     bool modified = false;
 
-    for( auto item : selection )
+    for( auto i : selection )
     {
+        auto item = static_cast<BOARD_ITEM*>( i );
         bool prevState = item->IsLocked();
 
         switch( aMode )
@@ -923,7 +924,7 @@ int PCB_EDITOR_CONTROL::CrossProbePcbToSch( const TOOL_EVENT& aEvent )
     const SELECTION& selection = selTool->GetSelection();
 
     if( selection.Size() == 1 )
-        m_frame->SendMessageToEESCHEMA( selection.Front() );
+        m_frame->SendMessageToEESCHEMA( static_cast<BOARD_ITEM*>( selection.Front() ) );
 
     return 0;
 }

@@ -46,12 +46,13 @@ using namespace std::placeholders;
 #include <tool/context_menu.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_settings.h>
+#include <tool/grid_menu.h>
+
+#include <tool/zoom_menu.h>
 #include <tools/pcb_actions.h>
 #include <tools/size_menu.h>
 #include <tools/selection_tool.h>
 #include <tools/edit_tool.h>
-#include <tools/grid_menu.h>
-#include <tools/zoom_menu.h>
 #include <tools/tool_event_utils.h>
 
 #include <ratsnest_data.h>

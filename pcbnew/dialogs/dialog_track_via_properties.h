@@ -27,7 +27,7 @@
 #include <boost/optional.hpp>
 #include <layers_id_colors_and_visibility.h>
 
-struct SELECTION;
+class SELECTION;
 class COMMIT;
 
 class PCB_BASE_FRAME;

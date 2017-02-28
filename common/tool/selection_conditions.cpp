@@ -22,9 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "selection_conditions.h"
-#include "selection_tool.h"
-#include <class_board_connected_item.h>
+
+#include <tool/selection.h>
+#include <tool/selection_conditions.h>
 
 #include <functional>
 using namespace std::placeholders;
@@ -33,35 +33,6 @@ using namespace std::placeholders;
 bool SELECTION_CONDITIONS::NotEmpty( const SELECTION& aSelection )
 {
     return !aSelection.Empty();
-}
-
-
-bool SELECTION_CONDITIONS::OnlyConnectedItems( const SELECTION& aSelection )
-{
-    if( aSelection.Empty() )
-        return false;
-
-    for( const auto &item : aSelection )
-    {
-        auto type = item->Type();
-
-        if( type != PCB_PAD_T && type != PCB_VIA_T && type != PCB_TRACE_T && type != PCB_ZONE_T )
-            return false;
-    }
-
-    return true;
-}
-
-
-SELECTION_CONDITION SELECTION_CONDITIONS::SameNet( bool aAllowUnconnected )
-{
-    return std::bind( &SELECTION_CONDITIONS::sameNetFunc, _1, aAllowUnconnected );
-}
-
-
-SELECTION_CONDITION SELECTION_CONDITIONS::SameLayer()
-{
-    return std::bind( &SELECTION_CONDITIONS::sameLayerFunc, _1 );
 }
 
 
@@ -104,72 +75,6 @@ SELECTION_CONDITION SELECTION_CONDITIONS::MoreThan( int aNumber )
 SELECTION_CONDITION SELECTION_CONDITIONS::LessThan( int aNumber )
 {
     return std::bind( &SELECTION_CONDITIONS::lessThanFunc, _1, aNumber );
-}
-
-
-bool SELECTION_CONDITIONS::sameNetFunc( const SELECTION& aSelection, bool aAllowUnconnected )
-{
-    if( aSelection.Empty() )
-        return false;
-
-    int netcode = -1;   // -1 stands for 'net code is not yet determined'
-
-    for( const auto& aitem : aSelection )
-    {
-        int current_netcode = -1;
-
-        const BOARD_CONNECTED_ITEM* item =
-            dynamic_cast<const BOARD_CONNECTED_ITEM*>( aitem );
-
-        if( item )
-        {
-            current_netcode = item->GetNetCode();
-        }
-        else
-        {
-            if( !aAllowUnconnected )
-                return false;
-            else
-                // if it is not a BOARD_CONNECTED_ITEM, treat it as if there was no net assigned
-                current_netcode = 0;
-        }
-
-        assert( current_netcode >= 0 );
-
-        if( netcode < 0 )
-        {
-            netcode = current_netcode;
-
-            if( netcode == NETINFO_LIST::UNCONNECTED && !aAllowUnconnected )
-                return false;
-        }
-        else if( netcode != current_netcode )
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-
-bool SELECTION_CONDITIONS::sameLayerFunc( const SELECTION& aSelection )
-{
-    if( aSelection.Empty() )
-        return false;
-
-    LSET layerSet;
-    layerSet.set();
-
-    for( const auto& item : aSelection )
-    {
-        layerSet &= item->GetLayerSet();
-
-        if( !layerSet.any() )       // there are no common layers left
-            return false;
-    }
-
-    return true;
 }
 
 

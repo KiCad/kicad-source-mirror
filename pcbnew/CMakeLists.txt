@@ -291,8 +291,7 @@ set( PCBNEW_CLASS_SRCS
 
     tools/selection_tool.cpp
     tools/selection_area.cpp
-    tools/selection_conditions.cpp
-    tools/conditional_menu.cpp
+    tools/pcb_selection_conditions.cpp
     tools/bright_box.cpp
     tools/edit_points.cpp
     tools/edit_constraints.cpp
@@ -310,10 +309,7 @@ set( PCBNEW_CLASS_SRCS
     tools/zoom_tool.cpp
     tools/tools_common.cpp
     tools/tool_event_utils.cpp
-    tools/tool_menu.cpp
 
-    tools/grid_menu.cpp
-    tools/zoom_menu.cpp
     tools/size_menu.cpp
 
     footprint_preview_panel.cpp

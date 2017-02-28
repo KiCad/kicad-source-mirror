@@ -31,9 +31,10 @@
 #include <math/vector2d.h>
 #include <tools/pcb_tool.h>
 #include <tool/context_menu.h>
+#include <tool/selection.h>
 
-#include "selection_conditions.h"
-#include "tool_menu.h"
+#include <tools/pcb_selection_conditions.h>
+#include <tool/tool_menu.h>
 
 class PCB_BASE_FRAME;
 class SELECTION_AREA;
@@ -45,111 +46,6 @@ namespace KIGFX
     class GAL;
 }
 
-struct SELECTION : public KIGFX::VIEW_GROUP
-{
-public:
-    using ITER = std::set<BOARD_ITEM*>::iterator;
-    using CITER = std::set<BOARD_ITEM*>::const_iterator;
-
-    ITER begin() { return m_items.begin(); }
-    ITER end() { return m_items.end(); }
-    CITER begin() const { return m_items.cbegin(); }
-    CITER end() const { return m_items.cend(); }
-
-    virtual void Add( BOARD_ITEM* aItem )
-    {
-        m_items.insert( aItem );
-    }
-
-    virtual void Remove( BOARD_ITEM *aItem )
-    {
-        m_items.erase( aItem );
-    }
-
-    virtual void Clear() override
-    {
-        m_items.clear();
-    }
-
-    virtual unsigned int GetSize() const override
-    {
-        return m_items.size();
-    }
-
-    virtual KIGFX::VIEW_ITEM* GetItem( unsigned int idx ) const override
-    {
-        auto iter = m_items.begin();
-
-        std::advance( iter, idx );
-
-        return *iter;
-    }
-
-    bool Contains( BOARD_ITEM* aItem ) const
-    {
-        return m_items.find( aItem ) != m_items.end();
-    }
-
-    /// Checks if there is anything selected
-    bool Empty() const
-    {
-        return ( m_items.size() == 0 );
-    }
-
-    /// Returns the number of selected parts
-    int Size() const
-    {
-        return m_items.size();
-    }
-
-    const std::set<BOARD_ITEM*> GetItems() const
-    {
-        return m_items;
-    }
-
-    /// Returns the center point of the selection area bounding box.
-    VECTOR2I GetCenter() const;
-
-    BOARD_ITEM* operator[]( const int index ) const
-    {
-        if( index < 0 || (unsigned int) index >= m_items.size() )
-            return nullptr;
-
-        auto iter = m_items.begin();
-        std::advance( iter, index );
-        return *iter;
-    }
-
-    BOARD_ITEM* Front() const
-    {
-        if ( !m_items.size() )
-            return nullptr;
-
-        return *m_items.begin();
-    }
-
-    std::set<BOARD_ITEM*>& Items()
-    {
-        return m_items;
-    }
-
-    virtual const VIEW_GROUP::ITEMS updateDrawList() const override;
-
-private:
-    /// Set of selected items
-    std::set<BOARD_ITEM*> m_items;
-
-    // mute hidden overloaded virtual function warnings
-    using VIEW_GROUP::Add;
-    using VIEW_GROUP::Remove;
-};
-
-enum SELECTION_LOCK_FLAGS
-{
-    SELECTION_UNLOCKED = 0,
-    SELECTION_LOCK_OVERRIDE = 1,
-    SELECTION_LOCKED = 2
-};
 
 /**
  * Class SELECTION_TOOL

@@ -39,7 +39,7 @@
 
 #include "pcb_actions.h"
 #include "selection_tool.h"
-#include "selection_conditions.h"
+#include "pcb_selection_conditions.h"
 #include "edit_tool.h"
 
 // Pad tools

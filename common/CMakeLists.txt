@@ -301,6 +301,11 @@ set( COMMON_SRCS
     tool/context_menu.cpp
     tool/actions.cpp
     tool/common_tools.cpp
+    tool/grid_menu.cpp
+    tool/zoom_menu.cpp
+    tool/tool_menu.cpp
+    tool/conditional_menu.cpp
+    tool/selection_conditions.cpp
 
     geometry/seg.cpp
     geometry/shape.cpp
