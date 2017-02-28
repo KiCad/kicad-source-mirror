@@ -2463,6 +2463,11 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::loadPart( FILE_LINE_READER& aReader )
         {
             // Now all is good, Add the root alias to the cache alias list.
             m_aliases[ part->GetName() ] = part->GetAlias( part->GetName() );
+
+            // Add aliases when exist
+            for( size_t ii = 0; ii < part->GetAliasCount(); ++ii )
+                m_aliases[ part->GetAlias( ii )->GetName() ] = part->GetAlias( ii );
+
             return part.release();
         }
 
@@ -2516,7 +2521,6 @@ void SCH_LEGACY_PLUGIN_CACHE::loadAliases( std::unique_ptr< LIB_PART >& aPart,
         newAlias = alias;
         checkForDuplicates( newAlias );
         aPart->AddAlias( newAlias );
-        m_aliases[ newAlias ] = aPart->GetAlias( newAlias );
         alias.clear();
         parseUnquotedString( alias, aReader, line, &line, true );
     }
