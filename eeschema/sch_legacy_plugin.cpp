@@ -2266,41 +2266,44 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
         else
             alias = it->second;
 
-        if( alias )
+        // Read the curent alias associated doc.
+        // if the alias does not exist, just skip the description
+        // (Can happen if a .dcm is not synchronized with the corresponding .lib file)
+        while( reader.ReadLine() )
         {
-            while( reader.ReadLine() )
+            line = reader.Line();
+
+            if( !line )
+                SCH_PARSE_ERROR( "unexpected end of file", reader, line );
+
+            if( strCompare( "$ENDCMP", line, &line ) )
+                break;
+
+            text = FROM_UTF8( line + 2 );
+            text = text.Trim();
+
+            switch( line[0] )
             {
-                line = reader.Line();
-
-                if( !line )
-                    SCH_PARSE_ERROR( "unexpected end of file", reader, line );
-
-                if( strCompare( "$ENDCMP", line, &line ) )
-                    break;
-
-                text = FROM_UTF8( line + 2 );
-                text = text.Trim();
-
-                switch( line[0] )
-                {
-                case 'D':
+            case 'D':
+                if( alias )
                     alias->SetDescription( text );
-                    break;
+                break;
 
-                case 'K':
+            case 'K':
+                if( alias )
                     alias->SetKeyWords( text );
-                    break;
+                break;
 
-                case 'F':
+            case 'F':
+                if( alias )
                     alias->SetDocFileName( text );
-                    break;
+                break;
 
-                case '#':
-                    break;
+            case '#':
+                break;
 
-                default:
-                    SCH_PARSE_ERROR( "expected token in symbol definition", reader, line );
-                }
+            default:
+                SCH_PARSE_ERROR( "expected token in symbol definition", reader, line );
             }
         }
     }
@@ -2647,8 +2650,10 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr< LIB_PART >& aPart,
 
         *fixedField = *field;
 
-        if( field->GetId() == VALUE )
-            aPart->m_name = field->GetText();
+        // Ensure the VALUE field = the part name (can be not the case
+        // with malformed libraries: edited by hand, or converted from other tools)
+        if( fixedField->GetId() == VALUE )
+            fixedField->m_Text = aPart->m_name;
     }
     else
     {
