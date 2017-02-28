@@ -148,7 +148,7 @@ void PART_LIB::EnableBuffering( bool aEnable )
 
 void PART_LIB::GetAliasNames( wxArrayString& aNames )
 {
-    m_plugin->EnumerateSymbolLib( aNames, fileName.GetFullPath() );
+    m_plugin->EnumerateSymbolLib( aNames, fileName.GetFullPath(), m_properties.get() );
 
     aNames.Sort();
 }
@@ -156,7 +156,7 @@ void PART_LIB::GetAliasNames( wxArrayString& aNames )
 
 void PART_LIB::GetAliases( std::vector<LIB_ALIAS*>& aAliases )
 {
-    m_plugin->EnumerateSymbolLib( aAliases, fileName.GetFullPath() );
+    m_plugin->EnumerateSymbolLib( aAliases, fileName.GetFullPath(), m_properties.get() );
 
     std::sort( aAliases.begin(), aAliases.end(),
             [](LIB_ALIAS *lhs, LIB_ALIAS *rhs) -> bool
@@ -172,7 +172,7 @@ void PART_LIB::GetEntryTypePowerNames( wxArrayString& aNames )
 
     for( size_t i = 0;  i < aliases.GetCount();  i++ )
     {
-        LIB_ALIAS* alias = m_plugin->LoadSymbol( fileName.GetFullPath(), aliases[i] );
+        LIB_ALIAS* alias = m_plugin->LoadSymbol( fileName.GetFullPath(), aliases[i], m_properties.get() );
 
         wxCHECK2_MSG( alias != NULL, continue,
                       wxString::Format( "alias '%s' not found in symbol  library '%s'",
@@ -212,11 +212,11 @@ bool PART_LIB::HasPowerParts()
     // return true if at least one power part is found in lib
     wxArrayString aliases;
 
-    m_plugin->EnumerateSymbolLib( aliases, fileName.GetFullPath() );
+    m_plugin->EnumerateSymbolLib( aliases, fileName.GetFullPath(), m_properties.get() );
 
     for( size_t i = 0;  i < aliases.GetCount();  i++ )
     {
-        LIB_ALIAS* alias = m_plugin->LoadSymbol( fileName.GetFullPath(), aliases[i] );
+        LIB_ALIAS* alias = m_plugin->LoadSymbol( fileName.GetFullPath(), aliases[i], m_properties.get() );
 
         wxCHECK2_MSG( alias != NULL, continue,
                       wxString::Format( "alias '%s' not found in symbol  library '%s'",
