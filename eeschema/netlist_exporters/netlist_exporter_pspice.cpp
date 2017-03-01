@@ -94,38 +94,21 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
         if( !item.m_enabled )
             continue;
 
+        // Save the node order
         aFormatter->Print( 0, "%c%s ", item.m_primitive, (const char*) item.m_refName.c_str() );
 
-        // Pins to node mapping
-        int activePinIndex = 0;
+        size_t pspiceNodes = item.m_pinSequence.empty() ? item.m_pins.size() : item.m_pinSequence.size();
 
-        for( unsigned ii = 0; ii < item.m_pins.size(); ii++ )
+        for( size_t ii = 0; ii < pspiceNodes; ii++ )
         {
-            // Case of Alt Sequence definition with Unused/Invalid Node index:
+            // Use the custom order if defined, otherwise use the standard pin order as defined in the compon
+            size_t activePinIndex = item.m_pinSequence.empty() ? ii : item.m_pinSequence[ii];
             // Valid used Node Indexes are in the set
             // {0,1,2,...m_item.m_pin.size()-1}
-            if( !item.m_pinSequence.empty() )
+            if( activePinIndex >= item.m_pins.size() )
             {
-                // All Vector values must be less <= max package size
-                // And Total Vector size should be <= package size
-                if( ( (unsigned) item.m_pinSequence[ii] < item.m_pins.size() )
-                    && ( ii < item.m_pinSequence.size() ) )
-                {
-                    // Case of Alt Pin Sequence in control good Index:
-                    activePinIndex = item.m_pinSequence[ii];
-                }
-                else
-                {
-                    // Case of Alt Pin Sequence in control Bad Index or not using all
-                    // pins for simulation:
-                    wxASSERT_MSG( false, "Used an invalid pin number in node sequence" );
-                    continue;
-                }
-            }
-            // Case of Standard Pin Sequence in control:
-            else
-            {
-                activePinIndex = ii;
+                wxASSERT_MSG( false, "Used an invalid pin number in node sequence" );
+                continue;
             }
 
             NETLIST_OBJECT* pin = item.m_pins[activePinIndex];
