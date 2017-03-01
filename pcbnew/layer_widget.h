@@ -113,15 +113,8 @@ protected:
     wxFlexGridSizer*    m_RenderFlexGridSizer;
 
     wxWindow*           m_FocusOwner;
-    wxBitmap*           m_BlankBitmap;
-    wxBitmap*           m_BlankAlternateBitmap;
-    wxBitmap*           m_RightArrowBitmap;
-    wxBitmap*           m_RightArrowAlternateBitmap;
-    wxSize              m_BitmapSize;
     int                 m_CurrentRow;           ///< selected row of layer list
     int                 m_PointSize;
-
-    static wxBitmap makeBitmap( COLOR4D aColor );
 
     /**
      * Virtual Function useAlternateBitmap
@@ -156,19 +149,13 @@ protected:
      */
     static LAYER_NUM getDecodedId( int aControlId );
 
-    /**
-     * Function makeColorButton
-     * creates a wxBitmapButton and assigns it a solid color and a control ID
-     */
-    wxBitmapButton* makeColorButton( wxWindow* aParent, COLOR4D aColor, int aID );
-
     void OnLeftDownLayers( wxMouseEvent& event );
 
     /**
-     * Function OnMiddleDownLayerColor
-     * is called only from a color button when user right clicks.
+     * Function OnSwatchChanged()
+     * is called when a user changes a swatch color
      */
-    void OnMiddleDownLayerColor( wxMouseEvent& event );
+    void OnLayerSwatchChanged( wxCommandEvent& aEvent );
 
     /**
      * Function OnLayerCheckBox
@@ -177,7 +164,11 @@ protected:
      */
     void OnLayerCheckBox( wxCommandEvent& event );
 
-    void OnMiddleDownRenderColor( wxMouseEvent& event );
+    /**
+     * Function OnRenderSwatchChanged
+     * Called when user has changed the swatch color of a render entry
+     */
+    void OnRenderSwatchChanged( wxCommandEvent& aEvent );
 
     void OnRenderCheckBox( wxCommandEvent& event );
 
@@ -366,6 +357,14 @@ public:
     bool GetRenderState( int aId );
 
     void UpdateLayouts();
+
+    /**
+     * Function UpdateLayerIcons
+     * Update all layer manager icons (layers only)
+     * Useful when loading a file or clearing a layer because they change,
+     * and the indicator arrow icon needs to be updated
+     */
+    void UpdateLayerIcons();
 
 /*  did not help:
     void Freeze()
