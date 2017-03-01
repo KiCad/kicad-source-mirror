@@ -26,6 +26,8 @@
 #include <wx/colour.h>
 #include <wx/colordlg.h>
 
+#include <memory>
+
 wxDEFINE_EVENT(COLOR_SWATCH_CHANGED, wxCommandEvent);
 
 using KIGFX::COLOR4D;
