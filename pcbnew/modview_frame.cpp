@@ -55,6 +55,7 @@
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
+#include <tool/common_tools.h>
 #include "tools/pcbnew_control.h"
 #include "tools/pcb_actions.h"
 
@@ -201,6 +202,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     drawPanel->SetEventDispatcher( m_toolDispatcher );
 
     m_toolManager->RegisterTool( new PCBNEW_CONTROL );
+    m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->InitTools();
 
     // If a footprint was previously loaded, reload it
