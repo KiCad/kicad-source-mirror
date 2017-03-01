@@ -167,13 +167,6 @@ static const char * rightarrow_alternate_xpm[] = {
 "..oO      "};
 
 
-
-static wxBitmap rightArrowBitmap( rightarrow_xpm );
-static wxBitmap rightArrowAlternateBitmap( rightarrow_alternate_xpm );
-static wxBitmap blankBitmap( clear_xpm );
-static wxBitmap blankAlternateBitmap( clear_alternate_xpm );
-
-
 ROW_ICON_PROVIDER::ROW_ICON_PROVIDER( bool aAlt ):
         m_alt( aAlt )
 {}
@@ -182,6 +175,13 @@ ROW_ICON_PROVIDER::ROW_ICON_PROVIDER( bool aAlt ):
 const wxBitmap& ROW_ICON_PROVIDER::GetIndicatorIcon(
             INDICATOR_ICON::ICON_ID aIconId ) const
 {
+    // need to wait until UI is ready before construction
+    // so can't go in the global scope
+    static const wxBitmap rightArrowBitmap( rightarrow_xpm );
+    static const wxBitmap rightArrowAlternateBitmap( rightarrow_alternate_xpm );
+    static const wxBitmap blankBitmap( clear_xpm );
+    static const wxBitmap blankAlternateBitmap( clear_alternate_xpm );
+
     const bool on = ( aIconId == STATE::ON );
 
     if( m_alt )
