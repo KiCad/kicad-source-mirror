@@ -34,11 +34,11 @@ add_executable( qa_eagle_plugin
     test_basic.cpp
 )
 
-add_dependencies( qa_eagle_plugin eeschema )
+add_dependencies( qa_eagle_plugin common eeschema_kiface )
 
 target_link_libraries( qa_eagle_plugin
-  eeschema
-  eeschema_kiface
-  ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
-  ${wxWidgets_LIBRARIES}
+    common
+    eeschema_kiface
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    ${wxWidgets_LIBRARIES}
 )

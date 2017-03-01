@@ -68,8 +68,8 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
 
     wxFileName fn = aFileName;
 
-    // if( !m_xmlTree.Load( fn.GetFullPath() ) )
-    //     THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'" ), fn.GetFullPath() ) );
+    if( !m_xmlTree.Load( fn.GetFullPath() ) )
+        THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'" ), fn.GetFullPath() ) );
 
     return sheet;
 }

@@ -24,21 +24,26 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/test_case_template.hpp>
-#include <sch_eagle_plugin.h>
+#include <sch_io_mgr.h>
+#include <kiway.h>
 
 #include <data/fixtures_eagle_plugin.h>
 
-// /**
-//  * Declares the IteratorFixture as the boost test suite fixture.
-//  */
-// BOOST_FIXTURE_TEST_SUITE( SegmentReference, CommonTestData )
+/**
+ * Checks that the SCH_IO manager finds the Eagle plugin
+ */
+BOOST_AUTO_TEST_CASE( FindPlugin )
+{
+    BOOST_CHECK( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ) != NULL );
+}
 
 /**
- * Checks the XML tree load
+ *
  */
 BOOST_AUTO_TEST_CASE( Load )
 {
-    SCH_EAGLE_PLUGIN plugin;
-    //
-    // plugin.Load( "data/eagle_schematics/empty.sch", NULL );
+    SCH_PLUGIN* pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE );
+
+    pi->Load("/home/alejandro/Proyectos/kicad/kicad-alejandro/eeschema/qa/data/eagle_schematics",
+             &Kiway());
 }
