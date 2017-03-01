@@ -169,7 +169,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         }
         else
         {
-            zoomScale = ( rotation > 0 ) ? 1.05 : 0.95;
+            zoomScale = ( rotation > 0 ) ? 1.05 : 1/1.05;
         }
 
         if( IsCursorWarpingEnabled() )

@@ -58,7 +58,7 @@ int COMMON_TOOLS::ZoomInOut( const TOOL_EVENT& aEvent )
     if( aEvent.IsAction( &ACTIONS::zoomIn ) )
         zoomScale = 1.3;
     else if( aEvent.IsAction( &ACTIONS::zoomOut ) )
-        zoomScale = 0.7;
+        zoomScale = 1/1.3;
 
     view->SetScale( view->GetScale() * zoomScale, getViewControls()->GetCursorPosition() );
 
@@ -77,7 +77,7 @@ int COMMON_TOOLS::ZoomInOutCenter( const TOOL_EVENT& aEvent )
     if( aEvent.IsAction( &ACTIONS::zoomInCenter ) )
         zoomScale = 1.3;
     else if( aEvent.IsAction( &ACTIONS::zoomOutCenter ) )
-        zoomScale = 0.7;
+        zoomScale = 1/1.3;
 
     view->SetScale( view->GetScale() * zoomScale );
 
