@@ -76,7 +76,6 @@ private:
     PNS::NODE* m_world;
     PNS::ROUTER* m_router;
     BOARD* m_board;
-    PICKED_ITEMS_LIST m_undoBuffer;
     PCB_EDIT_FRAME* m_frame;
     std::unique_ptr<BOARD_COMMIT> m_commit;
     DISPLAY_OPTIONS* m_dispOptions;
