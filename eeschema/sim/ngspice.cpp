@@ -206,7 +206,7 @@ bool NGSPICE::LoadNetlist( const string& aNetlist )
     ngSpice_Circ( lines.data() );
 
     for( auto line : lines )
-        delete line;
+        free( line );
 
     return true;
 }
