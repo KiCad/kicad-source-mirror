@@ -224,6 +224,19 @@ public:
     }
 
     /**
+     * Function WithAlpha
+     * Returns a colour with the same colour, but the given alpha
+     * @param aAlpha specifies the alpha of the new color
+     * @return COLOR4D color with that alpha
+     */
+     COLOR4D WithAlpha( double aAlpha ) const
+     {
+         assert( aAlpha >= 0.0 && aAlpha <= 1.0 );
+
+         return COLOR4D( r, g, b, aAlpha );
+     }
+
+    /**
      * Function Inverted
      * Returns an inverted color, alpha remains the same.
      * @return COLOR4D& Inverted color.
