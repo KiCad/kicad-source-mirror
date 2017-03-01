@@ -51,6 +51,7 @@ static const UTIL::CFG_MAP<KIGFX::GRID_STYLE> gridStyleConfigVals =
 {
     { KIGFX::GRID_STYLE::DOTS,       0 },
     { KIGFX::GRID_STYLE::LINES,      1 },
+    { KIGFX::GRID_STYLE::SMALL_CROSS,2 },
 };
 
 

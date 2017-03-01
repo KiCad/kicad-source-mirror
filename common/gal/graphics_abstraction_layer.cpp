@@ -267,6 +267,41 @@ void GAL::DrawGrid()
                 }
             }
         }
+        else if( gridStyle == GRID_STYLE::SMALL_CROSS )
+        {
+            SetIsFill( false );
+            SetIsStroke( true );
+            SetStrokeColor( gridColor );
+
+            SetLineWidth( marker );
+            double lineLen = GetLineWidth() * 2;
+
+            // Vertical positions:
+            for( int j = gridStartY; j != gridEndY; j += dirY )
+            {
+                if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
+                    || gridScreenSizeDense > gridThreshold )
+                {
+                    int posY =  j * gridSize.y + gridOrigin.y;
+
+                    // Horizontal positions:
+                    for( int i = gridStartX; i != gridEndX; i += dirX )
+                    {
+                        if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
+                            || gridScreenSizeDense > gridThreshold )
+                        {
+                            int posX = i * gridSize.x + gridOrigin.x;
+
+                            drawGridLine( VECTOR2D( posX - lineLen, posY ),
+                                          VECTOR2D( posX + lineLen,   posY ) );
+
+                            drawGridLine( VECTOR2D( posX, posY - lineLen ),
+                                          VECTOR2D( posX, posY + lineLen ) );
+                        }
+                    }
+                }
+            }
+        }
         else    // Dotted grid
         {
             bool tickX, tickY;

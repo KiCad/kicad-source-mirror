@@ -49,7 +49,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	wxStaticBoxSizer* sGridSettings;
 	sGridSettings = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Grid Display (OpenGL && Cairo)") ), wxVERTICAL );
 	
-	wxString m_gridStyleChoices[] = { _("Dots"), _("Lines") };
+	wxString m_gridStyleChoices[] = { _("Dots"), _("Lines"), _("Small crosses") };
 	int m_gridStyleNChoices = sizeof( m_gridStyleChoices ) / sizeof( wxString );
 	m_gridStyle = new wxRadioBox( sGridSettings->GetStaticBox(), wxID_ANY, _("Grid Style"), wxDefaultPosition, wxDefaultSize, m_gridStyleNChoices, m_gridStyleChoices, 1, wxRA_SPECIFY_COLS );
 	m_gridStyle->SetSelection( 0 );

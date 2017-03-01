@@ -59,8 +59,9 @@ static const double gridMinSpacingStep = 5;
 
 static const UTIL::CFG_MAP<KIGFX::GRID_STYLE> gridStyleSelectMap =
 {
-    { KIGFX::GRID_STYLE::DOTS,     0 },    // Default
-    { KIGFX::GRID_STYLE::LINES,    1 },
+    { KIGFX::GRID_STYLE::DOTS,        0 },  // Default
+    { KIGFX::GRID_STYLE::LINES,       1 },
+    { KIGFX::GRID_STYLE::SMALL_CROSS, 2 },
 };
 
 

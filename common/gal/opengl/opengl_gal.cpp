@@ -906,50 +906,88 @@ void OPENGL_GAL::DrawGrid()
         glColor4d( gridColor.r, gridColor.g, gridColor.b, 1.0 );
     }
 
-    // Vertical lines
-    for( int j = gridStartY; j != gridEndY; j += dirY )
+    if( gridStyle == GRID_STYLE::SMALL_CROSS )
     {
-        if( j % gridTick == 0 && gridScreenSizeDense > gridThreshold )
-            glLineWidth( majorLineWidth );
-        else
-            glLineWidth( minorLineWidth );
+        glLineWidth( minorLineWidth );
 
-        if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
-            || gridScreenSizeDense > gridThreshold )
+        // calculate a line len = 2 minorLineWidth, in internal unit value
+        // (in fact the size of cross is lineLen*2)
+        int lineLen = KiROUND( minorLineWidth / worldScale *2 );
+
+        // Vertical positions
+        for( int j = gridStartY; j != gridEndY; j += dirY )
         {
-            glBegin( GL_LINES );
-            glVertex2d( gridStartX * gridSize.x, j * gridSize.y + gridOrigin.y );
-            glVertex2d( gridEndX * gridSize.x, j * gridSize.y + gridOrigin.y );
-            glEnd();
+            if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
+                || gridScreenSizeDense > gridThreshold )
+            {
+                int posY =  j * gridSize.y + gridOrigin.y;
+
+                // Horizontal positions
+                for( int i = gridStartX; i != gridEndX; i += dirX )
+                {
+                    if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
+                        || gridScreenSizeDense > gridThreshold )
+                    {
+                        int posX = i * gridSize.x + gridOrigin.x;
+
+                        glBegin( GL_LINES );
+                        glVertex2d( posX -lineLen, posY );
+                        glVertex2d( posX + lineLen, posY );
+                        glVertex2d( posX, posY - lineLen );
+                        glVertex2d( posX, posY + lineLen );
+                        glEnd();
+                    }
+                }
+            }
         }
     }
-
-    if( gridStyle == GRID_STYLE::DOTS )
+    else
     {
-        glStencilFunc( GL_NOTEQUAL, 0, 1 );
-        glColor4d( gridColor.r, gridColor.g, gridColor.b, 1.0 );
-    }
-
-    // Horizontal lines
-    for( int i = gridStartX; i != gridEndX; i += dirX )
-    {
-        if( i % gridTick == 0 && gridScreenSizeDense > gridThreshold )
-            glLineWidth( majorLineWidth );
-        else
-            glLineWidth( minorLineWidth );
-
-        if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
-            || gridScreenSizeDense > gridThreshold )
+        // Vertical lines
+        for( int j = gridStartY; j != gridEndY; j += dirY )
         {
-            glBegin( GL_LINES );
-            glVertex2d( i * gridSize.x + gridOrigin.x, gridStartY * gridSize.y );
-            glVertex2d( i * gridSize.x + gridOrigin.x, gridEndY * gridSize.y );
-            glEnd();
-        }
-    }
+            if( j % gridTick == 0 && gridScreenSizeDense > gridThreshold )
+                glLineWidth( majorLineWidth );
+            else
+                glLineWidth( minorLineWidth );
 
-    if( gridStyle == GRID_STYLE::DOTS )
-        glDisable( GL_STENCIL_TEST );
+            if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
+                || gridScreenSizeDense > gridThreshold )
+            {
+                glBegin( GL_LINES );
+                glVertex2d( gridStartX * gridSize.x, j * gridSize.y + gridOrigin.y );
+                glVertex2d( gridEndX * gridSize.x, j * gridSize.y + gridOrigin.y );
+                glEnd();
+            }
+        }
+
+        if( gridStyle == GRID_STYLE::DOTS )
+        {
+            glStencilFunc( GL_NOTEQUAL, 0, 1 );
+            glColor4d( gridColor.r, gridColor.g, gridColor.b, 1.0 );
+        }
+
+        // Horizontal lines
+        for( int i = gridStartX; i != gridEndX; i += dirX )
+        {
+            if( i % gridTick == 0 && gridScreenSizeDense > gridThreshold )
+                glLineWidth( majorLineWidth );
+            else
+                glLineWidth( minorLineWidth );
+
+            if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
+                || gridScreenSizeDense > gridThreshold )
+            {
+                glBegin( GL_LINES );
+                glVertex2d( i * gridSize.x + gridOrigin.x, gridStartY * gridSize.y );
+                glVertex2d( i * gridSize.x + gridOrigin.x, gridEndY * gridSize.y );
+                glEnd();
+            }
+        }
+
+        if( gridStyle == GRID_STYLE::DOTS )
+            glDisable( GL_STENCIL_TEST );
+    }
 
     glEnable( GL_DEPTH_TEST );
     glEnable( GL_TEXTURE_2D );
