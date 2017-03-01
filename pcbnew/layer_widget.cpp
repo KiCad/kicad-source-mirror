@@ -190,8 +190,10 @@ void LAYER_WIDGET::OnTabChange( wxNotebookEvent& event )
 wxWindow* LAYER_WIDGET::getLayerComp( int aRow, int aColumn ) const
 {
     unsigned ndx = aRow * LYR_COLUMN_COUNT + aColumn;
+
     if( ndx < m_LayersFlexGridSizer->GetChildren().GetCount() )
         return m_LayersFlexGridSizer->GetChildren()[ndx]->GetWindow();
+
     return NULL;
 }
 
@@ -199,7 +201,8 @@ wxWindow* LAYER_WIDGET::getLayerComp( int aRow, int aColumn ) const
 int LAYER_WIDGET::findLayerRow( LAYER_NUM aLayer ) const
 {
     int count = GetLayerRowCount();
-    for( int row=0;  row<count;  ++row )
+
+    for( int row = 0; row < count; ++row )
     {
         // column 0 in the layer scroll window has a wxStaticBitmap, get its ID.
         wxWindow* w = getLayerComp( row, 0 );
@@ -208,6 +211,7 @@ int LAYER_WIDGET::findLayerRow( LAYER_NUM aLayer ) const
         if( aLayer == getDecodedId( w->GetId() ))
             return row;
     }
+
     return -1;
 }
 
@@ -215,8 +219,10 @@ int LAYER_WIDGET::findLayerRow( LAYER_NUM aLayer ) const
 wxWindow* LAYER_WIDGET::getRenderComp( int aRow, int aColumn ) const
 {
     int ndx = aRow * RND_COLUMN_COUNT + aColumn;
+
     if( (unsigned) ndx < m_RenderFlexGridSizer->GetChildren().GetCount() )
         return m_RenderFlexGridSizer->GetChildren()[ndx]->GetWindow();
+
     return NULL;
 }
 
@@ -224,7 +230,8 @@ wxWindow* LAYER_WIDGET::getRenderComp( int aRow, int aColumn ) const
 int LAYER_WIDGET::findRenderRow( int aId ) const
 {
     int count = GetRenderRowCount();
-    for( int row=0;  row<count;  ++row )
+
+    for( int row = 0; row < count; ++row )
     {
         // column 0 in the layer scroll window has a wxStaticBitmap, get its ID.
         wxWindow* w = getRenderComp( row, 0 );
@@ -233,6 +240,7 @@ int LAYER_WIDGET::findRenderRow( int aId ) const
         if( aId == getDecodedId( w->GetId() ))
             return row;
     }
+
     return -1;
 }
 
@@ -422,14 +430,16 @@ wxSize LAYER_WIDGET::GetBestSize() const
     // size of m_LayerScrolledWindow --------------
     wxArrayInt widths = m_LayersFlexGridSizer->GetColWidths();
     int totWidth = 0;
+
     if( widths.GetCount() )
     {
-        for( int i=0;  i<LYR_COLUMN_COUNT;  ++i )
+        for( int i = 0; i < LYR_COLUMN_COUNT; ++i )
         {
             totWidth += widths[i] + m_LayersFlexGridSizer->GetHGap();
             // printf("widths[%d]:%d\n", i, widths[i] );
         }
     }
+
     // Account for the parent's frame:
     totWidth += 10;
 
@@ -447,9 +457,10 @@ wxSize LAYER_WIDGET::GetBestSize() const
     // size of m_RenderScrolledWindow --------------
     widths = m_RenderFlexGridSizer->GetColWidths();
     totWidth = 0;
+
     if( widths.GetCount() )
     {
-        for( int i=0;  i<RND_COLUMN_COUNT;  ++i )
+        for( int i = 0; i < RND_COLUMN_COUNT; ++i )
         {
             totWidth += widths[i] + m_RenderFlexGridSizer->GetHGap();
             // printf("widths[%d]:%d\n", i, widths[i] );
@@ -616,6 +627,7 @@ COLOR4D LAYER_WIDGET::GetLayerColor( LAYER_NUM aLayer ) const
 void LAYER_WIDGET::SetRenderState( int aId, bool isSet )
 {
     int row = findRenderRow( aId );
+
     if( row >= 0 )
     {
         int col = 1;    // checkbox is column 1
@@ -629,6 +641,7 @@ void LAYER_WIDGET::SetRenderState( int aId, bool isSet )
 bool LAYER_WIDGET::GetRenderState( int aId )
 {
     int row = findRenderRow( aId );
+
     if( row >= 0 )
     {
         int col = 1;    // checkbox is column 1
@@ -636,6 +649,7 @@ bool LAYER_WIDGET::GetRenderState( int aId )
         wxASSERT( cb );
         return cb->GetValue();
     }
+
     return false;   // the value of a non-existent row
 }
 
@@ -653,6 +667,7 @@ void LAYER_WIDGET::UpdateLayouts()
 void LAYER_WIDGET::UpdateLayerIcons()
 {
     int rowCount = GetLayerRowCount();
+
     for( int row = 0; row < rowCount ; row++ )
     {
         INDICATOR_ICON* indicator = (INDICATOR_ICON*) getLayerComp( row, COLUMN_ICON_ACTIVE );
