@@ -1861,8 +1861,8 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
     // Improvement: this is not taking in account the lightcolor
     if( nr_lights_that_can_cast_shadows > 0 )
     {
-        aHitInfo.m_ShadowFactor = shadow_att_factor_sum /
-                                  (float)(nr_lights_that_can_cast_shadows * 1.0f);
+        aHitInfo.m_ShadowFactor = glm::max( shadow_att_factor_sum /
+                                  (float)(nr_lights_that_can_cast_shadows * 1.0f), 0.0f );
     }
     else
     {
