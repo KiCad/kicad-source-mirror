@@ -562,7 +562,7 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                     {
                         // store the VIEW_CONTROLS settings if we launch a subtool
                         if( GetCurrentToolState() == st )
-                            st->vcSettings = m_viewControls->GetSettings();
+                            saveViewControls( st );
 
                         st->Push();
                     }
@@ -697,17 +697,7 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 
     // Store the current VIEW_CONTROLS settings
     if( TOOL_STATE* state = GetCurrentToolState() )
-    {
-        state->vcSettings = m_viewControls->GetSettings();
-
-        // If context menu has overridden the cursor position, restore the original one
-        // (see dispatchContextMenu())
-        if( m_origCursor )
-        {
-            state->vcSettings.m_forceCursorPosition = true;
-            state->vcSettings.m_forcedPosition = *m_origCursor;
-        }
-    }
+        saveViewControls( state );
 
     if( !aState->Pop() )
     {
@@ -826,4 +816,22 @@ bool TOOL_MANAGER::isActive( TOOL_BASE* aTool )
 
     // Just check if the tool is on the active tools stack
     return std::find( m_activeTools.begin(), m_activeTools.end(), aTool->GetId() ) != m_activeTools.end();
+}
+
+
+void TOOL_MANAGER::saveViewControls( TOOL_STATE* aState )
+{
+    aState->vcSettings = m_viewControls->GetSettings();
+
+    // If context menu has overridden the cursor position, reaStateore the original one
+    // (see dispatchContextMenu())
+    if( m_origCursor )
+    {
+        aState->vcSettings.m_forceCursorPosition = true;
+        aState->vcSettings.m_forcedPosition = *m_origCursor;
+    }
+    else
+    {
+        aState->vcSettings.m_forceCursorPosition = false;
+    }
 }

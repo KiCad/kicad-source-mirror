@@ -450,6 +450,13 @@ private:
      */
     bool isActive( TOOL_BASE* aTool );
 
+    /**
+     * Function saveViewControls()
+     * Saves the VIEW_CONTROLS settings to the tool state object. If VIEW_CONTROLS
+     * settings are affected by TOOL_MANAGER, the original settings are saved.
+     */
+    void saveViewControls( TOOL_STATE* aState );
+
     /// Index of registered tools current states, associated by tools' objects.
     TOOL_STATE_MAP m_toolState;
 
