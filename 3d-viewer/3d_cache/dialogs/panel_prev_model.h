@@ -44,7 +44,7 @@
 #include <3d_canvas/eda_3d_canvas.h>
 
 // Define min and max parameter values
-#define MAX_SCALE          100.0
+#define MAX_SCALE          10000.0
 #define MAX_ROTATION       180.0
 #define MAX_OFFSET         1000.0
 
