@@ -285,6 +285,7 @@ void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
     }
     else
     {
+        glDrawBuffer( GL_FRONT_AND_BACK );
         glViewport( 0, 0, GetScreenSize().x, GetScreenSize().y );
     }
 }
@@ -293,7 +294,7 @@ void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
 void OPENGL_COMPOSITOR::ClearBuffer()
 {
     assert( m_initialized );
-
+    // Compositor requires transparent backgrounds to work correctly
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
 }
@@ -324,7 +325,7 @@ void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aSourceHandle, unsigned int aDe
     assert( aDestHandle <= usedBuffers() );
 
     // Switch to the destination buffer and blit the scene
-    SetBuffer ( aDestHandle );
+    SetBuffer( aDestHandle );
 
     // Depth test has to be disabled to make transparency working
     glDisable( GL_DEPTH_TEST );
