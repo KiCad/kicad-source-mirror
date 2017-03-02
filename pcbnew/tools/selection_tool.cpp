@@ -770,35 +770,15 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 
     return 0;
 }
-
-int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
+void SELECTION_TOOL::selectAllItemsOnSheet( wxString sheet )
 {
-    if( !selectCursor( true ) )
-        return 0;
-
-    // this function currently only supports modules since they are only
-    // on one sheet.
-    auto item = m_selection.Front();
-    if( item->Type() != PCB_MODULE_T )
-        return 0;
-    if( !item )
-        return 0;
-    auto mod = dynamic_cast<MODULE*>( item );
-
-    clearSelection();
-
-    // get the lowest subsheet name for this.
-    wxString sheetPath = mod->GetPath();
-    sheetPath = sheetPath.BeforeLast( '/' );
-    sheetPath = sheetPath.AfterLast( '/' );
-
     auto modules = board()->m_Modules.GetFirst();
     std::list<MODULE*> modList;
 
     // store all modules that are on that sheet
     for( MODULE* mitem = modules; mitem; mitem = mitem->Next() )
     {
-        if ( mitem != NULL && mitem->GetPath().Contains( sheetPath ) )
+        if ( mitem != NULL && mitem->GetPath().Contains( sheet ) )
         {
             modList.push_back( mitem );
         }
@@ -869,6 +849,30 @@ int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
         if( i != NULL )
             select( i );
     }
+}
+
+int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
+{
+    if( !selectCursor( true ) )
+        return 0;
+
+    // this function currently only supports modules since they are only
+    // on one sheet.
+    auto item = m_selection.Front();
+    if( item->Type() != PCB_MODULE_T )
+        return 0;
+    if( !item )
+        return 0;
+    auto mod = dynamic_cast<MODULE*>( item );
+
+    clearSelection();
+
+    // get the lowest subsheet name for this.
+    wxString sheetPath = mod->GetPath();
+    sheetPath = sheetPath.BeforeLast( '/' );
+    sheetPath = sheetPath.AfterLast( '/' );
+
+    selectAllItemsOnSheet(sheetPath);
 
     // Inform other potentially interested tools
     if( m_selection.Size() > 0 )

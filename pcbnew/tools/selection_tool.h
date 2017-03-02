@@ -177,6 +177,11 @@ private:
      */
     void selectAllItemsOnNet( int aNetCode );
 
+    /**
+     * Selects all items with the given sheet timestamp name
+     */
+    void selectAllItemsOnSheet( wxString sheet );
+
     ///> Selects all modules belonging to same sheet.
     int selectSameSheet( const TOOL_EVENT& aEvent );
 
