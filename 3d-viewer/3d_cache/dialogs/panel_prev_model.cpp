@@ -476,6 +476,9 @@ void PANEL_PREV_3D::onMouseWheelScale( wxMouseEvent& event )
 
     double step = SCALE_INCREMENT;
 
+    if( event.ShiftDown( ) )
+        step = SCALE_INCREMENT_FINE;
+
     if( event.GetWheelRotation() >= 0 )
         step = -step;
 
@@ -487,7 +490,12 @@ void PANEL_PREV_3D::onMouseWheelRot( wxMouseEvent& event )
 {
     wxTextCtrl* textCtrl = (wxTextCtrl*) event.GetEventObject();
 
+    wxKeyboardState kbdState;
+
     double step = ROTATION_INCREMENT_WHEEL;
+
+    if( event.ShiftDown( ) )
+        step = ROTATION_INCREMENT_WHEEL_FINE;
 
     if( event.GetWheelRotation() >= 0 )
         step = -step;
@@ -500,9 +508,15 @@ void PANEL_PREV_3D::onMouseWheelOffset( wxMouseEvent& event )
     wxTextCtrl* textCtrl = (wxTextCtrl*) event.GetEventObject();
 
     double step = OFFSET_INCREMENT_MM;
+    if( event.ShiftDown( ) )
+        step = OFFSET_INCREMENT_MM_FINE;
 
     if( g_UserUnit == INCHES )
+    {
         step = OFFSET_INCREMENT_MIL/1000.0;
+        if( event.ShiftDown( ) )
+            step = OFFSET_INCREMENT_MIL_FINE/1000.0;
+    }
 
     if( event.GetWheelRotation() >= 0 )
         step = -step;

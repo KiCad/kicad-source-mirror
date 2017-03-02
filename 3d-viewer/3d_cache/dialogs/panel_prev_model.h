@@ -48,11 +48,18 @@
 #define MAX_ROTATION       180.0
 #define MAX_OFFSET         1000.0
 
-#define SCALE_INCREMENT    0.02
-#define ROTATION_INCREMENT 5            // in degrees, for spin button command
-#define ROTATION_INCREMENT_WHEEL 1      // in degrees, for mouse wheel command
-#define OFFSET_INCREMENT_MM   0.1
-#define OFFSET_INCREMENT_MIL   5.0
+#define SCALE_INCREMENT_FINE    0.02
+#define SCALE_INCREMENT     0.1
+
+#define ROTATION_INCREMENT 5             // in degrees, for spin button command
+#define ROTATION_INCREMENT_WHEEL 15      // in degrees, for mouse wheel command
+#define ROTATION_INCREMENT_WHEEL_FINE 1  // in degrees, for mouse wheel command
+
+#define OFFSET_INCREMENT_MM   0.5
+#define OFFSET_INCREMENT_MM_FINE 0.1
+
+#define OFFSET_INCREMENT_MIL   25.0
+#define OFFSET_INCREMENT_MIL_FINE   5.0
 
 
 // Declared classes to create pointers
