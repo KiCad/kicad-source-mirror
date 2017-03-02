@@ -157,7 +157,7 @@ static void bench_line_reader_reuse( const wxString& aFile, int aReps, BENCH_REP
 /**
  * Benchmark using an INPUTSTREAM_LINE_READER with a given
  * wxInputStream implementation.
- * The INPUTSTREAM_LINE_READER is reset for each cycle.
+ * The wxInputStream is recreated for each cycle.
  */
 template<typename S>
 static void bench_wxis( const wxString& aFile, int aReps, BENCH_REPORT& report )
@@ -182,13 +182,65 @@ static void bench_wxis( const wxString& aFile, int aReps, BENCH_REPORT& report )
 /**
  * Benchmark using an INPUTSTREAM_LINE_READER with a given
  * wxInputStream implementation.
- * The INPUTSTREAM_LINE_READER is recreated for each cycle.
+ * The wxInputStream is reset for each cycle.
  */
 template<typename S>
 static void bench_wxis_reuse( const wxString& aFile, int aReps, BENCH_REPORT& report )
 {
     S fileStream( aFile );
     INPUTSTREAM_LINE_READER istr( &fileStream, aFile );
+
+    for( int i = 0; i < aReps; ++i)
+    {
+        while( istr.ReadLine() )
+        {
+            report.linesRead++;
+            report.charAcc += (unsigned char) istr.Line()[0];
+        }
+
+        fileStream.SeekI( 0 );
+    }
+}
+
+
+/**
+ * Benchmark using a INPUTSTREAM_LINE_READER with a given
+ * wxInputStream implementation, buffered with wxBufferedInputStream.
+ * The wxInputStream is recreated for each cycle.
+ */
+template<typename WXIS>
+static void bench_wxbis( const wxString& aFile, int aReps, BENCH_REPORT& report )
+{
+    WXIS fileStream( aFile );
+    wxBufferedInputStream bufferedStream( fileStream );
+
+    for( int i = 0; i < aReps; ++i)
+    {
+        INPUTSTREAM_LINE_READER istr( &bufferedStream, aFile );
+
+        while( istr.ReadLine() )
+        {
+            report.linesRead++;
+            report.charAcc += (unsigned char) istr.Line()[0];
+        }
+
+        fileStream.SeekI( 0 );
+    }
+}
+
+
+/**
+ * Benchmark using a INPUTSTREAM_LINE_READER with a given
+ * wxInputStream implementation, buffered with wxBufferedInputStream.
+ * The wxInputStream is reset for each cycle.
+ */
+template<typename WXIS>
+static void bench_wxbis_reuse( const wxString& aFile, int aReps, BENCH_REPORT& report )
+{
+    WXIS fileStream( aFile );
+    wxBufferedInputStream bufferedStream( fileStream );
+
+    INPUTSTREAM_LINE_READER istr( &bufferedStream, aFile );
 
     for( int i = 0; i < aReps; ++i)
     {
@@ -217,6 +269,10 @@ static std::vector<BENCHMARK> benchmarkList =
     { 'W', bench_wxis<wxFileInputStream>, "wxFileIStream, reused" },
     { 'g', bench_wxis<wxFFileInputStream>, "wxFFileIStream" },
     { 'G', bench_wxis_reuse<wxFFileInputStream>, "wxFFileIStream, reused" },
+    { 'b', bench_wxbis<wxFileInputStream>, "wxFileIStream. buf'd" },
+    { 'B', bench_wxbis_reuse<wxFileInputStream>, "wxFileIStream, buf'd, reused" },
+    { 'c', bench_wxbis<wxFFileInputStream>, "wxFFileIStream. buf'd" },
+    { 'C', bench_wxbis_reuse<wxFFileInputStream>, "wxFFileIStream, buf'd, reused" },
 };
 
 
@@ -312,7 +368,7 @@ int main( int argc, char* argv[] )
 
         BENCH_REPORT report = executeBenchMark( bmark, reps, inFile );
 
-        os << wxString::Format( "%-25s %u lines, acc: %u in %u ms",
+        os << wxString::Format( "%-30s %u lines, acc: %u in %u ms",
                 bmark.name, report.linesRead, report.charAcc, (int) report.benchDurMs.count() )
             << std::endl;;
     }
