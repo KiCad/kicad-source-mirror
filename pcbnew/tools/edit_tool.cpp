@@ -257,6 +257,8 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     bool lockOverride = false;
 
     controls->ShowCursor( true );
+    controls->SetSnapping( true );
+    controls->SetAutoPan( true );
 
     // cumulative translation
     wxPoint totalMovement( 0, 0 );
