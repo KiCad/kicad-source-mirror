@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014  Cirilo Bernardo
+ * Copyright (C) 2014-2017  Cirilo Bernardo
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,8 +28,6 @@
 #include <string>
 #include <list>
 #include <map>
-#include <wx/string.h>
-#include <wx/filename.h>
 
 #include <idf_common.h>
 
@@ -104,15 +102,15 @@ protected:
     double                      thickness;  // Board/Extrude Thickness or Height (IDF spec)
 
     // Read outline data from a BOARD or LIBRARY file's outline section
-    void readOutlines( std::ifstream& aBoardFile, IDF3::IDF_VERSION aIdfVersion );
+    void readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aIdfVersion );
     // Write comments to a BOARD or LIBRARY file (must not be within a SECTION as per IDFv3 spec)
-    bool writeComments( std::ofstream& aBoardFile );
+    bool writeComments( std::ostream& aBoardFile );
     // Write the outline owner to a BOARD file
-    bool writeOwner( std::ofstream& aBoardFile );
+    bool writeOwner( std::ostream& aBoardFile );
     // Write the data of a single outline object
-    void writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutline, size_t aIndex );
+    void writeOutline( std::ostream& aBoardFile, IDF_OUTLINE* aOutline, size_t aIndex );
     // Iterate through the outlines and write out all data
-    void writeOutlines( std::ofstream& aBoardFile );  // write outline data (no headers)
+    void writeOutlines( std::ostream& aBoardFile );  // write outline data (no headers)
     // Clear internal list of outlines
     void clearOutlines( void );
     /**
@@ -135,7 +133,7 @@ protected:
      * @param aBoardFile is an IDFv3 file opened for reading
      * @param aHeader is the ".BOARD_OUTLINE" header line as read by FetchIDFLine
      */
-    virtual void readData( std::ifstream& aBoardFile, const std::string& aHeader,
+    virtual void readData( std::istream& aBoardFile, const std::string& aHeader,
                            IDF3::IDF_VERSION aIdfVersion );
 
     /**
@@ -145,7 +143,7 @@ protected:
      *
      * @param aBoardFile is an IDFv3 file opened for writing
      */
-    virtual void writeData( std::ofstream& aBoardFile );
+    virtual void writeData( std::ostream& aBoardFile );
 
 public:
     BOARD_OUTLINE();
@@ -363,7 +361,7 @@ private:
      * @param aBoardFile is an IDFv3 file open for reading
      * @param aHeader is the .OTHER_OUTLINE header as read via FetchIDFLine
      */
-    virtual void readData( std::ifstream& aBoardFile, const std::string& aHeader,
+    virtual void readData( std::istream& aBoardFile, const std::string& aHeader,
                            IDF3::IDF_VERSION aIdfVersion ) override;
 
     /**
@@ -374,7 +372,7 @@ private:
      *
      * @return bool: true if the data was successfully written, otherwise false.
      */
-    virtual void writeData( std::ofstream& aBoardFile ) override;
+    virtual void writeData( std::ostream& aBoardFile ) override;
 
 public:
     OTHER_OUTLINE( IDF3_BOARD* aParent );
@@ -431,14 +429,14 @@ private:
      * @param aBoardFile is an open IDFv3 board file
      * @param aHeader is the .ROUTE_OUTLINE header as returned by FetchIDFLine
      */
-    virtual void readData( std::ifstream& aBoardFile, const std::string& aHeader,
+    virtual void readData( std::istream& aBoardFile, const std::string& aHeader,
                            IDF3::IDF_VERSION aIdfVersion ) override;
 
     /**
      * Function writeData
      * writes the ROUTE_OUTLINE data to an open IDFv3 file
      */
-    virtual void writeData( std::ofstream& aBoardFile ) override;
+    virtual void writeData( std::ostream& aBoardFile ) override;
 
 protected:
     IDF3::IDF_LAYER layers; // Routing layers (IDF spec)
@@ -483,7 +481,7 @@ private:
      * @param aBoardFile is an IDFv3 file opened for reading
      * @param aHeader is the .PLACE_OUTLINE header as returned by FetchIDFLine
      */
-    virtual void readData( std::ifstream& aBoardFile, const std::string& aHeader,
+    virtual void readData( std::istream& aBoardFile, const std::string& aHeader,
                            IDF3::IDF_VERSION aIdfVersion ) override;
 
     /**
@@ -494,7 +492,7 @@ private:
      *
      * @return bool: true if the data was successfully written, otherwise false
      */
-    virtual void writeData( std::ofstream& aBoardFile ) override;
+    virtual void writeData( std::ostream& aBoardFile ) override;
 
 protected:
     IDF3::IDF_LAYER side;   // Board Side [TOP/BOTTOM/BOTH ONLY] (IDF spec)
@@ -592,7 +590,7 @@ private:
      * @param aBoardFile is an open IDFv3 file
      * @param aHeader is the .PLACE_REGION header as returned by FetchIDFLine
      */
-    virtual void readData( std::ifstream& aBoardFile, const std::string& aHeader,
+    virtual void readData( std::istream& aBoardFile, const std::string& aHeader,
                            IDF3::IDF_VERSION aIdfVersion ) override;
 
     /**
@@ -603,7 +601,7 @@ private:
      *
      * @return bool: true if the data is successfully written, otherwise false
      */
-    virtual void writeData( std::ofstream& aBoardFile ) override;
+    virtual void writeData( std::ostream& aBoardFile ) override;
 
 public:
     GROUP_OUTLINE( IDF3_BOARD* aParent );
@@ -661,8 +659,8 @@ private:
 
     std::map< std::string, std::string >    props;      // properties list
 
-    void readProperties( std::ifstream& aLibFile );
-    bool writeProperties( std::ofstream& aLibFile );
+    void readProperties( std::istream& aLibFile );
+    bool writeProperties( std::ostream& aLibFile );
 
     /**
      * Function readData
@@ -672,7 +670,7 @@ private:
      * @param aLibFile is an open IDFv3 Library file
      * @param aHeader is the .ELECTRICAL or .MECHANICAL header as returned by FetchIDFLine
      */
-    virtual void readData( std::ifstream& aLibFile, const std::string& aHeader,
+    virtual void readData( std::istream& aLibFile, const std::string& aHeader,
                            IDF3::IDF_VERSION aIdfVersion ) override;
 
     /**
@@ -683,7 +681,7 @@ private:
      *
      * @return bool: true if the data was successfully written, otherwise false
      */
-    virtual void writeData( std::ofstream& aLibFile ) override;
+    virtual void writeData( std::ostream& aLibFile ) override;
 
     /**
      * Function incrementRef

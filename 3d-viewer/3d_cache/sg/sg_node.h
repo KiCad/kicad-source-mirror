@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@
 #ifndef SG_NODE_H
 #define SG_NODE_H
 
-#include <fstream>
+#include <iostream>
 #include <string>
 #include <list>
 #include <vector>
@@ -227,7 +227,7 @@ public:
      * writes this node's data to a VRML file; this includes
      * all data of child and referenced nodes.
      */
-    virtual bool WriteVRML( std::ofstream& aFile, bool aReuseFlag ) = 0;
+    virtual bool WriteVRML( std::ostream& aFile, bool aReuseFlag ) = 0;
 
     /**
      * Function WriteCache
@@ -236,7 +236,7 @@ public:
      * If this function is invoked by the user, parentNode must be
      * set to NULL in order to ensure coherent data.
      */
-    virtual bool WriteCache( std::ofstream& aFile, SGNODE* parentNode ) = 0;
+    virtual bool WriteCache( std::ostream& aFile, SGNODE* parentNode ) = 0;
 
     /**
      * Function ReadCache
@@ -244,7 +244,7 @@ public:
      * open the file for reading and invoke this function from a new
      * SCENEGRAPH node.
      */
-    virtual bool ReadCache( std::ifstream& aFile, SGNODE* parentNode ) = 0;
+    virtual bool ReadCache( std::istream& aFile, SGNODE* parentNode ) = 0;
 };
 
 #endif  // SG_NODE_H

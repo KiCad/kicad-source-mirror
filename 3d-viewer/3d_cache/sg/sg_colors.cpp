@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -207,7 +207,7 @@ void SGCOLORS::ReNameNodes( void )
 }
 
 
-bool SGCOLORS::WriteVRML( std::ofstream& aFile, bool aReuseFlag )
+bool SGCOLORS::WriteVRML( std::ostream& aFile, bool aReuseFlag )
 {
     if( colors.empty() )
         return false;
@@ -265,7 +265,7 @@ bool SGCOLORS::WriteVRML( std::ofstream& aFile, bool aReuseFlag )
 }
 
 
-bool SGCOLORS::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
+bool SGCOLORS::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 {
     if( NULL == parentNode )
     {
@@ -334,7 +334,7 @@ bool SGCOLORS::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
 }
 
 
-bool SGCOLORS::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
+bool SGCOLORS::ReadCache( std::istream& aFile, SGNODE* parentNode )
 {
     if( !colors.empty() )
     {

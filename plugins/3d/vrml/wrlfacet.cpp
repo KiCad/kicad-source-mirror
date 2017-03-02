@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2016-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -277,7 +277,7 @@ float FACET::CalcFaceNormal()
         lCPts[2] = *sV;
         ++sV;
 
-        WRLVEC3F wnorm = face_normal;
+        wnorm = face_normal;
         a2 = acosf( VCalcCosAngle(  lCPts[1], lCPts[0], lCPts[2] ) );
         wnorm.x *= a1 * a2;
         wnorm.y *= a1 * a2;

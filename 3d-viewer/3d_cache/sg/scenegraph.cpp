@@ -257,7 +257,7 @@ void SCENEGRAPH::ReNameNodes( void )
 }
 
 
-bool SCENEGRAPH::WriteVRML( std::ofstream& aFile, bool aReuseFlag )
+bool SCENEGRAPH::WriteVRML( std::ostream& aFile, bool aReuseFlag )
 {
     if( m_Transforms.empty() && m_RTransforms.empty()
         && m_Shape.empty() && m_RShape.empty() )
@@ -364,7 +364,7 @@ bool SCENEGRAPH::WriteVRML( std::ofstream& aFile, bool aReuseFlag )
 }
 
 
-bool SCENEGRAPH::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
+bool SCENEGRAPH::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 {
     if( NULL == parentNode && NULL != m_Parent )
     {
@@ -510,7 +510,7 @@ bool SCENEGRAPH::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
 }
 
 
-bool SCENEGRAPH::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
+bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
 {
     if( !m_Transforms.empty() || !m_RTransforms.empty()
         || !m_Shape.empty() || !m_RShape.empty() )

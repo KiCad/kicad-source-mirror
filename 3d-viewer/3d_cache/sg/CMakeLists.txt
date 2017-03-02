@@ -1,9 +1,9 @@
 include_directories(
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/3d-viewer
-  )
+)
 
-add_library( kicad_3dsg SHARED
+set( SG_FILES
     sg_base.cpp
     sg_node.cpp
     sg_helpers.cpp
@@ -28,6 +28,12 @@ add_library( kicad_3dsg SHARED
     ifsg_shape.cpp
     ifsg_api.cpp
 )
+
+if( MINGW )
+    list( APPEND SG_FILES ${CMAKE_SOURCE_DIR}/common/streamwrapper.cpp )
+endif( MINGW )
+
+add_library( kicad_3dsg SHARED ${SG_FILES} )
 
 if( APPLE )
     # puts library into the main kicad.app bundle in build tree

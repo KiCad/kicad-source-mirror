@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014  Cirilo Bernardo
+ * Copyright (C) 2014-2017  Cirilo Bernardo
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -151,7 +151,7 @@ IDF3::OUTLINE_TYPE BOARD_OUTLINE::GetOutlineType( void )
     return outlineType;
 }
 
-void BOARD_OUTLINE::readOutlines( std::ifstream& aBoardFile, IDF3::IDF_VERSION aIdfVersion )
+void BOARD_OUTLINE::readOutlines( std::istream& aBoardFile, IDF3::IDF_VERSION aIdfVersion )
 {
     // reads the outline data from a file
     double x, y, ang;
@@ -654,7 +654,7 @@ void BOARD_OUTLINE::readOutlines( std::ifstream& aBoardFile, IDF3::IDF_VERSION a
     return;
 }
 
-bool BOARD_OUTLINE::writeComments( std::ofstream& aBoardFile )
+bool BOARD_OUTLINE::writeComments( std::ostream& aBoardFile )
 {
     if( comments.empty() )
         return true;
@@ -671,7 +671,7 @@ bool BOARD_OUTLINE::writeComments( std::ofstream& aBoardFile )
     return !aBoardFile.fail();
 }
 
-bool BOARD_OUTLINE::writeOwner( std::ofstream& aBoardFile )
+bool BOARD_OUTLINE::writeOwner( std::ostream& aBoardFile )
 {
     switch( owner )
     {
@@ -691,7 +691,7 @@ bool BOARD_OUTLINE::writeOwner( std::ofstream& aBoardFile )
     return !aBoardFile.fail();
 }
 
-void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutline, size_t aIndex )
+void BOARD_OUTLINE::writeOutline( std::ostream& aBoardFile, IDF_OUTLINE* aOutline, size_t aIndex )
 {
     std::list<IDF_SEGMENT*>::iterator bo;
     std::list<IDF_SEGMENT*>::iterator eo;
@@ -955,7 +955,7 @@ void BOARD_OUTLINE::writeOutline( std::ofstream& aBoardFile, IDF_OUTLINE* aOutli
     return;
 }
 
-void BOARD_OUTLINE::writeOutlines( std::ofstream& aBoardFile )
+void BOARD_OUTLINE::writeOutlines( std::ostream& aBoardFile )
 {
     if( outlines.empty() )
         return;
@@ -1029,7 +1029,7 @@ double BOARD_OUTLINE::GetThickness( void )
     return thickness;
 }
 
-void BOARD_OUTLINE::readData( std::ifstream& aBoardFile, const std::string& aHeader,
+void BOARD_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHeader,
                               IDF3::IDF_VERSION aIdfVersion )
 {
     //  BOARD_OUTLINE (PANEL_OUTLINE)
@@ -1223,7 +1223,7 @@ void BOARD_OUTLINE::readData( std::ifstream& aBoardFile, const std::string& aHea
 }
 
 
-void BOARD_OUTLINE::writeData( std::ofstream& aBoardFile )
+void BOARD_OUTLINE::writeData( std::ostream& aBoardFile )
 {
     writeComments( aBoardFile );
 
@@ -1610,7 +1610,7 @@ IDF3::IDF_LAYER OTHER_OUTLINE::GetSide( void )
     return side;
 }
 
-void OTHER_OUTLINE::readData( std::ifstream& aBoardFile, const std::string& aHeader,
+void OTHER_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHeader,
                               IDF3::IDF_VERSION aIdfVersion )
 {
     // OTHER_OUTLINE/VIA_KEEPOUT
@@ -1869,7 +1869,7 @@ void OTHER_OUTLINE::readData( std::ifstream& aBoardFile, const std::string& aHea
     return;
 }
 
-void OTHER_OUTLINE::writeData( std::ofstream& aBoardFile )
+void OTHER_OUTLINE::writeData( std::ostream& aBoardFile )
 {
     // this section is optional; do not write if not required
     if( outlines.empty() )
@@ -1970,7 +1970,7 @@ IDF3::IDF_LAYER ROUTE_OUTLINE::GetLayers( void )
     return layers;
 }
 
-void ROUTE_OUTLINE::readData( std::ifstream& aBoardFile, const std::string& aHeader,
+void ROUTE_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHeader,
                               IDF3::IDF_VERSION aIdfVersion )
 {
     //  ROUTE_OUTLINE (or ROUTE_KEEPOUT)
@@ -2183,7 +2183,7 @@ void ROUTE_OUTLINE::readData( std::ifstream& aBoardFile, const std::string& aHea
 }
 
 
-void ROUTE_OUTLINE::writeData( std::ofstream& aBoardFile )
+void ROUTE_OUTLINE::writeData( std::ostream& aBoardFile )
 {
     // this section is optional; do not write if not required
     if( outlines.empty() )
@@ -2318,7 +2318,7 @@ double PLACE_OUTLINE::GetMaxHeight( void )
     return thickness;
 }
 
-void PLACE_OUTLINE::readData( std::ifstream& aBoardFile, const std::string& aHeader,
+void PLACE_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHeader,
                               IDF3::IDF_VERSION aIdfVersion )
 {
     //  PLACE_OUTLINE/KEEPOUT
@@ -2558,7 +2558,7 @@ void PLACE_OUTLINE::readData( std::ifstream& aBoardFile, const std::string& aHea
     return;
 }
 
-void PLACE_OUTLINE::writeData( std::ofstream& aBoardFile )
+void PLACE_OUTLINE::writeData( std::ostream& aBoardFile )
 {
     // this section is optional; do not write if not required
     if( outlines.empty() )
@@ -2742,7 +2742,7 @@ const std::string& GROUP_OUTLINE::GetGroupName( void )
 }
 
 
-void GROUP_OUTLINE::readData( std::ifstream& aBoardFile, const std::string& aHeader,
+void GROUP_OUTLINE::readData( std::istream& aBoardFile, const std::string& aHeader,
                               IDF3::IDF_VERSION aIdfVersion )
 {
     //  Placement Group
@@ -2901,7 +2901,7 @@ void GROUP_OUTLINE::readData( std::ifstream& aBoardFile, const std::string& aHea
 }
 
 
-void GROUP_OUTLINE::writeData( std::ofstream& aBoardFile )
+void GROUP_OUTLINE::writeData( std::ostream& aBoardFile )
 {
     // this section is optional; do not write if not required
     if( outlines.empty() )
@@ -2974,7 +2974,7 @@ IDF3_COMP_OUTLINE::IDF3_COMP_OUTLINE( IDF3_BOARD* aParent )
     return;
 }
 
-void IDF3_COMP_OUTLINE::readProperties( std::ifstream& aLibFile )
+void IDF3_COMP_OUTLINE::readProperties( std::istream& aLibFile )
 {
     bool quoted = false;
     bool comment = false;
@@ -3094,7 +3094,7 @@ void IDF3_COMP_OUTLINE::readProperties( std::ifstream& aLibFile )
 }
 
 
-bool IDF3_COMP_OUTLINE::writeProperties( std::ofstream& aLibFile )
+bool IDF3_COMP_OUTLINE::writeProperties( std::ostream& aLibFile )
 {
     if( props.empty() )
         return true;
@@ -3111,7 +3111,7 @@ bool IDF3_COMP_OUTLINE::writeProperties( std::ofstream& aLibFile )
     return !aLibFile.fail();
 }
 
-void IDF3_COMP_OUTLINE::readData( std::ifstream& aLibFile, const std::string& aHeader,
+void IDF3_COMP_OUTLINE::readData( std::istream& aLibFile, const std::string& aHeader,
                                   IDF3::IDF_VERSION aIdfVersion )
 {
     //  .ELECTRICAL/.MECHANICAL
@@ -3377,7 +3377,7 @@ void IDF3_COMP_OUTLINE::readData( std::ifstream& aLibFile, const std::string& aH
 }
 
 
-void IDF3_COMP_OUTLINE::writeData( std::ofstream& aLibFile )
+void IDF3_COMP_OUTLINE::writeData( std::ostream& aLibFile )
 {
     if( refNum == 0 )
         return;    // nothing to do

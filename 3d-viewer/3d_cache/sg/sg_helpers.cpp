@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -162,7 +162,7 @@ void S3D::FormatColor( std::string& result, const SGCOLOR& aColor )
 }
 
 
-bool S3D::WritePoint( std::ofstream& aFile, const SGPOINT& aPoint )
+bool S3D::WritePoint( std::ostream& aFile, const SGPOINT& aPoint )
 {
     aFile.write( (char*)&aPoint.x, sizeof(aPoint.x) );
     aFile.write( (char*)&aPoint.y, sizeof(aPoint.y) );
@@ -175,7 +175,7 @@ bool S3D::WritePoint( std::ofstream& aFile, const SGPOINT& aPoint )
 }
 
 
-bool S3D::WriteVector( std::ofstream& aFile, const SGVECTOR& aVector )
+bool S3D::WriteVector( std::ostream& aFile, const SGVECTOR& aVector )
 {
     double x, y, z;
     aVector.GetVector( x, y, z );
@@ -190,7 +190,7 @@ bool S3D::WriteVector( std::ofstream& aFile, const SGVECTOR& aVector )
 }
 
 
-bool S3D::WriteColor( std::ofstream& aFile, const SGCOLOR& aColor )
+bool S3D::WriteColor( std::ostream& aFile, const SGCOLOR& aColor )
 {
     float r, g, b;
     aColor.GetColor( r, g, b );
@@ -205,7 +205,7 @@ bool S3D::WriteColor( std::ofstream& aFile, const SGCOLOR& aColor )
 }
 
 
-S3D::SGTYPES S3D::ReadTag( std::ifstream& aFile, std::string& aName )
+S3D::SGTYPES S3D::ReadTag( std::istream& aFile, std::string& aName )
 {
     char schar;
     aFile.get( schar );
@@ -293,7 +293,7 @@ S3D::SGTYPES S3D::ReadTag( std::ifstream& aFile, std::string& aName )
 }
 
 
-bool S3D::ReadPoint( std::ifstream& aFile, SGPOINT& aPoint )
+bool S3D::ReadPoint( std::istream& aFile, SGPOINT& aPoint )
 {
     aFile.read( (char*)&aPoint.x, sizeof( aPoint.x ) );
     aFile.read( (char*)&aPoint.y, sizeof( aPoint.y ) );
@@ -306,7 +306,7 @@ bool S3D::ReadPoint( std::ifstream& aFile, SGPOINT& aPoint )
 }
 
 
-bool S3D::ReadVector( std::ifstream& aFile, SGVECTOR& aVector )
+bool S3D::ReadVector( std::istream& aFile, SGVECTOR& aVector )
 {
     double x, y, z;
     aFile.read( (char*)&x, sizeof(double) );
@@ -321,7 +321,7 @@ bool S3D::ReadVector( std::ifstream& aFile, SGVECTOR& aVector )
 }
 
 
-bool S3D::ReadColor( std::ifstream& aFile, SGCOLOR& aColor )
+bool S3D::ReadColor( std::istream& aFile, SGCOLOR& aColor )
 {
     float r, g, b;
     aFile.read( (char*)&r, sizeof(float) );

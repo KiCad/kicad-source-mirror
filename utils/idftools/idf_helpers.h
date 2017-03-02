@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014  Cirilo Bernardo
+ * Copyright (C) 2014-2017  Cirilo Bernardo
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@
 #define IDF_HELPERS_H
 
 #include <wx/wx.h>
-#include <fstream>
+#include <iostream>
 #include <string>
 #include <idf_common.h>
 
@@ -82,7 +82,7 @@ namespace IDF3
  *
  * @return bool: true if a line was read and was not empty; otherwise false
  */
-bool FetchIDFLine( std::ifstream& aModel, std::string& aLine, bool& isComment, std::streampos& aFilePos );
+bool FetchIDFLine( std::istream& aModel, std::string& aLine, bool& isComment, std::streampos& aFilePos );
 
 
 /**
@@ -145,7 +145,7 @@ bool ParseIDFLayer( const std::string& aToken, IDF3::IDF_LAYER& aLayer );
  *
  * @return bool: true if the data was successfully written, otherwise false
  */
-bool WriteLayersText( std::ofstream& aBoardFile, IDF3::IDF_LAYER aLayer );
+bool WriteLayersText( std::ostream& aBoardFile, IDF3::IDF_LAYER aLayer );
 
 
 /**

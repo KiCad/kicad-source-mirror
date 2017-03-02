@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014  Cirilo Bernardo
+ * Copyright (C) 2014-2017  Cirilo Bernardo
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,7 +91,7 @@ private:
      * data was encountered or an error occurred. if an error occurred then
      * an exception is thrown.
      */
-    bool readPlaceData( std::ifstream &aBoardFile, IDF3::FILE_STATE& aBoardState,
+    bool readPlaceData( std::istream &aBoardFile, IDF3::FILE_STATE& aBoardState,
                         IDF3_BOARD *aBoard, IDF3::IDF_VERSION aIdfVersion,
                         bool aNoSubstituteOutlines );
 
@@ -109,7 +109,7 @@ private:
      *
      * @return bool: true if data was successfully written, otherwise false
      */
-    void writePlaceData( std::ofstream& aBoardFile, double aXpos, double aYpos, double aAngle,
+    void writePlaceData( std::ostream& aBoardFile, double aXpos, double aYpos, double aAngle,
                          const std::string aRefDes, IDF3::IDF_PLACEMENT aPlacement,
                          IDF3::IDF_LAYER aSide );
 
@@ -233,7 +233,7 @@ private:
      *
      * @return bool: true if the operation succeeded, otherwise false
      */
-    bool writeDrillData( std::ofstream& aBoardFile );
+    bool writeDrillData( std::ostream& aBoardFile );
 
     /**
      * Function WritePlaceData
@@ -243,7 +243,7 @@ private:
      *
      * @return bool: true if the operation succeeded, otherwise false
      */
-    bool writePlaceData( std::ofstream& aBoardFile );
+    bool writePlaceData( std::ostream& aBoardFile );
 
 #ifndef DISABLE_IDF_OWNERSHIP
     bool checkOwnership( int aSourceLine, const char* aSourceFunc );
@@ -474,7 +474,6 @@ private:
     std::map< std::string, IDF3_COMPONENT*> components;         // drill and placement data for components
     std::map< std::string, IDF3_COMP_OUTLINE*> compOutlines;    // component outlines (data for library file)
     std::string boardName;
-    IDF3::FILE_STATE state;
     IDF3::CAD_TYPE   cadType;
     IDF3::IDF_UNIT   unit;
     IDF3::IDF_VERSION   idfVer;                                 // IDF version of Board or Library
@@ -526,18 +525,18 @@ private:
     bool delCompDrill( double aDia, double aXpos, double aYpos, std::string aRefDes );
 
     // read the DRILLED HOLES section
-    void readBrdDrills( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState );
+    void readBrdDrills( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState );
     // read the NOTES section
-    void readBrdNotes( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState );
+    void readBrdNotes( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState );
     // read the component placement section
-    void readBrdPlacement( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState,
+    void readBrdPlacement( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState,
                            bool aNoSubstituteOutlines );
     // read the board HEADER
-    void readBrdHeader( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState );
+    void readBrdHeader( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState );
     // read individual board sections; pay attention to IDFv3 section specifications
     // exception thrown on unrecoverable errors. state flag set to FILE_PLACEMENT
     // upon reading the PLACEMENT file; according to IDFv3 this is the final section
-    void readBrdSection( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState,
+    void readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState,
                          bool aNoSubstituteOutlines );
     // read the board file data
     void readBoardFile( const std::string& aFileName, bool aNoSubstituteOutlines );
@@ -546,9 +545,9 @@ private:
     void writeBoardFile( const std::string& aFileName );
 
     // read the library sections (outlines)
-    void readLibSection( std::ifstream& aLibFile, IDF3::FILE_STATE& aLibState, IDF3_BOARD* aBoard );
+    void readLibSection( std::istream& aLibFile, IDF3::FILE_STATE& aLibState, IDF3_BOARD* aBoard );
     // read the library HEADER
-    void readLibHeader( std::ifstream& aLibFile, IDF3::FILE_STATE& aLibState );
+    void readLibHeader( std::istream& aLibFile, IDF3::FILE_STATE& aLibState );
     // read the library file data
     void readLibFile( const std::string& aFileName );
 

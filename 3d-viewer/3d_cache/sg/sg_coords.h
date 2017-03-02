@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,10 +65,10 @@ public:
     bool CalcNormals( SGFACESET* callingNode, SGNODE** aPtr = NULL );
 
     void ReNameNodes( void ) override;
-    bool WriteVRML( std::ofstream& aFile, bool aReuseFlag ) override;
+    bool WriteVRML( std::ostream& aFile, bool aReuseFlag ) override;
 
-    bool WriteCache( std::ofstream& aFile, SGNODE* parentNode ) override;
-    bool ReadCache( std::ifstream& aFile, SGNODE* parentNode ) override;
+    bool WriteCache( std::ostream& aFile, SGNODE* parentNode ) override;
+    bool ReadCache( std::istream& aFile, SGNODE* parentNode ) override;
 };
 
 #endif  // SG_COORDS_H

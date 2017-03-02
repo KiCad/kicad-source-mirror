@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014  Cirilo Bernardo
+ * Copyright (C) 2014-2017  Cirilo Bernardo
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ using namespace std;
 using namespace IDF3;
 
 // fetch a line from the given input file and trim the ends
-bool IDF3::FetchIDFLine( std::ifstream& aModel, std::string& aLine, bool& isComment, std::streampos& aFilePos )
+bool IDF3::FetchIDFLine( std::istream& aModel, std::string& aLine, bool& isComment, std::streampos& aFilePos )
 {
     aLine = "";
     aFilePos = aModel.tellg();
@@ -205,7 +205,7 @@ bool IDF3::ParseIDFLayer( const std::string& aToken, IDF3::IDF_LAYER& aLayer )
 }
 
 
-bool IDF3::WriteLayersText( std::ofstream& aBoardFile, IDF3::IDF_LAYER aLayer )
+bool IDF3::WriteLayersText( std::ostream& aBoardFile, IDF3::IDF_LAYER aLayer )
 {
     switch( aLayer )
     {

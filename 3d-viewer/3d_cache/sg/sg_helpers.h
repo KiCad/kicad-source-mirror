@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
 #ifndef SG_HELPERS_H
 #define SG_HELPERS_H
 
-#include <fstream>
+#include <iostream>
 #include <string>
 #include <algorithm>
 #include <vector>
@@ -210,13 +210,13 @@ namespace S3D
     //
 
     // write out an XYZ vertex
-    bool WritePoint( std::ofstream& aFile, const SGPOINT& aPoint );
+    bool WritePoint( std::ostream& aFile, const SGPOINT& aPoint );
 
     // write out a unit vector
-    bool WriteVector( std::ofstream& aFile, const SGVECTOR& aVector );
+    bool WriteVector( std::ostream& aFile, const SGVECTOR& aVector );
 
     // write out an RGB color
-    bool WriteColor( std::ofstream& aFile, const SGCOLOR& aColor );
+    bool WriteColor( std::ostream& aFile, const SGCOLOR& aColor );
 
     //
     // Cache related READ functions
@@ -232,16 +232,16 @@ namespace S3D
      * @return will be the NodeType which the tag represents or
      * S3D::SGTYPES::SGTYPE_END on failure
      */
-    S3D::SGTYPES ReadTag( std::ifstream& aFile, std::string& aName );
+    S3D::SGTYPES ReadTag( std::istream& aFile, std::string& aName );
 
     // read an XYZ vertex
-    bool ReadPoint( std::ifstream& aFile, SGPOINT& aPoint );
+    bool ReadPoint( std::istream& aFile, SGPOINT& aPoint );
 
     // read a unit vector
-    bool ReadVector( std::ifstream& aFile, SGVECTOR& aVector );
+    bool ReadVector( std::istream& aFile, SGVECTOR& aVector );
 
     // read an RGB color
-    bool ReadColor( std::ifstream& aFile, SGCOLOR& aColor );
+    bool ReadColor( std::istream& aFile, SGCOLOR& aColor );
 };
 
 #endif  // SG_HELPERS_H

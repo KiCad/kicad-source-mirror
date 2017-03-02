@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fstream>
 #include <iostream>
 #include <sstream>
 #include <wx/log.h>
@@ -195,7 +194,7 @@ void SGINDEX::ReNameNodes( void )
 }
 
 
-bool SGINDEX::WriteVRML( std::ofstream& aFile, bool aReuseFlag )
+bool SGINDEX::WriteVRML( std::ostream& aFile, bool aReuseFlag )
 {
     if( index.empty() )
         return false;
@@ -207,7 +206,7 @@ bool SGINDEX::WriteVRML( std::ofstream& aFile, bool aReuseFlag )
 }
 
 
-bool SGINDEX::writeCoordIndex( std::ofstream& aFile )
+bool SGINDEX::writeCoordIndex( std::ostream& aFile )
 {
     size_t n = index.size();
 
@@ -259,14 +258,14 @@ bool SGINDEX::writeCoordIndex( std::ofstream& aFile )
 }
 
 
-bool SGINDEX::writeColorIndex( std::ofstream& aFile )
+bool SGINDEX::writeColorIndex( std::ostream& aFile )
 {
     aFile << " colorIndex [\n  ";
     return writeIndexList( aFile );
 }
 
 
-bool SGINDEX::writeIndexList( std::ofstream& aFile )
+bool SGINDEX::writeIndexList( std::ostream& aFile )
 {
     // index to control formatting
     int nv = 0;
@@ -295,7 +294,7 @@ bool SGINDEX::writeIndexList( std::ofstream& aFile )
 }
 
 
-bool SGINDEX::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
+bool SGINDEX::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 {
     if( NULL == parentNode )
     {
@@ -364,7 +363,7 @@ bool SGINDEX::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
 }
 
 
-bool SGINDEX::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
+bool SGINDEX::ReadCache( std::istream& aFile, SGNODE* parentNode )
 {
     if( !index.empty() )
     {

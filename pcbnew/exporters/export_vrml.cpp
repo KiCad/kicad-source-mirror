@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2013  Lorenzo Mercantonio
- * Copyright (C) 2014-2016  Cirilo Bernardo
+ * Copyright (C) 2014-2017  Cirilo Bernardo
  * Copyright (C) 2013 Jean-Pierre Charras jp.charras at wanadoo.fr
  * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -44,6 +44,7 @@
 #include "macros.h"
 #include "pgm_base.h"
 #include "plugins/3dapi/ifsg_all.h"
+#include "streamwrapper.h"
 #include "vrml_layer.h"
 #include "wxPcbStruct.h"
 #include "../../kicad/kicad.h"
@@ -62,7 +63,6 @@ static bool USE_DEFS;               // true to reuse component definitions
 static bool USE_RELPATH;            // true to use relative paths in VRML inline{}
 static double WORLD_SCALE = 1.0;    // scaling from 0.1 in to desired VRML unit
 static double BOARD_SCALE;          // scaling from mm to desired VRML world scale
-static std::ofstream output_file;   // legacy VRML output stream
 static const int PRECISION = 6;     // legacy precision factor (now set to 6)
 static wxString SUBDIR_3D;          // legacy 3D subdirectory
 static wxString PROJ_DIR;           // project directory
@@ -315,7 +315,7 @@ static void create_vrml_shell( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX color
 static void create_vrml_plane( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX colorID,
     VRML_LAYER* layer, double aHeight, bool aTopPlane );
 
-static void write_triangle_bag( std::ofstream& aOut_file, VRML_COLOR& aColor,
+static void write_triangle_bag( std::ostream& aOut_file, VRML_COLOR& aColor,
                                 VRML_LAYER* aLayer, bool aPlane, bool aTop,
                                 double aTop_z, double aBottom_z )
 {
@@ -415,7 +415,8 @@ static void write_triangle_bag( std::ofstream& aOut_file, VRML_COLOR& aColor,
 }
 
 
-static void write_layers( MODEL_VRML& aModel, BOARD* aPcb, const char* aFileName )
+static void write_layers( MODEL_VRML& aModel, BOARD* aPcb,
+    const char* aFileName, std::ofstream* aOutputFile )
 {
     // VRML_LAYER board;
     aModel.m_board.Tesselate( &aModel.m_holes );
@@ -424,7 +425,7 @@ static void write_layers( MODEL_VRML& aModel, BOARD* aPcb, const char* aFileName
 
     if( USE_INLINES )
     {
-        write_triangle_bag( output_file, aModel.GetColor( VRML_COLOR_PCB ),
+        write_triangle_bag( *aOutputFile, aModel.GetColor( VRML_COLOR_PCB ),
                             &aModel.m_board, false, false, brdz, -brdz );
     }
     else
@@ -445,7 +446,7 @@ static void write_layers( MODEL_VRML& aModel, BOARD* aPcb, const char* aFileName
 
     if( USE_INLINES )
     {
-        write_triangle_bag( output_file, aModel.GetColor( VRML_COLOR_TRACK ),
+        write_triangle_bag( *aOutputFile, aModel.GetColor( VRML_COLOR_TRACK ),
                            &aModel.m_top_copper, true, true,
                            aModel.GetLayerZ( F_Cu ), 0 );
     }
@@ -460,7 +461,7 @@ static void write_layers( MODEL_VRML& aModel, BOARD* aPcb, const char* aFileName
 
     if( USE_INLINES )
     {
-        write_triangle_bag( output_file, aModel.GetColor( VRML_COLOR_TIN ),
+        write_triangle_bag( *aOutputFile, aModel.GetColor( VRML_COLOR_TIN ),
                             &aModel.m_top_tin, true, true,
                             aModel.GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) * BOARD_SCALE,
                             0 );
@@ -477,7 +478,7 @@ static void write_layers( MODEL_VRML& aModel, BOARD* aPcb, const char* aFileName
 
     if( USE_INLINES )
     {
-        write_triangle_bag( output_file, aModel.GetColor( VRML_COLOR_TRACK ),
+        write_triangle_bag( *aOutputFile, aModel.GetColor( VRML_COLOR_TRACK ),
                             &aModel.m_bot_copper, true, false,
                             aModel.GetLayerZ( B_Cu ), 0 );
     }
@@ -492,7 +493,7 @@ static void write_layers( MODEL_VRML& aModel, BOARD* aPcb, const char* aFileName
 
     if( USE_INLINES )
     {
-        write_triangle_bag( output_file, aModel.GetColor( VRML_COLOR_TIN ),
+        write_triangle_bag( *aOutputFile, aModel.GetColor( VRML_COLOR_TIN ),
                             &aModel.m_bot_tin, true, false,
                             aModel.GetLayerZ( B_Cu )
                             - Millimeter2iu( ART_OFFSET / 2.0 ) * BOARD_SCALE,
@@ -510,7 +511,7 @@ static void write_layers( MODEL_VRML& aModel, BOARD* aPcb, const char* aFileName
 
     if( USE_INLINES )
     {
-        write_triangle_bag( output_file, aModel.GetColor( VRML_COLOR_TIN ),
+        write_triangle_bag( *aOutputFile, aModel.GetColor( VRML_COLOR_TIN ),
                             &aModel.m_plated_holes, false, false,
                             aModel.GetLayerZ( F_Cu ) + Millimeter2iu( ART_OFFSET / 2.0 ) * BOARD_SCALE,
                             aModel.GetLayerZ( B_Cu ) - Millimeter2iu( ART_OFFSET / 2.0 ) * BOARD_SCALE );
@@ -527,7 +528,7 @@ static void write_layers( MODEL_VRML& aModel, BOARD* aPcb, const char* aFileName
 
     if( USE_INLINES )
     {
-        write_triangle_bag( output_file, aModel.GetColor( VRML_COLOR_SILK ), &aModel.m_top_silk,
+        write_triangle_bag( *aOutputFile, aModel.GetColor( VRML_COLOR_SILK ), &aModel.m_top_silk,
                             true, true, aModel.GetLayerZ( F_SilkS ), 0 );
     }
     else
@@ -541,7 +542,7 @@ static void write_layers( MODEL_VRML& aModel, BOARD* aPcb, const char* aFileName
 
     if( USE_INLINES )
     {
-        write_triangle_bag( output_file, aModel.GetColor( VRML_COLOR_SILK ), &aModel.m_bot_silk,
+        write_triangle_bag( *aOutputFile, aModel.GetColor( VRML_COLOR_SILK ), &aModel.m_bot_silk,
                             true, false, aModel.GetLayerZ( B_SilkS ), 0 );
     }
     else
@@ -1265,7 +1266,8 @@ static void compose_quat( double q1[4], double q2[4], double qr[4] )
 }
 
 
-static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule )
+static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb,
+    MODULE* aModule, std::ostream* aOutputFile )
 {
     if( !aModel.m_plainPCB )
     {
@@ -1404,29 +1406,28 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
                     if( !S3D::WriteVRML( dstFile.GetFullPath().ToUTF8(), true, mod3d, USE_DEFS, true ) )
                         continue;
                 }
-
             }
 
-            output_file << "Transform {\n";
+            (*aOutputFile) << "Transform {\n";
 
             // only write a rotation if it is >= 0.1 deg
             if( std::abs( rot[3] ) > 0.0001745 )
             {
-                output_file << "  rotation " << std::setprecision( 5 );
-                output_file << rot[0] << " " << rot[1] << " " << rot[2] << " " << rot[3] << "\n";
+                (*aOutputFile) << "  rotation " << std::setprecision( 5 );
+                (*aOutputFile) << rot[0] << " " << rot[1] << " " << rot[2] << " " << rot[3] << "\n";
             }
 
-            output_file << "  translation " << std::setprecision( PRECISION );
-            output_file << trans.x << " ";
-            output_file << trans.y << " ";
-            output_file << trans.z << "\n";
+            (*aOutputFile) << "  translation " << std::setprecision( PRECISION );
+            (*aOutputFile) << trans.x << " ";
+            (*aOutputFile) << trans.y << " ";
+            (*aOutputFile) << trans.z << "\n";
 
-            output_file << "  scale ";
-            output_file << sM->m_Scale.x << " ";
-            output_file << sM->m_Scale.y << " ";
-            output_file << sM->m_Scale.z << "\n";
+            (*aOutputFile) << "  scale ";
+            (*aOutputFile) << sM->m_Scale.x << " ";
+            (*aOutputFile) << sM->m_Scale.y << " ";
+            (*aOutputFile) << sM->m_Scale.z << "\n";
 
-            output_file << "  children [\n    Inline {\n      url \"";
+            (*aOutputFile) << "  children [\n    Inline {\n      url \"";
 
             if( USE_RELPATH )
             {
@@ -1439,8 +1440,8 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
 
             wxString fn = dstFile.GetFullPath();
             fn.Replace( "\\", "/" );
-            output_file << TO_UTF8( fn ) << "\"\n    } ]\n";
-            output_file << "  }\n";
+            (*aOutputFile) << TO_UTF8( fn ) << "\"\n    } ]\n";
+            (*aOutputFile) << "  }\n";
         }
         else
         {
@@ -1503,9 +1504,6 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
     // plain PCB or else PCB with copper and silkscreen
     model3d.m_plainPCB = aUsePlainPCB;
 
-    // locale switch for C numeric output
-    LOCALE_IO* toggle = NULL;
-
     try
     {
 
@@ -1537,8 +1535,16 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
                     throw( std::runtime_error( "Could not create 3D model subdirectory" ) );
             }
 
-            toggle = new LOCALE_IO;
-            output_file.open( TO_UTF8( aFullFileName ), std::ios_base::out );
+            OPEN_OSTREAM( output_file, TO_UTF8( aFullFileName ) );
+
+            if( output_file.fail() )
+            {
+                std::ostringstream ostr;
+                ostr << "Could not open file '" << TO_UTF8( aFullFileName ) << "'";
+                throw( std::runtime_error( ostr.str().c_str() ) );
+            }
+
+            output_file.imbue( std::locale( "C" ) );
 
             // Begin with the usual VRML boilerplate
             wxString fn = aFullFileName;
@@ -1553,19 +1559,28 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
             output_file << WORLD_SCALE << " ";
             output_file << WORLD_SCALE << "\n";
             output_file << "  children [\n";
-        }
 
-        // Export footprints
-        for( MODULE* module = pcb->m_Modules; module != 0; module = module->Next() )
-            export_vrml_module( model3d, pcb, module );
+            // Export footprints
+            for( MODULE* module = pcb->m_Modules; module != 0; module = module->Next() )
+                export_vrml_module( model3d, pcb, module, &output_file );
 
-        // write out the board and all layers
-        write_layers( model3d, pcb, TO_UTF8( aFullFileName ) );
+            // write out the board and all layers
+            write_layers( model3d, pcb, TO_UTF8( aFullFileName ), &output_file );
 
-        // Close the outer 'transform' node
-        if( USE_INLINES )
+            // Close the outer 'transform' node
             output_file << "]\n}\n";
 
+            CLOSE_STREAM( output_file );
+        }
+        else
+        {
+            // Export footprints
+            for( MODULE* module = pcb->m_Modules; module != 0; module = module->Next() )
+                export_vrml_module( model3d, pcb, module, NULL );
+
+            // write out the board and all layers
+            write_layers( model3d, pcb, TO_UTF8( aFullFileName ), NULL );
+        }
     }
     catch( const std::exception& e )
     {
@@ -1574,14 +1589,6 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
         wxMessageBox( msg );
 
         ok = false;
-    }
-
-    if( USE_INLINES )
-    {
-        output_file.close();
-
-        if( toggle )
-            delete toggle;
     }
 
     return ok;

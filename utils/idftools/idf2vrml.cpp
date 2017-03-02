@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014  Cirilo Bernardo
+ * Copyright (C) 2014-2017  Cirilo Bernardo
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,17 +47,17 @@
 #include <cerrno>
 #include <list>
 #include <utility>
-#include <clocale>
 #include <vector>
 #include <cstdlib>
 #include <cstring>
 #include <algorithm>
 #include <boost/ptr_container/ptr_map.hpp>
 
-#include <idf_helpers.h>
-#include <idf_common.h>
-#include <idf_parser.h>
-#include <vrml_layer.h>
+#include "idf_helpers.h"
+#include "idf_common.h"
+#include "idf_parser.h"
+#include "streamwrapper.h"
+#include "vrml_layer.h"
 
 #ifndef MIN_ANG
 #define MIN_ANG 0.01
@@ -198,14 +198,14 @@ VRML_COLOR colors[NCOLORS] =
     { { 0.102, 1, 0.984 },      { 0, 0, 0 },    { 0.102, 1, 0.984 },        0.9, 0, 0.1 }
 };
 
-bool WriteHeader( IDF3_BOARD& board, std::ofstream& file );
-bool MakeBoard( IDF3_BOARD& board, std::ofstream& file );
-bool MakeComponents( IDF3_BOARD& board, std::ofstream& file, bool compact );
-bool MakeOtherOutlines( IDF3_BOARD& board, std::ofstream& file );
+bool WriteHeader( IDF3_BOARD& board, std::ostream& file );
+bool MakeBoard( IDF3_BOARD& board, std::ostream& file );
+bool MakeComponents( IDF3_BOARD& board, std::ostream& file, bool compact );
+bool MakeOtherOutlines( IDF3_BOARD& board, std::ostream& file );
 bool PopulateVRML( VRML_LAYER& model, const std::list< IDF_OUTLINE* >* items, bool bottom,
                    double scale, double dX = 0.0, double dY = 0.0, double angle = 0.0 );
 bool AddSegment( VRML_LAYER& model, IDF_SEGMENT* seg, int icont, int iseg );
-bool WriteTriangles( std::ofstream& file, VRML_IDS* vID, VRML_LAYER* layer, bool plane,
+bool WriteTriangles( std::ostream& file, VRML_IDS* vID, VRML_LAYER* layer, bool plane,
                      bool top, double top_z, double bottom_z, int precision, bool compact );
 inline void TransformPoint( IDF_SEGMENT& seg, double frac, bool bottom,
                             double dX, double dY, double angle );
@@ -215,9 +215,6 @@ VRML_IDS* GetColor( boost::ptr_map<const std::string, VRML_IDS>& cmap,
 
 int IDF2VRML::OnRun()
 {
-    // IDF implicitly requires the C locale
-    setlocale( LC_ALL, "C" );
-
     // Essential inputs:
     // 1. IDF file
     // 2. Output scale: internal IDF units are mm, so 1 = 1mm per VRML unit,
@@ -264,9 +261,14 @@ int IDF2VRML::OnRun()
     fname.Normalize();
     wxLogMessage( "Writing file: '%s'", fname.GetFullName() );
 
-    std::ofstream ofile;
-    ofile.open( fname.GetFullPath().ToUTF8(), std::ios_base::out );
+    OPEN_OSTREAM( ofile, fname.GetFullPath().ToUTF8() );
 
+    if( ofile.fail() )
+    {
+        wxLogMessage( "Could not open file: '%s'", fname.GetFullName() );
+    }
+
+    ofile.imbue( std::locale( "C" ) );
     ofile << std::fixed; // do not use exponents in VRML output
     WriteHeader( pcb, ofile );
 
@@ -280,15 +282,13 @@ int IDF2VRML::OnRun()
     MakeOtherOutlines( pcb, ofile );
 
     ofile << "]\n}\n";
-    ofile.close();
+    CLOSE_STREAM( ofile );
 
-    // restore the locale
-    setlocale( LC_ALL, "" );
     return 0;
 }
 
 
-bool WriteHeader( IDF3_BOARD& board, std::ofstream& file )
+bool WriteHeader( IDF3_BOARD& board, std::ostream& file )
 {
     std::string bname = board.GetBoardName();
 
@@ -320,7 +320,7 @@ bool WriteHeader( IDF3_BOARD& board, std::ofstream& file )
 }
 
 
-bool MakeBoard( IDF3_BOARD& board, std::ofstream& file )
+bool MakeBoard( IDF3_BOARD& board, std::ostream& file )
 {
     VRML_LAYER vpcb;
 
@@ -484,7 +484,7 @@ bool AddSegment( VRML_LAYER& model, IDF_SEGMENT* seg, int icont, int iseg )
 }
 
 
-bool WriteTriangles( std::ofstream& file, VRML_IDS* vID, VRML_LAYER* layer, bool plane,
+bool WriteTriangles( std::ostream& file, VRML_IDS* vID, VRML_LAYER* layer, bool plane,
                      bool top, double top_z, double bottom_z, int precision, bool compact )
 {
     if( vID == NULL || layer == NULL )
@@ -699,7 +699,7 @@ inline void TransformPoint( IDF_SEGMENT& seg, double frac, bool bottom,
     return;
 }
 
-bool MakeComponents( IDF3_BOARD& board, std::ofstream& file, bool compact )
+bool MakeComponents( IDF3_BOARD& board, std::ostream& file, bool compact )
 {
     int cidx = 2;   // color index; start at 2 since 0,1 are special (board, NOGEOM_NOPART)
 
@@ -883,7 +883,7 @@ VRML_IDS* GetColor( boost::ptr_map<const std::string, VRML_IDS>& cmap, int& inde
 }
 
 
-bool MakeOtherOutlines( IDF3_BOARD& board, std::ofstream& file )
+bool MakeOtherOutlines( IDF3_BOARD& board, std::ostream& file )
 {
     int cidx = 2;   // color index; start at 2 since 0,1 are special (board, NOGEOM_NOPART)
 

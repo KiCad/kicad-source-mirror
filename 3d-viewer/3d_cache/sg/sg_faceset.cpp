@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -482,7 +482,7 @@ void SGFACESET::ReNameNodes( void )
 }
 
 
-bool SGFACESET::WriteVRML( std::ofstream& aFile, bool aReuseFlag )
+bool SGFACESET::WriteVRML( std::ostream& aFile, bool aReuseFlag )
 {
     if( ( NULL == m_Coords && NULL == m_RCoords )
         || ( NULL == m_CoordIndices ) )
@@ -538,7 +538,7 @@ bool SGFACESET::WriteVRML( std::ofstream& aFile, bool aReuseFlag )
 }
 
 
-bool SGFACESET::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
+bool SGFACESET::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 {
     if( NULL == parentNode )
     {
@@ -670,7 +670,7 @@ bool SGFACESET::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
 }
 
 
-bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
+bool SGFACESET::ReadCache( std::istream& aFile, SGNODE* parentNode )
 {
     if( m_Coords || m_RCoords || m_CoordIndices
         || m_Colors || m_RColors

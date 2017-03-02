@@ -3,7 +3,7 @@
  *
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013  Cirilo Bernardo
+ * Copyright (C) 2013-2017  Cirilo Bernardo
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -980,7 +980,7 @@ bool VRML_LAYER::pushOutline( VRML_LAYER* holes )
 
 
 // writes out the vertex list for a planar feature
-bool VRML_LAYER::WriteVertices( double aZcoord, std::ofstream& aOutFile, int aPrecision )
+bool VRML_LAYER::WriteVertices( double aZcoord, std::ostream& aOutFile, int aPrecision )
 {
     if( ordmap.size() < 3 )
     {
@@ -1026,7 +1026,7 @@ bool VRML_LAYER::WriteVertices( double aZcoord, std::ofstream& aOutFile, int aPr
 // writes out the vertex list for a 3D feature; top and bottom are the
 // Z values for the top and bottom; top must be > bottom
 bool VRML_LAYER::Write3DVertices( double aTopZ, double aBottomZ,
-                                  std::ofstream& aOutFile, int aPrecision )
+                                  std::ostream& aOutFile, int aPrecision )
 {
     if( ordmap.size() < 3 )
     {
@@ -1113,7 +1113,7 @@ bool VRML_LAYER::Write3DVertices( double aTopZ, double aBottomZ,
 // writes out the index list;
 // 'top' indicates the vertex ordering and should be
 // true for a polygon visible from above the PCB
-bool VRML_LAYER::WriteIndices( bool aTopFlag, std::ofstream& aOutFile )
+bool VRML_LAYER::WriteIndices( bool aTopFlag, std::ostream& aOutFile )
 {
     if( triplets.empty() )
     {
@@ -1161,7 +1161,7 @@ bool VRML_LAYER::WriteIndices( bool aTopFlag, std::ofstream& aOutFile )
 
 
 // writes out the index list for a 3D feature
-bool VRML_LAYER::Write3DIndices( std::ofstream& aOutFile, bool aIncludePlatedHoles )
+bool VRML_LAYER::Write3DIndices( std::ostream& aOutFile, bool aIncludePlatedHoles )
 {
     if( outline.empty() )
     {
@@ -1703,7 +1703,7 @@ int VRML_LAYER::GetSize( void )
 // renumbering of all vertices from 'start'. Returns the end number.
 // Take care when using this call since tesselators cannot work on
 // the internal data concurrently
-int VRML_LAYER::Import( int start, GLUtesselator* tess )
+int VRML_LAYER::Import( int start, GLUtesselator* aTesselator )
 {
     if( start < 0 )
     {
@@ -1711,7 +1711,7 @@ int VRML_LAYER::Import( int start, GLUtesselator* tess )
         return -1;
     }
 
-    if( !tess )
+    if( !aTesselator )
     {
         error = "Import(): NULL tesselator pointer";
         return -1;
@@ -1741,7 +1741,7 @@ int VRML_LAYER::Import( int start, GLUtesselator* tess )
         cbeg = contours[i]->begin();
         cend = contours[i]->end();
 
-        gluTessBeginContour( tess );
+        gluTessBeginContour( aTesselator );
 
         while( cbeg != cend )
         {
@@ -1749,10 +1749,10 @@ int VRML_LAYER::Import( int start, GLUtesselator* tess )
             pt[0] = vp->x;
             pt[1] = vp->y;
             pt[2] = 0.0;
-            gluTessVertex( tess, pt, vp );
+            gluTessVertex( aTesselator, pt, vp );
         }
 
-        gluTessEndContour( tess );
+        gluTessEndContour( aTesselator );
     }
 
     return start;

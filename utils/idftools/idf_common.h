@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2014  Cirilo Bernardo
+ * Copyright (C) 2013-2017  Cirilo Bernardo
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -280,7 +280,7 @@ private:
      * @return bool: true if a note item was read, false otherwise. In case of unrecoverable errors
      * an exception is thrown
      */
-    bool readNote( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState, IDF3::IDF_UNIT aBoardUnit );
+    bool readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState, IDF3::IDF_UNIT aBoardUnit );
 
     /**
      * Function writeNote
@@ -292,7 +292,7 @@ private:
      * @return bool: true if the item was successfully written, false otherwise. In case of
      * unrecoverable errors an exception is thrown
      */
-    bool writeNote( std::ofstream& aBoardFile, IDF3::IDF_UNIT aBoardUnit );
+    bool writeNote( std::ostream& aBoardFile, IDF3::IDF_UNIT aBoardUnit );
 
 public:
     IDF_NOTE();
@@ -366,7 +366,7 @@ private:
      * @return bool: true if data was successfully read, otherwise false. In case of an
      * unrecoverable error an exception is thrown
      */
-    bool read( std::ifstream& aBoardFile, IDF3::IDF_UNIT aBoardUnit, IDF3::FILE_STATE aBoardState,
+    bool read( std::istream& aBoardFile, IDF3::IDF_UNIT aBoardUnit, IDF3::FILE_STATE aBoardState,
                IDF3::IDF_VERSION aIdfVersion );
 
     /**
@@ -377,7 +377,7 @@ private:
      * @param aBoardFile is an open BOARD file
      * @param aBoardUnit is the native unit of the output file
      */
-    void write( std::ofstream& aBoardFile, IDF3::IDF_UNIT aBoardUnit );
+    void write( std::ostream& aBoardFile, IDF3::IDF_UNIT aBoardUnit );
 
 public:
     /**

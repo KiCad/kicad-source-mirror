@@ -3,7 +3,7 @@
  *
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2014  Cirilo Bernardo
+ * Copyright (C) 2013-2017  Cirilo Bernardo
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,6 @@
 #include <list>
 #include <string>
 #include <iostream>
-#include <fstream>
 #include <sstream>
 #include <iomanip>
 #include <cerrno>
@@ -91,7 +90,7 @@ IDF_NOTE::IDF_NOTE()
 }
 
 
-bool IDF_NOTE::readNote( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardState,
+bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState,
                          IDF3::IDF_UNIT aBoardUnit )
 {
     std::string iline;      // the input line
@@ -250,7 +249,7 @@ bool IDF_NOTE::readNote( std::ifstream& aBoardFile, IDF3::FILE_STATE& aBoardStat
 }
 
 
-bool IDF_NOTE::writeNote( std::ofstream& aBoardFile, IDF3::IDF_UNIT aBoardUnit )
+bool IDF_NOTE::writeNote( std::ostream& aBoardFile, IDF3::IDF_UNIT aBoardUnit )
 {
     if( aBoardUnit == UNIT_THOU )
     {
@@ -403,7 +402,7 @@ bool IDF_DRILL_DATA::Matches( double aDrillDia, double aPosX, double aPosY )
     return false;
 }
 
-bool IDF_DRILL_DATA::read( std::ifstream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
+bool IDF_DRILL_DATA::read( std::istream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
                            IDF3::FILE_STATE aBoardState, IDF3::IDF_VERSION aIdfVersion )
 {
     std::string iline;      // the input line
@@ -651,7 +650,7 @@ bool IDF_DRILL_DATA::read( std::ifstream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
     return true;
 }
 
-void IDF_DRILL_DATA::write( std::ofstream& aBoardFile, IDF3::IDF_UNIT aBoardUnit )
+void IDF_DRILL_DATA::write( std::ostream& aBoardFile, IDF3::IDF_UNIT aBoardUnit )
 {
     std::string holestr;
     std::string refstr;

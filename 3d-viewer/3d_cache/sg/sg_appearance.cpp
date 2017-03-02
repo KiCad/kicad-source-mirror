@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -289,7 +289,7 @@ void SGAPPEARANCE::ReNameNodes( void )
 }
 
 
-bool SGAPPEARANCE::WriteVRML( std::ofstream& aFile, bool aReuseFlag )
+bool SGAPPEARANCE::WriteVRML( std::ostream& aFile, bool aReuseFlag )
 {
     if( aReuseFlag )
     {
@@ -366,7 +366,7 @@ bool SGAPPEARANCE::WriteVRML( std::ofstream& aFile, bool aReuseFlag )
 }
 
 
-bool SGAPPEARANCE::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
+bool SGAPPEARANCE::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 {
     if( NULL == parentNode )
     {
@@ -436,7 +436,7 @@ bool SGAPPEARANCE::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
 }
 
 
-bool SGAPPEARANCE::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
+bool SGAPPEARANCE::ReadCache( std::istream& aFile, SGNODE* parentNode )
 {
     S3D::ReadColor( aFile, ambient );
     aFile.read( (char*)&shininess, sizeof(shininess) );

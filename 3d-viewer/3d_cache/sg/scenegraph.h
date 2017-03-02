@@ -79,10 +79,10 @@ public:
     bool AddChildNode( SGNODE* aNode ) override;
 
     void ReNameNodes( void ) override;
-    bool WriteVRML( std::ofstream& aFile, bool aReuseFlag ) override;
+    bool WriteVRML( std::ostream& aFile, bool aReuseFlag ) override;
 
-    bool WriteCache( std::ofstream& aFile, SGNODE* parentNode ) override;
-    bool ReadCache( std::ifstream& aFile, SGNODE* parentNode ) override;
+    bool WriteCache( std::ostream& aFile, SGNODE* parentNode ) override;
+    bool ReadCache( std::istream& aFile, SGNODE* parentNode ) override;
 
     bool Prepare( const glm::dmat4* aTransform,
         S3D::MATLIST& materials, std::vector< SMESH >& meshes );
