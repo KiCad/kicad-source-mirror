@@ -991,9 +991,9 @@ int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
  */
 static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 {
-    KIGFX::RENDER_SETTINGS* render = aToolMgr->GetView()->GetPainter()->GetSettings();
-    GENERAL_COLLECTORS_GUIDE guide =
-        static_cast<PCB_BASE_FRAME*>( aToolMgr->GetEditFrame() )->GetCollectorsGuide();
+    auto render = aToolMgr->GetView()->GetPainter()->GetSettings();
+    auto frame = static_cast<PCB_EDIT_FRAME*>( aToolMgr->GetEditFrame() );
+    auto guide = frame->GetCollectorsGuide();
     BOARD* board = static_cast<BOARD*>( aToolMgr->GetModel() );
     GENERAL_COLLECTOR collector;
     int net = -1;
@@ -1001,6 +1001,16 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
     // Find a connected item for which we are going to highlight a net
     collector.Collect( board, GENERAL_COLLECTOR::PadsTracksOrZones,
                        wxPoint( aPosition.x, aPosition.y ), guide );
+
+    for( unsigned int i = 0; i < collector.GetCount(); i++ )
+    {
+        if( collector[i]->Type() == PCB_PAD_T )
+        {
+            frame->SendMessageToEESCHEMA( static_cast<BOARD_CONNECTED_ITEM*>( collector[i] ) );
+            break;
+        }
+    }
+
     bool enableHighlight = ( collector.GetCount() > 0 );
 
     // Obtain net code for the clicked item
