@@ -338,7 +338,6 @@ public:
     ~PNS_PCBNEW_DEBUG_DECORATOR()
     {
         Clear();
-        m_view->Remove( m_items );
         delete m_items;
     }
 

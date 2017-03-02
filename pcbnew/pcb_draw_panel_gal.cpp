@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 CERN
+ * Copyright (C) 2014-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -101,9 +101,6 @@ PCB_DRAW_PANEL_GAL::PCB_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
                                         KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
 EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalType )
 {
-    m_worksheet = NULL;
-    m_ratsnest = NULL;
-
     setDefaultLayerOrder();
     setDefaultLayerDeps();
 
@@ -126,8 +123,6 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalTy
 PCB_DRAW_PANEL_GAL::~PCB_DRAW_PANEL_GAL()
 {
     delete m_painter;
-    delete m_worksheet;
-    delete m_ratsnest;
 }
 
 
@@ -159,14 +154,8 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( const BOARD* aBoard )
         m_view->Add( zone );
 
     // Ratsnest
-    if( m_ratsnest )
-    {
-        m_view->Remove( m_ratsnest );
-        delete m_ratsnest;
-    }
-
-    m_ratsnest = new KIGFX::RATSNEST_VIEWITEM( aBoard->GetRatsnest() );
-    m_view->Add( m_ratsnest );
+    m_ratsnest.reset( new KIGFX::RATSNEST_VIEWITEM( aBoard->GetRatsnest() ) );
+    m_view->Add( m_ratsnest.get() );
 
     // Display settings
     UseColorScheme( aBoard->GetColorsSettings() );
@@ -175,14 +164,8 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( const BOARD* aBoard )
 
 void PCB_DRAW_PANEL_GAL::SetWorksheet( KIGFX::WORKSHEET_VIEWITEM* aWorksheet )
 {
-    if( m_worksheet )
-    {
-        m_view->Remove( m_worksheet );
-        delete m_worksheet;
-    }
-
-    m_worksheet = aWorksheet;
-    m_view->Add( m_worksheet );
+    m_worksheet.reset( aWorksheet );
+    m_view->Add( m_worksheet.get() );
 }
 
 

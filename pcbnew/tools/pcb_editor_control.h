@@ -110,7 +110,7 @@ private:
     PCB_EDIT_FRAME* m_frame;
 
     ///> Place & drill origin marker.
-    KIGFX::ORIGIN_VIEWITEM* m_placeOrigin;
+    std::unique_ptr<KIGFX::ORIGIN_VIEWITEM> m_placeOrigin;
 
     ///> Flag to ignore a single crossprobe message from eeschema.
     bool m_probingSchToPcb;

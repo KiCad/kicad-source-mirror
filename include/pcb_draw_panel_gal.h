@@ -107,10 +107,10 @@ protected:
     void setDefaultLayerDeps();
 
     ///> Currently used worksheet
-    KIGFX::WORKSHEET_VIEWITEM* m_worksheet;
+    std::unique_ptr<KIGFX::WORKSHEET_VIEWITEM> m_worksheet;
 
     ///> Ratsnest view item
-    KIGFX::RATSNEST_VIEWITEM* m_ratsnest;
+    std::unique_ptr<KIGFX::RATSNEST_VIEWITEM> m_ratsnest;
 };
 
 #endif /* PCB_DRAW_PANEL_GAL_H_ */

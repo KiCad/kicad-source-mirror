@@ -229,14 +229,12 @@ TOOL_ACTION PCB_ACTIONS::toBeDone( "pcbnew.Control.toBeDone",
 PCBNEW_CONTROL::PCBNEW_CONTROL() :
     TOOL_INTERACTIVE( "pcbnew.Control" ), m_frame( NULL )
 {
-    m_gridOrigin = new KIGFX::ORIGIN_VIEWITEM();
+    m_gridOrigin.reset( new KIGFX::ORIGIN_VIEWITEM() );
 }
 
 
 PCBNEW_CONTROL::~PCBNEW_CONTROL()
 {
-    getView()->Remove( m_gridOrigin );
-    delete m_gridOrigin;
 }
 
 
@@ -247,8 +245,8 @@ void PCBNEW_CONTROL::Reset( RESET_REASON aReason )
     if( aReason == MODEL_RELOAD || aReason == GAL_SWITCH )
     {
         m_gridOrigin->SetPosition( getModel<BOARD>()->GetGridOrigin() );
-        getView()->Remove( m_gridOrigin );
-        getView()->Add( m_gridOrigin );
+        getView()->Remove( m_gridOrigin.get() );
+        getView()->Add( m_gridOrigin.get() );
     }
 }
 
@@ -731,7 +729,7 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 
     if( origin )
     {
-        setOrigin( getView(), m_frame, m_gridOrigin, *origin );
+        setOrigin( getView(), m_frame, m_gridOrigin.get(), *origin );
         delete origin;
     }
     else
@@ -743,7 +741,7 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 
         // TODO it will not check the toolbar button in module editor, as it uses a different ID..
         m_frame->SetToolID( ID_PCB_PLACE_GRID_COORD_BUTT, wxCURSOR_PENCIL, _( "Adjust grid origin" ) );
-        picker->SetClickHandler( std::bind( setOrigin, getView(), m_frame, m_gridOrigin, _1 ) );
+        picker->SetClickHandler( std::bind( setOrigin, getView(), m_frame, m_gridOrigin.get(), _1 ) );
         picker->Activate();
         Wait();
     }

@@ -26,6 +26,7 @@
 #define PCBNEW_CONTROL_H
 
 #include <tool/tool_interactive.h>
+#include <memory>
 
 namespace KIGFX {
     class ORIGIN_VIEWITEM;
@@ -94,7 +95,7 @@ private:
     PCB_BASE_FRAME* m_frame;
 
     ///> Grid origin marker.
-    KIGFX::ORIGIN_VIEWITEM* m_gridOrigin;
+    std::unique_ptr<KIGFX::ORIGIN_VIEWITEM> m_gridOrigin;
 
     ///> Applies the legacy canvas grid settings for GAL.
     void updateGrid();

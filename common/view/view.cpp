@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2016 CERN
+ * Copyright (C) 2013-2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -250,7 +250,10 @@ void VIEW::OnDestroy( VIEW_ITEM* aItem )
     if( !data )
         return;
 
-    data->m_view->Remove( aItem );
+    if( data->m_view )
+        data->m_view->Remove( aItem );
+
+    delete data;
 }
 
 
@@ -311,7 +314,9 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
     if( aDrawPriority < 0 )
         aDrawPriority = m_nextDrawPriority++;
 
-    aItem->m_viewPrivData = new VIEW_ITEM_DATA;
+    if( !aItem->m_viewPrivData )
+        aItem->m_viewPrivData = new VIEW_ITEM_DATA;
+
     aItem->m_viewPrivData->m_view = this;
     aItem->m_viewPrivData->m_drawPriority = aDrawPriority;
 
@@ -342,6 +347,7 @@ void VIEW::Remove( VIEW_ITEM* aItem )
     if( !viewData )
         return;
 
+    wxASSERT( viewData->m_view == this );
     auto item = std::find( m_allItems.begin(), m_allItems.end(), aItem );
 
     if( item != m_allItems.end() )
@@ -367,6 +373,7 @@ void VIEW::Remove( VIEW_ITEM* aItem )
     }
 
     viewData->deleteGroups();
+    viewData->m_view = nullptr;
 }
 
 
@@ -826,8 +833,8 @@ struct VIEW::drawItem
 
     bool operator()( VIEW_ITEM* aItem )
     {
+        wxASSERT( aItem->viewPrivData() );
 
-        assert( aItem->viewPrivData() );
         // Conditions that have te be fulfilled for an item to be drawn
         bool drawCondition = aItem->viewPrivData()->isRenderable() &&
                              aItem->ViewGetLOD( layer, view ) < view->m_scale;
@@ -974,7 +981,6 @@ struct VIEW::recacheItem
 void VIEW::Clear()
 {
     BOX2I r;
-
     r.SetMaximum();
     m_allItems.clear();
 
