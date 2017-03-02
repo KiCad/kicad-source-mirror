@@ -514,6 +514,9 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 {
                     LAYER_ID layer = getDrawingLayer();
 
+                    if( layer == Edge_Cuts )    // dimensions are not allowed on EdgeCuts
+                        layer = Dwgs_User;
+
                     // Init the new item attributes
                     dimension = new DIMENSION( m_board );
                     dimension->SetLayer( layer );
@@ -1114,9 +1117,6 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             case SET_ORIGIN:
             {
                 LAYER_ID layer = getDrawingLayer();
-
-                if( layer == Edge_Cuts )    // dimensions are not allowed on EdgeCuts
-                    layer = Dwgs_User;
 
                 // Init the new item attributes
                 aGraphic->SetShape( S_ARC );
