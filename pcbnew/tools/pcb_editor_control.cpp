@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
+ * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -1002,7 +1003,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
     collector.Collect( board, GENERAL_COLLECTOR::PadsTracksOrZones,
                        wxPoint( aPosition.x, aPosition.y ), guide );
 
-    for( unsigned int i = 0; i < collector.GetCount(); i++ )
+    for( int i = 0; i < collector.GetCount(); i++ )
     {
         if( collector[i]->Type() == PCB_PAD_T )
         {
