@@ -68,7 +68,7 @@ void STDISTREAM_LINE_READER::setStream( std::istream& aStream )
 
 
 IFSTREAM_LINE_READER::IFSTREAM_LINE_READER( const wxString& aFileName ) throw( IO_ERROR ) :
-        m_fStream( std::ifstream( aFileName ) )
+        m_fStream( aFileName )
 {
     if( !m_fStream.is_open() )
     {
