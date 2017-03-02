@@ -105,6 +105,9 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     EVT_BUTTON( ID_TO_PL_EDITOR, KICAD_MANAGER_FRAME::OnRunPageLayoutEditor )
     EVT_MENU( ID_TO_PL_EDITOR, KICAD_MANAGER_FRAME::OnRunPageLayoutEditor )
 
+    EVT_MENU_RANGE( ID_KICAD_SELECT_ICONS_OPTIONS, ID_KICAD_SELECT_ICON_OPTIONS_END,
+                    KICAD_MANAGER_FRAME::OnChangeIconsOptions )
+
     EVT_UPDATE_UI( ID_SELECT_DEFAULT_PDF_BROWSER, KICAD_MANAGER_FRAME::OnUpdateDefaultPdfBrowser )
     EVT_UPDATE_UI( ID_SELECT_PREFERED_PDF_BROWSER,
                    KICAD_MANAGER_FRAME::OnUpdatePreferredPdfBrowser )
@@ -360,6 +363,10 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Language submenu
     preferencesMenu->AppendSeparator();
     Pgm().AddMenuLanguageList( preferencesMenu );
+
+    // Icons options submenu
+    preferencesMenu->AppendSeparator();
+    Pgm().AddMenuIconsOptions( preferencesMenu );
 
     // Menu Tools:
     wxMenu* toolsMenu = new wxMenu;

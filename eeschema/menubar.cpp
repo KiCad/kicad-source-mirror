@@ -615,9 +615,14 @@ static void preparePreferencesMenu( wxMenu* aParentMenu )
 #endif // __WXMAC__
 
     // Language submenu
+    aParentMenu->AppendSeparator();
     Pgm().AddMenuLanguageList( aParentMenu );
 
+    // Icons options submenu
+    Pgm().AddMenuIconsOptions( aParentMenu );
+
     // Import/export (submenu in preferences menu)
+    aParentMenu->AppendSeparator();
     wxMenu* importExportSubmenu = new wxMenu();
     prepareImportExportMenu( importExportSubmenu );
 

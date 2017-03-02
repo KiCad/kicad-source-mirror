@@ -407,6 +407,12 @@ public:
      */
     virtual void ShowChangedLanguage();
 
+    /**
+     * Function ShowChangedIcons
+     * redraws items menus after a icon was changed option.
+     */
+    virtual void ShowChangedIcons();
+
 
     /**
      * Function PostCommandMenuEvent

@@ -146,6 +146,13 @@ public:
     void OnSize( wxSizeEvent& event );
 
     /**
+     * Function OnChangeIconsOptions
+     * Selects the current icons options in menus (or toolbars) in Kicad
+     * (the default for toolbars/menus is 26x26 pixels, and shows icons in menus).
+     */
+    void OnChangeIconsOptions( wxCommandEvent& event );
+
+    /**
      * Function OnLoadProject
      * loads an exiting or creates a new project (.pro) file.
      */

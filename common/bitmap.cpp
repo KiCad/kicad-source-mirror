@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,20 +26,131 @@
 #include <wx/image.h>
 #include <wx/bitmap.h>
 #include <wx/mstream.h>
+#include <wx/menu.h>
+#include <wx/menuitem.h>
 
+#include <common.h>
 #include <bitmaps.h>
-
+#include <pgm_base.h>
 
 wxBitmap KiBitmap( BITMAP_DEF aBitmap )
 {
     wxMemoryInputStream is( aBitmap->png, aBitmap->byteCount );
+    wxImage image( is, wxBITMAP_TYPE_PNG );
+    wxBitmap bitmap( image );
 
-    return wxBitmap( wxImage( is, wxBITMAP_TYPE_PNG, -1 ), -1 );
+    return bitmap;
 }
+
 
 wxBitmap* KiBitmapNew( BITMAP_DEF aBitmap )
 {
     wxMemoryInputStream is( aBitmap->png, aBitmap->byteCount );
+    wxImage image( is, wxBITMAP_TYPE_PNG );
+    wxBitmap* bitmap = new wxBitmap( image );
 
-    return new wxBitmap( wxImage( is, wxBITMAP_TYPE_PNG, -1 ), -1 );
+    return bitmap;
 }
+
+wxMenuItem* AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText,
+                         const wxBitmap&  aImage, wxItemKind aType = wxITEM_NORMAL )
+{
+    wxMenuItem* item;
+
+    item = new wxMenuItem( aMenu, aId, aText, wxEmptyString, aType );
+
+    // Retrieve the global applicaton show icon option:
+    bool useImagesInMenus = Pgm().GetUseIconsInMenus();
+
+    if( useImagesInMenus )
+    {
+        if( aType == wxITEM_CHECK )
+        {
+    #if defined(  __WINDOWS__ )
+            item->SetBitmaps( KiBitmap( checked_ok_xpm ), aImage );
+            // A workaround to a strange bug on Windows, wx Widgets 3.0:
+            // size of bitmaps is not taken in account for wxITEM_CHECK menu
+            // unless we call SetFont
+            item->SetFont(*wxNORMAL_FONT);
+    #endif
+        }
+        else
+            item->SetBitmap( aImage );
+    }
+
+    aMenu->Append( item );
+
+    return item;
+}
+
+wxMenuItem* AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText,
+                         const wxString& aHelpText, const wxBitmap& aImage,
+                         wxItemKind aType = wxITEM_NORMAL )
+{
+    wxMenuItem* item;
+
+    item = new wxMenuItem( aMenu, aId, aText, aHelpText, aType );
+
+    // Retrieve the global applicaton show icon option:
+    bool useImagesInMenus = Pgm().GetUseIconsInMenus();
+
+    if( useImagesInMenus )
+    {
+        if( aType == wxITEM_CHECK )
+        {
+    #if defined(  __WINDOWS__ )
+            item->SetBitmaps( KiBitmap( checked_ok_xpm ), aImage );
+            // A workaround to a strange bug on Windows, wx Widgets 3.0:
+            // size of bitmaps is not taken in account for wxITEM_CHECK menu
+            // unless we call SetFont
+            item->SetFont(*wxNORMAL_FONT);
+    #endif
+        }
+        else
+            item->SetBitmap( aImage );
+    }
+
+    aMenu->Append( item );
+
+    return item;
+}
+
+wxMenuItem* AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId,
+                         const wxString& aText, const wxBitmap& aImage )
+{
+    wxMenuItem* item;
+
+    item = new wxMenuItem( aMenu, aId, aText );
+    item->SetSubMenu( aSubMenu );
+
+    // Retrieve the global applicaton show icon option:
+    bool useImagesInMenus = Pgm().GetUseIconsInMenus();
+
+    if( useImagesInMenus )
+        item->SetBitmap( aImage );
+
+    aMenu->Append( item );
+
+    return item;
+};
+
+
+wxMenuItem* AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId,
+                         const wxString& aText, const wxString& aHelpText,
+                         const wxBitmap&  aImage )
+{
+    wxMenuItem* item;
+
+    item = new wxMenuItem( aMenu, aId, aText, aHelpText );
+    item->SetSubMenu( aSubMenu );
+
+    // Retrieve the global applicaton show icon option:
+    bool useImagesInMenus = Pgm().GetUseIconsInMenus();
+
+    if( useImagesInMenus )
+        item->SetBitmap( aImage );
+
+    aMenu->Append( item );
+
+    return item;
+};

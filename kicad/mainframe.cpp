@@ -54,7 +54,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent,
     m_leftWinWidth = 60;
     m_manager_Hokeys_Descr = NULL;
 
-    // Create the status line (bottom of the frame
+    // Create the status line (bottom of the frame)
     static const int dims[3] = { -1, -1, 100 };
 
     CreateStatusBar( 3 );
@@ -439,6 +439,16 @@ void KICAD_MANAGER_FRAME::OnRunPcbFpEditor( wxCommandEvent& event )
 }
 
 
+void KICAD_MANAGER_FRAME::OnChangeIconsOptions( wxCommandEvent& event )
+{
+    if( event.GetId() == ID_KICAD_SELECT_ICONS_IN_MENUS )
+    {
+        Pgm().SetUseIconsInMenus( event.IsChecked() );
+        Kiway.ShowChangedIcons();
+    }
+}
+
+
 void KICAD_MANAGER_FRAME::OnRunBitmapConverter( wxCommandEvent& event )
 {
     Execute( this, BITMAPCONVERTER_EXE );
@@ -544,6 +554,7 @@ void KICAD_MANAGER_FRAME::PrintPrjInfo()
                         GetChars( GetProjectFileName() ) );
     PrintMsg( msg );
 }
+
 
 void KICAD_MANAGER_FRAME::Process_Config( wxCommandEvent& event )
 {

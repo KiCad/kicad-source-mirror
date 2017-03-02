@@ -137,6 +137,9 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // Language submenu
     Pgm().AddMenuLanguageList( preferencesMenu );
 
+    // Icons options submenu
+    Pgm().AddMenuIconsOptions( preferencesMenu );
+
     // Hotkey submenu
     AddHotkeyConfigMenu( preferencesMenu );
 

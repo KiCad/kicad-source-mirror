@@ -235,6 +235,13 @@ protected:
      */
     void language_change( wxCommandEvent& event );
 
+    /**
+     * Function OnChangeIconsOptions
+     * is an event handler called on a icons options in menus or toolbars
+     * menu selection.
+     */
+    void OnChangeIconsOptions( wxCommandEvent& event );
+
     // variables for modal behavior support, only used by a few derivatives.
     bool            m_modal;        // true if frame is intended to be modal, not modeless
     WX_EVENT_LOOP*  m_modal_loop;   // points to nested event_loop, NULL means not modal and dismissed

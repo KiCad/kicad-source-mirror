@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -217,6 +217,16 @@ public:
     VTBL_ENTRY void AddMenuLanguageList( wxMenu* MasterMenu );
 
     /**
+     * Function AddMenuIconsOptions
+     * creates a menu list for icons in menu and icon sizes choice,
+     * and add it as submenu to \a MasterMenu.
+     *
+     * @param MasterMenu The main menu. The sub menu list will be accessible from the menu
+     *                   item with id ID_KICAD_SELECT_ICONS_OPTIONS
+     */
+    VTBL_ENTRY void AddMenuIconsOptions( wxMenu* MasterMenu );
+
+    /**
      * Function SetLanguageIdentifier
      * sets in .m_language_id member the wxWidgets language identifier Id  from
      * the KiCad menu id (internal menu identifier).
@@ -320,6 +330,14 @@ public:
      */
     void SaveCommonSettings();
 
+    /// Scaling factor for menus and tool icons
+    void SetIconsScale( double aValue ) { m_iconsScale = aValue; }
+    double GetIconsScale() { return m_iconsScale; }
+    /// True to use menu icons
+    void SetUseIconsInMenus( bool aUseIcons ) { m_useIconsInMenus = aUseIcons; }
+    bool GetUseIconsInMenus() { return m_useIconsInMenus; }
+
+
 protected:
 
     /**
@@ -349,6 +367,11 @@ protected:
 
     /// true to use the selected PDF browser, if exists, or false to use the default
     bool            m_use_system_pdf_browser;
+
+    /// Scaling factor for menus and tool icons
+    double          m_iconsScale;
+    /// True to use menu icons
+    bool            m_useIconsInMenus;
 
     /// Trap all changes in here, simplifies debugging
     void setLanguageId( int aId )       { m_language_id = aId; }

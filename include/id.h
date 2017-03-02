@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -146,6 +146,10 @@ enum main_id
     ID_LANGUAGE_BULGARIAN,
     ID_LANGUAGE_LITHUANIAN,
     ID_LANGUAGE_CHOICE_END,
+
+    ID_KICAD_SELECT_ICONS_OPTIONS,
+    ID_KICAD_SELECT_ICONS_IN_MENUS,
+    ID_KICAD_SELECT_ICON_OPTIONS_END,
 
     ID_SET_REPEAT_OPTION,
 

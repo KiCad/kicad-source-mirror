@@ -220,7 +220,11 @@ void preparePreferencesMenu( wxMenu* aParentMenu )
                  KiBitmap( add_tracks_xpm ) ); // fixme: icon
 
     // Language submenu
+    aParentMenu->AppendSeparator();
     Pgm().AddMenuLanguageList( aParentMenu );
+
+    // Icons options submenu
+    Pgm().AddMenuIconsOptions( aParentMenu );
 
     // Hotkey submenu
     AddHotkeyConfigMenu( aParentMenu );

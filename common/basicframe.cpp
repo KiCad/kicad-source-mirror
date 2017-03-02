@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -238,6 +238,13 @@ void EDA_BASE_FRAME::ReCreateMenuBar()
 
 
 void EDA_BASE_FRAME::ShowChangedLanguage()
+{
+    ReCreateMenuBar();
+    GetMenuBar()->Refresh();
+}
+
+
+void EDA_BASE_FRAME::ShowChangedIcons()
 {
     ReCreateMenuBar();
     GetMenuBar()->Refresh();

@@ -357,6 +357,14 @@ public:
      */
     VTBL_ENTRY void SetLanguage( int aLanguage );
 
+    /**
+     * Function ShowChangedIcons
+     * Calls ShowChangedIcons() on all KIWAY_PLAYERs.
+     * Used after changing options related to icons in menus and toolbars
+     * (like enable/disable icons in menus)
+     */
+    VTBL_ENTRY void ShowChangedIcons();
+
     KIWAY( PGM_BASE* aProgram, int aCtlBits, wxFrame* aTop = NULL );
 
     /**

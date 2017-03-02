@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
  */
 
 
+#include <pgm_base.h>
 #include <kiway_player.h>
 #include <kiway_express.h>
 #include <kiway.h>
@@ -36,6 +37,8 @@
 BEGIN_EVENT_TABLE( KIWAY_PLAYER, EDA_BASE_FRAME )
     EVT_KIWAY_EXPRESS( KIWAY_PLAYER::kiway_express )
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, KIWAY_PLAYER::language_change )
+    EVT_MENU_RANGE( ID_KICAD_SELECT_ICONS_OPTIONS, ID_KICAD_SELECT_ICON_OPTIONS_END,
+                    KIWAY_PLAYER::OnChangeIconsOptions )
 END_EVENT_TABLE()
 
 
@@ -202,4 +205,14 @@ void KIWAY_PLAYER::language_change( wxCommandEvent& event )
 
     // tell all the KIWAY_PLAYERs about the language change.
     Kiway().SetLanguage( id );
+}
+
+
+void KIWAY_PLAYER::OnChangeIconsOptions( wxCommandEvent& event )
+{
+    if( event.GetId() == ID_KICAD_SELECT_ICONS_IN_MENUS )
+    {
+        Pgm().SetUseIconsInMenus( event.IsChecked() );
+        Kiway().ShowChangedIcons();
+    }
 }

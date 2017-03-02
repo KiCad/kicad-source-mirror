@@ -338,14 +338,6 @@ if( USE_WX_GRAPHICS_CONTEXT OR APPLE )
 endif()
 
 
-# By default images in menu items are enabled on all platforms except OSX.
-if( NOT APPLE )
-    set( USE_IMAGES_IN_MENUS ON CACHE BOOL "Enable images in menus" )
-else()
-    set( USE_IMAGES_IN_MENUS OFF CACHE BOOL "Enable images in menus" )
-endif()
-
-
 # KIFACE_SUFFIX is the file extension used for top level program modules which
 # implement the KIFACE interface.  A valid suffix starts with a period '.'.
 

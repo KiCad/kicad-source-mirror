@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2014 KiCad Developers.
+ * Copyright (C) 2004-2017 KiCad Developers.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,20 +33,9 @@
 
 #include <wx/menu.h>
 #include <wx/menuitem.h>
-
 #include <bitmaps.h>
 
 
-/**
- * SET_BITMAP is a macro used to add a bitmap to a menu item.
- * @note Do not use with checked menu items.
- * @param aImage is the image to add the menu item.
- */
-#if !defined( USE_IMAGES_IN_MENUS )
-#  define SET_BITMAP( aImage )
-#else
-#  define SET_BITMAP( aImage ) item->SetBitmap( aImage )
-#endif
 
 /**
  * Function AddMenuItem
@@ -60,35 +49,8 @@
  * @param aType is the type of menu :wxITEM_NORMAL (default), wxITEM_CHECK ...
  * @return a pointer to the new created wxMenuItem
  */
-static inline wxMenuItem* AddMenuItem( wxMenu*          aMenu,
-                                       int              aId,
-                                       const wxString&  aText,
-                                       const wxBitmap&  aImage,
-                                       wxItemKind       aType = wxITEM_NORMAL )
-{
-    wxMenuItem* item;
-
-    item = new wxMenuItem( aMenu, aId, aText, wxEmptyString, aType );
-
-    if( aType == wxITEM_CHECK )
-    {
-#if defined( USE_IMAGES_IN_MENUS ) && defined(  __WINDOWS__ )
-        item->SetBitmaps( KiBitmap( checked_ok_xpm ), aImage );
-        // A workaround to a strange bug on Windows, wx Widgets 3.0:
-        // size of bitmaps is not taken in account for wxITEM_CHECK menu
-        // unless we call SetFont
-        item->SetFont(*wxNORMAL_FONT);
-#endif
-    }
-    else
-    {
-        SET_BITMAP( aImage );
-    }
-
-    aMenu->Append( item );
-
-    return item;
-}
+wxMenuItem* AddMenuItem( wxMenu* aMenu, int aId, const wxString&  aText,
+                         const wxBitmap&  aImage, wxItemKind aType = wxITEM_NORMAL );
 
 
 /**
@@ -104,36 +66,9 @@ static inline wxMenuItem* AddMenuItem( wxMenu*          aMenu,
  * @param aType is the type of menu :wxITEM_NORMAL (default), wxITEM_CHECK ...
  * @return a pointer to the new created wxMenuItem
  */
-static inline wxMenuItem* AddMenuItem( wxMenu*          aMenu,
-                                       int              aId,
-                                       const wxString&  aText,
-                                       const wxString&  aHelpText,
-                                       const wxBitmap&  aImage,
-                                       wxItemKind       aType = wxITEM_NORMAL )
-{
-    wxMenuItem* item;
-
-    item = new wxMenuItem( aMenu, aId, aText, aHelpText, aType );
-
-    if( aType == wxITEM_CHECK )
-    {
-#if defined( USE_IMAGES_IN_MENUS ) && defined(  __WINDOWS__ )
-        item->SetBitmaps( KiBitmap( checked_ok_xpm ), aImage );
-        // A workaround to a strange bug on Windows, wx Widgets 3.0:
-        // size of bitmaps is not taken in account for wxITEM_CHECK menu
-        // unless we call SetFont
-        item->SetFont(*wxNORMAL_FONT);
-#endif
-    }
-    else
-    {
-        SET_BITMAP( aImage );
-    }
-
-    aMenu->Append( item );
-
-    return item;
-}
+wxMenuItem* AddMenuItem( wxMenu* aMenu, int aId, const wxString&  aText,
+                         const wxString& aHelpText, const wxBitmap& aImage,
+                         wxItemKind aType = wxITEM_NORMAL );
 
 
 /**
@@ -148,23 +83,8 @@ static inline wxMenuItem* AddMenuItem( wxMenu*          aMenu,
  * @param aImage is the icon to add to the new menu item.
  * @return a pointer to the new created wxMenuItem
  */
-static inline wxMenuItem* AddMenuItem( wxMenu*          aMenu,
-                                       wxMenu*          aSubMenu,
-                                       int              aId,
-                                       const wxString&  aText,
-                                       const wxBitmap&  aImage )
-{
-    wxMenuItem* item;
-
-    item = new wxMenuItem( aMenu, aId, aText );
-    item->SetSubMenu( aSubMenu );
-
-    SET_BITMAP( aImage );
-
-    aMenu->Append( item );
-
-    return item;
-};
+wxMenuItem* AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId,
+                         const wxString& aText, const wxBitmap& aImage );
 
 
 /**
@@ -180,23 +100,8 @@ static inline wxMenuItem* AddMenuItem( wxMenu*          aMenu,
  * @param aImage is the icon to add to the new menu item.
  * @return a pointer to the new created wxMenuItem
  */
-static inline wxMenuItem* AddMenuItem( wxMenu*          aMenu,
-                                       wxMenu*          aSubMenu,
-                                       int              aId,
-                                       const wxString&  aText,
-                                       const wxString&  aHelpText,
-                                       const wxBitmap&  aImage )
-{
-    wxMenuItem* item;
-
-    item = new wxMenuItem( aMenu, aId, aText, aHelpText );
-    item->SetSubMenu( aSubMenu );
-
-    SET_BITMAP( aImage );
-
-    aMenu->Append( item );
-
-    return item;
-};
+wxMenuItem* AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId,
+                         const wxString& aText, const wxString& aHelpText,
+                         const wxBitmap&  aImage );
 
 #endif // MENUS_HELPERS_H_
