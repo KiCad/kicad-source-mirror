@@ -89,6 +89,10 @@ TOOL_ACTION PCB_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",
         AS_GLOBAL, 0,
         _( "Whole Net" ), _( "Selects all tracks & vias belonging to the same net." ) );
 
+TOOL_ACTION PCB_ACTIONS::selectOnSheet( "pcbnew.InteractiveSelection.SelectOnSheet",
+        AS_GLOBAL,  0,
+        _( "Sheet" ), _( "Selects all modules and tracks in the schematic sheet" ) );
+
 TOOL_ACTION PCB_ACTIONS::selectSameSheet( "pcbnew.InteractiveSelection.SelectSameSheet",
         AS_GLOBAL,  'P',
         _( "Same Sheet" ), _( "Selects all modules and tracks in the same schematic sheet" ) );
@@ -541,6 +545,7 @@ void SELECTION_TOOL::SetTransitions()
     Go( &SELECTION_TOOL::selectCopper, PCB_ACTIONS::selectCopper.MakeEvent() );
     Go( &SELECTION_TOOL::selectNet, PCB_ACTIONS::selectNet.MakeEvent() );
     Go( &SELECTION_TOOL::selectSameSheet, PCB_ACTIONS::selectSameSheet.MakeEvent() );
+    Go( &SELECTION_TOOL::selectOnSheet, PCB_ACTIONS::selectOnSheet.MakeEvent() );
 }
 
 
@@ -681,7 +686,7 @@ int SELECTION_TOOL::selectConnection( const TOOL_EVENT& aEvent )
 
 int SELECTION_TOOL::selectCopper( const TOOL_EVENT& aEvent )
 {
-    if( !selectCursor( ) )
+    if( !selectCursor() )
         return 0;
 
     // copy the selection, since we're going to iterate and modify
@@ -691,7 +696,7 @@ int SELECTION_TOOL::selectCopper( const TOOL_EVENT& aEvent )
     {
         auto item = static_cast<BOARD_ITEM*>( i );
         // only connected items can be traversed in the ratsnest
-        if ( item->IsConnected() )
+        if( item->IsConnected() )
         {
             auto& connItem = static_cast<BOARD_CONNECTED_ITEM&>( *item );
 
@@ -770,7 +775,7 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 
     return 0;
 }
-void SELECTION_TOOL::selectAllItemsOnSheet( wxString sheet )
+void SELECTION_TOOL::selectAllItemsOnSheet( wxString aSheet )
 {
     auto modules = board()->m_Modules.GetFirst();
     std::list<MODULE*> modList;
@@ -778,7 +783,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString sheet )
     // store all modules that are on that sheet
     for( MODULE* mitem = modules; mitem; mitem = mitem->Next() )
     {
-        if ( mitem != NULL && mitem->GetPath().Contains( sheet ) )
+        if( mitem != NULL && mitem->GetPath().Contains( aSheet ) )
         {
             modList.push_back( mitem );
         }
@@ -851,6 +856,43 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString sheet )
     }
 }
 
+void SELECTION_TOOL::zoomFitSelection( void )
+{
+	//Should recalculate the view to zoom in on the selection
+	auto selectionBox = m_selection.ViewBBox();
+    auto canvas = m_frame->GetGalCanvas();
+	auto view = getView();
+
+	VECTOR2D screenSize = view->ToWorld( canvas->GetClientSize(), false );
+
+	if( !( selectionBox.GetWidth() == 0 ) || !( selectionBox.GetHeight() == 0 ) )
+	{
+		VECTOR2D vsize = selectionBox.GetSize();
+		double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
+				fabs( vsize.y / screenSize.y ) );
+		view->SetScale( scale );
+		view->SetCenter( selectionBox.Centre() );
+		view->Add( &m_selection );
+	}
+
+	m_frame->GetGalCanvas()->ForceRefresh();
+}
+
+int SELECTION_TOOL::selectOnSheet( const TOOL_EVENT& aEvent )
+{
+    clearSelection();
+    wxString* sheet = aEvent.Parameter<wxString*>();
+    selectAllItemsOnSheet( *sheet );
+
+	zoomFitSelection();
+
+	if( m_selection.Size() > 0 )
+		m_toolMgr->ProcessEvent( SelectedEvent );
+
+
+    return 0;
+}
+
 int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 {
     if( !selectCursor( true ) )
@@ -872,7 +914,7 @@ int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
     sheetPath = sheetPath.BeforeLast( '/' );
     sheetPath = sheetPath.AfterLast( '/' );
 
-    selectAllItemsOnSheet(sheetPath);
+    selectAllItemsOnSheet( sheetPath );
 
     // Inform other potentially interested tools
     if( m_selection.Size() > 0 )
@@ -1780,6 +1822,28 @@ VECTOR2I SELECTION::GetCenter() const
     }
 
     return centre;
+}
+
+const BOX2I SELECTION::ViewBBox() const
+{
+    EDA_RECT eda_bbox;
+
+    if( Size() == 1 )
+	{
+		eda_bbox = Front()->GetBoundingBox();
+	}
+    else if( Size() > 1 )
+    {
+		eda_bbox = Front()->GetBoundingBox();
+        auto i = m_items.begin();
+        ++i;
+
+        for( ; i != m_items.end(); ++i )
+        {
+            eda_bbox.Merge( (*i)->GetBoundingBox() );
+        }
+    }
+	return BOX2I( eda_bbox.GetOrigin(), eda_bbox.GetSize() );
 }
 
 

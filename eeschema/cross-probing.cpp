@@ -129,6 +129,11 @@ std::string FormatProbeItem( EDA_ITEM* aComponent, SCH_COMPONENT* aPart )
         aPart = (SCH_COMPONENT*) aComponent;
         return StrPrintf( "$PART: %s", TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
 
+    case SCH_SHEET_T:
+        aPart = (SCH_COMPONENT*)aComponent;
+        return StrPrintf( "$SHEET: %s", TO_UTF8( wxString::Format( wxT("%8.8lX"),
+                        (unsigned long) aPart->GetTimeStamp() ) ) );
+
     case LIB_PIN_T:
         {
             if( !aPart )

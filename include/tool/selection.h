@@ -97,6 +97,8 @@ public:
     /// Returns the center point of the selection area bounding box.
     VECTOR2I GetCenter() const;
 
+    const BOX2I ViewBBox() const override;
+
     EDA_ITEM* operator[]( const int index ) const
     {
         if( index < 0 || (unsigned int) index >= m_items.size() )
