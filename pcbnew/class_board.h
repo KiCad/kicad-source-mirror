@@ -185,7 +185,6 @@ private:
 
     int                     m_fileFormatVersionAtLoad;  ///< the version loaded from the file
 
-    mutable EDA_RECT        m_BoundingBox;
     NETINFO_LIST            m_NetInfo;              ///< net info list (name, design constraints ..
     RN_DATA*                m_ratsnest;
 
@@ -823,19 +822,12 @@ public:
      * calculates the bounding box containing all board items (or board edge segments).
      * @param aBoardEdgesOnly is true if we are interested in board edge segments only.
      * @return EDA_RECT - the board's bounding box
-     * @see PCB_BASE_FRAME::GetBoardBoundingBox() which calls this and doctors the result
      */
     EDA_RECT ComputeBoundingBox( bool aBoardEdgesOnly = false ) const;
 
-    /**
-     * Function GetBoundingBox
-     * may be called soon after ComputeBoundingBox() to return the same EDA_RECT,
-     * as long as the BOARD has not changed.  Remember, ComputeBoundingBox()'s
-     * aBoardEdgesOnly argument is considered in this return value also.
-     */
     const EDA_RECT GetBoundingBox() const override
     {
-        return ComputeBoundingBox();
+        return ComputeBoundingBox( false );
     }
 
     /**

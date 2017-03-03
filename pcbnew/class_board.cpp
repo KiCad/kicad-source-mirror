@@ -1123,8 +1123,6 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
         }
     }
 
-    m_BoundingBox = area;   // save for BOARD::GetBoundingBox()
-
     return area;
 }
 
