@@ -793,7 +793,7 @@ static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE_CONTAINER *>& aO
 
 int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+    const SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
     BOARD* board = getModel<BOARD>();
     BOARD_COMMIT commit( m_frame );
 

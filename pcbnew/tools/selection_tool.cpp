@@ -168,8 +168,7 @@ SELECTION_TOOL::SELECTION_TOOL() :
         m_locked( true ), m_menu( *this ),
         m_priv( std::make_unique<PRIV>() )
 {
-    // Do not leave uninitialized members:
-    m_preliminary = false;
+
 }
 
 
@@ -201,7 +200,6 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<PCB_BASE_FRAME>();
     m_locked = true;
-    m_preliminary = true;
 
     if( aReason == TOOL_BASE::MODEL_RELOAD )
     {
@@ -255,8 +253,6 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 selectPoint( evt->Position() );
 
             m_menu.ShowContextMenu( m_selection );
-
-            m_preliminary = emptySelection;
         }
 
         // double click? Display the properties window
@@ -273,14 +269,10 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( m_additive )
             {
-                m_preliminary = false;
-
                 selectMultiple();
             }
             else if( m_selection.Empty() )
             {
-                m_preliminary = false;
-
                 // There is nothing selected, so try to select something
                 if( !selectCursor() )
                 {
@@ -317,9 +309,6 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         else if( evt->Action() == TA_CONTEXT_MENU_CLOSED )
         {
-            if( m_preliminary )
-                clearSelection();
-
             m_menu.CloseContextMenu( evt );
         }
     }
@@ -330,22 +319,32 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-
 SELECTION& SELECTION_TOOL::GetSelection()
 {
-    // The selected items list has been requested, so it is no longer preliminary
-    m_preliminary = false;
+    return m_selection;
+}
 
-    auto items = m_selection.GetItems();
-
-    // Filter out not modifiable items
-    for( auto item : items )
+SELECTION& SELECTION_TOOL::RequestSelection( int aFlags )
+{
+    if ( m_selection.Empty() )
     {
-        if( !modifiable( static_cast<BOARD_ITEM*>( item ) ) )
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, 0 );
+        m_selection.SetIsHover( true );
+    }
+    else
+    {
+        m_selection.SetIsHover( false );
+    }
+
+    for( auto item : m_selection )
+    {
+        if( ( aFlags & SELECTION_EDITABLE ) && item->Type() == PCB_MARKER_T )
         {
-            m_selection.Remove( item );
+            unselect( static_cast<BOARD_ITEM *>( item ) );
         }
     }
+    if ( aFlags & SELECTION_SANITIZE_PADS )
+        SanitizeSelection();
 
     return m_selection;
 }
@@ -622,7 +621,6 @@ int SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 
     return 0;
 }
-
 
 int SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
 {
@@ -1329,16 +1327,6 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
     return board()->IsLayerVisible( aItem->GetLayer() );
 }
 
-
-bool SELECTION_TOOL::modifiable( const BOARD_ITEM* aItem ) const
-{
-    if( aItem->Type() == PCB_MARKER_T )
-        return false;
-
-    return true;
-}
-
-
 void SELECTION_TOOL::select( BOARD_ITEM* aItem )
 {
     if( aItem->IsSelected() )
@@ -1354,8 +1342,9 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
             return;
     }
 
-    selectVisually( aItem );
     m_selection.Add( aItem );
+    selectVisually( aItem );
+
 
     if( m_selection.Size() == 1 )
     {
@@ -1375,8 +1364,8 @@ void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
     if( !aItem->IsSelected() )
         return;
 
-    unselectVisually( aItem );
     m_selection.Remove( aItem );
+    unselectVisually( aItem );
 
     if( m_selection.Empty() )
     {
@@ -1386,7 +1375,7 @@ void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 }
 
 
-void SELECTION_TOOL::selectVisually( BOARD_ITEM* aItem ) const
+void SELECTION_TOOL::selectVisually( BOARD_ITEM* aItem )
 {
     // Hide the original item, so it is shown only on overlay
     aItem->SetSelected();
@@ -1405,10 +1394,12 @@ void SELECTION_TOOL::selectVisually( BOARD_ITEM* aItem ) const
             view()->Update( item, KIGFX::GEOMETRY );
         } );
     }
+
+    view()->Update( &m_selection );
 }
 
 
-void SELECTION_TOOL::unselectVisually( BOARD_ITEM* aItem ) const
+void SELECTION_TOOL::unselectVisually( BOARD_ITEM* aItem )
 {
     // Restore original item visibility
     aItem->ClearSelected();
@@ -1427,6 +1418,8 @@ void SELECTION_TOOL::unselectVisually( BOARD_ITEM* aItem ) const
             view()->Update( item, KIGFX::ALL );
         });
     }
+
+    view()->Update( &m_selection );
 }
 
 
@@ -1791,7 +1784,7 @@ bool SELECTION_TOOL::SanitizeSelection()
             select( item );
 
         // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( UnselectedEvent );
+        m_toolMgr->ProcessEvent( SelectedEvent );
     }
 
     return true;
@@ -1843,9 +1836,9 @@ const BOX2I SELECTION::ViewBBox() const
             eda_bbox.Merge( (*i)->GetBoundingBox() );
         }
     }
+
 	return BOX2I( eda_bbox.GetOrigin(), eda_bbox.GetSize() );
 }
-
 
 const KIGFX::VIEW_GROUP::ITEMS SELECTION::updateDrawList() const
 {

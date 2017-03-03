@@ -35,6 +35,21 @@
 class SELECTION : public KIGFX::VIEW_GROUP
 {
 public:
+    SELECTION() {};
+
+    SELECTION( const SELECTION& aOther )
+    {
+        m_items = aOther.m_items;
+        m_isHover = aOther.m_isHover;
+    }
+
+    const SELECTION& operator= ( const SELECTION& aOther )
+    {
+        m_items = aOther.m_items;
+        m_isHover = aOther.m_isHover;
+        return *this;
+    }
+
     using ITER = std::set<EDA_ITEM*>::iterator;
     using CITER = std::set<EDA_ITEM*>::const_iterator;
 
@@ -42,6 +57,16 @@ public:
     ITER end() { return m_items.end(); }
     CITER begin() const { return m_items.cbegin(); }
     CITER end() const { return m_items.cend(); }
+
+    void SetIsHover( bool aIsHover )
+    {
+        m_isHover = aIsHover;
+    }
+
+    bool IsHover() const
+    {
+        return m_isHover;
+    }
 
     virtual void Add( EDA_ITEM* aItem )
     {
@@ -122,11 +147,26 @@ public:
         return m_items;
     }
 
+    template<class T>
+    T* FirstOfKind() const
+    {
+        auto refType = T( nullptr ).Type();
+        for( auto item : m_items )
+        {
+            if( item->Type() == refType )
+                return static_cast<T*> ( item );
+        }
+
+        return nullptr;
+    }
+
     virtual const VIEW_GROUP::ITEMS updateDrawList() const override;
 
 private:
     /// Set of selected items
     std::set<EDA_ITEM*> m_items;
+
+    bool m_isHover;
 
     // mute hidden overloaded virtual function warnings
     using VIEW_GROUP::Add;
@@ -138,6 +178,20 @@ enum SELECTION_LOCK_FLAGS
     SELECTION_UNLOCKED = 0,
     SELECTION_LOCK_OVERRIDE = 1,
     SELECTION_LOCKED = 2
+};
+
+// Selection type flags for RequestSelection()
+enum SELECTION_TYPE_FLAGS
+{
+    // Items that can be deleted (but not necessarily modified, eg. DRC markers)
+    SELECTION_DELETABLE = 1,
+    // Items that can be edited (moved, rotated, properties)
+    SELECTION_EDITABLE = 2,
+    // Remove pads without a host module
+    SELECTION_SANITIZE_PADS = 4,
+    // Request a hover-only selection
+    SELECTION_HOVER = 8,
+    SELECTION_DEFAULT = 0x7
 };
 
 #endif
