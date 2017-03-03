@@ -151,6 +151,7 @@ public:
     T* FirstOfKind() const
     {
         auto refType = T( nullptr ).Type();
+
         for( auto item : m_items )
         {
             if( item->Type() == refType )

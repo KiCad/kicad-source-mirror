@@ -88,7 +88,7 @@ void DRC::ShowDRCDialog( wxWindow* aParent )
     }
 }
 
-void DRC::addMarkerToPcb( MARKER_PCB *aMarker )
+void DRC::addMarkerToPcb( MARKER_PCB* aMarker )
 {
     BOARD_COMMIT commit ( m_pcbEditorFrame );
     commit.Add( aMarker );

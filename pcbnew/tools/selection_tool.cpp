@@ -319,10 +319,12 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+
 SELECTION& SELECTION_TOOL::GetSelection()
 {
     return m_selection;
 }
+
 
 SELECTION& SELECTION_TOOL::RequestSelection( int aFlags )
 {

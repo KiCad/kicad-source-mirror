@@ -258,7 +258,7 @@ private:
      * Function addMarkerToPcb
      * Adds a DRC marker to the PCB throught the COMMIT mechanism.
      */
-    void addMarkerToPcb( MARKER_PCB *aMarker );
+    void addMarkerToPcb( MARKER_PCB* aMarker );
 
     //-----<categorical group tests>-----------------------------------------
 
