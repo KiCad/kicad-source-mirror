@@ -38,6 +38,8 @@
 #include <kiface_i.h>
 #include <pgm_base.h>
 #include <wxstruct.h>
+#include <menus_helpers.h>
+#include <bitmaps.h>
 
 #include <wx/display.h>
 #include <wx/utils.h>
@@ -652,4 +654,38 @@ bool EDA_BASE_FRAME::PostCommandMenuEvent( int evt_type )
     }
 
     return false;
+}
+
+
+void EDA_BASE_FRAME::OnChangeIconsOptions( wxCommandEvent& event )
+{
+    if( event.GetId() == ID_KICAD_SELECT_ICONS_IN_MENUS )
+    {
+        Pgm().SetUseIconsInMenus( event.IsChecked() );
+    }
+
+    ReCreateMenuBar();
+}
+
+
+void EDA_BASE_FRAME::AddMenuIconsOptions( wxMenu* MasterMenu )
+{
+    wxMenu*      menu = NULL;
+    wxMenuItem*  item = MasterMenu->FindItem( ID_KICAD_SELECT_ICONS_OPTIONS );
+
+    if( item )     // This menu exists, do nothing
+        return;
+
+    menu = new wxMenu;
+
+    menu->Append( new wxMenuItem( menu, ID_KICAD_SELECT_ICONS_IN_MENUS,
+                  _( "Icons in Menus" ), wxEmptyString,
+                  wxITEM_CHECK ) );
+    menu->Check( ID_KICAD_SELECT_ICONS_IN_MENUS, Pgm().GetUseIconsInMenus() );
+
+    AddMenuItem( MasterMenu, menu,
+                 ID_KICAD_SELECT_ICONS_OPTIONS,
+                 _( "Icons Options" ),
+                 _( "Select show icons in menus and icons sizes" ),
+                 KiBitmap( hammer_xpm ) );
 }

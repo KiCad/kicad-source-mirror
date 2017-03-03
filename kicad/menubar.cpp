@@ -366,7 +366,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     // Icons options submenu
     preferencesMenu->AppendSeparator();
-    Pgm().AddMenuIconsOptions( preferencesMenu );
+    AddMenuIconsOptions( preferencesMenu );
 
     // Menu Tools:
     wxMenu* toolsMenu = new wxMenu;

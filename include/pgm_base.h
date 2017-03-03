@@ -217,16 +217,6 @@ public:
     VTBL_ENTRY void AddMenuLanguageList( wxMenu* MasterMenu );
 
     /**
-     * Function AddMenuIconsOptions
-     * creates a menu list for icons in menu and icon sizes choice,
-     * and add it as submenu to \a MasterMenu.
-     *
-     * @param MasterMenu The main menu. The sub menu list will be accessible from the menu
-     *                   item with id ID_KICAD_SELECT_ICONS_OPTIONS
-     */
-    VTBL_ENTRY void AddMenuIconsOptions( wxMenu* MasterMenu );
-
-    /**
      * Function SetLanguageIdentifier
      * sets in .m_language_id member the wxWidgets language identifier Id  from
      * the KiCad menu id (internal menu identifier).

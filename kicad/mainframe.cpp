@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 CERN (www.cern.ch)
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -441,11 +441,8 @@ void KICAD_MANAGER_FRAME::OnRunPcbFpEditor( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::OnChangeIconsOptions( wxCommandEvent& event )
 {
-    if( event.GetId() == ID_KICAD_SELECT_ICONS_IN_MENUS )
-    {
-        Pgm().SetUseIconsInMenus( event.IsChecked() );
-        Kiway.ShowChangedIcons();
-    }
+    EDA_BASE_FRAME::OnChangeIconsOptions( event );
+    Kiway.ShowChangedIcons();
 }
 
 

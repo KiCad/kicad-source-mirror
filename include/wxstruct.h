@@ -408,10 +408,27 @@ public:
     virtual void ShowChangedLanguage();
 
     /**
+     * Function OnChangeIconsOptions
+     * Selects the current icons options in menus (or toolbars) in Kicad
+     * (the default for toolbars/menus is 26x26 pixels, and shows icons in menus).
+     */
+    virtual void OnChangeIconsOptions( wxCommandEvent& event );
+
+    /**
      * Function ShowChangedIcons
      * redraws items menus after a icon was changed option.
      */
     virtual void ShowChangedIcons();
+
+    /**
+     * Function AddMenuIconsOptions
+     * creates a menu list for icons in menu and icon sizes choice,
+     * and add it as submenu to \a MasterMenu.
+     *
+     * @param MasterMenu The main menu. The sub menu list will be accessible from the menu
+     *                   item with id ID_KICAD_SELECT_ICONS_OPTIONS
+     */
+    void AddMenuIconsOptions( wxMenu* MasterMenu );
 
 
     /**

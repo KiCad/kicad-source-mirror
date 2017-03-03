@@ -77,7 +77,7 @@ static void prepareLibraryMenu( wxMenu* aParentMenu );
 static void prepareDesignRulesMenu( wxMenu* aParentMenu );
 
 // Build the preferences menu
-static void preparePreferencesMenu( wxMenu* aParentMenu );
+static void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu );
 
 
 void PCB_EDIT_FRAME::ReCreateMenuBar()
@@ -122,7 +122,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     prepareLibraryMenu( configmenu );
     configmenu->AppendSeparator();
 
-    preparePreferencesMenu( configmenu );
+    preparePreferencesMenu( this, configmenu );
 
     // Update menu labels:
     configmenu->SetLabel( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER,
@@ -190,7 +190,7 @@ void prepareDesignRulesMenu( wxMenu* aParentMenu )
 
 
 // Build the preferences menu
-void preparePreferencesMenu( wxMenu* aParentMenu )
+void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
 {
     AddMenuItem( aParentMenu, ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER,
                  _( "Hide La&yers Manager" ),
@@ -224,7 +224,7 @@ void preparePreferencesMenu( wxMenu* aParentMenu )
     Pgm().AddMenuLanguageList( aParentMenu );
 
     // Icons options submenu
-    Pgm().AddMenuIconsOptions( aParentMenu );
+    aFrame->AddMenuIconsOptions( aParentMenu );
 
     // Hotkey submenu
     AddHotkeyConfigMenu( aParentMenu );

@@ -210,9 +210,6 @@ void KIWAY_PLAYER::language_change( wxCommandEvent& event )
 
 void KIWAY_PLAYER::OnChangeIconsOptions( wxCommandEvent& event )
 {
-    if( event.GetId() == ID_KICAD_SELECT_ICONS_IN_MENUS )
-    {
-        Pgm().SetUseIconsInMenus( event.IsChecked() );
-        Kiway().ShowChangedIcons();
-    }
+    EDA_BASE_FRAME::OnChangeIconsOptions( event );
+    Kiway().ShowChangedIcons();
 }

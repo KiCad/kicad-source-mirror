@@ -65,7 +65,7 @@ static void prepareEditMenu( wxMenu* aParentMenu );
 static void prepareViewMenu( wxMenu* aParentMenu );
 
 // Build the preferences menu
-static void preparePreferencesMenu( wxMenu* aParentMenu );
+static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu );
 
 
 void SCH_EDIT_FRAME::ReCreateMenuBar()
@@ -104,7 +104,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     // Menu Preferences:
     wxMenu* preferencesMenu = new wxMenu;
-    preparePreferencesMenu( preferencesMenu );
+    preparePreferencesMenu( this, preferencesMenu );
 
     // Menu Tools:
     wxMenu* toolsMenu = new wxMenu;
@@ -594,7 +594,7 @@ void prepareImportExportMenu( wxMenu* aParentMenu )
                  KiBitmap( hotkeys_import_xpm ) );
 }
 
-static void preparePreferencesMenu( wxMenu* aParentMenu )
+static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
 {
     // Library
     AddMenuItem( aParentMenu,
@@ -619,7 +619,7 @@ static void preparePreferencesMenu( wxMenu* aParentMenu )
     Pgm().AddMenuLanguageList( aParentMenu );
 
     // Icons options submenu
-    Pgm().AddMenuIconsOptions( aParentMenu );
+    aFrame->AddMenuIconsOptions( aParentMenu );
 
     // Import/export (submenu in preferences menu)
     aParentMenu->AppendSeparator();

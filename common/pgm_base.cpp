@@ -908,26 +908,3 @@ void PGM_BASE::ConfigurePaths( wxWindow* aParent )
 
     SetLocalEnvVariables( dlg_envvars.GetEnvVarMap() );
 }
-
-
-void PGM_BASE::AddMenuIconsOptions( wxMenu* MasterMenu )
-{
-    wxMenu*      menu = NULL;
-    wxMenuItem*  item = MasterMenu->FindItem( ID_KICAD_SELECT_ICONS_OPTIONS );
-
-    if( item )     // This menu exists, do nothing
-        return;
-
-    menu = new wxMenu;
-
-    menu->Append( new wxMenuItem( menu, ID_KICAD_SELECT_ICONS_IN_MENUS,
-                  _( "Icons in Menus" ), wxEmptyString,
-                  wxITEM_CHECK ) );
-    menu->Check( ID_KICAD_SELECT_ICONS_IN_MENUS, m_useIconsInMenus );
-
-    AddMenuItem( MasterMenu, menu,
-                 ID_KICAD_SELECT_ICONS_OPTIONS,
-                 _( "Icons Options" ),
-                 _( "Select show icons in menus and icons sizes" ),
-                 KiBitmap( hammer_xpm ) );
-}

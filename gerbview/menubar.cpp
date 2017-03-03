@@ -195,7 +195,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     Pgm().AddMenuLanguageList( configMenu );
 
     // Icons options submenu
-    Pgm().AddMenuIconsOptions( configMenu );
+    AddMenuIconsOptions( configMenu );
 
     // Hotkey submenu
     AddHotkeyConfigMenu( configMenu );

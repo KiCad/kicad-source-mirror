@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN (www.cern.ch)
- * Copyright (C) 2015 KiCad Developers, see CHANGELOG.txt for contributors.
+ * Copyright (C) 2017 KiCad Developers, see CHANGELOG.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,7 +150,7 @@ public:
      * Selects the current icons options in menus (or toolbars) in Kicad
      * (the default for toolbars/menus is 26x26 pixels, and shows icons in menus).
      */
-    void OnChangeIconsOptions( wxCommandEvent& event );
+    void OnChangeIconsOptions( wxCommandEvent& event ) override;
 
     /**
      * Function OnLoadProject
