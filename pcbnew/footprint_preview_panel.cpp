@@ -162,6 +162,7 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL(
     m_loader = std::make_unique<LOADER_THREAD>( this );
     m_loader->Run();
 
+    SetStealsFocus( false );
     ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
     EnableScrolling( false, false );    // otherwise Zoom Auto disables GAL canvas
 

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2013-2017 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -57,6 +58,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_painter    = NULL;
     m_eventDispatcher = NULL;
     m_lostFocus  = false;
+    m_stealsFocus = false;
 
     SetLayoutDirection( wxLayout_LeftToRight );
 
@@ -397,7 +399,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
 void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
 {
-    if( m_lostFocus )
+    if( m_lostFocus && m_stealsFocus )
         SetFocus();
 
     if( !m_eventDispatcher )
@@ -412,7 +414,8 @@ void EDA_DRAW_PANEL_GAL::onEvent( wxEvent& aEvent )
 void EDA_DRAW_PANEL_GAL::onEnter( wxEvent& aEvent )
 {
     // Getting focus is necessary in order to receive key events properly
-    SetFocus();
+    if( m_stealsFocus )
+        SetFocus();
 
     aEvent.Skip();
 }

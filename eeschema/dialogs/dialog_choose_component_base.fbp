@@ -417,7 +417,7 @@
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
                                                     <event name="OnKeyDown"></event>
-                                                    <event name="OnKeyUp">OnInterceptSearchBoxKey</event>
+                                                    <event name="OnKeyUp">OnSearchBoxKey</event>
                                                     <event name="OnKillFocus"></event>
                                                     <event name="OnLeaveWindow"></event>
                                                     <event name="OnLeftDClick"></event>
@@ -504,7 +504,7 @@
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnKeyDown"></event>
-                                            <event name="OnKeyUp">OnInterceptTreeEnter</event>
+                                            <event name="OnKeyUp">OnTreeKeyUp</event>
                                             <event name="OnKillFocus"></event>
                                             <event name="OnLeaveWindow"></event>
                                             <event name="OnLeftDClick"></event>
@@ -523,7 +523,7 @@
                                             <event name="OnSetFocus"></event>
                                             <event name="OnSize"></event>
                                             <event name="OnTreelistColumnSorted"></event>
-                                            <event name="OnTreelistItemActivated">OnDoubleClickTreeActivation</event>
+                                            <event name="OnTreelistItemActivated">OnTreeActivate</event>
                                             <event name="OnTreelistItemChecked"></event>
                                             <event name="OnTreelistItemContextMenu"></event>
                                             <event name="OnTreelistItemExpanded"></event>

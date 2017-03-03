@@ -125,7 +125,7 @@ void DIALOG_CHOOSE_COMPONENT::OnSearchBoxChange( wxCommandEvent& aEvent )
 
 void DIALOG_CHOOSE_COMPONENT::OnSearchBoxEnter( wxCommandEvent& aEvent )
 {
-    EndModal( wxID_OK );   // We are done.
+    HandleItemSelection();
 }
 
 
@@ -138,14 +138,9 @@ void DIALOG_CHOOSE_COMPONENT::selectIfValid( const wxTreeListItem& aTreeId )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::OnInterceptSearchBoxKey( wxKeyEvent& aKeyStroke )
+void DIALOG_CHOOSE_COMPONENT::OnSearchBoxKey( wxKeyEvent& aKeyStroke )
 {
-    // Cursor up/down and partiallyi cursor are use to do tree navigation operations.
-    // This is done by intercepting some navigational keystrokes that normally would go to
-    // the text search box (which has the focus by default). That way, we are mostly keyboard
-    // operable.
-    // (If the tree has the focus, it can handle that by itself).
-    const wxTreeListItem sel = m_libraryComponentTree->GetSelection();
+    auto const sel = m_libraryComponentTree->GetSelection();
 
     switch( aKeyStroke.GetKeyCode() )
     {
@@ -155,22 +150,6 @@ void DIALOG_CHOOSE_COMPONENT::OnInterceptSearchBoxKey( wxKeyEvent& aKeyStroke )
 
     case WXK_DOWN:
         selectIfValid( GetNextItem( *m_libraryComponentTree, sel ) );
-        break;
-
-        // The following keys we can only hijack if they are not needed by the textbox itself.
-
-    case WXK_LEFT:
-        if( m_searchBox->GetInsertionPoint() == 0 )
-            m_libraryComponentTree->Collapse( sel );
-        else
-            aKeyStroke.Skip();   // Use for original purpose: move cursor.
-        break;
-
-    case WXK_RIGHT:
-        if( m_searchBox->GetInsertionPoint() >= (long) m_searchBox->GetLineText( 0 ).length() )
-            m_libraryComponentTree->Expand( sel );
-        else
-            aKeyStroke.Skip();   // Use for original purpose: move cursor.
         break;
 
     default:
@@ -186,24 +165,23 @@ void DIALOG_CHOOSE_COMPONENT::OnTreeSelect( wxTreeListEvent& aEvent )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::OnDoubleClickTreeActivation( wxTreeListEvent& aEvent )
+void DIALOG_CHOOSE_COMPONENT::OnTreeActivate( wxTreeListEvent& aEvent )
 {
-    if( updateSelection() )
+    updateSelection();
+    HandleItemSelection();
+}
+
+
+void DIALOG_CHOOSE_COMPONENT::OnTreeKeyUp( wxKeyEvent& aEvent )
+{
+    if( aEvent.GetKeyCode() == WXK_RETURN )
     {
-        // Ok, got selection. We don't just end the modal dialog here, but
-        // wait for the MouseUp event to occur. Otherwise something (broken?)
-        // happens: the dialog will close and will deliver the 'MouseUp' event
-        // to the eeschema canvas, that will immediately place the component.
-        //
-        // NOW, here's where it gets really fun. wxTreeListCtrl eats MouseUp.
-        // This isn't really feasible to bypass without a fully custom
-        // wxDataViewCtrl implementation, and even then might not be fully
-        // possible (docs are vague). To get around this, we use a one-shot
-        // timer to schedule the dialog close.
-        //
-        // See DIALOG_CHOOSE_COMPONENT::OnCloseTimer for the other end of this
-        // spaghetti noodle.
-        m_dbl_click_timer->StartOnce( DIALOG_CHOOSE_COMPONENT::DblClickDelay );
+        updateSelection();
+        HandleItemSelection();
+    }
+    else
+    {
+        aEvent.Skip();
     }
 }
 
@@ -229,32 +207,10 @@ void DIALOG_CHOOSE_COMPONENT::OnCloseTimer( wxTimerEvent& aEvent )
 }
 
 
-// Test strategy to see if OnInterceptTreeEnter() works:
-//  - search for an item.
-//  - click into the tree once to set focus on tree; navigate. Press 'Enter'
-//  -> The dialog should close and the component be available to place.
-void DIALOG_CHOOSE_COMPONENT::OnInterceptTreeEnter( wxKeyEvent& aEvent )
-{
-    // We have to do some special handling for double-click on a tree-item because
-    // of some superfluous event delivery bug in wxWidgets (see OnDoubleClickTreeActivation()).
-    // In tree-activation, we assume we got a double-click and need to take special precaution
-    // that the mouse-up event is not delivered to the window one level up by going through
-    // a state-sequence OnDoubleClickTreeActivation() -> OnTreeMouseUp().
-
-    // Pressing 'Enter' within a tree will also call OnDoubleClickTreeActivation(),
-    // but since this is not due to the double-click and we have no way of knowing that it is
-    // not, we need to intercept the 'Enter' key before that to know that it is time to exit.
-    if( aEvent.GetKeyCode() == WXK_RETURN )
-        EndModal( wxID_OK );    // Dialog is done.
-    else
-        aEvent.Skip();          // Let tree handle that key for navigation.
-}
-
-
 void DIALOG_CHOOSE_COMPONENT::OnStartComponentBrowser( wxMouseEvent& aEvent )
 {
     m_external_browser_requested = true;
-    EndModal( wxID_OK );   // We are done.
+    EndModal( wxID_OK );
 }
 
 
@@ -395,6 +351,36 @@ void DIALOG_CHOOSE_COMPONENT::renderPreview( LIB_PART* aComponent, int aUnit )
     auto opts = PART_DRAW_OPTIONS::Default();
     opts.draw_hidden_fields = false;
     aComponent->Draw( NULL, &dc, offset, aUnit, m_deMorganConvert, opts );
+}
+
+
+void DIALOG_CHOOSE_COMPONENT::HandleItemSelection()
+{
+    if( m_search_container->GetSelectedAlias() )
+    {
+        // Got a selection. We can't just end the modal dialog here, because
+        // wx leaks some events back to the parent window (in particular, the
+        // MouseUp following a double click).
+        //
+        // NOW, here's where it gets really fun. wxTreeListCtrl eats MouseUp.
+        // This isn't really feasible to bypass without a fully custom
+        // wxDataViewCtrl implementation, and even then might not be fully
+        // possible (docs are vague). To get around this, we use a one-shot
+        // timer to schedule the dialog close.
+        //
+        // See DIALOG_CHOOSE_COMPONENT::OnCloseTimer for the other end of this
+        // spaghetti noodle.
+        m_dbl_click_timer->StartOnce( DIALOG_CHOOSE_COMPONENT::DblClickDelay );
+    }
+    else
+    {
+        auto const sel = m_libraryComponentTree->GetSelection();
+
+        if( m_libraryComponentTree->IsExpanded( sel ) )
+            m_libraryComponentTree->Collapse( sel );
+        else
+            m_libraryComponentTree->Expand( sel );
+    }
 }
 
 

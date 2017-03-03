@@ -139,12 +139,13 @@ public:
      */
     void UpdateSearchTerm( const wxString& aSearch );
 
-    /** Function GetSelectedAlias
+    /**
+     * Get the currently selected alias.
      *
-     * @param aUnit : if not NULL, the selected sub-unit is set here.
-     * @return the selected alias or NULL if there is none, or there is no tree.
+     * @param aUnit : if not null, the selected sub-unit is set here.
+     * @return the selected alias or nullptr if there is none, or there is no tree.
      */
-    LIB_ALIAS* GetSelectedAlias( int* aUnit );
+    LIB_ALIAS* GetSelectedAlias( int* aUnit = nullptr );
 
     /**
      * Function GetComponentsCount

@@ -76,11 +76,11 @@ public:
 protected:
     virtual void OnSearchBoxChange( wxCommandEvent& aEvent ) override;
     virtual void OnSearchBoxEnter( wxCommandEvent& aEvent ) override;
-    virtual void OnInterceptSearchBoxKey( wxKeyEvent& aEvent ) override;
+    virtual void OnSearchBoxKey( wxKeyEvent& aEvent ) override;
 
     virtual void OnTreeSelect( wxTreeListEvent& aEvent ) override;
-    virtual void OnDoubleClickTreeActivation( wxTreeListEvent& aEvent ) override;
-    virtual void OnInterceptTreeEnter( wxKeyEvent& aEvent ) override;
+    virtual void OnTreeActivate( wxTreeListEvent& aEvent ) override;
+    virtual void OnTreeKeyUp( wxKeyEvent& aEvent ) override;
 
     virtual void OnStartComponentBrowser( wxMouseEvent& aEvent ) override;
     virtual void OnHandlePreviewRepaint( wxPaintEvent& aRepaintEvent ) override;
@@ -90,10 +90,17 @@ protected:
 
 private:
     bool updateSelection();
-    void selectIfValid( const wxTreeListItem& aTreeId );
-    void renderPreview( LIB_PART*      aComponent, int aUnit );
-
     void updateFootprint();
+    void selectIfValid( const wxTreeListItem& aTreeId );
+    void renderPreview( LIB_PART* aComponent, int aUnit );
+
+    /**
+     * Handle the selection of an item. This is called when either the search
+     * box or the tree receive an Enter, or the tree receives a double click.
+     * If the item selected is a category, it is expanded or collapsed; if it
+     * is a component, the component is picked.
+     */
+    void HandleItemSelection();
 
     std::unique_ptr<wxTimer> m_dbl_click_timer;
     FOOTPRINT_PREVIEW_PANEL* m_footprintPreviewPanel;
