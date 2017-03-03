@@ -65,6 +65,7 @@ class REPORTER;
 struct PARSE_ERROR;
 class IO_ERROR;
 class FP_LIB_TABLE;
+struct AUTOROUTER_CONTEXT;
 
 namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
 
@@ -1619,7 +1620,7 @@ public:
     void AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC );
 
     // Autorouting:
-    int Solve( wxDC* DC, int two_sides );
+    int Solve( AUTOROUTER_CONTEXT& aCtx, int aLayersCount );
     void Reset_Noroutable( wxDC* DC );
     void Autoroute( wxDC* DC, int mode );
     void ReadAutoroutedTracks( wxDC* DC );

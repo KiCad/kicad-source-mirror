@@ -166,6 +166,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
 
     /* Calculated ncol and nrow, matrix size for routing. */
     RoutingMatrix.ComputeMatrixSize( GetBoard() );
+    AUTOROUTER_CONTEXT ctx = { this, GetBoard(), RoutingMatrix.m_BrdBox, DC };
 
     m_messagePanel->EraseMsgBox();
 
@@ -190,7 +191,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
 
     // DisplayRoutingMatrix( m_canvas, DC );
 
-    Solve( DC, RoutingMatrix.m_RoutingLayersCount );
+    Solve( ctx, RoutingMatrix.m_RoutingLayersCount );
 
     /* Free memory. */
     FreeQueue();

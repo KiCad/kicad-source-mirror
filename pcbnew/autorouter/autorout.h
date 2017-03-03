@@ -40,6 +40,10 @@
 
 class BOARD;
 class DRAWSEGMENT;
+class TRACK;
+class D_PAD;
+class RATSNEST_ITEM;
+class PCB_EDIT_FRAME;
 
 
 #define TOP     0
@@ -78,6 +82,20 @@ typedef unsigned char MATRIX_CELL;
 typedef int  DIST_CELL;
 typedef char DIR_CELL;
 
+struct AUTOROUTER_CONTEXT
+{
+    ///> Parent frame
+    PCB_EDIT_FRAME* pcbframe;
+
+    ///> Board to be routed
+    BOARD* board;
+
+    ///> Cached board bounding box
+    const EDA_RECT bbox;
+
+    ///> Drawing context
+    wxDC* dc;
+};
 
 /**
  * class MATRIX_ROUTING_HEAD
@@ -176,13 +194,6 @@ extern MATRIX_ROUTING_HEAD RoutingMatrix;        /* 2-sided board */
 #define WRITE_ADD_CELL 4
 
 // Functions:
-
-class PCB_EDIT_FRAME;
-class BOARD;
-class D_PAD;
-class RATSNEST_ITEM;
-class TRACK;
-
 
 /* Initialize a color value, the cells included in the board edge of the
  * pad surface by pt_pad, with the margin reserved for isolation and the

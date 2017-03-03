@@ -48,9 +48,7 @@
 #include <autorout.h>
 #include <cell.h>
 
-
-static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
-                                wxDC*           DC,
+static int Autoroute_One_Track( AUTOROUTER_CONTEXT& ctx,
                                 int             two_sides,
                                 int             row_source,
                                 int             col_source,
@@ -58,8 +56,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
                                 int             col_target,
                                 RATSNEST_ITEM*  pt_rat );
 
-static int Retrace( PCB_EDIT_FRAME* pcbframe,
-                    wxDC*           DC,
+static int Retrace( AUTOROUTER_CONTEXT& ctx,
                     int,
                     int,
                     int,
@@ -67,14 +64,14 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe,
                     int,
                     int              net_code );
 
-static void OrCell_Trace( BOARD* pcb,
+static void OrCell_Trace( AUTOROUTER_CONTEXT& ctx,
                           int    col,
                           int    row,
                           int    side,
                           int    orient,
                           int    current_net_code );
 
-static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC );
+static void AddNewTrace( AUTOROUTER_CONTEXT& ctx );
 
 
 static int            segm_oX, segm_oY;
@@ -266,7 +263,7 @@ static long newmask[8] =
  * -1 if escape (stop being routed) request
  * -2 if default memory allocation
  */
-int PCB_EDIT_FRAME::Solve( wxDC* DC, int aLayersCount )
+int PCB_EDIT_FRAME::Solve( AUTOROUTER_CONTEXT& aCtx, int aLayersCount )
 {
     int           current_net_code;
     int           row_source, col_source, row_target, col_target;
@@ -279,7 +276,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int aLayersCount )
 
     m_canvas->SetAbortRequest( false );
 
-    s_Clearance = GetBoard()->GetDesignSettings().GetDefault()->GetClearance();
+    s_Clearance = aCtx.board->GetDesignSettings().GetDefault()->GetClearance();
 
     // Prepare the undo command info
     s_ItemsListPicker.ClearListAndDeleteItems();  // Should not be necessary, but...
@@ -313,7 +310,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int aLayersCount )
         EraseMsgBox();
 
         routedCount++;
-        net = GetBoard()->FindNet( current_net_code );
+        net = aCtx.board->FindNet( current_net_code );
 
         if( net )
         {
@@ -323,20 +320,19 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int aLayersCount )
             AppendMsgPanel( wxT( "Activity" ), msg, BROWN );
         }
 
-        segm_oX = GetBoard()->GetBoundingBox().GetX() + (RoutingMatrix.m_GridRouting * col_source);
-        segm_oY = GetBoard()->GetBoundingBox().GetY() + (RoutingMatrix.m_GridRouting * row_source);
-        segm_fX = GetBoard()->GetBoundingBox().GetX() + (RoutingMatrix.m_GridRouting * col_target);
-        segm_fY = GetBoard()->GetBoundingBox().GetY() + (RoutingMatrix.m_GridRouting * row_target);
+        segm_oX = aCtx.bbox.GetX() + ( RoutingMatrix.m_GridRouting * col_source );
+        segm_oY = aCtx.bbox.GetY() + ( RoutingMatrix.m_GridRouting * row_source );
+        segm_fX = aCtx.bbox.GetX() + ( RoutingMatrix.m_GridRouting * col_target );
+        segm_fY = aCtx.bbox.GetY() + ( RoutingMatrix.m_GridRouting * row_target );
 
         // Draw segment.
-        GRLine( m_canvas->GetClipBox(), DC,
+        GRLine( m_canvas->GetClipBox(), aCtx.dc,
                 segm_oX, segm_oY, segm_fX, segm_fY,
                 0, WHITE );
-        pt_cur_ch->m_PadStart->Draw( m_canvas, DC, GR_OR | GR_HIGHLIGHT );
-        pt_cur_ch->m_PadEnd->Draw( m_canvas, DC, GR_OR | GR_HIGHLIGHT );
+        pt_cur_ch->m_PadStart->Draw( m_canvas, aCtx.dc, GR_OR | GR_HIGHLIGHT );
+        pt_cur_ch->m_PadEnd->Draw( m_canvas, aCtx.dc, GR_OR | GR_HIGHLIGHT );
 
-        success = Autoroute_One_Track( this, DC,
-                                       two_sides, row_source, col_source,
+        success = Autoroute_One_Track( aCtx, two_sides, row_source, col_source,
                                        row_target, col_target, pt_cur_ch );
 
         switch( success )
@@ -363,12 +359,12 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int aLayersCount )
         AppendMsgPanel( wxT( "OK" ), msg, GREEN );
         msg.Printf( wxT( "%d" ), nbunsucces );
         AppendMsgPanel( wxT( "Fail" ), msg, RED );
-        msg.Printf( wxT( "  %d" ), GetBoard()->GetUnconnectedNetCount() );
+        msg.Printf( wxT( "  %d" ), aCtx.board->GetUnconnectedNetCount() );
         AppendMsgPanel( wxT( "Not Connected" ), msg, CYAN );
 
         // Delete routing from display.
-        pt_cur_ch->m_PadStart->Draw( m_canvas, DC, GR_AND );
-        pt_cur_ch->m_PadEnd->Draw( m_canvas, DC, GR_AND );
+        pt_cur_ch->m_PadStart->Draw( m_canvas, aCtx.dc, GR_AND );
+        pt_cur_ch->m_PadEnd->Draw( m_canvas, aCtx.dc, GR_AND );
 
         if( stop )
             break;
@@ -396,8 +392,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int aLayersCount )
  * Escape STOP_FROM_ESC if demand
  * ERR_MEMORY if memory allocation failed.
  */
-static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
-                                wxDC*           DC,
+static int Autoroute_One_Track( AUTOROUTER_CONTEXT& ctx,
                                 int             two_sides,
                                 int             row_source,
                                 int             col_source,
@@ -427,14 +422,14 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     wxString     msg;
 
     // @todo this could be a bottle neck
-    LSET all_cu = LSET::AllCuMask( pcbframe->GetBoard()->GetCopperLayerCount() );
+    LSET all_cu = LSET::AllCuMask( ctx.board->GetCopperLayerCount() );
 
     wxBusyCursor dummy_cursor;      // Set an hourglass cursor while routing a
                                     // track
 
     result = NOSUCCESS;
 
-    marge = s_Clearance + ( pcbframe->GetDesignSettings().GetCurrentTrackWidth() / 2 );
+    marge = s_Clearance + ( ctx.pcbframe->GetDesignSettings().GetCurrentTrackWidth() / 2 );
 
     // clear direction flags
     i = RoutingMatrix.m_Nrows * RoutingMatrix.m_Ncols * sizeof(DIR_CELL);
@@ -474,10 +469,8 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
      * On the routing grid (1 grid point must be in the pad)
      */
     {
-        int cX = ( RoutingMatrix.m_GridRouting * col_source )
-                 + pcbframe->GetBoard()->GetBoundingBox().GetX();
-        int cY = ( RoutingMatrix.m_GridRouting * row_source )
-                 + pcbframe->GetBoard()->GetBoundingBox().GetY();
+        int cX = ( RoutingMatrix.m_GridRouting * col_source ) + ctx.bbox.GetX();
+        int cY = ( RoutingMatrix.m_GridRouting * row_source ) + ctx.bbox.GetY();
         int dx = pt_cur_ch->m_PadStart->GetSize().x / 2;
         int dy = pt_cur_ch->m_PadStart->GetSize().y / 2;
         int px = pt_cur_ch->m_PadStart->GetPosition().x;
@@ -489,10 +482,8 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
         if( ( abs( cX - px ) > dx ) || ( abs( cY - py ) > dy ) )
             goto end_of_route;
 
-        cX = ( RoutingMatrix.m_GridRouting * col_target )
-             + pcbframe->GetBoard()->GetBoundingBox().GetX();
-        cY = ( RoutingMatrix.m_GridRouting * row_target )
-             + pcbframe->GetBoard()->GetBoundingBox().GetY();
+        cX = ( RoutingMatrix.m_GridRouting * col_target ) + ctx.bbox.GetX();
+        cY = ( RoutingMatrix.m_GridRouting * row_target ) + ctx.bbox.GetY();
         dx = pt_cur_ch->m_PadEnd->GetSize().x / 2;
         dy = pt_cur_ch->m_PadEnd->GetSize().y / 2;
         px = pt_cur_ch->m_PadEnd->GetPosition().x;
@@ -514,18 +505,18 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     }
 
     // Placing the bit to remove obstacles on 2 pads to a link.
-    pcbframe->SetStatusText( wxT( "Gen Cells" ) );
+    ctx.pcbframe->SetStatusText( wxT( "Gen Cells" ) );
 
     PlacePad( pt_cur_ch->m_PadStart, CURRENT_PAD, marge, WRITE_OR_CELL );
     PlacePad( pt_cur_ch->m_PadEnd, CURRENT_PAD, marge, WRITE_OR_CELL );
 
     // Regenerates the remaining barriers (which may encroach on the
     // placement bits precedent)
-    i = pcbframe->GetBoard()->GetPadCount();
+    i = ctx.board->GetPadCount();
 
-    for( unsigned ii = 0; ii < pcbframe->GetBoard()->GetPadCount(); ii++ )
+    for( unsigned ii = 0; ii < ctx.board->GetPadCount(); ii++ )
     {
-        D_PAD* ptr = pcbframe->GetBoard()->GetPad( ii );
+        D_PAD* ptr = ctx.board->GetPad( ii );
 
         if( ( pt_cur_ch->m_PadStart != ptr ) && ( pt_cur_ch->m_PadEnd != ptr ) )
         {
@@ -612,18 +603,16 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
            && (tab_mask[side] & padLayerMaskEnd).any() )
         {
             // Remove link.
-            GRSetDrawMode( DC, GR_XOR );
-            GRLine( pcbframe->GetCanvas()->GetClipBox(),
-                    DC,
-                    segm_oX,
-                    segm_oY,
-                    segm_fX,
-                    segm_fY,
+            GRSetDrawMode( ctx.dc, GR_XOR );
+            GRLine( ctx.pcbframe->GetCanvas()->GetClipBox(),
+                    ctx.dc,
+                    segm_oX, segm_oY,
+                    segm_fX, segm_fY,
                     0,
                     WHITE );
 
             // Generate trace.
-            if( Retrace( pcbframe, DC, row_source, col_source,
+            if( Retrace( ctx, row_source, col_source,
                          row_target, col_target, side, current_net_code ) )
             {
                 result = SUCCESS;   // Success : Route OK
@@ -632,7 +621,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
             break;                  // Routing complete.
         }
 
-        if( pcbframe->GetCanvas()->GetAbortRequest() )
+        if( ctx.pcbframe->GetCanvas()->GetAbortRequest() )
         {
             result = STOP_FROM_ESC;
             break;
@@ -650,7 +639,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
             lastmove = MoveNodes;
             msg.Printf( wxT( "Activity: Open %d   Closed %d   Moved %d" ),
                         OpenNodes, ClosNodes, MoveNodes );
-            pcbframe->SetStatusText( msg );
+            ctx.pcbframe->SetStatusText( msg );
         }
 
         _self = 0;
@@ -828,7 +817,7 @@ end_of_route:
 
     msg.Printf( wxT( "Activity: Open %d   Closed %d   Moved %d"),
                 OpenNodes, ClosNodes, MoveNodes );
-    pcbframe->SetStatusText( msg );
+    ctx.pcbframe->SetStatusText( msg );
 
     return result;
 }
@@ -951,7 +940,7 @@ static long bit[8][9] =
  * 0 if error
  * > 0 if Ok
  */
-static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
+static int Retrace( AUTOROUTER_CONTEXT& ctx,
                     int row_source, int col_source,
                     int row_target, int col_target, int target_side,
                     int current_net_code )
@@ -1066,11 +1055,11 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
 
             case FROM_OTHERSIDE:
             default:
-                DisplayError( pcbframe, wxT( "Retrace: error 1" ) );
+                DisplayError( ctx.pcbframe, wxT( "Retrace: error 1" ) );
                 return 0;
             }
 
-            OrCell_Trace( pcbframe->GetBoard(), r1, c1, s1, p_dir, current_net_code );
+            OrCell_Trace( ctx, r1, c1, s1, p_dir, current_net_code );
         }
         else
         {
@@ -1085,10 +1074,10 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
                     || x == FROM_OTHERSIDE )
                && ( ( b = bit[y - 1][x - 1] ) != 0 ) )
             {
-                OrCell_Trace( pcbframe->GetBoard(), r1, c1, s1, b, current_net_code );
+                OrCell_Trace( ctx, r1, c1, s1, b, current_net_code );
 
                 if( b & HOLE )
-                    OrCell_Trace( pcbframe->GetBoard(), r2, c2, s2, HOLE, current_net_code );
+                    OrCell_Trace( ctx, r2, c2, s2, HOLE, current_net_code );
             }
             else
             {
@@ -1141,7 +1130,7 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
                 return 0;
             }
 
-            OrCell_Trace( pcbframe->GetBoard(), r2, c2, s2, p_dir, current_net_code );
+            OrCell_Trace( ctx, r2, c2, s2, p_dir, current_net_code );
         }
 
         // move to next cell
@@ -1153,7 +1142,7 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
         s1 = s2;
     } while( !( ( r2 == row_source ) && ( c2 == col_source ) ) );
 
-    AddNewTrace( pcbframe, DC );
+    AddNewTrace( ctx );
     return 1;
 }
 
@@ -1161,34 +1150,31 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
 /* This function is used by Retrace and read the autorouting matrix data cells to create
  * the real track on the physical board
  */
-static void OrCell_Trace( BOARD* pcb, int col, int row,
+static void OrCell_Trace( AUTOROUTER_CONTEXT& ctx, int col, int row,
                           int side, int orient, int current_net_code )
 {
     if( orient == HOLE )  // placement of a via
     {
-        VIA *newVia = new VIA( pcb );
+        VIA* newVia = new VIA( ctx.board );
 
         g_CurrentTrackList.PushBack( newVia );
 
         g_CurrentTrackSegment->SetState( TRACK_AR, true );
         g_CurrentTrackSegment->SetLayer( F_Cu );
 
-        g_CurrentTrackSegment->SetStart(wxPoint( pcb->GetBoundingBox().GetX() +
-                                                ( RoutingMatrix.m_GridRouting * row ),
-                                                pcb->GetBoundingBox().GetY() +
-                                                ( RoutingMatrix.m_GridRouting * col )));
+        g_CurrentTrackSegment->SetStart( wxPoint( ctx.bbox.GetX() + RoutingMatrix.m_GridRouting * row,
+                            ctx.bbox.GetY() + RoutingMatrix.m_GridRouting * col ) );
         g_CurrentTrackSegment->SetEnd( g_CurrentTrackSegment->GetStart() );
 
-        g_CurrentTrackSegment->SetWidth( pcb->GetDesignSettings().GetCurrentViaSize() );
-        newVia->SetViaType( pcb->GetDesignSettings().m_CurrentViaType );
+        g_CurrentTrackSegment->SetWidth( ctx.board->GetDesignSettings().GetCurrentViaSize() );
+        newVia->SetViaType( ctx.board->GetDesignSettings().m_CurrentViaType );
 
         g_CurrentTrackSegment->SetNetCode( current_net_code );
     }
     else    // placement of a standard segment
     {
-        TRACK *newTrack = new TRACK( pcb );
+        TRACK* newTrack = new TRACK( ctx.board );
         int    dx0, dy0, dx1, dy1;
-
 
         g_CurrentTrackList.PushBack( newTrack );
 
@@ -1198,10 +1184,8 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
             g_CurrentTrackSegment->SetLayer( g_Route_Layer_TOP );
 
         g_CurrentTrackSegment->SetState( TRACK_AR, true );
-        g_CurrentTrackSegment->SetEnd( wxPoint( pcb->GetBoundingBox().GetX() +
-                                         ( RoutingMatrix.m_GridRouting * row ),
-                                         pcb->GetBoundingBox().GetY() +
-                                         ( RoutingMatrix.m_GridRouting * col )));
+        g_CurrentTrackSegment->SetEnd( wxPoint( ctx.bbox.GetX() + RoutingMatrix.m_GridRouting * row,
+                            ctx.bbox.GetY() + RoutingMatrix.m_GridRouting * col ) );
         g_CurrentTrackSegment->SetNetCode( current_net_code );
 
         if( g_CurrentTrackSegment->Back() == NULL ) // Start trace.
@@ -1238,7 +1222,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
             }
         }
 
-        g_CurrentTrackSegment->SetWidth( pcb->GetDesignSettings().GetCurrentTrackWidth() );
+        g_CurrentTrackSegment->SetWidth( ctx.board->GetDesignSettings().GetCurrentTrackWidth() );
 
         if( g_CurrentTrackSegment->GetStart() != g_CurrentTrackSegment->GetEnd() )
         {
@@ -1270,18 +1254,18 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
  * connected
  * Center on pads even if they are off grid.
  */
-static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
+static void AddNewTrace( AUTOROUTER_CONTEXT& ctx )
 {
     if( g_FirstTrackSegment == NULL )
         return;
 
     int dx0, dy0, dx1, dy1;
     int marge, via_marge;
-    EDA_DRAW_PANEL* panel = pcbframe->GetCanvas();
-    PCB_SCREEN* screen = pcbframe->GetScreen();
+    EDA_DRAW_PANEL* panel = ctx.pcbframe->GetCanvas();
+    PCB_SCREEN* screen = ctx.pcbframe->GetScreen();
 
-    marge = s_Clearance + ( pcbframe->GetDesignSettings().GetCurrentTrackWidth() / 2 );
-    via_marge = s_Clearance + ( pcbframe->GetDesignSettings().GetCurrentViaSize() / 2 );
+    marge = s_Clearance + ( ctx.pcbframe->GetDesignSettings().GetCurrentTrackWidth() / 2 );
+    via_marge = s_Clearance + ( ctx.pcbframe->GetDesignSettings().GetCurrentViaSize() / 2 );
 
     dx1 = g_CurrentTrackSegment->GetEnd().x - g_CurrentTrackSegment->GetStart().x;
     dy1 = g_CurrentTrackSegment->GetEnd().y - g_CurrentTrackSegment->GetStart().y;
@@ -1305,13 +1289,13 @@ static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
         g_CurrentTrackList.PushBack( newTrack );
     }
 
-    g_FirstTrackSegment->start = pcbframe->GetBoard()->GetPad( g_FirstTrackSegment,
+    g_FirstTrackSegment->start = ctx.board->GetPad( g_FirstTrackSegment,
             ENDPOINT_START );
 
     if( g_FirstTrackSegment->start )
         g_FirstTrackSegment->SetState( BEGIN_ONPAD, true );
 
-    g_CurrentTrackSegment->end = pcbframe->GetBoard()->GetPad( g_CurrentTrackSegment,
+    g_CurrentTrackSegment->end = ctx.board->GetPad( g_CurrentTrackSegment,
             ENDPOINT_END );
 
     if( g_CurrentTrackSegment->end )
@@ -1331,18 +1315,18 @@ static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
 
     // Put entire new current segment list in BOARD
     TRACK* track;
-    TRACK* insertBeforeMe = g_CurrentTrackSegment->GetBestInsertPoint( pcbframe->GetBoard() );
+    TRACK* insertBeforeMe = g_CurrentTrackSegment->GetBestInsertPoint( ctx.board );
 
     while( ( track = g_CurrentTrackList.PopFront() ) != NULL )
     {
         ITEM_PICKER picker( track, UR_NEW );
         s_ItemsListPicker.PushItem( picker );
-        pcbframe->GetBoard()->m_Track.Insert( track, insertBeforeMe );
+        ctx.board->m_Track.Insert( track, insertBeforeMe );
     }
 
-    DrawTraces( panel, DC, firstTrack, newCount, GR_OR );
+    DrawTraces( panel, ctx.dc, firstTrack, newCount, GR_OR );
 
-    pcbframe->TestNetConnection( DC, netcode );
+    ctx.pcbframe->TestNetConnection( ctx.dc, netcode );
 
     screen->SetModify();
 }
