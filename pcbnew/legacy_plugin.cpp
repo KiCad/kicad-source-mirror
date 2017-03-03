@@ -660,14 +660,10 @@ void LEGACY_PLUGIN::loadGENERAL()
 
         else if( TESTLINE( "Di" ) )
         {
-            BIU x1 = biuParse( line + SZ( "Di" ), &data );
-            BIU y1 = biuParse( data, &data );
-            BIU x2 = biuParse( data, &data );
-            BIU y2 = biuParse( data );
-
-            EDA_RECT bbbox( wxPoint( x1, y1 ), wxSize( x2-x1, y2-y1 ) );
-
-            m_board->SetBoundingBox( bbbox );
+            biuParse( line + SZ( "Di" ), &data );
+            biuParse( data, &data );
+            biuParse( data, &data );
+            biuParse( data );
         }
 
         /* This is no more usefull, so this info is no more parsed

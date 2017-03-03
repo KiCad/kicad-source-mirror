@@ -86,8 +86,6 @@ bool MATRIX_ROUTING_HEAD::ComputeMatrixSize( BOARD* aPcb, bool aUseBoardEdgesOnl
 
     m_BrdBox.SetEnd( end );
 
-    aPcb->SetBoundingBox( m_BrdBox );
-
     m_Nrows = m_BrdBox.GetHeight() / m_GridRouting;
     m_Ncols = m_BrdBox.GetWidth() / m_GridRouting;
 

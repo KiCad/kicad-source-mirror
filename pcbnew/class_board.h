@@ -850,8 +850,6 @@ public:
         return ComputeBoundingBox( true );
     }
 
-    void SetBoundingBox( const EDA_RECT& aBox ) { m_BoundingBox = aBox; }
-
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     /**
