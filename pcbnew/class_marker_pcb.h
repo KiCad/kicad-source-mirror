@@ -117,6 +117,8 @@ public:
         return BOX2I( m_Pos, VECTOR2I( 1300000, 1300000 ) );
     }
 
+    const EDA_RECT GetBoundingBox() const override;
+
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
 #if defined(DEBUG)

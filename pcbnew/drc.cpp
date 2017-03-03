@@ -52,7 +52,7 @@
 
 #include <dialog_drc.h>
 #include <wx/progdlg.h>
-
+#include <board_commit.h>
 
 void DRC::ShowDRCDialog( wxWindow* aParent )
 {
@@ -88,6 +88,12 @@ void DRC::ShowDRCDialog( wxWindow* aParent )
     }
 }
 
+void DRC::addMarkerToPcb( MARKER_PCB *aMarker )
+{
+    BOARD_COMMIT commit ( m_pcbEditorFrame );
+    commit.Add( aMarker );
+    commit.Push( _(""), false );
+}
 
 void DRC::DestroyDRCDialog( int aReason )
 {
@@ -345,10 +351,8 @@ bool DRC::doNetClass( NETCLASSPTR nc, wxString& msg )
                     FmtVal( g.m_TrackClearance )
                     );
 
-        m_currentMarker = fillMarker( DRCE_NETCLASS_CLEARANCE, msg, m_currentMarker );
-        m_pcb->Add( m_currentMarker );
-        m_pcbEditorFrame->GetGalCanvas()->GetView()->Add( m_currentMarker );
-        m_currentMarker = 0;
+        addMarkerToPcb( fillMarker( DRCE_NETCLASS_CLEARANCE, msg, m_currentMarker ) );
+        m_currentMarker = nullptr;
         ret = false;
     }
 #endif
@@ -361,10 +365,8 @@ bool DRC::doNetClass( NETCLASSPTR nc, wxString& msg )
                     FmtVal( g.m_TrackMinWidth )
                     );
 
-        m_currentMarker = fillMarker( DRCE_NETCLASS_TRACKWIDTH, msg, m_currentMarker );
-        m_pcb->Add( m_currentMarker );
-        m_pcbEditorFrame->GetGalCanvas()->GetView()->Add( m_currentMarker );
-        m_currentMarker = 0;
+        addMarkerToPcb( fillMarker( DRCE_NETCLASS_TRACKWIDTH, msg, m_currentMarker ) );
+        m_currentMarker = nullptr;
         ret = false;
     }
 
@@ -376,10 +378,8 @@ bool DRC::doNetClass( NETCLASSPTR nc, wxString& msg )
                     FmtVal( g.m_ViasMinSize )
                     );
 
-        m_currentMarker = fillMarker( DRCE_NETCLASS_VIASIZE, msg, m_currentMarker );
-        m_pcb->Add( m_currentMarker );
-        m_pcbEditorFrame->GetGalCanvas()->GetView()->Add( m_currentMarker );
-        m_currentMarker = 0;
+        addMarkerToPcb( fillMarker( DRCE_NETCLASS_VIASIZE, msg, m_currentMarker ) );
+        m_currentMarker = nullptr;
         ret = false;
     }
 
@@ -391,10 +391,8 @@ bool DRC::doNetClass( NETCLASSPTR nc, wxString& msg )
                     FmtVal( g.m_ViasMinDrill )
                     );
 
-        m_currentMarker = fillMarker( DRCE_NETCLASS_VIADRILLSIZE, msg, m_currentMarker );
-        m_pcb->Add( m_currentMarker );
-        m_pcbEditorFrame->GetGalCanvas()->GetView()->Add( m_currentMarker );
-        m_currentMarker = 0;
+        addMarkerToPcb( fillMarker( DRCE_NETCLASS_VIADRILLSIZE, msg, m_currentMarker ) );
+        m_currentMarker = nullptr;
         ret = false;
     }
 
@@ -406,10 +404,8 @@ bool DRC::doNetClass( NETCLASSPTR nc, wxString& msg )
                     FmtVal( g.m_MicroViasMinSize )
                     );
 
-        m_currentMarker = fillMarker( DRCE_NETCLASS_uVIASIZE, msg, m_currentMarker );
-        m_pcb->Add( m_currentMarker );
-        m_pcbEditorFrame->GetGalCanvas()->GetView()->Add( m_currentMarker );
-        m_currentMarker = 0;
+        addMarkerToPcb( fillMarker( DRCE_NETCLASS_uVIASIZE, msg, m_currentMarker ) );
+        m_currentMarker = nullptr;
         ret = false;
     }
 
@@ -421,10 +417,8 @@ bool DRC::doNetClass( NETCLASSPTR nc, wxString& msg )
                     FmtVal( g.m_MicroViasMinDrill )
                     );
 
-        m_currentMarker = fillMarker( DRCE_NETCLASS_uVIADRILLSIZE, msg, m_currentMarker );
-        m_pcb->Add( m_currentMarker );
-        m_pcbEditorFrame->GetGalCanvas()->GetView()->Add( m_currentMarker );
-        m_currentMarker = 0;
+        addMarkerToPcb( fillMarker( DRCE_NETCLASS_uVIADRILLSIZE, msg, m_currentMarker ) );
+        m_currentMarker = nullptr;
         ret = false;
     }
 
@@ -487,9 +481,8 @@ void DRC::testPad2Pad()
         if( !doPadToPadsDrc( pad, &sortedPads[i], listEnd, x_limit ) )
         {
             wxASSERT( m_currentMarker );
-            m_pcb->Add( m_currentMarker );
-            m_pcbEditorFrame->GetGalCanvas()->GetView()->Add( m_currentMarker );
-            m_currentMarker = 0;
+            addMarkerToPcb ( m_currentMarker );
+            m_currentMarker = nullptr;
         }
     }
 }
@@ -540,9 +533,8 @@ void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
         if( !doTrackDrc( segm, segm->Next(), true ) )
         {
             wxASSERT( m_currentMarker );
-            m_pcb->Add( m_currentMarker );
-            m_pcbEditorFrame->GetGalCanvas()->GetView()->Add( m_currentMarker );
-            m_currentMarker = 0;
+            addMarkerToPcb ( m_currentMarker );
+            m_currentMarker = nullptr;
         }
     }
 
@@ -613,11 +605,9 @@ void DRC::testZones()
 
         if( ( netcode < 0 ) || pads_in_net == 0 )
         {
-            m_currentMarker = fillMarker( test_area,
-                                          DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE, m_currentMarker );
-            m_pcb->Add( m_currentMarker );
-            m_pcbEditorFrame->GetGalCanvas()->GetView()->Add( m_currentMarker );
-            m_currentMarker = NULL;
+            addMarkerToPcb( fillMarker( test_area,
+                                        DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE, m_currentMarker ) );
+            m_currentMarker = nullptr;
         }
     }
 
@@ -649,11 +639,9 @@ void DRC::testKeepoutAreas()
                 if( area->Outline()->Distance( segm->GetStart(), segm->GetEnd(),
                                                segm->GetWidth() ) == 0 )
                 {
-                    m_currentMarker = fillMarker( segm, NULL,
-                                                  DRCE_TRACK_INSIDE_KEEPOUT, m_currentMarker );
-                    m_pcb->Add( m_currentMarker );
-                    m_pcbEditorFrame->GetGalCanvas()->GetView()->Add( m_currentMarker );
-                    m_currentMarker = 0;
+                    addMarkerToPcb( fillMarker( segm, NULL,
+                                                DRCE_TRACK_INSIDE_KEEPOUT, m_currentMarker ) );
+                    m_currentMarker = nullptr;
                 }
             }
             else if( segm->Type() == PCB_VIA_T )
@@ -666,11 +654,9 @@ void DRC::testKeepoutAreas()
 
                 if( area->Outline()->Distance( segm->GetPosition() ) < segm->GetWidth()/2 )
                 {
-                    m_currentMarker = fillMarker( segm, NULL,
-                                                  DRCE_VIA_INSIDE_KEEPOUT, m_currentMarker );
-                    m_pcb->Add( m_currentMarker );
-                    m_pcbEditorFrame->GetGalCanvas()->GetView()->Add( m_currentMarker );
-                    m_currentMarker = 0;
+                    addMarkerToPcb( fillMarker( segm, NULL,
+                                                DRCE_VIA_INSIDE_KEEPOUT, m_currentMarker ) );
+                    m_currentMarker = nullptr;
                 }
             }
         }
@@ -726,12 +712,10 @@ void DRC::testTexts()
 
                     if( dist < min_dist )
                     {
-                        m_currentMarker = fillMarker( track, text,
-                                                      DRCE_TRACK_INSIDE_TEXT,
-                                                      m_currentMarker );
-                        m_pcb->Add( m_currentMarker );
-                        m_pcbEditorFrame->GetGalCanvas()->GetView()->Add( m_currentMarker );
-                        m_currentMarker = NULL;
+                        addMarkerToPcb( fillMarker( track, text,
+                                                    DRCE_TRACK_INSIDE_TEXT,
+                                                    m_currentMarker ) );
+                        m_currentMarker = nullptr;
                         break;
                     }
                 }
@@ -746,11 +730,9 @@ void DRC::testTexts()
 
                     if( segtest.PointCloserThan( track->GetPosition(), min_dist ) )
                     {
-                        m_currentMarker = fillMarker( track, text,
-                                                      DRCE_VIA_INSIDE_TEXT, m_currentMarker );
-                        m_pcb->Add( m_currentMarker );
-                        m_pcbEditorFrame->GetGalCanvas()->GetView()->Add( m_currentMarker );
-                        m_currentMarker = NULL;
+                        addMarkerToPcb( fillMarker( track, text,
+                                                    DRCE_VIA_INSIDE_TEXT, m_currentMarker ) );
+                        m_currentMarker = nullptr;
                         break;
                     }
                 }
@@ -796,11 +778,9 @@ void DRC::testTexts()
                 if( !checkClearanceSegmToPad( pad, text->GetThickness(),
                                               pad->GetClearance(NULL) ) )
                 {
-                    m_currentMarker = fillMarker( pad, text,
-                                                  DRCE_PAD_INSIDE_TEXT, m_currentMarker );
-                    m_pcb->Add( m_currentMarker );
-                    m_pcbEditorFrame->GetGalCanvas()->GetView()->Add( m_currentMarker );
-                    m_currentMarker = NULL;
+                    addMarkerToPcb( fillMarker( pad, text,
+                                                DRCE_PAD_INSIDE_TEXT, m_currentMarker ) );
+                    m_currentMarker = nullptr;
                     break;
                 }
             }

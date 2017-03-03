@@ -254,6 +254,11 @@ private:
      */
     MARKER_PCB* fillMarker( int aErrorCode, const wxString& aMessage, MARKER_PCB* fillMe );
 
+    /**
+     * Function addMarkerToPcb
+     * Adds a DRC marker to the PCB throught the COMMIT mechanism.
+     */
+    void addMarkerToPcb( MARKER_PCB *aMarker );
 
     //-----<categorical group tests>-----------------------------------------
 

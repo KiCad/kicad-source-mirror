@@ -149,3 +149,8 @@ void MARKER_PCB::ViewGetLayers( int aLayers[], int& aCount ) const
     aCount = 1;
     aLayers[0] = ITEM_GAL_LAYER( DRC_VISIBLE );
 }
+
+const EDA_RECT MARKER_PCB::GetBoundingBox() const
+{
+    return EDA_RECT( m_Pos, wxSize( 1300000, 1300000 ) );
+}

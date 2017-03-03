@@ -1108,7 +1108,16 @@ void PCB_PAINTER::draw( const MARKER_PCB* aMarker )
 
     m_gal->Save();
     m_gal->Translate( aMarker->GetPosition() );
-    m_gal->SetFillColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+
+    if( aMarker->IsSelected() )
+    {
+        m_gal->SetFillColor( COLOR4D( 1.0, 0.5, 0.5, 1.0 ) );
+    }
+    else
+    {
+        m_gal->SetFillColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+    }
+
     m_gal->SetIsFill( true );
     m_gal->SetIsStroke( false );
     m_gal->DrawPolygon( arrow, sizeof( arrow ) / sizeof( VECTOR2D ) );
