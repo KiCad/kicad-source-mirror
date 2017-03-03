@@ -279,23 +279,13 @@ bool TOOL_MANAGER::RunAction( const std::string& aActionName, bool aNow, void* a
 {
     TOOL_ACTION* action = m_actionMgr->FindAction( aActionName );
 
-    if( action )
+    if( !action )
     {
-        TOOL_EVENT event = action->MakeEvent();
-
-        // Allow to override the action parameter
-        if( aParam )
-            event.SetParameter( aParam );
-
-        if( aNow )
-            ProcessEvent( event );
-        else
-            PostEvent( event );
-
-        return true;
+        wxASSERT_MSG( false, wxString::Format( wxT( "Could not find action %s." ), aActionName ) );
+        return false;
     }
 
-    wxASSERT_MSG( action != NULL, wxString::Format( wxT( "Could not find action %s." ), aActionName ) );
+    RunAction( *action, aNow, aParam );
 
     return false;
 }
