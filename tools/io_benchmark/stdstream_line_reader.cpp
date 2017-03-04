@@ -67,19 +67,19 @@ void STDISTREAM_LINE_READER::setStream( std::istream& aStream )
 }
 
 
-IFSTREAM_LINE_READER::IFSTREAM_LINE_READER( const wxString& aFileName ) throw( IO_ERROR ) :
-        m_fStream( aFileName )
+IFSTREAM_LINE_READER::IFSTREAM_LINE_READER( const wxFileName& aFileName ) throw( IO_ERROR ) :
+        m_fStream( aFileName.GetFullName().ToUTF8() )
 {
     if( !m_fStream.is_open() )
     {
         wxString msg = wxString::Format(
-            _( "Unable to open filename '%s' for reading" ), aFileName.GetData() );
+            _( "Unable to open filename '%s' for reading" ), aFileName.GetFullPath().GetData() );
         THROW_IO_ERROR( msg );
     }
 
     setStream( m_fStream );
 
-    source = aFileName;
+    source = aFileName.GetFullName();
 }
 
 

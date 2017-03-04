@@ -24,6 +24,8 @@
 #ifndef FSTREAM_LINE_READER_H
 #define FSTREAM_LINE_READER_H
 
+#include <wx/filename.h>
+
 #include <richio.h>
 
 #include <istream>
@@ -59,7 +61,7 @@ class IFSTREAM_LINE_READER : public STDISTREAM_LINE_READER
 {
 public:
 
-    IFSTREAM_LINE_READER( const wxString& aFileName ) throw( IO_ERROR );
+    IFSTREAM_LINE_READER( const wxFileName& aFileName ) throw( IO_ERROR );
 
     void Rewind();
 
