@@ -416,7 +416,7 @@ static void write_triangle_bag( std::ostream& aOut_file, VRML_COLOR& aColor,
 
 
 static void write_layers( MODEL_VRML& aModel, BOARD* aPcb,
-    const char* aFileName, std::ofstream* aOutputFile )
+    const char* aFileName, OSTREAM* aOutputFile )
 {
     // VRML_LAYER board;
     aModel.m_board.Tesselate( &aModel.m_holes );

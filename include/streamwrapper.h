@@ -27,6 +27,8 @@
 #if defined( WIN32 ) && defined( __GNUC__ )
     #include <ext/stdio_filebuf.h>
 
+    #define OSTREAM std::ostream
+
     #define OPEN_OSTREAM( var, name ) \
         kicad::stream var ## _BUF_; \
         std::ostream& var = *var ## _BUF_.Open( name, std::ios_base::out | std::ios_base::trunc | std::ios_base::binary )
@@ -63,6 +65,8 @@
 
 #elif defined( _MSC_VER )   // defined( WIN32 ) && defined( __GNUC__ )
 
+    #define OSTREAM std::ofstream
+
     #define OPEN_OSTREAM( var, name ) \
     std::ofstream var; \
     var.open( wxString::FromUTF8Unchecked( name ).wc_str(), \
@@ -81,6 +85,8 @@
     #define CLOSE_STREAM( var ) var.close()
 
 #else   // defined( WIN32 ) && defined( __GNUC__ )
+
+    #define OSTREAM std::ofstream
 
     #define OPEN_OSTREAM( var, name ) \
         std::ofstream var; \
