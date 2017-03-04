@@ -562,8 +562,6 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
      * their SCH_SCREEN::Draw() draws nothing
      */
 
-    CheckComponentsToPartsLinks();
-
     for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
     {
         if( item->IsMoving() || item->IsResized() )
@@ -584,8 +582,6 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
  */
 void SCH_SCREEN::Plot( PLOTTER* aPlotter )
 {
-    CheckComponentsToPartsLinks();
-
     for( SCH_ITEM* item = m_drawList.begin();  item;  item = item->Next() )
     {
         aPlotter->SetCurrentLineWidth( item->GetPenSize() );
@@ -1386,12 +1382,6 @@ void SCH_SCREENS::BuildScreenList( EDA_ITEM* aItem )
     {
         SCH_SCREEN*     screen = (SCH_SCREEN*) aItem;
 
-        // Ensure each component has its pointer to its part lib LIB_PART
-        // up to date (the cost is low if this is the case)
-        // We do this update here, because most of time this function is called
-        // to create a netlist, or an ERC, which need this update
-        screen->CheckComponentsToPartsLinks();
-
         AddScreenToList( screen );
         EDA_ITEM* strct = screen->GetDrawItems();
 
@@ -1523,6 +1513,14 @@ int SCH_SCREENS::GetMarkerCount( enum MARKER_BASE::TYPEMARKER aMarkerType,
 
     return count;
 }
+
+
+void SCH_SCREENS::UpdateSymbolLinks()
+{
+    for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
+        screen->CheckComponentsToPartsLinks();
+}
+
 
 #if defined(DEBUG)
 void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const

@@ -133,6 +133,11 @@ static bool insert_library( PROJECT *aProject, PART_LIB *aLibrary, size_t aIndex
     }
     aProject->SetElem( PROJECT::ELEM_SCH_PART_LIBS, libs );
 
+    // Update the schematic symbol library links since the library list has changed.
+    SCH_SCREENS schematic;
+
+    schematic.UpdateSymbolLinks();
+
     return true;
 }
 

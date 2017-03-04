@@ -152,6 +152,15 @@ void LIB_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
         // Force a reload of the PART_LIBS
         prj->SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
         prj->SetElem( PROJECT::ELEM_SCH_SEARCH_STACK, NULL );
+
+        // Update the schematic symbol library links.
+        SCH_SCREENS schematic;
+
+        schematic.UpdateSymbolLinks();
+
+        // There may be no parent window so use KIWAY message to refresh the schematic editor
+        // in case any symbols have changed.
+        Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_REFRESH, std::string( "" ), this );
     }
 }
 
@@ -222,6 +231,12 @@ void SCH_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
         // Force a reload of the PART_LIBS
         prj->SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
         prj->SetElem( PROJECT::ELEM_SCH_SEARCH_STACK, NULL );
+
+        // Update the schematic symbol library links.
+        SCH_SCREENS schematic;
+
+        schematic.UpdateSymbolLinks();
+        GetCanvas()->Refresh();
     }
 }
 

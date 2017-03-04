@@ -40,8 +40,11 @@ enum MAIL_T
     MAIL_BACKANNOTATE_FOOTPRINTS,   ///< CVPCB->SCH footprint stuffing at cvpcb termination
     MAIL_EESCHEMA_NETLIST,          ///< EESCHEMA->CVPCB netlist immediately after launching CVPCB
     MAIL_SCH_PCB_UPDATE,            ///< Sch->PCB forward update
-    MAIL_SCH_PCB_UPDATE_REQUEST     ///< Sch->PCB forward update, requests SCH to re-generate netlist and send it to PCB via another mail (kind of bootstrap)
 
+    ///< Sch->PCB forward update, requests SCH to re-generate netlist and send it to PCB
+    ///< via another mail (kind of bootstrap)
+    MAIL_SCH_PCB_UPDATE_REQUEST,
+    MAIL_SCH_REFRESH                ///< The the schematic editor to refresh the display.
 };
 
 #endif  // MAIL_TYPE_H_

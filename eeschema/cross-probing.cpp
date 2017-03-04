@@ -33,8 +33,9 @@
 #include <kiway_express.h>
 #include <macros.h>
 #include <eda_dde.h>
-#include <schframe.h>
+#include <class_drawpanel.h>
 
+#include <schframe.h>
 #include <general.h>
 #include <eeschema_id.h>
 #include <lib_draw_item.h>
@@ -215,6 +216,10 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         {
             DBG( printf( "%s: ioe:%s\n", __func__, TO_UTF8( ioe.What() ) );)
         }
+        break;
+
+    case MAIL_SCH_REFRESH:
+        GetCanvas()->Refresh();
         break;
 
     default:

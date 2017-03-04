@@ -44,6 +44,7 @@
 #include <class_library.h>
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
+#include <schframe.h>
 
 #include <dialog_choose_component.h>
 #include <component_tree_search_container.h>
@@ -445,6 +446,21 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     UpdateAliasSelectList();
     UpdatePartSelectList();
 
+    // This is not the most effecient way to do this because the changed library may not have
+    // any effect on the schematic symbol links.  Since this is not called very often, take the
+    // hit here rather than the myriad other places (including SCH_SCREEN::Draw()) where it was
+    // being called.
+    if( !newFile )
+    {
+        SCH_SCREENS schematic;
+
+        schematic.UpdateSymbolLinks();
+
+        // There may be no parent window so use KIWAY message to refresh the schematic editor
+        // in case any symbols have changed.
+        Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_REFRESH, std::string( "" ), this );
+    }
+
     return true;
 }
 
@@ -534,7 +550,8 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
     search_container.AddLibrary( *lib );
 
     wxString dialogTitle;
-    dialogTitle.Printf( _( "Delete Component (%u items loaded)" ), search_container.GetComponentsCount() );
+    dialogTitle.Printf( _( "Delete Component (%u items loaded)" ),
+                        search_container.GetComponentsCount() );
 
     DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, &search_container, m_convert );
 
