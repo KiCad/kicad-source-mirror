@@ -147,7 +147,7 @@
                         <property name="show">1</property>
                         <property name="size"></property>
                         <property name="splitmode">wxSPLIT_VERTICAL</property>
-                        <property name="style">wxSP_3D|wxSP_LIVE_UPDATE</property>
+                        <property name="style">wxSP_LIVE_UPDATE</property>
                         <property name="subclass"></property>
                         <property name="toolbar_pane">0</property>
                         <property name="tooltip"></property>
