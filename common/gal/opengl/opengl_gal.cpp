@@ -1031,6 +1031,7 @@ void OPENGL_GAL::Flush()
 
 void OPENGL_GAL::ClearScreen( const COLOR4D& aColor )
 {
+    // Clear screen
     compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
     glClearColor( aColor.r, aColor.g, aColor.b, aColor.a );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
