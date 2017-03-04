@@ -775,7 +775,7 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 
     return 0;
 }
-void SELECTION_TOOL::selectAllItemsOnSheet( wxString aSheet )
+void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
 {
     auto modules = board()->m_Modules.GetFirst();
     std::list<MODULE*> modList;
@@ -783,7 +783,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString aSheet )
     // store all modules that are on that sheet
     for( MODULE* mitem = modules; mitem; mitem = mitem->Next() )
     {
-        if( mitem != NULL && mitem->GetPath().Contains( aSheet ) )
+        if( mitem != NULL && mitem->GetPath().Contains( aSheetpath ) )
         {
             modList.push_back( mitem );
         }
@@ -858,24 +858,24 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString aSheet )
 
 void SELECTION_TOOL::zoomFitSelection( void )
 {
-	//Should recalculate the view to zoom in on the selection
-	auto selectionBox = m_selection.ViewBBox();
+    //Should recalculate the view to zoom in on the selection
+    auto selectionBox = m_selection.ViewBBox();
     auto canvas = m_frame->GetGalCanvas();
-	auto view = getView();
+    auto view = getView();
 
-	VECTOR2D screenSize = view->ToWorld( canvas->GetClientSize(), false );
+    VECTOR2D screenSize = view->ToWorld( canvas->GetClientSize(), false );
 
-	if( !( selectionBox.GetWidth() == 0 ) || !( selectionBox.GetHeight() == 0 ) )
-	{
-		VECTOR2D vsize = selectionBox.GetSize();
-		double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
-				fabs( vsize.y / screenSize.y ) );
-		view->SetScale( scale );
-		view->SetCenter( selectionBox.Centre() );
-		view->Add( &m_selection );
-	}
+    if( !( selectionBox.GetWidth() == 0 ) || !( selectionBox.GetHeight() == 0 ) )
+    {
+        VECTOR2D vsize = selectionBox.GetSize();
+        double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
+                fabs( vsize.y / screenSize.y ) );
+        view->SetScale( scale );
+        view->SetCenter( selectionBox.Centre() );
+        view->Add( &m_selection );
+    }
 
-	m_frame->GetGalCanvas()->ForceRefresh();
+    m_frame->GetGalCanvas()->ForceRefresh();
 }
 
 int SELECTION_TOOL::selectOnSheet( const TOOL_EVENT& aEvent )
@@ -884,10 +884,10 @@ int SELECTION_TOOL::selectOnSheet( const TOOL_EVENT& aEvent )
     wxString* sheet = aEvent.Parameter<wxString*>();
     selectAllItemsOnSheet( *sheet );
 
-	zoomFitSelection();
+    zoomFitSelection();
 
-	if( m_selection.Size() > 0 )
-		m_toolMgr->ProcessEvent( SelectedEvent );
+    if( m_selection.Size() > 0 )
+        m_toolMgr->ProcessEvent( SelectedEvent );
 
 
     return 0;
@@ -1824,12 +1824,12 @@ const BOX2I SELECTION::ViewBBox() const
     EDA_RECT eda_bbox;
 
     if( Size() == 1 )
-	{
-		eda_bbox = Front()->GetBoundingBox();
-	}
+    {
+        eda_bbox = Front()->GetBoundingBox();
+    }
     else if( Size() > 1 )
     {
-		eda_bbox = Front()->GetBoundingBox();
+        eda_bbox = Front()->GetBoundingBox();
         auto i = m_items.begin();
         ++i;
 
@@ -1839,7 +1839,7 @@ const BOX2I SELECTION::ViewBBox() const
         }
     }
 
-	return BOX2I( eda_bbox.GetOrigin(), eda_bbox.GetSize() );
+    return BOX2I( eda_bbox.GetOrigin(), eda_bbox.GetSize() );
 }
 
 const KIGFX::VIEW_GROUP::ITEMS SELECTION::updateDrawList() const

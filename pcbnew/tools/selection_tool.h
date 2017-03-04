@@ -191,8 +191,9 @@ private:
 
     /**
      * Selects all items with the given sheet timestamp name
+     * (the sheet path)
      */
-    void selectAllItemsOnSheet( wxString aSheet );
+    void selectAllItemsOnSheet( wxString& aSheetpath );
 
     ///> Selects all modules belonging to same sheet.
     int selectOnSheet( const TOOL_EVENT& aEvent );
