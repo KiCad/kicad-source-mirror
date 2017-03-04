@@ -164,6 +164,8 @@ public:
     void SetLibId( const LIB_ID& aName, PART_LIBS* aLibs=NULL );
     const LIB_ID& GetLibId() const        { return m_lib_id; }
 
+    PART_REF& GetPartRef() { return m_part; }
+
     /**
      * Function Resolve
      * [re-]assigns the current LIB_PART from aLibs which this component

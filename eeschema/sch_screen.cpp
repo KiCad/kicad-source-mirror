@@ -550,9 +550,6 @@ void SCH_SCREEN::CheckComponentsToPartsLinks()
             SCH_COMPONENT::ResolveAll( c, libs );
 
             m_modification_sync = mod_hash;     // note the last mod_hash
-
-            // guard against unneeded runs through this code path by printing trace
-            DBG(printf("%s: resync-ing %s\n", __func__, TO_UTF8( GetFileName() ) );)
         }
     }
 }
@@ -646,7 +643,7 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponen
         {
             pin = NULL;
 
-            LIB_PART* part = Prj().SchLibs()->FindLibPart( component->GetLibId() );
+            auto part = component->GetPartRef().lock();
 
             if( !part )
                 continue;
