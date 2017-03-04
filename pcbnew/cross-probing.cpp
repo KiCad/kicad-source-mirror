@@ -45,7 +45,6 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     char        line[1024];
     wxString    msg;
     wxString    modName;
-    wxString    *sheetStamp;
     char*       idcmd;
     char*       text;
     MODULE*     module = NULL;
@@ -81,11 +80,10 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     else if( strcmp( idcmd, "$SHEET:" ) == 0 )
     {
         msg.Printf( _( "Selecting all from sheet '%s'" ), FROM_UTF8( text ) );
-        sheetStamp = new wxString( FROM_UTF8( text ) );
+        wxString sheetStamp( FROM_UTF8( text ) );
         SetStatusText( msg );
-            GetToolManager()->RunAction( PCB_ACTIONS::selectOnSheet,
-                true,
-                static_cast<void*>( sheetStamp ) );
+        GetToolManager()->RunAction( PCB_ACTIONS::selectOnSheet, true,
+                                     static_cast<void*>( &sheetStamp ) );
         return;
     }
     else if( strcmp( idcmd, "$PIN:" ) == 0 )

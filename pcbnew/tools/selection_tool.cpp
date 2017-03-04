@@ -95,18 +95,19 @@ TOOL_ACTION PCB_ACTIONS::selectOnSheet( "pcbnew.InteractiveSelection.SelectOnShe
 
 TOOL_ACTION PCB_ACTIONS::selectSameSheet( "pcbnew.InteractiveSelection.SelectSameSheet",
         AS_GLOBAL,  'P',
-        _( "Same Sheet" ), _( "Selects all modules and tracks in the same schematic sheet" ) );
+        _( "Items in Same Hierarchical Sheet" ),
+        _( "Selects all modules and tracks in the same schematic sheet" ) );
 
 TOOL_ACTION PCB_ACTIONS::find( "pcbnew.InteractiveSelection.Find",
         AS_GLOBAL, 0, //TOOL_ACTION::LegacyHotKey( HK_FIND_ITEM ), // handled by wxWidgets
-        _( "Find Item" ), _( "Searches the document for an item" ), find_xpm );
+        _( "Find Item" ),_( "Searches the document for an item" ), find_xpm );
 
 TOOL_ACTION PCB_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GET_AND_MOVE_FOOTPRINT ) );
 
 TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSelection",
         AS_GLOBAL, MD_SHIFT + 'F',
-        _( "Filter selection" ), _( "Filter the types of items in the selection" ),
+        _( "Filter Selection" ), _( "Filter the types of items in the selection" ),
         nullptr );
 
 
@@ -775,6 +776,8 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 
     return 0;
 }
+
+
 void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
 {
     auto modules = board()->m_Modules.GetFirst();
@@ -901,10 +904,13 @@ int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
     // this function currently only supports modules since they are only
     // on one sheet.
     auto item = m_selection.Front();
+
     if( item->Type() != PCB_MODULE_T )
         return 0;
+
     if( !item )
         return 0;
+
     auto mod = dynamic_cast<MODULE*>( item );
 
     clearSelection();

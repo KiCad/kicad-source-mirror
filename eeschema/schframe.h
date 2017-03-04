@@ -488,15 +488,17 @@ public:
     /**
      * Function SendMessageToPcbnew
      * send a remote to Pcbnew via a socket connection.
-     * @param objectToSync Item to be located on board (footprint, pad or text)
-     * @param LibItem Component in library if objectToSync is a sub item of a component
+     * @param aObjectToSync = item to be located on board
+     *      (footprint, pad, text or schematic sheet)
+     * @param aPart = component if objectToSync is a sub item of a symbol (like a pin)
      * <p>
      * Commands are
      * $PART: reference   put cursor on footprint anchor
      * $PIN: number $PART: reference put cursor on the footprint pad
+     * $SHEET: time_stamp  select all footprints of components is the schematic sheet path
      * </p>
      */
-    void SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*  LibItem );
+    void SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_COMPONENT* aPart );
 
     /**
      * BuildNetListBase
