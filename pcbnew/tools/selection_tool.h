@@ -195,10 +195,12 @@ private:
      */
     void selectAllItemsOnSheet( wxString& aSheetpath );
 
-    ///> Selects all modules belonging to same sheet.
-    int selectOnSheet( const TOOL_EVENT& aEvent );
+    ///> Selects all modules belonging to same sheet, from Eeschema,
+    ///> using crossprobing
+    int selectOnSheetFromEeschema( const TOOL_EVENT& aEvent );
 
-    ///> Selects all modules belonging to same sheet.
+    ///> Selects all modules belonging to same hierarchical sheet
+    ///> as the selected footprint.
     int selectSameSheet( const TOOL_EVENT& aEvent );
 
     ///> Find dialog callback.

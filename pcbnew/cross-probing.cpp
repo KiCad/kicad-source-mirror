@@ -82,7 +82,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         msg.Printf( _( "Selecting all from sheet '%s'" ), FROM_UTF8( text ) );
         wxString sheetStamp( FROM_UTF8( text ) );
         SetStatusText( msg );
-        GetToolManager()->RunAction( PCB_ACTIONS::selectOnSheet, true,
+        GetToolManager()->RunAction( PCB_ACTIONS::selectOnSheetFromEeschema, true,
                                      static_cast<void*>( &sheetStamp ) );
         return;
     }

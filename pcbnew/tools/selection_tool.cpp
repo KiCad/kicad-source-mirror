@@ -89,12 +89,12 @@ TOOL_ACTION PCB_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",
         AS_GLOBAL, 0,
         _( "Whole Net" ), _( "Selects all tracks & vias belonging to the same net." ) );
 
-TOOL_ACTION PCB_ACTIONS::selectOnSheet( "pcbnew.InteractiveSelection.SelectOnSheet",
+TOOL_ACTION PCB_ACTIONS::selectOnSheetFromEeschema( "pcbnew.InteractiveSelection.SelectOnSheet",
         AS_GLOBAL,  0,
         _( "Sheet" ), _( "Selects all modules and tracks in the schematic sheet" ) );
 
 TOOL_ACTION PCB_ACTIONS::selectSameSheet( "pcbnew.InteractiveSelection.SelectSameSheet",
-        AS_GLOBAL,  'P',
+        AS_GLOBAL,  0,
         _( "Items in Same Hierarchical Sheet" ),
         _( "Selects all modules and tracks in the same schematic sheet" ) );
 
@@ -106,7 +106,7 @@ TOOL_ACTION PCB_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GET_AND_MOVE_FOOTPRINT ) );
 
 TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSelection",
-        AS_GLOBAL, MD_SHIFT + 'F',
+        AS_GLOBAL, 0,
         _( "Filter Selection" ), _( "Filter the types of items in the selection" ),
         nullptr );
 
@@ -547,7 +547,7 @@ void SELECTION_TOOL::SetTransitions()
     Go( &SELECTION_TOOL::selectCopper, PCB_ACTIONS::selectCopper.MakeEvent() );
     Go( &SELECTION_TOOL::selectNet, PCB_ACTIONS::selectNet.MakeEvent() );
     Go( &SELECTION_TOOL::selectSameSheet, PCB_ACTIONS::selectSameSheet.MakeEvent() );
-    Go( &SELECTION_TOOL::selectOnSheet, PCB_ACTIONS::selectOnSheet.MakeEvent() );
+    Go( &SELECTION_TOOL::selectOnSheetFromEeschema, PCB_ACTIONS::selectOnSheetFromEeschema.MakeEvent() );
 }
 
 
@@ -881,11 +881,13 @@ void SELECTION_TOOL::zoomFitSelection( void )
     m_frame->GetGalCanvas()->ForceRefresh();
 }
 
-int SELECTION_TOOL::selectOnSheet( const TOOL_EVENT& aEvent )
+
+int SELECTION_TOOL::selectOnSheetFromEeschema( const TOOL_EVENT& aEvent )
 {
     clearSelection();
-    wxString* sheet = aEvent.Parameter<wxString*>();
-    selectAllItemsOnSheet( *sheet );
+    wxString* sheetpath = aEvent.Parameter<wxString*>();
+
+    selectAllItemsOnSheet( *sheetpath );
 
     zoomFitSelection();
 
@@ -895,6 +897,7 @@ int SELECTION_TOOL::selectOnSheet( const TOOL_EVENT& aEvent )
 
     return 0;
 }
+
 
 int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 {
