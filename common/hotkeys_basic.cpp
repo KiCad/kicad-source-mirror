@@ -635,7 +635,8 @@ void ReadHotkeyConfig( const wxString& Appname, struct EDA_HOTKEY_CONFIG* aDescL
     wxFileName fn( Appname );
     fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
 
-    wxConfigBase* config = GetNewConfig( fn.GetFullPath() );
+    std::unique_ptr<wxConfigBase> config;
+    config.reset( GetNewConfig( fn.GetFullPath() ) );
 
     if( !config->HasEntry( HOTKEYS_CONFIG_KEY ) )
     {
@@ -645,7 +646,6 @@ void ReadHotkeyConfig( const wxString& Appname, struct EDA_HOTKEY_CONFIG* aDescL
 
     wxString data;
     config->Read( HOTKEYS_CONFIG_KEY, &data );
-    delete config;
 
     ParseHotkeyConfig( data, aDescList );
 }
