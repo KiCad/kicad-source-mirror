@@ -349,12 +349,13 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         if( !rescueNeverShow )
         {
-            if( RescueProject( false ) )
-            {
-                GetScreen()->CheckComponentsToPartsLinks();
-                GetScreen()->TestDanglingEnds();
-            }
+            RescueProject( false );
         }
+
+        SCH_SCREENS schematic;
+
+        schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
+        GetScreen()->TestDanglingEnds();    // Only perform the dangling end test on root sheet.
     }
 
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
