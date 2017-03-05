@@ -58,7 +58,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_painter    = NULL;
     m_eventDispatcher = NULL;
     m_lostFocus  = false;
-    m_stealsFocus = false;
+    m_stealsFocus = true;
 
     SetLayoutDirection( wxLayout_LeftToRight );
 
