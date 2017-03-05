@@ -39,6 +39,7 @@ class PART_LIBS;
 class SEARCH_STACK;
 class S3D_CACHE;
 class KIWAY;
+class SYMBOL_LIB_TABLE;
 
 #define VTBL_ENTRY      virtual
 
@@ -193,6 +194,7 @@ public:
         ELEM_SCH_PART_LIBS,
         ELEM_SCH_SEARCH_STACK,
         ELEM_3DCACHE,
+        ELEM_SYMBOL_LIB_TABLE,
 
         ELEM_COUNT
     };
@@ -278,6 +280,9 @@ public:
 
     /// Accessor for Eeschema search stack.
     SEARCH_STACK*  SchSearchS();
+
+    /// Accessor for project symbol library table.
+    SYMBOL_LIB_TABLE* SchSymbolLibTable();
 #endif
 
     //-----</KIFACE Specific APIs>-----------------------------------------------

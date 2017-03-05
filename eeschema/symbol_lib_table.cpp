@@ -37,10 +37,13 @@
 using namespace LIB_TABLE_T;
 
 
-static const wxChar global_tbl_name[] = wxT( "sym-lib-table" );
+static const wxString global_tbl_name( "sym-lib-table" );
 
 
-SYMBOL_LIB_TABLE SYMBOL_LIB_TABLE::m_globalLibTable;   // There can be only one.
+/// The global symbol library table.  This is not dynamically allocated because
+/// in a multiple project environment we must keep its address constant (since it is
+/// the fallback table for multiple projects).
+SYMBOL_LIB_TABLE    g_symbolLibraryTable;
 
 
 bool SYMBOL_LIB_TABLE_ROW::operator==( const SYMBOL_LIB_TABLE_ROW& aRow ) const
@@ -63,6 +66,12 @@ SYMBOL_LIB_TABLE::SYMBOL_LIB_TABLE( SYMBOL_LIB_TABLE* aFallBackTable ) :
 {
     // not copying fall back, simply search aFallBackTable separately
     // if "nickName not found".
+}
+
+
+SYMBOL_LIB_TABLE& SYMBOL_LIB_TABLE::GetGlobalLibTable()
+{
+    return g_symbolLibraryTable;
 }
 
 
@@ -364,7 +373,7 @@ LIB_ALIAS* SYMBOL_LIB_TABLE::LoadSymbolWithOptionalNickname( const LIB_ID& aLibI
 
 const wxString SYMBOL_LIB_TABLE::GlobalPathEnvVariableName()
 {
-    return  "KICAD_SYSTEM_SYMBOLS";
+    return  "KICAD_SYMBOL_DIR";
 }
 
 
@@ -411,4 +420,10 @@ wxString SYMBOL_LIB_TABLE::GetGlobalTableFileName()
     fn.SetName( global_tbl_name );
 
     return fn.GetFullPath();
+}
+
+
+const wxString& SYMBOL_LIB_TABLE::GetSymbolLibTableFileName()
+{
+    return global_tbl_name;
 }

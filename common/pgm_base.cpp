@@ -519,6 +519,22 @@ bool PGM_BASE::InitPgm()
         }
         envVarItem.SetValue( tmpFileName.GetFullPath() );
         m_local_env_vars[ envVarName ] = envVarItem;
+
+        // KICAD_SYMBOLS
+        envVarName = wxT( "KICAD_SYMBOL_DIR" );
+        if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
+        {
+            tmpFileName.AssignDir( envValue );
+            envVarItem.SetDefinedExternally( true );
+        }
+        else
+        {
+            tmpFileName = baseSharePath;
+            tmpFileName.AppendDir( wxT( "library" ) );
+            envVarItem.SetDefinedExternally( false );
+        }
+        envVarItem.SetValue( tmpFileName.GetFullPath() );
+        m_local_env_vars[ envVarName ] = envVarItem;
     }
 
     ReadPdfBrowserInfos();      // needs m_common_settings

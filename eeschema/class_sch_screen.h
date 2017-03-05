@@ -590,6 +590,19 @@ public:
     void UpdateSymbolLinks();
     void TestDanglingEnds();
 
+    /**
+     * Function HasNoFullyDefinedLibIds
+     *
+     * tests all of the schematic symbols to see if all #LIB_ID objects library nickname is not
+     * set.
+     *
+     * If none of the #LIB_ID object library nicknames are not set, this indicates that the
+     * project was created before the symbol library implementation.
+     *
+     * @return true if all of the #LIB_ID object library nick names are empty, otherwise false.
+     */
+    bool HasNoFullyDefinedLibIds();
+
 private:
     void AddScreenToList( SCH_SCREEN* aScreen );
     void BuildScreenList( EDA_ITEM* aItem );

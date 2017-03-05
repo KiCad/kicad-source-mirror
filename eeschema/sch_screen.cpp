@@ -1529,6 +1529,33 @@ void SCH_SCREENS::TestDanglingEnds()
 }
 
 
+bool SCH_SCREENS::HasNoFullyDefinedLibIds()
+{
+    SCH_COMPONENT* symbol;
+    SCH_ITEM* item;
+    SCH_ITEM* nextItem;
+    SCH_SCREEN* screen;
+
+    for( screen = GetFirst(); screen; screen = GetNext() )
+    {
+        for( item = screen->GetDrawItems(); item; item = nextItem )
+        {
+            nextItem = item->Next();
+
+            if( item->Type() != SCH_COMPONENT_T )
+                continue;
+
+            symbol = dynamic_cast< SCH_COMPONENT* >( item );
+
+            if( !symbol->GetLibId().GetLibNickname().empty() )
+                return false;
+        }
+    }
+
+    return true;
+}
+
+
 #if defined(DEBUG)
 void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
 {

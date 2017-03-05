@@ -44,7 +44,8 @@ public:
     typedef SCH_IO_MGR::SCH_FILE_T LIB_T;
 
     SYMBOL_LIB_TABLE_ROW( const wxString& aNick, const wxString& aURI, const wxString& aType,
-                          const wxString& aOptions, const wxString& aDescr = wxEmptyString ) :
+                          const wxString& aOptions = wxEmptyString,
+                          const wxString& aDescr = wxEmptyString ) :
         LIB_TABLE_ROW( aNick, aURI, aOptions, aDescr )
     {
         SetType( aType );
@@ -290,10 +291,9 @@ public:
      */
     static const wxString GlobalPathEnvVariableName();
 
-    static SYMBOL_LIB_TABLE& GetGlobalLibTable() { return m_globalLibTable; }
+    static SYMBOL_LIB_TABLE& GetGlobalLibTable();
 
-private:
-    static SYMBOL_LIB_TABLE m_globalLibTable;   // There can be only one.
+    static const wxString& GetSymbolLibTableFileName();
 };
 
 

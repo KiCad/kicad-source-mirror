@@ -67,10 +67,6 @@ option( KICAD_SCRIPTING_ACTION_MENU
     "Build a tools menu with registred python plugins: actions plugins (default OFF)."
     )
 
-option( KICAD_USE_SCH_IO_MANAGER
-    "Build Eeschema with the I/O manager for handling schematic and symbol library I/O. (default OFF)"
-    )
-
 option( KICAD_USE_OCE
     "Build tools and plugins related to OpenCascade Community Edition (default OFF)"
     )
