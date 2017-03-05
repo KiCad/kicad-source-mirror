@@ -260,7 +260,7 @@ The easiest way to build KiCad using the [MSYS2][] build environment is to use t
 development branch.  To build the KiCad package, run the `msys2_shell.bat` file located in the
 MSYS2 install path and run the following commands:
 
-    pacman -S git
+    pacman -S base-devel git
     mkdir src
     cd src
     git clone https://github.com/Alexpux/MINGW-packages
