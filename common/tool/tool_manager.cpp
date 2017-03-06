@@ -112,7 +112,7 @@ struct TOOL_MANAGER::TOOL_STATE
     std::vector<TRANSITION> transitions;
 
     /// VIEW_CONTROLS settings to preserve settings when the tools are switched
-    KIGFX::VIEW_CONTROLS::SETTINGS vcSettings;
+    KIGFX::VC_SETTINGS vcSettings;
 
     void operator=( const TOOL_STATE& aState )
     {

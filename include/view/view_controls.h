@@ -40,6 +40,52 @@ namespace KIGFX
 {
 class VIEW;
 
+///> Structure to keep VIEW_CONTROLS settings for easy store/restore operations
+struct VC_SETTINGS
+{
+    VC_SETTINGS()
+    {
+        Reset();
+    }
+
+    ///> Restores the default settings
+    void Reset();
+
+    ///> Flag determining the cursor visibility
+    bool m_showCursor;
+
+    ///> Forced cursor position (world coordinates)
+    VECTOR2D m_forcedPosition;
+
+    ///> Is the forced cursor position enabled
+    bool m_forceCursorPosition;
+
+    ///> Should the cursor be locked within the parent window area
+    bool m_cursorCaptured;
+
+    ///> Should the cursor snap to grid or move freely
+    bool m_snappingEnabled;
+
+    ///> Flag for grabbing the mouse cursor
+    bool m_grabMouse;
+
+    ///> Flag for turning on autopanning
+    bool m_autoPanEnabled;
+
+    ///> Distance from cursor to VIEW edge when panning is active
+    float m_autoPanMargin;
+
+    ///> How fast is panning when in auto mode
+    float m_autoPanSpeed;
+
+    ///> If the cursor is allowed to be warped
+    bool m_warpCursor;
+
+    ///> Mousewheel (2-finger touchpad) panning
+    bool m_enableMousewheelPan;
+};
+
+
 /**
  * Class VIEW_CONTROLS
  * is an interface for classes handling user events controlling the view behaviour
@@ -173,6 +219,11 @@ public:
         m_settings.m_cursorCaptured = aEnabled;
     }
 
+    /**
+     * Function IsCursorPositionForced()
+     * Returns true if the cursor position is set by one of the tools. Forced cursor position
+     * means it does not react to mouse movement.
+     */
     inline bool IsCursorPositionForced() const
     {
         return m_settings.m_forceCursorPosition;
@@ -242,66 +293,21 @@ public:
      */
     virtual void Reset();
 
-    ///> Structure to keep VIEW_CONTROLS settings for easy store/restore operations
-    struct SETTINGS
-    {
-        SETTINGS()
-        {
-            Reset();
-        }
-
-        ///> Restores the default settings
-        void Reset();
-
-        ///> Flag determining the cursor visibility
-        bool m_showCursor;
-
-        ///> Forced cursor position (world coordinates)
-        VECTOR2D m_forcedPosition;
-
-        ///> Is the forced cursor position enabled
-        bool m_forceCursorPosition;
-
-        ///> Should the cursor be locked within the parent window area
-        bool m_cursorCaptured;
-
-        ///> Should the cursor snap to grid or move freely
-        bool m_snappingEnabled;
-
-        ///> Flag for grabbing the mouse cursor
-        bool m_grabMouse;
-
-        ///> Flag for turning on autopanning
-        bool m_autoPanEnabled;
-
-        ///> Distance from cursor to VIEW edge when panning is active
-        float m_autoPanMargin;
-
-        ///> How fast is panning when in auto mode
-        float m_autoPanSpeed;
-
-        ///> If the cursor is allowed to be warped
-        bool m_warpCursor;
-
-        ///> Mousewheel (2-finger touchpad) panning
-        bool m_enableMousewheelPan;
-    };
-
     ///> Returns the current VIEW_CONTROLS settings
-    const SETTINGS& GetSettings() const
+    const VC_SETTINGS& GetSettings() const
     {
         return m_settings;
     }
 
     ///> Applies VIEW_CONTROLS settings from an object
-    void ApplySettings( const SETTINGS& aSettings );
+    void ApplySettings( const VC_SETTINGS& aSettings );
 
 protected:
     ///> Pointer to controlled VIEW.
     VIEW* m_view;
 
     ///> Current VIEW_CONTROLS settings
-    SETTINGS m_settings;
+    VC_SETTINGS m_settings;
 };
 } // namespace KIGFX
 

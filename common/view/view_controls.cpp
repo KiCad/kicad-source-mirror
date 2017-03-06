@@ -47,12 +47,12 @@ bool VIEW_CONTROLS::IsCursorShown() const
 void VIEW_CONTROLS::Reset()
 {
     // Get the default settings from the default constructor
-    SETTINGS dummy;
+    VC_SETTINGS dummy;
     ApplySettings( dummy );
 }
 
 
-void VIEW_CONTROLS::SETTINGS::Reset()
+void VC_SETTINGS::Reset()
 {
     m_showCursor = false;
     m_forceCursorPosition = false;
@@ -67,7 +67,7 @@ void VIEW_CONTROLS::SETTINGS::Reset()
 }
 
 
-void VIEW_CONTROLS::ApplySettings( const SETTINGS& aSettings )
+void VIEW_CONTROLS::ApplySettings( const VC_SETTINGS& aSettings )
 {
     ShowCursor( aSettings.m_showCursor );
     CaptureCursor( aSettings.m_cursorCaptured );
