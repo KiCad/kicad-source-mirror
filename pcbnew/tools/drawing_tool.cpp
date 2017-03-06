@@ -421,11 +421,6 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_controls->ShowCursor( false );
-    m_controls->SetSnapping( false );
-    m_controls->SetAutoPan( false );
-    m_controls->CaptureCursor( false );
-
     m_view->Remove( &preview );
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
@@ -603,12 +598,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     if( step != SET_ORIGIN )
         delete dimension;
 
-    m_controls->ShowCursor( false );
-    m_controls->SetSnapping( false );
-    m_controls->SetAutoPan( false );
-    m_controls->CaptureCursor( false );
     m_view->Remove( &preview );
-
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
     return 0;
@@ -826,11 +816,6 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     }
 
     preview.Clear();
-
-    m_controls->ShowCursor( false );
-    m_controls->SetSnapping( false );
-    m_controls->SetAutoPan( false );
-    m_controls->CaptureCursor( false );
     m_view->Remove( &preview );
 
     return 0;
@@ -878,11 +863,6 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt )  )
             break;
     }
-
-    m_controls->SetAutoPan( false );
-    m_controls->CaptureCursor( false );
-    m_controls->SetSnapping( false );
-    m_controls->ShowCursor( false );
 
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
@@ -1053,10 +1033,6 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         }
     }
 
-    m_controls->ShowCursor( false );
-    m_controls->SetSnapping( false );
-    m_controls->SetAutoPan( false );
-    m_controls->CaptureCursor( false );
     m_view->Remove( &preview );
 
     return started;
@@ -1223,18 +1199,13 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
         }
     }
 
-    m_controls->ShowCursor( false );
-    m_controls->SetSnapping( false );
-    m_controls->SetAutoPan( false );
-    m_controls->CaptureCursor( false );
     m_view->Remove( &preview );
 
     return ( step > SET_ORIGIN );
 }
 
 
-std::unique_ptr<ZONE_CONTAINER> DRAWING_TOOL::createNewZone(
-        bool aKeepout )
+std::unique_ptr<ZONE_CONTAINER> DRAWING_TOOL::createNewZone( bool aKeepout )
 {
     const auto& board = *getModel<BOARD>();
 
@@ -1541,12 +1512,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
         }
     }
 
-    m_controls->ShowCursor( false );
-    m_controls->SetSnapping( false );
-    m_controls->SetAutoPan( false );
-    m_controls->CaptureCursor( false );
     m_view->Remove( &preview );
-
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
     return 0;

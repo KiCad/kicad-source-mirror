@@ -425,9 +425,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     else
         m_commit->Push( _( "Drag" ) );
 
-    controls->ShowCursor( false );
-    controls->SetAutoPan( false );
-
     return 0;
 }
 

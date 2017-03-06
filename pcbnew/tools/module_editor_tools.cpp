@@ -193,11 +193,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_controls->ShowCursor( false );
-    m_controls->SetSnapping( false );
-    m_controls->SetAutoPan( false );
     m_view->Remove( &preview );
-
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
     return 0;
@@ -341,7 +337,6 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
     }
 
     m_frame->DisplayToolMsg( wxEmptyString );
-    m_controls->ShowCursor( false );
 
     return 0;
 }
@@ -409,9 +404,6 @@ int MODULE_EDITOR_TOOLS::CopyItems( const TOOL_EVENT& aEvent )
     }
 
     m_frame->DisplayToolMsg( wxString::Format( _( "Copied %d item(s)" ), selection.Size() ) );
-    m_controls->SetSnapping( false );
-    m_controls->ShowCursor( false );
-    m_controls->SetAutoPan( false );
 
     return 0;
 }
@@ -528,9 +520,6 @@ int MODULE_EDITOR_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
     }
 
     delete pastedModule;
-    m_controls->ShowCursor( false );
-    m_controls->SetSnapping( false );
-    m_controls->SetAutoPan( false );
     m_view->Remove( &preview );
 
     return 0;

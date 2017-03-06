@@ -254,113 +254,109 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( selection.Size() == 1 )
+    if( selection.Size() != 1 )
+        return 0;
+
+    Activate();
+
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    KIGFX::VIEW* view = getView();
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+    auto item = selection.Front();
+
+    m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
+
+    if( !m_editPoints )
+        return 0;
+
+    view->Add( m_editPoints.get() );
+    m_editedPoint = NULL;
+    bool modified = false;
+
+    BOARD_COMMIT commit( editFrame );
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
     {
-        Activate();
-
-        KIGFX::VIEW_CONTROLS* controls = getViewControls();
-        KIGFX::VIEW* view = getView();
-        PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
-        auto item = selection.Front();
-
-        m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
-
-        if( !m_editPoints )
-            return 0;
-
-        view->Add( m_editPoints.get() );
-        m_editedPoint = NULL;
-        bool modified = false;
-
-        BOARD_COMMIT commit( editFrame );
-
-        // Main loop: keep receiving events
-        while( OPT_TOOL_EVENT evt = Wait() )
+        if( !m_editPoints ||
+            evt->Matches( m_selectionTool->ClearedEvent ) ||
+            evt->Matches( m_selectionTool->UnselectedEvent ) ||
+            evt->Matches( m_selectionTool->SelectedEvent ) )
         {
-            if( !m_editPoints ||
-                evt->Matches( m_selectionTool->ClearedEvent ) ||
-                evt->Matches( m_selectionTool->UnselectedEvent ) ||
-                evt->Matches( m_selectionTool->SelectedEvent ) )
+            break;
+        }
+
+        if ( !modified )
+            updateEditedPoint( *evt );
+
+        if( evt->IsDrag( BUT_LEFT ) && m_editedPoint )
+        {
+            if( !modified )
             {
-                break;
+                commit.StageItems( selection, CHT_MODIFY );
+
+                controls->ForceCursorPosition( false );
+                m_original = *m_editedPoint;    // Save the original position
+                controls->SetAutoPan( true );
+                modified = true;
             }
 
-            if ( !modified )
-                updateEditedPoint( *evt );
+            bool enableAltConstraint = !!evt->Modifier( MD_CTRL );
 
-            if( evt->IsDrag( BUT_LEFT ) && m_editedPoint )
-            {
-                if( !modified )
-                {
-                    commit.StageItems( selection, CHT_MODIFY );
+            if( enableAltConstraint != (bool) m_altConstraint )  // alternative constraint
+                setAltConstraint( enableAltConstraint );
 
-                    controls->ForceCursorPosition( false );
-                    m_original = *m_editedPoint;    // Save the original position
-                    controls->SetAutoPan( true );
-                    modified = true;
-                }
+            m_editedPoint->SetPosition( controls->GetCursorPosition() );
 
-                bool enableAltConstraint = !!evt->Modifier( MD_CTRL );
-
-                if( enableAltConstraint != (bool) m_altConstraint )  // alternative constraint
-                    setAltConstraint( enableAltConstraint );
-
-                m_editedPoint->SetPosition( controls->GetCursorPosition() );
-
-                if( m_altConstraint )
-                    m_altConstraint->Apply();
-                else
-                    m_editedPoint->ApplyConstraint();
-
-                updateItem();
-                updatePoints();
-            }
-
-            else if( evt->IsMouseUp( BUT_LEFT ) )
-            {
-                controls->SetAutoPan( false );
-                setAltConstraint( false );
-
-                if( modified )
-                {
-                    commit.Push( _( "Drag a line ending" ) );
-                    modified = false;
-                }
-
-                m_toolMgr->PassEvent();
-            }
-
-            else if( evt->IsCancel() )
-            {
-                if( modified )      // Restore the last change
-                {
-                    commit.Revert();
-                    updatePoints();
-                    modified = false;
-                }
-
-                // Let the selection tool receive the event too
-                m_toolMgr->PassEvent();
-
-                break;
-            }
-
+            if( m_altConstraint )
+                m_altConstraint->Apply();
             else
-            {
-                m_toolMgr->PassEvent();
-            }
+                m_editedPoint->ApplyConstraint();
+
+            updateItem();
+            updatePoints();
         }
 
-        if( m_editPoints )
+        else if( evt->IsMouseUp( BUT_LEFT ) )
         {
-            finishItem();
-            view->Remove( m_editPoints.get() );
-            m_editPoints.reset();
+            controls->SetAutoPan( false );
+            setAltConstraint( false );
+
+            if( modified )
+            {
+                commit.Push( _( "Drag a line ending" ) );
+                modified = false;
+            }
+
+            m_toolMgr->PassEvent();
         }
 
-        controls->ShowCursor( false );
-        controls->SetAutoPan( false );
-        controls->SetSnapping( false );
+        else if( evt->IsCancel() )
+        {
+            if( modified )      // Restore the last change
+            {
+                commit.Revert();
+                updatePoints();
+                modified = false;
+            }
+
+            // Let the selection tool receive the event too
+            m_toolMgr->PassEvent();
+
+            break;
+        }
+
+        else
+        {
+            m_toolMgr->PassEvent();
+        }
+    }
+
+    if( m_editPoints )
+    {
+        finishItem();
+        view->Remove( m_editPoints.get() );
+        m_editPoints.reset();
     }
 
     return 0;
