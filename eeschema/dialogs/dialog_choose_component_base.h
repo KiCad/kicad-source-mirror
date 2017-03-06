@@ -12,7 +12,6 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
-class TWO_COLUMN_TREE_LIST;
 
 #include "dialog_shim.h"
 #include <wx/bitmap.h>
@@ -26,7 +25,7 @@ class TWO_COLUMN_TREE_LIST;
 #include <wx/string.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
-#include <wx/treelist.h>
+#include <wx/dataview.h>
 #include <wx/html/htmlwin.h>
 #include <wx/panel.h>
 #include <wx/choice.h>
@@ -49,7 +48,7 @@ class DIALOG_CHOOSE_COMPONENT_BASE : public DIALOG_SHIM
 		wxPanel* m_panel3;
 		wxStaticBitmap* m_searchBoxIcon;
 		wxTextCtrl* m_searchBox;
-		TWO_COLUMN_TREE_LIST* m_libraryComponentTree;
+		wxDataViewCtrl* m_libraryComponentTree;
 		wxHtmlWindow* m_componentDetails;
 		wxPanel* m_panel4;
 		wxPanel* m_componentView;
@@ -62,12 +61,10 @@ class DIALOG_CHOOSE_COMPONENT_BASE : public DIALOG_SHIM
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnIdle( wxIdleEvent& event ) { event.Skip(); }
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
-		virtual void OnSearchBoxKey( wxKeyEvent& event ) { event.Skip(); }
 		virtual void OnSearchBoxChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSearchBoxEnter( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnTreeKeyUp( wxKeyEvent& event ) { event.Skip(); }
-		virtual void OnTreeActivate( wxTreeListEvent& event ) { event.Skip(); }
-		virtual void OnTreeSelect( wxTreeListEvent& event ) { event.Skip(); }
+		virtual void OnTreeActivate( wxDataViewEvent& event ) { event.Skip(); }
+		virtual void OnTreeSelect( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnDatasheetClick( wxHtmlLinkEvent& event ) { event.Skip(); }
 		virtual void OnStartComponentBrowser( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnHandlePreviewRepaint( wxPaintEvent& event ) { event.Skip(); }

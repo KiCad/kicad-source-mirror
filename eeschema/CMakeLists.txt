@@ -108,7 +108,8 @@ set( EESCHEMA_SRCS
     files-io.cpp
     find.cpp
     getpart.cpp
-    component_tree_search_container.cpp
+    cmp_tree_model.cpp
+    cmp_tree_model_adapter.cpp
     generate_alias_info.cpp
     hierarch.cpp
     highlight_connection.cpp

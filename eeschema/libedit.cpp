@@ -47,7 +47,7 @@
 #include <schframe.h>
 
 #include <dialog_choose_component.h>
-#include <component_tree_search_container.h>
+#include <cmp_tree_model_adapter.h>
 
 #include <dialogs/dialog_lib_new_component.h>
 
@@ -542,18 +542,17 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
         }
     }
 
-    COMPONENT_TREE_SEARCH_CONTAINER search_container( Prj().SchLibs() );
+    auto adapter( CMP_TREE_MODEL_ADAPTER::Create( Prj().SchLibs() ) );
 
     wxString name = part ? part->GetName() : wxString( wxEmptyString );
-    search_container.SetPreselectNode( name, /* aUnit */ 0 );
-    search_container.ShowUnits( false );
-    search_container.AddLibrary( *lib );
+    adapter->SetPreselectNode( name, /* aUnit */ 0 );
+    adapter->ShowUnits( false );
+    adapter->AddLibrary( *lib );
 
     wxString dialogTitle;
-    dialogTitle.Printf( _( "Delete Component (%u items loaded)" ),
-                        search_container.GetComponentsCount() );
+    dialogTitle.Printf( _( "Delete Component (%u items loaded)" ), adapter->GetComponentsCount() );
 
-    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, &search_container, m_convert );
+    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, m_convert );
 
     if( dlg.ShowModal() == wxID_CANCEL )
     {

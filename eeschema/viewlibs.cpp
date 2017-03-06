@@ -41,7 +41,7 @@
 #include <class_library.h>
 #include <dialog_helpers.h>
 #include <dialog_choose_component.h>
-#include <component_tree_search_container.h>
+#include <cmp_tree_model_adapter.h>
 
 
 void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
@@ -50,16 +50,16 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
     PART_LIBS* libs = Prj().SchLibs();
 
     // Container doing search-as-you-type.
-    COMPONENT_TREE_SEARCH_CONTAINER search_container( libs );
+    auto adapter( CMP_TREE_MODEL_ADAPTER::Create( libs ) );
 
     for( PART_LIB& lib : *libs )
     {
-        search_container.AddLibrary( lib );
+        adapter->AddLibrary( lib );
     }
 
     dialogTitle.Printf( _( "Choose Component (%d items loaded)" ),
-                        search_container.GetComponentsCount() );
-    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, &search_container, m_convert );
+                        adapter->GetComponentsCount() );
+    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, m_convert );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@
 #include <eeschema_id.h>
 
 #include <dialog_choose_component.h>
-#include <component_tree_search_container.h>
+#include <cmp_tree_model_adapter.h>
 #include <dialog_get_component.h>
 
 
@@ -107,7 +107,7 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const SCHLIB_FILTER* aFilte
     wxString        dialogTitle;
     PART_LIBS*      libs = Prj().SchLibs();
 
-    COMPONENT_TREE_SEARCH_CONTAINER search_container( libs );   // Container doing search-as-you-type
+    auto adapter( CMP_TREE_MODEL_ADAPTER::Create( libs ) );
     bool loaded = false;
 
     if( aFilter )
@@ -121,12 +121,12 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const SCHLIB_FILTER* aFilte
             if( currLibrary )
             {
                 loaded = true;
-                search_container.AddLibrary( *currLibrary );
+                adapter->AddLibrary( *currLibrary );
             }
         }
 
         if( aFilter->GetFilterPowerParts() )
-            search_container.SetFilter( COMPONENT_TREE_SEARCH_CONTAINER::CMP_FILTER_POWER );
+            adapter->SetFilter( CMP_TREE_MODEL_ADAPTER::CMP_FILTER_POWER );
 
     }
 
@@ -134,7 +134,7 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const SCHLIB_FILTER* aFilte
     {
         for( PART_LIB& lib : *libs )
         {
-            search_container.AddLibrary( lib );
+            adapter->AddLibrary( lib );
         }
     }
 
@@ -149,17 +149,17 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const SCHLIB_FILTER* aFilte
         // we build it with only with "History" string translatable
         wxString nodename;
         nodename  << wxT("-- ") << _("History") << wxT(" --");
-        search_container.AddAliasList( nodename, aHistoryList, NULL );
-        search_container.SetPreselectNode( aHistoryList[0], aHistoryLastUnit );
+        adapter->AddAliasList( nodename, aHistoryList, NULL );
+        adapter->SetPreselectNode( aHistoryList[0], aHistoryLastUnit );
     }
 
     if( !aHighlight.IsEmpty() )
-        search_container.SetPreselectNode( aHighlight, /* aUnit */ 0 );
+        adapter->SetPreselectNode( aHighlight, /* aUnit */ 0 );
 
     const int deMorgan = aConvert ? *aConvert : 1;
     dialogTitle.Printf( _( "Choose Component (%d items loaded)" ),
-                        search_container.GetComponentsCount() );
-    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, &search_container, deMorgan );
+                        adapter->GetComponentsCount() );
+    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, deMorgan );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return wxEmptyString;

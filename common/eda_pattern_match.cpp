@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2017 Chris Pavlina <pavlina.chris@gmail.com>
+ * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@
 #include <eda_pattern_match.h>
 #include <wx/log.h>
 #include <climits>
+#include <make_unique.h>
 
 bool EDA_PATTERN_MATCH_SUBSTR::SetPattern( const wxString& aPattern )
 {
@@ -134,4 +135,57 @@ bool EDA_PATTERN_MATCH_WILDCARD::SetPattern( const wxString& aPattern )
 int EDA_PATTERN_MATCH_WILDCARD::Find( const wxString& aCandidate ) const
 {
     return EDA_PATTERN_MATCH_REGEX::Find( aCandidate );
+}
+
+
+EDA_COMBINED_MATCHER::EDA_COMBINED_MATCHER( const wxString& aPattern )
+    : m_pattern( aPattern )
+{
+    // Whatever syntax users prefer, it shall be matched.
+    AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_REGEX>() );
+    AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_WILDCARD>() );
+    // If any of the above matchers couldn't be created because the pattern
+    // syntax does not match, the substring will try its best.
+    AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_SUBSTR>() );
+}
+
+
+bool EDA_COMBINED_MATCHER::Find( const wxString& aTerm, int& aMatchersTriggered, int& aPosition )
+{
+    aPosition = EDA_PATTERN_NOT_FOUND;
+    aMatchersTriggered = 0;
+
+    for( auto const& matcher : m_matchers )
+    {
+        int local_find = matcher->Find( aTerm );
+
+        if ( local_find != EDA_PATTERN_NOT_FOUND )
+        {
+            aMatchersTriggered += 1;
+
+            if ( local_find < aPosition || aPosition == EDA_PATTERN_NOT_FOUND )
+            {
+                aPosition = local_find;
+            }
+        }
+    }
+
+    return aPosition != EDA_PATTERN_NOT_FOUND;
+}
+
+
+wxString const& EDA_COMBINED_MATCHER::GetPattern() const
+{
+    return m_pattern;
+}
+
+
+void EDA_COMBINED_MATCHER::AddMatcher(
+        const wxString &aPattern,
+        std::unique_ptr<EDA_PATTERN_MATCH> aMatcher )
+{
+    if ( aMatcher->SetPattern( aPattern ) )
+    {
+        m_matchers.push_back( std::move( aMatcher ) );
+    }
 }

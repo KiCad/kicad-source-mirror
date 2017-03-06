@@ -31,6 +31,7 @@
 #define EDA_PATTERN_MATCH_H
 
 #include <vector>
+#include <memory>
 #include <wx/wx.h>
 #include <wx/string.h>
 #include <wx/regex.h>
@@ -93,6 +94,34 @@ class EDA_PATTERN_MATCH_WILDCARD : public EDA_PATTERN_MATCH_REGEX
 public:
     virtual bool SetPattern( const wxString& aPattern ) override;
     virtual int Find( const wxString& aCandidate ) const override;
+};
+
+
+class EDA_COMBINED_MATCHER
+{
+public:
+    EDA_COMBINED_MATCHER( const wxString &aPattern );
+
+    /*
+     * Look in all existing matchers, return the earliest match of any of
+     * the existing.
+     *
+     * @param aTerm                 term to look for
+     * @param aMatchersTriggered    out: number of matcher that found the term
+     * @param aPostion              out: where the term was found, or EDA_PATTERN_NOT_FOUND
+     *
+     * @return true if any matchers found the term
+     */
+    bool Find( const wxString &aTerm, int& aMatchersTriggered, int& aPosition );
+
+    wxString const& GetPattern() const;
+
+private:
+    // Add matcher if it can compile the pattern.
+    void AddMatcher( const wxString &aPattern, std::unique_ptr<EDA_PATTERN_MATCH> aMatcher );
+
+    std::vector<std::unique_ptr<EDA_PATTERN_MATCH>> m_matchers;
+    wxString m_pattern;
 };
 
 #endif  // EDA_PATTERN_MATCH_H
