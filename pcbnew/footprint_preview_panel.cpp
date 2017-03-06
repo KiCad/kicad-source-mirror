@@ -36,22 +36,72 @@
 #include <wx/stattext.h>
 
 
-FOOTPRINT_PREVIEW_PANEL::LOADER_THREAD::LOADER_THREAD ( FOOTPRINT_PREVIEW_PANEL* aParent ) :
-    wxThread ( wxTHREAD_JOINABLE ),
-    m_parent( aParent )
+class FP_LOADER_THREAD: public wxThread
 {
+    FOOTPRINT_PREVIEW_PANEL* m_parent;
+    std::shared_ptr<FOOTPRINT_PREVIEW_PANEL::IFACE> m_iface;
 
-}
+public:
+    FP_LOADER_THREAD( FOOTPRINT_PREVIEW_PANEL* aParent,
+                      std::shared_ptr<FOOTPRINT_PREVIEW_PANEL::IFACE> const& aIface ):
+        wxThread( wxTHREAD_DETACHED ),
+        m_parent( aParent ),
+        m_iface( aIface )
+    {}
+
+    ~FP_LOADER_THREAD()
+    {}
+
+    virtual void* Entry() override
+    {
+        while(!TestDestroy())
+        {
+            auto ent = m_iface->PopFromQueue();
+
+            if( ent )
+            {
+                FP_LIB_TABLE*   fptbl = m_parent->Prj().PcbFootprintLibs();
+
+                if(!fptbl)
+                    continue;
+
+                ent->module = NULL;
+
+                try {
+                    ent->module = fptbl->FootprintLoadWithOptionalNickname( ent->fpid );
+
+                    if(ent->module == NULL)
+                        ent->status = FPS_NOT_FOUND;
+
+                } catch( const IO_ERROR& ioe )
+                {
+                    ent->status = FPS_NOT_FOUND;
+                }
 
 
-FOOTPRINT_PREVIEW_PANEL::LOADER_THREAD::~LOADER_THREAD ()
-{
+                if(ent->status != FPS_NOT_FOUND )
+                    ent->status = FPS_READY;
 
-}
+                m_iface->AddToCache( *ent );
+
+                if( ent->fpid == m_parent->m_currentFPID )
+                {
+                    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, 1 );
+                    m_parent->GetEventHandler()->AddPendingEvent ( event );
+                }
+
+            } else {
+                wxMilliSleep(100);
+            }
+        }
+
+        return NULL;
+    }
+};
 
 
 boost::optional<FOOTPRINT_PREVIEW_PANEL::CACHE_ENTRY>
-FOOTPRINT_PREVIEW_PANEL::LOADER_THREAD::PopFromQueue()
+FOOTPRINT_PREVIEW_PANEL::IFACE::PopFromQueue()
 {
     wxMutexLocker lock( m_loaderLock );
 
@@ -69,7 +119,7 @@ FOOTPRINT_PREVIEW_PANEL::LOADER_THREAD::PopFromQueue()
 
 
 FOOTPRINT_PREVIEW_PANEL::CACHE_ENTRY
-FOOTPRINT_PREVIEW_PANEL::LOADER_THREAD::AddToQueue( LIB_ID const & aEntry )
+FOOTPRINT_PREVIEW_PANEL::IFACE::AddToQueue( LIB_ID const & aEntry )
 {
     wxMutexLocker lock( m_loaderLock );
 
@@ -81,7 +131,7 @@ FOOTPRINT_PREVIEW_PANEL::LOADER_THREAD::AddToQueue( LIB_ID const & aEntry )
 }
 
 
-void FOOTPRINT_PREVIEW_PANEL::LOADER_THREAD::AddToCache(
+void FOOTPRINT_PREVIEW_PANEL::IFACE::AddToCache(
         FOOTPRINT_PREVIEW_PANEL::CACHE_ENTRY const & aEntry )
 {
     wxMutexLocker lock( m_loaderLock );
@@ -91,7 +141,7 @@ void FOOTPRINT_PREVIEW_PANEL::LOADER_THREAD::AddToCache(
 
 
 boost::optional<FOOTPRINT_PREVIEW_PANEL::CACHE_ENTRY>
-FOOTPRINT_PREVIEW_PANEL::LOADER_THREAD::GetFromCache( LIB_ID const & aFPID )
+FOOTPRINT_PREVIEW_PANEL::IFACE::GetFromCache( LIB_ID const & aFPID )
 {
     wxMutexLocker lock( m_loaderLock );
     auto it = m_cachedFootprints.find( aFPID );
@@ -100,53 +150,6 @@ FOOTPRINT_PREVIEW_PANEL::LOADER_THREAD::GetFromCache( LIB_ID const & aFPID )
         return it->second;
     else
         return boost::none;
-}
-
-
-void* FOOTPRINT_PREVIEW_PANEL::LOADER_THREAD::Entry()
-{
-    while(!TestDestroy())
-    {
-        auto ent = PopFromQueue();
-
-        if( ent )
-        {
-            FP_LIB_TABLE*   fptbl = m_parent->Prj().PcbFootprintLibs();
-
-            if(!fptbl)
-                continue;
-
-            ent->module = NULL;
-
-            try {
-                ent->module = fptbl->FootprintLoadWithOptionalNickname( ent->fpid );
-
-                if(ent->module == NULL)
-                    ent->status = FPS_NOT_FOUND;
-
-            } catch( const IO_ERROR& ioe )
-            {
-                ent->status = FPS_NOT_FOUND;
-            }
-
-
-            if(ent->status != FPS_NOT_FOUND )
-                ent->status = FPS_READY;
-
-            AddToCache( *ent );
-
-            if( ent->fpid == m_parent->m_currentFPID )
-            {
-                wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, 1 );
-                m_parent->GetEventHandler()->AddPendingEvent ( event );
-            }
-
-        } else {
-            wxMilliSleep(100);
-        }
-    }
-
-    return NULL;
 }
 
 
@@ -159,7 +162,8 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL(
       m_hidesizer( NULL )
 {
 
-    m_loader = std::make_unique<LOADER_THREAD>( this );
+    m_iface = std::make_shared<IFACE>();
+    m_loader = new FP_LOADER_THREAD( this, m_iface );
     m_loader->Run();
 
     SetStealsFocus( false );
@@ -189,12 +193,12 @@ FOOTPRINT_PREVIEW_PANEL::~FOOTPRINT_PREVIEW_PANEL( )
 FOOTPRINT_PREVIEW_PANEL::CACHE_ENTRY
 FOOTPRINT_PREVIEW_PANEL::CacheFootprint ( const LIB_ID& aFPID )
 {
-    auto opt_ent = m_loader->GetFromCache( aFPID );
+    auto opt_ent = m_iface->GetFromCache( aFPID );
 
     if( opt_ent )
         return *opt_ent;
     else
-        return m_loader->AddToQueue( aFPID );
+        return m_iface->AddToQueue( aFPID );
 }
 
 

@@ -38,6 +38,7 @@ class KIWAY;
 class IO_MGR;
 class BOARD;
 class wxStaticText;
+class FP_LOADER_THREAD;
 
 enum FOOTPRINT_STATUS {
     FPS_NOT_FOUND = 0,
@@ -47,6 +48,8 @@ enum FOOTPRINT_STATUS {
 
 class FOOTPRINT_PREVIEW_PANEL : public PCB_DRAW_PANEL_GAL, public KIWAY_HOLDER
 {
+    friend class FP_LOADER_THREAD;
+
 public:
 
 
@@ -104,12 +107,9 @@ public:
 
 protected:
 
-    class LOADER_THREAD : public wxThread
+    class IFACE
     {
         public:
-            LOADER_THREAD ( FOOTPRINT_PREVIEW_PANEL *aParent );
-            ~LOADER_THREAD ();
-
             /**
              * Threadsafe accessor to retrieve an entry from the cache.
              */
@@ -120,10 +120,6 @@ protected:
              * Also adds a placeholder to the cache and returns it.
              */
             CACHE_ENTRY AddToQueue( LIB_ID const & aEntry );
-
-        protected:
-            void* Entry() override;
-            FOOTPRINT_PREVIEW_PANEL *m_parent;
 
             /**
              * Threadsafe accessor to pop from the loader queue. Returns a
@@ -144,8 +140,8 @@ protected:
             std::deque<CACHE_ENTRY> m_loaderQueue;
             std::map<LIB_ID, CACHE_ENTRY> m_cachedFootprints;
             wxMutex m_loaderLock;
-
     };
+
 
     FOOTPRINT_PREVIEW_PANEL(
             KIWAY* aKiway, wxWindow* aParent,
@@ -157,7 +153,8 @@ private:
 
     void renderFootprint( MODULE *module );
 
-    std::unique_ptr<LOADER_THREAD> m_loader;
+    FP_LOADER_THREAD* m_loader;
+    std::shared_ptr<IFACE> m_iface;
 
     std::unique_ptr<BOARD> m_dummyBoard;
 
