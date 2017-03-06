@@ -76,13 +76,6 @@ public:
      *
      * @param aEnabled says whether the option should enabled or disabled.
      */
-    void SetAutoPan( bool aEnabled ) override
-    {
-        m_settings.m_autoPanEnabled = aEnabled;
-
-        if( m_state == AUTO_PANNING )
-            m_state = IDLE;
-    }
 
     /// @copydoc VIEW_CONTROLS::GetMousePosition()
     VECTOR2I GetMousePosition() const override;

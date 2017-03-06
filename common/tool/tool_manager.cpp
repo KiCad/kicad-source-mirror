@@ -148,7 +148,6 @@ struct TOOL_MANAGER::TOOL_STATE
     void Push()
     {
         auto state = std::make_unique<TOOL_STATE>( *this );
-        //state->vcSettings = theTool->getViewControls()->GetSettings();
         stateStack.push( std::move( state ) );
         clear();
     }
@@ -200,9 +199,13 @@ TOOL_MANAGER::TOOL_MANAGER() :
     m_view( NULL ),
     m_viewControls( NULL ),
     m_editFrame( NULL ),
-    m_passEvent( false )
+    m_passEvent( false ),
+    m_menuActive( false )
 {
     m_actionMgr = new ACTION_MANAGER( this );
+
+    // Keep default VIEW_CONTROLS settings at the bottom of the stack
+    m_vcStack.push( KIGFX::VC_SETTINGS() );
 }
 
 
@@ -300,7 +303,7 @@ void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aPara
         event.SetParameter( aParam );
 
     if( aNow )
-        ProcessEvent( event );
+        processEvent( event );
     else
         PostEvent( event );
 }
@@ -323,7 +326,7 @@ bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
     wxASSERT( aTool != NULL );
 
     TOOL_EVENT evt( TC_COMMAND, TA_ACTIVATE, aTool->GetName() );
-    ProcessEvent( evt );
+    processEvent( evt );
 
     return true;
 }
@@ -407,7 +410,7 @@ void TOOL_MANAGER::DeactivateTool()
 {
     // Deactivate the active tool, but do not run anything new
     TOOL_EVENT evt( TC_COMMAND, TA_CANCEL_TOOL );
-    ProcessEvent( evt );
+    processEvent( evt );
 }
 
 
@@ -522,8 +525,17 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                 st->pendingWait = false;
                 st->waitEvents.clear();
 
-                if( st->cofunc && !st->cofunc->Resume() )
-                    it = finishTool( st );
+                if( st->cofunc )
+                {
+                    pushViewControls();
+                    applyViewControls( st );
+                    bool end = !st->cofunc->Resume();
+                    saveViewControls( st );
+                    popViewControls();
+
+                    if( end )
+                        it = finishTool( st );
+                }
 
                 // If the tool did not request to propagate
                 // the event to other tools, we should stop it now
@@ -549,13 +561,7 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 
                     // if there is already a context, then store it
                     if( st->cofunc )
-                    {
-                        // store the VIEW_CONTROLS settings if we launch a subtool
-                        if( GetCurrentToolState() == st )
-                            saveViewControls( st );
-
                         st->Push();
-                    }
 
                     st->cofunc = new COROUTINE<int, const TOOL_EVENT&>( std::move( func_copy ) );
 
@@ -563,7 +569,11 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                     st->transitions.clear();
 
                     // got match? Run the handler.
+                    pushViewControls();
+                    applyViewControls( st );
                     st->cofunc->Call( aEvent );
+                    saveViewControls( st );
+                    popViewControls();
 
                     if( !st->cofunc->Running() )
                         finishTool( st ); // The couroutine has finished immediately?
@@ -653,7 +663,9 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
 
         // Run update handlers on the created copy
         menu->UpdateAll();
+        m_menuActive = true;
         GetEditFrame()->PopupMenu( menu.get() );
+        m_menuActive = false;
 
         // If nothing was chosen from the context menu, we must notify the tool as well
         if( menu->GetSelected() < 0 )
@@ -685,20 +697,12 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 {
     auto it = std::find( m_activeTools.begin(), m_activeTools.end(), aState->theTool->GetId() );
 
-    // Store the current VIEW_CONTROLS settings
-    if( TOOL_STATE* state = GetCurrentToolState() )
-        saveViewControls( state );
-
     if( !aState->Pop() )
     {
         // Deactivate the tool if there are no other contexts saved on the stack
         if( it != m_activeTools.end() )
             it = m_activeTools.erase( it );
     }
-
-    // Restore VIEW_CONTROLS settings stored by the previous tool
-    if( TOOL_STATE* state = GetCurrentToolState() )
-        m_viewControls->ApplySettings( state->vcSettings );
 
     // Set transitions to be ready for future TOOL_EVENTs
     aState->theTool->SetTransitions();
@@ -707,22 +711,13 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 }
 
 
-bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
+void TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 {
-    // Early dispatch of events destined for the TOOL_MANAGER
-    if( !dispatchStandardEvents( aEvent ) )
-        return false;
+    processEvent( aEvent );
 
-    dispatchInternal( aEvent );
-    dispatchActivation( aEvent );
-    dispatchContextMenu( aEvent );
-
-    // Dispatch queue
-    while( !m_eventQueue.empty() )
+    if( TOOL_STATE* active = GetCurrentToolState() )
     {
-        TOOL_EVENT event = m_eventQueue.front();
-        m_eventQueue.pop_front();
-        ProcessEvent( event );
+        applyViewControls( active );
     }
 
     if( m_view->IsDirty() )
@@ -730,8 +725,6 @@ bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
         EDA_DRAW_FRAME* f = static_cast<EDA_DRAW_FRAME*>( GetEditFrame() );
         f->GetGalCanvas()->Refresh();    // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
     }
-
-    return false;
 }
 
 
@@ -813,15 +806,57 @@ void TOOL_MANAGER::saveViewControls( TOOL_STATE* aState )
 {
     aState->vcSettings = m_viewControls->GetSettings();
 
-    // If context menu has overridden the cursor position, reaStateore the original one
+    // If context menu has overridden the cursor position, restore the original position
     // (see dispatchContextMenu())
-    if( m_origCursor )
+    if( m_menuActive )
     {
-        aState->vcSettings.m_forceCursorPosition = true;
-        aState->vcSettings.m_forcedPosition = *m_origCursor;
+        if( m_origCursor )
+        {
+            aState->vcSettings.m_forceCursorPosition = true;
+            aState->vcSettings.m_forcedPosition = *m_origCursor;
+        }
+        else
+        {
+            aState->vcSettings.m_forceCursorPosition = false;
+        }
     }
-    else
+}
+
+
+void TOOL_MANAGER::applyViewControls( TOOL_STATE* aState )
+{
+    m_viewControls->ApplySettings( aState->vcSettings );
+}
+
+
+void TOOL_MANAGER::pushViewControls()
+{
+    m_vcStack.push( m_viewControls->GetSettings() );
+}
+
+
+void TOOL_MANAGER::popViewControls()
+{
+    m_viewControls->ApplySettings( m_vcStack.top() );
+    m_vcStack.pop();
+}
+
+
+void TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
+{
+    // Early dispatch of events destined for the TOOL_MANAGER
+    if( !dispatchStandardEvents( aEvent ) )
+        return;
+
+    dispatchInternal( aEvent );
+    dispatchActivation( aEvent );
+    dispatchContextMenu( aEvent );
+
+    // Dispatch queue
+    while( !m_eventQueue.empty() )
     {
-        aState->vcSettings.m_forceCursorPosition = false;
+        TOOL_EVENT event = m_eventQueue.front();
+        m_eventQueue.pop_front();
+        processEvent( event );
     }
 }

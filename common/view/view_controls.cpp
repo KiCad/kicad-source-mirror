@@ -78,9 +78,5 @@ void VIEW_CONTROLS::ApplySettings( const VC_SETTINGS& aSettings )
     SetAutoPanSpeed( aSettings.m_autoPanSpeed );
     EnableCursorWarping( aSettings.m_warpCursor );
     EnableMousewheelPan( aSettings.m_enableMousewheelPan );
-
-    // disable 'force cursor position' to prevent awkward cursor jumping    // TODO comment
-    m_settings.m_forceCursorPosition = false;
-    VECTOR2D cursorPos = GetCursorPosition();
-    ForceCursorPosition( aSettings.m_forceCursorPosition, cursorPos );
+    ForceCursorPosition( aSettings.m_forceCursorPosition, aSettings.m_forcedPosition );
 }
