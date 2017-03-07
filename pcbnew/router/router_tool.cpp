@@ -601,6 +601,9 @@ void ROUTER_TOOL::performRouting()
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
+        // Don't crash if we missed an operation that cancelled routing.
+        wxCHECK2( m_router->RoutingInProgress(), break );
+
         if( evt->IsMotion() )
         {
             m_router->SetOrthoMode( evt->Modifier( MD_CTRL ) );
@@ -644,7 +647,8 @@ void ROUTER_TOOL::performRouting()
             break;
         }
         else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt )
-                 || evt->IsUndoRedo() )
+                 || evt->IsUndoRedo()
+                 || evt->IsAction( &PCB_ACTIONS::routerInlineDrag ) )
             break;
     }
 
