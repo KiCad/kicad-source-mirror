@@ -29,7 +29,6 @@
 #include <algorithm>
 
 #include <boost/optional.hpp>
-#include <boost/range/adaptor/map.hpp>
 
 #include <wx/event.h>
 #include <wx/clipbrd.h>
@@ -418,10 +417,10 @@ void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
 {
     DeactivateTool();
 
-    for( TOOL_BASE* tool : m_toolState | boost::adaptors::map_keys )
+    for( auto& state : m_toolState )
     {
-        tool->Reset( aReason );
-        tool->SetTransitions();
+        state.first->Reset( aReason );
+        state.first->SetTransitions();
     }
 }
 
@@ -545,8 +544,9 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
         }
     }
 
-    for( TOOL_STATE* st : ( m_toolState | boost::adaptors::map_values ) )
+    for( auto& state : m_toolState )
     {
+        TOOL_STATE* st = state.second;
         bool finished = false;
 
         // no state handler in progress - check if there are any transitions (defined by
