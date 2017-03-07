@@ -28,54 +28,10 @@
 
 #include <cstdlib>
 
-#include <boost/version.hpp>
 #include <type_traits>
 
-#if BOOST_VERSION < 106100
-#include <boost/context/fcontext.hpp>
+#include <system/libcontext.h>
 #include <memory>
-#else
-#include <boost/context/execution_context.hpp>
-#include <boost/context/protected_fixedsize_stack.hpp>
-#endif
-
-/**
- * Note: in the history of boost, two changes to the context interface happened.
- * [1.54, 1.56)
- * http://www.boost.org/doc/libs/1_55_0/libs/context/doc/html/context/context/boost_fcontext.html
- *       intptr_t    jump_fcontext(
- *                       fcontext_t* ofc,
- *                       fcontext_t const* nfc,
- *                       intptr_t vp,
- *                       bool preserve_fpu = true
- *                   );
- *
- *       fcontext_t* make_fcontext(
- *                       void* sp,
- *                       std::size_t size,
- *                       void (*fn)(intptr_t)
- *                   );
- *
- * [1.56, 1.61)
- * http://www.boost.org/doc/libs/1_56_0/libs/context/doc/html/context/context/boost_fcontext.html
- *       intptr_t    jump_fcontext(
- *                       fcontext_t* ofc,
- *                       fcontext_t nfc,            <-----
- *                       intptr_t vp,
- *                       bool preserve_fpu = true
- *                   );
- *
- *       fcontext_t  make_fcontext(                 <-----
- *                       void* sp,
- *                       std::size_t size,
- *                       void(*fn)(intptr_t)
- *                   );
- *
- * [1.61, oo)
- * http://www.boost.org/doc/libs/1_61_0/libs/context/doc/html/context/ecv2.html
- *       fcontext_t is hidden away behind the boost::execution_context(_v2) and the stack is created on behalf of
- *       the user.
- */
 
 /**
  *  Class COROUNTINE.
@@ -90,7 +46,7 @@
  *  preempted only when it deliberately yields the control to the caller. This way,
  *  we avoid concurrency problems such as locking / race conditions.
  *
- *  Uses boost::context library to do the actual context switching.
+ *  Uses libcontext library to do the actual context switching.
  *
  *  This particular version takes a DELEGATE as an entry point, so it can invoke
  *  methods within a given object as separate coroutines.
@@ -120,17 +76,8 @@ private:
                                     // call context holds a reference to the main stack context
     };
 
-#if BOOST_VERSION < 106100
-    using CONTEXT_T = boost::context::fcontext_t;
-#else
-    using CONTEXT_T = boost::context::execution_context<INVOCATION_ARGS*>;
-#endif
-
-#if BOOST_VERSION < 105600
-    using CALLEE_STORAGE = CONTEXT_T*;
-#else
+    using CONTEXT_T = libcontext::fcontext_t;
     using CALLEE_STORAGE = CONTEXT_T;
-#endif
 
     class CALL_CONTEXT
     {
@@ -145,15 +92,8 @@ private:
             m_mainStackFunction = std::move( aFunc );
             INVOCATION_ARGS args{ INVOCATION_ARGS::CONTINUE_AFTER_ROOT, aCor, this };
 
-#if BOOST_VERSION < 105600
-            boost::context::jump_fcontext( aCor->m_callee, m_mainStackContext,
+            libcontext::jump_fcontext( &aCor->m_callee, *m_mainStackContext,
                 reinterpret_cast<intptr_t>( &args ) );
-#elif BOOST_VERSION < 106100
-            boost::context::jump_fcontext( &aCor->m_callee, *m_mainStackContext,
-                reinterpret_cast<intptr_t>( &args ) );
-#else
-            *m_mainStackContext = std::get<0>( ( *m_mainStackContext )( &args ) );
-#endif
         }
 
         void Continue( INVOCATION_ARGS* args )
@@ -195,9 +135,7 @@ public:
         m_func( std::move( aEntry ) ),
         m_running( false ),
         m_args( 0 ),
-#if BOOST_VERSION < 106100 // -> m_callee = void* or void**
         m_callee( nullptr ),
-#endif
         m_retVal( 0 )
     {
     }
@@ -351,7 +289,6 @@ private:
 
         m_args = &aArgs;
 
-#if BOOST_VERSION < 106100
         assert( m_stack == nullptr );
 
         // fixme: Clean up stack stuff. Add a guard
@@ -364,15 +301,7 @@ private:
         // correct the stack size
         stackSize -= size_t( ( (ptrdiff_t) m_stack.get() + stackSize ) - (ptrdiff_t) sp );
 
-        m_callee = boost::context::make_fcontext( sp, stackSize, callerStub );
-#else
-        m_callee = CONTEXT_T(
-            std::allocator_arg_t(),
-            boost::context::protected_fixedsize_stack( c_defaultStackSize ),
-            &COROUTINE::callerStub
-        );
-#endif
-
+        m_callee = libcontext::make_fcontext( sp, stackSize, callerStub );
         m_running = true;
 
         // off we go!
@@ -385,7 +314,6 @@ private:
     }
 
     /* real entry point of the coroutine */
-#if BOOST_VERSION < 106100
     static void callerStub( intptr_t aData )
     {
         INVOCATION_ARGS& args = *reinterpret_cast<INVOCATION_ARGS*>( aData );
@@ -403,43 +331,13 @@ private:
         // go back to wherever we came from.
         cor->jumpOut();
     }
-#else
-    /* real entry point of the coroutine */
-    static CONTEXT_T callerStub( CONTEXT_T caller, INVOCATION_ARGS* aArgsPtr )
-    {
-        const auto& args = *aArgsPtr;
-        auto* cor = args.destination;
-
-        cor->m_caller      = std::move( caller );
-        cor->m_callContext = args.context;
-
-        if( args.type == INVOCATION_ARGS::FROM_ROOT )
-            cor->m_callContext->SetMainStack( &cor->m_caller );
-
-        // call the coroutine method
-        cor->m_retVal = cor->m_func( *(cor->m_args) );
-        cor->m_running = false;
-
-        // go back to wherever we came from.
-        return std::move( cor->m_caller );
-    }
-#endif
 
     INVOCATION_ARGS* jumpIn( INVOCATION_ARGS* args )
     {
-#if BOOST_VERSION < 105600
         args = reinterpret_cast<INVOCATION_ARGS*>(
-            boost::context::jump_fcontext( &m_caller, m_callee,
+            libcontext::jump_fcontext( &m_caller, m_callee,
                                            reinterpret_cast<intptr_t>( args ) )
             );
-#elif BOOST_VERSION < 106100
-        args = reinterpret_cast<INVOCATION_ARGS*>(
-            boost::context::jump_fcontext( &m_caller, m_callee,
-                                           reinterpret_cast<intptr_t>( args ) )
-            );
-#else
-        std::tie( m_callee, args ) = m_callee( args );
-#endif
 
         return args;
     }
@@ -448,19 +346,10 @@ private:
     {
         INVOCATION_ARGS args{ INVOCATION_ARGS::FROM_ROUTINE, nullptr, nullptr };
         INVOCATION_ARGS* ret;
-#if BOOST_VERSION < 105600
         ret = reinterpret_cast<INVOCATION_ARGS*>(
-            boost::context::jump_fcontext( m_callee, &m_caller,
+            libcontext::jump_fcontext( &m_callee, m_caller,
                                            reinterpret_cast<intptr_t>( &args ) )
             );
-#elif BOOST_VERSION < 106100
-        ret = reinterpret_cast<INVOCATION_ARGS*>(
-            boost::context::jump_fcontext( &m_callee, m_caller,
-                                           reinterpret_cast<intptr_t>( &args ) )
-            );
-#else
-        std::tie( m_caller, ret ) = m_caller( &args );
-#endif
 
         m_callContext = ret->context;
 
@@ -472,10 +361,8 @@ private:
 
     static constexpr int c_defaultStackSize = 2000000;    // fixme: make configurable
 
-#if BOOST_VERSION < 106100
     ///< coroutine stack
     std::unique_ptr<char[]> m_stack;
-#endif
 
     std::function<ReturnType( ArgType )> m_func;
 

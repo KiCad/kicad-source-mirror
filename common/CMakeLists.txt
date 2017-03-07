@@ -284,6 +284,8 @@ endif()
 
 set( COMMON_SRCS
     ${COMMON_SRCS}
+    system/libcontext.cpp
+
     kicad_curl/kicad_curl.cpp
     kicad_curl/kicad_curl_easy.cpp
 
