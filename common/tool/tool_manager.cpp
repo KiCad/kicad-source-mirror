@@ -24,7 +24,6 @@
  */
 
 #include <map>
-#include <deque>
 #include <stack>
 #include <algorithm>
 
@@ -34,7 +33,6 @@
 #include <wx/clipbrd.h>
 
 #include <view/view.h>
-#include <view/view_controls.h>
 
 #include <tool/tool_base.h>
 #include <tool/tool_interactive.h>

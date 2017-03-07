@@ -26,23 +26,18 @@
 #ifndef __TOOL_MANAGER_H
 #define __TOOL_MANAGER_H
 
-#include <deque>
 #include <typeinfo>
 #include <map>
 #include <list>
 #include <stack>
 
 #include <tool/tool_base.h>
+#include <view/view_controls.h>
 
 class TOOL_BASE;
 class ACTION_MANAGER;
 class CONTEXT_MENU;
 class wxWindow;
-
-namespace KIGFX
-{
-    struct VC_SETTINGS;
-};
 
 /**
  * Class TOOL_MANAGER.
