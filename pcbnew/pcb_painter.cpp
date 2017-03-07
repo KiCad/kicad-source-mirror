@@ -64,7 +64,10 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
 void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSettings )
 {
     for( int i = 0; i < LAYER_ID_COUNT; i++ )
+    {
         m_layerColors[i] = aSettings->GetLayerColor( i );
+        m_layerColors[i].a = 0.8;   // slightly transparent
+    }
 
     for( int i = 0; i < END_PCB_VISIBLE_LIST; i++ )
         m_layerColors[ITEM_GAL_LAYER( i )] = aSettings->GetItemColor( i );

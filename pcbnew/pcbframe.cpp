@@ -734,12 +734,13 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 
 void PCB_EDIT_FRAME::forceColorsToLegacy()
 {
-    COLORS_DESIGN_SETTINGS *cds = GetBoard()->GetColorsSettings();
+    COLORS_DESIGN_SETTINGS* cds = GetBoard()->GetColorsSettings();
 
     for( int i = 0; i < LAYER_ID_COUNT; i++ )
     {
         COLOR4D c = cds->GetLayerColor( i );
         c.SetToNearestLegacyColor();
+        c.a = 0.8;
         cds->SetLayerColor( i, c );
     }
 
@@ -747,6 +748,7 @@ void PCB_EDIT_FRAME::forceColorsToLegacy()
     {
         COLOR4D c = cds->GetItemColor( i );
         c.SetToNearestLegacyColor();
+        c.a = 0.8;
         cds->SetItemColor( i, c );
     }
 }
