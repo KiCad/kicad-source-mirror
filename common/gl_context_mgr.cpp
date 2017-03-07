@@ -80,7 +80,9 @@ void GL_CONTEXT_MANAGER::LockCtx( wxGLContext* aContext, wxGLCanvas* aCanvas )
     wxGLCanvas* canvas = aCanvas ? aCanvas : m_glContexts.at( aContext );
 
     // Prevent assertion failure in wxGLContext::SetCurrent during GAL teardown
+#ifdef __WXGTK__
     if( canvas->GetXWindow() )
+#endif
     {
         canvas->SetCurrent( *aContext );
     }
