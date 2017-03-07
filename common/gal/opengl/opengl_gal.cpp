@@ -640,7 +640,12 @@ void OPENGL_GAL::DrawPolyline( const VECTOR2D aPointList[], int aListSize )
 
 void OPENGL_GAL::DrawPolyline( const SHAPE_LINE_CHAIN& aLineChain )
 {
-    drawPolyline( [&](int idx) { return aLineChain.CPoint(idx); }, aLineChain.PointCount() + 1 );
+    auto numPoints = aLineChain.PointCount();
+
+    if( aLineChain.IsClosed() )
+        numPoints += 1;
+
+    drawPolyline( [&](int idx) { return aLineChain.CPoint(idx); }, numPoints );
 }
 
 

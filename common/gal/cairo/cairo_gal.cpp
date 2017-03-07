@@ -1081,10 +1081,15 @@ void CAIRO_GAL::drawPoly( const SHAPE_LINE_CHAIN& aLineChain )
     if( aLineChain.PointCount() < 2 )
         return;
 
+    auto numPoints = aLineChain.PointCount();
+
+    if( aLineChain.IsClosed() )
+        numPoints += 1;
+
     const VECTOR2I start = aLineChain.CPoint( 0 );
     cairo_move_to( currentContext, start.x, start.y );
 
-    for( int i = 1; i < aLineChain.PointCount(); ++i )
+    for( int i = 1; i < numPoints; ++i )
     {
         const VECTOR2I& p = aLineChain.CPoint( i );
         cairo_line_to( currentContext, p.x, p.y );
