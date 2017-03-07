@@ -9,3 +9,5 @@ if( KICAD_SCRIPTING_MODULES )
         )
 
 endif()
+
+add_subdirectory( geometry )
