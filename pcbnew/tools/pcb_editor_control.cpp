@@ -750,22 +750,19 @@ int PCB_EDITOR_CONTROL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
 static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE_CONTAINER *>& aOriginZones,
         std::vector<ZONE_CONTAINER *>& aMergedZones )
 {
-    SHAPE_POLY_SET mergedOutlines = ConvertPolyListToPolySet( aOriginZones[0]->Outline()->m_CornersList );
-
     for( unsigned int i = 1; i < aOriginZones.size(); i++ )
     {
-        SHAPE_POLY_SET areaToMergePoly = ConvertPolyListToPolySet( aOriginZones[i]->Outline()->m_CornersList );
-
-        mergedOutlines.BooleanAdd( areaToMergePoly, SHAPE_POLY_SET::PM_FAST  );
+        aOriginZones[0]->Outline()->BooleanAdd( *aOriginZones[i]->Outline(),
+                                                SHAPE_POLY_SET::PM_FAST );
     }
 
-    mergedOutlines.Simplify( SHAPE_POLY_SET::PM_FAST );
+    aOriginZones[0]->Outline()->Simplify( SHAPE_POLY_SET::PM_FAST );
 
     // We should have one polygon with hole
     // We can have 2 polygons with hole, if the 2 initial polygons have only one common corner
     // and therefore cannot be merged (they are dectected as intersecting)
     // but we should never have more than 2 polys
-    if( mergedOutlines.OutlineCount() > 1 )
+    if( aOriginZones[0]->Outline()->OutlineCount() > 1 )
     {
         wxLogMessage( wxT( "BOARD::CombineAreas error: more than 2 polys after merging" ) );
         return false;
@@ -779,9 +776,8 @@ static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE_CONTAINER *>& aO
     aCommit.Modify( aOriginZones[0] );
     aMergedZones.push_back( aOriginZones[0] );
 
-    aOriginZones[0]->Outline()->m_CornersList = ConvertPolySetToPolyList( mergedOutlines );
     aOriginZones[0]->SetLocalFlags( 1 );
-    aOriginZones[0]->Outline()->Hatch();
+    aOriginZones[0]->Hatch();
 
     return true;
 }

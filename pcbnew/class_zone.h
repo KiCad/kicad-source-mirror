@@ -1,4 +1,3 @@
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -38,6 +37,7 @@
 #include <class_board_connected_item.h>
 #include <layers_id_colors_and_visibility.h>
 #include <PolyLine.h>
+#include <geometry/shape_poly_set.h>
 #include <class_zone_settings.h>
 
 
@@ -79,6 +79,11 @@ class ZONE_CONTAINER : public BOARD_CONNECTED_ITEM
 {
 public:
 
+    /**
+     * Zone hatch styles
+     */
+    typedef enum HATCH_STYLE { NO_HATCH, DIAGONAL_FULL, DIAGONAL_EDGE } HATCH_STYLE;
+
     ZONE_CONTAINER( BOARD* parent );
 
     ZONE_CONTAINER( const ZONE_CONTAINER& aZone );
@@ -88,6 +93,14 @@ public:
 
     /**
      * Function GetPosition
+     *
+     * Returns a reference to the first corner of the polygon set.
+     *
+     * \warning The implementation of this function relies on the fact that wxPoint and VECTOR2I
+     * have the same layout. If you intend to use the returned reference directly, please note
+     * that you are _only_ allowed to use members x and y. Any use on anything that is not one of
+     * these members will have undefined behaviour.
+     *
      * @return a wxPoint, position of the first point of the outline
      */
     const wxPoint& GetPosition() const override;
@@ -196,8 +209,30 @@ public:
     int GetMinThickness() const { return m_ZoneMinThickness; }
     void SetMinThickness( int aMinThickness ) { m_ZoneMinThickness = aMinThickness; }
 
-    int GetSelectedCorner() const { return m_CornerSelection; }
-    void SetSelectedCorner( int aCorner ) { m_CornerSelection = aCorner; }
+    int GetSelectedCorner() const
+    {
+        // Transform relative indices to global index
+        int globalIndex;
+        m_Poly->GetGlobalIndex( *m_CornerSelection, globalIndex );
+
+        return globalIndex;
+    }
+
+    void SetSelectedCorner( int aCorner )
+    {
+        SHAPE_POLY_SET::VERTEX_INDEX selectedCorner;
+
+        // If the global index of the corner is correct, assign it to m_CornerSelection
+        if( m_Poly->GetRelativeIndices( aCorner, &selectedCorner ) )
+        {
+            if( m_CornerSelection == nullptr )
+                m_CornerSelection = new SHAPE_POLY_SET::VERTEX_INDEX;
+
+            *m_CornerSelection = selectedCorner;
+        }
+        else
+            throw( std::out_of_range( "aCorner-th vertex does not exist" ) );
+    }
 
     ///
     // Like HitTest but selects the current corner to be operated on
@@ -209,10 +244,10 @@ public:
     std::vector <SEGMENT>& FillSegments() { return m_FillSegmList; }
     const std::vector <SEGMENT>& FillSegments() const { return m_FillSegmList; }
 
-    CPolyLine* Outline() { return m_Poly; }
-    const CPolyLine* Outline() const { return const_cast< CPolyLine* >( m_Poly ); }
+    SHAPE_POLY_SET* Outline() { return m_Poly; }
+    const SHAPE_POLY_SET* Outline() const { return const_cast< SHAPE_POLY_SET* >( m_Poly ); }
 
-    void SetOutline( CPolyLine* aOutline ) { m_Poly = aOutline; }
+    void SetOutline( SHAPE_POLY_SET* aOutline ) { m_Poly = aOutline; }
 
     /**
      * Function HitTest
@@ -231,7 +266,7 @@ public:
      */
     bool HitTestInsideZone( const wxPoint& aPosition ) const
     {
-        return m_Poly->TestPointInside( aPosition.x, aPosition.y );
+        return m_Poly->Contains( VECTOR2I( aPosition ), 0 );
     }
 
     /**
@@ -310,25 +345,45 @@ public:
      * if both aMinClearanceValue = 0 and aUseNetClearance = false: create the zone outline polygon.
      */
     void TransformOutlinesShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                               int                    aMinClearanceValue,
-                                               bool                   aUseNetClearance );
+                                                        int aMinClearanceValue,
+                                                        bool aUseNetClearance );
     /**
      * Function HitTestForCorner
-     * tests if the given wxPoint near a corner
-     * Set m_CornerSelection to -1 if nothing found, or index of corner
-     * @return true if found
-     * @param refPos : A wxPoint to test
+     * tests if the given wxPoint is near a corner.
+     * @param  refPos     is the wxPoint to test.
+     * @param  aCornerHit [out] is the index of the closest vertex found, useless when return
+     *                    value is false.
+     * @return bool - true if some corner was found to be closer to refPos than aClearance; false
+     *              otherwise.
      */
-    int HitTestForCorner( const wxPoint& refPos ) const;
+    bool HitTestForCorner( const wxPoint& refPos, SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const;
+
+    /**
+     * Function HitTestForCorner
+     * tests if the given wxPoint is near a corner.
+     * @param  refPos     is the wxPoint to test.
+     * @return bool - true if some corner was found to be closer to refPos than aClearance; false
+     *              otherwise.
+     */
+    bool HitTestForCorner( const wxPoint& refPos ) const;
 
     /**
      * Function HitTestForEdge
      * tests if the given wxPoint is near a segment defined by 2 corners.
-     * Set m_CornerSelection to -1 if nothing found, or index of the starting corner of vertice
-     * @return true if found
-     * @param refPos : A wxPoint to test
+     * @param  refPos     is the wxPoint to test.
+     * @param  aCornerHit [out] is the index of the closest vertex found, useless when return
+     *                    value is false.
+     * @return bool - true if some edge was found to be closer to refPos than aClearance.
      */
-    int HitTestForEdge( const wxPoint& refPos ) const;
+    bool HitTestForEdge( const wxPoint& refPos, SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const;
+
+    /**
+     * Function HitTestForEdge
+     * tests if the given wxPoint is near a segment defined by 2 corners.
+     * @param  refPos     is the wxPoint to test.
+     * @return bool - true if some edge was found to be closer to refPos than aClearance.
+     */
+    bool HitTestForEdge( const wxPoint& refPos ) const;
 
     /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                               bool aContained = true, int aAccuracy ) const
@@ -410,7 +465,37 @@ public:
 
     int GetNumCorners( void ) const
     {
-        return m_Poly->GetCornersCount();
+        return m_Poly->TotalVertices();
+    }
+
+    /**
+     * Function Iterate
+     * returns an iterator to visit all points of the zone's main outline without holes.
+     * @return SHAPE_POLY_SET::ITERATOR - an iterator to visit the zone vertices without holes.
+     */
+    SHAPE_POLY_SET::ITERATOR Iterate()
+    {
+        return m_Poly->Iterate();
+    }
+
+    /**
+     * Function IterateWithHoles
+     * returns an iterator to visit all points of the zone's main outline with holes.
+     * @return SHAPE_POLY_SET::ITERATOR - an iterator to visit the zone vertices with holes.
+     */
+    SHAPE_POLY_SET::ITERATOR IterateWithHoles()
+    {
+        return m_Poly->IterateWithHoles();
+    }
+
+    /**
+     * Function CIterateWithHoles
+     * returns an iterator to visit all points of the zone's main outline with holes.
+     * @return SHAPE_POLY_SET::ITERATOR - an iterator to visit the zone vertices with holes.
+     */
+    SHAPE_POLY_SET::CONST_ITERATOR CIterateWithHoles() const
+    {
+        return m_Poly->CIterateWithHoles();
     }
 
     void RemoveAllContours( void )
@@ -418,30 +503,62 @@ public:
         m_Poly->RemoveAllContours();
     }
 
-    const wxPoint& GetCornerPosition( int aCornerIndex ) const
+    const VECTOR2I& GetCornerPosition( int aCornerIndex ) const
     {
-        return m_Poly->GetPos( aCornerIndex );
+        SHAPE_POLY_SET::VERTEX_INDEX index;
+
+        // Convert global to relative indices
+        if( !m_Poly->GetRelativeIndices( aCornerIndex, &index ) )
+            throw( std::out_of_range( "aCornerIndex-th vertex does not exist" ) );
+
+        return m_Poly->CVertex( index );
     }
 
     void SetCornerPosition( int aCornerIndex, wxPoint new_pos )
     {
-        m_Poly->SetX( aCornerIndex, new_pos.x );
-        m_Poly->SetY( aCornerIndex, new_pos.y );
+        SHAPE_POLY_SET::VERTEX_INDEX relativeIndices;
+
+        // Convert global to relative indices
+        if( m_Poly->GetRelativeIndices( aCornerIndex, &relativeIndices ) )
+        {
+            m_Poly->Vertex( relativeIndices ).x = new_pos.x;
+            m_Poly->Vertex( relativeIndices ).y = new_pos.y;
+        }
+        else
+            throw( std::out_of_range( "aCornerIndex-th vertex does not exist" ) );
     }
 
-    void AppendCorner( wxPoint position )
+    /**
+     * Function NewHole
+     * creates a new hole on the zone; i.e., a new contour on the zone's outline.
+     */
+    void NewHole()
     {
-        m_Poly->AppendCorner( position.x, position.y );
+        m_Poly->NewHole();
     }
 
-    int GetHatchStyle() const
+    /**
+     * Function AppendCorner
+     * @param position          is the position of the new corner.
+     * @param aAllowDuplication is a flag to indicate whether it is allowed to add this corner
+     *                          even if it is duplicated.
+     */
+    void AppendCorner( wxPoint position, bool aAllowDuplication = false )
     {
-        return m_Poly->GetHatchStyle();
+        if( m_Poly->OutlineCount() == 0 )
+            m_Poly->NewOutline();
+
+        m_Poly->Append( position.x, position.y, -1, -1, aAllowDuplication );
     }
 
-    void SetHatchStyle( CPolyLine::HATCH_STYLE aStyle )
+    HATCH_STYLE GetHatchStyle() const
     {
-        m_Poly->SetHatchStyle( aStyle );
+        return m_hatchStyle;
+    }
+
+    void SetHatchStyle( HATCH_STYLE aStyle )
+    {
+        m_hatchStyle = aStyle;
     }
 
     /**
@@ -485,9 +602,9 @@ public:
      * Function GetSmoothedPoly
      * returns a pointer to the corner-smoothed version of
      * m_Poly if it exists, otherwise it returns m_Poly.
-     * @return CPolyLine* - pointer to the polygon.
+     * @return SHAPE_POLY_SET* - pointer to the polygon.
      */
-    CPolyLine* GetSmoothedPoly() const
+    SHAPE_POLY_SET* GetSmoothedPoly() const
     {
         if( m_smoothedPoly )
             return m_smoothedPoly;
@@ -534,6 +651,58 @@ public:
     void SetDoNotAllowVias( bool aEnable ) { m_doNotAllowVias = aEnable; }
     void SetDoNotAllowTracks( bool aEnable ) { m_doNotAllowTracks = aEnable; }
 
+    /**
+     * Hatch related methods
+     */
+
+    /**
+     * Function GetHatchPitch
+     * @return int - the zone hatch pitch in iu.
+     */
+    int GetHatchPitch() const;
+
+    /**
+     * Function GetDefaultHatchPitchMils
+     * @return int - the default hatch pitch in mils.
+     *
+     * \todo This value is hardcoded, but it should be user configurable.
+     */
+    static int GetDefaultHatchPitchMils() { return 20; }
+
+    /**
+     * Function SetHatch
+     * sets all hatch parameters for the zone.
+     * @param  aHatchStyle   is the style of the hatch, specified as one of HATCH_STYLE possible
+     *                       values.
+     * @param  aHatchPitch   is the hatch pitch in iu.
+     * @param  aRebuildHatch is a flag to indicate whether to re-hatch after having set the
+     *                       previous parameters.
+     */
+    void SetHatch( int aHatchStyle, int aHatchPitch, bool aRebuildHatch );
+
+    /**
+     * Function SetHatchPitch
+     * sets the hatch pitch parameter for the zone.
+     * @param  aPitch is the hatch pitch in iu.
+     */
+    void SetHatchPitch( int aPitch );
+
+    /**
+     * Function UnHatch
+     * clears the zone's hatch.
+     */
+    void   UnHatch();
+
+    /**
+     * Function Hatch
+     * computes the hatch lines depending on the hatch parameters and stores it in the zone's
+     * attribute m_HatchLines.
+     */
+    void   Hatch();
+
+    const std::vector<SEG>& GetHatchLines() const { return m_HatchLines; }
+
+
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
@@ -543,8 +712,8 @@ public:
 private:
     void buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeatures );
 
-    CPolyLine*            m_Poly;                ///< Outline of the zone.
-    CPolyLine*            m_smoothedPoly;        // Corner-smoothed version of m_Poly
+    SHAPE_POLY_SET*       m_Poly;                ///< Outline of the zone.
+    SHAPE_POLY_SET*       m_smoothedPoly;        // Corner-smoothed version of m_Poly
     int                   m_cornerSmoothingType;
     unsigned int          m_cornerRadius;
 
@@ -587,8 +756,8 @@ private:
     /// How to fill areas: 0 => use filled polygons, 1 => fill with segments.
     int                   m_FillMode;
 
-    /// The index of the corner being moved or -1 if no corner is selected.
-    int                   m_CornerSelection;
+    /// The index of the corner being moved or nullptr if no corner is selected.
+    SHAPE_POLY_SET::VERTEX_INDEX* m_CornerSelection;
 
     /// Variable used in polygon calculations.
     int                   m_localFlgs;
@@ -602,14 +771,52 @@ private:
      * from outlines (m_Poly) but unlike m_Poly these filled polygons have no hole
      * (they are all in one piece)  In very simple cases m_FilledPolysList is same
      * as m_Poly.  In less simple cases (when m_Poly has holes) m_FilledPolysList is
-
-
-
      * a polygon equivalent to m_Poly, without holes but with extra outline segment
      * connecting "holes" with external main outline.  In complex cases an outline
      * described by m_Poly can have many filled areas
      */
-    SHAPE_POLY_SET m_FilledPolysList;
+    SHAPE_POLY_SET        m_FilledPolysList;
+
+    HATCH_STYLE           m_hatchStyle;     // hatch style, see enum above
+    int                   m_hatchPitch;     // for DIAGONAL_EDGE, distance between 2 hatch lines
+    std::vector<SEG>      m_HatchLines;     // hatch lines
+
+    /**
+     * Union to handle conversion between references to wxPoint and to VECTOR2I.
+     *
+     * The function GetPosition(), that returns a reference to a wxPoint, needs some existing
+     * wxPoint object that it can point to. The header of this function cannot be changed, as it
+     * overrides the function from the base class BOARD_ITEM. This made sense when ZONE_CONTAINER
+     * was implemented using the legacy CPolyLine class, that worked with wxPoints. However,
+     * m_Poly is now a SHAPE_POLY_SET, whose corners are objects of type VECTOR2I, not wxPoint.
+     * Thus, we cannot directly reference the first corner of m_Poly, so a modified version of it
+     * that can be read as a wxPoint needs to be handled.
+     * Taking advantage of the fact that both wxPoint and VECTOR2I have the same memory layout
+     * (two integers: x, y), this union let us convert a reference to a VECTOR2I into a reference
+     * to a wxPoint.
+     *
+     * The idea is the following: in GetPosition(), m_Poly->GetCornerPosition( 0 ) returns a
+     * reference to the first corner of the polygon set. If we retrieve its memory direction, we
+     * can tell the compiler to cast that pointer to a WX_VECTOR_CONVERTER pointer. We can finally
+     * shape that memory layout as a wxPoint picking the wx member of the union.
+     *
+     * Although this solution is somewhat unstable, as it relies on the fact that the memory
+     * layout is exactly the same, it is the best attempt to keep backwards compatibility while
+     * using the new SHAPE_POLY_SET.
+     */
+    typedef union {
+        wxPoint wx;
+        VECTOR2I vector;
+    } WX_VECTOR_CONVERTER;
+
+    // Sanity check: assure that the conversion VECTOR2I->wxPoint using the previous union is
+    // correct, making sure that the access for x and y attributes is still safe.
+    static_assert(offsetof(wxPoint,x) == offsetof(VECTOR2I,x),
+                  "wxPoint::x and VECTOR2I::x have different offsets");
+
+    static_assert(offsetof(wxPoint,y) == offsetof(VECTOR2I,y),
+                  "wxPoint::y and VECTOR2I::y have different offsets");
+
 };
 
 

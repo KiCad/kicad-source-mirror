@@ -70,6 +70,7 @@ principle should be easily implemented by adapting the current STL containers.
 %ignore GetCommandOptions;
 
 %rename(getWxRect) operator wxRect;
+%rename(getBOX2I) operator BOX2I;
 %ignore operator <<;
 %ignore operator=;
 

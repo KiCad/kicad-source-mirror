@@ -1597,17 +1597,15 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
                 zone->SetLayer( layer );
                 zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
-                CPolyLine::HATCH_STYLE outline_hatch = CPolyLine::DIAGONAL_EDGE;
+                ZONE_CONTAINER::HATCH_STYLE outline_hatch = ZONE_CONTAINER::DIAGONAL_EDGE;
 
-                zone->Outline()->Start( layer, kicad_x( r.x1 ), kicad_y( r.y1 ), outline_hatch );
+                zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ) );
                 zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y1 ) ) );
                 zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y2 ) ) );
                 zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ) );
-                zone->Outline()->CloseLastContour();
 
                 // this is not my fault:
-                zone->Outline()->SetHatch(
-                        outline_hatch, Mils2iu( zone->Outline()->GetDefaultHatchPitchMils() ), true );
+                zone->SetHatch( outline_hatch, Mils2iu( zone->GetDefaultHatchPitchMils() ), true );
             }
 
             m_xpath->pop();
@@ -2736,7 +2734,6 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                     zone->SetLayer( layer );
                     zone->SetNetCode( netCode );
 
-                    bool first = true;
                     for( CITER vi = it->second.begin();  vi != it->second.end();  ++vi )
                     {
                         if( vi->first != "vertex" )     // skip <xmlattr> node
@@ -2744,32 +2741,21 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 
                         EVERTEX v( vi->second );
 
-                        // the ZONE_CONTAINER API needs work, as you can see:
-                        if( first )
-                        {
-                            zone->Outline()->Start( layer,  kicad_x( v.x ), kicad_y( v.y ),
-                                                    CPolyLine::NO_HATCH);
-                            first = false;
-                        }
-                        else
-                            zone->AppendCorner( wxPoint( kicad_x( v.x ), kicad_y( v.y ) ) );
+                        // Append the corner
+                        zone->AppendCorner( wxPoint( kicad_x( v.x ), kicad_y( v.y ) ) );
                     }
-
-                    zone->Outline()->CloseLastContour();
 
                     // If the pour is a cutout it needs to be set to a keepout
                     if( p.pour == EPOLYGON::CUTOUT )
                     {
                         zone->SetIsKeepout( true );
                         zone->SetDoNotAllowCopperPour( true );
-                        zone->Outline()->SetHatchStyle( CPolyLine::NO_HATCH );
+                        zone->SetHatchStyle( ZONE_CONTAINER::NO_HATCH );
                     }
 
                     // if spacing is set the zone should be hatched
                     if( p.spacing )
-                        zone->Outline()->SetHatch( CPolyLine::DIAGONAL_EDGE,
-                                                   *p.spacing,
-                                                   true );
+                        zone->SetHatch( ZONE_CONTAINER::DIAGONAL_EDGE, *p.spacing, true );
 
                     // clearances, etc.
                     zone->SetArcSegmentCount( 32 );     // @todo: should be a constructor default?

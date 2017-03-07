@@ -30,6 +30,7 @@
 #define CLASS_EDA_RECT_H
 
 #include <wx/gdicmn.h>
+#include <math/box2.h>
 
 /**
  * Class EDA_RECT
@@ -78,6 +79,7 @@ public:
      * @return true if aPoint is inside the boundary box. A point on a edge is seen as inside
      */
     bool Contains( const wxPoint& aPoint ) const;
+
     /**
      * Function Contains
      * @param x = the x coordinate of the point to test
@@ -175,6 +177,18 @@ public:
         EDA_RECT rect( m_Pos, m_Size );
         rect.Normalize();
         return wxRect( rect.m_Pos, rect.m_Size );
+    }
+
+    /**
+     * Function operator(BOX2I)
+     * overloads the cast operator to return a BOX2I
+     * @return BOX2I - this box shaped as a BOX2I object.
+     */
+    operator BOX2I() const
+    {
+        EDA_RECT rect( m_Pos, m_Size );
+        rect.Normalize();
+        return BOX2I( rect.GetPosition(), rect.GetEnd() );
     }
 
     /**

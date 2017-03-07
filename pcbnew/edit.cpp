@@ -613,7 +613,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
              * and start move the new corner
              */
             zone_cont->Draw( m_canvas, &dc, GR_XOR );
-            zone_cont->Outline()->InsertCorner( zone_cont->GetSelectedCorner(), pos.x, pos.y );
+            zone_cont->Outline()->InsertVertex( zone_cont->GetSelectedCorner(), pos );
             zone_cont->SetSelectedCorner( zone_cont->GetSelectedCorner() + 1 );
             zone_cont->Draw( m_canvas, &dc, GR_XOR );
             m_canvas->SetAutoPanRequest( true );

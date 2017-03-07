@@ -214,15 +214,15 @@ void DIALOG_COPPER_ZONE::initDialog()
 
     switch( m_settings.m_Zone_HatchingStyle )
     {
-    case CPolyLine::NO_HATCH:
+    case ZONE_CONTAINER::NO_HATCH:
         m_OutlineAppearanceCtrl->SetSelection( 0 );
         break;
 
-    case CPolyLine::DIAGONAL_EDGE:
+    case ZONE_CONTAINER::DIAGONAL_EDGE:
         m_OutlineAppearanceCtrl->SetSelection( 1 );
         break;
 
-    case CPolyLine::DIAGONAL_FULL:
+    case ZONE_CONTAINER::DIAGONAL_FULL:
         m_OutlineAppearanceCtrl->SetSelection( 2 );
         break;
     }
@@ -355,15 +355,15 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     switch( m_OutlineAppearanceCtrl->GetSelection() )
     {
     case 0:
-        m_settings.m_Zone_HatchingStyle = CPolyLine::NO_HATCH;
+        m_settings.m_Zone_HatchingStyle = ZONE_CONTAINER::NO_HATCH;
         break;
 
     case 1:
-        m_settings.m_Zone_HatchingStyle = CPolyLine::DIAGONAL_EDGE;
+        m_settings.m_Zone_HatchingStyle = ZONE_CONTAINER::DIAGONAL_EDGE;
         break;
 
     case 2:
-        m_settings.m_Zone_HatchingStyle = CPolyLine::DIAGONAL_FULL;
+        m_settings.m_Zone_HatchingStyle = ZONE_CONTAINER::DIAGONAL_FULL;
         break;
     }
 

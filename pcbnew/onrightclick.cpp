@@ -716,14 +716,14 @@ void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu*
                     edge_zone->GetIsKeepout() ? _("Keepout Area") : _( "Zones" ),
                     KiBitmap( add_zone_xpm ) );
 
-        if( edge_zone->HitTestForCorner( RefPos( true ) ) >= 0 )
+        if( edge_zone->HitTestForCorner( RefPos( true ) ) )
         {
             AddMenuItem( zones_menu, ID_POPUP_PCB_MOVE_ZONE_CORNER,
                          _( "Move Corner" ), KiBitmap( move_xpm ) );
             AddMenuItem( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CORNER,
                          _( "Delete Corner" ), KiBitmap( delete_xpm ) );
         }
-        else if( edge_zone->HitTestForEdge( RefPos( true ) ) >= 0 )
+        else if( edge_zone->HitTestForEdge( RefPos( true ) ) )
         {
             AddMenuItem( zones_menu, ID_POPUP_PCB_ADD_ZONE_CORNER,
                          _( "Create Corner" ), KiBitmap( add_corner_xpm ) );
@@ -771,7 +771,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu*
         zones_menu->AppendSeparator();
 
         if( edge_zone->GetSelectedCorner() >= 0 &&
-            edge_zone->Outline()->IsCutoutContour( edge_zone->GetSelectedCorner() ) )
+            edge_zone->Outline()->IsVertexInHole( edge_zone->GetSelectedCorner() ) )
             AddMenuItem( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CUTOUT,
                          _( "Delete Cutout" ), KiBitmap( delete_xpm ) );
 

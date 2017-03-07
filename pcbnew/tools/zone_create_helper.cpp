@@ -110,14 +110,16 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aExistingZone,
     auto& board = *m_tool.getModel<BOARD>();
     auto& toolMgr = *m_tool.GetManager();
 
+    aExistingZone.Outline()->NewOutline();
+
     // Copy cutout corners into existing zone
     for( int ii = 0; ii < aCutout.GetNumCorners(); ii++ )
     {
-        aExistingZone.AppendCorner( aCutout.GetCornerPosition( ii ) );
+        aExistingZone.Outline()->Append( aCutout.GetCornerPosition( ii ) );
     }
 
     // Close the current corner list
-    aExistingZone.Outline()->CloseLastContour();
+    aExistingZone.Outline()->Outline( 0 ).SetClosed( true );
 
     board.OnAreaPolygonModified( nullptr, &aExistingZone );
 
@@ -217,18 +219,16 @@ void ZONE_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
     }
     else
     {
-        m_zone->Outline()->Start( m_zone->GetLayer(),
-                                  finalPoints[0].x, finalPoints[0].y,
-                                  m_zone->GetHatchStyle() );
+        m_zone->Outline()->NewOutline();
 
-        for( size_t i = 1; i < finalPoints.size(); ++i )
+        for( const auto& pt : finalPoints )
         {
-            m_zone->AppendCorner( { finalPoints[i].x, finalPoints[i].y } );
+            m_zone->Outline()->Append( pt );
         }
 
-        m_zone->Outline()->CloseLastContour();
+        m_zone->Outline()->Outline( 0 ).SetClosed( true );
         m_zone->Outline()->RemoveNullSegments();
-        m_zone->Outline()->Hatch();
+        m_zone->Hatch();
 
         // hand the zone over to the committer
         commitZone( std::move( m_zone ) );

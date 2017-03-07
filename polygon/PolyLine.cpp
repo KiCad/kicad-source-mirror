@@ -354,7 +354,10 @@ CPolyLine* CPolyLine::Chamfer( unsigned int aDistance )
 
             int nx2  = KiROUND( distance * xb / lenb );
             int ny2  = KiROUND( distance * yb / lenb );
-            newPoly->AppendCorner( x1 + nx2, y1 + ny2 );
+
+            // Due to rounding errors, repeated corners could be added; this check prevents it
+            if(nx1 != nx2 || ny1 != ny2)
+                newPoly->AppendCorner( x1 + nx2, y1 + ny2 );
         }
 
         newPoly->CloseLastContour();
@@ -423,7 +426,7 @@ CPolyLine* CPolyLine::Fillet( unsigned int aRadius, unsigned int aSegments )
             double          denom   = sqrt( 2.0 / ( 1 + cosine ) - 1 );
 
             // Do nothing in case of parallel edges
-            if( !std::isfinite( denom ) )
+            if( std::isinf( denom ) )
                 continue;
 
             // Limit rounding distance to one half of an edge
@@ -480,11 +483,22 @@ CPolyLine* CPolyLine::Fillet( unsigned int aRadius, unsigned int aSegments )
             else
                 newPoly->AppendCorner( KiROUND( nx ), KiROUND( ny ) );
 
+            // Store the previous added corner to make a sanity check
+            int prevX = KiROUND(nx);
+            int prevY = KiROUND(ny);
+
             for( unsigned int j = 0; j < segments; j++ )
             {
                 nx  = xc + cos( startAngle + (j + 1) * deltaAngle ) * radius;
                 ny  = yc - sin( startAngle + (j + 1) * deltaAngle ) * radius;
-                newPoly->AppendCorner( KiROUND( nx ), KiROUND( ny ) );
+
+                // Due to rounding errors, repeated corners could be added; this check prevents it
+                if(KiROUND(nx) != prevX || KiROUND(ny) != prevY)
+                {
+                    newPoly->AppendCorner( KiROUND( nx ), KiROUND( ny ) );
+                    prevX = KiROUND(nx);
+                    prevY = KiROUND(ny);
+                }
             }
         }
 
@@ -1154,7 +1168,7 @@ int CPolyLine::HitTestForEdge( const wxPoint& aPos, int aDistMax ) const
         if( m_CornersList.IsEndContour ( item_pos ) || end_segm >= lim )
         {
             unsigned tmp = first_corner_pos;
-            first_corner_pos = end_segm;    // first_corner_pos is now the beginning of the next outline
+            first_corner_pos = end_segm;    // first_corner_pos is the beginning of next outline
             end_segm = tmp;                 // end_segm is the beginning of the current outline
         }
 

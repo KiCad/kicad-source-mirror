@@ -177,26 +177,19 @@ void PCB_POLYGON::AddToBoard()
         zone->SetNetCode( m_netCode );
 
         // add outline
-        int outline_hatch = CPolyLine::DIAGONAL_EDGE;
+        int outline_hatch = ZONE_CONTAINER::DIAGONAL_EDGE;
 
-        zone->Outline()->Start( m_KiCadLayer, KiROUND( m_outline[i]->x ),
-                                KiROUND( m_outline[i]->y ), outline_hatch );
-
-        for( i = 1; i < (int) m_outline.GetCount(); i++ )
+        for( i = 0; i < (int) m_outline.GetCount(); i++ )
         {
             zone->AppendCorner( wxPoint( KiROUND( m_outline[i]->x ),
                                          KiROUND( m_outline[i]->y ) ) );
         }
 
-        zone->Outline()->CloseLastContour();
-
         zone->SetZoneClearance( m_width );
 
         zone->SetPriority( m_priority );
 
-        zone->Outline()->SetHatch( outline_hatch,
-                                   Mils2iu( zone->Outline()->GetDefaultHatchPitchMils() ),
-                                   true );
+        zone->SetHatch( outline_hatch, Mils2iu( zone->GetDefaultHatchPitchMils() ), true );
 
         if ( m_objType == wxT( 'K' ) )
         {

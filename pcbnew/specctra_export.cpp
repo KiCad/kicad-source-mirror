@@ -1016,26 +1016,27 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
             mainPolygon->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
 
-            int count = item->Outline()->m_CornersList.GetCornersCount();
-            int ndx = 0;  // used in 2 for() loops below
-            for( ; ndx<count; ++ndx )
+            // Handle the main outlines
+            SHAPE_POLY_SET::ITERATOR iterator;
+            for( iterator = item->IterateWithHoles(); iterator; iterator++ )
             {
-                wxPoint   point( item->Outline()->m_CornersList[ndx].x,
-                                 item->Outline()->m_CornersList[ndx].y );
+                wxPoint point( iterator->x, iterator->y );
                 mainPolygon->AppendPoint( mapPt(point) );
 
                 // this was the end of the main polygon
-                if( item->Outline()->m_CornersList[ndx].end_contour )
+                if( iterator.IsEndContour() )
                     break;
             }
 
             WINDOW* window  = 0;
             PATH*   cutout  = 0;
 
+            bool isStartContour = true;
+
             // handle the cutouts
-            for( ++ndx; ndx<count; ++ndx )
+            for( iterator++; iterator; iterator++ )
             {
-                if( item->Outline()->m_CornersList[ndx-1].end_contour )
+                if( isStartContour )
                 {
                     window = new WINDOW( plane );
 
@@ -1048,11 +1049,14 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                     cutout->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
                 }
 
+                // If the point in this iteration is the last of the contour, the next iteration
+                // will start with a new contour.
+                isStartContour = iterator.IsEndContour();
+
                 wxASSERT( window );
                 wxASSERT( cutout );
 
-                wxPoint point(item->Outline()->m_CornersList[ndx].x,
-                              item->Outline()->m_CornersList[ndx].y );
+                wxPoint point(iterator->x, iterator->y );
                 cutout->AppendPoint( mapPt(point) );
             }
         }
@@ -1093,41 +1097,44 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
             mainPolygon->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
 
-            int count = item->Outline()->m_CornersList.GetCornersCount();
-            int ndx = 0;  // used in 2 for() loops below
-            for( ; ndx<count; ++ndx )
+            // Handle the main outlines
+            SHAPE_POLY_SET::ITERATOR iterator;
+            for( iterator = item->IterateWithHoles(); iterator; iterator++ )
             {
-                wxPoint   point( item->Outline()->m_CornersList[ndx].x,
-                                 item->Outline()->m_CornersList[ndx].y );
+                wxPoint point( iterator->x, iterator->y );
                 mainPolygon->AppendPoint( mapPt(point) );
 
                 // this was the end of the main polygon
-                if( item->Outline()->m_CornersList[ndx].end_contour )
+                if( iterator.IsEndContour() )
                     break;
             }
 
             WINDOW* window = 0;
             PATH*   cutout = 0;
 
+            bool isStartContour = true;
+
             // handle the cutouts
-            for( ++ndx; ndx<count; ++ndx )
+            for( iterator++; iterator; iterator++ )
             {
-                if( item->Outline()->m_CornersList[ndx-1].end_contour )
+                if( isStartContour )
                 {
                     window = new WINDOW( keepout );
                     keepout->AddWindow( window );
 
                     cutout = new PATH( window, T_polygon );
+
                     window->SetShape( cutout );
 
                     cutout->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
                 }
 
+                isStartContour = iterator.IsEndContour();
+
                 wxASSERT( window );
                 wxASSERT( cutout );
 
-                wxPoint point(item->Outline()->m_CornersList[ndx].x,
-                              item->Outline()->m_CornersList[ndx].y );
+                wxPoint point(iterator->x, iterator->y );
                 cutout->AppendPoint( mapPt(point) );
             }
         }

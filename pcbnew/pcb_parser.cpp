@@ -2644,9 +2644,9 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
                  wxT( " as ZONE_CONTAINER." ) );
 
-    CPolyLine::HATCH_STYLE hatchStyle = CPolyLine::NO_HATCH;
+    ZONE_CONTAINER::HATCH_STYLE hatchStyle = ZONE_CONTAINER::NO_HATCH;
 
-    int     hatchPitch = Mils2iu( CPolyLine::GetDefaultHatchPitchMils() );
+    int     hatchPitch = Mils2iu( ZONE_CONTAINER::GetDefaultHatchPitchMils() );
     wxPoint pt;
     T       token;
     int     tmp;
@@ -2709,9 +2709,9 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
             switch( token )
             {
             default:
-            case T_none:   hatchStyle = CPolyLine::NO_HATCH;        break;
-            case T_edge:   hatchStyle = CPolyLine::DIAGONAL_EDGE;   break;
-            case T_full:   hatchStyle = CPolyLine::DIAGONAL_FULL;
+            case T_none:   hatchStyle = ZONE_CONTAINER::NO_HATCH;        break;
+            case T_edge:   hatchStyle = ZONE_CONTAINER::DIAGONAL_EDGE;   break;
+            case T_full:   hatchStyle = ZONE_CONTAINER::DIAGONAL_FULL;
             }
 
             hatchPitch = parseBoardUnits( "hatch pitch" );
@@ -2956,7 +2956,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
         }
 
         // Set hatch here, after outlines corners are read
-        zone->Outline()->SetHatch( hatchStyle, hatchPitch, true );
+        zone->SetHatch( hatchStyle, hatchPitch, true );
     }
 
     if( !pts.IsEmpty() )

@@ -973,12 +973,11 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
     m_gal->SetIsStroke( true );
     m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
 
-    const CPolyLine* polygon = aZone->Outline();
-    for( int i = 0; i < polygon->GetCornersCount(); ++i )
+    for( auto iterator = aZone->CIterateWithHoles(); iterator; iterator++ )
     {
-        corners.push_back( VECTOR2D( polygon->GetPos( i ) ) );
+        corners.push_back( VECTOR2D( *iterator ) );
 
-        if( polygon->IsEndContour( i ) )
+        if( iterator.IsEndContour() )
         {
             // The last point for closing the polyline
             corners.push_back( corners[0] );
@@ -986,11 +985,8 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
             corners.clear();
         }
 
-        for( unsigned ic = 0; ic < polygon->m_HatchLines.size(); ic++ )
-        {
-            auto& hatchLine = polygon->m_HatchLines[ic];
-            m_gal->DrawLine( hatchLine.m_Start, hatchLine.m_End );
-        }
+        for( const SEG& hatchLine : aZone->GetHatchLines() )
+            m_gal->DrawLine( hatchLine.A, hatchLine.B );
     }
 
     // Draw the filling

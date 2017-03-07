@@ -38,6 +38,8 @@ class SEG
 {
 private:
     typedef VECTOR2I::extended_type ecoord;
+    VECTOR2I m_a;
+    VECTOR2I m_b;
 
 public:
     friend inline std::ostream& operator<<( std::ostream& aStream, const SEG& aSeg );
@@ -46,13 +48,15 @@ public:
      * to an object the segment belongs to (e.g. a line chain) or references to locally stored
      * points (m_a, m_b).
      */
-    VECTOR2I A;
-    VECTOR2I B;
+    VECTOR2I& A;
+    VECTOR2I& B;
 
     /** Default constructor
      * Creates an empty (0, 0) segment, locally-referenced
      */
-    SEG()
+    SEG() :
+        A( m_a ),
+        B( m_b )
     {
         m_index = -1;
     }
@@ -62,9 +66,11 @@ public:
      * Creates a segment between (aX1, aY1) and (aX2, aY2), locally referenced
      */
     SEG( int aX1, int aY1, int aX2, int aY2 ) :
-        A ( VECTOR2I( aX1, aY1 ) ),
-        B ( VECTOR2I( aX2, aY2 ) )
+        A( m_a ),
+        B( m_b )
     {
+        A = VECTOR2I( aX1, aY1 );
+        B = VECTOR2I( aX2, aY2 );
         m_index = -1;
     }
 
@@ -72,9 +78,35 @@ public:
      * Constructor
      * Creates a segment between (aA) and (aB), locally referenced
      */
-    SEG( const VECTOR2I& aA, const VECTOR2I& aB ) : A( aA ), B( aB )
+    SEG( const VECTOR2I& aA, const VECTOR2I& aB ) :
+        A( m_a ),
+        B( m_b )
+    {
+        A = aA;
+        B = aB;
+        m_index = -1;
+    }
+
+    /**
+     * Constructor
+     * Creates a segment between (aA) and (aB), referencing the passed points
+     */
+    SEG( VECTOR2I& aA, VECTOR2I& aB ) :
+        A( aA ),
+        B( aB )
     {
         m_index = -1;
+    }
+
+    /**
+     * Constructor
+     * Creates a segment between (aA) and (aB), referencing the passed points
+     */
+    SEG( VECTOR2I& aA, VECTOR2I& aB, int aIndex ) :
+        A( aA ),
+        B( aB )
+    {
+        m_index = aIndex;
     }
 
     /**
@@ -84,16 +116,25 @@ public:
      * @param aB reference to the end point in the parent shape
      * @param aIndex index of the segment within the parent shape
      */
-    SEG( const VECTOR2I& aA, const VECTOR2I& aB, int aIndex ) : A( aA ), B( aB )
+    SEG( const VECTOR2I& aA, const VECTOR2I& aB, int aIndex ) :
+        A( m_a ),
+        B( m_b )
     {
+        A = aA;
+        B = aB;
         m_index = aIndex;
     }
 
     /**
      * Copy constructor
      */
-    SEG( const SEG& aSeg ) : A( aSeg.A ), B( aSeg.B ), m_index( aSeg.m_index )
+    SEG( const SEG& aSeg ) :
+        A( m_a ),
+        B( m_b ),
+        m_index( aSeg.m_index )
     {
+        A = aSeg.A;
+        B = aSeg.B;
     }
 
     SEG& operator=( const SEG& aSeg )

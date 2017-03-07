@@ -435,7 +435,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
     if(g_DumpZonesWhenFilling)
         dumper->BeginGroup("clipper-zone");
 
-    SHAPE_POLY_SET solidAreas = ConvertPolyListToPolySet( m_smoothedPoly->m_CornersList );
+    SHAPE_POLY_SET solidAreas = *m_smoothedPoly;
 
     solidAreas.Inflate( -outline_half_thickness, segsPerCircle );
     solidAreas.Simplify( POLY_CALC_MODE );

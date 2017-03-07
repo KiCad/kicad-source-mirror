@@ -53,7 +53,7 @@
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
     BOARD_CONNECTED_ITEM( aBoard, PCB_ZONE_AREA_T )
 {
-    m_CornerSelection = -1;
+    m_CornerSelection = nullptr;                // no corner is selected
     m_IsFilled = false;                         // fill status : true when the zone is filled
     m_FillMode = 0;                             // How to fill areas: 0 = use filled polygons, != 0 fill with segments
     m_priority = 0;
@@ -65,7 +65,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
     SetDoNotAllowTracks( true );                // has meaning only if m_isKeepout == true
     m_cornerRadius = 0;
     SetLocalFlags( 0 );                         // flags tempoarry used in zone calculations
-    m_Poly     = new CPolyLine();               // Outlines
+    m_Poly = new SHAPE_POLY_SET();              // Outlines
     aBoard->GetZoneSettings().ExportSetting( *this );
 }
 
@@ -77,10 +77,10 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
 
     // Should the copy be on the same net?
     SetNetCode( aZone.GetNetCode() );
-    m_Poly = new CPolyLine( *aZone.m_Poly );
+    m_Poly = new SHAPE_POLY_SET( *aZone.m_Poly );
 
-    // For corner moving, corner index to drag, or -1 if no selection
-    m_CornerSelection = -1;
+    // For corner moving, corner index to drag, or nullptr if no selection
+    m_CornerSelection = nullptr;
     m_IsFilled = aZone.m_IsFilled;
     m_ZoneClearance = aZone.m_ZoneClearance;     // clearance value
     m_ZoneMinThickness = aZone.m_ZoneMinThickness;
@@ -101,6 +101,10 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     m_cornerSmoothingType = aZone.m_cornerSmoothingType;
     m_cornerRadius = aZone.m_cornerRadius;
 
+    m_hatchStyle = aZone.m_hatchStyle;
+    m_hatchPitch = aZone.m_hatchPitch;
+    m_HatchLines = aZone.m_HatchLines;
+
     SetLocalFlags( aZone.GetLocalFlags() );
 }
 
@@ -109,9 +113,11 @@ ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
 {
     BOARD_CONNECTED_ITEM::operator=( aOther );
 
-    m_Poly->RemoveAllContours();
-    m_Poly->Copy( aOther.m_Poly );  // copy outlines
-    m_CornerSelection  = -1;        // for corner moving, corner index to drag or -1 if no selection
+    // Replace the outlines for aOther outlines.
+    delete m_Poly;
+    m_Poly = new SHAPE_POLY_SET( *aOther.m_Poly );
+
+    m_CornerSelection  = nullptr; // for corner moving, corner index to (null if no selection)
     m_ZoneClearance    = aOther.m_ZoneClearance;            // clearance value
     m_ZoneMinThickness = aOther.m_ZoneMinThickness;
     m_FillMode = aOther.m_FillMode;                         // filling mode (segments/polygons)
@@ -119,9 +125,9 @@ ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
     m_PadConnection = aOther.m_PadConnection;
     m_ThermalReliefGap = aOther.m_ThermalReliefGap;
     m_ThermalReliefCopperBridge = aOther.m_ThermalReliefCopperBridge;
-    m_Poly->SetHatchStyle( aOther.m_Poly->GetHatchStyle() );
-    m_Poly->SetHatchPitch( aOther.m_Poly->GetHatchPitch() );
-    m_Poly->m_HatchLines = aOther.m_Poly->m_HatchLines;     // copy vector <CSegment>
+    SetHatchStyle( aOther.GetHatchStyle() );
+    SetHatchPitch( aOther.GetHatchPitch() );
+    m_HatchLines = aOther.m_HatchLines;     // copy vector <SEG>
     m_FilledPolysList.RemoveAllContours();
     m_FilledPolysList.Append( aOther.m_FilledPolysList );
     m_FillSegmList.clear();
@@ -134,7 +140,8 @@ ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
 ZONE_CONTAINER::~ZONE_CONTAINER()
 {
     delete m_Poly;
-    m_Poly = NULL;
+    delete m_smoothedPoly;
+    delete m_CornerSelection;
 }
 
 
@@ -159,9 +166,13 @@ bool ZONE_CONTAINER::UnFill()
 
 const wxPoint& ZONE_CONTAINER::GetPosition() const
 {
-    static const wxPoint dummy;
+    const WX_VECTOR_CONVERTER* pos;
 
-    return m_Poly ? GetCornerPosition( 0 ) : dummy;
+    // The retrieved vertex is a VECTOR2I. Casting it to a union WX_VECTOR_CONVERTER, we can later
+    // return the object shaped as a wxPoint. See the definition of the union in class_zone.h for
+    // more information on this hack.
+    pos = reinterpret_cast<const WX_VECTOR_CONVERTER*>( &GetCornerPosition( 0 ) );
+    return pos->wx;
 }
 
 
@@ -195,38 +206,29 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
     color.a = 0.588;
 
     // draw the lines
-    int i_start_contour = 0;
     std::vector<wxPoint> lines;
     lines.reserve( (GetNumCorners() * 2) + 2 );
 
-    for( int ic = 0; ic < GetNumCorners(); ic++ )
+    // Iterate through the segments of the outline
+    for( auto iterator = m_Poly->IterateSegmentsWithHoles(); iterator; iterator++ )
     {
-        seg_start = GetCornerPosition( ic ) + offset;
+        // Create the segment
+        SEG segment = *iterator;
 
-        if( !m_Poly->m_CornersList.IsEndContour( ic ) && ic < GetNumCorners() - 1 )
-        {
-            seg_end = GetCornerPosition( ic + 1 ) + offset;
-        }
-        else
-        {
-            seg_end = GetCornerPosition( i_start_contour ) + offset;
-            i_start_contour = ic + 1;
-        }
-
-        lines.push_back( seg_start );
-        lines.push_back( seg_end );
+        lines.push_back( static_cast<wxPoint>( segment.A ) + offset );
+        lines.push_back( static_cast<wxPoint>( segment.B ) + offset );
     }
 
     GRLineArray( panel->GetClipBox(), DC, lines, 0, color );
 
     // draw hatches
     lines.clear();
-    lines.reserve( (m_Poly->m_HatchLines.size() * 2) + 2 );
+    lines.reserve( (m_HatchLines.size() * 2) + 2 );
 
-    for( unsigned ic = 0; ic < m_Poly->m_HatchLines.size(); ic++ )
+    for( unsigned ic = 0; ic < m_HatchLines.size(); ic++ )
     {
-        seg_start = m_Poly->m_HatchLines[ic].m_Start + offset;
-        seg_end   = m_Poly->m_HatchLines[ic].m_End + offset;
+        seg_start = static_cast<wxPoint>( m_HatchLines[ic].A ) + offset;
+        seg_end   = static_cast<wxPoint>( m_HatchLines[ic].B ) + offset;
         lines.push_back( seg_start );
         lines.push_back( seg_end );
     }
@@ -357,7 +359,7 @@ const EDA_RECT ZONE_CONTAINER::GetBoundingBox() const
 
     for( int i = 0; i<count; ++i )
     {
-        wxPoint corner = GetCornerPosition( i );
+        wxPoint corner = static_cast<wxPoint>( GetCornerPosition( i ) );
 
         ymax = std::max( ymax, corner.y );
         xmax = std::max( xmax, corner.x );
@@ -391,45 +393,63 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC,
             color = COLOR4D( DARKDARKGRAY );
     }
 
-    // draw the lines
-    wxPoint start_contour_pos = GetCornerPosition( 0 );
-    int     icmax = GetNumCorners() - 1;
+    // Object to iterate through the corners of the outlines
+    SHAPE_POLY_SET::ITERATOR iterator = m_Poly->Iterate();
 
-    for( int ic = 0; ic <= icmax; ic++ )
+    // Segment start and end
+    VECTOR2I seg_start, seg_end;
+
+    // Remember the first point of this contour
+    VECTOR2I contour_first_point = *iterator;
+
+    // Iterate through all the corners of the outlines and build the segments to draw
+    while( iterator )
     {
-        int xi = GetCornerPosition( ic ).x;
-        int yi = GetCornerPosition( ic ).y;
-        int xf, yf;
+        // Get the first point of the current segment
+        seg_start = *iterator;
 
-        if( !m_Poly->m_CornersList.IsEndContour( ic ) && ic < icmax )
+        // Get the last point of the current segment, handling the case where the end of the
+        // contour is reached, when the last point of the segment is the first point of the
+        // contour
+        if( !iterator.IsEndContour() )
         {
-            is_close_segment = false;
-            xf = GetCornerPosition( ic + 1 ).x;
-            yf = GetCornerPosition( ic + 1 ).y;
+            // Set GR mode to default
+            current_gr_mode = draw_mode;
 
-            if( m_Poly->m_CornersList.IsEndContour( ic + 1 ) || (ic == icmax - 1) )
+            SHAPE_POLY_SET::ITERATOR iterator_copy = iterator;
+            iterator_copy++;
+            if( iterator_copy.IsEndContour() )
                 current_gr_mode = GR_XOR;
-            else
-                current_gr_mode = draw_mode;
+
+            is_close_segment = false;
+
+            iterator++;
+            seg_end = *iterator;
         }
-        else    // Draw the line from last corner to the first corner of the current contour
+        else
         {
             is_close_segment = true;
-            current_gr_mode  = GR_XOR;
-            xf = start_contour_pos.x;
-            yf = start_contour_pos.y;
 
-            // Prepare the next contour for drawing, if exists
-            if( ic < icmax )
-                start_contour_pos = GetCornerPosition( ic + 1 );
+            seg_end = contour_first_point;
+
+            // Reassign first point of the contour to the next contour start
+            iterator++;
+
+            if( iterator )
+                contour_first_point = *iterator;
+
+            // Set GR mode to XOR
+            current_gr_mode = GR_XOR;
         }
 
         GRSetDrawMode( DC, current_gr_mode );
 
         if( is_close_segment )
-            GRLine( panel->GetClipBox(), DC, xi, yi, xf, yf, 0, WHITE );
+            GRLine( panel->GetClipBox(), DC, seg_start.x, seg_start.y, seg_end.x, seg_end.y, 0,
+                    WHITE );
         else
-            GRLine( panel->GetClipBox(), DC, xi, yi, xf, yf, 0, color );
+            GRLine( panel->GetClipBox(), DC, seg_start.x, seg_start.y, seg_end.x, seg_end.y, 0,
+                    color );
     }
 }
 
@@ -462,90 +482,109 @@ void ZONE_CONTAINER::SetCornerRadius( unsigned int aRadius )
 
 bool ZONE_CONTAINER::HitTest( const wxPoint& aPosition ) const
 {
-    if( HitTestForCorner( aPosition ) >= 0 )
-        return true;
-
-    if( HitTestForEdge( aPosition ) >= 0 )
-        return true;
-
-    return false;
+    return HitTestForCorner( aPosition ) || HitTestForEdge( aPosition );
 }
+
 
 void ZONE_CONTAINER::SetSelectedCorner( const wxPoint& aPosition )
 {
-    m_CornerSelection = HitTestForCorner( aPosition );
+    SHAPE_POLY_SET::VERTEX_INDEX corner;
 
-    if( m_CornerSelection < 0 )
-        m_CornerSelection = HitTestForEdge( aPosition );
+    // If there is some corner to be selected, assign it to m_CornerSelection
+    if( HitTestForCorner( aPosition, corner ) || HitTestForEdge( aPosition, corner ) )
+    {
+        if( m_CornerSelection == nullptr )
+            m_CornerSelection = new SHAPE_POLY_SET::VERTEX_INDEX;
+
+        *m_CornerSelection = corner;
+    }
 }
-
 
 // Zones outlines have no thickness, so it Hit Test functions
 // we must have a default distance between the test point
 // and a corner or a zone edge:
 #define MAX_DIST_IN_MM 0.25
 
-int ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos ) const
+bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos,
+                                       SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const
 {
     int distmax = Millimeter2iu( MAX_DIST_IN_MM );
-    return m_Poly->HitTestForCorner( refPos, distmax );
+
+    return m_Poly->CollideVertex( VECTOR2I( refPos ), aCornerHit, distmax );
 }
 
 
-int ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos ) const
+bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos ) const
+{
+    SHAPE_POLY_SET::VERTEX_INDEX dummy;
+    return HitTestForCorner( refPos, dummy );
+}
+
+
+bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos,
+                                     SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const
 {
     int distmax = Millimeter2iu( MAX_DIST_IN_MM );
-    return m_Poly->HitTestForEdge( refPos, distmax );
+
+    return m_Poly->CollideEdge( VECTOR2I( refPos ), aCornerHit, distmax );
+}
+
+
+bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos ) const
+{
+    SHAPE_POLY_SET::VERTEX_INDEX dummy;
+    return HitTestForEdge( refPos, dummy );
 }
 
 
 bool ZONE_CONTAINER::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_RECT arect = aRect;
-    arect.Inflate( aAccuracy );
-    EDA_RECT bbox = m_Poly->GetBoundingBox();
+    // Convert to BOX2I
+    BOX2I aBox = aRect;
+    aBox.Inflate( aAccuracy );
+    BOX2I bbox = m_Poly->BBox();
     bbox.Normalize();
 
     if( aContained )
-         return arect.Contains( bbox );
-    else    // Test for intersection between aRect and the polygon
+         return aBox.Contains( bbox );
+    else    // Test for intersection between aBox and the polygon
             // For a polygon, using its bounding box has no sense here
     {
-        // Fast test: if aRect is outside the polygon bounding box,
+        // Fast test: if aBox is outside the polygon bounding box,
         // rectangles cannot intersect
-        if( ! bbox.Intersects( arect ) )
+        if( ! bbox.Intersects( aBox ) )
             return false;
 
-        // aRect is inside the polygon bounding box,
+        // aBox is inside the polygon bounding box,
         // and can intersect the polygon: use a fine test.
-        // aRect intersects the polygon if at least one aRect corner
+        // aBox intersects the polygon if at least one aBox corner
         // is inside the polygon
-        wxPoint corner = arect.GetOrigin();
+        wxPoint corner = static_cast<wxPoint>( aBox.GetOrigin() );
 
         if( HitTestInsideZone( corner ) )
             return true;
 
-        corner.x = arect.GetEnd().x;
+        corner.x = aBox.GetEnd().x;
 
         if( HitTestInsideZone( corner ) )
             return true;
 
-        corner = arect.GetEnd();
+        corner = static_cast<wxPoint>( aBox.GetEnd() );
 
         if( HitTestInsideZone( corner ) )
             return true;
 
-        corner.x = arect.GetOrigin().x;
+        corner.x = aBox.GetOrigin().x;
 
         if( HitTestInsideZone( corner ) )
             return true;
 
-        // No corner inside arect, but outlines can intersect arect
-        // if one of outline corners is inside arect
-        int count = m_Poly->GetCornersCount();
+        // No corner inside aBox, but outlines can intersect aBox
+        // if one of outline corners is inside aBox
+        int count = m_Poly->TotalVertices();
         for( int ii =0; ii < count; ii++ )
         {
-            if( arect.Contains( m_Poly->GetPos( ii ) ) )
+            if( aBox.Contains( m_Poly->Vertex( ii ) ) )
                 return true;
         }
 
@@ -595,9 +634,8 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     // Display Cutout instead of Outline for holes inside a zone
     // i.e. when num contour !=0
-    int ncont = m_Poly->GetContour( m_CornerSelection );
-
-    if( ncont )
+    // Check whether the selected corner is in a hole; i.e., in any contour but the first one.
+    if( m_CornerSelection != nullptr && m_CornerSelection->m_contour > 0 )
         msg << wxT( " " ) << _( "(Cutout)" );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg, DARKCYAN ) );
@@ -648,7 +686,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), BROWN ) );
 
-    msg.Printf( wxT( "%d" ), (int) m_Poly->m_CornersList.GetCornersCount() );
+    msg.Printf( wxT( "%d" ), (int) m_Poly->TotalVertices() );
     aList.push_back( MSG_PANEL_ITEM( _( "Corners" ), msg, BLUE ) );
 
     if( m_FillMode )
@@ -659,7 +697,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Fill Mode" ), msg, BROWN ) );
 
     // Useful for statistics :
-    msg.Printf( wxT( "%d" ), (int) m_Poly->m_HatchLines.size() );
+    msg.Printf( wxT( "%d" ), (int) m_HatchLines.size() );
     aList.push_back( MSG_PANEL_ITEM( _( "Hatch Lines" ), msg, BLUE ) );
 
     if( !m_FilledPolysList.IsEmpty() )
@@ -675,12 +713,9 @@ void ZONE_CONTAINER::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 void ZONE_CONTAINER::Move( const wxPoint& offset )
 {
     /* move outlines */
-    for( unsigned ii = 0; ii < m_Poly->m_CornersList.GetCornersCount(); ii++ )
-    {
-        SetCornerPosition( ii, GetCornerPosition( ii ) + offset );
-    }
+    m_Poly->Move( VECTOR2I( offset ) );
 
-    m_Poly->Hatch();
+    Hatch();
 
     m_FilledPolysList.Move( VECTOR2I( offset.x, offset.y ) );
 
@@ -694,23 +729,10 @@ void ZONE_CONTAINER::Move( const wxPoint& offset )
 
 void ZONE_CONTAINER::MoveEdge( const wxPoint& offset, int aEdge )
 {
-    // Move the start point of the selected edge:
-    SetCornerPosition( aEdge, GetCornerPosition( aEdge ) + offset );
+    m_Poly->Edge( aEdge ).A += VECTOR2I( offset );
+    m_Poly->Edge( aEdge ).B += VECTOR2I( offset );
 
-    // Move the end point of the selected edge:
-    if( m_Poly->m_CornersList.IsEndContour( aEdge ) || aEdge == GetNumCorners() - 1 )
-    {
-        int icont = m_Poly->GetContour( aEdge );
-        aEdge = m_Poly->GetContourStart( icont );
-    }
-    else
-    {
-        aEdge++;
-    }
-
-    SetCornerPosition( aEdge, GetCornerPosition( aEdge ) + offset );
-
-    m_Poly->Hatch();
+    Hatch();
 }
 
 
@@ -718,18 +740,18 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
 {
     wxPoint pos;
 
-    for( unsigned ic = 0; ic < m_Poly->m_CornersList.GetCornersCount(); ic++ )
+    for( auto iterator = m_Poly->IterateWithHoles(); iterator; iterator++ )
     {
-        pos = m_Poly->m_CornersList.GetPos( ic );
+        pos = static_cast<wxPoint>( *iterator );
         RotatePoint( &pos, centre, angle );
-        m_Poly->SetX( ic, pos.x );
-        m_Poly->SetY( ic, pos.y );
+        iterator->x = pos.x;
+        iterator->y = pos.y;
     }
 
-    m_Poly->Hatch();
+    Hatch();
 
     /* rotate filled areas: */
-    for( SHAPE_POLY_SET::ITERATOR ic = m_FilledPolysList.Iterate(); ic; ++ic )
+    for( auto ic = m_FilledPolysList.Iterate(); ic; ++ic )
         RotatePoint( &ic->x, &ic->y, centre.x, centre.y, angle );
 
     for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
@@ -750,15 +772,15 @@ void ZONE_CONTAINER::Flip( const wxPoint& aCentre )
 
 void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
 {
-    for( unsigned ic = 0; ic < m_Poly->m_CornersList.GetCornersCount(); ic++ )
+    for( auto iterator = m_Poly->IterateWithHoles(); iterator; iterator++ )
     {
-        int py = mirror_ref.y - m_Poly->m_CornersList.GetY( ic );
-        m_Poly->m_CornersList.SetY( ic, py + mirror_ref.y );
+        int py = mirror_ref.y - iterator->y;
+        iterator->y = py + mirror_ref.y;
     }
 
-    m_Poly->Hatch();
+    Hatch();
 
-    for( SHAPE_POLY_SET::ITERATOR ic = m_FilledPolysList.Iterate(); ic; ++ic )
+    for( auto ic = m_FilledPolysList.Iterate(); ic; ++ic )
     {
         int py = mirror_ref.y - ic->y;
         ic->y = py + mirror_ref.y;
@@ -786,18 +808,19 @@ void ZONE_CONTAINER::AddPolygon( std::vector< wxPoint >& aPolygon )
     if( aPolygon.empty() )
         return;
 
+    SHAPE_LINE_CHAIN outline;
+
+    // Create an outline and populate it with the points of aPolygon
     for( unsigned i = 0;  i < aPolygon.size();  i++ )
     {
-        if( i == 0 )
-            m_Poly->Start( GetLayer(), aPolygon[i].x, aPolygon[i].y, GetHatchStyle() );
-        else
-            AppendCorner( aPolygon[i] );
+        outline.Append( VECTOR2I( aPolygon[i] ) );
     }
 
-    m_Poly->CloseLastContour();
+    outline.SetClosed( true );
+
+    // Add the outline as a new polygon in the polygon set
+    m_Poly->AddOutline( outline );
 }
-
-
 
 wxString ZONE_CONTAINER::GetSelectMenuText() const
 {
@@ -805,10 +828,9 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
     NETINFO_ITEM* net;
     BOARD* board = GetBoard();
 
-    int ncont = m_Poly->GetContour( m_CornerSelection );
-
-    if( ncont )
-        text << wxT( " " ) << _( "(Cutout)" );
+    // Check whether the selected contour is a hole (contour index > 0)
+    if( m_CornerSelection != nullptr &&  m_CornerSelection->m_contour > 0 )
+            text << wxT( " " ) << _( "(Cutout)" );
 
     if( GetIsKeepout() )
         text << wxT( " " ) << _( "(Keepout)" );
@@ -847,6 +869,204 @@ wxString ZONE_CONTAINER::GetSelectMenuText() const
                  GetChars( GetLayerName() ) );
 
     return msg;
+}
+
+
+int ZONE_CONTAINER::GetHatchPitch() const
+{
+    return m_hatchPitch;
+}
+
+
+void ZONE_CONTAINER::SetHatch( int aHatchStyle, int aHatchPitch, bool aRebuildHatch )
+{
+    SetHatchPitch( aHatchPitch );
+    m_hatchStyle = (ZONE_CONTAINER::HATCH_STYLE) aHatchStyle;
+
+    if( aRebuildHatch )
+        Hatch();
+}
+
+
+void ZONE_CONTAINER::SetHatchPitch( int aPitch )
+{
+    m_hatchPitch = aPitch;
+}
+
+
+void ZONE_CONTAINER::UnHatch()
+{
+    m_HatchLines.clear();
+}
+
+
+// Creates hatch lines inside the outline of the complex polygon
+// sort function used in ::Hatch to sort points by descending wxPoint.x values
+bool sortEndsByDescendingX( const VECTOR2I& ref, const VECTOR2I& tst )
+{
+    return tst.x < ref.x;
+}
+
+// Implementation copied from old CPolyLine
+void ZONE_CONTAINER::Hatch()
+{
+    UnHatch();
+
+    if( m_hatchStyle == NO_HATCH || m_hatchPitch == 0 || m_Poly->IsEmpty() )
+        return;
+
+    // define range for hatch lines
+    int min_x = m_Poly->Vertex( 0 ).x;
+    int max_x = m_Poly->Vertex( 0 ).x;
+    int min_y = m_Poly->Vertex( 0 ).y;
+    int max_y = m_Poly->Vertex( 0 ).y;
+
+    for( auto iterator = m_Poly->IterateWithHoles(); iterator; iterator++ )
+    {
+        if( iterator->x < min_x )
+            min_x = iterator->x;
+
+        if( iterator->x > max_x )
+            max_x = iterator->x;
+
+        if( iterator->y < min_y )
+            min_y = iterator->y;
+
+        if( iterator->y > max_y )
+            max_y = iterator->y;
+    }
+
+    // Calculate spacing between 2 hatch lines
+    int spacing;
+
+    if( m_hatchStyle == DIAGONAL_EDGE )
+        spacing = m_hatchPitch;
+    else
+        spacing = m_hatchPitch * 2;
+
+    // set the "length" of hatch lines (the length on horizontal axis)
+    int  hatch_line_len = m_hatchPitch;
+
+    // To have a better look, give a slope depending on the layer
+    LAYER_NUM layer = GetLayer();
+    int     slope_flag = (layer & 1) ? 1 : -1;  // 1 or -1
+    double  slope = 0.707106 * slope_flag;      // 45 degrees slope
+    int     max_a, min_a;
+
+    if( slope_flag == 1 )
+    {
+        max_a   = KiROUND( max_y - slope * min_x );
+        min_a   = KiROUND( min_y - slope * max_x );
+    }
+    else
+    {
+        max_a   = KiROUND( max_y - slope * max_x );
+        min_a   = KiROUND( min_y - slope * min_x );
+    }
+
+    min_a = (min_a / spacing) * spacing;
+
+    // calculate an offset depending on layer number,
+    // for a better look of hatches on a multilayer board
+    int offset = (layer * 7) / 8;
+    min_a += offset;
+
+    // loop through hatch lines
+    #define MAXPTS 200      // Usually we store only few values per one hatch line
+                            // depending on the complexity of the zone outline
+
+    static std::vector<VECTOR2I> pointbuffer;
+    pointbuffer.clear();
+    pointbuffer.reserve( MAXPTS + 2 );
+
+    for( int a = min_a; a < max_a; a += spacing )
+    {
+        // get intersection points for this hatch line
+
+        // Note: because we should have an even number of intersections with the
+        // current hatch line and the zone outline (a closed polygon,
+        // or a set of closed polygons), if an odd count is found
+        // we skip this line (should not occur)
+        pointbuffer.clear();
+
+        // Iterate through all vertices
+        for( auto iterator = m_Poly->IterateSegmentsWithHoles(); iterator; iterator++ )
+        {
+            double  x, y, x2, y2;
+            int     ok;
+
+            SEG segment = *iterator;
+
+            ok = FindLineSegmentIntersection( a, slope,
+                                              segment.A.x, segment.A.y,
+                                              segment.B.x, segment.B.y,
+                                              &x, &y, &x2, &y2 );
+
+              if( ok )
+              {
+                  VECTOR2I point( KiROUND( x ), KiROUND( y ) );
+                  pointbuffer.push_back( point );
+              }
+
+              if( ok == 2 )
+              {
+                  VECTOR2I point( KiROUND( x2 ), KiROUND( y2 ) );
+                  pointbuffer.push_back( point );
+              }
+
+              if( pointbuffer.size() >= MAXPTS )    // overflow
+              {
+                  wxASSERT( 0 );
+                  break;
+              }
+        }
+
+        // ensure we have found an even intersection points count
+        // because intersections are the ends of segments
+        // inside the polygon(s) and a segment has 2 ends.
+        // if not, this is a strange case (a bug ?) so skip this hatch
+        if( pointbuffer.size() % 2 != 0 )
+            continue;
+
+        // sort points in order of descending x (if more than 2) to
+        // ensure the starting point and the ending point of the same segment
+        // are stored one just after the other.
+        if( pointbuffer.size() > 2 )
+            sort( pointbuffer.begin(), pointbuffer.end(), sortEndsByDescendingX );
+
+        // creates lines or short segments inside the complex polygon
+        for( unsigned ip = 0; ip < pointbuffer.size(); ip += 2 )
+        {
+            int dx = pointbuffer[ip + 1].x - pointbuffer[ip].x;
+
+            // Push only one line for diagonal hatch,
+            // or for small lines < twice the line length
+            // else push 2 small lines
+            if( m_hatchStyle == DIAGONAL_FULL || fabs( dx ) < 2 * hatch_line_len )
+            {
+                m_HatchLines.push_back( SEG( pointbuffer[ip], pointbuffer[ip + 1] ) );
+            }
+            else
+            {
+                double dy = pointbuffer[ip + 1].y - pointbuffer[ip].y;
+                slope = dy / dx;
+
+                if( dx > 0 )
+                    dx = hatch_line_len;
+                else
+                    dx = -hatch_line_len;
+
+                int x1 = KiROUND( pointbuffer[ip].x + dx );
+                int x2 = KiROUND( pointbuffer[ip + 1].x - dx );
+                int y1 = KiROUND( pointbuffer[ip].y + dx * slope );
+                int y2 = KiROUND( pointbuffer[ip + 1].y - dx * slope );
+
+                m_HatchLines.push_back(SEG(pointbuffer[ip].x, pointbuffer[ip].y, x1, y1));
+
+                m_HatchLines.push_back( SEG( pointbuffer[ip+1].x, pointbuffer[ip+1].y, x2, y2 ) );
+            }
+        }
+    }
 }
 
 

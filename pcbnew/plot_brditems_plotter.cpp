@@ -646,7 +646,7 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
      *
      * in non filled mode the outline is plotted, but not the filling items
      */
-    for( SHAPE_POLY_SET::CONST_ITERATOR ic =  polysList.CIterate(); ic; ++ic )
+    for( auto ic = polysList.CIterate(); ic; ++ic )
     {
         wxPoint pos( ic->x, ic->y );
         cornerList.push_back( pos );

@@ -2474,7 +2474,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 {
     unique_ptr<ZONE_CONTAINER> zc( new ZONE_CONTAINER( m_board ) );
 
-    CPolyLine::HATCH_STYLE outline_hatch = CPolyLine::NO_HATCH;
+    ZONE_CONTAINER::HATCH_STYLE outline_hatch = ZONE_CONTAINER::NO_HATCH;
     bool    sawCorner = false;
     char    buf[1024];
     char*   line;
@@ -2489,17 +2489,13 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             // e.g. "ZCorner 25650 49500 0"
             BIU x    = biuParse( line + SZ( "ZCorner" ), &data );
             BIU y    = biuParse( data, &data );
-            int flag = intParse( data );
 
             if( !sawCorner )
-                zc->Outline()->Start( zc->GetLayer(), x, y, outline_hatch );
+                zc->NewHole();
             else
                 zc->AppendCorner( wxPoint( x, y ) );
 
             sawCorner = true;
-
-            if( flag )
-                zc->Outline()->CloseLastContour();
         }
 
         else if( TESTLINE( "ZInfo" ) )      // general info found
@@ -2540,9 +2536,9 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
             switch( *hopt )   // upper case required
             {
-            case 'N':   outline_hatch = CPolyLine::NO_HATCH;        break;
-            case 'E':   outline_hatch = CPolyLine::DIAGONAL_EDGE;   break;
-            case 'F':   outline_hatch = CPolyLine::DIAGONAL_FULL;   break;
+            case 'N':   outline_hatch = ZONE_CONTAINER::NO_HATCH;        break;
+            case 'E':   outline_hatch = ZONE_CONTAINER::DIAGONAL_EDGE;   break;
+            case 'F':   outline_hatch = ZONE_CONTAINER::DIAGONAL_FULL;   break;
 
             default:
                 m_error.Printf( wxT( "Bad ZAux for CZONE_CONTAINER '%s'" ), zc->GetNetname().GetData() );
@@ -2724,9 +2720,8 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
                 // Hatch here, after outlines corners are read
                 // Set hatch here, after outlines corners are read
-                zc->Outline()->SetHatch( outline_hatch,
-                                         Mils2iu( CPolyLine::GetDefaultHatchPitchMils() ),
-                                         true );
+                zc->SetHatch( outline_hatch, Mils2iu( ZONE_CONTAINER::GetDefaultHatchPitchMils() ),
+                              true );
 
                 m_board->Add( zc.release() );
             }

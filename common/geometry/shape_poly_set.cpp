@@ -1,8 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 CERN
+ * Copyright (C) 2015-2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  *
  * Point in polygon algorithm adapted from Clipper Library (C) Angus Johnson,
  * subject to Clipper library license.
@@ -32,6 +33,8 @@
 #include <list>
 #include <algorithm>
 
+#include <common.h>
+
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
@@ -41,12 +44,106 @@ using namespace ClipperLib;
 SHAPE_POLY_SET::SHAPE_POLY_SET() :
     SHAPE( SH_POLY_SET )
 {
+}
 
+
+SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther ) :
+    SHAPE( SH_POLY_SET ), m_polys( aOther.m_polys )
+{
 }
 
 
 SHAPE_POLY_SET::~SHAPE_POLY_SET()
 {
+}
+
+
+SHAPE* SHAPE_POLY_SET::Clone() const
+{
+    return new SHAPE_POLY_SET( *this );
+}
+
+
+bool SHAPE_POLY_SET::GetRelativeIndices( int aGlobalIdx,
+                                         SHAPE_POLY_SET::VERTEX_INDEX* aRelativeIndices ) const
+{
+    int polygonIdx = 0;
+    unsigned int contourIdx = 0;
+    int vertexIdx = 0;
+
+    int currentGlobalIdx = 0;
+
+    for( polygonIdx = 0; polygonIdx < OutlineCount(); polygonIdx++ )
+    {
+        const POLYGON currentPolygon = CPolygon( polygonIdx );
+
+        for( contourIdx = 0; contourIdx < currentPolygon.size(); contourIdx++ )
+        {
+            SHAPE_LINE_CHAIN currentContour = currentPolygon[contourIdx];
+            int totalPoints = currentContour.PointCount();
+
+            for( vertexIdx = 0; vertexIdx < totalPoints; vertexIdx++ )
+            {
+                // Check if the current vertex is the globally indexed as aGlobalIdx
+                if( currentGlobalIdx == aGlobalIdx )
+                {
+                    aRelativeIndices->m_polygon = polygonIdx;
+                    aRelativeIndices->m_contour = contourIdx;
+                    aRelativeIndices->m_vertex  = vertexIdx;
+
+                    return true;
+                }
+
+                // Advance
+                currentGlobalIdx++;
+            }
+        }
+    }
+
+    return false;
+}
+
+
+bool SHAPE_POLY_SET::GetGlobalIndex( SHAPE_POLY_SET::VERTEX_INDEX aRelativeIndices,
+                                     int& aGlobalIdx )
+{
+    int selectedVertex = aRelativeIndices.m_vertex;
+    unsigned int selectedContour = aRelativeIndices.m_contour;
+    unsigned int selectedPolygon = aRelativeIndices.m_polygon;
+
+    // Check whether the vertex indices make sense in this poly set
+    if( selectedPolygon < m_polys.size() && selectedContour < m_polys[selectedPolygon].size() &&
+        selectedVertex < m_polys[selectedPolygon][selectedContour].PointCount() )
+    {
+        POLYGON currentPolygon;
+
+        aGlobalIdx = 0;
+
+        for( unsigned int polygonIdx = 0; polygonIdx < selectedPolygon; polygonIdx++ )
+        {
+            currentPolygon = Polygon( polygonIdx );
+
+            for( unsigned int contourIdx = 0; contourIdx < currentPolygon.size(); contourIdx++ )
+            {
+                aGlobalIdx += currentPolygon[contourIdx].PointCount();
+            }
+        }
+
+        currentPolygon = Polygon( selectedPolygon );
+
+        for( unsigned int contourIdx = 0; contourIdx < selectedContour; contourIdx ++ )
+        {
+            aGlobalIdx += currentPolygon[contourIdx].PointCount();
+        }
+
+        aGlobalIdx += selectedVertex;
+
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 
@@ -66,13 +163,18 @@ int SHAPE_POLY_SET::NewHole( int aOutline )
     SHAPE_LINE_CHAIN empty_path;
     empty_path.SetClosed( true );
 
-    m_polys.back().push_back( empty_path );
+    // Default outline is the last one
+    if( aOutline < 0 )
+        aOutline += m_polys.size();
+
+    // Add hole to the selected outline
+    m_polys[aOutline].push_back( empty_path );
 
     return m_polys.back().size() - 2;
 }
 
 
-int SHAPE_POLY_SET::Append( int x, int y, int aOutline, int aHole )
+int SHAPE_POLY_SET::Append( int x, int y, int aOutline, int aHole, bool aAllowDuplication )
 {
     if( aOutline < 0 )
         aOutline += m_polys.size();
@@ -87,9 +189,31 @@ int SHAPE_POLY_SET::Append( int x, int y, int aOutline, int aHole )
     assert( aOutline < (int)m_polys.size() );
     assert( idx < (int)m_polys[aOutline].size() );
 
-    m_polys[aOutline][idx].Append( x, y );
+    m_polys[aOutline][idx].Append( x, y, aAllowDuplication );
 
     return m_polys[aOutline][idx].PointCount();
+}
+
+
+void SHAPE_POLY_SET::InsertVertex( int aGlobalIndex, VECTOR2I aNewVertex )
+{
+    VERTEX_INDEX index;
+
+    if( aGlobalIndex < 0 )
+        aGlobalIndex = 0;
+
+    if( aGlobalIndex >= TotalVertices() ){
+        Append( aNewVertex );
+    }
+    else
+    {
+        // Assure the position to be inserted exists; throw an exception otherwise
+        if( GetRelativeIndices( aGlobalIndex, &index ) )
+            m_polys[index.m_polygon][index.m_contour].Insert( index.m_vertex, aNewVertex );
+        else
+            throw( std::out_of_range( "aGlobalIndex-th vertex does not exist" ) );
+    }
+
 }
 
 
@@ -112,26 +236,22 @@ int SHAPE_POLY_SET::VertexCount( int aOutline , int aHole  ) const
 }
 
 
-const VECTOR2I& SHAPE_POLY_SET::CVertex( int index, int aOutline , int aHole ) const
+SHAPE_POLY_SET SHAPE_POLY_SET::Subset( int aFirstPolygon, int aLastPolygon )
 {
-    if( aOutline < 0 )
-        aOutline += m_polys.size();
+    assert( aFirstPolygon >= 0 && aLastPolygon <= OutlineCount() );
 
-    int idx;
+    SHAPE_POLY_SET newPolySet;
 
-    if( aHole < 0 )
-        idx = 0;
-    else
-        idx = aHole + 1;
+    for( int index = aFirstPolygon; index < aLastPolygon; index++ )
+    {
+        newPolySet.m_polys.push_back( Polygon( index ) );
+    }
 
-    assert( aOutline < (int)m_polys.size() );
-    assert( idx < (int)m_polys[aOutline].size() );
-
-    return m_polys[aOutline][idx].CPoint( index );
+    return newPolySet;
 }
 
 
-VECTOR2I& SHAPE_POLY_SET::Vertex( int index, int aOutline , int aHole )
+VECTOR2I& SHAPE_POLY_SET::Vertex( int aIndex, int aOutline, int aHole )
 {
     if( aOutline < 0 )
         aOutline += m_polys.size();
@@ -146,7 +266,116 @@ VECTOR2I& SHAPE_POLY_SET::Vertex( int index, int aOutline , int aHole )
     assert( aOutline < (int)m_polys.size() );
     assert( idx < (int)m_polys[aOutline].size() );
 
-    return m_polys[aOutline][idx].Point( index );
+    return m_polys[aOutline][idx].Point( aIndex );
+}
+
+
+const VECTOR2I& SHAPE_POLY_SET::CVertex( int aIndex, int aOutline, int aHole ) const
+{
+    if( aOutline < 0 )
+        aOutline += m_polys.size();
+
+    int idx;
+
+    if( aHole < 0 )
+        idx = 0;
+    else
+        idx = aHole + 1;
+
+    assert( aOutline < (int)m_polys.size() );
+    assert( idx < (int)m_polys[aOutline].size() );
+
+    return m_polys[aOutline][idx].CPoint( aIndex );
+}
+
+
+VECTOR2I& SHAPE_POLY_SET::Vertex( int aGlobalIndex )
+{
+    SHAPE_POLY_SET::VERTEX_INDEX index;
+
+    // Assure the passed index references a legal position; abort otherwise
+    if( !GetRelativeIndices( aGlobalIndex, &index ) )
+        throw( std::out_of_range( "aGlobalIndex-th vertex does not exist" ) );
+
+    return m_polys[index.m_polygon][index.m_contour].Point( index.m_vertex );
+}
+
+
+const VECTOR2I& SHAPE_POLY_SET::CVertex( int aGlobalIndex ) const
+{
+    SHAPE_POLY_SET::VERTEX_INDEX index;
+
+    // Assure the passed index references a legal position; abort otherwise
+    if( !GetRelativeIndices( aGlobalIndex, &index ) )
+        throw( std::out_of_range( "aGlobalIndex-th vertex does not exist" ) );
+
+    return m_polys[index.m_polygon][index.m_contour].CPoint( index.m_vertex );
+}
+
+
+VECTOR2I& SHAPE_POLY_SET::Vertex( SHAPE_POLY_SET::VERTEX_INDEX index )
+{
+    return Vertex( index.m_vertex, index.m_polygon, index.m_contour - 1 );
+}
+
+
+const VECTOR2I& SHAPE_POLY_SET::CVertex( SHAPE_POLY_SET::VERTEX_INDEX index ) const
+{
+    return CVertex( index.m_vertex, index.m_polygon, index.m_contour - 1 );
+}
+
+
+SEG SHAPE_POLY_SET::Edge( int aGlobalIndex )
+{
+    SHAPE_POLY_SET::VERTEX_INDEX indices;
+
+    // If the edge does not exist, throw an exception, it is an illegal access memory error
+    if( !GetRelativeIndices( aGlobalIndex, &indices ) )
+        throw( std::out_of_range( "aGlobalIndex-th edge does not exist" ) );
+
+    return m_polys[indices.m_polygon][indices.m_contour].Segment( indices.m_vertex );
+}
+
+
+bool SHAPE_POLY_SET::IsPolygonSelfIntersecting( int aPolygonIndex )
+{
+    // Get polygon
+    const POLYGON poly = CPolygon( aPolygonIndex );
+
+    SEGMENT_ITERATOR iterator = IterateSegmentsWithHoles( aPolygonIndex );
+    SEGMENT_ITERATOR innerIterator;
+
+    for( iterator = IterateSegmentsWithHoles( aPolygonIndex ); iterator; iterator++ )
+    {
+        SEG firstSegment = *iterator;
+
+        // Iterate through all remaining segments.
+        innerIterator = iterator;
+
+        // Start in the next segment, we don't want to check collision between a segment and itself
+        for( innerIterator++; innerIterator; innerIterator++ )
+        {
+            SEG secondSegment = *innerIterator;
+
+            // Check whether the two segments built collide, only when they are not adjacent.
+            if( !iterator.IsAdjacent( innerIterator ) && firstSegment.Collide( secondSegment, 0 ) )
+                return true;
+        }
+    }
+
+    return false;
+}
+
+
+bool SHAPE_POLY_SET::IsSelfIntersecting()
+{
+    for( unsigned int polygon = 0; polygon < m_polys.size(); polygon++ )
+    {
+        if( IsPolygonSelfIntersecting( polygon ) )
+            return true;
+    }
+
+    return false;
 }
 
 
@@ -205,8 +434,11 @@ const SHAPE_LINE_CHAIN SHAPE_POLY_SET::convertFromClipper( const Path& aPath )
     for( unsigned int i = 0; i < aPath.size(); i++ )
         lc.Append( aPath[i].X, aPath[i].Y );
 
+    lc.SetClosed( true );
+
     return lc;
 }
+
 
 void SHAPE_POLY_SET::booleanOp( ClipType aType, const SHAPE_POLY_SET& aOtherShape,
                                 POLYGON_MODE aFastMode )
@@ -363,7 +595,7 @@ void SHAPE_POLY_SET::importTree( PolyTree* tree )
             for( unsigned int i = 0; i < n->Childs.size(); i++ )
                 paths.push_back( convertFromClipper( n->Childs[i]->Contour ) );
 
-            m_polys.push_back(paths);
+            m_polys.push_back( paths );
         }
     }
 }
@@ -410,6 +642,7 @@ struct FractureEdge
 
 
 typedef std::vector<FractureEdge*> FractureEdgeSet;
+
 
 static int processEdge( FractureEdgeSet& edges, FractureEdge* edge )
 {
@@ -477,6 +710,7 @@ static int processEdge( FractureEdgeSet& edges, FractureEdge* edge )
 
     return 0;
 }
+
 
 void SHAPE_POLY_SET::fractureSingle( POLYGON& paths )
 {
@@ -590,11 +824,59 @@ void SHAPE_POLY_SET::Fracture( POLYGON_MODE aFastMode )
 }
 
 
+bool SHAPE_POLY_SET::HasHoles() const
+{
+    // Iterate through all the polygons on the set
+    for( const POLYGON& paths : m_polys )
+    {
+        // If any of them has more than one contour, it is a hole.
+        if( paths.size() > 1 )
+            return true;
+    }
+
+    // Return false if and only if every polygon has just one outline, without holes.
+    return false;
+}
+
+
 void SHAPE_POLY_SET::Simplify( POLYGON_MODE aFastMode )
 {
     SHAPE_POLY_SET empty;
 
     booleanOp( ctUnion, empty, aFastMode );
+}
+
+
+int SHAPE_POLY_SET::NormalizeAreaOutlines()
+{
+    // We are expecting only one main outline, but this main outline can have holes
+    // if holes: combine holes and remove them from the main outline.
+    // Note also we are using SHAPE_POLY_SET::PM_STRICTLY_SIMPLE in polygon
+    // calculations, but it is not mandatory. It is used mainly
+    // because there is usually only very few vertices in area outlines
+    SHAPE_POLY_SET::POLYGON& outline = Polygon( 0 );
+    SHAPE_POLY_SET holesBuffer;
+
+    // Move holes stored in outline to holesBuffer:
+    // The first SHAPE_LINE_CHAIN is the main outline, others are holes
+    while( outline.size() > 1 )
+    {
+        holesBuffer.AddOutline( outline.back() );
+        outline.pop_back();
+    }
+
+    Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+    // If any hole, substract it to main outline
+    if( holesBuffer.OutlineCount() )
+    {
+        holesBuffer.Simplify( SHAPE_POLY_SET::PM_FAST);
+        BooleanSubtract( holesBuffer, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    }
+
+    RemoveNullSegments();
+
+    return OutlineCount();
 }
 
 
@@ -607,10 +889,10 @@ const std::string SHAPE_POLY_SET::Format() const
     for( unsigned i = 0; i < m_polys.size(); i++ )
     {
         ss << "poly " << m_polys[i].size() << "\n";
-        for( unsigned j = 0; j < m_polys[i].size(); j++)
+        for( unsigned j = 0; j < m_polys[i].size(); j++ )
         {
             ss << m_polys[i][j].PointCount() << "\n";
-            for( int v = 0; v < m_polys[i][j].PointCount(); v++)
+            for( int v = 0; v < m_polys[i][j].PointCount(); v++ )
                 ss << m_polys[i][j].CPoint( v ).x << " " << m_polys[i][j].CPoint( v ).y << "\n";
         }
         ss << "\n";
@@ -694,9 +976,105 @@ const BOX2I SHAPE_POLY_SET::BBox( int aClearance ) const
 }
 
 
+bool SHAPE_POLY_SET::PointOnEdge( const VECTOR2I& aP ) const
+{
+    // Iterate through all the polygons in the set
+    for( const POLYGON& polygon : m_polys )
+    {
+        // Iterate through all the line chains in the polygon
+        for( const SHAPE_LINE_CHAIN& lineChain : polygon )
+        {
+            if( lineChain.PointOnEdge( aP ) )
+                return true;
+        }
+    }
+
+    return false;
+}
+
+
+bool SHAPE_POLY_SET::Collide( const VECTOR2I& aP, int aClearance ) const
+{
+    SHAPE_POLY_SET polySet = SHAPE_POLY_SET( *this );
+
+    // Inflate the polygon if necessary.
+    if( aClearance > 0 )
+    {
+        // fixme: the number of arc segments should not be hardcoded
+        polySet.Inflate( aClearance, 8 );
+    }
+
+    // There is a collision if and only if the point is inside of the polygon.
+    return polySet.Contains( aP );
+}
+
+
 void SHAPE_POLY_SET::RemoveAllContours()
 {
     m_polys.clear();
+}
+
+
+void SHAPE_POLY_SET::RemoveContour( int aContourIdx, int aPolygonIdx )
+{
+    // Default polygon is the last one
+    if( aPolygonIdx < 0 )
+        aPolygonIdx += m_polys.size();
+
+     m_polys[aPolygonIdx].erase( m_polys[aPolygonIdx].begin() + aContourIdx );
+}
+
+
+int SHAPE_POLY_SET::RemoveNullSegments()
+{
+    int removed = 0;
+
+    ITERATOR iterator = IterateWithHoles();
+
+    VECTOR2I contourStart = *iterator;
+    VECTOR2I segmentStart, segmentEnd;
+
+    VERTEX_INDEX indexStart;
+
+    while( iterator )
+    {
+        // Obtain first point and its index
+        segmentStart = *iterator;
+        indexStart = iterator.GetIndex();
+
+        // Obtain last point
+        if( iterator.IsEndContour() )
+        {
+            segmentEnd = contourStart;
+
+            // Advance
+            iterator++;
+
+            if( iterator )
+                contourStart = *iterator;
+        }
+        else
+        {
+            // Advance
+            iterator++;
+
+            if( iterator )
+                segmentEnd = *iterator;
+        }
+
+        // Remove segment start if both points are equal
+        if( segmentStart == segmentEnd )
+        {
+            RemoveVertex( indexStart );
+            removed++;
+
+            // Advance the iterator one position, as there is one vertex less.
+            if( iterator )
+                iterator++;
+        }
+    }
+
+    return removed;
 }
 
 
@@ -718,23 +1096,129 @@ void SHAPE_POLY_SET::Append( const VECTOR2I& aP, int aOutline, int aHole )
 }
 
 
+bool SHAPE_POLY_SET::CollideVertex( const VECTOR2I& aPoint,
+                                    SHAPE_POLY_SET::VERTEX_INDEX& aClosestVertex, int aClearance )
+{
+    // Shows whether there was a collision
+    bool collision = false;
+
+    // Difference vector between each vertex and aPoint.
+    VECTOR2D delta;
+    double distance, clearance;
+
+    // Convert clearance to double for precission when comparing distances
+    clearance = aClearance;
+
+    for( ITERATOR iterator = IterateWithHoles(); iterator; iterator++ )
+    {
+        // Get the difference vector between current vertex and aPoint
+        delta = *iterator - aPoint;
+
+        // Compute distance
+        distance = delta.EuclideanNorm();
+
+        // Check for collisions
+        if( distance <= clearance )
+        {
+            collision = true;
+
+            // Update aClearance to look for closer vertices
+            clearance = distance;
+
+            // Store the indices that identify the vertex
+            aClosestVertex = iterator.GetIndex();
+        }
+    }
+
+    return collision;
+}
+
+
+bool SHAPE_POLY_SET::CollideEdge( const VECTOR2I& aPoint,
+                                  SHAPE_POLY_SET::VERTEX_INDEX& aClosestVertex, int aClearance )
+{
+    // Shows whether there was a collision
+    bool collision = false;
+
+    SEGMENT_ITERATOR iterator;
+
+    for( iterator = IterateSegmentsWithHoles(); iterator; iterator++ )
+    {
+        SEG currentSegment = *iterator;
+        int distance = currentSegment.Distance( aPoint );
+
+        // Check for collisions
+        if( distance <= aClearance )
+        {
+            collision = true;
+
+            // Update aClearance to look for closer edges
+            aClearance = distance;
+
+            // Store the indices that identify the vertex
+            aClosestVertex = iterator.GetIndex();
+        }
+    }
+
+    return collision;
+}
+
+
 bool SHAPE_POLY_SET::Contains( const VECTOR2I& aP, int aSubpolyIndex ) const
 {
-    // fixme: support holes!
-
     if( m_polys.size() == 0 ) // empty set?
         return false;
 
+    // If there is a polygon specified, check the condition against that polygon
     if( aSubpolyIndex >= 0 )
-        return pointInPolygon( aP, m_polys[aSubpolyIndex][0] );
+        return containsSingle( aP, aSubpolyIndex );
 
-    for( const POLYGON& polys : m_polys )
+    // In any other case, check it against all polygons in the set
+    for( int polygonIdx = 0; polygonIdx < OutlineCount(); polygonIdx++ )
     {
-        if( polys.size() == 0 )
-            continue;
-
-        if( pointInPolygon( aP, polys[0] ) )
+        if( containsSingle( aP, polygonIdx ) )
             return true;
+    }
+
+    return false;
+
+}
+
+
+void SHAPE_POLY_SET::RemoveVertex( int aGlobalIndex )
+{
+    VERTEX_INDEX index;
+
+    // Assure the to be removed vertex exists, abort otherwise
+    if( GetRelativeIndices( aGlobalIndex, &index ) )
+        RemoveVertex( index );
+    else
+        throw( std::out_of_range( "aGlobalIndex-th vertex does not exist" ) );
+}
+
+
+void SHAPE_POLY_SET::RemoveVertex( VERTEX_INDEX aIndex )
+{
+    m_polys[aIndex.m_polygon][aIndex.m_contour].Remove( aIndex.m_vertex );
+}
+
+
+bool SHAPE_POLY_SET::containsSingle( const VECTOR2I& aP, int aSubpolyIndex ) const
+{
+    // Check that the point is inside the outline
+    if( pointInPolygon( aP, m_polys[aSubpolyIndex][0] ) )
+    {
+        // Check that the point is not in any of the holes
+        for( int holeIdx = 0; holeIdx < HoleCount( aSubpolyIndex ); holeIdx++ )
+        {
+            const SHAPE_LINE_CHAIN hole = CHole( aSubpolyIndex, holeIdx );
+            // If the point is inside a hole (and not on its edge),
+            // it is outside of the polygon
+            if( pointInPolygon( aP, hole ) && !hole.PointOnEdge( aP ) )
+                return false;
+        }
+
+        return true;
     }
 
     return false;
@@ -831,4 +1315,314 @@ int SHAPE_POLY_SET::TotalVertices() const
     }
 
     return c;
+}
+
+
+SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::ChamferPolygon( unsigned int aDistance, int aIndex )
+{
+    return chamferFilletPolygon( CORNER_MODE::CHAMFERED, aDistance, aIndex );
+}
+
+
+SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::FilletPolygon( unsigned int aRadius,
+                                                       unsigned int aSegments,
+                                                       int aIndex )
+{
+    return chamferFilletPolygon(CORNER_MODE::FILLETED, aRadius, aIndex, aSegments );
+}
+
+
+int SHAPE_POLY_SET::DistanceToPolygon( VECTOR2I aPoint, int aPolygonIndex )
+{
+    // We calculate the min dist between the segment and each outline segment
+    // However, if the segment to test is inside the outline, and does not cross
+    // any edge, it can be seen outside the polygon.
+    // Therefore test if a segment end is inside ( testing only one end is enough )
+    if( containsSingle( aPoint, aPolygonIndex ) )
+        return 0;
+
+    SEGMENT_ITERATOR iterator = IterateSegmentsWithHoles( aPolygonIndex );
+
+    SEG polygonEdge = *iterator;
+    int minDistance = polygonEdge.Distance( aPoint );
+
+    for( iterator++; iterator && minDistance > 0; iterator++ )
+    {
+        polygonEdge = *iterator;
+
+        int currentDistance = polygonEdge.Distance( aPoint );
+
+        if( currentDistance < minDistance )
+            minDistance = currentDistance;
+    }
+
+    return minDistance;
+}
+
+
+int SHAPE_POLY_SET::DistanceToPolygon( SEG aSegment, int aPolygonIndex, int aSegmentWidth )
+{
+    // We calculate the min dist between the segment and each outline segment
+    // However, if the segment to test is inside the outline, and does not cross
+    // any edge, it can be seen outside the polygon.
+    // Therefore test if a segment end is inside ( testing only one end is enough )
+    if( containsSingle( aSegment.A, aPolygonIndex ) )
+        return 0;
+
+    SEGMENT_ITERATOR iterator = IterateSegmentsWithHoles( aPolygonIndex );
+
+    SEG polygonEdge = *iterator;
+    int minDistance = polygonEdge.Distance( aSegment );
+
+    for( iterator++; iterator && minDistance > 0; iterator++ )
+    {
+        polygonEdge = *iterator;
+
+        int currentDistance = polygonEdge.Distance( aSegment );
+
+        if( currentDistance < minDistance )
+            minDistance = currentDistance;
+    }
+
+    // Take into account the width of the segment
+    if( aSegmentWidth > 0 )
+        minDistance -= aSegmentWidth/2;
+
+    // Return the maximum of minDistance and zero
+    return minDistance < 0 ? 0 : minDistance;
+}
+
+
+int SHAPE_POLY_SET::Distance( VECTOR2I aPoint )
+{
+    int currentDistance;
+    int minDistance = DistanceToPolygon( aPoint, 0 );
+
+    // Iterate through all the polygons and get the minimum distance.
+    for( unsigned int polygonIdx = 1; polygonIdx < m_polys.size(); polygonIdx++ )
+    {
+        currentDistance = DistanceToPolygon( aPoint, polygonIdx );
+
+        if( currentDistance < minDistance )
+            minDistance = currentDistance;
+    }
+
+    return minDistance;
+}
+
+
+int SHAPE_POLY_SET::Distance( SEG aSegment, int aSegmentWidth )
+{
+    int currentDistance;
+    int minDistance = DistanceToPolygon( aSegment, 0 );
+
+    // Iterate through all the polygons and get the minimum distance.
+    for( unsigned int polygonIdx = 1; polygonIdx < m_polys.size(); polygonIdx++ )
+    {
+        currentDistance = DistanceToPolygon( aSegment, polygonIdx, aSegmentWidth );
+
+        if( currentDistance < minDistance )
+            minDistance = currentDistance;
+    }
+
+    return minDistance;
+}
+
+
+bool SHAPE_POLY_SET::IsVertexInHole( int aGlobalIdx )
+{
+    VERTEX_INDEX index;
+
+    // Get the polygon and contour where the vertex is. If the vertex does not exist, return false
+    if( !GetRelativeIndices( aGlobalIdx, &index ) )
+        return false;
+
+    // The contour is a hole if its index is greater than zero
+    return index.m_contour > 0;
+}
+
+
+SHAPE_POLY_SET SHAPE_POLY_SET::Chamfer( int aDistance )
+{
+    SHAPE_POLY_SET chamfered;
+
+    for( unsigned int polygonIdx = 0; polygonIdx < m_polys.size(); polygonIdx++ )
+        chamfered.m_polys.push_back( ChamferPolygon( aDistance, polygonIdx ) );
+
+    return chamfered;
+}
+
+
+SHAPE_POLY_SET SHAPE_POLY_SET::Fillet( int aRadius, int aSegments )
+{
+    SHAPE_POLY_SET filleted;
+
+    for( size_t polygonIdx = 0; polygonIdx < m_polys.size(); polygonIdx++ )
+        filleted.m_polys.push_back( FilletPolygon( aRadius, aSegments, polygonIdx ) );
+
+    return filleted;
+}
+
+
+SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
+                                                              unsigned int aDistance,
+                                                              int aIndex,
+                                                              int aSegments )
+{
+    // Null segments create serious issues in calculations. Remove them:
+    RemoveNullSegments();
+
+    SHAPE_POLY_SET::POLYGON currentPoly = Polygon( aIndex );
+    SHAPE_POLY_SET::POLYGON newPoly;
+
+    // If the chamfering distance is zero, then the polygon remain intact.
+    if( aDistance == 0 )
+    {
+        return currentPoly;
+    }
+
+    // Iterate through all the contours (outline and holes) of the polygon.
+    for( SHAPE_LINE_CHAIN &currContour : currentPoly )
+    {
+        // Generate a new contour in the new polygon
+        SHAPE_LINE_CHAIN newContour;
+
+        // Iterate through the vertices of the contour
+        for( int currVertex = 0; currVertex < currContour.PointCount(); currVertex++ )
+        {
+            // Current vertex
+            int x1  = currContour.Point( currVertex ).x;
+            int y1  = currContour.Point( currVertex ).y;
+
+            // Indices for previous and next vertices.
+            int prevVertex;
+            int nextVertex;
+
+            // Previous and next vertices indices computation. Necessary to manage the edge cases.
+
+            // Previous vertex is the last one if the current vertex is the first one
+            prevVertex = currVertex == 0 ? currContour.PointCount() - 1 : currVertex - 1;
+
+            // next vertex is the first one if the current vertex is the last one.
+            nextVertex = currVertex == currContour.PointCount() - 1 ? 0 : currVertex + 1;
+
+            // Previous vertex computation
+            double xa = currContour.Point( prevVertex ).x - x1;
+            double ya = currContour.Point( prevVertex ).y - y1;
+
+            // Next vertex computation
+            double xb = currContour.Point( nextVertex ).x - x1;
+            double yb = currContour.Point( nextVertex ).y - y1;
+
+            // Compute the new distances
+            double lena = hypot( xa, ya );
+            double lenb = hypot( xb, yb );
+
+            // Make the final computations depending on the mode selected, chamfered or filleted.
+            if( aMode == CORNER_MODE::CHAMFERED )
+            {
+                double distance = aDistance;
+
+                // Chamfer one half of an edge at most
+                if( 0.5 * lena < distance )
+                    distance = 0.5 * lena;
+
+                if( 0.5 * lenb < distance )
+                    distance = 0.5 * lenb;
+
+                int nx1 = KiROUND( distance * xa / lena );
+                int ny1 = KiROUND( distance * ya / lena );
+
+                newContour.Append( x1 + nx1, y1 + ny1 );
+
+                int nx2 = KiROUND( distance * xb / lenb );
+                int ny2 = KiROUND( distance * yb / lenb );
+
+                newContour.Append( x1 + nx2, y1 + ny2 );
+            }
+            else // CORNER_MODE = FILLETED
+            {
+                double cosine = ( xa * xb + ya * yb ) / ( lena * lenb );
+
+                double radius = aDistance;
+                double denom  = sqrt( 2.0 / ( 1 + cosine ) - 1 );
+
+                // Do nothing in case of parallel edges
+                if( std::isinf( denom ) )
+                    continue;
+
+                // Limit rounding distance to one half of an edge
+                if( 0.5 * lena * denom < radius )
+                    radius = 0.5 * lena * denom;
+
+                if( 0.5 * lenb * denom < radius )
+                    radius = 0.5 * lenb * denom;
+
+                // Calculate fillet arc absolute center point (xc, yx)
+                double k     = radius / sqrt( .5 * ( 1 - cosine ) );
+                double lenab = sqrt( ( xa / lena + xb / lenb ) * ( xa / lena + xb / lenb ) +
+                                        ( ya / lena + yb / lenb ) * ( ya / lena + yb / lenb ) );
+                double xc = x1 + k * ( xa / lena + xb / lenb ) / lenab;
+                double yc = y1 + k * ( ya / lena + yb / lenb ) / lenab;
+
+                // Calculate arc start and end vectors
+                k = radius / sqrt( 2 / ( 1 + cosine ) - 1 );
+                double xs = x1 + k * xa / lena - xc;
+                double ys = y1 + k * ya / lena - yc;
+                double xe = x1 + k * xb / lenb - xc;
+                double ye = y1 + k * yb / lenb - yc;
+
+                // Cosine of arc angle
+                double argument = ( xs * xe + ys * ye ) / ( radius * radius );
+
+                // Make sure the argument is in [-1,1], interval in which the acos function is
+                // defined
+                if( argument < -1 )
+                    argument = -1;
+                else if( argument > 1 )
+                    argument = 1;
+
+                double arcAngle = acos( argument );
+
+                // Calculate the number of segments
+                unsigned int segments = ceil( (double) aSegments * ( arcAngle / ( 2 * M_PI ) ) );
+
+                double deltaAngle = arcAngle / segments;
+                double startAngle = atan2( -ys, xs );
+
+                // Flip arc for inner corners
+                if( xa * yb - ya * xb <= 0 )
+                    deltaAngle *= -1;
+
+                double nx = xc + xs;
+                double ny = yc + ys;
+
+                newContour.Append( KiROUND( nx ), KiROUND( ny ) );
+
+                // Store the previous added corner to make a sanity check
+                int prevX = KiROUND( nx );
+                int prevY = KiROUND( ny );
+
+                for( unsigned int j = 0; j < segments; j++ )
+                {
+                    nx = xc + cos( startAngle + (j + 1) * deltaAngle ) * radius;
+                    ny = yc - sin( startAngle + (j + 1) * deltaAngle ) * radius;
+
+                    // Sanity check: the rounding can produce repeated corners; do not add them.
+                    if( KiROUND( nx ) != prevX || KiROUND( ny ) != prevY )
+                    {
+                        newContour.Append( KiROUND( nx ), KiROUND( ny ) );
+                        prevX = KiROUND( nx );
+                        prevY = KiROUND( ny );
+                    }
+                }
+            }
+        }
+
+        // Close the current contour and add it the new polygon
+        newContour.SetClosed( true );
+        newPoly.push_back( newContour );
+    }
+
+    return newPoly;
 }
