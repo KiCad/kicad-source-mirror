@@ -30,6 +30,7 @@
 
 #include <fctsys.h>
 #include <wx/valgen.h>
+#include <wx/valnum.h>
 #include <schframe.h>
 #include <base_units.h>
 
@@ -109,6 +110,17 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
     m_Parent = aParent;
     m_CurrentText = aTextItem;
     InitDialog();
+
+    // Conservative limits 0.01 to 10.0 inches
+    int minSize = 10 * IU_PER_MILS;
+    int maxSize = 10 * 1000 * IU_PER_MILS;
+
+    wxFloatingPointValidator<double> textSizeValidator( NULL, wxNUM_VAL_NO_TRAILING_ZEROES );
+    textSizeValidator.SetPrecision( 4 );
+    textSizeValidator.SetRange( To_User_Unit( g_UserUnit, minSize ),
+                                To_User_Unit( g_UserUnit, maxSize ) );
+
+    m_TextSize->SetValidator( textSizeValidator );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
