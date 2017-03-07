@@ -322,8 +322,12 @@ private:
     /**
      * Compute the width required for the given column of a node and its
      * children.
+     *
+     * @param aNode - root node of the tree
+     * @param aCol - column number
+     * @param aHeading - heading text, to set the minimum width
      */
-    int ColWidth( CMP_TREE_NODE& aNode, int aCol );
+    int ColWidth( CMP_TREE_NODE& aTree, int aCol, wxString const& aHeading );
 
     /**
      * Return the width required to display a single row's aCol text.
@@ -331,6 +335,12 @@ private:
      * (*cough* macOS)
      */
     int WidthFor( CMP_TREE_NODE& aNode, int aCol );
+
+    /**
+     * Return the width required to display a column's heading. This is
+     * cached by column number for the same reason as the width per cell.
+     */
+    int WidthFor( wxString const& aHeading, int aCol );
 
     /**
      * Find any results worth highlighting and expand them, according to given

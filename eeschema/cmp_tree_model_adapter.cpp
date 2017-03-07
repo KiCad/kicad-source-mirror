@@ -198,10 +198,14 @@ void CMP_TREE_MODEL_ADAPTER::AttachTo( wxDataViewCtrl* aDataViewCtrl )
     aDataViewCtrl->SetIndent( kDataViewIndent );
     aDataViewCtrl->AssociateModel( this );
     aDataViewCtrl->ClearColumns();
-    m_col_part = aDataViewCtrl->AppendTextColumn( _( "Part" ), 0, wxDATAVIEW_CELL_INERT,
-                ColWidth( m_tree, 0 ) );
-    m_col_desc = aDataViewCtrl->AppendTextColumn( _( "Description" ), 1, wxDATAVIEW_CELL_INERT,
-                ColWidth( m_tree, 1 ) );
+
+    wxString part_head = _( "Part" );
+    wxString desc_head = _( "Desc" );
+
+    m_col_part = aDataViewCtrl->AppendTextColumn( part_head, 0, wxDATAVIEW_CELL_INERT,
+                ColWidth( m_tree, 0, part_head ) );
+    m_col_desc = aDataViewCtrl->AppendTextColumn( desc_head, 1, wxDATAVIEW_CELL_INERT,
+                ColWidth( m_tree, 1, desc_head ) );
     aDataViewCtrl->Thaw();
 }
 
@@ -317,18 +321,22 @@ int CMP_TREE_MODEL_ADAPTER::Compare(
 }
 
 
-int CMP_TREE_MODEL_ADAPTER::ColWidth( CMP_TREE_NODE& aNode, int aCol )
+int CMP_TREE_MODEL_ADAPTER::ColWidth( CMP_TREE_NODE& aTree, int aCol, wxString const& aHeading )
 {
     const int indent = aCol ? 0 : kDataViewIndent;
-    int max_width = aNode.Score > 0 ? WidthFor( aNode, aCol ) : 0;
 
-    for( auto& node: aNode.Children )
+    int min_width = WidthFor( aHeading, aCol );
+    int width = std::max( aTree.Score > 0 ? WidthFor( aTree, aCol ) : 0, min_width );
+
+    if( aTree.Score > 0 )
     {
-        if( aNode.Score > 0 )
-            max_width = std::max( max_width, ColWidth( *node, aCol ) + indent );
+        for( auto& node: aTree.Children )
+        {
+            width = std::max( width, ColWidth( *node, aCol, aHeading ) + indent );
+        }
     }
 
-    return max_width;
+    return width;
 }
 
 
@@ -349,6 +357,24 @@ int CMP_TREE_MODEL_ADAPTER::WidthFor( CMP_TREE_NODE& aNode, int aCol )
         m_width_cache[&aNode][1] = wdesc;
         return m_width_cache[&aNode][aCol];
     }
+}
+
+
+int CMP_TREE_MODEL_ADAPTER::WidthFor( wxString const& aHeading, int aCol )
+{
+    static std::vector<int> widths;
+
+    for( int i = (int) widths.size(); i <= aCol; ++i )
+    {
+        widths.push_back( 0 );
+    }
+
+    if( widths[aCol] == 0 )
+    {
+        widths[aCol] = m_widget->GetTextExtent( aHeading ).x;
+    }
+
+    return widths[aCol];
 }
 
 
