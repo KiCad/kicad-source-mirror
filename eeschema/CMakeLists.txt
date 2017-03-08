@@ -27,7 +27,6 @@ set( EESCHEMA_DLGS
     dialogs/dialog_bom_base.cpp
     dialogs/dialog_bom_cfg_keywords.cpp
     dialogs/dialog_choose_component.cpp
-    dialogs/dialog_choose_component_base.cpp
     dialogs/dialog_lib_edit_text.cpp
     dialogs/dialog_lib_edit_text_base.cpp
     dialogs/dialog_edit_component_in_lib.cpp

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
+ * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -24,10 +25,19 @@
 #ifndef DIALOG_CHOOSE_COMPONENT_H
 #define DIALOG_CHOOSE_COMPONENT_H
 
-#include <dialog_choose_component_base.h>
+#include "dialog_shim.h"
 #include <cmp_tree_model_adapter.h>
-#include <wx/timer.h>
-#include <memory>
+
+class wxStaticBitmap;
+class wxTextCtrl;
+class wxStdDialogButtonSizer;
+class wxDataViewCtrl;
+class wxHtmlWindow;
+class wxHtmlLinkEvent;
+class wxPanel;
+class wxChoice;
+class wxButton;
+class wxTimer;
 
 class FOOTPRINT_PREVIEW_PANEL;
 class LIB_ALIAS;
@@ -69,13 +79,8 @@ class SCH_BASE_FRAME;
  *     }
  *
  */
-class DIALOG_CHOOSE_COMPONENT : public DIALOG_CHOOSE_COMPONENT_BASE
+class DIALOG_CHOOSE_COMPONENT : public DIALOG_SHIM
 {
-    SCH_BASE_FRAME*             m_parent;
-    CMP_TREE_MODEL_ADAPTER::PTR m_adapter;
-    int             m_deMorganConvert;
-    bool            m_external_browser_requested;
-
 public:
 
     /**
@@ -91,8 +96,6 @@ public:
     DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
                              CMP_TREE_MODEL_ADAPTER::PTR& aAdapter,
                              int aDeMorganConvert );
-    virtual ~DIALOG_CHOOSE_COMPONENT();
-    void OnInitDialog( wxInitDialogEvent& event ) override;
 
     /** Function GetSelectedAlias
      * To be called after this dialog returns from ShowModal().
@@ -110,24 +113,47 @@ public:
     bool IsExternalBrowserSelected() const { return m_external_browser_requested; }
 
 protected:
-    virtual void OnSearchBoxChange( wxCommandEvent& aEvent ) override;
-    virtual void OnSearchBoxEnter( wxCommandEvent& aEvent ) override;
-    void OnSearchBoxCharHook( wxKeyEvent& aEvent );
 
-    virtual void OnTreeSelect( wxDataViewEvent& aEvent ) override;
-    virtual void OnTreeActivate( wxDataViewEvent& aEvent ) override;
+    static constexpr int DblClickDelay = 100; // milliseconds
 
-    virtual void OnStartComponentBrowser( wxMouseEvent& aEvent ) override;
-    virtual void OnHandlePreviewRepaint( wxPaintEvent& aRepaintEvent ) override;
-    virtual void OnDatasheetClick( wxHtmlLinkEvent& aEvent ) override;
+    wxPanel* ConstructLeftPanel( wxWindow* aParent );
+    wxPanel* ConstructRightPanel( wxWindow* aParent );
 
-    virtual void OnCloseTimer( wxTimerEvent& aEvent );
+    void OnInitDialog( wxInitDialogEvent& aEvent );
+    void OnCloseTimer( wxTimerEvent& aEvent );
 
-private:
-    bool updateSelection();
-    void updateFootprint();
-    void selectIfValid( const wxDataViewItem& aTreeId );
-    void renderPreview( LIB_PART* aComponent, int aUnit );
+    void OnQueryText( wxCommandEvent& aEvent );
+    void OnQueryEnter( wxCommandEvent& aEvent );
+    void OnQueryCharHook( wxKeyEvent& aEvent );
+
+    void OnTreeSelect( wxDataViewEvent& aEvent );
+    void OnTreeActivate( wxDataViewEvent& aEvent );
+
+    void OnDetailsLink( wxHtmlLinkEvent& aEvent );
+
+    void OnSchViewDClick( wxMouseEvent& aEvent );
+    void OnSchViewPaint( wxPaintEvent& aEvent );
+
+    /**
+     * Look up the footprint for a given alias and display it.
+     */
+    void ShowFootprintFor( LIB_ALIAS* aAlias );
+
+    /**
+     * If a wxDataViewitem is valid, select it and post a selection event.
+     */
+    void SelectIfValid( const wxDataViewItem& aTreeId );
+
+    /**
+     * Post a wxEVT_DATAVIEW_SELECTION_CHANGED to notify the selection handler
+     * that a new part has been selected.
+     */
+    void PostSelectEvent();
+
+    /**
+     * Display a given component into the schematic symbol preview.
+     */
+    void RenderPreview( LIB_PART* aComponent, int aUnit );
 
     /**
      * Handle the selection of an item. This is called when either the search
@@ -137,10 +163,21 @@ private:
      */
     void HandleItemSelection();
 
-    std::unique_ptr<wxTimer> m_dbl_click_timer;
-    FOOTPRINT_PREVIEW_PANEL* m_footprintPreviewPanel;
+    wxTimer*        m_dbl_click_timer;
+    wxTextCtrl*     m_query_ctrl;
+    wxDataViewCtrl* m_tree_ctrl;
+    wxHtmlWindow*   m_details_ctrl;
+    wxPanel*        m_sch_view_ctrl;
+    wxChoice*       m_fp_sel_ctrl;
+    wxPanel*        m_fp_view_ctrl;
 
-    static constexpr int DblClickDelay = 100; // milliseconds
+    FOOTPRINT_PREVIEW_PANEL* m_fp_viewer;
+
+    SCH_BASE_FRAME*             m_parent;
+    CMP_TREE_MODEL_ADAPTER::PTR m_adapter;
+    int             m_deMorganConvert;
+    bool            m_external_browser_requested;
+
 };
 
 #endif /* DIALOG_CHOOSE_COMPONENT_H */
