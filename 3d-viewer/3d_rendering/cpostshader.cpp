@@ -109,11 +109,11 @@ void CPOSTSHADER::SetPixelData( unsigned int x,
 
 void CPOSTSHADER::destroy_buffers()
 {
-    delete m_normals;           m_normals = 0;
-    delete m_color;             m_color = 0;
-    delete m_depth;             m_depth = 0;
-    delete m_shadow_att_factor; m_shadow_att_factor = 0;
-    delete m_wc_hitposition;    m_wc_hitposition = 0;
+    delete[] m_normals;           m_normals = nullptr;
+    delete[] m_color;             m_color = nullptr;
+    delete[] m_depth;             m_depth = nullptr;
+    delete[] m_shadow_att_factor; m_shadow_att_factor = nullptr;
+    delete[] m_wc_hitposition;    m_wc_hitposition = nullptr;
 }
 
 

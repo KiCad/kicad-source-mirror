@@ -83,7 +83,7 @@ C3D_RENDER_RAYTRACING::~C3D_RENDER_RAYTRACING()
     delete m_outlineBoard2dObjects;
     m_outlineBoard2dObjects = NULL;
 
-    delete m_shaderBuffer;
+    delete[] m_shaderBuffer;
     m_shaderBuffer = NULL;
 
     opengl_delete_pbo();
@@ -2132,7 +2132,7 @@ void C3D_RENDER_RAYTRACING::initialize_block_positions()
     }
 
     // Create m_shader buffer
-    delete m_shaderBuffer;
+    delete[] m_shaderBuffer;
     m_shaderBuffer = new SFVEC3F[m_realBufferSize.x * m_realBufferSize.y];
 
     opengl_init_pbo();
