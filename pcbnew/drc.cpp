@@ -92,7 +92,7 @@ void DRC::addMarkerToPcb( MARKER_PCB* aMarker )
 {
     BOARD_COMMIT commit ( m_pcbEditorFrame );
     commit.Add( aMarker );
-    commit.Push( _(""), false );
+    commit.Push( wxEmptyString, false );
 }
 
 void DRC::DestroyDRCDialog( int aReason )
