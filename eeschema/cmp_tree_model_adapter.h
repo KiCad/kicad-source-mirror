@@ -24,6 +24,7 @@
 
 #include <cmp_tree_model.h>
 
+#include <wx/hashmap.h>
 #include <wx/dataview.h>
 #include <vector>
 #include <unordered_map>
@@ -280,20 +281,6 @@ protected:
             unsigned int            aCol ) const override;
 
     /**
-     * Compare two data items, for sorting.
-     */
-    virtual int Compare(
-            wxDataViewItem const&   aFirst,
-            wxDataViewItem const&   aSecond,
-            unsigned int            aCol,
-            bool                    aAscending ) const override;
-
-    /**
-     * Whether list is sorted even if the user hasn't selected a sort column
-     */
-    virtual bool HasDefaultCompare() const override { return true; }
-
-    /**
      * Set the value of an item. Does nothing - this model doesn't support
      * editing.
      */
@@ -315,7 +302,8 @@ private:
     wxDataViewColumn*   m_col_desc;
     wxDataViewCtrl*     m_widget;
 
-    typedef std::unordered_map<CMP_TREE_NODE*, std::vector<int>> WIDTH_CACHE;
+    WX_DECLARE_STRING_HASH_MAP( std::vector<int>, WIDTH_CACHE );
+    //typedef std::unordered_map<std::string, std::vector<int>> WIDTH_CACHE;
 
     static WIDTH_CACHE m_width_cache;
 
