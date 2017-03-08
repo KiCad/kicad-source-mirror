@@ -86,8 +86,10 @@ public:
 
                 if( ent->fpid == m_parent->m_currentFPID )
                 {
-                    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, 1 );
-                    m_parent->GetEventHandler()->AddPendingEvent ( event );
+                    auto handler = m_parent->GetEventHandler();
+
+                    if( handler )
+                        handler->QueueEvent( new wxCommandEvent( wxEVT_COMMAND_TEXT_UPDATED, 1 ) );
                 }
 
             } else {
