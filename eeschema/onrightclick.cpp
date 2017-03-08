@@ -398,7 +398,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_LIBS*
     AddMenuItem( PopMenu, ID_AUTOPLACE_FIELDS, msg, KiBitmap( autoplace_fields_xpm ) );
 
     if( libEntry && !libEntry->GetDocFileName().IsEmpty() )
-        AddMenuItem( PopMenu, ID_POPUP_SCH_DISPLAYDOC_CMP, _( "Doc" ), KiBitmap( datasheet_xpm ) );
+        AddMenuItem( PopMenu, ID_POPUP_SCH_DISPLAYDOC_CMP, _( "Open Documentation" ), KiBitmap( datasheet_xpm ) );
 }
 
 
