@@ -139,7 +139,7 @@ CMP_TREE_NODE_ALIAS::CMP_TREE_NODE_ALIAS( CMP_TREE_NODE* aParent, LIB_ALIAS* aAl
 
     if( aAlias->GetPart()->IsMulti() )
     {
-        for( int u = 1; u < aAlias->GetPart()->GetUnitCount(); ++u )
+        for( int u = 1; u <= aAlias->GetPart()->GetUnitCount(); ++u )
         {
             AddUnit( u );
         }
