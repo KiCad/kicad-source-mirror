@@ -35,6 +35,7 @@ static const wxString GalGLAntialiasingKeyword( "OpenGLAntialiasingMode" );
 static const wxString GalGridStyleConfig( "GridStyle" );
 static const wxString GalGridLineWidthConfig( "GridLineWidth" );
 static const wxString GalGridMaxDensityConfig( "GridMaxDensity" );
+static const wxString GalGridAxesEnabledConfig( "GridAxesEnabled" );
 
 
 static const UTIL::CFG_MAP<KIGFX::OPENGL_ANTIALIASING_MODE> aaModeConfigVals =
@@ -57,7 +58,10 @@ static const UTIL::CFG_MAP<KIGFX::GRID_STYLE> gridStyleConfigVals =
 
 GAL_DISPLAY_OPTIONS::GAL_DISPLAY_OPTIONS()
     : gl_antialiasing_mode( OPENGL_ANTIALIASING_MODE::NONE ),
-      m_gridStyle( GRID_STYLE::DOTS )
+      m_gridStyle( GRID_STYLE::DOTS ),
+      m_gridLineWidth( 0.5 ),
+      m_gridMinSpacing( 10 ),
+      m_axesEnabled( false )
 {}
 
 
@@ -79,6 +83,9 @@ void GAL_DISPLAY_OPTIONS::ReadConfig( wxConfigBase* aCfg, wxString aBaseName )
     aCfg->Read( aBaseName + GalGridMaxDensityConfig,
                 &m_gridMinSpacing, 10 );
 
+    aCfg->Read( aBaseName + GalGridAxesEnabledConfig,
+                &m_axesEnabled, false );
+
     NotifyChanged();
 }
 
@@ -96,6 +103,9 @@ void GAL_DISPLAY_OPTIONS::WriteConfig( wxConfigBase* aCfg, wxString aBaseName )
 
     aCfg->Write( aBaseName + GalGridMaxDensityConfig,
                  m_gridMinSpacing );
+
+    aCfg->Write( aBaseName + GalGridAxesEnabledConfig,
+                 m_axesEnabled );
 }
 
 

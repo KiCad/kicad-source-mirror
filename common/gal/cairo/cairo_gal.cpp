@@ -87,6 +87,7 @@ CAIRO_GAL::CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions,
 
     // Grid color settings are different in Cairo and OpenGL
     SetGridColor( COLOR4D( 0.1, 0.1, 0.1, 0.8 ) );
+    SetAxesColor( COLOR4D( BLUE ) );
 
     // Allocate memory for pixel storage
     allocateBitmaps();
@@ -819,7 +820,7 @@ void CAIRO_GAL::drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
 {
     cairo_move_to( currentContext, aStartPoint.x, aStartPoint.y );
     cairo_line_to( currentContext, aEndPoint.x, aEndPoint.y );
-    cairo_set_source_rgba( currentContext, gridColor.r, gridColor.g, gridColor.b, strokeColor.a );
+    cairo_set_source_rgba( currentContext, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
     cairo_stroke( currentContext );
 }
 

@@ -129,6 +129,7 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
 
     // Grid color settings are different in Cairo and OpenGL
     SetGridColor( COLOR4D( 0.8, 0.8, 0.8, 0.1 ) );
+    SetAxesColor( COLOR4D( BLUE ) );
 
     // Tesselator initialization
     tesselator = gluNewTess();
@@ -992,6 +993,23 @@ void OPENGL_GAL::DrawGrid()
 
         if( gridStyle == GRID_STYLE::DOTS )
             glDisable( GL_STENCIL_TEST );
+    }
+
+    // Draw axes if desired
+    if( axesEnabled )
+    {
+        glLineWidth( minorLineWidth );
+        glColor4d( axesColor.r, axesColor.g, axesColor.b, 1.0 );
+
+        glBegin( GL_LINES );
+        glVertex2d( worldStartPoint.x, 0 );
+        glVertex2d( worldEndPoint.x, 0 );
+        glEnd();
+
+        glBegin( GL_LINES );
+        glVertex2d( 0, worldStartPoint.y );
+        glVertex2d( 0, worldEndPoint.y );
+        glEnd();
     }
 
     glEnable( GL_DEPTH_TEST );

@@ -800,6 +800,16 @@ public:
     }
 
     /**
+     * @brief Set the axes color.
+     *
+     * @param aAxesColor is the color to draw the axes if enabled.
+     */
+    inline void SetAxesColor( const COLOR4D& aAxesColor )
+    {
+        axesColor = aAxesColor;
+    }
+
+    /**
      * @brief Draw every tick line wider.
      *
      * @param aInterval increase the width of every aInterval line, if 0 do not use this feature.
@@ -975,6 +985,8 @@ protected:
     VECTOR2D           gridOrigin;             ///< The grid origin
     VECTOR2D           gridOffset;             ///< The grid offset to compensate cursor position
     COLOR4D            gridColor;              ///< Color of the grid
+    COLOR4D            axesColor;              ///< Color of the axes
+    bool               axesEnabled;            ///< Should the axes be drawn
     int                gridTick;               ///< Every tick line gets the double width
     double             gridLineWidth;          ///< Line width of the grid
     int                gridMinSpacing;         ///< Minimum screen size of the grid (pixels)

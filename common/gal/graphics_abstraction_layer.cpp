@@ -110,6 +110,12 @@ bool GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
         refresh = true;
     }
 
+    if( options.m_axesEnabled != axesEnabled )
+    {
+        axesEnabled = options.m_axesEnabled;
+        refresh = true;
+    }
+
     // tell the derived class if the base class needs an update or not
     return refresh;
 }
@@ -334,6 +340,21 @@ void GAL::DrawGrid()
                 }
             }
         }
+    }
+
+    // Draw axes if desired
+    if( axesEnabled )
+    {
+        SetIsFill( false );
+        SetIsStroke( true );
+        SetStrokeColor( axesColor );
+        SetLineWidth( marker );
+
+        drawGridLine( VECTOR2D( worldStartPoint.x, 0 ),
+                      VECTOR2D( worldEndPoint.x, 0 ) );
+
+        drawGridLine( VECTOR2D( 0, worldStartPoint.y ),
+                      VECTOR2D( 0, worldEndPoint.y ) );
     }
 }
 
