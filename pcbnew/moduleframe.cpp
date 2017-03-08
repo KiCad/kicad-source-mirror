@@ -43,6 +43,7 @@
 #include <msgpanel.h>
 #include <fp_lib_table.h>
 #include <bitmaps.h>
+#include <gal/graphics_abstraction_layer.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -330,6 +331,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     setupTools();
+    GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
     UseGalCanvas( parentFrame->IsGalCanvasActive() );
 
     if( m_auimgr.GetPane( "m_LayersManagerToolBar" ).IsShown() )

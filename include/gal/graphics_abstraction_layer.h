@@ -810,6 +810,14 @@ public:
     }
 
     /**
+     * @brief Enables drawing the axes.
+     */
+    inline void SetAxesEnabled( bool aAxesEnabled )
+    {
+        axesEnabled = aAxesEnabled;
+    }
+
+    /**
      * @brief Draw every tick line wider.
      *
      * @param aInterval increase the width of every aInterval line, if 0 do not use this feature.

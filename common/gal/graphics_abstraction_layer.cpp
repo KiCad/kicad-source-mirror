@@ -79,6 +79,7 @@ GAL::~GAL()
 {
 }
 
+
 void GAL::OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& aOptions )
 {
     // defer to the child class first
@@ -179,9 +180,6 @@ double GAL::computeMinGridSpacing() const
 
 void GAL::DrawGrid()
 {
-    if( !gridVisibility )
-        return;
-
     SetTarget( TARGET_NONCACHED );
 
     // Draw the grid
@@ -202,146 +200,6 @@ void GAL::DrawGrid()
     double marker = std::max( 1.0, gridLineWidth ) / worldScale;
     double doubleMarker = 2.0 * marker;
 
-    // Check if the grid would not be too dense
-    if( std::max( gridScreenSizeDense, gridScreenSizeCoarse ) > gridThreshold )
-    {
-        // Compute grid variables
-        int gridStartX  = KiROUND( worldStartPoint.x / gridSize.x );
-        int gridEndX    = KiROUND( worldEndPoint.x / gridSize.x );
-        int gridStartY  = KiROUND( worldStartPoint.y / gridSize.y );
-        int gridEndY    = KiROUND( worldEndPoint.y / gridSize.y );
-
-        // Correct the index, else some lines are not correctly painted
-
-        gridStartY -= std::abs( gridOrigin.y / gridSize.y ) + 1;
-        gridEndY += std::abs( gridOrigin.y / gridSize.y ) + 1;
-
-        if ( gridStartX <= gridEndX )
-        {
-            gridStartX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
-            gridEndX += std::abs( gridOrigin.x / gridSize.x ) + 1;
-        }
-        else
-        {
-            gridStartX += std::abs( gridOrigin.x / gridSize.x ) + 1;
-            gridEndX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
-        }
-
-        int dirX = gridEndX >= gridStartX ? 1 : -1;
-        int dirY = gridEndY >= gridStartY ? 1 : -1;
-
-        // Draw the grid behind all other layers
-        SetLayerDepth( depthRange.y * 0.75 );
-
-        if( gridStyle == GRID_STYLE::LINES )
-        {
-            SetIsFill( false );
-            SetIsStroke( true );
-            SetStrokeColor( gridColor );
-
-            // Now draw the grid, every coarse grid line gets the double width
-
-            // Vertical lines
-            for( int j = gridStartY; j != gridEndY; j += dirY )
-            {
-                if( j % gridTick == 0 && gridScreenSizeDense > gridThreshold )
-                    SetLineWidth( doubleMarker );
-                else
-                    SetLineWidth( marker );
-
-                if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
-                    || gridScreenSizeDense > gridThreshold )
-                {
-                    drawGridLine( VECTOR2D( gridStartX * gridSize.x, j * gridSize.y + gridOrigin.y ),
-                                  VECTOR2D( gridEndX * gridSize.x,   j * gridSize.y + gridOrigin.y ) );
-                }
-            }
-
-            // Horizontal lines
-            for( int i = gridStartX; i != gridEndX; i += dirX )
-            {
-                if( i % gridTick == 0 && gridScreenSizeDense > gridThreshold )
-                    SetLineWidth( doubleMarker );
-                else
-                    SetLineWidth( marker );
-
-                if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
-                    || gridScreenSizeDense > gridThreshold )
-                {
-                    drawGridLine( VECTOR2D( i * gridSize.x + gridOrigin.x, gridStartY * gridSize.y ),
-                                  VECTOR2D( i * gridSize.x + gridOrigin.x, gridEndY * gridSize.y ) );
-                }
-            }
-        }
-        else if( gridStyle == GRID_STYLE::SMALL_CROSS )
-        {
-            SetIsFill( false );
-            SetIsStroke( true );
-            SetStrokeColor( gridColor );
-
-            SetLineWidth( marker );
-            double lineLen = GetLineWidth() * 2;
-
-            // Vertical positions:
-            for( int j = gridStartY; j != gridEndY; j += dirY )
-            {
-                if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
-                    || gridScreenSizeDense > gridThreshold )
-                {
-                    int posY =  j * gridSize.y + gridOrigin.y;
-
-                    // Horizontal positions:
-                    for( int i = gridStartX; i != gridEndX; i += dirX )
-                    {
-                        if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
-                            || gridScreenSizeDense > gridThreshold )
-                        {
-                            int posX = i * gridSize.x + gridOrigin.x;
-
-                            drawGridLine( VECTOR2D( posX - lineLen, posY ),
-                                          VECTOR2D( posX + lineLen,   posY ) );
-
-                            drawGridLine( VECTOR2D( posX, posY - lineLen ),
-                                          VECTOR2D( posX, posY + lineLen ) );
-                        }
-                    }
-                }
-            }
-        }
-        else    // Dotted grid
-        {
-            bool tickX, tickY;
-            SetIsFill( true );
-            SetIsStroke( false );
-            SetFillColor( gridColor );
-
-            for( int j = gridStartY; j != gridEndY; j += dirY )
-            {
-                if( j % gridTick == 0 && gridScreenSizeDense > gridThreshold )
-                    tickY = true;
-                else
-                    tickY = false;
-
-                for( int i = gridStartX; i != gridEndX; i += dirX )
-                {
-                    if( i % gridTick == 0 && gridScreenSizeDense > gridThreshold )
-                        tickX = true;
-                    else
-                        tickX = false;
-
-                    if( tickX || tickY || gridScreenSizeDense > gridThreshold )
-                    {
-                        double radius = ( ( tickX && tickY ) ? doubleMarker : marker ) / 2.0;
-                        DrawRectangle( VECTOR2D( i * gridSize.x - radius + gridOrigin.x,
-                                                 j * gridSize.y - radius + gridOrigin.y ),
-                                       VECTOR2D( i * gridSize.x + radius + gridOrigin.x,
-                                                 j * gridSize.y + radius + gridOrigin.y ) );
-                    }
-                }
-            }
-        }
-    }
-
     // Draw axes if desired
     if( axesEnabled )
     {
@@ -355,6 +213,158 @@ void GAL::DrawGrid()
 
         drawGridLine( VECTOR2D( 0, worldStartPoint.y ),
                       VECTOR2D( 0, worldEndPoint.y ) );
+    }
+
+    if( !gridVisibility )
+        return;
+
+    // Check if the grid would not be too dense
+    if( std::max( gridScreenSizeDense, gridScreenSizeCoarse ) <= gridThreshold )
+        return;
+
+    // Compute grid variables
+    int gridStartX  = KiROUND( worldStartPoint.x / gridSize.x );
+    int gridEndX    = KiROUND( worldEndPoint.x / gridSize.x );
+    int gridStartY  = KiROUND( worldStartPoint.y / gridSize.y );
+    int gridEndY    = KiROUND( worldEndPoint.y / gridSize.y );
+
+    // Correct the index, else some lines are not correctly painted
+    gridStartY -= std::abs( gridOrigin.y / gridSize.y ) + 1;
+    gridEndY += std::abs( gridOrigin.y / gridSize.y ) + 1;
+
+    if( gridStartX <= gridEndX )
+    {
+        gridStartX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
+        gridEndX += std::abs( gridOrigin.x / gridSize.x ) + 1;
+    }
+    else
+    {
+        gridStartX += std::abs( gridOrigin.x / gridSize.x ) + 1;
+        gridEndX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
+    }
+
+    int dirX = gridEndX >= gridStartX ? 1 : -1;
+    int dirY = gridEndY >= gridStartY ? 1 : -1;
+
+    // Draw the grid behind all other layers
+    SetLayerDepth( depthRange.y * 0.75 );
+
+    if( gridStyle == GRID_STYLE::LINES )
+    {
+        SetIsFill( false );
+        SetIsStroke( true );
+        SetStrokeColor( gridColor );
+
+        // Now draw the grid, every coarse grid line gets the double width
+
+        // Vertical lines
+        for( int j = gridStartY; j != gridEndY; j += dirY )
+        {
+            const double y = j * gridSize.y + gridOrigin.y;
+
+            if( axesEnabled && y == 0 )
+                continue;
+
+            if( j % gridTick == 0 && gridScreenSizeDense > gridThreshold )
+                SetLineWidth( doubleMarker );
+            else
+                SetLineWidth( marker );
+
+            if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
+                || gridScreenSizeDense > gridThreshold )
+            {
+                drawGridLine( VECTOR2D( gridStartX * gridSize.x, y ),
+                                VECTOR2D( gridEndX * gridSize.x,   y ) );
+            }
+        }
+
+        // Horizontal lines
+        for( int i = gridStartX; i != gridEndX; i += dirX )
+        {
+            const double x = i * gridSize.x + gridOrigin.x;
+
+            if( axesEnabled && x == 0 )
+                continue;
+
+            if( i % gridTick == 0 && gridScreenSizeDense > gridThreshold )
+                SetLineWidth( doubleMarker );
+            else
+                SetLineWidth( marker );
+
+            if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
+                || gridScreenSizeDense > gridThreshold )
+            {
+                drawGridLine( VECTOR2D( x, gridStartY * gridSize.y ),
+                                VECTOR2D( x, gridEndY * gridSize.y ) );
+            }
+        }
+    }
+    else if( gridStyle == GRID_STYLE::SMALL_CROSS )
+    {
+        SetIsFill( false );
+        SetIsStroke( true );
+        SetStrokeColor( gridColor );
+
+        SetLineWidth( marker );
+        double lineLen = GetLineWidth() * 2;
+
+        // Vertical positions:
+        for( int j = gridStartY; j != gridEndY; j += dirY )
+        {
+            if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
+                || gridScreenSizeDense > gridThreshold )
+            {
+                int posY =  j * gridSize.y + gridOrigin.y;
+
+                // Horizontal positions:
+                for( int i = gridStartX; i != gridEndX; i += dirX )
+                {
+                    if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
+                        || gridScreenSizeDense > gridThreshold )
+                    {
+                        int posX = i * gridSize.x + gridOrigin.x;
+
+                        drawGridLine( VECTOR2D( posX - lineLen, posY ),
+                                        VECTOR2D( posX + lineLen,   posY ) );
+
+                        drawGridLine( VECTOR2D( posX, posY - lineLen ),
+                                        VECTOR2D( posX, posY + lineLen ) );
+                    }
+                }
+            }
+        }
+    }
+    else    // Dotted grid
+    {
+        bool tickX, tickY;
+        SetIsFill( true );
+        SetIsStroke( false );
+        SetFillColor( gridColor );
+
+        for( int j = gridStartY; j != gridEndY; j += dirY )
+        {
+            if( j % gridTick == 0 && gridScreenSizeDense > gridThreshold )
+                tickY = true;
+            else
+                tickY = false;
+
+            for( int i = gridStartX; i != gridEndX; i += dirX )
+            {
+                if( i % gridTick == 0 && gridScreenSizeDense > gridThreshold )
+                    tickX = true;
+                else
+                    tickX = false;
+
+                if( tickX || tickY || gridScreenSizeDense > gridThreshold )
+                {
+                    double radius = ( ( tickX && tickY ) ? doubleMarker : marker ) / 2.0;
+                    DrawRectangle( VECTOR2D( i * gridSize.x - radius + gridOrigin.x,
+                                                j * gridSize.y - radius + gridOrigin.y ),
+                                    VECTOR2D( i * gridSize.x + radius + gridOrigin.x,
+                                                j * gridSize.y + radius + gridOrigin.y ) );
+                }
+            }
+        }
     }
 }
 

@@ -848,9 +848,6 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
 
 void OPENGL_GAL::DrawGrid()
 {
-    if( !gridVisibility )
-        return;
-
     int gridScreenSizeDense  = KiROUND( gridSize.x * worldScale );
     int gridScreenSizeCoarse = KiROUND( gridSize.x * static_cast<double>( gridTick ) * worldScale );
 
@@ -873,6 +870,26 @@ void OPENGL_GAL::DrawGrid()
     VECTOR2D worldStartPoint = screenWorldMatrix * VECTOR2D( 0.0, 0.0 );
     VECTOR2D worldEndPoint = screenWorldMatrix * VECTOR2D( screenSize );
 
+    // Draw axes if desired
+    if( axesEnabled )
+    {
+        glLineWidth( minorLineWidth );
+        glColor4d( axesColor.r, axesColor.g, axesColor.b, 1.0 );
+
+        glBegin( GL_LINES );
+        glVertex2d( worldStartPoint.x, 0 );
+        glVertex2d( worldEndPoint.x, 0 );
+        glEnd();
+
+        glBegin( GL_LINES );
+        glVertex2d( 0, worldStartPoint.y );
+        glVertex2d( 0, worldEndPoint.y );
+        glEnd();
+    }
+
+    if( !gridVisibility )
+        return;
+
     // Compute grid variables
     int gridStartX = KiROUND( worldStartPoint.x / gridSize.x );
     int gridEndX = KiROUND( worldEndPoint.x / gridSize.x );
@@ -883,7 +900,7 @@ void OPENGL_GAL::DrawGrid()
     gridStartY -= std::abs( gridOrigin.y / gridSize.y ) + 1;
     gridEndY += std::abs( gridOrigin.y / gridSize.y ) + 1;
 
-    if ( gridStartX <= gridEndX )
+    if( gridStartX <= gridEndX )
     {
         gridStartX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
         gridEndX += std::abs( gridOrigin.x / gridSize.x ) + 1;
@@ -952,6 +969,12 @@ void OPENGL_GAL::DrawGrid()
         // Vertical lines
         for( int j = gridStartY; j != gridEndY; j += dirY )
         {
+            const double y = j * gridSize.y + gridOrigin.y;
+
+            // If axes are drawn, skip the lines that would cover them
+            if( axesEnabled && y == 0 )
+                continue;
+
             if( j % gridTick == 0 && gridScreenSizeDense > gridThreshold )
                 glLineWidth( majorLineWidth );
             else
@@ -961,8 +984,8 @@ void OPENGL_GAL::DrawGrid()
                 || gridScreenSizeDense > gridThreshold )
             {
                 glBegin( GL_LINES );
-                glVertex2d( gridStartX * gridSize.x, j * gridSize.y + gridOrigin.y );
-                glVertex2d( gridEndX * gridSize.x, j * gridSize.y + gridOrigin.y );
+                glVertex2d( gridStartX * gridSize.x, y );
+                glVertex2d( gridEndX * gridSize.x, y );
                 glEnd();
             }
         }
@@ -976,6 +999,12 @@ void OPENGL_GAL::DrawGrid()
         // Horizontal lines
         for( int i = gridStartX; i != gridEndX; i += dirX )
         {
+            const double x = i * gridSize.x + gridOrigin.x;
+
+            // If axes are drawn, skip the lines that would cover them
+            if( axesEnabled && x == 0 )
+                continue;
+
             if( i % gridTick == 0 && gridScreenSizeDense > gridThreshold )
                 glLineWidth( majorLineWidth );
             else
@@ -993,23 +1022,6 @@ void OPENGL_GAL::DrawGrid()
 
         if( gridStyle == GRID_STYLE::DOTS )
             glDisable( GL_STENCIL_TEST );
-    }
-
-    // Draw axes if desired
-    if( axesEnabled )
-    {
-        glLineWidth( minorLineWidth );
-        glColor4d( axesColor.r, axesColor.g, axesColor.b, 1.0 );
-
-        glBegin( GL_LINES );
-        glVertex2d( worldStartPoint.x, 0 );
-        glVertex2d( worldEndPoint.x, 0 );
-        glEnd();
-
-        glBegin( GL_LINES );
-        glVertex2d( 0, worldStartPoint.y );
-        glVertex2d( 0, worldEndPoint.y );
-        glEnd();
     }
 
     glEnable( GL_DEPTH_TEST );
