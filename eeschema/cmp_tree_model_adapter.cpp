@@ -353,8 +353,8 @@ int CMP_TREE_MODEL_ADAPTER::WidthFor( CMP_TREE_NODE& aNode, int aCol )
         int wname = m_widget->GetTextExtent( aNode.Name ).x + kDataViewIndent;
         int wdesc = m_widget->GetTextExtent( aNode.Desc ).x;
 
-        m_width_cache[&aNode][0] = wname;
-        m_width_cache[&aNode][1] = wdesc;
+        m_width_cache[&aNode].push_back( wname );
+        m_width_cache[&aNode].push_back( wdesc );
         return m_width_cache[&aNode][aCol];
     }
 }

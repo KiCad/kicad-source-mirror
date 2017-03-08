@@ -315,7 +315,7 @@ private:
     wxDataViewColumn*   m_col_desc;
     wxDataViewCtrl*     m_widget;
 
-    typedef std::unordered_map<CMP_TREE_NODE*, int[2]> WIDTH_CACHE;
+    typedef std::unordered_map<CMP_TREE_NODE*, std::vector<int>> WIDTH_CACHE;
 
     static WIDTH_CACHE m_width_cache;
 
