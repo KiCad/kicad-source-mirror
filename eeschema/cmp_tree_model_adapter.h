@@ -27,8 +27,6 @@
 #include <wx/hashmap.h>
 #include <wx/dataview.h>
 #include <vector>
-#include <unordered_map>
-#include <memory>
 
 class LIB_ALIAS;
 class PART_LIB;
@@ -303,7 +301,6 @@ private:
     wxDataViewCtrl*     m_widget;
 
     WX_DECLARE_STRING_HASH_MAP( std::vector<int>, WIDTH_CACHE );
-    //typedef std::unordered_map<std::string, std::vector<int>> WIDTH_CACHE;
 
     static WIDTH_CACHE m_width_cache;
 
