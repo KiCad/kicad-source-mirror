@@ -41,6 +41,7 @@
 #include <wx/splitter.h>
 #include <wx/button.h>
 #include <wx/timer.h>
+#include <wx/utils.h>
 
 #include <class_library.h>
 #include <sch_base_frame.h>
@@ -66,6 +67,8 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT(
     m_deMorganConvert( aDeMorganConvert >= 0 ? aDeMorganConvert : 0 ),
     m_external_browser_requested( false )
 {
+    wxBusyCursor busy_while_loading;
+
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
     auto splitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE );
@@ -99,7 +102,6 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT(
     m_sch_view_ctrl->Bind( wxEVT_PAINT, &DIALOG_CHOOSE_COMPONENT::OnSchViewPaint, this );
 
     Layout();
-    Centre();
 }
 
 
