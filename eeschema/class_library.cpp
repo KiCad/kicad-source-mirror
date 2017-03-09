@@ -188,7 +188,15 @@ void PART_LIB::GetEntryTypePowerNames( wxArrayString& aNames )
 
 LIB_ALIAS* PART_LIB::FindAlias( const wxString& aName )
 {
-    return m_plugin->LoadSymbol( fileName.GetFullPath(), aName, m_properties.get() );
+    LIB_ALIAS* alias = m_plugin->LoadSymbol( fileName.GetFullPath(), aName, m_properties.get() );
+
+    // Set the library to this even though technically the legacy cache plugin owns the
+    // symbols.  This allows the symbol library table conversion tool to determine the
+    // correct library where the symbol was found.
+    if( alias && alias->GetPart() && !alias->GetPart()->GetLib() )
+        alias->GetPart()->SetLib( this );
+
+    return alias;
 }
 
 

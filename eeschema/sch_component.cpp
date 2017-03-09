@@ -46,9 +46,9 @@
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
-//#include <sch_collectors.h>
 #include <class_netlist_object.h>
 #include <lib_draw_item.h>
+#include <symbol_lib_table.h>
 
 #include <dialogs/dialog_schematic_find.h>
 
@@ -268,6 +268,26 @@ void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId, PART_LIBS* aLibs )
 
         if( aLibs )
             Resolve( aLibs );
+        else
+            m_part.reset();
+    }
+}
+
+
+void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aSymLibTable )
+{
+    if( m_lib_id != aLibId )
+    {
+        wxCHECK_RET( aSymLibTable, "No symbol library table provided." );
+
+        m_lib_id = aLibId;
+        SetModified();
+
+        LIB_ALIAS* alias = aSymLibTable->LoadSymbol( m_lib_id.GetLibNickname(),
+                                                     m_lib_id.GetLibItemName() );
+
+        if( alias && alias->GetPart() )
+            m_part = alias->GetPart()->SharedPtr();
         else
             m_part.reset();
     }

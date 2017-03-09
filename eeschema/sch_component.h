@@ -50,6 +50,7 @@ class LIB_PART;
 class PART_LIBS;
 class SCH_COLLECTOR;
 class SCH_SCREEN;
+class SYMBOL_LIB_TABLE;
 
 
 /// A container for several SCH_FIELD items
@@ -162,6 +163,8 @@ public:
     bool IsMovableFromAnchorPoint() override { return false; }
 
     void SetLibId( const LIB_ID& aName, PART_LIBS* aLibs=NULL );
+    void SetLibId( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aSymLibTable );
+
     const LIB_ID& GetLibId() const        { return m_lib_id; }
 
     PART_REF& GetPartRef() { return m_part; }

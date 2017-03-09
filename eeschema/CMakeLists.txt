@@ -68,6 +68,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_sch_sheet_props_base.cpp
     dialogs/dialog_schematic_find.cpp
     dialogs/dialog_schematic_find_base.cpp
+    dialogs/dialog_symbol_remap.cpp
+    dialogs/dialog_symbol_remap_base.cpp
     )
 
 set( EESCHEMA_WIDGETS
