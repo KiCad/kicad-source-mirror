@@ -188,13 +188,13 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
 
     // load pcbnew inside python, and load all the user plugins, TODO: add system wide plugins
     {
-        char cmd[1024];
+        char loadCmd[1024];
         PyLOCK lock;
-        snprintf( cmd, sizeof(cmd), "import sys, traceback\n"
+        snprintf( loadCmd, sizeof(loadCmd), "import sys, traceback\n"
                       "sys.path.append(\".\")\n"
                       "import pcbnew\n"
                       "pcbnew.LoadPlugins(\"%s\")", aUserScriptingPath );
-        PyRun_SimpleString( cmd );
+        PyRun_SimpleString( loadCmd );
     }
 
     return true;
