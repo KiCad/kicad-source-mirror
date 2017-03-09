@@ -145,22 +145,36 @@ static bool insert_library( PROJECT *aProject, PART_LIB *aLibrary, size_t aIndex
 /**
  * Function get_components
  * Fills a vector with all of the project's components, to ease iterating over them.
+ * The list is sorted by lib id, therefore components using the same library
+ * symbol are grouped, allowing later faster calculations (one library search by group
+ * of symbols)
  *
  * @param aComponents - a vector that will take the components
  */
+// Helper sort function, used in get_components, to sort a component list by lib_id
+static bool sort_by_libid( const SCH_COMPONENT* ref, SCH_COMPONENT* cmp )
+{
+    return ref->GetLibId() < cmp->GetLibId();
+}
+
 static void get_components( std::vector<SCH_COMPONENT*>& aComponents )
 {
     SCH_SCREENS screens;
+
+    // Get the full list
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
         for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
         {
             if( item->Type() != SCH_COMPONENT_T )
                 continue;
-            SCH_COMPONENT* component = dynamic_cast<SCH_COMPONENT*>( item );
+            SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
             aComponents.push_back( component );
         }
     }
+
+    // sort aComponents by lib part. Components will be grouped by same lib part.
+    std::sort( aComponents.begin(), aComponents.end(), sort_by_libid );
 }
 
 
@@ -241,13 +255,29 @@ public:
         typedef std::map<wxString, RESCUE_CASE_CANDIDATE> candidate_map_t;
         candidate_map_t candidate_map;
 
+        // Remember the list of components is sorted by part name.
+        // So a search in libraries is made only once by group
+        LIB_ALIAS* case_sensitive_match = nullptr;
+        std::vector<LIB_ALIAS*> case_insensitive_matches;
+
+        wxString last_part_name;
+
         for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
         {
             wxString part_name( each_component->GetLibId().GetLibItemName() );
-            LIB_ID id( wxEmptyString, part_name );
-            LIB_ALIAS* case_sensitive_match = aRescuer.GetLibs()->FindLibraryAlias( id );
-            std::vector<LIB_ALIAS*> case_insensitive_matches;
-            aRescuer.GetLibs()->FindLibraryNearEntries( case_insensitive_matches, part_name );
+
+            if( last_part_name != part_name )
+            {
+                // A new part name is found (a new group starts here).
+                // Search the symbol names candidates only once for this group:
+                last_part_name = part_name;
+                case_insensitive_matches.clear();
+
+                LIB_ID id( wxEmptyString, part_name );
+
+                case_sensitive_match = aRescuer.GetLibs()->FindLibraryAlias( id );
+                aRescuer.GetLibs()->FindLibraryNearEntries( case_insensitive_matches, part_name );
+            }
 
             if( case_sensitive_match || !( case_insensitive_matches.size() ) )
                 continue;
@@ -329,16 +359,27 @@ public:
         typedef std::map<wxString, RESCUE_CACHE_CANDIDATE> candidate_map_t;
         candidate_map_t candidate_map;
 
+        // Remember the list of components is sorted by part name.
+        // So a search in libraries is made only once by group
+        LIB_PART* cache_match = nullptr;
+        LIB_PART* lib_match = nullptr;
+        wxString old_part_name;
+
         wxString part_name_suffix = aRescuer.GetPartNameSuffix();
 
         for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
         {
             wxString part_name( each_component->GetLibId().GetLibItemName() );
 
-            LIB_PART* cache_match = find_component( part_name,
-                                                    aRescuer.GetLibs(), /* aCached */ true );
-            LIB_ID id( wxEmptyString, part_name );
-            LIB_PART* lib_match = aRescuer.GetLibs()->FindLibPart( id );
+            if( old_part_name != part_name )
+            {
+                // A new part name is found (a new group starts here).
+                // Search the symbol names candidates only once for this group:
+                old_part_name = part_name;
+                cache_match = find_component( part_name, aRescuer.GetLibs(), /* aCached */ true );
+                LIB_ID id( wxEmptyString, part_name );
+                lib_match = aRescuer.GetLibs()->FindLibPart( id );
+            }
 
             // Test whether there is a conflict
             if( !cache_match || !lib_match )
