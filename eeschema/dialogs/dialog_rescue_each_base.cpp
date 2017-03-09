@@ -20,20 +20,20 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	m_lblInfo->Wrap( 500 );
 	bSizerMain->Add( m_lblInfo, 0, wxALL|wxEXPAND, 5 );
 	
-	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Symbols to update:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText5->Wrap( -1 );
-	m_staticText5->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_titleSymbols = new wxStaticText( this, wxID_ANY, _("Symbols to update:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_titleSymbols->Wrap( -1 );
+	m_titleSymbols->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
-	bSizerMain->Add( m_staticText5, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerMain->Add( m_titleSymbols, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ListOfConflicts = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerMain->Add( m_ListOfConflicts, 2, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Instances of this symbol:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText4->Wrap( -1 );
-	m_staticText4->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_titleInstances = new wxStaticText( this, wxID_ANY, _("Instances of this symbol:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_titleInstances->Wrap( -1 );
+	m_titleInstances->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
-	bSizerMain->Add( m_staticText4, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerMain->Add( m_titleInstances, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ListOfInstances = new wxDataViewListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerMain->Add( m_ListOfInstances, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );

@@ -150,6 +150,7 @@ void DIALOG_RESCUE_EACH::PopulateInstanceList()
     RESCUE_CANDIDATE& selected_part = m_Rescuer->m_all_candidates[row];
 
     wxVector<wxVariant> data;
+    int count = 0;
     for( SCH_COMPONENT* each_component : *m_Rescuer->GetComponents() )
     {
         if( each_component->GetLibId().Format() != UTF8( selected_part.GetRequestedName() ) )
@@ -161,8 +162,11 @@ void DIALOG_RESCUE_EACH::PopulateInstanceList()
         data.push_back( each_component->GetRef( & m_Parent->GetCurrentSheet() ) );
         data.push_back( valueField ? valueField->GetText() : wxT( "" ) );
         m_ListOfInstances->AppendItem( data );
-
+        count++;
     }
+
+    m_titleInstances->SetLabelText( wxString::Format(
+                    _( "Instances of this symbol (%d items):" ), count ) );
 }
 
 

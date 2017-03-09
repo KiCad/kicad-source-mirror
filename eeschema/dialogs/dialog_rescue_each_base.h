@@ -38,9 +38,9 @@ class DIALOG_RESCUE_EACH_BASE : public DIALOG_SHIM
 	
 	protected:
 		wxStaticText* m_lblInfo;
-		wxStaticText* m_staticText5;
+		wxStaticText* m_titleSymbols;
 		wxDataViewListCtrl* m_ListOfConflicts;
-		wxStaticText* m_staticText4;
+		wxStaticText* m_titleInstances;
 		wxDataViewListCtrl* m_ListOfInstances;
 		wxStaticText* m_staticText2;
 		wxPanel* m_componentViewOld;
