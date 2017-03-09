@@ -1,13 +1,14 @@
 include_directories( BEFORE
-        pcb
-        ${CMAKE_CURRENT_SOURCE_DIR}
+    pcb
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/include
 )
 
 include_directories( SYSTEM 
     ${OCE_INCLUDE_DIRS}
 )
 
-add_executable( kicad2step
+set( K2S_FILES
     kicad2step.cpp
     pcb/3d_resolver.cpp
     pcb/base.cpp
@@ -20,6 +21,12 @@ add_executable( kicad2step
     sexpr/sexpr.cpp
     sexpr/sexpr_parser.cpp
 )
+
+if( MINGW )
+    list( APPEND K2S_FILES ${CMAKE_SOURCE_DIR}/common/streamwrapper.cpp )
+endif( MINGW )
+
+add_executable( kicad2step ${K2S_FILES} )
 
 target_link_libraries( kicad2step ${wxWidgets_LIBRARIES} ${LIBS_OCE} )
 

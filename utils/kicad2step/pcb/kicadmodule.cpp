@@ -360,7 +360,8 @@ bool KICADMODULE::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
 
     for( auto i : m_models )
     {
-        std::string fname( resolver->ResolvePath( i->m_modelname.c_str() ).ToUTF8() );
+        std::string fname( resolver->ResolvePath(
+            wxString::FromUTF8Unchecked( i->m_modelname.c_str() ) ).ToUTF8() );
 
         if( aPCB->AddComponent( fname, m_refdes, LAYER_BOTTOM == m_side ? true : false,
             newpos, m_rotation, i->m_offset, i->m_rotation ) )
