@@ -34,7 +34,7 @@
 // class SCH_JUNCTION;
 // class SCH_NO_CONNECT;
 // class SCH_LINE;
-// class SCH_BUS_ENTRY_BASE;
+// class SCH_BUS_ENTRY_BASE;s
 // class SCH_TEXT;
 // class SCH_COMPONENT;
 // class SCH_FIELD;
@@ -104,7 +104,12 @@ public:
 
 
 private:
-    wxXmlDocument m_xmlTree;
+    void loadDrawing( wxXmlNode* node );
+    void loadSchematic( wxXmlNode* node );
+    void loadSheet( wxXmlNode* node );
+
+    SCH_SHEET* m_rootSheet; ///< The root sheet of the schematic being loaded..
+    wxString m_version; ///< Eagle file version.
 protected:
 };
 

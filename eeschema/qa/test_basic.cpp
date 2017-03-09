@@ -44,6 +44,6 @@ BOOST_AUTO_TEST_CASE( Load )
 {
     SCH_PLUGIN* pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE );
 
-    pi->Load("/home/alejandro/Proyectos/kicad/kicad-alejandro/eeschema/qa/data/eagle_schematics",
-             &Kiway());
+    pi->Load("/home/alejandro/Proyectos/kicad/kicad-alejandro/eeschema/qa/data/eagle_schematics/empty.sch",
+             NULL);
 }
