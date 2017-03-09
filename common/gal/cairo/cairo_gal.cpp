@@ -199,6 +199,8 @@ void CAIRO_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPo
 
         cairo_save( currentContext );
 
+        cairo_set_source_rgba( currentContext, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+
         cairo_translate( currentContext, aStartPoint.x, aStartPoint.y );
         cairo_rotate( currentContext, lineAngle );
 
@@ -250,6 +252,51 @@ void CAIRO_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aS
     }
 
     flushPath();
+
+    isElementAdded = true;
+}
+
+
+void CAIRO_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle,
+                                double aEndAngle, double aWidth )
+{
+    SWAP( aStartAngle, >, aEndAngle );
+
+    if( isFillEnabled )
+    {
+        cairo_arc( currentContext, aCenterPoint.x, aCenterPoint.y, aRadius, aStartAngle, aEndAngle );
+        cairo_set_source_rgba( currentContext, fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+        cairo_stroke( currentContext );
+    }
+    else
+    {
+        double width = aWidth / 2.0;
+        VECTOR2D startPoint( cos( aStartAngle ) * aRadius,
+                             sin( aStartAngle ) * aRadius );
+        VECTOR2D endPoint( cos( aEndAngle ) * aRadius,
+                           sin( aEndAngle ) * aRadius );
+
+        cairo_save( currentContext );
+
+        cairo_set_source_rgba( currentContext, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+
+        cairo_translate( currentContext, aCenterPoint.x, aCenterPoint.y );
+
+        cairo_new_sub_path( currentContext );
+        cairo_arc( currentContext, 0, 0, aRadius - width, aStartAngle, aEndAngle );
+
+        cairo_new_sub_path( currentContext );
+        cairo_arc( currentContext, 0, 0, aRadius + width, aStartAngle, aEndAngle );
+
+        cairo_new_sub_path( currentContext );
+        cairo_arc_negative( currentContext, startPoint.x, startPoint.y, width, aStartAngle, aStartAngle + M_PI );
+
+        cairo_new_sub_path( currentContext );
+        cairo_arc( currentContext, endPoint.x, endPoint.y, width, aEndAngle, aEndAngle + M_PI );
+
+        cairo_restore( currentContext );
+        flushPath();
+    }
 
     isElementAdded = true;
 }
