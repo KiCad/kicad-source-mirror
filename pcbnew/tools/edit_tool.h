@@ -124,6 +124,9 @@ public:
      */
     int ExchangeFootprints( const TOOL_EVENT& aEvent );
 
+    ///> Launches a tool to measure between points
+    int MeasureTool( const TOOL_EVENT& aEvent );
+
     ///> Sets up handlers for various events.
     void SetTransitions() override;
 

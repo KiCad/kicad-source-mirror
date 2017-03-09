@@ -35,6 +35,7 @@
 #include <class_draw_panel_gal.h>
 #include <module_editor_frame.h>
 #include <array_creator.h>
+#include <pcbnew_id.h>
 
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
@@ -61,6 +62,8 @@ using namespace std::placeholders;
 #include <dialogs/dialog_exchange_modules.h>
 
 #include <tools/tool_event_utils.h>
+
+#include <preview_items/ruler_item.h>
 
 #include <board_commit.h>
 
@@ -148,6 +151,11 @@ TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
 TOOL_ACTION PCB_ACTIONS::editModifiedSelection( "pcbnew.InteractiveEdit.ModifiedSelection",
         AS_GLOBAL, 0,
         "", "" );
+
+TOOL_ACTION PCB_ACTIONS::measureTool( "pcbnew.InteractiveEdit.measureTool",
+        AS_GLOBAL, MD_CTRL + MD_SHIFT + 'M',
+        _( "Measure tool" ), _( "Interactively measure distance between points" ),
+        nullptr, AF_ACTIVATE );
 
 
 EDIT_TOOL::EDIT_TOOL() :
@@ -927,6 +935,95 @@ int EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 }
 
 
+int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
+{
+    auto& view = *getView();
+    auto& controls = *getViewControls();
+
+    Activate();
+    frame()->SetToolID( EditingModules() ? ID_MODEDIT_MEASUREMENT_TOOL
+                                         : ID_PCB_MEASUREMENT_TOOL,
+                        wxCURSOR_PENCIL, _( "Measure distance between two points" ) );
+
+    KIGFX::PREVIEW::RULER_ITEM ruler;
+    view.Add( &ruler );
+    view.SetVisible( &ruler, false );
+
+    bool originSet = false;
+
+    controls.ShowCursor( true );
+    controls.SetSnapping( true );
+
+    while( auto evt = Wait() )
+    {
+        const VECTOR2I cursorPos = controls.GetCursorPosition();
+
+        if( evt->IsCancel() || evt->IsActivate() )
+        {
+            break;
+        }
+
+        // click or drag starts
+        else if( !originSet &&
+                ( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
+        {
+            if( !evt->IsDrag( BUT_LEFT ) )
+            {
+                ruler.SetOrigin( cursorPos );
+                ruler.SetEnd( cursorPos );
+            }
+
+            controls.CaptureCursor( true );
+            controls.SetAutoPan( true );
+
+            originSet = true;
+        }
+
+        else if( !originSet && evt->IsMotion() )
+        {
+            // make sure the origin is set before a drag starts
+            // otherwise you can miss a step
+            ruler.SetOrigin( cursorPos );
+            ruler.SetEnd( cursorPos );
+        }
+
+        // second click or mouse up after drag ends
+        else if( originSet &&
+                ( evt->IsClick( BUT_LEFT ) || evt->IsMouseUp( BUT_LEFT ) ) )
+        {
+            originSet = false;
+
+            controls.SetAutoPan( false );
+            controls.CaptureCursor( false );
+
+            view.SetVisible( &ruler, false );
+        }
+
+        // move or drag when origin set updates rules
+        else if( originSet &&
+                ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
+        {
+            ruler.SetEnd( cursorPos );
+
+            view.SetVisible( &ruler, true );
+            view.Update( &ruler, KIGFX::GEOMETRY );
+        }
+
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            GetManager()->PassEvent();
+        }
+    }
+
+    view.SetVisible( &ruler, false );
+    view.Remove( &ruler );
+
+    frame()->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+
+    return 0;
+}
+
+
 void EDIT_TOOL::SetTransitions()
 {
     Go( &EDIT_TOOL::Main,       PCB_ACTIONS::editActivate.MakeEvent() );
@@ -943,6 +1040,7 @@ void EDIT_TOOL::SetTransitions()
     Go( &EDIT_TOOL::Mirror,     PCB_ACTIONS::mirror.MakeEvent() );
     Go( &EDIT_TOOL::editFootprintInFpEditor, PCB_ACTIONS::editFootprintInFpEditor.MakeEvent() );
     Go( &EDIT_TOOL::ExchangeFootprints,      PCB_ACTIONS::exchangeFootprints.MakeEvent() );
+    Go( &EDIT_TOOL::MeasureTool,             PCB_ACTIONS::measureTool.MakeEvent() );
 }
 
 

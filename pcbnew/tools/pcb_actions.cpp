@@ -151,6 +151,10 @@ boost::optional<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
     case ID_PCB_PLACE_OFFSET_COORD_BUTT:
         return PCB_ACTIONS::drillOrigin.MakeEvent();
 
+    case ID_PCB_MEASUREMENT_TOOL:
+    case ID_MODEDIT_MEASUREMENT_TOOL:
+        return PCB_ACTIONS::measureTool.MakeEvent();
+
     case ID_PCB_HIGHLIGHT_BUTT:
         return PCB_ACTIONS::highlightNetCursor.MakeEvent();
 

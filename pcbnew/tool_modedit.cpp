@@ -196,6 +196,11 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
                             _( "Set the origin point for the grid" ),
                             wxITEM_CHECK );
 
+    m_drawToolBar->AddTool( ID_MODEDIT_MEASUREMENT_TOOL, wxEmptyString,
+                            KiBitmap( measurement_xpm ),
+                            _( "Measure distance between two points" ),
+                            wxITEM_CHECK );
+
     m_drawToolBar->Realize();
 }
 

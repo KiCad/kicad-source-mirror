@@ -200,6 +200,11 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
         break;
 
+    case ID_MODEDIT_MEASUREMENT_TOOL:
+        DisplayError( this, wxT( "Unsupported tool in legacy canvas" ) );
+        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+        break;
+
     default:
         DisplayError( this, wxT( "FOOTPRINT_EDIT_FRAME::ProcessCommand error" ) );
         SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );

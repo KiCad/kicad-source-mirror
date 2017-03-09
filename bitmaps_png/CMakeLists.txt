@@ -339,6 +339,7 @@ set( BMAPS_MID
     load_module_lib
     local_ratsnest
     locked
+    measurement
     mirepcb
     mirror_h
     mirror_v

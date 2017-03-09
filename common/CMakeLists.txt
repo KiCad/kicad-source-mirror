@@ -184,6 +184,8 @@ set( COMMON_PAGE_LAYOUT_SRCS
     )
 
 set( COMMON_PREVIEW_ITEMS_SRCS
+    preview_items/preview_utils.cpp
+    preview_items/ruler_item.cpp
     preview_items/simple_overlay_item.cpp
     preview_items/selection_area.cpp
     )
