@@ -608,7 +608,7 @@ private:
                                      const KICAD_T aFilterList[] = LIB_COLLECTOR::AllItems );
     void EditField( LIB_FIELD* Field );
 
-    void refreshSchematic() const;
+    void refreshSchematic();
 
 public:
     /**

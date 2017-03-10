@@ -1439,7 +1439,7 @@ bool LIB_EDIT_FRAME::SynchronizePins()
 }
 
 
-void LIB_EDIT_FRAME::refreshSchematic() const
+void LIB_EDIT_FRAME::refreshSchematic()
 {
     // This is not the most effecient way to do this because the changed library may not have
     // any effect on the schematic symbol links.  Since this is not called very often, take the
