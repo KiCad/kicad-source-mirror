@@ -183,12 +183,17 @@ set( COMMON_PAGE_LAYOUT_SRCS
     page_layout/page_layout_reader.cpp
     )
 
+set( COMMON_PREVIEW_ITEMS_SRCS
+    preview_items/simple_overlay_item.cpp
+    )
+
 set( COMMON_SRCS
     ${LIB_KICAD_SRCS}
     ${COMMON_ABOUT_DLG_SRCS}
     ${COMMON_DLG_SRCS}
     ${COMMON_WIDGET_SRCS}
     ${COMMON_PAGE_LAYOUT_SRCS}
+    ${COMMON_PREVIEW_ITEMS_SRCS}
     base_struct.cpp
     basicframe.cpp
     bezier_curves.cpp
