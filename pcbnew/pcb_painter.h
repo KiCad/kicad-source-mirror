@@ -130,6 +130,12 @@ protected:
     ///> Flag determining if items on a given layer should be drawn as an outline or a filled item
     bool    m_sketchMode[TOTAL_LAYER_COUNT];
 
+    ///> Flag determining if board graphic items should be outlined or stroked
+    bool    m_sketchBoardGfx;
+
+    ///> Flag determining if footprint graphic items should be outlined or stroked
+    bool    m_sketchFpGfx;
+
     ///> Flag determining if pad numbers should be visible
     bool    m_padNumbers;
 

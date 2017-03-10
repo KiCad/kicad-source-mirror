@@ -50,6 +50,8 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_netNamesOnTracks = true;
     m_displayZone = DZ_SHOW_FILLED;
     m_clearance = CL_NONE;
+    m_sketchBoardGfx = false;
+    m_sketchFpGfx = false;
 
     // By default everything should be displayed as filled
     for( unsigned int i = 0; i < TOTAL_LAYER_COUNT; ++i )
@@ -116,6 +118,8 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const DISPLAY_OPTIONS* aOptions )
 
     m_hiContrastEnabled = aOptions->m_ContrastModeDisplay;
     m_padNumbers        = aOptions->m_DisplayPadNum;
+    m_sketchBoardGfx    = !aOptions->m_DisplayDrawItemsFill;
+    m_sketchFpGfx       = !aOptions->m_DisplayModEdgeFill;
 
     // Whether to draw tracks, vias & pads filled or as outlines
     m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )]         = !aOptions->m_DisplayPadFill;
@@ -783,56 +787,67 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
 {
     const COLOR4D& color = m_pcbSettings.GetColor( aSegment, aSegment->GetLayer() );
+    bool sketch = ( aSegment->Type() == PCB_LINE_T && m_pcbSettings.m_sketchBoardGfx )
+        || ( aSegment->Type() == PCB_MODULE_EDGE_T && m_pcbSettings.m_sketchFpGfx );
 
-    m_gal->SetIsFill( false );
-    m_gal->SetIsStroke( true );
+    int thickness = getLineThickness( aSegment->GetWidth() );
+    VECTOR2D start( aSegment->GetStart() );
+    VECTOR2D end( aSegment->GetEnd() );
+
+    m_gal->SetIsFill( !sketch );
+    m_gal->SetIsStroke( sketch );
+    m_gal->SetFillColor( color );
     m_gal->SetStrokeColor( color );
-
-    if( m_pcbSettings.m_sketchMode[aLayer] )
-        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );    // Outline mode
-    else
-        m_gal->SetLineWidth( getLineThickness( aSegment->GetWidth() ) );     // Filled mode
+    m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
 
     switch( aSegment->GetShape() )
     {
     case S_SEGMENT:
-        m_gal->DrawLine( VECTOR2D( aSegment->GetStart() ), VECTOR2D( aSegment->GetEnd() ) );
+        m_gal->DrawSegment( start, end, thickness );
         break;
 
     case S_RECT:
         wxASSERT_MSG( false, wxT( "Not tested yet" ) );
-        m_gal->DrawRectangle( VECTOR2D( aSegment->GetStart() ), VECTOR2D( aSegment->GetEnd() ) );
+        m_gal->DrawRectangle( start, end );
         break;
 
     case S_ARC:
-        m_gal->DrawArc( VECTOR2D( aSegment->GetCenter() ), aSegment->GetRadius(),
+        m_gal->DrawArcSegment( start, aSegment->GetRadius(),
                         DECIDEG2RAD( aSegment->GetArcAngleStart() ),
                         DECIDEG2RAD( aSegment->GetArcAngleStart() + aSegment->GetAngle() ),
+                        thickness );
         break;
 
     case S_CIRCLE:
-        m_gal->DrawCircle( VECTOR2D( aSegment->GetCenter() ), aSegment->GetRadius() );
+        if( sketch )
+        {
+            m_gal->DrawCircle( start, aSegment->GetRadius() - thickness / 2 );
+            m_gal->DrawCircle( start, aSegment->GetRadius() + thickness / 2 );
+        }
+        else
+        {
+            m_gal->SetLineWidth( thickness );
+            m_gal->SetIsFill( false );
+            m_gal->DrawCircle( start, aSegment->GetRadius() );
+        }
         break;
 
     case S_POLYGON:
     {
         std::deque<VECTOR2D> pointsList;
 
-        m_gal->SetIsFill( true );
+        m_gal->SetIsFill( true );       // draw polygons the legacy way
         m_gal->SetIsStroke( false );
-        m_gal->SetFillColor( color );
-
         m_gal->Save();
+        m_gal->SetLineWidth( thickness );
 
-        MODULE* module = aSegment->GetParentModule();
-        if( module )
+        if( MODULE* module = aSegment->GetParentModule() )
         {
             m_gal->Translate( module->GetPosition() );
             m_gal->Rotate( -module->GetOrientationRadians() );
         }
         else
         {
-            // not tested
             m_gal->Translate( aSegment->GetPosition() );
             m_gal->Rotate( DECIDEG2RAD( -aSegment->GetAngle() ) );
         }
