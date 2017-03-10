@@ -133,9 +133,13 @@ CMP_TREE_NODE_ALIAS::CMP_TREE_NODE_ALIAS( CMP_TREE_NODE* aParent, LIB_ALIAS* aAl
     Type        = ALIAS;
     Name        = aAlias->GetName();
     Desc        = aAlias->GetDescription();
-    MatchName   = aAlias->GetName().Lower();
-    SearchText  = aAlias->GetKeyWords() + "        " + Desc;
     Alias       = aAlias;
+
+    // Pre-normalized strings for fast case-insensitive matching
+    // Search text spaces out keywords and description to penalize description
+    // matches - earlier matches are worth more.
+    MatchName   = aAlias->GetName().Lower();
+    SearchText  = (aAlias->GetKeyWords() + "        " + Desc).Lower();
 
     if( aAlias->GetPart()->IsMulti() )
     {
@@ -167,14 +171,18 @@ void CMP_TREE_NODE_ALIAS::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
     int matchers_fired = 0;
 
     if( aMatcher.GetPattern() == MatchName )
+    {
         Score += 1000;  // exact match. High score :)
+    }
     else if( aMatcher.Find( MatchName, matchers_fired, found_pos ) )
     {
         // Substring match. The earlier in the string the better.
         Score += matchPosScore( found_pos, 20 ) + 20;
     }
     else if( aMatcher.Find( Parent->MatchName, matchers_fired, found_pos ) )
+    {
         Score += 19;   // parent name matches.         score += 19
+    }
     else if( aMatcher.Find( SearchText, matchers_fired, found_pos ) )
     {
         // If we have a very short search term (like one or two letters),
