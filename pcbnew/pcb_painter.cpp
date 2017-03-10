@@ -534,7 +534,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
             // do not display descriptions upside down
             NORMALIZE_ANGLE_90( orientation );
-            m_gal->Rotate( -orientation * M_PI / 1800.0 );
+            m_gal->Rotate( DECIDEG2RAD( -orientation ) );
 
             // Default font settings
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
@@ -806,8 +806,8 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
 
     case S_ARC:
         m_gal->DrawArc( VECTOR2D( aSegment->GetCenter() ), aSegment->GetRadius(),
-                        aSegment->GetArcAngleStart() * M_PI / 1800.0,
-                        ( aSegment->GetArcAngleStart() + aSegment->GetAngle() ) * M_PI / 1800.0 );
+                        DECIDEG2RAD( aSegment->GetArcAngleStart() ),
+                        DECIDEG2RAD( aSegment->GetArcAngleStart() + aSegment->GetAngle() ),
         break;
 
     case S_CIRCLE:
@@ -834,7 +834,7 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
         {
             // not tested
             m_gal->Translate( aSegment->GetPosition() );
-            m_gal->Rotate( -aSegment->GetAngle() * M_PI / 1800.0 );
+            m_gal->Rotate( DECIDEG2RAD( -aSegment->GetAngle() ) );
         }
 
         std::copy( aSegment->GetPolyPoints().begin(), aSegment->GetPolyPoints().end(),
