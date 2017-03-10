@@ -152,11 +152,11 @@ void COLOR_SWATCH::GetNewSwatchColor()
     {
         wxColourData colourData;
         colourData.SetColour( m_color.ToColour() );
-        wxColourDialog* dialog = new wxColourDialog( this, &colourData );
+        wxColourDialog dialog( this, &colourData );
 
-        if( dialog->ShowModal() == wxID_OK )
+        if( dialog.ShowModal() == wxID_OK )
         {
-            newColor = COLOR4D( dialog->GetColourData().GetColour() );
+            newColor = COLOR4D( dialog.GetColourData().GetColour() );
         }
     }
     else
