@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -141,7 +141,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                             _( "Create a new component from the current one" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_PART, wxEmptyString,
-                         KiBitmap( save_part_in_mem_xpm ),
+                            KiBitmap( save_part_in_mem_xpm ),
                             _( "Update current component in current library" ) );
 
     m_mainToolBar->AddTool( ImportPartId, wxEmptyString, KiBitmap( import_xpm ),

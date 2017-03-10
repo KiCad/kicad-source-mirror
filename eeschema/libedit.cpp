@@ -261,6 +261,7 @@ void LIB_EDIT_FRAME::RedrawComponent( wxDC* aDC, wxPoint aOffset  )
     }
 }
 
+
 void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     if( GetScreen() == NULL )
@@ -399,7 +400,8 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
         if( !wxRenameFile( libFileName.GetFullPath(), backupFileName.GetFullPath() ) )
         {
             libFileName.MakeAbsolute();
-            msg = _( "Failed to rename old component library file " ) + backupFileName.GetFullPath();
+            msg = _( "Failed to rename old component library file " ) +
+                  backupFileName.GetFullPath();
             DisplayError( this, msg );
         }
     }
@@ -445,21 +447,7 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     AppendMsgPanel( msg, msg1, BLUE );
     UpdateAliasSelectList();
     UpdatePartSelectList();
-
-    // This is not the most effecient way to do this because the changed library may not have
-    // any effect on the schematic symbol links.  Since this is not called very often, take the
-    // hit here rather than the myriad other places (including SCH_SCREEN::Draw()) where it was
-    // being called.
-    if( !newFile )
-    {
-        SCH_SCREENS schematic;
-
-        schematic.UpdateSymbolLinks();
-
-        // There may be no parent window so use KIWAY message to refresh the schematic editor
-        // in case any symbols have changed.
-        Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_REFRESH, std::string( "" ), this );
-    }
+    refreshSchematic();
 
     return true;
 }
@@ -611,7 +599,6 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
 
     m_canvas->Refresh();
 }
-
 
 
 void LIB_EDIT_FRAME::CreateNewLibraryPart( wxCommandEvent& event )

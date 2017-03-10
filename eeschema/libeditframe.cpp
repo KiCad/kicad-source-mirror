@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,7 +96,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_LIBEDIT_NEW_PART_FROM_EXISTING, LIB_EDIT_FRAME::OnCreateNewPartFromExisting )
 
     EVT_TOOL( ID_LIBEDIT_SELECT_PART, LIB_EDIT_FRAME::LoadOneLibraryPart )
-    EVT_TOOL( ID_LIBEDIT_SAVE_CURRENT_PART, LIB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_UNDO, LIB_EDIT_FRAME::GetComponentFromUndoList )
     EVT_TOOL( wxID_REDO, LIB_EDIT_FRAME::GetComponentFromRedoList )
     EVT_TOOL( ID_LIBEDIT_GET_FRAME_EDIT_PART, LIB_EDIT_FRAME::OnEditComponentProperties )
@@ -110,6 +109,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ExportPartId, LIB_EDIT_FRAME::OnExportPart )
     EVT_TOOL( CreateNewLibAndSavePartId, LIB_EDIT_FRAME::OnExportPart )
     EVT_TOOL( ImportPartId, LIB_EDIT_FRAME::OnImportPart )
+    EVT_TOOL( ID_LIBEDIT_SAVE_CURRENT_PART, LIB_EDIT_FRAME::OnSaveCurrentPart )
 
     EVT_COMBOBOX( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnSelectPart )
     EVT_COMBOBOX( ID_LIBEDIT_SELECT_ALIAS, LIB_EDIT_FRAME::OnSelectAlias )
@@ -274,19 +274,19 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     mesg.MessageToolbarPane();
 
     m_auimgr.AddPane( m_mainToolBar,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top().Row( 0 ) );
+                      wxAuiPaneInfo( horiz ).Name( "m_mainToolBar" ).Top().Row( 0 ) );
 
     m_auimgr.AddPane( m_drawToolBar,
-                      wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
+                      wxAuiPaneInfo( vert ).Name( "m_VToolBar" ).Right() );
 
     m_auimgr.AddPane( m_optionsToolBar,
-                      wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ).Left() );
+                      wxAuiPaneInfo( vert ).Name( "m_optionsToolBar" ).Left() );
 
     m_auimgr.AddPane( m_canvas,
-                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
+                      wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
 
     m_auimgr.AddPane( m_messagePanel,
-                      wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
+                      wxAuiPaneInfo( mesg ).Name( "MsgPanel" ).Bottom().Layer(10) );
 
     m_auimgr.Update();
 
@@ -548,11 +548,13 @@ void LIB_EDIT_FRAME::OnUpdatePinByPin( wxUpdateUIEvent& event )
     event.Check( m_editPinsPerPartOrConvert );
 }
 
+
 void LIB_EDIT_FRAME::OnUpdatePinTable( wxUpdateUIEvent& event )
 {
     LIB_PART* part = GetCurPart();
     event.Enable( part != NULL );
 }
+
 
 void LIB_EDIT_FRAME::OnUpdatePartNumber( wxUpdateUIEvent& event )
 {
@@ -642,7 +644,7 @@ void LIB_EDIT_FRAME::OnViewEntryDoc( wxCommandEvent& event )
     wxString    fileName;
     LIB_ALIAS*  alias = part->GetAlias( m_aliasName );
 
-    wxCHECK_RET( alias != NULL, wxT( "Alias not found." ) );
+    wxCHECK_RET( alias != NULL, "Alias not found." );
 
     fileName = alias->GetDocFileName();
 
@@ -666,6 +668,46 @@ void LIB_EDIT_FRAME::OnSelectBodyStyle( wxCommandEvent& event )
 
     m_lastDrawItem = NULL;
     m_canvas->Refresh();
+}
+
+
+void LIB_EDIT_FRAME::OnSaveCurrentPart( wxCommandEvent& aEvent )
+{
+    LIB_PART* part = GetCurPart();
+
+    if( !part )
+    {
+        DisplayError( this, _( "No part to save." ) );
+        return;
+    }
+
+    PART_LIB* lib  = GetCurLib();
+
+    if( !lib )
+        SelectActiveLibrary();
+
+    lib = GetCurLib();
+
+    if( !lib )
+    {
+        DisplayError( this, _( "No library specified." ) );
+        return;
+    }
+
+    try
+    {
+        SaveOnePart( lib );
+    }
+    catch( ... )
+    {
+        wxString msg;
+        msg.Printf( _( "Unexpected error occured saving symbol '%s' to symbol library '%s'." ),
+                    part->GetName(), lib->GetName() );
+        DisplayError( this, msg );
+        return;
+    }
+
+    refreshSchematic();
 }
 
 
@@ -712,7 +754,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     default:
         m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(),
-                                    wxEmptyString );
+                                   wxEmptyString );
         break;
     }
 
@@ -725,33 +767,6 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_LIBEDIT_SELECT_CURRENT_LIB:
         SelectActiveLibrary();
-        break;
-
-    case ID_LIBEDIT_SAVE_CURRENT_PART:
-        {
-            LIB_PART*   part = GetCurPart();
-
-            if( !part )
-            {
-                DisplayError( this, _( "No part to save." ) );
-                break;
-            }
-
-            PART_LIB*   lib  = GetCurLib();
-
-            if( !lib )
-                SelectActiveLibrary();
-
-            lib = GetCurLib();
-
-            if( !lib )
-            {
-                DisplayError( this, _( "No library specified." ) );
-                break;
-            }
-
-            SaveOnePart( lib );
-        }
         break;
 
     case ID_LIBEDIT_EDIT_PIN_BY_PIN:
@@ -931,7 +946,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this, wxT( "LIB_EDIT_FRAME::Process_Special_Functions error" ) );
+        DisplayError( this, "LIB_EDIT_FRAME::Process_Special_Functions error" );
         break;
     }
 
@@ -1058,8 +1073,8 @@ void LIB_EDIT_FRAME::EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem )
 
     // Display new text
     if( DC && !DrawItem->InEditMode() )
-        DrawItem->Draw( m_canvas, DC, wxPoint( 0, 0 ), COLOR4D::UNSPECIFIED, GR_DEFAULT_DRAWMODE, NULL,
-                        DefaultTransform );
+        DrawItem->Draw( m_canvas, DC, wxPoint( 0, 0 ), COLOR4D::UNSPECIFIED, GR_DEFAULT_DRAWMODE,
+                        NULL, DefaultTransform );
 }
 
 
@@ -1092,7 +1107,7 @@ void LIB_EDIT_FRAME::OnCreateNewPartFromExisting( wxCommandEvent& event )
 {
     LIB_PART*      part = GetCurPart();
 
-    wxCHECK_RET( part, wxT( "Cannot create new part from non-existent current part." ) );
+    wxCHECK_RET( part, "Cannot create new part from non-existent current part." );
 
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
     m_canvas->CrossHairOff( &dc );
@@ -1292,7 +1307,7 @@ LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aF
         if( item == NULL )
         {
             wxASSERT_MSG( m_collectedItems.GetCount() <= MAX_SELECT_ITEM_IDS,
-                          wxT( "Select item clarification context menu size limit exceeded." ) );
+                          "Select item clarification context menu size limit exceeded." );
 
             wxMenu selectMenu;
             AddMenuItem( &selectMenu, wxID_NONE, _( "Clarify Selection" ),
@@ -1334,7 +1349,7 @@ LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aF
 
 void LIB_EDIT_FRAME::deleteItem( wxDC* aDC )
 {
-    wxCHECK_RET( m_drawItem != NULL, wxT( "No drawing item selected to delete." ) );
+    wxCHECK_RET( m_drawItem != NULL, "No drawing item selected to delete." );
 
     m_canvas->CrossHairOff( aDC );
 
@@ -1401,6 +1416,7 @@ void LIB_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
     }
 }
 
+
 void LIB_EDIT_FRAME::OnOpenPinTable( wxCommandEvent& aEvent )
 {
     LIB_PART* part = GetCurPart();
@@ -1413,10 +1429,27 @@ void LIB_EDIT_FRAME::OnOpenPinTable( wxCommandEvent& aEvent )
     return;
 }
 
+
 bool LIB_EDIT_FRAME::SynchronizePins()
 {
     LIB_PART*      part = GetCurPart();
 
     return !m_editPinsPerPartOrConvert && ( part &&
         ( part->HasConversion() || part->IsMulti() ) );
+}
+
+
+void LIB_EDIT_FRAME::refreshSchematic() const
+{
+    // This is not the most effecient way to do this because the changed library may not have
+    // any effect on the schematic symbol links.  Since this is not called very often, take the
+    // hit here rather than the myriad other places (including SCH_SCREEN::Draw()) where it was
+    // being called.
+    SCH_SCREENS schematic;
+
+    schematic.UpdateSymbolLinks();
+
+    // There may be no parent window so use KIWAY message to refresh the schematic editor
+    // in case any symbols have changed.
+    Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_REFRESH, std::string( "" ), this );
 }
