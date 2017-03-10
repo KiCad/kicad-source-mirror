@@ -35,6 +35,7 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <wx/log.h>
 
 /**
  * The class PROF_COUNTER is a small class to help profiling.
@@ -97,6 +98,21 @@ public:
 
         std::chrono::duration<double, std::milli> elapsed = display_stoptime - m_starttime;
         std::cerr << m_name << " took " << elapsed.count() << " milliseconds." << std::endl;
+    }
+
+    /**
+     * Show the elapsed time (in ms) in a wxLogMessage window.
+     */
+    void ShowDlg()
+    {
+        TIME_POINT display_stoptime = m_running ?
+                    std::chrono::high_resolution_clock::now() :
+                    m_stoptime;
+
+        std::chrono::duration<double, std::milli> elapsed = display_stoptime - m_starttime;
+        wxString msg;
+        msg << m_name << " took " << elapsed.count() << " ms.";
+        wxLogMessage( msg );
     }
 
     /**

@@ -276,7 +276,10 @@ public:
                 LIB_ID id( wxEmptyString, part_name );
 
                 case_sensitive_match = aRescuer.GetLibs()->FindLibraryAlias( id );
-                aRescuer.GetLibs()->FindLibraryNearEntries( case_insensitive_matches, part_name );
+
+                if( !case_sensitive_match )
+                    // the case sensitive match failed. Try a case insensitive match
+                    aRescuer.GetLibs()->FindLibraryNearEntries( case_insensitive_matches, part_name );
             }
 
             if( case_sensitive_match || !( case_insensitive_matches.size() ) )
@@ -285,6 +288,7 @@ public:
             RESCUE_CASE_CANDIDATE candidate(
                 part_name, case_insensitive_matches[0]->GetName(),
                 case_insensitive_matches[0]->GetPart() );
+
             candidate_map[part_name] = candidate;
         }
 
@@ -379,20 +383,22 @@ public:
                 cache_match = find_component( part_name, aRescuer.GetLibs(), /* aCached */ true );
                 LIB_ID id( wxEmptyString, part_name );
                 lib_match = aRescuer.GetLibs()->FindLibPart( id );
+
+                // Test whether there is a conflict
+                if( !cache_match || !lib_match )
+                    continue;
+
+                if( !cache_match->PinsConflictWith( *lib_match, /* aTestNums */ true,
+                        /* aTestNames */ true, /* aTestType */ true, /* aTestOrientation */ true,
+                        /* aTestLength */ false ))
+                    continue;
+
+                RESCUE_CACHE_CANDIDATE candidate(
+                    part_name, part_name + part_name_suffix,
+                    cache_match, lib_match );
+
+                candidate_map[part_name] = candidate;
             }
-
-            // Test whether there is a conflict
-            if( !cache_match || !lib_match )
-                continue;
-            if( !cache_match->PinsConflictWith( *lib_match, /* aTestNums */ true,
-                    /* aTestNames */ true, /* aTestType */ true, /* aTestOrientation */ true,
-                    /* aTestLength */ false ))
-                continue;
-
-            RESCUE_CACHE_CANDIDATE candidate(
-                part_name, part_name + part_name_suffix,
-                cache_match, lib_match );
-            candidate_map[part_name] = candidate;
         }
 
         // Now, dump the map into aCandidates
