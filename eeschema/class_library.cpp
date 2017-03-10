@@ -287,19 +287,18 @@ PART_LIB* PART_LIB::LoadLibrary( const wxString& aFileName ) throw( IO_ERROR, bo
 {
     std::unique_ptr<PART_LIB> lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName ) );
 
-    wxArrayString tmp;
+    std::vector<LIB_ALIAS*> aliases;
+    // This loads the library.
+    lib->GetAliases( aliases );
 
-    // This loads the library although we could probably do lazy loading.
-    lib->GetAliasNames( tmp );
-
-    // This not them most efficient way to set the LIB_PART m_library member but it will
-    // only be used when loading legacy libraries in the future.  Once the symbols in the
+    // Now, set the LIB_PART m_library member but it will only be used
+    // when loading legacy libraries in the future. Once the symbols in the
     // schematic have a full #LIB_ID, this will not get called.
-    for( size_t i = 0; i < tmp.GetCount();  i++ )
+    for( size_t ii = 0; ii < aliases.size(); ii++ )
     {
-        LIB_ALIAS* alias = lib->FindAlias( tmp[i] );
+        LIB_ALIAS* alias = aliases[ii];
 
-        if( alias && alias->GetPart() )
+        if( alias->GetPart() )
             alias->GetPart()->SetLib( lib.get() );
     }
 
