@@ -1448,6 +1448,7 @@ void LIB_EDIT_FRAME::refreshSchematic()
     SCH_SCREENS schematic;
 
     schematic.UpdateSymbolLinks();
+    schematic.TestDanglingEnds();
 
     // There may be no parent window so use KIWAY message to refresh the schematic editor
     // in case any symbols have changed.

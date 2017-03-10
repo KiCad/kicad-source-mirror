@@ -1522,6 +1522,13 @@ void SCH_SCREENS::UpdateSymbolLinks()
 }
 
 
+void SCH_SCREENS::TestDanglingEnds()
+{
+    for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
+        screen->TestDanglingEnds();
+}
+
+
 #if defined(DEBUG)
 void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
 {

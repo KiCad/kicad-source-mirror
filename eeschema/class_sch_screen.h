@@ -588,6 +588,7 @@ public:
                         enum MARKER_BASE::MARKER_SEVERITY aSeverity );
 
     void UpdateSymbolLinks();
+    void TestDanglingEnds();
 
 private:
     void AddScreenToList( SCH_SCREEN* aScreen );
