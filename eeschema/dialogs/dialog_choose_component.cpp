@@ -45,7 +45,7 @@
 
 #include <class_library.h>
 #include <sch_base_frame.h>
-#include <widgets/footprint_preview_panel.h>
+#include <widgets/footprint_preview_widget.h>
 #include <widgets/two_column_tree_list.h>
 #include <template_fieldnames.h>
 #include <generate_alias_info.h>
@@ -61,7 +61,6 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT(
         CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, int aDeMorganConvert ):
     DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition,
                  wxSize( 800, 650 ), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
-    m_fp_viewer( nullptr ),
     m_parent( aParent ),
     m_adapter( aAdapter ),
     m_deMorganConvert( aDeMorganConvert >= 0 ? aDeMorganConvert : 0 ),
@@ -158,11 +157,7 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
     m_fp_sel_ctrl = new wxChoice( panel, wxID_ANY );
     m_fp_sel_ctrl->SetSelection( 0 );
 
-    m_fp_view_ctrl = new wxPanel( panel, wxID_ANY,
-            wxDefaultPosition, wxSize( -1,-1 ),
-            wxFULL_REPAINT_ON_RESIZE | wxSUNKEN_BORDER | wxTAB_TRAVERSAL );
-
-    m_fp_viewer = FOOTPRINT_PREVIEW_PANEL::InstallOnPanel( Kiway(), m_fp_view_ctrl, true );
+    m_fp_view_ctrl = new FOOTPRINT_PREVIEW_WIDGET( panel, Kiway() );
 
     sizer->Add( m_sch_view_ctrl,    1, wxEXPAND | wxALL,    5 );
     sizer->Add( m_fp_sel_ctrl,      0, wxEXPAND | wxALL,    5 );
@@ -188,10 +183,10 @@ void DIALOG_CHOOSE_COMPONENT::OnInitDialog( wxInitDialogEvent& aEvent )
     m_query_ctrl->SetFocus();
     m_query_ctrl->SetValue( wxEmptyString );
 
-    if( m_fp_viewer )
+    if( m_fp_view_ctrl->IsInitialized() )
     {
         // This hides the GAL panel and shows the status label
-        m_fp_viewer->SetStatusText( wxEmptyString );
+        m_fp_view_ctrl->SetStatusText( wxEmptyString );
     }
 }
 
@@ -280,8 +275,8 @@ void DIALOG_CHOOSE_COMPONENT::OnTreeSelect( wxDataViewEvent& aEvent )
     {
         m_details_ctrl->SetPage( wxEmptyString );
 
-        if( m_fp_viewer )
-            m_fp_viewer->SetStatusText( wxEmptyString );
+        if( m_fp_view_ctrl->IsInitialized() )
+            m_fp_view_ctrl->SetStatusText( wxEmptyString );
     }
 }
 
@@ -322,7 +317,7 @@ void DIALOG_CHOOSE_COMPONENT::OnSchViewDClick( wxMouseEvent& aEvent )
 
 void DIALOG_CHOOSE_COMPONENT::ShowFootprintFor( LIB_ALIAS* aAlias )
 {
-    if( !m_fp_viewer )
+    if( !m_fp_view_ctrl->IsInitialized() )
         return;
 
     LIB_FIELDS fields;
@@ -335,13 +330,13 @@ void DIALOG_CHOOSE_COMPONENT::ShowFootprintFor( LIB_ALIAS* aAlias )
         wxString fpname = field.GetFullText();
         if( fpname == wxEmptyString )
         {
-            m_fp_viewer->SetStatusText( _( "No footprint specified" ) );
+            m_fp_view_ctrl->SetStatusText( _( "No footprint specified" ) );
         }
         else
         {
-            m_fp_viewer->ClearStatus();
-            m_fp_viewer->CacheFootprint( LIB_ID( fpname ) );
-            m_fp_viewer->DisplayFootprint( LIB_ID( fpname ) );
+            m_fp_view_ctrl->ClearStatus();
+            m_fp_view_ctrl->CacheFootprint( LIB_ID( fpname ) );
+            m_fp_view_ctrl->DisplayFootprint( LIB_ID( fpname ) );
         }
         break;
     }

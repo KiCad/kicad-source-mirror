@@ -39,7 +39,7 @@ class wxChoice;
 class wxButton;
 class wxTimer;
 
-class FOOTPRINT_PREVIEW_PANEL;
+class FOOTPRINT_PREVIEW_WIDGET;
 class LIB_ALIAS;
 class LIB_PART;
 class SCH_BASE_FRAME;
@@ -169,9 +169,8 @@ protected:
     wxHtmlWindow*   m_details_ctrl;
     wxPanel*        m_sch_view_ctrl;
     wxChoice*       m_fp_sel_ctrl;
-    wxPanel*        m_fp_view_ctrl;
 
-    FOOTPRINT_PREVIEW_PANEL* m_fp_viewer;
+    FOOTPRINT_PREVIEW_WIDGET* m_fp_view_ctrl;
 
     SCH_BASE_FRAME*             m_parent;
     CMP_TREE_MODEL_ADAPTER::PTR m_adapter;

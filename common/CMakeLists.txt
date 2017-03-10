@@ -169,7 +169,7 @@ set( COMMON_WIDGET_SRCS
     widgets/mathplot.cpp
     widgets/widget_hotkey_list.cpp
     widgets/two_column_tree_list.cpp
-    widgets/footprint_preview_panel.cpp
+    widgets/footprint_preview_widget.cpp
     widgets/indicator_icon.cpp
     )
 

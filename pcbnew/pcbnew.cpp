@@ -57,7 +57,7 @@
 #include <module_editor_frame.h>
 #include <modview_frame.h>
 #include <footprint_wizard_frame.h>
-#include <widgets/footprint_preview_panel.h>
+#include <footprint_preview_panel.h>
 #include <gl_context_mgr.h>
 extern bool IsWxPythonLoaded();
 
