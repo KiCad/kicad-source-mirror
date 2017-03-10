@@ -532,12 +532,13 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
     // Swap the angles, if start angle is greater than end angle
     SWAP( aStartAngle, >, aEndAngle );
 
+    const double alphaIncrement = calcAngleStep( aRadius );
+
     Save();
     currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0 );
 
     if( isStrokeEnabled )
     {
-        const double alphaIncrement = 2.0 * M_PI / CIRCLE_POINTS;
         currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
         VECTOR2D p( cos( aStartAngle ) * aRadius, sin( aStartAngle ) * aRadius );
@@ -561,7 +562,6 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
 
     if( isFillEnabled )
     {
-        const double alphaIncrement = 2 * M_PI / CIRCLE_POINTS;
         double alpha;
         currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
         currentManager->Shader( SHADER_NONE );
@@ -598,7 +598,7 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, d
     // Swap the angles, if start angle is greater than end angle
     SWAP( aStartAngle, >, aEndAngle );
 
-    const double alphaIncrement = 2.0 * M_PI / CIRCLE_POINTS;
+    const double alphaIncrement = calcAngleStep( aRadius );
 
     Save();
     currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0 );

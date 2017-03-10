@@ -441,6 +441,15 @@ private:
     unsigned int getNewGroupNumber();
 
     /**
+     * @brief Compute the angle step when drawing arcs/circles approximated with lines.
+     */
+    double calcAngleStep( double aRadius ) const
+    {
+        // Bigger arcs need smaller alpha increment to make them look smooth
+        return std::min( 1e6 / aRadius, 2.0 * M_PI / CIRCLE_POINTS );
+    }
+
+    /**
      * @brief Basic OpenGL initialization.
      */
     void init();
