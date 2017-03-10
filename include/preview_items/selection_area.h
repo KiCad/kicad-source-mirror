@@ -22,63 +22,70 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __SELECTION_AREA_H
-#define __SELECTION_AREA_H
+#ifndef PREVIEW_ITEMS_SELECTION_AREA_H
+#define PREVIEW_ITEMS_SELECTION_AREA_H
 
-#include <base_struct.h>
-#include <layers_id_colors_and_visibility.h>
-#include <math/box2.h>
+#include <preview_items/simple_overlay_item.h>
+
 
 namespace KIGFX
 {
 class GAL;
-}
+
+namespace PREVIEW
+{
 
 /**
  * Class SELECTION_AREA
  *
- * Represents a selection area (currently a rectangle) in a VIEW.
+ * Represents a selection area (currently a rectangle) in a VIEW,
+ * drawn corner-to-corner between two points. This is useful when
+ * selecting a rectangular area, for lasso-select or zooming, for
+ * example.
  */
-class SELECTION_AREA : public EDA_ITEM
+class SELECTION_AREA : public SIMPLE_OVERLAY_ITEM
 {
 public:
-    static const int SelectionLayer = ITEM_GAL_LAYER( GP_OVERLAY );
 
     SELECTION_AREA();
-    ~SELECTION_AREA() {};
 
-    virtual const BOX2I ViewBBox() const override;
+    const BOX2I ViewBBox() const override;
 
-    void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
-
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
-
+    ///> Set the origin of the rectange (the fixed corner)
     void SetOrigin( VECTOR2I aOrigin )
     {
         m_origin = aOrigin;
     }
 
+    /**
+     * Set the current end of the rectangle (the corner that moves
+     * with the cursor.
+     */
     void SetEnd( VECTOR2I aEnd )
     {
         m_end = aEnd;
     }
 
-#if defined(DEBUG)
-    void Show( int x, std::ostream& st ) const override
-    {
-    }
-#endif
-
-    /** Get class name
+    /**
+     * Get class name
      * @return  string "SELECTION_AREA"
      */
-    virtual wxString GetClass() const override
+    wxString GetClass() const override
     {
         return wxT( "SELECTION_AREA" );
     }
 
 private:
+
+    /**
+     * Draw the selection rectangle onto the GAL
+     */
+    void drawPreviewShape( KIGFX::GAL& aGal ) const override;
+
     VECTOR2I m_origin, m_end;
 };
 
-#endif
+} // PREVIEW
+} // KIGFX
+
+#endif // PREVIEW_ITEMS_SELECTION_AREA_H

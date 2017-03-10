@@ -43,6 +43,7 @@ using namespace std::placeholders;
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
 #include <view/view_group.h>
+#include <preview_items/selection_area.h>
 #include <painter.h>
 #include <bitmaps.h>
 #include <hotkeys.h>
@@ -52,7 +53,6 @@ using namespace std::placeholders;
 #include <ratsnest_data.h>
 
 #include "selection_tool.h"
-#include "selection_area.h"
 #include "bright_box.h"
 #include "pcb_actions.h"
 
@@ -464,7 +464,7 @@ bool SELECTION_TOOL::selectMultiple()
     KIGFX::VIEW* view = getView();
     getViewControls()->SetAutoPan( true );
 
-    SELECTION_AREA area;
+    KIGFX::PREVIEW::SELECTION_AREA area;
     view->Add( &area );
 
     while( OPT_TOOL_EVENT evt = Wait() )

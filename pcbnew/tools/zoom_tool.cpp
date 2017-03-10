@@ -23,9 +23,9 @@
 #include <view/view_controls.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>
+#include <preview_items/selection_area.h>
 
 #include "zoom_tool.h"
-#include "selection_area.h"
 #include "pcb_actions.h"
 
 
@@ -76,7 +76,7 @@ bool ZOOM_TOOL::selectRegion()
     auto canvas = m_frame->GetGalCanvas();
     getViewControls()->SetAutoPan( true );
 
-    SELECTION_AREA area;
+    KIGFX::PREVIEW::SELECTION_AREA area;
     view->Add( &area );
 
     while( auto evt = Wait() )

@@ -37,7 +37,6 @@
 #include <tool/tool_menu.h>
 
 class PCB_BASE_FRAME;
-class SELECTION_AREA;
 class BOARD_ITEM;
 class GENERAL_COLLECTOR;
 
