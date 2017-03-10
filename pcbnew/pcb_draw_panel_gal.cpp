@@ -377,6 +377,12 @@ bool PCB_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
 void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
 {
+    // caching makes no sense for Cairo and other software renderers
+    auto target = m_backend == GAL_TYPE_OPENGL ? KIGFX::TARGET_CACHED : KIGFX::TARGET_NONCACHED;
+
+    for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++ )
+        m_view->SetLayerTarget( i, target );
+
     for( LAYER_NUM i = 0; (unsigned) i < sizeof( GAL_LAYER_ORDER ) / sizeof( LAYER_NUM ); ++i )
     {
         LAYER_NUM layer = GAL_LAYER_ORDER[i];
@@ -384,22 +390,9 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
 
         // Set layer display dependencies & targets
         if( IsCopperLayer( layer ) )
-        {
             m_view->SetRequired( GetNetnameLayer( layer ), layer );
-            m_view->SetLayerTarget( layer, KIGFX::TARGET_CACHED );
-        }
         else if( IsNetnameLayer( layer ) )
-        {
             m_view->SetLayerDisplayOnly( layer );
-            m_view->SetLayerTarget( layer, KIGFX::TARGET_CACHED );
-        }
-    }
-
-    // caching makes no sense for Cairo and other software renderers
-    if ( m_backend != GAL_TYPE_OPENGL )
-    {
-        for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++ )
-           m_view->SetLayerTarget( i, KIGFX::TARGET_NONCACHED );
     }
 
     m_view->SetLayerTarget( ITEM_GAL_LAYER( ANCHOR_VISIBLE ), KIGFX::TARGET_NONCACHED );
