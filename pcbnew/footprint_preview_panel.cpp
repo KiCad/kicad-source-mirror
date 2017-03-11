@@ -29,13 +29,12 @@
 #include <math/box2.h>
 #include <class_module.h>
 #include <class_board.h>
+#include <ki_mutex.h>
 
 #include <boost/bind.hpp>
 #include <make_unique.h>
 
 #include <wx/stattext.h>
-
-
 
 
 /**
@@ -49,7 +48,7 @@ class FP_THREAD_IFACE
         /// Retrieve a cache entry by LIB_ID
         boost::optional<CACHE_ENTRY> GetFromCache( LIB_ID const & aFPID )
         {
-            wxMutexLocker lock( m_lock );
+            MUTLOCK lock( m_lock );
             auto it = m_cachedFootprints.find( aFPID );
 
             if( it != m_cachedFootprints.end() )
@@ -64,7 +63,7 @@ class FP_THREAD_IFACE
          */
         CACHE_ENTRY AddToQueue( LIB_ID const & aEntry )
         {
-            wxMutexLocker lock( m_lock );
+            MUTLOCK lock( m_lock );
 
             CACHE_ENTRY ent = { aEntry, NULL, FPS_LOADING };
             m_cachedFootprints[aEntry] = ent;
@@ -76,7 +75,7 @@ class FP_THREAD_IFACE
         /// Pop an entry from the queue, or empty option if none is available.
         boost::optional<CACHE_ENTRY> PopFromQueue()
         {
-            wxMutexLocker lock( m_lock );
+            MUTLOCK lock( m_lock );
 
             if( m_loaderQueue.empty() )
             {
@@ -93,7 +92,7 @@ class FP_THREAD_IFACE
         /// Add an entry to the cache.
         void AddToCache( CACHE_ENTRY const & aEntry )
         {
-            wxMutexLocker lock( m_lock );
+            MUTLOCK lock( m_lock );
 
             m_cachedFootprints[aEntry.fpid] = aEntry;
         }
@@ -103,7 +102,7 @@ class FP_THREAD_IFACE
          */
         void SetCurrentFootprint( LIB_ID aFp )
         {
-            wxMutexLocker lock( m_lock );
+            MUTLOCK lock( m_lock );
             m_current_fp = aFp;
         }
 
@@ -112,7 +111,7 @@ class FP_THREAD_IFACE
          */
         LIB_ID GetCurrentFootprint()
         {
-            wxMutexLocker lock( m_lock );
+            MUTLOCK lock( m_lock );
             return m_current_fp;
         }
 
@@ -120,7 +119,7 @@ class FP_THREAD_IFACE
         std::deque<CACHE_ENTRY> m_loaderQueue;
         std::map<LIB_ID, CACHE_ENTRY> m_cachedFootprints;
         LIB_ID m_current_fp;
-        wxMutex m_lock;
+        MUTEX m_lock;
 };
 
 
