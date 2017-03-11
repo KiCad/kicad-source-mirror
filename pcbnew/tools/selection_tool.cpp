@@ -53,7 +53,7 @@ using namespace std::placeholders;
 #include <ratsnest_data.h>
 
 #include "selection_tool.h"
-#include "bright_box.h"
+#include "pcb_bright_box.h"
 #include "pcb_actions.h"
 
 // Selection tool actions
@@ -1136,7 +1136,7 @@ void SELECTION_TOOL::clearSelection()
 BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 {
     BOARD_ITEM* current = NULL;
-    BRIGHT_BOX brightBox;
+    PCB_BRIGHT_BOX brightBox;
     CONTEXT_MENU menu;
 
     getView()->Add( &brightBox );

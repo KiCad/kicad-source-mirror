@@ -188,6 +188,7 @@ set( COMMON_PREVIEW_ITEMS_SRCS
     preview_items/ruler_item.cpp
     preview_items/simple_overlay_item.cpp
     preview_items/selection_area.cpp
+    preview_items/bright_box.cpp
     )
 
 set( COMMON_SRCS
