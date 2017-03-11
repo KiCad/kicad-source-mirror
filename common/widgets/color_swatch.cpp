@@ -87,9 +87,9 @@ COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, COLOR4D aColor, int aID,
     SetSizer( sizer );
 
     auto swatch = makeColorSwatch( this, m_color, aID );
-    m_swatch = swatch.get(); // hold a handle
+    m_swatch = swatch.release(); // hold a handle
 
-    sizer->Add( swatch.release(), 0, 0 );
+    sizer->Add( m_swatch, 0, 0 );
 
     // forward click to any other listeners, since we don't want them
     m_swatch->Bind( wxEVT_LEFT_DOWN, &COLOR_SWATCH::rePostEvent, this );

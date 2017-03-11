@@ -44,11 +44,12 @@ public:
 
     virtual const BOX2I ViewBBox() const override
     {
-        BOX2I bb; bb.SetMaximum();
-        return bb;
-
         if( !m_item )
-            return BOX2I();
+        {
+            BOX2I bb;
+            bb.SetMaximum();
+            return bb;
+        }
 
         return m_item->ViewBBox();
     }

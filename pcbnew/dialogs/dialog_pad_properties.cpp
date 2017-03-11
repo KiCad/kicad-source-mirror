@@ -957,12 +957,6 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
     commit.Modify( m_currentPad );
 
-    wxSize  size;
-    MODULE* footprint = m_currentPad->GetParent();
-
-    if( footprint )
-        footprint->SetLastEditTime();
-
     // redraw the area where the pad was, without pad (delete pad on screen)
     m_currentPad->SetFlags( DO_NOT_DRAW );
     m_parent->GetCanvas()->RefreshDrawingRect( m_currentPad->GetBoundingBox() );
@@ -978,16 +972,21 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
         rastnestIsChanged = true;
     }
 
-    // compute the pos 0 value, i.e. pad position for footprint with orientation = 0
-    // i.e. relative to footprint origin (footprint position)
-    wxPoint pt = m_currentPad->GetPosition() - footprint->GetPosition();
+    wxSize  size;
+    MODULE* footprint = m_currentPad->GetParent();
 
-    RotatePoint( &pt, -footprint->GetOrientation() );
+    if( footprint )
+    {
+        footprint->SetLastEditTime();
 
-    m_currentPad->SetPos0( pt );
-
-    m_currentPad->SetOrientation( m_padMaster->GetOrientation() * isign
-                                    + footprint->GetOrientation() );
+        // compute the pos 0 value, i.e. pad position for footprint with orientation = 0
+        // i.e. relative to footprint origin (footprint position)
+        wxPoint pt = m_currentPad->GetPosition() - footprint->GetPosition();
+        RotatePoint( &pt, -footprint->GetOrientation() );
+        m_currentPad->SetPos0( pt );
+        m_currentPad->SetOrientation( m_padMaster->GetOrientation() * isign
+                                        + footprint->GetOrientation() );
+    }
 
     m_currentPad->SetSize( m_padMaster->GetSize() );
 

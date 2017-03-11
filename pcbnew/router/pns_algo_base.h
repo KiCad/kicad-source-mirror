@@ -40,7 +40,7 @@ class ALGO_BASE
 {
 public:
     ALGO_BASE( ROUTER* aRouter ) :
-        m_router( aRouter )
+        m_debugDecorator( nullptr ), m_router( aRouter )
     {}
 
     virtual ~ALGO_BASE() {}

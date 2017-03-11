@@ -908,10 +908,10 @@ int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
     // on one sheet.
     auto item = m_selection.Front();
 
-    if( item->Type() != PCB_MODULE_T )
+    if( !item )
         return 0;
 
-    if( !item )
+    if( item->Type() != PCB_MODULE_T )
         return 0;
 
     auto mod = dynamic_cast<MODULE*>( item );
@@ -1509,6 +1509,9 @@ static double calcMaxArea( GENERAL_COLLECTOR& aCollector, KICAD_T aType )
 
 static inline double calcCommonArea( const BOARD_ITEM* aItem, const BOARD_ITEM* aOther )
 {
+    if( !aItem || !aOther )
+        return 0;
+
     return getRect( aItem ).Common( getRect( aOther ) ).GetArea();
 }
 
@@ -1697,7 +1700,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
 
         for( int i = 0; i < aCollector.GetCount(); ++i )
         {
-            if( TRACK* track = dyn_cast<TRACK*> ( aCollector[i] ) )
+            if( TRACK* track = dyn_cast<TRACK*>( aCollector[i] ) )
             {
                 maxLength = std::max( track->GetLength(), maxLength );
                 maxLength = std::max( (double) track->GetWidth(), maxLength );

@@ -195,7 +195,11 @@ INDEX::ITEM_SHAPE_INDEX* INDEX::getSubindex( const ITEM* aItem )
         break;
     }
 
-    assert( idx_n >= 0 && idx_n < MaxSubIndices );
+    if( idx_n < 0 || idx_n >= MaxSubIndices )
+    {
+        assert( false );
+        return nullptr;
+    }
 
     if( !m_subIndices[idx_n] )
         m_subIndices[idx_n] = new ITEM_SHAPE_INDEX;
@@ -206,6 +210,9 @@ INDEX::ITEM_SHAPE_INDEX* INDEX::getSubindex( const ITEM* aItem )
 void INDEX::Add( ITEM* aItem )
 {
     ITEM_SHAPE_INDEX* idx = getSubindex( aItem );
+
+    if( !idx )
+        return;
 
     idx->Add( aItem );
     m_allItems.insert( aItem );
@@ -221,9 +228,11 @@ void INDEX::Remove( ITEM* aItem )
 {
     ITEM_SHAPE_INDEX* idx = getSubindex( aItem );
 
+    if( !idx )
+        return;
+
     idx->Remove( aItem );
     m_allItems.erase( aItem );
-
     int net = aItem->Net();
 
     if( net >= 0 && m_netMap.find( net ) != m_netMap.end() )

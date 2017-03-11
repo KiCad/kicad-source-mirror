@@ -153,6 +153,7 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER* 
     m_overrideNetA = 0;
     m_overrideNetB = 0;
     m_overrideClearance = 0;
+    m_useDpGap = false;
 }
 
 

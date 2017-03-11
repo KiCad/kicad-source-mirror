@@ -177,7 +177,7 @@ XNODE* PCB_MODULE::FindPatternMultilayerSection( XNODE* aNode, wxString* aPatGra
 
         if( FindNode( aNode, wxT( "patternGraphicsDef" ) ) )
             lNode = FindNode( aNode, wxT( "patternGraphicsDef" ) );
-        else
+        else if( pNode )
             lNode = FindNode( pNode, wxT( "patternGraphicsDef" ) );
 
         if( *aPatGraphRefName == wxEmptyString )    // no patern delection, the first is actual...

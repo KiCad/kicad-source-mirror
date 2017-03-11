@@ -785,11 +785,12 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     wxString fileName;
 
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
-    BOARD* board = getModel<BOARD>();
-    BOARD_COMMIT commit( editFrame );
 
     if( !editFrame )
         return 0;
+
+    BOARD* board = getModel<BOARD>();
+    BOARD_COMMIT commit( editFrame );
 
     // Pick a file to append
     if( !AskLoadBoardFileName( editFrame, &open_ctl, &fileName, true ) )
