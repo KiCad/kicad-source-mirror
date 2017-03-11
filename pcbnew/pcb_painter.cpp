@@ -828,6 +828,7 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
         {
             m_gal->SetLineWidth( thickness );
             m_gal->SetIsFill( false );
+            m_gal->SetIsStroke( true );
             m_gal->DrawCircle( start, aSegment->GetRadius() );
         }
         break;
