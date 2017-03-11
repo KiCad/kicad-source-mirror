@@ -353,6 +353,13 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         int w_dist = aRefSeg->GetClearance( track );
         w_dist += (aRefSeg->GetWidth() + track->GetWidth()) / 2;
 
+        // Due to many double to int conversions during calculations, which
+        // create rounding issues,
+        // the exact clearance margin cannot be really known.
+        // To avoid false bad DRC detection due to these rounding issues,
+        // slightly decrease the w_dist (remove one nanometer is enough !)
+        w_dist -= 1;
+
         // If the reference segment is a via, we test it here
         if( aRefSeg->Type() == PCB_VIA_T )
         {
@@ -1002,11 +1009,11 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
  */
 bool DRC::checkMarginToCircle( wxPoint aCentre, int aRadius, int aLength )
 {
-    if( abs( aCentre.y ) > aRadius )     // trivial case
+    if( abs( aCentre.y ) >= aRadius )     // trivial case
         return true;
 
     // Here, distance between aCentre and X axis is < aRadius
-    if( (aCentre.x >= -aRadius ) && ( aCentre.x <= (aLength + aRadius) ) )
+    if( (aCentre.x > -aRadius ) && ( aCentre.x < (aLength + aRadius) ) )
     {
         if( (aCentre.x >= 0) && (aCentre.x <= aLength) )
             return false;           // aCentre is between the starting point and the ending point of the segm
