@@ -82,7 +82,10 @@ CMP_TREE_MODEL_ADAPTER::CMP_TREE_MODEL_ADAPTER( PART_LIBS* aLibs )
     :m_filter( CMP_FILTER_NONE ),
      m_show_units( true ),
      m_libs( aLibs ),
-     m_preselect_unit( 0 )
+     m_preselect_unit( 0 ),
+     m_col_part( nullptr ),
+     m_col_desc( nullptr ),
+     m_widget( nullptr )
 {}
 
 

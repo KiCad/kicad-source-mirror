@@ -104,6 +104,7 @@ int CMP_TREE_NODE::Compare( CMP_TREE_NODE const& aNode1, CMP_TREE_NODE const& aN
 
 CMP_TREE_NODE::CMP_TREE_NODE()
     : Parent( nullptr ),
+        Type( INVALID ),
         IntrinsicRank( 0 ),
         Score( kLowestDefaultScore ),
         Alias( nullptr ),

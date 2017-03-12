@@ -76,7 +76,7 @@ class LIB_ALIAS;
 class CMP_TREE_NODE {
 public:
     enum TYPE {
-        ROOT, LIB, ALIAS, UNIT
+        ROOT, LIB, ALIAS, UNIT, INVALID
     };
 
     CMP_TREE_NODE*                              Parent;     ///< Parent node or null
