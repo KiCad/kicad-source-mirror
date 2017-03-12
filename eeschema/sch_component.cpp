@@ -172,9 +172,11 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit,
             schField = AddField( fld );
         }
 
-        schField->SetTextPos( m_Pos + it->GetTextPos() );
         schField->ImportValues( *it );
         schField->SetText( it->GetText() );
+
+        // Now the field is initialized, place it to the right position:
+        schField->SetTextPos( m_Pos + it->GetTextPos() );
     }
 
     wxString msg = aPart.GetReferenceField().GetText();
