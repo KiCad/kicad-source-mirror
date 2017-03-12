@@ -1,0 +1,24 @@
+diff --git a/include/wx/app.h b/include/wx/app.h
+index 9a73469570..89c1762dc7 100644
+--- a/include/wx/app.h
++++ b/include/wx/app.h
+@@ -798,6 +798,19 @@ public:
+                                                                               \
+             return wxEntry(argc, argv);                                       \
+         }
++#elif wxUSE_UNICODE && ( defined(__MINGW32__) || defined(__MINGW64__) )
++    #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE                                    \
++        int main(int argc, char **argv)                                       \
++        {                                                                     \
++            wxDISABLE_DEBUG_SUPPORT();                                        \
++                                                                              \
++            LPWSTR cmdline = ::GetCommandLineW();                             \
++            int argcw;                                                        \
++            LPWSTR* argvw = ::CommandLineToArgvW( cmdline, &argcw );          \
++            int result = wxEntry( argcw, argvw );                             \
++            ::LocalFree( argvw );                                             \
++            return result;                                                    \
++        }
+ #else // Use standard main()
+     #define wxIMPLEMENT_WXWIN_MAIN_CONSOLE                                    \
+         int main(int argc, char **argv)                                       \
