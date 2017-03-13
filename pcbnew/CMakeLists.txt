@@ -113,6 +113,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_layer_selection_base.cpp
     dialogs/dialog_layers_setup.cpp
     dialogs/dialog_layers_setup_base.cpp
+    dialogs/dialog_modedit_display_options.cpp
     dialogs/dialog_modedit_options.cpp
     dialogs/dialog_modedit_options_base.cpp
     dialogs/dialog_netlist.cpp

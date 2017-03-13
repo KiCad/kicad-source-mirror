@@ -32,9 +32,11 @@
 #include <wxBasePcbFrame.h>
 #include <pcb_base_edit_frame.h>
 #include <io_mgr.h>
+#include <config_params.h>
 
 class PCB_LAYER_WIDGET;
 class FP_LIB_TABLE;
+class EDGE_MODULE;
 
 namespace PCB { struct IFACE; }     // A KIFACE_I coded in pcbnew.c
 

@@ -327,6 +327,11 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "&Settings" ), _( "Change the footprint editor settings." ),
                  KiBitmap( preference_xpm ) );
 
+    AddMenuItem( prefs_menu, ID_PCB_DISPLAY_OPTIONS_SETUP,
+                 _( "&Display" ),
+                 _( "Change footprint editor display settings" ),
+                 KiBitmap( display_options_xpm ) );
+
     // Language submenu
     Pgm().AddMenuLanguageList( prefs_menu );
 

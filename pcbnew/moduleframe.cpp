@@ -51,6 +51,7 @@
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
+#include <dialogs/dialog_modedit_display_options.h>
 #include <dialog_hotkeys_editor.h>
 #include <module_editor_frame.h>
 #include <modview_frame.h>
@@ -138,6 +139,8 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_PCB_LIB_TABLE_EDIT,
               FOOTPRINT_EDIT_FRAME::ProcessPreferences )
     EVT_MENU( wxID_PREFERENCES,
+              FOOTPRINT_EDIT_FRAME::ProcessPreferences )
+    EVT_MENU( ID_PCB_DISPLAY_OPTIONS_SETUP,
               FOOTPRINT_EDIT_FRAME::ProcessPreferences )
     EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, FOOTPRINT_EDIT_FRAME::OnConfigurePaths )
 
@@ -927,6 +930,10 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
 
     case wxID_PREFERENCES:
         InvokeFPEditorPrefsDlg( this );
+        break;
+
+    case ID_PCB_DISPLAY_OPTIONS_SETUP:
+        DIALOG_MODEDIT_DISPLAY_OPTIONS::Invoke( *this );
         break;
 
     default:
