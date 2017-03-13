@@ -166,6 +166,7 @@ set( COMMON_DLG_SRCS
 
 set( COMMON_WIDGET_SRCS
     widgets/color_swatch.cpp
+    widgets/gal_options_panel.cpp
     widgets/mathplot.cpp
     widgets/widget_hotkey_list.cpp
     widgets/two_column_tree_list.cpp

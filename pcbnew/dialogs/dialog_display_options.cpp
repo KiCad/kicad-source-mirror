@@ -32,7 +32,6 @@
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <pcbstruct.h>
-#include <incremental_text_ctrl.h>
 #include <config_map.h>
 
 #include <pcbnew_id.h>
@@ -43,26 +42,8 @@
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <pcb_painter.h>
-#include <gal/gal_display_options.h>
 
-/*
- * Spin control parameters
- */
-static const double gridThicknessMin = 0.5;
-static const double gridThicknessMax = 10.0;
-static const double gridThicknessStep = 0.5;
-
-static const double gridMinSpacingMin = 5;
-static const double gridMinSpacingMax = 200;
-static const double gridMinSpacingStep = 5;
-
-
-static const UTIL::CFG_MAP<KIGFX::GRID_STYLE> gridStyleSelectMap =
-{
-    { KIGFX::GRID_STYLE::DOTS,        0 },  // Default
-    { KIGFX::GRID_STYLE::LINES,       1 },
-    { KIGFX::GRID_STYLE::SMALL_CROSS, 2 },
-};
+#include <widgets/gal_options_panel.h>
 
 
 static const UTIL::CFG_MAP<TRACE_CLEARANCE_DISPLAY_MODE_T> traceClearanceSelectMap =
@@ -72,16 +53,6 @@ static const UTIL::CFG_MAP<TRACE_CLEARANCE_DISPLAY_MODE_T> traceClearanceSelectM
     { SHOW_CLEARANCE_NEW_TRACKS,                          1 },
     { SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS, 3 },
     { SHOW_CLEARANCE_ALWAYS,                              4 },
-};
-
-
-static const UTIL::CFG_MAP<KIGFX::OPENGL_ANTIALIASING_MODE> aaModeSelectMap =
-{
-    { KIGFX::OPENGL_ANTIALIASING_MODE::NONE,              0 },    // Default
-    { KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH,    1 },
-    { KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA,   2 },
-    { KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2,  3 },
-    { KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4,  4 },
 };
 
 
@@ -97,20 +68,10 @@ DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( PCB_EDIT_FRAME* parent ) :
 {
     m_Parent = parent;
 
-    // bind the spin button and text box
-    m_gridSizeIncrementer = std::make_unique<SPIN_INCREMENTAL_TEXT_CTRL>(
-                *m_gridLineWidthSpinBtn, *m_gridLineWidth );
+    KIGFX::GAL_DISPLAY_OPTIONS& galOptions = m_Parent->GetGalDisplayOptions();
+    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, galOptions );
 
-    m_gridSizeIncrementer->SetStep( gridThicknessMin, gridThicknessMax,
-                                    gridThicknessStep );
-    m_gridSizeIncrementer->SetPrecision( 1 );
-
-    m_gridMinSpacingIncrementer = std::make_unique<SPIN_INCREMENTAL_TEXT_CTRL>(
-                *m_gridMinSpacingSpinBtn, *m_gridMinSpacing );
-
-    m_gridMinSpacingIncrementer->SetStep( gridMinSpacingMin, gridMinSpacingMax,
-                                          gridMinSpacingStep );
-    m_gridMinSpacingIncrementer->SetPrecision( 0 ); // restrict to ints
+    sLeftSizer->Add( m_galOptsPanel, 1, wxEXPAND, 0 );
 
     // load settings into controls
     init();
@@ -125,8 +86,8 @@ DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( PCB_EDIT_FRAME* parent ) :
 void DIALOG_DISPLAY_OPTIONS::init()
 {
     SetFocus();
+
     const DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
-    const KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = m_Parent->GetGalDisplayOptions();
 
     m_OptDisplayTracks->SetValue( displ_opts->m_DisplayPcbTrackFill == SKETCH );
 
@@ -146,15 +107,7 @@ void DIALOG_DISPLAY_OPTIONS::init()
     m_OptDisplayDrawings->SetValue( displ_opts->m_DisplayDrawItemsFill == SKETCH );
     m_ShowNetNamesOption->SetSelection( displ_opts->m_DisplayNetNamesMode );
 
-    m_choiceAntialiasing->SetSelection( UTIL::GetConfigForVal(
-            aaModeSelectMap, gal_opts.gl_antialiasing_mode ) );
-
-    m_gridStyle->SetSelection( UTIL::GetConfigForVal(
-            gridStyleSelectMap, gal_opts.m_gridStyle ) );
-
-    m_gridSizeIncrementer->SetValue( gal_opts.m_gridLineWidth );
-
-    m_gridMinSpacingIncrementer->SetValue( gal_opts.m_gridMinSpacing );
+    m_galOptsPanel->TransferDataToWindow();
 }
 
 
@@ -170,7 +123,6 @@ void DIALOG_DISPLAY_OPTIONS::OnCancelClick( wxCommandEvent& event )
 void DIALOG_DISPLAY_OPTIONS::OnOkClick( wxCommandEvent& event )
 {
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
-    KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = m_Parent->GetGalDisplayOptions();
 
     m_Parent->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
 
@@ -195,17 +147,7 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick( wxCommandEvent& event )
     displ_opts->m_DisplayDrawItemsFill = not m_OptDisplayDrawings->GetValue();
     displ_opts->m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
 
-    gal_opts.gl_antialiasing_mode = UTIL::GetValFromConfig(
-            aaModeSelectMap, m_choiceAntialiasing->GetSelection() );
-
-    gal_opts.m_gridStyle = UTIL::GetValFromConfig(
-            gridStyleSelectMap, m_gridStyle->GetSelection() );
-
-    gal_opts.m_gridLineWidth = m_gridSizeIncrementer->GetValue();
-
-    gal_opts.m_gridMinSpacing = m_gridMinSpacingIncrementer->GetValue();
-
-    gal_opts.NotifyChanged();
+    m_galOptsPanel->TransferDataFromWindow();
 
     // Apply changes to the GAL
     KIGFX::VIEW* view = m_Parent->GetGalCanvas()->GetView();
