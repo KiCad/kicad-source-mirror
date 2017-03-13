@@ -23,7 +23,6 @@ class DIALOG_SHIM;
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/radiobox.h>
-#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -56,15 +55,9 @@ class DIALOG_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_OptDisplayPadNoConn;
 		wxCheckBox* m_OptDisplayDrawings;
 		wxCheckBox* m_Show_Page_Limits;
-		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-		
-		// Virtual event handlers, overide them in your derived class
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
-		
 	
 	public:
 		

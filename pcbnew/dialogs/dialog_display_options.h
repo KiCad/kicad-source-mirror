@@ -31,17 +31,16 @@ class GAL_OPTIONS_PANEL;
 
 class DIALOG_DISPLAY_OPTIONS : public DIALOG_DISPLAY_OPTIONS_BASE
 {
-private:
-   PCB_EDIT_FRAME* m_Parent;
-
-   GAL_OPTIONS_PANEL* m_galOptsPanel;
-
-   void init();
-
 public:
    DIALOG_DISPLAY_OPTIONS( PCB_EDIT_FRAME* parent );
    ~DIALOG_DISPLAY_OPTIONS() {};
-   void OnOkClick( wxCommandEvent& event ) override;
-   void OnCancelClick( wxCommandEvent& event ) override;
+
+   bool TransferDataFromWindow() override;
+   bool TransferDataToWindow() override;
+
+private:
+   PCB_EDIT_FRAME* m_parent;
+
+   GAL_OPTIONS_PANEL* m_galOptsPanel;
 };
 
