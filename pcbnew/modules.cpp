@@ -116,7 +116,7 @@ void PCB_EDIT_FRAME::StartMoveModule( MODULE* aModule, wxDC* aDC,
     aModule->SetFlags( IS_MOVED );
 
     /* Show ratsnest. */
-    if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
+    if( GetBoard()->IsElementVisible( LAYER_RATSNEST ) )
         DrawGeneralRatsnest( aDC );
 
     EraseDragList();
@@ -223,7 +223,7 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
     // Display ratsnest is allowed
     pcbframe->GetBoard()->m_Status_Pcb &= ~DO_NOT_SHOW_GENERAL_RASTNEST;
 
-    if( pcbframe->GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
+    if( pcbframe->GetBoard()->IsElementVisible( LAYER_RATSNEST ) )
         pcbframe->DrawGeneralRatsnest( DC );
 
 #ifdef __WXMAC__
@@ -269,7 +269,7 @@ bool PCB_EDIT_FRAME::Delete_Module( MODULE* aModule, wxDC* aDC )
     aModule->SetState( IS_DELETED, true );
     SaveCopyInUndoList( aModule, UR_DELETED );
 
-    if( aDC && GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
+    if( aDC && GetBoard()->IsElementVisible( LAYER_RATSNEST ) )
         Compile_Ratsnest( aDC, true );
 
     // Redraw the full screen to ensure perfect display of board and ratsnest.
@@ -304,7 +304,7 @@ void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
         }
 
         /* Show ratsnest if necessary. */
-        if( DC && GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
+        if( DC && GetBoard()->IsElementVisible( LAYER_RATSNEST ) )
             DrawGeneralRatsnest( DC );
 
         g_Offset_Module.x = 0;
@@ -331,7 +331,7 @@ void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
         {
             Module->Draw( m_canvas, DC, GR_OR );
 
-            if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
+            if( GetBoard()->IsElementVisible( LAYER_RATSNEST ) )
                 Compile_Ratsnest( DC, true );
         }
     }
@@ -410,7 +410,7 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreat
 
     m_canvas->SetMouseCapture( NULL, NULL );
 
-    if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) && !aDoNotRecreateRatsnest )
+    if( GetBoard()->IsElementVisible( LAYER_RATSNEST ) && !aDoNotRecreateRatsnest )
         Compile_Ratsnest( aDC, true );
 
     if( aDC )
@@ -443,7 +443,7 @@ void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, double angle, bool
             m_canvas->RefreshDrawingRect( module->GetBoundingBox() );
             module->ClearFlags( DO_NOT_DRAW );
 
-            if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
+            if( GetBoard()->IsElementVisible( LAYER_RATSNEST ) )
                 DrawGeneralRatsnest( DC );
         }
     }
@@ -472,7 +472,7 @@ void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, double angle, bool
             //  not beiing moved: redraw the module and update ratsnest
             module->Draw( m_canvas, DC, GR_OR );
 
-            if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
+            if( GetBoard()->IsElementVisible( LAYER_RATSNEST ) )
                 Compile_Ratsnest( DC, true );
         }
         else

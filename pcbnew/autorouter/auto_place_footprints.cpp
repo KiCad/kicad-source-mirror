@@ -132,7 +132,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
     wxPoint             PosOK;
     wxPoint             memopos;
     int                 error;
-    LAYER_ID            lay_tmp_TOP, lay_tmp_BOTTOM;
+    PCB_LAYER_ID            lay_tmp_TOP, lay_tmp_BOTTOM;
 
     // Undo: init list
     PICKED_ITEMS_LIST   newList;

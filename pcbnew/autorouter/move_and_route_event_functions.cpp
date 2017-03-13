@@ -105,7 +105,7 @@ void PCB_EDIT_FRAME::OnPlaceOrRouteFootprints( wxCommandEvent& event )
     }
 
     // Erase ratsnest if needed
-    if( GetBoard()->IsElementVisible(RATSNEST_VISIBLE) )
+    if( GetBoard()->IsElementVisible( LAYER_RATSNEST ) )
         DrawGeneralRatsnest( &dc );
 
     GetBoard()->m_Status_Pcb |= DO_NOT_SHOW_GENERAL_RASTNEST;

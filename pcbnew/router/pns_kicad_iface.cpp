@@ -353,7 +353,7 @@ public:
             return;
 
         m_items = new KIGFX::VIEW_GROUP( m_view );
-        m_items->SetLayer( ITEM_GAL_LAYER( GP_OVERLAY ) );
+        m_items->SetLayer( LAYER_GP_OVERLAY ) ;
         m_view->Add( m_items );
     }
 
@@ -729,7 +729,7 @@ std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE::syncTrack( TRACK* aTrack )
 
 std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE::syncVia( VIA* aVia )
 {
-    LAYER_ID top, bottom;
+    PCB_LAYER_ID top, bottom;
     aVia->LayerPair( &top, &bottom );
     std::unique_ptr<PNS::VIA> via( new PNS::VIA(
             aVia->GetPosition(),
@@ -943,7 +943,7 @@ void PNS_KICAD_IFACE::SetView( KIGFX::VIEW* aView )
 
     m_view = aView;
     m_previewItems = new KIGFX::VIEW_GROUP( m_view );
-    m_previewItems->SetLayer( ITEM_GAL_LAYER( GP_OVERLAY ) );
+    m_previewItems->SetLayer( LAYER_GP_OVERLAY ) ;
     m_view->Add( m_previewItems );
 
     delete m_debugDecorator;

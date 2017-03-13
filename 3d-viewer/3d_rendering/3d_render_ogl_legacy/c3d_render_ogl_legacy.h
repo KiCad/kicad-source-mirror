@@ -47,8 +47,8 @@
 #include <map>
 
 
-typedef std::map< LAYER_ID, CLAYERS_OGL_DISP_LISTS* > MAP_OGL_DISP_LISTS;
-typedef std::map< LAYER_ID, CLAYER_TRIANGLES * > MAP_TRIANGLES;
+typedef std::map< PCB_LAYER_ID, CLAYERS_OGL_DISP_LISTS* > MAP_OGL_DISP_LISTS;
+typedef std::map< PCB_LAYER_ID, CLAYER_TRIANGLES * > MAP_TRIANGLES;
 typedef std::map< wxString, C_OGL_3DMODEL * > MAP_3DMODEL;
 
 #define SIZE_OF_CIRCLE_TEXTURE 1024
@@ -148,11 +148,11 @@ private:
                                        float aZtop,
                                        float aZbot );
 
-    void render_solder_mask_layer( LAYER_ID aLayerID,
+    void render_solder_mask_layer( PCB_LAYER_ID aLayerID,
                                    float aZPosition,
                                    bool aIsRenderingOnPreviewMode );
 
-    void get_layer_z_pos( LAYER_ID aLayerID,
+    void get_layer_z_pos( PCB_LAYER_ID aLayerID,
                           float &aOutZtop,
                           float &aOutZbot ) const;
 
@@ -208,12 +208,12 @@ private:
         SMATERIAL m_GrayMaterial;
     }m_materials;
 
-    void set_layer_material( LAYER_ID aLayerID );
-    SFVEC3F get_layer_color( LAYER_ID aLayerID );
+    void set_layer_material( PCB_LAYER_ID aLayerID );
+    SFVEC3F get_layer_color( PCB_LAYER_ID aLayerID );
 
 public:
     const MAP_OGL_DISP_LISTS &GetLayerDispListMap() const { return m_ogl_disp_lists_layers; }
-    const CLAYERS_OGL_DISP_LISTS *GetLayerDispList( LAYER_ID aLayerId ) const { return m_ogl_disp_lists_layers.at( aLayerId ); }
+    const CLAYERS_OGL_DISP_LISTS *GetLayerDispList( PCB_LAYER_ID aLayerId ) const { return m_ogl_disp_lists_layers.at( aLayerId ); }
     const CLAYERS_OGL_DISP_LISTS *GetBoardDispList() const { return m_ogl_disp_list_board; }
 };
 

@@ -73,7 +73,7 @@ static LSEQ dlg_layers()
 {
     // layers that are put out into the dialog UI, coordinate with wxformbuilder and
     // getCTLs( LAYER_NUM aLayerNumber )
-    static const LAYER_ID layers[] = {
+    static const PCB_LAYER_ID layers[] = {
         F_CrtYd,
         F_Fab,
         F_Adhes,
@@ -396,7 +396,7 @@ void DIALOG_LAYERS_SETUP::showBoardLayerNames()
 
     for( LSEQ seq = dlg_layers();  seq;  ++seq )
     {
-        LAYER_ID layer = *seq;
+        PCB_LAYER_ID layer = *seq;
 
         wxControl*  ctl = getName( layer );
 
@@ -421,7 +421,7 @@ void DIALOG_LAYERS_SETUP::showSelectedLayerCheckBoxes( LSET enabledLayers )
     // the check boxes
     for( LSEQ seq = dlg_layers();  seq;  ++seq )
     {
-        LAYER_ID layer = *seq;
+        PCB_LAYER_ID layer = *seq;
         setLayerCheckBox( layer, enabledLayers[layer] );
     }
 }
@@ -448,7 +448,7 @@ void DIALOG_LAYERS_SETUP::showLayerTypes()
 {
     for( LSEQ seq = LSET::AllCuMask().Seq();  seq;  ++seq )
     {
-        LAYER_ID cu_layer = *seq;
+        PCB_LAYER_ID cu_layer = *seq;
 
         wxChoice* ctl = getChoice( cu_layer );
         ctl->SetSelection( m_pcb->GetLayerType( cu_layer ) );
@@ -462,7 +462,7 @@ LSET DIALOG_LAYERS_SETUP::getUILayerMask()
 
     for( LSEQ seq = dlg_layers();  seq;  ++seq )
     {
-        LAYER_ID    layer = *seq;
+        PCB_LAYER_ID    layer = *seq;
         wxCheckBox* ctl = getCheckBox( layer );
 
         if( ctl->GetValue() )
@@ -498,7 +498,7 @@ void DIALOG_LAYERS_SETUP::setCopperLayerCheckBoxes( int copperCount )
 
     for( LSEQ seq = LSET::InternalCuMask().Seq();  seq;  ++seq, --copperCount )
     {
-        LAYER_ID layer = *seq;
+        PCB_LAYER_ID layer = *seq;
         bool     state = copperCount > 0;
 
 #ifdef HIDE_INACTIVE_LAYERS
@@ -607,7 +607,7 @@ void DIALOG_LAYERS_SETUP::OnOkButtonClick( wxCommandEvent& event )
 
         for( LSEQ seq = LSET::AllCuMask().Seq();  seq;  ++seq )
         {
-            LAYER_ID  layer = *seq;
+            PCB_LAYER_ID  layer = *seq;
 
             if( m_enabledLayers[layer] )
             {
@@ -671,7 +671,7 @@ bool DIALOG_LAYERS_SETUP::testLayerNames()
 
     for( LSEQ seq = LSET::AllCuMask().Seq();  seq;  ++seq )
     {
-        LAYER_ID layer = *seq;
+        PCB_LAYER_ID layer = *seq;
 
         // we _can_ rely on m_enabledLayers being current here:
         if( !m_enabledLayers[layer] )

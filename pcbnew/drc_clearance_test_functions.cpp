@@ -207,7 +207,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         // and **only one layer** can be drilled
         if( refvia->GetViaType() == VIA_MICROVIA )
         {
-            LAYER_ID    layer1, layer2;
+            PCB_LAYER_ID    layer1, layer2;
             bool        err = true;
 
             refvia->LayerPair( &layer1, &layer2 );

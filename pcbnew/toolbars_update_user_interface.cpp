@@ -141,9 +141,9 @@ void PCB_EDIT_FRAME::OnUpdateDrcEnable( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateShowBoardRatsnest( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) );
+    aEvent.Check( GetBoard()->IsElementVisible( LAYER_RATSNEST ) );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_RATSNEST,
-                                        GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) ?
+                                        GetBoard()->IsElementVisible( LAYER_RATSNEST ) ?
                                         _( "Hide board ratsnest" ) :
                                         _( "Show board ratsnest" ) );
 }

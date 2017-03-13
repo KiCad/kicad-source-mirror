@@ -130,7 +130,7 @@ void DIALOG_DISPLAY_OPTIONS::initOptDialog( )
         }
     }
 
-    m_OptDisplayDCodes->SetValue( m_Parent->IsElementVisible( DCODES_VISIBLE ) );
+    m_OptDisplayDCodes->SetValue( m_Parent->IsElementVisible( LAYER_DCODES ) );
 
 
     m_OptZoomNoCenter->SetValue( m_Parent->GetCanvas()->GetEnableZoomNoCenter() );
@@ -172,7 +172,7 @@ void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
     else
         m_Parent->m_DisplayOptions.m_DisplayPolygonsFill = true;
 
-    m_Parent->SetElementVisibility( DCODES_VISIBLE, m_OptDisplayDCodes->GetValue() );
+    m_Parent->SetElementVisibility( LAYER_DCODES, m_OptDisplayDCodes->GetValue() );
 
     int idx = m_ShowPageLimits->GetSelection();
 

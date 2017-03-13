@@ -433,12 +433,12 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_DCODES:
-        SetElementVisibility( DCODES_VISIBLE, state );
+        SetElementVisibility( LAYER_DCODES, state );
         m_canvas->Refresh( true );
         break;
 
     case ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS:
-        SetElementVisibility( NEGATIVE_OBJECTS_VISIBLE, state );
+        SetElementVisibility( LAYER_NEGATIVE_OBJECTS, state );
         m_canvas->Refresh( true );
         break;
 

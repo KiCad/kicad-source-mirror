@@ -46,6 +46,7 @@ namespace PREVIEW
 class SELECTION_AREA : public SIMPLE_OVERLAY_ITEM
 {
 public:
+    static const int SelectionLayer = LAYER_GP_OVERLAY;
 
     SELECTION_AREA();
 

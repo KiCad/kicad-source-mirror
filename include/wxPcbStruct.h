@@ -603,7 +603,7 @@ public:
      * will change the currently active layer to \a aLayer and also
      * update the PCB_LAYER_WIDGET.
      */
-    virtual void SetActiveLayer( LAYER_ID aLayer ) override;
+    virtual void SetActiveLayer( PCB_LAYER_ID aLayer ) override;
 
     /**
      * Function IsElementVisible
@@ -611,18 +611,18 @@ public:
      * inline function.
      * @param aElement is from the enum by the same name
      * @return bool - true if the element is visible.
-     * @see enum PCB_VISIBLE
+     * @see enum GAL_LAYER_ID
      */
-    bool IsElementVisible( int aElement ) const;
+    bool IsElementVisible( GAL_LAYER_ID aElement ) const;
 
     /**
      * Function SetElementVisibility
      * changes the visibility of an element category
      * @param aElement is from the enum by the same name
-     * @param aNewState = The new visibility state of the element category
-     * @see enum PCB_VISIBLE
+     * @param GAL_LAYER_ID = The new visibility state of the element category
+     * @see enum PCB_LAYER_ID
      */
-    void SetElementVisibility( int aElement, bool aNewState );
+    void SetElementVisibility( GAL_LAYER_ID aElement, bool aNewState );
 
     /**
      * Function SetVisibleAlls
@@ -1297,7 +1297,7 @@ public:
     bool MergeCollinearTracks( TRACK* track, wxDC* DC, int end );
 
     void Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC );
-    void SwitchLayer( wxDC* DC, LAYER_ID layer ) override;
+    void SwitchLayer( wxDC* DC, PCB_LAYER_ID layer ) override;
 
     /**
      * Function Add45DegreeSegment
@@ -1497,7 +1497,7 @@ public:
     DRAWSEGMENT* Begin_DrawSegment( DRAWSEGMENT* Segment, STROKE_T shape, wxDC* DC );
     void End_Edge( DRAWSEGMENT* Segment, wxDC* DC );
     void Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC );
-    void Delete_Drawings_All_Layer( LAYER_ID aLayer );
+    void Delete_Drawings_All_Layer( PCB_LAYER_ID aLayer );
 
     // Dimension handling:
     void ShowDimensionPropertyDialog( DIMENSION* aDimension, wxDC* aDC );

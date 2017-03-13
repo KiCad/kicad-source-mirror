@@ -47,7 +47,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     SetVisibleLayers( all_set );
 
     // set all but hidden text as visible.
-    m_visibleElements = ~( 1 << MOD_TEXT_INVISIBLE );
+    m_visibleElements = ~( 1 << GAL_LAYER_INDEX( LAYER_MOD_TEXT_INVISIBLE ) );
 
     SetCopperLayerCount( 2 );               // Default design is a double sided board
 
@@ -322,7 +322,7 @@ void BOARD_DESIGN_SETTINGS::SetVisibleAlls()
 }
 
 
-void BOARD_DESIGN_SETTINGS::SetLayerVisibility( LAYER_ID aLayer, bool aNewState )
+void BOARD_DESIGN_SETTINGS::SetLayerVisibility( PCB_LAYER_ID aLayer, bool aNewState )
 {
     if( aNewState && IsLayerEnabled( aLayer ) )
         m_visibleLayers.set( aLayer, true );
@@ -331,15 +331,12 @@ void BOARD_DESIGN_SETTINGS::SetLayerVisibility( LAYER_ID aLayer, bool aNewState 
 }
 
 
-void BOARD_DESIGN_SETTINGS::SetElementVisibility( int aElementCategory, bool aNewState )
+void BOARD_DESIGN_SETTINGS::SetElementVisibility( GAL_LAYER_ID aElementCategory, bool aNewState )
 {
-    if( aElementCategory < 0 || aElementCategory >= END_PCB_VISIBLE_LIST )
-        return;
-
     if( aNewState )
-        m_visibleElements |= 1 << aElementCategory;
+        m_visibleElements |= 1 << GAL_LAYER_INDEX( aElementCategory );
     else
-        m_visibleElements &= ~( 1 << aElementCategory );
+        m_visibleElements &= ~( 1 << GAL_LAYER_INDEX( aElementCategory ) );
 }
 
 
@@ -389,7 +386,7 @@ struct list_size_check {
    {
        // Int (the type used for saving visibility settings) is only 32 bits guaranteed,
        // be sure that we do not cross the limit
-       assert( END_PCB_VISIBLE_LIST <= 32 );
+       assert( GAL_LAYER_INDEX( GAL_LAYER_ID_BITMASK_END ) <= 32 );
    };
 };
 static list_size_check check;

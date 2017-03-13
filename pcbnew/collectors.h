@@ -71,13 +71,13 @@ public:
      * Function IsLayerLocked
      * @return bool - true if the given layer is locked, else false.
      */
-    virtual     bool IsLayerLocked( LAYER_ID layer ) const = 0;
+    virtual     bool IsLayerLocked( PCB_LAYER_ID layer ) const = 0;
 
     /**
      * Function IsLayerVisible
      * @return bool - true if the given layer is visible, else false.
      */
-    virtual     bool IsLayerVisible( LAYER_ID layer ) const = 0;
+    virtual     bool IsLayerVisible( PCB_LAYER_ID layer ) const = 0;
 
     /**
      * Function IgnoreLockedLayers
@@ -95,7 +95,7 @@ public:
      * Function GetPreferredLayer
      * @return int - the preferred layer for HitTest()ing.
      */
-    virtual     LAYER_ID GetPreferredLayer() const = 0;
+    virtual     PCB_LAYER_ID GetPreferredLayer() const = 0;
 
     /**
      * Function IgnorePreferredLayer
@@ -381,7 +381,7 @@ private:
     // the storage architecture here is not important, since this is only
     // a carrier object and its functions are what is used, and data only indirectly.
 
-    LAYER_ID m_PreferredLayer;
+    PCB_LAYER_ID m_PreferredLayer;
     bool    m_IgnorePreferredLayer;
 
     LSET    m_LayerLocked;                  ///< bit-mapped layer locked bits
@@ -412,7 +412,7 @@ public:
      * @param aVisibleLayerMask = current visible layers (bit mask)
      * @param aPreferredLayer = the layer to search first
      */
-    GENERAL_COLLECTORS_GUIDE( LSET aVisibleLayerMask, LAYER_ID aPreferredLayer )
+    GENERAL_COLLECTORS_GUIDE( LSET aVisibleLayerMask, PCB_LAYER_ID aPreferredLayer )
     {
         m_PreferredLayer            = aPreferredLayer;
         m_IgnorePreferredLayer      = false;
@@ -445,12 +445,12 @@ public:
      * Function IsLayerLocked
      * @return bool - true if the given layer is locked, else false.
      */
-    bool IsLayerLocked( LAYER_ID aLayerId ) const override
+    bool IsLayerLocked( PCB_LAYER_ID aLayerId ) const override
     {
         return m_LayerLocked[aLayerId];
     }
 
-    void SetLayerLocked( LAYER_ID aLayerId, bool isLocked )
+    void SetLayerLocked( PCB_LAYER_ID aLayerId, bool isLocked )
     {
         m_LayerLocked.set( aLayerId, isLocked );
     }
@@ -459,11 +459,11 @@ public:
      * Function IsLayerVisible
      * @return bool - true if the given layer is visible, else false.
      */
-    bool IsLayerVisible( LAYER_ID aLayerId ) const override
+    bool IsLayerVisible( PCB_LAYER_ID aLayerId ) const override
     {
         return m_LayerVisible[aLayerId];
     }
-    void SetLayerVisible( LAYER_ID aLayerId, bool isVisible )
+    void SetLayerVisible( PCB_LAYER_ID aLayerId, bool isVisible )
     {
         m_LayerVisible.set( aLayerId, isVisible );
     }
@@ -489,8 +489,8 @@ public:
      * Function GetPreferredLayer
      * @return int - the preferred layer for HitTest()ing.
      */
-    LAYER_ID GetPreferredLayer() const override    { return m_PreferredLayer; }
-    void SetPreferredLayer( LAYER_ID aLayer )      { m_PreferredLayer = aLayer; }
+    PCB_LAYER_ID GetPreferredLayer() const override    { return m_PreferredLayer; }
+    void SetPreferredLayer( PCB_LAYER_ID aLayer )      { m_PreferredLayer = aLayer; }
 
 
     /**

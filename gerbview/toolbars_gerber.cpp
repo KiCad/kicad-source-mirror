@@ -505,13 +505,13 @@ void GERBVIEW_FRAME::OnUpdatePolygonsDrawMode( wxUpdateUIEvent& aEvent )
 
 void GERBVIEW_FRAME::OnUpdateShowDCodes( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( IsElementVisible( DCODES_VISIBLE ) );
+    aEvent.Check( IsElementVisible( LAYER_DCODES ) );
 }
 
 
 void GERBVIEW_FRAME::OnUpdateShowNegativeItems( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( IsElementVisible( NEGATIVE_OBJECTS_VISIBLE ) );
+    aEvent.Check( IsElementVisible( LAYER_NEGATIVE_OBJECTS ) );
 }
 
 

@@ -637,7 +637,8 @@ public:
         m_useDrawPriority = aFlag;
     }
 
-    static const int VIEW_MAX_LAYERS = 256;      ///< maximum number of layers that may be shown
+    static const int VIEW_MAX_LAYERS = 512;      ///< maximum number of layers that may be shown
+
 
 private:
     struct VIEW_LAYER

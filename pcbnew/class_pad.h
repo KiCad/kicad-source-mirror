@@ -476,7 +476,7 @@ public:
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    bool IsOnLayer( LAYER_ID aLayer ) const override
+    bool IsOnLayer( PCB_LAYER_ID aLayer ) const override
     {
         return m_layerMask[aLayer];
     }

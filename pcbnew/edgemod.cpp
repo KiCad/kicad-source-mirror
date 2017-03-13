@@ -193,14 +193,14 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
     // note: if aEdge == NULL, all outline segments will be modified
 
     MODULE*     module = GetBoard()->m_Modules;
-    LAYER_ID    layer = F_SilkS;
+    PCB_LAYER_ID    layer = F_SilkS;
     bool        modified = false;
 
     if( aEdge )
         layer = aEdge->GetLayer();
 
     // Ask for the new layer
-    LAYER_ID new_layer = SelectLayer( layer, Edge_Cuts );
+    PCB_LAYER_ID new_layer = SelectLayer( layer, Edge_Cuts );
 
     if( layer < 0 )
         return;

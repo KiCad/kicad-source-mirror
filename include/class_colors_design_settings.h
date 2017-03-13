@@ -46,9 +46,6 @@ public:
     // Common to Eeschema, Pcbnew, GerbView
     COLOR4D m_LayersColors[LAYER_ID_COUNT];     ///< Layer colors (tracks and graphic items)
 
-    // Common to Eeschema, Pcbnew
-    COLOR4D m_ItemsColors[32];                  ///< All others items but layers
-
 public:
     COLORS_DESIGN_SETTINGS();
 
@@ -69,14 +66,14 @@ public:
     /**
      * Function GetItemColor
      * @return the color for an item which is one of the item indices given
-     * in pcbstruct.h, enum PCB_VISIBLE or in schematic
+     * in enum PCB_LAYER_ID
      */
     COLOR4D GetItemColor( int aItemIdx ) const;
 
     /**
      * Function SetItemColor
      * sets the color for an item which is one of the item indices given
-     * in pcbstruct.h, enum PCB_VISIBLE or in schematic
+     * in enum PCB_LAYER_ID
      */
     void SetItemColor( int aItemIdx, COLOR4D aColor );
 

@@ -501,7 +501,7 @@ void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
 {
     if( m_ctl & CTL_STD_LAYER_NAMES )
     {
-        LAYER_ID layer = aItem->GetLayer();
+        PCB_LAYER_ID layer = aItem->GetLayer();
 
         // English layer names should never need quoting.
         m_out->Print( 0, " (layer %s)", TO_UTF8( BOARD::GetStandardLayerName( layer ) ) );
@@ -548,7 +548,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
     for( LSEQ cu = aBoard->GetEnabledLayers().CuStack();  cu;  ++cu )
     {
-        LAYER_ID layer = *cu;
+        PCB_LAYER_ID layer = *cu;
 
         m_out->Print( aNestLevel+1, "(%d %s %s", layer,
                       m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str(),
@@ -562,7 +562,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
     // Save used non-copper layers in the order they are defined.
     // desired sequence for non Cu BOARD layers.
-    static const LAYER_ID non_cu[] = {
+    static const PCB_LAYER_ID non_cu[] = {
         B_Adhes,        // 32
         F_Adhes,
         B_Paste,
@@ -585,7 +585,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 
     for( LSEQ seq = aBoard->GetEnabledLayers().Seq( non_cu, DIM( non_cu ) );  seq;  ++seq )
     {
-        LAYER_ID layer = *seq;
+        PCB_LAYER_ID layer = *seq;
 
         m_out->Print( aNestLevel+1, "(%d %s user", layer,
                       m_out->Quotew( aBoard->GetLayerName( layer ) ).c_str() );
@@ -1211,15 +1211,15 @@ void PCB_IO::formatLayers( LSET aLayerMask, int aNestLevel ) const
 
     wxString layerName;
 
-    for( LAYER_NUM layer = 0; layer < LAYER_ID_COUNT; ++layer )
+    for( LAYER_NUM layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
         if( aLayerMask[layer] )
         {
             if( m_board && !( m_ctl & CTL_STD_LAYER_NAMES ) )
-                layerName = m_board->GetLayerName( LAYER_ID( layer ) );
+                layerName = m_board->GetLayerName( PCB_LAYER_ID( layer ) );
 
             else    // I am being called from FootprintSave()
-                layerName = BOARD::GetStandardLayerName( LAYER_ID( layer ) );
+                layerName = BOARD::GetStandardLayerName( PCB_LAYER_ID( layer ) );
 
             output += ' ';
             output += m_out->Quotew( layerName );
@@ -1437,7 +1437,7 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
 {
     if( aTrack->Type() == PCB_VIA_T )
     {
-        LAYER_ID  layer1, layer2;
+        PCB_LAYER_ID  layer1, layer2;
 
         const VIA*  via = static_cast<const VIA*>(aTrack);
         BOARD*      board = (BOARD*) via->GetParent();

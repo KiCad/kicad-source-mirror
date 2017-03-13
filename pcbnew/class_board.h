@@ -177,7 +177,7 @@ private:
     /// edge zone descriptors, owned by pointer.
     ZONE_CONTAINERS         m_ZoneDescriptorList;
 
-    LAYER                   m_Layer[LAYER_ID_COUNT];
+    LAYER                   m_Layer[PCB_LAYER_ID_COUNT];
 
                                                     // if true m_highLight_NetCode is used
     HIGH_LIGHT_INFO         m_highLight;                // current high light data
@@ -425,7 +425,7 @@ public:
      * @param aLayer = The layer to be tested
      * @return bool - true if the layer is visible.
      */
-    bool IsLayerEnabled( LAYER_ID aLayer ) const
+    bool IsLayerEnabled( PCB_LAYER_ID aLayer ) const
     {
         return m_designSettings.IsLayerEnabled( aLayer );
     }
@@ -437,7 +437,7 @@ public:
      * @param aLayer = The layer to be tested
      * @return bool - true if the layer is visible.
      */
-    bool IsLayerVisible( LAYER_ID aLayer ) const
+    bool IsLayerVisible( PCB_LAYER_ID aLayer ) const
     {
         return m_designSettings.IsLayerVisible( aLayer );
     }
@@ -458,15 +458,15 @@ public:
      */
     void SetVisibleLayers( LSET aLayerMask );
 
-    // these 2 functions are not tidy at this time, since there are PCB_VISIBLEs that
+    // these 2 functions are not tidy at this time, since there are PCB_LAYER_IDs that
     // are not stored in the bitmap.
 
     /**
      * Function GetVisibleElements
      * is a proxy function that calls the correspondent function in m_BoardSettings
      * returns a bit-mask of all the element categories that are visible
-     * @return int - the visible element bitmap or-ed from enum PCB_VISIBLE
-     * @see enum PCB_VISIBLE
+     * @return int - the visible element bitmap or-ed from enum GAL_LAYER_ID
+     * @see enum GAL_LAYER_ID
      */
     int GetVisibleElements() const;
 
@@ -474,15 +474,15 @@ public:
      * Function SetVisibleElements
      * is a proxy function that calls the correspondent function in m_BoardSettings
      * changes the bit-mask of visible element categories
-     * @param aMask = The new bit-mask of visible element bitmap or-ed from enum PCB_VISIBLE
-     * @see enum PCB_VISIBLE
+     * @param aMask = The new bit-mask of visible element bitmap or-ed from enum GAL_LAYER_ID
+     * @see enum GAL_LAYER_ID
      */
     void SetVisibleElements( int aMask );
 
     /**
      * Function SetVisibleAlls
      * changes the bit-mask of visible element categories and layers
-     * @see enum PCB_VISIBLE
+     * @see enum GAL_LAYER_ID
      */
     void SetVisibleAlls();
 
@@ -490,20 +490,20 @@ public:
      * Function IsElementVisible
      * tests whether a given element category is visible. Keep this as an
      * inline function.
-     * @param aPCB_VISIBLE is from the enum by the same name
+     * @param LAYER_aPCB is from the enum by the same name
      * @return bool - true if the element is visible.
-     * @see enum PCB_VISIBLE
+     * @see enum GAL_LAYER_ID
      */
-    bool IsElementVisible( int aPCB_VISIBLE ) const;
+    bool IsElementVisible( GAL_LAYER_ID LAYER_aPCB ) const;
 
     /**
      * Function SetElementVisibility
      * changes the visibility of an element category
-     * @param aPCB_VISIBLE is from the enum by the same name
+     * @param LAYER_aPCB is from the enum by the same name
      * @param aNewState = The new visibility state of the element category
-     * @see enum PCB_VISIBLE
+     * @see enum GAL_LAYER_ID
      */
-    void SetElementVisibility( int aPCB_VISIBLE, bool aNewState );
+    void SetElementVisibility( GAL_LAYER_ID LAYER_aPCB, bool aNewState );
 
     /**
      * Function IsModuleLayerVisible
@@ -512,16 +512,16 @@ public:
      * @param layer One of the two allowed layers for modules: F_Cu or B_Cu
      * @return bool - true if the layer is visible, else false.
      */
-    bool IsModuleLayerVisible( LAYER_ID layer );
+    bool IsModuleLayerVisible( PCB_LAYER_ID layer );
 
     /**
      * Function GetVisibleElementColor
      * returns the color of a pcb visible element.
-     * @see enum PCB_VISIBLE
+     * @see enum GAL_LAYER_ID
      */
-    COLOR4D GetVisibleElementColor( int aPCB_VISIBLE );
+    COLOR4D GetVisibleElementColor( GAL_LAYER_ID LAYER_aPCB );
 
-    void SetVisibleElementColor( int aPCB_VISIBLE, COLOR4D aColor );
+    void SetVisibleElementColor( GAL_LAYER_ID LAYER_aPCB, COLOR4D aColor );
 
     /**
      * Function GetDesignSettings
@@ -595,7 +595,7 @@ public:
      * @param aLayer = A copper layer, like B_Cu, etc.
      * @param aOutlines The SHAPE_POLY_SET to fill in with items outline.
      */
-    void ConvertBrdLayerToPolygonalContours( LAYER_ID aLayer, SHAPE_POLY_SET& aOutlines );
+    void ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aOutlines );
 
     /**
      * Function GetLayerID
@@ -604,10 +604,10 @@ public:
      *
      * @param aLayerName = A layer name, like wxT("B.Cu"), etc.
      *
-     * @return LAYER_ID -   the layer id, which for copper layers may
+     * @return PCB_LAYER_ID -   the layer id, which for copper layers may
      *                      be custom, else standard.
      */
-    const LAYER_ID GetLayerID( const wxString& aLayerName ) const;
+    const PCB_LAYER_ID GetLayerID( const wxString& aLayerName ) const;
 
     /**
      * Function GetLayerName
@@ -619,7 +619,7 @@ public:
      * @return wxString -   the layer name, which for copper layers may
      *                      be custom, else standard.
      */
-    const wxString GetLayerName( LAYER_ID aLayer ) const;
+    const wxString GetLayerName( PCB_LAYER_ID aLayer ) const;
 
     /**
      * Function SetLayerName
@@ -630,7 +630,7 @@ public:
      * @return bool - true if aLayerName was legal and unique among other
      *   layer names at other layer indices and aLayer was within range, else false.
      */
-    bool SetLayerName( LAYER_ID aLayer, const wxString& aLayerName );
+    bool SetLayerName( PCB_LAYER_ID aLayer, const wxString& aLayerName );
 
     /**
      * Function GetStandardLayerName
@@ -643,9 +643,9 @@ public:
      * @return const wxString - containing the layer name or "BAD INDEX" if aLayerId
      *                      is not legal
      */
-    static wxString GetStandardLayerName( LAYER_ID aLayerId )
+    static wxString GetStandardLayerName( PCB_LAYER_ID aLayerId )
     {
-        // a BOARD's standard layer name is the LAYER_ID fixed name
+        // a BOARD's standard layer name is the PCB_LAYER_ID fixed name
         return LSET::Name( aLayerId );
     }
 
@@ -657,7 +657,7 @@ public:
      * @param aLayer A reference to a LAYER description.
      * @return false if the index was out of range.
      */
-    bool SetLayerDescr( LAYER_ID aIndex, const LAYER& aLayer );
+    bool SetLayerDescr( PCB_LAYER_ID aIndex, const LAYER& aLayer );
 
     /**
      * Function GetLayerType
@@ -667,7 +667,7 @@ public:
      * @return LAYER_T - the layer type, or LAYER_T(-1) if the
      *  index was out of range.
      */
-    LAYER_T GetLayerType( LAYER_ID aLayer ) const;
+    LAYER_T GetLayerType( PCB_LAYER_ID aLayer ) const;
 
     /**
      * Function SetLayerType
@@ -677,19 +677,19 @@ public:
      * @param aLayerType The new layer type.
      * @return bool - true if aLayerType was legal and aLayer was within range, else false.
      */
-    bool SetLayerType( LAYER_ID aLayer, LAYER_T aLayerType );
+    bool SetLayerType( PCB_LAYER_ID aLayer, LAYER_T aLayerType );
 
     /**
      * Function SetLayerColor
      * changes a layer color for any valid layer, including non-copper ones.
      */
-    void SetLayerColor( LAYER_ID aLayer, COLOR4D aColor );
+    void SetLayerColor( PCB_LAYER_ID aLayer, COLOR4D aColor );
 
     /**
      * Function GetLayerColor
      * gets a layer color for any valid layer, including non-copper ones.
      */
-    COLOR4D GetLayerColor( LAYER_ID aLayer ) const;
+    COLOR4D GetLayerColor( PCB_LAYER_ID aLayer ) const;
 
     /** Functions to get some items count */
     int GetNumSegmTrack() const;
@@ -981,8 +981,8 @@ public:
      * @return ZONE_CONTAINER* return a pointer to the ZONE_CONTAINER found, else NULL
      */
     ZONE_CONTAINER* HitTestForAnyFilledArea( const wxPoint& aRefPos,
-                                             LAYER_ID      aStartLayer,
-                                             LAYER_ID      aEndLayer,
+                                             PCB_LAYER_ID      aStartLayer,
+                                             PCB_LAYER_ID      aEndLayer,
                                              int aNetCode );
 
     /**
@@ -992,14 +992,14 @@ public:
     void RedrawAreasOutlines( EDA_DRAW_PANEL* aPanel,
                               wxDC*           aDC,
                               GR_DRAWMODE     aDrawMode,
-                              LAYER_ID       aLayer );
+                              PCB_LAYER_ID       aLayer );
 
     /**
      * Function RedrawFilledAreas
      * Redraw all filled areas on layer aLayer ( redraw all if aLayer < 0 )
      */
     void RedrawFilledAreas( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
-                            LAYER_ID aLayer );
+                            PCB_LAYER_ID aLayer );
 
     /**
      * Function SetAreasNetCodesFromNetNames
@@ -1067,14 +1067,14 @@ public:
      * @return a reference to the new area
      */
     ZONE_CONTAINER* AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode,
-                             LAYER_ID aLayer, wxPoint aStartPointPosition, int aHatch );
+                             PCB_LAYER_ID aLayer, wxPoint aStartPointPosition, int aHatch );
 
     /**
      * Function InsertArea
      * add empty copper area to net, inserting after m_ZoneDescriptorList[iarea]
      * @return pointer to the new area
      */
-    ZONE_CONTAINER* InsertArea( int netcode, int iarea, LAYER_ID layer, int x, int y, int hatch );
+    ZONE_CONTAINER* InsertArea( int netcode, int iarea, PCB_LAYER_ID layer, int x, int y, int hatch );
 
     /**
      * Function NormalizeAreaPolygon
@@ -1187,10 +1187,10 @@ public:
      * of the via.
      * </p>
      * @param aPosition The wxPoint to HitTest() against.
-     * @param aLayer The layer to search.  Use -1 (LAYER_ID::UNDEFINED_LAYER) for a don't care.
+     * @param aLayer The layer to search.  Use -1 (<PCB_LAYER_ID>::UNDEFINED_LAYER) for a don't care.
      * @return VIA* A point a to the VIA object if found, else NULL.
      */
-    VIA* GetViaByPosition( const wxPoint& aPosition, LAYER_ID aLayer = LAYER_ID( -1 ) ) const;
+    VIA* GetViaByPosition( const wxPoint& aPosition, PCB_LAYER_ID aLayer = PCB_LAYER_ID( -1 ) ) const;
 
     /**
      * Function GetPad
@@ -1351,7 +1351,7 @@ public:
      * @param aIgnoreLocked Ignore locked modules when true.
      * @return MODULE* The best module or NULL if none.
      */
-    MODULE* GetFootprint( const wxPoint& aPosition, LAYER_ID aActiveLayer,
+    MODULE* GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer,
                           bool aVisibleOnly, bool aIgnoreLocked = false );
 
     /**

@@ -212,7 +212,7 @@ static void build_via_testpoints( BOARD *aPcb,
             rk.drill = via->GetDrillValue();
             rk.mechanical = false;
 
-            LAYER_ID top_layer, bottom_layer;
+            PCB_LAYER_ID top_layer, bottom_layer;
 
             via->LayerPair( &top_layer, &bottom_layer );
 

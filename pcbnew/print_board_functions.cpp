@@ -68,8 +68,8 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
     displ_opts->m_DisplayPadFill = true;
     displ_opts->m_DisplayViaFill = true;
     displ_opts->m_DisplayPadNum = false;
-    bool nctmp = GetBoard()->IsElementVisible(NO_CONNECTS_VISIBLE);
-    GetBoard()->SetElementVisibility(NO_CONNECTS_VISIBLE, false);
+    bool nctmp = GetBoard()->IsElementVisible( LAYER_NO_CONNECTS );
+    GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
     displ_opts->m_DisplayPadIsol    = false;
     displ_opts->m_DisplayModEdgeFill    = FILLED;
     displ_opts->m_DisplayModTextFill    = FILLED;
@@ -101,7 +101,7 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
     m_canvas->SetPrintMirrored( false );
 
     *displ_opts = save_opt;
-    GetBoard()->SetElementVisibility( NO_CONNECTS_VISIBLE, nctmp );
+    GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, nctmp );
 }
 
 
@@ -132,7 +132,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
 
     save_opt = *displ_opts;
 
-    LAYER_ID activeLayer = GetScreen()->m_Active_Layer;
+    PCB_LAYER_ID activeLayer = GetScreen()->m_Active_Layer;
 
     displ_opts->m_ContrastModeDisplay = false;
     displ_opts->m_DisplayPadFill = true;
@@ -151,11 +151,11 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
             // Calculate the active layer number to print from its mask layer:
             GetScreen()->m_Active_Layer = B_Cu;
 
-            for( LAYER_NUM id = LAYER_ID_COUNT-1; id >= 0; --id )
+            for( LAYER_NUM id = PCB_LAYER_ID_COUNT-1; id >= 0; --id )
             {
                 if( aPrintMask[id] )
                 {
-                    GetScreen()->m_Active_Layer = LAYER_ID( id );
+                    GetScreen()->m_Active_Layer = PCB_LAYER_ID( id );
                     break;
                 }
             }
@@ -175,13 +175,13 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
 
     displ_opts->m_DisplayPadNum = false;
 
-    bool nctmp = GetBoard()->IsElementVisible( NO_CONNECTS_VISIBLE );
+    bool nctmp = GetBoard()->IsElementVisible( LAYER_NO_CONNECTS );
 
-    GetBoard()->SetElementVisibility( NO_CONNECTS_VISIBLE, false );
+    GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
 
-    bool anchorsTmp = GetBoard()->IsElementVisible( ANCHOR_VISIBLE );
+    bool anchorsTmp = GetBoard()->IsElementVisible( LAYER_ANCHOR );
 
-    GetBoard()->SetElementVisibility( ANCHOR_VISIBLE, false );
+    GetBoard()->SetElementVisibility( LAYER_ANCHOR, false );
 
     displ_opts->m_DisplayPadIsol = false;
     displ_opts->m_DisplayModEdgeFill = FILLED;
@@ -223,7 +223,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
             int         radius = track->GetWidth() / 2;
             const VIA*  via = static_cast<const VIA*>( track );
 
-            COLOR4D color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + via->GetViaType() );
+            COLOR4D color = g_ColorsSettings.GetItemColor( LAYER_VIAS + via->GetViaType() );
 
             GRFilledCircle( m_canvas->GetClipBox(), aDC,
                             via->GetStart().x,
@@ -308,8 +308,8 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     *displ_opts = save_opt;
     GetScreen()->m_Active_Layer = activeLayer;
 
-    GetBoard()->SetElementVisibility( NO_CONNECTS_VISIBLE, nctmp );
-    GetBoard()->SetElementVisibility( ANCHOR_VISIBLE, anchorsTmp );
+    GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, nctmp );
+    GetBoard()->SetElementVisibility( LAYER_ANCHOR, anchorsTmp );
 }
 
 

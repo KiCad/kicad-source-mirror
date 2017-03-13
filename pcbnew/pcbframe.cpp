@@ -736,20 +736,12 @@ void PCB_EDIT_FRAME::forceColorsToLegacy()
 {
     COLORS_DESIGN_SETTINGS* cds = GetBoard()->GetColorsSettings();
 
-    for( int i = 0; i < LAYER_ID_COUNT; i++ )
+    for( unsigned i = 0; i < DIM( cds->m_LayersColors ); i++ )
     {
         COLOR4D c = cds->GetLayerColor( i );
         c.SetToNearestLegacyColor();
         c.a = 0.8;
         cds->SetLayerColor( i, c );
-    }
-
-    for( unsigned int i = 0; i < DIM( cds->m_ItemsColors ); i++ )
-    {
-        COLOR4D c = cds->GetItemColor( i );
-        c.SetToNearestLegacyColor();
-        c.a = 0.8;
-        cds->SetItemColor( i, c );
     }
 }
 
@@ -841,26 +833,26 @@ void PCB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 
 bool PCB_EDIT_FRAME::IsGridVisible() const
 {
-    return IsElementVisible( GRID_VISIBLE );
+    return IsElementVisible( LAYER_GRID );
 }
 
 
 void PCB_EDIT_FRAME::SetGridVisibility(bool aVisible)
 {
-    SetElementVisibility( GRID_VISIBLE, aVisible );
+    SetElementVisibility( LAYER_GRID, aVisible );
 }
 
 
 COLOR4D PCB_EDIT_FRAME::GetGridColor() const
 {
-    return GetBoard()->GetVisibleElementColor( GRID_VISIBLE );
+    return GetBoard()->GetVisibleElementColor( LAYER_GRID );
 }
 
 
 void PCB_EDIT_FRAME::SetGridColor( COLOR4D aColor )
 {
 
-    GetBoard()->SetVisibleElementColor( GRID_VISIBLE, aColor );
+    GetBoard()->SetVisibleElementColor( LAYER_GRID, aColor );
 
     if( IsGalCanvasActive() )
     {
@@ -872,7 +864,7 @@ void PCB_EDIT_FRAME::SetGridColor( COLOR4D aColor )
 bool PCB_EDIT_FRAME::IsMicroViaAcceptable()
 {
     int copperlayercnt = GetBoard()->GetCopperLayerCount( );
-    LAYER_ID currLayer = GetActiveLayer();
+    PCB_LAYER_ID currLayer = GetActiveLayer();
 
     if( !GetDesignSettings().m_MicroViasAllowed )
         return false;   // Obvious..
@@ -890,7 +882,7 @@ bool PCB_EDIT_FRAME::IsMicroViaAcceptable()
 }
 
 
-void PCB_EDIT_FRAME::SetActiveLayer( LAYER_ID aLayer )
+void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 {
     PCB_BASE_FRAME::SetActiveLayer( aLayer );
 
@@ -935,15 +927,15 @@ void PCB_EDIT_FRAME::unitsChangeRefresh()
 }
 
 
-bool PCB_EDIT_FRAME::IsElementVisible( int aElement ) const
+bool PCB_EDIT_FRAME::IsElementVisible( GAL_LAYER_ID aElement ) const
 {
     return GetBoard()->IsElementVisible( aElement );
 }
 
 
-void PCB_EDIT_FRAME::SetElementVisibility( int aElement, bool aNewState )
+void PCB_EDIT_FRAME::SetElementVisibility( GAL_LAYER_ID aElement, bool aNewState )
 {
-    GetGalCanvas()->GetView()->SetLayerVisible( ITEM_GAL_LAYER( aElement ), aNewState );
+    GetGalCanvas()->GetView()->SetLayerVisible( aElement , aNewState );
     GetBoard()->SetElementVisibility( aElement, aNewState );
     m_Layers->SetRenderState( aElement, aNewState );
 }
@@ -953,7 +945,7 @@ void PCB_EDIT_FRAME::SetVisibleAlls()
 {
     GetBoard()->SetVisibleAlls();
 
-    for( int ii = 0; ii < PCB_VISIBLE( END_PCB_VISIBLE_LIST ); ii++ )
+    for( GAL_LAYER_ID ii = GAL_LAYER_ID_START; ii < GAL_LAYER_ID_BITMASK_END; ++ii )
         m_Layers->SetRenderState( ii, true );
 }
 

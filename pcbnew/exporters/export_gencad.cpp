@@ -97,7 +97,7 @@ static const wxString GenCADLayerNameFlipped[32] =
 
 #else
 
-static std::string GenCADLayerName( int aCuCount, LAYER_ID aId )
+static std::string GenCADLayerName( int aCuCount, PCB_LAYER_ID aId )
 {
     if( IsCopperLayer( aId ) )
     {
@@ -157,7 +157,7 @@ static std::string GenCADLayerName( int aCuCount, LAYER_ID aId )
 };
 
 
-static const LAYER_ID gc_seq[] = {
+static const PCB_LAYER_ID gc_seq[] = {
     B_Cu,
     In30_Cu,
     In29_Cu,
@@ -194,7 +194,7 @@ static const LAYER_ID gc_seq[] = {
 
 
 // flipped layer name for Gencad export (to make CAM350 imports correct)
-static std::string GenCADLayerNameFlipped( int aCuCount, LAYER_ID aId )
+static std::string GenCADLayerNameFlipped( int aCuCount, PCB_LAYER_ID aId )
 {
     if( 1<= aId && aId <= 14 )
     {
@@ -574,7 +574,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 
         for( LSEQ seq = mask.Seq( gc_seq, DIM( gc_seq ) );  seq;  ++seq )
         {
-            LAYER_ID layer = *seq;
+            PCB_LAYER_ID layer = *seq;
 
             fprintf( aFile, "PAD V%d.%d.%s %s 0 0\n",
                     via->GetWidth(), via->GetDrillValue(),
@@ -601,7 +601,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         // the special gc_seq
         for( LSEQ seq = pad_set.Seq( gc_seq, DIM( gc_seq ) );  seq;  ++seq )
         {
-            LAYER_ID layer = *seq;
+            PCB_LAYER_ID layer = *seq;
 
             fprintf( aFile, "PAD P%u %s 0 0\n", i, GenCADLayerName( cu_count, layer ).c_str() );
         }
@@ -609,10 +609,10 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         // Flipped padstack
         fprintf( aFile, "PADSTACK PAD%uF %g\n", i, pad->GetDrillSize().x / SCALE_FACTOR );
 
-        // the normal LAYER_ID sequence is inverted from gc_seq[]
+        // the normal PCB_LAYER_ID sequence is inverted from gc_seq[]
         for( LSEQ seq = pad_set.Seq();  seq;  ++seq )
         {
-            LAYER_ID layer = *seq;
+            PCB_LAYER_ID layer = *seq;
 
             fprintf( aFile, "PAD P%u %s 0 0\n", i, GenCADLayerNameFlipped( cu_count, layer ).c_str() );
         }

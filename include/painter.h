@@ -231,16 +231,16 @@ protected:
     std::set<unsigned int> m_activeLayers; ///< Stores active layers number
 
     ///> Colors for all layers (normal)
-    COLOR4D m_layerColors[TOTAL_LAYER_COUNT];
+    COLOR4D m_layerColors[LAYER_ID_COUNT];
 
     ///> Colors for all layers (highlighted)
-    COLOR4D m_layerColorsHi[TOTAL_LAYER_COUNT];
+    COLOR4D m_layerColorsHi[LAYER_ID_COUNT];
 
     ///> Colors for all layers (selected)
-    COLOR4D m_layerColorsSel[TOTAL_LAYER_COUNT];
+    COLOR4D m_layerColorsSel[LAYER_ID_COUNT];
 
     ///> Colors for all layers (darkened)
-    COLOR4D m_layerColorsDark[TOTAL_LAYER_COUNT];
+    COLOR4D m_layerColorsDark[LAYER_ID_COUNT];
 
     /// Parameters for display modes
     bool    m_hiContrastEnabled;    ///< High contrast display mode on/off

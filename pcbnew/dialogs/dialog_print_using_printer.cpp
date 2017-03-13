@@ -83,7 +83,7 @@ private:
     wxConfigBase*   m_config;
     // the list of existing board layers in wxCheckListBox, with the
     // board layers id:
-    std::pair<wxCheckListBox*, int> m_boxSelectLayer[LAYER_ID_COUNT];
+    std::pair<wxCheckListBox*, int> m_boxSelectLayer[PCB_LAYER_ID_COUNT];
     static bool     m_ExcludeEdgeLayer;
 
     void OnCloseWindow( wxCloseEvent& event ) override;
@@ -178,7 +178,7 @@ void DIALOG_PRINT_USING_PRINTER::initValues( )
 
     for( ;  seq;  ++seq )
     {
-        LAYER_ID layer = *seq;
+        PCB_LAYER_ID layer = *seq;
         int checkIndex;
 
         if( IsCopperLayer( layer ) )

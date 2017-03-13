@@ -175,7 +175,7 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
         m_gal->BeginDrawing();
         m_gal->ClearScreen( settings->GetBackgroundColor() );
 
-        KIGFX::COLOR4D gridColor = settings->GetLayerColor( ITEM_GAL_LAYER( GRID_VISIBLE ) );
+        KIGFX::COLOR4D gridColor = settings->GetLayerColor( LAYER_GRID );
         m_gal->SetGridColor( gridColor );
 
         if( m_view->IsDirty() )

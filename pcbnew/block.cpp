@@ -317,7 +317,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
     {
         for( MODULE* module = m_Pcb->m_Modules;  module;  module = module->Next() )
         {
-            LAYER_ID layer = module->GetLayer();
+            PCB_LAYER_ID layer = module->GetLayer();
 
             if( module->HitTest( GetScreen()->m_BlockLocate, selectOnlyComplete )
                 && ( !module->IsLocked() || blockOpts.includeLockedModules ) )

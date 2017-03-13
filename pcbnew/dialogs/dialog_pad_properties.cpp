@@ -171,12 +171,12 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 
     if( m_dummyPad->GetLayerSet()[F_Cu] )
     {
-        color = m_board->GetVisibleElementColor( PAD_FR_VISIBLE );
+        color = m_board->GetVisibleElementColor( LAYER_PAD_FR );
     }
 
     if( m_dummyPad->GetLayerSet()[B_Cu] )
     {
-        color = color.LegacyMix( m_board->GetVisibleElementColor( PAD_BK_VISIBLE ) );
+        color = color.LegacyMix( m_board->GetVisibleElementColor( LAYER_PAD_BK ) );
     }
 
     // What could happen: the pad color is *actually* black, or no

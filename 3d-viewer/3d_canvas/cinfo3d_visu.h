@@ -52,10 +52,10 @@
 #include <reporter.h>
 
 /// A type that stores a container of 2d objects for each layer id
-typedef std::map< LAYER_ID, CBVHCONTAINER2D *> MAP_CONTAINER_2D;
+typedef std::map< PCB_LAYER_ID, CBVHCONTAINER2D *> MAP_CONTAINER_2D;
 
 /// A type that stores polysets for each layer id
-typedef std::map< LAYER_ID, SHAPE_POLY_SET *> MAP_POLY;
+typedef std::map< PCB_LAYER_ID, SHAPE_POLY_SET *> MAP_POLY;
 
 /// This defines the range that all coord will have to be rendered.
 /// It will use this value to convert to a normalized value between
@@ -106,7 +106,7 @@ class CINFO3D_VISU
      * @param aLayer: layer ID to get status
      * @return true if layer should be displayed, false if not
      */
-    bool Is3DLayerEnabled( LAYER_ID aLayer ) const;
+    bool Is3DLayerEnabled( PCB_LAYER_ID aLayer ) const;
 
     /**
      * @brief ShouldModuleBeDisplayed - Test if module should be displayed in
@@ -256,7 +256,7 @@ class CINFO3D_VISU
      * @param aLayerId: the layer to get the color information
      * @return the color in SFVEC3F format
      */
-    SFVEC3F GetLayerColor( LAYER_ID aLayerId ) const;
+    SFVEC3F GetLayerColor( PCB_LAYER_ID aLayerId ) const;
 
     /**
      * @brief GetItemColor - get the technical color of a layer
@@ -277,14 +277,14 @@ class CINFO3D_VISU
      * @param aLayerId: layer id
      * @return position in 3D unities
      */
-    float GetLayerTopZpos3DU( LAYER_ID aLayerId ) const { return m_layerZcoordTop[aLayerId]; }
+    float GetLayerTopZpos3DU( PCB_LAYER_ID aLayerId ) const { return m_layerZcoordTop[aLayerId]; }
 
     /**
      * @brief GetLayerBottomZpos3DU - Get the bottom z position
      * @param aLayerId: layer id
      * @return position in 3D unities
      */
-    float GetLayerBottomZpos3DU( LAYER_ID aLayerId ) const { return m_layerZcoordBottom[aLayerId]; }
+    float GetLayerBottomZpos3DU( PCB_LAYER_ID aLayerId ) const { return m_layerZcoordBottom[aLayerId]; }
 
     /**
      * @brief GetMapLayers - Get the map of container that have the objects per layer
@@ -437,33 +437,33 @@ class CINFO3D_VISU
 
     void AddPadsShapesWithClearanceToContainer( const MODULE *aModule,
                                                 CGENERICCONTAINER2D *aDstContainer,
-                                                LAYER_ID aLayerId,
+                                                PCB_LAYER_ID aLayerId,
                                                 int aInflateValue,
                                                 bool aSkipNPTHPadsWihNoCopper );
 
     void AddGraphicsShapesWithClearanceToContainer( const MODULE *aModule,
                                                     CGENERICCONTAINER2D *aDstContainer,
-                                                    LAYER_ID aLayerId,
+                                                    PCB_LAYER_ID aLayerId,
                                                     int aInflateValue );
 
     void AddShapeWithClearanceToContainer( const TEXTE_PCB *aTextPCB,
                                            CGENERICCONTAINER2D *aDstContainer,
-                                           LAYER_ID aLayerId,
+                                           PCB_LAYER_ID aLayerId,
                                            int aClearanceValue );
 
     void AddShapeWithClearanceToContainer( const DRAWSEGMENT *aDrawSegment,
                                            CGENERICCONTAINER2D *aDstContainer,
-                                           LAYER_ID aLayerId,
+                                           PCB_LAYER_ID aLayerId,
                                            int aClearanceValue );
 
     void AddShapeWithClearanceToContainer( const DIMENSION *aDimension,
                                            CGENERICCONTAINER2D *aDstContainer,
-                                           LAYER_ID aLayerId,
+                                           PCB_LAYER_ID aLayerId,
                                            int aClearanceValue );
 
     void AddSolidAreasShapesToContainer( const ZONE_CONTAINER *aZoneContainer,
                                          CGENERICCONTAINER2D *aDstContainer,
-                                         LAYER_ID aLayerId );
+                                         PCB_LAYER_ID aLayerId );
 
     void TransformArcToSegments( const wxPoint &aCentre,
                                  const wxPoint &aStart,
@@ -483,13 +483,13 @@ class CINFO3D_VISU
                                              int aWidth) const;
 
     void transformPadsShapesWithClearanceToPolygon( const DLIST<D_PAD> &aPads,
-                                                    LAYER_ID aLayer,
+                                                    PCB_LAYER_ID aLayer,
                                                     SHAPE_POLY_SET &aCornerBuffer,
                                                     int aInflateValue,
                                                     bool aSkipNPTHPadsWihNoCopper) const;
 
     void transformGraphicModuleEdgeToPolygonSet( const MODULE *aModule,
-                                                 LAYER_ID aLayer,
+                                                 PCB_LAYER_ID aLayer,
                                                  SHAPE_POLY_SET& aCornerBuffer ) const;
 
     void buildPadShapePolygon( const D_PAD *aPad,
@@ -616,10 +616,10 @@ class CINFO3D_VISU
     double m_biuTo3Dunits;
 
     /// Top (End) Z position of each layer (normalized)
-    float  m_layerZcoordTop[LAYER_ID_COUNT];
+    float  m_layerZcoordTop[PCB_LAYER_ID_COUNT];
 
     /// Bottom (Start) Z position of each layer (normalized)
-    float  m_layerZcoordBottom[LAYER_ID_COUNT];
+    float  m_layerZcoordBottom[PCB_LAYER_ID_COUNT];
 
     /// Copper thickness (normalized)
     float  m_copperThickness3DU;

@@ -60,7 +60,7 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     gal->SetIsFill( false );
     gal->SetLineWidth( 1.0 );
     auto rs = aView->GetPainter()->GetSettings();
-    auto color = rs->GetColor( NULL, ITEM_GAL_LAYER( RATSNEST_VISIBLE ) );
+    auto color = rs->GetColor( NULL, LAYER_RATSNEST );
     int highlightedNet = rs->GetHighlightNetCode();
 
     // Dynamic ratsnest (for e.g. dragged items)
@@ -117,7 +117,7 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 void RATSNEST_VIEWITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 1;
-    aLayers[0] = ITEM_GAL_LAYER( RATSNEST_VISIBLE );
+    aLayers[0] = LAYER_RATSNEST;
 }
 
 }

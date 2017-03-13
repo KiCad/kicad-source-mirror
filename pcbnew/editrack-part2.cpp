@@ -108,8 +108,8 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     // layer pair is B_Cu and F_Cu.
     via->SetLayerPair( B_Cu, F_Cu );
 
-    LAYER_ID first_layer = GetActiveLayer();
-    LAYER_ID last_layer;
+    PCB_LAYER_ID first_layer = GetActiveLayer();
+    PCB_LAYER_ID last_layer;
 
     // prepare switch to new active layer:
     if( first_layer != GetScreen()->m_Route_Layer_TOP )
@@ -126,7 +126,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
 
     case VIA_MICROVIA:  // from external to the near neighbor inner layer
         {
-            LAYER_ID last_inner_layer = ToLAYER_ID( ( GetBoard()->GetCopperLayerCount() - 2 ) );
+            PCB_LAYER_ID last_inner_layer = ToLAYER_ID( ( GetBoard()->GetCopperLayerCount() - 2 ) );
 
             if( first_layer == B_Cu )
                 last_layer = last_inner_layer;
@@ -224,7 +224,7 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
     D_PAD*   pt_pad = NULL;
     MODULE*  Module = NULL;
 
-    if( GetBoard()->IsElementVisible(RATSNEST_VISIBLE) )
+    if( GetBoard()->IsElementVisible( LAYER_RATSNEST ) )
         return;
 
     if( ( GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK ) == 0 )

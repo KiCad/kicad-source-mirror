@@ -103,7 +103,7 @@ public:
         return HitTestMarker( aPosition );
     }
 
-    bool IsOnLayer( LAYER_ID aLayer ) const override;
+    bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 

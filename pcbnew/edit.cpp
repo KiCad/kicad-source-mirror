@@ -439,7 +439,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
                 wxGetMousePosition( &dlgPosition.x, &dlgPosition.y );
 
-                LAYER_ID layer = SelectLayer( GetActiveLayer(), LSET::AllNonCuMask(), dlgPosition );
+                PCB_LAYER_ID layer = SelectLayer( GetActiveLayer(), LSET::AllNonCuMask(), dlgPosition );
 
                 m_canvas->SetIgnoreMouseEvents( false );
                 m_canvas->MoveCursorToCrossHair();
@@ -988,7 +988,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_SELECT_LAYER:
         {
-            LAYER_ID itmp = SelectLayer( GetActiveLayer() );
+            PCB_LAYER_ID itmp = SelectLayer( GetActiveLayer() );
 
             if( itmp >= 0 )
             {
@@ -1011,7 +1011,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
         {
-            LAYER_ID itmp = SelectLayer( GetActiveLayer(), LSET::AllCuMask() );
+            PCB_LAYER_ID itmp = SelectLayer( GetActiveLayer(), LSET::AllCuMask() );
 
             if( itmp >= 0 )
                 SetActiveLayer( itmp );
@@ -1022,7 +1022,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_SELECT_CU_LAYER:
         {
-            LAYER_ID itmp = SelectLayer( GetActiveLayer(), LSET::AllNonCuMask() );
+            PCB_LAYER_ID itmp = SelectLayer( GetActiveLayer(), LSET::AllNonCuMask() );
 
             if( itmp >= 0 )
                 SetActiveLayer( itmp );
@@ -1347,9 +1347,9 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
 }
 
 
-void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, LAYER_ID layer )
+void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
 {
-    LAYER_ID curLayer = GetActiveLayer();
+    PCB_LAYER_ID curLayer = GetActiveLayer();
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
     // Check if the specified layer matches the present layer

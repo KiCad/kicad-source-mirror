@@ -45,6 +45,7 @@ class MSG_PANEL_ITEM;
 
 
 // Via types
+// Note that this enum must be synchronized to GAL_LAYER_ID
 enum VIATYPE_T
 {
     VIA_THROUGH      = 3,      /* Always a through hole via */
@@ -232,7 +233,7 @@ public:
      * @param aLayer The layer to match, pass -1 for a don't care.
      * @return A pointer to a VIA object if found, else NULL.
      */
-    VIA* GetVia( const wxPoint& aPosition, LAYER_ID aLayer = UNDEFINED_LAYER );
+    VIA* GetVia( const wxPoint& aPosition, PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
 
     /**
      * Function GetVia
@@ -390,7 +391,7 @@ public:
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset ) override;
 
-    bool IsOnLayer( LAYER_ID aLayer ) const override;
+    bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
 
     virtual LSET GetLayerSet() const override;
 
@@ -401,7 +402,7 @@ public:
      * @param aTopLayer = first layer connected by the via
      * @param aBottomLayer = last layer connected by the via
      */
-    void SetLayerPair( LAYER_ID aTopLayer, LAYER_ID aBottomLayer );
+    void SetLayerPair( PCB_LAYER_ID aTopLayer, PCB_LAYER_ID aBottomLayer );
 
     /**
      * Function LayerPair
@@ -410,7 +411,7 @@ public:
      *  @param top_layer = pointer to the first layer (can be null)
      *  @param bottom_layer = pointer to the last layer (can be null)
      */
-    void LayerPair( LAYER_ID* top_layer, LAYER_ID* bottom_layer ) const;
+    void LayerPair( PCB_LAYER_ID* top_layer, PCB_LAYER_ID* bottom_layer ) const;
 
     const wxPoint& GetPosition() const override {  return m_Start; }
     void SetPosition( const wxPoint& aPoint ) override { m_Start = aPoint;  m_End = aPoint; }
@@ -481,7 +482,7 @@ protected:
 
 private:
     /// The bottom layer of the via (the top layer is in m_Layer)
-    LAYER_ID  m_BottomLayer;
+    PCB_LAYER_ID  m_BottomLayer;
 
     VIATYPE_T m_ViaType;        // Type of via
 

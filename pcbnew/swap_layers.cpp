@@ -41,20 +41,20 @@
 #include <wx/statline.h>
 
 
-#define NO_CHANGE     LAYER_ID(-3)
+#define NO_CHANGE     PCB_LAYER_ID(-3)
 
 
 enum swap_layer_id {
     ID_WINEDA_SWAPLAYERFRAME = 1800,
     ID_BUTTON_0,
-    ID_TEXT_0 = ID_BUTTON_0 + LAYER_ID_COUNT
+    ID_TEXT_0 = ID_BUTTON_0 + PCB_LAYER_ID_COUNT
 };
 
 
 class SWAP_LAYERS_DIALOG : public DIALOG_SHIM
 {
 public:
-    SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent, LAYER_ID* aArray );
+    SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent, PCB_LAYER_ID* aArray );
     // ~SWAP_LAYERS_DIALOG() { };
 
 private:
@@ -68,8 +68,8 @@ private:
     wxStaticLine*           Line;
     wxStdDialogButtonSizer* StdDialogButtonSizer;
 
-    LAYER_ID*               m_callers_nlayers;          // DIM() is LAYER_ID_COUNT
-    wxStaticText*           layer_list[LAYER_ID_COUNT];
+    PCB_LAYER_ID*               m_callers_nlayers;          // DIM() is PCB_LAYER_ID_COUNT
+    wxStaticText*           layer_list[PCB_LAYER_ID_COUNT];
 
     void Sel_Layer( wxCommandEvent& event );
     void OnOkClick( wxCommandEvent& event );
@@ -80,7 +80,7 @@ private:
 
 
 BEGIN_EVENT_TABLE( SWAP_LAYERS_DIALOG, wxDialog )
-    EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + LAYER_ID_COUNT - 1,
+    EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + PCB_LAYER_ID_COUNT - 1,
                        wxEVT_COMMAND_BUTTON_CLICKED, SWAP_LAYERS_DIALOG::Sel_Layer )
 
     EVT_BUTTON( wxID_OK, SWAP_LAYERS_DIALOG::OnOkClick )
@@ -89,7 +89,7 @@ BEGIN_EVENT_TABLE( SWAP_LAYERS_DIALOG, wxDialog )
 END_EVENT_TABLE()
 
 
-SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent, LAYER_ID* aArray ) :
+SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent, PCB_LAYER_ID* aArray ) :
     DIALOG_SHIM( parent, -1, _( "Swap Layers:" ), wxPoint( -1, -1 ),
                  wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
     m_callers_nlayers( aArray )
@@ -229,7 +229,7 @@ SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( PCB_BASE_FRAME* parent, LAYER_ID* aArray
          */
         if( layer == 0 )
         {
-            text = new wxStaticText( this, item_ID, board->GetLayerName( LAYER_ID( 0 ) ),
+            text = new wxStaticText( this, item_ID, board->GetLayerName( PCB_LAYER_ID( 0 ) ),
                                      wxDefaultPosition, wxDefaultSize, 0 );
             goodSize = text->GetSize();
 
@@ -306,12 +306,12 @@ void SWAP_LAYERS_DIALOG::Sel_Layer( wxCommandEvent& event )
 
     ii = event.GetId();
 
-    if( ii < ID_BUTTON_0 || ii >= ID_BUTTON_0 + LAYER_ID_COUNT )
+    if( ii < ID_BUTTON_0 || ii >= ID_BUTTON_0 + PCB_LAYER_ID_COUNT )
         return;
 
     ii = event.GetId() - ID_BUTTON_0;
 
-    LAYER_ID layer = m_callers_nlayers[ii];
+    PCB_LAYER_ID layer = m_callers_nlayers[ii];
 
     LSET notallowed_mask = IsCopperLayer( ii ) ? LSET::AllNonCuMask() : LSET::AllCuMask();
 
@@ -358,7 +358,7 @@ void SWAP_LAYERS_DIALOG::OnOkClick( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
 {
-    LAYER_ID    new_layer[LAYER_ID_COUNT];
+    PCB_LAYER_ID    new_layer[PCB_LAYER_ID_COUNT];
 
     for( unsigned i = 0; i < DIM( new_layer );  ++i )
         new_layer[i] = NO_CHANGE;
@@ -380,7 +380,7 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
             if( via->GetViaType() == VIA_THROUGH )
                 continue;
 
-            LAYER_ID top_layer, bottom_layer;
+            PCB_LAYER_ID top_layer, bottom_layer;
 
             via->LayerPair( &top_layer, &bottom_layer );
 

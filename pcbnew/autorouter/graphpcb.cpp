@@ -323,7 +323,7 @@ void TraceSegmentPcb( TRACK* aTrack, int color, int marge, int op_logic )
         int uy1 = aTrack->GetEnd().y - RoutingMatrix.GetBrdCoordOrigin().y;
 
         // Ordinary track
-        LAYER_ID layer = aTrack->GetLayer();
+        PCB_LAYER_ID layer = aTrack->GetLayer();
 
         if( color == VIA_IMPOSSIBLE )
             layer = UNDEFINED_LAYER;

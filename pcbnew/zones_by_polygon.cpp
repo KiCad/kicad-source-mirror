@@ -383,7 +383,7 @@ void PCB_EDIT_FRAME::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* aZone )
         return;
     }
 
-    LAYER_ID layer = aZone->GetLayer();
+    PCB_LAYER_ID layer = aZone->GetLayer();
 
     if( DC )
     {
@@ -760,7 +760,7 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
     m_canvas->SetMouseCapture( NULL, NULL );
 
     // Undraw old drawings, because they can have important changes
-    LAYER_ID layer = zone->GetLayer();
+    PCB_LAYER_ID layer = zone->GetLayer();
     GetBoard()->RedrawAreasOutlines( m_canvas, DC, GR_XOR, layer );
     GetBoard()->RedrawFilledAreas( m_canvas, DC, GR_XOR, layer );
 

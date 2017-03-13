@@ -123,7 +123,7 @@ void DIALOG_EXCHANGE_MODULE::OnOkClick( wxCommandEvent& event )
 
     if( result )
     {
-        if( m_parent->GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
+        if( m_parent->GetBoard()->IsElementVisible( LAYER_RATSNEST ) )
             m_parent->Compile_Ratsnest( NULL, true );
 
         m_parent->GetCanvas()->Refresh();

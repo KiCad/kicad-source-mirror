@@ -62,14 +62,20 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 %include netinfo.i
 %include netclass.i
 
+%ignore operator++(SCH_LAYER_ID&);
+
+%ignore operator++(GAL_LAYER_ID&);
+
+%ignore operator+(const GAL_LAYER_ID&, int);
 
 %include layers_id_colors_and_visibility.h
+
 // Extend LSET by 2 methods to add or remove layers from the layer list
 // Mainly used to add or remove layers of a pad layer list
 %extend LSET
 {
-    LSET addLayer( LAYER_ID aLayer)    { return self->set(aLayer); }
-    LSET removeLayer( LAYER_ID aLayer) { return self->reset(aLayer); }
+    LSET addLayer( PCB_LAYER_ID aLayer)    { return self->set(aLayer); }
+    LSET removeLayer( PCB_LAYER_ID aLayer) { return self->reset(aLayer); }
     LSET addLayerSet( LSET aLayerSet)    { return *self |= aLayerSet; }
     LSET removeLayerSet( LSET aLayerSet) { return *self &= ~aLayerSet; }
 

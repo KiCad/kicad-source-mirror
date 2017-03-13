@@ -191,7 +191,7 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
     // after pads, only track & via tests remain, skip them if not desired
     if( doTrack )
     {
-        LAYER_ID layer = screen->m_Active_Layer;
+        PCB_LAYER_ID layer = screen->m_Active_Layer;
 
         for( TRACK* via = m_Pcb->m_Track;
                 via && (via = via->GetVia( *curpos, layer )) != NULL;

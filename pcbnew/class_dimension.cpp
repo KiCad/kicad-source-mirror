@@ -83,7 +83,7 @@ const wxString DIMENSION::GetText() const
 }
 
 
-void DIMENSION::SetLayer( LAYER_ID aLayer )
+void DIMENSION::SetLayer( PCB_LAYER_ID aLayer )
 {
     m_Layer = aLayer;
     m_Text.SetLayer( aLayer );

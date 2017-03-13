@@ -224,21 +224,21 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMod
 
     BOARD* brd = GetBoard( );
     COLOR4D color = brd->GetLayerColor( GetLayer() );
-    LAYER_ID text_layer = GetLayer();
+    PCB_LAYER_ID text_layer = GetLayer();
 
     if( !brd->IsLayerVisible( m_Layer )
-      || (IsFrontLayer( text_layer ) && !brd->IsElementVisible( MOD_TEXT_FR_VISIBLE ))
-      || (IsBackLayer( text_layer ) && !brd->IsElementVisible( MOD_TEXT_BK_VISIBLE )) )
+      || ( IsFrontLayer( text_layer ) && !brd->IsElementVisible( LAYER_MOD_TEXT_FR ) )
+      || ( IsBackLayer( text_layer ) && !brd->IsElementVisible( LAYER_MOD_TEXT_BK ) ) )
         return;
 
-    // Invisible texts are still drawn (not plotted) in MOD_TEXT_INVISIBLE
+    // Invisible texts are still drawn (not plotted) in LAYER_MOD_TEXT_INVISIBLE
     // Just because we must have to edit them (at least to make them visible)
     if( !IsVisible() )
     {
-        if( !brd->IsElementVisible( MOD_TEXT_INVISIBLE ) )
+        if( !brd->IsElementVisible( LAYER_MOD_TEXT_INVISIBLE ) )
             return;
 
-        color = brd->GetVisibleElementColor( MOD_TEXT_INVISIBLE );
+        color = brd->GetVisibleElementColor( LAYER_MOD_TEXT_INVISIBLE );
     }
 
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)aPanel->GetDisplayOptions();
@@ -246,7 +246,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMod
     // shade text if high contrast mode is active
     if( ( aDrawMode & GR_ALLOW_HIGHCONTRAST ) && displ_opts && displ_opts->m_ContrastModeDisplay )
     {
-        LAYER_ID curr_layer = ( (PCB_SCREEN*) aPanel->GetScreen() )->m_Active_Layer;
+        PCB_LAYER_ID curr_layer = ( (PCB_SCREEN*) aPanel->GetScreen() )->m_Active_Layer;
 
         if( !IsOnLayer( curr_layer ) )
             color = COLOR4D( DARKDARKGRAY );
@@ -262,9 +262,9 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMod
     wxPoint pos = GetTextPos() - aOffset;
 
     // Draw the text anchor point
-    if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
+    if( brd->IsElementVisible( LAYER_ANCHOR ) )
     {
-        COLOR4D anchor_color = brd->GetVisibleElementColor(ANCHOR_VISIBLE);
+        COLOR4D anchor_color = brd->GetVisibleElementColor( LAYER_ANCHOR );
         GRDrawAnchor( aPanel->GetClipBox(), aDC, pos.x, pos.y, DIM_ANCRE_TEXTE, anchor_color );
     }
 
@@ -433,11 +433,11 @@ const BOX2I TEXTE_MODULE::ViewBBox() const
 void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     if( !IsVisible() )      // Hidden text
-        aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_INVISIBLE );
+        aLayers[0] = LAYER_MOD_TEXT_INVISIBLE;
     //else if( IsFrontLayer( m_Layer ) )
-        //aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE );
+        //aLayers[0] = LAYER_MOD_TEXT_FR;
     //else if( IsBackLayer( m_Layer ) )
-        //aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE );
+        //aLayers[0] = LAYER_MOD_TEXT_BK;
     else
         aLayers[0] = GetLayer();
 
@@ -452,18 +452,18 @@ unsigned int TEXTE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( !aView )
         return 0;
 
-    if( m_Type == TEXT_is_VALUE && !aView->IsLayerVisible( ITEM_GAL_LAYER( MOD_VALUES_VISIBLE ) ) )
+    if( m_Type == TEXT_is_VALUE && !aView->IsLayerVisible( LAYER_MOD_VALUES ) )
         return MAX;
 
-    if( m_Type == TEXT_is_REFERENCE && !aView->IsLayerVisible( ITEM_GAL_LAYER( MOD_REFERENCES_VISIBLE ) ) )
+    if( m_Type == TEXT_is_REFERENCE && !aView->IsLayerVisible( LAYER_MOD_REFERENCES ) )
         return MAX;
 
-    if( IsFrontLayer( m_Layer ) && ( !aView->IsLayerVisible( ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE ) ) ||
-                                     !aView->IsLayerVisible( ITEM_GAL_LAYER( MOD_FR_VISIBLE ) ) ) )
+    if( IsFrontLayer( m_Layer ) && ( !aView->IsLayerVisible( LAYER_MOD_TEXT_FR ) ||
+                                     !aView->IsLayerVisible( LAYER_MOD_FR ) ) )
         return MAX;
 
-    if( IsBackLayer( m_Layer ) && ( !aView->IsLayerVisible( ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE ) ) ||
-                                    !aView->IsLayerVisible( ITEM_GAL_LAYER( MOD_BK_VISIBLE ) ) ) )
+    if( IsBackLayer( m_Layer ) && ( !aView->IsLayerVisible( LAYER_MOD_TEXT_BK ) ||
+                                    !aView->IsLayerVisible( LAYER_MOD_BK ) ) )
         return MAX;
 
     return 0;

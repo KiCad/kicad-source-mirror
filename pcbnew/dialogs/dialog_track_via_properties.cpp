@@ -51,7 +51,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     boost::optional<int> trackEndX = boost::make_optional<int>( false, 0 );
     boost::optional<int> trackEndY = boost::make_optional<int>( false, 0 );
     boost::optional<int> trackWidth = boost::make_optional<int>( false, 0 );
-    boost::optional<LAYER_ID> trackLayer = boost::make_optional<LAYER_ID>( false, (LAYER_ID) 0 );
+    boost::optional<PCB_LAYER_ID> trackLayer = boost::make_optional<PCB_LAYER_ID>( false, (PCB_LAYER_ID) 0 );
     boost::optional<int> viaX, viaY, viaDiameter;
     boost::optional<int> viaDrill = boost::make_optional<int>( false, 0 );
 
@@ -262,7 +262,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply( COMMIT& aCommit )
                 LAYER_NUM layer = m_TrackLayerCtrl->GetLayerSelection();
 
                 if( layer != UNDEFINED_LAYER )
-                    t->SetLayer( (LAYER_ID) layer );
+                    t->SetLayer( (PCB_LAYER_ID) layer );
 
                 if( changeLock )
                     t->SetLocked( setLock );

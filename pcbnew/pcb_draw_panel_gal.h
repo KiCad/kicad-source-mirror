@@ -69,20 +69,20 @@ public:
     ///> @copydoc EDA_DRAW_PANEL_GAL::SetHighContrastLayer()
     virtual void SetHighContrastLayer( int aLayer ) override
     {
-        SetHighContrastLayer( static_cast< LAYER_ID >( aLayer ) );
+        SetHighContrastLayer( static_cast< PCB_LAYER_ID >( aLayer ) );
     }
 
     ///> SetHighContrastLayer(), with some extra smarts for PCB
-    void SetHighContrastLayer( LAYER_ID aLayer );
+    void SetHighContrastLayer( PCB_LAYER_ID aLayer );
 
     ///> @copydoc EDA_DRAW_PANEL_GAL::SetTopLayer()
     virtual void SetTopLayer( int aLayer ) override
     {
-        SetTopLayer( static_cast< LAYER_ID >( aLayer ) );
+        SetTopLayer( static_cast< PCB_LAYER_ID >( aLayer ) );
     }
 
     ///> SetTopLayer(), with some extra smarts for PCB
-    void SetTopLayer( LAYER_ID aLayer );
+    void SetTopLayer( PCB_LAYER_ID aLayer );
 
     /**
      * Function SyncLayersVisibility

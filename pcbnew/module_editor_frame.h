@@ -419,18 +419,18 @@ public:
      * inline function.
      * @param aElement is from the enum by the same name
      * @return bool - true if the element is visible.
-     * @see enum PCB_VISIBLE
+     * @see enum PCB_LAYER_ID
      */
-    bool IsElementVisible( int aElement ) const;
+    bool IsElementVisible( GAL_LAYER_ID aElement ) const;
 
     /**
      * Function SetElementVisibility
      * changes the visibility of an element category
      * @param aElement is from the enum by the same name
      * @param aNewState = The new visibility state of the element category
-     * @see enum PCB_VISIBLE
+     * @see enum PCB_LAYER_ID
      */
-    void SetElementVisibility( int aElement, bool aNewState );
+    void SetElementVisibility( GAL_LAYER_ID aElement, bool aNewState );
 
     /**
      * Function IsGridVisible() , virtual
@@ -453,7 +453,7 @@ public:
     virtual COLOR4D GetGridColor() const override;
 
     ///> @copydoc PCB_BASE_FRAME::SetActiveLayer()
-    void SetActiveLayer( LAYER_ID aLayer ) override;
+    void SetActiveLayer( PCB_LAYER_ID aLayer ) override;
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     virtual void UseGalCanvas( bool aEnable ) override;

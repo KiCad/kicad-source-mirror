@@ -159,7 +159,7 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
 
     for( LSEQ cu_stack = show.UIOrder();  cu_stack;  ++cu_stack, imgIdx++ )
     {
-        LAYER_ID layer = *cu_stack;
+        PCB_LAYER_ID layer = *cu_stack;
 
         m_layerId.push_back( layer );
 

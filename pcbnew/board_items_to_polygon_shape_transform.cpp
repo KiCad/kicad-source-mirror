@@ -63,7 +63,7 @@ static void addTextSegmToPoly( int x0, int y0, int xf, int yf )
 }
 
 
-void BOARD::ConvertBrdLayerToPolygonalContours( LAYER_ID aLayer, SHAPE_POLY_SET& aOutlines )
+void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aOutlines )
 {
     // Number of segments to convert a circle to a polygon
     const int       segcountforcircle   = 18;
@@ -94,7 +94,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( LAYER_ID aLayer, SHAPE_POLY_SET&
     for( int ii = 0; ii < GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = GetArea( ii );
-        LAYER_ID        zonelayer = zone->GetLayer();
+        PCB_LAYER_ID        zonelayer = zone->GetLayer();
 
         if( zonelayer == aLayer )
             zone->TransformSolidAreasShapesToPolygonSet(
@@ -126,7 +126,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( LAYER_ID aLayer, SHAPE_POLY_SET&
 }
 
 
-void MODULE::TransformPadsShapesWithClearanceToPolygon( LAYER_ID aLayer,
+void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
                         SHAPE_POLY_SET& aCornerBuffer,
                         int                    aInflateValue,
                         int                    aCircleToSegmentsCount,
@@ -201,7 +201,7 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( LAYER_ID aLayer,
  *  initial radius * aCorrectionFactor
  */
 void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
-                        LAYER_ID        aLayer,
+                        PCB_LAYER_ID        aLayer,
                         SHAPE_POLY_SET& aCornerBuffer,
                         int             aInflateValue,
                         int             aCircleToSegmentsCount,
@@ -277,7 +277,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
 // Same as function TransformGraphicShapesWithClearanceToPolygonSet but
 // this only render text
 void MODULE::TransformGraphicTextWithClearanceToPolygonSet(
-                        LAYER_ID        aLayer,
+                        PCB_LAYER_ID        aLayer,
                         SHAPE_POLY_SET& aCornerBuffer,
                         int             aInflateValue,
                         int             aCircleToSegmentsCount,

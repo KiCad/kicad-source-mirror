@@ -275,7 +275,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos )
             DRAWSEGMENT* dseg = static_cast<DRAWSEGMENT*>( aItem );
             VECTOR2I start = dseg->GetStart();
             VECTOR2I end = dseg->GetEnd();
-            //LAYER_ID layer = dseg->GetLayer();
+            //PCB_LAYER_ID layer = dseg->GetLayer();
 
             switch( dseg->GetShape() )
             {

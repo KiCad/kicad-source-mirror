@@ -75,7 +75,7 @@ void DIALOG_GENERALOPTIONS::init()
     m_MaxShowLinks->SetValue( displ_opts->m_MaxLinksShowed );
 
     m_DrcOn->SetValue( g_Drc_On );
-    m_ShowGlobalRatsnest->SetValue( m_Board->IsElementVisible( RATSNEST_VISIBLE ) );
+    m_ShowGlobalRatsnest->SetValue( m_Board->IsElementVisible( LAYER_RATSNEST ) );
     m_TrackAutodel->SetValue( g_AutoDeleteOldTrack );
     m_Track_45_Only_Ctrl->SetValue( g_Track_45_Only_Allowed );
     m_Segments_45_Only_Ctrl->SetValue( g_Segments_45_Only );
@@ -113,9 +113,9 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
     displ_opts->m_MaxLinksShowed = m_MaxShowLinks->GetValue();
     g_Drc_On = m_DrcOn->GetValue();
 
-    if( m_Board->IsElementVisible(RATSNEST_VISIBLE) != m_ShowGlobalRatsnest->GetValue() )
+    if( m_Board->IsElementVisible( LAYER_RATSNEST ) != m_ShowGlobalRatsnest->GetValue() )
     {
-        GetParent()->SetElementVisibility( RATSNEST_VISIBLE, m_ShowGlobalRatsnest->GetValue() );
+        GetParent()->SetElementVisibility( LAYER_RATSNEST, m_ShowGlobalRatsnest->GetValue() );
         GetParent()->GetCanvas()->Refresh();
         GetParent()->OnModify();
     }

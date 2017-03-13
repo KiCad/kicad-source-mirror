@@ -821,25 +821,25 @@ void FOOTPRINT_EDIT_FRAME::updateView()
 
 bool FOOTPRINT_EDIT_FRAME::IsGridVisible() const
 {
-    return IsElementVisible( GRID_VISIBLE );
+    return IsElementVisible( LAYER_GRID );
 }
 
 
 void FOOTPRINT_EDIT_FRAME::SetGridVisibility(bool aVisible)
 {
-    SetElementVisibility( GRID_VISIBLE, aVisible );
+    SetElementVisibility( LAYER_GRID, aVisible );
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::IsElementVisible( int aElement ) const
+bool FOOTPRINT_EDIT_FRAME::IsElementVisible( GAL_LAYER_ID aElement ) const
 {
     return GetBoard()->IsElementVisible( aElement );
 }
 
 
-void FOOTPRINT_EDIT_FRAME::SetElementVisibility( int aElement, bool aNewState )
+void FOOTPRINT_EDIT_FRAME::SetElementVisibility( GAL_LAYER_ID aElement, bool aNewState )
 {
-    GetGalCanvas()->GetView()->SetLayerVisible( ITEM_GAL_LAYER( aElement ), aNewState );
+    GetGalCanvas()->GetView()->SetLayerVisible( aElement , aNewState );
     GetBoard()->SetElementVisibility( aElement, aNewState );
     m_Layers->SetRenderState( aElement, aNewState );
 }

@@ -375,9 +375,9 @@ void PCB_BASE_FRAME::Show3D_Frame( wxCommandEvent& event )
 
 
 // Note: virtual, overridden in PCB_EDIT_FRAME;
-void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, LAYER_ID layer )
+void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
 {
-    LAYER_ID preslayer = GetActiveLayer();
+    PCB_LAYER_ID preslayer = GetActiveLayer();
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
     // Check if the specified layer matches the present layer
@@ -595,15 +595,15 @@ GENERAL_COLLECTORS_GUIDE PCB_BASE_FRAME::GetCollectorsGuide()
                                     GetActiveLayer() );
 
     // account for the globals
-    guide.SetIgnoreMTextsMarkedNoShow( ! m_Pcb->IsElementVisible( MOD_TEXT_INVISIBLE ));
-    guide.SetIgnoreMTextsOnBack( ! m_Pcb->IsElementVisible( MOD_TEXT_BK_VISIBLE ));
-    guide.SetIgnoreMTextsOnFront( ! m_Pcb->IsElementVisible( MOD_TEXT_FR_VISIBLE ));
-    guide.SetIgnoreModulesOnBack( ! m_Pcb->IsElementVisible( MOD_BK_VISIBLE ) );
-    guide.SetIgnoreModulesOnFront( ! m_Pcb->IsElementVisible( MOD_FR_VISIBLE ) );
-    guide.SetIgnorePadsOnBack( ! m_Pcb->IsElementVisible( PAD_BK_VISIBLE ) );
-    guide.SetIgnorePadsOnFront( ! m_Pcb->IsElementVisible( PAD_FR_VISIBLE ) );
-    guide.SetIgnoreModulesVals( ! m_Pcb->IsElementVisible( MOD_VALUES_VISIBLE ) );
-    guide.SetIgnoreModulesRefs( ! m_Pcb->IsElementVisible( MOD_REFERENCES_VISIBLE ) );
+    guide.SetIgnoreMTextsMarkedNoShow( ! m_Pcb->IsElementVisible( LAYER_MOD_TEXT_INVISIBLE ) );
+    guide.SetIgnoreMTextsOnBack( ! m_Pcb->IsElementVisible( LAYER_MOD_TEXT_BK ) );
+    guide.SetIgnoreMTextsOnFront( ! m_Pcb->IsElementVisible( LAYER_MOD_TEXT_FR ) );
+    guide.SetIgnoreModulesOnBack( ! m_Pcb->IsElementVisible( LAYER_MOD_BK ) );
+    guide.SetIgnoreModulesOnFront( ! m_Pcb->IsElementVisible( LAYER_MOD_FR ) );
+    guide.SetIgnorePadsOnBack( ! m_Pcb->IsElementVisible( LAYER_PAD_BK ) );
+    guide.SetIgnorePadsOnFront( ! m_Pcb->IsElementVisible( LAYER_PAD_FR ) );
+    guide.SetIgnoreModulesVals( ! m_Pcb->IsElementVisible( LAYER_MOD_VALUES ) );
+    guide.SetIgnoreModulesRefs( ! m_Pcb->IsElementVisible( LAYER_MOD_REFERENCES ) );
 
     return guide;
 }

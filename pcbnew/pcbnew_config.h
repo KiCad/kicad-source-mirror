@@ -11,7 +11,7 @@
 
 /* Useful macro : */
 #define LOC_COLOR(layer)            &g_ColorsSettings.m_LayersColors[layer]
-#define ITEM_COLOR(item_visible)    &g_ColorsSettings.m_ItemsColors[item_visible]
+#define ITEM_COLOR(item_visible)    &g_ColorsSettings.m_LayersColors[item_visible]
 
 
 #endif    // _PCBNEW_CONFIG_H_

@@ -31,7 +31,7 @@
 #include <gerbview_frame.h>
 #include <select_layers_to_pcb.h>
 
-#define NB_PCB_LAYERS LAYER_ID_COUNT
+#define NB_PCB_LAYERS PCB_LAYER_ID_COUNT
 #define FIRST_COPPER_LAYER 0
 #define LAST_COPPER_LAYER 31
 
@@ -202,7 +202,7 @@ void SELECT_LAYER_DIALOG::OnCancelClick( wxCommandEvent& event )
 }
 
 // This function is a duplicate of
-// const wxChar* LSET::Name( LAYER_ID aLayerId )
+// const wxChar* LSET::Name( PCB_LAYER_ID aLayerId )
 // However it avoids a dependency to Pcbnew code.
 const wxString GetPCBDefaultLayerName( int aLayerId )
 {

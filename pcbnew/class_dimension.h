@@ -96,7 +96,7 @@ public:
         m_Text.SetTextSize( aTextSize );
     }
 
-    void SetLayer( LAYER_ID aLayer ) override;
+    void SetLayer( PCB_LAYER_ID aLayer ) override;
 
     void SetShape( int aShape )         { m_Shape = aShape; }
     int GetShape() const                { return m_Shape; }

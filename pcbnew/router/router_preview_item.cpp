@@ -43,7 +43,7 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* a
 
     m_shape = NULL;
     m_clearance = -1;
-    m_originLayer = m_layer = ITEM_GAL_LAYER( GP_OVERLAY );
+    m_originLayer = m_layer = LAYER_GP_OVERLAY ;
 
     m_showTrackClearance = false;
     m_showViaClearance = false;
@@ -102,7 +102,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
     }
 
     case PNS::ITEM::VIA_T:
-        m_originLayer = m_layer = ITEM_GAL_LAYER( VIAS_VISIBLE );
+        m_originLayer = m_layer = LAYER_VIAS;
         m_type = PR_SHAPE;
         m_width = 0;
         m_color = COLOR4D( 0.7, 0.7, 0.7, 0.8 );

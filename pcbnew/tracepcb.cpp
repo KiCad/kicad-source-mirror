@@ -211,7 +211,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
         if( module->IsMoving() )
             continue;
 
-        if( !IsElementVisible( PCB_VISIBLE( MOD_FR_VISIBLE ) ) )
+        if( !IsElementVisible( LAYER_MOD_FR ) )
         {
             if( module->GetLayer() == F_Cu )
                 display = false;
@@ -219,7 +219,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
             layerMask.set( F_Cu, false );
         }
 
-        if( !IsElementVisible( PCB_VISIBLE( MOD_BK_VISIBLE ) ) )
+        if( !IsElementVisible( LAYER_MOD_BK ) )
         {
             if( module->GetLayer() == B_Cu )
                 display = false;

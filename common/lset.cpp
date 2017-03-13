@@ -30,7 +30,7 @@
 #include <class_board.h>
 
 
-LSET::LSET( const LAYER_ID* aArray, unsigned aCount ) :
+LSET::LSET( const PCB_LAYER_ID* aArray, unsigned aCount ) :
     BASE_SET()
 {
     for( unsigned i=0; i<aCount; ++i )
@@ -42,7 +42,7 @@ LSET::LSET( unsigned aIdCount, int aFirst, ... ) :
     BASE_SET()
 {
     // The constructor, without the mandatory aFirst argument, could have been confused
-    // by the compiler with the LSET( LAYER_ID ).  With aFirst, that ambiguity is not
+    // by the compiler with the LSET( PCB_LAYER_ID ).  With aFirst, that ambiguity is not
     // present.  Therefore aIdCount must always be >=1.
     wxASSERT_MSG( aIdCount > 0, wxT( "aIdCount must be >= 1" ) );
 
@@ -56,11 +56,11 @@ LSET::LSET( unsigned aIdCount, int aFirst, ... ) :
 
         for( unsigned i=0;  i<aIdCount;  ++i )
         {
-            LAYER_ID id = (LAYER_ID) va_arg( ap, int );
+            PCB_LAYER_ID id = (PCB_LAYER_ID) va_arg( ap, int );
 
-            // printf( "%s: id:%d LAYER_ID_COUNT:%d\n", __func__, id, LAYER_ID_COUNT );
+            // printf( "%s: id:%d PCB_LAYER_ID_COUNT:%d\n", __func__, id, PCB_LAYER_ID_COUNT );
 
-            assert( unsigned( id ) < LAYER_ID_COUNT );
+            assert( unsigned( id ) < PCB_LAYER_ID_COUNT );
 
             set( id );
         }
@@ -70,7 +70,7 @@ LSET::LSET( unsigned aIdCount, int aFirst, ... ) :
 }
 
 
-const wxChar* LSET::Name( LAYER_ID aLayerId )
+const wxChar* LSET::Name( PCB_LAYER_ID aLayerId )
 {
     const wxChar* txt;
 
@@ -135,6 +135,7 @@ const wxChar* LSET::Name( LAYER_ID aLayerId )
     case B_Fab:             txt = wxT( "B.Fab" );           break;
 
     default:
+        std::cout << aLayerId << std::endl;
         wxASSERT_MSG( 0, wxT( "aLayerId out of range" ) );
                             txt = wxT( "BAD INDEX!" );      break;
     }
@@ -146,7 +147,7 @@ const wxChar* LSET::Name( LAYER_ID aLayerId )
 LSEQ LSET::CuStack() const
 {
     // desired sequence
-    static const LAYER_ID sequence[] = {
+    static const PCB_LAYER_ID sequence[] = {
         F_Cu,
         In1_Cu,
         In2_Cu,
@@ -188,7 +189,7 @@ LSEQ LSET::CuStack() const
 LSEQ LSET::Technicals( LSET aSetToOmit ) const
 {
     // desired sequence
-    static const LAYER_ID sequence[] = {
+    static const PCB_LAYER_ID sequence[] = {
         B_Adhes,
         F_Adhes,
         B_Paste,
@@ -212,7 +213,7 @@ LSEQ LSET::Technicals( LSET aSetToOmit ) const
 LSEQ LSET::Users() const
 {
     // desired
-    static const LAYER_ID sequence[] = {
+    static const PCB_LAYER_ID sequence[] = {
         Dwgs_User,
         Cmts_User,
         Eco1_User,
@@ -333,7 +334,7 @@ int LSET::ParseHex( const char* aStart, int aCount )
 }
 
 
-LSEQ LSET::Seq( const LAYER_ID* aWishListSequence, unsigned aCount ) const
+LSEQ LSET::Seq( const PCB_LAYER_ID* aWishListSequence, unsigned aCount ) const
 {
     LSEQ ret;
 
@@ -342,7 +343,7 @@ LSEQ LSET::Seq( const LAYER_ID* aWishListSequence, unsigned aCount ) const
 
     for( unsigned i=0; i<aCount;  ++i )
     {
-        LAYER_ID id = aWishListSequence[i];
+        PCB_LAYER_ID id = aWishListSequence[i];
 
         if( test( id ) )
         {
@@ -356,7 +357,7 @@ LSEQ LSET::Seq( const LAYER_ID* aWishListSequence, unsigned aCount ) const
 
     for( unsigned i=0; i<aCount;  ++i )
     {
-        LAYER_ID id = aWishListSequence[i];
+        PCB_LAYER_ID id = aWishListSequence[i];
 
         if( test( id ) )
             ret.push_back( id );
@@ -374,7 +375,7 @@ LSEQ LSET::Seq() const
     for( unsigned i=0;  i<size();  ++i )
     {
         if( test(i) )
-            ret.push_back( LAYER_ID( i ) );
+            ret.push_back( PCB_LAYER_ID( i ) );
     }
 
     return ret;
@@ -384,7 +385,7 @@ LSEQ LSET::Seq() const
 LSEQ LSET::SeqStackupBottom2Top() const
 {
     // bottom-to-top stack-up layers
-    static const LAYER_ID sequence[] = {
+    static const PCB_LAYER_ID sequence[] = {
         B_Fab,
         B_CrtYd,
         B_Adhes,
@@ -441,7 +442,7 @@ LSEQ LSET::SeqStackupBottom2Top() const
 }
 
 
-LAYER_ID FlipLayer( LAYER_ID aLayerId, int aCopperLayersCount )
+PCB_LAYER_ID FlipLayer( PCB_LAYER_ID aLayerId, int aCopperLayersCount )
 {
     switch( aLayerId )
     {
@@ -470,7 +471,7 @@ LAYER_ID FlipLayer( LAYER_ID aLayerId, int aCopperLayersCount )
         if( IsCopperLayer( aLayerId ) && aCopperLayersCount >= 4 )
         {
             // internal copper layers count is aCopperLayersCount-2
-            LAYER_ID fliplayer = LAYER_ID(aCopperLayersCount - 2 - ( aLayerId - In1_Cu ) );
+            PCB_LAYER_ID fliplayer = PCB_LAYER_ID(aCopperLayersCount - 2 - ( aLayerId - In1_Cu ) );
             // Ensure fliplayer has a value which does not crash pcbnew:
             if( fliplayer < F_Cu )
                 fliplayer = F_Cu;
@@ -574,7 +575,7 @@ LSET FlipLayerMask( LSET aMask, int aCopperLayersCount )
 }
 
 
-LAYER_ID LSET::ExtractLayer() const
+PCB_LAYER_ID LSET::ExtractLayer() const
 {
     unsigned set_count = count();
 
@@ -586,7 +587,7 @@ LAYER_ID LSET::ExtractLayer() const
     for( unsigned i=0; i < size(); ++i )
     {
         if( test( i ) )
-            return LAYER_ID( i );
+            return PCB_LAYER_ID( i );
     }
 
     wxASSERT( 0 );  // set_count was verified as 1 above, what did you break?
@@ -597,7 +598,7 @@ LAYER_ID LSET::ExtractLayer() const
 
 LSET LSET::InternalCuMask()
 {
-    static const LAYER_ID cu_internals[] = {
+    static const PCB_LAYER_ID cu_internals[] = {
         In1_Cu,
         In2_Cu,
         In3_Cu,
@@ -750,22 +751,22 @@ LSET LSET::BackMask()
 
 LSEQ LSET::UIOrder() const
 {
-    LAYER_ID order[LAYER_ID_COUNT];
+    PCB_LAYER_ID order[PCB_LAYER_ID_COUNT];
 
-    // Assmuming that the LAYER_ID order is according to preferred UI order, as of
+    // Assmuming that the PCB_LAYER_ID order is according to preferred UI order, as of
     // today this is true.  When that becomes not true, its easy to change the order
     // in here to compensate.
 
     for( unsigned i=0;  i<DIM(order);  ++i )
-        order[i] = LAYER_ID( i );
+        order[i] = PCB_LAYER_ID( i );
 
     return Seq( order, DIM( order ) );
 }
 
 
-LAYER_ID ToLAYER_ID( int aLayer )
+PCB_LAYER_ID ToLAYER_ID( int aLayer )
 {
-    wxASSERT( unsigned( aLayer ) < LAYER_ID_COUNT );
-    return LAYER_ID( aLayer );
+    wxASSERT( unsigned( aLayer ) < PCB_LAYER_ID_COUNT );
+    return PCB_LAYER_ID( aLayer );
 }
 

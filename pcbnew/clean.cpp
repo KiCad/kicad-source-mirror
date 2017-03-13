@@ -403,7 +403,7 @@ const ZONE_CONTAINER* TRACKS_CLEANER::zoneForTrackEndpoint( const TRACK* aTrack,
         ENDPOINT_T aEndPoint )
 {
     // Vias are special cased, since they get a layer range, not a single one
-    LAYER_ID    top_layer, bottom_layer;
+    PCB_LAYER_ID    top_layer, bottom_layer;
     const VIA*  via = dyn_cast<const VIA*>( aTrack );
 
     if( via )

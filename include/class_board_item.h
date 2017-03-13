@@ -77,7 +77,7 @@ class BOARD_ITEM : public EDA_ITEM
     void SetBack( EDA_ITEM* aBack )       { Pback = aBack; }
 
 protected:
-    LAYER_ID    m_Layer;
+    PCB_LAYER_ID    m_Layer;
 
     static int getTrailingInt( wxString aStr );
     static int getNextNumberInSequence( const std::set<int>& aSeq, bool aFillSequenceGaps );
@@ -129,7 +129,7 @@ public:
      * Function GetLayer
      * returns the primary layer this item is on.
      */
-    LAYER_ID GetLayer() const { return m_Layer; }
+    PCB_LAYER_ID GetLayer() const { return m_Layer; }
 
     /**
      * Function GetLayerSet
@@ -146,7 +146,7 @@ public:
      * is virtual because some items (in fact: class DIMENSION)
      * have a slightly different initialization
      */
-    virtual void SetLayer( LAYER_ID aLayer )
+    virtual void SetLayer( PCB_LAYER_ID aLayer )
     {
         // trap any invalid layers, then go find the caller and fix it.
         // wxASSERT( unsigned( aLayer ) < unsigned( NB_PCB_LAYERS ) );
@@ -179,7 +179,7 @@ public:
      * @param aLayer The layer to test for.
      * @return bool - true if on given layer, else false.
      */
-    virtual bool IsOnLayer( LAYER_ID aLayer ) const
+    virtual bool IsOnLayer( PCB_LAYER_ID aLayer ) const
     {
         return m_Layer == aLayer;
     }

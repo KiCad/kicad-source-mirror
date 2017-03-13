@@ -128,7 +128,7 @@ public:
 
 protected:
     ///> Flag determining if items on a given layer should be drawn as an outline or a filled item
-    bool    m_sketchMode[TOTAL_LAYER_COUNT];
+    bool    m_sketchMode[GAL_LAYER_ID_END];
 
     ///> Flag determining if board graphic items should be outlined or stroked
     bool    m_sketchBoardGfx;

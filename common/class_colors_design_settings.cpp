@@ -66,18 +66,18 @@ static const EDA_COLOR_T default_layer_color[] = {
 
 static const EDA_COLOR_T default_items_color[] = {
     LIGHTGRAY, // unused
-    CYAN,      // VIA_MICROVIA_VISIBLE
-    BROWN,     // VIA_BBLIND_VISIBLE
-    LIGHTGRAY, // VIA_THROUGH_VISIBLE
-    YELLOW,    // NON_PLATED_VISIBLE
-    LIGHTGRAY, // MOD_TEXT_FR_VISIBLE
-    BLUE,      // MOD_TEXT_BK_VISIBLE
-    DARKGRAY,  // MOD_TEXT_INVISIBLE
-    BLUE,      // ANCHOR_VISIBLE
-    RED,       // PAD_FR_VISIBLE
-    GREEN,     // PAD_BK_VISIBLE
-    LIGHTGRAY, // RATSNEST_VISIBLE
-    DARKGRAY,  // GRID_VISIBLE
+    CYAN,      // LAYER_VIA_MICROVIA
+    BROWN,     // LAYER_VIA_BBLIND
+    LIGHTGRAY, // LAYER_VIA_THROUGH
+    YELLOW,    // LAYER_NON_PLATED
+    LIGHTGRAY, // LAYER_MOD_TEXT_FR
+    BLUE,      // LAYER_MOD_TEXT_BK
+    DARKGRAY,  // LAYER_MOD_TEXT_INVISIBLE
+    BLUE,      // LAYER_ANCHOR
+    RED,       // LAYER_PAD_FR
+    GREEN,     // LAYER_PAD_BK
+    LIGHTGRAY, // LAYER_RATSNEST
+    DARKGRAY,  // LAYER_GRID
     LIGHTRED,  LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
     LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
     LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
@@ -88,7 +88,7 @@ static const EDA_COLOR_T default_items_color[] = {
 
 COLORS_DESIGN_SETTINGS::COLORS_DESIGN_SETTINGS()
 {
-    for( unsigned src = 0, dst = 0; dst < DIM(m_LayersColors); ++dst )
+    for( unsigned src = 0, dst = 0; dst < DIM( m_LayersColors ); ++dst )
     {
         m_LayersColors[dst] = COLOR4D( default_layer_color[src++] );
 
@@ -96,19 +96,16 @@ COLORS_DESIGN_SETTINGS::COLORS_DESIGN_SETTINGS()
             src = 0;        // wrap the source.
     }
 
-    for( unsigned src = 0, dst = 0; dst < DIM(m_ItemsColors);  ++dst )
+    for( unsigned src = 0, dst = LAYER_VIAS; dst < DIM( default_items_color ); ++dst )
     {
-        m_ItemsColors[dst] = COLOR4D( default_items_color[src++] );
-
-        if( src >= DIM( default_items_color ) )
-            src = 0;
+        m_LayersColors[dst] = COLOR4D( default_items_color[src++] );
     }
 }
 
 
 COLOR4D COLORS_DESIGN_SETTINGS::GetLayerColor( LAYER_NUM aLayer ) const
 {
-    if( (unsigned) aLayer < DIM(m_LayersColors) )
+    if( (unsigned) aLayer < DIM( m_LayersColors ) )
     {
         return m_LayersColors[aLayer];
     }
@@ -118,7 +115,7 @@ COLOR4D COLORS_DESIGN_SETTINGS::GetLayerColor( LAYER_NUM aLayer ) const
 
 void COLORS_DESIGN_SETTINGS::SetLayerColor( LAYER_NUM aLayer, COLOR4D aColor )
 {
-    if( (unsigned) aLayer < DIM(m_LayersColors) )
+    if( (unsigned) aLayer < DIM( m_LayersColors ) )
     {
         m_LayersColors[aLayer] = aColor;
     }
@@ -127,9 +124,9 @@ void COLORS_DESIGN_SETTINGS::SetLayerColor( LAYER_NUM aLayer, COLOR4D aColor )
 
 COLOR4D COLORS_DESIGN_SETTINGS::GetItemColor( int aItemIdx ) const
 {
-    if( (unsigned) aItemIdx < DIM( m_ItemsColors ) )
+    if( (unsigned) aItemIdx < DIM( m_LayersColors ) )
     {
-        return m_ItemsColors[aItemIdx];
+        return m_LayersColors[aItemIdx];
     }
 
     return COLOR4D::UNSPECIFIED;
@@ -138,9 +135,9 @@ COLOR4D COLORS_DESIGN_SETTINGS::GetItemColor( int aItemIdx ) const
 
 void COLORS_DESIGN_SETTINGS::SetItemColor( int aItemIdx, COLOR4D aColor )
 {
-    if( (unsigned) aItemIdx < DIM(m_ItemsColors) )
+    if( (unsigned) aItemIdx < DIM( m_LayersColors ) )
     {
-        m_ItemsColors[aItemIdx] = aColor;
+        m_LayersColors[aItemIdx] = aColor;
     }
 }
 
@@ -149,7 +146,4 @@ void COLORS_DESIGN_SETTINGS::SetAllColorsAs( COLOR4D aColor )
 {
     for( unsigned ii = 0; ii < DIM(m_LayersColors); ii++ )
         m_LayersColors[ii] = aColor;
-
-    for( unsigned ii = 0; ii < DIM(m_ItemsColors); ii++ )
-        m_ItemsColors[ii] = aColor;
 }

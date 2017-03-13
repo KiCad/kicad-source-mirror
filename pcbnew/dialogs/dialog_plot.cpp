@@ -149,7 +149,7 @@ void DIALOG_PLOT::Init_Dialog()
     // Populate the check list box by all enabled layers names
     for( LSEQ seq = m_layerList;  seq;  ++seq )
     {
-        LAYER_ID layer = *seq;
+        PCB_LAYER_ID layer = *seq;
 
         int checkIndex = m_layerCheckListBox->Append( m_board->GetLayerName( layer ) );
 
@@ -768,7 +768,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
     for( LSEQ seq = m_plotOpts.GetLayerSelection().UIOrder();  seq;  ++seq )
     {
-        LAYER_ID layer = *seq;
+        PCB_LAYER_ID layer = *seq;
 
         // All copper layers that are disabled are actually selected
         // This is due to wonkyness in automatically selecting copper layers

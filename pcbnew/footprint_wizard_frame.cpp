@@ -146,7 +146,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
     DISPLAY_OPTIONS* disp_opts = (DISPLAY_OPTIONS*) GetDisplayOptions();
     disp_opts->m_DisplayPadIsol = false;
     disp_opts->m_DisplayPadNum = true;
-    GetBoard()->SetElementVisibility( PCB_VISIBLE(NO_CONNECTS_VISIBLE), false );
+    GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
 
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 

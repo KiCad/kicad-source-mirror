@@ -89,13 +89,13 @@ PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings()
                                                    &m_displayMode, 2, 0, 2 ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true,
                                                         wxT( "DCodeColorEx" ),
-                                                        &g_ColorsSettings.m_ItemsColors[
-                                                            DCODES_VISIBLE],
+                                                        &g_ColorsSettings.m_LayersColors[
+                                                            LAYER_DCODES],
                                                         WHITE ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true,
                                                         wxT( "NegativeObjectsColorEx" ),
-                                                        &g_ColorsSettings.m_ItemsColors[
-                                                            NEGATIVE_OBJECTS_VISIBLE],
+                                                        &g_ColorsSettings.m_LayersColors[
+                                                            LAYER_NEGATIVE_OBJECTS],
                                                         DARKGRAY ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true,
                                                     wxT( "DisplayPolarCoordinates" ),

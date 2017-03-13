@@ -162,7 +162,7 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 {
     BOARD_COMMIT commit( m_parent );
 
-    LAYER_ID newlayer = ToLAYER_ID( m_SelLayerBox->GetLayerSelection() );
+    PCB_LAYER_ID newlayer = ToLAYER_ID( m_SelLayerBox->GetLayerSelection() );
 
     if( !m_parent->GetBoard()->IsLayerEnabled( newlayer ) )
     {

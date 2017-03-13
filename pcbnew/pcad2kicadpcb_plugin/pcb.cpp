@@ -48,7 +48,7 @@
 
 namespace PCAD2KICAD {
 
-LAYER_ID PCB::GetKiCadLayer( int aPCadLayer )
+PCB_LAYER_ID PCB::GetKiCadLayer( int aPCadLayer )
 {
     wxASSERT( aPCadLayer >= 0 && aPCadLayer < MAX_PCAD_LAYER_QTY );
     return m_layersMap[aPCadLayer].KiCadLayer;
@@ -479,9 +479,9 @@ int PCB::FindLayer( wxString aLayerName )
  */
 void PCB::MapLayer( XNODE* aNode )
 {
-    wxString    lName, layerType;
-    LAYER_ID    KiCadLayer;
-    long        num = 0;
+    wxString     lName, layerType;
+    PCB_LAYER_ID KiCadLayer;
+    long         num = 0;
 
     aNode->GetAttribute( wxT( "Name" ), &lName );
     lName = lName.MakeUpper();

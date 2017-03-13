@@ -25,7 +25,6 @@
 
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view.h>
-#include <layers_id_colors_and_visibility.h>
 
 
 using namespace KIGFX::PREVIEW;
@@ -51,7 +50,7 @@ void SIMPLE_OVERLAY_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
 void SIMPLE_OVERLAY_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    static const int SelectionLayer = ITEM_GAL_LAYER( GP_OVERLAY );
+    static const int SelectionLayer = LAYER_GP_OVERLAY;
 
     aLayers[0] = SelectionLayer;
     aCount = 1;

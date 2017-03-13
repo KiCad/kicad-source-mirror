@@ -141,10 +141,10 @@ protected:
      * listed layer can be reachable in the graphic item properties dialog.
      *
      * @param aLayer is the layer id to test
-     * @return true if LAYER_ID aLayer has meaning in footprint editor mode.
+     * @return true if PCB_LAYER_ID aLayer has meaning in footprint editor mode.
      * and therefore is shown in render panel
      */
-    bool isLayerAllowedInFpMode( LAYER_ID aLayer );
+    bool isLayerAllowedInFpMode( PCB_LAYER_ID aLayer );
 
     /**
      * Function OnRightDownLayers

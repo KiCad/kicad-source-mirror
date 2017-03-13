@@ -143,7 +143,7 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::Init()
     wxImageList* imageList = new wxImageList( LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
     m_LayerSelectionCtrl->AssignImageList( imageList, wxIMAGE_LIST_SMALL );
 
-    LAYER_ID lyrSelect = m_parent->GetActiveLayer();
+    PCB_LAYER_ID lyrSelect = m_parent->GetActiveLayer();
 
     if( m_zone )
         lyrSelect = m_zone->GetLayer();
@@ -153,7 +153,7 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::Init()
 
     for( LSEQ seq = LSET::AllNonCuMask().Seq(); seq; ++seq, ++imgIdx )
     {
-        LAYER_ID layer = *seq;
+        PCB_LAYER_ID layer = *seq;
 
         COLOR4D layerColor = board->GetLayerColor( layer );
         imageList->Add( makeLayerBitmap( layerColor ) );

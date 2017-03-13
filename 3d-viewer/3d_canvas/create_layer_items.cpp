@@ -91,7 +91,7 @@ void addTextSegmToContainer( int x0, int y0, int xf, int yf )
 // board_items_to_polygon_shape_transform.cpp
 void CINFO3D_VISU::AddShapeWithClearanceToContainer( const TEXTE_PCB* aTextPCB,
                                                      CGENERICCONTAINER2D *aDstContainer,
-                                                     LAYER_ID aLayerId,
+                                                     PCB_LAYER_ID aLayerId,
                                                      int aClearanceValue )
 {
     wxSize size = aTextPCB->GetTextSize();
@@ -141,7 +141,7 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const TEXTE_PCB* aTextPCB,
 
 void CINFO3D_VISU::AddShapeWithClearanceToContainer( const DIMENSION* aDimension,
                                                      CGENERICCONTAINER2D *aDstContainer,
-                                                     LAYER_ID aLayerId,
+                                                     PCB_LAYER_ID aLayerId,
                                                      int aClearanceValue )
 {
     AddShapeWithClearanceToContainer(&aDimension->Text(), aDstContainer, aLayerId, aClearanceValue);
@@ -178,7 +178,7 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const DIMENSION* aDimension
 // board_items_to_polygon_shape_transform.cpp#L204
 void CINFO3D_VISU::AddGraphicsShapesWithClearanceToContainer( const MODULE* aModule,
                                                               CGENERICCONTAINER2D *aDstContainer,
-                                                              LAYER_ID aLayerId,
+                                                              PCB_LAYER_ID aLayerId,
                                                               int aInflateValue )
 {
     std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
@@ -603,7 +603,7 @@ void CINFO3D_VISU::createNewPad( const D_PAD* aPad,
 
 void CINFO3D_VISU::AddPadsShapesWithClearanceToContainer( const MODULE* aModule,
                                                           CGENERICCONTAINER2D *aDstContainer,
-                                                          LAYER_ID aLayerId,
+                                                          PCB_LAYER_ID aLayerId,
                                                           int aInflateValue,
                                                           bool aSkipNPTHPadsWihNoCopper )
 {
@@ -745,7 +745,7 @@ void CINFO3D_VISU::TransformArcToSegments( const wxPoint &aCentre,
 // board_items_to_polygon_shape_transform.cpp#L431
 void CINFO3D_VISU::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSegment,
                                                      CGENERICCONTAINER2D *aDstContainer,
-                                                     LAYER_ID aLayerId,
+                                                     PCB_LAYER_ID aLayerId,
                                                      int aClearanceValue )
 {
     // The full width of the lines to create:
@@ -909,7 +909,7 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSeg
 // board_items_to_polygon_shape_transform.cpp
 void CINFO3D_VISU::AddSolidAreasShapesToContainer( const ZONE_CONTAINER* aZoneContainer,
                                                    CGENERICCONTAINER2D *aDstContainer,
-                                                   LAYER_ID aLayerId )
+                                                   PCB_LAYER_ID aLayerId )
 {
     // Copy the polys list because we have to simplify it
     SHAPE_POLY_SET polyList = SHAPE_POLY_SET(aZoneContainer->GetFilledPolysList());
@@ -1164,7 +1164,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     unsigned start_Time = stats_startCopperLayersTime;
 #endif
 
-    LAYER_ID cu_seq[MAX_CU_LAYERS];
+    PCB_LAYER_ID cu_seq[MAX_CU_LAYERS];
     LSET     cu_set = LSET::AllCuMask( m_copperLayersCount );
 
     m_stats_nr_tracks               = 0;
@@ -1216,7 +1216,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
     // Prepare copper layers index and containers
     // /////////////////////////////////////////////////////////////////////////
-    std::vector< LAYER_ID > layer_id;
+    std::vector< PCB_LAYER_ID > layer_id;
     layer_id.clear();
     layer_id.reserve( m_copperLayersCount );
 
@@ -1225,7 +1225,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
     for( LSEQ cu = cu_set.Seq( cu_seq, DIM( cu_seq ) ); cu; ++cu )
     {
-        const LAYER_ID curr_layer_id = *cu;
+        const PCB_LAYER_ID curr_layer_id = *cu;
 
         if( !Is3DLayerEnabled( curr_layer_id ) ) // Skip non enabled layers
             continue;
@@ -1255,7 +1255,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     // /////////////////////////////////////////////////////////////////////////
     for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
     {
-        const LAYER_ID curr_layer_id = layer_id[lIdx];
+        const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
 
         wxASSERT( m_layers_container2D.find( curr_layer_id ) != m_layers_container2D.end() );
 
@@ -1286,7 +1286,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     // /////////////////////////////////////////////////////////////////////////
     for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
     {
-        const LAYER_ID curr_layer_id = layer_id[lIdx];
+        const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
 
         // ADD TRACKS
         unsigned int nTracks = trackList.size();
@@ -1370,7 +1370,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     // /////////////////////////////////////////////////////////////////////////
     for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
     {
-        const LAYER_ID curr_layer_id = layer_id[lIdx];
+        const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
 
         // ADD TRACKS
         const unsigned int nTracks = trackList.size();
@@ -1481,7 +1481,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     {
         for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
         {
-            const LAYER_ID curr_layer_id = layer_id[lIdx];
+            const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
 
             wxASSERT( m_layers_poly.find( curr_layer_id ) != m_layers_poly.end() );
 
@@ -1599,7 +1599,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     // /////////////////////////////////////////////////////////////////////////
     for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
     {
-        const LAYER_ID curr_layer_id = layer_id[lIdx];
+        const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
 
         wxASSERT( m_layers_container2D.find( curr_layer_id ) != m_layers_container2D.end() );
 
@@ -1636,7 +1636,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     {
         for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
         {
-            const LAYER_ID curr_layer_id = layer_id[lIdx];
+            const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
 
             wxASSERT( m_layers_poly.find( curr_layer_id ) != m_layers_poly.end() );
 
@@ -1679,7 +1679,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     // /////////////////////////////////////////////////////////////////////////
     for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
     {
-        const LAYER_ID curr_layer_id = layer_id[lIdx];
+        const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
 
         wxASSERT( m_layers_container2D.find( curr_layer_id ) != m_layers_container2D.end() );
 
@@ -1739,7 +1739,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     {
         for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
         {
-            const LAYER_ID curr_layer_id = layer_id[lIdx];
+            const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
 
             wxASSERT( m_layers_poly.find( curr_layer_id ) != m_layers_poly.end() );
 
@@ -1800,7 +1800,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
         // /////////////////////////////////////////////////////////////////////
         for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
         {
-            const LAYER_ID curr_layer_id = layer_id[lIdx];
+            const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
 
             if( aStatusTextReporter )
                 aStatusTextReporter->Report( wxString::Format( _( "Create zones of layer %s" ),
@@ -1814,7 +1814,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
             for( int ii = 0; ii < m_board->GetAreaCount(); ++ii )
             {
                 const ZONE_CONTAINER* zone = m_board->GetArea( ii );
-                const LAYER_ID zonelayer = zone->GetLayer();
+                const PCB_LAYER_ID zonelayer = zone->GetLayer();
 
                 if( zonelayer == curr_layer_id )
                 {
@@ -1839,7 +1839,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
         // /////////////////////////////////////////////////////////////////////
         for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
         {
-            const LAYER_ID curr_layer_id = layer_id[lIdx];
+            const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
 
             wxASSERT( m_layers_poly.find( curr_layer_id ) != m_layers_poly.end() );
 
@@ -1880,7 +1880,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
         #pragma omp parallel for
         for( signed int lIdx = 0; lIdx < nLayers; ++lIdx )
         {
-            const LAYER_ID curr_layer_id = layer_id[lIdx];
+            const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
 
             wxASSERT( m_layers_poly.find( curr_layer_id ) != m_layers_poly.end() );
 
@@ -1905,7 +1905,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
     for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
     {
-        const LAYER_ID curr_layer_id = layer_id[lIdx];
+        const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
 
         if( m_layers_outer_holes_poly.find( curr_layer_id ) !=
             m_layers_outer_holes_poly.end() )
@@ -1951,7 +1951,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
         aStatusTextReporter->Report( _( "Build Tech layers" ) );
 
     // draw graphic items, on technical layers
-    static const LAYER_ID teckLayerList[] = {
+    static const PCB_LAYER_ID teckLayerList[] = {
             B_Adhes,
             F_Adhes,
             B_Paste,
@@ -1975,7 +1975,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
          seq;
          ++seq )
     {
-        const LAYER_ID curr_layer_id = *seq;
+        const PCB_LAYER_ID curr_layer_id = *seq;
 
         if( !Is3DLayerEnabled( curr_layer_id ) )
                     continue;

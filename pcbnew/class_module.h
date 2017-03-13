@@ -320,7 +320,7 @@ public:
      *  there is no copper left on the board (for instance when creating Gerber Files or 3D shapes)
      *  default = false
      */
-    void TransformPadsShapesWithClearanceToPolygon( LAYER_ID aLayer,
+    void TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
                             SHAPE_POLY_SET& aCornerBuffer,
                             int             aInflateValue,
                             int             aCircleToSegmentsCount,
@@ -348,7 +348,7 @@ public:
      *       if 0, use the aCircleToSegmentsCount value
      */
     void TransformGraphicShapesWithClearanceToPolygonSet(
-                            LAYER_ID aLayer,
+                            PCB_LAYER_ID aLayer,
                             SHAPE_POLY_SET& aCornerBuffer,
                             int             aInflateValue,
                             int             aCircleToSegmentsCount,
@@ -367,7 +367,7 @@ public:
      * @param aCircleToSegmentsCountForTexts
      */
     void TransformGraphicTextWithClearanceToPolygonSet(
-                            LAYER_ID aLayer,
+                            PCB_LAYER_ID aLayer,
                             SHAPE_POLY_SET& aCornerBuffer,
                             int             aInflateValue,
                             int             aCircleToSegmentsCount,

@@ -302,7 +302,7 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
 }
 
 
-void C3D_RENDER_OGL_LEGACY::set_layer_material( LAYER_ID aLayerID )
+void C3D_RENDER_OGL_LEGACY::set_layer_material( PCB_LAYER_ID aLayerID )
 {
     switch( aLayerID )
     {
@@ -360,7 +360,7 @@ void C3D_RENDER_OGL_LEGACY::set_layer_material( LAYER_ID aLayerID )
 }
 
 
-SFVEC3F C3D_RENDER_OGL_LEGACY::get_layer_color( LAYER_ID aLayerID )
+SFVEC3F C3D_RENDER_OGL_LEGACY::get_layer_color( PCB_LAYER_ID aLayerID )
 {
     SFVEC3F layerColor = m_settings.GetLayerColor( aLayerID );
 
@@ -623,7 +623,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving,
          ++ii )
     {
 
-        const LAYER_ID layer_id = (LAYER_ID)(ii->first);
+        const PCB_LAYER_ID layer_id = (PCB_LAYER_ID)(ii->first);
 
         // Mask kayers are not processed here because they are a special case
         if( (layer_id == B_Mask) || (layer_id == F_Mask) )
@@ -918,7 +918,7 @@ void C3D_RENDER_OGL_LEGACY::ogl_free_all_display_lists()
 }
 
 
-void C3D_RENDER_OGL_LEGACY::render_solder_mask_layer( LAYER_ID aLayerID,
+void C3D_RENDER_OGL_LEGACY::render_solder_mask_layer( PCB_LAYER_ID aLayerID,
                                                       float aZPosition,
                                                       bool aIsRenderingOnPreviewMode )
 {

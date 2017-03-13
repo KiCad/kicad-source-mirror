@@ -442,7 +442,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
          ii != m_settings.GetMapLayers().end();
          ++ii )
     {
-        LAYER_ID layer_id = static_cast<LAYER_ID>(ii->first);
+        PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>(ii->first);
 
         // Mask kayers are not processed here because they are a special case
         if( (layer_id == B_Mask) || (layer_id == F_Mask) )
@@ -644,7 +644,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
              ii != m_settings.GetMapLayers().end();
              ++ii )
         {
-            LAYER_ID layer_id = static_cast<LAYER_ID>(ii->first);
+            PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>(ii->first);
 
             const CBVHCONTAINER2D *containerLayer2d =
                     static_cast<const CBVHCONTAINER2D *>(ii->second);
@@ -971,7 +971,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
 // 3d_draw_helper_functions.cpp
 void C3D_RENDER_RAYTRACING::insert3DViaHole( const VIA* aVia )
 {
-    LAYER_ID    top_layer, bottom_layer;
+    PCB_LAYER_ID    top_layer, bottom_layer;
     int radiusBUI = (aVia->GetDrillValue() / 2);
 
     aVia->LayerPair( &top_layer, &bottom_layer );
@@ -1001,7 +1001,7 @@ void C3D_RENDER_RAYTRACING::insert3DViaHole( const VIA* aVia )
     if( m_settings.GetFlag( FL_USE_REALISTIC_MODE ) )
         objPtr->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_settings.m_CopperColor ) );
     else
-        objPtr->SetColor( ConvertSRGBToLinear( m_settings.GetItemColor( VIAS_VISIBLE + aVia->GetViaType() ) ) );
+        objPtr->SetColor( ConvertSRGBToLinear( m_settings.GetItemColor( LAYER_VIAS + aVia->GetViaType() ) ) );
 
     m_object_container.Add( objPtr );
 }
@@ -1018,7 +1018,7 @@ void C3D_RENDER_RAYTRACING::insert3DPadHole( const D_PAD* aPad )
     if( m_settings.GetFlag( FL_USE_REALISTIC_MODE ) )
         objColor = (SFVEC3F)m_settings.m_CopperColor;
     else
-        objColor = m_settings.GetItemColor( PADS_VISIBLE );
+        objColor = m_settings.GetItemColor( LAYER_PADS );
 
     const wxSize  drillsize   = aPad->GetDrillSize();
     const bool    hasHole     = drillsize.x && drillsize.y;

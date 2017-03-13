@@ -629,8 +629,8 @@ void LIB_VIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    SetGridColor( GetLayerColor( LAYER_GRID ) );
-    SetDrawBgColor( GetLayerColor( LAYER_BACKGROUND ) );
+    SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
+    SetDrawBgColor( GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
 
     aCfg->Read( LIBLIST_WIDTH_KEY, &m_libListWidth, 150 );
     aCfg->Read( CMPLIST_WIDTH_KEY, &m_cmpListWidth, 150 );

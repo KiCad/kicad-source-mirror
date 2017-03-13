@@ -105,10 +105,10 @@ void GERBER_LAYER_WIDGET::ReFillRender()
 
 #define RR  LAYER_WIDGET::ROW   // Render Row abreviation to reduce source width
 
-             // text                id                      color       tooltip                 checked
-        RR( _( "Grid" ),            GERBER_GRID_VISIBLE,    WHITE,      _( "Show the (x,y) grid dots" ) ),
-        RR( _( "DCodes" ),          DCODES_VISIBLE,         WHITE,      _( "Show DCodes identification" ) ),
-        RR( _( "Neg. Obj." ),       NEGATIVE_OBJECTS_VISIBLE,  DARKGRAY,
+             // text            id                      color       tooltip                 checked
+        RR( _( "Grid" ),        LAYER_GERBVIEW_GRID,    WHITE,      _( "Show the (x,y) grid dots" ) ),
+        RR( _( "DCodes" ),      LAYER_DCODES,           WHITE,      _( "Show DCodes identification" ) ),
+        RR( _( "Neg. Obj." ),   LAYER_NEGATIVE_OBJECTS, DARKGRAY,
                                     _( "Show negative objects in this color" ) ),
     };
 
@@ -117,10 +117,10 @@ void GERBER_LAYER_WIDGET::ReFillRender()
         if( renderRows[row].color != COLOR4D::UNSPECIFIED )       // does this row show a color?
         {
             renderRows[row].color = myframe->GetVisibleElementColor(
-                                    (GERBER_VISIBLE_ID)renderRows[row].id );
+                                    ( GERBVIEW_LAYER_ID )renderRows[row].id );
         }
         renderRows[row].state = myframe->IsElementVisible(
-                                (GERBER_VISIBLE_ID)renderRows[row].id );
+                                ( GERBVIEW_LAYER_ID )renderRows[row].id );
     }
 
     AppendRenderRows( renderRows, DIM(renderRows) );
@@ -293,13 +293,13 @@ void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFin
 
 void GERBER_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
 {
-    myframe->SetVisibleElementColor( (GERBER_VISIBLE_ID)aId, aColor );
+    myframe->SetVisibleElementColor( (GERBVIEW_LAYER_ID) aId, aColor );
     myframe->GetCanvas()->Refresh();
 }
 
 void GERBER_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 {
-    myframe->SetElementVisibility( (GERBER_VISIBLE_ID)aId, isEnabled );
+    myframe->SetElementVisibility( (GERBVIEW_LAYER_ID) aId, isEnabled );
     myframe->GetCanvas()->Refresh();
 }
 

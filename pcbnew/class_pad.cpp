@@ -931,31 +931,31 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 
     // These types of pads contain a hole
     if( m_Attribute == PAD_ATTRIB_STANDARD || m_Attribute == PAD_ATTRIB_HOLE_NOT_PLATED )
-        aLayers[aCount++] = ITEM_GAL_LAYER( PADS_HOLES_VISIBLE );
+        aLayers[aCount++] = LAYER_PADS_HOLES;
 
     if( IsOnLayer( F_Cu ) && IsOnLayer( B_Cu ) )
     {
         // Multi layer pad
-        aLayers[aCount++] = ITEM_GAL_LAYER( PADS_VISIBLE );
-        aLayers[aCount++] = NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE );
+        aLayers[aCount++] = LAYER_PADS;
+        aLayers[aCount++] = LAYER_PADS_NETNAMES;
     }
     else if( IsOnLayer( F_Cu ) )
     {
-        aLayers[aCount++] = ITEM_GAL_LAYER( PAD_FR_VISIBLE );
-        aLayers[aCount++] = NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE );
+        aLayers[aCount++] = LAYER_PAD_FR;
+        aLayers[aCount++] = LAYER_PAD_FR_NETNAMES;
     }
     else if( IsOnLayer( B_Cu ) )
     {
-        aLayers[aCount++] = ITEM_GAL_LAYER( PAD_BK_VISIBLE );
-        aLayers[aCount++] = NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
+        aLayers[aCount++] = LAYER_PAD_BK;
+        aLayers[aCount++] = LAYER_PAD_BK_NETNAMES;
     }
 
     // Check non-copper layers. This list should include all the layers that the
     // footprint editor allows a pad to be placed on.
-    static const LAYER_ID layers_mech[] = { F_Mask, B_Mask, F_Paste, B_Paste,
+    static const PCB_LAYER_ID layers_mech[] = { F_Mask, B_Mask, F_Paste, B_Paste,
         F_Adhes, B_Adhes, F_SilkS, B_SilkS, Dwgs_User, Eco1_User, Eco2_User };
 
-    for( LAYER_ID each_layer : layers_mech )
+    for( PCB_LAYER_ID each_layer : layers_mech )
     {
         if( IsOnLayer( each_layer ) )
             aLayers[aCount++] = each_layer;
@@ -1013,7 +1013,7 @@ const BOX2I D_PAD::ViewBBox() const
 wxString LayerMaskDescribe( const BOARD *aBoard, LSET aMask )
 {
     // Try the single or no- layer case (easy)
-    LAYER_ID layer = aMask.ExtractLayer();
+    PCB_LAYER_ID layer = aMask.ExtractLayer();
 
     switch( (int) layer )
     {

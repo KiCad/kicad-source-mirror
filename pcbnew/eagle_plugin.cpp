@@ -1391,7 +1391,7 @@ void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
         {
             // some eagle boards do not have contiguous layer number sequences.
 
-#if 0   // pre LAYER_ID & LSET:
+#if 0   // pre PCB_LAYER_ID & LSET:
             m_cu_map[it->number] = cu.size() - 1 - ki_layer_count;
 #else
             m_cu_map[it->number] = ki_layer_count;
@@ -1414,7 +1414,7 @@ void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
 
         for( EITER it = cu.begin();  it != cu.end();  ++it )
         {
-            LAYER_ID layer =  kicad_layer( it->number );
+            PCB_LAYER_ID layer =  kicad_layer( it->number );
 
             // these function provide their own protection against UNDEFINED_LAYER:
             m_board->SetLayerName( layer, FROM_UTF8( it->name.c_str() ) );
@@ -1437,8 +1437,8 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
         {
             m_xpath->push( "wire" );
 
-            EWIRE       w( gr->second );
-            LAYER_ID    layer = kicad_layer( w.layer );
+            EWIRE        w( gr->second );
+            PCB_LAYER_ID layer = kicad_layer( w.layer );
 
             wxPoint start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
             wxPoint end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
@@ -1473,8 +1473,8 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
         {
             m_xpath->push( "text" );
 
-            ETEXT       t( gr->second );
-            LAYER_ID    layer = kicad_layer( t.layer );
+            ETEXT        t( gr->second );
+            PCB_LAYER_ID layer = kicad_layer( t.layer );
 
             if( layer != UNDEFINED_LAYER )
             {
@@ -1561,8 +1561,8 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
         {
             m_xpath->push( "circle" );
 
-            ECIRCLE     c( gr->second );
-            LAYER_ID    layer = kicad_layer( c.layer );
+            ECIRCLE      c( gr->second );
+            PCB_LAYER_ID layer = kicad_layer( c.layer );
 
             if( layer != UNDEFINED_LAYER )       // unsupported layer
             {
@@ -1584,8 +1584,8 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             // net related info on it from the DTD.
             m_xpath->push( "rectangle" );
 
-            ERECT       r( gr->second );
-            LAYER_ID    layer = kicad_layer( r.layer );
+            ERECT        r( gr->second );
+            PCB_LAYER_ID layer = kicad_layer( r.layer );
 
             if( IsCopperLayer( layer ) )
             {
@@ -2146,8 +2146,8 @@ MODULE* EAGLE_PLUGIN::makeModule( CPTREE& aPackage, const string& aPkgName ) con
 
 void EAGLE_PLUGIN::packageWire( MODULE* aModule, CPTREE& aTree ) const
 {
-    EWIRE       w( aTree );
-    LAYER_ID    layer = kicad_layer( w.layer );
+    EWIRE        w( aTree );
+    PCB_LAYER_ID layer = kicad_layer( w.layer );
 
     if( IsNonCopperLayer( layer ) )     // only valid non-copper wires, skip copper package wires
     {
@@ -2273,8 +2273,8 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
 
 void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
 {
-    ETEXT       t( aTree );
-    LAYER_ID    layer = kicad_layer( t.layer );
+    ETEXT        t( aTree );
+    PCB_LAYER_ID layer = kicad_layer( t.layer );
 
     if( layer == UNDEFINED_LAYER )
     {
@@ -2379,8 +2379,8 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
 
 void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, CPTREE& aTree ) const
 {
-    ERECT       r( aTree );
-    LAYER_ID    layer = kicad_layer( r.layer );
+    ERECT        r( aTree );
+    PCB_LAYER_ID layer = kicad_layer( r.layer );
 
     if( IsNonCopperLayer( layer ) )  // skip copper "package.rectangle"s
     {
@@ -2413,7 +2413,7 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, CPTREE& aTree ) const
 void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, CPTREE& aTree ) const
 {
     EPOLYGON    p( aTree );
-    LAYER_ID    layer = kicad_layer( p.layer );
+    PCB_LAYER_ID    layer = kicad_layer( p.layer );
 
     if( IsNonCopperLayer( layer ) )  // skip copper "package.rectangle"s
     {
@@ -2462,7 +2462,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, CPTREE& aTree ) const
 void EAGLE_PLUGIN::packageCircle( MODULE* aModule, CPTREE& aTree ) const
 {
     ECIRCLE         e( aTree );
-    LAYER_ID        layer = kicad_layer( e.layer );
+    PCB_LAYER_ID    layer = kicad_layer( e.layer );
     EDGE_MODULE*    gr = new EDGE_MODULE( aModule, S_CIRCLE );
 
     aModule->GraphicalItems().PushBack( gr );
@@ -2520,8 +2520,8 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, CPTREE& aTree ) const
 
 void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
 {
-    ESMD        e( aTree );
-    LAYER_ID    layer = kicad_layer( e.layer );
+    ESMD         e( aTree );
+    PCB_LAYER_ID layer = kicad_layer( e.layer );
 
     if( !IsCopperLayer( layer ) )
     {
@@ -2608,8 +2608,8 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
             if( it->first == "wire" )
             {
                 m_xpath->push( "wire" );
-                EWIRE   w( it->second );
-                LAYER_ID  layer = kicad_layer( w.layer );
+                EWIRE        w( it->second );
+                PCB_LAYER_ID layer = kicad_layer( w.layer );
 
                 if( IsCopperLayer( layer ) )
                 {
@@ -2643,8 +2643,8 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 m_xpath->push( "via" );
                 EVIA    v( it->second );
 
-                LAYER_ID  layer_front_most = kicad_layer( v.layer_front_most );
-                LAYER_ID  layer_back_most  = kicad_layer( v.layer_back_most );
+                PCB_LAYER_ID  layer_front_most = kicad_layer( v.layer_front_most );
+                PCB_LAYER_ID  layer_back_most  = kicad_layer( v.layer_back_most );
 
                 if( IsCopperLayer( layer_front_most ) &&
                     IsCopperLayer( layer_back_most ) )
@@ -2720,8 +2720,8 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
             {
                 m_xpath->push( "polygon" );
 
-                EPOLYGON    p( it->second );
-                LAYER_ID    layer = kicad_layer( p.layer );
+                EPOLYGON     p( it->second );
+                PCB_LAYER_ID layer = kicad_layer( p.layer );
 
                 if( IsCopperLayer( layer ) )
                 {
@@ -2807,7 +2807,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 }
 
 
-LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
+PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
 {
     /* will assume this is a valid mapping for all eagle boards until I get paid more:
 
@@ -2935,7 +2935,7 @@ LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         }
     }
 
-    return LAYER_ID( kiLayer );
+    return PCB_LAYER_ID( kiLayer );
 }
 
 

@@ -976,11 +976,11 @@ void FOOTPRINT_EDIT_FRAME::OnVerticalToolbar( wxCommandEvent& aEvent )
 
 COLOR4D FOOTPRINT_EDIT_FRAME::GetGridColor() const
 {
-    return g_ColorsSettings.GetItemColor( GRID_VISIBLE );
+    return g_ColorsSettings.GetItemColor( LAYER_GRID );
 }
 
 
-void FOOTPRINT_EDIT_FRAME::SetActiveLayer( LAYER_ID aLayer )
+void FOOTPRINT_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 {
     PCB_BASE_FRAME::SetActiveLayer( aLayer );
 

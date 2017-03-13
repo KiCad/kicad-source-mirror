@@ -67,18 +67,18 @@ extern bool IsWxPythonLoaded();
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
 
-bool        g_Drc_On = true;
-bool        g_AutoDeleteOldTrack = true;
-bool        g_Raccord_45_Auto = true;
-bool        g_Alternate_Track_Posture = false;
-bool        g_Track_45_Only_Allowed = true;  // True to allow horiz, vert. and 45deg only tracks
-bool        g_Segments_45_Only;              // True to allow horiz, vert. and 45deg only graphic segments
-bool        g_TwoSegmentTrackBuild = true;
+bool         g_Drc_On = true;
+bool         g_AutoDeleteOldTrack = true;
+bool         g_Raccord_45_Auto = true;
+bool         g_Alternate_Track_Posture = false;
+bool         g_Track_45_Only_Allowed = true;  // True to allow horiz, vert. and 45deg only tracks
+bool         g_Segments_45_Only;              // True to allow horiz, vert. and 45deg only graphic segments
+bool         g_TwoSegmentTrackBuild = true;
 
-LAYER_ID    g_Route_Layer_TOP;
-LAYER_ID    g_Route_Layer_BOTTOM;
-int         g_MagneticPadOption   = CAPTURE_CURSOR_IN_TRACK_TOOL;
-int         g_MagneticTrackOption = CAPTURE_CURSOR_IN_TRACK_TOOL;
+PCB_LAYER_ID g_Route_Layer_TOP;
+PCB_LAYER_ID g_Route_Layer_BOTTOM;
+int          g_MagneticPadOption   = CAPTURE_CURSOR_IN_TRACK_TOOL;
+int          g_MagneticTrackOption = CAPTURE_CURSOR_IN_TRACK_TOOL;
 
 wxPoint     g_Offset_Module;     // module offset used when moving a footprint
 

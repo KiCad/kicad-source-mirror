@@ -277,7 +277,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
     for( int layer=0; layer<copperCount; ++layer )
     {
-        LAYER_ID kilayer = pcbLayer2kicad[layer];
+        PCB_LAYER_ID kilayer = pcbLayer2kicad[layer];
 
         if( onAllCopperLayers || aPad->IsOnLayer( kilayer ) )
         {
@@ -713,8 +713,8 @@ PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter,
 
 PADSTACK* SPECCTRA_DB::makeVia( const ::VIA* aVia )
 {
-    LAYER_ID    topLayerNum;
-    LAYER_ID    botLayerNum;
+    PCB_LAYER_ID    topLayerNum;
+    PCB_LAYER_ID    botLayerNum;
 
     aVia->LayerPair( &topLayerNum, &botLayerNum );
 

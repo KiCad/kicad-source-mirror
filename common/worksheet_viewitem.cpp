@@ -131,7 +131,7 @@ void WORKSHEET_VIEWITEM::ViewDraw( int aLayer, VIEW* aView ) const
 void WORKSHEET_VIEWITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 1;
-    aLayers[0] = ITEM_GAL_LAYER( WORKSHEET );
+    aLayers[0] = LAYER_WORKSHEET;
 }
 
 

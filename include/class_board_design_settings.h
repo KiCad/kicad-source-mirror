@@ -144,14 +144,14 @@ public:
                                             // if empty, use footprint name as default
     bool    m_RefDefaultVisibility;         ///< Default ref text visibility on fp creation
     int     m_RefDefaultlayer;              ///< Default ref text layer on fp creation
-                                            // should be a LAYER_ID, but use an int
+                                            // should be a PCB_LAYER_ID, but use an int
                                             // to save this param in config
 
     wxString    m_ValueDefaultText;         ///< Default value text on fp creation
                                             // if empty, use footprint name as default
     bool    m_ValueDefaultVisibility;       ///< Default value text visibility on fp creation
     int     m_ValueDefaultlayer;            ///< Default value text layer on fp creation
-                                            // should be a LAYER_ID, but use an int
+                                            // should be a PCB_LAYER_ID, but use an int
                                             // to save this param in config
 
     // Miscellaneous
@@ -447,7 +447,7 @@ public:
      * @param aLayerId = The layer to be tested
      * @return bool - true if the layer is visible.
      */
-    inline bool IsLayerVisible( LAYER_ID aLayerId ) const
+    inline bool IsLayerVisible( PCB_LAYER_ID aLayerId ) const
     {
         // If a layer is disabled, it is automatically invisible
         return (m_visibleLayers & m_enabledLayers)[aLayerId];
@@ -459,7 +459,7 @@ public:
      * @param aLayerId = The layer to be changed
      * @param aNewState = The new visibility state of the layer
      */
-    void SetLayerVisibility( LAYER_ID aLayerId, bool aNewState );
+    void SetLayerVisibility( PCB_LAYER_ID aLayerId, bool aNewState );
 
     /**
      * Function GetVisibleElements
@@ -487,13 +487,11 @@ public:
      * inline function.
      * @param aElementCategory is from the enum by the same name
      * @return bool - true if the element is visible.
-     * @see enum PCB_VISIBLE
+     * @see enum GAL_LAYER_ID
      */
-    inline bool IsElementVisible( int aElementCategory ) const
+    inline bool IsElementVisible( GAL_LAYER_ID aElementCategory ) const
     {
-        assert( aElementCategory >= 0 && aElementCategory < END_PCB_VISIBLE_LIST );
-
-        return ( m_visibleElements & ( 1 << aElementCategory ) );
+        return ( m_visibleElements & ( 1 << GAL_LAYER_INDEX( aElementCategory ) ) );
     }
 
     /**
@@ -501,9 +499,9 @@ public:
      * changes the visibility of an element category
      * @param aElementCategory is from the enum by the same name
      * @param aNewState = The new visibility state of the element category
-     * @see enum PCB_VISIBLE
+     * @see enum GAL_LAYER_ID
      */
-    void SetElementVisibility( int aElementCategory, bool aNewState );
+    void SetElementVisibility( GAL_LAYER_ID aElementCategory, bool aNewState );
 
     /**
      * Function GetEnabledLayers
@@ -528,7 +526,7 @@ public:
      * @param aLayerId = The layer to be tested
      * @return bool - true if the layer is enabled
      */
-    inline bool IsLayerEnabled( LAYER_ID aLayerId ) const
+    inline bool IsLayerEnabled( PCB_LAYER_ID aLayerId ) const
     {
         return m_enabledLayers[aLayerId];
     }

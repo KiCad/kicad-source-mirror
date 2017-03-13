@@ -150,7 +150,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     }
 }
 
-void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, LAYER_ID aLayer,
+void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
                         const PCB_PLOT_PARAMS& aPlotOpt )
 {
     PCB_PLOT_PARAMS plotOpt = aPlotOpt;
@@ -411,10 +411,10 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             COLOR4D color = COLOR4D::BLACK;
 
             if( pad->GetLayerSet()[B_Cu] )
-               color = aBoard->GetVisibleElementColor( PAD_BK_VISIBLE );
+               color = aBoard->GetVisibleElementColor( LAYER_PAD_BK );
 
             if( pad->GetLayerSet()[F_Cu] )
-                color = color.LegacyMix( aBoard->GetVisibleElementColor( PAD_FR_VISIBLE ) );
+                color = color.LegacyMix( aBoard->GetVisibleElementColor( LAYER_PAD_FR ) );
 
             // Temporary set the pad size to the required plot size:
             wxSize tmppadsize = pad->GetSize();
@@ -507,7 +507,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
         gbr_metadata.SetNetName( Via->GetNetname() );
 
-        COLOR4D color = aBoard->GetVisibleElementColor( VIAS_VISIBLE + Via->GetViaType() );
+        COLOR4D color = aBoard->GetVisibleElementColor( LAYER_VIAS + Via->GetViaType() );
         // Set plot color (change WHITE to LIGHTGRAY because
         // the white items are not seen on a white paper or screen
         aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
@@ -570,7 +570,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
 
 // Seems like we want to plot from back to front?
-static const LAYER_ID plot_seq[] = {
+static const PCB_LAYER_ID plot_seq[] = {
 
     B_Adhes,        // 32
     F_Adhes,
@@ -641,7 +641,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter,
 
     for( LSEQ seq = aLayerMask.Seq( plot_seq, DIM( plot_seq ) );  seq;  ++seq )
     {
-        LAYER_ID layer = *seq;
+        PCB_LAYER_ID layer = *seq;
 
         outlines.RemoveAllContours();
         aBoard->ConvertBrdLayerToPolygonalContours( layer, outlines );
@@ -733,7 +733,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
                           LSET aLayerMask, const PCB_PLOT_PARAMS& aPlotOpt,
                           int aMinThickness )
 {
-    LAYER_ID    layer = aLayerMask[B_Mask] ? B_Mask : F_Mask;
+    PCB_LAYER_ID    layer = aLayerMask[B_Mask] ? B_Mask : F_Mask;
     int         inflate = aMinThickness/2;
 
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );

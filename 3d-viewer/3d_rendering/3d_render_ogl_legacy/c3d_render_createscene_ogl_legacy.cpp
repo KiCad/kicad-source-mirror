@@ -493,7 +493,7 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER *aStatusTextReporter )
              ii != outerMapHoles.end();
              ++ii )
         {
-            LAYER_ID layer_id = static_cast<LAYER_ID>(ii->first);
+            PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>(ii->first);
             const SHAPE_POLY_SET *poly = static_cast<const SHAPE_POLY_SET *>(ii->second);
             const CBVHCONTAINER2D *container = map_holes.at( layer_id );
 
@@ -511,7 +511,7 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER *aStatusTextReporter )
              ii != innerMapHoles.end();
              ++ii )
         {
-            LAYER_ID layer_id = static_cast<LAYER_ID>(ii->first);
+            PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>(ii->first);
             const SHAPE_POLY_SET *poly = static_cast<const SHAPE_POLY_SET *>(ii->second);
             const CBVHCONTAINER2D *container = map_holes.at( layer_id );
 
@@ -539,7 +539,7 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER *aStatusTextReporter )
          ii != m_settings.GetMapLayers().end();
          ++ii )
     {
-        LAYER_ID layer_id = static_cast<LAYER_ID>(ii->first);
+        PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>(ii->first);
 
         if( !m_settings.Is3DLayerEnabled( layer_id ) )
             continue;
@@ -685,7 +685,7 @@ void C3D_RENDER_OGL_LEGACY::add_triangle_top_bot( CLAYER_TRIANGLES *aDst,
 }
 
 
-void C3D_RENDER_OGL_LEGACY::get_layer_z_pos ( LAYER_ID aLayerID,
+void C3D_RENDER_OGL_LEGACY::get_layer_z_pos ( PCB_LAYER_ID aLayerID,
                                               float &aOutZtop,
                                               float &aOutZbot ) const
 {
@@ -773,7 +773,7 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
                 const SFVEC2F via_center(  via->GetStart().x * m_settings.BiuTo3Dunits(),
                                           -via->GetStart().y * m_settings.BiuTo3Dunits() );
 
-                LAYER_ID top_layer, bottom_layer;
+                PCB_LAYER_ID top_layer, bottom_layer;
                 via->LayerPair( &top_layer, &bottom_layer );
 
                 float ztop, zbot, dummy;

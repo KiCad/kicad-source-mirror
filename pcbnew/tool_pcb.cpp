@@ -129,7 +129,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     }
 
     int via_type = GetDesignSettings().m_CurrentViaType;
-    via_color = GetBoard()->GetVisibleElementColor(VIAS_VISIBLE+via_type);
+    via_color = GetBoard()->GetVisibleElementColor( LAYER_VIAS + via_type );
 
     if( previous_via_color != via_color )
     {
@@ -745,7 +745,7 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_SHOW_RATSNEST:
-        SetElementVisibility( RATSNEST_VISIBLE, state );
+        SetElementVisibility( LAYER_RATSNEST, state );
         OnModify();
 
         if( state && (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )

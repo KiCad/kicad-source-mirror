@@ -120,9 +120,9 @@ CINFO3D_VISU::~CINFO3D_VISU()
 }
 
 
-bool CINFO3D_VISU::Is3DLayerEnabled( LAYER_ID aLayer ) const
+bool CINFO3D_VISU::Is3DLayerEnabled( PCB_LAYER_ID aLayer ) const
 {
-    wxASSERT( aLayer < LAYER_ID_COUNT );
+    wxASSERT( aLayer < PCB_LAYER_ID_COUNT );
 
     DISPLAY3D_FLG flg;
 
@@ -372,7 +372,7 @@ void CINFO3D_VISU::InitSettings( REPORTER *aStatusTextReporter )
 
     // calculate z position for each non copper layer
     // Solder mask and Solder paste have the same Z position
-    for( int layer_id = MAX_CU_LAYERS; layer_id < LAYER_ID_COUNT; ++layer_id )
+    for( int layer_id = MAX_CU_LAYERS; layer_id < PCB_LAYER_ID_COUNT; ++layer_id )
     {
         float zposTop;
         float zposBottom;
@@ -526,9 +526,9 @@ void CINFO3D_VISU::CameraSetType( CAMERA_TYPE aCameraType )
 }
 
 
-SFVEC3F CINFO3D_VISU::GetLayerColor( LAYER_ID aLayerId ) const
+SFVEC3F CINFO3D_VISU::GetLayerColor( PCB_LAYER_ID aLayerId ) const
 {
-    wxASSERT( aLayerId < LAYER_ID_COUNT );
+    wxASSERT( aLayerId < PCB_LAYER_ID_COUNT );
 
     const COLOR4D color = g_ColorsSettings.GetLayerColor( aLayerId );
 

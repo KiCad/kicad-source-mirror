@@ -71,7 +71,7 @@ private:
 
     long            m_NetFiltering;
 
-    std::vector<LAYER_ID> m_LayerId;        ///< Handle the real layer number from layer
+    std::vector<PCB_LAYER_ID> m_LayerId;    ///< Handle the real layer number from layer
                                             ///< name position in m_LayerSelectionCtrl
 
     static wxString m_netNameShowFilter;    ///< the filter to show nets (default * "*").
@@ -245,7 +245,7 @@ void DIALOG_COPPER_ZONE::initDialog()
 
     for( LSEQ cu_stack = cu_set.UIOrder();  cu_stack;  ++cu_stack, imgIdx++ )
     {
-        LAYER_ID layer = *cu_stack;
+        PCB_LAYER_ID layer = *cu_stack;
 
         m_LayerId.push_back( layer );
 

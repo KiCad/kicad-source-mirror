@@ -174,7 +174,7 @@ void RATSNEST_ITEM::Draw( EDA_DRAW_PANEL* panel,
 {
     GRSetDrawMode( DC, aDrawMode );
 
-    COLOR4D color = g_ColorsSettings.GetItemColor(RATSNEST_VISIBLE);
+    COLOR4D color = g_ColorsSettings.GetItemColor( LAYER_RATSNEST );
 
     GRLine( panel->GetClipBox(), DC,
             m_PadStart->GetPosition() - aOffset,

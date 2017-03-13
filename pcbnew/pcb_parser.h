@@ -32,7 +32,7 @@
 
 #include <pcb_lexer.h>
 #include <hashtables.h>
-#include <layers_id_colors_and_visibility.h>    // LAYER_ID
+#include <layers_id_colors_and_visibility.h>    // PCB_LAYER_ID
 #include <common.h>                             // KiROUND
 #include <convert_to_biu.h>                     // IU_PER_MM
 #include <3d_cache/3d_info.h>
@@ -65,7 +65,7 @@ struct LAYER;
  */
 class PCB_PARSER : public PCB_LEXER
 {
-    typedef boost::unordered_map< std::string, LAYER_ID >   LAYER_ID_MAP;
+    typedef boost::unordered_map< std::string, PCB_LAYER_ID >   LAYER_ID_MAP;
     typedef boost::unordered_map< std::string, LSET >       LSET_MAP;
 
     BOARD*              m_board;
@@ -170,7 +170,7 @@ class PCB_PARSER : public PCB_LEXER
      * @throw PARSE_ERROR if the layer syntax is incorrect.
      * @return The index the parsed #BOARD_ITEM layer.
      */
-    LAYER_ID parseBoardItemLayer() throw( IO_ERROR, PARSE_ERROR );
+    PCB_LAYER_ID parseBoardItemLayer() throw( IO_ERROR, PARSE_ERROR );
 
     /**
      * Function parseBoardItemLayersAsMask

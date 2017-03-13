@@ -293,9 +293,9 @@ void GERBVIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     bool tmp;
     aCfg->Read( cfgShowDCodes, &tmp, true );
-    SetElementVisibility( DCODES_VISIBLE, tmp );
+    SetElementVisibility( LAYER_DCODES, tmp );
     aCfg->Read( cfgShowNegativeObjects, &tmp, false );
-    SetElementVisibility( NEGATIVE_OBJECTS_VISIBLE, tmp );
+    SetElementVisibility( LAYER_NEGATIVE_OBJECTS, tmp );
 
     // because we have more than one file history, we must read this one
     // using a specific path
@@ -320,9 +320,9 @@ void GERBVIEW_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     aCfg->Write( cfgShowPageSizeOption, GetPageSettings().GetType() );
     aCfg->Write( cfgShowBorderAndTitleBlock, m_showBorderAndTitleBlock );
-    aCfg->Write( cfgShowDCodes, IsElementVisible( DCODES_VISIBLE ) );
+    aCfg->Write( cfgShowDCodes, IsElementVisible( LAYER_DCODES ) );
     aCfg->Write( cfgShowNegativeObjects,
-                 IsElementVisible( NEGATIVE_OBJECTS_VISIBLE ) );
+                 IsElementVisible( LAYER_NEGATIVE_OBJECTS ) );
 
     // Save the drill file history list.
     // Because we have  more than one file history, we must save this one
@@ -362,20 +362,20 @@ void GERBVIEW_FRAME::ReFillLayerWidget()
 }
 
 
-void GERBVIEW_FRAME::SetElementVisibility( GERBER_VISIBLE_ID aItemIdVisible,
+void GERBVIEW_FRAME::SetElementVisibility( GERBVIEW_LAYER_ID aItemIdVisible,
                                            bool aNewState )
 {
     switch( aItemIdVisible )
     {
-    case DCODES_VISIBLE:
+    case LAYER_DCODES:
         m_DisplayOptions.m_DisplayDCodes = aNewState;
         break;
 
-    case NEGATIVE_OBJECTS_VISIBLE:
+    case LAYER_NEGATIVE_OBJECTS:
         m_DisplayOptions.m_DisplayNegativeObjects = aNewState;
         break;
 
-    case GERBER_GRID_VISIBLE:
+    case LAYER_GERBVIEW_GRID:
         SetGridVisibility( aNewState );
         break;
 
@@ -562,19 +562,19 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
 }
 
 
-bool GERBVIEW_FRAME::IsElementVisible( GERBER_VISIBLE_ID aItemIdVisible ) const
+bool GERBVIEW_FRAME::IsElementVisible( GERBVIEW_LAYER_ID aItemIdVisible ) const
 {
     switch( aItemIdVisible )
     {
-    case DCODES_VISIBLE:
+    case LAYER_DCODES:
         return m_DisplayOptions.m_DisplayDCodes;
         break;
 
-    case NEGATIVE_OBJECTS_VISIBLE:
+    case LAYER_NEGATIVE_OBJECTS:
         return m_DisplayOptions.m_DisplayNegativeObjects;
         break;
 
-    case GERBER_GRID_VISIBLE:
+    case LAYER_GERBVIEW_GRID:
         return IsGridVisible();
         break;
 
@@ -607,18 +607,18 @@ bool GERBVIEW_FRAME::IsLayerVisible( int aLayer ) const
 }
 
 
-COLOR4D GERBVIEW_FRAME::GetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible ) const
+COLOR4D GERBVIEW_FRAME::GetVisibleElementColor( GERBVIEW_LAYER_ID aItemIdVisible ) const
 {
     COLOR4D color = COLOR4D::UNSPECIFIED;
 
     switch( aItemIdVisible )
     {
-    case NEGATIVE_OBJECTS_VISIBLE:
-    case DCODES_VISIBLE:
+    case LAYER_NEGATIVE_OBJECTS:
+    case LAYER_DCODES:
         color = m_colorsSettings->GetItemColor( aItemIdVisible );
         break;
 
-    case GERBER_GRID_VISIBLE:
+    case LAYER_GERBVIEW_GRID:
         color = GetGridColor();
         break;
 
@@ -634,21 +634,21 @@ COLOR4D GERBVIEW_FRAME::GetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible
 void GERBVIEW_FRAME::SetGridVisibility( bool aVisible )
 {
     EDA_DRAW_FRAME::SetGridVisibility( aVisible );
-    m_LayersManager->SetRenderState( GERBER_GRID_VISIBLE, aVisible );
+    m_LayersManager->SetRenderState( LAYER_GERBVIEW_GRID, aVisible );
 }
 
 
-void GERBVIEW_FRAME::SetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible,
+void GERBVIEW_FRAME::SetVisibleElementColor( GERBVIEW_LAYER_ID aItemIdVisible,
                                              COLOR4D aColor )
 {
     switch( aItemIdVisible )
     {
-    case NEGATIVE_OBJECTS_VISIBLE:
-    case DCODES_VISIBLE:
+    case LAYER_NEGATIVE_OBJECTS:
+    case LAYER_DCODES:
         m_colorsSettings->SetItemColor( aItemIdVisible, aColor );
         break;
 
-    case GERBER_GRID_VISIBLE:
+    case LAYER_GERBVIEW_GRID:
         SetGridColor( aColor );
         m_colorsSettings->SetItemColor( aItemIdVisible, aColor );
         break;
@@ -661,8 +661,8 @@ void GERBVIEW_FRAME::SetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible,
 
 COLOR4D GERBVIEW_FRAME::GetNegativeItemsColor() const
 {
-    if( IsElementVisible( NEGATIVE_OBJECTS_VISIBLE ) )
-        return GetVisibleElementColor( NEGATIVE_OBJECTS_VISIBLE );
+    if( IsElementVisible( LAYER_NEGATIVE_OBJECTS ) )
+        return GetVisibleElementColor( LAYER_NEGATIVE_OBJECTS );
     else
         return GetDrawBgColor();
 }

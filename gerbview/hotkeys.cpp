@@ -185,12 +185,12 @@ bool GERBVIEW_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_GBR_NEGATIVE_DISPLAY_ONOFF:
-        SetElementVisibility( NEGATIVE_OBJECTS_VISIBLE, not IsElementVisible( NEGATIVE_OBJECTS_VISIBLE ) );
+        SetElementVisibility( LAYER_NEGATIVE_OBJECTS, not IsElementVisible( LAYER_NEGATIVE_OBJECTS ) );
         m_canvas->Refresh();
         break;
 
     case HK_GBR_DCODE_DISPLAY_ONOFF:
-        SetElementVisibility( DCODES_VISIBLE, not IsElementVisible( DCODES_VISIBLE ) );
+        SetElementVisibility( LAYER_DCODES, not IsElementVisible( LAYER_DCODES ) );
         m_canvas->Refresh();
         break;
 

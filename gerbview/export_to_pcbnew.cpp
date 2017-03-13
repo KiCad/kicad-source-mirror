@@ -456,7 +456,7 @@ void GBR_TO_PCB_EXPORTER::writePcbHeader( LAYER_NUM* aLayerLookUpTable )
         fprintf( m_fp, "    (%d %s signal)\n", id, TO_UTF8( GetPCBDefaultLayerName( id ) ) );
     }
 
-    for( int ii = B_Adhes; ii < LAYER_ID_COUNT; ii++ )
+    for( int ii = B_Adhes; ii < PCB_LAYER_ID_COUNT; ii++ )
     {
         fprintf( m_fp, "    (%d %s user)\n", ii, TO_UTF8( GetPCBDefaultLayerName( ii ) ) );
     }

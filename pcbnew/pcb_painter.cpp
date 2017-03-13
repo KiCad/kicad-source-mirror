@@ -54,7 +54,7 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_sketchFpGfx = false;
 
     // By default everything should be displayed as filled
-    for( unsigned int i = 0; i < TOTAL_LAYER_COUNT; ++i )
+    for( unsigned int i = 0; i < PCB_LAYER_ID_COUNT; ++i )
     {
         m_sketchMode[i] = false;
     }
@@ -65,41 +65,42 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
 
 void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSettings )
 {
-    for( int i = 0; i < LAYER_ID_COUNT; i++ )
+    for( int i = 0; i < PCB_LAYER_ID_COUNT; i++ )
     {
         m_layerColors[i] = aSettings->GetLayerColor( i );
         m_layerColors[i].a = 0.8;   // slightly transparent
     }
 
-    for( int i = 0; i < END_PCB_VISIBLE_LIST; i++ )
-        m_layerColors[ITEM_GAL_LAYER( i )] = aSettings->GetItemColor( i );
+    for( int i = GAL_LAYER_ID_START; i < GAL_LAYER_ID_END; i++ )
+        m_layerColors[i] = aSettings->GetItemColor( i );
 
-    m_layerColors[ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE )]            = m_layerColors[F_SilkS];
-    m_layerColors[ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE )]            = m_layerColors[B_SilkS];
+    m_layerColors[LAYER_MOD_TEXT_FR]            = m_layerColors[F_SilkS];
+    m_layerColors[LAYER_MOD_TEXT_BK]            = m_layerColors[B_SilkS];
 
     // Default colors for specific layers
-    m_layerColors[ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE )]             = COLOR4D( 0.5, 0.4, 0.0, 0.8 );
-    m_layerColors[ITEM_GAL_LAYER( PADS_HOLES_VISIBLE )]             = COLOR4D( 0.0, 0.5, 0.5, 0.8 );
-    m_layerColors[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )]            = COLOR4D( 0.6, 0.6, 0.6, 0.8 );
-    m_layerColors[ITEM_GAL_LAYER( VIA_BBLIND_VISIBLE )]             = COLOR4D( 0.6, 0.6, 0.6, 0.8 );
-    m_layerColors[ITEM_GAL_LAYER( VIA_MICROVIA_VISIBLE )]           = COLOR4D( 0.4, 0.4, 0.8, 0.8 );
-    m_layerColors[ITEM_GAL_LAYER( PADS_VISIBLE )]                   = COLOR4D( 0.6, 0.6, 0.6, 0.8 );
-    m_layerColors[NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE )]      = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
-    m_layerColors[NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE )]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
-    m_layerColors[NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE )]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
-    m_layerColors[ITEM_GAL_LAYER( ANCHOR_VISIBLE )]                 = COLOR4D( 0.3, 0.3, 1.0, 0.9 );
-    m_layerColors[ITEM_GAL_LAYER( WORKSHEET )]                      = COLOR4D( 0.5, 0.0, 0.0, 0.8 );
-    m_layerColors[ITEM_GAL_LAYER( DRC_VISIBLE )]                    = COLOR4D( 1.0, 0.0, 0.0, 0.8 );
+    m_layerColors[LAYER_VIAS_HOLES]             = COLOR4D( 0.5, 0.4, 0.0, 0.8 );
+    m_layerColors[LAYER_PADS_HOLES]             = COLOR4D( 0.0, 0.5, 0.5, 0.8 );
+    m_layerColors[LAYER_VIA_THROUGH]            = COLOR4D( 0.6, 0.6, 0.6, 0.8 );
+    m_layerColors[LAYER_VIA_BBLIND]             = COLOR4D( 0.6, 0.6, 0.6, 0.8 );
+    m_layerColors[LAYER_VIA_MICROVIA]           = COLOR4D( 0.4, 0.4, 0.8, 0.8 );
+    m_layerColors[LAYER_PADS]                   = COLOR4D( 0.6, 0.6, 0.6, 0.8 );
+    m_layerColors[LAYER_PADS_NETNAMES]          = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
+    m_layerColors[LAYER_PAD_FR_NETNAMES]        = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
+    m_layerColors[LAYER_PAD_BK_NETNAMES]        = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
+    m_layerColors[LAYER_ANCHOR]                 = COLOR4D( 0.3, 0.3, 1.0, 0.9 );
+    m_layerColors[LAYER_RATSNEST]               = COLOR4D( 0.4, 0.4, 0.4, 0.8 );
+    m_layerColors[LAYER_WORKSHEET]              = COLOR4D( 0.5, 0.0, 0.0, 0.8 );
+    m_layerColors[LAYER_DRC]                    = COLOR4D( 1.0, 0.0, 0.0, 0.8 );
 
     // Make ratsnest lines slightly transparent
-    m_layerColors[ITEM_GAL_LAYER( RATSNEST_VISIBLE )].a = 0.8;
+    m_layerColors[LAYER_RATSNEST].a = 0.8;
 
     // Netnames for copper layers
     for( LSEQ cu = LSET::AllCuMask().CuStack();  cu;  ++cu )
     {
         const COLOR4D lightLabel( 0.8, 0.8, 0.8, 0.7 );
         const COLOR4D darkLabel = lightLabel.Inverted();
-        LAYER_ID layer = *cu;
+        PCB_LAYER_ID layer = *cu;
 
         if( m_layerColors[layer].GetBrightness() > 0.5 )
             m_layerColors[GetNetnameLayer( layer )] = darkLabel;
@@ -122,11 +123,11 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const DISPLAY_OPTIONS* aOptions )
     m_sketchFpGfx       = !aOptions->m_DisplayModEdgeFill;
 
     // Whether to draw tracks, vias & pads filled or as outlines
-    m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )]         = !aOptions->m_DisplayPadFill;
-    m_sketchMode[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )]  = !aOptions->m_DisplayViaFill;
-    m_sketchMode[ITEM_GAL_LAYER( VIA_BBLIND_VISIBLE )]   = !aOptions->m_DisplayViaFill;
-    m_sketchMode[ITEM_GAL_LAYER( VIA_MICROVIA_VISIBLE )] = !aOptions->m_DisplayViaFill;
-    m_sketchMode[ITEM_GAL_LAYER( TRACKS_VISIBLE )]       = !aOptions->m_DisplayPcbTrackFill;
+    m_sketchMode[LAYER_PADS]         = !aOptions->m_DisplayPadFill;
+    m_sketchMode[LAYER_VIA_THROUGH]  = !aOptions->m_DisplayViaFill;
+    m_sketchMode[LAYER_VIA_BBLIND]   = !aOptions->m_DisplayViaFill;
+    m_sketchMode[LAYER_VIA_MICROVIA] = !aOptions->m_DisplayViaFill;
+    m_sketchMode[LAYER_TRACKS]       = !aOptions->m_DisplayPcbTrackFill;
 
     // Net names display settings
     switch( aOptions->m_DisplayNetNamesMode )
@@ -355,7 +356,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
         m_gal->SetStrokeColor( color );
         m_gal->SetIsStroke( true );
 
-        if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( TRACKS_VISIBLE )] )
+        if( m_pcbSettings.m_sketchMode[LAYER_TRACKS] )
         {
             // Outline mode
             m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
@@ -396,7 +397,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
         return;
 
     // Choose drawing settings depending on if we are drawing via's pad or hole
-    if( aLayer == ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ) )
+    if( aLayer == LAYER_VIAS_HOLES )
         radius = aVia->GetDrillValue() / 2.0;
     else
         radius = aVia->GetWidth() / 2.0;
@@ -407,15 +408,15 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
     switch( aVia->GetViaType() )
     {
     case VIA_THROUGH:
-        sketchMode = m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE )];
+        sketchMode = m_pcbSettings.m_sketchMode[LAYER_VIA_THROUGH];
         break;
 
     case VIA_BLIND_BURIED:
-        sketchMode = m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( VIA_BBLIND_VISIBLE )];
+        sketchMode = m_pcbSettings.m_sketchMode[LAYER_VIA_BBLIND];
         break;
 
     case VIA_MICROVIA:
-        sketchMode = m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( VIA_MICROVIA_VISIBLE )];
+        sketchMode = m_pcbSettings.m_sketchMode[LAYER_VIA_MICROVIA];
         break;
 
     default:
@@ -426,10 +427,10 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
     if( aVia->GetViaType() == VIA_BLIND_BURIED )
     {
         // Buried vias are drawn in a special way to indicate the top and bottom layers
-        LAYER_ID layerTop, layerBottom;
+        PCB_LAYER_ID layerTop, layerBottom;
         aVia->LayerPair( &layerTop, &layerBottom );
 
-        if( aLayer == ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ) )
+        if( aLayer == LAYER_VIAS_HOLES )
         {                                                               // TODO outline mode
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
@@ -453,7 +454,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
             {
                 m_gal->DrawArc( center, radius, M_PI, 3.0 * M_PI / 2.0 );
             }
-            else if( aLayer == ITEM_GAL_LAYER( VIA_BBLIND_VISIBLE ) )
+            else if( aLayer == LAYER_VIA_BBLIND )
             {
                 m_gal->DrawArc( center, radius, M_PI / 2.0, M_PI );
                 m_gal->DrawArc( center, radius, 3.0 * M_PI / 2.0, 2.0 * M_PI );
@@ -485,7 +486,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
     constexpr int clearanceFlags = PCB_RENDER_SETTINGS::CL_EXISTING | PCB_RENDER_SETTINGS::CL_VIAS;
 
     if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags
-            && aLayer != ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ) )
+            && aLayer != LAYER_VIAS_HOLES )
     {
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
         m_gal->SetIsFill( false );
@@ -601,7 +602,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     const COLOR4D& color = m_pcbSettings.GetColor( aPad, aLayer );
     VECTOR2D size;
 
-    if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )] )
+    if( m_pcbSettings.m_sketchMode[LAYER_PADS] )
     {
         // Outline mode
         m_gal->SetIsFill( false );
@@ -622,7 +623,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     m_gal->Rotate( -aPad->GetOrientationRadians() );
 
     // Choose drawing settings depending on if we are drawing a pad itself or a hole
-    if( aLayer == ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ) )
+    if( aLayer == LAYER_PADS_HOLES )
     {
         // Drawing hole: has same shape as PAD_CIRCLE or PAD_OVAL
         size  = VECTOR2D( aPad->GetDrillSize() ) / 2.0;
@@ -664,7 +665,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             m = ( size.y - size.x );
             n = size.x;
 
-            if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )] )
+            if( m_pcbSettings.m_sketchMode[LAYER_PADS] )
             {
                 // Outline mode
                 m_gal->DrawArc( VECTOR2D( 0, -m ), n, -M_PI, 0 );
@@ -685,7 +686,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             m = ( size.x - size.y );
             n = size.y;
 
-            if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )] )
+            if( m_pcbSettings.m_sketchMode[LAYER_PADS] )
             {
                 // Outline mode
                 m_gal->DrawArc( VECTOR2D( -m, 0 ), n, M_PI / 2, 3 * M_PI / 2 );
@@ -716,7 +717,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         TransformRoundRectToPolygon( polySet, wxPoint( 0, 0 ), prsize,
                 0.0, corner_radius, segmentToCircleCount );
 
-        if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )] )
+        if( m_pcbSettings.m_sketchMode[LAYER_PADS] )
         {
             if( polySet.OutlineCount() > 0 )
                 m_gal->DrawPolyline( polySet.Outline( 0 ) );
@@ -744,7 +745,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         polySet.Append( VECTOR2I( corners[2] ) );
         polySet.Append( VECTOR2I( corners[3] ) );
 
-        if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )] )
+        if( m_pcbSettings.m_sketchMode[LAYER_PADS] )
             m_gal->DrawPolyline( polySet.COutline( 0 ) );
         else
             m_gal->DrawPolygon( polySet );
@@ -764,9 +765,9 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     constexpr int clearanceFlags = /*PCB_RENDER_SETTINGS::CL_EXISTING |*/ PCB_RENDER_SETTINGS::CL_PADS;
 
     if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags
-            && ( aLayer == ITEM_GAL_LAYER( PAD_FR_VISIBLE )
-                || aLayer == ITEM_GAL_LAYER( PAD_BK_VISIBLE )
-                || aLayer == ITEM_GAL_LAYER( PADS_VISIBLE ) ) )
+            && ( aLayer == LAYER_PAD_FR
+                || aLayer == LAYER_PAD_BK
+                || aLayer == LAYER_PADS ) )
     {
         SHAPE_POLY_SET polySet;
         constexpr int SEGCOUNT = 64;
@@ -943,9 +944,9 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
 
 void PCB_PAINTER::draw( const MODULE* aModule, int aLayer )
 {
-    if( aLayer == ITEM_GAL_LAYER( ANCHOR_VISIBLE ) )
+    if( aLayer == LAYER_ANCHOR )
     {
-        const COLOR4D color = m_pcbSettings.GetColor( aModule, ITEM_GAL_LAYER( ANCHOR_VISIBLE ) );
+        const COLOR4D color = m_pcbSettings.GetColor( aModule, LAYER_ANCHOR );
 
         // Draw anchor
         m_gal->SetStrokeColor( color );

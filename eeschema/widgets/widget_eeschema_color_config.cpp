@@ -90,7 +90,7 @@ static COLORBUTTON sheetColorButtons[] = {
 static COLORBUTTON miscColorButtons[] = {
     { _( "ERC warning" ),       LAYER_ERC_WARN },
     { _( "ERC error" ),         LAYER_ERC_ERR },
-    { _( "Grid" ),              LAYER_GRID },
+    { _( "Grid" ),              LAYER_SCHEMATIC_GRID },
     { _( "Brightened" ),        LAYER_BRIGHTENED },
     { wxT( "" ), -1 }                           // Sentinel marking end of list.
 };
@@ -104,9 +104,9 @@ static BUTTONINDEX buttonGroups[] = {
     { wxT( "" ), NULL }
 };
 
-static COLORBUTTON bgColorButton = { "", LAYER_BACKGROUND };
+static COLORBUTTON bgColorButton = { "", LAYER_SCHEMATIC_BACKGROUND };
 
-static COLOR4D currentColors[ LAYERSCH_ID_COUNT ];
+static COLOR4D currentColors[ SCH_LAYER_ID_COUNT ];
 
 
 WIDGET_EESCHEMA_COLOR_CONFIG::WIDGET_EESCHEMA_COLOR_CONFIG( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFrame ) :
@@ -151,8 +151,8 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
             rowBoxSizer = new wxBoxSizer( wxHORIZONTAL );
             columnBoxSizer->Add( rowBoxSizer, 0, wxGROW | wxALL, 0 );
 
-            COLOR4D color = GetLayerColor( LAYERSCH_ID( buttons->m_Layer ) );
-            currentColors[ buttons->m_Layer ] = color;
+            COLOR4D color = GetLayerColor( SCH_LAYER_ID( buttons->m_Layer ) );
+            currentColors[ SCH_LAYER_INDEX( buttons->m_Layer ) ] = color;
 
             wxMemoryDC iconDC;
             wxBitmap   bitmap( BUTT_SIZE_X, BUTT_SIZE_Y );
@@ -217,7 +217,7 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
         columnBoxSizer->Add( selBgColorBtn, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 5 );
     }
 
-    currentColors[ LAYER_BACKGROUND ] = bgColor;
+    currentColors[ SCH_LAYER_INDEX( LAYER_SCHEMATIC_BACKGROUND ) ] = bgColor;
 
     // Dialog now needs to be resized, but the associated command is found elsewhere.
 }
@@ -234,7 +234,7 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::SetColor( wxCommandEvent& event )
     wxCHECK_RET( colorButton != NULL, wxT( "Client data not set for color button." ) );
 
     wxColourData colourData;
-    colourData.SetColour( currentColors[ colorButton->m_Layer ].ToColour() );
+    colourData.SetColour( currentColors[ SCH_LAYER_INDEX( colorButton->m_Layer ) ].ToColour() );
     wxColourDialog *dialog = new wxColourDialog( this, &colourData );
 
     COLOR4D newColor = COLOR4D::UNSPECIFIED;
@@ -244,10 +244,11 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::SetColor( wxCommandEvent& event )
         newColor = COLOR4D( dialog->GetColourData().GetColour() );
     }
 
-    if( newColor == COLOR4D::UNSPECIFIED || currentColors[ colorButton->m_Layer ] == newColor )
+    if( newColor == COLOR4D::UNSPECIFIED ||
+        currentColors[ SCH_LAYER_INDEX( colorButton->m_Layer ) ] == newColor )
         return;
 
-    currentColors[ colorButton->m_Layer ] = newColor;
+    currentColors[ SCH_LAYER_INDEX( colorButton->m_Layer ) ] = newColor;
 
     wxMemoryDC iconDC;
 
@@ -275,11 +276,11 @@ bool WIDGET_EESCHEMA_COLOR_CONFIG::TransferDataFromControl()
     // Check for color conflicts with background color to give user a chance to bail
     // out before making changes.
 
-    COLOR4D bgcolor = currentColors[LAYER_BACKGROUND];
+    COLOR4D bgcolor = currentColors[ SCH_LAYER_INDEX( LAYER_SCHEMATIC_BACKGROUND ) ];
 
-    for( LAYERSCH_ID clyr = LAYER_WIRE; clyr < LAYERSCH_ID_COUNT; ++clyr )
+    for( SCH_LAYER_ID clyr = LAYER_WIRE; clyr < SCH_LAYER_ID_END; ++clyr )
     {
-        if( bgcolor == currentColors[ clyr ] && clyr != LAYER_BACKGROUND )
+        if( bgcolor == currentColors[ SCH_LAYER_INDEX( clyr ) ] && clyr != LAYER_SCHEMATIC_BACKGROUND )
         {
             warning = true;
             break;
@@ -300,15 +301,15 @@ bool WIDGET_EESCHEMA_COLOR_CONFIG::TransferDataFromControl()
 
     // Update color of background
     GetDrawFrame()->SetDrawBgColor( bgcolor );
-    currentColors[ LAYER_BACKGROUND ] = bgcolor;
+    currentColors[ SCH_LAYER_INDEX( LAYER_SCHEMATIC_BACKGROUND ) ] = bgcolor;
 
 
-    for( LAYERSCH_ID clyr = LAYER_WIRE; clyr < LAYERSCH_ID_COUNT; ++clyr )
+    for( SCH_LAYER_ID clyr = LAYER_WIRE; clyr < SCH_LAYER_ID_END; ++clyr )
     {
-        SetLayerColor( currentColors[ clyr ], clyr );
+        SetLayerColor( currentColors[ SCH_LAYER_INDEX( clyr ) ], clyr );
     }
 
-    GetDrawFrame()->SetGridColor( GetLayerColor( LAYER_GRID ) );
+    GetDrawFrame()->SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
     GetDrawFrame()->GetCanvas()->Refresh();
 
     return true;

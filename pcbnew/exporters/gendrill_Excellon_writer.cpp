@@ -714,7 +714,7 @@ std::vector<DRILL_LAYER_PAIR> EXCELLON_WRITER::getUniqueLayerPairs() const
 }
 
 
-const std::string EXCELLON_WRITER::layerName( LAYER_ID aLayer ) const
+const std::string EXCELLON_WRITER::layerName( PCB_LAYER_ID aLayer ) const
 {
     // Generic names here.
     switch( aLayer )

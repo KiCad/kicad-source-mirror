@@ -492,19 +492,19 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
 
     const int layerCount = bds.GetCopperLayerCount();
     int currentLayer = m_router->GetCurrentLayer();
-    LAYER_ID pairTop = m_frame->GetScreen()->m_Route_Layer_TOP;
-    LAYER_ID pairBottom = m_frame->GetScreen()->m_Route_Layer_BOTTOM;
+    PCB_LAYER_ID pairTop = m_frame->GetScreen()->m_Route_Layer_TOP;
+    PCB_LAYER_ID pairBottom = m_frame->GetScreen()->m_Route_Layer_BOTTOM;
 
     PNS::SIZES_SETTINGS sizes = m_router->Sizes();
 
     // ask the user for a target layer
-    LAYER_ID targetLayer = UNDEFINED_LAYER;
+    PCB_LAYER_ID targetLayer = UNDEFINED_LAYER;
 
     if( selectLayer )
     {
         wxPoint dlgPosition = wxGetMousePosition();
 
-        targetLayer = m_frame->SelectLayer( static_cast<LAYER_ID>( currentLayer ),
+        targetLayer = m_frame->SelectLayer( static_cast<PCB_LAYER_ID>( currentLayer ),
                 LSET::AllNonCuMask(), dlgPosition );
     }
 

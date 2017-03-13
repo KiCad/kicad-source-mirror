@@ -606,7 +606,7 @@ public:
      * @param aDlgPosition = position of dialog ( defualt = centered)
      * @return the selected layer id
      */
-    LAYER_ID SelectLayer( LAYER_ID aDefaultLayer,
+    PCB_LAYER_ID SelectLayer( PCB_LAYER_ID aDefaultLayer,
                           LSET aNotAllowedLayersMask = LSET(),
                           wxPoint aDlgPosition = wxDefaultPosition );
 
@@ -615,13 +615,13 @@ public:
      */
     void SelectCopperLayerPair();
 
-    virtual void SwitchLayer( wxDC* DC, LAYER_ID layer );
+    virtual void SwitchLayer( wxDC* DC, PCB_LAYER_ID layer );
 
     /**
      * Function SetActiveLayer
      * will change the currently active layer to \a aLayer.
      */
-    virtual void SetActiveLayer( LAYER_ID aLayer )
+    virtual void SetActiveLayer( PCB_LAYER_ID aLayer )
     {
         GetScreen()->m_Active_Layer = aLayer;
     }
@@ -630,7 +630,7 @@ public:
      * Function GetActiveLayer
      * returns the active layer
      */
-    virtual LAYER_ID GetActiveLayer() const
+    virtual PCB_LAYER_ID GetActiveLayer() const
     {
         return GetScreen()->m_Active_Layer;
     }

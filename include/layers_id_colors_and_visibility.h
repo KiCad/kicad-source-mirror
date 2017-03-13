@@ -47,15 +47,35 @@ class BOARD;
  */
 typedef int     LAYER_NUM;
 
+/**
+ * A quick note on layer IDs:
+ *
+ * The layers are stored in separate enums so that certain functions can
+ * take in the enums as datatypes and don't have to know about layers from
+ * other applications.
+ *
+ * Layers that are shared between applications should be in the GAL_LAYER_ID enum.
+ *
+ * The PCB_LAYER_ID struct must start at zero for compatibility with legacy board files.
+ *
+ * Some functions accept any layer ID, so they start at zero (i.e. F_Cu) and go up to
+ * the LAYER_ID_COUNT, which needs to be kept up-to-date if new enums are added.
+ */
+
 
 /**
- * Enum LAYER_ID
- * is the set of PCB layers.  It has nothing to do with gerbers or view layers.
- * One of these cannot be "incremented".
+ * Enum PCB_LAYER_ID
+ * This is the definition of all layers used in Pcbnew
+ * The PCB layer types are fixed at value 0 through LAYER_ID_COUNT,
+ * to ensure compatibility with legacy board files.
+ *
  */
-enum LAYER_ID: int
+enum PCB_LAYER_ID: int
 {
-    F_Cu,           // 0
+    UNDEFINED_LAYER = -1,
+    UNSELECTED_LAYER = -2,
+
+    F_Cu = 0,           // 0
     In1_Cu,
     In2_Cu,
     In3_Cu,
@@ -113,22 +133,181 @@ enum LAYER_ID: int
     B_Fab,
     F_Fab,
 
-    LAYER_ID_COUNT,
-
-    UNDEFINED_LAYER = -1,
-    UNSELECTED_LAYER = -2,
+    PCB_LAYER_ID_COUNT
 };
-
 
 #define MAX_CU_LAYERS       (B_Cu - F_Cu + 1)
 
+/// Dedicated layers for net names used in Pcbnew
+enum NETNAMES_LAYER_ID: int
+{
+
+    NETNAMES_LAYER_ID_START = PCB_LAYER_ID_COUNT,
+
+    /// Reserved space for board layer netnames
+
+    NETNAMES_LAYER_ID_RESERVED = NETNAMES_LAYER_ID_START + PCB_LAYER_ID_COUNT,
+
+    /// Additional netnames layers (not associated with a PCB layer)
+
+    LAYER_PAD_FR_NETNAMES,
+    LAYER_PAD_BK_NETNAMES,
+    LAYER_PADS_NETNAMES,
+
+    NETNAMES_LAYER_ID_END
+};
+
+/// Macro for obtaining netname layer for a given PCB layer
+#define NETNAMES_LAYER_INDEX( layer )   ( NETNAMES_LAYER_ID_START + layer )
+
+/// GAL layers are "virtual" layers, i.e. not tied into design data.
+/// Some layers here are shared between applications.
+enum GAL_LAYER_ID: int
+{
+    GAL_LAYER_ID_START = NETNAMES_LAYER_ID_END,
+
+    LAYER_VIAS = GAL_LAYER_ID_START,
+    LAYER_VIA_MICROVIA,
+    LAYER_VIA_BBLIND,
+    LAYER_VIA_THROUGH,
+    LAYER_NON_PLATED,
+    LAYER_MOD_TEXT_FR,
+    LAYER_MOD_TEXT_BK,
+    LAYER_MOD_TEXT_INVISIBLE,   ///< text marked as invisible
+    LAYER_ANCHOR,
+    LAYER_PAD_FR,
+    LAYER_PAD_BK,
+    LAYER_RATSNEST,
+    LAYER_GRID,
+    LAYER_GRID_AXES,
+    LAYER_NO_CONNECTS,          ///< show a marker on pads with no nets
+    LAYER_MOD_FR,               ///< show modules on front
+    LAYER_MOD_BK,               ///< show modules on back
+    LAYER_MOD_VALUES,           ///< show modules values (when texts are visibles)
+    LAYER_MOD_REFERENCES,       ///< show modules references (when texts are visibles)
+    LAYER_TRACKS,
+    LAYER_PADS,                 ///< multilayer pads, usually with holes
+    LAYER_PADS_HOLES,
+    LAYER_VIAS_HOLES,
+    LAYER_DRC,                  ///< drc markers
+    LAYER_WORKSHEET,            ///< worksheet frame
+    LAYER_GP_OVERLAY,           ///< general purpose overlay
+
+    /// This is the end of the layers used for visibility bitmasks in Pcbnew
+    /// There can be at most 32 layers above here.
+    GAL_LAYER_ID_BITMASK_END,
+
+    /// Add new GAL layers here
+
+    GAL_LAYER_ID_END
+};
+
+/// Use this macro to convert a GAL layer to a 0-indexed offset from LAYER_VIAS
+#define GAL_LAYER_INDEX( x ) ( x - GAL_LAYER_ID_START )
+
+inline GAL_LAYER_ID operator++( GAL_LAYER_ID& a )
+{
+    a = GAL_LAYER_ID( int( a ) + 1 );
+    return a;
+}
+
+/// Used for via types
+inline GAL_LAYER_ID operator+( const GAL_LAYER_ID& a, int b )
+{
+    GAL_LAYER_ID t = GAL_LAYER_ID( int( a ) + b );
+    wxASSERT( t <= GAL_LAYER_ID_END );
+    return t;
+}
+
+/// Eeschema drawing layers
+enum SCH_LAYER_ID: int
+{
+    SCH_LAYER_ID_START = GAL_LAYER_ID_END,
+
+    LAYER_WIRE = SCH_LAYER_ID_START,
+    LAYER_BUS,
+    LAYER_JUNCTION,
+    LAYER_LOCLABEL,
+    LAYER_GLOBLABEL,
+    LAYER_HIERLABEL,
+    LAYER_PINNUM,
+    LAYER_PINNAM,
+    LAYER_REFERENCEPART,
+    LAYER_VALUEPART,
+    LAYER_FIELDS,
+    LAYER_DEVICE,
+    LAYER_NOTES,
+    LAYER_NETNAM,
+    LAYER_PIN,
+    LAYER_SHEET,
+    LAYER_SHEETNAME,
+    LAYER_SHEETFILENAME,
+    LAYER_SHEETLABEL,
+    LAYER_NOCONNECT,
+    LAYER_ERC_WARN,
+    LAYER_ERC_ERR,
+    LAYER_DEVICE_BACKGROUND,
+    LAYER_SCHEMATIC_GRID,
+    LAYER_SCHEMATIC_BACKGROUND,
+    LAYER_BRIGHTENED,
+
+    SCH_LAYER_ID_END
+};
+
+#define SCH_LAYER_ID_COUNT ( SCH_LAYER_ID_END - SCH_LAYER_ID_START )
+
+#define SCH_LAYER_INDEX( x ) ( x - SCH_LAYER_ID_START )
+
+inline SCH_LAYER_ID operator++( SCH_LAYER_ID& a )
+{
+    a = SCH_LAYER_ID( int( a ) + 1 );
+    return a;
+}
+
+// number of draw layers in Gerbview
+#define GERBER_DRAWLAYERS_COUNT 32
+
+/// GerbView draw layers
+enum GERBVIEW_LAYER_ID: int
+{
+    GERBVIEW_LAYER_ID_START = SCH_LAYER_ID_END,
+
+    /// GerbView draw layers
+    GERBVIEW_LAYER_ID_RESERVED = GERBVIEW_LAYER_ID_START + GERBER_DRAWLAYERS_COUNT,
+
+    LAYER_DCODES,
+    LAYER_NEGATIVE_OBJECTS,
+    LAYER_GERBVIEW_GRID,
+    LAYER_GERBVIEW_AXES,
+    LAYER_GERBVIEW_BACKGROUND,
+
+    GERBVIEW_LAYER_ID_END
+};
+
+/// Must update this if you add any enums after GerbView!
+#define LAYER_ID_COUNT GERBVIEW_LAYER_ID_END
+
+
+// Some elements do not have yet a visibility control
+// from a dialog, but have a visibility control flag.
+// Here is a mask to set them visible, to be sure they are displayed
+// after loading a board for instance
+#define MIN_VISIBILITY_MASK int( (1 << GAL_LAYER_INDEX( LAYER_TRACKS ) ) +\
+                 ( 1 << GAL_LAYER_INDEX( LAYER_PADS ) ) +\
+                 ( 1 << GAL_LAYER_INDEX( LAYER_PADS_HOLES ) ) +\
+                 ( 1 << GAL_LAYER_INDEX( LAYER_VIAS_HOLES ) ) +\
+                 ( 1 << GAL_LAYER_INDEX( LAYER_DRC ) ) +\
+                 ( 1 << GAL_LAYER_INDEX( LAYER_WORKSHEET ) ) +\
+                 ( 1 << GAL_LAYER_INDEX( LAYER_GP_OVERLAY ) ) )
+
+
 /// A sequence of layers, a sequence provides a certain order.
-typedef std::vector<LAYER_ID>   BASE_SEQ;
+typedef std::vector<PCB_LAYER_ID>   BASE_SEQ;
 
 
 /**
  * Class LSEQ
- * is a sequence (and therefore also a set) of LAYER_IDs.  A sequence provides
+ * is a sequence (and therefore also a set) of PCB_LAYER_IDs.  A sequence provides
  * a certain order.
  * <p>
  * It can also be used as an iterator:
@@ -166,19 +345,19 @@ public:
 
     operator bool ()        { return m_index < size(); }
 
-    LAYER_ID operator * () const
+    PCB_LAYER_ID operator * () const
     {
         return at( m_index );       // throws std::out_of_range
     }
 };
 
 
-typedef std::bitset<LAYER_ID_COUNT>     BASE_SET;
+typedef std::bitset<PCB_LAYER_ID_COUNT>     BASE_SET;
 
 
 /**
  * Class LSET
- * is a set of LAYER_IDs.  It can be converted to numerous purpose LSEQs using
+ * is a set of PCB_LAYER_IDs.  It can be converted to numerous purpose LSEQs using
  * the various member functions, most of which are based on Seq(). The advantage
  * of converting to LSEQ using purposeful code, is it removes any dependency
  * on order/sequence inherent in this set.
@@ -190,7 +369,7 @@ public:
     // The constructor flavors are carefully chosen to prevent LSET( int ) from compiling.
     // That excludes  "LSET s = 0;" and excludes "LSET s = -1;", etc.
     // LSET s = 0;  needs to be removed from the code, this accomplishes that.
-    // Remember LSET( LAYER_ID(0) ) sets bit 0, so "LSET s = 0;" is illegal
+    // Remember LSET( PCB_LAYER_ID(0) ) sets bit 0, so "LSET s = 0;" is illegal
     // to prevent that surprize.  Therefore LSET's constructor suite is significantly
     // different than the base class from which it is derived.
 
@@ -212,8 +391,8 @@ public:
     }
 
     /**
-     * Constructor LSET( LAYER_ID )
-     * takes a LAYER_ID and sets that bit.  This makes the following code into
+     * Constructor LSET( PCB_LAYER_ID )
+     * takes a PCB_LAYER_ID and sets that bit.  This makes the following code into
      * a bug:
      *
      * <code>   LSET s = 0;  </code>
@@ -226,26 +405,26 @@ public:
      *
      * for an empty set.
      */
-    LSET( LAYER_ID aLayer ) :    // LAYER_ID deliberately exludes int and relatives
+    LSET( PCB_LAYER_ID aLayer ) :    // PCB_LAYER_ID deliberately exludes int and relatives
         BASE_SET()
     {
         set( aLayer );
     }
 
     /**
-     * Constructor LSET( const LAYER_ID* aArray, unsigned aCount )
+     * Constructor LSET( const PCB_LAYER_ID* aArray, unsigned aCount )
      * works well with an array or LSEQ.
      */
-    LSET( const LAYER_ID* aArray, unsigned aCount );
+    LSET( const PCB_LAYER_ID* aArray, unsigned aCount );
 
     /**
-     * Constructor LSET( unsigned, LAYER_ID, ...)
-     * takes one or more LAYER_IDs in the argument list to construct
+     * Constructor LSET( unsigned, PCB_LAYER_ID, ...)
+     * takes one or more PCB_LAYER_IDs in the argument list to construct
      * the set.  Typically only used in static construction.
      *
-     * @param aIdCount is the number of LAYER_IDs which follow.
+     * @param aIdCount is the number of PCB_LAYER_IDs which follow.
      * @param aFirst is the first included in @a aIdCount and must always be present, and can
-     *  be followed by any number of additional LAYER_IDs so long as @a aIdCount accurately
+     *  be followed by any number of additional PCB_LAYER_IDs so long as @a aIdCount accurately
      *  reflects the count.
      *
      *  Parameter is 'int' to avoid va_start undefined behavior.
@@ -256,7 +435,7 @@ public:
      * Function Name
      * returns the fixed name association with aLayerId.
      */
-    static const wxChar* Name( LAYER_ID aLayerId );
+    static const wxChar* Name( PCB_LAYER_ID aLayerId );
 
     /**
      * Function InternalCuMask()
@@ -267,7 +446,7 @@ public:
 
     /**
      * Function AllCuMask
-     * returns a mask holding the requested number of Cu LAYER_IDs.
+     * returns a mask holding the requested number of Cu PCB_LAYER_IDs.
      */
     static LSET AllCuMask( int aCuLayerCount = MAX_CU_LAYERS );
 
@@ -364,15 +543,15 @@ public:
      * returns an LSEQ from the union of this LSET and a desired sequence.  The LSEQ
      * element will be in the same sequence as aWishListSequence if they are present.
      * @param aWishListSequence establishes the order of the returned LSEQ, and the LSEQ will only
-     * contiain LAYER_IDs which are present in this set.
+     * contain PCB_LAYER_IDs which are present in this set.
      * @param aCount is the length of aWishListSequence array.
      */
-    LSEQ Seq( const LAYER_ID* aWishListSequence, unsigned aCount ) const;
+    LSEQ Seq( const PCB_LAYER_ID* aWishListSequence, unsigned aCount ) const;
 
     /**
      * Function Seq
-     * returns a LSEQ from this LSET in ascending LAYER_ID order.  Each LSEQ
-     * element will be in the same sequence as in LAYER_ID and only present
+     * returns a LSEQ from this LSET in ascending PCB_LAYER_ID order.  Each LSEQ
+     * element will be in the same sequence as in PCB_LAYER_ID and only present
      * in the resultant LSEQ if present in this set.  Therefore the sequence is
      * subject to change, use it only when enumeration and not order is important.
      */
@@ -408,138 +587,31 @@ public:
     std::string FmtBin() const;
 
     /**
-     * Find the first set LAYER_ID. Returns UNDEFINED_LAYER if more
+     * Find the first set PCB_LAYER_ID. Returns UNDEFINED_LAYER if more
      * than one is set or UNSELECTED_LAYER if none is set.
      */
-    LAYER_ID ExtractLayer() const;
+    PCB_LAYER_ID ExtractLayer() const;
 
 private:
 
-    /// Take this off the market, it may not be used because of LSET( LAYER_ID ).
+    /// Take this off the market, it may not be used because of LSET( PCB_LAYER_ID ).
     LSET( unsigned long __val )
     {
         // not usable, it's private.
     }
 };
 
-
-/**
- * Enum PCB_VISIBLE
- * is a set of visible PCB elements.
- * @see BOARD::SetVisibleElementColor()
- * @see BOARD::SetVisibleElement()
- */
-enum PCB_VISIBLE
-{
-    VIAS_VISIBLE,
-    VIA_MICROVIA_VISIBLE,
-    VIA_BBLIND_VISIBLE,
-    VIA_THROUGH_VISIBLE,
-    NON_PLATED_VISIBLE,
-    MOD_TEXT_FR_VISIBLE,
-    MOD_TEXT_BK_VISIBLE,
-    MOD_TEXT_INVISIBLE,         ///< text marked as invisible
-    ANCHOR_VISIBLE,
-    PAD_FR_VISIBLE,
-    PAD_BK_VISIBLE,
-    RATSNEST_VISIBLE,
-    GRID_VISIBLE,
-
-    // the rest of these do not currently support color changes:
-    NO_CONNECTS_VISIBLE,        ///< show a marker on pads with no nets
-    MOD_FR_VISIBLE,             ///< show modules on front
-    MOD_BK_VISIBLE,             ///< show modules on back
-    MOD_VALUES_VISIBLE,         ///< show modules values (when texts are visibles)
-    MOD_REFERENCES_VISIBLE,     ///< show modules references (when texts are visibles)
-
-    TRACKS_VISIBLE,
-    PADS_VISIBLE,               ///< multilayer pads, usually with holes
-    PADS_HOLES_VISIBLE,
-    VIAS_HOLES_VISIBLE,
-
-    DRC_VISIBLE,                ///< drc markers
-    WORKSHEET,                  ///< worksheet frame
-    GP_OVERLAY,                 ///< general purpose overlay
-
-    END_PCB_VISIBLE_LIST        // sentinel
-};
-
-// Some elements do not have yet a visibility control
-// from a dialog, but have a visibility control flag.
-// Here is a mask to set them visible, to be sure they are displayed
-// after loading a board for instance
-#define MIN_VISIBILITY_MASK int( (1 << TRACKS_VISIBLE) +\
-                 (1 << PADS_VISIBLE) +\
-                 (1 << PADS_HOLES_VISIBLE) +\
-                 (1 << VIAS_HOLES_VISIBLE) +\
-                 (1 << DRC_VISIBLE) +\
-                 (1 << WORKSHEET) +\
-                 (1 << GP_OVERLAY) )
-
-/**
- * Enum NETNAMES_VISIBLE
- * is a set of layers specific for displaying net names.
- * Their visiblity is not supposed to be saved in a board file,
- * they are only to be used by the GAL.
- */
-#if 0
-// was:
-enum NETNAMES_VISIBLE
-{
-    LAYER_1_NETNAMES_VISIBLE,   // bottom layer
-    LAYER_2_NETNAMES_VISIBLE,
-    LAYER_3_NETNAMES_VISIBLE,
-    LAYER_4_NETNAMES_VISIBLE,
-    LAYER_5_NETNAMES_VISIBLE,
-    LAYER_6_NETNAMES_VISIBLE,
-    LAYER_7_NETNAMES_VISIBLE,
-    LAYER_8_NETNAMES_VISIBLE,
-    LAYER_9_NETNAMES_VISIBLE,
-    LAYER_10_NETNAMES_VISIBLE,
-    LAYER_11_NETNAMES_VISIBLE,
-    LAYER_12_NETNAMES_VISIBLE,
-    LAYER_13_NETNAMES_VISIBLE,
-    LAYER_14_NETNAMES_VISIBLE,
-    LAYER_15_NETNAMES_VISIBLE,
-    LAYER_16_NETNAMES_VISIBLE,  // top layer
-
-    PAD_FR_NETNAMES_VISIBLE,
-    PAD_BK_NETNAMES_VISIBLE,
-    PADS_NETNAMES_VISIBLE,
-
-    END_NETNAMES_VISIBLE_LIST   // sentinel
-};
-#else
-enum NETNAMES_VISIBLE
-{
-    PAD_FR_NETNAMES_VISIBLE = B_Cu+1,
-    PAD_BK_NETNAMES_VISIBLE,
-    PADS_NETNAMES_VISIBLE,
-
-    END_NETNAMES_VISIBLE_LIST   // sentinel
-};
-#endif
-
-
-/// macro for obtaining layer number for specific item (eg. pad or text)
-#define ITEM_GAL_LAYER(layer)       (LAYER_ID_COUNT + layer)
-
-#define NETNAMES_GAL_LAYER(layer)   (LAYER_ID_COUNT + END_PCB_VISIBLE_LIST + layer )
-
-/// number of *all* GAL layers including PCB and item layers
-#define TOTAL_LAYER_COUNT	        (LAYER_ID_COUNT + END_PCB_VISIBLE_LIST + END_NETNAMES_VISIBLE_LIST)
-
 /**
  * Function IsValidLayer
  * tests whether a given integer is a valid layer index, i.e. can
- * be safely put in a LAYER_ID
+ * be safely put in a PCB_LAYER_ID
  * @param aLayerId = Layer index to test. It can be an int, so its
  * useful during I/O
  * @return true if aLayerIndex is a valid layer index
  */
 inline bool IsValidLayer( LAYER_NUM aLayerId )
 {
-    return unsigned( aLayerId ) < LAYER_ID_COUNT;
+    return unsigned( aLayerId ) < PCB_LAYER_ID_COUNT;
 }
 
 /**
@@ -550,7 +622,7 @@ inline bool IsValidLayer( LAYER_NUM aLayerId )
  */
 inline bool IsPcbLayer( LAYER_NUM aLayer )
 {
-    return aLayer >= F_Cu && aLayer < LAYER_ID_COUNT;
+    return aLayer >= F_Cu && aLayer < PCB_LAYER_ID_COUNT;
 }
 
 /**
@@ -572,7 +644,7 @@ inline bool IsCopperLayer( LAYER_NUM aLayerId )
  */
 inline bool IsNonCopperLayer( LAYER_NUM aLayerId )
 {
-    return aLayerId > B_Cu && aLayerId <= LAYER_ID_COUNT;
+    return aLayerId > B_Cu && aLayerId <= PCB_LAYER_ID_COUNT;
 }
 
 /**
@@ -581,7 +653,7 @@ inline bool IsNonCopperLayer( LAYER_NUM aLayerId )
  * @param aLayerId = Layer to test
  * @return true if aLayer is a user layer
  */
-inline bool IsUserLayer( LAYER_ID aLayerId )
+inline bool IsUserLayer( PCB_LAYER_ID aLayerId )
 {
     return aLayerId >= Dwgs_User && aLayerId <= Eco2_User;
 }
@@ -599,7 +671,7 @@ inline bool IsUserLayer( LAYER_ID aLayerId )
 /**
  * Layer classification: check if it's a front layer
  */
-inline bool IsFrontLayer( LAYER_ID aLayerId )
+inline bool IsFrontLayer( PCB_LAYER_ID aLayerId )
 {
     switch( aLayerId )
     {
@@ -622,7 +694,7 @@ inline bool IsFrontLayer( LAYER_ID aLayerId )
 /**
  * Layer classification: check if it's a back layer
  */
-inline bool IsBackLayer( LAYER_ID aLayerId )
+inline bool IsBackLayer( PCB_LAYER_ID aLayerId )
 {
     switch( aLayerId )
     {
@@ -648,11 +720,11 @@ inline bool IsBackLayer( LAYER_ID aLayerId )
  * some (not all) layers: external copper, and paired layers( Mask, Paste, solder ... )
  * are swapped between front and back sides
  * internal layers are flipped only if the copper layers count is known
- * @param aLayer = the LAYER_ID to flip
+ * @param aLayer = the PCB_LAYER_ID to flip
  * @param aCopperLayersCount = the number of copper layers. if 0 (in fact if < 4 )
  *  internal layers will be not flipped because the layer count is not known
  */
-LAYER_ID FlipLayer( LAYER_ID aLayerId, int aCopperLayersCount = 0 );
+PCB_LAYER_ID FlipLayer( PCB_LAYER_ID aLayerId, int aCopperLayersCount = 0 );
 
 /**
  * Calculate the mask layer when flipping a footprint
@@ -671,13 +743,13 @@ LSET FlipLayerMask( LSET aMask, int aCopperLayersCount = 0 );
 inline int GetNetnameLayer( int aLayer )
 {
     if( IsCopperLayer( aLayer ) )
-        return NETNAMES_GAL_LAYER( aLayer );
-    else if( aLayer == ITEM_GAL_LAYER( PADS_VISIBLE ) )
-        return NETNAMES_GAL_LAYER( PADS_NETNAMES_VISIBLE );
-    else if( aLayer == ITEM_GAL_LAYER( PAD_FR_VISIBLE ) )
-        return NETNAMES_GAL_LAYER( PAD_FR_NETNAMES_VISIBLE );
-    else if( aLayer == ITEM_GAL_LAYER( PAD_BK_VISIBLE ) )
-        return NETNAMES_GAL_LAYER( PAD_BK_NETNAMES_VISIBLE );
+        return NETNAMES_LAYER_INDEX( aLayer );
+    else if( aLayer == LAYER_PADS )
+        return LAYER_PADS_NETNAMES;
+    else if( aLayer == LAYER_PAD_FR )
+        return LAYER_PAD_FR_NETNAMES;
+    else if( aLayer == LAYER_PAD_BK )
+        return LAYER_PAD_BK_NETNAMES;
 
     // Fallback
     return Cmts_User;
@@ -691,11 +763,11 @@ inline int GetNetnameLayer( int aLayer )
  */
 inline bool IsNetnameLayer( LAYER_NUM aLayer )
 {
-    return aLayer >= NETNAMES_GAL_LAYER( F_Cu ) &&
-           aLayer < NETNAMES_GAL_LAYER( END_NETNAMES_VISIBLE_LIST );
+    return aLayer >= NETNAMES_LAYER_INDEX( F_Cu ) &&
+           aLayer < NETNAMES_LAYER_ID_END;
 }
 
 
-LAYER_ID ToLAYER_ID( int aLayer );
+PCB_LAYER_ID ToLAYER_ID( int aLayer );
 
 #endif // LAYERS_ID_AND_VISIBILITY_H_

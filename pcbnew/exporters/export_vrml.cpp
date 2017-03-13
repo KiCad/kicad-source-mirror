@@ -140,7 +140,7 @@ static SGNODE* sgmaterial[VRML_COLOR_LAST] = { NULL };
 class MODEL_VRML
 {
 private:
-    double      m_layer_z[LAYER_ID_COUNT];
+    double      m_layer_z[PCB_LAYER_ID_COUNT];
 
     int         m_iMaxSeg;                  // max. sides to a small circle
     double      m_arcMinLen, m_arcMaxLen;   // min and max lengths of an arc chord
@@ -567,7 +567,7 @@ static void compute_layer_Zs( MODEL_VRML& aModel, BOARD* pcb )
     // Compute each layer's Z value, more or less like the 3d view
     for( LSEQ seq = LSET::AllCuMask().Seq();  seq;  ++seq )
     {
-        LAYER_ID i = *seq;
+        PCB_LAYER_ID i = *seq;
 
         if( i < copper_layers )
             aModel.SetLayerZ( i,  half_thickness - aModel.m_brd_thickness * i / (copper_layers - 1) );
@@ -773,7 +773,7 @@ static void export_vrml_drawings( MODEL_VRML& aModel, BOARD* pcb )
     // draw graphic items
     for( BOARD_ITEM* drawing = pcb->m_Drawings; drawing != 0; drawing = drawing->Next() )
     {
-        LAYER_ID layer = drawing->GetLayer();
+        PCB_LAYER_ID layer = drawing->GetLayer();
 
         if( layer != F_Cu && layer != B_Cu && layer != B_SilkS && layer != F_SilkS )
             continue;
@@ -902,7 +902,7 @@ static void export_round_padstack( MODEL_VRML& aModel, BOARD* pcb,
 static void export_vrml_via( MODEL_VRML& aModel, BOARD* aPcb, const VIA* aVia )
 {
     double      x, y, r, hole;
-    LAYER_ID    top_layer, bottom_layer;
+    PCB_LAYER_ID    top_layer, bottom_layer;
 
     hole = aVia->GetDrillValue() * BOARD_SCALE / 2.0;
     r   = aVia->GetWidth() * BOARD_SCALE / 2.0;

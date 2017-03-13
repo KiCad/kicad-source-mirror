@@ -94,7 +94,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     case ID_PCB_LAYERS_SETUP:
         if( InvokeLayerSetup( this, GetBoard() ) )
         {
-            LAYER_ID cur_layer = GetActiveLayer();
+            PCB_LAYER_ID cur_layer = GetActiveLayer();
 
             // If after showing the dialog the user has removed the active layer,
             // then select a new active layer (front copper layer).
@@ -362,45 +362,45 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
                                                        &displ_opts->m_DisplayZonesMode, 0, 0, 2 ) );
 
         // layer colors:
-        wxASSERT( DIM( cds.m_LayersColors ) == LAYER_ID_COUNT );
-        for( int i = 0;  i<LAYER_ID_COUNT;  ++i )
+        wxASSERT( DIM( cds.m_LayersColors ) >= PCB_LAYER_ID_COUNT );
+        for( int i = 0;  i<PCB_LAYER_ID_COUNT;  ++i )
         {
             wxString vn = wxString::Format(
                             wxT( "ColorPCBLayer_%s" ),
-                            LSET::Name( LAYER_ID( i ) ) );
+                            LSET::Name( PCB_LAYER_ID( i ) ) );
 
             m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, vn, LOC_COLOR( i ), cds.m_LayersColors[i] ) );
         }
 
         m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorTxtFrontEx" ),
-                                                            ITEM_COLOR( MOD_TEXT_FR_VISIBLE ),
+                                                            ITEM_COLOR( LAYER_MOD_TEXT_FR ),
                                                             LIGHTGRAY ) );
         m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorTxtBackEx" ),
-                                                            ITEM_COLOR( MOD_TEXT_BK_VISIBLE ),
+                                                            ITEM_COLOR( LAYER_MOD_TEXT_BK ),
                                                             BLUE ) );
         m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorTxtInvisEx" ),
-                                                            ITEM_COLOR( MOD_TEXT_INVISIBLE ),
+                                                            ITEM_COLOR( LAYER_MOD_TEXT_INVISIBLE ),
                                                             DARKGRAY ) );
         m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorAnchorEx" ),
-                                                            ITEM_COLOR( ANCHOR_VISIBLE ), BLUE ) );
+                                                            ITEM_COLOR( LAYER_ANCHOR ), BLUE ) );
         m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPadBackEx" ),
-                                                            ITEM_COLOR( PAD_BK_VISIBLE ), GREEN ) );
+                                                            ITEM_COLOR( LAYER_PAD_BK ), GREEN ) );
         m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorPadFrontEx" ),
-                                                            ITEM_COLOR( PAD_FR_VISIBLE ), RED ) );
+                                                            ITEM_COLOR( LAYER_PAD_FR ), RED ) );
         m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorViaThruEx" ),
-                                                            ITEM_COLOR( VIA_THROUGH_VISIBLE ),
+                                                            ITEM_COLOR( LAYER_VIA_THROUGH ),
                                                             LIGHTGRAY ) );
         m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorViaBBlindEx" ),
-                                                            ITEM_COLOR( VIA_BBLIND_VISIBLE ),
+                                                            ITEM_COLOR( LAYER_VIA_BBLIND ),
                                                             BROWN ) );
         m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorViaMicroEx" ),
-                                                            ITEM_COLOR( VIA_MICROVIA_VISIBLE ),
+                                                            ITEM_COLOR( LAYER_VIA_MICROVIA ),
                                                             CYAN ) );
         m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorNonPlatedEx" ),
-                                                            ITEM_COLOR( NON_PLATED_VISIBLE ),
+                                                            ITEM_COLOR( LAYER_NON_PLATED ),
                                                             YELLOW ) );
         m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorRatsEx" ),
-                                                            ITEM_COLOR( RATSNEST_VISIBLE ),
+                                                            ITEM_COLOR( LAYER_RATSNEST ),
                                                             WHITE ) );
 
         // Miscellaneous:

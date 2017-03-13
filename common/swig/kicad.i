@@ -117,10 +117,10 @@ principle should be easily implemented by adapting the current STL containers.
 %template(intVector) std::vector<int>;
 %template(str_utf8_Map) std::map< std::string,UTF8 >;
 
-// wrapper of BASE_SEQ (see typedef std::vector<LAYER_ID> BASE_SEQ;)
-%template(base_seqVect) std::vector<enum LAYER_ID>;
+// wrapper of BASE_SEQ (see typedef std::vector<PCB_LAYER_ID> BASE_SEQ;)
+%template(base_seqVect) std::vector<enum PCB_LAYER_ID>;
 
-// TODO: wrapper of BASE_SET (see std::bitset<LAYER_ID_COUNT> BASE_SET;)
+// TODO: wrapper of BASE_SET (see std::bitset<PCB_LAYER_ID_COUNT> BASE_SET;)
 
 
 // KiCad plugin handling

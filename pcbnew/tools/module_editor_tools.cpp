@@ -518,11 +518,11 @@ int MODULE_EDITOR_TOOLS::ModuleTextOutlines( const TOOL_EVENT& aEvent )
     KIGFX::PCB_RENDER_SETTINGS* settings =
             static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
-    const LAYER_NUM layers[] = { ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE ),
-                                 ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE ),
-                                 ITEM_GAL_LAYER( MOD_TEXT_INVISIBLE ),
-                                 ITEM_GAL_LAYER( MOD_REFERENCES_VISIBLE ),
-                                 ITEM_GAL_LAYER( MOD_VALUES_VISIBLE ) };
+    const LAYER_NUM layers[] = { LAYER_MOD_TEXT_BK,
+                                 LAYER_MOD_TEXT_FR,
+                                 LAYER_MOD_TEXT_INVISIBLE,
+                                 LAYER_MOD_REFERENCES,
+                                 LAYER_MOD_VALUES };
 
     bool enable = !settings->GetSketchMode( layers[0] );
 
@@ -553,7 +553,7 @@ int MODULE_EDITOR_TOOLS::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
     KIGFX::PCB_RENDER_SETTINGS* settings =
             static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
-    const LAYER_ID layers[] = { F_Adhes, B_Adhes, F_Paste, B_Paste,
+    const PCB_LAYER_ID layers[] = { F_Adhes, B_Adhes, F_Paste, B_Paste,
             F_SilkS, B_SilkS, F_Mask, B_Mask,
             Dwgs_User, Cmts_User, Eco1_User, Eco2_User, Edge_Cuts };
 

@@ -58,7 +58,7 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override
     {
-        aLayers[0] = ITEM_GAL_LAYER( GP_OVERLAY );
+        aLayers[0] = LAYER_GP_OVERLAY ;
         aCount = 1;
     }
 

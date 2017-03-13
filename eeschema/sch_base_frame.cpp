@@ -65,13 +65,13 @@ void SCH_BASE_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
 // Virtual from EDA_DRAW_FRAME
 COLOR4D SCH_BASE_FRAME::GetDrawBgColor() const
 {
-    return GetLayerColor( LAYER_BACKGROUND );
+    return GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
 }
 
 void SCH_BASE_FRAME::SetDrawBgColor( COLOR4D aColor)
 {
     m_drawBgColor= aColor;
-    SetLayerColor( aColor, LAYER_BACKGROUND );
+    SetLayerColor( aColor, LAYER_SCHEMATIC_BACKGROUND );
 }
 
 

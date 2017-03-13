@@ -33,6 +33,7 @@
 
 #include <config_params.h>
 #include <draw_frame.h>
+#include <layers_id_colors_and_visibility.h>
 
 #include <gerbview.h>
 #include <class_gbr_layout.h>
@@ -285,19 +286,19 @@ public:
      * Function IsElementVisible
      * tests whether a given element category is visible. Keep this as an
      * inline function.
-     * @param aItemIdVisible is an item id from the enum GERBER_VISIBLE_ID
+     * @param aItemIdVisible is an item id from the enum GERBVIEW_LAYER_ID
      * @return bool - true if the element is visible.
      */
-    bool    IsElementVisible( GERBER_VISIBLE_ID aItemIdVisible ) const;
+    bool    IsElementVisible( GERBVIEW_LAYER_ID aItemIdVisible ) const;
 
     /**
      * Function SetElementVisibility
      * changes the visibility of an element category
-     * @param aItemIdVisible is an item id from the enum GERBER_VISIBLE_ID
+     * @param aItemIdVisible is an item id from the enum GERBVIEW_LAYER_ID
      * @param aNewState = The new visibility state of the element category
-     *  (see enum PCB_VISIBLE)
+     *  (see enum PCB)
      */
-    void    SetElementVisibility( GERBER_VISIBLE_ID aItemIdVisible, bool aNewState );
+    void    SetElementVisibility( GERBVIEW_LAYER_ID aItemIdVisible, bool aNewState );
 
     /**
      * Function SetGridVisibility(), virtual from EDA_DRAW_FRAME
@@ -334,9 +335,9 @@ public:
      * Function GetVisibleElementColor
      * returns the color of a gerber visible element.
      */
-    COLOR4D GetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible ) const;
+    COLOR4D GetVisibleElementColor( GERBVIEW_LAYER_ID aItemIdVisible ) const;
 
-    void    SetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible, COLOR4D aColor );
+    void    SetVisibleElementColor( GERBVIEW_LAYER_ID aItemIdVisible, COLOR4D aColor );
 
     /**
      * Function GetLayerColor

@@ -380,7 +380,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     if( item->IsOnLayer( m_Guide->GetPreferredLayer() ) ||
             m_Guide->IgnorePreferredLayer() )
     {
-        LAYER_ID layer = item->GetLayer();
+        PCB_LAYER_ID layer = item->GetLayer();
 
         /* Modules and their subcomponents: reference, value and pads
          * are not sensitive to the layer visibility controls.  They all
@@ -413,7 +413,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         // no effect on other criteria, since there is a separate "ignore" control for
         // those in the COLLECTORS_GUIDE
 
-        LAYER_ID layer = item->GetLayer();
+        PCB_LAYER_ID layer = item->GetLayer();
 
         /* Modules and their subcomponents: reference, value and pads
          * are not sensitive to the layer visibility controls.  They all

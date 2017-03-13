@@ -66,16 +66,16 @@ public:
 class HOLE_INFO
 {
 public:
-    int         m_Hole_Diameter;        // hole value, and for oblong: min(hole size x, hole size y)
-    int         m_Tool_Reference;       // Tool reference for this hole = 1 ... n (values <=0 must not be used)
-    wxSize      m_Hole_Size;            // hole size for oblong holes
-    double      m_Hole_Orient;          // Hole rotation (= pad rotation) for oblong holes
-    int         m_Hole_Shape;           // hole shape: round (0) or oval (1)
-    wxPoint     m_Hole_Pos;             // hole position
-    LAYER_ID    m_Hole_Bottom_Layer;    // hole ending layer (usually back layer)
-    LAYER_ID    m_Hole_Top_Layer;       // hole starting layer (usually front layer):
-                                        // m_Hole_Top_Layer < m_Hole_Bottom_Layer
-    bool        m_Hole_NotPlated;       // hole not plated. Must be in a specific drill file or section
+    int          m_Hole_Diameter;        // hole value, and for oblong: min(hole size x, hole size y)
+    int          m_Tool_Reference;       // Tool reference for this hole = 1 ... n (values <=0 must not be used)
+    wxSize       m_Hole_Size;            // hole size for oblong holes
+    double       m_Hole_Orient;          // Hole rotation (= pad rotation) for oblong holes
+    int          m_Hole_Shape;           // hole shape: round (0) or oval (1)
+    wxPoint      m_Hole_Pos;             // hole position
+    PCB_LAYER_ID m_Hole_Bottom_Layer;    // hole ending layer (usually back layer)
+    PCB_LAYER_ID m_Hole_Top_Layer;       // hole starting layer (usually front layer):
+                                         // m_Hole_Top_Layer < m_Hole_Bottom_Layer
+    bool         m_Hole_NotPlated;       // hole not plated. Must be in a specific drill file or section
 
 public:
     HOLE_INFO()
@@ -116,7 +116,7 @@ public:
 };
 
 
-typedef std::pair<LAYER_ID, LAYER_ID>   DRILL_LAYER_PAIR;
+typedef std::pair<PCB_LAYER_ID, PCB_LAYER_ID>   DRILL_LAYER_PAIR;
 class OUTPUTFORMATTER;
 
 /**
@@ -361,7 +361,7 @@ private:
 
     const std::string layerPairName( DRILL_LAYER_PAIR aPair ) const;
 
-    const std::string layerName( LAYER_ID aLayer ) const;
+    const std::string layerName( PCB_LAYER_ID aLayer ) const;
 
     /**
      * @return a filename which identify the drill file function.

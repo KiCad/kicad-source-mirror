@@ -342,8 +342,8 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
 
         via->SetWidth( viaDiam );
 
-        LAYER_ID topLayer = pcbLayer2kicad[topLayerNdx];
-        LAYER_ID botLayer = pcbLayer2kicad[botLayerNdx];
+        PCB_LAYER_ID topLayer = pcbLayer2kicad[topLayerNdx];
+        PCB_LAYER_ID botLayer = pcbLayer2kicad[botLayerNdx];
 
         via->SetLayerPair( topLayer, botLayer );
     }

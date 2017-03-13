@@ -116,7 +116,7 @@ public:
 class SCH_ITEM : public EDA_ITEM
 {
 protected:
-    LAYERSCH_ID    m_Layer;
+    SCH_LAYER_ID   m_Layer;
     EDA_ITEMS      m_connections;   ///< List of items connected to this item.
     wxPoint        m_storedPos;     ///< a temporary variable used in some move commands
                                     ///> to store a initial pos (of the item or mouse cursor)
@@ -161,14 +161,14 @@ public:
      * Function GetLayer
      * returns the layer this item is on.
      */
-    LAYERSCH_ID GetLayer() const { return m_Layer; }
+    SCH_LAYER_ID GetLayer() const { return m_Layer; }
 
     /**
      * Function SetLayer
      * sets the layer this item is on.
      * @param aLayer The layer number.
      */
-    void SetLayer( LAYERSCH_ID aLayer )  { m_Layer = aLayer; }
+    void SetLayer( SCH_LAYER_ID aLayer )  { m_Layer = aLayer; }
 
     /**
      * Function GetPenSize virtual pure

@@ -87,7 +87,7 @@ void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     // shade text if high contrast mode is active
     if( ( DrawMode & GR_ALLOW_HIGHCONTRAST ) && displ_opts && displ_opts->m_ContrastModeDisplay )
     {
-        LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+        PCB_LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
         if( !IsOnLayer( curr_layer ) )
             color = COLOR4D( DARKDARKGRAY );
@@ -95,8 +95,8 @@ void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
 
     COLOR4D anchor_color = COLOR4D::UNSPECIFIED;
 
-    if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
-        anchor_color = brd->GetVisibleElementColor( ANCHOR_VISIBLE );
+    if( brd->IsElementVisible( LAYER_ANCHOR ) )
+        anchor_color = brd->GetVisibleElementColor( LAYER_ANCHOR );
 
     EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
     EDA_TEXT::Draw( clipbox, DC, offset, color,

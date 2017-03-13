@@ -601,7 +601,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     // Update the RATSNEST items, which were not loaded at the time
     // BOARD::SetVisibleElements() was called from within any PLUGIN.
-    // See case RATSNEST_VISIBLE: in BOARD::SetElementVisibility()
+    // See case LAYER_RATSNEST: in BOARD::SetElementVisibility()
     GetBoard()->SetVisibleElements( GetBoard()->GetVisibleElements() );
 
     // Display the loaded board:

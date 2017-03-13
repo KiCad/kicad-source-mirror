@@ -196,8 +196,8 @@ wxString VIA::GetSelectMenuText() const
         wxString netname = GetNetname();
 
         // say which layers, only two for now
-        LAYER_ID topLayer;
-        LAYER_ID botLayer;
+        PCB_LAYER_ID topLayer;
+        PCB_LAYER_ID botLayer;
         LayerPair( &topLayer, &botLayer );
         text.Printf( format.GetData(), GetChars( ShowWidth() ),
                      GetChars( netname ), GetNetCode(),
@@ -364,8 +364,8 @@ void VIA::Flip( const wxPoint& aCentre )
     if( GetViaType() != VIA_THROUGH )
     {
         int copperLayerCount = GetBoard()->GetCopperLayerCount();
-        LAYER_ID top_layer;
-        LAYER_ID bottom_layer;
+        PCB_LAYER_ID top_layer;
+        PCB_LAYER_ID bottom_layer;
         LayerPair( &top_layer, &bottom_layer );
         top_layer = FlipLayer( top_layer, copperLayerCount );
         bottom_layer = FlipLayer( bottom_layer, copperLayerCount );
@@ -390,9 +390,9 @@ SEARCH_RESULT TRACK::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
 }
 
 
-bool VIA::IsOnLayer( LAYER_ID layer_number ) const
+bool VIA::IsOnLayer( PCB_LAYER_ID layer_number ) const
 {
-    LAYER_ID bottom_layer, top_layer;
+    PCB_LAYER_ID bottom_layer, top_layer;
 
     LayerPair( &top_layer, &bottom_layer );
 
@@ -416,7 +416,7 @@ LSET VIA::GetLayerSet() const
 
     wxASSERT( m_Layer <= m_BottomLayer );
 
-    // LAYER_IDs are numbered from front to back, this is top to bottom.
+    // PCB_LAYER_IDs are numbered from front to back, this is top to bottom.
     for( LAYER_NUM id = m_Layer;  id <= m_BottomLayer;  ++id )
     {
         layermask.set( id );
@@ -426,7 +426,7 @@ LSET VIA::GetLayerSet() const
 }
 
 
-void VIA::SetLayerPair( LAYER_ID aTopLayer, LAYER_ID aBottomLayer )
+void VIA::SetLayerPair( PCB_LAYER_ID aTopLayer, PCB_LAYER_ID aBottomLayer )
 {
     if( GetViaType() == VIA_THROUGH )
     {
@@ -442,10 +442,10 @@ void VIA::SetLayerPair( LAYER_ID aTopLayer, LAYER_ID aBottomLayer )
 }
 
 
-void VIA::LayerPair( LAYER_ID* top_layer, LAYER_ID* bottom_layer ) const
+void VIA::LayerPair( PCB_LAYER_ID* top_layer, PCB_LAYER_ID* bottom_layer ) const
 {
-    LAYER_ID t_layer = F_Cu;
-    LAYER_ID b_layer = B_Cu;
+    PCB_LAYER_ID t_layer = F_Cu;
+    PCB_LAYER_ID b_layer = B_Cu;
 
     if( GetViaType() != VIA_THROUGH )
     {
@@ -613,7 +613,7 @@ void TRACK::DrawShortNetname( EDA_DRAW_PANEL* panel,
             }
         }
 
-        LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+        PCB_LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
         if( ( aDC->LogicalToDeviceXRel( tsize ) >= MIN_TEXT_SIZE )
          && ( !(!IsOnLayer( curr_layer )&& displ_opts->m_ContrastModeDisplay) ) )
@@ -652,7 +652,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
     if( ( aDrawMode & GR_ALLOW_HIGHCONTRAST ) && displ_opts->m_ContrastModeDisplay )
     {
-        LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+        PCB_LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
         if( !IsOnLayer( curr_layer ) )
             color = COLOR4D( DARKDARKGRAY );
@@ -720,7 +720,7 @@ void SEGZONE::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
     if( ( aDrawMode & GR_ALLOW_HIGHCONTRAST ) && displ_opts->m_ContrastModeDisplay )
     {
-        LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+        PCB_LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
         if( !IsOnLayer( curr_layer ) )
             color = COLOR4D( DARKDARKGRAY );
@@ -783,7 +783,7 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
     wxCHECK_RET( panel != NULL, wxT( "VIA::Draw panel cannot be NULL." ) );
 
     int radius;
-    LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    PCB_LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
     int fillvia = 0;
     PCB_BASE_FRAME* frame  = (PCB_BASE_FRAME*) panel->GetParent();
@@ -796,9 +796,9 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
     GRSetDrawMode( aDC, aDrawMode );
 
     BOARD * brd =  GetBoard();
-    COLOR4D color = brd->GetVisibleElementColor( VIAS_VISIBLE + GetViaType() );
+    COLOR4D color = brd->GetVisibleElementColor( LAYER_VIAS + GetViaType() );
 
-    if( brd->IsElementVisible( PCB_VISIBLE(VIAS_VISIBLE + GetViaType()) ) == false
+    if( brd->IsElementVisible( LAYER_VIAS + GetViaType() ) == false
         && !( aDrawMode & GR_HIGHLIGHT ) )
        return;
 
@@ -929,7 +929,7 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
     if( GetViaType() == VIA_BLIND_BURIED )
     {
         int ax = 0, ay = radius, bx = 0, by = drill_radius;
-        LAYER_ID layer_top, layer_bottom;
+        PCB_LAYER_ID layer_top, layer_bottom;
 
         LayerPair( &layer_top, &layer_bottom );
 
@@ -990,25 +990,25 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
 
 void VIA::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aLayers[0] = ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE );
+    aLayers[0] = LAYER_VIAS_HOLES;
     aCount = 2;
 
     // Just show it on common via & via holes layers
     switch( GetViaType() )
     {
     case VIA_THROUGH:
-        aLayers[1] = ITEM_GAL_LAYER( VIA_THROUGH_VISIBLE );
+        aLayers[1] = LAYER_VIA_THROUGH;
         break;
 
     case VIA_BLIND_BURIED:
-        aLayers[1] = ITEM_GAL_LAYER( VIA_BBLIND_VISIBLE );
+        aLayers[1] = LAYER_VIA_BBLIND;
         aLayers[2] = m_Layer;
         aLayers[3] = m_BottomLayer;
         aCount += 2;
         break;
 
     case VIA_MICROVIA:
-        aLayers[1] = ITEM_GAL_LAYER( VIA_MICROVIA_VISIBLE );
+        aLayers[1] = LAYER_VIA_MICROVIA;
         break;
 
     default:
@@ -1213,7 +1213,7 @@ void VIA::GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList )
 
 
     // Display layer pair
-    LAYER_ID top_layer, bottom_layer;
+    PCB_LAYER_ID top_layer, bottom_layer;
 
     LayerPair( &top_layer, &bottom_layer );
 
@@ -1312,7 +1312,7 @@ bool VIA::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 }
 
 
-VIA* TRACK::GetVia( const wxPoint& aPosition, LAYER_ID aLayer)
+VIA* TRACK::GetVia( const wxPoint& aPosition, PCB_LAYER_ID aLayer)
 {
     for( VIA* via = GetFirstVia( this ); via; via = GetFirstVia( via->Next() ) )
     {
