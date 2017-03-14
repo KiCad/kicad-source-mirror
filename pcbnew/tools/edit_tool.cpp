@@ -421,6 +421,11 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         }
     } while( ( evt = Wait() ) ); //Should be assignment not equality test
 
+    controls->ForceCursorPosition( false );
+    controls->ShowCursor( false );
+    controls->SetSnapping( false );
+    controls->SetAutoPan( false );
+
     m_dragging = false;
     m_offset.x = 0;
     m_offset.y = 0;
