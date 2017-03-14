@@ -64,7 +64,7 @@ FP_LIB_TABLE::FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable ) :
 }
 
 
-void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in ) throw()
+void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
 {
     T       tok;
 
@@ -185,15 +185,14 @@ void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in ) throw()
 }
 
 
-void FP_LIB_TABLE::Format( OUTPUTFORMATTER* out, int nestLevel ) const
-    throw()
+void FP_LIB_TABLE::Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) const
 {
-    out->Print( nestLevel, "(fp_lib_table\n" );
+    aOutput->Print( aIndentLevel, "(fp_lib_table\n" );
 
     for( LIB_TABLE_ROWS_CITER it = rows.begin();  it != rows.end();  ++it )
-        it->Format( out, nestLevel+1 );
+        it->Format( aOutput, aIndentLevel+1 );
 
-    out->Print( nestLevel, ")\n" );
+    aOutput->Print( aIndentLevel, ")\n" );
 }
 
 

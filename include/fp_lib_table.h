@@ -103,9 +103,9 @@ class FP_LIB_TABLE : public LIB_TABLE
 {
 public:
 
-    virtual void Parse( LIB_TABLE_LEXER* aLexer ) throw() override;
+    virtual void Parse( LIB_TABLE_LEXER* aLexer ) override;
 
-    virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw() override;
+    virtual void Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) const override;
 
     /**
      * Constructor FP_LIB_TABLE

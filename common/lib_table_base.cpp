@@ -81,7 +81,6 @@ const wxString LIB_TABLE_ROW::GetFullURI( bool aSubstituted ) const
 
 
 void LIB_TABLE_ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
-    throw( IO_ERROR, boost::interprocess::lock_exception )
 {
     // In Kicad, we save path and file names using the Unix notation (separator = '/')
     // So ensure separator is always '/' is saved URI string
@@ -99,7 +98,6 @@ void LIB_TABLE_ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
 
 
 void LIB_TABLE_ROW::Parse( std::unique_ptr< LIB_TABLE_ROW >& aRow, LIB_TABLE_LEXER* in )
-    throw( IO_ERROR, PARSE_ERROR )
 {
     /*
      * (lib (name NICKNAME)(descr DESCRIPTION)(type TYPE)(full_uri FULL_URI)(options OPTIONS))

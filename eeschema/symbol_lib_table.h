@@ -101,11 +101,9 @@ class SYMBOL_LIB_TABLE : public LIB_TABLE
 {
 public:
 
-    virtual void Parse( LIB_TABLE_LEXER* aLexer )
-        throw( IO_ERROR, PARSE_ERROR ) override;
+    virtual void Parse( LIB_TABLE_LEXER* aLexer ) override;
 
-    virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) const
-        throw( IO_ERROR, boost::interprocess::lock_exception ) override;
+    virtual void Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) const override;
 
     /**
      * Constructor SYMBOL_LIB_TABLE

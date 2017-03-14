@@ -178,11 +178,9 @@ public:
      * @param nestLevel is the indentation level to base all lines of the output.
      *                  Actual indentation will be 2 spaces for each nestLevel.
      */
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) const
-        throw( IO_ERROR, boost::interprocess::lock_exception );
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) const;
 
-    static void Parse( std::unique_ptr< LIB_TABLE_ROW >& aRow, LIB_TABLE_LEXER* in )
-        throw( IO_ERROR, PARSE_ERROR );
+    static void Parse( std::unique_ptr< LIB_TABLE_ROW >& aRow, LIB_TABLE_LEXER* in );
 
     LIB_TABLE_ROW* clone() const
     {
@@ -279,11 +277,35 @@ class LIB_TABLE : public PROJECT::_ELEM
 
 public:
 
-    virtual void Parse( LIB_TABLE_LEXER* aLexer )
-        throw( IO_ERROR, PARSE_ERROR ) = 0;
+    /**
+     * Function Parse
+     *
+     * Parses the \a #LIB_TABLE_LEXER s-expression library table format into the appropriate
+     * #LIB_TABLE_ROW objects.
+     *
+     * @param aLexer is the lexer to parse.
+     *
+     * @throw IO_ERROR if an I/O error occurs during parsing.
+     * @throw PARSER_ERROR if the lexer format to parse is invalid.
+     * @throw boost::bad_pointer if an any attempt to add an invalid pointer to the
+     *                           boost::ptr_vector.
+     * @throw boost::bad_index if an index outside the row table bounds is accessed.
+     */
+    virtual void Parse( LIB_TABLE_LEXER* aLexer ) = 0;
 
-    virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) const
-        throw( IO_ERROR, boost::interprocess::lock_exception ) = 0;
+    /**
+     * Function Format
+     *
+     * Generates the table s-expression format to the \a aOutput with an indention level
+     * of \a aIndentLevel.
+     *
+     * @param aOutput is the #OUTPUTFORMATER to format the table into.
+     * @param aIndentLevel is the indentation level (2 spaces) to indent.
+     *
+     * @throw IO_ERROR if an I/O error occurs during output.
+     * @throw boost::interprocess::lock_except if separate process attempt to access the table.
+     */
+    virtual void Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) const = 0;
 
     /**
      * Constructor LIB_TABLE

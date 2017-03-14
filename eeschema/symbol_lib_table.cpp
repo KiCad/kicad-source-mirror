@@ -67,7 +67,6 @@ SYMBOL_LIB_TABLE::SYMBOL_LIB_TABLE( SYMBOL_LIB_TABLE* aFallBackTable ) :
 
 
 void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
-    throw( IO_ERROR, PARSE_ERROR )
 {
     T       tok;
 
@@ -188,15 +187,14 @@ void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
 }
 
 
-void SYMBOL_LIB_TABLE::Format( OUTPUTFORMATTER* out, int nestLevel ) const
-    throw( IO_ERROR, boost::interprocess::lock_exception )
+void SYMBOL_LIB_TABLE::Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) const
 {
-    out->Print( nestLevel, "(sym_lib_table\n" );
+    aOutput->Print( aIndentLevel, "(sym_lib_table\n" );
 
     for( LIB_TABLE_ROWS_CITER it = rows.begin();  it != rows.end();  ++it )
-        it->Format( out, nestLevel+1 );
+        it->Format( aOutput, aIndentLevel+1 );
 
-    out->Print( nestLevel, ")\n" );
+    aOutput->Print( aIndentLevel, ")\n" );
 }
 
 
