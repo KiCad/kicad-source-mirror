@@ -278,7 +278,7 @@ void DIALOG_DESIGN_RULES::InitDialogRules()
 void DIALOG_DESIGN_RULES::InitGlobalRules()
 {
     // Set unit labels
-    wxString units = ReturnUnitSymbol( g_UserUnit, "%s" );
+    const wxString units = GetAbbreviatedUnitsLabel( g_UserUnit );
 
     m_ViaMinUnits->SetLabel( units );
     m_ViaMinDrillUnits->SetLabel( units );
