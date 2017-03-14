@@ -6,9 +6,9 @@ software development experience.  This document contains the instructions on how
 from source on the supported platforms.  It is not intended as a guide for installing or building
 [library dependencies](#library_dependencies).  Please consult your platforms documentation for
 installing packages or the source code when building the library dependencies.  Currently the
-supported platforms are Windows Versions 7-10, just about any version of Linux, and OSX
-10.7-10.10.  You may be able to build KiCad on other platforms but it is not supported.  On
-Windows and Linux the [GNU GCC][] is the only supported compiler and on OSX [Clang][] is the
+supported platforms are Windows Versions 7-10, just about any version of Linux, and macOS
+10.9-10.12.  You may be able to build KiCad on other platforms but it is not supported.  On
+Windows and Linux the [GNU GCC][] is the only supported compiler and on macOS [Clang][] is the
 only supported compiler.
 
 [TOC]
@@ -127,7 +127,7 @@ so use at your own risk.
 ## Graphics Context Overlay ## {#overlay_opt}
 
 The USE_WX_OVERLAY option is used to enable the optional wxOverlay class for graphics rendering
-on OSX.  This is enabled on OSX by default and disabled on all other platforms.
+on macOS.  This is enabled on macOS by default and disabled on all other platforms.
 
 ## Scripting Support ## {#scripting_opt}
 
@@ -336,11 +336,14 @@ configure pacman to prevent upgrading the 64-bit Boost package by adding:
 to your /etc/pacman.conf file.
 
 
-# Building KiCad on OSX # {#build_osx}
+# Building KiCad on macOS # {#build_osx}
 
-Building on OSX is challenging at best.  It typically requires building dependency libraries
+Building on macOS is challenging at best.  It typically requires building dependency libraries
 that require patching in order to work correctly.  For more information on the complexities of
-building KiCad on OSX, see the [OSX bundle build scripts][].
+building and packaging KiCad on macOS, see the [macOS bundle build scripts][].
+
+In the following set of commands, replace the macOS version number (i.e. 10.9) with the desired
+minimum version.  It may be easiest to build for the same version you are running.
 
 Download the wxPython source and build using the following commands:
 
@@ -354,7 +357,7 @@ Download the wxPython source and build using the following commands:
     patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.2_macosx_unicode_pasteboard.patch
     mkdir build
     cd build
-    export MAC_OS_X_VERSION_MIN_REQUIRED=10.7
+    export MAC_OS_X_VERSION_MIN_REQUIRED=10.9
     ../configure \
         --prefix=`pwd`/../wx-bin \
         --with-opengl \
@@ -369,7 +372,7 @@ Download the wxPython source and build using the following commands:
         --with-zlib=builtin \
         --with-expat=builtin \
         --without-liblzma \
-        --with-macosx-version-min=10.7 \
+        --with-macosx-version-min=10.9 \
         --enable-universal-binary=i386,x86_64 \
         CC=clang \
         CXX=clang++
@@ -382,7 +385,7 @@ Build KiCad using the following commands:
     cd build/release
     cmake -DCMAKE_C_COMPILER=clang \
           -DCMAKE_CXX_COMPILER=clang++ \
-          -DCMAKE_OSX_DEPLOYMENT_TARGET=10.7 \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET=10.9 \
           -DwxWidgets_CONFIG_EXECUTABLE=path-to-wx-install/bin/wx-config \
           -DKICAD_SCRIPTING=ON \
           -DKICAD_SCRIPTING_MODULES=ON \
