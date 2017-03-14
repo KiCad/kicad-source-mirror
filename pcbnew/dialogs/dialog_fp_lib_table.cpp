@@ -536,17 +536,36 @@ private:
     void deleteRowHandler( wxCommandEvent& event ) override
     {
         int currRow = getCursorRow();
-        wxArrayInt selectedRows	= m_cur_grid->GetSelectedRows();
 
+        // In a wxGrid, collect rows that have a selected cell, or are selected
+        // is not so easy: it depend on the way the selection was made.
+        // Here, we collect row selected by clicking on a row label, and
+        // row that contain a cell previously selected.
+        // If no candidate, just delete the row with the grid cursor.
+        wxArrayInt selectedRows	= m_cur_grid->GetSelectedRows();
+        wxGridCellCoordsArray cells = m_cur_grid->GetSelectedCells();
+
+        // Add all row having cell selected to list:
+        for( unsigned ii = 0; ii < cells.GetCount(); ii++ )
+            selectedRows.Add( cells[ii].GetRow() );
+
+        // Use the row having the grid cursor only if we have no candidate:
         if( selectedRows.size() == 0 && getCursorRow() >= 0 )
             selectedRows.Add( getCursorRow() );
 
         std::sort( selectedRows.begin(), selectedRows.end() );
 
+        // Remove selected rows (note: a row can be stored more than once in list)
+        int last_row = -1;
         for( int ii = selectedRows.GetCount()-1; ii >= 0; ii-- )
         {
             int row = selectedRows[ii];
-            m_cur_grid->DeleteRows( row, 1 );
+
+            if( row != last_row )
+            {
+                last_row = row;
+                m_cur_grid->DeleteRows( row, 1 );
+            }
         }
 
         if( currRow >= m_cur_grid->GetNumberRows() )
