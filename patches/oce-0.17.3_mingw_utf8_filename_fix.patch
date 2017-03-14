@@ -1,0 +1,2534 @@
+From af336de6fd7984b045b8e67c127c1d12f911cd66 Mon Sep 17 00:00:00 2001
+From: Cirilo Bernardo <cirilo.bernardo@gmail.com>
+Date: Sun, 5 Mar 2017 13:46:16 +1100
+Subject: [PATCH] Hack code to provide UTF8 filename support in MinGW
+
+---
+ inc/FSD_CmpFile.hxx                       |  10 +-
+ inc/FSD_File.hxx                          |  13 +-
+ src/BRepTools/BRepTools.cxx               |  14 +-
+ src/FSD/FSD_CmpFile.cxx                   | 326 +++++++++++++++------------
+ src/FSD/FSD_File.cxx                      | 356 +++++++++++++++++-------------
+ src/IGESControl/IGESControl_Writer.cxx    |   7 +-
+ src/IGESSelect/IGESSelect_WorkLibrary.cxx |   7 +-
+ src/OSD/OSD_MAllocHook.cxx                |  40 ++--
+ src/OSD/OSD_MAllocHook.hxx                |   7 +-
+ src/OSD/OSD_OpenFile.cxx                  | 169 +++++++++-----
+ src/OSD/OSD_OpenFile.hxx                  |  65 +++---
+ src/StepSelect/StepSelect_WorkLibrary.cxx |  10 +-
+ src/VrmlAPI/VrmlAPI_Writer.cxx            |   6 +-
+ 13 files changed, 601 insertions(+), 429 deletions(-)
+
+diff --git a/inc/FSD_CmpFile.hxx b/inc/FSD_CmpFile.hxx
+index 57453a341..1351a026a 100644
+--- a/inc/FSD_CmpFile.hxx
++++ b/inc/FSD_CmpFile.hxx
+@@ -6,6 +6,7 @@
+ #ifndef _FSD_CmpFile_HeaderFile
+ #define _FSD_CmpFile_HeaderFile
+ 
++#include <iostream>
+ #include <Standard.hxx>
+ #include <Standard_DefineAlloc.hxx>
+ #include <Standard_Macro.hxx>
+@@ -34,6 +35,7 @@ class TColStd_SequenceOfAsciiString;
+ class TColStd_SequenceOfExtendedString;
+ class Storage_BaseDriver;
+ class Standard_Type;
++class STREAM_WRAPPER;
+ 
+ 
+ 
+@@ -236,10 +238,7 @@ public:
+   Standard_EXPORT   Storage_Error Close() ;
+   
+   Standard_EXPORT   void Destroy() ;
+-~FSD_CmpFile()
+-{
+-  Destroy();
+-}
++  ~FSD_CmpFile();
+ 
+ 
+ 
+@@ -280,7 +279,8 @@ private:
+   Standard_EXPORT   void RaiseError (const Handle(Standard_Type)& theFailure) ;
+ 
+ 
+-  FSD_FStream myStream;
++    STREAM_WRAPPER* m_wrapper;
++    std::iostream*  myStream;
+ 
+ 
+ };
+diff --git a/inc/FSD_File.hxx b/inc/FSD_File.hxx
+index 7fc8f8788..b14a5fd37 100644
+--- a/inc/FSD_File.hxx
++++ b/inc/FSD_File.hxx
+@@ -6,6 +6,7 @@
+ #ifndef _FSD_File_HeaderFile
+ #define _FSD_File_HeaderFile
+ 
++#include <iostream>
+ #include <Standard.hxx>
+ #include <Standard_DefineAlloc.hxx>
+ #include <Standard_Macro.hxx>
+@@ -32,7 +33,7 @@ class TCollection_ExtendedString;
+ class TColStd_SequenceOfAsciiString;
+ class TColStd_SequenceOfExtendedString;
+ class Storage_BaseDriver;
+-
++class STREAM_WRAPPER;
+ 
+ 
+ //! A general driver which defines as a file, the
+@@ -253,10 +254,8 @@ public:
+   Standard_EXPORT   Storage_Error Close() ;
+   
+   Standard_EXPORT   void Destroy() ;
+-~FSD_File()
+-{
+-  Destroy();
+-}
++
++  ~FSD_File();
+ 
+ 
+ 
+@@ -295,8 +294,8 @@ private:
+   Standard_EXPORT static Standard_CString MagicNumber() ;
+ 
+ 
+-  FSD_FStream myStream;
+-
++  STREAM_WRAPPER* m_wrapper;
++  std::iostream*  myStream;
+ 
+ };
+ 
+diff --git a/src/BRepTools/BRepTools.cxx b/src/BRepTools/BRepTools.cxx
+index ec467ee53..33f562676 100644
+--- a/src/BRepTools/BRepTools.cxx
++++ b/src/BRepTools/BRepTools.cxx
+@@ -611,9 +611,8 @@ Standard_Boolean  BRepTools::Write(const TopoDS_Shape& Sh,
+                                    const Standard_CString File,
+                                    const Handle(Message_ProgressIndicator)& PR)
+ {
+-  ofstream os;
+-  OSD_OpenStream(os, File, ios::out);
+-  if (!os.rdbuf()->is_open()) return Standard_False;
++  OPEN_STREAM( os, File, ios::out );
++  if( !IS_OPEN( os )) return Standard_False;
+ 
+   Standard_Boolean isGood = (os.good() && !os.eof());
+   if(!isGood)
+@@ -632,7 +631,7 @@ Standard_Boolean  BRepTools::Write(const TopoDS_Shape& Sh,
+   isGood = os.good();
+ 
+   errno = 0;
+-  os.close();
++  CLOSE_STREAM( os );
+   isGood = os.good() && isGood && !errno;
+ 
+   return isGood;
+@@ -648,10 +647,9 @@ Standard_Boolean BRepTools::Read(TopoDS_Shape& Sh,
+                                  const BRep_Builder& B,
+                                  const Handle(Message_ProgressIndicator)& PR)
+ {
+-  filebuf fic;
+-  istream in(&fic);
+-  OSD_OpenFileBuf(fic,File,ios::in);
+-  if(!fic.is_open()) return Standard_False;
++  OPEN_ISTREAM( in, File );
++
++  if( !IS_OPEN( in ) ) return Standard_False;
+   
+   BRepTools_ShapeSet SS(B);
+   SS.SetProgress(PR);
+diff --git a/src/FSD/FSD_CmpFile.cxx b/src/FSD/FSD_CmpFile.cxx
+index 102d0cc32..ecca0813f 100644
+--- a/src/FSD/FSD_CmpFile.cxx
++++ b/src/FSD/FSD_CmpFile.cxx
+@@ -14,6 +14,7 @@
+ 
+ #include <FSD_CmpFile.ixx>
+ #include <OSD.hxx>
++#include <OSD_OpenFile.hxx>
+ 
+ #include <Storage_StreamModeError.hxx>
+ #include <Storage_StreamUnknownTypeError.hxx>
+@@ -42,7 +43,13 @@ const Standard_CString MAGICNUMBER = "CMPFILE";
+ 
+ FSD_CmpFile::FSD_CmpFile()
+ {
++  m_wrapper = new STREAM_WRAPPER;
++}
+ 
++FSD_CmpFile::~FSD_CmpFile()
++{
++  Destroy();
++  delete m_wrapper;
+ }
+ 
+ //=======================================================================
+@@ -87,45 +94,22 @@ Storage_Error FSD_CmpFile::Open(const TCollection_AsciiString& aName,const Stora
+ 
+   if (OpenMode() == Storage_VSNone) {
+ 
+-#if defined(_WNT32)
+-    TCollection_ExtendedString aWName(aName);
+-    if (aMode == Storage_VSRead) {
+-      myStream.open((const wchar_t*)aWName.ToExtString(),ios::in|ios::binary); // ios::nocreate is not portable
+-    }
+-    else if (aMode == Storage_VSWrite) {
+-      myStream.open((const wchar_t*)aWName.ToExtString(),ios::out|ios::binary);
+-    }
+-    else if (aMode == Storage_VSReadWrite) {
+-      myStream.open((const wchar_t*)aWName.ToExtString(),ios::in|ios::out|ios::binary);
+-    }
+-#elif !defined(IRIX) && !defined(DECOSF1)
+     if (aMode == Storage_VSRead) {
+-      myStream.open(aName.ToCString(),ios::in|ios::binary); // ios::nocreate is not portable
++      myStream = m_wrapper->Open( aName.ToCString(), ios::in|ios::binary); // ios::nocreate is not portable
+     }
+     else if (aMode == Storage_VSWrite) {
+-      myStream.open(aName.ToCString(),ios::out|ios::binary);
++      myStream = m_wrapper->Open( aName.ToCString(), ios::out|ios::binary); // ios::nocreate is not portable
+     }
+     else if (aMode == Storage_VSReadWrite) {
+-      myStream.open(aName.ToCString(),ios::in|ios::out|ios::binary);
++      myStream = m_wrapper->Open( aName.ToCString(), ios::in|ios::out|ios::binary); // ios::nocreate is not portable
+     }
+-#else
+-    if (aMode == Storage_VSRead) {
+-      myStream.open(aName.ToCString(),ios::in); // ios::nocreate is not portable
+-    }
+-    else if (aMode == Storage_VSWrite) {
+-      myStream.open(aName.ToCString(),ios::out);
+-    }
+-    else if (aMode == Storage_VSReadWrite) {
+-      myStream.open(aName.ToCString(),ios::in|ios::out);
+-    }
+-#endif
+ 
+-    if (myStream.fail()) {
++    if ( !m_wrapper->IsOpen() ) {
+       result = Storage_VSOpenError;
+     }
+     else {
+-      myStream.precision(17);
+-      myStream.imbue (std::locale::classic()); // use always C locale
++      myStream->precision(17);
++      myStream->imbue (std::locale::classic()); // use always C locale
+       SetOpenMode(aMode);
+     }
+   }
+@@ -142,7 +126,10 @@ Storage_Error FSD_CmpFile::Open(const TCollection_AsciiString& aName,const Stora
+ 
+ Standard_Boolean FSD_CmpFile::IsEnd()
+ {
+-  return myStream.eof();
++  if( NULL == myStream )
++    return true;
++
++  return myStream->eof();
+ }
+ 
+ //=======================================================================
+@@ -155,7 +142,8 @@ Storage_Error FSD_CmpFile::Close()
+   Storage_Error result = Storage_VSOk;
+ 
+   if (OpenMode() != Storage_VSNone) {
+-    myStream.close();
++    m_wrapper->Init();
++    myStream = NULL;
+     SetOpenMode(Storage_VSNone);
+   }
+   else {
+@@ -218,7 +206,7 @@ void FSD_CmpFile::ReadLine(TCollection_AsciiString& buffer)
+   while (!IsEnd && !FSD_CmpFile::IsEnd()) {
+     Buffer[0] = '\0';
+     //myStream.get(Buffer,8192,'\n');
+-    myStream.getline(Buffer,8192,'\n');
++    myStream->getline(Buffer,8192,'\n');
+     for (Standard_Size lv = (strlen(Buffer)- 1); lv > 1 && (Buffer[lv] == '\r' || Buffer[lv] == '\n') ;lv--) {
+       Buffer[lv] = '\0';
+     }  
+@@ -256,6 +244,8 @@ void FSD_CmpFile::WriteExtendedLine(const TCollection_ExtendedString& buffer)
+ 
+   myStream << (char)0 << "\n";
+ #endif
++  if( NULL == myStream ) return;
++
+   Standard_ExtString extBuffer;
+   Standard_Integer   i;
+ 
+@@ -265,7 +255,7 @@ void FSD_CmpFile::WriteExtendedLine(const TCollection_ExtendedString& buffer)
+     PutExtCharacter(extBuffer[i]);
+   }
+ 
+-  myStream << "\n";
++  (*myStream) << "\n";
+ }
+ 
+ //=======================================================================
+@@ -301,7 +291,7 @@ void FSD_CmpFile::ReadChar(TCollection_AsciiString& buffer, const Standard_Size
+   buffer.Clear();
+ 
+   while (!IsEnd() && (ccount < rsize)) {
+-    myStream.get(c);
++    myStream->get(c);
+     buffer += c;
+     ccount++;
+   }
+@@ -323,7 +313,7 @@ void FSD_CmpFile::ReadString(TCollection_AsciiString& buffer)
+   while (!IsEnd && !FSD_CmpFile::IsEnd()) {
+     Buffer[0] = '\0';
+     //myStream.get(Buffer,8192,'\n');
+-    myStream.getline(Buffer,8192,'\n');
++    myStream->getline(Buffer,8192,'\n');
+     for (Standard_Size lv = (strlen(Buffer)- 1); lv > 1 && (Buffer[lv] == '\r' || Buffer[lv] == '\n') ;lv--) {
+       Buffer[lv] = '\0';
+     }  
+@@ -364,7 +354,7 @@ void FSD_CmpFile::ReadWord(TCollection_AsciiString& buffer)
+   buffer.Clear();
+ 
+   while (!IsEnd && !FSD_CmpFile::IsEnd()) {
+-    myStream.get(c);
++    myStream->get(c);
+     if ((c != ' ') && (c != '\n')) IsEnd = Standard_True;
+   }
+ 
+@@ -380,7 +370,7 @@ void FSD_CmpFile::ReadWord(TCollection_AsciiString& buffer)
+     }
+     *tmpb = c;
+     tmpb++; i++;
+-    myStream.get(c);
++    myStream->get(c);
+     if ((c == '\n') || (c == ' ')) IsEnd = Standard_True;
+   }
+ 
+@@ -427,8 +417,9 @@ void FSD_CmpFile::SkipObject()
+ 
+ Storage_BaseDriver& FSD_CmpFile::PutReference(const Standard_Integer aValue)
+ {
+-  myStream << aValue << " ";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << aValue << " ";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return *this;
+ }
+ 
+@@ -439,11 +430,12 @@ Storage_BaseDriver& FSD_CmpFile::PutReference(const Standard_Integer aValue)
+ 
+ Storage_BaseDriver& FSD_CmpFile::PutCharacter(const Standard_Character aValue)
+ {
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
+   unsigned short i;
+ 
+   i = aValue;
+-  myStream << i << " ";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  (*myStream) << i << " ";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return *this;
+ }
+ 
+@@ -454,8 +446,9 @@ Storage_BaseDriver& FSD_CmpFile::PutCharacter(const Standard_Character aValue)
+ 
+ Storage_BaseDriver& FSD_CmpFile::PutExtCharacter(const Standard_ExtCharacter aValue)
+ {
+-  myStream << aValue << " ";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << aValue << " ";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return *this;
+ }
+ 
+@@ -466,8 +459,9 @@ Storage_BaseDriver& FSD_CmpFile::PutExtCharacter(const Standard_ExtCharacter aVa
+ 
+ Storage_BaseDriver& FSD_CmpFile::PutInteger(const Standard_Integer aValue)
+ {
+-  myStream << aValue << " ";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << aValue << " ";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return *this;
+ }
+ 
+@@ -478,8 +472,9 @@ Storage_BaseDriver& FSD_CmpFile::PutInteger(const Standard_Integer aValue)
+ 
+ Storage_BaseDriver& FSD_CmpFile::PutBoolean(const Standard_Boolean aValue)
+ {
+-  myStream << ((Standard_Integer)aValue) << " ";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << ((Standard_Integer)aValue) << " ";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return *this;
+ }
+ 
+@@ -490,8 +485,9 @@ Storage_BaseDriver& FSD_CmpFile::PutBoolean(const Standard_Boolean aValue)
+ 
+ Storage_BaseDriver& FSD_CmpFile::PutReal(const Standard_Real aValue)
+ {
+-  myStream << ((Standard_Real)aValue) << " ";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << ((Standard_Real)aValue) << " ";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return *this;
+ }
+ 
+@@ -502,8 +498,9 @@ Storage_BaseDriver& FSD_CmpFile::PutReal(const Standard_Real aValue)
+ 
+ Storage_BaseDriver& FSD_CmpFile::PutShortReal(const Standard_ShortReal aValue)
+ {
+-  myStream << aValue << " ";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << aValue << " ";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return *this;
+ }
+ 
+@@ -514,7 +511,8 @@ Storage_BaseDriver& FSD_CmpFile::PutShortReal(const Standard_ShortReal aValue)
+ 
+ Storage_BaseDriver& FSD_CmpFile::GetReference(Standard_Integer& aValue)
+ {
+-  if (!(myStream >> aValue)) Storage_StreamTypeMismatchError::Raise();
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> aValue)) Storage_StreamTypeMismatchError::Raise();
+ 
+   return *this;
+ }
+@@ -526,13 +524,14 @@ Storage_BaseDriver& FSD_CmpFile::GetReference(Standard_Integer& aValue)
+ 
+ Storage_BaseDriver& FSD_CmpFile::GetCharacter(Standard_Character& aValue)
+ {
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
+   unsigned short i = 0;
+-  if (!(myStream >> i)) {
++  if (!((*myStream) >> i)) {
+     // SGI : donne une erreur mais a une bonne valeur pour les caracteres ecrits
+     //       signes (-80 fait ios::badbit, mais la variable i est initialisee)
+     //
+     if (i == 0) Storage_StreamTypeMismatchError::Raise();
+-    myStream.clear(ios::goodbit);
++    myStream->clear(ios::goodbit);
+   }
+   aValue = (char)i;
+ 
+@@ -546,7 +545,8 @@ Storage_BaseDriver& FSD_CmpFile::GetCharacter(Standard_Character& aValue)
+ 
+ Storage_BaseDriver& FSD_CmpFile::GetExtCharacter(Standard_ExtCharacter& aValue)
+ {
+-  if (!(myStream >> aValue)) Storage_StreamTypeMismatchError::Raise();
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> aValue)) Storage_StreamTypeMismatchError::Raise();
+   
+   return *this;
+ }
+@@ -558,7 +558,8 @@ Storage_BaseDriver& FSD_CmpFile::GetExtCharacter(Standard_ExtCharacter& aValue)
+ 
+ Storage_BaseDriver& FSD_CmpFile::GetInteger(Standard_Integer& aValue)
+ {
+-  if (!(myStream >> aValue)) Storage_StreamTypeMismatchError::Raise();
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> aValue)) Storage_StreamTypeMismatchError::Raise();
+ 
+   return *this;
+ }
+@@ -570,7 +571,8 @@ Storage_BaseDriver& FSD_CmpFile::GetInteger(Standard_Integer& aValue)
+ 
+ Storage_BaseDriver& FSD_CmpFile::GetBoolean(Standard_Boolean& aValue)
+ {
+-  if (!(myStream >> aValue)) Storage_StreamTypeMismatchError::Raise();
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> aValue)) Storage_StreamTypeMismatchError::Raise();
+ 
+   return *this;
+ }
+@@ -582,11 +584,12 @@ Storage_BaseDriver& FSD_CmpFile::GetBoolean(Standard_Boolean& aValue)
+ 
+ Storage_BaseDriver& FSD_CmpFile::GetReal(Standard_Real& aValue)
+ {
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
+ #ifdef BUC60808
+   char realbuffer[100];
+ 
+   realbuffer[0] = '\0';
+-  if (!(myStream >> realbuffer)) {
++  if (!((*myStream) >> realbuffer)) {
+ #ifdef OCCT_DEBUG
+     cerr << "%%%ERROR: read error of double at offset " << myStream.tellg() << endl;
+     cerr << "\t buffer is" << realbuffer<< endl;
+@@ -603,7 +606,7 @@ Storage_BaseDriver& FSD_CmpFile::GetReal(Standard_Real& aValue)
+ 
+   return *this;
+ #else
+-  if (!(myStream >> aValue)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> aValue)) Storage_StreamTypeMismatchError::Raise();
+ 
+   return *this;
+ #endif
+@@ -616,12 +619,13 @@ Storage_BaseDriver& FSD_CmpFile::GetReal(Standard_Real& aValue)
+ 
+ Storage_BaseDriver& FSD_CmpFile::GetShortReal(Standard_ShortReal& aValue)
+ {
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
+ #ifdef BUC60808
+   char realbuffer[100];
+   Standard_Real r = 0.0;
+ 
+   realbuffer[0] = '\0';
+-  if (!(myStream >> realbuffer)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> realbuffer)) Storage_StreamTypeMismatchError::Raise();
+   if (!OSD::CStringToReal(realbuffer,r))
+     Storage_StreamTypeMismatchError::Raise();
+ 
+@@ -629,7 +633,7 @@ Storage_BaseDriver& FSD_CmpFile::GetShortReal(Standard_ShortReal& aValue)
+ 
+   return *this;
+ #else
+-  if (!(myStream >> aValue)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> aValue)) Storage_StreamTypeMismatchError::Raise();
+  return *this;
+ #endif
+ }
+@@ -653,9 +657,10 @@ void FSD_CmpFile::Destroy()
+ 
+ Storage_Error FSD_CmpFile::BeginWriteInfoSection() 
+ {
+-  myStream << FSD_CmpFile::MagicNumber() << '\n';
+-  myStream << "BEGIN_INFO_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << FSD_CmpFile::MagicNumber() << '\n';
++  (*myStream) << "BEGIN_INFO_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ 
+   return Storage_VSOk;
+ }
+@@ -675,24 +680,25 @@ void FSD_CmpFile::WriteInfo(const Standard_Integer nbObj,
+ 			 const TCollection_ExtendedString& dataType,
+ 			 const TColStd_SequenceOfAsciiString& userInfo) 
+ {
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
+   Standard_Integer i;
+ 
+-  myStream << nbObj;
+-  myStream << "\n";
+-  myStream << dbVersion.ToCString() << "\n";
+-  myStream << date.ToCString() << "\n";
+-  myStream << schemaName.ToCString() << "\n";
+-  myStream << schemaVersion.ToCString() << "\n";
++  (*myStream) << nbObj;
++  (*myStream) << "\n";
++  (*myStream) << dbVersion.ToCString() << "\n";
++  (*myStream) << date.ToCString() << "\n";
++  (*myStream) << schemaName.ToCString() << "\n";
++  (*myStream) << schemaVersion.ToCString() << "\n";
+   WriteExtendedLine(appName);
+-  myStream << appVersion.ToCString() << "\n";
++  (*myStream) << appVersion.ToCString() << "\n";
+   WriteExtendedLine(dataType);
+-  myStream << userInfo.Length() << "\n";
++  (*myStream) << userInfo.Length() << "\n";
+ 
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ 
+   for (i = 1; i <= userInfo.Length(); i++) {
+-    myStream << userInfo.Value(i).ToCString() << "\n";
+-    if (myStream.bad()) Storage_StreamWriteError::Raise();
++    (*myStream) << userInfo.Value(i).ToCString() << "\n";
++    if (myStream->bad()) Storage_StreamWriteError::Raise();
+   }
+ }
+ 
+@@ -703,8 +709,9 @@ void FSD_CmpFile::WriteInfo(const Standard_Integer nbObj,
+ 
+ Storage_Error FSD_CmpFile::EndWriteInfoSection() 
+ {
+-  myStream << "END_INFO_SECTION\n";
+-  if (myStream.bad())  Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "END_INFO_SECTION\n";
++  if (myStream->bad())  Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -746,7 +753,8 @@ void FSD_CmpFile::ReadInfo(Standard_Integer& nbObj,
+ 			TCollection_ExtendedString& dataType,
+ 			TColStd_SequenceOfAsciiString& userInfo) 
+ {
+-  if (!(myStream >> nbObj)) Storage_StreamTypeMismatchError::Raise();
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> nbObj)) Storage_StreamTypeMismatchError::Raise();
+ 
+   FlushEndOfLine();
+ 
+@@ -760,7 +768,7 @@ void FSD_CmpFile::ReadInfo(Standard_Integer& nbObj,
+ 
+   Standard_Integer i,len = 0;
+ 
+-  if (!(myStream >> len)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> len)) Storage_StreamTypeMismatchError::Raise();
+ 
+   FlushEndOfLine();
+ 
+@@ -791,8 +799,9 @@ Storage_Error FSD_CmpFile::EndReadInfoSection()
+ 
+ Storage_Error FSD_CmpFile::BeginWriteCommentSection() 
+ {
+-  myStream << "BEGIN_COMMENT_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "BEGIN_COMMENT_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -803,15 +812,16 @@ Storage_Error FSD_CmpFile::BeginWriteCommentSection()
+ 
+ void FSD_CmpFile::WriteComment(const TColStd_SequenceOfExtendedString& aCom)
+ {
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
+  Standard_Integer i,aSize;
+ 
+  aSize = aCom.Length();
+- myStream << aSize << "\n";
+- if (myStream.bad()) Storage_StreamWriteError::Raise();
++  (*myStream) << aSize << "\n";
++ if (myStream->bad()) Storage_StreamWriteError::Raise();
+ 
+  for (i = 1; i <= aSize; i++) {
+    WriteExtendedLine(aCom.Value(i));
+-   if (myStream.bad()) Storage_StreamWriteError::Raise();
++   if (myStream->bad()) Storage_StreamWriteError::Raise();
+  }
+ }
+ 
+@@ -822,8 +832,9 @@ void FSD_CmpFile::WriteComment(const TColStd_SequenceOfExtendedString& aCom)
+ 
+ Storage_Error FSD_CmpFile::EndWriteCommentSection() 
+ {
+-  myStream << "END_COMMENT_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "END_COMMENT_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -844,10 +855,11 @@ Storage_Error FSD_CmpFile::BeginReadCommentSection()
+ 
+ void FSD_CmpFile::ReadComment(TColStd_SequenceOfExtendedString& aCom)
+ {
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
+   TCollection_ExtendedString line;
+   Standard_Integer           len,i;
+ 
+-  if (!(myStream >> len)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> len)) Storage_StreamTypeMismatchError::Raise();
+   
+   FlushEndOfLine();  
+ 
+@@ -875,8 +887,9 @@ Storage_Error FSD_CmpFile::EndReadCommentSection()
+ 
+ Storage_Error FSD_CmpFile::BeginWriteTypeSection() 
+ {
+-  myStream << "BEGIN_TYPE_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "BEGIN_TYPE_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -887,8 +900,9 @@ Storage_Error FSD_CmpFile::BeginWriteTypeSection()
+ 
+ void FSD_CmpFile::SetTypeSectionSize(const Standard_Integer aSize) 
+ {
+-  myStream << aSize << "\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << aSize << "\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -899,8 +913,9 @@ void FSD_CmpFile::SetTypeSectionSize(const Standard_Integer aSize)
+ void FSD_CmpFile::WriteTypeInformations(const Standard_Integer typeNum,
+ 				      const TCollection_AsciiString& typeName) 
+ {
+-  myStream << typeNum << " " << typeName.ToCString() << "\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << typeNum << " " << typeName.ToCString() << "\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -910,8 +925,9 @@ void FSD_CmpFile::WriteTypeInformations(const Standard_Integer typeNum,
+ 
+ Storage_Error FSD_CmpFile::EndWriteTypeSection() 
+ {
+-  myStream << "END_TYPE_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "END_TYPE_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -932,9 +948,10 @@ Storage_Error FSD_CmpFile::BeginReadTypeSection()
+ 
+ Standard_Integer FSD_CmpFile::TypeSectionSize() 
+ {
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
+   Standard_Integer i;
+ 
+-  if (!(myStream >> i)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> i)) Storage_StreamTypeMismatchError::Raise();
+ 
+   FlushEndOfLine();
+ 
+@@ -949,8 +966,9 @@ Standard_Integer FSD_CmpFile::TypeSectionSize()
+ void FSD_CmpFile::ReadTypeInformations(Standard_Integer& typeNum,
+ 				    TCollection_AsciiString& typeName) 
+ {
+-  if (!(myStream >> typeNum)) Storage_StreamTypeMismatchError::Raise();
+-  if (!(myStream >> typeName)) Storage_StreamTypeMismatchError::Raise();
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> typeNum)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> typeName)) Storage_StreamTypeMismatchError::Raise();
+   FlushEndOfLine();
+ }
+ 
+@@ -972,8 +990,9 @@ Storage_Error FSD_CmpFile::EndReadTypeSection()
+ 
+ Storage_Error FSD_CmpFile::BeginWriteRootSection() 
+ {
+-  myStream << "BEGIN_ROOT_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "BEGIN_ROOT_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -984,8 +1003,9 @@ Storage_Error FSD_CmpFile::BeginWriteRootSection()
+ 
+ void FSD_CmpFile::SetRootSectionSize(const Standard_Integer aSize) 
+ {
+-  myStream << aSize << "\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << aSize << "\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -995,8 +1015,9 @@ void FSD_CmpFile::SetRootSectionSize(const Standard_Integer aSize)
+ 
+ void FSD_CmpFile::WriteRoot(const TCollection_AsciiString& rootName, const Standard_Integer aRef, const TCollection_AsciiString& rootType) 
+ {
+-  myStream << aRef << " " << rootName.ToCString() << " " << rootType.ToCString() << "\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << aRef << " " << rootName.ToCString() << " " << rootType.ToCString() << "\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -1006,8 +1027,9 @@ void FSD_CmpFile::WriteRoot(const TCollection_AsciiString& rootName, const Stand
+ 
+ Storage_Error FSD_CmpFile::EndWriteRootSection() 
+ {
+-  myStream << "END_ROOT_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "END_ROOT_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -1028,9 +1050,10 @@ Storage_Error FSD_CmpFile::BeginReadRootSection()
+ 
+ Standard_Integer FSD_CmpFile::RootSectionSize() 
+ {
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
+   Standard_Integer i;
+ 
+-  if (!(myStream >> i)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> i)) Storage_StreamTypeMismatchError::Raise();
+   
+   FlushEndOfLine();
+   
+@@ -1044,7 +1067,8 @@ Standard_Integer FSD_CmpFile::RootSectionSize()
+ 
+ void FSD_CmpFile::ReadRoot(TCollection_AsciiString& rootName, Standard_Integer& aRef,TCollection_AsciiString& rootType) 
+ {
+-  if (!(myStream >> aRef)) Storage_StreamTypeMismatchError::Raise();
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> aRef)) Storage_StreamTypeMismatchError::Raise();
+   ReadWord(rootName);
+   ReadWord(rootType);
+ }
+@@ -1067,8 +1091,9 @@ Storage_Error FSD_CmpFile::EndReadRootSection()
+ 
+ Storage_Error FSD_CmpFile::BeginWriteRefSection() 
+ {
+-  myStream << "BEGIN_REF_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "BEGIN_REF_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -1079,8 +1104,9 @@ Storage_Error FSD_CmpFile::BeginWriteRefSection()
+ 
+ void FSD_CmpFile::SetRefSectionSize(const Standard_Integer aSize) 
+ {
+-  myStream << aSize << "\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << aSize << "\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -1091,8 +1117,9 @@ void FSD_CmpFile::SetRefSectionSize(const Standard_Integer aSize)
+ void FSD_CmpFile::WriteReferenceType(const Standard_Integer reference,
+ 				  const Standard_Integer typeNum) 
+ {
+-  myStream << reference << " " << typeNum << "\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << reference << " " << typeNum << "\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -1102,8 +1129,9 @@ void FSD_CmpFile::WriteReferenceType(const Standard_Integer reference,
+ 
+ Storage_Error FSD_CmpFile::EndWriteRefSection() 
+ {
+-  myStream << "END_REF_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "END_REF_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -1124,9 +1152,10 @@ Storage_Error FSD_CmpFile::BeginReadRefSection()
+ 
+ Standard_Integer FSD_CmpFile::RefSectionSize() 
+ {
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
+   Standard_Integer i;
+ 
+-  if (!(myStream >> i)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> i)) Storage_StreamTypeMismatchError::Raise();
+   FlushEndOfLine();
+ 
+   return i;
+@@ -1140,8 +1169,9 @@ Standard_Integer FSD_CmpFile::RefSectionSize()
+ void FSD_CmpFile::ReadReferenceType(Standard_Integer& reference,
+ 				 Standard_Integer& typeNum) 
+ {
+-  if (!(myStream >> reference)) Storage_StreamTypeMismatchError::Raise();
+-  if (!(myStream >> typeNum)) Storage_StreamTypeMismatchError::Raise();
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> reference)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> typeNum)) Storage_StreamTypeMismatchError::Raise();
+   FlushEndOfLine();
+ }
+ 
+@@ -1163,8 +1193,9 @@ Storage_Error FSD_CmpFile::EndReadRefSection()
+ 
+ Storage_Error FSD_CmpFile::BeginWriteDataSection() 
+ {
+-  myStream << "BEGIN_DATA_SECTION";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "BEGIN_DATA_SECTION";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -1176,8 +1207,10 @@ Storage_Error FSD_CmpFile::BeginWriteDataSection()
+ void FSD_CmpFile::WritePersistentObjectHeader(const Standard_Integer aRef,
+ 					   const Standard_Integer aType) 
+ {
+-  myStream << "\n#" << aRef << "%" << aType << " ";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
++  (*myStream) << "\n#" << aRef << "%" << aType << " ";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -1187,7 +1220,8 @@ void FSD_CmpFile::WritePersistentObjectHeader(const Standard_Integer aRef,
+ 
+ void FSD_CmpFile::BeginWritePersistentObjectData() 
+ {
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -1197,7 +1231,8 @@ void FSD_CmpFile::BeginWritePersistentObjectData()
+ 
+ void FSD_CmpFile::BeginWriteObjectData() 
+ {
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -1207,7 +1242,8 @@ void FSD_CmpFile::BeginWriteObjectData()
+ 
+ void FSD_CmpFile::EndWriteObjectData() 
+ {
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -1217,7 +1253,8 @@ void FSD_CmpFile::EndWriteObjectData()
+ 
+ void FSD_CmpFile::EndWritePersistentObjectData() 
+ {
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -1227,8 +1264,9 @@ void FSD_CmpFile::EndWritePersistentObjectData()
+ 
+ Storage_Error FSD_CmpFile::EndWriteDataSection() 
+ {
+-  myStream << "\nEND_DATA_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "\nEND_DATA_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -1250,29 +1288,30 @@ Storage_Error FSD_CmpFile::BeginReadDataSection()
+ void FSD_CmpFile::ReadPersistentObjectHeader(Standard_Integer& aRef,
+ 					  Standard_Integer& aType) 
+ {
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
+   char c;
+ 
+-  myStream.get(c);
++  myStream->get(c);
+ 
+   while (c != '#') {
+     if (IsEnd() || (c != ' ') || (c == '\r')|| (c == '\n')) {
+       Storage_StreamFormatError::Raise();
+     }
+-    myStream.get(c);
++    myStream->get(c);
+   }
+ 
+-  if (!(myStream >> aRef)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> aRef)) Storage_StreamTypeMismatchError::Raise();
+ 
+-  myStream.get(c);
++  myStream->get(c);
+ 
+   while (c != '%') {
+     if (IsEnd() || (c != ' ') || (c == '\r')|| (c == '\n')) {
+       Storage_StreamFormatError::Raise();
+     }
+-    myStream.get(c);
++    myStream->get(c);
+   }
+ 
+-  if (!(myStream >> aType)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> aType)) Storage_StreamTypeMismatchError::Raise();
+ //  cout << "REF:" << aRef << " TYPE:"<< aType << endl;
+ }
+ 
+@@ -1313,17 +1352,18 @@ void FSD_CmpFile::EndReadObjectData()
+ 
+ void FSD_CmpFile::EndReadPersistentObjectData() 
+ {
++  if( NULL == myStream ) Storage_StreamFormatError::Raise();
+   char c;
+ 
+-  myStream.get(c);
++  myStream->get(c);
+   while (c != '\n' && (c != '\r')) {
+     if (IsEnd() || (c != ' ')) {
+       Storage_StreamFormatError::Raise();
+     }
+-    myStream.get(c);
++    myStream->get(c);
+   }
+  if (c == '\r') {
+-   myStream.get(c);
++   myStream->get(c);
+  }
+ //  cout << "EndReadPersistentObjectData" << endl;
+ }
+@@ -1345,14 +1385,16 @@ Storage_Error FSD_CmpFile::EndReadDataSection()
+ 
+ Storage_Position FSD_CmpFile::Tell()
+ {
++  if( NULL == myStream ) return -1;
++
+   switch (OpenMode()) {
+   case Storage_VSRead:
+-    return (Storage_Position) myStream.tellp();
++    return (Storage_Position) myStream->tellp();
+   case Storage_VSWrite:
+-    return (Storage_Position) myStream.tellg();
++    return (Storage_Position) myStream->tellg();
+   case Storage_VSReadWrite: {
+-    Storage_Position aPosR  = (Storage_Position) myStream.tellp();
+-    Storage_Position aPosW  = (Storage_Position) myStream.tellg();
++    Storage_Position aPosR  = (Storage_Position) myStream->tellp();
++    Storage_Position aPosW  = (Storage_Position) myStream->tellg();
+     if (aPosR < aPosW)
+       return aPosW;
+     else
+diff --git a/src/FSD/FSD_File.cxx b/src/FSD/FSD_File.cxx
+index 393fed9ca..47f6e5db3 100644
+--- a/src/FSD/FSD_File.cxx
++++ b/src/FSD/FSD_File.cxx
+@@ -14,6 +14,7 @@
+ 
+ #include <FSD_File.ixx>
+ #include <OSD.hxx>
++#include <OSD_OpenFile.hxx>
+ 
+ const Standard_CString MAGICNUMBER = "FSDFILE";
+ const Standard_CString ENDOFNORMALEXTENDEDSECTION = "BEGIN_REF_SECTION";
+@@ -28,7 +29,14 @@ const Standard_Integer SIZEOFNORMALEXTENDEDSECTION = 16;
+ 
+ FSD_File::FSD_File()
+ {
++  m_wrapper = new STREAM_WRAPPER;
++  myStream = NULL;
++}
+ 
++FSD_File::~FSD_File()
++{
++  Destroy();
++  delete m_wrapper;
+ }
+ 
+ //=======================================================================
+@@ -73,34 +81,22 @@ Storage_Error FSD_File::Open(const TCollection_AsciiString& aName,const Storage_
+ 
+   if (OpenMode() == Storage_VSNone) {
+ 
+-#ifdef _MSC_VER
+-    TCollection_ExtendedString aWName(aName);
+     if (aMode == Storage_VSRead) {
+-      myStream.open( (const wchar_t*) aWName.ToExtString(),ios::in); // ios::nocreate is not portable
++      myStream = m_wrapper->Open( aName.ToCString(), ios::in); // ios::nocreate is not portable
+     }
+     else if (aMode == Storage_VSWrite) {
+-      myStream.open( (const wchar_t*) aWName.ToExtString(),ios::out);
++      myStream = m_wrapper->Open( aName.ToCString(), ios::out); // ios::nocreate is not portable
+     }
+     else if (aMode == Storage_VSReadWrite) {
+-      myStream.open( (const wchar_t*) aWName.ToExtString(),ios::in|ios::out);
+-#else
+-    if (aMode == Storage_VSRead) {
+-      myStream.open(aName.ToCString(),ios::in); // ios::nocreate is not portable
+-    }
+-    else if (aMode == Storage_VSWrite) {
+-      myStream.open(aName.ToCString(),ios::out);
+-    }
+-    else if (aMode == Storage_VSReadWrite) {
+-      myStream.open(aName.ToCString(),ios::in|ios::out);
+-#endif
++      myStream = m_wrapper->Open( aName.ToCString(), ios::in|ios::out); // ios::nocreate is not portable
+     }
+     
+-    if (myStream.fail()) {
++    if ( !m_wrapper->IsOpen() ) {
+       result = Storage_VSOpenError;
+     }
+     else {
+-      myStream.precision(17);
+-      myStream.imbue (std::locale::classic()); // use always C locale
++      myStream->precision(17);
++      myStream->imbue (std::locale::classic()); // use always C locale
+       SetOpenMode(aMode);
+     }
+   }
+@@ -118,7 +114,10 @@ Storage_Error FSD_File::Open(const TCollection_AsciiString& aName,const Storage_
+ 
+ Standard_Boolean FSD_File::IsEnd()
+ {
+-  return myStream.eof();
++  if( NULL == myStream )
++    return true;
++
++  return myStream->eof();
+ }
+ 
+ //=======================================================================
+@@ -131,7 +130,8 @@ Storage_Error FSD_File::Close()
+   Storage_Error result = Storage_VSOk;
+ 
+   if (OpenMode() != Storage_VSNone) {
+-    myStream.close();
++    m_wrapper->Init();
++    myStream = NULL;
+     SetOpenMode(Storage_VSNone);
+   }
+   else {
+@@ -190,7 +190,7 @@ void FSD_File::ReadLine(TCollection_AsciiString& buffer)
+ 
+   while (!IsEnd && !FSD_File::IsEnd()) {
+     Buffer[0] = '\0';
+-    myStream.getline(Buffer,8192,'\n');
++    myStream->getline(Buffer,8192,'\n');
+     
+ //    char c;
+ //    if (myStream.get(c) && c != '\n') {
+@@ -211,6 +211,8 @@ void FSD_File::ReadLine(TCollection_AsciiString& buffer)
+ 
+ void FSD_File::WriteExtendedLine(const TCollection_ExtendedString& buffer)
+ {
++  if( NULL == myStream ) return;
++
+   Standard_ExtString extBuffer;
+   Standard_Integer   i,c,d;
+ 
+@@ -220,10 +222,10 @@ void FSD_File::WriteExtendedLine(const TCollection_ExtendedString& buffer)
+     c = (extBuffer[i] & 0x0000FF00 ) >> 8 ;
+     d = extBuffer[i] & 0x000000FF;
+ 
+-    myStream << (char)c << (char)d;
++    (*myStream) << (char)c << (char)d;
+   }
+ 
+-  myStream << (char)0 << "\n";
++  (*myStream) << (char)0 << "\n";
+ }
+ 
+ //=======================================================================
+@@ -233,6 +235,8 @@ void FSD_File::WriteExtendedLine(const TCollection_ExtendedString& buffer)
+ 
+ void FSD_File::ReadExtendedLine(TCollection_ExtendedString& buffer)
+ {
++  if( NULL == myStream ) return;
++
+   char c = '\0';
+   Standard_ExtCharacter i = 0,j,count = 0;
+   Standard_Boolean fin = Standard_False;
+@@ -241,7 +245,7 @@ void FSD_File::ReadExtendedLine(TCollection_ExtendedString& buffer)
+   buffer.Clear();
+ 
+   while (!fin && !IsEnd()) {
+-    myStream.get(c);
++    myStream->get(c);
+ 
+     if (c == tg[count]) count++;
+     else count = 0;
+@@ -251,7 +255,7 @@ void FSD_File::ReadExtendedLine(TCollection_ExtendedString& buffer)
+       if (c == '\0') fin = Standard_True;
+       i = (i << 8);
+       
+-      myStream.get(c);
++      myStream->get(c);
+       if (c == tg[count]) count++;
+       else count = 0;
+       if (count < SIZEOFNORMALEXTENDEDSECTION) {
+@@ -285,7 +289,7 @@ void FSD_File::ReadChar(TCollection_AsciiString& buffer, const Standard_Size rsi
+   buffer.Clear();
+ 
+   while (!IsEnd() && (ccount < rsize)) {
+-    myStream.get(c);
++    myStream->get(c);
+     buffer += c;
+     ccount++;
+   }
+@@ -306,7 +310,7 @@ void FSD_File::ReadString(TCollection_AsciiString& buffer)
+   
+   while (!IsEnd && !FSD_File::IsEnd()) {
+     Buffer[0] = '\0';
+-    myStream.getline(Buffer,8192,'\n');
++    myStream->getline(Buffer,8192,'\n');
+     bpos = Buffer;
+ 
+     // LeftAdjust
+@@ -345,7 +349,7 @@ void FSD_File::ReadWord(TCollection_AsciiString& buffer)
+   buffer.Clear();
+ 
+   while (!IsEnd && !FSD_File::IsEnd()) {
+-    myStream.get(c);
++    myStream->get(c);
+     if ((c != ' ') && (c != '\n')) IsEnd = Standard_True;
+   }
+ 
+@@ -361,7 +365,7 @@ void FSD_File::ReadWord(TCollection_AsciiString& buffer)
+     }
+     *tmpb = c;
+     tmpb++; i++;
+-    myStream.get(c);
++    myStream->get(c);
+     if ((c == '\n') || (c == ' ')) IsEnd = Standard_True;
+   }
+ 
+@@ -408,8 +412,9 @@ void FSD_File::SkipObject()
+ 
+ Storage_BaseDriver& FSD_File::PutReference(const Standard_Integer aValue)
+ {
+-  myStream << aValue << " ";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << aValue << " ";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return *this;
+ }
+ 
+@@ -420,11 +425,12 @@ Storage_BaseDriver& FSD_File::PutReference(const Standard_Integer aValue)
+ 
+ Storage_BaseDriver& FSD_File::PutCharacter(const Standard_Character aValue)
+ {
+-  unsigned short i;
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
+ 
++  unsigned short i;
+   i = aValue;
+-  myStream << i << " ";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  (*myStream) << i << " ";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return *this;
+ }
+ 
+@@ -435,8 +441,10 @@ Storage_BaseDriver& FSD_File::PutCharacter(const Standard_Character aValue)
+ 
+ Storage_BaseDriver& FSD_File::PutExtCharacter(const Standard_ExtCharacter aValue)
+ {
+-  myStream << aValue << " ";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++
++  (*myStream) << aValue << " ";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return *this;
+ }
+ 
+@@ -447,8 +455,9 @@ Storage_BaseDriver& FSD_File::PutExtCharacter(const Standard_ExtCharacter aValue
+ 
+ Storage_BaseDriver& FSD_File::PutInteger(const Standard_Integer aValue)
+ {
+-  myStream << aValue << " ";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << aValue << " ";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return *this;
+ }
+ 
+@@ -459,8 +468,9 @@ Storage_BaseDriver& FSD_File::PutInteger(const Standard_Integer aValue)
+ 
+ Storage_BaseDriver& FSD_File::PutBoolean(const Standard_Boolean aValue)
+ {
+-  myStream << ((Standard_Integer)aValue) << " ";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << ((Standard_Integer)aValue) << " ";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return *this;
+ }
+ 
+@@ -471,8 +481,9 @@ Storage_BaseDriver& FSD_File::PutBoolean(const Standard_Boolean aValue)
+ 
+ Storage_BaseDriver& FSD_File::PutReal(const Standard_Real aValue)
+ {
+-  myStream << ((Standard_Real)aValue) << " ";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << ((Standard_Real)aValue) << " ";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return *this;
+ }
+ 
+@@ -483,8 +494,9 @@ Storage_BaseDriver& FSD_File::PutReal(const Standard_Real aValue)
+ 
+ Storage_BaseDriver& FSD_File::PutShortReal(const Standard_ShortReal aValue)
+ {
+-  myStream << aValue << " ";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << aValue << " ";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return *this;
+ }
+ 
+@@ -495,7 +507,8 @@ Storage_BaseDriver& FSD_File::PutShortReal(const Standard_ShortReal aValue)
+ 
+ Storage_BaseDriver& FSD_File::GetReference(Standard_Integer& aValue)
+ {
+-  if (!(myStream >> aValue)) Storage_StreamTypeMismatchError::Raise();
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> aValue)) Storage_StreamTypeMismatchError::Raise();
+ 
+   return *this;
+ }
+@@ -507,13 +520,14 @@ Storage_BaseDriver& FSD_File::GetReference(Standard_Integer& aValue)
+ 
+ Storage_BaseDriver& FSD_File::GetCharacter(Standard_Character& aValue)
+ {
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
+   unsigned short i = 0;
+-  if (!(myStream >> i)) {
++  if (!((*myStream) >> i)) {
+     // SGI : donne une erreur mais a une bonne valeur pour les caracteres ecrits
+     //       signes (-80 fait ios::badbit, mais la variable i est initialisee)
+     //
+     if (i == 0) Storage_StreamTypeMismatchError::Raise();
+-    myStream.clear(ios::goodbit); // .clear(0) is not portable
++    myStream->clear(ios::goodbit); // .clear(0) is not portable
+   }
+   aValue = (char)i;
+ 
+@@ -527,7 +541,8 @@ Storage_BaseDriver& FSD_File::GetCharacter(Standard_Character& aValue)
+ 
+ Storage_BaseDriver& FSD_File::GetExtCharacter(Standard_ExtCharacter& aValue)
+ {
+-  if (!(myStream >> aValue)) Storage_StreamTypeMismatchError::Raise();
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> aValue)) Storage_StreamTypeMismatchError::Raise();
+   
+   return *this;
+ }
+@@ -539,7 +554,8 @@ Storage_BaseDriver& FSD_File::GetExtCharacter(Standard_ExtCharacter& aValue)
+ 
+ Storage_BaseDriver& FSD_File::GetInteger(Standard_Integer& aValue)
+ {
+-  if (!(myStream >> aValue)) Storage_StreamTypeMismatchError::Raise();
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> aValue)) Storage_StreamTypeMismatchError::Raise();
+ 
+   return *this;
+ }
+@@ -551,7 +567,8 @@ Storage_BaseDriver& FSD_File::GetInteger(Standard_Integer& aValue)
+ 
+ Storage_BaseDriver& FSD_File::GetBoolean(Standard_Boolean& aValue)
+ {
+-  if (!(myStream >> aValue)) Storage_StreamTypeMismatchError::Raise();
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> aValue)) Storage_StreamTypeMismatchError::Raise();
+ 
+   return *this;
+ }
+@@ -563,16 +580,17 @@ Storage_BaseDriver& FSD_File::GetBoolean(Standard_Boolean& aValue)
+ 
+ Storage_BaseDriver& FSD_File::GetReal(Standard_Real& aValue)
+ {
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
+ #ifdef USEOSDREAL
+   char realbuffer[100];
+ 
+   realbuffer[0] = '\0';
+-  if (!(myStream >> realbuffer)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> realbuffer)) Storage_StreamTypeMismatchError::Raise();
+   if (!OSD::CStringToReal(realbuffer,aValue)) Storage_StreamTypeMismatchError::Raise();
+ 
+   return *this;
+ #else
+-  if (!(myStream >> aValue)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> aValue)) Storage_StreamTypeMismatchError::Raise();
+ 
+   return *this;
+ #endif
+@@ -585,19 +603,20 @@ Storage_BaseDriver& FSD_File::GetReal(Standard_Real& aValue)
+ 
+ Storage_BaseDriver& FSD_File::GetShortReal(Standard_ShortReal& aValue)
+ {
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
+ #ifdef USEOSDREAL
+   char realbuffer[100];
+   Standard_Real r = 0.0;
+ 
+   realbuffer[0] = '\0';
+-  if (!(myStream >> realbuffer)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> realbuffer)) Storage_StreamTypeMismatchError::Raise();
+   if (!OSD::CStringToReal(realbuffer,r)) Storage_StreamTypeMismatchError::Raise();
+ 
+   aValue = r;
+ 
+   return *this;
+ #else
+-  if (!(myStream >> aValue)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> aValue)) Storage_StreamTypeMismatchError::Raise();
+  return *this;
+ #endif
+ }
+@@ -621,9 +640,11 @@ void FSD_File::Destroy()
+ 
+ Storage_Error FSD_File::BeginWriteInfoSection() 
+ {
+-  myStream << FSD_File::MagicNumber() << '\n';
+-  myStream << "BEGIN_INFO_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++
++  (*myStream) << FSD_File::MagicNumber() << '\n';
++  (*myStream) << "BEGIN_INFO_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ 
+   return Storage_VSOk;
+ }
+@@ -643,24 +664,25 @@ void FSD_File::WriteInfo(const Standard_Integer nbObj,
+ 			 const TCollection_ExtendedString& dataType,
+ 			 const TColStd_SequenceOfAsciiString& userInfo) 
+ {
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
+   Standard_Integer i;
+ 
+-  myStream << nbObj;
+-  myStream << "\n";
+-  myStream << dbVersion.ToCString() << "\n";
+-  myStream << date.ToCString() << "\n";
+-  myStream << schemaName.ToCString() << "\n";
+-  myStream << schemaVersion.ToCString() << "\n";
++  (*myStream) << nbObj;
++  (*myStream) << "\n";
++  (*myStream) << dbVersion.ToCString() << "\n";
++  (*myStream) << date.ToCString() << "\n";
++  (*myStream) << schemaName.ToCString() << "\n";
++  (*myStream) << schemaVersion.ToCString() << "\n";
+   WriteExtendedLine(appName);
+-  myStream << appVersion.ToCString() << "\n";
++  (*myStream) << appVersion.ToCString() << "\n";
+   WriteExtendedLine(dataType);
+-  myStream << userInfo.Length() << "\n";
++  (*myStream) << userInfo.Length() << "\n";
+ 
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ 
+   for (i = 1; i <= userInfo.Length(); i++) {
+-    myStream << userInfo.Value(i).ToCString() << "\n";
+-    if (myStream.bad()) Storage_StreamWriteError::Raise();
++    (*myStream) << userInfo.Value(i).ToCString() << "\n";
++    if (myStream->bad()) Storage_StreamWriteError::Raise();
+   }
+ }
+ 
+@@ -671,8 +693,9 @@ void FSD_File::WriteInfo(const Standard_Integer nbObj,
+ 
+ Storage_Error FSD_File::EndWriteInfoSection() 
+ {
+-  myStream << "END_INFO_SECTION\n";
+-  if (myStream.bad())  Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "END_INFO_SECTION\n";
++  if (myStream->bad())  Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -714,7 +737,8 @@ void FSD_File::ReadInfo(Standard_Integer& nbObj,
+ 			TCollection_ExtendedString& dataType,
+ 			TColStd_SequenceOfAsciiString& userInfo) 
+ {
+-  if (!(myStream >> nbObj)) Storage_StreamTypeMismatchError::Raise();
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> nbObj)) Storage_StreamTypeMismatchError::Raise();
+ 
+   FlushEndOfLine();
+ 
+@@ -728,7 +752,7 @@ void FSD_File::ReadInfo(Standard_Integer& nbObj,
+ 
+   Standard_Integer i,len = 0;
+ 
+-  if (!(myStream >> len)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> len)) Storage_StreamTypeMismatchError::Raise();
+ 
+   FlushEndOfLine();
+ 
+@@ -759,8 +783,9 @@ Storage_Error FSD_File::EndReadInfoSection()
+ 
+ Storage_Error FSD_File::BeginWriteCommentSection() 
+ {
+-  myStream << "BEGIN_COMMENT_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "BEGIN_COMMENT_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -771,15 +796,16 @@ Storage_Error FSD_File::BeginWriteCommentSection()
+ 
+ void FSD_File::WriteComment(const TColStd_SequenceOfExtendedString& aCom)
+ {
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
+  Standard_Integer i,aSize;
+ 
+  aSize = aCom.Length();
+- myStream << aSize << "\n";
+- if (myStream.bad()) Storage_StreamWriteError::Raise();
++  (*myStream) << aSize << "\n";
++ if (myStream->bad()) Storage_StreamWriteError::Raise();
+ 
+  for (i = 1; i <= aSize; i++) {
+    WriteExtendedLine(aCom.Value(i));
+-   if (myStream.bad()) Storage_StreamWriteError::Raise();
++   if (myStream->bad()) Storage_StreamWriteError::Raise();
+  }
+ }
+ 
+@@ -790,8 +816,9 @@ void FSD_File::WriteComment(const TColStd_SequenceOfExtendedString& aCom)
+ 
+ Storage_Error FSD_File::EndWriteCommentSection() 
+ {
+-  myStream << "END_COMMENT_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "END_COMMENT_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -812,10 +839,11 @@ Storage_Error FSD_File::BeginReadCommentSection()
+ 
+ void FSD_File::ReadComment(TColStd_SequenceOfExtendedString& aCom)
+ {
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
+   TCollection_ExtendedString line;
+   Standard_Integer           len,i;
+ 
+-  if (!(myStream >> len)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> len)) Storage_StreamTypeMismatchError::Raise();
+   
+   FlushEndOfLine();  
+ 
+@@ -843,8 +871,9 @@ Storage_Error FSD_File::EndReadCommentSection()
+ 
+ Storage_Error FSD_File::BeginWriteTypeSection() 
+ {
+-  myStream << "BEGIN_TYPE_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "BEGIN_TYPE_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -855,8 +884,9 @@ Storage_Error FSD_File::BeginWriteTypeSection()
+ 
+ void FSD_File::SetTypeSectionSize(const Standard_Integer aSize) 
+ {
+-  myStream << aSize << "\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << aSize << "\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -867,8 +897,9 @@ void FSD_File::SetTypeSectionSize(const Standard_Integer aSize)
+ void FSD_File::WriteTypeInformations(const Standard_Integer typeNum,
+ 				      const TCollection_AsciiString& typeName) 
+ {
+-  myStream << typeNum << " " << typeName.ToCString() << "\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << typeNum << " " << typeName.ToCString() << "\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -878,8 +909,9 @@ void FSD_File::WriteTypeInformations(const Standard_Integer typeNum,
+ 
+ Storage_Error FSD_File::EndWriteTypeSection() 
+ {
+-  myStream << "END_TYPE_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "END_TYPE_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -900,9 +932,10 @@ Storage_Error FSD_File::BeginReadTypeSection()
+ 
+ Standard_Integer FSD_File::TypeSectionSize() 
+ {
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
+   Standard_Integer i;
+ 
+-  if (!(myStream >> i)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> i)) Storage_StreamTypeMismatchError::Raise();
+ 
+   FlushEndOfLine();
+ 
+@@ -917,8 +950,9 @@ Standard_Integer FSD_File::TypeSectionSize()
+ void FSD_File::ReadTypeInformations(Standard_Integer& typeNum,
+ 				    TCollection_AsciiString& typeName) 
+ {
+-  if (!(myStream >> typeNum)) Storage_StreamTypeMismatchError::Raise();
+-  if (!(myStream >> typeName)) Storage_StreamTypeMismatchError::Raise();
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> typeNum)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> typeName)) Storage_StreamTypeMismatchError::Raise();
+   FlushEndOfLine();
+ }
+ 
+@@ -940,8 +974,9 @@ Storage_Error FSD_File::EndReadTypeSection()
+ 
+ Storage_Error FSD_File::BeginWriteRootSection() 
+ {
+-  myStream << "BEGIN_ROOT_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "BEGIN_ROOT_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -952,8 +987,9 @@ Storage_Error FSD_File::BeginWriteRootSection()
+ 
+ void FSD_File::SetRootSectionSize(const Standard_Integer aSize) 
+ {
+-  myStream << aSize << "\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << aSize << "\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -963,8 +999,9 @@ void FSD_File::SetRootSectionSize(const Standard_Integer aSize)
+ 
+ void FSD_File::WriteRoot(const TCollection_AsciiString& rootName, const Standard_Integer aRef, const TCollection_AsciiString& rootType) 
+ {
+-  myStream << aRef << " " << rootName.ToCString() << " " << rootType.ToCString() << "\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << aRef << " " << rootName.ToCString() << " " << rootType.ToCString() << "\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -974,8 +1011,9 @@ void FSD_File::WriteRoot(const TCollection_AsciiString& rootName, const Standard
+ 
+ Storage_Error FSD_File::EndWriteRootSection() 
+ {
+-  myStream << "END_ROOT_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "END_ROOT_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -996,9 +1034,10 @@ Storage_Error FSD_File::BeginReadRootSection()
+ 
+ Standard_Integer FSD_File::RootSectionSize() 
+ {
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
+   Standard_Integer i;
+ 
+-  if (!(myStream >> i)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> i)) Storage_StreamTypeMismatchError::Raise();
+   
+   FlushEndOfLine();
+   
+@@ -1012,7 +1051,8 @@ Standard_Integer FSD_File::RootSectionSize()
+ 
+ void FSD_File::ReadRoot(TCollection_AsciiString& rootName, Standard_Integer& aRef,TCollection_AsciiString& rootType) 
+ {
+-  if (!(myStream >> aRef)) Storage_StreamTypeMismatchError::Raise();
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> aRef)) Storage_StreamTypeMismatchError::Raise();
+   ReadWord(rootName);
+   ReadWord(rootType);
+ }
+@@ -1035,8 +1075,9 @@ Storage_Error FSD_File::EndReadRootSection()
+ 
+ Storage_Error FSD_File::BeginWriteRefSection() 
+ {
+-  myStream << "BEGIN_REF_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "BEGIN_REF_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -1047,8 +1088,9 @@ Storage_Error FSD_File::BeginWriteRefSection()
+ 
+ void FSD_File::SetRefSectionSize(const Standard_Integer aSize) 
+ {
+-  myStream << aSize << "\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << aSize << "\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -1059,8 +1101,9 @@ void FSD_File::SetRefSectionSize(const Standard_Integer aSize)
+ void FSD_File::WriteReferenceType(const Standard_Integer reference,
+ 				  const Standard_Integer typeNum) 
+ {
+-  myStream << reference << " " << typeNum << "\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << reference << " " << typeNum << "\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -1070,8 +1113,9 @@ void FSD_File::WriteReferenceType(const Standard_Integer reference,
+ 
+ Storage_Error FSD_File::EndWriteRefSection() 
+ {
+-  myStream << "END_REF_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "END_REF_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -1092,9 +1136,10 @@ Storage_Error FSD_File::BeginReadRefSection()
+ 
+ Standard_Integer FSD_File::RefSectionSize() 
+ {
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
+   Standard_Integer i;
+ 
+-  if (!(myStream >> i)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> i)) Storage_StreamTypeMismatchError::Raise();
+   FlushEndOfLine();
+ 
+   return i;
+@@ -1108,8 +1153,9 @@ Standard_Integer FSD_File::RefSectionSize()
+ void FSD_File::ReadReferenceType(Standard_Integer& reference,
+ 				 Standard_Integer& typeNum) 
+ {
+-  if (!(myStream >> reference)) Storage_StreamTypeMismatchError::Raise();
+-  if (!(myStream >> typeNum)) Storage_StreamTypeMismatchError::Raise();
++  if( NULL == myStream ) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> reference)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> typeNum)) Storage_StreamTypeMismatchError::Raise();
+   FlushEndOfLine();
+ }
+ 
+@@ -1131,8 +1177,9 @@ Storage_Error FSD_File::EndReadRefSection()
+ 
+ Storage_Error FSD_File::BeginWriteDataSection() 
+ {
+-  myStream << "BEGIN_DATA_SECTION";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "BEGIN_DATA_SECTION";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -1144,8 +1191,9 @@ Storage_Error FSD_File::BeginWriteDataSection()
+ void FSD_File::WritePersistentObjectHeader(const Standard_Integer aRef,
+ 					   const Standard_Integer aType) 
+ {
+-  myStream << "\n#" << aRef << "=%" << aType;
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "\n#" << aRef << "=%" << aType;
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -1155,8 +1203,9 @@ void FSD_File::WritePersistentObjectHeader(const Standard_Integer aRef,
+ 
+ void FSD_File::BeginWritePersistentObjectData() 
+ {
+-  myStream << "( ";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "( ";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -1166,8 +1215,9 @@ void FSD_File::BeginWritePersistentObjectData()
+ 
+ void FSD_File::BeginWriteObjectData() 
+ {
+-  myStream << "( ";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "( ";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -1177,8 +1227,9 @@ void FSD_File::BeginWriteObjectData()
+ 
+ void FSD_File::EndWriteObjectData() 
+ {
+-  myStream << ") ";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << ") ";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -1188,8 +1239,9 @@ void FSD_File::EndWriteObjectData()
+ 
+ void FSD_File::EndWritePersistentObjectData() 
+ {
+-  myStream << ")";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << ")";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+ }
+ 
+ //=======================================================================
+@@ -1199,8 +1251,9 @@ void FSD_File::EndWritePersistentObjectData()
+ 
+ Storage_Error FSD_File::EndWriteDataSection() 
+ {
+-  myStream << "\nEND_DATA_SECTION\n";
+-  if (myStream.bad()) Storage_StreamWriteError::Raise();
++  if( NULL == myStream ) Storage_StreamWriteError::Raise();
++  (*myStream) << "\nEND_DATA_SECTION\n";
++  if (myStream->bad()) Storage_StreamWriteError::Raise();
+   return Storage_VSOk;
+ }
+ 
+@@ -1222,39 +1275,40 @@ Storage_Error FSD_File::BeginReadDataSection()
+ void FSD_File::ReadPersistentObjectHeader(Standard_Integer& aRef,
+ 					  Standard_Integer& aType) 
+ {
++  if( NULL == myStream ) Storage_StreamFormatError::Raise();
+   char c;
+ 
+-  myStream.get(c);
++  myStream->get(c);
+ 
+   while (c != '#') {
+     if (IsEnd() || (c != ' ') || (c == '\n')) {
+       Storage_StreamFormatError::Raise();
+     }
+-    myStream.get(c);
++    myStream->get(c);
+   }
+ 
+-  if (!(myStream >> aRef)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> aRef)) Storage_StreamTypeMismatchError::Raise();
+ 
+-  myStream.get(c);
++  myStream->get(c);
+ 
+ 
+    while (c != '=') {
+     if (IsEnd() || (c != ' ') || (c == '\n')) {
+       Storage_StreamFormatError::Raise();
+     }
+-    myStream.get(c);
++    myStream->get(c);
+   }
+ 
+-  myStream.get(c);
++  myStream->get(c);
+ 
+   while (c != '%') {
+     if (IsEnd() || (c != ' ') || (c == '\n')) {
+       Storage_StreamFormatError::Raise();
+     }
+-    myStream.get(c);
++    myStream->get(c);
+   }
+ 
+-  if (!(myStream >> aType)) Storage_StreamTypeMismatchError::Raise();
++  if (!((*myStream) >> aType)) Storage_StreamTypeMismatchError::Raise();
+ //  cout << "REF:" << aRef << " TYPE:"<< aType << endl;
+ }
+ 
+@@ -1265,13 +1319,14 @@ void FSD_File::ReadPersistentObjectHeader(Standard_Integer& aRef,
+ 
+ void FSD_File::BeginReadPersistentObjectData() 
+ {
++  if( NULL == myStream ) Storage_StreamFormatError::Raise();
+   char c;
+-  myStream.get(c);
++  myStream->get(c);
+   while (c != '(') {
+     if (IsEnd() || (c != ' ') || (c == '\n')) {
+       Storage_StreamFormatError::Raise();
+     }
+-    myStream.get(c);
++    myStream->get(c);
+   }
+ 
+ //cout << "BeginReadPersistentObjectData" << endl;
+@@ -1284,14 +1339,15 @@ void FSD_File::BeginReadPersistentObjectData()
+ 
+ void FSD_File::BeginReadObjectData() 
+ {
++  if( NULL == myStream ) Storage_StreamFormatError::Raise();
+ 
+   char c;
+-  myStream.get(c);
++  myStream->get(c);
+   while (c != '(') {
+     if (IsEnd() || (c != ' ') || (c == '\n')) {
+       Storage_StreamFormatError::Raise();
+     }
+-    myStream.get(c);
++    myStream->get(c);
+   }
+ 
+ //  cout << "BeginReadObjectData" << endl;
+@@ -1304,14 +1360,15 @@ void FSD_File::BeginReadObjectData()
+ 
+ void FSD_File::EndReadObjectData() 
+ {
++  if( NULL == myStream ) Storage_StreamFormatError::Raise();
+ 
+   char c;
+-  myStream.get(c);
++  myStream->get(c);
+   while (c != ')') {
+     if (IsEnd() || (c != ' ') || (c == '\n')) {
+       Storage_StreamFormatError::Raise();
+     }
+-    myStream.get(c);
++    myStream->get(c);
+   }
+ 
+ //  cout << "EndReadObjectData" << endl;
+@@ -1324,23 +1381,24 @@ void FSD_File::EndReadObjectData()
+ 
+ void FSD_File::EndReadPersistentObjectData() 
+ {
++  if( NULL == myStream ) Storage_StreamFormatError::Raise();
+ 
+   char c;
+ 
+-  myStream.get(c);
++  myStream->get(c);
+   while (c != ')') {
+     if (IsEnd() || (c != ' ') || (c == '\n')) {
+       Storage_StreamFormatError::Raise();
+     }
+-    myStream.get(c);
++    myStream->get(c);
+   }
+ 
+-  myStream.get(c);
++  myStream->get(c);
+   while (c != '\n') {
+     if (IsEnd() || (c != ' ')) {
+       Storage_StreamFormatError::Raise();
+     }
+-    myStream.get(c);
++    myStream->get(c);
+   }
+ //  cout << "EndReadPersistentObjectData" << endl;
+ }
+@@ -1362,14 +1420,16 @@ Storage_Error FSD_File::EndReadDataSection()
+ 
+ Storage_Position FSD_File::Tell()
+ {
++  if( NULL == myStream ) return -1;
++
+   switch (OpenMode()) {
+   case Storage_VSRead:
+-    return (Storage_Position) myStream.tellp();
++    return (Storage_Position) myStream->tellp();
+   case Storage_VSWrite:
+-    return (Storage_Position) myStream.tellg();
++    return (Storage_Position) myStream->tellg();
+   case Storage_VSReadWrite: {
+-    Storage_Position aPosR  = (Storage_Position) myStream.tellp();
+-    Storage_Position aPosW  = (Storage_Position) myStream.tellg();
++    Storage_Position aPosR  = (Storage_Position) myStream->tellp();
++    Storage_Position aPosW  = (Storage_Position) myStream->tellg();
+     if (aPosR < aPosW)
+       return aPosW;
+     else
+diff --git a/src/IGESControl/IGESControl_Writer.cxx b/src/IGESControl/IGESControl_Writer.cxx
+index 99ef6ddc6..f58a069ed 100644
+--- a/src/IGESControl/IGESControl_Writer.cxx
++++ b/src/IGESControl/IGESControl_Writer.cxx
+@@ -268,16 +268,15 @@ Standard_Boolean IGESControl_Writer::Write
+ Standard_Boolean IGESControl_Writer::Write
+   (const Standard_CString file, const Standard_Boolean fnes)
+ {
+-  ofstream fout;
+-  OSD_OpenStream(fout,file,ios::out);
+-  if (!fout) return Standard_False;
++  OPEN_OSTREAM( fout, file );
++  if( !IS_OPEN( fout ) ) return Standard_False;
+ #ifdef OCCT_DEBUG
+   cout<<" Ecriture fichier ("<< (fnes ? "fnes" : "IGES") <<"): "<<file<<endl;
+ #endif
+   Standard_Boolean res = Write (fout,fnes);
+ 
+   errno = 0;
+-  fout.close();
++  CLOSE_STREAM( fout );
+   res = fout.good() && res && !errno;
+ 
+   return res;
+diff --git a/src/IGESSelect/IGESSelect_WorkLibrary.cxx b/src/IGESSelect/IGESSelect_WorkLibrary.cxx
+index b7f0aa490..dcf1e747b 100644
+--- a/src/IGESSelect/IGESSelect_WorkLibrary.cxx
++++ b/src/IGESSelect/IGESSelect_WorkLibrary.cxx
+@@ -97,9 +97,8 @@ static  Handle(IGESData_FileProtocol) IGESProto;
+   DeclareAndCast(IGESData_Protocol,prot,ctx.Protocol());
+ 
+   if (igesmod.IsNull() || prot.IsNull()) return Standard_False;
+-  ofstream fout;
+-  OSD_OpenStream(fout,ctx.FileName(),ios::out );
+-  if (!fout) {
++  OPEN_OSTREAM( fout, ctx.FileName() );
++  if( !IS_OPEN( fout ) ) {
+     ctx.CCheck(0)->AddFail("IGES File could not be created");
+     sout<<" - IGES File could not be created : " << ctx.FileName() << endl; return 0;
+   }
+@@ -127,7 +126,7 @@ static  Handle(IGESData_FileProtocol) IGESProto;
+   Standard_Boolean status = VW.Print(fout);                sout<<" Done"<<endl;
+ 
+   errno = 0;
+-  fout.close();
++  CLOSE_STREAM( fout );
+   status = fout.good() && status && !errno;
+   if(errno)
+     sout << strerror(errno) << endl;
+diff --git a/src/OSD/OSD_MAllocHook.cxx b/src/OSD/OSD_MAllocHook.cxx
+index e9e3d9c68..aba7afa21 100644
+--- a/src/OSD/OSD_MAllocHook.cxx
++++ b/src/OSD/OSD_MAllocHook.cxx
+@@ -14,6 +14,7 @@
+ // commercial license or contractual agreement.
+ 
+ #include <OSD_MAllocHook.hxx>
++#include <OSD_OpenFile.hxx>
+ 
+ #if !defined(WNT) || defined(__MINGW32__) || defined(__BORLANDC__)
+ #if !defined __STDC_LIMIT_MACROS
+@@ -205,7 +206,8 @@ void OSD_MAllocHook::SetCallback(Callback* theCB)
+ OSD_MAllocHook::LogFileHandler::LogFileHandler()
+ : myBreakSize(0)
+ {
+-  myLogFile.imbue (std::locale ("C"));
++    myLogFile = NULL;
++    m_wrapper = new STREAM_WRAPPER;
+ }
+ 
+ //=======================================================================
+@@ -216,6 +218,7 @@ OSD_MAllocHook::LogFileHandler::LogFileHandler()
+ OSD_MAllocHook::LogFileHandler::~LogFileHandler()
+ {
+   Close();
++  delete m_wrapper;
+ }
+ 
+ //=======================================================================
+@@ -226,13 +229,15 @@ OSD_MAllocHook::LogFileHandler::~LogFileHandler()
+ Standard_Boolean OSD_MAllocHook::LogFileHandler::Open(const char* theFileName)
+ {
+   Close();
+-  myLogFile.open (theFileName);
+-  if (!myLogFile.is_open())
++  myLogFile = m_wrapper->Open( theFileName, ios::out );
++
++  if (!m_wrapper->IsOpen())
+   {
+     return Standard_False;
+   }
+ 
+-  myLogFile << "Operation type; Request Number; Block Size\n"
++  myLogFile->imbue (std::locale ("C"));
++  (*myLogFile) << "Operation type; Request Number; Block Size\n"
+                "------------------------------------------\n";
+   return Standard_True;
+ }
+@@ -244,9 +249,10 @@ Standard_Boolean OSD_MAllocHook::LogFileHandler::Open(const char* theFileName)
+ 
+ void OSD_MAllocHook::LogFileHandler::Close()
+ {
+-  if (myLogFile.is_open())
++  if ( m_wrapper->IsOpen() )
+   {
+-    myLogFile.close();
++      m_wrapper->Init();
++      myLogFile = NULL;
+   }
+ }
+ 
+@@ -371,11 +377,13 @@ Standard_Boolean OSD_MAllocHook::LogFileHandler::MakeReport
+   fclose(aLogFile);
+ 
+   // print the report
+-  std::ofstream aRepFile (theOutFile);
+-  if(!aRepFile.is_open())
++  OPEN_STREAM( aRepFile, theOutFile, ios::out );
++
++  if( !IS_OPEN( aRepFile ) )
+   {
+     return Standard_False;
+   }
++
+   aRepFile.imbue (std::locale ("C"));
+ 
+   aRepFile << std::setw(20) << "BlockSize "
+@@ -424,7 +432,7 @@ Standard_Boolean OSD_MAllocHook::LogFileHandler::MakeReport
+            << std::setw(20) << aTotalLeftSize << ' '
+            << std::setw(20) << aTotalPeakSize << std::endl;
+ 
+-  aRepFile.close();
++  CLOSE_STREAM( aRepFile );
+   return Standard_True;
+ }
+ 
+@@ -437,10 +445,10 @@ void OSD_MAllocHook::LogFileHandler::AllocEvent
+                    (size_t      theSize,
+                     long        theRequestNum)
+ {
+-  if (myLogFile.is_open())
++  if ( m_wrapper->IsOpen())
+   {
+     myMutex.Lock();
+-    myLogFile << "alloc "<< std::setw(10) << theRequestNum
++    (*myLogFile) << "alloc "<< std::setw(10) << theRequestNum
+               << std::setw(20) << theSize << std::endl;
+     if (myBreakSize == theSize)
+       place_for_breakpoint();
+@@ -458,10 +466,10 @@ void OSD_MAllocHook::LogFileHandler::FreeEvent
+                     size_t      theSize,
+                     long        theRequestNum)
+ {
+-  if (myLogFile.is_open())
++  if (m_wrapper->IsOpen())
+   {
+     myMutex.Lock();
+-    myLogFile << "free " << std::setw(20) << theRequestNum
++    (*myLogFile) << "free " << std::setw(20) << theRequestNum
+               << std::setw(20) << theSize << std::endl;
+     myMutex.Unlock();
+   }
+@@ -528,8 +536,8 @@ void OSD_MAllocHook::CollectBySize::Reset()
+ Standard_Boolean OSD_MAllocHook::CollectBySize::MakeReport(const char* theOutFile)
+ {
+   // print the report
+-  std::ofstream aRepFile(theOutFile);
+-  if (!aRepFile.is_open())
++  OPEN_STREAM( aRepFile, theOutFile, ios::out );
++  if( !IS_OPEN( aRepFile ) )
+     return Standard_False;
+   std::locale aCLoc("C");
+   aRepFile.imbue(aCLoc);
+@@ -575,7 +583,7 @@ Standard_Boolean OSD_MAllocHook::CollectBySize::MakeReport(const char* theOutFil
+            << std::setw(20) << aTotAlloc  << ' '
+            << std::setw(20) << myTotalLeftSize  << ' '
+            << std::setw(20) << myTotalPeakSize << std::endl;
+-  aRepFile.close();
++  CLOSE_STREAM( aRepFile );
+   return Standard_True;
+ }
+ 
+diff --git a/src/OSD/OSD_MAllocHook.hxx b/src/OSD/OSD_MAllocHook.hxx
+index 175a58857..fd1840a7d 100644
+--- a/src/OSD/OSD_MAllocHook.hxx
++++ b/src/OSD/OSD_MAllocHook.hxx
+@@ -19,7 +19,9 @@
+ #include <Standard_TypeDef.hxx>
+ #include <Standard_Mutex.hxx>
+ #include <stdio.h>
+-#include <fstream>
++#include <iostream>
++
++class STREAM_WRAPPER;
+ 
+ /**
+  * This class provides the possibility to set callback for memory
+@@ -101,7 +103,8 @@ public:
+     Standard_EXPORT virtual void FreeEvent(void*, size_t, long);
+ 
+   private:
+-    std::ofstream  myLogFile;
++    STREAM_WRAPPER* m_wrapper;
++    std::ostream*  myLogFile;
+     Standard_Mutex myMutex;
+     size_t         myBreakSize;
+   };
+diff --git a/src/OSD/OSD_OpenFile.cxx b/src/OSD/OSD_OpenFile.cxx
+index 32e5ccd07..1530afccf 100644
+--- a/src/OSD/OSD_OpenFile.cxx
++++ b/src/OSD/OSD_OpenFile.cxx
+@@ -11,6 +11,7 @@
+ // Alternatively, this file may be used under the terms of Open CASCADE
+ // commercial license or contractual agreement.
+ 
++#include <locale>
+ #include <OSD_OpenFile.hxx>
+ #include <TCollection_ExtendedString.hxx>
+ #include <NCollection_UtfString.hxx>
+@@ -23,7 +24,7 @@ FILE* OSD_OpenFile(const char* theName,
+                    const char* theMode)
+ {
+   FILE* aFile = 0;
+-#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
++#if defined(_WIN32)
+   // file name is treated as UTF-8 string and converted to UTF-16 one
+   const TCollection_ExtendedString aFileNameW (theName, Standard_True);
+   const TCollection_ExtendedString aFileModeW (theMode, Standard_True);
+@@ -43,7 +44,7 @@ FILE* OSD_OpenFile(const TCollection_ExtendedString& theName,
+                    const char* theMode)
+ {
+   FILE* aFile = 0;
+-#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
++#if defined(_WIN32)
+   const TCollection_ExtendedString aFileModeW (theMode, Standard_True);
+   aFile = ::_wfopen ((const wchar_t* )theName.ToExtString(),
+                      (const wchar_t* )aFileModeW.ToExtString());
+@@ -55,71 +56,123 @@ FILE* OSD_OpenFile(const TCollection_ExtendedString& theName,
+   return aFile;
+ }
+ 
+-// ==============================================
+-// function : OSD_OpenFileBuf
+-// purpose : Opens file buffer
+-// ==============================================
+-void OSD_OpenFileBuf(std::filebuf& theBuff,
+-                     const char* theName,
+-                     const std::ios_base::openmode theMode)
++#include <iostream>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++
++
++STREAM_WRAPPER::STREAM_WRAPPER()
+ {
+-#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
+-  // file name is treated as UTF-8 string and converted to UTF-16 one
+-  const TCollection_ExtendedString aFileNameW (theName, Standard_True);
+-  theBuff.open ((const wchar_t* )aFileNameW.ToExtString(), theMode);
+-#else
+-  theBuff.open (theName, theMode);
+-#endif
++  m_buf = NULL;
++  m_stream = NULL;
++  return;
+ }
+ 
+-// ==============================================
+-// function : OSD_OpenFileBuf
+-// purpose : Opens file buffer
+-// ==============================================
+-void OSD_OpenFileBuf(std::filebuf& theBuff,
+-                     const TCollection_ExtendedString& theName,
+-                     const std::ios_base::openmode theMode)
++
++STREAM_WRAPPER::~STREAM_WRAPPER()
+ {
+-#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
+-  theBuff.open ((const wchar_t* )theName.ToExtString(), theMode);
+-#else
+-  // conversion in UTF-8 for linux
+-  NCollection_Utf8String aString((const Standard_Utf16Char*)theName.ToExtString());
+-  theBuff.open (aString.ToCString(),theMode);
+-#endif
++  if( NULL != m_stream )
++    delete m_stream;
++
++  if( NULL != m_buf )
++  {
++    m_buf->close(); // ensure file is closed regardless of m_buf's destructor
++    delete m_buf;
++  }
++
++  return;
+ }
+ 
+-// ==============================================
+-// function : OSD_OpenStream
+-// purpose : Opens file stream
+-// ==============================================
+-void OSD_OpenStream(std::ofstream& theStream,
+-                    const char* theName,
+-                    const std::ios_base::openmode theMode)
++
++std::iostream* STREAM_WRAPPER::Open( const char* aFileName, std::ios_base::openmode aMode )
+ {
+-#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
+-  // file name is treated as UTF-8 string and converted to UTF-16 one
+-  const TCollection_ExtendedString aFileNameW (theName, Standard_True);
+-  theStream.open ((const wchar_t* )aFileNameW.ToExtString(), theMode);
+-#else
+-  theStream.open (theName, theMode);
+-#endif
++  if( NULL != m_stream )
++  {
++    delete m_stream;
++    m_stream = NULL;
++  }
++
++  if( NULL != m_buf )
++  {
++    m_buf->close();
++    delete m_buf;
++  }
++
++  int flags = 0;
++
++  if( aMode & std::ios_base::app )
++    flags |= _O_APPEND;
++
++  if( aMode & std::ios_base::out && aMode & std::ios_base::in )
++    flags |= _O_RDWR;
++  else if( aMode & std::ios_base::out )
++    flags |= _O_WRONLY;
++  else if( aMode & std::ios_base::in )
++    flags |= _O_RDONLY;
++
++  if( aMode & std::ios_base::binary )
++    flags |= _O_BINARY;
++
++  if( aMode & std::ios_base::out && aMode & std::ios_base::trunc
++      && !( aMode & std::ios_base::app ) && !( aMode & std::ios_base::ate ) )
++    flags |= _O_TRUNC;
++
++  if( aMode & std::ios_base::out )
++    flags |= _O_CREAT;
++
++  // convert from UTF8 to wchar_t
++  const TCollection_ExtendedString aFileNameW( aFileName, Standard_True);
++
++  int fd = _wopen( (const wchar_t* )aFileNameW.ToExtString(), flags, _S_IREAD | _S_IWRITE );
++
++  if( fd >= 0 && aMode & std::ios_base::ate )
++    lseek( fd, 0, SEEK_END );
++
++  m_buf = new __gnu_cxx::stdio_filebuf<char>( fd, aMode );
++
++  m_stream = new std::iostream( m_buf );
++
++  return m_stream;
+ }
+ 
+-// ==============================================
+-// function : OSD_OpenStream
+-// purpose : Opens file stream
+-// ==============================================
+-void OSD_OpenStream(std::ofstream& theStream,
+-                    const TCollection_ExtendedString& theName,
+-                    const std::ios_base::openmode theMode)
++
++void STREAM_WRAPPER::Close( void )
+ {
+-#if defined(_WIN32) && !defined(__MINGW32__) && !defined(__MINGW64__)
+-  theStream.open ((const wchar_t* )theName.ToExtString(), theMode);
+-#else
+-  // conversion in UTF-8 for linux
+-  NCollection_Utf8String aString((const Standard_Utf16Char*)theName.ToExtString());
+-  theStream.open (aString.ToCString(),theMode);
+-#endif
++  if( m_buf )
++    m_buf->close();
++
++  return;
++}
++
++
++void STREAM_WRAPPER::Init( void )
++{
++  if( m_stream )
++  {
++    delete m_stream;
++    m_stream = NULL;
++  }
++
++  if( m_buf )
++  {
++    m_buf->close();
++    delete m_buf;
++    m_buf = NULL;
++  }
++}
++
++
++std::iostream* STREAM_WRAPPER::GetStream( void )
++{
++  return m_stream;
+ }
+ 
++
++bool STREAM_WRAPPER::IsOpen( void )
++{
++  if( NULL == m_buf )
++    return false;
++
++  return m_buf->is_open();
++}
+diff --git a/src/OSD/OSD_OpenFile.hxx b/src/OSD/OSD_OpenFile.hxx
+index 5c4a70aaf..bc9c13339 100644
+--- a/src/OSD/OSD_OpenFile.hxx
++++ b/src/OSD/OSD_OpenFile.hxx
+@@ -23,39 +23,48 @@
+ 
+ #include <fstream>
+ #include <TCollection_ExtendedString.hxx>
++#include <ext/stdio_filebuf.h>
+ 
+-//! Function opens the file stream.
+-//! @param theStream stream to open
+-//! @param theName name of file encoded in UTF-8
+-//! @param theMode opening mode
+-__Standard_API void OSD_OpenStream (std::ofstream& theStream,
+-                                    const char* theName,
+-                                    const std::ios_base::openmode theMode);
+ 
+-//! Function opens the file stream.
+-//! @param theStream stream to open
+-//! @param theName name of file encoded in UTF-16
+-//! @param theMode opening mode
+-__Standard_API void OSD_OpenStream (std::ofstream& theStream,
+-                                    const TCollection_ExtendedString& theName,
+-                                    const std::ios_base::openmode theMode);
++#define OPEN_OSTREAM( var, name ) \
++        STREAM_WRAPPER var ## _BUF_; \
++        std::ostream& var = *var ## _BUF_.Open( name, std::ios_base::out | std::ios_base::trunc | std::ios_base::binary )
+ 
+-//! Function opens the file buffer.
+-//! @param theBuff file buffer to open
+-//! @param theName name of file encoded in UTF-8
+-//! @param theMode opening mode
+-__Standard_API void OSD_OpenFileBuf (std::filebuf& theBuff,
+-                                     const char* theName,
+-                                     const std::ios_base::openmode theMode);
++#define OPEN_ISTREAM( var, name ) \
++        STREAM_WRAPPER var ## _BUF_; \
++        std::istream& var = *var ## _BUF_.Open( name, std::ios_base::in | std::ios_base::binary )
+ 
+-//! Function opens the file buffer.
+-//! @param theBuff file buffer to open
+-//! @param theName name of file encoded in UTF-16
+-//! @param theMode opening mode
+-__Standard_API void OSD_OpenFileBuf (std::filebuf& theBuff,
+-                                     const TCollection_ExtendedString& theName,
+-                                     const std::ios_base::openmode theMode);
++#define OPEN_IOSTREAM( var, name ) \
++        STREAM_WRAPPER var ## _BUF_; \
++        std::iostream& var = *var ## _BUF_.Open( name, std::ios_base::out | std::ios_base::in | std::ios_base::binary )
++
++#define OPEN_STREAM( var, name, mode ) \
++        STREAM_WRAPPER var ## _BUF_; \
++        std::iostream& var = *var ## _BUF_.Open( name, mode )
++
++#define IS_OPEN( var ) var ## _BUF_.IsOpen()
++
++#define CLOSE_STREAM( var ) var ## _BUF_.Close()
++
++class STREAM_WRAPPER
++{
++private:
++    __gnu_cxx::stdio_filebuf<char>* m_buf;
++    std::iostream*                  m_stream;
++
++public:
++    STREAM_WRAPPER();
++    virtual ~STREAM_WRAPPER();
++
++    std::iostream* Open( const char* aFileName, std::ios_base::openmode aMode );
++    void Close( void );
++
++    std::iostream* GetStream( void );
++
++    bool IsOpen( void );
+ 
++    void Init( void );
++};
+ 
+ //! Function opens the file.
+ //! @param theName name of file encoded in UTF-16
+diff --git a/src/StepSelect/StepSelect_WorkLibrary.cxx b/src/StepSelect/StepSelect_WorkLibrary.cxx
+index 5ff57af96..e822cbef1 100644
+--- a/src/StepSelect/StepSelect_WorkLibrary.cxx
++++ b/src/StepSelect/StepSelect_WorkLibrary.cxx
+@@ -12,6 +12,7 @@
+ // commercial license or contractual agreement.
+ 
+ #include <StepSelect_WorkLibrary.ixx>
++#include <OSD_OpenFile.hxx>
+ 
+ #include <sys/stat.h>
+ #include <errno.h>
+@@ -84,10 +85,11 @@ Standard_Boolean  StepSelect_WorkLibrary::WriteFile
+   DeclareAndCast(StepData_Protocol,stepro,ctx.Protocol());
+   if (stepmodel.IsNull() || stepro.IsNull()) return Standard_False;
+ 
+-  ofstream fout;
+-  OSD_OpenStream(fout,ctx.FileName(),ios::out|ios::trunc);
++  OPEN_OSTREAM( fout, ctx.FileName() );
++  // XXX - ofstream fout;
++  // XXX - OSD_OpenStream(fout,ctx.FileName(),ios::out|ios::trunc);
+ 
+-  if (!fout || !fout.rdbuf()->is_open()) {
++  if (!IS_OPEN(fout)) {
+     ctx.CCheck(0)->AddFail("Step File could not be created");
+     sout<<" Step File could not be created : " << ctx.FileName() << endl; return 0;
+   }
+@@ -118,7 +120,7 @@ Standard_Boolean  StepSelect_WorkLibrary::WriteFile
+   sout<<" Done"<<endl;
+       
+   errno = 0;
+-  fout.close();
++  CLOSE_STREAM( fout );
+   isGood = fout.good() && isGood && !errno;
+   if(errno)
+     sout << strerror(errno) << endl;
+diff --git a/src/VrmlAPI/VrmlAPI_Writer.cxx b/src/VrmlAPI/VrmlAPI_Writer.cxx
+index a31c9d203..615934de2 100644
+--- a/src/VrmlAPI/VrmlAPI_Writer.cxx
++++ b/src/VrmlAPI/VrmlAPI_Writer.cxx
+@@ -216,8 +216,7 @@ void VrmlAPI_Writer::Write(const TopoDS_Shape& aShape,const Standard_CString aFi
+ {
+   OSD_Path thePath(aFile);
+   TCollection_AsciiString theFile;thePath.SystemName(theFile);
+-  ofstream outfile;
+-  OSD_OpenStream(outfile, theFile.ToCString(), ios::out);
++  OPEN_OSTREAM( outfile, theFile.ToCString() );
+   Handle(VrmlConverter_IsoAspect) ia = new VrmlConverter_IsoAspect;  // UIso
+   Handle(VrmlConverter_IsoAspect) ia1 = new VrmlConverter_IsoAspect; //VIso
+   ia->SetMaterial(myUisoMaterial);
+@@ -315,6 +314,7 @@ void VrmlAPI_Writer::Write(const TopoDS_Shape& aShape,const Standard_CString aFi
+       Group2.Print(outfile);
+     }
+   S2.Print(outfile); 
+-  S1.Print(outfile); 
++  S1.Print(outfile);
++  CLOSE_STREAM( outfile );
+ }
+ 
+-- 
+2.11.0
+
