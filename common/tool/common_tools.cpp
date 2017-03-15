@@ -89,10 +89,7 @@ int COMMON_TOOLS::ZoomCenter( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* ctls = getViewControls();
 
-    if( ctls->IsCursorWarpingEnabled() )
-        ctls->CenterOnCursor();
-    else
-        getView()->SetCenter( getViewControls()->GetCursorPosition() );
+    ctls->CenterOnCursor();
 
     return 0;
 }

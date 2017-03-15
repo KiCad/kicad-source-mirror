@@ -76,7 +76,5 @@ void VIEW_CONTROLS::ApplySettings( const VC_SETTINGS& aSettings )
     SetAutoPan( aSettings.m_autoPanEnabled );
     SetAutoPanMargin( aSettings.m_autoPanMargin );
     SetAutoPanSpeed( aSettings.m_autoPanSpeed );
-    EnableCursorWarping( aSettings.m_warpCursor );
-    EnableMousewheelPan( aSettings.m_enableMousewheelPan );
     ForceCursorPosition( aSettings.m_forceCursorPosition, aSettings.m_forcedPosition );
 }
