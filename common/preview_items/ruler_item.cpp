@@ -203,8 +203,9 @@ void drawBacksideTicks( KIGFX::GAL& aGal, const VECTOR2D& aOrigin,
 }
 
 
-RULER_ITEM::RULER_ITEM():
-    EDA_ITEM( NOT_USED )    // Never added to anything - just a preview
+RULER_ITEM::RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& aGeomMgr ):
+    EDA_ITEM( NOT_USED ),    // Never added to anything - just a preview
+    m_geomMgr( aGeomMgr )
 {}
 
 
@@ -212,8 +213,8 @@ const BOX2I RULER_ITEM::ViewBBox() const
 {
     BOX2I tmp;
 
-    tmp.SetOrigin( m_origin );
-    tmp.SetEnd( m_end );
+    tmp.SetOrigin( m_geomMgr.GetOrigin() );
+    tmp.SetEnd( m_geomMgr.GetEnd() );
     tmp.Normalize();
     return tmp;
 }
@@ -230,20 +231,23 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     auto& gal = *aView->GetGAL();
 
+    const auto origin = m_geomMgr.GetOrigin();
+    const auto end = m_geomMgr.GetEnd();
+
     gal.SetLineWidth( 1.0 );
     gal.SetIsStroke( true );
     gal.SetIsFill( false );
     gal.SetStrokeColor( PreviewOverlayDefaultColor() );
 
     // draw the main line from the origin to cursor
-    gal.DrawLine( m_origin, m_end );
+    gal.DrawLine( origin, end );
 
-    VECTOR2D rulerVec( m_end - m_origin );
+    VECTOR2D rulerVec( end - origin );
 
     // constant text size on screen
     SetConstantGlyphHeight( gal, 12.0 );
 
-    drawCursorStrings( gal, m_end, rulerVec );
+    drawCursorStrings( gal, end, rulerVec );
 
     // tick label size
     SetConstantGlyphHeight( gal, 10.0 );
@@ -251,11 +255,11 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     // basic tick size
     const double minorTickLen = 5.0 / gal.GetWorldScale();
 
-    drawTicksAlongLine( gal, m_origin, rulerVec, minorTickLen );
+    drawTicksAlongLine( gal, origin, rulerVec, minorTickLen );
 
     gal.SetStrokeColor( PreviewOverlayDefaultColor().WithAlpha( PreviewOverlayDeemphAlpha( true ) ) );
-    drawBacksideTicks( gal, m_origin, rulerVec, minorTickLen * majorTickLengthFactor, 2 );
+    drawBacksideTicks( gal, origin, rulerVec, minorTickLen * majorTickLengthFactor, 2 );
 
     // draw the back of the origin "crosshair"
-    gal.DrawLine( m_origin, m_origin + rulerVec.Resize( -minorTickLen * midTickLengthFactor ) );
+    gal.DrawLine( origin, origin + rulerVec.Resize( -minorTickLen * midTickLengthFactor ) );
 }

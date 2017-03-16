@@ -950,7 +950,10 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
                                          : ID_PCB_MEASUREMENT_TOOL,
                         wxCURSOR_PENCIL, _( "Measure distance between two points" ) );
 
-    KIGFX::PREVIEW::RULER_ITEM ruler;
+    KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
+
+    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr );
+
     view.Add( &ruler );
     view.SetVisible( &ruler, false );
 
@@ -974,8 +977,8 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
         {
             if( !evt->IsDrag( BUT_LEFT ) )
             {
-                ruler.SetOrigin( cursorPos );
-                ruler.SetEnd( cursorPos );
+                twoPtMgr.SetOrigin( cursorPos );
+                twoPtMgr.SetEnd( cursorPos );
             }
 
             controls.CaptureCursor( true );
@@ -988,8 +991,8 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
         {
             // make sure the origin is set before a drag starts
             // otherwise you can miss a step
-            ruler.SetOrigin( cursorPos );
-            ruler.SetEnd( cursorPos );
+            twoPtMgr.SetOrigin( cursorPos );
+            twoPtMgr.SetEnd( cursorPos );
         }
 
         // second click or mouse up after drag ends
@@ -1008,7 +1011,8 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
         else if( originSet &&
                 ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
         {
-            ruler.SetEnd( cursorPos );
+            twoPtMgr.SetAngleSnap( evt->Modifier( MD_CTRL ) );
+            twoPtMgr.SetEnd( cursorPos );
 
             view.SetVisible( &ruler, true );
             view.Update( &ruler, KIGFX::GEOMETRY );

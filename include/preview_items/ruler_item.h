@@ -25,6 +25,7 @@
 #define PREVIEW_ITEMS_RULER_ITEM_H
 
 #include <base_struct.h>
+#include <preview_items/two_point_geom_manager.h>
 
 namespace KIGFX
 {
@@ -32,6 +33,7 @@ class GAL;
 
 namespace PREVIEW
 {
+class TWO_POINT_GEOMETRY_MANAGER;
 
 /**
  * Class RULER_ITEM
@@ -42,7 +44,7 @@ class RULER_ITEM : public EDA_ITEM
 {
 public:
 
-    RULER_ITEM();
+    RULER_ITEM( const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr );
 
     ///> @copydoc EDA_ITEM::ViewBBox()
     const BOX2I ViewBBox() const override;
@@ -69,24 +71,9 @@ public:
         return wxT( "RULER_ITEM" );
     }
 
-    ///> Set the origin of the ruler (the fixed end)
-    void SetOrigin( VECTOR2I aOrigin )
-    {
-        m_origin = aOrigin;
-    }
-
-    /**
-     * Set the current end of the rectangle (the end that moves
-     * with the cursor.
-     */
-    void SetEnd( VECTOR2I aEnd )
-    {
-        m_end = aEnd;
-    }
-
 private:
 
-    VECTOR2I m_origin, m_end;
+    const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr;
 };
 
 } // PREVIEW
