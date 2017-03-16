@@ -132,7 +132,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
 
         m_gridLineWidthSpinBtn = new wxSpinButton( sGridSettings->GetStaticBox(),
                 wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS );
-        sGridSettingsGrid->Add( m_gridLineWidthSpinBtn, 0, wxALL, 0 );
+        sGridSettingsGrid->Add( m_gridLineWidthSpinBtn, 0, wxEXPAND | wxALL, 0 );
 
         l_gridLineWidthUnits = new wxStaticText( sGridSettings->GetStaticBox(),
                 wxID_ANY, _("px"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -150,7 +150,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
 
         m_gridMinSpacingSpinBtn = new wxSpinButton( sGridSettings->GetStaticBox(),
                 wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS );
-        sGridSettingsGrid->Add( m_gridMinSpacingSpinBtn, 0, wxALL, 0 );
+        sGridSettingsGrid->Add( m_gridMinSpacingSpinBtn, 0, wxEXPAND | wxALL, 0 );
 
         l_gridMinSpacingUnits = new wxStaticText( sGridSettings->GetStaticBox(),
                 wxID_ANY, _("px"), wxDefaultPosition, wxDefaultSize, 0 );
