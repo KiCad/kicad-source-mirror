@@ -75,6 +75,9 @@ enum VIA_ACTION_FLAGS
     VIA          = 0x00,     ///> Normal via
     BLIND_VIA    = 0x01,     ///> blind/buried via
     MICROVIA     = 0x02,     ///> Microvia
+
+    // Select layer
+    SELECT_LAYER = VIA_MASK + 1,    ///> Ask user to select layer before adding via
 };
 
 
@@ -144,6 +147,22 @@ static const TOOL_ACTION ACT_PlaceMicroVia( "pcbnew.InteractiveRouter.PlaceMicro
     _( "Place Microvia" ), _( "Adds a microvia at the end of currently routed track." ),
     via_microvia_xpm, AF_NONE,
     (void*) VIA_ACTION_FLAGS::MICROVIA );
+
+static const TOOL_ACTION ACT_SelLayerAndPlaceThroughVia(
+    "pcbnew.InteractiveRouter.SelLayerAndPlaceVia",
+    AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_SEL_LAYER_AND_ADD_THROUGH_VIA ),
+    _( "Select Layer and Place Through Via" ),
+    _( "Select a layer, then add a through-hole via at the end of currently routed track." ),
+    select_w_layer_xpm, AF_NONE,
+    (void*) ( VIA_ACTION_FLAGS::VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
+
+static const TOOL_ACTION ACT_SelLayerAndPlaceBlindVia(
+    "pcbnew.InteractiveRouter.SelLayerAndPlaceBlindVia",
+    AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_SEL_LAYER_AND_ADD_BLIND_BURIED_VIA ),
+    _( "Select Layer and Place Blind/Buried Via" ),
+    _( "Select a layer, then add a blind or buried via at the end of currently routed track."),
+    select_w_layer_xpm, AF_NONE,
+    (void*) ( VIA_ACTION_FLAGS::BLIND_VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
 
 static const TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackViaSize",
     AS_CONTEXT, 'Q',
@@ -287,6 +306,8 @@ public:
         Add( ACT_PlaceThroughVia );
         Add( ACT_PlaceBlindVia );
         Add( ACT_PlaceMicroVia );
+        Add( ACT_SelLayerAndPlaceThroughVia );
+        Add( ACT_SelLayerAndPlaceBlindVia );
         Add( ACT_SwitchPosture );
 
         AppendSeparator();
@@ -454,6 +475,8 @@ static VIATYPE_T getViaTypeFromFlags( int aFlags )
         wxASSERT_MSG( false, "Unhandled via type" );
     }
 
+    wxLogDebug("via type %d", viaType );
+
     return viaType;
 }
 
@@ -463,6 +486,7 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
     const int actViaFlags = aEvent.Parameter<intptr_t>();
 
     VIATYPE_T viaType = getViaTypeFromFlags( actViaFlags );
+    const bool selectLayer = actViaFlags & VIA_ACTION_FLAGS::SELECT_LAYER;
 
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
@@ -472,6 +496,17 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
     LAYER_ID pairBottom = m_frame->GetScreen()->m_Route_Layer_BOTTOM;
 
     PNS::SIZES_SETTINGS sizes = m_router->Sizes();
+
+    // ask the user for a target layer
+    LAYER_ID targetLayer = UNDEFINED_LAYER;
+
+    if( selectLayer )
+    {
+        wxPoint dlgPosition = wxGetMousePosition();
+
+        targetLayer = m_frame->SelectLayer( static_cast<LAYER_ID>( currentLayer ),
+                LSET::AllNonCuMask(), dlgPosition );
+    }
 
     // fixme: P&S supports more than one fixed layer pair. Update the dialog?
     sizes.ClearLayerPairs();
@@ -520,29 +555,65 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
     case VIA_THROUGH:
         sizes.SetViaDiameter( bds.GetCurrentViaSize() );
         sizes.SetViaDrill( bds.GetCurrentViaDrill() );
-        sizes.AddLayerPair( pairTop, pairBottom );
+
+        if( targetLayer != UNDEFINED_LAYER )
+        {
+            // go from the current layer to the chosen layer
+            sizes.AddLayerPair( currentLayer, targetLayer );
+        }
+        else
+        {
+            // use the default layer pair
+            sizes.AddLayerPair( pairTop, pairBottom );
+        }
         break;
 
     case VIA_MICROVIA:
         sizes.SetViaDiameter( bds.GetCurrentMicroViaSize() );
         sizes.SetViaDrill( bds.GetCurrentMicroViaDrill() );
 
+        wxASSERT_MSG( !selectLayer, "Unexpected select layer for microvia (microvia layers are implicit)" );
+
         if( currentLayer == F_Cu || currentLayer == In1_Cu )
+        {
+            // front-side microvia
             sizes.AddLayerPair( F_Cu, In1_Cu );
+        }
         else if( currentLayer == B_Cu || currentLayer == layerCount - 2 )
+        {
+            // back-side microvia
             sizes.AddLayerPair( B_Cu, layerCount - 2 );
+        }
         else
-            wxASSERT( false );
+        {
+            wxASSERT_MSG( false, "Invalid layer pair for microvia (must be on or adjacent to an outer layer)" );
+        }
         break;
 
     case VIA_BLIND_BURIED:
         sizes.SetViaDiameter( bds.GetCurrentViaSize() );
         sizes.SetViaDrill( bds.GetCurrentViaDrill() );
 
-        if( currentLayer == pairTop || currentLayer == pairBottom )
-            sizes.AddLayerPair( pairTop, pairBottom );
+        if( targetLayer != UNDEFINED_LAYER )
+        {
+            // go directly to the user specified layer
+            sizes.AddLayerPair( currentLayer, targetLayer );
+        }
         else
-            sizes.AddLayerPair( pairTop, currentLayer );
+        {
+            if( currentLayer == pairTop || currentLayer == pairBottom )
+            {
+                // the current layer is on the defined layer pair,
+                // swap to the other side
+                sizes.AddLayerPair( pairTop, pairBottom );
+            }
+            else
+            {
+                // the current layer is not part of the current layer pair,
+                // so fallback and swap to the top layer of the pair by default
+                sizes.AddLayerPair( pairTop, currentLayer );
+            }
+        }
         break;
 
     default:
@@ -730,6 +801,8 @@ void ROUTER_TOOL::SetTransitions()
     Go( &ROUTER_TOOL::onViaCommand, ACT_PlaceThroughVia.MakeEvent() );
     Go( &ROUTER_TOOL::onViaCommand, ACT_PlaceBlindVia.MakeEvent() );
     Go( &ROUTER_TOOL::onViaCommand, ACT_PlaceMicroVia.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand, ACT_SelLayerAndPlaceThroughVia.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand, ACT_SelLayerAndPlaceBlindVia.MakeEvent() );
 
     // TODO is not this redundant? the same actions can be used for menus and hotkeys
     Go( &ROUTER_TOOL::SettingsDialog, ACT_RouterOptions.MakeEvent() );
