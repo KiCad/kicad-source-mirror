@@ -6,8 +6,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2010 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
- * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -220,6 +220,19 @@ MARKER_PCB* DRC::fillMarker( int aErrorCode, const wxString& aMessage, MARKER_PC
         fillMe = new MARKER_PCB( aErrorCode, posA, aMessage, posA );
 
     fillMe->SetShowNoCoordinate();
+
+    return fillMe;
+}
+
+
+MARKER_PCB* DRC::fillMarker( const wxPoint& aPos, int aErrorCode, const wxString& aMessage, MARKER_PCB* fillMe )
+{
+    wxPoint  posA = aPos;
+
+    if( fillMe )
+        fillMe->SetData( aErrorCode, posA, aMessage, posA );
+    else
+        fillMe = new MARKER_PCB( aErrorCode, posA, aMessage, posA );
 
     return fillMe;
 }

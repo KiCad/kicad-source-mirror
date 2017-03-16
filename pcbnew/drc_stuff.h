@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2016 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,6 +80,8 @@
 #define DRCE_VIA_INSIDE_TEXT                   41   ///< Via in inside a text area
 #define DRCE_TRACK_INSIDE_TEXT                 42   ///< Track in inside a text area
 #define DRCE_PAD_INSIDE_TEXT                   43   ///< Pad in inside a text area
+#define DRCE_OVERLAPPING_FOOTPRINTS            44   ///< footprint courtyards overlap
+#define DRCE_MISSING_COURTYARD_IN_FOOTPRINT    45   ///< footprint has no courtyard defined
 
 
 class EDA_DRAW_PANEL;
@@ -164,6 +166,8 @@ private:
     bool     m_doZonesTest;
     bool     m_doKeepoutTest;
     bool     m_doCreateRptFile;
+    bool     m_doFootprintOverlapping;
+    bool     m_doNoCourtyardDefined;
 
     wxString m_rptFilename;
 
@@ -229,6 +233,9 @@ private:
     MARKER_PCB* fillMarker( D_PAD* aPad, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe );
 
     MARKER_PCB* fillMarker( ZONE_CONTAINER* aArea, int aErrorCode, MARKER_PCB* fillMe );
+
+    MARKER_PCB* fillMarker( const wxPoint& aPos, int aErrorCode,
+                            const wxString& aMessage, MARKER_PCB* fillMe );
 
     /**
      * Function fillMarker
@@ -340,6 +347,13 @@ private:
      * @return bool - false if DRC error  or true if OK
      */
     bool doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex );
+
+    /**
+     * Function doFootprintOverlappingDrc
+     * tests for footprint courtyard overlaps
+     * @return bool - false if DRC error  or true if OK
+     */
+    bool doFootprintOverlappingDrc();
 
     //-----<single tests>----------------------------------------------
 
@@ -476,19 +490,24 @@ public:
      * @param aUnconnectedTest Tells whether to list unconnected pads.
      * @param aZonesTest Tells whether to test zones.
      * @param aKeepoutTest Tells whether to test keepout areas.
+     * @param aCourtyardTest Tells whether to test footprint courtyard overlap.
+     * @param aCourtyardMissingTest Tells whether to test missing courtyard definition in footprint.
      * @param aReportName A string telling the disk file report name entered.
      * @param aSaveReport A boolean telling whether to generate disk file report.
      */
     void SetSettings( bool aPad2PadTest, bool aUnconnectedTest,
                       bool aZonesTest, bool aKeepoutTest,
+                      bool aCourtyardTest, bool aCourtyardMissingTest,
                       const wxString& aReportName, bool aSaveReport )
     {
-        m_doPad2PadTest     = aPad2PadTest;
-        m_doUnconnectedTest = aUnconnectedTest;
-        m_doZonesTest       = aZonesTest;
-        m_doKeepoutTest     = aKeepoutTest;
-        m_rptFilename       = aReportName;
-        m_doCreateRptFile   = aSaveReport;
+        m_doPad2PadTest         = aPad2PadTest;
+        m_doUnconnectedTest     = aUnconnectedTest;
+        m_doZonesTest           = aZonesTest;
+        m_doKeepoutTest         = aKeepoutTest;
+        m_rptFilename           = aReportName;
+        m_doCreateRptFile       = aSaveReport;
+        m_doFootprintOverlapping = aCourtyardTest;
+        m_doNoCourtyardDefined  = aCourtyardMissingTest;
     }
 
 

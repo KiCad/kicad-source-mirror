@@ -640,6 +640,19 @@ public:
     /// Return the initial comments block or NULL if none, without transfer of ownership.
     const wxArrayString* GetInitialComments() const { return m_initial_comments; }
 
+    /** Used in DRC to test the courtyard area (a complex polygon)
+     * @return the courtyard polygon
+     */
+    SHAPE_POLY_SET& GetPolyCourtyard() { return m_poly_courtyard; }
+
+    /** Used in DRC to build the courtyard area (a complex polygon)
+     * from graphic items put on the courtyard
+     * @return true if OK, false if the polygon cannot be built
+     * The polygon cannot be built if segments/arcs on courtyard layers
+     * cannot be grouped in a polygon.
+     */
+    bool BuildPolyCourtyard();
+
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
@@ -682,6 +695,9 @@ private:
 
     wxArrayString*    m_initial_comments;   ///< leading s-expression comments in the module,
                                             ///< lazily allocated only if needed for speed
+
+    /// Used in DRC to test the courtyard area (a polygon which can be not basic
+    SHAPE_POLY_SET m_poly_courtyard;
 };
 
 #endif     // MODULE_H_

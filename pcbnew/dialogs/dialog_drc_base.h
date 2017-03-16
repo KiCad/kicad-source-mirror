@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 16 2016)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -25,7 +25,6 @@ class DRCLISTBOX;
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
 #include <wx/button.h>
-#include <wx/statbox.h>
 #include <wx/statline.h>
 #include <wx/listbox.h>
 #include <wx/panel.h>
@@ -33,6 +32,7 @@ class DRCLISTBOX;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/notebook.h>
+#include <wx/statbox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -55,6 +55,7 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxPanel* m_panelUnconnectedBox;
 	
 	protected:
+		wxStaticText* m_staticTextOptions;
 		wxStaticText* m_ClearanceTitle;
 		wxStaticText* m_TrackMinWidthTitle;
 		wxStaticText* m_TrackMinWidthUnit;
@@ -62,6 +63,9 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxStaticText* m_ViaMinUnit;
 		wxStaticText* m_MicroViaMinTitle;
 		wxStaticText* m_MicroViaMinUnit;
+		wxCheckBox* m_cbCourtyardOverlap;
+		wxCheckBox* m_cbCourtyardMissing;
+		wxStaticText* m_staticTextRpt;
 		wxCheckBox* m_CreateRptCtrl;
 		wxTextCtrl* m_RptFilenameCtrl;
 		wxButton* m_BrowseButton;
@@ -109,7 +113,7 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		DRCLISTBOX* m_ClearanceListBox;
 		DRCLISTBOX* m_UnconnectedListBox;
 		
-		DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("DRC Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 733,438 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("DRC Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 679,518 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_DRC_CONTROL_BASE();
 	
 };

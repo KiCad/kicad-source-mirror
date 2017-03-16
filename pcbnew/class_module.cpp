@@ -48,6 +48,7 @@
 #include <class_board.h>
 #include <class_edge_mod.h>
 #include <class_module.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 #include <view/view.h>
 
@@ -1218,4 +1219,77 @@ double MODULE::PadCoverageRatio() const
     double ratio = padArea / moduleArea;
 
     return std::min( ratio, 1.0 );
+}
+
+
+bool MODULE::BuildPolyCourtyard()
+{
+    m_poly_courtyard.RemoveAllContours();
+    // Build the courtyard area from graphic items on the courtyard.
+    // Only PCB_MODULE_EDGE_T have meaning, graphic texts are ignored.
+    // Collect items:
+    std::vector< EDGE_MODULE* > list;
+
+    for( BOARD_ITEM* item = GraphicalItems(); item; item = item->Next() )
+    {
+        if( item->GetLayer() == B_CrtYd && item->Type() == PCB_MODULE_EDGE_T )
+            list.push_back( static_cast< EDGE_MODULE* > ( item ) );
+
+        if( item->GetLayer() == F_CrtYd && item->Type() == PCB_MODULE_EDGE_T )
+            list.push_back( static_cast< EDGE_MODULE* > ( item ) );
+    }
+
+    if( !list.size() )
+        return false;
+
+    // Build the coutyard
+    const int circleToSegmentsCount = 16;
+    EDA_RECT rect;  // the bouding box of segments
+    bool has_segments = false;
+
+    for( EDGE_MODULE* item : list )
+    {
+        switch( item->GetShape() )
+        {
+        case S_SEGMENT:
+            if( !has_segments )
+            {
+                rect.Move( item->GetStart() );
+                has_segments = true;
+            }
+            else
+                rect.Merge( item->GetStart() );
+
+            rect.Merge( item->GetEnd() );
+            break;
+
+        case S_CIRCLE:
+            TransformCircleToPolygon( m_poly_courtyard, item->GetCenter(),
+                                      item->GetRadius(), circleToSegmentsCount );
+            break;
+
+        case S_ARC:
+            break;
+
+        case S_POLYGON:
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    if( has_segments )  // Build the polygon from bounding box
+    {
+        m_poly_courtyard.NewOutline();
+        m_poly_courtyard.Append( rect.GetOrigin().x, rect.GetOrigin().y );
+        m_poly_courtyard.Append( rect.GetOrigin().x + rect.GetWidth(),
+                                 rect.GetOrigin().y );
+        m_poly_courtyard.Append( rect.GetOrigin().x + rect.GetWidth(),
+                                 rect.GetOrigin().y + rect.GetHeight() );
+        m_poly_courtyard.Append( rect.GetOrigin().x,
+                                 rect.GetOrigin().y + rect.GetHeight() );
+    }
+
+    return true;
 }

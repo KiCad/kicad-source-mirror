@@ -58,7 +58,7 @@ public:
 
     /// Constructors
     DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent );
-    ~DIALOG_DRC_CONTROL(){};
+    ~DIALOG_DRC_CONTROL();
 
     /**
      * Enable/disable the report file creation
@@ -147,6 +147,7 @@ private:
     BOARD*              m_currentBoard;     // the board currently on test
     DRC*                m_tester;
     PCB_EDIT_FRAME*     m_brdEditor;
+    wxConfigBase*       m_config;
 };
 
 #endif  // _DIALOG_DRC_H_

@@ -2,9 +2,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,6 +122,8 @@ DRC::DRC( PCB_EDIT_FRAME* aPcbWindow )
     m_doUnconnectedTest = true;     // enable unconnected tests
     m_doZonesTest = true;           // enable zone to items clearance tests
     m_doKeepoutTest = true;         // enable keepout areas to items clearance tests
+    m_doFootprintOverlapping = true; // enable courtyards areas overlap tests
+    m_doNoCourtyardDefined = true;  // enable missing courtyard in footprint warning
     m_abortDRC = false;
     m_drcInProgress = false;
 
@@ -297,6 +299,18 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     }
 
     testTexts();
+
+    // find overlaping courtyard ares.
+    if( m_doFootprintOverlapping || m_doNoCourtyardDefined )
+    {
+        if( aMessages )
+        {
+            aMessages->AppendText( _( "Courtyard areas...\n" ) );
+            aMessages->Refresh();
+        }
+
+        doFootprintOverlappingDrc();
+    }
 
     // update the m_drcDialog listboxes
     updatePointers();
@@ -968,3 +982,70 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
 
     return true;
 }
+
+
+bool DRC::doFootprintOverlappingDrc()
+{
+    // Detects missing footprint courtyards, and for others, courtyard overlap.
+    wxString msg;
+    bool success = true;
+
+    // Update courtyard polygons, and test for missing courtyard definition:
+    for( MODULE* footprint = m_pcb->m_Modules; footprint; footprint = footprint->Next() )
+    {
+        footprint->BuildPolyCourtyard();
+
+        if( footprint->GetPolyCourtyard().OutlineCount() == 0 && m_doNoCourtyardDefined )
+        {
+            msg.Printf( _( "footprint '%s' has no courtyard defined" ),
+                        footprint->GetReference().GetData() );
+            m_currentMarker = fillMarker( footprint->GetPosition(),
+                                          DRCE_MISSING_COURTYARD_IN_FOOTPRINT,
+                                          msg, m_currentMarker );
+            addMarkerToPcb( m_currentMarker );
+            m_currentMarker = nullptr;
+            success = false;
+        }
+    }
+
+    if( !m_doFootprintOverlapping )
+        return success;
+
+    // Now test for overlapping:
+    for( MODULE* footprint = m_pcb->m_Modules; footprint; footprint = footprint->Next() )
+    {
+        if( footprint->GetPolyCourtyard().OutlineCount() == 0 )
+            continue;           // No courtyard defined
+
+        for( MODULE* candidate = footprint->Next(); candidate; candidate = candidate->Next() )
+        {
+            if( candidate->GetPolyCourtyard().OutlineCount() == 0 )
+                continue;       // No courtyard defined
+
+            SHAPE_POLY_SET courtyard;
+            courtyard.Append( footprint->GetPolyCourtyard() );
+
+            // Build the common area between footprint and the candidate:
+            courtyard.BooleanIntersection( candidate->GetPolyCourtyard(), SHAPE_POLY_SET::PM_FAST );
+
+            // If no overlap, courtyard is empty (no common area).
+            // Therefore if a common polygon exists, this is a DRC error
+            if( courtyard.OutlineCount() )
+            {
+                //Overlap between footprint and candidate
+                msg.Printf( _( "footprints '%s' and '%s' overlap" ),
+                            footprint->GetReference().GetData(),
+                            candidate->GetReference().GetData() );
+                VECTOR2I& pos = courtyard.Vertex( 0, 0 );
+                wxPoint loc( pos.x, pos.y );
+                m_currentMarker = fillMarker( loc, DRCE_OVERLAPPING_FOOTPRINTS, msg, m_currentMarker );
+                addMarkerToPcb( m_currentMarker );
+                m_currentMarker = nullptr;
+                success = false;
+            }
+        }
+    }
+
+    return success;
+}
+
