@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@
 #include <pcbnew_id.h>
 #include <build_version.h>
 #include <class_board.h>
+#include <class_drawpanel.h>
 #include <kicad_string.h>
 #include <io_mgr.h>
 #include <macros.h>
@@ -92,7 +93,7 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard,
     wxString    header;
     PROPERTIES  props;
 
-    if( aFormat==IO_MGR::LEGACY )
+    if( aFormat == IO_MGR::LEGACY )
     {
         header = wxString::Format(
             wxT( "PCBNEW-BOARD Version %d date %s\n\n# Created by Pcbnew%s scripting\n\n" ),
@@ -106,4 +107,18 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard,
     IO_MGR::Save( aFormat, aFileName, aBoard, NULL );
 #endif
     return true;
+}
+
+
+void Refresh()
+{
+    // first argument is erase background, second is a wxRect
+    PcbEditFrame->GetCanvas()->Refresh( true, NULL );
+}
+
+
+void WindowZoom( int xl, int yl, int width, int height )
+{
+    EDA_RECT Rect( wxPoint( xl, yl ), wxSize( width, height )) ;
+    PcbEditFrame->Window_Zoom( Rect );
 }

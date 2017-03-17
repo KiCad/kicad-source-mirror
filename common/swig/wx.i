@@ -39,6 +39,10 @@
 void wxSetDefaultPyEncoding(const char* encoding);
 const char* wxGetDefaultPyEncoding();
 
+// wxCoord /////////////////////////////////////////////////////////
+// need to let swig know that wxCoord is an int. Ref: wx/defs.h
+typedef int wxCoord;
+
 
 // wxRect class wrapper ///////////////////////////////////////////////////////
 

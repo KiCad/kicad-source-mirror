@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 NBEE Embedded Systems SL, Miguel Angel Ajo <miguelangel@ajo.es>
- * Copyright (C) 2013 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2013-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,5 +43,7 @@ BOARD*  LoadBoard( wxString& aFileName );
 bool    SaveBoard( wxString& aFileName, BOARD* aBoard, IO_MGR::PCB_FILE_T aFormat );
 bool    SaveBoard( wxString& aFileName, BOARD* aBoard );
 
+void    Refresh();
+void    WindowZoom( int xl, int yl, int width, int height );
 
 #endif

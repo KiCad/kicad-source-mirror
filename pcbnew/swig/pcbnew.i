@@ -104,6 +104,7 @@ HANDLE_EXCEPTIONS(PLUGIN::FootprintDelete)
 %include <plot_common.h>
 %include <exporters/gendrill_Excellon_writer.h>
 %include <gal/color4d.h>
+%include <id.h>
 
 %include <pcbnew_scripting_helpers.h>
 
