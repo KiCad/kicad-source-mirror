@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -129,6 +129,8 @@ SPIN_INCREMENTAL_TEXT_CTRL::SPIN_INCREMENTAL_TEXT_CTRL( wxSpinButton& aSpinBtn,
         m_spinBtn( aSpinBtn ),
         m_textCtrl( aTextCtrl )
 {
+    (void) m_spinBtn;
+
     // set always enabled, otherwise it's very hard to keep in sync
     aSpinBtn.SetRange( -INT_MAX, INT_MAX );
 
