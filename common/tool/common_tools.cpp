@@ -32,6 +32,13 @@
 
 #include <tool/common_tools.h>
 
+
+static TOOL_ACTION ACT_toggleCursor( "common.Control.toggleCursor",
+        AS_GLOBAL, MD_CTRL + MD_SHIFT + 'X',
+        _( "Toggle Always Show Cursor" ),
+         _( "Toogle display of the cursor, even when not in an interactive tool" ) );
+
+
 COMMON_TOOLS::COMMON_TOOLS() :
     TOOL_INTERACTIVE( "common.Control" ), m_frame( NULL )
 {
@@ -188,6 +195,17 @@ int COMMON_TOOLS::GridPreset( const TOOL_EVENT& aEvent )
 }
 
 
+int COMMON_TOOLS::ToggleCursor( const TOOL_EVENT& aEvent )
+{
+    auto& galOpts = m_frame->GetGalDisplayOptions();
+
+    galOpts.m_forceDisplayCursor = !galOpts.m_forceDisplayCursor;
+    galOpts.NotifyChanged();
+
+    return 0;
+}
+
+
 void COMMON_TOOLS::SetTransitions()
 {
     Go( &COMMON_TOOLS::ZoomInOut,          ACTIONS::zoomIn.MakeEvent() );
@@ -201,6 +219,8 @@ void COMMON_TOOLS::SetTransitions()
     Go( &COMMON_TOOLS::GridNext,           ACTIONS::gridNext.MakeEvent() );
     Go( &COMMON_TOOLS::GridPrev,           ACTIONS::gridPrev.MakeEvent() );
     Go( &COMMON_TOOLS::GridPreset,         ACTIONS::gridPreset.MakeEvent() );
+
+    Go( &COMMON_TOOLS::ToggleCursor,       ACT_toggleCursor.MakeEvent() );
 }
 
 

@@ -51,6 +51,9 @@ public:
     int ZoomFitScreen( const TOOL_EVENT& aEvent );
     int ZoomPreset( const TOOL_EVENT& aEvent );
 
+    // Cursor control
+    int ToggleCursor( const TOOL_EVENT& aEvent );
+
     // Grid control
     int GridNext( const TOOL_EVENT& aEvent );
     int GridPrev( const TOOL_EVENT& aEvent );

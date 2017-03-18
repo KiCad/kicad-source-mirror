@@ -67,6 +67,7 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
     SetCursorColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
     SetCursorSize( 80 );
     SetCursorEnabled( false );
+    forceDisplayCursor = false;
 
     strokeFont.LoadNewStrokeFont( newstroke_font, newstroke_font_bufsize );
 
@@ -114,6 +115,12 @@ bool GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
     if( options.m_axesEnabled != axesEnabled )
     {
         axesEnabled = options.m_axesEnabled;
+        refresh = true;
+    }
+
+    if( options.m_forceDisplayCursor != forceDisplayCursor )
+    {
+        forceDisplayCursor = options.m_forceDisplayCursor;
         refresh = true;
     }
 

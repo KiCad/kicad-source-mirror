@@ -159,7 +159,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
 
         sGridSettings->Add( sGridSettingsGrid, 1, wxALL|wxEXPAND, 5 );
 
-        sLeftSizer->Add( sGridSettings, 1, wxALL | wxEXPAND, 5 );
+        sLeftSizer->Add( sGridSettings, 0, wxALL | wxEXPAND, 5 );
 
         // bind the spin buttons and text boxes
         m_gridSizeIncrementer = std::make_unique<SPIN_INCREMENTAL_TEXT_CTRL>(
@@ -176,6 +176,18 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
                                               gridMinSpacingStep );
         m_gridMinSpacingIncrementer->SetPrecision( 0 ); // restrict to ints
     }
+
+    {
+        auto sCursorSettings = new wxStaticBoxSizer( new wxStaticBox( this,
+                wxID_ANY, _("Cursor Display (OpenGL && Cairo)") ), wxVERTICAL );
+
+        sLeftSizer->Add( sCursorSettings, 1, wxALL | wxEXPAND, 5 );
+
+        m_forceCursorDisplay = new wxCheckBox( this, wxID_ANY, _( "Always display cursor" ) );
+
+        sCursorSettings->Add( m_forceCursorDisplay, 0, wxALL | wxEXPAND, 5 );
+    }
+
 }
 
 
@@ -190,6 +202,8 @@ bool GAL_OPTIONS_PANEL::TransferDataToWindow()
     m_gridSizeIncrementer->SetValue( m_galOptions.m_gridLineWidth );
 
     m_gridMinSpacingIncrementer->SetValue( m_galOptions.m_gridMinSpacing );
+
+    m_forceCursorDisplay->SetValue( m_galOptions.m_forceDisplayCursor );
 
     return true;
 }
@@ -206,6 +220,8 @@ bool GAL_OPTIONS_PANEL::TransferDataFromWindow()
     m_galOptions.m_gridLineWidth = m_gridSizeIncrementer->GetValue();
 
     m_galOptions.m_gridMinSpacing = m_gridMinSpacingIncrementer->GetValue();
+
+    m_galOptions.m_forceDisplayCursor = m_forceCursorDisplay->GetValue();
 
     m_galOptions.NotifyChanged();
 

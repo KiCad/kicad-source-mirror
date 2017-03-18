@@ -39,7 +39,9 @@ void VIEW_CONTROLS::ShowCursor( bool aEnabled )
 
 bool VIEW_CONTROLS::IsCursorShown() const
 {
-    assert( m_settings.m_showCursor == m_view->GetGAL()->IsCursorEnabled() );
+    // this only says if the VIEW_CONTROLS say the cursor should be
+    // shown: m_view->GetGAL()->IsCursorEnabled() will say if the GAL is
+    // actually going to do show the cursor or not
     return m_settings.m_showCursor;
 }
 

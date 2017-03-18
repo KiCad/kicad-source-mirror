@@ -84,6 +84,9 @@ namespace KIGFX
 
         ///> Whether or not to draw the coordinate system axes
         bool m_axesEnabled;
+
+        ///> Force cursor display
+        bool m_forceDisplayCursor;
     };
 
 }

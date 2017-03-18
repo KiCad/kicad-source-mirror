@@ -904,7 +904,7 @@ public:
      */
     bool IsCursorEnabled() const
     {
-        return isCursorEnabled;
+        return isCursorEnabled || forceDisplayCursor;
     }
 
     /**
@@ -1019,6 +1019,7 @@ protected:
 
     // Cursor settings
     bool               isCursorEnabled;        ///< Is the cursor enabled?
+    bool               forceDisplayCursor;     ///< Always show cursor
     COLOR4D            cursorColor;            ///< Cursor color
     unsigned int       cursorSize;             ///< Size of the cursor in pixels
     VECTOR2D           cursorPosition;         ///< Current cursor position (world coordinates)

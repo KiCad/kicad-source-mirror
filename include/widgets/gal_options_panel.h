@@ -52,15 +52,20 @@ private:
     wxBoxSizer* m_mainSizer;
 
     wxChoice* m_choiceAntialiasing;
+
     wxRadioBox* m_gridStyle;
+
     wxStaticText* l_gridLineWidth;
     wxTextCtrl* m_gridLineWidth;
     wxSpinButton* m_gridLineWidthSpinBtn;
     wxStaticText* l_gridLineWidthUnits;
+
     wxStaticText* l_gridMinSpacing;
     wxTextCtrl* m_gridMinSpacing;
     wxSpinButton* m_gridMinSpacingSpinBtn;
     wxStaticText* l_gridMinSpacingUnits;
+
+    wxCheckBox* m_forceCursorDisplay;
 
     ///> The GAL options to read/write
     KIGFX::GAL_DISPLAY_OPTIONS& m_galOptions;
