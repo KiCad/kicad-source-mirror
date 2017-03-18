@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2016 Mark Roszko <mark.roszko@gmail.com>
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,8 +76,6 @@ namespace SEXPR
 
     SEXPR* PARSER::parseString( const std::string& aString, std::string::const_iterator& it )
     {
-        std::string::const_iterator eit = aString.end();
-
         for( ; it != aString.end(); ++it )
         {
             if( *it == '\n' )
