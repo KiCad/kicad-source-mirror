@@ -377,3 +377,18 @@ VECTOR2D GAL::GetGridPoint( const VECTOR2D& aPoint ) const
 const int GAL::MIN_DEPTH = -1024;
 const int GAL::MAX_DEPTH = 1023;
 const int GAL::GRID_DEPTH = MAX_DEPTH - 1;
+
+
+COLOR4D GAL::getCursorColor() const
+{
+    auto color = cursorColor;
+
+    // dim the cursor if it's only on because it was forced
+    // (this helps to provide a hint for active tools)
+    if( !isCursorEnabled )
+    {
+        color.a = color.a * 0.5;
+    }
+
+    return color;
+}

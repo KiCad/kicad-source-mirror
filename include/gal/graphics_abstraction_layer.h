@@ -1055,6 +1055,11 @@ protected:
     /// Depth level on which the grid is drawn
     static const int GRID_DEPTH;
 
+    /**
+     * Gets the actual cursor color to draw
+     */
+    COLOR4D getCursorColor() const;
+
     // ---------------
     // Settings observer interface
     // ---------------

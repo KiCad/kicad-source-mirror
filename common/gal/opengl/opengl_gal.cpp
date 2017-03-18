@@ -1657,7 +1657,7 @@ void OPENGL_GAL::skipMouseEvent( wxMouseEvent& aEvent )
 
 void OPENGL_GAL::blitCursor()
 {
-    if( !isCursorEnabled )
+    if( !IsCursorEnabled() )
         return;
 
     compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
@@ -1666,9 +1666,13 @@ void OPENGL_GAL::blitCursor()
     VECTOR2D cursorEnd    = cursorPosition + cursorSize / ( 2 * worldScale );
     VECTOR2D cursorCenter = ( cursorBegin + cursorEnd ) / 2;
 
+    const COLOR4D cColor = getCursorColor();
+    const COLOR4D color( cColor.r * cColor.a, cColor.g * cColor.a,
+                         cColor.b * cColor.a, 1.0 );
+
     glDisable( GL_TEXTURE_2D );
     glLineWidth( 1.0 );
-    glColor4d( cursorColor.r, cursorColor.g, cursorColor.b, cursorColor.a );
+    glColor4d( color.r, color.g, color.b, color.a );
 
     glBegin( GL_LINES );
     glVertex2d( cursorCenter.x, cursorBegin.y );

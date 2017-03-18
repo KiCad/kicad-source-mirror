@@ -969,9 +969,11 @@ void CAIRO_GAL::initCursor()
 
     wxMemoryDC cursorShape( *cursorPixels );
 
+    const auto cColor = getCursorColor();
+
     cursorShape.SetBackground( *wxTRANSPARENT_BRUSH );
-    wxColour color( cursorColor.r * cursorColor.a * 255, cursorColor.g * cursorColor.a * 255,
-                    cursorColor.b * cursorColor.a * 255, 255 );
+    wxColour color( cColor.r * cColor.a * 255, cColor.g * cColor.a * 255,
+                    cColor.b * cColor.a * 255, 255 );
     wxPen pen = wxPen( color );
     cursorShape.SetPen( pen );
     cursorShape.Clear();
@@ -983,15 +985,18 @@ void CAIRO_GAL::initCursor()
 
 void CAIRO_GAL::blitCursor( wxMemoryDC& clientDC )
 {
-    if( !isCursorEnabled )
+    if( !IsCursorEnabled() )
         return;
 
     auto p = ToScreen( cursorPosition );
 
-    clientDC.SetPen( *wxWHITE_PEN );
+    const auto cColor = getCursorColor();
+
+    wxColour color( cColor.r * cColor.a * 255, cColor.g * cColor.a * 255,
+                    cColor.b * cColor.a * 255, 255 );
+    clientDC.SetPen( wxPen( color ) );
     clientDC.DrawLine( p.x - cursorSize / 2, p.y, p.x + cursorSize / 2, p.y );
     clientDC.DrawLine( p.x, p.y - cursorSize / 2, p.x, p.y + cursorSize / 2 );
-
 }
 
 
