@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@ typedef int     LAYER_NUM;
  * is the set of PCB layers.  It has nothing to do with gerbers or view layers.
  * One of these cannot be "incremented".
  */
-enum LAYER_ID
+enum LAYER_ID: int
 {
     F_Cu,           // 0
     In1_Cu,
@@ -247,8 +247,10 @@ public:
      * @param aFirst is the first included in @a aIdCount and must always be present, and can
      *  be followed by any number of additional LAYER_IDs so long as @a aIdCount accurately
      *  reflects the count.
+     *
+     *  Parameter is 'int' to avoid va_start undefined behavior.
      */
-    LSET( unsigned aIdCount, LAYER_ID aFirst, ... );  // args chosen to prevent LSET( int ) from compiling
+    LSET( unsigned aIdCount, int aFirst, ... );  // args chosen to prevent LSET( int ) from compiling
 
     /**
      * Function Name

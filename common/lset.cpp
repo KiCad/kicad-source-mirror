@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ LSET::LSET( const LAYER_ID* aArray, unsigned aCount ) :
 }
 
 
-LSET::LSET( unsigned aIdCount, LAYER_ID aFirst, ... ) :
+LSET::LSET( unsigned aIdCount, int aFirst, ... ) :
     BASE_SET()
 {
     // The constructor, without the mandatory aFirst argument, could have been confused
