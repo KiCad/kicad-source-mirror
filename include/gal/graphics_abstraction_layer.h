@@ -918,26 +918,6 @@ public:
     }
 
     /**
-     * @brief Returns the cursor size.
-     *
-     * @return The current cursor size (in pixels).
-     */
-    inline unsigned int GetCursorSize() const
-    {
-        return cursorSize;
-    }
-
-    /**
-     * @brief Set the cursor size.
-     *
-     * @param aCursorSize is the size of the cursor expressed in pixels.
-     */
-    virtual inline void SetCursorSize( unsigned int aCursorSize )
-    {
-        cursorSize = aCursorSize;
-    }
-
-    /**
      * @brief Draw the cursor.
      *
      * @param aCursorPosition is the cursor position in screen coordinates.
@@ -1021,7 +1001,7 @@ protected:
     bool               isCursorEnabled;        ///< Is the cursor enabled?
     bool               forceDisplayCursor;     ///< Always show cursor
     COLOR4D            cursorColor;            ///< Cursor color
-    unsigned int       cursorSize;             ///< Size of the cursor in pixels
+    bool               fullscreenCursor;       ///< Shape of the cursor (fullscreen or small cross)
     VECTOR2D           cursorPosition;         ///< Current cursor position (world coordinates)
 
     /// Instance of object that stores information about how to draw texts

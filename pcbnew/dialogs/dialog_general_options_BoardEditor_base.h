@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2016)
+// C++ code generated with wxFormBuilder (version Jan  9 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -44,7 +44,6 @@ class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE : public DIALOG_SHIM
 		{
 			wxID_POLAR_CTRL = 1000,
 			wxID_UNITS,
-			wxID_CURSOR_SHAPE,
 			wxID_DRC_ONOFF,
 			wxID_GENERAL_RATSNEST,
 			wxID_TRACK_AUTODEL,
@@ -56,7 +55,6 @@ class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE : public DIALOG_SHIM
 		
 		wxRadioBox* m_PolarDisplay;
 		wxRadioBox* m_UnitsSelection;
-		wxRadioBox* m_CursorShape;
 		wxStaticText* m_staticTextmaxlinks;
 		wxSpinCtrl* m_MaxShowLinks;
 		wxStaticText* m_staticTextautosave;

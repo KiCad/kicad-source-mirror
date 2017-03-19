@@ -71,6 +71,9 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
     wxBoxSizer* sLeftSizer = new wxBoxSizer( wxVERTICAL );
     m_mainSizer->Add( sLeftSizer, 1, wxALL | wxEXPAND, 0 );
 
+    // @todo LEGACY: not required when legacy is gone
+    const wxString galOnlySuffix = _( " (OpenGL && Cairo)" );
+
     /*
      * Anti-aliasing subpanel
      */
@@ -101,7 +104,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
     {
         wxStaticBoxSizer* sGridSettings;
         sGridSettings = new wxStaticBoxSizer( new wxStaticBox( this,
-                wxID_ANY, _("Grid Display (OpenGL && Cairo)") ), wxVERTICAL );
+                wxID_ANY, _( "Grid Display" ) + galOnlySuffix ), wxVERTICAL );
 
         wxString m_gridStyleChoices[] = {
             _( "Dots" ),
@@ -110,7 +113,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
         };
         int m_gridStyleNChoices = sizeof( m_gridStyleChoices ) / sizeof( wxString );
         m_gridStyle = new wxRadioBox( sGridSettings->GetStaticBox(),
-                wxID_ANY, _("Grid Style"),
+                wxID_ANY, _( "Grid Style" ),
                 wxDefaultPosition, wxDefaultSize,
                 m_gridStyleNChoices, m_gridStyleChoices, 1, wxRA_SPECIFY_COLS );
         sGridSettings->Add( m_gridStyle, 0, wxALL|wxEXPAND, 5 );
@@ -177,11 +180,35 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
 
     {
         auto sCursorSettings = new wxStaticBoxSizer( new wxStaticBox( this,
-                wxID_ANY, _( "Cursor Display (OpenGL && Cairo)" ) ), wxVERTICAL );
+                wxID_ANY, _( "Cursor Display" ) ), wxVERTICAL );
 
         sLeftSizer->Add( sCursorSettings, 1, wxALL | wxEXPAND, 5 );
 
-        m_forceCursorDisplay = new wxCheckBox( this, wxID_ANY, _( "Always display cursor" ) );
+        wxString m_CursorShapeChoices[] = {
+            _( "Small cross" ),
+            _( "Full screen cursor" )
+        };
+
+        wxString cursorShapeTitle = _( "Cursor Shape" );
+
+        // cursor is not shown in legacy on OSX, so this setting won't
+        // do anything there
+        // @todo LEGACY remove this
+#ifdef __APPLE__
+        cursorShapeTitle += galOnlySuffix;
+#endif
+
+        int m_CursorShapeNChoices = sizeof( m_CursorShapeChoices ) / sizeof( wxString );
+        m_cursorShape = new wxRadioBox( this, wxID_ANY,
+                 cursorShapeTitle, wxDefaultPosition, wxDefaultSize,
+                 m_CursorShapeNChoices, m_CursorShapeChoices, 1, wxRA_SPECIFY_COLS );
+
+        m_cursorShape->SetSelection( 0 );
+        m_cursorShape->SetToolTip( _( "Main cursor shape selection (small cross or large cursor)" ) );
+
+        sCursorSettings->Add( m_cursorShape, 0, wxALL | wxEXPAND, 5 );
+
+        m_forceCursorDisplay = new wxCheckBox( this, wxID_ANY, _( "Always display cursor" ) + galOnlySuffix );
 
         sCursorSettings->Add( m_forceCursorDisplay, 0, wxALL | wxEXPAND, 5 );
     }
@@ -200,6 +227,8 @@ bool GAL_OPTIONS_PANEL::TransferDataToWindow()
 
     m_gridMinSpacingIncrementer->SetValue( m_galOptions.m_gridMinSpacing );
 
+    m_cursorShape->SetSelection( m_galOptions.m_fullscreenCursor );
+
     m_forceCursorDisplay->SetValue( m_galOptions.m_forceDisplayCursor );
 
     return true;
@@ -217,6 +246,8 @@ bool GAL_OPTIONS_PANEL::TransferDataFromWindow()
     m_galOptions.m_gridLineWidth = m_gridSizeIncrementer->GetValue();
 
     m_galOptions.m_gridMinSpacing = m_gridMinSpacingIncrementer->GetValue();
+
+    m_galOptions.m_fullscreenCursor = m_cursorShape->GetSelection();
 
     m_galOptions.m_forceDisplayCursor = m_forceCursorDisplay->GetValue();
 

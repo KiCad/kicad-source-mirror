@@ -869,19 +869,6 @@ void PCB_EDIT_FRAME::SetGridColor( COLOR4D aColor )
 }
 
 
-void PCB_EDIT_FRAME::SetCursorShape( int aCursorShape )
-{
-    const unsigned int BIG_CURSOR = 8000;
-    const unsigned int SMALL_CURSOR = 80;
-
-    EDA_DRAW_FRAME::SetCursorShape( aCursorShape );
-    KIGFX::GAL* gal = GetGalCanvas()->GetGAL();
-
-    if( gal )
-        gal->SetCursorSize( aCursorShape ? BIG_CURSOR : SMALL_CURSOR );
-}
-
-
 bool PCB_EDIT_FRAME::IsMicroViaAcceptable()
 {
     int copperlayercnt = GetBoard()->GetCopperLayerCount( );

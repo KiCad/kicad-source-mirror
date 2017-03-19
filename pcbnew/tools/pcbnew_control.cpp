@@ -709,12 +709,10 @@ int PCBNEW_CONTROL::ResetCoords( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::SwitchCursor( const TOOL_EVENT& aEvent )
 {
-    const unsigned int BIG_CURSOR = 8000;
-    const unsigned int SMALL_CURSOR = 80;
+    auto& galOpts = m_frame->GetGalDisplayOptions();
 
-    PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
-    KIGFX::GAL* gal = frame->GetGalCanvas()->GetGAL();
-    gal->SetCursorSize( frame->GetCursorShape() ? BIG_CURSOR : SMALL_CURSOR );
+    galOpts.m_fullscreenCursor = !galOpts.m_fullscreenCursor;
+    galOpts.NotifyChanged();
 
     return 0;
 }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2016)
+// C++ code generated with wxFormBuilder (version Jan  9 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -37,14 +37,6 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	m_UnitsSelection->SetToolTip( _("Selection of units used to display dimensions and positions of items") );
 	
 	bLeftSizer->Add( m_UnitsSelection, 0, wxALL|wxEXPAND, 5 );
-	
-	wxString m_CursorShapeChoices[] = { _("Small cross"), _("Full screen cursor") };
-	int m_CursorShapeNChoices = sizeof( m_CursorShapeChoices ) / sizeof( wxString );
-	m_CursorShape = new wxRadioBox( this, wxID_CURSOR_SHAPE, _("Cursor"), wxDefaultPosition, wxDefaultSize, m_CursorShapeNChoices, m_CursorShapeChoices, 1, wxRA_SPECIFY_COLS );
-	m_CursorShape->SetSelection( 0 );
-	m_CursorShape->SetToolTip( _("Main cursor shape selection (small cross or large cursor)") );
-	
-	bLeftSizer->Add( m_CursorShape, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizerUpper->Add( bLeftSizer, 2, wxALL|wxEXPAND, 5 );

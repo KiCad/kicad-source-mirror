@@ -36,6 +36,7 @@ static const wxString GalGridStyleConfig( "GridStyle" );
 static const wxString GalGridLineWidthConfig( "GridLineWidth" );
 static const wxString GalGridMaxDensityConfig( "GridMaxDensity" );
 static const wxString GalGridAxesEnabledConfig( "GridAxesEnabled" );
+static const wxString GalFullscreenCursorConfig( "CursorFullscreen" );
 static const wxString GalForceDisplayCursorConfig( "ForceDisplayCursor" );
 
 
@@ -63,6 +64,7 @@ GAL_DISPLAY_OPTIONS::GAL_DISPLAY_OPTIONS()
       m_gridLineWidth( 0.5 ),
       m_gridMinSpacing( 10.0 ),
       m_axesEnabled( false ),
+      m_fullscreenCursor( false ),
       m_forceDisplayCursor( false )
 {}
 
@@ -88,6 +90,9 @@ void GAL_DISPLAY_OPTIONS::ReadConfig( wxConfigBase* aCfg, wxString aBaseName )
     aCfg->Read( aBaseName + GalGridAxesEnabledConfig,
                 &m_axesEnabled, false );
 
+    aCfg->Read( aBaseName + GalFullscreenCursorConfig,
+                &m_fullscreenCursor, false );
+
     aCfg->Read( aBaseName + GalForceDisplayCursorConfig,
                 &m_forceDisplayCursor, false );
 
@@ -111,6 +116,9 @@ void GAL_DISPLAY_OPTIONS::WriteConfig( wxConfigBase* aCfg, wxString aBaseName )
 
     aCfg->Write( aBaseName + GalGridAxesEnabledConfig,
                  m_axesEnabled );
+
+    aCfg->Write( aBaseName + GalFullscreenCursorConfig,
+                 m_fullscreenCursor );
 
     aCfg->Write( aBaseName + GalForceDisplayCursorConfig,
                  m_forceDisplayCursor );

@@ -112,6 +112,7 @@ bool CAIRO_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 
     if( super::updatedGalDisplayOptions( aOptions ) )
     {
+        initCursor();
         Refresh();
         refresh = true;
     }
@@ -850,13 +851,6 @@ void CAIRO_GAL::ClearTarget( RENDER_TARGET aTarget )
 }
 
 
-void CAIRO_GAL::SetCursorSize( unsigned int aCursorSize )
-{
-    GAL::SetCursorSize( aCursorSize );
-    initCursor();
-}
-
-
 void CAIRO_GAL::DrawCursor( const VECTOR2D& aCursorPosition )
 {
     cursorPosition = aCursorPosition;
@@ -964,6 +958,8 @@ void CAIRO_GAL::initCursor()
     if( cursorPixelsSaved )
         delete cursorPixelsSaved;
 
+    const int cursorSize = fullscreenCursor ? 8000 : 80;
+
     cursorPixels      = new wxBitmap( cursorSize, cursorSize );
     cursorPixelsSaved = new wxBitmap( cursorSize, cursorSize );
 
@@ -991,6 +987,7 @@ void CAIRO_GAL::blitCursor( wxMemoryDC& clientDC )
     auto p = ToScreen( cursorPosition );
 
     const auto cColor = getCursorColor();
+    const int cursorSize = fullscreenCursor ? 8000 : 80;
 
     wxColour color( cColor.r * cColor.a * 255, cColor.g * cColor.a * 255,
                     cColor.b * cColor.a * 255, 255 );

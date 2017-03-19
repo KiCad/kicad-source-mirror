@@ -66,8 +66,6 @@ static const wxString traceScrollSettings( wxT( "KicadScrollSettings" ) );
 ///@{
 /// \ingroup config
 
-/// Nonzero iff fullscreen cursor is to be used (suffix)
-static const wxString CursorShapeEntryKeyword( wxT( "CursorShape" ) );
 /// Nonzero to show grid (suffix)
 static const wxString ShowGridEntryKeyword( wxT( "ShowGrid" ) );
 /// Grid color ID (suffix)
@@ -154,7 +152,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_showBorderAndTitleBlock = false;  // true to display reference sheet.
     m_showGridAxis        = false;      // true to draw the grid axis
     m_showOriginAxis      = false;      // true to draw the grid origin
-    m_cursorShape         = 0;
     m_LastGridSizeId      = 0;
     m_drawGrid            = true;       // hide/Show grid. default = show
     m_gridColor           = COLOR4D( DARKGRAY );   // Default grid color
@@ -318,7 +315,11 @@ void EDA_DRAW_FRAME::OnToggleCrossHairStyle( wxCommandEvent& aEvent )
 {
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
     m_canvas->CrossHairOff( &dc );
-    SetCursorShape( !GetCursorShape() );
+
+    auto& galOpts = GetGalDisplayOptions();
+    galOpts.m_fullscreenCursor = !galOpts.m_fullscreenCursor;
+    galOpts.NotifyChanged();
+
     m_canvas->CrossHairOn( &dc );
 }
 
@@ -360,7 +361,7 @@ void EDA_DRAW_FRAME::OnUpdateGrid( wxUpdateUIEvent& aEvent )
 
 void EDA_DRAW_FRAME::OnUpdateCrossHairStyle( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( m_cursorShape );
+    aEvent.Check( GetGalDisplayOptions().m_fullscreenCursor );
 }
 
 
@@ -692,13 +693,6 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     wxString baseCfgName = ConfigBaseName();
 
-    // Cursor shape is problematic on OS X, lock to 0
-#ifdef __APPLE__
-    m_cursorShape = 0;
-#else
-    aCfg->Read( baseCfgName + CursorShapeEntryKeyword, &m_cursorShape, ( long )0 );
-#endif // __APPLE__
-
     bool btmp;
     if( aCfg->Read( baseCfgName + ShowGridEntryKeyword, &btmp ) )
         SetGridVisibility( btmp );
@@ -726,7 +720,6 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     wxString baseCfgName = ConfigBaseName();
 
-    aCfg->Write( baseCfgName + CursorShapeEntryKeyword, m_cursorShape );
     aCfg->Write( baseCfgName + ShowGridEntryKeyword, IsGridVisible() );
     aCfg->Write( baseCfgName + GridColorEntryKeyword,
                  GetGridColor().ToColour().GetAsString( wxC2S_CSS_SYNTAX ) );
@@ -1129,7 +1122,6 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
         // Transfer EDA_DRAW_PANEL settings
         GetGalCanvas()->GetViewControls()->EnableCursorWarping( !m_canvas->GetEnableZoomNoCenter() );
         GetGalCanvas()->GetViewControls()->EnableMousewheelPan( m_canvas->GetEnableMousewheelPan() );
-        GetToolManager()->RunAction( "pcbnew.Control.switchCursor" );
     }
     else if( m_galCanvasActive )
     {

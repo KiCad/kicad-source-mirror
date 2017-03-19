@@ -65,6 +65,7 @@ private:
     wxSpinButton* m_gridMinSpacingSpinBtn;
     wxStaticText* l_gridMinSpacingUnits;
 
+    wxRadioBox* m_cursorShape;
     wxCheckBox* m_forceCursorDisplay;
 
     ///> The GAL options to read/write

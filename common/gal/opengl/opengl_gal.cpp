@@ -1662,6 +1662,8 @@ void OPENGL_GAL::blitCursor()
 
     compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
 
+    const int cursorSize = fullscreenCursor ? 8000 : 80;
+
     VECTOR2D cursorBegin  = cursorPosition - cursorSize / ( 2 * worldScale );
     VECTOR2D cursorEnd    = cursorPosition + cursorSize / ( 2 * worldScale );
     VECTOR2D cursorCenter = ( cursorBegin + cursorEnd ) / 2;

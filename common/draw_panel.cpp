@@ -39,6 +39,7 @@
 #include <class_base_screen.h>
 #include <draw_frame.h>
 #include <view/view_controls.h>
+#include <gal/gal_display_options.h>
 
 #include <kicad_device_context.h>
 
@@ -221,7 +222,7 @@ void EDA_DRAW_PANEL::DrawCrossHair( wxDC* aDC, COLOR4D aColor )
 
     GRSetDrawMode( aDC, GR_XOR );
 
-    if( GetParent()->m_cursorShape != 0 )    // Draws full screen crosshair.
+    if( GetParent()->GetGalDisplayOptions().m_fullscreenCursor )
     {
         wxSize  clientSize = GetClientSize();
 

@@ -371,9 +371,6 @@ public:
      */
     virtual void SetGridColor( COLOR4D aColor ) override;
 
-    ///> @copydoc EDA_DRAW_FRAME::SetCursorShape()
-    virtual void SetCursorShape( int aCursorShape ) override;
-
     // Configurations:
     void Process_Config( wxCommandEvent& event );
 
