@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -79,7 +80,7 @@ private:
     wxRealPoint m_coords;
     mpWindow* m_window;
 
-    const int DRAG_MARGIN = 10;
+    static constexpr int DRAG_MARGIN = 10;
 };
 
 
