@@ -371,6 +371,7 @@ set( PCB_COMMON_SRCS
     ../pcbnew/class_zone.cpp
     ../pcbnew/class_zone_settings.cpp
     ../pcbnew/classpcb.cpp
+    ../pcbnew/convert_drawsegment_list_to_polygon.cpp
     ../pcbnew/ratsnest_data.cpp
     ../pcbnew/ratsnest_viewitem.cpp
     ../pcbnew/collectors.cpp

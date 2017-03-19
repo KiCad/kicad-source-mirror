@@ -130,7 +130,10 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _( "Courtyards overlap" ) );
 
     case DRCE_MISSING_COURTYARD_IN_FOOTPRINT:
-        return wxString( _( "Footprint has no courtard defined" ) );
+        return wxString( _( "Footprint has no courtyard defined" ) );
+
+    case DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT:
+        return wxString( _( "Footprint has incorect courtyard (not a closed shape)" ) );
 
     default:
         return wxString::Format( wxT( "Unknown DRC error code %d" ), m_ErrorCode );

@@ -1221,75 +1221,39 @@ double MODULE::PadCoverageRatio() const
     return std::min( ratio, 1.0 );
 }
 
+// see convert_drawsegment_list_to_polygon.cpp:
+extern bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
+                                     SHAPE_POLY_SET& aPolygons);
 
 bool MODULE::BuildPolyCourtyard()
 {
-    m_poly_courtyard.RemoveAllContours();
+    m_poly_courtyard_front.RemoveAllContours();
+    m_poly_courtyard_back.RemoveAllContours();
     // Build the courtyard area from graphic items on the courtyard.
     // Only PCB_MODULE_EDGE_T have meaning, graphic texts are ignored.
     // Collect items:
-    std::vector< EDGE_MODULE* > list;
+    std::vector< DRAWSEGMENT* > list_front;
+    std::vector< DRAWSEGMENT* > list_back;
 
     for( BOARD_ITEM* item = GraphicalItems(); item; item = item->Next() )
     {
         if( item->GetLayer() == B_CrtYd && item->Type() == PCB_MODULE_EDGE_T )
-            list.push_back( static_cast< EDGE_MODULE* > ( item ) );
+            list_back.push_back( static_cast< DRAWSEGMENT* > ( item ) );
 
         if( item->GetLayer() == F_CrtYd && item->Type() == PCB_MODULE_EDGE_T )
-            list.push_back( static_cast< EDGE_MODULE* > ( item ) );
+            list_front.push_back( static_cast< DRAWSEGMENT* > ( item ) );
     }
 
-    if( !list.size() )
-        return false;
+    // Note: if no item found on courtyard layers, return true.
+    // false is returned only when the shape defined on courtyard layers
+    // is not convertible to a polygon
+    if( !list_front.size() && !list_back.size() )
+        return true;
 
-    // Build the coutyard
-    const int circleToSegmentsCount = 16;
-    EDA_RECT rect;  // the bouding box of segments
-    bool has_segments = false;
+    bool success = ConvertOutlineToPolygon( list_front, m_poly_courtyard_front );
 
-    for( EDGE_MODULE* item : list )
-    {
-        switch( item->GetShape() )
-        {
-        case S_SEGMENT:
-            if( !has_segments )
-            {
-                rect.Move( item->GetStart() );
-                has_segments = true;
-            }
-            else
-                rect.Merge( item->GetStart() );
+    if( success )
+        success = ConvertOutlineToPolygon( list_back, m_poly_courtyard_back );
 
-            rect.Merge( item->GetEnd() );
-            break;
-
-        case S_CIRCLE:
-            TransformCircleToPolygon( m_poly_courtyard, item->GetCenter(),
-                                      item->GetRadius(), circleToSegmentsCount );
-            break;
-
-        case S_ARC:
-            break;
-
-        case S_POLYGON:
-            break;
-
-        default:
-            break;
-        }
-    }
-
-    if( has_segments )  // Build the polygon from bounding box
-    {
-        m_poly_courtyard.NewOutline();
-        m_poly_courtyard.Append( rect.GetOrigin().x, rect.GetOrigin().y );
-        m_poly_courtyard.Append( rect.GetOrigin().x + rect.GetWidth(),
-                                 rect.GetOrigin().y );
-        m_poly_courtyard.Append( rect.GetOrigin().x + rect.GetWidth(),
-                                 rect.GetOrigin().y + rect.GetHeight() );
-        m_poly_courtyard.Append( rect.GetOrigin().x,
-                                 rect.GetOrigin().y + rect.GetHeight() );
-    }
-
-    return true;
+    return success;
 }

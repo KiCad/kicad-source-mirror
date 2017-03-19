@@ -82,6 +82,8 @@
 #define DRCE_PAD_INSIDE_TEXT                   43   ///< Pad in inside a text area
 #define DRCE_OVERLAPPING_FOOTPRINTS            44   ///< footprint courtyards overlap
 #define DRCE_MISSING_COURTYARD_IN_FOOTPRINT    45   ///< footprint has no courtyard defined
+#define DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT  46   ///< footprint has a courtyard but malformed
+                                                    ///< (not convetrible to polygon)
 
 
 class EDA_DRAW_PANEL;
