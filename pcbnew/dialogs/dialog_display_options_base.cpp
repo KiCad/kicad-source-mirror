@@ -21,18 +21,6 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	sLeftSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxStaticBoxSizer* sSketchModeSizer;
-	sSketchModeSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Tracks and Vias:") ), wxVERTICAL );
-	
-	m_OptDisplayTracks = new wxCheckBox( sSketchModeSizer->GetStaticBox(), wxID_ANY, _("Show tracks in sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
-	sSketchModeSizer->Add( m_OptDisplayTracks, 0, wxALL, 5 );
-	
-	m_OptDisplayVias = new wxCheckBox( sSketchModeSizer->GetStaticBox(), wxID_ANY, _("Show vias in sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
-	sSketchModeSizer->Add( m_OptDisplayVias, 0, wxALL, 5 );
-	
-	
-	sLeftSizer->Add( sSketchModeSizer, 0, wxALL|wxEXPAND, 5 );
-	
 	
 	bupperSizer->Add( sLeftSizer, 1, wxEXPAND, 5 );
 	
@@ -60,6 +48,18 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	wxBoxSizer* sRightSizer;
 	sRightSizer = new wxBoxSizer( wxVERTICAL );
+	
+	wxStaticBoxSizer* sSketchModeSizer;
+	sSketchModeSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Tracks and Vias:") ), wxVERTICAL );
+	
+	m_OptDisplayTracks = new wxCheckBox( sSketchModeSizer->GetStaticBox(), wxID_ANY, _("Show tracks in sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
+	sSketchModeSizer->Add( m_OptDisplayTracks, 0, wxALL, 5 );
+	
+	m_OptDisplayVias = new wxCheckBox( sSketchModeSizer->GetStaticBox(), wxID_ANY, _("Show vias in sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
+	sSketchModeSizer->Add( m_OptDisplayVias, 0, wxALL, 5 );
+	
+	
+	sRightSizer->Add( sSketchModeSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sfootprintSizer;
 	sfootprintSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Footprints:") ), wxVERTICAL );

@@ -77,14 +77,14 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
     {
         wxStaticBoxSizer* sOpenGLRenderingSizer;
         sOpenGLRenderingSizer = new wxStaticBoxSizer( new wxStaticBox( this,
-                wxID_ANY, _("OpenGL Rendering:") ), wxVERTICAL );
+                wxID_ANY, _( "OpenGL Rendering:" ) ), wxVERTICAL );
 
         wxString m_choiceAntialiasingChoices[] = {
-            _("No Antialiasing"),
-            _("Subpixel Antialiasing (High Quality)"),
-            _("Subpixel Antialiasing (Ultra Quality)"),
-            _("Supersampling (2x)"),
-            _("Supersampling (4x)")
+            _( "No Antialiasing" ),
+            _( "Subpixel Antialiasing (High Quality)" ),
+            _( "Subpixel Antialiasing (Ultra Quality)" ),
+            _( "Supersampling (2x)" ),
+            _( "Supersampling (4x)" )
         };
         int m_choiceAntialiasingNChoices = sizeof( m_choiceAntialiasingChoices ) / sizeof( wxString );
         m_choiceAntialiasing = new wxChoice( sOpenGLRenderingSizer->GetStaticBox(),
@@ -104,9 +104,9 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
                 wxID_ANY, _("Grid Display (OpenGL && Cairo)") ), wxVERTICAL );
 
         wxString m_gridStyleChoices[] = {
-            _("Dots"),
-            _("Lines"),
-            _("Small crosses")
+            _( "Dots" ),
+            _( "Lines" ),
+            _( "Small crosses" )
         };
         int m_gridStyleNChoices = sizeof( m_gridStyleChoices ) / sizeof( wxString );
         m_gridStyle = new wxRadioBox( sGridSettings->GetStaticBox(),
@@ -122,12 +122,11 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
         sGridSettingsGrid->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
         l_gridLineWidth = new wxStaticText( sGridSettings->GetStaticBox(),
-                wxID_ANY, _("Grid thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+                wxID_ANY, _( "Grid thickness:" ) );
         l_gridLineWidth->Wrap( -1 );
         sGridSettingsGrid->Add( l_gridLineWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-        m_gridLineWidth = new wxTextCtrl( sGridSettings->GetStaticBox(),
-                wxID_ANY, _("0.5"), wxDefaultPosition, wxDefaultSize, 0 );
+        m_gridLineWidth = new wxTextCtrl( sGridSettings->GetStaticBox(), wxID_ANY );
         sGridSettingsGrid->Add( m_gridLineWidth, 0, wxEXPAND, 5 );
 
         m_gridLineWidthSpinBtn = new wxSpinButton( sGridSettings->GetStaticBox(),
@@ -135,17 +134,16 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
         sGridSettingsGrid->Add( m_gridLineWidthSpinBtn, 0, wxEXPAND | wxALL, 0 );
 
         l_gridLineWidthUnits = new wxStaticText( sGridSettings->GetStaticBox(),
-                wxID_ANY, _("px"), wxDefaultPosition, wxDefaultSize, 0 );
+                wxID_ANY, _( "px" ) );
         l_gridLineWidthUnits->Wrap( -1 );
         sGridSettingsGrid->Add( l_gridLineWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
         l_gridMinSpacing = new wxStaticText( sGridSettings->GetStaticBox(),
-                wxID_ANY, _("Min grid spacing:"), wxDefaultPosition, wxDefaultSize, 0 );
+                wxID_ANY, _( "Min grid spacing:" ) );
         l_gridMinSpacing->Wrap( -1 );
         sGridSettingsGrid->Add( l_gridMinSpacing, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-        m_gridMinSpacing = new wxTextCtrl( sGridSettings->GetStaticBox(),
-                wxID_ANY, _("10"), wxDefaultPosition, wxDefaultSize, 0 );
+        m_gridMinSpacing = new wxTextCtrl( sGridSettings->GetStaticBox(), wxID_ANY);
         sGridSettingsGrid->Add( m_gridMinSpacing, 0, wxEXPAND, 5 );
 
         m_gridMinSpacingSpinBtn = new wxSpinButton( sGridSettings->GetStaticBox(),
@@ -153,7 +151,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
         sGridSettingsGrid->Add( m_gridMinSpacingSpinBtn, 0, wxEXPAND | wxALL, 0 );
 
         l_gridMinSpacingUnits = new wxStaticText( sGridSettings->GetStaticBox(),
-                wxID_ANY, _("px"), wxDefaultPosition, wxDefaultSize, 0 );
+                wxID_ANY, _( "px" ) );
         l_gridMinSpacingUnits->Wrap( -1 );
         sGridSettingsGrid->Add( l_gridMinSpacingUnits, 0, wxALL, 5 );
 
@@ -179,7 +177,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
 
     {
         auto sCursorSettings = new wxStaticBoxSizer( new wxStaticBox( this,
-                wxID_ANY, _("Cursor Display (OpenGL && Cairo)") ), wxVERTICAL );
+                wxID_ANY, _( "Cursor Display (OpenGL && Cairo)" ) ), wxVERTICAL );
 
         sLeftSizer->Add( sCursorSettings, 1, wxALL | wxEXPAND, 5 );
 
@@ -187,7 +185,6 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
 
         sCursorSettings->Add( m_forceCursorDisplay, 0, wxALL | wxEXPAND, 5 );
     }
-
 }
 
 

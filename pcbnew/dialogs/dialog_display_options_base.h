@@ -14,15 +14,15 @@
 class DIALOG_SHIM;
 
 #include "dialog_shim.h"
-#include <wx/string.h>
-#include <wx/checkbox.h>
+#include <wx/sizer.h>
 #include <wx/gdicmn.h>
+#include <wx/string.h>
+#include <wx/radiobox.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/sizer.h>
 #include <wx/statbox.h>
-#include <wx/radiobox.h>
+#include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -42,10 +42,10 @@ class DIALOG_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 		};
 		
 		wxBoxSizer* sLeftSizer;
-		wxCheckBox* m_OptDisplayTracks;
-		wxCheckBox* m_OptDisplayVias;
 		wxRadioBox* m_ShowNetNamesOption;
 		wxRadioBox* m_OptDisplayTracksClearance;
+		wxCheckBox* m_OptDisplayTracks;
+		wxCheckBox* m_OptDisplayVias;
 		wxCheckBox* m_OptDisplayModOutlines;
 		wxCheckBox* m_OptDisplayModTexts
 		;
