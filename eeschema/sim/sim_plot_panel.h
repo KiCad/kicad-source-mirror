@@ -197,7 +197,7 @@ public:
 
     void DeleteAllTraces();
 
-    bool IsShown( const wxString& aName ) const
+    bool TraceShown( const wxString& aName ) const
     {
         return m_traces.count( aName ) > 0;
     }
