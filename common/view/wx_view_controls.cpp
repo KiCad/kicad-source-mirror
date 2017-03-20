@@ -278,6 +278,12 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
     {
     case AUTO_PANNING:
     {
+        if ( !m_settings.m_autoPanEnabled )
+        {
+            m_state = IDLE;
+            return;
+        }
+
 #if wxCHECK_VERSION( 3, 0, 0 )
         if( !m_parentPanel->HasFocus() )
             break;
