@@ -308,7 +308,7 @@ int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 
     for( TRACK* track = getModel<BOARD>()->m_Track; track; track = track->Next() )
     {
-        if( track->Type() == PCB_TRACE_T )
+        if( track->Type() == PCB_TRACE_T || track->Type() == PCB_VIA_T )
             getView()->Update( track, KIGFX::GEOMETRY );
     }
 
