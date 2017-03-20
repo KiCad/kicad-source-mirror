@@ -274,6 +274,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
         uniqifier += 'A'; // A for all layers
 
     const int copperCount = aBoard->GetCopperLayerCount();
+
     for( int layer=0; layer<copperCount; ++layer )
     {
         LAYER_ID kilayer = pcbLayer2kicad[layer];
@@ -507,7 +508,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
     image->image_id = aModule->GetFPID().Format().c_str();
 
     // from the pads, and make an IMAGE using collated padstacks.
-    for( int p=0;  p<moduleItems.GetCount();  ++p )
+    for( int p=0; p < moduleItems.GetCount(); ++p )
     {
         D_PAD* pad = (D_PAD*) moduleItems[p];
 
@@ -518,6 +519,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
             POINT   vertex   = mapPt( pad->GetPos0() );
 
             int layerCount = aBoard->GetCopperLayerCount();
+
             for( int layer=0;  layer<layerCount;  ++layer )
             {
                 KEEPOUT* keepout = new KEEPOUT( image, T_keepout );
@@ -537,6 +539,13 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
 
         else
         {
+            // Pads not on copper layers (i.e. only on tech layers) are ignored
+            // because they create invalid pads in .dsn file for freeroute
+            LSET mask_copper_layers = pad->GetLayerSet() & LSET::AllCuMask();
+
+            if( !mask_copper_layers.any() )
+                continue;
+
             PADSTACK*               padstack = makePADSTACK( aBoard, pad );
             PADSTACKSET::iterator   iter = padstackset.find( *padstack );
 
@@ -717,41 +726,6 @@ PADSTACK* SPECCTRA_DB::makeVia( const ::VIA* aVia )
 
     return makeVia( aVia->GetWidth(), aVia->GetDrillValue(), topLayer, botLayer );
 }
-
-
-/**
- * Function makeCircle
- * does a line segmented circle into aPath.
- */
-static void makeCircle( PATH* aPath, DRAWSEGMENT* aGraphic )
-{
-    // do a circle segmentation
-    const int   STEPS = 2 * 36;
-
-    int         radius  = aGraphic->GetRadius();
-
-    if( radius <= 0 )   // Should not occur, but ...
-        return;
-
-    wxPoint     center  = aGraphic->GetCenter();
-    double      angle   = 3600.0;
-    wxPoint     start = center;
-    start.x += radius;
-
-    wxPoint nextPt;
-
-    for( int step = 0; step<STEPS; ++step )
-    {
-        double rotation = ( angle * step ) / STEPS;
-
-        nextPt = start;
-
-        RotatePoint( &nextPt.x, &nextPt.y, center.x, center.y, rotation );
-
-        aPath->AppendPoint( mapPt( nextPt ) );
-    }
-}
-
 
 
 void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
