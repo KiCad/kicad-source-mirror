@@ -1009,9 +1009,9 @@ void SPECCTRA_DB::doBOUNDARY( BOUNDARY* growth ) throw( IO_ERROR, boost::bad_poi
 
 void SPECCTRA_DB::doPATH( PATH* growth ) throw( IO_ERROR )
 {
-    T       tok = NextTok();
+    T tok = NextTok();
 
-    if( !IsSymbol( tok ) )
+    if( !IsSymbol( tok ) && (int)tok != DSN_NUMBER )   // a layer name can be like a number like +12
         Expecting( "layer_id" );
 
     growth->layer_id = CurText();
@@ -1084,7 +1084,7 @@ void SPECCTRA_DB::doCIRCLE( CIRCLE* growth ) throw( IO_ERROR )
 {
     T       tok;
 
-    NeedSYMBOL();
+    NeedSYMBOLorNUMBER();
     growth->layer_id = CurText();
 
     if( NextTok() != T_NUMBER )
@@ -2062,6 +2062,7 @@ L_done_that:
             if( growth->shape )
                 Unexpected( tok );
             break;
+
         default:
             // the example in the spec uses "circ" instead of "circle".  Bad!
             if( !strcmp( "circ", CurText() ) )
@@ -2811,7 +2812,7 @@ void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IO_ERROR, boost::bad_pointer )
             break;
 
         case T_net:
-            NeedSYMBOL();
+            NeedSYMBOLorNUMBER();
             growth->net_id = CurText();
             NeedRIGHT();
             break;

@@ -347,10 +347,7 @@ bool DSNLEXER::IsSymbol( int aTok )
     // This is static and not inline to reduce code space.
 
     // if aTok is >= 0, then it is a coincidental match to a keyword.
-    return     aTok==DSN_SYMBOL
-            || aTok==DSN_STRING
-            || aTok>=0
-            ;
+    return aTok==DSN_SYMBOL || aTok==DSN_STRING || aTok>=0;
 }
 
 
