@@ -1011,7 +1011,7 @@ void SPECCTRA_DB::doPATH( PATH* growth ) throw( IO_ERROR )
 {
     T tok = NextTok();
 
-    if( !IsSymbol( tok ) && (int)tok != DSN_NUMBER )   // a layer name can be like a number like +12
+    if( !IsSymbol( tok ) && tok != T_NUMBER )   // a layer name can be like a number like +12
         Expecting( "layer_id" );
 
     growth->layer_id = CurText();
