@@ -3973,26 +3973,6 @@ public:
      * flips the modules which were on the back side of the board back to the back.
      */
     void RevertMODULEs( BOARD* aBoard );
-
-    /**
-     * Function GetBoardPolygonOutlines
-     * Is not used in SPECCTRA export, but uses a lot of functions from it
-     * and is used to extract a board outlines (3D view, automatic zones build ...)
-     * makes the board perimeter by filling the BOUNDARY element
-     * any closed outline inside the main outline is a hole
-     * All contours should be closed, i.e. have valid vertices to build a closed polygon
-     * @param aBoard The BOARD to get information from in order to make the outlines.
-     * @param aOutlines The SHAPE_POLY_SET to fill in with main outlines.
-     * @param aHoles The empty SHAPE_POLY_SET to fill in with holes, if any.
-     * @param aErrorText = a wxString reference to display an error message
-     *          with the coordinate of the point which creates the error
-     *          (default = NULL , no message returned on error)
-     * @return true if success, false if a contour is not valid
-     */
-    bool GetBoardPolygonOutlines( BOARD* aBoard,
-                                  SHAPE_POLY_SET& aOutlines,
-                                  SHAPE_POLY_SET& aHoles,
-                                  wxString* aErrorText = NULL );
 };
 
 
