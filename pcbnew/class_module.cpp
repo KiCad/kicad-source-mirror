@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1223,7 +1223,7 @@ double MODULE::PadCoverageRatio() const
 
 // see convert_drawsegment_list_to_polygon.cpp:
 extern bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
-                                     SHAPE_POLY_SET& aPolygons);
+                                     SHAPE_POLY_SET& aPolygons, wxString* aErrorText);
 
 bool MODULE::BuildPolyCourtyard()
 {
@@ -1250,10 +1250,18 @@ bool MODULE::BuildPolyCourtyard()
     if( !list_front.size() && !list_back.size() )
         return true;
 
-    bool success = ConvertOutlineToPolygon( list_front, m_poly_courtyard_front );
+    wxString error_msg;
+
+    bool success = ConvertOutlineToPolygon( list_front, m_poly_courtyard_front, &error_msg );
 
     if( success )
-        success = ConvertOutlineToPolygon( list_back, m_poly_courtyard_back );
+        success = ConvertOutlineToPolygon( list_back, m_poly_courtyard_back, &error_msg );
+
+    if( !error_msg.IsEmpty() )
+    {
+        error_msg.Prepend( GetReference() + ": " );
+        wxLogMessage( error_msg );
+    }
 
     return success;
 }

@@ -2874,13 +2874,14 @@ BOARD_ITEM* BOARD::Duplicate( const BOARD_ITEM* aItem,
  * All contours should be closed, i.e. are valid vertices for a closed polygon
  * return true if success, false if a contour is not valid
  */
-#include <specctra.h>
+extern bool BuildBoardPolygonOutlines( BOARD* aBoard,
+                                SHAPE_POLY_SET& aOutlines,
+                                SHAPE_POLY_SET& aHoles,
+                                wxString* aErrorText );
+
 bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
                                      SHAPE_POLY_SET& aHoles,
                                      wxString* aErrorText )
 {
-    // the SPECCTRA_DB function to extract board outlines:
-    DSN::SPECCTRA_DB dummy;
-    return dummy.GetBoardPolygonOutlines( this, aOutlines,
-                                          aHoles, aErrorText );
+    return BuildBoardPolygonOutlines( this, aOutlines, aHoles, aErrorText );
 }

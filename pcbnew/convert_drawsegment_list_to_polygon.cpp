@@ -175,12 +175,16 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, std::vector< DRAWSEGMENT* 
  * These closed inner outlines are considered as holes in the main outline
  * @param aSegList the initial list of drawsegments (only lines, circles and arcs).
  * @param aPolygons will contain the complex polygon.
+ * @param aErrorText is a wxString to return error message.
  */
-bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList, SHAPE_POLY_SET& aPolygons)
+bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
+                              SHAPE_POLY_SET& aPolygons, wxString* aErrorText)
 {
 
     if( aSegList.size() == 0 )
         return true;
+
+    wxString msg;
 
     // Make a working copy of aSegList, because the list is modified during calculations
     std::vector< DRAWSEGMENT* > segList = aSegList;
@@ -367,13 +371,15 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList, SHAPE_POLY_
                 break;
 
             default:
+                if( aErrorText )
                 {
-                    wxLogMessage( _( "Unsupported DRAWSEGMENT type %s" ),
+                    msg.Printf( _( "Unsupported DRAWSEGMENT type %s" ),
                         GetChars( BOARD_ITEM::ShowShape( graphic->GetShape() ) ) );
 
-                    return false;
+                    *aErrorText << msg << "\n";
                 }
-                break;
+
+                return false;
             }
 
             // Get next closest segment.
@@ -392,12 +398,18 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList, SHAPE_POLY_
                 }
                 else
                 {
-                    wxLogMessage(
-                        _( "Unable to find the next boundary segment with an endpoint of (%s mm, %s mm). "
-                            "graphic outline must form a contiguous, closed polygon." ),
-                        GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.x ).c_str() ) ),
-                        GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.y ).c_str() ) )
-                    );
+                    if( aErrorText )
+                    {
+                        msg.Printf(
+                            _( "Unable to find the next boundary segment with an endpoint of (%s mm, %s mm). "
+                                "graphic outline must form a contiguous, closed polygon." ),
+                            GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.x ).c_str() ) ),
+                            GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.y ).c_str() ) )
+                            );
+
+                        *aErrorText << msg << "\n";
+                    }
+
                     return false;
                 }
                 break;
@@ -497,7 +509,7 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList, SHAPE_POLY_
 
                         wxPoint nextPt;
 
-                        for( int step = 1; step<=steps; ++step )
+                        for( int step = 1; step <= steps; ++step )
                         {
                             double rotation = ( angle * step ) / steps;
 
@@ -512,14 +524,16 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList, SHAPE_POLY_
                     break;
 
                 default:
+                    if( aErrorText )
                     {
-                        wxLogMessage(
+                        msg.Printf(
                             _( "Unsupported DRAWSEGMENT type %s" ),
                             GetChars( BOARD_ITEM::ShowShape( graphic->GetShape() ) ) );
 
-                        return false;
+                        *aErrorText << msg << "\n";
                     }
-                    break;
+
+                    return false;
                 }
 
                 // Get next closest segment.
@@ -538,12 +552,17 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList, SHAPE_POLY_
                     }
                     else
                     {
-                        wxLogMessage(
-                            _( "Unable to find the next graphic segment with an endpoint of (%s mm, %s mm).\n"
-                               "Edit graphics, making them contiguous polygons each." ),
-                            GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.x ).c_str() ) ),
-                            GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.y ).c_str() ) )
-                        );
+                        if( aErrorText )
+                        {
+                            msg.Printf(
+                                _( "Unable to find the next graphic segment with an endpoint of (%s mm, %s mm).\n"
+                                   "Edit graphics, making them contiguous polygons each." ),
+                                GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.x ).c_str() ) ),
+                                GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.y ).c_str() ) )
+                            );
+
+                            *aErrorText << msg << "\n";
+                        }
 
                         return false;
                     }
@@ -554,4 +573,92 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList, SHAPE_POLY_
     }
 
     return true;
+}
+
+#include <class_board.h>
+#include <collectors.h>
+
+/* This function is used to extract a board outlines (3D view, automatic zones build ...)
+ * Any closed outline inside the main outline is a hole
+ * All contours should be closed, i.e. valid closed polygon vertices
+ */
+bool BuildBoardPolygonOutlines( BOARD* aBoard,
+                                SHAPE_POLY_SET& aOutlines,
+                                SHAPE_POLY_SET& aHoles,
+                                wxString* aErrorText )
+{
+    PCB_TYPE_COLLECTOR  items;
+
+    // Get all the DRAWSEGMENTS and module graphics into 'items',
+    // then keep only those on layer == Edge_Cuts.
+    static const KICAD_T  scan_graphics[] = { PCB_LINE_T, PCB_MODULE_EDGE_T, EOT };
+    items.Collect( aBoard, scan_graphics );
+
+    // Make a working copy of aSegList, because the list is modified during calculations
+    std::vector< DRAWSEGMENT* > segList;
+
+    for( int ii = 0; ii < items.GetCount(); ii++ )
+    {
+        if( items[ii]->GetLayer() == Edge_Cuts )
+            segList.push_back( static_cast< DRAWSEGMENT* >( items[ii] ) );
+    }
+
+    bool success = ConvertOutlineToPolygon( segList, aOutlines, aErrorText );
+
+    // Now move holes in aHoles
+    // only one main outline is expected
+    if( success && aOutlines.OutlineCount() )
+    {
+        int outlineId = 0;
+
+        int holecount = aOutlines.HoleCount( outlineId );
+
+        if( holecount )
+        {
+            for( int ii = 0; ii < holecount; ++ii )
+            {
+                aHoles.AddOutline( aOutlines.Hole( outlineId, ii ) );
+            }
+
+            // Remove holes from aOutlines:
+            SHAPE_POLY_SET::POLYGON& polygon = aOutlines.Polygon( outlineId );
+            polygon.erase( polygon.begin()+1, polygon.end() );
+        }
+    }
+    else
+    {
+        // Creates a valid polygon outline is not possible.
+        // So uses the board edge cuts bounding box to create a
+        // rectangular outline
+        // (when no edge cuts items, fillBOUNDARY build a contour
+        // from global bounding box
+
+        EDA_RECT bbbox = aBoard->GetBoardEdgesBoundingBox();
+
+        // Ensure non null area. If happen, gives a minimal size.
+        if( ( bbbox.GetWidth() ) == 0 || ( bbbox.GetHeight() == 0 ) )
+            bbbox.Inflate( Millimeter2iu( 1.0 ) );
+
+        aOutlines.RemoveAllContours();
+        aOutlines.NewOutline();
+
+        wxPoint corner;
+        corner.x = bbbox.GetOrigin().x;
+        corner.y = bbbox.GetOrigin().y;
+        aOutlines.Append( corner.x, corner.y );
+
+        corner.x = bbbox.GetOrigin().x;
+        corner.y = bbbox.GetEnd().y;
+        aOutlines.Append( corner.x, corner.y );
+
+        corner.x = bbbox.GetEnd().x;
+        corner.y = bbbox.GetEnd().y;
+        aOutlines.Append( corner.x, corner.y );
+
+        corner.x = bbbox.GetEnd().x;
+        corner.y = bbbox.GetOrigin().y;
+        aOutlines.Append( corner.x, corner.y );
+    }
+
+    return success;
 }
