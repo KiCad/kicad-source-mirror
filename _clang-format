@@ -14,7 +14,7 @@ AllowShortLoopsOnASingleLine: false
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: true
 AlwaysBreakTemplateDeclarations: false
-BinPackArguments: false
+BinPackArguments: true
 BinPackParameters: true
 BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Allman
@@ -24,7 +24,7 @@ BreakStringLiterals: false
 ColumnLimit: 100
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 ConstructorInitializerIndentWidth: 8
-ContinuationIndentWidth: 4
+ContinuationIndentWidth: 8
 Cpp11BracedListStyle: false
 DerivePointerAlignment: false
 DisableFormat: false
