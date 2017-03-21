@@ -339,13 +339,18 @@ SELECTION& SELECTION_TOOL::RequestSelection( int aFlags )
         m_selection.SetIsHover( false );
     }
 
-    for( auto item : m_selection )
+    // Be careful with iterators: items can be removed from list
+    // that invalidate iterators.
+    for( unsigned ii = 0; ii < m_selection.GetSize(); ii++ )
     {
+        EDA_ITEM* item = m_selection[ii];
+
         if( ( aFlags & SELECTION_EDITABLE ) && item->Type() == PCB_MARKER_T )
         {
             unselect( static_cast<BOARD_ITEM *>( item ) );
         }
     }
+
     if ( aFlags & SELECTION_SANITIZE_PADS )
         SanitizeSelection();
 
