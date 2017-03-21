@@ -44,6 +44,8 @@
 #include <class_track.h>
 #include <class_zone.h>
 #include <class_drawsegment.h>
+#include <ratsnest_data.h>
+#include <view/view.h>
 
 #include <specctra.h>
 
@@ -62,14 +64,6 @@ void PCB_EDIT_FRAME::ImportSpecctraDesign( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
 {
-/*
-    if( GetScreen()->IsModify() )
-    {
-        if( !IsOK( this, _( "Board Modified: Continue ?" ) ) )
-            return;
-    }
-*/
-
     wxString fullFileName = GetBoard()->GetFileName();
     wxString path;
     wxString name;
@@ -92,6 +86,13 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
 
     if( fullFileName == wxEmptyString )
         return;
+
+     SetCurItem( NULL );
+
+    // To avoid issues with undo/redo lists (dangling pointers)
+    // clear the lists
+    // todo: use undo/redo feature
+    GetScreen()->ClearUndoRedoList();
 
     SPECCTRA_DB     db;
     LOCALE_IO       toggle;
@@ -116,18 +117,24 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
     OnModify();
     GetBoard()->m_Status_Pcb = 0;
 
-    /* At this point we should call Compile_Ratsnest()
-     * but this could be time consumming.
-     * So if incorrect number of Connected and No connected pads is accepted
-     * until Compile_Ratsnest() is called (when track tool selected for instance)
-     * leave the next line commented
-     * Otherwise uncomment this line
-    */
-    //Compile_Ratsnest( NULL, true );
+    Compile_Ratsnest( NULL, true );
+    GetBoard()->GetRatsnest()->ProcessBoard();
+
+    if( GetGalCanvas() )    // Update view:
+    {
+        auto view = GetGalCanvas()->GetView();
+
+        // Update footprint positions
+        view->RecacheAllItems();
+
+        // add imported tracks (previous tracks are removed, therfore all are new)
+        for( TRACK* track = GetBoard()->m_Track; track; track = track->Next() )
+            view->Add( track );
+   }
 
     SetStatusText( wxString( _( "Session file imported and merged OK." ) ) );
 
-    m_canvas->Refresh( true );
+    Refresh();
 }
 
 
@@ -488,14 +495,6 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
                 PATH*   path = (PATH*) wire->shape;
                 for( unsigned pt=0;  pt<path->points.size()-1;  ++pt )
                 {
-                    /* a debugging aid, may come in handy
-                    if( path->points[pt].x == 547800
-                    &&  path->points[pt].y == -380250 )
-                    {
-                        int breakhere = 1;
-                    }
-                    */
-
                     TRACK* track = makeTRACK( path, pt, netoutCode );
                     aBoard->Add( track );
                 }

@@ -224,7 +224,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
         }
     }
 
-    commit.Push( wxT( "Global delete" ) );
+    commit.Push( "Global delete" );
 
     if( m_DelMarkers->GetValue() )
         pcb->DeleteMARKERs();
@@ -233,7 +233,9 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
         m_Parent->Compile_Ratsnest( NULL, true );
 
     // There is a chance that some of tracks have changed their nets, so rebuild ratsnest from scratch
-    // TODO necessary? if not, remove rn_data.h header as well
-    //if( m_Parent->IsGalCanvasActive() )
-        //pcb->GetRatsnest()->ProcessBoard();
+    if( m_Parent->IsGalCanvasActive() )
+        pcb->GetRatsnest()->ProcessBoard();
+    else
+        m_Parent->GetCanvas()->Refresh();
+
 }

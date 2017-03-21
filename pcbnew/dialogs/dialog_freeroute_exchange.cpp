@@ -104,12 +104,6 @@ void DIALOG_FREEROUTE::OnExportButtonClick( wxCommandEvent& event )
 void DIALOG_FREEROUTE::OnImportButtonClick( wxCommandEvent& event )
 {
     m_Parent->ImportSpecctraSession(  event );
-
-    /* Connectivity must be rebuild.
-     * because for large board it can take some time, this is made only on demand
-     */
-    if( IsOK( this, _("Do you want to rebuild connectivity data ?" ) ) )
-        m_Parent->Compile_Ratsnest( NULL, true );
 }
 
 
