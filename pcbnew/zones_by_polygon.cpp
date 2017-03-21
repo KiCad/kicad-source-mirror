@@ -45,6 +45,7 @@
 #include <protos.h>
 #include <zones_functions_for_undo_redo.h>
 #include <drc_stuff.h>
+#include <ratsnest_data.h>
 
 // Outline creation:
 static void Abort_Zone_Create_Outline( EDA_DRAW_PANEL* Panel, wxDC* DC );
@@ -934,8 +935,26 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     // Redraw the real new zone outlines
     GetBoard()->RedrawAreasOutlines( m_canvas, DC, GR_OR, UNDEFINED_LAYER );
 
-
     UpdateCopyOfZonesList( s_PickedList, s_AuxiliaryList, GetBoard() );
+
+    // refill zones with the new properties applied
+    for( unsigned i = 0; i < s_PickedList.GetCount(); ++i )
+    {
+        auto zone = dyn_cast<ZONE_CONTAINER*>( s_PickedList.GetPickedItem( i ) );
+
+        if( zone == nullptr )
+        {
+            wxASSERT_MSG( false, "Expected a zone after zone properties edit" );
+            continue;
+        }
+
+        if( zone->IsFilled() )
+        {
+            Fill_Zone( zone );
+            GetBoard()->GetRatsnest()->Recalculate( zone->GetNetCode() );
+        }
+    }
+
     commit.Stage( s_PickedList );
     commit.Push( _( "Modify zone properties" ) );
 
