@@ -988,18 +988,10 @@ void OPENGL_GAL::DrawGrid()
 
     // Correct the index, else some lines are not correctly painted
     gridStartY -= std::abs( gridOrigin.y / gridSize.y ) + 1;
-    gridEndY += std::abs( gridOrigin.y / gridSize.y ) + 1;
+    gridEndY -= std::abs( gridOrigin.y / gridSize.y ) - 1;
 
-    if( gridStartX <= gridEndX )
-    {
-        gridStartX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
-        gridEndX += std::abs( gridOrigin.x / gridSize.x ) + 1;
-    }
-    else
-    {
-        gridStartX += std::abs( gridOrigin.x / gridSize.x ) + 1;
-        gridEndX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
-    }
+    gridStartX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
+    gridEndX -= std::abs( gridOrigin.x / gridSize.x ) - 1;
 
     int dirX = gridStartX >= gridEndX ? -1 : 1;
     int dirY = gridStartY >= gridEndY ? -1 : 1;
@@ -1074,8 +1066,8 @@ void OPENGL_GAL::DrawGrid()
                 || gridScreenSizeDense > gridThreshold )
             {
                 glBegin( GL_LINES );
-                glVertex2d( gridStartX * gridSize.x, y );
-                glVertex2d( gridEndX * gridSize.x, y );
+                glVertex2d( gridStartX * gridSize.x + gridOrigin.x, y );
+                glVertex2d( gridEndX * gridSize.x + gridOrigin.x, y );
                 glEnd();
             }
         }
@@ -1104,8 +1096,8 @@ void OPENGL_GAL::DrawGrid()
                 || gridScreenSizeDense > gridThreshold )
             {
                 glBegin( GL_LINES );
-                glVertex2d( i * gridSize.x + gridOrigin.x, gridStartY * gridSize.y );
-                glVertex2d( i * gridSize.x + gridOrigin.x, gridEndY * gridSize.y );
+                glVertex2d( x, gridStartY * gridSize.y + gridOrigin.y );
+                glVertex2d( x, gridEndY * gridSize.y + gridOrigin.y );
                 glEnd();
             }
         }

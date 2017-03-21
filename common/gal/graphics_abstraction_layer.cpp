@@ -230,18 +230,10 @@ void GAL::DrawGrid()
 
     // Correct the index, else some lines are not correctly painted
     gridStartY -= std::abs( gridOrigin.y / gridSize.y ) + 1;
-    gridEndY += std::abs( gridOrigin.y / gridSize.y ) + 1;
+    gridEndY -= std::abs( gridOrigin.y / gridSize.y ) - 1;
 
-    if( gridStartX <= gridEndX )
-    {
-        gridStartX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
-        gridEndX += std::abs( gridOrigin.x / gridSize.x ) + 1;
-    }
-    else
-    {
-        gridStartX += std::abs( gridOrigin.x / gridSize.x ) + 1;
-        gridEndX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
-    }
+    gridStartX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
+    gridEndX -= std::abs( gridOrigin.x / gridSize.x ) - 1;
 
     int dirX = gridEndX >= gridStartX ? 1 : -1;
     int dirY = gridEndY >= gridStartY ? 1 : -1;
@@ -273,8 +265,8 @@ void GAL::DrawGrid()
             if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
                 || gridScreenSizeDense > gridThreshold )
             {
-                drawGridLine( VECTOR2D( gridStartX * gridSize.x, y ),
-                                VECTOR2D( gridEndX * gridSize.x,   y ) );
+                drawGridLine( VECTOR2D( gridStartX * gridSize.x + gridOrigin.x, y ),
+                              VECTOR2D( gridEndX * gridSize.x + gridOrigin.x, y ) );
             }
         }
 
@@ -294,8 +286,8 @@ void GAL::DrawGrid()
             if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
                 || gridScreenSizeDense > gridThreshold )
             {
-                drawGridLine( VECTOR2D( x, gridStartY * gridSize.y ),
-                                VECTOR2D( x, gridEndY * gridSize.y ) );
+                drawGridLine( VECTOR2D( x, gridStartY * gridSize.y + gridOrigin.y ),
+                              VECTOR2D( x, gridEndY * gridSize.y + gridOrigin.y ) );
             }
         }
     }
