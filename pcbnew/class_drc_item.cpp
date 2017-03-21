@@ -133,7 +133,7 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _( "Footprint has no courtyard defined" ) );
 
     case DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT:
-        return wxString( _( "Footprint has incorect courtyard (not a closed shape)" ) );
+        return wxString( _( "Footprint has incorrect courtyard (not a closed shape)" ) );
 
     default:
         return wxString::Format( wxT( "Unknown DRC error code %d" ), m_ErrorCode );
