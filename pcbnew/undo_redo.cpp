@@ -142,8 +142,8 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
             itemsList.push_back( item );
 
         // Append drawings
-        for( auto item : aPcb->Drawings() )
-            itemsList.push_back( item );
+        for( auto ditem : aPcb->Drawings() )
+            itemsList.push_back( ditem );
 
         // Append zones outlines
         for( int ii = 0; ii < aPcb->GetAreaCount(); ii++ )
@@ -565,7 +565,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
         if( IsGalCanvasActive() )
         {
-			connectivity->RecalculateRatsnest();         
+			connectivity->RecalculateRatsnest();
         }
     }
 }

@@ -350,6 +350,10 @@ const std::list<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems(
 const std::list<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetNetItems( int aNetCode,
         const KICAD_T aTypes[] ) const
 {
+    std::list<BOARD_CONNECTED_ITEM*> rv;
+
+    // FIXME!
+        return rv;
 }
 
 

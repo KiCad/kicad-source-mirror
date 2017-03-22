@@ -269,9 +269,6 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
             newTrack->SetFlags( IS_NEW );
 
             newTrack->SetState( BEGIN_ONPAD | END_ONPAD, false );
-
-            D_PAD* pad = GetBoard()->GetPad( previousTrack, ENDPOINT_END );
-
             newTrack->start = previousTrack->end;
 
             DBG( g_CurrentTrackList.VerifyListIntegrity(); );

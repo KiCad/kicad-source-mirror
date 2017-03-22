@@ -945,7 +945,11 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
     std::list<BOARD_CONNECTED_ITEM*> localConnectionList;
     for( int netCode : netcodeList )
     {
-        //ratsnest->GetNetItems( netCode, localConnectionList, (RN_ITEM_TYPE)( RN_TRACKS | RN_VIAS ) );
+        KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
+        for( auto item : board()->GetConnectivity()->GetNetItems( netCode, types ) )
+        {
+            localConnectionList.push_back( item );
+        }
     }
 
     for( BOARD_ITEM* i : modList )

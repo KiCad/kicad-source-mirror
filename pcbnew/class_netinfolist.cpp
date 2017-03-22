@@ -142,19 +142,6 @@ void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
 }
 
 
-/* sort function, to sort pad list by netnames
- * this is a case sensitive sort.
- * DO NOT change it because NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname )
- * when search a net by its net name does a binary search
- * and expects to have a nets list sorted by an alphabetic case sensitive sort
- */
-
-static bool padlistSortByNetnames( const D_PAD* a, const D_PAD* b )
-{
-    return ( a->GetNetname().Cmp( b->GetNetname() ) ) < 0;
-}
-
-
 /**
  *  Compute and update the net_codes for PADS et and equipots (.m_NetCode member)
  *  net_codes are >= 1 (net_code = 0 means not connected)
@@ -169,10 +156,6 @@ static bool padlistSortByNetnames( const D_PAD* a, const D_PAD* b )
  */
 void NETINFO_LIST::buildListOfNets()
 {
-    D_PAD*          pad;
-    int             nodes_count = 0;
-
-
     // Restore the initial state of NETINFO_ITEMs
     for( NETINFO_LIST::iterator net( begin() ), netEnd( end() ); net != netEnd; ++net )
         net->Clear();
