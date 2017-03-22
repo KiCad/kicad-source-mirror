@@ -1,8 +1,9 @@
 /*
- * KiRouter - a push-and-(sometimes-)shove PCB router
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2015 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,8 +19,8 @@
  * with this program.  If not, see <http://www.gnu.or/licenses/>.
  */
 
-#ifndef __DIRECTION_H
-#define __DIRECTION_H
+#ifndef DIRECTION45_H
+#define DIRECTION45_H
 
 #include <geometry/seg.h>
 #include <geometry/shape_line_chain.h>
@@ -354,4 +355,4 @@ private:
     Directions m_dir;
 };
 
-#endif    // __DIRECTION_H
+#endif    // DIRECTION45_H

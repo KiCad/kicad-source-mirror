@@ -24,12 +24,12 @@
 #include <cmath>
 #include <limits>
 
+#include <geometry/direction45.h>
 #include <geometry/shape.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_segment.h>
 
-#include "direction.h"
 
 #include "pns_diff_pair.h"
 #include "pns_router.h"

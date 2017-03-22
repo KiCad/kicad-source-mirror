@@ -40,7 +40,7 @@
 #include <view/view.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
-#include <router/direction.h>
+#include <geometry/direction45.h>
 #include <ratsnest_data.h>
 #include <board_commit.h>
 #include <scoped_set_reset.h>

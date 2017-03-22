@@ -21,8 +21,9 @@
 
 #include <tool/tool_settings.h>
 
+#include <geometry/direction45.h>
+
 #include "pns_routing_settings.h"
-#include "direction.h"
 
 namespace PNS {
 
