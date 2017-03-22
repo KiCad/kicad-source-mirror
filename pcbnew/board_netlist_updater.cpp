@@ -596,7 +596,7 @@ bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist )
         if( !zone->IsOnCopperLayer() || zone->GetIsKeepout() )
             continue;
 
-        int nc = zone->GetNet()->GetNodesCount();
+        int nc = m_board->GetConnectivity()->GetPadCount( zone->GetNetCode() );
 
         if( nc == 0 )
         {
@@ -668,7 +668,6 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     if( !m_isDryRun )
     {
         m_commit.Push( _( "Update netlist" ) );
-        m_frame->Compile_Ratsnest( NULL, false );
         m_board->GetConnectivity()->Build( m_board );
         testConnectivity( aNetlist );
     }

@@ -21,8 +21,6 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#define PROFILE
-
 #ifdef PROFILE
 #include <profile.h>
 #endif
@@ -127,7 +125,6 @@ void CONNECTIVITY_DATA::updateRatsnest()
     #ifdef PROFILE
     rnUpdate.Show();
     #endif /* PROFILE */
-    printf( "Dirty: %d\n", nDirty );
 }
 
 
@@ -165,6 +162,7 @@ void CONNECTIVITY_DATA::RecalculateRatsnest()
 
 
 
+
     for( auto c : clusters )
     {
         int net = c->OriginNet();
@@ -181,7 +179,7 @@ void CONNECTIVITY_DATA::RecalculateRatsnest()
 }
 
 
-void CONNECTIVITY_DATA::blockRatsnestItems( const std::vector<BOARD_ITEM*>& aItems )
+void CONNECTIVITY_DATA::BlockRatsnestItems( const std::vector<BOARD_ITEM*>& aItems )
 {
     std::vector<BOARD_CONNECTED_ITEM*> citems;
 
@@ -231,7 +229,7 @@ void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& 
 
     m_dynamicRatsnest.clear();
 
-    blockRatsnestItems( aItems );
+    BlockRatsnestItems( aItems );
 
     for( unsigned int nc = 1; nc < m_dynamicConnectivity->m_nets.size(); nc++ )
     {
@@ -333,45 +331,182 @@ const std::list<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems(
         const KICAD_T aTypes[] ) const
 {
     std::list<BOARD_CONNECTED_ITEM*> rv;
-    const auto clusters = m_connAlgo->SearchClusters( CN_CONNECTIVITY_ALGO::CSM_CONNECTIVITY_CHECK, aTypes, aItem->GetNetCode() );
+    const auto clusters = m_connAlgo->SearchClusters( CN_CONNECTIVITY_ALGO::CSM_CONNECTIVITY_CHECK,
+            aTypes, aItem->GetNetCode() );
 
-    for ( auto cl : clusters )
-        if ( cl->Contains (aItem ) )
+    for( auto cl : clusters )
+        if( cl->Contains( aItem ) )
         {
-            for ( const auto item : *cl )
+            for( const auto item : *cl )
                 rv.push_back( item->Parent() );
         }
+
+
 
     return rv;
 }
 
 
-const std::list<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetNetItems(
-        int aNetCode,
+const std::list<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetNetItems( int aNetCode,
         const KICAD_T aTypes[] ) const
 {
-
 }
+
 
 bool CONNECTIVITY_DATA::CheckConnectivity( std::vector<CN_DISJOINT_NET_ENTRY>& aReport )
 {
     RecalculateRatsnest();
 
-    for ( auto net : m_nets )
+    for( auto net : m_nets )
     {
-        if ( net )
+        if( net )
         {
-            for ( const auto& edge: net->GetEdges() )
+            for( const auto& edge : net->GetEdges() )
             {
                 CN_DISJOINT_NET_ENTRY ent;
                 ent.net = edge.GetSourceNode()->Parent()->GetNetCode();
-                ent.a = edge.GetSourceNode()->Parent();
-                ent.b = edge.GetTargetNode()->Parent();
+                ent.a   = edge.GetSourceNode()->Parent();
+                ent.b   = edge.GetTargetNode()->Parent();
                 ent.anchorA = edge.GetSourceNode()->Pos();
                 ent.anchorB = edge.GetTargetNode()->Pos();
                 aReport.push_back( ent );
             }
         }
     }
+
     return aReport.empty();
+}
+
+
+const std::vector<TRACK*> CONNECTIVITY_DATA::GetConnectedTracks(  const BOARD_CONNECTED_ITEM* aItem )
+const
+{
+    auto& entry = m_connAlgo->ItemEntry( aItem );
+
+    std::set<TRACK*> tracks;
+    std::vector<TRACK*> rv;
+
+    for( auto citem : entry.GetItems() )
+    {
+        for( auto connected : citem->ConnectedItems() )
+        {
+            if( connected->Parent()->Type() == PCB_TRACE_T )
+                tracks.insert( static_cast<TRACK*> ( connected->Parent() ) );
+        }
+    }
+
+    std::copy( tracks.begin(), tracks.end(), std::back_inserter( rv ) );
+    return rv;
+}
+
+
+const std::vector<D_PAD*> CONNECTIVITY_DATA::GetConnectedPads(  const BOARD_CONNECTED_ITEM* aItem )
+const
+{
+    auto& entry = m_connAlgo->ItemEntry( aItem );
+
+    std::set<D_PAD*> pads;
+    std::vector<D_PAD*> rv;
+
+    for( auto citem : entry.GetItems() )
+    {
+        for( auto connected : citem->ConnectedItems() )
+        {
+            if( connected->Parent()->Type() == PCB_PAD_T )
+                pads.insert( static_cast<D_PAD*> ( connected->Parent() ) );
+        }
+    }
+
+    std::copy( pads.begin(), pads.end(), std::back_inserter( rv ) );
+    return rv;
+}
+
+
+unsigned int CONNECTIVITY_DATA::GetLinksCount() const
+{
+    return 0;
+    assert( false );
+}
+
+
+unsigned int CONNECTIVITY_DATA::GetConnectedCount() const
+{
+    return 0;
+    assert( false );
+}
+
+
+unsigned int CONNECTIVITY_DATA::GetNodeCount( int aNet ) const
+{
+    return 0;
+    assert( false );
+}
+
+
+unsigned int CONNECTIVITY_DATA::GetPadCount( int aNet ) const
+{
+    return 0;
+    assert( false );
+}
+
+
+const std::vector<VECTOR2I> CONNECTIVITY_DATA::NearestUnconnectedTargets(
+        const BOARD_CONNECTED_ITEM* aRef,
+        const VECTOR2I& aPos,
+        int aNet )
+{
+    CN_CLUSTER_PTR refCluster;
+    int refNet = -1;
+
+    if( aRef )
+        refNet = aRef->GetNetCode();
+
+    if( aNet >= 0 )
+        refNet = aNet;
+
+    if( aRef )
+    {
+        for( auto cl : m_connAlgo->GetClusters() )
+        {
+            if( cl->Contains( aRef ) )
+            {
+                refCluster = cl;
+                break;
+            }
+        }
+    }
+
+    std::set <VECTOR2I> anchors;
+
+    for( auto cl : m_connAlgo->GetClusters() )
+    {
+        if( cl != refCluster )
+        {
+            for( auto item : *cl )
+            {
+                if( item->Parent()->GetNetCode() == refNet
+                    && item->Parent()->Type() != PCB_ZONE_AREA_T )
+                    for( auto anchor : item->Anchors() )
+                    {
+                        anchors.insert( anchor->Pos() );
+                    }
+
+
+            }
+        }
+    }
+
+
+    std::vector<VECTOR2I> rv;
+
+    std::copy( anchors.begin(), anchors.end(), std::back_inserter( rv ) );
+    std::sort( rv.begin(), rv.end(), [aPos] ( const VECTOR2I& a, const VECTOR2I& b )
+    {
+        auto da = (a - aPos).EuclideanNorm();
+        auto db = (b - aPos).EuclideanNorm();
+
+        return da < db;
+    } );
+
+    return rv;
 }

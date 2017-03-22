@@ -42,6 +42,7 @@
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <pcb_painter.h>
+#include <connectivity.h>
 
 #define COL_NETNAME 0
 #define COL_NETINFO 1
@@ -141,7 +142,9 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
                 continue;
         }
 
-        if( !m_cbShowZeroPad->IsChecked() && net->m_PadInNetList.size() == 0 )
+        unsigned nPads = m_brd->GetConnectivity()->GetPadCount( netcode );
+
+        if( !m_cbShowZeroPad->IsChecked() && nPads == 0 )
             continue;
 
         if( m_netsListGrid->GetNumberRows() <= row_idx )
@@ -154,7 +157,7 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
 
         if( netcode )
         {
-            txt.Printf( wxT( "%u" ), (unsigned) net->m_PadInNetList.size() );
+            txt.Printf( wxT( "%u" ), nPads );
             m_netsListGrid->SetCellValue( row_idx, COL_NETINFO, txt );
         }
         else    // For the net 0 (unconnected pads), the pad count is not known

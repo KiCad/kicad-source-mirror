@@ -481,7 +481,7 @@ public:
      * It shows the connections from a pad to the nearest connected pad
      * @param aModule = module to consider.
      */
-    void build_ratsnest_module( MODULE* aModule );
+     void build_ratsnest_module( MODULE *mod, wxPoint aMoveVector );
 
     /**
      * Function TraceModuleRatsNest
@@ -526,7 +526,8 @@ public:
      * When aInit = false, aItemRef is not used (can be NULL)
      */
     void BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
-                                   const wxPoint& aPosition, bool aInit );
+                                   const wxPoint& aPosition,
+                                    int aNet );
 
     /**
      * Function TestForActiveLinksInRatsnest

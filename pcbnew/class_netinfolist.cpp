@@ -62,7 +62,6 @@ void NETINFO_LIST::clear()
     for( it = m_netNames.begin(), itEnd = m_netNames.end(); it != itEnd; ++it )
         delete it->second;
 
-    m_PadsFullList.clear();
     m_netNames.clear();
     m_netCodes.clear();
     m_newNetCode = 0;
@@ -143,32 +142,6 @@ void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
 }
 
 
-D_PAD* NETINFO_LIST::GetPad( unsigned aIdx ) const
-{
-    if( aIdx < m_PadsFullList.size() )
-        return m_PadsFullList[aIdx];
-    else
-        return NULL;
-}
-
-
-bool NETINFO_LIST::DeletePad( D_PAD* aPad )
-{
-    std::vector<D_PAD*>::iterator it  = m_PadsFullList.begin();
-    std::vector<D_PAD*>::iterator end = m_PadsFullList.end();
-
-    for( ; it != end;  ++it )
-    {
-        if( *it == aPad )
-        {
-            m_PadsFullList.erase( it );
-            return true;
-        }
-    }
-    return false;
-}
-
-
 /* sort function, to sort pad list by netnames
  * this is a case sensitive sort.
  * DO NOT change it because NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname )
@@ -199,46 +172,14 @@ void NETINFO_LIST::buildListOfNets()
     D_PAD*          pad;
     int             nodes_count = 0;
 
-    // Build the PAD list, sorted by net
-    buildPadsFullList();
 
     // Restore the initial state of NETINFO_ITEMs
     for( NETINFO_LIST::iterator net( begin() ), netEnd( end() ); net != netEnd; ++net )
         net->Clear();
 
-    // Assign pads to appropriate NETINFO_ITEMs
-    for( unsigned ii = 0; ii < m_PadsFullList.size(); ii++ )
-    {
-        pad = m_PadsFullList[ii];
-
-        if( pad->GetNetCode() == NETINFO_LIST::UNCONNECTED ) // pad not connected
-            continue;
-
-        if( !( pad->GetLayerSet() & LSET::AllCuMask() ).any() )
-            // pad not a copper layer (happens when building complex shapes)
-            continue;
-
-        // Add pad to the appropriate list of pads
-        NETINFO_ITEM* net = pad->GetNet();
-
-        // it should not be possible for BOARD_CONNECTED_ITEM to return NULL as a result of GetNet()
-        wxASSERT( net );
-
-        if( net )
-            net->m_PadInNetList.push_back( pad );
-
-        ++nodes_count;
-    }
-
-    m_Parent->SetNodeCount( nodes_count );
-
     m_Parent->SynchronizeNetsAndNetClasses( );
-
-    m_Parent->m_Status_Pcb |= NET_CODES_OK;
-
     m_Parent->SetAreasNetCodesFromNetNames();
 }
-
 
 #if defined(DEBUG)
 void NETINFO_LIST::Show() const
@@ -253,46 +194,6 @@ void NETINFO_LIST::Show() const
     }
 }
 #endif
-
-
-void NETINFO_LIST::buildPadsFullList()
-{
-    /*
-     * initialize:
-     *   m_Pads (list of pads)
-     * set m_Status_Pcb = LISTE_PAD_OK;
-     * also clear m_Pcb->m_FullRatsnest that could have bad data
-     *   (m_Pcb->m_FullRatsnest uses pointer to pads)
-     * Be aware NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname )
-     * when search a net by its net name does a binary search
-     * and expects to have a nets list sorted by an alphabetic case sensitive sort
-     * So do not change the sort function used here
-     */
-
-    if( m_Parent->m_Status_Pcb & LISTE_PAD_OK )
-        return;
-
-    // empty the old list
-    m_PadsFullList.clear();
-    m_Parent->m_FullRatsnest.clear();
-
-    // Clear variables used in ratsnest computation
-    for( MODULE* module = m_Parent->m_Modules;  module;  module = module->Next() )
-    {
-        for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
-        {
-            m_PadsFullList.push_back( pad );
-
-            pad->SetSubRatsnest( 0 );
-            pad->SetParent( module );
-        }
-    }
-
-    // Sort pad list per net
-    sort( m_PadsFullList.begin(), m_PadsFullList.end(), padlistSortByNetnames );
-
-    m_Parent->m_Status_Pcb = LISTE_PAD_OK;
-}
 
 
 int NETINFO_LIST::getFreeNetCode()

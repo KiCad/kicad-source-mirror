@@ -701,8 +701,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         backupFileName = create_backup_file( aFileName );
     }
 
-    GetBoard()->m_Status_Pcb &= ~CONNEXION_OK;
-
     GetBoard()->SynchronizeNetsAndNetClasses();
 
     // Select default Netclass before writing file.
@@ -787,7 +785,6 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName )
         return false;
     }
 
-    GetBoard()->m_Status_Pcb &= ~CONNEXION_OK;
     GetBoard()->SynchronizeNetsAndNetClasses();
 
     // Select default Netclass before writing file.

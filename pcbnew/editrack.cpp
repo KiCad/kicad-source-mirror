@@ -41,6 +41,7 @@
 #include <class_board.h>
 #include <class_track.h>
 #include <class_zone.h>
+#include <connectivity.h>
 
 
 static void Abort_Create_Track( EDA_DRAW_PANEL* panel, wxDC* DC );
@@ -158,7 +159,11 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
         DBG( g_CurrentTrackList.VerifyListIntegrity() );
 
-        BuildAirWiresTargetsList( lockPoint, wxPoint( 0, 0 ), true );
+        int net = -1;
+        if (lockPoint)
+            net = lockPoint->GetNetCode();
+
+        BuildAirWiresTargetsList( lockPoint, wxPoint( 0, 0 ), net );
 
         DBG( g_CurrentTrackList.VerifyListIntegrity() );
 
@@ -183,7 +188,6 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
         if( pad )
         {
-            g_CurrentTrackSegment->m_PadsConnected.push_back( pad );
             // Useful to display track length, if the pad has a die length:
             g_CurrentTrackSegment->SetState( BEGIN_ONPAD, true );
             g_CurrentTrackSegment->start = pad;
@@ -267,12 +271,6 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
             newTrack->SetState( BEGIN_ONPAD | END_ONPAD, false );
 
             D_PAD* pad = GetBoard()->GetPad( previousTrack, ENDPOINT_END );
-
-            if( pad )
-            {
-                newTrack->m_PadsConnected.push_back( pad );
-                previousTrack->m_PadsConnected.push_back( pad );
-            }
 
             newTrack->start = previousTrack->end;
 
@@ -489,6 +487,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
             ITEM_PICKER picker( track, UR_NEW );
             s_ItemsListPicker.PushItem( picker );
             GetBoard()->m_Track.Insert( track, insertBeforeMe );
+            GetBoard()->GetConnectivity()->Add( track );
         }
 
         TraceAirWiresToTargets( aDC );
@@ -533,6 +532,8 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
 
     m_canvas->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
+
+    GetBoard()->GetConnectivity()->RecalculateRatsnest();
 
     return true;
 }
@@ -825,7 +826,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     displ_opts->m_ShowTrackClearanceMode = showTrackClearanceMode;
     displ_opts->m_DisplayPcbTrackFill    = tmp;
 
-    frame->BuildAirWiresTargetsList( NULL, g_CurrentTrackSegment->GetEnd(), false );
+    frame->BuildAirWiresTargetsList( NULL, g_CurrentTrackSegment->GetEnd(), g_CurrentTrackSegment->GetNetCode() );
     frame->TraceAirWiresToTargets( aDC );
 }
 

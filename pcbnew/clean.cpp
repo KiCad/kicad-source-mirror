@@ -35,14 +35,12 @@
 #include <pcbnew.h>
 #include <class_board.h>
 #include <class_track.h>
-#include <connect.h>
 #include <dialog_cleaning_options.h>
 #include <board_commit.h>
-
-#include <tuple>
+#include <connectivity.h>
 
 // Helper class used to clean tracks and vias
-class TRACKS_CLEANER: CONNECTIONS
+class TRACKS_CLEANER
 {
 public:
     TRACKS_CLEANER( BOARD* aPcb, BOARD_COMMIT& aCommit );
@@ -69,7 +67,7 @@ private:
      * Removes redundant vias like vias at same location
      * or on pad through
      */
-    bool clean_vias();
+    bool cleanupVias();
 
     /**
      * Removes all the following THT vias on the same position of the
@@ -98,12 +96,6 @@ private:
      */
     bool clean_segments();
 
-    /**
-     * helper function
-     * Rebuild list of tracks, and connected tracks
-     * this info must be rebuilt when tracks are erased
-     */
-    void buildTrackConnectionInfo();
 
     /**
      * helper function
@@ -147,7 +139,6 @@ void PCB_EDIT_FRAME::Clean_Pcb()
         // Clear undo and redo lists to avoid inconsistencies between lists
         SetCurItem( NULL );
         commit.Push( _( "Board cleanup" ) );
-        Compile_Ratsnest( NULL, true );
     }
 
     m_canvas->Refresh( true );
@@ -165,13 +156,12 @@ bool TRACKS_CLEANER::CleanupBoard( bool aRemoveMisConnected,
                                    bool aMergeSegments,
                                    bool aDeleteUnconnected )
 {
-    buildTrackConnectionInfo();
 
     bool modified = false;
 
     // delete redundant vias
     if( aCleanVias )
-        modified |= clean_vias();
+        modified |= cleanupVias();
 
     // Remove null segments and intermediate points on aligned segments
     // If not asked, remove null segments only if remove misconnected is asked
@@ -187,7 +177,7 @@ bool TRACKS_CLEANER::CleanupBoard( bool aRemoveMisConnected,
             modified = true;
 
             // Refresh track connection info
-            buildTrackConnectionInfo();
+            //buildTrackConnectionInfo(); FIXME: update connectivity
         }
     }
 
@@ -195,7 +185,9 @@ bool TRACKS_CLEANER::CleanupBoard( bool aRemoveMisConnected,
     if( aDeleteUnconnected )
     {
         if( modified ) // Refresh track connection info
-            buildTrackConnectionInfo();
+            {
+                //buildTrackConnectionInfo(); FIXME: update connectivity
+            }
 
         if( deleteDanglingTracks() )
         {
@@ -214,116 +206,43 @@ bool TRACKS_CLEANER::CleanupBoard( bool aRemoveMisConnected,
 
 
 TRACKS_CLEANER::TRACKS_CLEANER( BOARD* aPcb, BOARD_COMMIT& aCommit )
-    : CONNECTIONS( aPcb ), m_brd( aPcb ), m_commit( aCommit )
+    : m_brd( aPcb ), m_commit( aCommit )
 {
-    // Be sure pad list is up to date
-    BuildPadsList();
-}
 
-
-void TRACKS_CLEANER::buildTrackConnectionInfo()
-{
-    BuildTracksCandidatesList( m_brd->m_Track, NULL );
-
-    // clear flags and variables used in cleanup
-    for( TRACK* track = m_brd->m_Track; track != NULL; track = track->Next() )
-    {
-        track->start = NULL;
-        track->end = NULL;
-        track->m_PadsConnected.clear();
-        track->SetState( START_ON_PAD | END_ON_PAD | BUSY, false );
-    }
-
-    // Build connections info tracks to pads
-    SearchTracksConnectedToPads();
-
-    for( TRACK* track = m_brd->m_Track; track != NULL; track = track->Next() )
-    {
-        // Mark track if connected to pads
-        for( unsigned jj = 0; jj < track->m_PadsConnected.size(); jj++ )
-        {
-            D_PAD * pad = track->m_PadsConnected[jj];
-
-            if( pad->HitTest( track->GetStart() ) )
-            {
-                track->start = pad;
-                track->SetState( START_ON_PAD, true );
-            }
-
-            if( pad->HitTest( track->GetEnd() ) )
-            {
-                track->end = pad;
-                track->SetState( END_ON_PAD, true );
-            }
-        }
-    }
 }
 
 
 bool TRACKS_CLEANER::removeBadTrackSegments()
 {
-    // The rastsnet is expected to be up to date (Compile_Ratsnest was called)
-
-    // Rebuild physical connections.
-    // the list of physical connected items to a given item is in
-    // m_PadsConnected and m_TracksConnected members of each item
-    BuildTracksCandidatesList( m_brd->m_Track );
-
-    // build connections between track segments and pads.
-    SearchTracksConnectedToPads();
-
-    TRACK* segment;
-
-    // build connections between track ends
-    for( segment = m_brd->m_Track; segment; segment = segment->Next() )
-    {
-        SearchConnectedTracks( segment );
-        GetConnectedTracks( segment );
-    }
-
     bool isModified = false;
+    auto connectivity = m_brd->GetConnectivity();
 
-    for( segment = m_brd->m_Track; segment; segment = segment->Next() )
+    for( auto segment : m_brd->Tracks() )
     {
         segment->SetState( FLAG0, false );
 
-        for( unsigned ii = 0; ii < segment->m_PadsConnected.size(); ++ii )
+        for( auto testedPad : connectivity->GetConnectedPads( segment ) )
         {
-            if( segment->GetNetCode() != segment->m_PadsConnected[ii]->GetNetCode() )
+            if( segment->GetNetCode() != testedPad->GetNetCode() )
                 segment->SetState( FLAG0, true );
         }
 
-        for( unsigned ii = 0; ii < segment->m_TracksConnected.size(); ++ii )
+        for( auto testedTrack : connectivity->GetConnectedTracks( segment ) )
         {
-            TRACK* tested = segment->m_TracksConnected[ii];
-
-            if( segment->GetNetCode() != tested->GetNetCode() && !tested->GetState( FLAG0 ) )
+            if( segment->GetNetCode() != testedTrack->GetNetCode() && !testedTrack->GetState( FLAG0 ) )
                 segment->SetState( FLAG0, true );
         }
     }
 
     // Remove tracks having a flagged segment
-    TRACK* next;
-
-    for( segment = m_brd->m_Track; segment; segment = next )
+    for( auto segment : m_brd->Tracks() )
     {
-        next = segment->Next();
-
         if( segment->GetState( FLAG0 ) )    // Segment is flagged to be removed
         {
             isModified = true;
             m_brd->Remove( segment );
             m_commit.Removed( segment );
         }
-    }
-
-    if( isModified )
-    {   // some pointers are invalid. Clear the m_TracksConnected list,
-        // to avoid any issue
-        for( segment = m_brd->m_Track; segment; segment = segment->Next() )
-            segment->m_TracksConnected.clear();
-
-        m_brd->m_Status_Pcb = 0;
     }
 
     return isModified;
@@ -353,7 +272,7 @@ bool TRACKS_CLEANER::remove_duplicates_of_via( const VIA *aVia )
 }
 
 
-bool TRACKS_CLEANER::clean_vias()
+bool TRACKS_CLEANER::cleanupVias()
 {
     bool modified = false;
 
@@ -376,9 +295,10 @@ bool TRACKS_CLEANER::clean_vias()
             /* To delete through Via on THT pads at same location
              * Examine the list of connected pads:
              * if one through pad is found, the via can be removed */
-            for( unsigned ii = 0; ii < via->m_PadsConnected.size(); ++ii )
+
+            const auto pads = m_brd->GetConnectivity()->GetConnectedPads( via );
+            for( const auto pad : pads )
             {
-                const D_PAD* pad = via->m_PadsConnected[ii];
                 const LSET all_cu = LSET::AllCuMask();
 
                 if( ( pad->GetLayerSet() & all_cu ) == all_cu )

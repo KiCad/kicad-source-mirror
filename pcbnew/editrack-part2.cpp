@@ -227,9 +227,9 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
     if( GetBoard()->IsElementVisible( LAYER_RATSNEST ) )
         return;
 
-    if( ( GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK ) == 0 )
-        Compile_Ratsnest( DC, true );
+    Compile_Ratsnest( DC, true );
 
+#if 0
     if( item )
     {
         if( item->Type() == PCB_PAD_T )
@@ -311,4 +311,5 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
         for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
             GetBoard()->m_FullRatsnest[ii].m_Status &= ~CH_VISIBLE;
     }
+    #endif
 }

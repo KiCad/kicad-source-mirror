@@ -196,19 +196,6 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     // ( the board can be reloaded )
     m_pcb = m_pcbEditorFrame->GetBoard();
 
-    // Ensure ratsnest is up to date:
-    if( (m_pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
-    {
-        if( aMessages )
-        {
-            aMessages->AppendText( _( "Compile ratsnest...\n" ) );
-            wxSafeYield();
-        }
-
-        m_pcbEditorFrame->Compile_Ratsnest( NULL, true );
-        //m_pcb->GetRatsnest()->ProcessBoard();
-    }
-
     // someone should have cleared the two lists before calling this.
 
     if( !testNetClasses() )
@@ -636,7 +623,7 @@ void DRC::testZones()
         // perhaps a "dead" net, which happens when all pads in this net were removed
         // Remark: a netcode < 0 should not happen (this is more a bug somewhere)
         int pads_in_net = (test_area->GetNetCode() > 0) ?
-                            test_area->GetNet()->GetNodesCount() : 1;
+                            m_pcb->GetConnectivity()->GetPadCount( test_area->GetNetCode() ) : 1;
 
         if( ( netcode < 0 ) || pads_in_net == 0 )
         {

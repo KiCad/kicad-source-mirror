@@ -97,15 +97,15 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     {
         RN_NET* net = m_data->GetRatsnestForNet( i );
 
-        if( !net->IsVisible() )
-            continue;
-
         // Draw the "static" ratsnest
         if( i != highlightedNet )
             gal->SetStrokeColor( color );  // using the default ratsnest color for not highlighted
 
         for( const auto& edge : net->GetUnconnected() )
         {
+            if ( !edge.IsVisible() )
+                continue;
+                
             const auto& sourceNode = edge.GetSourceNode();
             const auto& targetNode = edge.GetTargetNode();
             const VECTOR2I source( sourceNode->Pos() );

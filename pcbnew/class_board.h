@@ -257,14 +257,10 @@ public:
     DLIST_ITERATOR_WRAPPER<MODULE> Modules() { return DLIST_ITERATOR_WRAPPER<MODULE>(m_Modules); }
     DLIST_ITERATOR_WRAPPER<BOARD_ITEM> Drawings() { return DLIST_ITERATOR_WRAPPER<BOARD_ITEM>(m_Drawings); }
 
+
+
     // will be deprecated as soon as append board functionality is fixed
     DLIST<BOARD_ITEM>&          DrawingsList() { return m_Drawings; }
-
-    /// Ratsnest list for the BOARD
-    std::vector<RATSNEST_ITEM>  m_FullRatsnest;
-
-    /// Ratsnest list relative to a given footprint (used while moving a footprint).
-    std::vector<RATSNEST_ITEM>  m_LocalRatsnest;
 
     /// zone contour currently in progress
     ZONE_CONTAINER*             m_CurrentZoneContour;
@@ -713,15 +709,6 @@ public:
     int GetNumSegmZone() const;
 
     /**
-     * Function GetNumRatsnests
-     * @return int - The number of rats
-     */
-    unsigned GetRatsnestsCount() const
-    {
-        return m_FullRatsnest.size();
-    }
-
-    /**
      * Function GetNodesCount
      * @return the number of pads members of nets (i.e. with netcode > 0)
      */
@@ -753,19 +740,13 @@ public:
      * Function GetPadCount
      * @return the number of pads in board
      */
-    unsigned GetPadCount() const
-    {
-        return m_NetInfo.GetPadCount();
-    }
+    unsigned GetPadCount() const;
 
     /**
      * Function GetPad
-     * @return D_PAD* - at the \a aIndex from m_NetInfo
+     * @return D_PAD* - at the \a aIndex
      */
-    D_PAD* GetPad( unsigned aIndex ) const
-    {
-        return m_NetInfo.GetPad( aIndex );
-    }
+    D_PAD* GetPad( unsigned aIndex ) const;
 
     /**
      * Function GetPads
@@ -774,7 +755,7 @@ public:
      * ownership of the respective PADs.
      * @return D_PADS - a full list of pads
      */
-    const D_PADS& GetPads()     { return m_NetInfo.m_PadsFullList; }
+    const std::vector<D_PAD*> GetPads();
 
     void BuildListOfNets()
     {
@@ -1192,14 +1173,6 @@ public:
     int Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_Examine,
                                                    bool            aCreate_Markers );
 
-    /****** function relative to ratsnest calculations: */
-
-    /**
-     * Function Test_Connection_To_Copper_Areas
-     * init .m_ZoneSubnet parameter in tracks and pads according to the connections to areas found
-     * @param aNetcode = netcode to analyze. if -1, analyze all nets
-     */
-    void Test_Connections_To_Copper_Areas( int aNetcode = -1 );
 
     /**
      * Function GetViaByPosition

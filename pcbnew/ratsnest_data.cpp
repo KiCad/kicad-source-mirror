@@ -299,7 +299,7 @@ public:
 
 #include <profile.h>
 
-RN_NET::RN_NET() : m_dirty( true ), m_visible( true )
+RN_NET::RN_NET() : m_dirty( true )
 {
     m_triangulator.reset( new TRIANGULATOR_STATE );
 }
@@ -708,4 +708,10 @@ bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode
 unsigned int RN_NET::GetNodeCount() const
 {
     return m_nodes.size();
+}
+
+void RN_NET::SetVisible( bool aEnabled )
+{
+    for ( auto& edge : m_rnEdges )
+        edge.SetVisible ( aEnabled );
 }

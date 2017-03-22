@@ -43,6 +43,8 @@
 #include <drag.h>
 #include <dialog_get_footprint_by_name.h>
 
+#include <connectivity.h>
+
 static void MoveFootprint( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                            const wxPoint& aPosition, bool aErase );
 static void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC );
@@ -265,7 +267,7 @@ bool PCB_EDIT_FRAME::Delete_Module( MODULE* aModule, wxDC* aDC )
     SetMsgPanel( aModule );
 
     /* Remove module from list, and put it in undo command list */
-    m_Pcb->m_Modules.Remove( aModule );
+    m_Pcb->Remove( aModule );
     aModule->SetState( IS_DELETED, true );
     SaveCopyInUndoList( aModule, UR_DELETED );
 
@@ -322,7 +324,7 @@ void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
 
     /* Flip the module */
     Module->Flip( Module->GetPosition() );
-
+    m_Pcb->GetConnectivity()->Update( Module );
     SetMsgPanel( Module );
 
     if( !Module->IsMoving() ) /* Inversion simple */
@@ -343,8 +345,8 @@ void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
             DrawSegmentWhileMovingFootprint( m_canvas, DC );
         }
 
-        GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
     }
+    m_Pcb->GetConnectivity()->Update( Module );
 }
 
 
@@ -356,7 +358,7 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreat
         return;
 
     OnModify();
-    GetBoard()->m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK);
+
 
     if( aModule->IsNew() )
     {
@@ -381,7 +383,7 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreat
 
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
-    if( displ_opts->m_Show_Module_Ratsnest && ( GetBoard()->m_Status_Pcb & LISTE_PAD_OK ) && aDC )
+    if( displ_opts->m_Show_Module_Ratsnest && aDC )
         TraceModuleRatsNest( aDC );
 
     newpos = GetCrossHairPosition();
@@ -409,6 +411,8 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreat
     EraseDragList();
 
     m_canvas->SetMouseCapture( NULL, NULL );
+
+    m_Pcb->GetConnectivity()->Update( aModule );
 
     if( GetBoard()->IsElementVisible( LAYER_RATSNEST ) && !aDoNotRecreateRatsnest )
         Compile_Ratsnest( aDC, true );
@@ -456,7 +460,6 @@ void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, double angle, bool
         }
     }
 
-    GetBoard()->m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK );
 
     if( incremental )
         module->SetOrientation( module->GetOrientation() + angle );
@@ -464,6 +467,7 @@ void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, double angle, bool
         module->SetOrientation( angle );
 
     SetMsgPanel( module );
+    m_Pcb->GetConnectivity()->Update( module );
 
     if( DC )
     {
@@ -484,35 +488,5 @@ void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, double angle, bool
 
         if( module->GetFlags() == 0 )  // module not in edit: redraw full screen
             m_canvas->Refresh();
-    }
-}
-
-
-// Redraw in XOR mode the outlines of the module.
-void MODULE::DrawOutlinesWhenMoving( EDA_DRAW_PANEL* panel, wxDC* DC,
-                                     const wxPoint&  aMoveVector )
-{
-    int    pad_fill_tmp;
-    D_PAD* pt_pad;
-
-    DrawEdgesOnly( panel, DC, aMoveVector, GR_XOR );
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
-
-    // Show pads in sketch mode to speedu up drawings
-    pad_fill_tmp = displ_opts->m_DisplayPadFill;
-    displ_opts->m_DisplayPadFill = true;
-
-    pt_pad = Pads();
-
-    for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
-        pt_pad->Draw( panel, DC, GR_XOR, aMoveVector );
-
-    displ_opts->m_DisplayPadFill = pad_fill_tmp;
-
-    if( displ_opts->m_Show_Module_Ratsnest )
-    {
-        PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) panel->GetParent();
-        frame->build_ratsnest_module( this );
-        frame->TraceModuleRatsNest( DC );
     }
 }

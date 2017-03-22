@@ -40,6 +40,7 @@
 #include <pcbnew.h>
 #include <protos.h>
 
+#include <connectivity.h>
 
 static void ListSetState( EDA_ITEM* Start, int NbItem, STATUS_FLAGS State,
                           bool onoff );
@@ -267,11 +268,13 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
                         pt_del->UnLink();
                         pt_del->SetStatus( 0 );
                         pt_del->ClearFlags();
+                        GetBoard()->GetConnectivity()->Remove ( pt_del );
                         ITEM_PICKER picker( pt_del, UR_DELETED );
                         aItemsListPicker->PushItem( picker );
                     }
                     else
                     {
+                        GetBoard()->GetConnectivity()->Remove ( pt_del );
                         pt_del->DeleteStructure();
                     }
                 }

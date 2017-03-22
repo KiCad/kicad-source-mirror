@@ -107,17 +107,3 @@ void PCB_EDIT_FRAME::HighLight( wxDC* DC )
 
     GetBoard()->DrawHighLight( m_canvas, DC, GetBoard()->GetHighLightNetCode() );
 }
-
-void PCB_EDIT_FRAME::HighlightUnconnectedPads( wxDC* DC )
-{
-    for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
-    {
-        RATSNEST_ITEM* net = &GetBoard()->m_FullRatsnest[ii];
-
-        if( (net->m_Status & CH_ACTIF) == 0 )
-            continue;
-
-        net->m_PadStart->Draw( m_canvas, DC, GR_OR | GR_HIGHLIGHT );
-        net->m_PadEnd->Draw( m_canvas, DC, GR_OR | GR_HIGHLIGHT );
-    }
-}

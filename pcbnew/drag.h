@@ -150,7 +150,7 @@ private:
     /** Fills m_DragList with of track segments connected to pads in aConnections
      *  For each selected track segment the EDIT flag is set
      */
-    void fillList( CONNECTIONS& aConnections );
+    void fillList( std::vector<D_PAD*>& aList );
 };
 
 

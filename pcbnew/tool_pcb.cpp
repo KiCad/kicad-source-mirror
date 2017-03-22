@@ -747,9 +747,7 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     case ID_TB_OPTIONS_SHOW_RATSNEST:
         SetElementVisibility( LAYER_RATSNEST, state );
         OnModify();
-
-        if( state && (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
-            Compile_Ratsnest( NULL, true );
+        Compile_Ratsnest( NULL, true );
 
         m_canvas->Refresh();
         break;

@@ -184,25 +184,13 @@ set( PCBNEW_EXPORTERS
     exporters/gendrill_gerber_writer.cpp
     )
 
-set( PCBNEW_AUTOROUTER_SRCS
-    autorouter/rect_placement/rect_placement.cpp
-    autorouter/move_and_route_event_functions.cpp
-    autorouter/auto_place_footprints.cpp
-    autorouter/autorout.cpp
-    autorouter/routing_matrix.cpp
-    autorouter/dist.cpp
-    autorouter/queue.cpp
-    autorouter/spread_footprints.cpp
-    autorouter/solve.cpp
-    autorouter/graphpcb.cpp
-    autorouter/work.cpp
-    )
-
 set( PCBNEW_MICROWAVE_SRCS
     microwave/microwave_inductor.cpp
     )
 
 set( PCBNEW_CLASS_SRCS
+    autorouter/rect_placement/rect_placement.cpp
+    autorouter/spread_footprints.cpp
     board_commit.cpp
     tool_modview.cpp
     modview_frame.cpp
@@ -299,7 +287,6 @@ set( PCBNEW_CLASS_SRCS
     zone_filling_algorithm.cpp
     zones_functions_for_undo_redo.cpp
     zones_polygons_insulated_copper_islands.cpp
-    zones_polygons_test_connections.cpp
     zones_test_and_combine_areas.cpp
     class_footprint_wizard.cpp
     class_action_plugin.cpp
@@ -334,7 +321,6 @@ set( PCBNEW_CLASS_SRCS
     )
 
 set( PCBNEW_SRCS
-    ${PCBNEW_AUTOROUTER_SRCS}
     ${PCBNEW_MICROWAVE_SRCS}
     ${PCBNEW_CLASS_SRCS}
     ${PCBNEW_DIALOGS}
@@ -622,7 +608,6 @@ add_library( pcbnew_kiface MODULE
     ${PCBNEW_COMMON_SRCS}
     ${PCBNEW_SCRIPTING_SRCS}
     )
-
 set_target_properties( pcbnew_kiface PROPERTIES
     # Decorate OUTPUT_NAME with PREFIX and SUFFIX, creating something like
     # _pcbnew.so, _pcbnew.dll, or _pcbnew.kiface

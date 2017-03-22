@@ -44,8 +44,6 @@ using namespace std::placeholders;
 #include <tools/pcb_actions.h>
 #include <tools/grid_helper.h>
 
-#include <ratsnest_data.h>
-
 #include "pns_kicad_iface.h"
 #include "pns_tool_base.h"
 #include "pns_segment.h"

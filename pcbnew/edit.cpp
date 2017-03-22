@@ -663,8 +663,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         SetCurItem( NULL );        // CurItem might be deleted by this command, clear the pointer
-        TestConnections();
-        TestForActiveLinksInRatsnest( 0 );   // Recalculate the active ratsnest, i.e. the unconnected links
         OnModify();
         SetMsgPanel( GetBoard() );
         m_canvas->Refresh();
@@ -673,7 +671,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_FILL_ZONE:
         m_canvas->MoveCursorToCrossHair();
         Fill_Zone( (ZONE_CONTAINER*) GetCurItem() );
-        TestNetConnection( NULL, ( (ZONE_CONTAINER*) GetCurItem() )->GetNetCode() );
         SetMsgPanel( GetBoard() );
         m_canvas->Refresh();
         break;
@@ -1449,11 +1446,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
             SetToolID( id, wxCURSOR_PENCIL, _( "Add tracks" ) );
         else
             SetToolID( id, wxCURSOR_QUESTION_ARROW, _( "Add tracks" ) );
-
-        if( (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
-        {
             Compile_Ratsnest( &dc, true );
-        }
 
         break;
 
@@ -1523,8 +1516,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     case ID_PCB_SHOW_1_RATSNEST_BUTT:
         SetToolID( id, wxCURSOR_HAND, _( "Select rats nest" ) );
 
-        if( ( GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK ) == 0 )
-            Compile_Ratsnest( &dc, true );
+        Compile_Ratsnest( &dc, true );
 
         break;
 

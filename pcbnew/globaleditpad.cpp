@@ -238,8 +238,6 @@ void PCB_BASE_FRAME::GlobalChange_PadSettings( D_PAD* aPad,
             {
                 if( pad->GetLayerSet() != aPad->GetLayerSet() )
                     continue;
-                else
-                    m_Pcb->m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK);
             }
 
             // Change characteristics:

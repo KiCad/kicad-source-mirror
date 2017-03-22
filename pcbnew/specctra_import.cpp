@@ -44,7 +44,7 @@
 #include <class_track.h>
 #include <class_zone.h>
 #include <class_drawsegment.h>
-#include <ratsnest_data.h>
+#include <connectivity.h>
 #include <view/view.h>
 
 #include <specctra.h>
@@ -117,8 +117,8 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
     OnModify();
     GetBoard()->m_Status_Pcb = 0;
 
-    Compile_Ratsnest( NULL, true );
-    GetBoard()->GetRatsnest()->ProcessBoard();
+    GetBoard()->GetConnectivity()->Clear();
+    GetBoard()->GetConnectivity()->Build( GetBoard() );
 
     if( GetGalCanvas() )    // Update view:
     {

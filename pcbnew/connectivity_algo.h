@@ -160,10 +160,31 @@ public:
     void SetTargetNode( const CN_ANCHOR_PTR& aNode ) { m_target = aNode; }
     void SetWeight( unsigned int weight ) { m_weight = weight; }
 
+    void SetVisible( bool aVisible )
+    {
+        m_visible = aVisible;
+    }
+
+    bool IsVisible() const
+    {
+        return m_visible;
+    }
+
+    const VECTOR2I GetSourcePos() const
+    {
+        return m_source->Pos();
+    }
+
+    const VECTOR2I GetTargetPos() const
+    {
+        return m_target->Pos();
+    }
+    
 private:
     CN_ANCHOR_PTR m_source;
     CN_ANCHOR_PTR m_target;
     unsigned int m_weight = 0;
+    bool m_visible = true;
 };
 
 class CN_CLUSTER

@@ -120,9 +120,6 @@ BOARD::~BOARD()
         Delete( area_to_remove );
     }
 
-    m_FullRatsnest.clear();
-    m_LocalRatsnest.clear();
-
     DeleteMARKERs();
     DeleteZONEOutlines();
 
@@ -1157,20 +1154,8 @@ void BOARD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     txt.Printf( wxT( "%d" ), m_NetInfo.GetNetCount() );
     aList.push_back( MSG_PANEL_ITEM( _( "Nets" ), txt, RED ) );
 
-    /* These parameters are known only if the full ratsnest is available,
-     *  so, display them only if this is the case
-     */
-    if( (m_Status_Pcb & NET_CODES_OK) )
-    {
-        txt.Printf( wxT( "%d" ), GetRatsnestsCount() );
-        aList.push_back( MSG_PANEL_ITEM( _( "Links" ), txt, DARKGREEN ) );
-
-        txt.Printf( wxT( "%d" ), GetRatsnestsCount() - GetUnconnectedNetCount() );
-        aList.push_back( MSG_PANEL_ITEM( _( "Connections" ), txt, DARKGREEN ) );
-
-        txt.Printf( wxT( "%d" ), GetUnconnectedNetCount() );
-        aList.push_back( MSG_PANEL_ITEM( _( "Unconnected" ), txt, BLUE ) );
-    }
+    txt.Printf( wxT( "%d" ), GetConnectivity()->GetUnconnectedCount() );
+    aList.push_back( MSG_PANEL_ITEM( _( "Unconnected" ), txt, BLUE ) );
 }
 
 
@@ -1428,10 +1413,14 @@ MODULE* BOARD::FindModule( const wxString& aRefOrTimeStamp, bool aSearchByTimeSt
 // Sort nets by decreasing pad count. For same pad count, sort by alphabetic names
 static bool sortNetsByNodes( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
 {
-    if( b->GetNodesCount() == a->GetNodesCount() )
-        return a->GetNetname() < b->GetNetname();
+    auto connectivity = a->GetParent()->GetConnectivity();
+    int countA = connectivity->GetPadCount( a->GetNet() );
+    int countB = connectivity->GetPadCount( b->GetNet() );
 
-    return b->GetNodesCount() < a->GetNodesCount();
+    if( countA == countB )
+        return a->GetNetname() < b->GetNetname();
+    else
+        return countB < countA;
 }
 
 // Sort nets by alphabetic names
@@ -1619,10 +1608,10 @@ D_PAD* BOARD::GetPad( TRACK* aTrace, ENDPOINT_T aEndPoint )
 
 D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, LSET aLayerSet )
 {
-    for( unsigned i=0; i<GetPadCount();  ++i )
+    for( auto mod : Modules() )
     {
-        D_PAD* pad = m_NetInfo.GetPad(i);
-
+        for ( auto pad : mod->PadsIter() )
+        {
         if( pad->GetPosition() != aPosition )
             continue;
 
@@ -1630,8 +1619,9 @@ D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, LSET aLayerSet )
         if( ( pad->GetLayerSet() & aLayerSet ).any() )
             return pad;
     }
+}
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -1744,29 +1734,23 @@ bool sortPadsByXthenYCoord( D_PAD* const & ref, D_PAD* const & comp )
 
 void BOARD::GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector, int aNetCode )
 {
-    if( aNetCode < 0 )
+    for ( auto mod : Modules() )
     {
-        aVector.insert( aVector.end(), m_NetInfo.m_PadsFullList.begin(),
-                        m_NetInfo.m_PadsFullList.end() );
-    }
-    else
-    {
-        const NETINFO_ITEM* net = m_NetInfo.GetNetItem( aNetCode );
-        if( net )
+        for ( auto pad : mod->PadsIter( ) )
         {
-            aVector.insert( aVector.end(), net->m_PadInNetList.begin(),
-                            net->m_PadInNetList.end() );
+            if( aNetCode < 0 ||  pad->GetNetCode() == aNetCode )
+            {
+                aVector.push_back( pad );
+            }
         }
     }
 
-    sort( aVector.begin(), aVector.end(), sortPadsByXthenYCoord );
+    std::sort( aVector.begin(), aVector.end(), sortPadsByXthenYCoord );
 }
 
 
 void BOARD::PadDelete( D_PAD* aPad )
 {
-    m_NetInfo.DeletePad( aPad );
-
     aPad->DeleteStructure();
 }
 
@@ -2830,7 +2814,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             if( !zone->IsOnCopperLayer() || zone->GetIsKeepout() )
                 continue;
 
-            if( zone->GetNet()->GetNodesCount() == 0 )
+            if( GetConnectivity()->GetPadCount( zone->GetNetCode() ) == 0 )
             {
                 msg.Printf( _( "Copper zone (net name '%s'): net has no pads connected." ),
                            GetChars( zone->GetNet()->GetNetname() ) );
@@ -2900,3 +2884,42 @@ bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
 {
     return m_connectivity->GetRatsnest();
 }*/
+
+const std::vector<D_PAD*> BOARD::GetPads()
+{
+    std::vector<D_PAD*> rv;
+    for ( auto mod: Modules() )
+    {
+        for ( auto pad: mod->PadsIter() )
+            rv.push_back ( pad );
+
+    }
+
+    return rv;
+}
+
+unsigned BOARD::GetPadCount() const
+{
+    return m_connectivity->GetPadCount();
+}
+
+/**
+ * Function GetPad
+ * @return D_PAD* - at the \a aIndex
+ */
+D_PAD* BOARD::GetPad( unsigned aIndex ) const
+{
+    unsigned count = 0;
+    for ( MODULE *mod = m_Modules; mod ; mod = mod->Next() ) // FIXME: const DLIST_ITERATOR
+    {
+        for ( D_PAD *pad = mod->Pads(); pad; pad = pad->Next() )
+        {
+            if ( count == aIndex )
+                return pad;
+
+            count++;
+        }
+    }
+
+    return nullptr;
+}

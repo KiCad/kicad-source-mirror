@@ -48,15 +48,7 @@ class CN_BOARD_ITEM_DATA;
  */
 class BOARD_CONNECTED_ITEM : public BOARD_ITEM
 {
-    friend class CONNECTIONS;
-
 public:
-
-
-    // These 2 members are used for temporary storage during connections calculations:
-    std::vector<TRACK*> m_TracksConnected;      // list of other tracks connected to me
-    std::vector<D_PAD*> m_PadsConnected;        // list of other pads connected to me
-
     BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype );
 
     // Do not create a copy constructor & operator=.

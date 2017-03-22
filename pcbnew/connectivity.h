@@ -44,6 +44,8 @@ class BOARD_ITEM;
 class ZONE_CONTAINER;
 class RN_DATA;
 class RN_NET;
+class TRACK;
+class D_PAD;
 
 struct CN_DISJOINT_NET_ENTRY
 {
@@ -130,7 +132,7 @@ public:
      */
     void PropagateNets();
 
-    bool    CheckConnectivity( std::vector<CN_DISJOINT_NET_ENTRY>& aReport );
+    bool CheckConnectivity( std::vector<CN_DISJOINT_NET_ENTRY>& aReport );
 
     /**
      * Function FindIsolatedCopperIslands()
@@ -152,6 +154,18 @@ public:
      */
     unsigned int GetUnconnectedCount() const;
 
+    unsigned int GetLinksCount() const;
+
+    unsigned int GetConnectedCount() const;
+
+
+    unsigned int GetNodeCount( int aNet = -1 ) const;
+
+    unsigned int GetPadCount( int aNet = -1 ) const;
+
+    const std::vector<TRACK*> GetConnectedTracks(  const BOARD_CONNECTED_ITEM* aItem ) const;
+
+    const std::vector<D_PAD*> GetConnectedPads(  const BOARD_CONNECTED_ITEM* aItem ) const;
 
     /**
      * Function ClearDynamicRatsnest()
@@ -188,11 +202,16 @@ public:
     const std::list<BOARD_CONNECTED_ITEM*> GetNetItems( int aNetCode,
             const KICAD_T aTypes[] ) const;
 
+    const std::vector<VECTOR2I> NearestUnconnectedTargets( const BOARD_CONNECTED_ITEM* aRef,
+            const VECTOR2I& aPos,
+            int aMaxCount = -1 );
+
+    void BlockRatsnestItems( const std::vector<BOARD_ITEM*>& aItems );
+
 private:
 
     void    updateRatsnest();
     void    addRatsnestCluster( std::shared_ptr<CN_CLUSTER> aCluster );
-    void    blockRatsnestItems( const std::vector<BOARD_ITEM*>& aItems );
 
     std::unique_ptr<CONNECTIVITY_DATA> m_dynamicConnectivity;
     std::shared_ptr<CN_CONNECTIVITY_ALGO> m_connAlgo;

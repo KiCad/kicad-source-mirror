@@ -49,6 +49,7 @@
 #include <wx/wfstream.h>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <memory.h>
+#include <connectivity.h>
 
 using namespace PCB_KEYS_T;
 
@@ -63,15 +64,17 @@ static const wxString traceFootprintLibrary( wxT( "KicadFootprintLib" ) );
 ///> Removes empty nets (i.e. with node count equal zero) from net classes
 void filterNetClass( const BOARD& aBoard, NETCLASS& aNetClass )
 {
+    auto connectivity = aBoard.GetConnectivity();
     for( NETCLASS::iterator it = aNetClass.begin(); it != aNetClass.end(); )
     {
         NETINFO_ITEM* netinfo = aBoard.FindNet( *it );
 
-        if( netinfo && netinfo->GetNodesCount() <= 0 ) // hopefully there are no nets with negative
+        if( netinfo && connectivity->GetNodeCount( netinfo->GetNet() ) <= 0 ) // hopefully there are no nets with negative
             aNetClass.Remove( it++ );                  // node count, but you never know..
         else
             ++it;
     }
+
 }
 
 /**
@@ -531,8 +534,8 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( 0, "\n" );
 
     m_out->Print( aNestLevel, "(general\n" );
-    m_out->Print( aNestLevel+1, "(links %d)\n", aBoard->GetRatsnestsCount() );
-    m_out->Print( aNestLevel+1, "(no_connects %d)\n", aBoard->GetUnconnectedNetCount() );
+    m_out->Print( aNestLevel+1, "(links %d)\n", aBoard->GetConnectivity()->GetLinksCount() );
+    m_out->Print( aNestLevel+1, "(no_connects %d)\n", aBoard->GetConnectivity()->GetUnconnectedCount() );
 
     // Write Bounding box info
     EDA_RECT bbox = aBoard->GetBoundingBox();

@@ -60,61 +60,6 @@ class MSG_PANEL_ITEM;
 #define CH_ACTIF            8        /* Not routed. */
 #define LOCAL_RATSNEST_ITEM 0x8000   /* Line between two pads of a single module. */
 
-
-/**
- * Class RATSNEST_ITEM
- * describes a ratsnest line: a straight line connecting 2 pads
- */
-class RATSNEST_ITEM
-{
-private:
-    int m_NetCode;      // netcode ( = 1.. n ,  0 is the value used for not connected items)
-
-public:
-    int    m_Status;    // State: see previous defines (CH_ ...)
-    D_PAD* m_PadStart;  // pointer to the starting pad
-    D_PAD* m_PadEnd;    // pointer to ending pad
-    int    m_Length;    // length of the line (used in some calculations)
-
-    RATSNEST_ITEM();
-
-    /**
-     * Function GetNet
-     * @return int - the net code.
-     */
-    int GetNet() const
-    {
-        return m_NetCode;
-    }
-
-    void SetNet( int aNetCode )
-    {
-        m_NetCode = aNetCode;
-    }
-
-    bool IsVisible()
-    {
-        return (m_Status & CH_VISIBLE) != 0;
-    }
-
-    bool IsActive()
-    {
-        return (m_Status & CH_ACTIF) != 0;
-    }
-
-    bool IsLocal()
-    {
-        return (m_Status & LOCAL_RATSNEST_ITEM) != 0;
-    }
-
-    /**
-     * Function Draw
-     */
-    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMode,
-               const wxPoint& offset );
-};
-
-
 DECL_VEC_FOR_SWIG( D_PADS, D_PAD* )
 
 /**
@@ -141,25 +86,6 @@ private:
     BOARD*  m_parent;           ///< The parent board the net belongs to.
 
 public:
-
-    D_PADS& Pads()              { return m_PadInNetList; }
-
-    /**
-     * Function GetNodesCount
-     * @return int - number of pad nodes in the net
-     */
-    int GetNodesCount() const   { return m_PadInNetList.size(); }
-
-
-    D_PADS  m_PadInNetList;     ///< List of pads connected to this net
-
-    unsigned m_RatsnestStartIdx;       /* Starting point of ratsnests of this
-                                        * net (included) in a general buffer of
-                                        * ratsnest (a vector<RATSNEST_ITEM*>
-                                        * buffer) */
-
-    unsigned m_RatsnestEndIdx;         // Ending point of ratsnests of this net
-                                       // (excluded) in this buffer
 
     NETINFO_ITEM( BOARD* aParent, const wxString& aNetName = wxEmptyString, int aNetCode = -1 );
     ~NETINFO_ITEM();
@@ -340,12 +266,6 @@ public:
      */
     void Clear()
     {
-        m_PadInNetList.clear();
-
-        m_RatsnestStartIdx  = 0;     // Starting point of ratsnests of this net in a
-                                     // general buffer of ratsnest
-        m_RatsnestEndIdx    = 0;     // Ending point of ratsnests of this net
-
         SetClass( NETCLASSPTR() );
     }
 
@@ -540,29 +460,12 @@ public:
      * Function GetPadCount
      * @return the number of pads in board
      */
-    unsigned GetPadCount() const                { return m_PadsFullList.size(); }
-
-    /**
-     * Function GetPads
-     * returns a list of all the pads (so long as buildPadsFullList() has
-     * been recently called).  Returned list contains non-owning pointers.
-     * @return D_PADS& - a full list of pads
-     */
-    const D_PADS& GetPads() const  { return m_PadsFullList; }
 
     /// Return the name map, at least for python.
     const NETNAMES_MAP& NetsByName() const      { return  m_netNames; }
 
     /// Return the netcode map, at least for python.
     const NETCODES_MAP& NetsByNetcode() const   { return m_netCodes; }
-
-    /**
-     * Function GetPad
-     * @return D_PAD* - the pad from m_PadsFullList or nullptr if bad @a aIdx
-     */
-    D_PAD* GetPad( unsigned aIdx ) const;
-
-    bool DeletePad( D_PAD* aPad );
 
     ///> Constant that holds the "unconnected net" number (typically 0)
     ///> all items "connected" to this net are actually not connected items
@@ -680,9 +583,6 @@ private:
     NETNAMES_MAP m_netNames;        ///< map of <wxString, NETINFO_ITEM*>, is NETINFO_ITEM owner
     NETCODES_MAP m_netCodes;        ///< map of <int, NETINFO_ITEM*> is NOT owner
 
-    D_PADS  m_PadsFullList;         ///< contains all pads, sorted by pad's netname.
-                                    ///< can be used in ratsnest calculations.
-
     int m_newNetCode;               ///< possible value for new net code assignment
 };
 
@@ -695,17 +595,13 @@ private:
 #define START_ON_TRACK 0x40
 #define END_ON_TRACK   0x80
 
-
 /* Status bit (OR'ed bits) for class BOARD member .m_Status_Pcb */
 enum StatusPcbFlags {
-    LISTE_PAD_OK = 1,                    /* Pad list is Ok */
-    LISTE_RATSNEST_ITEM_OK = 2,          /* General Ratsnest is Ok */
+
     RATSNEST_ITEM_LOCAL_OK = 4,          /* current MODULE ratsnest is Ok */
-    CONNEXION_OK = 8,                    /* List of connections exists. */
-    NET_CODES_OK = 0x10,                 /* Bit indicating that Netcode is OK,
-                                          * do not change net name.  */
     DO_NOT_SHOW_GENERAL_RASTNEST = 0x20  /* Do not display the general
                                           * ratsnest (used in module moves) */
 };
+
 
 #endif  // CLASS_NETINFO_

@@ -34,6 +34,7 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_circle.h>
+#include <geometry/convex_hull.h>
 
 #include "pns_node.h"
 #include "pns_line_placer.h"
@@ -50,14 +51,6 @@
 #include "pns_dp_meander_placer.h"
 
 #include <router/router_preview_item.h>
-
-#include <class_board.h>
-#include <class_board_connected_item.h>
-#include <class_module.h>
-#include <class_track.h>
-#include <ratsnest_data.h>
-#include <layers_id_colors_and_visibility.h>
-#include <geometry/convex_hull.h>
 
 namespace PNS {
 

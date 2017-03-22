@@ -178,21 +178,8 @@ public:
      * @param aEnabled is new state. True if ratsnest for a given net is meant to be displayed,
      * false otherwise.
      */
-    void SetVisible( bool aEnabled )
-    {
-        m_visible = aEnabled;
-    }
-
-    /**
-     * Function IsVisible()
-     * Returns the visibility flag state.
-     * @return True if ratsnest for given net is set as visible, false otherwise,
-     */
-    bool IsVisible() const
-    {
-        return m_visible;
-    }
-
+    void SetVisible( bool aEnabled );
+    
     /**
      * Function MarkDirty()
      * Marks ratsnest for given net as 'dirty', i.e. requiring recomputation.
@@ -313,9 +300,6 @@ protected:
 
     ///> Flag indicating necessity of recalculation of ratsnest for a net.
     bool m_dirty;
-
-    ///> Visibility flag.
-    bool m_visible;
 
     class TRIANGULATOR_STATE;
 

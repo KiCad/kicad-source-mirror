@@ -50,6 +50,8 @@
 #include <pcbnew.h>
 #include <protos.h>
 
+#include <connectivity.h>
+
 #define BLOCK_OUTLINE_COLOR YELLOW
 
 /**
@@ -536,6 +538,7 @@ void PCB_EDIT_FRAME::Block_Delete()
     {
         BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
         itemsList->SetPickedItemStatus( UR_DELETED, ii );
+        GetBoard()->GetConnectivity()->Remove( item );
 
         switch( item->Type() )
         {
@@ -599,6 +602,7 @@ void PCB_EDIT_FRAME::Block_Rotate()
     {
         BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
         wxASSERT( item );
+
         itemsList->SetPickedItemStatus( UR_CHANGED, ii );
 
         switch( item->Type() )
@@ -642,6 +646,7 @@ void PCB_EDIT_FRAME::Block_Rotate()
         BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
         wxASSERT( item );
         item->Rotate( centre, rotAngle );
+        GetBoard()->GetConnectivity()->Update( item );
     }
 
     Compile_Ratsnest( NULL, true );
@@ -667,6 +672,7 @@ void PCB_EDIT_FRAME::Block_Flip()
         wxASSERT( item );
         itemsList->SetPickedItemStatus( UR_FLIPPED, ii );
         item->Flip( center );
+        GetBoard()->GetConnectivity()->Update( item );
 
         // If a connected item is flipped, the ratsnest is no more OK
         switch( item->Type() )
@@ -721,6 +727,7 @@ void PCB_EDIT_FRAME::Block_Move()
         BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
         itemsList->SetPickedItemStatus( UR_MOVED, ii );
         item->Move( MoveVector );
+        GetBoard()->GetConnectivity()->Update( item );
         item->ClearFlags( IS_MOVED );
 
         switch( item->Type() )

@@ -54,10 +54,6 @@ NETINFO_ITEM::NETINFO_ITEM( BOARD* aParent, const wxString& aNetName, int aNetCo
     m_NetCode( aNetCode ), m_Netname( aNetName ), m_ShortNetname( m_Netname.AfterLast( '/' ) )
 {
     m_parent   = aParent;
-    m_RatsnestStartIdx = 0;     // Starting point of ratsnests of this net in a
-                                // general buffer of ratsnest
-    m_RatsnestEndIdx   = 0;     // Ending point of ratsnests of this net
-
     m_NetClassName = NETCLASS::Default;
 }
 
@@ -144,39 +140,4 @@ void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     // Displays the net length of internal ICs connections (wires inside ICs):
     txt = ::LengthDoubleToString( lengthPadToDie );
     aList.push_back( MSG_PANEL_ITEM( _( "In Package" ), txt, RED ) );
-}
-
-
-/***********************/
-/* class RATSNEST_ITEM */
-/***********************/
-
-RATSNEST_ITEM::RATSNEST_ITEM()
-{
-    m_NetCode  = 0;         // netcode ( = 1.. n ,  0 is the value used for not
-                            // connected items)
-    m_Status   = 0;         // state
-    m_PadStart = NULL;      // pointer to the starting pad
-    m_PadEnd   = NULL;      // pointer to ending pad
-    m_Length   = 0;         // length of the line (temporary used in some
-                            // calculations)
-}
-
-
-/**
- * Function Draw
- * Draws a line (a ratsnest) from the starting pad to the ending pad
- */
-void RATSNEST_ITEM::Draw( EDA_DRAW_PANEL* panel,
-                          wxDC*           DC,
-                          GR_DRAWMODE     aDrawMode,
-                          const wxPoint&  aOffset )
-{
-    GRSetDrawMode( DC, aDrawMode );
-
-    COLOR4D color = g_ColorsSettings.GetItemColor( LAYER_RATSNEST );
-
-    GRLine( panel->GetClipBox(), DC,
-            m_PadStart->GetPosition() - aOffset,
-            m_PadEnd->GetPosition() - aOffset, 0, color );
 }

@@ -25,7 +25,6 @@
 #include <class_module.h>
 #include <class_track.h>
 #include <board_commit.h>
-#include <ratsnest_data.h>
 #include <layers_id_colors_and_visibility.h>
 #include <geometry/convex_hull.h>
 #include <wxPcbStruct.h>

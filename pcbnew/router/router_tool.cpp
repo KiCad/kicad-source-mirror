@@ -55,8 +55,6 @@ using namespace std::placeholders;
 #include <tools/edit_tool.h>
 #include <tools/tool_event_utils.h>
 
-#include <ratsnest_data.h>
-
 #include "router_tool.h"
 #include "pns_segment.h"
 #include "pns_router.h"

@@ -41,8 +41,7 @@
 
 #include <class_module.h>
 #include <class_board.h>
-#include <connect.h>
-
+#include <connectivity.h>
 
 /* a list of DRAG_SEGM_PICKER items used to move or drag tracks */
 std::vector<DRAG_SEGM_PICKER> g_DragSegmentList;
@@ -60,7 +59,6 @@ DRAG_SEGM_PICKER::DRAG_SEGM_PICKER( TRACK* aTrack )
     m_RotationOffset = 0.0;
     m_Flipped = false;
 }
-
 
 void DRAG_SEGM_PICKER::SetAuxParameters()
 {
@@ -155,16 +153,14 @@ void DRAG_LIST::BuildDragListe( MODULE* aModule )
     m_Pad = NULL;
     m_Module = aModule;
 
-    // Build connections info
-    CONNECTIONS connections( m_Brd );
-    std::vector<D_PAD*>&padList = connections.GetPadsList();
+    std::vector<D_PAD*> padList;
 
-    for( D_PAD* pad = aModule->Pads();  pad;  pad = pad->Next() )
+    for ( auto pad : aModule->PadsIter() )
         padList.push_back( pad );
 
     sort( padList.begin(), padList.end(), sortPadsByXthenYCoord );
 
-    fillList( connections );
+    fillList( padList );
 }
 
 
@@ -174,11 +170,10 @@ void DRAG_LIST::BuildDragListe( D_PAD* aPad )
     m_Module = NULL;
 
     // Build connections info
-    CONNECTIONS connections( m_Brd );
-    std::vector<D_PAD*>&padList = connections.GetPadsList();
+    std::vector<D_PAD*> padList;
     padList.push_back( aPad );
 
-    fillList( connections );
+    fillList( padList );
 }
 
 
@@ -188,26 +183,18 @@ bool sort_tracklist( const DRAG_SEGM_PICKER& ref, const DRAG_SEGM_PICKER& tst )
     return ref.m_Track < tst.m_Track;
 }
 
-
-void DRAG_LIST::fillList( CONNECTIONS& aConnections )
+void DRAG_LIST::fillList( std::vector<D_PAD*>& aList )
 {
-    aConnections.BuildTracksCandidatesList( m_Brd->m_Track, NULL);
 
-    // Build connections info tracks to pads
-    // Rebuild pads to track info only)
-    aConnections.SearchTracksConnectedToPads( false, true );
-
-    std::vector<D_PAD*>padList = aConnections.GetPadsList();
-
+printf("FillList!\n");
     // clear flags and variables of selected tracks
-    for( unsigned ii = 0;  ii < padList.size(); ii++ )
+    for( auto pad : aList )
     {
-        D_PAD * pad = padList[ii];
+        auto connectedTracks = m_Brd->GetConnectivity()->GetConnectedTracks( pad );
 
         // store track connected to the pad
-        for( unsigned jj = 0; jj < pad->m_TracksConnected.size(); jj++ )
+        for ( auto track : connectedTracks )
         {
-            TRACK * track = pad->m_TracksConnected[jj];
             track->start = NULL;
             track->end = NULL;
             track->SetState( START_ON_PAD|END_ON_PAD|BUSY, false );
@@ -215,14 +202,13 @@ void DRAG_LIST::fillList( CONNECTIONS& aConnections )
     }
 
     // store tracks connected to pads
-    for(  unsigned ii = 0;  ii < padList.size(); ii++ )
+    for( auto pad : aList )
     {
-        D_PAD * pad = padList[ii];
+        auto connectedTracks = m_Brd->GetConnectivity()->GetConnectedTracks( pad );
 
         // store track connected to the pad
-        for( unsigned jj = 0; jj < pad->m_TracksConnected.size(); jj++ )
+        for ( auto track : connectedTracks )
         {
-            TRACK * track = pad->m_TracksConnected[jj];
 
             if( pad->HitTest( track->GetStart() ) )
             {

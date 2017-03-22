@@ -185,10 +185,10 @@ int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
         aActiveWindow->Raise();
 #endif
     }
-    TestConnections();
+    //TestConnections();
 
     // Recalculate the active ratsnest, i.e. the unconnected links
-    TestForActiveLinksInRatsnest( 0 );
+    //TestForActiveLinksInRatsnest( 0 );
     if( progressDialog )
         progressDialog->Destroy();
     return errorLevel;
