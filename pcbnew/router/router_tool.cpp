@@ -64,6 +64,20 @@ using namespace std::placeholders;
 using namespace KIGFX;
 using boost::optional;
 
+
+/**
+ * Flags used by via tool actions
+ */
+enum VIA_ACTION_FLAGS
+{
+    // Via type
+    VIA_MASK     = 0x03,
+    VIA          = 0x00,     ///> Normal via
+    BLIND_VIA    = 0x01,     ///> blind/buried via
+    MICROVIA     = 0x02,     ///> Microvia
+};
+
+
 TOOL_ACTION PCB_ACTIONS::routerActivateSingle( "pcbnew.InteractiveRouter.SingleTrack",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_TRACK ),
         _( "Interactive Router (Single Tracks)" ),
@@ -115,18 +129,21 @@ static const TOOL_ACTION ACT_PlaceThroughVia( "pcbnew.InteractiveRouter.PlaceVia
     AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_ADD_THROUGH_VIA ),
     _( "Place Through Via" ),
     _( "Adds a through-hole via at the end of currently routed track." ),
-    via_xpm );
+    via_xpm, AF_NONE,
+    (void*) VIA_ACTION_FLAGS::VIA );
 
 static const TOOL_ACTION ACT_PlaceBlindVia( "pcbnew.InteractiveRouter.PlaceBlindVia",
     AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_ADD_BLIND_BURIED_VIA ),
     _( "Place Blind/Buried Via" ),
     _( "Adds a blind or buried via at the end of currently routed track."),
-    via_buried_xpm );
+    via_buried_xpm, AF_NONE,
+    (void*) VIA_ACTION_FLAGS::BLIND_VIA );
 
 static const TOOL_ACTION ACT_PlaceMicroVia( "pcbnew.InteractiveRouter.PlaceMicroVia",
     AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_ADD_MICROVIA ),
     _( "Place Microvia" ), _( "Adds a microvia at the end of currently routed track." ),
-    via_microvia_xpm );
+    via_microvia_xpm, AF_NONE,
+    (void*) VIA_ACTION_FLAGS::MICROVIA );
 
 static const TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackViaSize",
     AS_CONTEXT, 'Q',
@@ -418,18 +435,34 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
 }
 
 
-int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
+static VIATYPE_T getViaTypeFromFlags( int aFlags )
 {
     VIATYPE_T viaType = VIA_THROUGH;
 
-    if( aEvent.IsAction( &ACT_PlaceThroughVia ) )
+    switch( aFlags & VIA_ACTION_FLAGS::VIA_MASK )
+    {
+    case VIA_ACTION_FLAGS::VIA:
         viaType = VIA_THROUGH;
-    else if( aEvent.IsAction( &ACT_PlaceBlindVia ) )
+        break;
+    case VIA_ACTION_FLAGS::BLIND_VIA:
         viaType = VIA_BLIND_BURIED;
-    else if( aEvent.IsAction( &ACT_PlaceMicroVia ) )
+        break;
+    case VIA_ACTION_FLAGS::MICROVIA:
         viaType = VIA_MICROVIA;
-    else
+        break;
+    default:
         wxASSERT_MSG( false, "Unhandled via type" );
+    }
+
+    return viaType;
+}
+
+
+int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
+{
+    const int actViaFlags = aEvent.Parameter<intptr_t>();
+
+    VIATYPE_T viaType = getViaTypeFromFlags( actViaFlags );
 
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
