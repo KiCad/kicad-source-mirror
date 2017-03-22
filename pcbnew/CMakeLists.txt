@@ -629,6 +629,18 @@ set_target_properties( pcbnew_kiface PROPERTIES
     SUFFIX          ${KIFACE_SUFFIX}
     )
 
+if ( KICAD_BUILD_TESTS )
+    if ( UNIX )
+	add_custom_command(TARGET pcbnew_kiface POST_BUILD
+	 COMMAND ln -sf _pcbnew.kiface lib_pcbnew_kiface.so )
+    else()
+	add_custom_command(TARGET pcbnew_kiface POST_BUILD
+	 COMMAND copy _pcbnew.kiface lib_pcbnew_kiface.dll )
+    endif()
+
+
+endif ()
+
 if( ${OPENMP_FOUND} )
     set_target_properties( pcbnew_kiface PROPERTIES
         COMPILE_FLAGS   ${OpenMP_CXX_FLAGS}

@@ -135,7 +135,7 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( const BOARD* aBoard )
         m_view->Add( (KIGFX::VIEW_ITEM*) ( aBoard->GetArea( i ) ) );
 
     // Load drawings
-    for( BOARD_ITEM* drawing = aBoard->m_Drawings; drawing; drawing = drawing->Next() )
+    for( auto drawing : const_cast<BOARD*>(aBoard)->Drawings() )
         m_view->Add( drawing );
 
     // Load tracks

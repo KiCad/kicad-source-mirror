@@ -44,6 +44,8 @@
 #include "zones.h"
 #include <3d_cache/3d_info.h>
 
+#include <core/iterators.h>
+
 #include <functional>
 
 class LINE_READER;
@@ -135,6 +137,8 @@ public:
 
     DLIST<BOARD_ITEM>& GraphicalItems()         { return m_Drawings; }
     const DLIST<BOARD_ITEM>& GraphicalItems() const { return m_Drawings; }
+
+    DLIST_ITERATOR_WRAPPER<D_PAD> PadsIter() { return DLIST_ITERATOR_WRAPPER<D_PAD>(m_Pads); }
 
     std::list<S3D_INFO>& Models()             { return m_3D_Drawings; }
     const std::list<S3D_INFO>& Models() const { return m_3D_Drawings; }

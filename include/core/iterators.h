@@ -53,7 +53,7 @@ template<class T> class DLIST_ITERATOR_WRAPPER
         explicit DLIST_ITERATOR_WRAPPER<T> ( DLIST<T>& list ) : m_list(list) {};
 
         DLIST_ITERATOR<T*> begin() { return DLIST_ITERATOR<T*> ( m_list.GetFirst()); }
-        DLIST_ITERATOR<T*> end() { return DLIST_ITERATOR<T*> ( m_list.GetLast()); }
+        DLIST_ITERATOR<T*> end() { return DLIST_ITERATOR<T*> ( nullptr ); }
 
         unsigned int Size() const {
             return m_list.GetCount();

@@ -1686,9 +1686,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
         CBVHCONTAINER2D *layerContainer = m_layers_container2D[curr_layer_id];
 
         // ADD GRAPHIC ITEMS ON COPPER LAYERS (texts)
-        for( const BOARD_ITEM* item = m_board->m_Drawings;
-             item;
-             item = item->Next() )
+        for( auto item : m_board->Drawings() )
         {
             if( !item->IsOnLayer( curr_layer_id ) )
                 continue;
@@ -1746,9 +1744,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
             SHAPE_POLY_SET *layerPoly = m_layers_poly[curr_layer_id];
 
             // ADD GRAPHIC ITEMS ON COPPER LAYERS (texts)
-            for( const BOARD_ITEM* item = m_board->m_Drawings;
-                 item;
-                 item = item->Next() )
+            for( auto item : m_board->Drawings() )
             {
                 if( !item->IsOnLayer( curr_layer_id ) )
                     continue;
@@ -1988,7 +1984,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
         // Add drawing objects
         // /////////////////////////////////////////////////////////////////////
-        for( BOARD_ITEM* item = m_board->m_Drawings; item; item = item->Next() )
+        for( auto item : m_board->Drawings() )
         {
             if( !item->IsOnLayer( curr_layer_id ) )
                 continue;
@@ -2024,7 +2020,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
         // Add drawing contours
         // /////////////////////////////////////////////////////////////////////
-        for( BOARD_ITEM* item = m_board->m_Drawings; item; item = item->Next() )
+        for( auto item : m_board->Drawings() )
         {
             if( !item->IsOnLayer( curr_layer_id ) )
                 continue;
