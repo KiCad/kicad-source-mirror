@@ -175,10 +175,12 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, std::vector< DRAWSEGMENT* 
  * These closed inner outlines are considered as holes in the main outline
  * @param aSegList the initial list of drawsegments (only lines, circles and arcs).
  * @param aPolygons will contain the complex polygon.
+ * @param aSegmentsByCircle is the number of segments to approximate a circle.
  * @param aErrorText is a wxString to return error message.
  */
 bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
-                              SHAPE_POLY_SET& aPolygons, wxString* aErrorText)
+                              SHAPE_POLY_SET& aPolygons, int aSegmentsByCircle,
+                              wxString* aErrorText )
 {
 
     if( aSegList.size() == 0 )
@@ -190,7 +192,6 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
     std::vector< DRAWSEGMENT* > segList = aSegList;
 
     unsigned    prox;           // a proximity BIU metric, not an accurate distance
-    const int   STEPS = 36;     // for a segmentation of an arc of 360 degrees
     DRAWSEGMENT* graphic;
     wxPoint prevPt;
 
@@ -229,7 +230,7 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
                 wxPoint     pstart   = graphic->GetArcStart();
                 wxPoint     center  = graphic->GetCenter();
                 double      angle   = -graphic->GetAngle();
-                int         steps   = STEPS * fabs(angle) /3600.0;
+                int         steps   = aSegmentsByCircle * fabs(angle) /3600.0;
 
                 if( steps == 0 )
                     steps = 1;
@@ -292,7 +293,7 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
     if( graphic->GetShape() == S_CIRCLE )
     {
         TransformCircleToPolygon( aPolygons, graphic->GetCenter(),
-                                  graphic->GetRadius(), STEPS );
+                                  graphic->GetRadius(), aSegmentsByCircle );
     }
     else
     {
@@ -342,7 +343,7 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
                     wxPoint pend    = graphic->GetArcEnd();
                     wxPoint pcenter = graphic->GetCenter();
                     double  angle  = -graphic->GetAngle();
-                    int     steps  = STEPS * fabs(angle) /3600.0;
+                    int     steps  = aSegmentsByCircle * fabs(angle) /3600.0;
 
                     if( steps == 0 )
                         steps = 1;
@@ -441,9 +442,9 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
 
             wxPoint nextPt;
 
-            for( int step = 0; step<STEPS; ++step )
+            for( int step = 0; step<aSegmentsByCircle; ++step )
             {
-                double rotation = ( angle * step ) / STEPS;
+                double rotation = ( angle * step ) / aSegmentsByCircle;
                 nextPt = start;
                 RotatePoint( &nextPt.x, &nextPt.y, center.x, center.y, rotation );
                 aPolygons.Append( nextPt, -1, hole );
@@ -494,7 +495,7 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
                         wxPoint     pend     = graphic->GetArcEnd();
                         wxPoint     pcenter  = graphic->GetCenter();
                         double      angle   = -graphic->GetAngle();
-                        int         steps   = STEPS * fabs(angle) /3600.0;
+                        int         steps   = aSegmentsByCircle * fabs(angle) /3600.0;
 
                         if( steps == 0 )
                             steps = 1;
@@ -602,29 +603,10 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard,
             segList.push_back( static_cast< DRAWSEGMENT* >( items[ii] ) );
     }
 
-    bool success = ConvertOutlineToPolygon( segList, aOutlines, aErrorText );
+    const int STEPS = 36;     // for a segmentation of an arc of 360 degrees
+    bool success = ConvertOutlineToPolygon( segList, aOutlines, STEPS, aErrorText );
 
-    // Now move holes in aHoles
-    // only one main outline is expected
-    if( success && aOutlines.OutlineCount() )
-    {
-/*        int outlineId = 0;
-
-        int holecount = aOutlines.HoleCount( outlineId );
-
-        if( holecount )
-        {
-            for( int ii = 0; ii < holecount; ++ii )
-            {
-                aHoles.AddOutline( aOutlines.Hole( outlineId, ii ) );
-            }
-
-            // Remove holes from aOutlines:
-            SHAPE_POLY_SET::POLYGON& polygon = aOutlines.Polygon( outlineId );
-            polygon.erase( polygon.begin()+1, polygon.end() );
-        }*/
-    }
-    else
+    if( !success || !aOutlines.OutlineCount() )
     {
         // Creates a valid polygon outline is not possible.
         // So uses the board edge cuts bounding box to create a
