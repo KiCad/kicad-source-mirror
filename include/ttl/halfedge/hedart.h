@@ -2,21 +2,21 @@
  * Copyright (C) 1998, 2000-2007, 2010, 2011, 2012, 2013 SINTEF ICT,
  * Applied Mathematics, Norway.
  *
- * Contact information: E-mail: tor.dokken@sintef.no                      
- * SINTEF ICT, Department of Applied Mathematics,                         
- * P.O. Box 124 Blindern,                                                 
- * 0314 Oslo, Norway.                                                     
+ * Contact information: E-mail: tor.dokken@sintef.no
+ * SINTEF ICT, Department of Applied Mathematics,
+ * P.O. Box 124 Blindern,
+ * 0314 Oslo, Norway.
  *
  * This file is part of TTL.
  *
  * TTL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version. 
+ * License, or (at your option) any later version.
  *
- * TTL is distributed in the hope that it will be useful,        
- * but WITHOUT ANY WARRANTY; without even the implied warranty of         
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          
+ * TTL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public
@@ -34,7 +34,7 @@
  * disclosing the source code of your own applications.
  *
  * This file may be used in accordance with the terms contained in a
- * written agreement between you and SINTEF ICT. 
+ * written agreement between you and SINTEF ICT.
  */
 
 #ifndef _HALF_EDGE_DART_
@@ -69,6 +69,7 @@ public:
     DART( const EDGE_PTR& aEdge, bool aDir = true )
     {
         m_edge = aEdge;
+        assert ( m_edge );
         m_dir = aDir;
     }
 
@@ -76,6 +77,7 @@ public:
     DART( const DART& aDart )
     {
         m_edge = aDart.m_edge;
+        assert ( m_edge );
         m_dir  = aDart.m_dir;
     }
 
@@ -91,6 +93,7 @@ public:
             return *this;
 
         m_edge = aDart.m_edge;
+        assert ( m_edge );
         m_dir = aDart.m_dir;
 
         return *this;
@@ -121,11 +124,13 @@ public:
         if( m_dir )
         {
             m_edge = m_edge->GetNextEdgeInFace()->GetNextEdgeInFace();
+            assert ( m_edge );
             m_dir = false;
         }
         else
         {
             m_edge = m_edge->GetNextEdgeInFace();
+            assert ( m_edge );
             m_dir = true;
         }
 
@@ -138,6 +143,7 @@ public:
         if( m_edge->GetTwinEdge() )
         {
             m_edge = m_edge->GetTwinEdge();
+            assert ( m_edge );
             m_dir = !m_dir;
         }
 
@@ -150,6 +156,7 @@ public:
     void Init( const EDGE_PTR& aEdge, bool aDir = true )
     {
         m_edge = aEdge;
+        assert(m_edge);
         m_dir = aDir;
     }
 

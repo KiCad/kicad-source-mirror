@@ -43,7 +43,7 @@ using namespace std::placeholders;
 #include <class_zone.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <ratsnest_data.h>
+#include <connectivity.h>
 
 // Point editor
 TOOL_ACTION PCB_ACTIONS::pointEditorAddCorner( "pcbnew.PointEditor.addCorner",
@@ -551,7 +551,7 @@ void POINT_EDITOR::finishItem() const
         if( zone->IsFilled() )
         {
             getEditFrame<PCB_EDIT_FRAME>()->Fill_Zone( zone );
-            zone->GetBoard()->GetRatsnest()->Recalculate( zone->GetNetCode() );
+//            zone->GetBoard()->GetRatsnest()->Recalculate( zone->GetNetCode() );
         }
     }
 }

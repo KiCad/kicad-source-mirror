@@ -39,8 +39,12 @@
 // Helper classes to handle connection points
 #include <connect.h>
 
+const bool g_UseLegacyConnectionAlgo = false;
+
 extern void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb );
 extern void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode );
+
+
 
 // Local functions
 static void RebuildTrackChain( BOARD* pcb );
@@ -853,13 +857,9 @@ void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
     return;
 }
 
-
-/* search connections between tracks and pads and propagate pad net codes to the track
- * segments.
- * Pads netcodes are assumed to be up to date.
- */
-void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
+void PCB_BASE_FRAME::ComputeLegacyConnections()
 {
+
     // Build the net info list
     GetBoard()->BuildListOfNets();
 
@@ -872,7 +872,6 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
         t->end = NULL;
         t->SetState( BUSY | IN_EDIT | BEGIN_ONPAD | END_ONPAD, false );
         t->SetZoneSubNet( 0 );
-        t->SetNetCode( NETINFO_LIST::UNCONNECTED );
     }
 
     // If no pad, reset pointers and netcode, and do nothing else
@@ -886,70 +885,10 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
     // First pass: build connections between track segments and pads.
     connections.SearchTracksConnectedToPads();
 
-    // For tracks connected to at least one pad,
-    // set the track net code to the pad netcode
-    for( TRACK* t = m_Pcb->m_Track;  t;  t = t->Next() )
-    {
-        if( t->m_PadsConnected.size() )
-            t->SetNetCode( t->m_PadsConnected[0]->GetNetCode() );
-    }
-
-    // Pass 2: build connections between track ends
     for( TRACK* t = m_Pcb->m_Track;  t;  t = t->Next() )
     {
         connections.SearchConnectedTracks( t );
         connections.GetConnectedTracks( t );
-    }
-
-    // Propagate net codes from a segment to other connected segments
-    bool new_pass_request = true;   // set to true if a track has its netcode changed from 0
-                                    // to a known netcode to re-evaluate netcodes
-                                    // of connected items
-    while( new_pass_request )
-    {
-        new_pass_request = false;
-
-        for( TRACK* t = m_Pcb->m_Track;  t;  t = t->Next() )
-        {
-            int netcode = t->GetNetCode();
-
-            if( netcode == 0 )
-            {
-                // try to find a connected item having a netcode
-                for( unsigned kk = 0; kk < t->m_TracksConnected.size(); kk++ )
-                {
-                    int altnetcode = t->m_TracksConnected[kk]->GetNetCode();
-                    if( altnetcode )
-                    {
-                        new_pass_request = true;
-                        netcode = altnetcode;
-                        t->SetNetCode(netcode);
-                        break;
-                    }
-                }
-            }
-
-            if( netcode )    // this track has a netcode
-            {
-                // propagate this netcode to connected tracks having no netcode
-                for( unsigned kk = 0; kk < t->m_TracksConnected.size(); kk++ )
-                {
-                    int altnetcode = t->m_TracksConnected[kk]->GetNetCode();
-                    if( altnetcode == 0 )
-                    {
-                        t->m_TracksConnected[kk]->SetNetCode(netcode);
-                        new_pass_request = true;
-                    }
-                }
-            }
-        }
-    }
-
-    if( IsGalCanvasActive() )
-    {
-    /// @todo LEGACY tracks might have changed their nets, so we need to refresh labels in GAL
-        for( TRACK* track = m_Pcb->m_Track; track; track = track->Next() )
-            GetGalCanvas()->GetView()->Update( track );
     }
 
     // Sort the track list by net codes:

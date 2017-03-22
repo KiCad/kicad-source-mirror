@@ -160,7 +160,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
 
         masque_layer &= layers_filter;
 
-        for( item = pcb->m_Drawings; item; item = item->Next() )
+        for( item = pcb->DrawingsList(); item; item = item->Next() )
         {
             KICAD_T type = item->Type();
             LAYER_NUM layer = item->GetLayer();

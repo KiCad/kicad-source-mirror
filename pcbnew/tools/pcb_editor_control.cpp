@@ -41,8 +41,7 @@
 #include <class_draw_panel_gal.h>
 #include <class_module.h>
 #include <class_mire.h>
-#include <ratsnest_data.h>
-#include <ratsnest_data.h>
+#include <connectivity.h>
 #include <collectors.h>
 #include <zones_functions_for_undo_redo.h>
 #include <board_commit.h>
@@ -481,7 +480,12 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         }
     }
 
-    view->Remove( &preview );
+	controls->ShowCursor( false );
+    controls->SetSnapping( false );
+    controls->SetAutoPan( false );
+    controls->CaptureCursor( false );
+    
+	view->Remove( &preview );
     m_frame->SetNoToolSelected();
 
     return 0;
@@ -637,7 +641,7 @@ int PCB_EDITOR_CONTROL::ZoneFill( const TOOL_EVENT& aEvent )
 {
     auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     const auto& selection = selTool->GetSelection();
-    RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
+    auto connectivity = getModel<BOARD>()->GetConnectivity();
 
     BOARD_COMMIT commit( this );
 
@@ -651,13 +655,11 @@ int PCB_EDITOR_CONTROL::ZoneFill( const TOOL_EVENT& aEvent )
 
         m_frame->Fill_Zone( zone );
         zone->SetIsFilled( true );
-        ratsnest->Update( zone );
-        getView()->Update( zone );
     }
 
     commit.Push( _( "Fill Zone" ) );
 
-    ratsnest->Recalculate();
+    connectivity->RecalculateRatsnest();
 
     return 0;
 }
@@ -666,7 +668,7 @@ int PCB_EDITOR_CONTROL::ZoneFill( const TOOL_EVENT& aEvent )
 int PCB_EDITOR_CONTROL::ZoneFillAll( const TOOL_EVENT& aEvent )
 {
     BOARD* board = getModel<BOARD>();
-    RN_DATA* ratsnest = board->GetRatsnest();
+    auto connectivity = getModel<BOARD>()->GetConnectivity();
 
     BOARD_COMMIT commit( this );
 
@@ -678,13 +680,11 @@ int PCB_EDITOR_CONTROL::ZoneFillAll( const TOOL_EVENT& aEvent )
 
         m_frame->Fill_Zone( zone );
         zone->SetIsFilled( true );
-        ratsnest->Update( zone );
-        getView()->Update( zone );
     }
 
     commit.Push( _( "Fill All Zones" ) );
 
-    ratsnest->Recalculate();
+    connectivity->RecalculateRatsnest();
 
     return 0;
 }
@@ -694,7 +694,7 @@ int PCB_EDITOR_CONTROL::ZoneUnfill( const TOOL_EVENT& aEvent )
 {
     auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     const auto& selection = selTool->GetSelection();
-    RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
+    auto connectivity = getModel<BOARD>()->GetConnectivity();
 
     BOARD_COMMIT commit( this );
 
@@ -708,13 +708,11 @@ int PCB_EDITOR_CONTROL::ZoneUnfill( const TOOL_EVENT& aEvent )
 
         zone->SetIsFilled( false );
         zone->ClearFilledPolysList();
-        ratsnest->Update( zone );
-        getView()->Update( zone );
     }
 
     commit.Push( _( "Unfill Zone" ) );
 
-    ratsnest->Recalculate();
+    connectivity->RecalculateRatsnest();
 
     return 0;
 }
@@ -723,7 +721,7 @@ int PCB_EDITOR_CONTROL::ZoneUnfill( const TOOL_EVENT& aEvent )
 int PCB_EDITOR_CONTROL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
 {
     BOARD* board = getModel<BOARD>();
-    RN_DATA* ratsnest = board->GetRatsnest();
+    auto connectivity = getModel<BOARD>()->GetConnectivity();
 
     BOARD_COMMIT commit( this );
 
@@ -735,13 +733,11 @@ int PCB_EDITOR_CONTROL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
 
         zone->SetIsFilled( false );
         zone->ClearFilledPolysList();
-        ratsnest->Update( zone );
-        getView()->Update( zone );
     }
 
     commit.Push( _( "Unfill All Zones" ) );
 
-    ratsnest->Recalculate();
+    connectivity->RecalculateRatsnest();
 
     return 0;
 }
@@ -808,22 +804,29 @@ int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
 
         netcode = curr_area->GetNetCode();
 
-        if( firstZone->GetNetCode() != netcode )
-            continue;
+        if( firstZone )
+        {
+		    if( firstZone->GetNetCode() != netcode )
+		        continue;
 
-        if( curr_area->GetPriority() != firstZone->GetPriority() )
-            continue;
+		    if( curr_area->GetPriority() != firstZone->GetPriority() )
+		        continue;
 
-        if( curr_area->GetIsKeepout() != firstZone->GetIsKeepout() )
-            continue;
+		    if( curr_area->GetIsKeepout() != firstZone->GetIsKeepout() )
+		        continue;
 
-        if( curr_area->GetLayer() != firstZone->GetLayer() )
-            continue;
+		    if( curr_area->GetLayer() != firstZone->GetLayer() )
+		        continue;
 
-        if( !board->TestAreaIntersection( curr_area, firstZone ) )
-            continue;
+		    if( !board->TestAreaIntersection( curr_area, firstZone ) )
+		        continue;
 
-        toMerge.push_back( curr_area );
+		    toMerge.push_back( curr_area );
+		}
+        else
+        {
+            toMerge.push_back( curr_area );
+        }
     }
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -1055,6 +1058,31 @@ int PCB_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+static bool showLocalRatsnest( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
+                            KIGFX::ORIGIN_VIEWITEM* aItem, const VECTOR2D& aPosition )
+{
+    aFrame->SetAuxOrigin( wxPoint( aPosition.x, aPosition.y ) );
+    aItem->SetPosition( aPosition );
+    aView->MarkDirty();
+
+    return true;
+}
+
+int PCB_EDITOR_CONTROL::ShowLocalRatsnest( const TOOL_EVENT& aEvent )
+{
+    Activate();
+
+    auto picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    assert( picker );
+
+    m_frame->SetToolID( ID_PCB_SHOW_1_RATSNEST_BUTT, wxCURSOR_PENCIL, _( "Pick Components for Local Ratsnest" ) );
+    //picker->SetClickHandler( std::bind( showLocalRatsnest, m_toolMgr, _1 ) );
+    picker->SetSnapping( false );
+    picker->Activate();
+    Wait();
+
+    return 0;
+}
 
 int PCB_EDITOR_CONTROL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
 {

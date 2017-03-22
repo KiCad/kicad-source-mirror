@@ -74,7 +74,7 @@
  * To emit zone data to a file when filling zones for the debugging purposes,
  * set this 'true' and build.
  */
-static const bool g_DumpZonesWhenFilling = false;
+static const bool g_DumpZonesWhenFilling = true;
 
 extern void BuildUnconnectedThermalStubsPolygonList( SHAPE_POLY_SET& aCornerBuffer,
                                                      BOARD* aPcb, ZONE_CONTAINER* aZone,
@@ -437,6 +437,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
 
     SHAPE_POLY_SET solidAreas = *m_smoothedPoly;
 
+    printf("VC %d\n", solidAreas.VertexCount());
+
     solidAreas.Inflate( -outline_half_thickness, segsPerCircle );
     solidAreas.Simplify( POLY_CALC_MODE );
 
@@ -473,10 +475,6 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
 
     m_FilledPolysList = areas_fractured;
 
-    // Remove insulated islands:
-    if( GetNetCode() > 0 )
-        TestForCopperIslandAndRemoveInsulatedIslands( aPcb );
-
     SHAPE_POLY_SET thermalHoles;
 
     // Test thermal stubs connections and add polygons to remove unconnected stubs.
@@ -506,9 +504,12 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
 
         m_FilledPolysList = th_fractured;
 
-        if( GetNetCode() > 0 )
-            TestForCopperIslandAndRemoveInsulatedIslands( aPcb );
     }
+
+    m_RawPolysList = m_FilledPolysList;
+
+	if( GetNetCode() > 0 )
+        TestForCopperIslandAndRemoveInsulatedIslands( aPcb );
 
     if(g_DumpZonesWhenFilling)
         dumper->EndGroup();

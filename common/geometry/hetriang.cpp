@@ -55,14 +55,6 @@ using namespace hed;
 #endif
 
 
-void NODE::updateLayers()
-{
-    assert( m_layers.none() );
-
-    for( const BOARD_CONNECTED_ITEM* item : m_parents )
-        m_layers |= item->GetLayerSet();
-}
-
 
 //#define DEBUG_HE
 #ifdef DEBUG_HE
@@ -402,12 +394,11 @@ std::list<NODE_PTR>* TRIANGULATION::GetNodes() const
 #endif
 
 
-std::list<EDGE_PTR>* TRIANGULATION::GetEdges( bool aSkipBoundaryEdges ) const
+void TRIANGULATION::GetEdges( std::list<EDGE_PTR>& aEdges, bool aSkipBoundaryEdges  ) const
 {
     // collect all arcs (one half edge for each arc)
     // (boundary edges are also collected).
     std::list<EDGE_PTR>::const_iterator it;
-    std::list<EDGE_PTR>* elist = new std::list<EDGE_PTR>;
 
     for( it = m_leadingEdges.begin(); it != m_leadingEdges.end(); ++it )
     {
@@ -419,13 +410,13 @@ std::list<EDGE_PTR>* TRIANGULATION::GetEdges( bool aSkipBoundaryEdges ) const
 
             if( ( !twinedge && !aSkipBoundaryEdges )
                     || ( twinedge && ( (size_t) edge.get() > (size_t) twinedge.get() ) ) )
-                elist->push_front( edge );
+                {
+                    aEdges.push_front( edge );
+                }
 
             edge = edge->GetNextEdgeInFace();
         }
     }
-
-    return elist;
 }
 
 
@@ -613,7 +604,8 @@ void TRIANGULATION::OptimizeDelaunay()
 
     // Collect all interior edges (one half edge for each arc)
     bool skip_boundary_edges = true;
-    std::list<EDGE_PTR>* elist = GetEdges( skip_boundary_edges );
+    std::list<EDGE_PTR> elist;
+    GetEdges( elist, skip_boundary_edges );
 
     // Assumes that elist has only one half-edge for each arc.
     bool cycling_check = true;
@@ -624,7 +616,7 @@ void TRIANGULATION::OptimizeDelaunay()
     {
         optimal = true;
 
-        for( it = elist->begin(); it != elist->end(); ++it )
+        for( it = elist.begin(); it != elist.end(); ++it )
         {
             EDGE_PTR edge = *it;
 
@@ -637,8 +629,6 @@ void TRIANGULATION::OptimizeDelaunay()
             }
         }
     }
-
-    delete elist;
 }
 
 

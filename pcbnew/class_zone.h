@@ -637,6 +637,12 @@ public:
         m_FillSegmList.insert( m_FillSegmList.end(), aSegments.begin(), aSegments.end() );
     }
 
+    SHAPE_POLY_SET& RawPolysList()
+    {
+        return m_RawPolysList;
+    }
+
+
     wxString GetSelectMenuText() const override;
 
     BITMAP_DEF GetMenuImage() const override;
@@ -781,6 +787,7 @@ private:
      * described by m_Poly can have many filled areas
      */
     SHAPE_POLY_SET        m_FilledPolysList;
+    SHAPE_POLY_SET m_RawPolysList;
 
     HATCH_STYLE           m_hatchStyle;     // hatch style, see enum above
     int                   m_hatchPitch;     // for DIAGONAL_EDGE, distance between 2 hatch lines

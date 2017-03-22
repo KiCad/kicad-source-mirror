@@ -41,7 +41,7 @@
 #include <class_zone.h>
 
 #include <pcb_netlist.h>
-#include <ratsnest_data.h>
+#include <connectivity.h>
 #include <reporter.h>
 
 #include <board_netlist_updater.h>
@@ -669,7 +669,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     {
         m_commit.Push( _( "Update netlist" ) );
         m_frame->Compile_Ratsnest( NULL, false );
-        m_board->GetRatsnest()->ProcessBoard();
+        m_board->GetConnectivity()->Build( m_board );
         testConnectivity( aNetlist );
     }
 

@@ -170,7 +170,7 @@ void PCB_BASE_FRAME::Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus )
     ClearMsgPanel();
 
     // Rebuild the full pads and net info list
-    RecalculateAllTracksNetcode();
+    ComputeLegacyConnections();
 
     if( aDisplayStatus )
     {

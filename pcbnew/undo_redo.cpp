@@ -45,7 +45,7 @@ using namespace std::placeholders;
 #include <class_zone.h>
 #include <class_edge_mod.h>
 
-#include <ratsnest_data.h>
+#include <connectivity.h>
 
 #include <tools/selection_tool.h>
 #include <tool/tool_manager.h>
@@ -383,7 +383,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
     bool        deep_reBuild_ratsnest = false;  // true later if pointers must be rebuilt
 
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
-    RN_DATA* ratsnest = GetBoard()->GetRatsnest();
+    auto connectivity = GetBoard()->GetConnectivity();
 
     // Undo in the reverse order of list creation: (this can allow stacked changes
     // like the same item can be changes and deleted in the same complex command
@@ -468,7 +468,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             }
 
             view->Remove( item );
-            ratsnest->Remove( item );
+            connectivity->Remove( item );
 
             item->SwapData( image );
 
@@ -482,7 +482,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             }
 
             view->Add( item );
-            ratsnest->Add( item );
+            connectivity->Add( item );
             item->ClearFlags();
 
         }
@@ -518,27 +518,27 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         case UR_MOVED:
             item->Move( aRedoCommand ? aList->m_TransformPoint : -aList->m_TransformPoint );
             view->Update( item, KIGFX::GEOMETRY );
-            ratsnest->Update( item );
+            connectivity->Update( item );
             break;
 
         case UR_ROTATED:
             item->Rotate( aList->m_TransformPoint,
                           aRedoCommand ? m_rotationAngle : -m_rotationAngle );
             view->Update( item, KIGFX::GEOMETRY );
-            ratsnest->Update( item );
+            connectivity->Update( item );
             break;
 
         case UR_ROTATED_CLOCKWISE:
             item->Rotate( aList->m_TransformPoint,
                           aRedoCommand ? -m_rotationAngle : m_rotationAngle );
             view->Update( item, KIGFX::GEOMETRY );
-            ratsnest->Update( item );
+            connectivity->Update( item );
             break;
 
         case UR_FLIPPED:
             item->Flip( aList->m_TransformPoint );
             view->Update( item, KIGFX::LAYERS );
-            ratsnest->Update( item );
+            connectivity->Update( item );
             break;
 
         default:
@@ -555,7 +555,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
     if( not_found )
         wxMessageBox( wxT( "Incomplete undo/redo operation: some items not found" ) );
 
-    // Rebuild pointers and ratsnest that can be changed.
+    // Rebuild pointers and connectivity that can be changed.
     if( reBuild_ratsnest )
     {
         // Compile ratsnest propagates nets from pads to tracks
@@ -565,10 +565,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
         if( IsGalCanvasActive() )
         {
-            if( deep_reBuild_ratsnest )
-                ratsnest->ProcessBoard();
-            else
-                ratsnest->Recalculate();
+			connectivity->RecalculateRatsnest();         
         }
     }
 }

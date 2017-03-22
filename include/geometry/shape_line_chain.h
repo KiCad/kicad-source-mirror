@@ -601,6 +601,7 @@ public:
     }
 
     const VECTOR2I PointAlong( int aPathLength ) const;
+    const SHAPE_LINE_CHAIN RemoveHoles( ) const;
 
 private:
     /// array of vertices

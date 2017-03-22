@@ -1,0 +1,204 @@
+/*
+ * This program source code file is part of KICAD, a free EDA CAD application.
+ *
+ * Copyright (C) 2013-2017 CERN
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#ifndef __CONNECTIVITY_H
+#define __CONNECTIVITY_H
+
+#include <core/typeinfo.h>
+
+#include <wx/string.h>
+#include <vector>
+#include <list>
+#include <memory>
+
+#include <math/vector2d.h>
+
+class CN_ITEM;
+class CN_CLUSTER;
+class CN_CONNECTIVITY_ALGO;
+class BOARD;
+class BOARD_CONNECTED_ITEM;
+class BOARD_ITEM;
+class ZONE_CONTAINER;
+class RN_DATA;
+class RN_NET;
+
+struct CN_DISJOINT_NET_ENTRY
+{
+    int net;
+    BOARD_CONNECTED_ITEM* a, * b;
+    VECTOR2I anchorA, anchorB;
+};
+
+struct RN_DYNAMIC_LINE
+{
+    int netCode;
+    VECTOR2I a, b;
+};
+
+// a wrapper class encompassing the connectivity computation algorithm and the
+class CONNECTIVITY_DATA
+{
+public:
+    CONNECTIVITY_DATA();
+    ~CONNECTIVITY_DATA();
+
+
+    /**
+     * Function Build()
+     * Builds the connectivity database for the board aBoard.
+     */
+    void Build( BOARD* aBoard );
+
+    /**
+     * Function Build()
+     * Builds the connectivity database for a set of items aItems.
+     */
+    void Build( const std::vector<BOARD_ITEM*>& aItems );
+
+    /**
+     * Function Add()
+     * Adds an item to the connectivity data.
+     * @param aItem is an item to be added.
+     * @return True if operation succeeded.
+     */
+    bool Add( BOARD_ITEM* aItem );
+
+    /**
+     * Function Remove()
+     * Removes an item from the connectivity data.
+     * @param aItem is an item to be updated.
+     * @return True if operation succeeded.
+     */
+    bool Remove( BOARD_ITEM* aItem );
+
+    /**
+     * Function Update()
+     * Updates the connectivity data for an item.
+     * @param aItem is an item to be updated.
+     * @return True if operation succeeded.
+     */
+    bool Update( BOARD_ITEM* aItem );
+
+    /**
+     * Function Clear()
+     * Erases the connectivity database.
+     */
+
+    void Clear();
+
+    /**
+     * Function GetNetCount()
+     * Returns the total number of nets in the connectivity database.
+     */
+    int GetNetCount() const;
+
+    /**
+     * Function GetRatsnestForNet()
+     * Returns the ratsnest, expressed as a set of graph edges for a given net.
+     */
+    RN_NET* GetRatsnestForNet( int aNet )
+    {
+        return m_nets[aNet];
+    }
+
+    /**
+     * Function PropagateNets()
+     * Propagates the net codes from the source pads to the tracks/vias.
+     */
+    void PropagateNets();
+
+    bool    CheckConnectivity( std::vector<CN_DISJOINT_NET_ENTRY>& aReport );
+
+    /**
+     * Function FindIsolatedCopperIslands()
+     * Searches for copper islands in zone aZone that are not connected to any pad.
+     * @param aZone zone to test
+     * @param aIslands list of islands that have no connections (outline indices in the polygon set)
+     */
+    void FindIsolatedCopperIslands( ZONE_CONTAINER* aZone, std::vector<int>& aIslands );
+
+    /**
+     * Function RecalculateRatsnest()
+     * Updates the ratsnest for the board.
+     */
+    void RecalculateRatsnest();
+
+    /**
+     * Function GetUnconnectedCount()
+     * Returns the number of remaining edges in the ratsnest.
+     */
+    unsigned int GetUnconnectedCount() const;
+
+
+    /**
+     * Function ClearDynamicRatsnest()
+     * Erases the temporary dynamic ratsnest (i.e. the ratsnest lines that)
+     * pcbnew displays when moving an item/set of items
+     */
+    void ClearDynamicRatsnest();
+
+    /**
+     * Function ComputeDynamicRatsnest()
+     * Calculates the temporary dynamic ratsnest (i.e. the ratsnest lines that)
+     * for the set of items aItems.
+     */
+    void ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& aItems  );
+
+
+    const std::vector<RN_DYNAMIC_LINE>& GetDynamicRatsnest() const;
+
+    /**
+     * Function GetConnectedItems()
+     * Returns a list of items connected to a source item aItem.
+     * @param aItem is the reference item to find other connected items.
+     * @param aTypes allows to filter by item types.
+     */
+    const std::list<BOARD_CONNECTED_ITEM*> GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
+            const KICAD_T aTypes[] ) const;
+
+    /**
+     * Function GetNetItems()
+     * Returns the list of items that belong to a certain net.
+     * @param aNetCode is the net code.
+     * @param aTypes allows to filter by item types.
+     */
+    const std::list<BOARD_CONNECTED_ITEM*> GetNetItems( int aNetCode,
+            const KICAD_T aTypes[] ) const;
+
+private:
+
+    void    updateRatsnest();
+    void    addRatsnestCluster( std::shared_ptr<CN_CLUSTER> aCluster );
+    void    blockRatsnestItems( const std::vector<BOARD_ITEM*>& aItems );
+
+    std::unique_ptr<CONNECTIVITY_DATA> m_dynamicConnectivity;
+    std::shared_ptr<CN_CONNECTIVITY_ALGO> m_connAlgo;
+
+    std::vector<RN_DYNAMIC_LINE> m_dynamicRatsnest;
+    std::vector<RN_NET*> m_nets;
+};
+
+#endif

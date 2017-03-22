@@ -37,6 +37,7 @@
 class NETCLASS;
 class TRACK;
 class D_PAD;
+class CN_BOARD_ITEM_DATA;
 
 /**
  * Class BOARD_CONNECTED_ITEM
@@ -50,6 +51,8 @@ class BOARD_CONNECTED_ITEM : public BOARD_ITEM
     friend class CONNECTIONS;
 
 public:
+
+
     // These 2 members are used for temporary storage during connections calculations:
     std::vector<TRACK*> m_TracksConnected;      // list of other tracks connected to me
     std::vector<D_PAD*> m_PadsConnected;        // list of other pads connected to me

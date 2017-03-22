@@ -51,7 +51,7 @@ using namespace std::placeholders;
 
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
-#include <ratsnest_data.h>
+#include <connectivity.h>
 
 #include "selection_tool.h"
 #include "pcb_bright_box.h"
@@ -830,24 +830,24 @@ void SELECTION_TOOL::selectAllItemsConnectedToTrack( TRACK& aSourceTrack )
 
 void SELECTION_TOOL::selectAllItemsConnectedToItem( BOARD_CONNECTED_ITEM& aSourceItem )
 {
-    RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
-    std::list<BOARD_CONNECTED_ITEM*> itemsList;
-    ratsnest->GetConnectedItems( &aSourceItem, itemsList, (RN_ITEM_TYPE)( RN_TRACKS | RN_VIAS ) );
+	constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
+    auto connectivity = board()->GetConnectivity();
 
-    for( BOARD_CONNECTED_ITEM* i : itemsList )
-        select( i );
+    std::list<BOARD_CONNECTED_ITEM*> items;
+    items = connectivity->GetConnectedItems( &aSourceItem, types );
+
+    for( auto item : connectivity->GetConnectedItems( &aSourceItem, types ) )
+        select( item );
 }
 
 
 void SELECTION_TOOL::selectAllItemsOnNet( int aNetCode )
 {
-    RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
-    std::list<BOARD_CONNECTED_ITEM*> itemsList;
+    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
+    auto connectivity = board()->GetConnectivity();
 
-    ratsnest->GetNetItems( aNetCode, itemsList, (RN_ITEM_TYPE)( RN_TRACKS | RN_VIAS ) );
-
-    for( BOARD_CONNECTED_ITEM* i : itemsList )
-        select( i );
+    for( auto item : connectivity->GetNetItems( aNetCode, types ) )
+        select( item );
 }
 
 
@@ -913,12 +913,12 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
     // now we need to find all modules that are connected to each of these nets
     // then we need to determine if these modules are in the list of modules
     // belonging to this sheet ( modList )
-    RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
+    //RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
     std::list<int> removeCodeList;
     for( int netCode : netcodeList )
     {
         std::list<BOARD_CONNECTED_ITEM*> netPads;
-        ratsnest->GetNetItems( netCode, netPads, (RN_ITEM_TYPE)( RN_PADS ) );
+    //    ratsnest->GetNetItems( netCode, netPads, (RN_ITEM_TYPE)( RN_PADS ) );
         for( BOARD_CONNECTED_ITEM* mitem : netPads )
         {
             bool found = ( std::find( modList.begin(), modList.end(), mitem->GetParent() ) != modList.end() );
@@ -945,7 +945,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
     std::list<BOARD_CONNECTED_ITEM*> localConnectionList;
     for( int netCode : netcodeList )
     {
-        ratsnest->GetNetItems( netCode, localConnectionList, (RN_ITEM_TYPE)( RN_TRACKS | RN_VIAS ) );
+        //ratsnest->GetNetItems( netCode, localConnectionList, (RN_ITEM_TYPE)( RN_TRACKS | RN_VIAS ) );
     }
 
     for( BOARD_ITEM* i : modList )

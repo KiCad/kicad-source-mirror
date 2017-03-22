@@ -1138,6 +1138,7 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
         gal->SetGridOrigin( VECTOR2D( GetGridOrigin() ) );
 
         // Transfer EDA_DRAW_PANEL settings
+
         GetGalCanvas()->GetViewControls()->EnableCursorWarping( !m_canvas->GetEnableZoomNoCenter() );
         GetGalCanvas()->GetViewControls()->EnableMousewheelPan( m_canvas->GetEnableMousewheelPan() );
     }
@@ -1365,4 +1366,3 @@ void EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos,
         break;
     }
 }
-

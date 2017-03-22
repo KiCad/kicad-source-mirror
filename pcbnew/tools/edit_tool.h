@@ -32,6 +32,7 @@
 class BOARD_COMMIT;
 class BOARD_ITEM;
 class SELECTION_TOOL;
+class CONNECTIVITY_DATA;
 
 /**
  * Class EDIT_TOOL
@@ -143,6 +144,13 @@ private:
     ///> Last cursor position (needed for getModificationPoint() to avoid changes
     ///> of edit reference point).
     VECTOR2I m_cursor;
+
+    std::unique_ptr<CONNECTIVITY_DATA> m_dynamicConnectivity;
+
+    ///> Updates ratsnest for selected items.
+    ///> @param aRedraw says if selected items should be drawn using the simple mode (e.g. one line
+    ///> per item).
+    void updateRatsnest( bool aRedraw );
 
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.

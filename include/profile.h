@@ -37,9 +37,6 @@
 #include <iomanip>
 #include <wx/log.h>
 
-#include <cstdio>
-#include <string>
-
 /**
  * The class PROF_COUNTER is a small class to help profiling.
  * It allows the calculation of the elapsed time (in millisecondes) between
@@ -153,42 +150,5 @@ private:
  * @author Dick Hollenbeck
  */
 unsigned GetRunningMicroSecs();
-
-class PROF_COUNTER
-{
-public:
-    PROF_COUNTER(const std::string& name, bool autostart = true)
-  {
-    m_name = name;
-    m_running= false;
-    if(autostart)
-      start();
-  }
-
-  void start()
-  {
-    m_running = true;
-    prof_start(&m_cnt);
-  }
-
-  void stop()
-  {
-    if(!m_running)
-    return;
-    m_running=false;
-    prof_end(&m_cnt);
-  }
-
-  void show()
-  {
-    stop();
-    fprintf(stderr,"%s took %.1f milliseconds.\n", m_name.c_str(), (double)m_cnt.msecs());
-  }
-private:
-  std::string m_name;
-  prof_counter m_cnt;
-  bool m_running;
-};
-
 
 #endif

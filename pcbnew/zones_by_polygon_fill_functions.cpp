@@ -43,7 +43,8 @@
 #include <pcbnew.h>
 #include <zones.h>
 
-#include <view/view.h>
+#include <connectivity.h>
+#include <board_commit.h>
 
 #define FORMAT_STRING _( "Filling zone %d out of %d (net %s)..." )
 
@@ -116,11 +117,15 @@ int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* aZone )
 
     wxBusyCursor dummy;     // Shows an hourglass cursor (removed by its destructor)
 
+    BOARD_COMMIT  commit ( this );
+    commit.Modify( aZone );
     aZone->BuildFilledSolidAreasPolygons( GetBoard() );
-    GetGalCanvas()->GetView()->Update( aZone, KIGFX::ALL );
-    GetBoard()->GetRatsnest()->Update( aZone );
+    commit.Push ( _("Fill Zone"), false );
 
-    OnModify();
+    //GetGalCanvas()->GetView()->Update( aZone, KIGFX::ALL );
+    //GetBoard()->GetConnectivity()->Update( aZone );
+
+    //OnModify();
 
     return 0;
 }

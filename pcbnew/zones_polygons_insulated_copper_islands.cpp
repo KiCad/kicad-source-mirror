@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,78 +25,24 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <common.h>
-
 #include <class_board.h>
-#include <class_module.h>
-#include <class_track.h>
 #include <class_zone.h>
-
-#include <pcbnew.h>
-#include <zones.h>
-#include <polygon_test_point_inside.h>
-
+#include <connectivity.h>
 
 void ZONE_CONTAINER::TestForCopperIslandAndRemoveInsulatedIslands( BOARD* aPcb )
 {
-    if( m_FilledPolysList.IsEmpty() )
-        return;
+    std::vector<int> islands;
 
-    // Build a list of points connected to the net:
-    // list of coordinates of pads and vias on this layer and on this net.
-    std::vector <wxPoint> listPointsCandidates;
+    auto connectivity = aPcb->GetConnectivity();
 
-    for( MODULE* module = aPcb->m_Modules; module; module = module->Next() )
+    connectivity->FindIsolatedCopperIslands( this, islands );
+
+    std::sort( islands.begin(), islands.end(), std::greater<int>() );
+
+    for( auto idx : islands )
     {
-        for( D_PAD* pad = module->Pads(); pad != NULL; pad = pad->Next() )
-        {
-            if( !pad->IsOnLayer( GetLayer() ) )
-                continue;
-
-            if( pad->GetNetCode() != GetNetCode() )
-                continue;
-
-            listPointsCandidates.push_back( pad->GetPosition() );
-        }
+        m_FilledPolysList.DeletePolygon( idx );
     }
 
-    for( TRACK* track = aPcb->m_Track; track; track = track->Next() )
-    {
-        if( !track->IsOnLayer( GetLayer() ) )
-            continue;
-
-        if( track->GetNetCode() != GetNetCode() )
-            continue;
-
-        listPointsCandidates.push_back( track->GetStart() );
-
-        if( track->Type() != PCB_VIA_T )
-            listPointsCandidates.push_back( track->GetEnd() );
-    }
-
-    // test if a point is inside
-
-    for( int outline = 0; outline < m_FilledPolysList.OutlineCount(); outline++ )
-    {
-        bool connected = false;
-
-        for( unsigned ic = 0; ic < listPointsCandidates.size(); ic++ )
-        {
-            // test if this area is connected to a board item:
-            wxPoint pos = listPointsCandidates[ic];
-
-            if( m_FilledPolysList.Contains( VECTOR2I( pos.x, pos.y ), outline ) )
-            {
-                connected = true;
-                break;
-            }
-        }
-
-        if( !connected )                 // this polygon is connected: analyse next polygon
-        {
-            m_FilledPolysList.DeletePolygon( outline );
-            outline--;
-        }
-    }
+    connectivity->Update( this );
 }

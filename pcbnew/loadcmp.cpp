@@ -303,7 +303,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         // (Can happen if the lib is an archive built from a board)
         Rotate_Module( NULL, module, 0, false );
 
-        RecalculateAllTracksNetcode();
+        //RecalculateAllTracksNetcode();
 
         if( aDC )
             module->Draw( m_canvas, aDC, GR_OR );

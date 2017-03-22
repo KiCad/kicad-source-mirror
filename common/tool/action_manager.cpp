@@ -220,7 +220,7 @@ void ACTION_MANAGER::UpdateHotKeys()
                 ++global_actions_cnt;
         }
 
-        assert( global_actions_cnt <= 1 );
+    //    assert( global_actions_cnt <= 1 );
     }
 #endif /* not NDEBUG */
 }

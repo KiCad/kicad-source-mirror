@@ -58,6 +58,7 @@
 #include <class_pcb_text.h>
 #include <class_mire.h>
 #include <class_dimension.h>
+#include <connectivity.h>
 
 
 /* This is an odd place for this, but CvPcb won't link if it is
@@ -106,7 +107,8 @@ BOARD::BOARD() :
     m_designSettings.SetCustomViaDrill( m_designSettings.GetCurrentViaDrill() );
 
     // Initialize ratsnest
-    m_ratsnest = new RN_DATA( this );
+    m_connectivity.reset( new CONNECTIVITY_DATA() );
+    m_connectivity->Build( this );
 }
 
 
@@ -117,8 +119,6 @@ BOARD::~BOARD()
         ZONE_CONTAINER* area_to_remove = m_ZoneDescriptorList[0];
         Delete( area_to_remove );
     }
-
-    delete m_ratsnest;
 
     m_FullRatsnest.clear();
     m_LocalRatsnest.clear();
@@ -942,7 +942,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     }
 
     aBoardItem->SetParent( this );
-    m_ratsnest->Add( aBoardItem );
+    m_connectivity->Add( aBoardItem );
 }
 
 
@@ -1011,7 +1011,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
         wxFAIL_MSG( wxT( "BOARD::Remove() needs more ::Type() support" ) );
     }
 
-    m_ratsnest->Remove( aBoardItem );
+    m_connectivity->Remove( aBoardItem );
 }
 
 
@@ -2895,3 +2895,8 @@ bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
     return success;
 
 }
+
+/*RN_DATA* BOARD::GetRatsnest() const
+{
+    return m_connectivity->GetRatsnest();
+}*/

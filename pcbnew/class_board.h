@@ -45,6 +45,9 @@
 #include <pcb_plot_params.h>
 #include <board_item_container.h>
 
+#include <memory>
+
+using std::unique_ptr;
 
 class PCB_BASE_FRAME;
 class PCB_EDIT_FRAME;
@@ -60,7 +63,7 @@ class NETLIST;
 class REPORTER;
 class RN_DATA;
 class SHAPE_POLY_SET;
-
+class CONNECTIVITY_DATA;
 
 /**
  * Enum LAYER_T
@@ -187,7 +190,7 @@ private:
     int                     m_fileFormatVersionAtLoad;  ///< the version loaded from the file
 
     NETINFO_LIST            m_NetInfo;              ///< net info list (name, design constraints ..
-    RN_DATA*                m_ratsnest;
+    std::shared_ptr<CONNECTIVITY_DATA>      m_connectivity;
 
     BOARD_DESIGN_SETTINGS   m_designSettings;
     ZONE_SETTINGS           m_zoneSettings;
@@ -291,13 +294,14 @@ public:
     BOARD_ITEM* Duplicate( const BOARD_ITEM* aItem, bool aAddToBoard = false );
 
     /**
-     * Function GetRatsnest()
+     * Function GetConnectivity()
      * returns list of missing connections between components/tracks.
      * @return RATSNEST* is an object that contains informations about missing connections.
      */
-    RN_DATA* GetRatsnest() const
+
+    std::shared_ptr<CONNECTIVITY_DATA> GetConnectivity() const
     {
-        return m_ratsnest;
+        return m_connectivity;
     }
 
     /**

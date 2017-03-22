@@ -43,7 +43,7 @@
 #include <class_board_design_settings.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <ratsnest_data.h>
+#include <connectivity.h>
 #include <wildcards_and_files_ext.h>
 
 #include <dialog_netlist.h>
@@ -330,9 +330,9 @@ void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
 void DIALOG_NETLIST::OnCompileRatsnestClick( wxCommandEvent& event )
 {
     // Rebuild the board connectivity:
-    if( m_parent->IsGalCanvasActive() )
-        m_parent->GetBoard()->GetRatsnest()->ProcessBoard();
-
+    auto board = m_parent->GetBoard();
+	//board->GetConnectivity()->Build( board );
+	board->GetConnectivity()->PropagateNets();
     m_parent->Compile_Ratsnest( m_dc, true );
 }
 
