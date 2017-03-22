@@ -630,10 +630,14 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard,
         // Creates a valid polygon outline is not possible.
         // So uses the board edge cuts bounding box to create a
         // rectangular outline
-        // (when no edge cuts items, fillBOUNDARY build a contour
+        // When no edge cuts items, build a contour
         // from global bounding box
 
         EDA_RECT bbbox = aBoard->GetBoardEdgesBoundingBox();
+
+        // If null area, uses the global bounding box.
+        if( ( bbbox.GetWidth() ) == 0 || ( bbbox.GetHeight() == 0 ) )
+            bbbox = aBoard->ComputeBoundingBox();
 
         // Ensure non null area. If happen, gives a minimal size.
         if( ( bbbox.GetWidth() ) == 0 || ( bbbox.GetHeight() == 0 ) )
@@ -643,21 +647,17 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard,
         aOutlines.NewOutline();
 
         wxPoint corner;
-        corner.x = bbbox.GetOrigin().x;
-        corner.y = bbbox.GetOrigin().y;
-        aOutlines.Append( corner.x, corner.y );
+        aOutlines.Append( bbbox.GetOrigin() );
 
         corner.x = bbbox.GetOrigin().x;
         corner.y = bbbox.GetEnd().y;
-        aOutlines.Append( corner.x, corner.y );
+        aOutlines.Append( corner );
 
-        corner.x = bbbox.GetEnd().x;
-        corner.y = bbbox.GetEnd().y;
-        aOutlines.Append( corner.x, corner.y );
+        aOutlines.Append( bbbox.GetEnd() );
 
         corner.x = bbbox.GetEnd().x;
         corner.y = bbbox.GetOrigin().y;
-        aOutlines.Append( corner.x, corner.y );
+        aOutlines.Append( corner );
     }
 
     return success;
