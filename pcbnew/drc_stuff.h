@@ -38,7 +38,7 @@
 
 /// DRC error codes:
 #define DRCE_                                  1    // not used yet
-#define DRCE_UNCONNECTED_PADS                  2    ///< pads are unconnected
+#define DRCE_UNCONNECTED_ITEMS                 2    ///< items are unconnected
 #define DRCE_TRACK_NEAR_THROUGH_HOLE           3    ///< thru hole is too close to track
 #define DRCE_TRACK_NEAR_PAD                    4    ///< pad too close to track
 #define DRCE_TRACK_NEAR_VIA                    5    ///< track too close to via

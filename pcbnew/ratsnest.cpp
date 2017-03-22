@@ -44,6 +44,8 @@
 #include <connectivity.h>
 #include <ratsnest_data.h>
 
+#include <wxPcbStruct.h>
+
 /**
  * Function Compile_Ratsnest
  *  Create the entire board ratsnest.
@@ -105,9 +107,16 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
             {
                 for ( const auto& edge : net->GetEdges() )
                 {
-                    auto s = edge.GetSourcePos();
-                    auto d = edge.GetTargetPos();
-                    GRLine( m_canvas->GetClipBox(), aDC, wxPoint(s.x, s.y), wxPoint(d.x, d.y), 0, color );
+                    if ( edge.IsVisible() )
+                    {
+                        auto s = edge.GetSourcePos();
+                        auto d = edge.GetTargetPos();
+                        auto sn = edge.GetSourceNode();
+                        auto dn = edge.GetTargetNode();
+
+                        if ( !sn->GetNoLine() && !dn->GetNoLine() )
+                            GRLine( m_canvas->GetClipBox(), aDC, wxPoint(s.x, s.y), wxPoint(d.x, d.y), 0, color );
+                    }
                 }
             }
     }
@@ -228,4 +237,103 @@ void MODULE::DrawOutlinesWhenMoving( EDA_DRAW_PANEL* panel, wxDC* DC,
         frame->build_ratsnest_module( this, aMoveVector );
         frame->TraceModuleRatsNest( DC );
     }
+}
+
+void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
+{
+    if( GetBoard()->IsElementVisible(RATSNEST_VISIBLE) )
+        return;
+
+    Compile_Ratsnest( DC, true );
+
+    printf("show1r: %p\n", item);
+
+    auto connectivity = GetBoard()->GetConnectivity();
+
+
+// FIXME
+
+#if 0
+    if( item )
+    {
+        if( item->Type() == PCB_PAD_T )
+        {
+            pt_pad = (D_PAD*) item;
+            Module = pt_pad->GetParent();
+        }
+
+        if( pt_pad ) // Displaying the ratsnest of the corresponding net.
+        {
+            SetMsgPanel( pt_pad );
+
+            for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
+            {
+                RATSNEST_ITEM* net = &GetBoard()->m_FullRatsnest[ii];
+
+                if( net->GetNet() == pt_pad->GetNetCode() )
+                {
+                    if( ( net->m_Status & CH_VISIBLE ) != 0 )
+                        continue;
+
+                    net->m_Status |= CH_VISIBLE;
+
+                    if( ( net->m_Status & CH_ACTIF ) == 0 )
+                        continue;
+
+                    net->Draw( m_canvas, DC, GR_XOR, wxPoint( 0, 0 ) );
+                }
+            }
+        }
+        else
+        {
+            if( item->Type() == PCB_MODULE_TEXT_T )
+            {
+                if( item->GetParent() && ( item->GetParent()->Type() == PCB_MODULE_T ) )
+                    Module = static_cast<MODULE*>( item->GetParent() );
+            }
+            else if( item->Type() == PCB_MODULE_T )
+            {
+                Module = static_cast<MODULE*>( item );
+            }
+
+            if( Module )
+            {
+                SetMsgPanel( Module );
+                pt_pad = Module->Pads();
+
+                for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
+                {
+                    for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
+                    {
+                        RATSNEST_ITEM* net = &GetBoard()->m_FullRatsnest[ii];
+
+                        if( ( net->m_PadStart == pt_pad ) || ( net->m_PadEnd == pt_pad ) )
+                        {
+                            if( net->m_Status & CH_VISIBLE )
+                                continue;
+
+                            net->m_Status |= CH_VISIBLE;
+
+                            if( (net->m_Status & CH_ACTIF) == 0 )
+                                continue;
+
+                            net->Draw( m_canvas, DC, GR_XOR, wxPoint( 0, 0 ) );
+                        }
+                    }
+                }
+
+                pt_pad = NULL;
+            }
+        }
+    }
+
+    // Erase if no pad or module has been selected.
+    if( ( pt_pad == NULL ) && ( Module == NULL ) )
+    {
+        DrawGeneralRatsnest( DC );
+
+        for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
+            GetBoard()->m_FullRatsnest[ii].m_Status &= ~CH_VISIBLE;
+    }
+    #endif
 }

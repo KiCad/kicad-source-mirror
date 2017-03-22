@@ -39,8 +39,8 @@ wxString DRC_ITEM::GetErrorText() const
 {
     switch( m_ErrorCode )
     {
-    case DRCE_UNCONNECTED_PADS:
-        return wxString( _( "Unconnected pads" ) );
+    case DRCE_UNCONNECTED_ITEMS:
+        return wxString( _( "Unconnected items" ) );
     case DRCE_TRACK_NEAR_THROUGH_HOLE:
         return wxString( _( "Track near thru-hole" ) );
     case DRCE_TRACK_NEAR_PAD:

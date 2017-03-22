@@ -41,8 +41,9 @@
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <geometry/seg.h>
-#include <ratsnest_data.h>
+
 #include <connectivity.h>
+#include <connectivity_algo.h>
 
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -546,55 +547,31 @@ void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
 
 void DRC::testUnconnected()
 {
-    std::vector<CN_DISJOINT_NET_ENTRY> report;
 
     auto connectivity = m_pcb->GetConnectivity();
 
-    connectivity->CheckConnectivity( report );
+    connectivity->Clear();
+    connectivity->Build(m_pcb); // just in case. This really needs to be reliable.
+    connectivity->RecalculateRatsnest();
 
-    for( auto ent : report )
+    std::vector<CN_EDGE> edges;
+    connectivity->GetUnconnectedEdges( edges );
+
+    for( const auto& edge : edges )
     {
-    /*    DRC_ITEM* uncItem = new DRC_ITEM( DRCE_UNCONNECTED_PADS,
-                                          msg,
-                                          padEnd->GetSelectMenuText(),
-                                          padStart->GetPosition(), padEnd->GetPosition() );*/
-
-    }
+        wxString t_src = edge.GetSourceNode()->Parent()->GetSelectMenuText();
+        wxString t_dst = edge.GetTargetNode()->Parent()->GetSelectMenuText();
+        auto src = edge.GetSourcePos();
+        auto dst = edge.GetTargetPos();
 
 
-#if 0
-    if( (m_pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
-    {
-        wxClientDC dc( m_pcbEditorFrame->GetCanvas() );
-        m_pcbEditorFrame->Compile_Ratsnest( &dc, true );
-    }
-
-    if( m_pcb->GetRatsnestsCount() == 0 )
-        return;
-
-    wxString msg;
-
-    for( unsigned ii = 0; ii < m_pcb->GetRatsnestsCount();  ++ii )
-    {
-        RATSNEST_ITEM& rat = m_pcb->m_FullRatsnest[ii];
-
-        if( (rat.m_Status & CH_ACTIF) == 0 )
-            continue;
-
-        D_PAD*    padStart = rat.m_PadStart;
-        D_PAD*    padEnd   = rat.m_PadEnd;
-
-        msg = padStart->GetSelectMenuText() + wxT( " net " ) + padStart->GetNetname();
-
-        DRC_ITEM* uncItem = new DRC_ITEM( DRCE_UNCONNECTED_PADS,
-                                          msg,
-                                          padEnd->GetSelectMenuText(),
-                                          padStart->GetPosition(), padEnd->GetPosition() );
-
+        DRC_ITEM* uncItem = new DRC_ITEM( DRCE_UNCONNECTED_ITEMS,
+                                          t_src,
+                                          t_dst,
+                                          wxPoint( src.x, src.y ), wxPoint(dst.x, dst.y) );
         m_unconnected.push_back( uncItem );
-    }
-#endif
 
+    }
 }
 
 

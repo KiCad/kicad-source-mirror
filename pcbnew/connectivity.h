@@ -38,6 +38,7 @@
 class CN_ITEM;
 class CN_CLUSTER;
 class CN_CONNECTIVITY_ALGO;
+class CN_EDGE;
 class BOARD;
 class BOARD_CONNECTED_ITEM;
 class BOARD_ITEM;
@@ -166,6 +167,8 @@ public:
     const std::vector<TRACK*> GetConnectedTracks(  const BOARD_CONNECTED_ITEM* aItem ) const;
 
     const std::vector<D_PAD*> GetConnectedPads(  const BOARD_CONNECTED_ITEM* aItem ) const;
+
+    void GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges ) const;
 
     /**
      * Function ClearDynamicRatsnest()

@@ -437,8 +437,6 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
 
     SHAPE_POLY_SET solidAreas = *m_smoothedPoly;
 
-    printf("VC %d\n", solidAreas.VertexCount());
-
     solidAreas.Inflate( -outline_half_thickness, segsPerCircle );
     solidAreas.Simplify( POLY_CALC_MODE );
 

@@ -514,3 +514,18 @@ const std::vector<VECTOR2I> CONNECTIVITY_DATA::NearestUnconnectedTargets(
 
     return rv;
 }
+
+void CONNECTIVITY_DATA::GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges) const
+{
+
+    for (   auto rnNet : m_nets )
+    {
+        if ( rnNet )
+        {
+            for( auto edge : rnNet->GetEdges() )
+            {
+                aEdges.push_back( edge );
+            }
+        }
+    }
+}
