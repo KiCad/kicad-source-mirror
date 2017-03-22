@@ -386,7 +386,12 @@ bool CMP_TREE_MODEL_ADAPTER::ShowPreselect()
     return FindAndExpand( m_tree,
             [&]( CMP_TREE_NODE const* n )
             {
-                return m_preselect_name == n->Name && m_preselect_unit == n->Unit;
+                if( n->Type == CMP_TREE_NODE::ALIAS && ( n->Children.empty() || !m_preselect_unit ) )
+                    return m_preselect_name == n->Name;
+                else if( n->Type == CMP_TREE_NODE::UNIT && m_preselect_unit )
+                    return m_preselect_name == n->Parent->Name && m_preselect_unit == n->Unit;
+                else
+                    return false;
             } );
 }
 

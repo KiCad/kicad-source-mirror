@@ -141,15 +141,7 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const SCHLIB_FILTER* aFilte
 
     if( !aHistoryList.empty() )
     {
-        // This is good for a transition for experienced users: giving them a History. Ideally,
-        // we actually make this part even faster to access with a popup on ALT-a or something.
-        // the history is under a node named  "-- History --"
-        // However, because it is translatable, and we need to have a node name starting by "-- "
-        // because we (later) sort all node names alphabetically and this node should be the first,
-        // we build it with only with "History" string translatable
-        wxString nodename;
-        nodename  << wxT("-- ") << _("History") << wxT(" --");
-        adapter->AddAliasList( nodename, aHistoryList, NULL );
+        adapter->AddAliasList( "-- " + _( "History" ) + " --", aHistoryList, NULL );
         adapter->SetPreselectNode( aHistoryList[0], aHistoryLastUnit );
     }
 
