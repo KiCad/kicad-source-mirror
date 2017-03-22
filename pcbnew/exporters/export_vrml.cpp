@@ -798,12 +798,10 @@ static void export_vrml_drawings( MODEL_VRML& aModel, BOARD* pcb )
 // board edges and cutouts
 static void export_vrml_board( MODEL_VRML& aModel, BOARD* aPcb )
 {
-    SHAPE_POLY_SET  bufferPcbOutlines;      // stores the board main outlines
-    SHAPE_POLY_SET  allLayerHoles;          // Contains through holes, calculated only once
-    // Build a polygon from edge cut items
+    SHAPE_POLY_SET  pcbOutlines;      // stores the board main outlines
     wxString msg;
 
-    if( !aPcb->GetBoardPolygonOutlines( bufferPcbOutlines, allLayerHoles, &msg ) )
+    if( !aPcb->GetBoardPolygonOutlines( pcbOutlines, &msg ) )
     {
         msg << "\n\n" <<
             _( "Unable to calculate the board outlines; fall back to using the board boundary box." );
@@ -812,9 +810,9 @@ static void export_vrml_board( MODEL_VRML& aModel, BOARD* aPcb )
 
     int seg;
 
-    for( int i = 0; i < bufferPcbOutlines.OutlineCount(); i++ )
+    for( int cnt = 0; cnt < pcbOutlines.OutlineCount(); cnt++ )
     {
-        const SHAPE_LINE_CHAIN& outline = bufferPcbOutlines.COutline( i );
+        const SHAPE_LINE_CHAIN& outline = pcbOutlines.COutline( cnt );
 
         seg = aModel.m_board.NewContour();
 
@@ -826,31 +824,32 @@ static void export_vrml_board( MODEL_VRML& aModel, BOARD* aPcb )
         }
 
         aModel.m_board.EnsureWinding( seg, false );
-    }
 
-    for( int i = 0; i < allLayerHoles.OutlineCount(); i++ )
-    {
-        const SHAPE_LINE_CHAIN& outline = allLayerHoles.COutline( i );
-
-        seg = aModel.m_holes.NewContour();
-
-        if( seg < 0 )
+        // Generate holes:
+        for( int ii = 0; ii < pcbOutlines.HoleCount( cnt ); ii++ )
         {
-            msg << "\n\n" <<
-              _( "VRML Export Failed: Could not add holes to contours." );
-            wxMessageBox( msg );
+            const SHAPE_LINE_CHAIN& hole = pcbOutlines.Hole( cnt, ii );
 
-            return;
+            seg = aModel.m_holes.NewContour();
+
+            if( seg < 0 )
+            {
+                msg << "\n\n" <<
+                  _( "VRML Export Failed: Could not add holes to contours." );
+                wxMessageBox( msg );
+
+                return;
+            }
+
+            for( int j = 0; j < hole.PointCount(); j++ )
+            {
+                aModel.m_holes.AddVertex( seg, (double)hole.CPoint(j).x * BOARD_SCALE,
+                                          -((double)hole.CPoint(j).y * BOARD_SCALE ) );
+
+            }
+
+            aModel.m_holes.EnsureWinding( seg, true );
         }
-
-        for( int j = 0; j < outline.PointCount(); j++ )
-        {
-            aModel.m_holes.AddVertex( seg, (double)outline.CPoint(j).x * BOARD_SCALE,
-                                        -((double)outline.CPoint(j).y * BOARD_SCALE ) );
-
-        }
-
-        aModel.m_holes.EnsureWinding( seg, true );
     }
 }
 

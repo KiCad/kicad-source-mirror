@@ -575,14 +575,13 @@ public:
      * from lines, arcs and circle items on edge cut layer
      * Any closed outline inside the main outline is a hole
      * All contours should be closed, i.e. have valid vertices to build a closed polygon
-     * @param aPoly The SHAPE_POLY_SET to fill in with outlines/holes.
+     * @param aOutlines The SHAPE_POLY_SET to fill in with outlines/holes.
      * @param aErrorText = a wxString reference to display an error message
      *          with the coordinate of the point which creates the error
      *          (default = NULL , no message returned on error)
      * @return true if success, false if a contour is not valid
      */
     bool GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
-                                  SHAPE_POLY_SET& aHoles,
                                   wxString* aErrorText = NULL );
 
     /**

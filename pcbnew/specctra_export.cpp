@@ -733,19 +733,16 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
 {
     wxString errMessage;
     SHAPE_POLY_SET outlines;
-    SHAPE_POLY_SET holes;
 
-    aBoard->GetBoardPolygonOutlines( outlines, holes, &errMessage );
+    aBoard->GetBoardPolygonOutlines( outlines, &errMessage );
 
-    //const int   STEPS = 36;     // for a segmentation of an arc of 360 degrees
-
-    if( outlines.OutlineCount() )   // Should be always true
+    for( int cnt = 0; cnt < outlines.OutlineCount(); cnt++ )   // Should be one outline
     {
         PATH*  path = new PATH( boundary );
         boundary->paths.push_back( path );
         path->layer_id = "pcb";
 
-        SHAPE_LINE_CHAIN& outline = outlines.Outline( 0 );
+        SHAPE_LINE_CHAIN& outline = outlines.Outline( cnt );
 
         for( int ii = 0; ii < outline.PointCount(); ii++ )
         {
@@ -754,35 +751,32 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
         }
 
         // Close polygon:
-        wxPoint pos( outline.Point( 0 ).x, outline.Point( 0 ).y );
-        path->AppendPoint( mapPt( pos ) );
-    }
+        wxPoint pos0( outline.Point( 0 ).x, outline.Point( 0 ).y );
+        path->AppendPoint( mapPt( pos0 ) );
 
-    // Output the interior Edge.Cuts graphics as keepouts, using same nearness
-    // metric as the board edge as otherwise we have trouble completing complex
-    // polygons.
-
-    for( int ii = 0; ii < holes.OutlineCount(); ii++ )
-    {
-        // emit a signal layers keepout for every interior polygon left...
-        KEEPOUT*    keepout = new KEEPOUT( NULL, T_keepout );
-        PATH*       poly_ko = new PATH( NULL, T_polygon );
-
-        keepout->SetShape( poly_ko );
-        poly_ko->SetLayerId( "signal" );
-        pcb->structure->keepouts.push_back( keepout );
-
-        SHAPE_LINE_CHAIN& hole = holes.Outline( ii );
-
-        for( int jj = 0; jj < hole.PointCount(); jj++ )
+        // Generate holes as keepout:
+        for( int ii = 0; ii < outlines.HoleCount( cnt ); ii++ )
         {
-            wxPoint pos( hole.Point( jj ).x, hole.Point( jj ).y );
+            // emit a signal layers keepout for every interior polygon left...
+            KEEPOUT*    keepout = new KEEPOUT( NULL, T_keepout );
+            PATH*       poly_ko = new PATH( NULL, T_polygon );
+
+            keepout->SetShape( poly_ko );
+            poly_ko->SetLayerId( "signal" );
+            pcb->structure->keepouts.push_back( keepout );
+
+            SHAPE_LINE_CHAIN& hole = outlines.Hole( cnt, ii );
+
+            for( int jj = 0; jj < hole.PointCount(); jj++ )
+            {
+                wxPoint pos( hole.Point( jj ).x, hole.Point( jj ).y );
+                poly_ko->AppendPoint( mapPt( pos ) );
+            }
+
+            // Close polygon:
+            wxPoint pos( hole.Point( 0 ).x, hole.Point( 0 ).y );
             poly_ko->AppendPoint( mapPt( pos ) );
         }
-
-        // Close polygon:
-        wxPoint pos( hole.Point( 0 ).x, hole.Point( 0 ).y );
-        poly_ko->AppendPoint( mapPt( pos ) );
     }
 
     if( !errMessage.IsEmpty() )

@@ -2876,12 +2876,10 @@ BOARD_ITEM* BOARD::Duplicate( const BOARD_ITEM* aItem,
  */
 extern bool BuildBoardPolygonOutlines( BOARD* aBoard,
                                 SHAPE_POLY_SET& aOutlines,
-                                SHAPE_POLY_SET& aHoles,
                                 wxString* aErrorText );
 
 bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
-                                     SHAPE_POLY_SET& aHoles,
                                      wxString* aErrorText )
 {
-    return BuildBoardPolygonOutlines( this, aOutlines, aHoles, aErrorText );
+    return BuildBoardPolygonOutlines( this, aOutlines, aErrorText );
 }

@@ -190,7 +190,7 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
     std::vector< DRAWSEGMENT* > segList = aSegList;
 
     unsigned    prox;           // a proximity BIU metric, not an accurate distance
-    const int   STEPS = 16;     // for a segmentation of an arc of 360 degrees
+    const int   STEPS = 36;     // for a segmentation of an arc of 360 degrees
     DRAWSEGMENT* graphic;
     wxPoint prevPt;
 
@@ -584,7 +584,6 @@ bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,
  */
 bool BuildBoardPolygonOutlines( BOARD* aBoard,
                                 SHAPE_POLY_SET& aOutlines,
-                                SHAPE_POLY_SET& aHoles,
                                 wxString* aErrorText )
 {
     PCB_TYPE_COLLECTOR  items;
@@ -609,7 +608,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard,
     // only one main outline is expected
     if( success && aOutlines.OutlineCount() )
     {
-        int outlineId = 0;
+/*        int outlineId = 0;
 
         int holecount = aOutlines.HoleCount( outlineId );
 
@@ -623,7 +622,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard,
             // Remove holes from aOutlines:
             SHAPE_POLY_SET::POLYGON& polygon = aOutlines.Polygon( outlineId );
             polygon.erase( polygon.begin()+1, polygon.end() );
-        }
+        }*/
     }
     else
     {

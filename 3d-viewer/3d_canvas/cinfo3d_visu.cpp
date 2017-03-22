@@ -475,19 +475,14 @@ void CINFO3D_VISU::createBoardPolygon()
 {
     m_board_poly.RemoveAllContours();
 
-    // Create board outlines and board holes
-    SHAPE_POLY_SET allLayerHoles;
-
     wxString errmsg;
 
-    if( !m_board->GetBoardPolygonOutlines( m_board_poly, allLayerHoles, &errmsg ) )
+    if( !m_board->GetBoardPolygonOutlines( m_board_poly, /*allLayerHoles,*/ &errmsg ) )
     {
         errmsg.append( wxT( "\n\n" ) );
         errmsg.append( _( "Cannot determine the board outline." ) );
         wxLogMessage( errmsg );
     }
-
-    m_board_poly.BooleanSubtract( allLayerHoles, SHAPE_POLY_SET::PM_FAST );
 
     Polygon_Calc_BBox_3DU( m_board_poly, m_board2dBBox3DU, m_biuTo3Dunits );
 }
