@@ -368,6 +368,31 @@ int CMP_TREE_MODEL_ADAPTER::WidthFor( wxString const& aHeading, int aCol )
 }
 
 
+bool CMP_TREE_MODEL_ADAPTER::FindAndExpand(
+        CMP_TREE_NODE& aNode,
+        std::function<bool( CMP_TREE_NODE const* )> aFunc )
+{
+    for( auto& node: aNode.Children )
+    {
+        if( aFunc( &*node ) )
+        {
+            auto item = wxDataViewItem(
+                    const_cast<void*>( static_cast<void const*>( &*node ) ) );
+            m_widget->ExpandAncestors( item );
+            m_widget->EnsureVisible( item );
+            m_widget->Select( item );
+            return true;
+        }
+        else if( FindAndExpand( *node, aFunc ) )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 bool CMP_TREE_MODEL_ADAPTER::ShowResults()
 {
     return FindAndExpand( m_tree,

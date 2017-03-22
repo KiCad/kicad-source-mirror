@@ -27,6 +27,7 @@
 #include <wx/hashmap.h>
 #include <wx/dataview.h>
 #include <vector>
+#include <functional>
 
 class LIB_ALIAS;
 class PART_LIB;
@@ -333,28 +334,9 @@ private:
      *
      * @return whether a node was expanded
      */
-    template<typename Func>
-    bool FindAndExpand( CMP_TREE_NODE& aNode, Func f )
-    {
-        for( auto& node: aNode.Children )
-        {
-            if( f( &*node ) )
-            {
-                auto item = wxDataViewItem(
-                        const_cast<void*>( static_cast<void const*>( &*node ) ) );
-                m_widget->ExpandAncestors( item );
-                m_widget->EnsureVisible( item );
-                m_widget->Select( item );
-                return true;
-            }
-            else if( FindAndExpand( *node, f ) )
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
+    bool FindAndExpand(
+            CMP_TREE_NODE& aNode,
+            std::function<bool( CMP_TREE_NODE const* )> aFunc );
 
     /**
      * Find and expand successful search results
