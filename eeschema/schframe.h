@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras wanadoo.fr
  * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1093,17 +1093,15 @@ private:
      * to load the component from and/or some other filters
      *          if NULL, no filtering.
      * @param aHistoryList     list remembering recently used component names.
-     * @param aHistoryLastUnit remembering last unit in last component.
      * @param aUseLibBrowser is the flag to determine if the library browser should be launched.
      * @return a pointer the SCH_COMPONENT object selected or NULL if no component was selected.
      * (TODO(hzeller): This really should be a class doing history, but didn't
      *  want to change too much while other refactoring is going on)
      */
-    SCH_COMPONENT* Load_Component( wxDC*           aDC,
-                                   const SCHLIB_FILTER*  aFilter,
-                                   wxArrayString&  aHistoryList,
-                                   int&            aHistoryLastUnit,
-                                   bool            aUseLibBrowser );
+    SCH_COMPONENT* Load_Component( wxDC*                            aDC,
+                                   const SCHLIB_FILTER*             aFilter,
+                                   SCH_BASE_FRAME::HISTORY_LIST&    aHistoryList,
+                                   bool                             aUseLibBrowser );
 
     /**
      * Function EditComponent

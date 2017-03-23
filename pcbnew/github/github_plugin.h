@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -170,6 +170,9 @@ public:
     wxArrayString FootprintEnumerate( const wxString& aLibraryPath,
             const PROPERTIES* aProperties = NULL ) override;
 
+    void PrefetchLib( const wxString& aLibraryPath,
+            const PROPERTIES* aProperties = NULL ) override;
+
     MODULE* FootprintLoad( const wxString& aLibraryPath,
             const wxString& aFootprintName, const PROPERTIES* aProperties ) override;
 
@@ -215,7 +218,8 @@ protected:
     /**
      * Function remoteGetZip
      * fetches a zip file image from a github repo synchronously.  The byte image
-     * is received into the m_input_stream.
+     * is received into the m_input_stream. If the image has already been stored,
+     * do nothing.
      */
     void remoteGetZip( const wxString& aRepoURL ) throw( IO_ERROR );
 

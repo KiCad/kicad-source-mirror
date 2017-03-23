@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,6 +63,13 @@ wxArrayString PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, const PR
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
     not_implemented( this, __FUNCTION__ );
     return wxArrayString();
+}
+
+
+void PLUGIN::PrefetchLib( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+{
+    (void) aLibraryPath;
+    (void) aProperties;
 }
 
 

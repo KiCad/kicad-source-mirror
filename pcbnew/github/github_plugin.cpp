@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -162,6 +162,18 @@ wxArrayString GITHUB_PLUGIN::FootprintEnumerate(
     }
 
     return ret;
+}
+
+
+void GITHUB_PLUGIN::PrefetchLib(
+        const wxString& aLibraryPath, const PROPERTIES* aProperties )
+{
+    if( m_lib_path != aLibraryPath )
+    {
+        m_zip_image.clear();
+    }
+
+    remoteGetZip( aLibraryPath );
 }
 
 
@@ -370,8 +382,13 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
     {
         delete m_gh_cache;
         m_gh_cache = 0;
-
         m_pretty_dir.clear();
+
+        if( !m_lib_path.empty() )
+        {
+            // Library path wasn't empty before - it's been changed. Flush out the prefetch cache.
+            m_zip_image.clear();
+        }
 
         if( aProperties )
         {
@@ -515,6 +532,9 @@ bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, std::string* aZipU
 void GITHUB_PLUGIN::remoteGetZip( const wxString& aRepoURL ) throw( IO_ERROR )
 {
     std::string  zip_url;
+
+    if( !m_zip_image.empty() )
+        return;
 
     if( !repoURL_zipURL( aRepoURL, &zip_url ) )
     {

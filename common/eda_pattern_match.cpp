@@ -34,6 +34,12 @@ bool EDA_PATTERN_MATCH_SUBSTR::SetPattern( const wxString& aPattern )
 }
 
 
+wxString const& EDA_PATTERN_MATCH_SUBSTR::GetPattern() const
+{
+    return m_pattern;
+}
+
+
 int EDA_PATTERN_MATCH_SUBSTR::Find( const wxString& aCandidate ) const
 {
     int loc = aCandidate.Find( m_pattern );
@@ -75,6 +81,12 @@ bool EDA_PATTERN_MATCH_REGEX::SetPattern( const wxString& aPattern )
 }
 
 
+wxString const& EDA_PATTERN_MATCH_REGEX::GetPattern() const
+{
+    return m_pattern;
+}
+
+
 int EDA_PATTERN_MATCH_REGEX::Find( const wxString& aCandidate ) const
 {
     if( m_regex.IsValid() )
@@ -100,6 +112,8 @@ int EDA_PATTERN_MATCH_REGEX::Find( const wxString& aCandidate ) const
 
 bool EDA_PATTERN_MATCH_WILDCARD::SetPattern( const wxString& aPattern )
 {
+    m_wildcard_pattern = aPattern;
+
     // Compile the wildcard string to a regular expression
     wxString regex;
     regex.Alloc( 2 * aPattern.Length() );   // no need to keep resizing, we know the size roughly
@@ -129,6 +143,12 @@ bool EDA_PATTERN_MATCH_WILDCARD::SetPattern( const wxString& aPattern )
     }
 
     return EDA_PATTERN_MATCH_REGEX::SetPattern( regex );
+}
+
+
+wxString const& EDA_PATTERN_MATCH_WILDCARD::GetPattern() const
+{
+    return m_wildcard_pattern;
 }
 
 

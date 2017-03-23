@@ -5,7 +5,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2011-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2016 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2017 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -280,6 +280,28 @@ public:
      * @throw IO_ERROR if the library cannot be found, or footprint cannot be loaded.
      */
     virtual wxArrayString FootprintEnumerate( const wxString& aLibraryPath,
+            const PROPERTIES* aProperties = NULL );
+
+    /**
+     * Function PrefetchLib
+     * If possible, prefetches the specified library (e.g. performing downloads). Does not parse.
+     * Threadsafe.
+     *
+     * This is a no-op for libraries that cannot be prefetched.
+     *
+     * Plugins that cannot prefetch need not override this; a default no-op is provided.
+     *
+     * @param aLibraryPath is a locator for the "library", usually a directory, file,
+     *   or URL containing several footprints.
+     *
+     * @param aProperties is an associative array that can be used to tell the
+     *  plugin anything needed about how to perform with respect to @a aLibraryPath.
+     *  The caller continues to own this object (plugin may not delete it), and
+     *  plugins should expect it to be optionally NULL.
+     *
+     * @throw IO_ERROR if there is an error prefetching the library.
+     */
+    virtual void PrefetchLib( const wxString& aLibraryPath,
             const PROPERTIES* aProperties = NULL );
 
     /**

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012-2016 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2012-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -201,6 +201,14 @@ wxArrayString FP_LIB_TABLE::FootprintEnumerate( const wxString& aNickname )
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
     wxASSERT( (PLUGIN*) row->plugin );
     return row->plugin->FootprintEnumerate( row->GetFullURI( true ), row->GetProperties() );
+}
+
+
+void FP_LIB_TABLE::PrefetchLib( const wxString& aNickname )
+{
+    const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
+    wxASSERT( (PLUGIN*) row->plugin );
+    row->plugin->PrefetchLib( row->GetFullURI( true ), row->GetProperties() );
 }
 
 

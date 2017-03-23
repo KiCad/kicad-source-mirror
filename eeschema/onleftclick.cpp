@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,11 +53,8 @@
 
 // TODO(hzeller): These pairs of elmenets should be represented by an object, but don't want
 // to refactor too much right now to not get in the way with other code changes.
-static wxArrayString s_CmpNameList;
-static int s_CmpLastUnit;
-
-static wxArrayString s_PowerNameList;
-static int s_LastPowerUnit;
+static SCH_BASE_FRAME::HISTORY_LIST s_CmpNameList;
+static SCH_BASE_FRAME::HISTORY_LIST s_PowerNameList;
 
 
 void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
@@ -306,7 +303,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( (item == NULL) || (item->GetFlags() == 0) )
         {
             GetScreen()->SetCurItem( Load_Component( aDC, NULL,
-                                                     s_CmpNameList, s_CmpLastUnit, true ) );
+                                                     s_CmpNameList, true ) );
             m_canvas->SetAutoPanRequest( true );
         }
         else
@@ -321,7 +318,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             SCHLIB_FILTER filter;
             filter.FilterPowerParts( true );
             GetScreen()->SetCurItem( Load_Component( aDC, &filter,
-                                                     s_PowerNameList, s_LastPowerUnit, false ) );
+                                                     s_PowerNameList, false ) );
             m_canvas->SetAutoPanRequest( true );
         }
         else

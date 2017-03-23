@@ -7,7 +7,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras
  * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,6 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-
 #include <fctsys.h>
 #include <kiway.h>
 #include <common.h>
@@ -212,7 +211,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles( const std::string& aNetlist )
                     if( component->GetFPID().IsLegacy() )
                     {
                         // get this first here, it's possibly obsoleted if we get it too soon.
-                        FP_LIB_TABLE*   tbl = Prj().PcbFootprintLibs();
+                        FP_LIB_TABLE*   tbl = Prj().PcbFootprintLibs( Kiway() );
 
                         int guess = guessNickname( tbl, (LIB_ID*) &component->GetFPID() );
 

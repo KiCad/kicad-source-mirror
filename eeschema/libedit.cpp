@@ -105,7 +105,6 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( LIB_ALIAS* aLibEntry )
 
 void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
 {
-    wxString   cmp_name;
     LIB_ALIAS* libEntry = NULL;
 
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
@@ -130,14 +129,13 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
     LIB_PART* current_part = GetCurPart();
     wxString part_name = current_part ? current_part->GetName() : wxString( wxEmptyString );
 
-    wxArrayString dummyHistoryList;
-    int dummyLastUnit;
+    SCH_BASE_FRAME::HISTORY_LIST dummyHistoryList;
     SCHLIB_FILTER filter;
     filter.LoadFrom( lib->GetName() );
-    cmp_name = SelectComponentFromLibrary( &filter, dummyHistoryList, dummyLastUnit,
-                                          true, NULL, NULL, part_name );
+    auto sel = SelectComponentFromLibrary( &filter, dummyHistoryList,
+                                          true, 0, 0, part_name, false );
 
-    if( cmp_name.IsEmpty() )
+    if( sel.Name.IsEmpty() )
         return;
 
     GetScreen()->ClrModify();
@@ -148,14 +146,14 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
     m_aliasName.Empty();
 
     // Load the new library component
-    libEntry = lib->FindAlias( cmp_name );
+    libEntry = lib->FindAlias( sel.Name );
     PART_LIB* searchLib = lib;
 
     if( !libEntry )
     {
         // Not found in the active library: search inside the full list
         // (can happen when using Viewlib to load a component)
-        libEntry = Prj().SchLibs()->FindLibraryAlias( LIB_ID( wxEmptyString, cmp_name ) );
+        libEntry = Prj().SchLibs()->FindLibraryAlias( LIB_ID( wxEmptyString, sel.Name ) );
 
         if( libEntry )
         {
@@ -175,7 +173,7 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
     if( !libEntry )
     {
         wxString msg = wxString::Format( _( "Part name '%s' not found in library '%s'" ),
-                                         GetChars( cmp_name ),
+                                         GetChars( sel.Name ),
                                          GetChars( searchLib->GetName() )  );
         DisplayError( this, msg );
         return;
@@ -540,9 +538,9 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
     wxString dialogTitle;
     dialogTitle.Printf( _( "Delete Component (%u items loaded)" ), adapter->GetComponentsCount() );
 
-    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, m_convert );
+    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, m_convert, false );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
+    if( dlg.ShowQuasiModal() == wxID_CANCEL )
     {
         return;
     }

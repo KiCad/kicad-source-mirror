@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2007-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -459,7 +459,7 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
         wxLogDebug( wxT( "Load footprint <%s> from library <%s>." ),
                     fpname.c_str(), nickname.c_str()  );
 
-        footprint = Prj().PcbFootprintLibs()->FootprintLoad(
+        footprint = Prj().PcbFootprintLibs( Kiway() )->FootprintLoad(
                 FROM_UTF8( nickname.c_str() ), FROM_UTF8( fpname.c_str() ) );
     }
     catch( const IO_ERROR& ioe )
@@ -495,7 +495,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
 
         SetTitle( msg );
         const FOOTPRINT_INFO* module_info =
-                parentframe->m_FootprintsList.GetModuleInfo( footprintName );
+                parentframe->m_FootprintsList->GetModuleInfo( footprintName );
 
         const wxChar* libname;
 

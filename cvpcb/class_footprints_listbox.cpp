@@ -29,12 +29,14 @@
 
 #include <fctsys.h>
 #include <wxstruct.h>
+#include <wx/wupdlock.h>
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
 #include <listview_classes.h>
 #include <cvpcb_id.h>
 #include <eda_pattern_match.h>
+#include <footprint_filter.h>
 
 
 FOOTPRINTS_LISTBOX::FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent,
@@ -133,62 +135,28 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
     wxString        msg;
     wxString        oldSelection;
 
-    EDA_PATTERN_MATCH_WILDCARD patternFilter;
-    patternFilter.SetPattern( aFootPrintFilterPattern.Lower() );    // Use case insensitive search
+    FOOTPRINT_FILTER filter( aList );
+
+    if( aFilterType & FILTERING_BY_COMPONENT_KEYWORD )
+        filter.FilterByFootprintFilters( aComponent->GetFootprintFilters() );
+
+    if( aFilterType & FILTERING_BY_PIN_COUNT )
+        filter.FilterByPinCount( aComponent->GetNetCount() );
+
+    if( aFilterType & FILTERING_BY_LIBRARY )
+        filter.FilterByLibrary( aLibName );
+
+    if( aFilterType & FILTERING_BY_NAME )
+        filter.FilterByPattern( aFootPrintFilterPattern );
 
     if( GetSelection() >= 0 && GetSelection() < (int)m_footprintList.GetCount() )
         oldSelection = m_footprintList[ GetSelection() ];
 
-    for( unsigned ii = 0; ii < aList.GetCount(); ii++ )
+    for( auto& i: filter )
     {
-        if( aFilterType == UNFILTERED_FP_LIST )
-        {
-            msg.Printf( wxT( "%3d %s:%s" ), int( newList.GetCount() + 1 ),
-                        GetChars( aList.GetItem( ii ).GetNickname() ),
-                        GetChars( aList.GetItem( ii ).GetFootprintName() ) );
-            newList.Add( msg );
-            continue;
-        }
-
-        // Filter footprints by selected library
-        if( (aFilterType & FILTERING_BY_LIBRARY) && !aLibName.IsEmpty()
-            && !aList.GetItem( ii ).InLibrary( aLibName ) )
-            continue;
-
-        // Filter footprints by symbol fp-filters
-        if( (aFilterType & FILTERING_BY_COMPONENT_KEYWORD) && aComponent
-            && !aComponent->MatchesFootprintFilters( aList.GetItem( ii ).GetNickname(), aList.GetItem( ii ).GetFootprintName() ) )
-            continue;
-
-        // Filter footprints by symbol pin-count
-        if( (aFilterType & FILTERING_BY_PIN_COUNT) && aComponent
-            && aComponent->GetNetCount() != aList.GetItem( ii ).GetUniquePadCount() )
-            continue;
-
-        // Filter footprints by text-input
-        if( (aFilterType & FILTERING_BY_NAME ) && !aFootPrintFilterPattern.IsEmpty() )
-        {
-            wxString currname = "";
-
-            // If the search string contains a ':' character,
-            // include the library name in the search string
-            // e.g. LibName:FootprintName
-            if( aFootPrintFilterPattern.Contains( ":" ) )
-            {
-                currname = aList.GetItem( ii ).GetNickname().Lower() + ":";
-            }
-
-            currname += aList.GetItem( ii ).GetFootprintName().Lower();
-
-            if( patternFilter.Find( currname ) == EDA_PATTERN_NOT_FOUND )
-            {
-                continue;
-            }
-        }
-
-        msg.Printf( wxT( "%3d %s:%s" ), int( newList.GetCount() + 1 ),
-                    GetChars( aList.GetItem( ii ).GetNickname() ),
-                    GetChars( aList.GetItem( ii ).GetFootprintName() ) );
+        msg.Printf( "%3d %s:%s", int( newList.GetCount() + 1 ),
+                    GetChars( i.GetNickname() ),
+                    GetChars( i.GetFootprintName() ) );
         newList.Add( msg );
     }
 
@@ -202,6 +170,7 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
     if( selection == wxNOT_FOUND )
         selection = 0;
 
+    wxWindowUpdateLocker freeze( this );
     DeleteAllItems();
 
     if( m_footprintList.GetCount() )

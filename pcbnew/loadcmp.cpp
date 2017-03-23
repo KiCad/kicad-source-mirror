@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,6 +54,7 @@ using namespace std::placeholders;
 #include <pcbnew.h>
 #include <module_editor_frame.h>
 #include <footprint_info.h>
+#include <footprint_info_impl.h>
 #include <dialog_get_component.h>
 #include <modview_frame.h>
 #include <wildcards_and_files_ext.h>
@@ -62,7 +63,9 @@ using namespace std::placeholders;
 
 static void DisplayCmpDoc( wxString& aName, void* aData );
 
-static FOOTPRINT_LIST MList;
+// Use the _IMPL class directly here because this is static - don't want to yank
+// a static through kiface.
+static FOOTPRINT_LIST_IMPL MList;
 
 static void clearModuleItemFlags( BOARD_ITEM* aItem )
 {

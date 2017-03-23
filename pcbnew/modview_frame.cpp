@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +60,7 @@
 #include "tools/pcb_actions.h"
 
 #include <functional>
+#include <memory>
 using namespace std::placeholders;
 
 
@@ -387,21 +388,21 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
         return;
     }
 
-    FOOTPRINT_LIST fp_info_list;
+    auto fp_info_list( FOOTPRINT_LIST::GetInstance( Kiway() ) );
 
     wxString nickname = getCurNickname();
 
-    fp_info_list.ReadFootprintFiles( Prj().PcbFootprintLibs(), !nickname ? NULL : &nickname );
+    fp_info_list->ReadFootprintFiles( Prj().PcbFootprintLibs(), !nickname ? NULL : &nickname );
 
-    if( fp_info_list.GetErrorCount() )
+    if( fp_info_list->GetErrorCount() )
     {
-        fp_info_list.DisplayErrors( this );
+        fp_info_list->DisplayErrors( this );
         return;
     }
 
-    for( const FOOTPRINT_INFO& footprint : fp_info_list.GetList() )
+    for( auto& footprint : fp_info_list->GetList() )
     {
-        m_footprintList->Append( footprint.GetFootprintName() );
+        m_footprintList->Append( footprint->GetFootprintName() );
     }
 
     int index = m_footprintList->FindString( getCurFootprintName() );

@@ -73,38 +73,6 @@ const COMPONENT_NET& COMPONENT::GetNet( const wxString& aPinName )
 }
 
 
-bool COMPONENT::MatchesFootprintFilters( const wxString& aLibraryName, const wxString& aFootprintName ) const
-{
-    if( m_footprintFilters.GetCount() == 0 )
-        return true;
-
-    // The matching is case insensitive
-    wxString name = "";
-
-    EDA_PATTERN_MATCH_WILDCARD patternFilter;
-
-    for( unsigned ii = 0; ii < m_footprintFilters.GetCount(); ii++ )
-    {
-        // If the filter contains a ':' character, include the library name in the pattern
-        if( m_footprintFilters[ii].Contains( ":" ) )
-        {
-            name = aLibraryName.Lower() + ":";
-        }
-
-        name += aFootprintName.Lower();
-
-        patternFilter.SetPattern( m_footprintFilters[ii].Lower() );
-
-        if( patternFilter.Find( name ) != EDA_PATTERN_NOT_FOUND )
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-
 void COMPONENT::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
 {
     int nl = aNestLevel;

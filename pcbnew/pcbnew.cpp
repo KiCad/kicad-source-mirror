@@ -35,8 +35,10 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
+#include <kiface_ids.h>
 #include <confirm.h>
 #include <macros.h>
+#include <make_unique.h>
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
 #include <eda_dde.h>
@@ -58,6 +60,7 @@
 #include <modview_frame.h>
 #include <footprint_wizard_frame.h>
 #include <footprint_preview_panel.h>
+#include <footprint_info_impl.h>
 #include <gl_context_mgr.h>
 extern bool IsWxPythonLoaded();
 
@@ -170,7 +173,17 @@ static struct IFACE : public KIFACE_I
      */
     void* IfaceOrAddress( int aDataId ) override
     {
-        return NULL;
+        switch( aDataId )
+        {
+        case KIFACE_NEW_FOOTPRINT_LIST:
+            return (void*) static_cast<FOOTPRINT_LIST*>( new FOOTPRINT_LIST_IMPL() );
+
+        case KIFACE_G_FOOTPRINT_TABLE:
+            return (void*) new FP_LIB_TABLE( &GFootprintTable );
+
+        default:
+            return nullptr;
+        }
     }
 
 } kiface( "pcbnew", KIWAY::FACE_PCB );

@@ -281,14 +281,14 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnTestChipName( wxCommandEvent& event )
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnSelectChipName( wxCommandEvent& event )
 {
-    wxArrayString dummy;
-    int dummyunit = 1;
-    wxString chipname = m_parent->SelectComponentFromLibrary( NULL, dummy, dummyunit,
-                                                              true, NULL, NULL );
-    if( chipname.IsEmpty() )
+    SCH_BASE_FRAME::HISTORY_LIST dummy;
+
+    auto sel = m_parent->SelectComponentFromLibrary( NULL, dummy, true, 0, 0 );
+
+    if( sel.Name.IsEmpty() )
         return;
 
-    chipnameTextCtrl->SetValue( chipname );
+    chipnameTextCtrl->SetValue( sel.Name );
 }
 
 

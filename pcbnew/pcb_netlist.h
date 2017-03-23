@@ -174,14 +174,6 @@ public:
 
     const wxArrayString& GetFootprintFilters() const { return m_footprintFilters; }
 
-    /**
-     * Function MatchesFootprintFilters
-     *
-     * @return true if \a aFootprintName matches any of the footprint filters or no footprint
-     *         filters are defined.
-     */
-    bool MatchesFootprintFilters( const wxString& aLibraryName, const wxString& aFootprintName ) const;
-
     MODULE* GetModule( bool aRelease = false )
     {
         return ( aRelease ) ? m_footprint.release() : m_footprint.get();

@@ -101,8 +101,6 @@ option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." ON )
 
 option( KICAD_SPICE "Build Kicad with internal Spice simulator." OFF )
 
-option( KICAD_FOOTPRINT_SELECTOR "Build experimental eeschema footprint selector." OFF )
-
 # Global setting: exports are explicit
 set( CMAKE_CXX_VISIBILITY_PRESET "hidden" )
 set( CMAKE_VISIBILITY_INLINES_HIDDEN ON )
@@ -319,10 +317,6 @@ endif()
 
 if( KICAD_SPICE )
     add_definitions( -DKICAD_SPICE )
-endif()
-
-if( KICAD_FOOTPRINT_SELECTOR )
-    add_definitions( -DKICAD_FOOTPRINT_SELECTOR )
 endif()
 
 if( KICAD_USE_SCH_IO_MANAGER )

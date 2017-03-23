@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,6 +127,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_skipComponentSelect   = false;
     m_filteringOptions      = 0;
     m_tcFilterString        = NULL;
+    m_FootprintsList        = FOOTPRINT_LIST::GetInstance( Kiway() );
 
     /* Name of the document footprint list
      * usually located in share/modules/footprints_doc
@@ -409,7 +410,7 @@ bool CVPCB_MAINFRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, i
 void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
 {
     bool    tableChanged = false;
-    int     r = InvokePcbLibTableEditor( this, &GFootprintTable, Prj().PcbFootprintLibs() );
+    int     r = InvokePcbLibTableEditor( this, &GFootprintTable, Prj().PcbFootprintLibs( Kiway() ) );
 
     if( r & 1 )
     {
@@ -437,7 +438,7 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
 
         try
         {
-            Prj().PcbFootprintLibs()->Save( fileName );
+            Prj().PcbFootprintLibs( Kiway() )->Save( fileName );
             tableChanged = true;
         }
         catch( const IO_ERROR& ioe )
@@ -455,7 +456,7 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
     {
         wxBusyCursor dummy;
         BuildLIBRARY_LISTBOX();
-        m_FootprintsList.ReadFootprintFiles( Prj().PcbFootprintLibs() );
+        m_FootprintsList->ReadFootprintFiles( Prj().PcbFootprintLibs( Kiway() ) );
     }
 }
 
@@ -482,7 +483,7 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
     COMPONENT* component = GetSelectedComponent();
     libraryName = m_libListBox->GetSelectedLibrary();
 
-    m_footprintListBox->SetFootprints( m_FootprintsList, libraryName, component,
+    m_footprintListBox->SetFootprints( *m_FootprintsList, libraryName, component,
                                        m_currentSearchPattern, m_filteringOptions);
 
     refreshAfterComponentSearch (component);
@@ -657,7 +658,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
     {
         wxString footprintName = GetSelectedFootprint();
 
-        FOOTPRINT_INFO* module = m_FootprintsList.GetModuleInfo( footprintName );
+        FOOTPRINT_INFO* module = m_FootprintsList->GetModuleInfo( footprintName );
 
         if( module )    // can be NULL if no netlist loaded
         {
@@ -715,7 +716,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
 
 bool CVPCB_MAINFRAME::LoadFootprintFiles()
 {
-    FP_LIB_TABLE* fptbl = Prj().PcbFootprintLibs();
+    FP_LIB_TABLE* fptbl = Prj().PcbFootprintLibs( Kiway() );
 
     // Check if there are footprint libraries in the footprint library table.
     if( !fptbl || !fptbl->GetLogicalLibs().size() )
@@ -728,12 +729,12 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
     {
     wxBusyCursor dummy;  // Let the user know something is happening.
 
-    m_FootprintsList.ReadFootprintFiles( fptbl );
+    m_FootprintsList->ReadFootprintFiles( fptbl );
     }
 
-    if( m_FootprintsList.GetErrorCount() )
+    if( m_FootprintsList->GetErrorCount() )
     {
-        m_FootprintsList.DisplayErrors( this );
+        m_FootprintsList->DisplayErrors( this );
     }
 
     return true;
@@ -862,7 +863,7 @@ void CVPCB_MAINFRAME::BuildFOOTPRINTS_LISTBOX()
                                              wxFONTWEIGHT_NORMAL ) );
     }
 
-    m_footprintListBox->SetFootprints( m_FootprintsList, wxEmptyString, NULL,
+    m_footprintListBox->SetFootprints( *m_FootprintsList, wxEmptyString, NULL,
                     wxEmptyString, FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST );
     DisplayStatus();
 }
@@ -921,7 +922,7 @@ void CVPCB_MAINFRAME::BuildLIBRARY_LISTBOX()
                                        wxFONTWEIGHT_NORMAL ) );
     }
 
-    FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
+    FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs( Kiway() );
 
     if( tbl )
     {

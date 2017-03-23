@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,7 +20,6 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-
 #ifndef PROJECT_H_
 #define PROJECT_H_
 
@@ -39,6 +38,7 @@ class FP_LIB_TABLE;
 class PART_LIBS;
 class SEARCH_STACK;
 class S3D_CACHE;
+class KIWAY;
 
 #define VTBL_ENTRY      virtual
 
@@ -235,6 +235,11 @@ public:
      */
     VTBL_ENTRY const wxString AbsolutePath( const wxString& aFileName ) const;
 
+    /**
+     * Return the table of footprint libraries. Requires an active Kiway as
+     * this is fetched from pcbnew.
+     */
+    VTBL_ENTRY FP_LIB_TABLE* PcbFootprintLibs( KIWAY& aKiway );
 
     //-----</Cross Module API>---------------------------------------------------
 
@@ -250,7 +255,10 @@ public:
     // functions can get linked into the KIFACE that needs them, and only there.
     // In fact, the other KIFACEs don't even know they exist.
 #if defined(PCBNEW) || defined(CVPCB)
-    // These are all prefaced with "Pcb"
+    /**
+     * Return the table of footprint libraries without Kiway, only from within
+     * pcbnew.
+     */
     FP_LIB_TABLE* PcbFootprintLibs();
 
     /**

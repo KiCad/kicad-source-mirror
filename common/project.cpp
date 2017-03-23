@@ -1,8 +1,7 @@
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
 #include <wx/stdpaths.h>
 
 #include <fctsys.h>
@@ -34,6 +32,9 @@
 #include <kicad_string.h>
 #include <config_params.h>
 #include <wildcards_and_files_ext.h>
+#include <fp_lib_table.h>
+#include <kiway.h>
+#include <kiface_ids.h>
 
 
 PROJECT::PROJECT()
@@ -378,4 +379,42 @@ const wxString PROJECT::AbsolutePath( const wxString& aFileName ) const
     }
 
     return fn.GetFullPath();
+}
+
+
+FP_LIB_TABLE* PROJECT::PcbFootprintLibs( KIWAY& aKiway )
+{
+    // This is a lazy loading function, it loads the project specific table when
+    // that table is asked for, not before.
+
+    FP_LIB_TABLE*   tbl = (FP_LIB_TABLE*) GetElem( ELEM_FPTBL );
+
+    // its gotta be NULL or a FP_LIB_TABLE, or a bug.
+    wxASSERT( !tbl || dynamic_cast<FP_LIB_TABLE*>( tbl ) );
+
+    if( !tbl )
+    {
+        // Stack the project specific FP_LIB_TABLE overlay on top of the global table.
+        // ~FP_LIB_TABLE() will not touch the fallback table, so multiple projects may
+        // stack this way, all using the same global fallback table.
+        KIFACE* kiface = aKiway.KiFACE( KIWAY::FACE_PCB );
+        if( kiface )
+            tbl = (FP_LIB_TABLE*) kiface->IfaceOrAddress( KIFACE_G_FOOTPRINT_TABLE );
+
+        wxASSERT( tbl );
+        SetElem( ELEM_FPTBL, tbl );
+
+        wxString projectFpLibTableFileName = FootprintLibTblName();
+
+        try
+        {
+            tbl->Load( projectFpLibTableFileName );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            DisplayError( NULL, ioe.What() );
+        }
+    }
+
+    return tbl;
 }

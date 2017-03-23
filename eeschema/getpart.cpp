@@ -28,6 +28,7 @@
  * @brief functions to get and place library components.
  */
 
+#include <algorithm>
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiway.h>
@@ -50,9 +51,10 @@
 #include <dialog_get_component.h>
 
 
-wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( const SCHLIB_FILTER* aFilter,
-                                                        LIB_ALIAS* aPreselectedAlias,
-                                                        int* aUnit, int* aConvert )
+SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowser(
+        const SCHLIB_FILTER* aFilter,
+        LIB_ALIAS* aPreselectedAlias,
+        int aUnit, int aConvert )
 {
     // Close any open non-modal Lib browser, and open a new one, in "modal" mode:
     LIB_VIEW_FRAME* viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
@@ -71,38 +73,36 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( const SCHLIB_FILTER* aFi
         viewlibFrame->SetSelectedComponent( aPreselectedAlias->GetName() );
     }
 
-    if( aUnit && *aUnit > 0 )
-        viewlibFrame->SetUnit( *aUnit );
+    if( aUnit > 0 )
+        viewlibFrame->SetUnit( aUnit );
 
-    if( aConvert && *aConvert > 0 )
-        viewlibFrame->SetConvert( *aConvert );
+    if( aConvert > 0 )
+        viewlibFrame->SetConvert( aConvert );
 
     viewlibFrame->Refresh();
 
-    wxString cmpname;
+    COMPONENT_SELECTION sel;
 
-    if( viewlibFrame->ShowModal( &cmpname, this ) )
+    if( viewlibFrame->ShowModal( &sel.Name, this ) )
     {
-        if( aUnit )
-            *aUnit = viewlibFrame->GetUnit();
-
-        if( aConvert )
-            *aConvert = viewlibFrame->GetConvert();
+        sel.Unit = viewlibFrame->GetUnit();
+        sel.Convert = viewlibFrame->GetConvert();
     }
 
     viewlibFrame->Destroy();
 
-    return cmpname;
+    return sel;
 }
 
 
-wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const SCHLIB_FILTER* aFilter,
-                                                     wxArrayString&  aHistoryList,
-                                                     int&            aHistoryLastUnit,
-                                                     bool            aUseLibBrowser,
-                                                     int*            aUnit,
-                                                     int*            aConvert,
-                                                     const wxString& aHighlight )
+SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
+        const SCHLIB_FILTER*                aFilter,
+        std::vector<COMPONENT_SELECTION>&   aHistoryList,
+        bool                                aUseLibBrowser,
+        int                                 aUnit,
+        int                                 aConvert,
+        const wxString&                     aHighlight,
+        bool                                aAllowFields )
 {
     wxString        dialogTitle;
     PART_LIBS*      libs = Prj().SchLibs();
@@ -141,56 +141,68 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const SCHLIB_FILTER* aFilte
 
     if( !aHistoryList.empty() )
     {
-        adapter->AddAliasList( "-- " + _( "History" ) + " --", aHistoryList, NULL );
-        adapter->SetPreselectNode( aHistoryList[0], aHistoryLastUnit );
+        wxArrayString history_list;
+
+        for( auto const& i : aHistoryList )
+            history_list.push_back( i.Name );
+
+        adapter->AddAliasList( "-- " + _( "History" ) + " --", history_list, NULL );
+        adapter->SetPreselectNode( aHistoryList[0].Name, aHistoryList[0].Unit );
     }
 
     if( !aHighlight.IsEmpty() )
         adapter->SetPreselectNode( aHighlight, /* aUnit */ 0 );
 
-    const int deMorgan = aConvert ? *aConvert : 1;
     dialogTitle.Printf( _( "Choose Component (%d items loaded)" ),
                         adapter->GetComponentsCount() );
-    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, deMorgan );
+    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, aConvert, aAllowFields );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return wxEmptyString;
+    if( dlg.ShowQuasiModal() == wxID_CANCEL )
+        return COMPONENT_SELECTION();
 
-    wxString cmpName;
-    LIB_ALIAS* const alias = dlg.GetSelectedAlias( aUnit );
+    COMPONENT_SELECTION sel;
+    LIB_ALIAS* const alias = dlg.GetSelectedAlias( &sel.Unit );
+
+    if( alias->GetPart()->IsMulti() && sel.Unit == 0 )
+        sel.Unit = 1;
+
+    sel.Fields = dlg.GetFields();
+
     if ( alias )
-        cmpName = alias->GetName();
+        sel.Name = alias->GetName();
 
     if( dlg.IsExternalBrowserSelected() )   // User requested component browser.
-        cmpName = SelectComponentFromLibBrowser( aFilter, alias, aUnit, aConvert);
+        sel = SelectComponentFromLibBrowser( aFilter, alias, sel.Unit, sel.Convert );
 
-    if( !cmpName.empty() )
+    if( !sel.Name.empty() )
     {
-        AddHistoryComponentName( aHistoryList, cmpName );
+        aHistoryList.erase(
+            std::remove_if(
+                aHistoryList.begin(),
+                aHistoryList.end(),
+                [ &sel ]( COMPONENT_SELECTION const& i ) { return i.Name == sel.Name; } ),
+            aHistoryList.end() );
 
-        if ( aUnit )
-            aHistoryLastUnit = *aUnit;
+        aHistoryList.insert( aHistoryList.begin(), sel );
     }
 
-    return cmpName;
+    return sel;
 }
 
 
-SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
-                                               const SCHLIB_FILTER* aFilter,
-                                               wxArrayString&  aHistoryList,
-                                               int&            aHistoryLastUnit,
-                                               bool            aUseLibBrowser )
+SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component(
+                                wxDC*                            aDC,
+                                const SCHLIB_FILTER*             aFilter,
+                                SCH_BASE_FRAME::HISTORY_LIST&    aHistoryList,
+                                bool                             aUseLibBrowser )
 {
-    int unit    = 1;
-    int convert = 1;
     SetRepeatItem( NULL );
     m_canvas->SetIgnoreMouseEvents( true );
 
-    wxString name = SelectComponentFromLibrary( aFilter, aHistoryList, aHistoryLastUnit,
-                                                aUseLibBrowser, &unit, &convert );
+    auto sel = SelectComponentFromLibrary( aFilter, aHistoryList,
+                                                aUseLibBrowser, 1, 1 );
 
-    if( name.IsEmpty() )
+    if( sel.Name.IsEmpty() )
     {
         m_canvas->SetIgnoreMouseEvents( false );
         m_canvas->MoveCursorToCrossHair();
@@ -205,19 +217,19 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
     if( aFilter )
         libsource = aFilter->GetLibSource();
 
-    LIB_PART* part = Prj().SchLibs()->FindLibPart( LIB_ID( wxEmptyString, name ), libsource );
+    LIB_PART* part = Prj().SchLibs()->FindLibPart( LIB_ID( wxEmptyString, sel.Name ), libsource );
 
     if( !part )
     {
         wxString msg = wxString::Format( _(
             "Failed to find part '%s' in library" ),
-            GetChars( name )
+            GetChars( sel.Name )
             );
         wxMessageBox( msg );
         return NULL;
     }
 
-    SCH_COMPONENT* component = new SCH_COMPONENT( *part, m_CurrentSheet, unit, convert,
+    SCH_COMPONENT* component = new SCH_COMPONENT( *part, m_CurrentSheet, sel.Unit, sel.Convert,
                                                   GetCrossHairPosition(), true );
 
     // Set the m_ChipName value, from component name in lib, for aliases
@@ -225,14 +237,23 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
     // alias exists because its root component was found
     LIB_ID libId;
 
-    libId.SetLibItemName( name, false );
+    libId.SetLibItemName( sel.Name, false );
     component->SetLibId( libId );
 
     // Be sure the link to the corresponding LIB_PART is OK:
     component->Resolve( Prj().SchLibs() );
 
+    // Set any fields that have been modified
+    for( auto const& i : sel.Fields )
+    {
+        auto field = component->GetField( i.first );
+
+        if( field )
+            field->SetText( i.second );
+    }
+
     // Set the component value that can differ from component name in lib, for aliases
-    component->GetField( VALUE )->SetText( name );
+    component->GetField( VALUE )->SetText( sel.Name );
 
     MSG_PANEL_ITEMS items;
 

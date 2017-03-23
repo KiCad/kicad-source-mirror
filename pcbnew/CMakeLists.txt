@@ -238,6 +238,7 @@ set( PCBNEW_CLASS_SRCS
     edtxtmod.cpp
     event_handlers_tracks_vias_sizes.cpp
     files.cpp
+    footprint_info_impl.cpp
     globaleditpad.cpp
     highlight.cpp
     hotkeys.cpp

@@ -27,6 +27,7 @@
 
 #include "dialog_shim.h"
 #include <cmp_tree_model_adapter.h>
+#include <footprint_info.h>
 
 class wxStaticBitmap;
 class wxTextCtrl;
@@ -40,6 +41,7 @@ class wxButton;
 class wxTimer;
 
 class FOOTPRINT_PREVIEW_WIDGET;
+class FOOTPRINT_SELECT_WIDGET;
 class LIB_ALIAS;
 class LIB_PART;
 class SCH_BASE_FRAME;
@@ -82,7 +84,6 @@ class SCH_BASE_FRAME;
 class DIALOG_CHOOSE_COMPONENT : public DIALOG_SHIM
 {
 public:
-
     /**
      * Create dialog to choose component.
      *
@@ -92,30 +93,44 @@ public:
      *                  for documentation.
      * @param aDeMorganConvert  preferred deMorgan conversion
      *                          (TODO: should happen in dialog)
+     * @param aAllowFieldEdits  if false, all functions that allow the user to edit
+     *      fields (currently just footprint selection) will not be available.
      */
     DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-                             CMP_TREE_MODEL_ADAPTER::PTR& aAdapter,
-                             int aDeMorganConvert );
+            CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, int aDeMorganConvert, bool aAllowFieldEdits );
 
     ~DIALOG_CHOOSE_COMPONENT();
 
     /** Function GetSelectedAlias
      * To be called after this dialog returns from ShowModal().
      *
+     * For multi-unit components, if the user selects the component itself
+     * rather than picking an individual unit, 0 will be returned in aUnit.
+     * Beware that this is an invalid unit number - this should be replaced
+     * with whatever default is desired (usually 1).
+     *
      * @param aUnit if not NULL, the selected unit is filled in here.
      * @return the alias that has been selected, or NULL if there is none.
      */
     LIB_ALIAS* GetSelectedAlias( int* aUnit ) const;
+
+    /**
+     * Get a list of fields edited by the user.
+     * @return vector of pairs; each.first = field ID, each.second = new value
+     */
+    std::vector<std::pair<int, wxString>> GetFields() const;
 
     /** Function IsExternalBrowserSelected
      *
      * @return true, iff the user pressed the thumbnail view of the component to
      *               launch the component browser.
      */
-    bool IsExternalBrowserSelected() const { return m_external_browser_requested; }
+    bool IsExternalBrowserSelected() const
+    {
+        return m_external_browser_requested;
+    }
 
 protected:
-
     static constexpr int DblClickDelay = 100; // milliseconds
 
     wxPanel* ConstructLeftPanel( wxWindow* aParent );
@@ -123,6 +138,7 @@ protected:
 
     void OnInitDialog( wxInitDialogEvent& aEvent );
     void OnCloseTimer( wxTimerEvent& aEvent );
+    void OnProgressTimer( wxTimerEvent& aEvent );
 
     void OnQueryText( wxCommandEvent& aEvent );
     void OnQueryEnter( wxCommandEvent& aEvent );
@@ -136,10 +152,24 @@ protected:
     void OnSchViewDClick( wxMouseEvent& aEvent );
     void OnSchViewPaint( wxPaintEvent& aEvent );
 
+    void OnFootprintSelected( wxCommandEvent& aEvent );
+
     /**
      * Look up the footprint for a given alias and display it.
      */
     void ShowFootprintFor( LIB_ALIAS* aAlias );
+
+    /**
+     * Display the given footprint by name.
+     */
+    void ShowFootprint( wxString const& aName );
+
+    /**
+     * Populate the footprint selector for a given alias.
+     *
+     * @param aAlias alias, or null to clear
+     */
+    void PopulateFootprintSelector( LIB_ALIAS* aAlias );
 
     /**
      * If a wxDataViewitem is valid, select it and post a selection event.
@@ -170,15 +200,20 @@ protected:
     wxDataViewCtrl* m_tree_ctrl;
     wxHtmlWindow*   m_details_ctrl;
     wxPanel*        m_sch_view_ctrl;
-    wxChoice*       m_fp_sel_ctrl;
 
+    FOOTPRINT_SELECT_WIDGET*  m_fp_sel_ctrl;
     FOOTPRINT_PREVIEW_WIDGET* m_fp_view_ctrl;
 
     SCH_BASE_FRAME*             m_parent;
     CMP_TREE_MODEL_ADAPTER::PTR m_adapter;
-    int             m_deMorganConvert;
-    bool            m_external_browser_requested;
+    int                         m_deMorganConvert;
+    bool                        m_allow_field_edits;
+    bool                        m_external_browser_requested;
+    wxString                    m_fp_override;
 
+    static FOOTPRINT_ASYNC_LOADER          m_fp_loader;
+    static std::unique_ptr<FOOTPRINT_LIST> m_fp_list;
+    std::vector<std::pair<int, wxString>> m_field_edits;
 };
 
 #endif /* DIALOG_CHOOSE_COMPONENT_H */

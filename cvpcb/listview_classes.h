@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@
 #define CVSTRUCT_H
 
 #include <wx/listctrl.h>
-
+#include <footprint_filter.h>
 
 /*  Forward declarations of all top-level window classes. */
 class CVPCB_MAINFRAME;
@@ -90,8 +90,12 @@ private:
     wxArrayString  m_footprintList;
 
 public:
-    // OR'ed mask to manage footprint filtering options
-    enum FP_FILTER_T
+
+    /**
+     * Filter setting constants. The filter type is a bitwise OR of these flags,
+     * and only footprints matching all selected filter types are shown.
+     */
+    enum FP_FILTER_T: int
     {
         UNFILTERED_FP_LIST              = 0,
         FILTERING_BY_COMPONENT_KEYWORD  = 0x0001,

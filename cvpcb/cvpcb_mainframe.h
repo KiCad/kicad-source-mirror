@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +37,7 @@
 #include <wxBasePcbFrame.h>
 #include <config_params.h>
 #include <autosel.h>
+#include <memory>
 
 
 /*  Forward declarations of all top-level window classes. */
@@ -72,7 +73,7 @@ public:
     wxArrayString             m_ModuleLibNames;
     wxArrayString             m_EquFilesNames;
     wxString                  m_DocModulesFileName;
-    FOOTPRINT_LIST            m_FootprintsList;
+    std::unique_ptr<FOOTPRINT_LIST> m_FootprintsList;
 
 protected:
     int             m_undefinedComponentCnt;

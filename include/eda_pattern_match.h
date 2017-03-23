@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,6 +52,11 @@ public:
     virtual bool SetPattern( const wxString& aPattern ) = 0;
 
     /**
+     * Return the pattern passed to SetPattern().
+     */
+    virtual wxString const& GetPattern() const = 0;
+
+    /**
      * Return the location of a match iff a given candidate string matches the set pattern.
      * Otherwise, return EDA_PATTERN_NOT_FOUND.
      */
@@ -67,6 +71,7 @@ class EDA_PATTERN_MATCH_SUBSTR : public EDA_PATTERN_MATCH
 {
 public:
     virtual bool SetPattern( const wxString& aPattern ) override;
+    virtual wxString const& GetPattern() const override;
     virtual int Find( const wxString& aCandidate ) const override;
 
 protected:
@@ -81,6 +86,7 @@ class EDA_PATTERN_MATCH_REGEX : public EDA_PATTERN_MATCH
 {
 public:
     virtual bool SetPattern( const wxString& aPattern ) override;
+    virtual wxString const& GetPattern() const override;
     virtual int Find( const wxString& aCandidate ) const override;
 
 protected:
@@ -93,7 +99,11 @@ class EDA_PATTERN_MATCH_WILDCARD : public EDA_PATTERN_MATCH_REGEX
 {
 public:
     virtual bool SetPattern( const wxString& aPattern ) override;
+    virtual wxString const& GetPattern() const override;
     virtual int Find( const wxString& aCandidate ) const override;
+
+protected:
+    wxString m_wildcard_pattern;
 };
 
 

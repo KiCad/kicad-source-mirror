@@ -59,9 +59,9 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
 
     dialogTitle.Printf( _( "Choose Component (%d items loaded)" ),
                         adapter->GetComponentsCount() );
-    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, m_convert );
+    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, m_convert, false );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
+    if( dlg.ShowQuasiModal() == wxID_CANCEL )
         return;
 
     /// @todo: The unit selection gets reset to 1 by SetSelectedComponent() so the unit

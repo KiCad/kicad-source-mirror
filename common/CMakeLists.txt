@@ -171,6 +171,8 @@ set( COMMON_WIDGET_SRCS
     widgets/widget_hotkey_list.cpp
     widgets/two_column_tree_list.cpp
     widgets/footprint_preview_widget.cpp
+    widgets/footprint_select_widget.cpp
+    widgets/footprint_choice.cpp
     widgets/indicator_icon.cpp
     )
 
@@ -243,6 +245,8 @@ set( COMMON_SRCS
     exceptions.cpp
     executable_names.cpp
     filter_reader.cpp
+    footprint_info.cpp
+    footprint_filter.cpp
     lib_id.cpp
     lib_table_keywords.cpp
 #    findkicadhelppath.cpp.notused      deprecated, use searchhelpfilefullpath.cpp
@@ -351,7 +355,6 @@ set( PCB_COMMON_SRCS
     eda_text.cpp
     class_page_info.cpp
     lset.cpp
-    footprint_info.cpp
     ../pcbnew/basepcbframe.cpp
     ../pcbnew/class_board.cpp
     ../pcbnew/class_board_connected_item.cpp

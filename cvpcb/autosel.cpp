@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -215,7 +215,7 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
             if( equivItem.m_ComponentValue.CmpNoCase( component->GetValue() ) != 0 )
                 continue;
 
-            const FOOTPRINT_INFO *module = m_FootprintsList.GetModuleInfo( equivItem.m_FootprintFPID );
+            const FOOTPRINT_INFO *module = m_FootprintsList->GetModuleInfo( equivItem.m_FootprintFPID );
 
             bool equ_is_unique = true;
             unsigned next = idx+1;
@@ -277,7 +277,7 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
         {
             // we do not need to analyze wildcards: single footprint do not
             // contain them and if there are wildcards it just will not match any
-            const FOOTPRINT_INFO* module = m_FootprintsList.GetModuleInfo( component->GetFootprintFilters()[0] );
+            const FOOTPRINT_INFO* module = m_FootprintsList->GetModuleInfo( component->GetFootprintFilters()[0] );
 
             if( module )
                 SetNewPkg( component->GetFootprintFilters()[0] );
