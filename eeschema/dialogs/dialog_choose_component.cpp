@@ -104,6 +104,17 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT(
 }
 
 
+DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
+{
+    // I am not sure the following two lines are necessary,
+    // but they will not hurt anyone
+    m_dbl_click_timer->Stop();
+    Unbind( wxEVT_TIMER, &DIALOG_CHOOSE_COMPONENT::OnCloseTimer, this );
+
+    delete m_dbl_click_timer;
+}
+
+
 wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructLeftPanel( wxWindow* aParent )
 {
     auto panel = new wxPanel( aParent );

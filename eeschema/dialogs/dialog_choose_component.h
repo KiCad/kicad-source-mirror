@@ -97,6 +97,8 @@ public:
                              CMP_TREE_MODEL_ADAPTER::PTR& aAdapter,
                              int aDeMorganConvert );
 
+    ~DIALOG_CHOOSE_COMPONENT();
+
     /** Function GetSelectedAlias
      * To be called after this dialog returns from ShowModal().
      *
