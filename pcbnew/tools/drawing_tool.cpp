@@ -1070,6 +1070,8 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
     }
 
     m_view->Remove( &preview );
+    m_controls->SetAutoPan( false );
+    m_controls->CaptureCursor( false );
 
     return started;
 }
@@ -1203,6 +1205,8 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
     preview.Remove( aGraphic );
     m_view->Remove( &arcAsst );
     m_view->Remove( &preview );
+    m_controls->SetAutoPan( false );
+    m_controls->CaptureCursor( false );
 
     return !arcManager.IsReset();
 }
