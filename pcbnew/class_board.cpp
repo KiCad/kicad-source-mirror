@@ -2881,5 +2881,11 @@ extern bool BuildBoardPolygonOutlines( BOARD* aBoard,
 bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
                                      wxString* aErrorText )
 {
-    return BuildBoardPolygonOutlines( this, aOutlines, aErrorText );
+    bool success = BuildBoardPolygonOutlines( this, aOutlines, aErrorText );
+
+    // Make polygon strictly simple to avoid issues (especially in 3D viewer)
+    aOutlines.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+    return success;
+
 }

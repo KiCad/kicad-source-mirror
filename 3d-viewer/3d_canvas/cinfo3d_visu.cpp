@@ -484,6 +484,9 @@ void CINFO3D_VISU::createBoardPolygon()
         wxLogMessage( errmsg );
     }
 
+    // Be sure the polygon is strictly simple to avoid issues.
+    m_board_poly.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
     Polygon_Calc_BBox_3DU( m_board_poly, m_board2dBBox3DU, m_biuTo3Dunits );
 }
 
