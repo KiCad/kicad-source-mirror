@@ -235,12 +235,10 @@ public:
 
     std::unique_ptr<IO_ERROR> PopError()
     {
-        auto item = m_errors.pop();
+        std::unique_ptr<IO_ERROR> error;
 
-        if( item )
-            return std::move( *item );
-        else
-            return std::unique_ptr<IO_ERROR>();
+        m_errors.pop( error );
+        return error;
     }
 
     /**

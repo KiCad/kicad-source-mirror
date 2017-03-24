@@ -20,7 +20,6 @@
 #ifndef SYNC_QUEUE_H
 #define SYNC_QUEUE_H
 
-#include <boost/optional.hpp>
 #include <mutex>
 #include <queue>
 
@@ -59,22 +58,24 @@ public:
     }
 
     /**
-     * Pop a value off the queue if there is one, returning it. If the queue is empty,
-     * return boost::none instead.
+     * Pop a value off the queue into the provided variable. If the queue is empty, the
+     * variable is not touched.
+     *
+     * @return true iff a value was popped.
      */
-    boost::optional<T> pop()
+    bool pop( T& aReceiver )
     {
         GUARD guard( m_mutex );
 
         if( m_queue.empty() )
         {
-            return boost::none;
+            return false;
         }
         else
         {
-            T val = std::move( m_queue.front() );
+            aReceiver = std::move( m_queue.front() );
             m_queue.pop();
-            return std::move( val );
+            return true;
         }
     }
 

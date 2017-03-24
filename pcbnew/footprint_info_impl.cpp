@@ -98,11 +98,13 @@ bool FOOTPRINT_LIST_IMPL::CatchErrors( std::function<void()> aFunc )
 
 void FOOTPRINT_LIST_IMPL::loader_job()
 {
-    while( auto const nickname = m_queue_in.pop() )
+    wxString nickname;
+
+    while( m_queue_in.pop( nickname ) )
     {
         CatchErrors( [this, &nickname]() {
-            m_lib_table->PrefetchLib( *nickname );
-            m_queue_out.push( *nickname );
+            m_lib_table->PrefetchLib( nickname );
+            m_queue_out.push( nickname );
         } );
 
         m_count_finished.fetch_add( 1 );
@@ -183,14 +185,16 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
     for( size_t i = 0; i < std::thread::hardware_concurrency() + 1; ++i )
     {
         threads.push_back( std::thread( [this, &queue_parsed]() {
-            while( auto nickname = this->m_queue_out.pop() )
+            wxString nickname;
+
+            while( this->m_queue_out.pop( nickname ) )
             {
                 CatchErrors( [this, &queue_parsed, &nickname]() {
-                    wxArrayString fpnames = this->m_lib_table->FootprintEnumerate( *nickname );
+                    wxArrayString fpnames = this->m_lib_table->FootprintEnumerate( nickname );
 
                     for( auto const& fpname : fpnames )
                     {
-                        FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO_IMPL( this, *nickname, fpname );
+                        FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO_IMPL( this, nickname, fpname );
                         queue_parsed.move_push( std::unique_ptr<FOOTPRINT_INFO>( fpinfo ) );
                     }
                 } );
@@ -201,8 +205,10 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
     for( auto& thr : threads )
         thr.join();
 
-    while( auto fpi = queue_parsed.pop() )
-        m_list.push_back( std::move( *fpi ) );
+    std::unique_ptr<FOOTPRINT_INFO> fpi;
+
+    while( queue_parsed.pop( fpi ) )
+        m_list.push_back( std::move( fpi ) );
 
     std::sort( m_list.begin(), m_list.end(),
             []( std::unique_ptr<FOOTPRINT_INFO> const&     lhs,
