@@ -37,6 +37,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/polygon
     ${CMAKE_SOURCE_DIR}/common/geometry
+    ${Boost_INCLUDE_DIR}
 )
 
 target_link_libraries(qa_geometry
