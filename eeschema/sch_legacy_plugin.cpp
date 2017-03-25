@@ -1668,7 +1668,7 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
             name1 = toUTFTildaText( aComponent->GetField( REFERENCE )->GetText() );
     }
 
-    wxString part_name = aComponent->GetLibId().GetLibItemName();
+    wxString part_name = FROM_UTF8( aComponent->GetLibId().GetLibItemName() );
 
     if( part_name.size() )
     {

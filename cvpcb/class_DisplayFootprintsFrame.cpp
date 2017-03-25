@@ -446,7 +446,7 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
     {
         LIB_ID fpid;
 
-        if( fpid.Parse( aFootprintName ) >= 0 )
+        if( fpid.Parse( TO_UTF8( aFootprintName ) ) >= 0 )
         {
             DisplayInfoMessage( this, wxString::Format( wxT( "Footprint ID <%s> is not valid." ),
                                                         GetChars( aFootprintName ) ) );

@@ -59,12 +59,12 @@ FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aFootprintName )
     {
         LIB_ID fpid;
 
-        wxCHECK_MSG( fpid.Parse( aFootprintName ) < 0, NULL,
+        wxCHECK_MSG( fpid.Parse( TO_UTF8( aFootprintName ) ) < 0, NULL,
                 wxString::Format(
-                        wxT( "'%s' is not a valid LIB_ID." ), GetChars( aFootprintName ) ) );
+                        "'%s' is not a valid LIB_ID.", aFootprintName ) );
 
-        wxString libNickname = fpid.GetLibNickname();
-        wxString footprintName = fpid.GetLibItemName();
+        wxString libNickname = FROM_UTF8( fpid.GetLibNickname() );
+        wxString footprintName = FROM_UTF8( fpid.GetLibItemName() );
 
         if( libNickname == fp->GetNickname() && footprintName == fp->GetFootprintName() )
             return &*fp;

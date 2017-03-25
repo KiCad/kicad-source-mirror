@@ -226,7 +226,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
 
     LIB_ID fpid;
 
-    wxCHECK_MSG( fpid.Parse( moduleName ) < 0, NULL,
+    wxCHECK_MSG( fpid.Parse( TO_UTF8( moduleName ) ) < 0, NULL,
                  wxString::Format( wxT( "Could not parse LIB_ID string '%s'." ),
                                    GetChars( moduleName ) ) );
 
@@ -237,7 +237,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
     catch( const IO_ERROR& ioe )
     {
         wxLogDebug( wxT( "An error occurred attemping to load footprint '%s'.\n\nError: %s" ),
-                    fpid.Format().c_str(), GetChars( ioe.What() ) );
+                    FROM_UTF8( fpid.Format() ), GetChars( ioe.What() ) );
     }
 
     if( !module && allowWildSeach )                // Search with wild card
@@ -256,7 +256,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         }
         else
         {
-            wxCHECK_MSG( fpid.Parse( moduleName ) < 0, NULL,
+            wxCHECK_MSG( fpid.Parse( TO_UTF8( moduleName ) ) < 0, NULL,
                          wxString::Format( wxT( "Could not parse LIB_ID string '%s'." ),
                                            GetChars( moduleName ) ) );
 
@@ -267,7 +267,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
             catch( const IO_ERROR& ioe )
             {
                 wxLogDebug( wxT( "An error occurred attemping to load footprint '%s'.\n\nError: %s" ),
-                            fpid.Format().c_str(), GetChars( ioe.What() ) );
+                            FROM_UTF8( fpid.Format() ), GetChars( ioe.What() ) );
             }
         }
     }
@@ -324,7 +324,7 @@ MODULE* PCB_BASE_FRAME::LoadFootprint( const LIB_ID& aFootprintId )
     catch( const IO_ERROR& ioe )
     {
         wxLogDebug( wxT( "An error occurred attemping to load footprint '%s'.\n\nError: %s" ),
-                    aFootprintId.Format().c_str(), GetChars( ioe.What() ) );
+                    FROM_UTF8( aFootprintId.Format() ), GetChars( ioe.What() ) );
     }
 
     return module;

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -339,7 +339,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
     if( !aModule )
         return;
 
-    fn.SetName( aModule->GetFPID().GetLibItemName() );
+    fn.SetName( FROM_UTF8( aModule->GetFPID().GetLibItemName() ) );
 
     wxString    wildcard = wxGetTranslation( KiCadFootprintLibFileWildcard );
 
@@ -535,7 +535,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
         return false;
 
     LIB_ID      fpid( fpid_txt );
-    wxString    fpname = fpid.GetLibItemName();
+    wxString    fpname = FROM_UTF8( fpid.GetLibItemName() );
 
     // Confirmation
     wxString msg = wxString::Format( FMT_OK_DELETE, fpname.GetData(), nickname.GetData() );
@@ -649,7 +649,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( const wxString& aLibrary,
     }
 
     // Ask what to use as the footprint name in the library
-    wxString footprintName = aModule->GetFPID().GetLibItemName();
+    wxString footprintName = FROM_UTF8( aModule->GetFPID().GetLibItemName() );
 
     if( aDisplayDialog )
     {

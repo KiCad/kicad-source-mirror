@@ -249,12 +249,12 @@ LIB_ALIAS* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxStri
         LIB_ID& id = (LIB_ID&) ret->GetPart()->GetLibId();
 
         // Catch any misbehaving plugin, which should be setting internal alias name properly:
-        wxASSERT( aAliasName == (wxString) id.GetLibItemName() );
+        wxASSERT( aAliasName == FROM_UTF8( id.GetLibItemName() ) );
 
         // and clearing nickname
         wxASSERT( !id.GetLibNickname().size() );
 
-        id.SetLibNickname( row->GetNickName() );
+        id.SetLibNickname( TO_UTF8( row->GetNickName() ) );
     }
 
     return ret;
@@ -272,7 +272,7 @@ SYMBOL_LIB_TABLE::SAVE_T SYMBOL_LIB_TABLE::SaveSymbol( const wxString& aNickname
         // Try loading the footprint to see if it already exists, caller wants overwrite
         // protection, which is atypical, not the default.
 
-        wxString name = aSymbol->GetLibId().GetLibItemName();
+        wxString name = FROM_UTF8( aSymbol->GetLibId().GetLibItemName() );
 
         std::unique_ptr< LIB_ALIAS > symbol( row->plugin->LoadSymbol( row->GetFullURI( true ),
                                                                       name,
@@ -333,8 +333,8 @@ void SYMBOL_LIB_TABLE::CreateSymbolLib( const wxString& aNickname )
 LIB_ALIAS* SYMBOL_LIB_TABLE::LoadSymbolWithOptionalNickname( const LIB_ID& aLibId )
     throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception )
 {
-    wxString   nickname = aLibId.GetLibNickname();
-    wxString   name     = aLibId.GetLibItemName();
+    wxString   nickname = FROM_UTF8( aLibId.GetLibNickname() );
+    wxString   name     = FROM_UTF8( aLibId.GetLibItemName() );
 
     if( nickname.size() )
     {

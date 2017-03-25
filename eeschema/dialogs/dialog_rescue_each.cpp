@@ -153,7 +153,7 @@ void DIALOG_RESCUE_EACH::PopulateInstanceList()
     int count = 0;
     for( SCH_COMPONENT* each_component : *m_Rescuer->GetComponents() )
     {
-        if( each_component->GetLibId().Format() != UTF8( selected_part.GetRequestedName() ) )
+        if( each_component->GetLibId().Format() != TO_UTF8( selected_part.GetRequestedName() ) )
             continue;
 
         SCH_FIELD* valueField = each_component->GetField( 1 );

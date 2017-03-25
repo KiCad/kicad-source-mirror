@@ -4,7 +4,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -487,7 +487,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
 
         lenRefText = std::max( lenRefText, int(item.m_Reference.length()) );
         lenValText = std::max( lenValText, int(item.m_Value.length()) );
-        lenPkgText = std::max( lenPkgText, int(item.m_Module->GetFPID().GetLibItemName().length()) );
+        lenPkgText = std::max( lenPkgText, int(FROM_UTF8( item.m_Module->GetFPID().GetLibItemName() ).length()) );
     }
 
     if( aFullFileName.IsEmpty() )
@@ -524,7 +524,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
             line << csv_sep;
             line << list[ii].m_Value;
             line << csv_sep;
-            line << wxString( list[ii].m_Module->GetFPID().GetLibItemName() );
+            line << FROM_UTF8( list[ii].m_Module->GetFPID().GetLibItemName() );
             line << csv_sep;
 
             line << wxString::Format( "%f%c%f%c%f",
@@ -579,7 +579,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
 
             const wxString& ref = list[ii].m_Reference;
             const wxString& val = list[ii].m_Value;
-            const wxString& pkg = list[ii].m_Module->GetFPID().GetLibItemName();
+            const wxString  pkg = FROM_UTF8( list[ii].m_Module->GetFPID().GetLibItemName() );
 
             fprintf(file, "%-*s  %-*s  %-*s  %9.4f  %9.4f  %8.4f  %s\n",
                     lenRefText, TO_UTF8( ref ),

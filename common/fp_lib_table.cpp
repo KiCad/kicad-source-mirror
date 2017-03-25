@@ -26,6 +26,7 @@
 
 #include <fctsys.h>
 #include <common.h>
+#include <macros.h>
 #include <kiface_i.h>
 #include <footprint_info.h>
 #include <lib_id.h>
@@ -255,12 +256,12 @@ MODULE* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& 
         LIB_ID& fpid = (LIB_ID&) ret->GetFPID();
 
         // Catch any misbehaving plugin, which should be setting internal footprint name properly:
-        wxASSERT( aFootprintName == (wxString) fpid.GetLibItemName() );
+        wxASSERT( aFootprintName == FROM_UTF8( fpid.GetLibItemName() ) );
 
         // and clearing nickname
         wxASSERT( !fpid.GetLibNickname().size() );
 
-        fpid.SetLibNickname( row->GetNickName() );
+        fpid.SetLibNickname( TO_UTF8( row->GetNickName() ) );
     }
 
     return ret;
@@ -278,7 +279,7 @@ FP_LIB_TABLE::SAVE_T FP_LIB_TABLE::FootprintSave( const wxString& aNickname,
         // Try loading the footprint to see if it already exists, caller wants overwrite
         // protection, which is atypical, not the default.
 
-        wxString fpname = aFootprint->GetFPID().GetLibItemName();
+        wxString fpname = FROM_UTF8( aFootprint->GetFPID().GetLibItemName() );
 
         std::unique_ptr<MODULE> footprint( row->plugin->FootprintLoad( row->GetFullURI( true ),
                                            fpname, row->GetProperties() ) );
@@ -329,8 +330,8 @@ void FP_LIB_TABLE::FootprintLibCreate( const wxString& aNickname )
 MODULE* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const LIB_ID& aFootprintId )
     throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception )
 {
-    wxString   nickname = aFootprintId.GetLibNickname();
-    wxString   fpname   = aFootprintId.GetLibItemName();
+    wxString   nickname = FROM_UTF8( aFootprintId.GetLibNickname() );
+    wxString   fpname   = FROM_UTF8( aFootprintId.GetLibItemName() );
 
     if( nickname.size() )
     {

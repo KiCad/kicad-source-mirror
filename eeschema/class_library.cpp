@@ -396,7 +396,7 @@ LIB_PART* PART_LIBS::FindLibPart( const LIB_ID& aLibId, const wxString& aLibrary
         if( !aLibraryName.IsEmpty() && lib.GetName() != aLibraryName )
             continue;
 
-        part = lib.FindPart( aLibId.GetLibItemName() );
+        part = lib.FindPart( FROM_UTF8( aLibId.GetLibItemName() ) );
 
         if( part )
             break;
@@ -415,7 +415,7 @@ LIB_ALIAS* PART_LIBS::FindLibraryAlias( const LIB_ID& aLibId, const wxString& aL
         if( !aLibraryName.IsEmpty() && lib.GetName() != aLibraryName )
             continue;
 
-        entry = lib.FindAlias( aLibId.GetLibItemName() );
+        entry = lib.FindAlias( FROM_UTF8( aLibId.GetLibItemName() ) );
 
         if( entry )
             break;

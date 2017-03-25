@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -264,7 +263,7 @@ public:
 
         for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
         {
-            wxString part_name( each_component->GetLibId().GetLibItemName() );
+            wxString part_name( FROM_UTF8( each_component->GetLibId().GetLibItemName() ) );
 
             if( last_part_name != part_name )
             {
@@ -327,12 +326,12 @@ public:
     {
         for( SCH_COMPONENT* each_component : *aRescuer->GetComponents() )
         {
-            if( each_component->GetLibId().GetLibItemName() != UTF8( m_requested_name ) )
+            if( each_component->GetLibId().GetLibItemName() != TO_UTF8( m_requested_name ) )
                 continue;
 
             LIB_ID libId;
 
-            libId.SetLibItemName( m_new_name, false );
+            libId.SetLibItemName( TO_UTF8( m_new_name ), false );
             each_component->SetLibId( libId );
             each_component->ClearFlags();
             aRescuer->LogRescue( each_component, m_requested_name, m_new_name );
@@ -373,7 +372,7 @@ public:
 
         for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
         {
-            wxString part_name( each_component->GetLibId().GetLibItemName() );
+            wxString part_name( FROM_UTF8( each_component->GetLibId().GetLibItemName() ) );
 
             if( old_part_name != part_name )
             {
@@ -462,12 +461,12 @@ public:
 
         for( SCH_COMPONENT* each_component : *aRescuer->GetComponents() )
         {
-            if( each_component->GetLibId().GetLibItemName() != UTF8( m_requested_name ) )
+            if( each_component->GetLibId().GetLibItemName() != TO_UTF8( m_requested_name ) )
                 continue;
 
             LIB_ID libId;
 
-            libId.SetLibItemName( m_new_name, false );
+            libId.SetLibItemName( TO_UTF8( m_new_name ), false );
             each_component->SetLibId( libId );
             each_component->ClearFlags();
             aRescuer->LogRescue( each_component, m_requested_name, m_new_name );
@@ -543,7 +542,7 @@ void RESCUER::UndoRescues()
     {
         LIB_ID libId;
 
-        libId.SetLibItemName( each_logitem.old_name, false );
+        libId.SetLibItemName( TO_UTF8( each_logitem.old_name ), false );
         each_logitem.component->SetLibId( libId );
         each_logitem.component->ClearFlags();
     }

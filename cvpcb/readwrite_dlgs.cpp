@@ -77,7 +77,7 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
 
         if( !aFootprintName.IsEmpty() )
         {
-            wxCHECK_RET( fpid.Parse( aFootprintName ) < 0,
+            wxCHECK_RET( fpid.Parse( TO_UTF8( aFootprintName ) ) < 0,
                          wxString::Format( wxT( "<%s> is not a valid LIB_ID." ),
                                            GetChars( aFootprintName ) ) );
         }
@@ -124,7 +124,7 @@ static int guessNickname( FP_LIB_TABLE* aTbl, LIB_ID* aFootprintId )
         return 0;
 
     wxString    nick;
-    wxString    fpname = aFootprintId->GetLibItemName();
+    wxString    fpname = FROM_UTF8( aFootprintId->GetLibItemName() );
 
     std::vector<wxString> nicks = aTbl->GetLogicalLibs();
 
@@ -147,7 +147,7 @@ static int guessNickname( FP_LIB_TABLE* aTbl, LIB_ID* aFootprintId )
 
     if( nick.size() )
     {
-        aFootprintId->SetLibNickname( nick );
+        aFootprintId->SetLibNickname( TO_UTF8( nick ) );
         return 0;
     }
 
@@ -227,7 +227,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles( const std::string& aNetlist )
                             msg += wxString::Format( _(
                                     "Component '%s' footprint '%s' was <b>not found</b> in any library.\n" ),
                                     GetChars( component->GetReference() ),
-                                    GetChars( component->GetFPID().GetLibItemName() )
+                                    GetChars( FROM_UTF8( component->GetFPID().GetLibItemName() ) )
                                     );
                             break;
 
@@ -235,7 +235,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles( const std::string& aNetlist )
                             msg += wxString::Format( _(
                                     "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n" ),
                                     GetChars( component->GetReference() ),
-                                    GetChars( component->GetFPID().GetLibItemName() )
+                                    GetChars( FROM_UTF8( component->GetFPID().GetLibItemName() ) )
                                     );
                             break;
                         }
@@ -316,8 +316,8 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles( const std::string& aNetlist )
         {
             COMPONENT* component = m_netlist.GetComponent( m_indexes[ii] );
 
-            wxString cmpfpid = component->GetFPID().Format();
-            wxString schfpid = component->GetAltFPID().Format();
+            wxString cmpfpid = FROM_UTF8( component->GetFPID().Format() );
+            wxString schfpid = FROM_UTF8( component->GetAltFPID().Format() );
 
             dlg.Add( component->GetReference(), schfpid, cmpfpid );
         }

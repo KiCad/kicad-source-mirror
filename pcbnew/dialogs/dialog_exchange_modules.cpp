@@ -311,8 +311,8 @@ bool DIALOG_EXCHANGE_MODULE::change_1_Module( MODULE*            aModule,
     // Load module.
     line.Printf( _( "Change footprint '%s' (from '%s') to '%s'" ),
                  GetChars( aModule->GetReference() ),
-                 oldFootprintFPID.Format().c_str(),
-                 aNewFootprintFPID.Format().c_str() );
+                 FROM_UTF8( oldFootprintFPID.Format() ),
+                 FROM_UTF8( aNewFootprintFPID.Format() ) );
     m_WinMessages->AppendText( line );
 
     newModule = m_parent->LoadFootprint( aNewFootprintFPID );

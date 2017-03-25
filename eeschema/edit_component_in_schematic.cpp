@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,7 +55,8 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
     LIB_PART* part = Prj().SchLibs()->FindLibPart( component->GetLibId() );
 
     wxCHECK_RET( part, wxT( "Library part for component <" ) +
-                 component->GetLibId().GetLibItemName() + wxT( "> could not be found." ) );
+                 FROM_UTF8( component->GetLibId().GetLibItemName() ) +
+                 wxT( "> could not be found." ) );
 
     // Save old component in undo list if not already in edit, or moving.
     if( aField->GetFlags() == 0 )

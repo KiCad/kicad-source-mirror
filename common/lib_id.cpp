@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2010-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -169,7 +169,7 @@ int LIB_ID::Parse( const UTF8& aId )
     // Some chars can be found in legacy files converted files from an other EDA tools.
     std::string fpname = aId.substr( partNdx, revNdx-partNdx );
     ReplaceIllegalFileNameChars( &fpname, '_' );
-    SetLibItemName( UTF8( fpname ) );
+    SetLibItemName( fpname );
 
     return -1;
 }
@@ -192,7 +192,7 @@ LIB_ID::LIB_ID( const std::string& aId ) throw( PARSE_ERROR )
 
 LIB_ID::LIB_ID( const wxString& aId ) throw( PARSE_ERROR )
 {
-    UTF8 id = aId;
+    UTF8 id = TO_UTF8( aId );
 
     int offset = Parse( id );
 
@@ -209,9 +209,9 @@ LIB_ID::LIB_ID( const wxString& aId ) throw( PARSE_ERROR )
 
 LIB_ID::LIB_ID( const wxString& aLibName, const wxString& aLibItemName,
                 const wxString& aRevision ) :
-    nickname( aLibName ),
-    item_name( aLibItemName ),
-    revision( aRevision )
+    nickname( TO_UTF8( aLibName ) ),
+    item_name( TO_UTF8( aLibItemName ) ),
+    revision( TO_UTF8( aRevision ) )
 {
 }
 
