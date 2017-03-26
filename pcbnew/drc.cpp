@@ -993,9 +993,9 @@ bool DRC::doFootprintOverlappingDrc()
     // Update courtyard polygons, and test for missing courtyard definition:
     for( MODULE* footprint = m_pcb->m_Modules; footprint; footprint = footprint->Next() )
     {
-        bool diag = footprint->BuildPolyCourtyard();
+        bool is_ok = footprint->BuildPolyCourtyard();
 
-        if( !diag && m_doFootprintOverlapping )
+        if( !is_ok && m_doFootprintOverlapping )
         {
             msg.Printf( _( "footprint '%s' has malformed courtyard" ),
                         footprint->GetReference().GetData() );
@@ -1012,7 +1012,7 @@ bool DRC::doFootprintOverlappingDrc()
 
         if( footprint->GetPolyCourtyardFront().OutlineCount() == 0 &&
             footprint->GetPolyCourtyardBack().OutlineCount() == 0 &&
-            !diag )
+            is_ok )
         {
             msg.Printf( _( "footprint '%s' has no courtyard defined" ),
                         footprint->GetReference().GetData() );
