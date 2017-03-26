@@ -93,7 +93,6 @@ class FP_THREAD_IFACE
         void AddToCache( CACHE_ENTRY const & aEntry )
         {
             MUTLOCK lock( m_lock );
-
             m_cachedFootprints[aEntry.fpid] = aEntry;
         }
 
@@ -115,10 +114,48 @@ class FP_THREAD_IFACE
             return m_current_fp;
         }
 
+        /**
+         * Set the associated panel, for QueueEvent() and GetTable().
+         */
+        void SetPanel( FOOTPRINT_PREVIEW_PANEL* aPanel )
+        {
+            MUTLOCK lock( m_lock );
+            m_panel = aPanel;
+        }
+
+        /**
+         * Post an event to the panel, if the panel still exists. Return whether
+         * the event was posted.
+         */
+        bool QueueEvent( wxEvent const& aEvent )
+        {
+            MUTLOCK lock( m_lock );
+
+            if( m_panel )
+            {
+                m_panel->GetEventHandler()->QueueEvent( aEvent.Clone() );
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /**
+         * Get an FP_LIB_TABLE, or null if the panel is dead.
+         */
+        FP_LIB_TABLE* GetTable()
+        {
+            MUTLOCK locK( m_lock );
+            return m_panel ? m_panel->Prj().PcbFootprintLibs() : nullptr;
+        }
+
     private:
         std::deque<CACHE_ENTRY> m_loaderQueue;
         std::map<LIB_ID, CACHE_ENTRY> m_cachedFootprints;
         LIB_ID m_current_fp;
+        FOOTPRINT_PREVIEW_PANEL* m_panel;
         MUTEX m_lock;
 };
 
@@ -131,14 +168,11 @@ class FP_LOADER_THREAD: public wxThread
 {
     using CACHE_ENTRY = FOOTPRINT_PREVIEW_PANEL::CACHE_ENTRY;
 
-    FOOTPRINT_PREVIEW_PANEL* m_parent;
     std::shared_ptr<FP_THREAD_IFACE> m_iface;
 
 public:
-    FP_LOADER_THREAD( FOOTPRINT_PREVIEW_PANEL* aParent,
-                      std::shared_ptr<FP_THREAD_IFACE> const& aIface ):
+    FP_LOADER_THREAD( std::shared_ptr<FP_THREAD_IFACE> const& aIface ):
         wxThread( wxTHREAD_DETACHED ),
-        m_parent( aParent ),
         m_iface( aIface )
     {}
 
@@ -149,7 +183,7 @@ public:
 
     void ProcessEntry( CACHE_ENTRY& aEntry )
     {
-        FP_LIB_TABLE* fptbl = m_parent->Prj().PcbFootprintLibs();
+        FP_LIB_TABLE* fptbl = m_iface->GetTable();
 
         if( !fptbl )
             return;
@@ -175,10 +209,8 @@ public:
 
         if( aEntry.fpid == m_iface->GetCurrentFootprint() )
         {
-            auto handler = m_parent->GetEventHandler();
-
-            if( handler )
-                handler->QueueEvent( new wxCommandEvent( wxEVT_COMMAND_TEXT_UPDATED, 1 ) );
+            wxCommandEvent evt( wxEVT_COMMAND_TEXT_UPDATED, 1 );
+            m_iface->QueueEvent( evt );
         }
     }
 
@@ -208,7 +240,8 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL(
 {
 
     m_iface = std::make_shared<FP_THREAD_IFACE>();
-    m_loader = new FP_LOADER_THREAD( this, m_iface );
+    m_iface->SetPanel( this );
+    m_loader = new FP_LOADER_THREAD( m_iface );
     m_loader->Run();
 
     SetStealsFocus( false );
@@ -230,7 +263,7 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL(
 
 FOOTPRINT_PREVIEW_PANEL::~FOOTPRINT_PREVIEW_PANEL( )
 {
-    m_loader->Delete();
+    m_iface->SetPanel( nullptr );
 }
 
 
