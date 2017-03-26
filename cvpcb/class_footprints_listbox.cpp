@@ -137,10 +137,10 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
 
     FOOTPRINT_FILTER filter( aList );
 
-    if( aFilterType & FILTERING_BY_COMPONENT_KEYWORD )
+    if( aFilterType & FILTERING_BY_COMPONENT_KEYWORD && aComponent )
         filter.FilterByFootprintFilters( aComponent->GetFootprintFilters() );
 
-    if( aFilterType & FILTERING_BY_PIN_COUNT )
+    if( aFilterType & FILTERING_BY_PIN_COUNT && aComponent )
         filter.FilterByPinCount( aComponent->GetNetCount() );
 
     if( aFilterType & FILTERING_BY_LIBRARY )
