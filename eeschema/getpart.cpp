@@ -163,6 +163,9 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
     COMPONENT_SELECTION sel;
     LIB_ALIAS* const alias = dlg.GetSelectedAlias( &sel.Unit );
 
+    if( alias == nullptr )      // Dialog closed by OK button, but no symbol selected
+        return COMPONENT_SELECTION();
+
     if( alias->GetPart()->IsMulti() && sel.Unit == 0 )
         sel.Unit = 1;
 
