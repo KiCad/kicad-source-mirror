@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2016 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2012-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2017 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2012-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -375,6 +375,39 @@ void LIB_TABLE::Save( const wxString& aFileName ) const
 {
     FILE_OUTPUTFORMATTER sf( aFileName );
     Format( &sf, 0 );
+}
+
+
+size_t LIB_TABLE::GetEnvVars( wxArrayString& aEnvVars ) const
+{
+    const LIB_TABLE* cur = this;
+
+    do
+    {
+        for( unsigned i = 0;  i < cur->rows.size();  i++ )
+        {
+            wxString uri = cur->rows[i].GetFullURI( false );
+
+            int start = uri.Find( "${" );
+
+            if( start == wxNOT_FOUND )
+                continue;
+
+            int end = uri.Find( '}' );
+
+            if( end == wxNOT_FOUND || end < start+2 )
+                continue;
+
+            wxString envVar = uri.Mid( start+2, end - (start+2) );
+
+            if( aEnvVars.Index( envVar, false ) == wxNOT_FOUND )
+                aEnvVars.Add( envVar );
+        }
+
+        // not found, search fall back table(s), if any
+    } while( ( cur = cur->fallBack ) != 0 );
+
+    return aEnvVars.GetCount();
 }
 
 

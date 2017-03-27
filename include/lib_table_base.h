@@ -43,7 +43,13 @@ class OUTPUTFORMATTER;
 class LIB_TABLE_LEXER;
 class LIB_ID;
 class LIB_TABLE_ROW;
+class LIB_TABLE_GRID;
 class IO_ERROR;
+
+
+typedef boost::ptr_vector< LIB_TABLE_ROW > LIB_TABLE_ROWS;
+typedef LIB_TABLE_ROWS::iterator           LIB_TABLE_ROWS_ITER;
+typedef LIB_TABLE_ROWS::const_iterator     LIB_TABLE_ROWS_CITER;
 
 
 /**
@@ -273,7 +279,7 @@ private:
 class LIB_TABLE : public PROJECT::_ELEM
 {
     friend class DIALOG_FP_LIB_TABLE;
-    friend class FP_TBL_MODEL;
+    friend class LIB_TABLE_GRID;
 
 public:
 
@@ -422,6 +428,18 @@ public:
         throw( IO_ERROR, boost::interprocess::lock_exception );
 
     /**
+     * Search the paths all of the #LIB_TABLE_ROWS of the #LIB_TABLE and add all of the
+     * environment variable substitutions to \a aEnvVars.
+     *
+     * This will only add unique environment variables to the list.  Duplicates are ignored.
+     *
+     * @param aEnvVars is the array to load the environment variables.
+     *
+     * @return the number of unique environment variables found in the table.
+     */
+    size_t GetEnvVars( wxArrayString& aEnvVars ) const;
+
+    /**
      * Function ParseOptions
      *
      * parses @a aOptionsList and places the result into a PROPERTIES object which is
@@ -484,10 +502,6 @@ protected:
         if( !nickIndex.size() )
             reindex();
     }
-
-    typedef boost::ptr_vector< LIB_TABLE_ROW > LIB_TABLE_ROWS;
-    typedef LIB_TABLE_ROWS::iterator           LIB_TABLE_ROWS_ITER;
-    typedef LIB_TABLE_ROWS::const_iterator     LIB_TABLE_ROWS_CITER;
 
     LIB_TABLE_ROWS rows;
 

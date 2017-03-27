@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 CERN
- * Copyright (C) 2012-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,175 +44,46 @@
 #include <grid_tricks.h>
 #include <confirm.h>
 #include <wizard_add_fplib.h>
-
-
-/// grid column order is established by this sequence
-enum COL_ORDER
-{
-    COL_NICKNAME,
-    COL_URI,
-    COL_TYPE,
-    COL_OPTIONS,
-    COL_DESCR,
-    COL_COUNT       // keep as last
-};
+#include <lib_table_grid.h>
 
 
 /**
- * Class FP_TBL_MODEL
- * mixes in FP_LIB_TABLE into wxGridTableBase so the result can be used
- * as a table within wxGrid.
+ * This class builds a wxGridTableBase by wrapping an #FP_LIB_TABLE object.
  */
-class FP_TBL_MODEL : public wxGridTableBase, public FP_LIB_TABLE
+class FP_LIB_TABLE_GRID : public LIB_TABLE_GRID, public FP_LIB_TABLE
 {
     friend class FP_GRID_TRICKS;
 
+protected:
+    LIB_TABLE_ROW* at( size_t aIndex ) override { return &rows.at( aIndex ); }
+
+    size_t size() const override { return rows.size(); }
+
+    LIB_TABLE_ROW* makeNewRow() override
+    {
+        return dynamic_cast< LIB_TABLE_ROW* >( new FP_LIB_TABLE_ROW );
+    }
+
+    LIB_TABLE_ROWS_ITER begin() override { return rows.begin(); }
+
+    LIB_TABLE_ROWS_ITER insert( LIB_TABLE_ROWS_ITER aIterator, LIB_TABLE_ROW* aRow ) override
+    {
+        return rows.insert( aIterator, aRow );
+    }
+
+    void push_back( LIB_TABLE_ROW* aRow ) override { rows.push_back( aRow ); }
+
+    LIB_TABLE_ROWS_ITER erase( LIB_TABLE_ROWS_ITER aFirst, LIB_TABLE_ROWS_ITER aLast ) override
+    {
+        return rows.erase( aFirst, aLast );
+    }
+
 public:
 
-    /**
-     * Constructor FP_TBL_MODEL
-     * is a copy constructor that builds a wxGridTableBase (table model) by wrapping
-     * an FP_LIB_TABLE.
-     */
-    FP_TBL_MODEL( const FP_LIB_TABLE& aTableToEdit )
+    FP_LIB_TABLE_GRID( const FP_LIB_TABLE& aTableToEdit )
     {
         rows = aTableToEdit.rows;
     }
-
-    //-----<wxGridTableBase overloads>-------------------------------------------
-
-    int         GetNumberRows() override { return rows.size(); }
-    int         GetNumberCols() override { return COL_COUNT; }
-
-    wxString    GetValue( int aRow, int aCol ) override
-    {
-        if( unsigned( aRow ) < rows.size() )
-        {
-            const LIB_TABLE_ROW* r  = &rows[aRow];
-
-            switch( aCol )
-            {
-            case COL_NICKNAME:  return r->GetNickName();
-            case COL_URI:       return r->GetFullURI();
-            case COL_TYPE:      return r->GetType();
-            case COL_OPTIONS:   return r->GetOptions();
-            case COL_DESCR:     return r->GetDescr();
-            default:
-                ;       // fall thru to wxEmptyString
-            }
-        }
-
-        return wxEmptyString;
-    }
-
-    void    SetValue( int aRow, int aCol, const wxString &aValue ) override
-    {
-        if( unsigned( aRow ) < rows.size() )
-        {
-            LIB_TABLE_ROW* r  = &rows[aRow];
-
-            switch( aCol )
-            {
-            case COL_NICKNAME:  r->SetNickName( aValue );    break;
-            case COL_URI:       r->SetFullURI( aValue );     break;
-            case COL_TYPE:      r->SetType( aValue  );       break;
-            case COL_OPTIONS:   r->SetOptions( aValue );     break;
-            case COL_DESCR:     r->SetDescr( aValue );       break;
-            }
-        }
-    }
-
-    bool IsEmptyCell( int aRow, int aCol ) override
-    {
-        return !GetValue( aRow, aCol );
-    }
-
-    bool InsertRows( size_t aPos = 0, size_t aNumRows = 1 ) override
-    {
-        if( aPos < rows.size() )
-        {
-            for( size_t i = 0; i < aNumRows; i++ )
-            {
-                rows.insert( rows.begin() + i,
-                             dynamic_cast< LIB_TABLE_ROW* >( new FP_LIB_TABLE_ROW ) );
-            }
-
-            // use the (wxGridStringTable) source Luke.
-            if( GetView() )
-            {
-                wxGridTableMessage msg( this,
-                                        wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
-                                        aPos,
-                                        aNumRows );
-
-                GetView()->ProcessTableMessage( msg );
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    bool AppendRows( size_t aNumRows = 1 ) override
-    {
-        // do not modify aNumRows, original value needed for wxGridTableMessage below
-        for( int i = aNumRows; i; --i )
-            rows.push_back( new FP_LIB_TABLE_ROW );
-
-        if( GetView() )
-        {
-            wxGridTableMessage msg( this,
-                                    wxGRIDTABLE_NOTIFY_ROWS_APPENDED,
-                                    aNumRows );
-
-            GetView()->ProcessTableMessage( msg );
-        }
-
-        return true;
-    }
-
-    bool DeleteRows( size_t aPos, size_t aNumRows ) override
-    {
-        // aPos may be a large positive, e.g. size_t(-1), and the sum of
-        // aPos+aNumRows may wrap here, so both ends of the range are tested.
-        if( aPos < rows.size() && aPos + aNumRows <= rows.size() )
-        {
-            LIB_TABLE_ROWS_ITER start = rows.begin() + aPos;
-            rows.erase( start, start + aNumRows );
-
-            if( GetView() )
-            {
-                wxGridTableMessage msg( this,
-                                        wxGRIDTABLE_NOTIFY_ROWS_DELETED,
-                                        aPos,
-                                        aNumRows );
-
-                GetView()->ProcessTableMessage( msg );
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    wxString GetColLabelValue( int aCol ) override
-    {
-        switch( aCol )
-        {
-        case COL_NICKNAME:  return _( "Nickname" );
-        case COL_URI:       return _( "Library Path" );
-
-        // keep this "Plugin Type" text fairly long so column is sized wide enough
-        case COL_TYPE:      return _( "Plugin Type" );
-        case COL_OPTIONS:   return _( "Options" );
-        case COL_DESCR:     return _( "Description" );
-        default:            return wxEmptyString;
-        }
-    }
-
-    //-----</wxGridTableBase overloads>------------------------------------------
 };
 
 
@@ -230,7 +101,7 @@ protected:
     /// spreadsheet formatted text.
     virtual void paste_text( const wxString& cb_text ) override
     {
-        FP_TBL_MODEL*       tbl = (FP_TBL_MODEL*) m_grid->GetTable();
+        FP_LIB_TABLE_GRID*       tbl = (FP_LIB_TABLE_GRID*) m_grid->GetTable();
 
         size_t  ndx = cb_text.find( "(fp_lib_table" );
 
@@ -302,8 +173,8 @@ public:
 
         // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
         // so make it a grid owned table.
-        m_global_grid->SetTable(  new FP_TBL_MODEL( *aGlobal ),  true );
-        m_project_grid->SetTable( new FP_TBL_MODEL( *aProject ), true );
+        m_global_grid->SetTable(  new FP_LIB_TABLE_GRID( *aGlobal ),  true );
+        m_project_grid->SetTable( new FP_LIB_TABLE_GRID( *aProject ), true );
 
         // add Cut, Copy, and Paste to wxGrids
         m_global_grid->PushEventHandler( new FP_GRID_TRICKS( m_global_grid ) );
@@ -387,8 +258,6 @@ public:
 
 
 private:
-    typedef FP_LIB_TABLE_ROW   ROW;
-
     /// If the cursor is not on a valid cell, because there are no rows at all, return -1,
     /// else return a 0 based column index.
     int getCursorCol() const
@@ -412,7 +281,7 @@ private:
     {
         for( int t=0; t<2; ++t )
         {
-            FP_TBL_MODEL& model = t==0 ? *global_model() : *project_model();
+            FP_LIB_TABLE_GRID& model = t==0 ? *global_model() : *project_model();
 
             for( int r = 0; r < model.GetNumberRows(); )
             {
@@ -427,7 +296,7 @@ private:
                     // button.
                     model.DeleteRows( r, 1 );
                 }
-                else if( nick.find(':') != size_t(-1) )
+                else if( nick.find( ':' ) != size_t( -1 ) )
                 {
                     wxString msg = wxString::Format(
                         _( "Illegal character '%s' found in Nickname: '%s' in row %d" ),
@@ -461,7 +330,7 @@ private:
         // check for duplicate nickNames, separately in each table.
         for( int t=0; t<2; ++t )
         {
-            FP_TBL_MODEL& model = t==0 ? *global_model() : *project_model();
+            FP_LIB_TABLE_GRID& model = t==0 ? *global_model() : *project_model();
 
             for( int r1 = 0; r1 < model.GetNumberRows() - 1;  ++r1 )
             {
@@ -588,7 +457,7 @@ private:
         {
             int curCol = getCursorCol();
 
-            FP_TBL_MODEL* tbl = cur_model();
+            FP_LIB_TABLE_GRID* tbl = cur_model();
 
             boost::ptr_vector< LIB_TABLE_ROW >::auto_type move_me =
                 tbl->rows.release( tbl->rows.begin() + curRow );
@@ -620,7 +489,7 @@ private:
         if( rowsSelected.GetCount() == 0 )
             return;
 
-        FP_TBL_MODEL* tbl = cur_model();
+        FP_LIB_TABLE_GRID* tbl = cur_model();
 
         // @todo: add multiple selection moves.
         int curRow = rowsSelected[0];
@@ -654,7 +523,7 @@ private:
 
     void optionsEditor( wxCommandEvent& event ) override
     {
-        FP_TBL_MODEL*   tbl = cur_model();
+        FP_LIB_TABLE_GRID*   tbl = cur_model();
 
         if( tbl->GetNumberRows() )
         {
@@ -742,8 +611,8 @@ private:
         // clear the table
         m_path_subs_grid->DeleteRows( 0, m_path_subs_grid->GetNumberRows() );
 
-        FP_TBL_MODEL*   gbl = global_model();
-        FP_TBL_MODEL*   prj = project_model();
+        FP_LIB_TABLE_GRID*   gbl = global_model();
+        FP_LIB_TABLE_GRID*   prj = project_model();
 
         int gblRowCount = gbl->GetNumberRows();
         int prjRowCount = prj->GetNumberRows();
@@ -813,9 +682,20 @@ private:
     FP_LIB_TABLE*    m_global;
     FP_LIB_TABLE*    m_project;
 
-    FP_TBL_MODEL*    global_model()  const   { return (FP_TBL_MODEL*) m_global_grid->GetTable(); }
-    FP_TBL_MODEL*    project_model() const   { return (FP_TBL_MODEL*) m_project_grid->GetTable(); }
-    FP_TBL_MODEL*    cur_model() const       { return (FP_TBL_MODEL*) m_cur_grid->GetTable(); }
+    FP_LIB_TABLE_GRID* global_model() const
+    {
+        return (FP_LIB_TABLE_GRID*) m_global_grid->GetTable();
+    }
+
+    FP_LIB_TABLE_GRID* project_model() const
+    {
+        return (FP_LIB_TABLE_GRID*) m_project_grid->GetTable();
+    }
+
+    FP_LIB_TABLE_GRID* cur_model() const
+    {
+        return (FP_LIB_TABLE_GRID*) m_cur_grid->GetTable();
+    }
 
     wxGrid*          m_cur_grid;     ///< changed based on tab choice
     static int       m_pageNdx;      ///< Remember the last notebook page selected during a session
@@ -835,7 +715,7 @@ void DIALOG_FP_LIB_TABLE::OnClickLibraryWizard( wxCommandEvent& event )
     const std::vector<WIZARD_FPLIB_TABLE::LIBRARY>& libs = dlg.GetLibraries();
     bool global_scope = dlg.GetLibScope() == WIZARD_FPLIB_TABLE::GLOBAL;
     wxGrid* libgrid = global_scope ? m_global_grid : m_project_grid;
-    FP_TBL_MODEL* tbl = (FP_TBL_MODEL*) libgrid->GetTable();
+    FP_LIB_TABLE_GRID* tbl = (FP_LIB_TABLE_GRID*) libgrid->GetTable();
 
     for( std::vector<WIZARD_FPLIB_TABLE::LIBRARY>::const_iterator it = libs.begin();
             it != libs.end(); ++it )
