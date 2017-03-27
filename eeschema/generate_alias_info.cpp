@@ -31,7 +31,7 @@ static const wxString DescriptionFormat =
     "__FIELDS__"
     "</table>";
 
-static const wxString AliasOfFormat =   "<br><i>" + _( "Alias of " ) + "%s</i>";
+static const wxString AliasOfFormat =   "<br><i>" + _( "Alias of " ) + "%s (%s)</i>";
 static const wxString DescFormat =      "<br>%s";
 static const wxString KeywordsFormat =  "<br>" + _( "Keywords:" ) + " %s";
 static const wxString FieldFormat =
@@ -90,37 +90,28 @@ protected:
         }
         else
         {
+            wxString root_name = _( "Unknown" );
+            wxString root_desc = "";
+
             LIB_PART* root = m_part->GetPart();
-            const wxString root_name = ( root ? root->GetName() : _( "Unknown" ) );
+            LIB_ALIAS* root_alias = root ? root->GetAlias( 0 ) : nullptr;
+
+            if( root )
+                root_name = root->GetName();
+
+            if( root_alias )
+                root_desc = root_alias->GetDescription();
+
             m_html.Replace(
-                "__ALIASOF__", wxString::Format( AliasOfFormat, EscapedHTML( root_name ) ) );
+                "__ALIASOF__", wxString::Format(
+                    AliasOfFormat, EscapedHTML( root_name ), EscapedHTML( root_desc ) ) );
         }
     }
 
 
     void SetHtmlDesc()
     {
-        wxString raw_desc;
-
-        if( m_part->IsRoot() )
-        {
-            raw_desc = m_part->GetDescription();
-        }
-        else
-        {
-            LIB_PART* root = m_part->GetPart();
-
-            for( size_t i = 0; i < root->GetAliasCount(); ++i )
-            {
-                LIB_ALIAS* alias = root->GetAlias( i );
-
-                if( alias && !alias->GetDescription().empty() )
-                {
-                    raw_desc = alias->GetDescription();
-                    break;
-                }
-            }
-        }
+        wxString raw_desc = m_part->GetDescription();
 
         m_html.Replace( "__DESC__", wxString::Format( DescFormat, EscapedHTML( raw_desc ) ) );
     }

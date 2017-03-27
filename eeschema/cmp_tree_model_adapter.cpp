@@ -310,6 +310,33 @@ void CMP_TREE_MODEL_ADAPTER::GetValue(
 }
 
 
+bool CMP_TREE_MODEL_ADAPTER::GetAttr(
+            wxDataViewItem const&   aItem,
+            unsigned int            aCol,
+            wxDataViewItemAttr&     aAttr ) const
+{
+    auto node = ToNode( aItem );
+    wxASSERT( node );
+
+    if( node->Type != CMP_TREE_NODE::ALIAS )
+    {
+        // Currently only aliases are formatted at all
+        return false;
+    }
+
+    if( node->Alias && !node->Alias->IsRoot() && aCol == 0 )
+    {
+        // Names of non-root aliases are italicized
+        aAttr.SetItalic( true );
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
 int CMP_TREE_MODEL_ADAPTER::ColWidth( CMP_TREE_NODE& aTree, int aCol, wxString const& aHeading )
 {
     const int indent = aCol ? 0 : kDataViewIndent;

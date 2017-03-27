@@ -87,6 +87,7 @@ class PART_LIBS;
  * - `GetColumnType()` - get the data type shown in each column
  * - `GetValue()` - get the data shown in a cell
  * - `SetValue()` - edit the data in a cell (does nothing)
+ * - `GetAttr()` - get any per-item formatting
  * - `Compare()` - compare two rows, for sorting
  * - `HasDefaultCompare()` - whether sorted by default
  */
@@ -287,6 +288,19 @@ protected:
             wxVariant const&        aVariant,
             wxDataViewItem const&   aItem,
             unsigned int            aCol ) override { return false; }
+
+    /**
+     * Get any formatting for an item.
+     *
+     * @param aItem     item to get formatting for
+     * @param aCol      column number of interest
+     * @param aAttr     receiver for attributes
+     * @return          true iff the item has non-default attributes
+     */
+    virtual bool GetAttr(
+            wxDataViewItem const&   aItem,
+            unsigned int            aCol,
+            wxDataViewItemAttr&     aAttr ) const override;
 
 private:
     CMP_FILTER_TYPE     m_filter;
