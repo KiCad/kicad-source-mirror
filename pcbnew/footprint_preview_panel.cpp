@@ -124,6 +124,15 @@ class FP_THREAD_IFACE
         }
 
         /**
+         * Get the associated panel.
+         */
+        FOOTPRINT_PREVIEW_PANEL* GetPanel()
+        {
+            MUTLOCK lock( m_lock );
+            return m_panel;
+        }
+
+        /**
          * Post an event to the panel, if the panel still exists. Return whether
          * the event was posted.
          */
@@ -217,7 +226,7 @@ public:
 
     virtual void* Entry() override
     {
-        while( !TestDestroy() )
+        while( m_iface->GetPanel() )
         {
             auto ent = m_iface->PopFromQueue();
 
@@ -227,7 +236,7 @@ public:
                 wxMilliSleep( 100 );
         }
 
-        return NULL;
+        return nullptr;
     }
 };
 
