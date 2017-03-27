@@ -136,6 +136,12 @@ void DIALOG_RESCUE_EACH::PopulateConflictList()
 
         m_ListOfConflicts->AppendItem( data );
     }
+
+    if( !m_Rescuer->m_all_candidates.empty() )
+    {
+        // Select the first choice
+        m_ListOfConflicts->SelectRow( 0 );
+    }
 }
 
 
