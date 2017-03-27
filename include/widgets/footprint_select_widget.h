@@ -66,7 +66,7 @@ public:
      *  Default and Other
      */
     FOOTPRINT_SELECT_WIDGET( wxWindow* aParent, FOOTPRINT_ASYNC_LOADER& aLoader,
-            std::unique_ptr<FOOTPRINT_LIST>& aFpList, bool aUpdate = true, int aMaxItems = 10 );
+            std::unique_ptr<FOOTPRINT_LIST>& aFpList, bool aUpdate = true, int aMaxItems = 400 );
 
     virtual ~FOOTPRINT_SELECT_WIDGET()
     {
