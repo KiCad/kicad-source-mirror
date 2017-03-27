@@ -30,6 +30,7 @@
 #define EDA_PATTERN_MATCH_H
 
 #include <vector>
+#include <map>
 #include <memory>
 #include <wx/wx.h>
 #include <wx/string.h>
@@ -104,6 +105,42 @@ public:
 
 protected:
     wxString m_wildcard_pattern;
+};
+
+
+/**
+ * Relational match.
+ *
+ * Matches tokens of the format:
+ *
+ *      key:value       or      key=value
+ *
+ * with search patterns of the format:
+ *
+ *      key<value, key<=value, key=value, key>=value, key>value
+ *
+ * by parsing the value numerically and comparing.
+ */
+class EDA_PATTERN_MATCH_RELATIONAL : public EDA_PATTERN_MATCH
+{
+public:
+    virtual bool SetPattern( const wxString& aPattern ) override;
+    virtual wxString const& GetPattern() const override;
+    virtual int Find( const wxString& aCandidate ) const override;
+    int FindOne( const wxString& aCandidate ) const;
+
+protected:
+
+    enum RELATION { LT, LE, EQ, GE, GT, NONE };
+
+    wxString m_pattern;
+    wxString m_key;
+    RELATION m_relation;
+    double   m_value;
+
+    static wxRegEx m_regex_description;
+    static wxRegEx m_regex_search;
+    static const std::map<wxString, double> m_units;
 };
 
 

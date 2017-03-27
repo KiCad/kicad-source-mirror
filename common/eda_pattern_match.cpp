@@ -24,6 +24,7 @@
 
 #include <eda_pattern_match.h>
 #include <wx/log.h>
+#include <wx/tokenzr.h>
 #include <climits>
 #include <make_unique.h>
 
@@ -158,12 +159,154 @@ int EDA_PATTERN_MATCH_WILDCARD::Find( const wxString& aCandidate ) const
 }
 
 
+bool EDA_PATTERN_MATCH_RELATIONAL::SetPattern( const wxString& aPattern )
+{
+    bool matches = m_regex_search.Matches( aPattern );
+
+    if( !matches || m_regex_search.GetMatchCount() < 5 )
+        return false;
+
+    m_pattern = aPattern;
+    wxString key = m_regex_search.GetMatch( aPattern, 1 );
+    wxString rel = m_regex_search.GetMatch( aPattern, 2 );
+    wxString val = m_regex_search.GetMatch( aPattern, 3 );
+    wxString unit = m_regex_search.GetMatch( aPattern, 4 );
+
+    m_key = key.Lower();
+
+    if( rel == "<" )
+        m_relation = LT;
+    else if( rel == "<=" )
+        m_relation = LE;
+    else if( rel == "=" )
+        m_relation = EQ;
+    else if( rel == ">=" )
+        m_relation = GE;
+    else if( rel == ">" )
+        m_relation = GT;
+    else
+        return false;
+
+    if( val == "" )
+    {
+        // Matching on empty values keeps the match list from going empty when
+        // the user types the relational operator character, which helps prevent
+        // confusion.
+        m_relation = NONE;
+    }
+    else if( !val.ToCDouble( &m_value ) )
+        return false;
+
+    auto unit_it = m_units.find( unit.Lower() );
+
+    if( unit_it != m_units.end() )
+        m_value *= unit_it->second;
+    else
+        return false;
+
+    m_pattern = aPattern;
+
+    return true;
+}
+
+
+wxString const& EDA_PATTERN_MATCH_RELATIONAL::GetPattern() const
+{
+    return m_pattern;
+}
+
+
+int EDA_PATTERN_MATCH_RELATIONAL::Find( const wxString& aCandidate ) const
+{
+    wxStringTokenizer tokenizer( aCandidate );
+    size_t lastpos = 0;
+
+    while( tokenizer.HasMoreTokens() )
+    {
+        const wxString token = tokenizer.GetNextToken();
+        int found_delta = FindOne( token );
+
+        if( found_delta != EDA_PATTERN_NOT_FOUND )
+        {
+            size_t found = (size_t) found_delta + lastpos;
+            return ( found > INT_MAX ) ? INT_MAX : (int) found;
+        }
+
+        lastpos = tokenizer.GetPosition();
+    }
+
+    return EDA_PATTERN_NOT_FOUND;
+}
+
+
+int EDA_PATTERN_MATCH_RELATIONAL::FindOne( const wxString& aCandidate ) const
+{
+    bool matches = m_regex_description.Matches( aCandidate );
+
+    if( !matches )
+        return EDA_PATTERN_NOT_FOUND;
+
+    size_t start, len;
+    m_regex_description.GetMatch( &start, &len, 0 );
+    wxString key = m_regex_description.GetMatch( aCandidate, 1 );
+    wxString val = m_regex_description.GetMatch( aCandidate, 2 );
+    wxString unit = m_regex_description.GetMatch( aCandidate, 3 );
+
+    int istart = ( start > INT_MAX ) ? INT_MAX : start;
+
+    if( key.Lower() != m_key )
+        return EDA_PATTERN_NOT_FOUND;
+
+    double val_parsed;
+
+    if( !val.ToCDouble( &val_parsed ) )
+        return EDA_PATTERN_NOT_FOUND;
+
+    auto unit_it = m_units.find( unit.Lower() );
+
+    if( unit_it != m_units.end() )
+        val_parsed *= unit_it->second;
+
+    switch( m_relation )
+    {
+    case LT: return val_parsed <  m_value    ? istart : EDA_PATTERN_NOT_FOUND;
+    case LE: return val_parsed <= m_value    ? istart : EDA_PATTERN_NOT_FOUND;
+    case EQ: return val_parsed == m_value    ? istart : EDA_PATTERN_NOT_FOUND;
+    case GE: return val_parsed >= m_value    ? istart : EDA_PATTERN_NOT_FOUND;
+    case GT: return val_parsed >  m_value    ? istart : EDA_PATTERN_NOT_FOUND;
+    case NONE: return istart;
+    default: return EDA_PATTERN_NOT_FOUND;
+    }
+}
+
+
+wxRegEx EDA_PATTERN_MATCH_RELATIONAL::m_regex_description(
+        R"((\w+)[=:]([-+]?[\d.]+)(\w*))", wxRE_ADVANCED );
+wxRegEx EDA_PATTERN_MATCH_RELATIONAL::m_regex_search(
+        R"(^(\w+)(<|<=|=|>=|>)([-+]?[\d.]*)(\w*)$)", wxRE_ADVANCED );
+const std::map<wxString, double> EDA_PATTERN_MATCH_RELATIONAL::m_units = {
+    { "p",  1e-12 },
+    { "n",  1e-9 },
+    { "u",  1e-6 },
+    { "m",  1e-3 },
+    { "",   1. },
+    { "k",  1e3 },
+    { "meg",1e6 },
+    { "g",  1e9 },
+    { "t",  1e12 },
+    { "ki", 1024. },
+    { "mi", 1048576. },
+    { "gi", 1073741824. },
+    { "ti", 1099511627776. } };
+
+
 EDA_COMBINED_MATCHER::EDA_COMBINED_MATCHER( const wxString& aPattern )
     : m_pattern( aPattern )
 {
     // Whatever syntax users prefer, it shall be matched.
     AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_REGEX>() );
     AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_WILDCARD>() );
+    AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_RELATIONAL>() );
     // If any of the above matchers couldn't be created because the pattern
     // syntax does not match, the substring will try its best.
     AddMatcher( aPattern, std::make_unique<EDA_PATTERN_MATCH_SUBSTR>() );
