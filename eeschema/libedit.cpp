@@ -549,10 +549,6 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
 
     if( !libEntry )
     {
-        msg.Printf( _( "Entry '%s' not found in library '%s'." ),
-                    GetChars( libEntry->GetName() ),
-                    GetChars( lib->GetName() ) );
-        DisplayError( this, msg );
         return;
     }
 
