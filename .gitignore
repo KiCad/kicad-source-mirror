@@ -62,3 +62,12 @@ demos/**/_autosave-*
 .*.swp
 *~
 .DS_Store
+*.png
+*.kiface
+*.o
+*.a
+*.cmake
+*.orig
+*.rej
+*.so
+*.old

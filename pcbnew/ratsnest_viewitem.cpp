@@ -55,16 +55,9 @@ const BOX2I RATSNEST_VIEWITEM::ViewBBox() const
     return bbox;
 }
 
-#include <geometry/seg.h>
-std::vector<SEG> delEdges;
-
-void clearDEdges() { delEdges.clear(); }
-void addDEdge ( SEG edge ) { delEdges.push_back(edge); }
-
-
 void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
-    static const double crossSize = 100000.0;
+    constexpr int CROSS_SIZE = 200000;
 
     auto gal = aView->GetGAL();
 	gal->SetIsStroke( true );
@@ -76,23 +69,19 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     int highlightedNet = rs->GetHighlightNetCode();
 
     gal->SetStrokeColor( color.Brightened( 0.8 ) );
-    for (auto s : delEdges)
-        gal->DrawLine( s.A, s.B );
-
 
     // Draw the "dynamic" ratsnest (i.e. for objects that may be currently being moved)
     for( const auto& l : m_data->GetDynamicRatsnest() )
     {
         if ( l.a == l.b )
         {
-            gal->DrawLine( VECTOR2I( l.a.x - crossSize, l.a.y - crossSize ), VECTOR2I( l.b.x + crossSize, l.b.y + crossSize ) );
-            gal->DrawLine( VECTOR2I( l.a.x - crossSize, l.a.y + crossSize ), VECTOR2I( l.b.x + crossSize, l.b.y - crossSize ) );
+            gal->DrawLine( VECTOR2I( l.a.x - CROSS_SIZE, l.a.y - CROSS_SIZE ), VECTOR2I( l.b.x + CROSS_SIZE, l.b.y + CROSS_SIZE ) );
+            gal->DrawLine( VECTOR2I( l.a.x - CROSS_SIZE, l.a.y + CROSS_SIZE ), VECTOR2I( l.b.x + CROSS_SIZE, l.b.y - CROSS_SIZE ) );
         } else {
             gal->DrawLine( l.a, l.b );
         }
     }
 
-    // Dynamic ratsnest (for e.g. dragged items)
     for( int i = 1; i < m_data->GetNetCount(); ++i )
     {
         RN_NET* net = m_data->GetRatsnestForNet( i );
@@ -103,20 +92,21 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
         for( const auto& edge : net->GetUnconnected() )
         {
-            if ( !edge.IsVisible() )
-                continue;
-                
+            //if ( !edge.IsVisible() )
+            //    continue;
+
             const auto& sourceNode = edge.GetSourceNode();
             const auto& targetNode = edge.GetTargetNode();
             const VECTOR2I source( sourceNode->Pos() );
             const VECTOR2I target( targetNode->Pos() );
 
-            if ( !sourceNode->GetNoLine() && !targetNode->GetNoLine() )
+            bool enable =  !sourceNode->GetNoLine() && !targetNode->GetNoLine();
+            bool show = sourceNode->Parent()->GetLocalRatsnestVisible() || targetNode->Parent()->GetLocalRatsnestVisible();
+
+            if ( enable && show )
             {
                 if ( source == target )
                 {
-                    constexpr int CROSS_SIZE = 200000;
-
                     gal->DrawLine( VECTOR2I( source.x - CROSS_SIZE, source.y - CROSS_SIZE ), VECTOR2I( source.x + CROSS_SIZE, source.y + CROSS_SIZE ) );
                     gal->DrawLine( VECTOR2I( source.x - CROSS_SIZE, source.y + CROSS_SIZE ), VECTOR2I( source.x + CROSS_SIZE, source.y - CROSS_SIZE ) );
                 }

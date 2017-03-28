@@ -285,6 +285,8 @@ const std::vector<RN_DYNAMIC_LINE>& CONNECTIVITY_DATA::GetDynamicRatsnest() cons
 
 void CONNECTIVITY_DATA::ClearDynamicRatsnest()
 {
+    m_connAlgo->ForEachAnchor( [] (CN_ANCHOR_PTR anchor ) { anchor->SetNoLine( false ); } );
+
     m_dynamicConnectivity.reset();
     m_dynamicRatsnest.clear();
 }

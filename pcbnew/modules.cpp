@@ -296,7 +296,6 @@ void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
 
     if( !Module->IsMoving() ) /* This is a simple flip, no other edition in progress */
     {
-        GetBoard()->m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK );
 
         if( DC )
         {

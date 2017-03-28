@@ -117,34 +117,6 @@ public:
     bool SetNetCode( int aNetCode, bool aNoAssert=false );
 
     /**
-     * Function GetSubNet
-     * @return int - the sub net code.
-     */
-    int GetSubNet() const
-    {
-        return m_Subnet;
-    }
-
-    void SetSubNet( int aSubNetCode )
-    {
-        m_Subnet = aSubNetCode;
-    }
-
-    /**
-     * Function GetZoneSubNet
-     * @return int - the sub net code in zone connections.
-     */
-    int GetZoneSubNet() const
-    {
-        return m_ZoneSubnet;
-    }
-
-    void SetZoneSubNet( int aSubNetCode )
-    {
-        m_ZoneSubnet = aSubNetCode;
-    }
-
-    /**
      * Function GetNetname
      * @return wxString - the full netname
      */
@@ -189,17 +161,23 @@ public:
      */
     wxString GetNetClassName() const;
 
+    void SetLocalRatsnestVisible( bool aVisible )
+    {
+        m_localRatsnestVisible = aVisible;
+    }
+
+    bool GetLocalRatsnestVisible() const
+    {
+        return m_localRatsnestVisible;
+    }
+
 protected:
     /// Stores all informations about the net that item belongs to
     NETINFO_ITEM* m_netinfo;
 
 private:
-    int         m_Subnet;       /* In rastnest routines : for the current net, block number
-                                 * (number common to the current connected items found)
-                                 */
 
-    int         m_ZoneSubnet;   // used in rastnest computations : for the current net,
-                                // handle cluster number in zone connection
+    bool m_localRatsnestVisible;
 };
 
 

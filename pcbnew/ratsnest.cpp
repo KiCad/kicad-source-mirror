@@ -97,30 +97,31 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
 
     auto connectivity = m_Pcb->GetConnectivity();
 
-    COLOR4D color = g_ColorsSettings.GetItemColor(LAYER_RATSNEST);
+    COLOR4D color = g_ColorsSettings.GetItemColor( LAYER_RATSNEST );
 
     for( int i = 1; i < connectivity->GetNetCount(); ++i )
     {
-            RN_NET* net = connectivity->GetRatsnestForNet( i );
+        RN_NET* net = connectivity->GetRatsnestForNet( i );
 
-            if( ( aNetcode <= 0 ) || ( aNetcode == i ) )
+        if( ( aNetcode <= 0 ) || ( aNetcode == i ) )
+        {
+            for( const auto& edge : net->GetEdges() )
             {
-                for ( const auto& edge : net->GetEdges() )
-                {
-                    if ( edge.IsVisible() )
-                    {
-                        auto s = edge.GetSourcePos();
-                        auto d = edge.GetTargetPos();
-                        auto sn = edge.GetSourceNode();
-                        auto dn = edge.GetTargetNode();
+                auto s = edge.GetSourcePos();
+                auto d = edge.GetTargetPos();
+                auto sn = edge.GetSourceNode();
+                auto dn = edge.GetTargetNode();
 
-                        if ( !sn->GetNoLine() && !dn->GetNoLine() )
-                            GRLine( m_canvas->GetClipBox(), aDC, wxPoint(s.x, s.y), wxPoint(d.x, d.y), 0, color );
-                    }
-                }
+                bool enable = !sn->GetNoLine() && !dn->GetNoLine();
+                bool show = sn->Parent()->GetLocalRatsnestVisible()
+                            || dn->Parent()->GetLocalRatsnestVisible();
+
+                if( enable && show )
+                    GRLine( m_canvas->GetClipBox(), aDC, wxPoint( s.x, s.y ), wxPoint( d.x,
+                                    d.y ), 0, color );
             }
+        }
     }
-
 }
 
 
@@ -133,7 +134,8 @@ void PCB_BASE_FRAME::TraceModuleRatsNest( wxDC* DC )
 
     for( const auto& l : GetBoard()->GetConnectivity()->GetDynamicRatsnest() )
     {
-        GRLine( m_canvas->GetClipBox(), DC, wxPoint(l.a.x, l.a.y), wxPoint(l.b.x, l.b.y), 0, tmpcolor );
+        GRLine( m_canvas->GetClipBox(), DC, wxPoint( l.a.x, l.a.y ), wxPoint( l.b.x,
+                        l.b.y ), 0, tmpcolor );
     }
 }
 
@@ -153,8 +155,8 @@ void PCB_BASE_FRAME::TraceModuleRatsNest( wxDC* DC )
  * drawn
  */
 
- static wxPoint s_CursorPos; // Coordinate of the moving point (mouse cursor and
-                             // end of current track segment)
+static wxPoint s_CursorPos;     // Coordinate of the moving point (mouse cursor and
+                                // end of current track segment)
 
 /* Function BuildAirWiresTargetsList
  * Build a list of candidates that can be a coonection point
@@ -163,11 +165,11 @@ void PCB_BASE_FRAME::TraceModuleRatsNest( wxDC* DC )
  * from the current new track to candidates during track creation
  */
 
-static BOARD_CONNECTED_ITEM *s_ref = nullptr;
+static BOARD_CONNECTED_ITEM* s_ref = nullptr;
 static int s_refNet = -1;
 
 void PCB_BASE_FRAME::BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
-                                               const wxPoint& aPosition, int aNet )
+        const wxPoint& aPosition, int aNet )
 {
     s_CursorPos = aPosition;    // needed for sort_by_distance
     s_ref = aItemRef;
@@ -175,25 +177,24 @@ void PCB_BASE_FRAME::BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
 }
 
 
+static MODULE movedModule( nullptr );
 
-
-static MODULE movedModule(nullptr);
-
-void PCB_BASE_FRAME::build_ratsnest_module( MODULE *mod, wxPoint aMoveVector )
+void PCB_BASE_FRAME::build_ratsnest_module( MODULE* mod, wxPoint aMoveVector )
 {
     auto connectivity = GetBoard()->GetConnectivity();
+
     movedModule = *mod;
     movedModule.Move( -aMoveVector );
     connectivity->ClearDynamicRatsnest();
-    connectivity->BlockRatsnestItems( {mod} );
-    connectivity->ComputeDynamicRatsnest( {&movedModule} );
+    connectivity->BlockRatsnestItems( { mod } );
+    connectivity->ComputeDynamicRatsnest( { &movedModule } );
 }
 
 
 void PCB_BASE_FRAME::TraceAirWiresToTargets( wxDC* aDC )
 {
     auto connectivity = GetBoard()->GetConnectivity();
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) GetDisplayOptions();
 
     auto targets = connectivity->NearestUnconnectedTargets( s_ref, s_CursorPos, s_refNet );
 
@@ -202,23 +203,23 @@ void PCB_BASE_FRAME::TraceAirWiresToTargets( wxDC* aDC )
 
     GRSetDrawMode( aDC, GR_XOR );
 
-    for (int i = 0; i < std::min( (int)displ_opts->m_MaxLinksShowed, (int)targets.size() ); i++)
+    for( int i = 0; i < std::min( (int) displ_opts->m_MaxLinksShowed, (int) targets.size() ); i++ )
     {
         auto p = targets[i];
-        GRLine( m_canvas->GetClipBox(), aDC, s_CursorPos, wxPoint(p.x, p.y), 0, YELLOW );
+        GRLine( m_canvas->GetClipBox(), aDC, s_CursorPos, wxPoint( p.x, p.y ), 0, YELLOW );
     }
-
 }
+
 
 // Redraw in XOR mode the outlines of the module.
 void MODULE::DrawOutlinesWhenMoving( EDA_DRAW_PANEL* panel, wxDC* DC,
-                                     const wxPoint&  aMoveVector )
+        const wxPoint& aMoveVector )
 {
-    int    pad_fill_tmp;
+    int pad_fill_tmp;
     D_PAD* pt_pad;
 
     DrawEdgesOnly( panel, DC, aMoveVector, GR_XOR );
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) panel->GetDisplayOptions();
 
     // Show pads in sketch mode to speedu up drawings
     pad_fill_tmp = displ_opts->m_DisplayPadFill;
@@ -239,101 +240,18 @@ void MODULE::DrawOutlinesWhenMoving( EDA_DRAW_PANEL* panel, wxDC* DC,
     }
 }
 
+
 void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
 {
-    if( GetBoard()->IsElementVisible(RATSNEST_VISIBLE) )
-        return;
-
-    Compile_Ratsnest( DC, true );
-
-    printf("show1r: %p\n", item);
-
-    auto connectivity = GetBoard()->GetConnectivity();
-
-
-// FIXME
-
-#if 0
-    if( item )
+    if( item->Type() == PCB_MODULE_T )
     {
-        if( item->Type() == PCB_PAD_T )
+        auto mod = static_cast<MODULE*> (item);
+
+        for( auto pad : mod->PadsIter() )
         {
-            pt_pad = (D_PAD*) item;
-            Module = pt_pad->GetParent();
+            pad->SetLocalRatsnestVisible( true );
         }
 
-        if( pt_pad ) // Displaying the ratsnest of the corresponding net.
-        {
-            SetMsgPanel( pt_pad );
-
-            for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
-            {
-                RATSNEST_ITEM* net = &GetBoard()->m_FullRatsnest[ii];
-
-                if( net->GetNet() == pt_pad->GetNetCode() )
-                {
-                    if( ( net->m_Status & CH_VISIBLE ) != 0 )
-                        continue;
-
-                    net->m_Status |= CH_VISIBLE;
-
-                    if( ( net->m_Status & CH_ACTIF ) == 0 )
-                        continue;
-
-                    net->Draw( m_canvas, DC, GR_XOR, wxPoint( 0, 0 ) );
-                }
-            }
-        }
-        else
-        {
-            if( item->Type() == PCB_MODULE_TEXT_T )
-            {
-                if( item->GetParent() && ( item->GetParent()->Type() == PCB_MODULE_T ) )
-                    Module = static_cast<MODULE*>( item->GetParent() );
-            }
-            else if( item->Type() == PCB_MODULE_T )
-            {
-                Module = static_cast<MODULE*>( item );
-            }
-
-            if( Module )
-            {
-                SetMsgPanel( Module );
-                pt_pad = Module->Pads();
-
-                for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
-                {
-                    for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
-                    {
-                        RATSNEST_ITEM* net = &GetBoard()->m_FullRatsnest[ii];
-
-                        if( ( net->m_PadStart == pt_pad ) || ( net->m_PadEnd == pt_pad ) )
-                        {
-                            if( net->m_Status & CH_VISIBLE )
-                                continue;
-
-                            net->m_Status |= CH_VISIBLE;
-
-                            if( (net->m_Status & CH_ACTIF) == 0 )
-                                continue;
-
-                            net->Draw( m_canvas, DC, GR_XOR, wxPoint( 0, 0 ) );
-                        }
-                    }
-                }
-
-                pt_pad = NULL;
-            }
-        }
+        m_canvas->Refresh();
     }
-
-    // Erase if no pad or module has been selected.
-    if( ( pt_pad == NULL ) && ( Module == NULL ) )
-    {
-        DrawGeneralRatsnest( DC );
-
-        for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
-            GetBoard()->m_FullRatsnest[ii].m_Status &= ~CH_VISIBLE;
-    }
-    #endif
 }

@@ -179,7 +179,7 @@ public:
     {
         return m_target->Pos();
     }
-    
+
 private:
     CN_ANCHOR_PTR m_source;
     CN_ANCHOR_PTR m_target;
@@ -503,6 +503,8 @@ public:
 
     ITER begin() { return m_items.begin(); };
     ITER end() { return m_items.end(); };
+
+    std::vector<CN_ANCHOR_PTR>& Anchors() { return m_anchors; }
 
     template <class T>
     void FindNearby( VECTOR2I aPosition, int aDistMax, T aFunc, bool aDirtyOnly = false );
@@ -940,6 +942,8 @@ public:
 
     const CLUSTERS& GetClusters();
     int             GetUnconnectedCount();
+
+    void ForEachAnchor(  std::function<void(CN_ANCHOR_PTR)> aFunc );
 };
 
 bool operator<( const CN_ANCHOR_PTR a, const CN_ANCHOR_PTR b );

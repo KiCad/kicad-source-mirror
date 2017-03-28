@@ -480,7 +480,7 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
             auto zoneItem = static_cast<CN_ZONE *> (item);
             auto searchZones = std::bind( checkForConnection, _1, zoneItem );
 
-            if( zoneItem->Dirty() )
+            if( zoneItem->Dirty() || m_padList.IsDirty() || m_trackList.IsDirty() || m_viaList.IsDirty() )
             {
                 totalDirtyCount++;
                 m_viaList.FindNearby( zoneItem->BBox(), searchZones );
@@ -900,4 +900,16 @@ void CN_CONNECTIVITY_ALGO::Clear()
     m_viaList.Clear();
     m_zoneList.Clear();
 
+}
+
+void CN_CONNECTIVITY_ALGO::ForEachAnchor(  std::function<void(CN_ANCHOR_PTR)> aFunc )
+{
+    for ( auto anchor : m_padList.Anchors() )
+        aFunc( anchor );
+    for ( auto anchor : m_viaList.Anchors() )
+        aFunc( anchor );
+    for ( auto anchor : m_trackList.Anchors() )
+        aFunc( anchor );
+    for ( auto anchor : m_zoneList.Anchors() )
+        aFunc( anchor );
 }

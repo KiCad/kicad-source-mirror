@@ -588,11 +588,6 @@ TOOL_ACTION COMMON_ACTIONS::toBeDone( "pcbnew.Control.toBeDone",
         AS_GLOBAL, 0,           // dialog saying it is not implemented yet
         "", "" );               // so users are aware of that
 
-TOOL_ACTION COMMON_ACTIONS::showLocalRatsnest( "pcbnew.Control.showLocalRatsnest",
-                AS_GLOBAL, 0,
-                "", "" );               
-
-
 TOOL_ACTION COMMON_ACTIONS::routerActivateSingle( "pcbnew.InteractiveRouter.SingleTrack",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_TRACK ),
         _( "Interactive Router (Single Tracks)" ),

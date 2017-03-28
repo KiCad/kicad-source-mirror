@@ -1094,7 +1094,7 @@ void TRACK::GetMsgPanelInfoBase_Common( std::vector< MSG_PANEL_ITEM >& aList )
         aList.push_back( MSG_PANEL_ITEM( _( "NetName" ), msg, RED ) );
 
         // Display net code : (useful in test or debug)
-        msg.Printf( wxT( "%d.%d" ), GetNetCode(), GetSubNet() );
+        msg.Printf( wxT( "%d" ), GetNetCode() );
         aList.push_back( MSG_PANEL_ITEM( _( "NetCode" ), msg, RED ) );
     }
 

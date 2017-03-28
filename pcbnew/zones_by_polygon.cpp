@@ -45,7 +45,7 @@
 #include <protos.h>
 #include <zones_functions_for_undo_redo.h>
 #include <drc_stuff.h>
-#include <ratsnest_data.h>
+#include <connectivity.h>
 
 // Outline creation:
 static void Abort_Zone_Create_Outline( EDA_DRAW_PANEL* Panel, wxDC* DC );
@@ -951,12 +951,12 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
         if( zone->IsFilled() )
         {
             Fill_Zone( zone );
-            GetBoard()->GetRatsnest()->Recalculate( zone->GetNetCode() );
         }
     }
 
     commit.Stage( s_PickedList );
     commit.Push( _( "Modify zone properties" ) );
+    GetBoard()->GetConnectivity()->RecalculateRatsnest();
 
     s_PickedList.ClearItemsList();  // s_ItemsListPicker is no longer owner of picked items
 }

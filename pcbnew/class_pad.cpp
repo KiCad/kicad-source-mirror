@@ -658,13 +658,6 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "Net" ), GetNetname(), DARKCYAN ) );
 
-    /* For test and debug only: display m_physical_connexion and
-     * m_logical_connexion */
-#if 1   // Used only to debug connectivity calculations
-    Line.Printf( wxT( "%d-%d-%d " ), GetSubRatsnest(), GetSubNet(), GetZoneSubNet() );
-    aList.push_back( MSG_PANEL_ITEM( wxT( "L-P-Z" ), Line, DARKGREEN ) );
-#endif
-
     board = GetBoard();
 
     aList.push_back( MSG_PANEL_ITEM( _( "Layer" ),
