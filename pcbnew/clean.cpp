@@ -96,6 +96,12 @@ private:
      */
     bool clean_segments();
 
+    /**
+     * helper function
+     * Rebuild list of tracks, and connected tracks
+     * this info must be rebuilt when tracks are erased
+     */
+    void buildTrackConnectionInfo();
 
     /**
      * helper function
@@ -144,6 +150,41 @@ void PCB_EDIT_FRAME::Clean_Pcb()
     m_canvas->Refresh( true );
 }
 
+void TRACKS_CLEANER::buildTrackConnectionInfo()
+{
+    auto connectivity = m_brd->GetConnectivity();
+
+// rebuild the connectivity, just in case
+	connectivity->Build(m_brd);
+
+// clear flags and variables used in cleanup
+    for( TRACK* track = m_brd->m_Track; track != NULL; track = track->Next() )
+    {
+        track->start = NULL;
+        track->end = NULL;
+        track->SetState( START_ON_PAD | END_ON_PAD | BUSY, false );
+    }
+
+    for( TRACK* track = m_brd->m_Track; track != NULL; track = track->Next() )
+    {
+        // Mark track if connected to pads
+        for( auto pad : connectivity->GetConnectedPads( track ) )
+        {
+            if( pad->HitTest( track->GetStart() ) )
+            {
+                track->start = pad;
+                track->SetState( START_ON_PAD, true );
+            }
+
+            if( pad->HitTest( track->GetEnd() ) )
+            {
+                track->end = pad;
+                track->SetState( END_ON_PAD, true );
+            }
+        }
+    }
+}
+
 
 /* Main cleaning function.
  *  Delete
@@ -170,24 +211,17 @@ bool TRACKS_CLEANER::CleanupBoard( bool aRemoveMisConnected,
     else if( aRemoveMisConnected )
         modified |= delete_null_segments();
 
-    if( aRemoveMisConnected )
-    {
-        if( removeBadTrackSegments() )
-        {
-            modified = true;
+    buildTrackConnectionInfo();
 
-            // Refresh track connection info
-            //buildTrackConnectionInfo(); FIXME: update connectivity
-        }
-    }
+    if( aRemoveMisConnected )
+        modified |= removeBadTrackSegments();
+
+    buildTrackConnectionInfo();
 
     // Delete dangling tracks
     if( aDeleteUnconnected )
     {
-        if( modified ) // Refresh track connection info
-            {
-                //buildTrackConnectionInfo(); FIXME: update connectivity
-            }
+        buildTrackConnectionInfo();
 
         if( deleteDanglingTracks() )
         {
@@ -658,6 +692,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
          * of pt_segm (pt_segm will be removed later) */
         if( aTrackRef->GetStart() == aCandidate->GetStart() )
         {
+            m_commit.Modify( aTrackRef );
             aTrackRef->SetStart( aCandidate->GetEnd() );
             aTrackRef->start = aCandidate->end;
             aTrackRef->SetState( START_ON_PAD, aCandidate->GetState( END_ON_PAD ) );
@@ -665,6 +700,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
         }
         else
         {
+            m_commit.Modify( aTrackRef );
             aTrackRef->SetStart( aCandidate->GetStart() );
             aTrackRef->start = aCandidate->start;
             aTrackRef->SetState( START_ON_PAD, aCandidate->GetState( START_ON_PAD ) );
@@ -681,6 +717,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
          * of pt_segm (pt_segm will be removed later) */
         if( aTrackRef->GetEnd() == aCandidate->GetStart() )
         {
+            m_commit.Modify( aTrackRef );
             aTrackRef->SetEnd( aCandidate->GetEnd() );
             aTrackRef->end = aCandidate->end;
             aTrackRef->SetState( END_ON_PAD, aCandidate->GetState( END_ON_PAD ) );
@@ -688,6 +725,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
         }
         else
         {
+            m_commit.Modify( aTrackRef );
             aTrackRef->SetEnd( aCandidate->GetStart() );
             aTrackRef->end = aCandidate->start;
             aTrackRef->SetState( END_ON_PAD, aCandidate->GetState( START_ON_PAD ) );
