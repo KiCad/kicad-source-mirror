@@ -1,0 +1,28 @@
+include_directories( BEFORE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/include
+    ${OPENGL_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIR}
+)
+
+include_directories( SYSTEM 
+)
+
+set( OGLTEST_FILES
+    kicad-ogltest.cpp
+)
+
+add_executable( kicad-ogltest ${OGLTEST_FILES} )
+
+target_link_libraries( kicad-ogltest ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} )
+
+if( APPLE )
+    # puts binaries into the *.app bundle while linking
+    set_target_properties( kicad-ogltest PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
+            )
+else()
+    install( TARGETS kicad-ogltest
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary )
+endif()

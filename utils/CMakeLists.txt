@@ -4,6 +4,7 @@ if( COMPILER_SUPPORTS_WSHADOW )
 endif()
 
 add_subdirectory( idftools )
+add_subdirectory( kicad-ogltest )
 
 if( KICAD_USE_OCE )
     add_subdirectory( kicad2step )
