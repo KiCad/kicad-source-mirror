@@ -98,7 +98,7 @@ bool OGLTEST_APP::OnInit()
 
     if( !OGLVersionRegex.Matches( version ) )
     {
-        printf( "FAIL: Cannot interpret OpenGL version\n" );
+        printf( "FAIL: Cannot interpret OpenGL version %s\n", pversion );
         return false;
     }
 
