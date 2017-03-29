@@ -5,7 +5,10 @@ include_directories( BEFORE
     ${Boost_INCLUDE_DIR}
 )
 
-include_directories( SYSTEM 
+include_directories(
+    ../../include
+    ../../common
+    ${INC_AFTER}
 )
 
 set( OGLTEST_FILES
@@ -14,7 +17,12 @@ set( OGLTEST_FILES
 
 add_executable( kicad-ogltest ${OGLTEST_FILES} )
 
-target_link_libraries( kicad-ogltest ${wxWidgets_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} )
+target_link_libraries( kicad-ogltest
+    gal
+    common
+    bitmaps
+    polygon
+    ${wxWidgets_LIBRARIES} )
 
 if( APPLE )
     # puts binaries into the *.app bundle while linking

@@ -27,9 +27,9 @@
 #include <wx/app.h>
 #include <wx/debug.h>
 #include <wx/settings.h>
-#include <wx/glcanvas.h>
 #include <wx/frame.h>
 #include <wx/regex.h>
+#include <gal/opengl/opengl_gal.h>
 #include <iostream>
 
 // Required OpenGL version
@@ -39,6 +39,9 @@
 static wxRegEx OGLVersionRegex( R"(^(\d+)\.(\d+))", wxRE_ADVANCED );
 
 static const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 8, 0 };
+
+
+void Pgm() {}
 
 
 class OGLTEST_APP : public wxApp
@@ -78,11 +81,17 @@ bool OGLTEST_APP::OnInit()
 
     auto frame = new wxFrame( nullptr, wxID_ANY, "OpenGL test", wxDefaultPosition, wxDefaultSize,
            wxTOPLEVEL_EX_DIALOG );
-    auto canvas = new wxGLCanvas( frame, wxID_ANY, &glAttributes[0] );
+
+    KIGFX::GAL_DISPLAY_OPTIONS gal_opts;
+
+    auto canvas = new KIGFX::OPENGL_GAL( gal_opts, frame );
     auto context = new wxGLContext( canvas );
 
+    frame->Raise();
     frame->Show();
     canvas->SetCurrent( *context );
+    auto size = canvas->GetSize();
+    canvas->ResizeScreen( size.GetWidth(), size.GetHeight() );
 
     printf( "INFO: Instantiated GL window\n" );
 
@@ -120,6 +129,10 @@ bool OGLTEST_APP::OnInit()
     {
         printf( "INFO: Found OpenGL version %ld.%ld\n", major, minor );
     }
+
+    canvas->BeginDrawing();
+    printf( "INFO: Successfully called OPENGL_GAL::BeginDrawing\n" );
+    canvas->EndDrawing();
 
     bool supported = wxGLCanvas::IsDisplaySupported( &glAttributes[0] );
 
