@@ -238,6 +238,9 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     gal.SetIsStroke( true );
     gal.SetIsFill( false );
     gal.SetStrokeColor( PreviewOverlayDefaultColor() );
+    gal.SetFontBold( false );
+    gal.SetFontItalic( false );
+    gal.SetTextMirrored( false );
 
     // draw the main line from the origin to cursor
     gal.DrawLine( origin, end );
