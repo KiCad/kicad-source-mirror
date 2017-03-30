@@ -108,11 +108,10 @@
                             <property name="proportion">0</property>
                             <object class="wxStaticBoxSizer" expanded="1">
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Component</property>
+                                <property name="label"></property>
                                 <property name="minimum_size"></property>
                                 <property name="name">optionsSizer</property>
                                 <property name="orient">wxVERTICAL</property>
-                                <property name="parent">1</property>
                                 <property name="permission">none</property>
                                 <event name="OnUpdateUI"></event>
                                 <object class="sizeritem" expanded="0">
@@ -147,7 +146,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Unit</property>
+                                        <property name="label">Unit:</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -286,7 +285,7 @@
                                         <event name="OnUpdateUI"></event>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="0">
+                                <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
                                     <property name="flag">wxEXPAND</property>
                                     <property name="proportion">0</property>
@@ -327,7 +326,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Units are interchangeable:</property>
+                                                <property name="label">Interchangeable Unit:</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -481,7 +480,7 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="choices">&quot;0&quot; &quot;+90&quot; &quot;180&quot; &quot;-90&quot;</property>
+                                        <property name="choices">&quot;0&quot; &quot;+90&quot; &quot;+180&quot; &quot;-90&quot;</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
@@ -496,7 +495,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Orientation (Degrees)</property>
+                                        <property name="label">Orientation (degrees):</property>
                                         <property name="majorDimension">1</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -571,7 +570,7 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="choices">&quot;Normal&quot; &quot;Mirror ---&quot; &quot;Mirror |&quot;</property>
+                                        <property name="choices">&quot;Default&quot; &quot;Mirror Horizontally&quot; &quot;Mirror Vertically&quot;</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
@@ -586,7 +585,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Mirror</property>
+                                        <property name="label">Position:</property>
                                         <property name="majorDimension">1</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -676,7 +675,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Converted Shape</property>
+                                        <property name="label">Convert Shape</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -737,11 +736,10 @@
                                     <property name="proportion">0</property>
                                     <object class="wxStaticBoxSizer" expanded="0">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Chip Name</property>
+                                        <property name="label">Component Name:</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">sbSizerChipName</property>
                                         <property name="orient">wxVERTICAL</property>
-                                        <property name="parent">1</property>
                                         <property name="permission">none</property>
                                         <event name="OnUpdateUI"></event>
                                         <object class="sizeritem" expanded="0">
@@ -797,7 +795,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">The name of the symbol in the library from which this component came</property>
+                                                <property name="tooltip">Name of the symbol in the library from which this component come from</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -877,7 +875,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Test</property>
+                                                        <property name="label">Validate</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -965,7 +963,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Select</property>
+                                                        <property name="label">Change</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -1056,7 +1054,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Timestamp</property>
+                                        <property name="label">Component ID:</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -1160,7 +1158,7 @@
                                         <property name="style">wxTE_READONLY</property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">An unique ID (a time stamp) to identify the component.&#x0A;This is an alternate identifier to the reference.</property>
+                                        <property name="tooltip">Unique ID that identifies the component</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
@@ -1279,11 +1277,11 @@
                                         <event name="OnUpdateUI"></event>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxALL|wxEXPAND</property>
                                     <property name="proportion">0</property>
-                                    <object class="wxButton" expanded="1">
+                                    <object class="wxButton" expanded="0">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
                                         <property name="RightDockable">1</property>
@@ -1312,7 +1310,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Edit Spice model</property>
+                                        <property name="label">Edit Spice Model</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -1400,7 +1398,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Reset to Library Defaults</property>
+                                        <property name="label">Reset to Default</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -1461,26 +1459,24 @@
                             <property name="border">5</property>
                             <property name="flag">wxALL|wxEXPAND</property>
                             <property name="proportion">1</property>
-                            <object class="wxStaticBoxSizer" expanded="1">
+                            <object class="wxStaticBoxSizer" expanded="0">
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Fields</property>
+                                <property name="label">  Fields</property>
                                 <property name="minimum_size"></property>
                                 <property name="name">fieldsSizer</property>
                                 <property name="orient">wxHORIZONTAL</property>
-                                <property name="parent">1</property>
                                 <property name="permission">none</property>
                                 <event name="OnUpdateUI"></event>
-                                <object class="sizeritem" expanded="1">
-                                    <property name="border">8</property>
+                                <object class="sizeritem" expanded="0">
+                                    <property name="border">0</property>
                                     <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                                     <property name="proportion">3</property>
                                     <object class="wxStaticBoxSizer" expanded="0">
                                         <property name="id">wxID_ANY</property>
                                         <property name="label"></property>
-                                        <property name="minimum_size"></property>
+                                        <property name="minimum_size">-1,-1</property>
                                         <property name="name">gridStaticBoxSizer</property>
                                         <property name="orient">wxVERTICAL</property>
-                                        <property name="parent">1</property>
                                         <property name="permission">none</property>
                                         <event name="OnUpdateUI"></event>
                                         <object class="sizeritem" expanded="0">
@@ -1528,7 +1524,7 @@
                                                 <property name="pane_size"></property>
                                                 <property name="permission">protected</property>
                                                 <property name="pin_button">1</property>
-                                                <property name="pos"></property>
+                                                <property name="pos">-1,-1</property>
                                                 <property name="resize">Resizable</property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
@@ -1621,7 +1617,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Add Field</property>
+                                                <property name="label">New Field</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -1642,7 +1638,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Add a new custom field</property>
+                                                <property name="tooltip">Create new custom field</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -1730,7 +1726,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Delete one of the optional fields</property>
+                                                <property name="tooltip">Delete optional field</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -1818,7 +1814,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Move the selected optional fields up one position</property>
+                                                <property name="tooltip">Move the selected optional field up one position</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -1854,7 +1850,7 @@
                                         </object>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="1">
+                                <object class="sizeritem" expanded="0">
                                     <property name="border">5</property>
                                     <property name="flag">wxEXPAND</property>
                                     <property name="proportion">2</property>
@@ -1890,7 +1886,7 @@
                                                         <property name="caption"></property>
                                                         <property name="caption_visible">1</property>
                                                         <property name="center_pane">0</property>
-                                                        <property name="choices">&quot;Left&quot; &quot;Center&quot; &quot;Right&quot;</property>
+                                                        <property name="choices">&quot;Align Left&quot; &quot;Center&quot; &quot;Align Right&quot;</property>
                                                         <property name="close_button">1</property>
                                                         <property name="context_help"></property>
                                                         <property name="context_menu">1</property>
@@ -1905,7 +1901,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Horiz. Justify</property>
+                                                        <property name="label">Horizontal Position:</property>
                                                         <property name="majorDimension">1</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
@@ -1922,7 +1918,7 @@
                                                         <property name="pin_button">1</property>
                                                         <property name="pos"></property>
                                                         <property name="resize">Resizable</property>
-                                                        <property name="selection">2</property>
+                                                        <property name="selection">0</property>
                                                         <property name="show">1</property>
                                                         <property name="size"></property>
                                                         <property name="style">wxRA_SPECIFY_COLS</property>
@@ -1980,7 +1976,7 @@
                                                         <property name="caption"></property>
                                                         <property name="caption_visible">1</property>
                                                         <property name="center_pane">0</property>
-                                                        <property name="choices">&quot;Bottom&quot; &quot;Center&quot; &quot;Top&quot;</property>
+                                                        <property name="choices">&quot;Align Top&quot; &quot;Center&quot; &quot;Align Bottom&quot;</property>
                                                         <property name="close_button">1</property>
                                                         <property name="context_help"></property>
                                                         <property name="context_menu">1</property>
@@ -1995,7 +1991,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Vert. Justify</property>
+                                                        <property name="label">Vertical Position:</property>
                                                         <property name="majorDimension">1</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
@@ -2012,7 +2008,7 @@
                                                         <property name="pin_button">1</property>
                                                         <property name="pos"></property>
                                                         <property name="resize">Resizable</property>
-                                                        <property name="selection">2</property>
+                                                        <property name="selection">0</property>
                                                         <property name="show">1</property>
                                                         <property name="size"></property>
                                                         <property name="style">wxRA_SPECIFY_COLS</property>
@@ -2069,11 +2065,10 @@
                                                     <property name="proportion">1</property>
                                                     <object class="wxStaticBoxSizer" expanded="0">
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Visibility</property>
+                                                        <property name="label">Visibility:</property>
                                                         <property name="minimum_size"></property>
                                                         <property name="name">visibilitySizer</property>
                                                         <property name="orient">wxVERTICAL</property>
-                                                        <property name="parent">1</property>
                                                         <property name="permission">none</property>
                                                         <event name="OnUpdateUI"></event>
                                                         <object class="sizeritem" expanded="0">
@@ -2130,7 +2125,7 @@
                                                                 <property name="style"></property>
                                                                 <property name="subclass"></property>
                                                                 <property name="toolbar_pane">0</property>
-                                                                <property name="tooltip">Check if you want this field visible</property>
+                                                                <property name="tooltip">Make selected field visible</property>
                                                                 <property name="validator_data_type"></property>
                                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -2218,7 +2213,7 @@
                                                                 <property name="style"></property>
                                                                 <property name="subclass"></property>
                                                                 <property name="toolbar_pane">0</property>
-                                                                <property name="tooltip">Check if you want this field&apos;s text rotated 90 degrees</property>
+                                                                <property name="tooltip">Rotated 90 degrees the selected field</property>
                                                                 <property name="validator_data_type"></property>
                                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -2287,7 +2282,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Style:</property>
+                                                        <property name="label">Font Style:</property>
                                                         <property name="majorDimension">1</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
@@ -2304,13 +2299,13 @@
                                                         <property name="pin_button">1</property>
                                                         <property name="pos"></property>
                                                         <property name="resize">Resizable</property>
-                                                        <property name="selection">3</property>
+                                                        <property name="selection">0</property>
                                                         <property name="show">1</property>
                                                         <property name="size"></property>
                                                         <property name="style">wxRA_SPECIFY_COLS</property>
                                                         <property name="subclass"></property>
                                                         <property name="toolbar_pane">0</property>
-                                                        <property name="tooltip">The style of the currently selected field&apos;s text in the schematic</property>
+                                                        <property name="tooltip"></property>
                                                         <property name="validator_data_type"></property>
                                                         <property name="validator_style">wxFILTER_NONE</property>
                                                         <property name="validator_type">wxDefaultValidator</property>
@@ -2387,7 +2382,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Field Name</property>
+                                                        <property name="label">Field Name:</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -2491,7 +2486,7 @@
                                                         <property name="style"></property>
                                                         <property name="subclass"></property>
                                                         <property name="toolbar_pane">0</property>
-                                                        <property name="tooltip">The name of the currently selected field&#x0A;Some fixed fields names are not editable</property>
+                                                        <property name="tooltip">Name of the selected field. Fixed field names are not editable</property>
                                                         <property name="validator_data_type"></property>
                                                         <property name="validator_style">wxFILTER_NONE</property>
                                                         <property name="validator_type">wxDefaultValidator</property>
@@ -2561,7 +2556,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Field Value</property>
+                                                        <property name="label">Field Value:</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -2665,7 +2660,7 @@
                                                         <property name="style"></property>
                                                         <property name="subclass"></property>
                                                         <property name="toolbar_pane">0</property>
-                                                        <property name="tooltip">The name of the currently selected field&#x0A;Some fixed fields names are not editable</property>
+                                                        <property name="tooltip">Name of the selected field. Fixed field names are not editable</property>
                                                         <property name="validator_data_type"></property>
                                                         <property name="validator_style">wxFILTER_NONE</property>
                                                         <property name="validator_type">wxDefaultValidator</property>
@@ -2736,7 +2731,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Show in Browser</property>
+                                                        <property name="label">Open in Browser</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -2808,7 +2803,7 @@
                                                 <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                                                 <property name="permission">none</property>
                                                 <property name="rows">3</property>
-                                                <property name="vgap">0</property>
+                                                <property name="vgap">6</property>
                                                 <object class="sizeritem" expanded="0">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxALIGN_CENTER_VERTICAL</property>
@@ -2841,7 +2836,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Size</property>
+                                                        <property name="label">Font Size:</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -2893,7 +2888,7 @@
                                                     </object>
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
-                                                    <property name="border">5</property>
+                                                    <property name="border">0</property>
                                                     <property name="flag">wxEXPAND|wxBOTTOM</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxTextCtrl" expanded="0">
@@ -2938,14 +2933,14 @@
                                                         <property name="pane_size"></property>
                                                         <property name="permission">protected</property>
                                                         <property name="pin_button">1</property>
-                                                        <property name="pos"></property>
+                                                        <property name="pos">-1,-1</property>
                                                         <property name="resize">Resizable</property>
                                                         <property name="show">1</property>
                                                         <property name="size"></property>
                                                         <property name="style"></property>
                                                         <property name="subclass"></property>
                                                         <property name="toolbar_pane">0</property>
-                                                        <property name="tooltip">The size of the currently selected field&apos;s text in the schematic</property>
+                                                        <property name="tooltip">Font Size of the selected field</property>
                                                         <property name="validator_data_type"></property>
                                                         <property name="validator_style">wxFILTER_NONE</property>
                                                         <property name="validator_type">wxDefaultValidator</property>
@@ -3098,7 +3093,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">PosX</property>
+                                                        <property name="label">Position, X: </property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -3150,7 +3145,7 @@
                                                     </object>
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
-                                                    <property name="border">5</property>
+                                                    <property name="border">0</property>
                                                     <property name="flag">wxEXPAND|wxTOP</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxTextCtrl" expanded="0">
@@ -3195,14 +3190,14 @@
                                                         <property name="pane_size"></property>
                                                         <property name="permission">protected</property>
                                                         <property name="pin_button">1</property>
-                                                        <property name="pos"></property>
+                                                        <property name="pos">-1,-1</property>
                                                         <property name="resize">Resizable</property>
                                                         <property name="show">1</property>
                                                         <property name="size"></property>
                                                         <property name="style"></property>
                                                         <property name="subclass"></property>
                                                         <property name="toolbar_pane">0</property>
-                                                        <property name="tooltip">The X coordinate of the text relative to the component</property>
+                                                        <property name="tooltip">X coordinate of the selected field</property>
                                                         <property name="validator_data_type"></property>
                                                         <property name="validator_style">wxFILTER_NONE</property>
                                                         <property name="validator_type">wxDefaultValidator</property>
@@ -3355,7 +3350,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">PosY</property>
+                                                        <property name="label">Position, Y: </property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -3452,14 +3447,14 @@
                                                         <property name="pane_size"></property>
                                                         <property name="permission">protected</property>
                                                         <property name="pin_button">1</property>
-                                                        <property name="pos"></property>
+                                                        <property name="pos">-1,-1</property>
                                                         <property name="resize">Resizable</property>
                                                         <property name="show">1</property>
                                                         <property name="size"></property>
                                                         <property name="style"></property>
                                                         <property name="subclass"></property>
                                                         <property name="toolbar_pane">0</property>
-                                                        <property name="tooltip">The Y coordinate of the text relative to the component</property>
+                                                        <property name="tooltip">X coordinate of the selected field</property>
                                                         <property name="validator_data_type"></property>
                                                         <property name="validator_style">wxFILTER_NONE</property>
                                                         <property name="validator_type">wxDefaultValidator</property>
