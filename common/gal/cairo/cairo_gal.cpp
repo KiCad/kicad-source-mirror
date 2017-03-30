@@ -52,11 +52,24 @@ CAIRO_GAL::CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions,
     mouseListener = aMouseListener;
     paintListener = aPaintListener;
 
-    // Initialize the flags
+    // Initialise grouping
     isGrouping          = false;
-    isInitialized       = false;
-    validCompositor     = false;
+    isElementAdded      = false;
     groupCounter        = 0;
+    currentGroup        = nullptr;
+
+    // Initialise compositing state
+    mainBuffer          = 0;
+    overlayBuffer       = 0;
+    validCompositor     = false;
+    SetTarget( TARGET_NONCACHED );
+
+    // Initialise Cairo state
+    cairo_matrix_init_identity( &cairoWorldScreenMatrix );
+    currentContext      = nullptr;
+    context             = nullptr;
+    surface             = nullptr;
+    isInitialized       = false;
 
     // Connecting the event handlers
     Connect( wxEVT_PAINT,       wxPaintEventHandler( CAIRO_GAL::onPaint ) );

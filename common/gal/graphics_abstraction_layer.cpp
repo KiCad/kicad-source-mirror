@@ -55,6 +55,7 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
     SetFlip( false, false );
     SetLineWidth( 1.0 );
     computeWorldScale();
+    SetAxesEnabled( false );
 
     // Set grid defaults
     SetGridVisibility( true );
