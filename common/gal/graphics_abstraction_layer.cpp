@@ -70,6 +70,9 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
     forceDisplayCursor = false;
     SetCursorEnabled( false );
 
+    // Initialize text properties
+    ResetTextAttributes();
+
     strokeFont.LoadNewStrokeFont( newstroke_font, newstroke_font_bufsize );
 
     // subscribe for settings updates
@@ -144,6 +147,21 @@ void GAL::SetTextAttributes( const EDA_TEXT* aText )
     SetFontBold( aText->IsBold() );
     SetFontItalic( aText->IsItalic() );
     SetTextMirrored( aText->IsMirrored() );
+}
+
+
+void GAL::ResetTextAttributes()
+{
+     // Tiny but non-zero - this will always need setting
+     // there is no built-in default
+    SetGlyphSize( { 1.0, 1.0 } );
+
+    SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
+    SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+
+    SetFontBold( false );
+    SetFontItalic( false );
+    SetTextMirrored( false );
 }
 
 

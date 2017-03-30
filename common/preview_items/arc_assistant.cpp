@@ -131,6 +131,8 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     gal.SetIsStroke( true );
     gal.SetIsFill( true );
 
+    gal.ResetTextAttributes();
+
     // constant text size on screen
     SetConstantGlyphHeight( gal, 12.0 );
 

@@ -362,6 +362,14 @@ public:
     virtual void SetTextAttributes( const EDA_TEXT* aText );
 
     /**
+     * Reset text attributes to default styling
+     *
+     * Normally, custom attributes will be set individually after this,
+     * otherwise you can use SetTextAttributes()
+     */
+    void ResetTextAttributes();
+
+    /**
      * @brief Set the font glyph size.
      *
      * @param aGlyphSize is the new font glyph size.
