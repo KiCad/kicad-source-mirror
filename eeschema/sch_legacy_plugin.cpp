@@ -1336,7 +1336,20 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
         }
         else if( strCompare( "U", line, &line ) )
         {
-            component->SetUnit( parseInt( aReader, line, &line ) );
+            // This fixes a potentially buggy files caused by unit being set to zero which
+            // causes netlist issues.  See https://bugs.launchpad.net/kicad/+bug/1677282.
+            int unit = parseInt( aReader, line, &line );
+
+            if( unit == 0 )
+            {
+                unit = 1;
+
+                // Set the file as modified so the user can be warned.
+                if( m_rootSheet && m_rootSheet->GetScreen() )
+                    m_rootSheet->GetScreen()->SetModify();
+            }
+
+            component->SetUnit( unit );
             component->SetConvert( parseInt( aReader, line, &line ) );
             component->SetTimeStamp( parseHex( aReader, line, &line ) );
         }

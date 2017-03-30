@@ -166,7 +166,7 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
     if( alias == nullptr )      // Dialog closed by OK button, but no symbol selected
         return COMPONENT_SELECTION();
 
-    if( alias->GetPart()->IsMulti() && sel.Unit == 0 )
+    if( sel.Unit == 0 )
         sel.Unit = 1;
 
     sel.Fields = dlg.GetFields();
