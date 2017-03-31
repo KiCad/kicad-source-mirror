@@ -536,9 +536,6 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
     BOARD*  brd = myframe->GetBoard();
     wxASSERT( aId > GAL_LAYER_ID_START && aId < GAL_LAYER_ID_END );
 
-    LSET visibleLayers = brd->GetVisibleLayers();
-    visibleLayers.set( aId, isEnabled );
-
     // The layer visibility status is saved in the board file so set the board modified
     // state so the user has the option to save the changes.
     if( brd->IsElementVisible( static_cast<GAL_LAYER_ID>( aId ) ) != isEnabled )
@@ -556,7 +553,7 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
             galCanvas->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
         }
         else
-            galCanvas->GetView()->SetLayerVisible( aId , isEnabled );
+            galCanvas->GetView()->SetLayerVisible( aId, isEnabled );
     }
 
     if( galCanvas && myframe->IsGalCanvasActive() )
