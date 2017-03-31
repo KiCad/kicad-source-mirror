@@ -38,6 +38,7 @@
 
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
+#include <class_gerber_file_image.h>
 #include <class_gerbview_layer_widget.h>
 #include <wildcards_and_files_ext.h>
 
@@ -373,62 +374,47 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
 
 bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aReporter )
 {
-    wxFileSystem zipfilesys;
+    wxString msg;
 
-    zipfilesys.AddHandler( new wxZipFSHandler );
-    zipfilesys.ChangePathTo( aFullFileName + wxT( "#zip:" ), true );
-
-    wxString  localfilename = zipfilesys.FindFirst( wxT( "*.*" ) );
+    // Extract the path of aFullFileName. We use it to store temporary files
     wxFileName fn( aFullFileName );
     wxString unzipDir = fn.GetPath();
 
+    wxFFileInputStream zipFile( aFullFileName );
+
+    if( !zipFile.IsOk() )
+    {
+        if( aReporter )
+        {
+            msg.Printf( _( "Zip file '%s' cannot be opened" ), GetChars( aFullFileName ) );
+            aReporter->Report( msg, REPORTER::RPT_ERROR );
+        }
+
+        return false;
+    }
+
     // Update the list of recent zip files.
-    UpdateFileHistory( aFullFileName,  &m_zipFileHistory );
+    UpdateFileHistory( aFullFileName, &m_zipFileHistory );
+
+    // The unzipped file in only a temporary file. Give it a filename
+    // which cannot conflict with an usual filename.
+    // TODO: make Read_GERBER_File() and Read_EXCELLON_File() able to
+    // accept a stream, and avoid using a temp file.
+    wxFileName temp_fn( "$tempfile.tmp" );
+    temp_fn.MakeAbsolute( unzipDir );
+    wxString unzipped_tempfile = temp_fn.GetFullPath();
+
 
     bool success = true;
-    wxString msg;
+    wxZipInputStream zipArchive( zipFile );
+    wxZipEntry* entry;
+    bool reported_no_more_layer = false;
 
-    while( !localfilename.IsEmpty() )
+    while( ( entry = zipArchive.GetNextEntry() ) )
     {
-        wxFSFile* zipfile = zipfilesys.OpenFile( localfilename );
-
-        if( !zipfile )
-        {
-            if( aReporter )
-            {
-                msg.Printf( _( "Zip file '%s' cannot be read" ), GetChars( aFullFileName ) );
-                aReporter->Report( msg, REPORTER::RPT_ERROR );
-            }
-            success = false;
-            break;
-        }
-
-        // In order to load a file in this archive, this file is unzipped and
-        // a temporary file is created in the same folder as the archive.
-        // This file will be deleted after being loaded in the viewer.
-        // One other (and better) way is to load it from the memory image, but currently
-        // Read_GERBER_File and Read_EXCELLON_File expects a file.
-        wxFileName uzfn = localfilename.AfterLast( ':' );
-        uzfn.MakeAbsolute( unzipDir );
-
-        // The unzipped file in only a temporary file. Give it a filename
-        // which cannot conflict with an usual gerber or drill file
-        // by adding a '$' to its ext.
-        wxString unzipfilename = uzfn.GetFullPath() + "$";
-
-        wxInputStream* stream = zipfile->GetStream();
-        wxFFileOutputStream* temporary_ofile = new wxFFileOutputStream( unzipfilename );
-
-        if( temporary_ofile->Ok() )
-            temporary_ofile->Write( *stream );
-        else
-        {
-            success = false;
-        }
-
-        // Close streams:
-        delete temporary_ofile;
-        delete zipfile;
+        wxString fname = entry->GetName();
+        wxFileName uzfn = fname;
+        wxString curr_ext = uzfn.GetExt().Lower();
 
         // The archive contains Gerber and/or Excellon drill files. Use the right loader.
         // However it can contain a few other files (reports, pdf files...),
@@ -438,80 +424,93 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
         // drill files do not have a well defined ext
         // It is .drl in kicad, but .txt in Altium for instance
         // Allows only .drl for drill files.
-        int layer = getActiveLayer();
-        setActiveLayer( layer, false );
-        bool read_ok = true;
-        bool skip_file = false;
+        if( curr_ext[0] != 'g' && curr_ext != "pho" && curr_ext != "drl" )
+        {
+            if( aReporter )
+            {
+                msg.Printf( _( "Info: skip file <i>'%s'</i> (unknown type)\n" ),
+                            GetChars( entry->GetName() ) );
+                aReporter->Report( msg, REPORTER::RPT_WARNING );
+            }
 
-        wxString curr_ext = uzfn.GetExt().Lower();
+            continue;
+        }
+
+        int layer = getActiveLayer();
+
+        if( layer == NO_AVAILABLE_LAYERS )
+        {
+            success = false;
+
+            if( aReporter )
+            {
+                if( !reported_no_more_layer )
+                    aReporter->Report( MSG_NO_MORE_LAYER, REPORTER::RPT_ERROR );
+
+                reported_no_more_layer = true;
+
+                // Report the name of not loaded files:
+                msg.Printf( MSG_NOT_LOADED, GetChars( entry->GetName() ) );
+                aReporter->Report( msg, REPORTER::RPT_ERROR );
+            }
+
+            delete entry;
+            continue;
+        }
+
+        // Create the unzipped temporary file:
+        {
+            wxFFileOutputStream temporary_ofile( unzipped_tempfile );
+
+            if( temporary_ofile.Ok() )
+                temporary_ofile.Write( zipArchive );
+            else
+            {
+                success = false;
+
+                if( aReporter )
+                {
+                    msg.Printf( _( "<b>Unable to create temporary file '%s'</b>\n"),
+                                GetChars( unzipped_tempfile ) );
+                    aReporter->Report( msg, REPORTER::RPT_ERROR );
+                }
+            }
+        }
+
+        bool read_ok = true;
 
         if( curr_ext[0] == 'g' || curr_ext == "pho" )
         {
             // Read gerber files: each file is loaded on a new GerbView layer
-            read_ok = Read_GERBER_File( unzipfilename );
+            read_ok = Read_GERBER_File( unzipped_tempfile );
         }
-        else if( curr_ext == "drl" )
+        else // if( curr_ext == "drl" )
         {
-            read_ok = Read_EXCELLON_File( unzipfilename );
+            read_ok = Read_EXCELLON_File( unzipped_tempfile );
         }
-        else    // if the ext is not "pho", "g*" or "drl",
-        {
-                // the type is unknown for Gerbview. Skip it
-            skip_file = true;
-            success = false;
 
-            if( aReporter )
-            {
-                msg.Printf( _( "Info: skip <i>%s</i> (unknown type)\n" ),
-                            GetChars( localfilename.AfterLast( ':' ) ) );
-                aReporter->Report( msg, REPORTER::RPT_WARNING );
-            }
-        }
+        delete entry;
 
         // The unzipped file is only a temporary file, delete it.
-        wxRemoveFile( unzipfilename );
+        wxRemoveFile( unzipped_tempfile );
 
-        if( !read_ok && !skip_file)
+        if( !read_ok )
         {
             success = false;
 
             if( aReporter )
             {
-                msg.Printf( _("<b>file %s read error</b>\n"), GetChars( unzipfilename ) );
+                msg.Printf( _("<b>unzipped file %s read error</b>\n"),
+                            GetChars( unzipped_tempfile ) );
                 aReporter->Report( msg, REPORTER::RPT_ERROR );
             }
         }
-
-        // Prepare the loading of the next file in archive, if exists
-        localfilename = zipfilesys.FindNext();
-
-        if( !skip_file )
+        else
         {
-            if( read_ok )
-            {
-                layer = getNextAvailableLayer( layer );
+            GERBER_FILE_IMAGE* gerber_image = GetGbrImage( layer );
+            gerber_image->m_FileName = fname;
 
-                if( layer == NO_AVAILABLE_LAYERS && !localfilename.IsEmpty() )
-                {
-                    success = false;
-
-                    if( aReporter )
-                    {
-                        aReporter->Report( MSG_NO_MORE_LAYER, REPORTER::RPT_ERROR );
-
-                        // Report the name of not loaded files:
-                        while( !localfilename.IsEmpty() )
-                        {
-                            msg.Printf( MSG_NOT_LOADED,
-                                        GetChars( localfilename.AfterLast( ':' ) ) );
-                            aReporter->Report( msg, REPORTER::RPT_ERROR );
-                            localfilename = zipfilesys.FindNext();
-                        }
-                    }
-                    break;
-                }
-            }
-
+            layer = getNextAvailableLayer( layer );
             setActiveLayer( layer, false );
         }
     }
@@ -523,7 +522,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
 bool GERBVIEW_FRAME::LoadZipArchiveFile( const wxString& aFullFileName )
 {
 #define ZipFileExtension "zip"
-#define ZipFileWildcard  _( "Zip file (*.zip)|*.zip" )
+#define ZipFileWildcard  _( "Zip file (*.zip)|*.zip;.zip" )
     wxFileName filename = aFullFileName;
     wxString currentPath;
 
