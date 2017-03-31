@@ -765,7 +765,7 @@ if( KICAD_SCRIPTING_MODULES )
          # put everything into bundle at build time, it is relocated at install
         add_custom_target( ScriptingModulesPcbnewSoCopy ALL
             COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so" "${PYTHON_DEST}/"
-            DEPENDS _pcbnew
+            DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.so
             COMMENT "Copying _pcbnew.so into ${PYTHON_DEST}"
             )
         add_dependencies( ScriptingModulesPcbnewSoCopy ScriptingWxpythonCopy )
@@ -775,6 +775,19 @@ if( KICAD_SCRIPTING_MODULES )
         install( FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so DESTINATION ${PYTHON_DEST} )
         set( PYMOD_EXT "so" )
     endif()
+
+    if( APPLE )
+         add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
+            DEPENDS pcbnew_kiface
+            COMMAND ${CMAKE_COMMAND} -E copy  ${OSX_BUNDLE_BUILD_KIFACE_DIR}/_pcbnew.kiface _pcbnew.${PYMOD_EXT}
+            COMMENT "Creating python's pcbnew native module _pcbnew.${PYMOD_EXT} for command line use."
+            )
+        add_custom_target(
+            pcbnew_python_module ALL
+            DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
+            )
+    else()
+
 
     # For phase 1, copy _pcbnew.kiface to the python module.
     add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
@@ -786,6 +799,7 @@ if( KICAD_SCRIPTING_MODULES )
         pcbnew_python_module ALL
         DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
         )
+    endif()
 
 endif()
 
