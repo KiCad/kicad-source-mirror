@@ -73,7 +73,7 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
     }
 
 
-    wxString COLOR4D::ToWxString( long flags )
+    wxString COLOR4D::ToWxString( long flags ) const
     {
         wxColour c = ToColour();
         return c.GetAsString( flags );
@@ -254,6 +254,11 @@ const bool operator==( const COLOR4D& lhs, const COLOR4D& rhs )
 const bool operator!=( const COLOR4D& lhs, const COLOR4D& rhs )
 {
     return !( lhs == rhs );
+}
+
+std::ostream &operator<<( std::ostream &aStream, COLOR4D const &aColor )
+{
+    return aStream << aColor.ToWxString( wxC2S_CSS_SYNTAX );
 }
 
 }

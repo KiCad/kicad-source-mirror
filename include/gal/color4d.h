@@ -87,7 +87,7 @@ public:
      */
     bool SetFromWxString( const wxString& aColorString );
 
-    wxString ToWxString( long flags );
+    wxString ToWxString( long flags ) const;
 
     wxColour ToColour() const
     {
@@ -296,6 +296,9 @@ const bool operator==( const COLOR4D& lhs, const COLOR4D& rhs );
 
 /// @brief Not equality operator, are two colors not equal
 const bool operator!=( const COLOR4D& lhs, const COLOR4D& rhs );
+
+/// Syntactic sugar for outputting colors to strings
+std::ostream &operator<<( std::ostream &aStream, COLOR4D const &aColor );
 
 } // namespace KIGFX
 
