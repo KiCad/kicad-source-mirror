@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  9 2017)
+// C++ code generated with wxFormBuilder (version Feb  6 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -25,8 +25,8 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	wxString m_PolarDisplayChoices[] = { _("Cartesian coordinates"), _("Polar coordinates") };
 	int m_PolarDisplayNChoices = sizeof( m_PolarDisplayChoices ) / sizeof( wxString );
 	m_PolarDisplay = new wxRadioBox( this, wxID_POLAR_CTRL, _("Coordinates"), wxDefaultPosition, wxDefaultSize, m_PolarDisplayNChoices, m_PolarDisplayChoices, 1, wxRA_SPECIFY_COLS );
-	m_PolarDisplay->SetSelection( 1 );
-	m_PolarDisplay->SetToolTip( _("Activates the display of relative coordinates from relative origin (set by the space key)\nto the cursor, in polar coordinates (angle and distance)") );
+	m_PolarDisplay->SetSelection( 0 );
+	m_PolarDisplay->SetToolTip( _("Set display of relative (dx/dy) coordinates to Cartesian (rectangular) or polar (angle/distance).") );
 	
 	bLeftSizer->Add( m_PolarDisplay, 0, wxALL|wxEXPAND, 5 );
 	
@@ -34,7 +34,7 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	int m_UnitsSelectionNChoices = sizeof( m_UnitsSelectionChoices ) / sizeof( wxString );
 	m_UnitsSelection = new wxRadioBox( this, wxID_UNITS, _("Units"), wxDefaultPosition, wxDefaultSize, m_UnitsSelectionNChoices, m_UnitsSelectionChoices, 1, wxRA_SPECIFY_COLS );
 	m_UnitsSelection->SetSelection( 1 );
-	m_UnitsSelection->SetToolTip( _("Selection of units used to display dimensions and positions of items") );
+	m_UnitsSelection->SetToolTip( _("Set units used to display dimensions and positions.") );
 	
 	bLeftSizer->Add( m_UnitsSelection, 0, wxALL|wxEXPAND, 5 );
 	
@@ -54,7 +54,7 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	fgSizer1->Add( m_staticTextmaxlinks, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_MaxShowLinks = new wxSpinCtrl( this, wxID_ANY, wxT("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 5, 1 );
-	m_MaxShowLinks->SetToolTip( _("Adjust the number of ratsnets shown from cursor to closest pads") );
+	m_MaxShowLinks->SetToolTip( _("Adjust the number of ratsnets shown from cursor to closest pads.") );
 	
 	fgSizer1->Add( m_MaxShowLinks, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxTOP, 5 );
 	
@@ -63,7 +63,7 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	fgSizer1->Add( m_staticTextautosave, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_SaveTime = new wxSpinCtrl( this, wxID_ANY, wxT("0"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 60, 0 );
-	m_SaveTime->SetToolTip( _("Delay after the first change to create a backup file of the board on disk.\nIf set to 0, auto backup is disabled") );
+	m_SaveTime->SetToolTip( _("Delay after the first change to create a backup file of the board on disk. If set to 0, auto backup is disabled.") );
 	
 	fgSizer1->Add( m_SaveTime, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
@@ -72,7 +72,7 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	fgSizer1->Add( m_staticTextRotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_RotationAngle = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_RotationAngle->SetToolTip( _("Context menu and hot key footprint rotation increment.") );
+	m_RotationAngle->SetToolTip( _("Set increment (in degrees) for context menu and hotkey rotation.") );
 	
 	fgSizer1->Add( m_RotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
@@ -84,33 +84,33 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	
 	m_DrcOn = new wxCheckBox( bMiddleRightBoxSizer->GetStaticBox(), wxID_DRC_ONOFF, _("&Enforce design rules when routing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DrcOn->SetValue(true); 
-	m_DrcOn->SetToolTip( _("Enable/disable the DRC control.\nWhen the DRC control is disabled, all connections are allowed.") );
+	m_DrcOn->SetToolTip( _("Enable DRC control. When DRC control is disabled, all connections are allowed.") );
 	
 	bMiddleRightBoxSizer->Add( m_DrcOn, 0, wxALL|wxEXPAND, 5 );
 	
 	m_ShowGlobalRatsnest = new wxCheckBox( bMiddleRightBoxSizer->GetStaticBox(), wxID_GENERAL_RATSNEST, _("&Show ratsnest"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ShowGlobalRatsnest->SetValue(true); 
-	m_ShowGlobalRatsnest->SetToolTip( _("Show (or not) the full rastnest.") );
+	m_ShowGlobalRatsnest->SetToolTip( _("Show the full ratsnest.") );
 	
 	bMiddleRightBoxSizer->Add( m_ShowGlobalRatsnest, 0, wxALL, 5 );
 	
 	m_TrackAutodel = new wxCheckBox( bMiddleRightBoxSizer->GetStaticBox(), wxID_TRACK_AUTODEL, _("&Delete unconnected tracks"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_TrackAutodel->SetToolTip( _("Enable/disable the automatic track deletion when recreating a track.") );
+	m_TrackAutodel->SetToolTip( _("Enable automatic track deletion when redrawing a track.") );
 	
 	bMiddleRightBoxSizer->Add( m_TrackAutodel, 0, wxALL, 5 );
 	
 	m_Track_45_Only_Ctrl = new wxCheckBox( bMiddleRightBoxSizer->GetStaticBox(), wxID_TRACKS45, _("&Limit tracks to 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Track_45_Only_Ctrl->SetToolTip( _("If enabled, force tracks directions to H, V or 45 degrees, when creating a track.") );
+	m_Track_45_Only_Ctrl->SetToolTip( _("Force track directions to H, V or 45 degrees when drawing a track.") );
 	
 	bMiddleRightBoxSizer->Add( m_Track_45_Only_Ctrl, 0, wxALL, 5 );
 	
 	m_Segments_45_Only_Ctrl = new wxCheckBox( bMiddleRightBoxSizer->GetStaticBox(), wxID_SEGMENTS45, _("L&imit graphic lines to 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Segments_45_Only_Ctrl->SetToolTip( _("If enabled, force segments directions to H, V or 45 degrees, when creating a segment on technical layers.") );
+	m_Segments_45_Only_Ctrl->SetToolTip( _("Force line segment directions to H, V or 45 degrees when drawing on technical layers.") );
 	
 	bMiddleRightBoxSizer->Add( m_Segments_45_Only_Ctrl, 0, wxALL, 5 );
 	
 	m_Track_DoubleSegm_Ctrl = new wxCheckBox( bMiddleRightBoxSizer->GetStaticBox(), wxID_ANY, _("&Use double segmented tracks"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Track_DoubleSegm_Ctrl->SetToolTip( _("If enabled, uses two track segments, with 45 degrees angle between them when creating a new track ") );
+	m_Track_DoubleSegm_Ctrl->SetToolTip( _("Use two track segments, with 45 degrees angle between them, when drawing a new track ") );
 	
 	bMiddleRightBoxSizer->Add( m_Track_DoubleSegm_Ctrl, 0, wxALL, 5 );
 	
@@ -127,7 +127,7 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	int m_MagneticPadOptCtrlNChoices = sizeof( m_MagneticPadOptCtrlChoices ) / sizeof( wxString );
 	m_MagneticPadOptCtrl = new wxRadioBox( this, wxID_ANY, _("Magnetic Pads"), wxDefaultPosition, wxDefaultSize, m_MagneticPadOptCtrlNChoices, m_MagneticPadOptCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_MagneticPadOptCtrl->SetSelection( 0 );
-	m_MagneticPadOptCtrl->SetToolTip( _("control the capture of the pcb cursor when the mouse cursor enters a pad area") );
+	m_MagneticPadOptCtrl->SetToolTip( _("Control capture of the cursor when the mouse enters a pad area.") );
 	
 	bRightSizer->Add( m_MagneticPadOptCtrl, 0, wxALL|wxEXPAND, 5 );
 	
@@ -135,7 +135,7 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	int m_MagneticTrackOptCtrlNChoices = sizeof( m_MagneticTrackOptCtrlChoices ) / sizeof( wxString );
 	m_MagneticTrackOptCtrl = new wxRadioBox( this, wxID_MAGNETIC_TRACKS, _("Magnetic Tracks"), wxDefaultPosition, wxDefaultSize, m_MagneticTrackOptCtrlNChoices, m_MagneticTrackOptCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_MagneticTrackOptCtrl->SetSelection( 0 );
-	m_MagneticTrackOptCtrl->SetToolTip( _("Control the capture of the pcb cursor when the mouse cursor enters a track") );
+	m_MagneticTrackOptCtrl->SetToolTip( _("Control capture of the cursor when the mouse approaches a track.") );
 	
 	bRightSizer->Add( m_MagneticTrackOptCtrl, 0, wxALL|wxEXPAND, 5 );
 	
@@ -143,17 +143,17 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	sbSizer2PAN = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan and Zoom") ), wxVERTICAL );
 	
 	m_ZoomCenterOpt = new wxCheckBox( sbSizer2PAN->GetStaticBox(), wxID_ANY, _("Ce&nter and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ZoomCenterOpt->SetToolTip( _("Keep the cursor at its current location when zooming") );
+	m_ZoomCenterOpt->SetToolTip( _("Center the cursor on screen when zooming.") );
 	
 	sbSizer2PAN->Add( m_ZoomCenterOpt, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	m_MousewheelPANOpt = new wxCheckBox( sbSizer2PAN->GetStaticBox(), wxID_ANY, _("Use touchpad to pan"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_MousewheelPANOpt->SetToolTip( _("Use touchpad to pan canvas") );
+	m_MousewheelPANOpt->SetToolTip( _("Enable touchpad-friendly controls (pan with scroll action, zoom with Ctrl+scroll).") );
 	
 	sbSizer2PAN->Add( m_MousewheelPANOpt, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	m_AutoPANOpt = new wxCheckBox( sbSizer2PAN->GetStaticBox(), wxID_AUTOPAN, _("&Pan while moving object"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_AutoPANOpt->SetToolTip( _("Allows auto pan when creating a track, or moving an item.") );
+	m_AutoPANOpt->SetToolTip( _("When drawing a track or moving an item, pan when approaching the edge of the display.") );
 	
 	sbSizer2PAN->Add( m_AutoPANOpt, 0, wxALL, 5 );
 	

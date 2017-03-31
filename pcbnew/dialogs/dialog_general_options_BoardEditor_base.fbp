@@ -161,13 +161,13 @@
                                         <property name="pin_button">1</property>
                                         <property name="pos"></property>
                                         <property name="resize">Resizable</property>
-                                        <property name="selection">1</property>
+                                        <property name="selection">0</property>
                                         <property name="show">1</property>
                                         <property name="size"></property>
                                         <property name="style">wxRA_SPECIFY_COLS</property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Activates the display of relative coordinates from relative origin (set by the space key)&#x0A;to the cursor, in polar coordinates (angle and distance)</property>
+                                        <property name="tooltip">Set display of relative (dx/dy) coordinates to Cartesian (rectangular) or polar (angle/distance).</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
@@ -257,7 +257,7 @@
                                         <property name="style">wxRA_SPECIFY_COLS</property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Selection of units used to display dimensions and positions of items</property>
+                                        <property name="tooltip">Set units used to display dimensions and positions.</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
@@ -456,7 +456,7 @@
                                                 <property name="style">wxSP_ARROW_KEYS</property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Adjust the number of ratsnets shown from cursor to closest pads</property>
+                                                <property name="tooltip">Adjust the number of ratsnets shown from cursor to closest pads.</property>
                                                 <property name="value">1</property>
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>
@@ -627,7 +627,7 @@
                                                 <property name="style">wxSP_ARROW_KEYS</property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Delay after the first change to create a backup file of the board on disk.&#x0A;If set to 0, auto backup is disabled</property>
+                                                <property name="tooltip">Delay after the first change to create a backup file of the board on disk. If set to 0, auto backup is disabled.</property>
                                                 <property name="value">0</property>
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>
@@ -796,7 +796,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Context menu and hot key footprint rotation increment.</property>
+                                                <property name="tooltip">Set increment (in degrees) for context menu and hotkey rotation.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -903,7 +903,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Enable/disable the DRC control.&#x0A;When the DRC control is disabled, all connections are allowed.</property>
+                                                <property name="tooltip">Enable DRC control. When DRC control is disabled, all connections are allowed.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -991,7 +991,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Show (or not) the full rastnest.</property>
+                                                <property name="tooltip">Show the full ratsnest.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -1079,7 +1079,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Enable/disable the automatic track deletion when recreating a track.</property>
+                                                <property name="tooltip">Enable automatic track deletion when redrawing a track.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -1167,7 +1167,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">If enabled, force tracks directions to H, V or 45 degrees, when creating a track.</property>
+                                                <property name="tooltip">Force track directions to H, V or 45 degrees when drawing a track.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -1255,7 +1255,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">If enabled, force segments directions to H, V or 45 degrees, when creating a segment on technical layers.</property>
+                                                <property name="tooltip">Force line segment directions to H, V or 45 degrees when drawing on technical layers.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -1343,7 +1343,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">If enabled, uses two track segments, with 45 degrees angle between them when creating a new track </property>
+                                                <property name="tooltip">Use two track segments, with 45 degrees angle between them, when drawing a new track </property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -1446,7 +1446,7 @@
                                         <property name="style">wxRA_SPECIFY_COLS</property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">control the capture of the pcb cursor when the mouse cursor enters a pad area</property>
+                                        <property name="tooltip">Control capture of the cursor when the mouse enters a pad area.</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
@@ -1536,7 +1536,7 @@
                                         <property name="style">wxRA_SPECIFY_COLS</property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Control the capture of the pcb cursor when the mouse cursor enters a track</property>
+                                        <property name="tooltip">Control capture of the cursor when the mouse approaches a track.</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
@@ -1637,7 +1637,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Keep the cursor at its current location when zooming</property>
+                                                <property name="tooltip">Center the cursor on screen when zooming.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -1725,7 +1725,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Use touchpad to pan canvas</property>
+                                                <property name="tooltip">Enable touchpad-friendly controls (pan with scroll action, zoom with Ctrl+scroll).</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -1813,7 +1813,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Allows auto pan when creating a track, or moving an item.</property>
+                                                <property name="tooltip">When drawing a track or moving an item, pan when approaching the edge of the display.</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
