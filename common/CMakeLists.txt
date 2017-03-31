@@ -284,6 +284,7 @@ set( COMMON_SRCS
     wildcards_and_files_ext.cpp
     worksheet.cpp
     wxwineda.cpp
+    wxdataviewctrl_helpers.cpp
     wx_unit_binder.cpp
     wx_status_popup.cpp
     xnode.cpp

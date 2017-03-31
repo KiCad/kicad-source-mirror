@@ -50,12 +50,8 @@
 #include <template_fieldnames.h>
 #include <widgets/footprint_preview_widget.h>
 #include <widgets/footprint_select_widget.h>
+#include <wxdataviewctrl_helpers.h>
 
-// Tree navigation helpers.
-static wxDataViewItem GetPrevItem( const wxDataViewCtrl& ctrl, const wxDataViewItem& item );
-static wxDataViewItem GetNextItem( const wxDataViewCtrl& ctrl, const wxDataViewItem& item );
-static wxDataViewItem GetPrevSibling( const wxDataViewCtrl& ctrl, const wxDataViewItem& item );
-static wxDataViewItem GetNextSibling( const wxDataViewCtrl& ctrl, const wxDataViewItem& item );
 
 FOOTPRINT_ASYNC_LOADER          DIALOG_CHOOSE_COMPONENT::m_fp_loader;
 std::unique_ptr<FOOTPRINT_LIST> DIALOG_CHOOSE_COMPONENT::m_fp_list;
@@ -525,103 +521,4 @@ void DIALOG_CHOOSE_COMPONENT::HandleItemSelection()
         else
             m_tree_ctrl->Expand( sel );
     }
-}
-
-
-static wxDataViewItem GetPrevItem( const wxDataViewCtrl& tree, const wxDataViewItem& item )
-{
-    auto prevItem = GetPrevSibling( tree, item );
-
-    if( !prevItem.IsOk() )
-    {
-        prevItem = tree.GetModel()->GetParent( item );
-    }
-    else if( tree.IsExpanded( prevItem ) )
-    {
-        wxDataViewItemArray children;
-        tree.GetModel()->GetChildren( prevItem, children );
-        prevItem = children[children.size() - 1];
-    }
-
-    return prevItem;
-}
-
-
-static wxDataViewItem GetNextItem( const wxDataViewCtrl& tree, const wxDataViewItem& item )
-{
-    wxDataViewItem nextItem;
-
-    if( !item.IsOk() )
-    {
-        // No selection. Select the first.
-        wxDataViewItemArray children;
-        tree.GetModel()->GetChildren( item, children );
-        return children[0];
-    }
-
-    if( tree.IsExpanded( item ) )
-    {
-        wxDataViewItemArray children;
-        tree.GetModel()->GetChildren( item, children );
-        nextItem = children[0];
-    }
-    else
-    {
-        // Walk up levels until we find one that has a next sibling.
-        for( wxDataViewItem walk = item; walk.IsOk(); walk = tree.GetModel()->GetParent( walk ) )
-        {
-            nextItem = GetNextSibling( tree, walk );
-
-            if( nextItem.IsOk() )
-                break;
-        }
-    }
-
-    return nextItem;
-}
-
-
-static wxDataViewItem GetPrevSibling( const wxDataViewCtrl& tree, const wxDataViewItem& item )
-{
-    wxDataViewItemArray siblings;
-    wxDataViewItem      invalid;
-    wxDataViewItem      parent = tree.GetModel()->GetParent( item );
-
-    tree.GetModel()->GetChildren( parent, siblings );
-
-    for( size_t i = 0; i < siblings.size(); ++i )
-    {
-        if( siblings[i] == item )
-        {
-            if( i == 0 )
-                return invalid;
-            else
-                return siblings[i - 1];
-        }
-    }
-
-    return invalid;
-}
-
-
-static wxDataViewItem GetNextSibling( const wxDataViewCtrl& tree, const wxDataViewItem& item )
-{
-    wxDataViewItemArray siblings;
-    wxDataViewItem      invalid;
-    wxDataViewItem      parent = tree.GetModel()->GetParent( item );
-
-    tree.GetModel()->GetChildren( parent, siblings );
-
-    for( size_t i = 0; i < siblings.size(); ++i )
-    {
-        if( siblings[i] == item )
-        {
-            if( i == siblings.size() - 1 )
-                return invalid;
-            else
-                return siblings[i + 1];
-        }
-    }
-
-    return invalid;
 }
