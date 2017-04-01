@@ -54,7 +54,7 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
     LAYER_VIA_THROUGH, LAYER_VIA_BBLIND,
     LAYER_VIA_MICROVIA, LAYER_PADS,
 
-    NETNAMES_LAYER_INDEX( LAYER_PAD_FR_NETNAMES ), LAYER_PAD_FR,
+    LAYER_PAD_FR_NETNAMES, LAYER_PAD_FR,
     NETNAMES_LAYER_INDEX( F_Cu ), F_Cu, F_Mask, F_SilkS, F_Paste, F_Adhes,
 
     NETNAMES_LAYER_INDEX( In1_Cu ),   In1_Cu,
@@ -88,7 +88,7 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
     NETNAMES_LAYER_INDEX( In29_Cu ),  In29_Cu,
     NETNAMES_LAYER_INDEX( In30_Cu ),  In30_Cu,
 
-    NETNAMES_LAYER_INDEX( LAYER_PAD_BK_NETNAMES ), LAYER_PAD_BK,
+    LAYER_PAD_BK_NETNAMES, LAYER_PAD_BK,
     NETNAMES_LAYER_INDEX( B_Cu ), B_Cu, B_Mask, B_Adhes, B_Paste, B_SilkS,
 
     LAYER_MOD_TEXT_BK,
@@ -293,14 +293,14 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
 
     for( GAL_LAYER_ID i = GAL_LAYER_ID_START; i < GAL_LAYER_ID_END; ++i )
     {
-        m_view->SetLayerVisible( i , aBoard->IsElementVisible( i ) );
+        m_view->SetLayerVisible( i, aBoard->IsElementVisible( i ) );
     }
 
     // Enable some layers that are GAL specific
     m_view->SetLayerVisible( LAYER_PADS_HOLES, true );
     m_view->SetLayerVisible( LAYER_VIAS_HOLES, true );
-    m_view->SetLayerVisible( LAYER_WORKSHEET , true );
-    m_view->SetLayerVisible( LAYER_GP_OVERLAY , true );
+    m_view->SetLayerVisible( LAYER_WORKSHEET, true );
+    m_view->SetLayerVisible( LAYER_GP_OVERLAY, true );
 }
 
 
