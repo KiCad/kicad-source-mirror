@@ -70,6 +70,8 @@ C3D_RENDER_RAYTRACING::C3D_RENDER_RAYTRACING( CINFO3D_VISU &aSettings ) :
 
     m_isPreview = false;
     m_rt_render_state = RT_RENDER_STATE_MAX; // Set to an initial invalid state
+    m_stats_start_rendering_time = 0;
+    m_nrBlocksRenderProgress = 0;
 }
 
 

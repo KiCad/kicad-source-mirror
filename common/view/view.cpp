@@ -50,6 +50,7 @@ public:
         m_view( nullptr ),
         m_flags( KIGFX::VISIBLE ),
         m_requiredUpdate( KIGFX::NONE ),
+        m_drawPriority( 0 ),
         m_groups( nullptr ),
         m_groupsSize( 0 ) {}
 
