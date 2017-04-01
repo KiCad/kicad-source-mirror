@@ -693,9 +693,12 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
     if( aCfg->Read( baseCfgName + ShowGridEntryKeyword, &btmp ) )
         SetGridVisibility( btmp );
 
-    int itmp;
-    if( aCfg->Read( baseCfgName + GridColorEntryKeyword, &itmp ) )
-        SetGridColor( ColorFromInt( itmp ) );
+    // Read grid color:
+    COLOR4D wtmp = COLOR4D::UNSPECIFIED;
+
+    if( wtmp.SetFromWxString( aCfg->Read(
+                baseCfgName + GridColorEntryKeyword, wxT( "NONE" ) ) ) )
+        SetGridColor( wtmp );
 
     aCfg->Read( baseCfgName + LastGridSizeIdKeyword, &m_LastGridSizeId, 0L );
 
