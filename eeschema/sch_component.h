@@ -170,6 +170,12 @@ public:
     PART_REF& GetPartRef() { return m_part; }
 
     /**
+     * Return information about the aliased parts
+     */
+    wxString GetAliasDescription() const;
+    wxString GetAliasDocumentation() const;
+
+    /**
      * Function Resolve
      * [re-]assigns the current LIB_PART from aLibs which this component
      * is based on.
@@ -291,6 +297,12 @@ public:
      * @return SCH_FIELD* - the field value or NULL if does not exist
      */
     SCH_FIELD* GetField( int aFieldNdx ) const;
+
+    /**
+     * Returns text associated with a given field (if such a field exists)
+     * @aFieldName is the name of the field
+     */
+    wxString GetFieldText( wxString aFieldName ) const;
 
     /**
      * Function GetFields

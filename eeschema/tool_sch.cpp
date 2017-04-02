@@ -160,9 +160,12 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, KiBitmap( netlist_xpm ),
                             _( "Generate netlist" ) );
 
+    m_mainToolBar->AddTool( ID_OPEN_CMP_TABLE, wxEmptyString, KiBitmap( spreadsheet_xpm ),
+                            _( "Component table view"  ) );
+
+
     m_mainToolBar->AddTool( ID_GET_TOOLS, wxEmptyString, KiBitmap( bom_xpm ),
                             HELP_GENERATE_BOM );
-
 
     m_mainToolBar->AddSeparator();
 

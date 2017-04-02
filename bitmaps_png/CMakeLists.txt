@@ -531,6 +531,7 @@ set( BMAPS_MID
     show_no_layers
     show_no_copper_layers
     show_all_copper_layers
+    spreadsheet
     svg_file
     swap_layer
     text_sketch

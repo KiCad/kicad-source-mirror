@@ -293,6 +293,43 @@ void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aSymLibTab
     }
 }
 
+/**
+ * Function GetAliasDescription
+ * Return the description text for the given part alias
+ */
+wxString SCH_COMPONENT::GetAliasDescription() const
+{
+    if( PART_SPTR part = m_part.lock() )
+    {
+        LIB_ALIAS* alias = part->GetAlias( GetLibId().GetLibItemName() );
+
+        if( !alias )
+            return wxEmptyString;
+
+        return alias->GetDescription();
+    }
+
+    return wxEmptyString;
+}
+
+/**
+ * Function GetAliasDocumentation
+ * Return the documentation text for the given part alias
+ */
+wxString SCH_COMPONENT::GetAliasDocumentation() const
+{
+    if( PART_SPTR part = m_part.lock() )
+    {
+        LIB_ALIAS* alias = part->GetAlias( GetLibId().GetLibItemName() );
+
+        if( !alias )
+            return wxEmptyString;
+
+        return alias->GetDocFileName();
+    }
+
+    return wxEmptyString;
+}
 
 bool SCH_COMPONENT::Resolve( PART_LIBS* aLibs )
 {
@@ -730,6 +767,37 @@ SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
 
     // use cast to remove const-ness
     return (SCH_FIELD*) field;
+}
+
+wxString SCH_COMPONENT::GetFieldText( wxString aFieldName ) const
+{
+
+    // Field name for comparison
+    wxString cmpFieldName;
+
+    // Default field names
+    for ( unsigned int i=0; i<MANDATORY_FIELDS; i++)
+    {
+        cmpFieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( i );
+
+        if( cmpFieldName.Cmp( aFieldName ) == 0 )
+        {
+            return m_Fields[i].GetText();
+        }
+    }
+
+    // Search custom fields
+    for( unsigned int ii=MANDATORY_FIELDS; ii<m_Fields.size(); ii++ )
+    {
+        cmpFieldName = m_Fields[ii].GetName();
+
+        if( cmpFieldName.Cmp( aFieldName ) == 0 )
+        {
+            return m_Fields[ii].GetText();
+        }
+    }
+
+    return wxEmptyString;
 }
 
 

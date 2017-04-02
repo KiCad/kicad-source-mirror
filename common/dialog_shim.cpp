@@ -97,7 +97,8 @@ DIALOG_SHIM::~DIALOG_SHIM()
     if( IsQuasiModal() )
         EndQuasiModal( wxID_CANCEL );
 
-    delete m_qmodal_parent_disabler;    // usually NULL by now
+    if( m_qmodal_parent_disabler )
+        delete m_qmodal_parent_disabler;    // usually NULL by now
 }
 
 void DIALOG_SHIM::FinishDialogSettings()

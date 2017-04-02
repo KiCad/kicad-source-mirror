@@ -94,6 +94,7 @@ const wxString ComponentFileWildcard( _( "KiCad cmp/footprint link files (*.cmp)
 const wxString DrillFileWildcard( _( "Drill files (*.drl)|*.drl;*.DRL" ) );
 const wxString SVGFileWildcard( _( "SVG files (*.svg)|*.svg;*.SVG" ) );
 const wxString HtmlFileWildcard( _( "HTML files (*.html)|*.htm;*.html" ) );
+const wxString CsvFileWildcard( _( "CSV Files (*.csv)|*.csv" ) );
 const wxString PdfFileWildcard( _( "Portable document format files (*.pdf)|*.pdf" ) );
 const wxString PSFileWildcard( _( "PostScript files (.ps)|*.ps" ) );
 const wxString ReportFileWildcard = _( "Report files (*.rpt)|*.rpt" );

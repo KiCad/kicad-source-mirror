@@ -83,6 +83,7 @@ extern const wxString BoardFileWildcard;
 extern const wxString NetlistFileWildcard;
 extern const wxString GerberFileWildcard;
 extern const wxString HtmlFileWildcard;
+extern const wxString CsvFileWildcard;
 extern const wxString LegacyPcbFileWildcard;
 extern const wxString PcbFileWildcard;
 extern const wxString EaglePcbFileWildcard;

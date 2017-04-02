@@ -249,6 +249,7 @@ enum main_id
     ID_PAN_RIGHT,
 
     ID_GET_NETLIST,
+    ID_OPEN_CMP_TABLE,
     ID_GET_TOOLS,
     ID_FIND_ITEMS,
 

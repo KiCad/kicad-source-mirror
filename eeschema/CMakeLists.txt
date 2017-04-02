@@ -25,6 +25,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_annotate_base.cpp
     dialogs/dialog_bom.cpp
     dialogs/dialog_bom_base.cpp
+	dialogs/dialog_bom_editor.cpp
+	dialogs/dialog_bom_editor_base.cpp
     dialogs/dialog_bom_cfg_keywords.cpp
     dialogs/dialog_choose_component.cpp
     dialogs/dialog_lib_edit_text.cpp
@@ -85,6 +87,9 @@ set( EESCHEMA_SRCS
     backanno.cpp
     block.cpp
     block_libedit.cpp
+    bom_exporter.cpp
+    bom_table_model.cpp
+    bom_table_column.cpp
     busentry.cpp
     bus-wire-junction.cpp
     class_drc_erc_item.cpp
