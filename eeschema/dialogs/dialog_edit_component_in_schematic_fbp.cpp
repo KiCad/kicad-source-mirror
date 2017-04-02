@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Feb 19 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -70,7 +70,6 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	sbSizerChipName = new wxStaticBoxSizer( new wxStaticBox( optionsSizer->GetStaticBox(), wxID_ANY, _("Component Name:") ), wxVERTICAL );
 	
 	chipnameTextCtrl = new wxTextCtrl( sbSizerChipName->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	chipnameTextCtrl->SetMaxLength( 0 ); 
 	chipnameTextCtrl->SetToolTip( _("Name of the symbol in the library from which this component come from") );
 	
 	sbSizerChipName->Add( chipnameTextCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -95,7 +94,6 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	optionsSizer->Add( m_staticTextTimeStamp, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_textCtrlTimeStamp = new wxTextCtrl( optionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	m_textCtrlTimeStamp->SetMaxLength( 0 ); 
 	m_textCtrlTimeStamp->SetToolTip( _("Unique ID that identifies the component") );
 	
 	optionsSizer->Add( m_textCtrlTimeStamp, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
@@ -200,7 +198,6 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	fieldNameBoxSizer->Add( fieldNameLabel, 0, wxTOP, 5 );
 	
 	fieldNameTextCtrl = new wxTextCtrl( fieldsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fieldNameTextCtrl->SetMaxLength( 0 ); 
 	fieldNameTextCtrl->SetToolTip( _("Name of the selected field. Fixed field names are not editable") );
 	
 	fieldNameBoxSizer->Add( fieldNameTextCtrl, 0, wxBOTTOM|wxEXPAND, 5 );
@@ -210,7 +207,6 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	fieldNameBoxSizer->Add( fieldValueLabel, 0, wxALIGN_TOP|wxTOP, 5 );
 	
 	fieldValueTextCtrl = new wxTextCtrl( fieldsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fieldValueTextCtrl->SetMaxLength( 0 ); 
 	fieldValueTextCtrl->SetToolTip( _("Name of the selected field. Fixed field names are not editable") );
 	
 	fieldNameBoxSizer->Add( fieldValueTextCtrl, 0, wxEXPAND|wxBOTTOM, 5 );
@@ -234,7 +230,6 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	fgSizerPosSize->Add( textSizeLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	textSizeTextCtrl = new wxTextCtrl( fieldsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxPoint( -1,-1 ), wxDefaultSize, 0 );
-	textSizeTextCtrl->SetMaxLength( 0 ); 
 	textSizeTextCtrl->SetToolTip( _("Font Size of the selected field") );
 	
 	fgSizerPosSize->Add( textSizeTextCtrl, 0, wxEXPAND|wxBOTTOM, 0 );
@@ -243,12 +238,11 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	m_staticTextUnitSize->Wrap( -1 );
 	fgSizerPosSize->Add( m_staticTextUnitSize, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	posXLabel = new wxStaticText( fieldsSizer->GetStaticBox(), wxID_ANY, _("Position, X: "), wxDefaultPosition, wxDefaultSize, 0 );
+	posXLabel = new wxStaticText( fieldsSizer->GetStaticBox(), wxID_ANY, _("Position X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	posXLabel->Wrap( -1 );
 	fgSizerPosSize->Add( posXLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	posXTextCtrl = new wxTextCtrl( fieldsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxPoint( -1,-1 ), wxDefaultSize, 0 );
-	posXTextCtrl->SetMaxLength( 0 ); 
 	posXTextCtrl->SetToolTip( _("X coordinate of the selected field") );
 	
 	fgSizerPosSize->Add( posXTextCtrl, 0, wxEXPAND|wxTOP, 0 );
@@ -257,12 +251,11 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	m_staticTextUnitPosX->Wrap( -1 );
 	fgSizerPosSize->Add( m_staticTextUnitPosX, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	posYLabel = new wxStaticText( fieldsSizer->GetStaticBox(), wxID_ANY, _("Position, Y: "), wxDefaultPosition, wxDefaultSize, 0 );
+	posYLabel = new wxStaticText( fieldsSizer->GetStaticBox(), wxID_ANY, _("Position Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	posYLabel->Wrap( -1 );
 	fgSizerPosSize->Add( posYLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	posYTextCtrl = new wxTextCtrl( fieldsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxPoint( -1,-1 ), wxDefaultSize, 0 );
-	posYTextCtrl->SetMaxLength( 0 ); 
 	posYTextCtrl->SetToolTip( _("X coordinate of the selected field") );
 	
 	fgSizerPosSize->Add( posYTextCtrl, 0, wxEXPAND, 5 );
