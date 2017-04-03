@@ -291,10 +291,11 @@ void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 void LIB_EDIT_FRAME::OnSaveActiveLibrary( wxCommandEvent& event )
 {
     bool newFile = false;
+
     if( event.GetId() == ID_LIBEDIT_SAVE_CURRENT_LIB_AS )
         newFile = true;
 
-    this->SaveActiveLibrary( newFile );
+    SaveActiveLibrary( newFile );
 }
 
 
@@ -307,14 +308,14 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
 
     PART_LIB* lib = GetCurLib();
 
-    // Just in case the library hasn't been cached yet.
-    lib->GetCount();
-
     if( !lib )
     {
         DisplayError( this, _( "No library specified." ) );
         return false;
     }
+
+    // Just in case the library hasn't been cached yet.
+    lib->GetCount();
 
     wxString oldFileName = lib->GetFullFileName();
 
