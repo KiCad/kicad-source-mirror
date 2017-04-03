@@ -704,6 +704,7 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 
     // Set transitions to be ready for future TOOL_EVENTs
     aState->theTool->SetTransitions();
+    m_viewControls->ForceCursorPosition( false );
 
     return it;
 }
