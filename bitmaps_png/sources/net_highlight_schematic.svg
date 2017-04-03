@@ -11,7 +11,7 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.91 r"
    sodipodi:docname="net_highlight_schematic.svg">
   <metadata
      id="metadata40">
@@ -21,7 +21,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -35,88 +35,82 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1920"
-     inkscape:window-height="1033"
+     inkscape:window-height="1053"
      id="namedview38"
      showgrid="true"
      inkscape:snap-to-guides="false"
      inkscape:snap-grids="true"
-     inkscape:zoom="22.961538"
-     inkscape:cx="8.5398606"
-     inkscape:cy="15.013174"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:zoom="32.472518"
+     inkscape:cx="10.481867"
+     inkscape:cy="12.648642"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      inkscape:snap-text-baseline="false">
     <inkscape:grid
        type="xygrid"
        id="grid3017"
-       empspacing="2"
+       empspacing="1"
        visible="true"
        enabled="true"
        snapvisiblegridlinesonly="true"
-       spacingx="0.5px"
-       spacingy="0.5px" />
+       spacingx="1"
+       spacingy="1" />
   </sodipodi:namedview>
   <defs
      id="defs4" />
   <path
-     style="fill:none;stroke:#999999;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 24.709648,12.562814 -9.124489,-0.0871"
-     id="path3762-9"
+     sodipodi:nodetypes="cc"
      inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cc" />
+     id="path2990-5-6-1"
+     d="m 19.50824,2.5236924 0,20.9784476"
+     style="fill:none;stroke:#bebebe;stroke-width:3.00546122;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   <path
-     style="fill:none;stroke:#999999;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 15.281436,21.5268 -13.8392535,0"
-     id="path3762"
+     style="fill:none;stroke:#bebebe;stroke-width:3;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 23.541745,16.518814 -17.0589117,0"
+     id="path3762-3"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc" />
   <path
      sodipodi:nodetypes="cc"
      inkscape:connector-curvature="0"
-     id="path3764"
-     d="m 15.451424,12.592827 -0.04355,8.958401"
-     style="fill:#999999;stroke:#999999;stroke-width:3.01138306;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+     id="path3764-6"
+     d="m 6.5076569,4.490333 0,12.045379"
+     style="fill:#c2c2c2;fill-opacity:1;stroke:#bebebe;stroke-width:2.98596144;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   <g
-     transform="matrix(1.6382539,0,0,1.5572263,1.2572207,0.36314149)"
-     id="g16">
+     transform="matrix(1.6382539,0,0,1.5572263,32.714507,1.595972)"
+     id="g16-7">
     <rect
        height="16"
        width="16"
        y="0"
        x="0"
-       id="rect18"
+       id="rect18-5"
        style="fill-opacity:0" />
   </g>
   <path
-     style="fill:none;stroke:#00c800;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 3.4497486,7.4186952 0,17.2597628"
-     id="path3765"
+     sodipodi:nodetypes="cc"
      inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cc" />
+     id="path2990-5"
+     d="m 23.513254,7.5131347 -9.002822,0"
+     style="fill:none;stroke:#ff00ff;stroke-width:2.99185824;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   <path
      sodipodi:nodetypes="cc"
      inkscape:connector-curvature="0"
-     id="path2990"
-     d="M 24.59095,7.3257956 3.7608098,7.2822445"
-     style="fill:none;stroke:#00c800;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+     id="path2990-5-6"
+     d="m 12.507401,7.5182451 0,13.2724239"
+     style="fill:none;stroke:#ff00ff;stroke-width:2.98801088;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   <path
+     sodipodi:nodetypes="cc"
      inkscape:connector-curvature="0"
-     style="fill:#b1aef9;fill-opacity:1;fill-rule:evenodd;stroke:#444643;stroke-width:0.8;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="path20"
-     d="m 0.54142981,15.449186 4.61652199,0.331528 -2.619268,4.847253 c 0.04162,0.911764 1.538074,1.698835 2.245087,1.118598 l 2.620077,-4.598407 3.2441182,2.776632 -0.04202,-12.9719295 z"
-     sodipodi:nodetypes="cccccccc" />
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.63950491px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Arial Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     x="3.9269257"
-     y="4.7785397"
-     id="text4141"
-     sodipodi:linespacing="125%"
-     transform="scale(0.89317103,1.1196064)"><tspan
-       sodipodi:role="line"
-       id="tspan4143"
-       x="3.9269257"
-       y="4.7785397">LABEL</tspan></text>
+     id="path2990-5-2"
+     d="m 12.502979,22.51231 -9.9968441,0"
+     style="fill:none;stroke:#ff00ff;stroke-width:2.9800415;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+  <path
+     style="fill:none;stroke:#bebebe;stroke-width:3.01416397;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 6.4569404,4.512368 -3.9389419,0"
+     id="path3762-3-9"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cc" />
 </svg>

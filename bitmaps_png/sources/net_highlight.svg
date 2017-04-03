@@ -11,7 +11,7 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.91 r"
    sodipodi:docname="net_highlight.svg">
   <metadata
      id="metadata40">
@@ -34,17 +34,17 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1301"
-     inkscape:window-height="744"
+     inkscape:window-width="1920"
+     inkscape:window-height="1053"
      id="namedview38"
      showgrid="true"
      inkscape:snap-to-guides="false"
      inkscape:snap-grids="true"
-     inkscape:zoom="22.961538"
-     inkscape:cx="13"
-     inkscape:cy="13"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:zoom="11.480769"
+     inkscape:cx="18.223901"
+     inkscape:cy="10.836464"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2">
     <inkscape:grid
@@ -60,8 +60,8 @@
   <defs
      id="defs4" />
   <path
-     style="fill:none;stroke:#999999;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="m 23.5,18.5 -21,0"
+     style="fill:none;stroke:#bebebe;stroke-width:3.00136065;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 23.514036,18.5 -21.0190529,0"
      id="path3762"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc" />
@@ -70,7 +70,7 @@
      inkscape:connector-curvature="0"
      id="path3764"
      d="m 18.5,2.5 0,21"
-     style="fill:#999999;stroke:#999999;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+     style="fill:#c2c2c2;fill-opacity:1;stroke:#bebebe;stroke-width:3;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   <g
      transform="matrix(1.6382539,0,0,1.5572263,1.2572207,0.36314149)"
      id="g16">
@@ -83,8 +83,8 @@
        style="fill-opacity:0" />
   </g>
   <path
-     style="fill:none;stroke:#ff0505;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="m 7.5,2.5 0,21"
+     style="fill:none;stroke:#bb0000;stroke-width:3.00006652;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 9.5033501,2.5000817 0,21.0009313"
      id="path3765"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc" />
@@ -92,22 +92,13 @@
      sodipodi:nodetypes="cc"
      inkscape:connector-curvature="0"
      id="path2990"
-     d="m 23.5,7.5 -21,0"
-     style="fill:none;stroke:#00c800;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-  <path
-     sodipodi:type="arc"
-     style="fill:#e6e6e6;fill-opacity:1;stroke:#1a1a1a;stroke-width:0.5;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     d="m 23.50902,9.5033501 -21.0000003,0"
+     style="fill:none;stroke:#57aa55;stroke-width:3;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+  <ellipse
+     style="fill:#a58f1f;fill-opacity:1;stroke:#7a7a7a;stroke-width:1.06198382;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="path2992"
-     sodipodi:cx="14"
-     sodipodi:cy="13"
-     sodipodi:rx="2.5"
-     sodipodi:ry="2.5"
-     d="m 16.5,13 a 2.5,2.5 0 1 1 -5,0 2.5,2.5 0 1 1 5,0 z"
-     transform="translate(-6.5,-5.5)" />
-  <path
-     inkscape:connector-curvature="0"
-     style="fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:#444643;stroke-width:0.84485227;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     id="path20"
-     d="m 23.166211,16.536031 -4.892514,0.352587 2.775857,5.155162 c -0.04411,0.969681 -1.630026,1.806748 -2.379306,1.189653 L 15.893533,18.342925 12.45547,21.295935 12.5,7.5 z"
-     sodipodi:nodetypes="cccccccc" />
+     cx="9.5097284"
+     cy="9.5482225"
+     rx="4.015882"
+     ry="4.023581" />
 </svg>
