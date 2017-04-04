@@ -173,7 +173,7 @@ void DIALOG_BOM_EDITOR::UpdateTitle()
     {
         title += wxString::Format( " %s %u %s",
                               _( "in" ),
-                              m_bom->Groups.size(),
+                              (unsigned int) m_bom->Groups.size(),
                               _( "groups" ) );
     }
 
