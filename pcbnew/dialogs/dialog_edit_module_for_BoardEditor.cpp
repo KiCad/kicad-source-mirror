@@ -8,7 +8,7 @@
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,9 +57,11 @@
 
 size_t DIALOG_MODULE_BOARD_EDITOR::m_page = 0;     // remember the last open page during session
 
+
 wxBEGIN_EVENT_TABLE( DIALOG_MODULE_BOARD_EDITOR, wxDialog )
     EVT_CLOSE( DIALOG_MODULE_BOARD_EDITOR::OnCloseWindow )
 wxEND_EVENT_TABLE()
+
 
 DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent,
                                                         MODULE*          aModule,
@@ -102,8 +104,7 @@ DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent
     m_LastSelected3DShapeIndex = 0;
     m_OrientValue = 0;
 
-    Layout();
-
+    // Layout() gets called correctly in TransferDataToWindow().
 }
 
 
@@ -317,7 +318,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
         if( res && res->SplitAlias( origPath, alias, shortPath ) )
         {
             origPath = alias;
-            origPath.append( wxT( ":" ) );
+            origPath.append( ":" );
             origPath.append( shortPath );
         }
 
@@ -338,7 +339,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
 
     m_AttributsCtrl->SetItemToolTip( 0,
         _( "Use this attribute for most non SMD components\n"
-            "Components with this option are not put in the footprint position list file" ) );
+           "Components with this option are not put in the footprint position list file" ) );
     m_AttributsCtrl->SetItemToolTip( 1,
          _( "Use this attribute for SMD components.\n"
             "Only components with this option are put in the footprint position list file" ) );
@@ -374,11 +375,14 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
         m_AutoPlaceCtrl->SetSelection( 0 );
 
     m_AutoPlaceCtrl->SetItemToolTip( 0,
-                                    _( "Component can be freely moved and auto placed. User can arbitrarily select and edit component's pads." ) );
+                                     _( "Component can be freely moved and auto placed. User "
+                                        "can arbitrarily select and edit component's pads." ) );
     m_AutoPlaceCtrl->SetItemToolTip( 1,
-                                    _( "Component can be freely moved and auto placed, but its pads cannot be selected or edited." ) );
+                                     _( "Component can be freely moved and auto placed, but its "
+                                        "pads cannot be selected or edited." ) );
     m_AutoPlaceCtrl->SetItemToolTip( 2,
-                                    _( "Component is locked: it cannot be freely moved or auto placed." ) );
+                                     _( "Component is locked: it cannot be freely moved or auto "
+                                        "placed." ) );
 
     m_CostRot90Ctrl->SetValue( m_CurrentModule->GetPlacementCost90() );
 
@@ -570,7 +574,7 @@ void DIALOG_MODULE_BOARD_EDITOR::BrowseAndAdd3DShapeFile()
 
 #ifdef __WINDOWS__
     // In Kicad files, filenames and paths are stored using Unix notation
-    model.m_Filename.Replace( wxT( "\\" ), wxT( "/" ) );
+    model.m_Filename.Replace( "\\", "/" );
 #endif
 
     m_shapes3D_list.push_back( model );
@@ -601,6 +605,7 @@ bool DIALOG_MODULE_BOARD_EDITOR::TransferDataToWindow()
 
     InitModeditProperties();
     InitBoardProperties();
+    Layout();
 
     return true;
 }
