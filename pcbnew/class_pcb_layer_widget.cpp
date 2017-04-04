@@ -520,11 +520,14 @@ void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
     wxASSERT( aId > GAL_LAYER_ID_START && aId < GAL_LAYER_ID_END );
     myframe->GetBoard()->SetVisibleElementColor( static_cast<GAL_LAYER_ID>( aId ), aColor );
 
-    if( myframe->GetGalCanvas() )
+    EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
+
+    if( galCanvas && myframe->IsGalCanvasActive() )
     {
-        KIGFX::VIEW* view = myframe->GetGalCanvas()->GetView();
+        KIGFX::VIEW* view = galCanvas->GetView();
         view->GetPainter()->GetSettings()->ImportLegacyColors( myframe->GetBoard()->GetColorsSettings() );
         view->UpdateLayerColor( aId );
+        galCanvas->Refresh();
     }
 
     myframe->GetCanvas()->Refresh();
@@ -545,7 +548,7 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 
     EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
 
-    if( galCanvas )
+    if( galCanvas && myframe->IsGalCanvasActive() )
     {
         if( aId == LAYER_GRID )
         {
@@ -554,10 +557,9 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
         }
         else
             galCanvas->GetView()->SetLayerVisible( aId, isEnabled );
-    }
 
-    if( galCanvas && myframe->IsGalCanvasActive() )
         galCanvas->Refresh();
+    }
     else
         myframe->GetCanvas()->Refresh();
 }
