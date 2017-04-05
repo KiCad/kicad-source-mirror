@@ -50,7 +50,7 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
     LAYER_MOD_REFERENCES, LAYER_MOD_VALUES,
 
     LAYER_RATSNEST, LAYER_ANCHOR,
-    LAYER_VIAS_HOLES, LAYER_PADS_HOLES,
+    LAYER_VIAS_HOLES, LAYER_PADS_HOLES, LAYER_NON_PLATED,
     LAYER_VIA_THROUGH, LAYER_VIA_BBLIND,
     LAYER_VIA_MICROVIA, LAYER_PADS,
 
@@ -195,7 +195,7 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
         LAYER_NUM layers[] = {
                 GetNetnameLayer( aLayer ), LAYER_VIA_THROUGH,
                 LAYER_VIAS_HOLES, LAYER_PADS,
-                LAYER_PADS_HOLES, LAYER_PADS_NETNAMES,
+                LAYER_PADS_HOLES, LAYER_NON_PLATED, LAYER_PADS_NETNAMES,
                 LAYER_GP_OVERLAY, LAYER_RATSNEST
         };
 
@@ -231,7 +231,7 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
     const LAYER_NUM layers[] = {
             LAYER_VIA_THROUGH,
             LAYER_VIAS_HOLES, LAYER_PADS,
-            LAYER_PADS_HOLES, LAYER_PADS_NETNAMES,
+            LAYER_PADS_HOLES, LAYER_NON_PLATED, LAYER_PADS_NETNAMES,
             LAYER_GP_OVERLAY, LAYER_RATSNEST, Dwgs_User,
             LAYER_DRC
     };
@@ -401,6 +401,7 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     // Some more required layers settings
     m_view->SetRequired( LAYER_VIAS_HOLES, LAYER_VIA_THROUGH );
     m_view->SetRequired( LAYER_PADS_HOLES, LAYER_PADS );
+    m_view->SetRequired( LAYER_NON_PLATED, LAYER_PADS );
     m_view->SetRequired( LAYER_PADS_NETNAMES, LAYER_PADS );
 
     // Front modules

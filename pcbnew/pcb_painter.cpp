@@ -65,32 +65,34 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
 
 void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSettings )
 {
+    // Init board layers colors:
     for( int i = 0; i < PCB_LAYER_ID_COUNT; i++ )
     {
         m_layerColors[i] = aSettings->GetLayerColor( i );
         m_layerColors[i].a = 0.8;   // slightly transparent
     }
 
+    // Init specific graphic layers colors:
     for( int i = GAL_LAYER_ID_START; i < GAL_LAYER_ID_END; i++ )
         m_layerColors[i] = aSettings->GetItemColor( i );
 
-    m_layerColors[LAYER_MOD_TEXT_FR]            = m_layerColors[F_SilkS];
-    m_layerColors[LAYER_MOD_TEXT_BK]            = m_layerColors[B_SilkS];
+    // Default colors for specific layers (not really board layers).
+    m_layerColors[LAYER_VIAS_HOLES]         = COLOR4D( 0.5, 0.4, 0.0, 0.8 );
+    m_layerColors[LAYER_PADS_HOLES]         = COLOR4D( 0.0, 0.0, 0.0, 1.0 );
+    m_layerColors[LAYER_PADS]               = COLOR4D( 0.6, 0.6, 0.0, 0.8 );
+    m_layerColors[LAYER_PADS_NETNAMES]      = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
+    m_layerColors[LAYER_PAD_FR_NETNAMES]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
+    m_layerColors[LAYER_PAD_BK_NETNAMES]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
+    m_layerColors[LAYER_WORKSHEET]          = COLOR4D( 0.5, 0.0, 0.0, 0.8 );
+    m_layerColors[LAYER_DRC]                = COLOR4D( 1.0, 0.0, 0.0, 0.8 );
 
-    // Default colors for specific layers
-    m_layerColors[LAYER_VIAS_HOLES]             = COLOR4D( 0.5, 0.4, 0.0, 0.8 );
-    m_layerColors[LAYER_PADS_HOLES]             = COLOR4D( 0.0, 0.5, 0.5, 0.8 );
-    m_layerColors[LAYER_VIA_THROUGH]            = COLOR4D( 0.6, 0.6, 0.6, 0.8 );
-    m_layerColors[LAYER_VIA_BBLIND]             = COLOR4D( 0.6, 0.6, 0.6, 0.8 );
-    m_layerColors[LAYER_VIA_MICROVIA]           = COLOR4D( 0.4, 0.4, 0.8, 0.8 );
-    m_layerColors[LAYER_PADS]                   = COLOR4D( 0.6, 0.6, 0.6, 0.8 );
-    m_layerColors[LAYER_PADS_NETNAMES]          = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
-    m_layerColors[LAYER_PAD_FR_NETNAMES]        = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
-    m_layerColors[LAYER_PAD_BK_NETNAMES]        = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
-    m_layerColors[LAYER_ANCHOR]                 = COLOR4D( 0.3, 0.3, 1.0, 0.9 );
-    m_layerColors[LAYER_RATSNEST]               = COLOR4D( 0.4, 0.4, 0.4, 0.8 );
-    m_layerColors[LAYER_WORKSHEET]              = COLOR4D( 0.5, 0.0, 0.0, 0.8 );
-    m_layerColors[LAYER_DRC]                    = COLOR4D( 1.0, 0.0, 0.0, 0.8 );
+    // LAYER_NON_PLATED, LAYER_ANCHOR],LAYER_RATSNEST,
+    // LAYER_VIA_THROUGH], LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA
+    // are initialized from aSettings
+
+    // These colors are not actually used. Set just in case...
+    m_layerColors[LAYER_MOD_TEXT_FR] = m_layerColors[F_SilkS];
+    m_layerColors[LAYER_MOD_TEXT_BK] = m_layerColors[B_SilkS];
 
     // Make ratsnest lines slightly transparent
     m_layerColors[LAYER_RATSNEST].a = 0.8;
@@ -599,7 +601,20 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     }
 
     // Pad drawing
-    const COLOR4D& color = m_pcbSettings.GetColor( aPad, aLayer );
+    COLOR4D color = m_pcbSettings.GetColor( aPad, aLayer );
+
+    // Pad holes color is specific
+    if( aLayer == LAYER_PADS_HOLES || aLayer == LAYER_NON_PLATED )
+    {
+        // Hole color is the background color for plated holes, but a specific color
+        // for not plated holes (LAYER_NON_PLATED color layer )
+        if( aPad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED /*&&
+            brd->IsElementVisible( LAYER_NON_PLATED )*/ )
+            color = m_pcbSettings.GetColor( nullptr, LAYER_NON_PLATED );
+        else
+            color = m_pcbSettings.GetBackgroundColor();
+    }
+
     VECTOR2D size;
 
     if( m_pcbSettings.m_sketchMode[LAYER_PADS] )
@@ -623,7 +638,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     m_gal->Rotate( -aPad->GetOrientationRadians() );
 
     // Choose drawing settings depending on if we are drawing a pad itself or a hole
-    if( aLayer == LAYER_PADS_HOLES )
+    if( aLayer == LAYER_PADS_HOLES || aLayer == LAYER_NON_PLATED )
     {
         // Drawing hole: has same shape as PAD_CIRCLE or PAD_OVAL
         size  = VECTOR2D( aPad->GetDrillSize() ) / 2.0;

@@ -167,16 +167,16 @@ enum GAL_LAYER_ID: int
     GAL_LAYER_ID_START = NETNAMES_LAYER_ID_END,
 
     LAYER_VIAS = GAL_LAYER_ID_START,
-    LAYER_VIA_MICROVIA,
-    LAYER_VIA_BBLIND,
-    LAYER_VIA_THROUGH,
-    LAYER_NON_PLATED,
+    LAYER_VIA_MICROVIA,         ///< to draw micro vias
+    LAYER_VIA_BBLIND,           ///< to draw blind/buried vias
+    LAYER_VIA_THROUGH,          ///< to draw usual through hole vias
+    LAYER_NON_PLATED,           ///< handle color for not plated holes
     LAYER_MOD_TEXT_FR,
     LAYER_MOD_TEXT_BK,
     LAYER_MOD_TEXT_INVISIBLE,   ///< text marked as invisible
-    LAYER_ANCHOR,
-    LAYER_PAD_FR,
-    LAYER_PAD_BK,
+    LAYER_ANCHOR,               ///< anchor of items having an anchor point (texts, footprints)
+    LAYER_PAD_FR,               ///< smd pads, front layer
+    LAYER_PAD_BK,               ///< smd pads, back layer
     LAYER_RATSNEST,
     LAYER_GRID,
     LAYER_GRID_AXES,
@@ -187,8 +187,8 @@ enum GAL_LAYER_ID: int
     LAYER_MOD_REFERENCES,       ///< show modules references (when texts are visibles)
     LAYER_TRACKS,
     LAYER_PADS,                 ///< multilayer pads, usually with holes
-    LAYER_PADS_HOLES,
-    LAYER_VIAS_HOLES,
+    LAYER_PADS_HOLES,           ///< to draw pad holes (plated or not plated)
+    LAYER_VIAS_HOLES,           ///< to draw via holes (pad holes do not use this layer)
     LAYER_DRC,                  ///< drc markers
     LAYER_WORKSHEET,            ///< worksheet frame
     LAYER_GP_OVERLAY,           ///< general purpose overlay
