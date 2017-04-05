@@ -222,10 +222,10 @@ void DIALOG_SYMBOL_REMAP::remapSymbolsToLibTable( REPORTER& aReporter )
 
 bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_COMPONENT* aSymbol )
 {
-    wxCHECK_RET( aSymbol != NULL, "Null pointer passed to remapSymbolToLibTable." );
-    wxCHECK_RET( aSymbol->GetLibId().GetLibNickname().empty(),
+    wxCHECK_MSG( aSymbol != NULL, false, "Null pointer passed to remapSymbolToLibTable." );
+    wxCHECK_MSG( aSymbol->GetLibId().GetLibNickname().empty(), false,
                  "Cannot remap symbol that is already mapped." );
-    wxCHECK_RET( !aSymbol->GetLibId().GetLibItemName().empty(),
+    wxCHECK_MSG( !aSymbol->GetLibId().GetLibItemName().empty(), false,
                  "The symbol LIB_ID name is empty." );
 
     PART_LIBS* libs = Prj().SchLibs();
