@@ -41,10 +41,10 @@ include_directories(
 )
 
 target_link_libraries(qa_geometry
-    ${CMAKE_BINARY_DIR}/polygon/libpolygon.a
-    ${CMAKE_BINARY_DIR}/common/libcommon.a
-    ${CMAKE_BINARY_DIR}/bitmaps_png/libbitmaps.a
-    ${CMAKE_BINARY_DIR}/polygon/libpolygon.a
+    polygon
+    common
+    polygon
+    bitmaps
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
