@@ -202,7 +202,8 @@ void SHAPE_POLY_SET::InsertVertex( int aGlobalIndex, VECTOR2I aNewVertex )
     if( aGlobalIndex < 0 )
         aGlobalIndex = 0;
 
-    if( aGlobalIndex >= TotalVertices() ){
+    if( aGlobalIndex >= TotalVertices() )
+    {
         Append( aNewVertex );
     }
     else

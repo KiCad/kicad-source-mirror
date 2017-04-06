@@ -781,15 +781,21 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         commit.Modify( zone );
 
         // Handle the last segment, so other segments can be easily handled in a loop
-        unsigned int nearestIdx = outline->TotalVertices() - 1, nextNearestIdx = 0;
-        SEG side( outline->Vertex( nearestIdx ), outline->Vertex( nextNearestIdx ) );
-        unsigned int nearestDist = side.Distance( cursorPos );
+        unsigned int nearestIdx = 0;
+        unsigned int nextNearestIdx = 0;
+        unsigned int nearestDist = INT_MAX;
 
-        for( int i = 0; i < outline->TotalVertices() - 1; ++i )
+        for( int i = 0; i < outline->TotalVertices(); ++i )
         {
-            side = SEG( outline->Vertex( i ), outline->Vertex( i + 1 ) );
+            int jj = i+1;
+
+            if( jj >= outline->TotalVertices() )
+                jj = 0;
+
+            SEG side( outline->Vertex( i ), outline->Vertex( jj ) );
 
             unsigned int distance = side.Distance( cursorPos );
+
             if( distance < nearestDist )
             {
                 nearestDist = distance;
@@ -797,6 +803,7 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
                 nextNearestIdx = i + 1;
             }
         }
+
 
         // Find the point on the closest segment
         VECTOR2I sideOrigin = outline->Vertex( nearestIdx );
@@ -809,7 +816,9 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         if( nearestPoint == sideOrigin || nearestPoint == sideEnd )
             nearestPoint = ( sideOrigin + sideEnd ) / 2;
 
-        outline->InsertVertex( nearestIdx, nearestPoint );
+        // Add corner between nearestIdx and nextNearestIdx:
+        outline->InsertVertex( nextNearestIdx, nearestPoint );
+        zone->Hatch();
 
         commit.Push( _( "Add a zone corner" ) );
     }
@@ -853,6 +862,7 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
             commit.Push( _( "Split segment" ) );
         }
     }
+
     updatePoints();
     return 0;
 }
