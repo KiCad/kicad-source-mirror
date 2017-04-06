@@ -2,6 +2,8 @@ include_directories( BEFORE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include
     ${OPENGL_INCLUDE_DIR}
+    ${GLEW_INCLUDE_DIR}
+    ${GLM_INCLUDE_DIR}
     ${Boost_INCLUDE_DIR}
 )
 
