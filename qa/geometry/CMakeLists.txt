@@ -24,6 +24,8 @@
 find_package(Boost COMPONENTS system filesystem unit_test_framework REQUIRED)
 find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
 
+add_definitions(-DBOOST_TEST_DYN_LINK)
+
 add_executable(qa_geometry
     test_module.cpp
     test_chamfer_fillet.cpp
