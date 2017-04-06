@@ -30,6 +30,7 @@
 #include <wx/frame.h>
 #include <wx/regex.h>
 #include <gal/opengl/opengl_gal.h>
+#include <pgm_base.h>
 #include <iostream>
 
 // Required OpenGL version
@@ -40,8 +41,10 @@ static wxRegEx OGLVersionRegex( R"(^(\d+)\.(\d+))", wxRE_ADVANCED );
 
 static const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 8, 0 };
 
-
-void Pgm() {}
+PGM_BASE& Pgm()
+{
+    throw std::logic_error("Dummy function called");
+}
 
 
 class OGLTEST_APP : public wxApp
