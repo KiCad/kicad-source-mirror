@@ -17,7 +17,8 @@ set( OGLTEST_FILES
     kicad-ogltest.cpp
 )
 
-add_executable( kicad-ogltest ${OGLTEST_FILES} )
+add_executable( kicad-ogltest WIN32 MACOSX_BUNDLE
+    ${OGLTEST_FILES} )
 
 target_link_libraries( kicad-ogltest
     gal
