@@ -54,10 +54,7 @@ Load() TODO's
 #include <errno.h>
 
 #include <wx/string.h>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/xml_parser.hpp>
-
-#include <eagle_plugin.h>
+#include <wx/xml/xml.h>
 
 #include <common.h>
 #include <macros.h>
@@ -76,948 +73,18 @@ Load() TODO's
 #include <class_pcb_text.h>
 #include <class_dimension.h>
 
-using namespace boost::property_tree;
+#include <eagle_plugin.h>
+
 using namespace std;
 
-typedef EAGLE_PLUGIN::BIU                   BIU;
-typedef PTREE::const_assoc_iterator         CA_ITER;
-typedef PTREE::const_iterator               CITER;
-typedef std::pair<CA_ITER, CA_ITER>         CA_ITER_RANGE;
 
-typedef MODULE_MAP::iterator                MODULE_ITER;
-typedef MODULE_MAP::const_iterator          MODULE_CITER;
-
-typedef boost::optional<string>             opt_string;
-typedef boost::optional<int>                opt_int;
-typedef boost::optional<double>             opt_double;
-typedef boost::optional<bool>               opt_bool;
-
-
-/// segment (element) of our XPATH into the Eagle XML document tree in PTREE form.
-struct TRIPLET
-{
-    const char* element;
-    const char* attribute;
-    const char* value;
-
-    TRIPLET( const char* aElement, const char* aAttribute = "", const char* aValue = "" ) :
-        element( aElement ),
-        attribute( aAttribute ),
-        value( aValue )
-    {}
-};
-
-
-/**
- * Class XPATH
- * keeps track of what we are working on within a PTREE.
- * Then if an exception is thrown, the place within the tree that gave us
- * grief can be reported almost accurately.  To minimally impact
- * speed, merely assign const char* pointers during the tree walking
- * expedition.  The const char* pointers must be to C strings residing either in
- * the data or code segment (i.e. "compiled in") or within the XML document, but
- * not on the stack, since the stack is unwound during the throwing of the
- * exception.  The XML document will not immediately vanish since we capture
- * the xpath (using function Contents()) before the XML document tree (PTREE)
- * is destroyed.
- */
-class XPATH
-{
-    std::vector<TRIPLET>    p;
-
-public:
-    void push( const char* aPathSegment, const char* aAttribute="" )
-    {
-        p.push_back( TRIPLET( aPathSegment, aAttribute ) );
-    }
-
-    void clear()    { p.clear(); }
-
-    void pop()      { p.pop_back(); }
-
-    /// modify the last path node's value
-    void Value( const char* aValue )
-    {
-        p.back().value = aValue;
-    }
-
-    /// modify the last path node's attribute
-    void Attribute( const char* aAttribute )
-    {
-        p.back().attribute = aAttribute;
-    }
-
-    /// return the contents of the XPATH as a single string
-    string Contents()
-    {
-        typedef std::vector<TRIPLET>::const_iterator CITER_TRIPLET;
-
-        string ret;
-
-        for( CITER_TRIPLET it = p.begin();  it != p.end();  ++it )
-        {
-            if( it != p.begin() )
-                ret += '.';
-
-            ret += it->element;
-
-            if( it->attribute[0] && it->value[0] )
-            {
-                ret += '[';
-                ret += it->attribute;
-                ret += '=';
-                ret += it->value;
-                ret += ']';
-            }
-        }
-
-        return ret;
-    }
-};
-
-
-/**
- * Function parseOptionalBool
- * returns an opt_bool and sets it true or false according to the presence
- * and value of an attribute within the CPTREE element.
- */
-static opt_bool parseOptionalBool( CPTREE& attribs, const char* aName )
-{
-    opt_bool    ret;
-    opt_string  stemp = attribs.get_optional<string>( aName );
-
-    if( stemp )
-        ret = !stemp->compare( "yes" );
-
-    return ret;
-}
-
-
-// All of the 'E'STRUCTS below merely hold Eagle XML information verbatim, in binary.
-// For maintenance and troubleshooting purposes, it was thought that we'd need to
-// separate the conversion process into distinct steps. There is no intent to have KiCad
-// forms of information in these 'E'STRUCTS.  They are only binary forms
-// of the Eagle information in the corresponding Eagle XML nodes.
-
-
-/// Eagle rotation
-struct EROT
-{
-    bool    mirror;
-    bool    spin;
-    double  degrees;
-
-    EROT() :
-        mirror( false ),
-        spin( false ),
-        degrees( 0 )
-    {}
-
-    EROT( double aDegrees ) :
-        mirror( false ),
-        spin( false ),
-        degrees( aDegrees )
-    {}
-};
-
-typedef boost::optional<EROT>   opt_erot;
-
-/// parse an Eagle XML "rot" field.  Unfortunately the DTD seems not to explain
-/// this format very well.  [S][M]R<degrees>.   Examples: "R90", "MR180", "SR180"
-static EROT erot( const string& aRot )
-{
-    EROT    rot;
-
-    rot.spin    = aRot.find( 'S' ) != aRot.npos;
-    rot.mirror  = aRot.find( 'M' ) != aRot.npos;
-    rot.degrees = strtod( aRot.c_str()
-                        + 1                     // skip leading 'R'
-                        + int( rot.spin )       // skip optional leading 'S'
-                        + int( rot.mirror ),    // skip optional leading 'M'
-                        NULL );
-    return rot;
-}
-
-/// Eagle "rot" fields are optional, handle that by returning opt_erot.
-static opt_erot parseOptionalEROT( CPTREE& attribs )
-{
-    opt_erot    ret;
-    opt_string  stemp = attribs.get_optional<string>( "rot" );
-    if( stemp )
-        ret = erot( *stemp );
-    return ret;
-}
-
-/// Eagle wire
-struct EWIRE
-{
-    double      x1;
-    double      y1;
-    double      x2;
-    double      y2;
-    double      width;
-    LAYER_NUM   layer;
-
-    // for style: (continuous | longdash | shortdash | dashdot)
-    enum {
-        CONTINUOUS,
-        LONGDASH,
-        SHORTDASH,
-        DASHDOT,
-    };
-    opt_int     style;
-    opt_double  curve;      ///< range is -359.9..359.9
-
-    // for cap: (flat | round)
-    enum {
-        FLAT,
-        ROUND,
-    };
-    opt_int     cap;
-
-    EWIRE( CPTREE& aWire );
-};
-
-/**
- * Constructor EWIRE
- * converts a "wire"'s xml attributes ( &ltwire&gt )
- * to binary without additional conversion.
- * This result is an EWIRE with the &ltwire&gt textual data merely converted to binary.
- */
-EWIRE::EWIRE( CPTREE& aWire )
-{
-    CPTREE& attribs = aWire.get_child( "<xmlattr>" );
-
-    /*
-    <!ELEMENT wire EMPTY>
-    <!ATTLIST wire
-          x1            %Coord;        #REQUIRED
-          y1            %Coord;        #REQUIRED
-          x2            %Coord;        #REQUIRED
-          y2            %Coord;        #REQUIRED
-          width         %Dimension;    #REQUIRED
-          layer         %Layer;        #REQUIRED
-          extent        %Extent;       #IMPLIED  -- only applicable for airwires --
-          style         %WireStyle;    "continuous"
-          curve         %WireCurve;    "0"
-          cap           %WireCap;      "round"   -- only applicable if 'curve' is not zero --
-          >
-    */
-
-    x1    = attribs.get<double>( "x1" );
-    y1    = attribs.get<double>( "y1" );
-    x2    = attribs.get<double>( "x2" );
-    y2    = attribs.get<double>( "y2" );
-    width = attribs.get<double>( "width" );
-    layer = attribs.get<int>( "layer" );
-
-    curve = attribs.get_optional<double>( "curve" );
-
-    opt_string s = attribs.get_optional<string>( "style" );
-    if( s )
-    {
-        if( !s->compare( "continuous" ) )
-            style = EWIRE::CONTINUOUS;
-        else if( !s->compare( "longdash" ) )
-            style = EWIRE::LONGDASH;
-        else if( !s->compare( "shortdash" ) )
-            style = EWIRE::SHORTDASH;
-        else if( !s->compare( "dashdot" ) )
-            style = EWIRE::DASHDOT;
-    }
-
-    s = attribs.get_optional<string>( "cap" );
-    if( s )
-    {
-        if( !s->compare( "round" ) )
-            cap = EWIRE::ROUND;
-        else if( !s->compare( "flat" ) )
-            cap = EWIRE::FLAT;
-    }
-    // ignoring extent
-}
-
-
-/// Eagle via
-struct EVIA
-{
-    double      x;
-    double      y;
-    int         layer_front_most;   /// < extent
-    int         layer_back_most;    /// < inclusive
-    double      drill;
-    opt_double  diam;
-    opt_string  shape;
-    EVIA( CPTREE& aVia );
-};
-
-EVIA::EVIA( CPTREE& aVia )
-{
-    CPTREE& attribs = aVia.get_child( "<xmlattr>" );
-
-    /*
-    <!ELEMENT via EMPTY>
-    <!ATTLIST via
-          x             %Coord;        #REQUIRED
-          y             %Coord;        #REQUIRED
-          extent        %Extent;       #REQUIRED
-          drill         %Dimension;    #REQUIRED
-          diameter      %Dimension;    "0"
-          shape         %ViaShape;     "round"
-          alwaysstop    %Bool;         "no"
-          >
-    */
-
-    x     = attribs.get<double>( "x" );
-    y     = attribs.get<double>( "y" );
-
-    string ext = attribs.get<string>( "extent" );
-
-    sscanf( ext.c_str(), "%d-%d", &layer_front_most, &layer_back_most );
-
-    drill = attribs.get<double>( "drill" );
-    diam  = attribs.get_optional<double>( "diameter" );
-    shape = attribs.get_optional<string>( "shape" );
-}
-
-
-/// Eagle circle
-struct ECIRCLE
-{
-    double  x;
-    double  y;
-    double  radius;
-    double  width;
-    LAYER_NUM layer;
-
-    ECIRCLE( CPTREE& aCircle );
-};
-
-ECIRCLE::ECIRCLE( CPTREE& aCircle )
-{
-    CPTREE& attribs = aCircle.get_child( "<xmlattr>" );
-
-    /*
-    <!ELEMENT circle EMPTY>
-    <!ATTLIST circle
-          x             %Coord;        #REQUIRED
-          y             %Coord;        #REQUIRED
-          radius        %Coord;        #REQUIRED
-          width         %Dimension;    #REQUIRED
-          layer         %Layer;        #REQUIRED
-          >
-    */
-
-    x      = attribs.get<double>( "x" );
-    y      = attribs.get<double>( "y" );
-    radius = attribs.get<double>( "radius" );
-    width  = attribs.get<double>( "width" );
-    layer  = attribs.get<int>( "layer" );
-}
-
-
-/// Eagle XML rectangle in binary
-struct ERECT
-{
-    double      x1;
-    double      y1;
-    double      x2;
-    double      y2;
-    int         layer;
-    opt_erot    rot;
-
-    ERECT( CPTREE& aRect );
-};
-
-ERECT::ERECT( CPTREE& aRect )
-{
-    CPTREE& attribs = aRect.get_child( "<xmlattr>" );
-
-    /*
-    <!ELEMENT rectangle EMPTY>
-    <!ATTLIST rectangle
-          x1            %Coord;        #REQUIRED
-          y1            %Coord;        #REQUIRED
-          x2            %Coord;        #REQUIRED
-          y2            %Coord;        #REQUIRED
-          layer         %Layer;        #REQUIRED
-          rot           %Rotation;     "R0"
-          >
-    */
-
-    x1    = attribs.get<double>( "x1" );
-    y1    = attribs.get<double>( "y1" );
-    x2    = attribs.get<double>( "x2" );
-    y2    = attribs.get<double>( "y2" );
-    layer = attribs.get<int>( "layer" );
-    rot   = parseOptionalEROT( attribs );
-}
-
-
-/// Eagle "attribute" XML element, no foolin'.
-struct EATTR
-{
-    string      name;
-    opt_string  value;
-    opt_double  x;
-    opt_double  y;
-    opt_double  size;
-    opt_int     layer;
-    opt_double  ratio;
-    opt_erot    rot;
-
-    enum {  // for 'display'
-        Off,
-        VALUE,
-        NAME,
-        BOTH,
-    };
-    opt_int     display;
-
-    EATTR( CPTREE& aTree );
-    EATTR() {}
-};
-
-/**
- * Constructor EATTR
- * parses an Eagle "attribute" XML element.  Note that an attribute element
- * is different than an XML element attribute.  The attribute element is a
- * full XML node in and of itself, and has attributes of its own.  Blame Eagle.
- */
-EATTR::EATTR( CPTREE& aAttribute )
-{
-    CPTREE& attribs = aAttribute.get_child( "<xmlattr>" );
-
-    /*
-    <!ELEMENT attribute EMPTY>
-    <!ATTLIST attribute
-        name          %String;       #REQUIRED
-        value         %String;       #IMPLIED
-        x             %Coord;        #IMPLIED
-        y             %Coord;        #IMPLIED
-        size          %Dimension;    #IMPLIED
-        layer         %Layer;        #IMPLIED
-        font          %TextFont;     #IMPLIED
-        ratio         %Int;          #IMPLIED
-        rot           %Rotation;     "R0"
-        display       %AttributeDisplay; "value" -- only in <element> or <instance> context --
-        constant      %Bool;         "no"     -- only in <device> context --
-        >
-    */
-
-    name    = attribs.get<string>( "name" );                    // #REQUIRED
-    value   = attribs.get_optional<string>( "value" );
-
-    x       = attribs.get_optional<double>( "x" );
-    y       = attribs.get_optional<double>( "y" );
-    size    = attribs.get_optional<double>( "size" );
-
-    // KiCad cannot currently put a TEXTE_MODULE on a different layer than the MODULE
-    // Eagle can it seems.
-    layer   = attribs.get_optional<int>( "layer" );
-
-    ratio   = attribs.get_optional<double>( "ratio" );
-    rot     = parseOptionalEROT( attribs );
-
-    opt_string stemp = attribs.get_optional<string>( "display" );
-    if( stemp )
-    {
-        // (off | value | name | both)
-        if( !stemp->compare( "off" ) )
-            display = EATTR::Off;
-        else if( !stemp->compare( "value" ) )
-            display = EATTR::VALUE;
-        else if( !stemp->compare( "name" ) )
-            display = EATTR::NAME;
-        else if( !stemp->compare( "both" ) )
-            display = EATTR::BOTH;
-    }
-}
-
-/// Eagle dimension element
-struct EDIMENSION
-{
-    double      x1;
-    double      y1;
-    double      x2;
-    double      y2;
-    double      x3;
-    double      y3;
-    int         layer;
-
-    opt_string dimensionType;
-
-    EDIMENSION( CPTREE& aDimension );
-};
-
-EDIMENSION::EDIMENSION( CPTREE& aDimension )
-{
-    CPTREE& attribs = aDimension.get_child( "<xmlattr>" );
-
-    /*
-    <!ELEMENT dimension EMPTY>
-    <!ATTLIST dimension
-          x1            %Coord;        #REQUIRED
-          y1            %Coord;        #REQUIRED
-          x2            %Coord;        #REQUIRED
-          y2            %Coord;        #REQUIRED
-          x3            %Coord;        #REQUIRED
-          y3            %Coord;        #REQUIRED
-          layer         %Layer;        #REQUIRED
-          dtype         %DimensionType; "parallel"
-          >
-    */
-
-    x1      = attribs.get<double>( "x1" );
-    y1      = attribs.get<double>( "y1" );
-    x2      = attribs.get<double>( "x2" );
-    y2      = attribs.get<double>( "y2" );
-    x3      = attribs.get<double>( "x3" );
-    y3      = attribs.get<double>( "y3" );
-    layer   = attribs.get<int>( "layer" );
-
-    opt_string dimType = attribs.get_optional<string>( "dtype" );
-
-    if(!dimType)
-    {
-        // default type is parallel
-    }
-}
-
-/// Eagle text element
-struct ETEXT
-{
-    string      text;
-    double      x;
-    double      y;
-    double      size;
-    int         layer;
-    opt_string  font;
-    opt_double  ratio;
-    opt_erot    rot;
-
-    enum {          // for align
-        CENTER,
-        CENTER_LEFT,
-        TOP_CENTER,
-        TOP_LEFT,
-        TOP_RIGHT,
-
-        // opposites are -1 x above, used by code tricks in here
-        CENTER_RIGHT  = -CENTER_LEFT,
-        BOTTOM_CENTER = -TOP_CENTER,
-        BOTTOM_LEFT   = -TOP_RIGHT,
-        BOTTOM_RIGHT  = -TOP_LEFT,
-    };
-
-    opt_int     align;
-
-    ETEXT( CPTREE& aText );
-};
-
-ETEXT::ETEXT( CPTREE& aText )
-{
-    CPTREE& attribs = aText.get_child( "<xmlattr>" );
-
-    /*
-    <!ELEMENT text (#PCDATA)>
-    <!ATTLIST text
-          x             %Coord;        #REQUIRED
-          y             %Coord;        #REQUIRED
-          size          %Dimension;    #REQUIRED
-          layer         %Layer;        #REQUIRED
-          font          %TextFont;     "proportional"
-          ratio         %Int;          "8"
-          rot           %Rotation;     "R0"
-          align         %Align;        "bottom-left"
-          >
-    */
-
-    text   = aText.data();
-    x      = attribs.get<double>( "x" );
-    y      = attribs.get<double>( "y" );
-    size   = attribs.get<double>( "size" );
-    layer  = attribs.get<int>( "layer" );
-
-    font   = attribs.get_optional<string>( "font" );
-    ratio  = attribs.get_optional<double>( "ratio" );
-    rot    = parseOptionalEROT( attribs );
-
-    opt_string stemp = attribs.get_optional<string>( "align" );
-    if( stemp )
-    {
-        // (bottom-left | bottom-center | bottom-right | center-left |
-        //   center | center-right | top-left | top-center | top-right)
-        if( !stemp->compare( "center" ) )
-            align = ETEXT::CENTER;
-        else if( !stemp->compare( "center-right" ) )
-            align = ETEXT::CENTER_RIGHT;
-        else if( !stemp->compare( "top-left" ) )
-            align = ETEXT::TOP_LEFT;
-        else if( !stemp->compare( "top-center" ) )
-            align = ETEXT::TOP_CENTER;
-        else if( !stemp->compare( "top-right" ) )
-            align = ETEXT::TOP_RIGHT;
-        else if( !stemp->compare( "bottom-left" ) )
-            align = ETEXT::BOTTOM_LEFT;
-        else if( !stemp->compare( "bottom-center" ) )
-            align = ETEXT::BOTTOM_CENTER;
-        else if( !stemp->compare( "bottom-right" ) )
-            align = ETEXT::BOTTOM_RIGHT;
-        else if( !stemp->compare( "center-left" ) )
-            align = ETEXT::CENTER_LEFT;
-    }
-}
-
-
-/// Eagle thru hol pad
-struct EPAD
-{
-    string      name;
-    double      x;
-    double      y;
-    double      drill;
-    opt_double  diameter;
-
-    // for shape: (square | round | octagon | long | offset)
-    enum {
-        SQUARE,
-        ROUND,
-        OCTAGON,
-        LONG,
-        OFFSET,
-    };
-    opt_int     shape;
-    opt_erot    rot;
-    opt_bool    stop;
-    opt_bool    thermals;
-    opt_bool    first;
-
-    EPAD( CPTREE& aPad );
-};
-
-EPAD::EPAD( CPTREE& aPad )
-{
-    CPTREE& attribs = aPad.get_child( "<xmlattr>" );
-
-    /*
-    <!ELEMENT pad EMPTY>
-    <!ATTLIST pad
-          name          %String;       #REQUIRED
-          x             %Coord;        #REQUIRED
-          y             %Coord;        #REQUIRED
-          drill         %Dimension;    #REQUIRED
-          diameter      %Dimension;    "0"
-          shape         %PadShape;     "round"
-          rot           %Rotation;     "R0"
-          stop          %Bool;         "yes"
-          thermals      %Bool;         "yes"
-          first         %Bool;         "no"
-          >
-    */
-
-    // #REQUIRED says DTD, throw exception if not found
-    name  = attribs.get<string>( "name" );
-    x     = attribs.get<double>( "x" );
-    y     = attribs.get<double>( "y" );
-    drill = attribs.get<double>( "drill" );
-
-    diameter = attribs.get_optional<double>( "diameter" );
-
-    opt_string s = attribs.get_optional<string>( "shape" );
-    if( s )
-    {
-        // (square | round | octagon | long | offset)
-        if( !s->compare( "square" ) )
-            shape = EPAD::SQUARE;
-        else if( !s->compare( "round" ) )
-            shape = EPAD::ROUND;
-        else if( !s->compare( "octagon" ) )
-            shape = EPAD::OCTAGON;
-        else if( !s->compare( "long" ) )
-            shape = EPAD::LONG;
-        else if( !s->compare( "offset" ) )
-            shape = EPAD::OFFSET;
-    }
-
-    rot      = parseOptionalEROT( attribs );
-    stop     = parseOptionalBool( attribs, "stop" );
-    thermals = parseOptionalBool( attribs, "thermals" );
-    first    = parseOptionalBool( attribs, "first" );
-}
-
-
-/// Eagle SMD pad
-struct ESMD
-{
-    string      name;
-    double      x;
-    double      y;
-    double      dx;
-    double      dy;
-    int         layer;
-    opt_int     roundness;
-    opt_erot    rot;
-    opt_bool    stop;
-    opt_bool    thermals;
-    opt_bool    cream;
-
-    ESMD( CPTREE& aSMD );
-};
-
-ESMD::ESMD( CPTREE& aSMD )
-{
-    CPTREE& attribs = aSMD.get_child( "<xmlattr>" );
-
-    /*
-    <!ATTLIST smd
-          name          %String;       #REQUIRED
-          x             %Coord;        #REQUIRED
-          y             %Coord;        #REQUIRED
-          dx            %Dimension;    #REQUIRED
-          dy            %Dimension;    #REQUIRED
-          layer         %Layer;        #REQUIRED
-          roundness     %Int;          "0"
-          rot           %Rotation;     "R0"
-          stop          %Bool;         "yes"
-          thermals      %Bool;         "yes"
-          cream         %Bool;         "yes"
-          >
-    */
-
-    // DTD #REQUIRED, throw exception if not found
-    name  = attribs.get<string>( "name" );
-    x     = attribs.get<double>( "x" );
-    y     = attribs.get<double>( "y" );
-    dx    = attribs.get<double>( "dx" );
-    dy    = attribs.get<double>( "dy" );
-    layer = attribs.get<int>( "layer" );
-    rot   = parseOptionalEROT( attribs );
-
-    roundness = attribs.get_optional<int>( "roundness" );
-    thermals  = parseOptionalBool( attribs, "thermals" );
-    stop      = parseOptionalBool( attribs, "stop" );
-    thermals  = parseOptionalBool( attribs, "thermals" );
-    cream     = parseOptionalBool( attribs, "cream" );
-}
-
-
-struct EVERTEX
-{
-    double      x;
-    double      y;
-
-    EVERTEX( CPTREE& aVertex );
-};
-
-EVERTEX::EVERTEX( CPTREE& aVertex )
-{
-    CPTREE& attribs = aVertex.get_child( "<xmlattr>" );
-
-    /*
-    <!ELEMENT vertex EMPTY>
-    <!ATTLIST vertex
-          x             %Coord;        #REQUIRED
-          y             %Coord;        #REQUIRED
-          curve         %WireCurve;    "0" -- the curvature from this vertex to the next one --
-          >
-    */
-
-    x = attribs.get<double>( "x" );
-    y = attribs.get<double>( "y" );
-}
-
-
-/// Eagle polygon, without vertices which are parsed as needed
-struct EPOLYGON
-{
-    double      width;
-    int         layer;
-    opt_double  spacing;
-
-    // KiCad priority is opposite of Eagle rank, that is:
-    //  - Eagle Low rank drawn first
-    //  - KiCad high priority drawn first
-    // So since Eagle has an upper limit we define this, used for the cases
-    // where no rank is specified.
-    static const int    max_priority = 6;
-
-    enum {      // for pour
-        SOLID,
-        HATCH,
-        CUTOUT,
-    };
-    int         pour;
-    opt_double  isolate;
-    opt_bool    orphans;
-    opt_bool    thermals;
-    opt_int     rank;
-
-    EPOLYGON( CPTREE& aPolygon );
-};
-
-EPOLYGON::EPOLYGON( CPTREE& aPolygon )
-{
-    CPTREE& attribs = aPolygon.get_child( "<xmlattr>" );
-
-    /*
-    <!ATTLIST polygon
-          width         %Dimension;    #REQUIRED
-          layer         %Layer;        #REQUIRED
-          spacing       %Dimension;    #IMPLIED
-          pour          %PolygonPour;  "solid"
-          isolate       %Dimension;    #IMPLIED -- only in <signal> or <package> context --
-          orphans       %Bool;         "no"  -- only in <signal> context --
-          thermals      %Bool;         "yes" -- only in <signal> context --
-          rank          %Int;          "0"   -- 1..6 in <signal> context, 0 or 7 in <package> context --
-          >
-    */
-
-    width   = attribs.get<double>( "width" );
-    layer   = attribs.get<int>( "layer" );
-    spacing = attribs.get_optional<double>( "spacing" );
-    isolate = attribs.get_optional<double>( "isolate" );
-    // default pour to solid fill
-    pour    = EPOLYGON::SOLID;
-    opt_string s = attribs.get_optional<string>( "pour" );
-
-    if( s )
-    {
-        // (solid | hatch | cutout)
-        if( !s->compare( "hatch" ) )
-            pour = EPOLYGON::HATCH;
-        else if( !s->compare( "cutout" ) )
-            pour = EPOLYGON::CUTOUT;
-    }
-
-    orphans  = parseOptionalBool( attribs, "orphans" );
-    thermals = parseOptionalBool( attribs, "thermals" );
-    rank     = attribs.get_optional<int>( "rank" );
-}
-
-/// Eagle hole element
-struct EHOLE
-{
-    double      x;
-    double      y;
-    double      drill;
-
-    EHOLE( CPTREE& aHole );
-};
-
-EHOLE::EHOLE( CPTREE& aHole )
-{
-    CPTREE& attribs = aHole.get_child( "<xmlattr>" );
-
-    /*
-    <!ELEMENT hole EMPTY>
-    <!ATTLIST hole
-          x             %Coord;        #REQUIRED
-          y             %Coord;        #REQUIRED
-          drill         %Dimension;    #REQUIRED
-          >
-    */
-
-    // #REQUIRED:
-    x     = attribs.get<double>( "x" );
-    y     = attribs.get<double>( "y" );
-    drill = attribs.get<double>( "drill" );
-}
-
-
-/// Eagle element element
-struct EELEMENT
-{
-    string      name;
-    string      library;
-    string      package;
-    string      value;
-    double      x;
-    double      y;
-    opt_bool    locked;
-    opt_bool    smashed;
-    opt_erot    rot;
-
-    EELEMENT( CPTREE& aElement );
-};
-
-EELEMENT::EELEMENT( CPTREE& aElement )
-{
-    CPTREE& attribs = aElement.get_child( "<xmlattr>" );
-
-    /*
-    <!ELEMENT element (attribute*, variant*)>
-    <!ATTLIST element
-          name          %String;       #REQUIRED
-          library       %String;       #REQUIRED
-          package       %String;       #REQUIRED
-          value         %String;       #REQUIRED
-          x             %Coord;        #REQUIRED
-          y             %Coord;        #REQUIRED
-          locked        %Bool;         "no"
-          smashed       %Bool;         "no"
-          rot           %Rotation;     "R0"
-          >
-    */
-
-    // #REQUIRED
-    name    = attribs.get<string>( "name" );
-    library = attribs.get<string>( "library" );
-    value   = attribs.get<string>( "value" );
-
-    package = attribs.get<string>( "package" );
-    ReplaceIllegalFileNameChars( &package );
-
-    x = attribs.get<double>( "x" );
-    y = attribs.get<double>( "y" );
-
-    // optional
-    locked  = parseOptionalBool( attribs, "locked" );
-    smashed = parseOptionalBool( attribs, "smashed" );
-    rot = parseOptionalEROT( attribs );
-}
-
-
-struct ELAYER
-{
-    int         number;
-    string      name;
-    int         color;
-    int         fill;
-    opt_bool    visible;
-    opt_bool    active;
-
-    ELAYER( CPTREE& aLayer );
-};
-
-ELAYER::ELAYER( CPTREE& aLayer )
-{
-    CPTREE& attribs = aLayer.get_child( "<xmlattr>" );
-
-    /*
-    <!ELEMENT layer EMPTY>
-    <!ATTLIST layer
-          number        %Layer;        #REQUIRED
-          name          %String;       #REQUIRED
-          color         %Int;          #REQUIRED
-          fill          %Int;          #REQUIRED
-          visible       %Bool;         "yes"
-          active        %Bool;         "yes"
-          >
-    */
-
-    number = attribs.get<int>( "number" );
-    name   = attribs.get<string>( "name" );
-    color  = attribs.get<int>( "color" );
-    fill   = 1;    // Temporary value.
-    visible = parseOptionalBool( attribs, "visible" );
-    active  = parseOptionalBool( attribs, "active" );
-}
+typedef MODULE_MAP::iterator          MODULE_ITER;
+typedef MODULE_MAP::const_iterator    MODULE_CITER;
 
 
 /// Parse an eagle distance which is either mm, or mils if there is "mil" suffix.
 /// Return is in BIU.
-static double parseEagle( const string& aDistance )
+static double parseEagle( const wxString& aDistance )
 {
     double ret = strtod( aDistance.c_str(), NULL );
     if( aDistance.npos != aDistance.find( "mil" ) )
@@ -1029,110 +96,39 @@ static double parseEagle( const string& aDistance )
 }
 
 
-/// subset of eagle.drawing.board.designrules in the XML document
-struct ERULES
+void ERULES::parse( wxXmlNode* aRules )
 {
-    int         psElongationLong;   ///< percent over 100%.  0-> not elongated, 100->twice as wide as is tall
-                                    ///< Goes into making a scaling factor for "long" pads.
+    wxXmlNode* child = aRules->GetChildren();
 
-    int         psElongationOffset; ///< the offset of the hole within the "long" pad.
-
-    double      rvPadTop;           ///< top pad size as percent of drill size
-    // double   rvPadBottom;        ///< bottom pad size as percent of drill size
-
-    double      rlMinPadTop;        ///< minimum copper annulus on through hole pads
-    double      rlMaxPadTop;        ///< maximum copper annulus on through hole pads
-
-    double      rvViaOuter;         ///< copper annulus is this percent of via hole
-    double      rlMinViaOuter;      ///< minimum copper annulus on via
-    double      rlMaxViaOuter;      ///< maximum copper annulus on via
-    double      mdWireWire;         ///< wire to wire spacing I presume.
-
-
-    ERULES() :
-        psElongationLong    ( 100 ),
-        psElongationOffset  ( 0 ),
-        rvPadTop            ( 0.25 ),
-        // rvPadBottom      ( 0.25 ),
-        rlMinPadTop         ( Mils2iu( 10 ) ),
-        rlMaxPadTop         ( Mils2iu( 20 ) ),
-
-        rvViaOuter          ( 0.25 ),
-        rlMinViaOuter       ( Mils2iu( 10 ) ),
-        rlMaxViaOuter       ( Mils2iu( 20 ) ),
-        mdWireWire          ( 0 )
-    {}
-
-    void parse( CPTREE& aRules );
-};
-
-void ERULES::parse( CPTREE& aRules )
-{
-    for( CITER it = aRules.begin();  it != aRules.end();  ++it )
+    while( child )
     {
-        if( it->first != "param" )
-            continue;
+        if( child->GetName() == "param" )
+        {
+            const wxString& name = child->GetAttribute( "name" );
+            const wxString& value = child->GetAttribute( "value" );
 
-        CPTREE& attribs = it->second.get_child( "<xmlattr>" );
+            if( name == "psElongationLong" )
+                psElongationLong = wxAtoi( value );
+            else if( name == "psElongationOffset" )
+                psElongationOffset = wxAtoi( value );
+            else if( name == "rvPadTop" )
+                value.ToDouble( &rvPadTop );
+            else if( name == "rlMinPadTop" )
+                rlMinPadTop = parseEagle( value );
+            else if( name == "rlMaxPadTop" )
+                rlMaxPadTop = parseEagle( value );
+            else if( name == "rvViaOuter" )
+                value.ToDouble( &rvViaOuter );
+            else if( name == "rlMinViaOuter" )
+                rlMinViaOuter = parseEagle( value );
+            else if( name == "rlMaxViaOuter" )
+                rlMaxViaOuter = parseEagle( value );
+            else if( name == "mdWireWire" )
+                mdWireWire = parseEagle( value );
+        }
 
-        const string& name = attribs.get<string>( "name" );
-
-        if( name == "psElongationLong" )
-            psElongationLong = attribs.get<int>( "value" );
-        else if( name == "psElongationOffset" )
-            psElongationOffset = attribs.get<int>( "value" );
-        else if( name == "rvPadTop" )
-            rvPadTop = attribs.get<double>( "value" );
-        else if( name == "rlMinPadTop" )
-            rlMinPadTop = parseEagle( attribs.get<string>( "value" ) );
-        else if( name == "rlMaxPadTop" )
-            rlMaxPadTop = parseEagle( attribs.get<string>( "value" ) );
-        else if( name == "rvViaOuter" )
-            rvViaOuter = attribs.get<double>( "value" );
-        else if( name == "rlMinViaOuter" )
-            rlMinViaOuter = parseEagle( attribs.get<string>( "value" ) );
-        else if( name == "rlMaxViaOuter" )
-            rlMaxViaOuter = parseEagle( attribs.get<string>( "value" ) );
-        else if( name == "mdWireWire" )
-            mdWireWire = parseEagle( attribs.get<string>( "value" ) );
+        child = child->GetNext();
     }
-}
-
-
-/// Assemble a two part key as a simple concatonation of aFirst and aSecond parts,
-/// using a separator.
-static inline string makeKey( const string& aFirst, const string& aSecond )
-{
-    string key = aFirst + '\x02' +  aSecond;
-    return key;
-}
-
-
-/// Make a unique time stamp
-static inline unsigned long timeStamp( CPTREE& aTree )
-{
-    // in this case from a unique tree memory location
-    return (unsigned long)(void*) &aTree;
-}
-
-
-/// Convert an Eagle curve end to a KiCad center for S_ARC
-wxPoint kicad_arc_center( wxPoint start, wxPoint end, double angle )
-{
-    // Eagle give us start and end.
-    // S_ARC wants start to give the center, and end to give the start.
-    double dx = end.x - start.x, dy = end.y - start.y;
-    wxPoint mid = (start + end) / 2;
-
-    double dlen = sqrt( dx*dx + dy*dy );
-    double dist = dlen / ( 2 * tan( DEG2RAD( angle ) / 2 ) );
-
-    wxPoint center(
-        mid.x + dist * ( dy / dlen ),
-        mid.y - dist * ( dx / dlen )
-    );
-
-    return center;
 }
 
 
@@ -1182,8 +178,8 @@ wxSize inline EAGLE_PLUGIN::kicad_fontz( double d ) const
 
 BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const PROPERTIES* aProperties )
 {
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
-    PTREE       doc;
+    LOCALE_IO       toggle;     // toggles on, then off, the C locale.
+    wxXmlNode*      doc;
 
     init( aProperties );
 
@@ -1198,12 +194,15 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
 
     try
     {
-        // 8 bit "filename" should be encoded according to disk filename encoding,
-        // (maybe this is current locale, maybe not, its a filesystem issue),
-        // and is not necessarily utf8.
-        string filename = (const char*) aFileName.char_str( wxConvFile );
+        // Load the document
+        wxXmlDocument xmlDocument;
+        wxFileName fn = aFileName;
 
-        read_xml( filename, doc, xml_parser::no_comments );
+        if( !xmlDocument.Load( fn.GetFullPath() ) )
+            THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'" ),
+                                              fn.GetFullPath() ) );
+
+        doc = xmlDocument.GetRoot();
 
         m_min_trace    = INT_MAX;
         m_min_via      = INT_MAX;
@@ -1234,21 +233,12 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
         // should be empty, else missing m_xpath->pop()
         wxASSERT( m_xpath->Contents().size() == 0 );
     }
-
-    catch( file_parser_error fpe )
+    // Catch all exceptions thrown from the parser.
+    catch( const XML_PARSER_ERROR &exc )
     {
-        // for xml_parser_error, what() has the line number in it,
-        // but no byte offset.  That should be an adequate error message.
-        THROW_IO_ERROR( fpe.what() );
-    }
+        string errmsg = exc.what();
 
-    // Class ptree_error is a base class for xml_parser_error & file_parser_error,
-    // so one catch should be OK for all errors.
-    catch( ptree_error pte )
-    {
-        string errmsg = pte.what();
-
-        errmsg += " @\n";
+        errmsg += "\n@ ";
         errmsg += m_xpath->Contents();
 
         THROW_IO_ERROR( errmsg );
@@ -1305,17 +295,20 @@ void EAGLE_PLUGIN::clear_cu_map()
 }
 
 
-void EAGLE_PLUGIN::loadAllSections( CPTREE& aDoc )
+void EAGLE_PLUGIN::loadAllSections( wxXmlNode* aDoc )
 {
-    CPTREE& drawing = aDoc.get_child( "eagle.drawing" );
-    CPTREE& board   = drawing.get_child( "board" );
+    wxXmlNode* drawing       = MapChildren( aDoc )["drawing"];
+    NODE_MAP drawingChildren = MapChildren( drawing );
+
+    wxXmlNode* board         = drawingChildren["board"];
+    NODE_MAP boardChildren   = MapChildren( board );
 
     m_xpath->push( "eagle.drawing" );
 
     {
         m_xpath->push( "board" );
 
-        CPTREE& designrules = board.get_child( "designrules" );
+        wxXmlNode* designrules = boardChildren["designrules"];
         loadDesignRules( designrules );
 
         m_xpath->pop();
@@ -1324,7 +317,7 @@ void EAGLE_PLUGIN::loadAllSections( CPTREE& aDoc )
     {
         m_xpath->push( "layers" );
 
-        CPTREE& layers = drawing.get_child( "layers" );
+        wxXmlNode* layers = drawingChildren["layers"];
         loadLayerDefs( layers );
 
         m_xpath->pop();
@@ -1333,16 +326,16 @@ void EAGLE_PLUGIN::loadAllSections( CPTREE& aDoc )
     {
         m_xpath->push( "board" );
 
-        CPTREE& plain = board.get_child( "plain" );
+        wxXmlNode* plain = boardChildren["plain"];
         loadPlain( plain );
 
-        CPTREE&  signals = board.get_child( "signals" );
+        wxXmlNode*  signals = boardChildren["signals"];
         loadSignals( signals );
 
-        CPTREE&  libs = board.get_child( "libraries" );
+        wxXmlNode*  libs = boardChildren["libraries"];
         loadLibraries( libs );
 
-        CPTREE& elems = board.get_child( "elements" );
+        wxXmlNode* elems = boardChildren["elements"];
         loadElements( elems );
 
         m_xpath->pop();     // "board"
@@ -1352,7 +345,7 @@ void EAGLE_PLUGIN::loadAllSections( CPTREE& aDoc )
 }
 
 
-void EAGLE_PLUGIN::loadDesignRules( CPTREE& aDesignRules )
+void EAGLE_PLUGIN::loadDesignRules( wxXmlNode* aDesignRules )
 {
     m_xpath->push( "designrules" );
     m_rules->parse( aDesignRules );
@@ -1360,22 +353,27 @@ void EAGLE_PLUGIN::loadDesignRules( CPTREE& aDesignRules )
 }
 
 
-void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
+void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
 {
     typedef std::vector<ELAYER>     ELAYERS;
     typedef ELAYERS::const_iterator EITER;
 
     ELAYERS     cu;  // copper layers
 
+    // Get the first layer and iterate
+    wxXmlNode* layerNode = aLayers->GetChildren();
+
     // find the subset of layers that are copper, and active
-    for( CITER layer = aLayers.begin();  layer != aLayers.end();  ++layer )
+    while( layerNode )
     {
-        ELAYER  elayer( layer->second );
+        ELAYER  elayer( layerNode );
 
         if( elayer.number >= 1 && elayer.number <= 16 && ( !elayer.active || *elayer.active ) )
         {
             cu.push_back( elayer );
         }
+
+        layerNode = layerNode->GetNext();
     }
 
     // establish cu layer map:
@@ -1426,18 +424,23 @@ void EAGLE_PLUGIN::loadLayerDefs( CPTREE& aLayers )
 }
 
 
-void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
+void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 {
     m_xpath->push( "plain" );
 
+    // Get the first graphic and iterate
+    wxXmlNode* gr = aGraphics->GetChildren();
+
     // (polygon | wire | text | circle | rectangle | frame | hole)*
-    for( CITER gr = aGraphics.begin();  gr != aGraphics.end();  ++gr )
+    while( gr )
     {
-        if( gr->first == "wire" )
+        wxString grName = gr->GetName();
+
+        if( grName == "wire" )
         {
             m_xpath->push( "wire" );
 
-            EWIRE        w( gr->second );
+            EWIRE        w( gr );
             PCB_LAYER_ID layer = kicad_layer( w.layer );
 
             wxPoint start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
@@ -1463,17 +466,17 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
                     dseg->SetAngle( *w.curve * -10.0 ); // KiCad rotates the other way
                 }
 
-                dseg->SetTimeStamp( timeStamp( gr->second ) );
+                dseg->SetTimeStamp( timeStamp( gr ) );
                 dseg->SetLayer( layer );
                 dseg->SetWidth( Millimeter2iu( DEFAULT_PCB_EDGE_THICKNESS ) );
             }
             m_xpath->pop();
         }
-        else if( gr->first == "text" )
+        else if( grName == "text" )
         {
             m_xpath->push( "text" );
 
-            ETEXT        t( gr->second );
+            ETEXT        t( gr );
             PCB_LAYER_ID layer = kicad_layer( t.layer );
 
             if( layer != UNDEFINED_LAYER )
@@ -1482,7 +485,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
                 m_board->Add( pcbtxt, ADD_APPEND );
 
                 pcbtxt->SetLayer( layer );
-                pcbtxt->SetTimeStamp( timeStamp( gr->second ) );
+                pcbtxt->SetTimeStamp( timeStamp( gr ) );
                 pcbtxt->SetText( FROM_UTF8( t.text.c_str() ) );
                 pcbtxt->SetTextPos( wxPoint( kicad_x( t.x ), kicad_y( t.y ) ) );
 
@@ -1577,11 +580,11 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             }
             m_xpath->pop();
         }
-        else if( gr->first == "circle" )
+        else if( grName == "circle" )
         {
             m_xpath->push( "circle" );
 
-            ECIRCLE      c( gr->second );
+            ECIRCLE      c( gr );
             PCB_LAYER_ID layer = kicad_layer( c.layer );
 
             if( layer != UNDEFINED_LAYER )       // unsupported layer
@@ -1590,7 +593,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
                 m_board->Add( dseg, ADD_APPEND );
 
                 dseg->SetShape( S_CIRCLE );
-                dseg->SetTimeStamp( timeStamp( gr->second ) );
+                dseg->SetTimeStamp( timeStamp( gr ) );
                 dseg->SetLayer( layer );
                 dseg->SetStart( wxPoint( kicad_x( c.x ), kicad_y( c.y ) ) );
                 dseg->SetEnd( wxPoint( kicad_x( c.x + c.radius ), kicad_y( c.y ) ) );
@@ -1598,13 +601,13 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             }
             m_xpath->pop();
         }
-        else if( gr->first == "rectangle" )
+        else if( grName == "rectangle" )
         {
             // This seems to be a simplified rectangular [copper] zone, cannot find any
             // net related info on it from the DTD.
             m_xpath->push( "rectangle" );
 
-            ERECT        r( gr->second );
+            ERECT        r( gr );
             PCB_LAYER_ID layer = kicad_layer( r.layer );
 
             if( IsCopperLayer( layer ) )
@@ -1613,7 +616,7 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
                 ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
                 m_board->Add( zone, ADD_APPEND );
 
-                zone->SetTimeStamp( timeStamp( gr->second ) );
+                zone->SetTimeStamp( timeStamp( gr ) );
                 zone->SetLayer( layer );
                 zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
@@ -1630,10 +633,10 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
 
             m_xpath->pop();
         }
-        else if( gr->first == "hole" )
+        else if( grName == "hole" )
         {
             m_xpath->push( "hole" );
-            EHOLE   e( gr->second );
+            EHOLE   e( gr );
 
             // Fabricate a MODULE with a single PAD_ATTRIB_HOLE_NOT_PLATED pad.
             // Use m_hole_count to gen up a unique name.
@@ -1672,18 +675,18 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             pad->SetLayerSet( LSET::AllCuMask() );
             m_xpath->pop();
         }
-        else if( gr->first == "frame" )
+        else if( grName == "frame" )
         {
             // picture this
         }
-        else if( gr->first == "polygon" )
+        else if( grName == "polygon" )
         {
             // could be on a copper layer, could be on another layer.
             // copper layer would be done using netCode=0 type of ZONE_CONTAINER.
         }
-        else if( gr->first == "dimension" )
+        else if( grName == "dimension" )
         {
-            EDIMENSION d( gr->second );
+            EDIMENSION d( gr );
 
             DIMENSION* dimension = new DIMENSION( m_board );
             m_board->Add( dimension, ADD_APPEND );
@@ -1714,29 +717,36 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
 
             dimension->AdjustDimensionDetails();
          }
+
+        // Get next graphic
+        gr = gr->GetNext();
     }
     m_xpath->pop();
 }
 
 
-void EAGLE_PLUGIN::loadLibrary( CPTREE& aLib, const string* aLibName )
+void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const string* aLibName )
 {
     m_xpath->push( "packages" );
 
     // library will have <xmlattr> node, skip that and get the single packages node
-    CPTREE& packages = aLib.get_child( "packages" );
+    wxXmlNode* packages = MapChildren( aLib )["packages"];
+
 
     // Create a MODULE for all the eagle packages, for use later via a copy constructor
     // to instantiate needed MODULES in our BOARD.  Save the MODULE templates in
     // a MODULE_MAP using a single lookup key consisting of libname+pkgname.
 
-    for( CITER package = packages.begin();  package != packages.end();  ++package )
+    // Get the first package and iterate
+    wxXmlNode* package = packages->GetChildren();
+
+    while( package )
     {
         m_xpath->push( "package", "name" );
 
-        const string& pack_ref = package->second.get<string>( "<xmlattr>.name" );
+        const wxString& pack_ref = package->GetAttribute( "name" );
 
-        string pack_name( pack_ref );
+        string pack_name( pack_ref.ToStdString() );
 
         ReplaceIllegalFileNameChars( &pack_name );
 
@@ -1744,10 +754,10 @@ void EAGLE_PLUGIN::loadLibrary( CPTREE& aLib, const string* aLibName )
 
         string key = aLibName ? makeKey( *aLibName, pack_name ) : pack_name;
 
-        MODULE* m = makeModule( package->second, pack_name );
+        MODULE* m = makeModule( package, pack_name );
 
         // add the templating MODULE to the MODULE template factory "m_templates"
-        std::pair<MODULE_ITER, bool> r = m_templates.insert( key, m );
+        std::pair<MODULE_ITER, bool> r = m_templates.insert( {key, m} );
 
         if( !r.second
             // && !( m_props && m_props->Value( "ignore_duplicates" ) )
@@ -1765,30 +775,37 @@ void EAGLE_PLUGIN::loadLibrary( CPTREE& aLib, const string* aLibName )
         }
 
         m_xpath->pop();
+
+        package = package->GetNext();
     }
 
     m_xpath->pop();     // "packages"
 }
 
 
-void EAGLE_PLUGIN::loadLibraries( CPTREE& aLibs )
+void EAGLE_PLUGIN::loadLibraries( wxXmlNode* aLibs )
 {
     m_xpath->push( "libraries.library", "name" );
 
-    for( CITER library = aLibs.begin();  library != aLibs.end();  ++library )
+    // Get the first library and iterate
+    wxXmlNode* library = aLibs->GetChildren();
+
+    while( library )
     {
-        const string& lib_name = library->second.get<string>( "<xmlattr>.name" );
+        const string& lib_name = library->GetAttribute( "name" ).ToStdString();
 
         m_xpath->Value( lib_name.c_str() );
 
-        loadLibrary( library->second, &lib_name );
+        loadLibrary( library, &lib_name );
+
+        library = library->GetNext();
     }
 
     m_xpath->pop();
 }
 
 
-void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
+void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 {
     m_xpath->push( "elements.element", "name" );
 
@@ -1797,14 +814,15 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
     bool refanceNamePresetInPackageLayout;
     bool valueNamePresetInPackageLayout;
 
+    // Get the first element and iterate
+    wxXmlNode* element = aElements->GetChildren();
 
-
-    for( CITER it = aElements.begin();  it != aElements.end();  ++it )
+    while( element )
     {
-        if( it->first != "element" )
+        if( element->GetName() != "element" )
             continue;
 
-        EELEMENT    e( it->second );
+        EELEMENT    e( element );
 
         // use "NULL-ness" as an indication of presence of the attribute:
         EATTR*      nameAttr  = 0;
@@ -1880,13 +898,16 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
             // EATTR override the ones established in the package only if they are
             // present here (except for rot, which if not present means angle zero).
             // So the logic is a bit different than in packageText() and in plain text.
-            for( CITER ait = it->second.begin();  ait != it->second.end();  ++ait )
-            {
 
-                if( ait->first != "attribute" )
+            // Get the first attribute and iterate
+            wxXmlNode* attribute = element->GetChildren();
+
+            while( attribute )
+            {
+                if( attribute->GetName() != "attribute" )
                     continue;
 
-                EATTR   a( ait->second );
+                EATTR   a( attribute );
 
                 if( a.name == "NAME" )
                 {
@@ -1980,12 +1001,17 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
                         m->Value().SetVisible( true );
 
                 }
+
+                attribute = attribute->GetNext();
             }
 
             m_xpath->pop();     // "attribute"
         }
 
         orientModuleAndText( m, e, nameAttr, valueAttr );
+
+        // Get next element
+        element = element->GetNext();
     }
 
     m_xpath->pop();     // "elements.element"
@@ -2121,50 +1147,55 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
     }
 }
 
-MODULE* EAGLE_PLUGIN::makeModule( CPTREE& aPackage, const string& aPkgName ) const
+
+MODULE* EAGLE_PLUGIN::makeModule( wxXmlNode* aPackage, const string& aPkgName ) const
 {
     std::unique_ptr<MODULE>   m( new MODULE( m_board ) );
 
     m->SetFPID( LIB_ID( aPkgName ) );
 
-    opt_string description = aPackage.get_optional<string>( "description" );
-    if( description )
-        m->SetDescription( FROM_UTF8( description->c_str() ) );
+    // Get the first package item and iterate
+    wxXmlNode* packageItem = aPackage->GetChildren();
 
-    for( CITER it = aPackage.begin();  it != aPackage.end();  ++it )
+    while( packageItem )
     {
-        CPTREE& t = it->second;
+        const wxString& itemName = packageItem->GetName();
 
-        if( it->first == "wire" )
-            packageWire( m.get(), t );
+        if( itemName == "description" )
+            m->SetDescription( FROM_UTF8( packageItem->GetNodeContent().c_str() ) );
 
-        else if( it->first == "pad" )
-            packagePad( m.get(), t );
+        else if( itemName == "wire" )
+            packageWire( m.get(), packageItem );
 
-        else if( it->first == "text" )
-            packageText( m.get(), t );
+        else if( itemName == "pad" )
+            packagePad( m.get(), packageItem );
 
-        else if( it->first == "rectangle" )
-            packageRectangle( m.get(), t );
+        else if( itemName == "text" )
+            packageText( m.get(), packageItem );
 
-        else if( it->first == "polygon" )
-            packagePolygon( m.get(), t );
+        else if( itemName == "rectangle" )
+            packageRectangle( m.get(), packageItem );
 
-        else if( it->first == "circle" )
-            packageCircle( m.get(), t );
+        else if( itemName == "polygon" )
+            packagePolygon( m.get(), packageItem );
 
-        else if( it->first == "hole" )
-            packageHole( m.get(), t );
+        else if( itemName == "circle" )
+            packageCircle( m.get(), packageItem );
 
-        else if( it->first == "smd" )
-            packageSMD( m.get(), t );
+        else if( itemName == "hole" )
+            packageHole( m.get(), packageItem );
+
+        else if( itemName == "smd" )
+            packageSMD( m.get(), packageItem );
+
+        packageItem = packageItem->GetNext();
     }
 
     return m.release();
 }
 
 
-void EAGLE_PLUGIN::packageWire( MODULE* aModule, CPTREE& aTree ) const
+void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
 {
     EWIRE        w( aTree );
     PCB_LAYER_ID layer = kicad_layer( w.layer );
@@ -2203,7 +1234,7 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, CPTREE& aTree ) const
 }
 
 
-void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
+void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
 {
     // this is thru hole technology here, no SMDs
     EPAD e( aTree );
@@ -2291,7 +1322,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, CPTREE& aTree ) const
 }
 
 
-void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
+void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
 {
     ETEXT        t( aTree );
     PCB_LAYER_ID layer = kicad_layer( t.layer );
@@ -2397,7 +1428,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
 }
 
 
-void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, CPTREE& aTree ) const
+void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
 {
     ERECT        r( aTree );
     PCB_LAYER_ID layer = kicad_layer( r.layer );
@@ -2430,7 +1461,7 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, CPTREE& aTree ) const
 }
 
 
-void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, CPTREE& aTree ) const
+void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
 {
     EPOLYGON    p( aTree );
     PCB_LAYER_ID    layer = kicad_layer( p.layer );
@@ -2459,16 +1490,22 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, CPTREE& aTree ) const
         dwg->SetTimeStamp( timeStamp( aTree ) );
 
         std::vector<wxPoint> pts;
-        pts.reserve( aTree.size() );
+        // TODO: I think there's no way to know a priori the number of children in wxXmlNode :()
+        // pts.reserve( aTree.size() );
 
-        for( CITER vi = aTree.begin();  vi != aTree.end();  ++vi )
+        // Get the first vertex and iterate
+        wxXmlNode* vertex = aTree->GetChildren();
+
+        while( vertex )
         {
-            if( vi->first != "vertex" )     // skip <xmlattr> node
+            if( vertex->GetName() != "vertex" )     // skip <xmlattr> node
                 continue;
 
-            EVERTEX v( vi->second );
+            EVERTEX v( vertex );
 
             pts.push_back( wxPoint( kicad_x( v.x ), kicad_y( v.y ) ) );
+
+            vertex = vertex->GetNext();
         }
 
         dwg->SetPolyPoints( pts );
@@ -2479,7 +1516,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, CPTREE& aTree ) const
 }
 
 
-void EAGLE_PLUGIN::packageCircle( MODULE* aModule, CPTREE& aTree ) const
+void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
 {
     ECIRCLE         e( aTree );
     PCB_LAYER_ID    layer = kicad_layer( e.layer );
@@ -2508,7 +1545,7 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, CPTREE& aTree ) const
 }
 
 
-void EAGLE_PLUGIN::packageHole( MODULE* aModule, CPTREE& aTree ) const
+void EAGLE_PLUGIN::packageHole( MODULE* aModule, wxXmlNode* aTree ) const
 {
     EHOLE   e( aTree );
 
@@ -2538,7 +1575,7 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, CPTREE& aTree ) const
 }
 
 
-void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
+void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
 {
     ESMD         e( aTree );
     PCB_LAYER_ID layer = kicad_layer( e.layer );
@@ -2602,7 +1639,7 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, CPTREE& aTree ) const
 typedef std::vector<ZONE_CONTAINER*>    ZONES;
 
 
-void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
+void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 {
     ZONES   zones;      // per net
 
@@ -2610,32 +1647,40 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 
     int netCode = 1;
 
-    for( CITER net = aSignals.begin();  net != aSignals.end();  ++net )
+    // Get the first signal and iterate
+    wxXmlNode* net = aSignals->GetChildren();
+
+    while( net )
     {
         bool    sawPad = false;
 
         zones.clear();
 
-        const string& nname = net->second.get<string>( "<xmlattr>.name" );
+        const string& nname = net->GetAttribute( "name" ).ToStdString();
         wxString netName = FROM_UTF8( nname.c_str() );
         m_board->Add( new NETINFO_ITEM( m_board, netName, netCode ) );
 
         m_xpath->Value( nname.c_str() );
 
+        // Get the first net item and iterate
+        wxXmlNode* netItem = net->GetChildren();
+
         // (contactref | polygon | wire | via)*
-        for( CITER it = net->second.begin();  it != net->second.end();  ++it )
+        while( netItem )
         {
-            if( it->first == "wire" )
+            const wxString& itemName = netItem->GetName();
+            if( itemName == "wire" )
             {
                 m_xpath->push( "wire" );
-                EWIRE        w( it->second );
+
+                EWIRE        w( netItem );
                 PCB_LAYER_ID layer = kicad_layer( w.layer );
 
                 if( IsCopperLayer( layer ) )
                 {
                     TRACK*  t = new TRACK( m_board );
 
-                    t->SetTimeStamp( timeStamp( it->second ) );
+                    t->SetTimeStamp( timeStamp( netItem ) );
 
                     t->SetPosition( wxPoint( kicad_x( w.x1 ), kicad_y( w.y1 ) ) );
                     t->SetEnd( wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
@@ -2658,10 +1703,10 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 m_xpath->pop();
             }
 
-            else if( it->first == "via" )
+            else if( itemName == "via" )
             {
                 m_xpath->push( "via" );
-                EVIA    v( it->second );
+                EVIA    v( netItem );
 
                 PCB_LAYER_ID  layer_front_most = kicad_layer( v.layer_front_most );
                 PCB_LAYER_ID  layer_back_most  = kicad_layer( v.layer_back_most );
@@ -2704,7 +1749,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                     else
                         via->SetViaType( VIA_BLIND_BURIED );
 
-                    via->SetTimeStamp( timeStamp( it->second ) );
+                    via->SetTimeStamp( timeStamp( netItem ) );
 
                     wxPoint pos( kicad_x( v.x ), kicad_y( v.y ) );
 
@@ -2716,14 +1761,13 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 m_xpath->pop();
             }
 
-            else if( it->first == "contactref" )
+            else if( itemName == "contactref" )
             {
                 m_xpath->push( "contactref" );
                 // <contactref element="RN1" pad="7"/>
-                CPTREE& attribs = it->second.get_child( "<xmlattr>" );
 
-                const string& reference = attribs.get<string>( "element" );
-                const string& pad       = attribs.get<string>( "pad" );
+                const string& reference = netItem->GetAttribute( "element" ).ToStdString();
+                const string& pad       = netItem->GetAttribute( "pad" ).ToStdString();
 
                 string key = makeKey( reference, pad ) ;
 
@@ -2736,11 +1780,11 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                 sawPad = true;
             }
 
-            else if( it->first == "polygon" )
+            else if( itemName == "polygon" )
             {
                 m_xpath->push( "polygon" );
 
-                EPOLYGON     p( it->second );
+                EPOLYGON     p( netItem );
                 PCB_LAYER_ID layer = kicad_layer( p.layer );
 
                 if( IsCopperLayer( layer ) )
@@ -2750,19 +1794,24 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
                     m_board->Add( zone, ADD_APPEND );
                     zones.push_back( zone );
 
-                    zone->SetTimeStamp( timeStamp( it->second ) );
+                    zone->SetTimeStamp( timeStamp( netItem ) );
                     zone->SetLayer( layer );
                     zone->SetNetCode( netCode );
 
-                    for( CITER vi = it->second.begin();  vi != it->second.end();  ++vi )
+                    // Get the first vertex and iterate
+                    wxXmlNode* vertex = netItem->GetChildren();
+
+                    while( vertex )
                     {
-                        if( vi->first != "vertex" )     // skip <xmlattr> node
+                        if( vertex->GetName() != "vertex" )     // skip <xmlattr> node
                             continue;
 
-                        EVERTEX v( vi->second );
+                        EVERTEX v( vertex );
 
                         // Append the corner
                         zone->AppendCorner( wxPoint( kicad_x( v.x ), kicad_y( v.y ) ) );
+
+                        vertex = vertex->GetNext();
                     }
 
                     // If the pour is a cutout it needs to be set to a keepout
@@ -2808,6 +1857,8 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 
                 m_xpath->pop();     // "polygon"
             }
+
+            netItem = netItem->GetNext();
         }
 
         if( zones.size() && !sawPad )
@@ -2821,6 +1872,9 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
         }
         else
             netCode++;
+
+        // Get next signal
+        net = net->GetNext();
     }
 
     m_xpath->pop();     // "signals.signal"
@@ -3031,7 +2085,7 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
 
         if( aLibPath != m_lib_path || load )
         {
-            PTREE       doc;
+            wxXmlNode*  doc;
             LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
             m_templates.clear();
@@ -3046,42 +2100,55 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
             // and is not necessarily utf8.
             string filename = (const char*) aLibPath.char_str( wxConvFile );
 
-            read_xml( filename, doc, xml_parser::no_comments );
+            // Load the document
+            wxXmlDocument xmlDocument;
+            wxFileName fn( filename );
+
+            if( !xmlDocument.Load( fn.GetFullPath() ) )
+                THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'" ),
+                                                  fn.GetFullPath() ) );
+
+            doc = xmlDocument.GetRoot();
+
+            wxXmlNode* drawing       = MapChildren( doc )["drawing"];
+            NODE_MAP drawingChildren = MapChildren( drawing );
 
             // clear the cu map and then rebuild it.
             clear_cu_map();
 
             m_xpath->push( "eagle.drawing.layers" );
-            CPTREE& layers  = doc.get_child( "eagle.drawing.layers" );
+            wxXmlNode* layers  = drawingChildren["layers"];
             loadLayerDefs( layers );
             m_xpath->pop();
 
             m_xpath->push( "eagle.drawing.library" );
-            CPTREE& library = doc.get_child( "eagle.drawing.library" );
+            wxXmlNode* library = drawingChildren["library"];
             loadLibrary( library, NULL );
             m_xpath->pop();
 
             m_mod_time = modtime;
         }
     }
-    catch( file_parser_error fpe )
-    {
-        // for xml_parser_error, what() has the line number in it,
-        // but no byte offset.  That should be an adequate error message.
-        THROW_IO_ERROR( fpe.what() );
-    }
-
-    // Class ptree_error is a base class for xml_parser_error & file_parser_error,
-    // so one catch should be OK for all errors.
-    catch( ptree_error pte )
-    {
-        string errmsg = pte.what();
-
-        errmsg += " @\n";
-        errmsg += m_xpath->Contents();
-
-        THROW_IO_ERROR( errmsg );
-    }
+    catch(...){}
+    // TODO: Handle exceptions
+    // catch( file_parser_error fpe )
+    // {
+    //     // for xml_parser_error, what() has the line number in it,
+    //     // but no byte offset.  That should be an adequate error message.
+    //     THROW_IO_ERROR( fpe.what() );
+    // }
+    //
+    // // Class ptree_error is a base class for xml_parser_error & file_parser_error,
+    // // so one catch should be OK for all errors.
+    // catch( ptree_error pte )
+    // {
+    //     string errmsg = pte.what();
+    //
+    //     errmsg += " @\n";
+    //     errmsg += m_xpath->Contents();
+    //
+    //     THROW_IO_ERROR( errmsg );
+    // }
 }
 
 

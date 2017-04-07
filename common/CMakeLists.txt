@@ -239,6 +239,7 @@ set( COMMON_SRCS
     draw_panel.cpp
     drawtxt.cpp
     dsnlexer.cpp
+    eagle_parser.cpp
     eda_dde.cpp
     eda_doc.cpp
     eda_pattern_match.cpp

@@ -27,47 +27,53 @@
 
 #include <io_mgr.h>
 #include <layers_id_colors_and_visibility.h>
+#include <eagle_parser.h>
 
-
-// forward declaration on ptree template so we can confine use of big boost
-// headers to only the implementation *.cpp file.
-
-#include <boost/property_tree/ptree_fwd.hpp>
-#include <boost/ptr_container/ptr_map.hpp>
 #include <map>
+#include <wx/xml/xml.h>
 
 
-class MODULE;
-typedef boost::ptr_map< std::string, MODULE >   MODULE_MAP;
+typedef std::map< std::string, MODULE* > MODULE_MAP;
+typedef std::map< std::string, ENET >    NET_MAP;
+typedef NET_MAP::const_iterator          NET_MAP_CITER;
 
 
-struct ENET
+/// subset of eagle.drawing.board.designrules in the XML document
+struct ERULES
 {
-    int         netcode;
-    std::string netname;
+    int         psElongationLong;   ///< percent over 100%.  0-> not elongated, 100->twice as wide as is tall
+                                    ///< Goes into making a scaling factor for "long" pads.
 
-    ENET( int aNetCode, const std::string& aNetName ) :
-        netcode( aNetCode ),
-        netname( aNetName )
+    int         psElongationOffset; ///< the offset of the hole within the "long" pad.
+
+    double      rvPadTop;           ///< top pad size as percent of drill size
+    // double   rvPadBottom;        ///< bottom pad size as percent of drill size
+
+    double      rlMinPadTop;        ///< minimum copper annulus on through hole pads
+    double      rlMaxPadTop;        ///< maximum copper annulus on through hole pads
+
+    double      rvViaOuter;         ///< copper annulus is this percent of via hole
+    double      rlMinViaOuter;      ///< minimum copper annulus on via
+    double      rlMaxViaOuter;      ///< maximum copper annulus on via
+    double      mdWireWire;         ///< wire to wire spacing I presume.
+
+
+    ERULES() :
+        psElongationLong    ( 100 ),
+        psElongationOffset  ( 0 ),
+        rvPadTop            ( 0.25 ),
+        // rvPadBottom      ( 0.25 ),
+        rlMinPadTop         ( Mils2iu( 10 ) ),
+        rlMaxPadTop         ( Mils2iu( 20 ) ),
+
+        rvViaOuter          ( 0.25 ),
+        rlMinViaOuter       ( Mils2iu( 10 ) ),
+        rlMaxViaOuter       ( Mils2iu( 20 ) ),
+        mdWireWire          ( 0 )
     {}
 
-    ENET() :
-        netcode( 0 )
-    {}
+    void parse( wxXmlNode* aRules );
 };
-
-typedef std::map< std::string, ENET >   NET_MAP;
-typedef NET_MAP::const_iterator         NET_MAP_CITER;
-
-typedef boost::property_tree::ptree     PTREE;
-typedef const PTREE                     CPTREE;
-
-struct EELEMENT;
-class XPATH;
-struct ERULES;
-struct EATTR;
-class TEXTE_MODULE;
-
 
 /**
  * Class EAGLE_PLUGIN
@@ -175,11 +181,11 @@ private:
 
     // all these loadXXX() throw IO_ERROR or ptree_error exceptions:
 
-    void loadAllSections( CPTREE& aDocument );
-    void loadDesignRules( CPTREE& aDesignRules );
-    void loadLayerDefs( CPTREE& aLayers );
-    void loadPlain( CPTREE& aPlain );
-    void loadSignals( CPTREE& aSignals );
+    void loadAllSections( wxXmlNode* aDocument );
+    void loadDesignRules( wxXmlNode* aDesignRules );
+    void loadLayerDefs( wxXmlNode* aLayers );
+    void loadPlain( wxXmlNode* aPlain );
+    void loadSignals( wxXmlNode* aSignals );
 
     /**
      * Function loadLibrary
@@ -192,10 +198,10 @@ private:
      *   we are loading a *.lbr not a *.brd file and the key used in m_templates is to exclude
      *   the library name.
      */
-    void loadLibrary( CPTREE& aLib, const std::string* aLibName );
+    void loadLibrary( wxXmlNode* aLib, const std::string* aLibName );
 
-    void loadLibraries( CPTREE& aLibs );
-    void loadElements( CPTREE& aElements );
+    void loadLibraries( wxXmlNode* aLibs );
+    void loadElements( wxXmlNode* aElements );
 
     void orientModuleAndText( MODULE* m, const EELEMENT& e, const EATTR* nameAttr, const EATTR* valueAttr );
     void orientModuleText( MODULE* m, const EELEMENT& e, TEXTE_MODULE* txt, const EATTR* a );
@@ -216,16 +222,16 @@ private:
      * Function makeModule
      * creates a MODULE from an Eagle package.
      */
-    MODULE* makeModule( CPTREE& aPackage, const std::string& aPkgName ) const;
+    MODULE* makeModule( wxXmlNode* aPackage, const std::string& aPkgName ) const;
 
-    void packageWire( MODULE* aModule, CPTREE& aTree ) const;
-    void packagePad( MODULE* aModule, CPTREE& aTree ) const;
-    void packageText( MODULE* aModule, CPTREE& aTree ) const;
-    void packageRectangle( MODULE* aModule, CPTREE& aTree ) const;
-    void packagePolygon( MODULE* aModule, CPTREE& aTree ) const;
-    void packageCircle( MODULE* aModule, CPTREE& aTree ) const;
-    void packageHole( MODULE* aModule, CPTREE& aTree ) const;
-    void packageSMD( MODULE* aModule, CPTREE& aTree ) const;
+    void packageWire( MODULE* aModule, wxXmlNode* aTree ) const;
+    void packagePad( MODULE* aModule, wxXmlNode* aTree ) const;
+    void packageText( MODULE* aModule, wxXmlNode* aTree ) const;
+    void packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const;
+    void packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const;
+    void packageCircle( MODULE* aModule, wxXmlNode* aTree ) const;
+    void packageHole( MODULE* aModule, wxXmlNode* aTree ) const;
+    void packageSMD( MODULE* aModule, wxXmlNode* aTree ) const;
 };
 
 #endif  // EAGLE_PLUGIN_H_
