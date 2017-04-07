@@ -1610,11 +1610,20 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
     if( aZone->GetNumCorners() )
     {
-        m_out->Print( aNestLevel+1, "(polygon\n");
-        m_out->Print( aNestLevel+2, "(pts\n" );
+        bool new_polygon = true;
+        bool is_closed = false;
 
         for( auto iterator = aZone->IterateWithHoles(); iterator; iterator++ )
         {
+            if( new_polygon )
+            {
+                newLine = 0;
+                m_out->Print( aNestLevel+1, "(polygon\n" );
+                m_out->Print( aNestLevel+2, "(pts\n" );
+                new_polygon = false;
+                is_closed = false;
+            }
+
             if( newLine == 0 )
                 m_out->Print( aNestLevel+3, "(xy %s %s)",
                               FMT_IU( iterator->x ).c_str(), FMT_IU( iterator->y ).c_str() );
@@ -1634,35 +1643,42 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
             if( iterator.IsEndContour() )
             {
+                is_closed = true;
+
                 if( newLine != 0 )
                     m_out->Print( 0, "\n" );
 
                 m_out->Print( aNestLevel+2, ")\n" );
-
-                if( !iterator.IsLastPolygon() )
-                {
-                    newLine = 0;
-                    m_out->Print( aNestLevel+1, ")\n" );
-                    m_out->Print( aNestLevel+1, "(polygon\n" );
-                    m_out->Print( aNestLevel+2, "(pts" );
-                }
+                m_out->Print( aNestLevel+1, ")\n" );
+                new_polygon = true;
             }
         }
 
-        m_out->Print( aNestLevel+1, ")\n" );
+        if( !is_closed )    // Should not happen, but...
+            m_out->Print( aNestLevel+1, ")\n" );
+
     }
 
-    // Save the PolysList
+    // Save the PolysList (filled areas)
     const SHAPE_POLY_SET& fv = aZone->GetFilledPolysList();
     newLine = 0;
 
     if( !fv.IsEmpty() )
     {
-        m_out->Print( aNestLevel+1, "(filled_polygon\n" );
-        m_out->Print( aNestLevel+2, "(pts\n" );
+        bool new_polygon = true;
+        bool is_closed = false;
 
         for( auto it = fv.CIterate(); it; ++it )
         {
+            if( new_polygon )
+            {
+                newLine = 0;
+                m_out->Print( aNestLevel+1, "(filled_polygon\n" );
+                m_out->Print( aNestLevel+2, "(pts\n" );
+                new_polygon = false;
+                is_closed = false;
+            }
+
             if( newLine == 0 )
                 m_out->Print( aNestLevel+3, "(xy %s %s)",
                               FMT_IU( it->x ).c_str(), FMT_IU( it->y ).c_str() );
@@ -1682,22 +1698,19 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
             if( it.IsEndContour() )
             {
+                is_closed = true;
+
                 if( newLine != 0 )
                     m_out->Print( 0, "\n" );
 
                 m_out->Print( aNestLevel+2, ")\n" );
-
-                if( !it.IsLastPolygon() )
-                {
-                    newLine = 0;
-                    m_out->Print( aNestLevel+1, ")\n" );
-                    m_out->Print( aNestLevel+1, "(filled_polygon\n" );
-                    m_out->Print( aNestLevel+2, "(pts\n" );
-                }
+                m_out->Print( aNestLevel+1, ")\n" );
+                new_polygon = true;
             }
         }
 
-        m_out->Print( aNestLevel+1, ")\n" );
+        if( !is_closed )    // Should not happen, but...
+            m_out->Print( aNestLevel+1, ")\n" );
     }
 
     // Save the filling segments list

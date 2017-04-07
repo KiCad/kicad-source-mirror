@@ -2888,12 +2888,15 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
                 if( token != T_pts )
                     Expecting( T_pts );
 
-                for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+                for( token = NextTok(); token != T_RIGHT; token = NextTok() )
                 {
                     corners.push_back( parseXY() );
                 }
 
                 NeedRIGHT();
+
+                // Remark: The first polygon is the main outline.
+                // Others are holes inside the main outline.
                 zone->AddPolygon( corners );
             }
             break;

@@ -780,7 +780,6 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 
         commit.Modify( zone );
 
-        // Handle the last segment, so other segments can be easily handled in a loop
         unsigned int nearestIdx = 0;
         unsigned int nextNearestIdx = 0;
         unsigned int nearestDist = INT_MAX;

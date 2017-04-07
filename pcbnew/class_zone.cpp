@@ -819,8 +819,12 @@ void ZONE_CONTAINER::AddPolygon( std::vector< wxPoint >& aPolygon )
     outline.SetClosed( true );
 
     // Add the outline as a new polygon in the polygon set
-    m_Poly->AddOutline( outline );
+    if( m_Poly->OutlineCount() == 0 )
+        m_Poly->AddOutline( outline );
+    else
+        m_Poly->AddHole( outline );
 }
+
 
 wxString ZONE_CONTAINER::GetSelectMenuText() const
 {

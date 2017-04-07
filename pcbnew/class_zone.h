@@ -620,8 +620,18 @@ public:
 
     unsigned int GetCornerRadius() const { return m_cornerRadius; };
 
+    /**
+     * add a polygon to the zone outline
+     * if the zone outline is empty, this is the main outline
+     * else it is a hole inside the main outline
+     */
     void AddPolygon( std::vector< wxPoint >& aPolygon );
 
+    /**
+     * add a polygon to the zone filled areas list.
+     * these polygons have no hole, therefore any added polygon is a new
+     * filled area
+     */
     void AddFilledPolygon( SHAPE_POLY_SET& aPolygon )
     {
         m_FilledPolysList.Append( aPolygon );
