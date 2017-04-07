@@ -59,7 +59,7 @@ boost::optional<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
         return PCB_ACTIONS::drawZone.MakeEvent();
 
     case ID_PCB_KEEPOUT_AREA_BUTT:
-        return PCB_ACTIONS::drawKeepout.MakeEvent();
+        return PCB_ACTIONS::drawZoneKeepout.MakeEvent();
 
     case ID_PCB_ADD_LINE_BUTT:
     case ID_MODEDIT_LINE_TOOL:

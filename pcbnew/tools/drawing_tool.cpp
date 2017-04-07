@@ -88,7 +88,7 @@ TOOL_ACTION PCB_ACTIONS::drawZone( "pcbnew.InteractiveDrawing.zone",
         AS_GLOBAL, 0,
         _( "Add Filled Zone" ), _( "Add a filled zone" ), NULL, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::drawKeepout( "pcbnew.InteractiveDrawing.keepout",
+TOOL_ACTION PCB_ACTIONS::drawZoneKeepout( "pcbnew.InteractiveDrawing.keepout",
         AS_GLOBAL, 0,
         _( "Add Keepout Area" ), _( "Add a keepout area" ), NULL, AF_ACTIVATE );
 
@@ -650,7 +650,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::DrawKeepout( const TOOL_EVENT& aEvent )
+int DRAWING_TOOL::DrawZoneKeepout( const TOOL_EVENT& aEvent )
 {
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::KEEPOUT );
     m_frame->SetToolID( ID_PCB_KEEPOUT_AREA_BUTT, wxCURSOR_PENCIL, _( "Add keepout" ) );
@@ -662,7 +662,7 @@ int DRAWING_TOOL::DrawKeepout( const TOOL_EVENT& aEvent )
 int DRAWING_TOOL::DrawZoneCutout( const TOOL_EVENT& aEvent )
 {
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ZONE );
-    m_frame->SetToolID( ID_PCB_KEEPOUT_AREA_BUTT, wxCURSOR_PENCIL, _( "Add zone cutout" ) );
+    m_frame->SetToolID( ID_PCB_ZONES_BUTT, wxCURSOR_PENCIL, _( "Add zone cutout" ) );
 
     return drawZone( false, ZONE_MODE::CUTOUT );
 }
@@ -671,7 +671,7 @@ int DRAWING_TOOL::DrawZoneCutout( const TOOL_EVENT& aEvent )
 int DRAWING_TOOL::DrawSimilarZone( const TOOL_EVENT& aEvent )
 {
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ZONE );
-    m_frame->SetToolID( ID_PCB_KEEPOUT_AREA_BUTT, wxCURSOR_PENCIL, _( "Add similar zone" ) );
+    m_frame->SetToolID( ID_PCB_ZONES_BUTT, wxCURSOR_PENCIL, _( "Add similar zone" ) );
 
     return drawZone( false, ZONE_MODE::SIMILAR );
 }
@@ -1334,7 +1334,9 @@ void DRAWING_TOOL::runPolygonEventLoop( POLYGON_GEOM_MANAGER& polyGeomMgr )
 
 int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
 {
-    // get a source zone, if we need one
+    // get a source zone, if we need one. We need it for:
+    // ZONE_MODE::CUTOUT (adding a hole to the source zone)
+    // ZONE_MODE::SIMILAR (creating a new zone using settings of source zone
     ZONE_CONTAINER* sourceZone = nullptr;
 
     if( !getSourceZoneForAction( aMode, sourceZone ) )
@@ -1398,7 +1400,7 @@ void DRAWING_TOOL::SetTransitions()
     Go( &DRAWING_TOOL::DrawArc,          PCB_ACTIONS::drawArc.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,    PCB_ACTIONS::drawDimension.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,         PCB_ACTIONS::drawZone.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawKeepout,      PCB_ACTIONS::drawKeepout.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawZoneKeepout,  PCB_ACTIONS::drawZoneKeepout.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZoneCutout,   PCB_ACTIONS::drawZoneCutout.MakeEvent() );
     Go( &DRAWING_TOOL::DrawSimilarZone,  PCB_ACTIONS::drawSimilarZone.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceText,        PCB_ACTIONS::placeText.MakeEvent() );

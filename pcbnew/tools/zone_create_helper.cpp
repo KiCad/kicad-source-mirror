@@ -107,33 +107,26 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createZoneFromExisting(
 void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aExistingZone,
                                             ZONE_CONTAINER& aCutout )
 {
-    auto& board = *m_tool.getModel<BOARD>();
-    auto& toolMgr = *m_tool.GetManager();
+    BOARD* board = m_tool.getModel<BOARD>();
+    int curr_hole = aExistingZone.Outline()->NewHole( 0 );
 
-    aExistingZone.Outline()->NewOutline();
-
-    // Copy cutout corners into existing zone
+    // Copy cutout corners into existing zone, in the new hole
     for( int ii = 0; ii < aCutout.GetNumCorners(); ii++ )
     {
-        aExistingZone.Outline()->Append( aCutout.GetCornerPosition( ii ) );
+        aExistingZone.Outline()->Append( aCutout.GetCornerPosition( ii ), 0, curr_hole );
     }
 
-    // Close the current corner list
-    aExistingZone.Outline()->Outline( 0 ).SetClosed( true );
+    // Be sure the current corner list is closed
+    aExistingZone.Outline()->Hole( 0, curr_hole ).SetClosed( true );
 
-    board.OnAreaPolygonModified( nullptr, &aExistingZone );
+    // Combine holes and simplify the new outline:
+    board->OnAreaPolygonModified( nullptr, &aExistingZone );
 
     // Re-fill if needed
     if( aExistingZone.IsFilled() )
     {
-        SELECTION_TOOL* selTool = toolMgr.GetTool<SELECTION_TOOL>();
-
-        auto& selection = selTool->GetSelection();
-
-        selection.Clear();
-        selection.Add( &aExistingZone );
-
-        toolMgr.RunAction( PCB_ACTIONS::zoneFill, true );
+        PCB_EDIT_FRAME* frame = m_tool.getEditFrame<PCB_EDIT_FRAME>();
+        frame->Fill_Zone( &aExistingZone );
     }
 }
 
@@ -142,23 +135,24 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
 {
     auto& frame = *m_tool.getEditFrame<PCB_EDIT_FRAME>();
 
-    if( !m_params.m_keepout )
-            frame.Fill_Zone( aZone.get() );
-
     BOARD_COMMIT bCommit( &m_tool );
 
     if( m_params.m_mode == DRAWING_TOOL::ZONE_MODE::CUTOUT )
     {
         // For cutouts, subtract from the source
         bCommit.Modify( m_params.m_sourceZone );
-
         performZoneCutout( *m_params.m_sourceZone, *aZone );
-
         bCommit.Push( _( "Add a zone cutout" ) );
+        m_params.m_sourceZone->Hatch();
     }
     else
     {
         // Add the zone as a new board item
+        aZone->Hatch();
+
+        if( !m_params.m_keepout )
+            frame.Fill_Zone( aZone.get() );
+
         bCommit.Add( aZone.release() );
         bCommit.Push( _( "Add a zone" ) );
     }
@@ -170,7 +164,6 @@ bool ZONE_CREATE_HELPER::OnFirstPoint()
     // if we don't have a zone, create one
     // the user's choice here can affect things like the colour
     // of the preview
-
     if( !m_zone )
     {
         if( m_params.m_sourceZone )
@@ -219,6 +212,8 @@ void ZONE_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
     }
     else
     {
+        // if m_params.m_mode == DRAWING_TOOL::ZONE_MODE::CUTOUT, m_zone
+        // will be merged to the existing zone as a new hole.
         m_zone->Outline()->NewOutline();
 
         for( const auto& pt : finalPoints )
@@ -228,7 +223,6 @@ void ZONE_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
 
         m_zone->Outline()->Outline( 0 ).SetClosed( true );
         m_zone->Outline()->RemoveNullSegments();
-        m_zone->Hatch();
 
         // hand the zone over to the committer
         commitZone( std::move( m_zone ) );

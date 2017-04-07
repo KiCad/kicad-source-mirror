@@ -136,13 +136,13 @@ public:
     int DrawZone( const TOOL_EVENT& aEvent );
 
     /**
-     * Function DrawKeepout()
+     * Function DrawZoneKeepout()
      * Starts interactively drawing a keepout area. After invoking the function an area settings
      * dialog is displayed. After confirmation it allows the user to set points that are going to
      * be used as a boundary polygon of the area. Double click or clicking on the origin of the
      * boundary polyline finishes the drawing.
      */
-    int DrawKeepout( const TOOL_EVENT& aEvent );
+    int DrawZoneKeepout( const TOOL_EVENT& aEvent );
 
     /**
      * Function DrawZoneCutout()
@@ -212,7 +212,10 @@ private:
      *
      * @param aKeepout dictates if the drawn polygon is a zone or a
      * keepout area.
-     * @param aMode dictates the mode of the zone tool
+     * @param aMode dictates the mode of the zone tool:
+     *  ADD      add a new zone/keepout with fresh settings
+     *  CUTOUT   add a cutout to an existing zone
+     *  SIMILAR  add a new zone with the same settings as an existing one
      */
     int drawZone( bool aKeepout, ZONE_MODE aMode );
 
