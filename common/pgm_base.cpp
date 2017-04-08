@@ -604,7 +604,12 @@ void PGM_BASE::loadCommonSettings()
     m_help_size.x = 500;
     m_help_size.y = 400;
     m_iconsScale  = 1.0;
+
+#if defined( __WXMAC__ )
+    m_useIconsInMenus = false;
+#else
     m_useIconsInMenus = true;
+#endif
 
     m_common_settings->Read( showEnvVarWarningDialog, &m_show_env_var_dialog );
     m_common_settings->Read( entryUseIconsInMenus, &m_useIconsInMenus, true );
