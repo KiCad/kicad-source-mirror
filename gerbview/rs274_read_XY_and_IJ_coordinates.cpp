@@ -267,7 +267,18 @@ wxPoint GERBER_FILE_IMAGE::ReadIJCoord( char*& Text )
  */
 int ReadInt( char*& text, bool aSkipSeparator = true )
 {
-    int ret = (int) strtol( text, &text, 10 );
+    int ret;
+
+    // For strtol, a string starting by 0X or 0x is a valid number in hexadecimal or octal.
+    // However, 'X'  is a separator in Gerber strings with numbers.
+    // We need to detect that
+    if( strnicmp( text, "0X", 2 ) == 0 )
+    {
+        text++;
+        ret = 0;
+    }
+    else
+        ret = (int) strtol( text, &text, 10 );
 
     if( *text == ',' || isspace( *text ) )
     {
@@ -290,7 +301,18 @@ int ReadInt( char*& text, bool aSkipSeparator = true )
  */
 double ReadDouble( char*& text, bool aSkipSeparator = true )
 {
-    double ret = strtod( text, &text );
+    double ret;
+
+    // For strtod, a string starting by 0X or 0x is a valid number in hexadecimal or octal.
+    // However, 'X'  is a separator in Gerber strings with numbers.
+    // We need to detect that
+    if( strnicmp( text, "0X", 2 ) == 0 )
+    {
+        text++;
+        ret = 0.0;
+    }
+    else
+        ret = strtod( text, &text );
 
     if( *text == ',' || isspace( *text ) )
     {

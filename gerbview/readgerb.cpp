@@ -173,6 +173,7 @@ bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
             case 'I':
             case 'J':       /* Auxiliary Move command */
                 m_IJPos = ReadIJCoord( text );
+
                 if( *text == '*' )      // command like X35142Y15945J504*
                 {
                     Execute_DCODE_Command( text,

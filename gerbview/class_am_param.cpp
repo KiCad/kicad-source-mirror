@@ -75,6 +75,7 @@ double AM_PARAM::GetValue( const D_CODE* aDcode ) const
     for( unsigned ii = 0; ii < m_paramStack.size(); ii++ )
     {
         AM_PARAM_ITEM item = m_paramStack[ii];
+
         switch( item.GetType() )
         {
             case ADD:
@@ -89,7 +90,9 @@ double AM_PARAM::GetValue( const D_CODE* aDcode ) const
                 if( aDcode )    // should be always true here
                 {
                     if( item.GetIndex() <= aDcode->GetParamCount() )
+                    {
                         curr_value = aDcode->GetParam( item.GetIndex() );
+                    }
                     else    // Get parameter from local param definition
                     {
                         const APERTURE_MACRO * am_parent = aDcode->GetMacro();
@@ -104,6 +107,7 @@ double AM_PARAM::GetValue( const D_CODE* aDcode ) const
             case PUSHVALUE: // a value is on the stack:
                 if( item.GetType() == PUSHVALUE )
                     curr_value = item.GetValue();
+
                 switch( state )
                 {
                     case POPVALUE:
@@ -137,6 +141,7 @@ double AM_PARAM::GetValue( const D_CODE* aDcode ) const
                 break;
         }
     }
+
     return paramvalue;
 }
 

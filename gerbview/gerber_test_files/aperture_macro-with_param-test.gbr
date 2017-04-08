@@ -5,6 +5,7 @@ G04 Handcoded by Stefan Petersen *
 %OFA0.0000B0.0000*%
 G90*
 %AMCIRCLE*
+0 this is a comment*
 1,1,$1,0,0*
 %
 %AMVECTOR*

@@ -162,6 +162,7 @@ public:
         m_dvalue = aValue;
         m_ivalue = 0;
     }
+
     AM_PARAM_ITEM( parm_item_type aType, int aValue )
     {
         m_type = aType;
@@ -173,18 +174,22 @@ public:
     {
         m_dvalue = aValue;
     }
+
     double GetValue( ) const
     {
         return m_dvalue;
     }
+
     parm_item_type GetType() const
     {
         return m_type;
     }
+
     unsigned GetIndex() const
     {
         return (unsigned) m_ivalue;
     }
+
     bool IsOperator() const
     {
         return m_type == ADD || m_type == SUB || m_type == MUL || m_type == DIV;
@@ -193,6 +198,7 @@ public:
     {
         return m_type == PUSHVALUE || m_type == PUSHPARM;
     }
+
     bool IsDefered() const
     {
         return m_type == PUSHPARM;

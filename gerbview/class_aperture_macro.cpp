@@ -143,6 +143,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
 
         // shape rotation:
         rotation = params[6].GetValue( tool ) * 10.0;
+
         if( rotation != 0)
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
@@ -454,7 +455,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
             aBuffer[ii] += start;
         }
     }
-    break;
+        break;
 
     case AMP_LINE_CENTER:
     {
@@ -793,6 +794,7 @@ double APERTURE_MACRO::GetLocalParam( const D_CODE* aDcode, unsigned aParamId ) 
 {
     // find parameter descr.
     const AM_PARAM * param = NULL;
+
     for( unsigned ii = 0; ii < m_localparamStack.size(); ii ++ )
     {
         if( m_localparamStack[ii].GetIndex() == aParamId )
@@ -801,9 +803,12 @@ double APERTURE_MACRO::GetLocalParam( const D_CODE* aDcode, unsigned aParamId ) 
             break;
         }
     }
+
     if ( param == NULL )    // not found
         return 0.0;
+
     // Evaluate parameter
     double value = param->GetValue( aDcode );
+
     return value;
 }

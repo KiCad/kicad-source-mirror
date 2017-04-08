@@ -733,7 +733,6 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
         break;
 
     case AP_DEFINITION:
-
         /* input example:  %ADD30R,0.081800X0.101500*%
          * Aperture definition has 4 options: C, R, O, P
          * (Circle, Rect, Oval, regular Polygon)
@@ -898,18 +897,24 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
             if( *text == ',' )
             {   // Read aperture macro parameters and store them
                 text++;     // text points the first parameter
+
                 while( *text && *text != '*' )
                 {
                     double param = ReadDouble( text );
                     dcode->AppendParam( param );
-                    while( isspace( *text ) ) text++;
-                    if( *text == 'X' )
-                        ++text;
+
+                    while( isspace( *text ) )
+                        text++;
+
+                    // Skip 'X' separator:
+                    if( *text == 'X' || *text == 'x' )
+                        text++;
                 }
             }
 
             // lookup the aperture macro here.
             APERTURE_MACRO* pam = FindApertureMacro( am_lookup );
+
             if( !pam )
             {
                 msg.Printf( wxT( "RS274X: aperture macro %s not found\n" ),
@@ -922,6 +927,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
             dcode->m_Shape = APT_MACRO;
             dcode->SetMacro( pam );
         }
+
         break;
 
     default:
@@ -1024,7 +1030,8 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *buff,
         if( *text == '*' )
             ++text;
 
-        text = GetNextLine( buff, text, gerber_file );  // Get next line
+        text = GetNextLine( buff, text, gerber_file );
+
         if( text == NULL )  // End of File
             return false;
 
@@ -1034,6 +1041,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *buff,
         // last line is % or *% sometime found.
         if( *text == '*' )
             ++text;
+
         if( *text == '%' )
             break;      // exit with text still pointing at %
 
@@ -1063,12 +1071,15 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *buff,
         else
             primitive_type = ReadInt( text );
 
+        bool is_comment = false;
+
         switch( primitive_type )
         {
         case AMP_COMMENT:     // lines starting by 0 are a comment
             paramCount = 0;
+            is_comment = true;
             // Skip comment
-            while( *text && (*text != '*') )
+            while( *text && ( *text != '*' ) )
                 text++;
             break;
 
@@ -1113,6 +1124,9 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *buff,
             AddMessageToList( msg );
             return false;
         }
+
+        if( is_comment )
+            continue;
 
         AM_PRIMITIVE prim( m_GerbMetric );
         prim.primitive_id = (AM_PRIMITIVE_ID) primitive_type;
