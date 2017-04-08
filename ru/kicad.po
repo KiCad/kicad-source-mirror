@@ -25526,42 +25526,6 @@ msgstr ""
 msgid "Import DXF File"
 msgstr "Импорт DXF файла"
 
-#~ msgid "Mirror ---"
-#~ msgstr "По вертикали"
-
-#~ msgid "Mirror |"
-#~ msgstr "По горизонтали"
-
-#~ msgid "Test"
-#~ msgstr "Тест"
-
-#~ msgid "Reset to Library Defaults"
-#~ msgstr "Сбросить установки"
-
-#~ msgid "The style of the currently selected field's text in the schematic"
-#~ msgstr "Стиль текущих выбранных полей текста на схеме"
-
-#~ msgid "The size of the currently selected field's text in the schematic"
-#~ msgstr "Размер текста выбранных полей на схеме"
-
-#~ msgid "PosX"
-#~ msgstr "Поз.X"
-
-#~ msgid "The X coordinate of the text relative to the component"
-#~ msgstr "Координата X текста относительно компонента"
-
-#~ msgid "PosY"
-#~ msgstr "Поз.Y"
-
-#~ msgid "Entry '%s' not found in library '%s'."
-#~ msgstr "Компонент '%s' не найден в библиотеке '%s'."
-
-#~ msgid "Context menu and hot key footprint rotation increment."
-#~ msgstr "Угол поворота посад.места через контекстное меню и по горячей клавише."
-
-#~ msgid "Allows auto pan when creating a track, or moving an item."
-#~ msgstr "Разрешает автопанорамирование при создании дорожек и перемещении элементов."
-
 #~ msgid "The Internet forum dedicated to KiCad Russian support, including GOST support"
 #~ msgstr ""
 #~ "Интернет форум, посвященный русскоязычной поддержке проекта KiCad, включая "
