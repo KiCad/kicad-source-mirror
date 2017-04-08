@@ -1045,7 +1045,8 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *buff,
         if( *text == '%' )
             break;      // exit with text still pointing at %
 
-        int paramCount = 0;
+        int paramCount = 0; // will be set to the minimal parameters count,
+                            // depending on the actual primitive
         int primitive_type = AMP_UNKNOWN;
         // Test for a valid symbol at the beginning of a description:
         // it can be: a parameter declaration like $1=$2/4
@@ -1084,7 +1085,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *buff,
             break;
 
         case AMP_CIRCLE:
-            paramCount = 4;
+            paramCount = 4; // minimal count. can have a optional parameter (rotation)
             break;
 
         case AMP_LINE2:
@@ -1132,7 +1133,7 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *buff,
         prim.primitive_id = (AM_PRIMITIVE_ID) primitive_type;
         int ii;
 
-        for( ii = 0; ii < paramCount && *text && *text != '*'; ++ii )
+        for( ii = 0; ii < *text && *text != '*'; ++ii )
         {
             prim.params.push_back( AM_PARAM() );
 
