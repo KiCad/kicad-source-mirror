@@ -5,9 +5,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2017 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -152,7 +152,7 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
     // Fix static text widget minimum width to a suitable value so that
     // resizing the dialog is not necessary when changing the corner smoothing type.
     // Depends on the default text in the widget.
-    m_cornerSmoothingTitle->SetMinSize( m_cornerSmoothingTitle->GetSize() );
+    m_cornerSmoothingValue->SetMinSize( m_cornerSmoothingValue->GetSize() );
 
     initDialog();
 
@@ -503,20 +503,20 @@ void DIALOG_COPPER_ZONE::OnCornerSmoothingModeChoice( wxCommandEvent& event )
     switch( selection )
     {
     case ZONE_SETTINGS::SMOOTHING_NONE:
-        m_cornerSmoothingTitle->Enable( false );
+        m_cornerSmoothingValue->Enable( false );
         m_cornerSmoothingCtrl->Enable( false );
         break;
     case ZONE_SETTINGS::SMOOTHING_CHAMFER:
-        m_cornerSmoothingTitle->Enable( true );
+        m_cornerSmoothingValue->Enable( true );
         m_cornerSmoothingCtrl->Enable( true );
-        m_cornerSmoothingTitle->SetLabel( _( "Chamfer distance" ) );
-        AddUnitSymbol( *m_cornerSmoothingTitle, g_UserUnit );
+        m_cornerSmoothingValue->SetLabel( _( "Chamfer distance" ) );
+        AddUnitSymbol( *m_cornerSmoothingValue, g_UserUnit );
         break;
     case ZONE_SETTINGS::SMOOTHING_FILLET:
-        m_cornerSmoothingTitle->Enable( true );
+        m_cornerSmoothingValue->Enable( true );
         m_cornerSmoothingCtrl->Enable( true );
-        m_cornerSmoothingTitle->SetLabel( _( "Fillet radius" ) );
-        AddUnitSymbol( *m_cornerSmoothingTitle, g_UserUnit );
+        m_cornerSmoothingValue->SetLabel( _( "Fillet radius" ) );
+        AddUnitSymbol( *m_cornerSmoothingValue, g_UserUnit );
         break;
     }
 }

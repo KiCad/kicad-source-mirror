@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  1 2016)
+// C++ code generated with wxFormBuilder (version Feb 19 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -74,40 +74,40 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		};
 		
 		wxBoxSizer* m_MainBoxSizer;
-		wxStaticText* m_staticText17;
+		wxStaticText* m_staticTextLayers;
 		wxListView* m_LayerSelectionCtrl;
-		wxStaticText* m_staticText2;
+		wxStaticText* m_staticTextNets;
 		wxListBox* m_ListNetNameSelection;
-		wxStaticText* m_staticText16;
+		wxStaticText* m_staticTextDisplay;
 		wxChoice* m_NetDisplayOption;
-		wxStaticText* m_staticText5;
+		wxStaticText* m_staticTextHfilter;
 		wxTextCtrl* m_DoNotShowNetNameFilter;
-		wxStaticText* m_staticText51;
+		wxStaticText* m_staticTextVFilter;
 		wxTextCtrl* m_ShowNetNameFilter;
 		wxButton* m_buttonRunFilter;
 		wxStaticText* m_ClearanceValueTitle;
 		wxTextCtrl* m_ZoneClearanceCtrl;
 		wxStaticText* m_MinThicknessValueTitle;
 		wxTextCtrl* m_ZoneMinThicknessCtrl;
-		wxStaticText* m_staticText151;
+		wxStaticText* m_staticTextSmoothing;
 		wxChoice* m_cornerSmoothingChoice;
-		wxStaticText* m_cornerSmoothingTitle;
+		wxStaticText* m_cornerSmoothingValue;
 		wxTextCtrl* m_cornerSmoothingCtrl;
-		wxStaticText* m_staticText13;
+		wxStaticText* m_staticTextPadConnection;
 		wxChoice* m_PadInZoneOpt;
 		wxStaticText* m_AntipadSizeText;
 		wxTextCtrl* m_AntipadSizeValue;
 		wxStaticText* m_CopperBridgeWidthText;
 		wxTextCtrl* m_CopperWidthValue;
-		wxStaticText* m_staticText171;
+		wxStaticText* m_staticTextPriorityLevel;
 		wxSpinCtrl* m_PriorityLevelCtrl;
-		wxStaticText* m_staticText11;
+		wxStaticText* m_staticTextFillMode;
 		wxChoice* m_FillModeCtrl;
-		wxStaticText* m_staticText12;
+		wxStaticText* m_staticTextSegmCnt;
 		wxChoice* m_ArcApproximationOpt;
-		wxStaticText* m_staticText14;
+		wxStaticText* m_staticTextSlope;
 		wxChoice* m_OrientEdgesOpt;
-		wxStaticText* m_staticText15;
+		wxStaticText* m_staticTextStyle;
 		wxChoice* m_OutlineAppearanceCtrl;
 		wxButton* m_ExportSetupButton;
 		wxStdDialogButtonSizer* m_sdbSizer;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  1 2016)
+// C++ code generated with wxFormBuilder (version Feb 19 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -34,9 +34,9 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* m_layerSizer;
 	m_layerSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText17 = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText17->Wrap( -1 );
-	m_layerSizer->Add( m_staticText17, 0, wxTOP|wxRIGHT, 5 );
+	m_staticTextLayers = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextLayers->Wrap( -1 );
+	m_layerSizer->Add( m_staticTextLayers, 0, wxTOP|wxRIGHT, 5 );
 	
 	m_LayerSelectionCtrl = new wxListView( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_ALIGN_LEFT|wxLC_NO_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL );
 	m_layerSizer->Add( m_LayerSelectionCtrl, 1, wxRIGHT, 5 );
@@ -47,9 +47,9 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizerNets;
 	bSizerNets = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Net:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->Wrap( -1 );
-	bSizerNets->Add( m_staticText2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_staticTextNets = new wxStaticText( this, wxID_ANY, _("Net:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextNets->Wrap( -1 );
+	bSizerNets->Add( m_staticTextNets, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ListNetNameSelection = new wxListBox( this, ID_NETNAME_SELECTION, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
 	bSizerNets->Add( m_ListNetNameSelection, 1, wxEXPAND, 5 );
@@ -60,9 +60,9 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	wxStaticBoxSizer* m_NetSortOptSizer;
 	m_NetSortOptSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Net Filtering") ), wxVERTICAL );
 	
-	m_staticText16 = new wxStaticText( m_NetSortOptSizer->GetStaticBox(), wxID_ANY, _("Display:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText16->Wrap( -1 );
-	m_NetSortOptSizer->Add( m_staticText16, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_staticTextDisplay = new wxStaticText( m_NetSortOptSizer->GetStaticBox(), wxID_ANY, _("Display:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDisplay->Wrap( -1 );
+	m_NetSortOptSizer->Add( m_staticTextDisplay, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	wxString m_NetDisplayOptionChoices[] = { _("Show all (alphabetical)"), _("Show all (pad count)"), _("Filtered (alphabetical)"), _("Filtered (pad count)") };
 	int m_NetDisplayOptionNChoices = sizeof( m_NetDisplayOptionChoices ) / sizeof( wxString );
@@ -70,18 +70,18 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_NetDisplayOption->SetSelection( 0 );
 	m_NetSortOptSizer->Add( m_NetDisplayOption, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	m_staticText5 = new wxStaticText( m_NetSortOptSizer->GetStaticBox(), wxID_ANY, _("Hidden net filter:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText5->Wrap( -1 );
-	m_NetSortOptSizer->Add( m_staticText5, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_staticTextHfilter = new wxStaticText( m_NetSortOptSizer->GetStaticBox(), wxID_ANY, _("Hidden net filter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextHfilter->Wrap( -1 );
+	m_NetSortOptSizer->Add( m_staticTextHfilter, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_DoNotShowNetNameFilter = new wxTextCtrl( m_NetSortOptSizer->GetStaticBox(), ID_TEXTCTRL_NETNAMES_FILTER, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	m_DoNotShowNetNameFilter->SetToolTip( _("Pattern to filter net names in filtered list.\nNet names matching this pattern are not displayed.") );
 	
 	m_NetSortOptSizer->Add( m_DoNotShowNetNameFilter, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticText51 = new wxStaticText( m_NetSortOptSizer->GetStaticBox(), wxID_ANY, _("Visible net filter:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText51->Wrap( -1 );
-	m_NetSortOptSizer->Add( m_staticText51, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_staticTextVFilter = new wxStaticText( m_NetSortOptSizer->GetStaticBox(), wxID_ANY, _("Visible net filter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextVFilter->Wrap( -1 );
+	m_NetSortOptSizer->Add( m_staticTextVFilter, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ShowNetNameFilter = new wxTextCtrl( m_NetSortOptSizer->GetStaticBox(), ID_TEXTCTRL_NETNAMES_FILTER, _("*"), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	m_ShowNetNameFilter->SetToolTip( _("Pattern to filter net names in filtered list.\nOnly net names matching this pattern are displayed.") );
@@ -119,9 +119,9 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_ZoneMinThicknessCtrl = new wxTextCtrl( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerSettings->Add( m_ZoneMinThicknessCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticText151 = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Corner smoothing:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText151->Wrap( -1 );
-	bSizerSettings->Add( m_staticText151, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_staticTextSmoothing = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Corner smoothing:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSmoothing->Wrap( -1 );
+	bSizerSettings->Add( m_staticTextSmoothing, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	wxString m_cornerSmoothingChoiceChoices[] = { _("None"), _("Chamfer"), _("Fillet") };
 	int m_cornerSmoothingChoiceNChoices = sizeof( m_cornerSmoothingChoiceChoices ) / sizeof( wxString );
@@ -129,9 +129,9 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_cornerSmoothingChoice->SetSelection( 0 );
 	bSizerSettings->Add( m_cornerSmoothingChoice, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	m_cornerSmoothingTitle = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Chamfer distance (mm):"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cornerSmoothingTitle->Wrap( -1 );
-	bSizerSettings->Add( m_cornerSmoothingTitle, 0, wxRIGHT|wxLEFT, 5 );
+	m_cornerSmoothingValue = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Chamfer distance (mm):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cornerSmoothingValue->Wrap( -1 );
+	bSizerSettings->Add( m_cornerSmoothingValue, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_cornerSmoothingCtrl = new wxTextCtrl( m_ExportableSetupSizer->GetStaticBox(), ID_M_CORNERSMOOTHINGCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerSettings->Add( m_cornerSmoothingCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
@@ -142,11 +142,11 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizerPadsConnection;
 	bSizerPadsConnection = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText13 = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Default pad connection:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText13->Wrap( -1 );
-	m_staticText13->SetToolTip( _("Default pad connection type to zone.\nThis setting can be overridden by local  pad settings") );
+	m_staticTextPadConnection = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Default pad connection:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPadConnection->Wrap( -1 );
+	m_staticTextPadConnection->SetToolTip( _("Default pad connection type to zone.\nThis setting can be overridden by local  pad settings") );
 	
-	bSizerPadsConnection->Add( m_staticText13, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizerPadsConnection->Add( m_staticTextPadConnection, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	wxString m_PadInZoneOptChoices[] = { _("Solid"), _("Thermal relief"), _("THT thermal"), _("None") };
 	int m_PadInZoneOptNChoices = sizeof( m_PadInZoneOptChoices ) / sizeof( wxString );
@@ -184,18 +184,18 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* m_MiddleBox;
 	m_MiddleBox = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText171 = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Zone priority level:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText171->Wrap( -1 );
-	m_staticText171->SetToolTip( _("On each copper layer, zones are filled by priority order.\nSo when a zone is inside an other zone:\n* If its priority is highter: its outlines are removed from the other layer.\n* If its priority is equal: a DRC error is set.") );
+	m_staticTextPriorityLevel = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Zone priority level:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPriorityLevel->Wrap( -1 );
+	m_staticTextPriorityLevel->SetToolTip( _("On each copper layer, zones are filled by priority order.\nSo when a zone is inside an other zone:\n* If its priority is higher: its outlines are removed from the other layer.\n* If its priority is equal: a DRC error is set.") );
 	
-	m_MiddleBox->Add( m_staticText171, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_MiddleBox->Add( m_staticTextPriorityLevel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_PriorityLevelCtrl = new wxSpinCtrl( m_ExportableSetupSizer->GetStaticBox(), ID_M_PRIORITYLEVELCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, 0 );
 	m_MiddleBox->Add( m_PriorityLevelCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticText11 = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Fill mode:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText11->Wrap( -1 );
-	m_MiddleBox->Add( m_staticText11, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_staticTextFillMode = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Fill mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextFillMode->Wrap( -1 );
+	m_MiddleBox->Add( m_staticTextFillMode, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	wxString m_FillModeCtrlChoices[] = { _("Polygon"), _("Segment") };
 	int m_FillModeCtrlNChoices = sizeof( m_FillModeCtrlChoices ) / sizeof( wxString );
@@ -203,9 +203,9 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_FillModeCtrl->SetSelection( 0 );
 	m_MiddleBox->Add( m_FillModeCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	m_staticText12 = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Segments / 360 deg:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText12->Wrap( -1 );
-	m_MiddleBox->Add( m_staticText12, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_staticTextSegmCnt = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Segments / 360 deg:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSegmCnt->Wrap( -1 );
+	m_MiddleBox->Add( m_staticTextSegmCnt, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	wxString m_ArcApproximationOptChoices[] = { _("16"), _("32") };
 	int m_ArcApproximationOptNChoices = sizeof( m_ArcApproximationOptChoices ) / sizeof( wxString );
@@ -219,9 +219,9 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizerLowerRight;
 	bSizerLowerRight = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText14 = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Outline slope:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText14->Wrap( -1 );
-	bSizerLowerRight->Add( m_staticText14, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_staticTextSlope = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Outline slope:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSlope->Wrap( -1 );
+	bSizerLowerRight->Add( m_staticTextSlope, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	wxString m_OrientEdgesOptChoices[] = { _("Arbitrary"), _("H, V, and 45 deg only") };
 	int m_OrientEdgesOptNChoices = sizeof( m_OrientEdgesOptChoices ) / sizeof( wxString );
@@ -229,9 +229,9 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_OrientEdgesOpt->SetSelection( 0 );
 	bSizerLowerRight->Add( m_OrientEdgesOpt, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	m_staticText15 = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Outline style:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText15->Wrap( -1 );
-	bSizerLowerRight->Add( m_staticText15, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_staticTextStyle = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Outline style:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextStyle->Wrap( -1 );
+	bSizerLowerRight->Add( m_staticTextStyle, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	wxString m_OutlineAppearanceCtrlChoices[] = { _("Line"), _("Hatched"), _("Fully hatched") };
 	int m_OutlineAppearanceCtrlNChoices = sizeof( m_OutlineAppearanceCtrlChoices ) / sizeof( wxString );
