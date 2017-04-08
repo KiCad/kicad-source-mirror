@@ -272,7 +272,7 @@ int ReadInt( char*& text, bool aSkipSeparator = true )
     // For strtol, a string starting by 0X or 0x is a valid number in hexadecimal or octal.
     // However, 'X'  is a separator in Gerber strings with numbers.
     // We need to detect that
-    if( strnicmp( text, "0X", 2 ) == 0 )
+    if( strncasecmp( text, "0X", 2 ) == 0 )
     {
         text++;
         ret = 0;
@@ -306,7 +306,7 @@ double ReadDouble( char*& text, bool aSkipSeparator = true )
     // For strtod, a string starting by 0X or 0x is a valid number in hexadecimal or octal.
     // However, 'X'  is a separator in Gerber strings with numbers.
     // We need to detect that
-    if( strnicmp( text, "0X", 2 ) == 0 )
+    if( strncasecmp( text, "0X", 2 ) == 0 )
     {
         text++;
         ret = 0.0;
