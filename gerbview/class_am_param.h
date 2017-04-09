@@ -5,9 +5,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+ * Copyright (C) 1992-2017 Jean-Pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -110,12 +110,18 @@ From an idea found in Gerbv, here is the way to evaluate a parameter.
 a AM_PARAM_ITEM holds info about operands and operators in a parameter definition
 ( a AM_PARAM ) like $2+$2-$3-$3/2
 
-There is no precedence defined in gerber RS274X, so actual value is calculated step to step.
+Precedence was recently actually defined in gerber RS274X
+(Previously, there was no actual info about this precedence)
+This is the usual arithmetic precendence between + - x / ( ), the only ones used in Gerber
+
+However, because it is recent, currently, actual value is calculated step to step:
+no precedence, and '(' ')' are ignored.
+
 Parameter definition is described by a very primitive assembler.
 This "program "should describe how to calculate the parameter.
-The assembler consist of 8 instruction intended for a stackbased machine.
+The assembler consist of 10 instruction intended for a stackbased machine.
 The instructions are:
-NOP, PUSHVALUE, PUSHPARM, ADD, SUB, MUL, DIV, EQUATE
+NOP, PUSHVALUE, PUSHPARM, ADD, SUB, MUL, DIV, OPEN_PAR, CLOSE_PAR, EQUATE
 
 The instructions
 ----------------
@@ -132,12 +138,14 @@ ADD  : The mathematical operation +. Takes the two uppermost values on the
 SUB  : Same as ADD, but with -.
 MUL  : Same as ADD, but with *.
 DIV  : Same as ADD, but with /.
+OPEN_PAR  : Opening parenthesis: modify the precedence of operators by opening a local block.
+CLOSE_PAR : Closing parenthesis: modify the precedence of operators by closing the local block.
 POPVALUE : used when evaluate the expression: store current calculated value
 */
 
 enum parm_item_type
 {
-    NOP, PUSHVALUE, PUSHPARM, ADD, SUB, MUL, DIV, POPVALUE
+    NOP, PUSHVALUE, PUSHPARM, ADD, SUB, MUL, DIV, OPEN_PAR, CLOSE_PAR, POPVALUE
 };
 
 /**

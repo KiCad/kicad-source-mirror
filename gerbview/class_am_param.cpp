@@ -5,9 +5,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2010 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+ * Copyright (C) 1992-2017 Jean-Pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -130,6 +130,14 @@ double AM_PARAM::GetValue( const D_CODE* aDcode ) const
                         paramvalue /= curr_value;
                         break;
 
+                    case  OPEN_PAR:
+                        // Currently: do nothing because operator precedence is not yet considered
+                        break;
+
+                    case  CLOSE_PAR:
+                        // Currently: do nothing because operator precedence is not yet considered
+                        break;
+
                     default:
                         wxLogDebug( wxT( "AM_PARAM::GetValue() : unexpected operator\n" ) );
                         break;
@@ -210,6 +218,16 @@ bool AM_PARAM::ReadParam( char*& aText  )
 
             case '/':
                 PushOperator( DIV );
+                aText++;
+                break;
+
+            case '(':   // Open a block to evaluate an expression between '(' and ')'
+                PushOperator( OPEN_PAR );
+                aText++;
+                break;
+
+            case ')':   // close a block between '(' and ')'
+                PushOperator( CLOSE_PAR );
                 aText++;
                 break;
 
