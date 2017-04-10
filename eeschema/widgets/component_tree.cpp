@@ -32,44 +32,57 @@
 #include <wx/statbmp.h>
 #include <wx/html/htmlwin.h>
 
-COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, CMP_TREE_MODEL_ADAPTER::PTR& aAdapter )
-    : wxPanel( aParent ), m_adapter( aAdapter )
+COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent,
+        CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, WIDGETS aWidgets )
+    : wxPanel( aParent ), m_adapter( aAdapter ), m_query_ctrl( nullptr ), m_details_ctrl( nullptr )
 {
     auto sizer = new wxBoxSizer( wxVERTICAL );
-    auto search_sizer = new wxBoxSizer( wxHORIZONTAL );
 
-    m_query_ctrl = new wxTextCtrl(
-            this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+    // Search text control
+    if( aWidgets & SEARCH )
+    {
+        auto search_sizer = new wxBoxSizer( wxHORIZONTAL );
 
+        m_query_ctrl = new wxTextCtrl(
+                this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+
+// Additional visual cue for GTK, which hides the placeholder text on focus
+#ifdef __WXGTK__
+        search_sizer->Add( new wxStaticBitmap( this, wxID_ANY,
+                                wxArtProvider::GetBitmap( wxART_FIND, wxART_FRAME_ICON ) ),
+                0, wxALIGN_CENTER | wxALL, 5 );
+#endif
+
+        search_sizer->Add( m_query_ctrl, 1, wxALIGN_CENTER | wxALL | wxEXPAND, 5 );
+        sizer->Add( search_sizer, 0, wxEXPAND, 5 );
+
+        m_query_ctrl->Bind( wxEVT_TEXT, &COMPONENT_TREE::onQueryText, this );
+        m_query_ctrl->Bind( wxEVT_TEXT_ENTER, &COMPONENT_TREE::onQueryEnter, this );
+        m_query_ctrl->Bind( wxEVT_CHAR_HOOK, &COMPONENT_TREE::onQueryCharHook, this );
+    }
+
+    // Component tree
     m_tree_ctrl =
             new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_SINGLE );
     m_adapter->AttachTo( m_tree_ctrl );
 
-    m_details_ctrl = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxSize( 320, 240 ),
-            wxHW_SCROLLBAR_AUTO | wxSUNKEN_BORDER );
-
-// Additional visual cue for GTK, which hides the placeholder text on focus
-#ifdef __WXGTK__
-    search_sizer->Add( new wxStaticBitmap( this, wxID_ANY,
-                               wxArtProvider::GetBitmap( wxART_FIND, wxART_FRAME_ICON ) ),
-            0, wxALIGN_CENTER | wxALL, 5 );
-#endif
-
-    search_sizer->Add( m_query_ctrl, 1, wxALIGN_CENTER | wxALL | wxEXPAND, 5 );
-
-    sizer->Add( search_sizer, 0, wxEXPAND, 5 );
     sizer->Add( m_tree_ctrl, 1, wxALL | wxEXPAND, 5 );
-    sizer->Add( m_details_ctrl, 1, wxALL | wxEXPAND, 5 );
+
+    // Description panel
+    if( aWidgets & DETAILS )
+    {
+        m_details_ctrl = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxSize( 320, 240 ),
+                wxHW_SCROLLBAR_AUTO | wxSUNKEN_BORDER );
+
+        sizer->Add( m_details_ctrl, 1, wxALL | wxEXPAND, 5 );
+        m_details_ctrl->Bind( wxEVT_HTML_LINK_CLICKED, &COMPONENT_TREE::onDetailsLink, this );
+    }
 
     SetSizer( sizer );
 
     Bind( wxEVT_INIT_DIALOG, &COMPONENT_TREE::onInitDialog, this );
-    m_query_ctrl->Bind( wxEVT_TEXT, &COMPONENT_TREE::onQueryText, this );
-    m_query_ctrl->Bind( wxEVT_TEXT_ENTER, &COMPONENT_TREE::onQueryEnter, this );
-    m_query_ctrl->Bind( wxEVT_CHAR_HOOK, &COMPONENT_TREE::onQueryCharHook, this );
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &COMPONENT_TREE::onTreeActivate, this );
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED, &COMPONENT_TREE::onTreeSelect, this );
-    m_details_ctrl->Bind( wxEVT_HTML_LINK_CLICKED, &COMPONENT_TREE::onDetailsLink, this );
 
     Layout();
     sizer->Fit( this );
@@ -124,9 +137,12 @@ void COMPONENT_TREE::onInitDialog( wxInitDialogEvent& aEvent )
 {
     // If wxTextCtrl::SetHint() is called before binding wxEVT_TEXT, the event
     // handler will intermittently fire.
-    m_query_ctrl->SetHint( _( "Search" ) );
-    m_query_ctrl->SetFocus();
-    m_query_ctrl->SetValue( wxEmptyString );
+    if( m_query_ctrl )
+    {
+        m_query_ctrl->SetHint( _( "Search" ) );
+        m_query_ctrl->SetFocus();
+        m_query_ctrl->SetValue( wxEmptyString );
+    }
 
     // There may be a part preselected in the model. Make sure it is displayed.
     postSelectEvent();
@@ -169,13 +185,16 @@ void COMPONENT_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
 
 void COMPONENT_TREE::onTreeSelect( wxDataViewEvent& aEvent )
 {
-    int unit = 0;
-    LIB_ALIAS* alias = GetSelectedAlias( &unit );
+    if( m_details_ctrl )
+    {
+        int unit = 0;
+        LIB_ALIAS* alias = GetSelectedAlias( &unit );
 
-    if( alias )
-        m_details_ctrl->SetPage( GenerateAliasInfo( alias, unit ) );
-    else
-        m_details_ctrl->SetPage( wxEmptyString );
+        if( alias )
+            m_details_ctrl->SetPage( GenerateAliasInfo( alias, unit ) );
+        else
+            m_details_ctrl->SetPage( wxEmptyString );
+    }
 
     aEvent.Skip();
 }

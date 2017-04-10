@@ -35,12 +35,16 @@ class wxHtmlWindow;
 class wxHtmlLinkEvent;
 
 /**
- * Widget displaying a tree of components with a search text control and description.
+ * Widget displaying a tree of components with optional search text control and description panel.
  */
 class COMPONENT_TREE : public wxPanel
 {
 public:
-    COMPONENT_TREE( wxWindow* aParent, CMP_TREE_MODEL_ADAPTER::PTR& aAdapter );
+    ///> Flags to select extra widgets
+    enum WIDGETS { NONE = 0x00, SEARCH = 0x01, DETAILS = 0x02, ALL = 0xFF };
+
+    COMPONENT_TREE( wxWindow* aParent,
+            CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, WIDGETS aWidgets = ALL );
 
     /**
      * For multi-unit components, if the user selects the component itself
