@@ -27,30 +27,22 @@
 
 #include <algorithm>
 #include <set>
-#include <wx/tokenzr.h>
 #include <wx/utils.h>
 
-#include <wx/artprov.h>
-#include <wx/bitmap.h>
 #include <wx/button.h>
-#include <wx/choice.h>
 #include <wx/dataview.h>
-#include <wx/html/htmlwin.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/splitter.h>
-#include <wx/statbmp.h>
-#include <wx/textctrl.h>
 #include <wx/timer.h>
 #include <wx/utils.h>
 
 #include <class_library.h>
-#include <generate_alias_info.h>
 #include <sch_base_frame.h>
 #include <template_fieldnames.h>
+#include <widgets/component_tree.h>
 #include <widgets/footprint_preview_widget.h>
 #include <widgets/footprint_select_widget.h>
-#include <wxdataviewctrl_helpers.h>
 
 
 FOOTPRINT_ASYNC_LOADER          DIALOG_CHOOSE_COMPONENT::m_fp_loader;
@@ -61,7 +53,6 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
         : DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxSize( 800, 650 ),
                   wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
           m_parent( aParent ),
-          m_adapter( aAdapter ),
           m_deMorganConvert( aDeMorganConvert >= 0 ? aDeMorganConvert : 0 ),
           m_allow_field_edits( aAllowFieldEdits ),
           m_external_browser_requested( false )
@@ -72,14 +63,14 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
 
     auto splitter = new wxSplitterWindow(
             this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE );
-    auto left_panel = ConstructLeftPanel( splitter );
+    m_tree = new COMPONENT_TREE( splitter, aAdapter );
     auto right_panel = ConstructRightPanel( splitter );
     auto buttons = new wxStdDialogButtonSizer();
     m_dbl_click_timer = new wxTimer( this );
 
     splitter->SetSashGravity( 0.9 );
     splitter->SetMinimumPaneSize( 1 );
-    splitter->SplitVertically( left_panel, right_panel, -300 );
+    splitter->SplitVertically( m_tree, right_panel, -300 );
 
     buttons->AddButton( new wxButton( this, wxID_OK ) );
     buttons->AddButton( new wxButton( this, wxID_CANCEL ) );
@@ -91,15 +82,9 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
 
     Bind( wxEVT_INIT_DIALOG, &DIALOG_CHOOSE_COMPONENT::OnInitDialog, this );
     Bind( wxEVT_TIMER, &DIALOG_CHOOSE_COMPONENT::OnCloseTimer, this, m_dbl_click_timer->GetId() );
+    Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &DIALOG_CHOOSE_COMPONENT::OnTreeActivate, this );
+    Bind( wxEVT_DATAVIEW_SELECTION_CHANGED, &DIALOG_CHOOSE_COMPONENT::OnTreeSelect, this );
 
-    m_query_ctrl->Bind( wxEVT_TEXT, &DIALOG_CHOOSE_COMPONENT::OnQueryText, this );
-    m_query_ctrl->Bind( wxEVT_TEXT_ENTER, &DIALOG_CHOOSE_COMPONENT::OnQueryEnter, this );
-    m_query_ctrl->Bind( wxEVT_CHAR_HOOK, &DIALOG_CHOOSE_COMPONENT::OnQueryCharHook, this );
-    m_tree_ctrl->Bind(
-            wxEVT_DATAVIEW_ITEM_ACTIVATED, &DIALOG_CHOOSE_COMPONENT::OnTreeActivate, this );
-    m_tree_ctrl->Bind(
-            wxEVT_DATAVIEW_SELECTION_CHANGED, &DIALOG_CHOOSE_COMPONENT::OnTreeSelect, this );
-    m_details_ctrl->Bind( wxEVT_HTML_LINK_CLICKED, &DIALOG_CHOOSE_COMPONENT::OnDetailsLink, this );
     m_sch_view_ctrl->Bind( wxEVT_LEFT_DCLICK, &DIALOG_CHOOSE_COMPONENT::OnSchViewDClick, this );
     m_sch_view_ctrl->Bind( wxEVT_PAINT, &DIALOG_CHOOSE_COMPONENT::OnSchViewPaint, this );
 
@@ -119,42 +104,6 @@ DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
     Unbind( wxEVT_TIMER, &DIALOG_CHOOSE_COMPONENT::OnCloseTimer, this );
 
     delete m_dbl_click_timer;
-}
-
-
-wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructLeftPanel( wxWindow* aParent )
-{
-    auto panel = new wxPanel( aParent );
-    auto sizer = new wxBoxSizer( wxVERTICAL );
-    auto search_sizer = new wxBoxSizer( wxHORIZONTAL );
-
-    m_query_ctrl = new wxTextCtrl(
-            panel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-
-    m_tree_ctrl =
-            new wxDataViewCtrl( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_SINGLE );
-    m_adapter->AttachTo( m_tree_ctrl );
-
-    m_details_ctrl = new wxHtmlWindow( panel, wxID_ANY, wxDefaultPosition, wxSize( 320, 240 ),
-            wxHW_SCROLLBAR_AUTO | wxSUNKEN_BORDER );
-
-// Additional visual cue for GTK, which hides the placeholder text on focus
-#ifdef __WXGTK__
-    search_sizer->Add( new wxStaticBitmap( panel, wxID_ANY,
-                               wxArtProvider::GetBitmap( wxART_FIND, wxART_FRAME_ICON ) ),
-            0, wxALIGN_CENTER | wxALL, 5 );
-#endif
-
-    search_sizer->Add( m_query_ctrl, 1, wxALIGN_CENTER | wxALL | wxEXPAND, 5 );
-
-    sizer->Add( search_sizer, 0, wxEXPAND, 5 );
-    sizer->Add( m_tree_ctrl, 1, wxALL | wxEXPAND, 5 );
-    sizer->Add( m_details_ctrl, 1, wxALL | wxEXPAND, 5 );
-
-    panel->SetSizer( sizer );
-    panel->Layout();
-    sizer->Fit( panel );
-    return panel;
 }
 
 
@@ -193,12 +142,6 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
 
 void DIALOG_CHOOSE_COMPONENT::OnInitDialog( wxInitDialogEvent& aEvent )
 {
-    // If wxTextCtrl::SetHint() is called before binding wxEVT_TEXT, the event
-    // handler will intermittently fire.
-    m_query_ctrl->SetHint( _( "Search" ) );
-    m_query_ctrl->SetFocus();
-    m_query_ctrl->SetValue( wxEmptyString );
-
     if( m_fp_view_ctrl->IsInitialized() )
     {
         // This hides the GAL panel and shows the status label
@@ -207,99 +150,30 @@ void DIALOG_CHOOSE_COMPONENT::OnInitDialog( wxInitDialogEvent& aEvent )
 
     if( m_fp_sel_ctrl )
         m_fp_sel_ctrl->Load( Kiway(), Prj() );
-
-    // There may be a part preselected in the model. Make sure it is displayed.
-    PostSelectEvent();
 }
 
 
 LIB_ALIAS* DIALOG_CHOOSE_COMPONENT::GetSelectedAlias( int* aUnit ) const
 {
-    auto sel = m_tree_ctrl->GetSelection();
-
-    if( aUnit )
-        *aUnit = m_adapter->GetUnitFor( sel );
-
-    return m_adapter->GetAliasFor( sel );
-}
-
-
-std::vector<std::pair<int, wxString>> DIALOG_CHOOSE_COMPONENT::GetFields() const
-{
-    return m_field_edits;
-}
-
-
-void DIALOG_CHOOSE_COMPONENT::OnQueryText( wxCommandEvent& aEvent )
-{
-    m_adapter->UpdateSearchString( m_query_ctrl->GetLineText( 0 ) );
-    PostSelectEvent();
-
-    // Required to avoid interaction with SetHint()
-    // See documentation for wxTextEntry::SetHint
-    aEvent.Skip();
-}
-
-
-void DIALOG_CHOOSE_COMPONENT::OnQueryEnter( wxCommandEvent& aEvent )
-{
-    HandleItemSelection();
-}
-
-
-void DIALOG_CHOOSE_COMPONENT::SelectIfValid( const wxDataViewItem& aTreeId )
-{
-    if( aTreeId.IsOk() )
-    {
-        m_tree_ctrl->EnsureVisible( aTreeId );
-        m_tree_ctrl->Select( aTreeId );
-        PostSelectEvent();
-    }
-}
-
-
-void DIALOG_CHOOSE_COMPONENT::PostSelectEvent()
-{
-    wxDataViewEvent evt( wxEVT_DATAVIEW_SELECTION_CHANGED );
-    m_tree_ctrl->GetEventHandler()->ProcessEvent( evt );
-}
-
-
-void DIALOG_CHOOSE_COMPONENT::OnQueryCharHook( wxKeyEvent& aKeyStroke )
-{
-    auto const sel = m_tree_ctrl->GetSelection();
-
-    switch( aKeyStroke.GetKeyCode() )
-    {
-    case WXK_UP: SelectIfValid( GetPrevItem( *m_tree_ctrl, sel ) ); break;
-
-    case WXK_DOWN: SelectIfValid( GetNextItem( *m_tree_ctrl, sel ) ); break;
-
-    default:
-        aKeyStroke.Skip(); // Any other key: pass on to search box directly.
-        break;
-    }
+    return m_tree->GetSelectedAlias( aUnit );
 }
 
 
 void DIALOG_CHOOSE_COMPONENT::OnTreeSelect( wxDataViewEvent& aEvent )
 {
-    auto       sel = m_tree_ctrl->GetSelection();
-    int        unit = m_adapter->GetUnitFor( sel );
-    LIB_ALIAS* alias = m_adapter->GetAliasFor( sel );
+    std::cout << "dialog choose component handler" << std::endl;    // TODO
+    int unit = 0;
+    LIB_ALIAS* alias = m_tree->GetSelectedAlias( &unit );
 
     m_sch_view_ctrl->Refresh();
 
     if( alias )
     {
-        m_details_ctrl->SetPage( GenerateAliasInfo( alias, unit ) );
         ShowFootprintFor( alias );
         PopulateFootprintSelector( alias );
     }
     else
     {
-        m_details_ctrl->SetPage( wxEmptyString );
-
         if( m_fp_view_ctrl->IsInitialized() )
             m_fp_view_ctrl->SetStatusText( wxEmptyString );
 
@@ -400,19 +274,10 @@ void DIALOG_CHOOSE_COMPONENT::PopulateFootprintSelector( LIB_ALIAS* aAlias )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::OnDetailsLink( wxHtmlLinkEvent& aEvent )
-{
-    const wxHtmlLinkInfo& info = aEvent.GetLinkInfo();
-    ::wxLaunchDefaultBrowser( info.GetHref() );
-}
-
-
 void DIALOG_CHOOSE_COMPONENT::OnSchViewPaint( wxPaintEvent& aEvent )
 {
-    auto sel = m_tree_ctrl->GetSelection();
-
-    int        unit = m_adapter->GetUnitFor( sel );
-    LIB_ALIAS* alias = m_adapter->GetAliasFor( sel );
+    int unit = 0;
+    LIB_ALIAS* alias = m_tree->GetSelectedAlias( &unit );
     LIB_PART*  part = alias ? alias->GetPart() : nullptr;
 
     // Don't draw anything (not even the background) if we don't have
@@ -496,7 +361,7 @@ void DIALOG_CHOOSE_COMPONENT::RenderPreview( LIB_PART* aComponent, int aUnit )
 
 void DIALOG_CHOOSE_COMPONENT::HandleItemSelection()
 {
-    if( m_adapter->GetAliasFor( m_tree_ctrl->GetSelection() ) )
+    if( m_tree->GetSelectedAlias() )
     {
         // Got a selection. We can't just end the modal dialog here, because
         // wx leaks some events back to the parent window (in particular, the
@@ -511,14 +376,5 @@ void DIALOG_CHOOSE_COMPONENT::HandleItemSelection()
         // See DIALOG_CHOOSE_COMPONENT::OnCloseTimer for the other end of this
         // spaghetti noodle.
         m_dbl_click_timer->StartOnce( DIALOG_CHOOSE_COMPONENT::DblClickDelay );
-    }
-    else
-    {
-        auto const sel = m_tree_ctrl->GetSelection();
-
-        if( m_tree_ctrl->IsExpanded( sel ) )
-            m_tree_ctrl->Collapse( sel );
-        else
-            m_tree_ctrl->Expand( sel );
     }
 }

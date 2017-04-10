@@ -75,6 +75,7 @@ set( EESCHEMA_DLGS
     )
 
 set( EESCHEMA_WIDGETS
+    widgets/component_tree.cpp
     widgets/widget_eeschema_color_config.cpp
     widgets/pin_shape_combobox.cpp
     widgets/pin_type_combobox.cpp

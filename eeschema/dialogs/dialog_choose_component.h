@@ -40,6 +40,7 @@ class wxChoice;
 class wxButton;
 class wxTimer;
 
+class COMPONENT_TREE;
 class FOOTPRINT_PREVIEW_WIDGET;
 class FOOTPRINT_SELECT_WIDGET;
 class LIB_ALIAS;
@@ -101,7 +102,7 @@ public:
 
     ~DIALOG_CHOOSE_COMPONENT();
 
-    /** Function GetSelectedAlias
+    /**
      * To be called after this dialog returns from ShowModal().
      *
      * For multi-unit components, if the user selects the component itself
@@ -112,13 +113,16 @@ public:
      * @param aUnit if not NULL, the selected unit is filled in here.
      * @return the alias that has been selected, or NULL if there is none.
      */
-    LIB_ALIAS* GetSelectedAlias( int* aUnit ) const;
+    LIB_ALIAS* GetSelectedAlias( int* aUnit = nullptr ) const;
 
     /**
      * Get a list of fields edited by the user.
      * @return vector of pairs; each.first = field ID, each.second = new value
      */
-    std::vector<std::pair<int, wxString>> GetFields() const;
+    std::vector<std::pair<int, wxString>> GetFields() const
+    {
+        return m_field_edits;
+    }
 
     /** Function IsExternalBrowserSelected
      *
@@ -133,21 +137,14 @@ public:
 protected:
     static constexpr int DblClickDelay = 100; // milliseconds
 
-    wxPanel* ConstructLeftPanel( wxWindow* aParent );
     wxPanel* ConstructRightPanel( wxWindow* aParent );
 
     void OnInitDialog( wxInitDialogEvent& aEvent );
     void OnCloseTimer( wxTimerEvent& aEvent );
     void OnProgressTimer( wxTimerEvent& aEvent );
 
-    void OnQueryText( wxCommandEvent& aEvent );
-    void OnQueryEnter( wxCommandEvent& aEvent );
-    void OnQueryCharHook( wxKeyEvent& aEvent );
-
     void OnTreeSelect( wxDataViewEvent& aEvent );
     void OnTreeActivate( wxDataViewEvent& aEvent );
-
-    void OnDetailsLink( wxHtmlLinkEvent& aEvent );
 
     void OnSchViewDClick( wxMouseEvent& aEvent );
     void OnSchViewPaint( wxPaintEvent& aEvent );
@@ -172,17 +169,6 @@ protected:
     void PopulateFootprintSelector( LIB_ALIAS* aAlias );
 
     /**
-     * If a wxDataViewitem is valid, select it and post a selection event.
-     */
-    void SelectIfValid( const wxDataViewItem& aTreeId );
-
-    /**
-     * Post a wxEVT_DATAVIEW_SELECTION_CHANGED to notify the selection handler
-     * that a new part has been selected.
-     */
-    void PostSelectEvent();
-
-    /**
      * Display a given component into the schematic symbol preview.
      */
     void RenderPreview( LIB_PART* aComponent, int aUnit );
@@ -196,16 +182,13 @@ protected:
     void HandleItemSelection();
 
     wxTimer*        m_dbl_click_timer;
-    wxTextCtrl*     m_query_ctrl;
-    wxDataViewCtrl* m_tree_ctrl;
-    wxHtmlWindow*   m_details_ctrl;
     wxPanel*        m_sch_view_ctrl;
 
     FOOTPRINT_SELECT_WIDGET*  m_fp_sel_ctrl;
     FOOTPRINT_PREVIEW_WIDGET* m_fp_view_ctrl;
+    COMPONENT_TREE*           m_tree;
 
     SCH_BASE_FRAME*             m_parent;
-    CMP_TREE_MODEL_ADAPTER::PTR m_adapter;
     int                         m_deMorganConvert;
     bool                        m_allow_field_edits;
     bool                        m_external_browser_requested;
