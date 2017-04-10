@@ -43,6 +43,7 @@ set( GERBVIEW_SRCS
     controle.cpp
     dcode.cpp
     draw_gerber_screen.cpp
+    evaluate.cpp
     events_called_functions.cpp
     excellon_read_drill_file.cpp
     export_to_pcbnew.cpp

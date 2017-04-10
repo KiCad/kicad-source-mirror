@@ -114,8 +114,10 @@ Precedence was recently actually defined in gerber RS274X
 (Previously, there was no actual info about this precedence)
 This is the usual arithmetic precendence between + - x / ( ), the only ones used in Gerber
 
-However, because it is recent, currently, actual value is calculated step to step:
+Before 2015 apr 10, actual value was calculated step to step:
 no precedence, and '(' ')' are ignored.
+
+Since 2015 apr 10 precedence is in use.
 
 Parameter definition is described by a very primitive assembler.
 This "program "should describe how to calculate the parameter.
@@ -147,6 +149,65 @@ enum parm_item_type
 {
     NOP, PUSHVALUE, PUSHPARM, ADD, SUB, MUL, DIV, OPEN_PAR, CLOSE_PAR, POPVALUE
 };
+
+/**
+ * This helper class hold a value or an arithmetic operator to calculate
+ * the final value of a aperture macro parameter, using usual
+ * arithmetic operator precedence
+ * Only operators ADD, SUB, MUL, DIV, OPEN_PAR, CLOSE_PAR have meaning when calculating
+ * a value
+ */
+class AM_PARAM_EVAL
+{
+public:
+    AM_PARAM_EVAL( parm_item_type aType )
+            : m_type( aType), m_dvalue( 0.0 )
+    {}
+
+    AM_PARAM_EVAL( double aValue )
+            : m_type( parm_item_type::NOP ), m_dvalue( aValue )
+    {}
+
+    parm_item_type GetType() const
+    {
+        return m_type;
+    }
+
+    bool IsOperator() const { return m_type != NOP; }
+    double GetValue() const { return m_dvalue; }
+    parm_item_type GetOperator() const { return m_type; }
+    int GetPriority() const { return GetPriority( GetOperator() ); }
+
+    static int GetPriority( parm_item_type aType )
+    {
+        switch( aType )
+        {
+        case ADD:
+        case SUB:
+            return 1;
+
+        case MUL:
+        case DIV:
+            return 2;
+
+        case OPEN_PAR:
+        case CLOSE_PAR:
+            return 3;
+
+        default:
+            break;
+        }
+
+        return 0;
+    }
+
+private:
+    parm_item_type m_type;  // the type of item
+    double m_dvalue;        // the value, for a numerical value
+                            // used only when m_type == NOP
+};
+
+typedef std::vector<AM_PARAM_EVAL> AM_PARAM_EVAL_STACK;
 
 /**
  * Class AM_PARAM
