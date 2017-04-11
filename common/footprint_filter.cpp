@@ -126,12 +126,14 @@ bool FOOTPRINT_FILTER_IT::FootprintFilterMatch( FOOTPRINT_INFO& aItem )
         return true;
 
     // The matching is case insensitive
-    wxString name = "";
+    wxString name;
 
     EDA_PATTERN_MATCH_WILDCARD patternFilter;
 
     for( auto const& each_filter : m_filter->m_footprint_filters )
     {
+        name.Empty();
+
         // If the filter contains a ':' character, include the library name in the pattern
         if( each_filter->GetPattern().Contains( ":" ) )
         {
@@ -201,7 +203,7 @@ void FOOTPRINT_FILTER::FilterByFootprintFilters( wxArrayString const& aFilters )
     for( auto const& each_pattern : aFilters )
     {
         m_footprint_filters.push_back( std::make_unique<EDA_PATTERN_MATCH_WILDCARD>() );
-        wxASSERT( m_footprint_filters.back()->SetPattern( each_pattern.Lower() ) );
+        m_footprint_filters.back()->SetPattern( each_pattern.Lower() );
     }
 
     m_filter_type |= FILTERING_BY_COMPONENT_KEYWORD;
