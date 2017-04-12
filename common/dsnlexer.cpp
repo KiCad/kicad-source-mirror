@@ -224,7 +224,6 @@ LINE_READER* DSNLEXER::PopReader()
             reader = 0;
             start  = dummy;
             limit  = dummy;
-            limit  = dummy;
         }
     }
     return ret;
