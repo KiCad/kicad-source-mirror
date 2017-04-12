@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2011-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -194,7 +194,7 @@ void SCH_SHEET_PATH::AnnotatePowerSymbols( PART_LIBS* aLibs, int* aReference )
             continue;
 
         SCH_COMPONENT*  component = (SCH_COMPONENT*) item;
-        LIB_PART*       part = aLibs->FindLibPart( component->GetLibId() );
+        LIB_PART* part = component->GetPartRef().lock().get();
 
         if( !part || !part->IsPower() )
             continue;
@@ -232,7 +232,7 @@ void SCH_SHEET_PATH::GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aRefer
             if( !aIncludePowerSymbols && component->GetRef( this )[0] == wxT( '#' ) )
                 continue;
 
-            LIB_PART* part = aLibs->FindLibPart( component->GetLibId() );
+            LIB_PART* part = component->GetPartRef().lock().get();
 
             if( part )
             {
@@ -263,7 +263,7 @@ void SCH_SHEET_PATH::GetMultiUnitComponents( PART_LIBS* aLibs,
         if( !aIncludePowerSymbols && component->GetRef( this )[0] == wxT( '#' ) )
             continue;
 
-        LIB_PART* part = aLibs->FindLibPart( component->GetLibId() );
+        LIB_PART* part = component->GetPartRef().lock().get();
 
         if( part && part->GetUnitCount() > 1 )
         {

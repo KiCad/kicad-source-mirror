@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2017 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.TXT for contributors.
  *
@@ -116,6 +116,7 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponent( EDA_ITEM* aItem, SCH_SHEET_P
         // Power symbols and other components which have the reference starting
         // with "#" are not included in netlist (pseudo or virtual components)
         ref = comp->GetRef( aSheetPath );
+
         if( ref[0] == wxChar( '#' ) )
             continue;
 
@@ -125,7 +126,8 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponent( EDA_ITEM* aItem, SCH_SHEET_P
         // (several sheets pointing to 1 screen), this will be erroneously be
         // toggled.
 
-        LIB_PART* part = m_libs->FindLibPart( comp->GetLibId() );
+        LIB_PART* part = comp->GetPartRef().lock().get();
+
         if( !part )
             continue;
 
@@ -184,7 +186,7 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponentAndCreatePinList( EDA_ITEM*   
         // (several sheets pointing to 1 screen), this will be erroneously be
         // toggled.
 
-        LIB_PART* part = m_libs->FindLibPart( comp->GetLibId() );
+        LIB_PART* part = comp->GetPartRef().lock().get();
 
         if( !part )
             continue;

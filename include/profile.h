@@ -111,7 +111,10 @@ public:
 
         std::chrono::duration<double, std::milli> elapsed = display_stoptime - m_starttime;
         wxString msg;
-        msg << m_name << " took " << elapsed.count() << " ms.";
+        if( elapsed.count() < 1000.0 )
+            msg << m_name << " took " << elapsed.count() << " ms.";
+        else
+            msg << m_name << " took " << elapsed.count()/1000.0 << " sec.";
         wxLogMessage( msg );
     }
 

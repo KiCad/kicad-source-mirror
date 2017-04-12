@@ -55,8 +55,13 @@ int TestDuplicateSheetNames( bool aCreateMarker );
 
 bool SCH_EDIT_FRAME::prepareForNetlist()
 {
-    SCH_SHEET_LIST sheets( g_RootSheet );
+    SCH_SCREENS schematic;
 
+    // Ensure all symbol library links for all sheets valid:
+    schematic.UpdateSymbolLinks();
+
+    // Ensure all power symbols have a valid reference
+    SCH_SHEET_LIST sheets( g_RootSheet );
     sheets.AnnotatePowerSymbols( Prj().SchLibs() );
 
     // Performs some controls:
@@ -79,9 +84,7 @@ bool SCH_EDIT_FRAME::prepareForNetlist()
     }
 
     // Cleanup the entire hierarchy
-    SCH_SCREENS screens;
-
-    screens.SchematicCleanUp();
+    schematic.SchematicCleanUp();
 
     return true;
 }
