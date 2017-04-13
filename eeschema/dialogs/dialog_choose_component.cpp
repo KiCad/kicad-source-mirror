@@ -167,7 +167,7 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
             wxFULL_REPAINT_ON_RESIZE | wxSUNKEN_BORDER | wxTAB_TRAVERSAL );
     m_sch_view_ctrl->SetLayoutDirection( wxLayout_LeftToRight );
 
-    if( m_allow_field_edits && m_fp_list )
+    if( m_allow_field_edits )
         m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( panel, m_fp_loader, m_fp_list, true );
     else
         m_fp_sel_ctrl = nullptr;
