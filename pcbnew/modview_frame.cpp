@@ -186,6 +186,10 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     ReCreateLibraryList();
     UpdateTitle();
 
+    // See for an existing board editor frame opened
+    // (we need it just to know some settings )
+    bool isBordEditorRunning = Kiway().Player( FRAME_PCB, false ) != nullptr;
+
     PCB_BASE_FRAME* parentFrame = static_cast<PCB_BASE_FRAME*>( Kiway().Player( FRAME_PCB, true ) );
 
     // Create GAL canvas
@@ -286,6 +290,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 #endif
 
     UseGalCanvas( parentFrame->IsGalCanvasActive() );
+
+    if( !isBordEditorRunning && IsModal() )
+        parentFrame->Destroy();
 
     if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame
     {
