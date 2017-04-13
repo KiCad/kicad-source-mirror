@@ -202,6 +202,11 @@ wxString FOOTPRINT_SELECT_WIDGET::ShowPicker()
     // event loop goes all silly.
     wxASSERT( !dsparent || dsparent->IsQuasiModal() );
 
+    // Now open the footprint viewer.
+    // However, this viewer creates a not shown PCB_EDIT_FRAME_NAME, if
+    // it does not exist previously.
+    // We must delete it when exiting, if it is not existing
+    auto pcbframe = m_kiway->Player( FRAME_PCB, false );    // return nullptr if not yet existing.
     auto frame = m_kiway->Player( FRAME_PCB_MODULE_VIEWER_MODAL, true );
 
     if( !frame->ShowModal( &fpname, parent ) )
@@ -210,6 +215,16 @@ wxString FOOTPRINT_SELECT_WIDGET::ShowPicker()
     }
 
     frame->Destroy();
+
+    // If the PCB_EDIT_FRAME was not previoulsy existing, delete the newly created one:
+    if( !pcbframe )
+    {
+        pcbframe = m_kiway->Player( FRAME_PCB, false );
+
+        if( pcbframe )
+            pcbframe->Destroy();
+    }
+
 
     return fpname;
 }
