@@ -1510,6 +1510,26 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
                         pcbtxt->SetTextAngle( sign * 90 * 10 );
                         align = ETEXT::TOP_RIGHT;
                     }
+                    else // Ok so text is not at 90,180 or 270 so do some funny stuf to get placement right
+                    {
+                        if( ( degrees > 0 ) &&  ( degrees < 90 ) )
+                            pcbtxt->SetTextAngle( sign * t.rot->degrees * 10 );
+                        else if( ( degrees > 90 ) && ( degrees < 180 ) )
+                        {
+                            pcbtxt->SetTextAngle( sign * ( t.rot->degrees + 180 ) * 10 );
+                            align = ETEXT::TOP_RIGHT;
+                        }
+                        else if( ( degrees > 180 ) && ( degrees < 270 ) )
+                        {
+                            pcbtxt->SetTextAngle( sign * ( t.rot->degrees - 180 ) * 10 );
+                            align = ETEXT::TOP_RIGHT;
+                        }
+                        else if( ( degrees > 270 ) && ( degrees < 360 ) )
+                        {
+                            pcbtxt->SetTextAngle( sign * t.rot->degrees * 10 );
+                            align = ETEXT::BOTTOM_LEFT;
+                        }
+                    }
                 }
 
                 switch( align )
