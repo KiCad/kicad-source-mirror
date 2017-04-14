@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -129,6 +129,9 @@ principle should be easily implemented by adapting the current STL containers.
 // map CPolyLine and classes used in CPolyLine:
 #include <../polygon/PolyLine.h>
 %include <../polygon/PolyLine.h>
+
+#include <geometry/shape_poly_set.h>
+%include <geometry/shape_poly_set.h>
 
 // ignore warning relative to operator = and operator ++:
 #pragma SWIG nowarn=362,383

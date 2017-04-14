@@ -760,9 +760,6 @@ class SHAPE_POLY_SET : public SHAPE
         ///> For aFastMode meaning, see function booleanOp
         void Fracture( POLYGON_MODE aFastMode );
 
-        ///> Converts a set of slitted polygons to a set of polygons with holes
-        void Unfracture();
-
         ///> Returns true if the polygon set has any holes.
         bool HasHoles() const;
 
