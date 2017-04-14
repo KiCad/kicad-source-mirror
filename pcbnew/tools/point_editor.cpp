@@ -776,37 +776,50 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     if( item->Type() == PCB_ZONE_AREA_T )
     {
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
-        SHAPE_POLY_SET* outline = zone->Outline();
+        SHAPE_POLY_SET* zoneOutline = zone->Outline();
 
         commit.Modify( zone );
 
         unsigned int nearestIdx = 0;
         unsigned int nextNearestIdx = 0;
         unsigned int nearestDist = INT_MAX;
+        unsigned int firstPointInContour = 0;
 
-        for( int i = 0; i < outline->TotalVertices(); ++i )
+        // Search the best outline segment to add a new corner
+        // and therefore break this segment into two segments
+
+        // Object to iterate through the corners of the outlines (main contour and its holes)
+        SHAPE_POLY_SET::ITERATOR iterator = zoneOutline->Iterate( 0,
+                zoneOutline->OutlineCount()-1, /* IterateHoles */ true );
+        int curr_idx = 0;
+
+        // Iterate through all the corners of the outlines and search the best segment
+        for( ; iterator; iterator++, curr_idx++ )
         {
-            int jj = i+1;
+            int jj = curr_idx+1;
 
-            if( jj >= outline->TotalVertices() )
-                jj = 0;
+            if( iterator.IsEndContour() )
+            {   // We reach the last point of the current contour (main or hole)
+                jj = firstPointInContour;
+                firstPointInContour = curr_idx+1;     // Prepare next contour analysis
+            }
 
-            SEG side( outline->Vertex( i ), outline->Vertex( jj ) );
+            SEG curr_segment( zoneOutline->Vertex( curr_idx ), zoneOutline->Vertex( jj ) );
 
-            unsigned int distance = side.Distance( cursorPos );
+            unsigned int distance = curr_segment.Distance( cursorPos );
 
             if( distance < nearestDist )
             {
                 nearestDist = distance;
-                nearestIdx = i;
-                nextNearestIdx = i + 1;
+                nearestIdx = curr_idx;
+                nextNearestIdx = jj;
             }
         }
 
 
         // Find the point on the closest segment
-        VECTOR2I sideOrigin = outline->Vertex( nearestIdx );
-        VECTOR2I sideEnd = outline->Vertex( nextNearestIdx );
+        VECTOR2I sideOrigin = zoneOutline->Vertex( nearestIdx );
+        VECTOR2I sideEnd = zoneOutline->Vertex( nextNearestIdx );
         SEG nearestSide( sideOrigin, sideEnd );
         VECTOR2I nearestPoint = nearestSide.NearestPoint( cursorPos );
 
@@ -816,7 +829,7 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
             nearestPoint = ( sideOrigin + sideEnd ) / 2;
 
         // Add corner between nearestIdx and nextNearestIdx:
-        outline->InsertVertex( nextNearestIdx, nearestPoint );
+        zoneOutline->InsertVertex( nextNearestIdx, nearestPoint );
         zone->Hatch();
 
         commit.Push( _( "Add a zone corner" ) );
@@ -880,14 +893,14 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
         BOARD_COMMIT commit( frame );
 
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
-        SHAPE_POLY_SET* outline = zone->Outline();
+        SHAPE_POLY_SET* zoneOutline = zone->Outline();
         commit.Modify( zone );
 
-        for( int i = 0; i < outline->TotalVertices(); ++i )
+        for( int i = 0; i < zoneOutline->TotalVertices(); ++i )
         {
-            if( outline->Vertex( i ) == m_editedPoint->GetPosition() )
+            if( zoneOutline->Vertex( i ) == m_editedPoint->GetPosition() )
             {
-                outline->RemoveVertex( i );
+                zoneOutline->RemoveVertex( i );
                 setEditedPoint( NULL );
                 commit.Push( _( "Remove a zone corner" ) );
                 break;
