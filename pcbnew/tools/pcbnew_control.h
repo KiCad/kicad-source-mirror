@@ -26,6 +26,7 @@
 #define PCBNEW_CONTROL_H
 
 #include <tool/tool_interactive.h>
+#include <io_mgr.h>
 #include <memory>
 
 namespace KIGFX {
@@ -79,7 +80,9 @@ public:
     int SwitchCursor( const TOOL_EVENT& aEvent );
     int SwitchUnits( const TOOL_EVENT& aEvent );
     int DeleteItemCursor( const TOOL_EVENT& aEvent );
-    int AppendBoard( const TOOL_EVENT& aEvent );
+    int AppendBoardFromClipboard( const TOOL_EVENT& aEvent );
+    int AppendBoardFromFile( const TOOL_EVENT& aEvent );
+    int AppendBoard( PLUGIN& pi, wxString& fileName );
     int ShowHelp( const TOOL_EVENT& aEvent );
     int ToBeDone( const TOOL_EVENT& aEvent );
 

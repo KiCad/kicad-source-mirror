@@ -142,6 +142,10 @@ TOOL_ACTION PCB_ACTIONS::appendBoard( "pcbnew.EditorControl.appendBoard",
         AS_GLOBAL, 0,
         "", "" );
 
+TOOL_ACTION PCB_ACTIONS::appendClipboard( "pcbnew.EditorControl.appendClipboard",
+        AS_GLOBAL, MD_CTRL + MD_SHIFT + int( 'V' ),
+        "", "" );
+
 TOOL_ACTION PCB_ACTIONS::highlightNet( "pcbnew.EditorControl.highlightNet",
         AS_GLOBAL, 0,
         "", "" );

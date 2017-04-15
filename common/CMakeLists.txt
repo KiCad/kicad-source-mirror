@@ -403,6 +403,7 @@ set( PCB_COMMON_SRCS
     ../pcbnew/eagle_plugin.cpp
     ../pcbnew/legacy_plugin.cpp
     ../pcbnew/kicad_plugin.cpp
+    ../pcbnew/kicad_clipboard.cpp
     ../pcbnew/gpcb_plugin.cpp
     ../pcbnew/pcb_netlist.cpp
     widgets/widget_net_selector.cpp

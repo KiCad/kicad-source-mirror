@@ -117,7 +117,6 @@ class PCB_PARSER : public PCB_LEXER
     DRAWSEGMENT*    parseDRAWSEGMENT();
     TEXTE_PCB*      parseTEXTE_PCB();
     DIMENSION*      parseDIMENSION();
-
     /**
      * Function parseMODULE
      * @param aInitialComments may be a pointer to a heap allocated initial comment block
@@ -325,6 +324,7 @@ public:
     wxString GetRequiredVersion();
 
 };
+
 
 
 #endif    // _PCBNEW_PARSER_H_

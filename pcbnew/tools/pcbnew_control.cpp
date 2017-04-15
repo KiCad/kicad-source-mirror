@@ -40,6 +40,8 @@
 #include <hotkeys.h>
 #include <properties.h>
 #include <io_mgr.h>
+#include <kicad_plugin.h>
+#include <kicad_clipboard.h>
 
 #include <pcbnew_id.h>
 #include <wxPcbStruct.h>
@@ -727,9 +729,14 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
     return 0;
 }
+int PCBNEW_CONTROL::AppendBoardFromClipboard( const TOOL_EVENT& aEvent )
+{
+    CLIPBOARD_IO pi;
+    wxString noString("");
+    return AppendBoard( pi, noString );
+}
 
-
-int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
 {
     int open_ctl;
     wxString fileName;
@@ -746,6 +753,13 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     IO_MGR::PCB_FILE_T pluginType = plugin_type( fileName, open_ctl );
     PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
 
+    return AppendBoard( *pi, fileName );
+
+}
+int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
+{
+
+    PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
     // Mark existing tracks, in order to know what are the new tracks
     // Tracks are inserted, not appended, so mark existing tracks to be
     // able to select the new tracks only later
@@ -778,7 +792,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
         props["page_height"] = ybuf;
 
         editFrame->GetDesignSettings().m_NetClasses.Clear();
-        pi->Load( fileName, board, &props );
+        pi.Load( fileName, board, &props );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -945,9 +959,13 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::SwitchCursor,       PCB_ACTIONS::switchCursor.MakeEvent() );
     Go( &PCBNEW_CONTROL::SwitchUnits,        PCB_ACTIONS::switchUnits.MakeEvent() );
     Go( &PCBNEW_CONTROL::DeleteItemCursor,   PCB_ACTIONS::deleteItemCursor.MakeEvent() );
-    Go( &PCBNEW_CONTROL::AppendBoard,        PCB_ACTIONS::appendBoard.MakeEvent() );
     Go( &PCBNEW_CONTROL::ShowHelp,           PCB_ACTIONS::showHelp.MakeEvent() );
     Go( &PCBNEW_CONTROL::ToBeDone,           PCB_ACTIONS::toBeDone.MakeEvent() );
+
+    // Append control
+    Go( &PCBNEW_CONTROL::AppendBoardFromFile,PCB_ACTIONS::appendBoard.MakeEvent() );
+    Go( &PCBNEW_CONTROL::AppendBoardFromClipboard
+            ,PCB_ACTIONS::appendClipboard.MakeEvent() );
 }
 
 

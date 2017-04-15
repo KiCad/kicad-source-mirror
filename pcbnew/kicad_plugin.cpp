@@ -527,9 +527,9 @@ void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
         m_out->Print( 0, " (layer %s)", m_out->Quotew( aItem->GetLayerName() ).c_str() );
 }
 
-
-void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
+void PCB_IO::formatHeader( BOARD* aBoard, int aNestLevel ) const throw(IO_ERROR)
 {
+
     const BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
 
     m_out->Print( 0, "\n" );
@@ -745,6 +745,12 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
         filterNetClass( *aBoard, netclass );    // Remove empty nets (from a copy of a netclass)
         netclass.Format( m_out, aNestLevel, m_ctl );
     }
+}
+
+void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
+    throw( IO_ERROR )
+{
+    formatHeader( aBoard );
 
     // Save the modules.
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )

@@ -82,6 +82,9 @@ public:
     /// Filters the items in the current selection (invokes dialog)
     static TOOL_ACTION filterSelection;
 
+    /// Copy selected items to clipboard
+    static TOOL_ACTION selectionToClipboard;
+
     // Edit Tool
     /// Activation of the edit tool
     static TOOL_ACTION editActivate;
@@ -365,6 +368,7 @@ public:
     static TOOL_ACTION drillOrigin;
     static TOOL_ACTION crossProbeSchToPcb;
     static TOOL_ACTION appendBoard;
+    static TOOL_ACTION appendClipboard;
     static TOOL_ACTION showHelp;
     static TOOL_ACTION showLocalRatsnest;
     static TOOL_ACTION toBeDone;

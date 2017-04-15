@@ -109,7 +109,7 @@ public:
         return wxT( "kicad_pcb" );
     }
 
-    void Save( const wxString& aFileName, BOARD* aBoard,
+    virtual void Save( const wxString& aFileName, BOARD* aBoard,
                const PROPERTIES* aProperties = NULL ) override;
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
@@ -187,6 +187,10 @@ protected:
     void cacheLib( const wxString& aLibraryPath, const wxString& aFootprintName = wxEmptyString );
 
     void init( const PROPERTIES* aProperties );
+
+    /// writes everything that comes before the board_items, like settings and layers etc
+    void formatHeader( BOARD* aBoard, int aNestLevel = 0 ) const
+        throw( IO_ERROR );
 
 private:
     void format( BOARD* aBoard, int aNestLevel = 0 ) const;
