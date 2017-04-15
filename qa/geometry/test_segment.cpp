@@ -38,22 +38,26 @@ BOOST_FIXTURE_TEST_SUITE( SegmentReference, CommonTestData )
  */
 BOOST_AUTO_TEST_CASE( SegmentReference )
 {
-    VECTOR2I A( 10, 20 );
-    VECTOR2I B( 100, 200 );
+    VECTOR2I pointA( 10, 20 );
+    VECTOR2I pointB( 100, 200 );
 
     // Build a segment referencing the previous points
-    SEG segment(A, B);
+    SEG segment( pointA, pointB );
 
-    BOOST_CHECK_EQUAL( A, VECTOR2I( 10, 20) );
-    BOOST_CHECK_EQUAL( B, VECTOR2I( 100, 200) );
+    BOOST_CHECK_EQUAL( pointA, VECTOR2I( 10, 20) );
+    BOOST_CHECK_EQUAL( pointB, VECTOR2I( 100, 200) );
 
     // Modify the ends of the segments
     segment.A += VECTOR2I( 10, 10 );
     segment.B += VECTOR2I( 100, 100 );
 
-    // Check that the original points are also modified
-    BOOST_CHECK_EQUAL( A, VECTOR2I( 20, 30) );
-    BOOST_CHECK_EQUAL( B, VECTOR2I( 200, 300) );
+    // Check that the original points are not modified
+    BOOST_CHECK_EQUAL( pointA, VECTOR2I( 10, 20) );
+    BOOST_CHECK_EQUAL( pointB, VECTOR2I( 100, 200) );
+
+    // Check that the ends in segment are modified
+    BOOST_CHECK_EQUAL( segment.A, VECTOR2I( 20, 30) );
+    BOOST_CHECK_EQUAL( segment.B, VECTOR2I( 200, 300) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
