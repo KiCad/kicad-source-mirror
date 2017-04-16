@@ -153,6 +153,8 @@ void DIALOG_BOM_EDITOR::OnBomEditorClosed( wxCloseEvent& event )
             m_bom->ApplyFieldChanges();
             m_parent->Refresh();
         }
+
+        m_parent->OnModify();
     }
 
     Destroy();
