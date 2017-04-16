@@ -531,12 +531,10 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
     case PCB_MODULE_T:
         {
         DIALOG_MODULE_MODULE_EDITOR dialog( this, static_cast<MODULE*>( aItem ) );
-        int ret = dialog.ShowModal();
+        dialog.ShowModal();
         GetScreen()->GetCurItem()->ClearFlags();
         m_canvas->MoveCursorToCrossHair();
-
-        if( ret > 0 )
-            m_canvas->Refresh();
+        m_canvas->Refresh();
         }
         break;
 

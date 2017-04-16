@@ -296,8 +296,6 @@ UTF8 LIB_ID::GetLibItemNameAndRev() const
 }
 
 
-#if 0   // this is broken, it does not output aLibItemName for some reason
-
 UTF8 LIB_ID::Format( const UTF8& aLogicalLib, const UTF8& aLibItemName, const UTF8& aRevision )
     throw( PARSE_ERROR )
 {
@@ -312,14 +310,14 @@ UTF8 LIB_ID::Format( const UTF8& aLogicalLib, const UTF8& aLibItemName, const UT
         {
             THROW_PARSE_ERROR( _( "Illegal character found in logical library name" ),
                                wxString::FromUTF8( aLogicalLib.c_str() ),
-                               aLogicalLib.c_str(),
-                               0,
-                               offset );
+                               aLogicalLib.c_str(), 0, offset );
         }
 
         ret += aLogicalLib;
         ret += ':';
     }
+
+    ret += aLibItemName;    // TODO: Add validity test.
 
     if( aRevision.size() )
     {
@@ -340,7 +338,6 @@ UTF8 LIB_ID::Format( const UTF8& aLogicalLib, const UTF8& aLibItemName, const UT
 
     return ret;
 }
-#endif
 
 
 int LIB_ID::compare( const LIB_ID& aLibId ) const

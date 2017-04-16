@@ -580,11 +580,10 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) GetScreen()->GetCurItem() );
 
-            int ret = dialog.ShowModal();
+            dialog.ShowModal();
             GetScreen()->GetCurItem()->ClearFlags();
 
-            if( ret > 0 )
-                m_canvas->Refresh();
+            m_canvas->Refresh();
         }
         break;
 

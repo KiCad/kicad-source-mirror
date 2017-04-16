@@ -172,7 +172,10 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
     m_valueCopy->SetParent( m_currentModule );
     m_ReferenceCtrl->SetValue( m_referenceCopy->GetText() );
     m_ValueCtrl->SetValue( m_valueCopy->GetText() );
-    m_FootprintNameCtrl->SetValue( FROM_UTF8( m_currentModule->GetFPID().Format() ) );
+
+    m_currentFPID = m_currentModule->GetFPID();
+    m_FootprintNameCtrl->SetValue( FROM_UTF8( m_currentFPID.GetLibItemName() ) );
+    m_LibraryNicknameCtrl->SetValue( FROM_UTF8( m_currentFPID.GetLibNickname() ) );
 
     m_AttributsCtrl->SetItemToolTip( 0, _( "Use this attribute for most non SMD components" ) );
     m_AttributsCtrl->SetItemToolTip( 1,
@@ -433,17 +436,9 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DShapeFile()
 }
 
 
-void DIALOG_MODULE_MODULE_EDITOR::OnCancelClick( wxCommandEvent& event )
+bool DIALOG_MODULE_MODULE_EDITOR::TransferDataFromWindow()
 {
-    EndModal( -1 );
-}
-
-
-void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
-{
-    BOARD_COMMIT commit( m_parent );
     wxString msg;
-
     // First, test for invalid chars in module name
     wxString footprintName = m_FootprintNameCtrl->GetValue();
 
@@ -451,22 +446,24 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
     {
         if( ! MODULE::IsLibNameValid( footprintName ) )
         {
-            msg.Printf( _( "Error:\none of invalid chars <%s> found\nin <%s>" ),
+            msg.Printf( _( "Error:\n"
+                           "one of invalid chars <%s> found\nin <%s>" ),
                         MODULE::StringLibNameInvalidChars( true ),
                         GetChars( footprintName ) );
 
             DisplayError( NULL, msg );
 
-            return;
+            return false;
         }
     }
 
     if( !m_PreviewPane->ValidateWithMessage( msg ) )
     {
         DisplayError( NULL, msg );
-        return;
+        return false;
     }
 
+    BOARD_COMMIT commit( m_parent );
     commit.Modify( m_currentModule );
 
     m_currentModule->SetLocked( m_AutoPlaceCtrl->GetSelection() == 1 );
@@ -493,7 +490,10 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
 
     // Init footprint name in library
     if( ! footprintName.IsEmpty() )
-        m_currentModule->SetFPID( LIB_ID( footprintName ) );
+    {
+        m_currentFPID.SetLibItemName( footprintName, false );
+        m_currentModule->SetFPID( m_currentFPID );
+    }
 
     // Init Fields:
     TEXTE_MODULE& reference = m_currentModule->Reference();
@@ -527,7 +527,7 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
 
     commit.Push( _( "Modify module properties" ) );
 
-    EndModal( 1 );
+    return true;
 }
 
 

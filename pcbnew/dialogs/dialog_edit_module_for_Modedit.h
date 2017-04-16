@@ -42,9 +42,10 @@ private:
     TEXTE_MODULE*               m_valueCopy;
     std::vector<S3D_INFO>       m_shapes3D_list;
     int                         m_lastSelected3DShapeIndex;
-    static size_t               m_page; // remember the last open page during session
+    static size_t               m_page;         // remember the last open page during session
     PANEL_PREV_3D*              m_PreviewPane;
     MODULE*                     m_currentModuleCopy;
+    LIB_ID                      m_currentFPID;  // the full initial FPID
 
 public:
 
@@ -71,9 +72,10 @@ private:
     {
         Edit3DShapeFileName();
     }
-    void OnCancelClick( wxCommandEvent& event ) override;
-    void OnOkClick( wxCommandEvent& event ) override;
+
     void Cfg3DPath( wxCommandEvent& event ) override;
+
+    bool TransferDataFromWindow() override;
 
     void OnInitDlg( wxInitDialogEvent& event ) override
     {

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Feb 19 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -65,6 +65,8 @@ class DIALOG_MODULE_MODULE_EDITOR_BASE : public DIALOG_SHIM
 		wxButton* m_button5;
 		wxStaticText* m_staticTextFp;
 		wxTextCtrl* m_FootprintNameCtrl;
+		wxStaticText* m_staticTextLibNickname;
+		wxTextCtrl* m_LibraryNicknameCtrl;
 		wxRadioBox* m_AttributsCtrl;
 		wxRadioBox* m_AutoPlaceCtrl;
 		wxStaticText* m_staticText11;
@@ -107,8 +109,6 @@ class DIALOG_MODULE_MODULE_EDITOR_BASE : public DIALOG_SHIM
 		virtual void Add3DShape( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Remove3DShape( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Cfg3DPath( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

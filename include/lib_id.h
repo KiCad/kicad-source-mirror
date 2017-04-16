@@ -159,10 +159,10 @@ public:
      *         aLibNickname, aLibItemName, and aRevision.
      *
      * @throw PARSE_ERROR if any of the pieces are illegal.
+     */
     static UTF8 Format( const UTF8& aLibNickname, const UTF8& aLibItemName,
                         const UTF8& aRevision = "" )
         throw( PARSE_ERROR );
-     */
 
     /**
      * Function IsValid
