@@ -393,6 +393,11 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
     // We have modified the UI, so call Fit() for m_Panel3D
     // to be sure the m_Panel3D sizers are initiliazed before opening the dialog
     m_Panel3D->GetSizer()->Fit( m_Panel3D );
+
+    // For some reason, on Linux, after the call to
+    // m_PreviewPane->SetModelDataIdx( m_LastSelected3DShapeIndex, true )
+    // the dialog has no longer the focus. Force it:
+    m_sdbSizerStdButtonsOK->SetFocus();
 }
 
 
