@@ -197,6 +197,9 @@ void DIALOG_PLOT::Init_Dialog()
     // Plot outline mode
     m_plotOutlineModeOpt->SetValue( m_plotOpts.GetPlotOutlineMode() );
 
+    // Plot text mode
+    m_plotTextAsLineOpt->SetValue( m_plotOpts.GetTextMode() == PLOTTEXTMODE_DEFAULT );
+
     // Plot mirror option
     m_plotMirrorOpt->SetValue( m_plotOpts.GetMirror() );
 
@@ -298,6 +301,14 @@ void DIALOG_PLOT::CreateDrillFile( wxCommandEvent& event )
 }
 
 
+void DIALOG_PLOT::OnChangeOutlineMode( wxCommandEvent& event )
+{
+    m_plotTextAsLineOpt->Enable( !m_plotOutlineModeOpt->GetValue() );
+    if( !m_plotTextAsLineOpt->IsEnabled() )
+        m_plotTextAsLineOpt->SetValue( true );
+}
+
+
 void DIALOG_PLOT::OnSetScaleOpt( wxCommandEvent& event )
 {
     /* Disable sheet reference for scale != 1:1 */
@@ -388,6 +399,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotPSNegativeOpt->Enable( true );
         m_forcePSA4OutputOpt->Enable( false );
         m_forcePSA4OutputOpt->SetValue( false );
+        m_plotTextAsLineOpt->Enable( false );
+        m_plotTextAsLineOpt->SetValue( false );
 
         m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
         m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
@@ -411,6 +424,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_PSFineAdjustWidthOpt->Enable( true );
         m_plotPSNegativeOpt->Enable( true );
         m_forcePSA4OutputOpt->Enable( true );
+        m_plotTextAsLineOpt->Enable( false );
+        m_plotTextAsLineOpt->SetValue( true );
 
         m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
         m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
@@ -439,6 +454,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotPSNegativeOpt->SetValue( false );
         m_forcePSA4OutputOpt->Enable( false );
         m_forcePSA4OutputOpt->SetValue( false );
+        m_plotTextAsLineOpt->Enable( false );
+        m_plotTextAsLineOpt->SetValue( true );
 
         m_PlotOptionsSizer->Show( m_GerberOptionsSizer );
         m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
@@ -463,6 +480,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_plotPSNegativeOpt->SetValue( false );
         m_plotPSNegativeOpt->Enable( false );
         m_forcePSA4OutputOpt->Enable( true );
+        m_plotTextAsLineOpt->Enable( false );
+        m_plotTextAsLineOpt->SetValue( true );
 
         m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
         m_PlotOptionsSizer->Show( m_HPGLOptionsSizer );
@@ -493,6 +512,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
         m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
         m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
+
+        OnChangeOutlineMode( event );
         break;
 
     default:
@@ -568,6 +589,8 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetPlotMode( m_plotModeOpt->GetSelection() == 1 ? SKETCH : FILLED );
     tempOptions.SetPlotOutlineMode( m_plotOutlineModeOpt->GetValue() );
     tempOptions.SetPlotViaOnMaskLayer( m_plotNoViaOnMaskOpt->GetValue() );
+    tempOptions.SetTextMode( m_plotTextAsLineOpt->GetValue() ?
+                             PLOTTEXTMODE_DEFAULT : PLOTTEXTMODE_NATIVE );
 
     // Update settings from text fields. Rewrite values back to the fields,
     // since the values may have been constrained by the setters.

@@ -66,10 +66,11 @@ private:
     void        OnRightClick( wxMouseEvent& event ) override;
     void        OnPopUpLayers( wxCommandEvent& event ) override;
     void        SetPlotFormat( wxCommandEvent& event ) override;
+    void        OnChangeOutlineMode( wxCommandEvent& event ) override;
     void        OnSetScaleOpt( wxCommandEvent& event ) override;
     void        CreateDrillFile( wxCommandEvent& event ) override;
     void        OnGerberX2Checked( wxCommandEvent& event ) override;
-	virtual void onRunDRC( wxCommandEvent& event ) override;
+    void        onRunDRC( wxCommandEvent& event ) override;
 
     // other functions
     void        applyPlotSettings();

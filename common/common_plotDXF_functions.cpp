@@ -741,7 +741,7 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
     if( textAsLines || containsNonAsciiChars( aText ) || aMultilineAllowed )
     {
         // output text as graphics.
-        // Perhaps miltiline texts could be handled as DXF text entity
+        // Perhaps multiline texts could be handled as DXF text entity
         // but I do not want spend time about this (JPC)
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
                 aWidth, aItalic, aBold, aMultilineAllowed );

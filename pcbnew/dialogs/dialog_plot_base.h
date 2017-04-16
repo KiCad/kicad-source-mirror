@@ -79,6 +79,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_plotPSNegativeOpt;
 		wxCheckBox* m_useAuxOriginCheckBox;
 		wxCheckBox* m_plotOutlineModeOpt;
+		wxCheckBox* m_plotTextAsLineOpt;
 		wxStaticText* m_staticText11;
 		wxChoice* m_drillShapeOpt;
 		wxStaticText* m_staticText12;
@@ -121,6 +122,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		virtual void OnRightClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void SetPlotFormat( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnChangeOutlineMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetScaleOpt( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGerberX2Checked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Plot( wxCommandEvent& event ) { event.Skip(); }
@@ -132,7 +134,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 733,808 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plot"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 733,809 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PLOT_BASE();
 		
 		void DIALOG_PLOT_BASEOnContextMenu( wxMouseEvent &event )
