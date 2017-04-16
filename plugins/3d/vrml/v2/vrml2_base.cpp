@@ -460,6 +460,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         return true;
     }
 
+    // pattern to skip:  PROTO name list
     if( !glob.compare( "PROTO" ) )
     {
         if( !proc.ReadName( glob ) || !proc.DiscardList() )
@@ -479,6 +480,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         return true;
     }
 
+    // pattern to skip:  EXTERNPROTO name1 name2 list
     if( !glob.compare( "EXTERNPROTO" ) )
     {
         if( !proc.ReadName( glob ) || !proc.ReadName( glob ) || !proc.DiscardList() )
@@ -498,6 +500,7 @@ bool WRL2BASE::ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
         return true;
     }
 
+    // pattern to skip:  ROUTE glob1 glob2 glob3
     if( !glob.compare( "ROUTE" ) )
     {
         if( !proc.ReadGlob( glob ) || !proc.ReadGlob( glob ) || !proc.ReadGlob( glob ) )
