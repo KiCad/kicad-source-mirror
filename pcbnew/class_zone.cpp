@@ -729,10 +729,14 @@ void ZONE_CONTAINER::Move( const wxPoint& offset )
 
 void ZONE_CONTAINER::MoveEdge( const wxPoint& offset, int aEdge )
 {
-    m_Poly->Edge( aEdge ).A += VECTOR2I( offset );
-    m_Poly->Edge( aEdge ).B += VECTOR2I( offset );
+    int next_corner;
 
-    Hatch();
+    if( m_Poly->GetNeighbourIndexes( aEdge, nullptr, &next_corner ) )
+    {
+        m_Poly->Vertex( aEdge ) += VECTOR2I( offset );
+        m_Poly->Vertex( next_corner ) += VECTOR2I( offset );
+        Hatch();
+    }
 }
 
 

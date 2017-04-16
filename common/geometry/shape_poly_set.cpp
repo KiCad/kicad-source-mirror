@@ -325,16 +325,50 @@ const VECTOR2I& SHAPE_POLY_SET::CVertex( SHAPE_POLY_SET::VERTEX_INDEX index ) co
     return CVertex( index.m_vertex, index.m_polygon, index.m_contour - 1 );
 }
 
-
-SEG SHAPE_POLY_SET::Edge( int aGlobalIndex )
+bool SHAPE_POLY_SET::GetNeighbourIndexes( int aGlobalIndex, int* aPrevious, int* aNext )
 {
-    SHAPE_POLY_SET::VERTEX_INDEX indices;
+    SHAPE_POLY_SET::VERTEX_INDEX index;
 
     // If the edge does not exist, throw an exception, it is an illegal access memory error
-    if( !GetRelativeIndices( aGlobalIndex, &indices ) )
-        throw( std::out_of_range( "aGlobalIndex-th edge does not exist" ) );
+    if( !GetRelativeIndices( aGlobalIndex, &index ) )
+        return false;
 
-    return m_polys[indices.m_polygon][indices.m_contour].Segment( indices.m_vertex );
+    // Calculate the previous and next index of aGlobalIndex, corresponding to
+    // the same contour;
+    VERTEX_INDEX inext = index;
+    int lastpoint = m_polys[index.m_polygon][index.m_contour].SegmentCount();
+
+    if( index.m_vertex == 0 )
+    {
+        index.m_vertex = lastpoint;
+        inext.m_vertex = 1;
+    }
+    else if( index.m_vertex == lastpoint )
+    {
+        index.m_vertex--;
+        inext.m_vertex = 0;
+    }
+    else
+    {
+        inext.m_vertex++;
+        index.m_vertex--;
+    }
+
+    if( aPrevious )
+    {
+        int previous;
+        GetGlobalIndex( index, previous );
+        *aPrevious = previous;
+    }
+
+    if( aNext )
+    {
+        int next;
+        GetGlobalIndex( inext, next );
+        *aNext = next;
+    }
+
+    return true;
 }
 
 

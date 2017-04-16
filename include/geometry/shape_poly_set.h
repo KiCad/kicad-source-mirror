@@ -392,7 +392,7 @@ class SHAPE_POLY_SET : public SHAPE
          * vertex.
          * @param  aRelativeIndices is the set of relative indices.
          * @param  aGlobalIdx       [out] is the computed global index.
-         * @return bool - true if the relative indices are correct; false otherwise. The cmoputed
+         * @return bool - true if the relative indices are correct; false otherwise. The computed
          *              global index is returned in the \p aGlobalIdx reference.
          */
         bool GetGlobalIndex( VERTEX_INDEX aRelativeIndices, int& aGlobalIdx );
@@ -462,15 +462,17 @@ class SHAPE_POLY_SET : public SHAPE
         const VECTOR2I& CVertex( VERTEX_INDEX aIndex ) const;
 
         /**
-         * Function Edge
-         * Returns a reference to the aGlobalIndex-th segment in the polygon set. Modifying the
-         * points in the returned object will modify the corresponding vertices on the polygon set.
-         * @param  aGlobalIndex is index of the edge, globally indexed between all edges in all
+         * Returns the global indexes of the previous and the next corner
+         * of the aGlobalIndex-th corner of a contour in the polygon set.
+         * they are often aGlobalIndex-1 and aGlobalIndex+1, but not for the first and last
+         * corner of the contour.
+         * @param  aGlobalIndex is index of the corner, globally indexed between all edges in all
          *                      contours
-         * @return SEG - the aGlobalIndex-th segment, whose points are references to the polygon
-         *             points.
+         * @param aPrevious - the globalIndex of the previous corner of the same contour.
+         * @param aNext - the globalIndex of the next corner of the same contour.
+         * @return true if OK, false if aGlobalIndex is out of range
          */
-        SEG Edge( int aGlobalIndex );
+        bool GetNeighbourIndexes( int aGlobalIndex, int* aPrevious, int* aNext );
 
 
         /**
