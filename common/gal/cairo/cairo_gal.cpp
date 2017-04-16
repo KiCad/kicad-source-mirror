@@ -269,6 +269,8 @@ void CAIRO_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, do
 
     if( isFillEnabled )
     {
+        // Filled segments mode
+        SetLineWidth( aWidth );
         cairo_arc( currentContext, aCenterPoint.x, aCenterPoint.y, aRadius, aStartAngle, aEndAngle );
         cairo_set_source_rgba( currentContext, fillColor.r, fillColor.g, fillColor.b, fillColor.a );
         cairo_stroke( currentContext );
