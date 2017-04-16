@@ -101,14 +101,6 @@ private:
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
-
-    /**
-     * @brief OnCloseWindow - called when the frame is closed
-     * @param event
-     */
-    void OnCloseWindow( wxCloseEvent &event );
-
-    DECLARE_EVENT_TABLE();
 };
 
 

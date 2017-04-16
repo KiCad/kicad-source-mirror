@@ -58,11 +58,6 @@
 size_t DIALOG_MODULE_BOARD_EDITOR::m_page = 0;     // remember the last open page during session
 
 
-wxBEGIN_EVENT_TABLE( DIALOG_MODULE_BOARD_EDITOR, wxDialog )
-    EVT_CLOSE( DIALOG_MODULE_BOARD_EDITOR::OnCloseWindow )
-wxEND_EVENT_TABLE()
-
-
 DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent,
                                                         MODULE*          aModule,
                                                         wxDC*            aDC ) :
@@ -134,14 +129,6 @@ DIALOG_MODULE_BOARD_EDITOR::~DIALOG_MODULE_BOARD_EDITOR()
     // no need to delete here
     // delete m_currentModuleCopy;
     // m_currentModuleCopy = NULL;
-}
-
-
-void DIALOG_MODULE_BOARD_EDITOR::OnCloseWindow( wxCloseEvent &event )
-{
-    m_PreviewPane->Close();
-
-    event.Skip();
 }
 
 
@@ -616,9 +603,6 @@ bool DIALOG_MODULE_BOARD_EDITOR::TransferDataFromWindow()
     wxPoint  modpos;
     wxString msg;
 
-    BOARD_COMMIT commit( m_Parent );
-    commit.Modify( m_CurrentModule );
-
     if( !Validate() || !DIALOG_MODULE_BOARD_EDITOR_BASE::TransferDataFromWindow() ||
         !m_PanelProperties->TransferDataFromWindow() )
     {
@@ -637,6 +621,9 @@ bool DIALOG_MODULE_BOARD_EDITOR::TransferDataFromWindow()
         m_Parent->GetCanvas()->CrossHairOff( m_DC );
         m_CurrentModule->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
     }
+
+    BOARD_COMMIT commit( m_Parent );
+    commit.Modify( m_CurrentModule );
 
     // Init Fields (should be first, because they can be moved or/and flipped later):
     TEXTE_MODULE& reference = m_CurrentModule->Reference();
