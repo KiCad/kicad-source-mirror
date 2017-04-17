@@ -456,7 +456,7 @@ bool BOM_TABLE_COMPONENT::AddUnit( SCH_REFERENCE aUnit )
                 }
                 break;
             case BOM_COL_ID_REFERENCE:
-                value = cmp->GetField( REFERENCE )->GetText();
+                value = aUnit.GetRef();
                 break;
             case BOM_COL_ID_VALUE:
                 value = cmp->GetField( VALUE )->GetText();
