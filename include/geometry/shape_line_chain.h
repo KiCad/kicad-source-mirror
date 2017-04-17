@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2013-2017
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,11 +191,10 @@ public:
     /**
      * Function Segment()
      *
-     * Returns a segment referencing to the segment (index) in the line chain.
-     * Modifying ends of the returned segment will modify corresponding points in the line chain.
+     * Returns a copy of the aIndex-th segment in the line chain.
      * @param aIndex: index of the segment in the line chain. Negative values are counted from
      * the end (i.e. -1 means the last segment in the line chain)
-     * @return SEG referenced to given segment in the line chain
+     * @return SEG - aIndex-th segment in the line chain
      */
     SEG Segment( int aIndex )
     {
@@ -210,10 +210,10 @@ public:
     /**
      * Function CSegment()
      *
-     * Returns a read-only segment referencing to the segment (index) in the line chain.
+     * Returns a constant copy of the aIndex-th segment in the line chain.
      * @param aIndex: index of the segment in the line chain. Negative values are counted from
      * the end (i.e. -1 means the last segment in the line chain)
-     * @return SEG referenced to given segment in the line chain
+     * @return const SEG - aIndex-th segment in the line chain
      */
     const SEG CSegment( int aIndex ) const
     {
