@@ -36,6 +36,7 @@
 
 #include "common.h"
 #include "pgm_base.h"
+#include "3d_plugin_dir.h"
 #include "3d_plugin_manager.h"
 #include "plugins/3d/3d_plugin.h"
 #include "3d_cache/sg/scenegraph.h"
@@ -132,22 +133,29 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
     checkPluginPath( testpath, searchpaths );
     #endif
 
-    #ifndef _WIN32  // suppress 'kicad' subdir since it is redundant on MSWin
-    fn.Assign( wxStandardPaths::Get().GetPluginsDir(), "" );
-    fn.RemoveLastDir();
-    fn.AppendDir( wxT( "kicad" ) );
+    #ifndef _WIN32
+        // multiarch friendly determination of the plugin directory: the executable dir
+        // is first determined via wxStandardPaths::Get().GetExecutablePath() and then
+        // the CMAKE_INSTALL_LIBDIR path is appended relative to the executable dir.
+
+        fn.Assign( wxStandardPaths::Get().GetExecutablePath() );
+        fn.RemoveLastDir();
+        wxString tfname = fn.GetPathWithSep();
+        tfname.Append( wxString::FromUTF8Unchecked( PLUGINDIR ) );
+        fn.Assign( tfname, "");
+        fn.AppendDir( "kicad" );
     #else
+        // on windows the plugins directory is within the executable's directory
         fn.Assign( wxStandardPaths::Get().GetExecutablePath() );
     #endif
 
     fn.AppendDir( wxT( "plugins" ) );
     fn.AppendDir( wxT( "3d" ) );
+
+    // checks plugin directory relative to executable path
     checkPluginPath( std::string( fn.GetPathWithSep().ToUTF8() ), searchpaths );
 
-    checkPluginPath( wxT( "/usr/lib/kicad/plugins/3d" ), searchpaths );
-    checkPluginPath( wxT( "/usr/local/lib/kicad/plugins/3d" ), searchpaths );
-    checkPluginPath( wxT( "/opt/kicad/lib/kicad/plugins/3d" ), searchpaths );
-
+    // check for per-user third party plugins
     // note: GetUserDataDir() gives '.pcbnew' rather than '.kicad' since it uses the exe name;
     fn.Assign( wxStandardPaths::Get().GetUserDataDir(), "" );
     fn.RemoveLastDir();
