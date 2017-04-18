@@ -93,6 +93,18 @@ DIALOG_BOM_EDITOR::~DIALOG_BOM_EDITOR()
     //TODO
 }
 
+/* Struct for keeping track of schematic sheet changes
+ * Stores:
+ * SHEET_PATH - Schematic to apply changes to
+ * PICKED_ITEMS_LIST - List of changes to apply
+ */
+
+typedef struct
+{
+    SCH_SHEET_PATH path;
+    PICKED_ITEMS_LIST items;
+} SheetUndoList;
+
 /**
  * When the component table dialog is closed,
  * work out if we need to save any changed.
@@ -124,36 +136,80 @@ bool DIALOG_BOM_EDITOR::TransferDataFromWindow()
 
     if( saveChanges )
     {
-        /** Create a list of picked items for undo
-         * PICKED_ITEMS_LIST contains multiple ITEM_PICKER instances
-         * Each ITEM_PICKER contains a component and a command
+        /**
+         * As we may be saving changes across multiple sheets,
+         * we need to first determine which changes need to be made to which sheet.
+         * To this end, we perform the following:
+         * 1. Save the "path" of the currently displayed sheet
+         * 2. Create a MAP of <SheetPath:ChangeList> changes that need to be made
+         * 3. Push UNDO actions to appropriate sheets
+         * 4. Perform all the update actions
+         * 5. Reset the sheet view to the current sheet
          */
 
-        auto pickerList = PICKED_ITEMS_LIST();
+        auto currentSheet = m_parent->GetCurrentSheet();
+
+        //! Create a map of changes required for each sheet
+        std::map<wxString, SheetUndoList> undoSheetMap;
 
         // List of components that have changed
         auto changed = m_bom->GetChangedComponents();
 
         ITEM_PICKER picker;
 
-        for( auto cmp : changed )
+        // Iterate through each of the components that were changed
+        for( auto ref : changed )
         {
+            // Extract the SCH_COMPONENT* object
+            auto cmp = ref.GetComp();
+
+            wxString path = ref.GetSheetPath().Path();
+
             // Push the component into the picker list
             picker = ITEM_PICKER( cmp, UR_CHANGED );
             picker.SetFlags( cmp->GetFlags() );
-            //picker.SetLink( DuplicateStruct( cmp, true ) );
 
-            pickerList.PushItem( picker );
+
+            /*
+             * If there is not currently an undo list for the given sheet,
+             * create an empty one
+             */
+
+            if( undoSheetMap.count( path ) == 0 )
+            {
+                SheetUndoList newList;
+
+                newList.path = ref.GetSheetPath();
+
+                undoSheetMap[path] = newList;
+            }
+
+            auto& pickerList = undoSheetMap[path];
+
+            pickerList.items.PushItem( picker );
         }
 
-        if( pickerList.GetCount() > 0 )
+        // Iterate through each sheet that needs updating
+        for( auto it = undoSheetMap.begin(); it != undoSheetMap.end(); ++it )
         {
-            m_parent->SaveCopyInUndoList( pickerList, UR_CHANGED );
-            m_bom->ApplyFieldChanges();
-            m_parent->Refresh();
+            auto undo = it->second;
+
+            m_parent->SetCurrentSheet( undo.path );
+            m_parent->SaveCopyInUndoList( undo.items, UR_CHANGED );
+            m_parent->OnModify();
         }
 
+        // Apply all the field changes
+        m_bom->ApplyFieldChanges();
+
+        // Redraw the current sheet and mark as dirty
+        m_parent->Refresh();
         m_parent->OnModify();
+
+        // Reset the view to where we left the user
+        m_parent->SetCurrentSheet(currentSheet);
+
+
     }
 
     return true;

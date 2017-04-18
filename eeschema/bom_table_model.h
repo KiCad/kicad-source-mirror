@@ -315,7 +315,7 @@ public:
 
     bool HaveFieldsChanged() const;
 
-    std::vector<SCH_COMPONENT*> GetChangedComponents();
+    std::vector<SCH_REFERENCE> GetChangedComponents();
     unsigned int CountChangedComponents();
 };
 

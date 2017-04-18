@@ -1446,9 +1446,9 @@ bool BOM_TABLE_MODEL::HaveFieldsChanged() const
 /**
  * Returns a list of only those components that have been changed
  */
-std::vector<SCH_COMPONENT*> BOM_TABLE_MODEL::GetChangedComponents()
+std::vector<SCH_REFERENCE> BOM_TABLE_MODEL::GetChangedComponents()
 {
-    std::vector<SCH_COMPONENT*> components;
+    std::vector<SCH_REFERENCE> components;
 
     for( auto& group : Groups )
     {
@@ -1464,12 +1464,7 @@ std::vector<SCH_COMPONENT*> BOM_TABLE_MODEL::GetChangedComponents()
             {
                 for( auto& unit : component->Units )
                 {
-                    auto cmp = unit.GetComp();
-
-                    if( cmp )
-                    {
-                        components.push_back( cmp );
-                    }
+                    components.push_back( unit );
                 }
             }
         }
