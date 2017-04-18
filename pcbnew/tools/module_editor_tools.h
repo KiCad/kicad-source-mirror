@@ -25,7 +25,7 @@
 #ifndef MODULE_EDITOR_TOOLS_H
 #define MODULE_EDITOR_TOOLS_H
 
-#include <tool/tool_interactive.h>
+#include <tools/pcb_tool.h>
 
 namespace KIGFX
 {
@@ -40,7 +40,7 @@ class PCB_EDIT_FRAME;
  *
  * Module editor specific tools.
  */
-class MODULE_EDITOR_TOOLS : public TOOL_INTERACTIVE
+class MODULE_EDITOR_TOOLS : public PCB_TOOL
 {
 public:
     MODULE_EDITOR_TOOLS();
@@ -98,12 +98,6 @@ public:
 
     ///> Sets up handlers for various events.
     void SetTransitions() override;
-
-private:
-    KIGFX::VIEW* m_view;
-    KIGFX::VIEW_CONTROLS* m_controls;
-    BOARD* m_board;
-    PCB_EDIT_FRAME* m_frame;
 
 };
 

@@ -138,6 +138,8 @@ void CONNECTIVITY_DATA::addRatsnestCluster( std::shared_ptr<CN_CLUSTER> aCluster
 
 void CONNECTIVITY_DATA::RecalculateRatsnest()
 {
+    m_connAlgo->PropagateNets();
+
     int lastNet = m_connAlgo->NetCount();
 
     if( lastNet >= (int) m_nets.size() )
@@ -451,8 +453,18 @@ unsigned int CONNECTIVITY_DATA::GetNodeCount( int aNet ) const
 
 unsigned int CONNECTIVITY_DATA::GetPadCount( int aNet ) const
 {
-    return 0;
-    assert( false );
+    int n = 0;
+
+    for ( auto pad : m_connAlgo->PadList() )
+    {
+        auto dpad = static_cast<D_PAD*>( pad->Parent() );
+        if ( aNet < 0 || aNet == dpad->GetNetCode() )
+        {
+            n++;
+        }
+    }
+
+    return n;
 }
 
 

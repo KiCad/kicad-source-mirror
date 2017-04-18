@@ -80,8 +80,7 @@ TOOL_ACTION PCB_ACTIONS::moduleTextOutlines( "pcbnew.ModuleEditor.textOutlines",
 
 
 MODULE_EDITOR_TOOLS::MODULE_EDITOR_TOOLS() :
-    TOOL_INTERACTIVE( "pcbnew.ModuleEditor" ), m_view( NULL ), m_controls( NULL ),
-    m_board( NULL ), m_frame( NULL )
+    PCB_TOOL( "pcbnew.ModuleEditor" )
 {
 }
 
@@ -93,46 +92,41 @@ MODULE_EDITOR_TOOLS::~MODULE_EDITOR_TOOLS()
 
 void MODULE_EDITOR_TOOLS::Reset( RESET_REASON aReason )
 {
-    // Init variables used by every drawing tool
-    m_view = getView();
-    m_controls = getViewControls();
-    m_board = getModel<BOARD>();
-    m_frame = getEditFrame<PCB_EDIT_FRAME>();
 }
 
 
 int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_PENCIL, _( "Add pads" ) );
+    frame()->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_PENCIL, _( "Add pads" ) );
 
-    assert( m_board->m_Modules );
+    assert( board()->m_Modules );
 
-    D_PAD* pad = new D_PAD( m_board->m_Modules );
-    m_frame->Import_Pad_Settings( pad, false );     // use the global settings for pad
+    D_PAD* pad = new D_PAD( board()->m_Modules );
+    frame()->Import_Pad_Settings( pad, false );     // use the global settings for pad
 
-    VECTOR2I cursorPos = m_controls->GetCursorPosition();
+    VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
     pad->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( m_view );
+    KIGFX::VIEW_GROUP preview( view() );
     preview.Add( pad );
-    m_view->Add( &preview );
+    view()->Add( &preview );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_controls->ShowCursor( true );
-    m_controls->SetSnapping( true );
+    getViewControls()->ShowCursor( true );
+    getViewControls()->SetSnapping( true );
 
     Activate();
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        cursorPos = m_controls->GetCursorPosition();
+        cursorPos = getViewControls()->GetCursorPosition();
 
         if( evt->IsMotion() )
         {
             pad->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-            m_view->Update( &preview );
+            view()->Update( &preview );
         }
 
         else if( evt->Category() == TC_COMMAND )
@@ -140,14 +134,14 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
             if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) )
             {
                 const auto rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle(
-                        *m_frame, *evt );
+                        *frame(), *evt );
                 pad->Rotate( pad->GetPosition(), rotationAngle );
-                m_view->Update( &preview );
+                view()->Update( &preview );
             }
             else if( evt->IsAction( &PCB_ACTIONS::flip ) )
             {
                 pad->Flip( pad->GetPosition() );
-                m_view->Update( &preview );
+                view()->Update( &preview );
             }
             else if( evt->IsCancel() || evt->IsActivate() )
             {
@@ -159,10 +153,10 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            BOARD_COMMIT commit( m_frame );
+            BOARD_COMMIT commit( frame() );
             commit.Add( pad );
 
-            m_board->m_Status_Pcb = 0;    // I have no clue why, but it is done in the legacy view
+            board()->m_Status_Pcb = 0;    // I have no clue why, but it is done in the legacy view
 
             // Take the next available pad number
             pad->IncrementPadName( true, true );
@@ -172,15 +166,15 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
             commit.Push( _( "Add a pad" ) );
 
             // Start placing next pad
-            pad = new D_PAD( m_board->m_Modules );
-            m_frame->Import_Pad_Settings( pad, false );
+            pad = new D_PAD( board()->m_Modules );
+            frame()->Import_Pad_Settings( pad, false );
             pad->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
             preview.Add( pad );
         }
     }
 
-    m_view->Remove( &preview );
-    m_frame->SetNoToolSelected();
+    view()->Remove( &preview );
+    frame()->SetNoToolSelected();
 
     return 0;
 }
@@ -188,7 +182,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 
 int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 {
-    if( !m_board->m_Modules || !m_board->m_Modules->Pads() )
+    if( !board()->m_Modules || !board()->m_Modules->Pads() )
         return 0;
 
     Activate();
@@ -196,14 +190,14 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
     GENERAL_COLLECTOR collector;
     const KICAD_T types[] = { PCB_PAD_T, EOT };
 
-    GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
+    GENERAL_COLLECTORS_GUIDE guide = frame()->GetCollectorsGuide();
     guide.SetIgnoreMTextsMarkedNoShow( true );
     guide.SetIgnoreMTextsOnBack( true );
     guide.SetIgnoreMTextsOnFront( true );
     guide.SetIgnoreModulesVals( true );
     guide.SetIgnoreModulesRefs( true );
 
-    DIALOG_ENUM_PADS settingsDlg( m_frame );
+    DIALOG_ENUM_PADS settingsDlg( frame() );
 
     if( settingsDlg.ShowModal() == wxID_CANCEL )
         return 0;
@@ -211,15 +205,16 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
     int padNumber = settingsDlg.GetStartNumber();
     wxString padPrefix = settingsDlg.GetPrefix();
 
-    m_frame->DisplayToolMsg( _( "Hold left mouse button and move cursor over pads to enumerate them" ) );
+    frame()->DisplayToolMsg( _(
+                    "Hold left mouse button and move cursor over pads to enumerate them" ) );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_controls->ShowCursor( true );
+    getViewControls()->ShowCursor( true );
 
     KIGFX::VIEW* view = m_toolMgr->GetView();
-    VECTOR2I oldCursorPos = m_controls->GetCursorPosition();
+    VECTOR2I oldCursorPos = getViewControls()->GetCursorPosition();
     std::list<D_PAD*> selectedPads;
-    BOARD_COMMIT commit( m_frame );
+    BOARD_COMMIT commit( frame() );
     std::map<wxString, wxString> oldNames;
 
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -227,13 +222,13 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
         if( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
         {
             selectedPads.clear();
-            VECTOR2I cursorPos = m_controls->GetCursorPosition();
+            VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
 
             if( evt->IsClick( BUT_LEFT ) )
             {
-                oldCursorPos = m_controls->GetCursorPosition();
+                oldCursorPos = getViewControls()->GetCursorPosition();
                 collector.Empty();
-                collector.Collect( m_board, types, wxPoint( cursorPos.x, cursorPos.y ), guide );
+                collector.Collect( board(), types, wxPoint( cursorPos.x, cursorPos.y ), guide );
 
                 for( int i = 0; i < collector.GetCount(); ++i )
                 {
@@ -253,7 +248,7 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 
                 collector.Empty();
                 for( int j = 0; j < segments; ++j ) {
-                    collector.Collect( m_board, types,
+                    collector.Collect( board(), types,
                                        wxPoint( oldCursorPos.x, oldCursorPos.y ) + j * LINE_STEP,
                                        guide );
 
@@ -316,13 +311,13 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
         }
     }
 
-    for( D_PAD* p = m_board->m_Modules->Pads(); p; p = p->Next() )
+    for( D_PAD* p = board()->m_Modules->Pads(); p; p = p->Next() )
     {
         p->ClearSelected();
         view->Update( p );
     }
 
-    m_frame->DisplayToolMsg( wxEmptyString );
+    frame()->DisplayToolMsg( wxEmptyString );
 
     return 0;
 }
@@ -334,20 +329,20 @@ int MODULE_EDITOR_TOOLS::CopyItems( const TOOL_EVENT& aEvent )
 
     Activate();
 
-    m_controls->SetSnapping( true );
-    m_controls->ShowCursor( true );
-    m_controls->SetAutoPan( true );
+    getViewControls()->SetSnapping( true );
+    getViewControls()->ShowCursor( true );
+    getViewControls()->SetAutoPan( true );
 
-    m_frame->DisplayToolMsg( _( "Select reference point" ) );
+    frame()->DisplayToolMsg( _( "Select reference point" ) );
 
     bool cancelled = false;
-    VECTOR2I cursorPos = m_controls->GetCursorPosition();
+    VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         if( evt->IsMotion() )
         {
-            cursorPos = m_controls->GetCursorPosition();
+            cursorPos = getViewControls()->GetCursorPosition();
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -365,7 +360,7 @@ int MODULE_EDITOR_TOOLS::CopyItems( const TOOL_EVENT& aEvent )
         PCB_IO io( CTL_FOR_CLIPBOARD );
 
         // Create a temporary module that contains selected items to ease serialization
-        MODULE module( m_board );
+        MODULE module( board() );
 
         for( auto item : selection )
         {
@@ -379,7 +374,7 @@ int MODULE_EDITOR_TOOLS::CopyItems( const TOOL_EVENT& aEvent )
         }
 
         // Set the new relative internal local coordinates of copied items
-        MODULE* editedModule = m_board->m_Modules;
+        MODULE* editedModule = board()->m_Modules;
         wxPoint moveVector = module.GetPosition() + editedModule->GetPosition() -
                              wxPoint( cursorPos.x, cursorPos.y );
         module.MoveAnchorPosition( moveVector );
@@ -389,7 +384,7 @@ int MODULE_EDITOR_TOOLS::CopyItems( const TOOL_EVENT& aEvent )
         m_toolMgr->SaveClipboard( data );
     }
 
-    m_frame->DisplayToolMsg( wxString::Format( _( "Copied %d item(s)" ), selection.Size() ) );
+    frame()->DisplayToolMsg( wxString::Format( _( "Copied %d item(s)" ), selection.Size() ) );
 
     return 0;
 }
@@ -409,38 +404,38 @@ int MODULE_EDITOR_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
     }
     catch( ... )
     {
-        m_frame->DisplayToolMsg( _( "Invalid clipboard contents" ) );
+        frame()->DisplayToolMsg( _( "Invalid clipboard contents" ) );
         return 0;
     }
 
     // Placement tool part
-    VECTOR2I cursorPos = m_controls->GetCursorPosition();
+    VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( m_view );
-    pastedModule->SetParent( m_board );
+    KIGFX::VIEW_GROUP preview( view() );
+    pastedModule->SetParent( board() );
     pastedModule->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
     pastedModule->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Add,
                                                 std::ref( preview ),  _1 ) );
     preview.Add( pastedModule );
-    m_view->Add( &preview );
+    view()->Add( &preview );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_controls->ShowCursor( true );
-    m_controls->SetSnapping( true );
-    m_controls->SetAutoPan( true );
+    getViewControls()->ShowCursor( true );
+    getViewControls()->SetSnapping( true );
+    getViewControls()->SetAutoPan( true );
 
     Activate();
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        cursorPos = m_controls->GetCursorPosition();
+        cursorPos = getViewControls()->GetCursorPosition();
 
         if( evt->IsMotion() )
         {
             pastedModule->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-            m_view->Update( &preview );
+            view()->Update( &preview );
         }
 
         else if( evt->Category() == TC_COMMAND )
@@ -448,14 +443,14 @@ int MODULE_EDITOR_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
             if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) )
             {
                 const auto rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle(
-                        *m_frame, *evt );
+                        *frame(), *evt );
                 pastedModule->Rotate( pastedModule->GetPosition(), rotationAngle );
-                m_view->Update( &preview );
+                view()->Update( &preview );
             }
             else if( evt->IsAction( &PCB_ACTIONS::flip ) )
             {
                 pastedModule->Flip( pastedModule->GetPosition() );
-                m_view->Update( &preview );
+                view()->Update( &preview );
             }
             else if( evt->IsCancel() || evt->IsActivate() )
             {
@@ -466,9 +461,9 @@ int MODULE_EDITOR_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            BOARD_COMMIT commit( m_frame );
+            BOARD_COMMIT commit( frame() );
 
-            m_board->m_Status_Pcb = 0;    // I have no clue why, but it is done in the legacy view
+            board()->m_Status_Pcb = 0;    // I have no clue why, but it is done in the legacy view
 
             // MODULE::RunOnChildren is infeasible here: we need to create copies of items, do not
             // directly modify them
@@ -506,7 +501,7 @@ int MODULE_EDITOR_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
     }
 
     delete pastedModule;
-    m_view->Remove( &preview );
+    view()->Remove( &preview );
 
     return 0;
 }
@@ -529,9 +524,9 @@ int MODULE_EDITOR_TOOLS::ModuleTextOutlines( const TOOL_EVENT& aEvent )
     for( LAYER_NUM layer : layers )
         settings->SetSketchMode( layer, enable );
 
-    for( MODULE* module = getModel<BOARD>()->m_Modules; module; module = module->Next() )
+    for( auto module : board()->Modules() )
     {
-        for( BOARD_ITEM* item = module->GraphicalItems(); item; item = item ->Next() )
+        for( auto item : module->GraphicalItemsIter() )
         {
             if( item->Type() == PCB_MODULE_TEXT_T )
                 view->Update( item, KIGFX::GEOMETRY );
@@ -541,7 +536,7 @@ int MODULE_EDITOR_TOOLS::ModuleTextOutlines( const TOOL_EVENT& aEvent )
         view->Update( &module->Value(), KIGFX::GEOMETRY );
     }
 
-    m_frame->GetGalCanvas()->Refresh();
+    frame()->GetGalCanvas()->Refresh();
 
     return 0;
 }
@@ -562,16 +557,16 @@ int MODULE_EDITOR_TOOLS::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
     for( LAYER_NUM layer : layers )
         settings->SetSketchMode( layer, enable );
 
-    for( MODULE* module = getModel<BOARD>()->m_Modules; module; module = module->Next() )
+    for( auto module : board()->Modules() )
     {
-        for( BOARD_ITEM* item = module->GraphicalItems(); item; item = item ->Next() )
+        for( auto item : module->GraphicalItemsIter() )
         {
             if( item->Type() == PCB_MODULE_EDGE_T )
                 view->Update( item, KIGFX::GEOMETRY );
         }
     }
 
-    m_frame->GetGalCanvas()->Refresh();
+    frame()->GetGalCanvas()->Refresh();
 
     return 0;
 }

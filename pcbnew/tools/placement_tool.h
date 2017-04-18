@@ -22,18 +22,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PLACEMENT_TOOL_H_
-#define PLACEMENT_TOOL_H_
+#ifndef ALIGN_DISTRIBUTE_TOOL_H_
+#define ALIGN_DISTRIBUTE_TOOL_H_
 
 #include <tool/tool_interactive.h>
 
 class SELECTION_TOOL;
 
-class PLACEMENT_TOOL : public TOOL_INTERACTIVE
+class ALIGN_DISTRIBUTE_TOOL : public TOOL_INTERACTIVE
 {
 public:
-    PLACEMENT_TOOL();
-    virtual ~PLACEMENT_TOOL();
+    ALIGN_DISTRIBUTE_TOOL();
+    virtual ~ALIGN_DISTRIBUTE_TOOL();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override {}
@@ -86,4 +86,4 @@ private:
     CONTEXT_MENU* m_placementMenu;
 };
 
-#endif /* PLACEMENT_TOOL_H_ */
+#endif /* ALIGN_DISTRIBUTE_TOOL_H_ */

@@ -139,6 +139,7 @@ public:
     const DLIST<BOARD_ITEM>& GraphicalItems() const { return m_Drawings; }
 
     DLIST_ITERATOR_WRAPPER<D_PAD> PadsIter() { return DLIST_ITERATOR_WRAPPER<D_PAD>(m_Pads); }
+    DLIST_ITERATOR_WRAPPER<BOARD_ITEM> GraphicalItemsIter() { return DLIST_ITERATOR_WRAPPER<BOARD_ITEM>(m_Drawings); }
 
     std::list<S3D_INFO>& Models()             { return m_3D_Drawings; }
     const std::list<S3D_INFO>& Models() const { return m_3D_Drawings; }

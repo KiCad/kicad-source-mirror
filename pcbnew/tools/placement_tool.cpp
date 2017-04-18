@@ -37,49 +37,49 @@
 #include <menus_helpers.h>
 
 // Placement tool
-TOOL_ACTION PCB_ACTIONS::alignTop( "pcbnew.Place.alignTop",
+TOOL_ACTION PCB_ACTIONS::alignTop( "pcbnew.AlignAndDistribute.alignTop",
         AS_GLOBAL, 0,
         _( "Align to Top" ),
         _( "Aligns selected items to the top edge" ), up_xpm );
 
-TOOL_ACTION PCB_ACTIONS::alignBottom( "pcbnew.Place.alignBottom",
+TOOL_ACTION PCB_ACTIONS::alignBottom( "pcbnew.AlignAndDistribute.alignBottom",
         AS_GLOBAL, 0,
         _( "Align to Bottom" ),
         _( "Aligns selected items to the bottom edge" ), down_xpm );
 
-TOOL_ACTION PCB_ACTIONS::alignLeft( "pcbnew.Place.alignLeft",
+TOOL_ACTION PCB_ACTIONS::alignLeft( "pcbnew.AlignAndDistribute.alignLeft",
         AS_GLOBAL, 0,
         _( "Align to Left" ),
         _( "Aligns selected items to the left edge" ), left_xpm );
 
-TOOL_ACTION PCB_ACTIONS::alignRight( "pcbnew.Place.alignRight",
+TOOL_ACTION PCB_ACTIONS::alignRight( "pcbnew.AlignAndDistribute.alignRight",
         AS_GLOBAL, 0,
         _( "Align to Right" ),
         _( "Aligns selected items to the right edge" ), right_xpm );
 
-TOOL_ACTION PCB_ACTIONS::distributeHorizontally( "pcbnew.Place.distributeHorizontally",
+TOOL_ACTION PCB_ACTIONS::distributeHorizontally( "pcbnew.AlignAndDistribute.distributeHorizontally",
         AS_GLOBAL, 0,
         _( "Distribute Horizontally" ),
         _( "Distributes selected items along the horizontal axis" ), distribute_horizontal_xpm );
 
-TOOL_ACTION PCB_ACTIONS::distributeVertically( "pcbnew.Place.distributeVertically",
+TOOL_ACTION PCB_ACTIONS::distributeVertically( "pcbnew.AlignAndDistribute.distributeVertically",
         AS_GLOBAL, 0,
         _( "Distribute Vertically" ),
         _( "Distributes selected items along the vertical axis" ), distribute_vertical_xpm );
 
 
-PLACEMENT_TOOL::PLACEMENT_TOOL() :
+ALIGN_DISTRIBUTE_TOOL::ALIGN_DISTRIBUTE_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.Placement" ), m_selectionTool( NULL ), m_placementMenu( NULL )
 {
 }
 
-PLACEMENT_TOOL::~PLACEMENT_TOOL()
+ALIGN_DISTRIBUTE_TOOL::~ALIGN_DISTRIBUTE_TOOL()
 {
     delete m_placementMenu;
 }
 
 
-bool PLACEMENT_TOOL::Init()
+bool ALIGN_DISTRIBUTE_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
     m_selectionTool = static_cast<SELECTION_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveSelection" ) );
@@ -111,7 +111,7 @@ bool PLACEMENT_TOOL::Init()
 }
 
 
-int PLACEMENT_TOOL::AlignTop( const TOOL_EVENT& aEvent )
+int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
@@ -148,7 +148,7 @@ int PLACEMENT_TOOL::AlignTop( const TOOL_EVENT& aEvent )
 }
 
 
-int PLACEMENT_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
+int ALIGN_DISTRIBUTE_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
@@ -185,7 +185,7 @@ int PLACEMENT_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
 }
 
 
-int PLACEMENT_TOOL::AlignLeft( const TOOL_EVENT& aEvent )
+int ALIGN_DISTRIBUTE_TOOL::AlignLeft( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
@@ -222,7 +222,7 @@ int PLACEMENT_TOOL::AlignLeft( const TOOL_EVENT& aEvent )
 }
 
 
-int PLACEMENT_TOOL::AlignRight( const TOOL_EVENT& aEvent )
+int ALIGN_DISTRIBUTE_TOOL::AlignRight( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
@@ -271,7 +271,7 @@ static bool compareY( const BOARD_ITEM* aA, const BOARD_ITEM* aB )
 }
 
 
-int PLACEMENT_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
+int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
@@ -314,7 +314,7 @@ int PLACEMENT_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
 }
 
 
-int PLACEMENT_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
+int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
@@ -357,13 +357,13 @@ int PLACEMENT_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
 }
 
 
-void PLACEMENT_TOOL::SetTransitions()
+void ALIGN_DISTRIBUTE_TOOL::SetTransitions()
 {
-    Go( &PLACEMENT_TOOL::AlignTop,    PCB_ACTIONS::alignTop.MakeEvent() );
-    Go( &PLACEMENT_TOOL::AlignBottom, PCB_ACTIONS::alignBottom.MakeEvent() );
-    Go( &PLACEMENT_TOOL::AlignLeft,   PCB_ACTIONS::alignLeft.MakeEvent() );
-    Go( &PLACEMENT_TOOL::AlignRight,  PCB_ACTIONS::alignRight.MakeEvent() );
+    Go( &ALIGN_DISTRIBUTE_TOOL::AlignTop,    PCB_ACTIONS::alignTop.MakeEvent() );
+    Go( &ALIGN_DISTRIBUTE_TOOL::AlignBottom, PCB_ACTIONS::alignBottom.MakeEvent() );
+    Go( &ALIGN_DISTRIBUTE_TOOL::AlignLeft,   PCB_ACTIONS::alignLeft.MakeEvent() );
+    Go( &ALIGN_DISTRIBUTE_TOOL::AlignRight,  PCB_ACTIONS::alignRight.MakeEvent() );
 
-    Go( &PLACEMENT_TOOL::DistributeHorizontally,  PCB_ACTIONS::distributeHorizontally.MakeEvent() );
-    Go( &PLACEMENT_TOOL::DistributeVertically,    PCB_ACTIONS::distributeVertically.MakeEvent() );
+    Go( &ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally,  PCB_ACTIONS::distributeHorizontally.MakeEvent() );
+    Go( &ALIGN_DISTRIBUTE_TOOL::DistributeVertically,    PCB_ACTIONS::distributeVertically.MakeEvent() );
 }

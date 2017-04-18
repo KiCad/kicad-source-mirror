@@ -943,6 +943,8 @@ public:
     const CLUSTERS& GetClusters();
     int             GetUnconnectedCount();
 
+    CN_PAD_LIST& PadList() { return m_padList; }
+
     void ForEachAnchor(  std::function<void(CN_ANCHOR_PTR)> aFunc );
 };
 
