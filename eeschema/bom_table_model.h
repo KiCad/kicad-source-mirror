@@ -43,6 +43,46 @@ class BOM_TABLE_ROW;        // Base-class for table row data model
 class BOM_TABLE_GROUP;      // Class for displaying a group of components
 class BOM_TABLE_COMPONENT;  // Class for displaying a single component
 
+// Map column IDs to field values (for quick lookup)
+typedef std::map<unsigned int, wxString> FIELD_VALUE_MAP;
+
+
+/**
+ * The BOM_FIELD_VALUES class provides quick lookup of component values
+ * (based on Field ID)
+ * This is done for the following reasons:
+ * - Increase lookup speed for table values
+ * - Allow field values to be reverted to original values
+ * - Allow duplicate components to reference the same data
+ */
+class BOM_FIELD_VALUES
+{
+public:
+    BOM_FIELD_VALUES(wxString aRefDes);
+
+    bool GetFieldValue( unsigned int aFieldId, wxString& aValue ) const;
+    bool GetBackupValue( unsigned int aFieldId, wxString& aValue ) const;
+
+    void SetFieldValue( unsigned int aFieldId, wxString aValue, bool aOverwrite = false );
+    void SetBackupValue( unsigned int aFieldId, wxString aValue );
+
+    wxString GetReference() const { return m_refDes; }
+
+    bool HasValueChanged( unsigned int aFieldId ) const;
+
+    void RevertChanges( unsigned int aFieldId );
+
+protected:
+    //! The RefDes to which these values correspond
+    wxString m_refDes;
+
+    //! Current values for each column
+    FIELD_VALUE_MAP m_currentValues;
+
+    //! Backup values for each column
+    FIELD_VALUE_MAP m_backupValues;
+};
+
 /**
  * Virtual base class determining how a row is displayed
  * There are three types of rows:
@@ -144,7 +184,7 @@ public:
     // List of units associated with this component
     std::vector<SCH_REFERENCE> Units;
 
-    BOM_TABLE_COMPONENT( BOM_TABLE_GROUP* aParent, BOM_COLUMN_LIST* aColumnList );
+    BOM_TABLE_COMPONENT( BOM_TABLE_GROUP* aParent, BOM_COLUMN_LIST* aColumnList, BOM_FIELD_VALUES* aValues );
 
     bool AddUnit( SCH_REFERENCE aUnit );
 
@@ -168,13 +208,9 @@ public:
     virtual BOM_TABLE_ROW* GetParent() const override { return m_parent; }
 
 protected:
-    // Initial data for reverting component values
-    std::map<unsigned int, wxString> m_fallbackData;
-
-    // Data as it is updated
-    std::map<unsigned int, wxString> m_fieldData;
-
     BOM_TABLE_GROUP* m_parent;
+
+    BOM_FIELD_VALUES* m_fieldValues;
 };
 
 /**
@@ -189,7 +225,11 @@ class BOM_TABLE_MODEL : public wxDataViewModel
 protected:
     BOM_TABLE_MODEL();
 
+    // Vector of unique component rows
     std::vector<std::unique_ptr<BOM_TABLE_COMPONENT>> m_components;
+
+    // Vector of field values mapped to field IDs
+    std::vector<std::unique_ptr<BOM_FIELD_VALUES>> m_fieldValues;
 
     // BOM Preferences
     //! Group components based on values

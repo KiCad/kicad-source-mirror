@@ -53,6 +53,86 @@ static BOM_TABLE_ROW const* ItemToRow( wxDataViewItem aItem )
     }
 }
 
+BOM_FIELD_VALUES::BOM_FIELD_VALUES( wxString aRefDes ) : m_refDes( aRefDes )
+{
+}
+
+/**
+ * Return the current value for the provided field ID
+ */
+bool BOM_FIELD_VALUES::GetFieldValue( unsigned int aFieldId, wxString& aValue ) const
+{
+    auto search = m_currentValues.find( aFieldId );
+
+    if( search == m_currentValues.end() )
+        return false;
+
+    aValue = search->second;
+
+    return true;
+}
+
+/**
+ * Return the backup value for the provided field ID
+ */
+bool BOM_FIELD_VALUES::GetBackupValue( unsigned int aFieldId, wxString& aValue ) const
+{
+    auto search = m_backupValues.find( aFieldId );
+
+    if( search == m_backupValues.end() )
+        return false;
+
+    aValue = search->second;
+
+    return true;
+}
+
+/**
+ * Set the value for the provided field ID
+ * Field value is set under any of the following conditions:
+ * - param aOverwrite is true
+ * - There is no current value
+ * - The current value is empty
+ */
+void BOM_FIELD_VALUES::SetFieldValue( unsigned int aFieldId, wxString aValue, bool aOverwrite )
+{
+    if( aOverwrite || m_currentValues.count( aFieldId ) == 0 || m_currentValues[aFieldId].IsEmpty() )
+    {
+        m_currentValues[aFieldId] = aValue;
+    }
+}
+
+/**
+ * Set the backup value for the provided field ID
+ * If the backup value is already set, new value is ignored
+ */
+void BOM_FIELD_VALUES::SetBackupValue( unsigned int aFieldId, wxString aValue )
+{
+    if( m_backupValues.count( aFieldId ) == 0 || m_backupValues[aFieldId].IsEmpty() )
+    {
+        m_backupValues[aFieldId] = aValue;
+    }
+}
+
+bool BOM_FIELD_VALUES::HasValueChanged( unsigned int aFieldId) const
+{
+    wxString currentValue, backupValue;
+
+    GetFieldValue( aFieldId, currentValue );
+    GetBackupValue( aFieldId, backupValue );
+
+    return currentValue.Cmp( backupValue ) != 0;
+}
+
+void BOM_FIELD_VALUES::RevertChanges( unsigned int aFieldId )
+{
+    wxString backupValue;
+
+    GetBackupValue( aFieldId, backupValue );
+
+    SetFieldValue( aFieldId, backupValue, true );
+}
+
 BOM_TABLE_ROW::BOM_TABLE_ROW() : m_columnList( nullptr )
 {
 }
@@ -416,10 +496,12 @@ int BOM_TABLE_GROUP::SortValues( const wxString& aFirst, const wxString& aSecond
  * Each COMPONENT row is associated with a single component item.
  */
 BOM_TABLE_COMPONENT::BOM_TABLE_COMPONENT( BOM_TABLE_GROUP* aParent,
-                                          BOM_COLUMN_LIST* aColumnList)
+                                          BOM_COLUMN_LIST* aColumnList,
+                                          BOM_FIELD_VALUES* aFieldValues )
 {
     m_parent = aParent;
     m_columnList = aColumnList;
+    m_fieldValues = aFieldValues;
 }
 
 /**
@@ -471,10 +553,8 @@ bool BOM_TABLE_COMPONENT::AddUnit( SCH_REFERENCE aUnit )
                 break;
             }
 
-            SetFieldValue( column->Id(), value );
-
-            // Add the value to the fallback map
-            m_fallbackData[column->Id()] = value;
+            m_fieldValues->SetFieldValue( column->Id(), value );
+            m_fieldValues->SetBackupValue( column->Id(), value );
         }
 
         return true;
@@ -489,16 +569,22 @@ bool BOM_TABLE_COMPONENT::AddUnit( SCH_REFERENCE aUnit )
  */
 wxString BOM_TABLE_COMPONENT::GetFieldValue( unsigned int aFieldId ) const
 {
-    auto search = m_fieldData.find( aFieldId );
+    wxString value;
 
-    if( search != m_fieldData.end()  )
+    switch ( aFieldId )
     {
-        return search->second;
-    }
-    else
-    {
+    case BOM_COL_ID_QUANTITY:
         return wxEmptyString;
+    case BOM_COL_ID_REFERENCE:
+        return GetReference();
+    default:
+        break;
     }
+
+    if( m_fieldValues )
+        m_fieldValues->GetFieldValue( aFieldId, value );
+
+    return value;
 }
 
 /**
@@ -509,9 +595,9 @@ wxString BOM_TABLE_COMPONENT::GetFieldValue( unsigned int aFieldId ) const
  */
 bool BOM_TABLE_COMPONENT::SetFieldValue( unsigned int aFieldId, const wxString aValue, bool aOverwrite )
 {
-    if( aOverwrite || m_fieldData.count( aFieldId ) == 0 || m_fieldData[aFieldId].IsEmpty() )
+    if( m_fieldValues )
     {
-        m_fieldData[aFieldId] = aValue;
+        m_fieldValues->SetFieldValue( aFieldId, aValue, aOverwrite );
         return true;
     }
 
@@ -550,13 +636,7 @@ bool BOM_TABLE_COMPONENT::HasValueChanged( BOM_COLUMN* aField ) const
         return false;
     }
 
-    auto value = m_fieldData.find( aField->Id() );
-    auto backup = m_fallbackData.find( aField->Id() );
-
-    wxString currentValue = value == m_fieldData.end() ? wxString() : value->second;
-    wxString backupValue = backup == m_fallbackData.end() ? wxString() : backup->second;
-
-    return currentValue.Cmp( backupValue ) != 0;
+    return m_fieldValues->HasValueChanged( aField->Id() );
 }
 
 /**
@@ -634,17 +714,7 @@ void BOM_TABLE_COMPONENT::RevertFieldChanges()
             break;
         }
 
-        if( column && HasValueChanged( column ) )
-        {
-            if( m_fallbackData.count( column->Id() ) > 0 )
-            {
-                m_fieldData[column->Id()] = m_fallbackData[column->Id()];
-            }
-            else
-            {
-                m_fieldData[column->Id()] = wxEmptyString;
-            }
-        }
+        m_fieldValues->RevertChanges( column->Id() );
     }
 }
 
@@ -931,6 +1001,7 @@ void BOM_TABLE_MODEL::SetComponents( SCH_REFERENCE_LIST aRefs )
 
     // Group multi-unit components together
     m_components.clear();
+    m_fieldValues.clear();
 
     for( unsigned int ii=0; ii<aRefs.GetCount(); ii++ )
     {
@@ -949,7 +1020,30 @@ void BOM_TABLE_MODEL::SetComponents( SCH_REFERENCE_LIST aRefs )
 
         if( !found )
         {
-            auto* newComponent = new BOM_TABLE_COMPONENT( nullptr, &ColumnList );
+            // Find the field:value map associated with this component
+            wxString refDes = ref.GetComp()->GetField( REFERENCE )->GetText();
+
+            bool dataFound = false;
+
+            BOM_FIELD_VALUES* values;
+
+            for( auto& data : m_fieldValues )
+            {
+                // Look for a match based on RefDes
+                if( data->GetReference().Cmp( refDes ) == 0 )
+                {
+                    dataFound = true;
+                    values = &*data;
+                }
+            }
+
+            if( !dataFound )
+            {
+                values = new BOM_FIELD_VALUES( refDes );
+                m_fieldValues.push_back( std::unique_ptr<BOM_FIELD_VALUES>( values ) );
+            }
+
+            auto* newComponent = new BOM_TABLE_COMPONENT( nullptr, &ColumnList, values );
             newComponent->AddUnit( ref );
 
             m_components.push_back( std::unique_ptr<BOM_TABLE_COMPONENT>( newComponent ) );
@@ -1088,6 +1182,11 @@ bool BOM_TABLE_MODEL::SetValue(
             {
                 result |= selectedRow->SetFieldValue( aFieldId, value, true );
             }
+        }
+
+        if( m_widget )
+        {
+            m_widget->Update();
         }
 
         return result;
