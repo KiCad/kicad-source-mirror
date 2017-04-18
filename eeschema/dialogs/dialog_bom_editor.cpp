@@ -85,7 +85,7 @@ DIALOG_BOM_EDITOR::DIALOG_BOM_EDITOR( SCH_EDIT_FRAME* parent ) :
 
     m_bom->ReloadTable();
 
-    UpdateTitle();
+    Update();
 }
 
 DIALOG_BOM_EDITOR::~DIALOG_BOM_EDITOR()
@@ -98,7 +98,7 @@ DIALOG_BOM_EDITOR::~DIALOG_BOM_EDITOR()
  * work out if we need to save any changed.
  * If so, capture those changes and push them to the undo stack.
  */
-void DIALOG_BOM_EDITOR::OnBomEditorClosed( wxCloseEvent& event )
+bool DIALOG_BOM_EDITOR::TransferDataFromWindow()
 {
     bool saveChanges = false;
 
@@ -115,11 +115,10 @@ void DIALOG_BOM_EDITOR::OnBomEditorClosed( wxCloseEvent& event )
             break;
         // Cancel (do not exit)
         case wxID_CANCEL:
-            event.Veto();
-            return;
+            return false;
         // Do not save, exit
         default:
-            break;
+            return true;
         }
     }
 
@@ -157,7 +156,7 @@ void DIALOG_BOM_EDITOR::OnBomEditorClosed( wxCloseEvent& event )
         m_parent->OnModify();
     }
 
-    Destroy();
+    return true;
 }
 
 /**
@@ -285,7 +284,14 @@ void DIALOG_BOM_EDITOR::OnGroupComponentsToggled( wxCommandEvent& event )
     m_bom->SetColumnGrouping( group );
     m_bom->ReloadTable();
 
-    m_regroupComponentsButton->Enable( group );
+    Update();
+}
+
+void DIALOG_BOM_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
+{
+    m_regroupComponentsButton->Enable( m_bom->GetColumnGrouping() );
+
+    m_reloadTableButton->Enable( m_bom->HaveFieldsChanged() );
 
     UpdateTitle();
 }
@@ -417,14 +423,13 @@ void DIALOG_BOM_EDITOR::OnExportBOM( wxCommandEvent& event )
 
 void DIALOG_BOM_EDITOR::OnTableValueChanged( wxDataViewEvent& event )
 {
-    m_reloadTableButton->Enable( m_bom->HaveFieldsChanged() );
-
-    UpdateTitle();
+    Update();
 }
 
 void DIALOG_BOM_EDITOR::OnRegroupComponents( wxCommandEvent& event )
 {
     m_bom->ReloadTable();
+    Update();
 }
 
 void DIALOG_BOM_EDITOR::OnRevertFieldChanges( wxCommandEvent& event )
@@ -434,8 +439,7 @@ void DIALOG_BOM_EDITOR::OnRevertFieldChanges( wxCommandEvent& event )
         if( IsOK( this, _( "Revert all component table changes?" ) ) )
         {
             m_bom->RevertFieldChanges();
-            m_reloadTableButton->Enable( m_bom->HaveFieldsChanged() );
-            UpdateTitle();
+            Update();
         }
     }
 }

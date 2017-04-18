@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr  1 2017)
+// C++ code generated with wxFormBuilder (version Mar 22 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -10,7 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE( DIALOG_BOM_EDITOR_BASE, DIALOG_SHIM )
-	EVT_CLOSE( DIALOG_BOM_EDITOR_BASE::_wxFB_OnBomEditorClosed )
+	EVT_UPDATE_UI( wxID_ANY, DIALOG_BOM_EDITOR_BASE::_wxFB_OnUpdateUI )
 	EVT_CHECKBOX( OPT_GROUP_COMPONENTS, DIALOG_BOM_EDITOR_BASE::_wxFB_OnGroupComponentsToggled )
 	EVT_BUTTON( ID_BUTTON_REGROUP, DIALOG_BOM_EDITOR_BASE::_wxFB_OnRegroupComponents )
 	EVT_BUTTON( ID_BUTTON_REVERT_CHANGES, DIALOG_BOM_EDITOR_BASE::_wxFB_OnRevertFieldChanges )
@@ -111,6 +111,21 @@ DIALOG_BOM_EDITOR_BASE::DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id,
 	
 	
 	bSizer6->Add( sbSizer2, 0, wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* sbSizer4;
+	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( m_leftPanel, wxID_ANY, _("Apply changes") ), wxVERTICAL );
+	
+	m_sdbSizer1 = new wxStdDialogButtonSizer();
+	m_sdbSizer1OK = new wxButton( sbSizer4->GetStaticBox(), wxID_OK );
+	m_sdbSizer1->AddButton( m_sdbSizer1OK );
+	m_sdbSizer1Cancel = new wxButton( sbSizer4->GetStaticBox(), wxID_CANCEL );
+	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
+	m_sdbSizer1->Realize();
+	
+	sbSizer4->Add( m_sdbSizer1, 1, wxEXPAND, 5 );
+	
+	
+	bSizer6->Add( sbSizer4, 1, wxEXPAND, 5 );
 	
 	
 	m_leftPanel->SetSizer( bSizer6 );

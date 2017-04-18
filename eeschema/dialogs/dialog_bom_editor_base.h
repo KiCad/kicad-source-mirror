@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr  1 2017)
+// C++ code generated with wxFormBuilder (version Mar 22 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -46,7 +46,7 @@ class DIALOG_BOM_EDITOR_BASE : public DIALOG_SHIM
 	private:
 		
 		// Private event handlers
-		void _wxFB_OnBomEditorClosed( wxCloseEvent& event ){ OnBomEditorClosed( event ); }
+		void _wxFB_OnUpdateUI( wxUpdateUIEvent& event ){ OnUpdateUI( event ); }
 		void _wxFB_OnGroupComponentsToggled( wxCommandEvent& event ){ OnGroupComponentsToggled( event ); }
 		void _wxFB_OnRegroupComponents( wxCommandEvent& event ){ OnRegroupComponents( event ); }
 		void _wxFB_OnRevertFieldChanges( wxCommandEvent& event ){ OnRevertFieldChanges( event ); }
@@ -69,11 +69,14 @@ class DIALOG_BOM_EDITOR_BASE : public DIALOG_SHIM
 		wxCheckBox* m_includeProjectData;
 		wxCheckBox* m_showRowNumbers;
 		wxButton* m_exportButton;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Cancel;
 		wxPanel* m_panel4;
 		wxDataViewCtrl* m_bomView;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnBomEditorClosed( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnGroupComponentsToggled( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegroupComponents( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRevertFieldChanges( wxCommandEvent& event ) { event.Skip(); }
@@ -87,7 +90,7 @@ class DIALOG_BOM_EDITOR_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("BOM editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1047,649 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER ); 
+		DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("BOM editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1047,649 ), long style = wxCAPTION|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSTAY_ON_TOP ); 
 		~DIALOG_BOM_EDITOR_BASE();
 		
 		void m_splitter1OnIdle( wxIdleEvent& )

@@ -62,6 +62,9 @@ private:
     void LoadColumnNames( void );
     void ReloadColumns( void );
 
+    // Called when the OK button is pressed
+    virtual bool TransferDataFromWindow() override;
+
     // Checkbox event callbacks
     virtual void OnColumnItemToggled( wxDataViewEvent& event ) override;
     virtual void OnGroupComponentsToggled( wxCommandEvent& event ) override;
@@ -75,9 +78,10 @@ private:
     // Called after a value in the table has changed
     virtual void OnTableValueChanged( wxDataViewEvent& event ) override;
 
-    virtual void OnBomEditorClosed( wxCloseEvent& event ) override;
-
     void UpdateTitle( void );
+
+    virtual void OnUpdateUI( wxUpdateUIEvent& event ) override;
+
 };
 
 #endif /* EESCHEMA_DIALOGS_DIALOG_BOM_EDITOR_H_ */
