@@ -787,9 +787,6 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     if( !editFrame )
         return 0;
 
-    BOARD* board = getModel<BOARD>();
-    BOARD_COMMIT commit( editFrame );
-
     // Pick a file to append
     if( !AskLoadBoardFileName( editFrame, &open_ctl, &fileName, true ) )
         return 0;
@@ -797,11 +794,11 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     IO_MGR::PCB_FILE_T pluginType = plugin_type( fileName, open_ctl );
     PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
 
-    // keep track of existing items, in order to know what are the new items
-    // (for undo command for instance)
+    // Mark existing tracks, in order to know what are the new tracks
+    // Tracks are inserted, not appended, so mark existing tracks to be
+    // able to select the new tracks only later
+    BOARD* board = getModel<BOARD>();
 
-    // Tracks are inserted, not appended, so mark the existing tracks to know what are the new tracks
-    // TODO legacy
     for( TRACK* track = board->m_Track; track; track = track->Next() )
         track->SetFlags( FLAG0 );
 
@@ -841,6 +838,10 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
+    SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    SELECTION& selection = selectionTool->GetSelection();
+    BOARD_COMMIT commit( editFrame );
+
     // Process the new items
     for( TRACK* track = board->m_Track; track; track = track->Next() )
     {
@@ -851,7 +852,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
         }
 
         commit.Added( track );
-        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, track );
+        selection.Add( track );
     }
 
     module = module ? module->Next() : board->m_Modules;
@@ -859,7 +860,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     for( ; module; module = module->Next() )
     {
         commit.Added( module );
-        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, module );
+        selection.Add( module );
     }
 
     drawing = drawing ? drawing->Next() : board->m_Drawings;
@@ -867,7 +868,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     for( ; drawing; drawing = drawing->Next() )
     {
         commit.Added( drawing );
-        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, drawing );
+        selection.Add( drawing );
     }
 
     for( ZONE_CONTAINER* zone = board->GetArea( zonescount ); zone;
@@ -875,7 +876,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     {
         ++zonescount;
         commit.Added( zone );
-        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, zone );
+        selection.Add( zone );
     }
 
     if( commit.Empty() )
@@ -905,11 +906,15 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     board->GetRatsnest()->ProcessBoard();
 
     // Start dragging the appended board
-    SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const SELECTION& selection = selectionTool->GetSelection();
-    VECTOR2D v( static_cast<BOARD_ITEM*>( selection.Front() )->GetPosition() );
-    getViewControls()->WarpCursor( v, true, true );
-    m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
+    if( selection.Front() )     // be sure at least one item is selected
+    {
+        // Inform other potentially interested tools
+        m_toolMgr->ProcessEvent( SELECTION_TOOL::SelectedEvent );
+
+        VECTOR2D v( static_cast<BOARD_ITEM*>( selection.Front() )->GetPosition() );
+        getViewControls()->WarpCursor( v, true, true );
+        m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
+    }
 
     return 0;
 }
