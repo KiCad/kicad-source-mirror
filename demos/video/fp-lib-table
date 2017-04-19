@@ -1,3 +1,5 @@
 (fp_lib_table
   (lib (name footprints)(type KiCad)(uri ${KIPRJMOD}/libs/footprints.pretty)(options "")(descr "footprints specific to this project"))
+  (lib (name Connectors)(type KiCad)(uri "$(KISYSMOD)/Connectors.pretty")(options "")(descr ""))
+  (lib (name Discret)(type KiCad)(uri "$(KISYSMOD)/Discret.pretty")(options "")(descr ""))
 )

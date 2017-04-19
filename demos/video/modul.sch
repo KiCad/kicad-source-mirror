@@ -2,7 +2,7 @@ EESchema Schematic File Version 2
 LIBS:video_schlib
 LIBS:power
 LIBS:video-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8

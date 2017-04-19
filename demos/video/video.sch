@@ -2,7 +2,7 @@ EESchema Schematic File Version 2
 LIBS:video_schlib
 LIBS:power
 LIBS:video-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
@@ -248,7 +248,7 @@ U 1 1 84DFBB8F
 P 15350 4050
 F 0 "J4" H 15350 4600 70  0000 C CNN
 F 1 "DB9FEM" H 15350 3500 70  0000 C CNN
-F 2 "Connect:DB9FC" H 15350 4050 60  0001 C CNN
+F 2 "Connectors:DB9FC" H 15350 4050 60  0001 C CNN
 F 3 "" H 15350 4050 60  0001 C CNN
 	1    15350 4050
 	1    0    0    1   
