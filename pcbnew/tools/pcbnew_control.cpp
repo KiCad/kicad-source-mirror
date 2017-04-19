@@ -906,7 +906,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     board->GetRatsnest()->ProcessBoard();
 
     // Start dragging the appended board
-    if( selection.Front() )     // be sure at least one item is selected
+    if( selection.Size() )     // be sure at least one item is loaded
     {
         // Inform other potentially interested tools
         m_toolMgr->ProcessEvent( SELECTION_TOOL::SelectedEvent );

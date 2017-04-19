@@ -828,7 +828,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     }
 
     return 0;
-};
+}
 
 
 class GAL_ARRAY_CREATOR: public ARRAY_CREATOR
@@ -873,10 +873,20 @@ private:
         return wxPoint( rp.x, rp.y );
     }
 
-    void prePushAction( BOARD_ITEM* new_item ) override
+    void prePushAction( BOARD_ITEM* aItem ) override
     {
-        m_parent.GetToolManager()->RunAction( PCB_ACTIONS::unselectItem,
-                                              true, new_item );
+        // Because aItem is/can be created from a selected item, and inherits from
+        // it this state, reset the selected stated of aItem:
+        aItem->ClearSelected();
+
+        if( aItem->Type() == PCB_MODULE_T )
+        {
+            static_cast<MODULE*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM* item )
+                                    {
+                                        item->ClearSelected();
+                                    }
+                                );
+        }
     }
 
     void postPushAction( BOARD_ITEM* new_item ) override

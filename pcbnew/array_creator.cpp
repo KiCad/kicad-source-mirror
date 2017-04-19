@@ -27,7 +27,6 @@
  */
 
 #include "array_creator.h"
-
 #include <board_commit.h>
 
 #include <dialogs/dialog_create_array.h>
@@ -41,7 +40,6 @@ void ARRAY_CREATOR::Invoke()
     if( numItems == 0 )
         return;
 
-    BOARD_COMMIT commit( &m_parent );
     MODULE* const module = getModule();
     const bool isModuleEditor = module != NULL;
 
@@ -55,6 +53,8 @@ void ARRAY_CREATOR::Invoke()
 
     if( ret != wxID_OK || array_opts == NULL )
         return;
+
+    BOARD_COMMIT commit( &m_parent );
 
     for ( int i = 0; i < numItems; ++i )
     {
