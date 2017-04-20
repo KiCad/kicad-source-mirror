@@ -133,9 +133,6 @@ protected:
 protected:
     /// Container for storing VIEW_ITEMs
     ITEMS m_groupItems;
-
-private:
-    void updateBbox();
 };
 
 } // namespace KIGFX

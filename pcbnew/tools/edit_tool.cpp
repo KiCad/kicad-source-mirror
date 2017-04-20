@@ -143,7 +143,6 @@ TOOL_ACTION PCB_ACTIONS::exchangeFootprints( "pcbnew.InteractiveEdit.ExchangeFoo
         _( "Exchange Footprint(s)" ), _( "Change the footprint used for modules" ),
         import_module_xpm );
 
-
 TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_ITEM ),
         _( "Properties..." ), _( "Displays item properties dialog" ), editor_xpm );
@@ -736,7 +735,6 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
         for( auto item : selection )
         {
-
             m_commit->Modify( item );
             static_cast<BOARD_ITEM*>( item )->Move( translation );
             static_cast<BOARD_ITEM*>( item )->Rotate( rotPoint, rotation );

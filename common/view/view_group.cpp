@@ -60,11 +60,11 @@ void VIEW_GROUP::Add( VIEW_ITEM* aItem )
 
 void VIEW_GROUP::Remove( VIEW_ITEM* aItem )
 {
-    for( auto iter = m_groupItems.begin(); iter != m_groupItems.end(); ++iter)
+    for( auto iter = m_groupItems.begin(); iter != m_groupItems.end(); ++iter )
     {
         if( aItem == *iter )
         {
-            m_groupItems.erase( iter);
+            m_groupItems.erase( iter );
             break;
         }
     }
@@ -82,10 +82,12 @@ unsigned int VIEW_GROUP::GetSize() const
     return m_groupItems.size();
 }
 
-VIEW_ITEM *VIEW_GROUP::GetItem(unsigned int idx) const
+
+VIEW_ITEM *VIEW_GROUP::GetItem( unsigned int idx ) const
 {
     return m_groupItems[idx];
 }
+
 
 const BOX2I VIEW_GROUP::ViewBBox() const
 {
@@ -163,9 +165,3 @@ void VIEW_GROUP::ItemsViewUpdate( VIEW_ITEM::VIEW_UPDATE_FLAGS aFlags )
     for(unsigned int i = 0 ; i < GetSize(); i++)
         GetItem(i)->ViewUpdate( aFlags );
 }*/
-
-
-void VIEW_GROUP::updateBbox()
-{
-
-}

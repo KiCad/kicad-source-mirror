@@ -1836,6 +1836,7 @@ VECTOR2I SELECTION::GetCenter() const
     return centre;
 }
 
+
 const BOX2I SELECTION::ViewBBox() const
 {
     EDA_RECT eda_bbox;
@@ -1858,6 +1859,7 @@ const BOX2I SELECTION::ViewBBox() const
 
     return BOX2I( eda_bbox.GetOrigin(), eda_bbox.GetSize() );
 }
+
 
 const KIGFX::VIEW_GROUP::ITEMS SELECTION::updateDrawList() const
 {
