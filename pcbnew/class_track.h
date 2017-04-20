@@ -434,6 +434,9 @@ public:
     /// @copydoc VIEW_ITEM::ViewGetLayers()
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
+    /// @copydoc VIEW_ITEM::ViewGetLOD()
+    virtual unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+
     virtual void Flip( const wxPoint& aCentre ) override;
 
 #if defined (DEBUG)

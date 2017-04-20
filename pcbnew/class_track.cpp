@@ -1018,6 +1018,18 @@ void VIA::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
+unsigned int VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+{
+    BOARD* board = GetBoard();
+
+    // Only draw the via if at least one of the layers it crosses is being displayed
+    if( board && ( board->GetVisibleLayers() & GetLayerSet() ).any() )
+        return 0;
+
+    return std::numeric_limits<unsigned int>::max();
+}
+
+
 // see class_track.h
 void TRACK::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
