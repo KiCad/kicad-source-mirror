@@ -520,7 +520,6 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     // TODO selectionModified
     m_toolMgr->RunAction( PCB_ACTIONS::editModifiedSelection, true );
-    editFrame->Refresh();
 
     return 0;
 }
@@ -565,8 +564,6 @@ static void mirrorPadX( D_PAD& aPad, const wxPoint& aMirrorPoint )
 
 int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
-    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
-
     const auto& selection = m_selectionTool->RequestSelection();
 
     if( m_selectionTool->CheckLock() == SELECTION_LOCKED )
@@ -632,7 +629,6 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
     // TODO selectionModified
     m_toolMgr->RunAction( PCB_ACTIONS::editModifiedSelection, true );
-    editFrame->Refresh();
 
     return 0;
 }
@@ -665,7 +661,6 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     m_toolMgr->RunAction( PCB_ACTIONS::editModifiedSelection, true );
-    getEditFrame<PCB_BASE_EDIT_FRAME>()->Refresh();
 
     return 0;
 }
@@ -738,9 +733,6 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
             m_commit->Modify( item );
             static_cast<BOARD_ITEM*>( item )->Move( translation );
             static_cast<BOARD_ITEM*>( item )->Rotate( rotPoint, rotation );
-
-            if( !m_dragging )
-                getView()->Update( item );
         }
 
         m_commit->Push( _( "Move exact" ) );
