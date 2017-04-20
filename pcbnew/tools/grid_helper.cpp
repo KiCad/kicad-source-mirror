@@ -113,7 +113,7 @@ VECTOR2I GRID_HELPER::Align( const VECTOR2I& aPoint ) const
 }
 
 
-VECTOR2I GRID_HELPER::AlignToSegment ( const VECTOR2I& aPoint, const SEG& aSeg )
+VECTOR2I GRID_HELPER::AlignToSegment( const VECTOR2I& aPoint, const SEG& aSeg )
 {
     OPT_VECTOR2I pts[6];
 
@@ -146,6 +146,7 @@ VECTOR2I GRID_HELPER::AlignToSegment ( const VECTOR2I& aPoint, const SEG& aSeg )
 
     return nearest;
 }
+
 
 VECTOR2I GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, BOARD_ITEM* aItem )
 {
@@ -231,12 +232,13 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDrag
 
     VECTOR2I nearestGrid = Align( aOrigin );
     double gridDist = ( nearestGrid - aOrigin ).EuclideanNorm();
+
     if( nearest )
     {
         double snapDist = nearest->Distance( aOrigin );
 
         if( nearest && snapDist < gridDist )
-             return nearest->pos;
+            return nearest->pos;
     }
 
     return nearestGrid;
@@ -259,7 +261,6 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos )
 
             break;
         }
-
 
         case PCB_PAD_T:
         {
@@ -367,25 +368,25 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos )
 
 GRID_HELPER::ANCHOR* GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, int aFlags, LSET aMatchLayers )
 {
-     double minDist = std::numeric_limits<double>::max();
-     ANCHOR* best = NULL;
+    double minDist = std::numeric_limits<double>::max();
+    ANCHOR* best = NULL;
 
-     for( ANCHOR& a : m_anchors )
-     {
-         if( !aMatchLayers[a.item->GetLayer()] )
-             continue;
+    for( ANCHOR& a : m_anchors )
+    {
+        if( !aMatchLayers[a.item->GetLayer()] )
+            continue;
 
-         if( ( aFlags & a.flags ) != aFlags )
-             continue;
+        if( ( aFlags & a.flags ) != aFlags )
+            continue;
 
-         double dist = a.Distance( aPos );
+        double dist = a.Distance( aPos );
 
-         if( dist < minDist )
-         {
-             minDist = dist;
-             best = &a;
-         }
-     }
+        if( dist < minDist )
+        {
+            minDist = dist;
+            best = &a;
+        }
+    }
 
-     return best;
+    return best;
 }
