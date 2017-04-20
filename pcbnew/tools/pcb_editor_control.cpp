@@ -1056,6 +1056,25 @@ int PCB_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_EDITOR_CONTROL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
+{
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const SELECTION& selection = selTool->GetSelection();
+    RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
+
+    // Update "simple" ratsnest, computed for currently modified items
+    ratsnest->ClearSimple();
+
+    for( auto item : selection )
+    {
+        ratsnest->Update( static_cast<BOARD_ITEM*>( item ) );
+        ratsnest->AddSimple( static_cast<BOARD_ITEM*>( item ) );
+    }
+
+    return 0;
+}
+
+
 void PCB_EDITOR_CONTROL::SetTransitions()
 {
     // Track & via size control
@@ -1085,6 +1104,7 @@ void PCB_EDITOR_CONTROL::SetTransitions()
     Go( &PCB_EDITOR_CONTROL::DrillOrigin,         PCB_ACTIONS::drillOrigin.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNet,        PCB_ACTIONS::highlightNet.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  PCB_ACTIONS::highlightNetCursor.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::UpdateSelectionRatsnest, PCB_ACTIONS::selectionModified.MakeEvent() );
 }
 
 

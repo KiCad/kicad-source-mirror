@@ -144,11 +144,6 @@ private:
     ///> of edit reference point).
     VECTOR2I m_cursor;
 
-    ///> Updates ratsnest for selected items.
-    ///> @param aRedraw says if selected items should be drawn using the simple mode (e.g. one line
-    ///> per item).
-    void updateRatsnest( bool aRedraw );
-
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.
     wxPoint getModificationPoint( const SELECTION& aSelection );
