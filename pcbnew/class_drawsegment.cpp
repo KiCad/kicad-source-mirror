@@ -522,6 +522,8 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
     EDA_RECT arect = aRect;
     arect.Inflate( aAccuracy );
 
+    EDA_RECT arcRect;
+
     switch( m_Shape )
     {
     case S_CIRCLE:
@@ -529,7 +531,18 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
         if( aContained )
             return arect.Contains( GetBoundingBox() );
         else
-            return arect.Intersects( GetBoundingBox() );
+        {
+            // If the rectangle does not intersect the bounding box, this is a much quicker test
+            if( !aRect.Intersects( GetBoundingBox() ) )
+            {
+                return false;
+            }
+            else
+            {
+                return arect.IntersectsCircleEdge( GetCenter(), GetRadius(), GetWidth() );
+            }
+
+        }
         break;
 
     case S_ARC:

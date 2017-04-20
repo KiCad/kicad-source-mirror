@@ -443,6 +443,66 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect ) const
     return rc;
 }
 
+const wxPoint EDA_RECT::ClosestPointTo( const wxPoint& aPoint ) const
+{
+    EDA_RECT me(*this);
+
+    me.Normalize();         // ensure size is >= 0
+
+    // Determine closest point to the circle centre within this rect
+    int nx = std::max( me.GetLeft(), std::min( aPoint.x, me.GetRight() ) );
+    int ny = std::max( me.GetTop(), std::min( aPoint.y, me.GetBottom() ) );
+
+    return wxPoint( nx, ny );
+}
+
+const wxPoint EDA_RECT::FarthestPointTo( const wxPoint& aPoint ) const
+{
+    EDA_RECT me(*this);
+
+    me.Normalize();         // ensure size is >= 0
+
+    int fx = std::max( std::abs( aPoint.x - me.GetLeft() ), std::abs( aPoint.x - me.GetRight() ) );
+    int fy = std::max( std::abs( aPoint.y - me.GetTop() ), std::abs( aPoint.y - me.GetBottom() ) );
+
+    return wxPoint( fx, fy );
+}
+
+/* IntersectsCircle
+ * test for common area between this rect and a circle
+ */
+bool EDA_RECT::IntersectsCircle( const wxPoint& aCenter, const int aRadius ) const
+{
+    wxPoint closest = ClosestPointTo( aCenter );
+
+    double dx = aCenter.x - closest.x;
+    double dy = aCenter.y - closest.y;
+
+    double r = (double) aRadius;
+
+    return ( dx * dx + dy * dy ) <= ( r * r );
+}
+
+bool EDA_RECT::IntersectsCircleEdge( const wxPoint& aCenter, const int aRadius, const int aWidth ) const
+{
+    EDA_RECT me(*this);
+    me.Normalize();         // ensure size is >= 0
+
+    // Test if the circle intersects at all
+    if( !IntersectsCircle( aCenter, aRadius + aWidth / 2 ) )
+    {
+        return false;
+    }
+
+    wxPoint far = FarthestPointTo( aCenter );
+    // Farthest point must be further than the inside of the line
+    double fx = (double) far.x;
+    double fy = (double) far.y;
+
+    double r = (double) aRadius - (double) aWidth / 2;
+
+    return ( fx * fx + fy * fy ) > ( r * r );
+}
 
 EDA_RECT& EDA_RECT::Inflate( int aDelta )
 {

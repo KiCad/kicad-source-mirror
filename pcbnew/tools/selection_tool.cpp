@@ -525,25 +525,21 @@ bool SELECTION_TOOL::selectMultiple()
                  * Right > Left : Select objects that are crossed by selection
                  */
 
-                // Add only those items that are visible
-                if( !item->IsSelected() && selectable( item ) )
+                if( width >= 0 )
                 {
-                    if( item->HitTest( selectionRect, width >= 0) )
+                    if( selectionBox.Contains( item->ViewBBox() ) )
+                    {
+                        select( item );
+                    }
+                }
+                else
+                {
+                    if( item->HitTest( selectionRect, false ) )
                     {
                         select( item );
                     }
 
                 }
-                /*
-                    // Selecting left->right requires full enclosure
-                    if ( xDelta >= 0 && selectionBox.Contains( item->ViewBBox() ) )
-                    {
-                        select( item );
-                    }
-
-                    // Selecting right->left requires only
-                    else if
-                */
             }
 
             if( m_selection.Size() == 1 )
