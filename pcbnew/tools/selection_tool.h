@@ -308,6 +308,11 @@ private:
      */
     void guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) const;
 
+    /**
+     * Event handler to update the selection VIEW_ITEM.
+     */
+    int updateSelection( const TOOL_EVENT& aEvent );
+
     /// Pointer to the parent frame.
     PCB_BASE_FRAME* m_frame;
 

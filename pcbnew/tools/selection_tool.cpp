@@ -553,6 +553,7 @@ void SELECTION_TOOL::SetTransitions()
     Go( &SELECTION_TOOL::selectNet, PCB_ACTIONS::selectNet.MakeEvent() );
     Go( &SELECTION_TOOL::selectSameSheet, PCB_ACTIONS::selectSameSheet.MakeEvent() );
     Go( &SELECTION_TOOL::selectOnSheetFromEeschema, PCB_ACTIONS::selectOnSheetFromEeschema.MakeEvent() );
+    Go( &SELECTION_TOOL::updateSelection, PCB_ACTIONS::editModifiedSelection.MakeEvent() );
 }
 
 
@@ -1755,6 +1756,14 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
             aCollector.Remove( item );
         }
     }
+}
+
+
+int SELECTION_TOOL::updateSelection( const TOOL_EVENT& aEvent )
+{
+    getView()->Update( &m_selection );
+
+    return 0;
 }
 
 

@@ -149,7 +149,7 @@ TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
 
 TOOL_ACTION PCB_ACTIONS::editModifiedSelection( "pcbnew.InteractiveEdit.ModifiedSelection",
         AS_GLOBAL, 0,
-        "", "" );
+        "", "", nullptr, AF_NOTIFY );
 
 TOOL_ACTION PCB_ACTIONS::measureTool( "pcbnew.InteractiveEdit.measureTool",
         AS_GLOBAL, MD_CTRL + MD_SHIFT + 'M',
@@ -345,8 +345,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
             }
 
-            getView()->Update( &selection );
-            m_toolMgr->RunAction( PCB_ACTIONS::editModifiedSelection, true );
+            m_toolMgr->RunAction( PCB_ACTIONS::editModifiedSelection, false );
         }
 
         else if( evt->IsCancel() || evt->IsActivate() )
