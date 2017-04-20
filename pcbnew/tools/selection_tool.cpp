@@ -500,21 +500,50 @@ bool SELECTION_TOOL::selectMultiple()
 
             // Mark items within the selection box as selected
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
+
+            // Filter the view items based on the selection box
             BOX2I selectionBox = area.ViewBBox();
             view->Query( selectionBox, selectedItems );         // Get the list of selected items
 
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR>::iterator it, it_end;
 
+            int width = area.GetEnd().x - area.GetOrigin().x;
+            int height = area.GetEnd().y - area.GetOrigin().y;
+
+            // Construct an EDA_RECT to determine BOARD_ITEM selection
+            EDA_RECT selectionRect( wxPoint( area.GetOrigin().x, area.GetOrigin().y ),
+                                    wxSize( width, height ) );
+
+            selectionRect.Normalize();
+
             for( it = selectedItems.begin(), it_end = selectedItems.end(); it != it_end; ++it )
             {
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
 
-                // Add only those items that are visible and fully within the selection box
-                if( !item->IsSelected() && selectable( item ) &&
-                        selectionBox.Contains( item->ViewBBox() ) )
+                /* Selection mode depends on direction of drag-selection:
+                 * Left > Right : Select objects that are fully enclosed by selection
+                 * Right > Left : Select objects that are crossed by selection
+                 */
+
+                // Add only those items that are visible
+                if( !item->IsSelected() && selectable( item ) )
                 {
-                    select( item );
+                    if( item->HitTest( selectionRect, width >= 0) )
+                    {
+                        select( item );
+                    }
+
                 }
+                /*
+                    // Selecting left->right requires full enclosure
+                    if ( xDelta >= 0 && selectionBox.Contains( item->ViewBBox() ) )
+                    {
+                        select( item );
+                    }
+
+                    // Selecting right->left requires only
+                    else if
+                */
             }
 
             if( m_selection.Size() == 1 )

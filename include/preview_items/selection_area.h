@@ -76,6 +76,10 @@ public:
         return wxT( "SELECTION_AREA" );
     }
 
+    VECTOR2I GetOrigin() const { return m_origin; }
+
+    VECTOR2I GetEnd() const { return m_end; }
+
 private:
 
     /**
