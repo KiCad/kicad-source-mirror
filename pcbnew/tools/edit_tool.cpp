@@ -147,7 +147,7 @@ TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_ITEM ),
         _( "Properties..." ), _( "Displays item properties dialog" ), editor_xpm );
 
-TOOL_ACTION PCB_ACTIONS::editModifiedSelection( "pcbnew.InteractiveEdit.ModifiedSelection",
+TOOL_ACTION PCB_ACTIONS::selectionModified( "pcbnew.InteractiveEdit.ModifiedSelection",
         AS_GLOBAL, 0,
         "", "", nullptr, AF_NOTIFY );
 
@@ -345,7 +345,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
             }
 
-            m_toolMgr->RunAction( PCB_ACTIONS::editModifiedSelection, false );
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, false );
         }
 
         else if( evt->IsCancel() || evt->IsActivate() )
@@ -476,7 +476,7 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         // Display properties dialog provided by the legacy canvas frame
         editFrame->OnEditItemRequest( NULL, item );
 
-        m_toolMgr->RunAction( PCB_ACTIONS::editModifiedSelection, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
         item->SetFlags( flags );
     }
 
@@ -517,8 +517,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( selection.IsHover() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    // TODO selectionModified
-    m_toolMgr->RunAction( PCB_ACTIONS::editModifiedSelection, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
 
     return 0;
 }
@@ -626,8 +625,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     if( selection.IsHover() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    // TODO selectionModified
-    m_toolMgr->RunAction( PCB_ACTIONS::editModifiedSelection, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
 
     return 0;
 }
@@ -659,7 +657,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     if( selection.IsHover() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::editModifiedSelection, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
 
     return 0;
 }
@@ -739,7 +737,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
         if( selection.IsHover() )
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-        m_toolMgr->RunAction( PCB_ACTIONS::editModifiedSelection, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
     }
 
     return 0;

@@ -224,7 +224,7 @@ int PAD_TOOL::applyPadSettings( const TOOL_EVENT& aEvent )
 
     commit.Push( _( "Apply Pad Settings" ) );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::editModifiedSelection, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
     frame.Refresh();
 
     return 0;
@@ -377,7 +377,7 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 
     commit.Push( _( "Apply Pad Settings" ) );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::editModifiedSelection, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
     frame.Refresh();
 
     return 0;

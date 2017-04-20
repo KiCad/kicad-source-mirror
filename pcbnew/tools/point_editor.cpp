@@ -723,7 +723,7 @@ void POINT_EDITOR::SetTransitions()
 {
     Go( &POINT_EDITOR::addCorner, PCB_ACTIONS::pointEditorAddCorner.MakeEvent() );
     Go( &POINT_EDITOR::removeCorner, PCB_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
-    Go( &POINT_EDITOR::modifiedSelection, PCB_ACTIONS::editModifiedSelection.MakeEvent() );
+    Go( &POINT_EDITOR::modifiedSelection, PCB_ACTIONS::selectionModified.MakeEvent() );
     Go( &POINT_EDITOR::OnSelectionChange, SELECTION_TOOL::SelectedEvent );
     Go( &POINT_EDITOR::OnSelectionChange, SELECTION_TOOL::UnselectedEvent );
 }
