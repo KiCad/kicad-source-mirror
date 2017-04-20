@@ -496,15 +496,17 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( m_selectionTool->CheckLock() == SELECTION_LOCKED )
         return 0;
 
-    // Shall the selection be cleared at the end?
-    wxPoint rotatePoint = getModificationPoint( selection );
+    wxPoint modPoint = getModificationPoint( selection );
     const int rotateAngle = TOOL_EVT_UTILS::GetEventRotationAngle( *editFrame, aEvent );
 
     for( auto item : selection )
     {
         m_commit->Modify( item );
-        static_cast<BOARD_ITEM*>( item )->Rotate( rotatePoint, rotateAngle );
+        static_cast<BOARD_ITEM*>( item )->Rotate( modPoint, rotateAngle );
     }
+
+    // Update the dragging point offset
+    m_offset = static_cast<BOARD_ITEM*>( selection.Front() )->GetPosition() - modPoint;
 
     if( !m_dragging )
         m_commit->Push( _( "Rotate" ) );
@@ -634,13 +636,16 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    wxPoint flipPoint = getModificationPoint( selection );
+    wxPoint modPoint = getModificationPoint( selection );
 
     for( auto item : selection )
     {
         m_commit->Modify( item );
-        static_cast<BOARD_ITEM*>( item )->Flip( flipPoint );
+        static_cast<BOARD_ITEM*>( item )->Flip( modPoint );
     }
+
+    // Update the dragging point offset
+    m_offset = static_cast<BOARD_ITEM*>( selection.Front() )->GetPosition() - modPoint;
 
     if( !m_dragging )
         m_commit->Push( _( "Flip" ) );
