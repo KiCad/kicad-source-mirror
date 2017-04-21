@@ -42,6 +42,70 @@
  */
 static const double DXF_OBLIQUE_ANGLE = 15;
 
+/* The layer/colors palette. The acad/DXF palette is divided in 3 zones:
+
+   - The primary colors (1 - 9)
+   - An HSV zone (10-250, 5 values x 2 saturations x 10 hues
+   - Greys (251 - 255)
+
+   There is *no* black... the white does it on paper, usually, and
+   anyway it depends on the plotter configuration, since DXF colors
+   are meant to be logical only (they represent *both* line color and
+   width); later version with plot styles only complicate the matter!
+
+   As usual, brown and magenta/purple are difficult to place since
+   they are actually variations of other colors.
+ */
+static const struct
+{
+    const char *name;
+    int color;
+} dxf_layer[NBCOLORS] =
+{
+    { "BLACK",      7 },    // In DXF, color 7 is *both* white and black!
+    { "GRAY1",      251 },
+    { "GRAY2",      8 },
+    { "GRAY3",      9 },
+    { "WHITE",      7 },
+    { "LYELLOW",    51 },
+    { "BLUE1",      178 },
+    { "GREEN1",     98 },
+    { "CYAN1",      138 },
+    { "RED1",       18 },
+    { "MAGENTA1",   228 },
+    { "BROWN1",     58 },
+    { "BLUE2",      5 },
+    { "GREEN2",     3 },
+    { "CYAN2",      4 },
+    { "RED2",       1 },
+    { "MAGENTA2",   6 },
+    { "BROWN2",     54 },
+    { "BLUE3",      171 },
+    { "GREEN3",     91 },
+    { "CYAN3",      131 },
+    { "RED3",       11 },
+    { "MAGENTA3",   221 },
+    { "YELLOW3",    2 },
+    { "BLUE4",      5 },
+    { "GREEN4",     3 },
+    { "CYAN4",      4 },
+    { "RED4",       1 },
+    { "MAGENTA4",   6 },
+    { "YELLOW4",    2 }
+};
+
+
+// A helper function to create a color name acceptable in DXF files
+// DXF files do not use a RGB definition
+static wxString getDXFColorName( COLOR4D aColor )
+{
+    EDA_COLOR_T color = ColorFindNearest( int( aColor.r*255 ),
+                                          int( aColor.g*255 ),
+                                          int( aColor.b*255 ) );
+    wxString cname( dxf_layer[color].name );
+    return cname;
+}
+
 /**
  * Set the scale/position for the DXF plot
  * The DXF engine doesn't support line widths and mirroring. The output
@@ -181,50 +245,7 @@ bool DXF_PLOTTER::StartPlot()
        - The primary colors (1 - 9)
        - An HSV zone (10-250, 5 values x 2 saturations x 10 hues
        - Greys (251 - 255)
-
-       There is *no* black... the white does it on paper, usually, and
-       anyway it depends on the plotter configuration, since DXF colors
-       are meant to be logical only (they represent *both* line color and
-       width); later version with plot styles only complicate the matter!
-
-       As usual, brown and magenta/purple are difficult to place since
-       they are actually variations of other colors.
      */
-    static const struct {
-        const char *name;
-        int color;
-    } dxf_layer[NBCOLORS] = {
-        { "BLACK",      7 },    // In DXF, color 7 is *both* white and black!
-        { "GRAY1",      251 },
-        { "GRAY2",      8 },
-        { "GRAY3",      9 },
-        { "WHITE",      7 },
-        { "LYELLOW",    51 },
-        { "BLUE1",      178 },
-        { "GREEN1",     98 },
-        { "CYAN1",      138 },
-        { "RED1",       18 },
-        { "MAGENTA1",   228 },
-        { "BROWN1",     58 },
-        { "BLUE2",      5 },
-        { "GREEN2",     3 },
-        { "CYAN2",      4 },
-        { "RED2",       1 },
-        { "MAGENTA2",   6 },
-        { "BROWN2",     54 },
-        { "BLUE3",      171 },
-        { "GREEN3",     91 },
-        { "CYAN3",      131 },
-        { "RED3",       11 },
-        { "MAGENTA3",   221 },
-        { "YELLOW3",    2 },
-        { "BLUE4",      5 },
-        { "GREEN4",     3 },
-        { "CYAN4",      4 },
-        { "RED4",       1 },
-        { "MAGENTA4",   6 },
-        { "YELLOW4",    2 }
-    };
 
     for( EDA_COLOR_T i = BLACK; i < NBCOLORS; i = NextColor(i) )
     {
@@ -314,7 +335,7 @@ void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill, int 
     DPOINT centre_dev = userToDeviceCoordinates( centre );
     if( radius > 0 )
     {
-        wxString cname( m_currentColor.ToColour().GetAsString( wxC2S_CSS_SYNTAX ) );
+        wxString cname = getDXFColorName( m_currentColor );
 
         if( !fill )
         {
@@ -463,7 +484,7 @@ void DXF_PLOTTER::PenTo( const wxPoint& pos, char plume )
     if( penLastpos != pos && plume == 'D' )
     {
         // DXF LINE
-        wxString cname( m_currentColor.ToColour().GetAsString( wxC2S_CSS_SYNTAX ) );
+        wxString cname = getDXFColorName( m_currentColor );
         fprintf( outputFile, "0\nLINE\n8\n%s\n10\n%g\n20\n%g\n11\n%g\n21\n%g\n",
                  TO_UTF8( cname ),
                  pen_lastpos_dev.x, pen_lastpos_dev.y, pos_dev.x, pos_dev.y );
@@ -510,7 +531,7 @@ void DXF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
     double radius_dev = userToDeviceSize( radius );
 
     // Emit a DXF ARC entity
-    wxString cname( m_currentColor.ToColour().GetAsString( wxC2S_CSS_SYNTAX ) );
+    wxString cname = getDXFColorName( m_currentColor );
     fprintf( outputFile,
              "0\nARC\n8\n%s\n10\n%g\n20\n%g\n40\n%g\n50\n%g\n51\n%g\n",
              TO_UTF8( cname ),
@@ -730,7 +751,7 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
            more useful as a CAD object */
         DPOINT origin_dev = userToDeviceCoordinates( aPos );
         SetColor( aColor );
-        wxString cname( m_currentColor.ToColour().GetAsString( wxC2S_CSS_SYNTAX ) );
+        wxString cname = getDXFColorName( m_currentColor );
         DPOINT size_dev = userToDeviceSize( aSize );
         int h_code = 0, v_code = 0;
         switch( aH_justify )
