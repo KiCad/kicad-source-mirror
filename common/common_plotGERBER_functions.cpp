@@ -67,7 +67,6 @@ GERBER_PLOTTER::GERBER_PLOTTER()
 void GERBER_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 				  double aScale, bool aMirror )
 {
-    wxASSERT( !outputFile );
     wxASSERT( aMirror == false );
     m_plotMirror = false;
     plotOffset = aOffset;

@@ -173,7 +173,6 @@ SVG_PLOTTER::SVG_PLOTTER()
 void SVG_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                                double aScale, bool aMirror )
 {
-    wxASSERT( !outputFile );
     m_plotMirror = aMirror;
     m_yaxisReversed = true;     // unlike other plotters, SVG has Y axis reversed
     plotOffset  = aOffset;

@@ -63,14 +63,12 @@ bool PDF_PLOTTER::OpenFile( const wxString& aFullFilename )
 
 void PDF_PLOTTER::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
-    wxASSERT( !workFile );
     pageInfo = aPageSettings;
 }
 
 void PDF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                               double aScale, bool aMirror )
 {
-    wxASSERT( !workFile );
     m_plotMirror = aMirror;
     plotOffset = aOffset;
     plotScale = aScale;
@@ -405,6 +403,7 @@ int PDF_PLOTTER::startPdfObject(int handle)
 {
     wxASSERT( outputFile );
     wxASSERT( !workFile );
+
     if( handle < 0)
         handle = allocPdfObject();
 

@@ -50,7 +50,6 @@ static const double DXF_OBLIQUE_ANGLE = 15;
 void DXF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                                double aScale, bool aMirror )
 {
-    wxASSERT( !outputFile );
     plotOffset  = aOffset;
     plotScale   = aScale;
 
@@ -278,7 +277,6 @@ bool DXF_PLOTTER::EndPlot()
  */
 void DXF_PLOTTER::SetColor( COLOR4D color )
 {
-    wxASSERT( outputFile );
     if( ( colorMode )
        || ( color == COLOR4D::BLACK )
        || ( color == COLOR4D::WHITE ) )

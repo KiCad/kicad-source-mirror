@@ -223,7 +223,6 @@ HPGL_PLOTTER::HPGL_PLOTTER()
 void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                                 double aScale, bool aMirror )
 {
-    wxASSERT( !outputFile );
     plotOffset  = aOffset;
     plotScale   = aScale;
     m_IUsPerDecimil = aIusPerDecimil;
