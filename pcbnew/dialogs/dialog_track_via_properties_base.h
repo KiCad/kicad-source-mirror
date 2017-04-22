@@ -16,17 +16,19 @@ class PCB_LAYER_BOX_SELECTOR;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
-#include <wx/checkbox.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/combobox.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
-#include <wx/stattext.h>
-#include <wx/textctrl.h>
 #include <wx/statline.h>
+#include <wx/checkbox.h>
+#include <wx/statbox.h>
+#include <wx/textctrl.h>
 #include <wx/bmpcbox.h>
+#include <wx/choice.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -43,6 +45,9 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 	protected:
 		wxBoxSizer* m_MainSizer;
 		wxStaticBoxSizer* m_sbCommonSizer;
+		wxStaticText* m_staticText24;
+		wxComboBox* m_NetComboBox;
+		wxStaticLine* m_staticline3;
 		wxCheckBox* m_lockedCbox;
 		wxStaticBoxSizer* m_sbTrackSizer;
 		wxStaticText* m_TrackStartXLabel;
@@ -78,6 +83,12 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_ViaDrillLabel;
 		wxTextCtrl* m_ViaDrillCtrl;
 		wxStaticText* m_ViaDrillUnit;
+		wxStaticText* m_ViaTypeLabel;
+		wxChoice* m_ViaTypeChoice;
+		wxStaticText* m_ViaStartLayerLabel;
+		PCB_LAYER_BOX_SELECTOR* m_ViaStartLayer;
+		wxStaticText* m_ViaEndLayerLabel1;
+		PCB_LAYER_BOX_SELECTOR* m_ViaEndLayer;
 		wxCheckBox* m_viaNetclass;
 		wxStdDialogButtonSizer* m_StdButtons;
 		wxButton* m_StdButtonsOK;

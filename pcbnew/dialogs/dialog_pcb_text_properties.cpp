@@ -53,7 +53,7 @@ class TEXTE_PCB;
 class DIALOG_PCB_TEXT_PROPERTIES : public DIALOG_PCB_TEXT_PROPERTIES_BASE
 {
 public:
-    DIALOG_PCB_TEXT_PROPERTIES( PCB_EDIT_FRAME* parent, TEXTE_PCB* passedTextPCB, wxDC* DC );
+    DIALOG_PCB_TEXT_PROPERTIES( PCB_EDIT_FRAME* parent, TEXTE_PCB* passedTextPCB, wxDC* DC = nullptr );
 
 private:
     PCB_EDIT_FRAME*     m_Parent;
