@@ -516,9 +516,6 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition ) const
 
 bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    wxPoint p1, p2;
-    int radius;
-    float theta;
     EDA_RECT arect = aRect;
     arect.Inflate( aAccuracy );
 
@@ -546,24 +543,28 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
         break;
 
     case S_ARC:
-        radius = hypot( (double)( GetEnd().x - GetStart().x ),
-                        (double)( GetEnd().y - GetStart().y ) );
-        theta  = std::atan2( (double)( GetEnd().y - GetStart().y ),
-                             (double)( GetEnd().x - GetStart().x ) );
 
-        //Approximate the arc with two lines. This should be accurate enough for selection.
-        p1.x   = radius * std::cos( theta + M_PI/4 ) + GetStart().x;
-        p1.y   = radius * std::sin( theta + M_PI/4 ) + GetStart().y;
-        p2.x   = radius * std::cos( theta + M_PI/2 ) + GetStart().x;
-        p2.y   = radius * std::sin( theta + M_PI/2 ) + GetStart().y;
+        computeArcBBox( arcRect );
 
+        // Test for full containment of this arc in the rect
         if( aContained )
-            return arect.Contains( GetEnd() ) && aRect.Contains( p1 ) && aRect.Contains( p2 );
+        {
+            return arect.Contains( arcRect );
+        }
+        // Test if the rect crosses the arc
         else
-            return arect.Intersects( GetEnd(), p1 ) || aRect.Intersects( p1, p2 );
+        {
+            arcRect = arcRect.Common( arect );
+            //arcRect.Inflate( GetWidth() );
 
+            /* All following tests must pass:
+             * 1. Rectangle must intersect arc BoundingBox
+             * 2. Rectangle must cross the outside of the arc
+             */
+            return arcRect.Intersects( arect ) &&
+                   arcRect.IntersectsCircleEdge( GetCenter(), GetRadius(), GetWidth() );
+        }
         break;
-
     case S_SEGMENT:
         if( aContained )
             return arect.Contains( GetStart() ) && aRect.Contains( GetEnd() );
