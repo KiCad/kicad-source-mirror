@@ -5,6 +5,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -188,17 +189,49 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
         if( itemsCount )
         {
-            wxPoint translation;
-            double rotation = 0;
+            MOVE_PARAMETERS params;
+            params.allowOverride = false;
 
-            DIALOG_MOVE_EXACT dialog( this, translation, rotation  );
+            DIALOG_MOVE_EXACT dialog( this, params );
+
             int ret = dialog.ShowModal();
 
             if( ret == wxID_OK )
             {
                 SaveCopyInUndoList( currentModule, UR_CHANGED );
-                const wxPoint blockCentre = GetScreen()->m_BlockLocate.Centre();
-                MoveMarkedItemsExactly( currentModule, blockCentre, translation, rotation );
+                wxPoint blockCentre = GetScreen()->m_BlockLocate.Centre();
+
+                wxPoint origin;
+
+                switch( params.origin )
+                {
+                case RELATIVE_TO_USER_ORIGIN:
+                    origin = GetScreen()->m_O_Curseur;
+                    break;
+
+                case RELATIVE_TO_GRID_ORIGIN:
+                    origin = GetGridOrigin();
+                    break;
+
+                case RELATIVE_TO_DRILL_PLACE_ORIGIN:
+                    origin = GetAuxOrigin();
+                    break;
+
+                case RELATIVE_TO_SHEET_ORIGIN:
+                    origin = wxPoint( 0, 0 );
+                    break;
+
+                case RELATIVE_TO_CURRENT_POSITION:
+                    // relative movement means that only the translation values should be used:
+                    // -> set origin and blockCentre to zero
+                    origin = wxPoint( 0, 0 );
+                    blockCentre = wxPoint( 0, 0 );
+                    break;
+                }
+
+                wxPoint finalMoveVector = params.translation + origin - blockCentre;
+
+                MoveMarkedItemsExactly( currentModule, blockCentre, finalMoveVector, params.rotation );
             }
         }
         break;

@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2014 John Beard, john.j.beard@gmail.com
  * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,11 +35,14 @@
 DIALOG_MOVE_EXACT::MOVE_EXACT_OPTIONS DIALOG_MOVE_EXACT::m_options;
 
 
-DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME* aParent,
-                                      wxPoint& translation, double& rotation ):
+DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT(PCB_BASE_FRAME *aParent, MOVE_PARAMETERS &aParams ) :
     DIALOG_MOVE_EXACT_BASE( aParent ),
-    m_translation( translation ),
-    m_rotation( rotation )
+    m_translation( aParams.translation ),
+    m_rotation( aParams.rotation ),
+    m_origin( aParams.origin ),
+    m_anchor( aParams.anchor ),
+    m_allowOverride( aParams.allowOverride ),
+    m_editingFootprint( aParams.editingFootprint )
 {
     // set the unit labels
     m_xUnit->SetLabelText( GetAbbreviatedUnitsLabel( g_UserUnit ) );
@@ -53,6 +57,69 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME* aParent,
     m_xEntry->SetValue( wxString::FromDouble( m_options.entry1 ) );
     m_yEntry->SetValue( wxString::FromDouble( m_options.entry2 ) );
     m_rotEntry->SetValue( wxString::FromDouble( m_options.entryRotation ) );
+    m_originChooser->SetSelection( m_options.origin );
+
+    if( m_allowOverride )
+    {
+        m_cbOverride->SetValue( m_options.overrideAnchor );
+        m_anchorChoice->Enable( m_options.overrideAnchor );
+
+        // ME_ANCHOR_FROM_LIBRARY is not in the wxChoice options so show the first choice instead
+        if( m_options.anchor == ANCHOR_FROM_LIBRARY )
+        {
+            m_anchorChoice->SetSelection( ANCHOR_TOP_LEFT_PAD );
+        }
+        else
+        {
+            m_anchorChoice->SetSelection( m_options.anchor );
+        }
+
+        if( m_options.origin == RELATIVE_TO_CURRENT_POSITION )
+        {
+            // no footprint override necessary in this mode
+            m_cbOverride->Disable();
+            m_anchorChoice->Disable();
+        }
+
+        if( m_editingFootprint )
+        {
+            // there is no point in showing the center footprint option when editing footprints
+            m_anchorChoice->Delete( ANCHOR_CENTER_FOOTPRINT );
+        }
+    }
+    else
+    {
+        // hide the checkbox and choice control if overides are not allowed
+        bMainSizer->Hide( bAnchorSizer, true );
+    }
+
+    if( wxPoint( 0, 0 ) == aParent->GetScreen()->m_O_Curseur )
+    {
+        // disble the user origin option when the user oigin is not set
+        m_originChooser->Enable( RELATIVE_TO_USER_ORIGIN, false );
+        m_originChooser->SetItemToolTip( RELATIVE_TO_USER_ORIGIN,
+                                         wxString( "The user origin is currently not set\n"
+                                                   "Set it by using the <space> hotkey" ) );
+    }
+
+    if( wxPoint( 0, 0 ) == aParent->GetGridOrigin() )
+    {
+        // disble the grid origin option when the user oigin is not set
+        m_originChooser->Enable( RELATIVE_TO_GRID_ORIGIN, false );
+        m_originChooser->SetItemToolTip( RELATIVE_TO_GRID_ORIGIN,
+                                         wxString( "The grid origin is currently not set\n"
+                                                   "Set it by using the tool in the <place> menu" ) );
+    }
+
+    if( wxPoint( 0, 0 ) == aParent->GetAuxOrigin() )
+    {
+        // disble the grid origin option when the drill/place oigin is not set
+        m_originChooser->Enable( RELATIVE_TO_DRILL_PLACE_ORIGIN, false );
+        m_originChooser->SetItemToolTip( RELATIVE_TO_DRILL_PLACE_ORIGIN,
+                                         wxString( "The drill/place origin is currently not set\n"
+                                                   "Set it by using the tool in the <place> menu" ) );
+    }
+
     updateDlgTexts( m_polarCoords->IsChecked() );
 
     m_stdButtonsOK->SetDefault();
@@ -129,6 +196,37 @@ void DIALOG_MOVE_EXACT::OnPolarChanged( wxCommandEvent& event )
 }
 
 
+void DIALOG_MOVE_EXACT::OnOriginChanged( wxCommandEvent& event )
+{
+    if( m_originChooser->GetSelection() == RELATIVE_TO_CURRENT_POSITION )
+    {
+        //no need to override the achor in this mode since the reference in the current position
+        m_cbOverride->Disable();
+        m_anchorChoice->Disable();
+    }
+    else if( m_allowOverride )
+    {
+        m_cbOverride->Enable();
+
+        if( m_cbOverride->IsChecked() )
+            m_anchorChoice->Enable();
+    }
+}
+
+
+void DIALOG_MOVE_EXACT::OnOverrideChanged( wxCommandEvent& event )
+{
+    if( m_cbOverride->IsChecked() )
+    {
+        m_anchorChoice->Enable();
+    }
+    else
+    {
+        m_anchorChoice->Disable();
+    }
+}
+
+
 void DIALOG_MOVE_EXACT::updateDlgTexts( bool aPolar )
 {
     if( aPolar )
@@ -174,6 +272,16 @@ void DIALOG_MOVE_EXACT::OnClear( wxCommandEvent& event )
 void DIALOG_MOVE_EXACT::OnOkClick( wxCommandEvent& event )
 {
     m_rotation = DoubleValueFromString( DEGREES, m_rotEntry->GetValue() );
+    m_origin = static_cast<MOVE_EXACT_ORIGIN>( m_originChooser->GetSelection() );
+
+    if( m_cbOverride->IsChecked() && m_allowOverride )
+    {
+        m_anchor = static_cast<MOVE_EXACT_ANCHOR>( m_anchorChoice->GetSelection() );
+    }
+    else
+    {
+        m_anchor = ANCHOR_FROM_LIBRARY;
+    }
 
     // for the output, we only deliver a Cartesian vector
     bool ok = GetTranslationInIU( m_translation, m_polarCoords->IsChecked() );
@@ -185,7 +293,9 @@ void DIALOG_MOVE_EXACT::OnOkClick( wxCommandEvent& event )
         m_options.entry1 = DoubleValueFromString( UNSCALED_UNITS, m_xEntry->GetValue() );
         m_options.entry2 = DoubleValueFromString( UNSCALED_UNITS, m_yEntry->GetValue() );
         m_options.entryRotation = DoubleValueFromString( UNSCALED_UNITS, m_rotEntry->GetValue() );
-
+        m_options.origin = m_origin;
+        m_options.anchor = static_cast<MOVE_EXACT_ANCHOR>( m_anchorChoice->GetSelection() );
+        m_options.overrideAnchor = m_cbOverride->IsChecked();
         event.Skip();
     }
 }

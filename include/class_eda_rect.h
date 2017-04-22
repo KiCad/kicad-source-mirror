@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2004-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,6 +110,7 @@ public:
     const wxPoint& GetOrigin() const { return m_Pos; }
     const wxPoint& GetPosition() const { return m_Pos; }
     const wxPoint GetEnd() const { return wxPoint( m_Pos.x + m_Size.x, m_Pos.y + m_Size.y ); }
+    const wxPoint GetCenter() const { return wxPoint( m_Pos.x + ( m_Size.x / 2 ), m_Pos.y + ( m_Size.y / 2 ) ); }
 
     int GetWidth() const { return m_Size.x; }
     int GetHeight() const { return m_Size.y; }

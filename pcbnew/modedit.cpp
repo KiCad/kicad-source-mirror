@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -837,10 +838,11 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
 void FOOTPRINT_EDIT_FRAME::moveExact()
 {
-    wxPoint translation;
-    double rotation = 0;
+    MOVE_PARAMETERS params;
+    params.allowOverride = false;
+    params.editingFootprint = true;
 
-    DIALOG_MOVE_EXACT dialog( this, translation, rotation );
+    DIALOG_MOVE_EXACT dialog( this, params );
     int ret = dialog.ShowModal();
 
     if( ret == wxID_OK )
@@ -849,8 +851,39 @@ void FOOTPRINT_EDIT_FRAME::moveExact()
 
         BOARD_ITEM* item = GetScreen()->GetCurItem();
 
-        item->Move( translation );
-        item->Rotate( item->GetPosition(), rotation );
+        wxPoint anchorPoint = item->GetPosition();
+        wxPoint origin;
+
+        switch( params.origin )
+        {
+        case RELATIVE_TO_USER_ORIGIN:
+            origin = GetScreen()->m_O_Curseur;
+            break;
+
+        case RELATIVE_TO_GRID_ORIGIN:
+            origin = GetGridOrigin();
+            break;
+
+        case RELATIVE_TO_DRILL_PLACE_ORIGIN:
+            origin = GetAuxOrigin();
+            break;
+
+        case RELATIVE_TO_SHEET_ORIGIN:
+            origin = wxPoint( 0, 0 );
+            break;
+
+        case RELATIVE_TO_CURRENT_POSITION:
+            // relative movement means that only the translation values should be used:
+            // -> set origin and anchor to zero
+            origin = wxPoint( 0, 0 );
+            anchorPoint = wxPoint( 0, 0 );
+            break;
+        }
+
+        wxPoint finalMoveVector = params.translation + origin - anchorPoint;
+
+        item->Move( finalMoveVector );
+        item->Rotate( item->GetPosition(), params.rotation );
         m_canvas->Refresh();
     }
 
@@ -880,16 +913,15 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
 
     case ID_MODEDIT_MODULE_MOVE_EXACT:
     {
-        wxPoint translation;
-        double rotation = 0;
+        MOVE_PARAMETERS params;
 
-        DIALOG_MOVE_EXACT dialog( this, translation, rotation  );
+        DIALOG_MOVE_EXACT dialog( this, params );
         int ret = dialog.ShowModal();
 
         if( ret == wxID_OK )
         {
-            MoveMarkedItemsExactly( module, wxPoint(0, 0),
-                                    translation, rotation, true );
+            MoveMarkedItemsExactly( module, wxPoint( 0, 0 ),
+                    params.translation, params.rotation, true );
         }
 
         break;

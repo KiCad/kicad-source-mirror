@@ -4,6 +4,7 @@
  * Copyright (C) 2013-2015 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -221,6 +222,8 @@ bool EDIT_TOOL::Init()
 
 
 bool EDIT_TOOL::invokeInlineRouter()
+
+
 {
     TRACK* track = uniqueSelected<TRACK>();
     VIA* via = uniqueSelected<VIA>();
@@ -707,13 +710,12 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-
-    wxPoint translation;
-    double rotation = 0;
-
     PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
 
-    DIALOG_MOVE_EXACT dialog( editFrame, translation, rotation );
+    MOVE_PARAMETERS params;
+    params.editingFootprint = m_editModules;
+
+    DIALOG_MOVE_EXACT dialog( editFrame, params );
     int ret = dialog.ShowModal();
 
     if( ret == wxID_OK )
@@ -721,11 +723,97 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
         VECTOR2I rp = selection.GetCenter();
         wxPoint rotPoint( rp.x, rp.y );
 
+        // Begin at the center of the selection determined above
+        wxPoint anchorPoint = rotPoint;
+
+        // If the anchor is not ANCHOR_FROM_LIBRARY then the user applied an override.
+        // Also run through this block if only one item is slected because it may be a module,
+        // in which case we want something different than the center of the selection
+        if( ( params.anchor != ANCHOR_FROM_LIBRARY ) || ( selection.GetSize() == 1 ) )
+        {
+            BOARD_ITEM* topLeftItem = static_cast<BOARD_ITEM*>( selection.GetTopLeftModule() );
+
+            // no module found if the GetTopLeftModule() returns null, retry for
+            if( topLeftItem == nullptr )
+            {
+                topLeftItem = static_cast<BOARD_ITEM*>( selection.GetTopLeftItem() );
+                anchorPoint = topLeftItem->GetPosition();
+            }
+
+            if( topLeftItem->Type() == PCB_MODULE_T )
+            {
+                // Cast to module to allow access to the pads
+                MODULE* mod = static_cast<MODULE*>( topLeftItem );
+
+                switch( params.anchor )
+                {
+                case ANCHOR_FROM_LIBRARY:
+                    anchorPoint = mod->GetPosition();
+                    break;
+                case ANCHOR_TOP_LEFT_PAD:
+                    topLeftItem = mod->GetTopLeftPad();
+                    break;
+                case ANCHOR_CENTER_FOOTPRINT:
+                    anchorPoint = mod->GetFootprintRect().GetCenter();
+                    break;
+                }
+            }
+
+            if( topLeftItem->Type() == PCB_PAD_T )
+            {
+                if( static_cast<D_PAD*>( topLeftItem )->GetAttribute() == PAD_ATTRIB_SMD )
+                {
+                    // Use the top left corner of SMD pads as an anchor instead of the center
+                    anchorPoint = topLeftItem->GetBoundingBox().GetPosition();
+                }
+                else
+                {
+                    anchorPoint = topLeftItem->GetPosition();
+                }
+            }
+        }
+
+        wxPoint origin;
+
+        switch( params.origin )
+        {
+        case RELATIVE_TO_USER_ORIGIN:
+            origin = editFrame->GetScreen()->m_O_Curseur;
+            break;
+
+        case RELATIVE_TO_GRID_ORIGIN:
+            origin = editFrame->GetGridOrigin();
+            break;
+
+        case RELATIVE_TO_DRILL_PLACE_ORIGIN:
+            origin = editFrame->GetAuxOrigin();
+            break;
+
+        case RELATIVE_TO_SHEET_ORIGIN:
+            origin = wxPoint( 0, 0 );
+            break;
+
+        case RELATIVE_TO_CURRENT_POSITION:
+            // relative movement means that only the translation values should be used:
+            // -> set origin and anchor to zero
+            origin = wxPoint( 0, 0 );
+            anchorPoint = wxPoint( 0, 0 );
+            break;
+        }
+
+        wxPoint finalMoveVector = params.translation + origin - anchorPoint;
+
+        // Make sure the rotation is from the right reference point
+        rotPoint += finalMoveVector;
+
         for( auto item : selection )
         {
             m_commit->Modify( item );
-            static_cast<BOARD_ITEM*>( item )->Move( translation );
-            static_cast<BOARD_ITEM*>( item )->Rotate( rotPoint, rotation );
+            static_cast<BOARD_ITEM*>( item )->Move( finalMoveVector );
+            static_cast<BOARD_ITEM*>( item )->Rotate( rotPoint, params.rotation );
+
+            if( !m_dragging )
+                getView()->Update( item );
         }
 
         m_commit->Push( _( "Move exact" ) );

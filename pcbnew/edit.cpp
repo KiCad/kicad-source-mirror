@@ -5,6 +5,7 @@
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1536,10 +1537,9 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 
 void PCB_EDIT_FRAME::moveExact()
 {
-    wxPoint translation;
-    double rotation = 0;
+    MOVE_PARAMETERS params;
 
-    DIALOG_MOVE_EXACT dialog( this, translation, rotation );
+    DIALOG_MOVE_EXACT dialog( this, params );
     int ret = dialog.ShowModal();
 
     if( ret == wxID_OK )
@@ -1555,8 +1555,66 @@ void PCB_EDIT_FRAME::moveExact()
             // Could be moved or rotated
             SaveCopyInUndoList( itemToSave, UR_CHANGED );
 
-            item->Move( translation );
-            item->Rotate( item->GetPosition(), rotation );
+            // begin with the default anchor
+            wxPoint anchorPoint = item->GetPosition();
+
+            if( item->Type() == PCB_MODULE_T )
+            {
+                // cast to module to allow access to the pads
+                MODULE* mod = static_cast<MODULE*>( item );
+
+                switch( params.anchor )
+                {
+                case ANCHOR_TOP_LEFT_PAD:
+                    if( mod->GetTopLeftPad()->GetAttribute() == PAD_ATTRIB_SMD )
+                    {
+                        anchorPoint = mod->GetTopLeftPad()->GetBoundingBox().GetPosition();
+                    }
+                    else
+                    {
+                        anchorPoint = mod->GetTopLeftPad()->GetPosition();
+                    }
+                    break;
+                case ANCHOR_CENTER_FOOTPRINT:
+                    anchorPoint = mod->GetFootprintRect().GetCenter();
+                    break;
+                case ANCHOR_FROM_LIBRARY:
+                    ; // nothing to do
+                }
+            }
+
+            wxPoint origin;
+
+            switch( params.origin )
+            {
+            case RELATIVE_TO_USER_ORIGIN:
+                origin = GetScreen()->m_O_Curseur;
+                break;
+
+            case RELATIVE_TO_GRID_ORIGIN:
+                origin = GetGridOrigin();
+                break;
+
+            case RELATIVE_TO_DRILL_PLACE_ORIGIN:
+                origin = GetAuxOrigin();
+                break;
+
+            case RELATIVE_TO_SHEET_ORIGIN:
+                origin = wxPoint( 0, 0 );
+                break;
+
+            case RELATIVE_TO_CURRENT_POSITION:
+                // relative movement means that only the translation values should be used:
+                // -> set origin and anchor to zero
+                origin = wxPoint( 0, 0 );
+                anchorPoint = wxPoint( 0, 0 );
+                break;
+            }
+
+            wxPoint finalMoveVector = params.translation + origin - anchorPoint;
+
+            item->Move( finalMoveVector );
+            item->Rotate( item->GetPosition(), params.rotation );
             m_canvas->Refresh();
         }
     }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Jan 13 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -24,6 +24,8 @@ class DIALOG_SHIM;
 #include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
+#include <wx/radiobox.h>
+#include <wx/choice.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
 
@@ -38,6 +40,7 @@ class DIALOG_MOVE_EXACT_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
+		wxBoxSizer* bMainSizer;
 		wxCheckBox* m_polarCoords;
 		wxStaticText* m_xLabel;
 		wxTextCtrl* m_xEntry;
@@ -51,6 +54,10 @@ class DIALOG_MOVE_EXACT_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_rotEntry;
 		wxStaticText* m_rotUnit;
 		wxButton* m_clearRot;
+		wxRadioBox* m_originChooser;
+		wxBoxSizer* bAnchorSizer;
+		wxCheckBox* m_cbOverride;
+		wxChoice* m_anchorChoice;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
@@ -61,12 +68,14 @@ class DIALOG_MOVE_EXACT_BASE : public DIALOG_SHIM
 		virtual void OnPolarChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTextFocusLost( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnClear( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOriginChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOverrideChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Move Item"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Move Item"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 509,277 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_MOVE_EXACT_BASE();
 	
 };

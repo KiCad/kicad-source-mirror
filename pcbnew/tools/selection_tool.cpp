@@ -4,6 +4,7 @@
  * Copyright (C) 2013-2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
+ * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1820,29 +1821,74 @@ bool SELECTION_TOOL::SanitizeSelection()
 
 
 // TODO(JE) Only works for BOARD_ITEM
+VECTOR2I SELECTION::GetPosition() const
+{
+    return static_cast<VECTOR2I>( GetBoundingBox().GetPosition() );
+}
+
+
 VECTOR2I SELECTION::GetCenter() const
 {
-    VECTOR2I centre;
+    return static_cast<VECTOR2I>( GetBoundingBox().Centre() );
+}
 
-    if( Size() == 1 )
+
+EDA_RECT SELECTION::GetBoundingBox() const
+{
+    EDA_RECT bbox;
+
+    bbox = Front()->GetBoundingBox();
+    auto i = m_items.begin();
+    ++i;
+
+    for( ; i != m_items.end(); ++i )
     {
-        centre = static_cast<BOARD_ITEM*>( Front() )->GetCenter();
+        bbox.Merge( (*i)->GetBoundingBox() );
     }
-    else
-    {
-        EDA_RECT bbox = Front()->GetBoundingBox();
-        auto i = m_items.begin();
-        ++i;
 
-        for( ; i != m_items.end(); ++i )
+    return bbox;
+}
+
+
+EDA_ITEM* SELECTION::GetTopLeftItem( bool onlyModules ) const
+{
+    BOARD_ITEM* topLeftItem = nullptr;
+    BOARD_ITEM* currentItem;
+
+    wxPoint pnt;
+
+    // find the leftmost (smallest x coord) and highest (smallest y with the smallest x) item in the selection
+    for( auto item : m_items )
+    {
+        currentItem = static_cast<BOARD_ITEM*>( item );
+        pnt = currentItem->GetPosition();
+
+        if( ( currentItem->Type() != PCB_MODULE_T ) && onlyModules )
         {
-            bbox.Merge( (*i)->GetBoundingBox() );
+            continue;
         }
-
-        centre = bbox.Centre();
+        else
+        {
+            if( topLeftItem == nullptr )
+            {
+                topLeftItem = currentItem;
+            }
+            else if( ( pnt.x < topLeftItem->GetPosition().x ) ||
+                     ( ( topLeftItem->GetPosition().x == pnt.x ) &&
+                     ( pnt.y < topLeftItem->GetPosition().y ) ) )
+            {
+                topLeftItem = currentItem;
+            }
+        }
     }
 
-    return centre;
+    return static_cast<EDA_ITEM*>( topLeftItem );
+}
+
+
+EDA_ITEM* SELECTION::GetTopLeftModule() const
+{
+    return GetTopLeftItem( true );
 }
 
 

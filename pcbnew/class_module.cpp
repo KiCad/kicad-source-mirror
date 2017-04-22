@@ -653,6 +653,26 @@ D_PAD* MODULE::GetPad( const wxPoint& aPosition, LSET aLayerMask )
 }
 
 
+D_PAD* MODULE::GetTopLeftPad()
+{
+    D_PAD* topLeftPad = m_Pads;
+
+    for( D_PAD* p = m_Pads->Next(); p; p =  p->Next() )
+    {
+        wxPoint pnt = p->GetPosition(); // GetPosition() returns the center of the pad
+
+        if( ( pnt.x < topLeftPad->GetPosition().x ) ||
+            ( ( topLeftPad->GetPosition().x == pnt.x ) &&
+              ( pnt.y < topLeftPad->GetPosition().y ) ) )
+        {
+            topLeftPad = p;
+        }
+    }
+
+    return topLeftPad;
+}
+
+
 unsigned MODULE::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 {
     if( aIncludeNPTH )

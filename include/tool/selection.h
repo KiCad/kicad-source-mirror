@@ -124,6 +124,13 @@ public:
 
     const BOX2I ViewBBox() const override;
 
+    /// Returns the top left point of the selection area bounding box.
+    VECTOR2I GetPosition() const;
+
+    EDA_RECT    GetBoundingBox() const;
+    EDA_ITEM*   GetTopLeftItem( bool onlyModules = false ) const;
+    EDA_ITEM*   GetTopLeftModule() const;
+
     EDA_ITEM* operator[]( const int index ) const
     {
         if( index < 0 || (unsigned int) index >= m_items.size() )
