@@ -129,6 +129,7 @@ set( BMAPS_MID
     add_power
     add_rectangle
     add_tracks
+    add_via
     add_zone_cutout
     add_zone
     align_items
