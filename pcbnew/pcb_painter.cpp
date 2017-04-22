@@ -393,6 +393,64 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
     VECTOR2D center( aVia->GetStart() );
     double   radius = 0.0;
 
+    // Only draw the via if at least one of the layers it crosses is being displayed
+    BOARD*  brd =  aVia->GetBoard( );
+    if( !( brd->GetVisibleLayers() & aVia->GetLayerSet() ).any() )
+        return;
+
+        // Draw description layer
+        if( IsNetnameLayer( aLayer ) )
+        {
+            VECTOR2D position( center );
+
+            // Is anything that we can display enabled?
+            if( m_pcbSettings.m_netNamesOnVias )
+            {
+                bool displayNetname = ( !aVia->GetNetname().empty() );
+                double maxSize = PCB_RENDER_SETTINGS::MAX_FONT_SIZE;
+                double size = aVia->GetWidth();
+
+                // Font size limits
+                if( size > maxSize )
+                    size = maxSize;
+
+                m_gal->Save();
+                m_gal->Translate( position );
+
+                // Default font settings
+                m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
+                m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+                m_gal->SetFontBold( false );
+                m_gal->SetFontItalic( false );
+                m_gal->SetTextMirrored( false );
+                m_gal->SetStrokeColor( m_pcbSettings.GetColor( NULL, aLayer ) );
+                m_gal->SetIsStroke( true );
+                m_gal->SetIsFill( false );
+
+                // Set the text position to the pad shape position (the pad position is not the best place)
+                VECTOR2D textpos( 0.0, 0.0 );
+
+                if( displayNetname )
+                {
+                    // calculate the size of net name text:
+                    double tsize = 1.5 * size / aVia->GetShortNetname().Length();
+                    tsize = std::min( tsize, size );
+                    // Use a smaller text size to handle interline, pen size..
+                    tsize *= 0.7;
+                    VECTOR2D namesize( tsize, tsize );
+
+                    m_gal->SetGlyphSize( namesize );
+                    m_gal->SetLineWidth( namesize.x / 12.0 );
+                    m_gal->BitmapText( aVia->GetShortNetname(), textpos, 0.0 );
+                }
+
+
+                m_gal->Restore();
+            }
+            return;
+        }
+
+
     // Choose drawing settings depending on if we are drawing via's pad or hole
     if( aLayer == LAYER_VIAS_HOLES )
         radius = aVia->GetDrillValue() / 2.0;

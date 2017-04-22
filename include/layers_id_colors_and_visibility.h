@@ -153,6 +153,7 @@ enum NETNAMES_LAYER_ID: int
     LAYER_PAD_FR_NETNAMES,
     LAYER_PAD_BK_NETNAMES,
     LAYER_PADS_NETNAMES,
+    LAYER_VIAS_NETNAMES,
 
     NETNAMES_LAYER_ID_END
 };
@@ -750,6 +751,7 @@ inline int GetNetnameLayer( int aLayer )
         return LAYER_PAD_FR_NETNAMES;
     else if( aLayer == LAYER_PAD_BK )
         return LAYER_PAD_BK_NETNAMES;
+    // fixme :via names
 
     // Fallback
     return Cmts_User;
