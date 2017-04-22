@@ -493,6 +493,7 @@
                                 <property name="minimum_size"></property>
                                 <property name="name">m_NetSortOptSizer</property>
                                 <property name="orient">wxVERTICAL</property>
+                                <property name="parent">1</property>
                                 <property name="permission">none</property>
                                 <event name="OnUpdateUI"></event>
                                 <object class="sizeritem" expanded="0">
@@ -1116,6 +1117,7 @@
                         <property name="minimum_size"></property>
                         <property name="name">m_ExportableSetupSizer</property>
                         <property name="orient">wxHORIZONTAL</property>
+                        <property name="parent">1</property>
                         <property name="permission">none</property>
                         <event name="OnUpdateUI"></event>
                         <object class="sizeritem" expanded="1">
@@ -2012,6 +2014,7 @@
                                         <property name="minimum_size"></property>
                                         <property name="name">m_ThermalShapesParamsSizer</property>
                                         <property name="orient">wxVERTICAL</property>
+                                        <property name="parent">1</property>
                                         <property name="permission">none</property>
                                         <event name="OnUpdateUI"></event>
                                         <object class="sizeritem" expanded="0">
@@ -2428,7 +2431,7 @@
                                         <property name="style"></property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Zones are filled by priority level, level 2 has higher priority than level 3.&#x0A;When a zone is inside an other zone:&#x0A;* If its priority is higher, its outlines are removed from the other zone.&#x0A;* If its priority is equal, a DRC error is set.</property>
+                                        <property name="tooltip">Zones are filled by priority level, level 3 has higher priority than level 2.&#x0A;When a zone is inside an other zone:&#x0A;* If its priority is higher, its outlines are removed from the other zone.&#x0A;* If its priority is equal, a DRC error is set.</property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
