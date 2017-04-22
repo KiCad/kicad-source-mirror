@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 19 2017)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -186,7 +186,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	
 	m_staticTextPriorityLevel = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Zone priority level:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPriorityLevel->Wrap( -1 );
-	m_staticTextPriorityLevel->SetToolTip( _("On each copper layer, zones are filled by priority order.\nSo when a zone is inside an other zone:\n* If its priority is higher: its outlines are removed from the other layer.\n* If its priority is equal: a DRC error is set.") );
+	m_staticTextPriorityLevel->SetToolTip( _("Zones are filled by priority level, level 3 has higher priority than level 2.\nWhen a zone is inside an other zone:\n* If its priority is higher, its outlines are removed from the other zone.\n* If its priority is equal, a DRC error is set.") );
 	
 	m_MiddleBox->Add( m_staticTextPriorityLevel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	

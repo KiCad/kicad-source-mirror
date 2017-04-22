@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -65,6 +65,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	fgSizerBrdThickness->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_textCtrlBrdThickness = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	#ifdef __WXGTK__
+	if ( !m_textCtrlBrdThickness->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_textCtrlBrdThickness->SetMaxLength( 20 );
+	}
+	#else
+	m_textCtrlBrdThickness->SetMaxLength( 20 );
+	#endif
 	fgSizerBrdThickness->Add( m_textCtrlBrdThickness, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticTextBrdThicknessUnit = new wxStaticText( this, wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -184,7 +192,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer6->Fit( m_AdhesFrontPanel );
 	m_LayerListFlexGridSizer->Add( m_AdhesFrontPanel, 1, wxEXPAND, 5 );
 	
-	m_AdhesFrontStaticText = new wxStaticText( m_LayersListPanel, ID_ADHESFRONTCHOICE, _("Off-board, manufacturing"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_AdhesFrontStaticText = new wxStaticText( m_LayersListPanel, ID_ADHESFRONTCHOICE, _("On-board, non-copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AdhesFrontStaticText->Wrap( -1 );
 	m_LayerListFlexGridSizer->Add( m_AdhesFrontStaticText, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
@@ -264,7 +272,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_MaskFrontStaticText, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_FrontName = new wxTextCtrl( m_LayersListPanel, ID_FRONTNAME, _("Front_later"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_FrontName->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_FrontName->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_FrontName->SetMaxLength( 20 );
+	}
+	#else
+	m_FrontName->SetMaxLength( 20 );
+	#endif
 	m_FrontName->SetToolTip( _("Layer name of front (top) copper layer") );
 	
 	m_LayerListFlexGridSizer->Add( m_FrontName, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
@@ -296,7 +311,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_FrontChoice, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_In1Name = new wxTextCtrl( m_LayersListPanel, ID_IN1NAME, _("In1"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In1Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In1Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In1Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In1Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In1Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In1Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -325,7 +347,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In1Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In2Name = new wxTextCtrl( m_LayersListPanel, ID_IN2NAME, _("In2"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In2Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In2Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In2Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In2Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In2Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In2Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -354,7 +383,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In2Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In3Name = new wxTextCtrl( m_LayersListPanel, ID_IN3NAME, _("In3"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In3Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In3Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In3Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In3Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In3Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In3Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -383,7 +419,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In3Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In4Name = new wxTextCtrl( m_LayersListPanel, ID_IN4NAME, _("In4"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In4Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In4Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In4Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In4Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In4Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In4Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -412,7 +455,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In4Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In5Name = new wxTextCtrl( m_LayersListPanel, ID_IN5NAME, _("In5"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In5Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In5Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In5Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In5Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In5Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In5Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -441,7 +491,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In5Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In6Name = new wxTextCtrl( m_LayersListPanel, ID_IN6NAME, _("In6"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In6Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In6Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In6Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In6Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In6Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In6Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -470,7 +527,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In6Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In7Name = new wxTextCtrl( m_LayersListPanel, ID_IN7NAME, _("In7"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In7Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In7Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In7Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In7Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In7Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In7Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -499,7 +563,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In7Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In8Name = new wxTextCtrl( m_LayersListPanel, ID_IN8NAME, _("In8"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In8Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In8Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In8Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In8Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In8Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In8Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -528,7 +599,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In8Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In9Name = new wxTextCtrl( m_LayersListPanel, ID_IN9NAME, _("In9"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In9Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In9Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In9Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In9Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In9Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In9Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -557,7 +635,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In9Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In10Name = new wxTextCtrl( m_LayersListPanel, ID_IN10NAME, _("In10"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In10Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In10Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In10Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In10Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In10Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In10Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -586,7 +671,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In10Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In11Name = new wxTextCtrl( m_LayersListPanel, ID_IN11NAME, _("In11"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In11Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In11Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In11Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In11Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In11Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In11Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -615,7 +707,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In11Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In12Name = new wxTextCtrl( m_LayersListPanel, ID_IN12NAME, _("In12"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In12Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In12Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In12Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In12Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In12Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In12Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -644,7 +743,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In12Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In13Name = new wxTextCtrl( m_LayersListPanel, ID_IN13NAME, _("In13"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In13Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In13Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In13Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In13Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In13Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In13Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -673,7 +779,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In13Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In14Name = new wxTextCtrl( m_LayersListPanel, ID_IN14NAME, _("In14"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In14Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In14Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In14Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In14Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In14Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In14Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -702,7 +815,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In14Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In15Name = new wxTextCtrl( m_LayersListPanel, ID_IN15NAME, _("In15"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In15Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In15Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In15Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In15Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In15Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In15Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -731,7 +851,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In15Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In16Name = new wxTextCtrl( m_LayersListPanel, ID_IN16NAME, _("In16"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In16Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In16Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In16Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In16Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In16Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In16Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -760,7 +887,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In16Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In17Name = new wxTextCtrl( m_LayersListPanel, ID_IN17NAME, _("In17"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In17Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In17Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In17Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In17Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In17Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In17Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -789,7 +923,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In17Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In18Name = new wxTextCtrl( m_LayersListPanel, ID_IN18NAME, _("In18"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In18Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In18Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In18Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In18Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In18Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In18Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -818,7 +959,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In18Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In19Name = new wxTextCtrl( m_LayersListPanel, ID_IN19NAME, _("In19"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In19Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In19Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In19Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In19Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In19Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In19Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -847,7 +995,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In19Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In20Name = new wxTextCtrl( m_LayersListPanel, ID_IN20NAME, _("In20"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In20Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In20Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In20Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In20Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In20Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In20Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -876,7 +1031,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In20Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In21Name = new wxTextCtrl( m_LayersListPanel, ID_IN21NAME, _("In21"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In21Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In21Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In21Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In21Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In21Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In21Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -905,7 +1067,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In21Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In22Name = new wxTextCtrl( m_LayersListPanel, ID_IN22NAME, _("In22"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In22Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In22Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In22Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In22Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In22Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In22Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -934,7 +1103,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In22Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In23Name = new wxTextCtrl( m_LayersListPanel, ID_IN23NAME, _("In23"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In23Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In23Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In23Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In23Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In23Name, 0, wxALL|wxEXPAND, 5 );
 	
 	m_In23Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -963,7 +1139,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In23Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In24Name = new wxTextCtrl( m_LayersListPanel, ID_IN24NAME, _("In24"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In24Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In24Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In24Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In24Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In24Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In24Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -992,7 +1175,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In24Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In25Name = new wxTextCtrl( m_LayersListPanel, ID_IN25NAME, _("In25"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In25Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In25Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In25Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In25Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In25Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In25Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -1021,7 +1211,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In25Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In26Name = new wxTextCtrl( m_LayersListPanel, ID_IN26NAME, _("In26"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In26Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In26Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In26Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In26Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In26Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In26Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -1050,7 +1247,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In26Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In27Name = new wxTextCtrl( m_LayersListPanel, ID_IN27NAME, _("In27"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In27Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In27Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In27Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In27Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In27Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In27Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -1079,7 +1283,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In27Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In28Name = new wxTextCtrl( m_LayersListPanel, ID_IN28NAME, _("In28"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In28Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In28Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In28Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In28Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In28Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In28Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -1108,7 +1319,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In28Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In29Name = new wxTextCtrl( m_LayersListPanel, ID_IN29NAME, _("In29"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In29Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In29Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In29Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In29Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In29Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In29Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -1137,7 +1355,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In29Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In30Name = new wxTextCtrl( m_LayersListPanel, ID_IN30NAME, _("In30"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_In30Name->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_In30Name->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_In30Name->SetMaxLength( 20 );
+	}
+	#else
+	m_In30Name->SetMaxLength( 20 );
+	#endif
 	m_LayerListFlexGridSizer->Add( m_In30Name, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_In30Panel = new wxPanel( m_LayersListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -1166,7 +1391,14 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	m_LayerListFlexGridSizer->Add( m_In30Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_BackName = new wxTextCtrl( m_LayersListPanel, ID_BACKNAME, _("Back"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_BackName->SetMaxLength( 20 ); 
+	#ifdef __WXGTK__
+	if ( !m_BackName->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_BackName->SetMaxLength( 20 );
+	}
+	#else
+	m_BackName->SetMaxLength( 20 );
+	#endif
 	m_BackName->SetToolTip( _("Layer name of back (bottom) copper layer") );
 	
 	m_LayerListFlexGridSizer->Add( m_BackName, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
@@ -1293,7 +1525,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer27->Fit( m_AdhesBackPanel );
 	m_LayerListFlexGridSizer->Add( m_AdhesBackPanel, 1, wxEXPAND, 5 );
 	
-	m_AdhesBackStaticText = new wxStaticText( m_LayersListPanel, ID_ADHESBACKCHOICE, _("Off-board, manufacturing"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_AdhesBackStaticText = new wxStaticText( m_LayersListPanel, ID_ADHESBACKCHOICE, _("On-board, non-copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AdhesBackStaticText->Wrap( -1 );
 	m_LayerListFlexGridSizer->Add( m_AdhesBackStaticText, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
@@ -1333,7 +1565,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	bSizer6111 = new wxBoxSizer( wxVERTICAL );
 	
 	m_CrtYdBackCheckBox = new wxCheckBox( m_CrtYdBackPanel, ID_CRTYDBACKCHECKBOX, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_CrtYdBackCheckBox->SetToolTip( _("If you want a courtyard layer for the front side of the board") );
+	m_CrtYdBackCheckBox->SetToolTip( _("If you want a courtyard layer for the back side of the board") );
 	
 	bSizer6111->Add( m_CrtYdBackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	

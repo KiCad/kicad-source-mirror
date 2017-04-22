@@ -2431,7 +2431,7 @@
                                         <property name="style"></property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">On each copper layer, zones are filled by priority order.&#x0A;So when a zone is inside an other zone:&#x0A;* If its priority is higher: its outlines are removed from the other layer.&#x0A;* If its priority is equal: a DRC error is set.</property>
+                                        <property name="tooltip">Zones are filled by priority level, level 3 has higher priority than level 2.&#x0A;When a zone is inside an other zone:&#x0A;* If its priority is higher, its outlines are removed from the other zone.&#x0A;* If its priority is equal, a DRC error is set.</property>
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
