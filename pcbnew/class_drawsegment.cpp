@@ -517,6 +517,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition ) const
 bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT arect = aRect;
+    arect.Normalize();
     arect.Inflate( aAccuracy );
 
     EDA_RECT arcRect;

@@ -483,6 +483,8 @@ public:
 
     bool HitTest( const wxPoint& aPosition ) const override;
 
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+
     wxString GetClass() const override
     {
         return wxT( "PAD" );

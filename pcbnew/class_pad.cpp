@@ -776,6 +776,36 @@ bool D_PAD::HitTest( const wxPoint& aPosition ) const
     return false;
 }
 
+bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+{
+    EDA_RECT arect = aRect;
+    arect.Normalize();
+    arect.Inflate( aAccuracy );
+
+    if( !arect.Intersects( GetBoundingBox() ) )
+        return false;
+
+    if( aContained )
+        return arect.Contains( GetBoundingBox() );
+
+    switch( GetShape() )
+    {
+    case PAD_SHAPE_CIRCLE:
+        return arect.IntersectsCircle( GetPosition(), GetBoundingRadius() );
+    case PAD_SHAPE_RECT:
+        break;
+    case PAD_SHAPE_OVAL:
+        break;
+    case PAD_SHAPE_TRAPEZOID:
+        break;
+    case PAD_SHAPE_ROUNDRECT:
+        break;
+    default:
+        break;
+    }
+
+    return false;
+}
 
 int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
 {
