@@ -223,7 +223,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
 
         case F_SilkS:
         case B_SilkS:
-            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
+            if ( plotOpt.GetPlotOutlineMode() )
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
             else
                 PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
@@ -264,7 +264,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
             plotOpt.SetSkipPlotNPTH_Pads( false );
             plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
 
-            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
+            if ( plotOpt.GetPlotOutlineMode() )
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
             else
                 PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
@@ -274,7 +274,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
             plotOpt.SetSkipPlotNPTH_Pads( false );
             plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
 
-            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF )
+            if ( plotOpt.GetPlotOutlineMode() )
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
             else
                 PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );

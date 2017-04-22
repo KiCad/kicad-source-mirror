@@ -201,6 +201,9 @@ void DIALOG_PLOT::Init_Dialog()
     // Plot mode
     setPlotModeChoiceSelection( m_plotOpts.GetPlotMode() );
 
+    // Plot outline mode
+    m_plotOutlineModeOpt->SetValue( m_plotOpts.GetPlotOutlineMode() );
+
     // Plot mirror option
     m_plotMirrorOpt->SetValue( m_plotOpts.GetMirror() );
 
@@ -369,6 +372,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_drillShapeOpt->Enable( true );
         m_plotModeOpt->Enable( false );
         setPlotModeChoiceSelection( FILLED );
+        m_plotOutlineModeOpt->Enable( false );
+        m_plotOutlineModeOpt->SetValue( false );
         m_plotMirrorOpt->Enable( true );
         m_useAuxOriginCheckBox->Enable( false );
         m_useAuxOriginCheckBox->SetValue( false );
@@ -392,6 +397,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
     case PLOT_FORMAT_POST:
         m_drillShapeOpt->Enable( true );
         m_plotModeOpt->Enable( true );
+        m_plotOutlineModeOpt->Enable( false );
+        m_plotOutlineModeOpt->SetValue( false );
         m_plotMirrorOpt->Enable( true );
         m_useAuxOriginCheckBox->Enable( false );
         m_useAuxOriginCheckBox->SetValue( false );
@@ -415,6 +422,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_drillShapeOpt->SetSelection( 0 );
         m_plotModeOpt->Enable( false );
         setPlotModeChoiceSelection( FILLED );
+        m_plotOutlineModeOpt->Enable( false );
+        m_plotOutlineModeOpt->SetValue( false );
         m_plotMirrorOpt->Enable( false );
         m_plotMirrorOpt->SetValue( false );
         m_useAuxOriginCheckBox->Enable( true );
@@ -442,6 +451,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
     case PLOT_FORMAT_HPGL:
         m_drillShapeOpt->Enable( true );
         m_plotModeOpt->Enable( true );
+        m_plotOutlineModeOpt->Enable( false );
+        m_plotOutlineModeOpt->SetValue( false );
         m_plotMirrorOpt->Enable( true );
         m_useAuxOriginCheckBox->Enable( false );
         m_useAuxOriginCheckBox->SetValue( false );
@@ -464,6 +475,8 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
     case PLOT_FORMAT_DXF:
         m_drillShapeOpt->Enable( true );
         m_plotModeOpt->Enable( false );
+        setPlotModeChoiceSelection( FILLED );
+        m_plotOutlineModeOpt->Enable( true );
         m_plotMirrorOpt->Enable( false );
         m_plotMirrorOpt->SetValue( false );
         m_useAuxOriginCheckBox->Enable( true );
@@ -556,6 +569,7 @@ void DIALOG_PLOT::applyPlotSettings()
                                    ( m_drillShapeOpt->GetSelection() ) );
     tempOptions.SetMirror( m_plotMirrorOpt->GetValue() );
     tempOptions.SetPlotMode( m_plotModeOpt->GetSelection() == 1 ? SKETCH : FILLED );
+    tempOptions.SetPlotOutlineMode( m_plotOutlineModeOpt->GetValue() );
     tempOptions.SetPlotViaOnMaskLayer( m_plotNoViaOnMaskOpt->GetValue() );
 
     // Update settings from text fields. Rewrite values back to the fields,

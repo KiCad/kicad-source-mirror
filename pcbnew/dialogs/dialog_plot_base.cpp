@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 16 2016)
+// C++ code generated with wxFormBuilder (version Dec 21 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -127,6 +127,12 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_useAuxOriginCheckBox->SetToolTip( _("Use auxiliary axis as coordinates origin in plot files") );
 	
 	bSizerPlotItems->Add( m_useAuxOriginCheckBox, 0, wxALL, 2 );
+	
+	m_plotOutlineModeOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot lines in outline mode"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotOutlineModeOpt->SetValue(true); 
+	m_plotOutlineModeOpt->SetToolTip( _("Otherwise plot with sketch lines in layers that don't support polygons (*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab) and plot in outline mode in other layers (*.Cu, *.Adhes, *.Paste, *.Mask)") );
+	
+	bSizerPlotItems->Add( m_plotOutlineModeOpt, 0, wxALL, 2 );
 	
 	
 	bSizer192->Add( bSizerPlotItems, 0, wxEXPAND, 5 );
