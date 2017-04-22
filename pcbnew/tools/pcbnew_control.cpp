@@ -836,6 +836,11 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
         return 0;
     }
 
+    // rebuild nets and ratsnest before any use of nets
+    board->BuildListOfNets();
+    board->SynchronizeNetsAndNetClasses();
+    board->GetRatsnest()->ProcessBoard();
+
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
@@ -899,11 +904,6 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     editFrame->ReCreateLayerBox();
     editFrame->ReFillLayerWidget();
     static_cast<PCB_DRAW_PANEL_GAL*>( editFrame->GetGalCanvas() )->SyncLayersVisibility( board );
-
-    // Ratsnest
-    board->BuildListOfNets();
-    board->SynchronizeNetsAndNetClasses();
-    board->GetRatsnest()->ProcessBoard();
 
     // Start dragging the appended board
     if( selection.Size() )     // be sure at least one item is loaded
