@@ -424,7 +424,7 @@ void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
 
     // Now, output the final polygon to DXF file:
     last = path.PointCount() - 1;
-	  VECTOR2I point = path.CPoint( 0 );
+    VECTOR2I point = path.CPoint( 0 );
 
     wxPoint startPoint( point.x, point.y );
     MoveTo( startPoint );
@@ -480,7 +480,8 @@ void DXF_PLOTTER::SetDash( bool dashed )
 void DXF_PLOTTER::ThickSegment( const wxPoint& aStart, const wxPoint& aEnd, int aWidth,
                                 EDA_DRAW_MODE_T aPlotMode )
 {
-    segmentAsOval( aStart, aEnd, aWidth, aPlotMode );
+    MoveTo( aStart );
+    FinishTo( aEnd );
 }
 
 /* Plot an arc in DXF format
