@@ -256,7 +256,7 @@ public:
     DLIST_ITERATOR_WRAPPER<TRACK> Tracks() { return DLIST_ITERATOR_WRAPPER<TRACK>(m_Track); }
     DLIST_ITERATOR_WRAPPER<MODULE> Modules() { return DLIST_ITERATOR_WRAPPER<MODULE>(m_Modules); }
     DLIST_ITERATOR_WRAPPER<BOARD_ITEM> Drawings() { return DLIST_ITERATOR_WRAPPER<BOARD_ITEM>(m_Drawings); }
-
+    ZONE_CONTAINERS& Zones() { return m_ZoneDescriptorList; }
 
 
     // will be deprecated as soon as append board functionality is fixed

@@ -35,36 +35,44 @@
 #include "pcb_actions.h"
 #include "tool_event_utils.h"
 
-
-void PCB_TOOL::doInteractiveItemPlacement( ITEM_CREATOR aItemCreator,
-                                           const wxString& aCommitMessage )
+void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE *aPlacer,
+                                           const wxString& aCommitMessage,
+                                           int aOptions )
 {
     using namespace std::placeholders;
-
-    KIGFX::VIEW& view = *getView();
-    KIGFX::VIEW_CONTROLS& controls = *getViewControls();
-    auto& frame = *getEditFrame<PCB_EDIT_FRAME>();
-
     std::unique_ptr<BOARD_ITEM> newItem;
 
     Activate();
 
-    BOARD_COMMIT commit( &frame );
+    BOARD_COMMIT commit( frame() );
 
     GetManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
     // do not capture or auto-pan until we start placing an item
-    controls.ShowCursor( true );
-    controls.SetSnapping( true );
+    controls()->ShowCursor( true );
+    controls()->SetSnapping( true );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     SELECTION preview;
-    view.Add( &preview );
+    view()->Add( &preview );
+
+    aPlacer->m_board = board();
+    aPlacer->m_frame = frame();
+
+    if ( aOptions & IPO_SINGLE_CLICK )
+    {
+        VECTOR2I cursorPos = controls()->GetCursorPosition();
+
+        newItem = aPlacer->CreateItem();
+        newItem->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+
+        preview.Add( newItem.get() );
+    }
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        VECTOR2I cursorPos = controls.GetCursorPosition();
+        VECTOR2I cursorPos = controls()->GetCursorPosition();
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
@@ -75,9 +83,12 @@ void PCB_TOOL::doInteractiveItemPlacement( ITEM_CREATOR aItemCreator,
 
                 preview.Clear();
 
-                controls.SetAutoPan( false );
-                controls.CaptureCursor( false );
-                controls.ShowCursor( true );
+                if ( aOptions & IPO_SINGLE_CLICK )
+                    break;
+
+                controls()->SetAutoPan( false );
+                controls()->CaptureCursor( false );
+                controls()->ShowCursor( true );
             }
             else
             {
@@ -93,14 +104,14 @@ void PCB_TOOL::doInteractiveItemPlacement( ITEM_CREATOR aItemCreator,
             if( !newItem )
             {
                 // create the item if possible
-                newItem = aItemCreator( *evt );
+                newItem = aPlacer->CreateItem();
 
                 // no item created, so wait for another click
                 if( !newItem  )
                     continue;
 
-                controls.CaptureCursor( true );
-                controls.SetAutoPan( true );
+                controls()->CaptureCursor( true );
+                controls()->SetAutoPan( true );
 
                 newItem->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
@@ -119,6 +130,8 @@ void PCB_TOOL::doInteractiveItemPlacement( ITEM_CREATOR aItemCreator,
                 newItem->ClearFlags();
                 preview.Remove( newItem.get() );
 
+                aPlacer->PlaceItem( newItem.get() );
+
                 if( newItem->Type() == PCB_MODULE_T )
                 {
                     auto module = dyn_cast<MODULE*>( newItem.get() );
@@ -128,9 +141,22 @@ void PCB_TOOL::doInteractiveItemPlacement( ITEM_CREATOR aItemCreator,
                 commit.Add( newItem.release() );
                 commit.Push( aCommitMessage );
 
-                controls.CaptureCursor( false );
-                controls.SetAutoPan( false );
-                controls.ShowCursor( true );
+                controls()->CaptureCursor( false );
+                controls()->SetAutoPan( false );
+                controls()->ShowCursor( true );
+                if (! ( aOptions & IPO_REPEAT ) )
+                    break;
+
+                if ( aOptions & IPO_SINGLE_CLICK )
+                {
+                    VECTOR2I cursorPos = controls()->GetCursorPosition();
+
+                    newItem = aPlacer->CreateItem();
+                    newItem->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+
+                    preview.Add( newItem.get() );
+                }
+
             }
         }
 
@@ -141,17 +167,17 @@ void PCB_TOOL::doInteractiveItemPlacement( ITEM_CREATOR aItemCreator,
              * it around, eg rotate and flip
              */
 
-            if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) )
+            if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) && ( aOptions & IPO_ROTATE ) )
             {
                 const auto rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle(
-                        frame, *evt );
+                        *frame(), *evt );
                 newItem->Rotate( newItem->GetPosition(), rotationAngle );
-                view.Update( &preview );
+                view()->Update( &preview );
             }
-            else if( evt->IsAction( &PCB_ACTIONS::flip ) )
+            else if( evt->IsAction( &PCB_ACTIONS::flip ) && ( aOptions & IPO_FLIP ) )
             {
                 newItem->Flip( newItem->GetPosition() );
-                view.Update( &preview );
+                view()->Update( &preview );
             }
         }
 
@@ -161,9 +187,9 @@ void PCB_TOOL::doInteractiveItemPlacement( ITEM_CREATOR aItemCreator,
             newItem->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
             // Show a preview of the item
-            view.Update( &preview );
+            view()->Update( &preview );
         }
     }
 
-    view.Remove( &preview );
+    view()->Remove( &preview );
 }

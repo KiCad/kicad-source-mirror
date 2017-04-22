@@ -135,6 +135,8 @@ public:
      */
     int DrawZone( const TOOL_EVENT& aEvent );
 
+    int DrawVia( const TOOL_EVENT& aEvent );
+
     /**
      * Function DrawZoneKeepout()
      * Starts interactively drawing a keepout area. After invoking the function an area settings

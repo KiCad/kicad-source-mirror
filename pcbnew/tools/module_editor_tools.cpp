@@ -95,85 +95,28 @@ void MODULE_EDITOR_TOOLS::Reset( RESET_REASON aReason )
 }
 
 
+
 int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 {
+    struct PAD_PLACER : public INTERACTIVE_PLACER_BASE
+    {
+        std::unique_ptr<BOARD_ITEM> CreateItem() override
+        {
+            D_PAD* pad = new D_PAD ( m_board->m_Modules );
+            m_frame->Import_Pad_Settings( pad, false );     // use the global settings for pad
+    //        pad->IncrementPadName( true, true );
+            return std::unique_ptr<BOARD_ITEM>( pad );
+        }
+    };
+
+    PAD_PLACER placer;
+
     frame()->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_PENCIL, _( "Add pads" ) );
 
     assert( board()->m_Modules );
 
-    D_PAD* pad = new D_PAD( board()->m_Modules );
-    frame()->Import_Pad_Settings( pad, false );     // use the global settings for pad
+    doInteractiveItemPlacement( &placer,  _( "Place pad" ), IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP | IPO_PROPERTIES );
 
-    VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
-    pad->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-
-    // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( view() );
-    preview.Add( pad );
-    view()->Add( &preview );
-
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    getViewControls()->ShowCursor( true );
-    getViewControls()->SetSnapping( true );
-
-    Activate();
-
-    // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
-    {
-        cursorPos = getViewControls()->GetCursorPosition();
-
-        if( evt->IsMotion() )
-        {
-            pad->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-            view()->Update( &preview );
-        }
-
-        else if( evt->Category() == TC_COMMAND )
-        {
-            if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) )
-            {
-                const auto rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle(
-                        *frame(), *evt );
-                pad->Rotate( pad->GetPosition(), rotationAngle );
-                view()->Update( &preview );
-            }
-            else if( evt->IsAction( &PCB_ACTIONS::flip ) )
-            {
-                pad->Flip( pad->GetPosition() );
-                view()->Update( &preview );
-            }
-            else if( evt->IsCancel() || evt->IsActivate() )
-            {
-                preview.Clear();
-                delete pad;
-                break;
-            }
-        }
-
-        else if( evt->IsClick( BUT_LEFT ) )
-        {
-            BOARD_COMMIT commit( frame() );
-            commit.Add( pad );
-
-            board()->m_Status_Pcb = 0;    // I have no clue why, but it is done in the legacy view
-
-            // Take the next available pad number
-            pad->IncrementPadName( true, true );
-
-            // Handle the view aspect
-            preview.Remove( pad );
-            commit.Push( _( "Add a pad" ) );
-
-            // Start placing next pad
-            pad = new D_PAD( board()->m_Modules );
-            frame()->Import_Pad_Settings( pad, false );
-            pad->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-            preview.Add( pad );
-        }
-    }
-
-    view()->Remove( &preview );
     frame()->SetNoToolSelected();
 
     return 0;

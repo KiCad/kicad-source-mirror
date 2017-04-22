@@ -42,6 +42,19 @@
  * A tool operating on a BOARD object
 **/
 
+class PCB_TOOL;
+class PCB_EDIT_FRAME;
+
+struct INTERACTIVE_PLACER_BASE
+{
+    virtual std::unique_ptr<BOARD_ITEM> CreateItem() = 0;
+    virtual bool PlaceItem( BOARD_ITEM *aItem ) { return false; }
+
+    PCB_EDIT_FRAME *m_frame;
+    BOARD *m_board;
+};
+
+
 class PCB_TOOL : public TOOL_INTERACTIVE
 {
 public:
@@ -82,13 +95,14 @@ public:
 
 protected:
 
-    /**
-     * Callable that returns a new board item.
-     *
-     * The event that triggered it is provided, so you can check modifier
-     * keys, position, etc, if required
-     */
-    using ITEM_CREATOR = std::function< std::unique_ptr< BOARD_ITEM >( const TOOL_EVENT& aEvt ) >;
+    enum INTERACTIVE_PLACEMENT_OPTIONS {
+        IPO_ROTATE = 1,
+        IPO_FLIP = 2,
+        IPO_PROPERTIES = 4,
+        IPO_SINGLE_CLICK = 8,
+        IPO_REPEAT = 16
+    };
+
 
     /**
      * Helper function for performing a common interactive idiom:
@@ -102,10 +116,12 @@ protected:
      * @param aItemCreator the callable that will attempt to create the item
      * @param aCommitMessage the message used on a successful commit
      */
-    void doInteractiveItemPlacement( ITEM_CREATOR aItemCreator,
-                                     const wxString& aCommitMessage );
+    void doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE *aPlacer,
+                                     const wxString& aCommitMessage,
+                                     int aOptions = IPO_ROTATE | IPO_FLIP | IPO_REPEAT );
 
     KIGFX::VIEW* view() const { return getView(); }
+    KIGFX::VIEW_CONTROLS* controls() const { return getViewControls(); }
     PCB_EDIT_FRAME* frame() const { return getEditFrame<PCB_EDIT_FRAME>(); }
     BOARD* board() const { return getModel<BOARD>(); }
 

@@ -58,6 +58,9 @@ boost::optional<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
     case ID_PCB_ZONES_BUTT:
         return PCB_ACTIONS::drawZone.MakeEvent();
 
+    case ID_PCB_DRAW_VIA_BUTT:
+        return PCB_ACTIONS::drawVia.MakeEvent();
+
     case ID_PCB_KEEPOUT_AREA_BUTT:
         return PCB_ACTIONS::drawZoneKeepout.MakeEvent();
 

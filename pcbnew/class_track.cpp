@@ -990,24 +990,25 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
 void VIA::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aLayers[0] = LAYER_VIAS_HOLES;
-    aCount = 2;
+    aLayers[1] = GetNetnameLayer( m_Layer );
+    aCount = 3;
 
     // Just show it on common via & via holes layers
     switch( GetViaType() )
     {
     case VIA_THROUGH:
-        aLayers[1] = LAYER_VIA_THROUGH;
+        aLayers[2] = LAYER_VIA_THROUGH;
         break;
 
     case VIA_BLIND_BURIED:
-        aLayers[1] = LAYER_VIA_BBLIND;
-        aLayers[2] = m_Layer;
-        aLayers[3] = m_BottomLayer;
+        aLayers[2] = LAYER_VIA_BBLIND;
+        aLayers[3] = m_Layer;
+        aLayers[4] = m_BottomLayer;
         aCount += 2;
         break;
 
     case VIA_MICROVIA:
-        aLayers[1] = LAYER_VIA_MICROVIA;
+        aLayers[2] = LAYER_VIA_MICROVIA;
         break;
 
     default:

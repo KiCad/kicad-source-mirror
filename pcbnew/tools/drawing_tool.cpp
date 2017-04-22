@@ -88,7 +88,11 @@ TOOL_ACTION PCB_ACTIONS::drawZone( "pcbnew.InteractiveDrawing.zone",
         AS_GLOBAL, 0,
         _( "Add Filled Zone" ), _( "Add a filled zone" ), NULL, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::drawZoneKeepout( "pcbnew.InteractiveDrawing.keepout",
+TOOL_ACTION PCB_ACTIONS::drawVia( "pcbnew.InteractiveDrawing.via",
+        AS_GLOBAL, 0,
+        _( "Add Vias" ), _( "Add free-stanging vias" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::drawKeepout( "pcbnew.InteractiveDrawing.keepout",
         AS_GLOBAL, 0,
         _( "Add Keepout Area" ), _( "Add a keepout area" ), NULL, AF_ACTIVATE );
 
@@ -1392,6 +1396,136 @@ void DRAWING_TOOL::make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper ) 
     }
 }
 
+int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
+{
+    struct VIA_PLACER : public INTERACTIVE_PLACER_BASE
+    {
+        int findStitchedZoneNet( VIA *aVia )
+        {
+            const auto pos = aVia->GetPosition();
+            const auto lset = aVia->GetLayerSet();
+
+            for ( auto tv : m_board->Tracks() ) // fixme: move to BOARD class?
+                if( tv->HitTest(pos) && (tv->GetLayerSet() &
+                       lset ).any() )
+                    return -1;
+
+            for ( auto mod : m_board->Modules() )
+                for ( auto pad : mod->PadsIter() )
+                if( pad->HitTest(pos) && (pad->GetLayerSet() &
+                       lset ).any() )
+                    return -1;
+
+            std::set<ZONE_CONTAINER* > foundZones;
+
+            for( auto zone : m_board->Zones() )
+            {
+                if ( zone->HitTestFilledArea ( pos ) )
+                {
+                    foundZones.insert ( zone );
+                }
+            }
+
+            for( auto z : foundZones )
+            {
+                if ( m_frame->GetActiveLayer() == z->GetLayer() )
+                    return z->GetNetCode();
+            }
+
+
+            return -1;
+        }
+
+        bool PlaceItem( BOARD_ITEM *aItem ) override
+        {
+            auto via = static_cast<VIA*>(aItem);
+            int newNet = findStitchedZoneNet(via);
+
+            if(newNet > 0 )
+                via->SetNetCode( newNet );
+
+            return false;
+        }
+
+
+        std::unique_ptr<BOARD_ITEM> CreateItem() override
+        {
+            auto& ds = m_board->GetDesignSettings();
+            VIA* via = new VIA ( m_board );
+
+            via->SetNetCode( 0 );
+            via->SetViaType( ds.m_CurrentViaType );
+
+            // for microvias, the size and hole will be changed later.
+            via->SetWidth( ds.GetCurrentViaSize());
+            via->SetDrill( ds.GetCurrentViaDrill() );
+
+            // Usual via is from copper to component.
+            // layer pair is B_Cu and F_Cu.
+            via->SetLayerPair( B_Cu, F_Cu );
+
+            LAYER_ID first_layer = m_frame->GetActiveLayer();
+            LAYER_ID last_layer;
+
+            // prepare switch to new active layer:
+            if( first_layer != m_frame->GetScreen()->m_Route_Layer_TOP )
+                last_layer = m_frame->GetScreen()->m_Route_Layer_TOP;
+            else
+                last_layer = m_frame->GetScreen()->m_Route_Layer_BOTTOM;
+
+            // Adjust the actual via layer pair
+            switch( via->GetViaType() )
+            {
+            case VIA_BLIND_BURIED:
+                via->SetLayerPair( first_layer, last_layer );
+                break;
+
+            case VIA_MICROVIA:  // from external to the near neighbor inner layer
+                {
+                    LAYER_ID last_inner_layer = ToLAYER_ID( ( m_board->GetCopperLayerCount() - 2 ) );
+
+                    if( first_layer == B_Cu )
+                        last_layer = last_inner_layer;
+                    else if( first_layer == F_Cu )
+                        last_layer = In1_Cu;
+                    else if( first_layer == last_inner_layer )
+                        last_layer = B_Cu;
+                    else if( first_layer == In1_Cu )
+                        last_layer = F_Cu;
+                    // else error: will be removed later
+                    via->SetLayerPair( first_layer, last_layer );
+
+                    // Update diameter and hole size, which where set previously
+                    // for normal vias
+                    NETINFO_ITEM* net = via->GetNet();
+                    if( net )
+                    {
+                        via->SetWidth( net->GetMicroViaSize() );
+                        via->SetDrill( net->GetMicroViaDrillSize() );
+                    }
+                }
+                break;
+
+            default:
+                break;
+            }
+
+
+
+            return std::unique_ptr<BOARD_ITEM>(via);
+        }
+    };
+
+    VIA_PLACER placer;
+
+    frame()->SetToolID( ID_PCB_DRAW_VIA_BUTT, wxCURSOR_PENCIL, _( "Add vias" ) );
+
+    doInteractiveItemPlacement( &placer,  _( "Place via" ), IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP | IPO_PROPERTIES );
+
+    frame()->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+
+    return 0;
+}
 
 void DRAWING_TOOL::SetTransitions()
 {
@@ -1403,6 +1537,7 @@ void DRAWING_TOOL::SetTransitions()
     Go( &DRAWING_TOOL::DrawZoneKeepout,  PCB_ACTIONS::drawZoneKeepout.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZoneCutout,   PCB_ACTIONS::drawZoneCutout.MakeEvent() );
     Go( &DRAWING_TOOL::DrawSimilarZone,  PCB_ACTIONS::drawSimilarZone.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawVia,          PCB_ACTIONS::drawVia.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceText,        PCB_ACTIONS::placeText.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceDXF,         PCB_ACTIONS::placeDXF.MakeEvent() );
     Go( &DRAWING_TOOL::SetAnchor,        PCB_ACTIONS::setAnchor.MakeEvent() );
