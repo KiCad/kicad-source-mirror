@@ -830,6 +830,11 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
         return 0;
     }
 
+    // rebuild nets and ratsnest before any use of nets
+    board->BuildListOfNets();
+    board->GetRatsnest()->Recalculate();
+    board->SynchronizeNetsAndNetClasses();
+
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
     // Process the new items
@@ -899,11 +904,6 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     editFrame->ReCreateLayerBox();
     editFrame->ReFillLayerWidget();
     static_cast<PCB_DRAW_PANEL_GAL*>( editFrame->GetGalCanvas() )->SyncLayersVisibility( board );
-
-    // Ratsnest
-    board->BuildListOfNets();
-    board->SynchronizeNetsAndNetClasses();
-    board->GetRatsnest()->Recalculate();
 
     // Start dragging the appended board
     VECTOR2D v( static_cast<BOARD_ITEM*>( undoListPicker.GetPickedItem( 0 ) )->GetPosition() );
