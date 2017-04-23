@@ -556,7 +556,6 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
         else
         {
             arcRect = arcRect.Common( arect );
-            //arcRect.Inflate( GetWidth() );
 
             /* All following tests must pass:
              * 1. Rectangle must intersect arc BoundingBox
@@ -568,9 +567,15 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
         break;
     case S_SEGMENT:
         if( aContained )
+        {
             return arect.Contains( GetStart() ) && aRect.Contains( GetEnd() );
+        }
         else
+        {
+            // Account for the width of the line
+            arect.Inflate( GetWidth() / 2 );
             return arect.Intersects( GetStart(), GetEnd() );
+        }
 
         break;
 

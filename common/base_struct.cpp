@@ -443,6 +443,110 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect ) const
     return rc;
 }
 
+bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
+{
+    /* Most rectangles will be axis aligned.
+     * It is quicker to check for this case and pass the rect
+     * to the simpler intersection test
+     */
+
+    // Prevent floating point comparison errors
+    static const double ROT_EPS = 0.000000001;
+
+    static const double ROT_PARALLEL[] = { -3600, -1800, 0, 1800, 3600 };
+    static const double ROT_PERPENDICULAR[] = { -2700, -900, 0, 900, 2700 };
+
+    NORMALIZE_ANGLE_POS<double>( aRot );
+
+    // Test for non-rotated rectangle
+    for( int ii=0; ii<5; ii++ )
+    {
+        if( std::fabs( aRot - ROT_PARALLEL[ii] ) < ROT_EPS )
+        {
+            return Intersects( aRect );
+        }
+    }
+
+    // Test for rectangle rotated by multiple of 90 degrees
+    for( int jj=0; jj<4; jj++ )
+    {
+        if( std::fabs( aRot - ROT_PERPENDICULAR[jj] ) < ROT_EPS )
+        {
+            EDA_RECT rotRect;
+
+            // Rotate the supplied rect by 90 degrees
+            rotRect.SetOrigin( aRect.Centre() );
+            rotRect.Inflate( aRect.GetHeight(), aRect.GetWidth() );
+            return Intersects( rotRect );
+        }
+    }
+
+    /* There is some non-orthogonal rotation.
+     * There are three cases to test:
+     * A) One point of this rect is inside the rotated rect
+     * B) One point of the rotated rect is inside this rect
+     * C) One of the sides of the rotated rect intersect this
+     */
+
+    wxPoint corners[4];
+
+    /* Test A : Any corners exist in rotated rect? */
+
+    corners[0] = m_Pos;
+    corners[1] = m_Pos + wxPoint( m_Size.x, 0 );
+    corners[2] = m_Pos + wxPoint( m_Size.x, m_Size.y );
+    corners[3] = m_Pos + wxPoint( 0, m_Size.y );
+
+    wxPoint rCentre = aRect.Centre();
+
+    for( int i=0; i<4; i++ )
+    {
+        wxPoint delta = corners[i] - rCentre;
+        RotatePoint( &delta, -aRot );
+        delta += rCentre;
+
+        if( aRect.Contains( delta ) )
+        {
+            return true;
+        }
+    }
+
+    /* Test B : Any corners of rotated rect exist in this one? */
+    int w = aRect.GetWidth() / 2;
+    int h = aRect.GetHeight() / 2;
+
+    // Construct corners around center of shape
+    corners[0] = wxPoint( -w, -h );
+    corners[1] = wxPoint(  w, -h );
+    corners[2] = wxPoint(  w,  h );
+    corners[3] = wxPoint( -w,  h );
+
+    // Rotate and test each corner
+    for( int j=0; j<4; j++ )
+    {
+        RotatePoint( &corners[j], aRot );
+        corners[j] += rCentre;
+
+        if( Contains( corners[j] ) )
+        {
+            return true;
+        }
+    }
+
+    /* Test C : Any sides of rotated rect intersect this */
+
+    if( Intersects( corners[0], corners[1] ) ||
+        Intersects( corners[1], corners[2] ) ||
+        Intersects( corners[2], corners[3] ) ||
+        Intersects( corners[3], corners[0] ) )
+    {
+        return true;
+    }
+
+
+    return false;
+}
+
 const wxPoint EDA_RECT::ClosestPointTo( const wxPoint& aPoint ) const
 {
     EDA_RECT me(*this);

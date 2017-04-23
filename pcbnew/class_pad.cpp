@@ -178,6 +178,9 @@ int D_PAD::GetRoundRectCornerRadius( const wxSize& aSize ) const
 }
 
 
+/**
+ * Return the BoundingBox for a D_PAD
+ */
 const EDA_RECT D_PAD::GetBoundingBox() const
 {
     EDA_RECT area;
@@ -192,7 +195,7 @@ const EDA_RECT D_PAD::GetBoundingBox() const
         break;
 
     case PAD_SHAPE_OVAL:
-        // Calculate the position of each rounded ent
+        // Calculate the position of each rounded end
         quadrant1.x =  m_Size.x/2;
         quadrant1.y =  0;
         quadrant2.x =  0;
@@ -207,7 +210,7 @@ const EDA_RECT D_PAD::GetBoundingBox() const
         dy = std::max( std::abs( quadrant1.y ) , std::abs( quadrant2.y )  );
 
         // Set the bbox
-        area.SetOrigin( m_Pos );
+        area.SetOrigin( ShapePos() );
         area.Inflate( dx, dy );
         break;
 
@@ -226,7 +229,7 @@ const EDA_RECT D_PAD::GetBoundingBox() const
         dy = std::max( std::abs( quadrant1.y ) , std::abs( quadrant2.y )  );
 
         // Set the bbox
-        area.SetOrigin( m_Pos );
+        area.SetOrigin( ShapePos() );
         area.Inflate( dx, dy );
         break;
 
@@ -251,6 +254,7 @@ const EDA_RECT D_PAD::GetBoundingBox() const
         y  = std::min( quadrant1.y, std::min( quadrant2.y, std::min( quadrant3.y, quadrant4.y) ) );
         dx = std::max( quadrant1.x, std::max( quadrant2.x, std::max( quadrant3.x, quadrant4.x) ) );
         dy = std::max( quadrant1.y, std::max( quadrant2.y, std::max( quadrant3.y, quadrant4.y) ) );
+
         area.SetOrigin( m_Pos.x+x, m_Pos.y+y );
         area.SetSize( dx-x, dy-y );
         break;
@@ -782,18 +786,28 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
     arect.Normalize();
     arect.Inflate( aAccuracy );
 
-    if( !arect.Intersects( GetBoundingBox() ) )
-        return false;
+    EDA_RECT shapeRect;
 
-    if( aContained )
-        return arect.Contains( GetBoundingBox() );
+    shapeRect.SetOrigin( ShapePos() );
+    shapeRect.Inflate( GetSize().x / 2, GetSize().y / 2 );
+
+    EDA_RECT bb = GetBoundingBox();
+
+    if( !arect.Intersects( bb ) )
+            return false;
+
+    int dist;
+
+    // This covers total containment for all test cases
+    if( arect.Contains( bb ) )
+        return true;
 
     switch( GetShape() )
     {
     case PAD_SHAPE_CIRCLE:
         return arect.IntersectsCircle( GetPosition(), GetBoundingRadius() );
     case PAD_SHAPE_RECT:
-        break;
+        return arect.Intersects( shapeRect, m_Orient );
     case PAD_SHAPE_OVAL:
         break;
     case PAD_SHAPE_TRAPEZOID:

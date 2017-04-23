@@ -158,6 +158,15 @@ public:
     bool Intersects( const EDA_RECT& aRect ) const;
 
     /**
+     * Tests for a common area between this rectangle,
+     * and a rectangle with arbitrary rotation
+     *
+     * @param aRect a rectangle to test intersection with
+     * @param aRot rectangle rotation (in 1/10 degrees)
+     */
+    bool Intersects( const EDA_RECT& aRect, double aRot ) const;
+
+    /**
      * Function Intersects
      * tests for a common area between a segment and this rectangle.
      *
