@@ -55,7 +55,7 @@ public:
      * @param aPt the new point
      * @param aLockIn whether to "lock in" the point, and move the
      * geometry manager to the next (or previous) step. False to
-     * update geomtry and not affect manager state
+     * update geometry and not affect manager state
      */
     void AddPoint( const VECTOR2I& aPt, bool aLockIn )
     {

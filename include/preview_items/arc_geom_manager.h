@@ -58,7 +58,6 @@ public:
         COMPLETE
     };
 
-
     int getMaxStep() const override
     {
         return COMPLETE;

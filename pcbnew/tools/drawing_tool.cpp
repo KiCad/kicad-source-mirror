@@ -1079,7 +1079,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
 /**
  * Update an arc DRAWSEGMENT from the current state
- * of an Arc Geoemetry Manager
+ * of an Arc Geometry Manager
  */
 static void updateArcFromConstructionMgr(
         const KIGFX::PREVIEW::ARC_GEOM_MANAGER& aMgr,
