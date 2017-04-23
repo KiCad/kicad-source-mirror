@@ -81,7 +81,7 @@ extern "C" {
 
 
 intptr_t LIBCONTEXT_CALL_CONVENTION jump_fcontext( fcontext_t* ofc, fcontext_t nfc,
-        intptr_t vp, bool preserve_fpu = false );
+        intptr_t vp, bool preserve_fpu = true );
 fcontext_t LIBCONTEXT_CALL_CONVENTION make_fcontext( void* sp, size_t size,
         void (* fn)( intptr_t ) );
 
