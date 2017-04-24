@@ -488,7 +488,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
     controls->SetSnapping( false );
     controls->SetAutoPan( false );
     controls->CaptureCursor( false );
-   
+
 	view->Remove( &preview );
     m_frame->SetNoToolSelected();
 
@@ -1110,6 +1110,7 @@ int PCB_EDITOR_CONTROL::ShowLocalRatsnest( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
 {
+    return 0;
 /*    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     const SELECTION& selection = selTool->GetSelection();
     RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();

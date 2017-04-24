@@ -92,7 +92,7 @@ TOOL_ACTION PCB_ACTIONS::drawVia( "pcbnew.InteractiveDrawing.via",
         AS_GLOBAL, 0,
         _( "Add Vias" ), _( "Add free-stanging vias" ), NULL, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::drawKeepout( "pcbnew.InteractiveDrawing.keepout",
+TOOL_ACTION PCB_ACTIONS::drawZoneKeepout( "pcbnew.InteractiveDrawing.keepout",
         AS_GLOBAL, 0,
         _( "Add Keepout Area" ), _( "Add a keepout area" ), NULL, AF_ACTIVATE );
 
@@ -1464,8 +1464,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             // layer pair is B_Cu and F_Cu.
             via->SetLayerPair( B_Cu, F_Cu );
 
-            LAYER_ID first_layer = m_frame->GetActiveLayer();
-            LAYER_ID last_layer;
+            PCB_LAYER_ID first_layer = m_frame->GetActiveLayer();
+            PCB_LAYER_ID last_layer;
 
             // prepare switch to new active layer:
             if( first_layer != m_frame->GetScreen()->m_Route_Layer_TOP )
@@ -1482,7 +1482,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             case VIA_MICROVIA:  // from external to the near neighbor inner layer
                 {
-                    LAYER_ID last_inner_layer = ToLAYER_ID( ( m_board->GetCopperLayerCount() - 2 ) );
+                    PCB_LAYER_ID last_inner_layer = ToLAYER_ID( ( m_board->GetCopperLayerCount() - 2 ) );
 
                     if( first_layer == B_Cu )
                         last_layer = last_inner_layer;

@@ -105,6 +105,9 @@ public:
     ///> Updates ratsnest for selected items.
     int UpdateSelectionRatsnest( const TOOL_EVENT& aEvent );
 
+    ///> Shows local ratsnest of a component
+    int ShowLocalRatsnest( const TOOL_EVENT& aEvent );
+
     ///> Sets up handlers for various events.
     void SetTransitions() override;
 

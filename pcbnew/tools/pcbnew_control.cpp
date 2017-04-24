@@ -839,7 +839,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     // rebuild nets and ratsnest before any use of nets
     board->BuildListOfNets();
     board->SynchronizeNetsAndNetClasses();
-    board->GetRatsnest()->ProcessBoard();
+    board->GetConnectivity()->Build( board );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
