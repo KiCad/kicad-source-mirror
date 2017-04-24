@@ -185,33 +185,79 @@ const EDA_RECT D_PAD::GetBoundingBox() const
 {
     EDA_RECT area;
     wxPoint quadrant1, quadrant2, quadrant3, quadrant4;
-    int x, y, dx, dy;
+    int x, y, r, dx, dy;
+
+    wxPoint center = ShapePos();
+    wxPoint endPoint;
+
+    EDA_RECT endRect;
 
     switch( GetShape() )
     {
     case PAD_SHAPE_CIRCLE:
-        area.SetOrigin( m_Pos );
+        area.SetOrigin( center );
         area.Inflate( m_Size.x / 2 );
         break;
 
     case PAD_SHAPE_OVAL:
-        // Calculate the position of each rounded end
-        quadrant1.x =  m_Size.x/2;
-        quadrant1.y =  0;
-        quadrant2.x =  0;
-        quadrant2.y =  m_Size.y/2;
+        /* To get the BoundingBox of an oval pad:
+         * a) If the pad is ROUND, see method for PAD_SHAPE_CIRCLE above
+         * OTHERWISE:
+         * b) Construct EDA_RECT for portion between circular ends
+         * c) Rotate that EDA_RECT
+         * d) Add the circular ends to the EDA_RECT
+         */
 
-        RotatePoint( &quadrant1, m_Orient );
-        RotatePoint( &quadrant2, m_Orient );
+        // Test if the shape is circular
+        if( m_Size.x == m_Size.y )
+        {
+            area.SetOrigin( center );
+            area.Inflate( m_Size.x / 2 );
+            break;
+        }
 
-        // Calculate the max position of each end, relative to the pad position
-        // (the min position is symetrical)
-        dx = std::max( std::abs( quadrant1.x ) , std::abs( quadrant2.x )  );
-        dy = std::max( std::abs( quadrant1.y ) , std::abs( quadrant2.y )  );
+        if( m_Size.x > m_Size.y )
+        {
+            // Pad is horizontal
+            dx = ( m_Size.x - m_Size.y ) / 2;
+            dy = m_Size.y / 2;
 
-        // Set the bbox
-        area.SetOrigin( ShapePos() );
+            // Location of end-points
+            x = dx;
+            y = 0;
+            r = dy;
+        }
+        else
+        {
+            // Pad is vertical
+            dx = m_Size.x / 2;
+            dy = ( m_Size.y - m_Size.x ) / 2;
+
+            x = 0;
+            y = dy;
+            r = dx;
+        }
+
+        // Construct the center rectangle and rotate
+        area.SetOrigin( center );
         area.Inflate( dx, dy );
+        area = area.GetBoundingBoxRotated( center, m_Orient );
+
+        endPoint = wxPoint( x, y );
+        RotatePoint( &endPoint, m_Orient );
+
+        // Add points at each quadrant of circular regions
+        endRect.SetOrigin( center + endPoint );
+        endRect.Inflate( r );
+
+        area.Merge( endRect );
+
+        endRect.SetSize( 0, 0 );
+        endRect.SetOrigin( center - endPoint );
+        endRect.Inflate( r );
+
+        area.Merge( endRect );
+
         break;
 
     case PAD_SHAPE_RECT:
@@ -786,17 +832,17 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
     arect.Normalize();
     arect.Inflate( aAccuracy );
 
-    EDA_RECT shapeRect;
+    wxPoint shapePos = ShapePos();
 
-    shapeRect.SetOrigin( ShapePos() );
-    shapeRect.Inflate( GetSize().x / 2, GetSize().y / 2 );
+    EDA_RECT shapeRect;
 
     EDA_RECT bb = GetBoundingBox();
 
-    if( !arect.Intersects( bb ) )
-            return false;
+    wxPoint endCenter;
+    int radius;
 
-    int dist;
+    if( !arect.Intersects( bb ) )
+        return false;
 
     // This covers total containment for all test cases
     if( arect.Contains( bb ) )
@@ -807,8 +853,57 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
     case PAD_SHAPE_CIRCLE:
         return arect.IntersectsCircle( GetPosition(), GetBoundingRadius() );
     case PAD_SHAPE_RECT:
+        shapeRect.SetOrigin( shapePos );
+        shapeRect.Inflate( m_Size.x / 2, m_Size.y / 2 );
         return arect.Intersects( shapeRect, m_Orient );
     case PAD_SHAPE_OVAL:
+
+        // Circlular test if dimensions are equal
+        if( m_Size.x == m_Size.y )
+            return arect.IntersectsCircle( shapePos, GetBoundingRadius() );
+
+        shapeRect.SetOrigin( shapePos );
+
+        // Horizontal dimension is greater
+        if( m_Size.x > m_Size.y )
+        {
+            radius = m_Size.y / 2;
+
+            shapeRect.Inflate( m_Size.x / 2 - radius, radius );
+
+            endCenter = wxPoint( m_Size.x / 2 - radius, 0 );
+            RotatePoint( &endCenter, m_Orient );
+
+            // Test circular ends
+            if( arect.IntersectsCircle( shapePos + endCenter, radius ) ||
+                arect.IntersectsCircle( shapePos - endCenter, radius ) )
+            {
+                return true;
+            }
+        }
+        else
+        {
+            radius = m_Size.x / 2;
+
+            shapeRect.Inflate( radius, m_Size.y / 2 - radius );
+
+            endCenter = wxPoint( 0, m_Size.y / 2 - radius );
+            RotatePoint( &endCenter, m_Orient );
+
+            // Test circular ends
+            if( arect.IntersectsCircle( shapePos + endCenter, radius ) ||
+                arect.IntersectsCircle( shapePos - endCenter, radius ) )
+            {
+                return true;
+            }
+        }
+
+        // Test rectangular portion between rounded ends
+        if( arect.Intersects( shapeRect, m_Orient ) )
+        {
+            return true;
+        }
+
         break;
     case PAD_SHAPE_TRAPEZOID:
         break;
