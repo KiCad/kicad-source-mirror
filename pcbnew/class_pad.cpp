@@ -749,7 +749,7 @@ void D_PAD::GetOblongDrillGeometry( wxPoint& aStartPoint,
 
 bool D_PAD::HitTest( const wxPoint& aPosition ) const
 {
-    int     dx, dy;
+    int dx, dy;
 
     wxPoint shape_pos = ShapePos();
 
@@ -826,6 +826,9 @@ bool D_PAD::HitTest( const wxPoint& aPosition ) const
     return false;
 }
 
+/**
+ * Test if an x,y axis-aligned rectangle hits this pad
+ */
 bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT arect = aRect;
@@ -835,6 +838,8 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
     wxPoint shapePos = ShapePos();
 
     EDA_RECT shapeRect;
+
+    int r;
 
     EDA_RECT bb = GetBoundingBox();
 
@@ -908,6 +913,59 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
     case PAD_SHAPE_TRAPEZOID:
         break;
     case PAD_SHAPE_ROUNDRECT:
+        /* RoundRect intersection can be broken up into simple tests:
+         * a) Test intersection of horizontal rect
+         * b) Test intersection of vertical rect
+         * c) Test intersection of each corner
+         */
+
+
+        r = GetRoundRectCornerRadius();
+
+        /* Test A - intersection of horizontal rect */
+        shapeRect.SetSize( 0, 0 );
+        shapeRect.SetOrigin( shapePos );
+        shapeRect.Inflate( m_Size.x / 2, m_Size.y / 2 - r );
+
+        // Short-circuit test for zero width or height
+        if( shapeRect.GetWidth() > 0 && shapeRect.GetHeight() > 0 &&
+            arect.Intersects( shapeRect, m_Orient ) )
+        {
+            return true;
+        }
+
+        /* Test B - intersection of vertical rect */
+        shapeRect.SetSize( 0, 0 );
+        shapeRect.SetOrigin( shapePos );
+        shapeRect.Inflate( m_Size.x / 2 - r, m_Size.y / 2 );
+
+        // Short-circuit test for zero width or height
+        if( shapeRect.GetWidth() > 0 && shapeRect.GetHeight() > 0 &&
+            arect.Intersects( shapeRect, m_Orient ) )
+        {
+            return true;
+        }
+
+        /* Test C - intersection of each corner */
+
+        endCenter = wxPoint( m_Size.x / 2 - r, m_Size.y / 2 - r );
+        RotatePoint( &endCenter, m_Orient );
+
+        if( arect.IntersectsCircle( shapePos + endCenter, r ) ||
+            arect.IntersectsCircle( shapePos - endCenter, r ) )
+        {
+            return true;
+        }
+
+        endCenter = wxPoint( m_Size.x / 2 - r, -m_Size.y / 2 + r );
+        RotatePoint( &endCenter, m_Orient );
+
+        if( arect.IntersectsCircle( shapePos + endCenter, r ) ||
+            arect.IntersectsCircle( shapePos - endCenter, r ) )
+        {
+            return true;
+        }
+
         break;
     default:
         break;
