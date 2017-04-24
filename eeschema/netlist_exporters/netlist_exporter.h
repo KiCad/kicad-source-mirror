@@ -91,7 +91,7 @@ protected:
 
     PART_LIBS*              m_libs;             /// no ownership
 
-    /// Used to temporary store and filter the list of pins of a schematic component
+    /// Used to temporarily store and filter the list of pins of a schematic component
     /// when generating schematic component data in netlist (comp section). No ownership
     /// of members.
     NETLIST_OBJECTS         m_SortedComponentPinList;
@@ -157,14 +157,14 @@ protected:
                                    LIB_PIN*        PinEntry );
 
     /**
-     * Function findAllInstancesOfComponent
+     * Function findAllUnitsOfComponent
      * is used for "multiple parts per package" components.
      * <p>
-     * Search the entire design for all instances of \a aComponent based on
-     * matching reference designator, and for each part, add all its pins
-     * to the temporary sorted pin list.
+     * Search the entire design for all units of \a aComponent based on
+     * matching reference designator, and for each unit, add all its pins
+     * to the temporary sorted pin list, m_SortedComponentPinList.
      */
-    void findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
+    void findAllUnitsOfComponent( SCH_COMPONENT*      aComponent,
                                       LIB_PART*       aEntry,
                                       SCH_SHEET_PATH* aSheetPath );
 

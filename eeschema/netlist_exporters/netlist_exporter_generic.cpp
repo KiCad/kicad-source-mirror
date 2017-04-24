@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
- * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2013-2017 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -49,9 +49,9 @@ bool NETLIST_EXPORTER_GENERIC::WriteNetlist( const wxString& aOutFileName, unsig
 
 XNODE* NETLIST_EXPORTER_GENERIC::makeRoot( int aCtl )
 {
-    XNODE*      xroot = node( wxT( "export" ) );
+    XNODE*      xroot = node( "export" );
 
-    xroot->AddAttribute( wxT( "version" ), wxT( "D" ) );
+    xroot->AddAttribute( "version", "D" );
 
     if( aCtl & GNL_HEADER )
         // add the "design" header
@@ -74,37 +74,133 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeRoot( int aCtl )
 }
 
 
+/// Holder for multi-unit component fields
+struct COMP_FIELDS
+{
+    wxString value;
+    wxString datasheet;
+    wxString footprint;
+
+    std::map< wxString, wxString >   f;
+};
+
+
+void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* comp, SCH_SHEET_PATH* aSheet )
+{
+    if( comp->GetUnitCount() > 1 )
+    {
+        // Sadly, each unit of a component can have its own unique fields.  This block
+        // finds the last non blank field and records it.  Last guy wins and the order
+        // of units occuring in a schematic hierarchy is variable.  Therefore user
+        // is best off setting fields into only one unit.  But this scavenger algorithm
+        // will find any non blank fields in all units and use the last non-blank field
+        // for each unique field name.
+
+        COMP_FIELDS fields;
+        wxString    ref = comp->GetRef( aSheet );
+
+        SCH_SHEET_LIST sheetList( g_RootSheet );
+
+        for( unsigned i = 0;  i < sheetList.size();  i++ )
+        {
+            for( EDA_ITEM* item = sheetList[i].LastDrawList();  item;  item = item->Next() )
+            {
+                if( item->Type() != SCH_COMPONENT_T )
+                    continue;
+
+                SCH_COMPONENT*  comp2 = (SCH_COMPONENT*) item;
+
+                wxString ref2 = comp2->GetRef( &sheetList[i] );
+
+                if( ref2.CmpNoCase( ref ) != 0 )
+                    continue;
+
+                // The last guy wins.  User should only set fields in any one unit.
+
+                if( !comp2->GetField( VALUE )->IsVoid() )
+                    fields.value = comp2->GetField( VALUE )->GetText();
+
+                if( !comp2->GetField( FOOTPRINT )->IsVoid() )
+                    fields.footprint = comp2->GetField( FOOTPRINT )->GetText();
+
+                if( !comp2->GetField( DATASHEET )->IsVoid() )
+                    fields.datasheet = comp2->GetField( DATASHEET )->GetText();
+
+                for( int fldNdx = MANDATORY_FIELDS;  fldNdx < comp2->GetFieldCount();  ++fldNdx )
+                {
+                    SCH_FIELD*  f = comp2->GetField( fldNdx );
+
+                    if( f->GetText().size() )
+                    {
+                        fields.f[ f->GetName() ] = f->GetText();
+                    }
+                }
+            }
+        }
+
+        xcomp->AddChild( node( "value", fields.value ) );
+
+        if( fields.footprint.size() )
+            xcomp->AddChild( node( "footprint", fields.footprint ) );
+
+        if( fields.datasheet.size() )
+            xcomp->AddChild( node( "datasheet", fields.datasheet ) );
+
+        if( fields.f.size() )
+        {
+            XNODE* xfields;
+            xcomp->AddChild( xfields = node( "fields" ) );
+
+            // non MANDATORY fields are output alphabetically
+            for( std::map< wxString, wxString >::const_iterator it = fields.f.begin();
+                    it != fields.f.end();  ++it )
+            {
+                XNODE*  xfield;
+                xfields->AddChild( xfield = node( "field", it->second ) );
+                xfield->AddAttribute( "name", it->first );
+            }
+        }
+    }
+    else
+    {
+        xcomp->AddChild( node( "value", comp->GetField( VALUE )->GetText() ) );
+
+        if( !comp->GetField( FOOTPRINT )->IsVoid() )
+            xcomp->AddChild( node( "footprint", comp->GetField( FOOTPRINT )->GetText() ) );
+
+        if( !comp->GetField( DATASHEET )->IsVoid() )
+            xcomp->AddChild( node( "datasheet", comp->GetField( DATASHEET )->GetText() ) );
+
+        // Export all user defined fields within the component,
+        // which start at field index MANDATORY_FIELDS.  Only output the <fields>
+        // container element if there are any <field>s.
+        if( comp->GetFieldCount() > MANDATORY_FIELDS )
+        {
+            XNODE* xfields;
+            xcomp->AddChild( xfields = node( "fields" ) );
+
+            for( int fldNdx = MANDATORY_FIELDS; fldNdx < comp->GetFieldCount(); ++fldNdx )
+            {
+                SCH_FIELD*  f = comp->GetField( fldNdx );
+
+                // only output a field if non empty and not just "~"
+                if( !f->IsVoid() )
+                {
+                    XNODE*  xfield;
+                    xfields->AddChild( xfield = node( "field", f->GetText() ) );
+                    xfield->AddAttribute( "name", f->GetName() );
+                }
+            }
+        }
+    }
+}
+
+
 XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
 {
-    XNODE*      xcomps = node( wxT( "components" ) );
+    XNODE*      xcomps = node( "components" );
 
     wxString    timeStamp;
-
-    // some strings we need many times, but don't want to construct more
-    // than once for performance.  These are used within loops so the
-    // enclosing wxString constructor would fire on each loop iteration if
-    // they were in a nested scope.
-
-    // these are actually constructor invocations, not assignments as it appears:
-    wxString    sFields     = wxT( "fields" );
-    wxString    sField      = wxT( "field" );
-    wxString    sComponent  = wxT( "comp" );          // use "part" ?
-    wxString    sName       = wxT( "name" );
-    wxString    sRef        = wxT( "ref" );
-    wxString    sPins       = wxT( "pins" );
-    wxString    sPin        = wxT( "pin" );
-    wxString    sValue      = wxT( "value" );
-    wxString    sSheetPath  = wxT( "sheetpath" );
-    wxString    sFootprint  = wxT( "footprint" );
-    wxString    sDatasheet  = wxT( "datasheet" );
-    wxString    sTStamp     = wxT( "tstamp" );
-    wxString    sTStamps    = wxT( "tstamps" );
-    wxString    sTSFmt      = wxT( "%8.8lX" );        // comp->m_TimeStamp
-    wxString    sLibSource  = wxT( "libsource" );
-    wxString    sLibPart    = wxT( "libpart" );
-    wxString    sLib        = wxT( "lib" );
-    wxString    sPart       = wxT( "part" );
-    wxString    sNames      = wxT( "names" );
 
     m_ReferencesAlreadyFound.Clear();
 
@@ -117,7 +213,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
     {
         for( EDA_ITEM* schItem = sheetList[i].LastDrawList();  schItem;  schItem = schItem->Next() )
         {
-            SCH_COMPONENT*  comp = findNextComponentAndCreatePinList( schItem, &sheetList[i] );
+            SCH_COMPONENT*  comp = findNextComponent( schItem, &sheetList[i] );
             if( !comp )
                 break;  // No component left
 
@@ -130,60 +226,32 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
             // under XSL processing systems which do sequential searching within
             // an element.
 
-            xcomps->AddChild( xcomp = node( sComponent ) );
-            xcomp->AddAttribute( sRef, comp->GetRef( &sheetList[i] ) );
+            xcomps->AddChild( xcomp = node( "comp" ) );
+            xcomp->AddAttribute( "ref", comp->GetRef( &sheetList[i] ) );
 
-            xcomp->AddChild( node( sValue, comp->GetField( VALUE )->GetText() ) );
-
-            if( !comp->GetField( FOOTPRINT )->IsVoid() )
-                xcomp->AddChild( node( sFootprint, comp->GetField( FOOTPRINT )->GetText() ) );
-
-            if( !comp->GetField( DATASHEET )->IsVoid() )
-                xcomp->AddChild( node( sDatasheet, comp->GetField( DATASHEET )->GetText() ) );
-
-            // Export all user defined fields within the component,
-            // which start at field index MANDATORY_FIELDS.  Only output the <fields>
-            // container element if there are any <field>s.
-            if( comp->GetFieldCount() > MANDATORY_FIELDS )
-            {
-                XNODE* xfields;
-                xcomp->AddChild( xfields = node( sFields ) );
-
-                for( int fldNdx = MANDATORY_FIELDS; fldNdx < comp->GetFieldCount(); ++fldNdx )
-                {
-                    SCH_FIELD*  f = comp->GetField( fldNdx );
-
-                    // only output a field if non empty and not just "~"
-                    if( !f->IsVoid() )
-                    {
-                        XNODE*  xfield;
-                        xfields->AddChild( xfield = node( sField, f->GetText() ) );
-                        xfield->AddAttribute( sName, f->GetName() );
-                    }
-                }
-            }
+            addComponentFields( xcomp, comp, &sheetList[i] );
 
             XNODE*  xlibsource;
-            xcomp->AddChild( xlibsource = node( sLibSource ) );
+            xcomp->AddChild( xlibsource = node( "libsource" ) );
 
             // "logical" library name, which is in anticipation of a better search
             // algorithm for parts based on "logical_lib.part" and where logical_lib
             // is merely the library name minus path and extension.
             LIB_PART* part = m_libs->FindLibPart( comp->GetLibId() );
             if( part )
-                xlibsource->AddAttribute( sLib, part->GetLib()->GetLogicalName() );
+                xlibsource->AddAttribute( "lib", part->GetLib()->GetLogicalName() );
 
             // We only want the symbol name, not the full LIB_ID.
-            xlibsource->AddAttribute( sPart, FROM_UTF8( comp->GetLibId().GetLibItemName() ) );
+            xlibsource->AddAttribute( "part", FROM_UTF8( comp->GetLibId().GetLibItemName() ) );
 
             XNODE* xsheetpath;
 
-            xcomp->AddChild( xsheetpath = node( sSheetPath ) );
-            xsheetpath->AddAttribute( sNames, sheetList[i].PathHumanReadable() );
-            xsheetpath->AddAttribute( sTStamps, sheetList[i].Path() );
+            xcomp->AddChild( xsheetpath = node( "sheetpath" ) );
+            xsheetpath->AddAttribute( "names", sheetList[i].PathHumanReadable() );
+            xsheetpath->AddAttribute( "tstamps", sheetList[i].Path() );
 
-            timeStamp.Printf( sTSFmt, (unsigned long)comp->GetTimeStamp() );
-            xcomp->AddChild( node( sTStamp, timeStamp ) );
+            timeStamp.Printf( "%8.8lX", (unsigned long)comp->GetTimeStamp() );
+            xcomp->AddChild( node( "tstamp", timeStamp ) );
         }
     }
 
@@ -194,7 +262,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
 XNODE* NETLIST_EXPORTER_GENERIC::makeDesignHeader()
 {
     SCH_SCREEN* screen;
-    XNODE*     xdesign = node( wxT( "design" ) );
+    XNODE*     xdesign = node( "design" );
     XNODE*     xtitleBlock;
     XNODE*     xsheet;
     XNODE*     xcomment;
@@ -202,12 +270,12 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeDesignHeader()
     wxFileName sourceFileName;
 
     // the root sheet is a special sheet, call it source
-    xdesign->AddChild( node( wxT( "source" ), g_RootSheet->GetScreen()->GetFileName() ) );
+    xdesign->AddChild( node( "source", g_RootSheet->GetScreen()->GetFileName() ) );
 
-    xdesign->AddChild( node( wxT( "date" ), DateAndTime() ) );
+    xdesign->AddChild( node( "date", DateAndTime() ) );
 
     // which Eeschema tool
-    xdesign->AddChild( node( wxT( "tool" ), wxT( "Eeschema " ) + GetBuildVersion() ) );
+    xdesign->AddChild( node( "tool", wxString( "Eeschema " ) + GetBuildVersion() ) );
 
     /*
         Export the sheets information
@@ -218,45 +286,45 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeDesignHeader()
     {
         screen = sheetList[i].LastScreen();
 
-        xdesign->AddChild( xsheet = node( wxT( "sheet" ) ) );
+        xdesign->AddChild( xsheet = node( "sheet" ) );
 
         // get the string representation of the sheet index number.
         // Note that sheet->GetIndex() is zero index base and we need to increment the
         // number by one to make it human readable
-        sheetTxt.Printf( wxT( "%u" ), i + 1 );
-        xsheet->AddAttribute( wxT( "number" ), sheetTxt );
-        xsheet->AddAttribute( wxT( "name" ), sheetList[i].PathHumanReadable() );
-        xsheet->AddAttribute( wxT( "tstamps" ), sheetList[i].Path() );
+        sheetTxt.Printf( "%u", i + 1 );
+        xsheet->AddAttribute( "number", sheetTxt );
+        xsheet->AddAttribute( "name", sheetList[i].PathHumanReadable() );
+        xsheet->AddAttribute( "tstamps", sheetList[i].Path() );
 
 
         TITLE_BLOCK tb = screen->GetTitleBlock();
 
-        xsheet->AddChild( xtitleBlock = node( wxT( "title_block" ) ) );
+        xsheet->AddChild( xtitleBlock = node( "title_block" ) );
 
-        xtitleBlock->AddChild( node( wxT( "title" ), tb.GetTitle() ) );
-        xtitleBlock->AddChild( node( wxT( "company" ), tb.GetCompany() ) );
-        xtitleBlock->AddChild( node( wxT( "rev" ), tb.GetRevision() ) );
-        xtitleBlock->AddChild( node( wxT( "date" ), tb.GetDate() ) );
+        xtitleBlock->AddChild( node( "title", tb.GetTitle() ) );
+        xtitleBlock->AddChild( node( "company", tb.GetCompany() ) );
+        xtitleBlock->AddChild( node( "rev", tb.GetRevision() ) );
+        xtitleBlock->AddChild( node( "date", tb.GetDate() ) );
 
         // We are going to remove the fileName directories.
         sourceFileName = wxFileName( screen->GetFileName() );
-        xtitleBlock->AddChild( node( wxT( "source" ), sourceFileName.GetFullName() ) );
+        xtitleBlock->AddChild( node( "source", sourceFileName.GetFullName() ) );
 
-        xtitleBlock->AddChild( xcomment = node( wxT( "comment" ) ) );
-        xcomment->AddAttribute( wxT("number"), wxT("1") );
-        xcomment->AddAttribute( wxT( "value" ), tb.GetComment1() );
+        xtitleBlock->AddChild( xcomment = node( "comment" ) );
+        xcomment->AddAttribute( "number", "1" );
+        xcomment->AddAttribute( "value", tb.GetComment1() );
 
-        xtitleBlock->AddChild( xcomment = node( wxT( "comment" ) ) );
-        xcomment->AddAttribute( wxT("number"), wxT("2") );
-        xcomment->AddAttribute( wxT( "value" ), tb.GetComment2() );
+        xtitleBlock->AddChild( xcomment = node( "comment" ) );
+        xcomment->AddAttribute( "number", "2" );
+        xcomment->AddAttribute( "value", tb.GetComment2() );
 
-        xtitleBlock->AddChild( xcomment = node( wxT( "comment" ) ) );
-        xcomment->AddAttribute( wxT("number"), wxT("3") );
-        xcomment->AddAttribute( wxT( "value" ), tb.GetComment3() );
+        xtitleBlock->AddChild( xcomment = node( "comment" ) );
+        xcomment->AddAttribute( "number", "3" );
+        xcomment->AddAttribute( "value", tb.GetComment3() );
 
-        xtitleBlock->AddChild( xcomment = node( wxT( "comment" ) ) );
-        xcomment->AddAttribute( wxT("number"), wxT("4") );
-        xcomment->AddAttribute( wxT( "value" ), tb.GetComment4() );
+        xtitleBlock->AddChild( xcomment = node( "comment" ) );
+        xcomment->AddAttribute( "number", "4" );
+        xcomment->AddAttribute( "value", tb.GetComment4() );
     }
 
     return xdesign;
@@ -265,16 +333,16 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeDesignHeader()
 
 XNODE* NETLIST_EXPORTER_GENERIC::makeLibraries()
 {
-    XNODE*  xlibs = node( wxT( "libraries" ) );     // auto_ptr
+    XNODE*  xlibs = node( "libraries" );     // auto_ptr
 
     for( std::set<void*>::iterator it = m_Libraries.begin(); it!=m_Libraries.end();  ++it )
     {
         PART_LIB*    lib = (PART_LIB*) *it;
         XNODE*      xlibrary;
 
-        xlibs->AddChild( xlibrary = node( wxT( "library" ) ) );
-        xlibrary->AddAttribute( wxT( "logical" ), lib->GetLogicalName() );
-        xlibrary->AddChild( node( wxT( "uri" ),  lib->GetFullFileName() ) );
+        xlibs->AddChild( xlibrary = node( "library" ) );
+        xlibrary->AddAttribute( "logical", lib->GetLogicalName() );
+        xlibrary->AddChild( node( "uri",  lib->GetFullFileName() ) );
 
         // @todo: add more fun stuff here
     }
@@ -285,24 +353,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibraries()
 
 XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
 {
-    XNODE*      xlibparts = node( wxT( "libparts" ) );   // auto_ptr
-    wxString    sLibpart  = wxT( "libpart" );
-    wxString    sLib      = wxT( "lib" );
-    wxString    sPart     = wxT( "part" );
-    wxString    sAliases  = wxT( "aliases" );
-    wxString    sAlias    = wxT( "alias" );
-    wxString    sPins     = wxT( "pins" );      // key for library component pins list
-    wxString    sPin      = wxT( "pin" );       // key for one library component pin descr
-    wxString    sPinNum   = wxT( "num" );       // key for one library component pin num
-    wxString    sPinName  = wxT( "name" );      // key for one library component pin name
-    wxString    sPinType  = wxT( "type" );      // key for one library component pin electrical type
-    wxString    sName     = wxT( "name" );
-    wxString    sField    = wxT( "field" );
-    wxString    sFields   = wxT( "fields" );
-    wxString    sDescr    = wxT( "description" );
-    wxString    sDocs     = wxT( "docs" );
-    wxString    sFprints  = wxT( "footprints" );
-    wxString    sFp       = wxT( "fp" );
+    XNODE*      xlibparts = node( "libparts" );   // auto_ptr
 
     LIB_PINS    pinList;
     LIB_FIELDS  fieldList;
@@ -317,40 +368,40 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
         m_Libraries.insert( library );  // inserts component's library if unique
 
         XNODE* xlibpart;
-        xlibparts->AddChild( xlibpart = node( sLibpart ) );
-        xlibpart->AddAttribute( sLib, library->GetLogicalName() );
-        xlibpart->AddAttribute( sPart, lcomp->GetName()  );
+        xlibparts->AddChild( xlibpart = node( "libpart" ) );
+        xlibpart->AddAttribute( "lib", library->GetLogicalName() );
+        xlibpart->AddAttribute( "part", lcomp->GetName()  );
 
         if( lcomp->GetAliasCount() )
         {
             wxArrayString aliases = lcomp->GetAliasNames( false );
             if( aliases.GetCount() )
             {
-                XNODE* xaliases = node( sAliases );
+                XNODE* xaliases = node( "aliases" );
                 xlibpart->AddChild( xaliases );
                 for( unsigned i=0;  i<aliases.GetCount();  ++i )
                 {
-                    xaliases->AddChild( node( sAlias, aliases[i] ) );
+                    xaliases->AddChild( node( "alias", aliases[i] ) );
                 }
             }
         }
 
         //----- show the important properties -------------------------
         if( !lcomp->GetAlias( 0 )->GetDescription().IsEmpty() )
-            xlibpart->AddChild( node( sDescr, lcomp->GetAlias( 0 )->GetDescription() ) );
+            xlibpart->AddChild( node( "description", lcomp->GetAlias( 0 )->GetDescription() ) );
 
         if( !lcomp->GetAlias( 0 )->GetDocFileName().IsEmpty() )
-            xlibpart->AddChild( node( sDocs,  lcomp->GetAlias( 0 )->GetDocFileName() ) );
+            xlibpart->AddChild( node( "docs",  lcomp->GetAlias( 0 )->GetDocFileName() ) );
 
         // Write the footprint list
         if( lcomp->GetFootPrints().GetCount() )
         {
             XNODE*  xfootprints;
-            xlibpart->AddChild( xfootprints = node( sFprints ) );
+            xlibpart->AddChild( xfootprints = node( "footprints" ) );
 
             for( unsigned i=0; i<lcomp->GetFootPrints().GetCount(); ++i )
             {
-                xfootprints->AddChild( node( sFp, lcomp->GetFootPrints()[i] ) );
+                xfootprints->AddChild( node( "fp", lcomp->GetFootPrints()[i] ) );
             }
         }
 
@@ -359,15 +410,15 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
         lcomp->GetFields( fieldList );
 
         XNODE*     xfields;
-        xlibpart->AddChild( xfields = node( sFields ) );
+        xlibpart->AddChild( xfields = node( "fields" ) );
 
         for( unsigned i=0;  i<fieldList.size();  ++i )
         {
             if( !fieldList[i].GetText().IsEmpty() )
             {
                 XNODE*     xfield;
-                xfields->AddChild( xfield = node( sField, fieldList[i].GetText() ) );
-                xfield->AddAttribute( sName, fieldList[i].GetName(false) );
+                xfields->AddChild( xfield = node( "field", fieldList[i].GetText() ) );
+                xfield->AddAttribute( "name", fieldList[i].GetName(false) );
             }
         }
 
@@ -397,15 +448,15 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
         {
             XNODE*     pins;
 
-            xlibpart->AddChild( pins = node( sPins ) );
+            xlibpart->AddChild( pins = node( "pins" ) );
             for( unsigned i=0; i<pinList.size();  ++i )
             {
                 XNODE*     pin;
 
-                pins->AddChild( pin = node( sPin ) );
-                pin->AddAttribute( sPinNum, pinList[i]->GetNumberString() );
-                pin->AddAttribute( sPinName, pinList[i]->GetName() );
-                pin->AddAttribute( sPinType, pinList[i]->GetCanonicalElectricalTypeName() );
+                pins->AddChild( pin = node( "pin" ) );
+                pin->AddAttribute( "num", pinList[i]->GetNumberString() );
+                pin->AddAttribute( "name", pinList[i]->GetName() );
+                pin->AddAttribute( "type", pinList[i]->GetCanonicalElectricalTypeName() );
 
                 // caution: construction work site here, drive slowly
             }
@@ -418,18 +469,10 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
 
 XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets()
 {
-    XNODE*      xnets = node( wxT( "nets" ) );      // auto_ptr if exceptions ever get used.
+    XNODE*      xnets = node( "nets" );      // auto_ptr if exceptions ever get used.
     wxString    netCodeTxt;
     wxString    netName;
     wxString    ref;
-
-    wxString    sNet  = wxT( "net" );
-    wxString    sName = wxT( "name" );
-    wxString    sCode = wxT( "code" );
-    wxString    sRef  = wxT( "ref" );
-    wxString    sPin  = wxT( "pin" );
-    wxString    sNode = wxT( "node" );
-    wxString    sFmtd = wxT( "%d" );
 
     XNODE*      xnet = 0;
     int         netCode;
@@ -474,16 +517,16 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets()
 
         if( ++sameNetcodeCount == 1 )
         {
-            xnets->AddChild( xnet = node( sNet ) );
-            netCodeTxt.Printf( sFmtd, netCode );
-            xnet->AddAttribute( sCode, netCodeTxt );
-            xnet->AddAttribute( sName, netName );
+            xnets->AddChild( xnet = node( "net" ) );
+            netCodeTxt.Printf( "%d", netCode );
+            xnet->AddAttribute( "code", netCodeTxt );
+            xnet->AddAttribute( "name", netName );
         }
 
         XNODE*      xnode;
-        xnet->AddChild( xnode = node( sNode ) );
-        xnode->AddAttribute( sRef, ref );
-        xnode->AddAttribute( sPin,  nitem->GetPinNumText() );
+        xnet->AddChild( xnode = node( "node" ) );
+        xnode->AddAttribute( "ref", ref );
+        xnode->AddAttribute( "pin",  nitem->GetPinNumText() );
     }
 
     return xnets;

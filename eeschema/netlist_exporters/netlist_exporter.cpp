@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2017 jp.charras at wanadoo.fr
- * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2013-2017 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -157,8 +157,8 @@ static bool sortPinsByNum( NETLIST_OBJECT* aPin1, NETLIST_OBJECT* aPin2 )
 }
 
 
-SCH_COMPONENT* NETLIST_EXPORTER::findNextComponentAndCreatePinList( EDA_ITEM*       aItem,
-                                                              SCH_SHEET_PATH* aSheetPath )
+SCH_COMPONENT* NETLIST_EXPORTER::findNextComponentAndCreatePinList(
+    EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath )
 {
     wxString    ref;
 
@@ -201,7 +201,7 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponentAndCreatePinList( EDA_ITEM*   
             // Collect all pins for this reference designator by searching
             // the entire design for other parts with the same reference designator.
             // This is only done once, it would be too expensive otherwise.
-            findAllInstancesOfComponent( comp, part, aSheetPath );
+            findAllUnitsOfComponent( comp, part, aSheetPath );
         }
 
         else    // entry->GetUnitCount() <= 1 means one part per package
@@ -236,8 +236,9 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponentAndCreatePinList( EDA_ITEM*   
     return NULL;
 }
 
+
 bool NETLIST_EXPORTER::addPinToComponentPinList( SCH_COMPONENT* aComponent,
-                                      SCH_SHEET_PATH* aSheetPath, LIB_PIN* aPin )
+   SCH_SHEET_PATH* aSheetPath, LIB_PIN* aPin )
 {
     // Search the PIN description for Pin in g_NetObjectslist
     for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
@@ -323,9 +324,8 @@ void NETLIST_EXPORTER::eraseDuplicatePins()
 }
 
 
-void NETLIST_EXPORTER::findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
-                                         LIB_PART*       aEntry,
-                                         SCH_SHEET_PATH* aSheetPath )
+void NETLIST_EXPORTER::findAllUnitsOfComponent( SCH_COMPONENT* aComponent,
+        LIB_PART* aEntry, SCH_SHEET_PATH* aSheetPath )
 {
     wxString    ref = aComponent->GetRef( aSheetPath );
     wxString    ref2;

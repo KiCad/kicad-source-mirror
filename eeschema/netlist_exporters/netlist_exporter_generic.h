@@ -123,6 +123,8 @@ protected:
      * @return XNODE* - the library nodes
      */
     XNODE* makeLibraries();
+
+    void addComponentFields(  XNODE* xcomp, SCH_COMPONENT* comp, SCH_SHEET_PATH* aSheet );
 };
 
 #endif
