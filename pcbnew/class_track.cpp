@@ -990,7 +990,7 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
 void VIA::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aLayers[0] = LAYER_VIAS_HOLES;
-    aLayers[1] = GetNetnameLayer( m_Layer );
+    aLayers[1] = LAYER_VIAS_NETNAMES;
     aCount = 3;
 
     // Just show it on common via & via holes layers
@@ -1012,7 +1012,8 @@ void VIA::ViewGetLayers( int aLayers[], int& aCount ) const
         break;
 
     default:
-        assert( false );
+        aLayers[2] = LAYER_GP_OVERLAY;
+        wxASSERT( false );
         break;
     }
 }

@@ -751,7 +751,8 @@ inline int GetNetnameLayer( int aLayer )
         return LAYER_PAD_FR_NETNAMES;
     else if( aLayer == LAYER_PAD_BK )
         return LAYER_PAD_BK_NETNAMES;
-    // fixme :via names
+    else if( aLayer >= LAYER_VIA_MICROVIA && aLayer <= LAYER_VIA_THROUGH )
+        return LAYER_VIAS_NETNAMES;
 
     // Fallback
     return Cmts_User;

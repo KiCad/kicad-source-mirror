@@ -42,9 +42,9 @@ using namespace std::placeholders;
 
 const LAYER_NUM GAL_LAYER_ORDER[] =
 {
-    LAYER_GP_OVERLAY ,
+    LAYER_GP_OVERLAY,
     LAYER_DRC,
-    LAYER_PADS_NETNAMES,
+    LAYER_PADS_NETNAMES, LAYER_VIAS_NETNAMES,
     Dwgs_User, Cmts_User, Eco1_User, Eco2_User, Edge_Cuts,
 
     LAYER_MOD_TEXT_FR,
@@ -194,10 +194,10 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
         // fixme do not like the idea of storing the list of layers here,
         // should be done in some other way I guess..
         LAYER_NUM layers[] = {
-                GetNetnameLayer( aLayer ), LAYER_VIA_THROUGH,
-                LAYER_VIAS_HOLES, LAYER_PADS,
-                LAYER_PADS_HOLES, LAYER_NON_PLATED, LAYER_PADS_NETNAMES,
-                LAYER_GP_OVERLAY, LAYER_RATSNEST
+                GetNetnameLayer( aLayer ),
+                LAYER_VIA_THROUGH, LAYER_VIAS_HOLES, LAYER_VIAS_NETNAMES,
+                LAYER_PADS, LAYER_PADS_HOLES, LAYER_PADS_NETNAMES,
+                LAYER_NON_PLATED, LAYER_GP_OVERLAY, LAYER_RATSNEST
         };
 
         for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
@@ -230,10 +230,9 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
 
     // Layers that should always have on-top attribute enabled
     const LAYER_NUM layers[] = {
-            LAYER_VIA_THROUGH,
-            LAYER_VIAS_HOLES, LAYER_PADS,
-            LAYER_PADS_HOLES, LAYER_NON_PLATED, LAYER_PADS_NETNAMES,
-            LAYER_GP_OVERLAY, LAYER_RATSNEST, Dwgs_User,
+            LAYER_VIA_THROUGH, LAYER_VIAS_HOLES, LAYER_VIAS_NETNAMES,
+            LAYER_PADS, LAYER_PADS_HOLES, LAYER_PADS_NETNAMES,
+            LAYER_NON_PLATED, LAYER_GP_OVERLAY, LAYER_RATSNEST, Dwgs_User,
             LAYER_DRC
     };
 
@@ -401,6 +400,7 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
 
     // Some more required layers settings
     m_view->SetRequired( LAYER_VIAS_HOLES, LAYER_VIA_THROUGH );
+    m_view->SetRequired( LAYER_VIAS_NETNAMES, LAYER_VIA_THROUGH );
     m_view->SetRequired( LAYER_PADS_HOLES, LAYER_PADS );
     m_view->SetRequired( LAYER_NON_PLATED, LAYER_PADS );
     m_view->SetRequired( LAYER_PADS_NETNAMES, LAYER_PADS );
