@@ -287,7 +287,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
 
     aIDFBoard.GetUserOffset( dx, dy );
 
-    for( D_PAD* pad = aModule->Pads(); pad; pad = pad->Next() )
+    for( D_PAD* pad = aModule->PadsList(); pad; pad = pad->Next() )
     {
         drill = (double) pad->GetDrillSize().x * scale;
         x     = pad->GetPosition().x * scale + dx;

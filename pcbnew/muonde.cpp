@@ -204,7 +204,7 @@ MODULE* PCB_EDIT_FRAME::CreateMuWaveBaseFootprint( const wxString& aValue,
     {
         D_PAD* pad = new D_PAD( module );
 
-        module->Pads().PushFront( pad );
+        module->PadsList().PushFront( pad );
 
         int tw = GetDesignSettings().GetCurrentTrackWidth();
         pad->SetSize( wxSize( tw, tw ) );
@@ -312,7 +312,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
     }
 
     module = CreateMuWaveBaseFootprint( cmp_name, text_size, pad_count );
-    pad    = module->Pads();
+    pad    = module->PadsList();
 
     switch( shape_type )
     {
@@ -339,7 +339,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
     case 2:     // Arc Stub created by a polygonal approach:
     {
         EDGE_MODULE* edge = new EDGE_MODULE( module );
-        module->GraphicalItems().PushFront( edge );
+        module->GraphicalItemsList().PushFront( edge );
 
         edge->SetShape( S_POLYGON );
         edge->SetLayer( F_Cu );
@@ -623,7 +623,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     wxPoint offset;
     offset.x = -ShapeSize.x / 2;
 
-    pad1   = module->Pads();
+    pad1   = module->PadsList();
     pad1->SetX0( offset.x );
     pad1->SetX( pad1->GetPos0().x );
 
@@ -636,7 +636,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     edge->SetShape( S_POLYGON );
     edge->SetLayer( F_Cu );
 
-    module->GraphicalItems().PushFront( edge );
+    module->GraphicalItemsList().PushFront( edge );
 
     // Get the corner buffer of the polygonal edge
     std::vector<wxPoint>& polyPoints = edge->GetPolyPoints();
@@ -698,7 +698,7 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* aModule )
     if( msg != wxT( "GAP" ) )
         return;
 
-    pad = aModule->Pads();
+    pad = aModule->PadsList();
 
     if( pad == NULL )
     {

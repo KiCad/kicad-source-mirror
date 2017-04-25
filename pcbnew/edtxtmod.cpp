@@ -90,7 +90,7 @@ TEXTE_MODULE* FOOTPRINT_EDIT_FRAME::CreateTextModule( MODULE* aModule, wxDC* aDC
 
     // Add the new text object to the beginning of the footprint draw list.
     if( aModule )
-        aModule->GraphicalItems().PushFront( text );
+        aModule->GraphicalItemsList().PushFront( text );
 
     text->ClearFlags();
 

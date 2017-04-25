@@ -642,7 +642,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
     {
         FootprintWriteShape( aFile, module );
 
-        for( pad = module->Pads(); pad; pad = pad->Next() )
+        for( pad = module->PadsList(); pad; pad = pad->Next() )
         {
             /* Funny thing: GenCAD requires the pad side even if you use
              *  padstacks (which are theorically optional but gerbtools
@@ -794,7 +794,7 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
 
         for( module = aPcb->m_Modules; module; module = module->Next() )
         {
-            for( pad = module->Pads(); pad; pad = pad->Next() )
+            for( pad = module->PadsList(); pad; pad = pad->Next() )
             {
                 wxString padname;
 
@@ -1174,7 +1174,7 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module )
     // CAM350 read it right but only closed shapes
     // ProntoPlace double-flip it (at least the pads are correct)
     // GerberTool usually get it right...
-    for( PtStruct = module->GraphicalItems(); PtStruct; PtStruct = PtStruct->Next() )
+    for( PtStruct = module->GraphicalItemsList(); PtStruct; PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
         {

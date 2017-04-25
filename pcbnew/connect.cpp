@@ -35,10 +35,7 @@
 #include <view/view.h>
 
 #include <pcbnew.h>
-
-// Helper classes to handle connection points
-#include <connect.h>
-
+#include <class_board.h>
 /*
  * Function SortTracksByNetCode used in RebuildTrackChain()
  * to sort track segments by net code.

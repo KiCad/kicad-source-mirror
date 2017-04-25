@@ -568,7 +568,7 @@ void DRC::testUnconnected()
         DRC_ITEM* uncItem = new DRC_ITEM( DRCE_UNCONNECTED_ITEMS,
                                           t_src,
                                           t_dst,
-                                          wxPoint( src.x, src.y ), wxPoint(dst.x, dst.y) );
+                                          wxPoint( src.x, src.y ), wxPoint( dst.x, dst.y ) );
         m_unconnected.push_back( uncItem );
 
     }
@@ -660,6 +660,7 @@ void DRC::testKeepoutAreas()
         // Test pads: TODO
     }
 }
+
 
 void DRC::testTexts()
 {
@@ -1085,3 +1086,4 @@ bool DRC::doFootprintOverlappingDrc()
 
     return success;
 }
+

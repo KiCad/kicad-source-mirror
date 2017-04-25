@@ -154,7 +154,7 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
     {
         D_PAD* nextpad;
 
-        for( D_PAD* pad = module->Pads(); pad != NULL; pad = nextpad )
+        for( D_PAD* pad = module->PadsList(); pad != NULL; pad = nextpad )
         {
             nextpad = pad->Next();  // pad pointer can be modified by next code, so
                                     // calculate the next pad here
@@ -249,7 +249,7 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
      */
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
-        for( BOARD_ITEM* item = module->GraphicalItems();  item;  item = item->Next() )
+        for( BOARD_ITEM* item = module->GraphicalItemsList();  item;  item = item->Next() )
         {
             if( !item->IsOnLayer( GetLayer() ) && !item->IsOnLayer( Edge_Cuts ) )
                 continue;
@@ -342,7 +342,7 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
    // Remove thermal symbols
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
-        for( D_PAD* pad = module->Pads(); pad != NULL; pad = pad->Next() )
+        for( D_PAD* pad = module->PadsList(); pad != NULL; pad = pad->Next() )
         {
             // Rejects non-standard pads with tht-only thermal reliefs
             if( GetPadConnection( pad ) == PAD_ZONE_CONN_THT_THERMAL

@@ -1099,11 +1099,11 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
     Format( (BOARD_ITEM*) &aModule->Value(), aNestLevel+1 );
 
     // Save drawing elements.
-    for( BOARD_ITEM* gr = aModule->GraphicalItems();  gr;  gr = gr->Next() )
+    for( BOARD_ITEM* gr = aModule->GraphicalItemsList();  gr;  gr = gr->Next() )
         Format( gr, aNestLevel+1 );
 
     // Save pads.
-    for( D_PAD* pad = aModule->Pads();  pad;  pad = pad->Next() )
+    for( D_PAD* pad = aModule->PadsList();  pad;  pad = pad->Next() )
         format( pad, aNestLevel+1 );
 
     // Save 3D info.

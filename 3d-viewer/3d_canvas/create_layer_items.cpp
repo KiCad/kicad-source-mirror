@@ -184,7 +184,7 @@ void CINFO3D_VISU::AddGraphicsShapesWithClearanceToContainer( const MODULE* aMod
     std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
     EDGE_MODULE* outline;
 
-    for( EDA_ITEM* item = aModule->GraphicalItems();
+    for( EDA_ITEM* item = aModule->GraphicalItemsList();
          item != NULL;
          item = item->Next() )
     {
@@ -607,7 +607,7 @@ void CINFO3D_VISU::AddPadsShapesWithClearanceToContainer( const MODULE* aModule,
                                                           int aInflateValue,
                                                           bool aSkipNPTHPadsWihNoCopper )
 {
-    const D_PAD* pad = aModule->Pads();
+    const D_PAD* pad = aModule->PadsList();
 
     wxSize margin;
 
@@ -1518,7 +1518,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     // /////////////////////////////////////////////////////////////////////////
     for( const MODULE* module = m_board->m_Modules; module; module = module->Next() )
     {
-        const D_PAD* pad = module->Pads();
+        const D_PAD* pad = module->PadsList();
 
         for( ; pad; pad = pad->Next() )
         {
@@ -1552,7 +1552,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     // /////////////////////////////////////////////////////////////////////////
     for( const MODULE* module = m_board->m_Modules; module; module = module->Next() )
     {
-        const D_PAD* pad = module->Pads();
+        const D_PAD* pad = module->PadsList();
 
         for( ; pad; pad = pad->Next() )
         {
@@ -1652,7 +1652,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
                 // Note: NPTH pads are not drawn on copper layers when the pad
                 // has same shape as its hole
-                transformPadsShapesWithClearanceToPolygon( module->Pads(),
+                transformPadsShapesWithClearanceToPolygon( module->PadsList(),
                                                            curr_layer_id,
                                                            *layerPoly,
                                                            0,
@@ -2058,7 +2058,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
         {
             if( (curr_layer_id == F_SilkS) || (curr_layer_id == B_SilkS) )
             {
-                D_PAD*  pad = module->Pads();
+                D_PAD*  pad = module->PadsList();
                 int     linewidth = g_DrawDefaultLineThickness;
 
                 for( ; pad; pad = pad->Next() )
@@ -2093,7 +2093,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
         {
             if( (curr_layer_id == F_SilkS) || (curr_layer_id == B_SilkS) )
             {
-                D_PAD*  pad = module->Pads();
+                D_PAD*  pad = module->PadsList();
                 const int linewidth = g_DrawDefaultLineThickness;
 
                 for( ; pad; pad = pad->Next() )
@@ -2106,7 +2106,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
             }
             else
             {
-                transformPadsShapesWithClearanceToPolygon( module->Pads(),
+                transformPadsShapesWithClearanceToPolygon( module->PadsList(),
                                                            curr_layer_id,
                                                            *layerPoly,
                                                            0,

@@ -581,7 +581,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
                                        parseInt( parameters[5], conv_unit ) ) );
             drawSeg->SetWidth( parseInt( parameters[6], conv_unit ) );
             drawSeg->SetDrawCoord();
-            module->GraphicalItems().PushBack( drawSeg );
+            module->GraphicalItemsList().PushBack( drawSeg );
             continue;
         }
 
@@ -599,7 +599,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
             EDGE_MODULE* drawSeg = new EDGE_MODULE( module.get() );
             drawSeg->SetLayer( F_SilkS );
             drawSeg->SetShape( S_ARC );
-            module->GraphicalItems().PushBack( drawSeg );
+            module->GraphicalItemsList().PushBack( drawSeg );
 
             // for and arc: ibuf[3] = ibuf[4]. Pcbnew does not know ellipses
             int     radius = ( parseInt( parameters[4], conv_unit ) +

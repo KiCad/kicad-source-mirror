@@ -318,7 +318,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
     MODULE* copy = (MODULE*) aPcbComponent->Clone();
 
     // At this point, the component footprint is updated.  Now update the nets.
-    for( D_PAD* pad = aPcbComponent->Pads(); pad; pad = pad->Next() )
+    for( D_PAD* pad = aPcbComponent->PadsList(); pad; pad = pad->Next() )
     {
         COMPONENT_NET net = aNewComponent->GetNet( pad->GetPadName() );
 

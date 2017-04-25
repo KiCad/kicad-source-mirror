@@ -390,7 +390,7 @@ static bool HasNonSMDPins( MODULE* aModule )
 {
     D_PAD* pad;
 
-    for( pad = aModule->Pads();  pad;  pad = pad->Next() )
+    for( pad = aModule->PadsList();  pad;  pad = pad->Next() )
     {
         if( pad->GetAttribute() != PAD_ATTRIB_SMD )
             return true;
@@ -717,7 +717,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
         else
             fputs( "layer other\n", rptfile );
 
-        for( D_PAD* pad = Module->Pads(); pad != NULL; pad = pad->Next() )
+        for( D_PAD* pad = Module->PadsList(); pad != NULL; pad = pad->Next() )
         {
             fprintf( rptfile, "$PAD \"%s\"\n", TO_UTF8( pad->GetPadName() ) );
             int layer = 0;
@@ -754,4 +754,3 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
 
     return true;
 }
-

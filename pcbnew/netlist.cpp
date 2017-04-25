@@ -169,8 +169,7 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     }
 
     // Rebuild the board connectivity:
-    Compile_Ratsnest( NULL, true );
-    //board->GetRatsnest()->ProcessBoard();
+    board->GetConnectivity()->Build( board );
 
     SetMsgPanel( board );
     m_canvas->Refresh();

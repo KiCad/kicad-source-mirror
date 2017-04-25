@@ -1078,7 +1078,7 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition
     {
         if ( item->Type() == PCB_MODULE_T )
         {
-            for ( auto pad : static_cast<MODULE *> (item)->PadsIter() )
+            for ( auto pad : static_cast<MODULE *> (item)->Pads() )
             {
                 pad->SetLocalRatsnestVisible( true );
             }

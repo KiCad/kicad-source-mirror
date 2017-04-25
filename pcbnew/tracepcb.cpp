@@ -267,7 +267,7 @@ void BOARD::DrawHighLight( EDA_DRAW_PANEL* am_canvas, wxDC* DC, int aNetCode )
     // Redraw any pads that have aNetCode
     for( MODULE* module = m_Modules; module; module = module->Next() )
     {
-        for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
+        for( D_PAD* pad = module->PadsList(); pad; pad = pad->Next() )
         {
             if( pad->GetNetCode() == aNetCode )
             {
@@ -302,7 +302,7 @@ static void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* aModule,
     displ_opts->m_DisplayPadFill = false;
 
     // Draw pads.
-    for( D_PAD* pad = aModule->Pads(); pad; pad = pad->Next() )
+    for( D_PAD* pad = aModule->PadsList(); pad; pad = pad->Next() )
     {
         if( (pad->GetLayerSet() & aLayerMask) == 0 )
             continue;

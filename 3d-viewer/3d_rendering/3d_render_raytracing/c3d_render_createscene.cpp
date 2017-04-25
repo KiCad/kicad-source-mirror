@@ -1188,7 +1188,7 @@ void C3D_RENDER_RAYTRACING::add_3D_vias_and_pads_to_container()
          module;
          module = module->Next() )
     {
-        for( const D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
+        for( const D_PAD* pad = module->PadsList(); pad; pad = pad->Next() )
             if( pad->GetAttribute () != PAD_ATTRIB_HOLE_NOT_PLATED )
             {
                 insert3DPadHole( pad );

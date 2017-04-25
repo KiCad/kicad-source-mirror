@@ -55,9 +55,8 @@ class D_PAD;
 class BOARD;
 class MSG_PANEL_ITEM;
 
-namespace KIGFX
-{
-    class VIEW;
+namespace KIGFX {
+class VIEW;
 };
 
 enum INCLUDE_NPTH_T
@@ -132,26 +131,35 @@ public:
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;
 
-    DLIST<D_PAD>& Pads()                        { return m_Pads; }
-    const DLIST<D_PAD>& Pads() const            { return m_Pads; }
+    DLIST<D_PAD>& PadsList()                        { return m_Pads; }
+    const DLIST<D_PAD>& PadsList() const { return m_Pads; }
 
-    DLIST<BOARD_ITEM>& GraphicalItems()         { return m_Drawings; }
-    const DLIST<BOARD_ITEM>& GraphicalItems() const { return m_Drawings; }
+    DLIST<BOARD_ITEM>& GraphicalItemsList()         { return m_Drawings; }
+    const DLIST<BOARD_ITEM>& GraphicalItemsList() const { return m_Drawings; }
 
-    DLIST_ITERATOR_WRAPPER<D_PAD> PadsIter() { return DLIST_ITERATOR_WRAPPER<D_PAD>(m_Pads); }
-    DLIST_ITERATOR_WRAPPER<BOARD_ITEM> GraphicalItemsIter() { return DLIST_ITERATOR_WRAPPER<BOARD_ITEM>(m_Drawings); }
+    DLIST_ITERATOR_WRAPPER<D_PAD> Pads()
+    {
+         return DLIST_ITERATOR_WRAPPER<D_PAD>( m_Pads );
+    }
+
+    DLIST_ITERATOR_WRAPPER<BOARD_ITEM> GraphicalItems()
+    {
+        return DLIST_ITERATOR_WRAPPER<BOARD_ITEM>( m_Drawings );
+    }
 
     std::list<S3D_INFO>& Models()             { return m_3D_Drawings; }
     const std::list<S3D_INFO>& Models() const { return m_3D_Drawings; }
 
     void SetPosition( const wxPoint& aPos ) override;
+
     const wxPoint& GetPosition() const override { return m_Pos; }
 
     void SetOrientation( double newangle );
-    void SetOrientationDegrees( double aOrientation ) { SetOrientation( aOrientation*10.0 ); }
+
+    void SetOrientationDegrees( double aOrientation ) { SetOrientation( aOrientation * 10.0 ); }
     double GetOrientation() const { return m_Orient; }
-    double GetOrientationDegrees() const   { return m_Orient/10.0; }
-    double GetOrientationRadians() const   { return m_Orient*M_PI/1800; }
+    double GetOrientationDegrees() const { return m_Orient / 10.0; }
+    double GetOrientationRadians() const { return m_Orient * M_PI / 1800; }
 
     const LIB_ID& GetFPID() const { return m_fpid; }
     void SetFPID( const LIB_ID& aFPID ) { m_fpid = aFPID; }
@@ -216,7 +224,7 @@ public:
      * function IsFlipped
      * @return true if the module is flipped, i.e. on the back side of the board
      */
-    bool IsFlipped() const {return GetLayer() == B_Cu; }
+    bool IsFlipped() const { return GetLayer() == B_Cu; }
 
 // m_ModuleStatus bits:
 #define MODULE_is_LOCKED    0x01        ///< module LOCKED: no autoplace allowed
@@ -243,7 +251,7 @@ public:
             m_ModuleStatus &= ~MODULE_is_LOCKED;
     }
 
-    bool IsPlaced() const   { return (m_ModuleStatus & MODULE_is_PLACED); }
+    bool IsPlaced() const { return m_ModuleStatus & MODULE_is_PLACED;  }
     void SetIsPlaced( bool isPlaced )
     {
         if( isPlaced )
@@ -252,7 +260,7 @@ public:
             m_ModuleStatus &= ~MODULE_is_PLACED;
     }
 
-    bool NeedsPlaced() const  { return (m_ModuleStatus & MODULE_to_PLACE); }
+    bool NeedsPlaced() const { return m_ModuleStatus & MODULE_to_PLACE;  }
     void SetNeedsPlaced( bool needsPlaced )
     {
         if( needsPlaced )
@@ -261,7 +269,7 @@ public:
             m_ModuleStatus &= ~MODULE_to_PLACE;
     }
 
-    bool PadsLocked() const { return ( m_ModuleStatus & MODULE_PADS_LOCKED ); }
+    bool PadsLocked() const { return m_ModuleStatus & MODULE_PADS_LOCKED;  }
 
     void SetPadsLocked( bool aPadsLocked )
     {
@@ -272,7 +280,7 @@ public:
     }
 
     void SetLastEditTime( time_t aTime ) { m_LastEditTime = aTime; }
-    void SetLastEditTime( ) { m_LastEditTime = time( NULL ); }
+    void SetLastEditTime() { m_LastEditTime = time( NULL ); }
     time_t GetLastEditTime() const { return m_LastEditTime; }
 
     /* drawing functions */
@@ -286,9 +294,9 @@ public:
      * @param aOffset = draw offset (usually wxPoint(0,0)
      */
     void Draw( EDA_DRAW_PANEL* aPanel,
-               wxDC*           aDC,
-               GR_DRAWMODE     aDrawMode,
-               const wxPoint&  aOffset = ZeroOffset ) override;
+            wxDC* aDC,
+            GR_DRAWMODE aDrawMode,
+            const wxPoint& aOffset = ZeroOffset ) override;
 
     /**
      * Function DrawOutlinesWhenMoving
@@ -300,7 +308,7 @@ public:
      * the draw position.
      */
     void DrawOutlinesWhenMoving( EDA_DRAW_PANEL* aPanel,
-               wxDC* aDC, const wxPoint&  aMoveVector );
+            wxDC* aDC, const wxPoint& aMoveVector );
 
     /**
      * function TransformPadsShapesWithClearanceToPolygon
@@ -326,11 +334,11 @@ public:
      *  default = false
      */
     void TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
-                            SHAPE_POLY_SET& aCornerBuffer,
-                            int             aInflateValue,
-                            int             aCircleToSegmentsCount,
-                            double          aCorrectionFactor,
-                            bool            aSkipNPTHPadsWihNoCopper = false ) const;
+            SHAPE_POLY_SET& aCornerBuffer,
+            int aInflateValue,
+            int aCircleToSegmentsCount,
+            double aCorrectionFactor,
+            bool aSkipNPTHPadsWihNoCopper = false ) const;
 
     /**
      * function TransformGraphicShapesWithClearanceToPolygonSet
@@ -352,13 +360,12 @@ public:
      *       a circle when building the texts polygonal shapes of the stroke font
      *       if 0, use the aCircleToSegmentsCount value
      */
-    void TransformGraphicShapesWithClearanceToPolygonSet(
-                            PCB_LAYER_ID aLayer,
-                            SHAPE_POLY_SET& aCornerBuffer,
-                            int             aInflateValue,
-                            int             aCircleToSegmentsCount,
-                            double          aCorrectionFactor,
-                            int             aCircleToSegmentsCountForTexts = 0 ) const;
+    void TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLayer,
+            SHAPE_POLY_SET& aCornerBuffer,
+            int aInflateValue,
+            int aCircleToSegmentsCount,
+            double aCorrectionFactor,
+            int aCircleToSegmentsCountForTexts = 0 ) const;
 
     /**
      * @brief TransformGraphicTextWithClearanceToPolygonSet
@@ -371,13 +378,12 @@ public:
      * @param aCorrectionFactor
      * @param aCircleToSegmentsCountForTexts
      */
-    void TransformGraphicTextWithClearanceToPolygonSet(
-                            PCB_LAYER_ID aLayer,
-                            SHAPE_POLY_SET& aCornerBuffer,
-                            int             aInflateValue,
-                            int             aCircleToSegmentsCount,
-                            double          aCorrectionFactor,
-                            int             aCircleToSegmentsCountForTexts = 0 ) const;
+    void TransformGraphicTextWithClearanceToPolygonSet( PCB_LAYER_ID aLayer,
+            SHAPE_POLY_SET& aCornerBuffer,
+            int aInflateValue,
+            int aCircleToSegmentsCount,
+            double aCorrectionFactor,
+            int aCircleToSegmentsCountForTexts = 0 ) const;
 
     /**
      * Function DrawEdgesOnly
@@ -388,7 +394,7 @@ public:
      *  @param draw_mode =  GR_OR, GR_XOR, GR_AND
      */
     void DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-                        GR_DRAWMODE draw_mode );
+            GR_DRAWMODE draw_mode );
 
     /**
      * Function DrawAncre
@@ -397,10 +403,10 @@ public:
      * every thing already drawn.
      */
     void DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC,
-                    const wxPoint& offset, int dim_ancre, GR_DRAWMODE draw_mode );
+            const wxPoint& offset, int dim_ancre, GR_DRAWMODE draw_mode );
 
     ///> @copydoc EDA_ITEM::GetMsgPanelInfo
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     bool HitTest( const wxPoint& aPosition ) const override;
 
@@ -457,8 +463,8 @@ public:
     TEXTE_MODULE& Reference()   { return *m_Reference; }
 
     /// The const versions to keep the compiler happy.
-    TEXTE_MODULE& Value() const       { return *m_Value; }
-    TEXTE_MODULE& Reference() const   { return *m_Reference; }
+    TEXTE_MODULE& Value() const { return *m_Value; }
+    TEXTE_MODULE& Reference() const { return *m_Reference; }
 
     /**
      * Function FindPadByName
@@ -490,7 +496,7 @@ public:
      *                     non-plated through holes when false.
      * @return the number of pads according to \a aIncludeNPTH.
      */
-    unsigned GetPadCount( INCLUDE_NPTH_T aIncludeNPTH = INCLUDE_NPTH_T( INCLUDE_NPTH ) ) const;
+    unsigned GetPadCount( INCLUDE_NPTH_T aIncludeNPTH = INCLUDE_NPTH_T(INCLUDE_NPTH) ) const;
 
     /**
      * GetUniquePadCount
@@ -504,7 +510,7 @@ public:
      *                     non-plated through holes when false.
      * @return the number of unique pads according to \a aIncludeNPTH.
      */
-    unsigned GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH = INCLUDE_NPTH_T( INCLUDE_NPTH ) ) const;
+    unsigned GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH = INCLUDE_NPTH_T(INCLUDE_NPTH) ) const;
 
     /**
      * Function GetNextPadName
@@ -516,15 +522,15 @@ public:
      */
     wxString GetNextPadName( bool aFillSequenceGaps ) const;
 
-    double GetArea() const                  { return m_Surface; }
+    double GetArea() const { return m_Surface; }
 
-    time_t GetLink() const                  { return m_Link; }
+    time_t GetLink() const { return m_Link; }
     void SetLink( time_t aLink )            { m_Link = aLink; }
 
-    int GetPlacementCost180() const         { return m_CntRot180; }
+    int GetPlacementCost180() const { return m_CntRot180; }
     void SetPlacementCost180( int aCost )   { m_CntRot180 = aCost; }
 
-    int GetPlacementCost90() const          { return m_CntRot90; }
+    int GetPlacementCost90() const { return m_CntRot90; }
     void SetPlacementCost90( int aCost )    { m_CntRot90 = aCost; }
 
     /**
@@ -533,8 +539,8 @@ public:
      * @return the new item, or NULL if the item could not be duplicated
      */
     BOARD_ITEM* Duplicate( const BOARD_ITEM* aItem,
-                           bool aIncrementPadNumbers,
-                           bool aAddToModule = false );
+            bool aIncrementPadNumbers,
+            bool aAddToModule = false );
 
     /**
      * Function Add3DModel
@@ -544,7 +550,7 @@ public:
      */
     void Add3DModel( S3D_INFO* a3DModel );
 
-    SEARCH_RESULT Visit( INSPECTOR inspector,  void* testData, const KICAD_T scanTypes[] ) override;
+    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
     wxString GetClass() const override
     {
@@ -597,7 +603,7 @@ public:
      * @param aName = the name in library to validate
      * @return true if the given name is valid
      */
-    static bool IsLibNameValid( const wxString & aName );
+    static bool IsLibNameValid( const wxString& aName );
 
     /**
      * static function StringLibNameInvalidChars
@@ -661,42 +667,42 @@ public:
 #endif
 
 private:
-    DLIST<D_PAD>      m_Pads;           ///< Linked list of pads.
+    DLIST<D_PAD> m_Pads;                ///< Linked list of pads.
     DLIST<BOARD_ITEM> m_Drawings;       ///< Linked list of graphical items.
     std::list<S3D_INFO> m_3D_Drawings;  ///< Linked list of 3D models.
-    double            m_Orient;         ///< Orientation in tenths of a degree, 900=90.0 degrees.
-    wxPoint           m_Pos;            ///< Position of module on the board in internal units.
-    TEXTE_MODULE*     m_Reference;      ///< Component reference designator value (U34, R18..)
-    TEXTE_MODULE*     m_Value;          ///< Component value (74LS00, 22K..)
-    LIB_ID            m_fpid;           ///< The #LIB_ID of the MODULE.
-    int               m_Attributs;      ///< Flag bits ( see Mod_Attribut )
-    int               m_ModuleStatus;   ///< For autoplace: flags (LOCKED, AUTOPLACED)
-    EDA_RECT          m_BoundaryBox;    ///< Bounding box : coordinates on board, real orientation.
+    double m_Orient;                    ///< Orientation in tenths of a degree, 900=90.0 degrees.
+    wxPoint m_Pos;                      ///< Position of module on the board in internal units.
+    TEXTE_MODULE* m_Reference;          ///< Component reference designator value (U34, R18..)
+    TEXTE_MODULE* m_Value;              ///< Component value (74LS00, 22K..)
+    LIB_ID m_fpid;                      ///< The #LIB_ID of the MODULE.
+    int m_Attributs;                    ///< Flag bits ( see Mod_Attribut )
+    int m_ModuleStatus;                 ///< For autoplace: flags (LOCKED, AUTOPLACED)
+    EDA_RECT m_BoundaryBox;             ///< Bounding box : coordinates on board, real orientation.
 
     // The final margin is the sum of these 2 values
-    int               m_ThermalWidth;
-    int               m_ThermalGap;
-    wxString          m_Doc;            ///< File name and path for documentation file.
-    wxString          m_KeyWord;        ///< Search keywords to find module in library.
-    wxString          m_Path;
-    ZoneConnection    m_ZoneConnection;
-    time_t            m_LastEditTime;
-    int               m_arflag;             ///< Use to trace ratsnest and auto routing.
-    double            m_Surface;        ///< Bounding box area
-    time_t            m_Link;           ///< Temporary logical link used in edition
-    int               m_CntRot90;       ///< Horizontal automatic placement cost ( 0..10 ).
-    int               m_CntRot180;      ///< Vertical automatic placement cost ( 0..10 ).
+    int m_ThermalWidth;
+    int m_ThermalGap;
+    wxString m_Doc;             ///< File name and path for documentation file.
+    wxString m_KeyWord;         ///< Search keywords to find module in library.
+    wxString m_Path;
+    ZoneConnection m_ZoneConnection;
+    time_t m_LastEditTime;
+    int m_arflag;           ///< Use to trace ratsnest and auto routing.
+    double m_Surface;       ///< Bounding box area
+    time_t m_Link;          ///< Temporary logical link used in edition
+    int m_CntRot90;         ///< Horizontal automatic placement cost ( 0..10 ).
+    int m_CntRot180;        ///< Vertical automatic placement cost ( 0..10 ).
 
     // Local tolerances. When zero, this means the corresponding netclass value
     // is used. Usually theses local tolerances zero, in deference to the
     // corresponding netclass values.
-    int               m_LocalClearance;
-    int               m_LocalSolderMaskMargin;    ///< Solder mask margin
-    int               m_LocalSolderPasteMargin;   ///< Solder paste margin absolute value
-    double            m_LocalSolderPasteMarginRatio;   ///< Solder mask margin ratio
-                                                       ///< value of pad size
+    int m_LocalClearance;
+    int m_LocalSolderMaskMargin;            ///< Solder mask margin
+    int m_LocalSolderPasteMargin;           ///< Solder paste margin absolute value
+    double m_LocalSolderPasteMarginRatio;   ///< Solder mask margin ratio
+                                            ///< value of pad size
 
-    wxArrayString*    m_initial_comments;   ///< leading s-expression comments in the module,
+    wxArrayString* m_initial_comments;      ///< leading s-expression comments in the module,
                                             ///< lazily allocated only if needed for speed
 
     /// Used in DRC to test the courtyard area (a polygon which can be not basic

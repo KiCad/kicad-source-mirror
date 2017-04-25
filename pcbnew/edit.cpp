@@ -663,6 +663,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         SetCurItem( NULL );        // CurItem might be deleted by this command, clear the pointer
+	// fixme
         OnModify();
         SetMsgPanel( GetBoard() );
         m_canvas->Refresh();

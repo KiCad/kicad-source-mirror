@@ -285,7 +285,7 @@ static void globalChangePadSettings( BOARD& board,
         if( module->GetFPID() != moduleRef->GetFPID() )
             continue;
 
-        for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
+        for( D_PAD* pad = module->PadsList();  pad;  pad = pad->Next() )
         {
             // Filters changes prohibited.
             if( aPadShapeFilter && ( pad->GetShape() != aSrcPad.GetShape() ) )

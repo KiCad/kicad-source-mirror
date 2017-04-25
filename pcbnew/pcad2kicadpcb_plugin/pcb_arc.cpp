@@ -161,7 +161,7 @@ void PCB_ARC::AddToModule( MODULE* aModule )
     if( IsNonCopperLayer( m_KiCadLayer ) )
     {
         EDGE_MODULE* arc = new EDGE_MODULE( aModule, S_ARC );
-        aModule->GraphicalItems().PushBack( arc );
+        aModule->GraphicalItemsList().PushBack( arc );
 
         arc->SetAngle( -m_angle );
         arc->m_Start0   = wxPoint( m_positionX, m_positionY );

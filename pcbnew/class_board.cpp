@@ -763,7 +763,7 @@ void BOARD::SetElementVisibility( GAL_LAYER_ID LAYER_aPCB, bool isEnabled )
         for ( auto track : Tracks() )
             track->SetLocalRatsnestVisible( isEnabled );
         for( auto mod : Modules() )
-            for ( auto pad : mod->PadsIter() )
+            for ( auto pad : mod->Pads() )
                 pad->SetLocalRatsnestVisible( isEnabled );
         for( int i = 0; i<GetAreaCount(); i++ )
         {
@@ -1617,7 +1617,7 @@ D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, LSET aLayerSet )
 {
     for( auto mod : Modules() )
     {
-        for ( auto pad : mod->PadsIter() )
+        for ( auto pad : mod->Pads() )
         {
         if( pad->GetPosition() != aPosition )
             continue;
@@ -1743,7 +1743,7 @@ void BOARD::GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector, int aNe
 {
     for ( auto mod : Modules() )
     {
-        for ( auto pad : mod->PadsIter( ) )
+        for ( auto pad : mod->Pads( ) )
         {
             if( aNetCode < 0 ||  pad->GetNetCode() == aNetCode )
             {
@@ -2617,7 +2617,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             continue;
 
         // At this point, the component footprint is updated.  Now update the nets.
-        for( D_PAD* pad = footprint->Pads();  pad;  pad = pad->Next() )
+        for( auto pad : footprint->Pads() )
         {
             COMPONENT_NET net = component->GetNet( pad->GetPadName() );
 
@@ -2897,7 +2897,7 @@ const std::vector<D_PAD*> BOARD::GetPads()
     std::vector<D_PAD*> rv;
     for ( auto mod: Modules() )
     {
-        for ( auto pad: mod->PadsIter() )
+        for ( auto pad: mod->Pads() )
             rv.push_back ( pad );
 
     }
@@ -2919,7 +2919,7 @@ D_PAD* BOARD::GetPad( unsigned aIndex ) const
     unsigned count = 0;
     for ( MODULE *mod = m_Modules; mod ; mod = mod->Next() ) // FIXME: const DLIST_ITERATOR
     {
-        for ( D_PAD *pad = mod->Pads(); pad; pad = pad->Next() )
+        for ( D_PAD *pad = mod->PadsList(); pad; pad = pad->Next() )
         {
             if ( count == aIndex )
                 return pad;

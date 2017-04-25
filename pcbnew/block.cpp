@@ -602,7 +602,6 @@ void PCB_EDIT_FRAME::Block_Rotate()
     {
         BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
         wxASSERT( item );
-
         itemsList->SetPickedItemStatus( UR_CHANGED, ii );
 
         switch( item->Type() )

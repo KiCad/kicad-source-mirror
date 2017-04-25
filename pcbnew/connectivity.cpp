@@ -189,7 +189,7 @@ void CONNECTIVITY_DATA::BlockRatsnestItems( const std::vector<BOARD_ITEM*>& aIte
     {
         if( item->Type() == PCB_MODULE_T )
         {
-            for( auto pad : static_cast<MODULE*>(item)->PadsIter() )
+            for( auto pad : static_cast<MODULE*>(item)->Pads() )
                 citems.push_back( pad );
         }
         else

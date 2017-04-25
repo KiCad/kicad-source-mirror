@@ -815,7 +815,7 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
              module;
              module = module->Next() )
         {
-            for( const D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
+            for( const D_PAD* pad = module->PadsList(); pad; pad = pad->Next() )
             {
                 if( pad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
                 {

@@ -140,7 +140,7 @@ bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
     switch( aItem->Type() )
     {
     case PCB_MODULE_T:
-        for ( auto pad : static_cast<MODULE *> (aItem ) -> PadsIter() )
+        for ( auto pad : static_cast<MODULE *> (aItem ) -> Pads() )
         {
             m_itemMap[ static_cast<BOARD_CONNECTED_ITEM*>( pad ) ].MarkItemsAsInvalid();
             m_itemMap.erase ( static_cast<BOARD_CONNECTED_ITEM*>( pad )  );
@@ -195,7 +195,7 @@ void CN_CONNECTIVITY_ALGO::markItemNetAsDirty( const BOARD_ITEM *aItem )
         if ( aItem->Type() == PCB_MODULE_T )
         {
             auto mod = static_cast <const MODULE *> ( aItem );
-            for( D_PAD* pad = mod->Pads(); pad; pad = pad->Next() )
+            for( D_PAD* pad = mod->PadsList(); pad; pad = pad->Next() )
                 markNetAsDirty ( pad->GetNetCode() );
         }
     }
@@ -209,7 +209,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
         switch( aItem->Type() )
         {
         case PCB_MODULE_T:
-            for ( auto pad : static_cast<MODULE *> (aItem ) -> PadsIter() )
+            for ( auto pad : static_cast<MODULE *> (aItem ) -> Pads() )
             {
                 if ( m_itemMap.find ( pad ) != m_itemMap.end() )
                     return false;
@@ -678,7 +678,7 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard )
         Add( tv );
 
     for( auto mod : aBoard->Modules() )
-        for( auto pad : mod->PadsIter() )
+        for( auto pad : mod->Pads() )
             Add( pad );
 
     /*wxLogTrace( "CN", "zones : %lu, pads : %lu vias : %lu tracks : %lu\n",
@@ -701,7 +701,7 @@ void CN_CONNECTIVITY_ALGO::Build( const std::vector<BOARD_ITEM *> &aItems )
 
             case PCB_MODULE_T:
             {
-                for( auto pad : static_cast<MODULE*>(item)->PadsIter() )
+                for( auto pad : static_cast<MODULE*>(item)->Pads() )
                 {
                     Add( pad );
                 }

@@ -125,7 +125,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 
 int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 {
-    if( !board()->m_Modules || !board()->m_Modules->Pads() )
+    if( !board()->m_Modules || !board()->m_Modules->PadsList() )
         return 0;
 
     Activate();
@@ -254,7 +254,7 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
         }
     }
 
-    for( D_PAD* p = board()->m_Modules->Pads(); p; p = p->Next() )
+    for( auto p : board()->m_Modules->Pads() )
     {
         p->ClearSelected();
         view->Update( p );
@@ -411,14 +411,13 @@ int MODULE_EDITOR_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
             // MODULE::RunOnChildren is infeasible here: we need to create copies of items, do not
             // directly modify them
 
-            for( D_PAD* pad = pastedModule->Pads(); pad; pad = pad->Next() )
+            for( auto pad : pastedModule->Pads() )
             {
                 D_PAD* clone = static_cast<D_PAD*>( pad->Clone() );
                 commit.Add( clone );
             }
 
-            for( BOARD_ITEM* drawing = pastedModule->GraphicalItems();
-                    drawing; drawing = drawing->Next() )
+            for( auto drawing : pastedModule->GraphicalItems() )
             {
                 BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( drawing->Clone() );
 
@@ -469,7 +468,7 @@ int MODULE_EDITOR_TOOLS::ModuleTextOutlines( const TOOL_EVENT& aEvent )
 
     for( auto module : board()->Modules() )
     {
-        for( auto item : module->GraphicalItemsIter() )
+        for( auto item : module->GraphicalItems() )
         {
             if( item->Type() == PCB_MODULE_TEXT_T )
                 view->Update( item, KIGFX::GEOMETRY );
@@ -502,7 +501,7 @@ int MODULE_EDITOR_TOOLS::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
 
     for( auto module : board()->Modules() )
     {
-        for( auto item : module->GraphicalItemsIter() )
+        for( auto item : module->GraphicalItems() )
         {
             if( item->Type() == PCB_MODULE_EDGE_T )
                 view->Update( item, KIGFX::GEOMETRY );

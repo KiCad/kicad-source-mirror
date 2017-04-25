@@ -37,7 +37,6 @@
 class NETCLASS;
 class TRACK;
 class D_PAD;
-class CN_BOARD_ITEM_DATA;
 
 /**
  * Class BOARD_CONNECTED_ITEM

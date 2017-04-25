@@ -584,7 +584,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     {
         wxBusyCursor dummy;    // Displays an Hourglass while building connectivity
         Compile_Ratsnest( NULL, true );
-        //GetBoard()->GetRatsnest()->ProcessBoard();
+        GetBoard()->GetConnectivity()->Build( GetBoard() );
     }
 
     // Update info shown by the horizontal toolbars

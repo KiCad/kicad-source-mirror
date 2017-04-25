@@ -1411,7 +1411,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                     return -1;
 
             for ( auto mod : m_board->Modules() )
-                for ( auto pad : mod->PadsIter() )
+                for ( auto pad : mod->Pads() )
                 if( pad->HitTest(pos) && (pad->GetLayerSet() &
                        lset ).any() )
                     return -1;

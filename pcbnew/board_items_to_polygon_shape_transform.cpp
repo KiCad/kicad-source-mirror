@@ -133,7 +133,7 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
                         double                 aCorrectionFactor,
                         bool                   aSkipNPTHPadsWihNoCopper ) const
 {
-    D_PAD* pad = Pads();
+    D_PAD* pad = PadsList();
 
     wxSize margin;
     for( ; pad != NULL; pad = pad->Next() )
@@ -211,7 +211,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
     std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
     EDGE_MODULE* outline;
 
-    for( EDA_ITEM* item = GraphicalItems(); item != NULL; item = item->Next() )
+    for( EDA_ITEM* item = GraphicalItemsList(); item != NULL; item = item->Next() )
     {
         switch( item->Type() )
         {
@@ -286,7 +286,7 @@ void MODULE::TransformGraphicTextWithClearanceToPolygonSet(
 {
     std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
 
-    for( EDA_ITEM* item = GraphicalItems(); item != NULL; item = item->Next() )
+    for( EDA_ITEM* item = GraphicalItemsList(); item != NULL; item = item->Next() )
     {
         switch( item->Type() )
         {

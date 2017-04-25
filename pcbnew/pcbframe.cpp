@@ -506,7 +506,7 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
 
     if( IsGalCanvasActive() )
     {
-        aBoard->GetConnectivity()->Build ( aBoard );
+        aBoard->GetConnectivity()->Build( aBoard );
         
         // reload the worksheet
         SetPageSettings( aBoard->GetPageSettings() );

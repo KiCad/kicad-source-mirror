@@ -133,7 +133,7 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER* 
     {
         auto moduleClearance = mod->GetLocalClearance();
 
-        for( D_PAD* pad = mod->Pads(); pad; pad = pad->Next() )
+        for( D_PAD* pad = mod->PadsList(); pad; pad = pad->Next() )
         {
             int padClearance = pad->GetLocalClearance();
 
@@ -765,7 +765,7 @@ void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
 
     for( MODULE* module = m_board->m_Modules; module; module = module->Next() )
     {
-        for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
+        for( D_PAD* pad = module->PadsList(); pad; pad = pad->Next() )
         {
             std::unique_ptr< PNS::SOLID > solid = syncPad( pad );
 

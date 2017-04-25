@@ -1198,7 +1198,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
             // All other fields greater than 1.
             default:
                 textm = new TEXTE_MODULE( aModule );
-                aModule->GraphicalItems().PushBack( textm );
+                aModule->GraphicalItemsList().PushBack( textm );
             }
 
             loadMODULE_TEXT( textm );
@@ -1609,7 +1609,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 
             pad->SetPosition( padpos + aModule->GetPosition() );
 
-            aModule->Pads().PushBack( pad.release() );
+            aModule->PadsList().PushBack( pad.release() );
             return;     // preferred exit
         }
     }
@@ -1757,7 +1757,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
 
     EDGE_MODULE* em = dwg.release();
 
-    aModule->GraphicalItems().PushBack( em );
+    aModule->GraphicalItemsList().PushBack( em );
 
     // this had been done at the MODULE level before, presumably because the
     // EDGE_MODULE needs to be already added to a module before this function will work.

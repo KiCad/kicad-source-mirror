@@ -331,9 +331,7 @@ void DIALOG_NETLIST::OnCompileRatsnestClick( wxCommandEvent& event )
 {
     // Rebuild the board connectivity:
     auto board = m_parent->GetBoard();
-	//board->GetConnectivity()->Build( board );
-	board->GetConnectivity()->PropagateNets();
-    m_parent->Compile_Ratsnest( m_dc, true );
+	board->GetConnectivity()->RecalculateRatsnest();
 }
 
 

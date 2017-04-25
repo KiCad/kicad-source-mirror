@@ -60,6 +60,7 @@ DRAG_SEGM_PICKER::DRAG_SEGM_PICKER( TRACK* aTrack )
     m_Flipped = false;
 }
 
+
 void DRAG_SEGM_PICKER::SetAuxParameters()
 {
     MODULE* module = NULL;
@@ -155,7 +156,7 @@ void DRAG_LIST::BuildDragListe( MODULE* aModule )
 
     std::vector<D_PAD*> padList;
 
-    for ( auto pad : aModule->PadsIter() )
+    for ( auto pad : aModule->Pads() )
         padList.push_back( pad );
 
     sort( padList.begin(), padList.end(), sortPadsByXthenYCoord );
@@ -185,8 +186,6 @@ bool sort_tracklist( const DRAG_SEGM_PICKER& ref, const DRAG_SEGM_PICKER& tst )
 
 void DRAG_LIST::fillList( std::vector<D_PAD*>& aList )
 {
-
-printf("FillList!\n");
     // clear flags and variables of selected tracks
     for( auto pad : aList )
     {

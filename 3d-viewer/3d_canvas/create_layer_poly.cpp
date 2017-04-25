@@ -194,7 +194,7 @@ void CINFO3D_VISU::transformGraphicModuleEdgeToPolygonSet( const MODULE *aModule
                                                            PCB_LAYER_ID aLayer,
                                                            SHAPE_POLY_SET& aCornerBuffer ) const
 {
-    for( const EDA_ITEM* item = aModule->GraphicalItems();
+    for( const EDA_ITEM* item = aModule->GraphicalItemsList();
          item != NULL;
          item = item->Next() )
     {

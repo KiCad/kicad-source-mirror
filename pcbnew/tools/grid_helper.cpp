@@ -256,7 +256,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos )
             MODULE* mod = static_cast<MODULE*>( aItem );
             addAnchor( mod->GetPosition(), ORIGIN | SNAPPABLE, mod );
 
-            for( D_PAD* pad = mod->Pads(); pad; pad = pad->Next() )
+            for( auto pad : mod->Pads() )
                 addAnchor( pad->GetPosition(), CORNER | SNAPPABLE, pad );
 
             break;

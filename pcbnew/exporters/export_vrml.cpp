@@ -1278,7 +1278,7 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb,
             export_vrml_text_module( &aModule->Value() );
 
         // Export module edges
-        for( EDA_ITEM* item = aModule->GraphicalItems(); item; item = item->Next() )
+        for( EDA_ITEM* item = aModule->GraphicalItemsList(); item; item = item->Next() )
         {
             switch( item->Type() )
             {
@@ -1298,7 +1298,7 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb,
     }
 
     // Export pads
-    for( D_PAD* pad = aModule->Pads(); pad; pad = pad->Next() )
+    for( D_PAD* pad = aModule->PadsList(); pad; pad = pad->Next() )
         export_vrml_pad( aModel, aPcb, pad );
 
     bool isFlipped = aModule->GetLayer() == B_Cu;

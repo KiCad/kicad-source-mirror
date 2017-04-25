@@ -160,7 +160,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
         DBG( g_CurrentTrackList.VerifyListIntegrity() );
 
         int net = -1;
-        if (lockPoint)
+        if( lockPoint )
             net = lockPoint->GetNetCode();
 
         BuildAirWiresTargetsList( lockPoint, wxPoint( 0, 0 ), net );

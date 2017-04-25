@@ -655,7 +655,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
             // Add a PAD_ATTRIB_HOLE_NOT_PLATED pad to this module.
             D_PAD* pad = new D_PAD( module );
-            module->Pads().PushBack( pad );
+            module->PadsList().PushBack( pad );
 
             pad->SetShape( PAD_SHAPE_CIRCLE );
             pad->SetAttribute( PAD_ATTRIB_HOLE_NOT_PLATED );
@@ -851,7 +851,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
         m_board->Add( m, ADD_APPEND );
 
         // update the nets within the pads of the clone
-        for( D_PAD* pad = m->Pads();  pad;  pad = pad->Next() )
+        for( D_PAD* pad = m->PadsList();  pad;  pad = pad->Next() )
         {
             string pn_key  = makeKey( e.name, TO_UTF8( pad->GetPadName() ) );
 
@@ -1233,7 +1233,7 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
         dwg->SetLayer( layer );
         dwg->SetWidth( width );
 
-        aModule->GraphicalItems().PushBack( dwg );
+        aModule->GraphicalItemsList().PushBack( dwg );
     }
 }
 
@@ -1244,7 +1244,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
     EPAD e( aTree );
 
     D_PAD*  pad = new D_PAD( aModule );
-    aModule->Pads().PushBack( pad );
+    aModule->PadsList().PushBack( pad );
 
     pad->SetPadName( FROM_UTF8( e.name.c_str() ) );
 
@@ -1346,7 +1346,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
     {
         // FIXME: graphical text items are rotated for some reason.
         txt = new TEXTE_MODULE( aModule );
-        aModule->GraphicalItems().PushBack( txt );
+        aModule->GraphicalItemsList().PushBack( txt );
     }
 
     txt->SetTimeStamp( timeStamp( aTree ) );
@@ -1440,7 +1440,7 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
     if( IsNonCopperLayer( layer ) )  // skip copper "package.rectangle"s
     {
         EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
-        aModule->GraphicalItems().PushBack( dwg );
+        aModule->GraphicalItemsList().PushBack( dwg );
 
         dwg->SetLayer( layer );
         dwg->SetWidth( 0 );
@@ -1473,7 +1473,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
     if( IsNonCopperLayer( layer ) )  // skip copper "package.rectangle"s
     {
         EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
-        aModule->GraphicalItems().PushBack( dwg );
+        aModule->GraphicalItemsList().PushBack( dwg );
 
         dwg->SetWidth( 0 );     // it's filled, no need for boundary width
 
@@ -1526,7 +1526,7 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
     PCB_LAYER_ID    layer = kicad_layer( e.layer );
     EDGE_MODULE*    gr = new EDGE_MODULE( aModule, S_CIRCLE );
 
-    aModule->GraphicalItems().PushBack( gr );
+    aModule->GraphicalItemsList().PushBack( gr );
 
     gr->SetWidth( kicad( e.width ) );
 
@@ -1555,7 +1555,7 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, wxXmlNode* aTree ) const
 
     // we add a PAD_ATTRIB_HOLE_NOT_PLATED pad to this module.
     D_PAD* pad = new D_PAD( aModule );
-    aModule->Pads().PushBack( pad );
+    aModule->PadsList().PushBack( pad );
 
     pad->SetShape( PAD_SHAPE_CIRCLE );
     pad->SetAttribute( PAD_ATTRIB_HOLE_NOT_PLATED );
@@ -1590,7 +1590,7 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
     }
 
     D_PAD*  pad = new D_PAD( aModule );
-    aModule->Pads().PushBack( pad );
+    aModule->PadsList().PushBack( pad );
 
     pad->SetPadName( FROM_UTF8( e.name.c_str() ) );
     pad->SetShape( PAD_SHAPE_RECT );

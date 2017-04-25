@@ -225,7 +225,7 @@ void MODULE::DrawOutlinesWhenMoving( EDA_DRAW_PANEL* panel, wxDC* DC,
     pad_fill_tmp = displ_opts->m_DisplayPadFill;
     displ_opts->m_DisplayPadFill = true;
 
-    pt_pad = Pads();
+    pt_pad = PadsList();
 
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
         pt_pad->Draw( panel, DC, GR_XOR, aMoveVector );
@@ -247,7 +247,7 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
     {
         auto mod = static_cast<MODULE*> (item);
 
-        for( auto pad : mod->PadsIter() )
+        for( auto pad : mod->Pads() )
         {
             pad->SetLocalRatsnestVisible( true );
         }

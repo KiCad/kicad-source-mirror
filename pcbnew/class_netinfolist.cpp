@@ -221,7 +221,7 @@ void NETINFO_MAPPING::Update()
     // Modules/pads
     for( MODULE* module = m_board->m_Modules; module; module = module->Next() )
     {
-        for( D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
+        for( D_PAD* pad = module->PadsList().GetFirst(); pad; pad = pad->Next() )
         {
             nets.insert( pad->GetNetCode() );
         }

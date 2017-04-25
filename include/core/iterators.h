@@ -27,40 +27,69 @@
 #include <dlist.h>
 #include <iterator>
 
-template<class T>
-class DLIST_ITERATOR: public std::iterator<std::bidirectional_iterator_tag, T>
+template <class T>
+class DLIST_ITERATOR : public std::iterator<std::bidirectional_iterator_tag, T>
 {
 private:
     T m_obj;
 
-    using reference = typename DLIST_ITERATOR<T>::reference ;
+    using reference = typename DLIST_ITERATOR<T>::reference;
+
 public:
-    explicit DLIST_ITERATOR<T>( T obj ) : m_obj(obj) {}
+    explicit DLIST_ITERATOR<T>( T obj ) :
+        m_obj(obj) {}
 
-    DLIST_ITERATOR<T>& operator++() { m_obj = m_obj->Next(); return *this; }
-    DLIST_ITERATOR<T>& operator--() { m_obj = m_obj->Prev(); return *this; }
+    DLIST_ITERATOR<T>& operator++()
+    {
+        m_obj = m_obj->Next(); return *this;
+    }
 
-    bool operator==(DLIST_ITERATOR<T> other) const {return m_obj == other.m_obj;}
-    bool operator!=(DLIST_ITERATOR<T> other) const {return !(*this == other);}
+    DLIST_ITERATOR<T>& operator--()
+    {
+        m_obj = m_obj->Prev(); return *this;
+    }
 
-    reference operator*() {return m_obj;}
+    bool operator==( DLIST_ITERATOR<T> other ) const
+    {
+        return m_obj == other.m_obj;
+    }
+
+    bool operator!=( DLIST_ITERATOR<T> other ) const
+    {
+        return !(*this == other);
+    }
+
+    reference operator*()
+    {
+        return m_obj;
+    }
 };
 
 // helper object, used to convert a DLIST<T> to an iterator
-template<class T> class DLIST_ITERATOR_WRAPPER
+template <class T>
+class DLIST_ITERATOR_WRAPPER
 {
-    public:
-        explicit DLIST_ITERATOR_WRAPPER<T> ( DLIST<T>& list ) : m_list(list) {};
+public:
+    explicit DLIST_ITERATOR_WRAPPER<T> ( DLIST<T>& list ) :
+        m_list(list) {}
 
-        DLIST_ITERATOR<T*> begin() { return DLIST_ITERATOR<T*> ( m_list.GetFirst()); }
-        DLIST_ITERATOR<T*> end() { return DLIST_ITERATOR<T*> ( nullptr ); }
+    DLIST_ITERATOR<T*> begin()
+    {
+        return DLIST_ITERATOR<T*> ( m_list.GetFirst() );
+    }
 
-        unsigned int Size() const {
-            return m_list.GetCount();
-        }
+    DLIST_ITERATOR<T*> end()
+    {
+        return DLIST_ITERATOR<T*> ( nullptr );
+    }
 
-    private:
-        DLIST<T>& m_list;
+    unsigned int Size() const
+    {
+        return m_list.GetCount();
+    }
+
+private:
+    DLIST<T>& m_list;
 };
 
 #endif
