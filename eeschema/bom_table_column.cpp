@@ -86,7 +86,7 @@ BOM_COLUMN* BOM_COLUMN_LIST::GetColumnByTitle( wxString aColTitle )
 {
     for( unsigned int ii=0; ii<Columns.size(); ii++ )
     {
-        if( Columns[ii] && Columns[ii]->Title().CmpNoCase( aColTitle ) == 0 )
+        if( Columns[ii] && Columns[ii]->Title().Cmp( aColTitle ) == 0 )
             return Columns[ii];
     }
 

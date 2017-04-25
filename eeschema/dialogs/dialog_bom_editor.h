@@ -69,14 +69,18 @@ private:
     virtual void OnColumnItemToggled( wxDataViewEvent& event ) override;
     virtual void OnGroupComponentsToggled( wxCommandEvent& event ) override;
 
-    virtual void OnExportBOM( wxCommandEvent& event ) override;
-
     virtual void OnRevertFieldChanges( wxCommandEvent& event ) override;
 
     virtual void OnRegroupComponents( wxCommandEvent& event ) override;
 
     // Called after a value in the table has changed
     virtual void OnTableValueChanged( wxDataViewEvent& event ) override;
+
+    // Called when a cell is left-clicked
+    virtual void OnTableItemActivated( wxDataViewEvent& event ) override;
+
+    // Called when a cell is right-clicked
+    virtual void OnTableItemContextMenu( wxDataViewEvent& event ) override;
 
     void UpdateTitle( void );
 

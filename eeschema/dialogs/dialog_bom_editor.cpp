@@ -35,8 +35,6 @@
 #include <general.h>
 #include <class_library.h>
 
-#include <bom_exporter.h>
-
 #include "dialog_bom_editor.h"
 #include <bom_table_model.h>
 
@@ -112,31 +110,9 @@ typedef struct
  */
 bool DIALOG_BOM_EDITOR::TransferDataFromWindow()
 {
-    bool saveChanges = false;
-
-    // If there are changed values, warn the user first
     if( m_bom->HaveFieldsChanged() )
     {
-        int result = DisplayExitDialog( this, _( "Changes exist in component table" ) );
-
-        switch( result )
-        {
-        // Save and exit
-        case wxID_YES:
-            saveChanges = true;
-            break;
-        // Cancel (do not exit)
-        case wxID_CANCEL:
-            return false;
-        // Do not save, exit
-        default:
-            return true;
-        }
-    }
-
-    if( saveChanges )
-    {
-        /**
+         /**
          * As we may be saving changes across multiple sheets,
          * we need to first determine which changes need to be made to which sheet.
          * To this end, we perform the following:
@@ -144,7 +120,7 @@ bool DIALOG_BOM_EDITOR::TransferDataFromWindow()
          * 2. Create a MAP of <SheetPath:ChangeList> changes that need to be made
          * 3. Push UNDO actions to appropriate sheets
          * 4. Perform all the update actions
-         * 5. Reset the sheet view to the current sheet
+         * 5. Reset the view to the current sheet
          */
 
         auto currentSheet = m_parent->GetCurrentSheet();
@@ -168,7 +144,6 @@ bool DIALOG_BOM_EDITOR::TransferDataFromWindow()
             // Push the component into the picker list
             picker = ITEM_PICKER( cmp, UR_CHANGED );
             picker.SetFlags( cmp->GetFlags() );
-
 
             /*
              * If there is not currently an undo list for the given sheet,
@@ -199,7 +174,7 @@ bool DIALOG_BOM_EDITOR::TransferDataFromWindow()
             m_parent->OnModify();
         }
 
-        // Apply all the field changes
+        // Make all component changes
         m_bom->ApplyFieldChanges();
 
         // Redraw the current sheet and mark as dirty
@@ -208,7 +183,6 @@ bool DIALOG_BOM_EDITOR::TransferDataFromWindow()
 
         // Reset the view to where we left the user
         m_parent->SetCurrentSheet(currentSheet);
-
 
     }
 
@@ -352,131 +326,6 @@ void DIALOG_BOM_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
     UpdateTitle();
 }
 
-/**
- * Called when the "Export BOM" button is pressed
- * Extract row data from the component table,
- * and export it to a BOM file
- */
-void DIALOG_BOM_EDITOR::OnExportBOM( wxCommandEvent& event )
-{
-    // Allowable BOM file formats
-    static const wxString wildcard = _( "BOM Files" ) + wxString( " *.csv, *.tsv, *.html)|*.csv;*.tsv;*.htm;*.html" );
-
-    wxFileDialog bomFileDialog(this, _("Select BOM file"),
-                Prj().GetProjectPath(),
-                wxEmptyString,
-                wildcard,
-                wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-
-    if( bomFileDialog.ShowModal() == wxID_CANCEL )
-    {
-        return;
-    }
-
-    // Ensure the component groups are correct
-    m_bom->ReloadTable();
-
-    wxString msg;
-
-    wxFileName filename = bomFileDialog.GetPath();
-
-    // Ensure correct file format
-    BOM_FILE_WRITER* writer;
-
-    wxString fn = filename.GetFullPath().Lower();
-
-    // CSV File
-    if( fn.EndsWith( ".csv" ) )
-    {
-        writer = new BOM_CSV_WRITER();
-    }
-    // TSV file
-    else if( fn.EndsWith( ".tsv" ) )
-    {
-        writer = new BOM_CSV_WRITER( '\t' );
-    }
-    // HTML file
-    else if( fn.EndsWith( ".html" ) || fn.EndsWith( ".htm" ) )
-    {
-        writer = new BOM_HTML_WRITER();
-    }
-    // Unknown file!
-    else
-    {
-        msg.Printf("%s:\n%s",
-                   _( "Unsupported file type" ),
-                   filename.GetExt() );
-
-        wxMessageBox( msg );
-        return;
-    }
-
-    // Set export preferences
-    writer->IncludeExtraData( m_includeProjectData->GetValue() );
-    writer->ShowRowNumbers( m_showRowNumbers->GetValue() );
-
-    // Project information
-    writer->SetKicadVersion( GetBuildVersion() );
-
-    // Extract sheet info from top-level sheet
-    if( g_RootSheet )
-    {
-        const TITLE_BLOCK& tb = g_RootSheet->GetScreen()->GetTitleBlock();
-
-        writer->SetSchematicDate( tb.GetDate() );
-        writer->SetSchematicVersion( tb.GetRevision() );
-        writer->SetSchematicTitle( tb.GetTitle() );
-    }
-
-    std::vector<BOM_COLUMN*> columns;
-    wxArrayString headings;
-
-    // Extract the visible column data
-    for( auto column : m_bom->ColumnList.Columns )
-    {
-        if( column && column->IsVisible() )
-        {
-            columns.push_back( column );
-            headings.push_back( column->Title() );
-        }
-    }
-
-    writer->SetHeader( headings );
-
-    // Extract the row data
-    for( unsigned int row=0; row<m_bom->GroupCount(); row++ )
-    {
-        writer->AddLine( m_bom->GetRowData( row, columns ) );
-    }
-
-    writer->SetGroupCount( m_bom->GroupCount() );
-    writer->SetComponentCount( m_bom->ComponentCount() );
-
-    // Open the BOM file for writing
-    wxFile bomFile( filename.GetFullPath(), wxFile::write );
-
-    if( bomFile.IsOpened() )
-    {
-        if( !writer->WriteToFile( bomFile ) )
-        {
-            msg.Printf( "%s:\n%s",
-                        _( "Error writing BOM file" ),
-                        filename.GetFullPath() );
-        }
-
-        bomFile.Close();
-    }
-    else
-    {
-        msg.Printf( "%s:\n%s",
-                    _( "Error opening BOM file" ),
-                    filename.GetFullPath() );
-
-        wxMessageBox( msg );
-    }
-}
-
 void DIALOG_BOM_EDITOR::OnTableValueChanged( wxDataViewEvent& event )
 {
     Update();
@@ -498,4 +347,25 @@ void DIALOG_BOM_EDITOR::OnRevertFieldChanges( wxCommandEvent& event )
             Update();
         }
     }
+}
+
+// Called when a cell is left-clicked
+void DIALOG_BOM_EDITOR::OnTableItemActivated( wxDataViewEvent& event )
+{
+    /* TODO
+     * - Focus on component selected in SCH_FRAME
+     */
+
+    event.Skip();
+}
+// Called when a cell is right-clicked
+void DIALOG_BOM_EDITOR::OnTableItemContextMenu( wxDataViewEvent& event )
+{
+    /* TODO
+     * - Display contect menu
+     * - Option to revert local changes if changes have been made
+     * - Option to select footprint if FOOTPRINT column selected
+     */
+
+    event.Skip();
 }

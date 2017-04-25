@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 22 2017)
+// C++ code generated with wxFormBuilder (version Apr  1 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -33,9 +33,6 @@ class DIALOG_SHIM;
 #define OPT_GROUP_COMPONENTS 1000
 #define ID_BUTTON_REGROUP 1001
 #define ID_BUTTON_REVERT_CHANGES 1002
-#define wxID_BOM_OPT_INC_PRJ_DATA 1003
-#define wxID_BOM_OPT_SHOW_ROW_NUMS 1004
-#define wxID_BOM_BUTTON_EXPORT 1005
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_BOM_EDITOR_BASE
@@ -51,9 +48,10 @@ class DIALOG_BOM_EDITOR_BASE : public DIALOG_SHIM
 		void _wxFB_OnRegroupComponents( wxCommandEvent& event ){ OnRegroupComponents( event ); }
 		void _wxFB_OnRevertFieldChanges( wxCommandEvent& event ){ OnRevertFieldChanges( event ); }
 		void _wxFB_OnColumnItemToggled( wxDataViewEvent& event ){ OnColumnItemToggled( event ); }
-		void _wxFB_OnExportBOM( wxCommandEvent& event ){ OnExportBOM( event ); }
 		void _wxFB_OnBomColumReordered( wxDataViewEvent& event ){ OnBomColumReordered( event ); }
 		void _wxFB_OnBomColumnSorted( wxDataViewEvent& event ){ OnBomColumnSorted( event ); }
+		void _wxFB_OnTableItemActivated( wxDataViewEvent& event ){ OnTableItemActivated( event ); }
+		void _wxFB_OnTableItemContextMenu( wxDataViewEvent& event ){ OnTableItemContextMenu( event ); }
 		void _wxFB_OnTableValueChanged( wxDataViewEvent& event ){ OnTableValueChanged( event ); }
 		void _wxFB_OnSelectionChanged( wxDataViewEvent& event ){ OnSelectionChanged( event ); }
 		
@@ -66,9 +64,6 @@ class DIALOG_BOM_EDITOR_BASE : public DIALOG_SHIM
 		wxButton* m_regroupComponentsButton;
 		wxButton* m_reloadTableButton;
 		wxDataViewListCtrl* m_columnListCtrl;
-		wxCheckBox* m_includeProjectData;
-		wxCheckBox* m_showRowNumbers;
-		wxButton* m_exportButton;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
@@ -81,9 +76,10 @@ class DIALOG_BOM_EDITOR_BASE : public DIALOG_SHIM
 		virtual void OnRegroupComponents( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRevertFieldChanges( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnColumnItemToggled( wxDataViewEvent& event ) { event.Skip(); }
-		virtual void OnExportBOM( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBomColumReordered( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnBomColumnSorted( wxDataViewEvent& event ) { event.Skip(); }
+		virtual void OnTableItemActivated( wxDataViewEvent& event ) { event.Skip(); }
+		virtual void OnTableItemContextMenu( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnTableValueChanged( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnSelectionChanged( wxDataViewEvent& event ) { event.Skip(); }
 		

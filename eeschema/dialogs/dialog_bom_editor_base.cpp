@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 22 2017)
+// C++ code generated with wxFormBuilder (version Apr  1 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -15,9 +15,10 @@ BEGIN_EVENT_TABLE( DIALOG_BOM_EDITOR_BASE, DIALOG_SHIM )
 	EVT_BUTTON( ID_BUTTON_REGROUP, DIALOG_BOM_EDITOR_BASE::_wxFB_OnRegroupComponents )
 	EVT_BUTTON( ID_BUTTON_REVERT_CHANGES, DIALOG_BOM_EDITOR_BASE::_wxFB_OnRevertFieldChanges )
 	EVT_DATAVIEW_ITEM_VALUE_CHANGED( wxID_ANY, DIALOG_BOM_EDITOR_BASE::_wxFB_OnColumnItemToggled )
-	EVT_BUTTON( wxID_BOM_BUTTON_EXPORT, DIALOG_BOM_EDITOR_BASE::_wxFB_OnExportBOM )
 	EVT_DATAVIEW_COLUMN_REORDERED( wxID_ANY, DIALOG_BOM_EDITOR_BASE::_wxFB_OnBomColumReordered )
 	EVT_DATAVIEW_COLUMN_SORTED( wxID_ANY, DIALOG_BOM_EDITOR_BASE::_wxFB_OnBomColumnSorted )
+	EVT_DATAVIEW_ITEM_ACTIVATED( wxID_ANY, DIALOG_BOM_EDITOR_BASE::_wxFB_OnTableItemActivated )
+	EVT_DATAVIEW_ITEM_CONTEXT_MENU( wxID_ANY, DIALOG_BOM_EDITOR_BASE::_wxFB_OnTableItemContextMenu )
 	EVT_DATAVIEW_ITEM_EDITING_DONE( wxID_ANY, DIALOG_BOM_EDITOR_BASE::_wxFB_OnTableValueChanged )
 	EVT_DATAVIEW_SELECTION_CHANGED( wxID_ANY, DIALOG_BOM_EDITOR_BASE::_wxFB_OnSelectionChanged )
 END_EVENT_TABLE()
@@ -78,39 +79,6 @@ DIALOG_BOM_EDITOR_BASE::DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id,
 	
 	
 	bSizer6->Add( 0, 0, 0, wxEXPAND, 5 );
-	
-	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_leftPanel, wxID_ANY, _("Export options") ), wxVERTICAL );
-	
-	m_includeProjectData = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_BOM_OPT_INC_PRJ_DATA, _("Include project data"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_includeProjectData->SetValue(true); 
-	m_includeProjectData->SetToolTip( _("Include project information in BOM file") );
-	
-	sbSizer2->Add( m_includeProjectData, 0, wxALL|wxEXPAND, 5 );
-	
-	m_showRowNumbers = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_BOM_OPT_SHOW_ROW_NUMS, _("Show row numbers"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_showRowNumbers->SetValue(true); 
-	m_showRowNumbers->SetToolTip( _("Show BOM row numbers ") );
-	
-	sbSizer2->Add( m_showRowNumbers, 0, wxALL|wxEXPAND, 5 );
-	
-	
-	sbSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	wxBoxSizer* bSizer13;
-	bSizer13 = new wxBoxSizer( wxHORIZONTAL );
-	
-	
-	bSizer13->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	m_exportButton = new wxButton( sbSizer2->GetStaticBox(), wxID_BOM_BUTTON_EXPORT, _("Export BOM"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer13->Add( m_exportButton, 0, wxALL, 5 );
-	
-	
-	sbSizer2->Add( bSizer13, 0, wxEXPAND, 5 );
-	
-	
-	bSizer6->Add( sbSizer2, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer4;
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( m_leftPanel, wxID_ANY, _("Apply changes") ), wxVERTICAL );

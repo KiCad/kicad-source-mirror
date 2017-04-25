@@ -682,6 +682,7 @@ void BOM_TABLE_COMPONENT::ApplyFieldChanges()
                     break;
                 }
 
+                // New field needs to be added?
                 if( !field && !value.IsEmpty() )
                 {
                     SCH_FIELD newField( wxPoint( 0, 0 ), -1, cmp, column->Title() );
@@ -1396,8 +1397,6 @@ void BOM_TABLE_MODEL::ApplyFieldChanges()
         if( !group )
             continue;
 
-        bool changed = false;
-
         for( auto& component : group->Components )
         {
             if( !component )
@@ -1406,14 +1405,7 @@ void BOM_TABLE_MODEL::ApplyFieldChanges()
             if( component->HasChanged() )
             {
                 component->ApplyFieldChanges();
-                ItemChanged( RowToItem( &*component ) );
-                changed = true;
             }
-        }
-
-        if( changed )
-        {
-            ItemChanged( RowToItem( &*group ) );
         }
     }
 }
