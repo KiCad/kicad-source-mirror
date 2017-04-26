@@ -181,25 +181,6 @@ void TEXTE_MODULE::SetLocalCoord()
     }
 }
 
-
-bool TEXTE_MODULE::HitTest( const wxPoint& aPosition ) const
-{
-    wxPoint  rel_pos;
-    EDA_RECT area = GetTextBox( -1, -1 );
-
-    /* Rotate refPos to - angle to test if refPos is within area (which
-     * is relative to an horizontal text)
-     */
-    rel_pos = aPosition;
-    RotatePoint( &rel_pos, GetTextPos(), -GetDrawRotation() );
-
-    if( area.Contains( rel_pos ) )
-        return true;
-
-    return false;
-}
-
-
 const EDA_RECT TEXTE_MODULE::GetBoundingBox() const
 {
     double   angle = GetDrawRotation();
