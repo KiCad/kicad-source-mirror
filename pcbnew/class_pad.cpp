@@ -280,14 +280,18 @@ const EDA_RECT D_PAD::GetBoundingBox() const
         break;
 
     case PAD_SHAPE_TRAPEZOID:
-        //Use the four corners and track their rotation
+        // Use the four corners and track their rotation
         // (Trapezoids will not be symmetric)
+
         quadrant1.x =  (m_Size.x + m_DeltaSize.y)/2;
         quadrant1.y =  (m_Size.y - m_DeltaSize.x)/2;
+
         quadrant2.x = -(m_Size.x + m_DeltaSize.y)/2;
         quadrant2.y =  (m_Size.y + m_DeltaSize.x)/2;
+
         quadrant3.x = -(m_Size.x - m_DeltaSize.y)/2;
         quadrant3.y = -(m_Size.y + m_DeltaSize.x)/2;
+
         quadrant4.x =  (m_Size.x - m_DeltaSize.y)/2;
         quadrant4.y = -(m_Size.y - m_DeltaSize.x)/2;
 
@@ -301,7 +305,7 @@ const EDA_RECT D_PAD::GetBoundingBox() const
         dx = std::max( quadrant1.x, std::max( quadrant2.x, std::max( quadrant3.x, quadrant4.x) ) );
         dy = std::max( quadrant1.y, std::max( quadrant2.y, std::max( quadrant3.y, quadrant4.y) ) );
 
-        area.SetOrigin( m_Pos.x+x, m_Pos.y+y );
+        area.SetOrigin( ShapePos().x + x, ShapePos().y + y );
         area.SetSize( dx-x, dy-y );
         break;
 
@@ -777,6 +781,7 @@ bool D_PAD::HitTest( const wxPoint& aPosition ) const
         wxPoint poly[4];
         BuildPadPolygon( poly, wxSize(0,0), 0 );
         RotatePoint( &delta, -m_Orient );
+
         return TestPointInsidePolygon( poly, 4, delta );
     }
 
@@ -911,7 +916,50 @@ bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
 
         break;
     case PAD_SHAPE_TRAPEZOID:
-        break;
+        /* Trapezoid intersection tests:
+         * A) Any points of rect inside trapezoid
+         * B) Any points of trapezoid inside rect
+         * C) Any sides of trapezoid cross rect
+         */
+        {
+
+        wxPoint poly[4];
+        BuildPadPolygon( poly, wxSize( 0, 0 ), 0 );
+
+        wxPoint corners[4];
+
+        corners[0] = wxPoint( arect.GetLeft(),  arect.GetTop() );
+        corners[1] = wxPoint( arect.GetRight(), arect.GetTop() );
+        corners[2] = wxPoint( arect.GetRight(), arect.GetBottom() );
+        corners[3] = wxPoint( arect.GetLeft(),  arect.GetBottom() );
+
+        for( int i=0; i<4; i++ )
+        {
+            RotatePoint( &poly[i], m_Orient );
+            poly[i] += shapePos;
+        }
+
+        for( int ii=0; ii<4; ii++ )
+        {
+            if( TestPointInsidePolygon( poly, 4, corners[ii] ) )
+            {
+                return true;
+            }
+
+            if( arect.Contains( poly[ii] ) )
+            {
+                return true;
+            }
+
+            if( arect.Intersects( poly[ii], poly[(ii+1) % 4] ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+
+        }
     case PAD_SHAPE_ROUNDRECT:
         /* RoundRect intersection can be broken up into simple tests:
          * a) Test intersection of horizontal rect
