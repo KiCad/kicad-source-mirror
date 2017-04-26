@@ -91,7 +91,6 @@ void PSLIKE_PLOTTER::SetColor( EDA_COLOR_T color )
 void PSLIKE_PLOTTER::FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize,
                                    double aPadOrient, EDA_DRAW_MODE_T aTraceMode )
 {
-    wxASSERT( outputFile );
     int x0, y0, x1, y1, delta;
     wxSize size( aSize );
 
@@ -339,7 +338,6 @@ void PSLIKE_PLOTTER::postscriptOverlinePositions( const wxString& aText, int aXS
 void PS_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror )
 {
-    wxASSERT( !outputFile );
     m_plotMirror = aMirror;
     plotOffset = aOffset;
     plotScale = aScale;

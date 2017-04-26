@@ -61,7 +61,6 @@ GERBER_PLOTTER::GERBER_PLOTTER()
 void GERBER_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 				  double aScale, bool aMirror )
 {
-    wxASSERT( !outputFile );
     wxASSERT( aMirror == false );
     m_plotMirror = false;
     plotOffset = aOffset;
@@ -318,7 +317,6 @@ void GERBER_PLOTTER::writeApertureList()
 
 void GERBER_PLOTTER::PenTo( const wxPoint& aPos, char plume )
 {
-    wxASSERT( outputFile );
     DPOINT pos_dev = userToDeviceCoordinates( aPos );
 
     switch( plume )
@@ -434,7 +432,6 @@ void GERBER_PLOTTER:: PlotPoly( const std::vector< wxPoint >& aCornerList,
 
 void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre, EDA_DRAW_MODE_T trace_mode )
 {
-    wxASSERT( outputFile );
     wxSize size( diametre, diametre );
 
     if( trace_mode == SKETCH )
@@ -454,7 +451,6 @@ void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre, EDA_DRAW_
 void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double orient,
                                    EDA_DRAW_MODE_T trace_mode )
 {
-    wxASSERT( outputFile );
     int x0, y0, x1, y1, delta;
     wxSize size( aSize );
 
@@ -508,7 +504,6 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
                                    double orient, EDA_DRAW_MODE_T trace_mode )
 
 {
-    wxASSERT( outputFile );
     wxSize size( aSize );
 
     // Plot as an aperture flash

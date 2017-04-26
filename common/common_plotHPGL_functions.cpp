@@ -212,7 +212,6 @@ HPGL_PLOTTER::HPGL_PLOTTER()
 void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                                 double aScale, bool aMirror )
 {
-    wxASSERT( !outputFile );
     plotOffset  = aOffset;
     plotScale   = aScale;
     m_IUsPerDecimil = aIusPerDecimil;
@@ -386,7 +385,6 @@ void HPGL_PLOTTER::SetDash( bool dashed )
 void HPGL_PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end,
                                  int width, EDA_DRAW_MODE_T tracemode )
 {
-    wxASSERT( outputFile );
     wxPoint center;
     wxSize  size;
 
@@ -449,7 +447,6 @@ void HPGL_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, 
 void HPGL_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double orient,
                                  EDA_DRAW_MODE_T trace_mode )
 {
-    wxASSERT( outputFile );
     int     deltaxy, cx, cy;
     wxSize  size( aSize );
 
@@ -635,7 +632,6 @@ void HPGL_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
 void HPGL_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint* aCorners,
                                    double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
 {
-    wxASSERT( outputFile );
     wxPoint polygone[4];        // coordinates of corners relatives to the pad
     wxPoint coord[4];           // absolute coordinates of corners (coordinates in plotter space)
     int     move;
