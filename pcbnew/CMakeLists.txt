@@ -208,8 +208,6 @@ set( PCBNEW_CLASS_SRCS
     class_pcb_layer_box_selector.cpp
     clean.cpp
     connect.cpp
-    connectivity.cpp
-    connectivity_algo.cpp
     controle.cpp
     dimension.cpp
     cross-probing.cpp
