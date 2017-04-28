@@ -156,9 +156,33 @@ public:
 
     bool IsCopper();                    ///< return true if the filefunction type is "Copper"
 
+    /**
+     * @return true if the filefunction type is "Plated" or "NotPlated"
+     * therefore a drill file
+     */
+    bool IsDrillFile();
+
     const wxString& GetFileType();      ///< the type of layer (Copper, Soldermask ... )
     const wxString& GetBrdLayerId();    ///< the brd layer identifier: Ln, only for Copper type
                                         ///< or Top, Bot for other types
+    /**
+     * @return the brd layer pair identifier: n,m for drill files
+     * (files with m_Prms.Item( 1 ) = "Plated" or "NotPlated")
+     */
+    const wxString GetDrillLayerPair();
+
+    /**
+     * @return the Layer Pair type for drill files
+     * (PTH, NPTH, Blind or Buried)
+     */
+    const wxString& GetLPType();
+
+    /**
+     * @return the drill/routing type for drill files
+     * (Drill, Route, Mixed)
+     */
+    const wxString& GetRouteType();
+
     const wxString& GetBrdLayerSide();  ///< the brd layer Pos: Top, Bot, Inr
                                         ///< same as GetBrdLayerId() for non copper type
     const wxString& GetLabel();         ///< the filefunction label, if any

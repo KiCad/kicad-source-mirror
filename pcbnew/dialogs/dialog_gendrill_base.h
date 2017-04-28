@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Feb 19 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -42,8 +42,10 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 	protected:
 		wxTextCtrl* m_outputDirectoryName;
 		wxButton* m_buttonBrowse;
+		wxRadioBox* m_rbFileFormat;
 		wxRadioBox* m_Choice_Unit;
 		wxRadioBox* m_Choice_Zeros_Format;
+		wxStaticText* m_staticTextTitle;
 		wxStaticText* m_staticTextPrecision;
 		wxRadioBox* m_Choice_Drill_Map;
 		wxCheckBox* m_Check_Mirror;
@@ -67,6 +69,7 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onFileFormatSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelDrillUnitsSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelZerosFmtSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGenDrillFile( wxCommandEvent& event ) { event.Skip(); }
@@ -77,7 +80,7 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Drill Files Generation"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 506,473 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Drill Files Generation"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 661,518 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_GENDRILL_BASE();
 	
 };

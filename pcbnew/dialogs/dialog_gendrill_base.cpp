@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Feb 19 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -23,7 +23,6 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	bdirnameSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Output directory:") ), wxHORIZONTAL );
 	
 	m_outputDirectoryName = new wxTextCtrl( bdirnameSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_outputDirectoryName->SetMaxLength( 0 ); 
 	bdirnameSizer->Add( m_outputDirectoryName, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonBrowse = new wxButton( bdirnameSizer->GetStaticBox(), wxID_ANY, _("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -41,6 +40,12 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* m_LeftBoxSizer;
 	m_LeftBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
+	wxString m_rbFileFormatChoices[] = { _("Excellon"), _("Gerber X2 (experimental)") };
+	int m_rbFileFormatNChoices = sizeof( m_rbFileFormatChoices ) / sizeof( wxString );
+	m_rbFileFormat = new wxRadioBox( this, wxID_ANY, _("File Format:"), wxDefaultPosition, wxDefaultSize, m_rbFileFormatNChoices, m_rbFileFormatChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbFileFormat->SetSelection( 0 );
+	m_LeftBoxSizer->Add( m_rbFileFormat, 0, wxALL|wxEXPAND, 5 );
+	
 	wxString m_Choice_UnitChoices[] = { _("Millimeters"), _("Inches") };
 	int m_Choice_UnitNChoices = sizeof( m_Choice_UnitChoices ) / sizeof( wxString );
 	m_Choice_Unit = new wxRadioBox( this, wxID_ANY, _("Drill Units:"), wxDefaultPosition, wxDefaultSize, m_Choice_UnitNChoices, m_Choice_UnitChoices, 1, wxRA_SPECIFY_COLS );
@@ -55,15 +60,22 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	
 	m_LeftBoxSizer->Add( m_Choice_Zeros_Format, 0, wxALL|wxEXPAND, 5 );
 	
-	wxStaticBoxSizer* sbSizerPrecision;
-	sbSizerPrecision = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Precision") ), wxVERTICAL );
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer1->AddGrowableCol( 1 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticTextPrecision = new wxStaticText( sbSizerPrecision->GetStaticBox(), wxID_ANY, _("Precision"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTitle = new wxStaticText( this, wxID_ANY, _("Precision"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTitle->Wrap( -1 );
+	fgSizer1->Add( m_staticTextTitle, 0, wxALL, 5 );
+	
+	m_staticTextPrecision = new wxStaticText( this, wxID_ANY, _("Precision"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPrecision->Wrap( -1 );
-	sbSizerPrecision->Add( m_staticTextPrecision, 0, wxALL, 5 );
+	fgSizer1->Add( m_staticTextPrecision, 0, wxALL, 5 );
 	
 	
-	m_LeftBoxSizer->Add( sbSizerPrecision, 0, wxEXPAND, 5 );
+	m_LeftBoxSizer->Add( fgSizer1, 0, wxEXPAND, 5 );
 	
 	
 	bmiddlerSizer->Add( m_LeftBoxSizer, 0, wxEXPAND, 5 );
@@ -79,26 +91,26 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	
 	bMiddleBoxSizer->Add( m_Choice_Drill_Map, 0, wxALL|wxEXPAND, 5 );
 	
-	wxStaticBoxSizer* sbOptSizer;
-	sbOptSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Drill File Options:") ), wxVERTICAL );
+	wxStaticBoxSizer* sbExcellonOptSizer;
+	sbExcellonOptSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Excellon Drill File Options:") ), wxVERTICAL );
 	
-	m_Check_Mirror = new wxCheckBox( sbOptSizer->GetStaticBox(), wxID_ANY, _("Mirror y axis"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Check_Mirror = new wxCheckBox( sbExcellonOptSizer->GetStaticBox(), wxID_ANY, _("Mirror y axis"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Check_Mirror->SetToolTip( _("Not recommended.\nUsed mostly by users who make the boards themselves.") );
 	
-	sbOptSizer->Add( m_Check_Mirror, 0, wxRIGHT|wxLEFT, 5 );
+	sbExcellonOptSizer->Add( m_Check_Mirror, 0, wxRIGHT|wxLEFT, 5 );
 	
-	m_Check_Minimal = new wxCheckBox( sbOptSizer->GetStaticBox(), wxID_ANY, _("Minimal header"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Check_Minimal->SetToolTip( _("Not recommended.\nOnly use for board houses which do not accept fully featured headers.") );
+	m_Check_Minimal = new wxCheckBox( sbExcellonOptSizer->GetStaticBox(), wxID_ANY, _("Minimal header"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Check_Minimal->SetToolTip( _("Not recommended.\nOnly use it for board houses which do not accept fully featured headers.") );
 	
-	sbOptSizer->Add( m_Check_Minimal, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	sbExcellonOptSizer->Add( m_Check_Minimal, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_Check_Merge_PTH_NPTH = new wxCheckBox( sbOptSizer->GetStaticBox(), wxID_ANY, _("Merge PTH and NPTH holes into one file"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Check_Merge_PTH_NPTH->SetToolTip( _("Not recommended.\nOnly use for board houses which ask for merged PTH and NPTH into a single file.") );
+	m_Check_Merge_PTH_NPTH = new wxCheckBox( sbExcellonOptSizer->GetStaticBox(), wxID_ANY, _("Merge PTH and NPTH holes into one file"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Check_Merge_PTH_NPTH->SetToolTip( _("Not recommended.\nOnly use for board houses which ask for merged PTH and NTPH into a single file.") );
 	
-	sbOptSizer->Add( m_Check_Merge_PTH_NPTH, 0, wxALL, 5 );
+	sbExcellonOptSizer->Add( m_Check_Merge_PTH_NPTH, 0, wxALL, 5 );
 	
 	
-	bMiddleBoxSizer->Add( sbOptSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bMiddleBoxSizer->Add( sbExcellonOptSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	wxString m_Choice_Drill_OffsetChoices[] = { _("Absolute"), _("Auxiliary axis") };
 	int m_Choice_Drill_OffsetNChoices = sizeof( m_Choice_Drill_OffsetChoices ) / sizeof( wxString );
@@ -211,6 +223,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	
 	// Connect Events
 	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
+	m_rbFileFormat->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onFileFormatSelection ), NULL, this );
 	m_Choice_Unit->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnSelDrillUnitsSelected ), NULL, this );
 	m_Choice_Zeros_Format->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnSelZerosFmtSelected ), NULL, this );
 	m_buttonDrill->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenDrillFile ), NULL, this );
@@ -223,6 +236,7 @@ DIALOG_GENDRILL_BASE::~DIALOG_GENDRILL_BASE()
 {
 	// Disconnect Events
 	m_buttonBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
+	m_rbFileFormat->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onFileFormatSelection ), NULL, this );
 	m_Choice_Unit->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnSelDrillUnitsSelected ), NULL, this );
 	m_Choice_Zeros_Format->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnSelZerosFmtSelected ), NULL, this );
 	m_buttonDrill->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenDrillFile ), NULL, this );

@@ -269,8 +269,9 @@ static wxString& makeStringCompatX1( wxString& aText, bool aUseX1CompatibilityMo
     return aText;
 }
 
-void AddGerberX2Attribute( PLOTTER * aPlotter,
-            const BOARD *aBoard, LAYER_NUM aLayer, bool aUseX1CompatibilityMode )
+
+void AddGerberX2Header( PLOTTER * aPlotter,
+            const BOARD *aBoard, bool aUseX1CompatibilityMode )
 {
     wxString text;
 
@@ -339,6 +340,15 @@ void AddGerberX2Attribute( PLOTTER * aPlotter,
 
     text.Printf( wxT( "%%TF.ProjectId,%s,%s,%s*%%" ), msg.ToAscii(), GetChars( guid ), rev.ToAscii() );
     aPlotter->AddLineToHeader( makeStringCompatX1( text, aUseX1CompatibilityMode ) );
+}
+
+
+void AddGerberX2Attribute( PLOTTER * aPlotter,
+            const BOARD *aBoard, LAYER_NUM aLayer, bool aUseX1CompatibilityMode )
+{
+    AddGerberX2Header( aPlotter, aBoard, aUseX1CompatibilityMode );
+
+    wxString text;
 
     // Add the TF.FileFunction
     text = GetGerberFileFunctionAttribute( aBoard, aLayer );

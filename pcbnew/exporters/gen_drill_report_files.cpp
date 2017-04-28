@@ -6,8 +6,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2017 Jean_Pierre Charras <jp.charras at wanadoo.fr>
+ * Copyright (C) 1992-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@
 
 #include <pcbnew.h>
 #include <pcbplot.h>
-#include <gendrill_Excellon_writer.h>
+#include <gendrill_file_writer_base.h>
 
 /* Conversion utilities - these will be used often in there... */
 inline double diameter_in_inches( double ius )
@@ -55,9 +55,13 @@ inline double diameter_in_mm( double ius )
 }
 
 
-bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
-                                       PlotFormat aFormat )
+bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName,
+                                            PlotFormat aFormat )
 {
+    // Remark:
+    // Hole list must be created before calling this function, by buildHolesList(),
+    // for the right holes set (PTH, NPTH, buried/blind vias ...)
+
     double          scale = 1.0;
     wxPoint         offset;
     PLOTTER*        plotter = NULL;
@@ -285,7 +289,7 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
 }
 
 
-bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
+bool GENDRILL_WRITER_BASE::GenDrillReportFile( const wxString& aFullFileName )
 {
     FILE_OUTPUTFORMATTER    out( aFullFileName );
 
@@ -309,6 +313,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
     LSET cu = m_pcb->GetEnabledLayers() & LSET::AllCuMask();
 
     int conventional_layer_num = 1;
+
     for( LSEQ seq = cu.Seq();  seq;  ++seq, ++conventional_layer_num )
     {
         out.Print( 0, "    L%-2d:  %-25s %s\n",
@@ -326,10 +331,10 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
      * 3 - Non Plated through holes
      */
 
-    bool buildNPTHlist = false;
+    bool buildNPTHlist = false;     // First pass: build PTH list only
 
     // in this loop are plated only:
-    for( unsigned pair_ndx = 0;  pair_ndx < hole_sets.size();  ++pair_ndx )
+    for( unsigned pair_ndx = 0; pair_ndx < hole_sets.size();  ++pair_ndx )
     {
         DRILL_LAYER_PAIR  pair = hole_sets[pair_ndx];
 
@@ -338,7 +343,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
         if( pair == DRILL_LAYER_PAIR( F_Cu, B_Cu ) )
         {
             out.Print( 0, "Drill file '%s' contains\n",
-                TO_UTF8( drillFileName( pair, false, m_merge_PTH_NPTH ) ) );
+                TO_UTF8( getDrillFileName( pair, false, m_merge_PTH_NPTH ) ) );
 
             out.Print( 0, "    plated through holes:\n" );
             out.Print( 0, separator );
@@ -348,7 +353,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
         else    // blind/buried
         {
             out.Print( 0, "Drill file '%s' contains\n",
-                TO_UTF8( drillFileName( pair, false, m_merge_PTH_NPTH ) ) );
+                TO_UTF8( getDrillFileName( pair, false, m_merge_PTH_NPTH ) ) );
 
             out.Print( 0, "    holes connecting layer pair: '%s and %s' (%s vias):\n",
                 TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( pair.first ) ) ),
@@ -376,7 +381,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
         out.Print( 0, "Not plated through holes are merged with plated holes\n" );
     else
         out.Print( 0, "Drill file '%s' contains\n",
-                   TO_UTF8( drillFileName( DRILL_LAYER_PAIR( F_Cu, B_Cu ),
+                   TO_UTF8( getDrillFileName( DRILL_LAYER_PAIR( F_Cu, B_Cu ),
                    true, m_merge_PTH_NPTH ) ) );
 
     out.Print( 0, "    unplated through holes:\n" );
@@ -388,7 +393,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
 }
 
 
-bool EXCELLON_WRITER::plotDrillMarks( PLOTTER* aPlotter )
+bool GENDRILL_WRITER_BASE::plotDrillMarks( PLOTTER* aPlotter )
 {
     // Plot the drill map:
     wxPoint pos;
@@ -412,7 +417,7 @@ bool EXCELLON_WRITER::plotDrillMarks( PLOTTER* aPlotter )
 }
 
 
-unsigned EXCELLON_WRITER::printToolSummary( OUTPUTFORMATTER& out, bool aSummaryNPTH ) const
+unsigned GENDRILL_WRITER_BASE::printToolSummary( OUTPUTFORMATTER& out, bool aSummaryNPTH ) const
 {
     unsigned totalHoleCount = 0;
 

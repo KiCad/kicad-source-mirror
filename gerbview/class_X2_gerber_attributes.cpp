@@ -174,8 +174,8 @@ X2_ATTRIBUTE_FILEFUNCTION::X2_ATTRIBUTE_FILEFUNCTION( X2_ATTRIBUTE& aAttributeBa
     m_Prms = aAttributeBase.GetPrms();
     m_z_order = 0;
 
-    //ensure at least 5 parameters
-    while( GetPrmCount() < 5 )
+    // ensure at least 7 parameters exist.
+    while( GetPrmCount() < 7 )
         m_Prms.Add( wxEmptyString );
 
     set_Z_Order();
@@ -183,7 +183,7 @@ X2_ATTRIBUTE_FILEFUNCTION::X2_ATTRIBUTE_FILEFUNCTION( X2_ATTRIBUTE& aAttributeBa
 
 const wxString& X2_ATTRIBUTE_FILEFUNCTION::GetFileType()
 {
-    // the type of layer (Copper ,  Soldermask ... )
+    // the type of layer (Copper, Soldermask ... )
     return m_Prms.Item( 1 );
 }
 
@@ -191,6 +191,14 @@ const wxString& X2_ATTRIBUTE_FILEFUNCTION::GetBrdLayerId()
 {
     // the brd layer identifier: Ln (for Copper type) or Top, Bot
     return m_Prms.Item( 2 );
+}
+
+const wxString X2_ATTRIBUTE_FILEFUNCTION::GetDrillLayerPair()
+{
+    // the layer pair identifiers, for drill files, i.e.
+    // with m_Prms.Item( 1 ) = "Plated" or "NonPlated"
+    wxString lpair = m_Prms.Item( 2 ) + ',' + m_Prms.Item( 3 );
+    return lpair;
 }
 
 const wxString& X2_ATTRIBUTE_FILEFUNCTION::GetBrdLayerSide()
@@ -203,6 +211,7 @@ const wxString& X2_ATTRIBUTE_FILEFUNCTION::GetBrdLayerSide()
         return m_Prms.Item( 2 );
 }
 
+
 const wxString& X2_ATTRIBUTE_FILEFUNCTION::GetLabel()
 {
     if( IsCopper() )
@@ -212,11 +221,34 @@ const wxString& X2_ATTRIBUTE_FILEFUNCTION::GetLabel()
 }
 
 
+const wxString& X2_ATTRIBUTE_FILEFUNCTION::GetLPType()
+{
+    // Only for drill files:  the Layer Pair type (PTH, NPTH, Blind or Buried)
+    return m_Prms.Item( 4 );
+}
+
+
+const wxString& X2_ATTRIBUTE_FILEFUNCTION::GetRouteType()
+{
+    // Only for drill files:  the drill/routing type(Drill, Route, Mixed)
+    return m_Prms.Item( 5 );
+}
+
+
 bool X2_ATTRIBUTE_FILEFUNCTION::IsCopper()
 {
     // the filefunction label, if any
     return GetFileType().IsSameAs( wxT( "Copper" ), false );
 }
+
+
+bool X2_ATTRIBUTE_FILEFUNCTION::IsDrillFile()
+{
+    // the filefunction label, if any
+    return GetFileType().IsSameAs( wxT( "Plated" ), false )
+           || GetFileType().IsSameAs( wxT( "NonPlated" ), false );
+}
+
 
 // Initialize the z order priority of the current file, from its attributes
 // this priority is the order of layers from top to bottom to draw/display gerber images

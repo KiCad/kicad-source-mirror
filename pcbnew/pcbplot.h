@@ -269,10 +269,34 @@ const wxString GetGerberProtelExtension( LAYER_NUM aLayer );
 const wxString GetGerberFileFunctionAttribute( const BOARD *aBoard, LAYER_NUM aLayer );
 
 /**
+ * Function AddGerberX2Header
+ * Calculates some X2 attributes, as defined in the
+ * Gerber file format specification J4 (chapter 5) and add them
+ * the to the gerber file header:
+ * TF.GenerationSoftware
+ * TF.CreationDate
+ * TF.ProjectId
+ * file format attribute is not added
+ * @param aPlotter, the current plotter.
+ * @param aBoard = the board, needed to extract some info
+ * @param aUseX1CompatibilityMode = false to generate X2 attributes, true to
+ * use X1 compatibility (X2 attributes added as structured comments,
+ * starting by "G04 #@! " followed by the X2 attribute
+ */
+void AddGerberX2Header( PLOTTER * aPlotter,
+            const BOARD *aBoard, bool aUseX1CompatibilityMode = false );
+
+/**
  * Function AddGerberX2Attribute
  * Calculates some X2 attributes, as defined in the
  * Gerber file format specification J4 (chapter 5) and add them
  * the to the gerber file header
+ * TF.GenerationSoftware
+ * TF.CreationDate
+ * TF.ProjectId
+ * TF.FileFunction
+ * TF.FilePolarity
+ *
  * @param aPlotter, the current plotter.
  * @param aBoard = the board, needed to extract some info
  * @param aLayer = the layer number to create the attribute for
@@ -280,7 +304,7 @@ const wxString GetGerberFileFunctionAttribute( const BOARD *aBoard, LAYER_NUM aL
  * use X1 compatibility (X2 attributes added as structured comments,
  * starting by "G04 #@! " followed by the X2 attribute
  */
-extern void AddGerberX2Attribute( PLOTTER * aPlotter, const BOARD *aBoard,
-                                  LAYER_NUM aLayer, bool aUseX1CompatibilityMode );
+void AddGerberX2Attribute( PLOTTER * aPlotter, const BOARD *aBoard,
+                           LAYER_NUM aLayer, bool aUseX1CompatibilityMode );
 
 #endif // PCBPLOT_H_

@@ -178,6 +178,8 @@ set( PCBNEW_EXPORTERS
     exporters/gen_drill_report_files.cpp
     exporters/gen_modules_placefile.cpp
     exporters/gendrill_Excellon_writer.cpp
+    exporters/gendrill_file_writer_base.cpp
+    exporters/gendrill_gerber_writer.cpp
     )
 
 set( PCBNEW_AUTOROUTER_SRCS

@@ -99,8 +99,22 @@ std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribu
         attribute_string = "%TA.AperFunction,WasherPad*%\n";
         break;
 
-    case GBR_APERTURE_ATTRIB_HEATSINKPAD:   // print info associated to a flashed heat sink pad (typically for SMDs)
+    case GBR_APERTURE_ATTRIB_HEATSINKPAD:   // print info associated to a flashed heat sink pad
+                                            // (typically for SMDs)
         attribute_string = "%TA.AperFunction,HeatsinkPad*%\n";
+        break;
+
+    case GBR_APERTURE_ATTRIB_VIADRILL:   // print info associated to a via hole in drill files
+        attribute_string = "%TA.AperFunction,ViaDrill*%\n";
+        break;
+
+    case GBR_APERTURE_ATTRIB_COMPONENTDRILL:    // print info associated to a component
+                                                // round hole in drill files
+        attribute_string = "%TA.AperFunction,ComponentDrill*%\n";
+        break;
+
+    case GBR_APERTURE_ATTRIB_SLOTDRILL:   // print info associated to a oblong hole in drill files
+        attribute_string = "%TA.AperFunction,Slot*%\n";
         break;
     }
 

@@ -60,6 +60,9 @@ public:
         GBR_APERTURE_ATTRIB_CONNECTORPAD,   ///< aperture used for edge connecto pad (outer layers)
         GBR_APERTURE_ATTRIB_WASHERPAD,      ///< aperture used for mechanical pads (NPTH)
         GBR_APERTURE_ATTRIB_HEATSINKPAD,    ///< aperture used for heat sink pad (typically for SMDs)
+        GBR_APERTURE_ATTRIB_VIADRILL,       ///< aperture used for via holes in drill files
+        GBR_APERTURE_ATTRIB_COMPONENTDRILL, ///< aperture used for pad holes in drill files
+        GBR_APERTURE_ATTRIB_SLOTDRILL,      ///< aperture used for oblong holes in drill files
         GBR_APERTURE_ATTRIB_END             ///< sentinel: max value
     };
 
