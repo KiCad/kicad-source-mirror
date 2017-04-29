@@ -989,5 +989,9 @@ void FOOTPRINT_EDIT_FRAME::UseGalCanvas( bool aEnable )
     PCB_BASE_EDIT_FRAME::UseGalCanvas( aEnable );
 
     if( aEnable )
+    {
+        // Be sure the axis are enabled:
+        GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
         updateView();
+    }
 }

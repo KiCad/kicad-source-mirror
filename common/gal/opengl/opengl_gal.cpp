@@ -938,23 +938,14 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
 
 void OPENGL_GAL::DrawGrid()
 {
-    int gridScreenSizeDense  = KiROUND( gridSize.x * worldScale );
-    int gridScreenSizeCoarse = KiROUND( gridSize.x * static_cast<double>( gridTick ) * worldScale );
+    SetTarget( TARGET_NONCACHED );
+    compositor->SetBuffer( mainBuffer );
 
     // sub-pixel lines all render the same
     double minorLineWidth = std::max( 1.0, gridLineWidth );
     double majorLineWidth = minorLineWidth * 2.0;
 
-    const double gridThreshold = computeMinGridSpacing();
-
-    // Check if the grid would not be too dense
-    if( std::max( gridScreenSizeDense, gridScreenSizeCoarse ) < gridThreshold )
-        return;
-
-    SetTarget( TARGET_NONCACHED );
-    compositor->SetBuffer( mainBuffer );
-
-    // Draw the grid
+    // Draw the axis and grid
     // For the drawing the start points, end points and increments have
     // to be calculated in world coordinates
     VECTOR2D worldStartPoint = screenWorldMatrix * VECTOR2D( 0.0, 0.0 );
@@ -978,6 +969,15 @@ void OPENGL_GAL::DrawGrid()
     }
 
     if( !gridVisibility )
+        return;
+
+    int gridScreenSizeDense  = KiROUND( gridSize.x * worldScale );
+    int gridScreenSizeCoarse = KiROUND( gridSize.x * static_cast<double>( gridTick ) * worldScale );
+
+    const double gridThreshold = computeMinGridSpacing();
+
+    // Check if the grid would not be too dense
+    if( std::max( gridScreenSizeDense, gridScreenSizeCoarse ) < gridThreshold )
         return;
 
     // Compute grid variables
