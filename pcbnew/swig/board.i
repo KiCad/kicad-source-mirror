@@ -101,7 +101,6 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 
 // std::vector templates
 %template(VIA_DIMENSION_Vector) std::vector<VIA_DIMENSION>;
-%template(RATSNEST_Vector)      std::vector<RATSNEST_ITEM>;
 %include class_board.h
 %{
 #include <class_board.h>

@@ -78,7 +78,15 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
 
 bool SaveBoard( wxString& aFileName, BOARD* aBoard )
 {
+    return SaveBoard( aFilename, aBoard, IO_MGR::KICAD );
+}
+
+
+bool SaveBoard( wxString& aFileName, BOARD* aBoard,
+                IO_MGR::PCB_FILE_T aFormat )
+{
     aBoard->m_Status_Pcb &= ~CONNEXION_OK;
+
     aBoard->SynchronizeNetsAndNetClasses();
     aBoard->GetDesignSettings().SetCurrentNetClass( NETCLASS::Default );
 
