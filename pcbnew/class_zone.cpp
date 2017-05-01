@@ -539,53 +539,62 @@ bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos ) const
 
 bool ZONE_CONTAINER::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    // Convert to BOX2I
-    BOX2I aBox = aRect;
-    aBox.Inflate( aAccuracy );
-    BOX2I bbox = m_Poly->BBox();
+    // Calculate bounding box for zone
+    EDA_RECT bbox = GetBoundingBox();
     bbox.Normalize();
 
+    EDA_RECT arect = aRect;
+    arect.Normalize();
+    arect.Inflate( aAccuracy );
+
     if( aContained )
-         return aBox.Contains( bbox );
+    {
+         return arect.Contains( bbox );
+    }
     else    // Test for intersection between aBox and the polygon
             // For a polygon, using its bounding box has no sense here
     {
         // Fast test: if aBox is outside the polygon bounding box,
         // rectangles cannot intersect
-        if( ! bbox.Intersects( aBox ) )
+        if( !arect.Intersects( bbox ) )
             return false;
 
         // aBox is inside the polygon bounding box,
         // and can intersect the polygon: use a fine test.
         // aBox intersects the polygon if at least one aBox corner
         // is inside the polygon
-        wxPoint corner = static_cast<wxPoint>( aBox.GetOrigin() );
+        wxPoint origin = arect.GetOrigin();
 
-        if( HitTestInsideZone( corner ) )
+        int w = arect.GetWidth();
+        int h = arect.GetHeight();
+
+        if ( HitTestInsideZone( origin ) ||
+             HitTestInsideZone( origin + wxPoint( w, 0 ) ) ||
+             HitTestInsideZone( origin + wxPoint( w, h ) ) ||
+             HitTestInsideZone( origin + wxPoint( 0, h ) ) )
+        {
             return true;
-
-        corner.x = aBox.GetEnd().x;
-
-        if( HitTestInsideZone( corner ) )
-            return true;
-
-        corner = static_cast<wxPoint>( aBox.GetEnd() );
-
-        if( HitTestInsideZone( corner ) )
-            return true;
-
-        corner.x = aBox.GetOrigin().x;
-
-        if( HitTestInsideZone( corner ) )
-            return true;
+        }
 
         // No corner inside aBox, but outlines can intersect aBox
         // if one of outline corners is inside aBox
         int count = m_Poly->TotalVertices();
         for( int ii =0; ii < count; ii++ )
         {
-            if( aBox.Contains( m_Poly->Vertex( ii ) ) )
+            auto vertex = m_Poly->Vertex( ii );
+            auto vertexNext = m_Poly->Vertex( ( ii + 1 ) % count );
+
+            // Test if the point is within the rect
+            if( arect.Contains( ( wxPoint ) vertex ) )
+            {
                 return true;
+            }
+
+            // Test if this edge intersects the rect
+            if( arect.Intersects( ( wxPoint ) vertex, ( wxPoint ) vertexNext ) )
+            {
+                return true;
+            }
         }
 
         return false;
