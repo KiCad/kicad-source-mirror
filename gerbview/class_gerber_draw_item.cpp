@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 <Jean-Pierre Charras>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 <Jean-Pierre Charras>
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -502,7 +502,7 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     msg = ShowGBRShape();
     aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg, DARKCYAN ) );
 
-    // Display D_Code value:
+    // Display D_Code value with its attributes:
     msg.Printf( _( "D Code %d" ), m_DCode );
     D_CODE* apertDescr = GetDcodeDescr();
 
@@ -513,9 +513,9 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     aList.push_back( MSG_PANEL_ITEM( msg, text, RED ) );
 
-    // Display graphic layer number
+    // Display graphic layer name
     msg = GERBER_FILE_IMAGE_LIST::GetImagesList().GetDisplayName( GetLayer(), true );
-    aList.push_back( MSG_PANEL_ITEM( _( "Graphic Layer" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Graphic Layer" ), msg, DARKGREEN ) );
 
     // Display item rotation
     // The full rotation is Image rotation + m_lyrRotation
@@ -550,6 +550,7 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     {
         net_msg = _( "Net:" );
         net_msg << " ";
+
         if( m_netAttributes.m_Netname.IsEmpty() )
             net_msg << "<no net name>";
         else
@@ -569,8 +570,7 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
         cmp_pad_msg << " " << m_netAttributes.m_Cmpref;
     }
 
-
-    aList.push_back( MSG_PANEL_ITEM( net_msg, cmp_pad_msg, CYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( net_msg, cmp_pad_msg, DARKCYAN ) );
 }
 
 

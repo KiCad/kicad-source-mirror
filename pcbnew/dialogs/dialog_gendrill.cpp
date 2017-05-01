@@ -28,12 +28,12 @@
 
 #include <fctsys.h>
 #include <kiface_i.h>
+#include <confirm.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <pcbplot.h>
 #include <gendrill_Excellon_writer.h>
 #include <gendrill_gerber_writer.h>
-//#include <macros.h>
 
 #include <class_board.h>
 #include <class_track.h>
@@ -386,7 +386,6 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
     UpdateConfig();     // set params and Save drill options
 
     m_parent->ClearMsgPanel();
-    wxString defaultPath = Prj().AbsolutePath( m_plotOpts.GetOutputDirectory() );
     WX_TEXT_CTRL_REPORTER reporter( m_messagesBox );
 
     const PlotFormat filefmt[6] =
@@ -400,6 +399,20 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
     if( choice >= DIM( filefmt ) )
         choice = 1;
 
+    // Create output directory if it does not exist (also transform it in
+    // absolute form). Bail if it fails
+    wxFileName  outputDir = wxFileName::DirName( m_plotOpts.GetOutputDirectory() );
+    wxString    boardFilename = m_parent->GetBoard()->GetFileName();
+
+    if( !EnsureFileDirectoryExists( &outputDir, boardFilename, &reporter ) )
+    {
+        wxString msg;
+        msg.Printf( _( "Could not write drill and/or map files to folder \"%s\"." ),
+                    GetChars( outputDir.GetPath() ) );
+        DisplayError( this, msg );
+        return;
+    }
+
     if( m_drillFileType == 0 )
     {
         EXCELLON_WRITER excellonWriter( m_parent->GetBoard() );
@@ -408,7 +421,8 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
         excellonWriter.SetOptions( m_Mirror, m_MinimalHeader, m_FileDrillOffset, m_Merge_PTH_NPTH );
         excellonWriter.SetMapFileFormat( filefmt[choice] );
 
-        excellonWriter.CreateDrillandMapFilesSet( defaultPath, aGenDrill, aGenMap, &reporter );
+        excellonWriter.CreateDrillandMapFilesSet( outputDir.GetFullPath(),
+                                                  aGenDrill, aGenMap, &reporter );
     }
     else
     {
@@ -420,7 +434,8 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
         gerberWriter.SetOptions( m_FileDrillOffset );
         gerberWriter.SetMapFileFormat( filefmt[choice] );
 
-        gerberWriter.CreateDrillandMapFilesSet( defaultPath, aGenDrill, aGenMap, &reporter );
+        gerberWriter.CreateDrillandMapFilesSet( outputDir.GetFullPath(),
+                                                aGenDrill, aGenMap, &reporter );
     }
 }
 
