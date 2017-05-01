@@ -42,7 +42,7 @@ class GERBER_WRITER: public GENDRILL_WRITER_BASE
 public:
     GERBER_WRITER( BOARD* aPcb );
 
-    ~GERBER_WRITER()
+    virtual ~GERBER_WRITER()
     {
     }
 

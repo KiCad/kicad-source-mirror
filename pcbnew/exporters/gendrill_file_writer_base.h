@@ -163,7 +163,7 @@ protected:
     }
 
 public:
-    ~GENDRILL_WRITER_BASE()
+    virtual ~GENDRILL_WRITER_BASE()
     {
     }
 

@@ -130,6 +130,9 @@ principle should be easily implemented by adapting the current STL containers.
 #include <../polygon/PolyLine.h>
 %include <../polygon/PolyLine.h>
 
+#include <geometry/shape.h>
+%include <geometry/shape.h>
+
 #include <geometry/shape_poly_set.h>
 %include <geometry/shape_poly_set.h>
 

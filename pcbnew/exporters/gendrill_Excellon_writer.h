@@ -51,7 +51,7 @@ private:
 public:
     EXCELLON_WRITER( BOARD* aPcb );
 
-    ~EXCELLON_WRITER()
+    virtual ~EXCELLON_WRITER()
     {
     }
 

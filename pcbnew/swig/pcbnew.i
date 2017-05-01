@@ -65,7 +65,9 @@ class BASE_SET {};
 
 #include <plotcontroller.h>
 #include <pcb_plot_params.h>
+#include <exporters/gendrill_file_writer_base.h>
 #include <exporters/gendrill_Excellon_writer.h>
+#include <exporters/gendrill_gerber_writer.h>
 
 BOARD *GetBoard(); /* get current editor board */
 %}
@@ -102,7 +104,9 @@ HANDLE_EXCEPTIONS(PLUGIN::FootprintDelete)
 %include <plotcontroller.h>
 %include <pcb_plot_params.h>
 %include <plot_common.h>
+%include <exporters/gendrill_file_writer_base.h>
 %include <exporters/gendrill_Excellon_writer.h>
+%include <exporters/gendrill_gerber_writer.h>
 %include <gal/color4d.h>
 %include <id.h>
 
