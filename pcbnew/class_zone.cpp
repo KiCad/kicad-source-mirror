@@ -563,10 +563,13 @@ bool ZONE_CONTAINER::HitTest( const EDA_RECT& aRect, bool aContained, int aAccur
         // and can intersect the polygon: use a fine test.
         // aBox intersects the polygon if at least one aBox corner
         // is inside the polygon
+
+        /*
         wxPoint origin = arect.GetOrigin();
 
         int w = arect.GetWidth();
         int h = arect.GetHeight();
+
 
         if ( HitTestInsideZone( origin ) ||
              HitTestInsideZone( origin + wxPoint( w, 0 ) ) ||
@@ -575,6 +578,7 @@ bool ZONE_CONTAINER::HitTest( const EDA_RECT& aRect, bool aContained, int aAccur
         {
             return true;
         }
+        */
 
         // No corner inside aBox, but outlines can intersect aBox
         // if one of outline corners is inside aBox
