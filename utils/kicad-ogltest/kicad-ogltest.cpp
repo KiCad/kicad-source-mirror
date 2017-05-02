@@ -65,15 +65,14 @@ public:
     WX_QUIET()
     {
         m_old_level = wxLog::GetLogLevel();
-        m_old_handler = wxTheAssertHandler;
-        wxTheAssertHandler = nullptr;
+        m_old_handler = wxSetAssertHandler( nullptr );
         wxLog::SetLogLevel( wxLOG_FatalError );
     }
 
     ~WX_QUIET()
     {
         wxLog::SetLogLevel( m_old_level );
-        wxTheAssertHandler = m_old_handler;
+        wxSetAssertHandler( m_old_handler );
     }
 };
 
