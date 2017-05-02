@@ -614,7 +614,27 @@ bool MODULE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) co
     if( aContained )
         return arect.Contains( m_BoundaryBox );
     else
-        return m_BoundaryBox.Intersects( arect );
+    {
+        // If the rect does not intersect the bounding box, skip any tests
+        if( !aRect.Intersects( GetBoundingBox() ) )
+            return false;
+
+        // Determine if any elements in the MODULE intersect the rect
+        for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
+        {
+            if( pad->HitTest( arect, false, 0 ) )
+                return true;
+        }
+
+        for( BOARD_ITEM* item = m_Drawings; item; item = item->Next() )
+        {
+            if( item->HitTest( arect, false, 0 ) )
+                return true;
+        }
+
+        // No items were hit
+        return false;
+    }
 }
 
 

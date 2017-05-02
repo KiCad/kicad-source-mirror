@@ -89,6 +89,35 @@ void TEXTE_MODULE::SetTextAngle( double aAngle )
     EDA_TEXT::SetTextAngle( NormalizeAngle360( aAngle ) );
 }
 
+bool TEXTE_MODULE::TextHitTest( const wxPoint& aPoint, int aAccuracy ) const
+{
+    EDA_RECT rect = GetTextBox( -1 );
+    wxPoint location = aPoint;
+
+    rect.Inflate( aAccuracy );
+
+    RotatePoint( &location, GetTextPos(), -GetDrawRotation() );
+
+    return rect.Contains( location );
+}
+
+bool TEXTE_MODULE::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy ) const
+{
+    EDA_RECT rect = aRect;
+
+    rect.Inflate( aAccuracy );
+
+    if( aContains )
+    {
+        return rect.Contains( GetBoundingBox() );
+    }
+    else
+    {
+        return rect.Intersects( GetTextBox( -1 ), GetDrawRotation() );
+    }
+
+}
+
 
 void TEXTE_MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
 {

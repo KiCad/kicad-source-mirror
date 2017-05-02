@@ -184,6 +184,10 @@ public:
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
+    virtual bool TextHitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const override;
+
+    virtual bool TextHitTest( const EDA_RECT& aRect, bool aContains = false, int aAccuracy = 0 ) const override;
+
     virtual bool HitTest( const wxPoint& aPosition ) const override
     {
         return TextHitTest( aPosition );

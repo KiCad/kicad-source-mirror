@@ -260,7 +260,7 @@ public:
      * @param aAccuracy - Amount to inflate the bounding box.
      * @return bool - true if a hit, else false
      */
-    bool TextHitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const;
+    virtual bool TextHitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const;
 
     /**
      * Function TextHitTest (overloaded)
@@ -271,7 +271,7 @@ public:
      * @param aAccuracy - Amount to inflate the bounding box.
      * @return bool - true if a hit, else false
      */
-    bool TextHitTest( const EDA_RECT& aRect, bool aContains = false, int aAccuracy = 0 ) const;
+    virtual bool TextHitTest( const EDA_RECT& aRect, bool aContains = false, int aAccuracy = 0 ) const;
 
     /**
      * Function LenSize
