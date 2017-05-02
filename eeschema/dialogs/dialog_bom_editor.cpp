@@ -84,6 +84,10 @@ DIALOG_BOM_EDITOR::DIALOG_BOM_EDITOR( SCH_EDIT_FRAME* parent ) :
     m_bom->ReloadTable();
 
     Update();
+
+    Layout();
+    GetSizer()->SetSizeHints( this );
+    Centre();
 }
 
 DIALOG_BOM_EDITOR::~DIALOG_BOM_EDITOR()
@@ -194,30 +198,29 @@ bool DIALOG_BOM_EDITOR::TransferDataFromWindow()
  */
 void DIALOG_BOM_EDITOR::UpdateTitle()
 {
-    wxString title = _( "Component table" ) + wxString( " - " );
+    wxString title;
 
-    title += wxString::Format( "%u %s",
-                              m_bom->ComponentCount(),
-                              _( "components" ) );
 
     if( m_bom->GetColumnGrouping() )
     {
-        title += wxString::Format( " %s %u %s",
-                              _( "in" ),
-                              (unsigned int) m_bom->Groups.size(),
-                              _( "groups" ) );
+        title.Printf ( _( "Component table - %u components in %u groups" ),
+                       m_bom->ComponentCount(),
+                       (unsigned int) m_bom->Groups.size() );
     }
+    else
+        title.Printf ( _( "Component table - %u components" ),
+                       m_bom->ComponentCount() );
 
     unsigned int count = m_bom->CountChangedComponents();
 
     if( count > 0 )
-    {
-        title += wxString::Format( " - %u %s",
-                                   count,
-                                   _( "changed" ) );
-    }
+        title += wxString::Format( _( " - %u changed" ), count );
 
-    SetTitle( title );
+    // Update title only if it has changed, to avoid flicker created by
+    // useless update, for instance when moving the mouse, because UpdateTitle()
+    // is called by a wxUpdateUIEvent:
+    if( GetTitle() != title )
+        SetTitle( title );
 }
 
 /**
@@ -320,7 +323,6 @@ void DIALOG_BOM_EDITOR::OnGroupComponentsToggled( wxCommandEvent& event )
 void DIALOG_BOM_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
 {
     m_regroupComponentsButton->Enable( m_bom->GetColumnGrouping() );
-
     m_reloadTableButton->Enable( m_bom->HaveFieldsChanged() );
 
     UpdateTitle();
