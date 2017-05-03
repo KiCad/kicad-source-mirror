@@ -395,7 +395,7 @@ bool BOM_TABLE_GROUP::HasValueChanged( BOM_COLUMN* aField ) const
  *
  * @aSort - Sort the references
  */
-wxArrayString BOM_TABLE_GROUP::GetReferences( bool aSort) const
+wxArrayString BOM_TABLE_GROUP::GetReferences( bool aSort ) const
 {
     wxArrayString refs;
 
@@ -805,13 +805,6 @@ wxDataViewColumn* BOM_TABLE_MODEL::AddColumn( BOM_COLUMN* aColumn, int aPosition
     if( !found )
         m_widget->AppendColumn( column );
 
-    //TODO - wxCOL_WIDTH_AUTOSIZE prevents columns from thereafter being resized
-    // This requires some further attention
-
-    /**
-    column->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-    column->SetWidth( column->GetWidth() );
-    **/
     column->SetResizeable( true );
 
     return column;

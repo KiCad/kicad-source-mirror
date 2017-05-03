@@ -85,6 +85,20 @@ DIALOG_BOM_EDITOR::DIALOG_BOM_EDITOR( SCH_EDIT_FRAME* parent ) :
 
     Update();
 
+    m_bomView->Update();
+
+    // Set default column widths
+    for( unsigned int ii = 0; ii < m_bomView->GetColumnCount(); ii++ )
+    {
+        auto col = m_bomView->GetColumn( ii );
+
+        if( !col )
+            continue;
+
+        col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
+        col->SetResizeable( true );
+    }
+
     Layout();
     GetSizer()->SetSizeHints( this );
     Centre();

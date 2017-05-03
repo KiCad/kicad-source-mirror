@@ -93,7 +93,7 @@ DIALOG_BOM_EDITOR_BASE::DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id,
 	sbSizer4->Add( m_sdbSizer1, 1, wxEXPAND, 5 );
 	
 	
-	bSizer6->Add( sbSizer4, 1, wxEXPAND, 5 );
+	bSizer6->Add( sbSizer4, 0, wxEXPAND, 10 );
 	
 	
 	m_leftPanel->SetSizer( bSizer6 );

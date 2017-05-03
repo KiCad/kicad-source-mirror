@@ -86,7 +86,7 @@ class DIALOG_BOM_EDITOR_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("BOM editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1047,649 ), long style = wxCAPTION|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSTAY_ON_TOP ); 
+		DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("BOM editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1047,800 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_BOM_EDITOR_BASE();
 		
 		void m_splitter1OnIdle( wxIdleEvent& )
