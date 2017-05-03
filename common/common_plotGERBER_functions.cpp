@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -657,7 +657,7 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
 
     /* Plot a flashed shape. */
     if( ( orient == 0 || orient == 900 || orient == 1800 || orient == 2700 )
-       && trace_mode == FILLED )
+        && trace_mode == FILLED )
     {
         if( orient == 900 || orient == 2700 ) /* orientation turned 90 deg. */
             std::swap( size.x, size.y );
@@ -705,9 +705,13 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
             if( gbr_metadata )
             {
                 metadata = *gbr_metadata;
-                metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
 
-                // Cleat .P attribute, only allowed for flashed items
+                // If the pad is drawn on a copper layer,
+                // set attribute to GBR_APERTURE_ATTRIB_CONDUCTOR
+                if( metadata.IsCopper() )
+                    metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
+
+                // Clear .P attribute, only allowed for flashed items
                 wxString attrname( ".P" );
                 metadata.m_NetlistMetadata.ClearAttribute( &attrname );
             }
@@ -821,7 +825,10 @@ void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
     if( aData )
     {
         gbr_metadata = *static_cast<GBR_METADATA*>( aData );
-        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
+        // If the pad is drawn on a copper layer,
+        // set attribute to GBR_APERTURE_ATTRIB_CONDUCTOR
+        if( gbr_metadata.IsCopper() )
+            gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
 
         wxString attrname( ".P" );
         gbr_metadata.m_NetlistMetadata.ClearAttribute( &attrname );   // not allowed on inner layers
@@ -855,7 +862,10 @@ void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
     if( aData )
     {
         gbr_metadata = *static_cast<GBR_METADATA*>( aData );
-        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
+        // If the pad is drawn on a copper layer,
+        // set attribute to GBR_APERTURE_ATTRIB_CONDUCTOR
+        if( gbr_metadata.IsCopper() )
+            gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
 
         wxString attrname( ".P" );
         gbr_metadata.m_NetlistMetadata.ClearAttribute( &attrname );   // not allowed on inner layers
@@ -927,7 +937,11 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
     if( gbr_metadata )
     {
         metadata = *gbr_metadata;
-        metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
+        // If the pad is drawn on a copper layer,
+        // set attribute to GBR_APERTURE_ATTRIB_CONDUCTOR
+        if( metadata.IsCopper() )
+            metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
+
         wxString attrname( ".P" );
         metadata.m_NetlistMetadata.ClearAttribute( &attrname );   // not allowed on inner layers
     }

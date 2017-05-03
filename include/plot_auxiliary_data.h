@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,7 +98,7 @@ public:
 class  GBR_METADATA
 {
 public:
-    GBR_METADATA() {}
+    GBR_METADATA(): m_isCopper( false)  {}
 
     void SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB aApertAttribute )
     {
@@ -124,8 +124,31 @@ public:
     void SetPadName( const wxString& aPadname ) { m_NetlistMetadata.m_Padname = aPadname; }
     void SetCmpReference( const wxString& aComponentRef ) { m_NetlistMetadata.m_Cmpref = aComponentRef; }
 
+    /**
+     * Allowed attributes are not the same on board copper layers and on other layers
+     * Therefore a flag can be set or reset when attributes can be depending on layers
+     */
+    bool IsCopper() { return m_isCopper; }
+    void SetCopper( bool aValue ) { m_isCopper = aValue; }
+
+    /**
+     * a item to handle aperture attribute:
+     */
     GBR_APERTURE_METADATA m_ApertureMetadata;
+
+    /**
+     * a item to handle object attribute:
+     */
     GBR_NETLIST_METADATA m_NetlistMetadata;
+
+private:
+    /**
+     * if the metadata is relative to a copper layer or not. This is a flag
+     * which can be set/reset when an attribute for a given item depends on the fact
+     * a copper layer or a non copper layer is plotted.
+     * The initial state in false.
+     */
+    bool m_isCopper;
 };
 
 /**

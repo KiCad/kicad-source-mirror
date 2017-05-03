@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,7 +61,8 @@ std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribu
         attribute_string = "%TA.AperFunction,ViaPad*%\n";
         break;
 
-    case GBR_APERTURE_ATTRIB_NONCONDUCTOR:  // print info associated to a flashed pad
+    case GBR_APERTURE_ATTRIB_NONCONDUCTOR:  // print info associated to a item on a copper layer
+                                            // which is not a track (for instance a text)
         attribute_string = "%TA.AperFunction,NonConductor*%\n";
         break;
 

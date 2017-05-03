@@ -7,7 +7,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,6 +77,7 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
     if( isOnCopperLayer )
     {
         gbr_metadata.SetNetAttribType( GBR_NETINFO_ALL );
+        gbr_metadata.SetCopper( true );
 
         if( isOnExternalCopperLayer )
             gbr_metadata.SetPadName( aPad->GetPadName() );
@@ -479,6 +480,7 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
     if( isOnCopperLayer )
     {
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_ETCHEDCMP );
+        gbr_metadata.SetCopper( true );
     }
     else if( aEdge->GetLayer() == Edge_Cuts )   // happens also when plotting copper layers
     {
@@ -621,6 +623,7 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
     if( isOnCopperLayer )
     {
         gbr_metadata.SetNetName( aZone->GetNetname() );
+        gbr_metadata.SetCopper( true );
 
         // Zones with no net name can exist.
         // they are not used to connect items, so the aperture attribute cannot
