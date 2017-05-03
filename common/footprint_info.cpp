@@ -95,7 +95,11 @@ void FOOTPRINT_LIST::DisplayErrors( wxTopLevelWindow* aWindow )
 
     while( auto error = PopError() )
     {
-        msg += wxT( "<p>" ) + error->Problem() + wxT( "</p>" );
+        wxString tmp = error->Problem();
+
+        // Preserve new lines in error messages so queued errors don't run together.
+        tmp.Replace( "\n", "<BR>" );
+        msg += wxT( "<p>" ) + tmp + wxT( "</p>" );
     }
 
     dlg.AddHTML_Text( msg );

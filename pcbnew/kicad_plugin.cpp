@@ -287,28 +287,43 @@ void FP_CACHE::Load()
 
     if( dir.GetFirst( &fpFileName, wildcard, wxDIR_FILES ) )
     {
+        wxString cacheError;
+
         do
         {
             // prepend the libpath into fullPath
             wxFileName fullPath( m_lib_path.GetPath(), fpFileName );
 
-            FILE_LINE_READER    reader( fullPath.GetFullPath() );
+            // Queue I/O errors so only files that fail to parse don't get loaded.
+            try
+            {
+                FILE_LINE_READER    reader( fullPath.GetFullPath() );
 
-            m_owner->m_parser->SetLineReader( &reader );
+                m_owner->m_parser->SetLineReader( &reader );
 
-            std::string name = TO_UTF8( fullPath.GetName() );
-            MODULE*     footprint = (MODULE*) m_owner->m_parser->Parse();
+                std::string name = TO_UTF8( fullPath.GetName() );
+                MODULE*     footprint = (MODULE*) m_owner->m_parser->Parse();
 
-            // The footprint name is the file name without the extension.
-            footprint->SetFPID( LIB_ID( fullPath.GetName() ) );
-            m_modules.insert( name, new FP_CACHE_ITEM( footprint, fullPath ) );
+                // The footprint name is the file name without the extension.
+                footprint->SetFPID( LIB_ID( fullPath.GetName() ) );
+                m_modules.insert( name, new FP_CACHE_ITEM( footprint, fullPath ) );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                if( !cacheError.IsEmpty() )
+                    cacheError += "\n\n";
 
+                cacheError += ioe.What();
+            }
         } while( dir.GetNext( &fpFileName ) );
 
         // Remember the file modification time of library file when the
         // cache snapshot was made, so that in a networked environment we will
         // reload the cache as needed.
         m_mod_time = GetLibModificationTime();
+
+        if( !cacheError.IsEmpty() )
+            THROW_IO_ERROR( cacheError );
     }
 }
 
