@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2009-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2009-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,6 +115,7 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
 
     if( component )
         component->GetDrawItemList().sort();
+
     OnModify( );
 
     MSG_PANEL_ITEMS items;
@@ -207,11 +208,17 @@ LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_PART* LibEntry, wxDC* DC )
     if( m_drawItem )
     {
         m_drawItem->BeginEdit( IS_NEW, drawPos );
-        m_drawItem->SetWidth( m_drawLineWidth );
-        m_drawItem->SetFillMode( m_drawFillStyle );
+
+        // Don't set line parameters for text objects.
+        if( m_drawItem->Type() != LIB_TEXT_T )
+        {
+            m_drawItem->SetWidth( m_drawLineWidth );
+            m_drawItem->SetFillMode( m_drawFillStyle );
+        }
 
         if( m_drawSpecificUnit )
             m_drawItem->SetUnit( m_unit );
+
         if( m_drawSpecificConvert )
             m_drawItem->SetConvert( m_convert );
 
@@ -240,7 +247,8 @@ void LIB_EDIT_FRAME::GraphicItemBeginDraw( wxDC* DC )
 
     if( m_drawItem->ContinueEdit( pos ) )
     {
-        m_drawItem->Draw( m_canvas, DC, pos, COLOR4D::UNSPECIFIED, g_XorMode, NULL, DefaultTransform );
+        m_drawItem->Draw( m_canvas, DC, pos, COLOR4D::UNSPECIFIED, g_XorMode, NULL,
+                          DefaultTransform );
         return;
     }
 
@@ -323,14 +331,14 @@ static void SymbolDisplayDraw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
         return;
 
     item->SetEraseLastDrawItem( aErase );
-    item->Draw( aPanel, aDC, aPanel->GetParent()->GetCrossHairPosition( true ), COLOR4D::UNSPECIFIED, g_XorMode, NULL,
-                DefaultTransform );
+    item->Draw( aPanel, aDC, aPanel->GetParent()->GetCrossHairPosition( true ),
+                COLOR4D::UNSPECIFIED, g_XorMode, NULL, DefaultTransform );
 }
 
 
 void LIB_EDIT_FRAME::EndDrawGraphicItem( wxDC* DC )
 {
-    if( LIB_PART*      part = GetCurPart() )
+    if( LIB_PART* part = GetCurPart() )
     {
         if( !m_drawItem )
             return;
