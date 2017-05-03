@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_BOM_EDITOR_BASE</property>
             <property name="pos"></property>
-            <property name="size">1047,800</property>
+            <property name="size">1047,471</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">BOM editor</property>
@@ -211,7 +211,7 @@
                                     <property name="max_size"></property>
                                     <property name="maximize_button">0</property>
                                     <property name="maximum_size"></property>
-                                    <property name="min_pane_size">0</property>
+                                    <property name="min_pane_size">120</property>
                                     <property name="min_size"></property>
                                     <property name="minimize_button">0</property>
                                     <property name="minimum_size"></property>
@@ -623,20 +623,20 @@
                                                         </object>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="0">
+                                                <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
                                                     <property name="flag">wxEXPAND</property>
                                                     <property name="proportion">5</property>
-                                                    <object class="wxBoxSizer" expanded="0">
+                                                    <object class="wxBoxSizer" expanded="1">
                                                         <property name="minimum_size"></property>
                                                         <property name="name">bSizer9</property>
                                                         <property name="orient">wxVERTICAL</property>
                                                         <property name="permission">none</property>
-                                                        <object class="sizeritem" expanded="0">
+                                                        <object class="sizeritem" expanded="1">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxEXPAND</property>
                                                             <property name="proportion">1</property>
-                                                            <object class="wxStaticBoxSizer" expanded="0">
+                                                            <object class="wxStaticBoxSizer" expanded="1">
                                                                 <property name="id">wxID_ANY</property>
                                                                 <property name="label">Fields</property>
                                                                 <property name="minimum_size"></property>
@@ -659,7 +659,7 @@
                                                                         <property name="hidden">0</property>
                                                                         <property name="id">wxID_ANY</property>
                                                                         <property name="maximum_size"></property>
-                                                                        <property name="minimum_size"></property>
+                                                                        <property name="minimum_size">-1,250</property>
                                                                         <property name="name">m_columnListCtrl</property>
                                                                         <property name="permission">protected</property>
                                                                         <property name="pos"></property>
@@ -717,21 +717,11 @@
                                                         </object>
                                                     </object>
                                                 </object>
-                                                <object class="sizeritem" expanded="0">
-                                                    <property name="border">5</property>
-                                                    <property name="flag">wxEXPAND</property>
-                                                    <property name="proportion">0</property>
-                                                    <object class="spacer" expanded="0">
-                                                        <property name="height">0</property>
-                                                        <property name="permission">protected</property>
-                                                        <property name="width">0</property>
-                                                    </object>
-                                                </object>
-                                                <object class="sizeritem" expanded="0">
+                                                <object class="sizeritem" expanded="1">
                                                     <property name="border">10</property>
                                                     <property name="flag">wxEXPAND</property>
                                                     <property name="proportion">0</property>
-                                                    <object class="wxStaticBoxSizer" expanded="0">
+                                                    <object class="wxStaticBoxSizer" expanded="1">
                                                         <property name="id">wxID_ANY</property>
                                                         <property name="label">Apply changes</property>
                                                         <property name="minimum_size"></property>
@@ -865,7 +855,7 @@
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
                                                         <property name="maximum_size"></property>
-                                                        <property name="minimum_size">250,250</property>
+                                                        <property name="minimum_size">450,250</property>
                                                         <property name="name">m_bomView</property>
                                                         <property name="permission">protected</property>
                                                         <property name="pos"></property>

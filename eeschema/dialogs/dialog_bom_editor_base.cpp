@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr  1 2017)
+// C++ code generated with wxFormBuilder (version Feb 19 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -36,6 +36,7 @@ DIALOG_BOM_EDITOR_BASE::DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id,
 	
 	m_splitter1 = new wxSplitterWindow( m_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D );
 	m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_BOM_EDITOR_BASE::m_splitter1OnIdle ), NULL, this );
+	m_splitter1->SetMinimumPaneSize( 120 );
 	
 	m_leftPanel = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer6;
@@ -69,6 +70,8 @@ DIALOG_BOM_EDITOR_BASE::DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id,
 	m_fieldListSizer = new wxStaticBoxSizer( new wxStaticBox( m_leftPanel, wxID_ANY, _("Fields") ), wxVERTICAL );
 	
 	m_columnListCtrl = new wxDataViewListCtrl( m_fieldListSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_columnListCtrl->SetMinSize( wxSize( -1,250 ) );
+	
 	m_fieldListSizer->Add( m_columnListCtrl, 1, wxALL|wxEXPAND, 5 );
 	
 	
@@ -76,9 +79,6 @@ DIALOG_BOM_EDITOR_BASE::DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id,
 	
 	
 	bSizer6->Add( bSizer9, 5, wxEXPAND, 5 );
-	
-	
-	bSizer6->Add( 0, 0, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer4;
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( m_leftPanel, wxID_ANY, _("Apply changes") ), wxVERTICAL );
@@ -104,7 +104,7 @@ DIALOG_BOM_EDITOR_BASE::DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id,
 	bSizer5 = new wxBoxSizer( wxVERTICAL );
 	
 	m_bomView = new wxDataViewCtrl( m_panel4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_MULTIPLE|wxDV_ROW_LINES|wxDV_VERT_RULES );
-	m_bomView->SetMinSize( wxSize( 250,250 ) );
+	m_bomView->SetMinSize( wxSize( 450,250 ) );
 	
 	bSizer5->Add( m_bomView, 1, wxALL|wxEXPAND, 5 );
 	
