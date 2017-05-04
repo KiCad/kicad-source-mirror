@@ -1740,6 +1740,14 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                     via->SetDrill( drillz );
 
+// make sure the via diameter respects the restring rules
+
+                    if( !v.diam || via->GetWidth() <= via->GetDrill() )
+                    {
+                        double annulus = Clamp( m_rules->rlMinViaOuter, (double) (via->GetWidth() / 2 - via->GetDrill()), m_rules->rlMaxViaOuter );
+                        via->SetWidth( drillz + 2 * annulus );
+                    }
+                    
                     if( kidiam < m_min_via )
                         m_min_via = kidiam;
 
@@ -1840,6 +1848,8 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     if( p.isolate )
                     {
                         zone->SetZoneClearance( kicad( *p.isolate ) );
+                    } else {
+                        zone->SetZoneClearance( 0 );
                     }
 
                     // missing == yes per DTD.
@@ -1855,7 +1865,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                         zone->SetThermalReliefCopperBridge( kicad( p.width + 0.05 ) );
                     }
 
-                    int rank = p.rank ? *p.rank : p.max_priority;
+                    int rank = p.rank ? (p.max_priority - *p.rank) : p.max_priority;
                     zone->SetPriority( rank );
                 }
 
