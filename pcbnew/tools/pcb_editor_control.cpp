@@ -27,6 +27,7 @@
 #include "pcb_editor_control.h"
 #include "pcb_actions.h"
 #include <tool/tool_manager.h>
+#include <wx/progdlg.h>
 
 #include "selection_tool.h"
 #include "drawing_tool.h"
@@ -673,22 +674,47 @@ int PCB_EDITOR_CONTROL::ZoneFillAll( const TOOL_EVENT& aEvent )
 {
     BOARD* board = getModel<BOARD>();
     auto connectivity = getModel<BOARD>()->GetConnectivity();
+    int areaCount = board->GetAreaCount();
+    const wxString fmt = _( "Filling zone %d out of %d (net %s)..." );
+    wxString msg;
+    bool aborted = false;
+
+    // Create a message with a long net name, and build a wxProgressDialog
+    // with a correct size to show this long net name
+    msg.Printf( fmt, 000, areaCount, wxT("XXXXXXXXXXXXXXXXX" ) );
+
+    auto progressDialog = new wxProgressDialog( _( "Fill All Zones" ), msg,
+                                 areaCount, frame(),
+                                 wxPD_AUTO_HIDE | wxPD_CAN_ABORT |
+                                 wxPD_APP_MODAL | wxPD_ELAPSED_TIME );
 
     BOARD_COMMIT commit( this );
 
-    for( int i = 0; i < board->GetAreaCount(); ++i )
+    for( int i = 0; i < areaCount; ++i )
     {
         ZONE_CONTAINER* zone = board->GetArea( i );
 
+        msg.Printf( fmt, i, areaCount, GetChars( zone->GetNetname() ) );
+
         commit.Modify( zone );
+
+        if( !progressDialog->Update( i, msg ) )
+        {
+            aborted = true;
+            break;  // Aborted by user
+        }
 
         m_frame->Fill_Zone( zone );
         zone->SetIsFilled( true );
     }
 
-    commit.Push( _( "Fill All Zones" ) );
+    if( aborted )
+        commit.Revert();
+    else
+        commit.Push( _( "Fill All Zones" ) );
 
     connectivity->RecalculateRatsnest();
+    progressDialog->Destroy();
 
     return 0;
 }
