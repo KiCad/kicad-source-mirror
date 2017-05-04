@@ -622,12 +622,14 @@ public:
 
     bool ContainsAnchor( const CN_ANCHOR_PTR anchor ) const
     {
-        return m_cachedPoly->ContainsPoint( anchor->Pos() );
+        auto zone = static_cast<ZONE_CONTAINER*> ( Parent() );
+        return m_cachedPoly->ContainsPoint( anchor->Pos(), zone->GetMinThickness() );
     }
 
     bool ContainsPoint( const VECTOR2I p ) const
     {
-        return m_cachedPoly->ContainsPoint( p );
+        auto zone = static_cast<ZONE_CONTAINER*> ( Parent() );
+        return m_cachedPoly->ContainsPoint( p, zone->GetMinThickness() );
     }
 
     const BOX2I& BBox() const
