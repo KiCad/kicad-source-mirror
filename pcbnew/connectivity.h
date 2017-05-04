@@ -211,6 +211,11 @@ public:
 
     void BlockRatsnestItems( const std::vector<BOARD_ITEM*>& aItems );
 
+    std::shared_ptr<CN_CONNECTIVITY_ALGO> GetConnectivityAlgo() const
+    {
+         return m_connAlgo;
+    }
+
 private:
 
     void    updateRatsnest();

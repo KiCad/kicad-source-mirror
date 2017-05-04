@@ -119,6 +119,8 @@ public:
         return m_cluster;
     }
 
+    bool IsDangling() const;
+
     // Tag used for unconnected items.
     static const int TAG_UNCONNECTED = -1;
 
@@ -948,6 +950,7 @@ public:
     CN_PAD_LIST& PadList() { return m_padList; }
 
     void ForEachAnchor(  std::function<void(CN_ANCHOR_PTR)> aFunc );
+    void ForEachItem(  std::function<void(CN_ITEM*)> aFunc );
 };
 
 bool operator<( const CN_ANCHOR_PTR a, const CN_ANCHOR_PTR b );

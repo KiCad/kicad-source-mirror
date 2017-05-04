@@ -38,6 +38,7 @@
 #include <dialog_cleaning_options.h>
 #include <board_commit.h>
 #include <connectivity.h>
+#include <connectivity_algo.h>
 
 // Helper class used to clean tracks and vias
 class TRACKS_CLEANER
@@ -158,18 +159,19 @@ void TRACKS_CLEANER::buildTrackConnectionInfo()
 	connectivity->Build(m_brd);
 
 // clear flags and variables used in cleanup
-    for( TRACK* track = m_brd->m_Track; track != NULL; track = track->Next() )
+    for( auto track : m_brd->Tracks() )
     {
         track->start = NULL;
         track->end = NULL;
         track->SetState( START_ON_PAD | END_ON_PAD | BUSY, false );
     }
 
-    for( TRACK* track = m_brd->m_Track; track != NULL; track = track->Next() )
+    for( auto track : m_brd->Tracks() )
     {
         // Mark track if connected to pads
         for( auto pad : connectivity->GetConnectedPads( track ) )
         {
+            printf("take pad %p\n", pad);
             if( pad->HitTest( track->GetStart() ) )
             {
                 track->start = pad;
@@ -313,6 +315,10 @@ bool TRACKS_CLEANER::cleanupVias()
     for( VIA* via = GetFirstVia( m_brd->m_Track ); via != NULL;
             via = GetFirstVia( via->Next() ) )
     {
+
+        if( via->GetFlags() & TRACK_LOCKED )
+            continue;
+
         // Correct via m_End defects (if any), should never happen
         if( via->GetStart() != via->GetEnd() )
         {
@@ -351,66 +357,27 @@ bool TRACKS_CLEANER::cleanupVias()
 }
 
 
-/// Utility for checking if a track/via ends on a zone
-const ZONE_CONTAINER* TRACKS_CLEANER::zoneForTrackEndpoint( const TRACK* aTrack,
-        ENDPOINT_T aEndPoint )
-{
-    // Vias are special cased, since they get a layer range, not a single one
-    PCB_LAYER_ID    top_layer, bottom_layer;
-    const VIA*  via = dyn_cast<const VIA*>( aTrack );
-
-    if( via )
-        via->LayerPair( &top_layer, &bottom_layer );
-    else
-    {
-        top_layer = aTrack->GetLayer();
-        bottom_layer = top_layer;
-    }
-
-    return m_brd->HitTestForAnyFilledArea( aTrack->GetEndPoint( aEndPoint ),
-            top_layer, bottom_layer, aTrack->GetNetCode() );
-}
-
-
 /** Utility: does the endpoint unconnected processed for one endpoint of one track
  * Returns true if the track must be deleted, false if not necessarily */
 bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK* aTrack, ENDPOINT_T aEndPoint )
 {
-    bool flag_erase = false;
+    auto connectivity = m_brd->GetConnectivity();
+    VECTOR2I endpoint ;
 
-    TRACK* other = aTrack->GetTrack( m_brd->m_Track, NULL, aEndPoint, true, false );
+    if ( aTrack->Type() == PCB_TRACE_T )
+        endpoint = aTrack->GetEndPoint( aEndPoint );
+    else
+        endpoint = aTrack->GetStart( );
 
-    if( !other && !zoneForTrackEndpoint( aTrack, aEndPoint ) )
-        flag_erase = true; // Start endpoint is neither on pad, zone or other track
-    else    // segment, via or zone connected to this end
+    auto anchors = connectivity->GetConnectivityAlgo()->ItemEntry( aTrack ).GetItems().front()->Anchors();
+
+    for ( auto anchor : anchors )
     {
-        // Fill connectivity informations
-        if( aEndPoint == ENDPOINT_START )
-            aTrack->start = other;
-        else
-            aTrack->end = other;
-
-        /* If a via is connected to this end, test if this via has a second item connected.
-         * If not, remove the current segment (the via would then become
-         * unconnected and remove on the following pass) */
-        VIA* via = dyn_cast<VIA*>( other );
-
-        if( via )
-        {
-            // search for another segment following the via
-            aTrack->SetState( BUSY, true );
-
-            other = via->GetTrack( m_brd->m_Track, NULL, aEndPoint, true, false );
-
-            // There is a via on the start but it goes nowhere
-            if( !other && !zoneForTrackEndpoint( via, aEndPoint ) )
-                flag_erase = true;
-
-            aTrack->SetState( BUSY, false );
-        }
+        if ( anchor->Pos() == endpoint && anchor->IsDangling() )
+            return true;
     }
 
-    return flag_erase;
+    return false;
 }
 
 

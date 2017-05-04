@@ -738,6 +738,7 @@ void CN_CONNECTIVITY_ALGO::propagateConnections()
                 if( item->CanChangeNet() )
                 {
                     item->Parent()->SetNetCode( cluster->OriginNet() );
+                    markNetAsDirty( cluster->OriginNet() );
                     n_changed++;
                 }
             }
@@ -902,6 +903,18 @@ void CN_CONNECTIVITY_ALGO::Clear()
 
 }
 
+void CN_CONNECTIVITY_ALGO::ForEachItem(  std::function<void(CN_ITEM*)> aFunc )
+{
+    for ( auto item : m_padList )
+        aFunc( item );
+    for ( auto item : m_viaList )
+        aFunc( item );
+    for ( auto item : m_trackList )
+        aFunc( item );
+    for ( auto item : m_zoneList )
+        aFunc( item );
+}
+
 void CN_CONNECTIVITY_ALGO::ForEachAnchor(  std::function<void(CN_ANCHOR_PTR)> aFunc )
 {
     for ( auto anchor : m_padList.Anchors() )
@@ -912,4 +925,9 @@ void CN_CONNECTIVITY_ALGO::ForEachAnchor(  std::function<void(CN_ANCHOR_PTR)> aF
         aFunc( anchor );
     for ( auto anchor : m_zoneList.Anchors() )
         aFunc( anchor );
+}
+
+bool CN_ANCHOR::IsDangling() const
+{
+    return m_cluster->Size() <= 1;
 }

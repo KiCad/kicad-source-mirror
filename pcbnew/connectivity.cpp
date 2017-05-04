@@ -354,10 +354,19 @@ const std::list<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems(
 const std::list<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetNetItems( int aNetCode,
         const KICAD_T aTypes[] ) const
 {
-    std::list<BOARD_CONNECTED_ITEM*> rv;
+    std::set<BOARD_CONNECTED_ITEM *> items;
+    std::list<BOARD_CONNECTED_ITEM *> rv;
 
-    // FIXME!
-        return rv;
+    // fixme: apply aTypes
+
+    m_connAlgo->ForEachItem( [&items, aNetCode] ( CN_ITEM* aItem) {
+        if ( aItem->Net() == aNetCode )
+            items.insert( aItem->Parent() );
+    } );
+
+    std::copy( items.begin(), items.end(), std::front_inserter( rv ) );
+
+    return rv;
 }
 
 

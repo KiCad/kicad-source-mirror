@@ -556,17 +556,9 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         wxMessageBox( wxT( "Incomplete undo/redo operation: some items not found" ) );
 
     // Rebuild pointers and connectivity that can be changed.
-    if( reBuild_ratsnest )
+    if( reBuild_ratsnest || deep_reBuild_ratsnest )
     {
-        // Compile ratsnest propagates nets from pads to tracks
-        /// @todo LEGACY Compile_Ratsnest() has to be rewritten and moved to RN_DATA
-        if( deep_reBuild_ratsnest )
-            Compile_Ratsnest( NULL, false );
-
-        if( IsGalCanvasActive() )
-        {
-			connectivity->RecalculateRatsnest();
-        }
+        Compile_Ratsnest( NULL, false );
     }
 }
 

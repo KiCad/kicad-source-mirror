@@ -160,18 +160,18 @@ DRAWING_TOOL::~DRAWING_TOOL()
 bool DRAWING_TOOL::Init()
 {
     auto activeToolFunctor = [ this ] ( const SELECTION& aSel ) {
-        return m_mode != MODE::NONE;
-    };
+                                 return m_mode != MODE::NONE;
+                             };
 
     // some interactive drawing tools can undo the last point
     auto canUndoPoint = [ this ] ( const SELECTION& aSel ) {
-        return m_mode == MODE::ARC || m_mode == MODE::ZONE;
-    };
+                            return m_mode == MODE::ARC || m_mode == MODE::ZONE;
+                        };
 
     // functor for zone-only actions
     auto zoneActiveFunctor = [this ] ( const SELECTION& aSel ) {
-        return m_mode == MODE::ZONE;
-    };
+                                 return m_mode == MODE::ZONE;
+                             };
 
     auto& ctxMenu = m_menu.GetMenu();
 
@@ -214,13 +214,14 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
 {
     BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
     DRAWSEGMENT* line = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
+
     boost::optional<VECTOR2D> startingPoint;
     BOARD_COMMIT commit( m_frame );
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::LINE );
 
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_LINE_TOOL : ID_PCB_ADD_LINE_BUTT,
-                        wxCURSOR_PENCIL, _( "Add graphic line" ) );
+            wxCURSOR_PENCIL, _( "Add graphic line" ) );
     m_lineWidth = getSegmentWidth( getDrawingLayer() );
 
     while( drawSegment( S_SEGMENT, line, startingPoint ) )
@@ -248,8 +249,8 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
 int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
 {
     BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
-    DRAWSEGMENT* circle = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
-    BOARD_COMMIT commit( m_frame );
+    DRAWSEGMENT*    circle = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
+    BOARD_COMMIT    commit( m_frame );
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::CIRCLE );
 
@@ -277,8 +278,8 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
 int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 {
     BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
-    DRAWSEGMENT* arc = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
-    BOARD_COMMIT commit( m_frame );
+    DRAWSEGMENT*    arc = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
+    BOARD_COMMIT    commit( m_frame );
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ARC );
 
@@ -311,6 +312,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     SELECTION preview;
+
     m_view->Add( &preview );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -322,7 +324,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
     Activate();
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_TEXT_TOOL : ID_PCB_ADD_TEXT_BUTT,
-                        wxCURSOR_PENCIL, _( "Add text" ) );
+            wxCURSOR_PENCIL, _( "Add text" ) );
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -346,10 +348,9 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             else
                 break;
 
-            if( evt->IsActivate() )  // now finish unconditionally
+            if( evt->IsActivate() ) // now finish unconditionally
                 break;
         }
-
         else if( text && evt->Category() == TC_COMMAND )
         {
             if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) )
@@ -366,12 +367,10 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 m_view->Update( &preview );
             }
         }
-
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu();
         }
-
         else if( evt->IsClick( BUT_LEFT ) )
         {
             if( !text )
@@ -389,7 +388,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     DialogEditModuleText textDialog( m_frame, textMod, NULL );
                     bool placing;
 
-                    RunMainStack( [&]() {
+                    RunMainStack([&]() {
                         placing = textDialog.ShowModal() && ( textMod->GetText().Length() > 0 );
                     } );
 
@@ -415,7 +414,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     textPcb->SetThickness( dsnSettings.m_PcbTextWidth );
                     textPcb->SetTextPos( wxPoint( cursorPos.x, cursorPos.y ) );
 
-                    RunMainStack( [&]() {
+                    RunMainStack([&]() {
                         getEditFrame<PCB_EDIT_FRAME>()->InstallTextPCBOptionsFrame( textPcb, NULL );
                     } );
 
@@ -430,14 +429,14 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
                 m_controls->CaptureCursor( true );
                 m_controls->SetAutoPan( true );
-                //m_controls->ShowCursor( false );
+                // m_controls->ShowCursor( false );
 
                 preview.Add( text );
             }
             else
             {
-                //assert( text->GetText().Length() > 0 );
-                //assert( text->GetTextSize().x > 0 && text->GetTextSize().y > 0 );
+                // assert( text->GetText().Length() > 0 );
+                // assert( text->GetTextSize().x > 0 && text->GetTextSize().y > 0 );
 
                 text->ClearFlags();
                 preview.Remove( text );
@@ -465,7 +464,6 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     m_frame->SetNoToolSelected();
 
     return 0;
-
 }
 
 
@@ -477,6 +475,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     SELECTION preview;
+
     m_view->Add( &preview );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -515,17 +514,15 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             else
                 break;
 
-            if( evt->IsActivate() )  // now finish unconditionally
+            if( evt->IsActivate() ) // now finish unconditionally
                 break;
         }
-
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) && step != SET_ORIGIN )
         {
             m_lineWidth += WIDTH_STEP;
             dimension->SetWidth( m_lineWidth );
             m_view->Update( &preview );
         }
-
         else if( evt->IsAction( &PCB_ACTIONS::decWidth ) && step != SET_ORIGIN )
         {
             if( m_lineWidth > WIDTH_STEP )
@@ -535,46 +532,44 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 m_view->Update( &preview );
             }
         }
-
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu();
         }
-
         else if( evt->IsClick( BUT_LEFT ) )
         {
             switch( step )
             {
             case SET_ORIGIN:
-                {
-                    PCB_LAYER_ID layer = getDrawingLayer();
+            {
+                PCB_LAYER_ID layer = getDrawingLayer();
 
-                    if( layer == Edge_Cuts )    // dimensions are not allowed on EdgeCuts
-                        layer = Dwgs_User;
+                if( layer == Edge_Cuts )        // dimensions are not allowed on EdgeCuts
+                    layer = Dwgs_User;
 
-                    // Init the new item attributes
-                    dimension = new DIMENSION( m_board );
-                    dimension->SetLayer( layer );
-                    dimension->SetOrigin( wxPoint( cursorPos.x, cursorPos.y ) );
-                    dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
-                    dimension->Text().SetTextSize( m_board->GetDesignSettings().m_PcbTextSize );
+                // Init the new item attributes
+                dimension = new DIMENSION( m_board );
+                dimension->SetLayer( layer );
+                dimension->SetOrigin( wxPoint( cursorPos.x, cursorPos.y ) );
+                dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+                dimension->Text().SetTextSize( m_board->GetDesignSettings().m_PcbTextSize );
 
-                    int width = m_board->GetDesignSettings().m_PcbTextWidth;
-                    maxThickness = Clamp_Text_PenSize( width, dimension->Text().GetTextSize() );
+                int width = m_board->GetDesignSettings().m_PcbTextWidth;
+                maxThickness = Clamp_Text_PenSize( width, dimension->Text().GetTextSize() );
 
-                    if( width > maxThickness )
-                        width = maxThickness;
+                if( width > maxThickness )
+                    width = maxThickness;
 
-                    dimension->Text().SetThickness( width );
-                    dimension->SetWidth( width );
-                    dimension->AdjustDimensionDetails();
+                dimension->Text().SetThickness( width );
+                dimension->SetWidth( width );
+                dimension->AdjustDimensionDetails();
 
-                    preview.Add( dimension );
+                preview.Add( dimension );
 
-                    m_controls->SetAutoPan( true );
-                    m_controls->CaptureCursor( true );
-                }
-                break;
+                m_controls->SetAutoPan( true );
+                m_controls->CaptureCursor( true );
+            }
+            break;
 
             case SET_END:
                 dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
@@ -582,23 +577,23 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 // Dimensions that have origin and end in the same spot are not valid
                 if( dimension->GetOrigin() == dimension->GetEnd() )
                     --step;
+
                 break;
 
             case SET_HEIGHT:
+            {
+                if( wxPoint( cursorPos.x, cursorPos.y ) != dimension->GetPosition() )
                 {
-                    if( wxPoint( cursorPos.x, cursorPos.y ) != dimension->GetPosition() )
-                    {
-                        assert( dimension->GetOrigin() != dimension->GetEnd() );
-                        assert( dimension->GetWidth() > 0 );
+                    assert( dimension->GetOrigin() != dimension->GetEnd() );
+                    assert( dimension->GetWidth() > 0 );
 
-                        preview.Remove( dimension );
+                    preview.Remove( dimension );
 
-                        commit.Add( dimension );
-                        commit.Push( _( "Draw a dimension" ) );
-
-                    }
+                    commit.Add( dimension );
+                    commit.Push( _( "Draw a dimension" ) );
                 }
-                break;
+            }
+            break;
             }
 
             if( ++step == FINISHED )
@@ -608,7 +603,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 m_controls->CaptureCursor( false );
             }
         }
-
         else if( evt->IsMotion() )
         {
             switch( step )
@@ -624,7 +618,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
                 wxPoint pos( cursorPos.x, cursorPos.y );
                 wxPoint delta( pos - dimension->m_featureLineDO );
-                double height  = ( delta.x * cos( angle ) ) + ( delta.y * sin( angle ) );
+                double  height = ( delta.x * cos( angle ) ) + ( delta.y * sin( angle ) );
                 dimension->SetHeight( height );
             }
             break;
@@ -648,6 +642,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 {
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ZONE );
+
     m_frame->SetToolID( ID_PCB_ZONES_BUTT, wxCURSOR_PENCIL, _( "Add zones" ) );
 
     return drawZone( false, ZONE_MODE::ADD );
@@ -657,6 +652,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 int DRAWING_TOOL::DrawZoneKeepout( const TOOL_EVENT& aEvent )
 {
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::KEEPOUT );
+
     m_frame->SetToolID( ID_PCB_KEEPOUT_AREA_BUTT, wxCURSOR_PENCIL, _( "Add keepout" ) );
 
     return drawZone( true, ZONE_MODE::ADD );
@@ -666,6 +662,7 @@ int DRAWING_TOOL::DrawZoneKeepout( const TOOL_EVENT& aEvent )
 int DRAWING_TOOL::DrawZoneCutout( const TOOL_EVENT& aEvent )
 {
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ZONE );
+
     m_frame->SetToolID( ID_PCB_ZONES_BUTT, wxCURSOR_PENCIL, _( "Add zone cutout" ) );
 
     return drawZone( false, ZONE_MODE::CUTOUT );
@@ -675,6 +672,7 @@ int DRAWING_TOOL::DrawZoneCutout( const TOOL_EVENT& aEvent )
 int DRAWING_TOOL::DrawSimilarZone( const TOOL_EVENT& aEvent )
 {
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ZONE );
+
     m_frame->SetToolID( ID_PCB_ZONES_BUTT, wxCURSOR_PENCIL, _( "Add similar zone" ) );
 
     return drawZone( false, ZONE_MODE::SIMILAR );
@@ -694,8 +692,8 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     if( dlgResult != wxID_OK || list.empty() )
         return 0;
 
-    VECTOR2I cursorPos = m_controls->GetCursorPosition();
-    VECTOR2I delta = cursorPos - list.front()->GetPosition();
+    VECTOR2I    cursorPos = m_controls->GetCursorPosition();
+    VECTOR2I    delta = cursorPos - list.front()->GetPosition();
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     SELECTION preview;
@@ -733,14 +731,13 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
 
             m_view->Update( &preview );
         }
-
         else if( evt->Category() == TC_COMMAND )
         {
             // TODO it should be handled by EDIT_TOOL, so add items and select?
             if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) )
             {
-                const auto rotationPoint = wxPoint( cursorPos.x, cursorPos.y );
-                const auto rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle(
+                const auto  rotationPoint   = wxPoint( cursorPos.x, cursorPos.y );
+                const auto  rotationAngle   = TOOL_EVT_UTILS::GetEventRotationAngle(
                         *m_frame, *evt );
 
                 for( auto item : preview )
@@ -763,12 +760,10 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu();
         }
-
         else if( evt->IsClick( BUT_LEFT ) )
         {
             // Place the drawing
@@ -807,7 +802,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
                         textMod->SetMultilineAllowed( text->IsMultilineAllowed() );
 #else
                         textMod->EDA_TEXT::SetEffects( *text );
-                        textMod->SetLocalCoord();   // using changed SetTexPos() via SetEffects()
+                        textMod->SetLocalCoord();    // using changed SetTexPos() via SetEffects()
 #endif
                         converted = textMod;
                         break;
@@ -815,8 +810,8 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
 
                     case PCB_LINE_T:
                     {
-                        DRAWSEGMENT* seg = static_cast<DRAWSEGMENT*>( item );
-                        EDGE_MODULE* modSeg = new EDGE_MODULE( (MODULE*) parent );
+                        DRAWSEGMENT*    seg = static_cast<DRAWSEGMENT*>( item );
+                        EDGE_MODULE*    modSeg = new EDGE_MODULE( (MODULE*) parent );
 
                         // Assignment operator also copies the item PCB_LINE_T type,
                         // so it cannot be added to a module which handles PCB_MODULE_EDGE_T
@@ -870,7 +865,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
     Activate();
     m_frame->SetToolID( ID_MODEDIT_ANCHOR_TOOL, wxCURSOR_PENCIL,
-                        _( "Place the footprint anchor" ) );
+            _( "Place the footprint anchor" ) );
 
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
@@ -886,8 +881,8 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
             commit.Modify( module );
 
             // set the new relative internal local coordinates of footprint items
-            VECTOR2I cursorPos = m_controls->GetCursorPosition();
-            wxPoint moveVector = module->GetPosition() - wxPoint( cursorPos.x, cursorPos.y );
+            VECTOR2I    cursorPos = m_controls->GetCursorPosition();
+            wxPoint     moveVector = module->GetPosition() - wxPoint( cursorPos.x, cursorPos.y );
             module->MoveAnchorPosition( moveVector );
 
             commit.Push( _( "Move the footprint reference anchor" ) );
@@ -900,7 +895,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         {
             m_menu.ShowContextMenu();
         }
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt )  )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             break;
     }
 
@@ -911,7 +906,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
 
 bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
-                                boost::optional<VECTOR2D> aStartingPoint )
+        boost::optional<VECTOR2D> aStartingPoint )
 {
     // Only two shapes are currently supported
     assert( aShape == S_SEGMENT || aShape == S_CIRCLE );
@@ -928,8 +923,8 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
     Activate();
 
-    bool direction45 = false;       // 45 degrees only mode
-    bool started = false;
+    bool    direction45 = false;    // 45 degrees only mode
+    bool    started = false;
     VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
     if( aStartingPoint )
@@ -1016,16 +1011,17 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             }
             else
             {
-                if( aGraphic->GetEnd() == aGraphic->GetStart() ||
-                        ( evt->IsDblClick( BUT_LEFT ) && aShape == S_SEGMENT ) )
-                                        // User has clicked twice in the same spot
-                {                       // a clear sign that the current drawing is finished
+                if( aGraphic->GetEnd() == aGraphic->GetStart()
+                    || ( evt->IsDblClick( BUT_LEFT ) && aShape == S_SEGMENT ) )
+                // User has clicked twice in the same spot
+                {
+                    // a clear sign that the current drawing is finished
                     // Now we have to add the helper line as well
                     if( direction45 )
                     {
                         BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
                         DRAWSEGMENT* l = m_editModules ? new EDGE_MODULE( (MODULE*) parent )
-                                                       : new DRAWSEGMENT;
+                                         : new DRAWSEGMENT;
 
                         // Copy coordinates, layer, etc.
                         *static_cast<DRAWSEGMENT*>( l ) = line45;
@@ -1044,7 +1040,6 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
                 break;
             }
         }
-
         else if( evt->IsMotion() )
         {
             // 45 degree lines
@@ -1055,7 +1050,6 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
             m_view->Update( &preview );
         }
-
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
             m_lineWidth += WIDTH_STEP;
@@ -1063,7 +1057,6 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             line45.SetWidth( m_lineWidth );
             m_view->Update( &preview );
         }
-
         else if( evt->IsAction( &PCB_ACTIONS::decWidth ) && ( m_lineWidth > WIDTH_STEP ) )
         {
             m_lineWidth -= WIDTH_STEP;
@@ -1085,8 +1078,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
  * Update an arc DRAWSEGMENT from the current state
  * of an Arc Geometry Manager
  */
-static void updateArcFromConstructionMgr(
-        const KIGFX::PREVIEW::ARC_GEOM_MANAGER& aMgr,
+static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER& aMgr,
         DRAWSEGMENT& aArc )
 {
     auto vec = aMgr.GetOrigin();
@@ -1148,12 +1140,10 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
 
             arcManager.AddPoint( cursorPos, true );
         }
-
         else if( evt->IsAction( &deleteLastPoint ) )
         {
             arcManager.RemoveLastPoint();
         }
-
         else if( evt->IsMotion() )
         {
             // set angle snap
@@ -1162,7 +1152,6 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             // update, but don't step the manager state
             arcManager.AddPoint( cursorPos, false );
         }
-
         else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             preview.Clear();
@@ -1174,21 +1163,18 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
         {
             m_menu.ShowContextMenu();
         }
-
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
             m_lineWidth += WIDTH_STEP;
             aGraphic->SetWidth( m_lineWidth );
             m_view->Update( &preview );
         }
-
         else if( evt->IsAction( &PCB_ACTIONS::decWidth ) && m_lineWidth > WIDTH_STEP )
         {
             m_lineWidth -= WIDTH_STEP;
             aGraphic->SetWidth( m_lineWidth );
             m_view->Update( &preview );
         }
-
         else if( evt->IsAction( &PCB_ACTIONS::arcPosture ) )
         {
             arcManager.ToggleClockwise();
@@ -1246,8 +1232,8 @@ bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER*& aZo
 
 void DRAWING_TOOL::runPolygonEventLoop( POLYGON_GEOM_MANAGER& polyGeomMgr )
 {
-    auto& controls = *getViewControls();
-    bool started = false;
+    auto&   controls    = *getViewControls();
+    bool    started     = false;
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -1269,21 +1255,19 @@ void DRAWING_TOOL::runPolygonEventLoop( POLYGON_GEOM_MANAGER& polyGeomMgr )
             controls.SetAutoPan( false );
             controls.CaptureCursor( false );
         }
-
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu();
         }
-
         // events that lock in nodes
         else if( evt->IsClick( BUT_LEFT )
-                || evt->IsDblClick( BUT_LEFT )
-                || evt->IsAction( &closeZoneOutline ) )
+                 || evt->IsDblClick( BUT_LEFT )
+                 || evt->IsAction( &closeZoneOutline ) )
         {
             // Check if it is double click / closing line (so we have to finish the zone)
             const bool endPolygon = evt->IsDblClick( BUT_LEFT )
-                            || evt->IsAction( &closeZoneOutline )
-                            || polyGeomMgr.NewPointClosesOutline( cursorPos );
+                                    || evt->IsAction( &closeZoneOutline )
+                                    || polyGeomMgr.NewPointClosesOutline( cursorPos );
 
             if( endPolygon )
             {
@@ -1295,7 +1279,7 @@ void DRAWING_TOOL::runPolygonEventLoop( POLYGON_GEOM_MANAGER& polyGeomMgr )
                 controls.SetAutoPan( false );
                 controls.CaptureCursor( false );
             }
-            else // adding a corner
+            else    // adding a corner
             {
                 polyGeomMgr.AddPoint( cursorPos );
 
@@ -1307,7 +1291,6 @@ void DRAWING_TOOL::runPolygonEventLoop( POLYGON_GEOM_MANAGER& polyGeomMgr )
                 }
             }
         }
-
         else if( evt->IsAction( &deleteLastPoint ) )
         {
             polyGeomMgr.DeleteLastCorner();
@@ -1323,16 +1306,15 @@ void DRAWING_TOOL::runPolygonEventLoop( POLYGON_GEOM_MANAGER& polyGeomMgr )
                 controls.CaptureCursor( false );
             }
         }
-
         else if( polyGeomMgr.IsPolygonInProgress()
-                    && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
+                 && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
         {
             bool draw45 = evt->Modifier( MD_CTRL );
             polyGeomMgr.SetLeaderMode( draw45 ? POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45
-                                              : POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
+                    : POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
             polyGeomMgr.SetCursorPosition( cursorPos );
         }
-    } // end while
+    }    // end while
 }
 
 
@@ -1358,7 +1340,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
     // hands the calculated points over to the zone creator tool
     POLYGON_GEOM_MANAGER polyGeomMgr( zoneTool );
 
-    Activate(); // register for events
+    Activate();    // register for events
 
     auto& controls = *getViewControls();
 
@@ -1377,8 +1359,8 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
 
 void DRAWING_TOOL::make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper ) const
 {
-    VECTOR2I cursorPos = m_controls->GetCursorPosition();
-    VECTOR2I origin( aSegment->GetStart() );
+    VECTOR2I    cursorPos = m_controls->GetCursorPosition();
+    VECTOR2I    origin( aSegment->GetStart() );
     DIRECTION_45 direction( origin - cursorPos );
     SHAPE_LINE_CHAIN newChain = direction.BuildInitialTrace( origin, cursorPos );
 
@@ -1396,76 +1378,94 @@ void DRAWING_TOOL::make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper ) 
     }
 }
 
+
 int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 {
     struct VIA_PLACER : public INTERACTIVE_PLACER_BASE
     {
-        int findStitchedZoneNet( VIA *aVia )
+        int findStitchedZoneNet( VIA* aVia )
         {
-            const auto pos = aVia->GetPosition();
-            const auto lset = aVia->GetLayerSet();
+            const auto  pos     = aVia->GetPosition();
+            const auto  lset    = aVia->GetLayerSet();
 
-            for ( auto tv : m_board->Tracks() ) // fixme: move to BOARD class?
-                if( tv->HitTest(pos) && (tv->GetLayerSet() &
-                       lset ).any() )
+            for( auto tv : m_board->Tracks() ) // fixme: move to BOARD class?
+                if( tv->HitTest( pos ) && (tv->GetLayerSet() &
+                                           lset ).any() )
                     return -1;
 
-            for ( auto mod : m_board->Modules() )
-                for ( auto pad : mod->Pads() )
-                if( pad->HitTest(pos) && (pad->GetLayerSet() &
-                       lset ).any() )
-                    return -1;
 
-            std::set<ZONE_CONTAINER* > foundZones;
+
+            for( auto mod : m_board->Modules() )
+                for( auto pad : mod->Pads() )
+                    if( pad->HitTest( pos ) && (pad->GetLayerSet() &
+                                                lset ).any() )
+                        return -1;
+
+
+
+            std::vector<ZONE_CONTAINER*> foundZones;
 
             for( auto zone : m_board->Zones() )
             {
-                if ( zone->HitTestFilledArea ( pos ) )
+                if( zone->HitTestFilledArea( pos ) )
                 {
-                    foundZones.insert ( zone );
+                    foundZones.push_back( zone );
                 }
             }
 
+            printf( "Found zones : %d\n", foundZones.size() );
+
+            std::sort( foundZones.begin(), foundZones.end(),
+                    [] ( const ZONE_CONTAINER* a, const ZONE_CONTAINER* b ) {
+                return a->GetLayer() < b->GetLayer();
+            } );
+
+            // first take the net of the active layer
             for( auto z : foundZones )
             {
-                if ( m_frame->GetActiveLayer() == z->GetLayer() )
+                if( m_frame->GetActiveLayer() == z->GetLayer() )
                     return z->GetNetCode();
             }
 
+            // none? take the topmost visible layer
+            for( auto z : foundZones )
+            {
+                if( m_board->IsLayerVisible( z->GetLayer() ) )
+                    return z->GetNetCode();
+            }
 
             return -1;
         }
 
-        bool PlaceItem( BOARD_ITEM *aItem ) override
+        bool PlaceItem( BOARD_ITEM* aItem ) override
         {
-            auto via = static_cast<VIA*>(aItem);
-            int newNet = findStitchedZoneNet(via);
+            auto    via = static_cast<VIA*>( aItem );
+            int     newNet = findStitchedZoneNet( via );
 
-            if(newNet > 0 )
+            if( newNet > 0 )
                 via->SetNetCode( newNet );
 
             return false;
         }
 
-
         std::unique_ptr<BOARD_ITEM> CreateItem() override
         {
-            auto& ds = m_board->GetDesignSettings();
-            VIA* via = new VIA ( m_board );
+            auto&   ds = m_board->GetDesignSettings();
+            VIA*    via = new VIA( m_board );
 
             via->SetNetCode( 0 );
             via->SetViaType( ds.m_CurrentViaType );
 
             // for microvias, the size and hole will be changed later.
-            via->SetWidth( ds.GetCurrentViaSize());
+            via->SetWidth( ds.GetCurrentViaSize() );
             via->SetDrill( ds.GetCurrentViaDrill() );
 
             // Usual via is from copper to component.
             // layer pair is B_Cu and F_Cu.
             via->SetLayerPair( B_Cu, F_Cu );
 
-            PCB_LAYER_ID first_layer = m_frame->GetActiveLayer();
-            PCB_LAYER_ID last_layer;
+            PCB_LAYER_ID    first_layer = m_frame->GetActiveLayer();
+            PCB_LAYER_ID    last_layer;
 
             // prepare switch to new active layer:
             if( first_layer != m_frame->GetScreen()->m_Route_Layer_TOP )
@@ -1480,39 +1480,41 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 via->SetLayerPair( first_layer, last_layer );
                 break;
 
-            case VIA_MICROVIA:  // from external to the near neighbor inner layer
+            case VIA_MICROVIA:    // from external to the near neighbor inner layer
+            {
+                PCB_LAYER_ID last_inner_layer =
+                    ToLAYER_ID( ( m_board->GetCopperLayerCount() - 2 ) );
+
+                if( first_layer == B_Cu )
+                    last_layer = last_inner_layer;
+                else if( first_layer == F_Cu )
+                    last_layer = In1_Cu;
+                else if( first_layer == last_inner_layer )
+                    last_layer = B_Cu;
+                else if( first_layer == In1_Cu )
+                    last_layer = F_Cu;
+
+                // else error: will be removed later
+                via->SetLayerPair( first_layer, last_layer );
+
+                // Update diameter and hole size, which where set previously
+                // for normal vias
+                NETINFO_ITEM* net = via->GetNet();
+
+                if( net )
                 {
-                    PCB_LAYER_ID last_inner_layer = ToLAYER_ID( ( m_board->GetCopperLayerCount() - 2 ) );
-
-                    if( first_layer == B_Cu )
-                        last_layer = last_inner_layer;
-                    else if( first_layer == F_Cu )
-                        last_layer = In1_Cu;
-                    else if( first_layer == last_inner_layer )
-                        last_layer = B_Cu;
-                    else if( first_layer == In1_Cu )
-                        last_layer = F_Cu;
-                    // else error: will be removed later
-                    via->SetLayerPair( first_layer, last_layer );
-
-                    // Update diameter and hole size, which where set previously
-                    // for normal vias
-                    NETINFO_ITEM* net = via->GetNet();
-                    if( net )
-                    {
-                        via->SetWidth( net->GetMicroViaSize() );
-                        via->SetDrill( net->GetMicroViaDrillSize() );
-                    }
+                    via->SetWidth( net->GetMicroViaSize() );
+                    via->SetDrill( net->GetMicroViaDrillSize() );
                 }
-                break;
+            }
+            break;
 
             default:
                 break;
             }
 
 
-
-            return std::unique_ptr<BOARD_ITEM>(via);
+            return std::unique_ptr<BOARD_ITEM>( via );
         }
     };
 
@@ -1520,27 +1522,30 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
     frame()->SetToolID( ID_PCB_DRAW_VIA_BUTT, wxCURSOR_PENCIL, _( "Add vias" ) );
 
-    doInteractiveItemPlacement( &placer,  _( "Place via" ), IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP | IPO_PROPERTIES );
+    doInteractiveItemPlacement( &placer, _(
+                    "Place via" ),
+            IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP | IPO_PROPERTIES );
 
     frame()->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
     return 0;
 }
 
+
 void DRAWING_TOOL::SetTransitions()
 {
-    Go( &DRAWING_TOOL::DrawLine,         PCB_ACTIONS::drawLine.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawCircle,       PCB_ACTIONS::drawCircle.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawArc,          PCB_ACTIONS::drawArc.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawDimension,    PCB_ACTIONS::drawDimension.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawZone,         PCB_ACTIONS::drawZone.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawZoneKeepout,  PCB_ACTIONS::drawZoneKeepout.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawZoneCutout,   PCB_ACTIONS::drawZoneCutout.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawSimilarZone,  PCB_ACTIONS::drawSimilarZone.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawVia,          PCB_ACTIONS::drawVia.MakeEvent() );
-    Go( &DRAWING_TOOL::PlaceText,        PCB_ACTIONS::placeText.MakeEvent() );
-    Go( &DRAWING_TOOL::PlaceDXF,         PCB_ACTIONS::placeDXF.MakeEvent() );
-    Go( &DRAWING_TOOL::SetAnchor,        PCB_ACTIONS::setAnchor.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawLine, PCB_ACTIONS::drawLine.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawCircle, PCB_ACTIONS::drawCircle.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawArc, PCB_ACTIONS::drawArc.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawDimension, PCB_ACTIONS::drawDimension.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawZone, PCB_ACTIONS::drawZone.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawZoneKeepout, PCB_ACTIONS::drawZoneKeepout.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawZoneCutout, PCB_ACTIONS::drawZoneCutout.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawSimilarZone, PCB_ACTIONS::drawSimilarZone.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawVia, PCB_ACTIONS::drawVia.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceText, PCB_ACTIONS::placeText.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceDXF, PCB_ACTIONS::placeDXF.MakeEvent() );
+    Go( &DRAWING_TOOL::SetAnchor, PCB_ACTIONS::setAnchor.MakeEvent() );
 }
 
 
@@ -1575,5 +1580,6 @@ PCB_LAYER_ID DRAWING_TOOL::getDrawingLayer() const
 
     return layer;
 }
+
 
 const unsigned int DRAWING_TOOL::WIDTH_STEP = 100000;

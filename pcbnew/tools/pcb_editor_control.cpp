@@ -1116,11 +1116,7 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition
 
 int PCB_EDITOR_CONTROL::ShowLocalRatsnest( const TOOL_EVENT& aEvent )
 {
-    printf("ShowLocalRTool!\n");
-
     Activate();
-
-
 
     auto picker = m_toolMgr->GetTool<PICKER_TOOL>();
     assert( picker );
