@@ -43,14 +43,14 @@ using std::string;
 
 
 template<>
-string Convert<string>( wxString aValue )
+string Convert<string>( const wxString& aValue )
 {
     return aValue.ToStdString();
 }
 
 
 template <>
-double Convert<double>( wxString aValue )
+double Convert<double>( const wxString& aValue )
 {
     double value;
 
@@ -63,7 +63,7 @@ double Convert<double>( wxString aValue )
 
 
 template <>
-int Convert<int>( wxString aValue )
+int Convert<int>( const wxString& aValue )
 {
     if( aValue.IsEmpty() )
         throw XML_PARSER_ERROR( "Conversion to int failed. Original value is empty." );
@@ -73,7 +73,7 @@ int Convert<int>( wxString aValue )
 
 
 template <>
-bool Convert<bool>( wxString aValue )
+bool Convert<bool>( const wxString& aValue )
 {
     if( aValue != "yes" && aValue != "no" )
         throw XML_PARSER_ERROR( "Conversion to bool failed. Original value, '" +
@@ -83,10 +83,11 @@ bool Convert<bool>( wxString aValue )
     return aValue == "yes";
 }
 
+
 /// parse an Eagle XML "rot" field.  Unfortunately the DTD seems not to explain
 /// this format very well.  [S][M]R<degrees>.   Examples: "R90", "MR180", "SR180"
 template<>
-EROT Convert<EROT>( wxString aRot )
+EROT Convert<EROT>( const wxString& aRot )
 {
     EROT value;
 
@@ -630,15 +631,15 @@ unsigned long timeStamp( wxXmlNode* aTree )
 }
 
 
-wxPoint kicad_arc_center( wxPoint start, wxPoint end, double angle )
+wxPoint kicad_arc_center( const wxPoint& aStart, const wxPoint& aEnd, double aAngle )
 {
     // Eagle give us start and end.
     // S_ARC wants start to give the center, and end to give the start.
-    double dx = end.x - start.x, dy = end.y - start.y;
-    wxPoint mid = (start + end) / 2;
+    double dx = aEnd.x - aStart.x, dy = aEnd.y - aStart.y;
+    wxPoint mid = ( aStart + aEnd ) / 2;
 
-    double dlen = sqrt( dx*dx + dy*dy );
-    double dist = dlen / ( 2 * tan( DEG2RAD( angle ) / 2 ) );
+    double dlen = sqrt( dx * dx + dy * dy );
+    double dist = dlen / ( 2 * tan( DEG2RAD( aAngle ) / 2 ) );
 
     wxPoint center(
         mid.x + dist * ( dy / dlen ),

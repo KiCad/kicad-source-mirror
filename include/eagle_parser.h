@@ -159,7 +159,7 @@ public:
  *        type T is unknown.
  */
 template<typename T>
-T Convert( wxString aValue )
+T Convert( const wxString& aValue )
 {
     throw XML_PARSER_ERROR( "Conversion failed. Unknown type." );
 }
@@ -196,7 +196,7 @@ public:
      *               aData is empty, the attribute is understood as unavailable; otherwise, the
      *               conversion to T is tried.
      */
-    OPTIONAL_XML_ATTRIBUTE( wxString aData )
+    OPTIONAL_XML_ATTRIBUTE( const wxString& aData )
     {
         m_isAvailable = !aData.IsEmpty();
 
@@ -229,7 +229,7 @@ public:
      * @param aData is a wxString that should be converted to T. If the string is empty, the
      *              attribute is set to unavailable.
      */
-    OPTIONAL_XML_ATTRIBUTE<T>& operator =( wxString aData )
+    OPTIONAL_XML_ATTRIBUTE<T>& operator =( const wxString& aData )
     {
         m_isAvailable = !aData.IsEmpty();
 
@@ -268,7 +268,7 @@ public:
      * tries to convert a string to the base type.
      * @param aString is the string that will be converted to the base type.
      */
-    void Set( wxString aString )
+    void Set( const wxString& aString )
     {
         m_data = Convert<T>( aString );
     }
@@ -685,6 +685,6 @@ string makeKey( const string& aFirst, const string& aSecond );
 unsigned long timeStamp( wxXmlNode* aTree );
 
 /// Convert an Eagle curve end to a KiCad center for S_ARC
-wxPoint kicad_arc_center( wxPoint start, wxPoint end, double angle );
+wxPoint kicad_arc_center( const wxPoint& aStart, const wxPoint& aEnd, double aAngle );
 
 #endif // _EAGLE_PARSER_H_
