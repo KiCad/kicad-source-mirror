@@ -94,7 +94,7 @@ static bool Join( wxPoint* aIntersectPoint, wxPoint a0, wxPoint a1, wxPoint b0, 
  * "Project" finds the projection of a grid point on a track. This is the point
  * from where we want to draw new orthogonal tracks when starting on a track.
  */
-bool Project( wxPoint* aNearPos, wxPoint on_grid, const TRACK* track )
+bool FindBestGridPointOnTrack( wxPoint* aNearPos, wxPoint on_grid, const TRACK* track )
 {
     if( track->GetStart ()== track->GetEnd() )
         return false;
@@ -219,7 +219,7 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
                 return false;
             }
 
-            return Project( curpos, on_grid, track );
+            return FindBestGridPointOnTrack( curpos, on_grid, track );
         }
 
         /*

@@ -847,7 +847,7 @@ static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     {
         // calculate the new position as allowed
         wxPoint StartPoint = static_cast<wxPoint>( zone->GetCornerPosition( icorner - 1 ) );
-        CalculateSegmentEndPoint( c_pos, StartPoint.x, StartPoint.y, &c_pos.x, &c_pos.y );
+        c_pos = CalculateSegmentEndPoint( c_pos, StartPoint );
     }
 
     zone->SetCornerPosition( icorner, c_pos );

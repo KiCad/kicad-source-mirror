@@ -650,7 +650,7 @@ static void PushTrack( EDA_DRAW_PANEL* panel )
     n.y = KiROUND( f * n.y );
 
     wxPoint hp = track->GetEnd();
-    Project( &hp, cursor, other );
+    FindBestGridPointOnTrack( &hp, cursor, other );
     track->SetEnd( hp + n );
 }
 
@@ -662,7 +662,7 @@ inline void DrawViaCirclesWhenEditingNewTrack( EDA_RECT* aPanelClipBox,
                                                int aViaRadiusWithClearence,
                                                COLOR4D aColor)
 {
-    //Current viasize clearence circle
+    //Current viasize clearance circle
     GRCircle( aPanelClipBox, aDC, aPos.x, aPos.y, aViaRadiusWithClearence, aColor );
     //Current viasize circle
     GRCircle( aPanelClipBox, aDC, aPos.x, aPos.y, aViaRadius, aColor );
@@ -754,11 +754,8 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
              * horizontal, vertical or 45 degrees.
              */
             wxPoint hp = g_CurrentTrackSegment->GetEnd();
-            CalculateSegmentEndPoint( frame->GetCrossHairPosition(),
-                                      g_CurrentTrackSegment->GetStart().x,
-                                      g_CurrentTrackSegment->GetStart().y,
-                                      &hp.x,
-                                      &hp.y );
+            hp = CalculateSegmentEndPoint( frame->GetCrossHairPosition(),
+                                           g_CurrentTrackSegment->GetStart() );
             g_CurrentTrackSegment->SetEnd(hp);
         }
     }
@@ -833,19 +830,18 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
 }
 
 
-/* Determine the coordinate to advanced the the current segment
- * in 0, 90, or 45 degrees, depending on position of origin and \a aPosition.
- */
-void CalculateSegmentEndPoint( const wxPoint& aPosition, int ox, int oy, int* fx, int* fy )
+wxPoint CalculateSegmentEndPoint( const wxPoint& aPosition, const wxPoint& aOrigin )
 {
-    int deltax, deltay, angle;
+    // Determine end point for a segment direction 0, 90, or 45 degrees
+    // depending on it's position from the origin \a aOrigin and \a aPosition.
+    wxPoint endPoint;
 
-    deltax = aPosition.x - ox;
-    deltay = aPosition.y - oy;
+    int deltax = aPosition.x - aOrigin.x;
+    int deltay = aPosition.y - aOrigin.y;
 
     deltax = abs( deltax );
     deltay = abs( deltay );
-    angle  = 45;
+    int angle  = 45;
 
     if( deltax >= deltay )
     {
@@ -867,8 +863,8 @@ void CalculateSegmentEndPoint( const wxPoint& aPosition, int ox, int oy, int* fx
     switch( angle )
     {
     case 0:
-        *fx = aPosition.x;
-        *fy = oy;
+        endPoint.x = aPosition.x;
+        endPoint.y = aOrigin.y;
         break;
 
     case 45:
@@ -876,21 +872,23 @@ void CalculateSegmentEndPoint( const wxPoint& aPosition, int ox, int oy, int* fx
         deltay = deltax;
 
         // Recalculate the signs for deltax and deltaY.
-        if( ( aPosition.x - ox ) < 0 )
+        if( ( aPosition.x - aOrigin.x ) < 0 )
             deltax = -deltax;
 
-        if( ( aPosition.y - oy ) < 0 )
+        if( ( aPosition.y - aOrigin.y ) < 0 )
             deltay = -deltay;
 
-        *fx = ox + deltax;
-        *fy = oy + deltay;
+        endPoint.x = aOrigin.x + deltax;
+        endPoint.y = aOrigin.y + deltay;
         break;
 
     case 90:
-        *fx = ox;
-        *fy = aPosition.y;
+        endPoint.x = aOrigin.x;
+        endPoint.y = aPosition.y;
         break;
     }
+
+    return endPoint;
 }
 
 

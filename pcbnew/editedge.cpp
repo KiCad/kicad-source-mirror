@@ -351,9 +351,8 @@ static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     {
         wxPoint pt;
 
-        CalculateSegmentEndPoint( aPanel->GetParent()->GetCrossHairPosition(),
-                                  Segment->GetStart().x, Segment->GetStart().y,
-                                  &pt.x, &pt.y );
+        pt = CalculateSegmentEndPoint( aPanel->GetParent()->GetCrossHairPosition(),
+                                       Segment->GetStart() );
         Segment->SetEnd( pt );
     }
     else    // here the angle is arbitrary

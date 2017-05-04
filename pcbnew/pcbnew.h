@@ -62,7 +62,6 @@ enum ENDPOINT_T {
 #define TEXTS_MIN_SIZE  Mils2iu( 5 )        ///< Minimum text size in Pcbnew units value (5 mils)
 #define TEXTS_MAX_SIZE  Mils2iu( 1000 )     ///< Maximum text size in Pcbnew units value (1 inch) )
 #define TEXTS_MAX_WIDTH Mils2iu( 500 )      ///< Maximum text width in Pcbnew units value (0.5 inches)
-#define MIN_DRAW_WIDTH  1                   ///< Minimum trace drawing width in pixels.
 
 
 // Flag to force the SKETCH mode to display items (.m_Flags member)

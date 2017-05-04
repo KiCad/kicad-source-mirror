@@ -493,7 +493,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         switch( GetDrillShape() )
         {
         case PAD_DRILL_SHAPE_CIRCLE:
-            if( aDC->LogicalToDeviceXRel( hole ) > MIN_DRAW_WIDTH )
+            if( aDC->LogicalToDeviceXRel( hole ) > 1 )  // hole is drawn if hole > 1pixel
                 GRFilledCircle( aClipBox, aDC, holepos.x, holepos.y, hole, 0,
                                 hole_color, hole_color );
             break;

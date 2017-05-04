@@ -665,11 +665,10 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
     GRSetDrawMode( aDC, aDrawMode );
 
-    int l_trace = m_Width / 2;
-
-    if( aDC->LogicalToDeviceXRel( l_trace ) <= MIN_DRAW_WIDTH )
+    // Draw track as line if width <= 1pixel:
+    if( aDC->LogicalToDeviceXRel( m_Width ) <= 1 )
     {
-        GRLine( panel->GetClipBox(), aDC, m_Start + aOffset, m_End + aOffset, 0, color );
+        GRLine( panel->GetClipBox(), aDC, m_Start + aOffset, m_End + aOffset, m_Width, color );
         return;
     }
 
@@ -733,11 +732,10 @@ void SEGZONE::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
     GRSetDrawMode( aDC, aDrawMode );
 
-    int l_trace = m_Width / 2;
-
-    if( aDC->LogicalToDeviceXRel( l_trace ) <= MIN_DRAW_WIDTH )
+    // Draw track as line if width <= 1pixel:
+    if( aDC->LogicalToDeviceXRel( m_Width ) <= 1 )
     {
-        GRLine( panel->GetClipBox(), aDC, m_Start + aOffset, m_End + aOffset, 0, color );
+        GRLine( panel->GetClipBox(), aDC, m_Start + aOffset, m_End + aOffset, m_Width, color );
         return;
     }
 
@@ -868,7 +866,8 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
         if( (aDrawMode & GR_XOR) == 0)
             GRSetDrawMode( aDC, GR_COPY );
 
-        if( aDC->LogicalToDeviceXRel( drill_radius ) > MIN_DRAW_WIDTH )  // Draw hole if large enough.
+        // Draw hole if the radius is > 1pixel.
+        if( aDC->LogicalToDeviceXRel( drill_radius ) > 1 )
             GRFilledCircle( panel->GetClipBox(), aDC, m_Start.x + aOffset.x,
                             m_Start.y + aOffset.y, drill_radius, 0, color, color );
 

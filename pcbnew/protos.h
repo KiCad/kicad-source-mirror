@@ -65,16 +65,16 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
                                    bool aErase );
 
 /**
- * Determine coordinate for a segment direction of 0, 90, or 45 degrees
- * depending on it's position from the origin (ox, oy) and \a aPosiition.
+ * Determine end point for a segment direction 0, 90, or 45 degrees
+ * depending on it's position from the origin \a aOrigin and \a aPosition.
  */
-void CalculateSegmentEndPoint( const wxPoint& aPosition, int ox, int oy, int* fx, int* fy );
+wxPoint CalculateSegmentEndPoint( const wxPoint& aPosition, const wxPoint& aOrigin );
 
 /**
  * Finds the projection of a grid point on a track. This is the point
  * from where we want to draw new orthogonal tracks when starting on a track.
  */
-bool Project( wxPoint* res, wxPoint on_grid, const TRACK* track );
+bool FindBestGridPointOnTrack( wxPoint* res, wxPoint on_grid, const TRACK* track );
 TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, LAYER_NUM aLayer, const wxPoint& aRef );
 
 
