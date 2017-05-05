@@ -29,6 +29,10 @@
 
 using namespace KIGFX::PREVIEW;
 
+// Selection area colours
+const COLOR4D SELECT_COLOR_L2R( 0.3, 0.3, 0.5, 0.3 );  // Slight blue
+const COLOR4D SELECT_COLOR_R2L( 0.3, 0.5, 0.3, 0.3 );  // Slight green
+
 
 SELECTION_AREA::SELECTION_AREA()
 {
@@ -50,6 +54,9 @@ const BOX2I SELECTION_AREA::ViewBBox() const
 
 void SELECTION_AREA::drawPreviewShape( KIGFX::GAL& aGal ) const
 {
+    // Set the fill color based on the direction of selection
+    aGal.SetFillColor( ( m_origin.x <= m_end.x ) ? SELECT_COLOR_L2R : SELECT_COLOR_R2L );
+
     aGal.DrawRectangle( m_origin, m_end );
 }
 
