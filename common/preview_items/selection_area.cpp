@@ -30,8 +30,8 @@
 using namespace KIGFX::PREVIEW;
 
 // Selection area colours
-const COLOR4D SELECT_COLOR_L2R( 0.3, 0.3, 0.5, 0.3 );  // Slight blue
-const COLOR4D SELECT_COLOR_R2L( 0.3, 0.5, 0.3, 0.3 );  // Slight green
+const COLOR4D SELECT_COLOR_L2R( 0.3, 0.3, 0.6, 0.3 );  // Slight blue
+const COLOR4D SELECT_COLOR_R2L( 0.3, 0.6, 0.3, 0.3 );  // Slight green
 
 
 SELECTION_AREA::SELECTION_AREA()

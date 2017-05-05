@@ -323,6 +323,9 @@ private:
     /// Flag saying if items should be added to the current selection or rather replace it.
     bool m_additive;
 
+    /// Flag saying if items should be removed from the current selection
+    bool m_subtractive;
+
     /// Flag saying if multiple selection mode is active.
     bool m_multiple;
 

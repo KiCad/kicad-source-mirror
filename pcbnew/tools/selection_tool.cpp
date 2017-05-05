@@ -230,6 +230,10 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // become the new selection (discarding previously selected items)
         m_additive = evt->Modifier( MD_SHIFT );
 
+        // Should selected items be REMOVED from the current selection?
+        // This will be ignored if the SHIFT modifier is pressed
+        m_subtractive = !m_additive && evt->Modifier( MD_CTRL );
+
         // single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {
@@ -269,7 +273,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         else if( evt->IsDrag( BUT_LEFT ) )
         {
-            if( m_additive )
+            if( m_additive || m_subtractive )
             {
                 selectMultiple();
             }
@@ -483,8 +487,10 @@ bool SELECTION_TOOL::selectMultiple()
 
         if( evt->IsDrag( BUT_LEFT ) )
         {
-            if( !m_additive )
+            if( !m_additive && !m_subtractive )
+            {
                 clearSelection();
+            }
 
             // Start drawing a selection box
             area.SetOrigin( evt->DragOrigin() );
@@ -529,14 +535,20 @@ bool SELECTION_TOOL::selectMultiple()
                 {
                     if( selectionBox.Contains( item->ViewBBox() ) )
                     {
-                        select( item );
+                        if( m_subtractive )
+                            unselect( item );
+                        else
+                            select( item );
                     }
                 }
                 else
                 {
                     if( item->HitTest( selectionRect, false ) )
                     {
-                        select( item );
+                        if( m_subtractive )
+                            unselect( item );
+                        else
+                            select( item );
                     }
 
                 }
