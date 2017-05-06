@@ -285,7 +285,7 @@ bool EDA_TEXT::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy
     if( aContains )
         return rect.Contains( GetTextBox( -1 ) );
 
-    return rect.Intersects( GetTextBox( -1 ) );
+    return rect.Intersects( GetTextBox( -1 ), GetTextAngle() );
 }
 
 
