@@ -166,7 +166,8 @@ public:
 
 SELECTION_TOOL::SELECTION_TOOL() :
         PCB_TOOL( "pcbnew.InteractiveSelection" ),
-        m_frame( NULL ), m_additive( false ), m_multiple( false ),
+        m_frame( NULL ), m_additive( false ), m_subtractive( false ),
+        m_multiple( false ),
         m_locked( true ), m_menu( *this ),
         m_priv( std::make_unique<PRIV>() )
 {
@@ -525,6 +526,9 @@ bool SELECTION_TOOL::selectMultiple()
             for( it = selectedItems.begin(), it_end = selectedItems.end(); it != it_end; ++it )
             {
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
+
+                if( !item || !selectable( item ) )
+                    continue;
 
                 /* Selection mode depends on direction of drag-selection:
                  * Left > Right : Select objects that are fully enclosed by selection
@@ -1329,6 +1333,14 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         break;
 
     case PCB_MODULE_T:
+
+        // In the module editor, we do not want to select the module itself
+        // rather, the module sub-components should be selected individually
+        if( m_editModules )
+        {
+            return false;
+        }
+
         if( aItem->IsOnLayer( F_Cu ) && board()->IsElementVisible( LAYER_MOD_FR ) )
             return !m_editModules;
 
