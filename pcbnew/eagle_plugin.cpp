@@ -686,36 +686,40 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
         else if( grName == "dimension" )
         {
             EDIMENSION d( gr );
+            PCB_LAYER_ID layer = kicad_layer( d.layer );
 
-            DIMENSION* dimension = new DIMENSION( m_board );
-            m_board->Add( dimension, ADD_APPEND );
+            if( layer != UNDEFINED_LAYER )
+            {
+                DIMENSION* dimension = new DIMENSION( m_board );
+                m_board->Add( dimension, ADD_APPEND );
 
-            dimension->SetLayer( kicad_layer( d.layer ) );
-            // The origin and end are assumed to always be in this order from eagle
-            dimension->SetOrigin( wxPoint( kicad_x( d.x1 ), kicad_y( d.y1 ) ) );
-            dimension->SetEnd( wxPoint( kicad_x( d.x2 ), kicad_y( d.y2 ) ) );
-            dimension->Text().SetTextSize( m_board->GetDesignSettings().m_PcbTextSize );
+                dimension->SetLayer( layer );
+                // The origin and end are assumed to always be in this order from eagle
+                dimension->SetOrigin( wxPoint( kicad_x( d.x1 ), kicad_y( d.y1 ) ) );
+                dimension->SetEnd( wxPoint( kicad_x( d.x2 ), kicad_y( d.y2 ) ) );
+                dimension->Text().SetTextSize( m_board->GetDesignSettings().m_PcbTextSize );
 
-            int width = m_board->GetDesignSettings().m_PcbTextWidth;
-            int maxThickness = Clamp_Text_PenSize( width, dimension->Text().GetTextSize() );
+                int width = m_board->GetDesignSettings().m_PcbTextWidth;
+                int maxThickness = Clamp_Text_PenSize( width, dimension->Text().GetTextSize() );
 
-            if( width > maxThickness )
-                width = maxThickness;
+                if( width > maxThickness )
+                    width = maxThickness;
 
-            dimension->Text().SetThickness( width );
-            dimension->SetWidth( width );
+                dimension->Text().SetThickness( width );
+                dimension->SetWidth( width );
 
-            // check which axis the dimension runs in
-            // because the "height" of the dimension is perpendicular to that axis
-            // Note the check is just if two axes are close enough to each other
-            // Eagle appears to have some rounding errors
-            if( fabs( d.x1 - d.x2 ) < 0.05 )
-                dimension->SetHeight( kicad_x( d.x1 - d.x3 ) );
-            else
-                dimension->SetHeight( kicad_y( d.y3 - d.y1 ) );
+                // check which axis the dimension runs in
+                // because the "height" of the dimension is perpendicular to that axis
+                // Note the check is just if two axes are close enough to each other
+                // Eagle appears to have some rounding errors
+                if( fabs( d.x1 - d.x2 ) < 0.05 )
+                    dimension->SetHeight( kicad_x( d.x1 - d.x3 ) );
+                else
+                    dimension->SetHeight( kicad_y( d.y3 - d.y1 ) );
 
-            dimension->AdjustDimensionDetails();
-         }
+                dimension->AdjustDimensionDetails();
+            }
+        }
 
         // Get next graphic
         gr = gr->GetNext();
@@ -1928,8 +1932,7 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
             case EAGLE_LAYER::USERLAYER2:    kiLayer = Eco2_User;    break;
         default:
             // some layers do not map to KiCad
-            // DBG( printf( "unsupported eagle layer: %d\n", aEagleLayer );)
-            //
+            wxASSERT_MSG( false, wxString::Format( "Unsupported Eagle layer %d", aEagleLayer ) );
             kiLayer = UNDEFINED_LAYER;      break;
         }
     }
