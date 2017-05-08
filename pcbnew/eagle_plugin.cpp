@@ -1882,82 +1882,6 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
 PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
 {
-    /* will assume this is a valid mapping for all eagle boards until I get paid more:
-
-    <layers>
-    <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
-    <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
-    <layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
-    <layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
-    <layer number="5" name="Route5" color="4" fill="4" visible="no" active="no"/>
-    <layer number="6" name="Route6" color="1" fill="8" visible="no" active="no"/>
-    <layer number="7" name="Route7" color="4" fill="8" visible="no" active="no"/>
-    <layer number="8" name="Route8" color="1" fill="2" visible="no" active="no"/>
-    <layer number="9" name="Route9" color="4" fill="2" visible="no" active="no"/>
-    <layer number="10" name="Route10" color="1" fill="7" visible="no" active="no"/>
-    <layer number="11" name="Route11" color="4" fill="7" visible="no" active="no"/>
-    <layer number="12" name="Route12" color="1" fill="5" visible="no" active="no"/>
-    <layer number="13" name="Route13" color="4" fill="5" visible="no" active="no"/>
-    <layer number="14" name="Route14" color="1" fill="6" visible="no" active="no"/>
-    <layer number="15" name="Route15" color="4" fill="6" visible="no" active="no"/>
-    <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
-    <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
-    <layer number="18" name="Vias" color="14" fill="1" visible="yes" active="yes"/>
-    <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
-    <layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
-    <layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
-    <layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
-    <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
-    <layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
-    <layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
-    <layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
-    <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
-    <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
-    <layer number="29" name="tStop" color="2" fill="3" visible="no" active="yes"/>
-    <layer number="30" name="bStop" color="5" fill="6" visible="no" active="yes"/>
-    <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
-    <layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
-    <layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
-    <layer number="34" name="bFinish" color="6" fill="6" visible="no" active="yes"/>
-    <layer number="35" name="tGlue" color="7" fill="4" visible="no" active="yes"/>
-    <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
-    <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
-    <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
-    <layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="yes"/>
-    <layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
-    <layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="yes"/>
-    <layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
-    <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
-    <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
-    <layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
-    <layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
-    <layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
-    <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
-    <layer number="49" name="ReferenceLC" color="13" fill="1" visible="yes" active="yes"/>
-    <layer number="50" name="ReferenceLS" color="12" fill="1" visible="yes" active="yes"/>
-    <layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
-    <layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
-
-    * These layers are used only in eagle schematic.
-    * They should not be found in board files.
-    * They are listed for info only.
-    <layer number="91" name="Nets" color="2" fill="1" visible="no" active="no"/>
-    <layer number="92" name="Busses" color="1" fill="1" visible="no" active="no"/>
-    <layer number="93" name="Pins" color="2" fill="1" visible="no" active="no"/>
-    <layer number="94" name="Symbols" color="4" fill="1" visible="no" active="no"/>
-    <layer number="95" name="Names" color="7" fill="1" visible="no" active="no"/>
-    <layer number="96" name="Values" color="7" fill="1" visible="no" active="no"/>
-    <layer number="97" name="Info" color="7" fill="1" visible="no" active="no"/>
-    <layer number="98" name="Guide" color="6" fill="1" visible="no" active="no"/>
-
-    * These layers are user layers
-    <layer number="160" name="???" color="7" fill="1" visible="yes" active="yes"/>
-    <layer number="161" name="???" color="7" fill="1" visible="yes" active="yes"/>
-
-    </layers>
-
-    */
-
     int kiLayer;
 
     // eagle copper layer:
@@ -1971,39 +1895,41 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         // translate non-copper eagle layer to pcbnew layer
         switch( aEagleLayer )
         {
-        case 20:    kiLayer = Edge_Cuts;    break;  // eagle says "Dimension" layer, but it's for board perimeter
-        case 21:    kiLayer = F_SilkS;      break;
-        case 22:    kiLayer = B_SilkS;      break;
-        case 25:    kiLayer = F_SilkS;      break;
-        case 26:    kiLayer = B_SilkS;      break;
-        case 27:    kiLayer = F_SilkS;      break;
-        case 28:    kiLayer = B_SilkS;      break;
-        case 29:    kiLayer = F_Mask;       break;
-        case 30:    kiLayer = B_Mask;       break;
-        case 31:    kiLayer = F_Paste;      break;
-        case 32:    kiLayer = B_Paste;      break;
-        case 33:    kiLayer = F_Mask;       break;
-        case 34:    kiLayer = B_Mask;       break;
-        case 35:    kiLayer = F_Adhes;      break;
-        case 36:    kiLayer = B_Adhes;      break;
-        case 48:    kiLayer = Cmts_User;    break;
-        case 49:    kiLayer = Cmts_User;    break;
-        case 50:    kiLayer = Cmts_User;    break;
+            // Eagle says "Dimension" layer, but it's for board perimeter
+            case EAGLE_LAYER::DIMENSION:     kiLayer = Edge_Cuts;    break;
+            case EAGLE_LAYER::TPLACE:        kiLayer = F_SilkS;      break;
+            case EAGLE_LAYER::BPLACE:        kiLayer = B_SilkS;      break;
+            case EAGLE_LAYER::TNAMES:        kiLayer = F_SilkS;      break;
+            case EAGLE_LAYER::BNAMES:        kiLayer = B_SilkS;      break;
+            case EAGLE_LAYER::TVALUES:       kiLayer = F_SilkS;      break;
+            case EAGLE_LAYER::BVALUES:       kiLayer = B_SilkS;      break;
+            case EAGLE_LAYER::TSTOP:         kiLayer = F_Mask;       break;
+            case EAGLE_LAYER::BSTOP:         kiLayer = B_Mask;       break;
+            case EAGLE_LAYER::TCREAM:        kiLayer = F_Paste;      break;
+            case EAGLE_LAYER::BCREAM:        kiLayer = B_Paste;      break;
+            case EAGLE_LAYER::TFINISH:       kiLayer = F_Mask;       break;
+            case EAGLE_LAYER::BFINISH:       kiLayer = B_Mask;       break;
+            case EAGLE_LAYER::TGLUE:         kiLayer = F_Adhes;      break;
+            case EAGLE_LAYER::BGLUE:         kiLayer = B_Adhes;      break;
+            case EAGLE_LAYER::DOCUMENT:      kiLayer = Cmts_User;    break;
+            case EAGLE_LAYER::REFERENCELC:   kiLayer = Cmts_User;    break;
+            case EAGLE_LAYER::REFERENCELS:   kiLayer = Cmts_User;    break;
 
         // Packages show the future chip pins on SMD parts using layer 51.
         // This is an area slightly smaller than the PAD/SMD copper area.
         // Carry those visual aids into the MODULE on the fabrication layer,
         // not silkscreen. This is perhaps not perfect, but there is not a lot
         // of other suitable paired layers
-        case 51:    kiLayer = F_Fab;        break;
-        case 52:    kiLayer = B_Fab;        break;
+            case EAGLE_LAYER::TDOCU:         kiLayer = F_Fab;        break;
+            case EAGLE_LAYER::BDOCU:         kiLayer = B_Fab;        break;
 
         // thes layers are defined as user layers. put them on ECO layers
-        case 160:   kiLayer = Eco1_User;    break;
-        case 161:   kiLayer = Eco2_User;    break;
+            case EAGLE_LAYER::USERLAYER1:    kiLayer = Eco1_User;    break;
+            case EAGLE_LAYER::USERLAYER2:    kiLayer = Eco2_User;    break;
         default:
             // some layers do not map to KiCad
             // DBG( printf( "unsupported eagle layer: %d\n", aEagleLayer );)
+            //
             kiLayer = UNDEFINED_LAYER;      break;
         }
     }

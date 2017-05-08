@@ -668,6 +668,76 @@ struct ELAYER
     ELAYER( wxXmlNode* aLayer );
 };
 
+
+struct EAGLE_LAYER
+{
+    enum
+    {
+        TOP         = 1,
+        ROUTE2      = 2,
+        ROUTE3      = 3,
+        ROUTE4      = 4,
+        ROUTE5      = 5,
+        ROUTE6      = 6,
+        ROUTE7      = 7,
+        ROUTE8      = 8,
+        ROUTE9      = 9,
+        ROUTE10     = 10,
+        ROUTE11     = 11,
+        ROUTE12     = 12,
+        ROUTE13     = 13,
+        ROUTE14     = 14,
+        ROUTE15     = 15,
+        BOTTOM      = 16,
+        PADS        = 17,
+        VIAS        = 18,
+        UNROUTED    = 19,
+        DIMENSION   = 20,
+        TPLACE      = 21,
+        BPLACE      = 22,
+        TORIGINS    = 23,
+        BORIGINS    = 24,
+        TNAMES      = 25,
+        BNAMES      = 26,
+        TVALUES     = 27,
+        BVALUES     = 28,
+        TSTOP       = 29,
+        BSTOP       = 30,
+        TCREAM      = 31,
+        BCREAM      = 32,
+        TFINISH     = 33,
+        BFINISH     = 34,
+        TGLUE       = 35,
+        BGLUE       = 36,
+        TTEST       = 37,
+        BTEST       = 38,
+        TKEEPOUT    = 39,
+        BKEEPOUT    = 40,
+        TRESTRICT   = 41,
+        BRESTRICT   = 42,
+        VRESTRICT   = 43,
+        DRILLS      = 44,
+        HOLES       = 45,
+        MILLING     = 46,
+        MEASURES    = 47,
+        DOCUMENT    = 48,
+        REFERENCELC = 49,
+        REFERENCELS = 50,
+        TDOCU       = 51,
+        BDOCU       = 52,
+        NETS        = 91,
+        BUSSES      = 92,
+        PINS        = 93,
+        SYMBOLS     = 94,
+        NAMES       = 95,
+        VALUES      = 96,
+        INFO        = 97,
+        GUIDE       = 98,
+        USERLAYER1  = 160,
+        USERLAYER2  = 161
+    };
+};
+
 /**
  * Function MapChildren
  * provides an easy access to the children of an XML node via their names.
