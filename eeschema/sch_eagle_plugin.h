@@ -24,6 +24,7 @@
 
 #include <wx/xml/xml.h>
 
+#include <sch_line.h>
 #include <sch_io_mgr.h>
 
 // class KIWAY;
@@ -47,7 +48,7 @@
 
 /**
  * Class SCH_EAGLE_PLUGIN
- * is a #SCH_PLUGIN derivation for loading Autodesk Eagle schematic files.
+ * is a #SCH_PLUGIN derivation for loading 6.x+ Eagle schematic files.
  *
  *
  * As with all SCH_PLUGINs there is no UI dependencies i.e. windowing
@@ -104,9 +105,16 @@ public:
 
 
 private:
-    void loadDrawing( wxXmlNode* node );
-    void loadSchematic( wxXmlNode* node );
-    void loadSheet( wxXmlNode* node );
+    void loadDrawing( wxXmlNode* aDrawingNode );
+    void loadSchematic( wxXmlNode* aSchematicNode );
+    void loadSheet( wxXmlNode* aSheetNode );
+    void loadSegments( wxXmlNode* aSegmentsNode );
+    SCH_LINE* loadWire( wxXmlNode* aWireNode );
+    void loadInstance( wxXmlNode* aInstanceNode );
+    void loadModuleinst( wxXmlNode* aModuleinstNode );
+    void loadLibrary( wxXmlNode* aLibraryNode );
+    LIB_PART* loadSymbol( wxXmlNode* aSymbolNode );
+
 
     SCH_SHEET* m_rootSheet; ///< The root sheet of the schematic being loaded..
     wxString m_version; ///< Eagle file version.
