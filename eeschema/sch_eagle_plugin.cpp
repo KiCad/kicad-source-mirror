@@ -2,7 +2,6 @@
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
 * Copyright (C) 2017 CERN
-*
 * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
 *
 * This program is free software; you can redistribute it and/or
@@ -33,24 +32,22 @@
 
 using namespace std;
 
-typedef unordered_map< string,  wxXmlNode* > NodeMap;
-
-NodeMap mapChildren( wxXmlNode* currentNode )
+NODE_MAP mapChildren( wxXmlNode* aCurrentNode )
 {
     // Map node_name -> node_pointer
-    NodeMap nodesMap;
+    NODE_MAP nodesMap;
 
     // Loop through all children mapping them in nodesMap
-    currentNode = currentNode->GetChildren();
-    while( currentNode )
+    aCurrentNode = aCurrentNode->GetChildren();
+    while( aCurrentNode )
     {
         // Create a new pair in the map
         //      key: current node name
         //      value: current node pointer
-        nodesMap[currentNode->GetName().ToStdString()] = currentNode;
+        nodesMap[aCurrentNode->GetName().ToStdString()] = aCurrentNode;
 
         // Get next child
-        currentNode = currentNode->GetNext();
+        aCurrentNode = aCurrentNode->GetNext();
     }
 
     return nodesMap;
@@ -74,8 +71,6 @@ void kicadLayer( int aEagleLayer )
      *     <layer number="97" name="Info" color="7" fill="1" visible="yes" active="yes"/>
      *     <layer number="98" name="Guide" color="6" fill="1" visible="yes" active="yes"/>
      * </layers>
-     *
-     *
      */
 
     switch( aEagleLayer )
@@ -116,7 +111,6 @@ const wxString SCH_EAGLE_PLUGIN::GetFileExtension() const
 }
 
 
-
 int SCH_EAGLE_PLUGIN::GetModifyHash() const
 {
     return 0;
@@ -125,7 +119,6 @@ int SCH_EAGLE_PLUGIN::GetModifyHash() const
 
 void SCH_EAGLE_PLUGIN::SaveLibrary( const wxString& aFileName, const PROPERTIES* aProperties )
 {
-
 }
 
 
@@ -163,7 +156,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
     m_version = currentNode->GetAttribute( "version", "0.0" );
 
     // Map all children into a readable dictionary
-    NodeMap children = mapChildren( currentNode );
+    NODE_MAP children = mapChildren( currentNode );
 
     // TODO: handle compatibility nodes
     // wxXmlNode* compatibility = children["compatibility"];
@@ -179,7 +172,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
 void SCH_EAGLE_PLUGIN::loadDrawing( wxXmlNode* aDrawingNode )
 {
     // Map all children into a readable dictionary
-    NodeMap drawingChildren = mapChildren( aDrawingNode );
+    NODE_MAP drawingChildren = mapChildren( aDrawingNode );
 
     // Board nodes should not appear in .sch files
     // wxXmlNode* board = drawingChildren["board"]
@@ -204,10 +197,10 @@ void SCH_EAGLE_PLUGIN::loadDrawing( wxXmlNode* aDrawingNode )
 void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 {
     // Map all children into a readable dictionary
-    NodeMap schematicChildren = mapChildren( aSchematicNode );
+    NODE_MAP schematicChildren = mapChildren( aSchematicNode );
 
     // TODO : handle classes nodes
-    // wxXmlNode* classes = schematicChildren["classes"];
+    //wxXmlNode* classes = schematicChildren["classes"];
 
     // TODO : handle description nodes
     // wxXmlNode* description = schematicChildren["description"];
@@ -230,6 +223,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
     // Loop through all the libraries
     wxXmlNode* libraryNode = schematicChildren["libraries"]->GetChildren();
+
     while( libraryNode )
     {
         loadLibrary( libraryNode );
@@ -238,6 +232,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
     // Loop through all the sheets
     wxXmlNode* sheetNode = schematicChildren["sheets"]->GetChildren();
+
     while( sheetNode )
     {
         loadSheet( sheetNode );
@@ -249,13 +244,14 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
 {
     // Map all children into a readable dictionary
-    NodeMap sheetChildren = mapChildren( aSheetNode );
+    NODE_MAP sheetChildren = mapChildren( aSheetNode );
 
     // Loop through all busses
     // From the DTD: "Buses receive names which determine which signals they include.
     // A bus is a drawing object. It does not create any electrical connections.
     // These are always created by means of the nets and their names."
     wxXmlNode* busNode = sheetChildren["busses"]->GetChildren();
+
     while( busNode )
     {
         // Get the bus name
@@ -271,6 +267,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
     // Loop through all nets
     // From the DTD: "Net is an electrical connection in a schematic."
     wxXmlNode* netNode = sheetChildren["nets"]->GetChildren();
+
     while( netNode )
     {
         // Get the net name and class
@@ -286,6 +283,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
 
     // Loop through all instances
     wxXmlNode* instanceNode = sheetChildren["instances"]->GetChildren();
+
     while( instanceNode )
     {
         loadInstance( instanceNode );
@@ -294,6 +292,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
 
     // Loop through all moduleinsts
     wxXmlNode* moduleinstNode = sheetChildren["moduleinsts"]->GetChildren();
+
     while( moduleinstNode )
     {
         loadModuleinst( moduleinstNode );
@@ -431,13 +430,13 @@ void SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
     wxString libName = aLibraryNode->GetAttribute( "name" );
 
     // Query all children and map them into a readable dictionary
-    NodeMap libraryChildren = mapChildren( aLibraryNode );
+    NODE_MAP libraryChildren = mapChildren( aLibraryNode );
 
     // TODO: Do something with the description
     // wxXmlNode* libraryChildren["description"];
 
     // Loop through the devicesets and load each of them
-    // wxXmlNode* devicesetNode = libraryChildren["devicesets"].GetChildren();
+    // wxXmlNode* devicesetNode = libraryChildren["devicesets"]->GetChildren();
     // while( devicesetNode )
     // {
     //     loadDeviceset( devicesetNode );
@@ -445,7 +444,7 @@ void SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
     // }
 
     // Loop through the packages and load each of them
-    // wxXmlNode* packageNode = libraryChildren["packages"].GetChildren();
+    // wxXmlNode* packageNode = libraryChildren["packages"]->GetChildren();
     // while( packageNode )
     // {
     //     loadPackage( packageNode );
@@ -454,6 +453,7 @@ void SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
 
     // Loop through the symbols and load each of them
     wxXmlNode* symbolNode = libraryChildren["symbols"]->GetChildren();
+
     while( symbolNode )
     {
         loadSymbol( symbolNode );
@@ -466,7 +466,7 @@ LIB_PART* SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode )
 {
     // Create a new part with the symbol name
     wxString symbolName = aSymbolNode->GetAttribute( "name" );
-    std::unique_ptr< LIB_PART > part( new LIB_PART( symbolName ) );
+    std::unique_ptr<LIB_PART> part( new LIB_PART( symbolName ) );
 
     wxXmlNode* currentNode = aSymbolNode->GetChildren();
 
@@ -476,11 +476,13 @@ LIB_PART* SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode )
 
         if( nodeName == "description" )
         {
-            // TODO: Do something with the description
+            // TODO
+            wxASSERT_MSG( false, "'description' nodes are not implemented yet" );
         }
         else if( nodeName == "dimension" )
         {
-            // TODO: Handle dimension
+            // TODO
+            wxASSERT_MSG( false, "'description' nodes are not implemented yet" );
         }
         else if( nodeName == "frame" )
         {
@@ -515,6 +517,7 @@ LIB_PART* SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode )
 
     return part.release();
 }
+
 
 LIB_CIRCLE* SCH_EAGLE_PLUGIN::loadCircle( LIB_PART* aPart, wxXmlNode* aCircleNode )
 {

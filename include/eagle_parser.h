@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012-2016 KiCad Developers, see AUTHORS.txt for contributors.
- * Copyright (C) 2017 CERN.
+ * Copyright (C) 2017 CERN
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -45,8 +45,8 @@ using std::string;
 
 class MODULE;
 
-typedef std::unordered_map< string,  wxXmlNode* > NODE_MAP;
-typedef std::map< string, MODULE* > MODULE_MAP;
+typedef std::unordered_map<string, wxXmlNode*> NODE_MAP;
+typedef std::map<string, MODULE*> MODULE_MAP;
 
 
 /**
@@ -98,7 +98,7 @@ struct TRIPLET
  */
 class XPATH
 {
-    std::vector<TRIPLET>    p;
+    std::vector<TRIPLET> p;
 
 public:
     void push( const char* aPathSegment, const char* aAttribute="" )
@@ -159,7 +159,7 @@ public:
  *        type T is unknown.
  */
 template<typename T>
-T Convert( const wxString& aValue )
+T Convert( wxString aValue )
 {
     throw XML_PARSER_ERROR( "Conversion failed. Unknown type." );
 }
@@ -196,7 +196,7 @@ public:
      *               aData is empty, the attribute is understood as unavailable; otherwise, the
      *               conversion to T is tried.
      */
-    OPTIONAL_XML_ATTRIBUTE( const wxString& aData )
+    OPTIONAL_XML_ATTRIBUTE( wxString aData )
     {
         m_isAvailable = !aData.IsEmpty();
 
@@ -229,7 +229,7 @@ public:
      * @param aData is a wxString that should be converted to T. If the string is empty, the
      *              attribute is set to unavailable.
      */
-    OPTIONAL_XML_ATTRIBUTE<T>& operator =( const wxString& aData )
+    OPTIONAL_XML_ATTRIBUTE<T>& operator =( wxString aData )
     {
         m_isAvailable = !aData.IsEmpty();
 
@@ -268,7 +268,7 @@ public:
      * tries to convert a string to the base type.
      * @param aString is the string that will be converted to the base type.
      */
-    void Set( const wxString& aString )
+    void Set( wxString aString )
     {
         m_data = Convert<T>( aString );
     }

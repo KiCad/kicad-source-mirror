@@ -43,14 +43,14 @@ using std::string;
 
 
 template<>
-string Convert<string>( const wxString& aValue )
+string Convert<string>( wxString aValue )
 {
     return aValue.ToStdString();
 }
 
 
 template <>
-double Convert<double>( const wxString& aValue )
+double Convert<double>( wxString aValue )
 {
     double value;
 
@@ -63,7 +63,7 @@ double Convert<double>( const wxString& aValue )
 
 
 template <>
-int Convert<int>( const wxString& aValue )
+int Convert<int>( wxString aValue )
 {
     if( aValue.IsEmpty() )
         throw XML_PARSER_ERROR( "Conversion to int failed. Original value is empty." );
@@ -73,7 +73,7 @@ int Convert<int>( const wxString& aValue )
 
 
 template <>
-bool Convert<bool>( const wxString& aValue )
+bool Convert<bool>( wxString aValue )
 {
     if( aValue != "yes" && aValue != "no" )
         throw XML_PARSER_ERROR( "Conversion to bool failed. Original value, '" +
@@ -87,7 +87,7 @@ bool Convert<bool>( const wxString& aValue )
 /// parse an Eagle XML "rot" field.  Unfortunately the DTD seems not to explain
 /// this format very well.  [S][M]R<degrees>.   Examples: "R90", "MR180", "SR180"
 template<>
-EROT Convert<EROT>( const wxString& aRot )
+EROT Convert<EROT>( wxString aRot )
 {
     EROT value;
 
@@ -638,7 +638,7 @@ wxPoint kicad_arc_center( const wxPoint& aStart, const wxPoint& aEnd, double aAn
     double dx = aEnd.x - aStart.x, dy = aEnd.y - aStart.y;
     wxPoint mid = ( aStart + aEnd ) / 2;
 
-    double dlen = sqrt( dx * dx + dy * dy );
+    double dlen = sqrt( dx*dx + dy*dy );
     double dist = dlen / ( 2 * tan( DEG2RAD( aAngle ) / 2 ) );
 
     wxPoint center(
