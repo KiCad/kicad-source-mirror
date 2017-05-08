@@ -26,23 +26,26 @@
 #include <sch_line.h>
 #include <sch_io_mgr.h>
 
-// class KIWAY;
-// class LINE_READER;
-// class SCH_SCREEN;
-// class SCH_SHEET;
-// class SCH_BITMAP;
-// class SCH_JUNCTION;
-// class SCH_NO_CONNECT;
-// class SCH_LINE;
-// class SCH_BUS_ENTRY_BASE;s
-// class SCH_TEXT;
-// class SCH_COMPONENT;
-// class SCH_FIELD;
-// class PROPERTIES;
-// class SCH_EAGLE_PLUGIN_CACHE;
-// class LIB_PART;
-// class PART_LIB;
-// class LIB_ALIAS;
+class KIWAY;
+class LINE_READER;
+class SCH_SCREEN;
+class SCH_SHEET;
+class SCH_BITMAP;
+class SCH_JUNCTION;
+class SCH_NO_CONNECT;
+class SCH_LINE;
+class SCH_BUS_ENTRY_BASE;
+class SCH_TEXT;
+class SCH_COMPONENT;
+class SCH_FIELD;
+class PROPERTIES;
+class SCH_EAGLE_PLUGIN_CACHE;
+class LIB_PART;
+class PART_LIB;
+class LIB_ALIAS;
+class LIB_CIRCLE;
+class LIB_RECTANGLE;
+class LIB_POLYLINE;
 
 
 /**
@@ -114,6 +117,9 @@ private:
     void loadLibrary( wxXmlNode* aLibraryNode );
     LIB_PART* loadSymbol( wxXmlNode* aSymbolNode );
 
+    LIB_CIRCLE* loadCircle( LIB_PART* aPart, wxXmlNode* aCircleNode );
+    LIB_RECTANGLE* loadRectangle( LIB_PART* aPart, wxXmlNode* aRectNode );
+    LIB_POLYLINE* loadPolyLine( LIB_PART* aPart, wxXmlNode* aRectNode );
 
     SCH_SHEET* m_rootSheet; ///< The root sheet of the schematic being loaded..
     wxString m_version; ///< Eagle file version.

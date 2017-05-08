@@ -24,6 +24,7 @@
  */
 
 #include <richio.h>
+#include <import_export.h>
 #include <map>
 
 
@@ -73,6 +74,7 @@ public:
      * @return the plugin corresponding to aFileType or NULL if not found.
      *  Caller owns the returned object, and must call PluginRelease when done using it.
      */
+    APIEXPORT
     static SCH_PLUGIN* FindPlugin( SCH_FILE_T aFileType );
 
     /**

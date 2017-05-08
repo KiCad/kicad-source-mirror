@@ -601,7 +601,9 @@ NODE_MAP MapChildren( wxXmlNode* currentNode )
     NODE_MAP nodesMap;
 
     // Loop through all children mapping them in nodesMap
-    currentNode = currentNode->GetChildren();
+    if( currentNode )
+        currentNode = currentNode->GetChildren();
+
     while( currentNode )
     {
         // Create a new pair in the map

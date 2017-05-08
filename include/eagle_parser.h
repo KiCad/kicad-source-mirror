@@ -48,6 +48,12 @@ class MODULE;
 typedef std::unordered_map<string, wxXmlNode*> NODE_MAP;
 typedef std::map<string, MODULE*> MODULE_MAP;
 
+static inline wxXmlNode* getChildrenNodes( NODE_MAP& aMap, const string& aName )
+{
+    auto it = aMap.find( aName );
+    return it == aMap.end() ? nullptr : it->second->GetChildren();
+}
+
 
 /**
  * Class XML_PARSER_ERROR

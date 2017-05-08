@@ -21,7 +21,7 @@
 # or you may write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+find_package( Boost COMPONENTS unit_test_framework REQUIRED )
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
@@ -32,7 +32,7 @@ include_directories(
 add_executable( qa_eagle_plugin
     test_module.cpp
     test_basic.cpp
-)
+    )
 
 add_dependencies( qa_eagle_plugin common eeschema_kiface )
 
@@ -41,4 +41,4 @@ target_link_libraries( qa_eagle_plugin
     eeschema_kiface
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
     ${wxWidgets_LIBRARIES}
-)
+    )

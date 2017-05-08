@@ -300,7 +300,7 @@ target_link_libraries( eeschema
     )
 
 # the DSO (KIFACE) housing the main eeschema code:
-add_library( eeschema_kiface STATIC
+add_library( eeschema_kiface SHARED
     ${EESCHEMA_SRCS}
     ${EESCHEMA_COMMON_SRCS}
     )

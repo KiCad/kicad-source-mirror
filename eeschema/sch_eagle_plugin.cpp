@@ -28,6 +28,12 @@
 #include <sch_sheet.h>
 #include <sch_eagle_plugin.h>
 
+#include <class_sch_screen.h>
+#include <class_libentry.h>
+#include <lib_circle.h>
+#include <lib_rectangle.h>
+#include <lib_polyline.h>
+
 #include <eagle_parser.h>
 
 using namespace std;
@@ -75,15 +81,15 @@ void kicadLayer( int aEagleLayer )
 
     switch( aEagleLayer )
     {
-    case 90: break;
-    case 91: break;
-    case 92: break;
-    case 93: break;
-    case 94: break;
-    case 95: break;
-    case 96: break;
-    case 97: break;
-    case 98: break;
+        case 90: break;
+        case 91: break;
+        case 92: break;
+        case 93: break;
+        case 94: break;
+        case 95: break;
+        case 96: break;
+        case 97: break;
+        case 98: break;
     }
 }
 
@@ -136,7 +142,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
         THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'" ), fn.GetFullPath() ) );
 
     // Delete on exception, if I own m_rootSheet, according to aAppendToMe
-    unique_ptr<SCH_SHEET> deleter( aAppendToMe ? nullptr : m_rootSheet  );
+    unique_ptr<SCH_SHEET> deleter( aAppendToMe ? nullptr : m_rootSheet );
 
     if( aAppendToMe )
     {
@@ -146,6 +152,14 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
     {
         m_rootSheet = new SCH_SHEET();
         m_rootSheet->SetFileName( aFileName );
+    }
+
+    // TODO change to loadSheet, so it can handle multiple sheets
+    if( !m_rootSheet->GetScreen() )
+    {
+        SCH_SCREEN* screen = new SCH_SCREEN( aKiway );
+        screen->SetFileName( aFileName );
+        m_rootSheet->SetScreen( screen );
     }
 
     // Retrieve the root as current node
@@ -250,7 +264,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
     // From the DTD: "Buses receive names which determine which signals they include.
     // A bus is a drawing object. It does not create any electrical connections.
     // These are always created by means of the nets and their names."
-    wxXmlNode* busNode = sheetChildren["busses"]->GetChildren();
+    wxXmlNode* busNode = getChildrenNodes( sheetChildren, "busses" );
 
     while( busNode )
     {
@@ -266,7 +280,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
 
     // Loop through all nets
     // From the DTD: "Net is an electrical connection in a schematic."
-    wxXmlNode* netNode = sheetChildren["nets"]->GetChildren();
+    wxXmlNode* netNode = getChildrenNodes( sheetChildren, "nets" );
 
     while( netNode )
     {
@@ -282,7 +296,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
     }
 
     // Loop through all instances
-    wxXmlNode* instanceNode = sheetChildren["instances"]->GetChildren();
+    wxXmlNode* instanceNode = getChildrenNodes( sheetChildren, "instances" );
 
     while( instanceNode )
     {
@@ -291,7 +305,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
     }
 
     // Loop through all moduleinsts
-    wxXmlNode* moduleinstNode = sheetChildren["moduleinsts"]->GetChildren();
+    wxXmlNode* moduleinstNode = getChildrenNodes( sheetChildren, "moduleinsts" );
 
     while( moduleinstNode )
     {
@@ -305,7 +319,13 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
     // wxString description = description->GetNodeContent();
 
     // TODO: do something with the plain
-    // wxXmlNode* plain = sheetChildren["plain"];
+    wxXmlNode* plainNode = sheetChildren["plain"];
+
+    while( plainNode )
+    {
+        loadSegments( plainNode );
+        plainNode = plainNode->GetNext();
+    }
 }
 
 
@@ -313,6 +333,8 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode )
 {
     // Loop through all segments
     wxXmlNode* currentSegment = aSegmentsNode->GetChildren();
+    SCH_SCREEN* screen = m_rootSheet->GetScreen();
+    //wxCHECK( screen, [>void<] );
 
     while( currentSegment )
     {
@@ -356,11 +378,21 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode )
             }
             else if( nodeName == "wire" )
             {
-                loadWire( segmentAttribute );
+                screen->Append( loadWire( segmentAttribute ) );
+            }
+            else if( nodeName == "segment" )
+            {
+                loadSegments( segmentAttribute );
+            }
+            else if( nodeName == "text" )
+            {
+                // TODO
+                //loadSegments( segmentAttribute );
             }
             else // DEFAULT
             {
-                THROW_IO_ERROR( wxString::Format( _( "XML node '%s' unknown" ), nodeName ) );
+                // TODO uncomment
+                //THROW_IO_ERROR( wxString::Format( _( "XML node '%s' unknown" ), nodeName ) );
             }
 
             // Get next segment attribute
@@ -374,24 +406,15 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode )
 
 SCH_LINE* SCH_EAGLE_PLUGIN::loadWire( wxXmlNode* aWireNode )
 {
-    std::unique_ptr< SCH_LINE > wire( new SCH_LINE );
+    std::unique_ptr<SCH_LINE> wire( new SCH_LINE );
 
-    wxString layer  = aWireNode->GetAttribute( "layer" );   // REQUIRED
-    wxString width  = aWireNode->GetAttribute( "width" );   // REQUIRED
-    wxString x1     = aWireNode->GetAttribute( "x1" );      // REQUIRED
-    wxString x2     = aWireNode->GetAttribute( "x2" );      // REQUIRED
-    wxString y1     = aWireNode->GetAttribute( "y1" );      // REQUIRED
-    wxString y2     = aWireNode->GetAttribute( "y2" );      // REQUIRED
-    wxString cap    = aWireNode->GetAttribute( "cap", "round" );        // Defaults to "round"
-    wxString curve  = aWireNode->GetAttribute( "curve", "0" );          // Defaults to "0"
-    wxString style  = aWireNode->GetAttribute( "style", "continuous" ); // Defaults to "continuous"
-    // wxString extent = aWireNode->GetAttribute( "extent" );  // Non-required, defaults to NOTHING
+    auto ewire = EWIRE( aWireNode );
 
     // TODO: layer map?
     // wire->SetLayer( layerMap( layer ) );
 
     // if( strCompare( "Wire", line, &line ) )
-    //     wire->SetLayer( LAYER_WIRE );
+         wire->SetLayer( LAYER_WIRE );
     // else if( strCompare( "Bus", line, &line ) )
     //     wire->SetLayer( LAYER_BUS );
     // else if( strCompare( "Notes", line, &line ) )
@@ -401,16 +424,15 @@ SCH_LINE* SCH_EAGLE_PLUGIN::loadWire( wxXmlNode* aWireNode )
 
     wxPoint begin, end;
 
-    begin.x = wxAtoi( x1 );
-    begin.y = wxAtoi( y1 );
-    end.x   = wxAtoi( x2 );
-    end.y   = wxAtoi( y2 );
+    begin.x = ewire.x1;
+    begin.y = ewire.y1;
+    end.x   = ewire.x2;
+    end.y   = ewire.y2;
 
     wire->SetStartPoint( begin );
     wire->SetEndPoint( end );
 
     return wire.release();
-
 }
 
 
@@ -477,39 +499,39 @@ LIB_PART* SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode )
         if( nodeName == "description" )
         {
             // TODO
-            wxASSERT_MSG( false, "'description' nodes are not implemented yet" );
+            //wxASSERT_MSG( false, "'description' nodes are not implemented yet" );
         }
         else if( nodeName == "dimension" )
         {
             // TODO
-            wxASSERT_MSG( false, "'description' nodes are not implemented yet" );
+            //wxASSERT_MSG( false, "'description' nodes are not implemented yet" );
         }
         else if( nodeName == "frame" )
         {
         }
         else if( nodeName == "circle" )
         {
-            part->AddDrawItem( loadCircle( part, currentNode ) );
+            part->AddDrawItem( loadCircle( part.get(), currentNode ) );
         }
         else if( nodeName == "pin" )
         {
-            part->AddDrawItem( loadPin( part, currentNode ) );
+            // part->AddDrawItem( loadPin( part, currentNode ) );
         }
         else if( nodeName == "polygon" )
         {
-            part->AddDrawItem( loadPolyline( part, currentNode ) );
+            //part->AddDrawItem( loadPolygon( part.get(), currentNode ) );
         }
         else if( nodeName == "rectangle" )
         {
-            part->AddDrawItem( loadRectangle( part, currentNode ) );
+            part->AddDrawItem( loadRectangle( part.get(), currentNode ) );
         }
         else if( nodeName == "text" )
         {
-            part->AddDrawItem( loadText( part, currentNode ) );
+            // part->AddDrawItem( loadText( part, currentNode ) );
         }
         else if( nodeName == "wire" )
         {
-            part->AddDrawItem( loadPolyline( part, currentNode ) );
+            // part->AddDrawItem( loadPolyline( part, currentNode ) );
         }
 
         currentNode = currentNode->GetNext();
@@ -521,25 +543,56 @@ LIB_PART* SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode )
 
 LIB_CIRCLE* SCH_EAGLE_PLUGIN::loadCircle( LIB_PART* aPart, wxXmlNode* aCircleNode )
 {
-    unique_ptr< LIB_CIRCLE > circle( new LIB_CIRCLE( aPart.get() ) );
+    // Parse the circle properties
+    ECIRCLE c( aCircleNode );
 
-    int layer = wxAtoi( aCircleNode->GetAttribute( "layer" ) );
+    unique_ptr<LIB_CIRCLE> circle( new LIB_CIRCLE( aPart ) );
 
-    int x;
-    int y;
-    int radius;
-    int width;
-
-    aCircleNode->GetAttribute( "x" ).ToDouble( &x );
-    aCircleNode->GetAttribute( "y" ).ToDouble( &y );
-    aCircleNode->GetAttribute( "radius" ).ToDouble( &radius );
-    aCircleNode->GetAttribute( "width" ).ToDouble( &width );
-
-    circle->SetPosition( wxPoint( x, y ) );
-    circle->SetRadius( radius );
-    circle->SetWidth( width ;
+    circle->SetPosition( wxPoint( c.x, c.y ) );
+    circle->SetRadius( c.radius );
+    circle->SetWidth( c.width );
 
     return circle.release();
+}
+
+
+LIB_RECTANGLE* SCH_EAGLE_PLUGIN::loadRectangle( LIB_PART* aPart, wxXmlNode* aRectNode )
+{
+    ERECT rect( aRectNode );
+
+    unique_ptr<LIB_RECTANGLE> rectangle( new LIB_RECTANGLE( aPart ) );
+
+    rectangle->SetPosition( wxPoint( rect.x1, rect.y1 ) );
+    rectangle->SetEnd( wxPoint( rect.x2, rect.y2 ) );
+
+    // TODO: Manage rotation
+
+    return rectangle.release();
+}
+
+
+LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadPolyLine( LIB_PART* aPart, wxXmlNode* aRectNode )
+{
+    std::unique_ptr< LIB_POLYLINE > polyLine( new LIB_POLYLINE( aPart ) );
+
+    /*int points = parseInt( aReader, line, &line );
+    polyLine->SetUnit( parseInt( aReader, line, &line ) );
+    polyLine->SetConvert( parseInt( aReader, line, &line ) );
+    polyLine->SetWidth( parseInt( aReader, line, &line ) );
+
+    wxPoint pt;
+
+    for( int i = 0; i < points; i++ )
+    {
+        pt.x = parseInt( aReader, line, &line );
+        pt.y = parseInt( aReader, line, &line );
+        polyLine->AddPoint( pt );
+    }
+
+    if( *line != 0 )
+        polyLine->SetFillMode( parseFillMode( aReader, line, &line ) );*/
+
+    return polyLine.release();
 }
 
 
