@@ -80,8 +80,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-04 00:00+0200\n"
-"PO-Revision-Date: 2017-05-04 00:09+0200\n"
+"POT-Creation-Date: 2017-05-08 13:18+0200\n"
+"PO-Revision-Date: 2017-05-08 13:19+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -1710,19 +1710,19 @@ msgid ""
 msgstr ""
 "Inserire il modulo python che implementa le funzioni PLUGIN::Footprint*()."
 
-#: pcbnew/editrack.cpp:815
+#: pcbnew/editrack.cpp:812
 msgid "Track Len"
 msgstr "Lung. pista"
 
-#: pcbnew/editrack.cpp:819
+#: pcbnew/editrack.cpp:816
 msgid "Full Len"
 msgstr "Lung. intera"
 
-#: pcbnew/editrack.cpp:821
+#: pcbnew/editrack.cpp:818
 msgid "Pad to die"
 msgstr "Piazzola a corpo"
 
-#: pcbnew/editrack.cpp:826
+#: pcbnew/editrack.cpp:823
 msgid "Segs Count"
 msgstr "Conteggio segmenti"
 
@@ -1941,7 +1941,7 @@ msgstr "Fronte"
 msgid "Pads"
 msgstr "Piazzole"
 
-#: pcbnew/class_module.cpp:559 pcbnew/class_track.cpp:1138
+#: pcbnew/class_module.cpp:559 pcbnew/class_track.cpp:1137
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:186
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:191
 msgid "Status"
@@ -2992,17 +2992,22 @@ msgstr "%s pin %s trovato"
 msgid "EEschema netlist"
 msgstr "Netlist Eeschema"
 
-#: pcbnew/eagle_plugin.cpp:1760
+#: pcbnew/eagle_plugin.cpp:201 pcbnew/eagle_plugin.cpp:2036
+#, c-format
+msgid "Unable to read file '%s'"
+msgstr "Impossibile leggere il file \"%s\""
+
+#: pcbnew/eagle_plugin.cpp:773
 #, c-format
 msgid "<package> name: '%s' duplicated in eagle <library>: '%s'"
 msgstr "Nome <package>: \"%s\" duplicato nella librereria di Eagle: \"%s\""
 
-#: pcbnew/eagle_plugin.cpp:1821
+#: pcbnew/eagle_plugin.cpp:842
 #, c-format
 msgid "No '%s' package in library '%s'"
 msgstr "Nessun package \"%s\" presente nella libreria \"%s\""
 
-#: pcbnew/eagle_plugin.cpp:2999
+#: pcbnew/eagle_plugin.cpp:1981
 #, c-format
 msgid "File '%s' is not readable."
 msgstr "Il file '%s' non è leggibile."
@@ -3028,8 +3033,8 @@ msgstr "Collegamento"
 #: pcbnew/class_pad.cpp:619 pcbnew/class_pcb_text.cpp:126
 #: pcbnew/class_pcb_layer_widget.cpp:278 pcbnew/class_zone.cpp:687
 #: pcbnew/class_drawsegment.cpp:379 pcbnew/layer_widget.cpp:386
-#: pcbnew/class_text_mod.cpp:361 pcbnew/class_track.cpp:1156
-#: pcbnew/class_track.cpp:1183
+#: pcbnew/class_text_mod.cpp:361 pcbnew/class_track.cpp:1155
+#: pcbnew/class_track.cpp:1182
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:111
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:140
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
@@ -3041,7 +3046,7 @@ msgstr "Strato"
 
 #: pcbnew/class_pad.cpp:625 pcbnew/class_pcb_text.cpp:140
 #: pcbnew/class_drawsegment.cpp:381 pcbnew/class_text_mod.cpp:377
-#: pcbnew/class_track.cpp:1161 pcbnew/class_track.cpp:1188
+#: pcbnew/class_track.cpp:1160 pcbnew/class_track.cpp:1187
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:52
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:354 eeschema/lib_field.cpp:793
 msgid "Width"
@@ -3054,7 +3059,7 @@ msgstr "Larghezza"
 msgid "Height"
 msgstr "Altezza"
 
-#: pcbnew/class_pad.cpp:634 pcbnew/class_track.cpp:1251
+#: pcbnew/class_pad.cpp:634 pcbnew/class_track.cpp:1250
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:277
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:305
 msgid "Drill"
@@ -3452,7 +3457,7 @@ msgid "Filling zone %d out of %d (net %s)..."
 msgstr "Riempimento zona %d fuori di %d (collegamento %s)..."
 
 #: pcbnew/zones_by_polygon_fill_functions.cpp:115 pcbnew/class_zone.cpp:672
-#: pcbnew/class_track.cpp:1095
+#: pcbnew/class_track.cpp:1094
 msgid "NetName"
 msgstr "Nome collegamento"
 
@@ -3751,7 +3756,7 @@ msgstr "Dimensioni \"%s\" su %s"
 msgid "Clarify Selection"
 msgstr "Disambigua selezione"
 
-#: pcbnew/class_pcb_layer_widget.cpp:61 pcbnew/class_track.cpp:1218
+#: pcbnew/class_pcb_layer_widget.cpp:61 pcbnew/class_track.cpp:1217
 msgid "Through Via"
 msgstr "Via passanti"
 
@@ -3767,7 +3772,7 @@ msgstr "Via coperti/interni"
 msgid "Show blind or buried vias"
 msgstr "Mostra Via coperti o interni"
 
-#: pcbnew/class_pcb_layer_widget.cpp:63 pcbnew/class_track.cpp:1208
+#: pcbnew/class_pcb_layer_widget.cpp:63 pcbnew/class_track.cpp:1207
 msgid "Micro Via"
 msgstr "Microvia"
 
@@ -4599,8 +4604,8 @@ msgstr "(Ritaglia)"
 
 #: pcbnew/class_zone.cpp:641 pcbnew/class_drawsegment.cpp:337
 #: pcbnew/class_marker_pcb.cpp:98 pcbnew/class_text_mod.cpp:351
-#: pcbnew/class_track.cpp:1146 pcbnew/class_track.cpp:1173
-#: pcbnew/class_track.cpp:1222 pcbnew/dialogs/dialog_layers_setup.cpp:346
+#: pcbnew/class_track.cpp:1145 pcbnew/class_track.cpp:1172
+#: pcbnew/class_track.cpp:1221 pcbnew/dialogs/dialog_layers_setup.cpp:346
 #: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:2094
 #: eeschema/sch_text.cpp:808 eeschema/libedit.cpp:498
 #: eeschema/dialogs/dialog_spice_model_base.cpp:30
@@ -4634,7 +4639,7 @@ msgstr "Proibita"
 msgid "<unknown>"
 msgstr "<sconosciuto>"
 
-#: pcbnew/class_zone.cpp:676 pcbnew/class_track.cpp:1099
+#: pcbnew/class_zone.cpp:676 pcbnew/class_track.cpp:1098
 msgid "NetCode"
 msgstr "Codice collegamento"
 
@@ -5081,7 +5086,7 @@ msgstr "Curva"
 msgid "Segment"
 msgstr "Segmento"
 
-#: pcbnew/class_drawsegment.cpp:362 pcbnew/class_track.cpp:1049
+#: pcbnew/class_drawsegment.cpp:362 pcbnew/class_track.cpp:1048
 #: eeschema/lib_pin.cpp:2111
 msgid "Length"
 msgstr "Lunghezza"
@@ -6844,73 +6849,73 @@ msgstr "Microvia %s, collegamento[%s] (%d) su strati %s/%s"
 msgid "Via %s net [%s] (%d) on layers %s/%s"
 msgstr "Via %s collegamento[%s] (%d) su strati %s/%s"
 
-#: pcbnew/class_track.cpp:1054
+#: pcbnew/class_track.cpp:1053
 msgid "Full Length"
 msgstr "Lung. intera"
 
-#: pcbnew/class_track.cpp:1057
+#: pcbnew/class_track.cpp:1056
 msgid "Pad To Die Length"
 msgstr "Lunghezza da piazzola a die"
 
-#: pcbnew/class_track.cpp:1065
+#: pcbnew/class_track.cpp:1064
 msgid "NC Name"
 msgstr "Nome NC"
 
-#: pcbnew/class_track.cpp:1066
+#: pcbnew/class_track.cpp:1065
 msgid "NC Clearance"
 msgstr "Isolamento NC"
 
-#: pcbnew/class_track.cpp:1069
+#: pcbnew/class_track.cpp:1068
 msgid "NC Width"
 msgstr "Spessore NC"
 
-#: pcbnew/class_track.cpp:1072
+#: pcbnew/class_track.cpp:1071
 msgid "NC Via Size"
 msgstr "Dimensioni via NC"
 
-#: pcbnew/class_track.cpp:1075
+#: pcbnew/class_track.cpp:1074
 msgid "NC Via Drill"
 msgstr "Foratura via NC"
 
-#: pcbnew/class_track.cpp:1146
+#: pcbnew/class_track.cpp:1145
 msgid "Track"
 msgstr "Pista"
 
-#: pcbnew/class_track.cpp:1165 pcbnew/class_track.cpp:1192
+#: pcbnew/class_track.cpp:1164 pcbnew/class_track.cpp:1191
 msgid "Segment Length"
 msgstr "Lunghezza segmento"
 
-#: pcbnew/class_track.cpp:1173
+#: pcbnew/class_track.cpp:1172
 msgid "Zone "
 msgstr "Zona"
 
-#: pcbnew/class_track.cpp:1213
+#: pcbnew/class_track.cpp:1212
 msgid "Blind/Buried Via"
 msgstr "Via coperto/interno"
 
-#: pcbnew/class_track.cpp:1238 pcbnew/dialogs/dialog_layers_setup_base.cpp:94
+#: pcbnew/class_track.cpp:1237 pcbnew/dialogs/dialog_layers_setup_base.cpp:94
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:330
 #: pcbnew/dialogs/dialog_plot_base.cpp:69
 msgid "Layers"
 msgstr "Strati"
 
-#: pcbnew/class_track.cpp:1244 pcbnew/dialogs/dialog_design_rules_base.cpp:304
+#: pcbnew/class_track.cpp:1243 pcbnew/dialogs/dialog_design_rules_base.cpp:304
 msgid "Diameter"
 msgstr "Diametro"
 
-#: pcbnew/class_track.cpp:1274
+#: pcbnew/class_track.cpp:1273
 msgid "(Specific)"
 msgstr "(Specifica)"
 
-#: pcbnew/class_track.cpp:1276
+#: pcbnew/class_track.cpp:1275
 msgid "(NetClass)"
 msgstr "(netclass)"
 
-#: pcbnew/class_track.cpp:1585
+#: pcbnew/class_track.cpp:1584
 msgid "Not found"
 msgstr "Non trovato "
 
-#: pcbnew/class_track.cpp:1593
+#: pcbnew/class_track.cpp:1592
 #, c-format
 msgid "Track %s, net [%s] (%d) on layer %s, length: %s"
 msgstr "Pista %s, collegamento [%s] (%d) su strato %s, lunghezza: %s"
@@ -8361,7 +8366,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_plot_base.cpp:81
 #: pcbnew/dialogs/dialog_block_options_base.cpp:20
 #: eeschema/dialogs/dialog_erc_base.cpp:147
-#: eeschema/dialogs/dialog_bom_editor_base.cpp:46
+#: eeschema/dialogs/dialog_bom_editor_base.cpp:52
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:112
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:75
 #: bitmap2component/bitmap2cmp_gui_base.cpp:137 include/lib_table_grid.h:173
@@ -9151,6 +9156,7 @@ msgstr "File rapporto"
 #: eeschema/dialogs/dialog_erc_base.cpp:101
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:128
 #: eeschema/dialogs/dialog_annotate_base.cpp:212
+#: eeschema/dialogs/dialog_bom_editor_base.cpp:121
 #: eeschema/dialogs/dialog_bom_base.cpp:62
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:125
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:107
@@ -13513,7 +13519,8 @@ msgstr "Usa valori netclass"
 #: pcbnew/dialogs/dialog_gendrill.cpp:410
 #, c-format
 msgid "Could not write drill and/or map files to folder \"%s\"."
-msgstr "Impossibile scrivere i file di foratura e/o mappatura nella cartella \"%s\"."
+msgstr ""
+"Impossibile scrivere i file di foratura e/o mappatura nella cartella \"%s\"."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:457
 msgid "Save Drill Report File"
@@ -21431,29 +21438,25 @@ msgid "Do not forget to choose a title for this netlist control page"
 msgstr ""
 "Non dimenticare di scegliere un titolo per questa pagina di controllo netlist"
 
-#: eeschema/dialogs/dialog_bom_editor_base.cpp:48
+#: eeschema/dialogs/dialog_bom_editor_base.cpp:54
 msgid "Group components"
 msgstr "Raggruppa componenti"
 
-#: eeschema/dialogs/dialog_bom_editor_base.cpp:50
+#: eeschema/dialogs/dialog_bom_editor_base.cpp:56
 msgid "Group components together based on common properties"
 msgstr "Raggruppa componenti assieme basandosi su proprietà in comune"
 
-#: eeschema/dialogs/dialog_bom_editor_base.cpp:54
+#: eeschema/dialogs/dialog_bom_editor_base.cpp:60
 msgid "Regroup components"
 msgstr "Riraggruppa componenti"
 
-#: eeschema/dialogs/dialog_bom_editor_base.cpp:57
-msgid "Revert all changes"
-msgstr "Annulla tutti i cambiamenti"
+#: eeschema/dialogs/dialog_bom_editor_base.cpp:112
+msgid "Apply Changes"
+msgstr "Applica i cambiamenti"
 
-#: eeschema/dialogs/dialog_bom_editor_base.cpp:59
-msgid "Reload table (reverts component field changes)"
-msgstr "Ricarica la tabella (annulla i cambiamenti nei campi componenti)"
-
-#: eeschema/dialogs/dialog_bom_editor_base.cpp:84
-msgid "Apply changes"
-msgstr "Applica cambiamenti"
+#: eeschema/dialogs/dialog_bom_editor_base.cpp:115
+msgid "Revert Changes"
+msgstr "Annulla i cambiamenti"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:38
 msgid "Plugins"
@@ -21490,22 +21493,30 @@ msgstr ""
 msgid "Plugin Info:"
 msgstr "Info plugin:"
 
-#: eeschema/dialogs/dialog_bom_editor.cpp:220
+#: eeschema/dialogs/dialog_bom_editor.cpp:67
+msgid "Sort"
+msgstr "Ordina"
+
+#: eeschema/dialogs/dialog_bom_editor.cpp:136
+msgid "Changes exist in component table"
+msgstr "Rilevati cambiamenti nella tabella componenti."
+
+#: eeschema/dialogs/dialog_bom_editor.cpp:264
 #, c-format
 msgid "Component table - %u components in %u groups"
 msgstr "Tabella componenti - %u componenti in %u gruppi"
 
-#: eeschema/dialogs/dialog_bom_editor.cpp:225
+#: eeschema/dialogs/dialog_bom_editor.cpp:269
 #, c-format
 msgid "Component table - %u components"
 msgstr "Tabella componenti - %u componenti"
 
-#: eeschema/dialogs/dialog_bom_editor.cpp:231
+#: eeschema/dialogs/dialog_bom_editor.cpp:275
 #, c-format
 msgid " - %u changed"
 msgstr " - %u cambiati"
 
-#: eeschema/dialogs/dialog_bom_editor.cpp:360
+#: eeschema/dialogs/dialog_bom_editor.cpp:419
 msgid "Revert all component table changes?"
 msgstr "Annullare tutti i cambiamenti alla tabella componenti?"
 
@@ -22557,7 +22568,7 @@ msgstr "Proprietà componente"
 msgid "Sheet Pin Properties"
 msgstr "Proprietà punto di connessione tra fogli"
 
-#: eeschema/dialogs/dialog_bom_editor_base.h:89
+#: eeschema/dialogs/dialog_bom_editor_base.h:95
 msgid "BOM editor"
 msgstr "Editor diba"
 
@@ -26409,6 +26420,9 @@ msgstr "Percorso libreria"
 msgid "Plugin Type"
 msgstr "Tipo plugin"
 
+#~ msgid "Reload table (reverts component field changes)"
+#~ msgstr "Ricarica la tabella (annulla i cambiamenti nei campi componenti)"
+
 #~ msgid "Draw a zone"
 #~ msgstr "Disegna una zona"
 
@@ -26808,9 +26822,6 @@ msgstr "Tipo plugin"
 
 #~ msgid "Cannot delete component reference."
 #~ msgstr "Impossibile cancellare il riferimento componente."
-
-#~ msgid "Cannot delete component value."
-#~ msgstr "Impossibile cancellare il valore componente."
 
 #~ msgid ""
 #~ "The duplicated zone is on the same layer as the initial zone, which has "
