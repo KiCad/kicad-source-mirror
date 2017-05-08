@@ -88,13 +88,16 @@ protected:
     bool        m_Show;         ///< Is this column visible?
     bool        m_ReadOnly;     ///< Is this column read only?
 
+    bool        m_sort;         ///< Is this column used for sorting?
+
 public:
-    BOM_COLUMN( unsigned int aId, BOM_COLUMN_TYPE aType, const wxString aTitle, bool aShow, bool aReadOnly = false ) :
+    BOM_COLUMN( unsigned int aId, BOM_COLUMN_TYPE aType, const wxString aTitle, bool aShow, bool aReadOnly = false, bool aSort = true ) :
             m_id( aId ),
             m_Type( aType ),
             m_Title( aTitle.Strip( wxString::both ) ),
             m_Show( aShow ),
-            m_ReadOnly( aReadOnly )
+            m_ReadOnly( aReadOnly ),
+            m_sort( aSort )
     {
     }
 
@@ -103,11 +106,13 @@ public:
     wxString Title() const { return m_Title; }
     bool IsVisible() const { return m_Show; }
     bool IsReadOnly() const { return m_ReadOnly; }
+    bool IsUsedToSort() const { return m_sort; }
 
     //TODO - Should renaming of columns be allowed?
     //bool SetTitle( const wxString aTitle );
     void SetVisible( bool aShow = true ) { m_Show = aShow; }
     void SetReadOnly( bool aReadOnly = true ) { m_ReadOnly = aReadOnly; }
+    void SetUsedToSort( bool aSort = true ) { m_sort = aSort; }
 
 };
 

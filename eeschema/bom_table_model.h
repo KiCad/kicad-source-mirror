@@ -58,19 +58,21 @@ typedef std::map<unsigned int, wxString> FIELD_VALUE_MAP;
 class BOM_FIELD_VALUES
 {
 public:
-    BOM_FIELD_VALUES(wxString aRefDes);
+    BOM_FIELD_VALUES( wxString aRefDes, FIELD_VALUE_MAP* aTemplate );
 
     bool GetFieldValue( unsigned int aFieldId, wxString& aValue ) const;
     bool GetBackupValue( unsigned int aFieldId, wxString& aValue ) const;
+    bool GetTemplateValue( unsigned int aFieldId, wxString& aValue ) const;
 
     void SetFieldValue( unsigned int aFieldId, wxString aValue, bool aOverwrite = false );
-    void SetBackupValue( unsigned int aFieldId, wxString aValue );
 
     wxString GetReference() const { return m_refDes; }
 
     bool HasValueChanged( unsigned int aFieldId ) const;
 
     void RevertChanges( unsigned int aFieldId );
+
+    void SetBackupPoint();
 
 protected:
     //! The RefDes to which these values correspond
@@ -81,6 +83,9 @@ protected:
 
     //! Backup values for each column
     FIELD_VALUE_MAP m_backupValues;
+
+    //! Template values for each column
+    FIELD_VALUE_MAP* m_templateValues;
 };
 
 /**
@@ -140,7 +145,7 @@ public:
     BOM_TABLE_GROUP( BOM_COLUMN_LIST* aColumnList );
     virtual ~BOM_TABLE_GROUP() {}
 
-    // Set display properties for
+    // Set display properties for a group row
     virtual bool GetAttr( unsigned int aFieldId, wxDataViewItemAttr& aAttr ) const override;
 
     // Get group row value
@@ -231,6 +236,9 @@ protected:
     // Vector of field values mapped to field IDs
     std::vector<std::unique_ptr<BOM_FIELD_VALUES>> m_fieldValues;
 
+    // Template field values
+    FIELD_VALUE_MAP m_fieldTemplates;
+
     // BOM Preferences
     //! Group components based on values
     bool m_groupColumns = true;
@@ -307,13 +315,15 @@ public:
 
     wxArrayString GetRowData( unsigned int aRow, std::vector<BOM_COLUMN*> aColumns ) const;
 
-    void SetComponents( SCH_REFERENCE_LIST aRefs );
+    void SetComponents( SCH_REFERENCE_LIST aRefs, const TEMPLATE_FIELDNAMES& aTemplateFields );
     void AddComponentFields( SCH_COMPONENT* aCmp );
 
     void RevertFieldChanges();
     void ApplyFieldChanges();
 
     bool HaveFieldsChanged() const;
+
+    void SetBackupPoint();
 
     std::vector<SCH_REFERENCE> GetChangedComponents();
     unsigned int CountChangedComponents();

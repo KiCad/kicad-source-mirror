@@ -63,6 +63,12 @@ DIALOG_BOM_EDITOR::DIALOG_BOM_EDITOR( SCH_EDIT_FRAME* parent ) :
                                         wxDATAVIEW_CELL_ACTIVATABLE,
                                         100 );
 
+    auto sortColumn = m_columnListCtrl->AppendToggleColumn(
+                                        _( "Sort" ),
+                                        wxDATAVIEW_CELL_ACTIVATABLE,
+                                        100 );
+
+
     // Resize the columns appropriately
     m_columnListCtrl->Update();
 
@@ -74,6 +80,11 @@ DIALOG_BOM_EDITOR::DIALOG_BOM_EDITOR( SCH_EDIT_FRAME* parent ) :
 
     nameColumn->SetWidth( wxCOL_WIDTH_AUTOSIZE );
     nameColumn->SetResizeable( true );
+
+    sortColumn->SetWidth( wxCOL_WIDTH_AUTOSIZE );
+    sortColumn->SetResizeable( true );
+
+    m_columnListCtrl->Update();
 
     // Read all components
     LoadComponents();
@@ -109,6 +120,44 @@ DIALOG_BOM_EDITOR::~DIALOG_BOM_EDITOR()
     //TODO
 }
 
+void DIALOG_BOM_EDITOR::OnCloseButton( wxCommandEvent& event )
+{
+    CloseDialog();
+}
+
+bool DIALOG_BOM_EDITOR::CloseDialog()
+{
+    if( !m_bom->HaveFieldsChanged() )
+    {
+        Destroy();
+        return true;
+    }
+
+    int result = DisplayExitDialog( this, _( "Changes exist in component table" ) );
+
+    switch( result )
+    {
+    case wxID_CANCEL:
+       return false;
+    case wxID_NO:
+       break;
+    case wxID_YES:
+       ApplyAllChanges();
+       break;
+    }
+
+    Destroy();
+    return true;
+}
+
+void DIALOG_BOM_EDITOR::OnDialogClosed( wxCloseEvent& event )
+{
+    if( !CloseDialog() )
+    {
+        event.Veto();
+    }
+}
+
 /* Struct for keeping track of schematic sheet changes
  * Stores:
  * SHEET_PATH - Schematic to apply changes to
@@ -121,90 +170,85 @@ typedef struct
     PICKED_ITEMS_LIST items;
 } SheetUndoList;
 
-/**
- * When the component table dialog is closed,
- * work out if we need to save any changed.
- * If so, capture those changes and push them to the undo stack.
- */
-bool DIALOG_BOM_EDITOR::TransferDataFromWindow()
+void DIALOG_BOM_EDITOR::ApplyAllChanges()
 {
-    if( m_bom->HaveFieldsChanged() )
+    if( !m_bom->HaveFieldsChanged() )
+        return;
+
+     /**
+     * As we may be saving changes across multiple sheets,
+     * we need to first determine which changes need to be made to which sheet.
+     * To this end, we perform the following:
+     * 1. Save the "path" of the currently displayed sheet
+     * 2. Create a MAP of <SheetPath:ChangeList> changes that need to be made
+     * 3. Push UNDO actions to appropriate sheets
+     * 4. Perform all the update actions
+     * 5. Reset the view to the current sheet
+     */
+
+    auto currentSheet = m_parent->GetCurrentSheet();
+
+    //! Create a map of changes required for each sheet
+    std::map<wxString, SheetUndoList> undoSheetMap;
+
+    // List of components that have changed
+    auto changed = m_bom->GetChangedComponents();
+
+    ITEM_PICKER picker;
+
+    // Iterate through each of the components that were changed
+    for( auto ref : changed )
     {
-         /**
-         * As we may be saving changes across multiple sheets,
-         * we need to first determine which changes need to be made to which sheet.
-         * To this end, we perform the following:
-         * 1. Save the "path" of the currently displayed sheet
-         * 2. Create a MAP of <SheetPath:ChangeList> changes that need to be made
-         * 3. Push UNDO actions to appropriate sheets
-         * 4. Perform all the update actions
-         * 5. Reset the view to the current sheet
+        // Extract the SCH_COMPONENT* object
+        auto cmp = ref.GetComp();
+
+        wxString path = ref.GetSheetPath().Path();
+
+        // Push the component into the picker list
+        picker = ITEM_PICKER( cmp, UR_CHANGED );
+        picker.SetFlags( cmp->GetFlags() );
+
+        /*
+         * If there is not currently an undo list for the given sheet,
+         * create an empty one
          */
 
-        auto currentSheet = m_parent->GetCurrentSheet();
-
-        //! Create a map of changes required for each sheet
-        std::map<wxString, SheetUndoList> undoSheetMap;
-
-        // List of components that have changed
-        auto changed = m_bom->GetChangedComponents();
-
-        ITEM_PICKER picker;
-
-        // Iterate through each of the components that were changed
-        for( auto ref : changed )
+        if( undoSheetMap.count( path ) == 0 )
         {
-            // Extract the SCH_COMPONENT* object
-            auto cmp = ref.GetComp();
+            SheetUndoList newList;
 
-            wxString path = ref.GetSheetPath().Path();
+            newList.path = ref.GetSheetPath();
 
-            // Push the component into the picker list
-            picker = ITEM_PICKER( cmp, UR_CHANGED );
-            picker.SetFlags( cmp->GetFlags() );
-
-            /*
-             * If there is not currently an undo list for the given sheet,
-             * create an empty one
-             */
-
-            if( undoSheetMap.count( path ) == 0 )
-            {
-                SheetUndoList newList;
-
-                newList.path = ref.GetSheetPath();
-
-                undoSheetMap[path] = newList;
-            }
-
-            auto& pickerList = undoSheetMap[path];
-
-            pickerList.items.PushItem( picker );
+            undoSheetMap[path] = newList;
         }
 
-        // Iterate through each sheet that needs updating
-        for( auto it = undoSheetMap.begin(); it != undoSheetMap.end(); ++it )
-        {
-            auto undo = it->second;
+        auto& pickerList = undoSheetMap[path];
 
-            m_parent->SetCurrentSheet( undo.path );
-            m_parent->SaveCopyInUndoList( undo.items, UR_CHANGED );
-            m_parent->OnModify();
-        }
-
-        // Make all component changes
-        m_bom->ApplyFieldChanges();
-
-        // Redraw the current sheet and mark as dirty
-        m_parent->Refresh();
-        m_parent->OnModify();
-
-        // Reset the view to where we left the user
-        m_parent->SetCurrentSheet(currentSheet);
-
+        pickerList.items.PushItem( picker );
     }
 
-    return true;
+    // Iterate through each sheet that needs updating
+    for( auto it = undoSheetMap.begin(); it != undoSheetMap.end(); ++it )
+    {
+        auto undo = it->second;
+
+        m_parent->SetCurrentSheet( undo.path );
+        m_parent->SaveCopyInUndoList( undo.items, UR_CHANGED );
+        m_parent->OnModify();
+    }
+
+    // Make all component changes
+    m_bom->ApplyFieldChanges();
+
+    // Redraw the current sheet and mark as dirty
+    m_parent->Refresh();
+    m_parent->OnModify();
+
+    // Reset the view to where we left the user
+    m_parent->SetCurrentSheet(currentSheet);
+
+    // Instruct the table to set the current values as the new backup values
+    m_bom->SetBackupPoint();
 }
 
 /**
@@ -252,7 +296,7 @@ void DIALOG_BOM_EDITOR::LoadComponents()
     sheets.GetComponents( m_parent->Prj().SchLibs(), refs, false );
 
     // Pass the references through to the model
-    m_bom->SetComponents( refs );
+    m_bom->SetComponents( refs, m_parent->GetTemplateFieldNames() );
 }
 
 /**
@@ -273,6 +317,7 @@ void DIALOG_BOM_EDITOR::LoadColumnNames()
 
         data.push_back( wxVariant( col->Title() ) );        // Column title      (string)
         data.push_back( wxVariant( col->IsVisible() ) );    // Column visibility (bool)
+        data.push_back( wxVariant( col->IsUsedToSort() ) ); // Column is used to sort
 
         m_columnListCtrl->AppendItem( data );
     }
@@ -318,6 +363,10 @@ void DIALOG_BOM_EDITOR::OnColumnItemToggled( wxDataViewEvent& event )
             m_bom->RemoveColumn( bomColumn );
         }
         break;
+    case 2: // Column used to sort
+        bomColumn->SetUsedToSort( bValue );
+        m_bom->ReloadTable();
+        break;
     }
 }
 
@@ -337,7 +386,11 @@ void DIALOG_BOM_EDITOR::OnGroupComponentsToggled( wxCommandEvent& event )
 void DIALOG_BOM_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
 {
     m_regroupComponentsButton->Enable( m_bom->GetColumnGrouping() );
-    m_reloadTableButton->Enable( m_bom->HaveFieldsChanged() );
+
+    bool changes = m_bom->HaveFieldsChanged();
+
+    m_applyChangesButton->Enable( changes );
+    m_revertChangesButton->Enable( changes );
 
     UpdateTitle();
 }
@@ -350,6 +403,12 @@ void DIALOG_BOM_EDITOR::OnTableValueChanged( wxDataViewEvent& event )
 void DIALOG_BOM_EDITOR::OnRegroupComponents( wxCommandEvent& event )
 {
     m_bom->ReloadTable();
+    Update();
+}
+
+void DIALOG_BOM_EDITOR::OnApplyFieldChanges( wxCommandEvent& event )
+{
+    ApplyAllChanges();
     Update();
 }
 

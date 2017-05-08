@@ -53,7 +53,9 @@ static BOM_TABLE_ROW const* ItemToRow( wxDataViewItem aItem )
     }
 }
 
-BOM_FIELD_VALUES::BOM_FIELD_VALUES( wxString aRefDes ) : m_refDes( aRefDes )
+BOM_FIELD_VALUES::BOM_FIELD_VALUES( wxString aRefDes, FIELD_VALUE_MAP* aTemplate ) :
+        m_refDes( aRefDes ),
+        m_templateValues( aTemplate )
 {
 }
 
@@ -88,6 +90,24 @@ bool BOM_FIELD_VALUES::GetBackupValue( unsigned int aFieldId, wxString& aValue )
 }
 
 /**
+ * Return the template value for a provided field ID (if it exists)
+ */
+bool BOM_FIELD_VALUES::GetTemplateValue( unsigned int aFieldId, wxString& aValue ) const
+{
+    if( !m_templateValues )
+        return false;
+
+    auto search = m_templateValues->find( aFieldId );
+
+    if( search == m_templateValues->end() )
+        return false;
+
+    aValue = search->second;
+
+    return true;
+}
+
+/**
  * Set the value for the provided field ID
  * Field value is set under any of the following conditions:
  * - param aOverwrite is true
@@ -99,18 +119,6 @@ void BOM_FIELD_VALUES::SetFieldValue( unsigned int aFieldId, wxString aValue, bo
     if( aOverwrite || m_currentValues.count( aFieldId ) == 0 || m_currentValues[aFieldId].IsEmpty() )
     {
         m_currentValues[aFieldId] = aValue;
-    }
-}
-
-/**
- * Set the backup value for the provided field ID
- * If the backup value is already set, new value is ignored
- */
-void BOM_FIELD_VALUES::SetBackupValue( unsigned int aFieldId, wxString aValue )
-{
-    if( m_backupValues.count( aFieldId ) == 0 || m_backupValues[aFieldId].IsEmpty() )
-    {
-        m_backupValues[aFieldId] = aValue;
     }
 }
 
@@ -131,6 +139,14 @@ void BOM_FIELD_VALUES::RevertChanges( unsigned int aFieldId )
     GetBackupValue( aFieldId, backupValue );
 
     SetFieldValue( aFieldId, backupValue, true );
+}
+
+void BOM_FIELD_VALUES::SetBackupPoint()
+{
+    for( auto it = m_currentValues.begin(); it != m_currentValues.end(); ++it )
+    {
+        m_backupValues[it->first] = it->second;
+    }
 }
 
 BOM_TABLE_ROW::BOM_TABLE_ROW() : m_columnList( nullptr )
@@ -317,6 +333,10 @@ bool BOM_TABLE_GROUP::AddComponent( BOM_TABLE_COMPONENT* aComponent )
 
     for( auto* column : m_columnList->Columns )
     {
+        // Ignore any columns marked as "not used for sorting"
+        if( !column->IsUsedToSort() )
+            continue;
+
         match = TestField( column, aComponent );
 
         // Escape on first mismatch
@@ -554,7 +574,6 @@ bool BOM_TABLE_COMPONENT::AddUnit( SCH_REFERENCE aUnit )
             }
 
             m_fieldValues->SetFieldValue( column->Id(), value );
-            m_fieldValues->SetBackupValue( column->Id(), value );
         }
 
         return true;
@@ -562,6 +581,7 @@ bool BOM_TABLE_COMPONENT::AddUnit( SCH_REFERENCE aUnit )
 
     return false;
 }
+
 
 /**
  * Return the value associated with a particular field
@@ -582,7 +602,14 @@ wxString BOM_TABLE_COMPONENT::GetFieldValue( unsigned int aFieldId ) const
     }
 
     if( m_fieldValues )
+    {
         m_fieldValues->GetFieldValue( aFieldId, value );
+
+        if( value.IsEmpty() )
+        {
+            m_fieldValues->GetTemplateValue( aFieldId, value );
+        }
+    }
 
     return value;
 }
@@ -966,9 +993,9 @@ void BOM_TABLE_MODEL::AddComponentFields( SCH_COMPONENT* aCmp )
             continue;
 
         ColumnList.AddColumn( new BOM_COLUMN( ColumnList.NextFieldId(),
-                                         BOM_COL_TYPE_USER,
-                                         field->GetName(),
-                                         true, false ) );
+                                              BOM_COL_TYPE_USER,
+                                              field->GetName(),
+                                              true, false ) );
     }
 }
 
@@ -976,8 +1003,9 @@ void BOM_TABLE_MODEL::AddComponentFields( SCH_COMPONENT* aCmp )
  * Add a list of component items to the BOM manager
  * Creates consolidated groups of components as required
  */
-void BOM_TABLE_MODEL::SetComponents( SCH_REFERENCE_LIST aRefs )
+void BOM_TABLE_MODEL::SetComponents( SCH_REFERENCE_LIST aRefs, const TEMPLATE_FIELDNAMES& aTemplateFields )
 {
+
     // Add default columns
     AddDefaultColumns();
 
@@ -993,10 +1021,33 @@ void BOM_TABLE_MODEL::SetComponents( SCH_REFERENCE_LIST aRefs )
         }
     }
 
+    // Add template fields if they are not already added
+    for( auto field : aTemplateFields )
+    {
+        BOM_COLUMN* col;
+
+        col = ColumnList.GetColumnByTitle( field.m_Name );
+
+        if( !col )
+        {
+            col = new BOM_COLUMN( ColumnList.NextFieldId(),
+                                       BOM_COL_TYPE_USER,
+                                       field.m_Name,
+                                       true, false );
+
+            ColumnList.AddColumn( col );
+        }
+
+        // Add template value for that field
+        m_fieldTemplates[col->Id()] = field.m_Value;
+    }
+
     // Group multi-unit components together
     m_components.clear();
     m_fieldValues.clear();
 
+
+    // Iterate through each unique component
     for( unsigned int ii=0; ii<aRefs.GetCount(); ii++ )
     {
         auto ref = aRefs.GetItem( ii );
@@ -1033,7 +1084,7 @@ void BOM_TABLE_MODEL::SetComponents( SCH_REFERENCE_LIST aRefs )
 
             if( !dataFound )
             {
-                values = new BOM_FIELD_VALUES( refDes );
+                values = new BOM_FIELD_VALUES( refDes, &m_fieldTemplates );
                 m_fieldValues.push_back( std::unique_ptr<BOM_FIELD_VALUES>( values ) );
             }
 
@@ -1042,6 +1093,17 @@ void BOM_TABLE_MODEL::SetComponents( SCH_REFERENCE_LIST aRefs )
 
             m_components.push_back( std::unique_ptr<BOM_TABLE_COMPONENT>( newComponent ) );
         }
+    }
+
+    SetBackupPoint();
+}
+
+void BOM_TABLE_MODEL::SetBackupPoint()
+{
+    // Mark backup locations for all values
+    for( auto& vals : m_fieldValues )
+    {
+        vals->SetBackupPoint();
     }
 }
 

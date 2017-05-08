@@ -57,19 +57,20 @@ private:
 
     BOM_TABLE_MODEL::MODEL_PTR m_bom;
 
-    void LoadComponents( void );
+    void LoadComponents();
 
-    void LoadColumnNames( void );
-    void ReloadColumns( void );
+    void LoadColumnNames();
+    void ReloadColumns();
 
-    // Called when the OK button is pressed
-    virtual bool TransferDataFromWindow() override;
+    void ApplyAllChanges();
 
     // Checkbox event callbacks
     virtual void OnColumnItemToggled( wxDataViewEvent& event ) override;
     virtual void OnGroupComponentsToggled( wxCommandEvent& event ) override;
 
     virtual void OnRevertFieldChanges( wxCommandEvent& event ) override;
+
+    virtual void OnApplyFieldChanges( wxCommandEvent& event ) override;
 
     virtual void OnRegroupComponents( wxCommandEvent& event ) override;
 
@@ -81,6 +82,12 @@ private:
 
     // Called when a cell is right-clicked
     virtual void OnTableItemContextMenu( wxDataViewEvent& event ) override;
+
+    // Called when the dialog is closed
+    virtual void OnDialogClosed( wxCloseEvent& event ) override;
+    virtual void OnCloseButton( wxCommandEvent& event ) override;
+
+    bool CloseDialog();
 
     void UpdateTitle( void );
 
