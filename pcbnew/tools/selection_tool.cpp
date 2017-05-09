@@ -488,14 +488,13 @@ bool SELECTION_TOOL::selectMultiple()
 
         if( evt->IsDrag( BUT_LEFT ) )
         {
-            if( !m_additive && !m_subtractive )
-            {
-                clearSelection();
-            }
 
             // Start drawing a selection box
             area.SetOrigin( evt->DragOrigin() );
             area.SetEnd( evt->Position() );
+            area.SetAdditive( m_additive );
+            area.SetSubtractive( m_subtractive );
+
             view->SetVisible( &area, true );
             view->Update( &area );
         }
