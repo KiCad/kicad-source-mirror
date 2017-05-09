@@ -431,7 +431,7 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
         break;
 
     default:
-        ;
+        break;
     }
 
     bbox.Inflate( ((m_Width+1) / 2) + 1 );
@@ -521,17 +521,18 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
     arect.Inflate( aAccuracy );
 
     EDA_RECT arcRect;
+    EDA_RECT bb = GetBoundingBox();
 
     switch( m_Shape )
     {
     case S_CIRCLE:
         // Test if area intersects or contains the circle:
         if( aContained )
-            return arect.Contains( GetBoundingBox() );
+            return arect.Contains( bb );
         else
         {
             // If the rectangle does not intersect the bounding box, this is a much quicker test
-            if( !aRect.Intersects( GetBoundingBox() ) )
+            if( !aRect.Intersects( bb ) )
             {
                 return false;
             }
@@ -545,17 +546,15 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
 
     case S_ARC:
 
-        computeArcBBox( arcRect );
-
         // Test for full containment of this arc in the rect
         if( aContained )
         {
-            return arect.Contains( arcRect );
+            return arect.Contains( bb );
         }
         // Test if the rect crosses the arc
         else
         {
-            arcRect = arcRect.Common( arect );
+            arcRect = bb.Common( arect );
 
             /* All following tests must pass:
              * 1. Rectangle must intersect arc BoundingBox
