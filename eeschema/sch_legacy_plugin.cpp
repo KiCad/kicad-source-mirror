@@ -624,7 +624,7 @@ void SCH_LEGACY_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
         wxFileName fileName = aSheet->GetFileName();
 
         if( !fileName.IsAbsolute() )
-            fileName.SetPath( m_path );
+            fileName.MakeAbsolute( m_path );
 
         m_rootSheet->SearchHierarchy( fileName.GetFullPath(), &screen );
 
