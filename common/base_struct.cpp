@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -589,10 +589,10 @@ bool EDA_RECT::IntersectsCircleEdge( const wxPoint& aCenter, const int aRadius, 
         return false;
     }
 
-    wxPoint far = FarthestPointTo( aCenter );
+    wxPoint farpt = FarthestPointTo( aCenter );
     // Farthest point must be further than the inside of the line
-    double fx = (double) far.x;
-    double fy = (double) far.y;
+    double fx = (double) farpt.x;
+    double fy = (double) farpt.y;
 
     double r = (double) aRadius - (double) aWidth / 2;
 
