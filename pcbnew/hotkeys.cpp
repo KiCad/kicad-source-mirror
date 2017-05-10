@@ -117,6 +117,7 @@ static EDA_HOTKEY HkFlipItem( _HKI( "Flip Item" ), HK_FLIP_ITEM, 'F' );
 static EDA_HOTKEY HkRotateItem( _HKI( "Rotate Item" ), HK_ROTATE_ITEM, 'R' );
 static EDA_HOTKEY HkMoveItem( _HKI( "Move Item" ), HK_MOVE_ITEM, 'M' );
 static EDA_HOTKEY HkMoveItemExact( _HKI( "Move Item Exactly" ), HK_MOVE_ITEM_EXACT, 'M' + GR_KB_CTRL );
+static EDA_HOTKEY HkPositionItemRelative( _HKI( "Position Item Relative" ), HK_POSITION_RELATIVE, 'R' + GR_KB_CTRL );
 static EDA_HOTKEY HkDuplicateItem( _HKI( "Duplicate Item" ), HK_DUPLICATE_ITEM, 'D' + GR_KB_CTRL );
 static EDA_HOTKEY HkDuplicateItemAndIncrement( _HKI( "Duplicate Item and Increment" ),
                                    HK_DUPLICATE_ITEM_AND_INCREMENT, 'D' + GR_KB_SHIFTCTRL );
@@ -262,7 +263,7 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     &HkPlaceItem,              &HkCopyItem,
     &HkMoveItem,
     &HkFlipItem,
-    &HkRotateItem,             &HkMoveItemExact,
+    &HkRotateItem,             &HkMoveItemExact, &HkPositionItemRelative,
     &HkDuplicateItem,          &HkDuplicateItemAndIncrement, &HkCreateArray,
     &HkDragFootprint,
     &HkGetAndMoveFootprint,    &HkLock_Unlock_Footprint,     &HkSavefile, &HkSavefileAs,

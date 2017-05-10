@@ -134,6 +134,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_pad_properties_base.cpp
     dialogs/dialog_plot_base.cpp
     dialogs/dialog_plot.cpp
+    dialogs/dialog_position_relative.cpp
+    dialogs/dialog_position_relative_base.cpp
     dialogs/dialog_print_for_modedit.cpp
     dialogs/dialog_print_for_modedit_base.cpp
     dialogs/dialog_print_using_printer.cpp
@@ -309,6 +311,7 @@ set( PCBNEW_CLASS_SRCS
     tools/point_editor.cpp
     tools/drawing_tool.cpp
     tools/edit_tool.cpp
+    tools/position_relative_tool.cpp
     tools/pcbnew_control.cpp
     tools/pcb_editor_control.cpp
     tools/microwave_tool.cpp

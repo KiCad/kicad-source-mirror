@@ -220,7 +220,12 @@ public:
     /// Distributes items evenly along the vertical axis
     static TOOL_ACTION distributeVertically;
 
+    // Position Relative Tool
+    /// Activation of the position relative tool
+    static TOOL_ACTION positionRelative;
 
+    /// Selection of anchor item for position relative tool
+    static TOOL_ACTION selectpositionRelativeItem;
 
     // Display modes
     static TOOL_ACTION trackDisplayMode;
