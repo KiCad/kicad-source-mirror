@@ -45,6 +45,7 @@ SELECTION_AREA::SELECTION_AREA() :
     SetFillColor( SELECT_MODE_NORMAL );
 }
 
+
 void SELECTION_AREA::SetAdditive( bool aAdditive )
 {
     m_additive = aAdditive;
@@ -53,13 +54,15 @@ void SELECTION_AREA::SetAdditive( bool aAdditive )
         m_subtractive = false;
 }
 
+
 void SELECTION_AREA::SetSubtractive( bool aSubtractive )
 {
     m_subtractive = aSubtractive;
 
-    if ( m_subtractive )
+    if( m_subtractive )
         m_additive = false;
 }
+
 
 const BOX2I SELECTION_AREA::ViewBBox() const
 {
@@ -94,4 +97,3 @@ void SELECTION_AREA::drawPreviewShape( KIGFX::GAL& aGal ) const
 
     aGal.DrawRectangle( m_origin, m_end );
 }
-

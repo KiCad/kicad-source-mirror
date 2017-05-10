@@ -373,19 +373,12 @@ bool EDA_RECT::Contains( const wxPoint& aPoint ) const
 }
 
 
-/*
- * return true if aRect is inside me (or on boundaries)
- */
 bool EDA_RECT::Contains( const EDA_RECT& aRect ) const
 {
     return Contains( aRect.GetOrigin() ) && Contains( aRect.GetEnd() );
 }
 
 
-/* Intersects
- * test for a common area between segment and rect.
- * return true if at least a common point is found
- */
 bool EDA_RECT::Intersects( const wxPoint& aPoint1, const wxPoint& aPoint2 ) const
 {
     wxPoint point2, point4;
@@ -412,10 +405,6 @@ bool EDA_RECT::Intersects( const wxPoint& aPoint1, const wxPoint& aPoint2 ) cons
 }
 
 
-/* Intersects
- * test for a common area between 2 rect.
- * return true if at least a common point is found
- */
 bool EDA_RECT::Intersects( const EDA_RECT& aRect ) const
 {
     // this logic taken from wxWidgets' geometry.cpp file:
@@ -443,6 +432,7 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect ) const
     return rc;
 }
 
+
 bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
 {
     /* Most rectangles will be axis aligned.
@@ -459,7 +449,7 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
     NORMALIZE_ANGLE_POS<double>( aRot );
 
     // Test for non-rotated rectangle
-    for( int ii=0; ii<5; ii++ )
+    for( int ii = 0; ii < 5; ii++ )
     {
         if( std::fabs( aRot - ROT_PARALLEL[ii] ) < ROT_EPS )
         {
@@ -468,7 +458,7 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
     }
 
     // Test for rectangle rotated by multiple of 90 degrees
-    for( int jj=0; jj<4; jj++ )
+    for( int jj = 0; jj < 4; jj++ )
     {
         if( std::fabs( aRot - ROT_PERPENDICULAR[jj] ) < ROT_EPS )
         {
@@ -499,7 +489,7 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
 
     wxPoint rCentre = aRect.Centre();
 
-    for( int i=0; i<4; i++ )
+    for( int i = 0; i < 4; i++ )
     {
         wxPoint delta = corners[i] - rCentre;
         RotatePoint( &delta, -aRot );
@@ -547,9 +537,10 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
     return false;
 }
 
+
 const wxPoint EDA_RECT::ClosestPointTo( const wxPoint& aPoint ) const
 {
-    EDA_RECT me(*this);
+    EDA_RECT me( *this );
 
     me.Normalize();         // ensure size is >= 0
 
@@ -560,9 +551,10 @@ const wxPoint EDA_RECT::ClosestPointTo( const wxPoint& aPoint ) const
     return wxPoint( nx, ny );
 }
 
+
 const wxPoint EDA_RECT::FarthestPointTo( const wxPoint& aPoint ) const
 {
-    EDA_RECT me(*this);
+    EDA_RECT me( *this );
 
     me.Normalize();         // ensure size is >= 0
 
@@ -572,9 +564,7 @@ const wxPoint EDA_RECT::FarthestPointTo( const wxPoint& aPoint ) const
     return wxPoint( fx, fy );
 }
 
-/* IntersectsCircle
- * test for common area between this rect and a circle
- */
+
 bool EDA_RECT::IntersectsCircle( const wxPoint& aCenter, const int aRadius ) const
 {
     wxPoint closest = ClosestPointTo( aCenter );
@@ -587,9 +577,10 @@ bool EDA_RECT::IntersectsCircle( const wxPoint& aCenter, const int aRadius ) con
     return ( dx * dx + dy * dy ) <= ( r * r );
 }
 
+
 bool EDA_RECT::IntersectsCircleEdge( const wxPoint& aCenter, const int aRadius, const int aWidth ) const
 {
-    EDA_RECT me(*this);
+    EDA_RECT me( *this );
     me.Normalize();         // ensure size is >= 0
 
     // Test if the circle intersects at all
@@ -607,6 +598,7 @@ bool EDA_RECT::IntersectsCircleEdge( const wxPoint& aCenter, const int aRadius, 
 
     return ( fx * fx + fy * fy ) > ( r * r );
 }
+
 
 EDA_RECT& EDA_RECT::Inflate( int aDelta )
 {
@@ -743,8 +735,6 @@ EDA_RECT EDA_RECT::Common( const EDA_RECT& aRect ) const
 }
 
 
-/* Calculate the bounding box of this, when rotated
- */
 const EDA_RECT EDA_RECT::GetBoundingBoxRotated( wxPoint aRotCenter, double aAngle )
 {
     wxPoint corners[4];

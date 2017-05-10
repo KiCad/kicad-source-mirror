@@ -196,7 +196,6 @@ public:
      */
     bool IntersectsCircle( const wxPoint& aCenter, const int aRadius ) const;
 
-
     /**
      * IntersectsCircleEdge
      * Tests for intersection between this rect and the edge (radius) of a circle

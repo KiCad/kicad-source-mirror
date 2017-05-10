@@ -178,9 +178,6 @@ int D_PAD::GetRoundRectCornerRadius( const wxSize& aSize ) const
 }
 
 
-/**
- * Return the BoundingBox for a D_PAD
- */
 const EDA_RECT D_PAD::GetBoundingBox() const
 {
     EDA_RECT area;
@@ -751,6 +748,7 @@ void D_PAD::GetOblongDrillGeometry( wxPoint& aStartPoint,
     aEndPoint.y = - delta_cy;
 }
 
+
 bool D_PAD::HitTest( const wxPoint& aPosition ) const
 {
     int dx, dy;
@@ -831,9 +829,7 @@ bool D_PAD::HitTest( const wxPoint& aPosition ) const
     return false;
 }
 
-/**
- * Test if an x,y axis-aligned rectangle hits this pad
- */
+
 bool D_PAD::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT arect = aRect;
