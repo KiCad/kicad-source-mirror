@@ -4690,6 +4690,7 @@
                                                             <property name="minimum_size"></property>
                                                             <property name="name">sbSizer2</property>
                                                             <property name="orient">wxVERTICAL</property>
+                                                            <property name="parent">1</property>
                                                             <property name="permission">none</property>
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="sizeritem" expanded="0">
@@ -5490,6 +5491,7 @@
                                                             <property name="minimum_size"></property>
                                                             <property name="name">m_LayersSizer</property>
                                                             <property name="orient">wxVERTICAL</property>
+                                                            <property name="parent">1</property>
                                                             <property name="permission">none</property>
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="sizeritem" expanded="0">
@@ -5684,6 +5686,7 @@
                                                                     <property name="minimum_size"></property>
                                                                     <property name="name">sbSizerTechlayers</property>
                                                                     <property name="orient">wxVERTICAL</property>
+                                                                    <property name="parent">1</property>
                                                                     <property name="permission">none</property>
                                                                     <event name="OnUpdateUI"></event>
                                                                     <object class="sizeritem" expanded="0">
@@ -6668,6 +6671,7 @@
                                                             <property name="minimum_size"></property>
                                                             <property name="name">sbSizeModuleInfo</property>
                                                             <property name="orient">wxVERTICAL</property>
+                                                            <property name="parent">1</property>
                                                             <property name="permission">none</property>
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="sizeritem" expanded="0">
@@ -7129,6 +7133,7 @@
                                                             <property name="minimum_size"></property>
                                                             <property name="name">sbClearancesSizer</property>
                                                             <property name="orient">wxVERTICAL</property>
+                                                            <property name="parent">1</property>
                                                             <property name="permission">none</property>
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="sizeritem" expanded="0">
@@ -8189,6 +8194,7 @@
                                                             <property name="minimum_size"></property>
                                                             <property name="name">sbSizerZonesSettings</property>
                                                             <property name="orient">wxVERTICAL</property>
+                                                            <property name="parent">1</property>
                                                             <property name="permission">none</property>
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="sizeritem" expanded="0">
@@ -9178,10 +9184,10 @@
                                         <property name="center_pane">0</property>
                                         <property name="class">PCB_DRAW_PANEL_GAL</property>
                                         <property name="close_button">1</property>
-                                        <property name="construction">PCB_BASE_FRAME* frame = static_cast&lt;PCB_BASE_FRAME*&gt;( parent );&#x0A;m_panelShowPadGal = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), wxDefaultSize, frame-&gt;GetGalDisplayOptions(), EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );</property>
+                                        <property name="construction">m_panelShowPadGal = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), wxDefaultSize, m_galOptions, EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
-                                        <property name="declaration">PCB_DRAW_PANEL_GAL* m_panelShowPadGal;</property>
+                                        <property name="declaration">PCB_DRAW_PANEL_GAL* m_panelShowPadGal;&#x0A;KIGFX::GAL_DISPLAY_OPTIONS m_galOptions;</property>
                                         <property name="default_pane">0</property>
                                         <property name="dock">Dock</property>
                                         <property name="dock_fixed">0</property>

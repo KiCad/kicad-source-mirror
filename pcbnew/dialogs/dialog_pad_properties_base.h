@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan 15 2017)
+// C++ code generated with wxFormBuilder (version Jul 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -157,6 +157,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextWarning;
 		wxPanel* m_panelShowPad;
 		PCB_DRAW_PANEL_GAL* m_panelShowPadGal;
+		KIGFX::GAL_DISPLAY_OPTIONS m_galOptions;
 		wxStaticText* m_staticTextWarningPadFlipped;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
