@@ -10,6 +10,9 @@
     Components are sorted and grouped by ref
     Fields are (if exist)
     Ref, Quantity, Value, Symbol, footprint, Description, Vendor
+
+    Command line:
+    python "pathToFile/bom_html_by_value.py" "%I" "%O.csv"
 """
 
 

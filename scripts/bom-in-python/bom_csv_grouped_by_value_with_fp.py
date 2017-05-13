@@ -10,6 +10,9 @@
     Components are sorted by ref and grouped by value with same footprint
     Fields are (if exist)
     'Ref', 'Qnty', 'Value', 'Cmp name', 'Footprint', 'Description', 'Vendor'
+
+    Command line:
+    python "pathToFile/bom_csv_grouped_by_value_with_fp.py" "%I" "%O.csv"
 """
 
 # Import the KiCad python helper module and the csv formatter

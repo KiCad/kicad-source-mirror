@@ -9,6 +9,9 @@
     Components are sorted by ref and grouped by value
     Fields are (if exist)
     Item, Qty, Reference(s), Value, LibPart, Footprint, Datasheet
+
+    Command line:
+    python "pathToFile/bom_csv_grouped_by_value.py" "%I" "%O.csv"
 """
 
 from __future__ import print_function
@@ -25,7 +28,6 @@ def myEqu(self, other):
 
     In this example of a custom equivalency operator we compare the
     value, the part name and the footprint.
-
     """
     result = True
     if self.getValue() != other.getValue():
