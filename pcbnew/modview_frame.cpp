@@ -689,11 +689,8 @@ void FOOTPRINT_VIEWER_FRAME::Update3D_Frame( bool aForceReloadFootprint )
 
     if( aForceReloadFootprint )
     {
-        draw3DFrame->ReloadRequest();
-
         // Force 3D screen refresh immediately
-        if( GetBoard()->m_Modules )
-            draw3DFrame->NewDisplay();
+        draw3DFrame->NewDisplay( true );
     }
 }
 

@@ -539,7 +539,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
     EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
     if( draw3DFrame )
-        draw3DFrame->NewDisplay();
+        draw3DFrame->NewDisplay( true );
 }
 
 

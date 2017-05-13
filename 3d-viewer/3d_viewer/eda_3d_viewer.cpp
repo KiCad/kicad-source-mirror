@@ -224,15 +224,23 @@ EDA_3D_VIEWER::~EDA_3D_VIEWER()
     //m_canvas = 0;
 }
 
+
 void EDA_3D_VIEWER::ReloadRequest()
 {
     // This will schedule a request to load later
     if( m_canvas )
         m_canvas->ReloadRequest( GetBoard(), Prj().Get3DCacheManager() );
+}
 
-    // This function is used by moduleframe.cpp
-    // while editing the pcb board, so it will not redraw to not slow the pcbnew
-    //m_canvas->Refresh();
+
+void EDA_3D_VIEWER::NewDisplay( bool aForceImmediateRedraw )
+{
+    ReloadRequest();
+
+    // After the ReloadRequest call, the refresh often takes a bit of time,
+    // and it is made here only on request.
+    if( aForceImmediateRedraw )
+        m_canvas->Refresh();
 }
 
 

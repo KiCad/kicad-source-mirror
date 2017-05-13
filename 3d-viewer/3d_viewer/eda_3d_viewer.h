@@ -63,12 +63,27 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
 
     BOARD* GetBoard() { return Parent()->GetBoard(); }
 
+    /**
+     * Request reloading the 3D view. However the request will be executed
+     * only when the 3D canvas is refreshed.
+     * It allows to prepare changes and request for 3D rebuild only when all
+     * changes are committed.
+     * This is made because the 3D rebuild can take a long time, and this rebuild
+     * cannot always made after each change, for calculation time reason.
+     */
     void ReloadRequest();
 
-    // !TODO: review this function
-    // !TODO: this need a way to tell what changed to the reload will only
-    // change the things on a need base
-    void NewDisplay( int dummy = 0 ) { ReloadRequest(); }
+    // !TODO: review this function: it need a way to tell what changed,
+    // to only reload/rebuild things that have really changed
+    /**
+     * Reload and refresh (rebuild)  the 3D scene.
+     * Warning: rebuilding the 3D scene can take a bit of time, so
+     * rebuilding the scene can be immediate, or made later, during
+     * the next 3D canvas refresh (on zoom for instance)
+     * @param aForceImmediateRedraw = true to immediately rebuild the 3D scene,
+     * false to wait a refresh later.
+     */
+    void NewDisplay( bool aForceImmediateRedraw = false );
 
     /**
      *  Function SetDefaultFileName

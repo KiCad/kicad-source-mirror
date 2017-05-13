@@ -24,12 +24,12 @@
 -->
 <!--
     @package
-    Command line:
-        xsltproc -o "%O.csv" "pathToFile/bom2csv.xsl" "%I"
-
     Output format
         Reference, Value, Fields[n], Library, Library Ref
         U1, PIC32MX, Fields[n], KicadLib, PIC
+
+Command line:
+        xsltproc -o "%O.csv" "pathToFile/bom2csv.xsl" "%I"
 -->
 
 <!DOCTYPE xsl:stylesheet [

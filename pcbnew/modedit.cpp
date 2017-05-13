@@ -190,7 +190,7 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromBoard( wxCommandEvent& event )
     EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
     if( draw3DFrame )
-        draw3DFrame->NewDisplay();
+        draw3DFrame->NewDisplay( true );
 }
 
 
@@ -370,7 +370,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
                 if( draw3DFrame )
-                    draw3DFrame->NewDisplay();
+                    draw3DFrame->NewDisplay( true );
 
                 GetScreen()->ClrModify();
             }
@@ -494,7 +494,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
         if( draw3DFrame )
-            draw3DFrame->NewDisplay();
+            draw3DFrame->NewDisplay( true );
         }
 
         break;
@@ -556,7 +556,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
         if( draw3DFrame )
-            draw3DFrame->NewDisplay();
+            draw3DFrame->NewDisplay( true );
         }
 
         GetScreen()->ClrModify();
