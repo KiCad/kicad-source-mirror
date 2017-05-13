@@ -11,7 +11,7 @@
     Fields are separated by tabs
 
     Command line:
-    python "pathToFile/bom_sorted_by_ref.py" "%I" "%O.csv"
+    python "pathToFile/bom_sorted_by_ref.py" "%I" "%O.txt"
 """
 
 from __future__ import print_function
