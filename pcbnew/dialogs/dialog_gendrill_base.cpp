@@ -105,7 +105,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	sbExcellonOptSizer->Add( m_Check_Minimal, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_Check_Merge_PTH_NPTH = new wxCheckBox( sbExcellonOptSizer->GetStaticBox(), wxID_ANY, _("Merge PTH and NPTH holes into one file"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Check_Merge_PTH_NPTH->SetToolTip( _("Not recommended.\nOnly use for board houses which ask for merged PTH and NTPH into a single file.") );
+	m_Check_Merge_PTH_NPTH->SetToolTip( _("Not recommended.\nOnly use for board houses which ask for merged PTH and NPTH into a single file.") );
 	
 	sbExcellonOptSizer->Add( m_Check_Merge_PTH_NPTH, 0, wxALL, 5 );
 	
