@@ -10,6 +10,9 @@
     Components are sorted and grouped by value
     Fields are (if exist)
     Ref, Quantity, Value, Part, Footprint, Description, Vendor
+
+    Command line:
+    python "pathToFile/bom_with_advanced_grouping.py" "%I" "%O.html"
 """
 
 

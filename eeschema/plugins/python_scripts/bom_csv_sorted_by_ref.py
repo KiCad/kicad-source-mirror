@@ -11,6 +11,9 @@
     One component per line
     Fields are (if exist)
     Ref, value, Part, footprint, Datasheet, Manufacturer, Vendor
+
+    Command line:
+    python "pathToFile/bom_csv_sorted_by_ref.py" "%I" "%O.csv"
 """
 
 from __future__ import print_function

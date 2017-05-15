@@ -25,6 +25,9 @@
     One component per line
     Fields are
     Ref,Value, Footprint, Datasheet, Field5, Field4, price
+
+    Command line
+    xsltproc -o "%O.csv" "pathToFile/bom2csv.xsl" "%I"
 -->
 
 <!DOCTYPE xsl:stylesheet [

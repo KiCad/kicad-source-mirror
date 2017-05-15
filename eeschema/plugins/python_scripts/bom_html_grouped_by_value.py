@@ -9,6 +9,9 @@
     Components are sorted by ref and grouped by value
     Fields are (if exist)
     Ref, Quantity, Value, Part, Datasheet, Description, Vendor
+
+    Command line:
+    python "pathToFile/bom_html_grouped_by_value.py" "%I" "%O.html"
 """
 
 from __future__ import print_function

@@ -1385,8 +1385,8 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
             export_vrml_module( model3d, pcb, module, output_file, wrml_3D_models_scaling_factor,
                                 aExport3DFiles, aUseRelativePaths, a3D_Subdir );
 
-            // write out the board and all layers
-            write_layers( model3d, output_file, pcb );
+        // write out the board and all layers
+        write_layers( model3d, output_file, pcb );
 
         // Close the outer 'transform' node
         output_file << "]\n}\n";

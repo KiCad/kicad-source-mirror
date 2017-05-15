@@ -3,12 +3,15 @@
 #
 """
     @package
-    Generate a BOM list file.
+    Generate a BOM list file (a simple text).
     Components are sorted by ref
     One component per line
     Fields are (if exist)
     Ref, Quantity, value, Part, footprint, Description, Vendor
     Fields are separated by tabs
+
+    Command line:
+    python "pathToFile/bom_sorted_by_ref.py" "%I" "%O.txt"
 """
 
 from __future__ import print_function
