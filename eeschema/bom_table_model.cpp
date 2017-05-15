@@ -787,7 +787,7 @@ wxDataViewColumn* BOM_TABLE_MODEL::AddColumn( BOM_COLUMN* aColumn, int aPosition
                                         renderer,
                                         aColumn->Id(),
                                         150, //TODO - variable default width?
-                                        wxAlignment( wxALIGN_CENTER ),
+                                        wxAlignment( wxALIGN_LEFT ),
                                         flags );
 
     // Work out where to insert the column
