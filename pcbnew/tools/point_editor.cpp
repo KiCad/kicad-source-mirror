@@ -87,6 +87,9 @@ public:
     {
         std::shared_ptr<EDIT_POINTS> points = std::make_shared<EDIT_POINTS>( aItem );
 
+        if( !aItem )
+            return points;
+
         // Generate list of edit points basing on the item type
         switch( aItem->Type() )
         {
@@ -274,12 +277,16 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     view->Add( m_editPoints.get() );
     m_editedPoint = NULL;
     bool modified = false;
+    bool revert = false;
 
     BOARD_COMMIT commit( editFrame );
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
+        if( revert )
+            break;
+
         if( !m_editPoints ||
             evt->Matches( m_selectionTool->ClearedEvent ) ||
             evt->Matches( m_selectionTool->UnselectedEvent ) ||
@@ -336,16 +343,13 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         else if( evt->IsCancel() )
         {
             if( modified )      // Restore the last change
-            {
-                commit.Revert();
-                updatePoints();
-                modified = false;
-            }
+                revert = true;
 
             // Let the selection tool receive the event too
             m_toolMgr->PassEvent();
 
-            break;
+            // Do not exit right now, let the selection clear the selection
+            //break;
         }
 
         else
@@ -356,8 +360,13 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
     if( m_editPoints )
     {
-        finishItem();
         view->Remove( m_editPoints.get() );
+
+        if( modified && revert )
+            commit.Revert();
+        else
+            finishItem();
+
         m_editPoints.reset();
     }
 
@@ -368,6 +377,9 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 void POINT_EDITOR::updateItem() const
 {
     EDA_ITEM* item = m_editPoints->GetParent();
+
+    if( !item )
+        return;
 
     switch( item->Type() )
     {
@@ -529,6 +541,9 @@ void POINT_EDITOR::finishItem() const
 {
     EDA_ITEM* item = m_editPoints->GetParent();
 
+    if( !item )
+        return;
+
     if( item->Type() == PCB_ZONE_AREA_T )
     {
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
@@ -548,6 +563,9 @@ void POINT_EDITOR::updatePoints()
         return;
 
     EDA_ITEM* item = m_editPoints->GetParent();
+
+    if( !item )
+        return;
 
     switch( item->Type() )
     {
@@ -886,6 +904,9 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
         return 0;
 
     EDA_ITEM* item = m_editPoints->GetParent();
+
+    if( !item )
+        return 0;
 
     if( item->Type() == PCB_ZONE_AREA_T )
     {
