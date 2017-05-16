@@ -37,6 +37,9 @@ using namespace std::placeholders;
 #include <class_track.h>
 #include <class_zone.h>
 
+#include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
+
 #include <dialog_global_deletion.h>
 
 
@@ -93,6 +96,9 @@ void DIALOG_GLOBAL_DELETION::OnCheckDeleteModules( wxCommandEvent& event )
 void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
 {
     bool gen_rastnest = false;
+
+    // Clear selection before removing any items
+    m_Parent->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
     m_Parent->SetCurItem( NULL );
 
