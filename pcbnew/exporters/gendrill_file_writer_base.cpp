@@ -50,14 +50,18 @@ static bool CmpHoleSorting( const HOLE_INFO& a, const HOLE_INFO& b )
 
     if( pada && padb )
     {
-        if( pada->GetParent()->GetReference().Cmp( padb->GetParent()->GetReference() ) != 0 )
-            return pada->GetParent()->GetReference().Cmp( padb->GetParent()->GetReference() ) < 0;
+        // cmp == 0 means the pads have the same parent, therfore the same reference
+        int cmp = pada->GetParent() - padb->GetParent();
+
+        if( cmp )
+            return cmp < 0;
     }
-    else if( pada || padb )
-        return true;
+    else if( pada || padb )     // in this case, other item is a via. Sort via first
+    {
+        return padb != nullptr;
+    }
 
-    // At this point, holes are via holes: sort by position
-
+    // At this point, sort by position, as last sort criteria
     if( a.m_Hole_Pos.x != b.m_Hole_Pos.x )
         return a.m_Hole_Pos.x < b.m_Hole_Pos.x;
 

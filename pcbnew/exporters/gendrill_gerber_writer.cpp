@@ -220,6 +220,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
     holes_count = 0;
 
     wxPoint hole_pos;
+    bool last_item_is_via = true;   // a flag to clear object attributes when a via hole is created.
 
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
@@ -233,9 +234,21 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
         GBR_METADATA gbr_metadata;
 
         if( dyn_cast<const VIA*>(hole_descr.m_ItemParent ) )
+        {
             gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_VIADRILL );
+
+            if( !last_item_is_via )
+            {
+                // be sure the current object attribute is cleared for vias
+                plotter.EndBlock( NULL );
+            }
+
+            last_item_is_via = true;
+        }
         else if( dyn_cast<const D_PAD*>( hole_descr.m_ItemParent ) )
         {
+            last_item_is_via = false;
+
             if( hole_descr.m_Hole_Shape )
                 gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_SLOTDRILL );
             else
@@ -243,7 +256,13 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 
             // Add object attribute: component reference to pads (mainly usefull for users)
             const D_PAD* pad = dyn_cast<const D_PAD*>( hole_descr.m_ItemParent );
-            gbr_metadata.SetCmpReference( pad->GetParent()->GetReference() );
+            wxString ref = pad->GetParent()->GetReference();
+
+#if 0   // Set to 1 to force a dummy reference for the parent pad.
+            if( ref.IsEmpty() )
+                ref = "<undefinedref>";
+#endif
+            gbr_metadata.SetCmpReference( ref );
             gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
         }
 
