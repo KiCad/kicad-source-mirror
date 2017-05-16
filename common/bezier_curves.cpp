@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,49 +30,7 @@
 #include <bezier_curves.h>
 
 
-#define add_segment(segment) if(s_bezier_Points_Buffer[s_bezier_Points_Buffer.size()-1] != segment) s_bezier_Points_Buffer.push_back(segment);
-
-
-// Local variables:
-static std::vector<wxPoint> s_bezier_Points_Buffer;
-
-static int    bezier_recursion_limit     = 12;
-static double bezier_approximation_scale = 0.5;  // 1
-
-static double bezier_curve_collinearity_epsilon    = 1e-30;
-static double bezier_curve_angle_tolerance_epsilon = 0.0001;
-static double bezier_distance_tolerance_square; // derived by approximation_scale
-static double bezier_angle_tolerance = 0.0;
-static double bezier_cusp_limit = 0.0;
-
-// Local functions:
-static void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int level );
-static void recursive_bezier( int x1,
-                              int y1,
-                              int x2,
-                              int y2,
-                              int x3,
-                              int y3,
-                              int x4,
-                              int y4,
-                              int level );
-
-/***********************************************************************************/
-
-
-std::vector<wxPoint> Bezier2Poly( wxPoint c1, wxPoint c2, wxPoint c3, wxPoint c4 )
-{
-    return Bezier2Poly( c1.x, c1.y, c2.x, c2.y, c3.x, c3.y, c4.x, c4.y );
-}
-
-
-std::vector<wxPoint> Bezier2Poly( wxPoint c1, wxPoint c2, wxPoint c3 )
-{
-    return Bezier2Poly( c1.x, c1.y, c2.x, c2.y, c3.x, c3.y );
-}
-
-
-inline double calc_sq_distance( int x1, int y1, int x2, int y2 )
+static inline double calc_sq_distance( int x1, int y1, int x2, int y2 )
 {
     int dx = x2 - x1;
     int dy = y2 - y1;
@@ -80,47 +38,39 @@ inline double calc_sq_distance( int x1, int y1, int x2, int y2 )
     return (double)dx * dx + (double)dy * dy;
 }
 
-inline double sqrt_len( int dx, int dy )
+
+static inline double sqrt_len( int dx, int dy )
 {
     return ((double)dx * dx) + ((double)dy * dy);
 }
 
 
-std::vector<wxPoint>  Bezier2Poly( int x1, int y1, int x2, int y2, int x3, int y3 )
+void BEZIER_POLY::GetPoly( std::vector<wxPoint>& aOutput )
 {
-    s_bezier_Points_Buffer.clear();
+    m_output = &aOutput;
+    m_output->clear();
+    m_output->push_back( wxPoint( m_ctrlPts.front() ) );
 
-    bezier_distance_tolerance_square  = 0.5 / bezier_approximation_scale;
-    bezier_distance_tolerance_square *= bezier_distance_tolerance_square;
-    s_bezier_Points_Buffer.push_back( wxPoint( x1, y1 ) );
-    recursive_bezier( x1, y1, x2, y2, x3, y3, 0 );
-    s_bezier_Points_Buffer.push_back( wxPoint( x3, y3 ) );
+    // Only quadratic and cubic Bezier curves are handled
+    if( m_ctrlPts.size() == 3 )
+        recursiveBezier( m_ctrlPts[0].x, m_ctrlPts[0].y,
+                m_ctrlPts[1].x, m_ctrlPts[1].y,
+                m_ctrlPts[2].x, m_ctrlPts[2].y, 0 );
 
-    wxLogDebug( wxT( "Bezier Conversion - End (%d vertex)" ), s_bezier_Points_Buffer.size() );
-    return s_bezier_Points_Buffer;
+    else if( m_ctrlPts.size() == 4 )
+        recursiveBezier( m_ctrlPts[0].x, m_ctrlPts[0].y,
+                m_ctrlPts[1].x, m_ctrlPts[1].y,
+                m_ctrlPts[2].x, m_ctrlPts[2].y,
+                m_ctrlPts[3].x, m_ctrlPts[3].y, 0 );
+
+    m_output->push_back( wxPoint( m_ctrlPts.back() ) );
 }
 
 
-std::vector<wxPoint> Bezier2Poly( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4 )
+void BEZIER_POLY::recursiveBezier( int x1, int y1, int x2, int y2, int x3, int y3, unsigned int level )
 {
-    s_bezier_Points_Buffer.clear();
-    bezier_distance_tolerance_square  = 0.5 / bezier_approximation_scale;
-    bezier_distance_tolerance_square *= bezier_distance_tolerance_square;
-
-    s_bezier_Points_Buffer.push_back( wxPoint( x1, y1 ) );
-    recursive_bezier( x1, y1, x2, y2, x3, y3, x4, y4, 0 );
-    s_bezier_Points_Buffer.push_back( wxPoint( x4, y4 ) );
-    wxLogDebug( wxT( "Bezier Conversion - End (%d vertex)" ), s_bezier_Points_Buffer.size() );
-    return s_bezier_Points_Buffer;
-}
-
-
-void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int level )
-{
-    if( abs( level ) > bezier_recursion_limit )
-    {
+    if( level > recursion_limit )
         return;
-    }
 
     // Calculate all the mid-points of the line segments
     //----------------------
@@ -136,18 +86,18 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int level
     double d  = fabs( ((double) (x2 - x3) * dy) - ((double) (y2 - y3) * dx ) );
     double da;
 
-    if( d > bezier_curve_collinearity_epsilon )
+    if( d > curve_collinearity_epsilon )
     {
         // Regular case
         //-----------------
-        if( d * d <= bezier_distance_tolerance_square * (dx * dx + dy * dy) )
+        if( d * d <= distance_tolerance_square * (dx * dx + dy * dy) )
         {
             // If the curvature doesn't exceed the distance_tolerance value
             // we tend to finish subdivisions.
             //----------------------
-            if( bezier_angle_tolerance < bezier_curve_angle_tolerance_epsilon )
+            if( angle_tolerance < curve_angle_tolerance_epsilon )
             {
-                add_segment( wxPoint( x123, y123 ) );
+                addSegment( wxPoint( x123, y123 ) );
                 return;
             }
 
@@ -158,11 +108,11 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int level
             if( da >=M_PI )
                 da = 2 * M_PI - da;
 
-            if( da < bezier_angle_tolerance )
+            if( da < angle_tolerance )
             {
                 // Finally we can stop the recursion
                 //----------------------
-                add_segment( wxPoint( x123, y123 ) );
+                addSegment( wxPoint( x123, y123 ) );
                 return;
             }
         }
@@ -193,26 +143,24 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int level
                 d = calc_sq_distance( x2, y2, x1 + (int) d * dx,
                                       y1 + (int) d * dy );
         }
-        if( d < bezier_distance_tolerance_square )
+        if( d < distance_tolerance_square )
         {
-            add_segment( wxPoint( x2, y2 ) );
+            addSegment( wxPoint( x2, y2 ) );
             return;
         }
     }
 
     // Continue subdivision
     //----------------------
-    recursive_bezier( x1, y1, x12, y12, x123, y123, level + 1 );
-    recursive_bezier( x123, y123, x23, y23, x3, y3, -(level + 1) );
+    recursiveBezier( x1, y1, x12, y12, x123, y123, level + 1 );
+    recursiveBezier( x123, y123, x23, y23, x3, y3, -(level + 1) );
 }
 
 
-void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int level )
+void BEZIER_POLY::recursiveBezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, unsigned int level )
 {
-    if( abs( level ) > bezier_recursion_limit )
-    {
+    if( level > recursion_limit )
         return;
-    }
 
     // Calculate all the mid-points of the line segments
     //----------------------
@@ -239,8 +187,8 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, i
     double d3 = fabs( (double) ( (x3 - x4) * dy - (y3 - y4) * dx ) );
     double da1, da2, k;
 
-    switch( (int(d2 > bezier_curve_collinearity_epsilon) << 1) +
-           int(d3 > bezier_curve_collinearity_epsilon) )
+    switch( (int(d2 > curve_collinearity_epsilon) << 1) +
+           int(d3 > curve_collinearity_epsilon) )
     {
     case 0:
 
@@ -285,17 +233,17 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, i
         }
         if( d2 > d3 )
         {
-            if( d2 < bezier_distance_tolerance_square )
+            if( d2 < distance_tolerance_square )
             {
-                add_segment( wxPoint( x2, y2 ) );
+                addSegment( wxPoint( x2, y2 ) );
                 return;
             }
         }
         else
         {
-            if( d3 < bezier_distance_tolerance_square )
+            if( d3 < distance_tolerance_square )
             {
-                add_segment( wxPoint( x3, y3 ) );
+                addSegment( wxPoint( x3, y3 ) );
                 return;
             }
         }
@@ -305,11 +253,11 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, i
 
         // p1,p2,p4 are collinear, p3 is significant
         //----------------------
-        if( d3 * d3 <= bezier_distance_tolerance_square * sqrt_len(dx, dy) )
+        if( d3 * d3 <= distance_tolerance_square * sqrt_len(dx, dy) )
         {
-            if( bezier_angle_tolerance < bezier_curve_angle_tolerance_epsilon )
+            if( angle_tolerance < curve_angle_tolerance_epsilon )
             {
-                add_segment( wxPoint( x23, y23 ) );
+                addSegment( wxPoint( x23, y23 ) );
                 return;
             }
 
@@ -320,18 +268,18 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, i
             if( da1 >= M_PI )
                 da1 = 2 * M_PI - da1;
 
-            if( da1 < bezier_angle_tolerance )
+            if( da1 < angle_tolerance )
             {
-                add_segment( wxPoint( x2, y2 ) );
-                add_segment( wxPoint( x3, y3 ) );
+                addSegment( wxPoint( x2, y2 ) );
+                addSegment( wxPoint( x3, y3 ) );
                 return;
             }
 
-            if( bezier_cusp_limit != 0.0 )
+            if( cusp_limit != 0.0 )
             {
-                if( da1 > bezier_cusp_limit )
+                if( da1 > cusp_limit )
                 {
-                    add_segment( wxPoint( x3, y3 ) );
+                    addSegment( wxPoint( x3, y3 ) );
                     return;
                 }
             }
@@ -342,11 +290,11 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, i
 
         // p1,p3,p4 are collinear, p2 is significant
         //----------------------
-        if( d2 * d2 <= bezier_distance_tolerance_square * sqrt_len(dx, dy) )
+        if( d2 * d2 <= distance_tolerance_square * sqrt_len(dx, dy) )
         {
-            if( bezier_angle_tolerance < bezier_curve_angle_tolerance_epsilon )
+            if( angle_tolerance < curve_angle_tolerance_epsilon )
             {
-                add_segment( wxPoint( x23, y23 ) );
+                addSegment( wxPoint( x23, y23 ) );
                 return;
             }
 
@@ -357,18 +305,18 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, i
             if( da1 >= M_PI )
                 da1 = 2 * M_PI - da1;
 
-            if( da1 < bezier_angle_tolerance )
+            if( da1 < angle_tolerance )
             {
-                add_segment( wxPoint( x2, y2 ) );
-                add_segment( wxPoint( x3, y3 ) );
+                addSegment( wxPoint( x2, y2 ) );
+                addSegment( wxPoint( x3, y3 ) );
                 return;
             }
 
-            if( bezier_cusp_limit != 0.0 )
+            if( cusp_limit != 0.0 )
             {
-                if( da1 > bezier_cusp_limit )
+                if( da1 > cusp_limit )
                 {
-                    add_segment( wxPoint( x2, y2 ) );
+                    addSegment( wxPoint( x2, y2 ) );
                     return;
                 }
             }
@@ -379,14 +327,14 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, i
 
         // Regular case
         //-----------------
-        if( (d2 + d3) * (d2 + d3) <= bezier_distance_tolerance_square * sqrt_len(dx, dy) )
+        if( (d2 + d3) * (d2 + d3) <= distance_tolerance_square * sqrt_len(dx, dy) )
         {
             // If the curvature doesn't exceed the distance_tolerance value
             // we tend to finish subdivisions.
             //----------------------
-            if( bezier_angle_tolerance < bezier_curve_angle_tolerance_epsilon )
+            if( angle_tolerance < curve_angle_tolerance_epsilon )
             {
-                add_segment( wxPoint( x23, y23 ) );
+                addSegment( wxPoint( x23, y23 ) );
                 return;
             }
 
@@ -402,25 +350,25 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, i
             if( da2 >= M_PI )
                 da2 = 2 * M_PI - da2;
 
-            if( da1 + da2 < bezier_angle_tolerance )
+            if( da1 + da2 < angle_tolerance )
             {
                 // Finally we can stop the recursion
                 //----------------------
-                add_segment( wxPoint( x23, y23 ) );
+                addSegment( wxPoint( x23, y23 ) );
                 return;
             }
 
-            if( bezier_cusp_limit != 0.0 )
+            if( cusp_limit != 0.0 )
             {
-                if( da1 > bezier_cusp_limit )
+                if( da1 > cusp_limit )
                 {
-                    add_segment( wxPoint( x2, y2 ) );
+                    addSegment( wxPoint( x2, y2 ) );
                     return;
                 }
 
-                if( da2 > bezier_cusp_limit )
+                if( da2 > cusp_limit )
                 {
-                    add_segment( wxPoint( x3, y3 ) );
+                    addSegment( wxPoint( x3, y3 ) );
                     return;
                 }
             }
@@ -430,6 +378,6 @@ void recursive_bezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, i
 
     // Continue subdivision
     //----------------------
-    recursive_bezier( x1, y1, x12, y12, x123, y123, x1234, y1234, level + 1 );
-    recursive_bezier( x1234, y1234, x234, y234, x34, y34, x4, y4, level + 1 );
+    recursiveBezier( x1, y1, x12, y12, x123, y123, x1234, y1234, level + 1 );
+    recursiveBezier( x1234, y1234, x234, y234, x34, y34, x4, y4, level + 1 );
 }

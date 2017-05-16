@@ -289,7 +289,11 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         break;
 
     case S_CURVE:
-        m_BezierPoints = Bezier2Poly( m_Start, m_BezierC1, m_BezierC2, m_End );
+        {
+            std::vector<wxPoint> ctrlPoints = { m_Start, m_BezierC1, m_BezierC2, m_End };
+            BEZIER_POLY converter( ctrlPoints );
+            converter.GetPoly( m_BezierPoints );
+        }
 
         for( unsigned int i=1; i < m_BezierPoints.size(); i++ )
         {

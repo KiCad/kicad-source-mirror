@@ -291,11 +291,8 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     std::vector<wxPoint> PolyPointsTraslated;
 
     COLOR4D color = GetLayerColor( LAYER_DEVICE );
-
-    m_PolyPoints = Bezier2Poly( m_BezierPoints[0],
-                                m_BezierPoints[1],
-                                m_BezierPoints[2],
-                                m_BezierPoints[3] );
+    BEZIER_POLY converter( m_BezierPoints );
+    converter.GetPoly( m_PolyPoints );
 
     PolyPointsTraslated.clear();
 
@@ -319,17 +316,18 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
         fill = NO_FILL;
 
     GRSetDrawMode( aDC, aDrawMode );
+    EDA_RECT* const clipbox  = aPanel? aPanel->GetClipBox() : NULL;
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
-        GRPoly( aPanel->GetClipBox(), aDC, m_PolyPoints.size(),
+        GRPoly( clipbox, aDC, m_PolyPoints.size(),
                 &PolyPointsTraslated[0], 1, GetPenSize(),
                 (m_Flags & IS_MOVED) ? color : GetLayerColor( LAYER_DEVICE_BACKGROUND ),
                 GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE  )
-        GRPoly( aPanel->GetClipBox(), aDC, m_PolyPoints.size(),
+        GRPoly( clipbox, aDC, m_PolyPoints.size(),
                 &PolyPointsTraslated[0], 1, GetPenSize(), color, color );
     else
-        GRPoly( aPanel->GetClipBox(), aDC, m_PolyPoints.size(),
+        GRPoly( clipbox, aDC, m_PolyPoints.size(),
                 &PolyPointsTraslated[0], 0, GetPenSize(), color, color );
 
     /* Set to one (1) to draw bounding box around bezier curve to validate

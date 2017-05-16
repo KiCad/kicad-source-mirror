@@ -1008,26 +1008,27 @@ void CPolyLine::AppendArc( int xi, int yi, int xf, int yf, int xc, int yc, int n
 }
 
 
-// Bezier Support
 void CPolyLine::AppendBezier( int x1, int y1, int x2, int y2, int x3, int y3 )
 {
-    std::vector<wxPoint> bezier_points;
+    std::vector<wxPoint> polyPoints;
 
-    bezier_points = Bezier2Poly( x1, y1, x2, y2, x3, y3 );
+    BEZIER_POLY converter( x1, y1, x2, y2, x3, y3 );
+    converter.GetPoly( polyPoints );
 
-    for( unsigned int i = 0; i < bezier_points.size(); i++ )
-        AppendCorner( bezier_points[i].x, bezier_points[i].y );
+    for( const auto& pt : polyPoints )
+        AppendCorner( pt.x, pt.y );
 }
 
 
 void CPolyLine::AppendBezier( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4 )
 {
-    std::vector<wxPoint> bezier_points;
+    std::vector<wxPoint> polyPoints;
 
-    bezier_points = Bezier2Poly( x1, y1, x2, y2, x3, y3, x4, y4 );
+    BEZIER_POLY converter( x1, y1, x2, y2, x3, y3, x4, y4 );
+    converter.GetPoly( polyPoints );
 
-    for( unsigned int i = 0; i < bezier_points.size(); i++ )
-        AppendCorner( bezier_points[i].x, bezier_points[i].y );
+    for( const auto& pt : polyPoints )
+        AppendCorner( pt.x, pt.y );
 }
 
 
