@@ -188,6 +188,18 @@ protected:
 
     void init( const PROPERTIES* aProperties );
 
+    void formatSetup( BOARD* aBoard, int aNestLevel = 0 ) const
+        throw( IO_ERROR );
+
+    void formatGeneral( BOARD* aBoard, int aNestLevel = 0 ) const
+        throw( IO_ERROR );
+
+    void formatBoardLayers( BOARD* aBoard, int aNestLevel = 0 ) const
+        throw( IO_ERROR );
+
+    void formatNetInformation( BOARD* aBoard, int aNestLevel = 0 ) const
+        throw( IO_ERROR );
+
     /// writes everything that comes before the board_items, like settings and layers etc
     void formatHeader( BOARD* aBoard, int aNestLevel = 0 ) const
         throw( IO_ERROR );
