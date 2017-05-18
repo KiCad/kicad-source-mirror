@@ -143,7 +143,7 @@ TOOL_ACTION PCB_ACTIONS::appendBoard( "pcbnew.EditorControl.appendBoard",
         "", "" );
 
 TOOL_ACTION PCB_ACTIONS::appendClipboard( "pcbnew.EditorControl.appendClipboard",
-        AS_GLOBAL, MD_CTRL + MD_SHIFT + int( 'V' ),
+        AS_GLOBAL, MD_CTRL + int( 'V' ),
         "", "" );
 
 TOOL_ACTION PCB_ACTIONS::highlightNet( "pcbnew.EditorControl.highlightNet",
@@ -394,7 +394,7 @@ int PCB_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 {
-    MODULE* module = NULL;
+    MODULE* module = aEvent.Parameter<MODULE*>();
     KIGFX::VIEW* view = getView();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     BOARD* board = getModel<BOARD>();
@@ -409,6 +409,12 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 
     Activate();
     m_frame->SetToolID( ID_PCB_MODULE_BUTT, wxCURSOR_PENCIL, _( "Add footprint" ) );
+
+    // Add all the drawable parts to preview
+    if( module )
+    {
+        preview.Add( module );
+    }
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )

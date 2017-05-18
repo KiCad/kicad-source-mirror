@@ -188,15 +188,19 @@ protected:
 
     void init( const PROPERTIES* aProperties );
 
+    /// formats the board setup information
     void formatSetup( BOARD* aBoard, int aNestLevel = 0 ) const
         throw( IO_ERROR );
 
+    /// formats the General section of the file
     void formatGeneral( BOARD* aBoard, int aNestLevel = 0 ) const
         throw( IO_ERROR );
 
+    /// formats the board layer information
     void formatBoardLayers( BOARD* aBoard, int aNestLevel = 0 ) const
         throw( IO_ERROR );
 
+    /// formats the Nets and Netclasses
     void formatNetInformation( BOARD* aBoard, int aNestLevel = 0 ) const
         throw( IO_ERROR );
 

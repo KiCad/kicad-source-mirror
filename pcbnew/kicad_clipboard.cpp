@@ -39,7 +39,7 @@
 #include <kicad_clipboard.h>
 
 CLIPBOARD_IO::CLIPBOARD_IO():
-    PCB_IO(),
+    PCB_IO( CTL_STD_LAYER_NAMES ),
     m_formatter(),
     m_parser( new CLIPBOARD_PARSER() )
 {
@@ -58,54 +58,135 @@ void CLIPBOARD_IO::setBoard(BOARD* aBoard)
     m_board = aBoard;
 }
 
-void CLIPBOARD_IO::writeHeader(BOARD* aBoard)
-{
-    formatHeader( aBoard );
-}
-
-
 void CLIPBOARD_IO::SaveSelection( SELECTION& aSelected )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
-    // Prepare net mapping that assures that net codes saved in a file are consecutive integers
-    m_mapping->SetBoard( m_board );
-
-    // we will fake being a .kicad_pcb to get the full parser kicking
-    // This means we also need layers and nets
-
-    m_formatter.Print( 0, "(kicad_pcb (version %d) (host pcbnew %s)\n", SEXPR_BOARD_FILE_VERSION,
-            m_formatter.Quotew( GetBuildVersion() ).c_str() );
-
+    // dont even start if the selection is empty
     if( aSelected.Empty() )
         return;
 
-    writeHeader( m_board );
+    // Prepare net mapping that assures that net codes saved in a file are consecutive integers
+    m_mapping->SetBoard( m_board );
 
-    m_formatter.Print( 0, "\n" );
-
+    // Differentiate how it is formatted depending on what selection contains
+    bool onlyModuleParts = true;
     for( auto i : aSelected )
     {
-
-        // Dont format stuff that cannot exist standalone!
+        // check if it not one of the module primitives
         if( ( i->Type() != PCB_MODULE_EDGE_T ) &&
                 ( i->Type() != PCB_MODULE_TEXT_T ) &&
                 ( i->Type() != PCB_PAD_T ) )
         {
-            //std::cout <<"type "<< i->Type() << std::endl;
-            auto item = static_cast<BOARD_ITEM*>( i );
-            Format( item, 1 );
+            onlyModuleParts = false;
+            continue;
+        }
+    }
+
+    // if there is only parts of a module selected, format it as a new module else
+    // format it as an entire board
+    MODULE module( m_board );
+
+    // only a module selected.
+    if( aSelected.Size() == 1 && aSelected.Front()->Type() == PCB_MODULE_T )
+    {
+        // make the module safe to transfer to other pcbs
+        MODULE* mod = static_cast<MODULE*>( aSelected.Front() );
+        for( D_PAD* pad = mod->Pads().GetFirst(); pad; pad = pad->Next() )
+        {
+            pad->SetNetCode( 0,0 );
+        }
+        mod->SetPath( "" );
+        Format(static_cast<BOARD_ITEM*>( mod ) );
+    }
+
+    // partial module selected.
+    else if( onlyModuleParts )
+    {
+        for( auto item : aSelected )
+        {
+            auto clone = static_cast<BOARD_ITEM*>( item->Clone() );
+
+            // Do not add reference/value - convert them to the common type
+            if( TEXTE_MODULE* text = dyn_cast<TEXTE_MODULE*>( clone ) )
+                text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
+
+            // If it is only a module, clear the nets from the pads
+            if( clone->Type() == PCB_PAD_T )
+            {
+               D_PAD* pad = static_cast<D_PAD*>(clone);
+               pad->SetNetCode(0,0);
+            }
+
+            module.Add( clone );
         }
 
+        // Set the new relative internal local coordinates of copied items
+        MODULE* editedModule = m_board->m_Modules;
+        wxPoint moveVector = module.GetPosition() + editedModule->GetPosition();
+
+        module.MoveAnchorPosition( moveVector );
+
+        Format( &module, 0 );
+
     }
-    m_formatter.Print( 0, "\n)" );
+    // lots of shite selected
+    else
+    {
+        // we will fake being a .kicad_pcb to get the full parser kicking
+        // This means we also need layers and nets
+        m_formatter.Print( 0, "(kicad_pcb (version %d) (host pcbnew %s)\n", SEXPR_BOARD_FILE_VERSION,
+                m_formatter.Quotew( GetBuildVersion() ).c_str() );
 
 
+        m_formatter.Print( 0, "\n" );
+
+        formatBoardLayers( m_board );
+        formatNetInformation( m_board );
+
+        m_formatter.Print( 0, "\n" );
+
+
+        for( auto i : aSelected )
+        {
+            // Dont format stuff that cannot exist standalone!
+            if( ( i->Type() != PCB_MODULE_EDGE_T ) &&
+                ( i->Type() != PCB_MODULE_TEXT_T ) &&
+                ( i->Type() != PCB_PAD_T ) )
+            {
+                //std::cout <<"type "<< i->Type() << std::endl;
+                auto item = static_cast<BOARD_ITEM*>( i );
+                Format( item, 1 );
+            }
+
+        }
+        m_formatter.Print( 0, "\n)" );
+    }
     if( wxTheClipboard->Open() )
     {
         wxTheClipboard->SetData( new wxTextDataObject( wxString( m_formatter.GetString().c_str(), wxConvUTF8 ) ) );
         wxTheClipboard->Close();
     }
+}
+
+BOARD_ITEM* CLIPBOARD_IO::Parse()
+{
+    std::string result;
+
+    if( wxTheClipboard->Open() )
+    {
+        if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
+        {
+            wxTextDataObject data;
+            wxTheClipboard->GetData( data );
+
+            result = data.GetText().mb_str();
+        }
+
+        wxTheClipboard->Close();
+    }
+
+    return PCB_IO::Parse( result );
 }
 
 void CLIPBOARD_IO::Save( const wxString& aFileName, BOARD* aBoard,
@@ -163,11 +244,12 @@ BOARD* CLIPBOARD_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const 
     m_parser->SetLineReader( &reader );
     m_parser->SetBoard( aAppendToMe );
 
+    BOARD_ITEM* item;
     BOARD* board;
 
     try
     {
-        board = dynamic_cast<BOARD*>( m_parser->Parse() );
+        item =  m_parser->Parse();
     }
     catch( const FUTURE_FORMAT_ERROR& )
     {
@@ -182,14 +264,17 @@ BOARD* CLIPBOARD_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const 
             throw;
     }
 
-    if( !board )
+    if( item->Type() != PCB_T )
     {
         // The parser loaded something that was valid, but wasn't a board.
         THROW_PARSE_ERROR( _( "Clipboard content is not Kicad compatible" ),
                 m_parser->CurSource(), m_parser->CurLine(),
                 m_parser->CurLineNumber(), m_parser->CurOffset() );
     }
-
+    else
+    {
+        board = dynamic_cast<BOARD*>( item );
+    }
     // Give the filename to the board if it's new
     if( !aAppendToMe )
         board->SetFileName( aFileName );

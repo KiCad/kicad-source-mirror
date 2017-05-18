@@ -28,6 +28,7 @@
 #include "pcb_actions.h"
 #include "selection_tool.h"
 #include "picker_tool.h"
+#include "pcb_editor_control.h"
 #include "grid_helper.h"
 
 #include <class_board.h>
@@ -729,11 +730,67 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
     return 0;
 }
+
 int PCBNEW_CONTROL::AppendBoardFromClipboard( const TOOL_EVENT& aEvent )
 {
     CLIPBOARD_IO pi;
-    wxString noString("");
-    return AppendBoard( pi, noString );
+    wxString noString( "" );
+
+    BOARD* board = getModel<BOARD>();
+    pi.setBoard( board );
+
+    BOARD_ITEM* clipItem = pi.Parse();
+    TOOL_EVENT event;
+
+    // The clipboard can contain two different things, an entire kicad_pcb
+    // or a single module
+
+    PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
+    if(frame->IsType( FRAME_PCB) )
+    {
+
+    }
+    else if( frame->IsType( FRAME_PCB_MODULE_EDITOR ) )
+    {
+
+    }
+    else
+    {
+        return 1;
+    }
+
+    switch( clipItem->Type() )
+    {
+        case PCB_T:
+            if(frame->IsType( FRAME_PCB ) )
+            {
+                if( AppendBoard( pi, noString ) )
+                {
+                    return 0;
+                }
+            }
+            break;
+        case PCB_MODULE_T:
+
+            if(frame->IsType( FRAME_PCB) )
+            {
+                m_toolMgr->RunAction( "pcbnew.EditorControl.placeModule", true,
+                        static_cast<MODULE*>( clipItem ) );
+                return 0;
+            }
+            else if( frame->IsType( FRAME_PCB_MODULE_EDITOR ) )
+            {
+                m_toolMgr->RunAction( "pcbnew.ModuleEditor.pasteItems", true,
+                        static_cast<MODULE*>( clipItem ) );
+                return 0;
+            }
+            break;
+        default:
+                m_frame->DisplayToolMsg( _( "Invalid clipboard contents" ) );
+            // FAILED
+            break;
+    }
+    return 1;
 }
 
 int PCBNEW_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
@@ -744,26 +801,31 @@ int PCBNEW_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
 
     if( !editFrame )
-        return 0;
+        return 1;
 
     // Pick a file to append
     if( !AskLoadBoardFileName( editFrame, &open_ctl, &fileName, true ) )
-        return 0;
+        return 1;
 
     IO_MGR::PCB_FILE_T pluginType = plugin_type( fileName, open_ctl );
     PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
 
     return AppendBoard( *pi, fileName );
-
 }
+
 int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
 {
 
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
+    if(!editFrame)
+        return 1;
+
     // Mark existing tracks, in order to know what are the new tracks
     // Tracks are inserted, not appended, so mark existing tracks to be
     // able to select the new tracks only later
     BOARD* board = getModel<BOARD>();
+    if(!board)
+        return 1;
 
     for( TRACK* track = board->m_Track; track; track = track->Next() )
         track->SetFlags( FLAG0 );

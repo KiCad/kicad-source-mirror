@@ -23,6 +23,7 @@
  */
 
 #include "module_editor_tools.h"
+#include "kicad_clipboard.h"
 #include "selection_tool.h"
 #include "pcb_actions.h"
 #include <tool/tool_manager.h>
@@ -63,11 +64,11 @@ TOOL_ACTION PCB_ACTIONS::enumeratePads( "pcbnew.ModuleEditor.enumeratePads",
         _( "Enumerate Pads" ), _( "Enumerate pads" ), pad_enumerate_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::copyItems( "pcbnew.ModuleEditor.copyItems",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_COPY_ITEM ),
+        AS_ACTIVE, 0,
         _( "Copy" ), _( "Copy items" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::pasteItems( "pcbnew.ModuleEditor.pasteItems",
-        AS_GLOBAL, MD_CTRL + int( 'V' ),
+        AS_GLOBAL, 0,
         _( "Paste" ), _( "Paste items" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::moduleEdgeOutlines( "pcbnew.ModuleEditor.graphicOutlines",
@@ -333,19 +334,15 @@ int MODULE_EDITOR_TOOLS::CopyItems( const TOOL_EVENT& aEvent )
 
 int MODULE_EDITOR_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
 {
-    // Parse clipboard
-    PCB_IO io( CTL_FOR_CLIPBOARD );
-    MODULE* pastedModule = NULL;
 
-    try
-    {
-        BOARD_ITEM* item = io.Parse( wxString( m_toolMgr->GetClipboard().c_str(), wxConvUTF8 ) );
-        assert( item->Type() == PCB_MODULE_T );
-        pastedModule = dyn_cast<MODULE*>( item );
-    }
-    catch( ... )
+    MODULE* pastedModule = aEvent.Parameter<MODULE*>();
+
+    for( BOARD_ITEM* item = pastedModule->GraphicalItems().GetFirst(); item;
+            item = item->Next() )
     {
         frame()->DisplayToolMsg( _( "Invalid clipboard contents" ) );
+        if( item->Type() == PCB_MODULE_TEXT_T )
+            std::cout << "Crashing on this" << std::endl;
         return 0;
     }
 

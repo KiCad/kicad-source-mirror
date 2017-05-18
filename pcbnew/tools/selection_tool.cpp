@@ -124,7 +124,7 @@ TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSel
         nullptr );
 
 TOOL_ACTION PCB_ACTIONS::selectionToClipboard( "pcbnew.InteractiveSelection.CopyToClipboard",
-        AS_GLOBAL, MD_CTRL + MD_SHIFT + int( 'C' ),
+        AS_GLOBAL, MD_CTRL + int( 'C' ),
         _( "Copy to Clipboard" ), _( "Copy selected content to clipboard" ),
         nullptr );
 
@@ -631,7 +631,8 @@ int SELECTION_TOOL::selectionToClipboard( const TOOL_EVENT& aEvent )
     BOARD*  board = getModel<BOARD>();
 
     io.setBoard( board );
-    auto& selection = RequestSelection( SELECTION_DELETABLE | SELECTION_SANITIZE_PADS );
+    //auto& selection = RequestSelection( SELECTION_DELETABLE | SELECTION_SANITIZE_PADS );
+    auto& selection = GetSelection();
     io.SaveSelection( selection );
 
     return 0;

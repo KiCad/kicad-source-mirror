@@ -47,6 +47,8 @@ public:
         throw( IO_ERROR, PARSE_ERROR, FUTURE_FORMAT_ERROR ) override
     {
        MODULE* mod = PCB_PARSER::parseMODULE(aInitialComments);
+
+       //TODO: figure out better way of handling paths
        mod->SetPath( wxT( "" ) );
        return mod;
     }
@@ -65,6 +67,8 @@ public:
      * the BOARD_ITEM* found in selection formatted by PCB_IO to clipboard as a text
      */
     void SaveSelection( SELECTION& selected );
+
+    BOARD_ITEM* Parse();
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties = NULL ) override;
     CLIPBOARD_IO();
