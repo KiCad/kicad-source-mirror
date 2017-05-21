@@ -746,15 +746,7 @@ int PCBNEW_CONTROL::AppendBoardFromClipboard( const TOOL_EVENT& aEvent )
     // or a single module
 
     PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
-    if(frame->IsType( FRAME_PCB) )
-    {
-
-    }
-    else if( frame->IsType( FRAME_PCB_MODULE_EDITOR ) )
-    {
-
-    }
-    else
+    if( !( frame->IsType( FRAME_PCB ) ) && !( frame->IsType( FRAME_PCB_MODULE_EDITOR ) ) )
     {
         return 1;
     }
@@ -817,14 +809,14 @@ int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
 {
 
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
-    if(!editFrame)
+    if( !editFrame )
         return 1;
 
     // Mark existing tracks, in order to know what are the new tracks
     // Tracks are inserted, not appended, so mark existing tracks to be
     // able to select the new tracks only later
     BOARD* board = getModel<BOARD>();
-    if(!board)
+    if( !board )
         return 1;
 
     for( TRACK* track = board->m_Track; track; track = track->Next() )
@@ -1025,9 +1017,10 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::ToBeDone,           PCB_ACTIONS::toBeDone.MakeEvent() );
 
     // Append control
-    Go( &PCBNEW_CONTROL::AppendBoardFromFile,PCB_ACTIONS::appendBoard.MakeEvent() );
-    Go( &PCBNEW_CONTROL::AppendBoardFromClipboard
-            ,PCB_ACTIONS::appendClipboard.MakeEvent() );
+    Go( &PCBNEW_CONTROL::AppendBoardFromFile,
+            PCB_ACTIONS::appendBoard.MakeEvent() );
+    Go( &PCBNEW_CONTROL::AppendBoardFromClipboard,
+            PCB_ACTIONS::appendClipboard.MakeEvent() );
 }
 
 

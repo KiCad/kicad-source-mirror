@@ -53,7 +53,7 @@ STRING_FORMATTER* CLIPBOARD_IO::GetFormatter()
     return &m_formatter;
 }
 
-void CLIPBOARD_IO::setBoard(BOARD* aBoard)
+void CLIPBOARD_IO::setBoard( BOARD* aBoard )
 {
     m_board = aBoard;
 }
@@ -114,8 +114,8 @@ void CLIPBOARD_IO::SaveSelection( SELECTION& aSelected )
             // If it is only a module, clear the nets from the pads
             if( clone->Type() == PCB_PAD_T )
             {
-               D_PAD* pad = static_cast<D_PAD*>(clone);
-               pad->SetNetCode(0,0);
+               D_PAD* pad = static_cast<D_PAD*>( clone );
+               pad->SetNetCode( 0, 0 );
             }
 
             module.Add( clone );

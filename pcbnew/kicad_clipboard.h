@@ -46,7 +46,7 @@ public:
     MODULE* parseMODULE( wxArrayString* aInitialComments )
         throw( IO_ERROR, PARSE_ERROR, FUTURE_FORMAT_ERROR ) override
     {
-       MODULE* mod = PCB_PARSER::parseMODULE(aInitialComments);
+       MODULE* mod = PCB_PARSER::parseMODULE( aInitialComments );
 
        //TODO: figure out better way of handling paths
        mod->SetPath( wxT( "" ) );
@@ -74,8 +74,8 @@ public:
     CLIPBOARD_IO();
     ~CLIPBOARD_IO();
 
-    void setBoard(BOARD* aBoard);
-    void writeHeader(BOARD* aBoard);
+    void setBoard( BOARD* aBoard );
+    void writeHeader( BOARD* aBoard );
     STRING_FORMATTER* GetFormatter();
 
 
