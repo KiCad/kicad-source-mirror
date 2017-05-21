@@ -424,7 +424,6 @@ int MODULE_EDITOR_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
                     // Whyyyyyyyyyyyyyyyyyyyyyy?! All other items conform to rotation performed
                     // on its parent module, but texts are so independent..
                     text->Rotate( text->GetPosition(), pastedModule->GetOrientation() );
-                    commit.Add( text );
                 }
 
                 commit.Add( clone );
