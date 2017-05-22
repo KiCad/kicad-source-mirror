@@ -302,7 +302,7 @@ public:
      * Returns text associated with a given field (if such a field exists)
      * @aFieldName is the name of the field
      */
-    wxString GetFieldText( wxString aFieldName ) const;
+    wxString GetFieldText( wxString aFieldName, bool aIncludeDefaultFields = true ) const;
 
     /**
      * Function GetFields
@@ -325,7 +325,7 @@ public:
      * Function FindField
      * searches for SCH_FIELD with \a aFieldName and returns it if found, else NULL.
      */
-    SCH_FIELD* FindField( const wxString& aFieldName );
+    SCH_FIELD* FindField( const wxString& aFieldName, bool aIncludeDefaultFields = true );
 
     void SetFields( const SCH_FIELDS& aFields )
     {

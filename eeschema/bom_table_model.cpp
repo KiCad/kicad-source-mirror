@@ -569,7 +569,7 @@ bool BOM_TABLE_COMPONENT::AddUnit( SCH_REFERENCE aUnit )
 
             // User fields
             default:
-                value = cmp->GetFieldText( column->Title() );
+                value = cmp->GetFieldText( column->Title(), false );
                 break;
             }
 
@@ -705,7 +705,8 @@ void BOM_TABLE_COMPONENT::ApplyFieldChanges()
                     field = cmp->GetField( DATASHEET );
                     break;
                 default:
-                    field = cmp->FindField( column->Title() );
+                    // Find the field by name (but ignore default fields)
+                    field = cmp->FindField( column->Title(), false );
                     break;
                 }
 
@@ -985,12 +986,31 @@ void BOM_TABLE_MODEL::AddComponentFields( SCH_COMPONENT* aCmp )
 
         fieldName = field->GetName();
 
-        auto existing = ColumnList.GetColumnByTitle( fieldName );
+        bool userMatchFound = false;
 
-        // As columns are sorted by ID, we can allow user to
-        // create a column with a "special" name
-        if( existing && existing->Id() >= MANDATORY_FIELDS)
+        // Search for the column within the existing columns
+        for( auto col : ColumnList.Columns )
+        {
+            if( !col )
+            {
+                continue;
+            }
+
+            if( col->Title().Cmp( fieldName ) == 0 )
+            {
+                if( col->Id() >= BOM_COL_ID_USER )
+                {
+                    userMatchFound = true;
+                    break;
+                }
+            }
+        }
+
+        // If a user-made column already exists with the same name, abort
+        if( userMatchFound )
+        {
             continue;
+        }
 
         ColumnList.AddColumn( new BOM_COLUMN( ColumnList.NextFieldId(),
                                               BOM_COL_TYPE_USER,

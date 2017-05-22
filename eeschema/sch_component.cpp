@@ -769,20 +769,23 @@ SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
     return (SCH_FIELD*) field;
 }
 
-wxString SCH_COMPONENT::GetFieldText( wxString aFieldName ) const
+wxString SCH_COMPONENT::GetFieldText( wxString aFieldName, bool aIncludeDefaultFields ) const
 {
-
     // Field name for comparison
     wxString cmpFieldName;
 
-    // Default field names
-    for ( unsigned int i=0; i<MANDATORY_FIELDS; i++)
+    if( aIncludeDefaultFields )
     {
-        cmpFieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( i );
 
-        if( cmpFieldName.Cmp( aFieldName ) == 0 )
+        // Default field names
+        for ( unsigned int i=0; i<MANDATORY_FIELDS; i++)
         {
-            return m_Fields[i].GetText();
+            cmpFieldName = TEMPLATE_FIELDNAME::GetDefaultFieldName( i );
+
+            if( cmpFieldName.Cmp( aFieldName ) == 0 )
+            {
+                return m_Fields[i].GetText();
+            }
         }
     }
 
@@ -819,13 +822,21 @@ SCH_FIELD* SCH_COMPONENT::AddField( const SCH_FIELD& aField )
     return &m_Fields[newNdx];
 }
 
-
-SCH_FIELD* SCH_COMPONENT::FindField( const wxString& aFieldName )
+/*
+ * Find and return compnent field with the given name
+ * @aFieldName is the name of the field to search for
+ * @aIncludeDefaultFields excludes default fields from search if set to false
+ */
+SCH_FIELD* SCH_COMPONENT::FindField( const wxString& aFieldName, bool aIncludeDefaultFields )
 {
-    for( unsigned i = 0;  i<m_Fields.size();  ++i )
+    unsigned start = aIncludeDefaultFields ? 0 : MANDATORY_FIELDS;
+
+    for( unsigned i = start;  i<m_Fields.size();  ++i )
     {
         if( aFieldName == m_Fields[i].GetName( false ) )
+        {
             return &m_Fields[i];
+        }
     }
 
     return NULL;
