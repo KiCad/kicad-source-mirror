@@ -92,7 +92,6 @@ static const wxString INFO_LEGACY_LIB_WARN_DELETE(
             "before deleting a footprint" ) );
 
 static const wxString ModLegacyExportFileWildcard( _( "Legacy foot print export files (*.emp)|*.emp" ) );
-static const wxString ModImportFileWildcard( _( "GPcb foot print files (*)|*" ) );
 
 
 #define EXPORT_IMPORT_LASTPATH_KEY wxT( "import_last_path" )
@@ -103,15 +102,14 @@ static const wxString ModImportFileWildcard( _( "GPcb foot print files (*)|*" ) 
  * @param aParent - parent window for the dialog
  * @param aLastPath - last opened path
  */
-static wxFileName prompt_for_module( wxWindow* aParent, const wxString& aLastPath )
+static wxFileName getFootprintFilenameFromUser( wxWindow* aParent, const wxString& aLastPath )
 {
-    static int lastFilterIndex = 0;
+    static int lastFilterIndex = 0;     // To store the last choice during a session.
     wxString wildCard;
 
     wildCard << wxGetTranslation( KiCadFootprintLibFileWildcard ) << wxChar( '|' )
              << wxGetTranslation( ModLegacyExportFileWildcard ) << wxChar( '|' )
-             << wxGetTranslation( ModImportFileWildcard ) << wxChar( '|' )
-             << wxGetTranslation( GedaPcbFootprintLibFileWildcard );
+             << wxGetTranslation( GedaPcbFootprintLibFileWildcard ) << wxChar( '|' );
 
     wxFileDialog dlg( aParent, FMT_IMPORT_MODULE, aLastPath, wxEmptyString, wildCard,
             wxFD_OPEN | wxFD_FILE_MUST_EXIST );
@@ -263,7 +261,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
     if( config )
         config->Read( EXPORT_IMPORT_LASTPATH_KEY, &lastOpenedPathForLoading );
 
-    wxFileName fn = prompt_for_module( this, lastOpenedPathForLoading );
+    wxFileName fn = getFootprintFilenameFromUser( this, lastOpenedPathForLoading );
 
     if( !fn.IsOk() )
         return NULL;
@@ -292,8 +290,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
         return NULL;
     }
 
-    MODULE*    module;
-    wxString   errMessage;
+    MODULE*    module = NULL;
 
     try
     {
@@ -310,7 +307,14 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
     catch( const IO_ERROR& ioe )
     {
         DisplayError( this, ioe.What() );
-        return NULL;
+
+        // if the footprint is not loaded, exit.
+        // However, even if an error happens, it can be loaded, because in KICAD and GPCB format,
+        // a fp library is a set of separate files, and the error(s) are not necessary when
+        // reading the selected file
+
+        if( !module )
+            return NULL;
     }
 
     // Insert footprint in list

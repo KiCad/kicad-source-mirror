@@ -287,6 +287,9 @@ wxDateTime GPCB_FPL_CACHE::GetLibModificationTime() const
 
 void GPCB_FPL_CACHE::Load()
 {
+    // Note: like our .pretty footprint libraries, the gpcb footprint libraries are folders,
+    // and the footprints are the .fp files inside this folder.
+
     wxDir dir( m_lib_path.GetPath() );
 
     if( !dir.IsOpened() )
@@ -301,18 +304,32 @@ void GPCB_FPL_CACHE::Load()
     if( !dir.GetFirst( &fpFileName, wildcard, wxDIR_FILES ) )
         return;
 
+    wxString cacheErrorMsg;
+
     do
     {
         wxFileName fn( m_lib_path.GetPath(), fpFileName );
 
-        // reader now owns fp, will close on exception or return
-        FILE_LINE_READER reader( fn.GetFullPath() );
-        std::string      name = TO_UTF8( fn.GetName() );
-        MODULE*          footprint = parseMODULE( &reader );
+        // Queue I/O errors so only files that fail to parse don't get loaded.
+        try
+        {
+            // reader now owns fp, will close on exception or return
+            FILE_LINE_READER reader( fn.GetFullPath() );
 
-        // The footprint name is the file name without the extension.
-        footprint->SetFPID( LIB_ID( fn.GetName() ) );
-        m_modules.insert( name, new GPCB_FPL_CACHE_ITEM( footprint, fn.GetName() ) );
+            std::string      name = TO_UTF8( fn.GetName() );
+            MODULE*          footprint = parseMODULE( &reader );
+
+            // The footprint name is the file name without the extension.
+            footprint->SetFPID( LIB_ID( fn.GetName() ) );
+            m_modules.insert( name, new GPCB_FPL_CACHE_ITEM( footprint, fn.GetName() ) );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            if( !cacheErrorMsg.IsEmpty() )
+                cacheErrorMsg += "\n";
+
+            cacheErrorMsg += ioe.What();
+        }
 
     } while( dir.GetNext( &fpFileName ) );
 
@@ -320,6 +337,11 @@ void GPCB_FPL_CACHE::Load()
     // cache snapshot was made, so that in a networked environment we will
     // reload the cache as needed.
     m_mod_time = GetLibModificationTime();
+
+#if 0
+    if( !cacheErrorMsg.IsEmpty() )
+        THROW_IO_ERROR( cacheErrorMsg );
+#endif
 }
 
 
@@ -416,7 +438,10 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
 
 
     if( aLineReader->ReadLine() == NULL )
-        THROW_IO_ERROR( "unexpected end of file" );
+    {
+        msg = aLineReader->GetSource() + ": empty file";
+        THROW_IO_ERROR( msg );
+    }
 
     parameters.Clear();
     parseParameters( parameters, aLineReader );
@@ -965,6 +990,7 @@ wxArrayString GPCB_PLUGIN::FootprintEnumerate( const wxString&   aLibraryPath,
     init( aProperties );
 
 #if 1                         // Set to 0 to only read directory contents, not load cache.
+
     cacheLib( aLibraryPath );
 
     const MODULE_MAP& mods = m_cache->GetModules();
