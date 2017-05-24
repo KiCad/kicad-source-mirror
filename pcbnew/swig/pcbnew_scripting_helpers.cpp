@@ -76,7 +76,7 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
 }
 
 
-bool SaveBoard( wxString& aFilename, BOARD* aBoard )
+bool SaveBoard( wxString& aFileName, BOARD* aBoard )
 {
     aBoard->m_Status_Pcb &= ~CONNEXION_OK;
     aBoard->SynchronizeNetsAndNetClasses();
