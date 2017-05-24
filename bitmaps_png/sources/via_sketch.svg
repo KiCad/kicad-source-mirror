@@ -11,7 +11,7 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="via_sketch.svg">
   <metadata
      id="metadata40">
@@ -34,20 +34,22 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1301"
+     inkscape:window-width="1366"
      inkscape:window-height="744"
      id="namedview38"
      showgrid="true"
      inkscape:snap-to-guides="false"
      inkscape:snap-grids="true"
-     inkscape:zoom="22.961538"
-     inkscape:cx="4.4857621"
-     inkscape:cy="13"
-     inkscape:window-x="65"
+     inkscape:zoom="11.480769"
+     inkscape:cx="-12.942973"
+     inkscape:cy="11.330808"
+     inkscape:window-x="0"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
-     inkscape:snap-nodes="true">
+     inkscape:snap-nodes="true"
+     showguides="true"
+     inkscape:guide-bbox="true">
     <inkscape:grid
        type="xygrid"
        id="grid3017"
@@ -59,7 +61,30 @@
        spacingy="0.5px" />
   </sodipodi:namedview>
   <defs
-     id="defs4" />
+     id="defs4">
+    <filter
+       id="c"
+       height="1.3651"
+       width="1.2097"
+       color-interpolation-filters="sRGB"
+       y="-0.18257"
+       x="-0.10484">
+      <feGaussianBlur
+         stdDeviation="1.5978799"
+         id="feGaussianBlur7" />
+    </filter>
+    <filter
+       id="d"
+       height="1.4696"
+       width="1.4809999"
+       color-interpolation-filters="sRGB"
+       y="-0.23481999"
+       x="-0.24049">
+      <feGaussianBlur
+         stdDeviation="1.5978799"
+         id="feGaussianBlur10" />
+    </filter>
+  </defs>
   <path
      inkscape:connector-curvature="0"
      id="path3951"
@@ -72,17 +97,6 @@
      id="path3949"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc" />
-  <g
-     transform="matrix(1.6382539,0,0,1.5572263,1.2572207,0.36314149)"
-     id="g16">
-    <rect
-       height="16"
-       width="16"
-       y="0"
-       x="0"
-       id="rect18"
-       style="fill-opacity:0" />
-  </g>
   <path
      style="fill:none;fill-opacity:0.69803921999999996;stroke:#4d4d4d;stroke-width:1.50000000000000000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
      d="M 17.596194 8.4038059 C 18.772463 9.5800746 19.5 11.205075 19.5 13 L 19.5 13 L 19.5 13 C 19.5 16.589851 16.589851 19.5 13 19.5 C 11.205075 19.5 9.5800746 18.772463 8.4038059 17.596194 "

@@ -7,12 +7,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="256"
-   height="256"
-   viewBox="0 0 2.56 2.56"
+   width="26"
+   height="26"
+   viewBox="0 0 0.24374999 0.24374999"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91pre2 r13516"
+   inkscape:version="0.92.0 r"
    sodipodi:docname="lang_lt.svg">
   <metadata
      id="metadata14">
@@ -37,36 +37,38 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1412"
-     inkscape:window-height="672"
+     inkscape:window-width="1364"
+     inkscape:window-height="729"
      id="namedview10"
      showgrid="false"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:zoom="1.5733333"
-     inkscape:cx="148.90151"
-     inkscape:cy="143.10718"
+     inkscape:zoom="19.846154"
+     inkscape:cx="13"
+     inkscape:cy="13"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="18"
      inkscape:window-maximized="0"
      inkscape:current-layer="g4149" />
   <g
      id="g4149"
-     transform="matrix(0.40677967,0,0,0.40677967,0.1970339,0.76228815)">
+     transform="matrix(0.40677967,0,0,0.40677967,0.1970339,-1.5539619)">
     <rect
-       style="fill:#e6e6e6;fill-rule:evenodd"
-       height="6.3916664"
-       width="6.3916664"
-       y="-1.9722916"
+       style="fill:#e6e6e6;fill-rule:evenodd;stroke-width:1"
+       height="0.59921873"
+       width="0.59921873"
+       y="3.8201563"
        x="-0.484375"
        id="rect4-3" />
     <g
-       transform="matrix(1.2291666,0,0,0.44659721,-0.38604166,2.1452527)"
-       id="g4143">
+       transform="matrix(0.11523437,0,0,0.04186849,-0.47515609,4.206176)"
+       id="g4143"
+       style="stroke-width:10.66666698">
       <g
-         id="g4146">
+         id="g4146"
+         style="stroke-width:10.66666698">
         <rect
-           style="fill:#c1272d"
+           style="fill:#c1272d;stroke-width:10.66666698"
            y="-0.44"
            x="0"
            id="rect4"
@@ -75,18 +77,18 @@
       </g>
     </g>
     <rect
-       style="fill:#006a44"
-       y="0.60895824"
-       x="-0.38604167"
+       style="fill:#006a44;stroke-width:1"
+       y="4.0621486"
+       x="-0.47515631"
        id="rect6"
-       height="1.3397917"
-       width="6.145833" />
+       height="0.12560546"
+       width="0.57617188" />
     <rect
-       style="fill:#fdb913"
-       y="-0.73083335"
-       x="-0.38604167"
+       style="fill:#fdb913;stroke-width:1"
+       y="3.936543"
+       x="-0.47285151"
        id="rect8"
-       height="1.3397917"
-       width="6.145833" />
+       height="0.12560546"
+       width="0.57617188" />
   </g>
 </svg>

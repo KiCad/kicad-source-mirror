@@ -1,7 +1,79 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="250" width="250" version="1.1">
- <rect fill-rule="evenodd" height="250.27" width="249.43" y=".57410" x="1.691" fill="#e6e6e6"/>
- <g transform="matrix(1.3758,0,0,1.3922,-523.72,-761.42)">
-  <rect height="109.75" width="171.8" y="582.54" x="387.01" fill="#fff"/>
-  <circle transform="matrix(.19089 0 0 .18292 387.01 582.54)" cy="300" cx="450" r="180" fill="#bc002d"/>
- </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="26"
+   width="26"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="lang_jp.svg">
+  <metadata
+     id="metadata16">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs14" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="744"
+     id="namedview12"
+     showgrid="false"
+     inkscape:zoom="0.944"
+     inkscape:cx="-37.605932"
+     inkscape:cy="125"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <rect
+     height="26"
+     width="25.912733"
+     y="0"
+     x="0.043633461"
+     id="rect4"
+     style="fill:#e6e6e6;fill-rule:evenodd" />
+  <g
+     transform="matrix(0.14292883,0,0,0.14463259,-54.54016,-79.16189)"
+     id="g6">
+    <rect
+       height="109.75"
+       width="171.8"
+       y="582.53998"
+       x="387.01001"
+       id="rect8"
+       style="fill:#ffffff" />
+    <circle
+       transform="matrix(0.19089,0,0,0.18292,387.01,582.54)"
+       cy="300"
+       cx="450"
+       r="180"
+       id="circle10"
+       d="m 630,300 c 0,99.41125 -80.58875,180 -180,180 -99.41125,0 -180,-80.58875 -180,-180 0,-99.41125 80.58875,-180 180,-180 99.41125,0 180,80.58875 180,180 z"
+       sodipodi:cx="450"
+       sodipodi:cy="300"
+       sodipodi:rx="180"
+       sodipodi:ry="180"
+       style="fill:#bc002d" />
+  </g>
 </svg>

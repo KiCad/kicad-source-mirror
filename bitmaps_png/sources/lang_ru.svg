@@ -1,10 +1,93 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="256" width="256" version="1.1" viewBox="-2100 -1470 1493.3333 1493.3333">
- <title>Flag of Brazil</title>
- <clipPath>
-  <circle cy="0" cx="0" r="735" fill="#28166f"/>
- </clipPath>
- <rect fill-rule="evenodd" height="1516.7" width="1516.7" y="-1493.3" x="-2100" fill="#e6e6e6"/>
- <rect height="291.67" width="1458.3" y="-1155" x="-2076.7" fill="#fff"/>
- <rect height="291.67" width="1458.3" y="-863.33" x="-2076.7" fill="#00f"/>
- <rect height="291.67" width="1458.3" y="-571.67" x="-2076.7" fill="#f00"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="26"
+   width="26"
+   version="1.1"
+   viewBox="-2100 -1470 151.66666 151.66666"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="lang_ru.svg">
+  <metadata
+     id="metadata22">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs20" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="744"
+     id="namedview18"
+     showgrid="false"
+     inkscape:zoom="0.921875"
+     inkscape:cx="-38.508475"
+     inkscape:cy="128"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <title
+     id="title4">Flag of Brazil</title>
+  <clipPath
+     id="clipPath6">
+    <circle
+       cy="0"
+       cx="0"
+       r="735"
+       id="circle8"
+       sodipodi:cx="0"
+       sodipodi:cy="0"
+       sodipodi:rx="735"
+       sodipodi:ry="735"
+       style="fill:#28166f" />
+  </clipPath>
+  <rect
+     height="151.66666"
+     width="151.66666"
+     y="-1470"
+     x="-2100"
+     id="rect10"
+     style="fill:#e6e6e6;fill-rule:evenodd" />
+  <rect
+     height="29.166361"
+     width="145.8268"
+     y="-1436.1708"
+     x="-2097.6702"
+     id="rect12"
+     style="fill:#ffffff" />
+  <rect
+     height="29.166361"
+     width="145.8268"
+     y="-1407.0044"
+     x="-2097.6702"
+     id="rect14"
+     style="fill:#0000ff" />
+  <rect
+     height="29.166361"
+     width="145.8268"
+     y="-1377.839"
+     x="-2097.6702"
+     id="rect16"
+     style="fill:#ff0000" />
 </svg>

@@ -11,7 +11,7 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="add_junction.svg">
   <metadata
      id="metadata29">
@@ -34,14 +34,14 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1301"
+     inkscape:window-width="1366"
      inkscape:window-height="744"
      id="namedview27"
      showgrid="true"
      inkscape:zoom="22.961538"
      inkscape:cx="4.5728642"
      inkscape:cy="13"
-     inkscape:window-x="65"
+     inkscape:window-x="0"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
@@ -56,9 +56,17 @@
        snapvisiblegridlinesonly="true" />
   </sodipodi:namedview>
   <defs
-     id="defs4" />
+     id="defs4">
+    <filter
+       id="a"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         stdDeviation="0.32744172"
+         id="feGaussianBlur7" />
+    </filter>
+  </defs>
   <path
-     style="opacity:0.50000000000000000;fill:none;stroke:#4d4d4d;stroke-width:2.50000000000000000;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     style="opacity:1;fill:none;stroke:#b3b3b3;stroke-width:2.50000000000000000;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
      d="m 16.5,2.5 0,21"
      id="path2987"
      inkscape:connector-curvature="0" />
@@ -66,7 +74,7 @@
      inkscape:connector-curvature="0"
      id="path3757"
      d="m 2.5,13 14,0"
-     style="opacity:0.50000000000000000;fill:none;stroke:#4d4d4d;stroke-width:2.50000000000000000;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     style="opacity:1;fill:none;stroke:#b3b3b3;stroke-width:2.50000000000000000;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
      sodipodi:nodetypes="cc" />
   <path
      sodipodi:type="arc"

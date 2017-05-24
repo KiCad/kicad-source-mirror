@@ -13,8 +13,8 @@
    height="26"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="Новый документ 1">
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="use_3D_copper_thickness.svg">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -25,17 +25,17 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="15.365974"
-     inkscape:cx="7.7906124"
-     inkscape:cy="9.6975944"
+     inkscape:cx="-2.2315313"
+     inkscape:cy="12.170591"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:showpageshadow="false"
-     inkscape:window-width="1366"
-     inkscape:window-height="744"
+     inkscape:window-width="1364"
+     inkscape:window-height="729"
      inkscape:window-x="0"
-     inkscape:window-y="24"
-     inkscape:window-maximized="1">
+     inkscape:window-y="18"
+     inkscape:window-maximized="0">
     <inkscape:grid
        type="xygrid"
        id="grid2985"
@@ -52,7 +52,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -62,7 +62,7 @@
      id="layer1"
      transform="translate(0,-1026.3622)">
     <path
-       style="fill:#49a749;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       style="fill:#b3b3b3;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
        d="M 0 0 L 0 26 L 26 26 L 26 0 L 0 0 z M 12.5 14 C 16.642136 14 20 15.790861 20 18 C 20 20.209139 16.642136 22 12.5 22 C 8.3578644 22 5 20.209139 5 18 C 5 15.790861 8.3578644 14 12.5 14 z "
        transform="translate(0,1026.3622)"
        id="path3777" />
@@ -74,7 +74,7 @@
        sodipodi:cy="10"
        sodipodi:rx="7.5"
        sodipodi:ry="5"
-       d="m 16.5,10 a 7.5,5 0 1 1 -15,0 7.5,5 0 1 1 15,0 z"
+       d="M 16.5,10 A 7.5,5 0 0 1 9,15 7.5,5 0 0 1 1.5,10 7.5,5 0 0 1 9,5 a 7.5,5 0 0 1 7.5,5 z"
        transform="translate(3.5,1034.3622)" />
     <rect
        style="fill:#004e00;fill-opacity:1;stroke:none"
@@ -102,7 +102,7 @@
        sodipodi:nodetypes="ccc" />
     <path
        transform="translate(3.5,1031.3622)"
-       d="m 16.5,10 a 7.5,5 0 1 1 -15,0 7.5,5 0 1 1 15,0 z"
+       d="M 16.5,10 A 7.5,5 0 0 1 9,15 7.5,5 0 0 1 1.5,10 7.5,5 0 0 1 9,5 a 7.5,5 0 0 1 7.5,5 z"
        sodipodi:ry="5"
        sodipodi:rx="7.5"
        sodipodi:cy="10"

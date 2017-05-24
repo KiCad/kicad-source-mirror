@@ -7,8 +7,8 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="16"
-   width="16"
+   height="26"
+   width="26"
    version="1.1"
    id="svg2"
    inkscape:version="0.48.4 r9939"
@@ -35,34 +35,26 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="977"
+     inkscape:window-width="1366"
+     inkscape:window-height="744"
      id="namedview14"
-     showgrid="true"
-     showborder="true"
-     fit-margin-top="0"
-     fit-margin-left="0"
-     fit-margin-right="0"
-     fit-margin-bottom="0"
-     inkscape:zoom="51.199282"
-     inkscape:cx="6.8779357"
-     inkscape:cy="10.031709"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     showgrid="false"
+     inkscape:zoom="0.944"
+     inkscape:cx="-37.605932"
+     inkscape:cy="125"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg2">
-    <inkscape:grid
-       type="xygrid"
-       id="grid2995"
-       empspacing="2"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true"
-       originx="0px"
-       originy="0px" />
-  </sodipodi:namedview>
+     inkscape:current-layer="svg2" />
+  <rect
+     height="26"
+     width="25.911234"
+     y="0"
+     x="0.044383049"
+     id="rect4"
+     style="fill:#e6e6e6;fill-rule:evenodd" />
   <g
-     transform="matrix(0.06690083,0,0,0.07287527,13.158449,2.9976548)"
+     transform="matrix(0.10567388,0,0,0.10567388,21.243514,5.8363049)"
      id="g6">
     <rect
        height="164.56"

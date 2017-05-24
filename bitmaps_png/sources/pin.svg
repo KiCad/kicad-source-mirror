@@ -11,8 +11,8 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="pin.svg">
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="add_pin.svg">
   <metadata
      id="metadata87">
     <rdf:RDF>
@@ -21,7 +21,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -34,16 +34,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1600"
-     inkscape:window-height="849"
+     inkscape:window-width="1366"
+     inkscape:window-height="744"
      id="namedview85"
      showgrid="true"
      inkscape:snap-grids="true"
      inkscape:zoom="22.961538"
-     inkscape:cx="13.087102"
-     inkscape:cy="14.268582"
+     inkscape:cx="20.435362"
+     inkscape:cy="12.477439"
      inkscape:window-x="0"
-     inkscape:window-y="29"
+     inkscape:window-y="24"
      inkscape:window-maximized="1"
      inkscape:current-layer="g3019">
     <inkscape:grid
@@ -52,10 +52,52 @@
        empspacing="2"
        visible="true"
        enabled="true"
-       snapvisiblegridlinesonly="true" />
+       snapvisiblegridlinesonly="true"
+       spacingx="0.5px"
+       spacingy="0.5px" />
   </sodipodi:namedview>
   <defs
-     id="defs4" />
+     id="defs4">
+    <linearGradient
+       id="f"
+       y2="5.5"
+       gradientUnits="userSpaceOnUse"
+       x2="1.0312001"
+       gradientTransform="matrix(1.9385,0,0,1.7906,-101.39,-12.363)"
+       y1="9.4062004"
+       x1="4.9688001">
+      <stop
+         stop-color="#afafff"
+         offset="0"
+         id="stop7" />
+      <stop
+         stop-color="#fff"
+         offset="1"
+         id="stop9" />
+    </linearGradient>
+    <filter
+       id="d"
+       height="1.2293"
+       width="1.09"
+       color-interpolation-filters="sRGB"
+       y="-0.11464"
+       x="-0.044985">
+      <feGaussianBlur
+         stdDeviation="0.68425161"
+         id="feGaussianBlur12" />
+    </filter>
+    <filter
+       id="e"
+       height="1.1071"
+       width="1.2934"
+       color-interpolation-filters="sRGB"
+       y="-0.053551"
+       x="-0.14670999">
+      <feGaussianBlur
+         stdDeviation="0.77576414"
+         id="feGaussianBlur15" />
+    </filter>
+  </defs>
   <g
      id="g3003">
     <g
@@ -119,24 +161,36 @@
          d="M 15,13 2,13"
          id="path3771"
          inkscape:connector-curvature="0" />
-      <g
-         transform="scale(0.98817647,1.011965)"
-         style="font-size:12.87740231px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol"
-         id="text3773">
-        <path
-           d="m 8.0451219,1.2720226 -1.7228556,4.671831 3.451999,0 -1.7291434,-4.671831 m -0.7168085,-1.25127099 1.4399048,0 3.5777548,9.38767659 -1.320437,0 -0.85514,-2.4082251 -4.2316851,0 -0.85514,2.4082251 -1.3393002,0 3.5840427,-9.38767659"
-           style=""
-           id="path2999" />
-      </g>
-      <g
-         transform="scale(-0.98817647,1.011965)"
-         style="font-size:12.87740231px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol"
-         id="text3777">
-        <path
-           d="m -10.327327,23.635474 2.0749717,0 0,-7.161797 -2.2573177,0.452721 0,-1.156954 2.2447421,-0.452721 1.2701344,0 0,8.318751 2.0749721,0 0,1.068925 -5.4075026,0 0,-1.068925"
-           style="font-family:Ubuntu;-inkscape-font-specification:Ubuntu"
-           id="path3002" />
-      </g>
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         d="M 11,10 7.5,1"
+         id="path2989"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cc" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path3759"
+         d="M 4,10 7.5,1"
+         style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         sodipodi:nodetypes="cc" />
+      <path
+         sodipodi:nodetypes="cc"
+         style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         d="m 5,7.5 5,0"
+         id="path3761"
+         inkscape:connector-curvature="0" />
+      <path
+         sodipodi:nodetypes="cc"
+         style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         d="m 7.5,25 0,-8.5"
+         id="path4130"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4132"
+         d="M 10,19 7.5,16.5"
+         style="fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         sodipodi:nodetypes="cc" />
     </g>
   </g>
 </svg>

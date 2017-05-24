@@ -1,5 +1,71 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="256" width="256" version="1.1" viewBox="-72 -48 40.96 40.96">
- <rect fill-rule="evenodd" height="41.6" width="41.6" y="-48.64" x="-72" fill="#e6e6e6"/>
- <rect height="13.6" width="40" y="-41.92" x="-71.36" fill="#fff"/>
- <rect height="13.6" width="40" y="-28.32" x="-71.36" fill="#dc143c"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="26"
+   width="26"
+   version="1.1"
+   viewBox="-72 -48 4.16 4.16"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="lang_pl.svg">
+  <metadata
+     id="metadata14">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs12" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="744"
+     id="namedview10"
+     showgrid="false"
+     inkscape:zoom="0.921875"
+     inkscape:cx="-38.508475"
+     inkscape:cy="128"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <rect
+     height="4.1599998"
+     width="4.1599998"
+     y="-48"
+     x="-72"
+     id="rect4"
+     style="fill:#e6e6e6;fill-rule:evenodd" />
+  <rect
+     height="1.3600001"
+     width="4"
+     y="-47.327999"
+     x="-71.935997"
+     id="rect6"
+     style="fill:#ffffff" />
+  <rect
+     height="1.3600001"
+     width="4"
+     y="-45.967999"
+     x="-71.935997"
+     id="rect8"
+     style="fill:#dc143c" />
 </svg>

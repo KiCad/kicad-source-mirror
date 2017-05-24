@@ -1,55 +1,244 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
- <defs>
-  <mask id="i">
-   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
-  </mask>
-  <mask id="n">
-   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
-  </mask>
-  <mask id="o">
-   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
-  </mask>
-  <mask id="p">
-   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
-  </mask>
-  <mask id="j">
-   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
-  </mask>
-  <mask id="m">
-   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
-  </mask>
-  <mask id="k">
-   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
-  </mask>
-  <mask id="l">
-   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
-  </mask>
- </defs>
- <a fill="#e5e500" mask="url(#o)" transform="matrix(-1.0533,0,0,-1.0414,46.87,47.939)">
-  <path d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" fill-rule="evenodd" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)" fill="#e5e500"/>
- </a>
- <a opacity=".83203" mask="url(#p)" transform="matrix(0 -1.0414 1.0533 0 -.64254 45.87)">
-  <path fill-rule="evenodd" d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)"/>
- </a>
- <a fill="#eded00" mask="url(#i)" transform="matrix(1.0533 0 0 1.0414 1.4155 -.94445)">
-  <path d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" fill-rule="evenodd" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)" fill="#eded00"/>
- </a>
- <path opacity=".9" d="m39.075 22.875a13.875 14.25 0 1 1 -0.0016 -0.21848l-13.873 0.218z" transform="matrix(.99191 0 0 .94943 -.85146 1.8348)" stroke="#000" stroke-width="1.5405" fill="none"/>
- <a opacity="0.83" mask="url(#n)" transform="matrix(0,1.0414,-1.0533,0,48.922,1.1043)">
-  <path fill-rule="evenodd" d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)"/>
- </a>
- <path opacity=".9" d="m4.5373 23.491h38.818" stroke="#000" stroke-width="2.016px" fill="none"/>
- <path opacity=".9" d="m24.134 4.5338v38.704" stroke="#000" stroke-width="2.1559px" fill="none"/>
- <a fill="#c1c100" mask="url(#j)" transform="matrix(.67174 0 0 .76458 7.6512 3.9816)">
-  <path d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" fill-rule="evenodd" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)" fill="#c1c100"/>
- </a>
- <a fill="#c1c100" mask="url(#m)" transform="matrix(-.67174 0 0 -.76458 40.662 43.016)">
-  <path d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" fill-rule="evenodd" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)" fill="#c1c100"/>
- </a>
- <a mask="url(#k)" transform="matrix(0 .67174 -.76458 0 43.801 7.3614)">
-  <path fill-rule="evenodd" d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)"/>
- </a>
- <a mask="url(#l)" transform="matrix(0 -.67174 .76458 0 4.4238 39.589)">
-  <path fill-rule="evenodd" d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)"/>
- </a>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="26"
+   width="26"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.91 r"
+   sodipodi:docname="add_mires.svg">
+  <metadata
+     id="metadata70">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1540"
+     inkscape:window-height="1053"
+     id="namedview68"
+     showgrid="true"
+     inkscape:zoom="27.812867"
+     inkscape:cx="10.205882"
+     inkscape:cy="13.675508"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4198" />
+  </sodipodi:namedview>
+  <defs
+     id="defs4">
+    <mask
+       id="i">
+      <rect
+         height="26.091999"
+         width="25.032"
+         y="-3.7337"
+         x="-4.6403999"
+         id="rect7"
+         style="fill:#ffffff;fill-rule:evenodd" />
+    </mask>
+    <mask
+       id="n">
+      <rect
+         height="26.091999"
+         width="25.032"
+         y="-3.7337"
+         x="-4.6403999"
+         id="rect10"
+         style="fill:#ffffff;fill-rule:evenodd" />
+    </mask>
+    <mask
+       id="o">
+      <rect
+         height="26.091999"
+         width="25.032"
+         y="-3.7337"
+         x="-4.6403999"
+         id="rect13"
+         style="fill:#ffffff;fill-rule:evenodd" />
+    </mask>
+    <mask
+       id="p">
+      <rect
+         height="26.091999"
+         width="25.032"
+         y="-3.7337"
+         x="-4.6403999"
+         id="rect16"
+         style="fill:#ffffff;fill-rule:evenodd" />
+    </mask>
+    <mask
+       id="j">
+      <rect
+         height="26.091999"
+         width="25.032"
+         y="-3.7337"
+         x="-4.6403999"
+         id="rect19"
+         style="fill:#ffffff;fill-rule:evenodd" />
+    </mask>
+    <mask
+       id="m">
+      <rect
+         height="26.091999"
+         width="25.032"
+         y="-3.7337"
+         x="-4.6403999"
+         id="rect22"
+         style="fill:#ffffff;fill-rule:evenodd" />
+    </mask>
+    <mask
+       id="k">
+      <rect
+         height="26.091999"
+         width="25.032"
+         y="-3.7337"
+         x="-4.6403999"
+         id="rect25"
+         style="fill:#ffffff;fill-rule:evenodd" />
+    </mask>
+    <mask
+       id="l">
+      <rect
+         height="26.091999"
+         width="25.032"
+         y="-3.7337"
+         x="-4.6403999"
+         id="rect28"
+         style="fill:#ffffff;fill-rule:evenodd" />
+    </mask>
+  </defs>
+  <a
+     mask="url(#o)"
+     transform="matrix(-0.65071113,0,0,-0.64430705,27.424211,27.860822)"
+     id="a30"
+     style="fill:#e5e500">
+    <path
+       d="m 40.093,23.074 a 14.001,13.576 0 1 1 -28.001,0 14.001,13.576 0 1 1 28.001,0 z"
+       transform="matrix(0.86364,0,0,0.875,-1.0028,3.2555)"
+       id="path32"
+       inkscape:connector-curvature="0"
+       style="fill:#e5e500;fill-rule:evenodd" />
+  </a>
+  <a
+     mask="url(#p)"
+     transform="matrix(0,-0.64430705,0.65071113,0,-1.9282339,26.580745)"
+     id="a34"
+     style="opacity:0.83202999">
+    <path
+       d="m 40.093,23.074 a 14.001,13.576 0 1 1 -28.001,0 14.001,13.576 0 1 1 28.001,0 z"
+       transform="matrix(0.86364,0,0,0.875,-1.0028,3.2555)"
+       id="path36"
+       inkscape:connector-curvature="0"
+       style="fill-rule:evenodd" />
+  </a>
+  <a
+     mask="url(#i)"
+     transform="matrix(0.65071113,0,0,0.64430705,-0.65681136,-2.383036)"
+     id="a38"
+     style="fill:#eded00">
+    <path
+       d="m 40.093,23.074 a 14.001,13.576 0 1 1 -28.001,0 14.001,13.576 0 1 1 28.001,0 z"
+       transform="matrix(0.86364,0,0,0.875,-1.0028,3.2555)"
+       id="path40"
+       inkscape:connector-curvature="0"
+       style="fill:#eded00;fill-rule:evenodd" />
+  </a>
+  <path
+     d="m 21.88728,12.773377 a 8.5023975,8.3705335 0 1 1 -9.89e-4,-0.128336 l -8.501171,0.128055 z"
+     id="path42"
+     inkscape:connector-curvature="0"
+     style="opacity:0.9;fill:none;stroke:#000000;stroke-width:0.92424065" />
+  <a
+     mask="url(#n)"
+     transform="matrix(0,0.64430705,-0.65071113,0,28.691901,-1.1154881)"
+     id="a44"
+     style="opacity:0.82999998">
+    <path
+       d="m 40.093,23.074 a 14.001,13.576 0 1 1 -28.001,0 14.001,13.576 0 1 1 28.001,0 z"
+       transform="matrix(0.86364,0,0,0.875,-1.0028,3.2555)"
+       id="path46"
+       inkscape:connector-curvature="0"
+       style="fill-rule:evenodd" />
+  </a>
+  <path
+     d="m 1.2717836,12.735011 23.9811044,0"
+     id="path48"
+     inkscape:connector-curvature="0"
+     style="opacity:0.9;fill:none;stroke:#000000;stroke-width:1.24636793px" />
+  <path
+     d="m 13.378289,1.0063198 0,23.9459022"
+     id="path50"
+     inkscape:connector-curvature="0"
+     style="opacity:0.9;fill:none;stroke:#000000;stroke-width:1.33285928px" />
+  <a
+     mask="url(#j)"
+     transform="matrix(0.41498973,0,0,0.47304041,3.1955,0.66467765)"
+     id="a52"
+     style="fill:#c1c100">
+    <path
+       d="m 40.093,23.074 a 14.001,13.576 0 1 1 -28.001,0 14.001,13.576 0 1 1 28.001,0 z"
+       transform="matrix(0.86364,0,0,0.875,-1.0028,3.2555)"
+       id="path54"
+       inkscape:connector-curvature="0"
+       style="fill:#c1c100;fill-rule:evenodd" />
+  </a>
+  <a
+     mask="url(#m)"
+     transform="matrix(-0.41498973,0,0,-0.47304041,23.589011,24.814996)"
+     id="a56"
+     style="fill:#c1c100">
+    <path
+       d="m 40.093,23.074 a 14.001,13.576 0 1 1 -28.001,0 14.001,13.576 0 1 1 28.001,0 z"
+       transform="matrix(0.86364,0,0,0.875,-1.0028,3.2555)"
+       id="path58"
+       inkscape:connector-curvature="0"
+       style="fill:#c1c100;fill-rule:evenodd" />
+  </a>
+  <a
+     mask="url(#k)"
+     transform="matrix(0,0.41560093,-0.47234475,0,25.528233,2.7557365)"
+     id="a60">
+    <path
+       d="m 40.093,23.074 a 14.001,13.576 0 1 1 -28.001,0 14.001,13.576 0 1 1 28.001,0 z"
+       transform="matrix(0.86364,0,0,0.875,-1.0028,3.2555)"
+       id="path62"
+       inkscape:connector-curvature="0"
+       style="fill-rule:evenodd" />
+  </a>
+  <a
+     mask="url(#l)"
+     transform="matrix(0,-0.41560093,0.47234475,0,1.2016652,22.694734)"
+     id="a64">
+    <path
+       d="m 40.093,23.074 a 14.001,13.576 0 1 1 -28.001,0 14.001,13.576 0 1 1 28.001,0 z"
+       transform="matrix(0.86364,0,0,0.875,-1.0028,3.2555)"
+       id="path66"
+       inkscape:connector-curvature="0"
+       style="fill-rule:evenodd" />
+  </a>
 </svg>

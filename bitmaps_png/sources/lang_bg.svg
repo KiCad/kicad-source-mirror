@@ -7,12 +7,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="48"
-   height="48"
-   viewBox="0 0 0.24 0.24"
+   width="26"
+   height="26"
+   viewBox="0 0 0.13 0.13"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.1 "
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="lang_bg.svg">
   <metadata
      id="metadata14">
@@ -22,7 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -38,19 +38,19 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1123"
-     inkscape:window-height="807"
+     inkscape:window-height="715"
      id="namedview10"
      showgrid="false"
      inkscape:zoom="11.244203"
      inkscape:cx="26.61597"
      inkscape:cy="26.235738"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-x="7"
+     inkscape:window-y="24"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg2" />
   <g
      id="g2991"
-     transform="matrix(0.04798479,0,0,0.07959657,0,0.22089684)">
+     transform="matrix(0.026,0,0,0.04333333,0,0.11960002)">
     <rect
        style="fill:#ffffff"
        y="-2.76"
