@@ -32,15 +32,15 @@
 
 #include "kicad.h"
 
+// Amount of clearance between tool buttons
+const int BUTTON_SEPARATION = 5;
+
+// Buttons are larger than images by this amount
+const int BUTTON_EXPANSION  = 5;
 
 LAUNCHER_PANEL::LAUNCHER_PANEL( wxWindow* parent ) :
     wxPanel( parent, wxID_ANY )
 {
-    m_bitmapButtons_maxHeight = 0;
-    m_buttonSeparation = 10;        // control of command buttons position
-    m_buttonsListPosition.x = m_buttonSeparation;
-    m_buttonsListPosition.y = m_buttonSeparation;
-    m_buttonLastPosition    = m_buttonsListPosition;
 
     // Add bitmap buttons to launch KiCad utilities:
     CreateCommandToolbar();
@@ -48,67 +48,76 @@ LAUNCHER_PANEL::LAUNCHER_PANEL( wxWindow* parent ) :
 
 int LAUNCHER_PANEL::GetPanelHeight() const
 {
-    int height = m_buttonsListPosition.y + m_bitmapButtons_maxHeight
-                 + m_buttonSeparation;
-    return height;
+    return m_height + 2 * BUTTON_SEPARATION;
 }
 
 /**
- * Function CreateCommandToolbar
- * create the buttons to call Eeschema CvPcb, Pcbnew and GerbView
+ * Add application launcher buttons
+ * e.g. Eeschema, CvPcb, Pcbnew, GerbView
  */
 void LAUNCHER_PANEL::CreateCommandToolbar()
 {
-    wxBitmapButton* btn;
+    m_buttonSizer = new wxBoxSizer( wxHORIZONTAL );
 
-    btn = AddBitmapButton( ID_TO_SCH, KiBitmap( icon_eeschema_xpm ) );
-    btn->SetToolTip( _( "Eeschema - Electronic schematic editor" ) );
+    AddButton( ID_TO_SCH,
+               KiBitmap( icon_eeschema_xpm ),
+               _( "Schematic layout editor" ) );
 
-    btn = AddBitmapButton( ID_TO_SCH_LIB_EDITOR, KiBitmap( icon_libedit_xpm ) );
-    btn->SetToolTip( _( "Schematic library editor" ) );
+    AddButton( ID_TO_SCH_LIB_EDITOR,
+               KiBitmap( icon_libedit_xpm ),
+               _( "Schematic library editor" ) );
 
-    btn = AddBitmapButton( ID_TO_PCB, KiBitmap( icon_pcbnew_xpm ) );
-    btn->SetToolTip( _( "Pcbnew - Printed circuit board editor" ) );
+    AddButton( ID_TO_PCB,
+               KiBitmap( icon_pcbnew_xpm ),
+               _( "PCB layout editor" ) );
 
-    btn = AddBitmapButton( ID_TO_PCB_FP_EDITOR, KiBitmap( icon_modedit_xpm ) );
-    btn->SetToolTip( _( "PCB footprint editor" ) );
+    AddButton( ID_TO_PCB_FP_EDITOR,
+               KiBitmap( icon_modedit_xpm ),
+               _( "PCB library editor" ) );
 
-    btn = AddBitmapButton( ID_TO_GERBVIEW, KiBitmap( icon_gerbview_xpm ) );
-    btn->SetToolTip( _( "GerbView - Gerber viewer" ) );
+    AddButton( ID_TO_GERBVIEW,
+               KiBitmap( icon_gerbview_xpm ),
+               _( "Gerber viewer" ) );
 
-    btn = AddBitmapButton( ID_TO_BITMAP_CONVERTER, KiBitmap( icon_bitmap2component_xpm ) );
-    btn->SetToolTip( _(
-                        "Bitmap2Component - Convert bitmap images to Eeschema\n"
-                        "or Pcbnew elements" ) );
+    AddButton( ID_TO_BITMAP_CONVERTER,
+               KiBitmap( icon_bitmap2component_xpm ),
+               _( "Import bitmap\n"
+                  "Convert bitmap images to schematic or PCB elements" ) );
 
-    btn = AddBitmapButton( ID_TO_PCB_CALCULATOR, KiBitmap( icon_pcbcalculator_xpm ) );
-    btn->SetToolTip( _( "Pcb calculator - Calculator for components, track width, etc." ) );
+    AddButton( ID_TO_PCB_CALCULATOR,
+               KiBitmap( icon_pcbcalculator_xpm ),
+               _( "Calculator tools" ) );
 
-    btn = AddBitmapButton( ID_TO_PL_EDITOR, KiBitmap( icon_pagelayout_editor_xpm ) );
-    btn->SetToolTip( _( "Pl editor - Worksheet layout editor" ) );
+    AddButton( ID_TO_PL_EDITOR,
+               KiBitmap( icon_pagelayout_editor_xpm ),
+               _( "Worksheet layout editor" ) );
+
+    // Add a stretchy spacer to make button bar fill the entire screen
+    m_buttonSizer->AddStretchSpacer();
+
+    SetSizer( m_buttonSizer );
 }
 
-
 /**
- * Function AddBitmapButton
- * add a  Bitmap Button (fast launch button) to the buttons panel
- * @param aId = the button id
- * @param aBitmap = the wxBitmap used to create the button
+ * Add a single button to the toolbar
+ * @param aId is the ID of the button
+ * @param aBitmap is the image to be used
+ * @param aToolTip is the button mouse-over tool tip
  */
-wxBitmapButton* LAUNCHER_PANEL::AddBitmapButton( wxWindowID aId, const wxBitmap& aBitmap  )
+void LAUNCHER_PANEL::AddButton( wxWindowID aId, const wxBitmap& aBitmap, wxString aToolTip )
 {
-    wxPoint buttPos = m_buttonLastPosition;
-    wxSize  buttSize;
-    int     btn_margin = 10;     // extra margin around the bitmap.
+    wxSize  buttSize( aBitmap.GetWidth() + BUTTON_EXPANSION,
+                      aBitmap.GetHeight() + BUTTON_EXPANSION );
 
-    buttSize.x = aBitmap.GetWidth() + btn_margin;
-    buttSize.y = aBitmap.GetHeight() + btn_margin;
+    if( m_height < buttSize.y )
+        m_height = buttSize.y;
 
-    if( m_bitmapButtons_maxHeight < buttSize.y )
-        m_bitmapButtons_maxHeight = buttSize.y;
+    auto btn = new wxBitmapButton( this, aId, aBitmap, wxDefaultPosition, buttSize );
 
-    wxBitmapButton* btn = new wxBitmapButton( this, aId, aBitmap, buttPos, buttSize );
-    m_buttonLastPosition.x += buttSize.x + m_buttonSeparation;
+    btn->SetToolTip( aToolTip );
 
-    return btn;
+    m_buttonSizer->Add( btn,
+                        0,
+                        wxALL | wxEXPAND,
+                        BUTTON_SEPARATION );
 }

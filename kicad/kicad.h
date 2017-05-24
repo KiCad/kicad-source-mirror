@@ -310,13 +310,9 @@ private:
 class LAUNCHER_PANEL : public wxPanel
 {
 private:
-    int     m_buttonSeparation;             // button distance in pixels
-    wxPoint m_buttonsListPosition;          /* position of the left bottom corner
-                                             *  of the first bitmap button
-                                             */
-    wxPoint m_buttonLastPosition;           // position of the last button in the window
-    int     m_bitmapButtons_maxHeight;      // height of bigger bitmap buttons
-                                            // Used to calculate the height of the panel.
+    wxBoxSizer* m_buttonSizer;
+
+    int m_height = 0;
 
 public: LAUNCHER_PANEL( wxWindow* parent );
     ~LAUNCHER_PANEL() { };
@@ -331,7 +327,7 @@ private:
      */
     void            CreateCommandToolbar( void );
 
-    wxBitmapButton* AddBitmapButton( wxWindowID aId, const wxBitmap& aBitmap );
+    void AddButton( wxWindowID aId, const wxBitmap& aBitmap, wxString aToolTip );
 };
 
 // The C++ project manager includes a single PROJECT in its link image.

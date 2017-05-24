@@ -101,8 +101,9 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent,
                       Layer( 1 ) );
 
     m_auimgr.AddPane( m_Launcher, wxTOP );
-    m_auimgr.GetPane( m_Launcher).CaptionVisible( false ).Row(1)
-        .BestSize( -1, m_Launcher->GetPanelHeight() ).PaneBorder( false ).Resizable( false );
+    m_auimgr.GetPane( m_Launcher).CaptionVisible( false ).PaneBorder(false)
+            .MinSize( wxSize( 100, m_Launcher->GetPanelHeight() ) )
+            .Resizable( false );
 
     m_auimgr.AddPane( m_MessagesBox,
                       wxAuiPaneInfo().Name( wxT( "m_MessagesBox" ) ).CentrePane().Layer( 2 ) );
