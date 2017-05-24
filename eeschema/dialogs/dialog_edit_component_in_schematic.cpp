@@ -1111,28 +1111,28 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
         // Only VALUE, REFERENCE , FOOTPRINT and DATASHEET are re-initialized
         LIB_FIELD& refField = part->GetReferenceField();
 
-        m_cmp->GetField( REFERENCE )->SetTextPos( refField.GetTextPos() + m_cmp->m_Pos );
         m_cmp->GetField( REFERENCE )->ImportValues( refField );
+        m_cmp->GetField( REFERENCE )->SetTextPos( refField.GetTextPos() + m_cmp->m_Pos );
 
         LIB_FIELD& valField = part->GetValueField();
 
-        m_cmp->GetField( VALUE )->SetTextPos( valField.GetTextPos() + m_cmp->m_Pos );
         m_cmp->GetField( VALUE )->ImportValues( valField );
+        m_cmp->GetField( VALUE )->SetTextPos( valField.GetTextPos() + m_cmp->m_Pos );
 
         LIB_FIELD* field = part->GetField(FOOTPRINT);
 
         if( field && m_cmp->GetField( FOOTPRINT ) )
         {
-            m_cmp->GetField( FOOTPRINT )->SetTextPos( field->GetTextPos() + m_cmp->m_Pos );
             m_cmp->GetField( FOOTPRINT )->ImportValues( *field );
+            m_cmp->GetField( FOOTPRINT )->SetTextPos( field->GetTextPos() + m_cmp->m_Pos );
         }
 
         field = part->GetField(DATASHEET);
 
         if( field && m_cmp->GetField( DATASHEET ) )
         {
-            m_cmp->GetField( DATASHEET )->SetTextPos( field->GetTextPos() + m_cmp->m_Pos );
             m_cmp->GetField( DATASHEET )->ImportValues( *field );
+            m_cmp->GetField( DATASHEET )->SetTextPos( field->GetTextPos() + m_cmp->m_Pos );
         }
 
         m_cmp->SetOrientation( CMP_NORMAL );
