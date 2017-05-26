@@ -11,7 +11,7 @@
    width="26"
    version="1.0"
    id="svg2"
-   inkscape:version="0.91 r"
+   inkscape:version="0.92.0 r15299"
    sodipodi:docname="up.svg">
   <metadata
      id="metadata28">
@@ -21,6 +21,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -34,25 +35,25 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1920"
-     inkscape:window-height="1053"
+     inkscape:window-height="1033"
      id="namedview26"
      showgrid="false"
-     inkscape:zoom="5.7403845"
-     inkscape:cx="7.1978314"
-     inkscape:cy="24.441167"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:zoom="14.913306"
+     inkscape:cx="16.24453"
+     inkscape:cy="8.0817039"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
   <defs
      id="defs4" />
   <g
      id="g4203"
-     transform="translate(-39.035684,-3.1392691)">
+     transform="matrix(1,0,0,-1,-39.035684,29.139269)">
     <path
        inkscape:connector-curvature="0"
        id="path18-6"
-       d="m 42.922488,15.034538 8.940805,10.24623 8.895846,-10.24623 -4.262943,0 0,-8.1705502 -9.238181,0 0,8.1705502 -4.335581,0 z"
+       d="m 42.922488,15.034538 8.940805,10.24623 8.895846,-10.24623 H 56.496196 V 6.8639878 h -9.238181 v 8.1705502 h -4.335581 z"
        style="color:#000000;fill:#5599ff;fill-opacity:1;stroke:#002255;stroke-width:0.54167002;stroke-opacity:1" />
     <path
        sodipodi:nodetypes="cccccc"
@@ -63,7 +64,7 @@
     <path
        inkscape:connector-curvature="0"
        id="path22-9"
-       d="m 44.082258,15.567 7.792464,8.946222 7.691714,-8.946222 -3.649772,0 0,-8.1613422 -8.113134,0 0,8.1613422 -3.720731,0 z"
+       d="M 44.082258,15.567 51.874722,24.513222 59.566436,15.567 H 55.916664 V 7.4056578 H 47.80353 V 15.567 h -3.720731 z"
        style="color:#000000;opacity:0.35400008;fill:#5599ff;fill-opacity:1;stroke:#002255;stroke-width:0.54167002;stroke-opacity:1" />
   </g>
 </svg>
