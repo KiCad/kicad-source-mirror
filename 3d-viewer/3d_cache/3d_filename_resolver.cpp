@@ -1022,7 +1022,7 @@ bool S3D_FILENAME_RESOLVER::ValidateFileName( const wxString& aFileName, bool& h
     // if we see the :\ pattern then it must be a drive designator
     if( pos0 != wxString::npos )
     {
-        size_t pos1 = aFileName.find( wxT( ":\\" ) );
+        size_t pos1 = filename.find( wxT( ":\\" ) );
 
         if( pos1 != wxString::npos && ( pos1 != pos0 || pos1 != 1 ) )
             return false;
