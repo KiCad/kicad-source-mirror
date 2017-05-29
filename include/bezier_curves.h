@@ -39,6 +39,7 @@ public:
         m_ctrlPts.emplace_back( x1, y1 );
         m_ctrlPts.emplace_back( x2, y2 );
         m_ctrlPts.emplace_back( x3, y3 );
+        m_output = nullptr;
     }
 
     BEZIER_POLY( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4 )
@@ -47,11 +48,13 @@ public:
         m_ctrlPts.emplace_back( x2, y2 );
         m_ctrlPts.emplace_back( x3, y3 );
         m_ctrlPts.emplace_back( x4, y4 );
+        m_output = nullptr;
     }
 
     BEZIER_POLY( const std::vector<wxPoint>& aControlPoints )
         : m_ctrlPts( aControlPoints )
     {
+        m_output = nullptr;
     }
 
     /**

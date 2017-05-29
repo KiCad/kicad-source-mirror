@@ -1054,7 +1054,9 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
         m_currentPad->SetShape( PAD_SHAPE_RECT );
     }
 
-    footprint->CalculateBoundingBox();
+    if( footprint )
+        footprint->CalculateBoundingBox();
+
     m_parent->SetMsgPanel( m_currentPad );
 
     // redraw the area where the pad was

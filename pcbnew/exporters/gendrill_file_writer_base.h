@@ -160,6 +160,7 @@ protected:
         m_mapFileFmt = PLOT_FORMAT_PDF;
         m_pageInfo = NULL;
         m_merge_PTH_NPTH = false;
+        m_zeroFormat = DECIMAL_FORMAT;
     }
 
 public:

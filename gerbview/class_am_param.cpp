@@ -124,6 +124,7 @@ double AM_PARAM::GetValue( const D_CODE* aDcode ) const
             case PUSHVALUE: // a value is on the stack:
                 curr_value = item.GetValue();
                 ops.push_back( AM_PARAM_EVAL( curr_value ) );
+                break;
 
             default:
                 wxLogDebug( "AM_PARAM::GetValue(): unexpected type\n" );

@@ -171,6 +171,12 @@ MICROWAVE_TOOL_INFO getMicrowaveItemCreator( PCB_EDIT_FRAME& frame, int aParam )
             return std::unique_ptr<MODULE>( frame.Create_MuWavePolygonShape() );
         };
         break;
+
+    default:
+        // Avoid uninitilized value:
+        info.toolId = 0;
+        // info.name is already set to empty string
+        break;
     };
 
     return info;
@@ -195,18 +201,19 @@ int MICROWAVE_TOOL::addMicrowaveFootprint( const TOOL_EVENT& aEvent )
 
     frame.SetToolID( info.toolId, wxCURSOR_PENCIL, info.name );
 
-    ITEM_CREATOR moduleCreator = [this, &info] ( const TOOL_EVENT& aAddingEvent ) {
-            auto module = info.creatorFunc();
+    ITEM_CREATOR moduleCreator = [this, &info] ( const TOOL_EVENT& aAddingEvent )
+    {
+        auto module = info.creatorFunc();
 
-            // Module has been added in the legacy backend,
-            // so we have to remove it before committing the change
-            // @todo LEGACY
-            if( module )
-            {
-                board()->Remove( module.get() );
-            }
+        // Module has been added in the legacy backend,
+        // so we have to remove it before committing the change
+        // @todo LEGACY
+        if( module )
+        {
+            board()->Remove( module.get() );
+        }
 
-            return module;
+        return module;
     };
 
     doInteractiveItemPlacement( moduleCreator,  _( "Place microwave feature" ) );

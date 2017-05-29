@@ -508,7 +508,9 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
         else
         {
             GERBER_FILE_IMAGE* gerber_image = GetGbrImage( layer );
-            gerber_image->m_FileName = fname;
+
+            if( gerber_image )
+                gerber_image->m_FileName = fname;
 
             layer = getNextAvailableLayer( layer );
             setActiveLayer( layer, false );
