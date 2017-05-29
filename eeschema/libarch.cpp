@@ -61,13 +61,9 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     wxString        msg;
     SCH_SCREENS     screens;
     PART_LIBS*      libs = Prj().SchLibs();
-    PART_LIB*       cacheLib = libs->FindLibraryByFullFileName( aFileName );
 
-    if( !cacheLib )
-    {
-        cacheLib = new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName );
-        libs->push_back( cacheLib );
-    }
+    // Create a new empty library to archive components:
+    PART_LIB*       cacheLib = new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName );
 
     cacheLib->SetCache();
     cacheLib->EnableBuffering();
@@ -113,7 +109,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     try
     {
         cacheLib->Save( false );
-        cacheLib->EnableBuffering( false );
+        delete cacheLib;
     }
     catch( ... /* IO_ERROR ioe */ )
     {
