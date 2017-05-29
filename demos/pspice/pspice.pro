@@ -1,5 +1,5 @@
-update=05/01/2014 19:00:46
-last_client=eeschema
+update=29/05/2017 18:09:30
+last_client=kicad
 [general]
 version=1
 RootSch=pspice.sch
@@ -36,14 +36,7 @@ LibName9=led
 LibName10=dip_sockets
 [eeschema]
 version=1
-PageLayoutDescrFile=
-SubpartIdSeparator=0
-SubpartFirstId=65
 LibDir=
-NetFmtName=Spice
-RptD_X=0
-RptD_Y=100
-RptLab=1
-LabSize=60
 [eeschema/libraries]
-LibName1=pspice
+LibName1=schematic_libspice
+LibName2=power
