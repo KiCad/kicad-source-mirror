@@ -120,7 +120,8 @@ void DXF2BRD_CONVERTER::addLine( const DRW_Line& aData )
     segm->SetStart( start );
     wxPoint end( mapX( aData.secPoint.x ), mapY( aData.secPoint.y ) );
     segm->SetEnd( end );
-    segm->SetWidth( mapDim( aData.thickness == 0 ? m_defaultThickness : aData.thickness ) );
+    segm->SetWidth( mapDim( aData.thickness == 0 ? m_defaultThickness / m_DXF2mm
+                            : aData.thickness ) );
     m_newItemsList.push_back( segm );
 }
 
@@ -153,7 +154,7 @@ void DXF2BRD_CONVERTER::addPolyline(const DRW_Polyline& aData )
         segm->SetStart( segment_startpoint );
         wxPoint segment_endpoint( mapX( vertex->basePoint.x ), mapY( vertex->basePoint.y ) );
         segm->SetEnd( segment_endpoint );
-        segm->SetWidth( mapDim( aData.thickness == 0 ? m_defaultThickness
+        segm->SetWidth( mapDim( aData.thickness == 0 ? m_defaultThickness / m_DXF2mm
                                 : aData.thickness ) );
         m_newItemsList.push_back( segm );
         segment_startpoint = segment_endpoint;
@@ -169,7 +170,7 @@ void DXF2BRD_CONVERTER::addPolyline(const DRW_Polyline& aData )
         closing_segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
         closing_segm->SetStart( segment_startpoint );
         closing_segm->SetEnd( polyline_startpoint );
-        closing_segm->SetWidth( mapDim( aData.thickness == 0 ? m_defaultThickness
+        closing_segm->SetWidth( mapDim( aData.thickness == 0 ? m_defaultThickness / m_DXF2mm
                                 : aData.thickness ) );
         m_newItemsList.push_back( closing_segm );
     }
@@ -186,7 +187,7 @@ void DXF2BRD_CONVERTER::addLWPolyline(const DRW_LWPolyline& aData )
     wxRealPoint seg_start;
     wxRealPoint poly_start;
     double bulge = 0.0;
-    int lineWidth = mapDim( aData.thickness == 0 ? m_defaultThickness
+    int lineWidth = mapDim( aData.thickness == 0 ? m_defaultThickness / m_DXF2mm
                             : aData.thickness );
 
     for( unsigned ii = 0; ii < aData.vertlist.size(); ii++ )
@@ -235,7 +236,8 @@ void DXF2BRD_CONVERTER::addCircle( const DRW_Circle& aData )
     segm->SetCenter( center );
     wxPoint circle_start( mapX( aData.basePoint.x + aData.radious ), mapY( aData.basePoint.y ) );
     segm->SetArcStart( circle_start );
-    segm->SetWidth( mapDim( aData.thickness == 0 ? m_defaultThickness : aData.thickness ) );
+    segm->SetWidth( mapDim( aData.thickness == 0 ? m_defaultThickness / m_DXF2mm
+                            : aData.thickness ) );
     m_newItemsList.push_back( segm );
 }
 
@@ -274,7 +276,8 @@ void DXF2BRD_CONVERTER::addArc( const DRW_Arc& data )
 
     segm->SetAngle( angle );
 
-    segm->SetWidth( mapDim( data.thickness == 0 ? m_defaultThickness : data.thickness ) );
+    segm->SetWidth( mapDim( data.thickness == 0 ? m_defaultThickness / m_DXF2mm
+                            : data.thickness ) );
     m_newItemsList.push_back( segm );
 }
 
@@ -384,7 +387,8 @@ void DXF2BRD_CONVERTER::addText( const DRW_Text& aData )
     // The 0.8 factor gives a better height/width ratio with our font
     textItem->SetTextWidth( mapDim( aData.height * 0.8 ) );
     textItem->SetTextHeight( mapDim( aData.height ) );
-    textItem->SetThickness( mapDim( aData.thickness == 0 ? m_defaultThickness : aData.thickness ) );
+    textItem->SetThickness( mapDim( aData.thickness == 0 ? m_defaultThickness / m_DXF2mm
+                                    : aData.thickness ) );
     textItem->SetText( text );
 
     m_newItemsList.push_back( static_cast< BOARD_ITEM* >( brdItem ) );
@@ -446,7 +450,8 @@ void DXF2BRD_CONVERTER::addMText( const DRW_MText& aData )
     // The 0.8 factor gives a better height/width ratio with our font
     textItem->SetTextWidth( mapDim( aData.height * 0.8 ) );
     textItem->SetTextHeight( mapDim( aData.height ) );
-    textItem->SetThickness( mapDim( aData.thickness == 0 ? m_defaultThickness : aData.thickness ) );
+    textItem->SetThickness( mapDim( aData.thickness == 0 ? m_defaultThickness / m_DXF2mm
+                                    : aData.thickness ) );
     textItem->SetText( text );
 
     // Initialize text justifications:
