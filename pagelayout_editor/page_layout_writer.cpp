@@ -239,10 +239,17 @@ void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_TEXT* aItem, int aNestLevel
 
     // Write font info, only if it is not the default setup
     bool write_size = aItem->m_TextSize.x != 0.0 || aItem->m_TextSize.y != 0.0;
+    bool write_thickness = aItem->m_LineWidth != 0.0;
 
-    if( write_size || aItem->IsBold() || aItem->IsItalic() )
+    if( write_thickness || write_size || aItem->IsBold() || aItem->IsItalic() )
     {
         m_out->Print( 0, " (%s", getTokenName( T_font ) );
+
+        if( write_thickness )
+        {
+            m_out->Print( 0, " (%s %s)", getTokenName( T_linewidth ),
+                          double2Str(aItem->m_LineWidth ).c_str() );
+        }
 
         if( write_size )
         {
