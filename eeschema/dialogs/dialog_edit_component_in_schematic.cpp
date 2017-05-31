@@ -27,6 +27,7 @@
 
 #include <wx/tooltip.h>
 #include <wx/hyperlink.h>
+#include <wx/url.h>
 
 #include <fctsys.h>
 #include <pgm_base.h>
@@ -50,6 +51,8 @@
 #include <dialog_spice_model.h>
 #include <netlist_exporter_pspice.h>
 #endif /* KICAD_SPICE */
+
+#include "common.h"
 
 
 /**
@@ -554,6 +557,18 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::deleteFieldButtonHandler( wxCommandEven
     m_skipCopyFromPanel = false;
 }
 
+static wxString resolveUriByEnvVars( const wxString& aUri )
+{
+    // URL-like URI: return as is.
+    wxURL url( aUri );
+    if( url.GetError() == wxURL_NOERR )
+    {
+        return aUri;
+    }
+    // Otherwise, the path points to a local file. Resolve environment
+    // variables if any.
+    return ExpandEnvVarSubstitutions( aUri );
+}
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::showButtonHandler( wxCommandEvent& event )
 {
@@ -562,6 +577,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::showButtonHandler( wxCommandEvent& even
     if( fieldNdx == DATASHEET )
     {
         wxString datasheet_uri = fieldValueTextCtrl->GetValue();
+        datasheet_uri = resolveUriByEnvVars( datasheet_uri );
         ::wxLaunchDefaultBrowser( datasheet_uri );
     }
     else if( fieldNdx == FOOTPRINT )

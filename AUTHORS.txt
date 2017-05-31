@@ -38,6 +38,8 @@ Chris Pavlina <pavlina.chris[at]gmail-dot-com>
 Simon Richter <Simon.Richter[at]hogyros-dot-de>
 Mario Luzeiro <mrluzeiro[at]ua-dot-pt>
 Mateusz Skowroński <skowri[at]gmail-dot-com>
+Cheng Sheng <chengsheng[at]google-dot-com>
+Google Inc.
 See also CHANGELOG.txt for contributors.
 
 
