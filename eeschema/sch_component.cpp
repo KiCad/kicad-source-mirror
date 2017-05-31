@@ -55,6 +55,8 @@
 #include <wx/tokenzr.h>
 #include <iostream>
 
+#include <eeschema_id.h>    // for MAX_UNIT_COUNT_PER_PACKAGE definition
+
 #define NULL_STRING "_NONAME_"
 
 /**
@@ -1457,7 +1459,8 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
             int multi = atoi( name1 );
 
-            if( multi < 0 || multi > 26 )
+            // Avoid out of range multi id:
+            if( multi < 0 || multi > MAX_UNIT_COUNT_PER_PACKAGE )
                 multi = 1;
 
             AddHierarchicalReference( path, ref, multi );
