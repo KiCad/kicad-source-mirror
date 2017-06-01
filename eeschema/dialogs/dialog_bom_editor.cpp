@@ -44,7 +44,7 @@
 int InvokeDialogCreateBOMEditor( SCH_EDIT_FRAME* aCaller )
 {
     DIALOG_BOM_EDITOR dlg( aCaller );
-    return dlg.ShowModal();
+    return dlg.ShowQuasiModal();
 }
 
 DIALOG_BOM_EDITOR::DIALOG_BOM_EDITOR( SCH_EDIT_FRAME* parent ) :
@@ -129,6 +129,7 @@ bool DIALOG_BOM_EDITOR::CloseDialog()
 {
     if( !m_bom->HaveFieldsChanged() )
     {
+        EndQuasiModal( wxID_CANCEL );
         Destroy();
         return true;
     }
@@ -146,6 +147,7 @@ bool DIALOG_BOM_EDITOR::CloseDialog()
        break;
     }
 
+    EndQuasiModal( wxID_CANCEL );
     Destroy();
     return true;
 }
