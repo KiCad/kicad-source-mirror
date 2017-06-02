@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -339,6 +339,30 @@ void AddGerberX2Header( PLOTTER * aPlotter,
         rev = wxT( "rev?" );
 
     text.Printf( wxT( "%%TF.ProjectId,%s,%s,%s*%%" ), msg.ToAscii(), GetChars( guid ), rev.ToAscii() );
+    aPlotter->AddLineToHeader( makeStringCompatX1( text, aUseX1CompatibilityMode ) );
+
+    // Add the TF.SameCoordinates, that specify all gerber files uses the same
+    // origin and orientation, and the registration between files is OK.
+    // The parameter of TF.SameCoordinates is a string that is common
+    // to all files using the same registration and has no special meaning:
+    // this is just a key
+    // Because there is no mirroring/rotation in Kicad, only the plot offset origin
+    // can create incorrect registration.
+    // So we create a key from plot offset options.
+    // and therefore for a given board, all Gerber files having the same key have the same
+    // plot origin and use the same registration
+    //
+    // Currently the key is "Original" when using absolute Pcbnew coordinates,
+    // and te PY ans PY position od auxiliary axis, when using it.
+    // Please, if absolute Pcbnew coordinates, one day, are set by user, change the way
+    // the key is built to ensure file only using the *same* axis have the same key.
+    wxString registration_id = "Original";
+    wxPoint auxOrigin = aBoard->GetAuxOrigin();
+
+    if( aBoard->GetPlotOptions().GetUseAuxOrigin() && auxOrigin.x && auxOrigin.y )
+        registration_id.Printf( "PX%xPY%x", auxOrigin.x, auxOrigin.y );
+
+    text.Printf( "%%TF.SameCoordinates,%s%%", registration_id.GetData() );
     aPlotter->AddLineToHeader( makeStringCompatX1( text, aUseX1CompatibilityMode ) );
 }
 
