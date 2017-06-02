@@ -68,7 +68,7 @@ void LIB_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->AddTool( ID_LIBEDIT_PIN_BUTT, wxEmptyString, KiBitmap( pin_xpm ),
                             HELP_ADD_PIN, wxITEM_CHECK  );
 
-    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_TEXT_BUTT, wxEmptyString, KiBitmap( add_text_xpm ),
+    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_TEXT_BUTT, wxEmptyString, KiBitmap( text_xpm ),
                             HELP_ADD_BODYTEXT, wxITEM_CHECK  );
 
     m_drawToolBar->AddTool( ID_LIBEDIT_BODY_RECT_BUTT, wxEmptyString, KiBitmap( add_rectangle_xpm ),
@@ -116,7 +116,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_LIB, wxEmptyString,
                             KiBitmap( save_library_xpm ),
-                            _( "Save current library to disk" ) );
+                            _( "Save into current library" ) );
 
     m_mainToolBar->AddTool( CreateNewLibAndSavePartId, wxEmptyString, KiBitmap( new_library_xpm ),
                             _( "Save current component to new library" ) );
@@ -130,15 +130,15 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString, KiBitmap( new_component_xpm ),
-                            _( "Create a new component" ) );
+                            _( "Create new component" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_SELECT_PART, wxEmptyString,
                             KiBitmap( import_cmp_from_lib_xpm ),
-                            _( "Load component to edit from the current library" ) );
+                            _( "Load component from current library" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_NEW_PART_FROM_EXISTING, wxEmptyString,
                             KiBitmap( copycomponent_xpm ),
-                            _( "Create a new component from the current one" ) );
+                            _( "Create new component from current component" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_PART, wxEmptyString,
                             KiBitmap( save_part_in_mem_xpm ),
@@ -153,7 +153,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Undo last command" ), g_Libedit_Hokeys_Descr, HK_UNDO, IS_COMMENT );
     m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString, KiBitmap( undo_xpm ), msg );
-    msg = AddHotkeyName( _( "Redo the last command" ), g_Libedit_Hokeys_Descr, HK_REDO,
+    msg = AddHotkeyName( _( "Redo last command" ), g_Libedit_Hokeys_Descr, HK_REDO,
                          IS_COMMENT );
     m_mainToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ), msg );
 
@@ -162,12 +162,12 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                             KiBitmap( part_properties_xpm ), _( "Edit component properties" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, wxEmptyString,
-                            KiBitmap( add_text_xpm ),
-                            _( "Add and remove fields and edit field properties" ) );
+                            KiBitmap( text_xpm ),
+                            _( "Edit field properties" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_LIBEDIT_CHECK_PART, wxEmptyString, KiBitmap( erc_xpm ),
-                            _( "Test for duplicate and off grid pins" ) );
+                            _( "Check duplicate and off grid pins" ) );
 
     m_mainToolBar->AddSeparator();
     msg = AddHotkeyName( HELP_ZOOM_IN, g_Libedit_Hokeys_Descr, HK_ZOOM_IN, IS_COMMENT );
@@ -190,7 +190,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_LIBEDIT_VIEW_DOC, wxEmptyString, KiBitmap( datasheet_xpm ),
-                            _( "Show the associated datasheet or document" ) );
+                            _( "Show associated datasheet or document" ) );
 
     m_mainToolBar->AddSeparator();
     m_partSelectBox = new wxComboBox( m_mainToolBar,
@@ -248,7 +248,7 @@ void LIB_EDIT_FRAME::CreateOptionToolbar()
 
     m_optionsToolBar->AddTool( ID_LIBEDIT_SHOW_ELECTRICAL_TYPE, wxEmptyString,
                                KiBitmap( pin_show_etype_xpm ),
-                               _( "Show the pins electrical type" ), wxITEM_CHECK );
+                               _( "Show pins electrical type" ), wxITEM_CHECK );
 
     m_optionsToolBar->Realize();
 }

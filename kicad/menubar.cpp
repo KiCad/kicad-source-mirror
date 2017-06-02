@@ -230,7 +230,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  wxID_ANY,
                  _( "Open &Recent" ),
                  _( "Open recent schematic project" ),
-                 KiBitmap( open_project_xpm ) );
+                 KiBitmap( recent_xpm ) );
 
     // New project creation
     wxMenu* newprjSubMenu = new wxMenu();
@@ -243,7 +243,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     msg = AddHotkeyName( _( "New Project from &Template" ),
                          kicad_Manager_Hokeys_Descr, HK_NEW_PRJ_TEMPLATE );
     AddMenuItem( newprjSubMenu, ID_NEW_PROJECT_FROM_TEMPLATE, msg,
-                 _( "Create a new project from a template" ),
+                 _( "Create new project from template" ),
                  KiBitmap( new_project_with_template_xpm ) );
 
     AddMenuItem( fileMenu, newprjSubMenu,
@@ -266,15 +266,15 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     fileMenu->AppendSeparator();
     AddMenuItem( fileMenu,
                  ID_SAVE_AND_ZIP_FILES,
-                 _( "&Archive Current Project..." ),
-                 _( "Archive project files in zip archive" ),
+                 _( "&Archive Current Project" ),
+                 _( "Archive all needed project files into zip archive" ),
                  KiBitmap( zip_xpm ) );
 
     // Unarchive
     AddMenuItem( fileMenu,
                  ID_READ_ZIP_ARCHIVE,
                  _( "&Unarchive Project" ),
-                 _( "Unarchive project files from zip file" ),
+                 _( "Unarchive project files from zip archive" ),
                  KiBitmap( unzip_xpm ) );
 
     // Separator
@@ -312,7 +312,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  ID_PREFERENCES_CONFIGURE_PATHS,
                  _( "Configure Pa&ths" ),
                  _( "Edit path configuration environment variables" ),
-                 KiBitmap( editor_xpm ) );
+                 KiBitmap( path_xpm ) );
 
     // Text editor
     AddMenuItem( preferencesMenu,
@@ -400,7 +400,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     msg = AddHotkeyName( _( "Run Pcb Calculator" ), kicad_Manager_Hokeys_Descr, HK_RUN_PCBCALCULATOR );
     AddMenuItem( toolsMenu, ID_TO_PCB_CALCULATOR, msg,
                  _( "Pcb calculator - Calculator for components, track width, etc." ),
-                 KiBitmap( options_module_xpm ) );
+                 KiBitmap( pcbcalculator_xpm ) );
 
     msg = AddHotkeyName( _( "Run Page Layout Editor" ), kicad_Manager_Hokeys_Descr, HK_RUN_PLEDITOR );
     AddMenuItem( toolsMenu, ID_TO_PL_EDITOR, msg,
@@ -442,7 +442,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     AddMenuItem( helpMenu, wxID_ABOUT,
                  _( "&About KiCad" ),
                  _( "About KiCad" ),
-                 KiBitmap( info_xpm ) );
+                 KiBitmap( about_xpm ) );
 
     // Create the menubar and append all submenus
     menuBar->Append( fileMenu, _( "&File" ) );

@@ -181,7 +181,7 @@ void prepareDesignRulesMenu( wxMenu* aParentMenu )
 {
     AddMenuItem( aParentMenu, ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG,
                  _( "&Design Rules" ),
-                 _( "Open the design rules editor" ), KiBitmap( hammer_xpm ) );
+                 _( "Open design rules editor" ), KiBitmap( config_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_LAYERS_SETUP,
                  _( "&Layers Setup" ),  _( "Enable and set layer properties" ),
@@ -205,18 +205,18 @@ void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
     aParentMenu->Append( wxID_PREFERENCES );
 #else
     AddMenuItem( aParentMenu, wxID_PREFERENCES,
-                 _( "&General" ), _( "Select general options for Pcbnew" ),
+                 _( "&General Settings" ), _( "Select general options for Pcbnew" ),
                  KiBitmap( preference_xpm ) );
 #endif
 
     AddMenuItem( aParentMenu, ID_PCB_DISPLAY_OPTIONS_SETUP,
-                 _( "&Display" ),
-                 _( "Select how items (pads, tracks texts ... ) are displayed" ),
+                 _( "&Display and Hide" ),
+                 _( "Select how items (pads, tracks, texts) are displayed" ),
                  KiBitmap( display_options_xpm ) );
 
     AddMenuItem( aParentMenu, ID_MENU_INTERACTIVE_ROUTER_SETTINGS,
                  _( "&Interactive Routing" ),
-                 _( "Configure the interactive router." ),
+                 _( "Configure interactive router" ),
                  KiBitmap( add_tracks_xpm ) ); // fixme: icon
 
     // Language submenu
@@ -248,24 +248,24 @@ void prepareRouteMenu( wxMenu* aParentMenu )
 {
     AddMenuItem( aParentMenu, ID_TRACK_BUTT,
                  _( "&Single Track" ),
-                 _( "Interactively route a single track" ),
+                 _( "Interactively route single track" ),
                  KiBitmap( add_tracks_xpm ) );
 
     AddMenuItem( aParentMenu, ID_DIFF_PAIR_BUTT,
                  _( "&Differential Pair" ),
-                 _( "Interactively route a differential pair" ),
+                 _( "Interactively route differential pair" ),
                  KiBitmap( ps_diff_pair_xpm ) );
 
     aParentMenu->AppendSeparator();
 
     AddMenuItem( aParentMenu, ID_TUNE_SINGLE_TRACK_LEN_BUTT,
                  _( "&Tune Track Length" ),
-                 _( "Tune length of a single track" ),
+                 _( "Tune length of single track" ),
                  KiBitmap( ps_tune_length_xpm ) );
 
     AddMenuItem( aParentMenu, ID_TUNE_DIFF_PAIR_LEN_BUTT,
                  _( "Tune Differential Pair &Length" ),
-                 _( "Tune length of a differential pair" ),
+                 _( "Tune length of differential pair" ),
                  KiBitmap( ps_diff_pair_tune_length_xpm ) );
 
     AddMenuItem( aParentMenu, ID_TUNE_DIFF_PAIR_SKEW_BUTT,
@@ -279,7 +279,7 @@ void prepareRouteMenu( wxMenu* aParentMenu )
 void prepareLibraryMenu( wxMenu* aParentMenu )
 {
     AddMenuItem( aParentMenu, ID_PCB_LIB_WIZARD,
-                _( "&Footprint Libraries Wizard" ), _( "Add footprint libraries with wizard" ),
+                _( "&Footprint Libraries Wizard" ), _( "Add footprint libraries using wizard" ),
                 KiBitmap( wizard_add_fplib_small_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_LIB_TABLE_EDIT,
@@ -291,13 +291,13 @@ void prepareLibraryMenu( wxMenu* aParentMenu )
                  ID_PREFERENCES_CONFIGURE_PATHS,
                  _( "Configure Pa&ths" ),
                  _( "Edit path configuration environment variables" ),
-                 KiBitmap( editor_xpm ) );
+                 KiBitmap( path_xpm ) );
 
 #ifdef BUILD_GITHUB_PLUGIN
     AddMenuItem( aParentMenu, ID_PCB_3DSHAPELIB_WIZARD,
-                 _( "&3D Shapes Libraries Downloader" ),
-                 _( "Download from Github the 3D shape libraries with wizard" ),
-                 KiBitmap( wizard_add_fplib_small_xpm ) );
+                 _( "&3D Shape Downloader" ),
+                 _( "Download from Github 3D shape libraries using wizard" ),
+                 KiBitmap( import3d_xpm ) );
 #endif
 }
 
@@ -325,7 +325,7 @@ void preparePlaceMenu( wxMenu* aParentMenu )
 
     AddMenuItem( aParentMenu, ID_PCB_ADD_TEXT_BUTT,
                  _( "Te&xt" ), _( "Add text on copper layers or graphic text" ),
-                 KiBitmap( add_text_xpm ) );
+                 KiBitmap( text_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_ARC_BUTT,
                  _( "&Arc" ), _( "Add graphic arc" ),KiBitmap( add_arc_xpm ) );
@@ -353,12 +353,12 @@ void preparePlaceMenu( wxMenu* aParentMenu )
 
     AddMenuItem( aParentMenu, ID_PCB_PLACE_OFFSET_COORD_BUTT,
                  _( "Drill and &Place Offset" ),
-                 _( "Place the origin point for drill and place files" ),
+                 _( "Place origin point for drill and place files" ),
                  KiBitmap( pcb_offset_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_PLACE_GRID_COORD_BUTT,
                  _( "&Grid Origin" ),
-                 _( "Set the origin point for the grid" ),
+                 _( "Set grid origin point" ),
                  KiBitmap( grid_select_axis_xpm ) );
 }
 
@@ -368,28 +368,28 @@ void prepareToolsMenu( wxMenu* aParentMenu )
 {
     AddMenuItem( aParentMenu,
                  ID_UPDATE_PCB_FROM_SCH,
-                 _( "Update PCB from Schematics" ),
-                 _( "Updates the PCB design with the current schematic (forward annotation)." ),
-                 KiBitmap( libedit_xpm ) );
+                 _( "Update PCB from Schematic" ),
+                 _( "Update PCB design with current schematic (forward annotation)" ),
+                 KiBitmap( import_brd_file_xpm ) );
 
     aParentMenu->AppendSeparator( );
 
     AddMenuItem( aParentMenu, ID_GET_NETLIST,
-                 _( "Read &Netlist" ),
-                 _( "Read the netlist and update board connectivity" ),
+                 _( "Load &Netlist" ),
+                 _( "Read netlist and update board connectivity" ),
                  KiBitmap( netlist_xpm ) );
 
     AddMenuItem( aParentMenu, ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR,
-                 _( "Set &Layer Pair" ), _( "Change the active layer pair" ),
+                 _( "Set &Layer Pair" ), _( "Change active layer pair" ),
                  KiBitmap( select_layer_pair_xpm ) );
 
     AddMenuItem( aParentMenu, ID_DRC_CONTROL,
-                 _( "&DRC" ),
+                 _( "&Design Rules Check" ),
                  _( "Perform design rules check" ), KiBitmap( erc_xpm ) );
 
     AddMenuItem( aParentMenu, ID_TOOLBARH_PCB_FREEROUTE_ACCESS,
                  _( "&FreeRoute" ),
-                 _( "Fast access to the web based FreeROUTE advanced router" ),
+                 _( "Fast access to web-based FreeROUTE advanced router" ),
                  KiBitmap( web_support_xpm ) );
 
 #if defined(KICAD_SCRIPTING_WXPYTHON)
@@ -425,32 +425,32 @@ void prepareHelpMenu( wxMenu* aParentMenu )
 
     AddMenuItem( aParentMenu, wxID_HELP,
                  _( "Pcbnew &Manual" ),
-                 _( "Open the Pcbnew Manual" ),
+                 _( "Open Pcbnew Manual" ),
                  KiBitmap( online_help_xpm ) );
 
     AddMenuItem( aParentMenu, wxID_INDEX,
                  _( "&Getting Started in KiCad" ),
-                 _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
+                 _( "Open \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
                  _( "&List Hotkeys" ),
-                 _( "Displays the current hotkeys list and corresponding commands" ),
+                 _( "Display current hotkeys list and corresponding commands" ),
                  KiBitmap( hotkeys_xpm ) );
 
     aParentMenu->AppendSeparator();
 
     AddMenuItem( aParentMenu, ID_HELP_GET_INVOLVED,
                  _( "Get &Involved" ),
-                 _( "Contribute to KiCad (opens a web browser)" ),
+                 _( "Contribute to KiCad - open web browser" ),
                  KiBitmap( info_xpm ) );
 
     aParentMenu->AppendSeparator();
 
     AddMenuItem( aParentMenu, wxID_ABOUT,
                  _( "&About KiCad" ),
-                 _( "Display the KiCad About dialog" ),
-                 KiBitmap( info_xpm ) );
+                 _( "Display KiCad About dialog" ),
+                 KiBitmap( about_xpm ) );
 }
 
 
@@ -471,7 +471,7 @@ void prepareEditMenu( wxMenu* aParentMenu )
 
     aParentMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Find..." ), g_Pcbnew_Editor_Hokeys_Descr, HK_FIND_ITEM );
+    text = AddHotkeyName( _( "&Find" ), g_Pcbnew_Editor_Hokeys_Descr, HK_FIND_ITEM );
     AddMenuItem( aParentMenu, ID_FIND_ITEMS, text, HELP_FIND , KiBitmap( find_xpm ) );
 
     aParentMenu->AppendSeparator();
@@ -480,23 +480,23 @@ void prepareEditMenu( wxMenu* aParentMenu )
 
     AddMenuItem( aParentMenu, ID_MENU_PCB_RESET_TEXTMODULE_FIELDS_SIZES,
                  _( "Set Footp&rint Field Sizes" ),
-                 _( "Set text size and width of footprint fields." ),
+                 _( "Set text size and width of footprint fields" ),
                  KiBitmap( reset_text_xpm ) );
 
     AddMenuItem( aParentMenu, ID_MENU_PCB_SWAP_LAYERS,
-                 _( "&Swap Layers..." ),
+                 _( "&Swap Layers" ),
                  _( "Swap tracks on copper layers or drawings on other layers" ),
                  KiBitmap( swap_layer_xpm ) );
 
     aParentMenu->AppendSeparator();
     AddMenuItem( aParentMenu, ID_PCB_GLOBAL_DELETE,
-                 _( "&Global Deletions..." ),
-                 _( "Delete tracks, footprints, texts... on board" ),
+                 _( "&Global Deletions" ),
+                 _( "Delete tracks, footprints and texts on board" ),
                  KiBitmap( general_deletions_xpm ) );
 
     AddMenuItem( aParentMenu, ID_MENU_PCB_CLEAN,
-                 _( "&Cleanup Tracks and Vias..." ),
-                 _( "Clean stubs, vias, delete break points, or unconnected tracks to pads and vias" ),
+                 _( "&Cleanup Tracks and Vias" ),
+                 _( "Clean stubs, vias, delete break points or unconnected tracks" ),
                  KiBitmap( delete_xpm ) );
 }
 
@@ -541,14 +541,14 @@ void prepareViewMenu( wxMenu* aParentMenu )
                  KiBitmap( three_d_xpm ) );
 
     AddMenuItem( aParentMenu, ID_MENU_LIST_NETS,
-                 _( "&List Nets" ), _( "View a list of nets with names and id's" ),
+                 _( "&List Nets" ), _( "View list of nets with names and IDs" ),
                  KiBitmap( list_nets_xpm ) );
 
     aParentMenu->AppendSeparator();
 
     AddMenuItem( aParentMenu, ID_MENU_PCB_FLIP_VIEW,
                  _( "&Flip Board View" ),
-                 _( "Flips (mirrors) the board view" ),
+                 _( "Flip (mirror) the board view" ),
                  KiBitmap( flip_board_xpm ), wxITEM_CHECK );
 
 
@@ -559,7 +559,7 @@ void prepareViewMenu( wxMenu* aParentMenu )
 
     aParentMenu->Append(
         new wxMenuItem( aParentMenu, ID_MENU_CANVAS_LEGACY,
-                        text, _( "Switch the canvas implementation to Legacy" ),
+                        text, _( "Switch canvas implementation to Legacy" ),
                         wxITEM_RADIO ) );
 
     text = AddHotkeyName( _( "Open&GL Canvas" ), g_Pcbnew_Editor_Hokeys_Descr,
@@ -567,7 +567,7 @@ void prepareViewMenu( wxMenu* aParentMenu )
 
     aParentMenu->Append(
         new wxMenuItem( aParentMenu, ID_MENU_CANVAS_OPENGL,
-                        text, _( "Switch the canvas implementation to OpenGL" ),
+                        text, _( "Switch canvas implementation to OpenGL" ),
                         wxITEM_RADIO ) );
 
     text = AddHotkeyName( _( "&Cairo Canvas" ), g_Pcbnew_Editor_Hokeys_Descr,
@@ -575,7 +575,7 @@ void prepareViewMenu( wxMenu* aParentMenu )
 
     aParentMenu->Append(
         new wxMenuItem( aParentMenu, ID_MENU_CANVAS_CAIRO,
-                        text, _( "Switch the canvas implementation to Cairo" ),
+                        text, _( "Switch canvas implementation to Cairo" ),
                         wxITEM_RADIO ) );
 }
 
@@ -584,31 +584,31 @@ void prepareViewMenu( wxMenu* aParentMenu )
 void prepareDimensionsMenu( wxMenu* aParentMenu )
 {
     AddMenuItem( aParentMenu, ID_PCB_USER_GRID_SETUP,
-                 _( "G&rid" ),_( "Adjust user grid dimensions" ),
+                 _( "User Defined G&rid" ),_( "Adjust custom user-defined grid dimensions" ),
                  KiBitmap( grid_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_DRAWINGS_WIDTHS_SETUP,
                  _( "Te&xts and Drawings" ),
                  _( "Adjust dimensions for texts and drawings" ),
-                 KiBitmap( options_text_xpm ) );
+                 KiBitmap( text_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_PAD_SETUP,
-                 _( "&Pads" ),  _( "Adjust default pad characteristics" ),
+                 _( "&Pads Size" ),  _( "Adjust default pad characteristics" ),
                  KiBitmap( pad_dimensions_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_MASK_CLEARANCE,
-                 _( "Pads &Mask Clearance" ),
-                 _( "Adjust the global clearance between pads and the solder resist mask" ),
+                 _( "Pads to &Mask Clearance" ),
+                 _( "Adjust global clearance between pads and solder resist mask" ),
                  KiBitmap( pads_mask_layers_xpm ) );
 
     AddMenuItem( aParentMenu, ID_MENU_DIFF_PAIR_DIMENSIONS,
                  _( "&Differential Pairs" ),
-                 _( "Define the global gap/width for differential pairs." ),
+                 _( "Define global gap/width for differential pairs." ),
                  KiBitmap( ps_diff_pair_xpm ) );
 
     aParentMenu->AppendSeparator();
     AddMenuItem( aParentMenu, ID_CONFIG_SAVE,
-                 _( "&Save..." ), _( "Save dimension preferences" ),
+                 _( "&Save Preferences" ), _( "Save dimension preferences" ),
                  KiBitmap( save_xpm ) );
 }
 
@@ -624,12 +624,12 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     {
         AddMenuItem( aParentMenu, ID_NEW_BOARD,
                 _( "&New Board" ),
-                _( "Create a new board" ),
-                KiBitmap( new_pcb_xpm ) );
+                _( "Create new board" ),
+                KiBitmap( new_generic_xpm ) );
 
         text = AddHotkeyName( _( "&Open Board" ), g_Pcbnew_Editor_Hokeys_Descr, HK_LOAD_BOARD );
         AddMenuItem( aParentMenu, ID_LOAD_FILE, text,
-                _( "Load an existing board" ),
+                _( "Load existing board" ),
                 KiBitmap( open_brd_file_xpm ) );
     }
 
@@ -652,17 +652,17 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     {
         AddMenuItem( aParentMenu, openRecentMenu,
                      -1, _( "Open &Recent" ),
-                     _( "Open a recently opened board" ),
+                     _( "Open recently opened board" ),
                      KiBitmap( open_project_xpm ) );
 
         AddMenuItem( aParentMenu, ID_APPEND_FILE,
                      _( "&Append Board" ),
-                     _( "Append another board to the currently loaded board." ),
+                     _( "Append another board to currently loaded board" ),
                      KiBitmap( import_xpm ) );
 
         AddMenuItem( aParentMenu, ID_IMPORT_NON_KICAD_BOARD,
                 _( "Import Non-Kicad Board File" ),
-                _( "Load a board file from other applications" ),
+                _( "Import board file from other applications" ),
                 KiBitmap( import_brd_file_xpm ) );
 
         aParentMenu->AppendSeparator();
@@ -680,18 +680,18 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     // when not under a project mgr, we are free to change filenames, cwd ...
     if( Kiface().IsSingle() )      // not when under a project mgr (pcbnew is run as stand alone)
     {
-        text = AddHotkeyName( _( "Sa&ve As..." ), g_Pcbnew_Editor_Hokeys_Descr, HK_SAVE_BOARD_AS );
+        text = AddHotkeyName( _( "Sa&ve As" ), g_Pcbnew_Editor_Hokeys_Descr, HK_SAVE_BOARD_AS );
         AddMenuItem( aParentMenu, ID_SAVE_BOARD_AS, text,
-                     _( "Save the current board as..." ),
+                     _( "Save current board with new name" ),
                      KiBitmap( save_as_xpm ) );
     }
     // under a project mgr, we can save a copy of the board,
     // but do not change the current board file name
     else
     {
-        text = AddHotkeyName( _( "Sa&ve Copy As..." ), g_Pcbnew_Editor_Hokeys_Descr, HK_SAVE_BOARD_AS );
+        text = AddHotkeyName( _( "Sa&ve Copy As" ), g_Pcbnew_Editor_Hokeys_Descr, HK_SAVE_BOARD_AS );
         AddMenuItem( aParentMenu, ID_COPY_BOARD_AS, text,
-                     _( "Save a copy of the current board as..." ),
+                     _( "Save copy of the current board" ),
                      KiBitmap( save_as_xpm ) );
     }
 
@@ -700,39 +700,39 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     AddMenuItem( aParentMenu, ID_MENU_READ_BOARD_BACKUP_FILE,
                  _( "Revert to Las&t Backup" ),
                  _( "Clear board and get previous backup version of board" ),
-                 KiBitmap( revert_pcbnew_xpm ) );
+                 KiBitmap( undo_xpm ) );
 
     AddMenuItem( aParentMenu, ID_MENU_RECOVER_BOARD_AUTOSAVE,
             _( "Resc&ue" ),
             _( "Clear board and get last rescue file automatically saved by Pcbnew" ),
-            KiBitmap( rescue_pcbnew_xpm ) );
+            KiBitmap( rescue_xpm ) );
     aParentMenu->AppendSeparator();
 
     //----- Fabrication Outputs submenu -----------------------------------------
     wxMenu* fabricationOutputsMenu = new wxMenu;
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_POS_MODULES_FILE,
-                 _( "Footprint &Position (.pos) File..." ),
+                 _( "Footprint &Position (.pos) File" ),
                  _( "Generate footprint position file for pick and place" ),
                  KiBitmap( post_compo_xpm ) );
 
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_DRILL_FILE,
-                 _( "&Drill (.drl) File..." ),
+                 _( "&Drill (.drl) File" ),
                  _( "Generate excellon2 drill file" ),
                  KiBitmap( post_drill_xpm ) );
 
     AddMenuItem( fabricationOutputsMenu, ID_GEN_EXPORT_FILE_MODULE_REPORT,
                  _( "&Footprint (.rpt) Report.." ),
-                 _( "Create a report of all footprints on the current board" ),
+                 _( "Create report of all footprints from current board" ),
                  KiBitmap( tools_xpm ) );
 
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_D356_FILE,
-            _( "IPC-D-356 Netlist File..." ),
+            _( "IPC-D-356 Netlist File" ),
             _( "Generate IPC-D-356 netlist file" ),
             KiBitmap( netlist_xpm ) );
 
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_BOM_FILE_FROM_BOARD,
-                 _( "&BOM File..." ),
-                 _( "Create a bill of materials from schematic" ),
+                 _( "&BOM File" ),
+                 _( "Create bill of materials from current schematic" ),
                  KiBitmap( bom_xpm ) );
 
     AddMenuItem( aParentMenu, fabricationOutputsMenu,
@@ -745,12 +745,12 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
 
     AddMenuItem( submenuImport, ID_GEN_IMPORT_SPECCTRA_SESSION,
                  _( "&Specctra Session" ),
-                 _( "Import a routed \"Specctra Session\" (*.ses) file" ),
+                 _( "Import routed \"Specctra Session\" (*.ses) file" ),
                  KiBitmap( import_xpm ) );
 
     AddMenuItem( submenuImport, ID_GEN_IMPORT_DXF_FILE,
                  _( "&DXF File" ),
-                 _( "Import a 2D Drawing DXF file to Pcbnew on the Drawings layer" ),
+                 _( "Import 2D Drawing DXF file to Pcbnew on Drawings layer" ),
                  KiBitmap( import_xpm ) );
 
     AddMenuItem( aParentMenu, submenuImport,
@@ -774,16 +774,16 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                  KiBitmap( sheetset_xpm ) );
 
     AddMenuItem( aParentMenu, wxID_PRINT,
-                 _( "&Print..." ), _( "Print board" ),
+                 _( "&Print" ), _( "Print board" ),
                  KiBitmap( print_button_xpm ) );
 
     AddMenuItem( aParentMenu, ID_GEN_PLOT_SVG,
-                 _( "Export SV&G..." ),
-                 _( "Export a board file in Scalable Vector Graphics format" ),
+                 _( "Export SV&G" ),
+                 _( "Export board file in Scalable Vector Graphics format" ),
                  KiBitmap( plot_svg_xpm ) );
 
     AddMenuItem( aParentMenu, ID_GEN_PLOT,
-                 _( "P&lot..." ),
+                 _( "P&lot" ),
                  _( "Plot board in HPGL, PostScript or Gerber RS-274X format)" ),
                  KiBitmap( plot_xpm ) );
 
@@ -793,21 +793,21 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     wxMenu* submenuarchive = new wxMenu();
 
     AddMenuItem( submenuarchive, ID_MENU_ARCHIVE_MODULES_IN_LIBRARY,
-                 _( "&Archive Footprints in a Project Library..." ),
-                 _( "Archive footprints in an existing library in footprint Lib table"
-                    "(do not remove other footprints in this lib)" ),
+                 _( "&Archive Footprints in Project Library." ),
+                 _( "Archive footprints in existing library in footprint Lib table"
+                    "(does not remove other footprints in this library)" ),
                  KiBitmap( library_update_xpm ) );
 
     AddMenuItem( submenuarchive, ID_MENU_CREATE_LIBRARY_AND_ARCHIVE_MODULES,
-                 _( "&Create Library and Archive Footprints..." ),
-                 _( "Archive all footprints in a new library\n"
-                    "(if this library already exists, it will be deleted)" ),
+                 _( "&Create Library and Archive Footprints." ),
+                 _( "Archive all footprints in new library\n"
+                    "(if the library already exists it will be deleted)" ),
                  KiBitmap( library_xpm ) );
 
     AddMenuItem( aParentMenu, submenuarchive,
                  ID_MENU_ARCHIVE_MODULES,
                  _( "Arc&hive Footprints" ),
-                 _( "Archive or add footprints in a library file" ),
+                 _( "Archive or add footprints in library file" ),
                  KiBitmap( library_xpm ) );
 
     aParentMenu->AppendSeparator();
@@ -819,30 +819,29 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
 void prepareExportMenu( wxMenu* aParentMenu )
 {
     AddMenuItem( aParentMenu, ID_GEN_EXPORT_SPECCTRA,
-                 _( "&Specctra DSN..." ),
-                 _( "Export the current board to a \"Specctra DSN\" file" ),
+                 _( "&Specctra DSN" ),
+                 _( "Export current board to \"Specctra DSN\" file" ),
                  KiBitmap( export_dsn_xpm ) );
 
     AddMenuItem( aParentMenu, ID_GEN_EXPORT_FILE_GENCADFORMAT,
-                 _( "&GenCAD..." ), _( "Export GenCAD format" ),
+                 _( "&GenCAD" ), _( "Export GenCAD format" ),
                  KiBitmap( export_xpm ) );
 
     AddMenuItem( aParentMenu, ID_GEN_EXPORT_FILE_VRML,
-                 _( "&VRML..." ),
-                 _( "Export a VRML board representation" ),
+                 _( "&VRML" ),
+                 _( "Export VRML board representation" ),
                  KiBitmap( three_d_xpm ) );
 
     AddMenuItem( aParentMenu, ID_GEN_EXPORT_FILE_IDF3,
-                 _( "I&DFv3..." ), _( "IDFv3 board and component export" ),
+                 _( "I&DFv3" ), _( "IDFv3 board and component export" ),
                  KiBitmap( export_idf_xpm ) );
 
     AddMenuItem( aParentMenu, ID_GEN_EXPORT_FILE_STEP,
-                 _( "S&TEP..." ), _( "STEP export" ),
+                 _( "S&TEP" ), _( "STEP export" ),
                  KiBitmap( export_idf_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_GEN_CMP_FILE,
-                 _( "&Component (.cmp) File..." ),
+                 _( "&Component (.cmp) File" ),
                  _( "Export component file (*.cmp) for Eeschema footprint field back-annotation" ),
                  KiBitmap( create_cmp_file_xpm ) );
 }
-

@@ -11,7 +11,7 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="add_bus.svg">
   <metadata
      id="metadata29">
@@ -34,15 +34,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1301"
-     inkscape:window-height="744"
+     inkscape:window-width="1920"
+     inkscape:window-height="1054"
      id="namedview27"
      showgrid="true"
      inkscape:zoom="22.961538"
-     inkscape:cx="13"
-     inkscape:cy="13"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:cx="5.4221104"
+     inkscape:cy="12.912898"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      inkscape:snap-to-guides="false"
@@ -58,8 +58,8 @@
   <defs
      id="defs4" />
   <path
-     style="fill:none;stroke:#0000c8;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="m 2.5,23.5 21,-21"
+     style="fill:none;stroke:#0000c8;stroke-width:3.28340077;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 4.4462831,21.510153 21.771473,4.3591935"
      id="path2985"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc" />

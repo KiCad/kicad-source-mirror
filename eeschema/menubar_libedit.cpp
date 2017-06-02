@@ -199,7 +199,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  ID_LIBEDIT_BODY_TEXT_BUTT,
                  _( "Graphic &Text" ),
                  HELP_ADD_BODYTEXT,
-                 KiBitmap( add_text_xpm ) );
+                 KiBitmap( text_xpm ) );
 
     // Graphic rectangle
     AddMenuItem( placeMenu,
@@ -287,7 +287,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  wxID_ABOUT,
                  _( "&About KiCad" ),
                  _( "About KiCad" ),
-                 KiBitmap( info_xpm ) );
+                 KiBitmap( about_xpm ) );
 
     // Create the menubar and append all submenus
     menuBar->Append( fileMenu, _( "&File" ) );

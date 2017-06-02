@@ -808,26 +808,26 @@ void AddHotkeyConfigMenu( wxMenu* aMenu )
     // Call hotkeys editor
     AddMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_SHOW_EDITOR,
                  _( "&Edit Hotkeys" ),
-                 _( "Call the hotkeys editor" ),
-                 KiBitmap( editor_xpm ) );
+                 _( "Edit hotkeys list" ),
+                 KiBitmap( config_xpm ) );
 
     HotkeySubmenu->AppendSeparator();
 
     // create hotkey file to export current hotkeys config
     AddMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_EXPORT_CONFIG,
                  _( "E&xport Hotkeys" ),
-                 _( "Create a hotkey configuration file to export the current hotkeys" ),
-                 KiBitmap( save_setup_xpm ) );
+                 _( "Export current hotkeys into configuration file" ),
+                 KiBitmap( hotkeys_export_xpm ) );
 
     // Reload hotkey file
     AddMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_IMPORT_CONFIG,
                  _( "&Import Hotkeys" ),
-                 _( "Load an existing hotkey configuration file" ),
-                 KiBitmap( reload_xpm ) );
+                 _( "Load existing hotkey configuration file" ),
+                 KiBitmap( hotkeys_import_xpm ) );
 
     // Append HotkeySubmenu to menu
     AddMenuItem( aMenu, HotkeySubmenu,
-                 wxID_ANY, _( "&Hotkeys" ),
-                 _( "Hotkeys configuration and preferences" ),
+                 wxID_ANY, _( "&Hotkeys Options" ),
+                 _( "Edit hotkeys configuration and preferences" ),
                  KiBitmap( hotkeys_xpm ) );
 }

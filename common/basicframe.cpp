@@ -687,5 +687,5 @@ void EDA_BASE_FRAME::AddMenuIconsOptions( wxMenu* MasterMenu )
                  ID_KICAD_SELECT_ICONS_OPTIONS,
                  _( "Icons Options" ),
                  _( "Select show icons in menus and icons sizes" ),
-                 KiBitmap( hammer_xpm ) );
+                 KiBitmap( icon_xpm ) );
 }

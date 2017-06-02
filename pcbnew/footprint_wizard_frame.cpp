@@ -655,13 +655,13 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
         // Set up toolbar
         m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_SELECT_WIZARD, wxEmptyString,
                                 KiBitmap( module_wizard_xpm ),
-                                _( "Select the wizard script to load and run" ) );
+                                _( "Select wizard script to run" ) );
 
         m_mainToolBar->AddSeparator();
 
         m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_RESET_TO_DEFAULT, wxEmptyString,
                                 KiBitmap( reload_xpm ),
-                                _( "Reset the wizard parameters to default values ") );
+                                _( "Reset wizard parameters to default") );
 
         m_mainToolBar->AddSeparator();
 
@@ -703,7 +703,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
         m_mainToolBar->AddSeparator();
         m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_DONE,
                                 wxEmptyString, KiBitmap( export_footprint_names_xpm ),
-                                _( "Export the footprint to the editor" ) );
+                                _( "Export footprint to editor" ) );
 
         // after adding the buttons to the toolbar, must call Realize() to
         // reflect the changes

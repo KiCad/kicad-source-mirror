@@ -35,7 +35,7 @@ class WX_HTML_REPORT_PANEL;
 class DIALOG_UPDATE_PCB_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxStaticText* m_staticText1;
 		wxRadioButton* m_matchByReference;
@@ -43,17 +43,17 @@ class DIALOG_UPDATE_PCB_BASE : public DIALOG_SHIM
 		WX_HTML_REPORT_PANEL* m_messagePanel;
 		wxButton* m_btnCancel;
 		wxButton* m_btnPerformUpdate;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnMatchChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdateClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_UPDATE_PCB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Update PCB from Schematics"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_UPDATE_PCB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Update PCB from Schematic"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_UPDATE_PCB_BASE();
-	
+
 };
 
 #endif //__DIALOG_UPDATE_PCB_BASE_H__

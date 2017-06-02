@@ -839,8 +839,8 @@ void PGM_BASE::AddMenuLanguageList( wxMenu* MasterMenu )
 
     AddMenuItem( MasterMenu, menu,
                  ID_LANGUAGE_CHOICE,
-                 _( "Language" ),
-                 _( "Select application language (only for testing!)" ),
+                 _( "Set Language" ),
+                 _( "Select application language (only for testing)" ),
                  KiBitmap( language_xpm ) );
 
     // Set Check mark on current selected language

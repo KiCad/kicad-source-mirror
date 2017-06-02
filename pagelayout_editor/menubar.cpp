@@ -61,13 +61,13 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // Load
     AddMenuItem( fileMenu, wxID_NEW,
                  _( "&New Page Layout Design" ),
-                 wxEmptyString, KiBitmap( pagelayout_new_xpm ) );
+                 wxEmptyString, KiBitmap( new_generic_xpm ) );
     AddMenuItem( fileMenu, wxID_OPEN,
                  _( "Load Page Layout &File" ),
                  wxEmptyString, KiBitmap(  pagelayout_load_xpm ) );
     AddMenuItem( fileMenu, ID_LOAD_DEFAULT_PAGE_LAYOUT,
                  _( "Load &Default Page Layout" ),
-                 wxEmptyString, KiBitmap(  pagelayout_load_default_xpm ) );
+                 wxEmptyString, KiBitmap(  pagelayout_load_xpm ) );
 
     // Recent gerber files
     static wxMenu* openRecentMenu;
@@ -84,7 +84,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
     AddMenuItem( fileMenu, openRecentMenu,
                  wxID_ANY, _( "Open &Recent Page Layout File" ),
-                 wxEmptyString, KiBitmap(  pagelayout_recent_xpm ) );
+                 wxEmptyString, KiBitmap(  recent_xpm ) );
 
      fileMenu->AppendSeparator();
     // Save current sheet
@@ -178,7 +178,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
                  wxID_ABOUT,
                  _( "&About Kicad" ),
                  _( "About KiCad" ),
-                 KiBitmap( info_xpm ) );
+                 KiBitmap( about_xpm ) );
 
     // Append menus to the menubar
     menuBar->Append( fileMenu, _( "&File" ) );

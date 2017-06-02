@@ -11,7 +11,7 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="add_tracks_and_vias.svg">
   <metadata
      id="metadata40">
@@ -21,7 +21,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -34,62 +34,41 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1301"
-     inkscape:window-height="744"
+     inkscape:window-width="1920"
+     inkscape:window-height="1054"
      id="namedview38"
      showgrid="true"
      inkscape:snap-to-guides="false"
      inkscape:snap-grids="true"
-     inkscape:zoom="22.961538"
-     inkscape:cx="11.214406"
-     inkscape:cy="13"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:zoom="32.472518"
+     inkscape:cx="13.860764"
+     inkscape:cy="2.2737168"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2">
     <inkscape:grid
        type="xygrid"
-       id="grid3017"
-       empspacing="2"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true"
-       spacingx="0.5px"
-       spacingy="0.5px" />
+       id="grid4138" />
   </sodipodi:namedview>
   <defs
      id="defs4" />
-  <g
-     transform="matrix(1.6382539,0,0,1.5572263,1.2572207,0.36314149)"
-     id="g16">
-    <rect
-       height="16"
-       width="16"
-       y="0"
-       x="0"
-       id="rect18"
-       style="fill-opacity:0" />
-  </g>
   <path
-     style="fill:none;stroke:#d40000;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="m 13.5,13 5.5,0 4.5,10.5"
+     id="path2990-3"
+     style="fill:none;stroke:#008000;stroke-width:2.84693623;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 13.540514,13.476636 -5.8155519,0 -4.0261538,-9.2405755 m 9.8417057,9.2405755 4.920855,0 4.026153,9.240581"
+     inkscape:connector-curvature="0" />
+  <path
+     style="fill:none;stroke:#d40000;stroke-width:2.69113684;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 13.492398,13.455369 4.978991,0 4.073719,9.3334"
      id="path3765"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccc" />
-  <path
-     sodipodi:nodetypes="ccc"
-     inkscape:connector-curvature="0"
-     id="path2990"
-     d="M 13.5,13 7,13 2.5,2.5"
-     style="fill:none;stroke:#008000;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-  <path
-     sodipodi:type="arc"
-     style="fill:#e6e6e6;fill-opacity:1;stroke:#1a1a1a;stroke-width:0.5;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+  <ellipse
+     style="fill:#e6e6e6;fill-opacity:1;stroke:#1a1a1a;stroke-width:0.79571545;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="path2992"
-     sodipodi:cx="14"
-     sodipodi:cy="13"
-     sodipodi:rx="2.5"
-     sodipodi:ry="2.5"
-     d="m 16.5,13 a 2.5,2.5 0 1 1 -5,0 2.5,2.5 0 1 1 5,0 z"
-     transform="translate(-1,0)" />
+     cx="13.309562"
+     cy="13.498771"
+     rx="3.0642097"
+     ry="3.0729613" />
 </svg>

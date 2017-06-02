@@ -185,7 +185,7 @@ int BASE_SCREEN::BuildGridsChoiceList( wxArrayString& aGridsList, bool aMmFirst)
 
         if( grid.m_CmdId == ID_POPUP_GRID_USER )
         {
-            msg = _( "User Grid" );
+            msg = _( "Custom User Grid" );
             idx_usergrid = i;
         }
         else

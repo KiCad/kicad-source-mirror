@@ -189,7 +189,7 @@ wxString TEXTE_PCB::GetSelectMenuText() const
 
 BITMAP_DEF TEXTE_PCB::GetMenuImage() const
 {
-    return add_text_xpm;
+    return text_xpm;
 }
 
 

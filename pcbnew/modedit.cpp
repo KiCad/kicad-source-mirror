@@ -131,7 +131,7 @@ BOARD_ITEM* FOOTPRINT_EDIT_FRAME::ModeditLocateAndDisplay( int aHotKeyCode )
 
         // Give a title to the selection menu. It also allow to close the popup menu without any action
         AddMenuItem( &itemMenu, wxID_NONE, _( "Clarify Selection" ),
-                     KiBitmap( dismiss_xpm ) );
+                     KiBitmap( info_xpm ) );
         itemMenu.AppendSeparator();
 
         int limit = std::min( MAX_ITEMS_IN_PICKER, m_Collector->GetCount() );

@@ -175,14 +175,14 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
             wxMenu selectMenu;
 
             AddMenuItem( &selectMenu, wxID_NONE, _( "Clarify Selection" ),
-                         KiBitmap( dismiss_xpm ) );
+                         KiBitmap( info_xpm ) );
             selectMenu.AppendSeparator();
 
             for( int i = 0;  i < m_collectedItems.GetCount() && i < MAX_SELECT_ITEM_IDS;  i++ )
             {
                 wxString text = m_collectedItems[i]->GetSelectMenuText();
                 BITMAP_DEF xpm = m_collectedItems[i]->GetMenuImage();
-                AddMenuItem( &selectMenu, ID_SELECT_ITEM_START + i, text, KiBitmap( xpm ) );
+                AddMenuItem( &selectMenu,   + i, text, KiBitmap( xpm ) );
             }
 
             // Set to NULL in case the user aborts the clarification context menu.

@@ -55,7 +55,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     if( Kiface().IsSingle() )   // not when under a project mgr
     {
         // These 2 menus have meaning only outside a project, i.e. not under a project manager:
-        m_mainToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString, KiBitmap( new_sch_xpm ),
+        m_mainToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString, KiBitmap( new_generic_xpm ),
                                 _( "New schematic project" ) );
 
         m_mainToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString, KiBitmap( open_document_xpm ),
@@ -68,7 +68,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddSeparator();
 
     m_mainToolBar->AddTool( ID_SHEET_SET, wxEmptyString, KiBitmap( sheetset_xpm ),
-                            _( "Page settings" ) );
+                            _( "Edit Page settings" ) );
 
     m_mainToolBar->AddSeparator();
 
@@ -83,7 +83,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( wxID_CUT, wxEmptyString, KiBitmap( cut_button_xpm ),
                             _( "Cut selected item" ) );
 
-    m_mainToolBar->AddTool( wxID_COPY, wxEmptyString, KiBitmap( copy_button_xpm ),
+    m_mainToolBar->AddTool( wxID_COPY, wxEmptyString, KiBitmap( copy_xpm ),
                             _( "Copy selected item" ) );
 
     m_mainToolBar->AddTool( wxID_PASTE, wxEmptyString, KiBitmap( paste_xpm ),
@@ -144,7 +144,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     // modedit is with libedit in a "library section" because the user must have footprints before
     // they can be assigned.
     m_mainToolBar->AddTool( ID_RUN_PCB_MODULE_EDITOR, wxEmptyString, KiBitmap( module_editor_xpm ),
-                            _( "Footprint Editor" ) );
+                            _( "Footprint Editor - Create/edit footprints" ) );
 
     m_mainToolBar->AddSeparator();
 
@@ -155,13 +155,13 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
                             _( "Perform electrical rules check" ) );
 
     m_mainToolBar->AddTool( ID_RUN_CVPCB, wxEmptyString, KiBitmap( cvpcb_xpm ),
-                            _( "Run CvPcb to associate components and footprints" ) );
+                            _( "Run CvPcb to associate footprints to components" ) );
 
     m_mainToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, KiBitmap( netlist_xpm ),
                             _( "Generate netlist" ) );
 
     m_mainToolBar->AddTool( ID_OPEN_CMP_TABLE, wxEmptyString, KiBitmap( spreadsheet_xpm ),
-                            _( "Component table view"  ) );
+                            _( "Edit Components Fields"  ) );
 
 
     m_mainToolBar->AddTool( ID_GET_TOOLS, wxEmptyString, KiBitmap( bom_xpm ),
@@ -196,7 +196,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
                             wxEmptyString, wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_HIGHLIGHT, wxEmptyString, KiBitmap( net_highlight_schematic_xpm ),
-                            _( "Click to highlight net" ), wxITEM_CHECK );
+                            _( "Highlight net" ), wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiBitmap( zoom_area_xpm ),
                             _( "Zoom to selection" ), wxITEM_CHECK );
@@ -255,7 +255,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
                             KiBitmap( add_dashed_line_xpm ),
                             HELP_PLACE_GRAPHICLINES, wxITEM_CHECK );
 
-    m_drawToolBar->AddTool( ID_TEXT_COMMENT_BUTT, wxEmptyString, KiBitmap( add_text_xpm ),
+    m_drawToolBar->AddTool( ID_TEXT_COMMENT_BUTT, wxEmptyString, KiBitmap( text_xpm ),
                             HELP_PLACE_GRAPHICTEXTS, wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_ADD_IMAGE_BUTT, wxEmptyString, KiBitmap( image_xpm ),

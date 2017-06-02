@@ -96,7 +96,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                  wxID_ANY,
                  _( "Open &Recent Gerber File" ),
                  _( "Open a recent opened Gerber file" ),
-                 KiBitmap( gerber_recent_files_xpm ) );
+                 KiBitmap( recent_xpm ) );
 
     // Recent drill files
     static wxMenu* openRecentDrlMenu;
@@ -111,7 +111,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                  wxID_ANY,
                  _( "Open Recent Dri&ll File" ),
                  _( "Open a recent opened drill file" ),
-                 KiBitmap( gerbview_open_recent_drill_files_xpm ) );
+                 KiBitmap( recent_xpm ) );
 
     // Recent drill files
     static wxMenu* openRecentZipArchiveMenu;
@@ -126,7 +126,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                  wxID_ANY,
                  _( "Open Recent Zip &Archive File" ),
                  _( "Open a recent opened zip archive file" ),
-                 KiBitmap( gerbview_open_recent_ziparchive_files_xpm ) );
+                 KiBitmap( recent_xpm ) );
 
     // Separator
     fileMenu->AppendSeparator();
@@ -268,7 +268,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                  wxID_ABOUT,
                  _( "&About Kicad" ),
                  _( "About KiCad" ),
-                 KiBitmap( info_xpm ) );
+                 KiBitmap( about_xpm ) );
 
     // Append menus to the menubar
     menuBar->Append( fileMenu, _( "&File" ) );

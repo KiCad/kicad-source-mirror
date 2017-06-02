@@ -76,12 +76,12 @@ void DIALOG_3D_VIEW_OPTIONS::initDialog()
     m_bitmapCuThickness->SetBitmap( KiBitmap( use_3D_copper_thickness_xpm ) );
     m_bitmap3Dshapes->SetBitmap( KiBitmap( shape_3d_xpm ) );
     m_bitmapAreas->SetBitmap( KiBitmap( add_zone_xpm ) );
-    m_bitmapSilkscreen->SetBitmap( KiBitmap( add_text_xpm ) );
+    m_bitmapSilkscreen->SetBitmap( KiBitmap( text_xpm ) );
     m_bitmapSolderMask->SetBitmap( KiBitmap( pads_mask_layers_xpm ) );
     m_bitmapSolderPaste->SetBitmap( KiBitmap( pads_mask_layers_xpm ) );
     m_bitmapAdhesive->SetBitmap( KiBitmap( tools_xpm ) );
-    m_bitmapComments->SetBitmap( KiBitmap( edit_sheet_xpm ) );
-    m_bitmapECO->SetBitmap( KiBitmap( edit_sheet_xpm ) );
+    m_bitmapComments->SetBitmap( KiBitmap( editor_xpm ) );
+    m_bitmapECO->SetBitmap( KiBitmap( editor_xpm ) );
 
     // Check/uncheck checkboxes
     m_checkBoxAreas->SetValue( m_3Dprms.GetFlag( FL_ZONE ) );

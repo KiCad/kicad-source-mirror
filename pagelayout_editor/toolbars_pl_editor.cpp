@@ -48,7 +48,7 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
     m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                       wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
-    m_mainToolBar->AddTool( wxID_NEW, wxEmptyString, KiBitmap( pagelayout_new_xpm ),
+    m_mainToolBar->AddTool( wxID_NEW, wxEmptyString, KiBitmap( new_generic_xpm ),
                             _( "New page layout design" ) );
 
     m_mainToolBar->AddTool( wxID_OPEN, wxEmptyString, KiBitmap( pagelayout_load_xpm ),

@@ -1312,7 +1312,7 @@ LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aF
 
             wxMenu selectMenu;
             AddMenuItem( &selectMenu, wxID_NONE, _( "Clarify Selection" ),
-                         KiBitmap( dismiss_xpm ) );
+                         KiBitmap( info_xpm ) );
 
             selectMenu.AppendSeparator();
 

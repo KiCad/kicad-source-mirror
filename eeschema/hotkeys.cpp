@@ -225,7 +225,7 @@ static EDA_HOTKEY HkLoadSchematic( _HKI( "Load Schematic" ), HK_LOAD_SCH, 'L' + 
 static EDA_HOTKEY HkAutoplaceFields( _HKI( "Autoplace Fields" ), HK_AUTOPLACE_FIELDS, 'O',
                                         ID_AUTOPLACE_FIELDS );
 
-static EDA_HOTKEY HkUpdatePcbFromSch( _HKI( "Update PCB from Schematics" ), HK_UPDATE_PCB_FROM_SCH,
+static EDA_HOTKEY HkUpdatePcbFromSch( _HKI( "Update PCB from Schematic" ), HK_UPDATE_PCB_FROM_SCH,
                                       WXK_F8 );
 
 // Higtlight connection

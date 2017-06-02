@@ -105,6 +105,7 @@ set( BMAPS_SMALL
 
 # image basenames that go into the toolbar sized destinations, i.e. 26x26
 set( BMAPS_MID
+    about
     add_arc
     add_bus2bus
     add_bus
@@ -127,7 +128,6 @@ set( BMAPS_MID
     add_polygon
     add_power
     add_rectangle
-    add_text
     add_tracks
     add_zone_cutout
     add_zone
@@ -168,9 +168,8 @@ set( BMAPS_MID
     component_select_unit
     component_select_alternate_shape
     config
-    copyblock
     copycomponent
-    copy_button
+    copy
     copy_library
     copy_pad_settings
     copper_layers_setup
@@ -203,11 +202,11 @@ set( BMAPS_MID
     delete_track
     delete
     directory
-    dismiss
     display_options
     distribute_horizontal
     distribute_vertical
     down
+    drag
     drag_module
     drag_outline_segment
     drag_pad
@@ -223,13 +222,10 @@ set( BMAPS_MID
     duplicate_zone
     edges_sketch
     edit_comp_footprint
-    edit_component
     edit_comp_ref
     edit_comp_value
     edit_module
     editor
-    edit_part
-    edit_sheet
     edit_text
     edit
     eeschema
@@ -239,6 +235,7 @@ set( BMAPS_MID
     ercwarn
     erc
     exit
+    exchange
     export_dsn
     export_idf
     export_footprint_names
@@ -257,12 +254,9 @@ set( BMAPS_MID
     gbr_select_mode1
     gbr_select_mode2
     gerber_file
-    gerber_recent_files
     gerbview_show_negative_objects
     gerbview_drill_file
     gerbview_clear_layers
-    gerbview_open_recent_drill_files
-    gerbview_open_recent_ziparchive_files
     general_deletions
     general_ratsnest
     glabel2label
@@ -281,9 +275,9 @@ set( BMAPS_MID
     hotkeys_import
     hotkeys_export
     html
+    icon
     icon_cvpcb_small
     icon_gerbview_small
-    icon_txt
     import3d
     image
     import_brd_file
@@ -375,9 +369,6 @@ set( BMAPS_MID
     move_rectangle
     move_sheet
     move_target
-    move_text
-    move_track_segment
-    move_track
     move_zone
     move
     mw_add_gap
@@ -395,10 +386,9 @@ set( BMAPS_MID
     new_cvpcb
     new_footprint
     new_library
-    new_pcb
+    new_generic
     new_project
     new_project_with_template
-    new_sch
     noconn
     normal
     online_help
@@ -418,7 +408,6 @@ set( BMAPS_MID
     options_pin
     options_rectangle
     options_segment
-    options_text
     options_tracks
     options_track
     options_vias
@@ -430,16 +419,15 @@ set( BMAPS_MID
     pad_dimensions
     pad_enumerate
     pads_mask_layers
+    path
     pagelayout_load
-    pagelayout_load_default
-    pagelayout_new
-    pagelayout_recent
     pagelayout_normal_view_mode
     pagelayout_special_view_mode
     palette
     part_properties
     paste
     pcbnew
+    pcbcalculator
     pcb_offset
     pin2pin
     pin_name_to
@@ -472,6 +460,7 @@ set( BMAPS_MID
     py_script
     ratsnest
     read_setup
+    recent
     redo
     red
     reload2
@@ -479,14 +468,8 @@ set( BMAPS_MID
     render_mode
     reset_text
     resize_sheet
-    rescue_pcbnew
-    revert_pcbnew
+    rescue
     right
-    rotate_field
-    rotate_glabel
-    rotate_module_cw
-    rotate_module_ccw
-    rotate_pin
     rotate_ccw
     rotate_cw
     rotate_neg_x
@@ -501,7 +484,6 @@ set( BMAPS_MID
     save_project
     save_setup
     save
-    schematic
     select_grid
     select_layer_pair
     select_w_layer
@@ -534,6 +516,7 @@ set( BMAPS_MID
     spreadsheet
     svg_file
     swap_layer
+    text
     text_sketch
     three_d
     tool_ratsnest

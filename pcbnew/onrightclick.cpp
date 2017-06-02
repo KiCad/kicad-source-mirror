@@ -271,7 +271,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 msg = AddHotkeyName( _( "Move Dimension Text" ), g_Board_Editor_Hokeys_Descr,
                                      HK_MOVE_ITEM );
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_MOVE_TEXT_DIMENSION_REQUEST,
-                             msg, KiBitmap( move_text_xpm ) );
+                             msg, KiBitmap( move_xpm ) );
 
                 msg = AddHotkeyName( _( "Duplicate Dimension" ), g_Board_Editor_Hokeys_Descr,
                                      HK_DUPLICATE_ITEM );
@@ -281,7 +281,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 msg = AddHotkeyName( _("Move Dimension Exactly" ), g_Board_Editor_Hokeys_Descr,
                                      HK_MOVE_ITEM_EXACT );
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_MOVE_EXACT,
-                             msg, KiBitmap( move_text_xpm ) );
+                             msg, KiBitmap( move_xpm ) );
 
                 msg = AddHotkeyName( _( "Delete Dimension" ), g_Board_Editor_Hokeys_Descr,
                                      HK_DELETE );
@@ -489,7 +489,7 @@ void PCB_EDIT_FRAME::createPopUpBlockMenu( wxMenu* menu )
     AddMenuItem( menu, ID_POPUP_ZOOM_BLOCK, _( "Zoom Block" ), KiBitmap( zoom_area_xpm ) );
     menu->AppendSeparator();
     AddMenuItem( menu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), KiBitmap( checked_ok_xpm ) );
-    AddMenuItem( menu, ID_POPUP_COPY_BLOCK, _( "Copy Block" ), KiBitmap( copyblock_xpm ) );
+    AddMenuItem( menu, ID_POPUP_COPY_BLOCK, _( "Copy Block" ), KiBitmap( copy_xpm ) );
     AddMenuItem( menu, ID_POPUP_FLIP_BLOCK, _( "Flip Block" ), KiBitmap( mirror_footprint_axisX_xpm ) );
     AddMenuItem( menu, ID_POPUP_ROTATE_BLOCK, _( "Rotate Block" ), KiBitmap( rotate_ccw_xpm ) );
     AddMenuItem( menu, ID_POPUP_DELETE_BLOCK, _( "Delete Block" ), KiBitmap( delete_xpm ) );
@@ -802,14 +802,14 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
 
         msg = AddHotkeyName( _( "Drag" ), g_Board_Editor_Hokeys_Descr, HK_DRAG_ITEM  );
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_DRAG_MODULE_REQUEST,
-                     msg, KiBitmap( drag_module_xpm ) );
+                     msg, KiBitmap( drag_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Rotate +" ), g_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
+    msg = AddHotkeyName( _( "Rotate 90 deg CCW" ), g_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
     AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE,
-                 msg, KiBitmap( rotate_module_ccw_xpm ) );
+                 msg, KiBitmap( rotate_ccw_xpm ) );
     AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE,
-                 _( "Rotate -" ), KiBitmap( rotate_module_cw_xpm ) );
+                 _( "Rotate 90 deg CW" ), KiBitmap( rotate_cw_xpm ) );
     msg = AddHotkeyName( _( "Flip" ), g_Board_Editor_Hokeys_Descr, HK_FLIP_ITEM );
     AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_CHANGE_SIDE_MODULE,
                  msg, KiBitmap( mirror_footprint_axisX_xpm ) );
@@ -851,7 +851,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
                      msg, KiBitmap( array_module_xpm ) );
 
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_EXCHANGE_FOOTPRINTS,
-                     _( "Exchange Footprint(s)" ), KiBitmap( import_module_xpm ) );
+                     _( "Exchange Footprint" ), KiBitmap( exchange_xpm ) );
     }
 }
 
@@ -878,12 +878,12 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* me
         msg = AddHotkeyName( _("Move Text Exactly" ), g_Board_Editor_Hokeys_Descr,
                              HK_MOVE_ITEM_EXACT );
         AddMenuItem( sub_menu_Fp_text, ID_POPUP_PCB_MOVE_EXACT,
-                     msg, KiBitmap( move_text_xpm ) );
+                     msg, KiBitmap( move_xpm ) );
     }
 
     msg = AddHotkeyName( _( "Rotate Text" ), g_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
     AddMenuItem( sub_menu_Fp_text, ID_POPUP_PCB_ROTATE_TEXTMODULE,
-                 msg, KiBitmap( rotate_field_xpm ) );
+                 msg, KiBitmap( rotate_cw_xpm ) );
 
     if( !flags )
     {
@@ -983,16 +983,16 @@ void PCB_EDIT_FRAME::createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
 
     sub_menu_Text = new wxMenu;
 
-    AddMenuItem( menu, sub_menu_Text, -1, msg, KiBitmap( add_text_xpm ) );
+    AddMenuItem( menu, sub_menu_Text, -1, msg, KiBitmap( text_xpm ) );
 
     if( !flags )
     {
         msg = AddHotkeyName( _( "Move" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
         AddMenuItem( sub_menu_Text, ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST,
-                     msg, KiBitmap( move_text_xpm ) );
+                     msg, KiBitmap( move_xpm ) );
         msg = AddHotkeyName( _( "Copy" ), g_Board_Editor_Hokeys_Descr, HK_COPY_ITEM );
         AddMenuItem( sub_menu_Text, ID_POPUP_PCB_COPY_TEXTEPCB,
-                     msg, KiBitmap( copyblock_xpm ) );
+                     msg, KiBitmap( copy_xpm ) );
     }
 
     msg = AddHotkeyName( _( "Rotate" ), g_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );

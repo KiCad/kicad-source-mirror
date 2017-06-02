@@ -11,7 +11,7 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="add_tracks.svg">
   <metadata
      id="metadata40">
@@ -34,44 +34,28 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1600"
-     inkscape:window-height="849"
+     inkscape:window-width="1920"
+     inkscape:window-height="1054"
      id="namedview38"
      showgrid="true"
      inkscape:snap-to-guides="false"
      inkscape:snap-grids="true"
-     inkscape:zoom="22.961538"
-     inkscape:cx="11.301508"
-     inkscape:cy="13"
+     inkscape:zoom="32.472518"
+     inkscape:cx="9.338512"
+     inkscape:cy="14.676609"
      inkscape:window-x="0"
-     inkscape:window-y="29"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2">
     <inkscape:grid
        type="xygrid"
-       id="grid3017"
-       empspacing="1"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true"
-       spacingx="0.5px"
-       spacingy="0.5px" />
+       id="grid4136" />
   </sodipodi:namedview>
   <defs
      id="defs4" />
-  <g
-     transform="matrix(1.6382539,0,0,1.5572263,1.2572207,0.36314149)"
-     id="g16">
-    <rect
-       height="16"
-       width="16"
-       y="0"
-       x="0"
-       id="rect18"
-       style="fill-opacity:0" />
-  </g>
   <path
      id="path2990"
-     style="fill:none;stroke:#008000;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="M 13.5,13 7,13 2.5,2.5 m 11,10.5 5.5,0 4.5,10.5" />
+     style="fill:none;stroke:#008000;stroke-width:2.84693623;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 13.851853,13.538226 -5.8155528,0 -4.026154,-9.2405748 m 9.8417068,9.2405748 4.920855,0 4.026153,9.240581"
+     inkscape:connector-curvature="0" />
 </svg>

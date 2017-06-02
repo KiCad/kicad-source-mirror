@@ -215,7 +215,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     // Set up toolbar
     if( Kiface().IsSingle() )
     {
-        m_mainToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, KiBitmap( new_pcb_xpm ),
+        m_mainToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, KiBitmap( new_generic_xpm ),
                                 _( "New board" ) );
         m_mainToolBar->AddTool( ID_LOAD_FILE, wxEmptyString, KiBitmap( open_brd_file_xpm ),
                                 _( "Open existing board" ) );
@@ -459,7 +459,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->AddTool( ID_PCB_ARC_BUTT, wxEmptyString, KiBitmap( add_arc_xpm ),
                             _( "Add graphic arc" ), wxITEM_CHECK );
 
-    m_drawToolBar->AddTool( ID_PCB_ADD_TEXT_BUTT, wxEmptyString, KiBitmap( add_text_xpm ),
+    m_drawToolBar->AddTool( ID_PCB_ADD_TEXT_BUTT, wxEmptyString, KiBitmap( text_xpm ),
                             _( "Add text on copper layers or graphic text" ), wxITEM_CHECK );
 
     m_drawToolBar->AddSeparator();
@@ -486,7 +486,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
 
     m_drawToolBar->AddTool( ID_PCB_MEASUREMENT_TOOL, wxEmptyString,
                             KiBitmap( measurement_xpm ),
-                            _( "Measure distance between two points" ),
+                            _( "Measure distance" ),
                             wxITEM_CHECK );
 
     m_drawToolBar->Realize();

@@ -698,7 +698,7 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
             AddMenuItem( &popupMenu, ID_PROJECT_TXTEDIT,
                          _( "&Edit in a text editor" ),
                          _( "Open the file in a Text Editor" ),
-                         KiBitmap( icon_txt_xpm ) );
+                         KiBitmap( editor_xpm ) );
             AddMenuItem( &popupMenu, ID_PROJECT_RENAME,
                          _( "&Rename file" ),
                          _( "Rename file" ),

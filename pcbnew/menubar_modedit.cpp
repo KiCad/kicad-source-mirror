@@ -86,13 +86,13 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // from Library
     AddMenuItem( openSubmenu, ID_MODEDIT_LOAD_MODULE,
                  _( "Load Footprint From Current Li&brary" ),
-                 _( "Open a footprint from library" ),
+                 _( "Open footprint from library" ),
                  KiBitmap( module_xpm ) );
 
     // from current Board
     AddMenuItem( openSubmenu, ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
                  _( "Load Footprint From &Current Board" ),
-                 _( "Load a footprint from the current board" ),
+                 _( "Load footprint from current board" ),
                  KiBitmap( load_module_board_xpm ) );
 
     /* Append openSubmenu to fileMenu */
@@ -105,7 +105,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Save the currently loaded legacy library as an s-expression library.
     AddMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBRARY_AS,
                  _( "Save &Current Library As..." ),
-                 _( "Save entire current library under a new name." ),
+                 _( "Save entire current library under a new name" ),
                  KiBitmap( copy_library_xpm ) );
 
     // Save module
@@ -118,27 +118,27 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // Save module in new lib
     AddMenuItem( fileMenu, ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
-                 _( "S&ave Footprint in New Library..." ),
-                 _( "Create a new library and save current footprint into it" ),
+                 _( "S&ave Footprint in New Library" ),
+                 _( "Create new library and save current footprint in it" ),
                  KiBitmap( new_library_xpm ) );
 
     // Export module
     AddMenuItem( fileMenu, ID_MODEDIT_EXPORT_PART,
-                 _( "&Export Footprint..." ),
+                 _( "&Export Footprint" ),
                  _( "Save currently loaded footprint into file" ),
                  KiBitmap( export_module_xpm ) );
 
     // Import DXF File
     AddMenuItem( fileMenu, ID_GEN_IMPORT_DXF_FILE,
                  _( "&Import DXF File" ),
-                 _( "Import a 2D Drawing DXF file to Pcbnew on the Drawings layer" ),
+                 _( "Import 2D Drawing DXF file to Pcbnew on Drawings layer" ),
                  KiBitmap( import_xpm ) );
 
     fileMenu->AppendSeparator();
 
     // Print
     AddMenuItem( fileMenu, wxID_PRINT,
-                 _( "&Print..." ),
+                 _( "&Print" ),
                  _( "Print current footprint" ),
                  KiBitmap( plot_xpm ) );
 
@@ -176,7 +176,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // Properties
     AddMenuItem( editMenu, ID_MODEDIT_EDIT_MODULE_PROPERTIES,
-                 _( "Edit &Properties" ),
+                 _( "Footprint &Properties" ),
                  _( "Edit footprint properties" ),
                  KiBitmap( module_options_xpm ) );
 
@@ -185,18 +185,18 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // User grid size
     AddMenuItem( dimensions_Submenu, ID_PCB_USER_GRID_SETUP,
-                 _( "&User Grid Size" ), _( "Adjust user grid" ),
+                 _( "Set Custom &User Grid" ), _( "Set custom user grid size" ),
                  KiBitmap( grid_xpm ) );
 
     // Sizes and Widths
     AddMenuItem( dimensions_Submenu, ID_PCB_DRAWINGS_WIDTHS_SETUP,
-                 _( "&Size and Width" ),
-                 _( "Adjust width for texts and drawings" ),
-                 KiBitmap( options_text_xpm ) );
+                 _( "Text &Size and Width" ),
+                 _( "Adjust width for text and drawing" ),
+                 KiBitmap( text_xpm ) );
 
     // Pad settings
     AddMenuItem( dimensions_Submenu, ID_MODEDIT_PAD_SETTINGS,
-                 _( "&Pad Setting" ), _( "Edit settings for new pads" ),
+                 _( "&Pad Properties" ), _( "Edit settings for new pads" ),
                  KiBitmap( pad_dimensions_xpm ) );
 
     //--------- View menu ----------------
@@ -293,7 +293,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Text
     AddMenuItem( placeMenu, ID_MODEDIT_TEXT_TOOL,
                  _( "&Text" ), _( "Add graphic text" ),
-                 KiBitmap( add_text_xpm ) );
+                 KiBitmap( text_xpm ) );
 
     placeMenu->AppendSeparator();
 
@@ -320,15 +320,15 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  ID_PREFERENCES_CONFIGURE_PATHS,
                  _( "Configure Pa&ths" ),
                  _( "Edit path configuration environment variables" ),
-                 KiBitmap( editor_xpm ) );
+                 KiBitmap( path_xpm ) );
 
     // Settings
     AddMenuItem( prefs_menu, wxID_PREFERENCES,
-                 _( "&Settings" ), _( "Change the footprint editor settings." ),
+                 _( "General &Settings" ), _( "Change footprint editor settings." ),
                  KiBitmap( preference_xpm ) );
 
     AddMenuItem( prefs_menu, ID_PCB_DISPLAY_OPTIONS_SETUP,
-                 _( "&Display" ),
+                 _( "&Display and Hide" ),
                  _( "Change footprint editor display settings" ),
                  KiBitmap( display_options_xpm ) );
 
@@ -354,14 +354,14 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( helpMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
                  _( "&List Hotkeys" ),
-                 _( "Displays the current hotkeys list and corresponding commands" ),
+                 _( "Displays current hotkeys table and corresponding commands" ),
                  KiBitmap( hotkeys_xpm ) );
 
     helpMenu->AppendSeparator();
 
     AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED,
                  _( "Get &Involved" ),
-                 _( "Contribute to KiCad (opens a web browser)" ),
+                 _( "Contribute to KiCad (opens in web browser)" ),
                  KiBitmap( info_xpm ) );
 
     // About Pcbnew
@@ -369,7 +369,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( helpMenu, wxID_ABOUT,
                  _( "&About KiCad" ),
                  _( "About KiCad" ),
-                 KiBitmap( info_xpm ) );
+                 KiBitmap( about_xpm ) );
 
     // Append menus to the menubar
     menuBar->Append( fileMenu, _( "&File" ) );

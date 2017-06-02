@@ -229,7 +229,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 
         // Give a title to the selection menu. This is also a cancel menu item
         AddMenuItem( &itemMenu, wxID_NONE, _( "Clarify Selection" ),
-                     KiBitmap( dismiss_xpm ) );
+                     KiBitmap( info_xpm ) );
         itemMenu.AppendSeparator();
 
         int limit = std::min( MAX_ITEMS_IN_PICKER, m_Collector->GetCount() );

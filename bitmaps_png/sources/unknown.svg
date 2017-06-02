@@ -14,7 +14,7 @@
    height="26"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="unknown.svg">
   <defs
      id="defs4">
@@ -48,7 +48,8 @@
        y1="21"
        x2="1"
        y2="1"
-       gradientUnits="userSpaceOnUse" />
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,-1,0,1052.3622)" />
     <filter
        inkscape:collect="always"
        id="filter3899">
@@ -79,7 +80,7 @@
        fy="6.4166613"
        r="3.5"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.85714311,-0.85714265,1.4285709,1.4285716,-4.9523675,12.619044)" />
+       gradientTransform="matrix(0.85714311,0.85714265,1.4285709,-1.4285716,-4.9523675,1039.7432)" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -89,16 +90,16 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="21.730769"
-     inkscape:cx="13"
-     inkscape:cy="13"
+     inkscape:cx="4.9929203"
+     inkscape:cy="12.907965"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:showpageshadow="false"
-     inkscape:window-width="1366"
-     inkscape:window-height="744"
+     inkscape:window-width="1920"
+     inkscape:window-height="1054"
      inkscape:window-x="0"
-     inkscape:window-y="24"
+     inkscape:window-y="0"
      inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
@@ -133,27 +134,25 @@
        id="path3889"
        d="m 0.5,0.5 17,0 c 3,1 7,5 8,8 l 0,17 -25,0 z"
        style="opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3899)"
-       transform="translate(0,1026.3622)" />
+       transform="matrix(1,0,0,-1,0,1052.3622)" />
     <path
        style="fill:url(#linearGradient3781);fill-opacity:1;stroke:none"
-       d="m 1,1 16,0 c 3,1 7,5 8,8 l 0,16 -24,0 z"
+       d="m 1,1051.3622 16,0 c 3,-1 7,-5 8,-8 l 0,-16 -24,0 z"
        id="rect3761"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccccc"
-       transform="translate(0,1026.3622)" />
+       sodipodi:nodetypes="cccccc" />
     <path
        sodipodi:nodetypes="cccc"
-       transform="translate(0,1026.3622)"
+       transform="matrix(1,0,0,-1,0,1052.3622)"
        inkscape:connector-curvature="0"
        id="path3783"
-       d="m 17,1 c 1,0.5 7.5,7 8,8 C 23,8 20,8 18,8 18,6 18,3 17,1 z"
+       d="m 17,1 c 1,0.5 7.5,7 8,8 C 23,8 20,8 18,8 18,6 18,3 17,1 Z"
        style="opacity:0.5;fill:#373737;fill-opacity:1;stroke:none;filter:url(#filter3952)" />
     <path
        style="fill:url(#radialGradient3975);fill-opacity:1;stroke:none"
-       d="m 17,1 c 3,1 7,5 8,8 C 23.5,8 22,7 19,7 19,4 18,2.5 17,1 z"
+       d="m 17,1051.3622 c 3,-1 7,-5 8,-8 -1.5,1 -3,2 -6,2 0,3 -1,4.5 -2,6 z"
        id="path3765"
        inkscape:connector-curvature="0"
-       transform="translate(0,1026.3622)"
        sodipodi:nodetypes="cccc" />
     <path
        id="path3094"

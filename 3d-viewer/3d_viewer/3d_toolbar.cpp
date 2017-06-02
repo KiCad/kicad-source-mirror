@@ -57,7 +57,7 @@ void EDA_3D_VIEWER::ReCreateMainToolbar()
     m_mainToolBar->AddSeparator();
 
     m_mainToolBar->AddTool( ID_TOOL_SCREENCOPY_TOCLIBBOARD, wxEmptyString,
-                            KiBitmap( copy_button_xpm ),
+                            KiBitmap( copy_xpm ),
                             _( "Copy 3D image to clipboard" ) );
 
     m_mainToolBar->AddSeparator();
@@ -152,7 +152,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
     fileMenu->AppendSeparator();
     AddMenuItem( fileMenu, ID_TOOL_SCREENCOPY_TOCLIBBOARD,
                  _( "Copy 3D Image to Clipboard" ),
-                 KiBitmap( copy_button_xpm ) );
+                 KiBitmap( copy_xpm ) );
 
     fileMenu->AppendSeparator();
     AddMenuItem( fileMenu, wxID_EXIT,
@@ -373,7 +373,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
                 _( "Show &Adhesive Layers" ), KiBitmap( tools_xpm ), wxITEM_CHECK );
 
     AddMenuItem( layersMenu, ID_MENU3D_SILKSCREEN_ONOFF,
-                _( "Show &Silkscreen Layers" ), KiBitmap( add_text_xpm ), wxITEM_CHECK );
+                _( "Show &Silkscreen Layers" ), KiBitmap( text_xpm ), wxITEM_CHECK );
 
     AddMenuItem( layersMenu, ID_MENU3D_SOLDER_MASK_ONOFF,
                 _( "Show Solder &Mask Layers" ), KiBitmap( pads_mask_layers_xpm ), wxITEM_CHECK );
@@ -384,10 +384,10 @@ void EDA_3D_VIEWER::CreateMenuBar()
     // Other layers are not "board" layers, and are not shown in realistic mode
     // These menus will be disabled in in realistic mode
     AddMenuItem( layersMenu, ID_MENU3D_COMMENTS_ONOFF,
-                _( "Show &Comments and Drawings Layers" ), KiBitmap( edit_sheet_xpm ), wxITEM_CHECK );
+                _( "Show &Comments and Drawings Layers" ), KiBitmap( editor_xpm ), wxITEM_CHECK );
 
     AddMenuItem( layersMenu, ID_MENU3D_ECO_ONOFF,
-                _( "Show &Eco Layers" ), KiBitmap( edit_sheet_xpm ), wxITEM_CHECK );
+                _( "Show &Eco Layers" ), KiBitmap( editor_xpm ), wxITEM_CHECK );
 
     // Reset options
     // /////////////////////////////////////////////////////////////////////////

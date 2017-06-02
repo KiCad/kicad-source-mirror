@@ -11,7 +11,7 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="add_dashed_line.svg">
   <metadata
      id="metadata50">
@@ -34,15 +34,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1600"
-     inkscape:window-height="849"
+     inkscape:window-width="1920"
+     inkscape:window-height="1054"
      id="namedview48"
      showgrid="true"
      inkscape:zoom="22.961538"
-     inkscape:cx="4.3551087"
-     inkscape:cy="13"
+     inkscape:cx="1.9755307"
+     inkscape:cy="10.816808"
      inkscape:window-x="0"
-     inkscape:window-y="29"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      inkscape:snap-to-guides="false"
@@ -60,9 +60,16 @@
   <defs
      id="defs4" />
   <path
-     style="fill:none;stroke:#0000cf;stroke-width:2.4000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:0;stroke-opacity:0.94117647;stroke-dasharray:4.80000019, 2.4000001;stroke-dashoffset:6.23999975"
-     d="M 1,25 24.485762,1.427136"
+     style="fill:none;stroke:#0000cf;stroke-width:1.93373311;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:3.86746634, 1.93373317;stroke-dashoffset:6.23999977;stroke-opacity:0.94117647"
+     d="M -49.640706,22.333943 -30.441372,3.6141321"
      id="path2990"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc" />
+  <rect
+     style="opacity:1;fill:none;fill-opacity:0.94117647;fill-rule:nonzero;stroke:#0000cf;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:1.79999995;stroke-dasharray:4,2;stroke-dashoffset:1;stroke-opacity:0.94117647"
+     id="rect4149"
+     width="17.963491"
+     height="18.023216"
+     x="4.0413499"
+     y="4.0034022" />
 </svg>

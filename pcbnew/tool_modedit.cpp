@@ -76,7 +76,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 #ifdef KICAD_SCRIPTING
     m_mainToolBar->AddTool( ID_MODEDIT_NEW_MODULE_FROM_WIZARD, wxEmptyString,
                             KiBitmap( module_wizard_xpm ),
-                            _( "New footprint using the footprint wizard" ) );
+                            _( "New footprint using footprint wizard" ) );
 #endif
 
 
@@ -91,7 +91,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddTool( ID_MODEDIT_UPDATE_MODULE_IN_BOARD, wxEmptyString,
                             KiBitmap( update_module_board_xpm ),
-                            _( "Update footprint in current board" ) );
+                            _( "Update footprint into current board" ) );
 
     m_mainToolBar->AddTool( ID_MODEDIT_INSERT_MODULE_IN_BOARD, wxEmptyString,
                             KiBitmap( insert_module_board_xpm ),
@@ -109,7 +109,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString, KiBitmap( undo_xpm ),
                             _( "Undo last edition" ) );
     m_mainToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ),
-                            _( "Redo the last undo command" ) );
+                            _( "Redo last undo command" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_MODEDIT_EDIT_MODULE_PROPERTIES, wxEmptyString,
@@ -136,7 +136,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_MODEDIT_PAD_SETTINGS, wxEmptyString, KiBitmap( options_pad_xpm ),
-                            _( "Pad settings" ) );
+                            _( "Pad properties" ) );
 
 #if 0       // Currently there is no check footprint function defined, so do not show this tool
     m_mainToolBar->AddSeparator();
@@ -167,7 +167,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
 
     m_drawToolBar->AddSeparator();
     m_drawToolBar->AddTool( ID_MODEDIT_PAD_TOOL, wxEmptyString, KiBitmap( pad_xpm ),
-                            _( "Add pads" ), wxITEM_CHECK );
+                            _( "Add pad" ), wxITEM_CHECK );
 
     m_drawToolBar->AddSeparator();
     m_drawToolBar->AddTool( ID_MODEDIT_LINE_TOOL, wxEmptyString, KiBitmap( add_polygon_xpm ),
@@ -179,26 +179,26 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->AddTool( ID_MODEDIT_ARC_TOOL, wxEmptyString, KiBitmap( add_arc_xpm ),
                             _( "Add graphic arc" ), wxITEM_CHECK );
 
-    m_drawToolBar->AddTool( ID_MODEDIT_TEXT_TOOL, wxEmptyString, KiBitmap( add_text_xpm ),
+    m_drawToolBar->AddTool( ID_MODEDIT_TEXT_TOOL, wxEmptyString, KiBitmap( text_xpm ),
                             _( "Add Text" ), wxITEM_CHECK );
 
     m_drawToolBar->AddSeparator();
     m_drawToolBar->AddTool( ID_MODEDIT_ANCHOR_TOOL, wxEmptyString, KiBitmap( anchor_xpm ),
-                            _( "Place the footprint reference anchor" ),
+                            _( "Place footprint reference anchor" ),
                             wxITEM_CHECK );
 
     m_drawToolBar->AddSeparator();
     m_drawToolBar->AddTool( ID_MODEDIT_DELETE_TOOL, wxEmptyString, KiBitmap( delete_xpm ),
-                            _( "Delete items" ), wxITEM_CHECK );
+                            _( "Delete item" ), wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_MODEDIT_PLACE_GRID_COORD, wxEmptyString,
                             KiBitmap( grid_select_axis_xpm ),
-                            _( "Set the origin point for the grid" ),
+                            _( "Set grid origin" ),
                             wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_MODEDIT_MEASUREMENT_TOOL, wxEmptyString,
                             KiBitmap( measurement_xpm ),
-                            _( "Measure distance between two points" ),
+                            _( "Measure distance" ),
                             wxITEM_CHECK );
 
     m_drawToolBar->Realize();

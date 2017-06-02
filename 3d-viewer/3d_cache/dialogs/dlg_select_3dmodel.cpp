@@ -135,7 +135,7 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
     dirChoices->SetMinSize( wxSize( 320, 12 ) );
 
     wxStaticText* stDirChoice = new wxStaticText( this, -1, _( "Paths:" ) );
-    wxButton* cfgPaths = new wxButton( this, ID_CFG_PATHS, _( "Configure Paths" ) );
+    wxButton* cfgPaths = new wxButton( this, ID_CFG_PATHS, _( "Configure Path" ) );
     hboxDirChoice->Add( stDirChoice, 0, wxALL | wxCENTER, 5 );
     hboxDirChoice->Add( dirChoices, 1, wxEXPAND | wxALL, 5 );
     hboxDirChoice->Add( cfgPaths, 0, wxALL, 5 );

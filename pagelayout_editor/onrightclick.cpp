@@ -47,7 +47,7 @@ void AddNewItemsCommand( wxMenu* aMainMenu )
     AddMenuItem( aMainMenu, ID_POPUP_ITEM_ADD_RECT, _( "Add Rectangle" ),
                  KiBitmap( add_rectangle_xpm ) );
     AddMenuItem( aMainMenu, ID_POPUP_ITEM_ADD_TEXT, _( "Add Text" ),
-                 KiBitmap( add_text_xpm ) );
+                 KiBitmap( text_xpm ) );
     AddMenuItem( aMainMenu, ID_POPUP_ITEM_APPEND_PAGE_LAYOUT,
                  _( "Append Page Layout Descr File" ),
                  KiBitmap( import_xpm ) );

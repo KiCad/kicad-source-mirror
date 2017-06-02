@@ -104,7 +104,7 @@ TOOL_ACTION PCB_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicateIn
 
 TOOL_ACTION PCB_ACTIONS::moveExact( "pcbnew.InteractiveEdit.moveExact",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_ITEM_EXACT ),
-        _( "Move Exactly..." ), _( "Moves the selected item(s) by an exact amount" ),
+        _( "Move Exactly" ), _( "Moves the selected item(s) by an exact amount" ),
         move_module_xpm );
 
 TOOL_ACTION PCB_ACTIONS::createArray( "pcbnew.InteractiveEdit.createArray",
@@ -113,12 +113,12 @@ TOOL_ACTION PCB_ACTIONS::createArray( "pcbnew.InteractiveEdit.createArray",
 
 TOOL_ACTION PCB_ACTIONS::rotateCw( "pcbnew.InteractiveEdit.rotateCw",
         AS_GLOBAL, MD_SHIFT + 'R',
-        _( "Rotate Clockwise" ), _( "Rotates selected item(s) clockwise" ),
+        _( "Rotate 90 deg CW" ), _( "Rotates selected item(s) clockwise" ),
         rotate_cw_xpm, AF_NONE, (void*) -1 );
 
 TOOL_ACTION PCB_ACTIONS::rotateCcw( "pcbnew.InteractiveEdit.rotateCcw",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROTATE_ITEM ),
-        _( "Rotate Counter-clockwise" ), _( "Rotates selected item(s) counter-clockwise" ),
+        _( "Rotate 90 deg CCW" ), _( "Rotates selected item(s) counter-clockwise" ),
         rotate_ccw_xpm, AF_NONE, (void*) 1 );
 
 TOOL_ACTION PCB_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
@@ -131,22 +131,22 @@ TOOL_ACTION PCB_ACTIONS::mirror( "pcbnew.InteractiveEdit.mirror",
 
 TOOL_ACTION PCB_ACTIONS::remove( "pcbnew.InteractiveEdit.remove",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BACK_SPACE ),
-        _( "Remove" ), _( "Deletes selected item(s)" ), delete_xpm,
+        _( "Delete" ), _( "Deletes selected item(s)" ), delete_xpm,
         AF_NONE, (void*) REMOVE_FLAGS::NORMAL );
 
 TOOL_ACTION PCB_ACTIONS::removeAlt( "pcbnew.InteractiveEdit.removeAlt",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
-        _( "Remove (Alternative)" ), _( "Deletes selected item(s)" ), delete_xpm,
+        _( "Delete (Alternative)" ), _( "Deletes selected item(s)" ), delete_xpm,
         AF_NONE, (void*) REMOVE_FLAGS::ALT );
 
 TOOL_ACTION PCB_ACTIONS::exchangeFootprints( "pcbnew.InteractiveEdit.ExchangeFootprints",
         AS_GLOBAL, 0,
-        _( "Exchange Footprint(s)" ), _( "Change the footprint used for modules" ),
-        import_module_xpm );
+        _( "Exchange Footprint" ), _( "Change the footprint used for modules" ),
+        exchange_xpm );
 
 TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_ITEM ),
-        _( "Properties..." ), _( "Displays item properties dialog" ), editor_xpm );
+        _( "Properties" ), _( "Displays item properties dialog" ), config_xpm );
 
 TOOL_ACTION PCB_ACTIONS::selectionModified( "pcbnew.InteractiveEdit.ModifiedSelection",
         AS_GLOBAL, 0,
@@ -154,7 +154,7 @@ TOOL_ACTION PCB_ACTIONS::selectionModified( "pcbnew.InteractiveEdit.ModifiedSele
 
 TOOL_ACTION PCB_ACTIONS::measureTool( "pcbnew.InteractiveEdit.measureTool",
         AS_GLOBAL, MD_CTRL + MD_SHIFT + 'M',
-        _( "Measure tool" ), _( "Interactively measure distance between points" ),
+        _( "Measuring tool" ), _( "Interactively measure distance between points" ),
         nullptr, AF_ACTIVATE );
 
 
@@ -1029,7 +1029,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     Activate();
     frame()->SetToolID( EditingModules() ? ID_MODEDIT_MEASUREMENT_TOOL
                                          : ID_PCB_MEASUREMENT_TOOL,
-                        wxCURSOR_PENCIL, _( "Measure distance between two points" ) );
+                        wxCURSOR_PENCIL, _( "Measure distance" ) );
 
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
 

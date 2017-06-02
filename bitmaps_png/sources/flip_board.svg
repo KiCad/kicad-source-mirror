@@ -11,8 +11,8 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="swap_layer.svg">
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="flip_board.svg">
   <metadata
      id="metadata40">
     <rdf:RDF>
@@ -21,7 +21,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -34,17 +34,17 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1366"
-     inkscape:window-height="744"
+     inkscape:window-width="1920"
+     inkscape:window-height="1054"
      id="namedview38"
      showgrid="true"
      inkscape:snap-to-guides="false"
      inkscape:snap-grids="true"
      inkscape:zoom="21.730769"
-     inkscape:cx="11.159292"
-     inkscape:cy="9.8707965"
+     inkscape:cx="10.70816"
+     inkscape:cy="8.5401654"
      inkscape:window-x="0"
-     inkscape:window-y="24"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2">
     <inkscape:grid
@@ -146,11 +146,11 @@
      sodipodi:nodetypes="ccccc"
      inkscape:connector-curvature="0"
      id="path3831"
-     d="m 10.5,10.5 15,0 0,15 -15,0 z"
-     style="fill:#e60000;fill-opacity:1;stroke:#4d4d4d;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+     d="m 11.399934,11.399934 12.188619,0 0,12.20768 -12.188619,0 z"
+     style="opacity:0.9;fill:#e60000;fill-opacity:1;stroke:#4d4d4d;stroke-width:0.81320983;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   <path
-     style="fill:#00a000;fill-opacity:1;stroke:#4d4d4d;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="m 0.5,0.5 15,0 0,15 -15,0 z"
+     style="opacity:0.9;fill:#00a000;fill-opacity:1;stroke:#4d4d4d;stroke-width:0.8134954;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 2.3394911,2.4362918 12.2441639,0 0,12.1608422 -12.2441639,0 z"
      id="rect3828"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccc" />

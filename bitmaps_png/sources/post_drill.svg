@@ -14,7 +14,7 @@
    height="26"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="post_drill.svg">
   <defs
      id="defs4">
@@ -57,29 +57,6 @@
          stdDeviation="0.375"
          id="feGaussianBlur3901" />
     </filter>
-    <filter
-       inkscape:collect="always"
-       id="filter3952"
-       x="-0.12"
-       width="1.24"
-       y="-0.12"
-       height="1.24">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.35"
-         id="feGaussianBlur3954" />
-    </filter>
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient3767"
-       id="radialGradient3975"
-       cx="16.666658"
-       cy="6.0666614"
-       fx="16.666658"
-       fy="6.0666614"
-       r="3.5"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.85714311,-0.85714265,1.4285709,1.4285716,-4.9523675,12.619044)" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -88,17 +65,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="21.730769"
-     inkscape:cx="13.787717"
-     inkscape:cy="12.614608"
+     inkscape:zoom="10.865385"
+     inkscape:cx="48.703026"
+     inkscape:cy="1.3550338"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:showpageshadow="false"
-     inkscape:window-width="1366"
-     inkscape:window-height="744"
+     inkscape:window-width="1920"
+     inkscape:window-height="1054"
      inkscape:window-x="0"
-     inkscape:window-y="24"
+     inkscape:window-y="0"
      inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
@@ -131,30 +108,16 @@
        sodipodi:nodetypes="cccccc"
        inkscape:connector-curvature="0"
        id="path3889"
-       d="m 1.5,0.5 15,0 c 3,1 7,5 8,8 l 0,17 -23,0 z"
+       d="m 1.5,0.5 22.97216,0 C 24.5,2 24.5,7.5 24.5,8.5 l 0,17 -23,0 z"
        style="opacity:0.5;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3899)"
        transform="translate(0,1026.3622)" />
     <path
        style="fill:url(#linearGradient3781);fill-opacity:1;stroke:none"
-       d="m 2,1 14,0 c 3,1 7,5 8,8 l 0,16 -22,0 z"
+       d="m 2,1 22.004699,0.065079 C 24,2 24,8 24,9 l 0,16 -22,0 z"
        id="rect3761"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccc"
        transform="translate(0,1026.3622)" />
-    <path
-       sodipodi:nodetypes="cccc"
-       transform="translate(0,1026.3622)"
-       inkscape:connector-curvature="0"
-       id="path3783"
-       d="m 16,1 c 1,0.5 7.5,7 8,8 C 22,8 19,8 17,8 17,6 17,3 16,1 z"
-       style="opacity:0.5;fill:#373737;fill-opacity:1;stroke:none;filter:url(#filter3952)" />
-    <path
-       style="fill:url(#radialGradient3975);fill-opacity:1;stroke:none"
-       d="m 16,1 c 3,1 7,5 8,8 C 22.5,8 21,7 18,7 18,4 17,2.5 16,1 z"
-       id="path3765"
-       inkscape:connector-curvature="0"
-       transform="translate(0,1026.3622)"
-       sodipodi:nodetypes="cccc" />
     <path
        style="fill:#858000;fill-opacity:0.86274510999999998;stroke:none"
        d="m 3,1041.3622 20,0 0,9 -20,0 z"
@@ -230,6 +193,6 @@
        sodipodi:cy="8.5"
        sodipodi:rx="4"
        sodipodi:ry="4"
-       d="m 16.5,8.5 c 0,2.209139 -1.790861,4 -4,4 -2.209139,0 -4,-1.790861 -4,-4 0,-2.209139 1.790861,-4 4,-4 2.209139,0 4,1.790861 4,4 z" />
+       d="m 16.5,8.5 a 4,4 0 0 1 -4,4 4,4 0 0 1 -4,-4 4,4 0 0 1 4,-4 4,4 0 0 1 4,4 z" />
   </g>
 </svg>

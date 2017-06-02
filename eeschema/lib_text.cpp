@@ -512,7 +512,7 @@ wxString LIB_TEXT::GetSelectMenuText() const
 
 BITMAP_DEF LIB_TEXT::GetMenuImage() const
 {
-    return add_text_xpm;
+    return text_xpm;
 }
 
 

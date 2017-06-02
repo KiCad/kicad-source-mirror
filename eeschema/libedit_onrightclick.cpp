@@ -188,7 +188,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
             msg = AddHotkeyName( _( "Move Text" ), g_Libedit_Hokeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg,
-                         KiBitmap( move_text_xpm ) );
+                         KiBitmap( move_xpm ) );
         }
 
         msg = AddHotkeyName( _( "Edit Text" ), g_Libedit_Hokeys_Descr, HK_EDIT );
@@ -254,7 +254,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         }
 
         msg = AddHotkeyName( _( "Field Rotate" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
-        AddMenuItem( PopMenu, ID_LIBEDIT_ROTATE_ITEM, msg, KiBitmap( rotate_field_xpm ) );
+        AddMenuItem( PopMenu, ID_LIBEDIT_ROTATE_ITEM, msg, KiBitmap( rotate_cw_xpm ) );
         msg = AddHotkeyName( _( "Field Edit" ), g_Libedit_Hokeys_Descr, HK_EDIT );
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
         break;
@@ -289,7 +289,7 @@ void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, LIB_EDIT_FRAME* frame )
     AddMenuItem( PopMenu, ID_LIBEDIT_EDIT_PIN, msg, KiBitmap( edit_xpm ) );
 
     msg = AddHotkeyName( _( "Rotate Pin " ), g_Libedit_Hokeys_Descr, HK_ROTATE );
-    AddMenuItem( PopMenu, ID_LIBEDIT_ROTATE_ITEM, msg, KiBitmap( rotate_pin_xpm ) );
+    AddMenuItem( PopMenu, ID_LIBEDIT_ROTATE_ITEM, msg, KiBitmap( rotate_cw_xpm ) );
 
     if( not_in_move )
     {
@@ -337,14 +337,14 @@ void AddMenusForBlock( wxMenu* PopMenu, LIB_EDIT_FRAME* frame )
     {
         AddMenuItem( PopMenu, ID_POPUP_SELECT_ITEMS_BLOCK, _( "Select Items" ),
                      KiBitmap( green_xpm ) );
-        AddMenuItem( PopMenu, ID_POPUP_COPY_BLOCK, _( "Copy Block" ), KiBitmap( copyblock_xpm ) );
-        msg = AddHotkeyName( _( "Mirror Block ||" ), g_Libedit_Hokeys_Descr, HK_MIRROR_Y );
+        AddMenuItem( PopMenu, ID_POPUP_COPY_BLOCK, _( "Copy Block" ), KiBitmap( copy_xpm ) );
+        msg = AddHotkeyName( _( "Flip Block Horizonal" ), g_Libedit_Hokeys_Descr, HK_MIRROR_Y );
         AddMenuItem( PopMenu, ID_POPUP_MIRROR_Y_BLOCK, msg,
                      KiBitmap( mirror_h_xpm ) );
-        msg = AddHotkeyName( _( "Mirror Block --" ), g_Libedit_Hokeys_Descr, HK_MIRROR_X );
+        msg = AddHotkeyName( _( "Flip Block Vertical" ), g_Libedit_Hokeys_Descr, HK_MIRROR_X );
         AddMenuItem( PopMenu, ID_POPUP_MIRROR_X_BLOCK, msg,
                      KiBitmap( mirror_v_xpm ) );
-        msg = AddHotkeyName( _( "Rotate Block CCW" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
+        msg = AddHotkeyName( _( "Rotate 90 deg CCW" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
         AddMenuItem( PopMenu, ID_POPUP_ROTATE_BLOCK, msg,
                      KiBitmap( rotate_ccw_xpm ) );
         AddMenuItem( PopMenu, ID_POPUP_DELETE_BLOCK, _( "Delete Block" ), KiBitmap( delete_xpm ) );
