@@ -100,7 +100,7 @@ std::string StrPrintf( const char* format, ... )
 void IO_ERROR::init( const char* aThrowersFile, const char* aThrowersLoc, const wxString& aMsg )
 {
     errorText.Printf( IO_FORMAT, aMsg.GetData(),
-        wxString::FromUTF8( aThrowersFile ).GetData(),
+        wxString::FromUTF8( aThrowersFile ).AfterLast( '/' ).GetData(),
         wxString::FromUTF8( aThrowersLoc ).GetData() );
 }
 
@@ -117,7 +117,7 @@ void PARSE_ERROR::init( const char* aThrowersFile, const char* aThrowersLoc,
 
     errorText.Printf( PARSE_FORMAT, aMsg.GetData(), aSource.GetData(),
         aLineNumber, aByteIndex,
-        wxString::FromUTF8( aThrowersFile ).GetData(),
+        wxString::FromUTF8( aThrowersFile ).AfterLast( '/' ).GetData(),
         wxString::FromUTF8( aThrowersLoc ).GetData() );
 }
 
