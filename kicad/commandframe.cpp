@@ -36,7 +36,7 @@
 const int BUTTON_SEPARATION = 5;
 
 // Buttons are larger than images by this amount
-const int BUTTON_EXPANSION  = 5;
+const int BUTTON_EXPANSION  = 6;
 
 LAUNCHER_PANEL::LAUNCHER_PANEL( wxWindow* parent ) :
     wxPanel( parent, wxID_ANY )
@@ -49,6 +49,11 @@ LAUNCHER_PANEL::LAUNCHER_PANEL( wxWindow* parent ) :
 int LAUNCHER_PANEL::GetPanelHeight() const
 {
     return m_height + 2 * BUTTON_SEPARATION;
+}
+
+int LAUNCHER_PANEL::GetPanelWidth() const
+{
+    return m_width + BUTTON_SEPARATION;
 }
 
 /**
@@ -106,11 +111,13 @@ void LAUNCHER_PANEL::CreateCommandToolbar()
  */
 void LAUNCHER_PANEL::AddButton( wxWindowID aId, const wxBitmap& aBitmap, wxString aToolTip )
 {
-    wxSize  buttSize( aBitmap.GetWidth() + BUTTON_EXPANSION,
-                      aBitmap.GetHeight() + BUTTON_EXPANSION );
+    wxSize  buttSize( aBitmap.GetWidth() + 2 * BUTTON_EXPANSION,
+                      aBitmap.GetHeight() + 2 * BUTTON_EXPANSION );
 
     if( m_height < buttSize.y )
         m_height = buttSize.y;
+
+    m_width += buttSize.x + BUTTON_SEPARATION;
 
     auto btn = new wxBitmapButton( this, aId, aBitmap, wxDefaultPosition, buttSize );
 

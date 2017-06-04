@@ -313,11 +313,13 @@ private:
     wxBoxSizer* m_buttonSizer;
 
     int m_height = 0;
+    int m_width  = 0;
 
 public: LAUNCHER_PANEL( wxWindow* parent );
     ~LAUNCHER_PANEL() { };
 
     int GetPanelHeight() const;
+    int GetPanelWidth() const;
 
 private:
 
