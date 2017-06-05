@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-06-02 13:59+0200\n"
-"PO-Revision-Date: 2017-06-02 14:18+0200\n"
+"PO-Revision-Date: 2017-06-05 10:28+0200\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -10985,7 +10985,6 @@ msgid "ERC error"
 msgstr "Error de ERC"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:94
-#, fuzzy
 msgid "Brightened"
 msgstr "Abrillantado"
 
@@ -11982,7 +11981,7 @@ msgstr ""
 
 #: gerbview/toolbars_gerber.cpp:174
 msgid "DCode:"
-msgstr ""
+msgstr "DCode:"
 
 #: gerbview/toolbars_gerber.cpp:228
 msgid "Turn polar coordinate on"
@@ -12038,7 +12037,7 @@ msgstr "Mostrar/ocultar la barra de administración de capas"
 
 #: gerbview/toolbars_gerber.cpp:298
 msgid "<No selection>"
-msgstr ""
+msgstr "<Sin selección>"
 
 #: gerbview/toolbars_gerber.cpp:525
 msgid "Hide layers manager"
@@ -12079,7 +12078,7 @@ msgstr "Eliminar archivo"
 
 #: kicad/commandframe.cpp:64
 msgid "Schematic layout editor"
-msgstr ""
+msgstr "Editor de esquemas"
 
 #: kicad/commandframe.cpp:68
 msgid "Schematic library editor"
@@ -12087,29 +12086,31 @@ msgstr "Editor de librerías."
 
 #: kicad/commandframe.cpp:72
 msgid "PCB layout editor"
-msgstr ""
+msgstr "Editor de PCBs"
 
 #: kicad/commandframe.cpp:76
 msgid "PCB library editor"
-msgstr ""
+msgstr "Editor de librerías"
 
 #: kicad/commandframe.cpp:80
 msgid "Gerber viewer"
-msgstr ""
+msgstr "Visor de archivos Gerber"
 
 #: kicad/commandframe.cpp:84
 msgid ""
 "Import bitmap\n"
 "Convert bitmap images to schematic or PCB elements"
 msgstr ""
+"Importar mapa de bits\n"
+"Convertir imágenes de mapa de bits en elementos de esquema o PCB"
 
 #: kicad/commandframe.cpp:89
 msgid "Calculator tools"
-msgstr ""
+msgstr "Calculadoras"
 
 #: kicad/commandframe.cpp:93
 msgid "Worksheet layout editor"
-msgstr ""
+msgstr "Editor de hoja de trabajo"
 
 #: kicad/dialogs/dialog_template_selector.cpp:120
 msgid "<html><h1>Template Selector</h1></html>"
@@ -12332,19 +12333,19 @@ msgstr "Guardar el proyecto activo"
 
 #: kicad/menubar.cpp:269
 msgid "&Archive Current Project"
-msgstr ""
+msgstr "&Archivar proyecto activo"
 
 #: kicad/menubar.cpp:270
 msgid "Archive all needed project files into zip archive"
-msgstr ""
+msgstr "Comprimir todos los ficheros necesarios del proyecto en un archivo Zip"
 
 #: kicad/menubar.cpp:276
 msgid "&Unarchive Project"
-msgstr ""
+msgstr "Desempaquetar proyecto"
 
 #: kicad/menubar.cpp:277
 msgid "Unarchive project files from zip archive"
-msgstr ""
+msgstr "Descomprimir los ficheros de un proyecto desde un archivo Zip."
 
 #: kicad/menubar.cpp:287
 msgid "Close KiCad"
@@ -13047,7 +13048,7 @@ msgstr ""
 
 #: pagelayout_editor/pl_editor_frame.cpp:346
 msgid "no file selected"
-msgstr ""
+msgstr "no se ha seleccionado archivo"
 
 #: pagelayout_editor/pl_editor_frame.cpp:460
 #, c-format
@@ -13815,11 +13816,11 @@ msgstr "Atenuadores RF"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1179
 msgid "10% / 5%"
-msgstr ""
+msgstr "10% / 5%"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1179
 msgid "<= 2%"
-msgstr ""
+msgstr "<= 2%"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1181
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1210
@@ -13840,7 +13841,7 @@ msgstr "3ª banda"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1202
 msgid "4th Band"
-msgstr ""
+msgstr "4ª banda"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1206
 msgid "Multiplier"
@@ -14371,7 +14372,7 @@ msgstr ""
 
 #: pcbnew/array_creator.cpp:113
 msgid "Create an array"
-msgstr ""
+msgstr "Crear matriz"
 
 #: pcbnew/autorouter/auto_place_footprints.cpp:165
 msgid "Footprints NOT LOCKED will be moved"
@@ -14565,7 +14566,7 @@ msgstr ""
 #: pcbnew/board_netlist_updater.cpp:441
 #, c-format
 msgid "Component %s is locked, skipping removal.\n"
-msgstr ""
+msgstr "El componente %s está bloqueado, no se eliminará.\n"
 
 #: pcbnew/board_netlist_updater.cpp:447
 #, c-format
@@ -14604,7 +14605,7 @@ msgstr "Prosesando componentes \"%s:%s:%s\".\n"
 
 #: pcbnew/board_netlist_updater.cpp:670
 msgid "Update netlist"
-msgstr ""
+msgstr "Actualizar lista de redes"
 
 #: pcbnew/board_netlist_updater.cpp:680
 #, c-format
@@ -14846,11 +14847,11 @@ msgstr "Tamaño de microvía demasiado pequeño"
 
 #: pcbnew/class_drc_item.cpp:93
 msgid "Too small via drill"
-msgstr ""
+msgstr "Tamaño de vía demasiado pequeño"
 
 #: pcbnew/class_drc_item.cpp:95
 msgid "Too small micro via drill"
-msgstr ""
+msgstr "Tamaño de microvía demasiado pequeño"
 
 #: pcbnew/class_drc_item.cpp:99
 msgid "NetClass Track Width &lt; global limit"
@@ -14902,15 +14903,15 @@ msgstr "Pad sobre texto"
 
 #: pcbnew/class_drc_item.cpp:130
 msgid "Courtyards overlap"
-msgstr ""
+msgstr "Solapamiento de áreas"
 
 #: pcbnew/class_drc_item.cpp:133
 msgid "Footprint has no courtyard defined"
-msgstr ""
+msgstr "La huella no tiene área definida"
 
 #: pcbnew/class_drc_item.cpp:136
 msgid "Footprint has incorrect courtyard (not a closed shape)"
-msgstr ""
+msgstr "La huella tiene un área incorrecta (no es una forma cerrada)"
 
 # TimeStamp
 #: pcbnew/class_edge_mod.cpp:240
@@ -15122,11 +15123,11 @@ msgstr "Mostrar microvías"
 
 #: pcbnew/class_pcb_layer_widget.cpp:64
 msgid "Non Plated Holes"
-msgstr ""
+msgstr "Orificios no plateados"
 
 #: pcbnew/class_pcb_layer_widget.cpp:64
 msgid "Show non plated holes in specific color"
-msgstr ""
+msgstr "Mostrar orificios no plateados en color específico"
 
 # Chevelu
 #: pcbnew/class_pcb_layer_widget.cpp:65
@@ -15543,6 +15544,9 @@ msgid ""
 "Unable to find the next boundary segment with an endpoint of (%s mm, %s mm). "
 "graphic outline must form a contiguous, closed polygon."
 msgstr ""
+"No puede encontrase el siguiente segmento delimitador con un punto final en "
+"(%s mm, %s mm). El perímetro gráfico debe formar un polígono contínuo y "
+"cerrado."
 
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:559
 #, c-format
@@ -15550,6 +15554,9 @@ msgid ""
 "Unable to find the next graphic segment with an endpoint of (%s mm, %s mm).\n"
 "Edit graphics, making them contiguous polygons each."
 msgstr ""
+"No puede encontrase el siguiente segmento delimitador con un punto final en "
+"(%s mm, %s mm).\n"
+"Edite el gráfico, formando polígonos contínuos."
 
 #: pcbnew/cross-probing.cpp:71
 #, c-format
@@ -15564,7 +15571,7 @@ msgstr "%s no encontrado"
 #: pcbnew/cross-probing.cpp:82
 #, c-format
 msgid "Selecting all from sheet '%s'"
-msgstr ""
+msgstr "Seleccionando todo de la hoja '%s'"
 
 #: pcbnew/cross-probing.cpp:132
 #, c-format
@@ -15734,13 +15741,15 @@ msgstr "Incluir elementos en capas no v&isibles"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:22
 msgid "Delete &track segments connecting different nets"
-msgstr ""
+msgstr "Eliminar los segmentos de pis&ta que conectan redes diferentes"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:23
 msgid ""
 "remove track segments connecting nodes belonging to different nets (short "
 "circuit)"
 msgstr ""
+"eliminar segmentos de pista que conectan nodos pertenecientes a diferentes "
+"redes (cortocircuito)"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:27
 msgid "&Delete redundant vias"
@@ -15748,7 +15757,7 @@ msgstr "Eliminar vías re&dundantes"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:28
 msgid "remove vias on through hole pads and superimposed vias"
-msgstr ""
+msgstr "eliminar vías de pads de agujero pasante y de vías superpuestas"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:32
 msgid "&Merge overlapping segments"
@@ -15760,11 +15769,11 @@ msgstr "fusionar segmentos de pista alineados, y eliminar segmentos nulos"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:37
 msgid "Delete &dangling tracks"
-msgstr ""
+msgstr "Eliminar pistas &descolgadas"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:38
 msgid "delete tracks having at least one dangling end"
-msgstr ""
+msgstr "eliminar pistas con al menos un extremo sin conectar"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:395
 #, c-format
@@ -15964,6 +15973,11 @@ msgid ""
 "* If its priority is higher, its outlines are removed from the other zone.\n"
 "* If its priority is equal, a DRC error is set."
 msgstr ""
+"Las zonas se llenan por nivel de prioridad, el nivel 3 tiene mayor prioridad "
+"que el nivel 2.\n"
+"Cuando una zona está dentro de otra:\n"
+"* Si su prioridad es mayor, su perímetro se elimina de la otra zona.\n"
+"* Si su prioridad es igual, se crea un error DRC."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:196
 msgid "Fill mode:"
@@ -16286,6 +16300,8 @@ msgstr "No puede eliminarse la clase de red por defecto."
 #, c-format
 msgid " - <b>Track Size</b> (%f %s) &lt; <b>Min Track Size</b> (%f %s)<br>"
 msgstr ""
+" - <b>Tamaño de pista</b> (%f %s) &lt; <b>Tamaño mínimo de pista</b> (%f "
+"%s)<br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1012
 #, c-format
@@ -16293,12 +16309,16 @@ msgid ""
 " - <b>Differential Pair Size</b> (%f %s) &lt; <b>Min Track Size</b> (%f "
 "%s)<br>"
 msgstr ""
+" - <b>Tamaño de par diferencial</b> (%f %s) &lt; <b>Tamaño mínimo de pista</"
+"b> (%f %s)<br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1026
 #, c-format
 msgid ""
 " - <b>Via Diameter</b> (%f %s) &lt; <b>Minimum Via Diameter</b> (%f %s)<br>"
 msgstr ""
+" - <b>Diámetro de vía</b> (%f %s) &lt; <b>Diámetro mínimo de vía</b> (%f "
+"%s)<br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1038
 #, c-format
