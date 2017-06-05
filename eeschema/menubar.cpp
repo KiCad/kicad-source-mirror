@@ -383,7 +383,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     // Plot submenu
     wxMenu* choice_plot_fmt = new wxMenu;
 
-    AddMenuItem( choice_plot_fmt, ID_GEN_PLOT_SCHEMATIC, _( u8"&Plot" ),
+    AddMenuItem( choice_plot_fmt, ID_GEN_PLOT_SCHEMATIC, _( "&Plot" ),
                  _( "Plot schematic sheet in PostScript, PDF, SVG, DXF or HPGL format" ),
                  KiBitmap( plot_xpm ) );
 
