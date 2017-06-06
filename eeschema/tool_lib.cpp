@@ -62,9 +62,6 @@ void LIB_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ),
                             _( "Deselect current tool" ), wxITEM_CHECK );
 
-    m_drawToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiBitmap( zoom_area_xpm ),
-                            _( "Zoom to selection" ), wxITEM_CHECK );
-
     m_drawToolBar->AddTool( ID_LIBEDIT_PIN_BUTT, wxEmptyString, KiBitmap( pin_xpm ),
                             HELP_ADD_PIN, wxITEM_CHECK  );
 
@@ -170,17 +167,20 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                             _( "Check duplicate and off grid pins" ) );
 
     m_mainToolBar->AddSeparator();
+    msg = AddHotkeyName( HELP_ZOOM_REDRAW, g_Libedit_Hokeys_Descr, HK_ZOOM_REDRAW, IS_COMMENT );
+    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ), msg );
+
     msg = AddHotkeyName( HELP_ZOOM_IN, g_Libedit_Hokeys_Descr, HK_ZOOM_IN, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
 
     msg = AddHotkeyName( HELP_ZOOM_OUT, g_Libedit_Hokeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ), msg );
 
-    msg = AddHotkeyName( HELP_ZOOM_REDRAW, g_Libedit_Hokeys_Descr, HK_ZOOM_REDRAW, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ), msg );
-
     msg = AddHotkeyName( HELP_ZOOM_FIT, g_Libedit_Hokeys_Descr, HK_ZOOM_AUTO, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
+
+    m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiBitmap( zoom_area_xpm ),
+                            _( "Zoom to selection" ), wxITEM_CHECK );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_DE_MORGAN_NORMAL_BUTT, wxEmptyString, KiBitmap( morgan1_xpm ),
