@@ -211,6 +211,7 @@ inline void TransformPoint( IDF_SEGMENT& seg, double frac, bool bottom,
                             double dX, double dY, double angle );
 VRML_IDS* GetColor( boost::ptr_map<const std::string, VRML_IDS>& cmap,
                       int& index, const std::string& uid );
+void CleanupColorMap(std::map<std::string, VRML_IDS*>& cmap);
 
 
 int IDF2VRML::OnRun()
@@ -842,6 +843,8 @@ bool MakeComponents( IDF3_BOARD& board, std::ostream& file, bool compact )
         ++sc;
     }
 
+    CleanupColorMap(cmap);
+
     return true;
 }
 
@@ -969,5 +972,16 @@ bool MakeOtherOutlines( IDF3_BOARD& board, std::ostream& file )
         ++sc;
     }
 
+    CleanupColorMap(cmap);
+
     return true;
+}
+
+void CleanupColorMap(std::map<std::string, VRML_IDS*>& cmap)
+{
+    for (std::map<std::string, VRML_IDS*>::reverse_iterator iter = cmap.rbegin(); iter != cmap.rend(); ++iter) {
+        VRML_IDS* id = iter->second;
+        delete id;
+    }
+    cmap.clear();
 }
