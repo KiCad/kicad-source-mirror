@@ -10,7 +10,7 @@
         <property name="disconnect_python_events">0</property>
         <property name="embedded_files_path">res</property>
         <property name="encoding">UTF-8</property>
-        <property name="event_generation">table</property>
+        <property name="event_generation">connect</property>
         <property name="file">dialog_bom_editor_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
@@ -486,7 +486,7 @@
                                                                         <property name="font"></property>
                                                                         <property name="gripper">0</property>
                                                                         <property name="hidden">0</property>
-                                                                        <property name="id">ID_BUTTON_REGROUP</property>
+                                                                        <property name="id">wxID_ANY</property>
                                                                         <property name="label">Regroup components</property>
                                                                         <property name="max_size"></property>
                                                                         <property name="maximize_button">0</property>
@@ -544,20 +544,20 @@
                                                                 </object>
                                                             </object>
                                                         </object>
-                                                        <object class="sizeritem" expanded="0">
+                                                        <object class="sizeritem" expanded="1">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxEXPAND</property>
                                                             <property name="proportion">5</property>
-                                                            <object class="wxBoxSizer" expanded="0">
+                                                            <object class="wxBoxSizer" expanded="1">
                                                                 <property name="minimum_size"></property>
                                                                 <property name="name">bSizer9</property>
                                                                 <property name="orient">wxVERTICAL</property>
                                                                 <property name="permission">none</property>
-                                                                <object class="sizeritem" expanded="0">
+                                                                <object class="sizeritem" expanded="1">
                                                                     <property name="border">5</property>
                                                                     <property name="flag">wxEXPAND</property>
                                                                     <property name="proportion">1</property>
-                                                                    <object class="wxStaticBoxSizer" expanded="0">
+                                                                    <object class="wxStaticBoxSizer" expanded="1">
                                                                         <property name="id">wxID_ANY</property>
                                                                         <property name="label">Fields</property>
                                                                         <property name="minimum_size"></property>
@@ -838,7 +838,7 @@
                                         <property name="font"></property>
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
-                                        <property name="id">ID_BUTTON_APPLY</property>
+                                        <property name="id">wxID_ANY</property>
                                         <property name="label">Apply Changes</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -926,7 +926,7 @@
                                         <property name="font"></property>
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
-                                        <property name="id">ID_BUTTON_REVERT</property>
+                                        <property name="id">wxID_ANY</property>
                                         <property name="label">Revert Changes</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>

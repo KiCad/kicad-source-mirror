@@ -81,7 +81,7 @@ int InvokeDialogPrintUsingPrinter( SCH_EDIT_FRAME* aCaller );
 int InvokeDialogCreateBOM( SCH_EDIT_FRAME* aCaller );
 
 /// Create and show DIALOG_BOM_EDITOR
-int InvokeDialogCreateBOMEditor( SCH_EDIT_FRAME* aCaller );
+void InvokeDialogCreateBOMEditor( SCH_EDIT_FRAME* aCaller );
 
 /**
  * Function InvokeDialogNetList

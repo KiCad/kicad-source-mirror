@@ -87,7 +87,7 @@ private:
     virtual void OnDialogClosed( wxCloseEvent& event ) override;
     virtual void OnCloseButton( wxCommandEvent& event ) override;
 
-    bool CloseDialog();
+    bool CanCloseDialog();
 
     void UpdateTitle( void );
 
