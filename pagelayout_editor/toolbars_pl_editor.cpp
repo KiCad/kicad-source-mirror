@@ -124,7 +124,7 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
                                       wxDefaultPosition, wxDefaultSize,
                                       5, choiceList );
     m_mainToolBar->AddControl( m_originSelectBox );
-    m_originSelectBox->SetToolTip( _(" Origin of coordinates displayed to the status bar") );
+    m_originSelectBox->SetToolTip( _("Origin of coordinates displayed to the status bar") );
 
     int minwidth = 0;
     for( int ii = 0; ii < 5; ii++ )

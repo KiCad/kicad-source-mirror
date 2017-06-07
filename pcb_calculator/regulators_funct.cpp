@@ -395,13 +395,13 @@ void PCB_CALCULATOR_FRAME::RegulatorsSolve()
     // Some tests:
     if( vout < vref && id != 2)
     {
-        m_RegulMessage->SetLabel( _(" Vout must be greater than vref" ) );
+        m_RegulMessage->SetLabel( _("Vout must be greater than vref" ) );
         return;
     }
 
     if( vref == 0.0 )
     {
-        m_RegulMessage->SetLabel( _(" Vref set to 0 !" ) );
+        m_RegulMessage->SetLabel( _("Vref set to 0 !" ) );
         return;
     }
 
