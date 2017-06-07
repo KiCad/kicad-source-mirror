@@ -122,7 +122,12 @@ protected:
     // A callback function to filter 3D filenames
     static bool filter3dshapesfiles( const wxString& aData )
     {
-        return aData.Contains( wxT( ".wrl" ) ) || aData.Contains( wxT( ".wings" ) );
+        return aData.Contains( wxT( ".wrl" ) ) ||
+               aData.Contains( wxT( ".wings" ) ) ||
+               aData.Contains( wxT( ".stp" ) ) ||
+               aData.Contains( wxT( ".step" ) ) ||
+               aData.Contains( wxT( ".STP" ) ) ||
+               aData.Contains( wxT( ".STEP" ) );
     }
 
     // A callback function to filter 3D folders names

@@ -397,7 +397,7 @@ bool WIZARD_3DSHAPE_LIBS_DOWNLOADER::downloadOneLib( const wxString& aLibURL,
 
     bool success;
 
-    // Get the list of candidate files: with ext .wrl or .wings
+    // Get the list of candidate files: with ext .wrl .stp .step .STEP .STP or .wings
     do
     {
         GITHUB_GETLIBLIST getter( aLibURL );
