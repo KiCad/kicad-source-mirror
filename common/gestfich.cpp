@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -347,21 +347,22 @@ bool OpenPDF( const wxString& file )
     wxString command;
     wxString filename = file;
 
+    // Quote in case there are spaces in the file name.
+    AddDelimiterString( filename );
+
     Pgm().ReadPdfBrowserInfos();
 
     if( !Pgm().UseSystemPdfBrowser() )    //  Run the preferred PDF Browser
     {
-        AddDelimiterString( filename );
         command = Pgm().GetPdfBrowserName() + wxT( " " ) + filename;
     }
     else
     {
-        wxFileType* filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( wxT( "pdf" ) );
+        if( wxLaunchDefaultApplication( file ) )
+            return true;
 
-        if( filetype )
-            command = filetype->GetOpenCommand( filename );
-
-        delete filetype;
+        // If launching the system default PDF viewer fails, fall through with empty command
+        // string so the error message is displayed.
     }
 
     if( !command.IsEmpty() )
@@ -373,15 +374,14 @@ bool OpenPDF( const wxString& file )
         else
         {
             wxString msg;
-            msg.Printf( _( "Problem while running the PDF viewer\nCommand is '%s'" ),
-                        GetChars( command ) );
+            msg.Printf( _( "Problem while running the PDF viewer\nCommand is '%s'" ), command );
             DisplayError( NULL, msg );
         }
     }
     else
     {
         wxString msg;
-        msg.Printf( _( "Unable to find a PDF viewer for <%s>" ), GetChars( filename ) );
+        msg.Printf( _( "Unable to find a PDF viewer for '%s'" ), file );
         DisplayError( NULL, msg );
     }
 
