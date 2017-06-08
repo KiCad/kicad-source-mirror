@@ -529,7 +529,7 @@ bool GITHUB_PLUGIN::repoURL_zipURL( const wxString& aRepoURL, std::string* aZipU
 }
 
 
-void GITHUB_PLUGIN::remoteGetZip( const wxString& aRepoURL ) throw( IO_ERROR )
+void GITHUB_PLUGIN::remoteGetZip( const wxString& aRepoURL )
 {
     std::string  zip_url;
 

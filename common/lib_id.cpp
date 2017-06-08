@@ -175,7 +175,7 @@ int LIB_ID::Parse( const UTF8& aId )
 }
 
 
-LIB_ID::LIB_ID( const std::string& aId ) throw( PARSE_ERROR )
+LIB_ID::LIB_ID( const std::string& aId )
 {
     int offset = Parse( aId );
 
@@ -190,7 +190,7 @@ LIB_ID::LIB_ID( const std::string& aId ) throw( PARSE_ERROR )
 }
 
 
-LIB_ID::LIB_ID( const wxString& aId ) throw( PARSE_ERROR )
+LIB_ID::LIB_ID( const wxString& aId )
 {
     UTF8 id = TO_UTF8( aId );
 
@@ -297,7 +297,6 @@ UTF8 LIB_ID::GetLibItemNameAndRev() const
 
 
 UTF8 LIB_ID::Format( const UTF8& aLogicalLib, const UTF8& aLibItemName, const UTF8& aRevision )
-    throw( PARSE_ERROR )
 {
     UTF8    ret;
     int     offset;

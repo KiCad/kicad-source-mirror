@@ -42,9 +42,9 @@ protected:
 public:
     PCB_CALCULATOR_DATAFILE( REGULATOR_LIST * aList );
 
-    int         WriteHeader( OUTPUTFORMATTER* aFormatter ) const throw( IO_ERROR );
-    void        Format( OUTPUTFORMATTER* aFormatter, int aNestLevel ) const throw( IO_ERROR );
-    void        Parse( PCB_CALCULATOR_DATAFILE_PARSER* aParser ) throw( IO_ERROR, PARSE_ERROR );
+    int         WriteHeader( OUTPUTFORMATTER* aFormatter ) const ;
+    void        Format( OUTPUTFORMATTER* aFormatter, int aNestLevel ) const ;
+    void        Parse( PCB_CALCULATOR_DATAFILE_PARSER* aParser );
 };
 
 
@@ -58,8 +58,8 @@ public:
     PCB_CALCULATOR_DATAFILE_PARSER( LINE_READER* aReader );
     PCB_CALCULATOR_DATAFILE_PARSER( char* aLine, wxString aSource );
     LINE_READER* GetReader() { return reader; };
-    void Parse( PCB_CALCULATOR_DATAFILE* aDataList ) throw( IO_ERROR, PARSE_ERROR );
-    void ParseRegulatorDescr( PCB_CALCULATOR_DATAFILE* aDataList ) throw( IO_ERROR, PARSE_ERROR );
+    void Parse( PCB_CALCULATOR_DATAFILE* aDataList );
+    void ParseRegulatorDescr( PCB_CALCULATOR_DATAFILE* aDataList );
 };
 
 #endif // PDATAFILE_READ_WRITE_H_

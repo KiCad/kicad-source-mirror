@@ -48,8 +48,7 @@ class PAGE_LAYOUT_READER_PARSER : public PAGE_LAYOUT_READER_LEXER
 {
 public:
     PAGE_LAYOUT_READER_PARSER( const char* aLine, const wxString& aSource );
-    void Parse( WORKSHEET_LAYOUT* aLayout )
-                throw( PARSE_ERROR, IO_ERROR );
+    void Parse( WORKSHEET_LAYOUT* aLayout );
 
 private:
 
@@ -69,41 +68,38 @@ private:
      */
     double parseDouble();
 
-    void parseSetup( WORKSHEET_LAYOUT* aLayout ) throw( IO_ERROR, PARSE_ERROR );
+    void parseSetup( WORKSHEET_LAYOUT* aLayout );
 
     /**
      * parse a graphic item starting by "(line" or "(rect" and read parameters.
      */
-    void parseGraphic( WORKSHEET_DATAITEM * aItem ) throw( IO_ERROR, PARSE_ERROR );
+    void parseGraphic( WORKSHEET_DATAITEM * aItem );
 
     /**
      * parse a text item starting by "(tbtext" and read parameters.
      */
-    void parseText( WORKSHEET_DATAITEM_TEXT * aItem ) throw( IO_ERROR, PARSE_ERROR );
+    void parseText( WORKSHEET_DATAITEM_TEXT * aItem );
 
     /**
      * parse a polygon item starting by "( polygon" and read parameters.
      * the list of corners included in this description is read by parsePolyOutline
      */
-    void parsePolygon( WORKSHEET_DATAITEM_POLYPOLYGON * aItem )
-        throw( IO_ERROR, PARSE_ERROR );
+    void parsePolygon( WORKSHEET_DATAITEM_POLYPOLYGON * aItem );
 
     /**
      * parse a list of corners starting by "( pts" and read coordinates.
      */
-    void parsePolyOutline( WORKSHEET_DATAITEM_POLYPOLYGON * aItem )
-        throw( IO_ERROR, PARSE_ERROR );
+    void parsePolyOutline( WORKSHEET_DATAITEM_POLYPOLYGON * aItem );
 
 
     /**
      * parse a bitmap item starting by "( bitmap" and read parameters.
      */
-    void parseBitmap( WORKSHEET_DATAITEM_BITMAP * aItem )
-        throw( IO_ERROR, PARSE_ERROR );
+    void parseBitmap( WORKSHEET_DATAITEM_BITMAP * aItem );
 
-    void parseCoordinate( POINT_COORD& aCoord) throw( IO_ERROR, PARSE_ERROR );
-    void readOption( WORKSHEET_DATAITEM * aItem ) throw( IO_ERROR, PARSE_ERROR );
-    void readPngdata( WORKSHEET_DATAITEM_BITMAP * aItem ) throw( IO_ERROR, PARSE_ERROR );
+    void parseCoordinate( POINT_COORD& aCoord);
+    void readOption( WORKSHEET_DATAITEM * aItem );
+    void readPngdata( WORKSHEET_DATAITEM_BITMAP * aItem );
 };
 
 // PCB_PLOT_PARAMS_PARSER
@@ -115,7 +111,6 @@ PAGE_LAYOUT_READER_PARSER::PAGE_LAYOUT_READER_PARSER( const char* aLine, const w
 
 
 void PAGE_LAYOUT_READER_PARSER::Parse( WORKSHEET_LAYOUT* aLayout )
-                             throw( PARSE_ERROR, IO_ERROR )
 {
     T token;
     WORKSHEET_DATAITEM * item;
@@ -178,7 +173,6 @@ void PAGE_LAYOUT_READER_PARSER::Parse( WORKSHEET_LAYOUT* aLayout )
 }
 
 void PAGE_LAYOUT_READER_PARSER::parseSetup( WORKSHEET_LAYOUT* aLayout )
-    throw( IO_ERROR, PARSE_ERROR )
 {
     T token;
     while( ( token = NextTok() ) != T_RIGHT )
@@ -235,7 +229,6 @@ void PAGE_LAYOUT_READER_PARSER::parseSetup( WORKSHEET_LAYOUT* aLayout )
 }
 
 void PAGE_LAYOUT_READER_PARSER::parsePolygon( WORKSHEET_DATAITEM_POLYPOLYGON * aItem )
-    throw( IO_ERROR, PARSE_ERROR )
 {
     T token;
 
@@ -309,7 +302,6 @@ void PAGE_LAYOUT_READER_PARSER::parsePolygon( WORKSHEET_DATAITEM_POLYPOLYGON * a
 }
 
 void PAGE_LAYOUT_READER_PARSER::parsePolyOutline( WORKSHEET_DATAITEM_POLYPOLYGON * aItem )
-    throw( IO_ERROR, PARSE_ERROR )
 {
     DPOINT corner;
     T token;
@@ -340,7 +332,6 @@ void PAGE_LAYOUT_READER_PARSER::parsePolyOutline( WORKSHEET_DATAITEM_POLYPOLYGON
 
 #include <wx/mstream.h>
 void PAGE_LAYOUT_READER_PARSER::parseBitmap( WORKSHEET_DATAITEM_BITMAP * aItem )
-    throw( IO_ERROR, PARSE_ERROR )
 {
     T token;
     BITMAP_BASE* image = new BITMAP_BASE;
@@ -407,7 +398,6 @@ void PAGE_LAYOUT_READER_PARSER::parseBitmap( WORKSHEET_DATAITEM_BITMAP * aItem )
 }
 
 void PAGE_LAYOUT_READER_PARSER::readPngdata( WORKSHEET_DATAITEM_BITMAP * aItem )
-            throw( IO_ERROR, PARSE_ERROR )
 {
     std::string tmp;
     T token;
@@ -448,7 +438,6 @@ void PAGE_LAYOUT_READER_PARSER::readPngdata( WORKSHEET_DATAITEM_BITMAP * aItem )
 
 
 void PAGE_LAYOUT_READER_PARSER::readOption( WORKSHEET_DATAITEM * aItem )
-    throw( IO_ERROR, PARSE_ERROR )
 {
     T token;
 
@@ -476,7 +465,6 @@ void PAGE_LAYOUT_READER_PARSER::readOption( WORKSHEET_DATAITEM * aItem )
 
 
 void PAGE_LAYOUT_READER_PARSER::parseGraphic( WORKSHEET_DATAITEM * aItem )
-    throw( IO_ERROR, PARSE_ERROR )
 {
     T token;
 
@@ -552,7 +540,6 @@ void PAGE_LAYOUT_READER_PARSER::parseGraphic( WORKSHEET_DATAITEM * aItem )
 
 
 void PAGE_LAYOUT_READER_PARSER::parseText( WORKSHEET_DATAITEM_TEXT* aItem )
-    throw( IO_ERROR, PARSE_ERROR )
 {
     T token;
 
@@ -703,7 +690,6 @@ void PAGE_LAYOUT_READER_PARSER::parseText( WORKSHEET_DATAITEM_TEXT* aItem )
 
 // parse an expression like " 25 1 ltcorner)"
 void PAGE_LAYOUT_READER_PARSER::parseCoordinate( POINT_COORD& aCoord)
-    throw( IO_ERROR, PARSE_ERROR )
 {
     T token;
 

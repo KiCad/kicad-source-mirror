@@ -84,12 +84,12 @@ typedef boost::property_tree::ptree_error   PTREE_ERROR;
  *
  * </code>
  */
-void Scan( PTREE* aTree, DSNLEXER* aLexer ) throw ( IO_ERROR );
+void Scan( PTREE* aTree, DSNLEXER* aLexer );
 
 /**
  * Function Format
  * outputs a PTREE into s-expression format via an OUTPUTFORMATTER derivative.
  */
-void Format( OUTPUTFORMATTER* out, int aNestLevel, int aCtl, CPTREE& aTree ) throw( IO_ERROR );
+void Format( OUTPUTFORMATTER* out, int aNestLevel, int aCtl, CPTREE& aTree );
 
 #endif  // PTREE_H_

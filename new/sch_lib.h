@@ -69,8 +69,7 @@ protected:                  ///< derived classes must implement
      * Function ReadPart
      * fetches @a aPartName's s-expression into @a aResult after clear()ing aResult.
      */
-    virtual void ReadPart( STR_UTF* aResult, const STRING& aPartName, const STRING& aRev = "" )
-        throw( IO_ERROR ) = 0;
+    virtual void ReadPart( STR_UTF* aResult, const STRING& aPartName, const STRING& aRev = "" ) = 0;
 
     /**
      * Function ReadParts
@@ -80,15 +79,13 @@ protected:                  ///< derived classes must implement
      *        does not have a version string, then the most recent version is fetched.
      * @param aResults receives the s-expressions
      */
-    virtual void ReadParts( STR_UTFS* aResults, const STRINGS& aPartNames )
-        throw( IO_ERROR ) = 0;
+    virtual void ReadParts( STR_UTFS* aResults, const STRINGS& aPartNames ) = 0;
 
     /**
      * Function GetCategories
      * fetches all categories present in the library source into @a aResults
      */
-    virtual void GetCategories( STRINGS* aResults )
-        throw( IO_ERROR ) = 0;
+    virtual void GetCategories( STRINGS* aResults ) = 0;
 
     /**
      * Function GetCategoricalPartNames
@@ -99,8 +96,7 @@ protected:                  ///< derived classes must implement
      *
      * @param aResults is a place to put the fetched result, one category per STRING.
      */
-    virtual void GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory="" )
-        throw( IO_ERROR ) = 0;
+    virtual void GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory="" ) = 0;
 
     /**
      * Function GetRevisions
@@ -112,8 +108,7 @@ protected:                  ///< derived classes must implement
      * the only result.  This means aPartName is present in the libsource, only once
      * without a revision.  This is a special case.
      */
-    virtual void GetRevisions( STRINGS* aResults, const STRING& aPartName )
-        throw( IO_ERROR ) = 0;
+    virtual void GetRevisions( STRINGS* aResults, const STRING& aPartName ) = 0;
 
     /**
      * Function FindParts
@@ -131,8 +126,7 @@ protected:                  ///< derived classes must implement
      *
      * @param aResults is a place to put the fetched part names, one part per STRING.
      */
-    virtual void FindParts( STRINGS* aResults, const STRING& aQuery )
-        throw( IO_ERROR ) = 0;
+    virtual void FindParts( STRINGS* aResults, const STRING& aQuery ) = 0;
 
     //-----</abstract for implementors>--------------------------------------
 
@@ -179,8 +173,7 @@ protected:                  ///< derived classes must implement
      * @return STRING - if the LIB_SINK support revision numbering, then return a
      *   revision name that was next in the sequence, e.g. "rev22", else "".
      */
-    virtual STRING WritePart( const STRING& aPartName, const STRING& aSExpression )
-        throw( IO_ERROR ) = 0;
+    virtual STRING WritePart( const STRING& aPartName, const STRING& aSExpression ) = 0;
 
 protected:
     STRING      sinkType;
@@ -255,21 +248,20 @@ public:
      *
      * @throw IO_ERROR if the part cannot be found or loaded.
      */
-    PART* LookupPart( const LPID& aLPID, LIB_TABLE* aLibTable )
-        throw( IO_ERROR );
+    PART* LookupPart( const LPID& aLPID, LIB_TABLE* aLibTable );
 
     /**
      * Function ReloadPart
      * will reload the part assuming the library source has a changed content
      * for it.
      */
-    void ReloadPart( PART* aPart ) throw( IO_ERROR );
+    void ReloadPart( PART* aPart );
 
     /**
      * Function GetCategories
      * returns all categories of parts within this LIB into @a aResults.
      */
-    STRINGS GetCategories() throw( IO_ERROR );
+    STRINGS GetCategories();
 
     /**
      * Function GetCategoricalPartNames
@@ -277,7 +269,7 @@ public:
      * creates cache entries for the very same parts if they do not already exist
      * in this LIB (i.e. cache).
      */
-    STRINGS GetCategoricalPartNames( const STRING& aCategory = "" ) throw( IO_ERROR );
+    STRINGS GetCategoricalPartNames( const STRING& aCategory = "" );
 
 
     //-----<.use delegates: source and sink>--------------------------------
@@ -287,16 +279,16 @@ public:
      * saves the part to non-volatile storage and returns the next new revision
      * name in the sequence established by the LIB_SINK.
      */
-    STRING WritePart( PART* aPart ) throw( IO_ERROR );
+    STRING WritePart( PART* aPart );
 
-    void SetPartBody( PART* aPart, const STRING& aSExpression ) throw( IO_ERROR );
+    void SetPartBody( PART* aPart, const STRING& aSExpression );
 
     /**
      * Function GetRevisions
      * returns the revisions of @a aPartName that are present in this LIB.
      * The returned STRINGS will look like "rev1", "rev2", etc.
      */
-    STRINGS GetRevisions( const STRING& aPartName ) throw( IO_ERROR );
+    STRINGS GetRevisions( const STRING& aPartName );
 
     /**
      * Function FindParts
@@ -311,7 +303,7 @@ public:
      *  here is an RPN s-expression that uses (and ..) and (or ..) operators. For example
      *  "(and (footprint 0805)(value 33ohm)(category passives))"
      */
-    STRINGS FindParts( const STRING& aQuery ) throw( IO_ERROR )
+    STRINGS FindParts( const STRING& aQuery )
     {
         // run the query on the cached data first for any PARTS which are fully
         // parsed (i.e. cached), then on the LIB_SOURCE to find any that
@@ -321,7 +313,7 @@ public:
     }
 
 #if defined(DEBUG)
-    static void Test( int argc, char** argv ) throw( IO_ERROR );
+    static void Test( int argc, char** argv );
 #endif
 
 protected:
@@ -356,7 +348,7 @@ protected:
      *
      * @return PART* - the cached PART, or NULL if not found.  No ownership transferred.
      */
-    const PART* lookupPart( const LPID& aLPID ) throw( IO_ERROR );
+    const PART* lookupPart( const LPID& aLPID );
 };
 
 

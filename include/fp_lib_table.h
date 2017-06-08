@@ -131,7 +131,7 @@ public:
      *
      * @throw IO_ERROR if \a aNickName cannot be found.
      */
-    const FP_LIB_TABLE_ROW* FindRow( const wxString& aNickName ) throw( IO_ERROR );
+    const FP_LIB_TABLE_ROW* FindRow( const wxString& aNickName );
 
     //-----<PLUGIN API SUBSET, REBASED ON aNickname>---------------------------
 
@@ -249,8 +249,7 @@ public:
      *          is thrown in the case where aFootprintName cannot be found.
      * @throw   PARSE_ERROR if @a aFootprintId is not parsed OK.
      */
-    MODULE* FootprintLoadWithOptionalNickname( const LIB_ID& aFootprintId )
-        throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception );
+    MODULE* FootprintLoadWithOptionalNickname( const LIB_ID& aFootprintId );
 
     /**
      * Function LoadGlobalTable
@@ -265,8 +264,7 @@ public:
      * @throw IO_ERROR if an error occurs attempting to load the footprint library
      *                 table.
      */
-    static bool LoadGlobalTable( FP_LIB_TABLE& aTable )
-        throw (IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception );
+    static bool LoadGlobalTable( FP_LIB_TABLE& aTable );
 
     /**
      * Function GetGlobalTableFileName

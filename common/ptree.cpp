@@ -87,7 +87,7 @@ inline void scanAtom( PTREE* aTree, DSNLEXER* aLexer )
 }
 
 
-void Scan( PTREE* aTree, DSNLEXER* aLexer ) throw( IO_ERROR )
+void Scan( PTREE* aTree, DSNLEXER* aLexer )
 {
     int tok  = aLexer->CurTok();
 
@@ -135,11 +135,11 @@ inline CITER next( CITER it )
 
 
 static void formatNode( OUTPUTFORMATTER* out, int aNestLevel, int aCtl,
-        const std::string& aKey, CPTREE& aTree ) throw( IO_ERROR );
+        const std::string& aKey, CPTREE& aTree );
 
 
 static void formatList( OUTPUTFORMATTER* out, int aNestLevel, int aCtl, CPTREE& aTree )
-    throw( IO_ERROR )
+
 {
     for( CITER it = aTree.begin();  it != aTree.end();  ++it )
     {
@@ -170,7 +170,7 @@ static void formatList( OUTPUTFORMATTER* out, int aNestLevel, int aCtl, CPTREE& 
 
 static void formatNode( OUTPUTFORMATTER* out, int aNestLevel, int aCtl,
         const std::string& aKey, CPTREE& aTree )
-    throw( IO_ERROR )
+
 {
     if( !isAtom( aTree ) )     // is a list, not an atom
     {
@@ -202,7 +202,7 @@ static void formatNode( OUTPUTFORMATTER* out, int aNestLevel, int aCtl,
 }
 
 
-void Format( OUTPUTFORMATTER* out, int aNestLevel, int aCtl, CPTREE& aTree ) throw( IO_ERROR )
+void Format( OUTPUTFORMATTER* out, int aNestLevel, int aCtl, CPTREE& aTree )
 {
     if( aTree.size() == 1 && !aTree.data().size() )
     {

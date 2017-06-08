@@ -249,7 +249,6 @@ void NETCLASS::Show( int nestLevel, std::ostream& os ) const
 
 
 void NETCLASS::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-    throw( IO_ERROR )
 {
     aFormatter->Print( aNestLevel, "(net_class %s %s\n",
                        aFormatter->Quotew( GetName() ).c_str(),

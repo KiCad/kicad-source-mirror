@@ -332,7 +332,6 @@ MODULE* PCB_BASE_FRAME::LoadFootprint( const LIB_ID& aFootprintId )
 
 
 MODULE* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
-    throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception )
 {
     FP_LIB_TABLE*   fptbl = Prj().PcbFootprintLibs();
 

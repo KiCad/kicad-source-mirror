@@ -29,7 +29,7 @@
 typedef wxXmlAttribute   XATTR;
 
 
-void XNODE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+void XNODE::Format( OUTPUTFORMATTER* out, int nestLevel )
 {
     switch( GetType() )
     {
@@ -48,7 +48,7 @@ void XNODE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
 }
 
 
-void XNODE::FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+void XNODE::FormatContents( OUTPUTFORMATTER* out, int nestLevel )
 {
     // output attributes first if they exist
     for( XATTR* attr = (XATTR*) GetAttributes();  attr;  attr = (XATTR*) attr->GetNext() )

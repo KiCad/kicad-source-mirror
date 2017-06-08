@@ -243,7 +243,7 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
 
 
 void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-    throw( IO_ERROR )
+
 {
     // Don't write the title block information if there is nothing to write.
     bool isempty = true;

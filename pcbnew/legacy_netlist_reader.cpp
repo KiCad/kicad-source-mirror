@@ -34,7 +34,7 @@
 #include <pcb_netlist.h>
 #include <netlist_reader.h>
 
-void LEGACY_NETLIST_READER::LoadNetlist() throw ( IO_ERROR, PARSE_ERROR, boost::bad_pointer )
+void LEGACY_NETLIST_READER::LoadNetlist()
 {
     int state            = 0;
     bool is_comment      = false;
@@ -97,7 +97,6 @@ void LEGACY_NETLIST_READER::LoadNetlist() throw ( IO_ERROR, PARSE_ERROR, boost::
 
 
 COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText )
-    throw( PARSE_ERROR, boost::bad_pointer )
 {
     char*    text;
     wxString msg;
@@ -178,7 +177,7 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText )
 }
 
 
-void LEGACY_NETLIST_READER::loadNet( char* aText, COMPONENT* aComponent ) throw( PARSE_ERROR )
+void LEGACY_NETLIST_READER::loadNet( char* aText, COMPONENT* aComponent )
 {
     wxString msg;
     char*    p;
@@ -212,7 +211,7 @@ void LEGACY_NETLIST_READER::loadNet( char* aText, COMPONENT* aComponent ) throw(
 }
 
 
-void LEGACY_NETLIST_READER::loadFootprintFilters() throw( IO_ERROR, PARSE_ERROR )
+void LEGACY_NETLIST_READER::loadFootprintFilters()
 {
     wxArrayString filters;
     wxString      cmpRef;

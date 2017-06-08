@@ -70,9 +70,9 @@ public:
      *
      * @param aId is a string to be parsed into the LIB_ID object.
      */
-    LIB_ID( const std::string& aId ) throw( PARSE_ERROR );
+    LIB_ID( const std::string& aId );
 
-    LIB_ID( const wxString& aId ) throw( PARSE_ERROR );
+    LIB_ID( const wxString& aId );
 
     /**
      * This LIB_ID ctor is a special version which ignores the parsing due to symbol
@@ -161,8 +161,7 @@ public:
      * @throw PARSE_ERROR if any of the pieces are illegal.
      */
     static UTF8 Format( const UTF8& aLibNickname, const UTF8& aLibItemName,
-                        const UTF8& aRevision = "" )
-        throw( PARSE_ERROR );
+                        const UTF8& aRevision = "" );
 
     /**
      * Function IsValid

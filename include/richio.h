@@ -118,7 +118,7 @@ public:
      * @return char* - The beginning of the read line, or NULL if EOF.
      * @throw IO_ERROR when a line is too long.
      */
-    virtual char* ReadLine() throw( IO_ERROR ) = 0;
+    virtual char* ReadLine() = 0;
 
     /**
      * Function GetSource
@@ -205,7 +205,7 @@ public:
      */
     FILE_LINE_READER( const wxString& aFileName,
             unsigned aStartingLineNumber = 0,
-            unsigned aMaxLineLength = LINE_READER_LINE_DEFAULT_MAX ) throw( IO_ERROR );
+            unsigned aMaxLineLength = LINE_READER_LINE_DEFAULT_MAX );
 
     /**
      * Constructor FILE_LINE_READER
@@ -232,7 +232,7 @@ public:
      */
     ~FILE_LINE_READER();
 
-    char* ReadLine() throw( IO_ERROR ) override;
+    char* ReadLine() override;
 
     /**
      * Function Rewind
@@ -279,7 +279,7 @@ public:
      */
     STRING_LINE_READER( const STRING_LINE_READER& aStartingPoint );
 
-    char* ReadLine() throw( IO_ERROR ) override;
+    char* ReadLine() override;
 };
 
 
@@ -302,7 +302,7 @@ public:
      */
     INPUTSTREAM_LINE_READER( wxInputStream* aStream, const wxString& aSource );
 
-    char* ReadLine() throw( IO_ERROR ) override;
+    char* ReadLine() override;
 };
 
 
@@ -329,8 +329,8 @@ class OUTPUTFORMATTER
     std::vector<char>   buffer;
     char                quoteChar[2];
 
-    int sprint( const char* fmt, ... )  throw( IO_ERROR );
-    int vprint( const char* fmt,  va_list ap )  throw( IO_ERROR );
+    int sprint( const char* fmt, ... );
+    int vprint( const char* fmt,  va_list ap );
 
 
 protected:
@@ -365,7 +365,7 @@ protected:
      * @param aCount  tells how many bytes to write.
      * @throw IO_ERROR, if there is a problem outputting, such as a full disk.
      */
-    virtual void write( const char* aOutBuf, int aCount ) throw( IO_ERROR ) = 0;
+    virtual void write( const char* aOutBuf, int aCount ) = 0;
 
 #if defined(__GNUG__)   // The GNU C++ compiler defines this
 
@@ -394,7 +394,7 @@ public:
      * @return int - the number of characters output.
      * @throw IO_ERROR, if there is a problem outputting, such as a full disk.
      */
-    int PRINTF_FUNC Print( int nestLevel, const char* fmt, ... ) throw( IO_ERROR );
+    int PRINTF_FUNC Print( int nestLevel, const char* fmt, ... );
 
     /**
      * Function GetQuoteChar
@@ -429,9 +429,9 @@ public:
      *
      * @throw IO_ERROR, if there is any kind of problem with the input string.
      */
-     virtual std::string Quotes( const std::string& aWrapee ) throw( IO_ERROR );
+     virtual std::string Quotes( const std::string& aWrapee );
 
-     std::string Quotew( const wxString& aWrapee ) throw( IO_ERROR );
+     std::string Quotew( const wxString& aWrapee );
 
     //-----</interface functions>-----------------------------------------
 };
@@ -479,7 +479,7 @@ public:
 
 protected:
     //-----<OUTPUTFORMATTER>------------------------------------------------
-    void write( const char* aOutBuf, int aCount ) throw( IO_ERROR ) override;
+    void write( const char* aOutBuf, int aCount ) override;
     //-----</OUTPUTFORMATTER>-----------------------------------------------
 };
 
@@ -504,14 +504,13 @@ public:
      */
     FILE_OUTPUTFORMATTER(   const wxString& aFileName,
                             const wxChar* aMode = wxT( "wt" ),
-                            char aQuoteChar = '"' )
-        throw( IO_ERROR );
+                            char aQuoteChar = '"' );
 
     ~FILE_OUTPUTFORMATTER();
 
 protected:
     //-----<OUTPUTFORMATTER>------------------------------------------------
-    void write( const char* aOutBuf, int aCount ) throw( IO_ERROR ) override;
+    void write( const char* aOutBuf, int aCount ) override;
     //-----</OUTPUTFORMATTER>-----------------------------------------------
 
     FILE*       m_fp;               ///< takes ownership
@@ -542,7 +541,7 @@ public:
 
 protected:
     //-----<OUTPUTFORMATTER>------------------------------------------------
-    void write( const char* aOutBuf, int aCount ) throw( IO_ERROR ) override;
+    void write( const char* aOutBuf, int aCount ) override;
     //-----</OUTPUTFORMATTER>-----------------------------------------------
 };
 

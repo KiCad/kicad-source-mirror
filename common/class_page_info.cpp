@@ -45,7 +45,7 @@ const wxChar PAGE_INFO::A2[] = wxT( "A2" );
 const wxChar PAGE_INFO::A1[] = wxT( "A1" );
 const wxChar PAGE_INFO::A0[] = wxT( "A0" );
 const wxChar PAGE_INFO::A[]  = wxT( "A" );
-const wxChar PAGE_INFO::B[]  = wxT( "B" ) ;
+const wxChar PAGE_INFO::B[]  = wxT( "B" );
 const wxChar PAGE_INFO::C[]  = wxT( "C" );
 const wxChar PAGE_INFO::D[]  = wxT( "D" );
 const wxChar PAGE_INFO::E[]  = wxT( "E" );
@@ -265,7 +265,6 @@ void PAGE_INFO::SetHeightMils( int aHeightInMils )
 
 
 void PAGE_INFO::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-    throw( IO_ERROR )
 {
     aFormatter->Print( aNestLevel, "(page %s", aFormatter->Quotew( GetType() ).c_str() );
 

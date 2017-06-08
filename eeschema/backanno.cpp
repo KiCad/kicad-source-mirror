@@ -49,7 +49,6 @@
 
 
 void SCH_EDIT_FRAME::backAnnotateFootprints( const std::string& aChangedSetOfReferences )
-    throw( IO_ERROR, boost::bad_pointer )
 {
     // Build a flat list of components in schematic:
     SCH_REFERENCE_LIST  refs;

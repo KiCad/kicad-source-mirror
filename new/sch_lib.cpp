@@ -155,7 +155,7 @@ LIB::~LIB()
 }
 
 
-const PART* LIB::lookupPart( const LPID& aLPID ) throw( IO_ERROR )
+const PART* LIB::lookupPart( const LPID& aLPID )
 {
     if( !parts )
     {
@@ -228,7 +228,7 @@ const PART* LIB::lookupPart( const LPID& aLPID ) throw( IO_ERROR )
 }
 
 
-PART* LIB::LookupPart( const LPID& aLPID, LIB_TABLE* aLibTable ) throw( IO_ERROR )
+PART* LIB::LookupPart( const LPID& aLPID, LIB_TABLE* aLibTable )
 {
     PART*   part = (PART*) lookupPart( aLPID );
 
@@ -264,7 +264,7 @@ PART* LIB::LookupPart( const LPID& aLPID, LIB_TABLE* aLibTable ) throw( IO_ERROR
 
 #if 0 && defined(DEBUG)
 
-void LIB::Test( int argc, char** argv ) throw( IO_ERROR );
+void LIB::Test( int argc, char** argv );
 {
 }
 

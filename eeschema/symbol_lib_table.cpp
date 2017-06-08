@@ -216,7 +216,7 @@ void SYMBOL_LIB_TABLE::EnumerateSymbolLib( const wxString& aNickname, wxArrayStr
 
 
 const SYMBOL_LIB_TABLE_ROW* SYMBOL_LIB_TABLE::FindRow( const wxString& aNickname )
-    throw( IO_ERROR )
+
 {
     SYMBOL_LIB_TABLE_ROW* row = dynamic_cast< SYMBOL_LIB_TABLE_ROW* >( findRow( aNickname ) );
 
@@ -340,7 +340,6 @@ void SYMBOL_LIB_TABLE::CreateSymbolLib( const wxString& aNickname )
 
 
 LIB_ALIAS* SYMBOL_LIB_TABLE::LoadSymbolWithOptionalNickname( const LIB_ID& aLibId )
-    throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception )
 {
     wxString   nickname = FROM_UTF8( aLibId.GetLibNickname() );
     wxString   name     = FROM_UTF8( aLibId.GetLibItemName() );
@@ -378,7 +377,6 @@ const wxString SYMBOL_LIB_TABLE::GlobalPathEnvVariableName()
 
 
 bool SYMBOL_LIB_TABLE::LoadGlobalTable( SYMBOL_LIB_TABLE& aTable )
-    throw (IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception )
 {
     bool        tableExists = true;
     wxFileName  fn = GetGlobalTableFileName();

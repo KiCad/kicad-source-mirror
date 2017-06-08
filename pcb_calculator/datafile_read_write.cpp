@@ -123,7 +123,7 @@ static const char* regtype_str[] =
     "normal", "3terminal"
 };
 
-int PCB_CALCULATOR_DATAFILE::WriteHeader( OUTPUTFORMATTER* aFormatter ) const throw( IO_ERROR )
+int PCB_CALCULATOR_DATAFILE::WriteHeader( OUTPUTFORMATTER* aFormatter ) const
 {
     int nestlevel = 0;
     aFormatter->Print( nestlevel++, "(datafile\n");
@@ -138,7 +138,7 @@ int PCB_CALCULATOR_DATAFILE::WriteHeader( OUTPUTFORMATTER* aFormatter ) const th
 }
 
 void PCB_CALCULATOR_DATAFILE::Format( OUTPUTFORMATTER* aFormatter,
-                              int aNestLevel ) const throw( IO_ERROR )
+                              int aNestLevel ) const
 {
     // Write regulators list:
     aFormatter->Print( aNestLevel++, "(%s\n", getTokenName( T_regulators ) );
@@ -163,7 +163,6 @@ void PCB_CALCULATOR_DATAFILE::Format( OUTPUTFORMATTER* aFormatter,
 
 
 void PCB_CALCULATOR_DATAFILE::Parse( PCB_CALCULATOR_DATAFILE_PARSER* aParser )
-                              throw( IO_ERROR, PARSE_ERROR )
 {
     aParser->Parse( this );
 }
@@ -184,7 +183,7 @@ PCB_CALCULATOR_DATAFILE_PARSER::PCB_CALCULATOR_DATAFILE_PARSER( char* aLine, wxS
 }
 
 
-void PCB_CALCULATOR_DATAFILE_PARSER::Parse( PCB_CALCULATOR_DATAFILE* aDataList ) throw( IO_ERROR, PARSE_ERROR )
+void PCB_CALCULATOR_DATAFILE_PARSER::Parse( PCB_CALCULATOR_DATAFILE* aDataList )
 {
     T token;
     while( ( token = NextTok() ) != T_EOF)
@@ -203,7 +202,6 @@ void PCB_CALCULATOR_DATAFILE_PARSER::Parse( PCB_CALCULATOR_DATAFILE* aDataList )
 }
 
 void PCB_CALCULATOR_DATAFILE_PARSER::ParseRegulatorDescr( PCB_CALCULATOR_DATAFILE* aDataList )
-    throw( IO_ERROR, PARSE_ERROR )
 {
     T token;
     wxString name;

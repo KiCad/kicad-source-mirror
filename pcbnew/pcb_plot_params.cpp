@@ -135,7 +135,7 @@ void PCB_PLOT_PARAMS::SetGerberPrecision( int aPrecision )
 
 // PLEASE NOTE: only plot dialog options are processed
 void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
-                              int aNestLevel, int aControl ) const throw( IO_ERROR )
+                              int aNestLevel, int aControl ) const
 {
     const char* falseStr = getTokenName( T_false );
     const char* trueStr = getTokenName( T_true );
@@ -215,7 +215,6 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
 
 
 void PCB_PLOT_PARAMS::Parse( PCB_PLOT_PARAMS_PARSER* aParser )
-                      throw( PARSE_ERROR, IO_ERROR )
 {
     aParser->Parse( this );
 }
@@ -337,7 +336,6 @@ PCB_PLOT_PARAMS_PARSER::PCB_PLOT_PARAMS_PARSER( char* aLine, const wxString& aSo
 
 
 void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
-                             throw( PARSE_ERROR, IO_ERROR )
 {
     T   token;
 
@@ -559,7 +557,7 @@ double PCB_PLOT_PARAMS_PARSER::parseDouble()
     return val;
 }
 
-void PCB_PLOT_PARAMS_PARSER::skipCurrent() throw( IO_ERROR, PARSE_ERROR )
+void PCB_PLOT_PARAMS_PARSER::skipCurrent()
 {
     int curr_level = 0;
     T token;

@@ -121,7 +121,7 @@ void PCB_PARSER::pushValueIntoMap( int aIndex, int aValue )
     m_netCodes[aIndex] = aValue;
 }
 
-double PCB_PARSER::parseDouble() throw( IO_ERROR )
+double PCB_PARSER::parseDouble()
 {
     char* tmp;
 
@@ -151,7 +151,7 @@ double PCB_PARSER::parseDouble() throw( IO_ERROR )
 }
 
 
-bool PCB_PARSER::parseBool() throw( PARSE_ERROR )
+bool PCB_PARSER::parseBool()
 {
     T token = NextTok();
 
@@ -166,7 +166,7 @@ bool PCB_PARSER::parseBool() throw( PARSE_ERROR )
 }
 
 
-int PCB_PARSER::parseVersion() throw( IO_ERROR, PARSE_ERROR )
+int PCB_PARSER::parseVersion()
 {
     if( NextTok() != T_version )
         Expecting( GetTokenText( T_version ) );
@@ -203,7 +203,7 @@ wxString PCB_PARSER::GetRequiredVersion()
 }
 
 
-wxPoint PCB_PARSER::parseXY() throw( PARSE_ERROR, IO_ERROR )
+wxPoint PCB_PARSER::parseXY()
 {
     if( CurTok() != T_LEFT )
         NeedLEFT();
@@ -223,7 +223,7 @@ wxPoint PCB_PARSER::parseXY() throw( PARSE_ERROR, IO_ERROR )
 }
 
 
-void PCB_PARSER::parseXY( int* aX, int* aY ) throw( PARSE_ERROR, IO_ERROR )
+void PCB_PARSER::parseXY( int* aX, int* aY )
 {
     wxPoint pt = parseXY();
 
@@ -235,7 +235,7 @@ void PCB_PARSER::parseXY( int* aX, int* aY ) throw( PARSE_ERROR, IO_ERROR )
 }
 
 
-void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText ) throw( PARSE_ERROR, IO_ERROR )
+void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
 {
     wxCHECK_RET( CurTok() == T_effects,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as EDA_TEXT." ) );
@@ -332,7 +332,7 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText ) throw( PARSE_ERROR, IO_ERROR )
 }
 
 
-S3D_INFO* PCB_PARSER::parse3DModel() throw( PARSE_ERROR, IO_ERROR )
+S3D_INFO* PCB_PARSER::parse3DModel()
 {
     wxCHECK_MSG( CurTok() == T_model, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as S3D_INFO." ) );
@@ -402,7 +402,7 @@ S3D_INFO* PCB_PARSER::parse3DModel() throw( PARSE_ERROR, IO_ERROR )
 }
 
 
-BOARD_ITEM* PCB_PARSER::Parse() throw( IO_ERROR, PARSE_ERROR )
+BOARD_ITEM* PCB_PARSER::Parse()
 {
     T               token;
     BOARD_ITEM*     item;
@@ -441,7 +441,7 @@ BOARD_ITEM* PCB_PARSER::Parse() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-BOARD* PCB_PARSER::parseBOARD() throw( IO_ERROR, PARSE_ERROR, FUTURE_FORMAT_ERROR )
+BOARD* PCB_PARSER::parseBOARD()
 {
     try
     {
@@ -457,7 +457,7 @@ BOARD* PCB_PARSER::parseBOARD() throw( IO_ERROR, PARSE_ERROR, FUTURE_FORMAT_ERRO
 }
 
 
-BOARD* PCB_PARSER::parseBOARD_unchecked() throw( IO_ERROR, PARSE_ERROR )
+BOARD* PCB_PARSER::parseBOARD_unchecked()
 {
     T token;
 
@@ -547,7 +547,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-void PCB_PARSER::parseHeader() throw( IO_ERROR, PARSE_ERROR )
+void PCB_PARSER::parseHeader()
 {
     wxCHECK_RET( CurTok() == T_kicad_pcb,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a header." ) );
@@ -583,7 +583,7 @@ void PCB_PARSER::parseHeader() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-void PCB_PARSER::parseGeneralSection() throw( IO_ERROR, PARSE_ERROR )
+void PCB_PARSER::parseGeneralSection()
 {
      wxCHECK_RET( CurTok() == T_general,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
@@ -628,7 +628,7 @@ void PCB_PARSER::parseGeneralSection() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-void PCB_PARSER::parsePAGE_INFO() throw( IO_ERROR, PARSE_ERROR )
+void PCB_PARSER::parsePAGE_INFO()
 {
     wxCHECK_RET( CurTok() == T_page,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a PAGE_INFO." ) );
@@ -684,7 +684,7 @@ void PCB_PARSER::parsePAGE_INFO() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-void PCB_PARSER::parseTITLE_BLOCK() throw( IO_ERROR, PARSE_ERROR )
+void PCB_PARSER::parseTITLE_BLOCK()
 {
     wxCHECK_RET( CurTok() == T_title_block,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
@@ -767,7 +767,7 @@ void PCB_PARSER::parseTITLE_BLOCK() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-void PCB_PARSER::parseLayer( LAYER* aLayer ) throw( IO_ERROR, PARSE_ERROR )
+void PCB_PARSER::parseLayer( LAYER* aLayer )
 {
     T           token;
 
@@ -809,7 +809,7 @@ void PCB_PARSER::parseLayer( LAYER* aLayer ) throw( IO_ERROR, PARSE_ERROR )
 
 
 
-void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
+void PCB_PARSER::parseLayers()
 {
     wxCHECK_RET( CurTok() == T_layers,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as layers." ) );
@@ -922,7 +922,7 @@ void PCB_PARSER::parseLayers() throw( IO_ERROR, PARSE_ERROR )
 
 
 template<class T, class M>
-T PCB_PARSER::lookUpLayer( const M& aMap ) throw( PARSE_ERROR, IO_ERROR )
+T PCB_PARSER::lookUpLayer( const M& aMap )
 {
     // avoid constructing another std::string, use lexer's directly
     typename M::const_iterator it = aMap.find( curText );
@@ -955,7 +955,7 @@ T PCB_PARSER::lookUpLayer( const M& aMap ) throw( PARSE_ERROR, IO_ERROR )
 }
 
 
-PCB_LAYER_ID PCB_PARSER::parseBoardItemLayer() throw( PARSE_ERROR, IO_ERROR )
+PCB_LAYER_ID PCB_PARSER::parseBoardItemLayer()
 {
     wxCHECK_MSG( CurTok() == T_layer, UNDEFINED_LAYER,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as layer." ) );
@@ -970,7 +970,7 @@ PCB_LAYER_ID PCB_PARSER::parseBoardItemLayer() throw( PARSE_ERROR, IO_ERROR )
 }
 
 
-LSET PCB_PARSER::parseBoardItemLayersAsMask() throw( PARSE_ERROR, IO_ERROR )
+LSET PCB_PARSER::parseBoardItemLayersAsMask()
 {
     wxCHECK_MSG( CurTok() == T_layers, LSET(),
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
@@ -988,7 +988,7 @@ LSET PCB_PARSER::parseBoardItemLayersAsMask() throw( PARSE_ERROR, IO_ERROR )
 }
 
 
-void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
+void PCB_PARSER::parseSetup()
 {
     wxCHECK_RET( CurTok() == T_setup,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as setup." ) );
@@ -1223,7 +1223,7 @@ void PCB_PARSER::parseSetup() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-void PCB_PARSER::parseNETINFO_ITEM() throw( IO_ERROR, PARSE_ERROR )
+void PCB_PARSER::parseNETINFO_ITEM()
 {
     wxCHECK_RET( CurTok() == T_net,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as net." ) );
@@ -1249,7 +1249,7 @@ void PCB_PARSER::parseNETINFO_ITEM() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
+void PCB_PARSER::parseNETCLASS()
 {
     wxCHECK_RET( CurTok() == T_net_class,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as net class." ) );
@@ -1332,7 +1332,7 @@ void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR )
+DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT()
 {
     wxCHECK_MSG( CurTok() == T_gr_arc || CurTok() == T_gr_circle || CurTok() == T_gr_curve ||
                  CurTok() == T_gr_line || CurTok() == T_gr_poly, NULL,
@@ -1494,7 +1494,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-TEXTE_PCB* PCB_PARSER::parseTEXTE_PCB() throw( IO_ERROR, PARSE_ERROR )
+TEXTE_PCB* PCB_PARSER::parseTEXTE_PCB()
 {
     wxCHECK_MSG( CurTok() == T_gr_text, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as TEXTE_PCB." ) );
@@ -1562,7 +1562,7 @@ TEXTE_PCB* PCB_PARSER::parseTEXTE_PCB() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
+DIMENSION* PCB_PARSER::parseDIMENSION()
 {
     wxCHECK_MSG( CurTok() == T_dimension, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as DIMENSION." ) );
@@ -1715,7 +1715,6 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
 
 
 MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments )
-        throw( IO_ERROR, PARSE_ERROR, FUTURE_FORMAT_ERROR )
 {
     try
     {
@@ -1732,7 +1731,6 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments )
 
 
 MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
-        throw( IO_ERROR, PARSE_ERROR )
 {
     wxCHECK_MSG( CurTok() == T_module, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as MODULE." ) );
@@ -1983,7 +1981,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 }
 
 
-TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR )
+TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE()
 {
     wxCHECK_MSG( CurTok() == T_fp_text, NULL,
                  wxString::Format( wxT( "Cannot parse %s as TEXTE_MODULE at line %d, offset %d." ),
@@ -2068,7 +2066,7 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
+EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
 {
     wxCHECK_MSG( CurTok() == T_fp_arc || CurTok() == T_fp_circle || CurTok() == T_fp_curve ||
                  CurTok() == T_fp_line || CurTok() == T_fp_poly, NULL,
@@ -2235,7 +2233,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
+D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
 {
     wxCHECK_MSG( CurTok() == T_pad, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as D_PAD." ) );
@@ -2489,7 +2487,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-TRACK* PCB_PARSER::parseTRACK() throw( IO_ERROR, PARSE_ERROR )
+TRACK* PCB_PARSER::parseTRACK()
 {
     wxCHECK_MSG( CurTok() == T_segment, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as TRACK." ) );
@@ -2555,7 +2553,7 @@ TRACK* PCB_PARSER::parseTRACK() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-VIA* PCB_PARSER::parseVIA() throw( IO_ERROR, PARSE_ERROR )
+VIA* PCB_PARSER::parseVIA()
 {
     wxCHECK_MSG( CurTok() == T_via, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as VIA." ) );
@@ -2638,7 +2636,7 @@ VIA* PCB_PARSER::parseVIA() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
+ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
 {
     wxCHECK_MSG( CurTok() == T_zone, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
@@ -3008,7 +3006,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-PCB_TARGET* PCB_PARSER::parsePCB_TARGET() throw( IO_ERROR, PARSE_ERROR )
+PCB_TARGET* PCB_PARSER::parsePCB_TARGET()
 {
     wxCHECK_MSG( CurTok() == T_target, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_TARGET." ) );

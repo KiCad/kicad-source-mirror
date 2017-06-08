@@ -37,7 +37,6 @@
  * outputs a formatted "(at X Y [ANGLE])" s-expression
  */
  static void formatAt( OUTPUTFORMATTER* out, const SCH::POINT& aPos, ANGLE aAngle, int indent=0 )
-    throw( IO_ERROR )
 {
     // if( aPos.x || aPos.y || aAngle )
     {
@@ -48,7 +47,6 @@
 }
 
 static void formatStroke( OUTPUTFORMATTER* out, STROKE aStroke, int indent=0 )
-    throw( IO_ERROR )
 {
     if( aStroke == STROKE_DEFAULT )
         out->Print( indent, "(stroke %.6g)", InternalToWidth( aStroke ) );
@@ -318,7 +316,6 @@ PROPERTIES::iterator PART::propertyFind( const wxString& aPropertyName )
 
 
 void PART::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
-    throw( IO_ERROR )
 {
     out->Print( indent, "(part %s", partNameAndRev.c_str() );
 
@@ -392,7 +389,6 @@ void PART::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
 
 
 void PROPERTY::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
-    throw( IO_ERROR )
 {
     wxASSERT( owner );      // all PROPERTYs should have an owner.
 
@@ -433,7 +429,6 @@ TEXT_EFFECTS* PROPERTY::EffectsLookup()
 
 
 void TEXT_EFFECTS::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
-    throw( IO_ERROR )
 {
     if( propName.IsEmpty() )
         out->Print( indent, "(effects " );
@@ -451,7 +446,6 @@ void TEXT_EFFECTS::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
 
 
 void FONT::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
-    throw( IO_ERROR )
 {
     if( italic || bold || !name.IsEmpty() || size.height != FONTZ_DEFAULT || size.width != FONTZ_DEFAULT )
     {
@@ -476,7 +470,6 @@ void FONT::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
 
 
 void PIN::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
-    throw( IO_ERROR )
 {
     bool    hasSignal = !signal.text.IsEmpty();
     bool    hasPad    = !pad.text.IsEmpty();
@@ -516,7 +509,6 @@ PIN::~PIN()
 
 
 void PINTEXT::Format( OUTPUTFORMATTER* out, const char* aElement, int indent, int ctl ) const
-    throw( IO_ERROR )
 {
     out->Print( indent, "(%s %s", aElement, out->Quotew( text ).c_str() );
 
@@ -530,7 +522,6 @@ void PINTEXT::Format( OUTPUTFORMATTER* out, const char* aElement, int indent, in
 
 
 void POLY_LINE::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
-    throw( IO_ERROR )
 {
     out->Print( indent, "(%s ",  pts.size() == 2 ? "line" : "polyline" );
     formatContents( out, indent, ctl );
@@ -538,7 +529,6 @@ void POLY_LINE::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
 
 
 void POLY_LINE::formatContents(  OUTPUTFORMATTER* out, int indent, int ctl ) const
-    throw( IO_ERROR )
 {
     formatStroke( out, stroke );
 
@@ -576,15 +566,12 @@ void POLY_LINE::formatContents(  OUTPUTFORMATTER* out, int indent, int ctl ) con
 
 
 void BEZIER::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
-    throw( IO_ERROR )
 {
     out->Print( indent, "(bezier " );
     formatContents( out, indent, ctl );     // inherited from POLY_LINE
 }
 
-
 void RECTANGLE::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
-    throw( IO_ERROR )
 {
     // (rectangle (start X Y) (end X Y) [(stroke WIDTH)] (fill FILL_TYPE))
 
@@ -603,7 +590,6 @@ void RECTANGLE::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
 
 
 void CIRCLE::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
-    throw( IO_ERROR )
 {
     /*
         (circle (center X Y)(radius LENGTH) [(stroke WIDTH)] (fill FILL_TYPE))
@@ -623,7 +609,6 @@ void CIRCLE::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
 
 
 void ARC::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
-    throw( IO_ERROR )
 {
     /*
         (arc (pos X Y)(radius RADIUS)(start X Y)(end X Y) [(stroke WIDTH)] (fill FILL_TYPE))
@@ -646,7 +631,6 @@ void ARC::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
 
 
 void GR_TEXT::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
-    throw( IO_ERROR )
 {
     /*
         (text "This is the text that gets drawn."

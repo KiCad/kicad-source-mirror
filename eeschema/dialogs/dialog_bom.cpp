@@ -86,10 +86,10 @@ class BOM_CFG_READER_PARSER : public DIALOG_BOM_CFG_LEXER
 public:
     BOM_CFG_READER_PARSER( BOM_PLUGIN_ARRAY* aPlugins,
                            const char* aData, const wxString& aSource );
-    void Parse() throw( PARSE_ERROR, IO_ERROR );
+    void Parse();
 
 private:
-    void parsePlugin() throw( IO_ERROR, PARSE_ERROR );
+    void parsePlugin();
 };
 
 // PCB_PLOT_PARAMS_PARSER
@@ -103,7 +103,7 @@ BOM_CFG_READER_PARSER::BOM_CFG_READER_PARSER(  BOM_PLUGIN_ARRAY* aPlugins,
 }
 
 
-void BOM_CFG_READER_PARSER::Parse() throw( PARSE_ERROR, IO_ERROR )
+void BOM_CFG_READER_PARSER::Parse()
 {
     T token;
 
@@ -131,7 +131,7 @@ void BOM_CFG_READER_PARSER::Parse() throw( PARSE_ERROR, IO_ERROR )
     }
 }
 
-void BOM_CFG_READER_PARSER::parsePlugin() throw( IO_ERROR, PARSE_ERROR )
+void BOM_CFG_READER_PARSER::parsePlugin()
 {
     BOM_PLUGIN plugin;
 

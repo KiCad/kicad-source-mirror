@@ -75,7 +75,7 @@ static bool save_library( PART_LIB* aLibrary, SCH_EDIT_FRAME* aEditFrame )
  *
  * @return true on success, false on failure
  */
-static bool insert_library( PROJECT *aProject, PART_LIB *aLibrary, size_t aIndex ) throw( boost::bad_pointer )
+static bool insert_library( PROJECT *aProject, PART_LIB *aLibrary, size_t aIndex )
 {
     wxArrayString libNames;
     wxString libPaths;

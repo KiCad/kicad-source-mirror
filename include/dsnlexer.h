@@ -114,7 +114,7 @@ protected:
 
     void init();
 
-    int readLine() throw( IO_ERROR )
+    int readLine()
     {
         if( reader )
         {
@@ -282,7 +282,7 @@ public:
      * @return int - the type of token found next.
      * @throw IO_ERROR - only if the LINE_READER throws it.
      */
-    int NextTok() throw( IO_ERROR );
+    int NextTok();
 
     /**
      * Function NeedSYMBOL
@@ -292,7 +292,7 @@ public:
      * @return int - the actual token read in.
      * @throw IO_ERROR, if the next token does not satisfy IsSymbol()
      */
-    int NeedSYMBOL() throw( IO_ERROR );
+    int NeedSYMBOL();
 
     /**
      * Function NeedSYMBOLorNUMBER
@@ -302,7 +302,7 @@ public:
      * @return int - the actual token read in.
      * @throw IO_ERROR, if the next token does not satisfy the above test
      */
-    int NeedSYMBOLorNUMBER() throw( IO_ERROR );
+    int NeedSYMBOLorNUMBER();
 
     /**
      * Function NeedNUMBER
@@ -311,7 +311,7 @@ public:
      * @return int - the actual token read in.
      * @throw IO_ERROR, if the next token does not satisfy the above test
      */
-    int NeedNUMBER( const char* aExpectation ) throw( IO_ERROR );
+    int NeedNUMBER( const char* aExpectation );
 
     /**
      * Function CurTok
@@ -387,7 +387,7 @@ public:
      * @return wxArrayString* - heap allocated block of comments, or NULL if none;
      *   caller owns the allocation and must delete if not NULL.
      */
-    wxArrayString* ReadCommentLines() throw( IO_ERROR );
+    wxArrayString* ReadCommentLines();
 
     /**
      * Function IsSymbol
@@ -403,7 +403,7 @@ public:
      * @param aTok is the token/keyword type which was expected at the current input location.
      * @throw IO_ERROR with the location within the input file of the problem.
      */
-    void Expecting( int aTok ) throw( IO_ERROR );
+    void Expecting( int aTok );
 
     /**
      * Function Expecting
@@ -412,7 +412,7 @@ public:
      *         current input location, e.g.  "pin|graphic|property"
      * @throw IO_ERROR with the location within the input file of the problem.
      */
-    void Expecting( const char* aTokenList ) throw( IO_ERROR );
+    void Expecting( const char* aTokenList );
 
     /**
      * Function Unexpected
@@ -421,7 +421,7 @@ public:
      *         current input location.
      * @throw IO_ERROR with the location within the input file of the problem.
      */
-    void Unexpected( int aTok ) throw( IO_ERROR );
+    void Unexpected( int aTok );
 
     /**
      * Function Unexpected
@@ -430,7 +430,7 @@ public:
      *         current input location.
      * @throw IO_ERROR with the location within the input file of the problem.
      */
-    void Unexpected( const char* aToken ) throw( IO_ERROR );
+    void Unexpected( const char* aToken );
 
     /**
      * Function Duplicate
@@ -440,7 +440,7 @@ public:
      *         current input location.
      * @throw IO_ERROR with the location within the input file of the problem.
      */
-    void Duplicate( int aTok ) throw( IO_ERROR );
+    void Duplicate( int aTok );
 
     /**
      * Function NeedLEFT
@@ -448,7 +448,7 @@ public:
      * If it is not, an IO_ERROR is thrown.
      * @throw IO_ERROR, if the next token is not a DSN_LEFT
      */
-    void NeedLEFT() throw( IO_ERROR );
+    void NeedLEFT();
 
     /**
      * Function NeedRIGHT
@@ -456,7 +456,7 @@ public:
      * If it is not, an IO_ERROR is thrown.
      * @throw IO_ERROR, if the next token is not a DSN_RIGHT
      */
-    void NeedRIGHT() throw( IO_ERROR );
+    void NeedRIGHT();
 
     /**
      * Function GetTokenText

@@ -79,7 +79,6 @@ NETLIST_READER::NETLIST_FILE_T NETLIST_READER::GuessNetlistFileType( LINE_READER
 NETLIST_READER* NETLIST_READER::GetNetlistReader( NETLIST*        aNetlist,
                                                   const wxString& aNetlistFileName,
                                                   const wxString& aCompFootprintFileName )
-    throw( IO_ERROR )
 {
     wxASSERT( aNetlist != NULL );
 
@@ -110,7 +109,7 @@ NETLIST_READER* NETLIST_READER::GetNetlistReader( NETLIST*        aNetlist,
 }
 
 
-bool CMP_READER::Load( NETLIST* aNetlist ) throw( IO_ERROR, PARSE_ERROR )
+bool CMP_READER::Load( NETLIST* aNetlist )
 {
     wxCHECK_MSG( aNetlist != NULL,true, wxT( "No netlist passed to CMP_READER::Load()" ) );
 

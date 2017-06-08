@@ -211,7 +211,7 @@ public:
      * @param aFileName - File name object of part library.
      * @throw IO_ERROR if there's any problem loading.
      */
-    PART_LIB* AddLibrary( const wxString& aFileName ) throw( IO_ERROR, boost::bad_pointer );
+    PART_LIB* AddLibrary( const wxString& aFileName );
 
     /**
      * Function AddLibrary
@@ -222,16 +222,14 @@ public:
      * @return PART_LIB* - the new PART_LIB, which remains owned by this PART_LIBS container.
      * @throw IO_ERROR if there's any problem loading.
      */
-    PART_LIB* AddLibrary( const wxString& aFileName, PART_LIBS::iterator& aIterator )
-        throw( IO_ERROR, boost::bad_pointer );
+    PART_LIB* AddLibrary( const wxString& aFileName, PART_LIBS::iterator& aIterator );
 
     /**
      * Function LoadAllLibraries
      * loads all of the project's libraries into this container, which should
      * be cleared before calling it.
      */
-    void LoadAllLibraries( PROJECT* aProject, bool aShowProgress=true )
-        throw( IO_ERROR, boost::bad_pointer );
+    void LoadAllLibraries( PROJECT* aProject, bool aShowProgress=true );
 
     /**
      * Function LibNamesAndPaths
@@ -239,8 +237,7 @@ public:
      * (without paths).
      */
     static void LibNamesAndPaths( PROJECT* aProject, bool doSave,
-                                  wxString* aPaths, wxArrayString* aNames=NULL )
-        throw( IO_ERROR, boost::bad_pointer );
+                                  wxString* aPaths, wxArrayString* aNames=NULL );
 
     /**
      * Function cacheName
@@ -509,7 +506,7 @@ public:
      *   the caller.
      * @throw IO_ERROR if there's any problem loading the library.
      */
-    static PART_LIB* LoadLibrary( const wxString& aFileName ) throw( IO_ERROR, boost::bad_pointer );
+    static PART_LIB* LoadLibrary( const wxString& aFileName );
 
     /**
      * Function HasPowerParts

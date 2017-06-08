@@ -185,8 +185,7 @@ public:
      * @param aControlBits The control bit definition for object specific formatting.
      * @throw IO_ERROR on write error.
      */
-    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-        throw( IO_ERROR );
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
 protected:
     // only the class implementation(s) may use this constructor

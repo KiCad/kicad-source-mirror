@@ -24,7 +24,7 @@
 
 /**
  * @file  3d_math.cpp
- * @brief 
+ * @brief
  */
 
 

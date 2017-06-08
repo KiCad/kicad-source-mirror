@@ -49,7 +49,7 @@ FILTER_READER::~FILTER_READER()
 }
 
 
-char* FILTER_READER::ReadLine() throw( IO_ERROR )
+char* FILTER_READER::ReadLine()
 {
     char* s;
 
@@ -87,7 +87,7 @@ WHITESPACE_FILTER_READER::~WHITESPACE_FILTER_READER()
 }
 
 
-char* WHITESPACE_FILTER_READER::ReadLine() throw( IO_ERROR )
+char* WHITESPACE_FILTER_READER::ReadLine()
 {
     char* s;
 

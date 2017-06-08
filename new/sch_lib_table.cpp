@@ -35,7 +35,7 @@ using namespace SCH;
 using namespace LT;         // tokens, enum T for LIB_TABLE
 
 
-LIB_TABLE::LIB_TABLE( LIB_TABLE* aFallBackTable ) :
+LIB_TABLE::LIB_TABLE( LIB_TABLE* aFallBackTable ):
     fallBack( aFallBackTable )
 {
     // not copying fall back, simply search aFallBackTable separately
@@ -43,7 +43,7 @@ LIB_TABLE::LIB_TABLE( LIB_TABLE* aFallBackTable ) :
 }
 
 
-void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR )
+void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in )
 {
     /*  grammar:
 
@@ -143,7 +143,6 @@ void LIB_TABLE::Parse( SCH_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR )
 
 
 void LIB_TABLE::Format( OUTPUTFORMATTER* out, int nestLevel ) const
-    throw( IO_ERROR )
 {
     out->Print( nestLevel, "(lib_table\n" );
     for( ROWS_CITER it = rows.begin();  it != rows.end();  ++it )
@@ -153,7 +152,6 @@ void LIB_TABLE::Format( OUTPUTFORMATTER* out, int nestLevel ) const
 
 
 void LIB_TABLE::ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
-    throw( IO_ERROR )
 {
     out->Print( nestLevel, "(lib (logical %s)(type %s)(full_uri %s)(options %s))\n",
         out->Quotes( logicalName ).c_str(),
@@ -190,9 +188,7 @@ STRINGS LIB_TABLE::GetLogicalLibs()
     return ret;
 }
 
-
 PART* LIB_TABLE::LookupPart( const LPID& aLPID, LIB* aLocalLib )
-    throw( IO_ERROR )
 {
     LIB* lib = lookupLib( aLPID, aLocalLib );
 
@@ -201,7 +197,6 @@ PART* LIB_TABLE::LookupPart( const LPID& aLPID, LIB* aLocalLib )
 
 
 LIB* LIB_TABLE::lookupLib( const LPID& aLPID, LIB* aFallBackLib )
-    throw( IO_ERROR )
 {
     if( aLPID.GetLogicalLib().size() )
     {
@@ -234,7 +229,7 @@ LIB* LIB_TABLE::lookupLib( const LPID& aLPID, LIB* aFallBackLib )
 }
 
 
-void LIB_TABLE::loadLib( ROW* aRow ) throw( IO_ERROR )
+void LIB_TABLE::loadLib( ROW* aRow )
 {
     assert( !aRow->lib );   // caller should know better.
 

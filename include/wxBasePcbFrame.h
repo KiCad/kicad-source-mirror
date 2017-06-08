@@ -95,8 +95,7 @@ protected:
      * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
      *                 occurs while reading footprint library files.
      */
-    MODULE* loadFootprint( const LIB_ID& aFootprintId )
-        throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception );
+    MODULE* loadFootprint( const LIB_ID& aFootprintId );
 
 public:
     PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,

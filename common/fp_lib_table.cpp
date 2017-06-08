@@ -215,7 +215,6 @@ void FP_LIB_TABLE::PrefetchLib( const wxString& aNickname )
 
 
 const FP_LIB_TABLE_ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname )
-    throw( IO_ERROR )
 {
     FP_LIB_TABLE_ROW* row = dynamic_cast< FP_LIB_TABLE_ROW* >( findRow( aNickname ) );
 
@@ -329,7 +328,6 @@ void FP_LIB_TABLE::FootprintLibCreate( const wxString& aNickname )
 
 
 MODULE* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const LIB_ID& aFootprintId )
-    throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception )
 {
     wxString   nickname = FROM_UTF8( aFootprintId.GetLibNickname() );
     wxString   fpname   = FROM_UTF8( aFootprintId.GetLibItemName() );
@@ -367,7 +365,6 @@ const wxString FP_LIB_TABLE::GlobalPathEnvVariableName()
 
 
 bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable )
-    throw (IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception )
 {
     bool        tableExists = true;
     wxFileName  fn = GetGlobalTableFileName();

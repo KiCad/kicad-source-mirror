@@ -35,7 +35,7 @@
 using namespace NL_T;
 
 
-void KICAD_NETLIST_READER::LoadNetlist() throw ( IO_ERROR, PARSE_ERROR, boost::bad_pointer )
+void KICAD_NETLIST_READER::LoadNetlist()
 {
     m_parser->Parse();
 
@@ -61,7 +61,7 @@ KICAD_NETLIST_PARSER::KICAD_NETLIST_PARSER( LINE_READER* aReader, NETLIST* aNetl
 }
 
 
-void KICAD_NETLIST_PARSER::skipCurrent() throw( IO_ERROR, PARSE_ERROR )
+void KICAD_NETLIST_PARSER::skipCurrent()
 {
     int curr_level = 0;
 
@@ -81,7 +81,7 @@ void KICAD_NETLIST_PARSER::skipCurrent() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-void KICAD_NETLIST_PARSER::Parse() throw( IO_ERROR, PARSE_ERROR, boost::bad_pointer )
+void KICAD_NETLIST_PARSER::Parse()
 {
     int plevel = 0;     // the count of ')' to read and end of file,
                         // after parsing all sections
@@ -177,7 +177,7 @@ void KICAD_NETLIST_PARSER::Parse() throw( IO_ERROR, PARSE_ERROR, boost::bad_poin
 }
 
 
-void KICAD_NETLIST_PARSER::parseNet() throw( IO_ERROR, PARSE_ERROR )
+void KICAD_NETLIST_PARSER::parseNet()
 {
     /* Parses a section like
      * (net (code 20) (name /PC-A0)
@@ -268,7 +268,7 @@ void KICAD_NETLIST_PARSER::parseNet() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-void KICAD_NETLIST_PARSER::parseComponent() throw( IO_ERROR, PARSE_ERROR, boost::bad_pointer )
+void KICAD_NETLIST_PARSER::parseComponent()
 {
    /* Parses a section like
      * (comp (ref P1)
@@ -380,7 +380,7 @@ void KICAD_NETLIST_PARSER::parseComponent() throw( IO_ERROR, PARSE_ERROR, boost:
 }
 
 
-void KICAD_NETLIST_PARSER::parseLibPartList() throw( IO_ERROR, PARSE_ERROR )
+void KICAD_NETLIST_PARSER::parseLibPartList()
 {
    /* Parses a section like
     *   (libpart (lib device) (part C)

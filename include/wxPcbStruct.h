@@ -253,8 +253,7 @@ public:
      * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
      *           occurs while reading footprint library files.
      */
-    void LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
-        throw( IO_ERROR, PARSE_ERROR );
+    void LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter );
 
     void OnQuit( wxCommandEvent& event );
 

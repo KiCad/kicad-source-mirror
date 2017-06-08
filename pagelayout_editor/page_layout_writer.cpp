@@ -63,26 +63,21 @@ protected:
     virtual ~WORKSHEET_LAYOUT_IO() {}
 
 public:
-    void Format( WORKSHEET_LAYOUT* aPageLayout ) const
-        throw( IO_ERROR );
+    void Format( WORKSHEET_LAYOUT* aPageLayout ) const;
 
-    void Format( WORKSHEET_DATAITEM* aItem, int aNestLevel ) const
-        throw( IO_ERROR );
+    void Format( WORKSHEET_DATAITEM* aItem, int aNestLevel ) const;
 
 private:
-    void format( WORKSHEET_LAYOUT* aPageLayout ) const
-        throw( IO_ERROR );
+    void format( WORKSHEET_LAYOUT* aPageLayout ) const;
 
-    void format( WORKSHEET_DATAITEM_TEXT* aItem, int aNestLevel ) const throw( IO_ERROR );
-    void format( WORKSHEET_DATAITEM* aItem, int aNestLevel ) const throw( IO_ERROR );
+    void format( WORKSHEET_DATAITEM_TEXT* aItem, int aNestLevel ) const;
+    void format( WORKSHEET_DATAITEM* aItem, int aNestLevel ) const;
     void format( WORKSHEET_DATAITEM_POLYPOLYGON* aItem, int aNestLevel )
-                 const throw( IO_ERROR );
-    void format( WORKSHEET_DATAITEM_BITMAP* aItem, int aNestLevel ) const
-                 throw( IO_ERROR );
-    void formatCoordinate( const char * aToken, POINT_COORD & aCoord ) const
-                           throw( IO_ERROR );
-    void formatRepeatParameters( WORKSHEET_DATAITEM* aItem ) const throw( IO_ERROR );
-    void formatOptions( WORKSHEET_DATAITEM* aItem ) const throw( IO_ERROR );
+                 const;
+    void format( WORKSHEET_DATAITEM_BITMAP* aItem, int aNestLevel ) const;
+    void formatCoordinate( const char * aToken, POINT_COORD & aCoord ) const;
+    void formatRepeatParameters( WORKSHEET_DATAITEM* aItem ) const;
+    void formatOptions( WORKSHEET_DATAITEM* aItem ) const;
 };
 
 
@@ -162,7 +157,6 @@ void WORKSHEET_LAYOUT::SaveInString( wxString& aOutputString )
 
 
 void WORKSHEET_LAYOUT_IO::Format( WORKSHEET_DATAITEM* aItem, int aNestLevel ) const
-    throw( IO_ERROR )
 {
     switch( aItem->GetType() )
     {
@@ -190,7 +184,6 @@ void WORKSHEET_LAYOUT_IO::Format( WORKSHEET_DATAITEM* aItem, int aNestLevel ) co
 
 
 void WORKSHEET_LAYOUT_IO::Format( WORKSHEET_LAYOUT* aPageLayout ) const
-    throw( IO_ERROR )
 {
     LOCALE_IO   toggle;     // switch on/off the locale "C" notation
 
@@ -230,7 +223,6 @@ void WORKSHEET_LAYOUT_IO::Format( WORKSHEET_LAYOUT* aPageLayout ) const
 
 
 void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_TEXT* aItem, int aNestLevel ) const
-    throw( IO_ERROR )
 {
     m_out->Print( aNestLevel, "(%s", getTokenName( T_tbtext ) );
     m_out->Print( 0, " %s", m_out->Quotew( aItem->m_TextBase ).c_str() );
@@ -311,7 +303,6 @@ void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_TEXT* aItem, int aNestLevel
 }
 
 void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM* aItem, int aNestLevel ) const
-    throw( IO_ERROR )
 {
     if( aItem->GetType() == WORKSHEET_DATAITEM::WS_RECT )
         m_out->Print( aNestLevel, "(%s", getTokenName( T_rect ) );
@@ -335,7 +326,6 @@ void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM* aItem, int aNestLevel ) co
 
 
 void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_POLYPOLYGON* aItem, int aNestLevel ) const
-    throw( IO_ERROR )
 {
     m_out->Print( aNestLevel, "(%s", getTokenName( T_polygon ) );
     m_out->Print( 0, " (%s %s)", getTokenName( T_name ),
@@ -386,7 +376,6 @@ void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_POLYPOLYGON* aItem, int aNe
 
 
 void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_BITMAP* aItem, int aNestLevel ) const
-    throw( IO_ERROR )
 {
     m_out->Print( aNestLevel, "(%s", getTokenName( T_bitmap ) );
     m_out->Print( 0, " (%s %s)", getTokenName( T_name ),
@@ -416,7 +405,6 @@ void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_BITMAP* aItem, int aNestLev
 
 void WORKSHEET_LAYOUT_IO::formatCoordinate( const char * aToken,
                                             POINT_COORD & aCoord ) const
-                       throw( IO_ERROR )
 {
     m_out->Print( 0, " (%s %s %s", aToken,
                   double2Str( aCoord.m_Pos.x ).c_str(),
@@ -445,7 +433,6 @@ void WORKSHEET_LAYOUT_IO::formatCoordinate( const char * aToken,
 
 
 void WORKSHEET_LAYOUT_IO::formatRepeatParameters( WORKSHEET_DATAITEM* aItem ) const
-    throw( IO_ERROR )
 {
     if( aItem->m_RepeatCount <= 1 )
         return;
@@ -465,7 +452,6 @@ void WORKSHEET_LAYOUT_IO::formatRepeatParameters( WORKSHEET_DATAITEM* aItem ) co
 
 
 void WORKSHEET_LAYOUT_IO::formatOptions( WORKSHEET_DATAITEM* aItem ) const
-                       throw( IO_ERROR )
 {
     switch( aItem->GetPage1Option() )
     {

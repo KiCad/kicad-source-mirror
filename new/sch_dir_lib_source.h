@@ -95,7 +95,7 @@ class DIR_LIB_SOURCE : public LIB_SOURCE
      * Function cache
      * [re-]loads the directory cache(s).
      */
-    void cache() throw( IO_ERROR );
+    void cache();
 
     /**
      * Function isCategoryName
@@ -121,7 +121,7 @@ class DIR_LIB_SOURCE : public LIB_SOURCE
      * Function readString
      * reads a Sweet string into aResult.  Candidate for virtual function later.
      */
-    void readString( STRING* aResult, const STRING& aFileName ) throw( IO_ERROR );
+    void readString( STRING* aResult, const STRING& aFileName );
 
     /**
      * Function cacheOneDir
@@ -131,7 +131,7 @@ class DIR_LIB_SOURCE : public LIB_SOURCE
      * only one level of categories is supported.  We know we are in the
      * top most directory if aCategory is empty.
      */
-    void cacheOneDir( const STRING& aCategory ) throw( IO_ERROR );
+    void cacheOneDir( const STRING& aCategory );
 
     /**
      * Function makeFileName
@@ -157,27 +157,23 @@ protected:
      *  tree, otherwise only a single version of each part is recognized, namely the
      *  one without the ".revN[N..]" trailer.
      */
-    DIR_LIB_SOURCE( const STRING& aDirectoryPath, const STRING& aOptions = "" ) throw( IO_ERROR );
+    DIR_LIB_SOURCE( const STRING& aDirectoryPath, const STRING& aOptions = "" );
 
     ~DIR_LIB_SOURCE();
 
     //-----<LIB_SOURCE implementation functions >------------------------------
 
-    void ReadPart( STRING* aResult, const STRING& aPartName, const STRING& aRev = "" )
-        throw( IO_ERROR );
+    void ReadPart( STRING* aResult, const STRING& aPartName, const STRING& aRev = "" );
 
-    void ReadParts( STRINGS* aResults, const STRINGS& aPartNames )
-        throw( IO_ERROR );
+    void ReadParts( STRINGS* aResults, const STRINGS& aPartNames );
 
-    void GetCategories( STRINGS* aResults ) throw( IO_ERROR );
+    void GetCategories( STRINGS* aResults );
 
-    void GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory = "" )
-        throw( IO_ERROR );
+    void GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory = "" );
 
-    void GetRevisions( STRINGS* aResults, const STRING& aPartName )
-        throw( IO_ERROR );
+    void GetRevisions( STRINGS* aResults, const STRING& aPartName );
 
-    void FindParts( STRINGS* aResults, const STRING& aQuery ) throw( IO_ERROR )
+    void FindParts( STRINGS* aResults, const STRING& aQuery )
     {
         // @todo
     }

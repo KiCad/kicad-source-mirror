@@ -102,21 +102,21 @@ class PCB_PARSER : public PCB_LEXER
      */
     void init();
 
-    void parseHeader() throw( IO_ERROR, PARSE_ERROR );
-    void parseGeneralSection() throw( IO_ERROR, PARSE_ERROR );
-    void parsePAGE_INFO() throw( IO_ERROR, PARSE_ERROR );
-    void parseTITLE_BLOCK() throw( IO_ERROR, PARSE_ERROR );
+    void parseHeader();
+    void parseGeneralSection();
+    void parsePAGE_INFO();
+    void parseTITLE_BLOCK();
 
-    void parseLayers() throw( IO_ERROR, PARSE_ERROR );
-    void parseLayer( LAYER* aLayer ) throw( IO_ERROR, PARSE_ERROR );
+    void parseLayers();
+    void parseLayer( LAYER* aLayer );
 
-    void parseSetup() throw( IO_ERROR, PARSE_ERROR );
-    void parseNETINFO_ITEM() throw( IO_ERROR, PARSE_ERROR );
-    void parseNETCLASS() throw( IO_ERROR, PARSE_ERROR );
+    void parseSetup();
+    void parseNETINFO_ITEM();
+    void parseNETCLASS();
 
-    DRAWSEGMENT*    parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR );
-    TEXTE_PCB*      parseTEXTE_PCB() throw( IO_ERROR, PARSE_ERROR );
-    DIMENSION*      parseDIMENSION() throw( IO_ERROR, PARSE_ERROR );
+    DRAWSEGMENT*    parseDRAWSEGMENT();
+    TEXTE_PCB*      parseTEXTE_PCB();
+    DIMENSION*      parseDIMENSION();
 
     /**
      * Function parseMODULE
@@ -124,29 +124,27 @@ class PCB_PARSER : public PCB_LEXER
      *   or NULL.  If not NULL, then caller has given ownership of a wxArrayString to
      *   this function and care must be taken to delete it even on exception.
      */
-    MODULE*         parseMODULE( wxArrayString* aInitialComments = 0 )
-                        throw( IO_ERROR, PARSE_ERROR, FUTURE_FORMAT_ERROR );
+    MODULE*         parseMODULE( wxArrayString* aInitialComments = 0 );
 
     /**
      * Function parseMODULE_unchecked
      * Parse a module, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
      */
-    MODULE*         parseMODULE_unchecked( wxArrayString* aInitialComments = 0 )
-                        throw( IO_ERROR, PARSE_ERROR );
-    TEXTE_MODULE*   parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR );
-    EDGE_MODULE*    parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR );
-    D_PAD*          parseD_PAD( MODULE* aParent = NULL ) throw( IO_ERROR, PARSE_ERROR );
-    TRACK*          parseTRACK() throw( IO_ERROR, PARSE_ERROR );
-    VIA*            parseVIA() throw( IO_ERROR, PARSE_ERROR );
-    ZONE_CONTAINER* parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR );
-    PCB_TARGET*     parsePCB_TARGET() throw( IO_ERROR, PARSE_ERROR );
-    BOARD*          parseBOARD() throw( IO_ERROR, PARSE_ERROR, FUTURE_FORMAT_ERROR );
+    MODULE*         parseMODULE_unchecked( wxArrayString* aInitialComments = 0 );
+    TEXTE_MODULE*   parseTEXTE_MODULE();
+    EDGE_MODULE*    parseEDGE_MODULE();
+    D_PAD*          parseD_PAD( MODULE* aParent = NULL );
+    TRACK*          parseTRACK();
+    VIA*            parseVIA();
+    ZONE_CONTAINER* parseZONE_CONTAINER();
+    PCB_TARGET*     parsePCB_TARGET();
+    BOARD*          parseBOARD();
 
     /**
      * Function parseBOARD_unchecked
      * Parse a module, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
      */
-    BOARD*          parseBOARD_unchecked() throw( IO_ERROR, PARSE_ERROR );
+    BOARD*          parseBOARD_unchecked();
 
 
     /**
@@ -160,7 +158,7 @@ class PCB_PARSER : public PCB_LEXER
      * @return int - The result of the parsed #BOARD_ITEM layer or set designator.
      */
     template<class T, class M>
-    T lookUpLayer( const M& aMap ) throw( PARSE_ERROR, IO_ERROR );
+    T lookUpLayer( const M& aMap );
 
     /**
      * Function parseBoardItemLayer
@@ -170,7 +168,7 @@ class PCB_PARSER : public PCB_LEXER
      * @throw PARSE_ERROR if the layer syntax is incorrect.
      * @return The index the parsed #BOARD_ITEM layer.
      */
-    PCB_LAYER_ID parseBoardItemLayer() throw( IO_ERROR, PARSE_ERROR );
+    PCB_LAYER_ID parseBoardItemLayer();
 
     /**
      * Function parseBoardItemLayersAsMask
@@ -180,7 +178,7 @@ class PCB_PARSER : public PCB_LEXER
      * @throw PARSE_ERROR if the layers syntax is incorrect.
      * @return The mask of layers the parsed #BOARD_ITEM is on.
      */
-    LSET parseBoardItemLayersAsMask() throw( PARSE_ERROR, IO_ERROR );
+    LSET parseBoardItemLayersAsMask();
 
     /**
      * Function parseXY
@@ -193,9 +191,9 @@ class PCB_PARSER : public PCB_LEXER
      * @throw PARSE_ERROR if the coordinate pair syntax is incorrect.
      * @return A wxPoint object containing the coordinate pair.
      */
-    wxPoint parseXY() throw( PARSE_ERROR, IO_ERROR );
+    wxPoint parseXY();
 
-    void parseXY( int* aX, int* aY ) throw( PARSE_ERROR, IO_ERROR );
+    void parseXY( int* aX, int* aY );
 
     /**
      * Function parseEDA_TEXT
@@ -204,9 +202,9 @@ class PCB_PARSER : public PCB_LEXER
      * @throw PARSE_ERROR if the text syntax is not valid.
      * @param aText A point to the #EDA_TEXT object to save the parsed settings into.
      */
-    void parseEDA_TEXT( EDA_TEXT* aText ) throw( PARSE_ERROR, IO_ERROR );
+    void parseEDA_TEXT( EDA_TEXT* aText );
 
-    S3D_INFO* parse3DModel() throw( PARSE_ERROR, IO_ERROR );
+    S3D_INFO* parse3DModel();
 
     /**
      * Function parseDouble
@@ -216,20 +214,20 @@ class PCB_PARSER : public PCB_LEXER
      * @throw IO_ERROR if an error occurs attempting to convert the current token.
      * @return The result of the parsed token.
      */
-    double parseDouble() throw( IO_ERROR );
+    double parseDouble();
 
-    inline double parseDouble( const char* aExpected ) throw( IO_ERROR )
+    inline double parseDouble( const char* aExpected )
     {
         NeedNUMBER( aExpected );
         return parseDouble();
     }
 
-    inline double parseDouble( PCB_KEYS_T::T aToken ) throw( IO_ERROR )
+    inline double parseDouble( PCB_KEYS_T::T aToken )
     {
         return parseDouble( GetTokenText( aToken ) );
     }
 
-    inline int parseBoardUnits() throw( IO_ERROR )
+    inline int parseBoardUnits()
     {
         // There should be no major rounding issues here, since the values in
         // the file are in mm and get converted to nano-meters.
@@ -240,7 +238,7 @@ class PCB_PARSER : public PCB_LEXER
         return KiROUND( parseDouble() * IU_PER_MM );
     }
 
-    inline int parseBoardUnits( const char* aExpected ) throw( PARSE_ERROR, IO_ERROR )
+    inline int parseBoardUnits( const char* aExpected )
     {
         // Use here KiROUND, not KIROUND (see comments about them)
         // when having a function as argument, because it will be called twice
@@ -248,35 +246,35 @@ class PCB_PARSER : public PCB_LEXER
         return KiROUND( parseDouble( aExpected ) * IU_PER_MM );
     }
 
-    inline int parseBoardUnits( PCB_KEYS_T::T aToken ) throw( PARSE_ERROR, IO_ERROR )
+    inline int parseBoardUnits( PCB_KEYS_T::T aToken )
     {
         return parseBoardUnits( GetTokenText( aToken ) );
     }
 
-    inline int parseInt() throw( PARSE_ERROR )
+    inline int parseInt()
     {
         return (int)strtol( CurText(), NULL, 10 );
     }
 
-    inline int parseInt( const char* aExpected ) throw( PARSE_ERROR )
+    inline int parseInt( const char* aExpected )
     {
         NeedNUMBER( aExpected );
         return parseInt();
     }
 
-    inline long parseHex() throw( PARSE_ERROR )
+    inline long parseHex()
     {
         NextTok();
         return strtol( CurText(), NULL, 16 );
     }
 
-    bool parseBool() throw( PARSE_ERROR );
+    bool parseBool();
 
     /**
      * Parse a format version tag like (version 20160417) return the version.
      * Expects to start on 'version', and eats the closing paren.
      */
-    int parseVersion() throw( IO_ERROR, PARSE_ERROR );
+    int parseVersion();
 
 public:
 
@@ -308,7 +306,7 @@ public:
         m_board = aBoard;
     }
 
-    BOARD_ITEM* Parse() throw( IO_ERROR, PARSE_ERROR );
+    BOARD_ITEM* Parse();
 
     /**
      * Return whether a version number, if any was parsed, was too recent

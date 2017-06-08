@@ -146,8 +146,7 @@ public:
          * @param nestLevel is the indentation level to base all lines of the output.
          *   Actual indentation will be 2 spaces for each nestLevel.
          */
-        void Format( OUTPUTFORMATTER* out, int nestLevel ) const
-            throw( IO_ERROR );
+        void Format( OUTPUTFORMATTER* out, int nestLevel ) const;
 
     protected:
 
@@ -246,7 +245,7 @@ public:
      * @param nestLevel is the indentation level to base all lines of the output.
      *   Actual indentation will be 2 spaces for each nestLevel.
      */
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw( IO_ERROR );
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) const;
 
     /**
      * Function LookupPart
@@ -268,7 +267,7 @@ public:
      *
      * @throw IO_ERROR if any problem occurs or if the part cannot be found.
      */
-    PART* LookupPart( const LPID& aLogicalPartID, LIB* aFallBackLib = NULL ) throw( IO_ERROR );
+    PART* LookupPart( const LPID& aLogicalPartID, LIB* aFallBackLib = NULL );
 
     /**
      * Function GetLogicalLibs
@@ -366,14 +365,14 @@ private:
      *
      * @throw IO_ERROR if any problem occurs or if the LIB cannot be found or cannot be loaded.
      */
-    LIB* lookupLib( const LPID& aLogicalPartID, LIB* aFallBackLib = NULL ) throw( IO_ERROR );
+    LIB* lookupLib( const LPID& aLogicalPartID, LIB* aFallBackLib = NULL );
 
     /**
      * Function loadLib
      * loads a LIB using information in @a aRow.  Call only if LIB not
      * already loaded.
      */
-    void loadLib( ROW* aRow ) throw( IO_ERROR );
+    void loadLib( ROW* aRow );
 
     typedef boost::ptr_map<STRING, ROW>     ROWS;
     typedef ROWS::iterator                  ROWS_ITER;

@@ -288,7 +288,7 @@ STRING DIR_LIB_SOURCE::makeFileName( const STRING& aPartName )
 }
 
 
-void DIR_LIB_SOURCE::readString( STRING* aResult, const STRING& aFileName ) throw( IO_ERROR )
+void DIR_LIB_SOURCE::readString( STRING* aResult, const STRING& aFileName )
 {
     FILE_WRAP   fw = open( aFileName.c_str(), O_RDONLY );
 
@@ -350,7 +350,7 @@ void DIR_LIB_SOURCE::readString( STRING* aResult, const STRING& aFileName ) thro
 }
 
 
-void DIR_LIB_SOURCE::cache() throw( IO_ERROR )
+void DIR_LIB_SOURCE::cache()
 {
     partnames.clear();
     categories.clear();
@@ -360,7 +360,7 @@ void DIR_LIB_SOURCE::cache() throw( IO_ERROR )
 
 
 DIR_LIB_SOURCE::DIR_LIB_SOURCE( const STRING& aDirectoryPath,
-                                const STRING& aOptions ) throw( IO_ERROR ) :
+                                const STRING& aOptions )  :
     useVersioning( strstr( aOptions.c_str(), "useVersioning" ) )
 {
     sourceURI     = aDirectoryPath;
@@ -385,7 +385,6 @@ DIR_LIB_SOURCE::~DIR_LIB_SOURCE()
 
 
 void DIR_LIB_SOURCE::GetCategoricalPartNames( STRINGS* aResults, const STRING& aCategory )
-    throw( IO_ERROR )
 {
     PN_ITER end = aCategory.size() ?
                         partnames.lower_bound( aCategory + char( '/' + 1 ) ) :
@@ -428,7 +427,6 @@ void DIR_LIB_SOURCE::GetCategoricalPartNames( STRINGS* aResults, const STRING& a
 
 
 void DIR_LIB_SOURCE::GetRevisions( STRINGS* aResults, const STRING& aPartName )
-    throw( IO_ERROR )
 {
     aResults->clear();
 
@@ -466,7 +464,6 @@ void DIR_LIB_SOURCE::GetRevisions( STRINGS* aResults, const STRING& aPartName )
 
 
 void DIR_LIB_SOURCE::ReadPart( STRING* aResult, const STRING& aPartName, const STRING& aRev )
-    throw( IO_ERROR )
 {
     STRING      partName = aPartName;
     const char* hasRev   = endsWithRev( partName );
@@ -551,7 +548,6 @@ void DIR_LIB_SOURCE::ReadPart( STRING* aResult, const STRING& aPartName, const S
 
 
 void DIR_LIB_SOURCE::ReadParts( STRINGS* aResults, const STRINGS& aPartNames )
-    throw( IO_ERROR )
 {
     aResults->clear();
 
@@ -563,7 +559,7 @@ void DIR_LIB_SOURCE::ReadParts( STRINGS* aResults, const STRINGS& aPartNames )
 }
 
 
-void DIR_LIB_SOURCE::GetCategories( STRINGS* aResults ) throw( IO_ERROR )
+void DIR_LIB_SOURCE::GetCategories( STRINGS* aResults )
 {
     aResults->clear();
 
@@ -594,7 +590,7 @@ void DIR_LIB_SOURCE::Show()
 #endif
 
 
-void DIR_LIB_SOURCE::cacheOneDir( const STRING& aCategory ) throw( IO_ERROR )
+void DIR_LIB_SOURCE::cacheOneDir( const STRING& aCategory )
 {
     STRING      curDir = sourceURI;
 

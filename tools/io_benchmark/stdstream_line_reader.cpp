@@ -41,7 +41,7 @@ STDISTREAM_LINE_READER::~STDISTREAM_LINE_READER()
 }
 
 
-char* STDISTREAM_LINE_READER::ReadLine() throw( IO_ERROR )
+char* STDISTREAM_LINE_READER::ReadLine()
 {
     getline( *m_stream, m_buffer );
 
@@ -67,7 +67,7 @@ void STDISTREAM_LINE_READER::setStream( std::istream& aStream )
 }
 
 
-IFSTREAM_LINE_READER::IFSTREAM_LINE_READER( const wxFileName& aFileName ) throw( IO_ERROR ) :
+IFSTREAM_LINE_READER::IFSTREAM_LINE_READER( const wxFileName& aFileName )  :
         m_fStream( aFileName.GetFullName().ToUTF8() )
 {
     if( !m_fStream.is_open() )

@@ -223,7 +223,7 @@ leading sentence in the doxygen html output. The chosen format is
      * @throw IO_ERROR, if there is a problem outputting, such asisk.
      */
     int PRINTF_FUNC Print( int nestLevel,
-        const char* fmt, ... )
+        const char* fmt, ... );
 ~~~~~~~~~~~~~
 
 The “Function \<name\>” text goes on the 2nd line of the comment. The

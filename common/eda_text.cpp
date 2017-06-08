@@ -428,7 +428,6 @@ bool EDA_TEXT::IsDefaultFormatting() const
 
 
 void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-    throw( IO_ERROR )
 {
 #ifndef GERBVIEW        // Gerbview does not use EDA_TEXT::Format
                         // and does not define FMT_IU, used here

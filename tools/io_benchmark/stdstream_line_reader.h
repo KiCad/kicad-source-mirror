@@ -42,7 +42,7 @@ public:
 
     ~STDISTREAM_LINE_READER();
 
-    char* ReadLine() throw( IO_ERROR ) override;
+    char* ReadLine()  override;
 
 protected:
 
@@ -61,7 +61,7 @@ class IFSTREAM_LINE_READER : public STDISTREAM_LINE_READER
 {
 public:
 
-    IFSTREAM_LINE_READER( const wxFileName& aFileName ) throw( IO_ERROR );
+    IFSTREAM_LINE_READER( const wxFileName& aFileName );
 
     void Rewind();
 

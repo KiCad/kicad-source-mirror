@@ -560,7 +560,7 @@ public:
 
 private:
     void formatNetClass( NETCLASS* aNetClass, OUTPUTFORMATTER* aFormatter, int aNestLevel,
-                         int aControlBits ) const throw( IO_ERROR );
+                         int aControlBits ) const;
 };
 
 #endif  // BOARD_DESIGN_SETTINGS_H_

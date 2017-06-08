@@ -156,7 +156,7 @@ void LINE_READER::expandCapacity( unsigned newsize )
 
 FILE_LINE_READER::FILE_LINE_READER( const wxString& aFileName,
             unsigned aStartingLineNumber,
-            unsigned aMaxLineLength ) throw( IO_ERROR ) :
+            unsigned aMaxLineLength ):
     LINE_READER( aMaxLineLength ),
     iOwn( true )
 {
@@ -193,7 +193,7 @@ FILE_LINE_READER::~FILE_LINE_READER()
 }
 
 
-char* FILE_LINE_READER::ReadLine() throw( IO_ERROR )
+char* FILE_LINE_READER::ReadLine()
 {
     length = 0;
 
@@ -226,7 +226,7 @@ char* FILE_LINE_READER::ReadLine() throw( IO_ERROR )
 }
 
 
-STRING_LINE_READER::STRING_LINE_READER( const std::string& aString, const wxString& aSource ) :
+STRING_LINE_READER::STRING_LINE_READER( const std::string& aString, const wxString& aSource ):
     LINE_READER( LINE_READER_LINE_DEFAULT_MAX ),
     lines( aString ),
     ndx( 0 )
@@ -237,7 +237,7 @@ STRING_LINE_READER::STRING_LINE_READER( const std::string& aString, const wxStri
 }
 
 
-STRING_LINE_READER::STRING_LINE_READER( const STRING_LINE_READER& aStartingPoint ) :
+STRING_LINE_READER::STRING_LINE_READER( const STRING_LINE_READER& aStartingPoint ):
     LINE_READER( LINE_READER_LINE_DEFAULT_MAX ),
     lines( aStartingPoint.lines ),
     ndx( aStartingPoint.ndx )
@@ -250,7 +250,7 @@ STRING_LINE_READER::STRING_LINE_READER( const STRING_LINE_READER& aStartingPoint
 }
 
 
-char* STRING_LINE_READER::ReadLine() throw( IO_ERROR )
+char* STRING_LINE_READER::ReadLine()
 {
     size_t  nlOffset = lines.find( '\n', ndx );
 
@@ -290,7 +290,7 @@ INPUTSTREAM_LINE_READER::INPUTSTREAM_LINE_READER( wxInputStream* aStream, const 
 }
 
 
-char* INPUTSTREAM_LINE_READER::ReadLine() throw( IO_ERROR )
+char* INPUTSTREAM_LINE_READER::ReadLine()
 {
     length  = 0;
 
@@ -367,7 +367,7 @@ const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee )
     return GetQuoteChar( wrapee, quoteChar );
 }
 
-int OUTPUTFORMATTER::vprint( const char* fmt,  va_list ap )  throw( IO_ERROR )
+int OUTPUTFORMATTER::vprint( const char* fmt,  va_list ap )
 {
     // This function can call vsnprintf twice.
     // But internally, vsnprintf retrieves arguments from the va_list identified by arg as if
@@ -393,7 +393,7 @@ int OUTPUTFORMATTER::vprint( const char* fmt,  va_list ap )  throw( IO_ERROR )
 }
 
 
-int OUTPUTFORMATTER::sprint( const char* fmt, ... )  throw( IO_ERROR )
+int OUTPUTFORMATTER::sprint( const char* fmt, ... )
 {
     va_list     args;
 
@@ -405,7 +405,7 @@ int OUTPUTFORMATTER::sprint( const char* fmt, ... )  throw( IO_ERROR )
 }
 
 
-int OUTPUTFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IO_ERROR )
+int OUTPUTFORMATTER::Print( int nestLevel, const char* fmt, ... )
 {
 #define NESTWIDTH           2   ///< how many spaces per nestLevel
 
@@ -434,7 +434,7 @@ int OUTPUTFORMATTER::Print( int nestLevel, const char* fmt, ... ) throw( IO_ERRO
 }
 
 
-std::string OUTPUTFORMATTER::Quotes( const std::string& aWrapee ) throw( IO_ERROR )
+std::string OUTPUTFORMATTER::Quotes( const std::string& aWrapee )
 {
     static const char quoteThese[] = "\t ()\n\r";
 
@@ -483,7 +483,7 @@ std::string OUTPUTFORMATTER::Quotes( const std::string& aWrapee ) throw( IO_ERRO
 }
 
 
-std::string OUTPUTFORMATTER::Quotew( const wxString& aWrapee ) throw( IO_ERROR )
+std::string OUTPUTFORMATTER::Quotew( const wxString& aWrapee )
 {
     // wxStrings are always encoded as UTF-8 as we convert to a byte sequence.
     // The non-virutal function calls the virtual workhorse function, and if
@@ -496,7 +496,7 @@ std::string OUTPUTFORMATTER::Quotew( const wxString& aWrapee ) throw( IO_ERROR )
 
 //-----<STRING_FORMATTER>----------------------------------------------------
 
-void STRING_FORMATTER::write( const char* aOutBuf, int aCount ) throw( IO_ERROR )
+void STRING_FORMATTER::write( const char* aOutBuf, int aCount )
 {
     mystring.append( aOutBuf, aCount );
 }
@@ -519,7 +519,7 @@ void STRING_FORMATTER::StripUseless()
 //-----<FILE_OUTPUTFORMATTER>----------------------------------------
 
 FILE_OUTPUTFORMATTER::FILE_OUTPUTFORMATTER( const wxString& aFileName,
-        const wxChar* aMode,  char aQuoteChar ) throw( IO_ERROR ) :
+        const wxChar* aMode,  char aQuoteChar ):
     OUTPUTFORMATTER( OUTPUTFMTBUFZ, aQuoteChar ),
     m_filename( aFileName )
 {
@@ -542,7 +542,7 @@ FILE_OUTPUTFORMATTER::~FILE_OUTPUTFORMATTER()
 }
 
 
-void FILE_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount ) throw( IO_ERROR )
+void FILE_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount )
 {
     if( 1 != fwrite( aOutBuf, aCount, 1, m_fp ) )
     {
@@ -556,7 +556,7 @@ void FILE_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount ) throw( IO_ER
 
 //-----<STREAM_OUTPUTFORMATTER>--------------------------------------
 
-void STREAM_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount ) throw( IO_ERROR )
+void STREAM_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount )
 {
     int lastWrite;
 

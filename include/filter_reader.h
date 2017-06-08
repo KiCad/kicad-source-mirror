@@ -48,7 +48,7 @@ public:
 
     ~FILTER_READER();
 
-    char* ReadLine() throw( IO_ERROR ) override;
+    char* ReadLine() override;
 
     const wxString& GetSource() const override
     {
@@ -82,7 +82,7 @@ public:
 
     ~WHITESPACE_FILTER_READER();
 
-    char* ReadLine() throw( IO_ERROR ) override;
+    char* ReadLine() override;
 
     const wxString& GetSource() const override
     {

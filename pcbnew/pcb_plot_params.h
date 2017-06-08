@@ -165,9 +165,8 @@ public:
     void        SetSkipPlotNPTH_Pads( bool aSkip ) { m_skipNPTH_Pads = aSkip; }
     bool        GetSkipPlotNPTH_Pads() const { return m_skipNPTH_Pads; }
 
-    void        Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl=0 )
-                        const throw( IO_ERROR );
-    void        Parse( PCB_PLOT_PARAMS_PARSER* aParser ) throw( PARSE_ERROR, IO_ERROR );
+    void        Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl=0 ) const;
+    void        Parse( PCB_PLOT_PARAMS_PARSER* aParser );
 
     bool        operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
     bool        operator!=( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;

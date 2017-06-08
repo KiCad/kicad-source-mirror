@@ -283,7 +283,7 @@ LIB_PART* PART_LIB::ReplacePart( LIB_PART* aOldPart, LIB_PART* aNewPart )
 }
 
 
-PART_LIB* PART_LIB::LoadLibrary( const wxString& aFileName ) throw( IO_ERROR, boost::bad_pointer )
+PART_LIB* PART_LIB::LoadLibrary( const wxString& aFileName )
 {
     std::unique_ptr<PART_LIB> lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName ) );
 
@@ -307,7 +307,7 @@ PART_LIB* PART_LIB::LoadLibrary( const wxString& aFileName ) throw( IO_ERROR, bo
 }
 
 
-PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName ) throw( IO_ERROR, boost::bad_pointer )
+PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName )
 {
     PART_LIB* lib;
 
@@ -327,7 +327,6 @@ PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName ) throw( IO_ERROR, bo
 
 
 PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName, PART_LIBS::iterator& aIterator )
-    throw( IO_ERROR, boost::bad_pointer )
 {
     // Don't reload the library if it is already loaded.
     wxFileName fn( aFileName );
@@ -479,7 +478,6 @@ int PART_LIBS::GetModifyHash()
 
 void PART_LIBS::LibNamesAndPaths( PROJECT* aProject, bool doSave,
                                   wxString* aPaths, wxArrayString* aNames )
-    throw( IO_ERROR, boost::bad_pointer )
 {
     wxString pro = aProject->GetProjectFullName();
 
@@ -548,7 +546,6 @@ const wxString PART_LIBS::CacheName( const wxString& aFullProjectFilename )
 
 
 void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
-    throw( IO_ERROR, boost::bad_pointer )
 {
     wxString        filename;
     wxString        libs_not_found;

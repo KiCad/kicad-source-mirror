@@ -177,8 +177,7 @@ public:
         bold( false )
     {}
 
-    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-        throw( IO_ERROR );
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
     // trust compiler to write its own assignment operator for this class OK.
 };
@@ -200,8 +199,7 @@ struct TEXT_EFFECTS
         property( 0 )
     {}
 
-    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-        throw( IO_ERROR );
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
     // trust compiler to write its own assignment operator for this class OK.
 };
@@ -246,7 +244,6 @@ public:
      * outputs this object to @a aFormatter in s-expression form.
      */
     virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-        throw( IO_ERROR )
     {}
 };
 
@@ -263,8 +260,7 @@ protected:
     int         fillType;       // T_none, T_filled, or T_transparent
     POINTS      pts;
 
-    void formatContents( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-        throw( IO_ERROR );
+    void formatContents( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
 public:
     POLY_LINE( PART* aOwner ) :
@@ -274,8 +270,7 @@ public:
     {
     }
 
-    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-        throw( IO_ERROR );
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
     BASE_GRAPHIC* Clone( PART* aOwner ) const
     {
@@ -299,8 +294,7 @@ public:
         fillType  = PR::T_none;
     }
 
-    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-        throw( IO_ERROR );
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
     BASE_GRAPHIC* Clone( PART* aOwner ) const
     {
@@ -330,8 +324,7 @@ public:
     {
     }
 
-    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-        throw( IO_ERROR );
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
     BASE_GRAPHIC* Clone( PART* aOwner ) const
     {
@@ -362,8 +355,7 @@ public:
     {
     }
 
-    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-        throw( IO_ERROR );
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
     BASE_GRAPHIC* Clone( PART* aOwner ) const
     {
@@ -396,8 +388,7 @@ public:
     {
     }
 
-    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-        throw( IO_ERROR );
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
     BASE_GRAPHIC* Clone( PART* aOwner ) const
     {
@@ -441,8 +432,7 @@ public:
         return SWEET_LEXER::TokenName( PR::T( aJustify ) );
     }
 
-    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-        throw( IO_ERROR );
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
     BASE_GRAPHIC* Clone( PART* aOwner ) const
     {
@@ -507,8 +497,7 @@ public:
         return effects;
     }
 
-    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-        throw( IO_ERROR );
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
     BASE_GRAPHIC* Clone( PART* aOwner ) const
     {
@@ -529,8 +518,7 @@ struct PINTEXT
         isVisible( true )
     {}
 
-    void Format( OUTPUTFORMATTER* aFormatter, const char* aElement, int aNestLevel, int aControlBits ) const
-        throw( IO_ERROR );
+    void Format( OUTPUTFORMATTER* aFormatter, const char* aElement, int aNestLevel, int aControlBits ) const;
 };
 
 
@@ -565,8 +553,7 @@ public:
         return SWEET_LEXER::TokenName( PR::T( shape ) );
     }
 
-    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
-        throw( IO_ERROR );
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const;
 
     BASE_GRAPHIC* Clone( PART* aOwner ) const
     {
@@ -626,7 +613,7 @@ public:
      * instead an exception would be thrown.
      * @throw IO_ERROR if any problem occurs or if the part cannot be found.
      */
-    PART* Lookup( LIB_TABLE* aLibTable, LIB* aFallBackLib ) throw( IO_ERROR )
+    PART* Lookup( LIB_TABLE* aLibTable, LIB* aFallBackLib )
     {
         if( !part )
         {
@@ -725,8 +712,7 @@ public:
      * @param aControlBits are bit flags ORed together which control how the output
      *  is done.
      */
-    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits = 0 ) const
-        throw( IO_ERROR );
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits = 0 ) const;
 
     /**
      * Function PropDelete

@@ -83,7 +83,7 @@ public:
      * @param nestLevel A multiple of the number of spaces to preceed the output with.
      * @throw IO_ERROR if a system error writing the output, such as a full disk.
      */
-    virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR );
+    virtual void Format( OUTPUTFORMATTER* out, int nestLevel );
 
     /**
      * Function FormatContents
@@ -93,7 +93,7 @@ public:
      * @param nestLevel A multiple of the number of spaces to preceed the output with.
      * @throw IO_ERROR if a system error writing the output, such as a full disk.
      */
-    virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR );
+    virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel );
 
 };
 

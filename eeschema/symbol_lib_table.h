@@ -127,7 +127,7 @@ public:
      *
      * @throw IO_ERROR if \a aNickName cannot be found.
      */
-    const SYMBOL_LIB_TABLE_ROW* FindRow( const wxString& aNickName ) throw( IO_ERROR );
+    const SYMBOL_LIB_TABLE_ROW* FindRow( const wxString& aNickName );
 
     //-----<PLUGIN API SUBSET, REBASED ON aNickname>---------------------------
 
@@ -254,8 +254,7 @@ public:
      *                   is thrown in the case where aId cannot be found.
      * @throw   PARSE_ERROR if @a atId is not parsed OK.
      */
-    LIB_ALIAS* LoadSymbolWithOptionalNickname( const LIB_ID& aId )
-        throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception );
+    LIB_ALIAS* LoadSymbolWithOptionalNickname( const LIB_ID& aId );
 
     /**
      * Function LoadGlobalTable
@@ -270,8 +269,7 @@ public:
      * @return true if the global library table exists and is loaded properly.
      * @throw IO_ERROR if an error occurs attempting to load the symbol library table.
      */
-    static bool LoadGlobalTable( SYMBOL_LIB_TABLE& aTable )
-        throw (IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception );
+    static bool LoadGlobalTable( SYMBOL_LIB_TABLE& aTable );
 
     /**
      * Function GetGlobalTableFileName

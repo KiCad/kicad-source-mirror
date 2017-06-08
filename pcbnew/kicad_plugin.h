@@ -145,8 +145,7 @@ public:
      * @param aNestLevel The indentation nest level.
      * @throw IO_ERROR on write error.
      */
-    void Format( BOARD_ITEM* aItem, int aNestLevel = 0 ) const
-        throw( IO_ERROR );
+    void Format( BOARD_ITEM* aItem, int aNestLevel = 0 ) const;
 
     std::string GetStringOutput( bool doClear )
     {
@@ -159,8 +158,7 @@ public:
 
     void SetOutputFormatter( OUTPUTFORMATTER* aFormatter ) { m_out = aFormatter; }
 
-    BOARD_ITEM* Parse( const wxString& aClipboardSourceInput )
-        throw( FUTURE_FORMAT_ERROR, PARSE_ERROR, IO_ERROR );
+    BOARD_ITEM* Parse( const wxString& aClipboardSourceInput );
 
 protected:
 
@@ -189,43 +187,31 @@ protected:
     void init( const PROPERTIES* aProperties );
 
 private:
-    void format( BOARD* aBoard, int aNestLevel = 0 ) const
-        throw( IO_ERROR );
+    void format( BOARD* aBoard, int aNestLevel = 0 ) const;
 
-    void format( DIMENSION* aDimension, int aNestLevel = 0 ) const
-        throw( IO_ERROR );
+    void format( DIMENSION* aDimension, int aNestLevel = 0 ) const;
 
-    void format( EDGE_MODULE* aModuleDrawing, int aNestLevel = 0 ) const
-        throw( IO_ERROR );
+    void format( EDGE_MODULE* aModuleDrawing, int aNestLevel = 0 ) const;
 
-    void format( DRAWSEGMENT* aSegment, int aNestLevel = 0 ) const
-        throw( IO_ERROR );
+    void format( DRAWSEGMENT* aSegment, int aNestLevel = 0 ) const;
 
-    void format( PCB_TARGET* aTarget, int aNestLevel = 0 ) const
-        throw( IO_ERROR );
+    void format( PCB_TARGET* aTarget, int aNestLevel = 0 ) const;
 
-    void format( MODULE* aModule, int aNestLevel = 0 ) const
-        throw( IO_ERROR );
+    void format( MODULE* aModule, int aNestLevel = 0 ) const;
 
-    void format( D_PAD* aPad, int aNestLevel = 0 ) const
-        throw( IO_ERROR );
+    void format( D_PAD* aPad, int aNestLevel = 0 ) const;
 
-    void format( TEXTE_PCB* aText, int aNestLevel = 0 ) const
-        throw( IO_ERROR );
+    void format( TEXTE_PCB* aText, int aNestLevel = 0 ) const;
 
-    void format( TEXTE_MODULE* aText, int aNestLevel = 0 ) const
-        throw( IO_ERROR );
+    void format( TEXTE_MODULE* aText, int aNestLevel = 0 ) const;
 
-    void format( TRACK* aTrack, int aNestLevel = 0 ) const
-        throw( IO_ERROR );
+    void format( TRACK* aTrack, int aNestLevel = 0 ) const;
 
-    void format( ZONE_CONTAINER* aZone, int aNestLevel = 0 ) const
-        throw( IO_ERROR );
+    void format( ZONE_CONTAINER* aZone, int aNestLevel = 0 ) const;
 
     void formatLayer( const BOARD_ITEM* aItem ) const;
 
-    void formatLayers( LSET aLayerMask, int aNestLevel = 0 ) const
-        throw( IO_ERROR );
+    void formatLayers( LSET aLayerMask, int aNestLevel = 0 ) const;
 };
 
 #endif  // KICAD_PLUGIN_H_

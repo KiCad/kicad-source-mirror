@@ -187,7 +187,7 @@ class GPCB_FPL_CACHE
     wxDateTime      m_mod_time;     /// Footprint library path modified time stamp.
     MODULE_MAP      m_modules;      /// Map of footprint file name per MODULE*.
 
-    MODULE* parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR, PARSE_ERROR );
+    MODULE* parseMODULE( LINE_READER* aLineReader );
 
     /**
      * Function testFlags
@@ -418,7 +418,7 @@ bool GPCB_FPL_CACHE::IsModified( const wxString& aLibPath, const wxString& aFoot
 }
 
 
-MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR, PARSE_ERROR )
+MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
 {
     #define TEXT_DEFAULT_SIZE  ( 40*IU_PER_MILS )
     #define OLD_GPCB_UNIT_CONV IU_PER_MILS

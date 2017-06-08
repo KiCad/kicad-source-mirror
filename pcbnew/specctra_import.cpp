@@ -197,7 +197,7 @@ static wxPoint mapPt( const POINT& aPoint, UNIT_RES* aResolution )
 }
 
 
-TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) throw( IO_ERROR )
+TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
 {
     int layerNdx = findLayerName( aPath->layer_id );
 
@@ -222,7 +222,6 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
 
 ::VIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint,
             int aNetCode, int aViaDrillDefault )
-    throw( IO_ERROR )
 {
     ::VIA*  via = 0;
     SHAPE*  shape;
@@ -358,7 +357,7 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
 // no UI code in this function, throw exception to report problems to the
 // UI handler: void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
 
-void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
+void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 {
     sessionBoard = aBoard;      // not owned here
 

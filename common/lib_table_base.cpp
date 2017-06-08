@@ -357,7 +357,7 @@ bool LIB_TABLE::InsertRow( LIB_TABLE_ROW* aRow, bool doReplace )
 
 
 void LIB_TABLE::Load( const wxString& aFileName )
-    throw( IO_ERROR )
+
 {
     // It's OK if footprint library tables are missing.
     if( wxFileName::IsFileReadable( aFileName ) )
@@ -371,7 +371,6 @@ void LIB_TABLE::Load( const wxString& aFileName )
 
 
 void LIB_TABLE::Save( const wxString& aFileName ) const
-    throw( IO_ERROR, boost::interprocess::lock_exception )
 {
     FILE_OUTPUTFORMATTER sf( aFileName );
     Format( &sf, 0 );
