@@ -62,6 +62,8 @@ private:
     // set to TRUE if the origin was actually parsed
     bool        m_hasGridOrigin;
     bool        m_hasDrillOrigin;
+    // the names of layers in use, and the internal layer ID
+    std::map<std::string, int> m_layersNames;
 
     // PCB parameters/entities
     double                      m_thickness;
@@ -71,12 +73,15 @@ private:
     bool parsePCB( SEXPR::SEXPR* data );
     bool parseGeneral( SEXPR::SEXPR* data );
     bool parseSetup( SEXPR::SEXPR* data );
+    bool parseLayers( SEXPR::SEXPR* data );
     bool parseModule( SEXPR::SEXPR* data );
     bool parseCurve( SEXPR::SEXPR* data, CURVE_TYPE aCurveType );
 
 public:
     KICADPCB();
     virtual ~KICADPCB();
+
+    int GetLayerId( std::string& aLayerName );
 
     void SetOrigin( double aXOrigin, double aYOrigin )
     {

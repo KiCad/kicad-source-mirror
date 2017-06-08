@@ -55,6 +55,8 @@ private:
     bool parseText( SEXPR::SEXPR* data );
     bool parsePad( SEXPR::SEXPR* data );
 
+    KICADPCB* m_parent;     // The parent KICADPCB, to know layer names
+
     LAYERS      m_side;
     std::string m_refdes;
     DOUBLET     m_position;
@@ -66,7 +68,7 @@ private:
     std::vector< KICADMODEL* >  m_models;
 
 public:
-    KICADMODULE();
+    KICADMODULE( KICADPCB* aParent );
     virtual ~KICADMODULE();
 
     bool Read( SEXPR::SEXPR* aEntry );

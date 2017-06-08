@@ -246,6 +246,8 @@ bool KICADPCB::parsePCB( SEXPR::SEXPR* data )
                 result = result && parseGeneral( child );
             else if( symname == "setup" )
                 result = result && parseSetup( child );
+            else if( symname == "layers" )
+                result = result && parseLayers( child );
             else if( symname == "module" )
                 result = result && parseModule( child );
             else if( symname == "gr_arc" )
@@ -301,6 +303,44 @@ bool KICADPCB::parseGeneral( SEXPR::SEXPR* data )
     wxLogMessage( "%s\n", ostr.str().c_str() );
 
     return false;
+}
+
+
+bool KICADPCB::parseLayers( SEXPR::SEXPR* data )
+{
+    size_t nc = data->GetNumberOfChildren();
+    SEXPR::SEXPR* child = NULL;
+
+    // Read the layername and the correstponding layer id list:
+    for( size_t i = 1; i < nc; ++i )
+    {
+        child = data->GetChild( i );
+
+        if( !child->IsList() )
+        {
+            std::ostringstream ostr;
+            ostr << "* corrupt PCB file (line " << child->GetLineNumber();
+            ostr << "): '" << m_filename << "'\n";
+            wxLogMessage( "%s\n", ostr.str().c_str() );
+            return false;
+        }
+
+        m_layersNames[child->GetChild( 1 )->GetSymbol()] =
+                      child->GetChild( 0 )->GetInteger();
+    }
+
+    return true;
+}
+
+int KICADPCB::GetLayerId( std::string& aLayerName )
+{
+    int lid = -1;
+    auto item = m_layersNames.find( aLayerName );
+
+    if( item != m_layersNames.end() )
+        lid = item->second;
+
+    return lid;
 }
 
 
@@ -369,7 +409,7 @@ bool KICADPCB::parseSetup( SEXPR::SEXPR* data )
 
 bool KICADPCB::parseModule( SEXPR::SEXPR* data )
 {
-    KICADMODULE* mp = new KICADMODULE();
+    KICADMODULE* mp = new KICADMODULE( this );
 
     if( !mp->Read( data ) )
     {

@@ -35,8 +35,9 @@
 #include "oce_utils.h"
 
 
-KICADMODULE::KICADMODULE()
+KICADMODULE::KICADMODULE( KICADPCB* aParent )
 {
+    m_parent = aParent;
     m_side = LAYER_NONE;
     m_rotation = 0.0;
     m_virtual = false;
@@ -172,12 +173,12 @@ bool KICADMODULE::parseCurve( SEXPR::SEXPR* data, CURVE_TYPE aCurveType )
 bool KICADMODULE::parseLayer( SEXPR::SEXPR* data )
 {
     SEXPR::SEXPR* val = data->GetChild( 1 );
-    std::string layer;
+    std::string layername;
 
     if( val->IsSymbol() )
-        layer = val->GetSymbol();
+        layername = val->GetSymbol();
     else if( val->IsString() )
-        layer = val->GetString();
+        layername = val->GetString();
     else
     {
         std::ostringstream ostr;
@@ -187,10 +188,12 @@ bool KICADMODULE::parseLayer( SEXPR::SEXPR* data )
         return false;
     }
 
-    if( layer == "F.Cu" )
-        m_side = LAYER_TOP;
-    else if( layer == "B.Cu" )
+    int layerId = m_parent->GetLayerId( layername );
+
+    if( layerId == 31 )
         m_side = LAYER_BOTTOM;
+    else
+        m_side = LAYER_TOP;
 
     return true;
 }
