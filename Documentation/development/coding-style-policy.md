@@ -223,7 +223,7 @@ leading sentence in the doxygen html output. The chosen format is
      * @throw IO_ERROR, if there is a problem outputting, such asisk.
      */
     int PRINTF_FUNC Print( int nestLevel,
-        const char* fmt, ... ) throw( IO_ERROR );
+        const char* fmt, ... )
 ~~~~~~~~~~~~~
 
 The “Function \<name\>” text goes on the 2nd line of the comment. The
@@ -626,7 +626,7 @@ below was taken directly from the KiCad source.
          * @return int - The number of bytes read, 0 at end of file.
          * @throw IOError only when a line is too long.
          */
-        int ReadLine() throw (IOError);
+        int ReadLine();
 
         operator char* ()
         {
@@ -685,7 +685,7 @@ below was taken directly from the KiCad source.
          * @return int - the number of characters output.
          * @throw IOError, if there is a problem outputting, such as a full disk.
          */
-        virtual int PRINTF_FUNC Print( int nestLevel, const char* fmt, ... ) throw( IOError ) = 0;
+        virtual int PRINTF_FUNC Print( int nestLevel, const char* fmt, ... ) = 0;
 
         /*/** */*
          * Function GetQuoteChar
@@ -771,7 +771,7 @@ below was taken directly from the KiCad source.
 
 
         //-----<OUTPUTFORMATTER>------------------------------------------------
-        int PRINTF_FUNC Print( int nestLevel, const char* fmt, ... ) throw( IOError );
+        int PRINTF_FUNC Print( int nestLevel, const char* fmt, ... );
         const char* GetQuoteChar( const char* wrapee );
         //-----</OUTPUTFORMATTER>-----------------------------------------------
     };

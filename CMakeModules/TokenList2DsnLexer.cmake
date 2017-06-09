@@ -298,7 +298,7 @@ public:
      * @return ${enum}::T - the type of token found next.
      * @throw IO_ERROR - only if the LINE_READER throws it.
      */
-    ${enum}::T NextTok() throw( IO_ERROR )
+    ${enum}::T NextTok()
     {
         return (${enum}::T) DSNLEXER::NextTok();
     }
@@ -311,7 +311,7 @@ public:
      * @return int - the actual token read in.
      * @throw IO_ERROR, if the next token does not satisfy IsSymbol()
      */
-    ${enum}::T NeedSYMBOL() throw( IO_ERROR )
+    ${enum}::T NeedSYMBOL()
     {
         return (${enum}::T) DSNLEXER::NeedSYMBOL();
     }
@@ -324,7 +324,7 @@ public:
      * @return int - the actual token read in.
      * @throw IO_ERROR, if the next token does not satisfy the above test
      */
-    ${enum}::T NeedSYMBOLorNUMBER() throw( IO_ERROR )
+    ${enum}::T NeedSYMBOLorNUMBER()
     {
         return (${enum}::T) DSNLEXER::NeedSYMBOLorNUMBER();
     }
