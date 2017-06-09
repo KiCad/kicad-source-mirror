@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-07 09:28+0200\n"
-"PO-Revision-Date: 2017-06-07 09:51+0200\n"
+"POT-Creation-Date: 2017-06-08 11:36+0200\n"
+"PO-Revision-Date: 2017-06-08 11:55+0200\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -1211,7 +1211,7 @@ msgid "Negative"
 msgstr "Negativo"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:137
-#: eeschema/dialogs/dialog_bom_editor_base.cpp:52
+#: eeschema/dialogs/dialog_bom_editor_base.cpp:35
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:112
 #: eeschema/dialogs/dialog_erc_base.cpp:147
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:75
@@ -1778,7 +1778,7 @@ msgstr "Copiar información de la versión"
 #: common/dialogs/dialog_display_info_HTML_base.cpp:22 common/zoom.cpp:300
 #: eeschema/dialogs/dialog_annotate_base.cpp:212
 #: eeschema/dialogs/dialog_bom_base.cpp:62
-#: eeschema/dialogs/dialog_bom_editor_base.cpp:121
+#: eeschema/dialogs/dialog_bom_editor_base.cpp:104
 #: eeschema/dialogs/dialog_erc_base.cpp:101
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:128
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:53
@@ -2528,7 +2528,7 @@ msgstr "No se puede crear la ruta '%s' de la tabla global de librerías"
 msgid "Command <%s> could not found"
 msgstr "No se ha encontrado el comando <%s>"
 
-#: common/gestfich.cpp:376
+#: common/gestfich.cpp:377
 #, c-format
 msgid ""
 "Problem while running the PDF viewer\n"
@@ -2539,8 +2539,8 @@ msgstr ""
 
 #: common/gestfich.cpp:384
 #, c-format
-msgid "Unable to find a PDF viewer for <%s>"
-msgstr "No se ha encontrado un visor PDF para <%s>"
+msgid "Unable to find a PDF viewer for '%s'"
+msgstr "No se puede encontrar un visor de PDF para '%s'"
 
 #: common/grid_tricks.cpp:115
 msgid "Cut\tCTRL+X"
@@ -4316,52 +4316,52 @@ msgstr "Mostrar"
 msgid "Sort"
 msgstr "Ordenar"
 
-#: eeschema/dialogs/dialog_bom_editor.cpp:137
+#: eeschema/dialogs/dialog_bom_editor.cpp:141
 msgid "Changes exist in component table"
 msgstr "Existen cambios en la tabla de componentes"
 
-#: eeschema/dialogs/dialog_bom_editor.cpp:266
+#: eeschema/dialogs/dialog_bom_editor.cpp:277
 #, c-format
 msgid "Component table - %u components in %u groups"
 msgstr "Tabla de componentes - %u componentes en %u grupos"
 
-#: eeschema/dialogs/dialog_bom_editor.cpp:271
+#: eeschema/dialogs/dialog_bom_editor.cpp:282
 #, c-format
 msgid "Component table - %u components"
 msgstr "Tabla de componentes - %u componentes"
 
-#: eeschema/dialogs/dialog_bom_editor.cpp:277
+#: eeschema/dialogs/dialog_bom_editor.cpp:288
 #, c-format
 msgid " - %u changed"
 msgstr " - %u cambiados"
 
-#: eeschema/dialogs/dialog_bom_editor.cpp:421
+#: eeschema/dialogs/dialog_bom_editor.cpp:441
 msgid "Revert all component table changes?"
 msgstr "¿Deshacer todos los cambios de la tabla de componentes?"
 
-#: eeschema/dialogs/dialog_bom_editor_base.cpp:54
+#: eeschema/dialogs/dialog_bom_editor_base.cpp:37
 msgid "Group components"
 msgstr "Agrupar componentes"
 
-#: eeschema/dialogs/dialog_bom_editor_base.cpp:56
+#: eeschema/dialogs/dialog_bom_editor_base.cpp:39
 msgid "Group components together based on common properties"
 msgstr "Agrupar componentes en base a propiedades comunes"
 
-#: eeschema/dialogs/dialog_bom_editor_base.cpp:60
+#: eeschema/dialogs/dialog_bom_editor_base.cpp:43
 msgid "Regroup components"
 msgstr "Reagrupar componentes"
 
-#: eeschema/dialogs/dialog_bom_editor_base.cpp:70
+#: eeschema/dialogs/dialog_bom_editor_base.cpp:53
 #: eeschema/widgets/widget_eeschema_color_config.cpp:77
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:24
 msgid "Fields"
 msgstr "Campos"
 
-#: eeschema/dialogs/dialog_bom_editor_base.cpp:112
+#: eeschema/dialogs/dialog_bom_editor_base.cpp:95
 msgid "Apply Changes"
 msgstr "Aplicar cambios"
 
-#: eeschema/dialogs/dialog_bom_editor_base.cpp:115
+#: eeschema/dialogs/dialog_bom_editor_base.cpp:98
 msgid "Revert Changes"
 msgstr "Deshacer cambios"
 
@@ -8946,7 +8946,7 @@ msgstr "Muestra la lista de atajos de teclado y los comandos correspondientes"
 msgid "Get &Involved"
 msgstr "Colabore con KiCad"
 
-#: eeschema/menubar.cpp:563
+#: eeschema/menubar.cpp:563 pcbnew/menubar_modedit.cpp:364
 msgid "Contribute to KiCad (open web browser)"
 msgstr "Contribuya con KiCad (abre el navegador web)"
 
@@ -13138,8 +13138,8 @@ msgid "Left Top page corner"
 msgstr "Esquina superior izquierda"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:127
-msgid " Origin of coordinates displayed to the status bar"
-msgstr "El origen de coordenadas se muestra en la barra de estado"
+msgid "Origin of coordinates displayed to the status bar"
+msgstr "Origen de las coordenadas mostradas en la barra de estado"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:140
 msgid "Page 1"
@@ -13956,11 +13956,11 @@ msgid "This regulator is already in list. Aborted"
 msgstr "El regulador ya se encuentra en la lista. Cancelado."
 
 #: pcb_calculator/regulators_funct.cpp:398
-msgid " Vout must be greater than vref"
-msgstr " Vout debe ser mayor que Vref"
+msgid "Vout must be greater than vref"
+msgstr "Vout debe ser mayor que vref"
 
 #: pcb_calculator/regulators_funct.cpp:404
-msgid " Vref set to 0 !"
+msgid "Vref set to 0 !"
 msgstr " ¡Vref igual a 0!"
 
 #: pcb_calculator/regulators_funct.cpp:410
@@ -16675,7 +16675,7 @@ msgstr "Mostrar nombres de red:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:34
 msgid "Show or hide net names on pads and/or tracks."
-msgstr ""
+msgstr "Mostrar u ocultar los nombres de red en los pads y/o pistas."
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:38
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:126
@@ -16710,6 +16710,8 @@ msgid ""
 "Show or hide the track and via clearance area. If \"New track\" is selected, "
 "track clearance area is shown only when creating the track."
 msgstr ""
+"Mostrar u ocultar los márgenes de pistas y vías. Si se selecciona Nueva "
+"pista, el margen de la pista solo se muestra al crear la pista."
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:53
 msgid "Tracks and Vias:"
@@ -16808,11 +16810,11 @@ msgstr "Introduzca el diámetro mínimo aceptable para microvías"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:108
 msgid "Check footprint courtyard overlap"
-msgstr ""
+msgstr "Comprobar el solapamiento del área de la huella"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:111
 msgid "Check courtyard missing in footprints"
-msgstr ""
+msgstr "Comprobar áreas no definidas en las huellas"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:123
 msgid "Create Report File"
@@ -16864,11 +16866,11 @@ msgstr "Mensajes de error:"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:215
 msgid "Marker count:"
-msgstr ""
+msgstr "Número de marcadores:"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:226
 msgid "Unconnected count:"
-msgstr ""
+msgstr "Número de no conectados:"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:243
 msgid ""
@@ -16910,6 +16912,8 @@ msgid ""
 "Use this attribute for \"virtual\" components drawn on board\n"
 "like an edge connector (old ISA PC bus for instance)"
 msgstr ""
+"Utilice este atributo para componentes \"virtuales\" dibujados en la placa\n"
+"(como, por ejemplo, un antiguo conector de BUS ISA)"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:365
 msgid ""
@@ -16942,28 +16946,28 @@ msgstr "Nombre de archivo no válido: "
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:498
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:356
 msgid "Edit 3D file name"
-msgstr ""
+msgstr "Editar nombre del archivo 3D"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:588
 msgid "Error: invalid footprint parameter"
-msgstr ""
+msgstr "Error: parámetro de huella no válido"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:594
 msgid "Error: invalid 3D parameter"
-msgstr ""
+msgstr "Error: parámetro 3D no válido"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:614
 msgid "Error: invalid or missing footprint parameter"
-msgstr ""
+msgstr "Error: parámetro de huella no válido o no existente"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:620
 msgid "Error: invalid or missing 3D parameter"
-msgstr ""
+msgstr "Error: parámetro 3D no válido o no existente"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:743
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:528
 msgid "Modify module properties"
-msgstr ""
+msgstr "Modificar las propiedades del módulo"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:58
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1393
@@ -17024,7 +17028,7 @@ msgstr "Editor de huellas"
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:137
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:102
 msgid "Placement type"
-msgstr ""
+msgstr "Tipo de emplazamiento"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:141
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:106
@@ -17229,11 +17233,11 @@ msgstr "Documentación"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:75
 msgid "Footprint name in library"
-msgstr ""
+msgstr "Nombre de la huella en la librería"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:82
 msgid "Library nickname"
-msgstr ""
+msgstr "Apodo de la librería"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:106
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:22
@@ -17312,7 +17316,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:330
 msgid "Modify module text"
-msgstr ""
+msgstr "Modificar texto del módulo"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:24
 #, c-format
@@ -17499,77 +17503,84 @@ msgstr "Unidades de salida:"
 #: pcbnew/dialogs/dialog_export_step.cpp:192
 msgid "STEP export failed; please save the PCB and try again"
 msgstr ""
+"Error al exportar el STEP; por favor, guarde la placa e inténtelo de nuevo"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:193
 #: pcbnew/dialogs/dialog_export_step.cpp:232
 #: pcbnew/dialogs/dialog_export_step.cpp:312
 msgid "STEP Export"
-msgstr ""
+msgstr "Exportar STEP"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:228
 msgid "File: "
-msgstr ""
+msgstr "Archivo: "
 
 #: pcbnew/dialogs/dialog_export_step.cpp:231
 msgid "File exists, overwrite?"
-msgstr ""
+msgstr "Archivo existente, ¿sobreescribir?"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:311
 msgid ""
 "Unable to create STEP file; check that the board has a valid outline and "
 "models."
 msgstr ""
+"No puede crearse el archivo STEP; compruebe que la placa tiene un perímetro "
+"y modelos válidos."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:19
 msgid "STEP File name:"
-msgstr ""
+msgstr "Nombre del archivo STEP:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:23
 msgid "Select a STEP export filename"
-msgstr ""
+msgstr "Seleccione un nombre para exportar el archivo STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:35
 msgid "STEP coordinates origin options:"
-msgstr ""
+msgstr "Opciones del origen de coordenadas STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:49
 msgid "Drill and plot axis origin"
-msgstr ""
+msgstr "Origen de los ejes de taladrado y trazado"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:50
 msgid ""
 "Use the auxiliary axis origin (used in plot and drill geneation) as STEP "
 "coordinates origin."
 msgstr ""
+"Utilizar el origen de los ejes auxiliares (usado en la creación de taladros "
+"y trazado) como origen de coordenadas STEP."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:57
 msgid "Grid origin"
-msgstr ""
+msgstr "Origen de la cuadrícula"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:58
 msgid "Use the grid origin as STEP coordinates origin."
-msgstr ""
+msgstr "Utilizar el origen de la cuadrícula como origen de coordenadas STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:65
 msgid "User defined origin"
-msgstr ""
+msgstr "Origen personalizado"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:66
 msgid ""
 "Use this option if you want to define a specific coordinate origin value."
 msgstr ""
+"Utilizar esta opción para definir un valor específico del origen de "
+"coordenadas."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:79
 msgid "User defined origin:"
-msgstr ""
+msgstr "Origen personalizado:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:148
 msgid "Other options:"
-msgstr ""
+msgstr "Otras opciones:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:162
 msgid "Ignore Virtual Components"
-msgstr ""
+msgstr "Ignorar componentes virtuales"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:244
 #, c-format
@@ -17654,27 +17665,27 @@ msgstr "Buscar marcador"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:149
 msgid "All footprint generator scripts were loaded"
-msgstr ""
+msgstr "Se han cargado todos los scripts de generación de huellas"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:65
 msgid "Available footprint generators"
-msgstr ""
+msgstr "Generadores de huellas disponibles"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:70
 msgid "Search paths:"
-msgstr ""
+msgstr "Rutas de búsqueda:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:77
 msgid "Not loadable python scripts:"
-msgstr ""
+msgstr "Scripts de python no cargables:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:84
 msgid "Show Trace"
-msgstr ""
+msgstr "Mostrar pista"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:101
 msgid "Update Python Modules"
-msgstr ""
+msgstr "Actualizar módulos de python"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:302
 #, c-format
@@ -17947,12 +17958,14 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gendrill.cpp:138
 #: pcbnew/dialogs/dialog_gendrill.cpp:139
 msgid "Use Netclass values"
-msgstr ""
+msgstr "Utilizar valores de clase de red"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:410
 #, c-format
 msgid "Could not write drill and/or map files to folder \"%s\"."
 msgstr ""
+"No se han podido escribir los archivos de taladrado y/o mapa en la carpeta "
+"\"%s\"."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:457
 msgid "Save Drill Report File"
@@ -22791,10 +22804,6 @@ msgstr "Abrir el manual de Pcbnew"
 msgid "Displays current hotkeys table and corresponding commands"
 msgstr ""
 
-#: pcbnew/menubar_modedit.cpp:364
-msgid "Contribute to KiCad (opens in web browser)"
-msgstr ""
-
 #: pcbnew/menubar_modedit.cpp:380
 msgid "Di&mensions"
 msgstr "Di&mensiones"
@@ -26066,7 +26075,7 @@ msgstr "Anotar esquema"
 msgid "Bill of Material"
 msgstr "Lista de materiales"
 
-#: eeschema/dialogs/dialog_bom_editor_base.h:95
+#: eeschema/dialogs/dialog_bom_editor_base.h:74
 msgid "BOM editor"
 msgstr ""
 
@@ -26530,6 +26539,18 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importar archivo DXF"
+
+#~ msgid "Unable to find a PDF viewer for <%s>"
+#~ msgstr "No se ha encontrado un visor PDF para <%s>"
+
+#~ msgid " Origin of coordinates displayed to the status bar"
+#~ msgstr "El origen de coordenadas se muestra en la barra de estado"
+
+#~ msgid " Vout must be greater than vref"
+#~ msgstr " Vout debe ser mayor que Vref"
+
+#~ msgid " Vref set to 0 !"
+#~ msgstr " ¡Vref igual a 0!"
 
 #~ msgid "User Grid"
 #~ msgstr "Cuadrícula Usuario"
