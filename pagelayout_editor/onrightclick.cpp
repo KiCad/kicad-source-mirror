@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -63,6 +63,14 @@ bool PL_EDITOR_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
 {
     bool busy = GetScreen()->GetCurItem() != NULL;
     wxString msg;
+
+    // If the tool ID_ZOOM_SELECTION is currently in use, add a
+    if( GetToolId() == ID_ZOOM_SELECTION && !busy )
+    {
+        AddMenuItem( aPopMenu, ID_NO_TOOL_SELECTED, _( "End Tool" ),
+                     KiBitmap( cursor_xpm ) );
+        aPopMenu->AppendSeparator();
+    }
 
     if( ! busy )     // No item currently edited
     {

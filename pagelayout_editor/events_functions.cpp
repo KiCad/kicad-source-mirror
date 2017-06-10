@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -97,13 +97,15 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_CHOICE( ID_SELECT_COORDINATE_ORIGIN, PL_EDITOR_FRAME::OnSelectCoordOriginCorner)
     EVT_CHOICE( ID_SELECT_PAGE_NUMBER, PL_EDITOR_FRAME::Process_Special_Functions)
 
-    // Vertical toolbar:
+    // the ID_NO_TOOL_SELECTED id TOOL does not existing currently, but the right click
+    // popup menu can generate this event.
     EVT_TOOL( ID_NO_TOOL_SELECTED, PL_EDITOR_FRAME::Process_Special_Functions )
 
     EVT_MENU_RANGE( ID_POPUP_START_RANGE, ID_POPUP_END_RANGE,
                     PL_EDITOR_FRAME::Process_Special_Functions )
 
     EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, PL_EDITOR_FRAME::OnUpdateSelectTool )
+
     EVT_UPDATE_UI( ID_ZOOM_SELECTION, PL_EDITOR_FRAME::OnUpdateSelectTool )
     EVT_UPDATE_UI( ID_SHOW_REAL_MODE, PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayNormalMode )
     EVT_UPDATE_UI( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnUpdateTitleBlockDisplaySpecialMode )
@@ -130,7 +132,11 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_ZOOM_SELECTION:
-        SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
+        // This tool is located on the main toolbar: switch it on or off on click
+        if( GetToolId() != ID_ZOOM_SELECTION )
+            SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
+        else
+            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         break;
 
     case ID_SELECT_PAGE_NUMBER:
@@ -602,6 +608,5 @@ void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplaySpecialMode( wxUpdateUIEvent& eve
 
 void PL_EDITOR_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 {
-    if( aEvent.GetEventObject() == m_mainToolBar )
-        aEvent.Check( GetToolId() == aEvent.GetId() );
+    aEvent.Check( GetToolId() == aEvent.GetId() );
 }

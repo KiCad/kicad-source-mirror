@@ -92,10 +92,6 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
     m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiBitmap( zoom_area_xpm ),
                             _( "Zoom to selection" ), wxITEM_CHECK );
 
-    m_mainToolBar->AddSeparator();
-    m_mainToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ),
-                            wxEmptyString, wxITEM_CHECK );
-
     // Display mode switch
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_SHOW_REAL_MODE, wxEmptyString,
