@@ -53,7 +53,7 @@
  * put text in aTarget
  * return a pointer to the last read char (the second quote if OK)
  */
-wxString GetQuotedText( wxString & text )
+wxString GetQuotedText( wxString& text )
 {
     int i = text.Find( QUOTE );
 
@@ -82,7 +82,7 @@ bool sortListbyCmpValue( const FOOTPRINT_EQUIVALENCE& ref, const FOOTPRINT_EQUIV
 // read the .equ files and populate the list of equivalents
 int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wxString * aErrorMessages )
 {
-    char        Line[1024];
+    char        line[1024];
     int         error_count = 0;
     FILE*       file;
     wxFileName  fn;
@@ -136,17 +136,18 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wx
             continue;
         }
 
-        while( GetLine( file, Line, NULL, sizeof(Line) ) != NULL )
+        while( GetLine( file, line, NULL, sizeof( line ) ) != NULL )
         {
-            char* text = Line;
-            wxString value, footprint, wtext = FROM_UTF8( Line );
-
-            value = GetQuotedText( wtext );
-
-            if( text == NULL || ( *text == 0 ) || value.IsEmpty() )
+            if( *line == 0 )
                 continue;
 
-            footprint = GetQuotedText( wtext );
+            wxString wtext = FROM_UTF8( line );
+            wxString value = GetQuotedText( wtext );
+
+            if( value.IsEmpty() )
+                continue;
+
+            wxString footprint = GetQuotedText( wtext );
 
             if( footprint.IsEmpty() )
                 continue;
@@ -169,9 +170,7 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wx
 void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
 {
     FOOTPRINT_EQUIVALENCE_LIST equiv_List;
-    COMPONENT*           component;
     wxString             msg, error_msg;
-    size_t               ii;
 
     if( m_netlist.IsEmpty() )
         return;
@@ -191,15 +190,13 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
     // Now, associate each free component with a footprint, when the association
     // is found in list
     m_skipComponentSelect = true;
-    ii = 0;
     error_msg.Empty();
 
     for( unsigned kk = 0;  kk < m_netlist.GetCount();  kk++ )
     {
-        component = m_netlist.GetComponent( kk );
+        COMPONENT* component = m_netlist.GetComponent( kk );
 
         bool found = false;
-        m_compListBox->SetSelection( ii++, true );
 
         if( !component->GetFPID().empty() ) // the component has already a footprint
             continue;
@@ -208,6 +205,8 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
         // When happens, using the footprint filter of components can remove the ambiguity by
         // filtering equivItem so one can use multiple equiv_List (for polar and
         // non-polar caps for example)
+        wxString fpid_candidate;
+
         for( unsigned idx = 0; idx < equiv_List.size(); idx++ )
         {
             FOOTPRINT_EQUIVALENCE& equivItem = equiv_List[idx];
@@ -232,13 +231,19 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
             // If the equivalence is unique, no ambiguity: use the association
             if( module && equ_is_unique )
             {
-                SetNewPkg( equivItem.m_FootprintFPID );
+                SetNewPkg( equivItem.m_FootprintFPID, kk );
                 found = true;
                 break;
             }
 
+            // Store the first candidate found in list, when equivalence is not unique
+            // We use it later.
+            if( module && fpid_candidate.IsEmpty() )
+                fpid_candidate = equivItem.m_FootprintFPID;
+
             // The equivalence is not unique: use the footprint filter to try to remove
             // ambiguity
+            // if the footprint filter does not remove ambiguity, we will use fpid_candidate
             if( module )
             {
                 size_t filtercount = component->GetFootprintFilters().GetCount();
@@ -264,13 +269,18 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
 
             if( found )
             {
-                SetNewPkg( equivItem.m_FootprintFPID );
+                SetNewPkg( equivItem.m_FootprintFPID, kk );
                 break;
             }
         }
 
         if( found )
             continue;
+        else if( !fpid_candidate.IsEmpty() )
+        {
+            SetNewPkg( fpid_candidate, kk );
+            continue;
+        }
 
         // obviously the last chance: there's only one filter matching one footprint
         if( 1 == component->GetFootprintFilters().GetCount() )
@@ -280,7 +290,9 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
             const FOOTPRINT_INFO* module = m_footprints.GetModuleInfo( component->GetFootprintFilters()[0] );
 
             if( module )
-                SetNewPkg( component->GetFootprintFilters()[0] );
+            {
+                SetNewPkg( component->GetFootprintFilters()[0], kk );
+            }
         }
     }
 
@@ -288,4 +300,5 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
         wxMessageBox( error_msg, _( "CvPcb Warning" ), wxOK | wxICON_WARNING, this );
 
     m_skipComponentSelect = false;
+    m_compListBox->Refresh();
 }

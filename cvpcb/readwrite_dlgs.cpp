@@ -48,7 +48,6 @@
 void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
 {
     COMPONENT* component;
-    bool       hasFootprint = false;
     int        componentIndex;
 
     if( m_netlist.IsEmpty() )
@@ -71,34 +70,8 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
         if( component == NULL )
             return;
 
-        // Check to see if the component has already a footprint set.
-        hasFootprint = !component->GetFPID().empty();
+        SetNewPkg( aFootprintName, componentIndex );
 
-        FPID fpid;
-
-        if( !aFootprintName.IsEmpty() )
-        {
-            wxCHECK_RET( fpid.Parse( aFootprintName ) < 0,
-                         wxString::Format( wxT( "<%s> is not a valid FPID." ),
-                                           GetChars( aFootprintName ) ) );
-        }
-
-        component->SetFPID( fpid );
-
-        // create the new component description
-        wxString   description = wxString::Format( CMP_FORMAT, componentIndex + 1,
-                            GetChars( component->GetReference() ),
-                            GetChars( component->GetValue() ),
-                            GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
-
-        // If the component hasn't had a footprint associated with it
-        // it now has, so we decrement the count of components without
-        // a footprint assigned.
-        if( !hasFootprint )
-            m_undefinedComponentCnt -= 1;
-
-        // Set the new description and deselect the processed component
-        m_compListBox->SetString( componentIndex, description );
         m_compListBox->SetSelection( componentIndex, false );
     }
 
@@ -110,6 +83,55 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
         componentIndex++;
 
     m_compListBox->SetSelection( componentIndex, true );
+
+    // update the statusbar
+    DisplayStatus();
+}
+
+
+void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName, int aIndex )
+{
+    COMPONENT* component;
+
+    if( m_netlist.IsEmpty() )
+        return;
+
+    component = m_netlist.GetComponent( aIndex );
+
+    if( component == NULL )
+        return;
+
+    // Check to see if the component has already a footprint set.
+    bool hasFootprint = !component->GetFPID().empty();
+
+    FPID fpid;
+
+    if( !aFootprintName.IsEmpty() )
+    {
+        wxCHECK_RET( fpid.Parse( aFootprintName ) < 0,
+                     wxString::Format( wxT( "<%s> is not a valid FPID." ),
+                                       GetChars( aFootprintName ) ) );
+    }
+
+    component->SetFPID( fpid );
+
+    // create the new component description
+    wxString   description = wxString::Format( CMP_FORMAT, aIndex + 1,
+                        GetChars( component->GetReference() ),
+                        GetChars( component->GetValue() ),
+                        GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
+
+    // If the component hasn't had a footprint associated with it
+    // it now has, so we decrement the count of components without
+    // a footprint assigned.
+    if( !hasFootprint )
+        m_undefinedComponentCnt -= 1;
+
+    // Set the new description and deselect the processed component
+    m_compListBox->SetString( aIndex, description );
+
+    // Mark this "session" as modified
+    m_modified = true;
 
     // update the statusbar
     DisplayStatus();
