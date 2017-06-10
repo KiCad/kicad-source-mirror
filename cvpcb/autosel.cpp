@@ -169,9 +169,7 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wx
 void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
 {
     FOOTPRINT_EQUIVALENCE_LIST equiv_List;
-    COMPONENT*           component;
     wxString             msg, error_msg;
-    size_t               ii;
 
     if( m_netlist.IsEmpty() )
         return;
@@ -191,15 +189,13 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
     // Now, associate each free component with a footprint, when the association
     // is found in list
     m_skipComponentSelect = true;
-    ii = 0;
     error_msg.Empty();
 
     for( unsigned kk = 0;  kk < m_netlist.GetCount();  kk++ )
     {
-        component = m_netlist.GetComponent( kk );
+        COMPONENT* component = m_netlist.GetComponent( kk );
 
         bool found = false;
-        m_compListBox->SetSelection( ii++, true );
 
         if( !component->GetFPID().empty() ) // the component has already a footprint
             continue;
@@ -232,7 +228,7 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
             // If the equivalence is unique, no ambiguity: use the association
             if( module && equ_is_unique )
             {
-                SetNewPkg( equivItem.m_FootprintFPID );
+                SetNewPkg( equivItem.m_FootprintFPID, kk );
                 found = true;
                 break;
             }
@@ -264,7 +260,7 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
 
             if( found )
             {
-                SetNewPkg( equivItem.m_FootprintFPID );
+                SetNewPkg( equivItem.m_FootprintFPID, kk );
                 break;
             }
         }
@@ -280,7 +276,9 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
             const FOOTPRINT_INFO* module = m_FootprintsList->GetModuleInfo( component->GetFootprintFilters()[0] );
 
             if( module )
-                SetNewPkg( component->GetFootprintFilters()[0] );
+            {
+                SetNewPkg( component->GetFootprintFilters()[0], kk );
+            }
         }
     }
 
@@ -288,4 +286,5 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
         wxMessageBox( error_msg, _( "CvPcb Warning" ), wxOK | wxICON_WARNING, this );
 
     m_skipComponentSelect = false;
+    m_compListBox->Refresh();
 }

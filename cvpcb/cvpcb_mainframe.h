@@ -168,11 +168,20 @@ public:
 
     /**
      * Function SetNewPkg
-     * links the footprint to the current selected component
+     * set the footprint name for all selected components in component list
      * and selects the next component.
-     * @param aFootprintName = the selected footprint
+     * @param aFootprintName = the new footprint name
      */
     void             SetNewPkg( const wxString& aFootprintName );
+
+    /**
+     * Function SetNewPkg
+     * Set the footprint name for the component of position aIndex in the component list
+     *
+     * @param aFootprintName = the new footprint name
+     * @param aIndex = the index of the component to modify in the component list
+     */
+    void             SetNewPkg( const wxString& aFootprintName, int aIndex );
 
     void             BuildCmpListBox();
     void             BuildFOOTPRINTS_LISTBOX();
