@@ -519,6 +519,7 @@ void SCH_EDIT_FRAME::OnCancelCurrentCommand( wxCommandEvent& aEvent )
 void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 {
     int id = aEvent.GetId();
+    int lastToolID = GetToolId();
 
     // Stop the current command and deselect the current tool.
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
@@ -534,7 +535,11 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         break;
 
     case ID_ZOOM_SELECTION:
-        SetToolID( id, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
+        // This tool is located on the main toolbar: switch it on or off on click
+        if( lastToolID != ID_ZOOM_SELECTION )
+            SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
+        else
+            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         break;
 
     case ID_HIERARCHY_PUSH_POP_BUTT:
@@ -644,8 +649,7 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 {
-    if( aEvent.GetEventObject() == m_drawToolBar )
-        aEvent.Check( GetToolId() == aEvent.GetId() );
+    aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 
 

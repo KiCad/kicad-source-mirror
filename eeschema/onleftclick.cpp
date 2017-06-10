@@ -108,6 +108,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_NO_TOOL_SELECTED:
         break;
 
+    case ID_ZOOM_SELECTION:
+        break;
+
     case ID_HIGHLIGHT:
         HighlightConnectionAtPosition( aPosition );
         break;

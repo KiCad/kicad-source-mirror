@@ -93,7 +93,7 @@ void BLOCK_SELECTOR::SetMessageBlock( EDA_DRAW_FRAME* frame )
         break;
 
     case BLOCK_ZOOM:     // Window Zoom
-        msg = _( "Win Zoom" );
+        msg = _( "Zoom to selection" );
         break;
 
     case BLOCK_ROTATE:     // Rotate 90 deg

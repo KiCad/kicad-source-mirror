@@ -71,6 +71,9 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 
     switch( GetToolId() )
     {
+    case ID_ZOOM_SELECTION:
+        break;
+
     case ID_NO_TOOL_SELECTED:
         // If an item is currently in edit, finish edit
         if( item_in_edit )
