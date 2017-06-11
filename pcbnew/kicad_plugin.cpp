@@ -1833,11 +1833,11 @@ void PCB_IO::cacheLib( const wxString& aLibraryPath, const wxString& aFootprintN
 }
 
 
-wxArrayString PCB_IO::FootprintEnumerate( const wxString&   aLibraryPath,
-                                          const PROPERTIES* aProperties )
+void PCB_IO::FootprintEnumerate( wxArrayString&    aFootprintNames,
+                                 const wxString&   aLibraryPath,
+                                 const PROPERTIES* aProperties )
 {
     LOCALE_IO     toggle;     // toggles on, then off, the C locale.
-    wxArrayString ret;
     wxDir         dir( aLibraryPath );
 
     if( !dir.IsOpened() )
@@ -1848,31 +1848,28 @@ wxArrayString PCB_IO::FootprintEnumerate( const wxString&   aLibraryPath,
 
     init( aProperties );
 
-#if 1                         // Set to 0 to only read directory contents, not load cache.
-    cacheLib( aLibraryPath );
+    wxString errorMsg;
+
+    // Some of the files may have been parsed correctly so we want to add the valid files to
+    // the library.
+    try
+    {
+        cacheLib( aLibraryPath );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        errorMsg = ioe.What();
+    }
 
     const MODULE_MAP& mods = m_cache->GetModules();
 
-
     for( MODULE_CITER it = mods.begin();  it != mods.end();  ++it )
     {
-        ret.Add( FROM_UTF8( it->first.c_str() ) );
+        aFootprintNames.Add( FROM_UTF8( it->first.c_str() ) );
     }
-#else
-    wxString fpFileName;
-    wxString wildcard = wxT( "*." ) + KiCadFootprintFileExtension;
 
-    if( dir.GetFirst( &fpFileName, wildcard, wxDIR_FILES ) )
-    {
-        do
-        {
-            wxFileName fn( aLibraryPath, fpFileName );
-            ret.Add( fn.GetName() );
-        } while( dir.GetNext( &fpFileName ) );
-    }
-#endif
-
-    return ret;
+    if( !errorMsg.IsEmpty() )
+        THROW_IO_ERROR( errorMsg );
 }
 
 

@@ -197,11 +197,12 @@ void FP_LIB_TABLE::Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) const
 }
 
 
-wxArrayString FP_LIB_TABLE::FootprintEnumerate( const wxString& aNickname )
+void FP_LIB_TABLE::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aNickname )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
     wxASSERT( (PLUGIN*) row->plugin );
-    return row->plugin->FootprintEnumerate( row->GetFullURI( true ), row->GetProperties() );
+    row->plugin->FootprintEnumerate( aFootprintNames, row->GetFullURI( true ),
+                                     row->GetProperties() );
 }
 
 

@@ -3388,7 +3388,9 @@ void LEGACY_PLUGIN::cacheLib( const wxString& aLibraryPath )
 }
 
 
-wxArrayString LEGACY_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+void LEGACY_PLUGIN::FootprintEnumerate( wxArrayString&    aFootprintNames,
+                                        const wxString&   aLibraryPath,
+                                        const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -3398,14 +3400,10 @@ wxArrayString LEGACY_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, c
 
     const MODULE_MAP&   mods = m_cache->m_modules;
 
-    wxArrayString   ret;
-
     for( MODULE_CITER it = mods.begin();  it != mods.end();  ++it )
     {
-        ret.Add( FROM_UTF8( it->first.c_str() ) );
+        aFootprintNames.Add( FROM_UTF8( it->first.c_str() ) );
     }
-
-    return ret;
 }
 
 

@@ -189,15 +189,35 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
 
             while( this->m_queue_out.pop( nickname ) )
             {
-                CatchErrors( [this, &queue_parsed, &nickname]() {
-                    wxArrayString fpnames = this->m_lib_table->FootprintEnumerate( nickname );
+                wxArrayString fpnames;
 
-                    for( auto const& fpname : fpnames )
+                try
+                {
+                    this->m_lib_table->FootprintEnumerate( fpnames, nickname );
+                }
+                catch( const IO_ERROR& ioe )
+                {
+                    m_errors.move_push( std::make_unique<IO_ERROR>( ioe ) );
+                }
+                catch( const std::exception& se )
+                {
+                    // This is a round about way to do this, but who knows what THROW_IO_ERROR()
+                    // may be tricked out to do someday, keep it in the game.
+                    try
                     {
-                        FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO_IMPL( this, nickname, fpname );
-                        queue_parsed.move_push( std::unique_ptr<FOOTPRINT_INFO>( fpinfo ) );
+                        THROW_IO_ERROR( se.what() );
                     }
-                } );
+                    catch( const IO_ERROR& ioe )
+                    {
+                        m_errors.move_push( std::make_unique<IO_ERROR>( ioe ) );
+                    }
+                }
+
+                for( auto const& fpname : fpnames )
+                {
+                    FOOTPRINT_INFO* fpinfo = new FOOTPRINT_INFO_IMPL( this, nickname, fpname );
+                    queue_parsed.move_push( std::unique_ptr<FOOTPRINT_INFO>( fpinfo ) );
+                }
             }
         } ) );
     }

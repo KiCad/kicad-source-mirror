@@ -412,7 +412,11 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
     if( fp_info_list->GetErrorCount() )
     {
         fp_info_list->DisplayErrors( this );
-        return;
+
+        // For footprint libraries that support one footprint per file, there may have been
+        // valid footprints read so show the footprints that loaded properly.
+        if( fp_info_list->GetList().size() == 0 )
+            return;
     }
 
     for( auto& footprint : fp_info_list->GetList() )

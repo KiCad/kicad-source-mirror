@@ -110,9 +110,10 @@ public:
     void Save( const wxString& aFileName, BOARD* aBoard,
                const PROPERTIES* aProperties = NULL ) override;
 
-    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties = NULL ) override;
+    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
+                 const PROPERTIES* aProperties = NULL ) override;
 
-    wxArrayString FootprintEnumerate( const wxString& aLibraryPath,
+    void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
             const PROPERTIES* aProperties = NULL ) override;
 
     MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
@@ -121,7 +122,8 @@ public:
     void FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
                         const PROPERTIES* aProperties = NULL ) override;
 
-    void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties = NULL ) override;
+    void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
+                          const PROPERTIES* aProperties = NULL ) override;
 
     void FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL) override;
 

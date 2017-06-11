@@ -551,7 +551,9 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
         PLUGIN::RELEASER cur( IO_MGR::PluginFind( curType ) );
         PLUGIN::RELEASER dst( IO_MGR::PluginFind( dstType ) );
 
-        wxArrayString mods = cur->FootprintEnumerate( curLibPath );
+        wxArrayString mods;
+
+        cur->FootprintEnumerate( mods, curLibPath );
 
         for( unsigned i = 0;  i < mods.size();  ++i )
         {

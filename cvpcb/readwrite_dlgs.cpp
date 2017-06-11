@@ -150,7 +150,9 @@ static int guessNickname( FP_LIB_TABLE* aTbl, LIB_ID* aFootprintId )
     // Search each library going through libraries alphabetically.
     for( unsigned libNdx = 0;  libNdx<nicks.size();  ++libNdx )
     {
-        wxArrayString fpnames = aTbl->FootprintEnumerate( nicks[libNdx] );
+        wxArrayString fpnames;
+
+        aTbl->FootprintEnumerate( fpnames, nicks[libNdx] );
 
         for( unsigned nameNdx = 0;  nameNdx<fpnames.size();   ++nameNdx )
         {

@@ -971,11 +971,11 @@ void GPCB_PLUGIN::cacheLib( const wxString& aLibraryPath, const wxString& aFootp
 }
 
 
-wxArrayString GPCB_PLUGIN::FootprintEnumerate( const wxString&   aLibraryPath,
-                                               const PROPERTIES* aProperties )
+void GPCB_PLUGIN::FootprintEnumerate( wxArrayString&    aFootprintNames,
+                                      const wxString&   aLibraryPath,
+                                      const PROPERTIES* aProperties )
 {
     LOCALE_IO     toggle;     // toggles on, then off, the C locale.
-    wxArrayString ret;
     wxDir         dir( aLibraryPath );
 
     if( !dir.IsOpened() )
@@ -1003,13 +1003,11 @@ wxArrayString GPCB_PLUGIN::FootprintEnumerate( const wxString&   aLibraryPath,
 
     for( MODULE_CITER it = mods.begin();  it != mods.end();  ++it )
     {
-        ret.Add( FROM_UTF8( it->first.c_str() ) );
+        aFootprintNames.Add( FROM_UTF8( it->first.c_str() ) );
     }
 
     if( !errorMsg.IsEmpty() )
         THROW_IO_ERROR( errorMsg );
-
-    return ret;
 }
 
 

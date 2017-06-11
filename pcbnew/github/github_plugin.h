@@ -167,7 +167,7 @@ public:
 
     const wxString GetFileExtension() const override;
 
-    wxArrayString FootprintEnumerate( const wxString& aLibraryPath,
+    void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
             const PROPERTIES* aProperties = NULL ) override;
 
     void PrefetchLib( const wxString& aLibraryPath,

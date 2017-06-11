@@ -146,7 +146,7 @@ public:
      *
      * @throw IO_ERROR if the library cannot be found, or footprint cannot be loaded.
      */
-    wxArrayString FootprintEnumerate( const wxString& aNickname );
+    void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aNickname );
 
     /**
      * Function PrefetchLib

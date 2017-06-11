@@ -131,7 +131,7 @@ const wxString GITHUB_PLUGIN::GetFileExtension() const
 }
 
 
-wxArrayString GITHUB_PLUGIN::FootprintEnumerate(
+void GITHUB_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames,
         const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     //D(printf("%s: this:%p  aLibraryPath:'%s'\n", __func__, this, TO_UTF8(aLibraryPath) );)
@@ -143,7 +143,9 @@ wxArrayString GITHUB_PLUGIN::FootprintEnumerate(
 
     if( m_pretty_dir.size() )
     {
-        wxArrayString locals = PCB_IO::FootprintEnumerate( m_pretty_dir );
+        wxArrayString locals;
+
+        PCB_IO::FootprintEnumerate( locals, m_pretty_dir );
 
         for( unsigned i=0; i<locals.GetCount();  ++i )
             unique.insert( locals[i] );
@@ -154,14 +156,10 @@ wxArrayString GITHUB_PLUGIN::FootprintEnumerate(
         unique.insert( FROM_UTF8( it->first.c_str() ) );
     }
 
-    wxArrayString ret;
-
     for( MYSET::const_iterator it = unique.begin();  it != unique.end();  ++it )
     {
-        ret.Add( *it );
+        aFootprintNames.Add( *it );
     }
-
-    return ret;
 }
 
 
@@ -283,7 +281,9 @@ void GITHUB_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxStrin
         // Does the PCB_IO base class have this footprint?
         // We cannot write to github.
 
-        wxArrayString pretties = PCB_IO::FootprintEnumerate( m_pretty_dir, aProperties );
+        wxArrayString pretties;
+
+        PCB_IO::FootprintEnumerate( pretties, m_pretty_dir, aProperties );
 
         if( pretties.Index( aFootprintName ) != wxNOT_FOUND )
         {

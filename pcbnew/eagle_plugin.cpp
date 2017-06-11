@@ -2080,18 +2080,15 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
 }
 
 
-wxArrayString EAGLE_PLUGIN::FootprintEnumerate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+void EAGLE_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
+                                       const PROPERTIES* aProperties )
 {
     init( aProperties );
 
     cacheLib( aLibraryPath );
 
-    wxArrayString   ret;
-
     for( MODULE_CITER it = m_templates.begin();  it != m_templates.end();  ++it )
-        ret.Add( FROM_UTF8( it->first.c_str() ) );
-
-    return ret;
+        aFootprintNames.Add( FROM_UTF8( it->first.c_str() ) );
 }
 
 

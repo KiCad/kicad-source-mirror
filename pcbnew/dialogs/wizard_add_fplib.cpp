@@ -4,7 +4,7 @@
  * Copyright (C) 2015 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * Copyright (C) 2014-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -177,7 +177,7 @@ bool WIZARD_FPLIB_TABLE::LIBRARY::Test()
 
     try
     {
-        footprints = p->FootprintEnumerate( m_path );
+        p->FootprintEnumerate( footprints, m_path );
     }
     catch( IO_ERROR& )
     {
@@ -656,7 +656,9 @@ bool WIZARD_FPLIB_TABLE::downloadGithubLibsFromList( wxArrayString& aUrlList,
             PLUGIN::RELEASER src( IO_MGR::PluginFind( IO_MGR::GITHUB ) );
             PLUGIN::RELEASER dst( IO_MGR::PluginFind( IO_MGR::KICAD ) );
 
-            wxArrayString footprints = src->FootprintEnumerate( libsrc_name );
+            wxArrayString footprints;
+
+            src->FootprintEnumerate( footprints, libsrc_name );
 
             for( unsigned i = 0;  i < footprints.size();  ++i )
             {
