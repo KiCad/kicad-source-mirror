@@ -74,15 +74,16 @@ private:
     /// current KiCad project dir
     wxString m_ProjDir;
 
-    /**
-     * Function checkCache
-     * searches the cache list for the given filename and retrieves
-     * the cache data; a cache entry is created if one does not
-     * already exist
+    /** Find or create cache entry for file name
      *
-     * @param aFileName [in] is a partial or full file path
-     * @param [out] if not NULL will hold a pointer to the cache entry for the model
-     * @return on success a pointer to a SCENEGRAPH, otherwise NULL
+     * Searches the cache list for the given filename and retrieves
+     * the cache data; a cache entry is created if one does not
+     * already exist.
+     *
+     * @param[in]   aFileName   file name (full or partial path)
+     * @param[out]  aCachePtr   optional return address for cache entry pointer
+     * @return      SCENEGRAPH object associated with file name
+     * @retval      NULL    on error
      */
     SCENEGRAPH* checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** aCachePtr = NULL );
 
@@ -90,9 +91,10 @@ private:
      * Function getSHA1
      * calculates the SHA1 hash of the given file
      *
-     * @param aFileName [in] is a fully qualified path to the model file
-     * @param aSHA1Sum [out] is a 20-byte character array to hold the SHA1 hash
-     * @return true if the sha1 hash was calculated; otherwise false
+     * @param[in]   aFileName   file name (full path)
+     * @param[out]  aSHA1Sum    a 20 byte character array to hold the SHA1 hash
+     * @retval      true        success
+     * @retval      false       failure
      */
     bool getSHA1( const wxString& aFileName, unsigned char* aSHA1Sum );
 

@@ -122,9 +122,10 @@ public:
      * sets the current KiCad project directory as the first
      * entry in the model path list
      *
-     * @param aProjDir is the current project directory
-     * @param flgChanged, if specified, is set to true if the directory actually changed
-     * @return true if the call succeeds
+     * @param[in]   aProjDir    current project directory
+     * @param[out]  flgChanged  optional, set to true if directory was changed
+     * @retval      true        success
+     * @retval      false       failure
      */
     bool SetProjectDir( const wxString& aProjDir, bool* flgChanged = NULL );
     wxString GetProjectDir( void );
