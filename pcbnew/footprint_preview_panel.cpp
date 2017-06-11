@@ -205,7 +205,7 @@ public:
             if( !aEntry.module )
                 aEntry.status = FPS_NOT_FOUND;
 
-        } catch( const IO_ERROR& ioe )
+        } catch( const IO_ERROR& )
         {
             aEntry.status = FPS_NOT_FOUND;
         }

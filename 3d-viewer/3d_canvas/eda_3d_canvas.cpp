@@ -603,7 +603,6 @@ void EDA_3D_CANVAS::OnRightClick( wxMouseEvent &event )
     wxPoint     pos;
     wxMenu      PopUpMenu;
     wxString msg;
-    wxMenuItem* item;
 
     pos.x = event.GetX();
     pos.y = event.GetY();
