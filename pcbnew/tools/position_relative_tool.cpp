@@ -21,54 +21,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#define BOOST_BIND_NO_PLACEHOLDERS
-
-#include <limits>
-
-#include <class_board.h>
-#include <class_module.h>
-#include <class_edge_mod.h>
-#include <class_zone.h>
-#include <collectors.h>
-#include <wxPcbStruct.h>
-#include <kiway.h>
-#include <class_draw_panel_gal.h>
-#include <module_editor_frame.h>
-#include <array_creator.h>
-#include <pcbnew_id.h>
-
-#include <tool/tool_manager.h>
-#include <view/view_controls.h>
-#include <view/view.h>
-#include <gal/graphics_abstraction_layer.h>
-#include <ratsnest_data.h>
-#include <confirm.h>
-#include <bitmaps.h>
-#include <hotkeys.h>
-
-#include <cassert>
 #include <functional>
 using namespace std::placeholders;
 
+#include "position_relative_tool.h"
 #include "pcb_actions.h"
 #include "selection_tool.h"
-#include "edit_tool.h"
-#include "grid_helper.h"
 #include "picker_tool.h"
-#include "position_relative_tool.h"
 
-#include <router/router_tool.h>
-
-#include <dialogs/dialog_move_exact.h>
 #include <dialogs/dialog_position_relative.h>
-#include <dialogs/dialog_track_via_properties.h>
-#include <dialogs/dialog_exchange_modules.h>
-
-#include <tools/tool_event_utils.h>
-
-#include <preview_items/ruler_item.h>
 
 #include <board_commit.h>
+#include <hotkeys.h>
+#include <bitmaps.h>
+#include <confirm.h>
 
 
 // Position relative tool actions
