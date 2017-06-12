@@ -1,9 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2015 CERN
- * @author Maciej Suminski <maciej.suminski@cern.ch>
- * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,11 +47,10 @@ class POSITION_RELATIVE_TOOL : public PCB_TOOL
 public:
     POSITION_RELATIVE_TOOL();
 
-    void Reset( RESET_REASON aReason );
+    void Reset( RESET_REASON aReason ) override;
 
     /// @copydoc POSITION_RELATIVE_TOOL::Init()
     bool Init() override;
-
 
     /**
      * Function PositionRelative()
@@ -82,17 +79,26 @@ public:
      *
      * Gets the last selected anchor item.
      */
-    BOARD_ITEM* GetAnchorItem();
+    BOARD_ITEM* GetAnchorItem()
+    {
+        return m_anchor_item;
+    }
+
+    /**
+     * Function UpdateAnchor()
+     *
+     * Selects the item to be used as the reference for relative move operation.
+     */
+    void UpdateAnchor( BOARD_ITEM* aItem );
 
     ///> Sets up handlers for various events.
     void SetTransitions() override;
 
+private:
     DIALOG_POSITION_RELATIVE* m_position_relative_dialog;
 
-private:
     ///> Selection tool used for obtaining selected items
     SELECTION_TOOL* m_selectionTool;
-
 
     std::unique_ptr<BOARD_COMMIT> m_commit;
 

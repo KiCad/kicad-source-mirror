@@ -1,9 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2015 CERN
- * @author Maciej Suminski <maciej.suminski@cern.ch>
- * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,8 +88,10 @@ TOOL_ACTION PCB_ACTIONS::selectpositionRelativeItem(
         "",
         nullptr );
 
+
 POSITION_RELATIVE_TOOL::POSITION_RELATIVE_TOOL() :
-    PCB_TOOL( "pcbnew.PositionRelative" ), m_selectionTool( NULL )
+    PCB_TOOL( "pcbnew.PositionRelative" ), m_position_relative_dialog( NULL ),
+    m_selectionTool( NULL ), m_anchor_item( NULL )
 {
 }
 
@@ -115,7 +115,6 @@ bool POSITION_RELATIVE_TOOL::Init()
         return false;
     }
 
-
     return true;
 }
 
@@ -136,7 +135,6 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
     PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
     m_position_relative_rotation = 0;
 
-
     if( !m_position_relative_dialog )
         m_position_relative_dialog = new DIALOG_POSITION_RELATIVE( editFrame,
                 m_toolMgr,
@@ -150,15 +148,12 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
 }
 
 
-static bool selectPRitem( TOOL_MANAGER* aToolMgr,
-        BOARD_ITEM* m_anchor_item,
-        const VECTOR2D& aPosition )
+static bool selectPRitem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 {
     SELECTION_TOOL* selectionTool = aToolMgr->GetTool<SELECTION_TOOL>();
     POSITION_RELATIVE_TOOL* positionRelativeTool = aToolMgr->GetTool<POSITION_RELATIVE_TOOL>();
-
-    assert( selectionTool );
-    assert( positionRelativeTool );
+    wxCHECK( selectionTool, false );
+    wxCHECK( positionRelativeTool, false );
 
     aToolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     aToolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
@@ -169,15 +164,9 @@ static bool selectPRitem( TOOL_MANAGER* aToolMgr,
     if( selection.Empty() )
         return true;
 
-    m_anchor_item = static_cast<BOARD_ITEM*>( selection.Front() );
-    positionRelativeTool->m_position_relative_dialog->UpdateAchor( m_anchor_item );
+    positionRelativeTool->UpdateAnchor( static_cast<BOARD_ITEM*>( selection.Front() ) );
+
     return true;
-}
-
-
-BOARD_ITEM* POSITION_RELATIVE_TOOL::GetAnchorItem()
-{
-    return m_anchor_item;
 }
 
 
@@ -215,11 +204,20 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
     assert( picker );
 
     picker->SetSnapping( false );
-    picker->SetClickHandler( std::bind( selectPRitem, m_toolMgr, m_anchor_item, _1 ) );
+    picker->SetClickHandler( std::bind( selectPRitem, m_toolMgr, _1 ) );
     picker->Activate();
     Wait();
 
     return 0;
+}
+
+
+void POSITION_RELATIVE_TOOL::UpdateAnchor( BOARD_ITEM* aItem )
+{
+    m_anchor_item = aItem;
+
+    if( m_position_relative_dialog )
+        m_position_relative_dialog->UpdateAnchor( aItem );
 }
 
 

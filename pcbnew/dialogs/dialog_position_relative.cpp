@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 John Beard, john.j.beard@gmail.com
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -187,7 +186,7 @@ void DIALOG_POSITION_RELATIVE::OnSelectItemClick( wxCommandEvent& event )
 }
 
 
-void DIALOG_POSITION_RELATIVE::UpdateAchor( BOARD_ITEM* aBoardItem )
+void DIALOG_POSITION_RELATIVE::UpdateAnchor( BOARD_ITEM* aBoardItem )
 {
     m_anchor_position = aBoardItem->GetPosition();
 
