@@ -128,7 +128,7 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
     switch( id )
     {
     case ID_NO_TOOL_SELECTED:
-        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+        SetNoToolSelected();
         break;
 
     case ID_ZOOM_SELECTION:
@@ -136,7 +136,7 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( GetToolId() != ID_ZOOM_SELECTION )
             SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
         else
-            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+            SetNoToolSelected();
         break;
 
     case ID_SELECT_PAGE_NUMBER:

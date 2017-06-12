@@ -441,12 +441,12 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
     case ID_PCB_MEASUREMENT_TOOL:
         DisplayError( this, _( "This tool is not available in the legacy canvas" ) );
-        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+        SetNoToolSelected();
         break;
 
     default:
         DisplayError( this, wxT( "PCB_EDIT_FRAME::OnLeftClick() id error" ) );
-        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+        SetNoToolSelected();
         break;
     }
 }

@@ -108,9 +108,8 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:
-
         // Stop the current command and deselect the current tool
-        m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
+        SetNoToolSelected();
         break;
     }
 
@@ -157,7 +156,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         else
         {
-            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+            SetNoToolSelected();
         }
 
         break;
@@ -527,7 +526,7 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     switch( id )
     {
     case ID_NO_TOOL_SELECTED:
-        SetToolID( id, m_canvas->GetDefaultCursor(), _( "No tool selected" ) );
+        SetNoToolSelected();
         break;
 
     case ID_HIGHLIGHT:
@@ -539,7 +538,7 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         if( lastToolID != ID_ZOOM_SELECTION )
             SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
         else
-            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+            SetNoToolSelected();
         break;
 
     case ID_HIERARCHY_PUSH_POP_BUTT:

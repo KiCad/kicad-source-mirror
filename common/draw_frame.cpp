@@ -1160,7 +1160,7 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     m_auimgr.Update();
 
     // Reset current tool on switch();
-    SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    SetNoToolSelected();
 
     m_galCanvasActive = aEnable;
 }

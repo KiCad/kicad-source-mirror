@@ -170,7 +170,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
             // Usually, we do not need to change twice the anchor position,
             // so deselect the active tool
-            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+            SetNoToolSelected();
             SetCurItem( NULL );
             m_canvas->Refresh();
         }
@@ -202,12 +202,12 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     case ID_MODEDIT_MEASUREMENT_TOOL:
         DisplayError( this, wxT( "Unsupported tool in legacy canvas" ) );
-        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+        SetNoToolSelected();
         break;
 
     default:
         DisplayError( this, wxT( "FOOTPRINT_EDIT_FRAME::ProcessCommand error" ) );
-        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+        SetNoToolSelected();
     }
 
     m_canvas->CrossHairOn( DC );

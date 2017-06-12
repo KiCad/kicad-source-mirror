@@ -178,7 +178,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         if( GetToolId() == ID_NO_TOOL_SELECTED )
-            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+            SetNoToolSelected();
         else
             m_canvas->SetCursor( (wxStockCursor) m_canvas->GetCurrentCursor() );
         break;
@@ -208,7 +208,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_NO_TOOL_SELECTED:
-        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+        SetNoToolSelected();
         break;
 
     case ID_ZOOM_SELECTION:
@@ -216,7 +216,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( GetToolId() != ID_ZOOM_SELECTION )
             SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
         else
-            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+            SetNoToolSelected();
         break;
 
     case ID_POPUP_CLOSE_CURRENT_TOOL:

@@ -1150,7 +1150,7 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         if( lastToolID != ID_ZOOM_SELECTION )
             SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
         else
-            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+            SetNoToolSelected();
         break;
 
     case ID_LIBEDIT_PIN_BUTT:
@@ -1166,7 +1166,7 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 
             cmd.SetId( ID_LIBEDIT_EDIT_PIN );
             GetEventHandler()->ProcessEvent( cmd );
-            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+            SetNoToolSelected();
         }
         break;
 
@@ -1197,13 +1197,13 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     case ID_LIBEDIT_IMPORT_BODY_BUTT:
         SetToolID( id, m_canvas->GetDefaultCursor(), _( "Import" ) );
         LoadOneSymbol();
-        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+        SetNoToolSelected();
         break;
 
     case ID_LIBEDIT_EXPORT_BODY_BUTT:
         SetToolID( id, m_canvas->GetDefaultCursor(), _( "Export" ) );
         SaveOneSymbol();
-        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+        SetNoToolSelected();
         break;
 
     case ID_LIBEDIT_DELETE_ITEM_BUTT:

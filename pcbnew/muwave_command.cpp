@@ -113,7 +113,7 @@ void PCB_EDIT_FRAME::MuWaveCommand( wxDC* DC, const wxPoint& MousePos )
     default:
         m_canvas->SetCursor( wxCURSOR_ARROW );
         DisplayError( this, wxT( "PCB_EDIT_FRAME::MuWaveCommand() id error" ) );
-        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+        SetNoToolSelected();
         break;
     }
 
