@@ -1424,9 +1424,6 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     int id = aEvent.GetId();
     int lastToolID = GetToolId();
 
-    if( GetToolId() == id )
-        return;
-
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
 
