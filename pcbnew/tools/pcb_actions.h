@@ -55,8 +55,14 @@ public:
     /// Selects an item (specified as the event parameter).
     static TOOL_ACTION selectItem;
 
+    /// Selects a list of items (specified as the event parameter)
+    static TOOL_ACTION selectItems;
+
     /// Unselects an item (specified as the event parameter).
     static TOOL_ACTION unselectItem;
+
+    /// Unselects a list of items (specified as the event parameter)
+    static TOOL_ACTION unselectItems;
 
     /// Selects a connection between junctions.
     static TOOL_ACTION selectConnection;

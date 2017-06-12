@@ -97,7 +97,7 @@ public:
     /**
      * Function Duplicate()
      *
-     * Duplicates a selection and starts a move action
+     * Duplicates the current selection and starts a move action.
      */
     int Duplicate( const TOOL_EVENT& aEvent );
 

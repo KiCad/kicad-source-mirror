@@ -70,7 +70,15 @@ TOOL_ACTION PCB_ACTIONS::selectItem( "pcbnew.InteractiveSelection.SelectItem",
         AS_GLOBAL, 0,
         "", "" );    // No description, it is not supposed to be shown anywhere
 
+TOOL_ACTION PCB_ACTIONS::selectItems( "pcbnew.InteractiveSelection.SelectItems",
+        AS_GLOBAL, 0,
+        "", "" );    // No description, it is not supposed to be shown anywhere
+
 TOOL_ACTION PCB_ACTIONS::unselectItem( "pcbnew.InteractiveSelection.UnselectItem",
+        AS_GLOBAL, 0,
+        "", "" );    // No description, it is not supposed to be shown anywhere
+
+TOOL_ACTION PCB_ACTIONS::unselectItems( "pcbnew.InteractiveSelection.UnselectItems",
         AS_GLOBAL, 0,
         "", "" );    // No description, it is not supposed to be shown anywhere
 
@@ -235,7 +243,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // This will be ignored if the SHIFT modifier is pressed
         m_subtractive = !m_additive && evt->Modifier( MD_CTRL );
 
-        // single click? Select single object
+        // Single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {
             if( evt->Modifier( MD_CTRL ) && !m_editModules )
@@ -244,8 +252,11 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
             else
             {
+                // If no modifier keys are pressed, clear the selection
                 if( !m_additive )
+                {
                     clearSelection();
+                }
 
                 selectPoint( evt->Position() );
             }
@@ -585,7 +596,9 @@ void SELECTION_TOOL::SetTransitions()
     Go( &SELECTION_TOOL::CursorSelection, PCB_ACTIONS::selectionCursor.MakeEvent() );
     Go( &SELECTION_TOOL::ClearSelection, PCB_ACTIONS::selectionClear.MakeEvent() );
     Go( &SELECTION_TOOL::SelectItem, PCB_ACTIONS::selectItem.MakeEvent() );
+    Go( &SELECTION_TOOL::SelectItems, PCB_ACTIONS::selectItems.MakeEvent() );
     Go( &SELECTION_TOOL::UnselectItem, PCB_ACTIONS::unselectItem.MakeEvent() );
+    Go( &SELECTION_TOOL::UnselectItems, PCB_ACTIONS::unselectItems.MakeEvent() );
     Go( &SELECTION_TOOL::find, PCB_ACTIONS::find.MakeEvent() );
     Go( &SELECTION_TOOL::findMove, PCB_ACTIONS::findMove.MakeEvent() );
     Go( &SELECTION_TOOL::filterSelection, PCB_ACTIONS::filterSelection.MakeEvent() );
@@ -672,6 +685,27 @@ int SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+
+int SELECTION_TOOL::SelectItems( const TOOL_EVENT& aEvent )
+{
+    std::vector<BOARD_ITEM*>* items = aEvent.Parameter<std::vector<BOARD_ITEM*>*>();
+
+    if( items )
+    {
+        // Perform individual selection of each item
+        // before processing the event.
+        for( auto item : *items )
+        {
+            select( item );
+        }
+
+        m_toolMgr->ProcessEvent( SelectedEvent );
+    }
+
+    return 0;
+}
+
+
 int SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
 {
     // Check if there is an item to be selected
@@ -683,6 +717,26 @@ int SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
 
         // Inform other potentially interested tools
         m_toolMgr->ProcessEvent( SelectedEvent );
+    }
+
+    return 0;
+}
+
+
+int SELECTION_TOOL::UnselectItems( const TOOL_EVENT& aEvent )
+{
+    std::vector<BOARD_ITEM*>* items = aEvent.Parameter<std::vector<BOARD_ITEM*>*>();
+
+    if( items )
+    {
+        // Perform individual unselection of each item
+        // before processing the event
+        for( auto item : *items )
+        {
+            unselect( item );
+        }
+
+        m_toolMgr->ProcessEvent( UnselectedEvent );
     }
 
     return 0;
@@ -1165,10 +1219,14 @@ int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
 void SELECTION_TOOL::clearSelection()
 {
     if( m_selection.Empty() )
+    {
         return;
+    }
 
     for( auto item : m_selection )
+    {
         unselectVisually( static_cast<BOARD_ITEM*>( item ) );
+    }
 
     m_selection.Clear();
 
@@ -1392,6 +1450,7 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
     // All other items are selected only if the layer on which they exist is visible
     return board()->IsLayerVisible( aItem->GetLayer() );
 }
+
 
 void SELECTION_TOOL::select( BOARD_ITEM* aItem )
 {

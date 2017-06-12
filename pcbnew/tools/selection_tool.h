@@ -114,8 +114,14 @@ public:
     ///> Item selection event handler.
     int SelectItem( const TOOL_EVENT& aEvent );
 
+    ///> Multiple item selection event handler
+    int SelectItems( const TOOL_EVENT& aEvent );
+
     ///> Item unselection event handler.
     int UnselectItem( const TOOL_EVENT& aEvent );
+
+    ///> Multiple item unselection event handler
+    int UnselectItems( const TOOL_EVENT& aEvent );
 
     ///> Event sent after an item is selected.
     static const TOOL_EVENT SelectedEvent;

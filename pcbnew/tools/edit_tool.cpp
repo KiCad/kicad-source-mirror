@@ -297,7 +297,9 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 // Drag items to the current cursor position
                 for( auto item : selection )
+                {
                     static_cast<BOARD_ITEM*>( item )->Move( movement + m_offset );
+                }
             }
             else if( !m_dragging )    // Prepare to start dragging
             {
@@ -830,8 +832,6 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 {
-    // Note: original items are no more modified.
-
     bool increment = aEvent.IsAction( &PCB_ACTIONS::duplicateIncrement );
 
     // Be sure that there is at least one item that we can modify
@@ -843,28 +843,24 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     // we have a selection to work on now, so start the tool process
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
-    std::vector<BOARD_ITEM*> old_items;
+    std::vector<BOARD_ITEM*> new_items;
+    new_items.reserve( selection.Size() );
 
+    BOARD_ITEM* orig_item = nullptr;
+    BOARD_ITEM* dupe_item = nullptr;
+
+    // Each selected item is duplicated and pushed to new_items list
+    // Old selection is cleared, and new items are then selected.
     for( auto item : selection )
     {
-        if( item )
-            old_items.push_back( static_cast<BOARD_ITEM*>( item ) );
-    }
+        if( !item )
+            continue;
 
-    for( unsigned i = 0; i < old_items.size(); ++i )
-    {
-        BOARD_ITEM* item = old_items[i];
-
-        // Unselect the item, so we won't pick it up again
-        // Do this first, so a single-item duplicate will correctly call
-        // SetCurItem and show the item properties
-        m_toolMgr->RunAction( PCB_ACTIONS::unselectItem, true, item );
-
-        BOARD_ITEM* new_item = NULL;
+        orig_item = static_cast<BOARD_ITEM*>( item );
 
         if( m_editModules )
         {
-            new_item = editFrame->GetBoard()->m_Modules->Duplicate( item, increment );
+            dupe_item = editFrame->GetBoard()->m_Modules->Duplicate( orig_item, increment );
         }
         else
         {
@@ -874,23 +870,31 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             // so zones are not duplicated
             if( item->Type() != PCB_ZONE_AREA_T )
 #endif
-            new_item = editFrame->GetBoard()->Duplicate( item );
+            dupe_item = editFrame->GetBoard()->Duplicate( orig_item );
         }
 
-        if( new_item )
+        if( dupe_item )
         {
-            m_commit->Add( new_item );
+            // Clear the selection flag here, otherwise the SELECTION_TOOL
+            // will not properly select it later on
+            dupe_item->ClearSelected();
 
-            // Select the new item, so we can pick it up
-            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, new_item );
+            new_items.push_back( dupe_item );
+            m_commit->Add( dupe_item );
         }
     }
+
+    // Clear the old selection first
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
+    // Select the new items
+    m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &new_items );
 
     // record the new items as added
     if( !selection.Empty() )
     {
         editFrame->DisplayToolMsg( wxString::Format( _( "Duplicated %d item(s)" ),
-                (int) old_items.size() ) );
+                (int) new_items.size() ) );
 
         // If items were duplicated, pick them up
         // this works well for "dropping" copies around and pushes the commit
