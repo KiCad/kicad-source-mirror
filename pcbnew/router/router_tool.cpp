@@ -888,7 +888,7 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
         }
     }
 
-    frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    frame->SetNoToolSelected();
     SetContextMenu( nullptr );
 
     // Store routing settings till the next invocation

@@ -201,6 +201,29 @@ public:
         return m_stealsFocus;
     }
 
+    /**
+     * Function SetCurrentCursor
+     * Set the current cursor shape for this panel
+     */
+    void SetCurrentCursor( int aCursor )
+    {
+        m_currentCursor = aCursor;
+        SetCursor( (wxStockCursor) m_currentCursor );
+    }
+
+    /**
+     * Function GetDefaultCursor
+     * @return the default cursor shape
+     */
+    int GetDefaultCursor() const { return m_defaultCursor; }
+
+    /**
+     * Function GetCurrentCursor
+     * @return the current cursor shape, depending on the current selected tool
+     */
+    int GetCurrentCursor() const { return m_currentCursor; }
+
+
 protected:
     void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
     void onSize( wxSizeEvent& aEvent );
@@ -211,6 +234,11 @@ protected:
     void onShowTimer( wxTimerEvent& aEvent );
 
     static const int MinRefreshPeriod = 17;             ///< 60 FPS.
+
+    /// Current mouse cursor shape id.
+    int     m_currentCursor;
+    /// The default mouse cursor shape id.
+    int     m_defaultCursor;
 
     /// Pointer to the parent window
     wxWindow*                m_parent;

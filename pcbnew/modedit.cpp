@@ -246,7 +246,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         if( id != ID_POPUP_CANCEL_CURRENT_COMMAND )
-            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+            SetNoToolSelected();
 
         break;
     }
@@ -940,8 +940,10 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
 void FOOTPRINT_EDIT_FRAME::OnVerticalToolbar( wxCommandEvent& aEvent )
 {
     int id = aEvent.GetId();
+    int lastToolID = GetToolId();
 
-    SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+    // Stop the current command and deselect the current tool.
+    SetNoToolSelected();
 
     switch( id )
     {
@@ -949,7 +951,11 @@ void FOOTPRINT_EDIT_FRAME::OnVerticalToolbar( wxCommandEvent& aEvent )
         break;
 
     case ID_ZOOM_SELECTION:
-        SetToolID( id, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
+        // This tool is located on the main toolbar: switch it on or off on click on it
+        if( lastToolID != ID_ZOOM_SELECTION )
+            SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
+        else
+            SetNoToolSelected();
         break;
 
     case ID_MODEDIT_LINE_TOOL:
@@ -985,7 +991,7 @@ void FOOTPRINT_EDIT_FRAME::OnVerticalToolbar( wxCommandEvent& aEvent )
         {
             SetToolID( id, wxCURSOR_ARROW, _( "Pad settings" ) );
             InstallPadOptionsFrame( NULL );
-            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+            SetNoToolSelected();
         }
         break;
 
@@ -995,12 +1001,12 @@ void FOOTPRINT_EDIT_FRAME::OnVerticalToolbar( wxCommandEvent& aEvent )
 
     case ID_MODEDIT_MEASUREMENT_TOOL:
         DisplayError( this, wxT( "Unsupported tool in legacy canvas" ) );
-        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+        SetNoToolSelected();
         break;
 
     default:
         wxFAIL_MSG( wxT( "Unknown command id." ) );
-        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+        SetNoToolSelected();
     }
 }
 

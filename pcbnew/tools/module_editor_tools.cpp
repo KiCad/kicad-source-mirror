@@ -180,7 +180,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
     }
 
     m_view->Remove( &preview );
-    m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    m_frame->SetNoToolSelected();
 
     return 0;
 }

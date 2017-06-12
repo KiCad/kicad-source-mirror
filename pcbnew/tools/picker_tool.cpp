@@ -83,7 +83,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
     }
 
     reset();
-    getEditFrame<PCB_BASE_FRAME>()->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    getEditFrame<PCB_BASE_FRAME>()->SetNoToolSelected();
 
     return 0;
 }

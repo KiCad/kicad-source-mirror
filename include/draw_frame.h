@@ -403,6 +403,16 @@ public:
      */
     virtual void SetToolID( int aId, int aCursor, const wxString& aToolMsg );
 
+    /**
+     * Select the ID_NO_TOOL_SELECTED id tool (Idle tool)
+     */
+    virtual void SetNoToolSelected();
+
+    /**
+     * @return the current tool ID
+     * when there is no active tool, the ID_NO_TOOL_SELECTED is returned
+     * (the id of the default Tool (idle tool) of the right vertical toolbar)
+     */
     int GetToolId() const { return m_toolId; }
 
     /* These 4 functions provide a basic way to show/hide grid

@@ -218,7 +218,7 @@ int MICROWAVE_TOOL::addMicrowaveFootprint( const TOOL_EVENT& aEvent )
 
     doInteractiveItemPlacement( moduleCreator,  _( "Place microwave feature" ) );
 
-    frame.SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    frame.SetNoToolSelected();
 
     return 0;
 }
@@ -375,7 +375,7 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
 
     view.Remove( &previewRect );
 
-    frame.SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    frame.SetNoToolSelected();
 
     return 0;
 }

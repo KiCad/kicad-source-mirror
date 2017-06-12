@@ -445,13 +445,13 @@ public:
 
     /**
      * Function GetDefaultCursor
-     * return the default cursor shape
+     * @return the default cursor shape
      */
     int GetDefaultCursor() const { return m_defaultCursor; }
 
     /**
      * Function GetCurrentCursor
-     * return the current cursor shape, depending on the current selected tool
+     * @return the current cursor shape, depending on the current selected tool
      */
     int GetCurrentCursor() const { return m_currentCursor; }
 

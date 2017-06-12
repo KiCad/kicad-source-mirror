@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2015 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
+ * Copyright (C) 2004-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -541,6 +541,10 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
     if( m_canvas && aCursor >= 0 )
         m_canvas->SetCurrentCursor( aCursor );
 
+    // Change GAL canvas cursor if requested.
+    if( IsGalCanvasActive() && aCursor >= 0 )
+        GetGalCanvas()->SetCurrentCursor( aCursor );
+
     DisplayToolMsg( aToolMsg );
 
     if( aId < 0 )
@@ -552,6 +556,21 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
     m_toolId = aId;
 }
 
+
+void EDA_DRAW_FRAME::SetNoToolSelected()
+{
+    // Select the ID_NO_TOOL_SELECTED id tool (Idle tool)
+
+    int defaultCursor = wxCURSOR_DEFAULT;
+
+    // Change GAL canvas cursor if requested.
+    if( IsGalCanvasActive() )
+        defaultCursor = GetGalCanvas()->GetDefaultCursor();
+    else if( m_canvas )
+        defaultCursor = m_canvas->GetDefaultCursor();
+
+    SetToolID( ID_NO_TOOL_SELECTED, defaultCursor, wxEmptyString );
+}
 
 wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition ) const
 {

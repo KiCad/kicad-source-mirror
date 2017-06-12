@@ -195,8 +195,8 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
                    FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard )
     EVT_UPDATE_UI( ID_MODEDIT_UPDATE_MODULE_IN_BOARD,
                    FOOTPRINT_EDIT_FRAME::OnUpdateReplaceModuleInBoard )
-    EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar )
-    EVT_UPDATE_UI( ID_ZOOM_SELECTION, FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar )
+    EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, FOOTPRINT_EDIT_FRAME::OnUpdateSelectTool )
+    EVT_UPDATE_UI( ID_ZOOM_SELECTION, FOOTPRINT_EDIT_FRAME::OnUpdateSelectTool )
 
     EVT_UPDATE_UI_RANGE( ID_MODEDIT_PAD_TOOL, ID_MODEDIT_MEASUREMENT_TOOL,
                          FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar )
@@ -564,6 +564,12 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 void FOOTPRINT_EDIT_FRAME::CloseModuleEditor( wxCommandEvent& Event )
 {
     Close();
+}
+
+
+void FOOTPRINT_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 
 

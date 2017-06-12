@@ -175,7 +175,16 @@ public:
     bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
     void OnVerticalToolbar( wxCommandEvent& aEvent );
 
+    /**
+     * handle ID_ZOOM_SELECTION and ID_NO_TOOL_SELECTED tools
+     */
+    void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
+
+    /**
+     * handle most of tools og the vertical right toolbar ("Tools" toolbar)
+     */
     void OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent );
+
     void OnUpdateOptionsToolbar( wxUpdateUIEvent& aEvent );
     void OnUpdateLibSelected( wxUpdateUIEvent& aEvent );
     void OnUpdateModuleSelected( wxUpdateUIEvent& aEvent );

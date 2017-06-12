@@ -60,6 +60,12 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_lostFocus  = false;
     m_stealsFocus = true;
 
+#ifdef __WXMAC__
+    m_defaultCursor = m_currentCursor = wxCURSOR_CROSS;
+#else
+    m_defaultCursor = m_currentCursor = wxCURSOR_ARROW;
+#endif
+
     SetLayoutDirection( wxLayout_LeftToRight );
 
     SwitchBackend( aGalType );

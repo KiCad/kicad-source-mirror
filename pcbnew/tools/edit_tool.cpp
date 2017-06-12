@@ -1112,7 +1112,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     view.SetVisible( &ruler, false );
     view.Remove( &ruler );
 
-    frame()->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    frame()->SetNoToolSelected();
 
     return 0;
 }

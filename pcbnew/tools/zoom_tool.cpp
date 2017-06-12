@@ -64,7 +64,7 @@ int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
             m_toolMgr->PassEvent();
     }
 
-    m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    m_frame->SetNoToolSelected();
     return 0;
 }
 

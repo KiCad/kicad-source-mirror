@@ -270,7 +270,7 @@ int LENGTH_TUNER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
         }
     }
 
-    m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    m_frame->SetNoToolSelected();
     m_frame->UndoRedoBlock( false );
 
     // Store routing settings till the next invocation

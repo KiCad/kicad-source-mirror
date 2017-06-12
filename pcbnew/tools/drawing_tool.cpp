@@ -235,7 +235,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
         line = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
     }
 
-    m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    m_frame->SetNoToolSelected();
 
     return 0;
 }
@@ -264,7 +264,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
         circle = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
     }
 
-    m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    m_frame->SetNoToolSelected();
 
     return 0;
 }
@@ -293,7 +293,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
         arc = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
     }
 
-    m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    m_frame->SetNoToolSelected();
 
     return 0;
 }
@@ -458,7 +458,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     }
 
     m_view->Remove( &preview );
-    m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    m_frame->SetNoToolSelected();
 
     return 0;
 
@@ -635,7 +635,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         delete dimension;
 
     m_view->Remove( &preview );
-    m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    m_frame->SetNoToolSelected();
 
     return 0;
 }
@@ -900,7 +900,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
             break;
     }
 
-    m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    m_frame->SetNoToolSelected();
 
     return 0;
 }
@@ -1365,7 +1365,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
 
     runPolygonEventLoop( polyGeomMgr );
 
-    m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
+    m_frame->SetNoToolSelected();
 
     return 0;
 }
