@@ -352,12 +352,13 @@ void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
 }
 
 
-VECTOR2I WX_VIEW_CONTROLS::GetMousePosition() const
+VECTOR2D WX_VIEW_CONTROLS::GetMousePosition( bool aWorldCoordinates ) const
 {
     wxPoint msp = wxGetMousePosition();
     wxPoint winp = m_parentPanel->GetScreenPosition();
+    VECTOR2D screenPos( msp.x - winp.x, msp.y - winp.y );
 
-    return VECTOR2I( msp.x - winp.x, msp.y - winp.y );
+    return aWorldCoordinates ? m_view->ToWorld( screenPos ) : screenPos;
 }
 
 
@@ -372,9 +373,9 @@ VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition() const
         VECTOR2D mousePosition = GetMousePosition();
 
         if( m_settings.m_snappingEnabled )
-            return m_view->GetGAL()->GetGridPoint( m_view->ToWorld( mousePosition ) );
+            return m_view->GetGAL()->GetGridPoint( mousePosition );
         else
-            return m_view->ToWorld( mousePosition );
+            return mousePosition;
     }
 }
 
@@ -413,7 +414,7 @@ void WX_VIEW_CONTROLS::CenterOnCursor() const
     const VECTOR2I& screenSize = m_view->GetGAL()->GetScreenPixelSize();
     VECTOR2I screenCenter( screenSize / 2 );
 
-    if( GetMousePosition() != screenCenter )
+    if( GetMousePosition( false ) != screenCenter )
     {
         m_view->SetCenter( GetCursorPosition() );
         m_parentPanel->WarpPointer( KiROUND( screenSize.x / 2 ), KiROUND( screenSize.y / 2 ) );

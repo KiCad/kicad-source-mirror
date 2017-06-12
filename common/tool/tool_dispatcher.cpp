@@ -264,8 +264,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         wxMouseEvent* me = static_cast<wxMouseEvent*>( &aEvent );
         int mods = decodeModifiers( me );
 
-        VECTOR2D screenPos = m_toolMgr->GetViewControls()->GetMousePosition();
-        VECTOR2D pos = getView()->ToWorld( screenPos );
+        VECTOR2D pos = m_toolMgr->GetViewControls()->GetMousePosition();
 
         if( pos != m_lastMousePos )
         {

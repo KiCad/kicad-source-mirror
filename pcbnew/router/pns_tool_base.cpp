@@ -238,8 +238,7 @@ void TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent )
 
 void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
 {
-    VECTOR2I mp = m_ctls->GetMousePosition();
-    VECTOR2I p = getView()->ToWorld( mp );
+    VECTOR2I p = m_ctls->GetMousePosition();
     int layer;
     bool snapEnabled = !aEvent.Modifier( MD_SHIFT );
 

@@ -1032,7 +1032,7 @@ int PCB_EDITOR_CONTROL::HighlightNet( const TOOL_EVENT& aEvent )
     else
     {
         // No net code specified, pick the net code belonging to the item under the cursor
-        highlightNet( m_toolMgr, getView()->ToWorld( getViewControls()->GetMousePosition() ) );
+        highlightNet( m_toolMgr, getViewControls()->GetMousePosition() );
     }
 
     return 0;

@@ -156,18 +156,20 @@ public:
 
     /**
      * Function GetMousePosition()
-     * Returns the current mouse pointer position in screen coordinates. Note, that it may be
+     * Returns the current mouse pointer position. Note, that it may be
      * different from the cursor position if snapping is enabled (@see GetCursorPosition()).
      *
-     * @return The current mouse pointer position in the screen coordinates.
+     * @param aWorldCoordinates if true, the result is given in world coordinates, otherwise
+     * it is given in screen coordinates.
+     * @return The current mouse pointer position in either world or screen coordinates.
      */
-    virtual VECTOR2I GetMousePosition() const = 0;
+    virtual VECTOR2D GetMousePosition( bool aWorldCoordinates = true ) const = 0;
 
     /**
      * Function GetCursorPosition()
      * Returns the current cursor position in world coordinates. Note, that it may be
      * different from the mouse pointer position if snapping is enabled or cursor position
-     * is forced to specific point.
+     * is forced to a specific point.
      *
      * @return The current cursor position in world coordinates.
      */

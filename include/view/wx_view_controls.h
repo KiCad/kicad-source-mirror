@@ -78,7 +78,7 @@ public:
      */
 
     /// @copydoc VIEW_CONTROLS::GetMousePosition()
-    VECTOR2I GetMousePosition() const override;
+    VECTOR2D GetMousePosition( bool aWorldCoordinates = true ) const override;
 
     /// @copydoc VIEW_CONTROLS::GetCursorPosition()
     VECTOR2D GetCursorPosition() const override;
