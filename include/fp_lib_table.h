@@ -136,13 +136,11 @@ public:
     //-----<PLUGIN API SUBSET, REBASED ON aNickname>---------------------------
 
     /**
-     * Function FootprintEnumerate
-     * returns a list of footprint names contained within the library given by
-     * @a aNickname.
+     * Return a list of footprint names contained within the library given by @a aNickname.
+     *
+     * @param aFootprintNames is the list to fill with the footprint names found in \a aNickname
      *
      * @param aNickname is a locator for the "library", it is a "name" in LIB_TABLE_ROW.
-     *
-     * @return wxArrayString - is the array of available footprint names inside a library
      *
      * @throw IO_ERROR if the library cannot be found, or footprint cannot be loaded.
      */

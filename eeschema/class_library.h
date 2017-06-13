@@ -287,7 +287,7 @@ public:
      *
      * The object can be either a part or an alias.
      *
-     * @param aEntryName - Name of entry to search for (case sensitive).
+     * @param aLibId - The library indentifaction of entry to search for (case sensitive).
      * @param aLibraryName - Name of the library to search.
      * @return The entry object if found, otherwise NULL.
      */

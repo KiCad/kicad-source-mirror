@@ -100,10 +100,10 @@ public:
     MODULE* Back() const { return static_cast<MODULE*>( Pback ); }
 
     ///> @copydoc BOARD_ITEM_CONTAINER::Add()
-    void Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode = ADD_INSERT ) override;
+    void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_INSERT ) override;
 
     ///> @copydoc BOARD_ITEM_CONTAINER::Remove()
-    void Remove( BOARD_ITEM* aBoardItem ) override;
+    void Remove( BOARD_ITEM* aItem ) override;
 
     /**
      * Function ClearAllNets
@@ -399,9 +399,6 @@ public:
 
     bool HitTest( const wxPoint& aPosition ) const override;
 
-    /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
-     *                               bool aContained = true, int aAccuracy ) const
-     */
     bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
 
     /**
@@ -564,13 +561,10 @@ public:
     void RunOnChildren( std::function<void (BOARD_ITEM*)> aFunction );
 
 
-    /// @copydoc VIEW_ITEM::ViewGetLayers()
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    /// @copydoc VIEW_ITEM::ViewGetLOD()
     virtual unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
-    /// @copydoc VIEW_ITEM::ViewBBox()
     virtual const BOX2I ViewBBox() const override;
 
     /**

@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2015 Jean-Pierre Charras, jp.charras wanadoo.fr
- * Copyright (C) 2011-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,11 +60,12 @@
 #define NO_BACKUP_FILE        false
 
 /**
- * a prefix to create filenames for schematic files or other difile when auto-saved
- * to retrieve a crash
- * The auto-saved filenames are AUTOSAVE_PREFIX_FILENAME + <sourcefilename>
- * where <sourcefilename> is the flename without path of the auto-saved file
- * Warning: avoid any special char like / \ $ % which can create issues on Unix
+ * Prefix to create filenames for schematic files or other difile when auto-saved
+ * to retrieve a crash.
+ *
+ * The auto-saved filenames are AUTOSAVE_PREFIX_FILENAME + \<sourcefilename\>
+ * where \<sourcefilename\> is the flename without path of the auto-saved file
+ * Warning: avoid any special charactoer like / \\ \$ \% which can create issues on Unix
  * or Window with filenames or env var expansion.
  */
 #define AUTOSAVE_PREFIX_FILENAME wxT( "_saved_" )

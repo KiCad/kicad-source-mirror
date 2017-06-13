@@ -23,7 +23,7 @@
  */
 
 /**
- * @file widget_hotkey_list
+ * @file widget_hotkey_list.h
  */
 
 #ifndef __widget_hotkey_list__

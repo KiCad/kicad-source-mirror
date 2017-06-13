@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +23,7 @@
  */
 
 /**
- * @file kicad_plugin.h
+ * @file include/plugins/kicad_plugin.h
  * defines the most basic functions which all kicad plugins must implement.
  * In the implementation the definitions must make use of the KICAD_PLUGIN_EXPORT
  * to ensure symbol visibility.

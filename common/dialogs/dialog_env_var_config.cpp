@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2017 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
  */
 
 /**
- * @file dialg_env_var_config.cpp
+ * @file dialog_env_var_config.cpp
  */
 
 #include <dialog_env_var_config.h>

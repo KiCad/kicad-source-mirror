@@ -22,7 +22,7 @@
  */
 
 /**
- * @file cvstruct.h
+ * @file listview_classes.h
  */
 
 #ifndef CVSTRUCT_H

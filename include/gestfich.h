@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2014 Jerry Jacobs
- * Copyright (C) 1992-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +67,7 @@ void OpenFile( const wxString& file );
  *              contains the result of the wxDirDialog when the OK button is used to dismiss
  *              the dialog.
  * @param aFlags is the style of the path dialog, wxDD_???.
- * @param aParaent is the parent window of the dialog.
+ * @param aParent is the parent window of the dialog.
  * @param aPosition is the position of the dialog.
  * @return true if a path was selected.
  */
@@ -87,8 +87,8 @@ bool EDA_PATH_SELECTOR( const wxString& aTitle,
  * @param aFileName is a string containing the default file name.
  * @param aExtension is a string containing the default file extension.
  * @param aWildcard is a string containing the default wildcard.
- * @param aParaent is the parent window of the dialog.
- * @param aFlags is the style of the path dialog, wxFD_???.
+ * @param aParent is the parent window of the dialog.
+ * @param aStyle is the style of the path dialog, wxFD_???.
  * @param aKeepWorkingDirectory determines if current working directory should be set to the
  *                              user selected path.
  * @param aPosition is the position of the dialog.

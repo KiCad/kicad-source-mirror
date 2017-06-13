@@ -24,7 +24,7 @@
  */
 
 /**
- * @file cvframe.cpp
+ * @file cvpcb_mainframe.cpp
  */
 
 #include <fctsys.h>

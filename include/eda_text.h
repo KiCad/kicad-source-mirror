@@ -300,15 +300,14 @@ public:
     EDA_RECT GetTextBox( int aLine = -1, int aThickness = -1, bool aInvertY = false ) const;
 
     /**
-     * Function GetInterline
-     * return the distance between 2 text lines
-     * has meaning only for multiline texts
+     * Return the distance between two lines of text.
+     *
      * <p>
-     * Calculates the distance (pitch) between 2 text lines
-     * the distance includes the interline + room for chars like j { and [
-     * Is used for multiline texts, but also for single line texts, to calculate
-     * the text bounding box
-     *.
+     * Calculates the distance (pitch) between two lines of text.  This distance includes the
+     * interline distance plus room for characters like j, {, and [.  It also used for single
+     * line text, to calculate the text bounding box.
+     * </p>
+     *
      * @param aTextThickness Overrides the current thickness when greater than 0.
      * this is needed when the current m_Thickness is 0 and a default line thickness
      * is used

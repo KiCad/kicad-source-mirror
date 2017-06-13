@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2017 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -657,15 +657,16 @@ public:
     virtual void InitBlockPasteInfos();
 
     /**
-     * Function HandleBlockBegin
-     * initializes the block command including the command type, initial position,
-     * and other variables.
+     * Initialize a block command.
      *
+     * @param aDC is the device context to perform the block command.
+     * @param aKey is the block command key press.
+     * @param aPosition is the logical position of the start of the block command.
      * @param aExplicitCommand - if this is given, begin with this command, rather
-     *  than looking up the command from aKey.
+     *  than looking up the command from \a aKey.
      */
     virtual bool HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& aPosition,
-            int aExplicitCommand = 0 );
+                                   int aExplicitCommand = 0 );
 
     /**
      * Function BlockCommand

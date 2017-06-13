@@ -263,8 +263,7 @@ public:
     //-----<Footprint Stuff>-----------------------------
 
     /**
-     * Function FootprintEnumerate
-     * returns a list of footprint names contained within the library at @a aLibraryPath.
+     * Return a list of footprint names contained within the library at @a aLibraryPath.
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
      *   or URL containing several footprints.
@@ -274,8 +273,7 @@ public:
      *  The caller continues to own this object (plugin may not delete it), and
      *  plugins should expect it to be optionally NULL.
      *
-     * @return wxArrayString - is the array of available footprint names inside
-     *   a library
+     * @param aFootprintNames is the array of available footprint names inside a library.
      *
      * @throw IO_ERROR if the library cannot be found, or footprint cannot be loaded.
      */

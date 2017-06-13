@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -271,10 +271,8 @@ public:
     void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
     int GetFileFormatVersionAtLoad()  const { return m_fileFormatVersionAtLoad; }
 
-    ///> @copydoc BOARD_ITEM_CONTAINER::Add()
     void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_INSERT ) override;
 
-    ///> @copydoc BOARD_ITEM_CONTAINER::Remove()
     void Remove( BOARD_ITEM* aBoardItem ) override;
 
     BOARD_ITEM* Duplicate( const BOARD_ITEM* aItem, bool aAddToBoard = false );
@@ -929,6 +927,8 @@ public:
      * @param aNetlist is the new netlist to revise the contents of the #BOARD with.
      * @param aDeleteSinglePadNets if true, remove nets counting only one pad
      *                             and set net code to 0 for these pads
+     * @param aNewFootprints is a pointer the to a list of new footprints used when updating
+     *                       the netlist.
      * @param aReporter is a #REPORTER object to report the changes \a aNetlist makes to
      *                  the #BOARD.  If NULL, no change reporting occurs.
      */
@@ -1187,10 +1187,11 @@ public:
      * of the via.
      * </p>
      * @param aPosition The wxPoint to HitTest() against.
-     * @param aLayer The layer to search.  Use -1 (<PCB_LAYER_ID>::UNDEFINED_LAYER) for a don't care.
+     * @param aLayer The layer to search.  Use -1 (PCB_LAYER_ID::UNDEFINED_LAYER) for a don't care.
      * @return VIA* A point a to the VIA object if found, else NULL.
      */
-    VIA* GetViaByPosition( const wxPoint& aPosition, PCB_LAYER_ID aLayer = PCB_LAYER_ID( -1 ) ) const;
+    VIA* GetViaByPosition( const wxPoint& aPosition,
+                           PCB_LAYER_ID aLayer = PCB_LAYER_ID( -1 ) ) const;
 
     /**
      * Function GetPad

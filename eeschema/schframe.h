@@ -24,7 +24,7 @@
  */
 
 /**
- * @file wxEeschemaStruct.h
+ * @file schframe.h
  */
 
 #ifndef  WX_EESCHEMA_STRUCT_H

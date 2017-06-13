@@ -27,7 +27,7 @@
  * used in Gerber plotter to generate auxiliary data during plot
  * (for instance info associated to flashed pads)
  *
- * @file plot_extra_data.h
+ * @file plot_auxiliary_data.h
  */
 
 #ifndef PLOT_EXTRA_DATA_H

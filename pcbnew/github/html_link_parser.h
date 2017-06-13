@@ -1,5 +1,5 @@
 /**
- * @file html_link_parse.h
+ * @file html_link_parser.h
  */
 
 /*

@@ -9,8 +9,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras.
- * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>.
- * Copyright (C) 2012-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2017 Wayne Stambaugh <stambaughw@gmail.com>.
+ * Copyright (C) 2012-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,8 +127,9 @@ public:
 
     /**
      * Constructor
-     * @param aLineReader ownership is taken of this LINE_READER.
-     * @param aFootprintLinkReader ownership is taken of this CMP_READER.
+     * @param aLineReader ownership is taken of this #LINE_READER.
+     * @param aNetlist the #NETLIST object to read into.
+     * @param aFootprintLinkReader ownership is taken of this #CMP_READER.
      */
     NETLIST_READER( LINE_READER*  aLineReader,
                     NETLIST*      aNetlist,

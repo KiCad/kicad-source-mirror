@@ -300,12 +300,10 @@ public:
     virtual void Parse( LIB_TABLE_LEXER* aLexer ) = 0;
 
     /**
-     * Function Format
-     *
-     * Generates the table s-expression format to the \a aOutput with an indention level
+     * Generate the table in s-expression format to \a aOutput with an indention level
      * of \a aIndentLevel.
      *
-     * @param aOutput is the #OUTPUTFORMATER to format the table into.
+     * @param aOutput is the #OUTPUTFORMATTER to format the table into.
      * @param aIndentLevel is the indentation level (2 spaces) to indent.
      *
      * @throw IO_ERROR if an I/O error occurs during output.

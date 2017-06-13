@@ -23,7 +23,7 @@
 
 /**
  * File locking utilities
- * @file lock_file.h
+ * @file lockfile.h
  */
 
 #ifndef INCLUDE__LOCK_FILE_H_
