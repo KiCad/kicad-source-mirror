@@ -211,8 +211,7 @@ void PCB_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
 {
-    if( aEvent.GetEventObject() == m_drawToolBar )
-        aEvent.Check( GetToolId() == aEvent.GetId() );
+    aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 
 void PCB_EDIT_FRAME::OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent )

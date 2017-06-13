@@ -389,6 +389,9 @@ public:
     virtual void ReCreateMenuBar() override;
     virtual void ReCreateAuxiliaryToolbar();
 
+    // Toolbar accessors
+    wxAuiToolBar* GetMainToolBar() const { return m_mainToolBar; }
+
     /**
      * Function SetToolID
      * sets the tool command ID to \a aId and sets the cursor to \a aCursor.  The
