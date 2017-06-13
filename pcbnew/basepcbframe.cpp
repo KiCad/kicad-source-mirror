@@ -976,6 +976,12 @@ void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
         if( m_toolManager )
             m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
 
+        // Transfer latets current display options from legacy to GAL canvas:
+        auto painter = static_cast<KIGFX::PCB_PAINTER*>( galCanvas->GetView()->GetPainter() );
+        auto settings = painter->GetSettings();
+        DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+        settings->LoadDisplayOptions( displ_opts );
+
         galCanvas->GetView()->RecacheAllItems();
         galCanvas->SetEventDispatcher( m_toolDispatcher );
         galCanvas->StartDrawing();

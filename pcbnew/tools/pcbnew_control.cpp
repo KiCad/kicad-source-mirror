@@ -202,7 +202,7 @@ TOOL_ACTION PCB_ACTIONS::zoomTool( "pcbnew.Control.zoomTool",
         _( "Zoom to Selection" ), "", NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::resetCoords( "pcbnew.Control.resetCoords",
-        AS_GLOBAL, ' ',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_RESET_LOCAL_COORD ),
         "", "" );
 
 TOOL_ACTION PCB_ACTIONS::switchCursor( "pcbnew.Control.switchCursor",
