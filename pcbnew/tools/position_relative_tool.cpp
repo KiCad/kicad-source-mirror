@@ -152,7 +152,7 @@ int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( wxPoint anchorPosition,
         static_cast<BOARD_ITEM*>( item )->Move( translation );
     }
 
-    m_commit->Push( _( "Positon Relative" ) );
+    m_commit->Push( _( "Position Relative" ) );
 
     if( m_position_relative_selection.IsHover() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
