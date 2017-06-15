@@ -179,9 +179,9 @@ void DIALOG_POSITION_RELATIVE::OnSelectItemClick( wxCommandEvent& event )
 {
     event.Skip();
 
-
     POSITION_RELATIVE_TOOL* posrelTool = m_toolMgr->GetTool<POSITION_RELATIVE_TOOL>();
-    assert( posrelTool );
+    wxASSERT( posrelTool );
+
     m_toolMgr->RunAction( PCB_ACTIONS::selectpositionRelativeItem, true );
 }
 
@@ -189,7 +189,6 @@ void DIALOG_POSITION_RELATIVE::OnSelectItemClick( wxCommandEvent& event )
 void DIALOG_POSITION_RELATIVE::UpdateAnchor( BOARD_ITEM* aBoardItem )
 {
     m_anchor_position = aBoardItem->GetPosition();
-
     PutValueInLocalUnits( *m_anchor_x, m_anchor_position.x );
     PutValueInLocalUnits( *m_anchor_y, m_anchor_position.y );
 }
@@ -210,8 +209,7 @@ void DIALOG_POSITION_RELATIVE::OnOkClick( wxCommandEvent& event )
         m_options.entry2    = DoubleValueFromString( UNSCALED_UNITS, m_yEntry->GetValue() );
         m_options.entryRotation = DoubleValueFromString( UNSCALED_UNITS, m_rotEntry->GetValue() );
         POSITION_RELATIVE_TOOL* posrelTool = m_toolMgr->GetTool<POSITION_RELATIVE_TOOL>();
-        assert( posrelTool );
-
+        wxASSERT( posrelTool );
 
         posrelTool->RelativeItemSelectionMove( m_anchor_position, m_translation, m_rotation );
 
