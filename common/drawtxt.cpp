@@ -209,7 +209,7 @@ void DrawGraphicHaloText( EDA_RECT* aClipBox, wxDC * aDC,
 
 /**
  * Function PLOTTER::Text
- *  same as DrawGraphicText, but plot graphic text insteed of draw it
+ * same as DrawGraphicText, but plot graphic text insteed of draw it
  *  @param aPos = text position (according to aH_justify, aV_justify)
  *  @param aColor (COLOR4D) = text color
  *  @param aText = text to draw
@@ -223,6 +223,8 @@ void DrawGraphicHaloText( EDA_RECT* aClipBox, wxDC * aDC,
  *  @param aItalic = true to simulate an italic font
  *  @param aBold = true to use a bold font Useful only with default width value (aWidth = 0)
  *  @param aMultilineAllowed = true to plot text as multiline, otherwise single line
+ *  @param aData = a parameter used by some plotters in SetCurrentLineWidth(),
+ * not directly used here.
  */
 void PLOTTER::Text( const wxPoint&              aPos,
                     const COLOR4D               aColor,

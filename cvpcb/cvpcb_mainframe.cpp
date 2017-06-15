@@ -979,7 +979,7 @@ void CVPCB_MAINFRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     switch( mail.Command() )
     {
     case MAIL_EESCHEMA_NETLIST:
-        ReadNetListAndLinkFiles( payload );
+        ReadNetListAndFpFiles( payload );
         /* @todo
         Go into SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event ) and trim GNL_ALL down.
         */

@@ -720,7 +720,7 @@ inline bool IsBackLayer( PCB_LAYER_ID aLayerId )
  * some (not all) layers: external copper, and paired layers( Mask, Paste, solder ... )
  * are swapped between front and back sides
  * internal layers are flipped only if the copper layers count is known
- * @param aLayer = the PCB_LAYER_ID to flip
+ * @param aLayerId = the PCB_LAYER_ID to flip
  * @param aCopperLayersCount = the number of copper layers. if 0 (in fact if < 4 )
  *  internal layers will be not flipped because the layer count is not known
  */

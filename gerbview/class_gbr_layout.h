@@ -131,8 +131,8 @@ public:
 
     /**
      * Function SetPrintableLayers
-     * changes the list of printable layers
-     * @param aLayerMask = The new bit-mask of printable layers
+     * Set the list of printable graphic layers
+     * @param aLayerList = the new list (std::vector) of printable layer id
      */
     void SetPrintableLayers( const std::vector<int>& aLayerList  )
     {
@@ -141,7 +141,7 @@ public:
 
     /**
      * Function GetPrintableLayers
-     * @return the bit-mask of printable layers
+     * @return the list of printable layers
      */
     std::vector<int> GetPrintableLayers()
     {
@@ -150,6 +150,7 @@ public:
 
     /**
      * Function ClearPrintableLayers
+     * Clear the list of graphic layers to print
      */
     void ClearPrintableLayers()
     {
@@ -158,6 +159,8 @@ public:
 
     /**
      * Function AddLayerToPrintableList
+     * Add a layer to the list of graphic layers to print
+     * @param aLayer = the id of the graphic layer.
      */
     void AddLayerToPrintableList( int aLayer)
     {

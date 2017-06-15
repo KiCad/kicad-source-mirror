@@ -112,7 +112,7 @@ void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius,
  * @param aCornerBuffer = a buffer to store the polygon
  * @param aPosition = the coordinate of the center of the rectangle
  * @param aSize = the size of the rectangle
- * @param aRadius = radius of rounded corners
+ * @param aCornerRadius = radius of rounded corners
  * @param aRotation = rotation in 0.1 degrees of the rectangle
  * @param aCircleToSegmentsCount = the number of segments to approximate a circle
  */

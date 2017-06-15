@@ -201,13 +201,21 @@ public:
     void SaveFootprintAssociation();
 
     /**
-     * Function ReadNetList
-     * reads the netlist (.net) file defined by #m_NetlistFileName.
-     * and the corresponding cmp to footprint (.cmp) link file
+     * Function ReadNetListAndFpFiles
+     * loads the netlist file built on the fly by Eeschema and loads
+     * footprint libraries from fp lib tables.
      * @param aNetlist is the netlist from eeschema in kicad s-expr format.
+     * (see CVPCB_MAINFRAME::KiwayMailIn() to know how to get this netlist)
      */
-    bool             ReadNetListAndLinkFiles( const std::string& aNetlist );
+    bool             ReadNetListAndFpFiles( const std::string& aNetlist );
 
+    /**
+     * Function ReadSchematicNetlist
+     * read the netlist (.net) file built on the fly by Eeschema.
+     * @param aNetlist is the netlist buffer filled by eeschema, in kicad s-expr format.
+     * It is the same netlist as the .net file created by Eeschema.
+     * (This method is called by ReadNetListAndFpFiles)
+     */
     int              ReadSchematicNetlist( const std::string& aNetlist );
 
     /**

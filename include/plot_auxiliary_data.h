@@ -166,6 +166,8 @@ std::string formatStringToGerber( const wxString& aString );
  * for a graphic object.
  * @param aPrintedText is the string to print
  * @param aLastNetAttributes is the current full set of attributes.
+ * @param aData is the GBR_NETLIST_METADATA associated to the graphic object (can be NULL
+ * if no associated metadata, and aClearPreviousAttributes will be set to false)
  * @param aClearPreviousAttributes returns true if the full set of attributes
  * must be deleted from file before adding new attribute (happens when a previous
  * attribute does not exist no more).

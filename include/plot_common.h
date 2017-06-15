@@ -289,9 +289,7 @@ public:
     /**
      * virtual function FlashPadCircle
      * @param aPadPos Position of the shape (center of the rectangle
-     * @param aSize = size of rounded rect
-     * @param cornerRadius Radius of the rounded corners
-     * @param aOrient The rotation of the shape
+     * @param aDiameter diameter of round pad
      * @param aTraceMode FILLED or SKETCH
      * @param aData an auxiliary info (mainly for gerber format)
      */
@@ -301,9 +299,8 @@ public:
     /**
      * virtual function FlashPadOval
      * @param aPadPos Position of the shape (center of the rectangle
-     * @param aSize = size of rounded rect
-     * @param cornerRadius Radius of the rounded corners
-     * @param aOrient The rotation of the shape
+     * @param aSize = size of oblong shape
+     * @param aPadOrient The rotation of the shape
      * @param aTraceMode FILLED or SKETCH
      * @param aData an auxiliary info (mainly for gerber format)
      */
@@ -314,8 +311,7 @@ public:
      * virtual function FlashPadRect
      * @param aPadPos Position of the shape (center of the rectangle
      * @param aSize = size of rounded rect
-     * @param cornerRadius Radius of the rounded corners
-     * @param aOrient The rotation of the shape
+     * @param aPadOrient The rotation of the shape
      * @param aTraceMode FILLED or SKETCH
      * @param aData an auxuliary info (mainly for gerber format)
      */
@@ -382,8 +378,7 @@ public:
     static const unsigned MARKER_COUNT = 58;
 
     /**
-     * Draw a pattern shape number aShapeId, to coord x0, y0.
-     * x0, y0 = coordinates tables
+     * Draw a pattern shape number aShapeId, to coord position.
      * Diameter diameter = (coord table) hole
      * AShapeId = index (used to generate forms characters)
      */

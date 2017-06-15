@@ -100,7 +100,6 @@
  * @param aGbrItem The GBRITEM to fill in.
  * @param aAperture the associated type of aperture
  * @param Dcode_index The DCODE value, like D14
- * @param aLayer The layer index to set into the GBRITEM
  * @param aPos The center point of the flash
  * @param aSize The diameter of the round flash
  * @param aLayerNegative = true if the current layer is negative
@@ -152,7 +151,6 @@ void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
  *
  * @param aGbrItem The GERBER_DRAW_ITEM to fill in.
  * @param Dcode_index The DCODE value, like D14
- * @param aLayer The layer index to set into the GBRITEM
  * @param aStart The starting point of the line
  * @param aEnd The ending point of the line
  * @param aPenSize The size of the flash. Note rectangular shapes are legal.
@@ -196,13 +194,11 @@ void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
  * </ul><p>
  * @param aGbrItem is the GBRITEM to fill in.
  * @param Dcode_index is the DCODE value, like D14
- * @param aLayer is the layer index to set into the GBRITEM
  * @param aStart is the starting point
  * @param aEnd is the ending point
  * @param aRelCenter is the center coordinate relative to start point,
  *   given in ABSOLUTE VALUE and the sign of values x et y de rel_center
- *   must be calculated from the previously given constraint: arc only in the
- * same quadrant.
+ *   must be calculated from the previously given constraint: arc only in the same quadrant.
  * @param aClockwise true if arc must be created clockwise
  * @param aPenSize The size of the flash. Note rectangular shapes are legal.
  * @param aMultiquadrant = true to create arcs upto 360 deg,
