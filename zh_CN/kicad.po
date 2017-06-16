@@ -93,7 +93,7 @@ msgstr "Pl 编辑器 - 图框编辑器"
 
 #: kicad/dialogs/dialog_template_selector.cpp:120
 msgid "<html><h1>Template Selector</h1></html>"
-msgstr "选择模板"
+msgstr "<html><h1>选择模板</h1></html>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:211
 msgid "Select Templates Directory"
@@ -370,11 +370,11 @@ msgstr "关闭KiCad"
 
 #: kicad/menubar.cpp:292
 msgid "Open Text E&ditor"
-msgstr "打开文件编辑器(&D)"
+msgstr "打开文本编辑器(&D)"
 
 #: kicad/menubar.cpp:293
 msgid "Launch preferred text editor"
-msgstr "打开文本编辑器"
+msgstr "打开首选文本编辑器"
 
 #: kicad/menubar.cpp:299
 msgid "&Open Local File"
@@ -400,7 +400,7 @@ msgstr "设置文本编辑器(&S)"
 
 #: kicad/menubar.cpp:317
 msgid "Set your preferred text editor"
-msgstr "设置自定义文本编辑器"
+msgstr "设置首选文本编辑器"
 
 #: kicad/menubar.cpp:325
 msgid "System &Default PDF Viewer"
@@ -14524,7 +14524,7 @@ msgstr "立陶宛"
 
 #: common/pgm_base.cpp:347
 msgid "No default editor found, you must choose it"
-msgstr "未找到编辑器 请选择默认文本编辑器"
+msgstr "未找到默认编辑器 请先设置首选文本编辑器"
 
 #: common/pgm_base.cpp:367
 msgid "Executable file (*.exe)|*.exe"
@@ -14536,7 +14536,7 @@ msgstr "可执行文件 （*） | *"
 
 #: common/pgm_base.cpp:379
 msgid "Select Preferred Editor"
-msgstr "选择默认编辑器"
+msgstr "选择首选编辑器"
 
 #: common/pgm_base.cpp:400
 #, c-format
