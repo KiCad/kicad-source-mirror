@@ -546,8 +546,8 @@ bool SIM_PLOT_PANEL::DeleteTrace( const wxString& aName )
 
     if( it != m_traces.end() )
     {
-        m_traces.erase( it );
         TRACE* trace = it->second;
+        m_traces.erase( it );
 
         if( CURSOR* cursor = trace->GetCursor() )
             DelLayer( cursor, true );
