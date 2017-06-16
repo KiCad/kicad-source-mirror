@@ -14528,11 +14528,11 @@ msgstr "未找到默认编辑器 请先设置首选文本编辑器"
 
 #: common/pgm_base.cpp:367
 msgid "Executable file (*.exe)|*.exe"
-msgstr "可执行文件（* .EXE）| *.exe文件"
+msgstr "可执行文件 (*.exe)|*.exe"
 
 #: common/pgm_base.cpp:369
 msgid "Executable file (*)|*"
-msgstr "可执行文件 （*） | *"
+msgstr "可执行文件 (*)|*"
 
 #: common/pgm_base.cpp:379
 msgid "Select Preferred Editor"
