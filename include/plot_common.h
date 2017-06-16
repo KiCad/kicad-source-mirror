@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -322,8 +322,8 @@ public:
      * virtual function FlashPadRoundRect
      * @param aPadPos Position of the shape (center of the rectangle
      * @param aSize = size of rounded rect
-     * @param aCornerRadius = radius of the rounded corners
-     * @param aOrient is the rotation of the shape
+     * @param aCornerRadius Radius of the rounded corners
+     * @param aOrient The rotation of the shape
      * @param aTraceMode FILLED or SKETCH
      * @param aData an auxiliary info (mainly for gerber format attributes)
      */
@@ -607,13 +607,12 @@ public:
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
                       int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void PenTo( const wxPoint& pos, char plume ) override;
-    virtual void FlashPadCircle( const wxPoint& pos, int diametre,
-                                 EDA_DRAW_MODE_T trace_mode, void* aData ) override;
-    virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, double orient,
-                               EDA_DRAW_MODE_T trace_mode, void* aData ) override;
+    virtual void FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
+                                 EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+    virtual void FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize, double aPadOrient,
+                               EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
     virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
-                               double aPadOrient, EDA_DRAW_MODE_T aTraceMode,
-                               void* aData ) override;
+                               double aOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
     virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                     int aCornerRadius, double aOrient,
                                     EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
@@ -666,12 +665,13 @@ public:
     }
 
     // Pad routines are handled with lower level primitives
-    virtual void FlashPadCircle( const wxPoint& pos, int diametre,
-                                 EDA_DRAW_MODE_T trace_mode, void* aData ) override;
-    virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, double orient,
-                               EDA_DRAW_MODE_T trace_mode, void* aData ) override;
-    virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
-                               double orient, EDA_DRAW_MODE_T trace_mode, void* aData ) override;
+    virtual void FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
+                                 EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+    virtual void FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize, double aPadOrient,
+                               EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+    virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
+                               double aPadOrient, EDA_DRAW_MODE_T aTraceMode,
+                               void* aData ) override;
     virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                     int aCornerRadius, double aOrient,
                                     EDA_DRAW_MODE_T aTraceMode, void* aData ) override;

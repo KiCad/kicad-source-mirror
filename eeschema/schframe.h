@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras wanadoo.fr
- * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -1089,7 +1089,7 @@ private:
      * else search in all loaded libs
      *
      * @param aDC is the device context to draw upon.
-     * @param aFilters is a filter to pass the allowed lib names list, or library name
+     * @param aFilter is a filter to pass the allowed lib names list, or library name
      * to load the component from and/or some other filters
      *          if NULL, no filtering.
      * @param aHistoryList     list remembering recently used component names.

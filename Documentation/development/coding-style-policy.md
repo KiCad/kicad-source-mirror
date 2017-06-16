@@ -1,12 +1,12 @@
 # KiCad C++ Source Code Style Guide #
 
-Latest Publishing: February 2013
+Latest Publishing: February 2017
 
 First Published: September 2010
 
 written by
 
-Wayne Stambaugh \<<stambaughw@verizon.net>\>
+Wayne Stambaugh \<<stambaughw@gmail.com>\>
 and
 Dick Hollenbeck \<<dick@softplc.com>\>
 
@@ -129,8 +129,7 @@ enables clever and concise Doxygen comments.
 **Example**
 ~~~~~~~~~~~~~{.cpp}
     /*/** */*
-     * Function SetFoo
-     * takes aFoo and copies it into this instance.
+     * Copy aFoo into this instance.
      */
     void SetFoo( int aFoo );
 ~~~~~~~~~~~~~
@@ -174,18 +173,21 @@ one or more blank lines above them. One blank line is preferred.
 ## 3.2 Doxygen ## {#doxygen}
 Doxygen is a C++ source code documenting tool used by the project.  Descriptive
 *.html files can be generated from the source code by installing Doxygen and
-building the target named **doxygen-docs**.
+building the target named **doxygen-docs** and **dev-docs** that include this
+document.
 
     $ cd <kicad_build_base>
     $ make doxygen-docs
 
-The \*.html files will be placed into
-\<kicad\_project\_base\>/Documentation/doxygen/html/
+The generated source \*.html files will be placed into
+\<kicad\_project\_base\>/Documentation/doxygen/html/ and the developer's
+\*.html files will be placed into
+\<kicad\_project\_base\>/Documentation/development/doxygen/html/
 
 Doxygen comments are used to build developer documentation from the
 source code. They should normally be only placed in header files and not
 in \*.cpp files. This eliminates the obligation to keep two comments in
-agreement with each other. is if the class, function, or enum, etc. is
+agreement with each other.  If the class, function, or enum, etc. is
 only defined in a \*.cpp source file and not present in any header file,
 in which case the Doxygen comments should go into the \*.cpp source file.
 Again, avoid duplicating the Doxygen comments in both the header and
@@ -208,28 +210,31 @@ static) function known only to a \*.cpp file. The format of a function
 comment is chosen to serve a dual purpose role: delineation of the
 function declaration within the source code and to create a consistent
 leading sentence in the doxygen html output. The chosen format is
-“Function \<name\>” as shown in the example below.
+to use a descriptive single line sentence, followed by a blank line,
+followed by an optional detailed description as the shown in the example
+below.
 
 **Example**
 ~~~~~~~~~~~~~{.cpp}
     /*/** */*
-     * Function Print
-     * formats and writes text to the output stream.
-     * @param nestLevel is the multiple of spaces to precede the output with.
-     * @param fmt is a printf() style format string.
+     * Format and write text to an output stream.
+     *
+     * A really detailed description goes here if it's needed.
+     *
+     * @param aMestLevel is the multiple of spaces to precede the output with.
+     * @param aFmt is a printf() style format string.
      * @param ... is a variable list of parameters that will get blended into
      *  the output under control of the format string.
-     * @return int - the number of characters output.
-     * @throw IO_ERROR, if there is a problem outputting, such asisk.
+     * @return the number of characters output.
+     * @throw IO_ERROR, if there is a problem outputting.
      */
-    int PRINTF_FUNC Print( int nestLevel,
-        const char* fmt, ... );
+    int PRINTF_FUNC Print( int aNestLevel, const char* aFmt, ... );
 ~~~~~~~~~~~~~
 
-The “Function \<name\>” text goes on the 2nd line of the comment. The
-\@return keyword if present, should show the type of the return value
-followed by a hiphen. The \@param keyword names a function parameter
-and the text following should flow like a normal English sentence.
+The single line description goes on the 2nd line of the comment. The
+\@return keyword if present, should describe the return value followed
+by a hyphen. The \@param keyword names a function parameter and the text
+following should flow like a normal English sentence.
 
 ### 3.2.2 Class Comments ### {#class_comments}
 A class comment describes a class declaration by giving the purpose and
@@ -241,14 +246,15 @@ multiple paragraphs.
 **Example**
 ~~~~~~~~~~~~~{.cpp}
     /*/** */*
-     * Class OUTPUTFORMATTER
-     * is an important interface (abstract) class used to output UTF8 text in
-     * a convenient way. The primary interface is "printf() - like" but
-     * with support for indentation control. The destination of the 8 bit
-     * wide text is up to the implementer.
+     * An interface (abstract) class used to output UTF8 text in a
+     * convenient way.
+     *
+     * The primary interface is "printf() like" but with support for
+     * indentation control. The destination of the 8 bit wide text is
+     * up to the implementer.
      * <p>
-     * The implementer only has to implement the write() function, but can
-     * also optionally re-implement GetQuoteChar().
+     * The implementer only has to implement the write() function, but
+     * can also optionally re-implement GetQuoteChar().
      * <p>
      * If you want to output a wxString, then use CONV_TO_UTF8() on it
      * before passing it as an argument to Print().
@@ -440,7 +446,7 @@ Each header file should include an \#ifndef which is commonly used to
 prevent compiler errors in the case where the header file is seen
 multiple times in the code stream presented to the compiler. Just
 after the license statement, at the top of the file there should be
-lines similar to these (but with a filename specific token other than
+lines similar to these (but with a file name specific token other than
 `RICHIO_H_`):
 
 ~~~~~~~~~~~~~{.cpp}
@@ -558,8 +564,7 @@ below was taken directly from the KiCad source.
 
 
     /*/** */*
-     * Struct IOError
-     * is a class used to hold an error message and may be used to throw exceptions
+     * A class used to hold an error message and may be used to throw exceptions
      * containing meaningful error messages.
      */
     struct IOError
@@ -579,9 +584,7 @@ below was taken directly from the KiCad source.
 
 
     /*/** */*
-     * Class LINE_READER
-     * reads single lines of text into its buffer and increments a line number counter.
-     * It throws an exception if a line is too long.
+     * Read single lines of text into a buffer and increments a line number counter.
      */
     class LINE_READER
     {
@@ -597,12 +600,10 @@ below was taken directly from the KiCad source.
     public:
 
         /*/** */*
-         * Constructor LINE_READER
-         * takes an open FILE and the size of the desired line buffer.
-         * @param aFile An open file in "ascii" mode, not binary mode.
-         * @param aMaxLineLength The number of bytes to use in the line buffer.
+         * @param aFile is an open file in "ascii" mode, not binary mode.
+         * @param aMaxLineLength is the number of bytes to use in the line buffer.
          */
-        LINE_READER( FILE* aFile,  unsigned aMaxLineLength );
+        LINE_READER( FILE* aFile, unsigned aMaxLineLength );
 
         ~LINE_READER()
         {
@@ -619,12 +620,11 @@ below was taken directly from the KiCad source.
         */
 
         /*/** */*
-         * Function ReadLine
-         * reads a line of text into the buffer and increments the line number
-         * counter.  If the line is larger than the buffer size, then an exception
-         * is thrown.
-         * @return int - The number of bytes read, 0 at end of file.
-         * @throw IOError only when a line is too long.
+         * Read a line of text into the buffer and increments the line number
+         * counter.
+         *
+         * @return is the number of bytes read, 0 at end of file.
+         * @throw IO_ERROR when a line is too long.
          */
         int ReadLine();
 
@@ -647,15 +647,16 @@ below was taken directly from the KiCad source.
 
 
     /*/** */*
-     * Class OUTPUTFORMATTER
-     * is an interface (abstract class) used to output ASCII text in a convenient
-     * way.  The primary interface is printf() like but with support for indentation
-     * control.  The destination of the 8 bit wide text is up to the implementer.
-     * If you want to output a wxString, then use CONV_TO_UTF8() on it before passing
-     * it as an argument to Print().
+     * An interface (abstract class) used to output ASCII text in a convenient way.
+     *
+     * The primary interface is printf() like with support for indentation control.
+     * The destination of the 8 bit wide text is up to the implementer. If you want
+     * to output a wxString, then use CONV_TO_UTF8() on it before passing it as an
+     * argument to Print().
      * <p>
      * Since this is an abstract interface, only classes derived from this one
      * will be the implementations.
+     * </p>
      */
     class OUTPUTFORMATTER
     {
@@ -675,58 +676,54 @@ below was taken directly from the KiCad source.
     public:
 
         /*/** */*
-         * Function Print
-         * formats and writes text to the output stream.
+         * Format and write text to the output stream.
          *
-         * @param nestLevel The multiple of spaces to preceed the output with.
-         * @param fmt A printf() style format string.
-         * @param ... a variable list of parameters that will get blended into
+         * @param nestLevel is the multiple of spaces to preceed the output with.
+         * @param fmt is a printf() style format string.
+         * @param ... is a variable list of parameters that will get blended into
          *  the output under control of the format string.
-         * @return int - the number of characters output.
-         * @throw IOError, if there is a problem outputting, such as a full disk.
+         * @return the number of characters output.
+         * @throw IO_ERROR if there is a problem outputting, such as a full disk.
          */
         virtual int PRINTF_FUNC Print( int nestLevel, const char* fmt, ... ) = 0;
 
         /*/** */*
-         * Function GetQuoteChar
-         * performs quote character need determination.
-         * It returns the quote character as a single character string for a given
+         * Return the quoting character required for aWrapee.
+         *
+         * Return the quote character as a single character string for a given
          * input wrapee string.  If the wrappee does not need to be quoted,
          * the return value is "" (the null string), such as when there are no
-         * delimiters in the input wrapee string.  If you want the quote_char
+         * delimiters in the input wrapee string.  If you want the quote character
          * to be assuredly not "", then pass in "(" as the wrappee.
          * <p>
          * Implementations are free to override the default behavior, which is to
          * call the static function of the same name.
-
-         * @param wrapee A string that might need wrapping on each end.
-         * @return const char* - the quote_char as a single character string, or ""
+         * </p>
+         *
+         * @param aWrapee is a string that might need wrapping on each end.
+         * @return the quote character as a single character string, or ""
          *   if the wrapee does not need to be wrapped.
          */
-        virtual const char* GetQuoteChar( const char* wrapee ) = 0;
+        virtual const char* GetQuoteChar( const char* aWrapee ) = 0;
 
         virtual ~OUTPUTFORMATTER() {}
 
         /*/** */*
-         * Function GetQuoteChar
-         * performs quote character need determination according to the Specctra DSN
-         * specification.
-
-         * @param wrapee A string that might need wrapping on each end.
-         * @param quote_char A single character C string which provides the current
+         * Get the quote character according to the Specctra DSN specification.
+         *
+         * @param aWrapee is a string that might need wrapping on each end.
+         * @param aQuoteChar is a single character C string which provides the current
          *          quote character, should it be needed by the wrapee.
          *
-         * @return const char* - the quote_char as a single character string, or ""
+         * @return the quote_character as a single character string, or ""
          *   if the wrapee does not need to be wrapped.
          */
-        static const char* GetQuoteChar( const char* wrapee, const char* quote_char );
+        static const char* GetQuoteChar( const char* aWrapee, const char* aQuoteChar );
     };
 
 
     /*/** */*
-     * Class STRINGFORMATTER
-     * implements OUTPUTFORMATTER to a memory buffer.  After Print()ing the
-     * string is available through GetString()
+     * Implement an OUTPUTFORMATTER to a memory buffer.
      */
     class STRINGFORMATTER : public OUTPUTFORMATTER
     {
@@ -739,8 +736,7 @@ below was taken directly from the KiCad source.
     public:
 
         /*/** */*
-         * Constructor STRINGFORMATTER
-         * reserves space in the buffer
+         * Reserve space in the buffer
          */
         STRINGFORMATTER( int aReserve = 300 ) :
             buffer( aReserve, '\0' )
@@ -749,8 +745,7 @@ below was taken directly from the KiCad source.
 
 
         /*/** */*
-         * Function Clear
-         * clears the buffer and empties the internal string.
+         * Clears the buffer and empties the internal string.
          */
         void Clear()
         {
@@ -758,8 +753,7 @@ below was taken directly from the KiCad source.
         }
 
         /*/** */*
-         * Function StripUseless
-         * removes whitespace, '(', and ')' from the mystring.
+         * Remove whitespace, '(', and ')' from the internal string.
          */
         void StripUseless();
 

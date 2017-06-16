@@ -46,8 +46,7 @@ class SCH_IO_MGR
 public:
 
     /**
-     * Enum SCH_FILE_T
-     * is a set of file types that the SCH_IO_MGR knows about, and for which there
+     * A set of file types that the #SCH_IO_MGR knows about, and for which there
      * has been a plugin written.
      */
     enum SCH_FILE_T
@@ -61,22 +60,22 @@ public:
     };
 
     /**
-     * Function FindPlugin
-     * returns a SCH_PLUGIN which the caller can use to import, export, save, or load
-     * design documents.  The returned SCH_PLUGIN, may be reference counted, so please
-     * call PluginRelease() when you are done using the returned SCH_PLUGIN.  It may or
-     * may not be code running from a DLL/DSO.
+     * Return a #SCH_PLUGIN which the caller can use to import, export, save, or load
+     * design documents.
      *
-     * @param aFileType is from SCH_FILE_T and tells which plugin to find.
+     * The returned #SCH_PLUGIN, may be reference counted, so please call PluginRelease()
+     * when you are done using the returned #SCH_PLUGIN.  It may or may not be code running
+     * from a DLL/DSO.
      *
-     * @return SCH_PLUGIN* - the plugin corresponding to aFileType or NULL if not found.
+     * @param aFileType is from #SCH_FILE_T and tells which plugin to find.
+     *
+     * @return the plugin corresponding to aFileType or NULL if not found.
      *  Caller owns the returned object, and must call PluginRelease when done using it.
      */
     static SCH_PLUGIN* FindPlugin( SCH_FILE_T aFileType );
 
     /**
-     * Function PluginRelease
-     * releases a SCH_PLUGIN back to the system, and may cause it to be unloaded from memory.
+     * Release a #SCH_PLUGIN back to the system, and may cause it to be unloaded from memory.
      *
      * @param aPlugin is the one to be released, and which is no longer usable
      *  after calling this.
@@ -84,76 +83,75 @@ public:
     static void ReleasePlugin( SCH_PLUGIN* aPlugin );
 
     /**
-     * Function ShowType
-     * returns a brief name for a plugin, given aFileType enum.
+     * Return a brief name for a plugin, given aFileType enum.
      */
     static const wxString ShowType( SCH_FILE_T aFileType );
 
     /**
-     * Function EnumFromStr
-     * returns the SCH_FILE_T from the corresponding plugin type name: "kicad", "legacy", etc.
+     * Return the #SCH_FILE_T from the corresponding plugin type name: "kicad", "legacy", etc.
      */
     static SCH_FILE_T EnumFromStr( const wxString& aFileType );
 
     /**
-     * Function GetFileExtension
-     * returns the file extension for \a aFileType.
+     * Return the file extension for \a aFileType.
      *
-     * @param aFileType The #SCH_FILE_T type.
-     * @return A wxString object containing the file extension for \a aFileType or an empty
-     *         string if \a aFileType is invalid.
+     * @param aFileType is the #SCH_FILE_T type.
+     *
+     * @return the file extension for \a aFileType or an empty string if \a aFileType is invalid.
      */
     static const wxString GetFileExtension( SCH_FILE_T aFileType );
 
     /**
-     * Function GuessPluginTypeFromLibPath
-     * returns a plugin type given a footprint library's libPath.
+     * Return a plugin type given a footprint library's libPath.
      */
     static SCH_FILE_T GuessPluginTypeFromLibPath( const wxString& aLibPath );
 
     /**
-     * Function Load
-     * finds the requested SCH_PLUGIN and if found, calls the SCH_PLUGIN->Load(..) function
+     * Load the requested #SCH_PLUGIN and if found, calls the SCH_PLUGIN->Load(..) function
      * on it using the arguments passed to this function.  After the SCH_PLUGIN->Load()
-     * function returns, the SCH_PLUGIN is Released() as part of this call.
+     * function returns, the #SCH_PLUGIN is Released() as part of this call.
      *
-     * @param aFileType is the SCH_FILE_T of file to load.
+     * @param aFileType is the #SCH_FILE_T of file to load.
+     *
      * @param aFileName is the name of the file to load.
+     *
      * @param aKiway is the #KIWAY object used to access the component libraries loaded
      *               by the project.
-     * @param aAppendToMe is an existing #SCHEMATIC to append to, use NULL if a new
-     *                    #SCHEMATIC load is wanted.
+     *
+     * @param aAppendToMe is an existing #SCH_SHEET to append to, use NULL if a new
+     *                    #SCH_SHEET load is wanted.
+     *
      * @param aProperties is an associative array that allows the caller to pass additional
-     *                    tuning parameters to the SCH_PLUGIN.
+     *                    tuning parameters to the #SCH_PLUGIN.
      *
-     * @return SCHEMATIC* - caller owns it, never NULL because exception thrown if error.
+     * @return the loaded schematic which the caller owns.  This is never NULL because
+     *          exception thrown if an error occurs.
      *
-     * @throw IO_ERROR if the SCH_PLUGIN cannot be found, file cannot be found,
+     * @throw IO_ERROR if the #SCH_PLUGIN cannot be found, file cannot be found
      *                 or file cannot be loaded.
      */
     static SCH_SHEET* Load( SCH_FILE_T aFileType, const wxString& aFileName, KIWAY* aKiway,
                             SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL );
 
     /**
-     * Function Save
-     * will write either a full aSchematic to a storage file in a format that this
+     * Write either a full aSchematic to a storage file in a format that this
      * implementation knows about, or it can be used to write a portion of
      * aSchematic to a special kind of export file.
      *
-     * @param aFileType is the SCH_FILE_T of file to save.
+     * @param aFileType is the #SCH_FILE_T of file to save.
      *
      * @param aFileName is the name of a file to save to on disk.
-     * @param aSchematic is the SCHEMATIC document (data tree) to save or export to disk.
      *
-     * @param aSchematic is the in memory document tree from which to extract information
-     *  when writing to \a aFileName.  The caller continues to own the SCHEMATIC, and
-     *  the plugin should refrain from modifying the SCHEMATIC if possible.
+     * @param aSchematic is the #SCH_SCREN document (data tree) to save or export to disk.
+     *
+     * @param aKiway is the #KIWAY object used to access the component libraries loaded
+     *               by the project.
      *
      * @param aProperties is an associative array that can be used to tell the
-     *  saver how to save the file, because it can take any number of
-     *  additional named tuning arguments that the plugin is known to support.
-     *  The caller continues to own this object (plugin may not delete it), and
-     *  plugins should expect it to be optionally NULL.
+     *                    saver how to save the file, because it can take any number of
+     *                    additional named tuning arguments that the plugin is known to support.
+     *                    The caller continues to own this object (plugin may not delete it), and
+     *                    plugins should expect it to be optionally NULL.
      *
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
@@ -163,8 +161,7 @@ public:
 
 
 /**
- * Class SCH_PLUGIN
- * is a base class that SCHEMATIC loading and saving plugins should derive from.
+ * Base class that schematic file and library loading and saving plugins should derive from.
  * Implementations can provide either Load() or Save() functions, or both.
  * SCH_PLUGINs throw exceptions, so it is best that you wrap your calls to these
  * functions in a try catch block.  Plugins throw exceptions because it is illegal
@@ -191,22 +188,17 @@ public:
     //-----<PUBLIC SCH_PLUGIN API>-------------------------------------------------
 
     /**
-     *
-     * Function GetName
-     * returns a brief hard coded name for this SCH_PLUGIN.
+     * Returns a brief hard coded name for this SCH_PLUGIN.
      */
     virtual const wxString GetName() const = 0;
 
     /**
-     * Function GetFileExtension
-     * returns the file extension for the SCH_PLUGIN.
+     * Returns the file extension for the #SCH_PLUGIN.
      */
     virtual const wxString GetFileExtension() const = 0;
 
     /**
-     * Function GetModifyHash
-     *
-     * returns the modification hash from the library cache.
+     * Return the modification hash from the library cache.
      *
      * @note This is temporary until the new s-expr file format is implement.  The new file
      *       format will embed symbols instead of referencing them from the library.  This
@@ -219,16 +211,17 @@ public:
     virtual void SaveLibrary( const wxString& aFileName, const PROPERTIES* aProperties = NULL );
 
     /**
-     * Function Load
-     *
-     * loads information from some input file format that this SCH_PLUGIN implementation
-     * knows about, into either a new SCHEMATIC or an existing one. This may be used to load an
-     * entire new SCHEMATIC, or to augment an existing one if @a aAppendToMe is not NULL.
+     * Load information from some input file format that this #SCH_PLUGIN implementation
+     * knows about, into either a new #SCH_SHEET or an existing one. This may be used to load an
+     * entire new #SCH_SHEET, or to augment an existing one if \a aAppendToMe is not NULL.
      *
      * @param aFileName is the name of the file to use as input and may be foreign in
      *                  nature or native in nature.
      *
-     * @param aAppendToMe is an existing SCHEMATIC to append to, but if NULL then this means
+     * @param aKiway is the #KIWAY object used to access the component libraries loaded
+     *               by the project.
+     *
+     * @param aAppendToMe is an existing #SCH_SHEET to append to, but if NULL then this means
      *                    "do not append, rather load anew".
      *
      * @param aProperties is an associative array that can be used to tell the loader how to
@@ -238,8 +231,8 @@ public:
      *                    this object (plugin may not delete it), and plugins should expect
      *                    it to be optionally NULL.
      *
-     * @return SCHEMATIC* - the successfully loaded schematic, or the same one as \a aAppendToMe
-     *                      if \a aAppendToMe was not NULL, and the caller owns it.
+     * @return the successfully loaded schematic, or the same one as \a aAppendToMe
+     *         if \a aAppendToMe was not NULL, and the caller owns it.
      *
      * @throw IO_ERROR if there is a problem loading, and its contents should say what went
      *                 wrong, using line number and character offsets of the input file if
@@ -249,18 +242,19 @@ public:
                              SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL );
 
     /**
-     * Function Save
-     *
-     * will write @a aSchematic to a storage file in a format that this
-     * SCH_PLUGIN implementation knows about, or it can be used to write a portion of
-     * aSchematic to a special kind of export file.
+     * Write \a aSchematic to a storage file in a format that this #SCH_PLUGIN implementation
+     * knows about, or it can be used to write a portion of \a aSchematic to a special kind
+     * of export file.
      *
      * @param aFileName is the name of a file to save to on disk.
      *
-     * @param aSchematic is the class SCHEMATIC in memory document tree from which to extract
+     * @param aSchematic is the class #SCH_SCREEN in memory document tree from which to extract
      *                   information when writing to \a aFileName.  The caller continues to
      *                   own the SCHEMATIC, and the plugin should refrain from modifying the
      *                   SCHEMATIC if possible.
+     *
+     * @param aKiway is the #KIWAY object used to access the component libraries loaded
+     *               by the project.
      *
      * @param aProperties is an associative array that can be used to tell the saver how to
      *                    save the file, because it can take any number of additional named
@@ -277,16 +271,16 @@ public:
                                       const PROPERTIES* aProperties = NULL );
 
     /**
-     * Function EnumerateSymbolLib
-     *
-     * returns a list of #LIB_PART alias names contained within the library @a aLibraryPath.
+     * Populate a list of #LIB_PART alias names contained within the library \a aLibraryPath.
      *
      * @param aAliasNameList is an array to populate with the #LIB_ALIAS names associated with
      *                       the library.
+     *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
      *                     or URL containing one or more #LIB_PART objects.
+     *
      * @param aProperties is an associative array that can be used to tell the plugin anything
-     *                    needed about how to perform with respect to @a aLibraryPath.  The
+     *                    needed about how to perform with respect to \a aLibraryPath.  The
      *                    caller continues to own this object (plugin may not delete it), and
      *                    plugins should expect it to be optionally NULL.
      *
@@ -297,16 +291,16 @@ public:
                                      const PROPERTIES* aProperties = NULL );
 
     /**
-     * Function EnumerateSymbolLib
-     *
-     * returns a list of #LIB_PART aliases contained within the library @a aLibraryPath.
+     * Populate a list of #LIB_PART aliases contained within the library \a aLibraryPath.
      *
      * @param aAliasList is an array to populate with the #LIB_ALIAS pointers associated with
      *                   the library.
+     *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
      *                     or URL containing one or more #LIB_PART objects.
+     *
      * @param aProperties is an associative array that can be used to tell the plugin anything
-     *                    needed about how to perform with respect to @a aLibraryPath.  The
+     *                    needed about how to perform with respect to \a aLibraryPath.  The
      *                    caller continues to own this object (plugin may not delete it), and
      *                    plugins should expect it to be optionally NULL.
      *
@@ -317,10 +311,8 @@ public:
                                      const PROPERTIES* aProperties = NULL );
 
     /**
-     * Function LoadSymbol
-     *
-     * loads a #LIB_ALIAS object having @a aAliasName from the @a aLibraryPath containing
-     * a library format that this SCH_PLUGIN knows about.  The #LIB_PART should be accessed
+     * Load a #LIB_ALIAS object having \a aAliasName from the \a aLibraryPath containing
+     * a library format that this #SCH_PLUGIN knows about.  The #LIB_PART should be accessed
      * indirectly using the #LIB_ALIAS it is associated with.
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
@@ -335,18 +327,16 @@ public:
      *                    (plugin may not delete it), and plugins should expect it to be
      *                    optionally NULL.
      *
-     * @return  LIB_ALIAS* - if found caller shares it, else NULL if not found.
+     * @return the alias if found caller shares it or NULL if not found.
      *
-     * @throw   IO_ERROR if the library cannot be found or read.  No exception
-     *                   is thrown in the case where aAliasName cannot be found.
+     * @throw IO_ERROR if the library cannot be found or read.  No exception
+     *                 is thrown in the case where aAliasName cannot be found.
      */
     virtual LIB_ALIAS* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
                                    const PROPERTIES* aProperties = NULL );
 
     /**
-     * Function SaveSymbol
-     *
-     * will write @a aSymbol to an existing library located at @a aLibraryPath.  If a #LIB_PART
+     * Write \a aSymbol to an existing library located at \a aLibraryPath.  If a #LIB_PART
      * by the same name already exists or there are any conflicting alias names, the new
      * #LIB_PART will silently overwrite any existing aliases and/or part becaue libraries
      * cannot have duplicate alias names.  It is the responsibility of the caller to check
@@ -370,11 +360,9 @@ public:
                              const PROPERTIES* aProperties = NULL );
 
     /**
-     * Function DeleteAlias
+     * Delete \a aAliasName from the library at \a aLibraryPath.
      *
-     * deletes @a aAliasName from the library at @a aLibraryPath.
-     *
-     * If @a aAliasName refers the the root #LIB_PART object, the part is renamed to
+     * If \a aAliasName refers the the root #LIB_PART object, the part is renamed to
      * the next or previous #LIB_ALIAS in the #LIB_PART if one exists.  If the #LIB_ALIAS
      * is the last alias referring to the root #LIB_PART, the #LIB_PART is also removed
      * from the library.
@@ -396,10 +384,8 @@ public:
                               const PROPERTIES* aProperties = NULL );
 
     /**
-     * Function DeleteSymbol
-     *
-     * deletes the entire #LIB_PART associated with @a aAliasName from the library
-     * @a aLibraryPath.
+     * Delete the entire #LIB_PART associated with \a aAliasName from the library
+     * \a aLibraryPath.
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
      *                     or URL containing several symbols.
@@ -419,9 +405,7 @@ public:
                                const PROPERTIES* aProperties = NULL );
 
     /**
-     * Function CreateSymbolLib
-     *
-     * creates a new empty symbol library at @a aLibraryPath.  It is an error to attempt
+     * Create a new empty symbol library at \a aLibraryPath.  It is an error to attempt
      * to create an existing library or to attempt to create on a "read only" location.
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
@@ -439,9 +423,7 @@ public:
                                   const PROPERTIES* aProperties = NULL );
 
     /**
-     * Function DeleteSymbolLib
-     *
-     * deletes an existing symbol library and returns true if successful, or if library
+     * Delete an existing symbol library and returns true if successful, or if library
      * does not exist returns false, or throws an exception if library exists but is read
      * only or cannot be deleted for some other reason.
      *
@@ -455,7 +437,7 @@ public:
      *                    object (plugin may not delete it), and plugins should expect
      *                    it to be optionally NULL.
      *
-     * @return bool - true if library deleted, false if library did not exist.
+     * @return true if library deleted or false if library did not exist.
      *
      * @throw IO_ERROR if there is a problem deleting an existing library.
      */
@@ -463,8 +445,7 @@ public:
                                   const PROPERTIES* aProperties = NULL );
 
     /**
-     * Function IsSymbolLibWritable
-     * returns true if the library at @a aLibraryPath is writable.  (Often
+     * Return true if the library at \a aLibraryPath is writable.  (Often
      * system libraries are read only because of where they are installed.)
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
@@ -475,9 +456,7 @@ public:
     virtual bool IsSymbolLibWritable( const wxString& aLibraryPath );
 
     /**
-     * Function SymbolLibOptions
-     *
-     * appends supported SCH_PLUGIN options to @a aListToAppenTo along with internationalized
+     * Append supported #SCH_PLUGIN options to \a aListToAppenTo along with internationalized
      * descriptions.  Options are typically appended so that a derived SCH_PLUGIN can call
      * its base class function by the same name first, thus inheriting options declared there.
      * (Some base class options could pertain to all Symbol*() functions in all derived
@@ -494,11 +473,11 @@ public:
      *      It may be multi-line and be quite explanatory of the option.</dd>
      *  </dl>
      * <br>
-     *  In the future perhaps @a aListToAppendTo evolves to something capable of also
+     *  In the future perhaps \a aListToAppendTo evolves to something capable of also
      *  holding a wxValidator for the cells in said dialog:
      *  http://forums.wxwidgets.org/viewtopic.php?t=23277&p=104180.
      *   This would require a 3 column list, and introducing wx GUI knowledge to
-     *   SCH_PLUGIN, which has been avoided to date.
+     *   #SCH_PLUGIN, which has been avoided to date.
      */
     virtual void SymbolLibOptions( PROPERTIES* aListToAppendTo ) const;
 
@@ -516,10 +495,8 @@ public:
 
 
     /**
-     * Class SCH_PLUGIN_RELEASER
-     *
-     * releases a SCH_PLUGIN in the context of a potential thrown exception, through
-     * its destructor.
+     * Helper object to release a #SCH_PLUGIN in the context of a potential thrown exception
+     * through its destructor.
      */
     class SCH_PLUGIN_RELEASER
     {
