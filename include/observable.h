@@ -1,4 +1,3 @@
-
 /*
 * This program source code file is part of KICAD, a free EDA CAD application.
 *
@@ -169,16 +168,16 @@ namespace UTIL {
          * cancels the subscription of a subscriber. Can be called during notification calls.
          * @param aObserver observer to remove from the subscription list
          */
-        void Unsubscribe( ObserverInterface* obs )
+        void Unsubscribe( ObserverInterface* aObserver )
         {
-            OBSERVABLE_BASE::remove_observer( static_cast<void*>(obs) );
+            OBSERVABLE_BASE::remove_observer( static_cast<void*>(aObserver) );
         }
 
         /**
          * Function Notify
          * Notifies event to all subscribed observers.
          * @param Ptr pointer to method of the Observer-interface
-         * @param Args list of arguments to each notification call, will be perfectly forwarded.
+         * @param aArgs list of arguments to each notification call, will be perfectly forwarded.
          */
         template< typename... Args1, typename... Args2 >
         void Notify( void(ObserverInterface::*Ptr)(Args1...), Args2&&... aArgs )
@@ -213,7 +212,7 @@ namespace UTIL {
         * Notifies event to all subscribed observers but one to be ignore.
         * @param Ptr pointer to method of the Observer-interface
         * @param aIgnore observer to ignore during this notification
-        * @param Args list of arguments to each notification call, will be perfectly forwarded.
+        * @param aArgs list of arguments to each notification call, will be perfectly forwarded.
         */
         template< typename... Args1, typename... Args2 >
         void NotifyIgnore( void(ObserverInterface::*Ptr)(Args1...), ObserverInterface* aIgnore,

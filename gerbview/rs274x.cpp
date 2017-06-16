@@ -149,9 +149,13 @@ static int ReadXCommand( char*& text )
 }
 
 /**
- * convert a string read from a gerber file to an unicode string
- * usual chars are just copied. \hhhh values are converted to
- * the unicoade char value
+ * Convert a string read from a gerber file to an unicode string
+ * Usual chars (ASCII7 values) are the only values allowed in Gerber files,
+ * and are just copied.
+ * However Gerber format allows using non ASCII7 values by coding them in a
+ * sequence of 4 hexadecimal chars (16 bits hexadecimal value)
+ * Hexadecimal coded values ("\hhhh") are converted to
+ * the unicode char value
  */
 static const wxString fromGerberString( const wxString& aGbrString )
 {

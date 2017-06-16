@@ -54,10 +54,11 @@ void TransformCircleToPolygon( SHAPE_POLY_SET&  aCornerBuffer,
  * Helper function GetRoundRectCornerCenters
  * Has meaning only for rounded rect
  * Returns the centers of the rounded corners.
+ * @param aCenters is the buffer to store the 4 coordinates.
+ * @param aRadius = the radius of the of the rounded corners.
  * @param aPosition = position of the round rect
  * @param aSize = size of the of the round rect.
  * @param aRotation = rotation of the of the round rect
- * @param aCenters a buffer to store the 4 coordinates.
  */
 void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius,
             const wxPoint& aPosition, const wxSize& aSize, double aRotation );

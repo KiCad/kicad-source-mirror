@@ -666,7 +666,7 @@ void HPGL_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
 
 
 void HPGL_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint* aCorners,
-                                   double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode, void* aData )
+                                   double aPadOrient, EDA_DRAW_MODE_T aTraceMode, void* aData )
 {
     std::vector< wxPoint > cornerList;
     cornerList.reserve( 4 );
@@ -679,5 +679,5 @@ void HPGL_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint* aCorne
         cornerList.push_back( coord );
     }
 
-    PlotPoly( cornerList, aTrace_Mode == FILLED ? FILLED_SHAPE : NO_FILL );
+    PlotPoly( cornerList, aTraceMode == FILLED ? FILLED_SHAPE : NO_FILL );
 }

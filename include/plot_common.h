@@ -322,7 +322,7 @@ public:
      * virtual function FlashPadRoundRect
      * @param aPadPos Position of the shape (center of the rectangle
      * @param aSize = size of rounded rect
-     * @param cornerRadius Radius of the rounded corners
+     * @param aCornerRadius = radius of the rounded corners
      * @param aOrient is the rotation of the shape
      * @param aTraceMode FILLED or SKETCH
      * @param aData an auxiliary info (mainly for gerber format attributes)
@@ -349,7 +349,7 @@ public:
      * @param aCorners = the list of 4 corners positions,
      * 		relative to the shape position, pad orientation 0
      * @param aPadOrient = the rotation of the shape
-     * @param aTrace_Mode = FILLED or SKETCH
+     * @param aTraceMode = FILLED or SKETCH
      * @param aData an auxiliary info (mainly for gerber format attributes)
      */
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
@@ -621,7 +621,7 @@ public:
                                  SHAPE_POLY_SET* aPolygons,
                                  EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode,
+                                 double aPadOrient, EDA_DRAW_MODE_T aTraceMode,
                                  void* aData ) override;
 
 protected:
@@ -679,7 +679,7 @@ public:
                                  SHAPE_POLY_SET* aPolygons,
                                  EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode, void* aData ) override;
+                                 double aPadOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
 
     /** The SetColor implementation is split with the subclasses:
      * The PSLIKE computes the rgb values, the subclass emits the
@@ -1087,7 +1087,7 @@ public:
      * TODO: always use flashed shapes (aperture macros)
      */
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode, void* aData ) override;
+                                 double aPadOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
 
     /**
      * Change the plot polarity and begin a new layer
@@ -1276,7 +1276,7 @@ public:
                                  SHAPE_POLY_SET* aPolygons,
                                  EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode, void* aData ) override;
+                                 double aPadOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
 
     virtual void Text( const wxPoint&              aPos,
                        const COLOR4D               aColor,

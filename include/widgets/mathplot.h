@@ -698,17 +698,21 @@ public:
     bool HasBBox() override { return FALSE; }
 
     /** Set X axis alignment.
-     *  @param align alignment (choose between mpALIGN_BORDER_BOTTOM, mpALIGN_BOTTOM, mpALIGN_CENTER, mpALIGN_TOP, mpALIGN_BORDER_TOP */
+     *  @param align alignment (choose between mpALIGN_BORDER_BOTTOM, mpALIGN_BOTTOM, mpALIGN_CENTER,
+     * mpALIGN_TOP, mpALIGN_BORDER_TOP
+     */
     void SetAlign( int align ) { m_flags = align; };
 
     void SetNameAlign( int align ) { m_nameFlags = align; }
 
     /** Set X axis ticks or grid
-     *  @param ticks TRUE to plot axis ticks, FALSE to plot grid. */
+     *  @param enable = true to plot axis ticks, false to plot grid.
+     */
     void SetTicks( bool enable ) { m_ticks = enable; };
 
     /** Get X axis ticks or grid
-     *  @return TRUE if plot is drawing axis ticks, FALSE if the grid is active. */
+     *  @return TRUE if plot is drawing axis ticks, FALSE if the grid is active.
+     */
     bool GetTicks() { return m_ticks; };
 
 
@@ -1271,10 +1275,12 @@ public:
      *  \return The number of layers in the mpWindow. */
     unsigned int CountAllLayers() { return m_layers.size(); };
 
+#if 0
     /** Draws the mpWindow on a page for printing
-     *  \param print the mpPrintout where to print the graph */
-    // void PrintGraph(mpPrintout *print);
-
+     *  \param print the mpPrintout where to print the graph
+     */
+    void PrintGraph(mpPrintout *print);
+#endif
 
     /** Returns the left-border layer coordinate that the user wants the mpWindow to show (it may be not exactly the actual shown coordinate in the case of locked aspect ratio).
      * @sa Fit
@@ -1336,19 +1342,26 @@ public:
     /** Set the left margin. @param left Left Margin */
     void SetMarginLeft( int left ) { m_marginLeft = left; };
 
-    /** Get the top margin. @param top Top Margin */
+    /** @return the top margin. */
     int GetMarginTop() { return m_marginTop; };
-    /** Get the right margin. @param right Right Margin */
+    /** @return the right margin. */
     int GetMarginRight() { return m_marginRight; };
-    /** Get the bottom margin. @param bottom Bottom Margin */
+    /** @return the bottom margin. */
     int GetMarginBottom() { return m_marginBottom; };
-    /** Get the left margin. @param left Left Margin */
+    /** @return the left margin. */
     int GetMarginLeft() { return m_marginLeft; };
 
-    /** Sets whether to show coordinate tooltip when mouse passes over the plot. \param value true for enable, false for disable */
+#if 0
+    /** Sets whether to show coordinate tooltip when mouse passes over the plot.
+     * \param value true for enable, false for disable
+     */
     // void EnableCoordTooltip(bool value = true);
-    /** Gets coordinate tooltip status. \return true for enable, false for disable */
+
+    /** Gets coordinate tooltip status.
+     * \return true for enable, false for disable
+     */
     // bool GetCoordTooltip() { return m_coordTooltip; };
+#endif
 
     /** Check if a given point is inside the area of a mpInfoLayer and eventually returns its pointer.
      *  @param point The position to be checked

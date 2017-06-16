@@ -76,7 +76,7 @@ public:
      *
      * @param aMin the minium value allowed
      * @param aMax the maximum value allows
-     * @param aNewfunc the step function used to calculate the next step
+     * @param aNewFunc the step function used to calculate the next step
      */
     void SetStep( double aMin, double aMax, STEP_FUNCTION aNewFunc );
 

@@ -73,6 +73,8 @@ public:
     /**
      * @param aParent the owning window
      * @param aIconProvider the icon provider to get icons from
+     * @param aInitialIcon is the initial state of the icon (the meaning
+     * depends on what is the purpose of the icon)
      * @param aID the ID to use for the widgets - events will have
      * this ID.
      */

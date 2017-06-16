@@ -75,6 +75,8 @@ public:
      * is a pure virtual function to override in the derived object.
      *
      * @param aText is the string to report.
+     * @param aSeverity is an indicator ( RPT_UNDEFINED, RPT_INFO, RPT_WARNING,
+     * RPT_ERROR, RPT_ACTION ) used to filter and format messages
      */
 
     virtual REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) = 0;

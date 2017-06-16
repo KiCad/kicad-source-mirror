@@ -173,6 +173,7 @@ public:
     /**
      * Constructor
      * @param aMasterList we take ownership of this here.
+     * @param aLibs is the library list of the project.
      */
     NETLIST_EXPORTER( NETLIST_OBJECT_LIST* aMasterList, PART_LIBS* aLibs ) :
         m_masterList( aMasterList ),
