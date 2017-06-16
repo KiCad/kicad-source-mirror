@@ -1763,11 +1763,11 @@ msgstr ""
 
 #: pcbnew/class_pcb_layer_widget.cpp:374
 msgid "Footprint courtyards on board's front"
-msgstr "封装丝印占位顶层"
+msgstr "顶层外框尺寸"
 
 #: pcbnew/class_pcb_layer_widget.cpp:375
 msgid "Footprint courtyards on board's back"
-msgstr "封装丝印占位底层"
+msgstr "底层外框尺寸"
 
 #: pcbnew/class_pcb_layer_widget.cpp:376
 msgid "Footprint assembly on board's front"
