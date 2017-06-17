@@ -150,7 +150,7 @@ public:
          * Function GetAutoPath
          * Returns path that is either absolute or related to KISYSMOD/KIPRJMOD if the files
          * are stored within one of the mentioned paths.
-         * @param aScoep is the scope for the library. It determines the environmental variables
+         * @param aScope is the scope for the library. It determines the environmental variables
          * that are used to check the path (GLOBAL scope checks only KISYSMOD, while PROJECT
          * scope checks both KISYSMOD & KIPRJMOD).
          */

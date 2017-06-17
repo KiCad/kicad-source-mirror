@@ -82,6 +82,8 @@ public:
      * @param aMirror = true to create mirrored coordinates (Y coordinates negated)
      * @param aMinimalHeader = true to use a minimal header (no comments, no info)
      * @param aOffset = drill coordinates offset
+     * @param aMerge_PTH_NPTH = true to create only one file containing PTH and NPTH
+     * false to create 2 separate files : one for PTH and one for NPTH
      */
     void SetOptions( bool aMirror, bool aMinimalHeader, wxPoint aOffset, bool aMerge_PTH_NPTH )
     {

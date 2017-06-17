@@ -292,15 +292,14 @@ public:
                                                 int             aCircleToSegmentsCount,
                                                 double          aCorrectionFactor ) const;
     /**
-     * Function BuildFilledSolidAreasPolygons
-     * Build the filled solid areas data from real outlines (stored in m_Poly)
+     * Build the filled solid areas polygons from zone outlines (stored in m_Poly)
      * The solid areas can be more than one on copper layers, and do not have holes
       ( holes are linked by overlapping segments to the main outline)
-     * in order to have drawable (and plottable) filled polygons
+     * in order to have drawable (and plottable) filled polygons.
      * @return true if OK, false if the solid polygons cannot be built
      * @param aPcb: the current board (can be NULL for non copper zones)
-     * @param aCornerBuffer: A reference to a buffer to store polygon corners, or NULL
-     * if NULL (default:
+     * @param aOutlineBuffer: A reference to a SHAPE_POLY_SET buffer to store polygons, or NULL.
+     * if NULL (default):
      * - m_FilledPolysList is used to store solid areas polygons.
      * - on copper layers, tracks and other items shapes of other nets are
      * removed from solid areas

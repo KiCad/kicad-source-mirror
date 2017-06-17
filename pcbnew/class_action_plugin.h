@@ -132,7 +132,7 @@ public:
     /**
      * Function SetActionMenu
      * Associate a menu id to an action plugin
-     * @param aInded is the action index
+     * @param aIndex is the action index
      * @param idMenu is the associated menuitem id
      */
     static void SetActionMenu( int aIndex, int idMenu );

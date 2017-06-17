@@ -62,7 +62,7 @@ public:
 
     /**
      * Enable/disable the report file creation
-     * @param aEnbale = true to ask for creation
+     * @param aEnable = true to ask for creation
      * @param aFileName = the filename or the report file
      */
     void SetRptSettings( bool aEnable, const wxString& aFileName );

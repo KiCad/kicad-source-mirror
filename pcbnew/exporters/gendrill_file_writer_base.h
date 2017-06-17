@@ -189,9 +189,8 @@ public:
     void SetPageInfo( const PAGE_INFO* aPageInfo ) { m_pageInfo = aPageInfo; }
 
     /**
-     * Function SetMapFileFormat
      * Initialize the format for the drill map file
-     * @param SetMapFileFormat = a PlotFormat value (one of
+     * @param aMapFmt = a PlotFormat value (one of
      * PLOT_FORMAT_HPGL, PLOT_FORMAT_POST, PLOT_FORMAT_GERBER,
      * PLOT_FORMAT_DXF, PLOT_FORMAT_SVG, PLOT_FORMAT_PDF
      * the most useful are PLOT_FORMAT_PDF and PLOT_FORMAT_POST
