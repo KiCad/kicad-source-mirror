@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,7 +98,6 @@ static EDA_HOTKEY HkSavefile( _HKI( "Save Board" ), HK_SAVE_BOARD, 'S' + GR_KB_C
 static EDA_HOTKEY HkSavefileAs( _HKI( "Save Board As" ), HK_SAVE_BOARD_AS, 'S' + GR_KB_CTRL + GR_KB_SHIFT );
 static EDA_HOTKEY HkLoadfile( _HKI( "Load Board" ), HK_LOAD_BOARD, 'L' + GR_KB_CTRL );
 static EDA_HOTKEY HkFindItem( _HKI( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
-static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTION, '@', ID_ZOOM_SELECTION );
 static EDA_HOTKEY HkBackspace( _HKI( "Delete Track Segment" ), HK_BACK_SPACE, WXK_BACK );
 static EDA_HOTKEY HkAddNewTrack( _HKI( "Add New Track" ), HK_ADD_NEW_TRACK, 'X' );
 static EDA_HOTKEY HkAddThroughVia( _HKI( "Add Through Via" ), HK_ADD_THROUGH_VIA, 'V' );
@@ -186,6 +185,9 @@ static EDA_HOTKEY HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
 static EDA_HOTKEY HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, GR_KB_CTRL + '-' );
 #endif
 
+static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTION,
+                                   '@', ID_ZOOM_SELECTION );
+
 static EDA_HOTKEY Hk3DViewer( _HKI( "3D Viewer" ), HK_3D_VIEWER, GR_KB_ALT + '3' );
 
 static EDA_HOTKEY HkHelp( _HKI( "Help (this window)" ), HK_HELP, '?' );
@@ -223,9 +225,17 @@ static EDA_HOTKEY HkSwitchGridToPrevious( _HKI( "Switch Grid To Previous" ),
                                           HK_SWITCH_GRID_TO_PREVIOUS, 'N' + GR_KB_SHIFT );
 
 static EDA_HOTKEY HkSwitchUnits( _HKI( "Switch Units" ), HK_SWITCH_UNITS, 'U' + GR_KB_CTRL );
+
 static EDA_HOTKEY HkTrackDisplayMode( _HKI( "Track Display Mode" ),
                                       HK_SWITCH_TRACK_DISPLAY_MODE, 'K' );
+
 static EDA_HOTKEY HkAddModule( _HKI( "Add Footprint" ), HK_ADD_MODULE, 'O' );
+
+// These hotkeys work only in GAL canvas, because the legacy canvas using wxDC does not know
+// the transparency (alpha channel)
+static EDA_HOTKEY HkIncLayerAlhpa( _HKI( "Increment Layer Transparency" ), HK_INC_LAYER_ALHPA, '}' );
+
+static EDA_HOTKEY HkDecLayerAlhpa( _HKI( "Decrement Layer Transparency" ), HK_DEC_LAYER_ALHPA, '{' );
 
 // List of common hotkey descriptors
 EDA_HOTKEY* common_Hotkey_List[] =
@@ -236,6 +246,7 @@ EDA_HOTKEY* common_Hotkey_List[] =
     &HkUndo,        &HkRedo,
     &HkMouseLeftClick,
     &HkMouseLeftDClick,
+    &HkIncLayerAlhpa, &HkDecLayerAlhpa,
     NULL
 };
 

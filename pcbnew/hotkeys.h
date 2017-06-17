@@ -101,7 +101,9 @@ enum hotkey_id_commnand {
     HK_LEFT_CLICK,
     HK_LEFT_DCLICK,
     HK_ZONE_FILL_OR_REFILL,
-    HK_ZONE_REMOVE_FILLED
+    HK_ZONE_REMOVE_FILLED,
+    HK_INC_LAYER_ALHPA,
+    HK_DEC_LAYER_ALHPA
 };
 
 // Full list of hotkey descriptors for board editor and footprint editor

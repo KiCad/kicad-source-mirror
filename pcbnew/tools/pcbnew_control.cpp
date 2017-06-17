@@ -146,11 +146,11 @@ TOOL_ACTION PCB_ACTIONS::layerToggle( "pcbnew.Control.layerToggle",
         "", "" );
 
 TOOL_ACTION PCB_ACTIONS::layerAlphaInc( "pcbnew.Control.layerAlphaInc",
-        AS_GLOBAL, '}',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_INC_LAYER_ALHPA ),
         "", "" );
 
 TOOL_ACTION PCB_ACTIONS::layerAlphaDec( "pcbnew.Control.layerAlphaDec",
-        AS_GLOBAL, '{',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DEC_LAYER_ALHPA ),
         "", "" );
 
 TOOL_ACTION PCB_ACTIONS::layerChanged( "pcbnew.Control.layerChanged",
