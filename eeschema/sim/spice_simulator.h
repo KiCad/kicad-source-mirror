@@ -90,6 +90,8 @@ public:
      * @brief Returns a requested vector with complex values. If the vector is real, then
      * the imaginary part is set to 0 in all values.
      * @param aName is the vector named in Spice convention (e.g. V(3), I(R1)).
+     * @param aMaxLen is max count of returned values.
+     * if -1 (default) all available values are returned.
      * @return Requested vector. It might be empty if there is no vector with requested name.
      */
     virtual std::vector<COMPLEX> GetPlot( const std::string& aName, int aMaxLen = -1 ) = 0;
@@ -98,6 +100,8 @@ public:
      * @brief Returns a requested vector with real values. If the vector is complex, then
      * the real part is returned.
      * @param aName is the vector named in Spice convention (e.g. V(3), I(R1)).
+     * @param aMaxLen is max count of returned values.
+     * if -1 (default) all available values are returned.
      * @return Requested vector. It might be empty if there is no vector with requested name.
      */
     virtual std::vector<double> GetRealPlot( const std::string& aName, int aMaxLen = -1 ) = 0;
@@ -106,6 +110,8 @@ public:
      * @brief Returns a requested vector with imaginary values. If the vector is complex, then
      * the imaginary part is returned. If the vector is reql, then only zeroes are returned.
      * @param aName is the vector named in Spice convention (e.g. V(3), I(R1)).
+     * @param aMaxLen is max count of returned values.
+     * if -1 (default) all available values are returned.
      * @return Requested vector. It might be empty if there is no vector with requested name.
      */
     virtual std::vector<double> GetImagPlot( const std::string& aName, int aMaxLen = -1 ) = 0;
@@ -113,6 +119,8 @@ public:
     /**
      * @brief Returns a requested vector with magnitude values.
      * @param aName is the vector named in Spice convention (e.g. V(3), I(R1)).
+     * @param aMaxLen is max count of returned values.
+     * if -1 (default) all available values are returned.
      * @return Requested vector. It might be empty if there is no vector with requested name.
      */
     virtual std::vector<double> GetMagPlot( const std::string& aName, int aMaxLen = -1 ) = 0;
@@ -120,6 +128,8 @@ public:
     /**
      * @brief Returns a requested vector with phase values.
      * @param aName is the vector named in Spice convention (e.g. V(3), I(R1)).
+     * @param aMaxLen is max count of returned values.
+     * if -1 (default) all available values are returned.
      * @return Requested vector. It might be empty if there is no vector with requested name.
      */
     virtual std::vector<double> GetPhasePlot( const std::string& aName, int aMaxLen = -1 ) = 0;

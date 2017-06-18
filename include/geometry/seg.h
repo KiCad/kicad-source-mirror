@@ -132,6 +132,7 @@ public:
       *
       * Returns the closest Euclidean distance between point aP and the line defined by
       * the ends of segment (this).
+      * @param aP the point to test
       * @param aDetermineSide: when true, the sign of the returned value indicates
       * the side of the line at which we are (negative = left)
       * @return the distance
@@ -142,7 +143,7 @@ public:
       * Function NearestPoint()
       *
       * Computes a point on the segment (this) that is closest to point aP.
-      * @return: nearest point
+      * @return the nearest point
       */
     const VECTOR2I NearestPoint( const VECTOR2I &aP ) const;
 

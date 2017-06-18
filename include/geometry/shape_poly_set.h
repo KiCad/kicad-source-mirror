@@ -376,11 +376,7 @@ class SHAPE_POLY_SET : public SHAPE
          * relative to the contour relative to the polygon in which it is.
          * @param  aGlobalIdx  is the global index of the corner whose structured index wants to
          *                     be found
-         * @param  aPolygonIdx is the index of the polygon in which the expected vertex is.
-         * @param  aContourIdx is the index of the contour in the aPolygonIdx-th polygon in which
-         *                     the expected vertex is.
-         * @param  aVertexIdx  is the index of the vertex in the aContourIdx-th contour in which
-         *                     the expected vertex is.
+         * @param  aRelativeIndices is a pointer to the set of relative indices to store.
          * @return bool - true if the global index is correct and the information in
          *              aRelativeIndices is valid; false otherwise.
          */
@@ -866,7 +862,7 @@ class SHAPE_POLY_SET : public SHAPE
         /**
          * Function RemoveVertex
          * deletes the vertex indexed by aIndex (index of polygon, contour and vertex).
-         * @param aindex is the set of relative indices of the to-be-removed vertex.
+         * @param aRelativeIndices is the set of relative indices of the to-be-removed vertex.
          */
         void RemoveVertex( VERTEX_INDEX aRelativeIndices );
 
@@ -963,7 +959,7 @@ class SHAPE_POLY_SET : public SHAPE
          * @return int -  The minimum distance between aPoint and all the polygons in the set. If
          *                the point is contained in any of the polygons, the distance is zero.
          */
-        int Distance( VECTOR2I point );
+        int Distance( VECTOR2I aPoint );
 
         /**
          * Function DistanceToPolygon

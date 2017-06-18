@@ -105,35 +105,35 @@ public:
     int Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult ) const;
 
     /**
-     * Function SetVisible()
      * Sets the item visibility.
      *
+     * @param aItem: the item to modify.
      * @param aIsVisible: whether the item is visible (on all layers), or not.
      */
     void SetVisible( VIEW_ITEM* aItem, bool aIsVisible = true );
 
     /**
-     * Function Hide()
      * Temporarily hides the item in the view (e.g. for overlaying)
      *
+     * @param aItem: the item to modify.
      * @param aHide: whether the item is hidden (on all layers), or not.
      */
     void Hide( VIEW_ITEM* aItem, bool aHide = true );
 
     /**
-     * Function IsVisible()
      * Returns information if the item is visible (or not).
      *
+     * @param aItem: the item to test.
      * @return when true, the item is visible (i.e. to be displayed, not visible in the
      * *current* viewport)
      */
     bool IsVisible( const VIEW_ITEM* aItem ) const;
 
     /**
-     * Function Update()
      * For dynamic VIEWs, informs the associated VIEW that the graphical representation of
      * this item has changed. For static views calling has no effect.
      *
+     * @param aItem: the item to update.
      * @param aUpdateFlags: how much the object has changed.
      */
     void Update( VIEW_ITEM* aItem );
@@ -345,7 +345,7 @@ public:
     /**
      * Function ToScreen()
      * Converts a world space one dimensionsal size to a one dimensional size in screen space.
-     * @param aCoord: the size to be transformed.
+     * @param aSize: the size to be transformed.
      */
     double ToScreen( double aSize ) const;
 
@@ -480,6 +480,7 @@ public:
     /**
      * Function SetTopLayer()
      * Sets given layer to be displayed on the top or sets back the default order of layers.
+     * @param aEnabled = true to display aLayer on the top.
      * @param aLayer: the layer or -1 in case when no particular layer should
      * be displayed on the top.
      */

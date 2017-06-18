@@ -323,6 +323,9 @@ public:
      * Appends a new point at the end of the line chain.
      * @param aX is X coordinate of the new point
      * @param aY is Y coordinate of the new point
+     * @param aAllowDuplication = true to append the new point
+     * even it is the same as the last entered point
+     * false (default) to skip it if it is the same as the last entered point
      */
     void Append( int aX, int aY, bool aAllowDuplication = false )
     {
@@ -335,6 +338,9 @@ public:
      *
      * Appends a new point at the end of the line chain.
      * @param aP the new point
+     * @param aAllowDuplication = true to append the new point
+     * even it is the same as the last entered point
+     * false (default) to skip it if it is the same as the last entered point
      */
     void Append( const VECTOR2I& aP, bool aAllowDuplication = false )
     {
