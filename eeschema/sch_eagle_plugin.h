@@ -132,6 +132,7 @@ private:
     SCH_SHEET* m_rootSheet; ///< The root sheet of the schematic being loaded..
     SCH_SHEET* m_currentSheet; ///< The current sheet of the schematic being loaded..
     wxString m_version; ///< Eagle file version.
+    PART_LIB* m_partlib; ///< symbol library for imported file.
 protected:
 };
 

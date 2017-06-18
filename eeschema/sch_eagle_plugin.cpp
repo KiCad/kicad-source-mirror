@@ -29,7 +29,9 @@
 #include <sch_sheet.h>
 #include <sch_eagle_plugin.h>
 
+#include <wildcards_and_files_ext.h>
 #include <class_sch_screen.h>
+#include <class_library.h>
 #include <class_libentry.h>
 #include <lib_circle.h>
 #include <lib_rectangle.h>
@@ -189,6 +191,18 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
         m_rootSheet->SetScreen( screen );
     }
 
+    // Create a schematic symbol library
+    wxFileName libfn = fn;
+    libfn.SetName(libfn.GetName()+wxString("-cache"));
+    libfn.SetExt( SchematicLibraryFileExtension );
+    std::unique_ptr<PART_LIB> lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, libfn.GetFullPath() ) );
+    lib->EnableBuffering();
+    if( !wxFileName::FileExists( lib->GetFullFileName() ) )
+    {
+        lib->Create();
+    }
+    m_partlib = lib.release();
+
     // Retrieve the root as current node
     wxXmlNode* currentNode = xmlDocument.GetRoot();
 
@@ -205,6 +219,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
     // Load drawing
     loadDrawing( children["drawing"] );
 
+    m_partlib->Save(false);
     deleter.release();
     return m_rootSheet;
 }
@@ -280,8 +295,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
     if(sheet_count > 1){
         // TODO: set up a heirachical sheet for each Eagle sheet.
-        int x, y, i;
-        i=1;
+        int x, y;
         x = 1;
         y = 1;
 
@@ -296,6 +310,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
           m_currentSheet = sheet.get();
           loadSheet( sheetNode );
+          sheet->GetScreen()->SetFileName( sheet->GetFileName() );
           m_rootSheet->GetScreen()->Append(sheet.release());
 
           sheetNode = sheetNode->GetNext();
@@ -336,7 +351,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode  )
       ReplaceIllegalFileNameChars(&filename);
       replace(filename.begin(),filename.end(), ' ', '_');
 
-      wxString fn = wxString(filename);
+      wxString fn = wxString(filename+".sch");
       m_currentSheet->SetFileName(fn);
       wxFileName fileName = m_currentSheet->GetFileName();
       m_currentSheet->GetScreen()->SetFileName( fileName.GetFullPath() );
@@ -585,7 +600,7 @@ void SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
 
     while( symbolNode )
     {
-        loadSymbol( symbolNode );
+        m_partlib->AddPart(loadSymbol( symbolNode ));
         symbolNode = symbolNode->GetNext();
     }
 }
