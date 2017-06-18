@@ -315,7 +315,30 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         delete g_RootSheet;   // Delete the current project.
         g_RootSheet = NULL;   // Force CreateScreens() to build new empty project on load failure.
 
-        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ) );
+        // Open file and guess at filetype Kicad/Eagle
+        wxTextFile tempFile;
+        tempFile.Open( fullFileName );
+        wxString firstline;
+        // read the first line
+        firstline = tempFile.GetFirstLine();
+        tempFile.Close();
+
+        SCH_IO_MGR::SCH_FILE_T filetype;
+
+        if( firstline.StartsWith( "<?xml" ) )
+        {
+            filetype = SCH_IO_MGR::SCH_EAGLE;
+        }
+        else if( firstline.StartsWith( "(schematic" ) )
+        {
+            filetype = SCH_IO_MGR::SCH_KICAD;
+        }
+        else
+        {
+            filetype = SCH_IO_MGR::SCH_LEGACY;
+        }
+
+        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( filetype ) );
 
         try
         {
