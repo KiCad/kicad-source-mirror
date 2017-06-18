@@ -730,21 +730,61 @@ LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( LIB_PART* aPart, wxXmlNode* 
     return polyLine.release();
 }
 
-LIB_PIN* SCH_EAGLE_PLUGIN::loadPin(  LIB_PART* aPart, wxXmlNode* aPin)
+LIB_PIN* SCH_EAGLE_PLUGIN::loadPin(  LIB_PART* aPart, wxXmlNode* aPin )
 {
+    std::unique_ptr<LIB_PIN> pin( new LIB_PIN( aPart ) );
 
-  std::unique_ptr< LIB_PIN > pin( new LIB_PIN( aPart ) );
+    auto epin = EPIN( aPin );
 
-  auto epin = EPIN(aPin);
+    pin->SetPosition( wxPoint( epin.x * EUNIT_TO_MIL, -epin.y * EUNIT_TO_MIL ) );
+    pin->SetName( epin.name );
 
-  pin->SetPosition(wxPoint(epin.x*EUNIT_TO_MIL, -epin.y*EUNIT_TO_MIL));
-  pin->SetName(epin.name);
+    int roti = 0;
 
-  EROT rot = epin.rot.Get();
-  pin->SetOrientation( int(rot.degrees/90+2)%4 );
+    if( epin.rot )
+    {
+        roti = int(epin.rot->degrees);
+    }
 
+    switch( roti )
+    {
+    case 0:
+        pin->SetOrientation( 'R' );
+        break;
 
-  return pin.release();
+    case 90:
+        pin->SetOrientation( 'D' );
+        break;
+
+    case 180:
+        pin->SetOrientation( 'L' );
+        break;
+
+    case 270:
+        pin->SetOrientation( 'U' );
+        break;
+    }
+
+    wxString length = epin.length.Get();
+
+    if( length =="short" )
+    {
+        pin->SetLength( 100 );
+    }
+    else if( length =="middle" )
+    {
+        pin->SetLength( 200 );
+    }
+    else if( length == "long" )
+    {
+        pin->SetLength( 300 );
+    }
+    else if( length == "point" )
+    {
+        pin->SetLength( 0 );
+    }
+
+    return pin.release();
 }
 
 
