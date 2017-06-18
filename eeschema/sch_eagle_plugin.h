@@ -121,7 +121,10 @@ private:
     LIB_RECTANGLE* loadRectangle( LIB_PART* aPart, wxXmlNode* aRectNode );
     LIB_POLYLINE* loadPolyLine( LIB_PART* aPart, wxXmlNode* aRectNode );
 
+
+    KIWAY* m_kiway;      ///< For creating sub sheets.
     SCH_SHEET* m_rootSheet; ///< The root sheet of the schematic being loaded..
+    SCH_SHEET* m_currentSheet; ///< The current sheet of the schematic being loaded..
     wxString m_version; ///< Eagle file version.
 protected:
 };

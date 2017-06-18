@@ -59,6 +59,23 @@ NODE_MAP mapChildren( wxXmlNode* aCurrentNode )
     return nodesMap;
 }
 
+int countChildren( wxXmlNode* aCurrentNode, std::string name)
+{
+    // Map node_name -> node_pointer
+    int count = 0;
+
+    // Loop through all children counting them if they match the given name
+    aCurrentNode = aCurrentNode->GetChildren();
+    while( aCurrentNode )
+    {
+        if(aCurrentNode->GetName().ToStdString() == name) count++;
+        // Get next child
+        aCurrentNode = aCurrentNode->GetNext();
+    }
+
+    return count;
+}
+
 
 void kicadLayer( int aEagleLayer )
 {
@@ -137,6 +154,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
     // Load the document
     wxXmlDocument xmlDocument;
     wxFileName fn = aFileName;
+    m_kiway = aKiway;
 
     if( !xmlDocument.Load( fn.GetFullPath() ) )
         THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'" ), fn.GetFullPath() ) );
@@ -247,18 +265,77 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
     // Loop through all the sheets
     wxXmlNode* sheetNode = schematicChildren["sheets"]->GetChildren();
 
-    while( sheetNode )
-    {
-        loadSheet( sheetNode );
-        sheetNode = sheetNode->GetNext();
+    int sheet_count = countChildren(schematicChildren["sheets"], "sheet" );
+
+    // If eagle schematic has multiple sheets.
+
+    if(sheet_count > 1){
+        // TODO: set up a heirachical sheet for each Eagle sheet.
+        int x, y, i;
+        i=1;
+        x = 1;
+        y = 1;
+
+        while( sheetNode ){
+          wxPoint pos = wxPoint(x*1000, y*1000);
+          std::unique_ptr<SCH_SHEET> sheet( new SCH_SHEET(pos) );
+          SCH_SCREEN* screen = new SCH_SCREEN(m_kiway) ;
+
+          sheet->SetTimeStamp( GetNewTimeStamp() );
+          sheet->SetParent( m_rootSheet->GetScreen() );
+          sheet->SetScreen(  screen );
+
+          m_currentSheet = sheet.get();
+          loadSheet( sheetNode );
+          m_rootSheet->GetScreen()->Append(sheet.release());
+
+          sheetNode = sheetNode->GetNext();
+          x+=2;
+          if(x>10)
+          {
+            x = 1;
+            y+=2;
+          }
+        }
+
+    } else {
+        while( sheetNode )
+        {
+            m_currentSheet = m_rootSheet;
+            loadSheet( sheetNode );
+            sheetNode = sheetNode->GetNext();
+        }
     }
+
 }
 
 
-void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
+void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode  )
 {
     // Map all children into a readable dictionary
     NODE_MAP sheetChildren = mapChildren( aSheetNode );
+
+    // Get description node
+
+    wxXmlNode* descriptionNode = getChildrenNodes( sheetChildren, "description" );
+    if( descriptionNode )
+    {
+      wxString des = descriptionNode->GetContent();
+      m_currentSheet->SetName(des);
+
+      std::string filename =  des.ToStdString();
+      ReplaceIllegalFileNameChars(&filename);
+      replace(filename.begin(),filename.end(), ' ', '_');
+
+      wxString fn = wxString(filename);
+      m_currentSheet->SetFileName(fn);
+      wxFileName fileName = m_currentSheet->GetFileName();
+      m_currentSheet->GetScreen()->SetFileName( fileName.GetFullPath() );
+
+
+    }
+
+
 
     // Loop through all busses
     // From the DTD: "Buses receive names which determine which signals they include.
