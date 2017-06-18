@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Feb 19 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -32,14 +32,6 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	fgInputSizer->Add( m_xLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
 	m_xEntry = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_xEntry->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_xEntry->SetMaxLength(  );
-	}
-	#else
-	m_xEntry->SetMaxLength(  );
-	#endif
 	fgInputSizer->Add( m_xEntry, 0, wxALL|wxEXPAND, 5 );
 	
 	m_xUnit = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -54,14 +46,6 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	fgInputSizer->Add( m_yLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
 	m_yEntry = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_yEntry->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_yEntry->SetMaxLength(  );
-	}
-	#else
-	m_yEntry->SetMaxLength(  );
-	#endif
 	fgInputSizer->Add( m_yEntry, 0, wxALL|wxEXPAND, 5 );
 	
 	m_yUnit = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -76,14 +60,6 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	fgInputSizer->Add( m_rotLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
 	m_rotEntry = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_rotEntry->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_rotEntry->SetMaxLength(  );
-	}
-	#else
-	m_rotEntry->SetMaxLength(  );
-	#endif
 	fgInputSizer->Add( m_rotEntry, 0, wxALL|wxEXPAND, 5 );
 	
 	m_rotUnit = new wxStaticText( this, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
