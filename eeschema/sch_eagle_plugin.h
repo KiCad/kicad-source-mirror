@@ -36,6 +36,7 @@ class SCH_NO_CONNECT;
 class SCH_LINE;
 class SCH_BUS_ENTRY_BASE;
 class SCH_TEXT;
+class SCH_GLOBALLABEL;
 class SCH_COMPONENT;
 class SCH_FIELD;
 class PROPERTIES;
@@ -46,6 +47,7 @@ class LIB_ALIAS;
 class LIB_CIRCLE;
 class LIB_RECTANGLE;
 class LIB_POLYLINE;
+class LIB_PIN;
 
 
 /**
@@ -110,17 +112,21 @@ private:
     void loadDrawing( wxXmlNode* aDrawingNode );
     void loadSchematic( wxXmlNode* aSchematicNode );
     void loadSheet( wxXmlNode* aSheetNode );
-    void loadSegments( wxXmlNode* aSegmentsNode );
-    SCH_LINE* loadWire( wxXmlNode* aWireNode );
     void loadInstance( wxXmlNode* aInstanceNode );
     void loadModuleinst( wxXmlNode* aModuleinstNode );
     void loadLibrary( wxXmlNode* aLibraryNode );
-    LIB_PART* loadSymbol( wxXmlNode* aSymbolNode );
 
-    LIB_CIRCLE* loadCircle( LIB_PART* aPart, wxXmlNode* aCircleNode );
-    LIB_RECTANGLE* loadRectangle( LIB_PART* aPart, wxXmlNode* aRectNode );
-    LIB_POLYLINE* loadPolyLine( LIB_PART* aPart, wxXmlNode* aRectNode );
+    void                loadSegments( wxXmlNode* aSegmentsNode, wxString aNetName, wxString aNetClass );
+    SCH_LINE*           loadSignalWire( wxXmlNode* aWireNode );
+    SCH_GLOBALLABEL*    loadLabel( wxXmlNode* aLabelNode, wxString aNetName );
+    SCH_JUNCTION*       loadJunction( wxXmlNode* aJunction );
 
+    LIB_PART*       loadSymbol( wxXmlNode* aSymbolNode );
+    LIB_CIRCLE*     loadSymbolCircle( LIB_PART* aPart, wxXmlNode* aCircleNode );
+    LIB_RECTANGLE*  loadSymbolRectangle( LIB_PART* aPart, wxXmlNode* aRectNode );
+    LIB_POLYLINE*   loadSymbolPolyLine( LIB_PART* aPart, wxXmlNode* aRectNode );
+    LIB_POLYLINE*   loadSymbolWire( LIB_PART* aPart, wxXmlNode* aWireNode );
+    LIB_PIN*        loadPin( LIB_PART*, wxXmlNode* );
 
     KIWAY* m_kiway;      ///< For creating sub sheets.
     SCH_SHEET* m_rootSheet; ///< The root sheet of the schematic being loaded..

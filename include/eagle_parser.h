@@ -427,6 +427,30 @@ struct EWIRE
     EWIRE( wxXmlNode* aWire );
 };
 
+/// Eagle Junction
+struct EJUNCTION
+{
+    double     x;
+    double     y;
+
+    EJUNCTION( wxXmlNode* aJunction);
+};
+
+/// Eagle label
+struct ELABEL
+{
+    double     x;
+    double     y;
+    double size;
+    LAYER_NUM  layer;
+    opt_erot rot;
+    opt_string xref;
+    wxString netname;
+
+
+    ELABEL( wxXmlNode* aLabel, wxString aNetName );
+};
+
 
 /// Eagle via
 struct EVIA
@@ -594,6 +618,22 @@ struct ESMD
     ESMD( wxXmlNode* aSMD );
 };
 
+/// Eagle pin element
+struct EPIN
+{
+    string   name;
+    double   x;
+    double   y;
+
+    opt_string visible;
+    opt_string length;
+    opt_string direction;
+    opt_string function;
+    opt_int swaplevel;
+    opt_erot rot;
+
+    EPIN( wxXmlNode* aPin );
+};
 
 /// Eagle vertex
 struct EVERTEX

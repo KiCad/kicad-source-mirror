@@ -25,6 +25,7 @@
 #include <string>
 #include <unordered_map>
 
+#include <sch_junction.h>
 #include <sch_sheet.h>
 #include <sch_eagle_plugin.h>
 
@@ -33,8 +34,16 @@
 #include <lib_circle.h>
 #include <lib_rectangle.h>
 #include <lib_polyline.h>
+#include <lib_pin.h>
 
 #include <eagle_parser.h>
+
+// Eagle schematic internal units are millimeters
+// Kicad schematic units are thousandths of an inch
+#define EUNIT_TO_MIL 1000.0/25.4
+
+// Eagle schematic axes are aligned with x increasing left to right and Y increasing bottom to top
+// Kicad schematic axes are algigned with x increasing left to rigth and Y increasing top to bottom.
 
 using namespace std;
 
@@ -349,7 +358,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode  )
         wxString busName = busNode->GetAttribute( "name" );
 
         // Load segments of this bus
-        loadSegments( busNode );
+      //  loadSegments( busNode );
 
         // Get next bus
         busNode = busNode->GetNext();
@@ -366,7 +375,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode  )
         wxString netClass = netNode->GetAttribute( "class" );
 
         // Load segments of this net
-        loadSegments( netNode );
+        loadSegments( netNode , netName, netClass);
 
         // Get next net
         netNode = netNode->GetNext();
@@ -400,19 +409,18 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode  )
 
     while( plainNode )
     {
-        loadSegments( plainNode );
+        //loadSegments( plainNode );
         plainNode = plainNode->GetNext();
     }
 }
 
 
-void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode )
+void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, wxString netName, wxString netClass)
 {
     // Loop through all segments
     wxXmlNode* currentSegment = aSegmentsNode->GetChildren();
-    SCH_SCREEN* screen = m_rootSheet->GetScreen();
+    SCH_SCREEN* screen = m_currentSheet->GetScreen();
     //wxCHECK( screen, [>void<] );
-
     while( currentSegment )
     {
         // Loop through all segment children
@@ -427,6 +435,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode )
                 // TODO: handle junctions attributes
                 segmentAttribute->GetAttribute( "x" );
                 segmentAttribute->GetAttribute( "y" );
+                screen->Append(loadJunction(segmentAttribute));
             }
             else if( nodeName == "label" )
             {
@@ -439,6 +448,9 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode )
                 segmentAttribute->GetAttribute( "ratio" );  // Defaults to "8"
                 segmentAttribute->GetAttribute( "rot" );    // Defaults to "R0"
                 segmentAttribute->GetAttribute( "xref" );   // Defaults to "no"
+
+                screen->Append(loadLabel(segmentAttribute, netName));
+
             }
             else if( nodeName == "pinref" )
             {
@@ -455,11 +467,11 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode )
             }
             else if( nodeName == "wire" )
             {
-                screen->Append( loadWire( segmentAttribute ) );
+                screen->Append( loadSignalWire( segmentAttribute ) );
             }
             else if( nodeName == "segment" )
             {
-                loadSegments( segmentAttribute );
+                //loadSegments( segmentAttribute );
             }
             else if( nodeName == "text" )
             {
@@ -481,35 +493,53 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode )
 }
 
 
-SCH_LINE* SCH_EAGLE_PLUGIN::loadWire( wxXmlNode* aWireNode )
+SCH_LINE* SCH_EAGLE_PLUGIN::loadSignalWire( wxXmlNode* aWireNode )
 {
     std::unique_ptr<SCH_LINE> wire( new SCH_LINE );
 
     auto ewire = EWIRE( aWireNode );
 
-    // TODO: layer map?
-    // wire->SetLayer( layerMap( layer ) );
-
-    // if( strCompare( "Wire", line, &line ) )
-         wire->SetLayer( LAYER_WIRE );
-    // else if( strCompare( "Bus", line, &line ) )
-    //     wire->SetLayer( LAYER_BUS );
-    // else if( strCompare( "Notes", line, &line ) )
-    //     wire->SetLayer( LAYER_NOTES );
-    // else
-    //     SCH_PARSE_ERROR( "invalid line type", aReader, line );
+    wire->SetLayer( LAYER_WIRE );
 
     wxPoint begin, end;
 
-    begin.x = ewire.x1;
-    begin.y = ewire.y1;
-    end.x   = ewire.x2;
-    end.y   = ewire.y2;
+    begin.x = ewire.x1*EUNIT_TO_MIL;
+    begin.y = -ewire.y1*EUNIT_TO_MIL;
+    end.x   = ewire.x2*EUNIT_TO_MIL;
+    end.y   = -ewire.y2*EUNIT_TO_MIL;
 
     wire->SetStartPoint( begin );
     wire->SetEndPoint( end );
 
     return wire.release();
+}
+
+
+
+SCH_JUNCTION* SCH_EAGLE_PLUGIN::loadJunction(wxXmlNode* aJunction){
+  std::unique_ptr<SCH_JUNCTION> junction( new SCH_JUNCTION );
+
+  auto ejunction = EJUNCTION(aJunction);
+
+  junction->SetPosition( wxPoint( ejunction.x*EUNIT_TO_MIL, -ejunction.y*EUNIT_TO_MIL ) );
+
+  return junction.release();
+}
+
+
+SCH_GLOBALLABEL* SCH_EAGLE_PLUGIN::loadLabel(wxXmlNode* aLabelNode, wxString aNetName){
+  std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
+
+  auto elabel = ELABEL(aLabelNode, aNetName);
+
+  glabel->SetPosition( wxPoint( elabel.x*EUNIT_TO_MIL, -elabel.y*EUNIT_TO_MIL ) );
+  glabel->SetText(elabel.netname);
+  glabel->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
+
+  EROT rot = elabel.rot.Get();
+  glabel->SetLabelSpinStyle( int(rot.degrees/90+2)%4 );
+
+  return glabel.release();
 }
 
 
@@ -588,11 +618,11 @@ LIB_PART* SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode )
         }
         else if( nodeName == "circle" )
         {
-            part->AddDrawItem( loadCircle( part.get(), currentNode ) );
+            part->AddDrawItem( loadSymbolCircle( part.get(), currentNode ) );
         }
         else if( nodeName == "pin" )
         {
-            // part->AddDrawItem( loadPin( part, currentNode ) );
+             part->AddDrawItem( loadPin( part.get(), currentNode ) );
         }
         else if( nodeName == "polygon" )
         {
@@ -600,7 +630,7 @@ LIB_PART* SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode )
         }
         else if( nodeName == "rectangle" )
         {
-            part->AddDrawItem( loadRectangle( part.get(), currentNode ) );
+            part->AddDrawItem( loadSymbolRectangle( part.get(), currentNode ) );
         }
         else if( nodeName == "text" )
         {
@@ -608,7 +638,7 @@ LIB_PART* SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode )
         }
         else if( nodeName == "wire" )
         {
-            // part->AddDrawItem( loadPolyline( part, currentNode ) );
+            part->AddDrawItem( loadSymbolWire( part.get(), currentNode ) );
         }
 
         currentNode = currentNode->GetNext();
@@ -618,58 +648,88 @@ LIB_PART* SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode )
 }
 
 
-LIB_CIRCLE* SCH_EAGLE_PLUGIN::loadCircle( LIB_PART* aPart, wxXmlNode* aCircleNode )
+LIB_CIRCLE* SCH_EAGLE_PLUGIN::loadSymbolCircle( LIB_PART* aPart, wxXmlNode* aCircleNode )
 {
     // Parse the circle properties
     ECIRCLE c( aCircleNode );
 
     unique_ptr<LIB_CIRCLE> circle( new LIB_CIRCLE( aPart ) );
 
-    circle->SetPosition( wxPoint( c.x, c.y ) );
-    circle->SetRadius( c.radius );
-    circle->SetWidth( c.width );
+    circle->SetPosition( wxPoint( c.x*EUNIT_TO_MIL, -c.y*EUNIT_TO_MIL ) );
+    circle->SetRadius( c.radius*EUNIT_TO_MIL );
+    circle->SetWidth( c.width*EUNIT_TO_MIL );
 
     return circle.release();
 }
 
 
-LIB_RECTANGLE* SCH_EAGLE_PLUGIN::loadRectangle( LIB_PART* aPart, wxXmlNode* aRectNode )
+LIB_RECTANGLE* SCH_EAGLE_PLUGIN::loadSymbolRectangle( LIB_PART* aPart, wxXmlNode* aRectNode )
 {
     ERECT rect( aRectNode );
 
     unique_ptr<LIB_RECTANGLE> rectangle( new LIB_RECTANGLE( aPart ) );
 
-    rectangle->SetPosition( wxPoint( rect.x1, rect.y1 ) );
-    rectangle->SetEnd( wxPoint( rect.x2, rect.y2 ) );
+    rectangle->SetPosition( wxPoint( rect.x1*EUNIT_TO_MIL, -rect.y1*EUNIT_TO_MIL ) );
+    rectangle->SetEnd( wxPoint( rect.x2*EUNIT_TO_MIL, -rect.y2*EUNIT_TO_MIL ) );
 
     // TODO: Manage rotation
 
     return rectangle.release();
 }
 
-
-LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadPolyLine( LIB_PART* aPart, wxXmlNode* aRectNode )
+LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolWire( LIB_PART* aPart, wxXmlNode* aWireNode )
 {
+    // TODO: Layer map
     std::unique_ptr< LIB_POLYLINE > polyLine( new LIB_POLYLINE( aPart ) );
 
-    /*int points = parseInt( aReader, line, &line );
-    polyLine->SetUnit( parseInt( aReader, line, &line ) );
-    polyLine->SetConvert( parseInt( aReader, line, &line ) );
-    polyLine->SetWidth( parseInt( aReader, line, &line ) );
+    auto ewire = EWIRE(aWireNode);
+    wxPoint begin, end;
 
-    wxPoint pt;
+    begin.x = ewire.x1*EUNIT_TO_MIL;
+    begin.y = -ewire.y1*EUNIT_TO_MIL;
+    end.x   = ewire.x2*EUNIT_TO_MIL;
+    end.y   = -ewire.y2*EUNIT_TO_MIL;
 
-    for( int i = 0; i < points; i++ )
-    {
-        pt.x = parseInt( aReader, line, &line );
-        pt.y = parseInt( aReader, line, &line );
-        polyLine->AddPoint( pt );
-    }
-
-    if( *line != 0 )
-        polyLine->SetFillMode( parseFillMode( aReader, line, &line ) );*/
+    polyLine->AddPoint( begin );
+    polyLine->AddPoint( end );
 
     return polyLine.release();
+}
+
+LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( LIB_PART* aPart, wxXmlNode* aPolygonNode )
+{
+    // TODO: Layer map
+    std::unique_ptr< LIB_POLYLINE > polyLine( new LIB_POLYLINE( aPart ) );
+
+    NODE_MAP polygonChildren = mapChildren( aPolygonNode );
+    wxXmlNode* vertex = getChildrenNodes( polygonChildren, "vertex" );
+
+    while(vertex) {
+        auto evertex = EVERTEX( vertex);
+        auto v = wxPoint(evertex.x*EUNIT_TO_MIL, -evertex.y*EUNIT_TO_MIL);
+        polyLine->AddPoint( v );
+
+        vertex->GetNext();
+    }
+
+    return polyLine.release();
+}
+
+LIB_PIN* SCH_EAGLE_PLUGIN::loadPin(  LIB_PART* aPart, wxXmlNode* aPin)
+{
+
+  std::unique_ptr< LIB_PIN > pin( new LIB_PIN( aPart ) );
+
+  auto epin = EPIN(aPin);
+
+  pin->SetPosition(wxPoint(epin.x*EUNIT_TO_MIL, -epin.y*EUNIT_TO_MIL));
+  pin->SetName(epin.name);
+
+  EROT rot = epin.rot.Get();
+  pin->SetOrientation( int(rot.degrees/90+2)%4 );
+
+
+  return pin.release();
 }
 
 
@@ -753,8 +813,6 @@ void SCH_EAGLE_PLUGIN::SymbolLibOptions( PROPERTIES* aListToAppendTo ) const
 // gate
 // grid
 // hole
-// junction
-// label
 // layer
 // note
 // pad

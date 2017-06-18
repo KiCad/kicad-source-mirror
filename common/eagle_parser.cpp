@@ -181,6 +181,47 @@ EWIRE::EWIRE( wxXmlNode* aWire )
         cap = EWIRE::FLAT;
 }
 
+EJUNCTION::EJUNCTION( wxXmlNode* aJunction)
+{
+    /*
+    <!ELEMENT junction EMPTY>
+    <!ATTLIST junction
+          x             %Coord;        #REQUIRED
+          y             %Coord;        #REQUIRED
+          >
+    */
+
+    x    = parseRequiredAttribute<double>( aJunction, "x" );
+    y    = parseRequiredAttribute<double>( aJunction, "y" );
+}
+
+ELABEL::ELABEL( wxXmlNode* aLabel, wxString aNetName)
+{
+    /*
+    <!ELEMENT label EMPTY>
+    <!ATTLIST label
+          x             %Coord;        #REQUIRED
+          y             %Coord;        #REQUIRED
+          size          %Dimension;    #REQUIRED
+          layer         %Layer;        #REQUIRED
+          font          %TextFont;     "proportional"
+          ratio         %Int;          "8"
+          rot           %Rotation;     "R0"
+          xref          %Bool;         "no"
+          >
+    */
+
+
+    x    = parseRequiredAttribute<double>( aLabel, "x" );
+    y    = parseRequiredAttribute<double>( aLabel, "y" );
+    size = parseRequiredAttribute<double>( aLabel, "size" );
+    layer = parseRequiredAttribute<int>( aLabel, "layer" );
+    rot   = parseOptionalAttribute<EROT>( aLabel, "rot" );
+    xref  = parseOptionalAttribute<string>(aLabel, "xref");
+    netname = aNetName;
+
+}
+
 
 EVIA::EVIA( wxXmlNode* aVia )
 {
@@ -466,6 +507,36 @@ ESMD::ESMD( wxXmlNode* aSMD )
     cream     = parseOptionalAttribute<bool>( aSMD, "cream" );
 }
 
+EPIN::EPIN( wxXmlNode* aPin ){
+    /*
+    <!ELEMENT pin EMPTY>
+    <!ATTLIST pin
+              name          %String;       #REQUIRED
+              x             %Coord;        #REQUIRED
+              y             %Coord;        #REQUIRED
+              visible       %PinVisible;   "both"
+              length        %PinLength;    "long"
+              direction     %PinDirection; "io"
+              function      %PinFunction;  "none"
+              swaplevel     %Int;          "0"
+              rot           %Rotation;     "R0"
+              >
+    */
+
+    // DTD #REQUIRED, throw exception if not found
+    name      = parseRequiredAttribute<string>( aPin, "name" );
+    x         = parseRequiredAttribute<double>( aPin, "x" );
+    y         = parseRequiredAttribute<double>( aPin, "y" );
+
+    visible  = parseOptionalAttribute<string>( aPin, "visible" );
+    length  = parseOptionalAttribute<string>( aPin, "length" );
+    direction  = parseOptionalAttribute<string>( aPin, "direction" );
+    function  = parseOptionalAttribute<string>( aPin, "function" );
+    swaplevel = parseOptionalAttribute<int>(aPin, "swaplevel");
+    rot = parseOptionalAttribute<EROT>(aPin, "rot");
+
+
+}
 
 EVERTEX::EVERTEX( wxXmlNode* aVertex )
 {
