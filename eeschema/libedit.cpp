@@ -55,9 +55,9 @@
 void LIB_EDIT_FRAME::DisplayLibInfos()
 {
     PART_LIB* lib = GetCurLib();
-    wxString title = wxString::Format( L"Part Library Editor \u2014 %s%s",
+    wxString title = wxString::Format( _( "Part Library Editor -- %s %s" ),
             lib ? lib->GetFullFileName() : _( "no library selected" ),
-            lib && lib->IsReadOnly() ? _( " [Read Only] ") : wxString( wxEmptyString ) );
+            lib && lib->IsReadOnly() ? _( "[Read Only]") : wxString( wxEmptyString ) );
 
     SetTitle( title );
 }

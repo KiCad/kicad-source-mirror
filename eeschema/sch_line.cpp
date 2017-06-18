@@ -462,7 +462,7 @@ wxString SCH_LINE::GetSelectMenuText() const
     switch( m_Layer )
     {
     case LAYER_NOTES:
-        txtfmt = _( "%s Graphic Line from (%s,%s) to (%s,%s) " );
+        txtfmt = _( "%s Graphic Line from (%s,%s) to (%s,%s)" );
         break;
 
     case LAYER_WIRE:

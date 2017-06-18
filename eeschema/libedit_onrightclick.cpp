@@ -227,7 +227,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 
         if( not_edited )
         {
-            msg = AddHotkeyName( _( "Delete Line " ), g_Libedit_Hokeys_Descr, HK_DELETE );
+            msg = AddHotkeyName( _( "Delete Line" ), g_Libedit_Hokeys_Descr, HK_DELETE );
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg,
                          KiBitmap( delete_segment_xpm ) );
         }
@@ -280,20 +280,20 @@ void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, LIB_EDIT_FRAME* frame )
 
     if( not_in_move )
     {
-        msg = AddHotkeyName( _( "Move Pin " ), g_Libedit_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Move Pin" ), g_Libedit_Hokeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg, KiBitmap( move_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Edit Pin " ), g_Libedit_Hokeys_Descr, HK_EDIT);
+    msg = AddHotkeyName( _( "Edit Pin" ), g_Libedit_Hokeys_Descr, HK_EDIT);
     AddMenuItem( PopMenu, ID_LIBEDIT_EDIT_PIN, msg, KiBitmap( edit_xpm ) );
 
-    msg = AddHotkeyName( _( "Rotate Pin " ), g_Libedit_Hokeys_Descr, HK_ROTATE );
+    msg = AddHotkeyName( _( "Rotate Pin" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
     AddMenuItem( PopMenu, ID_LIBEDIT_ROTATE_ITEM, msg, KiBitmap( rotate_cw_xpm ) );
 
     if( not_in_move )
     {
-        msg = AddHotkeyName( _( "Delete Pin " ), g_Libedit_Hokeys_Descr, HK_DELETE );
+        msg = AddHotkeyName( _( "Delete Pin" ), g_Libedit_Hokeys_Descr, HK_DELETE );
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg, KiBitmap( delete_pin_xpm ) );
     }
 
