@@ -48,6 +48,7 @@ class LIB_CIRCLE;
 class LIB_RECTANGLE;
 class LIB_POLYLINE;
 class LIB_PIN;
+class LIB_TEXT;
 
 
 /**
@@ -127,6 +128,7 @@ private:
     LIB_POLYLINE*   loadSymbolPolyLine( LIB_PART* aPart, wxXmlNode* aRectNode );
     LIB_POLYLINE*   loadSymbolWire( LIB_PART* aPart, wxXmlNode* aWireNode );
     LIB_PIN*        loadPin( LIB_PART*, wxXmlNode* );
+    LIB_TEXT*       loadSymboltext(  LIB_PART* aPart, wxXmlNode* aLibText );
 
     KIWAY* m_kiway;      ///< For creating sub sheets.
     SCH_SHEET* m_rootSheet; ///< The root sheet of the schematic being loaded..

@@ -37,6 +37,7 @@
 #include <lib_rectangle.h>
 #include <lib_polyline.h>
 #include <lib_pin.h>
+#include <lib_text.h>
 
 #include <eagle_parser.h>
 
@@ -649,7 +650,24 @@ LIB_PART* SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode )
         }
         else if( nodeName == "text" )
         {
-            // part->AddDrawItem( loadText( part, currentNode ) );
+            LIB_TEXT* libtext = loadSymboltext( part.get(), currentNode );
+
+            if( libtext->GetText() ==">NAME" )
+            {
+                auto field = part->GetReferenceField();
+                field.SetOffset( libtext->GetPosition() );
+                field.SetTextSize( libtext->GetTextSize() );
+                field.SetTextAngle( libtext->GetTextAngle() );
+            }
+            else if( libtext->GetText() == ">VALUE" )
+            {
+                auto field = part->GetValueField();
+                field.SetOffset( libtext->GetPosition() );
+                field.SetTextSize( libtext->GetTextSize() );
+                field.SetTextAngle( libtext->GetTextAngle() );
+            }
+            //else
+            //    part->AddDrawItem( loadlibtext( part.get(), currentNode ) );
         }
         else if( nodeName == "wire" )
         {
@@ -785,6 +803,19 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin(  LIB_PART* aPart, wxXmlNode* aPin )
     }
 
     return pin.release();
+}
+
+LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymboltext(  LIB_PART* aPart, wxXmlNode* aLibText )
+{
+    std::unique_ptr<LIB_TEXT> libtext( new LIB_TEXT( aPart ) );
+
+    auto etext = ETEXT( aLibText );
+
+    libtext->SetPosition( wxPoint( etext.x * EUNIT_TO_MIL, -etext.y * EUNIT_TO_MIL ) );
+    libtext->SetText( aLibText->GetNodeContent() );
+    libtext->SetTextSize(wxSize(int(etext.size*EUNIT_TO_MIL), int(etext.size*EUNIT_TO_MIL)));
+
+    return libtext.release();
 }
 
 
