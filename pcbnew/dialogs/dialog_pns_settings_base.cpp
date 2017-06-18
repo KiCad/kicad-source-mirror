@@ -35,7 +35,7 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_staticText4->Wrap( -1 );
 	fgSizer1->Add( m_staticText4, 0, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	wxString m_dragToolModeChoices[] = { _("move item"), _("interactive drag") };
+	wxString m_dragToolModeChoices[] = { _("Move item"), _("Interactive drag") };
 	int m_dragToolModeNChoices = sizeof( m_dragToolModeChoices ) / sizeof( wxString );
 	m_dragToolMode = new wxChoice( bOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_dragToolModeNChoices, m_dragToolModeChoices, 0 );
 	m_dragToolMode->SetSelection( 0 );
