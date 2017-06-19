@@ -43,7 +43,7 @@
 
 // Eagle schematic internal units are millimeters
 // Kicad schematic units are thousandths of an inch
-#define EUNIT_TO_MIL 1000.0/25.4
+constexpr double EUNIT_TO_MIL = 1000.0 / 25.4;
 
 // Eagle schematic axes are aligned with x increasing left to right and Y increasing bottom to top
 // Kicad schematic axes are algigned with x increasing left to rigth and Y increasing top to bottom.
