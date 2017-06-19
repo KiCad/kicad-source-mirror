@@ -181,7 +181,8 @@ EWIRE::EWIRE( wxXmlNode* aWire )
         cap = EWIRE::FLAT;
 }
 
-EJUNCTION::EJUNCTION( wxXmlNode* aJunction)
+
+EJUNCTION::EJUNCTION( wxXmlNode* aJunction )
 {
     /*
     <!ELEMENT junction EMPTY>
@@ -194,6 +195,7 @@ EJUNCTION::EJUNCTION( wxXmlNode* aJunction)
     x    = parseRequiredAttribute<double>( aJunction, "x" );
     y    = parseRequiredAttribute<double>( aJunction, "y" );
 }
+
 
 ELABEL::ELABEL( wxXmlNode* aLabel, const wxString& aNetName )
 {
@@ -211,15 +213,13 @@ ELABEL::ELABEL( wxXmlNode* aLabel, const wxString& aNetName )
           >
     */
 
-
     x    = parseRequiredAttribute<double>( aLabel, "x" );
     y    = parseRequiredAttribute<double>( aLabel, "y" );
     size = parseRequiredAttribute<double>( aLabel, "size" );
     layer = parseRequiredAttribute<int>( aLabel, "layer" );
     rot   = parseOptionalAttribute<EROT>( aLabel, "rot" );
-    xref  = parseOptionalAttribute<string>(aLabel, "xref");
+    xref  = parseOptionalAttribute<string>( aLabel, "xref" );
     netname = aNetName;
-
 }
 
 
@@ -507,7 +507,9 @@ ESMD::ESMD( wxXmlNode* aSMD )
     cream     = parseOptionalAttribute<bool>( aSMD, "cream" );
 }
 
-EPIN::EPIN( wxXmlNode* aPin ){
+
+EPIN::EPIN( wxXmlNode* aPin )
+{
     /*
     <!ELEMENT pin EMPTY>
     <!ATTLIST pin
@@ -528,15 +530,14 @@ EPIN::EPIN( wxXmlNode* aPin ){
     x         = parseRequiredAttribute<double>( aPin, "x" );
     y         = parseRequiredAttribute<double>( aPin, "y" );
 
-    visible  = parseOptionalAttribute<string>( aPin, "visible" );
-    length  = parseOptionalAttribute<string>( aPin, "length" );
-    direction  = parseOptionalAttribute<string>( aPin, "direction" );
+    visible   = parseOptionalAttribute<string>( aPin, "visible" );
+    length    = parseOptionalAttribute<string>( aPin, "length" );
+    direction = parseOptionalAttribute<string>( aPin, "direction" );
     function  = parseOptionalAttribute<string>( aPin, "function" );
-    swaplevel = parseOptionalAttribute<int>(aPin, "swaplevel");
-    rot = parseOptionalAttribute<EROT>(aPin, "rot");
-
-
+    swaplevel = parseOptionalAttribute<int>( aPin, "swaplevel" );
+    rot       = parseOptionalAttribute<EROT>( aPin, "rot" );
 }
+
 
 EVERTEX::EVERTEX( wxXmlNode* aVertex )
 {

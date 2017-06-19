@@ -447,7 +447,6 @@ struct ELABEL
     opt_string xref;
     wxString netname;
 
-
     ELABEL( wxXmlNode* aLabel, const wxString& aNetName );
 };
 

@@ -46,7 +46,7 @@
 constexpr double EUNIT_TO_MIL = 1000.0 / 25.4;
 
 // Eagle schematic axes are aligned with x increasing left to right and Y increasing bottom to top
-// Kicad schematic axes are algigned with x increasing left to rigth and Y increasing top to bottom.
+// Kicad schematic axes are aligned with x increasing left to rigth and Y increasing top to bottom.
 
 using namespace std;
 
@@ -71,6 +71,7 @@ static NODE_MAP mapChildren( wxXmlNode* aCurrentNode )
     return nodesMap;
 }
 
+
 static int countChildren( wxXmlNode* aCurrentNode, const std::string& aName )
 {
     // Map node_name -> node_pointer
@@ -78,9 +79,12 @@ static int countChildren( wxXmlNode* aCurrentNode, const std::string& aName )
 
     // Loop through all children counting them if they match the given name
     aCurrentNode = aCurrentNode->GetChildren();
+
     while( aCurrentNode )
     {
-        if(aCurrentNode->GetName().ToStdString() == name) count++;
+        if( aCurrentNode->GetName().ToStdString() == aName )
+            count++;
+
         // Get next child
         aCurrentNode = aCurrentNode->GetNext();
     }
@@ -89,7 +93,7 @@ static int countChildren( wxXmlNode* aCurrentNode, const std::string& aName )
 }
 
 
-void kicadLayer( int aEagleLayer )
+static void kicadLayer( int aEagleLayer )
 {
     /**
      * Layers in Kicad schematics are not actually layers, but abstract groups mainly used to
@@ -194,14 +198,16 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
 
     // Create a schematic symbol library
     wxFileName libfn = fn;
-    libfn.SetName(libfn.GetName()+wxString("-cache"));
+    libfn.SetName( libfn.GetName() + wxString( "-cache" ) );
     libfn.SetExt( SchematicLibraryFileExtension );
     std::unique_ptr<PART_LIB> lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, libfn.GetFullPath() ) );
     lib->EnableBuffering();
+
     if( !wxFileName::FileExists( lib->GetFullFileName() ) )
     {
         lib->Create();
     }
+
     m_partlib = lib.release();
 
     // Retrieve the root as current node
@@ -220,7 +226,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
     // Load drawing
     loadDrawing( children["drawing"] );
 
-    m_partlib->Save(false);
+    m_partlib->Save( false );
     deleter.release();
     return m_rootSheet;
 }
@@ -294,36 +300,40 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
     // If eagle schematic has multiple sheets.
 
-    if(sheet_count > 1){
+    if( sheet_count > 1 )
+    {
         // TODO: set up a heirachical sheet for each Eagle sheet.
         int x, y;
         x = 1;
         y = 1;
 
-        while( sheetNode ){
-          wxPoint pos = wxPoint(x*1000, y*1000);
-          std::unique_ptr<SCH_SHEET> sheet( new SCH_SHEET(pos) );
-          SCH_SCREEN* screen = new SCH_SCREEN(m_kiway) ;
+        while( sheetNode )
+        {
+            wxPoint pos = wxPoint( x*1000, y*1000);
+            std::unique_ptr<SCH_SHEET> sheet( new SCH_SHEET( pos ) );
+            SCH_SCREEN* screen = new SCH_SCREEN( m_kiway );
 
-          sheet->SetTimeStamp( GetNewTimeStamp() );
-          sheet->SetParent( m_rootSheet->GetScreen() );
-          sheet->SetScreen(  screen );
+            sheet->SetTimeStamp( GetNewTimeStamp() );
+            sheet->SetParent( m_rootSheet->GetScreen() );
+            sheet->SetScreen( screen );
 
-          m_currentSheet = sheet.get();
-          loadSheet( sheetNode );
-          sheet->GetScreen()->SetFileName( sheet->GetFileName() );
-          m_rootSheet->GetScreen()->Append(sheet.release());
+            m_currentSheet = sheet.get();
+            loadSheet( sheetNode );
+            sheet->GetScreen()->SetFileName( sheet->GetFileName() );
+            m_rootSheet->GetScreen()->Append( sheet.release() );
 
-          sheetNode = sheetNode->GetNext();
-          x+=2;
-          if(x>10)
-          {
-            x = 1;
-            y+=2;
-          }
+            sheetNode = sheetNode->GetNext();
+            x += 2;
+
+            if( x > 10 )
+            {
+                x = 1;
+                y += 2;
+            }
         }
-
-    } else {
+    }
+    else
+    {
         while( sheetNode )
         {
             m_currentSheet = m_rootSheet;
@@ -331,11 +341,10 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
             sheetNode = sheetNode->GetNext();
         }
     }
-
 }
 
 
-void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode  )
+void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
 {
     // Map all children into a readable dictionary
     NODE_MAP sheetChildren = mapChildren( aSheetNode );
@@ -343,24 +352,21 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode  )
     // Get description node
 
     wxXmlNode* descriptionNode = getChildrenNodes( sheetChildren, "description" );
+
     if( descriptionNode )
     {
-      wxString des = descriptionNode->GetContent();
-      m_currentSheet->SetName(des);
+        wxString des = descriptionNode->GetContent();
+        m_currentSheet->SetName( des );
 
-      std::string filename =  des.ToStdString();
-      ReplaceIllegalFileNameChars(&filename);
-      replace(filename.begin(),filename.end(), ' ', '_');
+        std::string filename = des.ToStdString();
+        ReplaceIllegalFileNameChars( &filename );
+        replace( filename.begin(), filename.end(), ' ', '_' );
 
-      wxString fn = wxString(filename+".sch");
-      m_currentSheet->SetFileName(fn);
-      wxFileName fileName = m_currentSheet->GetFileName();
-      m_currentSheet->GetScreen()->SetFileName( fileName.GetFullPath() );
-
-
+        wxString fn = wxString( filename + ".sch" );
+        m_currentSheet->SetFileName( fn );
+        wxFileName fileName = m_currentSheet->GetFileName();
+        m_currentSheet->GetScreen()->SetFileName( fileName.GetFullPath() );
     }
-
-
 
     // Loop through all busses
     // From the DTD: "Buses receive names which determine which signals they include.
@@ -391,7 +397,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode  )
         wxString netClass = netNode->GetAttribute( "class" );
 
         // Load segments of this net
-        loadSegments( netNode , netName, netClass);
+        loadSegments( netNode, netName, netClass );
 
         // Get next net
         netNode = netNode->GetNext();
@@ -431,7 +437,8 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode  )
 }
 
 
-void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, wxString netName, wxString netClass)
+void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& netName,
+        const wxString& netClass )
 {
     // Loop through all segments
     wxXmlNode* currentSegment = aSegmentsNode->GetChildren();
@@ -451,7 +458,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, wxString netName,
                 // TODO: handle junctions attributes
                 segmentAttribute->GetAttribute( "x" );
                 segmentAttribute->GetAttribute( "y" );
-                screen->Append(loadJunction(segmentAttribute));
+                screen->Append( loadJunction( segmentAttribute ) );
             }
             else if( nodeName == "label" )
             {
@@ -465,8 +472,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, wxString netName,
                 segmentAttribute->GetAttribute( "rot" );    // Defaults to "R0"
                 segmentAttribute->GetAttribute( "xref" );   // Defaults to "no"
 
-                screen->Append(loadLabel(segmentAttribute, netName));
-
+                screen->Append( loadLabel( segmentAttribute, netName ) );
             }
             else if( nodeName == "pinref" )
             {
@@ -531,31 +537,32 @@ SCH_LINE* SCH_EAGLE_PLUGIN::loadSignalWire( wxXmlNode* aWireNode )
 }
 
 
+SCH_JUNCTION* SCH_EAGLE_PLUGIN::loadJunction( wxXmlNode* aJunction )
+{
+    std::unique_ptr<SCH_JUNCTION> junction( new SCH_JUNCTION );
 
-SCH_JUNCTION* SCH_EAGLE_PLUGIN::loadJunction(wxXmlNode* aJunction){
-  std::unique_ptr<SCH_JUNCTION> junction( new SCH_JUNCTION );
+    auto ejunction = EJUNCTION( aJunction );
 
-  auto ejunction = EJUNCTION(aJunction);
+    junction->SetPosition( wxPoint( ejunction.x*EUNIT_TO_MIL, -ejunction.y*EUNIT_TO_MIL ) );
 
-  junction->SetPosition( wxPoint( ejunction.x*EUNIT_TO_MIL, -ejunction.y*EUNIT_TO_MIL ) );
-
-  return junction.release();
+    return junction.release();
 }
 
 
-SCH_GLOBALLABEL* SCH_EAGLE_PLUGIN::loadLabel(wxXmlNode* aLabelNode, wxString aNetName){
-  std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
+SCH_GLOBALLABEL* SCH_EAGLE_PLUGIN::loadLabel(wxXmlNode* aLabelNode, const wxString& aNetName )
+{
+    std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
 
-  auto elabel = ELABEL(aLabelNode, aNetName);
+    auto elabel = ELABEL( aLabelNode, aNetName );
 
-  glabel->SetPosition( wxPoint( elabel.x*EUNIT_TO_MIL, -elabel.y*EUNIT_TO_MIL ) );
-  glabel->SetText(elabel.netname);
-  glabel->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
+    glabel->SetPosition( wxPoint( elabel.x*EUNIT_TO_MIL, -elabel.y*EUNIT_TO_MIL ) );
+    glabel->SetText(elabel.netname);
+    glabel->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
 
-  if( elabel.rot )
+    if( elabel.rot )
         glabel->SetLabelSpinStyle( int( elabel.rot.Get().degrees/90+2)%4 );
 
-  return glabel.release();
+    return glabel.release();
 }
 
 
@@ -601,7 +608,7 @@ void SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
 
     while( symbolNode )
     {
-        m_partlib->AddPart(loadSymbol( symbolNode ));
+        m_partlib->AddPart( loadSymbol( symbolNode ) );
         symbolNode = symbolNode->GetNext();
     }
 }
@@ -710,6 +717,7 @@ LIB_RECTANGLE* SCH_EAGLE_PLUGIN::loadSymbolRectangle( LIB_PART* aPart, wxXmlNode
     return rectangle.release();
 }
 
+
 LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolWire( LIB_PART* aPart, wxXmlNode* aWireNode )
 {
     // TODO: Layer map
@@ -729,6 +737,7 @@ LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolWire( LIB_PART* aPart, wxXmlNode* aWir
     return polyLine.release();
 }
 
+
 LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( LIB_PART* aPart, wxXmlNode* aPolygonNode )
 {
     // TODO: Layer map
@@ -737,9 +746,10 @@ LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( LIB_PART* aPart, wxXmlNode* 
     NODE_MAP polygonChildren = mapChildren( aPolygonNode );
     wxXmlNode* vertex = getChildrenNodes( polygonChildren, "vertex" );
 
-    while(vertex) {
-        auto evertex = EVERTEX( vertex);
-        auto v = wxPoint(evertex.x*EUNIT_TO_MIL, -evertex.y*EUNIT_TO_MIL);
+    while( vertex )
+    {
+        auto evertex = EVERTEX( vertex );
+        auto v = wxPoint( evertex.x*EUNIT_TO_MIL, -evertex.y*EUNIT_TO_MIL );
         polyLine->AddPoint( v );
 
         vertex->GetNext();
@@ -748,7 +758,8 @@ LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( LIB_PART* aPart, wxXmlNode* 
     return polyLine.release();
 }
 
-LIB_PIN* SCH_EAGLE_PLUGIN::loadPin(  LIB_PART* aPart, wxXmlNode* aPin )
+
+LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( LIB_PART* aPart, wxXmlNode* aPin )
 {
     std::unique_ptr<LIB_PIN> pin( new LIB_PIN( aPart ) );
 
@@ -761,7 +772,7 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin(  LIB_PART* aPart, wxXmlNode* aPin )
 
     if( epin.rot )
     {
-        roti = int(epin.rot->degrees);
+        roti = int( epin.rot->degrees );
     }
 
     switch( roti )
@@ -808,7 +819,8 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin(  LIB_PART* aPart, wxXmlNode* aPin )
     return pin.release();
 }
 
-LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymboltext(  LIB_PART* aPart, wxXmlNode* aLibText )
+
+LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymboltext( LIB_PART* aPart, wxXmlNode* aLibText )
 {
     std::unique_ptr<LIB_TEXT> libtext( new LIB_TEXT( aPart ) );
 
@@ -816,7 +828,8 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymboltext(  LIB_PART* aPart, wxXmlNode* aLibTex
 
     libtext->SetPosition( wxPoint( etext.x * EUNIT_TO_MIL, -etext.y * EUNIT_TO_MIL ) );
     libtext->SetText( aLibText->GetNodeContent() );
-    libtext->SetTextSize(wxSize(int(etext.size*EUNIT_TO_MIL), int(etext.size*EUNIT_TO_MIL)));
+    libtext->SetTextSize( wxSize( int( etext.size * EUNIT_TO_MIL ),
+                                  int( etext.size * EUNIT_TO_MIL ) ) );
 
     return libtext.release();
 }
