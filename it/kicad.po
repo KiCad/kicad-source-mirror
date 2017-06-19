@@ -80,8 +80,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-13 11:14+0200\n"
-"PO-Revision-Date: 2017-06-13 11:20+0200\n"
+"POT-Creation-Date: 2017-06-19 12:34+0200\n"
+"PO-Revision-Date: 2017-06-19 12:39+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -187,7 +187,7 @@ msgstr ""
 "Nome progetto:\n"
 "\"%s\"\n"
 
-#: kicad/menubar.cpp:143 pcbnew/hotkeys.cpp:191 eeschema/hotkeys.cpp:118
+#: kicad/menubar.cpp:143 pcbnew/hotkeys.cpp:193 eeschema/hotkeys.cpp:118
 #: gerbview/hotkeys.cpp:66 pagelayout_editor/hotkeys.cpp:81
 msgid "Help (this window)"
 msgstr "Aiuto (questa finestra)"
@@ -1156,15 +1156,15 @@ msgstr "Modifica marcatore"
 msgid "Delete Target"
 msgstr "Cancella marcatore"
 
-#: pcbnew/onrightclick.cpp:350 pcbnew/hotkeys.cpp:127
+#: pcbnew/onrightclick.cpp:350 pcbnew/hotkeys.cpp:126
 msgid "Get and Move Footprint"
 msgstr "Ottieni e sposta impronta"
 
-#: pcbnew/onrightclick.cpp:363 pcbnew/hotkeys.cpp:155
+#: pcbnew/onrightclick.cpp:363 pcbnew/hotkeys.cpp:154
 msgid "Fill or Refill All Zones"
 msgstr "Riempi o aggiorna tutte le zone"
 
-#: pcbnew/onrightclick.cpp:367 pcbnew/hotkeys.cpp:157
+#: pcbnew/onrightclick.cpp:367 pcbnew/hotkeys.cpp:156
 msgid "Remove Filled Areas in All Zones"
 msgstr "Elimina riempimenti in tute le zone"
 
@@ -1218,7 +1218,7 @@ msgstr "Posiziona automaticamente tutte le impronte"
 
 #: pcbnew/onrightclick.cpp:444
 msgid "Automatically Place New Footprints"
-msgstr "Posiziona automaticamente tutte le nuove impronte"
+msgstr "Posiziona automaticamente le nuove impronte"
 
 #: pcbnew/onrightclick.cpp:446
 msgid "Automatically Place Next Footprints"
@@ -1332,7 +1332,7 @@ msgid "Select Layer and Place Blind/Buried Via"
 msgstr "Seleziona strato e piazza via coperto/interno"
 
 #: pcbnew/onrightclick.cpp:602 pcbnew/router/router_tool.cpp:175
-#: pcbnew/hotkeys.cpp:111
+#: pcbnew/hotkeys.cpp:110
 msgid "Switch Track Posture"
 msgstr "Commuta postura pista"
 
@@ -1525,7 +1525,7 @@ msgstr "Ribalta"
 msgid "Edit Parameters"
 msgstr "Modifica parametri"
 
-#: pcbnew/onrightclick.cpp:824 pcbnew/hotkeys.cpp:115
+#: pcbnew/onrightclick.cpp:824 pcbnew/hotkeys.cpp:114
 msgid "Edit with Footprint Editor"
 msgstr "Modifica con l'editor delle impronte"
 
@@ -2251,7 +2251,7 @@ msgstr "Sposta esattamente"
 msgid "Moves the selected item(s) by an exact amount"
 msgstr "Sposta gli elementi selezionati di un valore esatto"
 
-#: pcbnew/tools/edit_tool.cpp:112 pcbnew/hotkeys.cpp:124
+#: pcbnew/tools/edit_tool.cpp:112 pcbnew/hotkeys.cpp:123
 #: pcbnew/dialogs/dialog_create_array_base.h:115
 msgid "Create Array"
 msgstr "Crea array"
@@ -2674,7 +2674,7 @@ msgstr "Aggiungi marcatore di allineamento strati"
 msgid "Add a layer alignment target"
 msgstr "Aggiungi un marcatore di allineamento strati"
 
-#: pcbnew/tools/pcb_editor_control.cpp:118 pcbnew/hotkeys.cpp:228
+#: pcbnew/tools/pcb_editor_control.cpp:118 pcbnew/hotkeys.cpp:232
 msgid "Add Footprint"
 msgstr "Aggiungi impronta"
 
@@ -2757,10 +2757,13 @@ msgstr "Posiziona relativamente a..."
 
 #: pcbnew/tools/position_relative_tool.cpp:45
 msgid "Positions the selected item(s) by an exact amount relative to another"
-msgstr "Posiziona gli elementi selezionati di un valore esatto relativamente ad un altro elemento"
+msgstr ""
+"Posiziona gli elementi selezionati di un valore esatto relativamente ad un "
+"altro elemento"
 
 #: pcbnew/tools/position_relative_tool.cpp:155
-msgid "Positon Relative"
+#: pcbnew/dialogs/dialog_position_relative_base.h:75
+msgid "Position Relative"
 msgstr "Posiziona relativamente"
 
 #: pcbnew/tools/placement_tool.cpp:42
@@ -2839,7 +2842,7 @@ msgstr "Distribuisci orizzontalmente"
 msgid "Distribute vertically"
 msgstr "Distribuisci verticalmente"
 
-#: pcbnew/tools/pcbnew_control.cpp:202 pcbnew/hotkeys.cpp:101
+#: pcbnew/tools/pcbnew_control.cpp:202 pcbnew/hotkeys.cpp:188
 #: eeschema/hotkeys.cpp:211 gerbview/hotkeys.cpp:65
 #: pagelayout_editor/hotkeys.cpp:80
 msgid "Zoom to Selection"
@@ -3384,7 +3387,7 @@ msgstr "Salvare le modifiche all'impronta prima di chiudere?"
 msgid "Library is not set, the footprint could not be saved."
 msgstr "Nessuna libreria selezionata. L'impronta non può esere salvata."
 
-#: pcbnew/moduleframe.cpp:724 pcbnew/hotkeys.cpp:189 pcbnew/pcbframe.cpp:706
+#: pcbnew/moduleframe.cpp:724 pcbnew/hotkeys.cpp:191 pcbnew/pcbframe.cpp:706
 #: pcbnew/modview_frame.cpp:689 cvpcb/class_DisplayFootprintsFrame.cpp:406
 msgid "3D Viewer"
 msgstr "Visualizzatore 3D"
@@ -3393,7 +3396,7 @@ msgstr "Visualizzatore 3D"
 msgid "no active library"
 msgstr "nessuna libreria attiva"
 
-#: pcbnew/moduleframe.cpp:813 pcbnew/hotkeys.cpp:307
+#: pcbnew/moduleframe.cpp:813 pcbnew/hotkeys.cpp:318
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:129
 msgid "Footprint Editor"
 msgstr "Editor impronte"
@@ -4486,7 +4489,7 @@ msgstr "Mostra contorni piazzole"
 msgid "Show pads in fill mode"
 msgstr "Mostra piazzole in modalità piena"
 
-#: pcbnew/basepcbframe.cpp:846 pcbnew/hotkeys.cpp:161 pcbnew/hotkeys.cpp:163
+#: pcbnew/basepcbframe.cpp:846 pcbnew/hotkeys.cpp:160 pcbnew/hotkeys.cpp:162
 #: common/tool/actions.cpp:36 eeschema/hotkeys.cpp:89 gerbview/hotkeys.cpp:60
 #: pagelayout_editor/hotkeys.cpp:74
 msgid "Zoom Auto"
@@ -4783,133 +4786,133 @@ msgstr "Salva scheda come"
 msgid "Load Board"
 msgstr "Carica scheda"
 
-#: pcbnew/hotkeys.cpp:102
+#: pcbnew/hotkeys.cpp:101
 msgid "Delete Track Segment"
 msgstr "Cancella segmento di pista"
 
-#: pcbnew/hotkeys.cpp:103
+#: pcbnew/hotkeys.cpp:102
 msgid "Add New Track"
 msgstr "Aggiungi nuova pista"
 
-#: pcbnew/hotkeys.cpp:104
+#: pcbnew/hotkeys.cpp:103
 msgid "Add Through Via"
 msgstr "Aggiungi via passante"
 
-#: pcbnew/hotkeys.cpp:105
+#: pcbnew/hotkeys.cpp:104
 msgid "Select Layer and Add Through Via"
 msgstr "Seleziona strato e piazza via passante"
 
-#: pcbnew/hotkeys.cpp:107
+#: pcbnew/hotkeys.cpp:106
 msgid "Add MicroVia"
 msgstr "Aggiungi microvia"
 
-#: pcbnew/hotkeys.cpp:108
+#: pcbnew/hotkeys.cpp:107
 msgid "Add Blind/Buried Via"
 msgstr "Aggiungi via coperto/interno"
 
-#: pcbnew/hotkeys.cpp:109
+#: pcbnew/hotkeys.cpp:108
 msgid "Select Layer and Add Blind/Buried Via"
 msgstr "Seleziona strato e piazza via coperto/interno"
 
-#: pcbnew/hotkeys.cpp:112
+#: pcbnew/hotkeys.cpp:111
 msgid "Drag Track Keep Slope"
 msgstr "Trascina pista mantendo l'inclinazione"
 
-#: pcbnew/hotkeys.cpp:113 pagelayout_editor/onrightclick.cpp:119
+#: pcbnew/hotkeys.cpp:112 pagelayout_editor/onrightclick.cpp:119
 #: pagelayout_editor/hotkeys.cpp:83
 msgid "Place Item"
 msgstr "Piazza elemento"
 
-#: pcbnew/hotkeys.cpp:114 eeschema/hotkeys.cpp:173
+#: pcbnew/hotkeys.cpp:113 eeschema/hotkeys.cpp:173
 msgid "Edit Item"
 msgstr "Modifica elemento"
 
-#: pcbnew/hotkeys.cpp:116
+#: pcbnew/hotkeys.cpp:115
 msgid "Flip Item"
 msgstr "Ribalta elemento"
 
-#: pcbnew/hotkeys.cpp:117 eeschema/hotkeys.cpp:172
+#: pcbnew/hotkeys.cpp:116 eeschema/hotkeys.cpp:172
 msgid "Rotate Item"
 msgstr "Ruota elemento"
 
-#: pcbnew/hotkeys.cpp:118 pcbnew/dialogs/dialog_move_exact_base.h:78
+#: pcbnew/hotkeys.cpp:117 pcbnew/dialogs/dialog_move_exact_base.h:78
 #: pagelayout_editor/onrightclick.cpp:105 pagelayout_editor/hotkeys.cpp:82
 msgid "Move Item"
 msgstr "Sposta elemento"
 
-#: pcbnew/hotkeys.cpp:119
+#: pcbnew/hotkeys.cpp:118
 msgid "Move Item Exactly"
 msgstr "Sposta elemento esattamente"
 
-#: pcbnew/hotkeys.cpp:120
+#: pcbnew/hotkeys.cpp:119
 msgid "Position Item Relative"
 msgstr "Posiziona elemento relativamente"
 
-#: pcbnew/hotkeys.cpp:121
+#: pcbnew/hotkeys.cpp:120
 msgid "Duplicate Item"
 msgstr "Duplica elemento"
 
-#: pcbnew/hotkeys.cpp:122
+#: pcbnew/hotkeys.cpp:121
 msgid "Duplicate Item and Increment"
 msgstr "Duplica elemento e incrementa"
 
-#: pcbnew/hotkeys.cpp:125
+#: pcbnew/hotkeys.cpp:124
 msgid "Copy Item"
 msgstr "Copia elemento"
 
-#: pcbnew/hotkeys.cpp:126 eeschema/hotkeys.cpp:195
+#: pcbnew/hotkeys.cpp:125 eeschema/hotkeys.cpp:195
 msgid "Drag Item"
 msgstr "Trascina elemento"
 
-#: pcbnew/hotkeys.cpp:128
+#: pcbnew/hotkeys.cpp:127
 msgid "Lock/Unlock Footprint"
 msgstr "Blocca/sblocca impronta"
 
-#: pcbnew/hotkeys.cpp:129
+#: pcbnew/hotkeys.cpp:128
 msgid "Delete Track or Footprint"
 msgstr "Cancella pista o impronta"
 
-#: pcbnew/hotkeys.cpp:130 eeschema/hotkeys.cpp:119 gerbview/hotkeys.cpp:68
+#: pcbnew/hotkeys.cpp:129 eeschema/hotkeys.cpp:119 gerbview/hotkeys.cpp:68
 #: pagelayout_editor/hotkeys.cpp:72
 msgid "Reset Local Coordinates"
 msgstr "Reimposta le coordinate locali"
 
-#: pcbnew/hotkeys.cpp:131
+#: pcbnew/hotkeys.cpp:130
 msgid "Toggle High Contrast Mode"
 msgstr "Commuta contrasto aumentato"
 
-#: pcbnew/hotkeys.cpp:133
+#: pcbnew/hotkeys.cpp:132
 msgid "Set Grid Origin"
 msgstr "Imposta origine griglia"
 
-#: pcbnew/hotkeys.cpp:134 pcbnew/dialogs/dialog_set_grid_base.cpp:94
+#: pcbnew/hotkeys.cpp:133 pcbnew/dialogs/dialog_set_grid_base.cpp:94
 msgid "Reset Grid Origin"
 msgstr "Reimposta origine griglia"
 
-#: pcbnew/hotkeys.cpp:136
+#: pcbnew/hotkeys.cpp:135
 msgid "Switch to Legacy Canvas"
 msgstr "Passa a schermo classico"
 
-#: pcbnew/hotkeys.cpp:142
+#: pcbnew/hotkeys.cpp:141
 msgid "Switch to OpenGL Canvas"
 msgstr "Passa a schermo OpenGL"
 
-#: pcbnew/hotkeys.cpp:148
+#: pcbnew/hotkeys.cpp:147
 msgid "Switch to Cairo Canvas"
 msgstr "Passa a schermo Cairo"
 
-#: pcbnew/hotkeys.cpp:166 eeschema/hotkeys.cpp:93 gerbview/hotkeys.cpp:61
+#: pcbnew/hotkeys.cpp:165 eeschema/hotkeys.cpp:93 gerbview/hotkeys.cpp:61
 #: pagelayout_editor/hotkeys.cpp:75
 msgid "Zoom Center"
 msgstr "Centra zoom"
 
-#: pcbnew/hotkeys.cpp:170 pcbnew/hotkeys.cpp:172 eeschema/hotkeys.cpp:98
+#: pcbnew/hotkeys.cpp:169 pcbnew/hotkeys.cpp:171 eeschema/hotkeys.cpp:98
 #: eeschema/hotkeys.cpp:100 gerbview/hotkeys.cpp:62
 #: pagelayout_editor/hotkeys.cpp:77
 msgid "Zoom Redraw"
 msgstr "Aggiorna zoom"
 
-#: pcbnew/hotkeys.cpp:177 pcbnew/hotkeys.cpp:179
+#: pcbnew/hotkeys.cpp:176 pcbnew/hotkeys.cpp:178
 #: common/widgets/mathplot.cpp:1767 common/tool/actions.cpp:16
 #: eeschema/hotkeys.cpp:106 eeschema/hotkeys.cpp:108
 #: eeschema/sim/sim_plot_frame_base.cpp:74 gerbview/hotkeys.cpp:64
@@ -4917,7 +4920,7 @@ msgstr "Aggiorna zoom"
 msgid "Zoom In"
 msgstr "Ingrandisci"
 
-#: pcbnew/hotkeys.cpp:184 pcbnew/hotkeys.cpp:186
+#: pcbnew/hotkeys.cpp:183 pcbnew/hotkeys.cpp:185
 #: common/widgets/mathplot.cpp:1768 common/tool/actions.cpp:20
 #: eeschema/hotkeys.cpp:113 eeschema/hotkeys.cpp:115
 #: eeschema/sim/sim_plot_frame_base.cpp:78 gerbview/hotkeys.cpp:63
@@ -4925,55 +4928,63 @@ msgstr "Ingrandisci"
 msgid "Zoom Out"
 msgstr "Rimpicciolisci"
 
-#: pcbnew/hotkeys.cpp:195 eeschema/hotkeys.cpp:124
+#: pcbnew/hotkeys.cpp:197 eeschema/hotkeys.cpp:124
 #: pagelayout_editor/hotkeys.cpp:92
 msgid "Undo"
 msgstr "Ripristina"
 
-#: pcbnew/hotkeys.cpp:199 pcbnew/hotkeys.cpp:201 eeschema/hotkeys.cpp:128
+#: pcbnew/hotkeys.cpp:201 pcbnew/hotkeys.cpp:203 eeschema/hotkeys.cpp:128
 #: eeschema/hotkeys.cpp:130 pagelayout_editor/hotkeys.cpp:93
 msgid "Redo"
 msgstr "Rifa"
 
-#: pcbnew/hotkeys.cpp:206
+#: pcbnew/hotkeys.cpp:208
 msgid "Switch Track Width To Next"
 msgstr "Cambia largezza pista alla prossima"
 
-#: pcbnew/hotkeys.cpp:209
+#: pcbnew/hotkeys.cpp:211
 msgid "Switch Track Width To Previous"
 msgstr "Cambia larghezza pista alla precedente"
 
-#: pcbnew/hotkeys.cpp:213
+#: pcbnew/hotkeys.cpp:215
 msgid "Switch Grid To Fast Grid1"
 msgstr "Cambia griglia a griglia veloce 1"
 
-#: pcbnew/hotkeys.cpp:216
+#: pcbnew/hotkeys.cpp:218
 msgid "Switch Grid To Fast Grid2"
 msgstr "Cambia griglia a griglia veloce 2"
 
-#: pcbnew/hotkeys.cpp:219
+#: pcbnew/hotkeys.cpp:221
 msgid "Switch Grid To Next"
 msgstr "Cambia griglia alla prossima"
 
-#: pcbnew/hotkeys.cpp:222
+#: pcbnew/hotkeys.cpp:224
 msgid "Switch Grid To Previous"
 msgstr "Cambia griglia alla precedente"
 
-#: pcbnew/hotkeys.cpp:225 gerbview/hotkeys.cpp:67
+#: pcbnew/hotkeys.cpp:227 gerbview/hotkeys.cpp:67
 msgid "Switch Units"
 msgstr "Commuta unità"
 
-#: pcbnew/hotkeys.cpp:226
+#: pcbnew/hotkeys.cpp:229
 msgid "Track Display Mode"
 msgstr "Modalità visualizzazione piste"
 
-#: pcbnew/hotkeys.cpp:305
+#: pcbnew/hotkeys.cpp:236
+msgid "Increment Layer Transparency"
+msgstr "Incrementa la trasparenza dello strato"
+
+#: pcbnew/hotkeys.cpp:238
+msgid "Decrement Layer Transparency"
+msgstr "Decrementa la trasparenza dello strato"
+
+#: pcbnew/hotkeys.cpp:316
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
 #: eeschema/hotkeys.cpp:341 pagelayout_editor/hotkeys.cpp:117
 msgid "Common"
 msgstr "Comuni"
 
-#: pcbnew/hotkeys.cpp:306
+#: pcbnew/hotkeys.cpp:317
 msgid "Board Editor"
 msgstr "Editor scheda"
 
@@ -6875,7 +6886,7 @@ msgstr "Valore componente:"
 msgid "Warning: The Top Layer and Bottom Layer are same."
 msgstr "Attenzione: Lo strato superiore e quello inferiore sono identici"
 
-#: pcbnew/clean.cpp:150 pcbnew/clean.cpp:796
+#: pcbnew/clean.cpp:149 pcbnew/clean.cpp:795
 msgid "Board cleanup"
 msgstr "Pulizia scheda"
 
@@ -7519,13 +7530,13 @@ msgstr ""
 msgid "Netlist update successful!"
 msgstr "Aggiornamento netlist effettuato con successo!"
 
-#: pcbnew/convert_drawsegment_list_to_polygon.cpp:377
-#: pcbnew/convert_drawsegment_list_to_polygon.cpp:531
+#: pcbnew/convert_drawsegment_list_to_polygon.cpp:376
+#: pcbnew/convert_drawsegment_list_to_polygon.cpp:530
 #, c-format
 msgid "Unsupported DRAWSEGMENT type %s"
 msgstr "DRAWSEGMENT tipo %s non supportatato"
 
-#: pcbnew/convert_drawsegment_list_to_polygon.cpp:405
+#: pcbnew/convert_drawsegment_list_to_polygon.cpp:404
 #, c-format
 msgid ""
 "Unable to find the next boundary segment with an endpoint of (%s mm, %s mm). "
@@ -7534,7 +7545,7 @@ msgstr ""
 "Impossibile trovare il segmento successivo del bordo con un capo di (%s mm, "
 "%s mm). Le grafiche perimetrali devono formare un poligono continuo e chiuso."
 
-#: pcbnew/convert_drawsegment_list_to_polygon.cpp:559
+#: pcbnew/convert_drawsegment_list_to_polygon.cpp:558
 #, c-format
 msgid ""
 "Unable to find the next graphic segment with an endpoint of (%s mm, %s mm).\n"
@@ -7572,7 +7583,6 @@ msgid "Select Output Directory"
 msgstr "Seleziona percorso di uscita"
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:187
-#: pcbnew/dialogs/dialog_SVG_print.cpp:221
 msgid "Use a relative path? "
 msgstr "Utilizzare percorso relativo?"
 
@@ -10863,12 +10873,12 @@ msgid "Mouse drag behaviour:"
 msgstr "Comportamento trascinamento mouse:"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:38
-msgid "move item"
-msgstr "sposta elemento"
+msgid "Move item"
+msgstr "Sposta elemento"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:38
-msgid "interactive drag"
-msgstr "trascinamento interattivo"
+msgid "Interactive drag"
+msgstr "Trascinamento interattivo"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:47
 msgid "Free angle mode (no shove/walkaround)"
@@ -12250,6 +12260,11 @@ msgstr "Sposta X vettore:"
 msgid "Move vector Y:"
 msgstr "Sposta Y vettore:"
 
+#: pcbnew/dialogs/dialog_SVG_print.cpp:221
+#: eeschema/dialogs/dialog_eeschema_config.cpp:417
+msgid "Use a relative path?"
+msgstr "Usare un percorso relativo?"
+
 #: pcbnew/dialogs/dialog_SVG_print.cpp:274
 #: eeschema/dialogs/dialog_plot_schematic.cpp:347
 #, c-format
@@ -12417,12 +12432,12 @@ msgid "Override default component anchor with:"
 msgstr "Scavalca l'ancoraggio predefinito del componente con:"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:89
-msgid "top left pad"
-msgstr "piazzola in cima a sinistra"
+msgid "Top left pad"
+msgstr "Piazzola in cima a sinistra"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:89
-msgid "footprint center"
-msgstr "centro impronta"
+msgid "Footprint center"
+msgstr "Centro impronta"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:35
 msgid ""
@@ -14414,10 +14429,6 @@ msgstr "Proprietà zone non in rame"
 #: pcbnew/dialogs/dialog_layers_setup_base.h:418
 msgid "Layer Setup"
 msgstr "Configurazione strati"
-
-#: pcbnew/dialogs/dialog_position_relative_base.h:75
-msgid "Position Relative"
-msgstr "Posiziona relativamente"
 
 #: pcbnew/dialogs/dialog_drc_base.h:116
 msgid "DRC Control"
@@ -16847,8 +16858,8 @@ msgstr "Oriz."
 
 #: eeschema/sch_line.cpp:465
 #, c-format
-msgid "%s Graphic Line from (%s,%s) to (%s,%s) "
-msgstr "%s Linea da (%s,%s) a (%s,%s) "
+msgid "%s Graphic Line from (%s,%s) to (%s,%s)"
+msgstr "%s Linea grafica da (%s,%s) a (%s,%s) "
 
 #: eeschema/sch_line.cpp:469
 #, c-format
@@ -18586,8 +18597,8 @@ msgid "Edit Line Options"
 msgstr "Modifica opzioni linea"
 
 #: eeschema/libedit_onrightclick.cpp:230
-msgid "Delete Line "
-msgstr "Cancella linea"
+msgid "Delete Line"
+msgstr "Elimina linea"
 
 #: eeschema/libedit_onrightclick.cpp:256
 msgid "Field Rotate"
@@ -18598,20 +18609,20 @@ msgid "Field Edit"
 msgstr "Modifica campo"
 
 #: eeschema/libedit_onrightclick.cpp:283
-msgid "Move Pin "
-msgstr "Sposta piedino"
+msgid "Move Pin"
+msgstr "Sposta pin"
 
 #: eeschema/libedit_onrightclick.cpp:288
-msgid "Edit Pin "
-msgstr "Modifica piedino"
+msgid "Edit Pin"
+msgstr "Modifica pin"
 
 #: eeschema/libedit_onrightclick.cpp:291
-msgid "Rotate Pin "
-msgstr "Ruota piedino"
+msgid "Rotate Pin"
+msgstr "Ruota pin"
 
 #: eeschema/libedit_onrightclick.cpp:296
-msgid "Delete Pin "
-msgstr "Cancella piedino"
+msgid "Delete Pin"
+msgstr "Cancella pin"
 
 #: eeschema/libedit_onrightclick.cpp:303
 msgid "Global"
@@ -19680,9 +19691,14 @@ msgstr ""
 "Le etichette globali sono simili (differenze solo nei caratteri maiuscoli/"
 "minuscoli)"
 
+#: eeschema/libedit.cpp:58
+#, c-format
+msgid "Part Library Editor -- %s %s"
+msgstr "Editor elemento di libreria -- %s %s"
+
 #: eeschema/libedit.cpp:60
-msgid " [Read Only] "
-msgstr " [Sola lettura] "
+msgid "[Read Only]"
+msgstr "[sola lettura]"
 
 #: eeschema/libedit.cpp:83 eeschema/libedit.cpp:113
 msgid ""
@@ -20026,10 +20042,6 @@ msgstr "\"%s\": libreria già in uso"
 #: eeschema/dialogs/dialog_eeschema_config.cpp:390
 msgid "Default Path for Libraries"
 msgstr "Percorso predefinito per le librerie"
-
-#: eeschema/dialogs/dialog_eeschema_config.cpp:417
-msgid "Use a relative path?"
-msgstr "Usare un percorso relativo?"
 
 #: eeschema/dialogs/dialog_eeschema_config.cpp:417
 msgid "Path type"
@@ -22707,7 +22719,10 @@ msgstr "Salva file di &associazione impronte"
 msgid ""
 "Configure footprint association file (.equ) list.These files are used to "
 "automatically assign the footprint name (FPID) from the component value"
-msgstr "Configura il file di associazioni impronte (.equ). Questi file vengono usati per assegnare automaticamente il nome impronta (FPID) in base al valore del componente"
+msgstr ""
+"Configura il file di associazioni impronte (.equ). Questi file vengono usati "
+"per assegnare automaticamente il nome impronta (FPID) in base al valore del "
+"componente"
 
 #: cvpcb/menubar.cpp:106
 msgid "&Keep Open On Save"
@@ -24386,15 +24401,15 @@ msgstr ""
 "La scheda esportata non ha sufficienti strati in rame per gestire gli strati "
 "interni"
 
-#: gerbview/rs274x.cpp:553
+#: gerbview/rs274x.cpp:557
 msgid "RS274X: Command \"IR\" rotation value not allowed"
 msgstr "RS274X: Comando \"IR\" valore di rotazione non consentito"
 
-#: gerbview/rs274x.cpp:644
+#: gerbview/rs274x.cpp:648
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
 msgstr "RS274X: Comando KNOCKOUT ignorato da Gerbview "
 
-#: gerbview/rs274x.cpp:707
+#: gerbview/rs274x.cpp:711
 msgid "Too many include files!!"
 msgstr "Inclusi troppi file!!"
 
