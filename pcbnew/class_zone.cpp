@@ -843,6 +843,24 @@ void ZONE_CONTAINER::AddPolygon( std::vector< wxPoint >& aPolygon )
 }
 
 
+bool ZONE_CONTAINER::AppendCorner( wxPoint aPosition, int aHoleIdx, bool aAllowDuplication )
+{
+    // Ensure the main outline exists:
+    if( m_Poly->OutlineCount() == 0 )
+        m_Poly->NewOutline();
+
+    // If aHoleIdx >= 0, the corner musty be added to the hole, index aHoleIdx.
+    // (remember: the index of the first hole is 0)
+    // Return error if if does dot exist.
+    if( aHoleIdx >= m_Poly->HoleCount( 0 ) )
+        return false;
+
+    m_Poly->Append( aPosition.x, aPosition.y, -1, aHoleIdx, aAllowDuplication );
+
+    return true;
+}
+
+
 wxString ZONE_CONTAINER::GetSelectMenuText() const
 {
     wxString text;

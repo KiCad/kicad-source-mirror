@@ -182,7 +182,7 @@ void PCB_POLYGON::AddToBoard()
         for( i = 0; i < (int) m_outline.GetCount(); i++ )
         {
             zone->AppendCorner( wxPoint( KiROUND( m_outline[i]->x ),
-                                         KiROUND( m_outline[i]->y ) ) );
+                                         KiROUND( m_outline[i]->y ) ), -1 );
         }
 
         zone->SetZoneClearance( m_width );
@@ -206,7 +206,6 @@ void PCB_POLYGON::AddToBoard()
         }
 
         //if( m_filled )
-        //    cvpcb is not linked
         //    zone->BuildFilledPolysListData( m_board );
     }
 }

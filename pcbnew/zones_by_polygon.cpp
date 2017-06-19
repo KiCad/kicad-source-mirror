@@ -669,8 +669,9 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
         zone->SetLayer( zoneInfo.m_CurrentZone_Layer );
 
         // A duplicated corner is needed; null segments are removed when the zone is finished.
-        zone->AppendCorner( GetCrossHairPosition() );
-        zone->AppendCorner( GetCrossHairPosition(), true );
+        zone->AppendCorner( GetCrossHairPosition(), -1 );
+        // Add the duplicate corner:
+        zone->AppendCorner( GetCrossHairPosition(), -1, true );
 
         if( g_Drc_On && (m_drc->Drc( zone, 0 ) == BAD_DRC) && zone->IsOnCopperLayer() )
         {

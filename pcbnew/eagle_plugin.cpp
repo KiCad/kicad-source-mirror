@@ -621,10 +621,11 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
                 ZONE_CONTAINER::HATCH_STYLE outline_hatch = ZONE_CONTAINER::DIAGONAL_EDGE;
 
-                zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ) );
-                zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y1 ) ) );
-                zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y2 ) ) );
-                zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ) );
+                const int outlineIdx = -1;      // this is the id of the copper zone main outline
+                zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ), outlineIdx );
+                zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y1 ) ), outlineIdx );
+                zone->AppendCorner( wxPoint( kicad_x( r.x2 ), kicad_y( r.y2 ) ), outlineIdx );
+                zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ), outlineIdx );
 
                 // this is not my fault:
                 zone->SetHatch( outline_hatch, Mils2iu( zone->GetDefaultHatchPitchMils() ), true );
@@ -1812,7 +1813,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                         EVERTEX v( vertex );
 
                         // Append the corner
-                        zone->AppendCorner( wxPoint( kicad_x( v.x ), kicad_y( v.y ) ) );
+                        zone->AppendCorner( wxPoint( kicad_x( v.x ), kicad_y( v.y ) ), -1 );
 
                         vertex = vertex->GetNext();
                     }

@@ -1070,11 +1070,17 @@ public:
                              PCB_LAYER_ID aLayer, wxPoint aStartPointPosition, int aHatch );
 
     /**
-     * Function InsertArea
-     * add empty copper area to net, inserting after m_ZoneDescriptorList[iarea]
+     * Add a copper area to net, inserting after m_ZoneDescriptorList[aAreaIdx]
+     * @param aNetcode is the netcode of the new copper zone
+     * @param aAreaIdx is the netcode of the new copper zone
+     * @param aLayer is the copper layer id of the new copper zone
+     * @param aCornerX,aCornerY is the coordinate of the first corner
+     * (a zone cannot have a empty outline)
+     * @param aHatch is the hatch option
      * @return pointer to the new area
      */
-    ZONE_CONTAINER* InsertArea( int netcode, int iarea, PCB_LAYER_ID layer, int x, int y, int hatch );
+    ZONE_CONTAINER* InsertArea( int aNetcode, int aAreaIdx, PCB_LAYER_ID aLayer,
+                                int aCornerX, int aCornerY, int aHatch );
 
     /**
      * Function NormalizeAreaPolygon

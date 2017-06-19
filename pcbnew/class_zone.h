@@ -537,18 +537,14 @@ public:
     }
 
     /**
-     * Function AppendCorner
-     * @param position          is the position of the new corner.
+     * Add a new corner to the zone outline (to the main outline or a hole)
+     * @param aPosition         is the position of the new corner.
+     * @param aHoleIdx          is the index of the hole (-1 for the main outline, >= 0 for hole).
      * @param aAllowDuplication is a flag to indicate whether it is allowed to add this corner
      *                          even if it is duplicated.
+     * @return true if the corner was added, false if error (aHoleIdx > hole count -1)
      */
-    void AppendCorner( wxPoint position, bool aAllowDuplication = false )
-    {
-        if( m_Poly->OutlineCount() == 0 )
-            m_Poly->NewOutline();
-
-        m_Poly->Append( position.x, position.y, -1, -1, aAllowDuplication );
-    }
+    bool AppendCorner( wxPoint aPosition, int aHoleIdx, bool aAllowDuplication = false );
 
     HATCH_STYLE GetHatchStyle() const
     {

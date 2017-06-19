@@ -2475,7 +2475,8 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
     unique_ptr<ZONE_CONTAINER> zc( new ZONE_CONTAINER( m_board ) );
 
     ZONE_CONTAINER::HATCH_STYLE outline_hatch = ZONE_CONTAINER::NO_HATCH;
-    bool    sawCorner = false;
+    bool    endContour = false;
+    int     holeIndex = -1;     // -1 is the main outline; holeIndex >= 0 = hole index
     char    buf[1024];
     char*   line;
     char*   saveptr;
@@ -2484,18 +2485,27 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
     {
         const char* data;
 
-        if( TESTLINE( "ZCorner" ) )         // new corner found
+        if( TESTLINE( "ZCorner" ) ) // new corner of the zone outlines found
         {
             // e.g. "ZCorner 25650 49500 0"
             BIU x    = biuParse( line + SZ( "ZCorner" ), &data );
             BIU y    = biuParse( data, &data );
 
-            if( !sawCorner )
+            if( endContour )
+            {
+                // the previous corner was the last corner of a contour.
+                // so this corner is the first of a new hole
+                endContour = false;
                 zc->NewHole();
-            else
-                zc->AppendCorner( wxPoint( x, y ) );
+                holeIndex++;
+            }
 
-            sawCorner = true;
+            zc->AppendCorner( wxPoint( x, y ), holeIndex );
+
+            // Is this corner the end of current contour?
+            // the next corner (if any) will be stored in a new contour (a hole)
+            // intParse( data )returns 0 = usual corner, 1 = last corner of the current contour:
+            endContour = intParse( data );
         }
 
         else if( TESTLINE( "ZInfo" ) )      // general info found
@@ -2655,7 +2665,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
         else if( TESTLINE( "$POLYSCORNERS" ) )
         {
-            // Read the PolysList (polygons used for fill areas in the zone)
+            // Read the PolysList (polygons that are the solid areas in the filled zone)
             SHAPE_POLY_SET polysList;
 
             bool makeNewOutline = true;

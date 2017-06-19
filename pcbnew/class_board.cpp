@@ -2348,21 +2348,24 @@ void BOARD::RemoveArea( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_to
 }
 
 
-ZONE_CONTAINER* BOARD::InsertArea( int netcode, int iarea, PCB_LAYER_ID layer, int x, int y, int hatch )
+ZONE_CONTAINER* BOARD::InsertArea( int aNetcode, int aAreaIdx, PCB_LAYER_ID aLayer,
+                                   int aCornerX, int aCornerY, int aHatch )
 {
     ZONE_CONTAINER* new_area = new ZONE_CONTAINER( this );
 
-    new_area->SetNetCode( netcode );
-    new_area->SetLayer( layer );
+    new_area->SetNetCode( aNetcode );
+    new_area->SetLayer( aLayer );
     new_area->SetTimeStamp( GetNewTimeStamp() );
 
-    if( iarea < (int) ( m_ZoneDescriptorList.size() - 1 ) )
-        m_ZoneDescriptorList.insert( m_ZoneDescriptorList.begin() + iarea + 1, new_area );
+    if( aAreaIdx < (int) ( m_ZoneDescriptorList.size() - 1 ) )
+        m_ZoneDescriptorList.insert( m_ZoneDescriptorList.begin() + aAreaIdx + 1, new_area );
     else
         m_ZoneDescriptorList.push_back( new_area );
 
-    new_area->SetHatchStyle( (ZONE_CONTAINER::HATCH_STYLE) hatch );
-    new_area->AppendCorner( wxPoint( x, y ) );
+    new_area->SetHatchStyle( (ZONE_CONTAINER::HATCH_STYLE) aHatch );
+
+    // Add the first corner to the new zone
+    new_area->AppendCorner( wxPoint( aCornerX, aCornerY ), -1 );
 
     return new_area;
 }
