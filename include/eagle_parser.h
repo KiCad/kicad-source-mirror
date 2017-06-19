@@ -448,7 +448,7 @@ struct ELABEL
     wxString netname;
 
 
-    ELABEL( wxXmlNode* aLabel, wxString aNetName );
+    ELABEL( wxXmlNode* aLabel, const wxString& aNetName );
 };
 
 

@@ -195,7 +195,7 @@ EJUNCTION::EJUNCTION( wxXmlNode* aJunction)
     y    = parseRequiredAttribute<double>( aJunction, "y" );
 }
 
-ELABEL::ELABEL( wxXmlNode* aLabel, wxString aNetName)
+ELABEL::ELABEL( wxXmlNode* aLabel, const wxString& aNetName )
 {
     /*
     <!ELEMENT label EMPTY>

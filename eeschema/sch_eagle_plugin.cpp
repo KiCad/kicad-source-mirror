@@ -50,7 +50,7 @@ constexpr double EUNIT_TO_MIL = 1000.0 / 25.4;
 
 using namespace std;
 
-NODE_MAP mapChildren( wxXmlNode* aCurrentNode )
+static NODE_MAP mapChildren( wxXmlNode* aCurrentNode )
 {
     // Map node_name -> node_pointer
     NODE_MAP nodesMap;
@@ -71,7 +71,7 @@ NODE_MAP mapChildren( wxXmlNode* aCurrentNode )
     return nodesMap;
 }
 
-int countChildren( wxXmlNode* aCurrentNode, std::string name)
+static int countChildren( wxXmlNode* aCurrentNode, const std::string& aName )
 {
     // Map node_name -> node_pointer
     int count = 0;

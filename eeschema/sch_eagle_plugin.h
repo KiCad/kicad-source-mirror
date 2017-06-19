@@ -117,9 +117,10 @@ private:
     void loadModuleinst( wxXmlNode* aModuleinstNode );
     void loadLibrary( wxXmlNode* aLibraryNode );
 
-    void                loadSegments( wxXmlNode* aSegmentsNode, wxString aNetName, wxString aNetClass );
+    void                loadSegments( wxXmlNode* aSegmentsNode, const wxString& aNetName,
+            const wxString& aNetClass );
     SCH_LINE*           loadSignalWire( wxXmlNode* aWireNode );
-    SCH_GLOBALLABEL*    loadLabel( wxXmlNode* aLabelNode, wxString aNetName );
+    SCH_GLOBALLABEL*    loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName );
     SCH_JUNCTION*       loadJunction( wxXmlNode* aJunction );
 
     LIB_PART*       loadSymbol( wxXmlNode* aSymbolNode );
