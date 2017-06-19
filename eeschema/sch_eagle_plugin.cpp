@@ -552,8 +552,8 @@ SCH_GLOBALLABEL* SCH_EAGLE_PLUGIN::loadLabel(wxXmlNode* aLabelNode, wxString aNe
   glabel->SetText(elabel.netname);
   glabel->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
 
-  EROT rot = elabel.rot.Get();
-  glabel->SetLabelSpinStyle( int(rot.degrees/90+2)%4 );
+  if( elabel.rot )
+        glabel->SetLabelSpinStyle( int( elabel.rot.Get().degrees/90+2)%4 );
 
   return glabel.release();
 }
@@ -783,23 +783,26 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin(  LIB_PART* aPart, wxXmlNode* aPin )
         break;
     }
 
-    wxString length = epin.length.Get();
+    if( epin.length )
+    {
+        wxString length = epin.length.Get();
 
-    if( length =="short" )
-    {
-        pin->SetLength( 100 );
-    }
-    else if( length =="middle" )
-    {
-        pin->SetLength( 200 );
-    }
-    else if( length == "long" )
-    {
-        pin->SetLength( 300 );
-    }
-    else if( length == "point" )
-    {
-        pin->SetLength( 0 );
+        if( length =="short" )
+        {
+            pin->SetLength( 100 );
+        }
+        else if( length =="middle" )
+        {
+            pin->SetLength( 200 );
+        }
+        else if( length == "long" )
+        {
+            pin->SetLength( 300 );
+        }
+        else if( length == "point" )
+        {
+            pin->SetLength( 0 );
+        }
     }
 
     return pin.release();
