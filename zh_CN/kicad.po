@@ -12961,10 +12961,10 @@ msgstr ", 钻孔: 默认"
 msgid ", drill: "
 msgstr ", 钻孔: "
 
-#: pcbnew/tools/zoom_menu.cpp:49
+#: common/tool/zoom_menu.cpp:49
 #, c-format
 msgid "Zoom: %.2f"
-msgstr "缩放: %.2f"
+msgstr "倍数: %.2f"
 
 #: pcbnew/xchgmod.cpp:123
 #, c-format
