@@ -89,7 +89,7 @@ int InvokePcbLibTableEditor( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobal,
  *             2 - changes in the project table
  *             3 - changes in both tables
  */
-int InvokeFootprintWizard( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal,
+int InvokeFootprintWizard( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobal,
                            FP_LIB_TABLE* aProject );
 
 /**
@@ -99,7 +99,7 @@ int InvokeFootprintWizard( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal,
  *
  * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
  */
-void Invoke3DShapeLibsDownloaderWizard( wxTopLevelWindow* aParent );
+void Invoke3DShapeLibsDownloaderWizard( wxTopLevelWindow* aCaller );
 
 
 /**

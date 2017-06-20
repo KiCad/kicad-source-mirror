@@ -122,16 +122,12 @@ KICAD_PLUGIN_EXPORT char const* GetFileFilter( int aIndex );
 KICAD_PLUGIN_EXPORT bool CanRender( void );
 
 /**
- * Function Load
- * reads the model file and creates a generic display structure
+ * reads a model file and creates a generic display structure
  *
  * @param aFileName is the full path of the model file
- * @param aModel is a handle to a null pointer; on successful
- * reading of the model data aModel will point to a representation
- * for rendering
- * @param returns true if the model was successfully loaded and false
- * if there is no rendering support for the model or there were
- * problems reading the model
+ * @return a SCENEGRAPH pointer to the display structure if the model
+ * was successfully loaded and NULL if there is no rendering support
+ * for the model or there were problems reading the model
  */
 KICAD_PLUGIN_EXPORT SCENEGRAPH* Load( char const* aFileName );
 

@@ -54,9 +54,9 @@
 #define DEFAULT_GITHUB_3DSHAPES_LIBS_URL \
     wxT( "https://github.com/KiCad/kicad-library/tree/master/modules/packages3d" )
 
-void Invoke3DShapeLibsDownloaderWizard( wxTopLevelWindow* aParent )
+void Invoke3DShapeLibsDownloaderWizard( wxTopLevelWindow* aCaller )
 {
-    WIZARD_3DSHAPE_LIBS_DOWNLOADER wizard( aParent );
+    WIZARD_3DSHAPE_LIBS_DOWNLOADER wizard( aCaller );
     wizard.RunWizard( wizard.GetFirstPage() );
 }
 

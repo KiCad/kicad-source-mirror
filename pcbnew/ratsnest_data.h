@@ -484,7 +484,7 @@ public:
     /**
      * Function GetClosestNode()
      * Returns a single node that lies in the shortest distance from a specific node and meets
-     * selected filter criterion..
+     * selected filter criterion.
      * @param aNode is the node for which the closest node is searched.
      * @param aFilter is a functor that filters nodes.
      */
@@ -516,7 +516,7 @@ public:
     /**
      * Function AddSimple()
      * Changes drawing mode for an item to simple (i.e. one ratsnest line per node).
-     * @param aNode is a node that changes its drawing mode.
+     * @param aItem is the item that changes its drawing mode.
      */
     void AddSimple( const BOARD_CONNECTED_ITEM* aItem );
 
@@ -769,9 +769,9 @@ public:
     /**
      * Function AreConnected()
      * Checks if two items are connected with copper.
-     * @param aThis is the first item.
+     * @param aItem is the first item.
      * @param aOther is the second item.
-     * @return True if they are connected, false otherwise.
+     * @return true if they are connected, false otherwise.
      */
     bool AreConnected( const BOARD_CONNECTED_ITEM* aItem, const BOARD_CONNECTED_ITEM* aOther );
 

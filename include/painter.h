@@ -71,6 +71,7 @@ public:
      * Sets the specified layer as active - it means that it can be drawn in a specific mode
      * (eg. highlighted, so it differs from other layers).
      * @param aLayerId is a layer number that should be displayed in a specific mode.
+     * @param aEnabled is the new layer state ( true = active or false = not active).
      */
     inline void SetActiveLayer( int aLayerId, bool aEnabled = true )
     {

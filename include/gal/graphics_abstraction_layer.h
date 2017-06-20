@@ -145,6 +145,7 @@ public:
      * @param aRadius       is the arc radius.
      * @param aStartAngle   is the start angle of the arc.
      * @param aEndAngle     is the end angle of the arc.
+     * @param aWidth        is the thickness of the arc (pen size).
      */
     virtual void
     DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle,

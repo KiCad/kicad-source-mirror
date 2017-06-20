@@ -25,7 +25,7 @@
  * @file scenegraph.h
  * defines the basic data set required to represent a 3D model;
  * this model must remain compatible with VRML2.0 in order to
- * facilitate VRML export of scene graph data created by avaiable
+ * facilitate VRML export of scene graph data created by available
  * 3D plugins.
  */
 

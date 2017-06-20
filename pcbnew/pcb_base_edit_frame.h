@@ -46,7 +46,7 @@ public:
 
     /**
      * Function GetModel()
-     * returns the primary data model.
+     * @return the primary data model.
      */
     virtual BOARD_ITEM_CONTAINER* GetModel() const = 0;
 

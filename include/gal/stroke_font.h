@@ -107,16 +107,18 @@ public:
     /**
      * Compute the vertical position of an overbar, sometimes used in texts.
      * This is the distance between the text base line and the overbar.
+     * @param aGlyphHeight is the height (vertical size) of the text.
+     * @param aGlyphThickness is the thickness of the lines used to draw the text.
      * @return the relative position of the overbar axis.
      */
     double ComputeOverbarVerticalPosition( double aGlyphHeight, double aGlyphThickness ) const;
 
     /**
-     * @brief Compute the X and Y size of a given text. The text is expected to be
-     * a only one line text.
+     * @brief Compute the distance (interline) between 2 lines of text (for multiline texts).
      *
-     * @param aText is the text string (one line).
-     * @return the text size.
+     * @param aGlyphHeight is the height (vertical size) of the text.
+     * @param aGlyphThickness is the thickness of the lines used to draw the text.
+     * @return the interline.
      */
     static double GetInterline( double aGlyphHeight, double aGlyphThickness );
 

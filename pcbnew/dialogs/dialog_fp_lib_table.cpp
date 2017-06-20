@@ -751,10 +751,10 @@ void DIALOG_FP_LIB_TABLE::OnClickLibraryWizard( wxCommandEvent& event )
 }
 
 
-int InvokePcbLibTableEditor( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal,
+int InvokePcbLibTableEditor( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobal,
                              FP_LIB_TABLE* aProject )
 {
-    DIALOG_FP_LIB_TABLE dlg( aParent, aGlobal, aProject );
+    DIALOG_FP_LIB_TABLE dlg( aCaller, aGlobal, aProject );
 
     int dialogRet = dlg.ShowModal();    // returns value passed to EndModal() above
 

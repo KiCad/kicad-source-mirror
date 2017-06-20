@@ -72,6 +72,8 @@ public:
      * which contains the name of the DSO.  Examples: "eeschema", "pcbnew", etc.
      * This controls the name of the wxConfigBase established in m_bm,
      * so it should be lowercase.
+     * @param aId is the type of DSO ( FACE_SCH, FACE_PCB, FACE_CVPCB,
+     * FACE_GERBVIEW, FACE_PL_EDITOR, FACE_PCB_CALCULATOR, FACE_BMP2CMP)
      */
     KIFACE_I( const char* aKifaceName, KIWAY::FACE_T aId ) :
         m_id( aId ),

@@ -56,7 +56,7 @@ public:
      *  at the source file of thrower.
      *
      * @param aThrowersFunction is the function name at the throw site.
-     * @param aThrowersLineNumber, is the source code line number of the throw.
+     * @param aThrowersLineNumber is the source code line number of the throw.
      *
      * Use macro THROW_IO_ERROR() to wrap a call to this constructor at the call site.
      */

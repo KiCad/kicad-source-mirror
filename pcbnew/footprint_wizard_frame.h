@@ -173,7 +173,7 @@ private:
     void                SaveSettings( wxConfigBase* aCfg ) override;
 
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int ) const override { return NULL; }
+    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override { return NULL; }
 
     /**
      * Function OnActivate

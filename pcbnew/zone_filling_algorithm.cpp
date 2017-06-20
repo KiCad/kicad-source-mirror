@@ -142,7 +142,7 @@ bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb, SHAPE_POLY_SET*
  * It can be used for any angle, if the zone outline to fill is rotated by this angle
  * and the result is rotated by -angle
  * @param aPolygon = a SHAPE_LINE_CHAIN polygon to fill
- * @param aFillSegmList = a std::vector <SEGMENT> which will be populated by filling segments
+ * @param aFillSegmList = a std::vector\<SEGMENT\> which will be populated by filling segments
  * @param aStep = the horizontal grid size
  */
 bool fillPolygonWithHorizontalSegments( const SHAPE_LINE_CHAIN& aPolygon,

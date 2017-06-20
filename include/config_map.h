@@ -90,11 +90,10 @@ static long GetConfigForVal( const MAP& aMap, CFG_NATIVE_VAL<MAP> aVal )
  * The default item is returned if the mapping fails.
  *
  * @param aMap the value-config mapping table
- * @param aVal the config value to look up
+ * @param aConf the config value to look up
  */
 template<typename MAP>
-static CFG_NATIVE_VAL<MAP> GetValFromConfig(
-        const MAP& aMap, long aConf )
+static CFG_NATIVE_VAL<MAP> GetValFromConfig( const MAP& aMap, long aConf )
 {
     // default is first entry
     CFG_NATIVE_VAL<MAP> aVal = aMap[0].first;
