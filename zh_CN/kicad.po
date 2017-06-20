@@ -2,10 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-03 21:33-0300\n"
-"PO-Revision-Date: 2016-08-04 00:06-0300\n"
-"Last-Translator: GQLee <gqlee@outlook.com>\n"
-"Language-Team: GQLee <gqlee@outlook.com>\n"
+"POT-Creation-Date: 2017-06-20 09:50-0800\n"
+"PO-Revision-Date: 2017-06-20 09:50-0800\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -11252,27 +11250,27 @@ msgstr "封装文档文件"
 
 #: pcbnew/onrightclick.cpp:429
 msgid "Global Spread and Place"
-msgstr "全局扩展和放置"
+msgstr "打散和放置"
 
 #: pcbnew/onrightclick.cpp:431
 msgid "Unlock All Footprints"
-msgstr "解锁所有封装"
+msgstr "解锁全部封装"
 
 #: pcbnew/onrightclick.cpp:433
 msgid "Lock All Footprints"
-msgstr "锁定所有封装"
+msgstr "锁定全部封装"
 
 #: pcbnew/onrightclick.cpp:436
 msgid "Spread out All Footprints"
-msgstr "展开所有封装"
+msgstr "打散放置全部封装"
 
 #: pcbnew/onrightclick.cpp:438
 msgid "Spread out Footprints not Already on Board"
-msgstr "不在电路板上展开封装"
+msgstr "打散放置尚未在板子上出现过的封装"
 
 #: pcbnew/onrightclick.cpp:441
 msgid "Automatically Place All Footprints"
-msgstr "自动放置所有封装"
+msgstr "自动放置全部封装"
 
 #: pcbnew/onrightclick.cpp:443
 msgid "Automatically Place New Footprints"
@@ -12963,10 +12961,10 @@ msgstr ", 钻孔: 默认"
 msgid ", drill: "
 msgstr ", 钻孔: "
 
-#: pcbnew/tools/zoom_menu.cpp:49
+#: common/tool/zoom_menu.cpp:49
 #, c-format
 msgid "Zoom: %.2f"
-msgstr "缩放: %.2f"
+msgstr "倍数: %.2f"
 
 #: pcbnew/xchgmod.cpp:123
 #, c-format
