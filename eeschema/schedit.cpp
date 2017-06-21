@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -539,10 +539,6 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
             SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
         else
             SetNoToolSelected();
-        break;
-
-    case ID_HIERARCHY_PUSH_POP_BUTT:
-        SetToolID( id, wxCURSOR_HAND, _( "Descend or ascend hierarchy" ) );
         break;
 
     case ID_NOCONN_BUTT:

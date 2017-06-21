@@ -115,24 +115,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         HighlightConnectionAtPosition( aPosition );
         break;
 
-    case ID_HIERARCHY_PUSH_POP_BUTT:
-        if( ( item && item->GetFlags() ) || ( g_RootSheet->CountSheets() == 0 ) )
-            break;
-
-        item = LocateAndShowItem( aPosition, SCH_COLLECTOR::SheetsOnly );
-
-        if( item )  // The user has clicked on a sheet: this is an enter sheet command
-        {
-            m_CurrentSheet->push_back( (SCH_SHEET*) item );
-            DisplayCurrentSheet();
-        }
-        else if( m_CurrentSheet->Last() != g_RootSheet )
-        {   // The user has clicked ouside a sheet:this is an leave sheet command
-            m_CurrentSheet->pop_back();
-            DisplayCurrentSheet();
-        }
-        break;
-
     case ID_NOCONN_BUTT:
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {

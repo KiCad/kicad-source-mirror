@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -200,10 +200,6 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
 
     m_drawToolBar->AddTool( ID_HIGHLIGHT, wxEmptyString, KiBitmap( net_highlight_schematic_xpm ),
                             _( "Highlight net" ), wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_HIERARCHY_PUSH_POP_BUTT, wxEmptyString,
-                            KiBitmap( hierarchy_cursor_xpm ),
-                            _( "Ascend/descend hierarchy" ), wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_SCH_PLACE_COMPONENT, wxEmptyString, KiBitmap( add_component_xpm ),
                             HELP_PLACE_COMPONENTS, wxITEM_CHECK );
