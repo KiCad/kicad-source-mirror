@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  1 2016)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -37,7 +37,7 @@ DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE::DIALOG_GLOBAL_MODULES_FIELDS_EDITION_
 	
 	bLeftSizer->Add( sbSizer1, 1, wxBOTTOM|wxEXPAND|wxRIGHT, 5 );
 	
-	m_staticTextFilter = new wxStaticText( this, wxID_ANY, _("Footprint Filter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextFilter = new wxStaticText( this, wxID_ANY, _("Footprint Name (FPID) Filter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextFilter->Wrap( -1 );
 	m_staticTextFilter->SetToolTip( _("A string to filter footprints to edit.\nIf not void, footprint names should match this filter.\nA filter can be something like SM* (case insensitive)") );
 	
@@ -124,14 +124,12 @@ DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE::DIALOG_GLOBAL_MODULES_FIELDS_EDITION_
 	bMainSizer->Fit( this );
 	
 	// Connect Events
-	m_sdbSizerButtonsCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE::OnOKClick ), NULL, this );
 }
 
 DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE::~DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE()
 {
 	// Disconnect Events
-	m_sdbSizerButtonsCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE::OnOKClick ), NULL, this );
 	
 }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  1 2016)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -59,7 +59,6 @@ class DIALOG_GLOBAL_MODULES_FIELDS_EDITION_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerButtonsCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOKClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	

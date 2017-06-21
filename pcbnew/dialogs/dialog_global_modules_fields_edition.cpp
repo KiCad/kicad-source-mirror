@@ -71,12 +71,7 @@ public:
 private:
     void initDialog();
 
-    // event handlers
-    void OnOKClick( wxCommandEvent& event ) override;
-    void OnCancelClick( wxCommandEvent& event ) override
-    {
-        EndModal( wxID_CANCEL );
-    }
+    bool TransferDataFromWindow() override;
 };
 
 bool DIALOG_GLOBAL_MODULES_FIELDS_EDITION::m_refSelection = false;
@@ -110,7 +105,7 @@ void DIALOG_GLOBAL_MODULES_FIELDS_EDITION::initDialog()
 }
 
 
-void DIALOG_GLOBAL_MODULES_FIELDS_EDITION::OnOKClick( wxCommandEvent& event )
+bool DIALOG_GLOBAL_MODULES_FIELDS_EDITION::TransferDataFromWindow()
 {
     m_refSelection = m_ReferenceOpt->GetValue();
     m_valueSelection = m_ValueOpt->GetValue();
@@ -122,14 +117,14 @@ void DIALOG_GLOBAL_MODULES_FIELDS_EDITION::OnOKClick( wxCommandEvent& event )
     m_brdSettings->m_ModuleTextWidth = ValueFromTextCtrl( *m_ThicknessValue );
 
     // clip m_ModuleTextWidth to the 1/4 of min size, to keep it always readable
-    int minsize = std::min( m_brdSettings->m_ModuleTextSize.x,
+    int max_thickness = std::min( m_brdSettings->m_ModuleTextSize.x,
                             m_brdSettings->m_ModuleTextSize.y ) / 4;
-    if( m_brdSettings->m_ModuleTextWidth > minsize )
-        m_brdSettings->m_ModuleTextWidth = minsize;
+    if( m_brdSettings->m_ModuleTextWidth > max_thickness )
+        m_brdSettings->m_ModuleTextWidth = max_thickness;
 
     m_parent->ResetModuleTextSizes( m_filterString, m_refSelection,
                                     m_valueSelection, m_othersSelection );
-    EndModal( wxID_OK );
+    return true;
 }
 
 
@@ -146,11 +141,12 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
 
     int modTextWidth = GetDesignSettings().m_ModuleTextWidth;
     const wxSize& modTextSize = GetDesignSettings().m_ModuleTextSize;
+    bool modified = false;
 
-    // Prepare undo list
+    // Change fields of footprints with fpid matching the filter
     for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
     {
-        if( ! aFilter.IsEmpty() )
+        if( !aFilter.IsEmpty() )
         {
             if( ! WildCompareString( aFilter, FROM_UTF8( module->GetFPID().Format().c_str() ),
                                      false ) )
@@ -168,6 +164,7 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
                 commit.Modify( item );
                 item->SetThickness( modTextWidth );
                 item->SetTextSize( modTextSize );
+                modified = true;
             }
         }
 
@@ -181,6 +178,7 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
                 commit.Modify( item );
                 item->SetThickness( modTextWidth );
                 item->SetTextSize( modTextSize );
+                modified = true;
             }
         }
 
@@ -199,11 +197,16 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
                         commit.Modify( item );
                         item->SetThickness( modTextWidth );
                         item->SetTextSize( modTextSize );
+                        modified = true;
                     }
                 }
             }
         }
     }
 
-    commit.Push( wxT( "Reset module text size" ) );
+    if( modified )
+    {
+        commit.Push( "Reset module text size" );
+        GetCanvas()->Refresh();
+    }
 }
