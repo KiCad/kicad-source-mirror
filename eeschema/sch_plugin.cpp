@@ -188,3 +188,11 @@ void SCH_PLUGIN::SymbolLibOptions( PROPERTIES* aListToAppendTo ) const
         ) );
 #endif
 }
+
+
+bool SCH_PLUGIN::CheckHeader( const wxString& aFileName )
+{
+    // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
+    not_implemented( this, __FUNCTION__ );
+    return NULL;
+}

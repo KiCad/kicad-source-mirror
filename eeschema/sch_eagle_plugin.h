@@ -108,6 +108,7 @@ public:
 
     void SymbolLibOptions( PROPERTIES* aListToAppendTo ) const override;
 
+    bool CheckHeader( const wxString& aFileName ) override; 
 
 private:
     void loadDrawing( wxXmlNode* aDrawingNode );

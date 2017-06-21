@@ -3604,5 +3604,19 @@ void SCH_LEGACY_PLUGIN::SaveLibrary( const wxString& aLibraryPath, const PROPERT
 }
 
 
+bool SCH_LEGACY_PLUGIN::CheckHeader( const wxString& aFileName )
+{
+    // Open file and check first line
+    wxTextFile tempFile;
+
+    tempFile.Open( aFileName );
+    wxString firstline;
+    // read the first line
+    firstline = tempFile.GetFirstLine();
+    tempFile.Close();
+
+    return firstline.StartsWith( "EESchema" );
+}
+
 const char* SCH_LEGACY_PLUGIN::PropBuffering = "buffering";
 const char* SCH_LEGACY_PLUGIN::PropNoDocFile = "no_doc_file";

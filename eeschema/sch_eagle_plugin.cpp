@@ -835,6 +835,21 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymboltext( LIB_PART* aPart, wxXmlNode* aLibText
 }
 
 
+bool SCH_EAGLE_PLUGIN::CheckHeader( const wxString& aFileName )
+{
+    // Open file and check first line
+    wxTextFile tempFile;
+
+    tempFile.Open( aFileName );
+    wxString firstline;
+    // read the first line
+    firstline = tempFile.GetFirstLine();
+    tempFile.Close();
+
+    return firstline.StartsWith( "<?xml" );
+}
+
+
 void SCH_EAGLE_PLUGIN::Save( const wxString& aFileName, SCH_SCREEN* aSchematic, KIWAY* aKiway,
                              const PROPERTIES* aProperties )
 {
