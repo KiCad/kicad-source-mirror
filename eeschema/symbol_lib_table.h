@@ -206,7 +206,7 @@ public:
      *
      * @throw IO_ERROR if there is a problem finding the footprint or the library, or deleting it.
      */
-    void DeleteSymbol( const wxString& aNickname, const wxString& aSymboltName );
+    void DeleteSymbol( const wxString& aNickname, const wxString& aSymbolName );
 
     /**
      * Function DeleteAlias

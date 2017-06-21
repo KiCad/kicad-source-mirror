@@ -71,7 +71,7 @@ public:
     };
 
     /**
-     * @param the client to pass the results onto
+     * @param aClient is the client to pass the results onto
      */
     POLYGON_GEOM_MANAGER( CLIENT& aClient );
 

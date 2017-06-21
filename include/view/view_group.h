@@ -93,7 +93,7 @@ public:
      * Draws all the stored items in the group on the given layer.
      *
      * @param aLayer is the layer which should be drawn.
-     * @param aGal is the GAL that should be used for drawing.
+     * @param aView is the VIEW that should be used for drawing.
      */
     virtual void ViewDraw( int aLayer, VIEW* aView ) const override;
 

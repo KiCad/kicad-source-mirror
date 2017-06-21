@@ -281,8 +281,8 @@ bool BOM_TABLE_GROUP::SetFieldValue( unsigned int aFieldId, const wxString aValu
  * - Tests each field in turn; all fields must match
  * - Some fields require special checking
  *
- * @aFieldId - The ID of the field
- * @aCmp - The component being tested
+ * @param aField - The field to test
+ * @param aComponent - The component being tested
  */
 bool BOM_TABLE_GROUP::TestField( BOM_COLUMN* aField, BOM_TABLE_COMPONENT* aComponent ) const
 {
@@ -413,7 +413,7 @@ bool BOM_TABLE_GROUP::HasValueChanged( BOM_COLUMN* aField ) const
  * Return a list of (ordered) references
  * for all the components in this group
  *
- * @aSort - Sort the references
+ * @param aSort - Sort the references
  */
 wxArrayString BOM_TABLE_GROUP::GetReferences( bool aSort ) const
 {

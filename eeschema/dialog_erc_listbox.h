@@ -56,7 +56,7 @@ public:
 
     /**
      * Function AppendToList
-     * @param aItem The SCH_MARKER* to add to the current list which will be
+     * @param aMarker is the SCH_MARKER* to add to the current list which will be
      *  later displayed in the wxHtmlWindow
      */
     void AppendToList( SCH_MARKER* aMarker )

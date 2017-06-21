@@ -141,6 +141,12 @@ static bool insert_library( PROJECT *aProject, PART_LIB *aLibrary, size_t aIndex
 }
 
 
+// Helper sort function, used in get_components, to sort a component list by lib_id
+static bool sort_by_libid( const SCH_COMPONENT* ref, SCH_COMPONENT* cmp )
+{
+    return ref->GetLibId() < cmp->GetLibId();
+}
+
 /**
  * Function get_components
  * Fills a vector with all of the project's components, to ease iterating over them.
@@ -150,12 +156,6 @@ static bool insert_library( PROJECT *aProject, PART_LIB *aLibrary, size_t aIndex
  *
  * @param aComponents - a vector that will take the components
  */
-// Helper sort function, used in get_components, to sort a component list by lib_id
-static bool sort_by_libid( const SCH_COMPONENT* ref, SCH_COMPONENT* cmp )
-{
-    return ref->GetLibId() < cmp->GetLibId();
-}
-
 static void get_components( std::vector<SCH_COMPONENT*>& aComponents )
 {
     SCH_SCREENS screens;

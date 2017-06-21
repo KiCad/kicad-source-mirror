@@ -247,7 +247,7 @@ public:
     /**
      * Function EnableCursorWarping()
      * Enables or disables warping the cursor.
-     * @param aEnabled is true if the cursor is allowed to be warped.
+     * @param aEnable is true if the cursor is allowed to be warped.
      */
     void EnableCursorWarping( bool aEnable )
     {
@@ -256,7 +256,7 @@ public:
 
     /**
      * Function IsCursorWarpingEnabled()
-     * Returns the current setting for cursor warping.
+     * @return the current setting for cursor warping.
      */
     bool IsCursorWarpingEnabled() const
     {
@@ -266,7 +266,7 @@ public:
     /**
      * Function EnableMousewheelPan()
      * Enables or disables mousewheel panning.
-     * @param aEnabled is true if mouse-wheel panning is enabled.
+     * @param aEnable is true if mouse-wheel panning is enabled.
      */
     virtual void EnableMousewheelPan( bool aEnable )
     {
@@ -275,7 +275,7 @@ public:
 
     /**
      * Function IsMousewheelPanEnabled()
-     * Returns the current setting for mousewheel panning
+     * @return the current setting for mousewheel panning
      */
     virtual bool IsMousewheelPanEnabled() const
     {

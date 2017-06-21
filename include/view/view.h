@@ -136,8 +136,8 @@ public:
      * @param aItem: the item to update.
      * @param aUpdateFlags: how much the object has changed.
      */
-    void Update( VIEW_ITEM* aItem );
     void Update( VIEW_ITEM* aItem, int aUpdateFlags );
+    void Update( VIEW_ITEM* aItem );
 
     /**
      * Function SetRequired()

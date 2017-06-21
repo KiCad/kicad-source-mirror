@@ -299,8 +299,11 @@ public:
     SCH_FIELD* GetField( int aFieldNdx ) const;
 
     /**
-     * Returns text associated with a given field (if such a field exists)
-     * @aFieldName is the name of the field
+     * Search for a field named aFieldName and returns text associated with this field
+     * (if such a field exists)
+     * @param aFieldName is the name of the field
+     * @param aIncludeDefaultFields = true (default) to include default fields in search
+     * (default fields are the mandatory fields ref, value, fooprint and doc)
      */
     wxString GetFieldText( wxString aFieldName, bool aIncludeDefaultFields = true ) const;
 

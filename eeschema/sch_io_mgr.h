@@ -142,7 +142,7 @@ public:
      *
      * @param aFileName is the name of a file to save to on disk.
      *
-     * @param aSchematic is the #SCH_SCREN document (data tree) to save or export to disk.
+     * @param aSchematic is the #SCH_SCREEN document (data tree) to save or export to disk.
      *
      * @param aKiway is the #KIWAY object used to access the component libraries loaded
      *               by the project.

@@ -109,7 +109,7 @@ public:
      * for quick hacks and debugging purposes.
      *
      * @param aLayer: current drawing layer
-     * @param aGal: pointer to the GAL device we are drawing on
+     * @param aView: pointer to the VIEW device we are drawing on
      */
     virtual void ViewDraw( int aLayer, VIEW* aView ) const
     {}

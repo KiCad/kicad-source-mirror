@@ -172,9 +172,9 @@ public:
      * Add the given list of components by alias. To be called in the setup
      * phase.
      *
-     * @param aNodeName         the parent node the components will appear under
-     * @param aAliasNameList    list of aliases
-     * @param aOptionalLib      library to look up names in (null = global)
+     * @param aNodeName     the parent node the components will appear under
+     * @param aAliasList    list of aliases
+     * @param aOptionalLib  library to look up names in (null = global)
      */
     void AddAliasList(
             wxString const&         aNodeName,
@@ -323,7 +323,7 @@ private:
      * Compute the width required for the given column of a node and its
      * children.
      *
-     * @param aNode - root node of the tree
+     * @param aTree - root node of the tree
      * @param aCol - column number
      * @param aHeading - heading text, to set the minimum width
      */

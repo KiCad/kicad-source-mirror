@@ -70,13 +70,6 @@ public:
      */
     void SetGrabMouse( bool aEnabled ) override;
 
-    /**
-     * Function SetAutoPan()
-     * Enables/disables autopanning (panning when mouse cursor reaches the panel border).
-     *
-     * @param aEnabled says whether the option should enabled or disabled.
-     */
-
     /// @copydoc VIEW_CONTROLS::GetMousePosition()
     VECTOR2D GetMousePosition( bool aWorldCoordinates = true ) const override;
 

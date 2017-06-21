@@ -57,8 +57,8 @@ public:
     /**
      * Set the polygon points
      *
-     * @param locked in points - the "fixed point" of the outline
-     * @param leader line points - the lines from the last fixed point to
+     * @param aLockedInPts - the "fixed points" of the outline
+     * @param aLeaderPts - the lines from the last fixed point to
      *        another point, eg the cursor.
      */
     void SetPoints( const std::vector<VECTOR2I>& aLockedInPts,
