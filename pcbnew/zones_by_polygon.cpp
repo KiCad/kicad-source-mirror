@@ -707,7 +707,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                 // It is necessary to allow duplication of the points, as we have to handle the
                 // continuous drawing while creating the zone at the same time as we build it. Null
                 // segments are removed when the zone is finished, in End_Zone.
-                zone->AppendCorner( GetCrossHairPosition(), true );
+                zone->AppendCorner( GetCrossHairPosition(), -1, true );
 
                 SetCurItem( zone );     // calls DisplayInfo().
 
