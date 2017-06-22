@@ -67,6 +67,7 @@ wxString DimensionLabel( const wxString& prefix, double aVal,
  * Set the GAL glyph height to a constant scaled value, so that it
  * always looks the same on screen
  *
+ * @param aGal the GAL to draw on
  * @param aHeight the height of the glyph, in pixels
  */
 void SetConstantGlyphHeight( KIGFX::GAL& aGal, double aHeight );

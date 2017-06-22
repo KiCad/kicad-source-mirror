@@ -969,7 +969,7 @@ int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
  * Function highlightNet()
  * Looks for a BOARD_CONNECTED_ITEM in a given spot, and if one is found - it enables
  * highlight for its net.
- * @param aPoint is the point where an item is expected (world coordinates).
+ * @param aPosition is the point where an item is expected (world coordinates).
  */
 static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 {

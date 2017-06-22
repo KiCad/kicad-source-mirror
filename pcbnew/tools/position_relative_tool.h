@@ -49,7 +49,7 @@ public:
 
     void Reset( RESET_REASON aReason ) override;
 
-    /// @copydoc POSITION_RELATIVE_TOOL::Init()
+    /// @copydoc TOOL_BASE::Init()
     bool Init() override;
 
     /**

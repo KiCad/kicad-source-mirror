@@ -267,7 +267,7 @@ private:
      * @param tcx
      * @param ep - last point on the edge we are traversing
      * @param eq - first point on the edge we are traversing
-     * @param flipTriangle - the current triangle sharing the point eq with edge
+     * @param flip_triangle - the current triangle sharing the point eq with edge
      * @param t
      * @param p
      */

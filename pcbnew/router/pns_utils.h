@@ -48,11 +48,11 @@ const SHAPE_LINE_CHAIN SegmentHull( const SHAPE_SEGMENT& aSeg, int aClearance,
  * Function ConvexHull()
  *
  * Creates an octagonal hull around a convex polygon.
- * @param convex The convex polygon.
- * @param clearance The minimum distance between polygon and hull.
+ * @param aConvex The convex polygon.
+ * @param aClearance The minimum distance between polygon and hull.
  * @return A closed line chain describing the octagon.
  */
-const SHAPE_LINE_CHAIN ConvexHull( const SHAPE_CONVEX& convex, int aClearance );
+const SHAPE_LINE_CHAIN ConvexHull( const SHAPE_CONVEX& aConvex, int aClearance );
 
 SHAPE_RECT ApproximateSegmentAsRect( const SHAPE_SEGMENT& aSeg );
 

@@ -85,7 +85,7 @@ public:
     /**
      * Function OnlyTypes
      * Creates a functor that tests if the selected items are *only* of given types.
-     * @param aType is a vector containing types that are searched.
+     * @param aTypes is a vector containing types that are searched.
      * @return Functor testing if selected items are exclusively of the requested types.
      */
     static SELECTION_CONDITION OnlyTypes( const std::vector<KICAD_T>& aTypes );
@@ -93,7 +93,7 @@ public:
     /**
      * Function OnlyTypes
      * Creates a functor that tests if the selected items are *only* of given types.
-     * @param aType is an array containing types that are searched. It has to be ended with
+     * @param aTypes is an array containing types that are searched. It has to be ended with
      * KICAD_T::EOT as end marker.
      * @return Functor testing if selected items are exclusively of the requested types.
      */

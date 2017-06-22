@@ -270,7 +270,7 @@ public:
      * Function Add()
      *
      * Adds an item to the current node.
-     * @param aItem item to add
+     * @param aSegment item to add
      * @param aAllowRedundant if true, duplicate items are allowed (e.g. a segment or via
      * at the same coordinates as an existing one)
      */
@@ -288,7 +288,6 @@ public:
      * Function Remove()
      *
      * Just as the name says, removes an item from this branch.
-     * @param aItem item to remove
      */
     void Remove( SOLID* aSolid );
     void Remove( VIA* aVia );
@@ -300,7 +299,7 @@ public:
      * Function Remove()
      *
      * Just as the name says, removes a line from this branch.
-     * @param aItem item to remove
+     * @param aLine item to remove
      */
     void Remove( LINE& aLine );
 
