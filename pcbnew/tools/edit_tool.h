@@ -28,6 +28,7 @@
 
 #include <math/vector2d.h>
 #include <tools/pcb_tool.h>
+#include <dialogs/dialog_move_exact.h>
 
 class BOARD_COMMIT;
 class BOARD_ITEM;
@@ -205,6 +206,8 @@ private:
     }
 
     std::unique_ptr<BOARD_COMMIT> m_commit;
+
+    wxPoint getAnchorPoint( const SELECTION &selection, const MOVE_PARAMETERS &params ) const;
 };
 
 #endif
