@@ -63,6 +63,7 @@ class DIALOG_MOVE_EXACT : public DIALOG_MOVE_EXACT_BASE
 {
 private:
 
+    PCB_BASE_FRAME*     m_parent;
     wxPoint&            m_translation;
     double&             m_rotation;
     MOVE_EXACT_ORIGIN&  m_origin;

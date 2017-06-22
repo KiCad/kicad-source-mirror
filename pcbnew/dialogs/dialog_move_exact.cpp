@@ -37,6 +37,7 @@ DIALOG_MOVE_EXACT::MOVE_EXACT_OPTIONS DIALOG_MOVE_EXACT::m_options;
 
 DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT(PCB_BASE_FRAME *aParent, MOVE_PARAMETERS &aParams ) :
     DIALOG_MOVE_EXACT_BASE( aParent ),
+    m_parent( aParent ),
     m_translation( aParams.translation ),
     m_rotation( aParams.rotation ),
     m_origin( aParams.origin ),
@@ -283,8 +284,36 @@ void DIALOG_MOVE_EXACT::OnOkClick( wxCommandEvent& event )
         m_anchor = ANCHOR_FROM_LIBRARY;
     }
 
+    wxPoint move_vector, origin;
     // for the output, we only deliver a Cartesian vector
-    bool ok = GetTranslationInIU( m_translation, m_polarCoords->IsChecked() );
+    bool ok = GetTranslationInIU( move_vector, m_polarCoords->IsChecked() );
+
+    switch( m_origin )
+    {
+    case RELATIVE_TO_USER_ORIGIN:
+        origin = m_parent->GetScreen()->m_O_Curseur;
+        break;
+
+    case RELATIVE_TO_GRID_ORIGIN:
+        origin = m_parent->GetGridOrigin();
+        break;
+
+    case RELATIVE_TO_DRILL_PLACE_ORIGIN:
+        origin = m_parent->GetAuxOrigin();
+        break;
+
+    case RELATIVE_TO_SHEET_ORIGIN:
+        origin = wxPoint( 0, 0 );
+        break;
+
+    case RELATIVE_TO_CURRENT_POSITION:
+        // relative movement means that only the translation values should be used:
+        // -> set origin and anchor to zero
+        origin = wxPoint( 0, 0 );
+        break;
+        }
+
+    m_translation = move_vector + origin;
 
     if( ok )
     {

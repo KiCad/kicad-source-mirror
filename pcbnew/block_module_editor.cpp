@@ -200,35 +200,12 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
                 SaveCopyInUndoList( currentModule, UR_CHANGED );
                 wxPoint blockCentre = GetScreen()->m_BlockLocate.Centre();
 
-                wxPoint origin;
-
-                switch( params.origin )
+                if( params.origin == RELATIVE_TO_CURRENT_POSITION )
                 {
-                case RELATIVE_TO_USER_ORIGIN:
-                    origin = GetScreen()->m_O_Curseur;
-                    break;
-
-                case RELATIVE_TO_GRID_ORIGIN:
-                    origin = GetGridOrigin();
-                    break;
-
-                case RELATIVE_TO_DRILL_PLACE_ORIGIN:
-                    origin = GetAuxOrigin();
-                    break;
-
-                case RELATIVE_TO_SHEET_ORIGIN:
-                    origin = wxPoint( 0, 0 );
-                    break;
-
-                case RELATIVE_TO_CURRENT_POSITION:
-                    // relative movement means that only the translation values should be used:
-                    // -> set origin and blockCentre to zero
-                    origin = wxPoint( 0, 0 );
                     blockCentre = wxPoint( 0, 0 );
-                    break;
                 }
 
-                wxPoint finalMoveVector = params.translation + origin - blockCentre;
+                wxPoint finalMoveVector = params.translation - blockCentre;
 
                 MoveMarkedItemsExactly( currentModule, blockCentre, finalMoveVector, params.rotation );
             }

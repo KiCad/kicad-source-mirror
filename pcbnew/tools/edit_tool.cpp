@@ -788,35 +788,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
             }
         }
 
-        wxPoint origin;
-
-        switch( params.origin )
-        {
-        case RELATIVE_TO_USER_ORIGIN:
-            origin = editFrame->GetScreen()->m_O_Curseur;
-            break;
-
-        case RELATIVE_TO_GRID_ORIGIN:
-            origin = editFrame->GetGridOrigin();
-            break;
-
-        case RELATIVE_TO_DRILL_PLACE_ORIGIN:
-            origin = editFrame->GetAuxOrigin();
-            break;
-
-        case RELATIVE_TO_SHEET_ORIGIN:
-            origin = wxPoint( 0, 0 );
-            break;
-
-        case RELATIVE_TO_CURRENT_POSITION:
-            // relative movement means that only the translation values should be used:
-            // -> set origin and anchor to zero
-            origin = wxPoint( 0, 0 );
-            anchorPoint = wxPoint( 0, 0 );
-            break;
-        }
-
-        wxPoint finalMoveVector = params.translation + origin - anchorPoint;
+        wxPoint finalMoveVector = params.translation - anchorPoint;
 
         // Make sure the rotation is from the right reference point
         rotPoint += finalMoveVector;
