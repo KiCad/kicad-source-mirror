@@ -168,6 +168,8 @@ public:
 
     const std::vector<D_PAD*> GetConnectedPads(  const BOARD_CONNECTED_ITEM* aItem ) const;
 
+    const std::vector<BOARD_CONNECTED_ITEM*> GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aAnchor, KICAD_T aTypes[] );
+
     void GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges ) const;
 
     /**

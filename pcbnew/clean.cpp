@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2016 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
- * Copyright (C) 2011-2017 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,13 +47,14 @@ public:
     TRACKS_CLEANER( BOARD* aPcb, BOARD_COMMIT& aCommit );
 
     /**
-     * The track cleanup function.
-     *
+     * the cleanup function.
+     * return true if some item was modified
+     * @param aFrame = the PCB_EDIT_FRAME which handles the board
      * @param aRemoveMisConnected = true to remove segments connecting 2 different nets
      * @param aCleanVias = true to remove superimposed vias
      * @param aMergeSegments = true to merge collinear segmenst and remove 0 len segm
-     * @param aDeleteUnconnected = true to remove dangling tracks (short circuits)
-     * @return true if some item was modified
+     * @param aDeleteUnconnected = true to remove dangling tracks
+     * (short circuits)
      */
     bool CleanupBoard( bool aCleanVias, bool aRemoveMisConnected,
                        bool aMergeSegments, bool aDeleteUnconnected );
@@ -74,12 +75,12 @@ private:
      * Removes all the following THT vias on the same position of the
      * specified one
      */
-    bool remove_duplicates_of_via( const VIA* aVia );
+    void removeDuplicatesOfVia( const VIA *aVia, std::set<BOARD_ITEM *>& aToRemove );
 
     /**
      * Removes all the following duplicates tracks of the specified one
      */
-    bool remove_duplicates_of_track( const TRACK* aTrack );
+    void removeDuplicatesOfTrack( const TRACK* aTrack, std::set<BOARD_ITEM*>& aToRemove );
 
     /**
      * Removes dangling tracks
@@ -87,15 +88,15 @@ private:
     bool deleteDanglingTracks();
 
     /// Delete null length track segments
-    bool delete_null_segments();
+    bool deleteNullSegments();
 
     /// Try to merge the segment to a following collinear one
-    bool merge_collinear_of_track( TRACK* aSegment );
+    bool MergeCollinearTracks( TRACK* aSegment );
 
     /**
      * Merge collinear segments and remove duplicated and null len segments
      */
-    bool clean_segments();
+    bool cleanupSegments();
 
     /**
      * helper function
@@ -119,6 +120,21 @@ private:
 
     BOARD* m_brd;
     BOARD_COMMIT& m_commit;
+
+    bool removeItems(  std::set<BOARD_ITEM*>& aItems )
+    {
+        bool isModified = false;
+
+
+        for( auto item : aItems )
+        {
+            isModified = true;
+            m_brd->Remove( item );
+            m_commit.Removed( item );
+        }
+
+        return isModified;
+    }
 };
 
 
@@ -151,18 +167,19 @@ void PCB_EDIT_FRAME::Clean_Pcb()
     m_canvas->Refresh( true );
 }
 
+extern void RebuildTrackChain ( BOARD *brd);
+
 void TRACKS_CLEANER::buildTrackConnectionInfo()
 {
     auto connectivity = m_brd->GetConnectivity();
 
-// rebuild the connectivity, just in case
-	connectivity->Build(m_brd);
+    connectivity->Build(m_brd);
+
+    //RebuildTrackChain ( m_brd );
 
 // clear flags and variables used in cleanup
     for( auto track : m_brd->Tracks() )
     {
-        track->start = NULL;
-        track->end = NULL;
         track->SetState( START_ON_PAD | END_ON_PAD | BUSY, false );
     }
 
@@ -171,20 +188,28 @@ void TRACKS_CLEANER::buildTrackConnectionInfo()
         // Mark track if connected to pads
         for( auto pad : connectivity->GetConnectedPads( track ) )
         {
-            printf("take pad %p\n", pad);
             if( pad->HitTest( track->GetStart() ) )
             {
-                track->start = pad;
                 track->SetState( START_ON_PAD, true );
             }
 
             if( pad->HitTest( track->GetEnd() ) )
             {
-                track->end = pad;
                 track->SetState( END_ON_PAD, true );
             }
         }
     }
+
+#if 0
+    printf("bci\n");
+    for( TRACK* segment = m_brd->m_Track; segment; segment = segment->Next() )
+    {
+        if( segment->Type() == PCB_TRACE_T )
+        {
+            printf("s %d %d %d %d %d %x\n", segment->GetStart().x, segment->GetStart().y, segment->GetEnd().x, segment->GetEnd().y, segment->GetLayer(),  segment->GetStatus() );
+        }
+    }
+#endif
 }
 
 
@@ -209,16 +234,14 @@ bool TRACKS_CLEANER::CleanupBoard( bool aRemoveMisConnected,
     // Remove null segments and intermediate points on aligned segments
     // If not asked, remove null segments only if remove misconnected is asked
     if( aMergeSegments )
-        modified |= clean_segments();
+        modified |= cleanupSegments();
     else if( aRemoveMisConnected )
-        modified |= delete_null_segments();
+        modified |= deleteNullSegments();
 
     buildTrackConnectionInfo();
 
     if( aRemoveMisConnected )
         modified |= removeBadTrackSegments();
-
-    buildTrackConnectionInfo();
 
     // Delete dangling tracks
     if( aDeleteUnconnected )
@@ -233,7 +256,7 @@ bool TRACKS_CLEANER::CleanupBoard( bool aRemoveMisConnected,
             // (when a T was formed by tracks and the "vertical" segment
             // is removed)
             if( aMergeSegments )
-                clean_segments();
+                cleanupSegments();
         }
     }
 
@@ -250,8 +273,9 @@ TRACKS_CLEANER::TRACKS_CLEANER( BOARD* aPcb, BOARD_COMMIT& aCommit )
 
 bool TRACKS_CLEANER::removeBadTrackSegments()
 {
-    bool isModified = false;
     auto connectivity = m_brd->GetConnectivity();
+
+    std::set<BOARD_ITEM *> toRemove;
 
     for( auto segment : m_brd->Tracks() )
     {
@@ -260,36 +284,22 @@ bool TRACKS_CLEANER::removeBadTrackSegments()
         for( auto testedPad : connectivity->GetConnectedPads( segment ) )
         {
             if( segment->GetNetCode() != testedPad->GetNetCode() )
-                segment->SetState( FLAG0, true );
+                toRemove.insert( segment );
         }
 
         for( auto testedTrack : connectivity->GetConnectedTracks( segment ) )
         {
             if( segment->GetNetCode() != testedTrack->GetNetCode() && !testedTrack->GetState( FLAG0 ) )
-                segment->SetState( FLAG0, true );
+                toRemove.insert( segment );
         }
     }
 
-    // Remove tracks having a flagged segment
-    for( auto segment : m_brd->Tracks() )
-    {
-        if( segment->GetState( FLAG0 ) )    // Segment is flagged to be removed
-        {
-            isModified = true;
-            m_brd->Remove( segment );
-            m_commit.Removed( segment );
-        }
-    }
-
-    return isModified;
+    return removeItems( toRemove );
 }
 
 
-bool TRACKS_CLEANER::remove_duplicates_of_via( const VIA *aVia )
+void TRACKS_CLEANER::removeDuplicatesOfVia( const VIA *aVia, std::set<BOARD_ITEM *>& aToRemove )
 {
-    bool modified = false;
-
-    // Search and delete others vias at same location
     VIA* next_via;
 
     for( VIA* alt_via = GetFirstVia( aVia->Next() ); alt_via != NULL; alt_via = next_via )
@@ -298,19 +308,14 @@ bool TRACKS_CLEANER::remove_duplicates_of_via( const VIA *aVia )
 
         if( ( alt_via->GetViaType() == VIA_THROUGH ) &&
                 ( alt_via->GetStart() == aVia->GetStart() ) )
-        {
-            m_brd->Remove( alt_via );
-            m_commit.Removed( alt_via );
-            modified = true;
-        }
+            aToRemove.insert ( alt_via );
     }
-    return modified;
 }
 
 
 bool TRACKS_CLEANER::cleanupVias()
 {
-    bool modified = false;
+    std::set<BOARD_ITEM*> toRemove;
 
     for( VIA* via = GetFirstVia( m_brd->m_Track ); via != NULL;
             via = GetFirstVia( via->Next() ) )
@@ -330,7 +335,7 @@ bool TRACKS_CLEANER::cleanupVias()
          * (yet) handle high density interconnects */
         if( via->GetViaType() == VIA_THROUGH )
         {
-            modified |= remove_duplicates_of_via( via );
+            removeDuplicatesOfVia( via, toRemove );
 
             /* To delete through Via on THT pads at same location
              * Examine the list of connected pads:
@@ -344,16 +349,14 @@ bool TRACKS_CLEANER::cleanupVias()
                 if( ( pad->GetLayerSet() & all_cu ) == all_cu )
                 {
                     // redundant: delete the via
-                    m_brd->Remove( via );
-                    m_commit.Removed( via );
-                    modified = true;
+                    toRemove.insert( via );
                     break;
                 }
             }
         }
     }
 
-    return modified;
+    return removeItems( toRemove );
 }
 
 
@@ -369,7 +372,14 @@ bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK* aTrack, ENDPOINT_T aEndPo
     else
         endpoint = aTrack->GetStart( );
 
-    auto anchors = connectivity->GetConnectivityAlgo()->ItemEntry( aTrack ).GetItems().front()->Anchors();
+    //wxASSERT ( connectivity->GetConnectivityAlgo()->ItemEntry( aTrack ) != nullptr );
+    wxASSERT ( connectivity->GetConnectivityAlgo()->ItemEntry( aTrack ).GetItems().size() != 0 );
+    auto citem = connectivity->GetConnectivityAlgo()->ItemEntry( aTrack ).GetItems().front();
+
+    if( !citem->Valid() )
+        return false;
+
+    auto anchors = citem->Anchors();
 
     for ( auto anchor : anchors )
     {
@@ -387,21 +397,18 @@ bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK* aTrack, ENDPOINT_T aEndPo
  */
 bool TRACKS_CLEANER::deleteDanglingTracks()
 {
-    if( m_brd->m_Track == NULL )
-        return false;
-
+    bool item_erased = false;
     bool modified = false;
-    bool item_erased;
 
     do // Iterate when at least one track is deleted
     {
         item_erased = false;
+
         TRACK* next_track;
 
         for( TRACK *track = m_brd->m_Track; track != NULL; track = next_track )
         {
             next_track = track->Next();
-
             bool flag_erase = false; // Start without a good reason to erase it
 
             /* if a track endpoint is not connected to a pad, test if
@@ -432,45 +439,36 @@ bool TRACKS_CLEANER::deleteDanglingTracks()
         }
     } while( item_erased );
 
+
     return modified;
 }
 
 
 // Delete null length track segments
-bool TRACKS_CLEANER::delete_null_segments()
+bool TRACKS_CLEANER::deleteNullSegments()
 {
-    bool modified = false;
-    TRACK* nextsegment;
+    std::set<BOARD_ITEM *> toRemove;
 
-    // Delete null segments
-    for( TRACK* segment = m_brd->m_Track; segment; segment = nextsegment )
+    for( auto segment : m_brd->Tracks() )
     {
-        nextsegment = segment->Next();
-
-        if( segment->IsNull() )     // Length segment = 0; delete it
-        {
-            m_brd->Remove( segment );
-            m_commit.Removed( segment );
-            modified = true;
-        }
+        if ( segment->IsNull() )     // Length segment = 0; delete it
+            toRemove.insert( segment );
     }
 
-    return modified;
+    return removeItems( toRemove );
 }
 
-
-bool TRACKS_CLEANER::remove_duplicates_of_track( const TRACK *aTrack )
+void TRACKS_CLEANER::removeDuplicatesOfTrack( const TRACK *aTrack, std::set<BOARD_ITEM*>& aToRemove )
 {
-    bool modified = false;
-    TRACK* nextsegment;
 
-    for( TRACK* other = aTrack->Next(); other; other = nextsegment )
+    for( auto other : m_brd->Tracks() )
     {
-        nextsegment = other->Next();
-
         // New netcode, break out (can't be there any other)
         if( aTrack->GetNetCode() != other->GetNetCode() )
-            break;
+            continue;
+
+        if ( aTrack == other )
+            continue;
 
         // Must be of the same type, on the same layer and the endpoints
         // must be the same (maybe swapped)
@@ -482,20 +480,17 @@ bool TRACKS_CLEANER::remove_duplicates_of_track( const TRACK *aTrack )
                 ( ( aTrack->GetStart() == other->GetEnd() ) &&
                  ( aTrack->GetEnd() == other->GetStart() ) ) )
             {
-                m_brd->Remove( other );
-                m_commit.Removed( other );
-                modified = true;
+                aToRemove.insert( other );
             }
         }
     }
-
-    return modified;
 }
 
 
-bool TRACKS_CLEANER::merge_collinear_of_track( TRACK* aSegment )
+bool TRACKS_CLEANER::MergeCollinearTracks( TRACK* aSegment )
 {
     bool merged_this = false;
+
 
     for( ENDPOINT_T endpoint = ENDPOINT_START; endpoint <= ENDPOINT_END;
             endpoint = ENDPOINT_T( endpoint + 1 ) )
@@ -539,33 +534,45 @@ bool TRACKS_CLEANER::merge_collinear_of_track( TRACK* aSegment )
         }
     }
 
+
+
     return merged_this;
 }
 
 
 // Delete null length segments, and intermediate points ..
-bool TRACKS_CLEANER::clean_segments()
+bool TRACKS_CLEANER::cleanupSegments()
 {
     bool modified = false;
 
     // Easy things first
-    modified |= delete_null_segments();
+    modified |= deleteNullSegments();
+
+    buildTrackConnectionInfo();
+
+    std::set<BOARD_ITEM*> toRemove;
 
     // Delete redundant segments, i.e. segments having the same end points and layers
     // (can happens when blocks are copied on themselve)
-    for( TRACK* segment = m_brd->m_Track; segment; segment = segment->Next() )
-        modified |= remove_duplicates_of_track( segment );
+    for ( auto segment : m_brd->Tracks() )
+        removeDuplicatesOfTrack( segment, toRemove );
+
+    modified |= removeItems( toRemove );
+    modified = true;
+
+    if( modified )
+        buildTrackConnectionInfo();
 
     // merge collinear segments:
     TRACK* nextsegment;
 
-    for( TRACK* segment = m_brd->m_Track; segment; segment = nextsegment )
+	for( TRACK* segment = m_brd->m_Track; segment; segment = nextsegment )
     {
         nextsegment = segment->Next();
 
         if( segment->Type() == PCB_TRACE_T )
         {
-            bool merged_this = merge_collinear_of_track( segment );
+            bool merged_this = MergeCollinearTracks( segment );
 
             if( merged_this ) // The current segment was modified, retry to merge it again
             {
@@ -580,7 +587,7 @@ bool TRACKS_CLEANER::clean_segments()
 
 
 /* Utility: check for parallelism between two segments */
-static bool parallelism_test( int dx1, int dy1, int dx2, int dy2 )
+static bool parallelismTest( int dx1, int dy1, int dx2, int dy2 )
 {
     /* The following condition list is ugly and repetitive, but I have
      * not a better way to express clearly the trivial cases. Hope the
@@ -607,7 +614,7 @@ static bool parallelism_test( int dx1, int dy1, int dx2, int dy2 )
 }
 
 
-/** Function used by clean_segments.
+/** Function used by cleanupSegments.
  *  Test if aTrackRef and aCandidate (which must have a common end) are collinear.
  *  and see if the common point is not on a pad (i.e. if this common point can be removed).
  *  the ending point of aTrackRef is the start point (aEndType == START)
@@ -619,6 +626,24 @@ static bool parallelism_test( int dx1, int dy1, int dx2, int dy2 )
  *    and return aCandidate (which can be deleted).
  *  else return NULL
  */
+
+static void updateConn( TRACK *track, std::shared_ptr<CONNECTIVITY_DATA> connectivity )
+{
+    for( auto pad : connectivity->GetConnectedPads( track ) )
+    {
+        if( pad->HitTest( track->GetStart() ) )
+        {
+            track->SetState( START_ON_PAD, true );
+        }
+
+        if( pad->HitTest( track->GetEnd() ) )
+        {
+            track->SetState( END_ON_PAD, true );
+        }
+    }
+}
+
+
 TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK* aCandidate,
                                        ENDPOINT_T aEndType )
 {
@@ -638,7 +663,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
         return aCandidate;
 
     // Weed out non-parallel tracks
-    if ( !parallelism_test( aTrackRef->GetEnd().x - aTrackRef->GetStart().x,
+    if ( !parallelismTest( aTrackRef->GetEnd().x - aTrackRef->GetStart().x,
                 aTrackRef->GetEnd().y - aTrackRef->GetStart().y,
                 aCandidate->GetEnd().x - aCandidate->GetStart().x,
                 aCandidate->GetEnd().y - aCandidate->GetStart().y ) )
@@ -649,9 +674,49 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
      * (this function) is called when there is only 2 connected segments,
      * and if this point is not on a pad, it can be removed and the 2 segments will be merged
      */
+
+     auto connectivity=m_brd->GetConnectivity();
+
+     updateConn(aTrackRef, connectivity);
+     updateConn(aCandidate, connectivity);
+
+#if 0
+
+
+     if (aTrackRef->GetNetCode() == 47)
+     {
+         auto pads = m_brd->GetConnectivity()->GetConnectedPads( aTrackRef );
+         printf("eps ref %d %d-%d %d pads-con %d eop %d sop %d\n",
+             aTrackRef->GetStart().x,
+             aTrackRef->GetStart().y,
+             aTrackRef->GetEnd().x,
+             aTrackRef->GetEnd().y,
+             pads.size(),
+             !!aTrackRef->GetState(END_ON_PAD),
+             !!aTrackRef->GetState(START_ON_PAD)
+
+             );
+
+         pads = m_brd->GetConnectivity()->GetConnectedPads( aCandidate );
+         printf("eps cand %d %d-%d %d pads-con %d eop %d sop %d\n",
+                 aCandidate->GetStart().x,
+                 aCandidate->GetStart().y,
+                 aCandidate->GetEnd().x,
+                 aCandidate->GetEnd().y,
+                 pads.size(),
+                 !!aCandidate->GetState(END_ON_PAD),
+                 !!aCandidate->GetState(START_ON_PAD)
+                 );
+
+        }
+
+#endif
+
+
+
     if( aEndType == ENDPOINT_START )
     {
-        // We do not have a pad, which is a always terminal point for a track
+    // We do not have a pad, which is a always terminal point for a track
         if( aTrackRef->GetState( START_ON_PAD ) )
             return NULL;
 
@@ -661,21 +726,23 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
         {
             m_commit.Modify( aTrackRef );
             aTrackRef->SetStart( aCandidate->GetEnd() );
-            aTrackRef->start = aCandidate->end;
             aTrackRef->SetState( START_ON_PAD, aCandidate->GetState( END_ON_PAD ) );
+            connectivity->Update( aTrackRef );
             return aCandidate;
         }
         else
         {
             m_commit.Modify( aTrackRef );
             aTrackRef->SetStart( aCandidate->GetStart() );
-            aTrackRef->start = aCandidate->start;
             aTrackRef->SetState( START_ON_PAD, aCandidate->GetState( START_ON_PAD ) );
+            connectivity->Update( aTrackRef );
             return aCandidate;
         }
     }
     else    // aEndType == END
     {
+
+
         // We do not have a pad, which is a always terminal point for a track
         if( aTrackRef->GetState( END_ON_PAD ) )
             return NULL;
@@ -686,16 +753,17 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
         {
             m_commit.Modify( aTrackRef );
             aTrackRef->SetEnd( aCandidate->GetEnd() );
-            aTrackRef->end = aCandidate->end;
             aTrackRef->SetState( END_ON_PAD, aCandidate->GetState( END_ON_PAD ) );
+            connectivity->Update( aTrackRef );
+
             return aCandidate;
         }
         else
         {
             m_commit.Modify( aTrackRef );
             aTrackRef->SetEnd( aCandidate->GetStart() );
-            aTrackRef->end = aCandidate->start;
             aTrackRef->SetState( END_ON_PAD, aCandidate->GetState( START_ON_PAD ) );
+            connectivity->Update( aTrackRef );
             return aCandidate;
         }
     }

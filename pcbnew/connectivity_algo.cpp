@@ -929,5 +929,14 @@ void CN_CONNECTIVITY_ALGO::ForEachAnchor(  std::function<void(CN_ANCHOR_PTR)> aF
 
 bool CN_ANCHOR::IsDangling() const
 {
-    return m_cluster->Size() <= 1;
+    if( !m_cluster )
+        return true;
+
+    int validCount = 0;
+
+    for( auto item : *m_cluster )
+        if ( item->Valid() )
+            validCount++;
+
+    return validCount <= 1;
 }

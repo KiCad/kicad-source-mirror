@@ -56,7 +56,6 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
             return *this;
 
         case CHT_REMOVE:
-            assert( m_changedItems.find( aItem ) == m_changedItems.end() );
             makeEntry( aItem, CHT_REMOVE | flag );
             return *this;
 
@@ -134,11 +133,26 @@ COMMIT& COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO_T aModFlag )
     return *this;
 }
 
+template <class Container, class F>
+void eraseIf( Container& c, F&& f )
+{
+    c.erase( std::remove_if( c.begin(),
+                    c.end(),
+                    std::forward<F>( f ) ),
+            c.end() );
+}
 
 void COMMIT::makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy )
 {
     // Expect an item copy if it is going to be modified
     assert( !!aCopy == ( ( aType & CHT_TYPE ) == CHT_MODIFY ) );
+
+    if( m_changedItems.find( aItem ) != m_changedItems.end() )
+    {
+        eraseIf( m_changes, [aItem] ( const COMMIT_LINE& aEnt ) {
+            return aEnt.m_item == aItem;
+        } );
+    }
 
     COMMIT_LINE ent;
 
