@@ -436,8 +436,19 @@ unsigned int CONNECTIVITY_DATA::GetLinksCount() const
 
 unsigned int CONNECTIVITY_DATA::GetNodeCount( int aNet ) const
 {
-    return 0;
-    assert( false );
+    int sum = 0;
+
+    if( aNet < 0 )
+    {
+        for( const auto& net : m_nets ) 
+            sum += net->GetNodeCount();
+    }
+    else if( aNet < m_nets.size() )
+    {
+        sum = m_nets[aNet]->GetNodeCount();
+    }
+
+    return sum;
 }
 
 
