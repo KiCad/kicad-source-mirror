@@ -109,7 +109,10 @@ public:
 
     void AddCluster( std::shared_ptr<CN_CLUSTER> aCluster );
 
-    unsigned int GetNodeCount() const;
+    unsigned int GetNodeCount() const
+    {
+        return m_nodes.size();
+    }
 
     /**
      * Function GetNodes()

@@ -273,12 +273,6 @@ void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& 
 }
 
 
-const std::vector<RN_DYNAMIC_LINE>& CONNECTIVITY_DATA::GetDynamicRatsnest() const
-{
-    return m_dynamicRatsnest;
-}
-
-
 void CONNECTIVITY_DATA::ClearDynamicRatsnest()
 {
     m_connAlgo->ForEachAnchor( [] (CN_ANCHOR_PTR anchor ) { anchor->SetNoLine( false ); } );

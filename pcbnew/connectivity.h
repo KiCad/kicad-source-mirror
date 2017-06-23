@@ -183,8 +183,10 @@ public:
      */
     void ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& aItems );
 
-
-    const std::vector<RN_DYNAMIC_LINE>& GetDynamicRatsnest() const;
+    const std::vector<RN_DYNAMIC_LINE>& GetDynamicRatsnest() const
+    {
+        return m_dynamicRatsnest;
+    }
 
     /**
      * Function GetConnectedItems()
