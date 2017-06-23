@@ -155,8 +155,6 @@ public:
      */
     unsigned int GetUnconnectedCount() const;
 
-    unsigned int GetLinksCount() const;
-
     unsigned int GetNodeCount( int aNet = -1 ) const;
 
     unsigned int GetPadCount( int aNet = -1 ) const;

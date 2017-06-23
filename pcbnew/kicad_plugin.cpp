@@ -534,7 +534,6 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( 0, "\n" );
 
     m_out->Print( aNestLevel, "(general\n" );
-    m_out->Print( aNestLevel+1, "(links %d)\n", aBoard->GetConnectivity()->GetLinksCount() );
     m_out->Print( aNestLevel+1, "(no_connects %d)\n", aBoard->GetConnectivity()->GetUnconnectedCount() );
 
     // Write Bounding box info

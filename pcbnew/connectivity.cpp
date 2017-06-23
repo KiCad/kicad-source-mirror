@@ -427,13 +427,6 @@ const
 }
 
 
-unsigned int CONNECTIVITY_DATA::GetLinksCount() const
-{
-    return 0;
-    assert( false );
-}
-
-
 unsigned int CONNECTIVITY_DATA::GetNodeCount( int aNet ) const
 {
     int sum = 0;
