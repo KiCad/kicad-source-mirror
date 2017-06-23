@@ -41,6 +41,7 @@
 #include <functional>
 #include <vector>
 #include <deque>
+#include <intrusive_list.h>
 
 #include <connectivity.h>
 
@@ -249,79 +250,6 @@ public:
 };
 
 typedef std::shared_ptr<CN_CLUSTER> CN_CLUSTER_PTR;
-
-
-// a lightweight intrusive list container
-template <class T>
-class INTRUSIVE_LIST
-{
-public:
-    INTRUSIVE_LIST<T>()
-    {
-        ListClear();
-    }
-
-    void ListClear()
-    {
-        m_prev  = nullptr;
-        m_next  = nullptr;
-        m_root  = (T*) this;
-        m_count = 1;
-    }
-
-    T* ListRemove()
-    {
-        if( m_prev )
-            m_prev->m_next = m_next;
-
-        if( m_next )
-            m_next->m_prev = m_prev;
-
-        m_root->m_count--;
-
-        T* rv = nullptr;
-
-        if( m_prev )
-            rv = m_prev;
-        else if( m_next )
-            rv = m_next;
-
-        m_root  = nullptr;
-        m_prev  = nullptr;
-        m_next  = nullptr;
-        return rv;
-    }
-
-    int ListSize() const
-    {
-        return m_root ? m_root->m_count : 0;
-    }
-
-    void ListInsert( T* item )
-    {
-        if( !m_root )
-            m_root = item;
-
-        if( m_next )
-            m_next->m_prev = item;
-
-        item->m_prev    = (T*) this;
-        item->m_next    = m_next;
-        item->m_root    = m_root;
-        m_root->m_count++;
-
-        m_next = item;
-    }
-
-    T* ListNext() const { return m_next; };
-    T* ListPrev() const { return m_prev; };
-
-private:
-    int m_count;
-    T* m_prev;
-    T* m_next;
-    T* m_root;
-};
 
 
 // basic connectivity item
