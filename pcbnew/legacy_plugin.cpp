@@ -654,8 +654,8 @@ void LEGACY_PLUGIN::loadGENERAL()
 
         else if( TESTLINE( "NoConn" ) )
         {
-            int tmp = intParse( line + SZ( "NoConn" ) );
-            m_board->SetUnconnectedNetCount( tmp );
+            // ignore
+            intParse( line + SZ( "NoConn" ) );
         }
 
         else if( TESTLINE( "Di" ) )

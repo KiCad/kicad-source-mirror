@@ -198,12 +198,6 @@ private:
     TITLE_BLOCK             m_titles;               ///< text in lower right of screen and plots
     PCB_PLOT_PARAMS         m_plotOptions;
 
-    /// Number of pads connected to the current net.
-    int                     m_nodeCount;
-
-    /// Number of unconnected nets in the current rats nest.
-    int                     m_unconnectedNetCount;
-
     /**
      * Function chainMarkedSegments
      * is used by MarkTrace() to set the BUSY flag of connected segments of the trace
@@ -713,26 +707,10 @@ public:
     unsigned GetNodesCount() const;
 
     /**
-     * Function SetNodeCount
-     * set the number of nodes of the current net to \a aCount.
-     *
-     * @param aCount is the number of nodes attached to the current net.
-     */
-    void SetNodeCount( unsigned aCount )   { m_nodeCount = aCount; }
-
-    /**
      * Function GetUnconnectedNetCount
-     * @return the number of unconnected nets in the current rats nest.
+     * @return the number of unconnected nets in the current ratsnest.
      */
-    unsigned GetUnconnectedNetCount() const { return m_unconnectedNetCount; }
-
-    /**
-     * Function SetUnconnectedNetCount
-     * sets the number of unconnected nets in the current rats nest to \a aCount.
-     *
-     * @param aCount is the number of unconneceted nets in the current rats nest.
-     */
-    void SetUnconnectedNetCount( unsigned aCount ) { m_unconnectedNetCount = aCount; }
+    unsigned GetUnconnectedNetCount() const;
 
     /**
      * Function GetPadCount

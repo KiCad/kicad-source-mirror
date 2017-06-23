@@ -77,8 +77,6 @@ BOARD::BOARD() :
 
     m_Status_Pcb    = 0;                    // Status word: bit 1 = calculate.
     SetColorsSettings( &g_ColorsSettings );
-    m_nodeCount     = 0;                    // Number of connected pads.
-    m_unconnectedNetCount   = 0;            // Number of unconnected nets.
 
     m_CurrentZoneContour = NULL;            // This ZONE_CONTAINER handle the
                                             // zone contour currently in progress
@@ -1054,7 +1052,13 @@ int BOARD::GetNumSegmZone() const
 
 unsigned BOARD::GetNodesCount() const
 {
-    return m_nodeCount;
+    return m_connectivity->GetPadCount();
+}
+
+
+unsigned BOARD::GetUnconnectedNetCount() const
+{
+    return m_connectivity->GetUnconnectedCount();
 }
 
 

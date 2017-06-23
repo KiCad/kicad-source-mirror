@@ -611,7 +611,8 @@ void PCB_PARSER::parseGeneralSection()
             break;
 
         case T_no_connects:
-            m_board->SetUnconnectedNetCount( parseInt( "no connect count" ) );
+            // ignore
+            parseInt( "no connect count" );
             NeedRIGHT();
             break;
 
