@@ -1413,8 +1413,6 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 }
             }
 
-            printf( "Found zones : %d\n", foundZones.size() );
-
             std::sort( foundZones.begin(), foundZones.end(),
                     [] ( const ZONE_CONTAINER* a, const ZONE_CONTAINER* b ) {
                 return a->GetLayer() < b->GetLayer();

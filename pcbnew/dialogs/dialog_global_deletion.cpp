@@ -160,16 +160,16 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
 
         masque_layer &= layers_filter;
 
-        for( auto item : pcb->Drawings() )
+        for( auto dwg : pcb->Drawings() )
         {
-            KICAD_T type = item->Type();
-            LAYER_NUM layer = item->GetLayer();
+            KICAD_T type = dwg->Type();
+            LAYER_NUM layer = dwg->GetLayer();
 
             if( delAll
                 || ( type == PCB_LINE_T && delDrawings && masque_layer[layer] )
                 || ( type == PCB_TEXT_T && delTexts && del_text_layers[layer] ) )
             {
-                commit.Remove( item );
+                commit.Remove( dwg );
             }
         }
     }
@@ -238,6 +238,6 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
     if( gen_rastnest )
         m_Parent->Compile_Ratsnest( NULL, true );
 
-    // There is a chance that some of tracks have changed their nets, so rebuild ratsnest from scratch    
+    // There is a chance that some of tracks have changed their nets, so rebuild ratsnest from scratch
     m_Parent->GetCanvas()->Refresh();
 }

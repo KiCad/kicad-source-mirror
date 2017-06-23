@@ -149,10 +149,10 @@ void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE *aPlacer,
 
                 if ( aOptions & IPO_SINGLE_CLICK )
                 {
-                    VECTOR2I cursorPos = controls()->GetCursorPosition();
+                    VECTOR2I pos = controls()->GetCursorPosition();
 
                     newItem = aPlacer->CreateItem();
-                    newItem->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+                    newItem->SetPosition( wxPoint( pos.x, pos.y ) );
 
                     preview.Add( newItem.get() );
                 }

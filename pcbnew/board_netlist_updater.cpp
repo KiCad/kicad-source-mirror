@@ -51,7 +51,6 @@
 
 BOARD_NETLIST_UPDATER::BOARD_NETLIST_UPDATER( PCB_EDIT_FRAME* aFrame, BOARD* aBoard ) :
     m_commit( aFrame ),
-    m_frame( aFrame ),
     m_board( aBoard )
 {
     m_reporter = &NULL_REPORTER::GetInstance();

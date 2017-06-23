@@ -139,7 +139,6 @@ private:
     bool testConnectivity( NETLIST& aNetlist );
 
     BOARD_COMMIT m_commit;
-    PCB_EDIT_FRAME* m_frame;
     BOARD* m_board;
     REPORTER* m_reporter;
 
