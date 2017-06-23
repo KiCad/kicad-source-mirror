@@ -574,8 +574,8 @@ public:
         return m_cachedPoly->BBox();
     }
 
-    virtual int             AnchorCount() const;
-    virtual const VECTOR2I  GetAnchor( int n ) const;
+    virtual int             AnchorCount() const override;
+    virtual const VECTOR2I  GetAnchor( int n ) const override;
 
 private:
     std::vector<VECTOR2I> m_testOutlinePoints;

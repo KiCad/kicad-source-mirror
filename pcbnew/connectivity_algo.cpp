@@ -831,7 +831,7 @@ void CN_CONNECTIVITY_ALGO::markNetAsDirty( int aNet )
     if( aNet <= 0 )
         return;
 
-    if(m_dirtyNets.size() <= aNet )
+    if( (int) m_dirtyNets.size() <= aNet )
         m_dirtyNets.resize( aNet + 1 );
 
     m_dirtyNets[aNet] = true;

@@ -750,19 +750,24 @@ void BOARD::SetElementVisibility( GAL_LAYER_ID LAYER_aPCB, bool isEnabled )
     switch( LAYER_aPCB )
     {
     case LAYER_RATSNEST:
-	{
+    {
         bool visible = IsElementVisible( LAYER_RATSNEST );
         // we must clear or set the CH_VISIBLE flags to hide/show ratsnest
         // because we have a tool to show/hide ratsnest relative to a pad or a module
         // so the hide/show option is a per item selection
 
-        for ( int net = 1; net < GetNetCount(); net++ )
+        for( unsigned int net = 1; net < GetNetCount(); net++ )
             GetConnectivity()->GetRatsnestForNet( net )->SetVisible( visible );
-        for ( auto track : Tracks() )
+
+        for( auto track : Tracks() )
             track->SetLocalRatsnestVisible( isEnabled );
+
         for( auto mod : Modules() )
-            for ( auto pad : mod->Pads() )
+        {
+            for( auto pad : mod->Pads() )
                 pad->SetLocalRatsnestVisible( isEnabled );
+        }
+
         for( int i = 0; i<GetAreaCount(); i++ )
         {
             auto zone = GetArea( i );
@@ -772,7 +777,8 @@ void BOARD::SetElementVisibility( GAL_LAYER_ID LAYER_aPCB, bool isEnabled )
         m_Status_Pcb = 0;
 
         break;
-	}
+    }
+
     default:
         ;
     }

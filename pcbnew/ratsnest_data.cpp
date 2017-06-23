@@ -248,7 +248,7 @@ public:
             mstEdges.emplace_back( src, dst, getDistance( src, dst ) );
         }
 
-        for( int i = 0; i < anchorChains.size(); i++ )
+        for( unsigned int i = 0; i < anchorChains.size(); i++ )
         {
             auto& chain = anchorChains[i];
 
@@ -260,7 +260,7 @@ public:
                 return a->GetCluster().get() < b->GetCluster().get();
             } );
 
-            for( auto j = 1; j < chain.size(); j++ )
+            for( unsigned int j = 1; j < chain.size(); j++ )
             {
                 const auto& prevNode    = chain[j - 1];
                 const auto& curNode     = chain[j];
@@ -368,7 +368,7 @@ void RN_NET::AddCluster( CN_CLUSTER_PTR aCluster )
     {
         bool isZone = dynamic_cast<CN_ZONE*>(item) != nullptr;
         auto& anchors = item->Anchors();
-        int nAnchors = isZone ? 1 : anchors.size();
+        unsigned int nAnchors = isZone ? 1 : anchors.size();
 
         if( nAnchors > anchors.size() )
             nAnchors = anchors.size();
@@ -376,7 +376,7 @@ void RN_NET::AddCluster( CN_CLUSTER_PTR aCluster )
         //printf("item %p anchors : %d\n", item, anchors.size() );
         //printf("add item %p anchors : %d net : %d\n", item, item->Anchors().size(), item->Parent()->GetNetCode() );
 
-        for( int i = 0; i < nAnchors; i++ )
+        for( unsigned int i = 0; i < nAnchors; i++ )
         {
         //    printf("add anchor %p\n", anchors[i].get() );
 

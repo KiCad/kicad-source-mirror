@@ -1451,8 +1451,8 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
             SetToolID( id, wxCURSOR_PENCIL, _( "Add tracks" ) );
         else
             SetToolID( id, wxCURSOR_QUESTION_ARROW, _( "Add tracks" ) );
-            Compile_Ratsnest( &dc, true );
 
+        Compile_Ratsnest( &dc, true );
         break;
 
     case ID_PCB_MODULE_BUTT:

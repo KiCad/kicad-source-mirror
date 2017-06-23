@@ -440,10 +440,10 @@ unsigned int CONNECTIVITY_DATA::GetNodeCount( int aNet ) const
 
     if( aNet < 0 )
     {
-        for( const auto& net : m_nets ) 
+        for( const auto& net : m_nets )
             sum += net->GetNodeCount();
     }
-    else if( aNet < m_nets.size() )
+    else if( aNet < (int) m_nets.size() )
     {
         sum = m_nets[aNet]->GetNodeCount();
     }
