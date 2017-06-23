@@ -104,7 +104,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
         {
             D_PAD* pad = new D_PAD ( m_board->m_Modules );
             m_frame->Import_Pad_Settings( pad, false );     // use the global settings for pad
-    //        pad->IncrementPadName( true, true );
+            pad->IncrementPadName( true, true );
             return std::unique_ptr<BOARD_ITEM>( pad );
         }
     };
