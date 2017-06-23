@@ -91,7 +91,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         {
             aPlotter->StartBlock( NULL );
 
-            for( D_PAD * pad = Module->PadsList(); pad; pad = pad->Next() )
+            for( D_PAD* pad = Module->PadsList(); pad; pad = pad->Next() )
             {
                 // See if the pad is on this layer
                 LSET masklayer = pad->GetLayerSet();

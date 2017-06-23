@@ -69,7 +69,7 @@ public:
      * false otherwise.
      */
     void SetVisible( bool aEnabled );
-    
+
     /**
      * Function MarkDirty()
      * Marks ratsnest for given net as 'dirty', i.e. requiring recomputation.
@@ -108,7 +108,6 @@ public:
     void Clear();
 
     void AddCluster( std::shared_ptr<CN_CLUSTER> aCluster );
-
 
     unsigned int GetNodeCount() const;
 
@@ -176,7 +175,7 @@ public:
 
 
 protected:
-    ///> Recomputes ratsnset from scratch.
+    ///> Recomputes ratsnest from scratch.
     void compute();
 
     ///> Vector of nodes
@@ -195,6 +194,5 @@ protected:
 
     std::shared_ptr<TRIANGULATOR_STATE> m_triangulator;
 };
-
 
 #endif /* RATSNEST_DATA_H */

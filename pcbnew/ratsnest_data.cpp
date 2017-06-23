@@ -54,6 +54,7 @@ static uint64_t getDistance( const CN_ANCHOR_PTR& aNode1, const CN_ANCHOR_PTR& a
     return sqrt( dx * dx + dy * dy );
 }
 
+
 static bool sortWeight( const CN_EDGE& aEdge1, const CN_EDGE& aEdge2 )
 {
     return aEdge1.GetWeight() < aEdge2.GetWeight();
@@ -181,6 +182,7 @@ static const std::vector<CN_EDGE> kruskalMST( std::list<CN_EDGE>& aEdges,
     return mst;
 }
 
+
 class RN_NET::TRIANGULATOR_STATE
 {
 private:
@@ -209,7 +211,7 @@ public:
         std::vector<ANCHOR_LIST> anchorChains;
 
         triNodes.reserve( m_allNodes.size() );
-        anchorChains.reserve ( m_allNodes.size() );
+        anchorChains.reserve( m_allNodes.size() );
 
         std::sort( m_allNodes.begin(), m_allNodes.end(),
                 [] ( const CN_ANCHOR_PTR& aNode1, const CN_ANCHOR_PTR& aNode2 )
@@ -297,16 +299,15 @@ public:
     }
 };
 
-#include <profile.h>
 
 RN_NET::RN_NET() : m_dirty( true )
 {
     m_triangulator.reset( new TRIANGULATOR_STATE );
 }
 
+
 void RN_NET::compute()
 {
-
     // Special cases do not need complicated algorithms (actually, it does not work well with
     // the Delaunay triangulator)
     //printf("compute nodes :  %d\n", m_nodes.size() );
@@ -332,7 +333,6 @@ void RN_NET::compute()
             for( auto node : m_nodes )
                 node->SetTag( 0 );
         }
-
 
         return;
     }
@@ -647,13 +647,13 @@ void RN_NET::AddCluster( CN_CLUSTER_PTR aCluster )
         auto& anchors = item->Anchors();
         int nAnchors = isZone ? 1 : anchors.size();
 
-        if ( nAnchors > anchors.size() )
+        if( nAnchors > anchors.size() )
             nAnchors = anchors.size();
 
         //printf("item %p anchors : %d\n", item, anchors.size() );
         //printf("add item %p anchors : %d net : %d\n", item, item->Anchors().size(), item->Parent()->GetNetCode() );
 
-        for ( int i = 0; i < nAnchors; i++ )
+        for( int i = 0; i < nAnchors; i++ )
         {
         //    printf("add anchor %p\n", anchors[i].get() );
 
@@ -674,6 +674,7 @@ void RN_NET::AddCluster( CN_CLUSTER_PTR aCluster )
         }
     }
 }
+
 
 bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode1,
         CN_ANCHOR_PTR& aNode2 ) const
@@ -710,8 +711,9 @@ unsigned int RN_NET::GetNodeCount() const
     return m_nodes.size();
 }
 
+
 void RN_NET::SetVisible( bool aEnabled )
 {
-    for ( auto& edge : m_rnEdges )
-        edge.SetVisible ( aEnabled );
+    for( auto& edge : m_rnEdges )
+        edge.SetVisible( aEnabled );
 }

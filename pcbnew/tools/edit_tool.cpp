@@ -532,6 +532,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+
 /*!
  * Mirror a point about the vertical axis passing through another point
  */
@@ -1149,6 +1150,7 @@ void EDIT_TOOL::SetTransitions()
     Go( &EDIT_TOOL::MeasureTool,             PCB_ACTIONS::measureTool.MakeEvent() );
 }
 
+
 void EDIT_TOOL::updateRatsnest( bool aRedraw )
 {
     auto& selection = m_selectionTool->GetSelection();
@@ -1160,6 +1162,7 @@ void EDIT_TOOL::updateRatsnest( bool aRedraw )
 
     connectivity->ComputeDynamicRatsnest( items );
 }
+
 
 wxPoint EDIT_TOOL::getModificationPoint( const SELECTION& aSelection )
 {
@@ -1177,6 +1180,7 @@ wxPoint EDIT_TOOL::getModificationPoint( const SELECTION& aSelection )
         return wxPoint( m_cursor.x, m_cursor.y );
     }
 }
+
 
 int EDIT_TOOL::editFootprintInFpEditor( const TOOL_EVENT& aEvent )
 {
@@ -1213,6 +1217,7 @@ int EDIT_TOOL::editFootprintInFpEditor( const TOOL_EVENT& aEvent )
 
     return 0;
 }
+
 
 template<class T>
 T* EDIT_TOOL::uniqueSelected()

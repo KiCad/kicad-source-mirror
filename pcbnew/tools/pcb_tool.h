@@ -50,8 +50,8 @@ struct INTERACTIVE_PLACER_BASE
     virtual std::unique_ptr<BOARD_ITEM> CreateItem() = 0;
     virtual bool PlaceItem( BOARD_ITEM *aItem ) { return false; }
 
-    PCB_EDIT_FRAME *m_frame;
-    BOARD *m_board;
+    PCB_EDIT_FRAME* m_frame;
+    BOARD* m_board;
 };
 
 

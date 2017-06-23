@@ -61,7 +61,6 @@ class MARKER_PCB;
 class MSG_PANEL_ITEM;
 class NETLIST;
 class REPORTER;
-class RN_DATA;
 class SHAPE_POLY_SET;
 class CONNECTIVITY_DATA;
 
@@ -292,9 +291,8 @@ public:
     /**
      * Function GetConnectivity()
      * returns list of missing connections between components/tracks.
-     * @return RATSNEST* is an object that contains informations about missing connections.
+     * @return an object that contains informations about missing connections.
      */
-
     std::shared_ptr<CONNECTIVITY_DATA> GetConnectivity() const
     {
         return m_connectivity;

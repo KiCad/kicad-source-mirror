@@ -60,7 +60,7 @@ void PCB_BASE_FRAME::Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus )
 
     GetBoard()->m_Status_Pcb = 0;   // we want a full ratsnest computation, from the scratch
 
-    if( GetBoard()->IsElementVisible(LAYER_RATSNEST) && aDC )
+    if( GetBoard()->IsElementVisible( LAYER_RATSNEST ) && aDC )
         DrawGeneralRatsnest( aDC, 0 );
 
     wxString msg;

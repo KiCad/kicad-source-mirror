@@ -177,7 +177,7 @@ void TRACKS_CLEANER::buildTrackConnectionInfo()
 
     //RebuildTrackChain ( m_brd );
 
-// clear flags and variables used in cleanup
+    // clear flags and variables used in cleanup
     for( auto track : m_brd->Tracks() )
     {
         track->SetState( START_ON_PAD | END_ON_PAD | BUSY, false );
@@ -320,7 +320,6 @@ bool TRACKS_CLEANER::cleanupVias()
     for( VIA* via = GetFirstVia( m_brd->m_Track ); via != NULL;
             via = GetFirstVia( via->Next() ) )
     {
-
         if( via->GetFlags() & TRACK_LOCKED )
             continue;
 
@@ -367,7 +366,7 @@ bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK* aTrack, ENDPOINT_T aEndPo
     auto connectivity = m_brd->GetConnectivity();
     VECTOR2I endpoint ;
 
-    if ( aTrack->Type() == PCB_TRACE_T )
+    if( aTrack->Type() == PCB_TRACE_T )
         endpoint = aTrack->GetEndPoint( aEndPoint );
     else
         endpoint = aTrack->GetStart( );
@@ -381,9 +380,9 @@ bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK* aTrack, ENDPOINT_T aEndPo
 
     auto anchors = citem->Anchors();
 
-    for ( auto anchor : anchors )
+    for( auto anchor : anchors )
     {
-        if ( anchor->Pos() == endpoint && anchor->IsDangling() )
+        if( anchor->Pos() == endpoint && anchor->IsDangling() )
             return true;
     }
 
@@ -451,7 +450,7 @@ bool TRACKS_CLEANER::deleteNullSegments()
 
     for( auto segment : m_brd->Tracks() )
     {
-        if ( segment->IsNull() )     // Length segment = 0; delete it
+        if( segment->IsNull() )     // Length segment = 0; delete it
             toRemove.insert( segment );
     }
 
@@ -467,7 +466,7 @@ void TRACKS_CLEANER::removeDuplicatesOfTrack( const TRACK *aTrack, std::set<BOAR
         if( aTrack->GetNetCode() != other->GetNetCode() )
             continue;
 
-        if ( aTrack == other )
+        if( aTrack == other )
             continue;
 
         // Must be of the same type, on the same layer and the endpoints
@@ -554,7 +553,7 @@ bool TRACKS_CLEANER::cleanupSegments()
 
     // Delete redundant segments, i.e. segments having the same end points and layers
     // (can happens when blocks are copied on themselve)
-    for ( auto segment : m_brd->Tracks() )
+    for( auto segment : m_brd->Tracks() )
         removeDuplicatesOfTrack( segment, toRemove );
 
     modified |= removeItems( toRemove );
@@ -663,7 +662,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
         return aCandidate;
 
     // Weed out non-parallel tracks
-    if ( !parallelismTest( aTrackRef->GetEnd().x - aTrackRef->GetStart().x,
+    if( !parallelismTest( aTrackRef->GetEnd().x - aTrackRef->GetStart().x,
                 aTrackRef->GetEnd().y - aTrackRef->GetStart().y,
                 aCandidate->GetEnd().x - aCandidate->GetStart().x,
                 aCandidate->GetEnd().y - aCandidate->GetStart().y ) )
@@ -675,15 +674,12 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
      * and if this point is not on a pad, it can be removed and the 2 segments will be merged
      */
 
-     auto connectivity=m_brd->GetConnectivity();
 
-     updateConn(aTrackRef, connectivity);
-     updateConn(aCandidate, connectivity);
 
 #if 0
 
 
-     if (aTrackRef->GetNetCode() == 47)
+     if(aTrackRef->GetNetCode() == 47)
      {
          auto pads = m_brd->GetConnectivity()->GetConnectedPads( aTrackRef );
          printf("eps ref %d %d-%d %d pads-con %d eop %d sop %d\n",
@@ -712,11 +708,14 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
 
 #endif
 
+    auto connectivity = m_brd->GetConnectivity();
 
+    updateConn( aTrackRef, connectivity );
+    updateConn( aCandidate, connectivity );
 
     if( aEndType == ENDPOINT_START )
     {
-    // We do not have a pad, which is a always terminal point for a track
+        // We do not have a pad, which is a always terminal point for a track
         if( aTrackRef->GetState( START_ON_PAD ) )
             return NULL;
 
@@ -741,8 +740,6 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
     }
     else    // aEndType == END
     {
-
-
         // We do not have a pad, which is a always terminal point for a track
         if( aTrackRef->GetState( END_ON_PAD ) )
             return NULL;

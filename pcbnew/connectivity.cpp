@@ -59,13 +59,6 @@ bool CONNECTIVITY_DATA::Remove( BOARD_ITEM* aItem )
 }
 
 
-/**
- * Function Update()
- * Updates the connectivity data for an item.
- * @param aItem is an item to be updated.
- * @return True if operation succeeded. The item will not be updated if it was not previously
- * added to the ratsnest.
- */
 bool CONNECTIVITY_DATA::Update( BOARD_ITEM* aItem )
 {
     m_connAlgo->Remove( aItem );
@@ -105,9 +98,9 @@ void CONNECTIVITY_DATA::updateRatsnest()
     int i;
 
     #ifdef USE_OPENMP
-            #pragma omp parallel shared(lastNet) private(i)
+        #pragma omp parallel shared(lastNet) private(i)
     {
-                #pragma omp for schedule(guided, 1)
+        #pragma omp for schedule(guided, 1)
     #else /* USE_OPENMP */
     {
     #endif
@@ -122,6 +115,7 @@ void CONNECTIVITY_DATA::updateRatsnest()
             }
         }
     }          /* end of parallel section */
+
     #ifdef PROFILE
     rnUpdate.Show();
     #endif /* PROFILE */
@@ -339,13 +333,13 @@ const std::list<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems(
             aTypes, aItem->GetNetCode() );
 
     for( auto cl : clusters )
+    {
         if( cl->Contains( aItem ) )
         {
             for( const auto item : *cl )
                 rv.push_back( item->Parent() );
         }
-
-
+    }
 
     return rv;
 }
@@ -354,13 +348,13 @@ const std::list<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems(
 const std::list<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetNetItems( int aNetCode,
         const KICAD_T aTypes[] ) const
 {
-    std::set<BOARD_CONNECTED_ITEM *> items;
-    std::list<BOARD_CONNECTED_ITEM *> rv;
+    std::set<BOARD_CONNECTED_ITEM*> items;
+    std::list<BOARD_CONNECTED_ITEM*> rv;
 
     // fixme: apply aTypes
 
-    m_connAlgo->ForEachItem( [&items, aNetCode] ( CN_ITEM* aItem) {
-        if ( aItem->Net() == aNetCode )
+    m_connAlgo->ForEachItem( [&items, aNetCode] ( CN_ITEM* aItem ) {
+        if( aItem->Net() == aNetCode )
             items.insert( aItem->Parent() );
     } );
 
@@ -395,7 +389,7 @@ bool CONNECTIVITY_DATA::CheckConnectivity( std::vector<CN_DISJOINT_NET_ENTRY>& a
 }
 
 
-const std::vector<TRACK*> CONNECTIVITY_DATA::GetConnectedTracks(  const BOARD_CONNECTED_ITEM* aItem )
+const std::vector<TRACK*> CONNECTIVITY_DATA::GetConnectedTracks( const BOARD_CONNECTED_ITEM* aItem )
 const
 {
     auto& entry = m_connAlgo->ItemEntry( aItem );
@@ -417,7 +411,7 @@ const
 }
 
 
-const std::vector<D_PAD*> CONNECTIVITY_DATA::GetConnectedPads(  const BOARD_CONNECTED_ITEM* aItem )
+const std::vector<D_PAD*> CONNECTIVITY_DATA::GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem )
 const
 {
     auto& entry = m_connAlgo->ItemEntry( aItem );
@@ -464,10 +458,11 @@ unsigned int CONNECTIVITY_DATA::GetPadCount( int aNet ) const
 {
     int n = 0;
 
-    for ( auto pad : m_connAlgo->PadList() )
+    for( auto pad : m_connAlgo->PadList() )
     {
         auto dpad = static_cast<D_PAD*>( pad->Parent() );
-        if ( aNet < 0 || aNet == dpad->GetNetCode() )
+
+        if( aNet < 0 || aNet == dpad->GetNetCode() )
         {
             n++;
         }
@@ -513,12 +508,12 @@ const std::vector<VECTOR2I> CONNECTIVITY_DATA::NearestUnconnectedTargets(
             {
                 if( item->Parent()->GetNetCode() == refNet
                     && item->Parent()->Type() != PCB_ZONE_AREA_T )
+                {
                     for( auto anchor : item->Anchors() )
                     {
                         anchors.insert( anchor->Pos() );
                     }
-
-
+                }
             }
         }
     }
@@ -538,12 +533,12 @@ const std::vector<VECTOR2I> CONNECTIVITY_DATA::NearestUnconnectedTargets(
     return rv;
 }
 
+
 void CONNECTIVITY_DATA::GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges) const
 {
-
-    for (   auto rnNet : m_nets )
+    for( auto rnNet : m_nets )
     {
-        if ( rnNet )
+        if( rnNet )
         {
             for( auto edge : rnNet->GetEdges() )
             {
@@ -553,7 +548,9 @@ void CONNECTIVITY_DATA::GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges) const
     }
 }
 
-const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aAnchor, KICAD_T aTypes[] )
+
+const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems(
+        const BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aAnchor, KICAD_T aTypes[] )
 {
     auto& entry = m_connAlgo->ItemEntry( aItem );
     std::vector<BOARD_CONNECTED_ITEM* > rv;
@@ -562,11 +559,11 @@ const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems( c
     {
         for( auto anchor : cnItem->Anchors() )
         {
-            if ( anchor->Pos() == aAnchor )
+            if( anchor->Pos() == aAnchor )
             {
                 for( int i = 0; aTypes[i] > 0; i++ )
                 {
-                    if ( cnItem->Parent()->Type() == aTypes[i] )
+                    if( cnItem->Parent()->Type() == aTypes[i] )
                     {
                         rv.push_back( cnItem->Parent() );
                         break;

@@ -70,7 +70,7 @@ public:
 
 protected:
     ///> Object containing ratsnest data.
-     std::shared_ptr<CONNECTIVITY_DATA> m_data;
+    std::shared_ptr<CONNECTIVITY_DATA> m_data;
 };
 
 }   // namespace KIGFX

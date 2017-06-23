@@ -145,8 +145,6 @@ private:
     ///> of edit reference point).
     VECTOR2I m_cursor;
 
-    std::unique_ptr<CONNECTIVITY_DATA> m_dynamicConnectivity;
-
     ///> Updates ratsnest for selected items.
     ///> @param aRedraw says if selected items should be drawn using the simple mode (e.g. one line
     ///> per item).

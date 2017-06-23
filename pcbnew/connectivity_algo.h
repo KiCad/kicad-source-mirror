@@ -145,6 +145,7 @@ private:
 typedef std::shared_ptr<CN_ANCHOR>  CN_ANCHOR_PTR;
 typedef std::vector<CN_ANCHOR_PTR>  CN_ANCHORS;
 
+
 class CN_EDGE
 {
 public:
@@ -188,6 +189,7 @@ private:
     unsigned int m_weight = 0;
     bool m_visible = true;
 };
+
 
 class CN_CLUSTER
 {
@@ -247,6 +249,7 @@ public:
 };
 
 typedef std::shared_ptr<CN_CLUSTER> CN_CLUSTER_PTR;
+
 
 // a lightweight intrusive list container
 template <class T>
@@ -320,6 +323,7 @@ private:
     T* m_root;
 };
 
+
 // basic connectivity item
 class CN_ITEM : public INTRUSIVE_LIST<CN_ITEM>
 {
@@ -328,21 +332,21 @@ private:
 
     using CONNECTED_ITEMS = std::vector<CN_ITEM*>;
 
-// list of items physically connected (touching)
+    ///> list of items physically connected (touching)
     CONNECTED_ITEMS m_connected;
 
     CN_ANCHORS m_anchors;
 
-// visited flag for the BFS scan
+    ///> visited flag for the BFS scan
     bool m_visited;
 
-// can the net propagator modify the netcode?
+    ///> can the net propagator modify the netcode?
     bool m_canChangeNet;
 
-// valid flag, used to identify garbage items (we use lazy removal)
+    ///> valid flag, used to identify garbage items (we use lazy removal)
     bool m_valid;
 
-// dirty flag, used to identify recently added item not yet scanned into the connectivity search
+    ///> dirty flag, used to identify recently added item not yet scanned into the connectivity search
     bool m_dirty;
 
 public:
@@ -362,7 +366,7 @@ public:
 
     CN_ANCHOR_PTR AddAnchor( const VECTOR2I& aPos )
     {
-        m_anchors.emplace_back( std::make_shared<CN_ANCHOR> ( aPos, this ) );
+        m_anchors.emplace_back( std::make_shared<CN_ANCHOR>( aPos, this ) );
         //printf("%p add %d\n", this, m_anchors.size() );
         return m_anchors.back();
     }
@@ -461,6 +465,7 @@ public:
 
 typedef std::shared_ptr<CN_ITEM> CN_ITEM_PTR;
 
+
 class CN_LIST
 {
 private:
@@ -491,7 +496,7 @@ public:
     CN_LIST()
     {
         m_dirty = false;
-    };
+    }
 
     void Clear()
     {
@@ -558,7 +563,6 @@ public:
 class CN_PAD_LIST : public CN_LIST
 {
 public:
-
     CN_ITEM* Add( D_PAD* pad )
     {
         auto item = new CN_ITEM( pad, false, 2 );
@@ -568,8 +572,9 @@ public:
 
         SetDirty();
         return item;
-    };
+    }
 };
+
 
 class CN_TRACK_LIST : public CN_LIST
 {
@@ -585,8 +590,9 @@ public:
         SetDirty();
 
         return item;
-    };
+    }
 };
+
 
 class CN_VIA_LIST : public CN_LIST
 {
@@ -599,8 +605,9 @@ public:
         addAnchor( via->GetStart(), item );
         SetDirty();
         return item;
-    };
+    }
 };
+
 
 class CN_ZONE : public CN_ITEM
 {
@@ -674,11 +681,12 @@ public:
         }
 
         return rv;
-    };
+    }
 
     template <class T>
     void FindNearbyZones( BOX2I aBBox, T aFunc, bool aDirtyOnly = false );
 };
+
 
 template <class T>
 void CN_LIST::FindNearby( BOX2I aBBox, T aFunc, bool aDirtyOnly )
@@ -686,10 +694,10 @@ void CN_LIST::FindNearby( BOX2I aBBox, T aFunc, bool aDirtyOnly )
     for( auto p : m_anchors )
     {
         if( p->Valid() && aBBox.Contains( p->Pos() ) )
+        {
             if( !aDirtyOnly || p->IsDirty() )
                 aFunc( p );
-
-
+        }
     }
 }
 
@@ -699,7 +707,7 @@ void CN_ZONE_LIST::FindNearbyZones( BOX2I aBBox, T aFunc, bool aDirtyOnly )
 {
     for( auto item : m_items )
     {
-        auto zone = static_cast<CN_ZONE*> ( item );
+        auto zone = static_cast<CN_ZONE*>( item );
 
         if( aBBox.Intersects( zone->BBox() ) )
         {
@@ -735,7 +743,7 @@ void CN_LIST::FindNearby( VECTOR2I aPosition, int aDistMax, T aFunc, bool aDirty
     {
         // Calculate half size of remaining interval to test.
         // Ensure the computed value is not truncated (too small)
-        if( (delta & 1) && ( delta > 1 ) )
+        if( ( delta & 1 ) && ( delta > 1 ) )
             delta++;
 
         delta /= 2;
@@ -787,12 +795,10 @@ void CN_LIST::FindNearby( VECTOR2I aPosition, int aDistMax, T aFunc, bool aDirty
         if( p->Valid() )
             if( !aDirtyOnly || p->IsDirty() )
                 aFunc( p );
-
-
     }
 
     // search previous candidates in list
-    for(  int ii = idx - 1; ii >=0; ii-- )
+    for( int ii = idx - 1; ii >=0; ii-- )
     {
         auto& p = m_anchors[ii];
         diff = p->Pos() - aPosition;
@@ -805,10 +811,10 @@ void CN_LIST::FindNearby( VECTOR2I aPosition, int aDistMax, T aFunc, bool aDirty
 
         // We have here a good candidate:add it
         if( p->Valid() )
+        {
             if( !aDirtyOnly || p->IsDirty() )
                 aFunc( p );
-
-
+        }
     }
 }
 
@@ -873,7 +879,7 @@ public:
     CLUSTERS m_ratsnestClusters;
     std::vector<bool> m_dirtyNets;
 
-    void            searchConnections( bool aIncludeZones = false );
+    void    searchConnections( bool aIncludeZones = false );
 
     void    update();
     void    propagateConnections();
@@ -889,8 +895,8 @@ public:
     bool addConnectedItem( BOARD_CONNECTED_ITEM* aItem );
     bool isDirty() const;
 
-    void    markNetAsDirty( int aNet );
-    void    markItemNetAsDirty( const BOARD_ITEM* aItem );
+    void markNetAsDirty( int aNet );
+    void markItemNetAsDirty( const BOARD_ITEM* aItem );
 
 public:
 

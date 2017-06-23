@@ -1389,19 +1389,19 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             const auto  lset    = aVia->GetLayerSet();
 
             for( auto tv : m_board->Tracks() ) // fixme: move to BOARD class?
-                if( tv->HitTest( pos ) && (tv->GetLayerSet() &
-                                           lset ).any() )
+            {
+                if( tv->HitTest( pos ) && ( tv->GetLayerSet() & lset ).any() )
                     return -1;
-
-
+            }
 
             for( auto mod : m_board->Modules() )
+            {
                 for( auto pad : mod->Pads() )
-                    if( pad->HitTest( pos ) && (pad->GetLayerSet() &
-                                                lset ).any() )
+                {
+                    if( pad->HitTest( pos ) && ( pad->GetLayerSet() & lset ).any() )
                         return -1;
-
-
+                }
+            }
 
             std::vector<ZONE_CONTAINER*> foundZones;
 
@@ -1511,7 +1511,6 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 break;
             }
 
-
             return std::unique_ptr<BOARD_ITEM>( via );
         }
     };
@@ -1520,8 +1519,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
     frame()->SetToolID( ID_PCB_DRAW_VIA_BUTT, wxCURSOR_PENCIL, _( "Add vias" ) );
 
-    doInteractiveItemPlacement( &placer, _(
-                    "Place via" ),
+    doInteractiveItemPlacement( &placer, _( "Place via" ),
             IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP | IPO_PROPERTIES );
 
     frame()->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );

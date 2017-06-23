@@ -116,10 +116,10 @@ static void build_pad_testpoints( BOARD *aPcb,
 {
     wxPoint origin = aPcb->GetAuxOrigin();
 
-    for( MODULE *module = aPcb->m_Modules;
+    for( MODULE* module = aPcb->m_Modules;
         module; module = module->Next() )
     {
-        for( D_PAD *pad = module->PadsList();  pad; pad = pad->Next() )
+        for( D_PAD* pad = module->PadsList();  pad; pad = pad->Next() )
         {
             D356_RECORD rk;
             rk.access = compute_pad_access_code( aPcb, pad->GetLayerSet() );

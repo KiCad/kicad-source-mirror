@@ -184,7 +184,7 @@ public:
      * Calculates the temporary dynamic ratsnest (i.e. the ratsnest lines that)
      * for the set of items aItems.
      */
-    void ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& aItems  );
+    void ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& aItems );
 
 
     const std::vector<RN_DYNAMIC_LINE>& GetDynamicRatsnest() const;
@@ -215,7 +215,7 @@ public:
 
     std::shared_ptr<CN_CONNECTIVITY_ALGO> GetConnectivityAlgo() const
     {
-         return m_connAlgo;
+        return m_connAlgo;
     }
 
 private:

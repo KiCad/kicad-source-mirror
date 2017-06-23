@@ -35,7 +35,7 @@
 #include "pcb_actions.h"
 #include "tool_event_utils.h"
 
-void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE *aPlacer,
+void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer,
                                            const wxString& aCommitMessage,
                                            int aOptions )
 {
@@ -59,7 +59,7 @@ void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE *aPlacer,
     aPlacer->m_board = board();
     aPlacer->m_frame = frame();
 
-    if ( aOptions & IPO_SINGLE_CLICK )
+    if( aOptions & IPO_SINGLE_CLICK )
     {
         VECTOR2I cursorPos = controls()->GetCursorPosition();
 
@@ -83,7 +83,7 @@ void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE *aPlacer,
 
                 preview.Clear();
 
-                if ( aOptions & IPO_SINGLE_CLICK )
+                if( aOptions & IPO_SINGLE_CLICK )
                     break;
 
                 controls()->SetAutoPan( false );
@@ -144,10 +144,11 @@ void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE *aPlacer,
                 controls()->CaptureCursor( false );
                 controls()->SetAutoPan( false );
                 controls()->ShowCursor( true );
-                if (! ( aOptions & IPO_REPEAT ) )
+
+                if( !( aOptions & IPO_REPEAT ) )
                     break;
 
-                if ( aOptions & IPO_SINGLE_CLICK )
+                if( aOptions & IPO_SINGLE_CLICK )
                 {
                     VECTOR2I pos = controls()->GetCursorPosition();
 
@@ -156,7 +157,6 @@ void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE *aPlacer,
 
                     preview.Add( newItem.get() );
                 }
-
             }
         }
 

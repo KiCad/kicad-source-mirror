@@ -156,7 +156,7 @@ void DRAG_LIST::BuildDragListe( MODULE* aModule )
 
     std::vector<D_PAD*> padList;
 
-    for ( auto pad : aModule->Pads() )
+    for( auto pad : aModule->Pads() )
         padList.push_back( pad );
 
     sort( padList.begin(), padList.end(), sortPadsByXthenYCoord );
@@ -192,7 +192,7 @@ void DRAG_LIST::fillList( std::vector<D_PAD*>& aList )
         auto connectedTracks = m_Brd->GetConnectivity()->GetConnectedTracks( pad );
 
         // store track connected to the pad
-        for ( auto track : connectedTracks )
+        for( auto track : connectedTracks )
         {
             track->start = NULL;
             track->end = NULL;
@@ -206,9 +206,8 @@ void DRAG_LIST::fillList( std::vector<D_PAD*>& aList )
         auto connectedTracks = m_Brd->GetConnectivity()->GetConnectedTracks( pad );
 
         // store track connected to the pad
-        for ( auto track : connectedTracks )
+        for( auto track : connectedTracks )
         {
-
             if( pad->HitTest( track->GetStart() ) )
             {
                 track->start = pad;

@@ -160,6 +160,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
         DBG( g_CurrentTrackList.VerifyListIntegrity() );
 
         int net = -1;
+
         if( lockPoint )
             net = lockPoint->GetNetCode();
 
@@ -798,7 +799,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     // If the starting point is on a pad, add current track length+ length die
     if( g_FirstTrackSegment->GetState( BEGIN_ONPAD ) )
     {
-        D_PAD * pad = (D_PAD *) g_FirstTrackSegment->start;
+        D_PAD* pad = (D_PAD*) g_FirstTrackSegment->start;
         lenPadToDie = (double) pad->GetPadToDieLength();
     }
 

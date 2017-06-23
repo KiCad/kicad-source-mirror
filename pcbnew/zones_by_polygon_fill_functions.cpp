@@ -117,10 +117,10 @@ int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* aZone )
 
     wxBusyCursor dummy;     // Shows an hourglass cursor (removed by its destructor)
 
-    BOARD_COMMIT  commit ( this );
+    BOARD_COMMIT commit( this );
     commit.Modify( aZone );
     aZone->BuildFilledSolidAreasPolygons( GetBoard() );
-    commit.Push ( _("Fill Zone"), false );
+    commit.Push( _( "Fill Zone" ), false );
 
     //GetGalCanvas()->GetView()->Update( aZone, KIGFX::ALL );
     //GetBoard()->GetConnectivity()->Update( aZone );
@@ -189,7 +189,9 @@ int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
 
     // Recalculate the active ratsnest, i.e. the unconnected links
     //TestForActiveLinksInRatsnest( 0 );
+
     if( progressDialog )
         progressDialog->Destroy();
+
     return errorLevel;
 }

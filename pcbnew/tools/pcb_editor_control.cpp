@@ -485,12 +485,12 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         }
     }
 
-	controls->ShowCursor( false );
+    controls->ShowCursor( false );
     controls->SetSnapping( false );
     controls->SetAutoPan( false );
     controls->CaptureCursor( false );
 
-	view->Remove( &preview );
+    view->Remove( &preview );
     m_frame->SetNoToolSelected();
 
     return 0;
@@ -836,23 +836,23 @@ int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
 
         if( firstZone )
         {
-		    if( firstZone->GetNetCode() != netcode )
-		        continue;
+            if( firstZone->GetNetCode() != netcode )
+                continue;
 
-		    if( curr_area->GetPriority() != firstZone->GetPriority() )
-		        continue;
+            if( curr_area->GetPriority() != firstZone->GetPriority() )
+                continue;
 
-		    if( curr_area->GetIsKeepout() != firstZone->GetIsKeepout() )
-		        continue;
+            if( curr_area->GetIsKeepout() != firstZone->GetIsKeepout() )
+                continue;
 
-		    if( curr_area->GetLayer() != firstZone->GetLayer() )
-		        continue;
+            if( curr_area->GetLayer() != firstZone->GetLayer() )
+                continue;
 
-		    if( !board->TestAreaIntersection( curr_area, firstZone ) )
-		        continue;
+            if( !board->TestAreaIntersection( curr_area, firstZone ) )
+                continue;
 
-		    toMerge.push_back( curr_area );
-		}
+            toMerge.push_back( curr_area );
+        }
         else
         {
             toMerge.push_back( curr_area );
@@ -1088,6 +1088,7 @@ int PCB_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+
 static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 {
     auto selectionTool = aToolMgr->GetTool<SELECTION_TOOL>();
@@ -1100,11 +1101,11 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition
     if( selection.Empty() )
         return true;
 
-    for ( auto item : selection )
+    for( auto item : selection )
     {
-        if ( item->Type() == PCB_MODULE_T )
+        if( item->Type() == PCB_MODULE_T )
         {
-            for ( auto pad : static_cast<MODULE *> (item)->Pads() )
+            for( auto pad : static_cast<MODULE *> (item)->Pads() )
             {
                 pad->SetLocalRatsnestVisible( true );
             }
@@ -1113,6 +1114,7 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition
 
     return true;
 }
+
 
 int PCB_EDITOR_CONTROL::ShowLocalRatsnest( const TOOL_EVENT& aEvent )
 {
@@ -1129,6 +1131,7 @@ int PCB_EDITOR_CONTROL::ShowLocalRatsnest( const TOOL_EVENT& aEvent )
 
     return 0;
 }
+
 
 int PCB_EDITOR_CONTROL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
 {
@@ -1179,7 +1182,7 @@ void PCB_EDITOR_CONTROL::SetTransitions()
     Go( &PCB_EDITOR_CONTROL::DrillOrigin,         PCB_ACTIONS::drillOrigin.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNet,        PCB_ACTIONS::highlightNet.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  PCB_ACTIONS::highlightNetCursor.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ShowLocalRatsnest,  PCB_ACTIONS::showLocalRatsnest.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ShowLocalRatsnest,   PCB_ACTIONS::showLocalRatsnest.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::UpdateSelectionRatsnest, PCB_ACTIONS::selectionModified.MakeEvent() );
 }
 

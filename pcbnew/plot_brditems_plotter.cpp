@@ -238,7 +238,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
             PlotTextModule( &aModule->Value(), GetValueColor() );
     }
 
-    for( BOARD_ITEM *item = aModule->GraphicalItemsList().GetFirst(); item; item = item->Next() )
+    for( BOARD_ITEM* item = aModule->GraphicalItemsList().GetFirst(); item; item = item->Next() )
     {
         textModule = dyn_cast<TEXTE_MODULE*>( item );
 
@@ -810,7 +810,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
     if( GetPlotMode() == FILLED )
          m_plotter->SetColor( WHITE );
 
-    for( TRACK *pts = m_board->m_Track; pts != NULL; pts = pts->Next() )
+    for( TRACK* pts = m_board->m_Track; pts != NULL; pts = pts->Next() )
     {
         const VIA* via = dyn_cast<const VIA*>( pts );
 
@@ -820,9 +820,9 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
                     wxSize( via->GetWidth(), 0 ), 0, small_drill );
     }
 
-    for( MODULE *Module = m_board->m_Modules; Module != NULL; Module = Module->Next() )
+    for( MODULE* Module = m_board->m_Modules; Module != NULL; Module = Module->Next() )
     {
-        for( D_PAD *pad = Module->PadsList(); pad != NULL; pad = pad->Next() )
+        for( D_PAD* pad = Module->PadsList(); pad != NULL; pad = pad->Next() )
         {
             if( pad->GetDrillSize().x == 0 )
                 continue;

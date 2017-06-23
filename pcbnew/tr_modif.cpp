@@ -268,13 +268,13 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
                         pt_del->UnLink();
                         pt_del->SetStatus( 0 );
                         pt_del->ClearFlags();
-                        GetBoard()->GetConnectivity()->Remove ( pt_del );
+                        GetBoard()->GetConnectivity()->Remove( pt_del );
                         ITEM_PICKER picker( pt_del, UR_DELETED );
                         aItemsListPicker->PushItem( picker );
                     }
                     else
                     {
-                        GetBoard()->GetConnectivity()->Remove ( pt_del );
+                        GetBoard()->GetConnectivity()->Remove( pt_del );
                         pt_del->DeleteStructure();
                     }
                 }

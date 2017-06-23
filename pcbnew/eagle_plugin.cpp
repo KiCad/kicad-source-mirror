@@ -1740,14 +1740,15 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                     via->SetDrill( drillz );
 
-// make sure the via diameter respects the restring rules
+                    // make sure the via diameter respects the restring rules
 
                     if( !v.diam || via->GetWidth() <= via->GetDrill() )
                     {
-                        double annulus = Clamp( m_rules->rlMinViaOuter, (double) (via->GetWidth() / 2 - via->GetDrill()), m_rules->rlMaxViaOuter );
+                        double annulus = Clamp( m_rules->rlMinViaOuter,
+                                (double)( via->GetWidth() / 2 - via->GetDrill() ), m_rules->rlMaxViaOuter );
                         via->SetWidth( drillz + 2 * annulus );
                     }
-                    
+
                     if( kidiam < m_min_via )
                         m_min_via = kidiam;
 
@@ -1770,6 +1771,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                     via->SetNetCode( netCode );
                 }
+
                 m_xpath->pop();
             }
 

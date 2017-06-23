@@ -830,7 +830,7 @@ void SELECTION_TOOL::selectAllItemsConnectedToTrack( TRACK& aSourceTrack )
 
 void SELECTION_TOOL::selectAllItemsConnectedToItem( BOARD_CONNECTED_ITEM& aSourceItem )
 {
-	constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
+    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
     auto connectivity = board()->GetConnectivity();
 
     std::list<BOARD_CONNECTED_ITEM*> items;

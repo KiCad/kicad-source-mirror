@@ -65,6 +65,7 @@ static const wxString traceFootprintLibrary( wxT( "KicadFootprintLib" ) );
 void filterNetClass( const BOARD& aBoard, NETCLASS& aNetClass )
 {
     auto connectivity = aBoard.GetConnectivity();
+
     for( NETCLASS::iterator it = aNetClass.begin(); it != aNetClass.end(); )
     {
         NETINFO_ITEM* netinfo = aBoard.FindNet( *it );
@@ -74,7 +75,6 @@ void filterNetClass( const BOARD& aBoard, NETCLASS& aNetClass )
         else
             ++it;
     }
-
 }
 
 /**
