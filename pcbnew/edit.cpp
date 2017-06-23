@@ -54,6 +54,7 @@
 #include <dialog_global_edit_tracks_and_vias.h>
 #include <invoke_pcb_dialog.h>
 #include <array_creator.h>
+#include <connectivity.h>
 
 #include <dialog_move_exact.h>
 
@@ -644,11 +645,13 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             ZONE_CONTAINER* zone_container = (ZONE_CONTAINER*) GetCurItem();
             zone_container->UnFill();
-            TestNetConnection( NULL, zone_container->GetNetCode() );
+            GetBoard()->GetConnectivity()->Update( zone_container );
             OnModify();
             SetMsgPanel( GetBoard() );
             m_canvas->Refresh();
         }
+
+        Compile_Ratsnest( &dc, false );
         SetCurItem( NULL );
         break;
 
@@ -660,10 +663,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             // Remove filled areas in zone
             ZONE_CONTAINER* zone_container = GetBoard()->GetArea( ii );
             zone_container->UnFill();
+            GetBoard()->GetConnectivity()->Update( zone_container );
         }
 
+        Compile_Ratsnest( &dc, false );
         SetCurItem( NULL );        // CurItem might be deleted by this command, clear the pointer
-	// fixme
         OnModify();
         SetMsgPanel( GetBoard() );
         m_canvas->Refresh();
