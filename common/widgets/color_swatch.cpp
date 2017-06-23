@@ -152,6 +152,9 @@ void COLOR_SWATCH::GetNewSwatchColor()
     {
         wxColourData colourData;
         colourData.SetColour( m_color.ToColour() );
+        // Has effect only on Windows: shows the full color dialog
+        colourData.SetChooseFull(true);
+
         wxColourDialog dialog( this, &colourData );
 
         if( dialog.ShowModal() == wxID_OK )
