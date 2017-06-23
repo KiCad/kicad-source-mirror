@@ -797,6 +797,7 @@ int SELECTION_TOOL::selectCopper( const TOOL_EVENT& aEvent )
     for( auto i : selection )
     {
         auto item = static_cast<BOARD_ITEM*>( i );
+
         // only connected items can be traversed in the ratsnest
         if( item->IsConnected() )
         {
@@ -862,6 +863,7 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
     for( auto i : selection )
     {
         auto item = static_cast<BOARD_ITEM*>( i );
+
         // only connected items get a net code
         if( item->IsConnected() )
         {
@@ -999,7 +1001,6 @@ int SELECTION_TOOL::selectOnSheetFromEeschema( const TOOL_EVENT& aEvent )
 
     if( m_selection.Size() > 0 )
         m_toolMgr->ProcessEvent( SelectedEvent );
-
 
     return 0;
 }

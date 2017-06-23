@@ -141,39 +141,6 @@ public:
 
     bool NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode1, CN_ANCHOR_PTR& aNode2 ) const;
 
-    /**
-     * Function GetClosestNode()
-     * Returns a single node that lies in the shortest distance from a specific node and meets
-     * selected filter criterion.
-     * @param aNode is the node for which the closest node is searched.
-     * @param aFilter is a functor that filters nodes.
-     */
-    /*const CN_ANCHOR_PTR GetClosestNode( const RN_NODE_PTR& aNode,
-                                      const RN_NODE_FILTER& aFilter ) const;*/
-
-    /**
-     * Function GetClosestNodes()
-     * Returns list of nodes sorted by the distance from a specific node.
-     * @param aNode is the node for which the closest nodes are searched.
-     * @param aNumber is asked number of returned nodes. If it is negative then all nodes that
-     * belong to the same net are returned. If asked number is greater than number of possible
-     * nodes then the size of list is limited to number of possible nodes.
-     */
-    //std::list<RN_NODE_PTR> GetClosestNodes( const RN_NODE_PTR& aNode, int aNumber = -1 ) const;
-
-    /**
-     * Function GetClosestNodes()
-     * Returns filtered list of nodes sorted by the distance from a specific node.
-     * @param aNode is the node for which the closest nodes are searched.
-     * @param aFilter is a functor that filters nodes.
-     * @param aNumber is asked number of returned nodes. If it is negative then all nodes that
-     * belong to the same net are returned. If asked number is greater than number of possible
-     * nodes then the size of list is limited to number of possible nodes.
-     */
-    //std::list<RN_NODE_PTR> GetClosestNodes( const RN_NODE_PTR& aNode,
-    //                                        const RN_NODE_FILTER& aFilter, int aNumber = -1 ) const;
-
-
 protected:
     ///> Recomputes ratsnest from scratch.
     void compute();

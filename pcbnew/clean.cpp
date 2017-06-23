@@ -167,15 +167,12 @@ void PCB_EDIT_FRAME::Clean_Pcb()
     m_canvas->Refresh( true );
 }
 
-extern void RebuildTrackChain ( BOARD *brd);
 
 void TRACKS_CLEANER::buildTrackConnectionInfo()
 {
     auto connectivity = m_brd->GetConnectivity();
 
     connectivity->Build(m_brd);
-
-    //RebuildTrackChain ( m_brd );
 
     // clear flags and variables used in cleanup
     for( auto track : m_brd->Tracks() )
@@ -199,17 +196,6 @@ void TRACKS_CLEANER::buildTrackConnectionInfo()
             }
         }
     }
-
-#if 0
-    printf("bci\n");
-    for( TRACK* segment = m_brd->m_Track; segment; segment = segment->Next() )
-    {
-        if( segment->Type() == PCB_TRACE_T )
-        {
-            printf("s %d %d %d %d %d %x\n", segment->GetStart().x, segment->GetStart().y, segment->GetEnd().x, segment->GetEnd().y, segment->GetLayer(),  segment->GetStatus() );
-        }
-    }
-#endif
 }
 
 
@@ -667,46 +653,6 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
                 aCandidate->GetEnd().x - aCandidate->GetStart().x,
                 aCandidate->GetEnd().y - aCandidate->GetStart().y ) )
         return NULL;
-
-    /* Here we have 2 aligned segments:
-     * We must change the pt_ref common point only if not on a pad
-     * (this function) is called when there is only 2 connected segments,
-     * and if this point is not on a pad, it can be removed and the 2 segments will be merged
-     */
-
-
-
-#if 0
-
-
-     if(aTrackRef->GetNetCode() == 47)
-     {
-         auto pads = m_brd->GetConnectivity()->GetConnectedPads( aTrackRef );
-         printf("eps ref %d %d-%d %d pads-con %d eop %d sop %d\n",
-             aTrackRef->GetStart().x,
-             aTrackRef->GetStart().y,
-             aTrackRef->GetEnd().x,
-             aTrackRef->GetEnd().y,
-             pads.size(),
-             !!aTrackRef->GetState(END_ON_PAD),
-             !!aTrackRef->GetState(START_ON_PAD)
-
-             );
-
-         pads = m_brd->GetConnectivity()->GetConnectedPads( aCandidate );
-         printf("eps cand %d %d-%d %d pads-con %d eop %d sop %d\n",
-                 aCandidate->GetStart().x,
-                 aCandidate->GetStart().y,
-                 aCandidate->GetEnd().x,
-                 aCandidate->GetEnd().y,
-                 pads.size(),
-                 !!aCandidate->GetState(END_ON_PAD),
-                 !!aCandidate->GetState(START_ON_PAD)
-                 );
-
-        }
-
-#endif
 
     auto connectivity = m_brd->GetConnectivity();
 

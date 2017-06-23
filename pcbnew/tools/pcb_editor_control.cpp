@@ -1136,20 +1136,6 @@ int PCB_EDITOR_CONTROL::ShowLocalRatsnest( const TOOL_EVENT& aEvent )
 int PCB_EDITOR_CONTROL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
 {
     return 0;
-/*    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const SELECTION& selection = selTool->GetSelection();
-    RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
-
-    // Update "simple" ratsnest, computed for currently modified items
-    ratsnest->ClearSimple();
-
-    for( auto item : selection )
-    {
-        ratsnest->Update( static_cast<BOARD_ITEM*>( item ) );
-        ratsnest->AddSimple( static_cast<BOARD_ITEM*>( item ) );
-    }
-
-    return 0;*/
 }
 
 

@@ -888,23 +888,6 @@ const VECTOR2I CN_ZONE::GetAnchor( int n ) const
 }
 
 
-/*const std::vector<VECTOR2I> CN_CLUSTER::GetAnchors()
-{
-    std::vector<VECTOR2I> anchors;
-
-    for( auto item : m_items )
-    {
-        int cnt = item->AnchorCount();
-        for(int i = 0 ; i < cnt; i++)
-        {
-            anchors.push_back( item->GetAnchor(i) );
-        }
-    }
-
-    return anchors;
-}*/
-
-
 int CN_ITEM::Net() const
 {
     if( !m_parent )
