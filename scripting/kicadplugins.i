@@ -84,6 +84,85 @@ def GetWizardsBackTrace():
     return FULL_BACK_TRACE
 
 
+def LoadOnePlugin(Dirname, ModuleName):
+    """
+    Load the plugin file ModuleName found in folder Dirname.
+    If this file cannot be loaded, its name is stored in failed_wizards_list
+    and the error trace is stored in FULL_BACK_TRACE
+    """
+    import os
+    import sys
+    import traceback
+
+    global NOT_LOADED_WIZARDS
+    global FULL_BACK_TRACE
+
+    module_filename = os.path.join(Dirname, ModuleName)
+
+    try:  # If there is an error loading the script, skip it
+        mtime = os.path.getmtime(module_filename)
+
+        if KICAD_PLUGINS.has_key(ModuleName):
+            plugin = KICAD_PLUGINS[ModuleName]
+
+            if not plugin["modification_time"] == mtime:
+                mod = reload(plugin["ModuleName"])
+                plugin["modification_time"] = mtime
+            else:
+                mod = plugin["ModuleName"]
+        else:
+            mod = __import__(ModuleName[:-3], locals(), globals() )
+
+        KICAD_PLUGINS[ModuleName]={ "filename":module_filename,
+                                    "modification_time":mtime,
+                                    "ModuleName":mod }
+
+    except:
+        if NOT_LOADED_WIZARDS != "" :
+            NOT_LOADED_WIZARDS += "\n"
+        NOT_LOADED_WIZARDS += module_filename
+        FULL_BACK_TRACE += traceback.format_exc(sys.exc_info())
+        pass
+
+
+
+def LoadOneSubdirPlugin(Dirname, SubDirname):
+    """
+    Load the plugins found in folder Dirname/SubDirname, by loading __ini__.py file.
+    If files cannot be loaded, its name is stored in failed_wizards_list
+    and the error trace is stored in FULL_BACK_TRACE
+    """
+    import os
+    import sys
+    import traceback
+
+    global NOT_LOADED_WIZARDS
+    global FULL_BACK_TRACE
+
+    fullPath = os.path.join(Dirname,SubDirname)
+
+    if os.path.isdir(fullPath):
+        """
+        Skip subdir which does not contain __init__.py, becuase if can be
+        a non python subdir (can be a subdir for .xsl plugins for instance)
+        """
+        if os.path.exists( os.path.join(fullPath, '__init__.py') ):
+            try:  # If there is an error loading the script, skip it
+                __import__(SubDirname, locals(), globals())
+
+            except:
+                if NOT_LOADED_WIZARDS != "" :
+                    NOT_LOADED_WIZARDS += "\n"
+                NOT_LOADED_WIZARDS += fullPath
+                FULL_BACK_TRACE += traceback.format_exc(sys.exc_info())
+                pass
+
+        else:
+            if NOT_LOADED_WIZARDS != "" :
+                NOT_LOADED_WIZARDS += "\n"
+            NOT_LOADED_WIZARDS += 'Skip subdir ' + fullPath
+
+
 def LoadPlugins(bundlepath=None):
     """
     Initialise Scripting/Plugin python environment and load plugins.
@@ -149,7 +228,9 @@ def LoadPlugins(bundlepath=None):
 
     global FULL_BACK_TRACE
     FULL_BACK_TRACE=""          # clear any existing trace
-    failed_wizards_list=""
+
+    global NOT_LOADED_WIZARDS
+    NOT_LOADED_WIZARDS = ""     # save not loaded wizards names list for later use
 
     global KICAD_PLUGINS
 
@@ -161,38 +242,13 @@ def LoadPlugins(bundlepath=None):
 
         for module in os.listdir(plugins_dir):
             if os.path.isdir(os.path.join(plugins_dir,module)):
-                __import__(module, locals(), globals())
+                LoadOneSubdirPlugin(plugins_dir, module)
+                continue
 
             if module == '__init__.py' or module[-3:] != '.py':
                 continue
 
-            try:  # If there is an error loading the script, skip it
-                module_filename = os.path.join(plugins_dir,module)
-                mtime = os.path.getmtime(module_filename)
-
-                if KICAD_PLUGINS.has_key(module):
-                    plugin = KICAD_PLUGINS[module]
-                    if not plugin["modification_time"] == mtime:
-                        mod = reload(plugin["module"])
-                        plugin["modification_time"] = mtime
-                    else:
-                        mod = plugin["module"]
-                else:
-                    mod = __import__(module[:-3], locals(), globals() )
-
-                KICAD_PLUGINS[module]={"filename":module_filename,
-                                       "modification_time":mtime,
-                                       "module":mod}
-
-            except:
-                if failed_wizards_list != "" :
-                    failed_wizards_list += "\n"
-                failed_wizards_list += module_filename
-                FULL_BACK_TRACE += traceback.format_exc(sys.exc_info())
-                pass
-
-    global NOT_LOADED_WIZARDS
-    NOT_LOADED_WIZARDS = failed_wizards_list    # save not loaded wizards names list for later use
+            LoadOnePlugin(plugins_dir, module);
 
 
 class KiCadPlugin:
