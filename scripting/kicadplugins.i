@@ -136,9 +136,9 @@ def LoadPlugins(bundlepath=None):
         plugin_directories.append(os.path.join(config_path, 'scripting', 'plugins'))
 
     if sys.platform.startswith('linux'):
-        plugin_directories.append(os.environ['HOME']+'/.kicad_plugins/')
-        plugin_directories.append(os.environ['HOME']+'/.kicad/scripting/')
-        plugin_directories.append(os.environ['HOME']+'/.kicad/scripting/plugins/')
+        plugin_directories.append(os.path.join(os.environ['HOME'],'.kicad_plugins'))
+        plugin_directories.append(os.path.join(os.environ['HOME'],'.kicad','scripting'))
+        plugin_directories.append(os.path.join(os.environ['HOME'],'.kicad','scripting','plugins'))
 
     global PLUGIN_DIRECTORIES_SEARCH
     PLUGIN_DIRECTORIES_SEARCH=""
@@ -160,14 +160,14 @@ def LoadPlugins(bundlepath=None):
         sys.path.append(plugins_dir)
 
         for module in os.listdir(plugins_dir):
-            if os.path.isdir(plugins_dir+module):
+            if os.path.isdir(os.path.join(plugins_dir,module)):
                 __import__(module, locals(), globals())
 
             if module == '__init__.py' or module[-3:] != '.py':
                 continue
 
             try:  # If there is an error loading the script, skip it
-                module_filename = plugins_dir + "/" + module
+                module_filename = os.path.join(plugins_dir,module)
                 mtime = os.path.getmtime(module_filename)
 
                 if KICAD_PLUGINS.has_key(module):
