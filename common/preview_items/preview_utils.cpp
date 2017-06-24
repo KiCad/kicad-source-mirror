@@ -22,12 +22,8 @@
  */
 
 #include <preview_items/preview_utils.h>
-
 #include <gal/graphics_abstraction_layer.h>
-
 #include <base_units.h>
-
-using namespace KIGFX;
 
 
 COLOR4D KIGFX::PREVIEW::PreviewOverlayDefaultColor()
@@ -65,7 +61,7 @@ static wxString getDimensionUnit( EDA_UNITS_T aUnits )
         return _( "mm" );
 
     case DEGREES:
-        return _( "°" );
+        return _( "deg" );
 
     case UNSCALED_UNITS:
         break;
