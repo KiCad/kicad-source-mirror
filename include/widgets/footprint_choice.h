@@ -67,6 +67,7 @@ protected:
     /**
      * Veto a select event for the separator
      *
+     * @param aEvent - the wxCommandEvent caller
      * @param aInner - true if event was called for the inner list (ie the popup)
      */
     void TryVetoSelect( wxCommandEvent& aEvent, bool aInner );
@@ -84,6 +85,7 @@ protected:
     /**
      * For arrow key events, skip over separators.
      *
+     * @param aEvent - the wxKeyEvent caller
      * @param aInner - true if event was called for the inner list (ie the popup)
      */
     void TrySkipSeparator( wxKeyEvent& aEvent, bool aInner );

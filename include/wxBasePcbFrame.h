@@ -479,9 +479,10 @@ public:
      * used only in move footprint. It is not optimal, but it is fast and sufficient
      * to help a footprint placement
      * It shows the connections from a pad to the nearest connected pad
+     * @param aMoveVector = move vector of the footprint being moved.
      * @param aModule = module to consider.
      */
-    void build_ratsnest_module( MODULE *mod, wxPoint aMoveVector );
+    void build_ratsnest_module( MODULE *aModule, wxPoint aMoveVector );
 
     /**
      * Function TraceModuleRatsNest
@@ -522,8 +523,7 @@ public:
      * from the current new track to candidates during track creation
      * @param aItemRef = the item connected to the starting point of the new track (track or pad)
      * @param aPosition = the position of the new track end (usually the mouse cursor on grid)
-     * @param aInit = true to build full candidate list or false to update data
-     * When aInit = false, aItemRef is not used (can be NULL)
+     * @param aNet = the netcode of the track
      */
     void BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
                                    const wxPoint& aPosition,

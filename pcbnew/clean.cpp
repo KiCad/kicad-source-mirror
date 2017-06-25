@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2016 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
+ * Copyright (C) 2004-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,9 +49,8 @@ public:
     /**
      * the cleanup function.
      * return true if some item was modified
-     * @param aFrame = the PCB_EDIT_FRAME which handles the board
-     * @param aRemoveMisConnected = true to remove segments connecting 2 different nets
      * @param aCleanVias = true to remove superimposed vias
+     * @param aRemoveMisConnected = true to remove segments connecting 2 different nets
      * @param aMergeSegments = true to merge collinear segmenst and remove 0 len segm
      * @param aDeleteUnconnected = true to remove dangling tracks
      * (short circuits)

@@ -131,7 +131,7 @@ public:
      * Function GetAllItems()
      * Adds all stored items to a list.
      * @param aOutput is the list that will have items added.
-     * @param aType determines the type of added items.
+     * @param aTypes determines the type of added items.
      */
     void GetAllItems( std::list<BOARD_CONNECTED_ITEM*>& aOutput, const KICAD_T aTypes[] ) const;
 

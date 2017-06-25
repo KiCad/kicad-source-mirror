@@ -179,14 +179,14 @@ void PCB_BASE_FRAME::BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
 
 static MODULE movedModule( nullptr );
 
-void PCB_BASE_FRAME::build_ratsnest_module( MODULE* mod, wxPoint aMoveVector )
+void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule, wxPoint aMoveVector )
 {
     auto connectivity = GetBoard()->GetConnectivity();
 
-    movedModule = *mod;
+    movedModule = *aModule;
     movedModule.Move( -aMoveVector );
     connectivity->ClearDynamicRatsnest();
-    connectivity->BlockRatsnestItems( { mod } );
+    connectivity->BlockRatsnestItems( { aModule } );
     connectivity->ComputeDynamicRatsnest( { &movedModule } );
 }
 

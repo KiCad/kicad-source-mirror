@@ -169,7 +169,7 @@ public:
 
     /**
      * Creates a hot key code that refers to a legacy hot key setting, instead of a particular key.
-     * @param aHotKey is an ID of hot key to be referred (see @hotkeys.h).
+     * @param aHotKey is an ID of hot key to be referred (see hotkeys.h).
      */
     inline static int LegacyHotKey( int aHotKey )
     {

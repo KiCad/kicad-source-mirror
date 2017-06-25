@@ -387,7 +387,7 @@ class CINFO3D_VISU
 
     /**
      * @brief GetNrSegmentsCircle
-     * @param aDiameter: diameter in 3DU
+     * @param aDiameter3DU: diameter in 3DU
      * @return number of sides that should be used in that circle
      */
     unsigned int GetNrSegmentsCircle( float aDiameter3DU ) const;

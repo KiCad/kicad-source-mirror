@@ -95,6 +95,10 @@ public:
     /**
      * Filter by footprint filter list. Does not update the list.
      *
+     * @param aFilters is a wxArrayString of strings used to filter the list of available
+     * footprints (can be empty).
+     * The final fp list is the list of footprint names matching at least one filtering string.
+     * A filtering string is something like sm0402 or DIP*
      * @param aZeroFilters - if true, zero filters = zero footprints. If false, zero filters =
      *  not filtering.
      */

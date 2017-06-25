@@ -141,7 +141,6 @@ public:
      * is then typically added to another node via AddRefNode().
      *
      * @param aNodeName is the name of the node to search for
-     * @param aCaller is a pointer to the node invoking this function
      * @return is a valid node pointer on success, otherwise NULL
      */
     SGNODE* FindNode( const char *aNodeName );

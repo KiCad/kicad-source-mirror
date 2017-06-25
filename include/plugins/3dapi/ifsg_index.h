@@ -62,8 +62,7 @@ public:
      * Function AddIndex
      * adds a single index to the list
      *
-     * @param nIndices [in] the number of indices to be stored
-     * @param aIndexList [in] the index data
+     * @param aIndex is the new index to add
      */
     bool AddIndex( int aIndex );
 };

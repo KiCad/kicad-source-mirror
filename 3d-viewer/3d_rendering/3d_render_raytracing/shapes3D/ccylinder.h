@@ -41,9 +41,10 @@ class  CVCYLINDER : public COBJECT
 public:
     /**
      * Constructor CVCYLINDER
-     * @param aCenterPoint = position of the center of the plane
-     * @param aXSize = size by X axis
-     * @param aYSize = size by Y axis
+     * @param aCenterPoint = position of the vertical cylinder axis in the XY plane
+     * @param aZmin = bottom position (Z axis)
+     * @param aZmax = top position (Z axis)
+     * @param aRadius = radius of the cylinder
      */
     CVCYLINDER( SFVEC2F aCenterPoint, float aZmin, float aZmax, float aRadius );
 

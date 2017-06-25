@@ -55,7 +55,7 @@ public:
      * Constructor
      *
      * @param aToolMgr: tool manager instance the events will be sent to
-     * @param aActions: ACTIONS subclass instance for ::TranslateLegacyId()
+     * @param aActions: ACTIONS subclass instance for ACTIONS::TranslateLegacyId()
      */
     TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr, ACTIONS *aActions );
 
