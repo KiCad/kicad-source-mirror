@@ -65,14 +65,14 @@ protected:
 
     /**
      * Post a wxEVT_DATAVIEW_SELECTION_CHANGED to notify the selection handler
-     * that a new part has been selected.
+     * that a new part has been preselected.
      */
-    void postSelectEvent();
+    void postPreselectEvent();
 
     /**
-     * If a library or part is selected, the corresponding subtree is expanded/collapsed.
+     * Post COMPONENT_SELECTED event to notify the selection handler that a part has been selected.
      */
-    void handleSubtree();
+    void postSelectEvent();
 
     // Event handlers
     void onInitDialog( wxInitDialogEvent& aEvent );
@@ -85,6 +85,7 @@ protected:
     void onTreeActivate( wxDataViewEvent& aEvent );
 
     void onDetailsLink( wxHtmlLinkEvent& aEvent );
+    void onPreselect( wxCommandEvent& aEvent );
 
     CMP_TREE_MODEL_ADAPTER::PTR m_adapter;
 
@@ -92,5 +93,11 @@ protected:
     wxDataViewCtrl* m_tree_ctrl;
     wxHtmlWindow*   m_details_ctrl;
 };
+
+///> Custom event sent when a new component is preselected
+wxDECLARE_EVENT( COMPONENT_PRESELECTED, wxCommandEvent );
+
+///> Custom event sent when a component is selected
+wxDECLARE_EVENT( COMPONENT_SELECTED, wxCommandEvent );
 
 #endif /* COMPONENT_TREE_H */

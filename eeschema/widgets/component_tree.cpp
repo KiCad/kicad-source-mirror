@@ -84,6 +84,8 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent,
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &COMPONENT_TREE::onTreeActivate, this );
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED, &COMPONENT_TREE::onTreeSelect, this );
 
+    Bind( COMPONENT_PRESELECTED, &COMPONENT_TREE::onPreselect, this );
+
     Layout();
     sizer->Fit( this );
 }
@@ -106,30 +108,22 @@ void COMPONENT_TREE::selectIfValid( const wxDataViewItem& aTreeId )
     {
         m_tree_ctrl->EnsureVisible( aTreeId );
         m_tree_ctrl->Select( aTreeId );
-        postSelectEvent();
+        postPreselectEvent();
     }
+}
+
+
+void COMPONENT_TREE::postPreselectEvent()
+{
+    wxCommandEvent event( COMPONENT_PRESELECTED );
+    wxPostEvent( this, event );
 }
 
 
 void COMPONENT_TREE::postSelectEvent()
 {
-    wxDataViewEvent evt( wxEVT_DATAVIEW_SELECTION_CHANGED );
-    m_tree_ctrl->GetEventHandler()->ProcessEvent( evt );
-}
-
-
-void COMPONENT_TREE::handleSubtree()
-{
-    if( !GetSelectedAlias() )
-    {
-        // Expand library/part units subtree
-        auto const sel = m_tree_ctrl->GetSelection();
-
-        if( m_tree_ctrl->IsExpanded( sel ) )
-            m_tree_ctrl->Collapse( sel );
-        else
-            m_tree_ctrl->Expand( sel );
-    }
+    wxCommandEvent event( COMPONENT_SELECTED );
+    wxPostEvent( this, event );
 }
 
 
@@ -145,14 +139,14 @@ void COMPONENT_TREE::onInitDialog( wxInitDialogEvent& aEvent )
     }
 
     // There may be a part preselected in the model. Make sure it is displayed.
-    postSelectEvent();
+    postPreselectEvent();
 }
 
 
 void COMPONENT_TREE::onQueryText( wxCommandEvent& aEvent )
 {
     m_adapter->UpdateSearchString( m_query_ctrl->GetLineText( 0 ) );
-    postSelectEvent();
+    postPreselectEvent();
 
     // Required to avoid interaction with SetHint()
     // See documentation for wxTextEntry::SetHint
@@ -162,7 +156,8 @@ void COMPONENT_TREE::onQueryText( wxCommandEvent& aEvent )
 
 void COMPONENT_TREE::onQueryEnter( wxCommandEvent& aEvent )
 {
-    handleSubtree();
+    if( GetSelectedAlias() )
+        postSelectEvent();
 }
 
 
@@ -185,6 +180,38 @@ void COMPONENT_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
 
 void COMPONENT_TREE::onTreeSelect( wxDataViewEvent& aEvent )
 {
+    postPreselectEvent();
+}
+
+
+void COMPONENT_TREE::onTreeActivate( wxDataViewEvent& aEvent )
+{
+    if( !GetSelectedAlias() )
+    {
+        // Expand library/part units subtree
+        auto const sel = m_tree_ctrl->GetSelection();
+
+        if( m_tree_ctrl->IsExpanded( sel ) )
+            m_tree_ctrl->Collapse( sel );
+        else
+            m_tree_ctrl->Expand( sel );
+    }
+    else
+    {
+        postSelectEvent();
+    }
+}
+
+
+void COMPONENT_TREE::onDetailsLink( wxHtmlLinkEvent& aEvent )
+{
+    const wxHtmlLinkInfo& info = aEvent.GetLinkInfo();
+    ::wxLaunchDefaultBrowser( info.GetHref() );
+}
+
+
+void COMPONENT_TREE::onPreselect( wxCommandEvent& aEvent )
+{
     if( m_details_ctrl )
     {
         int unit = 0;
@@ -200,15 +227,5 @@ void COMPONENT_TREE::onTreeSelect( wxDataViewEvent& aEvent )
 }
 
 
-void COMPONENT_TREE::onTreeActivate( wxDataViewEvent& aEvent )
-{
-    handleSubtree();
-    aEvent.Skip();
-}
-
-
-void COMPONENT_TREE::onDetailsLink( wxHtmlLinkEvent& aEvent )
-{
-    const wxHtmlLinkInfo& info = aEvent.GetLinkInfo();
-    ::wxLaunchDefaultBrowser( info.GetHref() );
-}
+wxDEFINE_EVENT( COMPONENT_PRESELECTED, wxCommandEvent );
+wxDEFINE_EVENT( COMPONENT_SELECTED, wxCommandEvent );

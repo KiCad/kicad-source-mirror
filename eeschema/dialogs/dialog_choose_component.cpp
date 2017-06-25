@@ -82,8 +82,8 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
 
     Bind( wxEVT_INIT_DIALOG, &DIALOG_CHOOSE_COMPONENT::OnInitDialog, this );
     Bind( wxEVT_TIMER, &DIALOG_CHOOSE_COMPONENT::OnCloseTimer, this, m_dbl_click_timer->GetId() );
-    Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &DIALOG_CHOOSE_COMPONENT::OnTreeActivate, this );
-    Bind( wxEVT_DATAVIEW_SELECTION_CHANGED, &DIALOG_CHOOSE_COMPONENT::OnTreeSelect, this );
+    Bind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentPreselected, this );
+    Bind( COMPONENT_SELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentSelected, this );
 
     m_sch_view_ctrl->Bind( wxEVT_LEFT_DCLICK, &DIALOG_CHOOSE_COMPONENT::OnSchViewDClick, this );
     m_sch_view_ctrl->Bind( wxEVT_PAINT, &DIALOG_CHOOSE_COMPONENT::OnSchViewPaint, this );
@@ -156,35 +156,6 @@ void DIALOG_CHOOSE_COMPONENT::OnInitDialog( wxInitDialogEvent& aEvent )
 LIB_ALIAS* DIALOG_CHOOSE_COMPONENT::GetSelectedAlias( int* aUnit ) const
 {
     return m_tree->GetSelectedAlias( aUnit );
-}
-
-
-void DIALOG_CHOOSE_COMPONENT::OnTreeSelect( wxDataViewEvent& aEvent )
-{
-    std::cout << "dialog choose component handler" << std::endl;    // TODO
-    int unit = 0;
-    LIB_ALIAS* alias = m_tree->GetSelectedAlias( &unit );
-
-    m_sch_view_ctrl->Refresh();
-
-    if( alias )
-    {
-        ShowFootprintFor( alias );
-        PopulateFootprintSelector( alias );
-    }
-    else
-    {
-        if( m_fp_view_ctrl->IsInitialized() )
-            m_fp_view_ctrl->SetStatusText( wxEmptyString );
-
-        PopulateFootprintSelector( nullptr );
-    }
-}
-
-
-void DIALOG_CHOOSE_COMPONENT::OnTreeActivate( wxDataViewEvent& aEvent )
-{
-    HandleItemSelection();
 }
 
 
@@ -318,6 +289,49 @@ void DIALOG_CHOOSE_COMPONENT::OnFootprintSelected( wxCommandEvent& aEvent )
 }
 
 
+void DIALOG_CHOOSE_COMPONENT::OnComponentPreselected( wxCommandEvent& aEvent )
+{
+    int unit = 0;
+    LIB_ALIAS* alias = m_tree->GetSelectedAlias( &unit );
+
+    m_sch_view_ctrl->Refresh();
+
+    if( alias )
+    {
+        ShowFootprintFor( alias );
+        PopulateFootprintSelector( alias );
+    }
+    else
+    {
+        if( m_fp_view_ctrl->IsInitialized() )
+            m_fp_view_ctrl->SetStatusText( wxEmptyString );
+
+        PopulateFootprintSelector( nullptr );
+    }
+}
+
+
+void DIALOG_CHOOSE_COMPONENT::OnComponentSelected( wxCommandEvent& aEvent )
+{
+    if( m_tree->GetSelectedAlias() )
+    {
+        // Got a selection. We can't just end the modal dialog here, because
+        // wx leaks some events back to the parent window (in particular, the
+        // MouseUp following a double click).
+        //
+        // NOW, here's where it gets really fun. wxTreeListCtrl eats MouseUp.
+        // This isn't really feasible to bypass without a fully custom
+        // wxDataViewCtrl implementation, and even then might not be fully
+        // possible (docs are vague). To get around this, we use a one-shot
+        // timer to schedule the dialog close.
+        //
+        // See DIALOG_CHOOSE_COMPONENT::OnCloseTimer for the other end of this
+        // spaghetti noodle.
+        m_dbl_click_timer->StartOnce( DIALOG_CHOOSE_COMPONENT::DblClickDelay );
+    }
+}
+
+
 void DIALOG_CHOOSE_COMPONENT::RenderPreview( LIB_PART* aComponent, int aUnit )
 {
     wxPaintDC dc( m_sch_view_ctrl );
@@ -356,25 +370,4 @@ void DIALOG_CHOOSE_COMPONENT::RenderPreview( LIB_PART* aComponent, int aUnit )
     auto opts = PART_DRAW_OPTIONS::Default();
     opts.draw_hidden_fields = false;
     aComponent->Draw( nullptr, &dc, offset, aUnit, m_deMorganConvert, opts );
-}
-
-
-void DIALOG_CHOOSE_COMPONENT::HandleItemSelection()
-{
-    if( m_tree->GetSelectedAlias() )
-    {
-        // Got a selection. We can't just end the modal dialog here, because
-        // wx leaks some events back to the parent window (in particular, the
-        // MouseUp following a double click).
-        //
-        // NOW, here's where it gets really fun. wxTreeListCtrl eats MouseUp.
-        // This isn't really feasible to bypass without a fully custom
-        // wxDataViewCtrl implementation, and even then might not be fully
-        // possible (docs are vague). To get around this, we use a one-shot
-        // timer to schedule the dialog close.
-        //
-        // See DIALOG_CHOOSE_COMPONENT::OnCloseTimer for the other end of this
-        // spaghetti noodle.
-        m_dbl_click_timer->StartOnce( DIALOG_CHOOSE_COMPONENT::DblClickDelay );
-    }
 }

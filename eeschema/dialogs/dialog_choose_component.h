@@ -143,13 +143,20 @@ protected:
     void OnCloseTimer( wxTimerEvent& aEvent );
     void OnProgressTimer( wxTimerEvent& aEvent );
 
-    void OnTreeSelect( wxDataViewEvent& aEvent );
-    void OnTreeActivate( wxDataViewEvent& aEvent );
-
     void OnSchViewDClick( wxMouseEvent& aEvent );
     void OnSchViewPaint( wxPaintEvent& aEvent );
 
     void OnFootprintSelected( wxCommandEvent& aEvent );
+
+    void OnComponentPreselected( wxCommandEvent& aEvent );
+
+    /**
+     * Handle the selection of an item. This is called when either the search
+     * box or the tree receive an Enter, or the tree receives a double click.
+     * If the item selected is a category, it is expanded or collapsed; if it
+     * is a component, the component is picked.
+     */
+    void OnComponentSelected( wxCommandEvent& aEvent );
 
     /**
      * Look up the footprint for a given alias and display it.
@@ -172,14 +179,6 @@ protected:
      * Display a given component into the schematic symbol preview.
      */
     void RenderPreview( LIB_PART* aComponent, int aUnit );
-
-    /**
-     * Handle the selection of an item. This is called when either the search
-     * box or the tree receive an Enter, or the tree receives a double click.
-     * If the item selected is a category, it is expanded or collapsed; if it
-     * is a component, the component is picked.
-     */
-    void HandleItemSelection();
 
     wxTimer*        m_dbl_click_timer;
     wxPanel*        m_sch_view_ctrl;
