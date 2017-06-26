@@ -342,6 +342,27 @@ public:
     }
 };
 
+
+/**
+ * Function MapChildren
+ * provides an easy access to the children of an XML node via their names.
+ * @param  currentNode is a pointer to a wxXmlNode, whose children will be mapped.
+ * @return NODE_MAP - a map linking the name of each children to the children itself (via a
+ *                  wxXmlNode*)
+ */
+NODE_MAP MapChildren( wxXmlNode* currentNode );
+
+/// Assemble a two part key as a simple concatenation of aFirst and aSecond parts,
+/// using a separator.
+string makeKey( const string& aFirst, const string& aSecond );
+
+/// Make a unique time stamp
+unsigned long timeStamp( wxXmlNode* aTree );
+
+/// Convert an Eagle curve end to a KiCad center for S_ARC
+wxPoint kicad_arc_center( const wxPoint& aStart, const wxPoint& aEnd, double aAngle );
+
+
 // Pre-declare for typedefs
 struct EROT;
 
@@ -350,6 +371,8 @@ typedef OPTIONAL_XML_ATTRIBUTE<int>     opt_int;
 typedef OPTIONAL_XML_ATTRIBUTE<double>  opt_double;
 typedef OPTIONAL_XML_ATTRIBUTE<bool>    opt_bool;
 typedef OPTIONAL_XML_ATTRIBUTE<EROT>    opt_erot;
+
+
 
 
 // All of the 'E'STRUCTS below merely hold Eagle XML information verbatim, in binary.
@@ -783,23 +806,7 @@ struct EAGLE_LAYER
     };
 };
 
-/**
- * Function MapChildren
- * provides an easy access to the children of an XML node via their names.
- * @param  currentNode is a pointer to a wxXmlNode, whose children will be mapped.
- * @return NODE_MAP - a map linking the name of each children to the children itself (via a
- *                  wxXmlNode*)
- */
-NODE_MAP MapChildren( wxXmlNode* currentNode );
 
-/// Assemble a two part key as a simple concatenation of aFirst and aSecond parts,
-/// using a separator.
-string makeKey( const string& aFirst, const string& aSecond );
 
-/// Make a unique time stamp
-unsigned long timeStamp( wxXmlNode* aTree );
-
-/// Convert an Eagle curve end to a KiCad center for S_ARC
-wxPoint kicad_arc_center( const wxPoint& aStart, const wxPoint& aEnd, double aAngle );
 
 #endif // _EAGLE_PARSER_H_

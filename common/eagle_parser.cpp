@@ -136,6 +136,63 @@ OPTIONAL_XML_ATTRIBUTE<T> parseOptionalAttribute( wxXmlNode* aNode, string aAttr
 }
 
 
+NODE_MAP MapChildren( wxXmlNode* currentNode )
+{
+    // Map node_name -> node_pointer
+    NODE_MAP nodesMap;
+
+    // Loop through all children mapping them in nodesMap
+    if( currentNode )
+        currentNode = currentNode->GetChildren();
+
+    while( currentNode )
+    {
+        // Create a new pair in the map
+        //      key: current node name
+        //      value: current node pointer
+        nodesMap[currentNode->GetName().ToStdString()] = currentNode;
+
+        // Get next child
+        currentNode = currentNode->GetNext();
+    }
+
+    return nodesMap;
+}
+
+
+string makeKey( const string& aFirst, const string& aSecond )
+{
+    string key = aFirst + '\x02' +  aSecond;
+    return key;
+}
+
+
+unsigned long timeStamp( wxXmlNode* aTree )
+{
+    // in this case from a unique tree memory location
+    return (unsigned long)(void*) aTree;
+}
+
+
+wxPoint kicad_arc_center( const wxPoint& aStart, const wxPoint& aEnd, double aAngle )
+{
+    // Eagle give us start and end.
+    // S_ARC wants start to give the center, and end to give the start.
+    double dx = aEnd.x - aStart.x, dy = aEnd.y - aStart.y;
+    wxPoint mid = ( aStart + aEnd ) / 2;
+
+    double dlen = sqrt( dx*dx + dy*dy );
+    double dist = dlen / ( 2 * tan( DEG2RAD( aAngle ) / 2 ) );
+
+    wxPoint center(
+        mid.x + dist * ( dy / dlen ),
+        mid.y - dist * ( dx / dlen )
+    );
+
+    return center;
+}
+
+
 EWIRE::EWIRE( wxXmlNode* aWire )
 {
     /*
@@ -667,58 +724,3 @@ ELAYER::ELAYER( wxXmlNode* aLayer )
 }
 
 
-NODE_MAP MapChildren( wxXmlNode* currentNode )
-{
-    // Map node_name -> node_pointer
-    NODE_MAP nodesMap;
-
-    // Loop through all children mapping them in nodesMap
-    if( currentNode )
-        currentNode = currentNode->GetChildren();
-
-    while( currentNode )
-    {
-        // Create a new pair in the map
-        //      key: current node name
-        //      value: current node pointer
-        nodesMap[currentNode->GetName().ToStdString()] = currentNode;
-
-        // Get next child
-        currentNode = currentNode->GetNext();
-    }
-
-    return nodesMap;
-}
-
-
-string makeKey( const string& aFirst, const string& aSecond )
-{
-    string key = aFirst + '\x02' +  aSecond;
-    return key;
-}
-
-
-unsigned long timeStamp( wxXmlNode* aTree )
-{
-    // in this case from a unique tree memory location
-    return (unsigned long)(void*) aTree;
-}
-
-
-wxPoint kicad_arc_center( const wxPoint& aStart, const wxPoint& aEnd, double aAngle )
-{
-    // Eagle give us start and end.
-    // S_ARC wants start to give the center, and end to give the start.
-    double dx = aEnd.x - aStart.x, dy = aEnd.y - aStart.y;
-    wxPoint mid = ( aStart + aEnd ) / 2;
-
-    double dlen = sqrt( dx*dx + dy*dy );
-    double dist = dlen / ( 2 * tan( DEG2RAD( aAngle ) / 2 ) );
-
-    wxPoint center(
-        mid.x + dist * ( dy / dlen ),
-        mid.y - dist * ( dx / dlen )
-    );
-
-    return center;
-}
