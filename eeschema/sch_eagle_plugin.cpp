@@ -33,6 +33,7 @@
 #include <class_sch_screen.h>
 #include <class_library.h>
 #include <class_libentry.h>
+#include <sch_component.h>
 #include <lib_circle.h>
 #include <lib_rectangle.h>
 #include <lib_polyline.h>
@@ -165,7 +166,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
                                    SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
 {
     // TODO: Handle Kiway and uncomment next line.
-    // wxASSERT( !aFileName || aKiway != NULL );
+    // wxASSERT( !aFileName || aKiway != null );
 
     // Load the document
     wxXmlDocument xmlDocument;
@@ -196,19 +197,19 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
         m_rootSheet->SetScreen( screen );
     }
 
-    // Create a schematic symbol library
-    wxFileName libfn = fn;
-    libfn.SetName( libfn.GetName() + wxString( "-cache" ) );
-    libfn.SetExt( SchematicLibraryFileExtension );
-    std::unique_ptr<PART_LIB> lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, libfn.GetFullPath() ) );
-    lib->EnableBuffering();
-
-    if( !wxFileName::FileExists( lib->GetFullFileName() ) )
-    {
-        lib->Create();
-    }
-
-    m_partlib = lib.release();
+    // // Create a schematic symbol library
+    // wxFileName libfn = fn;
+    // libfn.SetName( libfn.GetName() );
+    // libfn.SetExt( SchematicLibraryFileExtension );
+    // std::unique_ptr<PART_LIB> lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, libfn.GetFullPath() ) );
+    // lib->EnableBuffering();
+    //
+    // if( !wxFileName::FileExists( lib->GetFullFileName() ) )
+    // {
+    //     lib->Create();
+    // }
+    //
+    // m_partlib = lib.release();
 
     // Retrieve the root as current node
     wxXmlNode* currentNode = xmlDocument.GetRoot();
@@ -226,7 +227,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
     // Load drawing
     loadDrawing( children["drawing"] );
 
-    m_partlib->Save( false );
+    //m_partlib->Save( false );
     deleter.release();
     return m_rootSheet;
 }
@@ -568,18 +569,53 @@ SCH_GLOBALLABEL* SCH_EAGLE_PLUGIN::loadLabel(wxXmlNode* aLabelNode, const wxStri
 
 void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 {
+    auto einstance = EINSTANCE( aInstanceNode );
+
+    SCH_SCREEN* screen = m_currentSheet->GetScreen();
+
+    // Find the part in the list for the sheet.
+    // Assign the component its value from the part entry
+    // Calculate the unit number from the gate entry of the instance
+    // Find the relevent LIB_PART using the
+
+    // Find the device from the part entry, and its LIB_PART.
+
+
+
+
+
+    std::unique_ptr< SCH_COMPONENT > component( new SCH_COMPONENT() );
+
+
+    component->SetPosition( wxPoint(einstance.x*EUNIT_TO_MIL, -einstance.y*EUNIT_TO_MIL) );
+
+    component->GetField(0)->SetText(einstance.part);
+
+
+
+
+
+
+    screen->Append( component.release() );
+
 }
 
 
 void SCH_EAGLE_PLUGIN::loadModuleinst( wxXmlNode* aModuleinstNode )
 {
+
 }
 
 
 void SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
 {
+
+
+    EAGLE_LIBRARY elib;
     // Read the library name
     wxString libName = aLibraryNode->GetAttribute( "name" );
+
+    std::cout << "Importing Eagle Library "<< libName.ToStdString() << std::endl;
 
     // Query all children and map them into a readable dictionary
     NODE_MAP libraryChildren = mapChildren( aLibraryNode );
@@ -587,13 +623,15 @@ void SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
     // TODO: Do something with the description
     // wxXmlNode* libraryChildren["description"];
 
-    // Loop through the devicesets and load each of them
-    // wxXmlNode* devicesetNode = libraryChildren["devicesets"]->GetChildren();
-    // while( devicesetNode )
-    // {
-    //     loadDeviceset( devicesetNode );
-    //     devicesetNode = devicesetNode->GetNext();
-    // }
+     // Loop through the devicesets and load each of them
+     wxXmlNode* devicesetNode = libraryChildren["devicesets"]->GetChildren();
+     while( devicesetNode )
+     {
+         auto edeviceset = EDEVICESET(devicesetNode );
+
+         elib.devicesets[edeviceset.name] = &edeviceset;
+         devicesetNode = devicesetNode->GetNext();
+     }
 
     // Loop through the packages and load each of them
     // wxXmlNode* packageNode = libraryChildren["packages"]->GetChildren();
@@ -608,17 +646,62 @@ void SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
 
     while( symbolNode )
     {
-        m_partlib->AddPart( loadSymbol( symbolNode ) );
+        wxString symbolName = symbolNode->GetAttribute( "name" );
+        elib.symbolnodes[symbolName.ToStdString()] = symbolNode;
         symbolNode = symbolNode->GetNext();
     }
+
+    // For each devicesets.
+    for(auto deviceset = elib.devicesets.begin(); deviceset != elib.devicesets.end(); deviceset++)
+    {
+        std::cout << "Importing Eagle device set "<< deviceset->first << std::endl;
+
+        std::map<std::string, LIB_ITEMS*> gate_items;
+
+        int gates_count = 0;
+        // create a set of lib items for each gate.
+        for(auto gate = deviceset->second->gates.begin(); gate != deviceset->second->gates.end(); gate++)
+        {
+            std::cout << "Creating item list for gate: "<< gate->name << std::endl;
+            wxXmlNode* sn = elib.symbolnodes[gate->name];
+            gate_items[gate->name] = loadSymbol(sn);
+            gates_count++;
+        }
+
+
+        for(auto device = deviceset->second->devices.begin(); device != deviceset->second->devices.end(); device++)
+        {
+            wxString symbolName = wxString(deviceset->first + device->name);
+
+            std::cout << symbolName.ToStdString() << '\n';
+
+            unique_ptr<LIB_PART> part;
+
+            part->SetName(symbolName);
+            part->SetUnitCount(gates_count);
+            for(const auto libItems : gate_items ){
+                for(const auto libitem : libItems)
+                {
+                    std::cout << libitem;
+                }
+
+            }
+
+
+
+
+        }
+    }
+
+
 }
 
 
-LIB_PART* SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode )
+LIB_ITEMS* SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode )
 {
     // Create a new part with the symbol name
     wxString symbolName = aSymbolNode->GetAttribute( "name" );
-    std::unique_ptr<LIB_PART> part( new LIB_PART( symbolName ) );
+    unique_ptr<LIB_ITEMS>  items;
 
     wxXmlNode* currentNode = aSymbolNode->GetChildren();
 
@@ -641,24 +724,27 @@ LIB_PART* SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode )
         }
         else if( nodeName == "circle" )
         {
-            part->AddDrawItem( loadSymbolCircle( part.get(), currentNode ) );
+            items->push_back(loadSymbolCircle( NULL, currentNode ) );
         }
         else if( nodeName == "pin" )
         {
-             part->AddDrawItem( loadPin( part.get(), currentNode ) );
+             items->push_back( loadPin( NULL, currentNode ) );
         }
         else if( nodeName == "polygon" )
         {
-            //part->AddDrawItem( loadPolygon( part.get(), currentNode ) );
+            //items.push_back( loadPolygon( NULL, currentNode ) );
         }
         else if( nodeName == "rectangle" )
         {
-            part->AddDrawItem( loadSymbolRectangle( part.get(), currentNode ) );
+            items->push_back( loadSymbolRectangle( NULL, currentNode ) );
         }
         else if( nodeName == "text" )
         {
-            LIB_TEXT* libtext = loadSymboltext( part.get(), currentNode );
+            LIB_TEXT* libtext = loadSymboltext( NULL, currentNode );
 
+            items->push_back( libtext);
+            // TODO: Reimplement mandatory field positioning.
+            /*
             if( libtext->GetText() ==">NAME" )
             {
                 auto field = part->GetReferenceField();
@@ -673,18 +759,19 @@ LIB_PART* SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode )
                 field.SetTextSize( libtext->GetTextSize() );
                 field.SetTextAngle( libtext->GetTextAngle() );
             }
+            */
             //else
-            //    part->AddDrawItem( loadlibtext( part.get(), currentNode ) );
+            //    items.push_back( loadlibtext( NULL, currentNode ) );
         }
         else if( nodeName == "wire" )
         {
-            part->AddDrawItem( loadSymbolWire( part.get(), currentNode ) );
+            items->push_back( loadSymbolWire( NULL, currentNode ) );
         }
 
         currentNode = currentNode->GetNext();
     }
 
-    return part.release();
+    return items.release();
 }
 
 

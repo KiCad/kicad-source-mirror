@@ -25,6 +25,8 @@
 
 #include <sch_line.h>
 #include <sch_io_mgr.h>
+#include <eagle_parser.h>
+#include <lib_draw_item.h>
 
 class KIWAY;
 class LINE_READER;
@@ -51,6 +53,7 @@ class LIB_PIN;
 class LIB_TEXT;
 
 
+
 /**
  * Class SCH_EAGLE_PLUGIN
  * is a #SCH_PLUGIN derivation for loading 6.x+ Eagle schematic files.
@@ -59,6 +62,16 @@ class LIB_TEXT;
  * As with all SCH_PLUGINs there is no UI dependencies i.e. windowing
  * calls allowed.
  */
+
+typedef struct EAGLE_LIBRARY
+{
+    wxString name;
+    std::unordered_map<std::string, LIB_PART*> kicadsymbols;
+    std::unordered_map<std::string, EDEVICESET*> devicesets;
+    std::unordered_map<std::string, wxXmlNode*> symbolnodes;
+
+}EAGLE_LIBRARY;
+
 class SCH_EAGLE_PLUGIN : public SCH_PLUGIN
 {
 public:
@@ -108,7 +121,7 @@ public:
 
     void SymbolLibOptions( PROPERTIES* aListToAppendTo ) const override;
 
-    bool CheckHeader( const wxString& aFileName ) override; 
+    bool CheckHeader( const wxString& aFileName ) override;
 
 private:
     void loadDrawing( wxXmlNode* aDrawingNode );
@@ -124,7 +137,7 @@ private:
     SCH_GLOBALLABEL*    loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName );
     SCH_JUNCTION*       loadJunction( wxXmlNode* aJunction );
 
-    LIB_PART*       loadSymbol( wxXmlNode* aSymbolNode );
+    LIB_ITEMS*      loadSymbol( wxXmlNode* aSymbolNode );
     LIB_CIRCLE*     loadSymbolCircle( LIB_PART* aPart, wxXmlNode* aCircleNode );
     LIB_RECTANGLE*  loadSymbolRectangle( LIB_PART* aPart, wxXmlNode* aRectNode );
     LIB_POLYLINE*   loadSymbolPolyLine( LIB_PART* aPart, wxXmlNode* aRectNode );
@@ -136,7 +149,11 @@ private:
     SCH_SHEET* m_rootSheet; ///< The root sheet of the schematic being loaded..
     SCH_SHEET* m_currentSheet; ///< The current sheet of the schematic being loaded..
     wxString m_version; ///< Eagle file version.
-    PART_LIB* m_partlib; ///< symbol library for imported file.
+    //PART_LIB* m_partlib; ///< symbol library for imported file.
+
+
+
+
 protected:
 };
 
