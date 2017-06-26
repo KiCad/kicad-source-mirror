@@ -534,13 +534,8 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( 0, "\n" );
 
     m_out->Print( aNestLevel, "(general\n" );
-    m_out->Print( aNestLevel+1, "(no_connects %d)\n", aBoard->GetConnectivity()->GetUnconnectedCount() );
 
     // Write Bounding box info
-    EDA_RECT bbox = aBoard->GetBoundingBox();
-    m_out->Print( aNestLevel+1,  "(area %s %s %s %s)\n",
-                  FMTIU( bbox.GetX() ).c_str(), FMTIU( bbox.GetY() ).c_str(),
-                  FMTIU( bbox.GetRight() ).c_str(), FMTIU( bbox.GetBottom() ).c_str() );
     m_out->Print( aNestLevel+1, "(thickness %s)\n",
                   FMTIU( dsnSettings.GetBoardThickness() ).c_str() );
 
