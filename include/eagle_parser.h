@@ -41,12 +41,17 @@
 #include <trigo.h>
 #include <kicad_string.h>
 
+
 using std::string;
 
 class MODULE;
+struct EINSTANCE;
+struct EPART;
 
 typedef std::unordered_map<string, wxXmlNode*> NODE_MAP;
 typedef std::map<string, MODULE*> MODULE_MAP;
+typedef std::map<string, EINSTANCE*> EINSTANCE_MAP;
+typedef std::map<string, EPART*> EPART_MAP;
 
 static inline wxXmlNode* getChildrenNodes( NODE_MAP& aMap, const string& aName )
 {
@@ -806,6 +811,150 @@ struct EAGLE_LAYER
     };
 };
 
+
+
+struct EPART
+{
+    /*
+     *  <!ELEMENT part (attribute*, variant*)>
+     *  <!ATTLIST part
+     *  name          %String;       #REQUIRED
+     *  library       %String;       #REQUIRED
+     *  deviceset     %String;       #REQUIRED
+     *  device        %String;       #REQUIRED
+     *  technology    %String;       ""
+     *  value         %String;       #IMPLIED
+     *  >
+     */
+
+    string name;
+    string library;
+    string deviceset;
+    string device;
+    string technology;
+    opt_string value;
+
+    EPART( wxXmlNode* aPart );
+};
+
+
+struct EINSTANCE
+{
+    /*
+     *  <!ELEMENT instance (attribute)*>
+     *  <!ATTLIST instance
+     *     part          %String;       #REQUIRED
+     *     gate          %String;       #REQUIRED
+     *     x             %Coord;        #REQUIRED
+     *     y             %Coord;        #REQUIRED
+     *     smashed       %Bool;         "no"
+     *     rot           %Rotation;     "R0"
+     *     >
+     */
+
+    string  part;
+    string  gate;
+    double  x;
+    double  y;
+    opt_bool    smashed;
+    opt_erot    rot;
+
+    EINSTANCE( wxXmlNode* aInstance );
+};
+
+struct EGATE
+{
+    /*
+     *   <!ELEMENT gate EMPTY>
+     *   <!ATTLIST gate
+     *   name          %String;       #REQUIRED
+     *   symbol        %String;       #REQUIRED
+     *   x             %Coord;        #REQUIRED
+     *   y             %Coord;        #REQUIRED
+     *   addlevel      %GateAddLevel; "next"
+     *   swaplevel     %Int;          "0"
+     *   >
+     */
+
+    string  name;
+    string  symbol;
+
+    double  x;
+    double  y;
+
+    opt_int addlevel;
+    opt_int swaplevel;
+
+    enum
+    {
+        MUST,
+        CAN,
+        NEXT,
+        REQUEST,
+        ALWAYS
+    };
+
+    EGATE( wxXmlNode* aGate );
+};
+
+
+struct ECONNECT
+{
+    /*
+     *  <!ELEMENT connect EMPTY>
+     *  <!ATTLIST connect
+     *         gate          %String;       #REQUIRED
+     *         pin           %String;       #REQUIRED
+     *         pad           %String;       #REQUIRED
+     *         route         %ContactRoute; "all"
+     *         >
+     */
+    string  gate;
+    string  pin;
+    string  pad;
+    int contactroute;
+
+    ECONNECT( wxXmlNode* aConnect );
+};
+
+
+typedef struct EDEVICE
+{
+    /*
+    <!ELEMENT device (connects?, technologies?)>
+    <!ATTLIST device
+              name          %String;       ""
+              package       %String;       #IMPLIED
+              >
+*/
+    std::string  name;
+    opt_string  package;
+
+    std::vector<ECONNECT> connects;
+
+    EDEVICE( wxXmlNode* aDevice );
+} EDEVICE;
+
+struct EDEVICESET
+{
+    /*
+    <!ELEMENT deviceset (description?, gates, devices)>
+    <!ATTLIST deviceset
+              name          %String;       #REQUIRED
+              prefix        %String;       ""
+              uservalue     %Bool;         "no"
+              >
+    */
+
+    std::string name;
+    opt_string prefix;
+    opt_bool uservalue;
+    std::vector<EDEVICE> devices;
+    std::vector<EGATE> gates;
+
+
+    EDEVICESET( wxXmlNode* aDeviceSet );
+};
 
 
 

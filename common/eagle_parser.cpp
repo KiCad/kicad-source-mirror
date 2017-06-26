@@ -724,3 +724,169 @@ ELAYER::ELAYER( wxXmlNode* aLayer )
 }
 
 
+EPART::EPART( wxXmlNode* aPart )
+{
+    /*
+     *  <!ELEMENT part (attribute*, variant*)>
+     *  <!ATTLIST part
+     *  name          %String;       #REQUIRED
+     *  library       %String;       #REQUIRED
+     *  deviceset     %String;       #REQUIRED
+     *  device        %String;       #REQUIRED
+     *  technology    %String;       ""
+     *  value         %String;       #IMPLIED
+     *  >
+     */
+    // #REQUIRED
+    name = parseRequiredAttribute<string>( aPart, "name" );
+    library = parseRequiredAttribute<string>( aPart, "library" );
+    deviceset = parseRequiredAttribute<string>( aPart, "deviceset" );
+    device = parseRequiredAttribute<string>( aPart, "device" );
+    technology = parseRequiredAttribute<string>( aPart, "technology" );
+    value = parseOptionalAttribute<string>( aPart, "value" );
+}
+
+
+EINSTANCE::EINSTANCE( wxXmlNode* aInstance )
+{
+    /*
+     *  <!ELEMENT instance (attribute)*>
+     *  <!ATTLIST instance
+     *     part          %String;       #REQUIRED
+     *     gate          %String;       #REQUIRED
+     *     x             %Coord;        #REQUIRED
+     *     y             %Coord;        #REQUIRED
+     *     smashed       %Bool;         "no"
+     *     rot           %Rotation;     "R0"
+     *     >
+     */
+    part    = parseRequiredAttribute<string>( aInstance, "part" );
+    gate    = parseRequiredAttribute<string>( aInstance, "gate" );
+
+    x   = parseRequiredAttribute<double>( aInstance, "x" );
+    y   = parseRequiredAttribute<double>( aInstance, "y" );
+
+    // optional
+    smashed = parseOptionalAttribute<bool>( aInstance, "smashed" );
+    rot = parseOptionalAttribute<EROT>( aInstance, "rot" );
+}
+
+
+EGATE::EGATE( wxXmlNode* aGate )
+{
+    /*
+     *   <!ELEMENT gate EMPTY>
+     *   <!ATTLIST gate
+     *   name          %String;       #REQUIRED
+     *   symbol        %String;       #REQUIRED
+     *   x             %Coord;        #REQUIRED
+     *   y             %Coord;        #REQUIRED
+     *   addlevel      %GateAddLevel; "next"
+     *   swaplevel     %Int;          "0"
+     *   >
+     */
+
+    name = parseRequiredAttribute<string>( aGate, "name" );
+    symbol = parseRequiredAttribute<string>( aGate, "library" );
+
+    x   = parseRequiredAttribute<double>( aGate, "x" );
+    y   = parseRequiredAttribute<double>( aGate, "y" );
+
+    opt_string stemp = parseOptionalAttribute<string>( aGate, "addlevel" );
+
+    // (off | value | name | both)
+    if( stemp == "must" )
+        addlevel = EGATE::MUST;
+    else if( stemp == "can" )
+        addlevel = EGATE::CAN;
+    else if( stemp == "next" )
+        addlevel = EGATE::NEXT;
+    else if( stemp == "request" )
+        addlevel = EGATE::REQUEST;
+    else if( stemp == "always" )
+        addlevel = EGATE::ALWAYS;
+    else
+        addlevel = EGATE::NEXT;
+}
+
+
+ECONNECT::ECONNECT( wxXmlNode* aConnect )
+{
+    /*
+     *  <!ELEMENT connect EMPTY>
+     *  <!ATTLIST connect
+     *         gate          %String;       #REQUIRED
+     *         pin           %String;       #REQUIRED
+     *         pad           %String;       #REQUIRED
+     *         route         %ContactRoute; "all"
+     *         >
+     */
+    gate =  parseRequiredAttribute<string>( aConnect, "gate" );
+    pin =  parseRequiredAttribute<string>( aConnect, "pin" );
+    pad = parseRequiredAttribute<string>( aConnect, "pad" );
+
+    //TODO:
+    //int contactroute;
+
+};
+
+
+EDEVICE::EDEVICE( wxXmlNode* aDevice )
+{
+    /*
+    <!ELEMENT device (connects?, technologies?)>
+    <!ATTLIST device
+              name          %String;       ""
+              package       %String;       #IMPLIED
+              >
+*/
+    name = parseRequiredAttribute<string>( aDevice, "name" );
+    package = parseOptionalAttribute<string>( aDevice, "package" );
+
+    NODE_MAP aDeviceChildren = MapChildren(aDevice);
+    wxXmlNode* connectNode = getChildrenNodes(aDeviceChildren, "connects");
+
+    while(connectNode){
+        connects.push_back(ECONNECT(connectNode));
+    }
+
+};
+
+
+EDEVICESET::EDEVICESET( wxXmlNode* aDeviceSet )
+{
+    /*
+    <!ELEMENT deviceset (description?, gates, devices)>
+    <!ATTLIST deviceset
+              name          %String;       #REQUIRED
+              prefix        %String;       ""
+              uservalue     %Bool;         "no"
+              >
+    */
+
+    name = parseRequiredAttribute<string>(aDeviceSet, "name");
+    prefix = parseOptionalAttribute<string>( aDeviceSet, "prefix" );
+    uservalue  =  parseOptionalAttribute<bool>( aDeviceSet, "uservalue" );
+
+
+
+    //TODO: description
+
+    NODE_MAP aDeviceSetChildren = MapChildren(aDeviceSet);
+    wxXmlNode* deviceNode = getChildrenNodes(aDeviceSetChildren, "device");
+
+    while(deviceNode){
+        devices.push_back(EDEVICE(deviceNode));
+        deviceNode->GetNext();
+    }
+
+    wxXmlNode* gateNode = getChildrenNodes(aDeviceSetChildren, "gate");
+
+    while(gateNode){
+        gates.push_back(EGATE(gateNode));
+        gateNode->GetNext();
+    }
+
+}
+
+
