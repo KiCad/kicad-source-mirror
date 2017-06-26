@@ -34,14 +34,14 @@
  *
  * To extract pretty footprints library list, this plugin simply reads in
  * a zip file of the repo and unzips it from RAM as needed.
- * Therefore this "Github" plugin is <b>read only for accessing remote
- * at https:////api.github.com//orgs//KiCad//repos
+ * Therefore this "Github" plugin is <b>read only</b> for accessing remote
+ * at "https://api.github.com/orgs/KiCad/repos"
  *
  * To extract 3D shapes libraries list (.3dshapes folders) we cannot use api.github.com
- * to read this list, becuse it is in a subdirectory of https://github.com/KiCad.
+ * to read this list, because it is in a subdirectory of "https://github.com/KiCad".
  * The corresponding html page of the server is read, and URLs of all .3dshapes folders
  * are extracted.
- * files are then read from https://raw.githubusercontent.com/<lib path>, but not zipped
+ * files are then read from "https://raw.githubusercontent.com/<lib path>", but not zipped
  * because they are not accessible in zipped form.
  */
 class GITHUB_GETLIBLIST

@@ -85,13 +85,13 @@ SCH_EDIT_FRAME* DIALOG_EESCHEMA_OPTIONS::GetParent()
 }
 
 
-void DIALOG_EESCHEMA_OPTIONS::SetUnits( const wxArrayString& units, int select )
+void DIALOG_EESCHEMA_OPTIONS::SetUnits( const wxArrayString& aUnits, int aSelect )
 {
-    wxASSERT( units.GetCount() > 0
-              && ( select >= 0 && (size_t) select < units.GetCount() ) );
+    wxASSERT( aUnits.GetCount() > 0
+              && ( aSelect >= 0 && (size_t) aSelect < aUnits.GetCount() ) );
 
-    m_choiceUnits->Append( units );
-    m_choiceUnits->SetSelection( select );
+    m_choiceUnits->Append( aUnits );
+    m_choiceUnits->SetSelection( aSelect );
 }
 
 

@@ -321,7 +321,7 @@ bool BOM_TABLE_GROUP::TestField( BOM_COLUMN* aField, BOM_TABLE_COMPONENT* aCompo
 /**
  * Add a new component to the group.
  * It is assumed at this stage that the component is a good match for the group.
- * @param aCmp is the new component to add
+ * @param aComponent is the new component to add
  */
 bool BOM_TABLE_GROUP::AddComponent( BOM_TABLE_COMPONENT* aComponent )
 {

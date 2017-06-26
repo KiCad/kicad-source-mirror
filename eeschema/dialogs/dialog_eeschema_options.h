@@ -101,12 +101,12 @@ public:
      * Function SetUnits
      * Set the unit options
      *
-     * @param units The array of strings representing the unit options
-     * @param select The unit to select from the unit options
+     * @param aUnits The array of strings representing the unit options
+     * @param aSelect The unit to select from the unit options
      *
      * Appends the @a units options to the list of unit options and selects the @a aSelect option
      */
-    void SetUnits( const wxArrayString& units, int aSelect = 0 );
+    void SetUnits( const wxArrayString& aUnits, int aSelect = 0 );
 
     /**
      * Function GetGridSelection

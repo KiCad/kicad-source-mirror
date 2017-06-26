@@ -6,8 +6,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 jean-pierre Charras <jean-pierre.charras@ujf-grenoble.fr>
-  * Copyright (C) 1992-2012 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2017 jean-pierre Charras jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2017 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,10 +45,9 @@
 
 class wxConfigBase;
 
-namespace {
-
 /**
- * Class DIALOG_ANNOTATE
+ * Class DIALOG_ANNOTATE: a dialog to set/clear reference designators,
+ * of a schematic hierarchy, with different options
  */
 class DIALOG_ANNOTATE: public DIALOG_ANNOTATE_BASE
 {
@@ -97,8 +96,6 @@ private:
         return m_cbAskForConfirmation->GetValue();
     }
 };
-
-}  // anonymous namespace
 
 
 DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, wxString message )

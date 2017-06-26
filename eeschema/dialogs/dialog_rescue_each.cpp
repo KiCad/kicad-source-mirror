@@ -41,7 +41,7 @@ public:
      * Constructor
      * This dialog asks the user which rescuable, cached parts he wants to rescue.
      * Any rejects will be pruned from aCandidates.
-     * @param aCaller - the SCH_EDIT_FRAME calling this
+     * @param aParent - the SCH_EDIT_FRAME calling this
      * @param aRescuer - the active RESCUER instance
      * @param aAskShowAgain - if true, a "Never Show Again" button will be included
      */
