@@ -26,6 +26,7 @@
 #include <richio.h>
 #include <import_export.h>
 #include <map>
+#include <enum_vector.h>
 
 
 class SCH_SHEET;
@@ -50,7 +51,7 @@ public:
      * A set of file types that the #SCH_IO_MGR knows about, and for which there
      * has been a plugin written.
      */
-    enum SCH_FILE_T
+    DEFINE_ENUM_VECTOR( SCH_FILE_T,
     {
         SCH_LEGACY,      ///< Legacy Eeschema file formats prior to s-expression.
         SCH_KICAD,       ///< The s-expression version of the schematic file formats.
@@ -59,7 +60,7 @@ public:
 
         // ALTIUM,
         // etc.
-    };
+    } );
 
     /**
      * Return a #SCH_PLUGIN which the caller can use to import, export, save, or load

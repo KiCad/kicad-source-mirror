@@ -170,3 +170,6 @@ void SCH_IO_MGR::Save( SCH_FILE_T aFileType, const wxString& aFileName,
 
     THROW_IO_ERROR( wxString::Format( FMT_NOTFOUND, ShowType( aFileType ).GetData() ) );
 }
+
+
+DECLARE_ENUM_VECTOR( SCH_IO_MGR, SCH_FILE_T );

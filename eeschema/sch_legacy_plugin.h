@@ -124,7 +124,7 @@ public:
                           const PROPERTIES* aProperties = NULL ) override;
     void SaveLibrary( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL ) override;
 
-    bool CheckHeader(const wxString& aFileName) override;
+    bool CheckHeader( const wxString& aFileName ) override;
 
 private:
     void loadHierarchy( SCH_SHEET* aSheet );
