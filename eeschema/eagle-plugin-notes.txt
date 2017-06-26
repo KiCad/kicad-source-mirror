@@ -1,0 +1,40 @@
+Eagle Plugin Implementation Notes. 
+2017 Russell Oliver
+
+
+
+
+Kicad           Eagle
+Footprint       Package
+Symbol          Device
+Unit            Gate
+
+Pin #           Pad # from connect for gate
+
+
+An Eagle library is made up of a description, package, symbols and devicesets. 
+
+Symbols outline the graphical layout of items including pins. 
+Pins for multi gate symbols are generally labled according to their function, i.e input / output. I/O
+In contrast to kicad, different gates can have different symbols. 
+An Eagle gate is equivelent to a Kicad symbol Unit. 
+
+An Eagle symbol pin is not numbered, therefore the relationship is made by the Eagle connect element. 
+A connect element gives the pad number for each pin found in that gate. 
+Therefore the equivelent kicad pin number is read from the connect element pad number. 
+
+Since an Eagle gate is equivelent to a kicad symbol unit, the graphical items for that unit will be copied from the Eagle symbol and will be unique for that unit. 
+This will yield duplication of the graphical elements if the same symbol is used for multiple gates but the conversion will be complete. 
+A second pass may be used to remove duplicate items. 
+A kicad pin is numbered using the pad number found in the connect element. The pin name will be retained. 
+
+An Eagle sheet contains a list of instances, which are equivelent to Kicad schematic component entries.
+An instance describes the part, the gate used and its location on the sheet.
+
+<instance part="C1" gate="G$1" x="27.94" y="30.48"/>
+A part has a name, the library used, the deviceset, the device, and optionally the device's value. 
+<part name="C1" library="rcl" deviceset="C-US" device="C0603" value="1u"/>
+
+
+
+
