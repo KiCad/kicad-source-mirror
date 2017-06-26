@@ -42,11 +42,13 @@
 // automatically and inherited by the python wrapper class.
 
 
-/*
 %extend MODULE
 {
     %pythoncode
     %{
+
+    def Pads(self):            return self.PadsList()
+    def GraphicalItems(self):  return self.GraphicalItemsList()
 
     #def SaveToLibrary(self,filename):
     #  return SaveModuleToLibrary(filename,self)
@@ -57,7 +59,6 @@
     #
     %}
 }
-*/
 
 
 %pythoncode

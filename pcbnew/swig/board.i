@@ -115,9 +115,8 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
     %{
 
     def GetModules(self):             return self.m_Modules
-    def GetDrawings(self):            return self.m_Drawings
+    def GetDrawings(self):            return self.DrawingsList()
     def GetTracks(self):              return self.m_Track
-    def GetFullRatsnest(self):        return self.m_FullRatsnest
 
     def Save(self,filename):
         return SaveBoard(filename,self,IO_MGR.KICAD)
