@@ -168,7 +168,7 @@ public:
         {
             for( LIST_LIGHT::iterator ii = m_lights.begin();
                  ii != m_lights.end();
-                 --ii )
+                 ++ii )
             {
                 delete *ii;
                 *ii = NULL;
