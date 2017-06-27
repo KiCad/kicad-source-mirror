@@ -295,10 +295,7 @@ void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aSymLibTab
     }
 }
 
-/**
- * Function GetAliasDescription
- * Return the description text for the given part alias
- */
+
 wxString SCH_COMPONENT::GetAliasDescription() const
 {
     if( PART_SPTR part = m_part.lock() )
@@ -314,10 +311,7 @@ wxString SCH_COMPONENT::GetAliasDescription() const
     return wxEmptyString;
 }
 
-/**
- * Function GetAliasDocumentation
- * Return the documentation text for the given part alias
- */
+
 wxString SCH_COMPONENT::GetAliasDocumentation() const
 {
     if( PART_SPTR part = m_part.lock() )
@@ -333,6 +327,7 @@ wxString SCH_COMPONENT::GetAliasDocumentation() const
     return wxEmptyString;
 }
 
+
 bool SCH_COMPONENT::Resolve( PART_LIBS* aLibs )
 {
     // I've never been happy that the actual individual PART_LIB is left up to
@@ -346,6 +341,21 @@ bool SCH_COMPONENT::Resolve( PART_LIBS* aLibs )
     return false;
 }
 
+
+bool SCH_COMPONENT::Resolve( SYMBOL_LIB_TABLE& aLibTable )
+{
+    LIB_ALIAS* alias = aLibTable.LoadSymbol( m_lib_id );
+
+    if( alias && alias->GetPart() )
+    {
+        m_part = alias->GetPart()->SharedPtr();
+        return true;
+    }
+
+    return false;
+}
+
+
 // Helper sort function, used in SCH_COMPONENT::ResolveAll, to sort
 // sch component by lib_id
 static bool sort_by_libid( const SCH_COMPONENT* ref, SCH_COMPONENT* cmp )
@@ -353,8 +363,8 @@ static bool sort_by_libid( const SCH_COMPONENT* ref, SCH_COMPONENT* cmp )
     return ref->GetLibId() < cmp->GetLibId();
 }
 
-void SCH_COMPONENT::ResolveAll(
-        const SCH_COLLECTOR& aComponents, PART_LIBS* aLibs )
+
+void SCH_COMPONENT::ResolveAll( const SCH_COLLECTOR& aComponents, PART_LIBS* aLibs )
 {
     // Usually, many components use the same part lib.
     // to avoid too long calculation time the list of components is grouped
@@ -398,6 +408,44 @@ void SCH_COMPONENT::ResolveAll(
 }
 
 
+void SCH_COMPONENT::ResolveAll( const SCH_COLLECTOR& aComponents, SYMBOL_LIB_TABLE& aLibTable )
+{
+    std::vector<SCH_COMPONENT*> cmp_list;
+
+    for( int i = 0;  i < aComponents.GetCount();  ++i )
+    {
+        SCH_COMPONENT* cmp = dynamic_cast<SCH_COMPONENT*>( aComponents[i] );
+
+        wxCHECK2_MSG( cmp, continue, "Invalid SCH_COMPONENT pointer in list." );
+
+        cmp_list.push_back( cmp );
+    }
+
+    // sort it by lib part. Cmp will be grouped by same lib part.
+    std::sort( cmp_list.begin(), cmp_list.end(), sort_by_libid );
+
+    LIB_ID curr_libid;
+
+    for( unsigned ii = 0; ii < cmp_list.size (); ++ii )
+    {
+        SCH_COMPONENT* cmp = cmp_list[ii];
+        cmp->Resolve( aLibTable );
+
+        // Propagate the m_part pointer to other members using the same lib_id
+        for( unsigned jj = ii+1; jj < cmp_list.size (); ++jj )
+        {
+            SCH_COMPONENT* next_cmp = cmp_list[jj];
+
+            if( curr_libid != next_cmp->m_lib_id )
+                break;
+
+            next_cmp->m_part = cmp->m_part;
+            ii = jj;
+        }
+    }
+}
+
+
 void SCH_COMPONENT::SetUnit( int aUnit )
 {
     if( m_unit != aUnit )
@@ -406,6 +454,7 @@ void SCH_COMPONENT::SetUnit( int aUnit )
         SetModified();
     }
 }
+
 
 void SCH_COMPONENT::UpdateUnit( int aUnit )
 {
@@ -589,12 +638,6 @@ const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet )
 }
 
 
-/* Function IsReferenceStringValid (static function)
- * Tests for an acceptable reference string
- * An acceptable reference string must support unannotation
- * i.e starts by letter
- * returns true if OK
- */
 bool SCH_COMPONENT::IsReferenceStringValid( const wxString& aReferenceString )
 {
     wxString text = aReferenceString;
@@ -771,6 +814,7 @@ SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
     return (SCH_FIELD*) field;
 }
 
+
 wxString SCH_COMPONENT::GetFieldText( wxString aFieldName, bool aIncludeDefaultFields ) const
 {
     // Field name for comparison
@@ -824,11 +868,7 @@ SCH_FIELD* SCH_COMPONENT::AddField( const SCH_FIELD& aField )
     return &m_Fields[newNdx];
 }
 
-/*
- * Find and return compnent field with the given name
- * @aFieldName is the name of the field to search for
- * @aIncludeDefaultFields excludes default fields from search if set to false
- */
+
 SCH_FIELD* SCH_COMPONENT::FindField( const wxString& aFieldName, bool aIncludeDefaultFields )
 {
     unsigned start = aIncludeDefaultFields ? 0 : MANDATORY_FIELDS;

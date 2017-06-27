@@ -31,10 +31,8 @@
 class LIB_PART;
 
 /**
- * Class SYMBOL_LIB_TABLE_ROW
- *
- * holds a record identifying a library accessed by the appropriate footprint library #PLUGIN
- * object in the #SYMBOL_LIB_TABLE.
+ * Hold a record identifying a symbol library accessed by the appropriate symbol library
+ * #SCH_PLUGIN object in the #SYMBOL_LIB_TABLE.
  */
 class SYMBOL_LIB_TABLE_ROW : public LIB_TABLE_ROW
 {
@@ -61,16 +59,12 @@ public:
     bool operator!=( const SYMBOL_LIB_TABLE_ROW& aRow ) const   { return !( *this == aRow ); }
 
     /**
-     * Function GetType
-     *
-     * returns the type of symbol library table represented by this row.
+     * Return the type of symbol library table represented by this row.
      */
     const wxString GetType() const override         { return SCH_IO_MGR::ShowType( type ); }
 
     /**
-     * Function SetType
-     *
-     * changes the type represented by this row.
+     * Change the schematic plugin type represented by this row.
      */
     void SetType( const wxString& aType ) override;
 
@@ -107,9 +101,7 @@ public:
     virtual void Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) const override;
 
     /**
-     * Constructor SYMBOL_LIB_TABLE
-     *
-     * builds a footprint library table by pre-pending this table fragment in front of
+     * Build a symbol library table by pre-pending this table fragment in front of
      * @a aFallBackTable.  Loading of this table fragment is done by using Parse().
      *
      * @param aFallBackTable is another SYMBOL_LIB_TABLE which is searched only when
@@ -119,11 +111,15 @@ public:
     SYMBOL_LIB_TABLE( SYMBOL_LIB_TABLE* aFallBackTable = NULL );
 
     /**
-     * Function FindRow
+     * Return an SYMBOL_LIB_TABLE_ROW if \a aNickName is found in this table or in any chained
+     * fallBack table fragment.
      *
-     * returns an SYMBOL_LIB_TABLE_ROW if \a aNickName is found in this table or in any chained
-     * fallBack table fragment.  The #PLUGIN is loaded and attached to the "plugin" field
-     * of the #SYMBOL_LIB_TABLE_ROW if not already loaded.
+     * The #SCH_PLUGIN is loaded and attached to the "plugin" fieldf the #SYMBOL_LIB_TABLE_ROW if
+     * not already loaded.
+     *
+     * @param aNickName is the name of the row to find.
+     *
+     * @return the row found or NULL if \a aNickName was not found.
      *
      * @throw IO_ERROR if \a aNickName cannot be found.
      */
@@ -132,9 +128,7 @@ public:
     //-----<PLUGIN API SUBSET, REBASED ON aNickname>---------------------------
 
     /**
-     * Function EnumerateSymbolLib
-     *
-     * returns a list of symbol alias names contained within the library given by @a aNickname.
+     * Return a list of symbol alias names contained within the library given by @a aNickname.
      *
      * @param aNickname is a locator for the "library", it is a "name" in LIB_TABLE_ROW.
      * @param aAliasNames is a reference to an array for the alias names
@@ -144,26 +138,27 @@ public:
     void EnumerateSymbolLib( const wxString& aNickname, wxArrayString& aAliasNames );
 
     /**
-     * Function LoadSymbol
+     * Load a #LIB_ALIAS having @a aAliasName from the library given by @a aNickname.
      *
-     * loads a #LIB_ALIAS having @a aAliasName from the library given by @a aNickname.
      * The actual symbol can be retreaved from the LIB_ALIAS::GetPart() method.
      *
      * @param aNickname is a locator for the "library", it is a "name" in #LIB_TABLE_ROW
-     *
      * @param aAliasName is the name of the #LIB_ALIAS to load.
      *
-     * @return  LIB_ALIAS* - if found we own it, else NULL if not found.
+     * @return the symbol alias if found or NULL if not found.
      *
-     * @throw   IO_ERROR if the library cannot be found or read.  No exception
-     *                   is thrown in the case where aAliasName cannot be found.
+     * @throw IO_ERROR if the library cannot be found or read.  No exception
+     *                 is thrown in the case where aAliasName cannot be found.
      */
     LIB_ALIAS* LoadSymbol( const wxString& aNickname, const wxString& aAliasName );
 
+    LIB_ALIAS* LoadSymbol( const LIB_ID& aLibId )
+    {
+        return LoadSymbol( aLibId.GetLibNickname(), aLibId.GetLibItemName() );
+    }
+
     /**
-     * Enum SAVE_T
-     *
-     * is the set of return values from SaveSymbol() below.
+     * The set of return values from SaveSymbol() below.
      */
     enum SAVE_T
     {
@@ -172,33 +167,28 @@ public:
     };
 
     /**
-     * Function SaveSymbol
+     * Write @a aSymbol to an existing library given by @a aNickname.
      *
-     * will write @a aSymbol to an existing library given by @a aNickname.  If a #LIB_PART
-     * by the same name already exists or there are any conflicting alias names, the new
-     * #LIB_PART will silently overwrite any existing aliases and/or part becaue libraries
-     * cannot have duplicate alias names.  It is the responsibility of the caller to check
-     * the library for conflicts before saving.
+     * If a #LIB_PART by the same name already exists or there are any conflicting alias
+     * names, the new #LIB_PART will silently overwrite any existing aliases and/or part
+     * becaue libraries cannot have duplicate alias names.  It is the responsibility of
+     * the caller to check the library for conflicts before saving.
      *
      * @param aNickname is a locator for the "library", it is a "name" in LIB_TABLE_ROW
-     *
      * @param aSymbol is what to store in the library. The library owns the symbol after this
      *                call.
-     *
      * @param aOverwrite when true means overwrite any existing symbol by the same name,
      *                   else if false means skip the write and return SAVE_SKIPPED.
      *
      * @return SAVE_T - SAVE_OK or SAVE_SKIPPED.  If error saving, then IO_ERROR is thrown.
      *
-     * @throw IO_ERROR if there is a problem saving.
+     * @throw IO_ERROR if there is a problem saving the symbol.
      */
     SAVE_T SaveSymbol( const wxString& aNickname, const LIB_PART* aSymbol,
                        bool aOverwrite = true );
 
     /**
-     * Function DeleteSymbol
-     *
-     * deletes the @a aSymbolName from the library given by @a aNickname.
+     * Deletes the @a aSymbolName from the library given by @a aNickname.
      *
      * @param aNickname is a locator for the "library", it is a "name" in LIB_TABLE_ROW.
      *
@@ -209,9 +199,7 @@ public:
     void DeleteSymbol( const wxString& aNickname, const wxString& aSymbolName );
 
     /**
-     * Function DeleteAlias
-     *
-     * deletes @a aAliasName from the library at @a aLibraryPath.
+     * Delete @a aAliasName from the library at @a aLibraryPath.
      *
      * If @a aAliasName refers the the root #LIB_PART object, the part is renamed to
      * the next or previous #LIB_ALIAS in the #LIB_PART if one exists.  If the #LIB_ALIAS
@@ -227,10 +215,12 @@ public:
     void DeleteAlias( const wxString& aNickname, const wxString& aAliasName );
 
     /**
-     * Function IsSymbolLibWritable
+     * Return true if the library given by @a aNickname is writable.
      *
-     * returns true if the library given by @a aNickname is writable.  (Often
-     * system libraries are read only because of where they are installed.)
+     * It is possible that some symbols libraries are read only because of where they are
+     * installed.
+     *
+     * @param aNickname is the library nickname in the symbol library table.
      *
      * @throw IO_ERROR if no library at @a aNickname exists.
      */
@@ -243,49 +233,48 @@ public:
     //-----</PLUGIN API SUBSET, REBASED ON aNickname>---------------------------
 
     /**
-     * Function LoadSymboldWithOptionalNickname
-     * loads a #LIB_PART having @a aFootprintId with possibly an empty librarynickname.
+     * Load a #LIB_PART having @a aFootprintId with possibly an empty library nickname.
      *
-     * @param aId the library  nickname and name of the symbol to load.
+     * @param aId the library nickname and name of the symbol to load.
      *
-     * @return  LIB_PART* - if found the library owns it, else NULL if not found.
+     * @return  the library symbol if found (the library owns it) or NULL if not found.
      *
-     * @throw   IO_ERROR if the library cannot be found or read.  No exception
-     *                   is thrown in the case where aId cannot be found.
-     * @throw   PARSE_ERROR if @a atId is not parsed OK.
+     * @throw IO_ERROR if the library cannot be found or read.  No exception
+     *                 is thrown in the case where aId cannot be found.
+     * @throw PARSE_ERROR if @a aId is not parsed OK.
      */
     LIB_ALIAS* LoadSymbolWithOptionalNickname( const LIB_ID& aId );
 
     /**
-     * Function LoadGlobalTable
-     *
-     * loads the global symbol library table into \a aTable.
+     * Load the global symbol library table into \a aTable.
      *
      * This probably should be move into the application object when KiCad is changed
      * to a single process application.  This is the least painful solution for the
      * time being.
      *
      * @param aTable the #SYMBOL_LIB_TABLE object to load.
+     *
      * @return true if the global library table exists and is loaded properly.
+     *
      * @throw IO_ERROR if an error occurs attempting to load the symbol library table.
      */
     static bool LoadGlobalTable( SYMBOL_LIB_TABLE& aTable );
 
     /**
-     * Function GetGlobalTableFileName
+     *
+     * Fetch the global symbol library table file name.
      *
      * @return the platform specific global symbol library path and file name.
      */
     static wxString GetGlobalTableFileName();
 
     /**
-     * Function GlobalPathEnvVarVariableName
+     * Return the name of the environment variable used to hold the directory of locally
+     * installed "KiCad sponsored" system symbol libraries.
      *
-     * returns the name of the environment variable used to hold the directory of locally
-     * installed "KiCad sponsored" system symbol libraries.  These can be either legacy
-     * or sweet format.  The only thing special about this particular environment variable
-     * is that it is set automatically by KiCad on program start up, <b>if</b> it is not
-     * set already in the environment.
+     * These can be either legacy or sweet format.  The only thing special about this
+     * particular environment variable is that it is set automatically by KiCad on
+     * program start up, <b>if</b> it is not set already in the environment.
      */
     static const wxString GlobalPathEnvVariableName();
 
