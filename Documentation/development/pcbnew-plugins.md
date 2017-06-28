@@ -2,7 +2,7 @@
 
 [TOC]
 
-## Introduction ##  {#ppi_intro}
+# Introduction # {#ppi_intro}
 KiCad implements a Python plugin interface so that external Python plugins can
 be run from within Pcbnew.  The interface is generated using the `Simplified
 Wrapper and Interface Generator` or [SWIG](http://www.swig.org).  SWIG is
@@ -15,7 +15,7 @@ corresponding .py files.  These files are installed into Python's system-wide
 `dist-packages` repository, thus they can be imported by any Python 2
 interpreter installed on the system.
 
-## Existing Pcbnew Python API documentation ##  {#ppi_api_docs}
+# Existing Pcbnew Python API documentation # {#ppi_api_docs}
 The Pcbnew Python API can be used stand-alone, i.e. no instance of Pcbnew is
 running and the board project to be manipulated is loaded and saved from and to
 file.  This approach is shown with some examples in the [user's
@@ -25,7 +25,7 @@ Another documentation source is the auto-generated Doxygen reference of the
 API. It can be found
 [here](http://docs.kicad-pcb.org/doxygen-python/namespacepcbnew.html).
 
-## `Action Plugin` Support ##  {#ppi_action_pi}
+# `Action Plugin` Support # {#ppi_action_pi}
 Besides the stand-alone usage of the generated Python plugin interface,
 additional support regarding online manipulation of board projects is available
 for Pcbnew.  Plugins using this feature are called `Action Plugins` and they are
@@ -37,7 +37,7 @@ Python plugin's code.
 This function can then be used to access and manipulate the currently loaded
 board from the Python script environment.
 
-### Typical Plugin Structure ###  {#ppi_pi_struct}
+## Typical Plugin Structure ## {#ppi_pi_struct}
 The `Action Plugin` support is implemented in Pcbnew by discovering Python
 packages and Python script files in specific directories on startup.
 In order for the discovery process to work, the following requirements must be met.
@@ -62,7 +62,7 @@ In order for the discovery process to work, the following requirements must be m
 
 The following examples demonstrate the plugin requirements.
 
-### Simple Plugin Example ###  {#ppi_simple_example}
+## Simple Plugin Example ## {#ppi_simple_example}
 The folder structure of the simple plugin is fairly straight forward.
 A single Python script file is placed into a directory that is present in the
 KiCad plugin path.
@@ -86,7 +86,7 @@ The file `simple_plugin.py` contains the following.
 
     SimplePlugin().register() # Instantiate and register to Pcbnew
 
-### Complex Plugin Example ###  {#ppi_complex_example}
+## Complex Plugin Example ## {#ppi_complex_example}
 The complex plugin example represents a single Python package that is imported
 on Pcbnew startup.  When the Python package is imported, the `__init__.py` file
 is executed and is thus a perfect place to instantiate and register the plugin
