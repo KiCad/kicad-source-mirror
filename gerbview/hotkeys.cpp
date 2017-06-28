@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2010 <Jean-Pierre Charras>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <class_drawpanel.h>
+#include <class_gerbview_layer_widget.h>
 #include <hotkeys.h>
 
 
@@ -62,19 +63,28 @@ static EDA_HOTKEY   HkZoomCenter( _HKI( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 
 static EDA_HOTKEY   HkZoomRedraw( _HKI( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
 static EDA_HOTKEY   HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
 static EDA_HOTKEY   HkZoomIn( _HKI( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
-static EDA_HOTKEY   HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTION, '@', ID_ZOOM_SELECTION );
+static EDA_HOTKEY   HkZoomSelection( _HKI( "Zoom to Selection" ),
+                                     HK_ZOOM_SELECTION, '@' );
 static EDA_HOTKEY   HkHelp( _HKI( "Help (this window)" ), HK_HELP, '?' );
 static EDA_HOTKEY   HkSwitchUnits( _HKI( "Switch Units" ), HK_SWITCH_UNITS, 'U' );
-static EDA_HOTKEY   HkResetLocalCoord( _HKI( "Reset Local Coordinates" ), HK_RESET_LOCAL_COORD, ' ' );
+static EDA_HOTKEY   HkResetLocalCoord( _HKI( "Reset Local Coordinates" ),
+                                       HK_RESET_LOCAL_COORD, ' ' );
 
-static EDA_HOTKEY   HkLinesDisplayMode( _HKI( "Gbr Lines Display Mode" ), HK_GBR_LINES_DISPLAY_MODE, 'L' );
-static EDA_HOTKEY   HkFlashedDisplayMode( _HKI( "Gbr Flashed Display Mode" ), HK_GBR_FLASHED_DISPLAY_MODE, 'F' );
-static EDA_HOTKEY   HkPolygonDisplayMode( _HKI( "Gbr Polygons Display Mode" ), HK_GBR_POLYGON_DISPLAY_MODE, 'P' );
-static EDA_HOTKEY   HkNegativeObjDisplayMode( _HKI( "Gbr Negative Obj Display Mode" ), HK_GBR_NEGATIVE_DISPLAY_ONOFF, 'N' );
-static EDA_HOTKEY   HkDCodesDisplayMode( _HKI( "DCodes Display Mode" ), HK_GBR_DCODE_DISPLAY_ONOFF, 'D' );
+static EDA_HOTKEY   HkLinesDisplayMode( _HKI( "Gbr Lines Display Mode" ),
+                                        HK_GBR_LINES_DISPLAY_MODE, 'L' );
+static EDA_HOTKEY   HkFlashedDisplayMode( _HKI( "Gbr Flashed Display Mode" ),
+                                        HK_GBR_FLASHED_DISPLAY_MODE, 'F' );
+static EDA_HOTKEY   HkPolygonDisplayMode( _HKI( "Gbr Polygons Display Mode" ),
+                                          HK_GBR_POLYGON_DISPLAY_MODE, 'P' );
+static EDA_HOTKEY   HkNegativeObjDisplayMode( _HKI( "Gbr Negative Obj Display Mode" ),
+                                              HK_GBR_NEGATIVE_DISPLAY_ONOFF, 'N' );
+static EDA_HOTKEY   HkDCodesDisplayMode( _HKI( "DCodes Display Mode" ),
+                                         HK_GBR_DCODE_DISPLAY_ONOFF, 'D' );
 
-static EDA_HOTKEY   HkSwitch2NextCopperLayer( _HKI( "Switch to Next Layer" ), HK_SWITCH_LAYER_TO_NEXT, '+' );
-static EDA_HOTKEY   HkSwitch2PreviousCopperLayer( _HKI( "Switch to Previous Layer" ), HK_SWITCH_LAYER_TO_PREVIOUS, '-' );
+static EDA_HOTKEY   HkSwitch2NextCopperLayer( _HKI( "Switch to Next Layer" ),
+                                              HK_SWITCH_LAYER_TO_NEXT, '+' );
+static EDA_HOTKEY   HkSwitch2PreviousCopperLayer( _HKI( "Switch to Previous Layer" ),
+                                              HK_SWITCH_LAYER_TO_PREVIOUS, '-' );
 
 // List of common hotkey descriptors
 EDA_HOTKEY* gerbviewHotkeyList[] = {
@@ -198,6 +208,7 @@ bool GERBVIEW_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         if( getActiveLayer() > 0 )
         {
             setActiveLayer( getActiveLayer() - 1 );
+            m_LayersManager->OnLayerSelected();
             m_canvas->Refresh();
         }
         break;
@@ -206,6 +217,7 @@ bool GERBVIEW_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         if( getActiveLayer() < 31 )
         {
             setActiveLayer( getActiveLayer() + 1 );
+            m_LayersManager->OnLayerSelected();
             m_canvas->Refresh();
         }
         break;
