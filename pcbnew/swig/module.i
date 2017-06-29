@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,8 @@
 
 /**
  * @file module.i
- * @brief Specific BOARD extensions and templates
+ * @brief Specific MODULE extensions and templates, and a few methods to access
+ * footprints in library files
  */
 
 
@@ -60,39 +61,75 @@
     %}
 }
 
+%extend PLUGIN
+{
+    // This version of FootprintEnumerate is for Python scripts, because the c++
+    // version of FootprintEnumerate is not easy to handle in these Python scripts
+    // if aExitOnError = true, footprintPyEnumerate throws a IO_ERROR.
+    // if false, errors are silently ignored
+    // in any case, only valid footprints are listed (especially for .pretty kicad libs
+    // and GEDA fp libs, which are folder containing separate fp files)
+
+    wxArrayString footprintPyEnumerate( const wxString& aLibraryPath, bool aExitOnError )
+    {
+        wxArrayString footprintNames;
+
+        if( aExitOnError )
+            self->FootprintEnumerate( footprintNames, aLibraryPath );
+        else
+        {
+            try
+            {
+                self->FootprintEnumerate( footprintNames, aLibraryPath );
+            }
+            catch( const IO_ERROR& error )
+            {
+            }
+        }
+
+        return footprintNames;
+    }
+
+    %pythoncode
+    %{
+        def FootprintEnumerate(self, libname):
+            return self.footprintPyEnumerate( libname, True )
+    %}
+}
 
 %pythoncode
 %{
-    def GetPluginForPath(lpath):
-        return IO_MGR.PluginFind(IO_MGR.LEGACY)
+    def GetPluginForPath(libname):
+        plugin_type = IO_MGR.GuessPluginTypeFromLibPath( libname );
+        return IO_MGR.PluginFind(plugin_type)
 
-    def FootprintEnumerate(lpath):
-        plug = GetPluginForPath(lpath)
-        return plug.FootprintEnumerate(lpath)
+    def FootprintEnumerate(libname):
+        plug = GetPluginForPath(libname)
+        return plug.FootprintEnumerate(libname)
 
-    def FootprintLoad(lpath,name):
-        plug = GetPluginForPath(lpath)
-        return plug.FootprintLoad(lpath,name)
+    def FootprintLoad(libname,name):
+        plug = GetPluginForPath(libname)
+        return plug.FootprintLoad(libname,name)
 
-    def FootprintSave(lpath,module):
-        plug = GetPluginForPath(lpath)
-        return plug.FootprintSave(lpath,module)
+    def FootprintSave(libname,module):
+        plug = GetPluginForPath(libname)
+        return plug.FootprintSave(libname,module)
 
-    def FootprintDelete(lpath,name):
-        plug = GetPluginForPath(lpath)
-        plug.FootprintDelete(lpath,name)
+    def FootprintDelete(libname,name):
+        plug = GetPluginForPath(libname)
+        plug.FootprintDelete(libname,name)
 
-    def FootprintLibCreate(lpath):
-        plug = GetPluginForPath(lpath)
-        plug.FootprintLibCreate(lpath)
+    def FootprintLibCreate(libname):
+        plug = GetPluginForPath(libname)
+        plug.FootprintLibCreate(libname)
 
-    def FootprintLibDelete(lpath):
-        plug = GetPluginForPath(lpath)
-        plug.FootprintLibDelete(lpath)
+    def FootprintLibDelete(libname):
+        plug = GetPluginForPath(libname)
+        plug.FootprintLibDelete(libname)
 
-    def FootprintIsWritable(lpath):
-        plug = GetPluginForPath(lpath)
-        plug.FootprintLibIsWritable(lpath)
+    def FootprintIsWritable(libname):
+        plug = GetPluginForPath(libname)
+        plug.FootprintLibIsWritable(libname)
 %}
 
 
