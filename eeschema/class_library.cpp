@@ -585,7 +585,13 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
             lib_dialog.Update( i, _( "Loading " + lib_names[i] ) );
         }
 
-        wxFileName fn = lib_names[i];
+        wxFileName fn;
+
+        // Do not use string assignment or single string ctor when initializing a wxFileName
+        // object.  File names with dots other than the file extension will be parsed
+        // incorrectly by wxFileName.
+        fn.SetName( lib_names[i] );
+
         // lib_names[] does not store the file extension. Set it:
         fn.SetExt( SchematicLibraryFileExtension );
 
