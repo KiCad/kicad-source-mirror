@@ -757,7 +757,11 @@ void BOARD::SetElementVisibility( GAL_LAYER_ID LAYER_aPCB, bool isEnabled )
         // so the hide/show option is a per item selection
 
         for( unsigned int net = 1; net < GetNetCount(); net++ )
-            GetConnectivity()->GetRatsnestForNet( net )->SetVisible( visible );
+        {
+            auto rn = GetConnectivity()->GetRatsnestForNet( net );
+            if( rn )
+                rn->SetVisible( visible );
+        }
 
         for( auto track : Tracks() )
             track->SetLocalRatsnestVisible( isEnabled );

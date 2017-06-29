@@ -103,6 +103,9 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
     {
         RN_NET* net = connectivity->GetRatsnestForNet( i );
 
+        if( !net )
+            continue;
+
         if( ( aNetcode <= 0 ) || ( aNetcode == i ) )
         {
             for( const auto& edge : net->GetEdges() )

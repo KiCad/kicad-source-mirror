@@ -122,11 +122,8 @@ public:
      * Function GetRatsnestForNet()
      * Returns the ratsnest, expressed as a set of graph edges for a given net.
      */
-    RN_NET* GetRatsnestForNet( int aNet )
-    {
-        return m_nets[aNet];
-    }
-
+    RN_NET* GetRatsnestForNet( int aNet );
+    
     /**
      * Function PropagateNets()
      * Propagates the net codes from the source pads to the tracks/vias.
