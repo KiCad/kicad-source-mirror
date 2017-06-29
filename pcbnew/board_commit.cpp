@@ -279,7 +279,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
     if( TOOL_MANAGER* toolMgr = frame->GetToolManager() )
         toolMgr->PostEvent( { TC_MESSAGE, TA_MODEL_CHANGE, AS_GLOBAL } );
 
-    connectivity->RecalculateRatsnest();
+    if ( !m_editModules )
+        connectivity->RecalculateRatsnest();
+
     frame->OnModify();
     frame->UpdateMsgPanel();
 
@@ -377,7 +379,8 @@ void BOARD_COMMIT::Revert()
         }
     }
 
-    connectivity->RecalculateRatsnest();
+    if ( !m_editModules )
+        connectivity->RecalculateRatsnest();
 
     clear();
 }

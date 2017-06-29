@@ -556,7 +556,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         wxMessageBox( wxT( "Incomplete undo/redo operation: some items not found" ) );
 
     // Rebuild pointers and connectivity that can be changed.
-    if( reBuild_ratsnest || deep_reBuild_ratsnest )
+    // connectivity can be rebuilt only in the board editor frame
+    if( IsType( FRAME_PCB ) && ( reBuild_ratsnest || deep_reBuild_ratsnest ) )
     {
         Compile_Ratsnest( NULL, false );
     }
