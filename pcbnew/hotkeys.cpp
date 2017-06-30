@@ -237,6 +237,10 @@ static EDA_HOTKEY HkIncLayerAlhpa( _HKI( "Increment Layer Transparency" ), HK_IN
 
 static EDA_HOTKEY HkDecLayerAlhpa( _HKI( "Decrement Layer Transparency" ), HK_DEC_LAYER_ALHPA, '{' );
 
+static EDA_HOTKEY HkSelectConnection( _HKI( "Select Trivial Connection" ), HK_SEL_TRIVIAL_CONNECTION, 'U' );
+
+static EDA_HOTKEY HkSelectCopper( _HKI( "Select Copper Connection" ), HK_SEL_COPPER_CONNECTION, 'I' );
+
 // List of common hotkey descriptors
 EDA_HOTKEY* common_Hotkey_List[] =
 {
@@ -289,6 +293,7 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     &HkSwitchHighContrastMode,
     &HkCanvasDefault,          &HkCanvasCairo,               &HkCanvasOpenGL,
     &HkZoneFillOrRefill,       &HkZoneRemoveFilled,
+    &HkSelectConnection,       &HkSelectCopper,
     NULL
 };
 

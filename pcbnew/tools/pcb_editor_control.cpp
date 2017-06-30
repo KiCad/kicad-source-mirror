@@ -126,7 +126,7 @@ TOOL_ACTION PCB_ACTIONS::crossProbeSchToPcb( "pcbnew.EditorControl.crossProbSchT
         "", "" );
 
 TOOL_ACTION PCB_ACTIONS::toggleLock( "pcbnew.EditorControl.toggleLock",
-        AS_GLOBAL, 'L',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_LOCK_UNLOCK_FOOTPRINT ),
         "Toggle Lock", "" );
 
 TOOL_ACTION PCB_ACTIONS::lock( "pcbnew.EditorControl.lock",

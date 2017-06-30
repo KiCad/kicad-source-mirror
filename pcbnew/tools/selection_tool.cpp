@@ -87,11 +87,11 @@ TOOL_ACTION PCB_ACTIONS::selectionClear( "pcbnew.InteractiveSelection.Clear",
         "", "" );    // No description, it is not supposed to be shown anywhere
 
 TOOL_ACTION PCB_ACTIONS::selectConnection( "pcbnew.InteractiveSelection.SelectConnection",
-        AS_GLOBAL, 'U',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SEL_TRIVIAL_CONNECTION ),
         _( "Trivial Connection" ), _( "Selects a connection between two junctions." ) );
 
 TOOL_ACTION PCB_ACTIONS::selectCopper( "pcbnew.InteractiveSelection.SelectCopper",
-        AS_GLOBAL, 'I',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SEL_COPPER_CONNECTION ),
         _( "Copper Connection" ), _( "Selects whole copper connection." ) );
 
 TOOL_ACTION PCB_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",
