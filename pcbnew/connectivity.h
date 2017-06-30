@@ -35,7 +35,6 @@
 
 #include <math/vector2d.h>
 
-class CN_ITEM;
 class CN_CLUSTER;
 class CN_CONNECTIVITY_ALGO;
 class CN_EDGE;
@@ -51,7 +50,7 @@ class D_PAD;
 struct CN_DISJOINT_NET_ENTRY
 {
     int net;
-    BOARD_CONNECTED_ITEM* a, * b;
+    BOARD_CONNECTED_ITEM *a, *b;
     VECTOR2I anchorA, anchorB;
 };
 
@@ -109,7 +108,6 @@ public:
      * Function Clear()
      * Erases the connectivity database.
      */
-
     void Clear();
 
     /**
@@ -123,7 +121,7 @@ public:
      * Returns the ratsnest, expressed as a set of graph edges for a given net.
      */
     RN_NET* GetRatsnestForNet( int aNet );
-    
+
     /**
      * Function PropagateNets()
      * Propagates the net codes from the source pads to the tracks/vias.
@@ -156,9 +154,9 @@ public:
 
     unsigned int GetPadCount( int aNet = -1 ) const;
 
-    const std::vector<TRACK*> GetConnectedTracks(  const BOARD_CONNECTED_ITEM* aItem ) const;
+    const std::vector<TRACK*> GetConnectedTracks( const BOARD_CONNECTED_ITEM* aItem ) const;
 
-    const std::vector<D_PAD*> GetConnectedPads(  const BOARD_CONNECTED_ITEM* aItem ) const;
+    const std::vector<D_PAD*> GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem ) const;
 
     const std::vector<BOARD_CONNECTED_ITEM*> GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aAnchor, KICAD_T aTypes[] );
 

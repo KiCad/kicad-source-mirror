@@ -2889,6 +2889,7 @@ extern bool BuildBoardPolygonOutlines( BOARD* aBoard,
                                 SHAPE_POLY_SET& aOutlines,
                                 wxString* aErrorText );
 
+
 bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
                                      wxString* aErrorText )
 {
@@ -2901,10 +2902,6 @@ bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
 
 }
 
-/*RN_DATA* BOARD::GetRatsnest() const
-{
-    return m_connectivity->GetRatsnest();
-}*/
 
 const std::vector<D_PAD*> BOARD::GetPads()
 {
@@ -2919,10 +2916,12 @@ const std::vector<D_PAD*> BOARD::GetPads()
     return rv;
 }
 
+
 unsigned BOARD::GetPadCount() const
 {
     return m_connectivity->GetPadCount();
 }
+
 
 /**
  * Function GetPad
@@ -2931,11 +2930,12 @@ unsigned BOARD::GetPadCount() const
 D_PAD* BOARD::GetPad( unsigned aIndex ) const
 {
     unsigned count = 0;
-    for ( MODULE *mod = m_Modules; mod ; mod = mod->Next() ) // FIXME: const DLIST_ITERATOR
+
+    for( MODULE* mod = m_Modules; mod ; mod = mod->Next() ) // FIXME: const DLIST_ITERATOR
     {
-        for ( D_PAD *pad = mod->PadsList(); pad; pad = pad->Next() )
+        for( D_PAD* pad = mod->PadsList(); pad; pad = pad->Next() )
         {
-            if ( count == aIndex )
+            if( count == aIndex )
                 return pad;
 
             count++;

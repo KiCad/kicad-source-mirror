@@ -150,14 +150,13 @@ void CONNECTIVITY_DATA::RecalculateRatsnest()
     int dirtyNets = 0;
 
     for( int net = 0; net < lastNet; net++ )
+    {
         if( m_connAlgo->IsNetDirty( net ) )
         {
             m_nets[net]->Clear();
             dirtyNets++;
         }
-
-
-
+    }
 
     for( auto c : clusters )
     {
@@ -431,7 +430,7 @@ unsigned int CONNECTIVITY_DATA::GetNodeCount( int aNet ) const
 {
     int sum = 0;
 
-    if( aNet < 0 )
+    if( aNet < 0 )      // Node count for all nets
     {
         for( const auto& net : m_nets )
             sum += net->GetNodeCount();
