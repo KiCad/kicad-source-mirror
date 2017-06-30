@@ -70,11 +70,11 @@ TOOL_ACTION PCB_ACTIONS::trackWidthDec( "pcbnew.EditorControl.trackWidthDec",
         "", "" );
 
 TOOL_ACTION PCB_ACTIONS::viaSizeInc( "pcbnew.EditorControl.viaSizeInc",
-        AS_GLOBAL, '\'',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_VIA_SIZE_INC ),
         "", "" );
 
 TOOL_ACTION PCB_ACTIONS::viaSizeDec( "pcbnew.EditorControl.viaSizeDec",
-        AS_GLOBAL, '\\',
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_VIA_SIZE_DEC ),
         "", "" );
 
 TOOL_ACTION PCB_ACTIONS::trackViaSizeChanged( "pcbnew.EditorControl.trackViaSizeChanged",

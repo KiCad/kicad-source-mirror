@@ -241,6 +241,16 @@ static EDA_HOTKEY HkSelectConnection( _HKI( "Select Trivial Connection" ), HK_SE
 
 static EDA_HOTKEY HkSelectCopper( _HKI( "Select Copper Connection" ), HK_SEL_COPPER_CONNECTION, 'I' );
 
+static EDA_HOTKEY HkRoutingOptions( _HKI( "Routing Options" ), HK_ROUTING_OPTIONS, 'E' );
+
+static EDA_HOTKEY HkCustomTrackWidth( _HKI( "Custom Track/Via Size" ), HK_CUSTOM_TRACK_WIDTH, 'Q' );
+
+static EDA_HOTKEY HkDpDimension( _HKI( "Differential Pair Dimensions" ), HK_DP_DIMENSIONS, 'P' );
+
+static EDA_HOTKEY HkViaSizeInc( _HKI( "Increase Via Size" ), HK_VIA_SIZE_INC, '\'' );
+
+static EDA_HOTKEY HkViaSizeDec( _HKI( "Decrease Via Size" ), HK_VIA_SIZE_DEC, '\\' );
+
 // List of common hotkey descriptors
 EDA_HOTKEY* common_Hotkey_List[] =
 {
@@ -294,6 +304,8 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     &HkCanvasDefault,          &HkCanvasCairo,               &HkCanvasOpenGL,
     &HkZoneFillOrRefill,       &HkZoneRemoveFilled,
     &HkSelectConnection,       &HkSelectCopper,
+    &HkRoutingOptions,         &HkCustomTrackWidth,          &HkDpDimension,
+    &HkViaSizeInc,             &HkViaSizeDec,
     NULL
 };
 

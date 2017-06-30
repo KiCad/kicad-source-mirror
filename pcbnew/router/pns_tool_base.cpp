@@ -39,6 +39,7 @@ using namespace std::placeholders;
 #include <dialogs/dialog_track_via_size.h>
 #include <base_units.h>
 #include <bitmaps.h>
+#include <hotkeys.h>
 
 #include <tool/context_menu.h>
 #include <tools/pcb_actions.h>
@@ -61,7 +62,7 @@ using namespace KIGFX;
 namespace PNS {
 
 TOOL_ACTION TOOL_BASE::ACT_RouterOptions( "pcbnew.InteractiveRouter.RouterOptions",
-                                            AS_CONTEXT, 'E',
+                                            AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_ROUTING_OPTIONS ),
                                             _( "Routing Options..." ),
                                             _( "Shows a dialog containing router options." ), tools_xpm );
 

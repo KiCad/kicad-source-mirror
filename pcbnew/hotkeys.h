@@ -105,7 +105,12 @@ enum hotkey_id_commnand {
     HK_INC_LAYER_ALHPA,
     HK_DEC_LAYER_ALHPA,
     HK_SEL_TRIVIAL_CONNECTION,
-    HK_SEL_COPPER_CONNECTION
+    HK_SEL_COPPER_CONNECTION,
+    HK_ROUTING_OPTIONS,
+    HK_CUSTOM_TRACK_WIDTH,
+    HK_DP_DIMENSIONS,
+    HK_VIA_SIZE_INC,
+    HK_VIA_SIZE_DEC
 };
 
 // Full list of hotkey descriptors for board editor and footprint editor

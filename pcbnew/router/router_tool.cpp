@@ -163,7 +163,7 @@ static const TOOL_ACTION ACT_SelLayerAndPlaceBlindVia(
     (void*) ( VIA_ACTION_FLAGS::BLIND_VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
 
 static const TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackViaSize",
-    AS_CONTEXT, 'Q',
+    AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_CUSTOM_TRACK_WIDTH ),
     _( "Custom Track/Via Size" ),
     _( "Shows a dialog for changing the track width and via size." ),
     width_track_xpm );
@@ -175,7 +175,7 @@ static const TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPost
     change_entry_orient_xpm );
 
 static const TOOL_ACTION ACT_SetDpDimensions( "pcbnew.InteractiveRouter.SetDpDimensions",
-    AS_CONTEXT, 'P',
+    AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_DP_DIMENSIONS ),
     _( "Differential Pair Dimensions..." ),
     _( "Sets the width and gap of the currently routed differential pair." ),
     ps_diff_pair_tune_length_xpm );
