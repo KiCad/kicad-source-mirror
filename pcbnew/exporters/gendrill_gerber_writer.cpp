@@ -207,9 +207,13 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 
     // else: empty file.
 
-    // End of attribute:
+    // End of .FileFunction attribute:
     text << "*%";
 
+    plotter.AddLineToHeader( text );
+
+    // Add file polarity (positive)
+    text = "%TF.FilePolarity,Positive*%";
     plotter.AddLineToHeader( text );
 
     if( !plotter.OpenFile( aFullFilename ) )
