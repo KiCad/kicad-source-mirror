@@ -97,16 +97,24 @@ FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( wxWindow* aParent,
 void FOOTPRINT_SELECT_WIDGET::Load( KIWAY& aKiway, PROJECT& aProject )
 {
     m_kiway = &aKiway;
-    auto fp_lib_table = aProject.PcbFootprintLibs( aKiway );
 
-    if( m_fp_loader.GetProgress() == 0 || !m_fp_loader.IsSameTable( fp_lib_table ) )
+    try
     {
-        m_fp_list = FOOTPRINT_LIST::GetInstance( aKiway );
-        m_fp_loader.SetList( &*m_fp_list );
-        m_fp_loader.Start( fp_lib_table );
-    }
+        auto fp_lib_table = aProject.PcbFootprintLibs( aKiway );
 
-    m_progress_timer->Start( 200 );
+        if( m_fp_loader.GetProgress() == 0 || !m_fp_loader.IsSameTable( fp_lib_table ) )
+        {
+            m_fp_list = FOOTPRINT_LIST::GetInstance( aKiway );
+            m_fp_loader.SetList( &*m_fp_list );
+            m_fp_loader.Start( fp_lib_table );
+        }
+
+        m_progress_timer->Start( 200 );
+    }
+    catch( ... )
+    {
+        // no footprint libraries available
+    }
 }
 
 
