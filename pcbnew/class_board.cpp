@@ -2508,6 +2508,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                 footprint->SetTimeStamp( GetNewTimeStamp() );
                 newFootprints.push_back( footprint );
                 Add( footprint, ADD_APPEND );
+                m_connectivity->Add( footprint );
             }
         }
         else                           // An existing footprint.
@@ -2570,8 +2571,12 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                             newFootprint->Value().SetEffects( footprint->Value() );
                         }
 
+                        m_connectivity->Remove( footprint );
                         Remove( footprint );
+
                         Add( newFootprint, ADD_APPEND );
+                        m_connectivity->Add( footprint );
+
                         footprint = newFootprint;
                     }
                 }
@@ -2647,7 +2652,10 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                 }
 
                 if( !aNetlist.IsDryRun() )
+                {
+                    m_connectivity->Remove( pad );
                     pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+                }
             }
             else                                 // Footprint pad has a net.
             {
@@ -2668,6 +2676,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     if( !aNetlist.IsDryRun() )
                     {
                         NETINFO_ITEM* netinfo = FindNet( net.GetNetName() );
+
                         if( netinfo == NULL )
                         {
                             // It is a new net, we have to add it
@@ -2675,7 +2684,9 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                             Add( netinfo );
                         }
 
+                        m_connectivity->Remove( pad );
                         pad->SetNetCode( netinfo->GetNet() );
+                        m_connectivity->Add( pad );
                     }
                 }
             }
@@ -2711,82 +2722,74 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                 }
 
                 if( !aNetlist.IsDryRun() )
+                {
+                    m_connectivity->Remove( module );
                     module->DeleteStructure();
+                }
             }
         }
     }
 
-    // We need the pad list, for next tests.
-    // padlist is the list of pads, sorted by netname.
     BuildListOfNets();
     std::vector<D_PAD*> padlist = GetPads();
+    auto connAlgo = m_connectivity->GetConnectivityAlgo();
 
     // If needed, remove the single pad nets:
     if( aDeleteSinglePadNets && !aNetlist.IsDryRun() )
     {
-        int         count = 0;
-        wxString    netname;
-        D_PAD*      pad = NULL;
-        D_PAD*      previouspad = NULL;
+        std::vector<unsigned int> padCount( connAlgo->NetCount() );
 
-        for( unsigned kk = 0; kk < padlist.size(); kk++ )
+        for( const auto cnItem : connAlgo->PadList() )
         {
-            pad = padlist[kk];
+            int net = cnItem->Parent()->GetNetCode();
 
-            if( pad->GetNetname().IsEmpty() )
-                continue;
+            if( net > 0 )
+                ++padCount[net];
+        }
 
-            if( netname != pad->GetNetname() )  // End of net
+        for( i = 0; i < connAlgo->NetCount(); ++i )
+        {
+            // First condition: only one pad in the net
+            if( padCount[i] == 1 )
             {
-                if( previouspad && count == 1 )
+                // Second condition, no zones attached to the pad
+                D_PAD* pad = nullptr;
+                int zoneCount = 0;
+                const KICAD_T types[] = { PCB_PAD_T, PCB_ZONE_AREA_T, EOT };
+                auto netItems = m_connectivity->GetNetItems( i, types );
+
+                for( const auto item : netItems )
                 {
-                    // First, see if we have a copper zone attached to this pad.
-                    // If so, this is not really a single pad net
-
-                    for( int ii = 0; ii < GetAreaCount(); ii++ )
+                    if( item->Type() == PCB_ZONE_AREA_T )
                     {
-                        ZONE_CONTAINER* zone = GetArea( ii );
-
-                        if( !zone->IsOnCopperLayer() )
-                            continue;
-
-                        if( zone->GetIsKeepout() )
-                            continue;
-
-                        if( zone->GetNet() == previouspad->GetNet() )
-                        {
-                            count++;
-                            break;
-                        }
+                        wxASSERT( !pad || pad->GetNet() == item->GetNet() );
+                        ++zoneCount;
                     }
-
-                    if( count == 1 )    // Really one pad, and nothing else
+                    else if( item->Type() == PCB_PAD_T )
                     {
-                        if( aReporter )
-                        {
-                            msg.Printf( _( "Remove single pad net \"%s\" on \"%s\" pad '%s'\n" ),
-                                        GetChars( previouspad->GetNetname() ),
-                                        GetChars( previouspad->GetParent()->GetReference() ),
-                                        GetChars( previouspad->GetPadName() ) );
-                            aReporter->Report( msg, REPORTER::RPT_ACTION );
-                        }
-
-                        previouspad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+                        wxASSERT( !pad );
+                        pad = static_cast<D_PAD*>( item );
                     }
                 }
 
-                netname = pad->GetNetname();
-                count = 1;
+                wxASSERT( pad );
+
+                if( zoneCount == 0 )
+                {
+                    if( aReporter )
+                    {
+                        msg.Printf( _( "Remove single pad net \"%s\" on \"%s\" pad '%s'\n" ),
+                                    GetChars( pad->GetNetname() ),
+                                    GetChars( pad->GetParent()->GetReference() ),
+                                    GetChars( pad->GetPadName() ) );
+                        aReporter->Report( msg, REPORTER::RPT_ACTION );
+                    }
+
+                    m_connectivity->Remove( pad );
+                    pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+                }
             }
-            else
-                count++;
-
-            previouspad = pad;
         }
-
-        // Examine last pad
-        if( pad && count == 1 )
-            pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
     }
 
     // Last step: Some tests:
@@ -2835,7 +2838,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             if( !zone->IsOnCopperLayer() || zone->GetIsKeepout() )
                 continue;
 
-            if( GetConnectivity()->GetPadCount( zone->GetNetCode() ) == 0 )
+            if( m_connectivity->GetPadCount( zone->GetNetCode() ) == 0 )
             {
                 msg.Printf( _( "Copper zone (net name '%s'): net has no pads connected." ),
                            GetChars( zone->GetNet()->GetNetname() ) );
