@@ -186,6 +186,23 @@ void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
 }
 
 
+bool FP_LIB_TABLE::operator==( const FP_LIB_TABLE& aFpTable ) const
+{
+    if( rows.size() == aFpTable.rows.size() )
+    {
+        for( unsigned i = 0; i < rows.size();  ++i )
+        {
+            if( (FP_LIB_TABLE_ROW&)rows[i] != (FP_LIB_TABLE_ROW&)aFpTable.rows[i] )
+                return false;
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+
 void FP_LIB_TABLE::Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) const
 {
     aOutput->Print( aIndentLevel, "(fp_lib_table\n" );

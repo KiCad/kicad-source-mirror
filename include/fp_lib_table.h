@@ -122,6 +122,11 @@ public:
      */
     FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable = NULL );
 
+
+    bool operator==( const FP_LIB_TABLE& aFpTable ) const;
+
+    bool operator!=( const FP_LIB_TABLE& r ) const  { return !( *this == r ); }
+
     /**
      * Function FindRow
      *

@@ -248,25 +248,25 @@ int PNS_PCBNEW_RULE_RESOLVER::matchDpSuffix( wxString aNetName, wxString& aCompl
         aComplementNet = "P";
         rv = -1;
     }
-	// Match P followed by 2 digits
+    // Match P followed by 2 digits
     else if( aNetName.Right( 2 ).IsNumber() && aNetName.Right( 3 ).Left( 1 ) == "P" )
     {
         aComplementNet = "N" + aNetName.Right( 2 );
         rv = 1;
     }
-	// Match P followed by 1 digit
+    // Match P followed by 1 digit
     else if( aNetName.Right( 1 ).IsNumber() && aNetName.Right( 2 ).Left( 1 ) == "P" )
     {
         aComplementNet = "N" + aNetName.Right( 1 );
         rv = 1;
     }
-	// Match N followed by 2 digits
+    // Match N followed by 2 digits
     else if( aNetName.Right( 2 ).IsNumber() && aNetName.Right( 3 ).Left( 1 ) == "N" )
     {
         aComplementNet = "P" + aNetName.Right( 2 );
         rv = -1;
     }
-	// Match N followed by 1 digit
+    // Match N followed by 1 digit
     else if( aNetName.Right( 1 ).IsNumber() && aNetName.Right( 2 ).Left( 1 ) == "N" )
     {
         aComplementNet = "P" + aNetName.Right( 1 );
