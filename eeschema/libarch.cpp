@@ -102,6 +102,15 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
                         // AddPart() does first clone the part before adding.
                         archLib->AddPart( part );
                     }
+                    // Russell: This is a hack to get a part to save into the cache file the components PART_REF when imported with the eagle plugin.
+                    // Don't think it is kosher, but it works for now.
+                    else
+                    {
+                        PART_REF partref = component->GetPartRef();
+                        if( !partref.expired()){
+                            cacheLib->AddPart( partref.lock().get() );
+                        }
+                    }
                 }
                 catch( ... /* IO_ERROR ioe */ )
                 {

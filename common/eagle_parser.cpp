@@ -742,8 +742,9 @@ EPART::EPART( wxXmlNode* aPart )
     library = parseRequiredAttribute<string>( aPart, "library" );
     deviceset = parseRequiredAttribute<string>( aPart, "deviceset" );
     device = parseRequiredAttribute<string>( aPart, "device" );
-    technology = parseRequiredAttribute<string>( aPart, "technology" );
+    technology = parseOptionalAttribute<string>( aPart, "technology" );
     value = parseOptionalAttribute<string>( aPart, "value" );
+    rot     = parseOptionalAttribute<EROT>( aPart, "rot" );
 }
 
 
@@ -786,8 +787,10 @@ EGATE::EGATE( wxXmlNode* aGate )
      *   >
      */
 
+    std::cout << aGate->GetName().ToStdString() << '\n';
     name = parseRequiredAttribute<string>( aGate, "name" );
-    symbol = parseRequiredAttribute<string>( aGate, "library" );
+    std::cout << name << '\n';
+    symbol = parseRequiredAttribute<string>( aGate, "symbol" );
 
     x   = parseRequiredAttribute<double>( aGate, "x" );
     y   = parseRequiredAttribute<double>( aGate, "y" );
@@ -848,6 +851,7 @@ EDEVICE::EDEVICE( wxXmlNode* aDevice )
 
     while(connectNode){
         connects.push_back(ECONNECT(connectNode));
+        connectNode = connectNode->GetNext();
     }
 
 };
@@ -868,8 +872,8 @@ EDEVICESET::EDEVICESET( wxXmlNode* aDeviceSet )
     prefix = parseOptionalAttribute<string>( aDeviceSet, "prefix" );
     uservalue  =  parseOptionalAttribute<bool>( aDeviceSet, "uservalue" );
 
-
-
+    /* Russell: Parsing of devices and gates moved to sch_eagle_plugin.cpp
+    *           
     //TODO: description
 
     NODE_MAP aDeviceSetChildren = MapChildren(aDeviceSet);
@@ -886,7 +890,6 @@ EDEVICESET::EDEVICESET( wxXmlNode* aDeviceSet )
         gates.push_back(EGATE(gateNode));
         gateNode->GetNext();
     }
+    */
 
 }
-
-

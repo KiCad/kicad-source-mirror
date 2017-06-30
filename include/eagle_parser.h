@@ -831,8 +831,9 @@ struct EPART
     string library;
     string deviceset;
     string device;
-    string technology;
+    opt_string technology;
     opt_string value;
+    opt_erot    rot;
 
     EPART( wxXmlNode* aPart );
 };
@@ -949,8 +950,8 @@ struct EDEVICESET
     std::string name;
     opt_string prefix;
     opt_bool uservalue;
-    std::vector<EDEVICE> devices;
-    std::vector<EGATE> gates;
+    //std::vector<EDEVICE> devices;
+    //std::vector<EGATE> gates;
 
 
     EDEVICESET( wxXmlNode* aDeviceSet );

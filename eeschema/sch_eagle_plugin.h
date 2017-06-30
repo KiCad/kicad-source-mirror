@@ -65,12 +65,14 @@ class LIB_TEXT;
 
 typedef struct EAGLE_LIBRARY
 {
-    wxString name;
+    std::string name;
     std::unordered_map<std::string, LIB_PART*> kicadsymbols;
-    std::unordered_map<std::string, EDEVICESET*> devicesets;
     std::unordered_map<std::string, wxXmlNode*> symbolnodes;
+    std::unordered_map<std::string, int> gate_unit;
 
-}EAGLE_LIBRARY;
+} EAGLE_LIBRARY;
+
+typedef  std::map<std::string, EPART*> EPART_LIST;
 
 class SCH_EAGLE_PLUGIN : public SCH_PLUGIN
 {
@@ -129,7 +131,7 @@ private:
     void loadSheet( wxXmlNode* aSheetNode );
     void loadInstance( wxXmlNode* aInstanceNode );
     void loadModuleinst( wxXmlNode* aModuleinstNode );
-    void loadLibrary( wxXmlNode* aLibraryNode );
+    EAGLE_LIBRARY* loadLibrary( wxXmlNode* aLibraryNode );
 
     void                loadSegments( wxXmlNode* aSegmentsNode, const wxString& aNetName,
             const wxString& aNetClass );
@@ -137,7 +139,7 @@ private:
     SCH_GLOBALLABEL*    loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName );
     SCH_JUNCTION*       loadJunction( wxXmlNode* aJunction );
 
-    LIB_ITEMS*      loadSymbol( wxXmlNode* aSymbolNode );
+    void loadSymbol(wxXmlNode *aSymbolNode, LIB_PART* aPart, EDEVICE* aDevice, int gateNumber, string gateName);
     LIB_CIRCLE*     loadSymbolCircle( LIB_PART* aPart, wxXmlNode* aCircleNode );
     LIB_RECTANGLE*  loadSymbolRectangle( LIB_PART* aPart, wxXmlNode* aRectNode );
     LIB_POLYLINE*   loadSymbolPolyLine( LIB_PART* aPart, wxXmlNode* aRectNode );
@@ -149,7 +151,11 @@ private:
     SCH_SHEET* m_rootSheet; ///< The root sheet of the schematic being loaded..
     SCH_SHEET* m_currentSheet; ///< The current sheet of the schematic being loaded..
     wxString m_version; ///< Eagle file version.
+    wxFileName m_filename;
     //PART_LIB* m_partlib; ///< symbol library for imported file.
+
+    EPART_LIST m_partlist;
+    std::map<std::string, EAGLE_LIBRARY*> m_eaglelibraries;
 
 
 
