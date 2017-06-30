@@ -128,6 +128,7 @@ public:
     /**
      * Display pin info (given by GetMsgPanelInfo) and add some info related to aComponent
      * (schematic pin position, and sheet path)
+     * @param aList is the message list to fill
      * @param aComponent is the component which "owns" the pin
      */
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList, SCH_COMPONENT* aComponent );

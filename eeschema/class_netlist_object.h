@@ -292,10 +292,7 @@ public:
     /**
      * Constructor.
      * NETLIST_OBJECT_LIST handle a list of connected items.
-     * the instance can be owner of items or not.
-     * If it is the owner, the items are freeed by the destructor
-     * @param aIsOwner true if the instance is the owner of item list
-     * (default = false)
+     * these NETLIST_OBJECT items are freeed by the destructor
      */
     NETLIST_OBJECT_LIST()
     {

@@ -370,7 +370,7 @@ private:
     void drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
 
     /**
-     * @param Generic way of drawing a polyline stored in different containers.
+     * @brief Generic way of drawing a polyline stored in different containers.
      * @param aPointGetter is a function to obtain coordinates of n-th vertex.
      * @param aPointCount is the number of points to be drawn.
      */
@@ -388,7 +388,7 @@ private:
      * @brief Draws a single character using bitmap font.
      * Its main purpose is to be used in BitmapText() function.
      *
-     * @param aCharacter is the character to be drawn.
+     * @param aChar is the character to be drawn.
      * @return Width of the drawn glyph.
      */
     int drawBitmapChar( unsigned long aChar );

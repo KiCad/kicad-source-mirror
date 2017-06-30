@@ -44,19 +44,19 @@ public:
     NONCACHED_CONTAINER( unsigned int aSize = defaultInitSize );
     virtual ~NONCACHED_CONTAINER();
 
-    ///< @copydoc VERTEX_CONTAINER::SetItem( VERTEX_ITEM* aItem )
+    /// @copydoc VERTEX_CONTAINER::SetItem( VERTEX_ITEM* aItem )
     virtual void SetItem( VERTEX_ITEM* aItem ) override;
 
-    ///< @copydoc VERTEX_CONTAINER::Allocate( unsigned int aSize )
+    /// @copydoc VERTEX_CONTAINER::Allocate( unsigned int aSize )
     virtual VERTEX* Allocate( unsigned int aSize ) override;
 
-    ///< @copydoc VERTEX_CONTAINER::Delete( VERTEX_ITEM* aItem )
+    /// @copydoc VERTEX_CONTAINER::Delete( VERTEX_ITEM* aItem )
     void Delete( VERTEX_ITEM* aItem ) override {}
 
-    ///< @copydoc VERTEX_CONTAINER::Clear()
+    /// @copydoc VERTEX_CONTAINER::Clear()
     virtual void Clear() override;
 
-    ///< @copydoc VERTEX_CONTAINER::GetSize()
+    /// @copydoc VERTEX_CONTAINER::GetSize()
     virtual inline unsigned int GetSize() const override
     {
         // As the m_freePtr points to the first free space, we can safely assume

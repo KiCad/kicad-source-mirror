@@ -206,6 +206,8 @@ protected:
      * @param aLibrary = a reference to the library to explore
      *                If NULL the user will be prompted tp chose a library
      * @param aBuffer = a wxString to put the selected component name
+     * @param aPreviousChoice = the previously selected component name.
+     * it will be added to the selection list. Can be empty.
      *
      * @return true if a component is selected
      *         false on cancel

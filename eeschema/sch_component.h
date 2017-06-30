@@ -393,7 +393,7 @@ public:
      * Autoplace fields only if correct to do so automatically.
      *
      * Fields that have been moved by hand are not automatically placed.
-     *.
+     *
      * @param aScreen is the SCH_SCREEN associated with the current instance of the
      *                component.
      */
@@ -431,7 +431,7 @@ public:
 
     /**
      * Draw a component with or without pin text
-     *.
+     *
      * @param aPanel is the panel to use (can be null) mainly used for clipping purposes.
      * @param aDC is the device context (can be null)
      * @param aOffset is the drawing offset (usually wxPoint(0,0),
@@ -528,9 +528,9 @@ public:
     /**
      * Test if the symbol's dangling state has changed for one given pin index.
      *
-     * As a side effect, the actually updates the dangling status for that pin.
+     * As a side effect, it actually updates the dangling status for that pin.
      *
-     * @param aItemList is list of all #DANGLING_END_ITEMs to be tested.
+     * @param aItemList is list of all #DANGLING_END_ITEM items to be tested.
      * @param aLibPins is list of all the #LIB_PIN items in this symbol
      * @param aPin is the index into \a aLibPins that identifies the pin to test
      * @return true if the pin's state has changed.
@@ -545,7 +545,7 @@ public:
      *
      * @note This does not test for  short circuits.
      *
-     * @param aItemList is list of all #DANGLING_END_ITEMs to be tested.
+     * @param aItemList is list of all #DANGLING_END_ITEM items to be tested.
      *
      * @return true if any pin's state has changed.
      */
