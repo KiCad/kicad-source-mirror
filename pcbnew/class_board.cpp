@@ -2747,7 +2747,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                 ++padCount[net];
         }
 
-        for( i = 0; i < connAlgo->NetCount(); ++i )
+        for( i = 0; i < (unsigned)connAlgo->NetCount(); ++i )
         {
             // First condition: only one pad in the net
             if( padCount[i] == 1 )

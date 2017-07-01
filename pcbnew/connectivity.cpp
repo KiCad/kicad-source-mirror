@@ -568,7 +568,7 @@ const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems(
 
 RN_NET* CONNECTIVITY_DATA::GetRatsnestForNet( int aNet )
 {
-    if ( aNet < 0 || aNet >= m_nets.size() )
+    if ( aNet < 0 || aNet >= (int)m_nets.size() )
     {
         return nullptr;
     }
