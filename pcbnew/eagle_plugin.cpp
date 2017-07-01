@@ -824,7 +824,12 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
     while( element )
     {
         if( element->GetName() != "element" )
+        {
+            wxLogMessage( "expected: <element> read <%s>. Skip it", element->GetName() );
+            // Get next item
+            element = element->GetNext();
             continue;
+        }
 
         EELEMENT    e( element );
 
@@ -909,7 +914,11 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
             while( attribute )
             {
                 if( attribute->GetName() != "attribute" )
+                {
+                    wxLogMessage( "expected: <attribute> read <%s>. Skip it", attribute->GetName() );
+                    attribute = attribute->GetNext();
                     continue;
+                }
 
                 EATTR   a( attribute );
 
