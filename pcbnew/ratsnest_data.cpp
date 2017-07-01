@@ -235,17 +235,29 @@ public:
         for( int i = prevId; i < id; i++ )
             anchorChains[prevId].push_back( m_allNodes[ i ] );
 
-
-        hed::TRIANGULATION triangulator;
-        triangulator.CreateDelaunay( triNodes.begin(), triNodes.end() );
-        triangulator.GetEdges( triangEdges );
-
-        for( auto e : triangEdges )
+        if( triNodes.size() == 1 )
         {
-            auto    src = m_allNodes[ e->GetSourceNode()->Id() ];
-            auto    dst = m_allNodes[ e->GetTargetNode()->Id() ];
-
+            return mstEdges;
+        }
+        else if( triNodes.size() == 2 )
+        {
+            auto src = m_allNodes[ triNodes[0]->Id() ];
+            auto dst = m_allNodes[ triNodes[1]->Id() ];
             mstEdges.emplace_back( src, dst, getDistance( src, dst ) );
+        }
+        else
+        {
+            hed::TRIANGULATION triangulator;
+            triangulator.CreateDelaunay( triNodes.begin(), triNodes.end() );
+            triangulator.GetEdges( triangEdges );
+
+            for( auto e : triangEdges )
+            {
+                auto    src = m_allNodes[ e->GetSourceNode()->Id() ];
+                auto    dst = m_allNodes[ e->GetTargetNode()->Id() ];
+
+                mstEdges.emplace_back( src, dst, getDistance( src, dst ) );
+            }
         }
 
         for( unsigned int i = 0; i < anchorChains.size(); i++ )

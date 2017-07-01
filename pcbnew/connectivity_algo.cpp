@@ -203,7 +203,7 @@ void CN_CONNECTIVITY_ALGO::markItemNetAsDirty( const BOARD_ITEM* aItem )
     if( aItem->IsConnected() )
     {
         auto citem = static_cast<const BOARD_CONNECTED_ITEM*>( aItem );
-        markNetAsDirty( citem->GetNetCode() );
+        MarkNetAsDirty( citem->GetNetCode() );
     }
     else
     {
@@ -212,7 +212,7 @@ void CN_CONNECTIVITY_ALGO::markItemNetAsDirty( const BOARD_ITEM* aItem )
             auto mod = static_cast <const MODULE*>( aItem );
 
             for( D_PAD* pad = mod->PadsList(); pad; pad = pad->Next() )
-                markNetAsDirty( pad->GetNetCode() );
+                MarkNetAsDirty( pad->GetNetCode() );
         }
     }
 }
@@ -224,6 +224,11 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
 
     switch( aItem->Type() )
     {
+    case PCB_NETINFO_T:
+    {
+        MarkNetAsDirty( static_cast<NETINFO_ITEM*>( aItem )->GetNet() );
+        break;
+    }    
     case PCB_MODULE_T:
         for( auto pad : static_cast<MODULE*>( aItem ) -> Pads() )
         {
@@ -762,7 +767,7 @@ void CN_CONNECTIVITY_ALGO::propagateConnections()
                 if( item->CanChangeNet() )
                 {
                     item->Parent()->SetNetCode( cluster->OriginNet() );
-                    markNetAsDirty( cluster->OriginNet() );
+                    MarkNetAsDirty( cluster->OriginNet() );
                     n_changed++;
                 }
             }
@@ -826,9 +831,9 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS& CN_CONNECTIVITY_ALGO::GetClusters()
 }
 
 
-void CN_CONNECTIVITY_ALGO::markNetAsDirty( int aNet )
+void CN_CONNECTIVITY_ALGO::MarkNetAsDirty( int aNet )
 {
-    if( aNet <= 0 )
+    if( aNet < 0 )
         return;
 
     if( (int) m_dirtyNets.size() <= aNet )

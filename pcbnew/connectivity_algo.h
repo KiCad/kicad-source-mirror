@@ -823,7 +823,6 @@ public:
     bool addConnectedItem( BOARD_CONNECTED_ITEM* aItem );
     bool isDirty() const;
 
-    void markNetAsDirty( int aNet );
     void markItemNetAsDirty( const BOARD_ITEM* aItem );
 
 public:
@@ -838,6 +837,9 @@ public:
 
     bool IsNetDirty( int aNet ) const
     {
+        if( aNet < 0 )
+            return false;
+
         return m_dirtyNets[ aNet ];
     }
 
@@ -883,8 +885,11 @@ public:
 
     CN_PAD_LIST& PadList() { return m_padList; }
 
-    void ForEachAnchor( std::function<void(CN_ANCHOR_PTR)> aFunc );
-    void ForEachItem( std::function<void(CN_ITEM*)> aFunc );
+    void ForEachAnchor(  std::function<void(CN_ANCHOR_PTR)> aFunc );
+    void ForEachItem(  std::function<void(CN_ITEM*)> aFunc );
+
+    void MarkNetAsDirty( int aNet );
+
 };
 
 bool operator<( const CN_ANCHOR_PTR a, const CN_ANCHOR_PTR b );
