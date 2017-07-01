@@ -119,7 +119,7 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
 
     // call SetHatch last, because hatch lines will be rebuilt,
     // using new parameters values
-    aTarget.SetHatch( m_Zone_HatchingStyle, Mils2iu( aTarget.GetDefaultHatchPitchMils() ), true );
+    aTarget.SetHatch( m_Zone_HatchingStyle, aTarget.GetDefaultHatchPitch(), true );
 }
 
 

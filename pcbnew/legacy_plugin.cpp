@@ -2730,7 +2730,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
                 // Hatch here, after outlines corners are read
                 // Set hatch here, after outlines corners are read
-                zc->SetHatch( outline_hatch, Mils2iu( ZONE_CONTAINER::GetDefaultHatchPitchMils() ),
+                zc->SetHatch( outline_hatch, ZONE_CONTAINER::GetDefaultHatchPitch(),
                               true );
 
                 m_board->Add( zc.release() );

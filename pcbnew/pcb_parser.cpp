@@ -1350,22 +1350,24 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT()
         NeedLEFT();
         token = NextTok();
 
-        if( token != T_start )
+        // the start keyword actually gives the arc center
+        // Allows also T_center for future change
+        if( token != T_start && token != T_center )
             Expecting( T_start );
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetStart( pt );
+        segment->SetCenter( pt );
         NeedRIGHT();
         NeedLEFT();
         token = NextTok();
 
-        if( token != T_end )
+        if( token != T_end )    // the end keyword actually gives the starting point of the arc
             Expecting( T_end );
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetEnd( pt );
+        segment->SetArcStart( pt );
         NeedRIGHT();
         break;
 
@@ -1379,7 +1381,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT()
 
         pt.x = parseBoardUnits( "X coordinate" );
         pt.y = parseBoardUnits( "Y coordinate" );
-        segment->SetStart( pt );
+        segment->SetCenter( pt );
         NeedRIGHT();
         NeedLEFT();
 
@@ -2085,7 +2087,9 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
         NeedLEFT();
         token = NextTok();
 
-        if( token != T_start )
+        // the start keyword actually gives the arc center
+        // Allows also T_center for future change
+        if( token != T_start && token != T_center )
             Expecting( T_start );
 
         pt.x = parseBoardUnits( "X coordinate" );
@@ -2095,7 +2099,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
         NeedLEFT();
         token = NextTok();
 
-        if( token != T_end )
+        if( token != T_end )    // end keyword actually gives the starting point of the arc
             Expecting( T_end );
 
         pt.x = parseBoardUnits( "X coordinate" );
@@ -2645,7 +2649,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
 
     ZONE_CONTAINER::HATCH_STYLE hatchStyle = ZONE_CONTAINER::NO_HATCH;
 
-    int     hatchPitch = Mils2iu( ZONE_CONTAINER::GetDefaultHatchPitchMils() );
+    int     hatchPitch = ZONE_CONTAINER::GetDefaultHatchPitch();
     wxPoint pt;
     T       token;
     int     tmp;

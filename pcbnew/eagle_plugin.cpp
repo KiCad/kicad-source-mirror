@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -628,7 +628,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 zone->AppendCorner( wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ), outlineIdx );
 
                 // this is not my fault:
-                zone->SetHatch( outline_hatch, Mils2iu( zone->GetDefaultHatchPitchMils() ), true );
+                zone->SetHatch( outline_hatch, zone->GetDefaultHatchPitch(), true );
             }
 
             m_xpath->pop();
@@ -1837,8 +1837,10 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     }
 
                     // if spacing is set the zone should be hatched
+                    // However, use the default hatch step, p.spacing value has no meaning for Kicad
+                    // TODO: see if this parameter is related to a grid fill option.
                     if( p.spacing )
-                        zone->SetHatch( ZONE_CONTAINER::DIAGONAL_EDGE, *p.spacing, true );
+                        zone->SetHatch( ZONE_CONTAINER::DIAGONAL_EDGE, zone->GetDefaultHatchPitch(), true );
 
                     // clearances, etc.
                     zone->SetArcSegmentCount( 32 );     // @todo: should be a constructor default?
@@ -1850,7 +1852,8 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     if( p.isolate )
                     {
                         zone->SetZoneClearance( kicad( *p.isolate ) );
-                    } else {
+                    } else
+                    {
                         zone->SetZoneClearance( 0 );
                     }
 
@@ -1912,41 +1915,50 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         // translate non-copper eagle layer to pcbnew layer
         switch( aEagleLayer )
         {
-            // Eagle says "Dimension" layer, but it's for board perimeter
-            case EAGLE_LAYER::DIMENSION:     kiLayer = Edge_Cuts;    break;
-            case EAGLE_LAYER::TPLACE:        kiLayer = F_SilkS;      break;
-            case EAGLE_LAYER::BPLACE:        kiLayer = B_SilkS;      break;
-            case EAGLE_LAYER::TNAMES:        kiLayer = F_SilkS;      break;
-            case EAGLE_LAYER::BNAMES:        kiLayer = B_SilkS;      break;
-            case EAGLE_LAYER::TVALUES:       kiLayer = F_SilkS;      break;
-            case EAGLE_LAYER::BVALUES:       kiLayer = B_SilkS;      break;
-            case EAGLE_LAYER::TSTOP:         kiLayer = F_Mask;       break;
-            case EAGLE_LAYER::BSTOP:         kiLayer = B_Mask;       break;
-            case EAGLE_LAYER::TCREAM:        kiLayer = F_Paste;      break;
-            case EAGLE_LAYER::BCREAM:        kiLayer = B_Paste;      break;
-            case EAGLE_LAYER::TFINISH:       kiLayer = F_Mask;       break;
-            case EAGLE_LAYER::BFINISH:       kiLayer = B_Mask;       break;
-            case EAGLE_LAYER::TGLUE:         kiLayer = F_Adhes;      break;
-            case EAGLE_LAYER::BGLUE:         kiLayer = B_Adhes;      break;
-            case EAGLE_LAYER::DOCUMENT:      kiLayer = Cmts_User;    break;
-            case EAGLE_LAYER::REFERENCELC:   kiLayer = Cmts_User;    break;
-            case EAGLE_LAYER::REFERENCELS:   kiLayer = Cmts_User;    break;
+        // Eagle says "Dimension" layer, but it's for board perimeter
+        case EAGLE_LAYER::DIMENSION:     kiLayer = Edge_Cuts;    break;
+        case EAGLE_LAYER::TPLACE:        kiLayer = F_SilkS;      break;
+        case EAGLE_LAYER::BPLACE:        kiLayer = B_SilkS;      break;
+        case EAGLE_LAYER::TNAMES:        kiLayer = F_SilkS;      break;
+        case EAGLE_LAYER::BNAMES:        kiLayer = B_SilkS;      break;
+        case EAGLE_LAYER::TVALUES:       kiLayer = F_SilkS;      break;
+        case EAGLE_LAYER::BVALUES:       kiLayer = B_SilkS;      break;
+        case EAGLE_LAYER::TSTOP:         kiLayer = F_Mask;       break;
+        case EAGLE_LAYER::BSTOP:         kiLayer = B_Mask;       break;
+        case EAGLE_LAYER::TCREAM:        kiLayer = F_Paste;      break;
+        case EAGLE_LAYER::BCREAM:        kiLayer = B_Paste;      break;
+        case EAGLE_LAYER::TFINISH:       kiLayer = F_Mask;       break;
+        case EAGLE_LAYER::BFINISH:       kiLayer = B_Mask;       break;
+        case EAGLE_LAYER::TGLUE:         kiLayer = F_Adhes;      break;
+        case EAGLE_LAYER::BGLUE:         kiLayer = B_Adhes;      break;
+        case EAGLE_LAYER::DOCUMENT:      kiLayer = Cmts_User;    break;
+        case EAGLE_LAYER::REFERENCELC:   kiLayer = Cmts_User;    break;
+        case EAGLE_LAYER::REFERENCELS:   kiLayer = Cmts_User;    break;
 
         // Packages show the future chip pins on SMD parts using layer 51.
         // This is an area slightly smaller than the PAD/SMD copper area.
         // Carry those visual aids into the MODULE on the fabrication layer,
         // not silkscreen. This is perhaps not perfect, but there is not a lot
         // of other suitable paired layers
-            case EAGLE_LAYER::TDOCU:         kiLayer = F_Fab;        break;
-            case EAGLE_LAYER::BDOCU:         kiLayer = B_Fab;        break;
+        case EAGLE_LAYER::TDOCU:         kiLayer = F_Fab;        break;
+        case EAGLE_LAYER::BDOCU:         kiLayer = B_Fab;        break;
 
         // thes layers are defined as user layers. put them on ECO layers
-            case EAGLE_LAYER::USERLAYER1:    kiLayer = Eco1_User;    break;
-            case EAGLE_LAYER::USERLAYER2:    kiLayer = Eco2_User;    break;
+        case EAGLE_LAYER::USERLAYER1:    kiLayer = Eco1_User;    break;
+        case EAGLE_LAYER::USERLAYER2:    kiLayer = Eco2_User;    break;
+
+        case EAGLE_LAYER::UNROUTED:
+        case EAGLE_LAYER::TKEEPOUT:
+        case EAGLE_LAYER::BKEEPOUT:
+        case EAGLE_LAYER::TTEST:
+        case EAGLE_LAYER::BTEST:
+        case EAGLE_LAYER::MILLING:
+        case EAGLE_LAYER::HOLES:
         default:
             // some layers do not map to KiCad
-            wxASSERT_MSG( false, wxString::Format( "Unsupported Eagle layer %d", aEagleLayer ) );
-            kiLayer = UNDEFINED_LAYER;      break;
+            wxLogMessage( wxString::Format( "Unsupported Eagle layer %d. Use drawings layer",
+                                            aEagleLayer ) );
+            kiLayer = Dwgs_User;      break;
         }
     }
 

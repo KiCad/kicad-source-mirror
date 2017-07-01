@@ -189,7 +189,7 @@ void PCB_POLYGON::AddToBoard()
 
         zone->SetPriority( m_priority );
 
-        zone->SetHatch( outline_hatch, Mils2iu( zone->GetDefaultHatchPitchMils() ), true );
+        zone->SetHatch( outline_hatch, zone->GetDefaultHatchPitch(), true );
 
         if ( m_objType == wxT( 'K' ) )
         {
