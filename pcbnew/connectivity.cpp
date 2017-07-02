@@ -574,3 +574,18 @@ RN_NET* CONNECTIVITY_DATA::GetRatsnestForNet( int aNet )
     }
     return m_nets[ aNet ];
 }
+
+void CONNECTIVITY_DATA::MarkItemNetAsDirty( BOARD_ITEM *aItem )
+{
+    if (aItem->Type() == PCB_MODULE_T)
+    {
+        for ( auto pad : static_cast<MODULE*>( aItem )->Pads() )
+        {
+            m_connAlgo->MarkNetAsDirty( pad->GetNetCode() );
+        }
+    }
+    if (aItem->IsConnected() )
+    {
+        m_connAlgo->MarkNetAsDirty( static_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode() );
+    }
+}

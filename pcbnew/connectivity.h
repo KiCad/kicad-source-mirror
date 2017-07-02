@@ -210,6 +210,8 @@ public:
         return m_connAlgo;
     }
 
+    void MarkItemNetAsDirty( BOARD_ITEM* aItem );
+
 private:
 
     void    updateRatsnest();

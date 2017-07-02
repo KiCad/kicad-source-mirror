@@ -263,6 +263,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
                 }
 
                 view->Update ( boardItem );
+                connectivity->MarkItemNetAsDirty( static_cast<BOARD_ITEM*>( ent.m_copy ) );
                 connectivity->Update( boardItem );
                 break;
             }
