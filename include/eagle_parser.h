@@ -833,7 +833,6 @@ struct EPART
     string device;
     opt_string technology;
     opt_string value;
-    opt_erot    rot;
 
     EPART( wxXmlNode* aPart );
 };
