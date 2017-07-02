@@ -585,10 +585,12 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
             lib_dialog.Update( i, _( "Loading " + lib_names[i] ) );
         }
 
-        wxFileName fn ( lib_names[i] );
-
-        // lib_names[] does not store the file extension. Set it:
-        fn.SetExt( SchematicLibraryFileExtension );
+        // lib_names[] does not store the file extension. Set it.
+        // Remember lib_names[i] can contain a '.' in name, so using a wxFileName
+        // before adding the extension can create incorrect full filename
+        wxString fullname = lib_names[i] + "." + SchematicLibraryFileExtension;
+        // Now the full name is set, we can use a wxFileName.
+        wxFileName fn( fullname );
 
         // Skip if the file name is not valid..
         if( !fn.IsOk() )
