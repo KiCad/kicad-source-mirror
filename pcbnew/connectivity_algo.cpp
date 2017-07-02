@@ -228,7 +228,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
     {
         MarkNetAsDirty( static_cast<NETINFO_ITEM*>( aItem )->GetNet() );
         break;
-    }    
+    }
     case PCB_MODULE_T:
         for( auto pad : static_cast<MODULE*>( aItem ) -> Pads() )
         {
@@ -755,7 +755,7 @@ void CN_CONNECTIVITY_ALGO::propagateConnections()
         else if( cluster->IsOrphaned() )
         {
             wxLogTrace( "CN", "Skipping orphaned cluster %p [net: %s]\n", cluster.get(),
-                    (const char*) cluster->OriginNetName() );
+                    (const char*) cluster->OriginNetName().c_str() );
         }
         else if( cluster->HasValidNet() )
         {
@@ -774,7 +774,7 @@ void CN_CONNECTIVITY_ALGO::propagateConnections()
 
             if( n_changed )
                 wxLogTrace( "CN", "Cluster %p : net : %d %s\n", cluster.get(),
-                        cluster->OriginNet(), (const char*) cluster->OriginNetName() );
+                        cluster->OriginNet(), (const char*) cluster->OriginNetName().c_str() );
             else
                 wxLogTrace( "CN", "Cluster %p : nothing to propagate\n", cluster.get() );
         }
