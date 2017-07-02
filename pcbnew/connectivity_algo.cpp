@@ -225,10 +225,10 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
     switch( aItem->Type() )
     {
     case PCB_NETINFO_T:
-    {
-        MarkNetAsDirty( static_cast<NETINFO_ITEM*>( aItem )->GetNet() );
-        break;
-    }
+        {
+            MarkNetAsDirty( static_cast<NETINFO_ITEM*>( aItem )->GetNet() );
+            break;
+        }
     case PCB_MODULE_T:
         for( auto pad : static_cast<MODULE*>( aItem ) -> Pads() )
         {
@@ -766,9 +766,14 @@ void CN_CONNECTIVITY_ALGO::propagateConnections()
             {
                 if( item->CanChangeNet() )
                 {
-                    item->Parent()->SetNetCode( cluster->OriginNet() );
-                    MarkNetAsDirty( cluster->OriginNet() );
-                    n_changed++;
+                    if( item->Parent()->GetNetCode() != cluster->OriginNet() )
+                    {
+                        MarkNetAsDirty( item->Parent()->GetNetCode() );
+                        MarkNetAsDirty( cluster->OriginNet() );
+
+                        item->Parent()->SetNetCode( cluster->OriginNet() );
+                        n_changed++;
+                    }
                 }
             }
 
