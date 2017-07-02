@@ -209,8 +209,6 @@ bool GERBER_PLOTTER::StartPlot()
     fputs( "G01*\n", outputFile );
 
     fputs( "G04 APERTURE LIST*\n", outputFile );
-    /* Select the default aperture */
-    SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH, 0 );
 
     return true;
 }

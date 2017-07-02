@@ -26,17 +26,18 @@
 #define GBR_NETLIST_METADATA_H
 
 
-// this class handle info which can be added in a gerber file as attribute
-// of an obtect
-// the GBR_INFO_TYPE types can be OR'ed to add 2 (or more) attributes
-// There are only 3 net attributes defined attached to an object by the %TO command
-// %TO.P
-// %TO.N
-// %TO.C
-// the .P attribute can be used only for flashed pads (using the D03 command)
-// and only for external copper layers, if the component is on a external copper layer
-// for other copper layer items (pads on internal layers, tracks ... ), only .N and .C
-// can be used
+/** this class handle info which can be added in a gerber file as attribute
+ * of an obtect
+ * the GBR_INFO_TYPE types can be OR'ed to add 2 (or more) attributes
+ * There are only 3 net attributes defined attached to an object by the %TO command
+ * %TO.P
+ * %TO.N
+ * %TO.C
+ * the .P attribute can be used only for flashed pads (using the D03 command)
+ * and only for external copper layers, if the component is on a external copper layer
+ * for other copper layer items (pads on internal layers, tracks ... ), only .N and .C
+ * can be used
+ */
 class GBR_NETLIST_METADATA
 {
 public:
@@ -106,7 +107,7 @@ public:
         if( *aName == ".P" )
         {
             m_NetAttribType &= ~GBR_NETINFO_PAD;
-            m_Cmpref.clear();
+            m_Padname.clear();
             return;
         }
     }
