@@ -841,6 +841,9 @@ void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame )
     // a block function.
     if( frame->GetScreen()->m_BlockLocate.GetCommand() == BLOCK_MOVE )
     {
+        msg = AddHotkeyName( _( "Cut Block" ), g_Schematic_Hokeys_Descr,
+                             HK_CUT_BLOCK );
+        AddMenuItem( PopMenu, wxID_CUT, msg, KiBitmap( cut_xpm ) );
         msg = AddHotkeyName( _( "Copy Block" ), g_Schematic_Hokeys_Descr,
                              HK_COPY_BLOCK );
         AddMenuItem( PopMenu, wxID_COPY, msg, KiBitmap( copy_xpm ) );
