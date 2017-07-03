@@ -387,7 +387,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_LIBS*
 
     if( !Component->GetFlags() )
     {
-        msg = AddHotkeyName( _( "Copy" ), g_Schematic_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Duplicate" ), g_Schematic_Hokeys_Descr,
                              HK_COPY_COMPONENT_OR_LABEL );
         AddMenuItem( PopMenu, ID_POPUP_SCH_COPY_ITEM, msg, KiBitmap( duplicate_module_xpm ) );
         msg = AddHotkeyName( _( "Delete" ), g_Schematic_Hokeys_Descr, HK_DELETE );
@@ -494,7 +494,7 @@ void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
         msg = AddHotkeyName( _( "Drag" ), g_Schematic_Hokeys_Descr,
                              HK_DRAG );
         AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( drag_xpm ) );
-        msg = AddHotkeyName( _( "Copy" ), g_Schematic_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Duplicate" ), g_Schematic_Hokeys_Descr,
                              HK_COPY_COMPONENT_OR_LABEL );
         AddMenuItem( PopMenu, ID_POPUP_SCH_COPY_ITEM, msg, KiBitmap( duplicate_module_xpm ) );
     }
@@ -566,7 +566,7 @@ void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
         AddMenuItem( PopMenu, ID_SCH_MOVE_ITEM, msg, KiBitmap( move_xpm ) );
         msg = AddHotkeyName( _( "Drag Label" ), g_Schematic_Hokeys_Descr, HK_DRAG );
         AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( drag_xpm ) );
-        msg = AddHotkeyName( _( "Copy Label" ), g_Schematic_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Duplicate Label" ), g_Schematic_Hokeys_Descr,
                              HK_COPY_COMPONENT_OR_LABEL );
         AddMenuItem( PopMenu, ID_POPUP_SCH_COPY_ITEM, msg, KiBitmap( duplicate_module_xpm ) );
     }
@@ -600,7 +600,7 @@ void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
         msg = AddHotkeyName( _( "Move" ), g_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
         AddMenuItem( PopMenu, ID_SCH_MOVE_ITEM, msg, KiBitmap( move_xpm ) );
-        msg = AddHotkeyName( _( "Copy" ), g_Schematic_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Duplicate" ), g_Schematic_Hokeys_Descr,
                              HK_COPY_COMPONENT_OR_LABEL );
         AddMenuItem( PopMenu, ID_POPUP_SCH_COPY_ITEM, msg, KiBitmap( duplicate_module_xpm ) );
     }
@@ -841,7 +841,7 @@ void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame )
     // a block function.
     if( frame->GetScreen()->m_BlockLocate.GetCommand() == BLOCK_MOVE )
     {
-        msg = AddHotkeyName( _( "Save Block" ), g_Schematic_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Copy Block" ), g_Schematic_Hokeys_Descr,
                              HK_SAVE_BLOCK );
         AddMenuItem( PopMenu, wxID_COPY, msg, KiBitmap( copy_xpm ) );
         AddMenuItem( PopMenu, ID_POPUP_COPY_BLOCK, _( "Duplicate Block" ), KiBitmap( duplicate_module_xpm ) );

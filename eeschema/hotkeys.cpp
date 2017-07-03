@@ -188,12 +188,12 @@ static EDA_HOTKEY HkMove( _HKI( "Move Schematic Item" ),
                           HK_MOVE_COMPONENT_OR_ITEM, 'M',
                           ID_SCH_MOVE_ITEM );
 
-static EDA_HOTKEY HkCopyComponentOrText( _HKI( "Copy Component or Label" ),
+static EDA_HOTKEY HkCopyComponentOrText( _HKI( "Duplicate Component or Label" ),
                                          HK_COPY_COMPONENT_OR_LABEL, 'C',
                                          ID_POPUP_SCH_COPY_ITEM );
 
 static EDA_HOTKEY HkDrag( _HKI( "Drag Item" ), HK_DRAG, 'G', ID_SCH_DRAG_ITEM );
-static EDA_HOTKEY HkSaveBlock( _HKI( "Save Block" ), HK_SAVE_BLOCK, 'C' + GR_KB_CTRL, wxID_COPY );
+static EDA_HOTKEY HkSaveBlock( _HKI( "Copy Block" ), HK_SAVE_BLOCK, 'C' + GR_KB_CTRL, wxID_COPY );
 static EDA_HOTKEY HkPasteBlock( _HKI( "Paste Block" ), HK_PASTE_BLOCK, 'V' + GR_KB_CTRL, wxID_PASTE );
 static EDA_HOTKEY HkCutBlock( _HKI( "Cut Block" ), HK_CUT_BLOCK, 'X' + GR_KB_CTRL, wxID_CUT );
 static EDA_HOTKEY HkMove2Drag( _HKI( "Move Block -> Drag Block" ),
