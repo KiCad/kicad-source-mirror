@@ -6,6 +6,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "class_pcb_layer_box_selector.h"
+#include "widgets/widget_net_selector.h"
 
 #include "dialog_track_via_properties_base.h"
 
@@ -29,9 +30,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_staticText24->Wrap( -1 );
 	fgSizer6->Add( m_staticText24, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_NetComboBox = new wxComboBox( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	m_NetComboBox->Enable( false );
-	
+	m_NetComboBox = new WIDGET_NET_SELECTOR( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxCB_READONLY ); 
 	fgSizer6->Add( m_NetComboBox, 1, wxALL|wxEXPAND, 5 );
 	
 	
@@ -46,10 +45,10 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgSizer5->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_lockedCbox = new wxCheckBox( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
-	fgSizer5->Add( m_lockedCbox, 1, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizer5->Add( m_lockedCbox, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
-	m_sbCommonSizer->Add( fgSizer5, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	m_sbCommonSizer->Add( fgSizer5, 1, wxEXPAND|wxALIGN_BOTTOM, 5 );
 	
 	
 	m_MainSizer->Add( m_sbCommonSizer, 0, wxEXPAND|wxALL, 5 );

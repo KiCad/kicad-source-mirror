@@ -29,6 +29,7 @@
 #include <wxPcbStruct.h>
 #include <confirm.h>
 
+#include <widgets/widget_net_selector.h>
 #include <board_commit.h>
 
 DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent, const SELECTION& aItems ) :
@@ -55,8 +56,39 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     boost::optional<int> viaX, viaY, viaDiameter;
     boost::optional<int> viaDrill = boost::make_optional<int>( false, 0 );
 
+    m_haveUniqueNet = true;
+    int prevNet = -1;
+
+    printf("Create!\n");
+
+    m_NetComboBox->SetBoard( aParent->GetBoard() );
+    m_NetComboBox->Enable(1);
+
     bool hasLocked = false;
     bool hasUnlocked = false;
+
+    for( auto& item : m_items )
+    {
+        int net = static_cast<BOARD_CONNECTED_ITEM*>(item)->GetNetCode();
+
+        if( prevNet >= 0 && net != prevNet )
+        {
+            printf("prev %d net %d\n", net, prevNet );
+            m_haveUniqueNet = false;
+            break;
+        }
+
+        prevNet = net;
+    }
+
+    if ( m_haveUniqueNet )
+    {
+        m_NetComboBox->SetSelectedNet( prevNet );
+    }
+    else
+    {
+        m_NetComboBox->SetMultiple( true );
+    }
 
     // Look for values that are common for every item that is selected
     for( auto& item : m_items )
@@ -267,6 +299,13 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply( COMMIT& aCommit )
                 if( changeLock )
                     t->SetLocked( setLock );
 
+                if ( m_NetComboBox->IsUniqueNetSelected() )
+                {
+                    printf("snc %d\n", m_NetComboBox->GetSelectedNet());
+                    t->SetNetCode( m_NetComboBox->GetSelectedNet() );
+                }
+
+
                 break;
             }
 
@@ -316,6 +355,13 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply( COMMIT& aCommit )
 
                     if( m_viaDrill.Valid() )
                         v->SetDrill( m_viaDrill.GetValue() );
+
+                }
+
+                if ( m_NetComboBox->IsUniqueNetSelected() )
+                {
+                    printf("snc %d\n", m_NetComboBox->GetSelectedNet());
+                    v->SetNetCode( m_NetComboBox->GetSelectedNet() );
                 }
 
                 if( changeLock )

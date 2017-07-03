@@ -84,4 +84,7 @@ private:
 
     ///> Flag that determines if the dialog displays via properties.
     bool m_vias;
+
+    ///> Fixme
+    bool m_haveUniqueNet;
 };

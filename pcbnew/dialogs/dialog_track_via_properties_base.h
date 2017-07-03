@@ -13,6 +13,7 @@
 #include <wx/intl.h>
 class DIALOG_SHIM;
 class PCB_LAYER_BOX_SELECTOR;
+class WIDGET_NET_SELECTOR;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -46,7 +47,7 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_MainSizer;
 		wxStaticBoxSizer* m_sbCommonSizer;
 		wxStaticText* m_staticText24;
-		wxComboBox* m_NetComboBox;
+		WIDGET_NET_SELECTOR* m_NetComboBox;
 		wxStaticLine* m_staticline3;
 		wxCheckBox* m_lockedCbox;
 		wxStaticBoxSizer* m_sbTrackSizer;
