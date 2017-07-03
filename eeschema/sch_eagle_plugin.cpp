@@ -19,6 +19,7 @@
 */
 
 #include <properties.h>
+#include <kiway.h>
 
 #include <wx/filename.h>
 #include <memory>
@@ -200,19 +201,19 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
         m_rootSheet->SetScreen( screen );
     }
 
-    // // Create a schematic symbol library
-    // wxFileName libfn = fn;
-    // libfn.SetName( libfn.GetName() );
-    // libfn.SetExt( SchematicLibraryFileExtension );
-    // std::unique_ptr<PART_LIB> lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, libfn.GetFullPath() ) );
-    // lib->EnableBuffering();
-    //
-    // if( !wxFileName::FileExists( lib->GetFullFileName() ) )
-    // {
-    //     lib->Create();
-    // }
-    //
-    // m_partlib = lib.release();
+    // Create a schematic symbol library
+    wxFileName libfn = aFileName;
+    libfn.SetName( libfn.GetName() );
+    libfn.SetExt( SchematicLibraryFileExtension );
+    std::unique_ptr<PART_LIB> lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, libfn.GetFullPath() ) );
+    lib->EnableBuffering();
+
+    if( !wxFileName::FileExists( lib->GetFullFileName() ) )
+    {
+        lib->Create();
+    }
+
+    m_partlib = lib.release();
 
     // Retrieve the root as current node
     wxXmlNode* currentNode = xmlDocument.GetRoot();
@@ -230,7 +231,12 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
     // Load drawing
     loadDrawing( children["drawing"] );
 
+    // There are two ways to add a new library, the official one that requires creating a file:
     //m_partlib->Save( false );
+    //aKiway->Prj().SchLibs()->AddLibrary( m_partlib->GetFullFileName() );
+    // or undocumented one:
+    aKiway->Prj().SchLibs()->push_back( m_partlib );
+
     deleter.release();
     return m_rootSheet;
 }
@@ -601,27 +607,37 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     //std::cout << gatename << '\n';
     //std::cout << "Gate to unit number " << m_eaglelibraries[epart->library]->gate_unit[gatename] << '\n';
     int unit = m_eaglelibraries[epart->library]->gate_unit[gatename];
-    LIB_PART* part = m_eaglelibraries[epart->library]->kicadsymbols[symbolname];
+
+    //LIB_PART* part = m_eaglelibraries[epart->library]->kicadsymbols[symbolname];
 
 
     std::cout << "Instance> part: " << einstance.part << " Gate: " << einstance.gate << " " << symbolname << '\n';
 
     //SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit, int convert, const wxPoint& pos, bool setNewItemFlag )
-    std::unique_ptr< SCH_COMPONENT > component( new SCH_COMPONENT( *part, NULL,  unit, 0, wxPoint(einstance.x*EUNIT_TO_MIL, -einstance.y*EUNIT_TO_MIL), true ) );
+    std::unique_ptr<SCH_COMPONENT> component( new SCH_COMPONENT() );
+    LIB_ID libId( wxEmptyString, symbolname );
+    component->SetLibId( libId );
+    component->SetUnit( unit );
+    component->SetConvert( 0 );
+    component->SetPosition( wxPoint( einstance.x * EUNIT_TO_MIL, -einstance.y * EUNIT_TO_MIL ) );
+    //component->SetTimeStamp( parseHex( aReader, line, &line ) );  // TODO we need to find a way
+                                                                    // to correlate symbols and footprints
+    //component->AddHierarchicalReference( path, reference, (int)tmp ); // TODO ??
 
-    if(einstance.rot){
-        if(einstance.rot->mirror){
-            component->MirrorY(einstance.x*EUNIT_TO_MIL);
+    if( einstance.rot )
+    {
+        if( einstance.rot->mirror )
+        {
+            component->MirrorY( einstance.x * EUNIT_TO_MIL );
             std::cout << "Mirror" << '\n';
         }
-        
     }
-    component->GetField(0)->SetText(einstance.part);
+
+    component->GetField( 0 )->SetText( einstance.part );
     component->SetModified();
     component->ClearFlags();
 
     screen->Append( component.release() );
-
 }
 
 

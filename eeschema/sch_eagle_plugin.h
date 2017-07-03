@@ -152,7 +152,7 @@ private:
     SCH_SHEET* m_currentSheet; ///< The current sheet of the schematic being loaded..
     wxString m_version; ///< Eagle file version.
     wxFileName m_filename;
-    //PART_LIB* m_partlib; ///< symbol library for imported file.
+    PART_LIB* m_partlib; ///< symbol library for imported file.
 
     EPART_LIST m_partlist;
     std::map<std::string, EAGLE_LIBRARY*> m_eaglelibraries;
