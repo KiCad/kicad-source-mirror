@@ -1319,9 +1319,13 @@ bool VIA::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
     box.Inflate( GetWidth() / 2 );
 
     if( aContained )
+    {
         return arect.Contains( box );
+    }
     else
-        return arect.Intersects( box );
+    {
+        return arect.IntersectsCircle( GetStart(), GetWidth() / 2 );
+    }
 }
 
 
