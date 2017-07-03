@@ -176,7 +176,7 @@ set( BMAPS_MID
     copper_layers_setup
     cursor_shape
     cursor
-    cut_button
+    cut
     cvpcb
     dashline
     datasheet
@@ -199,7 +199,6 @@ set( BMAPS_MID
     delete_rectangle
     delete_segment
     delete_sheet
-    delete_text
     delete_track
     delete
     directory

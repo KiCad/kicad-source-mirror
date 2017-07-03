@@ -80,7 +80,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
 
-    m_mainToolBar->AddTool( wxID_CUT, wxEmptyString, KiBitmap( cut_button_xpm ),
+    m_mainToolBar->AddTool( wxID_CUT, wxEmptyString, KiBitmap( cut_xpm ),
                             _( "Cut selected item" ) );
 
     m_mainToolBar->AddTool( wxID_COPY, wxEmptyString, KiBitmap( copy_xpm ),
