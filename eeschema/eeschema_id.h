@@ -100,7 +100,7 @@ enum id_eeschema_frm
     ID_TB_OPTIONS_BUS_WIRES_ORIENT,
 
     /* Schematic editor context menu IDs. */
-    ID_POPUP_SCH_COPY_ITEM,
+    ID_POPUP_SCH_DUPLICATE_ITEM,
 
     ID_POPUP_START_RANGE,
     ID_POPUP_SCH_DELETE,

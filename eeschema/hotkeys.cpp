@@ -188,12 +188,12 @@ static EDA_HOTKEY HkMove( _HKI( "Move Schematic Item" ),
                           HK_MOVE_COMPONENT_OR_ITEM, 'M',
                           ID_SCH_MOVE_ITEM );
 
-static EDA_HOTKEY HkCopyComponentOrText( _HKI( "Duplicate Component or Label" ),
-                                         HK_COPY_COMPONENT_OR_LABEL, 'C',
-                                         ID_POPUP_SCH_COPY_ITEM );
+static EDA_HOTKEY HkDuplicateItem( _HKI( "Duplicate Component or Label" ),
+                                         HK_DUPLICATE_ITEM, 'C',
+                                         ID_POPUP_SCH_DUPLICATE_ITEM );
 
 static EDA_HOTKEY HkDrag( _HKI( "Drag Item" ), HK_DRAG, 'G', ID_SCH_DRAG_ITEM );
-static EDA_HOTKEY HkSaveBlock( _HKI( "Copy Block" ), HK_SAVE_BLOCK, 'C' + GR_KB_CTRL, wxID_COPY );
+static EDA_HOTKEY HkCopyBlock( _HKI( "Copy Block" ), HK_COPY_BLOCK, 'C' + GR_KB_CTRL, wxID_COPY );
 static EDA_HOTKEY HkPasteBlock( _HKI( "Paste Block" ), HK_PASTE_BLOCK, 'V' + GR_KB_CTRL, wxID_PASTE );
 static EDA_HOTKEY HkCutBlock( _HKI( "Cut Block" ), HK_CUT_BLOCK, 'X' + GR_KB_CTRL, wxID_CUT );
 static EDA_HOTKEY HkMove2Drag( _HKI( "Move Block -> Drag Block" ),
@@ -282,11 +282,11 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
     &HkFindReplace,
     &HkInsert,
     &HkMove2Drag,
-    &HkSaveBlock,
+    &HkCopyBlock,
     &HkPasteBlock,
     &HkCutBlock,
     &HkMove,
-    &HkCopyComponentOrText,
+    &HkDuplicateItem,
     &HkAddComponent,
     &HkAddPower,
     &HkMirrorX,
@@ -476,7 +476,7 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ZOOM_SELECTION:
     case HK_MOVEBLOCK_TO_DRAGBLOCK:          // Switch to drag mode, when block moving
     case HK_PASTE_BLOCK:
-    case HK_SAVE_BLOCK:                      // Copy block to paste buffer.
+    case HK_COPY_BLOCK:                      // Copy block to paste buffer.
     case HK_CUT_BLOCK:
         cmd.SetId( hotKey->m_IdMenuEvent );
         GetEventHandler()->ProcessEvent( cmd );
@@ -575,7 +575,7 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         }
         break;
 
-    case HK_COPY_COMPONENT_OR_LABEL:        // Duplicate component or text/label
+    case HK_DUPLICATE_ITEM:        // Duplicate component or text/label
         if( itemInEdit )
             break;
 

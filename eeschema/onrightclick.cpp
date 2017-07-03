@@ -388,8 +388,8 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_LIBS*
     if( !Component->GetFlags() )
     {
         msg = AddHotkeyName( _( "Duplicate" ), g_Schematic_Hokeys_Descr,
-                             HK_COPY_COMPONENT_OR_LABEL );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_COPY_ITEM, msg, KiBitmap( duplicate_module_xpm ) );
+                             HK_DUPLICATE_ITEM );
+        AddMenuItem( PopMenu, ID_POPUP_SCH_DUPLICATE_ITEM, msg, KiBitmap( duplicate_module_xpm ) );
         msg = AddHotkeyName( _( "Delete" ), g_Schematic_Hokeys_Descr, HK_DELETE );
         AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE_CMP, msg, KiBitmap( delete_xpm ) );
     }
@@ -495,8 +495,8 @@ void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
                              HK_DRAG );
         AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( drag_xpm ) );
         msg = AddHotkeyName( _( "Duplicate" ), g_Schematic_Hokeys_Descr,
-                             HK_COPY_COMPONENT_OR_LABEL );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_COPY_ITEM, msg, KiBitmap( duplicate_module_xpm ) );
+                             HK_DUPLICATE_ITEM );
+        AddMenuItem( PopMenu, ID_POPUP_SCH_DUPLICATE_ITEM, msg, KiBitmap( duplicate_module_xpm ) );
     }
 
     msg = AddHotkeyName( _( "Rotate" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
@@ -531,8 +531,8 @@ void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
         msg = AddHotkeyName( _( "Drag Hierarchical Label" ), g_Schematic_Hokeys_Descr, HK_DRAG );
         AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( drag_xpm ) );
         msg = AddHotkeyName( _( "Copy Hierarchical Label" ), g_Schematic_Hokeys_Descr,
-                             HK_COPY_COMPONENT_OR_LABEL );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_COPY_ITEM, msg, KiBitmap( copy_xpm ) );
+                             HK_DUPLICATE_ITEM );
+        AddMenuItem( PopMenu, ID_POPUP_SCH_DUPLICATE_ITEM, msg, KiBitmap( copy_xpm ) );
     }
 
     msg = AddHotkeyName( _( "Rotate Hierarchical Label" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
@@ -567,8 +567,8 @@ void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
         msg = AddHotkeyName( _( "Drag Label" ), g_Schematic_Hokeys_Descr, HK_DRAG );
         AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( drag_xpm ) );
         msg = AddHotkeyName( _( "Duplicate Label" ), g_Schematic_Hokeys_Descr,
-                             HK_COPY_COMPONENT_OR_LABEL );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_COPY_ITEM, msg, KiBitmap( duplicate_module_xpm ) );
+                             HK_DUPLICATE_ITEM );
+        AddMenuItem( PopMenu, ID_POPUP_SCH_DUPLICATE_ITEM, msg, KiBitmap( duplicate_module_xpm ) );
     }
 
     msg = AddHotkeyName( _( "Rotate Label" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
@@ -601,8 +601,8 @@ void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
                              HK_MOVE_COMPONENT_OR_ITEM );
         AddMenuItem( PopMenu, ID_SCH_MOVE_ITEM, msg, KiBitmap( move_xpm ) );
         msg = AddHotkeyName( _( "Duplicate" ), g_Schematic_Hokeys_Descr,
-                             HK_COPY_COMPONENT_OR_LABEL );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_COPY_ITEM, msg, KiBitmap( duplicate_module_xpm ) );
+                             HK_DUPLICATE_ITEM );
+        AddMenuItem( PopMenu, ID_POPUP_SCH_DUPLICATE_ITEM, msg, KiBitmap( duplicate_module_xpm ) );
     }
 
     msg = AddHotkeyName( _( "Rotate" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
@@ -842,7 +842,7 @@ void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame )
     if( frame->GetScreen()->m_BlockLocate.GetCommand() == BLOCK_MOVE )
     {
         msg = AddHotkeyName( _( "Copy Block" ), g_Schematic_Hokeys_Descr,
-                             HK_SAVE_BLOCK );
+                             HK_COPY_BLOCK );
         AddMenuItem( PopMenu, wxID_COPY, msg, KiBitmap( copy_xpm ) );
         AddMenuItem( PopMenu, ID_POPUP_COPY_BLOCK, _( "Duplicate Block" ), KiBitmap( duplicate_module_xpm ) );
         msg = AddHotkeyName( _( "Drag Block" ), g_Schematic_Hokeys_Descr,
