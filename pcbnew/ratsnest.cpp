@@ -246,7 +246,7 @@ void MODULE::DrawOutlinesWhenMoving( EDA_DRAW_PANEL* panel, wxDC* DC,
 
 void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
 {
-    if( item->Type() == PCB_MODULE_T )
+    if( item && item->Type() == PCB_MODULE_T )
     {
         auto mod = static_cast<MODULE*> (item);
 
