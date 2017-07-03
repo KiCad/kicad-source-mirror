@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Dec 21 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -19,10 +19,10 @@ DIALOG_PRINT_FOR_MODEDIT_BASE::DIALOG_PRINT_FOR_MODEDIT_BASE( wxWindow* parent, 
 	wxBoxSizer* bmiddleLeftSizer;
 	bmiddleLeftSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_ScaleOptionChoices[] = { _("fit in page"), _("Scale 0.5"), _("Scale 0.7"), _("Scale 1"), _("Scale 1.4"), _("Scale 2"), _("Scale 3"), _("Scale 4"), _("Scale 8"), _("Scale 16") };
+	wxString m_ScaleOptionChoices[] = { _("Fit to page"), _("Scale 0.5"), _("Scale 0.7"), _("Scale 1"), _("Scale 1.4"), _("Scale 2"), _("Scale 3"), _("Scale 4"), _("Scale 8"), _("Scale 16") };
 	int m_ScaleOptionNChoices = sizeof( m_ScaleOptionChoices ) / sizeof( wxString );
-	m_ScaleOption = new wxRadioBox( this, wxID_ANY, _("Approx. Scale:"), wxDefaultPosition, wxDefaultSize, m_ScaleOptionNChoices, m_ScaleOptionChoices, 1, wxRA_SPECIFY_COLS );
-	m_ScaleOption->SetSelection( 3 );
+	m_ScaleOption = new wxRadioBox( this, wxID_ANY, _("Approx. Scale"), wxDefaultPosition, wxDefaultSize, m_ScaleOptionNChoices, m_ScaleOptionChoices, 1, wxRA_SPECIFY_COLS );
+	m_ScaleOption->SetSelection( 0 );
 	bmiddleLeftSizer->Add( m_ScaleOption, 0, wxALL, 5 );
 	
 	
@@ -34,7 +34,7 @@ DIALOG_PRINT_FOR_MODEDIT_BASE::DIALOG_PRINT_FOR_MODEDIT_BASE( wxWindow* parent, 
 	wxString m_ModeColorOptionChoices[] = { _("Color"), _("Black and white") };
 	int m_ModeColorOptionNChoices = sizeof( m_ModeColorOptionChoices ) / sizeof( wxString );
 	m_ModeColorOption = new wxRadioBox( this, wxID_PRINT_MODE, _("Print Mode"), wxDefaultPosition, wxDefaultSize, m_ModeColorOptionNChoices, m_ModeColorOptionChoices, 1, wxRA_SPECIFY_COLS );
-	m_ModeColorOption->SetSelection( 1 );
+	m_ModeColorOption->SetSelection( 0 );
 	m_ModeColorOption->SetToolTip( _("Choose if you want to draw the sheet like it appears on screen,\nor in black and white mode, better to print it when using  black and white printers") );
 	
 	bmiddleRightSizer->Add( m_ModeColorOption, 0, wxALL|wxEXPAND, 5 );

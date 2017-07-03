@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May 21 2016)
+// C++ code generated with wxFormBuilder (version Dec 21 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -17,7 +17,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	bMainSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxStaticBoxSizer* sbLayersSizer;
-	sbLayersSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Layers:") ), wxVERTICAL );
+	sbLayersSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Included Layers") ), wxVERTICAL );
 	
 	wxBoxSizer* bleftSizer;
 	bleftSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -53,7 +53,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	
 	sbLayersSizer->Add( bleftSizer, 1, wxEXPAND, 5 );
 	
-	m_Exclude_Edges_Pcb = new wxCheckBox( sbLayersSizer->GetStaticBox(), wxID_ANY, _("Exclude Edges_Pcb Layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Exclude_Edges_Pcb = new wxCheckBox( sbLayersSizer->GetStaticBox(), wxID_ANY, _("Exclude Edges_Pcb layer"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Exclude_Edges_Pcb->SetToolTip( _("Exclude contents of Edges_Pcb layer from all other layers") );
 	
 	sbLayersSizer->Add( m_Exclude_Edges_Pcb, 0, wxALL|wxEXPAND, 5 );
@@ -64,13 +64,13 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	wxBoxSizer* bmiddleLeftSizer;
 	bmiddleLeftSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_ScaleOptionChoices[] = { _("fit in page"), _("Scale 0.5"), _("Scale 0.7"), _("Approx. Scale 1"), _("Accurate Scale 1"), _("Scale 1.4"), _("Scale 2"), _("Scale 3"), _("Scale 4") };
+	wxString m_ScaleOptionChoices[] = { _("fit to page"), _("Scale 0.5"), _("Scale 0.7"), _("Approx. Scale 1"), _("Accurate Scale 1"), _("Scale 1.4"), _("Scale 2"), _("Scale 3"), _("Scale 4") };
 	int m_ScaleOptionNChoices = sizeof( m_ScaleOptionChoices ) / sizeof( wxString );
-	m_ScaleOption = new wxRadioBox( this, wxID_ANY, _("Approx. Scale:"), wxDefaultPosition, wxDefaultSize, m_ScaleOptionNChoices, m_ScaleOptionChoices, 1, wxRA_SPECIFY_COLS );
-	m_ScaleOption->SetSelection( 4 );
+	m_ScaleOption = new wxRadioBox( this, wxID_ANY, _("Approximate Scale"), wxDefaultPosition, wxDefaultSize, m_ScaleOptionNChoices, m_ScaleOptionChoices, 1, wxRA_SPECIFY_COLS );
+	m_ScaleOption->SetSelection( 0 );
 	bmiddleLeftSizer->Add( m_ScaleOption, 0, wxALL, 5 );
 	
-	m_FineAdjustXscaleTitle = new wxStaticText( this, wxID_ANY, _("X Scale Adjust"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_FineAdjustXscaleTitle = new wxStaticText( this, wxID_ANY, _("X Scale Adjust:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_FineAdjustXscaleTitle->Wrap( -1 );
 	bmiddleLeftSizer->Add( m_FineAdjustXscaleTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -79,7 +79,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	
 	bmiddleLeftSizer->Add( m_FineAdjustXscaleOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_FineAdjustYscaleTitle = new wxStaticText( this, wxID_ANY, _("Y Scale Adjust"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_FineAdjustYscaleTitle = new wxStaticText( this, wxID_ANY, _("Y Scale Adjust:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_FineAdjustYscaleTitle->Wrap( -1 );
 	bmiddleLeftSizer->Add( m_FineAdjustYscaleTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -95,9 +95,9 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	bmiddleRightSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbOptionsSizer;
-	sbOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options:") ), wxVERTICAL );
+	sbOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Generic Options") ), wxVERTICAL );
 	
-	m_TextPenWidth = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Default pen size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextPenWidth = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Default Pen Size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextPenWidth->Wrap( -1 );
 	m_TextPenWidth->SetToolTip( _("Pen size used to draw items that have no pen size specified.\nUsed mainly to draw items in sketch mode.") );
 	
@@ -108,7 +108,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	
 	m_Print_Sheet_Ref = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_FRAME_SEL, _("Print frame ref"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Print_Sheet_Ref->SetValue(true); 
-	m_Print_Sheet_Ref->SetToolTip( _("Print (or not) the Frame references.") );
+	m_Print_Sheet_Ref->SetToolTip( _("Print Frame references.") );
 	
 	sbOptionsSizer->Add( m_Print_Sheet_Ref, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -120,7 +120,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	
 	wxString m_Drill_Shape_OptChoices[] = { _("No drill mark"), _("Small mark"), _("Real drill") };
 	int m_Drill_Shape_OptNChoices = sizeof( m_Drill_Shape_OptChoices ) / sizeof( wxString );
-	m_Drill_Shape_Opt = new wxRadioBox( this, wxID_ANY, _("Pads Drill Opt"), wxDefaultPosition, wxDefaultSize, m_Drill_Shape_OptNChoices, m_Drill_Shape_OptChoices, 1, wxRA_SPECIFY_COLS );
+	m_Drill_Shape_Opt = new wxRadioBox( this, wxID_ANY, _("Pads Drill Options"), wxDefaultPosition, wxDefaultSize, m_Drill_Shape_OptNChoices, m_Drill_Shape_OptChoices, 1, wxRA_SPECIFY_COLS );
 	m_Drill_Shape_Opt->SetSelection( 1 );
 	bmiddleRightSizer->Add( m_Drill_Shape_Opt, 0, wxALL|wxEXPAND, 5 );
 	

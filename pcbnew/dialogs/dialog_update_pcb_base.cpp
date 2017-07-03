@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2016)
+// C++ code generated with wxFormBuilder (version Dec 21 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -56,7 +56,7 @@ DIALOG_UPDATE_PCB_BASE::DIALOG_UPDATE_PCB_BASE( wxWindow* parent, wxWindowID id,
 	m_btnCancel = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_btnCancel, 1, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 	
-	m_btnPerformUpdate = new wxButton( this, wxID_ANY, _("Perform PCB Update"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnPerformUpdate = new wxButton( this, wxID_ANY, _("Update PCB"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_btnPerformUpdate, 0, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	

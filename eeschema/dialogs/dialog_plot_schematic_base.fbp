@@ -47,7 +47,7 @@
             <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
-            <property name="title">Plot Schematic</property>
+            <property name="title">Plot Schematic Options</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
@@ -134,7 +134,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Output directory:</property>
+                                <property name="label">Output Directory:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -309,7 +309,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Browse...</property>
+                                <property name="label">Browse</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -408,7 +408,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Format</property>
+                                <property name="label">Output Format</property>
                                 <property name="majorDimension">1</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -425,7 +425,7 @@
                                 <property name="pin_button">1</property>
                                 <property name="pos"></property>
                                 <property name="resize">Resizable</property>
-                                <property name="selection">1</property>
+                                <property name="selection">4</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
                                 <property name="style">wxRA_SPECIFY_COLS</property>
@@ -475,6 +475,7 @@
                                 <property name="minimum_size"></property>
                                 <property name="name">m_paperOptionsSizer</property>
                                 <property name="orient">wxVERTICAL</property>
+                                <property name="parent">1</property>
                                 <property name="permission">protected</property>
                                 <event name="OnUpdateUI"></event>
                                 <object class="sizeritem" expanded="1">
@@ -495,7 +496,7 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="choices">&quot;Schematic size&quot; &quot;Force size A4&quot; &quot;Force size A&quot;</property>
+                                        <property name="choices">&quot;Schematic size&quot; &quot;A4&quot; &quot;A&quot;</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
@@ -510,7 +511,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Page Size:</property>
+                                        <property name="label">Page Size</property>
                                         <property name="majorDimension">1</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -527,7 +528,7 @@
                                         <property name="pin_button">1</property>
                                         <property name="pos"></property>
                                         <property name="resize">Resizable</property>
-                                        <property name="selection">1</property>
+                                        <property name="selection">0</property>
                                         <property name="show">1</property>
                                         <property name="size"></property>
                                         <property name="style">wxRA_SPECIFY_COLS</property>
@@ -577,6 +578,7 @@
                                         <property name="minimum_size"></property>
                                         <property name="name">m_paperHPGLSizer</property>
                                         <property name="orient">wxVERTICAL</property>
+                                        <property name="parent">1</property>
                                         <property name="permission">protected</property>
                                         <event name="OnUpdateUI"></event>
                                         <object class="sizeritem" expanded="1">
@@ -680,7 +682,7 @@
                                                 <property name="caption"></property>
                                                 <property name="caption_visible">1</property>
                                                 <property name="center_pane">0</property>
-                                                <property name="choices">&quot;Schematic size&quot; &quot;Page size A4&quot; &quot;Page size A3&quot; &quot;Page size A2&quot; &quot;Page size A1&quot; &quot;Page size A0&quot; &quot;Page size A&quot; &quot;Page size B&quot; &quot;Page size C&quot; &quot;Page size D&quot; &quot;Page size E&quot;</property>
+                                                <property name="choices">&quot;Schematic size&quot; &quot;A4&quot; &quot;A3&quot; &quot;A2&quot; &quot;A1&quot; &quot;A0&quot; &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot;</property>
                                                 <property name="close_button">1</property>
                                                 <property name="context_help"></property>
                                                 <property name="context_menu">1</property>
@@ -768,7 +770,7 @@
                                                 <property name="caption"></property>
                                                 <property name="caption_visible">1</property>
                                                 <property name="center_pane">0</property>
-                                                <property name="choices">&quot;Bottom left corner&quot; &quot;Center of the page&quot;</property>
+                                                <property name="choices">&quot;Bottom left&quot; &quot;Center on page&quot;</property>
                                                 <property name="close_button">1</property>
                                                 <property name="context_help"></property>
                                                 <property name="context_menu">1</property>
@@ -783,7 +785,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Origin</property>
+                                                <property name="label">Allign</property>
                                                 <property name="majorDimension">1</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
@@ -800,7 +802,7 @@
                                                 <property name="pin_button">1</property>
                                                 <property name="pos"></property>
                                                 <property name="resize">Resizable</property>
-                                                <property name="selection">0</property>
+                                                <property name="selection">1</property>
                                                 <property name="show">1</property>
                                                 <property name="size"></property>
                                                 <property name="style">wxRA_SPECIFY_COLS</property>
@@ -1028,6 +1030,7 @@
                                 <property name="minimum_size"></property>
                                 <property name="name">sbSizerPlotFormat</property>
                                 <property name="orient">wxVERTICAL</property>
+                                <property name="parent">1</property>
                                 <property name="permission">none</property>
                                 <event name="OnUpdateUI"></event>
                                 <object class="sizeritem" expanded="1">
@@ -1062,7 +1065,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Default line thickness</property>
+                                        <property name="label">Default Line Thickness</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -1237,7 +1240,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Mode</property>
+                                        <property name="label">Output Mode</property>
                                         <property name="majorDimension">1</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -1254,7 +1257,7 @@
                                         <property name="pin_button">1</property>
                                         <property name="pos"></property>
                                         <property name="resize">Resizable</property>
-                                        <property name="selection">1</property>
+                                        <property name="selection">0</property>
                                         <property name="show">1</property>
                                         <property name="size"></property>
                                         <property name="style">wxRA_SPECIFY_COLS</property>

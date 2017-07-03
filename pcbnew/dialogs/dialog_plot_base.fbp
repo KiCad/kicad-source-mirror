@@ -143,7 +143,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Plot format:</property>
+                                        <property name="label">Plot Format:</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -325,7 +325,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Output directory:</property>
+                                        <property name="label">Output Directory:</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -509,7 +509,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Browse...</property>
+                                                <property name="label">Browse</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -585,7 +585,7 @@
                             <property name="proportion">1</property>
                             <object class="wxStaticBoxSizer" expanded="0">
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Layers</property>
+                                <property name="label">Included Layers:</property>
                                 <property name="minimum_size"></property>
                                 <property name="name">m_LayersSizer</property>
                                 <property name="orient">wxHORIZONTAL</property>
@@ -698,7 +698,7 @@
                                     <property name="proportion">0</property>
                                     <object class="wxStaticBoxSizer" expanded="0">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Options</property>
+                                        <property name="label">General Options</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">sbOptionsSizer</property>
                                         <property name="orient">wxVERTICAL</property>
@@ -1822,7 +1822,7 @@
                                                                 <property name="gripper">0</property>
                                                                 <property name="hidden">0</property>
                                                                 <property name="id">wxID_ANY</property>
-                                                                <property name="label">Drill marks:</property>
+                                                                <property name="label">Drill Marks:</property>
                                                                 <property name="max_size"></property>
                                                                 <property name="maximize_button">0</property>
                                                                 <property name="maximum_size"></property>
@@ -2164,7 +2164,7 @@
                                                                 <property name="gripper">0</property>
                                                                 <property name="hidden">0</property>
                                                                 <property name="id">wxID_ANY</property>
-                                                                <property name="label">Plot mode:</property>
+                                                                <property name="label">Plot Mode:</property>
                                                                 <property name="max_size"></property>
                                                                 <property name="maximize_button">0</property>
                                                                 <property name="maximum_size"></property>
@@ -2335,7 +2335,7 @@
                                                                 <property name="gripper">0</property>
                                                                 <property name="hidden">0</property>
                                                                 <property name="id">wxID_ANY</property>
-                                                                <property name="label">Default line width</property>
+                                                                <property name="label">Line Width:</property>
                                                                 <property name="max_size"></property>
                                                                 <property name="maximize_button">0</property>
                                                                 <property name="maximum_size"></property>
@@ -2489,7 +2489,7 @@
                                     <property name="proportion">1</property>
                                     <object class="wxStaticBoxSizer" expanded="0">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Current solder mask settings:</property>
+                                        <property name="label">Solder Mask Options</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">sbSizerSoldMaskLayerOpt</property>
                                         <property name="orient">wxVERTICAL</property>
@@ -2544,7 +2544,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Solder mask clearance:</property>
+                                                        <property name="label">Clearance:</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -2710,7 +2710,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Solder mask min width:</property>
+                                                        <property name="label">Width:</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -3242,7 +3242,7 @@
                                                 <property name="caption"></property>
                                                 <property name="caption_visible">1</property>
                                                 <property name="center_pane">0</property>
-                                                <property name="choices">&quot;4.5 (unit mm)&quot; &quot;4.6 (unit mm)&quot;</property>
+                                                <property name="choices">&quot;4.5, unit mm&quot; &quot;4.6, unit mm&quot;</property>
                                                 <property name="close_button">1</property>
                                                 <property name="context_help"></property>
                                                 <property name="context_menu">1</property>
@@ -3257,7 +3257,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Format</property>
+                                                <property name="label">Coordinate Format</property>
                                                 <property name="majorDimension">1</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
@@ -3370,7 +3370,7 @@
                                                         <property name="gripper">0</property>
                                                         <property name="hidden">0</property>
                                                         <property name="id">wxID_ANY</property>
-                                                        <property name="label">Pen size</property>
+                                                        <property name="label">Pen size:</property>
                                                         <property name="max_size"></property>
                                                         <property name="maximize_button">0</property>
                                                         <property name="maximum_size"></property>
@@ -3949,7 +3949,7 @@
                                                                 <property name="gripper">0</property>
                                                                 <property name="hidden">0</property>
                                                                 <property name="id">wxID_ANY</property>
-                                                                <property name="label">Width correction</property>
+                                                                <property name="label">Width correction:</property>
                                                                 <property name="max_size"></property>
                                                                 <property name="maximize_button">0</property>
                                                                 <property name="maximum_size"></property>

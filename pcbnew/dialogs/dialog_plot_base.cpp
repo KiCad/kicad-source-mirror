@@ -23,7 +23,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizerPlotFmt;
 	bSizerPlotFmt = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextPlotFmt = new wxStaticText( this, wxID_ANY, _("Plot format:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPlotFmt = new wxStaticText( this, wxID_ANY, _("Plot Format:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPlotFmt->Wrap( -1 );
 	bSizerPlotFmt->Add( m_staticTextPlotFmt, 0, wxTOP, 5 );
 	
@@ -39,7 +39,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizerOutDir;
 	bSizerOutDir = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextDir = new wxStaticText( this, wxID_ANY, _("Output directory:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDir = new wxStaticText( this, wxID_ANY, _("Output Directory:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDir->Wrap( -1 );
 	bSizerOutDir->Add( m_staticTextDir, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 	
@@ -51,7 +51,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	bSizer29->Add( m_outputDirectoryName, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
-	m_browseButton = new wxButton( this, wxID_ANY, _("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_browseButton = new wxButton( this, wxID_ANY, _("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer29->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 	
 	
@@ -66,7 +66,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bmiddleSizer;
 	bmiddleSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_LayersSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Layers") ), wxHORIZONTAL );
+	m_LayersSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Included Layers:") ), wxHORIZONTAL );
 	
 	wxArrayString m_layerCheckListBoxChoices;
 	m_layerCheckListBox = new wxCheckListBox( m_LayersSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_layerCheckListBoxChoices, 0 );
@@ -78,7 +78,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_PlotOptionsSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbOptionsSizer;
-	sbOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
+	sbOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("General Options") ), wxVERTICAL );
 	
 	wxBoxSizer* bSizer192;
 	bSizer192 = new wxBoxSizer( wxHORIZONTAL );
@@ -146,7 +146,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizer14;
 	bSizer14 = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText11 = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Drill marks:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText11 = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Drill Marks:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
 	bSizer14->Add( m_staticText11, 0, wxRIGHT|wxLEFT, 5 );
 	
@@ -166,7 +166,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_scaleOpt->SetSelection( 1 );
 	bSizer14->Add( m_scaleOpt, 0, wxEXPAND|wxLEFT, 5 );
 	
-	m_staticText13 = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText13 = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot Mode:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText13->Wrap( -1 );
 	bSizer14->Add( m_staticText13, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -176,7 +176,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_plotModeOpt->SetSelection( 0 );
 	bSizer14->Add( m_plotModeOpt, 0, wxEXPAND|wxLEFT, 5 );
 	
-	m_textDefaultPenSize = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Default line width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textDefaultPenSize = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Line Width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textDefaultPenSize->Wrap( -1 );
 	m_textDefaultPenSize->SetToolTip( _("Pen size used to draw items that have no pen size specified.\nUsed mainly to draw items in sketch mode.") );
 	
@@ -197,14 +197,14 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_PlotOptionsSizer->Add( sbOptionsSizer, 0, wxALL|wxEXPAND, 3 );
 	
 	wxStaticBoxSizer* sbSizerSoldMaskLayerOpt;
-	sbSizerSoldMaskLayerOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Current solder mask settings:") ), wxVERTICAL );
+	sbSizerSoldMaskLayerOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Solder Mask Options") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizerSoldMaskOpts;
 	fgSizerSoldMaskOpts = new wxFlexGridSizer( 2, 2, 0, 0 );
 	fgSizerSoldMaskOpts->SetFlexibleDirection( wxBOTH );
 	fgSizerSoldMaskOpts->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_SolderMaskMarginLabel = new wxStaticText( sbSizerSoldMaskLayerOpt->GetStaticBox(), wxID_ANY, _("Solder mask clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderMaskMarginLabel = new wxStaticText( sbSizerSoldMaskLayerOpt->GetStaticBox(), wxID_ANY, _("Clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SolderMaskMarginLabel->Wrap( -1 );
 	m_SolderMaskMarginLabel->SetToolTip( _("Margin between pads and solder mask") );
 	
@@ -214,7 +214,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_SolderMaskMarginCurrValue->Wrap( -1 );
 	fgSizerSoldMaskOpts->Add( m_SolderMaskMarginCurrValue, 0, wxALL, 5 );
 	
-	m_solderMaskMinWidthLabel = new wxStaticText( sbSizerSoldMaskLayerOpt->GetStaticBox(), wxID_ANY, _("Solder mask min width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_solderMaskMinWidthLabel = new wxStaticText( sbSizerSoldMaskLayerOpt->GetStaticBox(), wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_solderMaskMinWidthLabel->Wrap( -1 );
 	m_solderMaskMinWidthLabel->SetToolTip( _("Minimum distance between 2 pad areas.\nTwo pad areas nearer than this value will be merged during plotting") );
 	
@@ -258,9 +258,9 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_GerberOptionsSizer->Add( bSizerGbrOpt, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	wxString m_rbGerberFormatChoices[] = { _("4.5 (unit mm)"), _("4.6 (unit mm)") };
+	wxString m_rbGerberFormatChoices[] = { _("4.5, unit mm"), _("4.6, unit mm") };
 	int m_rbGerberFormatNChoices = sizeof( m_rbGerberFormatChoices ) / sizeof( wxString );
-	m_rbGerberFormat = new wxRadioBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, m_rbGerberFormatNChoices, m_rbGerberFormatChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbGerberFormat = new wxRadioBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Coordinate Format"), wxDefaultPosition, wxDefaultSize, m_rbGerberFormatNChoices, m_rbGerberFormatChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbGerberFormat->SetSelection( 0 );
 	m_rbGerberFormat->SetToolTip( _("Resolution of coordinates in Gerber files.\nUse the higher value if possible.") );
 	
@@ -274,7 +274,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizer22;
 	bSizer22 = new wxBoxSizer( wxVERTICAL );
 	
-	m_textPenSize = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("Pen size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textPenSize = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("Pen size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textPenSize->Wrap( -1 );
 	bSizer22->Add( m_textPenSize, 0, wxRIGHT|wxLEFT, 5 );
 	
@@ -325,7 +325,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizer191;
 	bSizer191 = new wxBoxSizer( wxVERTICAL );
 	
-	m_textPSFineAdjustWidth = new wxStaticText( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("Width correction"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textPSFineAdjustWidth = new wxStaticText( m_PSOptionsSizer->GetStaticBox(), wxID_ANY, _("Width correction:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textPSFineAdjustWidth->Wrap( -1 );
 	bSizer191->Add( m_textPSFineAdjustWidth, 0, wxRIGHT|wxLEFT, 5 );
 	
