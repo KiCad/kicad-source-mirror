@@ -118,9 +118,9 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
             msg = AddHotkeyName( _( "Move Arc" ), g_Libedit_Hokeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg,
-                         KiBitmap( move_arc_xpm ) );
+                         KiBitmap( move_xpm ) );
             msg = AddHotkeyName( _( "Drag Arc Size" ), g_Libedit_Hokeys_Descr, HK_DRAG );
-            AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM, msg, KiBitmap( move_arc_xpm ) );
+            AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM, msg, KiBitmap( move_xpm ) );
         }
 
         msg = AddHotkeyName( _( "Edit Arc Options" ), g_Libedit_Hokeys_Descr, HK_EDIT );
@@ -200,7 +200,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         if( not_edited )
         {
             msg = AddHotkeyName( _( "Delete Text" ), g_Libedit_Hokeys_Descr, HK_DELETE );
-            AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg, KiBitmap( delete_text_xpm ) );
+            AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg, KiBitmap( delete_xpm ) );
         }
         break;
 
@@ -337,7 +337,7 @@ void AddMenusForBlock( wxMenu* PopMenu, LIB_EDIT_FRAME* frame )
     {
         AddMenuItem( PopMenu, ID_POPUP_SELECT_ITEMS_BLOCK, _( "Select Items" ),
                      KiBitmap( green_xpm ) );
-        AddMenuItem( PopMenu, ID_POPUP_COPY_BLOCK, _( "Copy Block" ), KiBitmap( copy_xpm ) );
+        AddMenuItem( PopMenu, ID_POPUP_COPY_BLOCK, _( "Duplicate Block" ), KiBitmap( duplicate_module_xpm ) );
         msg = AddHotkeyName( _( "Flip Block Horizonal" ), g_Libedit_Hokeys_Descr, HK_MIRROR_Y );
         AddMenuItem( PopMenu, ID_POPUP_MIRROR_Y_BLOCK, msg,
                      KiBitmap( mirror_h_xpm ) );

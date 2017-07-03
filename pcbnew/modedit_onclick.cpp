@@ -294,7 +294,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
             AddMenuItem( transform_choice, ID_MODEDIT_MODULE_ROTATE, _( "Rotate" ),
                          KiBitmap( rotate_ccw_xpm ) );
             AddMenuItem( transform_choice, ID_MODEDIT_MODULE_MIRROR, _( "Mirror" ),
-                         KiBitmap( mirror_footprint_axisY_xpm ) );
+                         KiBitmap( mirror_h_xpm ) );
             AddMenuItem( transform_choice, ID_MODEDIT_MODULE_MOVE_EXACT, _( "Move Exactly" ),
                          KiBitmap( move_module_xpm ) );
 
@@ -389,7 +389,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                     msg = AddHotkeyName( _("Delete Text" ), g_Module_Editor_Hokeys_Descr,
                                          HK_DELETE );
                     AddMenuItem( PopMenu, ID_POPUP_PCB_DELETE_TEXTMODULE, msg,
-                                 KiBitmap( delete_text_xpm ) );
+                                 KiBitmap( delete_xpm ) );
                 }
             }
             break;

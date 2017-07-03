@@ -270,7 +270,6 @@ set( BMAPS_MID
     hammer
     help
     hidden_pin
-    hierarchy_cursor
     hierarchy_nav
     hotkeys
     hotkeys_import
@@ -338,8 +337,6 @@ set( BMAPS_MID
     mirepcb
     mirror_h
     mirror_v
-    mirror_footprint_axisX
-    mirror_footprint_axisY
     mode_module
     mode_track
     modratsnest
@@ -357,7 +354,6 @@ set( BMAPS_MID
     modview_icon
     morgan1
     morgan2
-    move_arc
     move_circle
     move_field
     move_glabel
