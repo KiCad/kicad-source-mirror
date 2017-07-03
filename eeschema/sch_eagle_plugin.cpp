@@ -929,6 +929,9 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( LIB_PART* aPart, wxXmlNode* aPin )
 
     switch( roti )
     {
+    default:
+        wxASSERT_MSG( false, wxString::Format( "Unhandled orientation (%d degrees)", roti ) );
+        // fall through
     case 0:
         pin->SetOrientation( 'R' );
         break;
