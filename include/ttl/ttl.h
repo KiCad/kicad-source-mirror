@@ -9,6 +9,9 @@
  *
  * This file is part of TTL.
  *
+ * see https://www.sintef.no/projectweb/geometry-toolkits/ttl/
+ * and https://github.com/SINTEF-Geometry/TTL
+ *
  * TTL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -663,10 +666,10 @@ bool TRIANGULATION_HELPER::LocateFaceSimplest( const POINT_TYPE& aPoint, DART_TY
  *   This function deals with degeneracy to some extent, but round-off errors may still
  *   lead to a wrong result if triangles are degenerate.
  *
- *   \param point
+ *   \param aPoint
  *   A point to be located
  *
- *   \param dart
+ *   \param aDart
  *   An arbitrary CCW dart in the triangulation\n
  *   Output: A CCW dart in the located triangle
  *
@@ -1325,7 +1328,7 @@ void TRIANGULATION_HELPER::PositionAtNextBoundaryEdge( DART_TYPE& aDart )
 
 /** Checks if the boundary of a triangulation is convex.
  *
- *   \param dart
+ *   \param aDart
  *   A CCW dart at the boundary of the m_triangulation
  *
  *   \require

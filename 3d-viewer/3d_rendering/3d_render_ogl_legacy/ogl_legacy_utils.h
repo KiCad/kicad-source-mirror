@@ -44,7 +44,7 @@ void OGL_draw_arrow( SFVEC3F aPosition, SFVEC3F aTargetPos, float aSize );
 
 /**
  * @brief OGL_draw_bbox - draw the bounding box lines
- * @param aBBox
+ * @param aBBox is the box to draw
  */
 void OGL_draw_bbox( const CBBOX &aBBox );
 
@@ -53,13 +53,16 @@ void OGL_draw_bbox( const CBBOX &aBBox );
  * @brief OGL_draw_half_open_cylinder - draws an open half cylinder
  * with diameter 1.0f and Height 1.0f
  * the bottom center is at (0,0,0) and top center is at (0,0,1)
+ * @param aNrSidesPerCircle is the number of segments to approximate a circle.
  */
 void OGL_draw_half_open_cylinder( unsigned int aNrSidesPerCircle );
 
 
 /**
- * @brief OGL_Draw_segment
- * @param aSegment
+ * @brief OGL_Draw_segment draws a thick segment with rounded ends
+ * @param aSegment is the thick segment to draw
+ * @param aNrSidesPerCircle is the number of segments to approximate a circle.
+ * used to draw the rounded ends of the segment
  */
 void OGL_Draw_segment( const CROUNDSEGMENT2D &aSegment,
                        unsigned int aNrSidesPerCircle );

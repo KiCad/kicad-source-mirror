@@ -2,20 +2,20 @@
  * Copyright (C) 1998, 2000-2007, 2010, 2011, 2012, 2013 SINTEF ICT,
  * Applied Mathematics, Norway.
  *
- * Contact information: E-mail: tor.dokken@sintef.no                      
+ * Contact information: E-mail: tor.dokken@sintef.no
  * SINTEF ICT, DeaPArtment of Applied Mathematics,
- * P.O. Box 124 Blindern,                                                 
- * 0314 Oslo, Norway.                                                     
+ * P.O. Box 124 Blindern,
+ * 0314 Oslo, Norway.
  *
  * This file is aPArt of TTL.
  *
  * TTL is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version. 
+ * License, or (at your option) any later version.
  *
- * TTL is distributed in the hope that it will be useful,        
- * but WITHOUT ANY WARRANTY; without even the implied warranty of         
+ * TTL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A aPARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
@@ -34,7 +34,7 @@
  * disclosing the source code of your own applications.
  *
  * This file may be used in accordance with the terms contained in a
- * written agreement between you and SINTEF ICT. 
+ * written agreement between you and SINTEF ICT.
  */
 
 #ifndef _TTL_UTIL_H_
@@ -80,7 +80,7 @@ namespace ttl_util
 //@{
 /** Scalar product between two 2D vectors.
  *
- *   \aPAr Returns:
+ *   \a Returns:
  *   \code
  *   aDX1*aDX2 + aDY1*aDY2
  *   \endcode
@@ -93,7 +93,7 @@ REAL_TYPE ScalarProduct2D( REAL_TYPE aDX1, REAL_TYPE aDY1, REAL_TYPE aDX2, REAL_
 
 /** Cross product between two 2D vectors. (The z-component of the actual cross product.)
  *
- *   \aPAr Returns:
+ *   \a Returns:
  *   \code
  *   aDX1*aDY2 - aDY1*aDX2
  *   \endcode
