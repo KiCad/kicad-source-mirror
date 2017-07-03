@@ -867,6 +867,8 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& a
             DisplayError( this, wxT( "No block to paste" ), 20 );
             GetScreen()->m_BlockLocate.SetCommand( BLOCK_IDLE );
             m_canvas->SetMouseCaptureCallback( NULL );
+            block->SetState( STATE_NO_BLOCK );
+            block->SetMessageBlock( this );
             return true;
         }
 
@@ -875,6 +877,8 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& a
             block->ClearItemsList();
             DisplayError( this,
                           wxT( "EDA_DRAW_FRAME::HandleBlockBegin() Err: m_mouseCaptureCallback NULL" ) );
+            block->SetState( STATE_NO_BLOCK );
+            block->SetMessageBlock( this );
             return true;
         }
 

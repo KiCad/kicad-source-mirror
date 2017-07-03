@@ -299,9 +299,27 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 wxPoint move_vector = -GetScreen()->m_BlockLocate.GetLastCursorPosition();
                 copyBlockItems( block->GetItems() );
                 MoveItemsInList( m_blockItems.GetItems(), move_vector );
-             }
+            }
 
             block->ClearItemsList();
+            break;
+
+        case BLOCK_CUT:
+            GetScreen()->UpdatePickList();
+            DrawAndSizingBlockOutlines( m_canvas, aDC, wxDefaultPosition, false );
+
+            if( block->GetCount() )
+            {
+                wxPoint move_vector = -GetScreen()->m_BlockLocate.GetLastCursorPosition();
+                copyBlockItems( block->GetItems() );
+                MoveItemsInList( m_blockItems.GetItems(), move_vector );
+                DeleteItemsInList( m_canvas, block->GetItems() );
+                OnModify();
+            }
+
+            block->ClearItemsList();
+            GetScreen()->TestDanglingEnds();
+            m_canvas->Refresh();
             break;
 
         case BLOCK_PASTE:

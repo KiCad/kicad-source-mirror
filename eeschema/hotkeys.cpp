@@ -194,6 +194,8 @@ static EDA_HOTKEY HkCopyComponentOrText( _HKI( "Copy Component or Label" ),
 
 static EDA_HOTKEY HkDrag( _HKI( "Drag Item" ), HK_DRAG, 'G', ID_SCH_DRAG_ITEM );
 static EDA_HOTKEY HkSaveBlock( _HKI( "Save Block" ), HK_SAVE_BLOCK, 'C' + GR_KB_CTRL, wxID_COPY );
+static EDA_HOTKEY HkPasteBlock( _HKI( "Paste Block" ), HK_PASTE_BLOCK, 'V' + GR_KB_CTRL, wxID_PASTE );
+static EDA_HOTKEY HkCutBlock( _HKI( "Cut Block" ), HK_CUT_BLOCK, 'X' + GR_KB_CTRL, wxID_CUT );
 static EDA_HOTKEY HkMove2Drag( _HKI( "Move Block -> Drag Block" ),
                                HK_MOVEBLOCK_TO_DRAGBLOCK, '\t', ID_POPUP_DRAG_BLOCK );
 static EDA_HOTKEY HkInsert( _HKI( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );
@@ -230,7 +232,7 @@ static EDA_HOTKEY HkUpdatePcbFromSch( _HKI( "Update PCB from Schematic" ), HK_UP
 
 // Higtlight connection
 static EDA_HOTKEY HkHighlightConnection( _HKI( "Highlight Connection" ), ID_HOTKEY_HIGHLIGHT,
-                                         'X' + GR_KB_CTRL );
+                                         'B' + GR_KB_CTRL );
 
 // List of common hotkey descriptors
 static EDA_HOTKEY* common_Hotkey_List[] =
@@ -281,6 +283,8 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
     &HkInsert,
     &HkMove2Drag,
     &HkSaveBlock,
+    &HkPasteBlock,
+    &HkCutBlock,
     &HkMove,
     &HkCopyComponentOrText,
     &HkAddComponent,
@@ -471,7 +475,9 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ZOOM_AUTO:
     case HK_ZOOM_SELECTION:
     case HK_MOVEBLOCK_TO_DRAGBLOCK:          // Switch to drag mode, when block moving
+    case HK_PASTE_BLOCK:
     case HK_SAVE_BLOCK:                      // Copy block to paste buffer.
+    case HK_CUT_BLOCK:
         cmd.SetId( hotKey->m_IdMenuEvent );
         GetEventHandler()->ProcessEvent( cmd );
         break;

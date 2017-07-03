@@ -123,15 +123,21 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SetRepeatItem( NULL );
         break;
 
-    case wxID_CUT:
+    case wxID_CUT: // save and delete block
+
         if( screen->m_BlockLocate.GetCommand() != BLOCK_MOVE )
             break;
-
-        screen->m_BlockLocate.SetCommand( BLOCK_DELETE );
+        screen->m_BlockLocate.SetCommand( BLOCK_CUT );
         screen->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         SetRepeatItem( NULL );
         SetSheetNumberAndCount();
+        break;
+
+    case wxID_COPY:         // really this is a Save block for paste
+        screen->m_BlockLocate.SetCommand( BLOCK_SAVE );
+        screen->m_BlockLocate.SetMessageBlock( this );
+        HandleBlockEnd( &dc );
         break;
 
     case wxID_PASTE:
@@ -327,12 +333,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             DisplayCurrentSheet();
         }
 
-        break;
-
-    case wxID_COPY:         // really this is a Save block for paste
-        screen->m_BlockLocate.SetCommand( BLOCK_SAVE );
-        screen->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_PLACE_BLOCK:

@@ -56,6 +56,7 @@ typedef enum {
     BLOCK_SAVE,
     BLOCK_DELETE,
     BLOCK_PASTE,
+    BLOCK_CUT,
     BLOCK_DRAG,
     BLOCK_DRAG_ITEM,    // like BLOCK_DRAG, when used to drag a selected component
                         // and not using an area defined by a mouse drag
