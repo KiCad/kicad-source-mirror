@@ -281,8 +281,9 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
     wxXmlNode* partNode = schematicChildren["parts"]->GetChildren();
     while( partNode )
     {
-        std::unique_ptr<EPART> epart( new EPART(partNode) );
-        m_partlist[epart.get()->name] = epart.release();
+        std::unique_ptr<EPART> epart( new EPART( partNode ) );
+        const string& name = epart->name;
+        m_partlist[name] = epart.release();
         partNode = partNode->GetNext();
     }
 
@@ -720,7 +721,9 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
 
             kpart->SetUnitCount(gates_count);
 
-            elib->kicadsymbols[kpart->GetName().ToStdString()] = kpart.release();
+            const string& name = kpart->GetName().ToStdString();
+            m_partlib->AddPart( kpart.get() );
+            elib->kicadsymbols[name] = kpart.release();
 
             deviceNode = deviceNode->GetNext();
         } // devicenode
