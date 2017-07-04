@@ -2847,6 +2847,8 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
         }
     }
 
+    m_connectivity->RecalculateRatsnest();
+
     std::swap( newFootprints, *aNewFootprints );
 }
 
