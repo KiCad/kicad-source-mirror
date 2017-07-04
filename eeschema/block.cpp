@@ -77,7 +77,7 @@ int SCH_EDIT_FRAME::BlockCommand( EDA_KEY key )
         break;
 
     case GR_KB_SHIFT:
-        cmd = BLOCK_COPY;
+        cmd = BLOCK_DUPLICATE;
         break;
 
     case GR_KB_ALT:
@@ -142,7 +142,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         block->ClearItemsList();
         break;
 
-    case BLOCK_COPY:                /* Copy */
+    case BLOCK_DUPLICATE:           /* Duplicate */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         if( m_canvas->IsMouseCaptured() )
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
@@ -242,7 +242,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             // fall through
 
         case BLOCK_MOVE:
-        case BLOCK_COPY:
+        case BLOCK_DUPLICATE:
             if( block->GetCommand() == BLOCK_DRAG_ITEM &&
                 GetScreen()->GetCurItem() != NULL )
             {
@@ -290,7 +290,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             m_canvas->Refresh();
             break;
 
-        case BLOCK_SAVE:    // Save a copy of items in paste buffer
+        case BLOCK_COPY:    // Save a copy of items in paste buffer
             GetScreen()->UpdatePickList();
             DrawAndSizingBlockOutlines( m_canvas, aDC, wxDefaultPosition, false );
 

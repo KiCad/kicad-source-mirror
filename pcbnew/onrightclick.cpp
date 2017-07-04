@@ -489,7 +489,7 @@ void PCB_EDIT_FRAME::createPopUpBlockMenu( wxMenu* menu )
     AddMenuItem( menu, ID_POPUP_ZOOM_BLOCK, _( "Zoom Block" ), KiBitmap( zoom_area_xpm ) );
     menu->AppendSeparator();
     AddMenuItem( menu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), KiBitmap( checked_ok_xpm ) );
-    AddMenuItem( menu, ID_POPUP_COPY_BLOCK, _( "Copy Block" ), KiBitmap( copy_xpm ) );
+    AddMenuItem( menu, ID_POPUP_DUPLICATE_BLOCK, _( "Duplicate Block" ), KiBitmap( copy_xpm ) );
     AddMenuItem( menu, ID_POPUP_FLIP_BLOCK, _( "Flip Block" ), KiBitmap( mirror_v_xpm ) );
     AddMenuItem( menu, ID_POPUP_ROTATE_BLOCK, _( "Rotate Block" ), KiBitmap( rotate_ccw_xpm ) );
     AddMenuItem( menu, ID_POPUP_DELETE_BLOCK, _( "Delete Block" ), KiBitmap( delete_xpm ) );

@@ -252,8 +252,8 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                 PopMenu->AppendSeparator();
                 AddMenuItem( PopMenu, ID_POPUP_PLACE_BLOCK,
                              _( "Place Block" ), KiBitmap( checked_ok_xpm ) );
-                AddMenuItem( PopMenu, ID_POPUP_COPY_BLOCK,
-                             _( "Copy Block (shift + drag mouse)" ),
+                AddMenuItem( PopMenu, ID_POPUP_DUPLICATE_BLOCK,
+                             _( "Duplicate Block (shift + drag mouse)" ),
                              KiBitmap( copy_xpm ) );
                 AddMenuItem( PopMenu, ID_POPUP_MIRROR_X_BLOCK,
                              _( "Mirror Block (alt + drag mouse)" ),

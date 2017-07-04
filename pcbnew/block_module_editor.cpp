@@ -112,7 +112,7 @@ int FOOTPRINT_EDIT_FRAME::BlockCommand( EDA_KEY key )
         break;
 
     case GR_KB_SHIFT:
-        cmd = BLOCK_COPY;
+        cmd = BLOCK_DUPLICATE;
         break;
 
     case GR_KB_CTRL:
@@ -159,8 +159,8 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     case BLOCK_DRAG:                // Drag
     case BLOCK_DRAG_ITEM:           // Drag a given item (not used here)
     case BLOCK_MOVE:                // Move
-    case BLOCK_COPY:                // Copy
-    case BLOCK_COPY_AND_INCREMENT:  // Specific to duplicate with increment command
+    case BLOCK_DUPLICATE:           // Duplicate
+    case BLOCK_DUPLICATE_AND_INCREMENT:  // Specific to duplicate with increment command
 
         // Find selected items if we didn't already set them manually
         if( itemsCount == 0 )
@@ -250,7 +250,7 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         DeleteMarkedItems( currentModule );
         break;
 
-    case BLOCK_SAVE:     // Save
+    case BLOCK_COPY:     // Copy
     case BLOCK_PASTE:
         break;
 
@@ -330,12 +330,12 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         m_canvas->Refresh( true );
         break;
 
-    case BLOCK_COPY:                // Copy
-    case BLOCK_COPY_AND_INCREMENT:  // Copy and increment pad names
+    case BLOCK_DUPLICATE:                // Duplicate
+    case BLOCK_DUPLICATE_AND_INCREMENT:  // Duplicate and increment pad names
         GetScreen()->m_BlockLocate.ClearItemsList();
         SaveCopyInUndoList( currentModule, UR_CHANGED );
         CopyMarkedItems( currentModule, GetScreen()->m_BlockLocate.GetMoveVector(),
-                         command == BLOCK_COPY_AND_INCREMENT );
+                         command == BLOCK_DUPLICATE_AND_INCREMENT );
         break;
 
     case BLOCK_PASTE:     // Paste
@@ -356,7 +356,7 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     case BLOCK_ZOOM:        // Handled by HandleBlockEnd
     case BLOCK_DELETE:
-    case BLOCK_SAVE:
+    case BLOCK_COPY:
     case BLOCK_ABORT:
     default:
         break;

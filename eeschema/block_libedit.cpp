@@ -67,7 +67,7 @@ int LIB_EDIT_FRAME::BlockCommand( EDA_KEY key )
         break;
 
     case GR_KB_SHIFT:
-        cmd = BLOCK_COPY;
+        cmd = BLOCK_DUPLICATE;
         break;
 
     case GR_KB_ALT:
@@ -119,7 +119,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     case BLOCK_DRAG:        // Drag
     case BLOCK_DRAG_ITEM:
     case BLOCK_MOVE:        // Move
-    case BLOCK_COPY:        // Copy
+    case BLOCK_DUPLICATE:   // Duplicate
         if( GetCurPart() )
             ItemCount = GetCurPart()->SelectItems( GetScreen()->m_BlockLocate,
                                                   m_unit, m_convert,
@@ -161,7 +161,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         }
         break;
 
-    case BLOCK_SAVE:     // Save
+    case BLOCK_COPY:     // Save
     case BLOCK_PASTE:
     case BLOCK_FLIP:
         break;
@@ -205,7 +205,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     case BLOCK_SELECT_ITEMS_ONLY:
         break;
 
-    case BLOCK_COPY_AND_INCREMENT:      // not used in Eeschema
+    case BLOCK_DUPLICATE_AND_INCREMENT: // not used in Eeschema
     case BLOCK_MOVE_EXACT:              // not used in Eeschema
         break;
     }
@@ -261,7 +261,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         m_canvas->Refresh( true );
         break;
 
-    case BLOCK_COPY:     // Copy
+    case BLOCK_DUPLICATE:           // Duplicate
         GetScreen()->m_BlockLocate.ClearItemsList();
 
         if( GetCurPart() )
@@ -305,7 +305,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     case BLOCK_ZOOM:        // Handled by HandleBlockEnd
     case BLOCK_DELETE:
-    case BLOCK_SAVE:
+    case BLOCK_COPY:
     case BLOCK_ABORT:
     default:
         break;

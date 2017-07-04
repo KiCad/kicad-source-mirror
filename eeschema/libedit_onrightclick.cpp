@@ -337,7 +337,7 @@ void AddMenusForBlock( wxMenu* PopMenu, LIB_EDIT_FRAME* frame )
     {
         AddMenuItem( PopMenu, ID_POPUP_SELECT_ITEMS_BLOCK, _( "Select Items" ),
                      KiBitmap( green_xpm ) );
-        AddMenuItem( PopMenu, ID_POPUP_COPY_BLOCK, _( "Duplicate Block" ), KiBitmap( duplicate_module_xpm ) );
+        AddMenuItem( PopMenu, ID_POPUP_DUPLICATE_BLOCK, _( "Duplicate Block" ), KiBitmap( duplicate_module_xpm ) );
         msg = AddHotkeyName( _( "Flip Block Horizonal" ), g_Libedit_Hokeys_Descr, HK_MIRROR_Y );
         AddMenuItem( PopMenu, ID_POPUP_MIRROR_Y_BLOCK, msg,
                      KiBitmap( mirror_h_xpm ) );

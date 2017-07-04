@@ -85,7 +85,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PLACE_BLOCK:
     case ID_POPUP_ZOOM_BLOCK:
     case ID_POPUP_DRAG_BLOCK:
-    case ID_POPUP_COPY_BLOCK:
+    case ID_POPUP_DUPLICATE_BLOCK:
     case ID_POPUP_SCH_DELETE_NODE:
     case ID_POPUP_SCH_DELETE_CONNECTION:
     case ID_POPUP_SCH_ENTER_SHEET:
@@ -135,7 +135,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case wxID_COPY:         // really this is a Save block for paste
-        screen->m_BlockLocate.SetCommand( BLOCK_SAVE );
+        screen->m_BlockLocate.SetCommand( BLOCK_COPY );
         screen->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;
@@ -358,12 +358,12 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SetSheetNumberAndCount();
         break;
 
-    case ID_POPUP_COPY_BLOCK:
+    case ID_POPUP_DUPLICATE_BLOCK:
         if( screen->m_BlockLocate.GetCommand() != BLOCK_MOVE )
             break;
 
         m_canvas->MoveCursorToCrossHair();
-        screen->m_BlockLocate.SetCommand( BLOCK_COPY );
+        screen->m_BlockLocate.SetCommand( BLOCK_DUPLICATE );
         screen->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
         break;

@@ -234,7 +234,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_ZOOM_BLOCK:
     case ID_POPUP_MIRROR_X_BLOCK:
     case ID_POPUP_ROTATE_BLOCK:
-    case ID_POPUP_COPY_BLOCK:
+    case ID_POPUP_DUPLICATE_BLOCK:
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -783,8 +783,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         HandleBlockPlace( &dc );
         break;
 
-    case ID_POPUP_COPY_BLOCK:
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_COPY );
+    case ID_POPUP_DUPLICATE_BLOCK:
+        GetScreen()->m_BlockLocate.SetCommand( BLOCK_DUPLICATE );
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         m_canvas->SetAutoPanRequest( false );
         HandleBlockPlace( &dc );

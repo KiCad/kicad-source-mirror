@@ -847,7 +847,7 @@ void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame )
         msg = AddHotkeyName( _( "Copy Block" ), g_Schematic_Hokeys_Descr,
                              HK_COPY_BLOCK );
         AddMenuItem( PopMenu, wxID_COPY, msg, KiBitmap( copy_xpm ) );
-        AddMenuItem( PopMenu, ID_POPUP_COPY_BLOCK, _( "Duplicate Block" ), KiBitmap( duplicate_module_xpm ) );
+        AddMenuItem( PopMenu, ID_POPUP_DUPLICATE_BLOCK, _( "Duplicate Block" ), KiBitmap( duplicate_module_xpm ) );
         msg = AddHotkeyName( _( "Drag Block" ), g_Schematic_Hokeys_Descr,
                              HK_MOVEBLOCK_TO_DRAGBLOCK );
         AddMenuItem( PopMenu, ID_POPUP_DRAG_BLOCK, msg, KiBitmap( drag_xpm ) );

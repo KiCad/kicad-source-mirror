@@ -1243,11 +1243,11 @@ public:
 
     /**
      * Function BlockCommand
-     * Returns the block command internat code (BLOCK_MOVE, BLOCK_COPY...)
+     * Returns the block command internat code (BLOCK_MOVE, BLOCK_DUPLICATE...)
      * corresponding to the keys pressed (ALT, SHIFT, SHIFT ALT ..) when
      * block command is started by dragging the mouse.
      * @param aKey = the key modifiers (Alt, Shift ...)
-     * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
+     * @return the block command id (BLOCK_MOVE, BLOCK_DUPLICATE...)
      */
     virtual int BlockCommand( EDA_KEY aKey ) override;
 

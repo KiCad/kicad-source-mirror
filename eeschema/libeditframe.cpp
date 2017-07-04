@@ -739,7 +739,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNUMSIZE_ITEM:
     case ID_POPUP_ZOOM_BLOCK:
     case ID_POPUP_DELETE_BLOCK:
-    case ID_POPUP_COPY_BLOCK:
+    case ID_POPUP_DUPLICATE_BLOCK:
     case ID_POPUP_SELECT_ITEMS_BLOCK:
     case ID_POPUP_MIRROR_X_BLOCK:
     case ID_POPUP_MIRROR_Y_BLOCK:
@@ -911,9 +911,9 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         HandleBlockEnd( &dc );
         break;
 
-    case ID_POPUP_COPY_BLOCK:
+    case ID_POPUP_DUPLICATE_BLOCK:
         m_canvas->SetAutoPanRequest( false );
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_COPY );
+        GetScreen()->m_BlockLocate.SetCommand( BLOCK_DUPLICATE );
         m_canvas->MoveCursorToCrossHair();
         HandleBlockEnd( &dc );
         break;

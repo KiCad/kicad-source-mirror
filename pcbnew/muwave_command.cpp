@@ -46,7 +46,7 @@ void PCB_EDIT_FRAME::ProcessMuWaveFunctions( wxCommandEvent& event )
 
     switch( id )    // End any command in progress.
     {
-    case ID_POPUP_COPY_BLOCK:
+    case ID_POPUP_DUPLICATE_BLOCK:
         break;
 
     default:        // End block command in progress.

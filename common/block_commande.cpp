@@ -76,16 +76,16 @@ void BLOCK_SELECTOR::SetMessageBlock( EDA_DRAW_FRAME* frame )
         msg = _( "Drag item" );
         break;
 
-    case BLOCK_COPY:     // Copy
-        msg = _( "Block Copy" );
+    case BLOCK_DUPLICATE:     // Duplicate
+        msg = _( "Block Duplicate" );
         break;
 
     case BLOCK_DELETE:     // Delete
         msg = _( "Block Delete" );
         break;
 
-    case BLOCK_SAVE:     // Save
-        msg = _( "Block Save" );
+    case BLOCK_COPY:     // Copy
+        msg = _( "Block Copy" );
         break;
 
     case BLOCK_PASTE:

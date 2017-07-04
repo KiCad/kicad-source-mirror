@@ -625,7 +625,7 @@ public:
 
     /**
      * Function BlockCommand
-     * returns the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
+     * returns the block command (BLOCK_MOVE, BLOCK_DUPLICATE...) corresponding to
      * the \a aKey (ALT, SHIFT ALT ..)
      */
     virtual int BlockCommand( EDA_KEY aKey ) override;

@@ -111,7 +111,7 @@ int PCB_EDIT_FRAME::BlockCommand( EDA_KEY aKey )
         break;
 
     case GR_KB_SHIFT:
-        cmd = BLOCK_COPY;
+        cmd = BLOCK_DUPLICATE;
         break;
 
     case GR_KB_CTRL:
@@ -163,12 +163,12 @@ void PCB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
-    case BLOCK_COPY:     // Copy
-    case BLOCK_COPY_AND_INCREMENT:
+    case BLOCK_DUPLICATE:     // Duplicate
+    case BLOCK_DUPLICATE_AND_INCREMENT:
         if( m_canvas->IsMouseCaptured() )
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
-        Block_Duplicate( command == BLOCK_COPY_AND_INCREMENT );
+        Block_Duplicate( command == BLOCK_DUPLICATE_AND_INCREMENT );
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
@@ -239,8 +239,8 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
         case BLOCK_DRAG:                // Drag (not used, for future enhancements)
         case BLOCK_MOVE:                // Move
-        case BLOCK_COPY:                // Copy
-        case BLOCK_COPY_AND_INCREMENT:  // Copy and increment relevant references
+        case BLOCK_DUPLICATE:           // Duplicate
+        case BLOCK_DUPLICATE_AND_INCREMENT:  // Duplicate and increment relevant references
         case BLOCK_PRESELECT_MOVE:      // Move with preselection list
             GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_MOVE );
             nextcmd = true;
@@ -267,7 +267,7 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             Block_Flip();
             break;
 
-        case BLOCK_SAVE: // Save (not used, for future enhancements)
+        case BLOCK_COPY: // Copy
             GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_STOP );
 
             if( GetScreen()->m_BlockLocate.GetCount() )
