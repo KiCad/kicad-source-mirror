@@ -87,7 +87,10 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
         candidate.r = ( (unsigned)( 255.0 * r ) | (unsigned)( 255.0 * aColor.r ) ) / 255.0,
         candidate.g = ( (unsigned)( 255.0 * g ) | (unsigned)( 255.0 * aColor.g ) ) / 255.0,
         candidate.b = ( (unsigned)( 255.0 * b ) | (unsigned)( 255.0 * aColor.b ) ) / 255.0,
-        candidate.a = 1.0;
+
+        // the alpha channel can be reinitialized
+        // but what is the best value?
+        candidate.a = ( aColor.a + a ) / 2;
 
         return candidate;
     }
@@ -98,10 +101,12 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
         EDA_COLOR_T legacyColor = GetNearestLegacyColor( *this );
         EDA_COLOR_T highlightColor = g_ColorRefs[legacyColor].m_LightColor;
 
+        // The alpha channel is not modified. Only R, G, B values are set,
+        // because legacy color does not know the alpha chanel.
+
         r = g_ColorRefs[highlightColor].m_Red / 255.0;
         g = g_ColorRefs[highlightColor].m_Green / 255.0;
         b = g_ColorRefs[highlightColor].m_Blue / 255.0;
-        a = 1.0;
 
         return *this;
     }
@@ -111,10 +116,12 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
     {
         EDA_COLOR_T legacyColor = GetNearestLegacyColor( *this );
 
+        // The alpha channel is not modified. Only R, G, B values are set,
+        // because legacy color does not know the alpha chanel.
+
         r = g_ColorRefs[legacyColor].m_Red / 255.0;
         g = g_ColorRefs[legacyColor].m_Green / 255.0;
         b = g_ColorRefs[legacyColor].m_Blue / 255.0;
-        a = 1.0;
 
         return *this;
     }

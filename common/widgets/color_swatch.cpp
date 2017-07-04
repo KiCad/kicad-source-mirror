@@ -23,9 +23,9 @@
 
 #include <widgets/color_swatch.h>
 
-#include <wx/colour.h>
-#include <wx/colordlg.h>
-
+//#include <wx/colour.h>
+//#include <wx/colordlg.h>
+#include <color4Dpickerdlg.h>
 #include <memory>
 
 wxDEFINE_EVENT(COLOR_SWATCH_CHANGED, wxCommandEvent);
@@ -150,22 +150,13 @@ void COLOR_SWATCH::GetNewSwatchColor()
 
     if( m_arbitraryColors )
     {
-        wxColourData colourData;
-        colourData.SetColour( m_color.ToColour() );
-        // Has effect only on Windows: shows the full color dialog
-        colourData.SetChooseFull(true);
-
-        wxColourDialog dialog( this, &colourData );
+        COLOR4D_PICKER_DLG dialog( this, m_color );
 
         if( dialog.ShowModal() == wxID_OK )
-        {
-            newColor = COLOR4D( dialog.GetColourData().GetColour() );
-        }
+            newColor = COLOR4D( dialog.GetColor() );
     }
     else
-    {
         newColor = DisplayColorFrame( this, m_color );
-    }
 
     if( newColor != COLOR4D::UNSPECIFIED )
     {

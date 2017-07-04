@@ -69,7 +69,11 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSet
     for( int i = 0; i < PCB_LAYER_ID_COUNT; i++ )
     {
         m_layerColors[i] = aSettings->GetLayerColor( i );
-        m_layerColors[i].a = 0.8;   // slightly transparent
+
+        // Guard: if the alpah channel is too small, the layer is not visible.
+        // clamp it to 0.2
+        if( m_layerColors[i].a < 0.2 )
+            m_layerColors[i].a = 0.2;
     }
 
     // Init specific graphic layers colors:

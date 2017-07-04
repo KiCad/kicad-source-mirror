@@ -507,7 +507,7 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
     if( IsGalCanvasActive() )
     {
         aBoard->GetConnectivity()->Build( aBoard );
-        
+
         // reload the worksheet
         SetPageSettings( aBoard->GetPageSettings() );
     }
@@ -737,7 +737,8 @@ void PCB_EDIT_FRAME::forceColorsToLegacy()
     {
         COLOR4D c = cds->GetLayerColor( i );
         c.SetToNearestLegacyColor();
-        c.a = 0.8;
+        // Note the alpha chanel is not modified. Therefore the value
+        // is the previous value used in GAL canvas.
         cds->SetLayerColor( i, c );
     }
 }
