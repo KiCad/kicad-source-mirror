@@ -160,14 +160,15 @@ void PCB_EDIT_FRAME::Delete_Drawings_All_Layer( PCB_LAYER_ID aLayer )
     if( !IsOK( this, msg ) )
         return;
 
-    PICKED_ITEMS_LIST   pickList;
-    ITEM_PICKER         picker( NULL, UR_DELETED );
-    BOARD_ITEM*         PtNext;
+    // Step 1: build the list of items to remove.
+    // because we are using iterators, we cannot modify the drawing list during iterate
+    // so we are using a 2 steps calculation:
+    // First, collect items.
+    // Second, remove items.
+    std::vector<BOARD_ITEM*> list;
 
     for( auto item : GetBoard()->Drawings() )
     {
-        PtNext = item->Next();
-
         switch( item->Type() )
         {
         case PCB_LINE_T:
@@ -175,11 +176,7 @@ void PCB_EDIT_FRAME::Delete_Drawings_All_Layer( PCB_LAYER_ID aLayer )
         case PCB_DIMENSION_T:
         case PCB_TARGET_T:
             if( item->GetLayer() == aLayer )
-            {
-                item->UnLink();
-                picker.SetItem( item );
-                pickList.PushItem( picker );
-            }
+                list.push_back( item );
 
             break;
 
@@ -193,11 +190,22 @@ void PCB_EDIT_FRAME::Delete_Drawings_All_Layer( PCB_LAYER_ID aLayer )
         }
     }
 
-    if( pickList.GetCount() )
+    if( list.size() == 0 )  // No item found
+        return;
+
+    // Step 2: remove items from main list, and move them to the undo list
+    PICKED_ITEMS_LIST   pickList;
+    ITEM_PICKER         picker( NULL, UR_DELETED );
+
+    for( auto item : list )
     {
-        OnModify();
-        SaveCopyInUndoList(pickList, UR_DELETED);
+        item->UnLink();
+        picker.SetItem( item );
+        pickList.PushItem( picker );
     }
+
+    OnModify();
+    SaveCopyInUndoList(pickList, UR_DELETED);
 }
 
 
