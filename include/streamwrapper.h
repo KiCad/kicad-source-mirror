@@ -17,6 +17,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @file streamwrapper.h
+ */
 
 #ifndef STREAMWRAPPER_H
 #define STREAMWRAPPER_H
@@ -43,8 +46,15 @@
 
     #define CLOSE_STREAM( var ) var ## _BUF_.Close()
 
+    /**
+     * \namespace kicad
+     */
     namespace kicad
     {
+        /**
+         * class stream is equivalent to std::stream, but accept UTF8 chars
+         * in filenames
+         */
         class stream
         {
         private:

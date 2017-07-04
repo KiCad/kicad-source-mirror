@@ -23,6 +23,10 @@
 #ifndef PROJECT_H_
 #define PROJECT_H_
 
+/**
+ * @file project.h
+ */
+
 #include <vector>
 #include <wx/string.h>
 #include <wx/filename.h>

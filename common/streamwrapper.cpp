@@ -17,6 +17,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @file streamwrapper.cpp
+ */
 
 #if !defined( WIN32 ) || !defined( __GNUC__ )
     #error streamwrapper.cpp should not be included in this build
@@ -35,7 +38,6 @@ kicad::stream::stream()
 {
     m_buf = NULL;
     m_stream = NULL;
-    return;
 }
 
 
@@ -49,8 +51,6 @@ kicad::stream::~stream()
         m_buf->close(); // ensure file is closed regardless of m_buf's destructor
         delete m_buf;
     }
-
-    return;
 }
 
 
@@ -110,8 +110,6 @@ void kicad::stream::Close( void )
 {
     if( m_buf )
         m_buf->close();
-
-    return;
 }
 
 
