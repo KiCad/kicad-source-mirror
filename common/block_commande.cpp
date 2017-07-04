@@ -50,6 +50,7 @@ BLOCK_SELECTOR::BLOCK_SELECTOR() :
 
 BLOCK_SELECTOR::~BLOCK_SELECTOR()
 {
+    ClearListAndDeleteItems();
 }
 
 
