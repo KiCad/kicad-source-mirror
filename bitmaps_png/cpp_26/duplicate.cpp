@@ -22,6 +22,6 @@ static const unsigned char png[] = {
  0x42, 0x60, 0x82,
 };
 
-const BITMAP_OPAQUE duplicate_module_xpm[1] = {{ png, sizeof( png ), "duplicate_module_xpm" }};
+const BITMAP_OPAQUE duplicate_xpm[1] = {{ png, sizeof( png ), "duplicate_xpm" }};
 
 //EOF

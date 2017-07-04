@@ -96,7 +96,7 @@ TOOL_ACTION PCB_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
 
 TOOL_ACTION PCB_ACTIONS::duplicate( "pcbnew.InteractiveEdit.duplicate",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE_ITEM ),
-        _( "Duplicate" ), _( "Duplicates the selected item(s)" ), duplicate_module_xpm );
+        _( "Duplicate" ), _( "Duplicates the selected item(s)" ), duplicate_xpm );
 
 TOOL_ACTION PCB_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicateIncrementPads",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE_ITEM_AND_INCREMENT ),
@@ -105,11 +105,11 @@ TOOL_ACTION PCB_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicateIn
 TOOL_ACTION PCB_ACTIONS::moveExact( "pcbnew.InteractiveEdit.moveExact",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_ITEM_EXACT ),
         _( "Move Exactly" ), _( "Moves the selected item(s) by an exact amount" ),
-        move_module_xpm );
+        move_exactly_xpm );
 
 TOOL_ACTION PCB_ACTIONS::createArray( "pcbnew.InteractiveEdit.createArray",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_CREATE_ARRAY ),
-        _( "Create Array" ), _( "Create array" ), array_module_xpm, AF_ACTIVATE );
+        _( "Create Array" ), _( "Create array" ), array_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::rotateCw( "pcbnew.InteractiveEdit.rotateCw",
         AS_GLOBAL, MD_SHIFT + 'R',

@@ -389,7 +389,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_LIBS*
     {
         msg = AddHotkeyName( _( "Duplicate" ), g_Schematic_Hokeys_Descr,
                              HK_DUPLICATE_ITEM );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_DUPLICATE_ITEM, msg, KiBitmap( duplicate_module_xpm ) );
+        AddMenuItem( PopMenu, ID_POPUP_SCH_DUPLICATE_ITEM, msg, KiBitmap( duplicate_xpm ) );
         msg = AddHotkeyName( _( "Delete" ), g_Schematic_Hokeys_Descr, HK_DELETE );
         AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE_CMP, msg, KiBitmap( delete_xpm ) );
     }
@@ -496,10 +496,10 @@ void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
         AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( drag_xpm ) );
         msg = AddHotkeyName( _( "Duplicate" ), g_Schematic_Hokeys_Descr,
                              HK_DUPLICATE_ITEM );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_DUPLICATE_ITEM, msg, KiBitmap( duplicate_module_xpm ) );
+        AddMenuItem( PopMenu, ID_POPUP_SCH_DUPLICATE_ITEM, msg, KiBitmap( duplicate_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Rotate" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
+    msg = AddHotkeyName( _( "Rotate 90 deg CW" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
     AddMenuItem( PopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_cw_xpm ) );
     msg = AddHotkeyName( _( "Edit" ), g_Schematic_Hokeys_Descr, HK_EDIT );
     AddMenuItem( PopMenu, ID_SCH_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
@@ -525,21 +525,21 @@ void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
 
     if( !HLabel->GetFlags() )
     {
-        msg = AddHotkeyName( _( "Move Hierarchical Label" ), g_Schematic_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Move" ), g_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
         AddMenuItem( PopMenu, ID_SCH_MOVE_ITEM, msg, KiBitmap( move_xpm ) );
-        msg = AddHotkeyName( _( "Drag Hierarchical Label" ), g_Schematic_Hokeys_Descr, HK_DRAG );
+        msg = AddHotkeyName( _( "Drag" ), g_Schematic_Hokeys_Descr, HK_DRAG );
         AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( drag_xpm ) );
-        msg = AddHotkeyName( _( "Copy Hierarchical Label" ), g_Schematic_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Copy" ), g_Schematic_Hokeys_Descr,
                              HK_DUPLICATE_ITEM );
         AddMenuItem( PopMenu, ID_POPUP_SCH_DUPLICATE_ITEM, msg, KiBitmap( copy_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Rotate Hierarchical Label" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
+    msg = AddHotkeyName( _( "Rotate 90 deg CW" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
     AddMenuItem( PopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_cw_xpm ) );
-    msg = AddHotkeyName( _( "Edit Hierarchical Label" ), g_Schematic_Hokeys_Descr, HK_EDIT );
+    msg = AddHotkeyName( _( "Edit" ), g_Schematic_Hokeys_Descr, HK_EDIT );
     AddMenuItem( PopMenu, ID_SCH_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
-    msg = AddHotkeyName( _( "Delete Hierarchical Label" ), g_Schematic_Hokeys_Descr, HK_DELETE );
+    msg = AddHotkeyName( _( "Delete" ), g_Schematic_Hokeys_Descr, HK_DELETE );
     AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE, msg, KiBitmap( delete_xpm ) );
 
     // add menu change type text (to label, glabel, text):
@@ -561,21 +561,21 @@ void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
 
     if( !Label->GetFlags() )
     {
-        msg = AddHotkeyName( _( "Move Label" ), g_Schematic_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Move" ), g_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
         AddMenuItem( PopMenu, ID_SCH_MOVE_ITEM, msg, KiBitmap( move_xpm ) );
-        msg = AddHotkeyName( _( "Drag Label" ), g_Schematic_Hokeys_Descr, HK_DRAG );
+        msg = AddHotkeyName( _( "Drag" ), g_Schematic_Hokeys_Descr, HK_DRAG );
         AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( drag_xpm ) );
-        msg = AddHotkeyName( _( "Duplicate Label" ), g_Schematic_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Duplicate" ), g_Schematic_Hokeys_Descr,
                              HK_DUPLICATE_ITEM );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_DUPLICATE_ITEM, msg, KiBitmap( duplicate_module_xpm ) );
+        AddMenuItem( PopMenu, ID_POPUP_SCH_DUPLICATE_ITEM, msg, KiBitmap( duplicate_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Rotate Label" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
+    msg = AddHotkeyName( _( "Rotate 90 deg CCW" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
     AddMenuItem( PopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_ccw_xpm ) );
-    msg = AddHotkeyName( _( "Edit Label" ), g_Schematic_Hokeys_Descr, HK_EDIT );
+    msg = AddHotkeyName( _( "Edit" ), g_Schematic_Hokeys_Descr, HK_EDIT );
     AddMenuItem( PopMenu, ID_SCH_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
-    msg = AddHotkeyName( _( "Delete Label" ), g_Schematic_Hokeys_Descr, HK_DELETE );
+    msg = AddHotkeyName( _( "Delete" ), g_Schematic_Hokeys_Descr, HK_DELETE );
     AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE, msg, KiBitmap( delete_xpm ) );
 
     // add menu change type text (to label, glabel, text):
@@ -602,10 +602,10 @@ void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
         AddMenuItem( PopMenu, ID_SCH_MOVE_ITEM, msg, KiBitmap( move_xpm ) );
         msg = AddHotkeyName( _( "Duplicate" ), g_Schematic_Hokeys_Descr,
                              HK_DUPLICATE_ITEM );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_DUPLICATE_ITEM, msg, KiBitmap( duplicate_module_xpm ) );
+        AddMenuItem( PopMenu, ID_POPUP_SCH_DUPLICATE_ITEM, msg, KiBitmap( duplicate_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Rotate" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
+    msg = AddHotkeyName( _( "Rotate 90 deg CCW" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
     AddMenuItem( PopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_ccw_xpm ) );
     msg = AddHotkeyName( _( "Edit" ), g_Schematic_Hokeys_Descr, HK_EDIT );
     AddMenuItem( PopMenu, ID_SCH_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
@@ -755,11 +755,11 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
         AddMenuItem( PopMenu, ID_POPUP_SCH_ENTER_SHEET, _( "Enter Sheet" ),
                      KiBitmap( enter_sheet_xpm ) );
         PopMenu->AppendSeparator();
-        msg = AddHotkeyName( _( "Move Sheet" ), g_Schematic_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Move" ), g_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
         AddMenuItem( PopMenu, ID_SCH_MOVE_ITEM, msg, KiBitmap( move_xpm ) );
 
-        msg = AddHotkeyName( _( "Drag Sheet" ), g_Schematic_Hokeys_Descr, HK_DRAG );
+        msg = AddHotkeyName( _( "Drag" ), g_Schematic_Hokeys_Descr, HK_DRAG );
         AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( drag_xpm ) );
 
         wxMenu* orientmenu = new wxMenu;
@@ -810,16 +810,16 @@ void AddMenusForSheetPin( wxMenu* PopMenu, SCH_SHEET_PIN* PinSheet )
 
     if( !PinSheet->GetFlags() )
     {
-        msg = AddHotkeyName( _( "Move Sheet Pin" ), g_Schematic_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Move" ), g_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
         AddMenuItem( PopMenu, ID_SCH_MOVE_ITEM, msg, KiBitmap( move_xpm ) );
     }
 
-    AddMenuItem( PopMenu, ID_SCH_EDIT_ITEM, _( "Edit Sheet Pin" ), KiBitmap( edit_xpm ) );
+    AddMenuItem( PopMenu, ID_SCH_EDIT_ITEM, _( "Edit" ), KiBitmap( edit_xpm ) );
 
     if( !PinSheet->GetFlags() )
-        AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Sheet Pin" ),
-                     KiBitmap( delete_pinsheet_xpm ) );
+        AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete" ),
+                     KiBitmap( delete_xpm ) );
 }
 
 
@@ -847,7 +847,7 @@ void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame )
         msg = AddHotkeyName( _( "Copy Block" ), g_Schematic_Hokeys_Descr,
                              HK_COPY_BLOCK );
         AddMenuItem( PopMenu, wxID_COPY, msg, KiBitmap( copy_xpm ) );
-        AddMenuItem( PopMenu, ID_POPUP_DUPLICATE_BLOCK, _( "Duplicate Block" ), KiBitmap( duplicate_module_xpm ) );
+        AddMenuItem( PopMenu, ID_POPUP_DUPLICATE_BLOCK, _( "Duplicate Block" ), KiBitmap( duplicate_xpm ) );
         msg = AddHotkeyName( _( "Drag Block" ), g_Schematic_Hokeys_Descr,
                              HK_MOVEBLOCK_TO_DRAGBLOCK );
         AddMenuItem( PopMenu, ID_POPUP_DRAG_BLOCK, msg, KiBitmap( drag_xpm ) );
@@ -885,12 +885,12 @@ void AddMenusForBitmap( wxMenu* aPopMenu, SCH_BITMAP * aBitmap )
 
     if( aBitmap->GetFlags() == 0 )
     {
-        msg = AddHotkeyName( _( "Move Image" ), g_Schematic_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Move" ), g_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
         AddMenuItem( aPopMenu, ID_SCH_MOVE_ITEM, msg, KiBitmap( move_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Rotate Image" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
+    msg = AddHotkeyName( _( "Rotate 90 deg CCW" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
     AddMenuItem( aPopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_ccw_xpm ) );
     msg = AddHotkeyName( _( "Flip Vertical" ), g_Schematic_Hokeys_Descr,
                          HK_MIRROR_X );
@@ -904,7 +904,7 @@ void AddMenusForBitmap( wxMenu* aPopMenu, SCH_BITMAP * aBitmap )
     if( aBitmap->GetFlags() == 0 )
     {
         aPopMenu->AppendSeparator();
-        msg = AddHotkeyName( _( "Delete Image" ), g_Schematic_Hokeys_Descr, HK_DELETE );
+        msg = AddHotkeyName( _( "Delete" ), g_Schematic_Hokeys_Descr, HK_DELETE );
         AddMenuItem( aPopMenu, ID_POPUP_SCH_DELETE, msg, KiBitmap( delete_xpm ) );
     }
 }

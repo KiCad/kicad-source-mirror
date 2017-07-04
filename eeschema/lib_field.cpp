@@ -806,5 +806,5 @@ void LIB_FIELD::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
 BITMAP_DEF LIB_FIELD::GetMenuImage() const
 {
-    return move_field_xpm;
+    return move_xpm;
 }

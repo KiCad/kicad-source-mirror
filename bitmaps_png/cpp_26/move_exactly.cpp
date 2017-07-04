@@ -37,6 +37,6 @@ static const unsigned char png[] = {
  0x42, 0x60, 0x82,
 };
 
-const BITMAP_OPAQUE move_module_xpm[1] = {{ png, sizeof( png ), "move_module_xpm" }};
+const BITMAP_OPAQUE move_exactly_xpm[1] = {{ png, sizeof( png ), "move_exactly_xpm" }};
 
 //EOF

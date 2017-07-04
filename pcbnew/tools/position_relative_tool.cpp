@@ -43,7 +43,7 @@ TOOL_ACTION PCB_ACTIONS::positionRelative( "pcbnew.PositionRelative.positionRela
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_POSITION_RELATIVE ),
         _( "Position Relative to..." ), _(
                 "Positions the selected item(s) by an exact amount relative to another" ),
-        move_module_xpm );
+        move_relative_xpm );
 
 
 TOOL_ACTION PCB_ACTIONS::selectpositionRelativeItem(

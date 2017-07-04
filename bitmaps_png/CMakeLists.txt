@@ -138,12 +138,7 @@ set( BMAPS_MID
     annotate_right_down
     annotate
     apply_pad_settings
-    array_line
-    array_module
-    array_pad
-    array_text
-    array_target
-    array_zone
+    array
     auto_associe
     auto_delete_track
     auto_track_width
@@ -180,7 +175,6 @@ set( BMAPS_MID
     cvpcb
     dashline
     datasheet
-    delete_arc
     delete_association
     delete_bus
     delete_circle
@@ -193,11 +187,8 @@ set( BMAPS_MID
     delete_net
     delete_node
     delete_pad
-    delete_pinsheet
-    delete_pin
     delete_polygon
     delete_rectangle
-    delete_segment
     delete_sheet
     delete_track
     delete
@@ -207,19 +198,12 @@ set( BMAPS_MID
     distribute_vertical
     down
     drag
-    drag_module
     drag_outline_segment
     drag_pad
     drag_segment_withslope
-    drag_track_segment
     drc_off
     drc
-    duplicate_line
-    duplicate_module
-    duplicate_pad
-    duplicate_target
-    duplicate_text
-    duplicate_zone
+    duplicate
     edges_sketch
     edit_comp_footprint
     edit_comp_ref
@@ -353,20 +337,16 @@ set( BMAPS_MID
     modview_icon
     morgan1
     morgan2
-    move_circle
-    move_field
     move_glabel
-    move_line
-    move_module
+    move_exactly
     move_pad
-    move_pinsheet
-    move_pin
     move_polygon
     move_rectangle
     move_sheet
     move_target
     move_zone
     move
+    move_relative
     mw_add_gap
     mw_add_line
     mw_add_shape
