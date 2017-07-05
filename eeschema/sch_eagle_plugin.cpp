@@ -28,8 +28,6 @@
 
 #include <sch_junction.h>
 #include <sch_sheet.h>
-#include <sch_eagle_plugin.h>
-
 #include <wildcards_and_files_ext.h>
 #include <class_sch_screen.h>
 #include <class_library.h>
@@ -41,8 +39,13 @@
 #include <lib_polyline.h>
 #include <lib_pin.h>
 #include <lib_text.h>
+#include <sch_text.h>
+#include <drawtxt.h>
 
 #include <eagle_parser.h>
+#include <sch_eagle_plugin.h>
+
+
 
 using std::string;
 
@@ -445,13 +448,20 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
     // wxString description = description->GetNodeContent();
 
     // TODO: do something with the plain
-    wxXmlNode* plainNode = sheetChildren["plain"];
+    wxXmlNode* plainNode = getChildrenNodes( sheetChildren, "plain");
 
     while( plainNode )
     {
-        //loadSegments( plainNode );
+        wxString nodeName = plainNode->GetName();
+
+        if(nodeName =="text" )
+        {
+            m_currentSheet->GetScreen()->Append(loadplaintext(plainNode));
+        }
+
         plainNode = plainNode->GetNext();
     }
+
 }
 
 
@@ -827,15 +837,17 @@ void  SCH_EAGLE_PLUGIN::loadSymbol(wxXmlNode *aSymbolNode, LIB_PART* aPart, EDEV
             if( libtext->GetText() ==">NAME" )
             {
                 aPart->GetReferenceField().SetTextPos( libtext->GetPosition() );
-                aPart->GetReferenceField().SetTextPos( libtext->GetPosition() );
                 aPart->GetReferenceField().SetTextSize( libtext->GetTextSize() );
                 aPart->GetReferenceField().SetTextAngle( libtext->GetTextAngle() );
+                aPart->GetReferenceField().SetBold(libtext->IsBold());
+
             }
             else if( libtext->GetText() == ">VALUE" )
             {
                 aPart->GetValueField().SetTextPos( libtext->GetPosition() );
                 aPart->GetValueField().SetTextSize( libtext->GetTextSize() );
                 aPart->GetValueField().SetTextAngle( libtext->GetTextAngle() );
+                aPart->GetValueField().SetBold(libtext->IsBold());
             }
             else
             {
@@ -999,10 +1011,97 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymboltext( LIB_PART* aPart, wxXmlNode* aLibText
 
     libtext->SetPosition( wxPoint( etext.x * EUNIT_TO_MIL, etext.y * EUNIT_TO_MIL ) );
     libtext->SetText( aLibText->GetNodeContent() );
-    libtext->SetTextSize( wxSize( int( etext.size * EUNIT_TO_MIL ),
-                                  int( etext.size * EUNIT_TO_MIL ) ) );
+    libtext->SetTextSize( wxSize( int(etext.size * EUNIT_TO_MIL),
+                    int(etext.size * EUNIT_TO_MIL) ) );
+
+    if( etext.ratio )
+    {
+        if( etext.ratio.Get()>12 )
+        {
+            libtext->SetBold( true );
+            libtext->SetThickness( GetPenSizeForBold( libtext->GetTextWidth() ) );
+        }
+    }
+
+    libtext->SetItalic( false );
 
     return libtext.release();
+}
+
+
+
+SCH_TEXT* SCH_EAGLE_PLUGIN::loadplaintext( wxXmlNode* aSchText )
+{
+    std::unique_ptr<SCH_TEXT> schtext( new SCH_TEXT() );
+
+    auto etext = ETEXT( aSchText );
+
+
+    schtext->SetItalic( false );
+    schtext->SetPosition( wxPoint( etext.x * EUNIT_TO_MIL, -etext.y * EUNIT_TO_MIL ) );
+    schtext->SetText( aSchText->GetNodeContent() );
+
+    if( etext.ratio )
+    {
+        std::cout << etext.ratio.Get() << '\n';
+
+        if( etext.ratio.Get()>12 )
+        {
+            schtext->SetBold( true );
+            schtext->SetThickness( GetPenSizeForBold( schtext->GetTextWidth() ) );
+        }
+    }
+
+    schtext->SetTextSize( wxSize( int(etext.size * EUNIT_TO_MIL),
+                    int(etext.size * EUNIT_TO_MIL) ) );
+
+    int align = etext.align ? *etext.align : ETEXT::BOTTOM_LEFT;
+
+    switch( align )
+    {
+    case ETEXT::CENTER:
+        // this was the default in eda_text's constructor
+        break;
+
+    case ETEXT::CENTER_LEFT:
+        schtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        break;
+
+    case ETEXT::CENTER_RIGHT:
+        schtext->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        break;
+
+    case ETEXT::TOP_CENTER:
+        schtext->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        break;
+
+    case ETEXT::TOP_LEFT:
+        schtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        schtext->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        break;
+
+    case ETEXT::TOP_RIGHT:
+        schtext->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        schtext->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        break;
+
+    case ETEXT::BOTTOM_CENTER:
+        schtext->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        break;
+
+    case ETEXT::BOTTOM_LEFT:
+        schtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        schtext->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        break;
+
+    case ETEXT::BOTTOM_RIGHT:
+        schtext->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        schtext->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        break;
+    }
+
+
+    return schtext.release();
 }
 
 

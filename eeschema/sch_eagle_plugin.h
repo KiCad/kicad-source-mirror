@@ -138,6 +138,7 @@ private:
     SCH_LINE*           loadSignalWire( wxXmlNode* aWireNode );
     SCH_GLOBALLABEL*    loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName );
     SCH_JUNCTION*       loadJunction( wxXmlNode* aJunction );
+    SCH_TEXT*           loadplaintext( wxXmlNode* aSchText );
 
     void loadSymbol(wxXmlNode *aSymbolNode, LIB_PART* aPart, EDEVICE* aDevice, int gateNumber, string gateName);
     LIB_CIRCLE*     loadSymbolCircle( LIB_PART* aPart, wxXmlNode* aCircleNode );
