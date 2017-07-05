@@ -80,8 +80,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-04 18:41+0200\n"
-"PO-Revision-Date: 2017-07-04 18:48+0200\n"
+"POT-Creation-Date: 2017-07-05 11:55+0200\n"
+"PO-Revision-Date: 2017-07-05 11:55+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -4949,12 +4949,12 @@ msgstr "Rimpicciolisci"
 #: pcbnew/hotkeys.cpp:197 eeschema/hotkeys.cpp:124
 #: pagelayout_editor/hotkeys.cpp:92
 msgid "Undo"
-msgstr "Ripristina"
+msgstr "Annulla"
 
 #: pcbnew/hotkeys.cpp:201 pcbnew/hotkeys.cpp:203 eeschema/hotkeys.cpp:128
 #: eeschema/hotkeys.cpp:130 pagelayout_editor/hotkeys.cpp:93
 msgid "Redo"
-msgstr "Rifa"
+msgstr "Rifà"
 
 #: pcbnew/hotkeys.cpp:208
 msgid "Switch Track Width To Next"
