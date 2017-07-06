@@ -28,6 +28,7 @@
 
 #include <sch_junction.h>
 #include <sch_sheet.h>
+#include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
 #include <class_sch_screen.h>
 #include <class_library.h>
@@ -617,6 +618,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     //std::cout << gatename << '\n';
     //std::cout << "Gate to unit number " << m_eaglelibraries[epart->library]->gate_unit[gatename] << '\n';
     int unit = m_eaglelibraries[epart->library]->gate_unit[gatename];
+    std::string package = m_eaglelibraries[epart->library]->package[symbolname];
 
     //LIB_PART* part = m_eaglelibraries[epart->library]->kicadsymbols[symbolname];
 
@@ -630,6 +632,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     component->SetUnit( unit );
     component->SetConvert( 0 );
     component->SetPosition( wxPoint( einstance.x * EUNIT_TO_MIL, -einstance.y * EUNIT_TO_MIL ) );
+    component->GetField( FOOTPRINT )->SetText( wxString(package) );
     //component->SetTimeStamp( parseHex( aReader, line, &line ) );  // TODO we need to find a way
                                                                     // to correlate symbols and footprints
     //component->AddHierarchicalReference( path, reference, (int)tmp ); // TODO ??
@@ -716,6 +719,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
             // Create symbol name from deviceset and device names.
             wxString symbolName = wxString( edeviceset.name+ edevice.name);
             ////std::cout << "Creating Kicad Symbol: " << symbolName.ToStdString() << '\n';
+            elib.get()->package[symbolName.ToStdString()] = edevice.package.Get();
 
             // Create kicad symbol.
             unique_ptr<LIB_PART> kpart ( new LIB_PART(symbolName));

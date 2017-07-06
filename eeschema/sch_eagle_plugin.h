@@ -69,6 +69,7 @@ typedef struct EAGLE_LIBRARY
     std::unordered_map<std::string, LIB_PART*> kicadsymbols;
     std::unordered_map<std::string, wxXmlNode*> symbolnodes;
     std::unordered_map<std::string, int> gate_unit;
+    std::unordered_map<std::string, std::string> package;
 
 } EAGLE_LIBRARY;
 
