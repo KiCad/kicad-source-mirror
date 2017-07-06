@@ -410,6 +410,10 @@ static VECTOR2I makeGapVector( VECTOR2I dir, int length )
 {
     int l = length / 2;
     VECTOR2I rv;
+
+    if( dir.EuclideanNorm() == 0 )
+        return dir;
+
     do
 	{
         rv = dir.Resize( l );
