@@ -28,6 +28,7 @@
 
 #include <sch_junction.h>
 #include <sch_sheet.h>
+#include <schframe.h>
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
 #include <class_sch_screen.h>
@@ -133,6 +134,34 @@ static void kicadLayer( int aEagleLayer )
         case 97: break;
         case 98: break;
     }
+}
+
+
+static COMPONENT_ORIENTATION_T kicadComponentRotation( float eagleDegrees )
+{
+    int roti = int(eagleDegrees);
+
+
+    switch( roti )
+    {
+    default:
+        wxASSERT_MSG( false, wxString::Format( "Unhandled orientation (%d degrees)", roti ) );
+
+    // fall through
+    case 0:
+        return CMP_ORIENT_0;
+
+    case 90:
+        return CMP_ORIENT_90;
+
+    case 180:
+        return CMP_ORIENT_180;
+
+    case 270:
+        return CMP_ORIENT_270;
+    }
+
+    return CMP_ORIENT_0;
 }
 
 
@@ -639,6 +668,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     if( einstance.rot )
     {
+        component->SetOrientation(kicadComponentRotation( einstance.rot->degrees));
         if( einstance.rot->mirror )
         {
             component->MirrorY( einstance.x * EUNIT_TO_MIL );
