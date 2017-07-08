@@ -207,6 +207,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     case BLOCK_DUPLICATE_AND_INCREMENT: // not used in Eeschema
     case BLOCK_MOVE_EXACT:              // not used in Eeschema
+    case BLOCK_CUT:                     // not used in libedit
         break;
     }
 

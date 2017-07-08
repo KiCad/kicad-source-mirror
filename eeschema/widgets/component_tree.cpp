@@ -53,7 +53,7 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent,
                 0, wxALIGN_CENTER | wxALL, 5 );
 #endif
 
-        search_sizer->Add( m_query_ctrl, 1, wxALIGN_CENTER | wxALL | wxEXPAND, 5 );
+        search_sizer->Add( m_query_ctrl, 1, wxALL | wxEXPAND, 5 );
         sizer->Add( search_sizer, 0, wxEXPAND, 5 );
 
         m_query_ctrl->Bind( wxEVT_TEXT, &COMPONENT_TREE::onQueryText, this );

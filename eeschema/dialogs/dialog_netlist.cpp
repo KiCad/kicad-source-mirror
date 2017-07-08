@@ -449,11 +449,11 @@ NETLIST_PAGE_DIALOG* NETLIST_DIALOG::AddOneCustomPage( const wxString & aTitle,
     currPage->m_CommandStringCtrl->SetInsertionPoint( 1 );
     currPage->m_LowBoxSizer->Add( currPage->m_CommandStringCtrl,
                                   0,
-                                  wxGROW | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxBOTTOM,
+                                  wxGROW | wxTOP | wxLEFT | wxRIGHT | wxBOTTOM,
                                   5 );
 
     currPage->m_LowBoxSizer->Add( new wxStaticText( currPage,
-                                                    -1, _( "Title:" ) ), 0,
+                                  -1, _( "Title:" ) ), 0,
                                   wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     currPage->m_TitleStringCtrl = new wxTextCtrl( currPage, -1, aTitle,
@@ -462,7 +462,7 @@ NETLIST_PAGE_DIALOG* NETLIST_DIALOG::AddOneCustomPage( const wxString & aTitle,
     currPage->m_TitleStringCtrl->SetInsertionPoint( 1 );
     currPage->m_LowBoxSizer->Add( currPage->m_TitleStringCtrl,
                                   0,
-                                  wxGROW | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxBOTTOM,
+                                  wxGROW | wxTOP | wxLEFT | wxRIGHT | wxBOTTOM,
                                   5 );
     return currPage;
 }

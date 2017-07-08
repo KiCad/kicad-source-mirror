@@ -66,11 +66,11 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     PART_LIB*       cacheLib = new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName );
 
     cacheLib->SetCache();
-    cacheLib->EnableBuffering();
+    cacheLib->EnableBuffering();    // To save symbols to file only when the library will be fully built
 
     /* Examine all screens (not hierarchical sheets) used in the schematic and build a
      * library of unique symbols found in all screens.  Complex hierarchies are not a
-     * problem because we just want to know the library symbols used in the schematic.
+     * problem because we just want to know the library symbols used in the schematic, not their reference.
      */
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
