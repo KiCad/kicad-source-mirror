@@ -197,6 +197,9 @@ private:
     ///> @param aShape is the type of created shape (@see STROKE_T).
     ///> @param aGraphic is an object that is going to be used by the tool for drawing. It has to
     ///> be already created. The tool deletes the object if it is not added to a BOARD.
+    ///> @param aStartingPoint is a starting point for this new DRAWSEGMENT. If exists
+    ///> the new item has its start point set to aStartingPoint,
+    ///> and its settings (width, layer) set to the current default values.
     ///> @return False if the tool was cancelled before the origin was set or origin and end are
     ///> the same point.
     bool drawSegment( int aShape, DRAWSEGMENT*& aGraphic,

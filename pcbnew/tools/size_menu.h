@@ -33,7 +33,7 @@ public:
     /**
      * Constructor.
      * @param aTrackSizes decides if the context menu should contain track sizes.
-     * @param aTrackSizes decides if the context menu should contain via sizes.
+     * @param aViaSizes decides if the context menu should contain via sizes.
      */
     TRACK_VIA_SIZE_MENU( bool aTrackSizes, bool aViaSizes );
 
