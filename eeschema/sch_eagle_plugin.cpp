@@ -656,6 +656,7 @@ SCH_LINE* SCH_EAGLE_PLUGIN::loadSignalWire( wxXmlNode* aWireNode )
 
     if( end.x < sheetBottomLeft.x) sheetBottomLeft.x = end.x;
     if( end.y > sheetBottomLeft.y) sheetBottomLeft.y = end.y;
+
     return wire.release();
 }
 
@@ -720,9 +721,12 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     // std::cout << "Instance> part: " << einstance.part << " Gate: " << einstance.gate << " " << symbolname << '\n';
 
-    std::unique_ptr<SCH_COMPONENT> component( new SCH_COMPONENT() );
+
     LIB_ID libId( m_partlib->GetLogicalName(), symbolname );
 
+    LIB_PART* part = m_partlib->FindPart(symbolname);
+
+    std::unique_ptr<SCH_COMPONENT> component( new SCH_COMPONENT() );
     component->SetLibId( libId );
     component->SetUnit( unit );
     component->SetConvert( 0 );
@@ -742,7 +746,24 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
         }
     }
 
-    component->GetField( 0 )->SetText( einstance.part );
+    LIB_FIELDS partFields;
+    part->GetFields(partFields);
+    for( auto const& field : partFields )
+    {
+        component->GetField(field.GetId())->ImportValues(field);
+        component->GetField(field.GetId())->SetTextPos( component->GetPosition() + field.GetTextPos() );
+    }
+
+    component->GetField( REFERENCE )->SetText( einstance.part );
+    if(epart->value)
+    {
+        component->GetField( VALUE )->SetText( *epart->value );
+    } else
+    {
+        component->GetField( VALUE )->SetText( *epart->value );
+    }
+    component->GetField( VALUE )->SetVisible(true);
+    component->GetField( REFERENCE )->SetVisible(true);
     component->SetModified();
     component->ClearFlags();
 
@@ -838,7 +859,8 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
             {
                 EGATE egate = EGATE( gateNode );
 
-                elib.get()->gate_unit[edeviceset.name + edevice.name + egate.name] = gates_count;
+                elib.get()->gate_unit[edeviceset.name + edevice.name + egate.name] = gateindex;
+
 
                 loadSymbol( elib->symbolnodes[egate.symbol],
                         (LIB_PART*) kpart.get(), &edevice, gateindex, egate.name );
@@ -848,6 +870,9 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
             }    // gateNode
 
             kpart->SetUnitCount( gates_count );
+            kpart->GetField( VALUE )->SetVisible(true);
+            kpart->GetField( REFERENCE )->SetVisible(true);
+
 
             const string& name = kpart->GetName().ToStdString();
             m_partlib->AddPart( kpart.get() );
@@ -942,19 +967,26 @@ void SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
             libtext->SetUnit( gateNumber );
             // TODO: Reimplement mandatory field positioning.
 
+            std::cout << libtext->GetText() << '\n';
             if( libtext->GetText() ==">NAME" )
             {
-                aPart->GetReferenceField().SetTextPos( libtext->GetPosition() );
-                aPart->GetReferenceField().SetTextSize( libtext->GetTextSize() );
-                aPart->GetReferenceField().SetTextAngle( libtext->GetTextAngle() );
-                aPart->GetReferenceField().SetBold( libtext->IsBold() );
+                aPart->GetField( REFERENCE )->SetTextPos( libtext->GetPosition() );
+                aPart->GetField( REFERENCE )->SetTextSize( libtext->GetTextSize() );
+                aPart->GetField( REFERENCE )->SetTextAngle( libtext->GetTextAngle() );
+                aPart->GetField( REFERENCE )->SetBold( libtext->IsBold() );
+                aPart->GetField( REFERENCE )->SetVertJustify(libtext->GetVertJustify());
+                aPart->GetField( REFERENCE )->SetHorizJustify(libtext->GetHorizJustify());
+                aPart->GetField( REFERENCE )->SetVisible(true);
             }
             else if( libtext->GetText() == ">VALUE" )
             {
-                aPart->GetValueField().SetTextPos( libtext->GetPosition() );
-                aPart->GetValueField().SetTextSize( libtext->GetTextSize() );
-                aPart->GetValueField().SetTextAngle( libtext->GetTextAngle() );
-                aPart->GetValueField().SetBold( libtext->IsBold() );
+                aPart->GetField( VALUE )->SetTextPos( libtext->GetPosition() );
+                aPart->GetField( VALUE )->SetTextSize( libtext->GetTextSize() );
+                aPart->GetField( VALUE )->SetTextAngle( libtext->GetTextAngle() );
+                aPart->GetField( VALUE )->SetBold( libtext->IsBold() );
+                aPart->GetField( VALUE )->SetVertJustify(libtext->GetVertJustify());
+                aPart->GetField( VALUE )->SetHorizJustify(libtext->GetHorizJustify());
+                aPart->GetField( VALUE )->SetVisible(true);
             }
             else
             {
@@ -1127,6 +1159,51 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymboltext( LIB_PART* aPart, wxXmlNode* aLibText
             libtext->SetBold( true );
             libtext->SetThickness( GetPenSizeForBold( libtext->GetTextWidth() ) );
         }
+    }
+
+    int align = etext.align ? *etext.align : ETEXT::BOTTOM_LEFT;
+
+    switch( align )
+    {
+    case ETEXT::CENTER:
+        // this was the default in eda_text's constructor
+        break;
+
+    case ETEXT::CENTER_LEFT:
+        libtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        break;
+
+    case ETEXT::CENTER_RIGHT:
+        libtext->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        break;
+
+    case ETEXT::TOP_CENTER:
+        libtext->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        break;
+
+    case ETEXT::TOP_LEFT:
+        libtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        libtext->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        break;
+
+    case ETEXT::TOP_RIGHT:
+        libtext->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        libtext->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        break;
+
+    case ETEXT::BOTTOM_CENTER:
+        libtext->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        break;
+
+    case ETEXT::BOTTOM_LEFT:
+        libtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        libtext->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        break;
+
+    case ETEXT::BOTTOM_RIGHT:
+        libtext->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        libtext->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        break;
     }
 
     libtext->SetItalic( false );
