@@ -285,7 +285,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
     loadDrawing( children["drawing"] );
 
     // There are two ways to add a new library, the official one that requires creating a file:
-    // m_partlib->Save( false );
+    m_partlib->Save( false );
     // aKiway->Prj().SchLibs()->AddLibrary( m_partlib->GetFullFileName() );
     // or undocumented one:
     aKiway->Prj().SchLibs()->push_back( m_partlib );
@@ -714,7 +714,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     // std::cout << "Instance> part: " << einstance.part << " Gate: " << einstance.gate << " " << symbolname << '\n';
 
     std::unique_ptr<SCH_COMPONENT> component( new SCH_COMPONENT() );
-    LIB_ID libId( wxEmptyString, symbolname );
+    LIB_ID libId( m_partlib->GetLogicalName(), symbolname );
 
     component->SetLibId( libId );
     component->SetUnit( unit );
