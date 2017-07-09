@@ -103,7 +103,7 @@ static int countChildren( wxXmlNode* aCurrentNode, const std::string& aName )
 }
 
 
-static void kicadLayer( int aEagleLayer )
+static SCH_LAYER_ID kicadLayer( int aEagleLayer )
 {
     /**
      * Layers in Kicad schematics are not actually layers, but abstract groups mainly used to
@@ -128,10 +128,10 @@ static void kicadLayer( int aEagleLayer )
         break;
 
     case 91:
-        break;
+        return LAYER_WIRE;
 
     case 92:
-        break;
+        return LAYER_BUS;
 
     case 93:
         break;
@@ -151,6 +151,7 @@ static void kicadLayer( int aEagleLayer )
     case 98:
         break;
     }
+    return LAYER_NOTES;
 }
 
 
@@ -450,7 +451,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
         wxString busName = busNode->GetAttribute( "name" );
 
         // Load segments of this bus
-        // loadSegments( busNode );
+         loadSegments( busNode, busName, wxString() );
 
         // Get next bus
         busNode = busNode->GetNext();
@@ -598,7 +599,7 @@ SCH_LINE* SCH_EAGLE_PLUGIN::loadSignalWire( wxXmlNode* aWireNode )
 
     auto ewire = EWIRE( aWireNode );
 
-    wire->SetLayer( LAYER_WIRE );
+    wire->SetLayer( kicadLayer(ewire.layer) );
 
     wxPoint begin, end;
 
