@@ -159,7 +159,8 @@ private:
     EPART_LIST m_partlist;
     std::map<std::string, EAGLE_LIBRARY*> m_eaglelibraries;
 
-
+    wxPoint sheetTopRight;
+    wxPoint sheetBottomLeft;
 
 
 protected:

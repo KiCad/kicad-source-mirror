@@ -511,7 +511,37 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
 
         plainNode = plainNode->GetNext();
     }
+
+    wxSize targetSheetSize( (sheetTopRight.x - sheetBottomLeft.x) * 1.5,
+            -( sheetTopRight.y - sheetBottomLeft.y) * 1.5 );
+
+
+    wxPoint itemsCentre(   (sheetTopRight.x - sheetBottomLeft.x) / 2,
+            (sheetTopRight.y - sheetBottomLeft.y) / 2 );
+
+    SCH_ITEM* item = m_currentSheet->GetScreen()->GetDrawItems();
+    wxSize pageSizeIU = m_currentSheet->GetScreen()->GetPageSettings().GetSizeIU();
+
+    PAGE_INFO pageInfo = m_currentSheet->GetScreen()->GetPageSettings();
+
+    if( pageSizeIU.x<targetSheetSize.x )
+        pageInfo.SetWidthMils( targetSheetSize.x );
+
+    if( pageSizeIU.y<targetSheetSize.y )
+        pageInfo.SetHeightMils( targetSheetSize.y );
+
+    m_currentSheet->GetScreen()->SetPageSettings( pageInfo );
+
+    pageSizeIU = m_currentSheet->GetScreen()->GetPageSettings().GetSizeIU();
+    wxPoint sheetcentre( pageSizeIU.x / 2, pageSizeIU.y / 2 );
+
+    while( item )
+    {
+        item->SetPosition( item->GetPosition() - itemsCentre + sheetcentre );
+        item = item->Next();
+    }
 }
+
 
 
 void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& netName,
@@ -611,6 +641,17 @@ SCH_LINE* SCH_EAGLE_PLUGIN::loadSignalWire( wxXmlNode* aWireNode )
     wire->SetStartPoint( begin );
     wire->SetEndPoint( end );
 
+    if( begin.x > sheetTopRight.x) sheetTopRight.x = begin.x;
+    if( begin.y < sheetTopRight.y) sheetTopRight.y = begin.y;
+
+    if( end.x > sheetTopRight.x) sheetTopRight.x = end.x;
+    if( end.y < sheetTopRight.y) sheetTopRight.y = end.y;
+
+    if( begin.x < sheetBottomLeft.x) sheetBottomLeft.x = begin.x;
+    if( begin.y > sheetBottomLeft.y) sheetBottomLeft.y = begin.y;
+
+    if( end.x < sheetBottomLeft.x) sheetBottomLeft.x = end.x;
+    if( end.y > sheetBottomLeft.y) sheetBottomLeft.y = end.y;
     return wire.release();
 }
 
@@ -620,8 +661,15 @@ SCH_JUNCTION* SCH_EAGLE_PLUGIN::loadJunction( wxXmlNode* aJunction )
     std::unique_ptr<SCH_JUNCTION> junction( new SCH_JUNCTION );
 
     auto ejunction = EJUNCTION( aJunction );
+    wxPoint pos( ejunction.x * EUNIT_TO_MIL, -ejunction.y * EUNIT_TO_MIL );
 
-    junction->SetPosition( wxPoint( ejunction.x * EUNIT_TO_MIL, -ejunction.y * EUNIT_TO_MIL ) );
+    junction->SetPosition( pos  );
+
+    if( pos.x > sheetTopRight.x) sheetTopRight.x = pos.x;
+    if( pos.y < sheetTopRight.y) sheetTopRight.y = pos.y;
+
+    if( pos.x < sheetBottomLeft.x) sheetBottomLeft.x = pos.x;
+    if( pos.y > sheetBottomLeft.y) sheetBottomLeft.y = pos.y;
 
     return junction.release();
 }
