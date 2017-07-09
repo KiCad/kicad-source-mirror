@@ -685,9 +685,12 @@ SCH_GLOBALLABEL* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxStr
     glabel->SetText( elabel.netname );
     glabel->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
 
+    glabel->SetLabelSpinStyle(0);
     if( elabel.rot )
-        glabel->SetLabelSpinStyle( int(elabel.rot.Get().degrees / 90 + 2) % 4 );
-
+    {
+        glabel->SetLabelSpinStyle( int( 360-elabel.rot->degrees / 90) % 4 );
+        if(elabel.rot->mirror && ( glabel->GetLabelSpinStyle() == 0 || glabel->GetLabelSpinStyle() == 2 )) glabel->SetLabelSpinStyle((glabel->GetLabelSpinStyle()+2)%4);
+    }
     return glabel.release();
 }
 
