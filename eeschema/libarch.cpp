@@ -63,14 +63,15 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     PART_LIBS*      libs = Prj().SchLibs();
 
     // Create a new empty library to archive components:
-    PART_LIB*       cacheLib = new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName );
+    std::unique_ptr<PART_LIB> archLib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName ) );
 
-    cacheLib->SetCache();
-    cacheLib->EnableBuffering();    // To save symbols to file only when the library will be fully built
+    archLib->SetCache();
+    archLib->EnableBuffering();    // To save symbols to file only when the library will be fully filled
 
     /* Examine all screens (not hierarchical sheets) used in the schematic and build a
      * library of unique symbols found in all screens.  Complex hierarchies are not a
-     * problem because we just want to know the library symbols used in the schematic, not their reference.
+     * problem because we just want to know the library symbols used in the schematic
+     * not their reference.
      */
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
@@ -81,7 +82,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 
             SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
-            if( !cacheLib->FindAlias( FROM_UTF8( component->GetLibId().GetLibItemName() ) ) )
+            if( !archLib->FindAlias( FROM_UTF8( component->GetLibId().GetLibItemName() ) ) )
             {
                 LIB_PART* part = NULL;
 
@@ -92,7 +93,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
                     if( part )
                     {
                         // AddPart() does first clone the part before adding.
-                        cacheLib->AddPart( part );
+                        archLib->AddPart( part );
                     }
                 }
                 catch( ... /* IO_ERROR ioe */ )
@@ -108,8 +109,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 
     try
     {
-        cacheLib->Save( false );
-        delete cacheLib;
+        archLib->Save( false );
     }
     catch( ... /* IO_ERROR ioe */ )
     {
