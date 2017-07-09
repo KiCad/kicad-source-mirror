@@ -146,7 +146,7 @@ public:
 
     /**
      * Function GetLibSource
-     * @return the name of the lib to use to load a part, or an a emty string
+     * @return the name of the lib to use to load a part, or an a empty string
      * Useful to load (in lib editor or lib viewer) a part from a given library
      */
     const wxString& GetLibSource() const
@@ -339,7 +339,17 @@ public:
               SCH_IO_MGR::SCH_FILE_T aPluginType = SCH_IO_MGR::SCH_LEGACY );
     ~PART_LIB();
 
+    /**
+     * @return a magic number that changes if the library has changed
+     */
     int GetModHash() const { return m_mod_hash; }
+
+    /**
+     * Forces a change of the magic number that usually changes
+     * if the library has changed. Usefull to force initializations
+     * only made on library change.
+     */
+    void IncModHash() { ++m_mod_hash; }
 
     SCH_IO_MGR::SCH_FILE_T GetPluginType() const { return m_pluginType; }
 

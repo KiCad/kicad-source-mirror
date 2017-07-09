@@ -587,7 +587,16 @@ public:
     int GetMarkerCount( enum MARKER_BASE::TYPEMARKER aMarkerType,
                         enum MARKER_BASE::MARKER_SEVERITY aSeverity );
 
+    /**
+      * initializes or reinitializes the weak reference
+     * to the LIB_PART for each SCH_COMPONENT found in the full schematic
+     * It must be called from:
+     * - Draw function
+     * - when loading a schematic file
+     * - before creating a netlist (in case a library is modified)
+     */
     void UpdateSymbolLinks();
+
     void TestDanglingEnds();
 
     /**

@@ -52,7 +52,21 @@ bool SCH_EDIT_FRAME::CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilenam
     fn.SetName( fn.GetName() + "-cache" );
     fn.SetExt( SchematicLibraryFileExtension );
 
-    return CreateArchiveLibrary( fn.GetFullPath() );
+    bool success = CreateArchiveLibrary( fn.GetFullPath() );
+
+    // Mark the library cache as modified:
+    PART_LIBS* libs = Prj().SchLibs();
+    PART_LIB* libcache = libs->FindLibrary( fn.GetName() );
+
+    if( libcache )
+        libcache->IncModHash();
+
+    // Update the schematic symbol library links.
+    // because the lib cache has changed
+    SCH_SCREENS schematic;
+    schematic.UpdateSymbolLinks();
+
+    return success;
 }
 
 
@@ -65,8 +79,8 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     // Create a new empty library to archive components:
     std::unique_ptr<PART_LIB> archLib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName ) );
 
-    archLib->SetCache();
-    archLib->EnableBuffering();    // To save symbols to file only when the library will be fully filled
+    // Save symbols to file only when the library will be fully filled
+    archLib->EnableBuffering();
 
     /* Examine all screens (not hierarchical sheets) used in the schematic and build a
      * library of unique symbols found in all screens.  Complex hierarchies are not a
