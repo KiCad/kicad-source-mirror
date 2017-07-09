@@ -1350,6 +1350,14 @@ LIB_FIELD& LIB_PART::GetReferenceField()
 }
 
 
+LIB_FIELD& LIB_PART::GetFootprintField()
+{
+    LIB_FIELD* field = GetField( FOOTPRINT );
+    wxASSERT( field != NULL );
+    return *field;
+}
+
+
 bool LIB_PART::SaveDateAndTime( OUTPUTFORMATTER& aFormatter )
 {
     int year, mon, day, hour, min, sec;

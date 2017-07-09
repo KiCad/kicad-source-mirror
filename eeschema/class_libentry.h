@@ -437,6 +437,9 @@ public:
     /** Return reference to the reference designator field. */
     LIB_FIELD& GetReferenceField();
 
+    /** Return reference to the footprint field */
+    LIB_FIELD& GetFootprintField();
+
     /**
      * Draw part.
      *

@@ -142,6 +142,24 @@ CMP_TREE_NODE_ALIAS::CMP_TREE_NODE_ALIAS( CMP_TREE_NODE* aParent, LIB_ALIAS* aAl
     MatchName   = aAlias->GetName().Lower();
     SearchText  = (aAlias->GetKeyWords() + "        " + Desc).Lower();
 
+    // Extract default footprint text
+    LIB_PART* part = aAlias->GetPart();
+
+    wxString footprint;
+
+    if( part )
+    {
+        footprint = part->GetFootprintField().GetText();
+    }
+
+    // If a footprint is defined for the part,
+    // add it to the serach string
+    if( !footprint.IsEmpty() )
+    {
+        SearchText += "        ";
+        SearchText += footprint.Lower();
+    }
+
     if( aAlias->GetPart()->IsMulti() )
     {
         for( int u = 1; u <= aAlias->GetPart()->GetUnitCount(); ++u )
