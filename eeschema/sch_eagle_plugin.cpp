@@ -535,9 +535,13 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
     pageSizeIU = m_currentSheet->GetScreen()->GetPageSettings().GetSizeIU();
     wxPoint sheetcentre( pageSizeIU.x / 2, pageSizeIU.y / 2 );
 
+    // round the translation to nearest 100mil.
+    wxPoint translation = sheetcentre- itemsCentre;
+    translation.x = translation.x - translation.x%100;
+    translation.y = translation.y - translation.y%100;
     while( item )
     {
-        item->SetPosition( item->GetPosition() - itemsCentre + sheetcentre );
+        item->SetPosition( item->GetPosition() +translation);
         item = item->Next();
     }
 }
