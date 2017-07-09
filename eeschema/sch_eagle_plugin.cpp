@@ -894,18 +894,28 @@ void SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
         {
             LIB_PIN* pin = loadPin( aPart, currentNode );
 
-            for( auto connect : aDevice->connects )
+            if(aDevice->connects.size() != 0)
             {
-                if( connect.gate == gateName and pin->GetName().ToStdString() == connect.pin )
+                for( auto connect : aDevice->connects )
                 {
-                    wxString padname( connect.pad );
-                    pin->SetPinNumFromString( padname );
-                    pin->SetPartNumber( gateNumber );
-                    pin->SetUnit( gateNumber );
+                    if( connect.gate == gateName and pin->GetName().ToStdString() == connect.pin )
+                    {
+                        wxString padname( connect.pad );
+                        pin->SetPinNumFromString( padname );
+                        pin->SetPartNumber( gateNumber );
+                        pin->SetUnit( gateNumber );
 
-                    aPart->AddDrawItem( pin );
-                    break;
+                        aPart->AddDrawItem( pin );
+                        break;
+                    }
                 }
+            }
+            else
+            {
+                pin->SetPartNumber( gateNumber );
+                pin->SetUnit( gateNumber );
+                aPart->AddDrawItem( pin );
+                break;
             }
         }
         else if( nodeName == "polygon" )
