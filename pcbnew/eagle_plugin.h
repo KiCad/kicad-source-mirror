@@ -234,6 +234,9 @@ private:
     void packageCircle( MODULE* aModule, wxXmlNode* aTree ) const;
     void packageHole( MODULE* aModule, wxXmlNode* aTree ) const;
     void packageSMD( MODULE* aModule, wxXmlNode* aTree ) const;
+
+    ///> Deletes the footprint templates list
+    void deleteTemplates();
 };
 
 #endif  // EAGLE_PLUGIN_H_

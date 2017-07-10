@@ -144,6 +144,7 @@ EAGLE_PLUGIN::EAGLE_PLUGIN() :
 
 EAGLE_PLUGIN::~EAGLE_PLUGIN()
 {
+    deleteTemplates();
     delete m_rules;
     delete m_xpath;
 }
@@ -271,8 +272,7 @@ void EAGLE_PLUGIN::init( const PROPERTIES* aProperties )
     m_min_via_hole = 0;
     m_xpath->clear();
     m_pads_to_nets.clear();
-
-    // m_templates.clear();     this is the FOOTPRINT cache too
+    deleteTemplates();
 
     m_board = NULL;
     m_props = aProperties;
@@ -1648,6 +1648,16 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
     // don't know what stop, thermals, and cream should look like now.
 }
 
+
+void EAGLE_PLUGIN::deleteTemplates()
+{
+    for( auto& t : m_templates )
+        delete t.second;
+
+    m_templates.clear();
+}
+
+
 /// non-owning container
 typedef std::vector<ZONE_CONTAINER*>    ZONES;
 
@@ -2050,7 +2060,7 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
             wxXmlNode*  doc;
             LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
-            m_templates.clear();
+            deleteTemplates();
 
             // Set this before completion of loading, since we rely on it for
             // text of an exception.  Delay setting m_mod_time until after successful load
