@@ -46,14 +46,14 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
 {
     m_config = Kiface().KifaceSettings();
     m_plotOpts = aParent->GetPlotSettings();
-    Init_Dialog();
+    init_Dialog();
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
 }
 
 
-void DIALOG_PLOT::Init_Dialog()
+void DIALOG_PLOT::init_Dialog()
 {
     wxString    msg;
     wxFileName  fileName;
@@ -116,8 +116,6 @@ void DIALOG_PLOT::Init_Dialog()
 
     // Set units for PS global width correction.
     AddUnitSymbol( *m_textPSFineAdjustWidth, g_UserUnit );
-
-    m_useAuxOriginCheckBox->SetValue( m_plotOpts.GetUseAuxOrigin() );
 
     // Test for a reasonable scale value. Set to 1 if problem
     if( m_XScaleAdjust < PLOT_MIN_SCALE || m_YScaleAdjust < PLOT_MIN_SCALE
@@ -206,8 +204,9 @@ void DIALOG_PLOT::Init_Dialog()
     // Put vias on mask layer
     m_plotNoViaOnMaskOpt->SetValue( m_plotOpts.GetPlotViaOnMaskLayer() );
 
-    // Output directory
-    m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
+    // Initialize a few other parameters, which can also be modified
+    // from the drill dialog
+    reInitDialog();
 
     // Update options values:
     wxCommandEvent cmd_event;
@@ -215,6 +214,18 @@ void DIALOG_PLOT::Init_Dialog()
     OnSetScaleOpt( cmd_event );
 }
 
+
+void DIALOG_PLOT::reInitDialog()
+{
+    // after calling drill dialog, some parameters can be modified.
+    // update them
+
+    // Output directory
+    m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
+
+    // Origin of coordinates:
+    m_useAuxOriginCheckBox->SetValue( m_plotOpts.GetUseAuxOrigin() );
+}
 
 void DIALOG_PLOT::OnQuit( wxCommandEvent& event )
 {
@@ -297,7 +308,7 @@ void DIALOG_PLOT::CreateDrillFile( wxCommandEvent& event )
 
     // a few plot settings can be modified: take them in account
     m_plotOpts = m_parent->GetPlotSettings();
-    Init_Dialog();
+    reInitDialog();
 }
 
 

@@ -113,6 +113,7 @@ bool DIALOG_SET_GRID::TransferDataFromWindow()
     }
 
     wxPoint gridOrigin;
+
     if( !getGridOrigin( gridOrigin ) )
     {
         wxMessageBox( wxString::Format( _( "Incorrect grid origin "

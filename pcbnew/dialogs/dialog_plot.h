@@ -58,7 +58,6 @@ private:
     PCB_PLOT_PARAMS     m_plotOpts;
 
     // Event called functions
-    void        Init_Dialog();
     void        Plot( wxCommandEvent& event ) override;
     void        OnQuit( wxCommandEvent& event ) override;
     void        OnClose( wxCloseEvent& event ) override;
@@ -73,6 +72,8 @@ private:
     void        onRunDRC( wxCommandEvent& event ) override;
 
     // other functions
+    void        init_Dialog();  // main initialization
+    void        reInitDialog(); // initialization after calling drill dialog
     void        applyPlotSettings();
     PlotFormat  getPlotFormat();
 
