@@ -68,12 +68,14 @@ FP_LIB_TABLE::FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable ) :
 void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
 {
     T       tok;
+    wxString errMsg;    // to collect error messages
 
     // This table may be nested within a larger s-expression, or not.
     // Allow for parser of that optional containing s-epression to have looked ahead.
     if( in->CurTok() != T_fp_lib_table )
     {
         in->NeedLEFT();
+
         if( ( tok = in->NextTok() ) != T_fp_lib_table )
             in->Expecting( T_fp_lib_table );
     }
@@ -87,10 +89,6 @@ void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
 
         if( tok != T_LEFT )
             in->Expecting( T_LEFT );
-
-        // in case there is a "row integrity" error, tell where later.
-        int lineNum = in->CurLineNumber();
-        int offset  = in->CurOffset();
 
         if( ( tok = in->NextTok() ) != T_lib )
             in->Expecting( T_lib );
@@ -175,14 +173,22 @@ void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
         // use doReplace in InsertRow().  (However a fallBack table can have a
         // conflicting nickName and ours will supercede that one since in
         // FindLib() we search this table before any fall back.)
+        wxString nickname = row->GetNickName(); // store it to be able to used it
+                                                // after row deletion if an error occurs
         if( !InsertRow( row.release() ) )
         {
             wxString msg = wxString::Format(
                                 _( "'%s' is a duplicate footprint library nickName" ),
-                                GetChars( row->GetNickName() ) );
-            THROW_PARSE_ERROR( msg, in->CurSource(), in->CurLine(), lineNum, offset );
+                                GetChars( nickname ) );
+            if( !errMsg.IsEmpty() )
+                errMsg << '\n';
+
+            errMsg << msg;
         }
     }
+
+    if( !errMsg.IsEmpty() )
+        THROW_IO_ERROR( errMsg );
 }
 
 

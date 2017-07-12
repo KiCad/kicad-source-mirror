@@ -185,11 +185,13 @@ void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
         // use doReplace in InsertRow().  (However a fallBack table can have a
         // conflicting nickName and ours will supercede that one since in
         // FindLib() we search this table before any fall back.)
+        wxString nickname = row->GetNickName(); // store it to be able to used it
+                                                // after row deletion if an error occurs
         if( !InsertRow( row.release() ) )
         {
             wxString msg = wxString::Format(
                                 _( "'%s' is a duplicate symbol library nickname" ),
-                                GetChars( row->GetNickName() ) );
+                                GetChars( nickname ) );
             THROW_PARSE_ERROR( msg, in->CurSource(), in->CurLine(), lineNum, offset );
         }
     }

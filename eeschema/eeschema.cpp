@@ -264,12 +264,16 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     }
     catch( const IO_ERROR& ioe )
     {
+        // if we are here, a incorrect global symbol library table was found.
+        // Incorrect global symbol library table is not a fatal error:
+        // the user just has to edit the (partially) loaded table.
         wxString msg = wxString::Format( _(
-            "An error occurred attempting to load the global symbol library table:\n\n%s" ),
+            "An error occurred attempting to load the global symbol library table:"
+            "\n\n%s\n\n"
+            "Please edit this global symbol library table in Preferences menu" ),
             GetChars( ioe.What() )
             );
         DisplayError( NULL, msg );
-        return false;
     }
 
     return true;
