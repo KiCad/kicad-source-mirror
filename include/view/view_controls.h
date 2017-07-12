@@ -166,14 +166,26 @@ public:
     virtual VECTOR2D GetMousePosition( bool aWorldCoordinates = true ) const = 0;
 
     /**
-     * Function GetCursorPosition()
      * Returns the current cursor position in world coordinates. Note, that it may be
      * different from the mouse pointer position if snapping is enabled or cursor position
      * is forced to a specific point.
      *
      * @return The current cursor position in world coordinates.
      */
-    virtual VECTOR2D GetCursorPosition() const = 0;
+    VECTOR2D GetCursorPosition() const
+    {
+        return GetCursorPosition( m_settings.m_snappingEnabled );
+    }
+
+    /**
+     * Returns the current cursor position in world coordinates. Note, that it may be
+     * different from the mouse pointer position if snapping is enabled or cursor position
+     * is forced to a specific point.
+     *
+     * @param aEnableSnapping selects whether cursor position should be snapped to the grid.
+     * @return The current cursor position in world coordinates.
+     */
+    virtual VECTOR2D GetCursorPosition( bool aEnableSnapping ) const = 0;
 
     /**
      * Function ForceCursorPosition()

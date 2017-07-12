@@ -472,7 +472,7 @@ bool SELECTION_TOOL::selectCursor( bool aSelectAlways )
     if( aSelectAlways || m_selection.Empty() )
     {
         clearSelection();
-        selectPoint( getViewControls()->GetMousePosition() );
+        selectPoint( getViewControls()->GetCursorPosition( false ) );
     }
 
     return !m_selection.Empty();

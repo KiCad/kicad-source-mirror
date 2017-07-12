@@ -73,8 +73,10 @@ public:
     /// @copydoc VIEW_CONTROLS::GetMousePosition()
     VECTOR2D GetMousePosition( bool aWorldCoordinates = true ) const override;
 
+    using VIEW_CONTROLS::GetCursorPosition;
+
     /// @copydoc VIEW_CONTROLS::GetCursorPosition()
-    VECTOR2D GetCursorPosition() const override;
+    VECTOR2D GetCursorPosition( bool aSnappingEnabled ) const override;
 
     /// @copydoc VIEW_CONTROLS::CursorWarp()
     void WarpCursor( const VECTOR2D& aPosition, bool aWorldCoordinates = false,

@@ -362,7 +362,7 @@ VECTOR2D WX_VIEW_CONTROLS::GetMousePosition( bool aWorldCoordinates ) const
 }
 
 
-VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition() const
+VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition( bool aEnableSnapping ) const
 {
     if( m_settings.m_forceCursorPosition )
     {
@@ -372,7 +372,7 @@ VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition() const
     {
         VECTOR2D mousePosition = GetMousePosition();
 
-        if( m_settings.m_snappingEnabled )
+        if( aEnableSnapping )
             return m_view->GetGAL()->GetGridPoint( mousePosition );
         else
             return mousePosition;
