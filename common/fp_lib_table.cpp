@@ -260,6 +260,7 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
     */
 
     T       tok;
+    wxString errMsg;    // to collect error messages
 
     // This table may be nested within a larger s-expression, or not.
     // Allow for parser of that optional containing s-epression to have looked ahead.
@@ -279,10 +280,6 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
 
         if( tok != T_LEFT )
             in->Expecting( T_LEFT );
-
-        // in case there is a "row integrity" error, tell where later.
-        int lineNum = in->CurLineNumber();
-        int offset  = in->CurOffset();
 
         if( ( tok = in->NextTok() ) != T_lib )
             in->Expecting( T_lib );
@@ -382,9 +379,15 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
             wxString msg = wxString::Format(
                                 _( "'%s' is a duplicate footprint library nickName" ),
                                 GetChars( row.nickName ) );
-            THROW_PARSE_ERROR( msg, in->CurSource(), in->CurLine(), lineNum, offset );
+            if( !errMsg.IsEmpty() )
+                errMsg << '\n';
+
+            errMsg << msg;
         }
     }
+
+    if( !errMsg.IsEmpty() )
+        THROW_IO_ERROR( errMsg );
 }
 
 

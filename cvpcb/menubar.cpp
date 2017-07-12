@@ -91,7 +91,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
                  KiBitmap( editor_xpm ) );
 
     AddMenuItem( preferencesMenu, ID_CVPCB_EQUFILES_LIST_EDIT,
-                 _( "&Footprint &Association Files" ),
+                 _( "Footprint &Association Files" ),
                  _( "Configure footprint association file (.equ) list."
                     "These files are used to automatically assign"
                     "the footprint name from the component value" ),
