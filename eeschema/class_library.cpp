@@ -472,6 +472,11 @@ int PART_LIBS::GetModifyHash()
         hash += it->GetModHash();
     }
 
+    // Rebuilding the cache (m_cache) does not change the GetModHash() value,
+    // but changes PART_LIBS::s_modify_generation.
+    // Take this change in account:
+    hash += PART_LIBS::s_modify_generation;
+
     return hash;
 }
 

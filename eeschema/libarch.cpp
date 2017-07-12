@@ -54,13 +54,6 @@ bool SCH_EDIT_FRAME::CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilenam
 
     bool success = CreateArchiveLibrary( fn.GetFullPath() );
 
-    // Mark the library cache as modified:
-    PART_LIBS* libs = Prj().SchLibs();
-    PART_LIB* libcache = libs->FindLibrary( fn.GetName() );
-
-    if( libcache )
-        libcache->IncModHash();
-
     // Update the schematic symbol library links.
     // because the lib cache has changed
     SCH_SCREENS schematic;

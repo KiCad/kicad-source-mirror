@@ -3387,6 +3387,11 @@ void SCH_LEGACY_PLUGIN::cacheLib( const wxString& aLibraryFileName )
         delete m_cache;
         m_cache = new SCH_LEGACY_PLUGIN_CACHE( aLibraryFileName );
 
+        // Because m_cache is rebuilt, increment PART_LIBS::s_modify_generation
+        // to modify the hash value that indicate component to symbol links
+        // must be updated.
+        PART_LIBS::s_modify_generation++;
+
         if( !isBuffering( m_props ) )
             m_cache->Load();
     }

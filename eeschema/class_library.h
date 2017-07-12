@@ -344,13 +344,6 @@ public:
      */
     int GetModHash() const { return m_mod_hash; }
 
-    /**
-     * Forces a change of the magic number that usually changes
-     * if the library has changed. Usefull to force initializations
-     * only made on library change.
-     */
-    void IncModHash() { ++m_mod_hash; }
-
     SCH_IO_MGR::SCH_FILE_T GetPluginType() const { return m_pluginType; }
 
     void SetPluginType( SCH_IO_MGR::SCH_FILE_T aPluginType );
