@@ -133,6 +133,7 @@ private:
     void loadInstance( wxXmlNode* aInstanceNode );
     void loadModuleinst( wxXmlNode* aModuleinstNode );
     EAGLE_LIBRARY* loadLibrary( wxXmlNode* aLibraryNode );
+    void addBusEntries();
 
     void                loadSegments( wxXmlNode* aSegmentsNode, const wxString& aNetName,
             const wxString& aNetClass );
@@ -159,8 +160,7 @@ private:
     EPART_LIST m_partlist;
     std::map<std::string, EAGLE_LIBRARY*> m_eaglelibraries;
 
-    wxPoint sheetTopRight;
-    wxPoint sheetBottomLeft;
+    EDA_RECT sheetBoundingBox;
 
 
 protected:
