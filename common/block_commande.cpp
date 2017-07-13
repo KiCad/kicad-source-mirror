@@ -220,8 +220,7 @@ void AbortBlockCurrentCommand( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
         screen->SetCurItem( NULL );
 
         // Delete the picked wrapper if this is a picked list.
-        if( screen->m_BlockLocate.GetCommand() != BLOCK_PASTE )
-            screen->m_BlockLocate.ClearItemsList();
+        screen->m_BlockLocate.ClearItemsList();
     }
 
     screen->m_BlockLocate.SetState( STATE_NO_BLOCK );
