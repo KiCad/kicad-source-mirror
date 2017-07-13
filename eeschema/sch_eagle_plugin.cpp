@@ -44,6 +44,8 @@
 #include <sch_text.h>
 #include <drawtxt.h>
 
+#include <sch_marker.h>
+#include <sch_bus_entry.h>
 #include <eagle_parser.h>
 #include <sch_eagle_plugin.h>
 
@@ -551,6 +553,9 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
         item->SetPosition( item->GetPosition()+translation );
         item = item->Next();
     }
+
+    addBusEntries();
+
 }
 
 
@@ -1287,6 +1292,333 @@ bool SCH_EAGLE_PLUGIN::CheckHeader( const wxString& aFileName )
 
     return firstline.StartsWith( "<?xml" );
 }
+
+void SCH_EAGLE_PLUGIN::addBusEntries()
+{
+    // Add bus entry symbols
+
+    // for each wire segment, compare each end with all busess.
+    // If the wire end is found to end on a bus segment and is perpendicular to it, place a bus entry symbol.
+
+    SCH_ITEM* item = m_currentSheet->GetScreen()->GetDrawItems();
+
+    for( ; item != NULL; item = item->Next() )
+    {
+        // Check item type for line
+        if( item->Type() != SCH_LINE_T )
+            continue;
+
+        // Check item type for wire
+        if( ( (SCH_LINE*) item )->GetLayer() != LAYER_WIRE )
+            continue;
+
+        SCH_ITEM* testitem = m_currentSheet->GetScreen()->GetDrawItems();
+
+        for( ; testitem != NULL; testitem = testitem->Next() )
+        {
+            // Check item type for line
+            if( testitem->Type() != SCH_LINE_T )
+                continue;
+
+            // Check item type for bus
+            if( ( (SCH_LINE*) testitem )->GetLayer() != LAYER_BUS )
+                continue;
+
+            // Get points of both segments.
+            wxPoint itemstart = ( (SCH_LINE*) item )->GetStartPoint();
+            wxPoint itemend = ( (SCH_LINE*) item )->GetEndPoint();
+            wxPoint testitemstart = ( (SCH_LINE*) testitem )->GetStartPoint();
+            wxPoint testitemend = ( (SCH_LINE*) testitem )->GetEndPoint();
+
+            // Test for horizontal wire and         vertical bus
+            if( itemstart.y == itemend.y && testitemstart.x == testitemend.x )
+            {
+                if( TestSegmentHit( itemstart, testitemstart, testitemend, 0 ) )
+                {
+                    // Wire start is on a bus.
+                    SCH_MARKER* marker =
+                        new SCH_MARKER( itemstart, "horizontal wire, vertical bus" );
+                    m_currentSheet->GetScreen()->Append( marker );
+
+                    // Wire start is on the vertical bus
+
+                    // if the end of the wire is to the left of the bus
+                    if( itemend.x < testitemstart.x )
+                    {
+                        // |
+                        // ---|
+                        // |
+                        if( TestSegmentHit( itemstart + wxPoint( 0, -100 ), testitemstart,
+                                    testitemend, 0 ) )
+                        {
+                            // |
+                            // ___/|
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( itemstart + wxPoint(
+                                            -100,
+                                            0 ),
+                                    '/' );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                        }
+                        else if( TestSegmentHit( itemstart + wxPoint( 0, 100 ), testitemstart,
+                                         testitemend, 0 ) )
+                        {
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( itemstart + wxPoint(
+                                            -100,
+                                            0 ),
+                                    '\\' );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                        }
+                    }
+                    // else the wire end is to the right of the bus
+                    // Wire is to the right of the bus
+                    // |
+                    // |----
+                    // |
+                    else
+                    {
+                        // test is bus exists above the wire
+                        if( TestSegmentHit( itemstart + wxPoint( 0, -100 ), testitemstart,
+                                    testitemend, 0 ) )
+                        {
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( itemstart + wxPoint(
+                                            0,
+                                            -100 ),
+                                    '\\' );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                        }
+                        // test is bus exists below the wire
+                        else if( TestSegmentHit( itemstart + wxPoint( 0, 100 ), testitemstart,
+                                         testitemend, 0 ) )
+                        {
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( itemstart + wxPoint(
+                                            0,
+                                            100 ),
+                                    '/' );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                        }
+                    }
+                }
+
+                // Same thing but test end of the wire instead.
+                if( TestSegmentHit( itemend, testitemstart, testitemend, 0 ) )
+                {
+                    SCH_MARKER* marker = new SCH_MARKER( itemend, "horizontal wire, vertical bus" );
+
+                    m_currentSheet->GetScreen()->Append( marker );
+
+                    // Wire end is on the vertical bus
+
+                    // if the start of the wire is to the left of the bus
+                    if( itemstart.x < testitemstart.x )
+                    {
+                        // Test if bus exists above the wire
+                        if( TestSegmentHit( itemend + wxPoint( 0, 100 ), testitemstart, testitemend,
+                                    0 ) )
+                        {
+                            // |
+                            // ___/|
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( itemend + wxPoint(
+                                            -100,
+                                            0 ),
+                                    '\\' );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                        }
+                        // Test if bus exists below the wire
+                        else if( TestSegmentHit( itemend + wxPoint( 0, -100 ), testitemstart,
+                                         testitemend, 0 ) )
+                        {
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( itemend + wxPoint(
+                                            -100,
+                                            0 ),
+                                    '/' );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                        }
+                    }
+                    // else the start of the wire is to the right of the bus
+                    // |
+                    // |----
+                    // |
+                    else
+                    {
+                        // test if bus existed above the wire
+                        if( TestSegmentHit( itemend + wxPoint( 0, -100 ), testitemstart,
+                                    testitemend, 0 ) )
+                        {
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( itemend + wxPoint(
+                                            0,
+                                            -100 ),
+                                    '\\' );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                        }
+                        // test if bus existed below the wire
+                        else if( TestSegmentHit( itemend + wxPoint( 0, 100 ), testitemstart,
+                                         testitemend, 0 ) )
+                        {
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( itemend + wxPoint(
+                                            0,
+                                            100 ),
+                                    '/' );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                        }
+                    }
+                }
+            }    // if( itemstart.y == itemend.y && testitemstart.x == testitemend.x)
+
+            // Test for horizontal wire and vertical bus
+            if( itemstart.x == itemend.x && testitemstart.y == testitemend.y )
+            {
+                if( TestSegmentHit( itemstart, testitemstart, testitemend, 0 ) )
+                {
+                    // Wire start is on the bus
+                    // If wire end is above the bus,
+                    if( itemend.y < testitemstart.y )
+                    {
+                        // Test for bus existance to the left of the wire
+                        if( TestSegmentHit( itemstart + wxPoint( -100, 0 ), testitemstart,
+                                    testitemend, 0 ) )
+                        {
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( itemstart + wxPoint(
+                                            -100,
+                                            0 ),
+                                    '/' );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            SCH_MARKER* marker = new SCH_MARKER( itemstart,
+                                    "vertical wire, horizontal bus, above, left of wire" );
+
+                            m_currentSheet->GetScreen()->Append( marker );
+                        }
+                        else if( TestSegmentHit( itemstart + wxPoint( 100, 0 ), testitemstart,
+                                         testitemend, 0 ) )
+                        {
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( itemstart + wxPoint(
+                                            0,
+                                            100 ),
+                                    '\\' );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            SCH_MARKER* marker = new SCH_MARKER( itemstart,
+                                    "vertical wire, horizontal bus, above, right of wire" );
+
+                            m_currentSheet->GetScreen()->Append( marker );
+                        }
+                    }
+                    else    // wire end is below the bus.
+                    {
+                        // Test for bus existance to the left of the wire
+                        if( TestSegmentHit( itemstart + wxPoint( -100, 0 ), testitemstart,
+                                    testitemend, 0 ) )
+                        {
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( itemstart + wxPoint(
+                                            -100,
+                                            0 ),
+                                    '\\' );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            SCH_MARKER* marker = new SCH_MARKER( itemstart,
+                                    "vertical wire, horizontal bus, below, left of wire" );
+
+                            m_currentSheet->GetScreen()->Append( marker );
+                        }
+                        else if( TestSegmentHit( itemstart + wxPoint( 100, 0 ), testitemstart,
+                                         testitemend, 0 ) )
+                        {
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( itemstart + wxPoint(
+                                            100,
+                                            0 ),
+                                    '/' );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            SCH_MARKER* marker = new SCH_MARKER( itemstart,
+                                    "vertical wire, horizontal bus, below, right of wire" );
+
+                            m_currentSheet->GetScreen()->Append( marker );
+                        }
+                    }
+                }
+
+                if( TestSegmentHit( itemend, testitemstart, testitemend, 0 ) )
+                {
+                    // Wire start is on the bus
+                    // If wire end is above the bus,
+                    if( itemstart.y < testitemstart.y )
+                    {
+                        // Test for bus existance to the left of the wire
+                        if( TestSegmentHit( itemend + wxPoint( -100, 0 ), testitemstart,
+                                    testitemend, 0 ) )
+                        {
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( itemend + wxPoint(
+                                            -100,
+                                            0 ),
+                                    '/' );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            SCH_MARKER* marker = new SCH_MARKER( itemend,
+                                    "vertical wire, horizontal bus, above, left of wire, end" );
+
+                            m_currentSheet->GetScreen()->Append( marker );
+                        }
+                        else if( TestSegmentHit( itemend + wxPoint( 100, 0 ), testitemstart,
+                                         testitemend, 0 ) )
+                        {
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( itemend + wxPoint(
+                                            0,
+                                            -100 ),
+                                    '\\' );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            SCH_MARKER* marker = new SCH_MARKER( itemend,
+                                    "vertical wire, horizontal bus, above, right of wire, end" );
+
+                            m_currentSheet->GetScreen()->Append( marker );
+                        }
+                    }
+                    else    // wire end is below the bus.
+                    {
+                        // Test for bus existance to the left of the wire
+                        if( TestSegmentHit( itemend + wxPoint( -100, 0 ), testitemstart,
+                                    testitemend, 0 ) )
+                        {
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( itemend + wxPoint(
+                                            -100,
+                                            0 ),
+                                    '\\' );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            SCH_MARKER* marker = new SCH_MARKER( itemend,
+                                    "vertical wire, horizontal bus, below, left of wire, end" );
+
+                            m_currentSheet->GetScreen()->Append( marker );
+                        }
+                        else if( TestSegmentHit( itemend + wxPoint( 100, 0 ), testitemstart,
+                                         testitemend, 0 ) )
+                        {
+                            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( itemend + wxPoint(
+                                            0,
+                                            100 ),
+                                    '/' );
+                            busEntry->SetFlags( IS_NEW );
+                            m_currentSheet->GetScreen()->Append( busEntry );
+                            SCH_MARKER* marker = new SCH_MARKER( itemend,
+                                    "vertical wire, horizontal bus, below, right of wire, end" );
+
+                            m_currentSheet->GetScreen()->Append( marker );
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 
 void SCH_EAGLE_PLUGIN::Save( const wxString& aFileName, SCH_SCREEN* aSchematic, KIWAY* aKiway,
