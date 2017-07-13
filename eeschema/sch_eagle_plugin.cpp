@@ -43,7 +43,6 @@
 #include <lib_text.h>
 #include <sch_text.h>
 #include <drawtxt.h>
-
 #include <sch_marker.h>
 #include <sch_bus_entry.h>
 #include <eagle_parser.h>
@@ -317,10 +316,39 @@ void SCH_EAGLE_PLUGIN::loadDrawing( wxXmlNode* aDrawingNode )
     // TODO: handle settings nodes
     // wxXmlNode* settings = drawingChildren["settings"]
 
+
     // Load schematic
     loadSchematic( drawingChildren["schematic"] );
 }
 
+void SCH_EAGLE_PLUGIN::countNets( wxXmlNode* aSchematicNode )
+{
+    // Map all children into a readable dictionary
+    NODE_MAP schematicChildren = mapChildren( aSchematicNode );
+    // Loop through all the sheets
+    wxXmlNode* sheetNode = schematicChildren["sheets"]->GetChildren();
+    while( sheetNode )
+    {
+        NODE_MAP sheetChildren = mapChildren( sheetNode );
+        // Loop through all nets
+        // From the DTD: "Net is an electrical connection in a schematic."
+        wxXmlNode* netNode = getChildrenNodes( sheetChildren, "nets" );
+
+        while( netNode )
+        {
+            std::string netName = netNode->GetAttribute( "name" ).ToStdString();
+            if( m_NetCounts.count(netName) ) m_NetCounts[netName] = m_NetCounts[netName]+1;
+            else  m_NetCounts[netName]=1;
+
+            // Get next net
+            netNode = netNode->GetNext();
+        }
+
+
+        sheetNode = sheetNode->GetNext();
+    }
+
+}
 
 void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 {
@@ -365,6 +393,10 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
         m_eaglelibraries[elib->name] = elib;
         libraryNode = libraryNode->GetNext();
     }
+
+    // find all nets and count how many sheets they appear on.
+    // local labels will be used for nets found only on that sheet.
+    countNets(aSchematicNode);
 
     // Loop through all the sheets
     wxXmlNode* sheetNode = schematicChildren["sheets"]->GetChildren();
@@ -570,8 +602,29 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
     // wxCHECK( screen, [>void<] );
     while( currentSegment )
     {
+        bool labelled = false; // has a label been added to this continously connected segment
+        NODE_MAP segmentChildren = mapChildren( currentSegment );
+
         // Loop through all segment children
         wxXmlNode* segmentAttribute = currentSegment->GetChildren();
+
+        // load wire nodes first
+        // label positions will then be tested for an underlying wire, since eagle labels can be seperated from the wire
+
+        DLIST<SCH_LINE> segmentWires;
+        segmentWires.SetOwnership( false );
+
+        while( segmentAttribute )
+        {
+            if( segmentAttribute->GetName() == "wire" )
+            {
+                segmentWires.Append( loadSignalWire( segmentAttribute ) );
+            }
+
+            segmentAttribute = segmentAttribute->GetNext();
+        }
+
+        segmentAttribute = currentSegment->GetChildren();
 
         while( segmentAttribute )
         {
@@ -579,24 +632,12 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
 
             if( nodeName == "junction" )
             {
-                // TODO: handle junctions attributes
-                segmentAttribute->GetAttribute( "x" );
-                segmentAttribute->GetAttribute( "y" );
                 screen->Append( loadJunction( segmentAttribute ) );
             }
             else if( nodeName == "label" )
             {
-                // TODO: handle labels attributes
-                segmentAttribute->GetAttribute( "x" );      // REQUIRED
-                segmentAttribute->GetAttribute( "y" );      // REQUIRED
-                segmentAttribute->GetAttribute( "size" );   // REQUIRED
-                segmentAttribute->GetAttribute( "layer" );  // REQUIRED
-                segmentAttribute->GetAttribute( "font" );   // Defaults to "proportional"
-                segmentAttribute->GetAttribute( "ratio" );  // Defaults to "8"
-                segmentAttribute->GetAttribute( "rot" );    // Defaults to "R0"
-                segmentAttribute->GetAttribute( "xref" );   // Defaults to "no"
-
-                screen->Append( loadLabel( segmentAttribute, netName ) );
+                screen->Append( loadLabel( segmentAttribute, netName, segmentWires ) );
+                labelled = true;
             }
             else if( nodeName == "pinref" )
             {
@@ -605,24 +646,9 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
                 segmentAttribute->GetAttribute( "part" );   // REQUIRED
                 segmentAttribute->GetAttribute( "pin" );    // REQUIRED
             }
-            else if( nodeName == "portref" )
-            {
-                // TODO: handle portref attributes
-                segmentAttribute->GetAttribute( "moduleinst" ); // REQUIRED
-                segmentAttribute->GetAttribute( "port" );       // REQUIRED
-            }
             else if( nodeName == "wire" )
             {
-                screen->Append( loadSignalWire( segmentAttribute ) );
-            }
-            else if( nodeName == "segment" )
-            {
-                // loadSegments( segmentAttribute );
-            }
-            else if( nodeName == "text" )
-            {
-                // TODO
-                // loadSegments( segmentAttribute );
+                // already handled;
             }
             else    // DEFAULT
             {
@@ -632,6 +658,37 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
 
             // Get next segment attribute
             segmentAttribute = segmentAttribute->GetNext();
+        }
+
+        SCH_LINE* wire = segmentWires.begin();
+
+
+        if(labelled == false && wire != NULL )
+        {
+            if(m_NetCounts[netName.ToStdString()]>1){
+                std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
+                glabel->SetPosition( wire->GetStartPoint() );
+                glabel->SetText( netName);
+                glabel->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
+                screen->Append( glabel.release() );
+            }
+            else
+            {
+                std::unique_ptr<SCH_LABEL> label( new SCH_LABEL );
+                label->SetPosition( wire->GetStartPoint() );
+                label->SetText( netName );
+                label->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
+                screen->Append( label.release() );
+            }
+        }
+
+
+        SCH_LINE* next_wire;
+        while( wire != NULL )
+        {
+            next_wire = wire->Next();
+            screen->Append( wire ) ;
+            wire = next_wire;
         }
 
         currentSegment = currentSegment->GetNext();
@@ -674,23 +731,144 @@ SCH_JUNCTION* SCH_EAGLE_PLUGIN::loadJunction( wxXmlNode* aJunction )
 }
 
 
-SCH_GLOBALLABEL* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName )
-{
-    std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
 
+
+SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName, const DLIST< SCH_LINE >& segmentWires )
+{
     auto elabel = ELABEL( aLabelNode, aNetName );
 
-    glabel->SetPosition( wxPoint( elabel.x * EUNIT_TO_MIL, -elabel.y * EUNIT_TO_MIL ) );
-    glabel->SetText( elabel.netname );
-    glabel->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
+    wxPoint elabelpos( elabel.x * EUNIT_TO_MIL, -elabel.y * EUNIT_TO_MIL );
 
-    glabel->SetLabelSpinStyle(0);
-    if( elabel.rot )
-    {
-        glabel->SetLabelSpinStyle( int( 360-elabel.rot->degrees / 90) % 4 );
-        if(elabel.rot->mirror && ( glabel->GetLabelSpinStyle() == 0 || glabel->GetLabelSpinStyle() == 2 )) glabel->SetLabelSpinStyle((glabel->GetLabelSpinStyle()+2)%4);
+    if(m_NetCounts[aNetName.ToStdString()]>1){
+        std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
+        glabel->SetPosition( elabelpos );
+        glabel->SetText( elabel.netname );
+        glabel->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
+
+        glabel->SetLabelSpinStyle(0);
+        if( elabel.rot )
+        {
+            glabel->SetLabelSpinStyle( int( elabel.rot->degrees / 90) % 4 );
+            if(elabel.rot->mirror && ( glabel->GetLabelSpinStyle() == 0 || glabel->GetLabelSpinStyle() == 2 )) glabel->SetLabelSpinStyle((glabel->GetLabelSpinStyle()+2)%4);
+        }
+
+        SCH_LINE* wire;
+        SCH_LINE* next_wire;
+
+        bool labelOnWire = false;
+        auto glabelPosition = glabel->GetPosition();
+        for( wire = segmentWires.begin(); wire; wire = next_wire )
+        {
+            next_wire = wire->Next();
+            if( wire->HitTest( glabelPosition, 0) )
+            {
+                labelOnWire = true;
+                break;
+            }
+        }
+
+        wire = segmentWires.begin();
+
+        if( labelOnWire == false )
+        {
+            wxPoint newLabelPos = findNearestLinePoint(elabelpos, segmentWires);
+            if( wire )
+            {
+                glabel->SetPosition( newLabelPos );
+            }
+        }
+
+        return glabel.release();
     }
-    return glabel.release();
+    else
+    {
+        std::unique_ptr<SCH_LABEL> label( new SCH_LABEL );
+        label->SetPosition(elabelpos);
+        label->SetText( elabel.netname );
+        label->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
+
+        label->SetLabelSpinStyle(0);
+        if( elabel.rot )
+        {
+            label->SetLabelSpinStyle( int( elabel.rot->degrees / 90) % 4 );
+            if(elabel.rot->mirror && ( label->GetLabelSpinStyle() == 0 || label->GetLabelSpinStyle() == 2 )) label->SetLabelSpinStyle((label->GetLabelSpinStyle()+2)%4);
+        }
+
+        SCH_LINE* wire;
+        SCH_LINE* next_wire;
+
+        bool labelOnWire = false;
+        auto labelPosition = label->GetPosition();
+        for( wire = segmentWires.begin(); wire; wire = next_wire )
+        {
+            next_wire = wire->Next();
+            if( wire->HitTest( labelPosition, 0) )
+            {
+                labelOnWire = true;
+                break;
+            }
+        }
+
+        wire = segmentWires.begin();
+
+        if( labelOnWire == false )
+        {
+
+            if( wire )
+            {
+                wxPoint newLabelPos = findNearestLinePoint( elabelpos , segmentWires);
+                label->SetPosition( newLabelPos );
+            }
+
+        }
+
+
+
+        return label.release();
+    }
+
+}
+
+
+wxPoint SCH_EAGLE_PLUGIN::findNearestLinePoint( const wxPoint aPoint, const DLIST< SCH_LINE >& lines)
+{
+    wxPoint nearestPoint;
+
+    float mindistance = std::numeric_limits<float>::max();
+    float d;
+    SCH_LINE* line = lines.begin();
+    while( line != NULL )
+    {
+        auto testpoint = line->GetStartPoint();
+        d = sqrt( abs( ( (aPoint.x-testpoint.x)^2 ) + ( (aPoint.y-testpoint.y)^2 ) ) );
+
+        if( d < mindistance )
+        {
+            mindistance  = d;
+            nearestPoint = testpoint;
+        }
+
+        testpoint = line->MidPoint();
+        d = sqrt( abs( ( (aPoint.x-testpoint.x)^2 ) + ( (aPoint.y-testpoint.y)^2 ) ) );
+
+        if( d < mindistance )
+        {
+            mindistance  = d;
+            nearestPoint = testpoint;
+        }
+
+        testpoint = line->GetEndPoint();
+        d = sqrt( abs( ( (aPoint.x-testpoint.x)^2 ) + ( (aPoint.y-testpoint.y)^2 ) ) );
+
+        if( d < mindistance )
+        {
+            mindistance  = d;
+            nearestPoint = testpoint;
+        }
+
+        line = line->Next();
+    }
+    return nearestPoint;
 }
 
 
@@ -959,9 +1137,7 @@ void SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
         {
             LIB_TEXT* libtext = loadSymboltext( aPart, currentNode );
             libtext->SetUnit( gateNumber );
-            // TODO: Reimplement mandatory field positioning.
 
-            std::cout << libtext->GetText() << '\n';
             if( libtext->GetText() ==">NAME" )
             {
                 aPart->GetField( REFERENCE )->SetTextPos( libtext->GetPosition() );

@@ -27,6 +27,7 @@
 #include <sch_io_mgr.h>
 #include <eagle_parser.h>
 #include <lib_draw_item.h>
+#include <dlist.h>
 
 class KIWAY;
 class LINE_READER;
@@ -133,12 +134,15 @@ private:
     void loadInstance( wxXmlNode* aInstanceNode );
     void loadModuleinst( wxXmlNode* aModuleinstNode );
     EAGLE_LIBRARY* loadLibrary( wxXmlNode* aLibraryNode );
+    void countNets( wxXmlNode* aSchematicNode );
     void addBusEntries();
+
+    wxPoint findNearestLinePoint(wxPoint aPoint, const DLIST< SCH_LINE >& lines);
 
     void                loadSegments( wxXmlNode* aSegmentsNode, const wxString& aNetName,
             const wxString& aNetClass );
     SCH_LINE*           loadSignalWire( wxXmlNode* aWireNode );
-    SCH_GLOBALLABEL*    loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName );
+    SCH_TEXT*           loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName, const DLIST< SCH_LINE >& segmentWires);
     SCH_JUNCTION*       loadJunction( wxXmlNode* aJunction );
     SCH_TEXT*           loadplaintext( wxXmlNode* aSchText );
 
@@ -161,6 +165,7 @@ private:
     std::map<std::string, EAGLE_LIBRARY*> m_eaglelibraries;
 
     EDA_RECT sheetBoundingBox;
+    std::map<std::string, int > m_NetCounts;
 
 
 protected:
