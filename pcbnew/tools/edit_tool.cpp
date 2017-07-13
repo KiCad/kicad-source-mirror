@@ -124,6 +124,8 @@ bool EDIT_TOOL::invokeInlineRouter()
         if( !theRouter->PNSSettings().InlineDragEnabled() )
             return false;
 
+        TOOL_EVENT dummy;
+        m_selectionTool->ClearSelection( dummy );
         m_toolMgr->RunAction( COMMON_ACTIONS::routerInlineDrag, true, track ? track : via );
         return true;
     }

@@ -795,8 +795,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
     VIEW_CONTROLS* ctls = getViewControls();
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
-
     Activate();
 
     m_router->SyncWorld();
