@@ -67,7 +67,7 @@ FP_LIB_TABLE::FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable ) :
 
 void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
 {
-    T       tok;
+    T        tok;
     wxString errMsg;    // to collect error messages
 
     // This table may be nested within a larger s-expression, or not.
@@ -89,6 +89,9 @@ void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
 
         if( tok != T_LEFT )
             in->Expecting( T_LEFT );
+
+        // in case there is a "row integrity" error, tell where later.
+        int lineNum = in->CurLineNumber();
 
         if( ( tok = in->NextTok() ) != T_lib )
             in->Expecting( T_lib );
@@ -175,11 +178,16 @@ void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
         // FindLib() we search this table before any fall back.)
         wxString nickname = row->GetNickName(); // store it to be able to used it
                                                 // after row deletion if an error occurs
-        if( !InsertRow( row.release() ) )
+        LIB_TABLE_ROW* tmp = row.release();
+
+        if( !InsertRow( tmp ) )
         {
+            delete tmp;     // The table did not take ownership of the row.
+
             wxString msg = wxString::Format(
-                                _( "'%s' is a duplicate footprint library nickName" ),
-                                GetChars( nickname ) );
+                                _( "Duplicate library nickname '%s' found in footprint library "
+                                   "table file line %d" ), GetChars( nickname ), lineNum );
+
             if( !errMsg.IsEmpty() )
                 errMsg << '\n';
 

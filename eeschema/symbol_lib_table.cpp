@@ -77,7 +77,8 @@ SYMBOL_LIB_TABLE& SYMBOL_LIB_TABLE::GetGlobalLibTable()
 
 void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
 {
-    T       tok;
+    T        tok;
+    wxString errMsg;    // to collect error messages
 
     // This table may be nested within a larger s-expression, or not.
     // Allow for parser of that optional containing s-epression to have looked ahead.
@@ -100,7 +101,6 @@ void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
 
         // in case there is a "row integrity" error, tell where later.
         int lineNum = in->CurLineNumber();
-        int offset  = in->CurOffset();
 
         if( ( tok = in->NextTok() ) != T_lib )
             in->Expecting( T_lib );
@@ -187,14 +187,25 @@ void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
         // FindLib() we search this table before any fall back.)
         wxString nickname = row->GetNickName(); // store it to be able to used it
                                                 // after row deletion if an error occurs
-        if( !InsertRow( row.release() ) )
+        LIB_TABLE_ROW* tmp = row.release();
+
+        if( !InsertRow( tmp ) )
         {
+            delete tmp;     // The table did not take ownership of the row.
+
             wxString msg = wxString::Format(
-                                _( "'%s' is a duplicate symbol library nickname" ),
-                                GetChars( nickname ) );
-            THROW_PARSE_ERROR( msg, in->CurSource(), in->CurLine(), lineNum, offset );
+                                _( "Duplicate library nickname '%s' found in symbol library "
+                                   "table file line %d" ), GetChars( nickname ), lineNum );
+
+            if( !errMsg.IsEmpty() )
+                errMsg << '\n';
+
+            errMsg << msg;
         }
     }
+
+    if( !errMsg.IsEmpty() )
+        THROW_IO_ERROR( errMsg );
 }
 
 
