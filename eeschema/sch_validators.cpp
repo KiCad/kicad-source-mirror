@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Wayne Stambaugh, stambaughw@gmail.com
- * Copyright (C) 2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -125,11 +125,6 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
             wxCHECK_MSG( false, true, wxT( "Invalid illegal character in field validator." ) );
 
         errorMsg.Printf( _( "The %s field cannot contain %s characters." ), fieldName, badChars );
-    }
-    else if( (tmp.Trim().Length() != val.Length()) || (tmp.Trim( false ).Length() != val.Length()) )
-    {
-        errorMsg.Printf( _( "The %s field cannot contain leading and/or trailing white space." ),
-                         fieldName );
     }
 
     if ( !errorMsg.empty() )
