@@ -1109,6 +1109,12 @@ void SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
                         pin->SetPartNumber( gateNumber );
                         pin->SetUnit( gateNumber );
 
+                        string pinname = pin->GetName().ToStdString();
+                        if(pinname[0] == '!'){
+                            pinname[0] = '~';
+                            pin->SetName( pinname );
+                        }
+
                         aPart->AddDrawItem( pin );
                         break;
                     }
