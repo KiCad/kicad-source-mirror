@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -36,7 +36,7 @@ WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE( wxWind
 	m_staticText8->Wrap( -1 );
 	bSizer19->Add( m_staticText8, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_textCtrlGithubURL = new wxTextCtrl( m_wizPage1, wxID_ANY, _("http://github.com/KiCad"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textCtrlGithubURL = new wxTextCtrl( m_wizPage1, wxID_ANY, _("https://github.com/KiCad/packages3d"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCtrlGithubURL->SetMinSize( wxSize( 300,-1 ) );
 	
 	bSizer19->Add( m_textCtrlGithubURL, 0, wxALL|wxEXPAND, 5 );

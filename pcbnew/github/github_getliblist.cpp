@@ -65,10 +65,9 @@ bool GITHUB_GETLIBLIST::Get3DshapesLibsList( wxArrayString* aList,
 
     strcpy( m_option_string, "text/html" );
 
-    wxString repoURL = m_repoURL;
-
     wxString errorMsg;
 
+    wxString repoURL = m_repoURL;
     fullURLCommand = repoURL.utf8_str();
     bool success = remoteGetJSON( fullURLCommand, &errorMsg );
 
@@ -95,7 +94,7 @@ bool GITHUB_GETLIBLIST::GetFootprintLibraryList( wxArrayString& aList )
 {
     std::string fullURLCommand;
     int page = 1;
-    int itemCountMax = 99;              // Do not use a valu > 100, it does not work
+    int itemCountMax = 99;              // Do not use a value >= 100, it does not work
 
     strcpy( m_option_string, "application/json" );
 

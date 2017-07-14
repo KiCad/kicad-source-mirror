@@ -68,7 +68,12 @@ public:
     void OnPageChanged( wxWizardEvent& aEvent ) override;
     void OnSelectAll3Dlibs( wxCommandEvent& aEvent ) override;
     void OnUnselectAll3Dlibs( wxCommandEvent& aEvent ) override;
+
+    /** Called when the content of m_searchCtrl3Dlibs has changed.
+     * Rebuild the list of libraries, lib cacdidate first
+     */
     void OnChangeSearch( wxCommandEvent& aEvent ) override;
+
     void OnWizardFinished( wxWizardEvent& aEvent ) override;
     void OnBrowseButtonClick( wxCommandEvent& aEvent ) override;
     void OnCheckSaveCopy( wxCommandEvent& aEvent );
