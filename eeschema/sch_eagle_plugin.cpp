@@ -285,11 +285,13 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
     // Load drawing
     loadDrawing( children["drawing"] );
 
+    PART_LIBS* prjLibs = aKiway->Prj().SchLibs();
+
     // There are two ways to add a new library, the official one that requires creating a file:
     m_partlib->Save( false );
-    // aKiway->Prj().SchLibs()->AddLibrary( m_partlib->GetFullFileName() );
+    // prjLibs->AddLibrary( m_partlib->GetFullFileName() );
     // or undocumented one:
-    aKiway->Prj().SchLibs()->push_back( m_partlib );
+    prjLibs->insert( prjLibs->begin(), m_partlib );
 
     deleter.release();
     return m_rootSheet;
@@ -583,6 +585,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
     while( item )
     {
         item->SetPosition( item->GetPosition()+translation );
+        item->ClearFlags();
         item = item->Next();
     }
 
@@ -894,7 +897,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     // std::cout << "Instance> part: " << einstance.part << " Gate: " << einstance.gate << " " << symbolname << '\n';
 
 
-    LIB_ID libId( m_partlib->GetLogicalName(), symbolname );
+    LIB_ID libId( wxEmptyString, symbolname );
 
     LIB_PART* part = m_partlib->FindPart(symbolname);
 
@@ -927,16 +930,18 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     }
 
     component->GetField( REFERENCE )->SetText( einstance.part );
-    if(epart->value)
+
+    if( epart->value )
     {
         component->GetField( VALUE )->SetText( *epart->value );
-    } else
-    {
-        component->GetField( VALUE )->SetText( *epart->value );
+        component->GetField( VALUE )->SetVisible( true );
     }
-    component->GetField( VALUE )->SetVisible(true);
-    component->GetField( REFERENCE )->SetVisible(true);
-    component->SetModified();
+    else
+    {
+        component->GetField( VALUE )->SetVisible( false );
+    }
+
+    component->GetField( REFERENCE )->SetVisible( true );
     component->ClearFlags();
 
     screen->Append( component.release() );
@@ -1007,7 +1012,9 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
             // Create symbol name from deviceset and device names.
             wxString symbolName = wxString( edeviceset.name + edevice.name );
             // std::cout << "Creating Kicad Symbol: " << symbolName.ToStdString() << '\n';
-            elib.get()->package[symbolName.ToStdString()] = edevice.package.Get();
+
+            if( edevice.package )
+                elib.get()->package[symbolName.ToStdString()] = edevice.package.Get();
 
             // Create kicad symbol.
             unique_ptr<LIB_PART> kpart( new LIB_PART( symbolName ) );
