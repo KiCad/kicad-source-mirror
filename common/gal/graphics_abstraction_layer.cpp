@@ -254,21 +254,20 @@ void GAL::DrawGrid()
     if( std::max( gridScreenSizeDense, gridScreenSizeCoarse ) <= gridThreshold )
         return;
 
-    // Compute grid variables
-    int gridStartX  = KiROUND( worldStartPoint.x / gridSize.x );
-    int gridEndX    = KiROUND( worldEndPoint.x / gridSize.x );
-    int gridStartY  = KiROUND( worldStartPoint.y / gridSize.y );
-    int gridEndY    = KiROUND( worldEndPoint.y / gridSize.y );
+    // Compute grid staring and ending indexes to draw grid points on the
+    // visible screen area
+    // Note: later any point coordinate will be offsetted by gridOrigin
+    int gridStartX = KiROUND( (worldStartPoint.x-gridOrigin.x) / gridSize.x );
+    int gridEndX = KiROUND( (worldEndPoint.x-gridOrigin.x) / gridSize.x );
+    int gridStartY = KiROUND( (worldStartPoint.y-gridOrigin.y) / gridSize.y );
+    int gridEndY = KiROUND( (worldEndPoint.y-gridOrigin.y) / gridSize.y );
 
-    // Correct the index, else some lines are not correctly painted
-    gridStartY -= std::abs( gridOrigin.y / gridSize.y ) + 1;
-    gridEndY -= std::abs( gridOrigin.y / gridSize.y ) - 1;
+    // Ensure start coordinate > end coordinate
+    if( gridStartX > gridEndX )
+        std::swap( gridStartX, gridEndX );
 
-    gridStartX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
-    gridEndX -= std::abs( gridOrigin.x / gridSize.x ) - 1;
-
-    int dirX = gridEndX >= gridStartX ? 1 : -1;
-    int dirY = gridEndY >= gridStartY ? 1 : -1;
+    if( gridStartY > gridEndY )
+        std::swap( gridStartY, gridEndY );
 
     // Draw the grid behind all other layers
     SetLayerDepth( depthRange.y * 0.75 );
@@ -282,7 +281,7 @@ void GAL::DrawGrid()
         // Now draw the grid, every coarse grid line gets the double width
 
         // Vertical lines
-        for( int j = gridStartY; j != gridEndY; j += dirY )
+        for( int j = gridStartY-1; j <= gridEndY; j++ )
         {
             const double y = j * gridSize.y + gridOrigin.y;
 
@@ -303,7 +302,7 @@ void GAL::DrawGrid()
         }
 
         // Horizontal lines
-        for( int i = gridStartX; i != gridEndX; i += dirX )
+        for( int i = gridStartX-1; i <= gridEndX; i++ )
         {
             const double x = i * gridSize.x + gridOrigin.x;
 
@@ -333,7 +332,7 @@ void GAL::DrawGrid()
         double lineLen = GetLineWidth() * 2;
 
         // Vertical positions:
-        for( int j = gridStartY; j != gridEndY; j += dirY )
+        for( int j = gridStartY-1; j <= gridEndY; j++ )
         {
             if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
                 || gridScreenSizeDense > gridThreshold )
@@ -341,7 +340,7 @@ void GAL::DrawGrid()
                 int posY =  j * gridSize.y + gridOrigin.y;
 
                 // Horizontal positions:
-                for( int i = gridStartX; i != gridEndX; i += dirX )
+                for( int i = gridStartX-1; i <= gridEndX; i++ )
                 {
                     if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
                         || gridScreenSizeDense > gridThreshold )
@@ -365,14 +364,14 @@ void GAL::DrawGrid()
         SetIsStroke( false );
         SetFillColor( gridColor );
 
-        for( int j = gridStartY; j != gridEndY; j += dirY )
+        for( int j = gridStartY-1; j <= gridEndY; j++ )
         {
             if( j % gridTick == 0 && gridScreenSizeDense > gridThreshold )
                 tickY = true;
             else
                 tickY = false;
 
-            for( int i = gridStartX; i != gridEndX; i += dirX )
+            for( int i = gridStartX-1; i <= gridEndX; i++ )
             {
                 if( i % gridTick == 0 && gridScreenSizeDense > gridThreshold )
                     tickX = true;
