@@ -141,7 +141,7 @@ private:
 
     void                loadSegments( wxXmlNode* aSegmentsNode, const wxString& aNetName,
             const wxString& aNetClass );
-    SCH_LINE*           loadSignalWire( wxXmlNode* aWireNode );
+    SCH_LINE*           loadWire( wxXmlNode* aWireNode );
     SCH_TEXT*           loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName, const DLIST< SCH_LINE >& segmentWires);
     SCH_JUNCTION*       loadJunction( wxXmlNode* aJunction );
     SCH_TEXT*           loadplaintext( wxXmlNode* aSchText );

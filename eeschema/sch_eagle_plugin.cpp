@@ -147,7 +147,7 @@ static SCH_LAYER_ID kicadLayer( int aEagleLayer )
         break;
 
     case 97:
-        break;
+        return LAYER_NOTES;
 
     case 98:
         break;
@@ -593,9 +593,13 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
     {
         wxString nodeName = plainNode->GetName();
 
-        if( nodeName =="text" )
+        if( nodeName == "text" )
         {
             m_currentSheet->GetScreen()->Append( loadplaintext( plainNode ) );
+        }
+        else if( nodeName == "wire" )
+        {
+            m_currentSheet->GetScreen()->Append( loadWire( plainNode ) );
         }
 
         plainNode = plainNode->GetNext();
@@ -676,7 +680,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
         {
             if( segmentAttribute->GetName() == "wire" )
             {
-                segmentWires.Append( loadSignalWire( segmentAttribute ) );
+                segmentWires.Append( loadWire( segmentAttribute ) );
             }
 
             segmentAttribute = segmentAttribute->GetNext();
@@ -757,7 +761,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
 }
 
 
-SCH_LINE* SCH_EAGLE_PLUGIN::loadSignalWire( wxXmlNode* aWireNode )
+SCH_LINE* SCH_EAGLE_PLUGIN::loadWire( wxXmlNode* aWireNode )
 {
     std::unique_ptr<SCH_LINE> wire( new SCH_LINE );
 
@@ -1202,10 +1206,12 @@ void SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
                 {
                     if( connect.gate == gateName and pin->GetName().ToStdString() == connect.pin )
                     {
+
                         wxString padname( connect.pad );
                         pin->SetPinNumFromString( padname );
                         pin->SetPartNumber( gateNumber );
                         pin->SetUnit( gateNumber );
+
 
                         string pinname = pin->GetName().ToStdString();
                         if(pinname[0] == '!'){
