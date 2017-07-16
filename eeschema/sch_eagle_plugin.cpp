@@ -1403,6 +1403,30 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( LIB_PART* aPart, wxXmlNode* aPin )
         }
     }
 
+    if( epin.visible )
+    {
+        wxString visible = epin.visible.Get();
+
+        if( visible == "off" )
+        {
+            pin->SetNameTextSize( 0 );
+            pin->SetNumberTextSize( 0 );
+        }
+        else if (visible == "pad")
+        {
+            pin->SetNameTextSize( 0 );
+        }
+        else if( visible == "pin" )
+        {
+            pin->SetNumberTextSize( 0 );
+        }
+        /*
+        else if( visible == "both" )
+        {
+        }
+        */
+    }
+
     return pin.release();
 }
 
