@@ -154,7 +154,8 @@ bool FOOTPRINT_FILTER_IT::FootprintFilterMatch( FOOTPRINT_INFO& aItem )
 
 bool FOOTPRINT_FILTER_IT::PinCountMatch( FOOTPRINT_INFO& aItem )
 {
-    return (unsigned) m_filter->m_pin_count == aItem.GetUniquePadCount();
+    return m_filter->m_pin_count >= 0 &&
+        (unsigned) m_filter->m_pin_count == aItem.GetUniquePadCount();
 }
 
 
