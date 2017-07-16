@@ -655,6 +655,8 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
     wxXmlNode* currentSegment = aSegmentsNode->GetChildren();
     SCH_SCREEN* screen = m_currentSheet->GetScreen();
 
+    int segmentCount = countChildren(aSegmentsNode, "segment");
+
     // wxCHECK( screen, [>void<] );
     while( currentSegment )
     {
@@ -718,7 +720,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
 
         SCH_LINE* wire = segmentWires.begin();
 
-
+        /*
         if(labelled == false && wire != NULL )
         {
             wxString netname = netName;
@@ -730,7 +732,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
                 glabel->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
                 screen->Append( glabel.release() );
             }
-            else
+            else if ( segmentCount > 1)
             {
                 std::unique_ptr<SCH_LABEL> label( new SCH_LABEL );
                 label->SetPosition( wire->GetStartPoint() );
@@ -739,6 +741,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
                 screen->Append( label.release() );
             }
         }
+        */
 
 
         SCH_LINE* next_wire;
