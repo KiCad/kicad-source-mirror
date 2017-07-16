@@ -192,6 +192,32 @@ wxPoint kicad_arc_center( const wxPoint& aStart, const wxPoint& aEnd, double aAn
     return center;
 }
 
+int parseAlignment(wxString alignment)
+{
+    // (bottom-left | bottom-center | bottom-right | center-left |
+    //   center | center-right | top-left | top-center | top-right)
+    if( alignment == "center" )
+        return ETEXT::CENTER;
+    else if( alignment == "center-right" )
+        return  ETEXT::CENTER_RIGHT;
+    else if( alignment == "top-left" )
+        return  ETEXT::TOP_LEFT;
+    else if( alignment == "top-center" )
+        return  ETEXT::TOP_CENTER;
+    else if( alignment == "top-right" )
+        return  ETEXT::TOP_RIGHT;
+    else if( alignment == "bottom-left" )
+        return  ETEXT::BOTTOM_LEFT;
+    else if( alignment == "bottom-center" )
+        return  ETEXT::BOTTOM_CENTER;
+    else if( alignment == "bottom-right" )
+        return  ETEXT::BOTTOM_RIGHT;
+    else if( alignment == "center-left" )
+        return  ETEXT::CENTER_LEFT;
+
+    return ETEXT::BOTTOM_LEFT;
+}
+
 
 EWIRE::EWIRE( wxXmlNode* aWire )
 {
@@ -395,6 +421,12 @@ EATTR::EATTR( wxXmlNode* aTree )
         display = EATTR::NAME;
     else if( stemp == "both" )
         display = EATTR::BOTH;
+
+    stemp = parseOptionalAttribute<string>( aTree, "align" );
+
+    align = parseAlignment(*stemp);
+
+
 }
 
 
@@ -459,26 +491,8 @@ ETEXT::ETEXT( wxXmlNode* aText )
 
     opt_string stemp = parseOptionalAttribute<string>( aText, "align" );
 
-    // (bottom-left | bottom-center | bottom-right | center-left |
-    //   center | center-right | top-left | top-center | top-right)
-    if( stemp == "center" )
-        align = ETEXT::CENTER;
-    else if( stemp == "center-right" )
-        align = ETEXT::CENTER_RIGHT;
-    else if( stemp == "top-left" )
-        align = ETEXT::TOP_LEFT;
-    else if( stemp == "top-center" )
-        align = ETEXT::TOP_CENTER;
-    else if( stemp == "top-right" )
-        align = ETEXT::TOP_RIGHT;
-    else if( stemp == "bottom-left" )
-        align = ETEXT::BOTTOM_LEFT;
-    else if( stemp == "bottom-center" )
-        align = ETEXT::BOTTOM_CENTER;
-    else if( stemp == "bottom-right" )
-        align = ETEXT::BOTTOM_RIGHT;
-    else if( stemp == "center-left" )
-        align = ETEXT::CENTER_LEFT;
+    align = parseAlignment(*stemp);
+
 }
 
 
@@ -744,7 +758,7 @@ EPART::EPART( wxXmlNode* aPart )
     device = parseRequiredAttribute<string>( aPart, "device" );
     technology = parseOptionalAttribute<string>( aPart, "technology" );
     value = parseOptionalAttribute<string>( aPart, "value" );
-    
+
 }
 
 

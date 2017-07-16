@@ -545,6 +545,7 @@ struct EATTR
         BOTH,
     };
     opt_int     display;
+    opt_int     align;
 
     EATTR( wxXmlNode* aTree );
     EATTR() {}

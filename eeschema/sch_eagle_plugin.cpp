@@ -184,6 +184,59 @@ static COMPONENT_ORIENTATION_T kicadComponentRotation( float eagleDegrees )
 }
 
 
+
+void eagleToKicadAlignment(EDA_TEXT* aText, int aEagleAlignment)
+{
+
+    switch( aEagleAlignment )
+    {
+    case ETEXT::CENTER:
+        // this was the default in eda_text's constructor
+        break;
+
+    case ETEXT::CENTER_LEFT:
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        break;
+
+    case ETEXT::CENTER_RIGHT:
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        break;
+
+    case ETEXT::TOP_CENTER:
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        break;
+
+    case ETEXT::TOP_LEFT:
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        break;
+
+    case ETEXT::TOP_RIGHT:
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        break;
+
+    case ETEXT::BOTTOM_CENTER:
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        break;
+
+    case ETEXT::BOTTOM_LEFT:
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        break;
+
+    case ETEXT::BOTTOM_RIGHT:
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        break;
+
+    default:
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+    }
+}
+
+
 SCH_EAGLE_PLUGIN::SCH_EAGLE_PLUGIN()
 {
     m_rootSheet = nullptr;
@@ -668,10 +721,12 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
 
         if(labelled == false && wire != NULL )
         {
+            wxString netname = netName;
+            netname.Replace("!", "~");
             if(m_NetCounts[netName.ToStdString()]>1){
                 std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
                 glabel->SetPosition( wire->GetStartPoint() );
-                glabel->SetText( netName);
+                glabel->SetText( netname);
                 glabel->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
                 screen->Append( glabel.release() );
             }
@@ -679,7 +734,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
             {
                 std::unique_ptr<SCH_LABEL> label( new SCH_LABEL );
                 label->SetPosition( wire->GetStartPoint() );
-                label->SetText( netName );
+                label->SetText( netname );
                 label->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
                 screen->Append( label.release() );
             }
@@ -742,11 +797,14 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aN
 
     wxPoint elabelpos( elabel.x * EUNIT_TO_MIL, -elabel.y * EUNIT_TO_MIL );
 
+    wxString netname = elabel.netname;
+    netname.Replace("!", "~");
+
     if(m_NetCounts[aNetName.ToStdString()]>1){
         std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
         glabel->SetPosition( elabelpos );
-        glabel->SetText( elabel.netname );
-        glabel->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
+        glabel->SetText( netname );
+        glabel->SetTextSize( wxSize( elabel.size*EUNIT_TO_MIL, elabel.size*EUNIT_TO_MIL ) );
 
         glabel->SetLabelSpinStyle(0);
         if( elabel.rot )
@@ -787,8 +845,8 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aN
     {
         std::unique_ptr<SCH_LABEL> label( new SCH_LABEL );
         label->SetPosition(elabelpos);
-        label->SetText( elabel.netname );
-        label->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
+        label->SetText( netname );
+        label->SetTextSize( wxSize( elabel.size*EUNIT_TO_MIL, elabel.size*EUNIT_TO_MIL ) );
 
         label->SetLabelSpinStyle(0);
         if( elabel.rot )
@@ -824,8 +882,6 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aN
             }
 
         }
-
-
 
         return label.release();
     }
@@ -942,6 +998,33 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     }
 
     component->GetField( REFERENCE )->SetVisible( true );
+
+    wxXmlNode* attributeNode = aInstanceNode->GetChildren();
+    while(attributeNode)
+    {
+        if(attributeNode->GetName() == "attribute")
+        {
+            auto attr = EATTR(attributeNode);
+
+            SCH_FIELD* field;
+            if(attr.name == "NAME"){
+                field = component->GetField( REFERENCE );
+                field->SetPosition( wxPoint(*attr.x* EUNIT_TO_MIL, *attr.y*-EUNIT_TO_MIL) );
+                int align = attr.align ? *attr.align : ETEXT::BOTTOM_LEFT;
+                eagleToKicadAlignment((EDA_TEXT*)field, align);
+            }
+
+            else if (attr.name == "VALUE"){
+                field = component->GetField( VALUE );
+                field->SetPosition( wxPoint(*attr.x* EUNIT_TO_MIL, *attr.y*-EUNIT_TO_MIL) );
+                int align = attr.align ? *attr.align : ETEXT::BOTTOM_LEFT;
+                eagleToKicadAlignment((EDA_TEXT*)field, align);
+            }
+        }
+        attributeNode = attributeNode->GetNext();
+
+    }
+
     component->ClearFlags();
 
     screen->Append( component.release() );
@@ -1332,8 +1415,8 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymboltext( LIB_PART* aPart, wxXmlNode* aLibText
 
     libtext->SetPosition( wxPoint( etext.x * EUNIT_TO_MIL, etext.y * EUNIT_TO_MIL ) );
     libtext->SetText( aLibText->GetNodeContent() );
-    libtext->SetTextSize( wxSize( int(etext.size * EUNIT_TO_MIL),
-                    int(etext.size * EUNIT_TO_MIL) ) );
+    libtext->SetTextSize( wxSize( int(etext.size * EUNIT_TO_MIL*0.95),
+                    int(etext.size * EUNIT_TO_MIL*0.95) ) );
 
     if( etext.ratio )
     {
@@ -1346,50 +1429,8 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymboltext( LIB_PART* aPart, wxXmlNode* aLibText
 
     int align = etext.align ? *etext.align : ETEXT::BOTTOM_LEFT;
 
-    switch( align )
-    {
-    case ETEXT::CENTER:
-        // this was the default in eda_text's constructor
-        break;
+    eagleToKicadAlignment((EDA_TEXT*)libtext.get(), align);
 
-    case ETEXT::CENTER_LEFT:
-        libtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        break;
-
-    case ETEXT::CENTER_RIGHT:
-        libtext->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        break;
-
-    case ETEXT::TOP_CENTER:
-        libtext->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-        break;
-
-    case ETEXT::TOP_LEFT:
-        libtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        libtext->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-        break;
-
-    case ETEXT::TOP_RIGHT:
-        libtext->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        libtext->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-        break;
-
-    case ETEXT::BOTTOM_CENTER:
-        libtext->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-        break;
-
-    case ETEXT::BOTTOM_LEFT:
-        libtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        libtext->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-        break;
-
-    case ETEXT::BOTTOM_RIGHT:
-        libtext->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        libtext->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-        break;
-    }
-
-    libtext->SetItalic( false );
 
     return libtext.release();
 }
@@ -1420,48 +1461,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadplaintext( wxXmlNode* aSchText )
 
     int align = etext.align ? *etext.align : ETEXT::BOTTOM_LEFT;
 
-    switch( align )
-    {
-    case ETEXT::CENTER:
-        // this was the default in eda_text's constructor
-        break;
-
-    case ETEXT::CENTER_LEFT:
-        schtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        break;
-
-    case ETEXT::CENTER_RIGHT:
-        schtext->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        break;
-
-    case ETEXT::TOP_CENTER:
-        schtext->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-        break;
-
-    case ETEXT::TOP_LEFT:
-        schtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        schtext->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-        break;
-
-    case ETEXT::TOP_RIGHT:
-        schtext->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        schtext->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-        break;
-
-    case ETEXT::BOTTOM_CENTER:
-        schtext->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-        break;
-
-    case ETEXT::BOTTOM_LEFT:
-        schtext->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        schtext->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-        break;
-
-    case ETEXT::BOTTOM_RIGHT:
-        schtext->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        schtext->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-        break;
-    }
+    eagleToKicadAlignment((EDA_TEXT*)schtext.get(), align);
 
 
     return schtext.release();
@@ -1481,6 +1481,7 @@ bool SCH_EAGLE_PLUGIN::CheckHeader( const wxString& aFileName )
 
     return firstline.StartsWith( "<?xml" );
 }
+
 
 void SCH_EAGLE_PLUGIN::addBusEntries()
 {
