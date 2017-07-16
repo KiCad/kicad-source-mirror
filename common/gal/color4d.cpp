@@ -1,10 +1,9 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
+ * Copyright 2012 Torsten Hueter, torstenhtr <at> gmx.de
+ * Copyright 2017 Kicad Developers, see AUTHORS.txt for contributors.
  *
- * Color class
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -264,7 +263,7 @@ std::ostream &operator<<( std::ostream &aStream, COLOR4D const &aColor )
 }
 
 
-void COLOR4D::ToHSV( double& aOutH, double& aOutS, double& aOutV ) const
+void COLOR4D::ToHSV( double& aOutHue, double& aOutSaturation, double& aOutValue ) const
 {
     double min, max, delta;
 
@@ -274,41 +273,50 @@ void COLOR4D::ToHSV( double& aOutH, double& aOutS, double& aOutV ) const
     max = r > g ? r : g;
     max = max > b ? max : b;
 
-    aOutV = max;                                // v
+    aOutValue = max;                    // value
     delta = max - min;
 
     if( max > 0.0 )
     {
-        aOutS = ( delta / max );                  // s
+        aOutSaturation = ( delta / max );
     }
-    else
+    else    // for black color (r = g = b = 0 )  saturation is set to 0.
     {
-        // r = g = b = 0                        // s = 0, v is undefined
-        aOutS = 0.0;
-        aOutH = NAN;                            // its now undefined
+        aOutSaturation = 0.0;
+        aOutHue = 0.0;
         return;
     }
 
-    if( r >= max )                          // > is bogus, just keeps compiler happy
-        aOutH = ( g - b ) / delta;          // between yellow & magenta
-    else if( g >= max )
-        aOutH = 2.0 + ( b - r ) / delta;    // between cyan & yellow
-    else
-        aOutH = 4.0 + ( r - g ) / delta;    // between magenta & cyan
+    /* Hue in degrees (0...360) is coded according to this table
+     * 0 or 360 : red
+     * 60 : yellow
+     * 120 : green
+     * 180 : cyan
+     * 240 : blue
+     * 300 : magenta
+    */
+    if( delta != 0.0 )
+    {
+        if( r >= max )
+            aOutHue = ( g - b ) / delta;          // between yellow & magenta
+        else if( g >= max )
+            aOutHue = 2.0 + ( b - r ) / delta;    // between cyan & yellow
+        else
+            aOutHue = 4.0 + ( r - g ) / delta;    // between magenta & cyan
 
-    aOutH *= 60.0;                          // degrees
+        aOutHue *= 60.0;                          // degrees
 
-    if( aOutH < 0.0 )
-        aOutH += 360.0;
+        if( aOutHue < 0.0 )
+            aOutHue += 360.0;
+    }
+    else    // delta = 0 means r = g = b. hue is set to 0.0
+        aOutHue = 0.0;
 }
 
 
 void COLOR4D::FromHSV( double aInH, double aInS, double aInV )
 {
-    double hh, p, q, t, ff;
-    long i;
-
-    if( aInS <= 0.0 )    // < is bogus, just shuts up warnings
+    if( aInS <= 0.0 )
     {
         r = aInV;
         g = aInV;
@@ -316,19 +324,27 @@ void COLOR4D::FromHSV( double aInH, double aInS, double aInV )
         return;
     }
 
-    hh = aInH;
+    double hh = aInH;
 
-    if( hh >= 360.0 )
-        hh = 0.0;
+    while( hh >= 360.0 )
+        hh -= 360.0;
 
+    /* Hue in degrees (0...360) is coded according to this table
+     * 0 or 360 : red
+     * 60 : yellow
+     * 120 : green
+     * 180 : cyan
+     * 240 : blue
+     * 300 : magenta
+    */
     hh /= 60.0;
 
-    i = (long) hh;
-    ff = hh - i;
+    int i = (int) hh;
+    double ff = hh - i;
 
-    p = aInV * ( 1.0 - aInS );
-    q = aInV * ( 1.0 - ( aInS * ff ) );
-    t = aInV * ( 1.0 - ( aInS * ( 1.0 - ff ) ) );
+    double p = aInV * ( 1.0 - aInS );
+    double q = aInV * ( 1.0 - ( aInS * ff ) );
+    double t = aInV * ( 1.0 - ( aInS * ( 1.0 - ff ) ) );
 
     switch( i )
     {

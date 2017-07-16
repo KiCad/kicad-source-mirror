@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Color class
  *
@@ -261,17 +261,19 @@ public:
      * Function ToHSV()
      * Converts current color (stored in RGB) to HSV format.
      *
-     * @param aOutH is conversion result for hue component.
-     * @param aOutS is conversion result for saturation component.
-     * @param aOutV is conversion result for value component.
+     * @param aOutHue is the conversion result for hue component, in degrees 0 ... 360.0
+     * @param aOutSaturation is the conversion result for saturation component (0 ... 1.0).
+     * @param aOutValue is conversion result for value component (0 ... 1.0).
+     * @note saturation is set to 0.0 for black color (r = v = b = 0), and
+     * hue is set to 0.0 if r = v = b = 0.
      */
-    void ToHSV( double& aOutH, double& aOutS, double& aOutV ) const;
+    void ToHSV( double& aOutHue, double& aOutSaturation, double& aOutValue ) const;
 
     /**
      * Function FromHSV()
      * Changes currently used color to the one given by hue, saturation and value parameters.
      *
-     * @param aInH is hue component.
+     * @param aInH is hue component, in degrees.
      * @param aInS is saturation component.
      * @param aInV is value component.
      */
