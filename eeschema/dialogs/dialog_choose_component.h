@@ -60,7 +60,7 @@ class SCH_BASE_FRAME;
  * for thorough documentation. A simple example usage follows:
  *
  *     // Create the adapter class
- *     auto adapter( Prj().SchLibs() );
+ *     auto adapter( CMP_TREE_MODEL_ADAPTER::Create( Prj().SchLibs() ) );
  *
  *     // Perform any configuration of adapter properties here
  *     adapter->SetPreselectNode( "TL072", 2 );
