@@ -915,23 +915,28 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
     // now we need to find all modules that are connected to each of these nets
     // then we need to determine if these modules are in the list of modules
     // belonging to this sheet ( modList )
-    //RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
     std::list<int> removeCodeList;
+
+
+    KICAD_T padType[] = { PCB_PAD_T };
     for( int netCode : netcodeList )
     {
-        std::list<BOARD_CONNECTED_ITEM*> netPads;
-// fixme
-    //    ratsnest->GetNetItems( netCode, netPads, (RN_ITEM_TYPE)( RN_PADS ) );
-        for( BOARD_CONNECTED_ITEM* mitem : netPads )
+
+        for( BOARD_CONNECTED_ITEM* mitem : board()->GetConnectivity()->GetNetItems( netCode, padType ) )
         {
-            bool found = ( std::find( modList.begin(), modList.end(), mitem->GetParent() ) != modList.end() );
-            if( !found )
+            if( mitem->Type() == PCB_PAD_T)
             {
-                // if we cannot find the module of the pad in the modList
-                // then we can assume that that module is not located in the same
-                // schematic, therefore invalidate this netcode.
-                removeCodeList.push_back( netCode );
-                break;
+
+                /* std::cout << "Checking net " << netCode << "of type " << mitem->Type() << ": "; */
+                bool found = ( std::find( modList.begin(), modList.end(), mitem->GetParent() ) != modList.end() );
+                if( !found )
+                {
+                    // if we cannot find the module of the pad in the modList
+                    // then we can assume that that module is not located in the same
+                    // schematic, therefore invalidate this netcode.
+                    removeCodeList.push_back( netCode );
+                    break;
+                }
             }
         }
     }
@@ -949,9 +954,10 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
     for( int netCode : netcodeList )
     {
         KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
-        for( auto item : board()->GetConnectivity()->GetNetItems( netCode, types ) )
+        for( BOARD_CONNECTED_ITEM* item : board()->GetConnectivity()->GetNetItems( netCode, types ) )
         {
             localConnectionList.push_back( item );
+            std::cout << netCode << std::endl;
         }
     }
 
