@@ -252,6 +252,7 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     case BLOCK_COPY:     // Copy
     case BLOCK_PASTE:
+    case BLOCK_CUT:
         break;
 
     case BLOCK_ROTATE:
