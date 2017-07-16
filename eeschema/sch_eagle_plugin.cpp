@@ -997,7 +997,11 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
         component->GetField( VALUE )->SetVisible( false );
     }
 
+    if(part->GetField(REFERENCE)->IsVisible())
     component->GetField( REFERENCE )->SetVisible( true );
+
+    else
+    component->GetField( REFERENCE )->SetVisible( false );
 
     wxXmlNode* attributeNode = aInstanceNode->GetChildren();
     while(attributeNode)
@@ -1132,8 +1136,6 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
             }    // gateNode
 
             kpart->SetUnitCount( gates_count );
-            kpart->GetField( VALUE )->SetVisible(true);
-            kpart->GetField( REFERENCE )->SetVisible(true);
 
 
             const string& name = kpart->GetName().ToStdString();
@@ -1160,6 +1162,9 @@ void SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
     std::vector<LIB_ITEM*> items;
 
     wxXmlNode* currentNode = aSymbolNode->GetChildren();
+
+    bool foundName = false;
+    bool foundValue = false;
 
     while( currentNode )
     {
@@ -1234,7 +1239,9 @@ void SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
             LIB_TEXT* libtext = loadSymboltext( aPart, currentNode );
             libtext->SetUnit( gateNumber );
 
-            if( libtext->GetText() ==">NAME" )
+
+
+            if( libtext->GetText().Upper() ==">NAME" )
             {
                 aPart->GetField( REFERENCE )->SetTextPos( libtext->GetPosition() );
                 aPart->GetField( REFERENCE )->SetTextSize( libtext->GetTextSize() );
@@ -1243,8 +1250,9 @@ void SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
                 aPart->GetField( REFERENCE )->SetVertJustify(libtext->GetVertJustify());
                 aPart->GetField( REFERENCE )->SetHorizJustify(libtext->GetHorizJustify());
                 aPart->GetField( REFERENCE )->SetVisible(true);
+                foundName = true;
             }
-            else if( libtext->GetText() == ">VALUE" )
+            else if( libtext->GetText().Upper() == ">VALUE" )
             {
                 aPart->GetField( VALUE )->SetTextPos( libtext->GetPosition() );
                 aPart->GetField( VALUE )->SetTextSize( libtext->GetTextSize() );
@@ -1253,6 +1261,7 @@ void SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
                 aPart->GetField( VALUE )->SetVertJustify(libtext->GetVertJustify());
                 aPart->GetField( VALUE )->SetHorizJustify(libtext->GetHorizJustify());
                 aPart->GetField( VALUE )->SetVisible(true);
+                foundValue = true;
             }
             else
             {
@@ -1268,6 +1277,12 @@ void SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
 
         currentNode = currentNode->GetNext();
     }
+
+    if( foundName == false )
+        aPart->GetField( REFERENCE )->SetVisible(false);
+    if( foundValue == false )
+        aPart->GetField( VALUE )->SetVisible(false);
+
 }
 
 
