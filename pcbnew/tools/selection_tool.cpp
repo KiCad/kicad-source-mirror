@@ -897,6 +897,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
 
     //Generate a list of all pads, and of all nets they belong to.
     std::list<int> netcodeList;
+    std::list<BOARD_CONNECTED_ITEM*> padList;
     for( MODULE* mmod : modList )
     {
         for( auto pad : mmod->Pads() )
@@ -904,13 +905,24 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
             if( pad->IsConnected() )
             {
                 netcodeList.push_back( pad->GetNetCode() );
+                padList.push_back( pad );
             }
         }
     }
-
     // remove all duplicates
     netcodeList.sort();
     netcodeList.unique();
+
+    // auto select trivial connections segments which are launched from the pads
+    std::list<TRACK*> launchTracks;
+    for( auto pad : padList )
+    {
+        launchTracks = board()->GetTracksByPosition( pad->GetPosition() );
+        for ( auto track : launchTracks )
+        {
+            selectAllItemsConnectedToTrack( *track );
+        }
+    }
 
     // now we need to find all modules that are connected to each of these nets
     // then we need to determine if these modules are in the list of modules

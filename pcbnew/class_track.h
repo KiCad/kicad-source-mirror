@@ -498,5 +498,16 @@ inline VIA* GetFirstVia( TRACK* aTrk, const TRACK* aStopPoint = NULL )
     else
         return NULL;
 }
+inline TRACK* GetFirstTrack( TRACK* aTrk, const TRACK* aStopPoint = NULL )
+{
+    while( aTrk && ( aTrk != aStopPoint ) && ( aTrk->Type() != PCB_TRACE_T ) )
+        aTrk = aTrk->Next();
+
+    // It could stop because of the stop point, not on a via
+    if( aTrk && ( aTrk->Type() == PCB_TRACE_T ) )
+        return static_cast<TRACK*>( aTrk );
+    else
+        return NULL;
+}
 
 #endif // CLASS_TRACK_H
