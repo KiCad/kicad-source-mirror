@@ -73,11 +73,7 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowse
         viewlibFrame->SetSelectedComponent( aPreselectedAlias->GetName() );
     }
 
-    if( aUnit > 0 )
-        viewlibFrame->SetUnit( aUnit );
-
-    if( aConvert > 0 )
-        viewlibFrame->SetConvert( aConvert );
+    viewlibFrame->SetUnitAndConvert( aUnit, aConvert );
 
     viewlibFrame->Refresh();
 

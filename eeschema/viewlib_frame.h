@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,10 +70,19 @@ public:
      *
      * Creates or recreates the list of current loaded libraries.
      * This list is sorted, with the library cache always at end of the list
+     *
+     * @return whether the selection of either library or component was changed (i.e. because the
+     * selected library no longer exists)
      */
-    void ReCreateListLib();
+    bool ReCreateListLib();
 
-    void ReCreateListCmp();
+    /**
+     * Create or recreate the list of components in the currently selected library.
+     *
+     * @return whether the selection was changed (i.e. because the selected component no longer
+     * exists)
+     */
+    bool ReCreateListCmp();
     void DisplayLibInfos();
     void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
     void OnCloseWindow( wxCloseEvent& Event );
@@ -135,10 +144,13 @@ public:
     void SetSelectedComponent( const wxString& aComponentName );
 
     // Accessors:
-    void SetUnit( int aUnit ) { m_unit = aUnit; }
+    /**
+     * Set unit and convert, and set flag preventing them from automatically resetting to 1
+     * @param aUnit - unit; if invalid will be set to 1
+     * @param aConvert - convert; if invalid will be set to 1
+     */
+    void SetUnitAndConvert( int aUnit, int aConvert );
     int GetUnit( void ) { return m_unit; }
-
-    void SetConvert( int aConvert ) { m_convert = aConvert; }
     int GetConvert( void ) { return m_convert; }
 
     bool GetShowElectricalType() { return m_showPinElectricalTypeName; }
@@ -197,6 +209,12 @@ private:
 
     static int      m_unit;
     static int      m_convert;
+
+    /**
+     * Updated to `true` if a list rewrite on GUI activation resulted in the component
+     * selection changing, or if the user has changed the selection manually.
+     */
+    bool m_selection_changed;
 
     /**
      * the option to show the pin electrical name in the component editor

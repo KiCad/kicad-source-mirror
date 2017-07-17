@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -173,6 +173,8 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
         m_libListWidth = 0;
     }
 
+    m_selection_changed = false;
+
     // Creates the component window display
     m_cmpList = new wxListBox( this, ID_LIBVIEW_CMP_LIST, wxPoint( 0, 0 ),
                                wxSize( m_cmpListWidth, -1 ), 0, NULL, wxLB_HSCROLL );
@@ -197,7 +199,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     mesg.MessageToolbarPane();
 
 
-    // Manage main toolbal
+    // Manage main toolbar
     m_auimgr.AddPane( m_mainToolBar,
                       wxAuiPaneInfo( horiz ).Name( "m_mainToolBar" ).Top().Row( 0 ) );
 
@@ -246,6 +248,14 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
 LIB_VIEW_FRAME::~LIB_VIEW_FRAME()
 {
+}
+
+
+void LIB_VIEW_FRAME::SetUnitAndConvert( int aUnit, int aConvert )
+{
+    m_unit = aUnit > 0 ? aUnit : 1;
+    m_convert = aConvert > 0 ? aConvert : 1;
+    m_selection_changed = false;
 }
 
 
@@ -402,10 +412,10 @@ double LIB_VIEW_FRAME::BestZoom()
 }
 
 
-void LIB_VIEW_FRAME::ReCreateListLib()
+bool LIB_VIEW_FRAME::ReCreateListLib()
 {
     if( !m_libList )
-        return;
+        return false;
 
     m_libList->Clear();
 
@@ -438,7 +448,7 @@ void LIB_VIEW_FRAME::ReCreateListLib()
     }
 
     if( libs.IsEmpty() )
-        return;
+        return true;
 
     m_libList->Append( libs );
 
@@ -459,17 +469,19 @@ void LIB_VIEW_FRAME::ReCreateListLib()
         m_convert = 1;
     }
 
-    ReCreateListCmp();
+    bool cmp_changed = ReCreateListCmp();
     ReCreateHToolbar();
     DisplayLibInfos();
     m_canvas->Refresh();
+
+    return cmp_changed;
 }
 
 
-void LIB_VIEW_FRAME::ReCreateListCmp()
+bool LIB_VIEW_FRAME::ReCreateListCmp()
 {
     if( m_cmpList == NULL )
-        return;
+        return false;
 
     m_cmpList->Clear();
 
@@ -481,7 +493,7 @@ void LIB_VIEW_FRAME::ReCreateListCmp()
         m_entryName = wxEmptyString;
         m_convert = 1;
         m_unit    = 1;
-        return;
+        return true;
     }
 
     wxArrayString  nameList;
@@ -494,6 +506,7 @@ void LIB_VIEW_FRAME::ReCreateListCmp()
     m_cmpList->Append( nameList );
 
     int index = m_cmpList->FindString( m_entryName );
+    bool changed = false;
 
     if( index == wxNOT_FOUND )
     {
@@ -502,13 +515,16 @@ void LIB_VIEW_FRAME::ReCreateListCmp()
         m_convert   = 1;
         m_unit      = 1;
         index       = 0;
+        changed     = true;
+        m_entryName = wxEmptyString;
     }
 
-    m_entryName = wxEmptyString;
     m_cmpList->SetSelection( index, true );
 
     wxCommandEvent evt( wxEVT_COMMAND_LISTBOX_SELECTED, ID_LIBVIEW_CMP_LIST );
     ProcessEvent( evt );
+
+    return changed;
 }
 
 
@@ -518,6 +534,8 @@ void LIB_VIEW_FRAME::ClickOnLibList( wxCommandEvent& event )
 
     if( ii < 0 )
         return;
+
+    m_selection_changed = true;
 
     SetSelectedLibrary( m_libList->GetString( ii ) );
 }
@@ -548,6 +566,8 @@ void LIB_VIEW_FRAME::ClickOnCmpList( wxCommandEvent& event )
     if( ii < 0 )
         return;
 
+    m_selection_changed = true;
+
     SetSelectedComponent( m_cmpList->GetString( ii ) );
 }
 
@@ -564,8 +584,14 @@ void LIB_VIEW_FRAME::SetSelectedComponent( const wxString& aComponentName )
         // by another caller than ClickOnCmpList.
         m_cmpList->SetStringSelection( aComponentName, true );
         DisplayLibInfos();
-        m_unit    = 1;
-        m_convert = 1;
+
+        if( m_selection_changed )
+        {
+            m_unit = 1;
+            m_convert = 1;
+            m_selection_changed = false;
+        }
+
         Zoom_Automatique( false );
         ReCreateHToolbar();
         m_canvas->Refresh();
@@ -667,8 +693,10 @@ void LIB_VIEW_FRAME::OnActivate( wxActivateEvent& event )
 {
     EDA_DRAW_FRAME::OnActivate( event );
 
-    if( m_libList )
-        ReCreateListLib();
+    bool changed = m_libList ? ReCreateListLib() : false;
+
+    if (changed)
+        m_selection_changed = true;
 
     DisplayLibInfos();
 }
