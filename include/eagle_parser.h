@@ -364,6 +364,13 @@ string makeKey( const string& aFirst, const string& aSecond );
 /// Make a unique time stamp
 unsigned long timeStamp( wxXmlNode* aTree );
 
+/// Computes module path basing on its name and value
+time_t moduleTstamp( const string& aName, const string& aValue );
+
+/// Returns module path using the module timestamp
+// TODO does not handle multisheet schematics correctly
+string modulePath( const string& aName, const string& aValue );
+
 /// Convert an Eagle curve end to a KiCad center for S_ARC
 wxPoint kicad_arc_center( const wxPoint& aStart, const wxPoint& aEnd, double aAngle );
 

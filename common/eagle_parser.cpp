@@ -26,13 +26,9 @@
 
 #include <eagle_parser.h>
 
-#include <wx/xml/xml.h>
-#include <wx/string.h>
-#include <wx/filename.h>
-
-#include <convert_to_biu.h>
-
-using std::string;
+#include <functional>
+#include <sstream>
+#include <iomanip>
 
 // Template specializations below parse wxString to the used types:
 //      - string
@@ -172,6 +168,25 @@ unsigned long timeStamp( wxXmlNode* aTree )
 {
     // in this case from a unique tree memory location
     return (unsigned long)(void*) aTree;
+}
+
+
+time_t moduleTstamp( const string& aName, const string& aValue )
+{
+    std::size_t h1 = std::hash<string>{}( aName );
+    std::size_t h2 = std::hash<string>{}( aValue );
+    return ((h1 ^ h2 << 1) & 0xffffffff);
+}
+
+
+string modulePath( const string& aName, const string& aValue )
+{
+    std::ostringstream s;
+
+    s << '/' << std::setfill('0') << std::uppercase << std::hex << std::setw(8)
+      << moduleTstamp( aName, aValue );
+
+    return s.str();
 }
 
 

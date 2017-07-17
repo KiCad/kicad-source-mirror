@@ -853,6 +853,9 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 
         // copy constructor to clone the template
         MODULE* m = new MODULE( *mi->second );
+        // TODO currently not handled correctly for multisheet schematics
+        //m->SetTimeStamp( moduleTstamp( e.name, e.value ) );
+        //m->SetPath( modulePath( e.name, e.value ) );
         m_board->Add( m, ADD_APPEND );
 
         // update the nets within the pads of the clone
@@ -871,18 +874,21 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
         refanceNamePresetInPackageLayout = true;
         valueNamePresetInPackageLayout = true;
         m->SetPosition( wxPoint( kicad_x( e.x ), kicad_y( e.y ) ) );
+
         // Is >NAME field set in package layout ?
         if( m->GetReference().size() == 0 )
         {
             m->Reference().SetVisible( false ); // No so no show
             refanceNamePresetInPackageLayout = false;
         }
+
         // Is >VALUE field set in package layout
         if( m->GetValue().size() == 0 )
         {
             m->Value().SetVisible( false );     // No so no show
             valueNamePresetInPackageLayout = false;
         }
+
         m->SetReference( FROM_UTF8( e.name.c_str() ) );
         m->SetValue( FROM_UTF8( e.value.c_str() ) );
 
@@ -890,6 +896,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
         { // Not smashed so show NAME & VALUE
             if( valueNamePresetInPackageLayout )
                 m->Value().SetVisible( true );  // Only if place holder in package layout
+
             if( refanceNamePresetInPackageLayout )
                 m->Reference().SetVisible( true );   // Only if place holder in package layout
         }
