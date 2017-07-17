@@ -80,8 +80,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-05 11:55+0200\n"
-"PO-Revision-Date: 2017-07-05 11:55+0200\n"
+"POT-Creation-Date: 2017-07-17 16:12+0200\n"
+"PO-Revision-Date: 2017-07-17 16:20+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -2629,11 +2629,11 @@ msgstr "Seleziona..."
 msgid "Selection contains locked items. Do you want to continue?"
 msgstr "Le selezione contiene elementi bloccati. Continuare?"
 
-#: pcbnew/tools/selection_tool.cpp:1193
+#: pcbnew/tools/selection_tool.cpp:1199
 msgid "Filter selection"
 msgstr "Filtra selezione"
 
-#: pcbnew/tools/selection_tool.cpp:1265
+#: pcbnew/tools/selection_tool.cpp:1271
 msgid "Clarify selection"
 msgstr "Chiarisci selezione"
 
@@ -2765,12 +2765,12 @@ msgstr "Duplica zona"
 msgid "Adjust zero"
 msgstr "Regola zero"
 
-#: pcbnew/tools/pcb_editor_control.cpp:1082 pcbnew/tool_pcb.cpp:432
+#: pcbnew/tools/pcb_editor_control.cpp:1083 pcbnew/tool_pcb.cpp:432
 #: pcbnew/edit.cpp:1518 eeschema/tool_sch.cpp:202
 msgid "Highlight net"
 msgstr "Evidenzia collegamento"
 
-#: pcbnew/tools/pcb_editor_control.cpp:1126
+#: pcbnew/tools/pcb_editor_control.cpp:1127
 msgid "Pick Components for Local Ratsnest"
 msgstr "Preleva componenti per le ratsnest locali"
 
@@ -3040,7 +3040,7 @@ msgstr "%s pin %s trovato"
 msgid "EEschema netlist"
 msgstr "Netlist Eeschema"
 
-#: pcbnew/eagle_plugin.cpp:201 pcbnew/eagle_plugin.cpp:2070
+#: pcbnew/eagle_plugin.cpp:202 pcbnew/eagle_plugin.cpp:2080
 #, c-format
 msgid "Unable to read file '%s'"
 msgstr "Impossibile leggere il file \"%s\""
@@ -3055,7 +3055,7 @@ msgstr "Nome <package>: \"%s\" duplicato nella librereria di Eagle: \"%s\""
 msgid "No '%s' package in library '%s'"
 msgstr "Nessun package \"%s\" presente nella libreria \"%s\""
 
-#: pcbnew/eagle_plugin.cpp:2015
+#: pcbnew/eagle_plugin.cpp:2025
 #, c-format
 msgid "File '%s' is not readable."
 msgstr "Il file '%s' non è leggibile."
@@ -5572,16 +5572,19 @@ msgstr ""
 "Consultare la sezione \"Tabella librerie impronte\" della documentazione di "
 "CvPcb o di Pcbnew per ulteriori informazioni."
 
-#: pcbnew/pcbnew.cpp:358 cvpcb/cvpcb.cpp:181
+#: pcbnew/pcbnew.cpp:361
 #, c-format
 msgid ""
 "An error occurred attempting to load the global footprint library table:\n"
 "\n"
-"%s"
+"%s\n"
+"\n"
+"Please edit this global footprint library table in Preferences menu"
 msgstr ""
 "Errore durante il caricamento della tabella librerie impronte globale:\n"
 "\n"
-"%s"
+"%s\n"
+"Modificare la tabella globale delle librerie impronte nel menu delle preferenze"
 
 #: pcbnew/menubar_pcbframe.cpp:130 pcbnew/menubar_pcbframe.cpp:196
 msgid "Hide La&yers Manager"
@@ -6900,7 +6903,7 @@ msgstr ""
 msgid "File '%s' is empty or is not a legacy library"
 msgstr "Il file \"%s\" è vuoto o non è una libreria datata"
 
-#: pcbnew/legacy_plugin.cpp:3460 eeschema/sch_legacy_plugin.cpp:3564
+#: pcbnew/legacy_plugin.cpp:3460 eeschema/sch_legacy_plugin.cpp:3569
 #, c-format
 msgid "library '%s' cannot be deleted"
 msgstr "La libreria '%s' non può essere cancellata"
@@ -7619,7 +7622,7 @@ msgstr "Crea file %s\n"
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:180
 #: pcbnew/exporters/gen_modules_placefile.cpp:610
-#: pcbnew/dialogs/dialog_plot.cpp:331 pcbnew/dialogs/dialog_SVG_print.cpp:214
+#: pcbnew/dialogs/dialog_plot.cpp:342 pcbnew/dialogs/dialog_SVG_print.cpp:214
 #: pcbnew/dialogs/dialog_gendrill.cpp:324
 #: eeschema/dialogs/dialog_plot_schematic.cpp:170
 msgid "Select Output Directory"
@@ -7631,7 +7634,7 @@ msgstr "Utilizzare percorso relativo?"
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:188
 #: pcbnew/exporters/gen_modules_placefile.cpp:197
-#: pcbnew/dialogs/dialog_plot.cpp:344 pcbnew/dialogs/dialog_plot.cpp:351
+#: pcbnew/dialogs/dialog_plot.cpp:355 pcbnew/dialogs/dialog_plot.cpp:362
 #: pcbnew/dialogs/dialog_SVG_print.cpp:222
 #: pcbnew/dialogs/dialog_SVG_print.cpp:233
 #: pcbnew/dialogs/dialog_gendrill.cpp:336
@@ -7654,7 +7657,7 @@ msgid "No footprint for automated placement."
 msgstr "Nessuna impronta da posizionare automaticamente."
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:257
-#: pcbnew/dialogs/dialog_plot.cpp:740
+#: pcbnew/dialogs/dialog_plot.cpp:751
 #, c-format
 msgid "Could not write plot files to folder \"%s\"."
 msgstr "Impossibile scrivere i file di tracciatura nella cartella \"%s\"."
@@ -7686,7 +7689,7 @@ msgid "Component Placement File generation OK."
 msgstr "Generazione file piazzamento componenti OK."
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:333
-#: pcbnew/dialogs/dialog_plot.cpp:847 pcbnew/dialogs/dialog_SVG_print.cpp:311
+#: pcbnew/dialogs/dialog_plot.cpp:858 pcbnew/dialogs/dialog_SVG_print.cpp:311
 #, c-format
 msgid "Unable to create file '%s'."
 msgstr "Impossibile creare il file \"%s\"."
@@ -7819,7 +7822,7 @@ msgstr "Non si dispone dei permessi necessari per salvare il file '%s'."
 msgid "cannot overwrite library path '%s'"
 msgstr "impossibile sovrascrivere il percorso libreria \"%s\""
 
-#: pcbnew/github/github_getliblist.cpp:106
+#: pcbnew/github/github_getliblist.cpp:105
 #, c-format
 msgid ""
 "malformed URL:\n"
@@ -7828,7 +7831,7 @@ msgstr ""
 "URL malformato:\n"
 "\"%s\""
 
-#: pcbnew/github/github_getliblist.cpp:235
+#: pcbnew/github/github_getliblist.cpp:234
 #, c-format
 msgid ""
 "Error fetching JSON data from URL '%s'.\n"
@@ -9643,19 +9646,19 @@ msgid "Error Init Printer info"
 msgstr "Errore info inizializzazione stampante"
 
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:356
-#: pcbnew/dialogs/dialog_plot.cpp:796
+#: pcbnew/dialogs/dialog_plot.cpp:807
 #: gerbview/dialogs/dialog_print_using_printer.cpp:298
 msgid "Warning: Scale option set to a very large value"
 msgstr "Attenzione: scala impostata ad un valore molto alto"
 
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:366
-#: pcbnew/dialogs/dialog_plot.cpp:792
+#: pcbnew/dialogs/dialog_plot.cpp:803
 #: gerbview/dialogs/dialog_print_using_printer.cpp:304
 msgid "Warning: Scale option set to a very small value"
 msgstr "Attenzione: scala impostata ad un valore molto basso"
 
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:433
-#: pcbnew/dialogs/dialog_plot.cpp:855
+#: pcbnew/dialogs/dialog_plot.cpp:866
 #: gerbview/dialogs/dialog_print_using_printer.cpp:353
 msgid "No layer selected"
 msgstr "Nessun strato selezionato"
@@ -10721,7 +10724,7 @@ msgid "Incorrect grid size (size must be >= %.3f mm and <= %.3f mm)"
 msgstr ""
 "Dimensione griglia errata (la dimensione deve essere >= %.3f mm e <= %.3f mm)"
 
-#: pcbnew/dialogs/dialog_set_grid.cpp:118
+#: pcbnew/dialogs/dialog_set_grid.cpp:119
 #, c-format
 msgid "Incorrect grid origin (coordinates must be >= %.3f mm and <= %.3f mm)"
 msgstr ""
@@ -10797,7 +10800,7 @@ msgstr "Percorso KISYS3DMOD non definito o non esistente"
 msgid "Downloading 3D libraries"
 msgstr "Scaricamento librerie 3D"
 
-#: pcbnew/dialogs/wizard_3DShape_Libs_downloader.cpp:462
+#: pcbnew/dialogs/wizard_3DShape_Libs_downloader.cpp:475
 msgid "Aborted by user"
 msgstr "Interrotto dall'utente"
 
@@ -12128,7 +12131,7 @@ msgstr "Aggiornamento completato"
 msgid "Changes applied to the PCB:"
 msgstr "Cambiamenti applicati al circuito stampato:"
 
-#: pcbnew/dialogs/dialog_plot.cpp:341 pcbnew/dialogs/dialog_gendrill.cpp:334
+#: pcbnew/dialogs/dialog_plot.cpp:352 pcbnew/dialogs/dialog_gendrill.cpp:334
 #: eeschema/dialogs/dialog_plot_schematic.cpp:182
 #, c-format
 msgid ""
@@ -12138,30 +12141,30 @@ msgstr ""
 "Usare un percorso relativo a\n"
 "\"%s\"?"
 
-#: pcbnew/dialogs/dialog_plot.cpp:350 pcbnew/dialogs/dialog_gendrill.cpp:342
+#: pcbnew/dialogs/dialog_plot.cpp:361 pcbnew/dialogs/dialog_gendrill.cpp:342
 #: eeschema/dialogs/dialog_plot_schematic.cpp:192
 msgid "Cannot make path relative (target volume different from file volume)!"
 msgstr ""
 "Impossibile rendere il percorso relativo (volume di destinazione diverso da "
 "quello del file)!"
 
-#: pcbnew/dialogs/dialog_plot.cpp:606
+#: pcbnew/dialogs/dialog_plot.cpp:617
 msgid "HPGL pen size constrained."
 msgstr "Dimensioni penna HPGL limitate."
 
-#: pcbnew/dialogs/dialog_plot.cpp:618
+#: pcbnew/dialogs/dialog_plot.cpp:629
 msgid "Default line width constrained."
 msgstr "Spessore predefinito della linea limitato."
 
-#: pcbnew/dialogs/dialog_plot.cpp:631
+#: pcbnew/dialogs/dialog_plot.cpp:642
 msgid "X scale constrained."
 msgstr "Scala X limitata."
 
-#: pcbnew/dialogs/dialog_plot.cpp:645
+#: pcbnew/dialogs/dialog_plot.cpp:656
 msgid "Y scale constrained."
 msgstr "Scala Y limitata."
 
-#: pcbnew/dialogs/dialog_plot.cpp:659
+#: pcbnew/dialogs/dialog_plot.cpp:670
 #, c-format
 msgid ""
 "Width correction constrained. The reasonable width correction value must be "
@@ -12171,7 +12174,7 @@ msgstr ""
 "larghezza deve essere compresa tra [%+f; %+f] (%s) per le attuali regole di "
 "progettazione."
 
-#: pcbnew/dialogs/dialog_plot.cpp:842
+#: pcbnew/dialogs/dialog_plot.cpp:853
 #, c-format
 msgid "Plot file '%s' created."
 msgstr "File tracciatura \"%s\" creato."
@@ -13245,8 +13248,8 @@ msgid "Please select the URL for the 3D libraries to download"
 msgstr "Selezionare l'URL per le librerie 3D da scaricare"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:39
-msgid "http://github.com/KiCad"
-msgstr "http://github.com/KiCad"
+msgid "https://github.com/KiCad/packages3d"
+msgstr "https://github.com/KiCad/packages3d"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:56
 msgid "3D shape local folder:"
@@ -15568,17 +15571,18 @@ msgstr "Inverti blocco"
 msgid "Block Mirror"
 msgstr "Specchia blocco"
 
-#: common/fp_lib_table.cpp:181
+#: common/fp_lib_table.cpp:188
 #, c-format
-msgid "'%s' is a duplicate footprint library nickName"
-msgstr "\"%s\" è una denominazione di libreria impronte duplicata"
+msgid ""
+"Duplicate library nickname '%s' found in footprint library table file line %d"
+msgstr "Denominatore librerie \"%s\" duplicato nel file tabella librerie impronte alla riga %d"
 
-#: common/fp_lib_table.cpp:241
+#: common/fp_lib_table.cpp:255
 #, c-format
 msgid "fp-lib-table files contain no library with nickname '%s'"
 msgstr "i file fp-lib-table non contengono librerie con denominazione \"%s\""
 
-#: common/fp_lib_table.cpp:395 eeschema/symbol_lib_table.cpp:390
+#: common/fp_lib_table.cpp:409 eeschema/symbol_lib_table.cpp:403
 #, c-format
 msgid "Cannot create global library table path '%s'."
 msgstr "Impossibile creare il percorso tabella librerie globale \"%s\"."
@@ -17319,16 +17323,19 @@ msgstr ""
 "Consultare la sezione \"Tabella librerie simboli\" della documentazione di "
 "Eeschema per ulteriori informazioni."
 
-#: eeschema/eeschema.cpp:268
+#: eeschema/eeschema.cpp:271
 #, c-format
 msgid ""
 "An error occurred attempting to load the global symbol library table:\n"
 "\n"
-"%s"
+"%s\n"
+"\n"
+"Please edit this global symbol library table in Preferences menu"
 msgstr ""
 "Errore durante il caricamento della tabella librerie simboli globale:\n"
 "\n"
-"%s"
+"%s\n"
+"Modificare la tabella globale librerie di simboli nel menu delle preferenze"
 
 #: eeschema/lib_draw_item.cpp:55
 msgid "Undefined"
@@ -18216,12 +18223,13 @@ msgstr "Editor schemi elettrici"
 msgid "Add Pin"
 msgstr "Aggiungi pin"
 
-#: eeschema/symbol_lib_table.cpp:191
+#: eeschema/symbol_lib_table.cpp:197
 #, c-format
-msgid "'%s' is a duplicate symbol library nickname"
-msgstr "\"%s\" è una denominazione di libreria simboli duplicata"
+msgid ""
+"Duplicate library nickname '%s' found in symbol library table file line %d"
+msgstr "Denominatore libreria \"%s\" duplicato nella tabella librerie simboli alla riga %d"
 
-#: eeschema/symbol_lib_table.cpp:226
+#: eeschema/symbol_lib_table.cpp:239
 #, c-format
 msgid "sym-lib-table files contain no library with nickname '%s'"
 msgstr "i file sym-lib-table non contengono librerie con denominazione \"%s\""
@@ -19367,7 +19375,7 @@ msgstr "fine file inattesa durante il caricamento dei filtri impronte"
 msgid "library %s does not contain an alias %s"
 msgstr "la libreria %s non contiene un alias %s"
 
-#: eeschema/sch_legacy_plugin.cpp:3536
+#: eeschema/sch_legacy_plugin.cpp:3541
 #, c-format
 msgid "symbol library '%s' already exists, cannot create a new library"
 msgstr ""
@@ -19555,12 +19563,12 @@ msgstr "Aggiungi una sonda simulatore"
 msgid "Select a value to be tuned"
 msgstr "Seleziona un parametro da regolare"
 
-#: eeschema/libarch.cpp:100
+#: eeschema/libarch.cpp:108
 #, c-format
 msgid "Failed to add symbol %s to library file '%s'"
 msgstr "Fallimento aggiunta simbolo %s al file libreria \"%s\""
 
-#: eeschema/libarch.cpp:116
+#: eeschema/libarch.cpp:123
 #, c-format
 msgid "Failed to save symbol library file '%s'"
 msgstr "Fallito salvataggio file libreria simboli \"%s\""
@@ -19626,12 +19634,7 @@ msgstr "%s, %s, %s, o %s"
 msgid "The %s field cannot contain %s characters."
 msgstr "Il campo %s non può contenere %s caratteri."
 
-#: eeschema/sch_validators.cpp:131
-#, c-format
-msgid "The %s field cannot contain leading and/or trailing white space."
-msgstr "Il campo %s non può contenere spazi bianchi iniziali o finali."
-
-#: eeschema/sch_validators.cpp:139
+#: eeschema/sch_validators.cpp:134
 msgid "Field Validation Error"
 msgstr "Errore validazione campo"
 
@@ -19667,20 +19670,20 @@ msgstr ""
 "Questo potrebbe causare un comportamento imprevisto all'inserimento in uno "
 "schema del componente."
 
-#: eeschema/class_library.cpp:511
+#: eeschema/class_library.cpp:516
 #, c-format
 msgid "Unable to load project's '%s' file"
 msgstr "Impossibile caricare il file progetto \"%s\""
 
-#: eeschema/class_library.cpp:568
+#: eeschema/class_library.cpp:573
 msgid "Loading Symbol Libraries"
 msgstr "Caricamento librerie simboli"
 
-#: eeschema/class_library.cpp:585
+#: eeschema/class_library.cpp:590
 msgid "Loading "
 msgstr "Caricamento "
 
-#: eeschema/class_library.cpp:628
+#: eeschema/class_library.cpp:633
 #, c-format
 msgid ""
 "Part library '%s' failed to load. Error:\n"
@@ -19689,7 +19692,7 @@ msgstr ""
 "Fallito il caricamento della libreria componenti \"%s\". Errore:\n"
 "%s"
 
-#: eeschema/class_library.cpp:656
+#: eeschema/class_library.cpp:661
 #, c-format
 msgid ""
 "Part library '%s' failed to load.\n"
@@ -22913,6 +22916,17 @@ msgstr ""
 "Bisogna configurare la tabella librerie per includere tutte le librerie "
 "impronte non incluse in KiCad. Consultare la sezione \"Tabella librerie "
 "impronte\" della documentazione di CvPcb per ulteriori informazioni."
+
+#: cvpcb/cvpcb.cpp:181
+#, c-format
+msgid ""
+"An error occurred attempting to load the global footprint library table:\n"
+"\n"
+"%s"
+msgstr ""
+"Errore durante il caricamento della tabella librerie impronte globale:\n"
+"\n"
+"%s"
 
 #: cvpcb/tool_cvpcb.cpp:55
 msgid "Edit footprint library table"
