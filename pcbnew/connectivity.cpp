@@ -344,11 +344,23 @@ const std::list<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetNetItems( int aNetC
     std::set<BOARD_CONNECTED_ITEM*> items;
     std::list<BOARD_CONNECTED_ITEM*> rv;
 
-    // fixme: apply aTypes
-
-    m_connAlgo->ForEachItem( [&items, aNetCode] ( CN_ITEM* aItem ) {
+    m_connAlgo->ForEachItem( [&items, aNetCode, &aTypes] ( CN_ITEM* aItem )
+    {
         if( aItem->Net() == aNetCode )
-            items.insert( aItem->Parent() );
+        {
+            KICAD_T itemType = aItem->Parent()->Type();
+
+            for( int i = 0; aTypes[i] > 0; ++i )
+            {
+                wxASSERT( aTypes[i] < MAX_STRUCT_TYPE_ID );
+
+                if( itemType == aTypes[i] )
+                {
+                    items.insert( aItem->Parent() );
+                    break;
+                }
+            }
+        }
     } );
 
     std::copy( items.begin(), items.end(), std::front_inserter( rv ) );
