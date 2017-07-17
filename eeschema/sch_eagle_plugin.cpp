@@ -1234,8 +1234,9 @@ void SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
         }
         else if( nodeName == "polygon" )
         {
-            // loadPolygon( aPart, currentNode );
-            // aPart->AddDrawItem();
+            LIB_POLYLINE* libpoly = loadSymbolPolyLine( aPart, currentNode );
+            libpoly->SetUnit( gateNumber );
+            aPart->AddDrawItem(libpoly);
         }
         else if( nodeName == "rectangle" )
         {
@@ -1350,17 +1351,23 @@ LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( LIB_PART* aPart, wxXmlNode* 
     // TODO: Layer map
     std::unique_ptr<LIB_POLYLINE> polyLine( new LIB_POLYLINE( aPart ) );
 
-    NODE_MAP polygonChildren = mapChildren( aPolygonNode );
-    wxXmlNode* vertex = getChildrenNodes( polygonChildren, "vertex" );
+    EPOLYGON epoly( aPolygonNode );
+    wxXmlNode* vertex = aPolygonNode->GetChildren();
 
+
+    wxPoint pt;
     while( vertex )
     {
-        auto evertex = EVERTEX( vertex );
-        auto v = wxPoint( evertex.x * EUNIT_TO_MIL, evertex.y * EUNIT_TO_MIL );
-        polyLine->AddPoint( v );
-
-        vertex->GetNext();
+        if( vertex->GetName() == "vertex" )     // skip <xmlattr> node
+        {
+            EVERTEX evertex( vertex );
+            pt = wxPoint( evertex.x * EUNIT_TO_MIL, evertex.y * EUNIT_TO_MIL );
+            polyLine->AddPoint( pt );
+        }
+        vertex = vertex->GetNext();
     }
+
+    polyLine->SetFillMode( FILLED_SHAPE );
 
     return polyLine.release();
 }
