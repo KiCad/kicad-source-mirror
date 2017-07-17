@@ -264,10 +264,13 @@ public:
      * @param aOutHue is the conversion result for hue component, in degrees 0 ... 360.0
      * @param aOutSaturation is the conversion result for saturation component (0 ... 1.0).
      * @param aOutValue is conversion result for value component (0 ... 1.0).
-     * @note saturation is set to 0.0 for black color (r = v = b = 0), and
-     * hue is set to 0.0 if r = v = b = 0.
+     * @param aAlwaysDefineHue controls the way hue is defined when r = v = b
+     * @note saturation is set to 0.0 for black color (r = v = b = 0), and if r = v = b,
+     * hue is set to 0.0 if aAlwaysDefineHue = true, and set to NAN if aAlwaysDefineHue = false.
+     * this option is usefull to convert a 4D color to a legacy color, because Red has hue = 0,
+     * therefore aAlwaysDefineHue = false makes difference between Red and Gray colors.
      */
-    void ToHSV( double& aOutHue, double& aOutSaturation, double& aOutValue ) const;
+    void ToHSV( double& aOutHue, double& aOutSaturation, double& aOutValue, bool aAlwaysDefineHue = false ) const;
 
     /**
      * Function FromHSV()

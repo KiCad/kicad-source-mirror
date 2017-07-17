@@ -263,7 +263,7 @@ std::ostream &operator<<( std::ostream &aStream, COLOR4D const &aColor )
 }
 
 
-void COLOR4D::ToHSV( double& aOutHue, double& aOutSaturation, double& aOutValue ) const
+void COLOR4D::ToHSV( double& aOutHue, double& aOutSaturation, double& aOutValue, bool aAlwaysDefineHue ) const
 {
     double min, max, delta;
 
@@ -283,7 +283,7 @@ void COLOR4D::ToHSV( double& aOutHue, double& aOutSaturation, double& aOutValue 
     else    // for black color (r = g = b = 0 )  saturation is set to 0.
     {
         aOutSaturation = 0.0;
-        aOutHue = 0.0;
+        aOutHue = aAlwaysDefineHue ? 0.0 : NAN;
         return;
     }
 
@@ -309,8 +309,10 @@ void COLOR4D::ToHSV( double& aOutHue, double& aOutSaturation, double& aOutValue 
         if( aOutHue < 0.0 )
             aOutHue += 360.0;
     }
-    else    // delta = 0 means r = g = b. hue is set to 0.0
-        aOutHue = 0.0;
+    else   // delta = 0 means r = g = b. hue is set to 0.0
+    {
+        aOutHue = aAlwaysDefineHue ? 0.0 : NAN;
+    }
 }
 
 
