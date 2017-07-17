@@ -41,6 +41,7 @@ using std::string;
 //      - bool
 //      - EROT
 
+constexpr auto DEFAULT_ALIGNMENT = ETEXT::BOTTOM_LEFT;
 
 template<>
 string Convert<string>( wxString aValue )
@@ -215,7 +216,7 @@ int parseAlignment(wxString alignment)
     else if( alignment == "center-left" )
         return  ETEXT::CENTER_LEFT;
 
-    return ETEXT::BOTTOM_LEFT;
+    return DEFAULT_ALIGNMENT;
 }
 
 
@@ -424,9 +425,7 @@ EATTR::EATTR( wxXmlNode* aTree )
 
     stemp = parseOptionalAttribute<string>( aTree, "align" );
 
-    align = parseAlignment(*stemp);
-
-
+    align = stemp ? parseAlignment( *stemp ) : DEFAULT_ALIGNMENT;
 }
 
 
@@ -491,8 +490,7 @@ ETEXT::ETEXT( wxXmlNode* aText )
 
     opt_string stemp = parseOptionalAttribute<string>( aText, "align" );
 
-    align = parseAlignment(*stemp);
-
+    align = stemp ? parseAlignment( *stemp ) : DEFAULT_ALIGNMENT;
 }
 
 
