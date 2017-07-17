@@ -916,19 +916,17 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
     // then we need to determine if these modules are in the list of modules
     // belonging to this sheet ( modList )
     std::list<int> removeCodeList;
+    constexpr KICAD_T padType[] = { PCB_PAD_T, EOT };
 
-
-    KICAD_T padType[] = { PCB_PAD_T };
     for( int netCode : netcodeList )
     {
-
         for( BOARD_CONNECTED_ITEM* mitem : board()->GetConnectivity()->GetNetItems( netCode, padType ) )
         {
             if( mitem->Type() == PCB_PAD_T)
             {
+                bool found = ( std::find( modList.begin(), modList.end(),
+                                    mitem->GetParent() ) != modList.end() );
 
-                /* std::cout << "Checking net " << netCode << "of type " << mitem->Type() << ": "; */
-                bool found = ( std::find( modList.begin(), modList.end(), mitem->GetParent() ) != modList.end() );
                 if( !found )
                 {
                     // if we cannot find the module of the pad in the modList
@@ -951,13 +949,13 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
     }
 
     std::list<BOARD_CONNECTED_ITEM*> localConnectionList;
+    constexpr KICAD_T trackViaType[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
+
     for( int netCode : netcodeList )
     {
-        KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
-        for( BOARD_CONNECTED_ITEM* item : board()->GetConnectivity()->GetNetItems( netCode, types ) )
+        for( BOARD_CONNECTED_ITEM* item : board()->GetConnectivity()->GetNetItems( netCode, trackViaType ) )
         {
             localConnectionList.push_back( item );
-            std::cout << netCode << std::endl;
         }
     }
 
@@ -966,12 +964,14 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
         if( i != NULL )
             select( i );
     }
+
     for( BOARD_CONNECTED_ITEM* i : localConnectionList )
     {
         if( i != NULL )
             select( i );
     }
 }
+
 
 void SELECTION_TOOL::zoomFitSelection( void )
 {
