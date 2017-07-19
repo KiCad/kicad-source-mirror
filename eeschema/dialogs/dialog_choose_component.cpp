@@ -352,13 +352,13 @@ void DIALOG_CHOOSE_COMPONENT::RenderPreview( LIB_PART* aComponent, int aUnit )
     if( !aComponent )
         return;
 
-    if( aUnit <= 0 )
-        aUnit = 1;
+    int unit = aUnit > 0 ? aUnit : 1;
+    int convert = m_deMorganConvert > 0 ? m_deMorganConvert : 1;
 
     dc.SetDeviceOrigin( dc_size.x / 2, dc_size.y / 2 );
 
     // Find joint bounding box for everything we are about to draw.
-    EDA_RECT     bBox = aComponent->GetUnitBoundingBox( aUnit, m_deMorganConvert );
+    EDA_RECT     bBox = aComponent->GetUnitBoundingBox( unit, convert );
     const double xscale = (double) dc_size.x / bBox.GetWidth();
     const double yscale = (double) dc_size.y / bBox.GetHeight();
     const double scale = std::min( xscale, yscale ) * 0.85;
@@ -369,5 +369,5 @@ void DIALOG_CHOOSE_COMPONENT::RenderPreview( LIB_PART* aComponent, int aUnit )
 
     auto opts = PART_DRAW_OPTIONS::Default();
     opts.draw_hidden_fields = false;
-    aComponent->Draw( nullptr, &dc, offset, aUnit, m_deMorganConvert, opts );
+    aComponent->Draw( nullptr, &dc, offset, unit, convert, opts );
 }
