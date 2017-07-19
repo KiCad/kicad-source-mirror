@@ -128,6 +128,11 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
     if( !board()->m_Modules || !board()->m_Modules->PadsList() )
         return 0;
 
+    DIALOG_ENUM_PADS settingsDlg( frame() );
+
+    if( settingsDlg.ShowModal() != wxID_OK )
+        return 0;
+
     Activate();
 
     GENERAL_COLLECTOR collector;
@@ -140,11 +145,6 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
     guide.SetIgnoreModulesVals( true );
     guide.SetIgnoreModulesRefs( true );
 
-    DIALOG_ENUM_PADS settingsDlg( frame() );
-
-    if( settingsDlg.ShowModal() == wxID_CANCEL )
-        return 0;
-
     int padNumber = settingsDlg.GetStartNumber();
     wxString padPrefix = settingsDlg.GetPrefix();
 
@@ -153,57 +153,52 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     getViewControls()->ShowCursor( true );
+    frame()->GetGalCanvas()->SetCursor( wxCURSOR_HAND );
 
     KIGFX::VIEW* view = m_toolMgr->GetView();
-    VECTOR2I oldCursorPos = getViewControls()->GetCursorPosition();
+    VECTOR2I oldCursorPos;  // store the previous mouse cursor position, during mouse drag
     std::list<D_PAD*> selectedPads;
     BOARD_COMMIT commit( frame() );
     std::map<wxString, wxString> oldNames;
+    bool isFirstPoint = true;   // used to be sure oldCursorPos will be initialized at least once.
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
+        if( evt->IsDrag( BUT_LEFT ) )
         {
             selectedPads.clear();
             VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
 
-            if( evt->IsClick( BUT_LEFT ) )
+            // Be sure the old cursor mouse position was initialized:
+            if( isFirstPoint )
             {
-                oldCursorPos = getViewControls()->GetCursorPosition();
-                collector.Empty();
-                collector.Collect( board(), types, wxPoint( cursorPos.x, cursorPos.y ), guide );
+                oldCursorPos = cursorPos;
+                isFirstPoint = false;
+            }
+
+            // wxWidgets deliver mouse move events not frequently enough, resulting in skipping
+            // pads if the user moves cursor too fast. To solve it, create a line that approximates
+            // the mouse move and search pads that are on the line.
+            int distance = ( cursorPos - oldCursorPos ).EuclideanNorm();
+            // Search will be made every 0.1 mm:
+            int segments = distance / int( 0.1*IU_PER_MM ) + 1;
+            const wxPoint line_step( ( cursorPos - oldCursorPos ) / segments );
+
+            collector.Empty();
+
+            for( int j = 0; j < segments; ++j )
+            {
+                wxPoint testpoint( cursorPos.x - j * line_step.x,
+                                   cursorPos.y - j * line_step.y );
+                collector.Collect( board(), types, testpoint, guide );
 
                 for( int i = 0; i < collector.GetCount(); ++i )
                 {
-                    if( collector[i]->Type() == PCB_PAD_T )
-                        selectedPads.push_back( static_cast<D_PAD*>( collector[i] ) );
+                    selectedPads.push_back( static_cast<D_PAD*>( collector[i] ) );
                 }
             }
-            else //evt->IsDrag( BUT_LEFT )
-            {
-                // wxWidgets deliver mouse move events not frequently enough, resulting in skipping
-                // pads if the user moves cursor too fast. To solve it, create a line that approximates
-                // the mouse move and select items intersecting with the line.
-                int distance = ( cursorPos - oldCursorPos ).EuclideanNorm();
-                int segments = distance / 100000 + 1;
-                const wxPoint LINE_STEP( ( cursorPos - oldCursorPos ).x / segments,
-                                         ( cursorPos - oldCursorPos ).y / segments );
 
-                collector.Empty();
-                for( int j = 0; j < segments; ++j ) {
-                    collector.Collect( board(), types,
-                                       wxPoint( oldCursorPos.x, oldCursorPos.y ) + j * LINE_STEP,
-                                       guide );
-
-                    for( int i = 0; i < collector.GetCount(); ++i )
-                    {
-                        if( collector[i]->Type() == PCB_PAD_T )
-                            selectedPads.push_back( static_cast<D_PAD*>( collector[i] ) );
-                    }
-                }
-
-                selectedPads.unique();
-            }
+            selectedPads.unique();
 
             for( D_PAD* pad : selectedPads )
             {
@@ -236,8 +231,6 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
                     getView()->Update( pad );
                 }
             }
-
-            oldCursorPos = cursorPos;
         }
 
         else if( ( evt->IsKeyPressed() && evt->KeyCode() == WXK_RETURN ) ||
@@ -252,6 +245,10 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
             commit.Revert();
             break;
         }
+
+        // Prepare the next loop by updating the old cursor mouse position
+        // to this last mouse cursor position
+        oldCursorPos = getViewControls()->GetCursorPosition();
     }
 
     for( auto p : board()->m_Modules->Pads() )
@@ -261,6 +258,7 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
     }
 
     frame()->DisplayToolMsg( wxEmptyString );
+    frame()->GetGalCanvas()->SetCursor( wxCURSOR_ARROW );
 
     return 0;
 }
