@@ -481,7 +481,8 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 break;      // exit the loop - we move exactly, so we have finished moving
             }
 
-            if( m_dragging )
+            // TODO check if the following can be removed
+            if( m_dragging && !selection.Empty() )
             {
                 // Update dragging offset (distance between cursor and the first dragged item)
                 m_offset = static_cast<BOARD_ITEM*>( selection.Front() )->GetPosition() - modPoint;
