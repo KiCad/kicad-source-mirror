@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -495,11 +495,14 @@ private:
 
     /**
      * Function LoadComponentFromCurrentLib
-     * loads a component from the current active library.
+     * loads a component from the current active library, optionally setting the selected
+     * unit and convert
      * @param aLibEntry The component to load from \a aLibrary (can be an alias)
+     * @param aUnit Unit to be selected
+     * @param aConvert Convert to be selected
      * @return true if \a aLibEntry loaded correctly.
      */
-    bool LoadComponentFromCurrentLib( LIB_ALIAS* aLibEntry );
+    bool LoadComponentFromCurrentLib( LIB_ALIAS* aLibEntry, int aUnit = 0, int aConvert = 0 );
 
     /**
      * Function LoadOneLibraryPartAux

@@ -88,16 +88,25 @@ bool LIB_EDIT_FRAME::LoadComponentAndSelectLib( LIB_ALIAS* aLibEntry, PART_LIB* 
 }
 
 
-bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( LIB_ALIAS* aLibEntry )
+bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( LIB_ALIAS* aLibEntry, int aUnit, int aConvert )
 {
     if( !LoadOneLibraryPartAux( aLibEntry, GetCurLib() ) )
         return false;
+
+    if( aUnit > 0 )
+        m_unit = aUnit;
+
+    if( aConvert > 0 )
+        m_convert = aConvert;
 
     m_editPinsPerPartOrConvert = GetCurPart()->UnitsLocked() ? true : false;
 
     GetScreen()->ClearUndoRedoList();
     Zoom_Automatique( false );
     SetShowDeMorgan( GetCurPart()->HasConversion() );
+
+    if( aUnit > 0 )
+        UpdatePartSelectList();
 
     return true;
 }
@@ -181,7 +190,7 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
 
     PART_LIB* old = SetCurLib( searchLib );
 
-    LoadComponentFromCurrentLib( libEntry );
+    LoadComponentFromCurrentLib( libEntry, sel.Unit, sel.Convert );
 
     SetCurLib( old );
 
