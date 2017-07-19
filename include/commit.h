@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 CERN
+ * Copyright 2016-2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -107,7 +107,10 @@ public:
 
     ///> Creates an undo entry for an item that has been already modified. Requires a copy done
     ///> before the modification.
-    COMMIT& Modified( EDA_ITEM* aItem, EDA_ITEM* aCopy );
+    COMMIT& Modified( EDA_ITEM* aItem, EDA_ITEM* aCopy )
+    {
+        return createModified( aItem, aCopy );
+    }
 
     template<class Range>
     COMMIT& StageItems( const Range& aRange, CHANGE_TYPE aChangeType )
@@ -137,6 +140,9 @@ public:
         return m_changes.empty();
     }
 
+    ///> Returns status of an item.
+    int GetStatus( EDA_ITEM* aItem );
+
 protected:
     struct COMMIT_LINE
     {
@@ -157,7 +163,15 @@ protected:
         m_changes.clear();
     }
 
+    COMMIT& createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlags = 0 );
+
     virtual void makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy = NULL );
+
+    /**
+     * Searches for an entry describing change for a particular item
+     * @return null if there is no related entry.
+     */
+    COMMIT_LINE* findEntry( EDA_ITEM* aItem );
 
     virtual EDA_ITEM* parentObject( EDA_ITEM* aItem ) const = 0;
 
