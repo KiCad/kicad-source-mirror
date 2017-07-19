@@ -39,7 +39,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizerOutDir;
 	bSizerOutDir = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextDir = new wxStaticText( this, wxID_ANY, _("Output Directory:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextDir = new wxStaticText( this, wxID_ANY, _("Output directory:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDir->Wrap( -1 );
 	bSizerOutDir->Add( m_staticTextDir, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 	
@@ -176,7 +176,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_plotModeOpt->SetSelection( 0 );
 	bSizer14->Add( m_plotModeOpt, 0, wxEXPAND|wxLEFT, 5 );
 	
-	m_textDefaultPenSize = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Line Width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textDefaultPenSize = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Line width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textDefaultPenSize->Wrap( -1 );
 	m_textDefaultPenSize->SetToolTip( _("Pen size used to draw items that have no pen size specified.\nUsed mainly to draw items in sketch mode.") );
 	

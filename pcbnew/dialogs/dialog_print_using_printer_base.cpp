@@ -25,7 +25,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText4 = new wxStaticText( sbLayersSizer->GetStaticBox(), wxID_ANY, _("Copper Layers:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4 = new wxStaticText( sbLayersSizer->GetStaticBox(), wxID_ANY, _("Copper layers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
 	bSizer6->Add( m_staticText4, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -70,7 +70,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	m_ScaleOption->SetSelection( 0 );
 	bmiddleLeftSizer->Add( m_ScaleOption, 0, wxALL, 5 );
 	
-	m_FineAdjustXscaleTitle = new wxStaticText( this, wxID_ANY, _("X Scale Adjust:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_FineAdjustXscaleTitle = new wxStaticText( this, wxID_ANY, _("X scale adjust:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_FineAdjustXscaleTitle->Wrap( -1 );
 	bmiddleLeftSizer->Add( m_FineAdjustXscaleTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -79,7 +79,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	
 	bmiddleLeftSizer->Add( m_FineAdjustXscaleOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_FineAdjustYscaleTitle = new wxStaticText( this, wxID_ANY, _("Y Scale Adjust:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_FineAdjustYscaleTitle = new wxStaticText( this, wxID_ANY, _("Y scale adjust:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_FineAdjustYscaleTitle->Wrap( -1 );
 	bmiddleLeftSizer->Add( m_FineAdjustYscaleTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -97,7 +97,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	wxStaticBoxSizer* sbOptionsSizer;
 	sbOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Generic Options") ), wxVERTICAL );
 	
-	m_TextPenWidth = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Default Pen Size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextPenWidth = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Default pen size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextPenWidth->Wrap( -1 );
 	m_TextPenWidth->SetToolTip( _("Pen size used to draw items that have no pen size specified.\nUsed mainly to draw items in sketch mode.") );
 	
