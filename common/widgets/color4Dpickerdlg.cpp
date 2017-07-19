@@ -580,49 +580,37 @@ void COLOR4D_PICKER_DLG::onRGBMouseDrag( wxMouseEvent& event )
 
 void COLOR4D_PICKER_DLG::onHSVMouseClick( wxMouseEvent& event )
 {
-    wxPoint mousePos = event.GetPosition();
-
-    // The cursor position is relative to the m_bitmapHSV wxBitmap center
-    wxSize bmsize = m_bitmapHSV->GetSize();
-    int half_size = std::min( bmsize.x, bmsize.y )/2;
-    mousePos.x -= half_size;
-    mousePos.y -= half_size;
-    mousePos.y = -mousePos.y;       // Use the bottom to top vertical axis
-
-    wxPoint dist = m_cursorBitmapHSV - mousePos;
-
-    if( std::abs( dist.x ) <= m_cursorsSize/2 && std::abs( dist.y ) <= m_cursorsSize/2 )
-        m_selectedCursor = &m_cursorBitmapHSV;
-    else
-        m_selectedCursor = nullptr;
+    if( setHSvaluesFromCursor( event.GetPosition() ) )
+        drawAll();
 }
 
 
 void COLOR4D_PICKER_DLG::onHSVMouseDrag( wxMouseEvent& event )
 {
     if( !event.Dragging() )
-    {
-        m_selectedCursor = nullptr;
-        return;
-    }
-
-    if( m_selectedCursor != &m_cursorBitmapHSV )
         return;
 
-    // Adjust the HSV cursor position to follow the mouse cursor
-    // The cursor position is relative to the m_bitmapHSV wxBitmap center
-    wxPoint mousePos = event.GetPosition();
+    if( setHSvaluesFromCursor( event.GetPosition() ) )
+        drawAll();
+}
+
+
+bool COLOR4D_PICKER_DLG::setHSvaluesFromCursor( wxPoint aMouseCursor )
+{
+    wxPoint mousePos = aMouseCursor;
     wxSize bmsize = m_bitmapHSV->GetSize();
     int half_size = std::min( bmsize.x, bmsize.y )/2;
+    // Make the cursor position relative to the m_bitmapHSV wxBitmap center
     mousePos.x -= half_size;
     mousePos.y -= half_size;
-    mousePos.y = -mousePos.y;       // Use the bottom to top vertical axis
+    mousePos.y = -mousePos.y;   // Use the bottom to top vertical axis
 
-    // The HSV cursor position is restricted to a circle of radius half_size
+    // The HS cursor position is restricted to a circle of radius half_size
     double dist_from_centre = hypot( (double)mousePos.x, (double)mousePos.y );
 
     if( dist_from_centre > half_size )
-        return;
+        // Saturation cannot be calculated:
+        return false;
 
     m_cursorBitmapHSV = mousePos;
 
@@ -641,7 +629,7 @@ void COLOR4D_PICKER_DLG::onHSVMouseDrag( wxMouseEvent& event )
     m_newColor4D.FromHSV( m_hue, m_sat, m_val );
     SetEditVals( ALL_CHANGED );
 
-    drawAll();
+    return true;
 }
 
 

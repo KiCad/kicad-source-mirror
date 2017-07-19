@@ -81,6 +81,15 @@ private:
 	void onHSVMouseClick( wxMouseEvent& event ) override;
 	void onHSVMouseDrag( wxMouseEvent& event ) override;
 
+    /** manage the Hue and Saturation settings when the mouse cursor
+     * is at aMouseCursor.
+     * @param aMouseCursor is the mouse cursor position on the HSV bitmap
+     * @return true if the Hue and Saturation can be set from aMouseCursor,
+     * if Saturation value computed from aMouseCursor is <= 1.0,
+     * and false if aMouseCursor is outside this area.
+     */
+	bool setHSvaluesFromCursor( wxPoint aMouseCursor );
+
     ///> Event handler for defined color buttons
     void buttColorClick( wxCommandEvent& event );
 

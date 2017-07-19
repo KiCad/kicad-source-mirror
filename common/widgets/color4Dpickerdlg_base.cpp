@@ -45,7 +45,7 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	bSizerPanels->Add( sbSizerViewRGB, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 	
 	wxStaticBoxSizer* sbSizerViewHSV;
-	sbSizerViewHSV = new wxStaticBoxSizer( new wxStaticBox( m_panelFreeColors, wxID_ANY, wxT("HSV") ), wxVERTICAL );
+	sbSizerViewHSV = new wxStaticBoxSizer( new wxStaticBox( m_panelFreeColors, wxID_ANY, wxT("Hue and Saturation") ), wxVERTICAL );
 	
 	
 	sbSizerViewHSV->Add( 0, 0, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
@@ -125,36 +125,35 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	bSizerLowerFreeColors->Add( sbSizerSetRGB, 1, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizerSetHSV;
-	sbSizerSetHSV = new wxStaticBoxSizer( new wxStaticBox( m_panelFreeColors, wxID_ANY, wxT("RGB Values") ), wxHORIZONTAL );
+	sbSizerSetHSV = new wxStaticBoxSizer( new wxStaticBox( m_panelFreeColors, wxID_ANY, wxT("HS Values") ), wxHORIZONTAL );
 	
-	wxFlexGridSizer* fgSizerHSB;
-	fgSizerHSB = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizerHSB->AddGrowableCol( 0 );
-	fgSizerHSB->AddGrowableCol( 1 );
-	fgSizerHSB->AddGrowableCol( 2 );
-	fgSizerHSB->SetFlexibleDirection( wxBOTH );
-	fgSizerHSB->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxFlexGridSizer* fgSizerHSV;
+	fgSizerHSV = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizerHSV->AddGrowableCol( 0 );
+	fgSizerHSV->AddGrowableCol( 1 );
+	fgSizerHSV->SetFlexibleDirection( wxBOTH );
+	fgSizerHSV->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_staticTextHue = new wxStaticText( sbSizerSetHSV->GetStaticBox(), wxID_ANY, wxT("Hue"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextHue->Wrap( -1 );
-	fgSizerHSB->Add( m_staticTextHue, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerHSV->Add( m_staticTextHue, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticTextSat = new wxStaticText( sbSizerSetHSV->GetStaticBox(), wxID_ANY, wxT("Saturation"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSat->Wrap( -1 );
-	fgSizerHSB->Add( m_staticTextSat, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerHSV->Add( m_staticTextSat, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_spinCtrlHue = new wxSpinCtrl( sbSizerSetHSV->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 0, 359, 0 );
 	m_spinCtrlHue->SetMinSize( wxSize( 80,-1 ) );
 	
-	fgSizerHSB->Add( m_spinCtrlHue, 0, wxALL|wxEXPAND, 5 );
+	fgSizerHSV->Add( m_spinCtrlHue, 0, wxALL|wxEXPAND, 5 );
 	
 	m_spinCtrlSaturation = new wxSpinCtrl( sbSizerSetHSV->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 255, 128 );
 	m_spinCtrlSaturation->SetMinSize( wxSize( 80,-1 ) );
 	
-	fgSizerHSB->Add( m_spinCtrlSaturation, 0, wxALL|wxEXPAND, 5 );
+	fgSizerHSV->Add( m_spinCtrlSaturation, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	sbSizerSetHSV->Add( fgSizerHSB, 1, wxEXPAND, 5 );
+	sbSizerSetHSV->Add( fgSizerHSV, 1, wxEXPAND, 5 );
 	
 	
 	bSizerLowerFreeColors->Add( sbSizerSetHSV, 1, wxEXPAND, 5 );
@@ -166,7 +165,7 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	m_panelFreeColors->SetSizer( bSizerUpperFreeColors );
 	m_panelFreeColors->Layout();
 	bSizerUpperFreeColors->Fit( m_panelFreeColors );
-	m_notebook->AddPage( m_panelFreeColors, wxT("Color Picker"), false );
+	m_notebook->AddPage( m_panelFreeColors, wxT("Color Picker"), true );
 	m_panelDefinedColors = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_SizerDefinedColors = new wxBoxSizer( wxVERTICAL );
 	
@@ -192,7 +191,7 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	m_panelDefinedColors->SetSizer( m_SizerDefinedColors );
 	m_panelDefinedColors->Layout();
 	m_SizerDefinedColors->Fit( m_panelDefinedColors );
-	m_notebook->AddPage( m_panelDefinedColors, wxT("Defined Colors"), true );
+	m_notebook->AddPage( m_panelDefinedColors, wxT("Defined Colors"), false );
 	
 	bSizerUpperMain->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 	
