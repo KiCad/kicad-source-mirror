@@ -118,12 +118,20 @@ protected:
     PCB_BASE_FRAME* myframe;
 
     // popup menu ids.
-#define ID_SHOW_ALL_COPPER_LAYERS                   wxID_HIGHEST
-#define ID_SHOW_NO_COPPER_LAYERS                    (wxID_HIGHEST+1)
-#define ID_SHOW_NO_COPPER_LAYERS_BUT_ACTIVE         (wxID_HIGHEST+2)
-#define ID_ALWAYS_SHOW_NO_COPPER_LAYERS_BUT_ACTIVE  (wxID_HIGHEST+3)
-#define ID_SHOW_NO_LAYERS                           (wxID_HIGHEST+4)
-#define ID_SHOW_ALL_LAYERS                          (wxID_HIGHEST+5)
+    enum POPUP_ID
+    {
+        ID_SHOW_ALL_COPPER_LAYERS                    = wxID_HIGHEST,
+        ID_SHOW_NO_COPPER_LAYERS,
+        ID_SHOW_NO_COPPER_LAYERS_BUT_ACTIVE,
+        ID_ALWAYS_SHOW_NO_COPPER_LAYERS_BUT_ACTIVE,
+        ID_SHOW_NO_LAYERS,
+        ID_SHOW_ALL_LAYERS,
+        ID_SHOW_ALL_FRONT,
+        ID_SHOW_ALL_BACK,
+        ID_HIDE_ALL_NON_COPPER,
+        ID_SHOW_ALL_NON_COPPER,
+        ID_LAST_VALUE
+    };
 
     virtual bool AreArbitraryColorsAllowed() override;
 
