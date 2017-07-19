@@ -139,14 +139,7 @@ COMMIT& COMMIT::createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlag
     auto entryIt = m_changedItems.find( parent );
 
     if( entryIt != m_changedItems.end() )
-    {
-#ifdef DEBUG
-        const COMMIT_LINE* entry = findEntry( parent );
-        wxASSERT_MSG( entry->m_copy == aCopy, "Staging a different copy, possible memleak" );
-#endif
-
         return *this; // item has been already modified once
-    }
 
     makeEntry( parent, CHT_MODIFY | aExtraFlags, aCopy );
 
