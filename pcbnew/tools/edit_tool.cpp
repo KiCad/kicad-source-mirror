@@ -158,6 +158,82 @@ TOOL_ACTION PCB_ACTIONS::measureTool( "pcbnew.InteractiveEdit.measureTool",
         nullptr, AF_ACTIVATE );
 
 
+static wxPoint getAnchorPoint( const SELECTION &selection, const MOVE_PARAMETERS &params )
+{
+    wxPoint anchorPoint;
+
+    if( params.origin == RELATIVE_TO_CURRENT_POSITION )
+    {
+        return wxPoint( 0, 0 );
+    }
+
+    // set default anchor
+    VECTOR2I rp = selection.GetCenter();
+    anchorPoint = wxPoint( rp.x, rp.y );
+
+    // If the anchor is not ANCHOR_FROM_LIBRARY then the user applied an override.
+    // Also run through this block if only one item is slected because it may be a module,
+    // in which case we want something different than the center of the selection
+    if( ( params.anchor != ANCHOR_FROM_LIBRARY ) || ( selection.GetSize() == 1 ) )
+    {
+        BOARD_ITEM* topLeftItem = static_cast<BOARD_ITEM*>( selection.GetTopLeftModule() );
+
+        // no module found if the GetTopLeftModule() returns null
+        if( topLeftItem != nullptr )
+        {
+            if( topLeftItem->Type() == PCB_MODULE_T )
+            {
+                // Cast to module to allow access to the pads
+                MODULE* mod = static_cast<MODULE*>( topLeftItem );
+
+                switch( params.anchor )
+                {
+                case ANCHOR_FROM_LIBRARY:
+                    anchorPoint = mod->GetPosition();
+                    break;
+
+                case ANCHOR_TOP_LEFT_PAD:
+                    topLeftItem = mod->GetTopLeftPad();
+                    break;
+
+                case ANCHOR_CENTER_FOOTPRINT:
+                    anchorPoint = mod->GetFootprintRect().GetCenter();
+                    break;
+                }
+            }
+
+            if( topLeftItem->Type() == PCB_PAD_T )
+            {
+                if( static_cast<D_PAD*>( topLeftItem )->GetAttribute() == PAD_ATTRIB_SMD )
+                {
+                    // Use the top left corner of SMD pads as an anchor instead of the center
+                    anchorPoint = topLeftItem->GetBoundingBox().GetPosition();
+                }
+                else
+                {
+                    anchorPoint = topLeftItem->GetPosition();
+                }
+            }
+        }
+        else // no module found in the selection
+        {
+            // in a selection of non-modules
+            if( params.anchor == ANCHOR_TOP_LEFT_PAD )
+            {
+                // approach the top left pad override for non-modules by using the position of
+                // the topleft item as an anchor
+                topLeftItem = static_cast<BOARD_ITEM*>( selection.GetTopLeftItem() );
+                anchorPoint = topLeftItem->GetPosition();
+            }
+        }
+    }
+
+    return anchorPoint;
+}
+
+
+
+
 EDIT_TOOL::EDIT_TOOL() :
     PCB_TOOL( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL ),
     m_dragging( false )
@@ -223,8 +299,6 @@ bool EDIT_TOOL::Init()
 
 
 bool EDIT_TOOL::invokeInlineRouter()
-
-
 {
     TRACK* track = uniqueSelected<TRACK>();
     VIA* via = uniqueSelected<VIA>();
@@ -764,77 +838,6 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
     }
 
     return 0;
-}
-
-wxPoint EDIT_TOOL::getAnchorPoint( const SELECTION &selection, const MOVE_PARAMETERS &params ) const
-{
-    wxPoint anchorPoint;
-
-    if( params.origin == RELATIVE_TO_CURRENT_POSITION )
-    {
-        return wxPoint( 0, 0 );
-    }
-
-    // set default anchor
-    VECTOR2I rp = selection.GetCenter();
-    anchorPoint = wxPoint( rp.x, rp.y );
-
-    // If the anchor is not ANCHOR_FROM_LIBRARY then the user applied an override.
-    // Also run through this block if only one item is slected because it may be a module,
-    // in which case we want something different than the center of the selection
-    if( ( params.anchor != ANCHOR_FROM_LIBRARY ) || ( selection.GetSize() == 1 ) )
-        {
-            BOARD_ITEM* topLeftItem = static_cast<BOARD_ITEM*>( selection.GetTopLeftModule() );
-
-            // no module found if the GetTopLeftModule() returns null
-            if( topLeftItem != nullptr )
-            {
-
-                if( topLeftItem->Type() == PCB_MODULE_T )
-                {
-                    // Cast to module to allow access to the pads
-                    MODULE* mod = static_cast<MODULE*>( topLeftItem );
-
-                    switch( params.anchor )
-                    {
-                    case ANCHOR_FROM_LIBRARY:
-                        anchorPoint = mod->GetPosition();
-                        break;
-                    case ANCHOR_TOP_LEFT_PAD:
-                        topLeftItem = mod->GetTopLeftPad();
-                        break;
-                    case ANCHOR_CENTER_FOOTPRINT:
-                        anchorPoint = mod->GetFootprintRect().GetCenter();
-                        break;
-                    }
-                }
-
-                if( topLeftItem->Type() == PCB_PAD_T )
-                {
-                    if( static_cast<D_PAD*>( topLeftItem )->GetAttribute() == PAD_ATTRIB_SMD )
-                    {
-                        // Use the top left corner of SMD pads as an anchor instead of the center
-                        anchorPoint = topLeftItem->GetBoundingBox().GetPosition();
-                    }
-                    else
-                    {
-                        anchorPoint = topLeftItem->GetPosition();
-                    }
-                }
-            }
-            else // no module found in the selection
-            {
-                // in a selection of non-modules
-                if( params.anchor == ANCHOR_TOP_LEFT_PAD )
-                {
-                    // approach the top left pad override for non-modules by using the position of
-                    // the topleft item as an anchor
-                    topLeftItem = static_cast<BOARD_ITEM*>( selection.GetTopLeftItem() );
-                    anchorPoint = topLeftItem->GetPosition();
-                }
-            }
-        }
-    return anchorPoint;
 }
 
 

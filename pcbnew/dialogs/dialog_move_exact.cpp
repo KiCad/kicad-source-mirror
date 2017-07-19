@@ -311,7 +311,7 @@ void DIALOG_MOVE_EXACT::OnOkClick( wxCommandEvent& event )
         // -> set origin and anchor to zero
         origin = wxPoint( 0, 0 );
         break;
-        }
+    }
 
     m_translation = move_vector + origin;
 
