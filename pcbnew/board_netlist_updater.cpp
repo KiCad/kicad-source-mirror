@@ -232,8 +232,9 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent, CO
     if( !aPcbComponent )
         return false;
 
+    // Create a copy only if the module has not been added during this update
+    MODULE* copy = m_commit.GetStatus( aPcbComponent ) ? nullptr : (MODULE*) aPcbComponent->Clone();
     bool changed = false;
-    MODULE* copy = (MODULE*) aPcbComponent->Clone();
 
     // Test for reference designator field change.
     if( aPcbComponent->GetReference() != aNewComponent->GetReference() )
@@ -300,7 +301,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent, CO
         }
     }
 
-    if( changed )
+    if( changed && copy )
         m_commit.Modified( aPcbComponent, copy );
     else
         delete copy;
@@ -313,8 +314,9 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
 {
     wxString msg;
 
+    // Create a copy only if the module has not been added during this update
+    MODULE* copy = m_commit.GetStatus( aPcbComponent ) ? nullptr : (MODULE*) aPcbComponent->Clone();
     bool changed = false;
-    MODULE* copy = (MODULE*) aPcbComponent->Clone();
 
     // At this point, the component footprint is updated.  Now update the nets.
     for( D_PAD* pad = aPcbComponent->PadsList(); pad; pad = pad->Next() )
@@ -409,7 +411,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
         }
     }
 
-    if( changed )
+    if( changed && copy )
         m_commit.Modified( aPcbComponent, copy );
     else
         delete copy;
