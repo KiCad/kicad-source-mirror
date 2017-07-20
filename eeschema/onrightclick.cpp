@@ -370,9 +370,9 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_LIBS*
     }
 
     wxMenu* orientmenu = new wxMenu;
-    msg = AddHotkeyName( _( "Rotate 90 deg CW" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
+    msg = AddHotkeyName( _( "Rotate Clockwise" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
     AddMenuItem( orientmenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_cw_xpm ) );
-    AddMenuItem( orientmenu, ID_SCH_ROTATE_COUNTERCLOCKWISE, _( "Rotate 90 deg CCW" ),
+    AddMenuItem( orientmenu, ID_SCH_ROTATE_COUNTERCLOCKWISE, _( "Rotate Counterclockwise" ),
                  KiBitmap( rotate_ccw_xpm ) );
     msg = AddHotkeyName( _( "Flip Vertical" ), g_Schematic_Hokeys_Descr, HK_MIRROR_X );
     AddMenuItem( orientmenu, ID_SCH_MIRROR_X, msg, KiBitmap( mirror_v_xpm ) );
@@ -499,7 +499,7 @@ void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
         AddMenuItem( PopMenu, ID_POPUP_SCH_DUPLICATE_ITEM, msg, KiBitmap( duplicate_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Rotate 90 deg CW" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
+    msg = AddHotkeyName( _( "Rotate Clockwise" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
     AddMenuItem( PopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_cw_xpm ) );
     msg = AddHotkeyName( _( "Edit" ), g_Schematic_Hokeys_Descr, HK_EDIT );
     AddMenuItem( PopMenu, ID_SCH_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
@@ -535,7 +535,7 @@ void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
         AddMenuItem( PopMenu, ID_POPUP_SCH_DUPLICATE_ITEM, msg, KiBitmap( copy_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Rotate 90 deg CW" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
+    msg = AddHotkeyName( _( "Rotate Clockwise" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
     AddMenuItem( PopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_cw_xpm ) );
     msg = AddHotkeyName( _( "Edit" ), g_Schematic_Hokeys_Descr, HK_EDIT );
     AddMenuItem( PopMenu, ID_SCH_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
@@ -571,7 +571,7 @@ void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
         AddMenuItem( PopMenu, ID_POPUP_SCH_DUPLICATE_ITEM, msg, KiBitmap( duplicate_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Rotate 90 deg CCW" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
+    msg = AddHotkeyName( _( "Rotate Counterclockwise" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
     AddMenuItem( PopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_ccw_xpm ) );
     msg = AddHotkeyName( _( "Edit" ), g_Schematic_Hokeys_Descr, HK_EDIT );
     AddMenuItem( PopMenu, ID_SCH_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
@@ -605,7 +605,7 @@ void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
         AddMenuItem( PopMenu, ID_POPUP_SCH_DUPLICATE_ITEM, msg, KiBitmap( duplicate_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Rotate 90 deg CCW" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
+    msg = AddHotkeyName( _( "Rotate Counterclockwise" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
     AddMenuItem( PopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_ccw_xpm ) );
     msg = AddHotkeyName( _( "Edit" ), g_Schematic_Hokeys_Descr, HK_EDIT );
     AddMenuItem( PopMenu, ID_SCH_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
@@ -763,10 +763,10 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
         AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( drag_xpm ) );
 
         wxMenu* orientmenu = new wxMenu;
-        msg = AddHotkeyName( _( "Rotate 90 deg CW" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
+        msg = AddHotkeyName( _( "Rotate Clockwise" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
         AddMenuItem( orientmenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_cw_xpm ) );
 
-        AddMenuItem( orientmenu, ID_SCH_ROTATE_COUNTERCLOCKWISE, _( "Rotate 90 deg CCW" ),
+        AddMenuItem( orientmenu, ID_SCH_ROTATE_COUNTERCLOCKWISE, _( "Rotate Counterclockwise" ),
                      KiBitmap( rotate_ccw_xpm ) );
 
         msg = AddHotkeyName( _( "Flip Vertical" ), g_Schematic_Hokeys_Descr, HK_MIRROR_X );
@@ -890,7 +890,7 @@ void AddMenusForBitmap( wxMenu* aPopMenu, SCH_BITMAP * aBitmap )
         AddMenuItem( aPopMenu, ID_SCH_MOVE_ITEM, msg, KiBitmap( move_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Rotate 90 deg CCW" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
+    msg = AddHotkeyName( _( "Rotate Counterclockwise" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
     AddMenuItem( aPopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_ccw_xpm ) );
     msg = AddHotkeyName( _( "Flip Vertical" ), g_Schematic_Hokeys_Descr,
                          HK_MIRROR_X );

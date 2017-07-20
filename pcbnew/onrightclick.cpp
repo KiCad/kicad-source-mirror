@@ -491,7 +491,7 @@ void PCB_EDIT_FRAME::createPopUpBlockMenu( wxMenu* menu )
     AddMenuItem( menu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), KiBitmap( checked_ok_xpm ) );
     AddMenuItem( menu, ID_POPUP_DUPLICATE_BLOCK, _( "Duplicate" ), KiBitmap( duplicate_xpm ) );
     AddMenuItem( menu, ID_POPUP_FLIP_BLOCK, _( "Flip" ), KiBitmap( mirror_v_xpm ) );
-    AddMenuItem( menu, ID_POPUP_ROTATE_BLOCK, _( "Rotate 90 deg CCW" ), KiBitmap( rotate_ccw_xpm ) );
+    AddMenuItem( menu, ID_POPUP_ROTATE_BLOCK, _( "Rotate Counterclockwise" ), KiBitmap( rotate_ccw_xpm ) );
     AddMenuItem( menu, ID_POPUP_DELETE_BLOCK, _( "Delete" ), KiBitmap( delete_xpm ) );
 }
 
@@ -805,11 +805,11 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
                      msg, KiBitmap( drag_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Rotate 90 deg CCW" ), g_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
+    msg = AddHotkeyName( _( "Rotate Counterclockwise" ), g_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
     AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE,
                  msg, KiBitmap( rotate_ccw_xpm ) );
     AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE,
-                 _( "Rotate 90 deg CW" ), KiBitmap( rotate_cw_xpm ) );
+                 _( "Rotate Clockwise" ), KiBitmap( rotate_cw_xpm ) );
     msg = AddHotkeyName( _( "Flip" ), g_Board_Editor_Hokeys_Descr, HK_FLIP_ITEM );
     AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_CHANGE_SIDE_MODULE,
                  msg, KiBitmap( mirror_v_xpm ) );
@@ -881,7 +881,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* me
                      msg, KiBitmap( move_exactly_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Rotate 90 deg CW" ), g_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
+    msg = AddHotkeyName( _( "Rotate Clockwise" ), g_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
     AddMenuItem( sub_menu_Fp_text, ID_POPUP_PCB_ROTATE_TEXTMODULE,
                  msg, KiBitmap( rotate_cw_xpm ) );
 

@@ -113,12 +113,12 @@ TOOL_ACTION PCB_ACTIONS::createArray( "pcbnew.InteractiveEdit.createArray",
 
 TOOL_ACTION PCB_ACTIONS::rotateCw( "pcbnew.InteractiveEdit.rotateCw",
         AS_GLOBAL, MD_SHIFT + 'R',
-        _( "Rotate 90 deg CW" ), _( "Rotates selected item(s) clockwise" ),
+        _( "Rotate Clockwise" ), _( "Rotates selected item(s) clockwise" ),
         rotate_cw_xpm, AF_NONE, (void*) -1 );
 
 TOOL_ACTION PCB_ACTIONS::rotateCcw( "pcbnew.InteractiveEdit.rotateCcw",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROTATE_ITEM ),
-        _( "Rotate 90 deg CCW" ), _( "Rotates selected item(s) counter-clockwise" ),
+        _( "Rotate Counterclockwise" ), _( "Rotates selected item(s) counterclockwise" ),
         rotate_ccw_xpm, AF_NONE, (void*) 1 );
 
 TOOL_ACTION PCB_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",

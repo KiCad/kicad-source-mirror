@@ -291,7 +291,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
         case PCB_MODULE_T:
             {
             wxMenu* transform_choice = new wxMenu;
-            AddMenuItem( transform_choice, ID_MODEDIT_MODULE_ROTATE, _( "Rotate 90 deg CCW" ),
+            AddMenuItem( transform_choice, ID_MODEDIT_MODULE_ROTATE, _( "Rotate Counterclockwise" ),
                          KiBitmap( rotate_ccw_xpm ) );
             AddMenuItem( transform_choice, ID_MODEDIT_MODULE_MIRROR, _( "Mirror" ),
                          KiBitmap( mirror_h_xpm ) );
@@ -350,7 +350,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                              KiBitmap( move_xpm ) );
             }
 
-            msg = AddHotkeyName( _("Rotate 90 deg CW" ), g_Module_Editor_Hokeys_Descr,
+            msg = AddHotkeyName( _("Rotate Clockwise" ), g_Module_Editor_Hokeys_Descr,
                                  HK_ROTATE_ITEM );
             AddMenuItem( PopMenu, ID_POPUP_PCB_ROTATE_TEXTMODULE, msg, KiBitmap( rotate_cw_xpm ) );
 

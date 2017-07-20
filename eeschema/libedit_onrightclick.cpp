@@ -194,7 +194,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         msg = AddHotkeyName( _( "Edit" ), g_Libedit_Hokeys_Descr, HK_EDIT );
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
 
-        msg = AddHotkeyName( _( "Rotate 90 deg CW" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
+        msg = AddHotkeyName( _( "Rotate Clockwise" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
         AddMenuItem( PopMenu, ID_LIBEDIT_ROTATE_ITEM, msg, KiBitmap( rotate_cw_xpm ) );
 
         if( not_edited )
@@ -253,7 +253,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
                          KiBitmap( move_xpm ) );
         }
 
-        msg = AddHotkeyName( _( "Rotate 90 deg CW" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
+        msg = AddHotkeyName( _( "Rotate Clockwise" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
         AddMenuItem( PopMenu, ID_LIBEDIT_ROTATE_ITEM, msg, KiBitmap( rotate_cw_xpm ) );
         msg = AddHotkeyName( _( "Edit" ), g_Libedit_Hokeys_Descr, HK_EDIT );
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
@@ -288,7 +288,7 @@ void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, LIB_EDIT_FRAME* frame )
     msg = AddHotkeyName( _( "Edit" ), g_Libedit_Hokeys_Descr, HK_EDIT);
     AddMenuItem( PopMenu, ID_LIBEDIT_EDIT_PIN, msg, KiBitmap( edit_xpm ) );
 
-    msg = AddHotkeyName( _( "Rotate 90 deg CW" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
+    msg = AddHotkeyName( _( "Rotate Clockwise" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
     AddMenuItem( PopMenu, ID_LIBEDIT_ROTATE_ITEM, msg, KiBitmap( rotate_cw_xpm ) );
 
     if( not_in_move )
@@ -344,7 +344,7 @@ void AddMenusForBlock( wxMenu* PopMenu, LIB_EDIT_FRAME* frame )
         msg = AddHotkeyName( _( "Flip Block Vertical" ), g_Libedit_Hokeys_Descr, HK_MIRROR_X );
         AddMenuItem( PopMenu, ID_POPUP_MIRROR_X_BLOCK, msg,
                      KiBitmap( mirror_v_xpm ) );
-        msg = AddHotkeyName( _( "Rotate 90 deg CCW" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
+        msg = AddHotkeyName( _( "Rotate Counterclockwise" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
         AddMenuItem( PopMenu, ID_POPUP_ROTATE_BLOCK, msg,
                      KiBitmap( rotate_ccw_xpm ) );
         AddMenuItem( PopMenu, ID_POPUP_DELETE_BLOCK, _( "Delete Block" ), KiBitmap( delete_xpm ) );
