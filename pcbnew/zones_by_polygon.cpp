@@ -129,7 +129,7 @@ void PCB_EDIT_FRAME::duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone )
     // do nothing
     if( success && ( aZone->GetLayer() == zoneSettings.m_CurrentZone_Layer ) )
     {
-        DisplayError( this,
+        DisplayErrorMessage( this,
             _( "The duplicated zone cannot be on the same layer as the original zone." ) );
         success = false;
     }
@@ -360,7 +360,7 @@ void PCB_EDIT_FRAME::End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER*
 
     if( error_count )
     {
-        DisplayError( this, _( "Area: DRC outline error" ) );
+        DisplayErrorMessage( this, _( "Area: DRC outline error" ) );
     }
 }
 
@@ -418,7 +418,7 @@ void PCB_EDIT_FRAME::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* aZone )
 
     if( error_count )
     {
-        DisplayError( this, _( "Area: DRC outline error" ) );
+        DisplayErrorMessage( this, _( "Area: DRC outline error" ) );
     }
 }
 
@@ -532,7 +532,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
     {
         if( GetToolId() == ID_PCB_KEEPOUT_AREA_BUTT && !IsCopperLayer( GetActiveLayer() ) )
         {
-            DisplayError( this,
+            DisplayErrorMessage( this,
                           _( "Error: a keepout area is allowed only on copper layers" ) );
             return 0;
         }
@@ -682,7 +682,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
             // SCREEN::SetCurItem(), so the DRC error remains on screen.
             // PCB_EDIT_FRAME::SetCurItem() calls DisplayInfo().
             GetScreen()->SetCurItem( NULL );
-            DisplayError( this,
+            DisplayErrorMessage( this,
                           _( "DRC error: this start point is inside or too close an other area" ) );
             return 0;
         }
@@ -747,7 +747,7 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
 
         if( g_Drc_On && m_drc->Drc( zone, icorner ) == BAD_DRC )      // we can't validate the closing edge
         {
-            DisplayError( this,
+            DisplayErrorMessage( this,
                           _( "DRC error: closing this area creates a DRC error with an other area" ) );
             m_canvas->MoveCursorToCrossHair();
             return false;
@@ -809,7 +809,7 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
 
     if( error_count )
     {
-        DisplayError( this, _( "Area: DRC outline error" ) );
+        DisplayErrorMessage( this, _( "Area: DRC outline error" ) );
     }
 
     UpdateCopyOfZonesList( s_PickedList, s_AuxiliaryList, GetBoard() );

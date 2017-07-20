@@ -86,13 +86,11 @@ bool PCB_EDIT_FRAME::AppendBoardFile( const wxString& aFullFileName, int aCtl )
     catch( const IO_ERROR& ioe )
     {
         for( TRACK* track = GetBoard()->m_Track; track; track = track->Next() )
+        {
             track->ClearFlags( FLAG0 );
+        }
 
-        wxString msg = wxString::Format( _(
-                "Error loading board.\n%s" ),
-                GetChars( ioe.What() )
-                );
-        DisplayError( this, msg );
+        DisplayErrorMessage( this, _( "Error loading board in AppendBoardFile" ), ioe.What() );
 
         return false;
     }

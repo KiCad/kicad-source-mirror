@@ -160,7 +160,9 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs()
         }
         catch( const IO_ERROR& ioe )
         {
-            DisplayError( NULL, ioe.What() );
+            DisplayErrorMessage( nullptr,
+                                 _( "Error loading project footprint libraries" ),
+                                 ioe.What() );
         }
     }
 

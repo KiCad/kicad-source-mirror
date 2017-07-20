@@ -357,13 +357,13 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
         // if we are here, a incorrect global footprint library table was found.
         // Incorrect global footprint library table is not a fatal error:
         // the user just has to edit the (partially) loaded table.
-        wxString msg = wxString::Format( _(
-            "An error occurred attempting to load the global footprint library "
-            "table:\n\n%s\n\n"
-            "Please edit this global footprint library table in Preferences menu" ),
-            GetChars( ioe.What() )
+
+        wxString msg = _(
+            "An error occurred attempting to load the global footprint library table:\n"
+            "Please edit this global footprint library table in Preferences menu"
             );
-        DisplayError( NULL, msg );
+
+        DisplayErrorMessage( NULL, msg, ioe.What() );
     }
 
 #if defined(KICAD_SCRIPTING)

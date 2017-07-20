@@ -256,7 +256,11 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this, wxT( "PCB_EDIT_FRAME::Process_Config error" ) );
+        DisplayErrorMessage(
+                this,
+                _( "Unkown ID in Process Config" ),
+                wxString::Format( _( "PCB_EDIT_FRAME::Process_Config received ID %d" ), id ) );
+        break;
     }
 }
 

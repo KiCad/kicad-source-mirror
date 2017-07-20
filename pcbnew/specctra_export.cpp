@@ -151,9 +151,9 @@ bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
     }
     else
     {
-        errorText   += '\n';
-        errorText   += _( "Unable to export, please fix and try again." );
-        DisplayError( this, errorText );
+        DisplayErrorMessage( this,
+                             _( "Unable to export, please fix and try again" ),
+                             errorText );
     }
 
     return ok;

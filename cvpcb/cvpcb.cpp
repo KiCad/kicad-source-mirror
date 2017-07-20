@@ -177,12 +177,10 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     }
     catch( const IO_ERROR& ioe )
     {
-        wxString msg = wxString::Format( _(
-            "An error occurred attempting to load the global footprint library "
-            "table:\n\n%s" ),
-            GetChars( ioe.What() )
-            );
-        DisplayError( NULL, msg );
+        DisplayErrorMessage(
+            nullptr,
+            _( "An error occurred attempting to load the global footprint library table" ),
+            ioe.What() );
         return false;
     }
 

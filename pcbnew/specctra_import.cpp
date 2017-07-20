@@ -85,9 +85,11 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
                                       false );
 
     if( fullFileName == wxEmptyString )
+    {
         return;
+    }
 
-     SetCurItem( NULL );
+    SetCurItem( NULL );
 
     // To avoid issues with undo/redo lists (dangling pointers)
     // clear the lists
@@ -104,13 +106,14 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
     }
     catch( const IO_ERROR& ioe )
     {
-        wxString msg = ioe.What();
-        msg += '\n';
-        msg += _("BOARD may be corrupted, do not save it.");
-        msg += '\n';
-        msg += _("Fix problem and try again.");
+        wxString msg = _(
+                "Board may be corrupted, do not save it.\n"
+                "Fix problem and try again"
+                );
 
-        DisplayError( this, msg );
+        wxString extra = ioe.What();
+
+        DisplayErrorMessage( this, msg, extra);
         return;
     }
 
@@ -129,7 +132,9 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
 
         // add imported tracks (previous tracks are removed, therfore all are new)
         for( TRACK* track = GetBoard()->m_Track; track; track = track->Next() )
+        {
             view->Add( track );
+        }
    }
 
     SetStatusText( wxString( _( "Session file imported and merged OK." ) ) );

@@ -76,7 +76,10 @@ int checkGlError( const std::string& aInfo, bool aThrow )
         if( aThrow )
             throw std::runtime_error( (const char*) errorMsg.char_str() );
         else
-            DisplayError( nullptr, errorMsg );
+            DisplayErrorMessage(
+                    nullptr,
+                    _( "OpenGL error occurred" ),
+                    errorMsg );
     }
 
     return result;

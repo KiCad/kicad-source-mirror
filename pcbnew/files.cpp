@@ -520,11 +520,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
         catch( const IO_ERROR& ioe )
         {
-            wxString msg = wxString::Format( _(
-                    "Error loading board.\n%s" ),
-                    GetChars( ioe.What() )
-                    );
-            DisplayError( this, msg );
+            DisplayErrorMessage( this,
+                                 wxString::Format( _( "Error loading board file:\n%s" ), fullFileName ),
+                                 ioe.What() );
             return false;
         }
 

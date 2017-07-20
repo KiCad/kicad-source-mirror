@@ -248,7 +248,7 @@ static bool copy_pro_file_template( const SEARCH_STACK& aSearchS, const wxString
                     "Unable to find '%s' template config file." ),
                     GetChars( templateFile ) );
 
-            DisplayError( NULL, msg );
+            DisplayErrorMessage( nullptr, _( "Error copying project file template" ), msg );
 
             return false;
         }
@@ -412,7 +412,7 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs( KIWAY& aKiway )
         }
         catch( const IO_ERROR& ioe )
         {
-            DisplayError( NULL, ioe.What() );
+            DisplayErrorMessage( NULL, _( "Error loading project footprint library table" ), ioe.What() );
         }
     }
 

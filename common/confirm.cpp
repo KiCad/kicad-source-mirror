@@ -67,6 +67,7 @@ int DisplayExitDialog( wxWindow* parent, const wxString& aMessage )
 }
 
 
+// DisplayError should be deprecated, use DisplayErrorMessage instead
 void DisplayError( wxWindow* parent, const wxString& text, int displaytime )
 {
     wxMessageDialog* dialog;
