@@ -21,7 +21,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizerDir;
 	bSizerDir = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticTextOutputDirectory = new wxStaticText( this, wxID_ANY, _("Output Directory:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextOutputDirectory = new wxStaticText( this, wxID_ANY, _("Output directory:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextOutputDirectory->Wrap( -1 );
 	bSizerDir->Add( m_staticTextOutputDirectory, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -54,7 +54,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	
 	m_paperHPGLSizer = new wxStaticBoxSizer( new wxStaticBox( m_paperOptionsSizer->GetStaticBox(), wxID_ANY, _("HPGL Options") ), wxVERTICAL );
 	
-	m_staticText4 = new wxStaticText( m_paperHPGLSizer->GetStaticBox(), wxID_ANY, _("Page Size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4 = new wxStaticText( m_paperHPGLSizer->GetStaticBox(), wxID_ANY, _("Page size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
 	m_paperHPGLSizer->Add( m_staticText4, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -105,7 +105,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	
 	m_PlotFrameRefOpt = new wxCheckBox( sbSizerPlotFormat->GetStaticBox(), wxID_ANY, _("Plot border and title block"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PlotFrameRefOpt->SetValue(true); 
-	m_PlotFrameRefOpt->SetToolTip( _("Print (or not) the Frame references.") );
+	m_PlotFrameRefOpt->SetToolTip( _("Print the frame references.") );
 	
 	sbSizerPlotFormat->Add( m_PlotFrameRefOpt, 0, wxALL, 5 );
 	

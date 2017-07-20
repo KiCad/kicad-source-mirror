@@ -11,7 +11,7 @@
 
 WX_HTML_REPORT_PANEL_BASE::WX_HTML_REPORT_PANEL_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
-	m_box = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Output Messages:") ), wxVERTICAL );
+	m_box = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Output messages:") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer4;
 	fgSizer4 = new wxFlexGridSizer( 2, 1, 0, 0 );

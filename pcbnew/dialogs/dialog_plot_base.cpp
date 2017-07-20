@@ -23,7 +23,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizerPlotFmt;
 	bSizerPlotFmt = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextPlotFmt = new wxStaticText( this, wxID_ANY, _("Plot Format:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPlotFmt = new wxStaticText( this, wxID_ANY, _("Plot format:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPlotFmt->Wrap( -1 );
 	bSizerPlotFmt->Add( m_staticTextPlotFmt, 0, wxTOP, 5 );
 	
@@ -66,7 +66,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bmiddleSizer;
 	bmiddleSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_LayersSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Included Layers:") ), wxHORIZONTAL );
+	m_LayersSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Included layers:") ), wxHORIZONTAL );
 	
 	wxArrayString m_layerCheckListBoxChoices;
 	m_layerCheckListBox = new wxCheckListBox( m_LayersSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_layerCheckListBoxChoices, 0 );
@@ -146,7 +146,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizer14;
 	bSizer14 = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText11 = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Drill Marks:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText11 = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Drill marks:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
 	bSizer14->Add( m_staticText11, 0, wxRIGHT|wxLEFT, 5 );
 	
@@ -166,7 +166,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_scaleOpt->SetSelection( 1 );
 	bSizer14->Add( m_scaleOpt, 0, wxEXPAND|wxLEFT, 5 );
 	
-	m_staticText13 = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot Mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText13 = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Plot mode:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText13->Wrap( -1 );
 	bSizer14->Add( m_staticText13, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -274,7 +274,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizer22;
 	bSizer22 = new wxBoxSizer( wxVERTICAL );
 	
-	m_textPenSize = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("Pen size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textPenSize = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("Pen size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textPenSize->Wrap( -1 );
 	bSizer22->Add( m_textPenSize, 0, wxRIGHT|wxLEFT, 5 );
 	

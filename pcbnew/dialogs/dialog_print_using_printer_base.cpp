@@ -67,7 +67,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	wxString m_ScaleOptionChoices[] = { _("fit to page"), _("Scale 0.5"), _("Scale 0.7"), _("Approx. Scale 1"), _("Accurate Scale 1"), _("Scale 1.4"), _("Scale 2"), _("Scale 3"), _("Scale 4") };
 	int m_ScaleOptionNChoices = sizeof( m_ScaleOptionChoices ) / sizeof( wxString );
 	m_ScaleOption = new wxRadioBox( this, wxID_ANY, _("Approximate Scale"), wxDefaultPosition, wxDefaultSize, m_ScaleOptionNChoices, m_ScaleOptionChoices, 1, wxRA_SPECIFY_COLS );
-	m_ScaleOption->SetSelection( 0 );
+	m_ScaleOption->SetSelection( 3 );
 	bmiddleLeftSizer->Add( m_ScaleOption, 0, wxALL, 5 );
 	
 	m_FineAdjustXscaleTitle = new wxStaticText( this, wxID_ANY, _("X scale adjust:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -97,7 +97,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	wxStaticBoxSizer* sbOptionsSizer;
 	sbOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Generic Options") ), wxVERTICAL );
 	
-	m_TextPenWidth = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Default pen size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextPenWidth = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Default pen size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextPenWidth->Wrap( -1 );
 	m_TextPenWidth->SetToolTip( _("Pen size used to draw items that have no pen size specified.\nUsed mainly to draw items in sketch mode.") );
 	
@@ -138,7 +138,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	wxBoxSizer* bbuttonsSizer;
 	bbuttonsSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_PagesOptionChoices[] = { _("1 Page per Layer"), _("Single page") };
+	wxString m_PagesOptionChoices[] = { _("1 Page per layer"), _("Single page") };
 	int m_PagesOptionNChoices = sizeof( m_PagesOptionChoices ) / sizeof( wxString );
 	m_PagesOption = new wxRadioBox( this, wxID_PAGE_MODE, _("Page Print"), wxDefaultPosition, wxDefaultSize, m_PagesOptionNChoices, m_PagesOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_PagesOption->SetSelection( 0 );
