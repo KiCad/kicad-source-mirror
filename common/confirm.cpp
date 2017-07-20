@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@
  */
 
 #include <wx/stockitem.h>
+#include <wx/richmsgdlg.h>
 
 #include <bitmaps.h>
 #include <html_messagebox.h>
@@ -70,31 +71,47 @@ void DisplayError( wxWindow* parent, const wxString& text, int displaytime )
 {
     wxMessageDialog* dialog;
 
-    if( displaytime > 0 )
-        dialog = new wxMessageDialog( parent, text, _( "Warning" ),
-                                      wxOK | wxCENTRE | wxICON_INFORMATION
-                                      | wxRESIZE_BORDER
-                                      );
-    else
-        dialog = new wxMessageDialog( parent, text, _( "Error" ),
-                                      wxOK | wxCENTRE | wxICON_ERROR
-                                      | wxRESIZE_BORDER
-                                      );
+    int icon = displaytime > 0 ? wxICON_INFORMATION : wxICON_ERROR;
+
+    dialog = new wxMessageDialog( parent, text, _( "Warning" ),
+                                      wxOK | wxCENTRE | wxRESIZE_BORDER | icon );
 
     dialog->ShowModal();
     dialog->Destroy();
 }
 
 
-void DisplayInfoMessage( wxWindow* parent, const wxString& text, int displaytime )
+void DisplayErrorMessage( wxWindow* aParent, const wxString& aText, const wxString aExtraInfo )
 {
-    wxMessageDialog* dialog;
+    wxRichMessageDialog* dlg;
 
-    dialog = new wxMessageDialog( parent, text, _( "Info" ),
-                                  wxOK | wxCENTRE | wxICON_INFORMATION );
+    dlg = new wxRichMessageDialog( aParent, aText, _( "Error" ),
+                                   wxOK | wxCENTRE | wxRESIZE_BORDER | wxICON_ERROR );
 
-    dialog->ShowModal();
-    dialog->Destroy();
+    if( !aExtraInfo.IsEmpty() )
+    {
+        dlg->ShowDetailedText( aExtraInfo );
+    }
+
+    dlg->ShowModal();
+    dlg->Destroy();
+}
+
+
+void DisplayInfoMessage( wxWindow* aParent, const wxString& aMessage, const wxString aExtraInfo )
+{
+    wxRichMessageDialog* dlg;
+
+    dlg = new wxRichMessageDialog( aParent, aMessage, _( "Info" ),
+                                   wxOK | wxCENTRE | wxRESIZE_BORDER | wxICON_INFORMATION );
+
+    if( !aExtraInfo.IsEmpty() )
+    {
+        dlg->ShowDetailedText( aExtraInfo );
+    }
+
+    dlg->ShowModal();
+    dlg->Destroy();
 }
 
 

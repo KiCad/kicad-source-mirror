@@ -58,12 +58,25 @@ int DisplayExitDialog( wxWindow* aParent, const wxString& aMessage );
 void DisplayError( wxWindow* parent, const wxString& aMessage, int displaytime = 0 );
 
 /**
+ * Function DisplayErrorMessage
+ * displays an error message with \a aMessage
+ *
+ * @param aParent is the parent window
+ * @param aMessage is the message text to display
+ * @param aExtraInfo is extra data that can be optionally displayed in a collapsible pane
+ */
+void DisplayErrorMessage( wxWindow* aParent, const wxString& aMessage, const wxString aExtraInfo = wxEmptyString );
+
+
+/**
  * Function DisplayInfoMessage
  * displays an informational message box with \a aMessage.
  *
- * @warning Setting \a displaytime does not work.  Do not use it.
+ * @param aParent is the parent window
+ * @param aMessage is the message text to display
+ * @param aExtraInfo is the extra data that can be optionally displayed in a collapsible pane
  */
-void DisplayInfoMessage( wxWindow* parent, const wxString& aMessage, int displaytime = 0 );
+void DisplayInfoMessage( wxWindow* parent, const wxString& aMessage, const wxString aExtraInfo = wxEmptyString );
 
 /**
  * Function IsOK

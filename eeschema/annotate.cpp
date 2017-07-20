@@ -85,7 +85,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
         {
             wxString msg;
             msg.Printf( _( "%d duplicate time stamps were found and replaced." ), count );
-            DisplayInfoMessage( NULL, msg, 2 );
+            DisplayInfoMessage( NULL, msg );
         }
     }
 
