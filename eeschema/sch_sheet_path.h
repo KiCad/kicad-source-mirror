@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,8 +111,6 @@ typedef std::map<wxString, SCH_REFERENCE_LIST> SCH_MULTI_UNIT_REFERENCE_MAP;
  */
 class SCH_SHEET_PATH : public SCH_SHEETS
 {
-#define MAX_SHEET_DEPTH 32         /// Maximum number of levels for a sheet path.
-
     int m_pageNumber;              /// Page numbers are maintained by the sheet load order.
 
 public:
@@ -204,17 +202,6 @@ public:
     void UpdateAllScreenReferences();
 
     /**
-     * Function AnnotatePowerSymbols
-     * annotates the power symbols only starting at \a aReference in the sheet path.
-     * @param aLibs the library list to use
-     * @param aReference A pointer to the number for the reference designator of the
-     *                   first power symbol to be annotated.  If the pointer is NULL
-     *                   the annotation starts at 1.  The number is incremented for
-     *                   each power symbol annotated.
-     */
-    void AnnotatePowerSymbols( PART_LIBS* aLibs, int* aReference );
-
-    /**
      * Function GetComponents
      * adds a SCH_REFERENCE() object to \a aReferences for each component in the sheet.
      * @param aLibs the library list to use
@@ -244,7 +231,7 @@ public:
      * @param aReference The reference designator of the component.
      * @param aFootPrint The value to set the footprint field.
      * @param aSetVisible The value to set the field visibility flag.
-     * @return True if \a aReference was found otherwise false.
+     * @return true if \a aReference was found otherwise false.
      */
     bool SetComponentFootprint( const wxString& aReference, const wxString& aFootPrint,
                                 bool aSetVisible );
@@ -364,7 +351,7 @@ public:
     /**
      * Function IsModified
      * checks the entire hierarchy for any modifications.
-     * @returns True if the hierarchy is modified otherwise false.
+     * @return True if the hierarchy is modified otherwise false.
      */
     bool IsModified();
 
@@ -379,7 +366,11 @@ public:
 
     /**
      * Function AnnotatePowerSymbols
-     * clear and annotates the entire hierarchy of the sheet path list.
+     * Silently annotates the not yet annotated power symbols of the entire hierarchy
+     * of the sheet path list.
+     * It is called before creating a netlist, to annotate power symbols, without prompting
+     * the user about not annotated or duplicate for these symbols, if only these symbols
+     * need annotation ( a very frequent case ).
      * @param aLib the library list to use
      */
     void AnnotatePowerSymbols( PART_LIBS* aLib );

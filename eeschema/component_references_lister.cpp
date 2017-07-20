@@ -6,9 +6,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2011 jean-pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+ * Copyright (C) 1992-2011 jean-pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 1992-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -193,19 +193,6 @@ void SCH_REFERENCE_LIST::RemoveSubComponentsFromList()
 }
 
 
-void SCH_REFERENCE_LIST::ResetHiddenReferences()
-{
-    for( unsigned ii = 0; ii < componentFlatList.size(); ii++ )
-    {
-        if( componentFlatList[ii].GetRefStr()[0] == '#' )
-        {
-            componentFlatList[ii].m_IsNew  = true;
-            componentFlatList[ii].m_NumRef = 0;
-        }
-    }
-}
-
-
 void SCH_REFERENCE_LIST::GetRefsInUse( int aIndex, std::vector< int >& aIdList, int aMinRefId )
 {
     aIdList.clear();
@@ -291,9 +278,6 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId,
 
     int LastReferenceNumber = 0;
     int NumberOfUnits, Unit;
-
-    // Components with an invisible reference (power...) always are re-annotated.
-    ResetHiddenReferences();
 
     /* calculate index of the first component with the same reference prefix
      * than the current component.  All components having the same reference
@@ -727,7 +711,15 @@ void SCH_REFERENCE::Annotate()
     if( m_NumRef < 0 )
         m_Ref += wxChar( '?' );
     else
-        m_Ref = TO_UTF8( GetRef() << m_NumRef );
+    {
+        // To avoid a risk of duplicate, for power components
+        // the ref number is 0nnn instead of nnn.
+        // Just because sometimes only power components are annotated
+        if( GetLibPart() && GetLibPart()->IsPower() )
+            m_Ref = TO_UTF8( GetRef() << "0" << m_NumRef );
+        else
+            m_Ref = TO_UTF8( GetRef() << m_NumRef );
+    }
 
     m_RootCmp->SetRef( &m_SheetPath, FROM_UTF8( m_Ref.c_str() ) );
     m_RootCmp->SetUnit( m_Unit );

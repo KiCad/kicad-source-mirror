@@ -181,42 +181,6 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
 }
 
 
-void SCH_SHEET_PATH::AnnotatePowerSymbols( PART_LIBS* aLibs, int* aReference )
-{
-    int ref = 1;
-
-    if( aReference )
-        ref = *aReference;
-
-    for( EDA_ITEM* item = LastDrawList();  item;  item = item->Next() )
-    {
-        if( item->Type() != SCH_COMPONENT_T )
-            continue;
-
-        SCH_COMPONENT*  component = (SCH_COMPONENT*) item;
-        LIB_PART* part = component->GetPartRef().lock().get();
-
-        if( !part || !part->IsPower() )
-            continue;
-
-        wxString refstr = component->GetPrefix();
-
-        //str will be "C?" or so after the ClearAnnotation call.
-        while( refstr.Last() == '?' )
-            refstr.RemoveLast();
-
-        if( !refstr.StartsWith( wxT( "#" ) ) )
-            refstr.insert( refstr.begin(), wxChar( '#' ) );
-
-        refstr << wxT( "0" ) << ref;
-        component->SetRef( this, refstr );
-        ref++;
-    }
-
-    if( aReference )
-        *aReference = ref;
-}
-
 
 void SCH_SHEET_PATH::GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
                                     bool aIncludePowerSymbols )
@@ -562,10 +526,79 @@ void SCH_SHEET_LIST::ClearModifyStatus()
 
 void SCH_SHEET_LIST::AnnotatePowerSymbols( PART_LIBS* aLibs )
 {
-    int ref = 1;
+    // List of reference for power symbols
+    SCH_REFERENCE_LIST references;
 
+    // Map of locked components (not used, but needed by Annotate()
+    SCH_MULTI_UNIT_REFERENCE_MAP lockedComponents;
+
+    // Build the list of power components:
     for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
-        (*it).AnnotatePowerSymbols( aLibs, &ref );
+    {
+        SCH_SHEET_PATH& spath = *it;
+
+        for( EDA_ITEM* item = spath.LastDrawList(); item; item = item->Next() )
+        {
+            if( item->Type() != SCH_COMPONENT_T )
+                continue;
+
+            SCH_COMPONENT*  component = (SCH_COMPONENT*) item;
+            LIB_PART* part = component->GetPartRef().lock().get();
+
+            if( !part || !part->IsPower() )
+                continue;
+
+            if( part )
+            {
+                SCH_REFERENCE reference( component, part, spath );
+                references.AddItem( reference );
+            }
+        }
+    }
+
+    // Find duplicate, and silently clear annotation of duplicate
+    std::map<wxString, int> ref_list;   // stores the existing references
+
+    for( unsigned ii = 0; ii< references.GetCount(); ++ii )
+    {
+        wxString curr_ref = references[ii].GetRef();
+
+        if( ref_list.find( curr_ref ) == ref_list.end() )
+        {
+            ref_list[curr_ref] = ii;
+            continue;
+        }
+
+        // Possible duplicate, if the ref ends by a number:
+        if( curr_ref.Last() < '0' && curr_ref.Last() > '9' )
+            continue;   // not annotated
+
+        // Duplicate: clear annotation by removing the number ending the ref
+        while( curr_ref.Last() >= '0' && curr_ref.Last() <= '9' )
+            curr_ref.RemoveLast();
+
+        references[ii].SetRef( curr_ref );
+    }
+
+
+    // Break full components reference in name (prefix) and number:
+    // example: IC1 become IC, and 1
+    references.SplitReferences();
+
+    // Ensure all power symbols have the reference starting by '#'
+    // (No sure this is really useful)
+    for( unsigned ii = 0; ii< references.GetCount(); ++ii )
+    {
+        if( references[ii].GetRef()[0] != '#' )
+        {
+            wxString new_ref = "#" + references[ii].GetRef();
+            references[ii].SetRef( new_ref );
+        }
+    }
+
+    // Recalculate and update reference numbers in schematic
+    references.Annotate( false, 100, lockedComponents );
+    references.UpdateAnnotation();
 }
 
 

@@ -412,13 +412,6 @@ public:
     int FindUnit( size_t aIndex, int aUnit );
 
     /**
-     * Function ResetHiddenReferences
-     * clears the annotation for all references that have an invisible reference designator.
-     * Invisible reference designators always have # as the first letter.
-     */
-    void ResetHiddenReferences();
-
-    /**
      * Function GetRefsInUse
      * adds all the reference designator numbers greater than \a aMinRefId to \a aIdList
      * skipping the reference at \a aIndex.
