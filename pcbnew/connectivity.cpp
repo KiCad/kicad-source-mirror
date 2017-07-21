@@ -330,7 +330,10 @@ const std::list<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems(
         if( cl->Contains( aItem ) )
         {
             for( const auto item : *cl )
-                rv.push_back( item->Parent() );
+            {
+                if( item->Valid() )
+                    rv.push_back( item->Parent() );
+            }
         }
     }
 
@@ -346,7 +349,7 @@ const std::list<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetNetItems( int aNetC
 
     m_connAlgo->ForEachItem( [&items, aNetCode, &aTypes] ( CN_ITEM* aItem )
     {
-        if( aItem->Net() == aNetCode )
+        if( aItem->Valid() && aItem->Net() == aNetCode )
         {
             KICAD_T itemType = aItem->Parent()->Type();
 
@@ -406,7 +409,7 @@ const
     {
         for( auto connected : citem->ConnectedItems() )
         {
-            if( connected->Valid() &&  ( connected->Parent()->Type() == PCB_TRACE_T || connected->Parent()->Type() == PCB_VIA_T ) )
+            if( connected->Valid() && ( connected->Parent()->Type() == PCB_TRACE_T || connected->Parent()->Type() == PCB_VIA_T ) )
                 tracks.insert( static_cast<TRACK*> ( connected->Parent() ) );
         }
     }
@@ -462,6 +465,9 @@ unsigned int CONNECTIVITY_DATA::GetPadCount( int aNet ) const
 
     for( auto pad : m_connAlgo->PadList() )
     {
+        if( !pad->Valid() )
+            continue;
+
         auto dpad = static_cast<D_PAD*>( pad->Parent() );
 
         if( aNet < 0 || aNet == dpad->GetNetCode() )
@@ -508,7 +514,7 @@ const std::vector<VECTOR2I> CONNECTIVITY_DATA::NearestUnconnectedTargets(
         {
             for( auto item : *cl )
             {
-                if( item->Parent()->GetNetCode() == refNet
+                if( item->Valid() && item->Parent()->GetNetCode() == refNet
                     && item->Parent()->Type() != PCB_ZONE_AREA_T )
                 {
                     for( auto anchor : item->Anchors() )
@@ -565,7 +571,7 @@ const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems(
             {
                 for( int i = 0; aTypes[i] > 0; i++ )
                 {
-                    if( cnItem->Parent()->Type() == aTypes[i] )
+                    if( cnItem->Valid() && cnItem->Parent()->Type() == aTypes[i] )
                     {
                         rv.push_back( cnItem->Parent() );
                         break;

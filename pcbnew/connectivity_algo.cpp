@@ -61,7 +61,7 @@ CN_CLUSTER::~CN_CLUSTER()
 
 wxString CN_CLUSTER::OriginNetName() const
 {
-    if( !m_originPad )
+    if( !m_originPad || !m_originPad->Valid() )
         return "<none>";
     else
         return m_originPad->Parent()->GetNetname();
@@ -78,7 +78,7 @@ bool CN_CLUSTER::Contains( const BOARD_CONNECTED_ITEM* aItem )
 {
     for( auto item : m_items )
     {
-        if( item->Parent() == aItem )
+        if( item->Valid() && item->Parent() == aItem )
             return true;
     }
 
@@ -766,7 +766,7 @@ void CN_CONNECTIVITY_ALGO::propagateConnections()
             {
                 if( item->CanChangeNet() )
                 {
-                    if( item->Parent()->GetNetCode() != cluster->OriginNet() )
+                    if( item->Valid() && item->Parent()->GetNetCode() != cluster->OriginNet() )
                     {
                         MarkNetAsDirty( item->Parent()->GetNetCode() );
                         MarkNetAsDirty( cluster->OriginNet() );
@@ -850,12 +850,18 @@ void CN_CONNECTIVITY_ALGO::MarkNetAsDirty( int aNet )
 
 int CN_ITEM::AnchorCount() const
 {
+    if( !m_valid )
+        return 0;
+
     return m_parent->Type() == PCB_TRACE_T ? 2 : 1;
 }
 
 
 const VECTOR2I CN_ITEM::GetAnchor( int n ) const
 {
+    if( !m_valid )
+        return VECTOR2I();
+
     switch( m_parent->Type() )
     {
         case PCB_PAD_T:
@@ -882,6 +888,9 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
 
 int CN_ZONE::AnchorCount() const
 {
+    if( !Valid() )
+        return 0;
+
     const auto zone = static_cast<const ZONE_CONTAINER*>( Parent() );
     const auto& outline = zone->GetFilledPolysList().COutline( m_subpolyIndex );
 
@@ -891,6 +900,9 @@ int CN_ZONE::AnchorCount() const
 
 const VECTOR2I CN_ZONE::GetAnchor( int n ) const
 {
+    if( !Valid() )
+        return VECTOR2I();
+
     const auto zone = static_cast<const ZONE_CONTAINER*> ( Parent() );
     const auto& outline = zone->GetFilledPolysList().COutline( m_subpolyIndex );
 
@@ -900,7 +912,7 @@ const VECTOR2I CN_ZONE::GetAnchor( int n ) const
 
 int CN_ITEM::Net() const
 {
-    if( !m_parent )
+    if( !m_parent || !m_valid )
         return -1;
 
     return m_parent->GetNetCode();
@@ -909,6 +921,7 @@ int CN_ITEM::Net() const
 
 BOARD_CONNECTED_ITEM* CN_ANCHOR::Parent() const
 {
+    assert( m_item->Valid() );
     return m_item->Parent();
 }
 
