@@ -1,5 +1,5 @@
 * Copyright (C) 1992-2015 Jean-Pierre Charras
-* Copyright (C) 1992-2015 Kicad Developers Team
+* Copyright (C) 1992-2017 Kicad Developers Team
 * under GNU General Public License (see copyright.txt)
 
 == Main Authors
@@ -38,8 +38,7 @@ Chris Pavlina <pavlina.chris[at]gmail-dot-com>
 Simon Richter <Simon.Richter[at]hogyros-dot-de>
 Mario Luzeiro <mrluzeiro[at]ua-dot-pt>
 Mateusz Skowroński <skowri[at]gmail-dot-com>
-Cheng Sheng <chengsheng[at]google-dot-com>
-Google Inc.
+Cheng Sheng <chengsheng[at]google-dot-com> Google Inc.
 Kristoffer Ödmark <kristoffer.odmark90[at]gmail-dot-com>
 See also CHANGELOG.txt for contributors.
 
