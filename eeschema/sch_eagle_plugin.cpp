@@ -1332,6 +1332,10 @@ LIB_RECTANGLE* SCH_EAGLE_PLUGIN::loadSymbolRectangle( LIB_PART* aPart, wxXmlNode
     rectangle->SetEnd( wxPoint( rect.x2 * EUNIT_TO_MIL, rect.y2 * EUNIT_TO_MIL ) );
 
     // TODO: Manage rotation
+    // Probaly using a transform.
+
+    // Eagle rectangles are filled by definition.
+    rectangle->SetFillMode(FILLED_SHAPE);
 
     return rectangle.release();
 }
