@@ -196,24 +196,74 @@ static COMPONENT_ORIENTATION_T kicadComponentRotation( float eagleDegrees )
 
 
 
-void eagleToKicadAlignment(EDA_TEXT* aText, int aEagleAlignment)
+void eagleToKicadAlignment( EDA_TEXT* aText, int aEagleAlignment, int reldegrees, bool mirror, bool spin, int absdegrees )
 {
+    int align = aEagleAlignment;
 
-    switch( aEagleAlignment )
+    if( reldegrees == 90)
+    {
+        aText->SetTextAngle( 900 );
+    }
+    else if( reldegrees == 180 )
+        align = -align;
+    else if( reldegrees == 270 )
+    {
+        aText->SetTextAngle( 900 );
+        align = -align;
+    }
+
+    if( mirror == true){
+
+        if(absdegrees == 90 || absdegrees == 270)
+        {
+            if( align == ETEXT::BOTTOM_RIGHT )
+                align = ETEXT::TOP_RIGHT;
+            else if( align == ETEXT::BOTTOM_LEFT )
+                align = ETEXT::TOP_LEFT;
+            else if( align == ETEXT::TOP_LEFT )
+                align = ETEXT::BOTTOM_LEFT;
+            else if( align == ETEXT::TOP_RIGHT )
+                align = ETEXT::BOTTOM_RIGHT;
+        }
+        else if (absdegrees == 0 || absdegrees == 180)
+        {
+            if( align == ETEXT::BOTTOM_RIGHT )
+                align = ETEXT::BOTTOM_LEFT;
+            else if( align == ETEXT::BOTTOM_LEFT )
+                align = ETEXT::BOTTOM_RIGHT;
+            else if( align == ETEXT::TOP_LEFT )
+                align = ETEXT::TOP_RIGHT;
+            else if( align == ETEXT::TOP_RIGHT )
+                align = ETEXT::TOP_LEFT;
+            else if( align == ETEXT::CENTER_LEFT )
+                align = ETEXT::CENTER_RIGHT;
+            else if( align == ETEXT::CENTER_RIGHT )
+                align = ETEXT::CENTER_LEFT;
+        }
+
+    }
+
+
+
+    switch( align )
     {
     case ETEXT::CENTER:
-        // this was the default in eda_text's constructor
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
     case ETEXT::CENTER_LEFT:
         aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
     case ETEXT::CENTER_RIGHT:
         aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
     case ETEXT::TOP_CENTER:
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
         aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
         break;
 
@@ -228,6 +278,7 @@ void eagleToKicadAlignment(EDA_TEXT* aText, int aEagleAlignment)
         break;
 
     case ETEXT::BOTTOM_CENTER:
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
         aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
         break;
 
@@ -242,10 +293,11 @@ void eagleToKicadAlignment(EDA_TEXT* aText, int aEagleAlignment)
         break;
 
     default:
-        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
         aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
     }
 }
+
 
 
 SCH_EAGLE_PLUGIN::SCH_EAGLE_PLUGIN()
@@ -1005,21 +1057,29 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     component->GetField( REFERENCE )->SetText( einstance.part );
 
+
+
     if( epart->value )
     {
         component->GetField( VALUE )->SetText( *epart->value );
-        component->GetField( VALUE )->SetVisible( true );
     }
     else
     {
-        component->GetField( VALUE )->SetVisible( false );
+        if(epart->device.length()>0)
+        component->GetField( VALUE )->SetText( epart->device );
+        else  if(epart->deviceset.length()>0)
+        component->GetField( VALUE )->SetText( epart->deviceset );
     }
 
     if(part->GetField(REFERENCE)->IsVisible())
     component->GetField( REFERENCE )->SetVisible( true );
-
     else
     component->GetField( REFERENCE )->SetVisible( false );
+
+    if(part->GetField( VALUE )->IsVisible())
+    component->GetField( VALUE )->SetVisible( true );
+    else
+    component->GetField( VALUE )->SetVisible( false );
 
     wxXmlNode* attributeNode = aInstanceNode->GetChildren();
     while(attributeNode)
@@ -1030,17 +1090,40 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
             SCH_FIELD* field;
             if(attr.name == "NAME"){
+
                 field = component->GetField( REFERENCE );
                 field->SetPosition( wxPoint(*attr.x* EUNIT_TO_MIL, *attr.y*-EUNIT_TO_MIL) );
                 int align = attr.align ? *attr.align : ETEXT::BOTTOM_LEFT;
-                eagleToKicadAlignment((EDA_TEXT*)field, align);
+
+                int absdegrees = attr.rot ? attr.rot->degrees : 0;
+                bool mirror = attr.rot ? attr.rot->mirror : false;
+                if(einstance.rot)if(einstance.rot->mirror){
+                    mirror = !mirror;
+                }
+                bool spin = attr.rot ? attr.rot->spin : false;
+
+                int reldegrees = ( absdegrees - einstance.rot->degrees + 360.0);
+                reldegrees %= 360;
+
+                eagleToKicadAlignment((EDA_TEXT*)field, align, reldegrees, mirror, spin, absdegrees);
+
             }
 
             else if (attr.name == "VALUE"){
                 field = component->GetField( VALUE );
                 field->SetPosition( wxPoint(*attr.x* EUNIT_TO_MIL, *attr.y*-EUNIT_TO_MIL) );
                 int align = attr.align ? *attr.align : ETEXT::BOTTOM_LEFT;
-                eagleToKicadAlignment((EDA_TEXT*)field, align);
+
+                int absdegrees = attr.rot ? attr.rot->degrees : 0;
+                bool mirror = attr.rot ? attr.rot->mirror : false;
+                bool spin = attr.rot ? attr.rot->spin : false;
+                if(einstance.rot)if(einstance.rot->mirror){
+                    mirror = !mirror;
+                }
+                int reldegrees = ( absdegrees - einstance.rot->degrees + 360.0);
+                reldegrees %= 360;
+
+                eagleToKicadAlignment((EDA_TEXT*)field, align, reldegrees, mirror, spin, absdegrees);
             }
         }
         attributeNode = attributeNode->GetNext();
@@ -1240,7 +1323,6 @@ void SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
                 pin->SetPartNumber( gateNumber );
                 pin->SetUnit( gateNumber );
                 aPart->AddDrawItem( pin );
-                break;
             }
         }
         else if( nodeName == "polygon" )
@@ -1485,8 +1567,8 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymboltext( LIB_PART* aPart, wxXmlNode* aLibText
 
     libtext->SetPosition( wxPoint( etext.x * EUNIT_TO_MIL, etext.y * EUNIT_TO_MIL ) );
     libtext->SetText( aLibText->GetNodeContent() );
-    libtext->SetTextSize( wxSize( int(etext.size * EUNIT_TO_MIL*0.95),
-                    int(etext.size * EUNIT_TO_MIL*0.95) ) );
+    libtext->SetTextSize( wxSize( etext.size * EUNIT_TO_MIL*0.95,
+                    etext.size * EUNIT_TO_MIL*0.95 ) );
 
     if( etext.ratio )
     {
@@ -1499,8 +1581,12 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymboltext( LIB_PART* aPart, wxXmlNode* aLibText
 
     int align = etext.align ? *etext.align : ETEXT::BOTTOM_LEFT;
 
-    eagleToKicadAlignment((EDA_TEXT*)libtext.get(), align);
 
+    int degrees = etext.rot ? etext.rot->degrees : 0;
+    bool mirror = etext.rot ? etext.rot->mirror : false;
+    bool spin = etext.rot ? etext.rot->spin : false;
+
+    eagleToKicadAlignment((EDA_TEXT*)libtext.get(), align, degrees, mirror, spin, 0);
 
     return libtext.release();
 }
@@ -1531,7 +1617,13 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadplaintext( wxXmlNode* aSchText )
 
     int align = etext.align ? *etext.align : ETEXT::BOTTOM_LEFT;
 
-    eagleToKicadAlignment((EDA_TEXT*)schtext.get(), align);
+
+    int degrees = etext.rot ? etext.rot->degrees : 0;
+    bool mirror = etext.rot ? etext.rot->mirror : false;
+    bool spin = etext.rot ? etext.rot->spin : false;
+
+    eagleToKicadAlignment((EDA_TEXT*)schtext.get(), align, degrees, mirror, spin, 0);
+
 
 
     return schtext.release();
