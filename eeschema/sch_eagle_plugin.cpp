@@ -103,56 +103,67 @@ static int countChildren( wxXmlNode* aCurrentNode, const std::string& aName )
     return count;
 }
 
-
-static SCH_LAYER_ID kicadLayer( int aEagleLayer )
+void SCH_EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
 {
-    /**
-     * Layers in Kicad schematics are not actually layers, but abstract groups mainly used to
-     * decide item colours.
-     *
-     * <layers>
-     *     <layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
-     *     <layer number="91" name="Nets" color="2" fill="1" visible="yes" active="yes"/>
-     *     <layer number="92" name="Busses" color="1" fill="1" visible="yes" active="yes"/>
-     *     <layer number="93" name="Pins" color="2" fill="1" visible="no" active="yes"/>
-     *     <layer number="94" name="Symbols" color="4" fill="1" visible="yes" active="yes"/>
-     *     <layer number="95" name="Names" color="7" fill="1" visible="yes" active="yes"/>
-     *     <layer number="96" name="Values" color="7" fill="1" visible="yes" active="yes"/>
-     *     <layer number="97" name="Info" color="7" fill="1" visible="yes" active="yes"/>
-     *     <layer number="98" name="Guide" color="6" fill="1" visible="yes" active="yes"/>
-     * </layers>
-     */
+    std::vector<ELAYER>     eagleLayers;
 
-    switch( aEagleLayer )
+    // Get the first layer and iterate
+    wxXmlNode* layerNode = aLayers->GetChildren();
+
+    // find the subset of layers that are copper, and active
+    while( layerNode )
     {
-    case 90:
-        break;
+        ELAYER  elayer( layerNode );
+        eagleLayers.push_back(elayer);
 
-    case 91:
-        return LAYER_WIRE;
-
-    case 92:
-        return LAYER_BUS;
-
-    case 93:
-        break;
-
-    case 94:
-        break;
-
-    case 95:
-        break;
-
-    case 96:
-        break;
-
-    case 97:
-        return LAYER_NOTES;
-
-    case 98:
-        break;
+        layerNode = layerNode->GetNext();
     }
-    return LAYER_NOTES;
+
+    for( const auto &elayer : eagleLayers )
+    {
+        /**
+         * Layers in Kicad schematics are not actually layers, but abstract groups mainly used to
+         * decide item colours.
+         *
+         * <layers>
+         *     <layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
+         *     <layer number="91" name="Nets" color="2" fill="1" visible="yes" active="yes"/>
+         *     <layer number="92" name="Busses" color="1" fill="1" visible="yes" active="yes"/>
+         *     <layer number="93" name="Pins" color="2" fill="1" visible="no" active="yes"/>
+         *     <layer number="94" name="Symbols" color="4" fill="1" visible="yes" active="yes"/>
+         *     <layer number="95" name="Names" color="7" fill="1" visible="yes" active="yes"/>
+         *     <layer number="96" name="Values" color="7" fill="1" visible="yes" active="yes"/>
+         *     <layer number="97" name="Info" color="7" fill="1" visible="yes" active="yes"/>
+         *     <layer number="98" name="Guide" color="6" fill="1" visible="yes" active="yes"/>
+         * </layers>
+         */
+
+        if(elayer.name == "Nets")
+        {
+            m_LayerMap[elayer.number] = LAYER_WIRE;
+        }
+        else if(elayer.name == "Info" || elayer.name == "Guide")
+        {
+            m_LayerMap[elayer.number] = LAYER_NOTES;
+        }
+        else if(elayer.name == "Busses")
+        {
+            m_LayerMap[elayer.number] = LAYER_BUS;
+        }
+    }
+}
+
+
+SCH_LAYER_ID SCH_EAGLE_PLUGIN::kicadLayer( int aEagleLayer )
+{
+    if(m_LayerMap.find(aEagleLayer) == m_LayerMap.end() )
+    {
+            return LAYER_NOTES;
+    }
+    else
+    {
+        return m_LayerMap[aEagleLayer];
+    }
 }
 
 
@@ -363,7 +374,8 @@ void SCH_EAGLE_PLUGIN::loadDrawing( wxXmlNode* aDrawingNode )
     // wxXmlNode* grid = drawingChildren["grid"]
 
     // TODO: handle layers nodes
-    // wxXmlNode* layers = drawingChildren["layers"]
+     wxXmlNode* layers = drawingChildren["layers"];
+     loadLayerDefs(layers);
 
     // TODO: handle library nodes
     // wxXmlNode* library = drawingChildren["library"]

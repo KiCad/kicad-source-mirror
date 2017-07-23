@@ -129,6 +129,7 @@ public:
 
 private:
     void loadDrawing( wxXmlNode* aDrawingNode );
+    void loadLayerDefs( wxXmlNode* aLayers );
     void loadSchematic( wxXmlNode* aSchematicNode );
     void loadSheet( wxXmlNode* aSheetNode );
     void loadInstance( wxXmlNode* aInstanceNode );
@@ -137,6 +138,7 @@ private:
     void countNets( wxXmlNode* aSchematicNode );
     void addBusEntries();
 
+    SCH_LAYER_ID kicadLayer( int aEagleLayer );
     wxPoint findNearestLinePoint(wxPoint aPoint, const DLIST< SCH_LINE >& lines);
 
     void                loadSegments( wxXmlNode* aSegmentsNode, const wxString& aNetName,
@@ -166,7 +168,7 @@ private:
 
     EDA_RECT sheetBoundingBox;
     std::map<std::string, int > m_NetCounts;
-
+    std::map<int, SCH_LAYER_ID> m_LayerMap;
 
 protected:
 };
