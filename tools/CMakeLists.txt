@@ -36,4 +36,15 @@ target_link_libraries( property_tree
     ${wxWidgets_LIBRARIES}
     )
 
+
+add_executable( utf8_tests
+    EXCLUDE_FROM_ALL
+    utf8_tests.cpp
+    )
+target_link_libraries( utf8_tests
+    common
+    ${wxWidgets_LIBRARIES}
+    )
+
+
 add_subdirectory( io_benchmark )
