@@ -5,8 +5,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2015 Jean-Pierre Charras
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 Jean-Pierre Charras
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -168,7 +168,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     wxString currdirname = fileName.GetPathWithSep();
     wxDir dir( currdirname );
 
-    if( !dir.IsOpened() )
+    if( !dir.IsOpened() )   // wxWidgets display a error message on issue.
         return;
 
     wxSetWorkingDirectory( currdirname );
@@ -177,6 +177,13 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     wxString zipfilename = zip.GetFullPath();
 
     wxFFileOutputStream ostream( zipfilename );
+
+    if( !ostream.IsOk() )   // issue to create the file. Perhaps not writable dir
+    {
+        wxMessageBox( wxString::Format( _( "Unable to create zip archive file '%s'" ), zipfilename ) );
+        return;
+    }
+
     wxZipOutputStream zipstream( ostream );
 
     // Build list of filenames to put in zip archive
