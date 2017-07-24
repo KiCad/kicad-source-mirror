@@ -1081,9 +1081,13 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
 {
     // updateLayers updates geometry too, so we do not have to update both of them at the same time
     if( aUpdateFlags & LAYERS )
+    {
         updateLayers( aItem );
+    }
     else if( aUpdateFlags & GEOMETRY )
+    {
         updateBbox( aItem );
+    }
 
     int layers[VIEW_MAX_LAYERS], layers_count;
     aItem->ViewGetLayers( layers, layers_count );

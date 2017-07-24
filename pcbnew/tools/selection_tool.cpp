@@ -426,7 +426,9 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag )
     {
     case 0:
         if( !m_additive && anyCollected )
+        {
             clearSelection();
+        }
 
         return false;
 
@@ -449,7 +451,9 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag )
         else if( collector.GetCount() > 1 )
         {
             if( aOnDrag )
+            {
                 Wait( TOOL_EVENT( TC_ANY, TA_MOUSE_UP, BUT_LEFT ) );
+            }
 
             item = disambiguationMenu( &collector );
 
@@ -1517,7 +1521,7 @@ void SELECTION_TOOL::selectVisually( BOARD_ITEM* aItem )
     // Hide the original item, so it is shown only on overlay
     aItem->SetSelected();
     view()->Hide( aItem, true );
-    view()->Update( aItem, KIGFX::GEOMETRY );
+    view()->Update( aItem, KIGFX::COLOR );
 
     // Modules are treated in a special way - when they are selected, we have to
     // unselect all the parts that make the module, not the module itself
@@ -1528,8 +1532,8 @@ void SELECTION_TOOL::selectVisually( BOARD_ITEM* aItem )
         {
             item->SetSelected();
             view()->Hide( item, true );
-            view()->Update( item, KIGFX::GEOMETRY );
-        } );
+            view()->Update( item, KIGFX::COLOR );
+        });
     }
 
     view()->Update( &m_selection );
@@ -1541,7 +1545,7 @@ void SELECTION_TOOL::unselectVisually( BOARD_ITEM* aItem )
     // Restore original item visibility
     aItem->ClearSelected();
     view()->Hide( aItem, false );
-    view()->Update( aItem, KIGFX::ALL );
+    view()->Update( aItem, KIGFX::COLOR );
 
     // Modules are treated in a special way - when they are selected, we have to
     // unselect all the parts that make the module, not the module itself
@@ -1552,7 +1556,7 @@ void SELECTION_TOOL::unselectVisually( BOARD_ITEM* aItem )
         {
             item->ClearSelected();
             view()->Hide( item, false );
-            view()->Update( item, KIGFX::ALL );
+            view()->Update( item, KIGFX::COLOR );
         });
     }
 
