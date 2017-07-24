@@ -869,6 +869,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aN
     wxPoint elabelpos( elabel.x * EUNIT_TO_MIL, -elabel.y * EUNIT_TO_MIL );
 
     wxString netname = elabel.netname;
+    netname.Replace("~", "~~");
     netname.Replace("!", "~");
 
     if(m_NetCounts[aNetName.ToStdString()]>1){
@@ -1307,11 +1308,10 @@ void SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
                         pin->SetUnit( gateNumber );
 
 
-                        string pinname = pin->GetName().ToStdString();
-                        if(pinname[0] == '!'){
-                            pinname[0] = '~';
-                            pin->SetName( pinname );
-                        }
+                        wxString pinname = pin->GetName();
+                        pinname.Replace("~", "~~");
+                        pinname.Replace("!", "~");
+                        pin->SetName( pinname );
 
                         aPart->AddDrawItem( pin );
                         break;
@@ -1601,7 +1601,10 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadplaintext( wxXmlNode* aSchText )
 
     schtext->SetItalic( false );
     schtext->SetPosition( wxPoint( etext.x * EUNIT_TO_MIL, -etext.y * EUNIT_TO_MIL ) );
-    schtext->SetText( aSchText->GetNodeContent() );
+    wxString thetext = aSchText->GetNodeContent();
+    thetext.Replace("~", "~~");
+    thetext.Replace("!", "~");
+    schtext->SetText( thetext );
 
     if( etext.ratio )
     {
