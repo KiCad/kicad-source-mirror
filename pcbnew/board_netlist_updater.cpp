@@ -11,7 +11,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,12 +108,12 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
         msg.Printf( _( "Adding new component \"%s:%s\" footprint \"%s\".\n" ),
                     GetChars( aComponent->GetReference() ),
                     GetChars( aComponent->GetTimeStamp() ),
-                    GetChars( FROM_UTF8( aComponent->GetFPID().Format() ) ) );
+                    GetChars( aComponent->GetFPID().Format() ) );
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
         msg.Printf( _( "Add component %s, footprint: %s.\n" ),
                     GetChars( aComponent->GetReference() ),
-                    GetChars( FROM_UTF8( aComponent->GetFPID().Format() ) ) );
+                    GetChars( aComponent->GetFPID().Format() ) );
         m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
 
@@ -135,7 +135,7 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
     {
         msg.Printf( _( "Cannot add component %s due to missing footprint %s.\n" ),
                     GetChars( aComponent->GetReference() ),
-                    GetChars( FROM_UTF8( aComponent->GetFPID().Format() ) ) );
+                    GetChars( aComponent->GetFPID().Format() ) );
 
         m_reporter->Report( msg, REPORTER::RPT_ERROR );
 
@@ -143,7 +143,7 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
                        "footprint \"%s\".\n" ),
                     GetChars( aComponent->GetReference() ),
                     GetChars( aComponent->GetTimeStamp() ),
-                    GetChars( FROM_UTF8( aComponent->GetFPID().Format() ) ) );
+                    GetChars( aComponent->GetFPID().Format() ) );
 
         m_reporter->Report( msg, REPORTER::RPT_INFO );
         ++m_errorCount;
@@ -168,8 +168,8 @@ MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE* aPcb
     {
         msg.Printf( _( "Change component %s footprint from %s to %s.\n"),
                     GetChars( aPcbComponent->GetReference() ),
-                    GetChars( FROM_UTF8( aPcbComponent->GetFPID().Format() ) ),
-                    GetChars( FROM_UTF8( aNewComponent->GetFPID().Format() ) ) );
+                    GetChars( aPcbComponent->GetFPID().Format() ),
+                    GetChars( aNewComponent->GetFPID().Format() ) );
 
         m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
@@ -177,8 +177,8 @@ MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE* aPcb
                        "\"%s\".\n" ),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aPcbComponent->GetPath() ),
-                    GetChars( FROM_UTF8( aPcbComponent->GetFPID().Format() ) ),
-                    GetChars( FROM_UTF8( aNewComponent->GetFPID().Format() ) ) );
+                    GetChars( aPcbComponent->GetFPID().Format() ),
+                    GetChars( aNewComponent->GetFPID().Format() ) );
 
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
@@ -206,7 +206,7 @@ MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE* aPcb
         msg.Printf( _( "Cannot change component %s footprint due to missing "
                        "footprint %s.\n" ),
                     GetChars( aPcbComponent->GetReference() ),
-                    GetChars( FROM_UTF8( aNewComponent->GetFPID().Format() ) ) );
+                    GetChars( aNewComponent->GetFPID().Format() ) );
 
         m_reporter->Report( msg, REPORTER::RPT_ERROR );
 
@@ -214,7 +214,7 @@ MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE* aPcb
                        "footprint \"%s\".\n" ),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aPcbComponent->GetPath() ),
-                    GetChars( FROM_UTF8( aNewComponent->GetFPID().Format() ) ) );
+                    GetChars( aNewComponent->GetFPID().Format() ) );
 
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
@@ -583,7 +583,7 @@ bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist )
             msg.Printf( _( "Component %s pad %s not found in footprint %s\n" ),
                         GetChars( component->GetReference() ),
                         GetChars( padname ),
-                        GetChars( FROM_UTF8( footprint->GetFPID().Format() ) ) );
+                        GetChars( footprint->GetFPID().Format() ) );
             m_reporter->Report( msg, REPORTER::RPT_ERROR );
             ++m_errorCount;
         }
@@ -631,7 +631,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         msg.Printf( _( "Processing component \"%s:%s:%s\".\n" ),
                     GetChars( component->GetReference() ),
                     GetChars( component->GetTimeStamp() ),
-                    GetChars( FROM_UTF8( component->GetFPID().Format() ) ) );
+                    GetChars( component->GetFPID().Format() ) );
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
         if( aNetlist.IsFindByTimeStamp() )

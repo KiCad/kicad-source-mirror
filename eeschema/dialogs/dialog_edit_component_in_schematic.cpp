@@ -343,7 +343,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
 
     tmp.Replace( wxT( " " ), wxT( "_" ) );
 
-    id.SetLibItemName( TO_UTF8( tmp ), false );
+    id.SetLibItemName( tmp, false );
 
     // Save current flags which could be modified by next change settings
     STATUS_FLAGS flags = m_cmp->GetFlags();
@@ -359,7 +359,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
         if( libs->FindLibraryAlias( id ) == NULL )
         {
             wxString msg = wxString::Format( _( "Component '%s' not found!" ),
-                                             GetChars( FROM_UTF8( id.Format() ) ) );
+                                             GetChars( id.Format() ) );
             DisplayError( this, msg );
         }
         else    // Change component from lib!
@@ -1096,7 +1096,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
         convertCheckBox->Enable( false );
 
     // Set the component's library name.
-    chipnameTextCtrl->SetValue( FROM_UTF8( m_cmp->GetLibId().Format() ) );
+    chipnameTextCtrl->SetValue( m_cmp->GetLibId().Format() );
 
     // Set the component's unique ID time stamp.
     m_textCtrlTimeStamp->SetValue( wxString::Format( wxT( "%8.8lX" ),

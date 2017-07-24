@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2016 Wayne Stambaugh, stambaughw@gmail.com
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -280,8 +280,7 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
     const LIB_PART* part = GetParent()->Prj().SchLibs()->FindLibPart( component->GetLibId() );
 
     wxASSERT_MSG( part, wxT( "Library part for component <" ) +
-                  FROM_UTF8( component->GetLibId().Format() ) +
-                  wxT( "> could not be found." ) );
+                  component->GetLibId().Format() + wxT( "> could not be found." ) );
 
     m_isPower = part->IsPower();
 

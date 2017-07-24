@@ -28,6 +28,26 @@
 #include <string>
 #include <wx/string.h>
 
+#if defined(DEBUG)
+ #define UTF8_VERIFY    // Might someday be a hidden cmake config option
+#endif
+
+
+/**
+ * Function IsUTF8
+ * tests a c-string to see if it is UTF8 encoded.  BTW an ASCII string is a valid
+ * UTF8 string.
+ */
+bool IsUTF8( const char* aString );
+
+
+#if defined(UTF8_VERIFY)
+ #define MAYBE_VERIFY_UTF8(x)       wxASSERT( IsUTF8(x) )
+#else
+ #define MAYBE_VERIFY_UTF8(x)       // nothing
+#endif
+
+
 /**
  * Class UTF8
  * is an 8 bit std::string that is assuredly encoded in UTF8, and supplies special
@@ -61,6 +81,7 @@ public:
     UTF8( const char* txt ) :
         std::string( txt )
     {
+        MAYBE_VERIFY_UTF8( c_str() );
     }
 
     /// For use with _() function on wx 2.8.
@@ -70,6 +91,7 @@ public:
     UTF8( const std::string& o ) :
         std::string( o )
     {
+        MAYBE_VERIFY_UTF8( c_str() );
     }
 
     UTF8() :
@@ -86,18 +108,24 @@ public:
     UTF8& operator=( const std::string& o )
     {
         std::string::operator=( o );
+
+        MAYBE_VERIFY_UTF8( c_str() );
         return *this;
     }
 
     UTF8& operator=( const char* s )
     {
         std::string::operator=( s );
+
+        MAYBE_VERIFY_UTF8( c_str() );
         return *this;
     }
 
     UTF8& operator=( char c )
     {
         std::string::operator=( c );
+
+        MAYBE_VERIFY_UTF8( c_str() );
         return *this;
     }
 

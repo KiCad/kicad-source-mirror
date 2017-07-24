@@ -133,7 +133,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit,
 
     m_unit      = unit;
     m_convert   = convert;
-    m_lib_id.SetLibItemName( TO_UTF8( aPart.GetName() ), false );
+    m_lib_id.SetLibItemName( aPart.GetName(), false );
     m_part      = aPart.SharedPtr();
     m_currentSheetPath = NULL;
     m_fieldsAutoplaced = AUTOPLACED_NO;
@@ -193,7 +193,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit,
     SetRef( sheet, msg );
 
     // Use the schematic component name instead of the library value field name.
-    GetField( VALUE )->SetText( FROM_UTF8( GetLibId().GetLibItemName() ) );
+    GetField( VALUE )->SetText( GetLibId().GetLibItemName() );
 }
 
 
@@ -1246,7 +1246,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
             name1 = toUTFTildaText( GetField( REFERENCE )->GetText() );
     }
 
-    wxString part_name = FROM_UTF8( GetLibId().GetLibItemName() );
+    wxString part_name = GetLibId().GetLibItemName();
 
     if( part_name.size() )
     {
@@ -1391,7 +1391,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( partname != NULL_STRING )
     {
-        m_lib_id.SetLibItemName( TO_UTF8( partname ), false );
+        m_lib_id.SetLibItemName( partname, false );
 
         if( !newfmt )
             GetField( VALUE )->SetText( partname );
@@ -1721,7 +1721,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     // part and alias can differ if alias is not the root
     if( PART_SPTR part = m_part.lock() )
     {
-        LIB_ALIAS* alias = part->GetAlias( FROM_UTF8( GetLibId().GetLibItemName() ) );
+        LIB_ALIAS* alias = part->GetAlias( GetLibId().GetLibItemName() );
 
         if( !alias )
             return;
@@ -1736,8 +1736,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
         aList.push_back( MSG_PANEL_ITEM( msg, GetField( VALUE )->GetShownText(), DARKCYAN ) );
 
         // Display component reference in library and library
-        aList.push_back( MSG_PANEL_ITEM( _( "Component" ), FROM_UTF8( GetLibId().GetLibItemName() ),
-                         BROWN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Component" ), GetLibId().GetLibItemName(), BROWN ) );
 
         if( alias->GetName() != part->GetName() )
             aList.push_back( MSG_PANEL_ITEM( _( "Alias of" ), part->GetName(), BROWN ) );
@@ -1982,8 +1981,7 @@ void SCH_COMPONENT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
     {
         wxCHECK_RET( 0,
                  wxT( "Cannot add connection points to list.  Cannot find component <" ) +
-                     FROM_UTF8( GetLibId().GetLibItemName() ) +
-                     wxT( "> in any of the loaded libraries." ) );
+                     GetLibId().GetLibItemName() + wxT( "> in any of the loaded libraries." ) );
     }
 }
 
@@ -2006,7 +2004,7 @@ wxString SCH_COMPONENT::GetSelectMenuText() const
 {
     wxString tmp;
     tmp.Printf( _( "Component %s, %s" ),
-                FROM_UTF8( GetLibId().GetLibItemName() ),
+                GetChars( GetLibId().GetLibItemName() ),
                 GetChars( GetField( REFERENCE )->GetShownText() ) );
     return tmp;
 }

@@ -89,7 +89,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 
             SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
-            if( !archLib->FindAlias( FROM_UTF8( component->GetLibId().GetLibItemName() ) ) )
+            if( !archLib->FindAlias( component->GetLibId().GetLibItemName() ) )
             {
                 LIB_PART* part = NULL;
 
@@ -106,7 +106,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
                 catch( ... /* IO_ERROR ioe */ )
                 {
                     msg.Printf( _( "Failed to add symbol %s to library file '%s'" ),
-                                FROM_UTF8( component->GetLibId().GetLibItemName() ), aFileName );
+                                wxString( component->GetLibId().GetLibItemName() ), aFileName );
                     DisplayError( this, msg );
                     return false;
                 }

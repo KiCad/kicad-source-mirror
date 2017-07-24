@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2013 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2013-2017 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2013-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
  */
 
 #include <utf8.h>
+#include <ki_exception.h>
 
 /* THROW_IO_ERROR needs this, but it includes this file, so until some
     factoring of THROW_IO_ERROR into a separate header, defer and use the asserts.
@@ -30,6 +31,7 @@
 */
 
 #include <assert.h>
+
 
 /*
     These are not inlined so that code space is saved by encapsulating the
@@ -55,10 +57,6 @@ UTF8& UTF8::operator=( const wxString& o )
     return *this;
 }
 
-
-#ifndef THROW_IO_ERROR
- #define THROW_IO_ERROR(x)      // nothing
-#endif
 
 // There is no wxWidgets function that does this, because wchar_t is 16 bits
 // on windows and wx wants to encode the output in UTF16 for such.
@@ -117,7 +115,7 @@ int UTF8::uni_forward( const unsigned char* aSequence, unsigned* aResult )
         ch =    ((s[0] & 0x1f) << 6) +
                 ((s[1] & 0x3f) << 0);
 
-        assert( ch > 0x007F && ch <= 0x07FF );
+        // assert( ch > 0x007F && ch <= 0x07FF );
         break;
 
     case 3:
@@ -134,7 +132,7 @@ int UTF8::uni_forward( const unsigned char* aSequence, unsigned* aResult )
                 ((s[1] & 0x3f) << 6 ) +
                 ((s[2] & 0x3f) << 0 );
 
-        assert( ch > 0x07FF && ch <= 0xFFFF );
+        // assert( ch > 0x07FF && ch <= 0xFFFF );
         break;
 
     case 4:
@@ -152,7 +150,7 @@ int UTF8::uni_forward( const unsigned char* aSequence, unsigned* aResult )
                 ((s[2] & 0x3f) << 6 ) +
                 ((s[3] & 0x3f) << 0 );
 
-        assert( ch > 0xFFFF && ch <= 0x10ffff );
+        // assert( ch > 0xFFFF && ch <= 0x10ffff );
         break;
     }
 
@@ -160,6 +158,36 @@ int UTF8::uni_forward( const unsigned char* aSequence, unsigned* aResult )
         *aResult = ch;
 
     return len;
+}
+
+
+bool IsUTF8( const char* aString )
+{
+    int len = strlen( aString );
+
+    if( len )
+    {
+        const unsigned char* next = (unsigned char*) aString;
+        const unsigned char* end  = next + len;
+
+        try
+        {
+            while( next < end )
+            {
+                next += UTF8::uni_forward( next, NULL );
+            }
+
+            // uni_forward() should find the exact end if it is truly UTF8
+            if( next > end )
+                return false;
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 

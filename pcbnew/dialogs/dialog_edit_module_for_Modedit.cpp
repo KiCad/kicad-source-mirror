@@ -10,7 +10,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -174,8 +174,8 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
     m_ValueCtrl->SetValue( m_valueCopy->GetText() );
 
     m_currentFPID = m_currentModule->GetFPID();
-    m_FootprintNameCtrl->SetValue( FROM_UTF8( m_currentFPID.GetLibItemName() ) );
-    m_LibraryNicknameCtrl->SetValue( FROM_UTF8( m_currentFPID.GetLibNickname() ) );
+    m_FootprintNameCtrl->SetValue( m_currentFPID.GetLibItemName() );
+    m_LibraryNicknameCtrl->SetValue( m_currentFPID.GetLibNickname() );
 
     m_AttributsCtrl->SetItemToolTip( 0, _( "Use this attribute for most non SMD components" ) );
     m_AttributsCtrl->SetItemToolTip( 1,

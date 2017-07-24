@@ -226,8 +226,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     {
         LIB_ID id;
 
-        id.SetLibNickname( TO_UTF8( getCurNickname() ) );
-        id.SetLibItemName( TO_UTF8( getCurFootprintName() ) );
+        id.SetLibNickname( getCurNickname() );
+        id.SetLibItemName( getCurFootprintName() );
         GetBoard()->Add( loadFootprint( id ) );
     }
 
@@ -475,8 +475,8 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
         GetBoard()->m_Modules.DeleteAll();
 
         LIB_ID id;
-        id.SetLibNickname( TO_UTF8( getCurNickname() ) );
-        id.SetLibItemName( TO_UTF8( getCurFootprintName() ) );
+        id.SetLibNickname( getCurNickname() );
+        id.SetLibItemName( getCurFootprintName() );
 
         try
         {
@@ -538,10 +538,10 @@ void FOOTPRINT_VIEWER_FRAME::ExportSelectedFootprint( wxCommandEvent& event )
 
         LIB_ID fpid;
 
-        fpid.SetLibNickname( TO_UTF8( getCurNickname() ) );
-        fpid.SetLibItemName( TO_UTF8( fp_name ) );
+        fpid.SetLibNickname( getCurNickname() );
+        fpid.SetLibItemName( fp_name );
 
-        DismissModal( true, FROM_UTF8( fpid.Format() ) );
+        DismissModal( true, fpid.Format() );
     }
     else
     {
@@ -795,9 +795,9 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
             delete oldmodule;
         }
 
-        setCurFootprintName( FROM_UTF8( module->GetFPID().GetLibItemName() ) );
+        setCurFootprintName( module->GetFPID().GetLibItemName() );
 
-        wxString nickname = FROM_UTF8( module->GetFPID().GetLibNickname() );
+        wxString nickname = module->GetFPID().GetLibNickname();
 
         if( !getCurNickname() && nickname.size() )
         {

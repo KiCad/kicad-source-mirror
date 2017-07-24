@@ -304,8 +304,8 @@ void FP_CACHE::Load()
 
                 m_owner->m_parser->SetLineReader( &reader );
 
-                std::string name = TO_UTF8( fullPath.GetName() );
-                MODULE*     footprint = (MODULE*) m_owner->m_parser->Parse();
+                UTF8    name = fullPath.GetName();
+                MODULE* footprint = (MODULE*) m_owner->m_parser->Parse();
 
                 // The footprint name is the file name without the extension.
                 footprint->SetFPID( LIB_ID( fullPath.GetName() ) );
@@ -1907,7 +1907,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
     MODULE_MAP& mods = m_cache->GetModules();
 
     // Quietly overwrite module and delete module file from path for any by same name.
-    wxFileName fn( aLibraryPath, FROM_UTF8( aFootprint->GetFPID().GetLibItemName() ),
+    wxFileName fn( aLibraryPath, aFootprint->GetFPID().GetLibItemName(),
                    KiCadFootprintFileExtension );
 
     if( !fn.IsOk() )

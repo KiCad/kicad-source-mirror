@@ -7,7 +7,7 @@
  * Copyright (C) 1992-2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -273,8 +273,8 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
             {
                 msg.Printf( _( "Footprint of component '%s' changed: board footprint '%s', netlist footprint '%s'\n" ),
                             GetChars( component->GetReference() ),
-                            GetChars( FROM_UTF8( fpOnBoard->GetFPID().Format() ) ),
-                            GetChars( FROM_UTF8( component->GetFPID().Format() ) ) );
+                            GetChars( fpOnBoard->GetFPID().Format() ),
+                            GetChars( component->GetFPID().Format() ) );
                 aReporter->Report( msg, REPORTER::RPT_WARNING );
             }
 
@@ -303,7 +303,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
                     msg.Printf( _( "Component '%s' footprint ID '%s' is not "
                                    "valid.\n" ),
                                 GetChars( component->GetReference() ),
-                                GetChars( FROM_UTF8( component->GetFPID().Format() ) ) );
+                                GetChars( component->GetFPID().Format() ) );
                     aReporter->Report( msg, REPORTER::RPT_ERROR );
                 }
 
@@ -324,7 +324,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
                     msg.Printf( _( "Component '%s' footprint '%s' was not found in "
                                    "any libraries in the footprint library table.\n" ),
                                 GetChars( component->GetReference() ),
-                                FROM_UTF8( component->GetFPID().GetLibItemName() ) );
+                                GetChars( component->GetFPID().GetLibItemName() ) );
                     aReporter->Report( msg, REPORTER::RPT_ERROR );
                 }
 

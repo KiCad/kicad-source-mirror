@@ -24,6 +24,14 @@
 
 
 /*
+Note:
+If you are using this plugin without the supporting nginx caching server, then you
+will never be happy with its performance.  However, it is the fastest plugin in
+existence when used with a local nginx and the nginx configuration file in this
+directory.  Nginx can be running in house on your network anywhere for this statement
+to be true.
+
+Comments below pertain to use without nginx, so are not relevant in every case:
 
 While exploring the possibility of local caching of the zip file, I discovered
 this command to retrieve the time stamp of the last commit into any particular
@@ -39,7 +47,6 @@ mechanism can be found, or github gets more servers.  But note that the occasion
 slow response is the exception rather than the norm.  Normally the response is
 down around a 1/3 of a second.  The information we would use is in the header
 named "Last-Modified" as seen below.
-
 
 HTTP/1.1 200 OK
 Server: GitHub.com
@@ -434,7 +441,9 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
 
         wxMemoryInputStream mis( &m_zip_image[0], m_zip_image.size() );
 
-        // @todo: generalize this name encoding from a PROPERTY (option) later
+        // Recently the zip standard adopted UTF8 encoded filenames within the
+        // internal zip directory block.  Please only use zip files that conform
+        // to that standard.  Github seems to now, but may not have earlier.
         wxZipInputStream    zis( mis, wxConvUTF8 );
 
         wxZipEntry* entry;
@@ -446,6 +455,8 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
             if( fn.GetExt() == kicad_mod )
             {
                 UTF8 fp_name = fn.GetName();    // omit extension & path
+
+                wxASSERT( IsUTF8( fp_name.c_str() ) );
 
                 m_gh_cache->insert( fp_name, entry );
             }

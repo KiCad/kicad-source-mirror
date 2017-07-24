@@ -6,7 +6,7 @@
  *
  * Copyright (C) 1992-2011 Jean-Pierre Charras.
  * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>.
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,7 +175,7 @@ bool CMP_READER::Load( NETLIST* aNetlist )
         {
             LIB_ID fpid;
 
-            if( !footprint.IsEmpty() && fpid.Parse( TO_UTF8( footprint ) ) >= 0 )
+            if( !footprint.IsEmpty() && fpid.Parse( footprint ) >= 0 )
             {
                 wxString error;
                 error.Printf( _( "invalid footprint ID in\nfile: <%s>\nline: %d" ),

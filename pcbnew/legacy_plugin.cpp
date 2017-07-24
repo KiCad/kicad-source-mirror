@@ -1373,7 +1373,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
 
     wxString msg = wxString::Format(
         wxT( "Missing '$EndMODULE' for MODULE '%s'" ),
-        FROM_UTF8( aModule->GetFPID().GetLibItemName() ) );
+        GetChars( aModule->GetFPID().GetLibItemName() ) );
 
     THROW_IO_ERROR( msg );
 }
@@ -1428,7 +1428,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
                                 padchar,
                                 padchar,
                                 m_reader->LineNumber(),
-                                FROM_UTF8( aModule->GetFPID().GetLibItemName() )
+                                GetChars( aModule->GetFPID().GetLibItemName() )
                     );
                 THROW_IO_ERROR( m_error );
             }
@@ -1634,7 +1634,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
                         (unsigned char) line[1],
                         (unsigned char) line[1],
                         m_reader->LineNumber(),
-                        FROM_UTF8( aModule->GetFPID().GetLibItemName() )
+                        GetChars( aModule->GetFPID().GetLibItemName() )
                         );
         THROW_IO_ERROR( m_error );
     }

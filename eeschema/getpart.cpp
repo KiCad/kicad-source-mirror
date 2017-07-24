@@ -236,7 +236,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component(
     // alias exists because its root component was found
     LIB_ID libId;
 
-    libId.SetLibItemName( TO_UTF8( sel.Name ), false );
+    libId.SetLibItemName( sel.Name, false );
     component->SetLibId( libId );
 
     // Be sure the link to the corresponding LIB_PART is OK:
