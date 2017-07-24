@@ -469,6 +469,7 @@ set( BMAPS_MID
     select_grid
     select_layer_pair
     select_w_layer
+    select_same_sheet
     shape_3d
     sheetset
     simulator
