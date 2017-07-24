@@ -166,7 +166,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     wxString currdirname = fileName.GetPathWithSep();
     wxDir dir( currdirname );
 
-    if( !dir.IsOpened() )
+    if( !dir.IsOpened() )   // wxWidgets display a error message on issue.
         return;
 
     wxSetWorkingDirectory( currdirname );
@@ -175,6 +175,13 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     wxString zipfilename = zip.GetFullPath();
 
     wxFFileOutputStream ostream( zipfilename );
+
+    if( !ostream.IsOk() )   // issue to create the file. Perhaps not writable dir
+    {
+        wxMessageBox( wxString::Format( _( "Unable to create zip archive file '%s'" ), zipfilename ) );
+        return;
+    }
+
     wxZipOutputStream zipstream( ostream );
 
     // Build list of filenames to put in zip archive
