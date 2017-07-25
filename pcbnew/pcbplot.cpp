@@ -362,7 +362,7 @@ void AddGerberX2Header( PLOTTER * aPlotter,
     if( aBoard->GetPlotOptions().GetUseAuxOrigin() && auxOrigin.x && auxOrigin.y )
         registration_id.Printf( "PX%xPY%x", auxOrigin.x, auxOrigin.y );
 
-    text.Printf( "%%TF.SameCoordinates,%s%%", registration_id.GetData() );
+    text.Printf( "%%TF.SameCoordinates,%s*%%", registration_id.GetData() );
     aPlotter->AddLineToHeader( makeStringCompatX1( text, aUseX1CompatibilityMode ) );
 }
 
