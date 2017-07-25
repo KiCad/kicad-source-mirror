@@ -36,6 +36,7 @@
 #include <class_libentry.h>
 #include <lib_draw_item.h>
 #include <sch_component.h>
+#include <lib_arc.h>
 #include <lib_circle.h>
 #include <lib_rectangle.h>
 #include <lib_polyline.h>
@@ -1373,7 +1374,7 @@ void SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
         }
         else if( nodeName == "wire" )
         {
-            LIB_POLYLINE* pline = loadSymbolWire( aPart, currentNode );
+            LIB_ITEM* pline = loadSymbolWire( aPart, currentNode );
             pline->SetUnit( gateNumber );
             aPart->AddDrawItem( pline );
         }
@@ -1423,23 +1424,82 @@ LIB_RECTANGLE* SCH_EAGLE_PLUGIN::loadSymbolRectangle( LIB_PART* aPart, wxXmlNode
 }
 
 
-LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolWire( LIB_PART* aPart, wxXmlNode* aWireNode )
+LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( LIB_PART* aPart, wxXmlNode* aWireNode )
 {
     // TODO: Layer map
-    std::unique_ptr<LIB_POLYLINE> polyLine( new LIB_POLYLINE( aPart ) );
+
 
     auto ewire = EWIRE( aWireNode );
-    wxPoint begin, end;
+
+    wxRealPoint begin, end;
 
     begin.x = ewire.x1 * EUNIT_TO_MIL;
     begin.y = ewire.y1 * EUNIT_TO_MIL;
     end.x   = ewire.x2 * EUNIT_TO_MIL;
     end.y   = ewire.y2 * EUNIT_TO_MIL;
+    if( ewire.curve )
+    {
+        std::unique_ptr<LIB_ARC> arc( new LIB_ARC( aPart ) );
+        wxRealPoint center = kicad_arc_center( begin, end, *ewire.curve*-1);
 
-    polyLine->AddPoint( begin );
-    polyLine->AddPoint( end );
+        arc->SetPosition(center);
+        arc->SetStart( begin );
+        arc->SetEnd( end );
+        arc->SetWidth(ewire.width*EUNIT_TO_MIL);
 
-    return polyLine.release();
+
+        double radius = sqrt(  abs( ( (center.x-begin.x)*(center.x-begin.x) ) + ( (center.y-begin.y)*(center.y-begin.y) ) ) );
+
+        arc->SetRadius(radius);
+        arc->CalcRadiusAngles();
+
+        if(ewire.width*2*EUNIT_TO_MIL > radius){
+            wxRealPoint centerStartVector = center - begin;
+
+            wxRealPoint centerEndVector   = center - end;
+            centerStartVector.x = centerStartVector.x/radius;
+            centerStartVector.y = centerStartVector.y/radius;
+
+
+            centerEndVector.x = centerEndVector.x/radius;
+            centerEndVector.y = centerEndVector.y/radius;
+            centerStartVector.x = centerStartVector.x*(ewire.width*EUNIT_TO_MIL+radius);
+            centerStartVector.y = centerStartVector.y*(ewire.width*EUNIT_TO_MIL+radius);
+
+            centerEndVector.x = centerEndVector.x*(ewire.width*EUNIT_TO_MIL+radius);
+            centerEndVector.y = centerEndVector.y*(ewire.width*EUNIT_TO_MIL+radius);
+
+
+            begin = center + centerStartVector;
+            end = center + centerEndVector;
+            radius = sqrt(  abs( ( (center.x-begin.x)*(center.x-begin.x) ) + ( (center.y-begin.y)*(center.y-begin.y) ) ) );
+
+            center = kicad_arc_center( begin, end, *ewire.curve*-1);
+
+            arc->SetPosition(center);
+            arc->SetStart( begin );
+            arc->SetEnd( end );
+            arc->SetRadius(radius);
+            arc->CalcRadiusAngles();
+            arc->SetWidth(0.001);
+            arc->SetFillMode(FILLED_SHAPE);
+
+        }
+
+        return (LIB_ITEM*) arc.release();
+
+    }
+    else
+    {
+        std::unique_ptr<LIB_POLYLINE> polyLine( new LIB_POLYLINE( aPart ) );
+
+        polyLine->AddPoint( begin );
+        polyLine->AddPoint( end );
+
+        return (LIB_ITEM*) polyLine.release();
+
+    }
+
 }
 
 

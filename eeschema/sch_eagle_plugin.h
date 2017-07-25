@@ -152,7 +152,7 @@ private:
     LIB_CIRCLE*     loadSymbolCircle( LIB_PART* aPart, wxXmlNode* aCircleNode );
     LIB_RECTANGLE*  loadSymbolRectangle( LIB_PART* aPart, wxXmlNode* aRectNode );
     LIB_POLYLINE*   loadSymbolPolyLine( LIB_PART* aPart, wxXmlNode* aPolygonNode );
-    LIB_POLYLINE*   loadSymbolWire( LIB_PART* aPart, wxXmlNode* aWireNode );
+    LIB_ITEM*       loadSymbolWire( LIB_PART* aPart, wxXmlNode* aWireNode );
     LIB_PIN*        loadPin( LIB_PART*, wxXmlNode* );
     LIB_TEXT*       loadSymboltext(  LIB_PART* aPart, wxXmlNode* aLibText );
 

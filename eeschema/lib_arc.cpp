@@ -745,7 +745,7 @@ void LIB_ARC::calcEdit( const wxPoint& aPosition )
         }
 
         m_Pos = newCenterPoint;
-        calcRadiusAngles();
+        CalcRadiusAngles();
     }
     else if( m_Flags == IS_NEW )
     {
@@ -781,7 +781,7 @@ void LIB_ARC::calcEdit( const wxPoint& aPosition )
         cY += m_ArcStart.y;
         m_Pos.x = cX;
         m_Pos.y = cY;
-        calcRadiusAngles();
+        CalcRadiusAngles();
 
         SetEraseLastDrawItem();
     }
@@ -792,7 +792,7 @@ void LIB_ARC::calcEdit( const wxPoint& aPosition )
 }
 
 
-void LIB_ARC::calcRadiusAngles()
+void LIB_ARC::CalcRadiusAngles()
 {
     wxPoint centerStartVector = twoPointVector( m_Pos, m_ArcStart );
     wxPoint centerEndVector   = twoPointVector( m_Pos, m_ArcEnd );
