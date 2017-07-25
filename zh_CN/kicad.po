@@ -81,9 +81,13 @@ msgid ""
 "or Pcbnew elements"
 msgstr "Bitmap2Component - 转换位图到 Eeschema 或  Pcbnew "
 
-#: kicad/commandframe.cpp:85 kicad/menubar.cpp:394
+#: kicad/commandframe.cpp:94
+msgid "Calculator tools"
+msgstr "计量工具"
+
+#: kicad/menubar.cpp:402
 msgid "Pcb calculator - Calculator for components, track width, etc."
-msgstr "PCB计算器 - 计算布线宽度等"
+msgstr "计量工具 - 计算布线宽度等"
 
 #: kicad/commandframe.cpp:88 kicad/menubar.cpp:399
 msgid "Pl editor - Worksheet layout editor"
