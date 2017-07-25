@@ -9950,7 +9950,7 @@ msgstr "线或多边形(&L)"
 #: pcbnew/menubar_modedit.cpp:281 pcbnew/menubar_pcbframe.cpp:417
 #: pcbnew/tool_modedit.cpp:173 pcbnew/tool_pcb.cpp:453
 msgid "Add graphic line or polygon"
-msgstr "添加图形  线/多边形"
+msgstr "添加线或多边形"
 
 #: pcbnew/menubar_modedit.cpp:286 pcbnew/menubar_pcbframe.cpp:409
 #: eeschema/menubar_libedit.cpp:213
