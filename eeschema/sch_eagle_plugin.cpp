@@ -1104,7 +1104,8 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
                 }
                 bool spin = attr.rot ? attr.rot->spin : false;
 
-                int reldegrees = ( absdegrees - einstance.rot->degrees + 360.0);
+                int rotation = einstance.rot ? einstance.rot->degrees : 0;
+                int reldegrees = ( absdegrees - rotation + 360.0);
                 reldegrees %= 360;
 
                 eagleToKicadAlignment((EDA_TEXT*)field, align, reldegrees, mirror, spin, absdegrees);
@@ -1122,7 +1123,9 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
                 if(einstance.rot)if(einstance.rot->mirror){
                     mirror = !mirror;
                 }
-                int reldegrees = ( absdegrees - einstance.rot->degrees + 360.0);
+
+                int rotation = einstance.rot ? einstance.rot->degrees : 0;
+                int reldegrees = ( absdegrees - rotation + 360.0);
                 reldegrees %= 360;
 
                 eagleToKicadAlignment((EDA_TEXT*)field, align, reldegrees, mirror, spin, absdegrees);
