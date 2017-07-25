@@ -63,17 +63,17 @@ msgstr "Eeschema  - 原理图编辑器"
 msgid "Schematic library editor"
 msgstr "原理图库编辑器"
 
-#: kicad/commandframe.cpp:71
-msgid "Pcbnew - Printed circuit board editor"
-msgstr "Pcbnew - PCB编辑器"
-
-#: kicad/commandframe.cpp:74
-msgid "PCB footprint editor"
-msgstr "PCB 封装编辑器"
-
 #: kicad/commandframe.cpp:77
-msgid "GerbView - Gerber viewer"
-msgstr "GerbView - Gerber 浏览器"
+msgid "PCB layout editor"
+msgstr "PCB板编辑器"
+
+#: kicad/commandframe.cpp:81
+msgid "PCB library editor"
+msgstr "PCB封装库编辑器"
+
+#: kicad/commandframe.cpp:85
+msgid "Gerber viewer"
+msgstr "Gerber浏览器"
 
 #: kicad/commandframe.cpp:81 kicad/menubar.cpp:388
 msgid ""
