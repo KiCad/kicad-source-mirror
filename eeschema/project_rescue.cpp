@@ -264,7 +264,7 @@ public:
 
         for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
         {
-            wxString part_name( each_component->GetLibId().GetLibItemName() );
+            wxString part_name = each_component->GetLibId().GetLibItemName();
 
             if( last_part_name != part_name )
             {
@@ -373,7 +373,7 @@ public:
 
         for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
         {
-            wxString part_name( each_component->GetLibId().GetLibItemName() );
+            wxString part_name = each_component->GetLibId().GetLibItemName();
 
             if( old_part_name != part_name )
             {

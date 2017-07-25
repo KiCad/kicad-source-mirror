@@ -811,7 +811,7 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist( const std::string& aNetlist )
     for( unsigned ii = 0; ii < m_netlist.GetCount(); ii++ )
     {
         if( m_netlist.GetComponent( ii )->GetFPID().GetLibItemName() == std::string( "$noname" ) )
-            m_netlist.GetComponent( ii )->SetFPID( LIB_ID( wxEmptyString ) );
+            m_netlist.GetComponent( ii )->SetFPID( LIB_ID() );
     }
 
     // Sort components by reference:

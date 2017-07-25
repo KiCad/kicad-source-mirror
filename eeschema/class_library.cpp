@@ -672,7 +672,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
     {
         // Use a different exception type so catch()er can route to proper use
         // of the HTML_MESSAGE_BOX.
-        THROW_PARSE_ERROR( wxEmptyString, UTF8( __func__ ), UTF8( libs_not_found ), 0, 0 );
+        THROW_PARSE_ERROR( wxEmptyString, __func__, TO_UTF8(libs_not_found), 0, 0 );
     }
 
 #if defined(DEBUG) && 1

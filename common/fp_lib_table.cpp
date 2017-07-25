@@ -286,7 +286,7 @@ MODULE* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& 
         LIB_ID& fpid = (LIB_ID&) ret->GetFPID();
 
         // Catch any misbehaving plugin, which should be setting internal footprint name properly:
-        wxASSERT( aFootprintName == (wxString) fpid.GetLibItemName() );
+        wxASSERT( aFootprintName == fpid.GetLibItemName().wx_str() );
 
         // and clearing nickname
         wxASSERT( !fpid.GetLibNickname().size() );

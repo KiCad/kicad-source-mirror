@@ -1165,7 +1165,7 @@ MODULE* EAGLE_PLUGIN::makeModule( wxXmlNode* aPackage, const string& aPkgName ) 
 {
     std::unique_ptr<MODULE>   m( new MODULE( m_board ) );
 
-    m->SetFPID( LIB_ID( aPkgName ) );
+    m->SetFPID( LIB_ID( UTF8(aPkgName) ) );
 
     // Get the first package item and iterate
     wxXmlNode* packageItem = aPackage->GetChildren();

@@ -83,7 +83,7 @@ int RevCmp( const char* s1, const char* s2 )
 //----<Policy and field test functions>-------------------------------------
 
 
-static inline int okLogical( const std::string& aField )
+static inline int okLogical( const UTF8& aField )
 {
     // std::string::npos is largest positive number, casting to int makes it -1.
     // Returning that means success.
@@ -91,7 +91,7 @@ static inline int okLogical( const std::string& aField )
 }
 
 
-static int okRevision( const std::string& aField )
+static int okRevision( const UTF8& aField )
 {
     char  rev[32];  // C string for speed
 
@@ -175,7 +175,7 @@ int LIB_ID::Parse( const UTF8& aId )
 }
 
 
-LIB_ID::LIB_ID( const std::string& aId )
+LIB_ID::LIB_ID( const UTF8& aId )
 {
     int offset = Parse( aId );
 

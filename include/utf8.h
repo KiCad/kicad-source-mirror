@@ -50,13 +50,13 @@ bool IsUTF8( const char* aString );
 
 /**
  * Class UTF8
- * is an 8 bit std::string that is assuredly encoded in UTF8, and supplies special
- * conversion support to and from wxString, and has iteration over unicode characters.
+ * is an 8 bit string that is assuredly encoded in UTF8, and supplies special
+ * conversion support to and from wxString, to and from std::string, and has
+ * non-mutating iteration over unicode characters.
  *
  * <p>I've been careful to supply only conversion facilities and not try
- * and duplicate wxString() with many member functions.  In the end it is
- * to be a std::string.  There are multiple ways to create text into a std::string
- * without the need of too many member functions:
+ * and duplicate wxString() with many member functions. There are multiple ways
+ * to create text into a std::string without the need of too many member functions:
  *
  * <ul>
  *  <li>richio.h's StrPrintf()</li>
@@ -70,7 +70,7 @@ bool IsUTF8( const char* aString );
  *
  * @author Dick Hollenbeck
  */
-class UTF8 : public std::string
+class UTF8
 {
 public:
 
@@ -79,7 +79,7 @@ public:
     /// This is a constructor for which you could end up with
     /// non-UTF8 encoding, but that would be your fault.
     UTF8( const char* txt ) :
-        std::string( txt )
+        m_s( txt )
     {
         MAYBE_VERIFY_UTF8( c_str() );
     }
@@ -89,13 +89,12 @@ public:
     UTF8( const wchar_t* txt );
 
     UTF8( const std::string& o ) :
-        std::string( o )
+        m_s( o )
     {
         MAYBE_VERIFY_UTF8( c_str() );
     }
 
-    UTF8() :
-        std::string()
+    UTF8()
     {
     }
 
@@ -103,61 +102,97 @@ public:
     {
     }
 
+    // expose some std::string functions publicly, since base class must be private.
+
+    const char* c_str()                         const   { return m_s.c_str(); }
+    bool empty()                                const   { return m_s.empty(); }
+
+    std::string::size_type find( char c )       const   { return m_s.find( c ); }
+    std::string::size_type find( char c, size_t& s )     const   { return m_s.find( c, s ); }
+
+    void clear()                                        { m_s.clear(); }
+    std::string::size_type length()             const   { return m_s.length(); }
+    std::string::size_type size()               const   { return m_s.size(); }
+    int compare( const std::string& s )         const   { return m_s.compare( s ); }
+
+    bool operator==( const UTF8& rhs )          const   { return m_s == rhs.m_s; }
+    bool operator==( const std::string& rhs )   const   { return m_s == rhs; }
+    bool operator==( const char* s )            const   { return m_s == s; }
+
+    std::string::size_type find_first_of( const std::string& str, std::string::size_type pos = 0 ) const
+    {
+        return m_s.find_first_of( str, pos );
+    }
+
+    UTF8& operator+=( const UTF8& str )
+    {
+        m_s += str.m_s;
+        MAYBE_VERIFY_UTF8( c_str() );
+        return (UTF8&) *this;
+    }
+
+    UTF8& operator+=( char ch )
+    {
+        m_s.operator+=( ch );
+        MAYBE_VERIFY_UTF8( c_str() );
+        return (UTF8&) *this;
+    }
+
+    UTF8& operator+=( const char* s )
+    {
+        m_s.operator+=( s );
+        MAYBE_VERIFY_UTF8( c_str() );
+        return (UTF8&) *this;
+    }
+
+    static const std::string::size_type npos = std::string::npos;
+
     UTF8& operator=( const wxString& o );
 
     UTF8& operator=( const std::string& o )
     {
-        std::string::operator=( o );
-
+        m_s = o;
         MAYBE_VERIFY_UTF8( c_str() );
         return *this;
     }
 
     UTF8& operator=( const char* s )
     {
-        std::string::operator=( s );
-
+        m_s = s;
         MAYBE_VERIFY_UTF8( c_str() );
         return *this;
     }
 
     UTF8& operator=( char c )
     {
-        std::string::operator=( c );
-
+        m_s = c;
         MAYBE_VERIFY_UTF8( c_str() );
         return *this;
     }
 
-    UTF8 substr( size_t pos = 0, size_t len = npos ) const
+    // a substring of a UTF8 is not necessarily a UTF8 if a multibyte character
+    // was split, so return std::string not UTF8
+    std::string substr( size_t pos = 0, size_t len = npos ) const
     {
-        return std::string::substr( pos, len );
+        return m_s.substr( pos, len );
     }
 
+    operator const std::string& () const    { return m_s; }
+    //operator std::string& ()                { return m_s; }
+    //operator std::string () const           { return m_s; }
+
+    wxString wx_str() const;
     operator wxString () const;
 
-    /// This one is not in std::string, and one wonders why... might be a solid
-    /// enough reason to remove it still.
-    operator char* () const
-    {
-        return (char*) c_str();
-    }
-
-    /**
-     * Function uni_forward
-     * advances over a single UTF8 encoded multibyte character, capturing the
-     * unicode character as it goes, and returning the number of bytes consumed.
-     *
-     * @param aSequence is the UTF8 byte sequence, must be aligned on start of character.
-     * @param aResult is where to put the unicode character, and may be NULL if no interest.
-     * @return int - the count of bytes consumed.
-     */
-    static int uni_forward( const unsigned char* aSequence, unsigned* aResult = NULL );
+    // "Read only" iterating over bytes is done with these, use the uni_iter to iterate
+    // over UTF8 (multi-byte) characters
+    std::string::const_iterator begin()         const   { return m_s.begin(); }
+    std::string::const_iterator end()           const   { return m_s.end(); }
 
 #ifndef SWIG
     /**
      * class uni_iter
-     * is a non-muting iterator that walks through unicode code points in the UTF8 encoded
+     * is a non-mutating iterator that walks through unicode code points in the UTF8 encoded
      * string.  The normal ++(), ++(int), ->(), and *() operators are all supported
      * for read only access and some return an unsigned holding the unicode character
      * appropriate for the respective operator.
@@ -168,11 +203,10 @@ public:
 
         const unsigned char* it;
 
-        // private constructor.
+        // private constructor
         uni_iter( const char* start ) :
             it( (const unsigned char*) start )
         {
-            // for the human: assert( sizeof(unsigned) >= 4 );
         }
 
 
@@ -204,7 +238,6 @@ public:
             return ret;
         }
 
-        /*
         /// return unicode at current position
         unsigned operator->() const
         {
@@ -214,7 +247,6 @@ public:
             uni_forward( it, &result );
             return result;
         }
-        */
 
         /// return unicode at current position
         unsigned operator*() const
@@ -225,6 +257,8 @@ public:
             uni_forward( it, &result );
             return result;
         }
+
+        uni_iter operator-( int aVal ) const { return uni_iter( (char*) it - aVal ); }
 
         bool operator==( const uni_iter& other ) const  { return it == other.it; }
         bool operator!=( const uni_iter& other ) const  { return it != other.it; }
@@ -243,7 +277,7 @@ public:
      */
     uni_iter ubegin() const
     {
-        return uni_iter( data() );
+        return uni_iter( m_s.data() );
     }
 
     /**
@@ -252,9 +286,24 @@ public:
      */
     uni_iter uend() const
     {
-        return uni_iter( data() + size() );
+        return uni_iter( m_s.data() + m_s.size() );
     }
+
+    /**
+     * Function uni_forward
+     * advances over a single UTF8 encoded multibyte character, capturing the
+     * unicode character as it goes, and returning the number of bytes consumed.
+     *
+     * @param aSequence is the UTF8 byte sequence, must be aligned on start of character.
+     * @param aResult is where to put the unicode character, and may be NULL if no interest.
+     * @return int - the count of bytes consumed.
+     */
+    static int uni_forward( const unsigned char* aSequence, unsigned* aResult = NULL );
 #endif  // SWIG
+
+protected:
+    std::string m_s;
 };
+
 
 #endif // UTF8_H_

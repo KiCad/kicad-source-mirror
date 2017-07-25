@@ -116,7 +116,7 @@ private:
     static int m_fileOpt;
     static int m_fileFormat;
 
-	void initDialog();
+    void initDialog();
     void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
     void OnOKButton( wxCommandEvent& event ) override;
 
@@ -524,7 +524,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
             line << csv_sep;
             line << list[ii].m_Value;
             line << csv_sep;
-            line << wxString( list[ii].m_Module->GetFPID().GetLibItemName() );
+            line << list[ii].m_Module->GetFPID().GetLibItemName().wx_str();
             line << csv_sep;
 
             line << wxString::Format( "%f%c%f%c%f",

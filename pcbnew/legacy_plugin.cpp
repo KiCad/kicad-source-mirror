@@ -442,7 +442,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
             ReplaceIllegalFileNameChars( &fpName );
 
             if( !fpName.empty() )
-                fpid = LIB_ID( fpName );
+                fpid = LIB_ID( UTF8( fpName ) );
 
             module->SetFPID( fpid );
 
@@ -3315,7 +3315,7 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
             ReplaceIllegalFileNameChars( &footprintName );
 
             // set the footprint name first thing, so exceptions can use name.
-            module->SetFPID( LIB_ID( footprintName ) );
+            module->SetFPID( LIB_ID( UTF8( footprintName ) ) );
 
             m_owner->loadMODULE( module.get() );
 
@@ -3370,7 +3370,7 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
                     {
                         nameOK = true;
 
-                        m->SetFPID( LIB_ID( newName ) );
+                        m->SetFPID( LIB_ID( UTF8( newName ) ) );
                         std::pair<MODULE_ITER, bool> r = m_modules.insert( newName, m );
 
                         wxASSERT_MSG( r.second, wxT( "error doing cache insert using guaranteed unique name" ) );

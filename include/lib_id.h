@@ -70,7 +70,7 @@ public:
      *
      * @param aId is a string to be parsed into the LIB_ID object.
      */
-    LIB_ID( const std::string& aId );
+    LIB_ID( const UTF8& aId );
 
     LIB_ID( const wxString& aId );
 

@@ -40,8 +40,14 @@
 
 
 UTF8::UTF8( const wxString& o ) :
-    std::string( (const char*) o.utf8_str() )
+    m_s( (const char*) o.utf8_str() )
 {
+}
+
+
+wxString UTF8::wx_str() const
+{
+    return wxString( c_str(), wxConvUTF8 );
 }
 
 
@@ -53,7 +59,7 @@ UTF8::operator wxString () const
 
 UTF8& UTF8::operator=( const wxString& o )
 {
-    std::string::operator=( (const char*) o.utf8_str() );
+    m_s = (const char*) o.utf8_str();
     return *this;
 }
 
@@ -193,7 +199,7 @@ bool IsUTF8( const char* aString )
 
 UTF8::UTF8( const wchar_t* txt ) :
     // size initial string safely large enough, then shrink to known size later.
-    std::string( wcslen( txt ) * 4, 0 )
+    m_s( wcslen( txt ) * 4, 0 )
 {
     /*
 
@@ -206,9 +212,9 @@ UTF8::UTF8( const wchar_t* txt ) :
 
     */
 
-    int sz = wxConvUTF8.WC2MB( (char*) data(), txt, size() );
+    int sz = wxConvUTF8.WC2MB( (char*) m_s.data(), txt, m_s.size() );
 
-    resize( sz );
+    m_s.resize( sz );
 }
 
 

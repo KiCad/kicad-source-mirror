@@ -271,7 +271,7 @@ LIB_ALIAS* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxStri
         LIB_ID& id = (LIB_ID&) ret->GetPart()->GetLibId();
 
         // Catch any misbehaving plugin, which should be setting internal alias name properly:
-        wxASSERT( aAliasName == (wxString) id.GetLibItemName() );
+        wxASSERT( aAliasName == id.GetLibItemName().wx_str() );
 
         // and clearing nickname
         wxASSERT( !id.GetLibNickname().size() );

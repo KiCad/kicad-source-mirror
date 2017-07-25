@@ -98,9 +98,9 @@ using namespace std;
 static const char* PRETTY_DIR = "allow_pretty_writing_to_this_dir";
 
 
-typedef boost::ptr_map<string, wxZipEntry>  MODULE_MAP;
-typedef MODULE_MAP::iterator                MODULE_ITER;
-typedef MODULE_MAP::const_iterator          MODULE_CITER;
+typedef boost::ptr_map< wxString, wxZipEntry >  MODULE_MAP;
+typedef MODULE_MAP::iterator                    MODULE_ITER;
+typedef MODULE_MAP::const_iterator              MODULE_CITER;
 
 
 /**
@@ -160,7 +160,7 @@ void GITHUB_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames,
 
     for( MODULE_ITER it = m_gh_cache->begin();  it!=m_gh_cache->end();  ++it )
     {
-        unique.insert( FROM_UTF8( it->first.c_str() ) );
+        unique.insert( it->first );
     }
 
     for( MYSET::const_iterator it = unique.begin();  it != unique.end();  ++it )
@@ -205,9 +205,7 @@ MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
         }
     }
 
-    UTF8 fp_name = aFootprintName;
-
-    MODULE_CITER it = m_gh_cache->find( fp_name );
+    MODULE_CITER it = m_gh_cache->find( aFootprintName );
 
     if( it != m_gh_cache->end() )  // fp_name is present
     {
@@ -234,7 +232,7 @@ MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
             // any name found in the pretty file; any name in the pretty file
             // must be ignored here.  Also, the library nickname is unknown in
             // this context so clear it just in case.
-            ret->SetFPID( fp_name );
+            ret->SetFPID( aFootprintName );
 
             return ret;
         }
@@ -447,6 +445,7 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
         wxZipInputStream    zis( mis, wxConvUTF8 );
 
         wxZipEntry* entry;
+        wxString    fp_name;
 
         while( ( entry = zis.GetNextEntry() ) != NULL )
         {
@@ -454,9 +453,7 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
 
             if( fn.GetExt() == kicad_mod )
             {
-                UTF8 fp_name = fn.GetName();    // omit extension & path
-
-                wxASSERT( IsUTF8( fp_name.c_str() ) );
+                fp_name = fn.GetName();    // omit extension & path
 
                 m_gh_cache->insert( fp_name, entry );
             }

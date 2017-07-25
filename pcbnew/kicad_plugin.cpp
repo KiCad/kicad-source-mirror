@@ -133,9 +133,9 @@ bool FP_CACHE_ITEM::IsModified() const
 }
 
 
-typedef boost::ptr_map< std::string, FP_CACHE_ITEM >  MODULE_MAP;
-typedef MODULE_MAP::iterator                          MODULE_ITER;
-typedef MODULE_MAP::const_iterator                    MODULE_CITER;
+typedef boost::ptr_map< wxString, FP_CACHE_ITEM >   MODULE_MAP;
+typedef MODULE_MAP::iterator                        MODULE_ITER;
+typedef MODULE_MAP::const_iterator                  MODULE_CITER;
 
 
 class FP_CACHE
@@ -304,12 +304,13 @@ void FP_CACHE::Load()
 
                 m_owner->m_parser->SetLineReader( &reader );
 
-                UTF8    name = fullPath.GetName();
-                MODULE* footprint = (MODULE*) m_owner->m_parser->Parse();
+                MODULE*     footprint = (MODULE*) m_owner->m_parser->Parse();
 
                 // The footprint name is the file name without the extension.
-                footprint->SetFPID( LIB_ID( fullPath.GetName() ) );
-                m_modules.insert( name, new FP_CACHE_ITEM( footprint, fullPath ) );
+                wxString    fpName = fullPath.GetName();
+
+                footprint->SetFPID( LIB_ID( fpName ) );
+                m_modules.insert( fpName, new FP_CACHE_ITEM( footprint, fullPath ) );
             }
             catch( const IO_ERROR& ioe )
             {
@@ -333,9 +334,7 @@ void FP_CACHE::Load()
 
 void FP_CACHE::Remove( const wxString& aFootprintName )
 {
-    std::string footprintName = TO_UTF8( aFootprintName );
-
-    MODULE_CITER it = m_modules.find( footprintName );
+    MODULE_CITER it = m_modules.find( aFootprintName );
 
     if( it == m_modules.end() )
     {
@@ -349,7 +348,7 @@ void FP_CACHE::Remove( const wxString& aFootprintName )
 
     // Remove the module from the cache and delete the module file from the library.
     wxString fullPath = it->second->GetFileName().GetFullPath();
-    m_modules.erase( footprintName );
+    m_modules.erase( aFootprintName );
     wxRemoveFile( fullPath );
 }
 
@@ -400,7 +399,7 @@ bool FP_CACHE::IsModified( const wxString& aLibPath, const wxString& aFootprintN
     }
     else
     {
-        MODULE_CITER it = m_modules.find( TO_UTF8( aFootprintName ) );
+        MODULE_CITER it = m_modules.find( aFootprintName );
 
         if( it == m_modules.end() || it->second->IsModified() )
             return true;
@@ -1848,7 +1847,7 @@ void PCB_IO::FootprintEnumerate( wxArrayString&    aFootprintNames,
 
     for( MODULE_CITER it = mods.begin();  it != mods.end();  ++it )
     {
-        aFootprintNames.Add( FROM_UTF8( it->first.c_str() ) );
+        aFootprintNames.Add( it->first );
     }
 
     if( !errorMsg.IsEmpty() )
@@ -1867,7 +1866,7 @@ MODULE* PCB_IO::FootprintLoad( const wxString& aLibraryPath, const wxString& aFo
 
     const MODULE_MAP& mods = m_cache->GetModules();
 
-    MODULE_CITER it = mods.find( TO_UTF8( aFootprintName ) );
+    MODULE_CITER it = mods.find( aFootprintName );
 
     if( it == mods.end() )
     {
@@ -1902,7 +1901,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
         THROW_IO_ERROR( msg );
     }
 
-    std::string footprintName = aFootprint->GetFPID().GetLibItemName();
+    wxString footprintName = aFootprint->GetFPID().GetLibItemName();
 
     MODULE_MAP& mods = m_cache->GetModules();
 

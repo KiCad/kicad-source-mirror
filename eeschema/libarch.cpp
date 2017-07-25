@@ -106,7 +106,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
                 catch( ... /* IO_ERROR ioe */ )
                 {
                     msg.Printf( _( "Failed to add symbol %s to library file '%s'" ),
-                                wxString( component->GetLibId().GetLibItemName() ), aFileName );
+                                component->GetLibId().GetLibItemName().wx_str(), aFileName );
                     DisplayError( this, msg );
                     return false;
                 }
