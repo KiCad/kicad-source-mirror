@@ -82,6 +82,7 @@ BEGIN_EVENT_TABLE( EDA_3D_CANVAS, wxGLCanvas )
                     ID_POPUP_3D_VIEW_END, EDA_3D_CANVAS::OnPopUpMenu )
 
     EVT_CLOSE( EDA_3D_CANVAS::OnCloseWindow )
+    EVT_SIZE(  EDA_3D_CANVAS::OnResize )
 END_EVENT_TABLE()
 
 
@@ -188,6 +189,10 @@ void EDA_3D_CANVAS::OnCloseWindow( wxCloseEvent &event )
     event.Skip();
 }
 
+void EDA_3D_CANVAS::OnResize( wxSizeEvent &event )
+{
+    this->Request_refresh();
+}
 
 bool  EDA_3D_CANVAS::initializeOpenGL()
 {

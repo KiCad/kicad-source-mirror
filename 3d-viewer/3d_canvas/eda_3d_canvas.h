@@ -159,6 +159,8 @@ class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
      */
     void OnCloseWindow( wxCloseEvent &event );
 
+    void OnResize( wxSizeEvent &event );
+
     void OnTimerTimeout_Redraw( wxTimerEvent& event );
 
     DECLARE_EVENT_TABLE()
