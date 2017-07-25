@@ -8,7 +8,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -223,7 +223,9 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
 
         case F_SilkS:
         case B_SilkS:
-            if ( plotOpt.GetPlotOutlineMode() )
+            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF && plotOpt.GetPlotOutlineMode() )
+                // PlotLayerOutlines() is designed only for DXF plotters.
+                // and must not be used for other plot formats
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
             else
                 PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
@@ -264,7 +266,9 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
             plotOpt.SetSkipPlotNPTH_Pads( false );
             plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
 
-            if ( plotOpt.GetPlotOutlineMode() )
+            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF && plotOpt.GetPlotOutlineMode() )
+                // PlotLayerOutlines() is designed only for DXF plotters.
+                // and must not be used for other plot formats
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
             else
                 PlotSilkScreen( aBoard, aPlotter, layer_mask, plotOpt );
@@ -274,7 +278,9 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
             plotOpt.SetSkipPlotNPTH_Pads( false );
             plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
 
-            if ( plotOpt.GetPlotOutlineMode() )
+            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF && plotOpt.GetPlotOutlineMode() )
+                // PlotLayerOutlines() is designed only for DXF plotters.
+                // and must not be used for other plot formats
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
             else
                 PlotStandardLayer( aBoard, aPlotter, layer_mask, plotOpt );
