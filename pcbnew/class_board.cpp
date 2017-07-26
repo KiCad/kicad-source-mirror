@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  *
@@ -2772,9 +2772,9 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     }
                 }
 
-                wxASSERT( pad );
+                wxASSERT( pad );    // pad = 0 means the pad list is not up to date
 
-                if( zoneCount == 0 )
+                if( pad && zoneCount == 0 )
                 {
                     if( aReporter )
                     {
