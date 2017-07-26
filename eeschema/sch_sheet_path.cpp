@@ -502,18 +502,6 @@ bool SCH_SHEET_LIST::IsModified()
 }
 
 
-bool SCH_SHEET_LIST::IsAutoSaveRequired()
-{
-    for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
-    {
-        if( (*it).LastScreen() && (*it).LastScreen()->IsSave() )
-            return true;
-    }
-
-    return false;
-}
-
-
 void SCH_SHEET_LIST::ClearModifyStatus()
 {
     for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )

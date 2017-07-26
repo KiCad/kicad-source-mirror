@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -354,13 +354,6 @@ public:
      * @return True if the hierarchy is modified otherwise false.
      */
     bool IsModified();
-
-    /**
-     * Function IsAutoSaveRequired
-     * checks the entire hierarchy for any modifications that require auto save.
-     * @return True if the hierarchy is modified otherwise false.
-     */
-    bool IsAutoSaveRequired();
 
     void ClearModifyStatus();
 
