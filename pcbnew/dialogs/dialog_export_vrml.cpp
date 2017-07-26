@@ -162,15 +162,6 @@ public:
         // Making path relative or absolute has no meaning when VRML files are not copied.
         event.Enable( m_cbCopyFiles->GetValue() );
     }
-
-    virtual void OnFileChanged( wxFileDirPickerEvent& event ) override
-    {
-        // Clicking on file picker button changes the focus to the file picker button which
-        // is not the behavior we want.  Set the focus back to the OK button so the next enter
-        // key press dismisses this dialog with the OK action.
-        m_sdbSizer1OK->SetFocus();
-    }
-
 };
 
 

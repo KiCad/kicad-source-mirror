@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -31,7 +31,6 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 	bUpperSizer->Add( m_staticText3, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_SubdirNameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SubdirNameCtrl->SetMaxLength( 0 ); 
 	bUpperSizer->Add( m_SubdirNameCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
@@ -72,7 +71,14 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 	fgSizerOptions->Add( m_staticText4, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_VRML_Xref = new wxTextCtrl( m_panel1, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_VRML_Xref->SetMaxLength( 8 ); 
+	#ifdef __WXGTK__
+	if ( !m_VRML_Xref->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_VRML_Xref->SetMaxLength( 8 );
+	}
+	#else
+	m_VRML_Xref->SetMaxLength( 8 );
+	#endif
 	fgSizerOptions->Add( m_VRML_Xref, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_staticText5 = new wxStaticText( m_panel1, wxID_ANY, _("Y Ref:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -80,7 +86,14 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 	fgSizerOptions->Add( m_staticText5, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_VRML_Yref = new wxTextCtrl( m_panel1, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_VRML_Yref->SetMaxLength( 8 ); 
+	#ifdef __WXGTK__
+	if ( !m_VRML_Yref->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_VRML_Yref->SetMaxLength( 8 );
+	}
+	#else
+	m_VRML_Yref->SetMaxLength( 8 );
+	#endif
 	fgSizerOptions->Add( m_VRML_Yref, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
@@ -147,14 +160,8 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 	this->SetSizer( bSizer1 );
 	this->Layout();
 	bSizer1->Fit( this );
-	
-	// Connect Events
-	m_filePicker->Connect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( DIALOG_EXPORT_3DFILE_BASE::OnFileChanged ), NULL, this );
 }
 
 DIALOG_EXPORT_3DFILE_BASE::~DIALOG_EXPORT_3DFILE_BASE()
 {
-	// Disconnect Events
-	m_filePicker->Disconnect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( DIALOG_EXPORT_3DFILE_BASE::OnFileChanged ), NULL, this );
-	
 }
