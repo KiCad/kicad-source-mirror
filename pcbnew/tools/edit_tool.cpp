@@ -328,7 +328,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection)
-    auto& selection = m_selectionTool->RequestSelection( SELECTION_DELETABLE );
+    auto& selection = m_selectionTool->RequestSelection( SELECTION_DEFAULT );
 
     if( selection.Empty() )
         return 0;
@@ -382,11 +382,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 if( !invokeInlineRouter() )
                 {
-                    selection = m_selectionTool->RequestSelection( SELECTION_DEFAULT );
-
-                    if( selection.Empty() )
-                        break;
-
                     // deal with locked items (override lock or abort the operation)
                     SELECTION_LOCK_FLAGS lockFlags = m_selectionTool->CheckLock();
 
