@@ -254,11 +254,18 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos )
         case PCB_MODULE_T:
         {
             MODULE* mod = static_cast<MODULE*>( aItem );
-            addAnchor( mod->GetPosition(), ORIGIN | SNAPPABLE, mod );
 
             for( auto pad : mod->Pads() )
-                addAnchor( pad->GetPosition(), CORNER | SNAPPABLE, pad );
+            {
+                if( pad->GetBoundingBox().Contains( wxPoint( aRefPos.x, aRefPos.y ) ) )
+                {
+                    addAnchor( pad->GetPosition(), CORNER | SNAPPABLE, pad );
+                    break;
+                }
+            }
 
+            // if the cursor is not over a pad, then drag the module by its origin
+            addAnchor( mod->GetPosition(), ORIGIN | SNAPPABLE, mod );
             break;
         }
 
