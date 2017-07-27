@@ -178,7 +178,10 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
     if( down )      // Handle mouse button press
     {
         st->downTimestamp = wxGetLocalTimeMillis();
-        st->dragOrigin = m_lastMousePos;
+
+        if( !st->pressed )      // save the drag origin on the first click only
+            st->dragOrigin = m_lastMousePos;
+
         st->downPosition = m_lastMousePos;
         st->dragMaxDelta = 0;
         st->pressed = true;
