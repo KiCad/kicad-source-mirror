@@ -7534,8 +7534,8 @@ msgid ""
 "\n"
 "Do you want to save the current document before proceeding?"
 msgstr ""
-"この操作はやり直しができません．しかも，階層化された回路図は追加できないこと"
-"に注意してください．\n"
+"この操作はやり直しができません。しかも、階層化された回路図は追加できないこと"
+"に注意してください。\n"
 "\n"
 "操作を続行する前に現在の作業内容を保存しますか？"
 
@@ -14110,7 +14110,7 @@ msgid ""
 "Unable to write file<%s>\n"
 "Do you want to exit and abandon your change?"
 msgstr ""
-"<%s>に書込めませんでした．\n"
+"<%s>に書込めませんでした。\n"
 "変更を破棄して終了しますか？"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:161
@@ -21781,7 +21781,7 @@ msgstr "ファイル '%s' を読み込めません"
 #: pcbnew/eagle_plugin.cpp:774
 #, c-format
 msgid "<package> name: '%s' duplicated in eagle <library>: '%s'"
-msgstr "<package> の名前:'%s' が，Eagleの <library> 名と重複しています:'%s'"
+msgstr "<package> の名前:'%s' が、Eagleの <library> 名と重複しています:'%s'"
 
 #: pcbnew/eagle_plugin.cpp:848
 #, c-format
@@ -24042,7 +24042,7 @@ msgstr "フットプリントの変更を終了前に保存しますか？"
 
 #: pcbnew/moduleframe.cpp:546
 msgid "Library is not set, the footprint could not be saved."
-msgstr "ライブラリが選択されていないため，フットプリントを保存できません．"
+msgstr "ライブラリが選択されていないため、フットプリントを保存できません。"
 
 #: pcbnew/moduleframe.cpp:783
 msgid "no active library"
