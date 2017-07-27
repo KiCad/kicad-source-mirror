@@ -28,7 +28,6 @@
 #include <draw_frame.h>
 
 #include <hotkeys_basic.h>
-#include <boost/range/adaptor/map.hpp>
 #include <cctype>
 #include <cassert>
 
@@ -197,8 +196,9 @@ void ACTION_MANAGER::UpdateHotKeys()
     m_actionHotKeys.clear();
     m_hotkeys.clear();
 
-    for( TOOL_ACTION* action : m_actionNameIndex | boost::adaptors::map_values )
+    for( const auto& actionName : m_actionNameIndex )
     {
+        TOOL_ACTION* action = actionName.second;
         int hotkey = processHotKey( action );
 
         if( hotkey > 0 )
@@ -208,13 +208,13 @@ void ACTION_MANAGER::UpdateHotKeys()
         }
     }
 
-#ifndef NDEBUG
+#ifdef DEBUG
     // Check if there are two global actions assigned to the same hotkey
-    for( std::list<TOOL_ACTION*>& action_list : m_actionHotKeys | boost::adaptors::map_values )
+    for( const auto& action_list : m_actionHotKeys )
     {
         int global_actions_cnt = 0;
 
-        for( TOOL_ACTION* action : action_list )
+        for( const TOOL_ACTION* action : action_list.second )
         {
             if( action->GetScope() == AS_GLOBAL )
                 ++global_actions_cnt;
