@@ -654,8 +654,6 @@ SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
             return SELECTION_LOCKED;
     }
 
-    m_locked = false;
-
     return SELECTION_UNLOCKED;
 }
 
