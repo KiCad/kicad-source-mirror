@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-24 21:55+0900\n"
-"PO-Revision-Date: 2017-07-24 22:00+0900\n"
+"POT-Creation-Date: 2017-07-27 14:16+0900\n"
+"PO-Revision-Date: 2017-07-27 14:37+0900\n"
 "Last-Translator: starfort_jp <starfort@nifty.com>\n"
 "Language-Team: kicad_jp <kicad@kicad.jp>\n"
 "Language: ja_JP\n"
@@ -181,7 +181,7 @@ msgstr "エイリアス"
 #: common/dialog_about/AboutDialog_main.cpp:129 eeschema/bom_table_column.h:34
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
-#: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1756
+#: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1755
 #: eeschema/viewlibs.cpp:235 include/lib_table_grid.h:174
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:44
 #: pcbnew/librairi.cpp:827
@@ -1122,8 +1122,8 @@ msgstr "ピクセル"
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:264
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:46
 #: pcbnew/dialogs/dialog_export_step_base.cpp:97
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:64
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:98
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:63
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:60
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:37
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:51
@@ -1627,21 +1627,21 @@ msgstr "出力ディレクトリ '%s' が生成されました。\n"
 msgid "Cannot create output directory '%s'.\n"
 msgstr "出力ディレクトリ '%s' を作成できませんでした。\n"
 
-#: common/confirm.cpp:74 common/pgm_base.cpp:925 eeschema/symbedit.cpp:103
+#: common/confirm.cpp:77 common/pgm_base.cpp:925 eeschema/symbedit.cpp:103
 #: eeschema/widgets/widget_eeschema_color_config.cpp:297
 msgid "Warning"
 msgstr "警告"
 
-#: common/confirm.cpp:79 kicad/prjconfig.cpp:140
+#: common/confirm.cpp:89 kicad/prjconfig.cpp:140
 #: pcbnew/router/length_tuner_tool.cpp:146
 msgid "Error"
 msgstr "エラー"
 
-#: common/confirm.cpp:93
+#: common/confirm.cpp:106
 msgid "Info"
 msgstr "情報"
 
-#: common/confirm.cpp:113
+#: common/confirm.cpp:131
 msgid "Confirmation"
 msgstr "確認"
 
@@ -2548,7 +2548,7 @@ msgstr "ロード エラー"
 msgid "Errors were encountered loading footprints:"
 msgstr "フットプリントのロード中にエラーが発生しました:"
 
-#: common/fp_lib_table.cpp:188
+#: common/fp_lib_table.cpp:187
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line %d"
@@ -2556,15 +2556,19 @@ msgstr ""
 "重複したライブラリの別名 '%s' がフットプリント ライブラリ テーブル ファイルの"
 "行 %d に見つかりました"
 
-#: common/fp_lib_table.cpp:255
+#: common/fp_lib_table.cpp:254
 #, c-format
 msgid "fp-lib-table files contain no library with nickname '%s'"
 msgstr "fp-lib-table ファイルはニックネーム '%s' のライブラリを含んでいません"
 
-#: common/fp_lib_table.cpp:409 eeschema/symbol_lib_table.cpp:403
+#: common/fp_lib_table.cpp:408 eeschema/symbol_lib_table.cpp:403
 #, c-format
 msgid "Cannot create global library table path '%s'."
 msgstr "グローバル ライブラリ テーブルのパス '%s' が生成できません."
+
+#: common/gal/opengl/utils.cpp:81
+msgid "OpenGL error occurred"
+msgstr "OpenGL エラーが発生しました"
 
 #: common/gestfich.cpp:233
 #, c-format
@@ -2871,11 +2875,19 @@ msgstr "二度とこのメッセージを表示しない。"
 msgid "Unable to find '%s' template config file."
 msgstr "'%s' テンプレート設定ファイルが見つかりませんでした。"
 
+#: common/project.cpp:251
+msgid "Error copying project file template"
+msgstr "プロジェクト ファイル テンプレートのコピー エラー"
+
 #: common/project.cpp:271
 #, c-format
 msgid "Cannot create prj file '%s' (Directory not writable)"
 msgstr ""
 "プロジェクトファイル '%s' を作成できません (ディレクトリは書き込み禁止)"
+
+#: common/project.cpp:415
+msgid "Error loading project footprint library table"
+msgstr "プロジェクト フットプリント ライブラリ テーブルの読み込みエラー"
 
 #: common/richio.cpp:167 tools/io_benchmark/stdstream_line_reader.cpp:76
 #, c-format
@@ -2943,7 +2955,7 @@ msgid "Center"
 msgstr "中央"
 
 #: common/tool/actions.cpp:36 eeschema/hotkeys.cpp:89 gerbview/hotkeys.cpp:61
-#: pagelayout_editor/hotkeys.cpp:74 pcbnew/basepcbframe.cpp:846
+#: pagelayout_editor/hotkeys.cpp:74 pcbnew/basepcbframe.cpp:848
 #: pcbnew/hotkeys.cpp:160 pcbnew/hotkeys.cpp:162
 msgid "Zoom Auto"
 msgstr "自動ズーム"
@@ -3352,7 +3364,7 @@ msgstr "プロジェクトファイル '%s' は書き込み禁止されていま
 msgid "Footprint Viewer"
 msgstr "フットプリント ビューア"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:180 pcbnew/basepcbframe.cpp:475
+#: cvpcb/class_DisplayFootprintsFrame.cpp:180 pcbnew/basepcbframe.cpp:477
 #: pcbnew/tool_pcb.cpp:342
 msgid "Display polar coordinates"
 msgstr "極座標表示"
@@ -3375,7 +3387,7 @@ msgstr "単位を mm に設定"
 msgid "Change cursor shape"
 msgstr "カーソルの形状を変更"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:199 pcbnew/basepcbframe.cpp:485
+#: cvpcb/class_DisplayFootprintsFrame.cpp:199 pcbnew/basepcbframe.cpp:487
 #: pcbnew/tool_pcb.cpp:380
 msgid "Show pads in outline mode"
 msgstr "アウトライン モードでパッドを表示"
@@ -3476,17 +3488,11 @@ msgstr ""
 "ん。詳細は CvPcb マニュアルの \"フットプリント ライブラリ テーブル\" の章を参"
 "照して下さい。"
 
-#: cvpcb/cvpcb.cpp:181
-#, c-format
-msgid ""
-"An error occurred attempting to load the global footprint library table:\n"
-"\n"
-"%s"
+#: cvpcb/cvpcb.cpp:182
+msgid "An error occurred attempting to load the global footprint library table"
 msgstr ""
 "グローバル フットプリント ライブラリ テーブルを読み込もうとしたところ、エラー"
-"が発生しました。\n"
-"\n"
-"%s"
+"が発生しました"
 
 #: cvpcb/cvpcb_mainframe.cpp:250
 msgid ""
@@ -3583,7 +3589,7 @@ msgstr ""
 msgid "Configuration Error"
 msgstr "構成エラー"
 
-#: cvpcb/cvpcb_mainframe.cpp:756 eeschema/schframe.cpp:1397
+#: cvpcb/cvpcb_mainframe.cpp:756 eeschema/schframe.cpp:1401
 #: kicad/prjconfig.cpp:334 pcbnew/moduleframe.cpp:815 pcbnew/pcbframe.cpp:1031
 msgid " [Read Only]"
 msgstr " [読み取り専用]"
@@ -3978,7 +3984,7 @@ msgid "Reference"
 msgstr "リファレンス"
 
 #: eeschema/bom_table_column.h:35 eeschema/lib_field.cpp:631
-#: eeschema/sch_component.cpp:1753 eeschema/template_fieldnames.cpp:45
+#: eeschema/sch_component.cpp:1752 eeschema/template_fieldnames.cpp:45
 #: pcbnew/class_edge_mod.cpp:237 pcbnew/class_module.cpp:585
 #: pcbnew/class_pad.cpp:654 pcbnew/class_text_mod.cpp:356
 #: pcbnew/loadcmp.cpp:436 pcbnew/loadcmp.cpp:500
@@ -4840,8 +4846,8 @@ msgstr "交換可能なユニット:"
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:83
 #: pcbnew/dialogs/dialog_export_step_base.cpp:110
 #: pcbnew/dialogs/dialog_export_step_base.cpp:128
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:74
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:82
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:73
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:88
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:34
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:48
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:62
@@ -6528,7 +6534,7 @@ msgid "Never Show Again"
 msgstr "再表示しない"
 
 #: eeschema/dialogs/dialog_rescue_each_base.h:65
-#: eeschema/project_rescue.cpp:579 eeschema/project_rescue.cpp:594
+#: eeschema/project_rescue.cpp:580 eeschema/project_rescue.cpp:595
 msgid "Project Rescue Helper"
 msgstr "プロジェクト レスキュー ヘルパー"
 
@@ -6991,7 +6997,7 @@ msgstr "モデル"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:230
 #: eeschema/dialogs/dialog_spice_model_base.cpp:264
-#: eeschema/sch_component.cpp:1745 pcbnew/dialogs/wizard_add_fplib_base.cpp:185
+#: eeschema/sch_component.cpp:1744 pcbnew/dialogs/wizard_add_fplib_base.cpp:185
 #: pcbnew/loadcmp.cpp:437
 msgid "Library"
 msgstr "ライブラリ"
@@ -7202,7 +7208,7 @@ msgstr "シンボル '%s' はシンボル ライブラリ '%s' にマップさ�
 msgid "Couldn't load image from <%s>"
 msgstr "<%s> からイメージを読み込むことが出来ません"
 
-#: eeschema/edit_component_in_schematic.cpp:70
+#: eeschema/edit_component_in_schematic.cpp:69
 #, c-format
 msgid "Edit %s Field"
 msgstr "フィールド %s の編集"
@@ -7231,26 +7237,19 @@ msgstr ""
 "参照してください。"
 
 #: eeschema/eeschema.cpp:271
-#, c-format
 msgid ""
-"An error occurred attempting to load the global symbol library table:\n"
-"\n"
-"%s\n"
-"\n"
+"An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu"
 msgstr ""
 "グローバル シンボル ライブラリ テーブルを読み込もうとしたところ、エラーが発生"
-"しました:\n"
-"\n"
-"%s\n"
-"\n"
-"設定メニューで、このグローバル シンボル ライブラリ テーブルを編集して下さい。"
+"しました。\n"
+"設定メニューで、このグローバル シンボル ライブラリ テーブルを編集して下さい"
 
 #: eeschema/eeschema_config.cpp:261 pcbnew/pcbnew_config.cpp:217
 msgid "Read Project File"
 msgstr "プロジェクトファイルをロード"
 
-#: eeschema/eeschema_config.cpp:494 pcbnew/pcbnew_config.cpp:291
+#: eeschema/eeschema_config.cpp:494 pcbnew/pcbnew_config.cpp:295
 msgid "Save Project File"
 msgstr "プロジェクト ファイルの保存"
 
@@ -9794,26 +9793,26 @@ msgstr "ファイル '%s' を作成できません\n"
 msgid "Cannot create file '%s'.\n"
 msgstr "ファイル '%s' を作成できません\n"
 
-#: eeschema/project_rescue.cpp:57
+#: eeschema/project_rescue.cpp:58
 #, c-format
 msgid "Failed to create component library file '%s'"
 msgstr "コンポーネント ライブラリ ファイル '%s' を作成できませんでした"
 
-#: eeschema/project_rescue.cpp:321
+#: eeschema/project_rescue.cpp:322
 #, c-format
 msgid "Rename to %s"
 msgstr "ファイル名を %s へ変更"
 
-#: eeschema/project_rescue.cpp:434
+#: eeschema/project_rescue.cpp:435
 #, c-format
 msgid "Rescue %s as %s"
 msgstr "%s を %s としてレスキュー"
 
-#: eeschema/project_rescue.cpp:578
+#: eeschema/project_rescue.cpp:579
 msgid "This project has nothing to rescue."
 msgstr "このプロジェクトにレスキューは必要ありません."
 
-#: eeschema/project_rescue.cpp:593
+#: eeschema/project_rescue.cpp:594
 msgid "No symbols were rescued."
 msgstr "レスキューするシンボルがありません."
 
@@ -9848,19 +9847,19 @@ msgstr "電源シンボル"
 msgid "Component"
 msgstr "コンポーネント"
 
-#: eeschema/sch_component.cpp:1743
+#: eeschema/sch_component.cpp:1742
 msgid "Alias of"
 msgstr "エイリアス"
 
-#: eeschema/sch_component.cpp:1751
+#: eeschema/sch_component.cpp:1750
 msgid "<Unknown>"
 msgstr "<不明>"
 
-#: eeschema/sch_component.cpp:1757
+#: eeschema/sch_component.cpp:1756
 msgid "Key Words"
 msgstr "キーワード"
 
-#: eeschema/sch_component.cpp:2008
+#: eeschema/sch_component.cpp:2006
 #, c-format
 msgid "Component %s, %s"
 msgstr "コンポーネント %s, %s"
@@ -10480,7 +10479,7 @@ msgstr "回路図を開く"
 msgid "Error: not a component or no component"
 msgstr "エラー: コンポーネントではありません、又はコンポーネントがありません"
 
-#: eeschema/schframe.cpp:1400
+#: eeschema/schframe.cpp:1404
 msgid " [no file]"
 msgstr " [no file]"
 
@@ -13358,7 +13357,7 @@ msgstr "mils"
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:191
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:46
 #: pcbnew/dialogs/dialog_export_step_base.cpp:97
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:64
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:63
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:90
 msgid "inch"
 msgstr "inch"
@@ -14543,15 +14542,9 @@ msgstr "環境の比誘電率"
 msgid "Cable Length"
 msgstr "ケーブル長"
 
-#: pcbnew/append_board_to_current.cpp:92 pcbnew/files.cpp:524
-#: pcbnew/tools/pcbnew_control.cpp:833
-#, c-format
-msgid ""
-"Error loading board.\n"
-"%s"
-msgstr ""
-"ボードをロード中のエラー \n"
-"%s"
+#: pcbnew/append_board_to_current.cpp:93
+msgid "Error loading board in AppendBoardFile"
+msgstr "ボード ファイルを追加でのボードの読み込みエラー"
 
 #: pcbnew/array_creator.cpp:113
 msgid "Create an array"
@@ -14623,15 +14616,19 @@ msgstr "配線作業を中止しますか？"
 msgid "Could not automatically place footprints. No board outlines detected."
 msgstr "フットプリントを自動配置できません。基板外形が検出できません。"
 
-#: pcbnew/basepcbframe.cpp:474
+#: pcbnew/basepcbframe.cpp:164
+msgid "Error loading project footprint libraries"
+msgstr "プロジェクト フットプリント ライブラリの読み込みエラー"
+
+#: pcbnew/basepcbframe.cpp:476
 msgid "Display rectangular coordinates"
 msgstr "直交座標表示"
 
-#: pcbnew/basepcbframe.cpp:486
+#: pcbnew/basepcbframe.cpp:488
 msgid "Show pads in fill mode"
 msgstr "塗りつぶしモードでパッドを表示"
 
-#: pcbnew/basepcbframe.cpp:851
+#: pcbnew/basepcbframe.cpp:853
 msgid "Zoom "
 msgstr "ズーム "
 
@@ -17448,7 +17445,7 @@ msgstr "ローカル クリアランス値"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:169
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:204
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:98
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:50
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:64
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:87
@@ -17661,7 +17658,7 @@ msgid "Select an IDF export filename"
 msgstr "IDFファイル名の指定"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:32
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:50
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:49
 msgid "Grid Reference Point:"
 msgstr "グリッドの基準点:"
 
@@ -17671,7 +17668,7 @@ msgstr "自動調整"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:42
 #: pcbnew/dialogs/dialog_export_step_base.cpp:93
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:60
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:59
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:62
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:86
 msgid "Units:"
@@ -17694,7 +17691,7 @@ msgid "Mils"
 msgstr "Mil"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:102
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:100
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:113
 msgid "Output Units:"
 msgstr "出力単位:"
 
@@ -17785,7 +17782,7 @@ msgstr "仮想コンポーネントを無視"
 msgid "Export STEP"
 msgstr "STEP をエクスポート"
 
-#: pcbnew/dialogs/dialog_export_vrml.cpp:244
+#: pcbnew/dialogs/dialog_export_vrml.cpp:235
 #, c-format
 msgid "Unable to create file '%s'"
 msgstr "ファイル '%s' を作成できません"
@@ -17802,39 +17799,39 @@ msgstr "VRML ボード ファイルの保存"
 msgid "Footprint 3D model path:"
 msgstr "フットプリントの3Dモデル パス:"
 
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:70
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:69
 msgid "X Ref:"
 msgstr "X Ref:"
 
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:78
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:84
 msgid "Y Ref:"
 msgstr "Y Ref:"
 
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:98
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 msgid "meter"
 msgstr "メートル"
 
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:98
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 msgid "0.1 Inch"
 msgstr "0.1 inch"
 
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:113
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:126
 msgid "Copy 3D model files to 3D model path"
 msgstr "3Dモデルパスへ3Dモデルファイルをコピー"
 
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:117
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:130
 msgid "Use relative paths to model files in board VRML file"
 msgstr "VRMLファイル中に相対パスでモデルファイルを指定"
 
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:118
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:131
 msgid "Use paths for model files in board VRML file relative to the vrml file"
 msgstr "モデルファイルへはVRMLファイルへの相対パスをパスを使って下さい"
 
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:122
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:135
 msgid "Plain PCB (no copper or silk)"
 msgstr "シンプルPCB(銅箔/シルクなし)"
 
-#: pcbnew/dialogs/dialog_export_vrml_base.h:76
+#: pcbnew/dialogs/dialog_export_vrml_base.h:72
 msgid "VRML Export Options"
 msgstr "VRML エクスポート オプション"
 
@@ -22064,7 +22061,16 @@ msgstr "現在のボードは変更されています。変更を保存します
 msgid "Board '%s' does not exist.  Do you wish to create it?"
 msgstr "ボード '%s' は存在しません。新規作成しますか?"
 
-#: pcbnew/files.cpp:554
+#: pcbnew/files.cpp:524
+#, c-format
+msgid ""
+"Error loading board file:\n"
+"%s"
+msgstr ""
+"ボード ファイルの読み込みエラー:\n"
+"%s"
+
+#: pcbnew/files.cpp:552
 msgid ""
 "This file was created by an older version of Pcbnew.\n"
 "It will be stored in the new file format when you save this file again."
@@ -22072,17 +22078,17 @@ msgstr ""
 "このファイルは古いバージョンの Pcbnew で作成されています。\n"
 "次に保存する際に、新しいフォーマットで保存し直されます。"
 
-#: pcbnew/files.cpp:660
+#: pcbnew/files.cpp:658
 #, c-format
 msgid "Warning: unable to create backup file '%s'"
 msgstr "警告: バックアップ ファイル '%s' を作成できません"
 
-#: pcbnew/files.cpp:687 pcbnew/files.cpp:780
+#: pcbnew/files.cpp:685 pcbnew/files.cpp:778
 #, c-format
 msgid "No access rights to write to file '%s'"
 msgstr "'%s' ファイルへの書き込み権限がありません"
 
-#: pcbnew/files.cpp:726 pcbnew/files.cpp:805
+#: pcbnew/files.cpp:724 pcbnew/files.cpp:803
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -22091,22 +22097,22 @@ msgstr ""
 "ボード保存中のエラー '%s'\n"
 "%s"
 
-#: pcbnew/files.cpp:732
+#: pcbnew/files.cpp:730
 #, c-format
 msgid "Failed to create '%s'"
 msgstr "'%s' の作成に失敗しました"
 
-#: pcbnew/files.cpp:758
+#: pcbnew/files.cpp:756
 #, c-format
 msgid "Backup file: '%s'"
 msgstr "バックアップファイル: '%s'"
 
-#: pcbnew/files.cpp:760
+#: pcbnew/files.cpp:758
 #, c-format
 msgid "Wrote board file: '%s'"
 msgstr "ボードファイルに書き込みました: '%s'"
 
-#: pcbnew/files.cpp:814
+#: pcbnew/files.cpp:812
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -22183,7 +22189,7 @@ msgstr ""
 "エラー JSON データを取得できませんでした URL '%s'\n"
 "理由: '%s'"
 
-#: pcbnew/github/github_plugin.cpp:295
+#: pcbnew/github/github_plugin.cpp:300
 #, c-format
 msgid ""
 "Footprint\n"
@@ -22196,7 +22202,7 @@ msgstr ""
 "が Github ライブラリ '%s' の書き込み可能な部分に存在\n"
 "しません"
 
-#: pcbnew/github/github_plugin.cpp:356
+#: pcbnew/github/github_plugin.cpp:361
 msgid ""
 "Set this property to a directory where footprints are to be written as "
 "pretty footprints when saving to this library. Anything saved will take "
@@ -22212,7 +22218,7 @@ msgstr ""
 "は <b>必ず</b> 拡張子に <b>.pretty</b> を付けること。 (保存フォーマットが "
 "pretty のため)</p>"
 
-#: pcbnew/github/github_plugin.cpp:411
+#: pcbnew/github/github_plugin.cpp:416
 #, c-format
 msgid ""
 "option '%s' for Github library '%s' must point to a writable directory "
@@ -22221,7 +22227,7 @@ msgstr ""
 "オプション '%s' は Github ライブラリ '%s' 用で、必ず最後に '.pretty' 拡張子を"
 "持つ書込み可能なディレクトリを指さなければなりません."
 
-#: pcbnew/github/github_plugin.cpp:541
+#: pcbnew/github/github_plugin.cpp:549
 #, c-format
 msgid ""
 "Unable to parse URL:\n"
@@ -22230,7 +22236,7 @@ msgstr ""
 "以下のURLが処理できませんでした:\n"
 "'%s'"
 
-#: pcbnew/github/github_plugin.cpp:565
+#: pcbnew/github/github_plugin.cpp:573
 #, c-format
 msgid ""
 "%s\n"
@@ -22243,7 +22249,7 @@ msgstr ""
 "ライブラリ: '%s'.\n"
 "理由: '%s'"
 
-#: pcbnew/github/github_plugin.cpp:582
+#: pcbnew/github/github_plugin.cpp:590
 #, c-format
 msgid ""
 "Cannot download library '%s'.\n"
@@ -22258,7 +22264,7 @@ msgid "Cannot convert \"%s\" to an integer"
 msgstr "\"%s\" を整数に変換できません"
 
 #: pcbnew/gpcb_plugin.cpp:297 pcbnew/gpcb_plugin.cpp:983
-#: pcbnew/kicad_plugin.cpp:1828
+#: pcbnew/kicad_plugin.cpp:1827
 #, c-format
 msgid "footprint library path '%s' does not exist"
 msgstr "フットプリント ライブラリのパス '%s' は存在しません"
@@ -22279,29 +22285,29 @@ msgstr "未知のトークン \"%s\""
 msgid "Element token contains %d parameters."
 msgstr "要素トークンは %d パラメータを含んでいます。"
 
-#: pcbnew/gpcb_plugin.cpp:1048 pcbnew/kicad_plugin.cpp:1898
-#: pcbnew/kicad_plugin.cpp:1964 pcbnew/librairi.cpp:527
+#: pcbnew/gpcb_plugin.cpp:1048 pcbnew/kicad_plugin.cpp:1897
+#: pcbnew/kicad_plugin.cpp:1963 pcbnew/librairi.cpp:527
 #, c-format
 msgid "Library '%s' is read only"
 msgstr "ライブラリ '%s' は読み込み専用です"
 
-#: pcbnew/gpcb_plugin.cpp:1067 pcbnew/kicad_plugin.cpp:2001
+#: pcbnew/gpcb_plugin.cpp:1067 pcbnew/kicad_plugin.cpp:2000
 #, c-format
 msgid "user does not have permission to delete directory '%s'"
 msgstr "現在のユーザーには、ディレクトリ '%s' を削除する権限がありません"
 
-#: pcbnew/gpcb_plugin.cpp:1075 pcbnew/kicad_plugin.cpp:2009
+#: pcbnew/gpcb_plugin.cpp:1075 pcbnew/kicad_plugin.cpp:2008
 #, c-format
 msgid "library directory '%s' has unexpected sub-directories"
 msgstr ""
 "ライブラリのディレクトリ '%s' は予期しないサブディレクトリを含んでいます"
 
-#: pcbnew/gpcb_plugin.cpp:1094 pcbnew/kicad_plugin.cpp:2028
+#: pcbnew/gpcb_plugin.cpp:1094 pcbnew/kicad_plugin.cpp:2027
 #, c-format
 msgid "unexpected file '%s' was found in library path '%s'"
 msgstr "予期しないファイル '%s' がライブラリ パス '%s' に見つかりました"
 
-#: pcbnew/gpcb_plugin.cpp:1112 pcbnew/kicad_plugin.cpp:2046
+#: pcbnew/gpcb_plugin.cpp:1112 pcbnew/kicad_plugin.cpp:2045
 #, c-format
 msgid "footprint library '%s' cannot be deleted"
 msgstr "フットプリント ライブラリ '%s' は削除できません"
@@ -22654,47 +22660,47 @@ msgstr ""
 msgid "Footprint library path '%s' does not exist"
 msgstr "フットプリント ライブラリのパス '%s' は存在しません"
 
-#: pcbnew/kicad_plugin.cpp:343
+#: pcbnew/kicad_plugin.cpp:342
 #, c-format
 msgid "library '%s' has no footprint '%s' to delete"
 msgstr "ライブラリ '%s' には削除するフットプリント '%s' がありません"
 
-#: pcbnew/kicad_plugin.cpp:1249 pcbnew/legacy_plugin.cpp:97
+#: pcbnew/kicad_plugin.cpp:1248 pcbnew/legacy_plugin.cpp:97
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "未知のパッド形状です: %d"
 
-#: pcbnew/kicad_plugin.cpp:1262 pcbnew/legacy_plugin.cpp:98
+#: pcbnew/kicad_plugin.cpp:1261 pcbnew/legacy_plugin.cpp:98
 #, c-format
 msgid "unknown pad attribute: %d"
 msgstr "未知のパッド属性です: %d"
 
-#: pcbnew/kicad_plugin.cpp:1465
+#: pcbnew/kicad_plugin.cpp:1464
 #, c-format
 msgid "unknown via type %d"
 msgstr "未知のビア形状です: %d"
 
-#: pcbnew/kicad_plugin.cpp:1595
+#: pcbnew/kicad_plugin.cpp:1594
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "未知のゾーンのコーナー用スムージング タイプ %d"
 
-#: pcbnew/kicad_plugin.cpp:1785
+#: pcbnew/kicad_plugin.cpp:1784
 msgid "this file does not contain a PCB"
 msgstr "このファイルは基板 (PCB) を含んでいません"
 
-#: pcbnew/kicad_plugin.cpp:1915
+#: pcbnew/kicad_plugin.cpp:1914
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "フットプリント ファイル名 '%s' は不正です。"
 
-#: pcbnew/kicad_plugin.cpp:1921
+#: pcbnew/kicad_plugin.cpp:1920
 #, c-format
 msgid "user does not have write permission to delete file '%s' "
 msgstr ""
 "現在のユーザはファイル '%s' を削除するための書き込み権限を持っていません "
 
-#: pcbnew/kicad_plugin.cpp:1976
+#: pcbnew/kicad_plugin.cpp:1975
 #, c-format
 msgid "cannot overwrite library path '%s'"
 msgstr "ライブラリ パス '%s' は上書きできません"
@@ -24243,6 +24249,19 @@ msgstr "寸法線は導体レイヤーまたは外形線レイヤーに配置で
 msgid "This tool is not available in the legacy canvas"
 msgstr "このツールは互換キャンバスでは無効です"
 
+#: pcbnew/onleftclick.cpp:549
+msgid "Item type is incorrect"
+msgstr "アイテムのタイプが不正です"
+
+#: pcbnew/onleftclick.cpp:550
+#, c-format
+msgid ""
+"Selected item type is %d\n"
+"Expected: %d"
+msgstr ""
+"選択されたアイテム タイプは %d\n"
+"予期されるタイプ: %d"
+
 #: pcbnew/onrightclick.cpp:152
 msgid "Lock Footprint"
 msgstr "フットプリントをロック"
@@ -24734,24 +24753,26 @@ msgstr ""
 "詳細は、CvPcb か Pcbnewのドキュメントにある \"フットプリント ライブラリ テー"
 "ブル\" の章を参照してください。"
 
-#: pcbnew/pcbnew.cpp:361
-#, c-format
+#: pcbnew/pcbnew.cpp:362
 msgid ""
 "An error occurred attempting to load the global footprint library table:\n"
-"\n"
-"%s\n"
-"\n"
 "Please edit this global footprint library table in Preferences menu"
 msgstr ""
 "グローバル フットプリント ライブラリ テーブルを読み込もうとしたところ、エラー"
 "が発生しました:\n"
-"\n"
-"%s\n"
-"\n"
 "設定メニューで、このグローバル フットプリント ライブラリ テーブルを編集して下"
-"さい。"
+"さい"
 
-#: pcbnew/plot_board_layers.cpp:121 pcbnew/plot_board_layers.cpp:310
+#: pcbnew/pcbnew_config.cpp:261
+msgid "Unkown ID in Process Config"
+msgstr "Process Config 中の不明な ID"
+
+#: pcbnew/pcbnew_config.cpp:262
+#, c-format
+msgid "PCB_EDIT_FRAME::Process_Config received ID %d"
+msgstr "PCB_EDIT_FRAME::Process_Config 受信 ID %d"
+
+#: pcbnew/plot_board_layers.cpp:121 pcbnew/plot_board_layers.cpp:316
 #, c-format
 msgid "Your BOARD has a bad layer number for footprint %s"
 msgstr "ボードにフットプリント %s に対して不正なレイヤー番号があります"
@@ -25111,8 +25132,8 @@ msgid "BOARD exported OK."
 msgstr "ボードは正しくエクスポートされました。"
 
 #: pcbnew/specctra_export.cpp:155
-msgid "Unable to export, please fix and try again."
-msgstr "エクスポートできません。問題点を修正してやり直してください。"
+msgid "Unable to export, please fix and try again"
+msgstr "エクスポートできません。問題点を修正してやり直してください"
 
 #: pcbnew/specctra_export.cpp:810
 #, c-format
@@ -25128,51 +25149,51 @@ msgstr "複数のコンポーネントが同一のリファレンスID '%s' を�
 msgid "Merge Specctra Session file:"
 msgstr "Spectra セッションファイルをマージ:"
 
-#: pcbnew/specctra_import.cpp:109
-msgid "BOARD may be corrupted, do not save it."
-msgstr "ボードが壊れているかもしれません、保存しないでください。"
+#: pcbnew/specctra_import.cpp:110
+msgid ""
+"Board may be corrupted, do not save it.\n"
+"Fix problem and try again"
+msgstr ""
+"ボードは破損しているかも知れません。保存しないで下さい。\n"
+"問題点を修正してやり直してください"
 
-#: pcbnew/specctra_import.cpp:111
-msgid "Fix problem and try again."
-msgstr "問題を修正してやり直してください。"
-
-#: pcbnew/specctra_import.cpp:135
+#: pcbnew/specctra_import.cpp:140
 msgid "Session file imported and merged OK."
 msgstr "セッション ファイルはインポートされ、正常にマージされました。"
 
-#: pcbnew/specctra_import.cpp:207 pcbnew/specctra_import.cpp:318
+#: pcbnew/specctra_import.cpp:212 pcbnew/specctra_import.cpp:323
 #, c-format
 msgid "Session file uses invalid layer id \"%s\""
 msgstr "セッションファイルで不正なレイヤーID \"%s\" が使用されています"
 
-#: pcbnew/specctra_import.cpp:259
+#: pcbnew/specctra_import.cpp:264
 msgid "Session via padstack has no shapes"
 msgstr "セッション ビアのパッドスタックは形状がありません"
 
-#: pcbnew/specctra_import.cpp:266 pcbnew/specctra_import.cpp:284
-#: pcbnew/specctra_import.cpp:309
+#: pcbnew/specctra_import.cpp:271 pcbnew/specctra_import.cpp:289
+#: pcbnew/specctra_import.cpp:314
 #, c-format
 msgid "Unsupported via shape: %s"
 msgstr "サポートされていないビアの形: %s"
 
-#: pcbnew/specctra_import.cpp:365
+#: pcbnew/specctra_import.cpp:370
 msgid "Session file is missing the \"session\" section"
 msgstr "セッションファイルに \"session\" セクションが見つかりません"
 
-#: pcbnew/specctra_import.cpp:373
+#: pcbnew/specctra_import.cpp:378
 msgid "Session file is missing the \"routes\" section"
 msgstr "セッションファイルに \"routes\" セクションが見つかりません"
 
-#: pcbnew/specctra_import.cpp:376
+#: pcbnew/specctra_import.cpp:381
 msgid "Session file is missing the \"library_out\" section"
 msgstr "セッションファイルに \"library_out\" セクションが見つかりません"
 
-#: pcbnew/specctra_import.cpp:402
+#: pcbnew/specctra_import.cpp:407
 #, c-format
 msgid "Session file has 'reference' to non-existent component \"%s\""
 msgstr "セッションファイルが存在しないコンポーネント \"%s\" を参照しています。"
 
-#: pcbnew/specctra_import.cpp:541
+#: pcbnew/specctra_import.cpp:546
 #, c-format
 msgid "A wire_via references a missing padstack \"%s\""
 msgstr "wire_via が失われたパッドスタック \"%s\" を参照しています"
@@ -25335,6 +25356,15 @@ msgstr "Pcbnew について(&A)"
 msgid "About Pcbnew PCB designer"
 msgstr "Pcbnew PCBデザイナーについて"
 
+#: pcbnew/tool_onrightclick.cpp:105
+msgid "Invalid tool ID "
+msgstr "不正なツール ID "
+
+#: pcbnew/tool_onrightclick.cpp:106
+#, c-format
+msgid "ToolOnRightClick called with ID %d"
+msgstr "ToolOnRightClick を呼び出す ID %d"
+
 #: pcbnew/tool_pcb.cpp:55
 msgid ""
 "Show active layer selections\n"
@@ -25493,6 +25523,18 @@ msgstr "%.1f mils (%.2f mm)"
 #: pcbnew/tool_pcb.cpp:717
 msgid "+/- to switch"
 msgstr "+/- でスイッチします"
+
+#: pcbnew/tool_pcb.cpp:817
+msgid "Invalid toolbar option"
+msgstr "不正なツールバー オプション"
+
+#: pcbnew/tool_pcb.cpp:818
+msgid ""
+"PCB_EDIT_FRAME::OnSelectOptionToolbar error \n"
+" (event not handled!)"
+msgstr ""
+"PCB_EDIT_FRAME::OnSelectOptionToolbar エラー \n"
+" (イベントがハンドルされていません!)"
 
 #: pcbnew/toolbars_update_user_interface.cpp:138
 msgid "Disable design rule checking"
@@ -25991,6 +26033,15 @@ msgstr "ローカル ラッツネスト用にコンポーネントを選択"
 msgid "Are you sure you want to delete item?"
 msgstr "本当にアイテムを削除してもよろしいですか？"
 
+#: pcbnew/tools/pcbnew_control.cpp:833
+#, c-format
+msgid ""
+"Error loading board.\n"
+"%s"
+msgstr ""
+"ボードをロード中のエラー \n"
+"%s"
+
 #: pcbnew/tools/pcbnew_control.cpp:890
 msgid "Append a board"
 msgstr "ボードを追加"
@@ -26163,15 +26214,15 @@ msgstr "選択されているアイテムの種類をフィルタリングしま
 msgid "Select..."
 msgstr "選択..."
 
-#: pcbnew/tools/selection_tool.cpp:644
+#: pcbnew/tools/selection_tool.cpp:648
 msgid "Selection contains locked items. Do you want to continue?"
 msgstr "ロックされたアイテムを含んで選択しています。続けますか？"
 
-#: pcbnew/tools/selection_tool.cpp:1199
+#: pcbnew/tools/selection_tool.cpp:1203
 msgid "Filter selection"
 msgstr "フィルター 選択"
 
-#: pcbnew/tools/selection_tool.cpp:1271
+#: pcbnew/tools/selection_tool.cpp:1275
 msgid "Clarify selection"
 msgstr "明示的な選択"
 
@@ -26473,6 +26524,55 @@ msgstr "'仮想(virtual)' 属性を持つコンポーネントの 3D モデル�
 #: utils/kicad2step/kicad2step.cpp:81
 msgid "display this message"
 msgstr "このメッセージを表示"
+
+#~ msgid ""
+#~ "An error occurred attempting to load the global footprint library table:\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "グローバル フットプリント ライブラリ テーブルを読み込もうとしたところ、エ"
+#~ "ラーが発生しました。\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid ""
+#~ "An error occurred attempting to load the global symbol library table:\n"
+#~ "\n"
+#~ "%s\n"
+#~ "\n"
+#~ "Please edit this global symbol library table in Preferences menu"
+#~ msgstr ""
+#~ "グローバル シンボル ライブラリ テーブルを読み込もうとしたところ、エラーが"
+#~ "発生しました:\n"
+#~ "\n"
+#~ "%s\n"
+#~ "\n"
+#~ "設定メニューで、このグローバル シンボル ライブラリ テーブルを編集して下さ"
+#~ "い。"
+
+#~ msgid ""
+#~ "An error occurred attempting to load the global footprint library table:\n"
+#~ "\n"
+#~ "%s\n"
+#~ "\n"
+#~ "Please edit this global footprint library table in Preferences menu"
+#~ msgstr ""
+#~ "グローバル フットプリント ライブラリ テーブルを読み込もうとしたところ、エ"
+#~ "ラーが発生しました:\n"
+#~ "\n"
+#~ "%s\n"
+#~ "\n"
+#~ "設定メニューで、このグローバル フットプリント ライブラリ テーブルを編集し"
+#~ "て下さい。"
+
+#~ msgid "Unable to export, please fix and try again."
+#~ msgstr "エクスポートできません。問題点を修正してやり直してください。"
+
+#~ msgid "BOARD may be corrupted, do not save it."
+#~ msgstr "ボードが壊れているかもしれません、保存しないでください。"
+
+#~ msgid "Fix problem and try again."
+#~ msgstr "問題を修正してやり直してください。"
 
 #~ msgid "Allign"
 #~ msgstr "整列"
