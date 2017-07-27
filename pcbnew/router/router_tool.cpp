@@ -878,11 +878,11 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
         }
         else if( evt->IsAction( &PCB_ACTIONS::remove ) )
         {
-            deleteTraces( m_startItem, true );
+            deleteTraces( m_startItem, false );
         }
         else if( evt->IsAction( &PCB_ACTIONS::removeAlt ) )
         {
-            deleteTraces( m_startItem, false );
+            deleteTraces( m_startItem, true );
         }
     }
 
