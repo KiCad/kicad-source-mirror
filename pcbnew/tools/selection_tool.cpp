@@ -1262,14 +1262,16 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 
     getView()->Add( &brightBox );
 
-    int limit = std::min( 10, aCollector->GetCount() );
+    int limit = std::min( 9, aCollector->GetCount() );
 
     for( int i = 0; i < limit; ++i )
     {
         wxString text;
         BOARD_ITEM* item = ( *aCollector )[i];
         text = item->GetSelectMenuText();
-        menu.Add( text, i + 1 );
+
+        wxString menuText = wxString::Format("&%d. %s", i + 1, text );
+        menu.Add( menuText, i + 1 );
     }
 
     menu.SetTitle( _( "Clarify selection" ) );
