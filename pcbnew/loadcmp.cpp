@@ -337,7 +337,16 @@ MODULE* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
 
     wxCHECK_MSG( fptbl, NULL, wxT( "Cannot look up LIB_ID in NULL FP_LIB_TABLE." ) );
 
-    MODULE* module = fptbl->FootprintLoadWithOptionalNickname( aFootprintId );
+    MODULE *module = nullptr;
+    try
+    {
+        module = fptbl->FootprintLoadWithOptionalNickname( aFootprintId );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxLogDebug( wxT( "An error occurred attemping to load footprint '%s'.\n\nError: %s" ),
+                    aFootprintId.Format().c_str(), GetChars( ioe.What() ) );
+    }
 
     // If the module is found, clear all net info,
     // to be sure there is no broken links
