@@ -22,15 +22,14 @@
 #include <stddef.h>
 
 
-#if defined(__GNUC__) || defined(__APPLE__)
+#if defined(__GNUC__) || defined(__APPLE__) || defined(__FreeBSD__)
 
     #define LIBCONTEXT_COMPILER_gcc
 
-    #if defined(__linux__)
-    #ifdef __x86_64__
+    #if defined(__linux__) || defined(__FreeBSD__)
+    #if defined(__x86_64__) || defined(__amd64__)
         #define LIBCONTEXT_PLATFORM_linux_x86_64
         #define LIBCONTEXT_CALL_CONVENTION
-
     #elif __i386__
         #define LIBCONTEXT_PLATFORM_linux_i386
         #define LIBCONTEXT_CALL_CONVENTION
