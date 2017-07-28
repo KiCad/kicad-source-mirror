@@ -78,9 +78,6 @@ private:
 
     wxString m_ShortNetname;    ///< short net name, like vout from /mysheet/mysubsheet/vout
 
-    wxString  m_NetClassName;   // Net Class name. if void this is equivalent
-                                // to "default" (the first
-                                // item of the net classes list
     NETCLASSPTR m_NetClass;
 
     BOARD*  m_parent;           ///< The parent board the net belongs to.
@@ -120,15 +117,7 @@ public:
      * Function SetClass
      * sets \a aNetclass into this NET
      */
-    void SetClass( NETCLASSPTR aNetClass )
-    {
-        m_NetClass = aNetClass;
-
-        if( aNetClass )
-            m_NetClassName = aNetClass->GetName();
-        else
-            m_NetClassName = NETCLASS::Default;
-    }
+    void SetClass( NETCLASSPTR aNetClass );
 
     NETCLASSPTR GetNetClass()
     {
@@ -139,9 +128,9 @@ public:
      * Function GetClassName
      * returns the class name
      */
-    const wxString& GetClassName() const
+    wxString GetClassName() const
     {
-        return m_NetClassName;
+        return m_NetClass ? m_NetClass->GetName() : NETCLASS::Default;
     }
 
 #if 1

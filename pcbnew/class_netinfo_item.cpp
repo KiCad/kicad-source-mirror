@@ -53,8 +53,12 @@ NETINFO_ITEM::NETINFO_ITEM( BOARD* aParent, const wxString& aNetName, int aNetCo
     BOARD_ITEM( aParent, PCB_NETINFO_T ),
     m_NetCode( aNetCode ), m_Netname( aNetName ), m_ShortNetname( m_Netname.AfterLast( '/' ) )
 {
-    m_parent   = aParent;
-    m_NetClassName = NETCLASS::Default;
+    m_parent = aParent;
+
+    if( aParent )
+        m_NetClass = aParent->GetDesignSettings().m_NetClasses.GetDefault();
+    else
+        m_NetClass = std::make_shared<NETCLASS>( "<invalid>" );
 }
 
 
@@ -72,6 +76,13 @@ void NETINFO_ITEM::Draw( EDA_DRAW_PANEL* panel,
                          GR_DRAWMODE     aDrawMode,
                          const wxPoint&  aOffset )
 {
+}
+
+
+void NETINFO_ITEM::SetClass( NETCLASSPTR aNetClass )
+{
+    wxCHECK( m_parent, /* void */ );
+    m_NetClass = aNetClass ? aNetClass : m_parent->GetDesignSettings().m_NetClasses.GetDefault();
 }
 
 

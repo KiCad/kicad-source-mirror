@@ -235,9 +235,6 @@ private:
     /// all the NETCLASSes except the default one.
     NETCLASS_MAP    m_NetClasses;
 
-    /// the default NETCLASS.
-    NETCLASSPTR     m_Default;
-
 public:
     NETCLASSES();
     ~NETCLASSES();
@@ -272,9 +269,10 @@ public:
      * Function GetDefault
      * @return the default net class.
      */
-    NETCLASSPTR GetDefault() const
+    NETCLASSPTR& GetDefault() const
     {
-        return m_Default;
+        static NETCLASSPTR defNetClass = std::make_shared<NETCLASS>( NETCLASS::Default );
+        return defNetClass;
     }
 
     /**
