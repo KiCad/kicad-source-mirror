@@ -439,6 +439,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         m_canvas->DrawGridAxis( aDC, GR_COPY, GetBoard()->GetGridOrigin() );
         break;
 
+    case ID_PCB_DRAW_VIA_BUTT:
     case ID_PCB_MEASUREMENT_TOOL:
         DisplayError( this, _( "This tool is not available in the legacy canvas" ) );
         SetNoToolSelected();

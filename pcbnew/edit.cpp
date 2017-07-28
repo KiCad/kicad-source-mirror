@@ -1526,6 +1526,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         break;
 
     // collect GAL-only tools here
+    case ID_PCB_DRAW_VIA_BUTT:
     case ID_PCB_MEASUREMENT_TOOL:
         SetToolID( id, wxCURSOR_DEFAULT, _( "Unsupported tool in this canvas" ) );
         break;
