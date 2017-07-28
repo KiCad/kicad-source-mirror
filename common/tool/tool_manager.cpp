@@ -665,6 +665,8 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
         GetEditFrame()->PopupMenu( menu.get() );
         m_menuActive = false;
 
+        m_viewControls->WarpCursor( cursor, true, false );
+
         // If nothing was chosen from the context menu, we must notify the tool as well
         if( menu->GetSelected() < 0 )
         {
