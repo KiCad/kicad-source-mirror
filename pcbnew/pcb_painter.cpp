@@ -896,12 +896,13 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
 
     case S_POLYGON:
     {
+        const auto& points = aSegment->GetPolyPoints();
         std::deque<VECTOR2D> pointsList;
 
-        m_gal->SetIsFill( true );       // draw polygons the legacy way
-        m_gal->SetIsStroke( false );
+        if( points.empty() )
+            break;
+
         m_gal->Save();
-        m_gal->SetLineWidth( thickness );
 
         if( MODULE* module = aSegment->GetParentModule() )
         {
@@ -914,11 +915,12 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
             m_gal->Rotate( DECIDEG2RAD( -aSegment->GetAngle() ) );
         }
 
-        std::copy( aSegment->GetPolyPoints().begin(), aSegment->GetPolyPoints().end(),
-                   std::back_inserter( pointsList ) );
+        std::copy( points.begin(), points.end(), std::back_inserter( pointsList ) );
+        pointsList.push_back( points[0] );
 
         m_gal->SetLineWidth( aSegment->GetWidth() );
-        m_gal->DrawPolyline( pointsList );
+        m_gal->SetIsFill( true );       // draw polygons the legacy way
+        m_gal->SetIsStroke( true );
         m_gal->DrawPolygon( pointsList );
 
         m_gal->Restore();

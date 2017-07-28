@@ -1486,6 +1486,10 @@ void OPENGL_GAL::drawPolygon( GLdouble* aPoints, int aPointCount )
 
     // Free allocated intersecting points
     tessIntersects.clear();
+
+    if( isStrokeEnabled )
+        drawPolyline( [&](int idx) { return VECTOR2D( aPoints[idx * 3], aPoints[idx * 3 + 1] ); },
+                aPointCount );
 }
 
 
