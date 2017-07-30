@@ -1217,6 +1217,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
             int gates_count = countChildren( aDeviceSetChildren["gates"], "gate" );
             kpart->SetUnitCount( gates_count );
             int gateindex;
+            bool ispower = false;
 
             if( gates_count>1 )
             {
@@ -1234,7 +1235,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
                 elib.get()->gate_unit[edeviceset.name + edevice.name + egate.name] = gateindex;
 
 
-                loadSymbol( elib->symbolnodes[egate.symbol],
+                ispower = loadSymbol( elib->symbolnodes[egate.symbol],
                         (LIB_PART*) kpart.get(), &edevice, gateindex, egate.name );
 
                 gateindex++;
@@ -1242,7 +1243,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
             }    // gateNode
 
             kpart->SetUnitCount( gates_count );
-
+            if(gates_count == 1 && ispower) kpart->SetPower();
 
             const string& name = kpart->GetName().ToStdString();
             m_partlib->AddPart( kpart.get() );
@@ -1258,7 +1259,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
 }
 
 
-void SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
+bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
         LIB_PART* aPart,
         EDEVICE* aDevice,
         int gateNumber,
@@ -1271,6 +1272,8 @@ void SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
 
     bool foundName = false;
     bool foundValue = false;
+    bool ispower = false;
+    int pincount;
 
     while( currentNode )
     {
@@ -1297,7 +1300,20 @@ void SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
         }
         else if( nodeName == "pin" )
         {
-            LIB_PIN* pin = loadPin( aPart, currentNode );
+            EPIN ePin =  EPIN( currentNode );
+            LIB_PIN* pin = loadPin( aPart, currentNode, &ePin );
+            pincount++;
+
+            if(ePin.direction)
+            {
+                if(wxString(*ePin.direction).Lower()== "sup")
+                {
+                    ispower = true;
+                    pin->SetType(PIN_POWER_IN);
+                }
+            }
+
+
 
             if(aDevice->connects.size() != 0)
             {
@@ -1390,6 +1406,7 @@ void SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
     if( foundValue == false )
         aPart->GetField( VALUE )->SetVisible(false);
 
+    return pincount == 1 ? ispower : false;
 }
 
 
@@ -1533,20 +1550,20 @@ LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( LIB_PART* aPart, wxXmlNode* 
 }
 
 
-LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( LIB_PART* aPart, wxXmlNode* aPin )
+LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( LIB_PART* aPart, wxXmlNode* aPin, EPIN* epin )
 {
     std::unique_ptr<LIB_PIN> pin( new LIB_PIN( aPart ) );
 
-    auto epin = EPIN( aPin );
+    epin = new EPIN( aPin );
 
-    pin->SetPosition( wxPoint( epin.x * EUNIT_TO_MIL, epin.y * EUNIT_TO_MIL ) );
-    pin->SetName( epin.name );
+    pin->SetPosition( wxPoint( epin->x * EUNIT_TO_MIL, epin->y * EUNIT_TO_MIL ) );
+    pin->SetName( epin->name );
 
     int roti = 0;
 
-    if( epin.rot )
+    if( epin->rot )
     {
-        roti = int(epin.rot->degrees);
+        roti = int(epin->rot->degrees);
     }
 
     switch( roti )
@@ -1572,9 +1589,9 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( LIB_PART* aPart, wxXmlNode* aPin )
         break;
     }
 
-    if( epin.length )
+    if( epin->length )
     {
-        wxString length = epin.length.Get();
+        wxString length = epin->length.Get();
 
         if( length =="short" )
         {
@@ -1594,9 +1611,9 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( LIB_PART* aPart, wxXmlNode* aPin )
         }
     }
 
-    if( epin.visible )
+    if( epin->visible )
     {
-        wxString visible = epin.visible.Get();
+        wxString visible = epin->visible.Get();
 
         if( visible == "off" )
         {
