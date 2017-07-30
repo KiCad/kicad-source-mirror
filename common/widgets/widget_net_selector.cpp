@@ -77,7 +77,7 @@ int WIDGET_NET_SELECTOR::GetSelectedNet()
 
 bool WIDGET_NET_SELECTOR::IsUniqueNetSelected() const
 {
-    if( m_multiple && ( GetSelection() == ( GetCount() - 1 ) ) )
+    if( m_multiple && ( GetSelection() == ( (int)GetCount() - 1 ) ) )
         return false;
 
     return true;
@@ -87,9 +87,9 @@ void WIDGET_NET_SELECTOR::SetBoard( BOARD* aBoard )
 {
     auto& netinfo = aBoard->GetNetInfo();
 
-    Append( wxT("<no net>" ));
+    Append( wxT( "<no net>" ));
 
-    for(int i = 1; i < netinfo.GetNetCount(); i++)
+    for(unsigned i = 1; i < netinfo.GetNetCount(); i++)
     {
         NETINFO_ITEM *ni = netinfo.GetNetItem(i);
         NET n;
