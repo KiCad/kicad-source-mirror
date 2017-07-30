@@ -775,7 +775,10 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
         aMultilineAllowed = false;  // the text has only one line.
 
     // Emit native PDF text (if requested)
-    if( m_textMode != PLOTTEXTMODE_STROKE && !aMultilineAllowed )
+    // Currently: does not work: disable it
+    bool use_native = false; // = m_textMode != PLOTTEXTMODE_STROKE && !aMultilineAllowed;
+
+    if( use_native )
     {
         const char *fontname = aItalic ? (aBold ? "/KicadFontBI" : "/KicadFontI")
             : (aBold ? "/KicadFontB" : "/KicadFont");
@@ -831,7 +834,7 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
     }
 
     // Plot the stroked text (if requested)
-    if( m_textMode != PLOTTEXTMODE_NATIVE || aMultilineAllowed )
+    if( !use_native )
     {
         PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
                 aWidth, aItalic, aBold, aMultilineAllowed );

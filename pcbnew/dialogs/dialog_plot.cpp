@@ -315,6 +315,7 @@ void DIALOG_PLOT::CreateDrillFile( wxCommandEvent& event )
 void DIALOG_PLOT::OnChangeOutlineMode( wxCommandEvent& event )
 {
     m_plotTextAsLineOpt->Enable( !m_plotOutlineModeOpt->GetValue() );
+
     if( !m_plotTextAsLineOpt->IsEnabled() )
         m_plotTextAsLineOpt->SetValue( true );
 }
@@ -411,7 +412,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_forcePSA4OutputOpt->Enable( false );
         m_forcePSA4OutputOpt->SetValue( false );
         m_plotTextAsLineOpt->Enable( false );
-        m_plotTextAsLineOpt->SetValue( false );
+        m_plotTextAsLineOpt->SetValue( true );
 
         m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
         m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
@@ -600,8 +601,12 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetPlotMode( m_plotModeOpt->GetSelection() == 1 ? SKETCH : FILLED );
     tempOptions.SetPlotOutlineMode( m_plotOutlineModeOpt->GetValue() );
     tempOptions.SetPlotViaOnMaskLayer( m_plotNoViaOnMaskOpt->GetValue() );
-    tempOptions.SetTextMode( m_plotTextAsLineOpt->GetValue() ?
-                             PLOTTEXTMODE_DEFAULT : PLOTTEXTMODE_NATIVE );
+
+    if( !m_plotTextAsLineOpt->IsEnabled() )     // Currently, only DXF supports this option
+        tempOptions.SetTextMode( PLOTTEXTMODE_DEFAULT  );
+    else
+        tempOptions.SetTextMode( m_plotTextAsLineOpt->GetValue() ?
+                                 PLOTTEXTMODE_DEFAULT : PLOTTEXTMODE_NATIVE );
 
     // Update settings from text fields. Rewrite values back to the fields,
     // since the values may have been constrained by the setters.
