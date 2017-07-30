@@ -88,7 +88,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_plotFrameRef               = false;
     m_plotViaOnMaskLayer         = false;
     m_plotMode                   = FILLED;
-    m_plotOutlineMode            = true;
+    m_DXFplotPolygonMode         = true;
     m_useAuxOrigin               = false;
     m_HPGLPenNum                 = 1;
     m_HPGLPenSpeed               = 20;        // this param is always in cm/s
@@ -242,7 +242,7 @@ bool PCB_PLOT_PARAMS::operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
     if( m_plotMode != aPcbPlotParams.m_plotMode )
         return false;
-    if( m_plotOutlineMode != aPcbPlotParams.m_plotOutlineMode )
+    if( m_DXFplotPolygonMode != aPcbPlotParams.m_DXFplotPolygonMode )
         return false;
     if( m_useAuxOrigin != aPcbPlotParams.m_useAuxOrigin )
         return false;
@@ -294,6 +294,7 @@ bool PCB_PLOT_PARAMS::operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
     if( !m_outputDirectory.IsSameAs( aPcbPlotParams.m_outputDirectory ) )
         return false;
+
     return true;
 }
 

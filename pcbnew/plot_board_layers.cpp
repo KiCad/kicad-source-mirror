@@ -223,7 +223,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
 
         case F_SilkS:
         case B_SilkS:
-            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF && plotOpt.GetPlotOutlineMode() )
+            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF && plotOpt.GetDXFPlotPolygonMode() )
                 // PlotLayerOutlines() is designed only for DXF plotters.
                 // and must not be used for other plot formats
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
@@ -266,7 +266,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
             plotOpt.SetSkipPlotNPTH_Pads( false );
             plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
 
-            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF && plotOpt.GetPlotOutlineMode() )
+            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF && plotOpt.GetDXFPlotPolygonMode() )
                 // PlotLayerOutlines() is designed only for DXF plotters.
                 // and must not be used for other plot formats
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );
@@ -278,7 +278,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
             plotOpt.SetSkipPlotNPTH_Pads( false );
             plotOpt.SetDrillMarksType( PCB_PLOT_PARAMS::NO_DRILL_SHAPE );
 
-            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF && plotOpt.GetPlotOutlineMode() )
+            if( plotOpt.GetFormat() == PLOT_FORMAT_DXF && plotOpt.GetDXFPlotPolygonMode() )
                 // PlotLayerOutlines() is designed only for DXF plotters.
                 // and must not be used for other plot formats
                 PlotLayerOutlines( aBoard, aPlotter, layer_mask, plotOpt );

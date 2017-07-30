@@ -54,8 +54,10 @@ private:
      */
     EDA_DRAW_MODE_T m_plotMode;
 
-    /// Plot lines in outline mode
-    bool        m_plotOutlineMode;
+    /// DXF format: Plot items in outline (polygon) mode
+    /// In polygon mode, each item to plot is converted to a polygon, and all
+    /// polygons are merged.
+    bool        m_DXFplotPolygonMode;
 
     /// Plot format type (chooses the driver to be used)
     PlotFormat  m_format;
@@ -186,8 +188,8 @@ public:
     void        SetPlotMode( EDA_DRAW_MODE_T aPlotMode ) { m_plotMode = aPlotMode; }
     EDA_DRAW_MODE_T GetPlotMode() const { return m_plotMode; }
 
-    void        SetPlotOutlineMode( bool aFlag ) { m_plotOutlineMode = aFlag; }
-    bool        GetPlotOutlineMode() const { return m_plotOutlineMode; }
+    void        SetDXFPlotPolygonMode( bool aFlag ) { m_DXFplotPolygonMode = aFlag; }
+    bool        GetDXFPlotPolygonMode() const { return m_DXFplotPolygonMode; }
 
     void        SetDrillMarksType( DrillMarksType aVal ) { m_drillMarks = aVal; }
     DrillMarksType GetDrillMarksType() const { return m_drillMarks; }

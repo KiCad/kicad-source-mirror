@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 21 2016)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -78,8 +78,6 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_plotMirrorOpt;
 		wxCheckBox* m_plotPSNegativeOpt;
 		wxCheckBox* m_useAuxOriginCheckBox;
-		wxCheckBox* m_plotOutlineModeOpt;
-		wxCheckBox* m_plotTextAsLineOpt;
 		wxStaticText* m_staticText11;
 		wxChoice* m_drillShapeOpt;
 		wxStaticText* m_staticText12;
@@ -109,6 +107,9 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxStaticText* m_textPSFineAdjustWidth;
 		wxTextCtrl* m_PSFineAdjustWidthOpt;
 		wxCheckBox* m_forcePSA4OutputOpt;
+		wxStaticBoxSizer* m_SizerDXF_options;
+		wxCheckBox* m_DXF_plotModeOpt;
+		wxCheckBox* m_DXF_plotTextStrokeFontOpt;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxButton* m_plotButton;
 		wxButton* m_buttonDrill;
@@ -122,9 +123,9 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		virtual void OnRightClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void SetPlotFormat( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnChangeOutlineMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetScaleOpt( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGerberX2Checked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnChangeDXFPlotMode( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Plot( wxCommandEvent& event ) { event.Skip(); }
 		virtual void CreateDrillFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onRunDRC( wxCommandEvent& event ) { event.Skip(); }

@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,19 +25,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
+//#include <fctsys.h>
 #include <class_board.h>
 #include <dialog_plot_base.h>
 #include <pcb_plot_params.h>
 
 /**
- * Class DIALOG_PLOT
- *
+ * Class DIALOG_PLOT is the dialog to set the plot options, and create plot files
+ * in various formats.
  */
 class DIALOG_PLOT : public DIALOG_PLOT_BASE
 {
 public:
     DIALOG_PLOT( PCB_EDIT_FRAME* parent );
+
 private:
     PCB_EDIT_FRAME*     m_parent;
     BOARD*              m_board;
@@ -65,15 +66,15 @@ private:
     void        OnRightClick( wxMouseEvent& event ) override;
     void        OnPopUpLayers( wxCommandEvent& event ) override;
     void        SetPlotFormat( wxCommandEvent& event ) override;
-    void        OnChangeOutlineMode( wxCommandEvent& event ) override;
+    void        OnChangeDXFPlotMode( wxCommandEvent& event ) override;
     void        OnSetScaleOpt( wxCommandEvent& event ) override;
     void        CreateDrillFile( wxCommandEvent& event ) override;
     void        OnGerberX2Checked( wxCommandEvent& event ) override;
     void        onRunDRC( wxCommandEvent& event ) override;
 
     // other functions
-    void        init_Dialog();  // main initialization
-    void        reInitDialog(); // initialization after calling drill dialog
+    void        init_Dialog();      // main initialization
+    void        reInitDialog();     // initialization after calling drill dialog
     void        applyPlotSettings();
     PlotFormat  getPlotFormat();
 
