@@ -11110,7 +11110,7 @@ msgstr ""
 #: pcbnew/onleftclick.cpp:259 pcbnew/tools/drawing_tool.cpp:726
 #: pcbnew/tools/drawing_tool.cpp:901
 msgid "Graphic not allowed on Copper layers"
-msgstr "图形不允放出现在铜层"
+msgstr "图形不允许出现在铜层"
 
 #: pcbnew/onleftclick.cpp:283
 msgid "Tracks on Copper layers only "
