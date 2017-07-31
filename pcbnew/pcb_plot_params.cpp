@@ -111,8 +111,6 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_widthAdjust                = 0.;
     m_outputDirectory.clear();
     m_color                      = BLACK;
-    m_referenceColor             = BLACK;
-    m_valueColor                 = BLACK;
     m_textMode                   = PLOTTEXTMODE_DEFAULT;
     m_layerSelection = LSET( 2, F_SilkS, B_SilkS) | LSET::AllCuMask();
 
@@ -220,7 +218,7 @@ void PCB_PLOT_PARAMS::Parse( PCB_PLOT_PARAMS_PARSER* aParser )
 }
 
 
-bool PCB_PLOT_PARAMS::operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
+bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams, bool aCompareOnlySavedPrms ) const
 {
     if( m_layerSelection != aPcbPlotParams.m_layerSelection )
         return false;
@@ -242,8 +240,11 @@ bool PCB_PLOT_PARAMS::operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
     if( m_plotMode != aPcbPlotParams.m_plotMode )
         return false;
-    if( m_DXFplotPolygonMode != aPcbPlotParams.m_DXFplotPolygonMode )
+    if( !aCompareOnlySavedPrms )
+    {
+        if( m_DXFplotPolygonMode != aPcbPlotParams.m_DXFplotPolygonMode )
         return false;
+    }
     if( m_useAuxOrigin != aPcbPlotParams.m_useAuxOrigin )
         return false;
     if( m_HPGLPenNum != aPcbPlotParams.m_HPGLPenNum )
@@ -284,24 +285,17 @@ bool PCB_PLOT_PARAMS::operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
     if( m_widthAdjust != aPcbPlotParams.m_widthAdjust )
         return false;
-    if( m_color != aPcbPlotParams.m_color )
-        return false;
-    if( m_referenceColor != aPcbPlotParams.m_referenceColor )
-        return false;
-    if( m_valueColor != aPcbPlotParams.m_valueColor )
-        return false;
+    if( !aCompareOnlySavedPrms )
+    {
+        if( m_color != aPcbPlotParams.m_color )
+            return false;
+    }
     if( m_textMode != aPcbPlotParams.m_textMode )
         return false;
     if( !m_outputDirectory.IsSameAs( aPcbPlotParams.m_outputDirectory ) )
         return false;
 
     return true;
-}
-
-
-bool PCB_PLOT_PARAMS::operator!=( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
-{
-    return !( *this == aPcbPlotParams );
 }
 
 
@@ -442,18 +436,22 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             aPcbPlotParams->m_HPGLPenNum = parseInt( HPGL_PEN_NUMBER_MIN,
                                                      HPGL_PEN_NUMBER_MAX );
             break;
+
         case T_hpglpenspeed:
             aPcbPlotParams->m_HPGLPenSpeed = parseInt( HPGL_PEN_SPEED_MIN,
                                                        HPGL_PEN_SPEED_MAX );
             break;
+
         case T_hpglpendiameter:
             aPcbPlotParams->m_HPGLPenDiam = parseInt( HPGL_PEN_DIAMETER_MIN,
                                                       HPGL_PEN_DIAMETER_MAX );
             break;
+
         case T_hpglpenoverlay:
             // No more used. juste here for compatibility with old versions
             parseInt( 0, HPGL_PEN_DIAMETER_MAX );
             break;
+
         case T_pscolor:
             NeedSYMBOL(); // This actually was never used...
             break;
@@ -557,6 +555,7 @@ double PCB_PLOT_PARAMS_PARSER::parseDouble()
 
     return val;
 }
+
 
 void PCB_PLOT_PARAMS_PARSER::skipCurrent()
 {

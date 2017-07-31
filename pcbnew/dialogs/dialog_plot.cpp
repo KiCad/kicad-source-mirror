@@ -706,11 +706,15 @@ void DIALOG_PLOT::applyPlotSettings()
     dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
     tempOptions.SetOutputDirectory( dirStr );
 
-    if( m_plotOpts != tempOptions )
+    if( !m_plotOpts.IsSameAs( tempOptions, false ) )
     {
+        // First, mark board as modified only for parameters saved in file
+        if( !m_plotOpts.IsSameAs( tempOptions, true ) )
+            m_parent->OnModify();
+
+        // Now, save any change, for the session
         m_parent->SetPlotSettings( tempOptions );
         m_plotOpts = tempOptions;
-        m_parent->OnModify();
     }
 }
 

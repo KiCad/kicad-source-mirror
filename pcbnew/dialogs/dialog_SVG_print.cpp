@@ -336,11 +336,6 @@ bool DIALOG_SVG_PRINT::CreateSVGFile( const wxString& aFullFileName, bool aOnlyO
     plot_opts.SetMirror( m_printMirror );
     plot_opts.SetFormat( PLOT_FORMAT_SVG );
 
-    COLOR4D color = COLOR4D::UNSPECIFIED;      // Used layer color to plot ref and value
-
-    plot_opts.SetReferenceColor( color );
-    plot_opts.SetValueColor( color );
-
     PAGE_INFO   pageInfo = m_board->GetPageSettings();
     wxPoint     axisorigin = m_board->GetAuxOrigin();
 
