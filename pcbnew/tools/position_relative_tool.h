@@ -92,7 +92,7 @@ public:
     void UpdateAnchor( BOARD_ITEM* aItem );
 
     ///> Sets up handlers for various events.
-    void SetTransitions() override;
+    void setTransitions() override;
 
 private:
     DIALOG_POSITION_RELATIVE* m_position_relative_dialog;

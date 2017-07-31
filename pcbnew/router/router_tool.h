@@ -43,7 +43,7 @@ public:
     int SettingsDialog( const TOOL_EVENT& aEvent );
     int CustomTrackWidthDialog( const TOOL_EVENT& aEvent );
 
-    void SetTransitions() override;
+    void setTransitions() override;
 
 private:
     int mainLoop( PNS::ROUTER_MODE aMode );

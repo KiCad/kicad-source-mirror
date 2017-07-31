@@ -391,7 +391,7 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
 }
 
 
-void MICROWAVE_TOOL::SetTransitions()
+void MICROWAVE_TOOL::setTransitions()
 {
     Go( &MICROWAVE_TOOL::addMicrowaveFootprint, PCB_ACTIONS::microwaveCreateGap.MakeEvent() );
     Go( &MICROWAVE_TOOL::addMicrowaveFootprint, PCB_ACTIONS::microwaveCreateStub.MakeEvent() );

@@ -89,7 +89,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-void PICKER_TOOL::SetTransitions()
+void PICKER_TOOL::setTransitions()
 {
     Go( &PICKER_TOOL::Main, PCB_ACTIONS::pickerTool.MakeEvent() );
 }

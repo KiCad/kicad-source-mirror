@@ -229,7 +229,7 @@ int LENGTH_TUNER_TOOL::TuneDiffPairSkew( const TOOL_EVENT& aEvent )
 }
 
 
-void LENGTH_TUNER_TOOL::SetTransitions()
+void LENGTH_TUNER_TOOL::setTransitions()
 {
     Go( &LENGTH_TUNER_TOOL::routerOptionsDialog, ACT_RouterOptions.MakeEvent() );
     Go( &LENGTH_TUNER_TOOL::meanderSettingsDialog, ACT_Settings.MakeEvent() );

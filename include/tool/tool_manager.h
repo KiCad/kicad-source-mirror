@@ -307,6 +307,12 @@ public:
     void ScheduleNextState( TOOL_BASE* aTool, TOOL_STATE_FUNC& aHandler,
             const TOOL_EVENT_LIST& aConditions );
 
+    /**
+     * Clears the state transition map for a tool
+     * @param aTool is the tool that should have the transition map cleared.
+     */
+    void ClearTransitions( TOOL_BASE* aTool );
+
     void RunMainStack( TOOL_BASE* aTool, std::function<void()> aFunc );
 
     /**

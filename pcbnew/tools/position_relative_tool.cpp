@@ -187,7 +187,7 @@ void POSITION_RELATIVE_TOOL::UpdateAnchor( BOARD_ITEM* aItem )
 }
 
 
-void POSITION_RELATIVE_TOOL::SetTransitions()
+void POSITION_RELATIVE_TOOL::setTransitions()
 {
     Go( &POSITION_RELATIVE_TOOL::PositionRelative, PCB_ACTIONS::positionRelative.MakeEvent() );
     Go( &POSITION_RELATIVE_TOOL::SelectPositionRelativeItem,

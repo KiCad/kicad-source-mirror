@@ -788,7 +788,7 @@ int ROUTER_TOOL::SettingsDialog( const TOOL_EVENT& aEvent )
 }
 
 
-void ROUTER_TOOL::SetTransitions()
+void ROUTER_TOOL::setTransitions()
 {
     Go( &ROUTER_TOOL::RouteSingleTrace, PCB_ACTIONS::routerActivateSingle.MakeEvent() );
     Go( &ROUTER_TOOL::RouteDiffPair, PCB_ACTIONS::routerActivateDiffPair.MakeEvent() );

@@ -57,7 +57,7 @@ public:
     int OnSelectionChange( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
-    void SetTransitions() override;
+    void setTransitions() override;
 
 private:
     ///> Selection tool used for obtaining selected items

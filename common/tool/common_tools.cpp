@@ -206,7 +206,7 @@ int COMMON_TOOLS::ToggleCursor( const TOOL_EVENT& aEvent )
 }
 
 
-void COMMON_TOOLS::SetTransitions()
+void COMMON_TOOLS::setTransitions()
 {
     Go( &COMMON_TOOLS::ZoomInOut,          ACTIONS::zoomIn.MakeEvent() );
     Go( &COMMON_TOOLS::ZoomInOut,          ACTIONS::zoomOut.MakeEvent() );

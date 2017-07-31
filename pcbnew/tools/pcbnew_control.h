@@ -84,7 +84,7 @@ public:
     int ToBeDone( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
-    void SetTransitions() override;
+    void setTransitions() override;
 
 private:
     ///> Pointer to the currently used edit frame.

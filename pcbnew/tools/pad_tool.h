@@ -47,7 +47,7 @@ public:
     bool Init() override;
 
     ///> Bind handlers to corresponding TOOL_ACTIONs
-    void SetTransitions() override;
+    void setTransitions() override;
 
 private:
     ///> Determine if there are any footprints on the board

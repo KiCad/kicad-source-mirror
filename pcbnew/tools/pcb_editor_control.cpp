@@ -1140,7 +1140,7 @@ int PCB_EDITOR_CONTROL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
 }
 
 
-void PCB_EDITOR_CONTROL::SetTransitions()
+void PCB_EDITOR_CONTROL::setTransitions()
 {
     // Track & via size control
     Go( &PCB_EDITOR_CONTROL::TrackWidthInc,      PCB_ACTIONS::trackWidthInc.MakeEvent() );

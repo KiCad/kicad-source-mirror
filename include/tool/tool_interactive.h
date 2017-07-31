@@ -114,7 +114,20 @@ protected:
     const TOOL_EVENT evButtonDown(int aButton = BUT_ANY );
 
 private:
+    /**
+     * This method is meant to be overridden in order to specify handlers for events. It is called
+     * every time tool is reset or finished.
+     */
+    virtual void setTransitions() = 0;
+
+    /**
+     * Clears the current transition map and restores the default one created by setTransitions().
+     */
+    void resetTransitions();
+
     void goInternal( TOOL_STATE_FUNC& aState, const TOOL_EVENT_LIST& aConditions );
+
+    friend class TOOL_MANAGER;
 };
 
 // hide TOOL_MANAGER implementation

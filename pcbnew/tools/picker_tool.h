@@ -98,8 +98,8 @@ public:
         m_clickHandler = aHandler;
     }
 
-    ///> @copydoc TOOL_INTERACTIVE::SetTransitions();
-    void SetTransitions() override;
+    ///> @copydoc TOOL_INTERACTIVE::setTransitions();
+    void setTransitions() override;
 
 private:
     // Tool settings.

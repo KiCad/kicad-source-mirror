@@ -1528,7 +1528,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 }
 
 
-void DRAWING_TOOL::SetTransitions()
+void DRAWING_TOOL::setTransitions()
 {
     Go( &DRAWING_TOOL::DrawLine, PCB_ACTIONS::drawLine.MakeEvent() );
     Go( &DRAWING_TOOL::DrawCircle, PCB_ACTIONS::drawCircle.MakeEvent() );

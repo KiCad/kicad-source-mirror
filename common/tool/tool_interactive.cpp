@@ -58,6 +58,13 @@ OPT_TOOL_EVENT TOOL_INTERACTIVE::Wait( const TOOL_EVENT_LIST& aEventList )
 }
 
 
+void TOOL_INTERACTIVE::resetTransitions()
+{
+    m_toolMgr->ClearTransitions( this );
+    setTransitions();
+}
+
+
 void TOOL_INTERACTIVE::goInternal( TOOL_STATE_FUNC& aState, const TOOL_EVENT_LIST& aConditions )
 {
     m_toolMgr->ScheduleNextState( this, aState, aConditions );

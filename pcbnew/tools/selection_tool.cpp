@@ -594,7 +594,7 @@ bool SELECTION_TOOL::selectMultiple()
 }
 
 
-void SELECTION_TOOL::SetTransitions()
+void SELECTION_TOOL::setTransitions()
 {
     Go( &SELECTION_TOOL::Main, PCB_ACTIONS::selectionActivate.MakeEvent() );
     Go( &SELECTION_TOOL::CursorSelection, PCB_ACTIONS::selectionCursor.MakeEvent() );

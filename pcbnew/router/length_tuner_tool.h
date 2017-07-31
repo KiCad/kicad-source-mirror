@@ -40,7 +40,7 @@ public:
     int TuneDiffPair( const TOOL_EVENT& aEvent );
     int TuneDiffPairSkew( const TOOL_EVENT& aEvent );
 
-    void SetTransitions() override;
+    void setTransitions() override;
 
 private:
     void performTuning();

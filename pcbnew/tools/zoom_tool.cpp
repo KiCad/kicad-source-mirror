@@ -134,7 +134,7 @@ bool ZOOM_TOOL::selectRegion()
 }
 
 
-void ZOOM_TOOL::SetTransitions()
+void ZOOM_TOOL::setTransitions()
 {
     Go( &ZOOM_TOOL::Main, PCB_ACTIONS::zoomTool.MakeEvent() );
 }

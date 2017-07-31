@@ -384,7 +384,7 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 }
 
 
-void PAD_TOOL::SetTransitions()
+void PAD_TOOL::setTransitions()
 {
     Go( &PAD_TOOL::applyPadSettings, PCB_ACTIONS::applyPadSettings.MakeEvent() );
     Go( &PAD_TOOL::copyPadSettings,  PCB_ACTIONS::copyPadSettings.MakeEvent() );

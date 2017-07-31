@@ -1124,7 +1124,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 }
 
 
-void EDIT_TOOL::SetTransitions()
+void EDIT_TOOL::setTransitions()
 {
     Go( &EDIT_TOOL::Main,       PCB_ACTIONS::editActivate.MakeEvent() );
     Go( &EDIT_TOOL::Rotate,     PCB_ACTIONS::rotateCw.MakeEvent() );

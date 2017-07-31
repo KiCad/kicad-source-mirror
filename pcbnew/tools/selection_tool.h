@@ -133,7 +133,7 @@ public:
     static const TOOL_EVENT ClearedEvent;
 
     ///> Sets up handlers for various events.
-    void SetTransitions() override;
+    void setTransitions() override;
 
     ///> Zooms the screen to center and fit the current selection.
     void zoomFitSelection( void );

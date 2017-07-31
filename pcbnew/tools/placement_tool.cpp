@@ -357,7 +357,7 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
 }
 
 
-void ALIGN_DISTRIBUTE_TOOL::SetTransitions()
+void ALIGN_DISTRIBUTE_TOOL::setTransitions()
 {
     Go( &ALIGN_DISTRIBUTE_TOOL::AlignTop,    PCB_ACTIONS::alignTop.MakeEvent() );
     Go( &ALIGN_DISTRIBUTE_TOOL::AlignBottom, PCB_ACTIONS::alignBottom.MakeEvent() );

@@ -737,7 +737,7 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
 }
 
 
-void POINT_EDITOR::SetTransitions()
+void POINT_EDITOR::setTransitions()
 {
     Go( &POINT_EDITOR::addCorner, PCB_ACTIONS::pointEditorAddCorner.MakeEvent() );
     Go( &POINT_EDITOR::removeCorner, PCB_ACTIONS::pointEditorRemoveCorner.MakeEvent() );

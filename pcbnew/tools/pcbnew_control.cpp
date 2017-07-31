@@ -936,7 +936,7 @@ int PCBNEW_CONTROL::ToBeDone( const TOOL_EVENT& aEvent )
 }
 
 
-void PCBNEW_CONTROL::SetTransitions()
+void PCBNEW_CONTROL::setTransitions()
 {
     // Display modes
     Go( &PCBNEW_CONTROL::TrackDisplayMode,   PCB_ACTIONS::trackDisplayMode.MakeEvent() );

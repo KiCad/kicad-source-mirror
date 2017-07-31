@@ -372,7 +372,9 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
     }
 
     aTool->Reset( TOOL_INTERACTIVE::RUN );
-    aTool->SetTransitions();
+
+    if( aTool->GetType() == INTERACTIVE )
+        static_cast<TOOL_INTERACTIVE*>( aTool )->resetTransitions();
 
     // Add the tool on the front of the processing queue (it gets events first)
     m_activeTools.push_front( id );
@@ -417,8 +419,11 @@ void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
 
     for( auto& state : m_toolState )
     {
-        state.first->Reset( aReason );
-        state.first->SetTransitions();
+        TOOL_BASE* tool = state.first;
+        tool->Reset( aReason );
+
+        if( tool->GetType() == INTERACTIVE )
+            static_cast<TOOL_INTERACTIVE*>( tool )->resetTransitions();
     }
 }
 
@@ -473,6 +478,12 @@ void TOOL_MANAGER::ScheduleNextState( TOOL_BASE* aTool, TOOL_STATE_FUNC& aHandle
     TOOL_STATE* st = m_toolState[aTool];
 
     st->transitions.push_back( TRANSITION( aConditions, aHandler ) );
+}
+
+
+void TOOL_MANAGER::ClearTransitions( TOOL_BASE* aTool )
+{
+    m_toolState[aTool]->transitions.clear();
 }
 
 
@@ -705,7 +716,11 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
     }
 
     // Set transitions to be ready for future TOOL_EVENTs
-    aState->theTool->SetTransitions();
+    TOOL_BASE* tool = aState->theTool;
+
+    if( tool->GetType() == INTERACTIVE )
+        static_cast<TOOL_INTERACTIVE*>( tool )->resetTransitions();
+
     m_viewControls->ForceCursorPosition( false );
 
     return it;

@@ -37,8 +37,8 @@ public:
     /// Main loop
     int Main( const TOOL_EVENT& aEvent );
 
-    /// @copydoc TOOL_BASE::SetTransitions()
-    void SetTransitions() override;
+    /// @copydoc TOOL_BASE::setTransitions()
+    void setTransitions() override;
 
 private:
     bool selectRegion();

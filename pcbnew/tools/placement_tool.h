@@ -78,7 +78,7 @@ public:
     int DistributeVertically( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
-    void SetTransitions() override;
+    void setTransitions() override;
 
 private:
     SELECTION_TOOL* m_selectionTool;

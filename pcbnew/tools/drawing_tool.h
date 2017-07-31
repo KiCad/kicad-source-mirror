@@ -177,7 +177,7 @@ public:
     int SetAnchor( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
-    void SetTransitions() override;
+    void setTransitions() override;
 
 private:
 
