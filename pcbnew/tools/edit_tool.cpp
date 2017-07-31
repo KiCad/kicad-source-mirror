@@ -481,7 +481,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 // Update dragging offset (distance between cursor and the first dragged item)
                 m_offset = static_cast<BOARD_ITEM*>( selection.Front() )->GetPosition() - modPoint;
-                getView()->Update( &selection );
                 updateRatsnest( true );
             }
         }
