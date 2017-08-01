@@ -1721,7 +1721,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     // part and alias can differ if alias is not the root
     if( PART_SPTR part = m_part.lock() )
     {
-        if( part.get() != dummy )
+        if( part.get() != dummy() )
         {
             LIB_ALIAS* alias = part->GetAlias( GetLibId().GetLibItemName() );
 
