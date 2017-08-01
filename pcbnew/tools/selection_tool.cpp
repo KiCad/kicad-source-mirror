@@ -1609,7 +1609,7 @@ static double calcArea( const BOARD_ITEM* aItem )
 }
 
 
-static double calcMinArea( GENERAL_COLLECTOR& aCollector, KICAD_T aType )
+/*static double calcMinArea( GENERAL_COLLECTOR& aCollector, KICAD_T aType )
 {
     double best = std::numeric_limits<double>::max();
 
@@ -1624,7 +1624,7 @@ static double calcMinArea( GENERAL_COLLECTOR& aCollector, KICAD_T aType )
     }
 
     return best;
-}
+}*/
 
 
 static double calcMaxArea( GENERAL_COLLECTOR& aCollector, KICAD_T aType )
@@ -1754,19 +1754,21 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
 
     if( aCollector.CountType( PCB_MODULE_T ) > 0 )
     {
-        double minArea = calcMinArea( aCollector, PCB_MODULE_T );
         double maxArea = calcMaxArea( aCollector, PCB_MODULE_T );
+        BOX2D viewportD = getView()->GetViewport();
+        BOX2I viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );
 
-        if( calcRatio( minArea, maxArea ) <= footprintAreaRatio )
+        for( int i = 0; i < aCollector.GetCount(); ++i )
         {
-            for( int i = 0; i < aCollector.GetCount(); ++i )
+            if( MODULE* mod = dyn_cast<MODULE*>( aCollector[i] ) )
             {
-                if( MODULE* mod = dyn_cast<MODULE*>( aCollector[i] ) )
-                {
-                    double normalizedArea = calcRatio( calcArea( mod ), maxArea );
+                double normalizedArea = calcRatio( calcArea( mod ), maxArea );
 
-                    if( normalizedArea > footprintAreaRatio )
-                        rejected.insert( mod );
+                if( normalizedArea > footprintAreaRatio
+                        // filter out components larger than the viewport
+                        || mod->ViewBBox().Contains( viewport ) )
+                {
+                    rejected.insert( mod );
                 }
             }
         }
