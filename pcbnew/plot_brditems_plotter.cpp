@@ -133,18 +133,12 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     // Plot text fields, if allowed
     if( trace_ref )
     {
-        if( GetReferenceColor() == UNSPECIFIED_COLOR )
-            PlotTextModule( &aModule->Reference(), getColor( textLayer ) );
-        else
-            PlotTextModule( &aModule->Reference(), GetReferenceColor() );
+        PlotTextModule( &aModule->Reference(), getColor( textLayer ) );
     }
 
     if( trace_val )
     {
-        if( GetValueColor() == UNSPECIFIED_COLOR )
-            PlotTextModule( &aModule->Value(), getColor( textLayer ) );
-        else
-            PlotTextModule( &aModule->Value(), GetValueColor() );
+        PlotTextModule( &aModule->Value(), getColor( textLayer ) );
     }
 
     for( BOARD_ITEM *item = aModule->GraphicalItems().GetFirst(); item; item = item->Next() )
@@ -249,11 +243,11 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
     draw.SetWidth( aDim->GetWidth() );
     draw.SetLayer( aDim->GetLayer() );
 
-    EDA_COLOR_T color = aDim->GetBoard()->GetLayerColor( aDim->GetLayer() );
+    EDA_COLOR_T color = getColor( aDim->GetLayer() );
 
     // Set plot color (change WHITE to LIGHTGRAY because
     // the white items are not seen on a white paper or screen
-    m_plotter->SetColor( color != WHITE ? color : LIGHTGRAY);
+    m_plotter->SetColor( color );
 
     PlotTextePcb( &aDim->Text() );
 
@@ -447,7 +441,8 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
     if( !m_layerMask[pt_texte->GetLayer()] )
         return;
 
-    m_plotter->SetColor( getColor( pt_texte->GetLayer() ) );
+    EDA_COLOR_T color = getColor( pt_texte->GetLayer() );
+    m_plotter->SetColor( color );
 
     size      = pt_texte->GetSize();
     pos       = pt_texte->GetTextPosition();
@@ -475,14 +470,14 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
         for( unsigned ii = 0; ii <  strings_list.Count(); ii++ )
         {
             wxString& txt =  strings_list.Item( ii );
-            m_plotter->Text( positions[ii], UNSPECIFIED_COLOR, txt, orient, size,
+            m_plotter->Text( positions[ii], color, txt, orient, size,
                              pt_texte->GetHorizJustify(), pt_texte->GetVertJustify(),
                              thickness, pt_texte->IsItalic(), allow_bold );
         }
     }
     else
     {
-        m_plotter->Text( pos, UNSPECIFIED_COLOR, shownText, orient, size,
+        m_plotter->Text( pos, color, shownText, orient, size,
                          pt_texte->GetHorizJustify(), pt_texte->GetVertJustify(),
                          thickness, pt_texte->IsItalic(), allow_bold );
     }

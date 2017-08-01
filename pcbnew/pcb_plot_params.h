@@ -54,8 +54,11 @@ private:
      */
     EDA_DRAW_MODE_T m_plotMode;
 
-    /// Plot lines in outline mode
-    bool        m_plotOutlineMode;
+    /** DXF format: Plot items in outline (polygon) mode
+     * In polygon mode, each item to plot is converted to a polygon, and all
+     * polygons are merged.
+     */
+    bool        m_DXFplotPolygonMode;
 
     /// Plot format type (chooses the driver to be used)
     PlotFormat  m_format;
@@ -66,7 +69,7 @@ private:
     /// Choose how represent text with PS, PDF and DXF drivers
     PlotTextMode m_textMode;
 
-    /// The default line width (used for the frame and in LINE mode)
+    /// The default line width (used to draw items having no defined width)
     int         m_lineWidth;
 
     /// When true set the scale to fit the board in the page
@@ -93,8 +96,10 @@ private:
     /// Set of layers to plot
     LSET        m_layerSelection;
 
-    /** When plotting gerbers use a conventional set of Protel extensions
-     * instead of appending a suffix to the board name */
+    /** When plotting gerber files, use a conventional set of Protel extensions
+     * instead of .gbr, that is now the offical gerber file extension
+     * this is a deprecated feature
+     */
     bool        m_useGerberProtelExtensions;
 
     /// Include attributes from the Gerber X2 format (chapter 5 in revision J2)
@@ -106,7 +111,7 @@ private:
     /// 5 is the minimal value for professional boards.
     int         m_gerberPrecision;
 
-    /// Plot gerbers using auxiliary (drill) origin instead of page coordinates
+    /// Plot gerbers using auxiliary (drill) origin instead of absolute coordinates
     bool        m_useAuxOrigin;
 
     /// On gerbers 'scrape' away the solder mask from silkscreen (trim silks)
@@ -139,8 +144,8 @@ private:
      * near 1.0; only X and Y dimensions are adjusted: circles are plotted as
      * circles, even if X and Y fine scale differ; because of this it is mostly
      * useful for printers: postscript plots would be best adjusted using
-     * the prologue (that would change the whole output matrix */
-
+     * the prologue (that would change the whole output matrix
+     */
     double      m_fineScaleAdjustX;     ///< fine scale adjust X axis
     double      m_fineScaleAdjustY;     ///< fine scale adjust Y axis
 
@@ -154,8 +159,6 @@ private:
     int         m_HPGLPenDiam;          ///< HPGL only: pen diameter in MILS, useful to fill areas
     int         m_HPGLPenOvr;           ///< HPGL only: pen overlay in MILS, useful only to fill areas
     EDA_COLOR_T m_color;                ///< Color for plotting the current layer
-    EDA_COLOR_T m_referenceColor;       ///< Color for plotting references
-    EDA_COLOR_T m_valueColor;           ///< Color for plotting values
 
 public:
     PCB_PLOT_PARAMS();
@@ -167,17 +170,17 @@ public:
                         const throw( IO_ERROR );
     void        Parse( PCB_PLOT_PARAMS_PARSER* aParser ) throw( PARSE_ERROR, IO_ERROR );
 
-    bool        operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
-    bool        operator!=( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
+    /**
+     * Compare current settings to aPcbPlotParams, including not saved parameters in brd file
+     * @param aPcbPlotParams = the PCB_PLOT_PARAMS to compare
+     * @param aCompareOnlySavedPrms = true to compare only saved in file parameters,
+     * and false to compare the full set of parameters.
+     * @return true is parameters are same, false if one (or more) parameter does not match
+     */
+    bool        IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams, bool aCompareOnlySavedPrms ) const;
 
     void        SetColor( EDA_COLOR_T aVal ) { m_color = aVal; }
     EDA_COLOR_T GetColor() const { return m_color; }
-
-    void        SetReferenceColor( EDA_COLOR_T aVal ) { m_referenceColor = aVal; }
-    EDA_COLOR_T GetReferenceColor() const { return m_referenceColor; }
-
-    void        SetValueColor( EDA_COLOR_T aVal ) { m_valueColor = aVal; }
-    EDA_COLOR_T GetValueColor() const { return m_valueColor; }
 
     void        SetTextMode( PlotTextMode aVal ) { m_textMode = aVal; }
     PlotTextMode GetTextMode() const { return m_textMode; }
@@ -185,8 +188,8 @@ public:
     void        SetPlotMode( EDA_DRAW_MODE_T aPlotMode ) { m_plotMode = aPlotMode; }
     EDA_DRAW_MODE_T GetPlotMode() const { return m_plotMode; }
 
-    void        SetPlotOutlineMode( bool aFlag ) { m_plotOutlineMode = aFlag; }
-    bool        GetPlotOutlineMode() const { return m_plotOutlineMode; }
+    void        SetDXFPlotPolygonMode( bool aFlag ) { m_DXFplotPolygonMode = aFlag; }
+    bool        GetDXFPlotPolygonMode() const { return m_DXFplotPolygonMode; }
 
     void        SetDrillMarksType( DrillMarksType aVal ) { m_drillMarks = aVal; }
     DrillMarksType GetDrillMarksType() const { return m_drillMarks; }

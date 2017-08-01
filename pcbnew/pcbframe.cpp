@@ -962,16 +962,20 @@ void PCB_EDIT_FRAME::OnModify( )
 
 void PCB_EDIT_FRAME::SVG_Print( wxCommandEvent& event )
 {
-    PCB_PLOT_PARAMS  tmp = GetPlotSettings();
+    PCB_PLOT_PARAMS  plot_prms = GetPlotSettings();
 
     // we don't want dialogs knowing about complex wxFrame functions so
     // pass everything the dialog needs without reference to *this frame's class.
-    if( InvokeSVGPrint( this, GetBoard(), &tmp ) )
+    if( InvokeSVGPrint( this, GetBoard(), &plot_prms ) )
     {
-        if( tmp != GetPlotSettings() )
+        if( !plot_prms.IsSameAs( GetPlotSettings(), false ) )
         {
-            SetPlotSettings( tmp );
-            OnModify();
+            // First, mark board as modified only for parameters saved in file
+            if( !plot_prms.IsSameAs( GetPlotSettings(), true ) )
+                OnModify();
+
+            // Now, save any change, for the session
+            SetPlotSettings( plot_prms );
         }
     }
 }

@@ -2,7 +2,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,7 +90,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS() :
     m_plotFrameRef               = false;
     m_plotViaOnMaskLayer         = false;
     m_plotMode                   = FILLED;
-    m_plotOutlineMode            = true;
+    m_DXFplotPolygonMode         = true;
     m_useAuxOrigin               = false;
     m_HPGLPenNum                 = 1;
     m_HPGLPenSpeed               = 20;        // this param is always in cm/s
@@ -114,8 +114,6 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS() :
     m_widthAdjust                = 0.;
     m_outputDirectory.clear();
     m_color                      = BLACK;
-    m_referenceColor             = BLACK;
-    m_valueColor                 = BLACK;
     m_textMode                   = PLOTTEXTMODE_DEFAULT;
 
     // This parameter controls if the NPTH pads will be plotted or not
@@ -220,7 +218,7 @@ void PCB_PLOT_PARAMS::Parse( PCB_PLOT_PARAMS_PARSER* aParser )
 }
 
 
-bool PCB_PLOT_PARAMS::operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
+bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams, bool aCompareOnlySavedPrms ) const
 {
     if( m_layerSelection != aPcbPlotParams.m_layerSelection )
         return false;
@@ -240,8 +238,13 @@ bool PCB_PLOT_PARAMS::operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
     if( m_plotMode != aPcbPlotParams.m_plotMode )
         return false;
-    if( m_plotOutlineMode != aPcbPlotParams.m_plotOutlineMode )
+
+    if( !aCompareOnlySavedPrms )
+    {
+        if( m_DXFplotPolygonMode != aPcbPlotParams.m_DXFplotPolygonMode )
         return false;
+    }
+
     if( m_useAuxOrigin != aPcbPlotParams.m_useAuxOrigin )
         return false;
     if( m_HPGLPenNum != aPcbPlotParams.m_HPGLPenNum )
@@ -284,23 +287,18 @@ bool PCB_PLOT_PARAMS::operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
     if( m_widthAdjust != aPcbPlotParams.m_widthAdjust )
         return false;
-    if( m_color != aPcbPlotParams.m_color )
-        return false;
-    if( m_referenceColor != aPcbPlotParams.m_referenceColor )
-        return false;
-    if( m_valueColor != aPcbPlotParams.m_valueColor )
-        return false;
+
+    if( !aCompareOnlySavedPrms )
+    {
+        if( m_color != aPcbPlotParams.m_color )
+            return false;
+    }
+
     if( m_textMode != aPcbPlotParams.m_textMode )
         return false;
     if( !m_outputDirectory.IsSameAs( aPcbPlotParams.m_outputDirectory ) )
         return false;
     return true;
-}
-
-
-bool PCB_PLOT_PARAMS::operator!=( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
-{
-    return !( *this == aPcbPlotParams );
 }
 
 
