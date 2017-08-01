@@ -1721,39 +1721,55 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     // part and alias can differ if alias is not the root
     if( PART_SPTR part = m_part.lock() )
     {
-        LIB_ALIAS* alias = part->GetAlias( GetLibId().GetLibItemName() );
+        if( part.get() != dummy )
+        {
+            LIB_ALIAS* alias = part->GetAlias( GetLibId().GetLibItemName() );
 
-        if( !alias )
-            return;
+            if( !alias )
+                return;
 
+            if( m_currentSheetPath )
+                aList.push_back( MSG_PANEL_ITEM( _( "Reference" ),
+                                                 GetRef( m_currentSheetPath ),
+                                                 DARKCYAN ) );
+
+            wxString msg = part->IsPower() ? _( "Power symbol" ) : _( "Value" );
+
+            aList.push_back( MSG_PANEL_ITEM( msg, GetField( VALUE )->GetShownText(), DARKCYAN ) );
+
+            // Display component reference in library and library
+            aList.push_back( MSG_PANEL_ITEM( _( "Component" ), GetLibId().GetLibItemName(),
+                                             BROWN ) );
+
+            if( alias->GetName() != part->GetName() )
+                aList.push_back( MSG_PANEL_ITEM( _( "Alias of" ), part->GetName(), BROWN ) );
+
+            aList.push_back( MSG_PANEL_ITEM( _( "Library" ), alias->GetLibraryName(), BROWN ) );
+
+            // Display the current associated footprint, if exists.
+            if( !GetField( FOOTPRINT )->IsVoid() )
+                msg = GetField( FOOTPRINT )->GetShownText();
+            else
+                msg = _( "<Unknown>" );
+
+            aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), msg, DARKRED ) );
+
+            // Display description of the component, and keywords found in lib
+            aList.push_back( MSG_PANEL_ITEM( _( "Description" ), alias->GetDescription(),
+                                             DARKCYAN ) );
+            aList.push_back( MSG_PANEL_ITEM( _( "Key Words" ), alias->GetKeyWords(), DARKCYAN ) );
+        }
+    }
+    else
+    {
         if( m_currentSheetPath )
-            aList.push_back( MSG_PANEL_ITEM( _( "Reference" ),
-                                             GetRef( m_currentSheetPath ),
+            aList.push_back( MSG_PANEL_ITEM( _( "Reference" ), GetRef( m_currentSheetPath ),
                                              DARKCYAN ) );
 
-        wxString msg = part->IsPower() ? _( "Power symbol" ) : _( "Value" );
-
-        aList.push_back( MSG_PANEL_ITEM( msg, GetField( VALUE )->GetShownText(), DARKCYAN ) );
-
-        // Display component reference in library and library
+        aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetField( VALUE )->GetShownText(),
+                                         DARKCYAN ) );
         aList.push_back( MSG_PANEL_ITEM( _( "Component" ), GetLibId().GetLibItemName(), BROWN ) );
-
-        if( alias->GetName() != part->GetName() )
-            aList.push_back( MSG_PANEL_ITEM( _( "Alias of" ), part->GetName(), BROWN ) );
-
-        aList.push_back( MSG_PANEL_ITEM( _( "Library" ), alias->GetLibraryName(), BROWN ) );
-
-        // Display the current associated footprint, if exists.
-        if( !GetField( FOOTPRINT )->IsVoid() )
-            msg = GetField( FOOTPRINT )->GetShownText();
-        else
-            msg = _( "<Unknown>" );
-
-        aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), msg, DARKRED ) );
-
-        // Display description of the component, and keywords found in lib
-        aList.push_back( MSG_PANEL_ITEM( _( "Description" ), alias->GetDescription(), DARKCYAN ) );
-        aList.push_back( MSG_PANEL_ITEM( _( "Key Words" ), alias->GetKeyWords(), DARKCYAN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Library" ), _( "Error: symbol not found!!!" ), RED ) );
     }
 }
 
