@@ -99,6 +99,9 @@ public:
 
     bool SwitchBackend( GAL_TYPE aGalType ) override;
 
+    ///> Forces refresh of the ratsnest visual representation
+    void RedrawRatsnest();
+
 protected:
     ///> Reassigns layer order to the initial settings.
     void setDefaultLayerOrder();

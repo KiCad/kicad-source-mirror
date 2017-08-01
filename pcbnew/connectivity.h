@@ -164,10 +164,15 @@ public:
 
     /**
      * Function ClearDynamicRatsnest()
-     * Erases the temporary dynamic ratsnest (i.e. the ratsnest lines that)
-     * pcbnew displays when moving an item/set of items
+     * Erases the temporary dynamic ratsnest (i.e. the ratsnest lines that
+     * pcbnew displays when moving an item/set of items)
      */
     void ClearDynamicRatsnest();
+
+    /**
+     * Hides the temporary dynamic ratsnest lines.
+     */
+    void HideDynamicRatsnest();
 
     /**
      * Function ComputeDynamicRatsnest()

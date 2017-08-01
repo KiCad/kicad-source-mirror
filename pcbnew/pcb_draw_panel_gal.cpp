@@ -375,6 +375,13 @@ bool PCB_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 }
 
 
+void PCB_DRAW_PANEL_GAL::RedrawRatsnest()
+{
+    if( m_ratsnest )
+        m_view->Update( m_ratsnest.get() );
+}
+
+
 void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
 {
     // caching makes no sense for Cairo and other software renderers

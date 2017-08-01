@@ -38,7 +38,7 @@ class PCB_EDIT_FRAME;
  *
  * Handles actions specific to the board editor in pcbnew.
  */
-class PCB_EDITOR_CONTROL : public PCB_TOOL
+class PCB_EDITOR_CONTROL : public wxEvtHandler, public PCB_TOOL
 {
 public:
     PCB_EDITOR_CONTROL();
@@ -111,10 +111,16 @@ public:
     ///> Shows local ratsnest of a component
     int ShowLocalRatsnest( const TOOL_EVENT& aEvent );
 
+private:
+    ///> Event handler to recalculate dynamic ratsnest
+    void ratsnestTimer( wxTimerEvent& aEvent );
+
+    ///> Recalculates dynamic ratsnest for the current selection
+    void calculateSelectionRatsnest();
+
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
-private:
     ///> Pointer to the currently used edit frame.
     PCB_EDIT_FRAME* m_frame;
 
@@ -123,6 +129,12 @@ private:
 
     ///> Flag to ignore a single crossprobe message from eeschema.
     bool m_probingSchToPcb;
+
+    ///> Flag to indicate whether the current selection ratsnest is slow to calculate.
+    bool m_slowRatsnest;
+
+    ///> Timer that start ratsnest calculation when it is slow to compute.
+    wxTimer m_ratsnestTimer;
 
     ///> How to modify a property for selected items.
     enum MODIFY_MODE { ON, OFF, TOGGLE };
