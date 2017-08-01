@@ -105,6 +105,9 @@ public:
     ///> Updates ratsnest for selected items.
     int UpdateSelectionRatsnest( const TOOL_EVENT& aEvent );
 
+    ///> Hides ratsnest for selected items. Called when there are no items selected.
+    int HideSelectionRatsnest( const TOOL_EVENT& aEvent );
+
     ///> Shows local ratsnest of a component
     int ShowLocalRatsnest( const TOOL_EVENT& aEvent );
 

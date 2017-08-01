@@ -1136,6 +1136,33 @@ int PCB_EDITOR_CONTROL::ShowLocalRatsnest( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
 {
+    auto selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    auto& selection = selectionTool->GetSelection();
+
+    if( selection.Empty() )
+    {
+        getModel<BOARD>()->GetConnectivity()->ClearDynamicRatsnest();
+    }
+    else
+    {
+        auto connectivity = getModel<BOARD>()->GetConnectivity();
+        std::vector<BOARD_ITEM*> items;
+        items.reserve( selection.Size() );
+
+        for( auto item : selection )
+            items.push_back( static_cast<BOARD_ITEM*>( item ) );
+
+        connectivity->ComputeDynamicRatsnest( items );
+    }
+
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::HideSelectionRatsnest( const TOOL_EVENT& aEvent )
+{
+    getModel<BOARD>()->GetConnectivity()->ClearDynamicRatsnest();
+
     return 0;
 }
 
@@ -1171,6 +1198,7 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  PCB_ACTIONS::highlightNetCursor.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ShowLocalRatsnest,   PCB_ACTIONS::showLocalRatsnest.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::UpdateSelectionRatsnest, PCB_ACTIONS::selectionModified.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::HideSelectionRatsnest, SELECTION_TOOL::ClearedEvent );
 }
 
 

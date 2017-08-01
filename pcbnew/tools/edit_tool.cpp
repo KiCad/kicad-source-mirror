@@ -372,11 +372,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 // Drag items to the current cursor position
                 for( auto item : selection )
-                {
                     static_cast<BOARD_ITEM*>( item )->Move( movement + m_offset );
-                }
-
-                updateRatsnest( true );
             }
             else if( !m_dragging )    // Prepare to start dragging
             {
@@ -481,7 +477,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 // Update dragging offset (distance between cursor and the first dragged item)
                 m_offset = static_cast<BOARD_ITEM*>( selection.Front() )->GetPosition() - modPoint;
-                updateRatsnest( true );
             }
         }
 
@@ -493,8 +488,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             lockOverride = false;
         }
     } while( ( evt = Wait() ) ); //Should be assignment not equality test
-
-    getModel<BOARD>()->GetConnectivity()->ClearDynamicRatsnest();
 
     controls->ForceCursorPosition( false );
     controls->ShowCursor( false );
@@ -590,8 +583,6 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     if( !m_dragging )
         m_commit->Push( _( "Rotate" ) );
-    else
-        updateRatsnest( true );
 
     if( selection.IsHover() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -699,8 +690,6 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
     if( !m_dragging )
         m_commit->Push( _( "Mirror" ) );
-    else
-        updateRatsnest( true );
 
     if( selection.IsHover() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -734,8 +723,6 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
     if( !m_dragging )
         m_commit->Push( _( "Flip" ) );
-    else
-        updateRatsnest( true );
 
     if( selection.IsHover() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -1141,19 +1128,6 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::editFootprintInFpEditor, PCB_ACTIONS::editFootprintInFpEditor.MakeEvent() );
     Go( &EDIT_TOOL::ExchangeFootprints,      PCB_ACTIONS::exchangeFootprints.MakeEvent() );
     Go( &EDIT_TOOL::MeasureTool,             PCB_ACTIONS::measureTool.MakeEvent() );
-}
-
-
-void EDIT_TOOL::updateRatsnest( bool aRedraw )
-{
-    auto& selection = m_selectionTool->GetSelection();
-    auto connectivity = getModel<BOARD>()->GetConnectivity();
-    std::vector<BOARD_ITEM *> items;
-
-    for ( auto item : selection )
-        items.push_back ( static_cast<BOARD_ITEM *>( item ) );
-
-    connectivity->ComputeDynamicRatsnest( items );
 }
 
 
