@@ -813,9 +813,8 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     default:
-        DisplayErrorMessage( this,
-                      _( "Invalid toolbar option" ),
-                      _( "PCB_EDIT_FRAME::OnSelectOptionToolbar error \n (event not handled!)" ) );
+        DisplayErrorMessage( this, "Invalid toolbar option",
+                       "PCB_EDIT_FRAME::OnSelectOptionToolbar error \n (event not handled!)" );
         break;
     }
 }

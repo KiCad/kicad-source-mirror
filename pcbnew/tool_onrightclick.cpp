@@ -101,9 +101,8 @@ void FOOTPRINT_EDIT_FRAME::ToolOnRightClick( wxCommandEvent& event )
         break;
 
     default:
-        DisplayErrorMessage( this,
-                             _( "Invalid tool ID "),
-                             wxString::Format( _( "ToolOnRightClick called with ID %d" ), id ) );
+        DisplayErrorMessage( this, "Invalid tool ID ",
+                             wxString::Format( "ToolOnRightClick called with ID %d", id ) );
         break;
     }
 }

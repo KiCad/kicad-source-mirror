@@ -545,11 +545,9 @@ void PCB_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
 
         if( curr_item->Type() != PCB_LINE_T )
         {
-            DisplayErrorMessage(
-                    this,
-                    _( "Item type is incorrect" ),
-                    wxString::Format( _( "Selected item type is %d\n"
-                                         "Expected: %d" ), curr_item->Type(), PCB_LINE_T ) );
+            DisplayErrorMessage( this, "Item type is incorrect",
+                                 wxString::Format( "Selected item type is %d\n"
+                                         "Expected: %d", curr_item->Type(), PCB_LINE_T ) );
             m_canvas->SetAutoPanRequest( false );
             break;
         }
