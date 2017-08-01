@@ -1020,6 +1020,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     std::string gatename = epart->deviceset + epart->device + einstance.gate;
     std::string symbolname = epart->deviceset + epart->device;
+    // KiCad enumerates units starting from 1, Eagle starts with 0
     int unit = m_eaglelibraries[epart->library]->gate_unit[gatename];
     std::string package = m_eaglelibraries[epart->library]->package[symbolname];
 
@@ -1219,14 +1220,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
             int gateindex;
             bool ispower = false;
 
-            if( gates_count>1 )
-            {
-                gateindex = 1;
-            }
-            else
-            {
-                gateindex = 0;
-            }
+            gateindex = 1;
 
             while( gateNode )
             {
