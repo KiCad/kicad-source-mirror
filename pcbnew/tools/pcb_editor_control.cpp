@@ -1154,7 +1154,7 @@ int PCB_EDITOR_CONTROL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
     {
         // Compute ratsnest only when user stops dragging for a moment
         connectivity->HideDynamicRatsnest();
-        m_ratsnestTimer.Start( 40 );
+        m_ratsnestTimer.Start( 20 );
     }
     else
     {
@@ -1165,7 +1165,7 @@ int PCB_EDITOR_CONTROL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
 
         // If it is too slow, then switch to 'slow ratsnest' mode when
         // ratsnest is calculated when user stops dragging items for a moment
-        if( counter.msecs() > 10 )
+        if( counter.msecs() > 25 )
         {
             m_slowRatsnest = true;
             connectivity->HideDynamicRatsnest();
