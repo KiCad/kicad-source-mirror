@@ -6,6 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2015  Cirilo Bernardo
+ * Copyright (C) 2013-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +46,6 @@
 class DIALOG_EXPORT_IDF3: public DIALOG_EXPORT_IDF3_BASE
 {
 private:
-    PCB_EDIT_FRAME* m_parent;
     wxConfigBase* m_config;
     bool   m_idfThouOpt;    // remember last preference for units in THOU
     bool   m_AutoAdjust;    // remember last Reference Point AutoAdjust setting
@@ -57,7 +57,6 @@ public:
     DIALOG_EXPORT_IDF3( PCB_EDIT_FRAME* parent ) :
             DIALOG_EXPORT_IDF3_BASE( parent )
     {
-        m_parent = parent;
         m_config = Kiface().KifaceSettings();
         SetFocus();
         m_idfThouOpt = false;
@@ -156,13 +155,25 @@ public:
         event.Skip();
     }
 
+    bool TransferDataFromWindow() override;
 };
 
 
-/**
- * Function OnExportIDF3
- * will export the current BOARD to IDF board and lib files.
- */
+bool DIALOG_EXPORT_IDF3::TransferDataFromWindow()
+{
+    wxFileName fn = m_filePickerIDF->GetPath();
+
+    if( fn.FileExists() )
+    {
+        if( wxMessageBox( _( "Are you sure you want to overwrite the exiting file?" ),
+                          _( "Warning" ), wxYES_NO | wxCENTER | wxICON_QUESTION, this ) == wxNO )
+            return false;
+    }
+
+    return true;
+}
+
+
 void PCB_EDIT_FRAME::OnExportIDF3( wxCommandEvent& event )
 {
     wxFileName fn;

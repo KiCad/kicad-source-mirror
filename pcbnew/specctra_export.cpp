@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,7 +91,7 @@ void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
                                       dsn_ext,
                                       mask,
                                       this,
-                                      wxFD_SAVE,
+                                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT,
                                       false );
 
     if( fullFileName == wxEmptyString )
