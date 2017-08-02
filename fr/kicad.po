@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-01 13:08+0200\n"
-"PO-Revision-Date: 2017-08-01 13:09+0200\n"
+"POT-Creation-Date: 2017-08-02 08:38+0200\n"
+"PO-Revision-Date: 2017-08-02 08:44+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -177,7 +177,7 @@ msgstr "Alias"
 #: common/dialog_about/AboutDialog_main.cpp:129 eeschema/bom_table_column.h:34
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
-#: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1755
+#: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1758
 #: eeschema/viewlibs.cpp:235 include/lib_table_grid.h:174
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:44
 #: pcbnew/librairi.cpp:827
@@ -1966,7 +1966,7 @@ msgstr "Ajouter une nouvelle entrée à la table."
 #: pcbnew/onrightclick.cpp:724 pcbnew/onrightclick.cpp:831
 #: pcbnew/onrightclick.cpp:901 pcbnew/onrightclick.cpp:958
 #: pcbnew/onrightclick.cpp:1010 pcbnew/tools/edit_tool.cpp:134
-#: pcbnew/tools/edit_tool.cpp:781
+#: pcbnew/tools/edit_tool.cpp:768
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -2067,7 +2067,7 @@ msgstr "Miroir Y"
 #: common/dialogs/dialog_image_editor_base.cpp:39
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:176
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:85
-#: pcbnew/onrightclick.cpp:998 pcbnew/tools/edit_tool.cpp:592
+#: pcbnew/onrightclick.cpp:998 pcbnew/tools/edit_tool.cpp:585
 msgid "Rotate"
 msgstr "Rotation"
 
@@ -3687,8 +3687,8 @@ msgstr "Variables d'env. pour chemins relatifs:"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:196
 #: eeschema/dialogs/dialog_rescue_each.cpp:110
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45 eeschema/lib_field.cpp:624
-#: eeschema/lib_field.cpp:803 eeschema/sch_component.cpp:1734
-#: eeschema/template_fieldnames.cpp:42
+#: eeschema/lib_field.cpp:803 eeschema/sch_component.cpp:1736
+#: eeschema/sch_component.cpp:1769 eeschema/template_fieldnames.cpp:42
 #: eeschema/widgets/widget_eeschema_color_config.cpp:76
 #: pcbnew/class_edge_mod.cpp:238 pcbnew/class_text_mod.cpp:352
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:42
@@ -4008,8 +4008,8 @@ msgstr ""
 "parent quelque part dans la hiérarchie de schéma."
 
 #: eeschema/bom_table_column.h:33 eeschema/dialogs/dialog_rescue_each.cpp:109
-#: eeschema/lib_field.cpp:617 eeschema/sch_component.cpp:1730
-#: eeschema/template_fieldnames.cpp:39
+#: eeschema/lib_field.cpp:617 eeschema/sch_component.cpp:1732
+#: eeschema/sch_component.cpp:1766 eeschema/template_fieldnames.cpp:39
 #: eeschema/widgets/widget_eeschema_color_config.cpp:75
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:40
@@ -4019,7 +4019,7 @@ msgid "Reference"
 msgstr "Référence"
 
 #: eeschema/bom_table_column.h:35 eeschema/lib_field.cpp:631
-#: eeschema/sch_component.cpp:1752 eeschema/template_fieldnames.cpp:45
+#: eeschema/sch_component.cpp:1755 eeschema/template_fieldnames.cpp:45
 #: pcbnew/class_edge_mod.cpp:237 pcbnew/class_module.cpp:585
 #: pcbnew/class_pad.cpp:654 pcbnew/class_text_mod.cpp:356
 #: pcbnew/loadcmp.cpp:445 pcbnew/loadcmp.cpp:509
@@ -7034,8 +7034,8 @@ msgstr "Modèle"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:230
 #: eeschema/dialogs/dialog_spice_model_base.cpp:264
-#: eeschema/sch_component.cpp:1744 pcbnew/dialogs/wizard_add_fplib_base.cpp:185
-#: pcbnew/loadcmp.cpp:446
+#: eeschema/sch_component.cpp:1747 eeschema/sch_component.cpp:1772
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:185 pcbnew/loadcmp.cpp:446
 msgid "Library"
 msgstr "Librairie"
 
@@ -9524,7 +9524,7 @@ msgstr "Déplacer %s"
 #: eeschema/onrightclick.cpp:368 eeschema/onrightclick.cpp:494
 #: eeschema/onrightclick.cpp:531 eeschema/onrightclick.cpp:567
 #: eeschema/onrightclick.cpp:762 pcbnew/onrightclick.cpp:803
-#: pcbnew/tools/edit_tool.cpp:514
+#: pcbnew/tools/edit_tool.cpp:507
 msgid "Drag"
 msgstr "Drag"
 
@@ -9886,28 +9886,32 @@ msgstr "Élément %s venant de l'élément %s trouvé en feuille %s"
 msgid "Item %s found in sheet %s"
 msgstr "Item %s trouvé en feuille %s"
 
-#: eeschema/sch_component.cpp:1734
+#: eeschema/sch_component.cpp:1736
 msgid "Power symbol"
 msgstr "Symbole d'alimentation"
 
-#: eeschema/sch_component.cpp:1739
+#: eeschema/sch_component.cpp:1741 eeschema/sch_component.cpp:1771
 #: eeschema/widgets/widget_eeschema_color_config.cpp:101
 msgid "Component"
 msgstr "Composant"
 
-#: eeschema/sch_component.cpp:1742
+#: eeschema/sch_component.cpp:1745
 msgid "Alias of"
 msgstr "Alias de"
 
-#: eeschema/sch_component.cpp:1750
+#: eeschema/sch_component.cpp:1753
 msgid "<Unknown>"
 msgstr "<Inconnu>"
 
-#: eeschema/sch_component.cpp:1756
+#: eeschema/sch_component.cpp:1760
 msgid "Key Words"
 msgstr "Mots Clé"
 
-#: eeschema/sch_component.cpp:2006
+#: eeschema/sch_component.cpp:1772
+msgid "Error: symbol not found!!!"
+msgstr "Erreur: symbole non trouvé !!!"
+
+#: eeschema/sch_component.cpp:2022
 #, c-format
 msgid "Component %s, %s"
 msgstr "Composant %s, %s"
@@ -11019,7 +11023,7 @@ msgid "Run Pcbnew to layout printed circuit board"
 msgstr "Lancer Pcbnew - outil de conception de C.I."
 
 #: eeschema/tool_sch.cpp:202 pcbnew/edit.cpp:1518 pcbnew/tool_pcb.cpp:432
-#: pcbnew/tools/pcb_editor_control.cpp:1083
+#: pcbnew/tools/pcb_editor_control.cpp:1089
 msgid "Highlight net"
 msgstr "Surbrillance net"
 
@@ -11226,7 +11230,7 @@ msgstr "Polarité"
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:77
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:115
 #: pcbnew/modedit_onclick.cpp:296 pcbnew/tools/edit_tool.cpp:130
-#: pcbnew/tools/edit_tool.cpp:701
+#: pcbnew/tools/edit_tool.cpp:692
 msgid "Mirror"
 msgstr "Miroir"
 
@@ -18580,7 +18584,7 @@ msgid "Items to Delete"
 msgstr "Éléments à Effacer"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:25
-#: pcbnew/onrightclick.cpp:716 pcbnew/tools/pcb_editor_control.cpp:163
+#: pcbnew/onrightclick.cpp:716 pcbnew/tools/pcb_editor_control.cpp:164
 msgid "Zones"
 msgstr "Zones"
 
@@ -20905,7 +20909,7 @@ msgstr "Options DXF"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:339
 msgid "Plot  all layers in outline (polygon) mode"
-msgstr "Tracertooutes les couches en mode contour (polygon)"
+msgstr "Tracer toutes les couches en mode contour (polygon)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:341
 msgid ""
@@ -20930,7 +20934,10 @@ msgstr "Utiliser la fonte Pcbnew pour tracer les textes"
 msgid ""
 "Check to use Pcbnew stroke font\n"
 "Uncheck to plot oneline ASCII texts as editable text (using DXF font)"
-msgstr "Activer pour utiliser la fonte Pcbnew"
+msgstr ""
+"Activer pour utiliser la fonte Pcbnew\n"
+"Désactiver pour tracer les textes sur une ligne comme textes éditable "
+"(utilisant la fonte DXF)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:377
 msgid "Generate Drill File"
@@ -21906,7 +21913,7 @@ msgid "Add tracks"
 msgstr "Addition de pistes"
 
 #: pcbnew/edit.cpp:1459 pcbnew/edit.cpp:1506
-#: pcbnew/tools/pcb_editor_control.cpp:401
+#: pcbnew/tools/pcb_editor_control.cpp:407
 msgid "Add footprint"
 msgstr "Ajouter empreinte"
 
@@ -21923,11 +21930,11 @@ msgid "Add keepout"
 msgstr "Ajout zone interdite"
 
 #: pcbnew/edit.cpp:1478 pcbnew/menubar_pcbframe.cpp:349 pcbnew/tool_pcb.cpp:473
-#: pcbnew/tools/pcb_editor_control.cpp:583
+#: pcbnew/tools/pcb_editor_control.cpp:589
 msgid "Add layer alignment target"
 msgstr "Ajouter Mire de superposition"
 
-#: pcbnew/edit.cpp:1482 pcbnew/tools/pcb_editor_control.cpp:993
+#: pcbnew/edit.cpp:1482 pcbnew/tools/pcb_editor_control.cpp:999
 msgid "Adjust zero"
 msgstr "Ajuster zéro"
 
@@ -22600,7 +22607,7 @@ msgstr "Commuter Grille à Précédente"
 msgid "Track Display Mode"
 msgstr "Mode d'Affichage des Pistes"
 
-#: pcbnew/hotkeys.cpp:232 pcbnew/tools/pcb_editor_control.cpp:118
+#: pcbnew/hotkeys.cpp:232 pcbnew/tools/pcb_editor_control.cpp:119
 msgid "Add Footprint"
 msgstr "Ajouter Empreinte"
 
@@ -24466,7 +24473,7 @@ msgstr "Zoom Bloc"
 
 #: pcbnew/onrightclick.cpp:493 pcbnew/onrightclick.cpp:813
 #: pcbnew/onrightclick.cpp:1000 pcbnew/tools/edit_tool.cpp:126
-#: pcbnew/tools/edit_tool.cpp:736
+#: pcbnew/tools/edit_tool.cpp:725
 msgid "Flip"
 msgstr "Change côté"
 
@@ -24611,7 +24618,7 @@ msgstr "Addition d'une Découpe"
 msgid "Duplicate Zone Onto Layer"
 msgstr "Dupliquer Zone sur Couche"
 
-#: pcbnew/onrightclick.cpp:749 pcbnew/tools/pcb_editor_control.cpp:665
+#: pcbnew/onrightclick.cpp:749 pcbnew/tools/pcb_editor_control.cpp:671
 #: pcbnew/zones_by_polygon_fill_functions.cpp:123
 msgid "Fill Zone"
 msgstr "Remplir Zone"
@@ -25376,7 +25383,7 @@ msgid "Check footprint"
 msgstr "Vérifier empreinte"
 
 #: pcbnew/tool_modedit.cpp:201 pcbnew/tool_pcb.cpp:492
-#: pcbnew/tools/edit_tool.cpp:1042
+#: pcbnew/tools/edit_tool.cpp:1029
 msgid "Measure distance"
 msgstr "Mesurer une distance"
 
@@ -25696,7 +25703,7 @@ msgstr "Ajouter Vias"
 
 #: pcbnew/tools/drawing_tool.cpp:93
 msgid "Add free-stanging vias"
-msgstr ""
+msgstr "Ajouter des vias libres"
 
 #: pcbnew/tools/drawing_tool.cpp:97
 msgid "Add Keepout Area"
@@ -25894,15 +25901,15 @@ msgstr "Outil de Mesure"
 msgid "Interactively measure distance between points"
 msgstr "Mesurer interactivement la distance entre deux points."
 
-#: pcbnew/tools/edit_tool.cpp:537
+#: pcbnew/tools/edit_tool.cpp:530
 msgid "Edit track/via properties"
 msgstr "Éditer les propriétés des pistes/vias"
 
-#: pcbnew/tools/edit_tool.cpp:827
+#: pcbnew/tools/edit_tool.cpp:814
 msgid "Move exact"
 msgstr "Déplacer exactement"
 
-#: pcbnew/tools/edit_tool.cpp:902
+#: pcbnew/tools/edit_tool.cpp:889
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "%d élément(s) dupliqué(s)"
@@ -26001,117 +26008,117 @@ msgstr "Copier les options générales de conception de pads dans ce pad"
 msgid "Copy the current pad settings to other pads"
 msgstr "Copier les caractéristiques de ce pad dans les autres pads"
 
-#: pcbnew/tools/pcb_editor_control.cpp:88
+#: pcbnew/tools/pcb_editor_control.cpp:89
 msgid "Fill"
 msgstr "Remplir"
 
-#: pcbnew/tools/pcb_editor_control.cpp:88
+#: pcbnew/tools/pcb_editor_control.cpp:89
 msgid "Fill zone(s)"
 msgstr "Remplir zone(s)"
 
-#: pcbnew/tools/pcb_editor_control.cpp:92
+#: pcbnew/tools/pcb_editor_control.cpp:93
 msgid "Fill All"
 msgstr "Remplir Tout"
 
-#: pcbnew/tools/pcb_editor_control.cpp:92
+#: pcbnew/tools/pcb_editor_control.cpp:93
 msgid "Fill all zones"
 msgstr "Remplir toutes les zones"
 
-#: pcbnew/tools/pcb_editor_control.cpp:96
+#: pcbnew/tools/pcb_editor_control.cpp:97
 msgid "Unfill"
 msgstr "Supprimer remplissage"
 
-#: pcbnew/tools/pcb_editor_control.cpp:96
+#: pcbnew/tools/pcb_editor_control.cpp:97
 msgid "Unfill zone(s)"
 msgstr "Supprimer remplissage zone(s)"
 
-#: pcbnew/tools/pcb_editor_control.cpp:100
+#: pcbnew/tools/pcb_editor_control.cpp:101
 msgid "Unfill All"
 msgstr "Supprimer tous les Remplissages"
 
-#: pcbnew/tools/pcb_editor_control.cpp:100
+#: pcbnew/tools/pcb_editor_control.cpp:101
 msgid "Unfill all zones"
 msgstr "Supprimer remplissage des zones"
 
-#: pcbnew/tools/pcb_editor_control.cpp:104
+#: pcbnew/tools/pcb_editor_control.cpp:105
 msgid "Merge Zones"
 msgstr "Fusionner les Zones"
 
-#: pcbnew/tools/pcb_editor_control.cpp:104
-#: pcbnew/tools/pcb_editor_control.cpp:866
+#: pcbnew/tools/pcb_editor_control.cpp:105
+#: pcbnew/tools/pcb_editor_control.cpp:872
 msgid "Merge zones"
 msgstr "Fusionner les zones"
 
-#: pcbnew/tools/pcb_editor_control.cpp:108
+#: pcbnew/tools/pcb_editor_control.cpp:109
 msgid "Duplicate Zone onto Layer"
 msgstr "Dupliquer Zone sur Couche"
 
-#: pcbnew/tools/pcb_editor_control.cpp:108
+#: pcbnew/tools/pcb_editor_control.cpp:109
 msgid "Duplicate zone outline onto a different layer"
 msgstr "Dupliquer le contour de la zone en double sur une couche différente"
 
-#: pcbnew/tools/pcb_editor_control.cpp:114
+#: pcbnew/tools/pcb_editor_control.cpp:115
 msgid "Add Layer Alignment Target"
 msgstr "Ajouter Mire de Superposition"
 
-#: pcbnew/tools/pcb_editor_control.cpp:114
+#: pcbnew/tools/pcb_editor_control.cpp:115
 msgid "Add a layer alignment target"
 msgstr "Ajouter une mire de superposition"
 
-#: pcbnew/tools/pcb_editor_control.cpp:118
+#: pcbnew/tools/pcb_editor_control.cpp:119
 msgid "Add a footprint"
 msgstr "Ajouter une empreinte"
 
-#: pcbnew/tools/pcb_editor_control.cpp:134
+#: pcbnew/tools/pcb_editor_control.cpp:135
 msgid "Lock"
 msgstr "Verrouiller"
 
-#: pcbnew/tools/pcb_editor_control.cpp:138
+#: pcbnew/tools/pcb_editor_control.cpp:139
 msgid "Unlock"
 msgstr "Déverrouiller"
 
-#: pcbnew/tools/pcb_editor_control.cpp:221
+#: pcbnew/tools/pcb_editor_control.cpp:222
 msgid "Locking"
 msgstr "Verrouillage"
 
-#: pcbnew/tools/pcb_editor_control.cpp:466
+#: pcbnew/tools/pcb_editor_control.cpp:472
 msgid "Place a module"
 msgstr "Placer une empreinte"
 
-#: pcbnew/tools/pcb_editor_control.cpp:617
+#: pcbnew/tools/pcb_editor_control.cpp:623
 msgid "Place a layer alignment target"
 msgstr "Placer une mire d'alignement"
 
-#: pcbnew/tools/pcb_editor_control.cpp:678
+#: pcbnew/tools/pcb_editor_control.cpp:684
 #: pcbnew/zones_by_polygon_fill_functions.cpp:49
 #, c-format
 msgid "Filling zone %d out of %d (net %s)..."
 msgstr "Remplissage zone %d sur %d (net %s)..."
 
-#: pcbnew/tools/pcb_editor_control.cpp:686
-#: pcbnew/tools/pcb_editor_control.cpp:714
+#: pcbnew/tools/pcb_editor_control.cpp:692
+#: pcbnew/tools/pcb_editor_control.cpp:720
 #: pcbnew/zones_by_polygon_fill_functions.cpp:147
 msgid "Fill All Zones"
 msgstr "Remplissage des Zones"
 
-#: pcbnew/tools/pcb_editor_control.cpp:743
+#: pcbnew/tools/pcb_editor_control.cpp:749
 msgid "Unfill Zone"
 msgstr "Supprimer Remplissage Zone"
 
-#: pcbnew/tools/pcb_editor_control.cpp:768
+#: pcbnew/tools/pcb_editor_control.cpp:774
 msgid "Unfill All Zones"
 msgstr "Supprimer Remplissage toutes Zones"
 
-#: pcbnew/tools/pcb_editor_control.cpp:912 pcbnew/zones_by_polygon.cpp:133
+#: pcbnew/tools/pcb_editor_control.cpp:918 pcbnew/zones_by_polygon.cpp:133
 msgid "The duplicated zone cannot be on the same layer as the original zone."
 msgstr ""
 "La zone dupliquée ne peut pas être sur la même couche que la zone initiale."
 
-#: pcbnew/tools/pcb_editor_control.cpp:923
+#: pcbnew/tools/pcb_editor_control.cpp:929
 msgid "Duplicate zone"
 msgstr "Dupliquer Zone"
 
-#: pcbnew/tools/pcb_editor_control.cpp:1127
+#: pcbnew/tools/pcb_editor_control.cpp:1133
 msgid "Pick Components for Local Ratsnest"
 msgstr "Selection Composants pour le Chevelu Local"
 
@@ -26304,16 +26311,16 @@ msgstr "Filtre des types d'éléments dans la sélection"
 msgid "Select..."
 msgstr "Sélection..."
 
-#: pcbnew/tools/selection_tool.cpp:648
+#: pcbnew/tools/selection_tool.cpp:653
 msgid "Selection contains locked items. Do you want to continue?"
 msgstr ""
 "La sélection contient des éléments verrouillés. Voulez vous continuer ?"
 
-#: pcbnew/tools/selection_tool.cpp:1201
+#: pcbnew/tools/selection_tool.cpp:1206
 msgid "Filter selection"
 msgstr "Filtre de sélection"
 
-#: pcbnew/tools/selection_tool.cpp:1275
+#: pcbnew/tools/selection_tool.cpp:1280
 msgid "Clarify selection"
 msgstr "Clarification sélection"
 
