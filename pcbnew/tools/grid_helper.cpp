@@ -41,10 +41,25 @@ using namespace std::placeholders;
 
 #include "grid_helper.h"
 
+
 GRID_HELPER::GRID_HELPER( PCB_BASE_FRAME* aFrame ) :
     m_frame( aFrame )
 {
     m_diagonalAuxAxesEnable = true;
+    KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
+
+    m_viewAxis.SetSize( 20000 );
+    m_viewAxis.SetStyle( KIGFX::ORIGIN_VIEWITEM::CROSS );
+    m_viewAxis.SetColor( COLOR4D( 1.0, 1.0, 1.0, 0.4 ) );
+    m_viewAxis.SetDrawAtZero( true );
+    view->Add( &m_viewAxis );
+    view->SetVisible( &m_viewAxis, false );
+
+    m_viewSnapPoint.SetStyle( KIGFX::ORIGIN_VIEWITEM::CIRCLE_CROSS );
+    m_viewSnapPoint.SetColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
+    m_viewSnapPoint.SetDrawAtZero( true );
+    view->Add( &m_viewSnapPoint );
+    view->SetVisible( &m_viewSnapPoint, false );
 }
 
 
@@ -83,10 +98,19 @@ VECTOR2I GRID_HELPER::GetOrigin() const
 
 void GRID_HELPER::SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin, bool aEnableDiagonal )
 {
+    KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
+
     if( aEnable )
+    {
         m_auxAxis = aOrigin;
+        m_viewAxis.SetPosition( aOrigin );
+        view->SetVisible( &m_viewAxis, true );
+    }
     else
+    {
         m_auxAxis = boost::optional<VECTOR2I>();
+        view->SetVisible( &m_viewAxis, false );
+    }
 
     m_diagonalAuxAxesEnable = aEnable;
 }
@@ -238,9 +262,14 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDrag
         double snapDist = nearest->Distance( aOrigin );
 
         if( nearest && snapDist < gridDist )
+        {
+            m_viewSnapPoint.SetPosition( nearest->pos );
+            m_frame->GetGalCanvas()->GetView()->SetVisible( &m_viewSnapPoint, true );
             return nearest->pos;
+        }
     }
 
+    m_frame->GetGalCanvas()->GetView()->SetVisible( &m_viewSnapPoint, false );
     return nearestGrid;
 }
 

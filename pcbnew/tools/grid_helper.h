@@ -29,6 +29,7 @@
 
 #include <math/vector2d.h>
 #include <boost/optional.hpp>
+#include <origin_viewitem.h>
 
 #include <layers_id_colors_and_visibility.h>
 
@@ -103,6 +104,7 @@ private:
     PCB_BASE_FRAME* m_frame;
     boost::optional<VECTOR2I> m_auxAxis;
     bool m_diagonalAuxAxesEnable;
+    KIGFX::ORIGIN_VIEWITEM m_viewSnapPoint, m_viewAxis;
 };
 
 #endif
