@@ -78,7 +78,5 @@ void VIEW_CONTROLS::ApplySettings( const VC_SETTINGS& aSettings )
     SetAutoPan( aSettings.m_autoPanEnabled );
     SetAutoPanMargin( aSettings.m_autoPanMargin );
     SetAutoPanSpeed( aSettings.m_autoPanSpeed );
-    // storing 'force cursor position' causes more harm than advantage
-    // let the tools control this setting
-    //ForceCursorPosition( aSettings.m_forceCursorPosition, aSettings.m_forcedPosition );
+    ForceCursorPosition( aSettings.m_forceCursorPosition, aSettings.m_forcedPosition );
 }
