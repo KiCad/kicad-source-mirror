@@ -351,7 +351,7 @@ SELECTION& SELECTION_TOOL::GetSelection()
 
 SELECTION& SELECTION_TOOL::RequestSelection( int aFlags )
 {
-    if ( m_selection.Empty() )
+    if( m_selection.Empty() )
     {
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, 0 );
         m_selection.SetIsHover( true );
@@ -373,7 +373,7 @@ SELECTION& SELECTION_TOOL::RequestSelection( int aFlags )
         }
     }
 
-    if ( aFlags & SELECTION_SANITIZE_PADS )
+    if( aFlags & SELECTION_SANITIZE_PADS )
         SanitizeSelection();
 
     return m_selection;
