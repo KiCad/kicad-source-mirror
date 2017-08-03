@@ -232,8 +232,6 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
 
 int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
-    bool unselect = false;
-
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -267,10 +265,11 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // right click? if there is any object - show the context menu
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            unselect = m_selection.Empty();
-
-            if( unselect )
+            if( m_selection.Empty() )
+            {
                 selectPoint( evt->Position() );
+                m_selection.SetIsHover( true );
+            }
 
             m_menu.ShowContextMenu( m_selection );
         }
@@ -302,8 +301,8 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
+                    m_selection.SetIsHover( true );
                     m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
-                    unselect = true;
                 }
             }
 
@@ -323,11 +322,9 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
         }
 
-        else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO_PRE
-                || ( unselect && m_toolMgr->GetCurrentToolId() == GetId() ) )
+        else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO_PRE )
         {
             clearSelection();
-            unselect = false;
         }
 
         else if( evt->Action() == TA_CONTEXT_MENU_CLOSED )
@@ -355,10 +352,6 @@ SELECTION& SELECTION_TOOL::RequestSelection( int aFlags )
     {
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, 0 );
         m_selection.SetIsHover( true );
-    }
-    else
-    {
-        m_selection.SetIsHover( false );
     }
 
     // Be careful with iterators: items can be removed from list
@@ -1238,16 +1231,13 @@ int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
 void SELECTION_TOOL::clearSelection()
 {
     if( m_selection.Empty() )
-    {
         return;
-    }
 
     for( auto item : m_selection )
-    {
         unselectVisually( static_cast<BOARD_ITEM*>( item ) );
-    }
 
     m_selection.Clear();
+    m_selection.SetIsHover( false );
 
     m_frame->SetCurItem( NULL );
     m_locked = true;
