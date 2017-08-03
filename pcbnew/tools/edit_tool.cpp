@@ -91,6 +91,10 @@ TOOL_ACTION PCB_ACTIONS::globalEditPads( "pcbnew.InteractiveEdit.globalPadEdit",
         _( "Changes pad properties globally." ), push_pad_settings_xpm );
 
 TOOL_ACTION PCB_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
+        AS_GLOBAL, 0,
+        _( "Edit Activate" ), _( "" ), move_xpm, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveEdit.move",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_ITEM ),
         _( "Move" ), _( "Moves the selected item(s)" ), move_xpm, AF_ACTIVATE );
 
@@ -156,7 +160,6 @@ TOOL_ACTION PCB_ACTIONS::measureTool( "pcbnew.InteractiveEdit.measureTool",
         AS_GLOBAL, MD_CTRL + MD_SHIFT + 'M',
         _( "Measuring tool" ), _( "Interactively measure distance between points" ),
         nullptr, AF_ACTIVATE );
-
 
 static wxPoint getAnchorPoint( const SELECTION &selection, const MOVE_PARAMETERS &params )
 {
@@ -270,13 +273,17 @@ bool EDIT_TOOL::Init()
 
     // Add context menu entries that are displayed when selection tool is active
     CONDITIONAL_MENU& menu = m_selectionTool->GetToolMenu().GetMenu();
-    menu.AddItem( PCB_ACTIONS::editActivate, SELECTION_CONDITIONS::NotEmpty );
+
+    menu.AddItem( PCB_ACTIONS::move, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::drag45Degree, SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
+    menu.AddItem( PCB_ACTIONS::dragFreeAngle, SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
     menu.AddItem( PCB_ACTIONS::rotateCcw, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::rotateCw, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::flip, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::remove, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 )
                       || SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
+
     menu.AddItem( PCB_ACTIONS::moveExact, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::positionRelative, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
@@ -298,26 +305,39 @@ bool EDIT_TOOL::Init()
 }
 
 
-bool EDIT_TOOL::invokeInlineRouter()
+bool EDIT_TOOL::invokeInlineRouter( int aDragMode )
 {
     TRACK* track = uniqueSelected<TRACK>();
     VIA* via = uniqueSelected<VIA>();
 
+
+
     if( track || via )
     {
-        ROUTER_TOOL* theRouter = static_cast<ROUTER_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveRouter" ) );
+        auto theRouter = static_cast<ROUTER_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveRouter" ) );
         assert( theRouter );
 
-        if( !theRouter->PNSSettings().InlineDragEnabled() )
+        if( !theRouter->Router()->Settings().InlineDragEnabled() )
             return false;
 
-        m_toolMgr->RunAction( PCB_ACTIONS::routerInlineDrag, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::routerInlineDrag, true, aDragMode );
         return true;
     }
 
     return false;
 }
 
+int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
+{
+    int mode = PNS::DM_ANY;
+
+    if( aEvent.IsAction( &PCB_ACTIONS::dragFreeAngle ) )
+        mode |= PNS::DM_FREE_ANGLE;
+
+    invokeInlineRouter( mode );
+
+    return 0;
+}
 
 int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 {
@@ -354,13 +374,16 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     do
     {
-        if( evt->IsAction( &PCB_ACTIONS::editActivate )
-                || evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
+        bool matchingAction = evt->IsAction( &PCB_ACTIONS::editActivate )
+        || evt->IsAction( &PCB_ACTIONS::move );
+
+        if( matchingAction
+            || evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
             if( selection.Empty() )
                 break;
 
-            BOARD_ITEM* curr_item = static_cast<BOARD_ITEM*>( selection.Front() );
+            auto curr_item = static_cast<BOARD_ITEM*>( selection.Front() );
 
             if( m_dragging && evt->Category() == TC_MOUSE )
             {
@@ -376,7 +399,12 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             }
             else if( !m_dragging )    // Prepare to start dragging
             {
-                if( !invokeInlineRouter() )
+                bool invokedRouter = false;
+
+                if ( !evt->IsAction( &PCB_ACTIONS::move ) )
+                    invokedRouter = invokeInlineRouter( PNS::DM_ANY );
+
+                if( !invokedRouter )
                 {
                     // deal with locked items (override lock or abort the operation)
                     SELECTION_LOCK_FLAGS lockFlags = m_selectionTool->CheckLock();
@@ -509,6 +537,46 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+bool EDIT_TOOL::changeTrackWidthOnClick( const SELECTION& selection )
+{
+    if ( selection.Size() == 1 && frame()->Settings().m_editActionChangesTrackWidth )
+    {
+        auto item = static_cast<BOARD_ITEM *>( selection[0] );
+
+        m_commit->Modify( item );
+
+        if( auto via = dyn_cast<VIA*>( item ) )
+        {
+            int new_width, new_drill;
+
+            if( via->GetViaType() == VIA_MICROVIA )
+            {
+                auto net = via->GetNet();
+
+                new_width = net->GetMicroViaSize();
+                new_drill = net->GetMicroViaDrillSize();
+            }
+            else
+            {
+                new_width = board()->GetDesignSettings().GetCurrentViaSize();
+                new_drill = board()->GetDesignSettings().GetCurrentViaDrill();
+            }
+
+            via->SetDrill( new_drill );
+            via->SetWidth( new_width );
+        }
+        else if ( auto track = dyn_cast<TRACK*>( item ) )
+        {
+            int new_width = board()->GetDesignSettings().GetCurrentTrackWidth();
+            track->SetWidth( new_width );
+        }
+
+        m_commit->Push( _("Edit track width/via size") );
+        return true;
+    }
+
+    return false;
+}
 
 int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
@@ -522,41 +590,7 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     // Tracks & vias are treated in a special way:
     if( ( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) )( selection ) )
     {
-        if ( selection.Size() == 1 && editFrame->Settings().m_editActionChangesTrackWidth )
-        {
-            auto item = static_cast<BOARD_ITEM *>( selection[0] );
-
-            m_commit->Modify( item );
-
-            if( auto via = dyn_cast<VIA*>( item ) )
-            {
-                int new_width, new_drill;
-
-                if( via->GetViaType() == VIA_MICROVIA )
-                {
-                    auto net = via->GetNet();
-
-                    new_width = net->GetMicroViaSize();
-                    new_drill = net->GetMicroViaDrillSize();
-                }
-                else
-                {
-                    new_width = board()->GetDesignSettings().GetCurrentViaSize();
-                    new_drill = board()->GetDesignSettings().GetCurrentViaDrill();
-                }
-
-                via->SetDrill( new_drill );
-                via->SetWidth( new_width );
-            }
-            else if ( auto track = dyn_cast<TRACK*>( item ) )
-            {
-                int new_width = board()->GetDesignSettings().GetCurrentTrackWidth();
-                track->SetWidth( new_width );
-            }
-
-            m_commit->Push( _("Edit track width/via size") );
-        }
-        else
+        if ( !changeTrackWidthOnClick( selection ) )
         {
             DIALOG_TRACK_VIA_PROPERTIES dlg( editFrame, selection );
 
@@ -1151,6 +1185,9 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 void EDIT_TOOL::setTransitions()
 {
     Go( &EDIT_TOOL::Main,       PCB_ACTIONS::editActivate.MakeEvent() );
+    Go( &EDIT_TOOL::Main,       PCB_ACTIONS::move.MakeEvent() );
+    Go( &EDIT_TOOL::Drag,       PCB_ACTIONS::drag45Degree.MakeEvent() );
+    Go( &EDIT_TOOL::Drag,       PCB_ACTIONS::dragFreeAngle.MakeEvent() );
     Go( &EDIT_TOOL::Rotate,     PCB_ACTIONS::rotateCw.MakeEvent() );
     Go( &EDIT_TOOL::Rotate,     PCB_ACTIONS::rotateCcw.MakeEvent() );
     Go( &EDIT_TOOL::Flip,       PCB_ACTIONS::flip.MakeEvent() );
@@ -1226,7 +1263,7 @@ int EDIT_TOOL::editFootprintInFpEditor( const TOOL_EVENT& aEvent )
 template<class T>
 T* EDIT_TOOL::uniqueSelected()
 {
-    const auto selection = m_selectionTool->GetSelection();
+    auto& selection = m_selectionTool->RequestSelection( SELECTION_DEFAULT );
 
     if( selection.Size() != 1 )
         return nullptr;

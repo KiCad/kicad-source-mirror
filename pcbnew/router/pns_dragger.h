@@ -97,12 +97,10 @@ public:
     /// @copydoc ALGO_BASE::Logger()
     virtual LOGGER* Logger() override;
 
+    void SetMode( int aDragMode );
+
 private:
-    enum DragMode {
-        DRAG_CORNER = 0,
-        DRAG_SEGMENT,
-        DRAG_VIA
-    };
+
 
     bool dragMarkObstacles( const VECTOR2I& aP );
     bool dragShove(const VECTOR2I& aP );
@@ -112,7 +110,7 @@ private:
 
     NODE*    m_world;
     NODE*    m_lastNode;
-    DragMode m_mode;
+    int      m_mode;
     LINE     m_draggedLine;
     VIA*     m_draggedVia;
     LINE     m_lastValidDraggedLine;
@@ -123,6 +121,7 @@ private:
     ITEM_SET m_origViaConnections;
     VIA*     m_initialVia;
     ITEM_SET m_draggedItems;
+    bool     m_freeAngleMode;
 };
 
 }

@@ -112,9 +112,27 @@ TOOL_ACTION PCB_ACTIONS::routerActivateTuneDiffPairSkew( "pcbnew.LengthTuner.Tun
         _( "Tune skew of a differential pair" ), "", NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerInlineDrag( "pcbnew.InteractiveRouter.InlineDrag",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DRAG_TRACK_KEEP_SLOPE ),
+        AS_CONTEXT, 0,
         _( "Drag Track/Via" ), _( "Drags tracks and vias without breaking connections" ),
         drag_xpm );
+
+TOOL_ACTION PCB_ACTIONS::breakTrack( "pcbnew.InteractiveRouter.BreakTrack",
+        AS_GLOBAL, 0,
+        _( "Break Track" ),
+        _( "Splits the track segment into two segments connected at the cursor position." ),
+        break_line_xpm );
+
+TOOL_ACTION PCB_ACTIONS::drag45Degree( "pcbnew.InteractiveRouter.Drag45Degree",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DRAG_TRACK_KEEP_SLOPE ),
+        _( "Drag (45 degree mode)" ),
+        _( "todo" ),
+        drag_segment_withslope_xpm );
+
+TOOL_ACTION PCB_ACTIONS::dragFreeAngle( "pcbnew.InteractiveRouter.DragFreeAngle",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DRAG_ITEM ),
+        _( "Drag (free angle)" ),
+        _( "todo" ),
+        move_xpm );
 
 static const TOOL_ACTION ACT_NewTrack( "pcbnew.InteractiveRouter.NewTrack", AS_CONTEXT,
     TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_TRACK ),
@@ -179,7 +197,6 @@ static const TOOL_ACTION ACT_SetDpDimensions( "pcbnew.InteractiveRouter.SetDpDim
     _( "Differential Pair Dimensions..." ),
     _( "Sets the width and gap of the currently routed differential pair." ),
     ps_diff_pair_tune_length_xpm );
-
 
 ROUTER_TOOL::ROUTER_TOOL() :
     TOOL_BASE( "pcbnew.InteractiveRouter" )
@@ -300,6 +317,11 @@ public:
 
         Add( ACT_NewTrack );
         Add( ACT_EndTrack );
+        Add( PCB_ACTIONS::breakTrack );
+
+        Add( PCB_ACTIONS::drag45Degree );
+        Add( PCB_ACTIONS::dragFreeAngle );
+
 //        Add( ACT_AutoEndRoute );  // fixme: not implemented yet. Sorry.
         Add( ACT_PlaceThroughVia );
         Add( ACT_PlaceBlindVia );
@@ -349,12 +371,6 @@ ROUTER_TOOL::~ROUTER_TOOL()
 
 bool ROUTER_TOOL::Init()
 {
-    // Track & via dragging menu entry
-    auto selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    CONDITIONAL_MENU& menu = selectionTool->GetToolMenu().GetMenu();
-    menu.AddItem( PCB_ACTIONS::routerInlineDrag, SELECTION_CONDITIONS::Count( 1 )
-            && SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_VIA_T, EOT } ) );
-
     m_savedSettings.Load( GetSettings() );
     return true;
 }
@@ -379,10 +395,10 @@ int ROUTER_TOOL::getDefaultWidth( int aNetCode )
 void ROUTER_TOOL::getNetclassDimensions( int aNetCode, int& aWidth,
                                          int& aViaDiameter, int& aViaDrill )
 {
-    BOARD_DESIGN_SETTINGS &bds = m_board->GetDesignSettings();
+    BOARD_DESIGN_SETTINGS &bds = board()->GetDesignSettings();
 
     NETCLASSPTR netClass;
-    NETINFO_ITEM* ni = m_board->FindNet( aNetCode );
+    NETINFO_ITEM* ni = board()->FindNet( aNetCode );
 
     if( ni )
     {
@@ -436,7 +452,7 @@ int ROUTER_TOOL::getStartLayer( const PNS::ITEM* aItem )
 
 void ROUTER_TOOL::switchLayerOnViaPlacement()
 {
-    int al = m_frame->GetActiveLayer();
+    int al = frame()->GetActiveLayer();
     int cl = m_router->GetCurrentLayer();
 
     if( cl != al )
@@ -450,7 +466,7 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
         newLayer = m_router->Sizes().GetLayerTop();
 
     m_router->SwitchLayer( *newLayer );
-    m_frame->SetActiveLayer( ToLAYER_ID( *newLayer ) );
+    frame()->SetActiveLayer( ToLAYER_ID( *newLayer ) );
 }
 
 
@@ -486,12 +502,12 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
     VIATYPE_T viaType = getViaTypeFromFlags( actViaFlags );
     const bool selectLayer = actViaFlags & VIA_ACTION_FLAGS::SELECT_LAYER;
 
-    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    BOARD_DESIGN_SETTINGS& bds = board()->GetDesignSettings();
 
     const int layerCount = bds.GetCopperLayerCount();
     int currentLayer = m_router->GetCurrentLayer();
-    PCB_LAYER_ID pairTop = m_frame->GetScreen()->m_Route_Layer_TOP;
-    PCB_LAYER_ID pairBottom = m_frame->GetScreen()->m_Route_Layer_BOTTOM;
+    PCB_LAYER_ID pairTop = frame()->GetScreen()->m_Route_Layer_TOP;
+    PCB_LAYER_ID pairBottom = frame()->GetScreen()->m_Route_Layer_BOTTOM;
 
     PNS::SIZES_SETTINGS sizes = m_router->Sizes();
 
@@ -502,7 +518,7 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
     {
         wxPoint dlgPosition = wxGetMousePosition();
 
-        targetLayer = m_frame->SelectLayer( static_cast<PCB_LAYER_ID>( currentLayer ),
+        targetLayer = frame()->SelectLayer( static_cast<PCB_LAYER_ID>( currentLayer ),
                 LSET::AllNonCuMask(), dlgPosition );
     }
 
@@ -514,27 +530,27 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         // Cannot place microvias or blind vias if not allowed (obvious)
         if( ( viaType == VIA_BLIND_BURIED ) && ( !bds.m_BlindBuriedViaAllowed ) )
         {
-            DisplayError( m_frame, _( "Blind/buried vias have to be enabled in the design settings." ) );
+            DisplayError( frame(), _( "Blind/buried vias have to be enabled in the design settings." ) );
             return false;
         }
 
         if( ( viaType == VIA_MICROVIA ) && ( !bds.m_MicroViasAllowed ) )
         {
-            DisplayError( m_frame, _( "Microvias have to be enabled in the design settings." ) );
+            DisplayError( frame(), _( "Microvias have to be enabled in the design settings." ) );
             return false;
         }
 
         // Can only place through vias on 2-layer boards
         if( ( viaType != VIA_THROUGH ) && ( layerCount <= 2 ) )
         {
-            DisplayError( m_frame, _( "Only through vias are allowed on 2 layer boards." ) );
+            DisplayError( frame(), _( "Only through vias are allowed on 2 layer boards." ) );
             return false;
         }
 
         // Can only place microvias if we're on an outer layer, or directly adjacent to one
         if( ( viaType == VIA_MICROVIA ) && ( currentLayer > In1_Cu ) && ( currentLayer < layerCount - 2 ) )
         {
-            DisplayError( m_frame, _( "Microvias can be placed only between the outer layers " \
+            DisplayError( frame(), _( "Microvias can be placed only between the outer layers " \
                                       "(F.Cu/B.Cu) and the ones directly adjacent to them." ) );
             return false;
         }
@@ -638,11 +654,11 @@ bool ROUTER_TOOL::prepareInteractive()
 
     if( !IsCopperLayer( routingLayer ) )
     {
-        DisplayError( m_frame, _( "Tracks on Copper layers only" ) );
+        DisplayError( frame(), _( "Tracks on Copper layers only" ) );
         return false;
     }
 
-    m_frame->SetActiveLayer( ToLAYER_ID( routingLayer ) );
+    frame()->SetActiveLayer( ToLAYER_ID( routingLayer ) );
 
     // fixme: switch on invisible layer
 
@@ -652,24 +668,24 @@ bool ROUTER_TOOL::prepareInteractive()
     {
         highlightNet( true, m_startItem->Net() );
         // Update track width and via size shown in main toolbar comboboxes
-        m_frame->SetCurrentNetClass( m_startItem->Parent()->GetNetClass()->GetName() );
+        frame()->SetCurrentNetClass( m_startItem->Parent()->GetNetClass()->GetName() );
     }
     else
-        m_frame->SetCurrentNetClass( NETCLASS::Default );
+        frame()->SetCurrentNetClass( NETCLASS::Default );
 
-    m_ctls->ForceCursorPosition( false );
-    m_ctls->SetAutoPan( true );
+    controls()->ForceCursorPosition( false );
+    controls()->SetAutoPan( true );
 
     PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
 
-    sizes.Init( m_board, m_startItem );
-    sizes.AddLayerPair( m_frame->GetScreen()->m_Route_Layer_TOP,
-                        m_frame->GetScreen()->m_Route_Layer_BOTTOM );
+    sizes.Init( board(), m_startItem );
+    sizes.AddLayerPair( frame()->GetScreen()->m_Route_Layer_TOP,
+                        frame()->GetScreen()->m_Route_Layer_BOTTOM );
     m_router->UpdateSizes( sizes );
 
     if( !m_router->StartRouting( m_startSnapPoint, m_startItem, routingLayer ) )
     {
-        DisplayError( m_frame, m_router->FailureReason() );
+        DisplayError( frame(), m_router->FailureReason() );
         highlightNet( false );
         return false;
     }
@@ -677,7 +693,7 @@ bool ROUTER_TOOL::prepareInteractive()
     m_endItem = NULL;
     m_endSnapPoint = m_startSnapPoint;
 
-    m_frame->UndoRedoBlock( true );
+    frame()->UndoRedoBlock( true );
 
     return true;
 }
@@ -687,9 +703,9 @@ bool ROUTER_TOOL::finishInteractive()
 {
     m_router->StopRouting();
 
-    m_ctls->SetAutoPan( false );
-    m_ctls->ForceCursorPosition( false );
-    m_frame->UndoRedoBlock( false );
+    controls()->SetAutoPan( false );
+    controls()->ForceCursorPosition( false );
+    frame()->UndoRedoBlock( false );
     highlightNet( false );
 
     return true;
@@ -724,7 +740,7 @@ void ROUTER_TOOL::performRouting()
                 switchLayerOnViaPlacement();
 
             // Synchronize the indicated layer
-            m_frame->SetActiveLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
+            frame()->SetActiveLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
             m_startItem = NULL;
@@ -737,7 +753,7 @@ void ROUTER_TOOL::performRouting()
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
-            m_router->SwitchLayer( m_frame->GetActiveLayer() );
+            m_router->SwitchLayer( frame()->GetActiveLayer() );
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );        // refresh
         }
@@ -763,7 +779,7 @@ int ROUTER_TOOL::DpDimensionsDialog( const TOOL_EVENT& aEvent )
     Activate();
 
     PNS::SIZES_SETTINGS sizes = m_router->Sizes();
-    DIALOG_PNS_DIFF_PAIR_DIMENSIONS settingsDlg( m_frame, sizes );
+    DIALOG_PNS_DIFF_PAIR_DIMENSIONS settingsDlg( frame(), sizes );
 
     if( settingsDlg.ShowModal() )
     {
@@ -779,7 +795,7 @@ int ROUTER_TOOL::SettingsDialog( const TOOL_EVENT& aEvent )
 {
     Activate();
 
-    DIALOG_PNS_SETTINGS settingsDlg( m_frame, m_router->Settings() );
+    DIALOG_PNS_SETTINGS settingsDlg( frame(), m_router->Settings() );
 
     if( settingsDlg.ShowModal() )
         m_savedSettings = m_router->Settings();
@@ -813,17 +829,24 @@ void ROUTER_TOOL::setTransitions()
 
 int ROUTER_TOOL::RouteSingleTrace( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Route Track" ) );
+    frame()->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Route Track" ) );
     return mainLoop( PNS::PNS_MODE_ROUTE_SINGLE );
 }
 
 
 int ROUTER_TOOL::RouteDiffPair( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Router Differential Pair" ) );
+    frame()->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Router Differential Pair" ) );
     return mainLoop( PNS::PNS_MODE_ROUTE_DIFF_PAIR );
 }
 
+void ROUTER_TOOL::breakTrack()
+{
+    if ( m_startItem->OfKind( PNS::ITEM::SEGMENT_T ) )
+    {
+        m_router->BreakSegment( m_startItem, m_startSnapPoint );
+    }
+}
 
 int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
 {
@@ -837,7 +860,7 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
 
     m_router->SetMode( aMode );
 
-    m_ctls->ShowCursor( true );
+    controls()->ShowCursor( true );
 
     m_startSnapPoint = getViewControls()->GetCursorPosition();
 
@@ -863,12 +886,25 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
         {
             updateStartItem( *evt );
         }
+        else if( evt->IsAction( &PCB_ACTIONS::dragFreeAngle ) )
+        {
+            performDragging( PNS::DM_ANY | PNS::DM_FREE_ANGLE );
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::drag45Degree ) )
+        {
+            performDragging( PNS::DM_ANY );
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::breakTrack ) )
+        {
+            updateStartItem( *evt );
+            breakTrack( );
+        }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACT_NewTrack ) )
         {
             updateStartItem( *evt );
 
             if( evt->Modifier( MD_CTRL ) )
-                performDragging();
+                performDragging( PNS::DM_ANY );
             else
                 performRouting();
         }
@@ -897,17 +933,17 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
 }
 
 
-void ROUTER_TOOL::performDragging()
+void ROUTER_TOOL::performDragging( int aMode )
 {
     VIEW_CONTROLS* ctls = getViewControls();
 
     if( m_startItem && m_startItem->IsLocked() )
     {
-        if( !IsOK( m_frame, _( "The item is locked. Do you want to continue?" ) ) )
+        if( !IsOK( frame(), _( "The item is locked. Do you want to continue?" ) ) )
             return;
     }
 
-    bool dragStarted = m_router->StartDragging( m_startSnapPoint, m_startItem );
+    bool dragStarted = m_router->StartDragging( m_startSnapPoint, m_startItem, aMode );
 
     if( !dragStarted )
         return;
@@ -917,7 +953,7 @@ void ROUTER_TOOL::performDragging()
 
     ctls->SetAutoPan( true );
 
-    m_frame->UndoRedoBlock( true );
+    frame()->UndoRedoBlock( true );
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -945,7 +981,7 @@ void ROUTER_TOOL::performDragging()
 
     m_startItem = NULL;
 
-    m_frame->UndoRedoBlock( false );
+    frame()->UndoRedoBlock( false );
     ctls->SetAutoPan( false );
     ctls->ForceCursorPosition( false );
     highlightNet( false );
@@ -974,21 +1010,23 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     if( m_startItem && m_startItem->IsLocked() )
     {
-        if( !IsOK( m_frame, _( "The item is locked. Do you want to continue?" ) ) )
+        if( !IsOK( frame(), _( "The item is locked. Do you want to continue?" ) ) )
             return false;
     }
 
-    VECTOR2I p0 = m_ctls->GetCursorPosition();
+    VECTOR2I p0 = controls()->GetCursorPosition();
 
-    bool dragStarted = m_router->StartDragging( p0, m_startItem );
+    int dragMode = aEvent.Parameter<int64_t> ();
+
+    bool dragStarted = m_router->StartDragging( p0, m_startItem, dragMode );
 
     if( !dragStarted )
         return 0;
 
-    m_ctls->ShowCursor( true );
-    m_ctls->ForceCursorPosition( false );
-    m_ctls->SetAutoPan( true );
-    m_frame->UndoRedoBlock( true );
+    controls()->ShowCursor( true );
+    controls()->ForceCursorPosition( false );
+    controls()->SetAutoPan( true );
+    frame()->UndoRedoBlock( true );
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -1012,9 +1050,9 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     if( m_router->RoutingInProgress() )
         m_router->StopRouting();
 
-    m_ctls->SetAutoPan( false );
-    m_ctls->ShowCursor( false );
-    m_frame->UndoRedoBlock( false );
+    controls()->SetAutoPan( false );
+    controls()->ShowCursor( false );
+    frame()->UndoRedoBlock( false );
 
     return 0;
 }
@@ -1022,8 +1060,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
 int ROUTER_TOOL::CustomTrackWidthDialog( const TOOL_EVENT& aEvent )
 {
-    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-    DIALOG_TRACK_VIA_SIZE sizeDlg( m_frame, bds );
+    BOARD_DESIGN_SETTINGS& bds = board()->GetDesignSettings();
+    DIALOG_TRACK_VIA_SIZE sizeDlg( frame(), bds );
 
     if( sizeDlg.ShowModal() )
     {
@@ -1038,7 +1076,7 @@ int ROUTER_TOOL::CustomTrackWidthDialog( const TOOL_EVENT& aEvent )
 int ROUTER_TOOL::onTrackViaSizeChanged( const TOOL_EVENT& aEvent )
 {
     PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
-    sizes.ImportCurrent( m_board->GetDesignSettings() );
+    sizes.ImportCurrent( board()->GetDesignSettings() );
     m_router->UpdateSizes( sizes );
 
     return 0;

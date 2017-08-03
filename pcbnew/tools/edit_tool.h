@@ -29,6 +29,7 @@
 #include <math/vector2d.h>
 #include <tools/pcb_tool.h>
 
+
 class BOARD_COMMIT;
 class BOARD_ITEM;
 class SELECTION_TOOL;
@@ -59,6 +60,13 @@ public:
      * @param aEvent is the handled event.
      */
     int Main( const TOOL_EVENT& aEvent );
+
+    /**
+     * Function Drag()
+     *
+     * todo
+     */
+    int Drag( const TOOL_EVENT& aEvent );
 
     /**
      * Function Edit()
@@ -151,7 +159,10 @@ private:
 
     int editFootprintInFpEditor( const TOOL_EVENT& aEvent );
 
-    bool invokeInlineRouter();
+    bool invokeInlineRouter( int aDragMode );
+
+    bool changeTrackWidthOnClick( const SELECTION& selection );
+
 
     /**
      * Function hoverSelection()

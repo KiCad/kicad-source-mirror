@@ -256,8 +256,8 @@ public:
     virtual void Unmark( int aMarker = -1 ) override;
     virtual int Marker() const override;
 
-    void DragSegment( const VECTOR2I& aP, int aIndex, int aSnappingThreshold = 0 );
-    void DragCorner( const VECTOR2I& aP, int aIndex, int aSnappingThreshold = 0 );
+    void DragSegment( const VECTOR2I& aP, int aIndex, int aSnappingThreshold = 0, bool aFreeAngle = false );
+    void DragCorner( const VECTOR2I& aP, int aIndex, int aSnappingThreshold = 0, bool aFreeAngle = false );
 
     void SetRank( int aRank ) override;
     int Rank() const override;
@@ -268,6 +268,12 @@ public:
     OPT_BOX2I ChangedArea( const LINE* aOther ) const;
 
 private:
+
+    void dragSegment45( const VECTOR2I& aP, int aIndex, int aSnappingThreshold );
+    void dragCorner45( const VECTOR2I& aP, int aIndex, int aSnappingThreshold  );
+    void dragSegmentFree( const VECTOR2I& aP, int aIndex, int aSnappingThreshold );
+    void dragCornerFree( const VECTOR2I& aP, int aIndex, int aSnappingThreshold  );
+
     VECTOR2I snapToNeighbourSegments( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I &aP,
                                       int aIndex, int aThreshold) const;
 

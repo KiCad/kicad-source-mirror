@@ -189,6 +189,14 @@ public:
 
     LOGGER* Logger() override;
 
+    /**
+     * Function SplitAdjacentSegments()
+     *
+     * Checks if point aP lies on segment aSeg. If so, splits the segment in two,
+     * forming a joint at aP and stores updated topology in node aNode.
+     */
+    bool SplitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I& aP );
+
 
 private:
     /**
@@ -233,14 +241,6 @@ private:
      * Used by posture switching mechanism.
      */
     void setInitialDirection( const DIRECTION_45& aDirection );
-
-    /**
-     * Function splitAdjacentSegments()
-     *
-     * Checks if point aP lies on segment aSeg. If so, splits the segment in two,
-     * forming a joint at aP and stores updated topology in node aNode.
-     */
-    void splitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I& aP );
 
     /**
      * Function removeLoops()

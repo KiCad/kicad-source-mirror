@@ -86,6 +86,9 @@ public:
     /// Activation of the edit tool
     static TOOL_ACTION editActivate;
 
+    /// move an item
+    static TOOL_ACTION move;
+
     /// Rotation of selected objects clockwise
     static TOOL_ACTION rotateCw;
 
@@ -119,6 +122,11 @@ public:
     /// Deleting a BOARD_ITEM
     static TOOL_ACTION remove;
     static TOOL_ACTION removeAlt;
+
+    static TOOL_ACTION breakTrack;
+    static TOOL_ACTION drag45Degree;
+    static TOOL_ACTION dragFreeAngle;
+
 
     // Drawing Tool
     /// Activation of the drawing tool (line)
@@ -196,10 +204,7 @@ public:
 
     /// Activation of the Push and Shove router (inline dragging mode)
     static TOOL_ACTION routerInlineDrag;
-
-    /// Break track action
-    static TOOL_ACTION breakTrack;
-
+    
     // Point Editor
     /// Break outline (insert additional points to an edge)
     static TOOL_ACTION pointEditorAddCorner;

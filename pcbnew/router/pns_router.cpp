@@ -124,12 +124,19 @@ const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP )
 }
 
 
-bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM* aStartItem )
+bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM* aStartItem, int aDragMode )
 {
+
+    if( aDragMode & DM_FREE_ANGLE )
+        m_forceMarkObstaclesMode = true;
+    else
+        m_forceMarkObstaclesMode = false;
+
     if( !aStartItem || aStartItem->OfKind( ITEM::SOLID_T ) )
         return false;
 
     m_dragger.reset( new DRAGGER( this ) );
+    m_dragger->SetMode( aDragMode );
     m_dragger->SetWorld( m_world.get() );
     m_dragger->SetDebugDecorator ( m_iface->GetDebugDecorator () );
 
@@ -148,6 +155,8 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM* aStartItem )
 
 bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
 {
+    m_forceMarkObstaclesMode = false;
+
     switch( m_mode )
     {
         case PNS_MODE_ROUTE_SINGLE:
@@ -262,7 +271,7 @@ void ROUTER::updateView( NODE* aNode, ITEM_SET& aCurrent )
     if( !aNode )
         return;
 
-    if( Settings().Mode() == RM_MarkObstacles )
+    if( Settings().Mode() == RM_MarkObstacles || m_forceMarkObstaclesMode )
         markViolations( aNode, aCurrent, removed );
 
     aNode->GetUpdatedItems( removed, added );
@@ -484,6 +493,23 @@ void ROUTER::SetInterface( ROUTER_IFACE *aIface )
 {
     m_iface = aIface;
     m_iface->SetRouter( this );
+}
+
+void ROUTER::BreakSegment( ITEM *aItem, const VECTOR2I& aP )
+{
+    NODE *node = m_world->Branch();
+
+    LINE_PLACER placer( this );
+
+    if ( placer.SplitAdjacentSegments( node, aItem, aP ) )
+    {
+        CommitRouting( node );
+    }
+    else
+    {
+        delete node;
+    }
+
 }
 
 }

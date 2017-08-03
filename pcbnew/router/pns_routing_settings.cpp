@@ -45,6 +45,8 @@ ROUTING_SETTINGS::ROUTING_SETTINGS()
     m_canViolateDRC = false;
     m_freeAngleMode = false;
     m_inlineDragEnabled = false;
+    m_snapToTracks = false;
+    m_snapToPads = false;
 }
 
 

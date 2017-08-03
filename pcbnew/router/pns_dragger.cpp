@@ -30,7 +30,7 @@ DRAGGER::DRAGGER( ROUTER* aRouter ) :
 {
     m_world = NULL;
     m_lastNode = NULL;
-    m_mode = DRAG_SEGMENT;
+    m_mode = DM_SEGMENT;
     m_draggedVia = NULL;
     m_shove = NULL;
     m_draggedSegmentIndex = 0;
@@ -62,14 +62,31 @@ bool DRAGGER::startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg )
     m_lastValidDraggedLine = m_draggedLine;
     m_lastValidDraggedLine.ClearSegmentLinks();
 
-    if( ( aP - aSeg->Seg().A ).EuclideanNorm() <= w2 )
-        m_mode = DRAG_CORNER;
-    else if( ( aP - aSeg->Seg().B ).EuclideanNorm() <= w2 )
+    auto distA = ( aP - aSeg->Seg().A ).EuclideanNorm();
+    auto distB = ( aP - aSeg->Seg().B ).EuclideanNorm();
+
+
+    if( distA <= w2 )
+    {
+        m_mode = DM_CORNER;
+    }
+    else if( distB <= w2 )
     {
         m_draggedSegmentIndex++;
-        m_mode = DRAG_CORNER;
-    } else
-        m_mode = DRAG_SEGMENT;
+        m_mode = DM_CORNER;
+    }
+    else if ( m_freeAngleMode )
+    {
+        if( distB < distA )
+        {
+            m_draggedSegmentIndex++;
+        }
+        m_mode = DM_CORNER;
+    }
+    else
+    {
+        m_mode = DM_SEGMENT;
+    }
 
     return true;
 }
@@ -79,7 +96,7 @@ bool DRAGGER::startDragVia( const VECTOR2D& aP, VIA* aVia )
 {
     m_draggedVia = aVia;
     m_initialVia = aVia;
-    m_mode = DRAG_VIA;
+    m_mode = DM_VIA;
 
     VECTOR2I p0( aVia->Pos() );
     JOINT* jt = m_world->FindJoint( p0, aVia->Layers().Start(), aVia->Net() );
@@ -112,6 +129,7 @@ bool DRAGGER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_lastNode = NULL;
     m_draggedItems.Clear();
     m_currentMode = Settings().Mode();
+    m_freeAngleMode = Settings().GetFreeAngleMode() || (m_mode & DM_FREE_ANGLE);
 
     aStartItem->Unmark( MK_LOCKED );
 
@@ -130,6 +148,10 @@ bool DRAGGER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     }
 }
 
+void DRAGGER::SetMode( int aMode )
+{
+    m_mode = aMode;
+}
 
 bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
 {
@@ -141,16 +163,16 @@ bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
 
     switch( m_mode )
     {
-    case DRAG_SEGMENT:
-    case DRAG_CORNER:
+    case DM_SEGMENT:
+    case DM_CORNER:
     {
         int thresh = Settings().SmoothDraggedSegments() ? m_draggedLine.Width() / 4 : 0;
         LINE dragged( m_draggedLine );
 
-        if( m_mode == DRAG_SEGMENT )
+        if( m_mode == DM_SEGMENT )
             dragged.DragSegment( aP, m_draggedSegmentIndex, thresh );
         else
-            dragged.DragCorner( aP, m_draggedSegmentIndex, thresh );
+            dragged.DragCorner( aP, m_draggedSegmentIndex, thresh, m_freeAngleMode );
 
         m_lastNode = m_shove->CurrentNode()->Branch();
 
@@ -165,7 +187,7 @@ bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
         break;
     }
 
-    case DRAG_VIA: // fixme...
+    case DM_VIA: // fixme...
     {
         m_lastNode = m_shove->CurrentNode()->Branch();
         dumbDragVia( m_initialVia, m_lastNode, aP );
@@ -205,7 +227,7 @@ void DRAGGER::dumbDragVia( VIA* aVia, NODE* aNode, const VECTOR2I& aP )
             LINE origLine( *l );
             LINE draggedLine( *l );
 
-            draggedLine.DragCorner( aP, origLine.CLine().Find( aVia->Pos() ) );
+            draggedLine.DragCorner( aP, origLine.CLine().Find( aVia->Pos() ), 0, m_freeAngleMode );
             draggedLine.ClearSegmentLinks();
 
             m_draggedItems.Add( draggedLine );
@@ -229,13 +251,13 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
 
     switch( m_mode )
     {
-    case DRAG_SEGMENT:
-    case DRAG_CORNER:
+    case DM_SEGMENT:
+    case DM_CORNER:
     {
         int thresh = Settings().SmoothDraggedSegments() ? m_draggedLine.Width() / 4 : 0;
         LINE dragged( m_draggedLine );
 
-        if( m_mode == DRAG_SEGMENT )
+        if( m_mode == DM_SEGMENT )
             dragged.DragSegment( aP, m_draggedSegmentIndex, thresh );
         else
             dragged.DragCorner( aP, m_draggedSegmentIndex, thresh );
@@ -264,7 +286,7 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
         break;
     }
 
-    case DRAG_VIA:
+    case DM_VIA:
     {
         VIA* newVia;
         SHOVE::SHOVE_STATUS st = m_shove->ShoveDraggingVia( m_draggedVia, aP, &newVia );
@@ -305,6 +327,9 @@ bool DRAGGER::FixRoute()
 
 bool DRAGGER::Drag( const VECTOR2I& aP )
 {
+    if( m_freeAngleMode )
+        return dragMarkObstacles( aP );
+
     switch( m_currentMode )
     {
     case RM_MarkObstacles:

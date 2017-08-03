@@ -41,7 +41,7 @@ class PNS_TUNE_STATUS_POPUP;
 
 namespace PNS {
 
-class APIEXPORT TOOL_BASE : public TOOL_INTERACTIVE
+class APIEXPORT TOOL_BASE : public PCB_TOOL
 {
 public:
     static TOOL_ACTION ACT_RouterOptions;
@@ -51,14 +51,10 @@ public:
 
     virtual void Reset( RESET_REASON aReason ) override;
 
-    const ROUTING_SETTINGS& PNSSettings() const
-    {
-        return m_savedSettings;
-    }
-
     ROUTER* Router() const;
 
 protected:
+    bool checkSnap( ITEM* aItem );
     const VECTOR2I snapToItem( bool aEnabled, ITEM* aItem, VECTOR2I aP);
     virtual ITEM* pickSingleItem( const VECTOR2I& aWhere, int aNet = -1, int aLayer = -1 );
     virtual void highlightNet( bool aEnabled, int aNetcode = -1 );
@@ -77,9 +73,6 @@ protected:
     ITEM* m_endItem;
     VECTOR2I m_endSnapPoint;
 
-    PCB_EDIT_FRAME* m_frame;
-    KIGFX::VIEW_CONTROLS* m_ctls;
-    BOARD* m_board;
     GRID_HELPER* m_gridHelper;
     PNS_KICAD_IFACE* m_iface;
     ROUTER* m_router;

@@ -109,10 +109,6 @@ LENGTH_TUNER_TOOL::~LENGTH_TUNER_TOOL()
 void LENGTH_TUNER_TOOL::Reset( RESET_REASON aReason )
 {
     TOOL_BASE::Reset( aReason );
-
-    Go( &LENGTH_TUNER_TOOL::TuneSingleTrace, PCB_ACTIONS::routerActivateTuneSingleTrace.MakeEvent() );
-    Go( &LENGTH_TUNER_TOOL::TuneDiffPair, PCB_ACTIONS::routerActivateTuneDiffPair.MakeEvent() );
-    Go( &LENGTH_TUNER_TOOL::TuneDiffPairSkew, PCB_ACTIONS::routerActivateTuneDiffPairSkew.MakeEvent() );
 }
 
 
@@ -132,14 +128,14 @@ void LENGTH_TUNER_TOOL::performTuning()
 {
     if( m_startItem )
     {
-        m_frame->SetActiveLayer( ToLAYER_ID ( m_startItem->Layers().Start() ) );
+        frame()->SetActiveLayer( ToLAYER_ID ( m_startItem->Layers().Start() ) );
 
         if( m_startItem->Net() >= 0 )
             highlightNet( true, m_startItem->Net() );
     }
 
-    m_ctls->ForceCursorPosition( false );
-    m_ctls->SetAutoPan( true );
+    controls()->ForceCursorPosition( false );
+    controls()->SetAutoPan( true );
 
     if( !m_router->StartRouting( m_startSnapPoint, m_startItem, 0 ) )
     {
@@ -155,7 +151,7 @@ void LENGTH_TUNER_TOOL::performTuning()
 
     VECTOR2I end( m_startSnapPoint );
 
-    PNS_TUNE_STATUS_POPUP statusPopup( m_frame );
+    PNS_TUNE_STATUS_POPUP statusPopup( frame() );
     statusPopup.Popup();
 
     m_router->Move( end, NULL );
@@ -210,27 +206,31 @@ void LENGTH_TUNER_TOOL::performTuning()
 
 int LENGTH_TUNER_TOOL::TuneSingleTrace( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Tune Trace Length" ) );
+    frame()->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Tune Trace Length" ) );
     return mainLoop( PNS::PNS_MODE_TUNE_SINGLE );
 }
 
 
 int LENGTH_TUNER_TOOL::TuneDiffPair( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Tune Diff Pair Length" ) );
+    frame()->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Tune Diff Pair Length" ) );
     return mainLoop( PNS::PNS_MODE_TUNE_DIFF_PAIR );
 }
 
 
 int LENGTH_TUNER_TOOL::TuneDiffPairSkew( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Tune Diff Pair Skew" ) );
+    frame()->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Tune Diff Pair Skew" ) );
     return mainLoop( PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW );
 }
 
 
 void LENGTH_TUNER_TOOL::setTransitions()
 {
+    Go( &LENGTH_TUNER_TOOL::TuneSingleTrace, PCB_ACTIONS::routerActivateTuneSingleTrace.MakeEvent() );
+    Go( &LENGTH_TUNER_TOOL::TuneDiffPair, PCB_ACTIONS::routerActivateTuneDiffPair.MakeEvent() );
+    Go( &LENGTH_TUNER_TOOL::TuneDiffPairSkew, PCB_ACTIONS::routerActivateTuneDiffPairSkew.MakeEvent() );
+
     Go( &LENGTH_TUNER_TOOL::routerOptionsDialog, ACT_RouterOptions.MakeEvent() );
     Go( &LENGTH_TUNER_TOOL::meanderSettingsDialog, ACT_Settings.MakeEvent() );
 }
@@ -245,9 +245,9 @@ int LENGTH_TUNER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
 
     m_router->SetMode( aMode );
 
-    m_ctls->SetSnapping( true );
-    m_ctls->ShowCursor( true );
-    m_frame->UndoRedoBlock( true );
+    controls()->SetSnapping( true );
+    controls()->ShowCursor( true );
+    frame()->UndoRedoBlock( true );
 
     std::unique_ptr<TUNER_TOOL_MENU> ctxMenu( new TUNER_TOOL_MENU );
     SetContextMenu( ctxMenu.get() );
@@ -270,8 +270,8 @@ int LENGTH_TUNER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
         }
     }
 
-    m_frame->SetNoToolSelected();
-    m_frame->UndoRedoBlock( false );
+    frame()->SetNoToolSelected();
+    frame()->UndoRedoBlock( false );
 
     // Store routing settings till the next invocation
     m_savedSettings = m_router->Settings();
@@ -283,7 +283,7 @@ int LENGTH_TUNER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
 
 int LENGTH_TUNER_TOOL::routerOptionsDialog( const TOOL_EVENT& aEvent )
 {
-    DIALOG_PNS_SETTINGS settingsDlg( m_frame, m_router->Settings() );
+    DIALOG_PNS_SETTINGS settingsDlg( frame(), m_router->Settings() );
 
     if( settingsDlg.ShowModal() == wxID_OK )
     {
@@ -302,7 +302,7 @@ int LENGTH_TUNER_TOOL::meanderSettingsDialog( const TOOL_EVENT& aEvent )
         return 0;
 
     PNS::MEANDER_SETTINGS settings = placer->MeanderSettings();
-    DIALOG_PNS_LENGTH_TUNING_SETTINGS settingsDlg( m_frame, settings, m_router->Mode() );
+    DIALOG_PNS_LENGTH_TUNING_SETTINGS settingsDlg( frame(), settings, m_router->Mode() );
 
     if( settingsDlg.ShowModal() )
         placer->UpdateSettings( settings );

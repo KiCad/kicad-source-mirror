@@ -405,7 +405,7 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
 }
 
 
-void LINE::DragCorner( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
+void LINE::dragCorner45( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
 {
     SHAPE_LINE_CHAIN path;
 
@@ -426,6 +426,37 @@ void LINE::DragCorner( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
 
     path.Simplify();
     m_line = path;
+}
+
+
+void LINE::dragCornerFree( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
+{
+    m_line.Point( aIndex ) = aP;
+    m_line.Simplify();
+}
+
+void LINE::DragCorner( const VECTOR2I& aP, int aIndex, int aSnappingThreshold, bool aFreeAngle )
+{
+    if( aFreeAngle )
+    {
+        dragCornerFree ( aP, aIndex, aSnappingThreshold );
+    }
+    else
+    {
+        dragCorner45 ( aP, aIndex, aSnappingThreshold );
+    }
+}
+
+void LINE::DragSegment( const VECTOR2I& aP, int aIndex, int aSnappingThreshold, bool aFreeAngle )
+{
+    if( aFreeAngle )
+    {
+        assert( false );
+    }
+    else
+    {
+        dragSegment45 ( aP, aIndex, aSnappingThreshold );
+    }
 }
 
 
@@ -517,7 +548,7 @@ VECTOR2I LINE::snapToNeighbourSegments( const SHAPE_LINE_CHAIN& aPath, const VEC
 }
 
 
-void LINE::DragSegment( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
+void LINE::dragSegment45( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
 {
     SHAPE_LINE_CHAIN path( m_line );
     VECTOR2I target( aP );

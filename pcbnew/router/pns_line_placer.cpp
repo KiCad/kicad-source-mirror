@@ -800,18 +800,18 @@ NODE* LINE_PLACER::CurrentNode( bool aLoopsRemoved ) const
 }
 
 
-void LINE_PLACER::splitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I& aP )
+bool LINE_PLACER::SplitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I& aP )
 {
     if( !aSeg )
-        return;
+        return false;
 
     if( !aSeg->OfKind( ITEM::SEGMENT_T ) )
-        return;
+        return false;
 
     JOINT* jt = aNode->FindJoint( aP, aSeg );
 
     if( jt && jt->LinkCount() >= 1 )
-        return;
+        return false;
 
     SEGMENT* s_old = static_cast<SEGMENT*>( aSeg );
 
@@ -826,6 +826,8 @@ void LINE_PLACER::splitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I
     aNode->Remove( s_old );
     aNode->Add( std::move( s_new[0] ), true );
     aNode->Add( std::move( s_new[1] ), true );
+
+    return true;
 }
 
 
@@ -901,7 +903,7 @@ void LINE_PLACER::initPlacement()
     world->KillChildren();
     NODE* rootNode = world->Branch();
 
-    splitAdjacentSegments( rootNode, m_startItem, m_currentStart );
+    SplitAdjacentSegments( rootNode, m_startItem, m_currentStart );
 
     setWorld( rootNode );
 
@@ -950,7 +952,7 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 
     if( eiDepth >= 0 && aEndItem && latestNode->Depth() > eiDepth && current.SegmentCount() )
     {
-        splitAdjacentSegments( m_lastNode, aEndItem, current.CPoint( -1 ) );
+        SplitAdjacentSegments( m_lastNode, aEndItem, current.CPoint( -1 ) );
 
         if( Settings().RemoveLoops() )
             removeLoops( m_lastNode, current );

@@ -51,7 +51,8 @@ private:
     int getDefaultWidth( int aNetCode );
 
     void performRouting();
-    void performDragging();
+    void performDragging( int aMode = PNS::DM_ANY );
+    void breakTrack();
 
     void getNetclassDimensions( int aNetCode, int& aWidth, int& aViaDiameter, int& aViaDrill );
     void handleCommonEvents( const TOOL_EVENT& evt );

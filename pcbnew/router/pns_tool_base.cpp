@@ -68,7 +68,7 @@ TOOL_ACTION TOOL_BASE::ACT_RouterOptions( "pcbnew.InteractiveRouter.RouterOption
 
 
 TOOL_BASE::TOOL_BASE( const std::string& aToolName ) :
-    TOOL_INTERACTIVE( aToolName )
+    PCB_TOOL( aToolName )
 {
     m_gridHelper = nullptr;
     m_iface = nullptr;
@@ -78,10 +78,6 @@ TOOL_BASE::TOOL_BASE( const std::string& aToolName ) :
     m_startLayer = 0;
 
     m_endItem = nullptr;
-
-    m_frame = nullptr;
-    m_ctls = nullptr;
-    m_board = nullptr;
     m_gridHelper = nullptr;
 }
 
@@ -101,23 +97,19 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
     delete m_iface;
     delete m_router;
 
-    m_frame = getEditFrame<PCB_EDIT_FRAME>();
-    m_ctls = getViewControls();
-    m_board = getModel<BOARD>();
-
     m_iface = new PNS_KICAD_IFACE;
-    m_iface->SetBoard( m_board );
+    m_iface->SetBoard( board() );
     m_iface->SetView( getView() );
-    m_iface->SetHostFrame( m_frame );
+    m_iface->SetHostFrame( frame() );
 
     m_router = new ROUTER;
-    m_router->SetInterface(m_iface);
+    m_router->SetInterface( m_iface );
     m_router->ClearWorld();
     m_router->SyncWorld();
     m_router->LoadSettings( m_savedSettings );
     m_router->UpdateSizes( m_savedSizes );
 
-    m_gridHelper = new GRID_HELPER( m_frame );
+    m_gridHelper = new GRID_HELPER( frame() );
 }
 
 
@@ -206,11 +198,38 @@ void TOOL_BASE::highlightNet( bool aEnabled, int aNetcode )
     getView()->UpdateAllLayersColor();
 }
 
+bool TOOL_BASE::checkSnap( ITEM *aItem )
+{
+    bool doSnap = false;
+
+    // Sync PNS engine settings with the general PCB editor options. I know the code below is awful, but...
+    auto& pnss = m_router->Settings();
+    const auto& gens = frame()->Settings();
+
+    pnss.SetSnapToTracks( false );
+    pnss.SetSnapToPads( false );
+
+    if( gens.m_magneticPads == CAPTURE_CURSOR_IN_TRACK_TOOL || gens.m_magneticPads == CAPTURE_ALWAYS )
+        pnss.SetSnapToPads( true );
+
+    if( gens.m_magneticTracks == CAPTURE_CURSOR_IN_TRACK_TOOL || gens.m_magneticTracks == CAPTURE_ALWAYS )
+        pnss.SetSnapToTracks( true );
+
+    if( aItem )
+    {
+        if( ( aItem->OfKind( ITEM::VIA_T ) || aItem->OfKind( ITEM::SEGMENT_T ) ) && pnss.GetSnapToTracks() )
+            doSnap = true;
+        else if( aItem->OfKind( ITEM::SOLID_T ) && pnss.GetSnapToPads() )
+            doSnap = true;
+    }
+
+    return doSnap;
+}
 
 void TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent )
 {
     int tl = getView()->GetTopLayer();
-    VECTOR2I cp = m_ctls->GetCursorPosition();
+    VECTOR2I cp = controls()->GetCursorPosition();
     VECTOR2I p;
 
     bool snapEnabled = true;
@@ -231,20 +250,21 @@ void TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent )
         m_startItem = nullptr;
 
     m_startSnapPoint = snapToItem( snapEnabled, m_startItem, p );
-    m_ctls->ForceCursorPosition( true, m_startSnapPoint );
+
+   controls()->ForceCursorPosition( true, checkSnap( m_startItem ) ? m_startSnapPoint : p );
 }
 
 
 void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
 {
-    VECTOR2I p = m_ctls->GetMousePosition();
+    VECTOR2I p = controls()->GetMousePosition();
     int layer;
     bool snapEnabled = !aEvent.Modifier( MD_SHIFT );
 
     if( m_router->GetCurrentNets().empty() || m_router->GetCurrentNets().front() < 0 )
     {
         m_endSnapPoint = snapToItem( snapEnabled, nullptr, p );
-        m_ctls->ForceCursorPosition( true, m_endSnapPoint );
+        controls()->ForceCursorPosition( true, m_endSnapPoint );
         m_endItem = nullptr;
 
         return;
@@ -267,10 +287,16 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
             break;
     }
 
-    VECTOR2I cursorPos = snapToItem( snapEnabled, endItem, p );
-    m_ctls->ForceCursorPosition( true, cursorPos );
-    m_endItem = endItem;
-    m_endSnapPoint = cursorPos;
+    if( checkSnap( endItem ) )
+    {
+        VECTOR2I cursorPos = snapToItem( snapEnabled, endItem, p );
+        controls()->ForceCursorPosition( true, checkSnap( endItem ) ? cursorPos : p );
+        m_endItem = endItem;
+        m_endSnapPoint = cursorPos;
+    } else {
+        m_endItem = nullptr;
+        m_endSnapPoint = p;
+    }
 
     if( m_endItem )
     {

@@ -136,6 +136,12 @@ public:
     void SetInlineDragEnabled ( bool aEnable ) { m_inlineDragEnabled = aEnable; }
     bool InlineDragEnabled() const { return m_inlineDragEnabled; }
 
+    void SetSnapToTracks( bool aSnap ) { m_snapToTracks = aSnap; }
+    void SetSnapToPads( bool aSnap ) { m_snapToPads = aSnap; }
+
+    bool GetSnapToTracks() const { return m_snapToTracks; }
+    bool GetSnapToPads() const { return m_snapToPads; }
+
 private:
     bool m_shoveVias;
     bool m_startDiagonal;
@@ -148,6 +154,8 @@ private:
     bool m_canViolateDRC;
     bool m_freeAngleMode;
     bool m_inlineDragEnabled;
+    bool m_snapToTracks;
+    bool m_snapToPads;
 
     PNS_MODE m_routingMode;
     PNS_OPTIMIZATION_EFFORT m_optimizerEffort;
