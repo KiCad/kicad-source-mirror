@@ -27,8 +27,11 @@
 
 #include <lib_table_base.h>
 #include <sch_io_mgr.h>
+#include <lib_id.h>
 
 class LIB_PART;
+class SYMBOL_LIB_TABLE_GRID;
+
 
 /**
  * Hold a record identifying a symbol library accessed by the appropriate symbol library
@@ -94,8 +97,9 @@ private:
 
 class SYMBOL_LIB_TABLE : public LIB_TABLE
 {
-public:
+    friend class SYMBOL_LIB_TABLE_GRID;
 
+public:
     virtual void Parse( LIB_TABLE_LEXER* aLexer ) override;
 
     virtual void Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) const override;

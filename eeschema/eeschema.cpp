@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,6 +46,7 @@
 #include <transform.h>
 #include <wildcards_and_files_ext.h>
 #include <symbol_lib_table.h>
+#include "dialogs/dialog_global_sym_lib_table_config.h"
 
 #include <kiway.h>
 #include <sim/sim_plot_frame.h>
@@ -244,35 +245,36 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
     wxConfigLoadSetups( KifaceSettings(), cfg_params() );
 
-    try
-    {
-        // The global table is not related to a specific project.  All projects
-        // will use the same global table.  So the KIFACE::OnKifaceStart() contract
-        // of avoiding anything project specific is not violated here.
-        if( !SYMBOL_LIB_TABLE::LoadGlobalTable( SYMBOL_LIB_TABLE::GetGlobalLibTable() ) )
-        {
-            DisplayInfoMessage( NULL, _(
-                "You have run Eeschema for the first time using the new symbol library table "
-                "method for finding symbols.\n\n"
-                "Eeschema has either copied the default table or created an empty table in the "
-                "kicad configuration folder.\n\n"
-                "You must first configure the library table to include all symbol libraries you "
-                "want to use.\n\n"
-                "See the \"Symbol Library Table\" section of Eeschema documentation for more "
-                "information." ) );
-        }
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        // if we are here, a incorrect global symbol library table was found.
-        // Incorrect global symbol library table is not a fatal error:
-        // the user just has to edit the (partially) loaded table.
-        wxString msg = _(
-            "An error occurred attempting to load the global symbol library table.\n"
-            "Please edit this global symbol library table in Preferences menu"
-            );
+    wxFileName fn = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
 
-        DisplayErrorMessage( NULL, msg, ioe.What() );
+    if( !fn.FileExists() )
+    {
+        DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG fpDialog( NULL );
+
+        fpDialog.ShowModal();
+    }
+    else
+    {
+        try
+        {
+            // The global table is not related to a specific project.  All projects
+            // will use the same global table.  So the KIFACE::OnKifaceStart() contract
+            // of avoiding anything project specific is not violated here.
+            if( !SYMBOL_LIB_TABLE::LoadGlobalTable( SYMBOL_LIB_TABLE::GetGlobalLibTable() ) )
+                return false;
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            // if we are here, a incorrect global symbol library table was found.
+            // Incorrect global symbol library table is not a fatal error:
+            // the user just has to edit the (partially) loaded table.
+            wxString msg = _(
+                "An error occurred attempting to load the global symbol library table.\n"
+                "Please edit this global symbol library table in Preferences menu."
+                );
+
+            DisplayErrorMessage( NULL, msg, ioe.What() );
+        }
     }
 
     return true;

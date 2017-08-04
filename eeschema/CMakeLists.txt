@@ -72,6 +72,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_schematic_find_base.cpp
     dialogs/dialog_symbol_remap.cpp
     dialogs/dialog_symbol_remap_base.cpp
+    dialogs/dialog_global_sym_lib_table_config.cpp
+    dialogs/dialog_global_sym_lib_table_config_base.cpp
     )
 
 set( EESCHEMA_WIDGETS
