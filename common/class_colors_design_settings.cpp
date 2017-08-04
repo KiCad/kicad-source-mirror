@@ -100,6 +100,13 @@ COLORS_DESIGN_SETTINGS::COLORS_DESIGN_SETTINGS()
     {
         m_LayersColors[dst] = COLOR4D( default_items_color[src++] );
     }
+
+    m_LayersColors[ LAYER_PCB_BACKGROUND ] = BLACK;
+    m_LayersColors[ LAYER_CURSOR ] = WHITE;
+    m_LayersColors[ LAYER_AUX_ITEMS ] = WHITE;
+    m_LayersColors[ LAYER_WORKSHEET ] = DARKRED;
+
+    setupConfigParams();
 }
 
 
@@ -146,4 +153,47 @@ void COLORS_DESIGN_SETTINGS::SetAllColorsAs( COLOR4D aColor )
 {
     for( unsigned ii = 0; ii < DIM(m_LayersColors); ii++ )
         m_LayersColors[ii] = aColor;
+}
+
+#define LOC_COLOR(layer)            &m_LayersColors[layer]
+#define ITEM_COLOR(item_visible)    &m_LayersColors[item_visible]
+
+void COLORS_DESIGN_SETTINGS::setupConfigParams()
+{
+    wxASSERT( DIM( m_LayersColors ) >= PCB_LAYER_ID_COUNT );
+    for( int i = 0;  i<PCB_LAYER_ID_COUNT;  ++i )
+    {
+        wxString vn = wxString::Format(
+                        wxT( "ColorPCBLayer_%s" ),
+                        LSET::Name( PCB_LAYER_ID( i ) ) );
+
+        Add( vn, LOC_COLOR(i), m_LayersColors[i] );
+    }
+
+    Add( wxT( "ColorTxtFrontEx" ), ITEM_COLOR( LAYER_MOD_TEXT_FR ), LIGHTGRAY );
+    Add( wxT( "ColorTxtBackEx" ), ITEM_COLOR( LAYER_MOD_TEXT_BK ), BLUE );
+    Add( wxT( "ColorTxtInvisEx" ), ITEM_COLOR( LAYER_MOD_TEXT_INVISIBLE ), DARKGRAY );
+    Add( wxT( "ColorPadBackEx" ), ITEM_COLOR( LAYER_PAD_BK ), GREEN );
+    Add( wxT( "ColorAnchorEx" ), ITEM_COLOR( LAYER_ANCHOR ), BLUE );
+    Add( wxT( "ColorPadFrontEx" ), ITEM_COLOR( LAYER_PAD_FR ), RED );
+    Add( wxT( "ColorViaThruEx" ), ITEM_COLOR( LAYER_VIA_THROUGH ), LIGHTGRAY );
+    Add( wxT( "ColorViaBBlindEx" ), ITEM_COLOR( LAYER_VIA_BBLIND ), BROWN );
+    Add( wxT( "ColorViaMicroEx" ), ITEM_COLOR( LAYER_VIA_MICROVIA ), CYAN );
+    Add( wxT( "ColorNonPlatedEx" ), ITEM_COLOR( LAYER_NON_PLATED ), YELLOW );
+    Add( wxT( "ColorRatsEx" ), ITEM_COLOR( LAYER_RATSNEST ), WHITE );
+    Add( wxT( "ColorPCBBackground" ), ITEM_COLOR( LAYER_PCB_BACKGROUND ), BLACK );
+    Add( wxT( "ColorPCBCursor" ), ITEM_COLOR( LAYER_CURSOR ), WHITE );
+    Add( wxT( "ColorAuxItems" ), ITEM_COLOR( LAYER_AUX_ITEMS ), WHITE );
+    Add( wxT( "ColorWorksheet" ), ITEM_COLOR( LAYER_WORKSHEET ), DARKRED );
+
+}
+
+void COLORS_DESIGN_SETTINGS::Load( wxConfigBase *aConfig )
+{
+    SETTINGS::Load(aConfig);
+}
+
+void COLORS_DESIGN_SETTINGS::Save( wxConfigBase *aConfig )
+{
+    SETTINGS::Save(aConfig);
 }

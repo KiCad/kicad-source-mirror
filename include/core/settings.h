@@ -23,24 +23,36 @@
  */
 
 
-#ifndef __TOOL_SETTINGS_H
-#define __TOOL_SETTINGS_H
+#ifndef __SETTINGS_H
+#define __SETTINGS_H
 
-#include <core/settings.h>
+#include <wx/confbase.h>
+#include <config_params.h>
+
 
 /**
  * Class TOOL_SETTINGS
  *
  * Manages persistent settings for a tool (just a simple wrapper to wxConfigBase)
  */
-class TOOL_BASE;
-
-class TOOL_SETTINGS : public SETTINGS
+class SETTINGS
 {
     public:
-        TOOL_SETTINGS( TOOL_BASE* aTool = NULL );
-        ~TOOL_SETTINGS();
+        SETTINGS()
+            {}
 
+        ~SETTINGS()
+            {}
+
+        void SetConfigPrefix ( const wxString& aPrefix )
+        {
+            m_prefix = aPrefix;
+        }
+
+        virtual void Load( wxConfigBase *aConfig );
+        virtual void Save( wxConfigBase *aConfig );
+
+        #if 0
         template<class T>
         T Get( const wxString& aName, T aDefaultValue ) const
         {
@@ -65,16 +77,42 @@ class TOOL_SETTINGS : public SETTINGS
 
             config->Write( getKeyName( aName ), aValue );
         }
+        #endif
+
+
+        void Add ( const wxString& name, int* aPtr, int aDefaultValue )
+        {
+            m_params.push_back ( new PARAM_CFG_INT ( name, aPtr, aDefaultValue ) );
+        }
+
+        void Add ( const wxString& name, bool* aPtr, bool aDefaultValue )
+        {
+            m_params.push_back ( new PARAM_CFG_BOOL ( name, aPtr, aDefaultValue ) );
+        }
+
+        void Add ( const wxString& name, KIGFX::COLOR4D* aPtr, KIGFX::COLOR4D aDefaultValue )
+        {
+            m_params.push_back ( new PARAM_CFG_SETCOLOR ( name, aPtr, aDefaultValue ) );
+        }
+
+        void Add ( const wxString& name, KIGFX::COLOR4D* aPtr, EDA_COLOR_T aDefaultValue )
+        {
+            m_params.push_back ( new PARAM_CFG_SETCOLOR ( name, aPtr, aDefaultValue ) );
+        }
+
+
+    protected:
+
+        virtual wxString getKeyName( const wxString& aEntryName ) const
+        {
+            return aEntryName;
+        }
 
     private:
-        wxString getKeyName( const wxString& aEntryName ) const;
-
-        ///> Returns pointer to currently used wxConfigBase. It might be NULL, if there is no
-        ///> TOOL_BASE assigned.
-        wxConfigBase* getConfigBase() const;
-
-        TOOL_BASE* m_tool;
-
+        wxString m_prefix;
+        PARAM_CFG_ARRAY m_params;
 };
+
+
 
 #endif

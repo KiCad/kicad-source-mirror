@@ -123,7 +123,7 @@ void CAIRO_COMPOSITOR::Begin()
 {
 }
 
-void CAIRO_COMPOSITOR::ClearBuffer()
+void CAIRO_COMPOSITOR::ClearBuffer( const COLOR4D& aColor )
 {
     // Clear the pixel storage
     memset( m_buffers[m_current].bitmap.get(), 0x00, m_bufferSize * sizeof(int) );

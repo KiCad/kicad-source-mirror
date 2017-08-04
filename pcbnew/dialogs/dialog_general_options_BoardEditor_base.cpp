@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb  6 2017)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -49,15 +49,6 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticTextmaxlinks = new wxStaticText( this, wxID_ANY, _("&Maximum links:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextmaxlinks->Wrap( -1 );
-	fgSizer1->Add( m_staticTextmaxlinks, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_MaxShowLinks = new wxSpinCtrl( this, wxID_ANY, wxT("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 5, 1 );
-	m_MaxShowLinks->SetToolTip( _("Adjust the number of ratsnets shown from cursor to closest pads.") );
-	
-	fgSizer1->Add( m_MaxShowLinks, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxTOP, 5 );
-	
 	m_staticTextautosave = new wxStaticText( this, wxID_ANY, _("&Auto save (minutes):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextautosave->Wrap( -1 );
 	fgSizer1->Add( m_staticTextautosave, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
@@ -79,43 +70,57 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	
 	bMiddleLeftSizer->Add( fgSizer1, 0, wxEXPAND, 5 );
 	
-	wxStaticBoxSizer* bMiddleRightBoxSizer;
-	bMiddleRightBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
+	wxStaticBoxSizer* bOptionsSizer;
+	bOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
 	
-	m_DrcOn = new wxCheckBox( bMiddleRightBoxSizer->GetStaticBox(), wxID_DRC_ONOFF, _("&Enforce design rules when routing"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_DrcOn->SetValue(true); 
-	m_DrcOn->SetToolTip( _("Enable DRC control. When DRC control is disabled, all connections are allowed.") );
-	
-	bMiddleRightBoxSizer->Add( m_DrcOn, 0, wxALL|wxEXPAND, 5 );
-	
-	m_ShowGlobalRatsnest = new wxCheckBox( bMiddleRightBoxSizer->GetStaticBox(), wxID_GENERAL_RATSNEST, _("&Show ratsnest"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ShowGlobalRatsnest = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_GENERAL_RATSNEST, _("&Show ratsnest"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ShowGlobalRatsnest->SetValue(true); 
 	m_ShowGlobalRatsnest->SetToolTip( _("Show the full ratsnest.") );
 	
-	bMiddleRightBoxSizer->Add( m_ShowGlobalRatsnest, 0, wxALL, 5 );
+	bOptionsSizer->Add( m_ShowGlobalRatsnest, 0, wxALL, 5 );
 	
-	m_TrackAutodel = new wxCheckBox( bMiddleRightBoxSizer->GetStaticBox(), wxID_TRACK_AUTODEL, _("&Delete unconnected tracks"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_TrackAutodel->SetToolTip( _("Enable automatic track deletion when redrawing a track.") );
-	
-	bMiddleRightBoxSizer->Add( m_TrackAutodel, 0, wxALL, 5 );
-	
-	m_Track_45_Only_Ctrl = new wxCheckBox( bMiddleRightBoxSizer->GetStaticBox(), wxID_TRACKS45, _("&Limit tracks to 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Track_45_Only_Ctrl->SetToolTip( _("Force track directions to H, V or 45 degrees when drawing a track.") );
-	
-	bMiddleRightBoxSizer->Add( m_Track_45_Only_Ctrl, 0, wxALL, 5 );
-	
-	m_Segments_45_Only_Ctrl = new wxCheckBox( bMiddleRightBoxSizer->GetStaticBox(), wxID_SEGMENTS45, _("L&imit graphic lines to 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Segments_45_Only_Ctrl = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_SEGMENTS45, _("L&imit graphic lines to 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Segments_45_Only_Ctrl->SetToolTip( _("Force line segment directions to H, V or 45 degrees when drawing on technical layers.") );
 	
-	bMiddleRightBoxSizer->Add( m_Segments_45_Only_Ctrl, 0, wxALL, 5 );
+	bOptionsSizer->Add( m_Segments_45_Only_Ctrl, 0, wxALL, 5 );
 	
-	m_Track_DoubleSegm_Ctrl = new wxCheckBox( bMiddleRightBoxSizer->GetStaticBox(), wxID_ANY, _("&Use double segmented tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_UseEditKeyForWidth = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Edit action changes track width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_UseEditKeyForWidth->SetToolTip( _("When active, hitting Edit hotkey or double-clicking on a track or via changes its width/diameter to the one selected in the main toolbar. ") );
+	
+	bOptionsSizer->Add( m_UseEditKeyForWidth, 0, wxALL, 5 );
+	
+	
+	bMiddleLeftSizer->Add( bOptionsSizer, 1, wxEXPAND|wxALL, 5 );
+	
+	wxStaticBoxSizer* bLegacyOptionsSizer;
+	bLegacyOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Legacy Routing Options") ), wxVERTICAL );
+	
+	m_DrcOn = new wxCheckBox( bLegacyOptionsSizer->GetStaticBox(), wxID_DRC_ONOFF, _("&Enforce design rules when routing"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DrcOn->SetValue(true); 
+	m_DrcOn->SetToolTip( _("Enable DRC control. When DRC control is disabled, all connections are allowed.") );
+	
+	bLegacyOptionsSizer->Add( m_DrcOn, 0, wxALL|wxEXPAND, 5 );
+	
+	m_TrackAutodel = new wxCheckBox( bLegacyOptionsSizer->GetStaticBox(), wxID_TRACK_AUTODEL, _("&Delete unconnected tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TrackAutodel->SetValue(true); 
+	m_TrackAutodel->SetToolTip( _("Enable automatic track deletion when redrawing a track.") );
+	
+	bLegacyOptionsSizer->Add( m_TrackAutodel, 0, wxALL, 5 );
+	
+	m_Track_45_Only_Ctrl = new wxCheckBox( bLegacyOptionsSizer->GetStaticBox(), wxID_TRACKS45, _("&Limit tracks to 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Track_45_Only_Ctrl->SetValue(true); 
+	m_Track_45_Only_Ctrl->SetToolTip( _("Force track directions to H, V or 45 degrees when drawing a track.") );
+	
+	bLegacyOptionsSizer->Add( m_Track_45_Only_Ctrl, 0, wxALL, 5 );
+	
+	m_Track_DoubleSegm_Ctrl = new wxCheckBox( bLegacyOptionsSizer->GetStaticBox(), wxID_ANY, _("&Use double segmented tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Track_DoubleSegm_Ctrl->SetValue(true); 
 	m_Track_DoubleSegm_Ctrl->SetToolTip( _("Use two track segments, with 45 degrees angle between them, when drawing a new track ") );
 	
-	bMiddleRightBoxSizer->Add( m_Track_DoubleSegm_Ctrl, 0, wxALL, 5 );
+	bLegacyOptionsSizer->Add( m_Track_DoubleSegm_Ctrl, 0, wxALL, 5 );
 	
 	
-	bMiddleLeftSizer->Add( bMiddleRightBoxSizer, 4, wxALL|wxEXPAND, 5 );
+	bMiddleLeftSizer->Add( bLegacyOptionsSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	bSizerUpper->Add( bMiddleLeftSizer, 0, wxALL|wxEXPAND, 5 );
@@ -126,7 +131,7 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	wxString m_MagneticPadOptCtrlChoices[] = { _("Never"), _("When creating tracks"), _("Always") };
 	int m_MagneticPadOptCtrlNChoices = sizeof( m_MagneticPadOptCtrlChoices ) / sizeof( wxString );
 	m_MagneticPadOptCtrl = new wxRadioBox( this, wxID_ANY, _("Magnetic Pads"), wxDefaultPosition, wxDefaultSize, m_MagneticPadOptCtrlNChoices, m_MagneticPadOptCtrlChoices, 1, wxRA_SPECIFY_COLS );
-	m_MagneticPadOptCtrl->SetSelection( 0 );
+	m_MagneticPadOptCtrl->SetSelection( 2 );
 	m_MagneticPadOptCtrl->SetToolTip( _("Control capture of the cursor when the mouse enters a pad area.") );
 	
 	bRightSizer->Add( m_MagneticPadOptCtrl, 0, wxALL|wxEXPAND, 5 );
@@ -158,7 +163,7 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	sbSizer2PAN->Add( m_AutoPANOpt, 0, wxALL, 5 );
 	
 	
-	bRightSizer->Add( sbSizer2PAN, 1, wxEXPAND, 5 );
+	bRightSizer->Add( sbSizer2PAN, 1, wxEXPAND|wxALL, 5 );
 	
 	
 	bSizerUpper->Add( bRightSizer, 0, wxALL|wxEXPAND, 5 );

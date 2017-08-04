@@ -68,7 +68,7 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     int highlightedNet = rs->GetHighlightNetCode();
 
-    gal->SetStrokeColor( color.Brightened( 0.8 ) );
+    gal->SetStrokeColor( color.Brightened(0.8) );
 
     // Draw the "dynamic" ratsnest (i.e. for objects that may be currently being moved)
     for( const auto& l : m_data->GetDynamicRatsnest() )

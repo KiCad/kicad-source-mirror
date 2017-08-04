@@ -36,6 +36,7 @@ set( CVPCB_DIALOGS
 set( CVPCB_SRCS
     ../common/base_units.cpp
     ../pcbnew/board_items_to_polygon_shape_transform.cpp
+    ../pcbnew/pcb_general_settings.cpp
     ../pcbnew/class_drc_item.cpp
     autosel.cpp
     cfg.cpp

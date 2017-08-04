@@ -1447,7 +1447,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         break;
 
     case ID_TRACK_BUTT:
-        if( g_Drc_On )
+        if( Settings().m_legacyDrcOn )
             SetToolID( id, wxCURSOR_PENCIL, _( "Add tracks" ) );
         else
             SetToolID( id, wxCURSOR_QUESTION_ARROW, _( "Add tracks" ) );

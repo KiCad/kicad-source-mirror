@@ -33,6 +33,7 @@
 namespace KIGFX
 {
 class GAL;
+class VIEW;
 
 namespace PREVIEW
 {
@@ -64,7 +65,7 @@ private:
     SHAPE_POLY_SET getOutline() const;
 
     ///> Draw rectangle and centre line onto GAL
-    void drawPreviewShape( KIGFX::GAL& aGal ) const override;
+    void drawPreviewShape( KIGFX::VIEW* aView ) const override;
 
     const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr;
 

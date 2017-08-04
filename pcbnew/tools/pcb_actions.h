@@ -197,6 +197,9 @@ public:
     /// Activation of the Push and Shove router (inline dragging mode)
     static TOOL_ACTION routerInlineDrag;
 
+    /// Break track action
+    static TOOL_ACTION breakTrack;
+
     // Point Editor
     /// Break outline (insert additional points to an edge)
     static TOOL_ACTION pointEditorAddCorner;

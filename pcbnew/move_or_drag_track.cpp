@@ -801,7 +801,7 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
     int current_net_code = Track->GetNetCode();
 
     // DRC control:
-    if( g_Drc_On )
+    if( Settings().m_legacyDrcOn )
     {
         errdrc = m_drc->Drc( Track, GetBoard()->m_Track );
 

@@ -88,15 +88,17 @@ public:
         COLOR4D     color;      ///< COLOR4D::UNSPECIFIED if none.
         bool        state;      ///< initial wxCheckBox state
         wxString    tooltip;    ///< if not empty, use this tooltip on row
+        bool        changeable; ///< if true, the state can be changed
 
         ROW( const wxString& aRowName, int aId, COLOR4D aColor = COLOR4D::UNSPECIFIED,
-            const wxString& aTooltip = wxEmptyString, bool aState = true )
+            const wxString& aTooltip = wxEmptyString, bool aState = true, bool aChangeable = true )
         {
             rowName = aRowName;
             id      = aId;
             color   = aColor;
             state   = aState;
             tooltip = aTooltip;
+            changeable = aChangeable;
         }
     };
 

@@ -150,7 +150,7 @@ public:
     virtual void Flush() override;
 
     /// @copydoc GAL::ClearScreen()
-    virtual void ClearScreen( const COLOR4D& aColor ) override;
+    virtual void ClearScreen( ) override;
 
     // -----------------
     // Attribute setting

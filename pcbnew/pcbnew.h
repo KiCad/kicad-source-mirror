@@ -76,13 +76,8 @@ enum ENDPOINT_T {
 extern wxString g_DocModulesFileName;
 
 // variables
-extern bool     g_Drc_On;
-extern bool     g_AutoDeleteOldTrack;
 extern bool     g_Raccord_45_Auto;
-extern bool     g_Track_45_Only_Allowed;
 extern bool     g_Alternate_Track_Posture;
-extern bool     g_Segments_45_Only;
-
 // Layer pair for auto routing and switch layers by hotkey
 extern PCB_LAYER_ID g_Route_Layer_TOP;
 extern PCB_LAYER_ID g_Route_Layer_BOTTOM;
@@ -101,12 +96,6 @@ extern DLIST<TRACK> g_CurrentTrackList;
 #define g_FirstTrackSegment   g_CurrentTrackList.GetFirst()   ///< first segment created
 
 
-enum MAGNETICPAD_OPTION_VALUES
-{
-    NO_EFFECT,
-    CAPTURE_CURSOR_IN_TRACK_TOOL,
-    CAPTURE_ALWAYS
-};
 
 /**
  * Helper function PythonPluginsReloadBase

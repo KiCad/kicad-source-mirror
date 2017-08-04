@@ -29,7 +29,6 @@
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
 #include <printout_controler.h>
-#include <colors_selection.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>
@@ -223,7 +222,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
             int         radius = track->GetWidth() / 2;
             const VIA*  via = static_cast<const VIA*>( track );
 
-            COLOR4D color = g_ColorsSettings.GetItemColor( LAYER_VIAS + via->GetViaType() );
+            COLOR4D color = Settings().Colors().GetItemColor( LAYER_VIAS + via->GetViaType() );
 
             GRFilledCircle( m_canvas->GetClipBox(), aDC,
                             via->GetStart().x,

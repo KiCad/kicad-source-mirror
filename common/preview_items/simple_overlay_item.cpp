@@ -44,7 +44,7 @@ void SIMPLE_OVERLAY_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     auto& gal = *aView->GetGAL();
 
     setupGal( gal );
-    drawPreviewShape( gal );
+    drawPreviewShape( aView );
 }
 
 

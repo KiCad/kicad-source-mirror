@@ -33,6 +33,7 @@ namespace KIGFX
 {
 
 class GAL;
+class VIEW;
 
 namespace PREVIEW
 {
@@ -67,7 +68,7 @@ public:
 private:
 
     ///> Draw rectangle and centre line onto GAL
-    void drawPreviewShape( KIGFX::GAL& aGal ) const override;
+    void drawPreviewShape( KIGFX::VIEW* aView ) const override;
 
     ///> complete polyline of locked in and leader points
     SHAPE_LINE_CHAIN m_lockedChain, m_leaderChain;

@@ -34,11 +34,11 @@
 #include <common.h>
 #include <class_drawpanel.h>
 #include <kicad_string.h>
-#include <colors_selection.h>
 #include <trigo.h>
 #include <macros.h>
 #include <richio.h>
 #include <bitmaps.h>
+#include <wxPcbStruct.h>
 
 #include <class_board.h>
 #include <class_mire.h>
@@ -89,7 +89,8 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
     if( brd->IsLayerVisible( m_Layer ) == false )
         return;
 
-    COLOR4D gcolor = brd->GetLayerColor( m_Layer );
+    auto frame = static_cast<PCB_EDIT_FRAME*> ( panel->GetParent() );
+    auto gcolor = frame->Settings().Colors().GetLayerColor( m_Layer );
 
     GRSetDrawMode( DC, mode_color );
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();

@@ -46,7 +46,6 @@
 #include <worksheet_viewitem.h>
 
 #include <pcbnew.h>
-#include <colors_selection.h>
 #include <collectors.h>
 
 #include <class_board.h>
@@ -76,8 +75,6 @@ BOARD::BOARD() :
     m_fileFormatVersionAtLoad = LEGACY_BOARD_FILE_VERSION;
 
     m_Status_Pcb    = 0;                    // Status word: bit 1 = calculate.
-    SetColorsSettings( &g_ColorsSettings );
-
     m_CurrentZoneContour = NULL;            // This ZONE_CONTAINER handle the
                                             // zone contour currently in progress
 
@@ -786,72 +783,6 @@ void BOARD::SetElementVisibility( GAL_LAYER_ID LAYER_aPCB, bool isEnabled )
     default:
         ;
     }
-}
-
-
-COLOR4D BOARD::GetVisibleElementColor( GAL_LAYER_ID aLayerId )
-{
-    COLOR4D color = COLOR4D::UNSPECIFIED;
-
-    switch( aLayerId )
-    {
-    case LAYER_NON_PLATED:
-    case LAYER_VIA_THROUGH:
-    case LAYER_VIA_MICROVIA:
-    case LAYER_VIA_BBLIND:
-    case LAYER_MOD_TEXT_FR:
-    case LAYER_MOD_TEXT_BK:
-    case LAYER_MOD_TEXT_INVISIBLE:
-    case LAYER_ANCHOR:
-    case LAYER_PAD_FR:
-    case LAYER_PAD_BK:
-    case LAYER_RATSNEST:
-    case LAYER_GRID:
-        color = GetColorsSettings()->GetItemColor( aLayerId );
-        break;
-
-    default:
-        wxLogDebug( wxT( "BOARD::GetVisibleElementColor(): bad arg %d" ), aLayerId );
-    }
-
-    return color;
-}
-
-
-void BOARD::SetVisibleElementColor( GAL_LAYER_ID aLayerId, COLOR4D aColor )
-{
-    switch( aLayerId )
-    {
-    case LAYER_NON_PLATED:
-    case LAYER_VIA_THROUGH:
-    case LAYER_VIA_MICROVIA:
-    case LAYER_VIA_BBLIND:
-    case LAYER_MOD_TEXT_FR:
-    case LAYER_MOD_TEXT_BK:
-    case LAYER_MOD_TEXT_INVISIBLE:
-    case LAYER_ANCHOR:
-    case LAYER_PAD_FR:
-    case LAYER_PAD_BK:
-    case LAYER_GRID:
-    case LAYER_RATSNEST:
-        GetColorsSettings()->SetItemColor( aLayerId, aColor );
-        break;
-
-    default:
-        wxLogDebug( wxT( "BOARD::SetVisibleElementColor(): bad arg %d" ), aLayerId );
-    }
-}
-
-
-void BOARD::SetLayerColor( PCB_LAYER_ID aLayer, COLOR4D aColor )
-{
-    GetColorsSettings()->SetLayerColor( aLayer, aColor );
-}
-
-
-COLOR4D BOARD::GetLayerColor( PCB_LAYER_ID aLayer ) const
-{
-    return GetColorsSettings()->GetLayerColor( aLayer );
 }
 
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb  6 2017)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -44,28 +44,27 @@ class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE : public DIALOG_SHIM
 		{
 			wxID_POLAR_CTRL = 1000,
 			wxID_UNITS,
-			wxID_DRC_ONOFF,
 			wxID_GENERAL_RATSNEST,
+			wxID_SEGMENTS45,
+			wxID_DRC_ONOFF,
 			wxID_TRACK_AUTODEL,
 			wxID_TRACKS45,
-			wxID_SEGMENTS45,
 			wxID_MAGNETIC_TRACKS,
 			wxID_AUTOPAN
 		};
 		
 		wxRadioBox* m_PolarDisplay;
 		wxRadioBox* m_UnitsSelection;
-		wxStaticText* m_staticTextmaxlinks;
-		wxSpinCtrl* m_MaxShowLinks;
 		wxStaticText* m_staticTextautosave;
 		wxSpinCtrl* m_SaveTime;
 		wxStaticText* m_staticTextRotationAngle;
 		wxTextCtrl* m_RotationAngle;
-		wxCheckBox* m_DrcOn;
 		wxCheckBox* m_ShowGlobalRatsnest;
+		wxCheckBox* m_Segments_45_Only_Ctrl;
+		wxCheckBox* m_UseEditKeyForWidth;
+		wxCheckBox* m_DrcOn;
 		wxCheckBox* m_TrackAutodel;
 		wxCheckBox* m_Track_45_Only_Ctrl;
-		wxCheckBox* m_Segments_45_Only_Ctrl;
 		wxCheckBox* m_Track_DoubleSegm_Ctrl;
 		wxRadioBox* m_MagneticPadOptCtrl;
 		wxRadioBox* m_MagneticTrackOptCtrl;

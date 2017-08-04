@@ -253,7 +253,7 @@ void DIALOG_COPPER_ZONE::initDialog()
 
         msg.Trim();
 
-        COLOR4D layerColor = board->GetLayerColor( layer );
+        COLOR4D layerColor = m_Parent->Settings().Colors().GetLayerColor( layer );
 
         imageList->Add( makeLayerBitmap( layerColor ) );
 

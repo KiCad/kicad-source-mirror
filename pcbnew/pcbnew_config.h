@@ -7,11 +7,8 @@
 #define _PCBNEW_CONFIG_H_
 
 #include <config_params.h>
-#include <colors_selection.h>
 
 /* Useful macro : */
-#define LOC_COLOR(layer)            &g_ColorsSettings.m_LayersColors[layer]
-#define ITEM_COLOR(item_visible)    &g_ColorsSettings.m_LayersColors[item_visible]
 
 
 #endif    // _PCBNEW_CONFIG_H_

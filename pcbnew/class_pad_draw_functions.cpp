@@ -37,6 +37,7 @@
 #include <drawtxt.h>
 #include <layers_id_colors_and_visibility.h>
 #include <wxBasePcbFrame.h>
+#include <wxPcbStruct.h>
 #include <pcbnew_id.h>             // ID_TRACK_BUTT
 #include <pcbnew.h>
 #include <class_board.h>
@@ -102,6 +103,10 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
      */
 
     BOARD* brd = GetBoard();
+
+    auto frame = static_cast<PCB_EDIT_FRAME*> ( aPanel->GetParent() );
+    const auto& cds = frame->Settings().Colors();
+
     bool   frontVisible = brd->IsElementVisible( LAYER_PAD_FR );
     bool   backVisible  = brd->IsElementVisible( LAYER_PAD_BK );
 
@@ -118,7 +123,6 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     if( !backVisible && !( m_layerMask & LSET::FrontMask() ).any() )
         return;
 
-    PCB_BASE_FRAME* frame  = (PCB_BASE_FRAME*) aPanel->GetParent();
 
     wxCHECK_RET( frame != NULL, wxT( "Panel has no parent frame window." ) );
 
@@ -134,12 +138,12 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
 
     if( m_layerMask[F_Cu] )
     {
-        color = brd->GetVisibleElementColor( LAYER_PAD_FR );
+        color = cds.GetItemColor( LAYER_PAD_FR );
     }
 
     if( m_layerMask[B_Cu] )
     {
-        color = color.LegacyMix( brd->GetVisibleElementColor( LAYER_PAD_BK ) );
+        color = color.LegacyMix( cds.GetItemColor( LAYER_PAD_BK ) );
     }
 
     if( color == BLACK ) // Not on a visible copper layer (i.e. still nothing to show)
@@ -162,7 +166,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
             break;
 
         default:
-            color = brd->GetLayerColor( pad_layer );
+            color = cds.GetLayerColor( pad_layer );
 #ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
             showActualMaskSize = pad_layer;
 #endif
@@ -240,7 +244,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     {
         if( IsOnLayer( screen->m_Active_Layer ) )
         {
-            color = brd->GetLayerColor( screen->m_Active_Layer );
+            color = cds.GetLayerColor( screen->m_Active_Layer );
 
             // In high contrast mode, and if the active layer is the mask
             // layer shows the pad size with the mask clearance
@@ -276,7 +280,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
         brd->IsElementVisible( LAYER_NON_PLATED ) )
     {
         drawInfo.m_ShowNotPlatedHole = true;
-        drawInfo.m_NPHoleColor = brd->GetVisibleElementColor( LAYER_NON_PLATED );
+        drawInfo.m_NPHoleColor = cds.GetItemColor( LAYER_NON_PLATED );
     }
 
     drawInfo.m_DrawMode    = aDraw_mode;

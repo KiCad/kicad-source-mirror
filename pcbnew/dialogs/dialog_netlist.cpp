@@ -39,7 +39,6 @@
 #include <netlist_reader.h>
 #include <reporter.h>
 
-#include <pcbnew_config.h>
 #include <class_board_design_settings.h>
 #include <class_board.h>
 #include <class_module.h>

@@ -673,7 +673,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
         // Add the duplicate corner:
         zone->AppendCorner( GetCrossHairPosition(), -1, true );
 
-        if( g_Drc_On && (m_drc->Drc( zone, 0 ) == BAD_DRC) && zone->IsOnCopperLayer() )
+        if( Settings().m_legacyDrcOn && (m_drc->Drc( zone, 0 ) == BAD_DRC) && zone->IsOnCopperLayer() )
         {
             zone->ClearFlags();
             zone->RemoveAllContours();
@@ -698,7 +698,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
         // by Show_New_Edge_While_Move_Mouse
         if( zone->GetCornerPosition( ii - 1 ) != zone->GetCornerPosition( ii ) )
         {
-            if( !g_Drc_On || !zone->IsOnCopperLayer() || ( m_drc->Drc( zone, ii - 1 ) == OK_DRC ) )
+            if( !Settings().m_legacyDrcOn || !zone->IsOnCopperLayer() || ( m_drc->Drc( zone, ii - 1 ) == OK_DRC ) )
             {
                 // Ok, we can add a new corner
                 if( m_canvas->IsMouseCaptured() )
@@ -742,10 +742,10 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
     int icorner = zone->GetNumCorners() - 1;
     if( zone->IsOnCopperLayer() )
     {
-        if( g_Drc_On && m_drc->Drc( zone, icorner - 1 ) == BAD_DRC )  // we can't validate last edge
+        if( Settings().m_legacyDrcOn && m_drc->Drc( zone, icorner - 1 ) == BAD_DRC )  // we can't validate last edge
             return false;
 
-        if( g_Drc_On && m_drc->Drc( zone, icorner ) == BAD_DRC )      // we can't validate the closing edge
+        if( Settings().m_legacyDrcOn && m_drc->Drc( zone, icorner ) == BAD_DRC )      // we can't validate the closing edge
         {
             DisplayErrorMessage( this,
                           _( "DRC error: closing this area creates a DRC error with an other area" ) );

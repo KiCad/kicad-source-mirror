@@ -72,19 +72,19 @@ void DIALOG_GENERALOPTIONS::init()
     wxString timevalue;
     timevalue << GetParent()->GetAutoSaveInterval() / 60;
     m_SaveTime->SetValue( timevalue );
-    m_MaxShowLinks->SetValue( displ_opts->m_MaxLinksShowed );
 
-    m_DrcOn->SetValue( g_Drc_On );
+    m_DrcOn->SetValue( GetParent()->Settings().m_legacyDrcOn );
     m_ShowGlobalRatsnest->SetValue( m_Board->IsElementVisible( LAYER_RATSNEST ) );
-    m_TrackAutodel->SetValue( g_AutoDeleteOldTrack );
-    m_Track_45_Only_Ctrl->SetValue( g_Track_45_Only_Allowed );
-    m_Segments_45_Only_Ctrl->SetValue( g_Segments_45_Only );
+    m_TrackAutodel->SetValue( GetParent()->Settings().m_legacyAutoDeleteOldTrack );
+    m_Track_45_Only_Ctrl->SetValue( GetParent()->Settings().m_legacyUse45DegreeTracks );
+    m_Segments_45_Only_Ctrl->SetValue( GetParent()->Settings().m_use45DegreeGraphicSegments );
     m_ZoomCenterOpt->SetValue( ! GetParent()->GetCanvas()->GetEnableZoomNoCenter() );
     m_MousewheelPANOpt->SetValue( GetParent()->GetCanvas()->GetEnableMousewheelPan() );
     m_AutoPANOpt->SetValue( GetParent()->GetCanvas()->GetEnableAutoPan() );
-    m_Track_DoubleSegm_Ctrl->SetValue( g_TwoSegmentTrackBuild );
-    m_MagneticPadOptCtrl->SetSelection( g_MagneticPadOption );
-    m_MagneticTrackOptCtrl->SetSelection( g_MagneticTrackOption );
+    m_Track_DoubleSegm_Ctrl->SetValue( GetParent()->Settings().m_legacyUseTwoSegmentTracks );
+    m_MagneticPadOptCtrl->SetSelection( GetParent()->Settings().m_magneticPads );
+    m_MagneticTrackOptCtrl->SetSelection( GetParent()->Settings().m_magneticTracks );
+    m_UseEditKeyForWidth->SetValue( GetParent()->Settings().m_editActionChangesTrackWidth );
 }
 
 
@@ -110,8 +110,7 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
     GetParent()->SetRotationAngle( wxRound( 10.0 * wxAtof( m_RotationAngle->GetValue() ) ) );
 
     /* Updating the combobox to display the active layer. */
-    displ_opts->m_MaxLinksShowed = m_MaxShowLinks->GetValue();
-    g_Drc_On = m_DrcOn->GetValue();
+    GetParent()->Settings().m_legacyDrcOn = m_DrcOn->GetValue();
 
     if( m_Board->IsElementVisible( LAYER_RATSNEST ) != m_ShowGlobalRatsnest->GetValue() )
     {
@@ -120,17 +119,18 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
         GetParent()->OnModify();
     }
 
-    g_AutoDeleteOldTrack   = m_TrackAutodel->GetValue();
-    g_Segments_45_Only = m_Segments_45_Only_Ctrl->GetValue();
-    g_Track_45_Only_Allowed    = m_Track_45_Only_Ctrl->GetValue();
+    GetParent()->Settings().m_legacyAutoDeleteOldTrack   = m_TrackAutodel->GetValue();
+    GetParent()->Settings().m_use45DegreeGraphicSegments = m_Segments_45_Only_Ctrl->GetValue();
+    GetParent()->Settings().m_legacyUse45DegreeTracks    = m_Track_45_Only_Ctrl->GetValue();
 
     GetParent()->GetCanvas()->SetEnableZoomNoCenter( ! m_ZoomCenterOpt->GetValue() );
     GetParent()->GetCanvas()->SetEnableMousewheelPan( m_MousewheelPANOpt->GetValue() );
     GetParent()->GetCanvas()->SetEnableAutoPan( m_AutoPANOpt->GetValue() );
 
-    g_TwoSegmentTrackBuild = m_Track_DoubleSegm_Ctrl->GetValue();
-    g_MagneticPadOption   = m_MagneticPadOptCtrl->GetSelection();
-    g_MagneticTrackOption = m_MagneticTrackOptCtrl->GetSelection();
+    GetParent()->Settings().m_legacyUseTwoSegmentTracks = m_Track_DoubleSegm_Ctrl->GetValue();
+    GetParent()->Settings().m_magneticPads   = (MAGNETIC_PAD_OPTION_VALUES) m_MagneticPadOptCtrl->GetSelection();
+    GetParent()->Settings().m_magneticTracks = (MAGNETIC_PAD_OPTION_VALUES) m_MagneticTrackOptCtrl->GetSelection();
+    GetParent()->Settings().m_editActionChangesTrackWidth = m_UseEditKeyForWidth->GetValue();
 
     EndModal( wxID_OK );
 }

@@ -324,6 +324,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
                         aSpec.rowName, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
     shrinkFont( cb, m_PointSize );
     cb->SetValue( aSpec.state );
+    cb->Enable( aSpec.changeable );
     cb->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED, &LAYER_WIDGET::OnRenderCheckBox, this );
     cb->SetToolTip( aSpec.tooltip );
     m_RenderFlexGridSizer->wxSizer::Insert( index+col, cb, 0, flags );

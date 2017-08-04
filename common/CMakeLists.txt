@@ -280,6 +280,7 @@ set( COMMON_SRCS
     searchhelpfilefullpath.cpp
     search_stack.cpp
     selcolor.cpp
+    settings.cpp
     systemdirsappend.cpp
     trigo.cpp
     utf8.cpp

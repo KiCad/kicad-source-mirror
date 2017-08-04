@@ -71,14 +71,14 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     }
 
     // Is the current segment Ok (no DRC error) ?
-    if( g_Drc_On )
+    if( Settings().m_legacyDrcOn )
     {
         if( BAD_DRC==m_drc->Drc( g_CurrentTrackSegment, GetBoard()->m_Track ) )
             // DRC error, the change layer is not made
             return false;
 
         // Handle 2 segments.
-        if( g_TwoSegmentTrackBuild && g_CurrentTrackSegment->Back() )
+        if( Settings().m_legacyUseTwoSegmentTracks && g_CurrentTrackSegment->Back() )
         {
             if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment->Back(), GetBoard()->m_Track ) )
                 return false;
@@ -151,7 +151,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
         break;
     }
 
-    if( g_Drc_On && BAD_DRC == m_drc->Drc( via, GetBoard()->m_Track ) )
+    if( Settings().m_legacyDrcOn && BAD_DRC == m_drc->Drc( via, GetBoard()->m_Track ) )
     {
         // DRC fault: the Via cannot be placed here ...
         delete via;
@@ -205,7 +205,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
 
     g_CurrentTrackList.PushBack( track );
 
-    if( g_TwoSegmentTrackBuild )
+    if( Settings().m_legacyUseTwoSegmentTracks )
     {
         // Create a second segment (we must have 2 track segments to adjust)
         g_CurrentTrackList.PushBack( (TRACK*)g_CurrentTrackSegment->Clone() );

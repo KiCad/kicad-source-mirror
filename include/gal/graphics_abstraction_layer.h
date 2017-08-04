@@ -198,11 +198,21 @@ public:
     /// @brief Force all remaining objects to be drawn.
     virtual void Flush() {};
 
+    void SetClearColor( const COLOR4D& aColor )
+    {
+        m_clearColor = aColor;
+    }
+
+    const COLOR4D& GetClearColor( ) const
+    {
+        return m_clearColor;
+    }
+
     /**
      * @brief Clear the screen.
      * @param aColor is the color used for clearing.
      */
-    virtual void ClearScreen( const COLOR4D& aColor ) {};
+    virtual void ClearScreen() {};
 
     // -----------------
     // Attribute setting
@@ -988,6 +998,7 @@ protected:
 
     COLOR4D            fillColor;              ///< The fill color
     COLOR4D            strokeColor;            ///< The color of the outlines
+    COLOR4D            m_clearColor;
 
     double             layerDepth;             ///< The actual layer depth
     VECTOR2D           depthRange;             ///< Range of the depth

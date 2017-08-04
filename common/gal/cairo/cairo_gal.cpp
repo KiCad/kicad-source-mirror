@@ -381,10 +381,10 @@ void CAIRO_GAL::Flush()
 }
 
 
-void CAIRO_GAL::ClearScreen( const COLOR4D& aColor )
+void CAIRO_GAL::ClearScreen( )
 {
-    backgroundColor = aColor;
-    cairo_set_source_rgb( currentContext, aColor.r, aColor.g, aColor.b );
+    backgroundColor = m_clearColor;
+    cairo_set_source_rgb( currentContext, backgroundColor.r, backgroundColor.g, backgroundColor.b );
     cairo_rectangle( currentContext, 0.0, 0.0, screenSize.x, screenSize.y );
     cairo_fill( currentContext );
 }
@@ -850,7 +850,7 @@ void CAIRO_GAL::ClearTarget( RENDER_TARGET aTarget )
         break;
     }
 
-    compositor->ClearBuffer();
+    compositor->ClearBuffer( COLOR4D::BLACK );
 
     // Restore the previous state
     compositor->SetBuffer( currentBuffer );
@@ -1014,8 +1014,9 @@ void CAIRO_GAL::initSurface()
 
     cairo_set_antialias( context, CAIRO_ANTIALIAS_NONE );
 
+    m_clearColor = backgroundColor;
     // Clear the screen
-    ClearScreen( backgroundColor );
+    ClearScreen( );
 
     // Compute the world <-> screen transformations
     ComputeWorldScreenMatrix();

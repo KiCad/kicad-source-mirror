@@ -27,6 +27,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <layers_id_colors_and_visibility.h>
 #include <view/view.h>
+#include <pcb_painter.h>
 
 #include <base_units.h>
 #include <common.h>
@@ -38,7 +39,7 @@ static const double midTickLengthFactor = 1.5;
 static const double majorTickLengthFactor = 2.5;
 
 
-static void drawCursorStrings( KIGFX::GAL& aGal, const VECTOR2D& aCursor,
+static void drawCursorStrings( KIGFX::VIEW* aView, const VECTOR2D& aCursor,
     const VECTOR2D& aRulerVec )
 {
     // draw the cursor labels
@@ -56,7 +57,7 @@ static void drawCursorStrings( KIGFX::GAL& aGal, const VECTOR2D& aCursor,
     }
 
     auto temp = aRulerVec;
-    DrawTextNextToCursor( aGal, aCursor, -temp, cursorStrings );
+    DrawTextNextToCursor( aView, aCursor, -temp, cursorStrings );
 }
 
 
@@ -117,13 +118,14 @@ static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace )
  * @param aLine line vector
  * @param aMinorTickLen length of minor ticks in IU
  */
-void drawTicksAlongLine( KIGFX::GAL& aGal, const VECTOR2D& aOrigin,
+void drawTicksAlongLine( KIGFX::VIEW *aView, const VECTOR2D& aOrigin,
         const VECTOR2D& aLine, double aMinorTickLen )
 {
     VECTOR2D tickLine = aLine.Rotate( -M_PI_2 );
-
+    auto gal = aView->GetGAL();
     double tickSpace;
-    TICK_FORMAT tickF = getTickFormatForScale( aGal.GetWorldScale(), tickSpace );
+    TICK_FORMAT tickF = getTickFormatForScale( gal->GetWorldScale(), tickSpace );
+    auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
 
     // number of ticks in whole ruler
     int numTicks = (int) std::ceil( aLine.EuclideanNorm() / tickSpace );
@@ -133,16 +135,16 @@ void drawTicksAlongLine( KIGFX::GAL& aGal, const VECTOR2D& aOrigin,
 
     if( aLine.Angle() > 0 )
     {
-        aGal.SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
+        gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
     }
     else
     {
-        aGal.SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
         labelAngle += M_PI;
     }
 
     // text and ticks are dimmed
-    aGal.SetStrokeColor( PreviewOverlayDefaultColor().WithAlpha( PreviewOverlayDeemphAlpha( true ) ) );
+    gal->SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ).WithAlpha( PreviewOverlayDeemphAlpha( true ) ) );
 
     const auto labelOffset = tickLine.Resize( aMinorTickLen * ( majorTickLengthFactor + 1 ) );
 
@@ -164,7 +166,7 @@ void drawTicksAlongLine( KIGFX::GAL& aGal, const VECTOR2D& aOrigin,
             length *= midTickLengthFactor;
         }
 
-        aGal.DrawLine( tickPos, tickPos + tickLine.Resize( length ) );
+        gal->DrawLine( tickPos, tickPos + tickLine.Resize( length ) );
 
         if( drawLabel )
         {
@@ -173,7 +175,7 @@ void drawTicksAlongLine( KIGFX::GAL& aGal, const VECTOR2D& aOrigin,
             // FIXME: spaces choke OpenGL lp:1668455
             label.erase( std::remove( label.begin(), label.end(), ' ' ), label.end() );
 
-            aGal.BitmapText( label, tickPos + labelOffset, labelAngle );
+            gal->BitmapText( label, tickPos + labelOffset, labelAngle );
         }
     }
 }
@@ -230,6 +232,7 @@ void RULER_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     auto& gal = *aView->GetGAL();
+    auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
 
     const auto origin = m_geomMgr.GetOrigin();
     const auto end = m_geomMgr.GetEnd();
@@ -237,7 +240,7 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     gal.SetLineWidth( 1.0 );
     gal.SetIsStroke( true );
     gal.SetIsFill( false );
-    gal.SetStrokeColor( PreviewOverlayDefaultColor() );
+    gal.SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
 
     gal.ResetTextAttributes();
 
@@ -249,7 +252,7 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     // constant text size on screen
     SetConstantGlyphHeight( gal, 12.0 );
 
-    drawCursorStrings( gal, end, rulerVec );
+    drawCursorStrings( aView, end, rulerVec );
 
     // tick label size
     SetConstantGlyphHeight( gal, 10.0 );
@@ -257,9 +260,9 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     // basic tick size
     const double minorTickLen = 5.0 / gal.GetWorldScale();
 
-    drawTicksAlongLine( gal, origin, rulerVec, minorTickLen );
+    drawTicksAlongLine( aView, origin, rulerVec, minorTickLen );
 
-    gal.SetStrokeColor( PreviewOverlayDefaultColor().WithAlpha( PreviewOverlayDeemphAlpha( true ) ) );
+    gal.SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ).WithAlpha( PreviewOverlayDeemphAlpha( true ) ) );
     drawBacksideTicks( gal, origin, rulerVec, minorTickLen * majorTickLengthFactor, 2 );
 
     // draw the back of the origin "crosshair"

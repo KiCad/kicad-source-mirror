@@ -31,7 +31,6 @@
 #include <gestfich.h>
 #include <wildcards_and_files_ext.h>
 #include <bitmap_io.h>
-#include <colors_selection.h>
 #include <build_version.h>
 #include <menus_helpers.h>
 #include <kiway.h>

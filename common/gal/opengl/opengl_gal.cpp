@@ -1145,11 +1145,11 @@ void OPENGL_GAL::Flush()
 }
 
 
-void OPENGL_GAL::ClearScreen( const COLOR4D& aColor )
+void OPENGL_GAL::ClearScreen( )
 {
     // Clear screen
     compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
-    glClearColor( aColor.r, aColor.g, aColor.b, aColor.a );
+    glClearColor( m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
 }
 
@@ -1312,7 +1312,11 @@ void OPENGL_GAL::ClearTarget( RENDER_TARGET aTarget )
         break;
     }
 
-    compositor->ClearBuffer();
+
+    if( aTarget != TARGET_OVERLAY )
+        compositor->ClearBuffer( m_clearColor );
+    else
+        compositor->ClearBuffer( COLOR4D::BLACK );
 
     // Restore the previous state
     compositor->SetBuffer( oldTarget );
@@ -1675,6 +1679,7 @@ void OPENGL_GAL::blitCursor()
     const COLOR4D color( cColor.r * cColor.a, cColor.g * cColor.a,
                          cColor.b * cColor.a, 1.0 );
 
+    glActiveTexture( GL_TEXTURE0 );
     glDisable( GL_TEXTURE_2D );
     glLineWidth( 1.0 );
     glColor4d( color.r, color.g, color.b, color.a );

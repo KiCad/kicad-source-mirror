@@ -343,7 +343,7 @@ void PCB_EDIT_FRAME::End_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
 {
     DRAWSEGMENT* Segment = (DRAWSEGMENT*) aPanel->GetScreen()->GetCurItem();
-
+    auto frame = (PCB_EDIT_FRAME*) ( aPanel->GetParent() );
     if( Segment == NULL )
         return;
 
@@ -355,7 +355,7 @@ static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     if( aErase )
         Segment->Draw( aPanel, aDC, GR_XOR );
 
-    if( g_Segments_45_Only && Segment->GetShape() == S_SEGMENT )
+    if( frame->Settings().m_use45DegreeGraphicSegments && Segment->GetShape() == S_SEGMENT )
     {
         wxPoint pt;
 

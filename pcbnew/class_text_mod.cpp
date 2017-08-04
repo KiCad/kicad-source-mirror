@@ -35,10 +35,9 @@
 #include <class_drawpanel.h>
 #include <drawtxt.h>
 #include <kicad_string.h>
-#include <colors_selection.h>
 #include <richio.h>
 #include <macros.h>
-#include <wxBasePcbFrame.h>
+#include <wxPcbStruct.h>
 #include <msgpanel.h>
 #include <base_units.h>
 #include <bitmaps.h>
@@ -234,7 +233,10 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMod
     wxASSERT( m_Parent );
 
     BOARD* brd = GetBoard( );
-    COLOR4D color = brd->GetLayerColor( GetLayer() );
+
+    auto frame = static_cast<PCB_BASE_FRAME*> ( aPanel->GetParent() );
+    auto color = frame->Settings().Colors().GetLayerColor( GetLayer() );
+
     PCB_LAYER_ID text_layer = GetLayer();
 
     if( !brd->IsLayerVisible( m_Layer )
@@ -249,7 +251,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMod
         if( !brd->IsElementVisible( LAYER_MOD_TEXT_INVISIBLE ) )
             return;
 
-        color = brd->GetVisibleElementColor( LAYER_MOD_TEXT_INVISIBLE );
+        color = frame->Settings().Colors().GetItemColor( LAYER_MOD_TEXT_INVISIBLE );
     }
 
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)aPanel->GetDisplayOptions();
@@ -275,7 +277,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMod
     // Draw the text anchor point
     if( brd->IsElementVisible( LAYER_ANCHOR ) )
     {
-        COLOR4D anchor_color = brd->GetVisibleElementColor( LAYER_ANCHOR );
+        COLOR4D anchor_color = frame->Settings().Colors().GetItemColor( LAYER_ANCHOR );
         GRDrawAnchor( aPanel->GetClipBox(), aDC, pos.x, pos.y, DIM_ANCRE_TEXTE, anchor_color );
     }
 

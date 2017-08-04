@@ -161,7 +161,73 @@ class RN_NET::TRIANGULATOR_STATE
 {
 private:
     std::vector<CN_ANCHOR_PTR>  m_allNodes;
-    std::vector<hed::NODE_PTR>  m_triangulationNodes;
+    std::vector<VECTOR2I>  m_prevNodes;
+    std::vector<std::pair<int, int> > m_prevEdges;
+
+    const std::list<hed::EDGE_PTR>& hedTriangulation( std::vector<hed::NODE_PTR>& aNodes )
+    {
+        hed::TRIANGULATION triangulator;
+        triangulator.CreateDelaunay( aNodes.begin(), aNodes.end() );
+        std::list<hed::EDGE_PTR> edges;
+        triangulator.GetEdges( edges );
+
+        return edges;
+    }
+
+
+    const std::list<hed::EDGE_PTR>& computeTriangulation( std::vector<hed::NODE_PTR>& aNodes )
+    {
+        #if 0
+        bool refresh = false;
+        // we assume aNodes are sorted
+        VECTOR2I prevDelta;
+
+        if ( aNodes.size() == m_prevNodes.size() )
+        {
+            for ( int i = 0; i < aNodes.size(); i++ )
+            {
+                const auto& a = aNodes[i];
+                const auto& b = m_prevNodes[i];
+
+                const auto delta = a->Pos() - b;
+
+                if ( i > 0 && delta != prevDelta )
+                {
+                    refresh = true;
+                    break;
+                }
+
+                prevDelta = delta;
+            }
+        }
+
+        if( refresh )
+        {
+            m_prevNodes.resize( aNodes.size() );
+
+            for ( int i = 0; i < aNodes.size(); i++ )
+            {
+                m_prevNodes[i] = aNodes[i]->Pos();
+            }
+
+            printf("need triang refresh\n");
+            auto edges = hedTriangulation( aNodes );
+
+            m_prevEdges.resize( edges.size() );
+
+            int i = 0;
+            for ( auto e : edges )
+            {
+                m_prevEdges[i].first = e->GetSourceNode()->Id();
+                m_prevEdges[i].second = e->GetTargetNode()->Id();
+            }
+
+        }
+
+
+        #endif
+        return hedTriangulation( aNodes );
+    }
 
 public:
 
@@ -249,6 +315,7 @@ public:
         {
             hed::TRIANGULATION triangulator;
             triangulator.CreateDelaunay( triNodes.begin(), triNodes.end() );
+//            std::list<hed::EDGE_PTR> edges;
             triangulator.GetEdges( triangEdges );
 
             for( auto e : triangEdges )

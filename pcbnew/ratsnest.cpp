@@ -31,7 +31,6 @@
 #include <gr_basic.h>
 #include <common.h>
 #include <class_drawpanel.h>
-#include <colors_selection.h>
 #include <wxBasePcbFrame.h>
 #include <macros.h>
 
@@ -97,7 +96,7 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
 
     auto connectivity = m_Pcb->GetConnectivity();
 
-    COLOR4D color = g_ColorsSettings.GetItemColor( LAYER_RATSNEST );
+    COLOR4D color = Settings().Colors().GetItemColor( LAYER_RATSNEST );
 
     for( int i = 1; i < connectivity->GetNetCount(); ++i )
     {
@@ -133,7 +132,7 @@ void PCB_BASE_FRAME::TraceModuleRatsNest( wxDC* DC )
     if( DC == NULL )
         return;
 
-    COLOR4D tmpcolor = g_ColorsSettings.GetItemColor( LAYER_RATSNEST );
+    COLOR4D tmpcolor = Settings().Colors().GetItemColor( LAYER_RATSNEST );
 
     for( const auto& l : GetBoard()->GetConnectivity()->GetDynamicRatsnest() )
     {

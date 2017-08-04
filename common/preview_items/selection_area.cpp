@@ -26,23 +26,44 @@
 
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view.h>
+#include <pcb_painter.h>
 
 using namespace KIGFX::PREVIEW;
 
-// Selection area colours
-const COLOR4D SELECT_MODE_NORMAL( 0.3, 0.3, 0.7, 0.3 ); // Slight blue
-const COLOR4D SELECT_MODE_ADDITIVE( 0.3, 0.7, 0.3, 0.3 ); // Slight green
-const COLOR4D SELECT_MODE_SUBTRACT( 0.7, 0.3, 0.3, 0.3 ); // Slight red
+struct SELECTION_COLORS
+{
+    COLOR4D normal;
+    COLOR4D additive;
+    COLOR4D subtract;
+    COLOR4D outline_l2r;
+    COLOR4D outline_r2l;
+};
 
-const COLOR4D SELECT_OUTLINE_L2R( 1.0, 1.0, 0.4, 1.0 );
-const COLOR4D SELECT_OUTLINE_R2L( 0.4, 0.4, 1.0, 1.0 );
+static const SELECTION_COLORS selectionColorScheme[2] = {
+    { // dark background
+        COLOR4D( 0.3, 0.3, 0.7, 0.3 ), // Slight blue
+        COLOR4D( 0.3, 0.7, 0.3, 0.3 ), // Slight green
+        COLOR4D( 0.7, 0.3, 0.3, 0.3 ), // Slight red
+
+        COLOR4D( 1.0, 1.0, 0.4, 1.0 ), // yellow
+        COLOR4D( 0.4, 0.4, 1.0, 1.0 ) // blue
+    },
+    { // bright background
+        COLOR4D( 0.5, 0.3, 1.0, 0.5 ), // Slight blue
+        COLOR4D( 0.5, 1.0, 0.5, 0.5 ), // Slight green
+        COLOR4D( 1.0, 0.5, 0.5, 0.5 ), // Slight red
+
+        COLOR4D( 0.7, 0.7, 0.0, 1.0 ), // yellow
+        COLOR4D( 0.1, 0.1, 1.0, 1.0 ) // blue
+    }
+};
+
 
 SELECTION_AREA::SELECTION_AREA() :
         m_additive( false ),
         m_subtractive( false )
 {
-    SetStrokeColor( SELECT_OUTLINE_L2R );
-    SetFillColor( SELECT_MODE_NORMAL );
+
 }
 
 
@@ -74,26 +95,33 @@ const BOX2I SELECTION_AREA::ViewBBox() const
     return tmp;
 }
 
-
-void SELECTION_AREA::drawPreviewShape( KIGFX::GAL& aGal ) const
+void SELECTION_AREA::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
+    auto& gal = *aView->GetGAL();
+
+    auto rs = static_cast<PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
+
+    const auto& scheme =  rs->IsBackgroundDark() ? selectionColorScheme[0] : selectionColorScheme[1];
+
     // Set the fill of the selection rectangle
     // based on the selection mode
     if( m_additive )
     {
-        aGal.SetFillColor( SELECT_MODE_ADDITIVE );
+        gal.SetFillColor( scheme.additive  );
     }
     else if( m_subtractive )
     {
-        aGal.SetFillColor( SELECT_MODE_SUBTRACT );
+        gal.SetFillColor( scheme.subtract );
     }
     else
     {
-        aGal.SetFillColor( SELECT_MODE_NORMAL );
+        gal.SetFillColor( scheme.normal );
     }
 
-    // Set the stroke color to indicate window or crossing selection
-    aGal.SetStrokeColor( ( m_origin.x <= m_end.x ) ? SELECT_OUTLINE_L2R : SELECT_OUTLINE_R2L );
+    gal.SetIsStroke( true );
+    gal.SetIsFill( true );
 
-    aGal.DrawRectangle( m_origin, m_end );
+    // Set the stroke color to indicate window or crossing selection
+    gal.SetStrokeColor( ( m_origin.x <= m_end.x ) ? scheme.outline_l2r : scheme.outline_r2l );
+    gal.DrawRectangle( m_origin, m_end );
 }

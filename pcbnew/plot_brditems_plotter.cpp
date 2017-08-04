@@ -56,7 +56,7 @@
 
 COLOR4D BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer )
 {
-    COLOR4D color = m_board->GetLayerColor( ToLAYER_ID( aLayer ) );
+    COLOR4D color = m_board->Colors().GetLayerColor( ToLAYER_ID( aLayer ) );
     if( color == COLOR4D::WHITE )
         color = COLOR4D( LIGHTGRAY );
     return color;
@@ -339,9 +339,11 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION* aDim )
     draw.SetWidth( aDim->GetWidth() );
     draw.SetLayer( aDim->GetLayer() );
 
-    COLOR4D color = getColor( aDim->GetLayer() );
+    COLOR4D color = m_board->Colors().GetLayerColor( aDim->GetLayer() );
 
-    m_plotter->SetColor( color );
+    // Set plot color (change WHITE to LIGHTGRAY because
+    // the white items are not seen on a white paper or screen
+    m_plotter->SetColor( color != WHITE ? color : LIGHTGRAY);
 
     PlotTextePcb( &aDim->Text() );
 

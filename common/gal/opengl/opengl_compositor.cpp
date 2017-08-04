@@ -31,6 +31,8 @@
 #include <gal/opengl/opengl_compositor.h>
 #include <gal/opengl/utils.h>
 
+#include <gal/color4d.h>
+
 #include <stdexcept>
 #include <cassert>
 
@@ -245,7 +247,7 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2U aDimensions )
         return 0;
     }
 
-    ClearBuffer();
+    ClearBuffer( COLOR4D::BLACK );
 
     // Return to direct rendering (we were asked only to create a buffer, not switch to one)
     bindFb( DIRECT_RENDERING );
@@ -290,11 +292,11 @@ void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
 }
 
 
-void OPENGL_COMPOSITOR::ClearBuffer()
+void OPENGL_COMPOSITOR::ClearBuffer( const COLOR4D& aColor )
 {
     assert( m_initialized );
 
-    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+    glClearColor( aColor.r, aColor.g, aColor.b, 0.0f );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
 }
 

@@ -40,6 +40,9 @@
 #include <class_gbr_screen.h>
 #include <class_page_info.h>
 #include <class_gbr_display_options.h>
+#include <class_colors_design_settings.h>
+
+extern COLORS_DESIGN_SETTINGS g_ColorsSettings;
 
 #define NO_AVAILABLE_LAYERS UNDEFINED_LAYER
 
@@ -335,7 +338,7 @@ public:
      * Function GetVisibleElementColor
      * returns the color of a gerber visible element.
      */
-    COLOR4D GetVisibleElementColor( GERBVIEW_LAYER_ID aItemIdVisible ) const;
+    COLOR4D GetVisibleElementColor( GERBVIEW_LAYER_ID aItemIdVisible );
 
     void    SetVisibleElementColor( GERBVIEW_LAYER_ID aItemIdVisible, COLOR4D aColor );
 
@@ -357,7 +360,7 @@ public:
      * This is usually the background color, but can be an other color
      * in order to see negative objects
      */
-    COLOR4D GetNegativeItemsColor() const;
+    COLOR4D GetNegativeItemsColor();
 
     /**
      * Function DisplayLinesSolidMode

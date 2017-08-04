@@ -34,6 +34,8 @@
 namespace KIGFX
 {
 
+class COLOR4D;
+
 class COMPOSITOR
 {
 public:
@@ -91,7 +93,7 @@ public:
      * Function ClearBuffer()
      * clears the selected buffer (set by the SetBuffer() function).
      */
-    virtual void ClearBuffer() = 0;
+    virtual void ClearBuffer( const COLOR4D& aColor ) = 0;
 
     /**
      * Function Begin()

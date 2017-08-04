@@ -24,6 +24,7 @@
 #include <gal/opengl/antialiasing.h>
 #include <gal/opengl/opengl_compositor.h>
 #include <gal/opengl/utils.h>
+#include <gal/color4d.h>
 
 #include <tuple>
 
@@ -181,7 +182,7 @@ VECTOR2U ANTIALIASING_SUPERSAMPLING::GetInternalBufferSize()
 void ANTIALIASING_SUPERSAMPLING::Begin()
 {
     compositor->SetBuffer( ssaaMainBuffer );
-    compositor->ClearBuffer();
+    compositor->ClearBuffer( COLOR4D::BLACK );
 }
 
 
@@ -445,7 +446,7 @@ void ANTIALIASING_SMAA::DrawBuffer( GLuint buffer )
 void ANTIALIASING_SMAA::Begin()
 {
     compositor->SetBuffer( smaaBaseBuffer );
-    compositor->ClearBuffer();
+    compositor->ClearBuffer( COLOR4D::BLACK );
 }
 
 
@@ -487,7 +488,7 @@ void ANTIALIASING_SMAA::Present()
     // pass 1: main-buffer -> smaaEdgesBuffer
     //
     compositor->SetBuffer( smaaEdgesBuffer );
-    compositor->ClearBuffer();
+    compositor->ClearBuffer( COLOR4D::BLACK );
 
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, sourceTexture );                                             checkGlError( "binding colorTex" );
@@ -499,7 +500,7 @@ void ANTIALIASING_SMAA::Present()
     // pass 2: smaaEdgesBuffer -> smaaBlendBuffer
     //
     compositor->SetBuffer( smaaBlendBuffer );
-    compositor->ClearBuffer();
+    compositor->ClearBuffer( COLOR4D::BLACK );
 
     auto edgesTex = compositor->GetBufferTexture( smaaEdgesBuffer );
 
@@ -518,7 +519,7 @@ void ANTIALIASING_SMAA::Present()
     // pass 3: colorTex + BlendBuffer -> output
     //
     compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
-    compositor->ClearBuffer();
+    compositor->ClearBuffer( COLOR4D::BLACK );
     auto blendTex = compositor->GetBufferTexture( smaaBlendBuffer );
 
     glActiveTexture( GL_TEXTURE0 );

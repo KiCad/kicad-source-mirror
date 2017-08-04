@@ -33,6 +33,7 @@
 
 #include <boost/bind.hpp>
 #include <make_unique.h>
+#include <class_colors_design_settings.h>
 
 #include <wx/stattext.h>
 
@@ -258,8 +259,9 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL(
     EnableScrolling( false, false );    // otherwise Zoom Auto disables GAL canvas
 
     m_dummyBoard = std::make_unique<BOARD>();
+    m_colorsSettings = std::make_unique<COLORS_DESIGN_SETTINGS>();
 
-    UseColorScheme( m_dummyBoard->GetColorsSettings() );
+    UseColorScheme( m_colorsSettings.get() );
     SyncLayersVisibility( &*m_dummyBoard );
 
     Raise();

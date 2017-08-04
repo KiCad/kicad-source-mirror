@@ -52,7 +52,7 @@ protected:
 public:
     ~FOOTPRINT_VIEWER_FRAME();
 
-    virtual COLOR4D GetGridColor() const override;
+    virtual COLOR4D GetGridColor() override;
 
     /**
      * Function ReCreateLibraryList

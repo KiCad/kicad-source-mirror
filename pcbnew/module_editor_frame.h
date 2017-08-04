@@ -459,7 +459,7 @@ public:
      * Function GetGridColor() , virtual
      * @return the color of the grid
      */
-    virtual COLOR4D GetGridColor() const override;
+    virtual COLOR4D GetGridColor() override;
 
     ///> @copydoc PCB_BASE_FRAME::SetActiveLayer()
     void SetActiveLayer( PCB_LAYER_ID aLayer ) override;

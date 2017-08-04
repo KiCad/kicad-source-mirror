@@ -522,12 +522,49 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     // Tracks & vias are treated in a special way:
     if( ( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) )( selection ) )
     {
-        DIALOG_TRACK_VIA_PROPERTIES dlg( editFrame, selection );
-
-        if( dlg.ShowModal() )
+        if ( selection.Size() == 1 && editFrame->Settings().m_editActionChangesTrackWidth )
         {
-            dlg.Apply( *m_commit );
-            m_commit->Push( _( "Edit track/via properties" ) );
+            auto item = static_cast<BOARD_ITEM *>( selection[0] );
+
+            m_commit->Modify( item );
+
+            if( auto via = dyn_cast<VIA*>( item ) )
+            {
+                int new_width, new_drill;
+
+                if( via->GetViaType() == VIA_MICROVIA )
+                {
+                    auto net = via->GetNet();
+
+                    new_width = net->GetMicroViaSize();
+                    new_drill = net->GetMicroViaDrillSize();
+                }
+                else
+                {
+                    new_width = board()->GetDesignSettings().GetCurrentViaSize();
+                    new_drill = board()->GetDesignSettings().GetCurrentViaDrill();
+                }
+
+                via->SetDrill( new_drill );
+                via->SetWidth( new_width );
+            }
+            else if ( auto track = dyn_cast<TRACK*>( item ) )
+            {
+                int new_width = board()->GetDesignSettings().GetCurrentTrackWidth();
+                track->SetWidth( new_width );
+            }
+
+            m_commit->Push( _("Edit track width/via size") );
+        }
+        else
+        {
+            DIALOG_TRACK_VIA_PROPERTIES dlg( editFrame, selection );
+
+            if( dlg.ShowModal() )
+            {
+                dlg.Apply( *m_commit );
+                m_commit->Push( _( "Edit track/via properties" ) );
+            }
         }
     }
     else if( selection.Size() == 1 ) // Properties are displayed when there is only one item selected

@@ -61,7 +61,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
             // delete the most recently entered
             delete g_CurrentTrackList.PopBack();
 
-            if( g_TwoSegmentTrackBuild )
+            if( Settings().m_legacyUseTwoSegmentTracks )
             {
                 // if in 2 track mode, and the next most recent is a segment
                 // not a via, and the one previous to that is a via, then
@@ -88,7 +88,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
 
             UpdateStatusBar();
 
-            if( g_TwoSegmentTrackBuild )   // We must have 2 segments or more, or 0
+            if( Settings().m_legacyUseTwoSegmentTracks )   // We must have 2 segments or more, or 0
             {
                 if( g_CurrentTrackList.GetCount() == 1
                     && g_CurrentTrackSegment->Type() != PCB_VIA_T )

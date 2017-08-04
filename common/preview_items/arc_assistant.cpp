@@ -26,6 +26,7 @@
 #include <preview_items/preview_utils.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view.h>
+#include <pcb_painter.h>
 
 #include <common.h>
 #include <base_units.h>
@@ -88,40 +89,47 @@ double angleIsSpecial( double aRadians )
 }
 
 
-static void drawLineWithHilight( KIGFX::GAL& aGal,
+static void drawLineWithHilight( KIGFX::VIEW *aView,
         const VECTOR2I& aStart, const VECTOR2I& aEnd, bool aDim )
 {
+    auto gal = aView->GetGAL();
+    auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
+
     const auto vec = aEnd - aStart;
-    COLOR4D strokeColor = PreviewOverlayDefaultColor();
+    COLOR4D strokeColor = rs->GetLayerColor( LAYER_AUX_ITEMS );
 
     if( angleIsSpecial( vec.Angle() ) )
-        strokeColor = PreviewOverlaySpecialAngleColor();
+        strokeColor = rs->IsBackgroundDark() ? COLOR4D( 0.5, 1.0, 0.5, 1.0 ) : COLOR4D( 0.0, 0.7, 0.0, 1.0 ) ;
 
-    aGal.SetStrokeColor( strokeColor.WithAlpha( PreviewOverlayDeemphAlpha( aDim ) ) );
-    aGal.DrawLine( aStart, aEnd );
+    gal->SetStrokeColor( strokeColor.WithAlpha( PreviewOverlayDeemphAlpha( aDim ) ) );
+    gal->DrawLine( aStart, aEnd );
 }
 
 
-static void drawArcWithHilight( KIGFX::GAL& aGal,
+static void drawArcWithHilight( KIGFX::VIEW *aView,
         const VECTOR2I& aOrigin, double aRad, double aStartAngle,
         double aEndAngle )
 {
-    COLOR4D color = PreviewOverlayDefaultColor();
+    auto gal = aView->GetGAL();
+    auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
+
+    auto color = rs->GetLayerColor( LAYER_AUX_ITEMS );
 
     if( angleIsSpecial( aStartAngle - aEndAngle ) )
-        color = PreviewOverlaySpecialAngleColor();
+        color = rs->IsBackgroundDark() ? COLOR4D( 0.5, 1.0, 0.5, 1.0 ) : COLOR4D( 0.0, 0.7, 0.0, 1.0 ) ;
 
-    aGal.SetStrokeColor( color );
-    aGal.SetFillColor( color.WithAlpha( 0.2 ) );
+    gal->SetStrokeColor( color );
+    gal->SetFillColor( color.WithAlpha( 0.2 ) );
 
     // draw the angle reference arc
-    aGal.DrawArc( aOrigin, aRad, -aStartAngle, -aEndAngle );
+    gal->DrawArc( aOrigin, aRad, -aStartAngle, -aEndAngle );
 }
 
 
 void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     auto& gal = *aView->GetGAL();
+    auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
 
     // not in a position to draw anything
     if( m_constructMan.IsReset() )
@@ -144,7 +152,7 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     // draw first radius line
     bool dimFirstLine = m_constructMan.GetStep() > ARC_GEOM_MANAGER::SET_START;
 
-    drawLineWithHilight( gal, origin, m_constructMan.GetStartRadiusEnd(), dimFirstLine );
+    drawLineWithHilight( aView, origin, m_constructMan.GetStartRadiusEnd(), dimFirstLine );
 
     std::vector<wxString> cursorStrings;
 
@@ -156,11 +164,11 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
         const auto angleRefLineEnd = m_constructMan.GetOrigin() + VECTOR2D( innerRad * 1.5, 0.0 );
 
-        gal.SetStrokeColor( PreviewOverlayDefaultColor() );
+        gal.SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
         gal.DrawLine( origin, angleRefLineEnd );
 
         // draw the angle reference arc
-        drawArcWithHilight( gal, origin, innerRad, initAngle, 0.0 );
+        drawArcWithHilight( aView, origin, innerRad, initAngle, 0.0 );
 
         double degs = getNormDeciDegFromRad( initAngle );
 
@@ -169,18 +177,18 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     }
     else
     {
-        drawLineWithHilight( gal, origin, m_constructMan.GetEndRadiusEnd(), false );
+        drawLineWithHilight( aView, origin, m_constructMan.GetEndRadiusEnd(), false );
 
         auto    start = m_constructMan.GetStartAngle();
         auto    subtended = m_constructMan.GetSubtended();
 
-        drawArcWithHilight( gal, origin, innerRad, start, start + subtended );
+        drawArcWithHilight( aView, origin, innerRad, start, start + subtended );
 
         double  subtendedDeg    = getNormDeciDegFromRad( subtended );
         double  endAngleDeg     = getNormDeciDegFromRad( start + subtended );
 
         // draw dimmed extender line to cursor
-        drawLineWithHilight( gal, origin, m_constructMan.GetLastPoint(), true );
+        drawLineWithHilight( aView, origin, m_constructMan.GetLastPoint(), true );
 
         cursorStrings.push_back( DimensionLabel( "Δθ", subtendedDeg, DEGREES ) );
         cursorStrings.push_back( DimensionLabel( "θ", endAngleDeg, DEGREES ) );
@@ -194,7 +202,7 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     }
 
     // place the text next to cursor, on opposite side from radius
-    DrawTextNextToCursor( gal, m_constructMan.GetLastPoint(),
+    DrawTextNextToCursor( aView, m_constructMan.GetLastPoint(),
             origin - m_constructMan.GetLastPoint(),
             cursorStrings );
 }

@@ -69,7 +69,7 @@ public:
      * or direct access to the VIEW, you probably should make a new
      * class.
      */
-    void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final;
+    void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
 
 
 #if defined(DEBUG)
@@ -123,7 +123,7 @@ private:
      * Subclasses should implement this in terms of their own graphical
      * data.
      */
-    virtual void drawPreviewShape( KIGFX::GAL& aGal ) const = 0;
+    virtual void drawPreviewShape( KIGFX::VIEW* aView ) const { };
 
 
     COLOR4D m_fillColor;

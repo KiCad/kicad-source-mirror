@@ -119,7 +119,7 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
     {
         int diagdrc = OK_DRC;
 
-        if( g_Drc_On )
+        if( Settings().m_legacyDrcOn )
             diagdrc = m_drc->Drc( aTrackItem, GetBoard()->m_Track );
 
         if( diagdrc == OK_DRC )

@@ -35,11 +35,10 @@
 #include <drawtxt.h>
 #include <kicad_string.h>
 #include <trigo.h>
-#include <colors_selection.h>
 #include <richio.h>
 #include <class_drawpanel.h>
 #include <macros.h>
-#include <wxBasePcbFrame.h>
+#include <wxPcbStruct.h>
 #include <msgpanel.h>
 #include <base_units.h>
 #include <bitmaps.h>
@@ -75,7 +74,8 @@ void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     if( brd->IsLayerVisible( m_Layer ) == false )
         return;
 
-    COLOR4D color = brd->GetLayerColor( m_Layer );
+    auto frame = static_cast<PCB_EDIT_FRAME*> ( panel->GetParent() );
+    auto color = frame->Settings().Colors().GetLayerColor( m_Layer );
 
     EDA_DRAW_MODE_T fillmode = FILLED;
     DISPLAY_OPTIONS* displ_opts =
@@ -96,7 +96,7 @@ void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     COLOR4D anchor_color = COLOR4D::UNSPECIFIED;
 
     if( brd->IsElementVisible( LAYER_ANCHOR ) )
-        anchor_color = brd->GetVisibleElementColor( LAYER_ANCHOR );
+        anchor_color = frame->Settings().Colors().GetItemColor( LAYER_ANCHOR );
 
     EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
     EDA_TEXT::Draw( clipbox, DC, offset, color,

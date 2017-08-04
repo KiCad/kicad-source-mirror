@@ -32,7 +32,6 @@
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <class_board_design_settings.h>
-#include <colors_selection.h>
 #include <layers_id_colors_and_visibility.h>
 
 #include <class_board.h>
@@ -149,10 +148,8 @@ LSET PCB_LAYER_BOX_SELECTOR::getEnabledLayers() const
 COLOR4D PCB_LAYER_BOX_SELECTOR::GetLayerColor( LAYER_NUM aLayer ) const
 {
     wxASSERT( m_boardFrame );
-    BOARD* board = m_boardFrame->GetBoard();
-    wxASSERT( board );
 
-    return board->GetLayerColor( ToLAYER_ID( aLayer ) );
+    return m_boardFrame->Settings().Colors().GetLayerColor( ToLAYER_ID( aLayer ) );
 }
 
 
@@ -165,4 +162,3 @@ wxString PCB_LAYER_BOX_SELECTOR::GetLayerName( LAYER_NUM aLayer ) const
 
     return board->GetLayerName( ToLAYER_ID( aLayer ) );
 }
-

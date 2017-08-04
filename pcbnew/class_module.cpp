@@ -38,13 +38,13 @@
 #include <confirm.h>
 #include <kicad_string.h>
 #include <pcbnew.h>
-#include <colors_selection.h>
 #include <richio.h>
 #include <filter_reader.h>
 #include <macros.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
 
+#include <wxPcbStruct.h>
 #include <class_board.h>
 #include <class_edge_mod.h>
 #include <class_module.h>
@@ -237,13 +237,15 @@ void MODULE::ClearAllNets()
 void MODULE::DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
                         int dim_ancre, GR_DRAWMODE draw_mode )
 {
+    auto frame = (PCB_EDIT_FRAME*) panel->GetParent();
+
     GRSetDrawMode( DC, draw_mode );
 
     if( GetBoard()->IsElementVisible( LAYER_ANCHOR ) )
     {
         GRDrawAnchor( panel->GetClipBox(), DC, m_Pos.x, m_Pos.y,
                       dim_ancre,
-                      g_ColorsSettings.GetItemColor( LAYER_ANCHOR ) );
+                      frame->Settings().Colors().GetItemColor( LAYER_ANCHOR ) );
     }
 }
 

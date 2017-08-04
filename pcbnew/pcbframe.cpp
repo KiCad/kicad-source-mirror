@@ -50,7 +50,7 @@
 #include <dialog_design_rules.h>
 #include <class_pcb_layer_widget.h>
 #include <hotkeys.h>
-#include <pcbnew_config.h>
+#include <config_params.h>
 #include <module_editor_frame.h>
 #include <dialog_helpers.h>
 #include <dialog_plot.h>
@@ -731,15 +731,15 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 
 void PCB_EDIT_FRAME::forceColorsToLegacy()
 {
-    COLORS_DESIGN_SETTINGS* cds = GetBoard()->GetColorsSettings();
+    COLORS_DESIGN_SETTINGS& cds = Settings().Colors();
 
-    for( unsigned i = 0; i < DIM( cds->m_LayersColors ); i++ )
+    for( unsigned i = 0; i < DIM( cds.m_LayersColors ); i++ )
     {
-        COLOR4D c = cds->GetLayerColor( i );
+        COLOR4D c = cds.GetLayerColor( i );
         c.SetToNearestLegacyColor();
         // Note the alpha chanel is not modified. Therefore the value
         // is the previous value used in GAL canvas.
-        cds->SetLayerColor( i, c );
+        cds.SetLayerColor( i, c );
     }
 }
 
@@ -794,6 +794,8 @@ void PCB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
+    m_configSettings.Load( aCfg );
+
     double dtmp;
     aCfg->Read( PlotLineWidthEntry, &dtmp, 0.1 ); // stored in mm
 
@@ -805,8 +807,6 @@ void PCB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     g_DrawDefaultLineThickness = Millimeter2iu( dtmp );
 
-    aCfg->Read( MagneticPadsEntry, &g_MagneticPadOption );
-    aCfg->Read( MagneticTracksEntry, &g_MagneticTrackOption );
     aCfg->Read( ShowMicrowaveEntry, &m_show_microwave_tools );
     aCfg->Read( ShowLayerManagerEntry, &m_show_layer_manager_tools );
     aCfg->Read( ShowPageLimitsEntry, &m_showPageLimits );
@@ -815,14 +815,14 @@ void PCB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
 void PCB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
+    m_configSettings.Save( aCfg );
+
     PCB_BASE_FRAME::SaveSettings( aCfg );
 
     wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
 
     // This value is stored in mm )
     aCfg->Write( PlotLineWidthEntry, MM_PER_IU * g_DrawDefaultLineThickness );
-    aCfg->Write( MagneticPadsEntry, (long) g_MagneticPadOption );
-    aCfg->Write( MagneticTracksEntry, (long) g_MagneticTrackOption );
     aCfg->Write( ShowMicrowaveEntry, (long) m_show_microwave_tools );
     aCfg->Write( ShowLayerManagerEntry, (long)m_show_layer_manager_tools );
     aCfg->Write( ShowPageLimitsEntry, m_showPageLimits );
@@ -841,16 +841,16 @@ void PCB_EDIT_FRAME::SetGridVisibility(bool aVisible)
 }
 
 
-COLOR4D PCB_EDIT_FRAME::GetGridColor() const
+COLOR4D PCB_EDIT_FRAME::GetGridColor()
 {
-    return GetBoard()->GetVisibleElementColor( LAYER_GRID );
+    return Settings().Colors().GetItemColor( LAYER_GRID );
 }
 
 
 void PCB_EDIT_FRAME::SetGridColor( COLOR4D aColor )
 {
 
-    GetBoard()->SetVisibleElementColor( LAYER_GRID, aColor );
+    Settings().Colors().SetItemColor( LAYER_GRID, aColor );
 
     if( IsGalCanvasActive() )
     {

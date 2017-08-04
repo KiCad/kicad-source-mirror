@@ -126,6 +126,13 @@ public:
         return m_sketchMode[aItemLayer];
     }
 
+    inline bool IsBackgroundDark() const
+    {
+        auto luma = m_layerColors[ LAYER_PCB_BACKGROUND ].GetBrightness();
+
+        return luma < 0.5;
+    }
+
 protected:
     ///> Flag determining if items on a given layer should be drawn as an outline or a filled item
     bool    m_sketchMode[GAL_LAYER_ID_END];

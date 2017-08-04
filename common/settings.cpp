@@ -1,8 +1,7 @@
 /*
- * This program source code file is part of KiCad, a free EDA CAD application.
+ * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2010-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2017 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,13 +21,30 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/* colors_selection.h */
+#include <core/settings.h>
 
-#ifndef _COLORS_SELECTION_H_
-#define _COLORS_SELECTION_H_
+void SETTINGS::Load( wxConfigBase *aConfig )
+{
+    for( const PARAM_CFG_BASE& param : m_params )
+    {
+        if( !!param.m_Group )
+            aConfig->SetPath( param.m_Group );
+        else
+            aConfig->SetPath( wxT("") );
 
-#include <class_colors_design_settings.h>
-// Colors for layers and items
-extern COLORS_DESIGN_SETTINGS g_ColorsSettings;
+        param.ReadParam( aConfig );
+    }
+}
 
-#endif      //  _COLORS_SELECTION_H_
+void SETTINGS::Save( wxConfigBase *aConfig )
+{
+    for( PARAM_CFG_BASE& param : m_params )
+    {
+        if( !!param.m_Group )
+            aConfig->SetPath( param.m_Group );
+        else
+            aConfig->SetPath( wxT("") );
+
+        param.SaveParam( aConfig );
+    }
+}

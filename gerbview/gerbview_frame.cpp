@@ -34,7 +34,6 @@
 #include <build_version.h>
 #include <trigo.h>
 #include <base_units.h>
-#include <colors_selection.h>
 #include <class_gbr_layer_box_selector.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
@@ -607,7 +606,7 @@ bool GERBVIEW_FRAME::IsLayerVisible( int aLayer ) const
 }
 
 
-COLOR4D GERBVIEW_FRAME::GetVisibleElementColor( GERBVIEW_LAYER_ID aItemIdVisible ) const
+COLOR4D GERBVIEW_FRAME::GetVisibleElementColor( GERBVIEW_LAYER_ID aItemIdVisible )
 {
     COLOR4D color = COLOR4D::UNSPECIFIED;
 
@@ -659,7 +658,7 @@ void GERBVIEW_FRAME::SetVisibleElementColor( GERBVIEW_LAYER_ID aItemIdVisible,
     }
 }
 
-COLOR4D GERBVIEW_FRAME::GetNegativeItemsColor() const
+COLOR4D GERBVIEW_FRAME::GetNegativeItemsColor()
 {
     if( IsElementVisible( LAYER_NEGATIVE_OBJECTS ) )
         return GetVisibleElementColor( LAYER_NEGATIVE_OBJECTS );

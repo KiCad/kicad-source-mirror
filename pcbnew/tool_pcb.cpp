@@ -34,7 +34,6 @@
 #include <help_common_strings.h>
 #include <dialog_helpers.h>
 #include <class_layer_box_selector.h>
-#include <colors_selection.h>
 #include <wxPcbStruct.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
@@ -102,7 +101,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
                    previous_Route_Layer_BOTTOM_color, previous_via_color;
 
     /* get colors, and redraw bitmap button only on changes */
-    active_layer_color = GetBoard()->GetLayerColor(GetActiveLayer());
+    active_layer_color = Settings().Colors().GetLayerColor(GetActiveLayer());
 
     if( previous_active_layer_color != active_layer_color )
     {
@@ -111,7 +110,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     }
 
     Route_Layer_TOP_color =
-        g_ColorsSettings.GetLayerColor( GetScreen()->m_Route_Layer_TOP );
+        Settings().Colors().GetLayerColor( GetScreen()->m_Route_Layer_TOP );
 
     if( previous_Route_Layer_TOP_color != Route_Layer_TOP_color )
     {
@@ -120,7 +119,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     }
 
     Route_Layer_BOTTOM_color =
-        g_ColorsSettings.GetLayerColor( GetScreen()->m_Route_Layer_BOTTOM );
+        Settings().Colors().GetLayerColor( GetScreen()->m_Route_Layer_BOTTOM );
 
     if( previous_Route_Layer_BOTTOM_color != Route_Layer_BOTTOM_color )
     {
@@ -129,7 +128,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     }
 
     int via_type = GetDesignSettings().m_CurrentViaType;
-    via_color = GetBoard()->GetVisibleElementColor( LAYER_VIAS + via_type );
+    via_color = Settings().Colors().GetItemColor( LAYER_VIAS + via_type );
 
     if( previous_via_color != via_color )
     {
@@ -736,11 +735,11 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     switch( id )
     {
     case ID_TB_OPTIONS_DRC_OFF:
-        g_Drc_On = !state;
+        Settings().m_legacyDrcOn = !state;
 
         if( GetToolId() == ID_TRACK_BUTT )
         {
-            if( g_Drc_On )
+            if( Settings().m_legacyDrcOn )
                 m_canvas->SetCursor( wxCURSOR_PENCIL );
             else
                 m_canvas->SetCursor( wxCURSOR_QUESTION_ARROW );
@@ -756,7 +755,7 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     case ID_TB_OPTIONS_AUTO_DEL_TRACK:
-        g_AutoDeleteOldTrack = state;
+        Settings().m_legacyAutoDeleteOldTrack = state;
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES:

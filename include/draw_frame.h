@@ -445,7 +445,7 @@ public:
      * Function GetGridColor() , virtual
      * @return the color of the grid
      */
-    virtual COLOR4D GetGridColor() const
+    virtual COLOR4D GetGridColor()
     {
         return m_gridColor;
     }

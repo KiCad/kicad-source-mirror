@@ -27,6 +27,7 @@
 
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view.h>
+#include <pcb_painter.h>
 
 using namespace KIGFX::PREVIEW;
 
@@ -59,14 +60,17 @@ void POLYGON_ITEM::SetPoints( const std::vector<VECTOR2I>& aLockedPts,
 }
 
 
-void POLYGON_ITEM::drawPreviewShape( KIGFX::GAL& aGal ) const
+void POLYGON_ITEM::drawPreviewShape( KIGFX::VIEW* aView ) const
 {
-    aGal.DrawPolyline( m_lockedChain );
-    aGal.DrawPolygon( m_polyfill );
+    auto& gal = *aView->GetGAL();
+    auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
+
+    gal.DrawPolyline( m_lockedChain );
+    gal.DrawPolygon( m_polyfill );
 
     // draw the leader line in a different color
-    aGal.SetStrokeColor( PreviewOverlayDefaultColor() );
-    aGal.DrawPolyline( m_leaderChain );
+    gal.SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
+    gal.DrawPolyline( m_leaderChain );
 }
 
 

@@ -30,7 +30,6 @@
  */
 
 #include <common.h>
-#include <colors_selection.h>
 #include <gerbview_frame.h>
 #include <class_gerber_file_image_list.h>
 

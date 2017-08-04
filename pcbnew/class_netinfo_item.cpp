@@ -34,7 +34,6 @@
 #include <common.h>
 #include <kicad_string.h>
 #include <pcbnew.h>
-#include <colors_selection.h>
 #include <richio.h>
 #include <macros.h>
 #include <msgpanel.h>

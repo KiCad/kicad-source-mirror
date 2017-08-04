@@ -35,7 +35,6 @@
 #include <pcb_calculator.h>
 
 #include <bitmaps.h>
-#include <colors_selection.h>
 #include <build_version.h>
 
 // Pcb_calculator data file extension:

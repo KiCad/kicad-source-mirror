@@ -66,7 +66,7 @@ public:
     virtual void Begin() override;
 
     /// @copydoc COMPOSITOR::ClearBuffer()
-    virtual void ClearBuffer() override;
+    virtual void ClearBuffer( const COLOR4D& aColor ) override;
 
     /// @copydoc COMPOSITOR::DrawBuffer()
     virtual void DrawBuffer( unsigned int aBufferHandle ) override;

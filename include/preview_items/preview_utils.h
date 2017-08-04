@@ -31,19 +31,10 @@
 namespace KIGFX
 {
 class GAL;
+class VIEW;
 
 namespace PREVIEW
 {
-
-/**
- * The default fill/stroke color of preview overlay items
- */
-COLOR4D PreviewOverlayDefaultColor();
-
-/**
- * The default alpha of overlay fills
- */
-double PreviewOverlayFillAlpha();
 
 /**
  * Default alpha of "de-emphasised" features (like previously locked-in
@@ -51,10 +42,6 @@ double PreviewOverlayFillAlpha();
  */
 double PreviewOverlayDeemphAlpha( bool aDeemph = true );
 
-/**
- * The colour of "special" angle overlay features
- */
-COLOR4D PreviewOverlaySpecialAngleColor();
 
 /**
  * Get a formatted string showing a dimension to a sane precision
@@ -81,7 +68,7 @@ void SetConstantGlyphHeight( KIGFX::GAL& aGal, double aHeight );
  * text in
  * @param aStrings list of strings to draw, top to bottom
  */
-void DrawTextNextToCursor( KIGFX::GAL& aGal,
+void DrawTextNextToCursor( KIGFX::VIEW* aView,
         const VECTOR2D& aCursorPos, const VECTOR2D& aTextQuadrant,
         const std::vector<wxString>& aStrings );
 

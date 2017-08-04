@@ -36,10 +36,11 @@
 #include <bezier_curves.h>
 #include <class_drawpanel.h>
 #include <class_pcb_screen.h>
-#include <colors_selection.h>
 #include <trigo.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
+
+#include <wxPcbStruct.h>
 
 #include <pcbnew.h>
 
@@ -206,14 +207,14 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     int radius;
 
     PCB_LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-    COLOR4D    color;
 
     BOARD * brd =  GetBoard( );
 
     if( brd->IsLayerVisible( GetLayer() ) == false )
         return;
 
-    color = brd->GetLayerColor( GetLayer() );
+    auto frame = static_cast<PCB_EDIT_FRAME*> ( panel->GetParent() );
+    auto color = frame->Settings().Colors().GetLayerColor( GetLayer() );
 
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
 

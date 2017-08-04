@@ -34,10 +34,10 @@
 #include <trigo.h>
 #include <wxstruct.h>
 #include <class_drawpanel.h>
-#include <colors_selection.h>
 #include <kicad_string.h>
 #include <richio.h>
 #include <bitmaps.h>
+#include <wxPcbStruct.h>
 
 #include <class_board.h>
 #include <class_pcb_text.h>
@@ -316,7 +316,6 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
 void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
                       const wxPoint& offset )
 {
-    COLOR4D     gcolor;
     BOARD*      brd = GetBoard();
 
     if( brd->IsLayerVisible( m_Layer ) == false )
@@ -324,7 +323,8 @@ void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
 
     m_Text.Draw( panel, DC, mode_color, offset );
 
-    gcolor = brd->GetLayerColor( m_Layer );
+    auto frame = static_cast<PCB_EDIT_FRAME*> ( panel->GetParent() );
+    auto gcolor = frame->Settings().Colors().GetLayerColor( m_Layer );
 
     GRSetDrawMode( DC, mode_color );
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();

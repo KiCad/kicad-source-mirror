@@ -37,7 +37,6 @@
 #include <class_pcb_screen.h>
 #include <confirm.h>
 #include <kicad_string.h>
-#include <colors_selection.h>
 #include <richio.h>
 #include <macros.h>
 #include <math_for_graphics.h>
@@ -46,6 +45,7 @@
 #include <base_units.h>
 #include <bitmaps.h>
 
+#include <wxPcbStruct.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>
@@ -119,7 +119,10 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     if( brd->IsLayerVisible( m_Layer ) == false )
         return;
 
-    COLOR4D color = brd->GetLayerColor( m_Layer );
+
+    auto frame = static_cast<PCB_BASE_FRAME*> ( panel->GetParent() );
+    auto color = frame->Settings().Colors().GetLayerColor( m_Layer );
+
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
 
     if(( draw_mode & GR_ALLOW_HIGHCONTRAST ) && displ_opts && displ_opts->m_ContrastModeDisplay )

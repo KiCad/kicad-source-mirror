@@ -32,7 +32,6 @@
 #include <class_drawpanel.h>
 #include <trigo.h>
 #include <wxPcbStruct.h>
-#include <colors_selection.h>
 
 #include <pcbnew.h>
 #include <drc_stuff.h>
@@ -194,7 +193,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
             g_CurrentTrackSegment->start = pad;
         }
 
-        if( g_TwoSegmentTrackBuild )
+        if( Settings().m_legacyUseTwoSegmentTracks )
         {
             // Create 2nd segment
             g_CurrentTrackList.PushBack( (TRACK*)g_CurrentTrackSegment->Clone() );
@@ -213,7 +212,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
         SetCurItem( g_CurrentTrackSegment, false );
         m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
 
-        if( g_Drc_On )
+        if( Settings().m_legacyDrcOn )
         {
             if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment, GetBoard()->m_Track ) )
             {
@@ -224,13 +223,13 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
     else   // Track in progress : segment coordinates are updated by ShowNewTrackWhenMovingCursor.
     {
         // Test for a D.R.C. error:
-        if( g_Drc_On )
+        if( Settings().m_legacyDrcOn )
         {
             if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment, GetBoard()->m_Track ) )
                 return NULL;
 
             // We must handle 2 segments
-            if( g_TwoSegmentTrackBuild && g_CurrentTrackSegment->Back() )
+            if( Settings().m_legacyUseTwoSegmentTracks && g_CurrentTrackSegment->Back() )
             {
                 if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment->Back(), GetBoard()->m_Track ) )
                     return NULL;
@@ -243,10 +242,10 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
          */
         bool CanCreateNewSegment = true;
 
-        if( !g_TwoSegmentTrackBuild && g_CurrentTrackSegment->IsNull() )
+        if( !Settings().m_legacyUseTwoSegmentTracks && g_CurrentTrackSegment->IsNull() )
             CanCreateNewSegment = false;
 
-        if( g_TwoSegmentTrackBuild && g_CurrentTrackSegment->IsNull()
+        if( Settings().m_legacyUseTwoSegmentTracks && g_CurrentTrackSegment->IsNull()
           && g_CurrentTrackSegment->Back()
           && g_CurrentTrackSegment->Back()->IsNull() )
             CanCreateNewSegment = false;
@@ -356,7 +355,7 @@ bool PCB_EDIT_FRAME::Add45DegreeSegment( wxDC* aDC )
         else
             newTrack->SetEnd( wxPoint(newTrack->GetEnd().x - segm_step_45, newTrack->GetEnd().y) );
 
-        if( g_Drc_On && BAD_DRC == m_drc->Drc( curTrack, GetBoard()->m_Track ) )
+        if( Settings().m_legacyDrcOn && BAD_DRC == m_drc->Drc( curTrack, GetBoard()->m_Track ) )
         {
             delete newTrack;
             return false;
@@ -391,7 +390,7 @@ bool PCB_EDIT_FRAME::Add45DegreeSegment( wxDC* aDC )
         else
             newTrack->SetEnd( wxPoint(newTrack->GetEnd().x, newTrack->GetEnd().y - segm_step_45) );
 
-        if( g_Drc_On && BAD_DRC==m_drc->Drc( newTrack, GetBoard()->m_Track ) )
+        if( Settings().m_legacyDrcOn && BAD_DRC==m_drc->Drc( newTrack, GetBoard()->m_Track ) )
         {
             delete newTrack;
             return false;
@@ -415,7 +414,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
     if( aTrack == NULL )
         return false;
 
-    if( g_Drc_On && BAD_DRC == m_drc->Drc( g_CurrentTrackSegment, GetBoard()->m_Track ) )
+    if( Settings().m_legacyDrcOn && BAD_DRC == m_drc->Drc( g_CurrentTrackSegment, GetBoard()->m_Track ) )
         return false;
 
     // Saving the coordinate of end point of the trace
@@ -499,7 +498,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
         }
 
         // delete the old track, if it exists and is redundant
-        if( g_AutoDeleteOldTrack )
+        if( Settings().m_legacyAutoDeleteOldTrack )
         {
             EraseRedundantTrack( aDC, firstTrack, newCount, &s_ItemsListPicker );
         }
@@ -705,7 +704,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
 
         if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )
         {
-            COLOR4D color = g_ColorsSettings.GetLayerColor( g_CurrentTrackSegment->GetLayer() );
+            COLOR4D color = frame->Settings().Colors().GetLayerColor( g_CurrentTrackSegment->GetLayer() );
             DrawViaCirclesWhenEditingNewTrack( panelClipBox, aDC, g_CurrentTrackSegment->GetEnd(),
                                                boardViaRadius, viaRadiusWithClearence, color);
         }
@@ -721,7 +720,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     if( !frame->GetDesignSettings().m_UseConnectedTrackWidth )
         g_CurrentTrackSegment->SetWidth( frame->GetDesignSettings().GetCurrentTrackWidth() );
 
-    if( g_TwoSegmentTrackBuild )
+    if( frame->Settings().m_legacyUseTwoSegmentTracks )
     {
         TRACK* previous_track = g_CurrentTrackSegment->Back();
 
@@ -734,13 +733,13 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
         }
     }
 
-    if( g_Track_45_Only_Allowed )
+    if( frame->Settings().m_legacyUse45DegreeTracks )
     {
-        if( g_TwoSegmentTrackBuild )
+        if( frame->Settings().m_legacyUseTwoSegmentTracks )
         {
             g_CurrentTrackSegment->SetEnd( frame->GetCrossHairPosition() );
 
-            if( g_Drc_On )
+            if( frame->Settings().m_legacyDrcOn )
                 PushTrack( aPanel );
 
             ComputeBreakPoint( g_CurrentTrackSegment,
@@ -769,7 +768,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
 
     if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )
     {
-        COLOR4D color = g_ColorsSettings.GetLayerColor(g_CurrentTrackSegment->GetLayer());
+        COLOR4D color = frame->Settings().Colors().GetLayerColor(g_CurrentTrackSegment->GetLayer());
 
         //Via diameter must have taken what we are using, rather than netclass value.
         DrawViaCirclesWhenEditingNewTrack( panelClipBox, aDC, g_CurrentTrackSegment->GetEnd(),

@@ -165,7 +165,7 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
 
         msg = board->GetLayerName( layer );
 
-        COLOR4D layerColor = board->GetLayerColor( layer );
+        COLOR4D layerColor = m_parent->Settings().Colors().GetLayerColor( layer );
 
         imageList->Add( makeLayerBitmap( layerColor ) );
 

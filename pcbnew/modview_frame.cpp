@@ -51,7 +51,7 @@
 
 #include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
-#include <pcbnew_config.h>
+#include <config_params.h>
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -699,9 +699,9 @@ void FOOTPRINT_VIEWER_FRAME::Update3D_Frame( bool aForceReloadFootprint )
 }
 
 
-COLOR4D FOOTPRINT_VIEWER_FRAME::GetGridColor() const
+COLOR4D FOOTPRINT_VIEWER_FRAME::GetGridColor()
 {
-    return g_ColorsSettings.GetItemColor( LAYER_GRID );
+    return Settings().Colors().GetItemColor( LAYER_GRID );
 }
 
 
@@ -890,7 +890,9 @@ void FOOTPRINT_VIEWER_FRAME::updateView()
 {
     if( IsGalCanvasActive() )
     {
-        static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayBoard( GetBoard() );
+        auto dp = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
+        dp->UseColorScheme( &Settings().Colors() );
+        dp->DisplayBoard( GetBoard() );
         m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
         m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     }

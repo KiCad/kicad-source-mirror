@@ -131,12 +131,12 @@ void PCB_EDIT_FRAME::OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateDrcEnable( wxUpdateUIEvent& aEvent )
 {
-    bool state = !g_Drc_On;
+    bool state = !Settings().m_legacyDrcOn;
     aEvent.Check( state );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_DRC_OFF,
-                                        g_Drc_On ?
-                                        _( "Disable design rule checking" ) :
-                                        _( "Enable design rule checking" ) );
+                                        Settings().m_legacyDrcOn ?
+                                        _( "Disable design rule checking while routing/editing tracks" ) :
+                                        _( "Enable design rule checking while routing/editing tracks" ) );
 }
 
 void PCB_EDIT_FRAME::OnUpdateShowBoardRatsnest( wxUpdateUIEvent& aEvent )
@@ -151,9 +151,9 @@ void PCB_EDIT_FRAME::OnUpdateShowBoardRatsnest( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateAutoDeleteTrack( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( g_AutoDeleteOldTrack );
+    aEvent.Check( Settings().m_legacyAutoDeleteOldTrack );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_AUTO_DEL_TRACK,
-                                        g_AutoDeleteOldTrack ?
+                                        Settings().m_legacyAutoDeleteOldTrack ?
                                         _( "Disable auto delete old track" ) :
                                         _( "Enable auto delete old track" ) );
 }

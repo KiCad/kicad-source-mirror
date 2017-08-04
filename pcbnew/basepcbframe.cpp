@@ -176,6 +176,7 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
     {
         delete m_Pcb;
         m_Pcb = aBoard;
+        m_Pcb->SetColorsSettings( &Settings().Colors() );
     }
 }
 

@@ -34,7 +34,6 @@
 #include <class_pcb_screen.h>
 #include <class_drawpanel.h>
 #include <kicad_string.h>
-#include <colors_selection.h>
 #include <richio.h>
 #include <macros.h>
 #include <wxBasePcbFrame.h>
@@ -187,7 +186,9 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
     PCB_LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     BOARD*      brd   = GetBoard();
 
-    COLOR4D     color = brd->GetLayerColor( m_Layer );
+    auto frame = static_cast<PCB_BASE_FRAME*> ( panel->GetParent() );
+
+    auto color = frame->Settings().Colors().GetLayerColor( m_Layer );
 
     if( brd->IsLayerVisible( m_Layer ) == false && !( aDrawMode & GR_HIGHLIGHT ) )
         return;
@@ -259,7 +260,9 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
 
     BOARD*      brd = GetBoard();
     PCB_LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-    COLOR4D     color = brd->GetLayerColor( m_Layer );
+
+    auto frame = static_cast<PCB_BASE_FRAME*> ( panel->GetParent() );
+    auto color = frame->Settings().Colors().GetLayerColor( m_Layer );
 
     if( brd->IsLayerVisible( m_Layer ) == false && !( aDrawMode & GR_HIGHLIGHT ) )
         return;
@@ -385,7 +388,10 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC,
 
     PCB_LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
     BOARD*      brd   = GetBoard();
-    COLOR4D     color = brd->GetLayerColor( m_Layer );
+
+    auto frame = static_cast<PCB_BASE_FRAME*> ( panel->GetParent() );
+    auto color = frame->Settings().Colors().GetLayerColor( m_Layer );
+
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
 
     if( displ_opts->m_ContrastModeDisplay )

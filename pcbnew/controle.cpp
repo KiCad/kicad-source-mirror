@@ -325,7 +325,7 @@ bool PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
     {
         // If there's no intrusion and DRC is active, we pass the cursor
         // "as is", and let ShowNewTrackWhenMovingCursor figure out what to do.
-        if( !g_Drc_On || !g_CurrentTrackSegment ||
+        if( !Settings().m_legacyDrcOn || !g_CurrentTrackSegment ||
             (BOARD_ITEM*)g_CurrentTrackSegment != this->GetCurItem() ||
             !LocateIntrusion( m_Pcb->m_Track, g_CurrentTrackSegment,
                               GetScreen()->m_Active_Layer, RefPos( true ) ) )

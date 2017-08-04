@@ -24,29 +24,12 @@
 #include <preview_items/preview_utils.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <base_units.h>
-
-
-COLOR4D KIGFX::PREVIEW::PreviewOverlayDefaultColor()
-{
-    return COLOR4D( 1.0, 1.0, 1.0, 1.0 );
-}
-
-
-double KIGFX::PREVIEW::PreviewOverlayFillAlpha()
-{
-    return 0.2;
-}
-
+#include <pcb_painter.h>
+#include <view/view.h>
 
 double KIGFX::PREVIEW::PreviewOverlayDeemphAlpha( bool aDeemph )
 {
     return aDeemph ? 0.5 : 1.0;
-}
-
-
-COLOR4D KIGFX::PREVIEW::PreviewOverlaySpecialAngleColor()
-{
-    return COLOR4D( 0.5, 1.0, 0.5, 1.0 );
 }
 
 
@@ -129,11 +112,13 @@ void KIGFX::PREVIEW::SetConstantGlyphHeight( KIGFX::GAL& aGal, double aHeight )
 }
 
 
-void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::GAL& aGal,
+void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView,
         const VECTOR2D& aCursorPos, const VECTOR2D& aTextQuadrant,
         const std::vector<wxString>& aStrings )
 {
-    auto glyphSize = aGal.GetGlyphSize();
+    auto gal = aView->GetGAL();
+    auto glyphSize = gal->GetGlyphSize();
+    auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
 
     const auto lineSpace = glyphSize.y * 0.2;
     auto linePitch = glyphSize.y + lineSpace;
@@ -151,23 +136,23 @@ void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::GAL& aGal,
 
     if( aTextQuadrant.x < 0 )
     {
-        aGal.SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
-        textPos.x += 15.0 / aGal.GetWorldScale();
+        gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
+        textPos.x += 15.0 / gal->GetWorldScale();
     }
     else
     {
-        aGal.SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        textPos.x -= 15.0 / aGal.GetWorldScale();
+        gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        textPos.x -= 15.0 / gal->GetWorldScale();
     }
 
-    aGal.SetStrokeColor( PreviewOverlayDefaultColor().WithAlpha(
+    gal->SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ).WithAlpha(
                             PreviewOverlayDeemphAlpha( true ) ) );
-    aGal.SetIsFill( false );
+    gal->SetIsFill( false );
 
     // write strings top-to-bottom
     for( const auto& str : aStrings )
     {
         textPos.y += linePitch;
-        aGal.BitmapText( str, textPos, 0.0 );
+        gal->BitmapText( str, textPos, 0.0 );
     }
 }

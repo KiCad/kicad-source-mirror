@@ -31,14 +31,20 @@
 #define COLORS_DESIGN_SETTING_H
 #include <gal/color4d.h>
 #include <layers_id_colors_and_visibility.h>
+#include <core/settings.h>
 
 using KIGFX::COLOR4D;
+
+class wxConfigBase;
+class wxString;
+
+class PARAM_CFG_ARRAY;
 
 /**
  * Class COLORS_DESIGN_SETTINGS
  * is a list of color settings for designs in Eeschema, Pcbnew and GerbView
  */
-class COLORS_DESIGN_SETTINGS
+class COLORS_DESIGN_SETTINGS : public SETTINGS
 {
 public:
     // Color options for screen display of the Printed Board and schematic:
@@ -49,6 +55,8 @@ public:
 public:
     COLORS_DESIGN_SETTINGS();
 
+    virtual void Load( wxConfigBase *aConfig );
+    virtual void Save( wxConfigBase *aConfig );
     /**
      * Function GetLayerColor
      * @return the color for aLayer which is one of the layer indices given
@@ -83,6 +91,11 @@ public:
      * Usefull to create a monochrome color selection for printing purpose
      */
     void SetAllColorsAs( COLOR4D aColor );
+
+private:
+
+    void setupConfigParams();
+
 };
 
 #endif  //  COLORS_DESIGN_SETTING_H

@@ -42,6 +42,7 @@ class IO_MGR;
 class BOARD;
 class FP_LOADER_THREAD;
 class FP_THREAD_IFACE;
+class COLORS_DESIGN_SETTINGS;
 
 
 /**
@@ -91,6 +92,7 @@ private:
     std::shared_ptr<FP_THREAD_IFACE>    m_iface;
     FOOTPRINT_STATUS_HANDLER            m_handler;
     std::unique_ptr<BOARD>              m_dummyBoard;
+    std::unique_ptr<COLORS_DESIGN_SETTINGS>    m_colorsSettings;
 
     LIB_ID      m_currentFPID;
     bool        m_footprintDisplayed;

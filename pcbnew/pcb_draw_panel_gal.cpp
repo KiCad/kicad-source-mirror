@@ -37,6 +37,8 @@
 #include <class_track.h>
 #include <wxBasePcbFrame.h>
 
+#include <gal/graphics_abstraction_layer.h>
+
 #include <functional>
 using namespace std::placeholders;
 
@@ -157,9 +159,6 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( const BOARD* aBoard )
     // Ratsnest
     m_ratsnest.reset( new KIGFX::RATSNEST_VIEWITEM( aBoard->GetConnectivity() ) );
     m_view->Add( m_ratsnest.get() );
-
-    // Display settings
-    UseColorScheme( aBoard->GetColorsSettings() );
 }
 
 
@@ -175,6 +174,7 @@ void PCB_DRAW_PANEL_GAL::UseColorScheme( const COLORS_DESIGN_SETTINGS* aSettings
     KIGFX::PCB_RENDER_SETTINGS* rs;
     rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() );
     rs->ImportLegacyColors( aSettings );
+    m_gal->SetCursorColor( aSettings->GetItemColor( LAYER_CURSOR ) );
 }
 
 

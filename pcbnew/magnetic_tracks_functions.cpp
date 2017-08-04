@@ -129,7 +129,7 @@ bool FindBestGridPointOnTrack( wxPoint* aNearPos, wxPoint on_grid, const TRACK* 
 bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
                 wxPoint on_grid, wxPoint* curpos )
 {
-    bool    doCheckNet = g_MagneticPadOption != CAPTURE_ALWAYS && g_Drc_On;
+    bool    doCheckNet = frame->Settings().m_magneticPads != CAPTURE_ALWAYS && frame->Settings().m_legacyDrcOn;
     bool    doTrack = false;
     bool    doPad = false;
     bool    amMovingVia = false;
@@ -155,20 +155,20 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
         currTrack = NULL;
     }
 
-    if( g_MagneticPadOption == CAPTURE_ALWAYS )
+    if( frame->Settings().m_magneticPads == CAPTURE_ALWAYS )
         doPad = true;
 
-    if( g_MagneticTrackOption == CAPTURE_ALWAYS )
+    if( frame->Settings().m_magneticTracks == CAPTURE_ALWAYS )
         doTrack = true;
 
     if( aCurrentTool == ID_TRACK_BUTT || amMovingVia )
     {
         int q = CAPTURE_CURSOR_IN_TRACK_TOOL;
 
-        if( g_MagneticPadOption == q )
+        if( frame->Settings().m_magneticPads == q )
             doPad = true;
 
-        if( g_MagneticTrackOption == q )
+        if( frame->Settings().m_magneticTracks == q )
             doTrack = true;
     }
 
@@ -225,7 +225,7 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
         /*
          * In two segment mode, ignore the final segment if it's inside a grid square.
          */
-        if( !amMovingVia && currTrack && g_TwoSegmentTrackBuild && currTrack->Back()
+        if( !amMovingVia && currTrack && frame->Settings().m_legacyUseTwoSegmentTracks && currTrack->Back()
             && currTrack->GetStart().x - aGridSize.x < currTrack->GetEnd().x
             && currTrack->GetStart().x + aGridSize.x > currTrack->GetEnd().x
             && currTrack->GetStart().y - aGridSize.y < currTrack->GetEnd().y

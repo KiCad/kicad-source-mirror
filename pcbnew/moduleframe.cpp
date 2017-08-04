@@ -821,7 +821,9 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
 
 void FOOTPRINT_EDIT_FRAME::updateView()
 {
-    static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayBoard( GetBoard() );
+    auto dp = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
+    dp->UseColorScheme( &Settings().Colors() );
+    dp->DisplayBoard( GetBoard() );
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
 }

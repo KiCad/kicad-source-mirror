@@ -42,32 +42,32 @@
 class PCB_LAYER_SELECTOR: public LAYER_SELECTOR
 {
 public:
-    PCB_LAYER_SELECTOR( BOARD* aBrd ) :
+    PCB_LAYER_SELECTOR( PCB_BASE_FRAME* aFrame ) :
         LAYER_SELECTOR()
     {
-        m_brd = aBrd;
+        m_frame = aFrame;
     }
 
 protected:
-    BOARD*  m_brd;
+    PCB_BASE_FRAME*  m_frame;
 
     // Returns true if the layer id is enabled (i.e. is it should be displayed)
     bool IsLayerEnabled( LAYER_NUM aLayer ) const override
     {
-        return m_brd->IsLayerEnabled( PCB_LAYER_ID( aLayer ) );
+        return m_frame->GetBoard()->IsLayerEnabled( PCB_LAYER_ID( aLayer ) );
     }
 
     // Returns a color index from the layer id
     // Virtual function
     COLOR4D GetLayerColor( LAYER_NUM aLayer ) const override
     {
-        return m_brd->GetLayerColor( ToLAYER_ID( aLayer ) );
+        return m_frame->Settings().Colors().GetLayerColor( ToLAYER_ID( aLayer ) );
     }
 
     // Returns the name of the layer id
     wxString GetLayerName( LAYER_NUM aLayer ) const override
     {
-        return m_brd->GetLayerName( ToLAYER_ID( aLayer ) );
+        return m_frame->GetBoard()->GetLayerName( ToLAYER_ID( aLayer ) );
     }
 };
 
@@ -81,12 +81,12 @@ class PCB_ONE_LAYER_SELECTOR : public PCB_LAYER_SELECTOR,
 {
     PCB_LAYER_ID    m_layerSelected;
     LSET        m_notAllowedLayersMask;
-
+    BOARD* m_brd;
     std::vector<PCB_LAYER_ID> m_layersIdLeftColumn;
     std::vector<PCB_LAYER_ID> m_layersIdRightColumn;
 
 public:
-    PCB_ONE_LAYER_SELECTOR( wxWindow* aParent, BOARD * aBrd,
+    PCB_ONE_LAYER_SELECTOR( PCB_BASE_FRAME* aParent, BOARD * aBrd,
                         PCB_LAYER_ID aDefaultLayer,
                         LSET aNotAllowedLayersMask );
 
@@ -101,12 +101,13 @@ private:
 };
 
 
-PCB_ONE_LAYER_SELECTOR::PCB_ONE_LAYER_SELECTOR( wxWindow* aParent,
+PCB_ONE_LAYER_SELECTOR::PCB_ONE_LAYER_SELECTOR( PCB_BASE_FRAME* aParent,
         BOARD* aBrd, PCB_LAYER_ID aDefaultLayer, LSET aNotAllowedLayersMask )
-    : PCB_LAYER_SELECTOR( aBrd ), DIALOG_LAYER_SELECTION_BASE( aParent )
+    : PCB_LAYER_SELECTOR( aParent ), DIALOG_LAYER_SELECTION_BASE( aParent )
 {
     m_layerSelected = aDefaultLayer;
     m_notAllowedLayersMask = aNotAllowedLayersMask;
+    m_brd = aBrd;
     buildList();
     Layout();
     GetSizer()->SetSizeHints( this );
@@ -246,6 +247,7 @@ class SELECT_COPPER_LAYERS_PAIR_DIALOG: public PCB_LAYER_SELECTOR,
                                         public DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE
 {
 private:
+    BOARD*       m_brd;
     PCB_LAYER_ID m_frontLayer;
     PCB_LAYER_ID m_backLayer;
     int          m_leftRowSelected;
@@ -254,7 +256,7 @@ private:
     std::vector<PCB_LAYER_ID> m_layersId;
 
 public:
-    SELECT_COPPER_LAYERS_PAIR_DIALOG( wxWindow* aParent, BOARD* aPcb,
+    SELECT_COPPER_LAYERS_PAIR_DIALOG( PCB_BASE_FRAME* aParent, BOARD* aPcb,
                                       PCB_LAYER_ID aFrontLayer, PCB_LAYER_ID aBackLayer );
 
     void GetLayerPair( PCB_LAYER_ID& aFrontLayer, PCB_LAYER_ID& aBackLayer )
@@ -306,14 +308,15 @@ void PCB_BASE_FRAME::SelectCopperLayerPair()
 
 
 SELECT_COPPER_LAYERS_PAIR_DIALOG::SELECT_COPPER_LAYERS_PAIR_DIALOG(
-        wxWindow* aParent, BOARD * aPcb, PCB_LAYER_ID aFrontLayer, PCB_LAYER_ID aBackLayer) :
-    PCB_LAYER_SELECTOR( aPcb ),
+        PCB_BASE_FRAME* aParent, BOARD * aPcb, PCB_LAYER_ID aFrontLayer, PCB_LAYER_ID aBackLayer) :
+    PCB_LAYER_SELECTOR( aParent ),
     DIALOG_COPPER_LAYER_PAIR_SELECTION_BASE( aParent )
 {
     m_frontLayer = aFrontLayer;
     m_backLayer = aBackLayer;
     m_leftRowSelected = 0;
     m_rightRowSelected = 0;
+    m_brd = aPcb;
     buildList();
     SetFocus();
     GetSizer()->SetSizeHints( this );

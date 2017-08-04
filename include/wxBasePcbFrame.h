@@ -43,6 +43,8 @@
 #include <pcbstruct.h>
 #include <class_draw_panel_gal.h>
 
+#include <pcb_general_settings.h>
+
 /* Forward declarations of classes. */
 class BOARD;
 class BOARD_CONNECTED_ITEM;
@@ -58,6 +60,7 @@ class ZONE_SETTINGS;
 class PCB_PLOT_PARAMS;
 class FP_LIB_TABLE;
 class LIB_ID;
+class PCB_GENERAL_SETTINGS ;
 
 /**
  * class PCB_BASE_FRAME
@@ -76,6 +79,7 @@ public:
 protected:
     BOARD*              m_Pcb;
     GENERAL_COLLECTOR*  m_Collector;
+    PCB_GENERAL_SETTINGS m_configSettings;
 
     /// Auxiliary tool bar typically shown below the main tool bar at the top of the
     /// main window.
@@ -701,6 +705,17 @@ public:
      * Stores the canvas type in the application settings.
      */
     bool SaveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
+
+    PCB_GENERAL_SETTINGS& Settings()
+    {
+        return m_configSettings;
+    }
+
+    const PCB_GENERAL_SETTINGS& CSettings() const
+    {
+        return m_configSettings;
+    }
+
 
     ///> Key in KifaceSettings to store the canvas type.
     static const wxChar CANVAS_TYPE_KEY[];

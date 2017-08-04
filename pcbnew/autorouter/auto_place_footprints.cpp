@@ -41,7 +41,6 @@
 
 #include <autorout.h>
 #include <cell.h>
-#include <colors_selection.h>
 
 #include <class_board.h>
 #include <class_module.h>

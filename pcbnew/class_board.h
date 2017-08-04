@@ -518,15 +518,6 @@ public:
     bool IsModuleLayerVisible( PCB_LAYER_ID layer );
 
     /**
-     * Function GetVisibleElementColor
-     * returns the color of a pcb visible element.
-     * @see enum GAL_LAYER_ID
-     */
-    COLOR4D GetVisibleElementColor( GAL_LAYER_ID LAYER_aPCB );
-
-    void SetVisibleElementColor( GAL_LAYER_ID LAYER_aPCB, COLOR4D aColor );
-
-    /**
      * Function GetDesignSettings
      * @return the BOARD_DESIGN_SETTINGS for this BOARD
      */
@@ -561,7 +552,7 @@ public:
      * Function GetColorSettings
      * @return the current COLORS_DESIGN_SETTINGS in use
      */
-    COLORS_DESIGN_SETTINGS* GetColorsSettings() const { return m_colorsSettings; }
+    const COLORS_DESIGN_SETTINGS& Colors() const { return *m_colorsSettings; }
 
     /**
      * Function SetColorsSettings
@@ -571,7 +562,6 @@ public:
     {
         m_colorsSettings = aColorsSettings;
     }
-
     /**
      * Function GetBoardPolygonOutlines
      * Extracts the board outlines and build a closed polygon
@@ -681,18 +671,6 @@ public:
      * @return bool - true if aLayerType was legal and aLayer was within range, else false.
      */
     bool SetLayerType( PCB_LAYER_ID aLayer, LAYER_T aLayerType );
-
-    /**
-     * Function SetLayerColor
-     * changes a layer color for any valid layer, including non-copper ones.
-     */
-    void SetLayerColor( PCB_LAYER_ID aLayer, COLOR4D aColor );
-
-    /**
-     * Function GetLayerColor
-     * gets a layer color for any valid layer, including non-copper ones.
-     */
-    COLOR4D GetLayerColor( PCB_LAYER_ID aLayer ) const;
 
     /** Functions to get some items count */
     int GetNumSegmTrack() const;

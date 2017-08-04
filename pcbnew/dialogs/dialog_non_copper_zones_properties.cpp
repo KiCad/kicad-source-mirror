@@ -155,7 +155,8 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::Init()
     {
         PCB_LAYER_ID layer = *seq;
 
-        COLOR4D layerColor = board->GetLayerColor( layer );
+        COLOR4D layerColor = m_parent->Settings().Colors().GetLayerColor( layer );
+
         imageList->Add( makeLayerBitmap( layerColor ) );
 
         msg = board->GetLayerName( layer );

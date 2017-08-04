@@ -86,16 +86,12 @@ public:
     void SetAdditive( bool aAdditive );
     void SetSubtractive( bool aSubtractive );
 
+    void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final;
 
 private:
 
     bool m_additive;
     bool m_subtractive;
-
-    /**
-     * Draw the selection rectangle onto the GAL
-     */
-    void drawPreviewShape( KIGFX::GAL& aGal ) const override;
 
     VECTOR2I m_origin, m_end;
 };

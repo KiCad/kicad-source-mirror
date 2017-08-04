@@ -78,6 +78,10 @@ const LAYER_WIDGET::ROW PCB_LAYER_WIDGET::s_render_rows[] = {
     RR( _( "Footprints Back" ), LAYER_MOD_BK,         COLOR4D::UNSPECIFIED, _( "Show footprints that are on board's back") ),
     RR( _( "Values" ),          LAYER_MOD_VALUES,     COLOR4D::UNSPECIFIED, _( "Show footprint's values") ),
     RR( _( "References" ),      LAYER_MOD_REFERENCES, COLOR4D::UNSPECIFIED, _( "Show footprint's references") ),
+    RR( _( "Worksheet" ),       LAYER_WORKSHEET,      DARKRED,              _( "Show worksheet") ),
+    RR( _( "Cursor" ),          LAYER_CURSOR,         WHITE,                _( "PCB Cursor" ), true, false ),
+    RR( _( "Aux items" ),       LAYER_AUX_ITEMS,      WHITE,                _( "Auxillary items (rulers, assistants, axes, etc.)" ), true, false ),
+    RR( _( "Background" ),      LAYER_PCB_BACKGROUND, BLACK,                _( "PCB Background" ), true, false )
 };
 
 static int s_allowed_in_FpEditor[] =
@@ -398,7 +402,7 @@ void PCB_LAYER_WIDGET::ReFillRender()
         if( renderRow.color != COLOR4D::UNSPECIFIED )       // does this row show a color?
         {
             // this window frame must have an established BOARD, i.e. after SetBoard()
-            renderRow.color = board->GetVisibleElementColor( static_cast<GAL_LAYER_ID>( renderRow.id ) );
+            renderRow.color = myframe->Settings().Colors().GetItemColor( static_cast<GAL_LAYER_ID>( renderRow.id ) );
         }
 
         renderRow.state = board->IsElementVisible( static_cast<GAL_LAYER_ID>( renderRow.id ) );
@@ -475,7 +479,7 @@ void PCB_LAYER_WIDGET::ReFill()
         }
 
         AppendLayerRow( LAYER_WIDGET::ROW(
-            brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ),
+            brd->GetLayerName( layer ), layer, myframe->Settings().Colors().GetLayerColor( layer ),
             dsc, true ) );
 
         if( m_fp_editor_mode && !isLayerAllowedInFpMode( layer ) )
@@ -522,7 +526,7 @@ void PCB_LAYER_WIDGET::ReFill()
             continue;
 
         AppendLayerRow( LAYER_WIDGET::ROW(
-            brd->GetLayerName( layer ), layer, brd->GetLayerColor( layer ),
+            brd->GetLayerName( layer ), layer,  myframe->Settings().Colors().GetLayerColor( layer ),
             wxGetTranslation( non_cu_seq[i].tooltip ), true ) );
 
         if( m_fp_editor_mode && !isLayerAllowedInFpMode( layer ) )
@@ -546,16 +550,16 @@ void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
     // destroys the GAL color setup
     if( !myframe->IsGalCanvasActive() )
     {
-        COLOR4D oldColor = myframe->GetBoard()->GetLayerColor( ToLAYER_ID( aLayer ) );
+        COLOR4D oldColor = myframe->Settings().Colors().GetLayerColor( ToLAYER_ID( aLayer ) );
         aColor.a = oldColor.a;
     }
 
-    myframe->GetBoard()->SetLayerColor( ToLAYER_ID( aLayer ), aColor );
+    myframe->Settings().Colors().SetLayerColor( ToLAYER_ID( aLayer ), aColor );
 
     if( myframe->IsGalCanvasActive() )
     {
         KIGFX::VIEW* view = myframe->GetGalCanvas()->GetView();
-        view->GetPainter()->GetSettings()->ImportLegacyColors( myframe->GetBoard()->GetColorsSettings() );
+        view->GetPainter()->GetSettings()->ImportLegacyColors( &myframe->Settings().Colors() );
         view->UpdateLayerColor( aLayer );
         view->UpdateLayerColor( GetNetnameLayer( aLayer ) );
     }
@@ -624,15 +628,14 @@ void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
 {
     wxASSERT( aId > GAL_LAYER_ID_START && aId < GAL_LAYER_ID_END );
 
-    BOARD* brd = myframe->GetBoard();
-    brd->SetVisibleElementColor( static_cast<GAL_LAYER_ID>( aId ), aColor );
+    myframe->Settings().Colors().SetItemColor( static_cast<GAL_LAYER_ID>( aId ), aColor );
 
     EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
 
     if( galCanvas && myframe->IsGalCanvasActive() )
     {
         KIGFX::VIEW* view = galCanvas->GetView();
-        view->GetPainter()->GetSettings()->ImportLegacyColors( brd->GetColorsSettings() );
+        view->GetPainter()->GetSettings()->ImportLegacyColors( &myframe->Settings().Colors() );
         view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );   // useful to update rastnest
         view->UpdateLayerColor( aId );
         galCanvas->Refresh();
