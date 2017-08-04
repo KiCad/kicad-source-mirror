@@ -82,3 +82,23 @@ int checkGlError( const std::string& aInfo, bool aThrow )
     return result;
 }
 
+
+static void debugMsgCallback( GLenum aSource, GLenum aType, GLuint aId,
+   GLenum aSeverity, GLsizei aLength, const GLchar* aMessage, const void* aUserParam) 
+{
+    printf( "%s", aMessage );
+}
+
+
+void enableGlDebug( bool aEnable )
+{
+    if( aEnable )
+    {
+        glEnable( GL_DEBUG_OUTPUT );
+        glDebugMessageCallback( debugMsgCallback, nullptr );
+    }
+    else
+    {
+        glDisable( GL_DEBUG_OUTPUT );
+    }
+}

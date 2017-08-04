@@ -340,6 +340,8 @@ void OPENGL_GAL::BeginDrawing()
     wxLogTrace( "GAL_PROFILE",
                 wxT( "OPENGL_GAL::BeginDrawing(): %.1f ms" ), totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
+
+    //enableGlDebug( true );
 }
 
 

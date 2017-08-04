@@ -36,4 +36,10 @@
  */
 int checkGlError( const std::string& aInfo, bool aThrow = true );
 
+/**
+ * @brief Enables/disables OpenGL driver messages output.
+ * @param aEnable decides whether the message should be shown.
+ */
+void enableGlDebug( bool aEnable );
+
 #endif /* __OPENGL_ERROR_H */
