@@ -67,7 +67,7 @@ class TOOL_SETTINGS : public SETTINGS
         }
 
     private:
-        wxString getKeyName( const wxString& aEntryName ) const;
+        wxString getKeyName( const wxString& aEntryName ) const override;
 
         ///> Returns pointer to currently used wxConfigBase. It might be NULL, if there is no
         ///> TOOL_BASE assigned.

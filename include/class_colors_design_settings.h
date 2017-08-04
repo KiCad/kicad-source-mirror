@@ -55,8 +55,8 @@ public:
 public:
     COLORS_DESIGN_SETTINGS();
 
-    virtual void Load( wxConfigBase *aConfig );
-    virtual void Save( wxConfigBase *aConfig );
+    virtual void Load( wxConfigBase *aConfig ) override;
+    virtual void Save( wxConfigBase *aConfig ) override;
     /**
      * Function GetLayerColor
      * @return the color for aLayer which is one of the layer indices given

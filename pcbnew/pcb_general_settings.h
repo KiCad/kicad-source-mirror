@@ -20,7 +20,7 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
- 
+
 #ifndef __PCBNEW_GENERAL_SETTINGS_H
 #define __PCBNEW_GENERAL_SETTINGS_H
 
@@ -41,8 +41,8 @@ class PCB_GENERAL_SETTINGS : public SETTINGS
 public:
     PCB_GENERAL_SETTINGS();
 
-    void Load ( wxConfigBase* aCfg );
-    void Save( wxConfigBase* aCfg );
+    void Load ( wxConfigBase* aCfg ) override;
+    void Save( wxConfigBase* aCfg ) override;
 
     COLORS_DESIGN_SETTINGS m_colorsSettings;
 
