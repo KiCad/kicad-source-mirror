@@ -285,7 +285,7 @@ static char parseChar( FILE_LINE_READER& aReader, const char* aCurrentToken,
         SCH_PARSE_ERROR( _( "unexpected end of line" ), aReader, aCurrentToken );
 
     if( !isspace( *( aCurrentToken + 1 ) ) )
-        SCH_PARSE_ERROR( _( "expected single character token" ), aReader, aCurrentToken );
+        SCH_PARSE_ERROR( "expected single character token", aReader, aCurrentToken );
 
     if( aNextToken )
     {
@@ -408,7 +408,7 @@ static void parseQuotedString( wxString& aString, FILE_LINE_READER& aReader,
 
     // Verify opening quote.
     if( *tmp != '"' )
-        SCH_PARSE_ERROR( _( "expecting opening quote" ), aReader, aCurrentToken );
+        SCH_PARSE_ERROR( "expecting opening quote", aReader, aCurrentToken );
 
     tmp++;
 
@@ -445,10 +445,10 @@ static void parseQuotedString( wxString& aString, FILE_LINE_READER& aReader,
     aString = FROM_UTF8( utf8.c_str() );
 
     if( aString.IsEmpty() && !aCanBeEmpty )
-        SCH_PARSE_ERROR( _( "expected quoted string" ), aReader, aCurrentToken );
+        SCH_PARSE_ERROR( "expected quoted string", aReader, aCurrentToken );
 
     if( *tmp && *tmp != '"' )
-        SCH_PARSE_ERROR( _( "no closing quote for string found" ), aReader, tmp );
+        SCH_PARSE_ERROR( "no closing quote for string found", aReader, tmp );
 
     // Move past the closing quote.
     tmp++;
@@ -764,7 +764,7 @@ void SCH_LEGACY_PLUGIN::loadPageSettings( FILE_LINE_READER& aReader, SCH_SCREEN*
     parseUnquotedString( buf, aReader, line, &line );
 
     if( !pageInfo.SetType( buf ) )
-        SCH_PARSE_ERROR( _( "invalid page size" ), aReader, line );
+        SCH_PARSE_ERROR( "invalid page size", aReader, line );
 
     int pagew = parseInt( aReader, line, &line );
     int pageh = parseInt( aReader, line, &line );
@@ -849,7 +849,7 @@ void SCH_LEGACY_PLUGIN::loadPageSettings( FILE_LINE_READER& aReader, SCH_SCREEN*
         }
     }
 
-    SCH_PARSE_ERROR( _( "missing 'EndDescr'" ), aReader, line );
+    SCH_PARSE_ERROR( "missing 'EndDescr'", aReader, line );
 }
 
 
@@ -941,7 +941,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( FILE_LINE_READER& aReader )
                     sheetPin->SetShape( NET_UNSPECIFIED );
                     break;
                 default:
-                    SCH_PARSE_ERROR( _( "invalid sheet pin type" ), aReader, line );
+                    SCH_PARSE_ERROR( "invalid sheet pin type", aReader, line );
                 }
 
                 switch( parseChar( aReader, line, &line ) )
@@ -962,7 +962,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( FILE_LINE_READER& aReader )
                     sheetPin->SetEdge( SCH_SHEET_PIN::SHEET_LEFT_SIDE );
                     break;
                 default:
-                    SCH_PARSE_ERROR( _( "invalid sheet pin side" ), aReader, line );
+                    SCH_PARSE_ERROR( "invalid sheet pin side", aReader, line );
                 }
 
                 wxPoint position;
@@ -984,7 +984,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( FILE_LINE_READER& aReader )
         line = aReader.ReadLine();
     }
 
-    SCH_PARSE_ERROR( _( "missing '$EndSheet`" ), aReader, line );
+    SCH_PARSE_ERROR( "missing '$EndSheet`", aReader, line );
 
     return NULL;  // Prevents compiler warning.  Should never get here.
 }
@@ -1243,7 +1243,7 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( FILE_LINE_READER& aReader )
         else if( strCompare( SheetLabelType[NET_UNSPECIFIED], line, &line ) )
             text->SetShape( NET_UNSPECIFIED );
         else
-            SCH_PARSE_ERROR( _( "invalid label type" ), aReader, line );
+            SCH_PARSE_ERROR( "invalid label type", aReader, line );
     }
 
     int thickness = 0;
@@ -1452,8 +1452,8 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
                 else if( hjustify == 'R' )
                     component->GetField( index )->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
                 else if( hjustify != 'C' )
-                    SCH_PARSE_ERROR( _( "component field text horizontal justification must be "
-                                        "L, R, or C" ), aReader, line );
+                    SCH_PARSE_ERROR( "component field text horizontal justification must be "
+                                     "L, R, or C", aReader, line );
 
                 // We are guaranteed to have a least one character here for older file formats
                 // otherwise an exception would have been raised..
@@ -1462,8 +1462,8 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
                 else if( textAttrs[0] == 'B' )
                     component->GetField( index )->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
                 else if( textAttrs[0] != 'C' )
-                    SCH_PARSE_ERROR( _( "component field text vertical justification must be "
-                                        "B, T, or C" ), aReader, line );
+                    SCH_PARSE_ERROR( "component field text vertical justification must be "
+                                     "B, T, or C", aReader, line );
 
                 // Newer file formats include the bold and italics text attribute.
                 if( textAttrs.Length() > 1 )
@@ -1475,13 +1475,13 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
                     if( textAttrs[1] == 'I' )
                         component->GetField( index )->SetItalic( true );
                     else if( textAttrs[1] != 'N' )
-                        SCH_PARSE_ERROR( _( "component field text italics indicator must be I or N" ),
+                        SCH_PARSE_ERROR( "component field text italics indicator must be I or N",
                                          aReader, line );
 
                     if( textAttrs[2] == 'B' )
                         component->GetField( index )->SetBold( true );
                     else if( textAttrs[2] != 'N' )
-                        SCH_PARSE_ERROR( _( "component field text bold indicator must be B or N" ),
+                        SCH_PARSE_ERROR( "component field text bold indicator must be B or N",
                                          aReader, line );
                 }
             }
@@ -1496,7 +1496,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
             else if( orientation == 'V' )
                 component->GetField( index )->SetTextAngle( TEXT_ANGLE_VERT );
             else
-                SCH_PARSE_ERROR( _( "component field orientation must be H or V" ),
+                SCH_PARSE_ERROR( "component field orientation must be H or V",
                                  aReader, line );
 
             if( name.IsEmpty() )
@@ -1528,22 +1528,22 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
             transform.x1 = parseInt( aReader, line, &line );
 
             if( transform.x1 < -1 || transform.x1 > 1 )
-                SCH_PARSE_ERROR( _( "invalid component X1 transform value" ), aReader, line );
+                SCH_PARSE_ERROR( "invalid component X1 transform value", aReader, line );
 
             transform.y1 = parseInt( aReader, line, &line );
 
             if( transform.y1 < -1 || transform.y1 > 1 )
-                SCH_PARSE_ERROR( _( "invalid component Y1 transform value" ), aReader, line );
+                SCH_PARSE_ERROR( "invalid component Y1 transform value", aReader, line );
 
             transform.x2 = parseInt( aReader, line, &line );
 
             if( transform.x2 < -1 || transform.x2 > 1 )
-                SCH_PARSE_ERROR( _( "invalid component X2 transform value" ), aReader, line );
+                SCH_PARSE_ERROR( "invalid component X2 transform value", aReader, line );
 
             transform.y2 = parseInt( aReader, line, &line );
 
             if( transform.y2 < -1 || transform.y2 > 1 )
-                SCH_PARSE_ERROR( _( "invalid component Y2 transform value" ), aReader, line );
+                SCH_PARSE_ERROR( "invalid component Y2 transform value", aReader, line );
 
             component->SetTransform( transform );
         }
@@ -2551,7 +2551,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr< LIB_PART >& aPart,
     int         id;
 
     if( sscanf( line + 1, "%d", &id ) != 1 || id < 0 )
-        SCH_PARSE_ERROR( _( "invalid field ID" ), aReader, line + 1 );
+        SCH_PARSE_ERROR( "invalid field ID", aReader, line + 1 );
 
     std::unique_ptr< LIB_FIELD > field( new LIB_FIELD( aPart.get(), id ) );
 
@@ -2590,7 +2590,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr< LIB_PART >& aPart,
     else if( textOrient == 'V' )
         field->SetTextAngle( TEXT_ANGLE_VERT );
     else
-        SCH_PARSE_ERROR( _( "invalid field text orientation parameter" ), aReader, line );
+        SCH_PARSE_ERROR( "invalid field text orientation parameter", aReader, line );
 
     char textVisible = parseChar( aReader, line, &line );
 
@@ -2599,7 +2599,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr< LIB_PART >& aPart,
     else if ( textVisible == 'I' )
         field->SetVisible( false );
     else
-        SCH_PARSE_ERROR( _( "invalid field text visibility parameter" ), aReader, line );
+        SCH_PARSE_ERROR( "invalid field text visibility parameter", aReader, line );
 
     // It may be technically correct to use the library version to determine if the field text
     // attributes are present.  If anyone knows if that is valid and what version that would be,
@@ -2616,7 +2616,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr< LIB_PART >& aPart,
         else if( textHJustify == 'R' )
             field->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
         else
-            SCH_PARSE_ERROR( _( "invalid field text horizontal justification parameter" ),
+            SCH_PARSE_ERROR( "invalid field text horizontal justification parameter",
                              aReader, line );
 
         wxString attributes;
@@ -2624,7 +2624,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr< LIB_PART >& aPart,
         parseUnquotedString( attributes, aReader, line, &line );
 
         if( !(attributes.size() == 3 || attributes.size() == 1 ) )
-            SCH_PARSE_ERROR( _( "invalid field text attributes size" ),
+            SCH_PARSE_ERROR( "invalid field text attributes size",
                              aReader, line );
 
         if( attributes[0] == 'C' )
@@ -2634,7 +2634,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr< LIB_PART >& aPart,
         else if( attributes[0] == 'T' )
             field->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
         else
-            SCH_PARSE_ERROR( _( "invalid field text vertical justification parameter" ),
+            SCH_PARSE_ERROR( "invalid field text vertical justification parameter",
                              aReader, line );
 
         if( attributes.size() == 3 )
@@ -2642,12 +2642,12 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr< LIB_PART >& aPart,
             if( attributes[1] == 'I' )        // Italic
                 field->SetItalic( true );
             else if( attributes[1] != 'N' )   // No italics is default, check for error.
-                SCH_PARSE_ERROR( _( "invalid field text italic parameter" ), aReader, line );
+                SCH_PARSE_ERROR( "invalid field text italic parameter", aReader, line );
 
             if ( attributes[2] == 'B' )       // Bold
                 field->SetBold( true );
             else if( attributes[2] != 'N' )   // No bold is default, check for error.
-                SCH_PARSE_ERROR( _( "invalid field text bold parameter" ), aReader, line );
+                SCH_PARSE_ERROR( "invalid field text bold parameter", aReader, line );
         }
     }
 
@@ -2738,13 +2738,13 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDrawEntries( std::unique_ptr< LIB_PART >& aPar
             break;
 
         default:
-            SCH_PARSE_ERROR( _( "undefined DRAW entry" ), aReader, line );
+            SCH_PARSE_ERROR( "undefined DRAW entry", aReader, line );
         }
 
         line = aReader.ReadLine();
     }
 
-    SCH_PARSE_ERROR( _( "file ended prematurely loading component draw element" ), aReader, line );
+    SCH_PARSE_ERROR( "file ended prematurely loading component draw element", aReader, line );
 }
 
 
@@ -2768,7 +2768,7 @@ FILL_T SCH_LEGACY_PLUGIN_CACHE::parseFillMode( FILE_LINE_READER& aReader, const 
         break;
 
     default:
-        SCH_PARSE_ERROR( _( "invalid fill type, expected f, F, or N" ), aReader, aLine );
+        SCH_PARSE_ERROR( "invalid fill type, expected f, F, or N", aReader, aLine );
     }
 
     return mode;
@@ -2922,7 +2922,7 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr< LIB_PART >& aPart,
         if( strCompare( "Italic", line, &line ) )
             text->SetItalic( true );
         else if( !strCompare( "Normal", line, &line ) )
-            SCH_PARSE_ERROR( _( "invalid text stype, expected 'Normal' or 'Italic'" ),
+            SCH_PARSE_ERROR( "invalid text stype, expected 'Normal' or 'Italic'",
                              aReader, line );
 
         if( parseInt( aReader, line, &line ) > 0 )
@@ -2946,7 +2946,7 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr< LIB_PART >& aPart,
                 break;
 
             default:
-                SCH_PARSE_ERROR( _( "invalid horizontal text justication parameter, expected L, C, or R" ),
+                SCH_PARSE_ERROR( "invalid horizontal text justication parameter, expected L, C, or R",
                                  aReader, line );
             }
 
@@ -2965,7 +2965,7 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr< LIB_PART >& aPart,
                 break;
 
             default:
-                SCH_PARSE_ERROR( _( "invalid vertical text justication parameter, expected T, C, or B" ),
+                SCH_PARSE_ERROR( "invalid vertical text justication parameter, expected T, C, or B",
                                  aReader, line );
             }
         }
@@ -3090,7 +3090,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr< LIB_PART >& aPart,
         break;
 
     default:
-        SCH_PARSE_ERROR( _( "unknown pin type" ), aReader, line );
+        SCH_PARSE_ERROR( "unknown pin type", aReader, line );
     }
 
     if( !attributes.IsEmpty() )       /* Special Symbol defined */
@@ -3143,7 +3143,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr< LIB_PART >& aPart,
                 break;
 
             default:
-                SCH_PARSE_ERROR( _( "unknown pin attribute" ), aReader, line );
+                SCH_PARSE_ERROR( "unknown pin attribute", aReader, line );
             }
         }
 
@@ -3186,7 +3186,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr< LIB_PART >& aPart,
             break;
 
         default:
-            SCH_PARSE_ERROR( _( "pin attributes do not define a valid pin shape" ), aReader, line );
+            SCH_PARSE_ERROR( "pin attributes do not define a valid pin shape", aReader, line );
         }
     }
 
@@ -3275,7 +3275,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadFootprintFilters( std::unique_ptr< LIB_PART >&
         line = aReader.ReadLine();
     }
 
-    SCH_PARSE_ERROR( _( "file ended prematurely while loading footprint filters" ), aReader, line );
+    SCH_PARSE_ERROR( "file ended prematurely while loading footprint filters", aReader, line );
 }
 
 
