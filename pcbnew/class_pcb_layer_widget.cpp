@@ -541,6 +541,15 @@ void PCB_LAYER_WIDGET::ReFill()
 
 void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
 {
+    // Avoid setting the alpha channel, when we are in legacy mode,
+    // because in legacy mode the alpha channel is not used, but changing it
+    // destroys the GAL color setup
+    if( !myframe->IsGalCanvasActive() )
+    {
+        COLOR4D oldColor = myframe->GetBoard()->GetLayerColor( ToLAYER_ID( aLayer ) );
+        aColor.a = oldColor.a;
+    }
+
     myframe->GetBoard()->SetLayerColor( ToLAYER_ID( aLayer ), aColor );
 
     if( myframe->IsGalCanvasActive() )

@@ -365,13 +365,14 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
 
         // layer colors:
         wxASSERT( DIM( cds.m_LayersColors ) >= PCB_LAYER_ID_COUNT );
+
         for( int i = 0;  i<PCB_LAYER_ID_COUNT;  ++i )
         {
-            wxString vn = wxString::Format(
-                            wxT( "ColorPCBLayer_%s" ),
-                            LSET::Name( PCB_LAYER_ID( i ) ) );
+            wxString vn = wxString::Format( "ColorPCBLayer_%s",
+                                            LSET::Name( PCB_LAYER_ID( i ) ) );
 
-            m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, vn, LOC_COLOR( i ), cds.m_LayersColors[i] ) );
+            m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, vn, LOC_COLOR( i ),
+                                        cds.m_LayersColors[i] ) );
         }
 
         m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true, wxT( "ColorTxtFrontEx" ),
