@@ -1303,8 +1303,47 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
                 if(wxString(*ePin.direction).Lower()== "sup")
                 {
                     ispower = true;
-                    pin->SetType(PIN_POWER_IN);
+                    pin->SetType(PIN_POWER_OUT);
                 }
+                else if(wxString(*ePin.direction).Lower()== "pas")
+                {
+                  pin->SetType(PIN_PASSIVE);
+                }
+                else if(wxString(*ePin.direction).Lower()== "out")
+                {
+                  pin->SetType(PIN_OUTPUT);
+                }
+                else if(wxString(*ePin.direction).Lower()== "in")
+                {
+                  pin->SetType(PIN_INPUT);
+                }
+                else if(wxString(*ePin.direction).Lower()== "nc")
+                {
+                  pin->SetType(PIN_NC);
+                }
+                else if(wxString(*ePin.direction).Lower()== "io")
+                {
+                  pin->SetType(PIN_BIDI);
+                }
+                else if(wxString(*ePin.direction).Lower()== "oc")
+                {
+                  pin->SetType(PIN_OPENEMITTER);
+                }
+                else if(wxString(*ePin.direction).Lower()== "hiz")
+                {
+                  pin->SetType(PIN_TRISTATE);
+                }
+                else
+                {
+                  pin->SetType(PIN_UNSPECIFIED);
+                }
+
+
+
+
+
+
+
             }
 
 
