@@ -44,10 +44,20 @@
 
 PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager,
                                   MODULE* aModuleCopy,
+                                  COLORS_DESIGN_SETTINGS *aColors,
                                   std::vector<S3D_INFO> *aParentInfoList ):
                 PANEL_PREV_3D_BASE( aParent, wxID_ANY )
     {
         initPanel();
+
+        // Initialize the color settings to draw the board and the footprint
+        if( aColors )
+            m_dummyBoard->SetColorsSettings( aColors );
+        else
+        {
+            static COLORS_DESIGN_SETTINGS defaultColors;
+            m_dummyBoard->SetColorsSettings( &defaultColors );
+        }
 
         if( NULL != aCacheManager )
             m_resolver = aCacheManager->GetResolver();

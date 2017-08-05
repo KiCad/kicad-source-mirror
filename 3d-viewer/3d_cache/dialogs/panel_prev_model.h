@@ -68,12 +68,14 @@ class S3D_FILENAME_RESOLVER;
 class BOARD;
 class CINFO3D_VISU;
 class MODULE;
+class COLORS_DESIGN_SETTINGS;
 
 class PANEL_PREV_3D: public PANEL_PREV_3D_BASE
 {
 public:
     PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager,
                      MODULE* aModuleCopy,
+                     COLORS_DESIGN_SETTINGS *aColors,
                      std::vector<S3D_INFO> *aParentInfoList = NULL );
 
     ~PANEL_PREV_3D();

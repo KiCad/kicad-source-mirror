@@ -87,6 +87,7 @@ DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent
     m_PreviewPane = new PANEL_PREV_3D( m_Panel3D,
                                        aParent->Prj().Get3DCacheManager(),
                                        m_currentModuleCopy,
+                                       &aParent->Settings().Colors(),
                                        &m_shapes3D_list );
 
     bLowerSizer3D->Add( m_PreviewPane, 1, wxEXPAND, 5 );
