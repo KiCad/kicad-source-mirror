@@ -74,7 +74,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-05 22:55+0200\n"
-"PO-Revision-Date: 2017-08-06 15:13+0200\n"
+"PO-Revision-Date: 2017-08-06 15:29+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -14121,11 +14121,11 @@ msgstr "Arrotondamento spigoli:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:126
 msgid "Chamfer"
-msgstr "Smussati"
+msgstr "Smusso"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:126
 msgid "Fillet"
-msgstr "Stondati"
+msgstr "Stondamento"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:132
 msgid "Chamfer distance (mm):"
