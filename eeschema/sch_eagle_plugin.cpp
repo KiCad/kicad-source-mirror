@@ -1484,11 +1484,20 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr< LIB_PART >& aPart, 
     if( ewire.curve )
     {
         std::unique_ptr<LIB_ARC> arc( new LIB_ARC( aPart.get() ) );
-        wxRealPoint center = kicad_arc_center( begin, end, *ewire.curve*-1);
+        wxRealPoint center = kicad_arc_center( begin, end, *ewire.curve);
 
         arc->SetPosition(center);
+        if(*ewire.curve >0)
+        {
         arc->SetStart( begin );
         arc->SetEnd( end );
+        }
+        else
+        {
+        arc->SetStart( end );
+        arc->SetEnd( begin );
+        }
+
         arc->SetWidth(ewire.width*EUNIT_TO_MIL);
 
 
@@ -1498,9 +1507,9 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr< LIB_PART >& aPart, 
         arc->CalcRadiusAngles();
 
         if(ewire.width*2*EUNIT_TO_MIL > radius){
-            wxRealPoint centerStartVector = center - begin;
+            wxRealPoint centerStartVector = begin-center;
 
-            wxRealPoint centerEndVector   = center - end;
+            wxRealPoint centerEndVector   = end - center;
             centerStartVector.x = centerStartVector.x/radius;
             centerStartVector.y = centerStartVector.y/radius;
 
@@ -1518,11 +1527,18 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr< LIB_PART >& aPart, 
             end = center + centerEndVector;
             radius = sqrt(  abs( ( (center.x-begin.x)*(center.x-begin.x) ) + ( (center.y-begin.y)*(center.y-begin.y) ) ) );
 
-            center = kicad_arc_center( begin, end, *ewire.curve*-1);
 
             arc->SetPosition(center);
+            if(*ewire.curve >0)
+            {
             arc->SetStart( begin );
             arc->SetEnd( end );
+            }
+            else
+            {
+            arc->SetStart( end );
+            arc->SetEnd( begin );
+            }
             arc->SetRadius(radius);
             arc->CalcRadiusAngles();
             arc->SetWidth(1);
