@@ -68,12 +68,13 @@
 # mc: - frame references = squadratura
 # mc: - workbook = libretto di lavoro (simulazioni)
 # mc: - thermal relief = supporto termico
+# mc: - cutout zone = zona ritaglio
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-05 22:55+0200\n"
-"PO-Revision-Date: 2017-08-05 19:27+0200\n"
+"PO-Revision-Date: 2017-08-06 15:13+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -1169,7 +1170,7 @@ msgstr "Elimina riempimento zone"
 
 #: pcbnew/onrightclick.cpp:239 pcbnew/tools/drawing_tool.cpp:141
 msgid "Close Zone Outline"
-msgstr "Rimuovi contorni zone"
+msgstr "Rimuovi contorni zona"
 
 #: pcbnew/onrightclick.cpp:241
 msgid "Delete Last Corner"
@@ -1438,7 +1439,7 @@ msgstr "Aggiungi zona simile"
 
 #: pcbnew/onrightclick.cpp:741
 msgid "Add Cutout Area"
-msgstr "Svuota area della zona"
+msgstr "Aggiungi area ritaglio"
 
 #: pcbnew/onrightclick.cpp:744
 msgid "Duplicate Zone Onto Layer"
@@ -1463,11 +1464,11 @@ msgstr "Sposta zona esattamente"
 
 #: pcbnew/onrightclick.cpp:766
 msgid "Edit Zone Properties"
-msgstr "Proprietà zona"
+msgstr "Modifica proprietà zona"
 
 #: pcbnew/onrightclick.cpp:776
 msgid "Delete Cutout"
-msgstr "Elimina zona vuota"
+msgstr "Elimina ritaglio"
 
 #: pcbnew/onrightclick.cpp:779
 msgid "Delete Zone Outline"
@@ -2296,7 +2297,7 @@ msgstr "Aggiungi una quota"
 
 #: pcbnew/tools/drawing_tool.cpp:89
 msgid "Add Filled Zone"
-msgstr "Aggiungi zone piene"
+msgstr "Aggiungi zona piena"
 
 #: pcbnew/tools/drawing_tool.cpp:89
 msgid "Add a filled zone"
@@ -2324,7 +2325,7 @@ msgstr "Aggiungi una zona ritaglio"
 
 #: pcbnew/tools/drawing_tool.cpp:101
 msgid "Add a cutout area of an existing zone"
-msgstr "Aggiungi un'area ritaglio di una zona esistente"
+msgstr "Aggiungi un'area di ritaglio all'interno di una zona esistente"
 
 #: pcbnew/tools/drawing_tool.cpp:106
 msgid "Add a Similar Zone"
@@ -2649,7 +2650,7 @@ msgstr "Riempi tutte le zone"
 
 #: pcbnew/tools/pcb_editor_control.cpp:749
 msgid "Unfill Zone"
-msgstr "Svuota zone"
+msgstr "Svuota zona"
 
 #: pcbnew/tools/pcb_editor_control.cpp:774
 msgid "Unfill All Zones"
@@ -4560,7 +4561,7 @@ msgstr "Contorno zona"
 
 #: pcbnew/class_zone.cpp:659 pcbnew/class_zone.cpp:879
 msgid "(Cutout)"
-msgstr "(Ritaglia)"
+msgstr "(Ritaglio)"
 
 #: pcbnew/class_zone.cpp:661 pcbnew/class_drawsegment.cpp:342
 #: pcbnew/class_marker_pcb.cpp:98 pcbnew/class_text_mod.cpp:364
