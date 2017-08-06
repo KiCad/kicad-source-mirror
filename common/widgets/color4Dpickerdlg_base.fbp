@@ -1779,9 +1779,9 @@
                             <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
-                                <property name="name">bSizerTransparency</property>
+                                <property name="name">m_SizerTransparency</property>
                                 <property name="orient">wxVERTICAL</property>
-                                <property name="permission">none</property>
+                                <property name="permission">protected</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
                                     <property name="flag"></property>

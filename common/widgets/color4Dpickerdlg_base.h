@@ -63,6 +63,7 @@ class COLOR4D_PICKER_DLG_BASE : public DIALOG_SHIM
 		wxPanel* m_panelDefinedColors;
 		wxBoxSizer* m_SizerDefinedColors;
 		wxFlexGridSizer* m_fgridColor;
+		wxBoxSizer* m_SizerTransparency;
 		wxStaticText* m_staticText9;
 		wxSlider* m_sliderTransparency;
 		wxStaticText* m_staticTextOldColor;

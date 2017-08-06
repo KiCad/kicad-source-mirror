@@ -195,24 +195,23 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	
 	bSizerUpperMain->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 	
-	wxBoxSizer* bSizerTransparency;
-	bSizerTransparency = new wxBoxSizer( wxVERTICAL );
+	m_SizerTransparency = new wxBoxSizer( wxVERTICAL );
 	
 	
-	bSizerTransparency->Add( 0, 20, 0, 0, 5 );
+	m_SizerTransparency->Add( 0, 20, 0, 0, 5 );
 	
 	m_staticText9 = new wxStaticText( this, wxID_ANY, wxT("Opacity %"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
-	bSizerTransparency->Add( m_staticText9, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_SizerTransparency->Add( m_staticText9, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_sliderTransparency = new wxSlider( this, wxID_ANY, 80, 20, 100, wxDefaultPosition, wxDefaultSize, wxSL_LABELS|wxSL_LEFT|wxSL_VERTICAL );
-	bSizerTransparency->Add( m_sliderTransparency, 1, wxALL, 5 );
+	m_SizerTransparency->Add( m_sliderTransparency, 1, wxALL, 5 );
 	
 	
-	bSizerTransparency->Add( 0, 20, 0, 0, 5 );
+	m_SizerTransparency->Add( 0, 20, 0, 0, 5 );
 	
 	
-	bSizerUpperMain->Add( bSizerTransparency, 0, wxEXPAND, 5 );
+	bSizerUpperMain->Add( m_SizerTransparency, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizerShowColors;
 	bSizerShowColors = new wxBoxSizer( wxVERTICAL );

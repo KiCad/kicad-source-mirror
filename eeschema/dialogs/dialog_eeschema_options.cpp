@@ -37,6 +37,7 @@
 
 #include <wx/settings.h>
 
+int  DIALOG_EESCHEMA_OPTIONS::m_lastPageSelected = 0;
 
 DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent ) :
     DIALOG_EESCHEMA_OPTIONS_BASE( parent )
@@ -61,8 +62,8 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent ) :
     m_colorConfigCtrl = new WIDGET_EESCHEMA_COLOR_CONFIG( m_panelColors, GetParent() );
     m_colorConfigCtrl->InstallOnPanel( m_panelColors );
 
-    // Make sure we select the first tab of the options tab page
-    m_notebook->SetSelection( 0 );
+    // Make sure we select the last used tab of the options tab page
+    m_notebook->SetSelection( m_lastPageSelected );
 
     // Lay out all child pages
     // No, I don't know why this->Layout() doesn't propagate through to these,
@@ -287,6 +288,8 @@ bool DIALOG_EESCHEMA_OPTIONS::TransferDataToWindow()
 
 bool DIALOG_EESCHEMA_OPTIONS::TransferDataFromWindow()
 {
+    m_lastPageSelected = m_notebook->GetSelection();
+
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 

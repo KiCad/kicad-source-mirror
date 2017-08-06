@@ -40,6 +40,9 @@ class SCH_EDIT_FRAME;
 
 class DIALOG_EESCHEMA_OPTIONS : public DIALOG_EESCHEMA_OPTIONS_BASE
 {
+private:
+    static int  m_lastPageSelected; ///< the active notebook page when closing this dialog
+                                    ///< strored to keep selection during a session
 protected:
     WIDGET_HOTKEY_LIST*             m_hotkeyListCtrl;
     WIDGET_EESCHEMA_COLOR_CONFIG*   m_colorConfigCtrl;

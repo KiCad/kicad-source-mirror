@@ -23,7 +23,14 @@ enum CHANGED_COLOR
 class COLOR4D_PICKER_DLG : public COLOR4D_PICKER_DLG_BASE
 {
 public:
-	COLOR4D_PICKER_DLG( wxWindow* aParent, KIGFX::COLOR4D& aCurrentColor );
+    /**
+     * Dialog constructor
+     * @param aParent is the caller
+     * @param aCurrentColor is the current color, used to show it in dialog
+     * @param aAllowOpacityControl = true to allow opacity (alpha channel) setting
+     * false to not show this setting (opacity = 1.0 always)
+     */
+	COLOR4D_PICKER_DLG( wxWindow* aParent, KIGFX::COLOR4D& aCurrentColor, bool aAllowOpacityControl );
 	~COLOR4D_PICKER_DLG();
 
 	KIGFX::COLOR4D GetColor() { return m_newColor4D; };
@@ -31,6 +38,8 @@ public:
     static int m_ActivePage;            ///< the active notebook page, stored during a session
 
 private:
+    bool m_allowOpacityCtrl;            ///< true to show the widget,
+                                        ///< false to keep alpha channel = 1.0
     KIGFX::COLOR4D m_previousColor4D;   ///< the inital color4d
     KIGFX::COLOR4D m_newColor4D;        ///< the current color4d
     int m_cursorsSize;

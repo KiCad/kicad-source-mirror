@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/* Set up color Layers for Eeschema
+/* Set up colors to draw items in Eeschema
  */
 
 #include <fctsys.h>
@@ -32,6 +32,7 @@
 #include <general.h>
 
 #include "widget_eeschema_color_config.h"
+#include <../common/widgets/color4Dpickerdlg.h>
 
 // Specify the width and height of every (color-displaying / bitmap) button
 const int BUTT_SIZE_X = 16;
@@ -232,20 +233,16 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::SetColor( wxCommandEvent& event )
     COLORBUTTON* colorButton = (COLORBUTTON*) button->GetClientData();
 
     wxCHECK_RET( colorButton != NULL, wxT( "Client data not set for color button." ) );
-
-    wxColourData colourData;
-    colourData.SetColour( currentColors[ SCH_LAYER_INDEX( colorButton->m_Layer ) ].ToColour() );
-    wxColourDialog *dialog = new wxColourDialog( this, &colourData );
-
+    COLOR4D oldColor = currentColors[ SCH_LAYER_INDEX( colorButton->m_Layer ) ];
     COLOR4D newColor = COLOR4D::UNSPECIFIED;
+    COLOR4D_PICKER_DLG dialog( this, oldColor, false );
 
-    if( dialog->ShowModal() == wxID_OK )
+    if( dialog.ShowModal() == wxID_OK )
     {
-        newColor = COLOR4D( dialog->GetColourData().GetColour() );
+        newColor = dialog.GetColor();
     }
 
-    if( newColor == COLOR4D::UNSPECIFIED ||
-        currentColors[ SCH_LAYER_INDEX( colorButton->m_Layer ) ] == newColor )
+    if( newColor == COLOR4D::UNSPECIFIED || oldColor == newColor )
         return;
 
     currentColors[ SCH_LAYER_INDEX( colorButton->m_Layer ) ] = newColor;
