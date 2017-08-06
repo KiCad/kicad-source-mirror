@@ -448,7 +448,7 @@ VECTOR2<T> VECTOR2<T>::operator-()
 template <class T>
 typename VECTOR2<T>::extended_type VECTOR2<T>::operator*( const VECTOR2<T>& aVector ) const
 {
-    return aVector.x * x + aVector.y * y;
+    return (extended_type)aVector.x * x + (extended_type)aVector.y * y;
 }
 
 

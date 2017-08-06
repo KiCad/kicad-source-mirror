@@ -387,7 +387,6 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC,
         return;
 
     PCB_LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-    BOARD*      brd   = GetBoard();
 
     auto frame = static_cast<PCB_BASE_FRAME*> ( panel->GetParent() );
     auto color = frame->Settings().Colors().GetLayerColor( m_Layer );

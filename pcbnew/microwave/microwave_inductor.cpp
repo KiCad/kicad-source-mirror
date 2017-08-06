@@ -244,14 +244,13 @@ static int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
     centre    = pt;
     centre.y += radius;
     gen_arc( aBuffer, pt, centre, 900 * sign );
-    aBuffer.back();
 
     // Rotate point
     angle += 900;
 
     for( unsigned jj = 0; jj < aBuffer.size(); jj++ )
     {
-        RotatePoint( &aBuffer[jj].x, &aBuffer[jj].y, aStartPoint.x, aStartPoint.y, angle );
+        RotatePoint( &aBuffer[jj], aStartPoint, angle );
     }
 
     // push last point (end point)

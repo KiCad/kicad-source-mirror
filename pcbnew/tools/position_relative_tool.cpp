@@ -59,6 +59,7 @@ POSITION_RELATIVE_TOOL::POSITION_RELATIVE_TOOL() :
     PCB_TOOL( "pcbnew.PositionRelative" ), m_position_relative_dialog( NULL ),
     m_selectionTool( NULL ), m_anchor_item( NULL )
 {
+    m_position_relative_rotation = 0.0;
 }
 
 
