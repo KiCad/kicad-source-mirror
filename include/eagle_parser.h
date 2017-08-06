@@ -51,7 +51,7 @@ struct EPART;
 typedef std::unordered_map<string, wxXmlNode*> NODE_MAP;
 typedef std::map<string, MODULE*> MODULE_MAP;
 typedef std::map<string, EINSTANCE*> EINSTANCE_MAP;
-typedef std::map<string, EPART*> EPART_MAP;
+typedef std::map<string, std::unique_ptr<EPART>> EPART_MAP;
 
 static inline wxXmlNode* getChildrenNodes( NODE_MAP& aMap, const string& aName )
 {

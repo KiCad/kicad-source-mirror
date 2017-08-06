@@ -29,6 +29,8 @@
 #include <lib_draw_item.h>
 #include <dlist.h>
 
+#include <boost/ptr_container/ptr_map.hpp>
+
 class KIWAY;
 class LINE_READER;
 class SCH_SCREEN;
@@ -67,14 +69,15 @@ class LIB_TEXT;
 typedef struct EAGLE_LIBRARY
 {
     std::string name;
-    std::unordered_map<std::string, LIB_PART*> kicadsymbols;
-    std::unordered_map<std::string, wxXmlNode*> symbolnodes;
+    boost::ptr_map<std::string, LIB_PART*> kicadsymbols;
+    boost::ptr_map<std::string, wxXmlNode*> symbolnodes;
     std::unordered_map<std::string, int> gate_unit;
     std::unordered_map<std::string, std::string> package;
 
 } EAGLE_LIBRARY;
 
-typedef  std::map<std::string, EPART*> EPART_LIST;
+typedef boost::ptr_map< std::string, EPART > EPART_LIST;
+
 
 class SCH_EAGLE_PLUGIN : public SCH_PLUGIN
 {
@@ -134,7 +137,7 @@ private:
     void loadSheet( wxXmlNode* aSheetNode );
     void loadInstance( wxXmlNode* aInstanceNode );
     void loadModuleinst( wxXmlNode* aModuleinstNode );
-    EAGLE_LIBRARY* loadLibrary( wxXmlNode* aLibraryNode );
+    EAGLE_LIBRARY loadLibrary( wxXmlNode* aLibraryNode );
     void countNets( wxXmlNode* aSchematicNode );
     void addBusEntries();
 
@@ -148,13 +151,13 @@ private:
     SCH_JUNCTION*       loadJunction( wxXmlNode* aJunction );
     SCH_TEXT*           loadplaintext( wxXmlNode* aSchText );
 
-    bool            loadSymbol(wxXmlNode *aSymbolNode, LIB_PART* aPart, EDEVICE* aDevice, int gateNumber, string gateName);
-    LIB_CIRCLE*     loadSymbolCircle( LIB_PART* aPart, wxXmlNode* aCircleNode );
-    LIB_RECTANGLE*  loadSymbolRectangle( LIB_PART* aPart, wxXmlNode* aRectNode );
-    LIB_POLYLINE*   loadSymbolPolyLine( LIB_PART* aPart, wxXmlNode* aPolygonNode );
-    LIB_ITEM*       loadSymbolWire( LIB_PART* aPart, wxXmlNode* aWireNode );
-    LIB_PIN*        loadPin( LIB_PART*, wxXmlNode*, EPIN* epin);
-    LIB_TEXT*       loadSymboltext(  LIB_PART* aPart, wxXmlNode* aLibText );
+    bool            loadSymbol(wxXmlNode *aSymbolNode, std::unique_ptr< LIB_PART >& aPart, EDEVICE* aDevice, int gateNumber, string gateName);
+    LIB_CIRCLE*     loadSymbolCircle( std::unique_ptr< LIB_PART >& aPart, wxXmlNode* aCircleNode, int gateNumber);
+    LIB_RECTANGLE*  loadSymbolRectangle( std::unique_ptr< LIB_PART >& aPart, wxXmlNode* aRectNode, int gateNumber );
+    LIB_POLYLINE*   loadSymbolPolyLine( std::unique_ptr< LIB_PART >& aPart, wxXmlNode* aPolygonNode, int gateNumber );
+    LIB_ITEM*       loadSymbolWire( std::unique_ptr< LIB_PART >& aPart, wxXmlNode* aWireNode, int gateNumber);
+    LIB_PIN*        loadPin( std::unique_ptr< LIB_PART >& aPart, wxXmlNode*, EPIN* epin, int gateNumber);
+    LIB_TEXT*       loadSymboltext(  std::unique_ptr< LIB_PART >& aPart, wxXmlNode* aLibText, int gateNumber);
 
     KIWAY* m_kiway;      ///< For creating sub sheets.
     SCH_SHEET* m_rootSheet; ///< The root sheet of the schematic being loaded..
@@ -163,8 +166,8 @@ private:
     wxFileName m_filename;
     PART_LIB* m_partlib; ///< symbol library for imported file.
 
-    EPART_LIST m_partlist;
-    std::map<std::string, EAGLE_LIBRARY*> m_eaglelibraries;
+    EPART_MAP m_partlist;
+    std::map<std::string, EAGLE_LIBRARY> m_eaglelibraries;
 
     EDA_RECT sheetBoundingBox;
     std::map<std::string, int > m_NetCounts;
