@@ -621,7 +621,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( !m_dragging )
         m_commit->Push( _( "Rotate" ) );
 
-    if( selection.IsHover() )
+    if( selection.IsHover() && !m_dragging )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
@@ -728,7 +728,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     if( !m_dragging )
         m_commit->Push( _( "Mirror" ) );
 
-    if( selection.IsHover() )
+    if( selection.IsHover() && !m_dragging )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
@@ -761,7 +761,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     if( !m_dragging )
         m_commit->Push( _( "Flip" ) );
 
-    if( selection.IsHover() )
+    if( selection.IsHover() && !m_dragging )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
