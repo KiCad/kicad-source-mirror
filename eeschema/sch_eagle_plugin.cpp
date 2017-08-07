@@ -1179,8 +1179,8 @@ EAGLE_LIBRARY SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
 
     while( symbolNode )
     {
-        wxString symbolName = symbolNode->GetAttribute( "name" );
-        elib.symbolnodes[symbolName.ToStdString()] = symbolNode;
+        string symbolName = symbolNode->GetAttribute( "name" ).ToStdString();
+        elib.symbolnodes[symbolName] = symbolNode;
         symbolNode = symbolNode->GetNext();
     }
 
@@ -1239,9 +1239,9 @@ EAGLE_LIBRARY SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
             kpart->SetUnitCount( gates_count );
             if(gates_count == 1 && ispower) kpart->SetPower();
 
-            const string& name = kpart->GetName().ToStdString();
+            string name = kpart->GetName().ToStdString();
             m_partlib->AddPart( kpart.get() );
-            elib.kicadsymbols[name] = kpart.release();
+            elib.kicadsymbols.insert( name, kpart.release() );
 
             deviceNode = deviceNode->GetNext();
         }    // devicenode
@@ -1267,7 +1267,7 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
     bool foundName = false;
     bool foundValue = false;
     bool ispower = false;
-    int pincount;
+    int pincount = 0;
 
     while( currentNode )
     {

@@ -69,8 +69,8 @@ class LIB_TEXT;
 typedef struct EAGLE_LIBRARY
 {
     std::string name;
-    boost::ptr_map<std::string, LIB_PART*> kicadsymbols;
-    boost::ptr_map<std::string, wxXmlNode*> symbolnodes;
+    boost::ptr_map<std::string, LIB_PART> kicadsymbols;
+    std::unordered_map<std::string, wxXmlNode*> symbolnodes;
     std::unordered_map<std::string, int> gate_unit;
     std::unordered_map<std::string, std::string> package;
 
