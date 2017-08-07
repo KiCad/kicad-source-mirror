@@ -1501,7 +1501,8 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr< LIB_PART >& aPart, 
         arc->SetWidth(ewire.width*EUNIT_TO_MIL);
 
 
-        double radius = sqrt(  abs( ( (center.x-begin.x)*(center.x-begin.x) ) + ( (center.y-begin.y)*(center.y-begin.y) ) ) );
+        double radius = sqrt( abs( ( ( center.x - begin.x ) * ( center.x - begin.x ) )
+                                   + ( ( center.y - begin.y ) * ( center.y - begin.y ) ) ) ) * 2;
 
         arc->SetRadius(radius);
         arc->CalcRadiusAngles();
@@ -1525,7 +1526,8 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr< LIB_PART >& aPart, 
 
             begin = center + centerStartVector;
             end = center + centerEndVector;
-            radius = sqrt(  abs( ( (center.x-begin.x)*(center.x-begin.x) ) + ( (center.y-begin.y)*(center.y-begin.y) ) ) );
+            radius = sqrt( abs( ( ( center.x - begin.x ) * ( center.x - begin.x ) )
+                                + ( ( center.y - begin.y ) * ( center.y - begin.y ) ) ) ) * 2;
 
 
             arc->SetPosition(center);
