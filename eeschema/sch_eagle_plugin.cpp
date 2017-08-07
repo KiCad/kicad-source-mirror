@@ -1301,7 +1301,7 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
                 if(wxString(*ePin.direction).Lower()== "sup")
                 {
                     ispower = true;
-                    pin->SetType(PIN_POWER_OUT);
+                    pin->SetType(PIN_POWER_IN);
                 }
                 else if(wxString(*ePin.direction).Lower()== "pas")
                 {
@@ -1373,6 +1373,8 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
             {
                 pin->SetPartNumber( gateNumber );
                 pin->SetUnit( gateNumber );
+                wxString stringPinNum = wxString::Format(wxT("%i"),pincount);
+                pin->SetPinNumFromString(stringPinNum);
                 aPart->AddDrawItem( pin.release() );
             }
         }
