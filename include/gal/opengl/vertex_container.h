@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright 2013-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -49,6 +49,12 @@ public:
     virtual ~VERTEX_CONTAINER();
 
     /**
+     * Returns true if the container caches vertex data in RAM or video memory.
+     * Otherwise it is a single batch draw which is later discarded.
+     */
+    virtual bool IsCached() const = 0;
+
+    /**
      * Function Map()
      * prepares the container for vertices updates.
      */
@@ -58,8 +64,7 @@ public:
      * Function Unmap()
      * finishes the vertices updates stage.
      */
-    virtual void Unmap()
-    {}
+    virtual void Unmap() {}
 
     /**
      * Function SetItem()
@@ -153,7 +158,7 @@ public:
     }
 
 protected:
-    VERTEX_CONTAINER( unsigned int aSize = defaultInitSize );
+    VERTEX_CONTAINER( unsigned int aSize = DEFAULT_SIZE );
 
     ///< How many vertices we can store in the container
     unsigned int    m_freeSpace;
@@ -182,7 +187,7 @@ protected:
     }
 
     ///< Default initial size of a container (expressed in vertices)
-    static const unsigned int defaultInitSize = 1048576;
+    static constexpr unsigned int DEFAULT_SIZE = 1048576;
 };
 } // namespace KIGFX
 

@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file gpu_manager.h
- * @brief Class to handle uploading vertices and indices to GPU in drawing purposes.
- */
-
 #ifndef GPU_MANAGER_H_
 #define GPU_MANAGER_H_
 
@@ -39,6 +34,10 @@ class SHADER;
 class VERTEX_CONTAINER;
 class CACHED_CONTAINER;
 class NONCACHED_CONTAINER;
+
+/**
+ * @brief Class to handle uploading vertices and indices to GPU in drawing purposes.
+ */
 
 class GPU_MANAGER
 {

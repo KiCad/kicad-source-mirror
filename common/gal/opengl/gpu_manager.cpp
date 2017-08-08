@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2016 CERN
+ * Copyright 2013-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -22,13 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file gpu_manager.cpp
- * @brief Class to handle uploading vertices and indices to GPU in drawing purposes.
- */
-
 #include <gal/opengl/gpu_manager.h>
-#include <gal/opengl/cached_container.h>
+#include <gal/opengl/cached_container_gpu.h>
+#include <gal/opengl/cached_container_ram.h>
 #include <gal/opengl/noncached_container.h>
 #include <gal/opengl/shader.h>
 #include <gal/opengl/utils.h>
@@ -45,13 +41,10 @@ using namespace KIGFX;
 
 GPU_MANAGER* GPU_MANAGER::MakeManager( VERTEX_CONTAINER* aContainer )
 {
-    if( typeid( *aContainer ) == typeid( CACHED_CONTAINER ) )
+    if( aContainer->IsCached() )
         return new GPU_CACHED_MANAGER( aContainer );
-    else if( typeid( *aContainer ) == typeid( NONCACHED_CONTAINER ) )
+    else
         return new GPU_NONCACHED_MANAGER( aContainer );
-
-    wxASSERT_MSG( false, wxT( "Not handled container type" ) );
-    return NULL;
 }
 
 

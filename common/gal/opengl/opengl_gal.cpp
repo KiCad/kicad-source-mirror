@@ -87,10 +87,6 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     compositor = new OPENGL_COMPOSITOR;
     compositor->SetAntialiasingMode( options.gl_antialiasing_mode );
 
-    cachedManager = new VERTEX_MANAGER( true );
-    nonCachedManager = new VERTEX_MANAGER( false );
-    overlayManager = new VERTEX_MANAGER( false );
-
     // Initialize the flags
     isFramebufferInitialized = false;
     isBitmapFontInitialized  = false;
@@ -154,9 +150,13 @@ OPENGL_GAL::~OPENGL_GAL()
     ClearCache();
 
     delete compositor;
-    delete cachedManager;
-    delete nonCachedManager;
-    delete overlayManager;
+
+    if( isInitialized )
+    {
+        delete cachedManager;
+        delete nonCachedManager;
+        delete overlayManager;
+    }
 
     GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
 
@@ -1251,7 +1251,9 @@ void OPENGL_GAL::DeleteGroup( int aGroupNumber )
 void OPENGL_GAL::ClearCache()
 {
     groups.clear();
-    cachedManager->Clear();
+
+    if( isInitialized )
+        cachedManager->Clear();
 }
 
 
@@ -1761,6 +1763,10 @@ void OPENGL_GAL::init()
         GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
         throw;
     }
+
+    cachedManager = new VERTEX_MANAGER( true );
+    nonCachedManager = new VERTEX_MANAGER( false );
+    overlayManager = new VERTEX_MANAGER( false );
 
     // Make VBOs use shaders
     cachedManager->SetShader( *shader );

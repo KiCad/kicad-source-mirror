@@ -49,6 +49,8 @@ set( GAL_SRCS
     gal/opengl/vertex_item.cpp
     gal/opengl/vertex_container.cpp
     gal/opengl/cached_container.cpp
+    gal/opengl/cached_container_gpu.cpp
+    gal/opengl/cached_container_ram.cpp
     gal/opengl/noncached_container.cpp
     gal/opengl/vertex_manager.cpp
     gal/opengl/gpu_manager.cpp

@@ -41,8 +41,13 @@ class SHADER;
 class NONCACHED_CONTAINER : public VERTEX_CONTAINER
 {
 public:
-    NONCACHED_CONTAINER( unsigned int aSize = defaultInitSize );
+    NONCACHED_CONTAINER( unsigned int aSize = DEFAULT_SIZE );
     virtual ~NONCACHED_CONTAINER();
+
+    bool IsCached() const override
+    {
+        return false;
+    }
 
     /// @copydoc VERTEX_CONTAINER::SetItem( VERTEX_ITEM* aItem )
     virtual void SetItem( VERTEX_ITEM* aItem ) override;
