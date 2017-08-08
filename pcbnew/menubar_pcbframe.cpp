@@ -793,13 +793,13 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     wxMenu* submenuarchive = new wxMenu();
 
     AddMenuItem( submenuarchive, ID_MENU_ARCHIVE_MODULES_IN_LIBRARY,
-                 _( "&Archive Footprints in Project Library." ),
+                 _( "&Archive Footprints in Project Library" ),
                  _( "Archive footprints in existing library in footprint Lib table"
                     "(does not remove other footprints in this library)" ),
                  KiBitmap( library_update_xpm ) );
 
     AddMenuItem( submenuarchive, ID_MENU_CREATE_LIBRARY_AND_ARCHIVE_MODULES,
-                 _( "&Create Library and Archive Footprints." ),
+                 _( "&Create Library and Archive Footprints" ),
                  _( "Archive all footprints in new library\n"
                     "(if the library already exists it will be deleted)" ),
                  KiBitmap( library_xpm ) );
