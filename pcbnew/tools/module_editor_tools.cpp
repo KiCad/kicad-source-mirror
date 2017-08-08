@@ -164,7 +164,7 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( evt->IsDrag( BUT_LEFT ) )
+        if( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
         {
             selectedPads.clear();
             VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
