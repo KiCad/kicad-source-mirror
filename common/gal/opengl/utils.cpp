@@ -95,7 +95,7 @@ void enableGlDebug( bool aEnable )
     if( aEnable )
     {
         glEnable( GL_DEBUG_OUTPUT );
-        glDebugMessageCallback( debugMsgCallback, (const void*) nullptr );
+        glDebugMessageCallback( debugMsgCallback, (void*) nullptr );
     }
     else
     {
