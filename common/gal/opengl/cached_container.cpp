@@ -431,18 +431,18 @@ void CACHED_CONTAINER::test()
     assert( freeSpace == m_freeSpace );
 
     // Used space check
-    unsigned int usedSpace = 0;
+    unsigned int used_space = 0;
     ITEMS::iterator itr;
     for( itr = m_items.begin(); itr != m_items.end(); ++itr )
-        usedSpace += ( *itr )->GetSize();
+        used_space += ( *itr )->GetSize();
 
     // If we have a chunk assigned, then there must be an item edited
     assert( m_chunkSize == 0 || m_item );
 
     // Currently reserved chunk is also counted as used
-    usedSpace += m_chunkSize;
+    used_space += m_chunkSize;
 
-    assert( ( m_freeSpace + usedSpace ) == m_currentSize );
+    assert( ( m_freeSpace + used_space ) == m_currentSize );
 
     // Overlapping check TODO
 #endif /* __WXDEBUG__ */
