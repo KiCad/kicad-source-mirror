@@ -66,9 +66,6 @@ public:
     }
 
 protected:
-    ///> Flag saying if the vertex buffer is initialized
-    bool m_isInitialized;
-
     ///> Handle to vertices buffer
     GLuint  m_verticesBuffer;
 

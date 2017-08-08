@@ -40,17 +40,18 @@
 using namespace KIGFX;
 
 CACHED_CONTAINER_RAM::CACHED_CONTAINER_RAM( unsigned int aSize ) :
-    CACHED_CONTAINER( aSize ), m_isInitialized( false ), m_verticesBuffer( 0 )
+    CACHED_CONTAINER( aSize ), m_verticesBuffer( 0 )
 {
+    glGenBuffers( 1, &m_verticesBuffer );
+    checkGlError( "generating vertices buffer" );
+
     m_vertices = static_cast<VERTEX*>( malloc( aSize * VertexSize ) );
 }
 
 
 CACHED_CONTAINER_RAM::~CACHED_CONTAINER_RAM()
 {
-    if( m_isInitialized )
-        glDeleteBuffers( 1, &m_verticesBuffer );
-
+    glDeleteBuffers( 1, &m_verticesBuffer );
     free( m_vertices );
 }
 
@@ -59,13 +60,6 @@ void CACHED_CONTAINER_RAM::Unmap()
 {
     if( !m_dirty )
         return;
-
-    if( !m_isInitialized )
-    {
-        glGenBuffers( 1, &m_verticesBuffer );
-        checkGlError( "generating vertices buffer" );
-        m_isInitialized = true;
-    }
 
     // Upload vertices coordinates and shader types to GPU memory
     glBindBuffer( GL_ARRAY_BUFFER, m_verticesBuffer );

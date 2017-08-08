@@ -60,21 +60,11 @@ protected:
     ///> Flag saying if vertex buffer is currently mapped
     bool m_isMapped;
 
-    ///> Flag saying if the vertex buffer is initialized
-    bool m_isInitialized;
-
     ///> Vertex buffer handle
     unsigned int m_glBufferHandle;
 
     ///> Flag saying whether it is safe to use glCopyBufferSubData
     bool m_useCopyBuffer;
-
-    /**
-     * Function init()
-     * performs the GL vertex buffer initialization. It can be invoked only when an OpenGL context
-     * is bound.
-     */
-    void init();
 
     /**
      * Function defragmentResize()

@@ -39,9 +39,15 @@
 using namespace KIGFX;
 
 CACHED_CONTAINER_GPU::CACHED_CONTAINER_GPU( unsigned int aSize ) :
-    CACHED_CONTAINER( aSize ), m_isMapped( false ),
-    m_isInitialized( false ), m_glBufferHandle( -1 )
+    CACHED_CONTAINER( aSize ), m_isMapped( false ), m_glBufferHandle( -1 )
 {
+    m_useCopyBuffer = GLEW_ARB_copy_buffer;
+
+    glGenBuffers( 1, &m_glBufferHandle );
+    glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );
+    glBufferData( GL_ARRAY_BUFFER, m_currentSize * VertexSize, NULL, GL_DYNAMIC_DRAW );
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
+    checkGlError( "allocating video memory for cached container" );
 }
 
 
@@ -50,17 +56,13 @@ CACHED_CONTAINER_GPU::~CACHED_CONTAINER_GPU()
     if( m_isMapped )
         Unmap();
 
-    if( m_isInitialized )
-        glDeleteBuffers( 1, &m_glBufferHandle );
+    glDeleteBuffers( 1, &m_glBufferHandle );
 }
 
 
 void CACHED_CONTAINER_GPU::Map()
 {
     assert( !IsMapped() );
-
-    if( !m_isInitialized )
-        init();
 
     glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );
     m_vertices = static_cast<VERTEX*>( glMapBuffer( GL_ARRAY_BUFFER, GL_READ_WRITE ) );
@@ -81,20 +83,6 @@ void CACHED_CONTAINER_GPU::Unmap()
     checkGlError( "unbinding vertices buffer" );
 
     m_isMapped = false;
-}
-
-
-void CACHED_CONTAINER_GPU::init()
-{
-    m_useCopyBuffer = GLEW_ARB_copy_buffer;
-
-    glGenBuffers( 1, &m_glBufferHandle );
-    glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );
-    glBufferData( GL_ARRAY_BUFFER, m_currentSize * VertexSize, NULL, GL_DYNAMIC_DRAW );
-    glBindBuffer( GL_ARRAY_BUFFER, 0 );
-    checkGlError( "allocating video memory for cached container" );
-
-    m_isInitialized = true;
 }
 
 
