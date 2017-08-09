@@ -83,8 +83,17 @@ int checkGlError( const std::string& aInfo, bool aThrow )
 }
 
 
-static void debugMsgCallback( GLenum aSource, GLenum aType, GLuint aId,
-   GLenum aSeverity, GLsizei aLength, const GLchar* aMessage, void* aUserParam )
+// debugMsgCallback is a callback function for glDebugMessageCallback.
+// It must have a right type on Windows
+#ifdef __WINDOWS__
+#include <windef.h>
+#define CB_TYPE APIENTRY
+#else
+#define CB_TYPE
+#endif
+
+static void CB_TYPE debugMsgCallback( GLenum aSource, GLenum aType, GLuint aId,
+   GLenum aSeverity, GLsizei aLength, const GLchar* aMessage, const void* aUserParam )
 {
     printf( "%s", aMessage );
 }
