@@ -190,9 +190,9 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, PCB_EDIT_FRAME::Show3D_Frame )
 
     // Switching canvases
-    EVT_MENU( ID_MENU_CANVAS_LEGACY, PCB_BASE_FRAME::SwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_CAIRO, PCB_BASE_FRAME::SwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_OPENGL, PCB_BASE_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_LEGACY, PCB_EDIT_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_CAIRO, PCB_EDIT_FRAME::SwitchCanvas )
+    EVT_MENU( ID_MENU_CANVAS_OPENGL, PCB_EDIT_FRAME::SwitchCanvas )
 
     // Menu Get Design Rules Editor
     EVT_MENU( ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG, PCB_EDIT_FRAME::ShowDesignRulesEditor )
@@ -1105,6 +1105,19 @@ void PCB_EDIT_FRAME::OnLayerColorChange( wxCommandEvent& aEvent )
     ReCreateLayerBox();
 }
 
+
+void PCB_EDIT_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
+{
+    // switches currently used canvas (default / Cairo / OpenGL).
+    PCB_BASE_FRAME::SwitchCanvas( aEvent );
+
+    // The base class method reinit the layers manager.
+    // We must upate the layer widget to match board visibility states,
+    // both layers and render columns.
+    syncLayerVisibilities();
+    syncLayerWidgetLayer();
+    syncRenderStates();
+}
 
 void PCB_EDIT_FRAME::ToPlotter( wxCommandEvent& event )
 {

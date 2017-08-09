@@ -119,6 +119,11 @@ protected:
     void enableGALSpecificMenus();
 
     /**
+     * switches currently used canvas (default / Cairo / OpenGL).
+     */
+    virtual void SwitchCanvas( wxCommandEvent& aEvent ) override;
+
+    /**
      * Helper function to coerce all colors to legacy-compatible when
      * switching from GAL to legacy canvas
      */
