@@ -7,7 +7,6 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.0"
@@ -37,15 +36,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1054"
+     inkscape:window-width="1366"
+     inkscape:window-height="717"
      id="namedview164"
      showgrid="true"
-     inkscape:zoom="27.812866"
-     inkscape:cx="10.334754"
-     inkscape:cy="8.0327749"
+     inkscape:zoom="9.8333331"
+     inkscape:cx="1.915385"
+     inkscape:cy="10.576725"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="1080"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2">
     <inkscape:grid
@@ -54,97 +53,6 @@
   </sodipodi:namedview>
   <defs
      id="defs4">
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 24 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="48 : 24 : 1"
-       inkscape:persp3d-origin="24 : 16 : 1"
-       id="perspective51" />
-    <linearGradient
-       id="linearGradient6881-1">
-      <stop
-         id="stop6883-0"
-         style="stop-color:#ffffff;stop-opacity:1"
-         offset="0" />
-      <stop
-         id="stop6885-3"
-         style="stop-color:#ffffff;stop-opacity:0"
-         offset="1" />
-    </linearGradient>
-    <linearGradient
-       x1="14.462892"
-       y1="12.284524"
-       x2="34.534348"
-       y2="39.684914"
-       id="linearGradient4064"
-       xlink:href="#linearGradient3264-3"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.92673346,0,0,0.8449938,4.7270711,52.187103)" />
-    <linearGradient
-       id="linearGradient3264-3">
-      <stop
-         id="stop3266-9"
-         style="stop-color:#c9c9c9;stop-opacity:1"
-         offset="0" />
-      <stop
-         id="stop3276-4"
-         style="stop-color:#f8f8f8;stop-opacity:1"
-         offset="0.25" />
-      <stop
-         id="stop3272-8"
-         style="stop-color:#e2e2e2;stop-opacity:1"
-         offset="0.5" />
-      <stop
-         id="stop3274-1"
-         style="stop-color:#b0b0b0;stop-opacity:1"
-         offset="0.75" />
-      <stop
-         id="stop3268-2"
-         style="stop-color:#c9c9c9;stop-opacity:1"
-         offset="1" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient3823">
-      <stop
-         style="stop-color:#000000;stop-opacity:1;"
-         offset="0"
-         id="stop3825" />
-      <stop
-         style="stop-color:#000000;stop-opacity:0;"
-         offset="1"
-         id="stop3827" />
-    </linearGradient>
-    <filter
-       style="color-interpolation-filters:sRGB"
-       id="filter3945">
-      <feGaussianBlur
-         stdDeviation="0.05617153"
-         id="feGaussianBlur12" />
-    </filter>
-    <filter
-       style="color-interpolation-filters:sRGB"
-       id="filter3941">
-      <feGaussianBlur
-         stdDeviation="0.05617153"
-         id="feGaussianBlur9" />
-    </filter>
-    <radialGradient
-       id="radialGradient3010"
-       gradientUnits="userSpaceOnUse"
-       cy="20.493999"
-       cx="35.292999"
-       gradientTransform="matrix(0,-0.37207013,-0.43717023,0,25.659761,18.586092)"
-       r="16.955999">
-      <stop
-         stop-color="#539bed"
-         offset="0"
-         id="stop15" />
-      <stop
-         stop-color="#0969d3"
-         offset="1"
-         id="stop17" />
-    </radialGradient>
     <filter
        style="color-interpolation-filters:sRGB"
        id="filter3945-3">
@@ -159,22 +67,6 @@
          stdDeviation="0.05617153"
          id="feGaussianBlur9-5" />
     </filter>
-    <radialGradient
-       id="radialGradient3010-3"
-       gradientUnits="userSpaceOnUse"
-       cy="20.493999"
-       cx="35.292999"
-       gradientTransform="matrix(0,-0.37207013,-0.43717023,0,26.320772,18.586092)"
-       r="16.955999">
-      <stop
-         stop-color="#539bed"
-         offset="0"
-         id="stop15-5" />
-      <stop
-         stop-color="#0969d3"
-         offset="1"
-         id="stop17-6" />
-    </radialGradient>
     <filter
        style="color-interpolation-filters:sRGB"
        id="filter3945-36">
@@ -206,13 +98,6 @@
          id="stop17-2" />
     </radialGradient>
   </defs>
-  <rect
-     style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="rect4338"
-     width="26.067072"
-     height="26.067072"
-     x="-0.085073434"
-     y="0.033428054" />
   <rect
      style="opacity:1;fill:#ffd42a;fill-opacity:1;fill-rule:nonzero;stroke:#d4aa00;stroke-width:1.03579581;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect4298"
