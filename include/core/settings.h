@@ -41,7 +41,7 @@ class SETTINGS
         SETTINGS()
             {}
 
-        ~SETTINGS()
+        virtual ~SETTINGS()
             {}
 
         void SetConfigPrefix ( const wxString& aPrefix )

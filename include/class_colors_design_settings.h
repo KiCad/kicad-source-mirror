@@ -55,6 +55,9 @@ public:
 public:
     COLORS_DESIGN_SETTINGS();
 
+    ~COLORS_DESIGN_SETTINGS() override
+        {}
+
     virtual void Load( wxConfigBase *aConfig ) override;
     virtual void Save( wxConfigBase *aConfig ) override;
     /**
