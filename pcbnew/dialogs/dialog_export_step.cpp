@@ -6,6 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo
+ * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +31,8 @@
 
 #include "wxPcbStruct.h"
 #include "kiface_i.h"
+#include "confirm.h"
+
 #include "pcbnew.h"
 #include "class_board.h"
 #include "dialog_export_step_base.h"
@@ -176,7 +179,30 @@ public:
         event.Skip();
     }
 
+    bool TransferDataFromWindow() override;
 };
+
+
+bool DIALOG_EXPORT_STEP::TransferDataFromWindow()
+{
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
+
+    wxFileName fn = m_filePickerSTEP->GetFileName();
+
+    if( fn.FileExists() )
+    {
+        wxString msg( _( "File: " ) );
+        msg.append( fn.GetFullPath() );
+        msg.append( "\n" );
+        msg.append( _( "already exists.  Do you want overwrite this file?" ) );
+
+        if( wxMessageBox( msg, _( "STEP Export" ), wxYES_NO | wxICON_QUESTION, this ) == wxNO )
+            return false;
+    }
+
+    return true;
+}
 
 
 void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
@@ -189,8 +215,8 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
     {
         if( !doAutoSave() )
         {
-            wxMessageBox( _( "STEP export failed; please save the PCB and try again" ),
-                          _( "STEP Export" ) );
+            DisplayErrorMessage( this,
+                                 _( "STEP export failed!  Please save the PCB and try again" ) );
             return;
         }
 
@@ -211,45 +237,13 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
 
     DIALOG_EXPORT_STEP dlg( this );
     dlg.FilePicker()->SetPath( brdFile.GetFullPath() );
-    bool fileOverwrite = false;
-    wxString outputFile;
 
-    while( !fileOverwrite )
-    {
-        if ( dlg.ShowModal() != wxID_OK )
-            return;
+    if ( dlg.ShowModal() != wxID_OK )
+        return;
 
-        brdFile = dlg.FilePicker()->GetPath();
-        brdFile.SetExt( "stp" );
-        outputFile = brdFile.GetFullPath();
+    wxString outputFile = dlg.FilePicker()->GetPath();
 
-        if( wxFile::Exists( outputFile ) )
-        {
-            wxString msg( _( "File: " ) );
-            msg.append( outputFile );
-            msg.append( "\n" );
-            msg.append( _( "File exists, overwrite?" ) );
-            int resp = wxMessageBox( msg, _( "STEP Export" ), wxYES_NO | wxCANCEL, this );
-
-            switch( resp )
-            {
-                case wxCANCEL:
-                    return;
-
-                case wxYES:
-                    fileOverwrite = true;
-                    break;
-
-                default:
-                    break;
-            }
-        }
-        else
-        {
-            fileOverwrite = true;
-        }
-    }
-
+    brdFile.SetExt( brdExt );
     outputFile.Prepend( "\"" );
     outputFile.Append( "\"" );
     bool   aUseDrillOrg = dlg.GetDrillOrgOption();
@@ -307,10 +301,7 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
 
     if( result )
     {
-        wxMessageBox(
-            _( "Unable to create STEP file; check that the board has a valid outline and models." ),
-            _( "STEP Export" ), wxOK );
+        DisplayErrorMessage( this, _( "Unable to create STEP file.  Check that the board has a "
+                                      "valid outline and models." ), cmdK2S );
     }
-
-    return;
 }

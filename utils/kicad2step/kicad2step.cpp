@@ -2,6 +2,7 @@
  * This program source code file is part of kicad2mcad
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -219,12 +220,16 @@ int KICAD2MCAD::OnRun()
     else
         tfname.Assign( m_outputFile );
 
+    // Set the file extension if the user's requested file name does not have an extension.
+    if( !tfname.HasExt() )
+    {
 #ifdef SUPPORTS_IGES
-    if( m_fmtIGES )
-        tfname.SetExt( "igs" );
-    else
+        if( m_fmtIGES )
+            tfname.SetExt( "igs" );
+        else
 #endif
-        tfname.SetExt( "stp" );
+            tfname.SetExt( "stp" );
+    }
 
     wxString outfile = tfname.GetFullPath();
 
