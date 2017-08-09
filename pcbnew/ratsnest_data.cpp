@@ -164,7 +164,7 @@ private:
     std::vector<VECTOR2I>  m_prevNodes;
     std::vector<std::pair<int, int> > m_prevEdges;
 
-    const std::list<hed::EDGE_PTR>& hedTriangulation( std::vector<hed::NODE_PTR>& aNodes )
+    std::list<hed::EDGE_PTR> hedTriangulation( std::vector<hed::NODE_PTR>& aNodes )
     {
         hed::TRIANGULATION triangulator;
         triangulator.CreateDelaunay( aNodes.begin(), aNodes.end() );
@@ -175,7 +175,7 @@ private:
     }
 
 
-    const std::list<hed::EDGE_PTR>& computeTriangulation( std::vector<hed::NODE_PTR>& aNodes )
+    std::list<hed::EDGE_PTR> computeTriangulation( std::vector<hed::NODE_PTR>& aNodes )
     {
         #if 0
         bool refresh = false;
