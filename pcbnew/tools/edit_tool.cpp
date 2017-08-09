@@ -92,7 +92,7 @@ TOOL_ACTION PCB_ACTIONS::globalEditPads( "pcbnew.InteractiveEdit.globalPadEdit",
 
 TOOL_ACTION PCB_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
         AS_GLOBAL, 0,
-        _( "Edit Activate" ), _( "" ), move_xpm, AF_ACTIVATE );
+        _( "Edit Activate" ), "", move_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveEdit.move",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_ITEM ),
