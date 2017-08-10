@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -44,9 +44,10 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxFilePickerCtrl* m_filePickerSTEP;
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_staticText6;
-		wxCheckBox* m_cbDrillOrigin;
-		wxCheckBox* m_cbAuxOrigin;
+		wxCheckBox* m_cbPlotOrigin;
+		wxCheckBox* m_cbGridOrigin;
 		wxCheckBox* m_cbUserOrigin;
+		wxCheckBox* m_cbBoardCenter;
 		wxStaticText* m_staticText2;
 		wxStaticText* m_staticText5;
 		wxChoice* m_STEP_OrgUnitChoice;
@@ -60,6 +61,10 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void onSelectOrigin( wxCommandEvent& event ) { event.Skip(); }
+		
 	
 	public:
 		

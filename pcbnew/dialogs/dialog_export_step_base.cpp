@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -34,7 +34,7 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	
 	m_staticText6 = new wxStaticText( this, wxID_ANY, _("Coordinate origin options:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText6->Wrap( -1 );
-	m_staticText6->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText6->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizer7->Add( m_staticText6, 0, wxALL, 5 );
 	
@@ -46,18 +46,18 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	
 	fgSizer2->Add( 0, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
-	m_cbDrillOrigin = new wxCheckBox( this, wxID_ANY, _("Drill and plot axis origin"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbDrillOrigin->SetToolTip( _("Use the auxiliary axis origin (used in plot and drill geneation) as STEP coordinates origin.") );
+	m_cbPlotOrigin = new wxCheckBox( this, wxID_ANY, _("Drill and plot axis origin"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbPlotOrigin->SetToolTip( _("Use the auxiliary axis origin (used in plot and drill geneation) as STEP coordinates origin.") );
 	
-	fgSizer2->Add( m_cbDrillOrigin, 0, wxALL, 5 );
+	fgSizer2->Add( m_cbPlotOrigin, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	
 	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
 	
-	m_cbAuxOrigin = new wxCheckBox( this, wxID_ANY, _("Grid origin"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbAuxOrigin->SetToolTip( _("Use the grid origin as STEP coordinates origin.") );
+	m_cbGridOrigin = new wxCheckBox( this, wxID_ANY, _("Grid origin"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbGridOrigin->SetToolTip( _("Use the grid origin as STEP coordinates origin.") );
 	
-	fgSizer2->Add( m_cbAuxOrigin, 0, wxALL, 5 );
+	fgSizer2->Add( m_cbGridOrigin, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	
 	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -65,7 +65,15 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	m_cbUserOrigin = new wxCheckBox( this, wxID_ANY, _("User defined origin"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbUserOrigin->SetToolTip( _("Use this option if you want to define a specific coordinate origin value.") );
 	
-	fgSizer2->Add( m_cbUserOrigin, 0, wxALL, 5 );
+	fgSizer2->Add( m_cbUserOrigin, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	
+	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_cbBoardCenter = new wxCheckBox( this, wxID_ANY, _("Board center origin"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbBoardCenter->SetToolTip( _("Use this option if you want to define coordinate origin at board center.") );
+	
+	fgSizer2->Add( m_cbBoardCenter, 0, wxALL, 5 );
 	
 	
 	bSizer7->Add( fgSizer2, 1, wxEXPAND, 5 );
@@ -78,7 +86,7 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	
 	m_staticText2 = new wxStaticText( this, wxID_ANY, _("User defined origin:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
-	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizer3->Add( m_staticText2, 0, wxALL, 5 );
 	
@@ -108,7 +116,14 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	fgSizer1->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_STEP_Xorg = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_STEP_Xorg->SetMaxLength( 8 ); 
+	#ifdef __WXGTK__
+	if ( !m_STEP_Xorg->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_STEP_Xorg->SetMaxLength( 8 );
+	}
+	#else
+	m_STEP_Xorg->SetMaxLength( 8 );
+	#endif
 	fgSizer1->Add( m_STEP_Xorg, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
 	
@@ -119,7 +134,14 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	fgSizer1->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_STEP_Yorg = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_STEP_Yorg->SetMaxLength( 8 ); 
+	#ifdef __WXGTK__
+	if ( !m_STEP_Yorg->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_STEP_Yorg->SetMaxLength( 8 );
+	}
+	#else
+	m_STEP_Yorg->SetMaxLength( 8 );
+	#endif
 	fgSizer1->Add( m_STEP_Yorg, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
 	
@@ -133,7 +155,7 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	
 	m_staticText7 = new wxStaticText( this, wxID_ANY, _("Other options:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7->Wrap( -1 );
-	m_staticText7->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText7->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizer8->Add( m_staticText7, 0, wxALL, 5 );
 	
@@ -175,8 +197,20 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	bSizerSTEPFile->Fit( this );
 	
 	this->Centre( wxBOTH );
+	
+	// Connect Events
+	m_cbPlotOrigin->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onSelectOrigin ), NULL, this );
+	m_cbGridOrigin->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onSelectOrigin ), NULL, this );
+	m_cbUserOrigin->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onSelectOrigin ), NULL, this );
+	m_cbBoardCenter->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onSelectOrigin ), NULL, this );
 }
 
 DIALOG_EXPORT_STEP_BASE::~DIALOG_EXPORT_STEP_BASE()
 {
+	// Disconnect Events
+	m_cbPlotOrigin->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onSelectOrigin ), NULL, this );
+	m_cbGridOrigin->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onSelectOrigin ), NULL, this );
+	m_cbUserOrigin->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onSelectOrigin ), NULL, this );
+	m_cbBoardCenter->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_STEP_BASE::onSelectOrigin ), NULL, this );
+	
 }

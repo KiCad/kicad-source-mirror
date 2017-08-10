@@ -37,9 +37,7 @@
 #include "class_board.h"
 #include "dialog_export_step_base.h"
 
-#define OPTKEY_STEP_USE_DRILL_ORG   "STEP_UseDrillOrigin"
-#define OPTKEY_STEP_USE_AUX_ORG     "STEP_UseAuxOrigin"
-#define OPTKEY_STEP_USE_USER_ORG    "STEP_UseUserOrigin"
+#define OPTKEY_STEP_ORIGIN_OPT      "STEP_Origin_Opt"
 #define OPTKEY_STEP_UORG_UNITS      "STEP_UserOriginUnits"
 #define OPTKEY_STEP_UORG_X          "STEP_UserOriginX"
 #define OPTKEY_STEP_UORG_Y          "STEP_UserOriginY"
@@ -48,72 +46,34 @@
 
 class DIALOG_EXPORT_STEP: public DIALOG_EXPORT_STEP_BASE
 {
+public:
+    enum STEP_ORG_OPT
+    {
+        STEP_ORG_0,             // absolute coordinates
+        STEP_ORG_PLOT_AXIS,     // origin is plot/drill axis origin
+        STEP_ORG_GRID_AXIS,     // origin is grid origin
+        STEP_ORG_BOARD_CENTER,  // origin is board center
+        STEP_ORG_USER,          // origin is entered by user
+    };
+
 private:
     PCB_EDIT_FRAME* m_parent;
     wxConfigBase* m_config;
-    bool   m_useDrillOrg;   // remember last preference for Use Drill Origin
-    bool   m_useAuxOrg;     // remember last preference for Use Aux Origin
-    bool   m_useUserOrg;    // remember last preference for Use User Origin
+    // The last preference for STEP Origin:
+    STEP_ORG_OPT m_STEP_org_opt;
     bool   m_noVirtual;     // remember last preference for No Virtual Component
     int    m_OrgUnits;      // remember last units for User Origin
     double m_XOrg;          // remember last User Origin X value
     double m_YOrg;          // remember last User Origin Y value
 
 public:
-    DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* parent ) :
-            DIALOG_EXPORT_STEP_BASE( parent )
-    {
-        m_parent = parent;
-        m_config = Kiface().KifaceSettings();
-        SetFocus();
-        m_useDrillOrg = false;
-        m_config->Read( OPTKEY_STEP_USE_DRILL_ORG, &m_useDrillOrg );
-        m_cbDrillOrigin->SetValue( m_useDrillOrg );
-        m_useAuxOrg = false;
-        m_config->Read( OPTKEY_STEP_USE_AUX_ORG, &m_useAuxOrg );
-        m_cbAuxOrigin->SetValue( m_useAuxOrg );
-        m_useUserOrg = false;
-        m_config->Read( OPTKEY_STEP_USE_USER_ORG, &m_useUserOrg );
-        m_cbUserOrigin->SetValue( m_useUserOrg );
-        m_cbUserOrigin->Bind( wxEVT_CHECKBOX, &DIALOG_EXPORT_STEP::OnUserOriginSelect, this );
-        m_config->Read( OPTKEY_STEP_UORG_UNITS, &m_OrgUnits, 0 );
-        m_config->Read( OPTKEY_STEP_UORG_X, &m_XOrg, 0.0 );
-        m_config->Read( OPTKEY_STEP_UORG_Y, &m_YOrg, 0.0 );
-        m_config->Read( OPTKEY_STEP_NOVIRT, &m_noVirtual );
-        m_cbRemoveVirtual->SetValue( m_noVirtual );
-
-        m_STEP_OrgUnitChoice->SetSelection( m_OrgUnits );
-        wxString tmpStr;
-        tmpStr << m_XOrg;
-        m_STEP_Xorg->SetValue( tmpStr );
-        tmpStr = "";
-        tmpStr << m_YOrg;
-        m_STEP_Yorg->SetValue( tmpStr );
-
-        if( m_useUserOrg )
-        {
-            m_STEP_OrgUnitChoice->Enable( true );
-            m_STEP_Xorg->Enable( true );
-            m_STEP_Yorg->Enable( true );
-        }
-        else
-        {
-            m_STEP_OrgUnitChoice->Enable( false );
-            m_STEP_Xorg->Enable( false );
-            m_STEP_Yorg->Enable( false );
-        }
-
-        m_sdbSizerOK->SetDefault();
-
-        // Now all widgets have the size fixed, call FinishDialogSettings
-        FinishDialogSettings();
-    }
+    DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* parent );
 
     ~DIALOG_EXPORT_STEP()
     {
-        m_config->Write( OPTKEY_STEP_USE_DRILL_ORG, m_cbDrillOrigin->GetValue() );
-        m_config->Write( OPTKEY_STEP_USE_AUX_ORG, m_cbAuxOrigin->GetValue() );
-        m_config->Write( OPTKEY_STEP_USE_USER_ORG, m_cbUserOrigin->GetValue() );
+        GetOriginOption(); // Update m_STEP_org_opt member.
+        m_config->Write( OPTKEY_STEP_ORIGIN_OPT, (int)m_STEP_org_opt );
+
         m_config->Write( OPTKEY_STEP_NOVIRT, m_cbRemoveVirtual->GetValue() );
 
         m_config->Write( OPTKEY_STEP_UORG_UNITS, m_STEP_OrgUnitChoice->GetSelection() );
@@ -141,46 +101,62 @@ public:
         return DoubleValueFromString( UNSCALED_UNITS, m_STEP_Yorg->GetValue() );
     }
 
-    bool GetDrillOrgOption()
-    {
-        return m_cbDrillOrigin->GetValue();
-    }
-
-    bool GetAuxOrgOption()
-    {
-        return m_cbAuxOrigin->GetValue();
-    }
-
-    bool GetUserOrgOption()
-    {
-        return m_cbUserOrigin->GetValue();
-    }
+    STEP_ORG_OPT GetOriginOption();
 
     bool GetNoVirtOption()
     {
         return m_cbRemoveVirtual->GetValue();
     }
 
-    void OnUserOriginSelect( wxCommandEvent& event )
-    {
-        if( GetUserOrgOption() )
-        {
-            m_STEP_OrgUnitChoice->Enable( true );
-            m_STEP_Xorg->Enable( true );
-            m_STEP_Yorg->Enable( true );
-        }
-        else
-        {
-            m_STEP_OrgUnitChoice->Enable( false );
-            m_STEP_Xorg->Enable( false );
-            m_STEP_Yorg->Enable( false );
-        }
+    bool TransferDataFromWindow() override;
+	void onSelectOrigin( wxCommandEvent& event ) override;
+};
 
-        event.Skip();
+DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* parent ) :
+        DIALOG_EXPORT_STEP_BASE( parent )
+{
+    m_parent = parent;
+    m_config = Kiface().KifaceSettings();
+    SetFocus();
+
+    m_STEP_org_opt = STEP_ORG_0;;
+    int tmp = STEP_ORG_0;
+
+    if( m_config->Read( OPTKEY_STEP_ORIGIN_OPT, &tmp ) )
+        m_STEP_org_opt = (STEP_ORG_OPT) tmp;
+
+    switch( m_STEP_org_opt )
+    {
+        default: break;
+        case STEP_ORG_PLOT_AXIS: m_cbPlotOrigin->SetValue( true ); break;
+        case STEP_ORG_GRID_AXIS: m_cbGridOrigin->SetValue( true ); break;
+        case STEP_ORG_USER: m_cbUserOrigin->SetValue( true ); break;
+        case STEP_ORG_BOARD_CENTER: m_cbBoardCenter->SetValue( true ); break;
     }
 
-    bool TransferDataFromWindow() override;
-};
+    m_config->Read( OPTKEY_STEP_UORG_UNITS, &m_OrgUnits, 0 );
+    m_config->Read( OPTKEY_STEP_UORG_X, &m_XOrg, 0.0 );
+    m_config->Read( OPTKEY_STEP_UORG_Y, &m_YOrg, 0.0 );
+    m_config->Read( OPTKEY_STEP_NOVIRT, &m_noVirtual );
+    m_cbRemoveVirtual->SetValue( m_noVirtual );
+
+    m_STEP_OrgUnitChoice->SetSelection( m_OrgUnits );
+    wxString tmpStr;
+    tmpStr << m_XOrg;
+    m_STEP_Xorg->SetValue( tmpStr );
+    tmpStr = "";
+    tmpStr << m_YOrg;
+    m_STEP_Yorg->SetValue( tmpStr );
+
+    m_STEP_OrgUnitChoice->Enable( m_cbUserOrigin->IsChecked() );
+    m_STEP_Xorg->Enable( m_cbUserOrigin->IsChecked() );
+    m_STEP_Yorg->Enable( m_cbUserOrigin->IsChecked() );
+
+    m_sdbSizerOK->SetDefault();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
+}
 
 
 bool DIALOG_EXPORT_STEP::TransferDataFromWindow()
@@ -202,6 +178,47 @@ bool DIALOG_EXPORT_STEP::TransferDataFromWindow()
     }
 
     return true;
+}
+
+
+void DIALOG_EXPORT_STEP::onSelectOrigin( wxCommandEvent& event )
+{
+    // If a new checkbox was checked: ensure other options are disabled
+    wxCheckBox* cbList[]
+    {
+		m_cbPlotOrigin, m_cbGridOrigin, m_cbUserOrigin, m_cbBoardCenter, NULL
+    };
+
+    if( event.IsChecked() )
+    {
+        for( int ii = 0; cbList[ii]; ii++ )
+        {
+            if( cbList[ii] != event.GetEventObject() )
+                cbList[ii]->SetValue( false );
+        }
+    }
+
+    // Enable/disable the user origin widgets:
+    m_STEP_OrgUnitChoice->Enable( m_cbUserOrigin->IsChecked() );
+    m_STEP_Xorg->Enable( m_cbUserOrigin->IsChecked() );
+    m_STEP_Yorg->Enable( m_cbUserOrigin->IsChecked() );
+}
+
+
+DIALOG_EXPORT_STEP::STEP_ORG_OPT DIALOG_EXPORT_STEP::GetOriginOption()
+{
+    m_STEP_org_opt = STEP_ORG_0;
+
+    if( m_cbPlotOrigin->IsChecked() )
+        m_STEP_org_opt = STEP_ORG_PLOT_AXIS;
+    else if( m_cbGridOrigin->IsChecked() )
+        m_STEP_org_opt = STEP_ORG_GRID_AXIS;
+    else if( m_cbUserOrigin->IsChecked() )
+        m_STEP_org_opt = STEP_ORG_USER;
+    else if( m_cbBoardCenter->IsChecked() )
+        m_STEP_org_opt = STEP_ORG_BOARD_CENTER;
+
+    return m_STEP_org_opt;
 }
 
 
@@ -242,29 +259,13 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
         return;
 
     wxString outputFile = dlg.FilePicker()->GetPath();
-
     brdFile.SetExt( brdExt );
     outputFile.Prepend( "\"" );
     outputFile.Append( "\"" );
-    bool   aUseDrillOrg = dlg.GetDrillOrgOption();
-    bool   aUseAuxOrg   = dlg.GetAuxOrgOption();
-    bool   aUseUserOrg  = dlg.GetUserOrgOption();
-    bool   aNoVirtual = dlg.GetNoVirtOption();
-    double aXOrg = 0.0;
-    double aYOrg = 0.0;
 
-    if( aUseUserOrg )
-    {
-        aXOrg = dlg.GetXOrg();
-        aYOrg = dlg.GetYOrg();
-
-        if( dlg.GetOrgUnitsChoice() == 1 )
-        {
-            // selected reference unit is in inches
-            aXOrg *= 25.4;
-            aYOrg *= 25.4;
-        }
-    }
+    DIALOG_EXPORT_STEP::STEP_ORG_OPT orgOpt = dlg.GetOriginOption();
+    double xOrg = 0.0;
+    double yOrg = 0.0;
 
     wxFileName appK2S( wxStandardPaths::Get().GetExecutablePath() );
     appK2S.SetName( "kicad2step" );
@@ -273,17 +274,49 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
     cmdK2S.Append( appK2S.GetFullPath() );
     cmdK2S.Append( "\"" );
 
-    if( aNoVirtual )
+    if( dlg.GetNoVirtOption() )
         cmdK2S.Append( " --no-virtual" );
 
-    if( aUseDrillOrg )
-        cmdK2S.Append( " --drill-origin" );
+    switch( orgOpt )
+    {
+        case DIALOG_EXPORT_STEP::STEP_ORG_0:
+            break;
 
-    if( aUseAuxOrg )
-        cmdK2S.Append( " --grid-origin" );
+        case DIALOG_EXPORT_STEP::STEP_ORG_PLOT_AXIS:
+            cmdK2S.Append( " --drill-origin" );
+            break;
 
-    if( aUseUserOrg )
-        cmdK2S.Append( wxString::Format( " --user-origin %.6fx%.6f", aXOrg, aYOrg ) );
+        case DIALOG_EXPORT_STEP::STEP_ORG_GRID_AXIS:
+            cmdK2S.Append( " --grid-origin" );
+            break;
+
+        case DIALOG_EXPORT_STEP::STEP_ORG_USER:
+        {
+            xOrg = dlg.GetXOrg();
+            yOrg = dlg.GetYOrg();
+
+            if( dlg.GetOrgUnitsChoice() == 1 )
+            {
+                // selected reference unit is in inches, and STEP units are mm
+                xOrg *= 25.4;
+                yOrg *= 25.4;
+            }
+
+            LOCALE_IO dummy;
+            cmdK2S.Append( wxString::Format( " --user-origin %.6fx%.6f", xOrg, yOrg ) );
+        }
+            break;
+
+        case DIALOG_EXPORT_STEP::STEP_ORG_BOARD_CENTER:
+        {
+            EDA_RECT bbox = GetBoard()->ComputeBoundingBox( true );
+            xOrg = Iu2Millimeter( bbox.GetCenter().x );
+            yOrg = Iu2Millimeter( bbox.GetCenter().y );
+            LOCALE_IO dummy;
+            cmdK2S.Append( wxString::Format( " --user-origin %.6fx%.6f", xOrg, yOrg ) );
+        }
+            break;
+    }
 
     cmdK2S.Append( " -f -o " );
     cmdK2S.Append( outputFile );
