@@ -69,13 +69,12 @@
 # mc: - workbook = libretto di lavoro (simulazioni)
 # mc: - thermal relief = supporto termico
 # mc: - cutout zone = zona ritaglio
-#: pcbnew/tools/edit_tool.cpp:95
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-09 03:05+0200\n"
-"PO-Revision-Date: 2017-08-09 03:12+0200\n"
+"POT-Creation-Date: 2017-08-10 18:36+0200\n"
+"PO-Revision-Date: 2017-08-10 18:39+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -4284,7 +4283,9 @@ msgstr "Trascina piste e via senza interrompere le connessioni"
 #: pcbnew/router/router_tool.cpp:122
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
-msgstr "Divide il segmento di pista in due segmenti connessi alla posizione del puntatore."
+msgstr ""
+"Divide il segmento di pista in due segmenti connessi alla posizione del "
+"puntatore."
 
 #: pcbnew/router/router_tool.cpp:127
 msgid "Drag (45 degree mode)"
@@ -5225,7 +5226,6 @@ msgid "Place DXF origin (0,0) point:"
 msgstr "Posiziona punto origine DXF (0,0):"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:54
-#: pcbnew/dialogs/dialog_export_step_base.cpp:106
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:58
 msgid "X Position:"
 msgstr "Posizione X:"
@@ -5242,7 +5242,6 @@ msgid "DXF origin on PCB Grid, X Coordinate"
 msgstr "Origine DXF su griglia C.S., coordinata X"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:70
-#: pcbnew/dialogs/dialog_export_step_base.cpp:124
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:79
 msgid "Y Position:"
 msgstr "Posizione Y:"
@@ -5253,7 +5252,7 @@ msgstr "Origine DXF su griglia C.S., coordinata Y"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:86
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:59
-#: pcbnew/dialogs/dialog_export_step_base.cpp:93
+#: pcbnew/dialogs/dialog_export_step_base.cpp:101
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:42
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:62
 msgid "Units:"
@@ -5262,7 +5261,7 @@ msgstr "Unità:"
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:90
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:63
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
-#: pcbnew/dialogs/dialog_export_step_base.cpp:97
+#: pcbnew/dialogs/dialog_export_step_base.cpp:105
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:46
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:198
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:209
@@ -5293,7 +5292,7 @@ msgstr "mm"
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:90
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:191
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:63
-#: pcbnew/dialogs/dialog_export_step_base.cpp:97
+#: pcbnew/dialogs/dialog_export_step_base.cpp:105
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:46
 #: pcb_calculator/UnitSelector.cpp:42 pcb_calculator/UnitSelector.cpp:74
 msgid "inch"
@@ -6335,7 +6334,7 @@ msgstr "Il file di salvataggio automatico \"%s\" non può essere rimosso!"
 msgid " [new file]"
 msgstr " [nuovo file]"
 
-#: pcbnew/pcbframe.cpp:1140
+#: pcbnew/pcbframe.cpp:1153
 msgid ""
 "Cannot update the PCB, because the Kicad is opened in stand-alone mode. In "
 "order to create/update PCBs from schematics, you need to launch Kicad shell "
@@ -8801,8 +8800,8 @@ msgstr "Rif X:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:73
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:88
-#: pcbnew/dialogs/dialog_export_step_base.cpp:110
-#: pcbnew/dialogs/dialog_export_step_base.cpp:128
+#: pcbnew/dialogs/dialog_export_step_base.cpp:118
+#: pcbnew/dialogs/dialog_export_step_base.cpp:136
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:62
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:83
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:129
@@ -9456,16 +9455,17 @@ msgid "Print"
 msgstr "Stampante"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:19
-msgid "STEP File name:"
-msgstr "Nome file STEP:"
+#: pcbnew/dialogs/dialog_export_idf_base.cpp:19
+msgid "File name:"
+msgstr "Nome file:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:23
 msgid "Select a STEP export filename"
 msgstr "Seleziona un nome file per l'esportazione STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:35
-msgid "STEP coordinates origin options:"
-msgstr "Opzioni coordinate di origine STEP:"
+msgid "Coordinate origin options:"
+msgstr "Opzioni coordinate di origine:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:49
 msgid "Drill and plot axis origin"
@@ -9498,16 +9498,33 @@ msgstr ""
 "Usare questa opzione se si vuole definire un valore di origine coordinate "
 "specifico."
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:79
+#: pcbnew/dialogs/dialog_export_step_base.cpp:73
+msgid "Board center origin"
+msgstr "Origine centro scheda"
+
+#: pcbnew/dialogs/dialog_export_step_base.cpp:74
+msgid ""
+"Use this option if you want to define coordinate origin at board center."
+msgstr "Usare questa opzione se si vuole definire l'origine coordinate al centro della scheda."
+
+#: pcbnew/dialogs/dialog_export_step_base.cpp:87
 msgid "User defined origin:"
 msgstr "Origine personalizzata:"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:148
+#: pcbnew/dialogs/dialog_export_step_base.cpp:114
+msgid "X position:"
+msgstr "Posizione X:"
+
+#: pcbnew/dialogs/dialog_export_step_base.cpp:132
+msgid "Y position:"
+msgstr "Posizione Y:"
+
+#: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Other options:"
 msgstr "Altre opzioni:"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:162
-msgid "Ignore Virtual Components"
+#: pcbnew/dialogs/dialog_export_step_base.cpp:170
+msgid "Ignore virtual components"
 msgstr "Ignora componenti virtuali"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:329
@@ -10546,27 +10563,26 @@ msgstr "Impossibile creare il file di rapporto \"%s\""
 msgid "Save DRC Report File"
 msgstr "Salva file rapporto DRC"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:192
-msgid "STEP export failed; please save the PCB and try again"
-msgstr "Esportazione STEP fallita; salvare la scheda e riprovare"
+#: pcbnew/dialogs/dialog_export_step.cpp:172
+#, c-format
+msgid ""
+"File: %s\n"
+"already exists. Do you want overwrite this file?"
+msgstr ""
+"Il file: %s\n"
+"Esiste già. Sovrascrivere questo file?"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:193
-#: pcbnew/dialogs/dialog_export_step.cpp:232
-#: pcbnew/dialogs/dialog_export_step.cpp:312
+#: pcbnew/dialogs/dialog_export_step.cpp:176
 msgid "STEP Export"
 msgstr "Esportazione STEP"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:228
-msgid "File: "
-msgstr "File: "
+#: pcbnew/dialogs/dialog_export_step.cpp:236
+msgid "STEP export failed!  Please save the PCB and try again"
+msgstr "Esportazione STEP fallita; salvare la scheda e riprovare"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:231
-msgid "File exists, overwrite?"
-msgstr "Il file esiste, sovrascrivere?"
-
-#: pcbnew/dialogs/dialog_export_step.cpp:311
+#: pcbnew/dialogs/dialog_export_step.cpp:337
 msgid ""
-"Unable to create STEP file; check that the board has a valid outline and "
+"Unable to create STEP file.  Check that the board has a valid outline and "
 "models."
 msgstr ""
 "Impossibile creare il file STEP; controllare che la scheda abbia contorni e "
@@ -10706,10 +10722,6 @@ msgstr ""
 msgid "Incorrect grid origin (coordinates must be >= %.3f mm and <= %.3f mm)"
 msgstr ""
 "Origine griglia errata (le coordinate devono essere >= %.3f e <= %.3f mm)"
-
-#: pcbnew/dialogs/dialog_export_idf_base.cpp:19
-msgid "File name:"
-msgstr "Nome file:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:23
 msgid "Select an IDF export filename"
@@ -14477,7 +14489,7 @@ msgstr "Modifiche globali piazzole"
 msgid "Pads Mask Clearance"
 msgstr "Isolamento delle piazzole per le maschere"
 
-#: pcbnew/dialogs/dialog_export_step_base.h:66
+#: pcbnew/dialogs/dialog_export_step_base.h:71
 msgid "Export STEP"
 msgstr "Esporta STEP"
 
@@ -26415,6 +26427,15 @@ msgstr "Percorso libreria"
 #: include/lib_table_grid.h:172
 msgid "Plugin Type"
 msgstr "Tipo plugin"
+
+#~ msgid "STEP File name:"
+#~ msgstr "Nome file STEP:"
+
+#~ msgid "File: "
+#~ msgstr "File: "
+
+#~ msgid "File exists, overwrite?"
+#~ msgstr "Il file esiste, sovrascrivere?"
 
 #~ msgid "Invalid tool ID "
 #~ msgstr "ID strumento non valido"
