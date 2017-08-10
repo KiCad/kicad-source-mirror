@@ -398,27 +398,27 @@ msgstr "Fit in page"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:87
 msgid "Rotate X <-"
-msgstr "Rotate X <-"
+msgstr "Rotate X ←"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:91
 msgid "Rotate X ->"
-msgstr "Rotate X ->"
+msgstr "Rotate X →"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:96
 msgid "Rotate Y <-"
-msgstr "Rotate Y <-"
+msgstr "Rotate Y ←"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:100
 msgid "Rotate Y ->"
-msgstr "Rotate Y ->"
+msgstr "Rotate Y →"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:105
 msgid "Rotate Z <-"
-msgstr "Rotate Z <-"
+msgstr "Rotate Z ←"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:109
 msgid "Rotate Z ->"
-msgstr "Rotate Z ->"
+msgstr "Rotate Z →"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:113
 msgid "Move left"
@@ -698,7 +698,7 @@ msgstr "Through hole"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:354
 msgid "Footprint Properties -> Placement type -> Through hole"
-msgstr "Footprint Properties -> Placement type -> Through hole"
+msgstr "Footprint Properties → Placement type → Through hole"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:357
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:100
@@ -708,7 +708,7 @@ msgstr "Surface mount"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:358
 msgid "Footprint Properties -> Placement type -> Surface mount"
-msgstr "Footprint Properties -> Placement type -> Surface mount"
+msgstr "Footprint Properties → Placement type → Surface mount"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:361
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:100
@@ -722,7 +722,7 @@ msgid ""
 "Footprint Properties -> Placement type -> Virtual (eg: edge connectors, test "
 "points, mechanical parts)"
 msgstr ""
-"Footprint Properties -> Placement type -> Virtual (eg: edge connectors, test "
+"Footprint Properties → Placement type → Virtual (eg: edge connectors, test "
 "points, mechanical parts)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:370
@@ -918,15 +918,15 @@ msgstr "Back View"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:659
 msgid "Move left <-"
-msgstr "Move left <-"
+msgstr "Move left ←"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:664
 msgid "Move right ->"
-msgstr "Move right ->"
+msgstr "Move right →"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:669
 msgid "Move Up ^"
-msgstr "Move Up ^"
+msgstr "Move Up ↑"
 
 #: 3d-viewer/3d_canvas/cinfo3d_visu.cpp:446
 msgid "Build board body"
@@ -4200,7 +4200,7 @@ msgstr "Cut Block"
 
 #: eeschema/hotkeys.cpp:199
 msgid "Move Block -> Drag Block"
-msgstr "Move Block -> Drag Block"
+msgstr "Move Block → Drag Block"
 
 #: eeschema/hotkeys.cpp:201
 msgid "Repeat Last Item"
@@ -6608,7 +6608,7 @@ msgstr "Custom"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:388
 msgid "Adjust passive component values (e.g. M -> Meg; 100 nF -> 100n)"
-msgstr "Adjust passive component values (e.g. M -> Meg; 100 nF -> 100n)"
+msgstr "Adjust passive component values (e.g. M → Meg; 100 nF → 100n)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:391
 msgid "Add full path for .include library directives"
@@ -7219,7 +7219,7 @@ msgstr "Reformat passive component values"
 
 #: eeschema/dialogs/dialog_netlist.cpp:386
 msgid "Reformat passive component values e.g. 1M -> 1Meg"
-msgstr "Reformat passive component values e.g. 1M -> 1Meg"
+msgstr "Reformat passive component values e.g. 1M → 1Meg"
 
 #: eeschema/dialogs/dialog_netlist.cpp:390
 msgid "Simulator command:"
@@ -18177,12 +18177,12 @@ msgstr "** Could not create file '%s' ***\n"
 #: pcbnew/dialogs/dialog_exchange_modules.cpp:216
 #, c-format
 msgid "Change footprint %s -> %s (for value = %s)?"
-msgstr "Change footprint %s -> %s (for value = %s)?"
+msgstr "Change footprint %s → %s (for value = %s)?"
 
 #: pcbnew/dialogs/dialog_exchange_modules.cpp:223
 #, c-format
 msgid "Change footprint %s -> %s ?"
-msgstr "Change footprint %s -> %s ?"
+msgstr "Change footprint %s → %s ?"
 
 #: pcbnew/dialogs/dialog_exchange_modules.cpp:271
 msgid "Are you sure you want to change all footprints?"
