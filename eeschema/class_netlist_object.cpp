@@ -184,7 +184,6 @@ NETLIST_OBJECT::NETLIST_OBJECT()
                                      * from the BUS label )  member number
                                      */
     m_ConnectionType = UNCONNECTED;
-    m_PinNum = 0;                   /* pin number ( 1 long = 4 bytes -> 4 ascii codes) */
     m_netNameCandidate = NULL;      /* a pointer to a NETLIST_OBJECT type label connected to this
                                      * object used to give a name to the net
                                      */
@@ -389,9 +388,7 @@ wxString NETLIST_OBJECT::GetShortNetName( bool adoptTimestamp ) const
             if( adoptTimestamp && netName.Last() == '?' )
                 netName << link->GetTimeStamp();
 
-            netName << wxT("-Pad")
-                    << LIB_PIN::PinStringNum( m_netNameCandidate->m_PinNum )
-                    << wxT(")");
+            netName << wxT("-Pad") << m_netNameCandidate->m_PinNum << wxT(")");
         }
     }
     else

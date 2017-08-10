@@ -59,7 +59,6 @@ int D_PAD::m_PadSketchModePenSize = 0;      // Pen size used to draw pads in ske
 D_PAD::D_PAD( MODULE* parent ) :
     BOARD_CONNECTED_ITEM( parent, PCB_PAD_T )
 {
-    m_NumPadName          = 0;
     m_Size.x = m_Size.y   = Mils2iu( 60 );  // Default pad size 60 mils.
     m_Drill.x = m_Drill.y = Mils2iu( 30 );  // Default drill size 30 mils.
     m_Orient              = 0;              // Pad rotation in 1/10 degrees.
@@ -513,48 +512,6 @@ wxPoint D_PAD::ShapePos() const
 }
 
 
-wxString D_PAD::GetPadName() const
-{
-    wxString name;
-
-    StringPadName( name );
-    return name;
-}
-
-
-void D_PAD::StringPadName( wxString& text ) const
-{
-    text.Empty();
-
-    for( int ii = 0;  ii < PADNAMEZ && m_Padname[ii];  ii++ )
-    {
-        // m_Padname is 8 bit KiCad font junk, do not sign extend
-        text.Append( (unsigned char) m_Padname[ii] );
-    }
-}
-
-
-// Change pad name
-void D_PAD::SetPadName( const wxString& name )
-{
-    int ii, len;
-
-    len = name.Length();
-
-    if( len > PADNAMEZ )
-        len = PADNAMEZ;
-
-    // m_Padname[] is not UTF8, it is an 8 bit character that matches the KiCad font,
-    // so only copy the lower 8 bits of each character.
-
-    for( ii = 0; ii < len; ii++ )
-        m_Padname[ii] = (char) name.GetChar( ii );
-
-    for( ii = len; ii < PADNAMEZ; ii++ )
-        m_Padname[ii] = '\0';
-}
-
-
 bool D_PAD::IncrementPadName( bool aSkipUnconnectable, bool aFillSequenceGaps )
 {
     bool skip = aSkipUnconnectable && ( GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED );
@@ -733,10 +690,8 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
 
     if( module )
     {
-        wxString msg = module->GetReference();
-        aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), msg, DARKCYAN ) );
-        StringPadName( Line );
-        aList.push_back( MSG_PANEL_ITEM( _( "Pad" ), Line, BROWN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), module->GetReference(), DARKCYAN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Pad" ), m_name, BROWN ) );
     }
 
     aList.push_back( MSG_PANEL_ITEM( _( "Net" ), GetNetname(), DARKCYAN ) );

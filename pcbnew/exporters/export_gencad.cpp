@@ -660,7 +660,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
                 layer = module->GetFlag() ? "BOTTOM" : "TOP";
             }
 
-            pad->StringPadName( pinname );
+            pinname = pad->GetPadName();
 
             if( pinname.IsEmpty() )
                 pinname = wxT( "none" );
@@ -796,15 +796,12 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
         {
             for( pad = module->PadsList(); pad; pad = pad->Next() )
             {
-                wxString padname;
-
                 if( pad->GetNetCode() != net->GetNet() )
                     continue;
 
-                pad->StringPadName( padname );
                 msg.Printf( wxT( "NODE %s %s" ),
                             GetChars( module->GetReference() ),
-                            GetChars( padname ) );
+                            GetChars( pad->GetPadName() ) );
 
                 fputs( TO_UTF8( msg ), aFile );
                 fputs( "\n", aFile );

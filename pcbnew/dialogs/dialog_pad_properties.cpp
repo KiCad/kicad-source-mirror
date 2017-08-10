@@ -1513,9 +1513,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     aPad->SetOffset( wxPoint( x, y ) );
 
     aPad->SetOrientation( m_OrientValue * 10.0 );
-
-    msg = m_PadNumCtrl->GetValue().Left( 4 );
-    aPad->SetPadName( msg );
+    aPad->SetPadName( m_PadNumCtrl->GetValue() );
 
     // Check if user has set an existing net name
     const NETINFO_ITEM* netinfo = m_board->FindNet( m_PadNetNameCtrl->GetValue() );

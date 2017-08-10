@@ -74,9 +74,7 @@ class LIB_PIN : public LIB_ITEM
     ELECTRICAL_PINTYPE m_type;  ///< Electrical type of the pin.  See enum ELECTRICAL_PINTYPE.
     int      m_attributes;   ///< Set bit 0 to indicate pin is invisible.
     wxString m_name;
-    long     m_number;       ///< Pin number defined as 4 ASCII characters like "12", "anod",
-                             ///< "G6", or "12".  It is stored as "12\0\0" and does not
-                             ///< depend on endian type.
+    wxString m_number;
     int      m_numTextSize;
     int      m_nameTextSize; ///< Pin num and Pin name sizes
 
@@ -161,36 +159,10 @@ public:
      */
     int PinDrawOrient( const TRANSFORM& aTransform ) const;
 
-    /**
-     * Fill a string buffer with pin number.
-     *
-     * Pin numbers are coded as a long or 4 ASCII characters.  Used to print
-     * or draw the pin number.
-     *
-     * @param aStringBuffer - the wxString to store the pin num as an unicode string
-     */
-    void PinStringNum( wxString& aStringBuffer ) const;
-
-    long GetNumber() const { return m_number; }
-
-    wxString GetNumberString() const { return PinStringNum( m_number ); }
-
-    /**
-     * Function PinStringNum (static function)
-     * Pin num is coded as a long or 4 ascii chars
-     * @param aPinNum = a long containing a pin num
-     * @return aStringBuffer = the wxString to store the pin num as an
-     *                         unicode string
-     */
-    static wxString PinStringNum( long aPinNum );
-
-    /**
-     * Function SetPinNumFromString
-     * fill the pin number buffer with \a aBuffer.
-     */
-    void SetPinNumFromString( wxString& aBuffer );
-
-    wxString GetName() const { return m_name; }
+    const wxString& GetName() const
+    {
+        return m_name;
+    }
 
     /**
      * Set the pin name.
@@ -213,6 +185,11 @@ public:
 
     int GetNameTextSize() const { return m_nameTextSize; }
 
+    const wxString& GetNumber() const
+    {
+        return m_number;
+    }
+
     /**
      * Set the pin number.
      *
@@ -220,7 +197,10 @@ public:
      * because each pin has its own number
      * @param aNumber New pin number.
      */
-    void SetNumber( const wxString& aNumber );
+    void SetNumber( const wxString& aNumber )
+    {
+        m_number = aNumber;
+    }
 
     /**
      * Set the size of the pin number text.

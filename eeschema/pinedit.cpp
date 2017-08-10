@@ -113,7 +113,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     dlg.SetPinNameTextSize( StringFromValue( g_UserUnit, pin->GetNameTextSize() ) );
     dlg.SetPinPositionX( StringFromValue( g_UserUnit, pin->GetPosition().x ) );
     dlg.SetPinPositionY( StringFromValue( g_UserUnit, -pin->GetPosition().y ) );
-    dlg.SetPadName( pin->GetNumberString() );
+    dlg.SetPadName( pin->GetNumber() );
     dlg.SetPadNameTextSize( StringFromValue( g_UserUnit, pin->GetNumberTextSize() ) );
 
     dlg.SetLength( StringFromValue( g_UserUnit, pin->GetLength() ) );
@@ -520,7 +520,7 @@ void LIB_EDIT_FRAME::CreateImagePins( LIB_PIN* aPin, int aUnit, int aConvert, bo
         // it does no have the save pin number as the master pin
         // Because we do not know the actual number, give it '??'
         wxString unknownNum( wxT( "??" ) );
-        NewPin->SetPinNumFromString( unknownNum );
+        NewPin->SetNumber( unknownNum );
 
         if( aConvert != 0 )
             NewPin->SetConvert( 1 );
@@ -535,7 +535,7 @@ void LIB_EDIT_FRAME::CreateImagePins( LIB_PIN* aPin, int aUnit, int aConvert, bo
         NewPin->SetConvert( 2 );
         // Gives this pin a new pin number
         // Because we do not know the actual number, give it '??'
-        NewPin->SetPinNumFromString( unknownNum );
+        NewPin->SetNumber( unknownNum );
 
         if( aPin->GetUnit() != 0 )
             NewPin->SetUnit( ii );
@@ -643,9 +643,9 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
     IncrementLabelMember( nextName, GetRepeatDeltaLabel() );
     pin->SetName( nextName );
 
-    pin->PinStringNum( msg );
+    msg = pin->GetNumber();
     IncrementLabelMember( msg, GetRepeatDeltaLabel() );
-    pin->SetPinNumFromString( msg );
+    pin->SetNumber( msg );
 
     m_drawItem = pin;
 
@@ -676,7 +676,7 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
 // helper function to sort pins by pin num
 bool sort_by_pin_number( const LIB_PIN* ref, const LIB_PIN* tst )
 {
-    int test = ref->GetNumber() - tst->GetNumber();
+    int test = ref->GetNumber().Cmp( tst->GetNumber() );
 
     if( test == 0 )
     {
@@ -725,8 +725,6 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
 
     for( unsigned ii = 1; ii < pinList.size(); ii++ )
     {
-        wxString stringPinNum, stringCurrPinNum;
-
         LIB_PIN* curr_pin = pinList[ii];
         LIB_PIN* pin      = pinList[ii - 1];
 
@@ -736,20 +734,18 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
             continue;
 
         dup_error++;
-        pin->PinStringNum( stringPinNum );
 
         /* TODO I dare someone to find a way to make happy translators on
            this thing! Lorenzo */
-        curr_pin->PinStringNum( stringCurrPinNum );
 
         wxString msg = wxString::Format( _(
             "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
             " conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>" ),
-            GetChars( stringCurrPinNum ),
+            GetChars( curr_pin->GetNumber() ),
             GetChars( curr_pin->GetName() ),
             curr_pin->GetPosition().x / 1000.0,
             -curr_pin->GetPosition().y / 1000.0,
-            GetChars( stringPinNum ),
+            GetChars( pin->GetNumber() ),
             GetChars( pin->GetName() ),
             pin->GetPosition().x / 1000.0,
             -pin->GetPosition().y / 1000.0
@@ -786,12 +782,10 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
 
         // "pin" is off grid here.
         offgrid_error++;
-        wxString stringPinNum;
-        pin->PinStringNum( stringPinNum );
 
         wxString msg = wxString::Format( _(
             "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>" ),
-            GetChars( stringPinNum ),
+            GetChars( pin->GetNumber() ),
             GetChars( pin->GetName() ),
             pin->GetPosition().x / 1000.0,
             -pin->GetPosition().y / 1000.0

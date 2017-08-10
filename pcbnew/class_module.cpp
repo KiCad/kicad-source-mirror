@@ -642,16 +642,9 @@ bool MODULE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) co
 
 D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 {
-    wxString buf;
-
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
-        pad->StringPadName( buf );
-#if 1
-        if( buf.CmpNoCase( aPadName ) == 0 )    // why case insensitive?
-#else
-        if( buf == aPadName )
-#endif
+        if( pad->GetPadName().CmpNoCase( aPadName ) == 0 )    // why case insensitive?
             return pad;
     }
 
@@ -716,7 +709,7 @@ unsigned MODULE::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 
 unsigned MODULE::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 {
-    std::set<wxUint32> usedNames;
+    std::set<wxString> usedNames;
 
     // Create a set of used pad numbers
     for( D_PAD* pad = PadsList(); pad; pad = pad->Next() )
@@ -740,7 +733,7 @@ unsigned MODULE::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
             }
         }
 
-        usedNames.insert( pad->GetPackedPadName() );
+        usedNames.insert( pad->GetPadName() );
     }
 
     return usedNames.size();

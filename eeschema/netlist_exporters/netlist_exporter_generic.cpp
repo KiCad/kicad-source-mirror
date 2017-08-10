@@ -454,7 +454,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
                 XNODE*     pin;
 
                 pins->AddChild( pin = node( "pin" ) );
-                pin->AddAttribute( "num", pinList[i]->GetNumberString() );
+                pin->AddAttribute( "num", pinList[i]->GetNumber() );
                 pin->AddAttribute( "name", pinList[i]->GetName() );
                 pin->AddAttribute( "type", pinList[i]->GetCanonicalElectricalTypeName() );
 
@@ -547,5 +547,5 @@ XNODE* NETLIST_EXPORTER_GENERIC::node( const wxString& aName, const wxString& aT
 static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 )
 {
     // return "lhs < rhs"
-    return RefDesStringCompare( aPin1->GetNumberString(), aPin2->GetNumberString() ) < 0;
+    return RefDesStringCompare( aPin1->GetNumber(), aPin2->GetNumber() ) < 0;
 }
