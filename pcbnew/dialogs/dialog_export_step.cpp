@@ -192,10 +192,10 @@ bool DIALOG_EXPORT_STEP::TransferDataFromWindow()
 
     if( fn.FileExists() )
     {
-        wxString msg( _( "File: " ) );
-        msg.append( fn.GetFullPath() );
-        msg.append( "\n" );
-        msg.append( _( "already exists.  Do you want overwrite this file?" ) );
+        wxString msg;
+        msg.Printf( _( "File: %s\n"
+                       "already exists. Do you want overwrite this file?" ),
+                    fn.GetFullPath().GetData() );
 
         if( wxMessageBox( msg, _( "STEP Export" ), wxYES_NO | wxICON_QUESTION, this ) == wxNO )
             return false;
