@@ -373,7 +373,7 @@ void MODULE::CopyNetlistSettings( MODULE* aModule, bool aCopyLocalSettings )
         // because we copy settings from the first pad found.
         // When old and new footprints have very few differences, a better
         // algo can be used.
-        D_PAD* oldPad = FindPadByName( pad->GetPadName() );
+        D_PAD* oldPad = FindPadByName( pad->GetName() );
 
         if( oldPad )
             oldPad->CopyNetlistSettings( pad, aCopyLocalSettings );
@@ -644,7 +644,7 @@ D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 {
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
-        if( pad->GetPadName().CmpNoCase( aPadName ) == 0 )    // why case insensitive?
+        if( pad->GetName().CmpNoCase( aPadName ) == 0 )    // why case insensitive?
             return pad;
     }
 
@@ -721,7 +721,7 @@ unsigned MODULE::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 
         // Skip pads with no name, because they are usually "mechanical"
         // pads, not "electrical" pads
-        if( pad->GetPadName().IsEmpty() )
+        if( pad->GetName().IsEmpty() )
             continue;
 
         if( !aIncludeNPTH )
@@ -733,7 +733,7 @@ unsigned MODULE::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
             }
         }
 
-        usedNames.insert( pad->GetPadName() );
+        usedNames.insert( pad->GetName() );
     }
 
     return usedNames.size();
@@ -1208,7 +1208,7 @@ wxString MODULE::GetNextPadName( bool aFillSequenceGaps ) const
     // Create a set of used pad numbers
     for( D_PAD* pad = PadsList(); pad; pad = pad->Next() )
     {
-        int padNumber = getTrailingInt( pad->GetPadName() );
+        int padNumber = getTrailingInt( pad->GetName() );
         usedNumbers.insert( padNumber );
     }
 

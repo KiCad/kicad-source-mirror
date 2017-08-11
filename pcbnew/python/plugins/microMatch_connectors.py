@@ -74,7 +74,7 @@ class PadStaggeredZGridArray(PA.PadArray):
 
             pos = dc.TransformPoint(posX, posY)
             pad = self.GetPad(padnum == 0, pos)
-            pad.SetPadName(self.GetName(padnum))
+            pad.SetName(self.GetName(padnum))
             self.AddPad(pad)
 
             line += 1

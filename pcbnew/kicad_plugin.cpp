@@ -1264,7 +1264,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     }
 
     m_out->Print( aNestLevel, "(pad %s %s %s",
-                  m_out->Quotew( aPad->GetPadName() ).c_str(),
+                  m_out->Quotew( aPad->GetName() ).c_str(),
                   type, shape );
     m_out->Print( 0, " (at %s", FMT_IU( aPad->GetPos0() ).c_str() );
 

@@ -128,7 +128,7 @@ static void build_pad_testpoints( BOARD *aPcb,
             if( rk.access != -1 )
             {
                 rk.netname = pad->GetNetname();
-                rk.pin = pad->GetPadName();
+                rk.pin = pad->GetName();
                 rk.refdes = module->GetReference();
                 rk.midpoint = false; // XXX MAYBE need to be computed (how?)
                 const wxSize& drill = pad->GetDrillSize();

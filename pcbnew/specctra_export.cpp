@@ -562,7 +562,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
 
             PIN* pin = new PIN( image );
 
-            padName     = pad->GetPadName();
+            padName     = pad->GetName();
             pin->pin_id = TO_UTF8( padName );
 
             if( padName!=wxEmptyString && pinmap.find( padName )==pinmap.end() )

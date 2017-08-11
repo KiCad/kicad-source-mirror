@@ -1453,7 +1453,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             }
             // chances are both were ASCII, but why take chances?
 
-            pad->SetPadName( padname );
+            pad->SetName( padname );
             pad->SetShape( PAD_SHAPE_T( padshape ) );
             pad->SetSize( wxSize( size_x, size_y ) );
             pad->SetDelta( wxSize( delta_x, delta_y ) );

@@ -374,7 +374,7 @@ void PCB::DoPCBComponents( XNODE*           aNode,
                                     break;
 
                                 mNode->GetAttribute( wxT( "Name" ), &propValue );
-                                mc->SetPadName( str, propValue );
+                                mc->SetName( str, propValue );
                                 mNode = mNode->GetNext();
                             }
                             else

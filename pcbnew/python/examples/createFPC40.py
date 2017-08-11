@@ -27,7 +27,7 @@ def smdRectPad(module,size,pos,name):
     pad.SetAttribute(PAD_ATTRIB_SMD)
     pad.SetLayerSet(pad.SMDMask())
     pad.SetPos0(pos)
-    pad.SetPadName(name)
+    pad.SetName(name)
     return pad
 
 for n in range (0,pads):

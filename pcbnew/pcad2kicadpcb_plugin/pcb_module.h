@@ -57,7 +57,7 @@ public:
                                         wxString                aDefaultMeasurementUnit,
                                         wxString                aActualConversion );
 
-    void            SetPadName( wxString aPin, wxString aName );
+    void            SetName( wxString aPin, wxString aName );
 
     virtual void    Parse( XNODE*   aNode, wxStatusBar* aStatusBar,
                            wxString aDefaultMeasurementUnit, wxString aActualConversion );

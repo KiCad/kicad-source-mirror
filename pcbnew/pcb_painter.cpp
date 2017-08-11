@@ -623,7 +623,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
             if( m_pcbSettings.m_padNumbers )
             {
-                const wxString& padName = aPad->GetPadName();
+                const wxString& padName = aPad->GetName();
                 textpos.y = -textpos.y;
                 double tsize = 1.5 * padsize.x / padName.Length();
                 tsize = std::min( tsize, size );

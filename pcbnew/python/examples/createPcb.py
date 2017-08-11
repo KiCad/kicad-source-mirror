@@ -27,7 +27,7 @@ for y in range (0,10):
         pt = wxPointMM(1.27*x,1.27*y)
         pad.SetPos0(pt);
         #pad.SetPosition(pt)
-        pad.SetPadName(str(n))
+        pad.SetName(str(n))
         module.Add(pad)
         n+=1
 
@@ -42,7 +42,7 @@ print map( lambda x: x.GetReference() , list(pcb.GetModules()))
 
 for m in pcb.GetModules():
     for p in m.Pads():
-        print p.GetPadName(), p.GetPosition(), p.GetOffset()
+        print p.GetName(), p.GetPosition(), p.GetOffset()
 
 
 # pcb.GetDesignSettings()

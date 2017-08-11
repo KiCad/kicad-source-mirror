@@ -517,7 +517,7 @@ bool D_PAD::IncrementPadName( bool aSkipUnconnectable, bool aFillSequenceGaps )
     bool skip = aSkipUnconnectable && ( GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED );
 
     if( !skip )
-        SetPadName( GetParent()->GetNextPadName( aFillSequenceGaps ) );
+        SetName( GetParent()->GetNextPadName( aFillSequenceGaps ) );
 
     return !skip;
 }
@@ -1180,7 +1180,7 @@ wxString D_PAD::GetSelectMenuText() const
 {
     wxString text;
     wxString padlayers( LayerMaskDescribe( GetBoard(), m_layerMask ) );
-    wxString padname( GetPadName() );
+    wxString padname( GetName() );
 
     if( padname.IsEmpty() )
     {
@@ -1191,7 +1191,7 @@ wxString D_PAD::GetSelectMenuText() const
     else
     {
         text.Printf( _( "Pad %s on %s of %s" ),
-                     GetChars(GetPadName() ), GetChars( padlayers ),
+                     GetChars(GetName() ), GetChars( padlayers ),
                      GetChars(GetParent()->GetReference() ) );
     }
 
@@ -1253,7 +1253,7 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
         wxString msg;
         msg.Printf( wxT( "footprint %s, pad %s: could not find valid layer for pad" ),
                 GetParent() ? GetParent()->GetReference() : "<null>",
-                GetPadName().IsEmpty() ? "(unnamed)" : GetPadName() );
+                GetName().IsEmpty() ? "(unnamed)" : GetName() );
         wxLogWarning( msg );
     }
 #endif

@@ -858,7 +858,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
         // update the nets within the pads of the clone
         for( D_PAD* pad = m->PadsList();  pad;  pad = pad->Next() )
         {
-            string pn_key  = makeKey( e.name, TO_UTF8( pad->GetPadName() ) );
+            string pn_key  = makeKey( e.name, TO_UTF8( pad->GetName() ) );
 
             NET_MAP_CITER ni = m_pads_to_nets.find( pn_key );
             if( ni != m_pads_to_nets.end() )
@@ -1255,7 +1255,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
     D_PAD*  pad = new D_PAD( aModule );
     aModule->PadsList().PushBack( pad );
 
-    pad->SetPadName( FROM_UTF8( e.name.c_str() ) );
+    pad->SetName( FROM_UTF8( e.name.c_str() ) );
 
     // pad's "Position" is not relative to the module's,
     // whereas Pos0 is relative to the module's but is the unrotated coordinate.
@@ -1572,7 +1572,7 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, wxXmlNode* aTree ) const
     // Mechanical purpose only:
     // no offset, no net name, no pad name allowed
     // pad->SetOffset( wxPoint( 0, 0 ) );
-    // pad->SetPadName( wxEmptyString );
+    // pad->SetName( wxEmptyString );
 
     wxPoint padpos( kicad_x( e.x ), kicad_y( e.y ) );
 
@@ -1601,7 +1601,7 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
     D_PAD*  pad = new D_PAD( aModule );
     aModule->PadsList().PushBack( pad );
 
-    pad->SetPadName( FROM_UTF8( e.name.c_str() ) );
+    pad->SetName( FROM_UTF8( e.name.c_str() ) );
     pad->SetShape( PAD_SHAPE_RECT );
     pad->SetAttribute( PAD_ATTRIB_SMD );
 

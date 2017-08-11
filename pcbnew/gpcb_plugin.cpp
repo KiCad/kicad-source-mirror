@@ -667,7 +667,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
             // and set to the pin name of the netlist on instantiation. Many gEDA
             // bare footprints use identical strings for name and number, so this
             // can be a bit confusing.
-            pad->SetPadName( parameters[paramCnt-3] );
+            pad->SetName( parameters[paramCnt-3] );
 
             int x1 = parseInt( parameters[2], conv_unit );
             int x2 = parseInt( parameters[4], conv_unit );
@@ -749,7 +749,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
             // Pcbnew pad name is used for electrical connection calculations.
             // Accordingly it should be mapped to gEDA's pin/pad number,
             // which is used for the same purpose.
-            pad->SetPadName( parameters[paramCnt-3] );
+            pad->SetName( parameters[paramCnt-3] );
 
             wxPoint padPos( parseInt( parameters[2], conv_unit ),
                             parseInt( parameters[3], conv_unit ) );

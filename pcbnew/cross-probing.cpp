@@ -174,7 +174,7 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
     case PCB_PAD_T:
         {
             module = (MODULE*) aItem->GetParent();
-            wxString pad = ((D_PAD*)aItem)->GetPadName();
+            wxString pad = ((D_PAD*)aItem)->GetName();
 
             return StrPrintf( "$PART: \"%s\" $PAD: \"%s\"",
                      TO_UTF8( module->GetReference() ),

@@ -2248,7 +2248,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
     std::unique_ptr< D_PAD > pad( new D_PAD( aParent ) );
 
     NeedSYMBOLorNUMBER();
-    pad->SetPadName( FromUTF8() );
+    pad->SetName( FromUTF8() );
 
     T token = NextTok();
 

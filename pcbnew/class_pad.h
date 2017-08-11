@@ -164,7 +164,7 @@ public:
      * Set the pad name (sometimes called pad number, although
      * it can be an array reference like AA12).
      */
-    void SetPadName( const wxString& aName )
+    void SetName( const wxString& aName )
     {
         m_name = aName;
     }
@@ -172,7 +172,7 @@ public:
     /**
      * @return the pad name
      */
-    const wxString& GetPadName() const
+    const wxString& GetName() const
     {
         return m_name;
     }

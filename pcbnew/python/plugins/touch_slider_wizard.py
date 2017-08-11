@@ -70,7 +70,7 @@ class TouchSliderWizard(FootprintWizardBase.FootprintWizard):
         pad.SetLayerSet(pad.ConnSMDMask())
         pad.SetPos0(pos)
         pad.SetPosition(pos)
-        pad.SetPadName(name)
+        pad.SetName(name)
         return pad
 
 
@@ -82,7 +82,7 @@ class TouchSliderWizard(FootprintWizardBase.FootprintWizard):
         pad.SetLayerSet(pad.ConnSMDMask())
         pad.SetPos0(pos)
         pad.SetPosition(pos)
-        pad.SetPadName(name)
+        pad.SetName(name)
         pad.SetDelta(wxSize(left_right*size[1],up_down*size[0]))
         return pad
 
