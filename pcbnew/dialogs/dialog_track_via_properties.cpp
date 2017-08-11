@@ -44,7 +44,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     m_viaDrill( aParent, m_ViaDrillCtrl, m_ViaDrillUnit ),
     m_tracks( false ), m_vias( false )
 {
-    assert( !m_items.Empty() );
+    wxASSERT( !m_items.Empty() );
 
     // This is a way to trick gcc into considering these variables as initialized
     boost::optional<int> trackStartX = boost::make_optional<int>( false, 0 );
@@ -53,7 +53,9 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     boost::optional<int> trackEndY = boost::make_optional<int>( false, 0 );
     boost::optional<int> trackWidth = boost::make_optional<int>( false, 0 );
     boost::optional<PCB_LAYER_ID> trackLayer = boost::make_optional<PCB_LAYER_ID>( false, (PCB_LAYER_ID) 0 );
-    boost::optional<int> viaX, viaY, viaDiameter;
+    boost::optional<int> viaX = boost::make_optional<int>( false, 0 );
+    boost::optional<int> viaY = boost::make_optional<int>( false, 0 );
+    boost::optional<int> viaDiameter = boost::make_optional<int>( false, 0 );
     boost::optional<int> viaDrill = boost::make_optional<int>( false, 0 );
 
     m_haveUniqueNet = true;
@@ -62,7 +64,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     printf("Create!\n");
 
     m_NetComboBox->SetBoard( aParent->GetBoard() );
-    m_NetComboBox->Enable(1);
+    m_NetComboBox->Enable( true );
 
     bool hasLocked = false;
     bool hasUnlocked = false;
@@ -174,12 +176,12 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
             }
 
             default:
-                assert( false );
+                wxASSERT( false );
                 break;
         }
     }
 
-    assert( m_tracks || m_vias );
+    wxASSERT( m_tracks || m_vias );
 
     if( m_vias )
     {
@@ -233,7 +235,8 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     m_StdButtonsOK->SetDefault();
 
     // Pressing ENTER when any of the text input fields is active applies changes
-    Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onOkClick ), NULL, this );
+    Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onOkClick ),
+             NULL, this );
 }
 
 
@@ -253,7 +256,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply( COMMIT& aCommit )
         {
             case PCB_TRACE_T:
             {
-                assert( m_tracks );
+                wxASSERT( m_tracks );
                 TRACK* t = static_cast<TRACK*>( item );
 
                 if( m_trackStartX.Valid() || m_trackStartY.Valid() )
@@ -311,7 +314,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply( COMMIT& aCommit )
 
             case PCB_VIA_T:
             {
-                assert( m_vias );
+                wxASSERT( m_vias );
 
                 VIA* v = static_cast<VIA*>( item );
 
@@ -371,7 +374,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply( COMMIT& aCommit )
             }
 
             default:
-                assert( false );
+                wxASSERT( false );
                 break;
         }
     }
