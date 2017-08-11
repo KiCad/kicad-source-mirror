@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2015 Jean-Pierre Charras, jp.charras@wanadoo.fr
+ * Copyright (C) 2013-2017 Jean-Pierre Charras, jp.charras@wanadoo.fr
  * Copyright (C) 2013-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -145,7 +145,13 @@ private:
     void    GenNetlist( wxCommandEvent& event ) override;
     void    RunSimulator( wxCommandEvent& event );
     void    NetlistUpdateOpt();
+
+    // Called when changing the notebook page, therefore the current
+    // netlist format
     void    OnNetlistTypeSelection( wxNotebookEvent& event ) override;
+
+    // called when checking the  "Default format" wxCheckBox
+    // in the current page of the notbook
     void    SelectDefaultNetlistType( wxCommandEvent& event );
 
     /**
@@ -238,7 +244,7 @@ enum id_netlist {
 };
 
 
-// ID for configuration:
+// keywords for configuration:
 #define CUSTOM_NETLIST_TITLE   wxT( "CustomNetlistTitle" )
 #define CUSTOM_NETLIST_COMMAND wxT( "CustomNetlistCommand" )
 #define NETLIST_USE_DEFAULT_NETNAME wxT( "NetlistUseDefaultNetname" )
@@ -342,8 +348,16 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
     // Add custom panels:
     InstallCustomPages();
 
+    // Ensure a netlist format is selected:
     if( !m_asFormatSelected )
+    {
         m_PanelNetType[PANELPCBNEW]->m_IsCurrentFormat->SetValue( true );
+        m_NoteBook->SetSelection( PANELPCBNEW );
+        // call OnNetlistTypeSelection to update some widgets.
+        // SetSelection() do nothing if the current page is already PANELPCBNEW
+        wxNotebookEvent event;
+        OnNetlistTypeSelection( event );
+    }
 
     SetDefaultItem( m_buttonNetlist );
 
@@ -490,6 +504,7 @@ void NETLIST_DIALOG::SelectDefaultNetlistType( wxCommandEvent& event )
 void NETLIST_DIALOG::OnNetlistTypeSelection( wxNotebookEvent& event )
 {
     NETLIST_PAGE_DIALOG* currPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
+
     if( currPage == NULL )
         return;
 
@@ -497,6 +512,7 @@ void NETLIST_DIALOG::OnNetlistTypeSelection( wxNotebookEvent& event )
     m_cbUseDefaultNetlistName->Enable( currPage->m_IdNetType < NET_TYPE_CUSTOM1 );
 
     wxString fileExt;
+
     if( FilenamePrms( currPage->m_IdNetType, &fileExt, NULL ) )
     {
         wxFileName fn = g_RootSheet->GetScreen()->GetFileName();
