@@ -114,17 +114,7 @@ bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
     while( true )
     {
         if( fgets( line, sizeof(line), m_Current_File ) == NULL )
-        {
-            if( m_FilesPtr == 0 )
-                break;
-
-            fclose( m_Current_File );
-
-            m_FilesPtr--;
-            m_Current_File = m_FilesList[m_FilesPtr];
-
-            continue;
-        }
+            break;
 
         text = StrPurge( line );
 

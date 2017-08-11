@@ -206,15 +206,11 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
     m_IJPos.x = m_IJPos.y = 0;                      // current centre coord for
                                                     // plot arcs & circles
     m_Current_File    = NULL;                       // Gerber file to read
-    m_FilesPtr        = 0;
     m_PolygonFillMode = false;
     m_PolygonFillModeState = 0;
     m_Selected_Tool = 0;
     m_Last_Pen_Command = 0;
     m_Exposure = false;
-
-    for( unsigned ii = 0; ii < DIM( m_FilesList ); ii++ )
-        m_FilesList[ii] = NULL;
 }
 
 

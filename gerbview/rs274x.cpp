@@ -72,7 +72,6 @@ enum RS274X_PARAMETERS {
     IMAGE_OFFSET   = CODE( 'I', 'O' ),          // Default: A = 0, B = 0
     IMAGE_POLARITY = CODE( 'I', 'P' ),          // Default: Positive
     IMAGE_ROTATION = CODE( 'I', 'R' ),          // Default: 0
-    PLOTTER_FILM   = CODE( 'P', 'M' ),
 
     // Aperture parameters:
     // Usually for the whole file
@@ -109,9 +108,6 @@ enum RS274X_PARAMETERS {
     KNOCKOUT = CODE( 'K', 'O' ),                // Default: off
     STEP_AND_REPEAT = CODE( 'S', 'R' ),         //  Default: A = 1, B = 1
     ROTATE = CODE( 'R', 'O' ),                  //  Default: 0
-
-    // Miscellaneous parameters:
-    INCLUDE_FILE   = CODE( 'I', 'F' )
 };
 
 
@@ -252,7 +248,6 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
     int      seq_len;    // not used, just provided
     int      seq_char;
     bool     ok = true;
-    char     line[GERBER_BUFZ];
     wxString msg;
     double   fcoord;
     bool     x_fmt_known = false;
@@ -649,17 +644,6 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
         AddMessageToList( msg );
         break;
 
-    case PLOTTER_FILM:  // Command PF <string>
-        // This is an info about film that must be used to plot this file
-        // Has no meaning here. We just display this string
-        msg = wxT( "Plotter Film info:<br>" );
-        while( *text != '*' )
-        {
-           msg.Append( *text++ );
-        }
-        AddMessageToList( msg );
-        break;
-
     case ROTATE:        // Layer rotation: command like %RO45*%
         m_Iterpolation = GERB_INTERPOL_LINEAR_1X;       // Start a new Gerber layer
         m_LocalRotation =ReadDouble( text );             // Store layer rotation in degrees
@@ -696,38 +680,9 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
     case LAYER_POLARITY:
         if( *text == 'C' )
             GetLayerParams().m_LayerNegative = true;
-
         else
             GetLayerParams().m_LayerNegative = false;
 
-//        DBG( printf( "%22s: LAYER_POLARITY m_LayerNegative=%s\n", __func__,
-//                   GetLayerParams().m_LayerNegative ? "true" : "false" ); )
-        break;
-
-    case INCLUDE_FILE:
-        if( m_FilesPtr >= INCLUDE_FILES_CNT_MAX )
-        {
-            ok = false;
-            AddMessageToList( _( "Too many include files!!" ) );
-            break;
-        }
-
-        strncpy( line, text, sizeof(line)-1 );
-        line[sizeof(line)-1] = '\0';
-
-        strtok( line, "*%%\n\r" );
-        m_FilesList[m_FilesPtr] = m_Current_File;
-
-        m_Current_File = fopen( line, "rt" );
-        if( m_Current_File == 0 )
-        {
-            msg.Printf( wxT( "include file <%s> not found." ), line );
-            AddMessageToList( msg );
-            ok = false;
-            m_Current_File = m_FilesList[m_FilesPtr];
-            break;
-        }
-        m_FilesPtr++;
         break;
 
     case AP_MACRO:  // lines like %AMMYMACRO*

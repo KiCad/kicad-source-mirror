@@ -148,9 +148,6 @@ public:
     wxPoint            m_IJPos;                                 // IJ coord (for arcs & circles )
 
     FILE*              m_Current_File;                          // Current file to read
-    #define            INCLUDE_FILES_CNT_MAX 10
-    FILE*              m_FilesList[INCLUDE_FILES_CNT_MAX + 2];  // Included files list
-    int                m_FilesPtr;                              // Stack pointer for files list
 
     int                m_Selected_Tool;                         // For hightlight: current selected Dcode
     bool               m_Has_DCode;                             // true = DCodes in file
