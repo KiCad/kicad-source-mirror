@@ -307,7 +307,8 @@ set( BMAPS_MID
     lib_next
     lib_previous
     library_browse
-    library_update
+    library_archive
+    library_archive_as
     library
     library_table
     lines90

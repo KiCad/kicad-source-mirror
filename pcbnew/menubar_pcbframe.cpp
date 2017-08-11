@@ -794,21 +794,21 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
 
     AddMenuItem( submenuarchive, ID_MENU_ARCHIVE_MODULES_IN_LIBRARY,
                  _( "&Archive Footprints in Project Library" ),
-                 _( "Archive footprints in existing library in footprint Lib table"
+                 _( "Archive all footprints in existing library in footprint Lib table"
                     "(does not remove other footprints in this library)" ),
-                 KiBitmap( library_update_xpm ) );
+                 KiBitmap( library_archive_xpm ) );
 
     AddMenuItem( submenuarchive, ID_MENU_CREATE_LIBRARY_AND_ARCHIVE_MODULES,
-                 _( "&Create Library and Archive Footprints" ),
+                 _( "&Create New Library and Archive Footprints" ),
                  _( "Archive all footprints in new library\n"
                     "(if the library already exists it will be deleted)" ),
-                 KiBitmap( library_xpm ) );
+                 KiBitmap( library_archive_as_xpm ) );
 
     AddMenuItem( aParentMenu, submenuarchive,
                  ID_MENU_ARCHIVE_MODULES,
                  _( "Arc&hive Footprints" ),
-                 _( "Archive or add footprints in library file" ),
-                 KiBitmap( library_xpm ) );
+                 _( "Archive or add all footprints in library file" ),
+                 KiBitmap( library_archive_xpm ) );
 
     aParentMenu->AppendSeparator();
     AddMenuItem( aParentMenu, wxID_EXIT, _( "&Close" ), _( "Close Pcbnew" ), KiBitmap( exit_xpm ) );
