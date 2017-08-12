@@ -11,6 +11,7 @@ COLOR4D_PICKER_DLG::COLOR4D_PICKER_DLG( wxWindow* aParent, KIGFX::COLOR4D& aCurr
                                         bool aAllowOpacityControl )
 	: COLOR4D_PICKER_DLG_BASE( aParent )
 {
+    m_allowMouseEvents = false;
     m_allowOpacityCtrl = aAllowOpacityControl;
     m_previousColor4D = aCurrentColor;
     m_newColor4D = aCurrentColor;
@@ -493,6 +494,7 @@ void COLOR4D_PICKER_DLG::buttColorClick( wxCommandEvent& event )
 
 void COLOR4D_PICKER_DLG::onRGBMouseClick( wxMouseEvent& event )
 {
+    m_allowMouseEvents = true;
     wxPoint mousePos = event.GetPosition();
 
     // The cursor position is relative to the m_bitmapHSV wxBitmap center
@@ -532,7 +534,7 @@ void COLOR4D_PICKER_DLG::onRGBMouseClick( wxMouseEvent& event )
 
 void COLOR4D_PICKER_DLG::onRGBMouseDrag( wxMouseEvent& event )
 {
-    if( !event.Dragging() )
+    if( !event.Dragging() || !m_allowMouseEvents )
     {
         m_selectedCursor = nullptr;
         return;
@@ -590,6 +592,8 @@ void COLOR4D_PICKER_DLG::onRGBMouseDrag( wxMouseEvent& event )
 
 void COLOR4D_PICKER_DLG::onHSVMouseClick( wxMouseEvent& event )
 {
+    m_allowMouseEvents = true;
+
     if( setHSvaluesFromCursor( event.GetPosition() ) )
         drawAll();
 }
@@ -597,7 +601,7 @@ void COLOR4D_PICKER_DLG::onHSVMouseClick( wxMouseEvent& event )
 
 void COLOR4D_PICKER_DLG::onHSVMouseDrag( wxMouseEvent& event )
 {
-    if( !event.Dragging() )
+    if( !event.Dragging() || !m_allowMouseEvents )
         return;
 
     if( setHSvaluesFromCursor( event.GetPosition() ) )

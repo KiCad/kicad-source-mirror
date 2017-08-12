@@ -38,6 +38,13 @@ public:
     static int m_ActivePage;            ///< the active notebook page, stored during a session
 
 private:
+    /* When the dialog is created, the mouse cursor can be on the RGB or HSV palette selector
+     * Because this dialog is created by clicking double clicking on a widget, the left mouse
+     * button is down, thus creating a not wanted mouse event inside this dialog
+     * m_allowMouseEvents is first set to false, and then set to true on the first left mouse
+     * clicking inside this dialog to prevent not wanted mouse drag event
+     */
+    bool m_allowMouseEvents;
     bool m_allowOpacityCtrl;            ///< true to show the widget,
                                         ///< false to keep alpha channel = 1.0
     KIGFX::COLOR4D m_previousColor4D;   ///< the inital color4d
