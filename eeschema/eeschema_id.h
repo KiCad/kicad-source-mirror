@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,6 +63,7 @@ enum id_eeschema_frm
 
     /* Schematic editor main menubar IDs. */
     ID_RESCUE_CACHED,
+    ID_EDIT_SYM_LIB_TABLE,
 
     /* Schematic editor horizontal toolbar IDs */
     ID_HIERARCHY,

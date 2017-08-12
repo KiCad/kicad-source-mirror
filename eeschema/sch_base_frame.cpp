@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,12 +22,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sch_base_frame.h>
-#include <viewlib_frame.h>
-#include <libeditframe.h>
 #include <base_units.h>
 #include <kiway.h>
 #include <class_drawpanel.h>
+
+#include <eeschema_id.h>
+#include <libeditframe.h>
+#include <viewlib_frame.h>
+#include <sch_base_frame.h>
+#include <symbol_lib_table.h>
+#include "dialogs/dialog_sym_lib_table.h"
+
 
 // Sttaic members:
 
@@ -48,6 +53,12 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
 }
 
 
+
+SCH_BASE_FRAME::~SCH_BASE_FRAME()
+{
+}
+
+
 void SCH_BASE_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
 {
     LIB_VIEW_FRAME* viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, true );
@@ -62,11 +73,13 @@ void SCH_BASE_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
     viewlibFrame->Raise();
 }
 
+
 // Virtual from EDA_DRAW_FRAME
 COLOR4D SCH_BASE_FRAME::GetDrawBgColor() const
 {
     return GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
 }
+
 
 void SCH_BASE_FRAME::SetDrawBgColor( COLOR4D aColor)
 {
@@ -200,4 +213,50 @@ void SCH_BASE_FRAME::UpdateStatusBar()
 
     // refresh units display
     DisplayUnitsMsg();
+}
+
+
+void SCH_BASE_FRAME::OnEditSymbolLibTable( wxCommandEvent& aEvent )
+{
+    DIALOG_SYMBOL_LIB_TABLE dlg( this, &SYMBOL_LIB_TABLE::GetGlobalLibTable(),
+                                 Prj().SchSymbolLibTable() );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    try
+    {
+        FILE_OUTPUTFORMATTER sf( SYMBOL_LIB_TABLE::GetGlobalTableFileName() );
+
+        SYMBOL_LIB_TABLE::GetGlobalLibTable().Format( &sf, 0 );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxString msg = wxString::Format( _( "Error occurred saving the global symbol library "
+                                            "table:\n\n%s" ),
+                                         GetChars( ioe.What().GetData() ) );
+        wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+    }
+
+    if( !Prj().GetProjectName().IsEmpty() )
+    {
+        wxFileName fn( Prj().GetProjectPath(), SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+
+        try
+        {
+            Prj().SchSymbolLibTable()->Save( fn.GetFullPath() );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxString msg = wxString::Format( _( "Error occurred saving project specific "
+                                                "symbol library table:\n\n%s" ),
+                                             GetChars( ioe.What() ) );
+            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+        }
+    }
+
+    LIB_VIEW_FRAME* viewer = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
+
+    if( viewer )
+        viewer->ReCreateListLib();
 }

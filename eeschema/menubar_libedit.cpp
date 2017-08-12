@@ -239,8 +239,14 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Configure component libraries and paths" ),
                  KiBitmap( library_xpm ) );
 
+    AddMenuItem( preferencesMenu,
+                 ID_EDIT_SYM_LIB_TABLE,
+                 _( "Symbol Library &Table" ),
+                 _( "Edit the symbol library table." ),
+                 KiBitmap( library_xpm ) );
+
     // Default values and options
-     AddMenuItem( preferencesMenu,
+    AddMenuItem( preferencesMenu,
                  wxID_PREFERENCES,
                  _( "Component Editor &Options" ),
                  _( "Set Component Editor default values and options" ),

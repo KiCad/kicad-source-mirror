@@ -294,6 +294,9 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Raise();
     Show( true );
 
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &OnEditSymbolLibTable, this,
+          ID_EDIT_SYM_LIB_TABLE );
+
     wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED, ID_ZOOM_PAGE );
     wxPostEvent( this, evt );
 }
@@ -301,6 +304,9 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
 {
+    Unbind( wxEVT_COMMAND_MENU_SELECTED, &OnEditSymbolLibTable, this,
+            ID_EDIT_SYM_LIB_TABLE );
+
     m_drawItem = m_lastDrawItem = NULL;
 
     delete m_tempCopyComponent;

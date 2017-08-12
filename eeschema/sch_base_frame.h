@@ -61,6 +61,8 @@ public:
                     const wxPoint& aPosition, const wxSize& aSize,
                     long aStyle, const wxString & aFrameName );
 
+    virtual ~SCH_BASE_FRAME();
+
     SCH_SCREEN* GetScreen() const override;
 
     /**
@@ -171,6 +173,8 @@ public:
             int                                 aConvert,
             const wxString& aHighlight = wxEmptyString,
             bool                                aAllowFields = true );
+
+    void OnEditSymbolLibTable( wxCommandEvent& aEvent );
 
 protected:
 

@@ -454,90 +454,94 @@ bool PGM_BASE::InitPgm()
     // OS specific instantiation of wxConfigBase derivative:
     m_common_settings = GetNewConfig( KICAD_COMMON );
 
-    // Only define the default environment variable if they haven't been set in the
-    // .kicad_common configuration file.
-    if( m_common_settings && !m_common_settings->HasGroup( pathEnvVariables ) )
+    wxString envVarName = wxT( "KIGITHUB" );
+    ENV_VAR_ITEM envVarItem;
+    wxString envValue;
+    wxFileName tmpFileName;
+
+    if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
     {
-        wxString envVarName = wxT( "KIGITHUB" );
-        ENV_VAR_ITEM envVarItem;
-        wxString envValue;
-        wxFileName tmpFileName;
-
+        tmpFileName.AssignDir( envValue );
+        envVarItem.SetDefinedExternally( true );
+    }
+    else
+    {
         envVarItem.SetValue( wxString( wxT( "https://github.com/KiCad" ) ) );
-        envVarItem.SetDefinedExternally( wxGetEnv( envVarName, NULL ) );
-        m_local_env_vars[ envVarName ] = envVarItem;
+        envVarItem.SetDefinedExternally( false );
+    }
 
-        wxFileName baseSharePath;
-        baseSharePath.AssignDir( wxString( wxT( DEFAULT_INSTALL_PATH ) ) );
+    m_local_env_vars[ envVarName ] = envVarItem;
+
+    wxFileName baseSharePath;
+    baseSharePath.AssignDir( wxString( wxT( DEFAULT_INSTALL_PATH ) ) );
 
 #if !defined( __WXMAC__ )
-        baseSharePath.AppendDir( wxT( "share" ) );
-        baseSharePath.AppendDir( wxT( "kicad" ) );
+    baseSharePath.AppendDir( wxT( "share" ) );
+    baseSharePath.AppendDir( wxT( "kicad" ) );
 #endif
 
-        // KISYSMOD
-        envVarName = wxT( "KISYSMOD" );
-        if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
-        {
-            tmpFileName.AssignDir( envValue );
-            envVarItem.SetDefinedExternally( true );
-        }
-        else
-        {
-            tmpFileName = baseSharePath;
-            tmpFileName.AppendDir( wxT( "modules" ) );
-            envVarItem.SetDefinedExternally( false );
-        }
-        envVarItem.SetValue( tmpFileName.GetFullPath() );
-        m_local_env_vars[ envVarName ] = envVarItem;
-
-        // KISYS3DMOD
-        envVarName = wxT( "KISYS3DMOD" );
-        if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
-        {
-            tmpFileName.AssignDir( envValue );
-            envVarItem.SetDefinedExternally( true );
-        }
-        else
-        {
-            tmpFileName.AppendDir( wxT( "packages3d" ) );
-            envVarItem.SetDefinedExternally( false );
-        }
-        envVarItem.SetValue( tmpFileName.GetFullPath() );
-        m_local_env_vars[ envVarName ] = envVarItem;
-
-        // KICAD_PTEMPLATES
-        envVarName = wxT( "KICAD_PTEMPLATES" );
-        if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
-        {
-            tmpFileName.AssignDir( envValue );
-            envVarItem.SetDefinedExternally( true );
-        }
-        else
-        {
-            tmpFileName = baseSharePath;
-            tmpFileName.AppendDir( wxT( "template" ) );
-            envVarItem.SetDefinedExternally( false );
-        }
-        envVarItem.SetValue( tmpFileName.GetFullPath() );
-        m_local_env_vars[ envVarName ] = envVarItem;
-
-        // KICAD_SYMBOLS
-        envVarName = wxT( "KICAD_SYMBOL_DIR" );
-        if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
-        {
-            tmpFileName.AssignDir( envValue );
-            envVarItem.SetDefinedExternally( true );
-        }
-        else
-        {
-            tmpFileName = baseSharePath;
-            tmpFileName.AppendDir( wxT( "library" ) );
-            envVarItem.SetDefinedExternally( false );
-        }
-        envVarItem.SetValue( tmpFileName.GetFullPath() );
-        m_local_env_vars[ envVarName ] = envVarItem;
+    // KISYSMOD
+    envVarName = wxT( "KISYSMOD" );
+    if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
+    {
+        tmpFileName.AssignDir( envValue );
+        envVarItem.SetDefinedExternally( true );
     }
+    else
+    {
+        tmpFileName = baseSharePath;
+        tmpFileName.AppendDir( wxT( "modules" ) );
+        envVarItem.SetDefinedExternally( false );
+    }
+    envVarItem.SetValue( tmpFileName.GetFullPath() );
+    m_local_env_vars[ envVarName ] = envVarItem;
+
+    // KISYS3DMOD
+    envVarName = wxT( "KISYS3DMOD" );
+    if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
+    {
+        tmpFileName.AssignDir( envValue );
+        envVarItem.SetDefinedExternally( true );
+    }
+    else
+    {
+        tmpFileName.AppendDir( wxT( "packages3d" ) );
+        envVarItem.SetDefinedExternally( false );
+    }
+    envVarItem.SetValue( tmpFileName.GetFullPath() );
+    m_local_env_vars[ envVarName ] = envVarItem;
+
+    // KICAD_PTEMPLATES
+    envVarName = wxT( "KICAD_PTEMPLATES" );
+    if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
+    {
+        tmpFileName.AssignDir( envValue );
+        envVarItem.SetDefinedExternally( true );
+    }
+    else
+    {
+        tmpFileName = baseSharePath;
+        tmpFileName.AppendDir( wxT( "template" ) );
+        envVarItem.SetDefinedExternally( false );
+    }
+    envVarItem.SetValue( tmpFileName.GetFullPath() );
+    m_local_env_vars[ envVarName ] = envVarItem;
+
+    // KICAD_SYMBOLS
+    envVarName = wxT( "KICAD_SYMBOL_DIR" );
+    if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
+    {
+        tmpFileName.AssignDir( envValue );
+        envVarItem.SetDefinedExternally( true );
+    }
+    else
+    {
+        tmpFileName = baseSharePath;
+        tmpFileName.AppendDir( wxT( "library" ) );
+        envVarItem.SetDefinedExternally( false );
+    }
+    envVarItem.SetValue( tmpFileName.GetFullPath() );
+    m_local_env_vars[ envVarName ] = envVarItem;
 
     ReadPdfBrowserInfos();      // needs m_common_settings
 

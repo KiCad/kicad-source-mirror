@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2016 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2016-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -31,6 +31,7 @@
 
 class LIB_PART;
 class SYMBOL_LIB_TABLE_GRID;
+class DIALOG_SYMBOL_LIB_TABLE;
 
 
 /**
@@ -98,6 +99,7 @@ private:
 class SYMBOL_LIB_TABLE : public LIB_TABLE
 {
     friend class SYMBOL_LIB_TABLE_GRID;
+    friend class DIALOG_SYMBOL_LIB_TABLE;
 
 public:
     virtual void Parse( LIB_TABLE_LEXER* aLexer ) override;

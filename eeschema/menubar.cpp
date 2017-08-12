@@ -610,6 +610,12 @@ static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
                  _( "Configure component libraries and paths" ),
                  KiBitmap( library_xpm ) );
 
+    AddMenuItem( aParentMenu,
+                 ID_EDIT_SYM_LIB_TABLE,
+                 _( "Symbol Library &Table" ),
+                 _( "Edit the symbol library table." ),
+                 KiBitmap( library_xpm ) );
+
     // Options (Preferences on WXMAC)
 #ifdef __WXMAC__
     aParentMenu->Append( wxID_PREFERENCES );
