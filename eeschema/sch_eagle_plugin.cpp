@@ -528,7 +528,8 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
     if( sheet_count > 1 )
     {
         // TODO: set up a heirachical sheet for each Eagle sheet.
-        int x, y;
+        int x, y, i;
+        i = 1;
         x = 1;
         y = 1;
 
@@ -538,12 +539,12 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
             std::unique_ptr<SCH_SHEET> sheet( new SCH_SHEET( pos ) );
             SCH_SCREEN* screen = new SCH_SCREEN( m_kiway );
 
-            sheet->SetTimeStamp( GetNewTimeStamp() );
+            sheet->SetTimeStamp( GetNewTimeStamp()-i ); // minus the sheet index to make it unique.
             sheet->SetParent( m_rootSheet->GetScreen() );
             sheet->SetScreen( screen );
 
             m_currentSheet = sheet.get();
-            loadSheet( sheetNode );
+            loadSheet( sheetNode, i);
             sheet->GetScreen()->SetFileName( sheet->GetFileName() );
             m_rootSheet->GetScreen()->Append( sheet.release() );
 
@@ -555,6 +556,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
                 x = 1;
                 y += 2;
             }
+            i++;
         }
     }
     else
@@ -562,14 +564,14 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
         while( sheetNode )
         {
             m_currentSheet = m_rootSheet;
-            loadSheet( sheetNode );
+            loadSheet( sheetNode, 0 );
             sheetNode = sheetNode->GetNext();
         }
     }
 }
 
 
-void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
+void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int sheetcount )
 {
     // Map all children into a readable dictionary
     NODE_MAP sheetChildren = mapChildren( aSheetNode );
@@ -578,20 +580,27 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode )
 
     wxXmlNode* descriptionNode = getChildrenNodes( sheetChildren, "description" );
 
+    wxString des;
+    std::string filename;
     if( descriptionNode )
     {
-        wxString des = descriptionNode->GetContent();
+        des = descriptionNode->GetContent();
         m_currentSheet->SetName( des );
-
-        std::string filename = des.ToStdString();
-        ReplaceIllegalFileNameChars( &filename );
-        replace( filename.begin(), filename.end(), ' ', '_' );
-
-        wxString fn = wxString( filename + ".sch" );
-        m_currentSheet->SetFileName( fn );
-        wxFileName fileName = m_currentSheet->GetFileName();
-        m_currentSheet->GetScreen()->SetFileName( fileName.GetFullPath() );
+        filename = des.ToStdString();
     }
+    else
+    {
+        filename = m_filename.GetName().ToStdString() + "_" + std::to_string(sheetcount);
+        m_currentSheet->SetName( filename );
+    }
+
+    ReplaceIllegalFileNameChars( &filename );
+    replace( filename.begin(), filename.end(), ' ', '_' );
+
+    wxString fn = wxString( filename + ".sch" );
+    m_currentSheet->SetFileName( fn );
+    wxFileName fileName = m_currentSheet->GetFileName();
+    m_currentSheet->GetScreen()->SetFileName( fileName.GetFullPath() );
 
     // Loop through all busses
     // From the DTD: "Buses receive names which determine which signals they include.
@@ -797,7 +806,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
                 std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
                 glabel->SetPosition( wire->GetStartPoint() );
                 glabel->SetText( netname);
-                glabel->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
+                glabel->SetTextSize( wxSize( 10, 10 ) );
                 screen->Append( glabel.release() );
             }
             else if ( segmentCount > 1)
@@ -805,7 +814,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
                 std::unique_ptr<SCH_LABEL> label( new SCH_LABEL );
                 label->SetPosition( wire->GetStartPoint() );
                 label->SetText( netname );
-                label->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
+                label->SetTextSize( wxSize( 10, 10 ) );
                 screen->Append( label.release() );
             }
         }

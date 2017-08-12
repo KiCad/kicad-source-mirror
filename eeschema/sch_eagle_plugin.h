@@ -134,7 +134,7 @@ private:
     void loadDrawing( wxXmlNode* aDrawingNode );
     void loadLayerDefs( wxXmlNode* aLayers );
     void loadSchematic( wxXmlNode* aSchematicNode );
-    void loadSheet( wxXmlNode* aSheetNode );
+    void loadSheet( wxXmlNode* aSheetNode, int sheetcount );
     void loadInstance( wxXmlNode* aInstanceNode );
     void loadModuleinst( wxXmlNode* aModuleinstNode );
     EAGLE_LIBRARY loadLibrary( wxXmlNode* aLibraryNode );
