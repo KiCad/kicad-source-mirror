@@ -789,7 +789,6 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
 
         SCH_LINE* wire = segmentWires.begin();
 
-        /*
         if(labelled == false && wire != NULL )
         {
             wxString netname = netName;
@@ -810,7 +809,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
                 screen->Append( label.release() );
             }
         }
-        */
+
 
 
         SCH_LINE* next_wire;
