@@ -294,7 +294,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Raise();
     Show( true );
 
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &OnEditSymbolLibTable, this,
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &LIB_EDIT_FRAME::OnEditSymbolLibTable, this,
           ID_EDIT_SYM_LIB_TABLE );
 
     wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED, ID_ZOOM_PAGE );
@@ -304,7 +304,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
 {
-    Unbind( wxEVT_COMMAND_MENU_SELECTED, &OnEditSymbolLibTable, this,
+    Unbind( wxEVT_COMMAND_MENU_SELECTED, &LIB_EDIT_FRAME::OnEditSymbolLibTable, this,
             ID_EDIT_SYM_LIB_TABLE );
 
     m_drawItem = m_lastDrawItem = NULL;

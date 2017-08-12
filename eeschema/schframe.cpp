@@ -437,14 +437,14 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     // Net list generator
     DefaultExecFlags();
 
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &OnEditSymbolLibTable, this,
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &SCH_EDIT_FRAME::OnEditSymbolLibTable, this,
           ID_EDIT_SYM_LIB_TABLE );
 }
 
 
 SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 {
-    Unbind( wxEVT_COMMAND_MENU_SELECTED, &OnEditSymbolLibTable, this,
+    Unbind( wxEVT_COMMAND_MENU_SELECTED, &SCH_EDIT_FRAME::OnEditSymbolLibTable, this,
             ID_EDIT_SYM_LIB_TABLE );
 
     delete m_item_to_repeat;        // we own the cloned object, see this->SetRepeatItem()
