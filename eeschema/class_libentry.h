@@ -34,8 +34,8 @@
 #include <lib_id.h>
 #include <lib_draw_item.h>
 #include <lib_field.h>
+#include <lib_items.h>
 #include <vector>
-#include <memory>
 
 class EDA_RECT;
 class LINE_READER;
@@ -236,7 +236,8 @@ class LIB_PART : public EDA_ITEM
     long                m_dateModified;     ///< Date the part was last modified.
     LIBRENTRYOPTIONS    m_options;          ///< Special part features such as POWER or NORMAL.)
     int                 m_unitCount;        ///< Number of units (parts) per package.
-    LIB_ITEMS           drawings;           ///< How to draw this part.
+    LIB_ITEMS_MAP       drawingsMap;        ///< How to draw this part.
+    LIB_ITEMS_LIST      drawings;           ///< Wrapper to drawingsMap to present as a flat structure
     wxArrayString       m_FootprintList;    /**< List of suitable footprint names for the
                                                  part (wild card names accepted). */
     LIB_ALIASES         m_aliases;          ///< List of alias object pointers associated with the
@@ -682,9 +683,20 @@ public:
     /**
      * Return a reference to the draw item list.
      *
-     * @return LIB_ITEMS& - Reference to the draw item object list.
+     * @return LIB_ITEMS_LIST& - Reference to the draw item object list.
      */
-    LIB_ITEMS& GetDrawItemList() { return drawings; }
+    LIB_ITEMS_LIST& GetDrawItemList()
+    {
+        return drawings;
+    }
+
+    /**
+     * Returns a reference to the draw item map that stores items per their type.
+     */
+    LIB_ITEMS_MAP& GetDrawItemMap()
+    {
+        return drawingsMap;
+    }
 
     /**
      * Set the units per part count.

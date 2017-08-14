@@ -113,9 +113,6 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
 
     DrawItem->SetWidth( m_drawLineWidth );
 
-    if( component )
-        component->GetDrawItemList().sort();
-
     OnModify( );
 
     MSG_PANEL_ITEMS items;

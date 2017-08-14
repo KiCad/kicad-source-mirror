@@ -110,7 +110,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     wxCHECK_RET( !aliasNames.IsEmpty(), "No aliases found in library " + filename );
 
     LIB_PART*   first = lib->FindAlias( aliasNames[0] )->GetPart();
-    LIB_ITEMS&  drawList = first->GetDrawItemList();
+    LIB_ITEMS_LIST&  drawList = first->GetDrawItemList();
 
     for( LIB_ITEM& item : drawList )
     {
@@ -213,7 +213,7 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
             part->GetValueField().Save( formatter );
             formatter.Print( 0, "DRAW\n" );
 
-            LIB_ITEMS& drawList = part->GetDrawItemList();
+            LIB_ITEMS_LIST& drawList = part->GetDrawItemList();
 
             for( LIB_ITEM& item : drawList )
             {

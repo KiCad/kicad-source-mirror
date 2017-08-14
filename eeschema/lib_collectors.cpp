@@ -26,6 +26,7 @@
 #include <general.h>
 #include <transform.h>
 #include <lib_collectors.h>
+#include <lib_items.h>
 
 
 const KICAD_T LIB_COLLECTOR::AllItems[] = {
@@ -110,7 +111,7 @@ SEARCH_RESULT LIB_COLLECTOR::Inspect( EDA_ITEM* aItem, void* testData )
 }
 
 
-void LIB_COLLECTOR::Collect( LIB_ITEMS& aItems, const KICAD_T aFilterList[],
+void LIB_COLLECTOR::Collect( LIB_ITEMS_LIST& aItems, const KICAD_T aFilterList[],
                              const wxPoint& aPosition, int aUnit, int aConvert )
 {
     Empty();        // empty the collection just in case

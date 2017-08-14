@@ -178,7 +178,7 @@ struct null_deleter
 
 LIB_PART::LIB_PART( const wxString& aName, PART_LIB* aLibrary ) :
     EDA_ITEM( LIB_PART_T ),
-    m_me( this, null_deleter() )
+    m_me( this, null_deleter() ), drawings( drawingsMap )
 {
     m_name                = aName;
     m_library             = aLibrary;
@@ -198,17 +198,17 @@ LIB_PART::LIB_PART( const wxString& aName, PART_LIB* aLibrary ) :
     // when the field editors are invoked.
     LIB_FIELD* value = new LIB_FIELD( this, VALUE );
     value->SetText( aName );
-    drawings.push_back( value );
+    drawingsMap[LIB_FIELD_T].push_back( value );
 
-    drawings.push_back( new LIB_FIELD( this, REFERENCE ) );
-    drawings.push_back( new LIB_FIELD( this, FOOTPRINT ) );
-    drawings.push_back( new LIB_FIELD( this, DATASHEET ) );
+    drawingsMap[LIB_FIELD_T].push_back( new LIB_FIELD( this, REFERENCE ) );
+    drawingsMap[LIB_FIELD_T].push_back( new LIB_FIELD( this, FOOTPRINT ) );
+    drawingsMap[LIB_FIELD_T].push_back( new LIB_FIELD( this, DATASHEET ) );
 }
 
 
 LIB_PART::LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary ) :
     EDA_ITEM( aPart ),
-    m_me( this, null_deleter() )
+    m_me( this, null_deleter() ), drawings( drawingsMap )
 {
     LIB_ITEM* newItem;
 
@@ -223,7 +223,7 @@ LIB_PART::LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary ) :
     m_dateModified        = aPart.m_dateModified;
     m_options             = aPart.m_options;
 
-    for( LIB_ITEM& oldItem : aPart.GetDrawItemList() )
+    for( LIB_ITEM& oldItem : aPart.drawings )
     {
         if( oldItem.IsNew() )
             continue;
@@ -351,7 +351,7 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
             if( drawItem.Type() == LIB_FIELD_T )
                 continue;
 
-            if( drawItem.Type() == LIB_FIELD_T )
+            if( drawItem.Type() == LIB_FIELD_T )        // TODO dead code?
             {
                 drawItem.Draw( aPanel, aDc, aOffset, aOpts.color,
                                aOpts.draw_mode, (void*) NULL, aOpts.transform );
@@ -428,7 +428,6 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
                            aOpts.draw_mode, (void*) forceNoFill,
                            aOpts.transform );
         }
-
     }
 
     // Enable this to draw the anchor of the component.
@@ -553,9 +552,9 @@ void LIB_PART::RemoveDrawItem( LIB_ITEM* aItem, EDA_DRAW_PANEL* aPanel, wxDC* aD
         }
     }
 
-    LIB_ITEMS::iterator i;
+    LIB_ITEMS& items = drawingsMap[aItem->Type()];
 
-    for( i = drawings.begin(); i != drawings.end(); i++ )
+    for( LIB_ITEMS::iterator i = items.begin(); i != items.end(); i++ )
     {
         if( *i == aItem )
         {
@@ -563,7 +562,7 @@ void LIB_PART::RemoveDrawItem( LIB_ITEM* aItem, EDA_DRAW_PANEL* aPanel, wxDC* aD
                 aItem->Draw( aPanel, aDc, wxPoint( 0, 0 ), COLOR4D::UNSPECIFIED,
                              g_XorMode, NULL, DefaultTransform );
 
-            drawings.erase( i );
+            items.erase( i );
             SetModified();
             break;
         }
@@ -576,7 +575,6 @@ void LIB_PART::AddDrawItem( LIB_ITEM* aItem )
     wxASSERT( aItem != NULL );
 
     drawings.push_back( aItem );
-    drawings.sort();
 }
 
 
@@ -619,17 +617,17 @@ LIB_ITEM* LIB_PART::GetNextDrawItem( LIB_ITEM* aItem, KICAD_T aType )
 
 void LIB_PART::GetPins( LIB_PINS& aList, int aUnit, int aConvert )
 {
+    if( drawingsMap.count( LIB_PIN_T ) == 0 )
+        return;
+
     /* Notes:
      * when aUnit == 0: no unit filtering
      * when aConvert == 0: no convert (shape selection) filtering
      * when .m_Unit == 0, the body item is common to units
      * when .m_Convert == 0, the body item is common to shapes
      */
-    for( LIB_ITEM& item : drawings )
+    for( LIB_ITEM& item : drawingsMap[LIB_PIN_T] )
     {
-        if( item.Type() != LIB_PIN_T )    // we search pins only
-            continue;
-
         // Unit filtering:
         if( aUnit && item.m_Unit && ( item.m_Unit != aUnit ) )
              continue;
@@ -994,7 +992,6 @@ bool LIB_PART::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 
 ok:
     // If we are here, this part is O.k. - put it in:
-    drawings.sort();
 
     return true;
 }
@@ -1132,7 +1129,7 @@ bool LIB_PART::LoadField( LINE_READER& aLineReader, wxString& aErrorMsg )
     }
     else
     {
-        drawings.push_back( field );
+        drawingsMap[LIB_FIELD_T].push_back( field );
     }
 
     return true;
@@ -1169,10 +1166,8 @@ const EDA_RECT LIB_PART::GetUnitBoundingBox( int aUnit, int aConvert ) const
     EDA_RECT bBox;
     bool initialized = false;
 
-    for( unsigned ii = 0; ii < drawings.size(); ii++  )
+    for( const LIB_ITEM& item : drawings )
     {
-        const LIB_ITEM& item = drawings[ii];
-
         if( ( item.m_Unit > 0 ) && ( ( m_unitCount > 1 ) && ( aUnit > 0 )
                                      && ( aUnit != item.m_Unit ) ) )
             continue;
@@ -1201,10 +1196,8 @@ const EDA_RECT LIB_PART::GetBodyBoundingBox( int aUnit, int aConvert ) const
     EDA_RECT bBox;
     bool initialized = false;
 
-    for( unsigned ii = 0; ii < drawings.size(); ii++  )
+    for( const LIB_ITEM& item : drawings )
     {
-        const LIB_ITEM& item = drawings[ii];
-
         if( ( item.m_Unit > 0 ) && ( ( m_unitCount > 1 ) && ( aUnit > 0 )
                                      && ( aUnit != item.m_Unit ) ) )
             continue;
@@ -1230,19 +1223,7 @@ const EDA_RECT LIB_PART::GetBodyBoundingBox( int aUnit, int aConvert ) const
 
 void LIB_PART::deleteAllFields()
 {
-    LIB_ITEMS::iterator it;
-
-    for( it = drawings.begin();  it != drawings.end();  /* deleting */  )
-    {
-        if( it->Type() != LIB_FIELD_T  )
-        {
-            ++it;
-            continue;
-        }
-
-        // 'it' is not advanced, but should point to next in list after erase()
-        it = drawings.erase( it );
-    }
+    drawingsMap[LIB_FIELD_T].clear();
 }
 
 
@@ -1256,12 +1237,8 @@ void LIB_PART::SetFields( const std::vector <LIB_FIELD>& aFields )
         LIB_FIELD* field = new LIB_FIELD( aFields[i] );
 
         field->SetParent( this );
-        drawings.push_back( field );
+        drawingsMap[LIB_FIELD_T].push_back( field );
     }
-
-    // Reorder drawings: transparent polygons first, pins and text last.
-    // so texts have priority on screen.
-    drawings.sort();
 }
 
 
@@ -1285,11 +1262,8 @@ void LIB_PART::GetFields( LIB_FIELDS& aList )
     }
 
     // Now grab all the rest of fields.
-    for( LIB_ITEM& item : drawings )
+    for( LIB_ITEM& item : drawingsMap[LIB_FIELD_T] )
     {
-        if( item.Type() != LIB_FIELD_T )
-            continue;
-
         field = ( LIB_FIELD* ) &item;
 
         if( (unsigned) field->GetId() < MANDATORY_FIELDS )
@@ -1302,11 +1276,8 @@ void LIB_PART::GetFields( LIB_FIELDS& aList )
 
 LIB_FIELD* LIB_PART::GetField( int aId )
 {
-    for( LIB_ITEM& item : drawings )
+    for( LIB_ITEM& item : drawingsMap[LIB_FIELD_T] )
     {
-        if( item.Type() != LIB_FIELD_T )
-            continue;
-
         LIB_FIELD* field = ( LIB_FIELD* ) &item;
 
         if( field->GetId() == aId )
@@ -1319,11 +1290,8 @@ LIB_FIELD* LIB_PART::GetField( int aId )
 
 LIB_FIELD* LIB_PART::FindField( const wxString& aFieldName )
 {
-    for( LIB_ITEM& item : drawings )
+    for( LIB_ITEM& item : drawingsMap[LIB_FIELD_T] )
     {
-        if( item.Type() != LIB_FIELD_T )
-            continue;
-
         LIB_FIELD* field = ( LIB_FIELD* ) &item;
 
         if( field->GetName() == aFieldName )
@@ -1400,23 +1368,21 @@ bool LIB_PART::LoadDateAndTime( char* aLine )
 void LIB_PART::SetOffset( const wxPoint& aOffset )
 {
     for( LIB_ITEM& item : drawings )
-    {
         item.SetOffset( aOffset );
-    }
 }
 
 
 void LIB_PART::RemoveDuplicateDrawItems()
 {
-    drawings.unique();
+    for( auto& itemTypes : drawingsMap )
+        itemTypes.second.unique();
 }
 
 
 bool LIB_PART::HasConversion() const
 {
-    for( unsigned ii = 0; ii < drawings.size(); ii++  )
+    for( const LIB_ITEM& item : drawings )
     {
-        const LIB_ITEM& item = drawings[ii];
         if( item.m_Convert > 1 )
             return true;
     }
@@ -1475,8 +1441,6 @@ void LIB_PART::MoveSelectedItems( const wxPoint& aOffset )
         item.SetOffset( aOffset );
         item.m_Flags = 0;
     }
-
-    drawings.sort();
 }
 
 
@@ -1491,7 +1455,7 @@ void LIB_PART::ClearSelectedItems()
 
 void LIB_PART::DeleteSelectedItems()
 {
-    LIB_ITEMS::iterator item = drawings.begin();
+    LIB_ITEMS_LIST::ITERATOR item = drawings.begin();
 
     // We *do not* remove the 2 mandatory fields: reference and value
     // so skip them (do not remove) if they are flagged selected.
@@ -1512,7 +1476,7 @@ void LIB_PART::DeleteSelectedItems()
         }
 
         if( !item->IsSelected() )
-            item++;
+            ++item;
         else
             item = drawings.erase( item );
     }
@@ -1547,9 +1511,7 @@ void LIB_PART::CopySelectedItems( const wxPoint& aOffset )
     }
 
     MoveSelectedItems( aOffset );
-    drawings.sort();
 }
-
 
 
 void LIB_PART::MirrorSelectedItemsH( const wxPoint& aCenter )
@@ -1562,9 +1524,8 @@ void LIB_PART::MirrorSelectedItemsH( const wxPoint& aCenter )
         item.MirrorHorizontal( aCenter );
         item.m_Flags = 0;
     }
-
-    drawings.sort();
 }
+
 
 void LIB_PART::MirrorSelectedItemsV( const wxPoint& aCenter )
 {
@@ -1576,9 +1537,8 @@ void LIB_PART::MirrorSelectedItemsV( const wxPoint& aCenter )
         item.MirrorVertical( aCenter );
         item.m_Flags = 0;
     }
-
-    drawings.sort();
 }
+
 
 void LIB_PART::RotateSelectedItems( const wxPoint& aCenter )
 {
@@ -1590,10 +1550,7 @@ void LIB_PART::RotateSelectedItems( const wxPoint& aCenter )
         item.Rotate( aCenter );
         item.m_Flags = 0;
     }
-
-    drawings.sort();
 }
-
 
 
 LIB_ITEM* LIB_PART::LocateDrawItem( int aUnit, int aConvert,
@@ -1642,15 +1599,14 @@ void LIB_PART::SetUnitCount( int aCount )
 
     if( aCount < m_unitCount )
     {
-        LIB_ITEMS::iterator i;
-        i = drawings.begin();
+        LIB_ITEMS_LIST::ITERATOR i = drawings.begin();
 
         while( i != drawings.end() )
         {
             if( i->m_Unit > aCount )
                 i = drawings.erase( i );
             else
-                i++;
+                ++i;
         }
     }
     else
@@ -1674,8 +1630,6 @@ void LIB_PART::SetUnitCount( int aCount )
                 drawings.push_back( newItem );
             }
         }
-
-        drawings.sort();
     }
 
     m_unitCount = aCount;
@@ -1714,14 +1668,14 @@ void LIB_PART::SetConversion( bool aSetConvert )
     {
         // Delete converted shape items because the converted shape does
         // not exist
-        LIB_ITEMS::iterator i = drawings.begin();
+        LIB_ITEMS_LIST::ITERATOR i = drawings.begin();
 
         while( i != drawings.end() )
         {
             if( i->m_Convert > 1 )
                 i = drawings.erase( i );
             else
-                i++;
+                ++i;
         }
     }
 }

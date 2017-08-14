@@ -36,8 +36,6 @@
 #include <transform.h>
 #include <gr_basic.h>
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 
 class LINE_READER;
 class OUTPUTFORMATTER;
@@ -53,14 +51,6 @@ extern const int fill_tab[];
 
 #define MINIMUM_SELECTION_DISTANCE 2 // Minimum selection distance in internal units
 
-
-/**
- * Helper for defining a list of library draw object pointers.  The Boost
- * pointer containers are responsible for deleting object pointers placed
- * in them.  If you access a object pointer from the list, do not delete
- * it directly.
- */
-typedef boost::ptr_vector< LIB_ITEM > LIB_ITEMS;
 
 /**
  * Helper for defining a list of pin object pointers.  The list does not
