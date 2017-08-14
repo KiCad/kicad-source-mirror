@@ -139,6 +139,7 @@ private:
     void loadModuleinst( wxXmlNode* aModuleinstNode );
     EAGLE_LIBRARY loadLibrary( wxXmlNode* aLibraryNode );
     void countNets( wxXmlNode* aSchematicNode );
+    void moveLabels( SCH_ITEM* wire, wxPoint newendpoint);
     void addBusEntries();
 
     SCH_LAYER_ID kicadLayer( int aEagleLayer );
