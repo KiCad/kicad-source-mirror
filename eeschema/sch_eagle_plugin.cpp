@@ -1782,9 +1782,11 @@ bool SCH_EAGLE_PLUGIN::CheckHeader( const wxString& aFileName )
     wxString firstline;
     // read the first line
     firstline = tempFile.GetFirstLine();
+    wxString secondline = tempFile.GetNextLine();
+    wxString thirdline = tempFile.GetNextLine();
     tempFile.Close();
 
-    return firstline.StartsWith( "<?xml" );
+    return firstline.StartsWith( "<?xml" ) && secondline.StartsWith("<!DOCTYPE eagle SYSTEM") && thirdline.StartsWith("<eagle version");
 }
 
 
