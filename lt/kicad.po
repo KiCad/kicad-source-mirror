@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: lt\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
-"X-Generator: Poedit 1.8.8\n"
+"X-Generator: Poedit 1.8.9\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
 "X-Poedit-SearchPath-1: pcbnew\n"
@@ -8067,11 +8067,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:72
 msgid "Offset X"
-msgstr ""
+msgstr "X poslinkis"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:80
 msgid "Offset Y"
-msgstr ""
+msgstr "Y poslinkis"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:104
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:100
@@ -12625,7 +12625,7 @@ msgstr ""
 
 #: pcbnew/import_dxf/dialog_dxf_import.cpp:137
 msgid "Open File"
-msgstr ""
+msgstr "Atverti failą"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:24
 #: gerbview/gerbview_frame.cpp:490
@@ -15444,11 +15444,11 @@ msgstr ""
 
 #: eeschema/erc.cpp:97
 msgid "Open Collector....."
-msgstr ""
+msgstr "Atviras kolektorius ..."
 
 #: eeschema/erc.cpp:98
 msgid "Open Emitter......."
-msgstr ""
+msgstr "Atviras emiteris ..."
 
 #: eeschema/erc.cpp:99
 msgid "No Connection......"
@@ -15488,11 +15488,11 @@ msgstr ""
 
 #: eeschema/erc.cpp:113
 msgid "Open Collector"
-msgstr ""
+msgstr "Atviras kolektorius"
 
 #: eeschema/erc.cpp:114
 msgid "Open Emitter"
-msgstr ""
+msgstr "Atviras emiteris"
 
 #: eeschema/erc.cpp:115
 msgid "No Connection"
@@ -16091,11 +16091,11 @@ msgstr ""
 
 #: eeschema/lib_pin.cpp:191
 msgid "Open collector"
-msgstr ""
+msgstr "Atviras kolektorius"
 
 #: eeschema/lib_pin.cpp:192
 msgid "Open emitter"
-msgstr ""
+msgstr "Atviras emiteris"
 
 #: eeschema/lib_pin.cpp:193
 msgid "Not connected"
@@ -16211,6 +16211,9 @@ msgid ""
 "\n"
 "Do you want to create a sheet with the contents of this file?"
 msgstr ""
+"\n"
+"\n"
+"Ar norite sukurti lapą su šio failo turiniu?"
 
 #: eeschema/sheet.cpp:161
 msgid "Changing the sheet file name cannot be undone.  "
@@ -16232,6 +16235,9 @@ msgid ""
 "\n"
 "Do you want to replace the sheet with the contents of this file?"
 msgstr ""
+"\n"
+"\n"
+"Ar norite pakeisti lapą šio failo turiniu?"
 
 #: eeschema/sheet.cpp:191
 msgid ""
@@ -16617,7 +16623,7 @@ msgstr ""
 
 #: eeschema/schframe.cpp:955
 msgid "Open Schematic"
-msgstr ""
+msgstr "Atverti schemą"
 
 #: eeschema/schframe.cpp:1085
 msgid "Error: not a component or no component"
@@ -19524,11 +19530,11 @@ msgstr ""
 
 #: gerbview/files.cpp:150
 msgid "Open Gerber File"
-msgstr ""
+msgstr "Atverti Gerber failą"
 
 #: gerbview/files.cpp:240
 msgid "Open Drill File"
-msgstr ""
+msgstr "Atverti gręžimų failą"
 
 #: gerbview/menubar.cpp:64
 msgid "Load &Gerber File"
@@ -21033,7 +21039,7 @@ msgstr "Atnaujinti reikšmes"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:552
 msgid "Note: Values are minimal values (from IPC 2221)"
-msgstr ""
+msgstr "Pastaba: nurodomos minimalios reikšmės (iš IPC 2221)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:571
 msgid "B1"
@@ -21336,7 +21342,7 @@ msgstr "Spalvos kodas"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1275
 msgid "Note: Values are minimal values"
-msgstr ""
+msgstr "Pastaba: nurodomos minimalios reikšmės"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1294
 msgid "Class 1"
