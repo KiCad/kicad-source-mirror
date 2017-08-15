@@ -427,6 +427,7 @@ void PSLIKE_PLOTTER::computeTextParameters( const wxPoint&           aPos,
                                             const wxString&          aText,
                                             int                      aOrient,
                                             const wxSize&            aSize,
+                                            bool                     aMirror,
                                             enum EDA_TEXT_HJUSTIFY_T aH_justify,
                                             enum EDA_TEXT_VJUSTIFY_T aV_justify,
                                             int                      aWidth,
@@ -487,7 +488,14 @@ void PSLIKE_PLOTTER::computeTextParameters( const wxPoint&           aPos,
     DPOINT sz_dev = userToDeviceSize( aSize );
 
     // Now returns the final values... the widening factor
-    *wideningFactor = sz_dev.y / sz_dev.x;
+    *wideningFactor = sz_dev.x / sz_dev.y;
+
+    // Mirrored texts must be plotted as mirrored!
+    if( m_plotMirror )
+    {
+        *wideningFactor = -*wideningFactor;
+        aOrient = -aOrient;
+    }
 
     // The CTM transformation matrix
     double alpha = DECIDEG2RAD( aOrient );
@@ -953,7 +961,7 @@ void PS_PLOTTER::Text( const wxPoint&       aPos,
         // Compute the copious tranformation parameters
         double ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f;
         double wideningFactor, heightFactor;
-        computeTextParameters( aPos, aText, aOrient, aSize, aH_justify,
+        computeTextParameters( aPos, aText, aOrient, aSize, m_plotMirror, aH_justify,
                 aV_justify, aWidth, aItalic, aBold,
                 &wideningFactor, &ctm_a, &ctm_b, &ctm_c,
                 &ctm_d, &ctm_e, &ctm_f, &heightFactor );

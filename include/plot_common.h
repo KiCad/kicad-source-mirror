@@ -692,6 +692,7 @@ protected:
                                 const wxString&          aText,
                                 int                      aOrient,
                                 const wxSize&            aSize,
+                                bool                     aMirror,
                                 enum EDA_TEXT_HJUSTIFY_T aH_justify,
                                 enum EDA_TEXT_VJUSTIFY_T aV_justify,
                                 int                      aWidth,
