@@ -190,6 +190,9 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxTextCtrl* m_Value_Frequency_Ctrl;
 		UNIT_SELECTOR_FREQUENCY* m_choiceUnit_Frequency;
 		wxStaticBitmap* m_bmCMicrostripZoddZeven;
+		wxFlexGridSizer* m_fgSizerZcomment;
+		wxStaticText* m_staticTextZdiff;
+		wxStaticText* m_staticTextZcommon;
 		wxStaticText* m_phys_prm1_label;
 		wxTextCtrl* m_Phys_prm1_Value;
 		UNIT_SELECTOR_LEN* m_choiceUnit_Param1;
@@ -305,7 +308,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 	
 	public:
 		
-		PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("PCB Calculator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 877,485 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxTAB_TRAVERSAL, const wxString& name = wxT("pcb_calculator") );
+		PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("PCB Calculator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 877,580 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxTAB_TRAVERSAL, const wxString& name = wxT("pcb_calculator") );
 		
 		~PCB_CALCULATOR_FRAME_BASE();
 	

@@ -784,10 +784,31 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bMiddleSizer->Add( sbCmpPrmsSizer, 0, wxEXPAND|wxTOP, 5 );
 	
 	wxBoxSizer* bSizerHelpBitmaps;
-	bSizerHelpBitmaps = new wxBoxSizer( wxHORIZONTAL );
+	bSizerHelpBitmaps = new wxBoxSizer( wxVERTICAL );
 	
 	m_bmCMicrostripZoddZeven = new wxStaticBitmap( m_panelTransline, wxID_ANY, wxBitmap( microstrip_zodd_zeven_xpm ), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerHelpBitmaps->Add( m_bmCMicrostripZoddZeven, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_fgSizerZcomment = new wxFlexGridSizer( 0, 2, 0, 0 );
+	m_fgSizerZcomment->AddGrowableCol( 0 );
+	m_fgSizerZcomment->AddGrowableCol( 1 );
+	m_fgSizerZcomment->SetFlexibleDirection( wxBOTH );
+	m_fgSizerZcomment->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticTextZdiff = new wxStaticText( m_panelTransline, wxID_ANY, _("Zdiff = Zodd * 2"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextZdiff->Wrap( -1 );
+	m_staticTextZdiff->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	
+	m_fgSizerZcomment->Add( m_staticTextZdiff, 0, wxALL, 5 );
+	
+	m_staticTextZcommon = new wxStaticText( m_panelTransline, wxID_ANY, _("Zcommon = Zeven / 2"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextZcommon->Wrap( -1 );
+	m_staticTextZcommon->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	
+	m_fgSizerZcomment->Add( m_staticTextZcommon, 0, wxALL, 5 );
+	
+	
+	bSizerHelpBitmaps->Add( m_fgSizerZcomment, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	
 	bMiddleSizer->Add( bSizerHelpBitmaps, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
@@ -1017,7 +1038,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelTransline->SetSizer( bSizeTransline );
 	m_panelTransline->Layout();
 	bSizeTransline->Fit( m_panelTransline );
-	m_Notebook->AddPage( m_panelTransline, _("TransLine"), false );
+	m_Notebook->AddPage( m_panelTransline, _("TransLine"), true );
 	m_panelAttenuators = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxStaticBoxSizer* sbSizerAtt;
 	sbSizerAtt = new wxStaticBoxSizer( new wxStaticBox( m_panelAttenuators, wxID_ANY, _("label") ), wxHORIZONTAL );
@@ -1171,7 +1192,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelAttenuators->SetSizer( sbSizerAtt );
 	m_panelAttenuators->Layout();
 	sbSizerAtt->Fit( m_panelAttenuators );
-	m_Notebook->AddPage( m_panelAttenuators, _("RF Attenuators"), true );
+	m_Notebook->AddPage( m_panelAttenuators, _("RF Attenuators"), false );
 	m_panelColorCode = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelColorCode;
 	bSizerPanelColorCode = new wxBoxSizer( wxHORIZONTAL );
@@ -1180,7 +1201,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	int m_rbToleranceSelectionNChoices = sizeof( m_rbToleranceSelectionChoices ) / sizeof( wxString );
 	m_rbToleranceSelection = new wxRadioBox( m_panelColorCode, wxID_ANY, _("Tolerance"), wxDefaultPosition, wxDefaultSize, m_rbToleranceSelectionNChoices, m_rbToleranceSelectionChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbToleranceSelection->SetSelection( 0 );
-	bSizerPanelColorCode->Add( m_rbToleranceSelection, 0, wxALL|wxALIGN_TOP, 5 );
+	bSizerPanelColorCode->Add( m_rbToleranceSelection, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	wxFlexGridSizer* fgSizerColoCode;
 	fgSizerColoCode = new wxFlexGridSizer( 2, 6, 0, 0 );

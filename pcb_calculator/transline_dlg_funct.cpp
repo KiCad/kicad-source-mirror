@@ -154,6 +154,7 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
 
     // This helper bitmap is shown for coupled microstrip only:
     m_bmCMicrostripZoddZeven->Show( aType == C_MICROSTRIP_TYPE );
+    m_fgSizerZcomment->Show( aType == C_MICROSTRIP_TYPE );
 
     TRANSLINE_IDENT* tr_ident = m_transline_list[m_currTransLineType];
     m_currTransLine = tr_ident->m_TLine;
