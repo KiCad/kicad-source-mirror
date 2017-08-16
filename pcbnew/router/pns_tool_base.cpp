@@ -232,6 +232,8 @@ void TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent )
     VECTOR2I cp = controls()->GetCursorPosition();
     VECTOR2I p;
 
+    controls()->ForceCursorPosition( false );
+
     bool snapEnabled = true;
 
     if( aEvent.IsMotion() || aEvent.IsClick() )
@@ -251,19 +253,26 @@ void TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent )
 
     m_startSnapPoint = snapToItem( snapEnabled, m_startItem, p );
 
-   controls()->ForceCursorPosition( true, checkSnap( m_startItem ) ? m_startSnapPoint : p );
+    if( checkSnap ( m_startItem ))
+    {
+        controls()->ForceCursorPosition( true, m_startSnapPoint );
+    }
 }
 
 
 void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
 {
-    VECTOR2I p = controls()->GetMousePosition();
+    controls()->ForceCursorPosition( false );
+
+    VECTOR2I mousePos = controls()->GetMousePosition();
+    VECTOR2I cursorPos = controls()->GetCursorPosition();
+
     int layer;
     bool snapEnabled = !aEvent.Modifier( MD_SHIFT );
 
     if( m_router->GetCurrentNets().empty() || m_router->GetCurrentNets().front() < 0 )
     {
-        m_endSnapPoint = snapToItem( snapEnabled, nullptr, p );
+        m_endSnapPoint = snapToItem( snapEnabled, nullptr, mousePos );
         controls()->ForceCursorPosition( true, m_endSnapPoint );
         m_endItem = nullptr;
 
@@ -281,7 +290,7 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
 
     for( int net : nets )
     {
-        endItem = pickSingleItem( p, net, layer );
+        endItem = pickSingleItem( mousePos, net, layer );
 
         if( endItem )
             break;
@@ -289,13 +298,13 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
 
     if( checkSnap( endItem ) )
     {
-        VECTOR2I cursorPos = snapToItem( snapEnabled, endItem, p );
-        controls()->ForceCursorPosition( true, checkSnap( endItem ) ? cursorPos : p );
+        VECTOR2I p = snapToItem( snapEnabled, endItem, mousePos );
+        controls()->ForceCursorPosition( true, p );
         m_endItem = endItem;
         m_endSnapPoint = cursorPos;
     } else {
         m_endItem = nullptr;
-        m_endSnapPoint = p;
+        m_endSnapPoint = cursorPos;
     }
 
     if( m_endItem )
