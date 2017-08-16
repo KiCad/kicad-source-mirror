@@ -71,3 +71,6 @@ demos/**/_autosave-*
 *.rej
 *.so
 *.old
+*.gch
+*.orig
+*.patch
