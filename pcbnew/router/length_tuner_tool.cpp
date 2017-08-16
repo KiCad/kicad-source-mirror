@@ -181,21 +181,25 @@ void LENGTH_TUNER_TOOL::performTuning()
         {
             placer->AmplitudeStep( -1 );
             m_router->Move( end, NULL );
+            updateStatusPopup( statusPopup );
         }
         else if( evt->IsAction( &ACT_AmplIncrease ) )
         {
             placer->AmplitudeStep( 1 );
             m_router->Move( end, NULL );
+            updateStatusPopup( statusPopup );
         }
         else if(evt->IsAction( &ACT_SpacingDecrease ) )
         {
             placer->SpacingStep( -1 );
             m_router->Move( end, NULL );
+            updateStatusPopup( statusPopup );
         }
         else if( evt->IsAction( &ACT_SpacingIncrease ) )
         {
             placer->SpacingStep( 1 );
             m_router->Move( end, NULL );
+            updateStatusPopup( statusPopup );
         }
     }
 
