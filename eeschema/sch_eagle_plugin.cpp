@@ -805,8 +805,8 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
 
         if(labelled == false && wire != NULL )
         {
-            wxString netname = netName;
-            netname.Replace("!", "~");
+            wxString netname = fixNetName( netName );
+
             if(m_NetCounts[netName.ToStdString()]>1){
                 std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
                 glabel->SetPosition( wire->MidPoint() );
@@ -884,9 +884,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode, const wxString& aN
 
     wxPoint elabelpos( elabel.x * EUNIT_TO_MIL, -elabel.y * EUNIT_TO_MIL );
 
-    wxString netname = elabel.netname;
-    netname.Replace("~", "~~");
-    netname.Replace("!", "~");
+    wxString netname = fixNetName( elabel.netname );
 
     if(m_NetCounts[aNetName.ToStdString()]>1){
         std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
@@ -2378,6 +2376,14 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
 }
 
 
+wxString SCH_EAGLE_PLUGIN::fixNetName( const wxString& aNetName )
+{
+    wxString ret( aNetName );
+    ret.Replace( "~", "~~" );
+    ret.Replace( "!", "~" );
+
+    return ret;
+}
 
 
 void SCH_EAGLE_PLUGIN::Save( const wxString& aFileName, SCH_SCREEN* aSchematic, KIWAY* aKiway,
