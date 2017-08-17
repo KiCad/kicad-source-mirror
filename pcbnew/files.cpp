@@ -579,11 +579,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     SetCurrentNetClass( NETCLASS::Default );
 
     // Rebuild list of nets (full ratsnest rebuild)
-    {
-        wxBusyCursor dummy;    // Displays an Hourglass while building connectivity
-        Compile_Ratsnest( NULL, true );
-        GetBoard()->GetConnectivity()->Build( GetBoard() );
-    }
+    Compile_Ratsnest( NULL, true );
+    GetBoard()->BuildConnectivity();
 
     // Update info shown by the horizontal toolbars
     ReFillLayerWidget();

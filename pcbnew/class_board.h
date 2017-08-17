@@ -293,6 +293,14 @@ public:
     }
 
     /**
+     * Builds or rebuilds the board connectivity database for the board,
+     * especially the list of connected items, list of nets and rastnest data
+     * Needed after loading a board to have the connectivity database updated.
+     */
+    void BuildConnectivity();
+
+
+    /**
      * Function DeleteMARKERs
      * deletes ALL MARKERS from the board.
      */

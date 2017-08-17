@@ -123,6 +123,12 @@ BOARD::~BOARD()
 }
 
 
+void BOARD::BuildConnectivity()
+{
+    GetConnectivity()->Build( this );
+}
+
+
 const wxPoint& BOARD::GetPosition() const
 {
     wxLogWarning( wxT( "This should not be called on the BOARD object") );

@@ -72,12 +72,18 @@ BOARD* LoadBoard( wxString& aFileName )
 
 BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
 {
-    return IO_MGR::Load( aFormat, aFileName );
+    BOARD* brd = IO_MGR::Load( aFormat, aFileName );
+
+    if( brd )
+        brd->BuildConnectivity();
+
+    return brd;
 }
 
 
 bool SaveBoard( wxString& aFileName, BOARD* aBoard, IO_MGR::PCB_FILE_T aFormat )
 {
+    aBoard->BuildConnectivity();
     aBoard->SynchronizeNetsAndNetClasses();
     aBoard->GetDesignSettings().SetCurrentNetClass( NETCLASS::Default );
 
