@@ -385,38 +385,38 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Menu Tools:
     wxMenu* toolsMenu = new wxMenu;
 
-    msg = AddHotkeyName( _( "Run Eeschema" ), kicad_Manager_Hokeys_Descr, HK_RUN_EESCHEMA );
+    msg = AddHotkeyName( _( "Edit Schematic" ), kicad_Manager_Hokeys_Descr, HK_RUN_EESCHEMA );
     AddMenuItem( toolsMenu, ID_TO_SCH, msg, KiBitmap( eeschema_xpm ) );
 
-    msg = AddHotkeyName( _( "Run Library Editor" ),
+    msg = AddHotkeyName( _( "Manage Symbol Libraries" ),
                          kicad_Manager_Hokeys_Descr, HK_RUN_LIBEDIT );
     AddMenuItem( toolsMenu, ID_TO_SCH_LIB_EDITOR, msg, KiBitmap( libedit_xpm ) );
 
-    msg = AddHotkeyName( _( "Run Pcbnew" ),
+    msg = AddHotkeyName( _( "Edit PCB Layout" ),
                          kicad_Manager_Hokeys_Descr, HK_RUN_PCBNEW );
     AddMenuItem( toolsMenu, ID_TO_PCB, msg, KiBitmap( pcbnew_xpm ) );
 
-    msg = AddHotkeyName( _( "Run Footprint Editor" ),
+    msg = AddHotkeyName( _( "Edit PCB Footprint" ),
                          kicad_Manager_Hokeys_Descr, HK_RUN_FPEDITOR );
     AddMenuItem( toolsMenu, ID_TO_PCB_FP_EDITOR, msg, KiBitmap( module_editor_xpm ) );
 
-    msg = AddHotkeyName( _( "Run Gerbview" ),
+    msg = AddHotkeyName( _( "View Gerber Files" ),
                          kicad_Manager_Hokeys_Descr, HK_RUN_GERBVIEW );
     AddMenuItem( toolsMenu, ID_TO_GERBVIEW, msg, KiBitmap( icon_gerbview_small_xpm ) );
 
-    msg = AddHotkeyName( _( "Run Bitmap2Component" ),
+    msg = AddHotkeyName( _( "Convert Image" ),
                          kicad_Manager_Hokeys_Descr, HK_RUN_BM2COMPONENT );
     AddMenuItem( toolsMenu, ID_TO_BITMAP_CONVERTER, msg,
                  _( "Bitmap2Component - Convert bitmap images to Eeschema\n"
                     "or Pcbnew elements" ),
                  KiBitmap( image_xpm ) );
 
-    msg = AddHotkeyName( _( "Run Pcb Calculator" ), kicad_Manager_Hokeys_Descr, HK_RUN_PCBCALCULATOR );
+    msg = AddHotkeyName( _( "Run PCB Calculator" ), kicad_Manager_Hokeys_Descr, HK_RUN_PCBCALCULATOR );
     AddMenuItem( toolsMenu, ID_TO_PCB_CALCULATOR, msg,
                  _( "Pcb calculator - Calculator for components, track width, etc." ),
                  KiBitmap( pcbcalculator_xpm ) );
 
-    msg = AddHotkeyName( _( "Run Page Layout Editor" ), kicad_Manager_Hokeys_Descr, HK_RUN_PLEDITOR );
+    msg = AddHotkeyName( _( "Edit Page Layout" ), kicad_Manager_Hokeys_Descr, HK_RUN_PLEDITOR );
     AddMenuItem( toolsMenu, ID_TO_PL_EDITOR, msg,
                  _( "Pl editor - Worksheet layout editor" ),
                  KiBitmap( pagelayout_load_xpm ) );

@@ -761,7 +761,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu*
         msg = AddHotkeyName( _("Move Zone Exactly" ), g_Board_Editor_Hokeys_Descr,
                              HK_MOVE_ITEM_EXACT );
         AddMenuItem( zones_menu, ID_POPUP_PCB_MOVE_EXACT,
-                     msg, KiBitmap( move_zone_xpm ) );
+                     msg, KiBitmap( move_xpm ) );
 
         msg = AddHotkeyName( _( "Edit Zone Properties" ), g_Board_Editor_Hokeys_Descr,
                              HK_EDIT_ITEM );

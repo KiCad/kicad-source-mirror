@@ -612,9 +612,9 @@ static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
 
     AddMenuItem( aParentMenu,
                  ID_EDIT_SYM_LIB_TABLE,
-                 _( "Symbol Library &Table" ),
-                 _( "Edit the symbol library table." ),
-                 KiBitmap( library_xpm ) );
+                 _( "Manage Symbol Library" ),
+                 _( "Manage the symbol library" ),
+                 KiBitmap( library_table_xpm ) );
 
     // Options (Preferences on WXMAC)
 #ifdef __WXMAC__
@@ -622,7 +622,7 @@ static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
 #else
     AddMenuItem( aParentMenu,
                  wxID_PREFERENCES,
-                 _( "Schematic Editor &Options" ),
+                 _( "General &Options" ),
                  _( "Edit Eeschema preferences" ),
                  KiBitmap( preference_xpm ) );
 #endif // __WXMAC__

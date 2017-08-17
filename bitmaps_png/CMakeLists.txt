@@ -349,7 +349,6 @@ set( BMAPS_MID
     move_rectangle
     move_sheet
     move_target
-    move_zone
     move
     move_relative
     mw_add_gap

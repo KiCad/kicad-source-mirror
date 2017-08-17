@@ -78,7 +78,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     wxMenu* preferencesMenu = new wxMenu;
 
     AddMenuItem( preferencesMenu, ID_CVPCB_LIB_TABLE_EDIT,
-                 _( "Footprint &Libraries" ), _( "Configure footprint libraries" ),
+                 _( "Manage Footprint &Libraries" ), _( "Manage footprint libraries" ),
                  KiBitmap( library_table_xpm ) );
 
     // Path configuration edit dialog.
