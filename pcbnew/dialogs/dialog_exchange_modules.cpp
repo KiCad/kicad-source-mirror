@@ -319,7 +319,7 @@ bool DIALOG_EXCHANGE_MODULE::change_1_Module( MODULE*            aModule,
 
     if( newModule == NULL )  // New module not found, redraw the old one.
     {
-        m_WinMessages->AppendText( wxT( " No\n" ) );
+        m_WinMessages->AppendText( wxT( ": footprint not found\n" ) );
         return false;
     }
 
@@ -328,7 +328,7 @@ bool DIALOG_EXCHANGE_MODULE::change_1_Module( MODULE*            aModule,
     if( aModule == m_currentModule )
         m_currentModule = newModule;
 
-    m_WinMessages->AppendText( wxT( " OK\n" ) );
+    m_WinMessages->AppendText( wxT( ": OK\n" ) );
 
     return true;
 }
