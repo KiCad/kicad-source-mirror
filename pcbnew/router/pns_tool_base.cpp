@@ -301,7 +301,7 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
         VECTOR2I p = snapToItem( snapEnabled, endItem, mousePos );
         controls()->ForceCursorPosition( true, p );
         m_endItem = endItem;
-        m_endSnapPoint = cursorPos;
+        m_endSnapPoint = p;
     } else {
         m_endItem = nullptr;
         m_endSnapPoint = cursorPos;
