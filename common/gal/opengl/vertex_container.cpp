@@ -41,11 +41,11 @@ VERTEX_CONTAINER* VERTEX_CONTAINER::MakeContainer( bool aCached )
 {
     if( aCached )
     {
-        const unsigned char* vendor = glGetString( GL_VENDOR );
+        const char* vendor = (const char*) glGetString( GL_VENDOR );
 
-        // AMD/ATI cards do not cope well with GPU memory mapping,
+        // Open source drivers do not cope well with GPU memory mapping,
         // so the vertex data has to be kept in RAM
-        if( strstr( (const char*) vendor, "AMD" ) )
+        if( strstr( vendor, "X.Org" ) || strstr( vendor, "nouveau" ) )
             return new CACHED_CONTAINER_RAM;
         else
             return new CACHED_CONTAINER_GPU;
