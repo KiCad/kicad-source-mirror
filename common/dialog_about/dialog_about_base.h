@@ -29,9 +29,9 @@
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class dialog_about_base
+/// Class DIALOG_ABOUT_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class dialog_about_base : public wxDialog 
+class DIALOG_ABOUT_BASE : public wxDialog 
 {
 	private:
 	
@@ -42,13 +42,19 @@ class dialog_about_base : public wxDialog
 		wxStaticText* m_staticTextBuildVersion;
 		wxStaticText* m_staticTextLibVersion;
 		wxAuiNotebook* m_auiNotebook;
-		wxButton* copyVersionInfo;
-		wxButton* ok;
+		wxButton* m_btShowVersionInfo;
+		wxButton* m_btCopyVersionInfo;
+		wxButton* m_btOk;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void onShowVersionInfo( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCopyVersionInfo( wxCommandEvent& event ) { event.Skip(); }
+		
 	
 	public:
 		
-		dialog_about_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("About"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 750,471 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~dialog_about_base();
+		DIALOG_ABOUT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("About"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 750,471 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_ABOUT_BASE();
 	
 };
 

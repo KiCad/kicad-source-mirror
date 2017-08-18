@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Rafael Sokolowski <Rafael.Sokolowski@web.de>
- * Copyright (C) 2010-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2010-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,53 +35,60 @@
 
 /**
  * About dialog to show application specific information.
- * Needs an <code>AboutAppInfo</code> object that contains the data to be displayed.
+ * Needs a <code>ABOUT_APP_INFO</code> object that contains the data to be displayed.
  */
-class dialog_about : public dialog_about_base
+class DIALOG_ABOUT : public DIALOG_ABOUT_BASE
 {
 private:
 
     // Icons for the various tabs of wxAuiNotebook
-    wxBitmap     picInformation;
-    wxBitmap     picDevelopers;
-    wxBitmap     picDocWriters;
-    wxBitmap     picArtists;
-    wxBitmap     picTranslators;
-    wxBitmap     picPackagers;
-    wxBitmap     picLicense;
+    wxBitmap     m_picInformation;
+    wxBitmap     m_picDevelopers;
+    wxBitmap     m_picDocWriters;
+    wxBitmap     m_picArtists;
+    wxBitmap     m_picTranslators;
+    wxBitmap     m_picPackagers;
+    wxBitmap     m_picLicense;
 
-    AboutAppInfo info;
+    ABOUT_APP_INFO m_info;
 
 public:
-    dialog_about( wxWindow* dlg, AboutAppInfo& appInfo );
-    ~dialog_about();
+    DIALOG_ABOUT( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aAppInfo );
+    ~DIALOG_ABOUT();
 
 private:
-    void             initDialog();
-    virtual void     OnClose( wxCloseEvent& event );
-    virtual void     OnOkClick( wxCommandEvent& event );
-    virtual void     OnHtmlLinkClicked( wxHtmlLinkEvent& event );
-    virtual void     OnCopyVersionInfo( wxCommandEvent &event );
+    void         initDialog();
+
+    /** build the version info message
+     * @param aMsg is the result
+     * @param aFormatHtml = true to use a minimal HTML format
+     * false to use a plain text
+     */
+    void         buildVersionInfoData( wxString& aMsg, bool aFormatHtml );
+
+    void         onHtmlLinkClicked( wxHtmlLinkEvent& event );
+
+	virtual void onCopyVersionInfo( wxCommandEvent& event ) override;
+	virtual void onShowVersionInfo( wxCommandEvent& event ) override;
 
     // Notebook pages
-    wxFlexGridSizer* CreateFlexGridSizer();
-    void             DeleteNotebooks();
-    void             CreateNotebooks();
-    void             CreateNotebookPage( wxAuiNotebook*      aParent,
+    wxFlexGridSizer* createFlexGridSizer();
+    void             createNotebooks();
+    void             createNotebookPage( wxAuiNotebook*      aParent,
                                          const wxString&     aCaption,
                                          const wxBitmap&     aIcon,
-                                         const Contributors& aContributors );
-    void             CreateNotebookPageByCategory( wxAuiNotebook*      aParent,
+                                         const CONTRIBUTORS& aContributors );
+    void             createNotebookPageByCategory( wxAuiNotebook*      aParent,
                                                    const wxString&     aCaption,
                                                    const wxBitmap&     aIcon,
-                                                   const Contributors& aContributors );
-    void             CreateNotebookHtmlPage( wxAuiNotebook*  aParent,
+                                                   const CONTRIBUTORS& aContributors );
+    void             createNotebookHtmlPage( wxAuiNotebook*  aParent,
                                              const wxString& aCaption,
                                              const wxBitmap& aIcon,
                                              const wxString& aHtmlMessage );
 
-    wxHyperlinkCtrl* CreateHyperlink( wxScrolledWindow* aParent, const wxString& email );
-    wxStaticBitmap*  CreateStaticBitmap( wxScrolledWindow* aParent, wxBitmap* icon );
+    wxStaticText* wxStaticTextMail( wxScrolledWindow* aParent, const wxString& email );
+    wxStaticBitmap*  createStaticBitmap( wxScrolledWindow* aParent, wxBitmap* icon );
 };
 
 #endif // DIALOG_ABOUT_H

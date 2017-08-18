@@ -36,100 +36,100 @@
 #include <wx/clipbrd.h>
 #include <wx/msgdlg.h>
 
-/* Pixel information of icons in XPM format.
- * All KiCad icons are linked into shared library 'libbitmaps.a'.
+/* All KiCad icons are linked into shared library 'libbitmaps.a'.
  *  Icons:
- *  preference_xpm[];    // Icon for 'Developers' tab
- *  editor_xpm[];        // Icon for 'Doc Writers' tab
- *  palette_xpm[];       // Icon for 'Artists' tab
- *  language_xpm[];      // Icon for 'Translators' tab
- *  right_xpm[];         // Right arrow icon for list items
- *  info_xpm[];          // Bulb for description tab
- *  tools_xpm[];         // Sheet of paper icon for license info tab
+ *  preference_xpm;    // Icon for 'Developers' tab
+ *  editor_xpm;        // Icon for 'Doc Writers' tab
+ *  palette_xpm;       // Icon for 'Artists' tab
+ *  language_xpm;      // Icon for 'Translators' tab
+ *  right_xpm;         // Right arrow icon for list items
+ *  info_xpm;          // Bulb for description tab
+ *  tools_xpm;         // Sheet of paper icon for license info tab
  */
 #include <bitmaps.h>
 #include <build_version.h>
+#include <html_messagebox.h>
 
-#include "dialog_about.h"
+#include "DIALOG_ABOUT.h"
 
 
 /*
- * Class dialog_about methods
+ * Class DIALOG_ABOUT methods
  */
 
-dialog_about::dialog_about(wxWindow *aParent, AboutAppInfo& appInfo)
-    : dialog_about_base(aParent), info(appInfo)
+DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
+    : DIALOG_ABOUT_BASE( aParent ), m_info( aAppInfo )
 {
-    picInformation = KiBitmap( info_xpm );
-    picDevelopers  = KiBitmap( preference_xpm );
-    picDocWriters  = KiBitmap( editor_xpm );
-    picArtists     = KiBitmap( palette_xpm );
-    picTranslators = KiBitmap( language_xpm );
-    picLicense     = KiBitmap( tools_xpm );
-    picPackagers   = KiBitmap( zip_xpm );
+    m_picInformation = KiBitmap( info_xpm );
+    m_picDevelopers  = KiBitmap( preference_xpm );
+    m_picDocWriters  = KiBitmap( editor_xpm );
+    m_picArtists     = KiBitmap( palette_xpm );
+    m_picTranslators = KiBitmap( language_xpm );
+    m_picLicense     = KiBitmap( tools_xpm );
+    m_picPackagers   = KiBitmap( zip_xpm );
 
-    m_bitmapApp->SetBitmap( info.GetIcon() );
+    if( m_info.GetAppIcon().IsOk() )
+    {
+        SetIcon( m_info.GetAppIcon() );
+        m_bitmapApp->SetBitmap( m_info.GetAppIcon() );
+    }
+    else
+    {
+        wxIcon icon;
+        icon.CopyFromBitmap( KiBitmap( icon_kicad_xpm ) );
+        SetIcon( icon );
+        m_bitmapApp->SetBitmap( icon );
+    }
 
-    m_staticTextAppTitle->SetLabel( info.GetAppName() );
-    m_staticTextCopyright->SetLabel( info.GetCopyright() );
-    m_staticTextBuildVersion->SetLabel( "Version: " + info.GetBuildVersion() );
-    m_staticTextLibVersion->SetLabel( info.GetLibVersion() );
+    m_staticTextAppTitle->SetLabel( m_info.GetAppName() );
+    m_staticTextCopyright->SetLabel( m_info.GetCopyright() );
+    m_staticTextBuildVersion->SetLabel( "Version: " + m_info.GetBuildVersion() );
+    m_staticTextLibVersion->SetLabel( m_info.GetLibVersion() );
 
-    DeleteNotebooks();
-    CreateNotebooks();
+    createNotebooks();
 
     GetSizer()->SetSizeHints( this );
     m_auiNotebook->Update();
     SetFocus();
     Centre();
-
-    Connect( wxID_COPY, wxEVT_COMMAND_BUTTON_CLICKED,
-             wxCommandEventHandler( dialog_about::OnCopyVersionInfo ) );
 }
 
 
-dialog_about::~dialog_about()
+DIALOG_ABOUT::~DIALOG_ABOUT()
 {
 }
 
 
-wxFlexGridSizer* dialog_about::CreateFlexGridSizer()
+wxFlexGridSizer* DIALOG_ABOUT::createFlexGridSizer()
 {
     // three columns with vertical and horizontal extra space of two pixels
-    wxFlexGridSizer* fgSizer1 = new wxFlexGridSizer( 3, 2, 2 );
-    fgSizer1->SetFlexibleDirection( wxHORIZONTAL );
-    fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+    wxFlexGridSizer* fgSizer = new wxFlexGridSizer( 3, 2, 2 );
+    fgSizer->SetFlexibleDirection( wxHORIZONTAL );
+    fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-    return fgSizer1;
+    return fgSizer;
 }
 
 
-void dialog_about::DeleteNotebooks()
+void DIALOG_ABOUT::createNotebooks()
 {
-    for( size_t i=0; i<m_auiNotebook->GetPageCount(); ++i )
-        m_auiNotebook->DeletePage( i );
+    createNotebookHtmlPage( m_auiNotebook, _( "Information" ), m_picInformation,
+                            m_info.GetDescription() );
+
+    createNotebookPage( m_auiNotebook, _( "Developers" ) , m_picDevelopers, m_info.GetDevelopers() );
+    createNotebookPage( m_auiNotebook, _( "Doc Writers" ), m_picDocWriters, m_info.GetDocWriters() );
+
+    createNotebookPageByCategory( m_auiNotebook, _( "Artists" ), m_picArtists, m_info.GetArtists() );
+    createNotebookPageByCategory( m_auiNotebook, _( "Translators" ), m_picTranslators,
+                                  m_info.GetTranslators() );
+    createNotebookPageByCategory( m_auiNotebook, _( "Packagers" ), m_picPackagers,
+                                  m_info.GetPackagers() );
+
+    createNotebookHtmlPage( m_auiNotebook, _( "License" ), m_picLicense, m_info.GetLicense() );
 }
 
-
-void dialog_about::CreateNotebooks()
-{
-    CreateNotebookHtmlPage( m_auiNotebook, _( "Information" ), picInformation,
-                            info.GetDescription() );
-
-    CreateNotebookPage( m_auiNotebook, _( "Developers" ) , picDevelopers, info.GetDevelopers() );
-    CreateNotebookPage( m_auiNotebook, _( "Doc Writers" ), picDocWriters, info.GetDocWriters() );
-
-    CreateNotebookPageByCategory( m_auiNotebook, _( "Artists" ), picArtists, info.GetArtists() );
-    CreateNotebookPageByCategory( m_auiNotebook, _( "Translators" ), picTranslators,
-                                  info.GetTranslators() );
-    CreateNotebookPageByCategory( m_auiNotebook, _( "Packagers" ), picPackagers,
-                                  info.GetPackagers() );
-
-    CreateNotebookHtmlPage( m_auiNotebook, _( "License" ), picLicense, info.GetLicense() );
-}
-
-void dialog_about::CreateNotebookPage( wxAuiNotebook* aParent, const wxString& aCaption,
-                                       const wxBitmap& aIcon, const Contributors& aContributors )
+void DIALOG_ABOUT::createNotebookPage( wxAuiNotebook* aParent, const wxString& aCaption,
+                                       const wxBitmap& aIcon, const CONTRIBUTORS& aContributors )
 {
     wxBoxSizer* bSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -144,14 +144,14 @@ void dialog_about::CreateNotebookPage( wxAuiNotebook* aParent, const wxString& a
      */
     wxPanel* panel1 = new wxPanel( m_scrolledWindow1 );
 
-    wxFlexGridSizer* fgSizer1 = CreateFlexGridSizer();
+    wxFlexGridSizer* fgSizer1 = createFlexGridSizer();
 
     for( size_t i=0; i<aContributors.GetCount(); ++i )
     {
-        Contributor* contributor = &aContributors.Item( i );
+        CONTRIBUTOR* contributor = &aContributors.Item( i );
 
         // Icon at first column
-        wxStaticBitmap* m_bitmap1 = CreateStaticBitmap( m_scrolledWindow1, contributor->GetIcon() );
+        wxStaticBitmap* m_bitmap1 = createStaticBitmap( m_scrolledWindow1, contributor->GetIcon() );
         fgSizer1->Add( m_bitmap1, 0, wxALIGN_CENTER|wxLEFT|wxRIGHT, 5 );
 
         // Name of contributor at second column
@@ -171,8 +171,8 @@ void dialog_about::CreateNotebookPage( wxAuiNotebook* aParent, const wxString& a
         // Email address of contributor at third column
         if ( contributor->GetEMail() != wxEmptyString )
         {
-            wxHyperlinkCtrl* hyperlink = CreateHyperlink( m_scrolledWindow1,
-                                                          contributor->GetEMail() );
+            wxStaticText* hyperlink = wxStaticTextMail( m_scrolledWindow1,
+                                                        contributor->GetEMail() );
             fgSizer1->Add( hyperlink, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
         }
         else
@@ -190,9 +190,9 @@ void dialog_about::CreateNotebookPage( wxAuiNotebook* aParent, const wxString& a
 }
 
 
-void dialog_about::CreateNotebookPageByCategory(wxAuiNotebook* aParent, const wxString& aCaption,
+void DIALOG_ABOUT::createNotebookPageByCategory(wxAuiNotebook* aParent, const wxString& aCaption,
                                                 const wxBitmap& aIcon,
-                                                const Contributors& aContributors)
+                                                const CONTRIBUTORS& aContributors)
 {
     wxBoxSizer* bSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -207,11 +207,11 @@ void dialog_about::CreateNotebookPageByCategory(wxAuiNotebook* aParent, const wx
      */
     wxPanel* panel1 = new wxPanel( m_scrolledWindow1 );
 
-    wxFlexGridSizer* fgSizer1 = CreateFlexGridSizer();
+    wxFlexGridSizer* fgSizer1 = createFlexGridSizer();
 
     for( size_t i=0; i < aContributors.GetCount(); ++i )
     {
-        Contributor* contributor = &aContributors.Item( i );
+        CONTRIBUTOR* contributor = &aContributors.Item( i );
 
         wxBitmap* icon = contributor->GetIcon();
         wxString category = contributor->GetCategory();
@@ -222,7 +222,7 @@ void dialog_about::CreateNotebookPageByCategory(wxAuiNotebook* aParent, const wx
         if( ( category != wxEmptyString ) && !( contributor->IsChecked() ) )
         {
             // Icon at first column
-            wxStaticBitmap* m_bitmap1 = CreateStaticBitmap( m_scrolledWindow1, icon );
+            wxStaticBitmap* m_bitmap1 = createStaticBitmap( m_scrolledWindow1, icon );
             fgSizer1->Add( m_bitmap1, 0, wxALIGN_CENTER|wxLEFT|wxRIGHT, 5 );
 
             // Category name at second column
@@ -240,7 +240,7 @@ void dialog_about::CreateNotebookPageByCategory(wxAuiNotebook* aParent, const wx
             // Now, all contributors of the same category will follow
             for( size_t j=0; j < aContributors.GetCount(); ++j )
             {
-                Contributor* sub_contributor = &aContributors.Item( j );
+                CONTRIBUTOR* sub_contributor = &aContributors.Item( j );
 
                 if ( sub_contributor->GetCategory() == category )
                 {
@@ -258,9 +258,9 @@ void dialog_about::CreateNotebookPageByCategory(wxAuiNotebook* aParent, const wx
                     // Email address of contributor at third column
                     if( sub_contributor->GetEMail() != wxEmptyString )
                     {
-                        wxHyperlinkCtrl* hyperlink = CreateHyperlink( m_scrolledWindow1,
-                                                                      sub_contributor->GetEMail() );
-                        fgSizer1->Add( hyperlink, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
+                        wxStaticText* mail = wxStaticTextMail( m_scrolledWindow1,
+                                                               sub_contributor->GetEMail() );
+                        fgSizer1->Add( mail, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
                     }
                     else
                     {
@@ -285,13 +285,13 @@ void dialog_about::CreateNotebookPageByCategory(wxAuiNotebook* aParent, const wx
      */
     for ( size_t k=0; k < aContributors.GetCount(); ++k )
     {
-        Contributor* contributor = &aContributors.Item( k );
+        CONTRIBUTOR* contributor = &aContributors.Item( k );
 
         if ( contributor->IsChecked() )
             continue;
 
         // Icon at first column
-        wxStaticBitmap* m_bitmap1 = CreateStaticBitmap( m_scrolledWindow1, contributor->GetIcon() );
+        wxStaticBitmap* m_bitmap1 = createStaticBitmap( m_scrolledWindow1, contributor->GetIcon() );
         fgSizer1->Add( m_bitmap1, 0, wxALIGN_CENTER|wxLEFT|wxRIGHT, 5 );
 
         // Name of contributor at second column
@@ -311,9 +311,9 @@ void dialog_about::CreateNotebookPageByCategory(wxAuiNotebook* aParent, const wx
         // Email address of contributor at third column
         if ( contributor->GetEMail() != wxEmptyString )
         {
-            wxHyperlinkCtrl* hyperlink = CreateHyperlink( m_scrolledWindow1,
-                                                          contributor->GetEMail() );
-            fgSizer1->Add( hyperlink, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
+            wxStaticText* mail = wxStaticTextMail( m_scrolledWindow1,
+                                                   contributor->GetEMail() );
+            fgSizer1->Add( mail, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
         }
         else
         {
@@ -330,7 +330,7 @@ void dialog_about::CreateNotebookPageByCategory(wxAuiNotebook* aParent, const wx
 }
 
 
-void dialog_about::CreateNotebookHtmlPage( wxAuiNotebook* aParent, const wxString& aCaption,
+void DIALOG_ABOUT::createNotebookHtmlPage( wxAuiNotebook* aParent, const wxString& aCaption,
                                            const wxBitmap& aIcon, const wxString& html )
 {
     wxPanel* panel = new wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
@@ -365,7 +365,7 @@ void dialog_about::CreateNotebookHtmlPage( wxAuiNotebook* aParent, const wxStrin
     // the HTML window shall not be used to open external links, thus this task is delegated
     // to users default browser
     htmlWindow->Connect( wxEVT_COMMAND_HTML_LINK_CLICKED,
-                         wxHtmlLinkEventHandler( dialog_about::OnHtmlLinkClicked ), NULL, this );
+                         wxHtmlLinkEventHandler( DIALOG_ABOUT::onHtmlLinkClicked ), NULL, this );
 
     // no additional space around the HTML window as it is also the case by the other notebook pages
     bSizer->Add( htmlWindow, 1, wxALL|wxEXPAND, 0 );
@@ -376,22 +376,16 @@ void dialog_about::CreateNotebookHtmlPage( wxAuiNotebook* aParent, const wxStrin
 }
 
 
-wxHyperlinkCtrl* dialog_about::CreateHyperlink(wxScrolledWindow* aParent, const wxString& email)
+wxStaticText* DIALOG_ABOUT::wxStaticTextMail(wxScrolledWindow* aParent, const wxString& aEmail)
 {
-    wxHyperlinkCtrl* hyperlink = new wxHyperlinkCtrl(
-                                        aParent, wxID_ANY,
-                                        wxT( "<" ) + email + wxT( ">" ), /* the label */
-                                        wxT( "mailto:" ) + email
-                                        + wxT( "?subject=KiCad - " )
-                                        + info.GetBuildVersion()
-                                        + wxT( " ,  " ) + info.GetLibVersion()
-                                        ); /* the url */
+    wxStaticText* text = new wxStaticText( aParent, wxID_ANY,
+                                           wxT( "<" ) + aEmail + wxT( ">" ) );
 
-    return hyperlink;
+    return text;
 }
 
 
-wxStaticBitmap* dialog_about::CreateStaticBitmap(wxScrolledWindow* aParent, wxBitmap* aIcon)
+wxStaticBitmap* DIALOG_ABOUT::createStaticBitmap(wxScrolledWindow* aParent, wxBitmap* aIcon)
 {
     wxStaticBitmap* bitmap = new wxStaticBitmap( aParent, wxID_ANY, wxNullBitmap,
                                                  wxDefaultPosition, wxDefaultSize, 0 );
@@ -409,28 +403,142 @@ wxStaticBitmap* dialog_about::CreateStaticBitmap(wxScrolledWindow* aParent, wxBi
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/// Event handlers
-///////////////////////////////////////////////////////////////////////////////
-
-void dialog_about::OnClose( wxCloseEvent &event )
-{
-    Destroy();
-}
-
-
-void dialog_about::OnOkClick( wxCommandEvent &event )
-{
-    Destroy();
-}
-
-
-void dialog_about::OnHtmlLinkClicked( wxHtmlLinkEvent& event )
+void DIALOG_ABOUT::onHtmlLinkClicked( wxHtmlLinkEvent& event )
 {
     ::wxLaunchDefaultBrowser( event.GetLinkInfo().GetHref() );
 }
 
-void dialog_about::OnCopyVersionInfo( wxCommandEvent& event )
+
+void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
+{
+    // DO NOT translate information in the msg_version string
+
+    wxString eol = aFormatHtml ? "<br>" : "\n";
+    wxString indent4 = aFormatHtml ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "    ";
+
+    #define ON "ON" << eol
+    #define OFF "OFF" << eol
+
+    wxPlatformInfo platform;
+    aMsg << "Application: " << m_info.GetAppName() << eol;
+    aMsg << "Version: " << m_info.GetBuildVersion() << eol;
+    aMsg << "Libraries:" << eol;
+    aMsg << indent4 << wxGetLibraryVersionInfo().GetVersionString() << eol;
+#ifdef BUILD_GITHUB_PLUGIN
+    aMsg << indent4 << KICAD_CURL::GetVersion() << eol;
+#endif
+    aMsg << "Platform: " << wxGetOsDescription() << ", "
+                << platform.GetArchName() << ", "
+                << platform.GetEndiannessName() << ", "
+                << platform.GetPortIdName() << eol;
+
+    aMsg << "Build Info:" << eol;
+    aMsg << indent4 << "wxWidgets: " << wxVERSION_NUM_DOT_STRING << " (";
+    aMsg << __WX_BO_UNICODE __WX_BO_STL __WX_BO_WXWIN_COMPAT_2_8 ")" << eol;
+
+    aMsg << indent4 << "Boost: " << ( BOOST_VERSION / 100000 ) << wxT( "." )
+                      << ( BOOST_VERSION / 100 % 1000 ) << wxT( "." )
+                      << ( BOOST_VERSION % 100 ) << eol;
+
+#ifdef BUILD_GITHUB_PLUGIN
+    aMsg << indent4 << "Curl: " << LIBCURL_VERSION << eol;
+#endif
+
+    aMsg << indent4 << "KiCad compiler: ";
+#if defined(__clang__)
+    aMsg << "Clang " << __clang_major__ << "." << __clang_minor__ << "." << __clang_patchlevel__;
+#elif defined(__GNUG__)
+    aMsg << "GCC " << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__;
+#elif defined(_MSC_VER)
+    aMsg << "Visual C++ " << _MSC_VER;
+#elif defined(__INTEL_COMPILER)
+    aMsg << "Intel C++ " << __INTEL_COMPILER;
+#else
+    aMsg << "Other Compiler ";
+#endif
+
+#if defined(__GXX_ABI_VERSION)
+    aMsg << " with C++ ABI " << __GXX_ABI_VERSION << eol;
+#else
+    aMsg << " without C++ ABI\n";
+#endif
+
+    // Add build settings config (build options):
+
+    aMsg << "Build settings:" << eol;
+
+    aMsg << indent4 << "USE_WX_GRAPHICS_CONTEXT=";
+#ifdef USE_WX_GRAPHICS_CONTEXT
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
+    aMsg << indent4 << "USE_WX_OVERLAY=";
+#ifdef USE_WX_OVERLAY
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
+    aMsg << indent4 << "KICAD_SCRIPTING=";
+#ifdef KICAD_SCRIPTING
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
+    aMsg << indent4 << "KICAD_SCRIPTING_MODULES=";
+#ifdef KICAD_SCRIPTING_MODULES
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
+    aMsg << indent4 << "KICAD_SCRIPTING_WXPYTHON=";
+#ifdef KICAD_SCRIPTING_WXPYTHON
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
+    aMsg << indent4 << "KICAD_SCRIPTING_ACTION_MENU=";
+#ifdef KICAD_SCRIPTING_ACTION_MENU
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
+    aMsg << indent4 << "BUILD_GITHUB_PLUGIN=";
+#ifdef BUILD_GITHUB_PLUGIN
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
+    aMsg << indent4 << "KICAD_USE_OCE=";
+#ifdef KICAD_USE_OCE
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+}
+
+
+void DIALOG_ABOUT::onShowVersionInfo( wxCommandEvent& event )
+{
+    wxString msg_version;
+    buildVersionInfoData( msg_version, true );
+
+    HTML_MESSAGE_BOX dlg( this, _( "Version Info" ), wxDefaultPosition,
+                          wxSize( 550, 500 ) );
+
+    dlg.AddHTML_Text( msg_version );
+    dlg.ShowModal();
+}
+
+
+void DIALOG_ABOUT::onCopyVersionInfo( wxCommandEvent& event )
 {
     if( !wxTheClipboard->Open() )
     {
@@ -439,114 +547,10 @@ void dialog_about::OnCopyVersionInfo( wxCommandEvent& event )
         return;
     }
 
-    wxPlatformInfo platform;
-
-    // DO NOT translate information in the msg_version string
     wxString msg_version;
-    msg_version << "Application: " << info.GetAppName() << "\n";
-    msg_version << "Version: " << info.GetBuildVersion() << "\n";
-    msg_version << "Libraries: " << wxGetLibraryVersionInfo().GetVersionString() << "\n";
-#ifdef BUILD_GITHUB_PLUGIN
-    msg_version << "           " << KICAD_CURL::GetVersion() << "\n";
-#endif
-    msg_version << "Platform: " << wxGetOsDescription() << ", "
-                                << platform.GetArchName() << ", "
-                                << platform.GetEndiannessName() << ", "
-                                << platform.GetPortIdName() << "\n";
-
-    msg_version << "- Build Info -\n";
-    msg_version << "wxWidgets: " << wxVERSION_NUM_DOT_STRING << " (";
-    msg_version << __WX_BO_UNICODE __WX_BO_STL __WX_BO_WXWIN_COMPAT_2_8 ")\n";
-
-    msg_version << "Boost: " << ( BOOST_VERSION / 100000 ) << wxT( "." )
-                             << ( BOOST_VERSION / 100 % 1000 ) << wxT( "." )
-                             << ( BOOST_VERSION % 100 ) << wxT( "\n" );
-
-#ifdef BUILD_GITHUB_PLUGIN
-    msg_version << "Curl: " << LIBCURL_VERSION << "\n";
-#endif
-
-    msg_version << "KiCad - Compiler: ";
-#if defined(__clang__)
-    msg_version << "Clang " << __clang_major__ << "." << __clang_minor__ << "." << __clang_patchlevel__;
-#elif defined(__GNUG__)
-    msg_version << "GCC " << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__;
-#elif defined(_MSC_VER)
-    msg_version << "Visual C++ " << _MSC_VER;
-#elif defined(__INTEL_COMPILER)
-    msg_version << "Intel C++ " << __INTEL_COMPILER;
-#else
-    msg_version << "Other Compiler ";
-#endif
-
-#if defined(__GXX_ABI_VERSION)
-    msg_version << " with C++ ABI " << __GXX_ABI_VERSION << "\n";
-#else
-    msg_version << " without C++ ABI\n";
-#endif
-
-    msg_version << "        Settings: ";
-
-    #define ON "ON\n"
-    #define OFF "OFF\n"
-
-    msg_version << "USE_WX_GRAPHICS_CONTEXT=";
-#ifdef USE_WX_GRAPHICS_CONTEXT
-    msg_version << ON;
-#else
-    msg_version << OFF;
-#endif
-
-    msg_version << "                  USE_WX_OVERLAY=";
-#ifdef USE_WX_OVERLAY
-    msg_version << ON;
-#else
-    msg_version << OFF;
-#endif
-
-    msg_version << "                  KICAD_SCRIPTING=";
-#ifdef KICAD_SCRIPTING
-    msg_version << ON;
-#else
-    msg_version << OFF;
-#endif
-
-    msg_version << "                  KICAD_SCRIPTING_MODULES=";
-#ifdef KICAD_SCRIPTING_MODULES
-    msg_version << ON;
-#else
-    msg_version << OFF;
-#endif
-
-    msg_version << "                  KICAD_SCRIPTING_WXPYTHON=";
-#ifdef KICAD_SCRIPTING_WXPYTHON
-    msg_version << ON;
-#else
-    msg_version << OFF;
-#endif
-
-    msg_version << "                  KICAD_SCRIPTING_ACTION_MENU=";
-#ifdef KICAD_SCRIPTING_ACTION_MENU
-    msg_version << ON;
-#else
-    msg_version << OFF;
-#endif
-
-    msg_version << "                  BUILD_GITHUB_PLUGIN=";
-#ifdef BUILD_GITHUB_PLUGIN
-    msg_version << ON;
-#else
-    msg_version << OFF;
-#endif
-
-    msg_version << "                  KICAD_USE_OCE=";
-#ifdef KICAD_USE_OCE
-    msg_version << ON;
-#else
-    msg_version << OFF;
-#endif
+    buildVersionInfoData( msg_version, false );
 
     wxTheClipboard->SetData( new wxTextDataObject( msg_version ) );
     wxTheClipboard->Close();
-    copyVersionInfo->SetLabel( _( "Copied..." ) );
+    m_btCopyVersionInfo->SetLabel( _( "Copied..." ) );
 }

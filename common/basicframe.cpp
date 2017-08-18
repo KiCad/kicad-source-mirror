@@ -515,8 +515,10 @@ void EDA_BASE_FRAME::GetKicadContribute( wxCommandEvent& event )
 {
     if( !wxLaunchDefaultBrowser( URL_GET_INVOLVED ) )
     {
-        wxString msg = _( "Could not launch the default browser. For information on how to help the KiCad project, visit " );
-        msg.Append( URL_GET_INVOLVED );
+        wxString msg;
+        msg.Printf( _( "Could not launch the default browser.\n"
+                       "For information on how to help the KiCad project, visit %s" ),
+                    URL_GET_INVOLVED );
         wxMessageBox( msg, _( "Get involved with KiCad" ), wxOK, this );
     }
 }
@@ -524,7 +526,7 @@ void EDA_BASE_FRAME::GetKicadContribute( wxCommandEvent& event )
 
 void EDA_BASE_FRAME::GetKicadAbout( wxCommandEvent& event )
 {
-    bool ShowAboutDialog(wxWindow * parent);
+    void ShowAboutDialog(EDA_BASE_FRAME * aParent); // See AboutDialog_main.cpp
     ShowAboutDialog( this );
 }
 
