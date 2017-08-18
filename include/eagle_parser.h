@@ -364,8 +364,8 @@ string makeKey( const string& aFirst, const string& aSecond );
 /// Make a unique time stamp
 unsigned long timeStamp( wxXmlNode* aTree );
 
-/// Computes module path basing on its name and value
-time_t moduleTstamp( const string& aName, const string& aValue );
+/// Computes module timestamp basing on its name, value and unit
+time_t moduleTstamp( const string& aName, const string& aValue, int aUnit );
 
 /// Returns module path using the module timestamp
 // TODO does not handle multisheet schematics correctly

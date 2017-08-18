@@ -1050,7 +1050,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     component->SetConvert( 0 );
     component->SetPosition( wxPoint( einstance.x * EUNIT_TO_MIL, -einstance.y * EUNIT_TO_MIL ) );
     component->GetField( FOOTPRINT )->SetText( wxString( package ) );
-    component->SetTimeStamp( moduleTstamp( einstance.part, epart->value ? *epart->value : "" ) );
+    component->SetTimeStamp( moduleTstamp( einstance.part, epart->value ? *epart->value : "", unit ) );
     // component->AddHierarchicalReference( path, reference, (int)tmp ); // TODO ??
 
     if( einstance.rot )

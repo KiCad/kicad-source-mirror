@@ -171,20 +171,23 @@ unsigned long timeStamp( wxXmlNode* aTree )
 }
 
 
-time_t moduleTstamp( const string& aName, const string& aValue )
+time_t moduleTstamp( const string& aName, const string& aValue, int aUnit )
 {
     std::size_t h1 = std::hash<string>{}( aName );
     std::size_t h2 = std::hash<string>{}( aValue );
-    return ((h1 ^ h2 << 1) & 0xffffffff);
+    std::size_t h3 = std::hash<int>{}( aUnit );
+
+    return h1 ^ (h2 << 1) ^ (h3 << 2);
 }
 
 
 string modulePath( const string& aName, const string& aValue )
 {
+    // TODO handle subsheet
     std::ostringstream s;
 
-    s << '/' << std::setfill('0') << std::uppercase << std::hex << std::setw(8)
-      << moduleTstamp( aName, aValue );
+    s << '/' << std::setfill( '0' ) << std::uppercase << std::hex << std::setw( 8 )
+      << moduleTstamp( aName, aValue, 0 );
 
     return s.str();
 }
