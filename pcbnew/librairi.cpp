@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,7 +109,7 @@ static wxFileName getFootprintFilenameFromUser( wxWindow* aParent, const wxStrin
 
     wildCard << wxGetTranslation( KiCadFootprintLibFileWildcard ) << wxChar( '|' )
              << wxGetTranslation( ModLegacyExportFileWildcard ) << wxChar( '|' )
-             << wxGetTranslation( GedaPcbFootprintLibFileWildcard ) << wxChar( '|' );
+             << wxGetTranslation( GedaPcbFootprintLibFileWildcard );
 
     wxFileDialog dlg( aParent, FMT_IMPORT_MODULE, aLastPath, wxEmptyString, wildCard,
             wxFD_OPEN | wxFD_FILE_MUST_EXIST );
