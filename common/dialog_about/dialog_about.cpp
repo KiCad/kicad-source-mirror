@@ -50,7 +50,7 @@
 #include <build_version.h>
 #include <html_messagebox.h>
 
-#include "DIALOG_ABOUT.h"
+#include "dialog_about.h"
 
 
 /*
