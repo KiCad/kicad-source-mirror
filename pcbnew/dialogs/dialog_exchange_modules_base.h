@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
+class WX_HTML_REPORT_PANEL;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -24,6 +25,7 @@ class DIALOG_SHIM;
 #include <wx/sizer.h>
 #include <wx/radiobox.h>
 #include <wx/button.h>
+#include <wx/panel.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
 
@@ -51,8 +53,7 @@ class DIALOG_EXCHANGE_MODULE_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_CurrentFootprintFPID;
 		wxStaticText* m_staticTextNewFPID;
 		wxTextCtrl* m_NewFootprintFPID;
-		wxStaticText* m_staticTextMsg;
-		wxTextCtrl* m_WinMessages;
+		WX_HTML_REPORT_PANEL* m_MessageWindow;
 		wxStaticLine* m_staticline1;
 		wxButton* m_Applybutton;
 		wxButton* m_Quitbutton;

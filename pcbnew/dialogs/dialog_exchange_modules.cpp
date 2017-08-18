@@ -36,6 +36,8 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <project.h>
+#include <wx_html_report_panel.h>
+//#include <reporter.h>
 
 #include <pcbnew.h>
 #include <dialog_exchange_modules.h>
@@ -102,6 +104,9 @@ void DIALOG_EXCHANGE_MODULE::OnOkClick( wxCommandEvent& event )
     m_selectionMode = m_Selection->GetSelection();
     bool result = false;
 
+    m_MessageWindow->Clear();
+    m_MessageWindow->Flush();
+
     switch( m_Selection->GetSelection() )
     {
     case 0:
@@ -156,25 +161,26 @@ void DIALOG_EXCHANGE_MODULE::OnSelectionClicked( wxCommandEvent& event )
 
 void DIALOG_EXCHANGE_MODULE::RebuildCmpList( wxCommandEvent& event )
 {
-    wxFileName  fn;
     wxString    msg;
+    REPORTER& reporter = m_MessageWindow->Reporter();
+    m_MessageWindow->Clear();
+    m_MessageWindow->Flush();
 
     // Build the .cmp file name from the board name
-    fn = m_parent->GetBoard()->GetFileName();
+    wxFileName fn = m_parent->GetBoard()->GetFileName();
     fn.SetExt( ComponentFileExtension );
 
     if( RecreateCmpFile( m_parent->GetBoard(), fn.GetFullPath() ) )
     {
-        msg.Printf( _( "File '%s' created\n" ),
-                    GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "File '%s' created\n" ), GetChars( fn.GetFullPath() ) );
+        reporter.Report( msg, REPORTER::RPT_INFO );
     }
     else
     {
         msg.Printf( _( "** Could not create file '%s' ***\n" ),
                     GetChars( fn.GetFullPath() ) );
+        reporter.Report( msg, REPORTER::RPT_ERROR );
     }
-
-    m_WinMessages->AppendText( msg );
 }
 
 
@@ -298,28 +304,29 @@ bool DIALOG_EXCHANGE_MODULE::change_1_Module( MODULE*            aModule,
                                               bool               aShowError )
 {
     MODULE* newModule;
-    wxString line;
+    wxString msg;
 
     if( aModule == NULL )
         return false;
 
     wxBusyCursor dummy;
+    REPORTER& reporter = m_MessageWindow->Reporter();
 
-    // Copy parameters from the old module.
+    // Copy parameters from the old footprint.
     LIB_ID oldFootprintFPID = aModule->GetFPID();
 
     // Load module.
-    line.Printf( _( "Change footprint '%s' (from '%s') to '%s'" ),
+    msg.Printf( _( "Change footprint '%s' (from '%s') to '%s'" ),
                  GetChars( aModule->GetReference() ),
                  oldFootprintFPID.Format().c_str(),
                  aNewFootprintFPID.Format().c_str() );
-    m_WinMessages->AppendText( line );
 
     newModule = m_parent->LoadFootprint( aNewFootprintFPID );
 
-    if( newModule == NULL )  // New module not found, redraw the old one.
+    if( newModule == NULL )  // New module not found.
     {
-        m_WinMessages->AppendText( wxT( ": footprint not found\n" ) );
+        msg << ": " << _( "footprint not found" );
+        reporter.Report( msg, REPORTER::RPT_ERROR );
         return false;
     }
 
@@ -328,7 +335,8 @@ bool DIALOG_EXCHANGE_MODULE::change_1_Module( MODULE*            aModule,
     if( aModule == m_currentModule )
         m_currentModule = newModule;
 
-    m_WinMessages->AppendText( wxT( ": OK\n" ) );
+    msg += ": OK";
+    reporter.Report( msg, REPORTER::RPT_ACTION );
 
     return true;
 }

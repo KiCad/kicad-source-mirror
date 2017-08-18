@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "wx_html_report_panel.h"
 
 #include "dialog_exchange_modules_base.h"
 
@@ -27,7 +29,6 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	bLeftSizer->Add( m_staticTextCmpVal, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_CmpValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	m_CmpValue->SetMaxLength( 0 ); 
 	bLeftSizer->Add( m_CmpValue, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticTexCmpRef = new wxStaticText( this, wxID_ANY, _("Component reference"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -75,7 +76,6 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	bMainSizer->Add( m_staticTextCurrFPID, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_CurrentFootprintFPID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	m_CurrentFootprintFPID->SetMaxLength( 0 ); 
 	bMainSizer->Add( m_CurrentFootprintFPID, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticTextNewFPID = new wxStaticText( this, wxID_ANY, _("New footprint name (FPID)"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -83,17 +83,12 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	bMainSizer->Add( m_staticTextNewFPID, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_NewFootprintFPID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_NewFootprintFPID->SetMaxLength( 0 ); 
 	bMainSizer->Add( m_NewFootprintFPID, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_staticTextMsg = new wxStaticText( this, wxID_ANY, _("Messages:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextMsg->Wrap( -1 );
-	bMainSizer->Add( m_staticTextMsg, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_MessageWindow = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_MessageWindow->SetMinSize( wxSize( 300,300 ) );
 	
-	m_WinMessages = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
-	m_WinMessages->SetMinSize( wxSize( -1,150 ) );
-	
-	bMainSizer->Add( m_WinMessages, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( m_MessageWindow, 1, wxEXPAND | wxALL, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
