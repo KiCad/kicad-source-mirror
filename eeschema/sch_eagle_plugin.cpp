@@ -1021,6 +1021,8 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 {
     auto einstance = EINSTANCE( aInstanceNode );
 
+    bool smashed = false;
+
     SCH_SCREEN* screen = m_currentSheet->GetScreen();
 
     // Find the part in the list for the sheet.
@@ -1063,6 +1065,8 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
         }
     }
 
+
+
     LIB_FIELDS partFields;
     part->GetFields(partFields);
     for( auto const& field : partFields )
@@ -1097,6 +1101,15 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     else
     component->GetField( VALUE )->SetVisible( false );
 
+    if( einstance.smashed )
+    {
+        smashed = einstance.smashed.Get();
+    }
+
+    bool valueAttributeFound = false;
+    bool nameAttributeFound = false;
+
+
     wxXmlNode* attributeNode = aInstanceNode->GetChildren();
     while(attributeNode)
     {
@@ -1106,7 +1119,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
             SCH_FIELD* field;
             if(attr.name == "NAME"){
-
+                nameAttributeFound = true;
                 field = component->GetField( REFERENCE );
                 field->SetPosition( wxPoint(*attr.x* EUNIT_TO_MIL, *attr.y*-EUNIT_TO_MIL) );
                 int align = attr.align ? *attr.align : ETEXT::BOTTOM_LEFT;
@@ -1127,6 +1140,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
             }
 
             else if (attr.name == "VALUE"){
+                valueAttributeFound = true;
                 field = component->GetField( VALUE );
                 field->SetPosition( wxPoint(*attr.x* EUNIT_TO_MIL, *attr.y*-EUNIT_TO_MIL) );
                 int align = attr.align ? *attr.align : ETEXT::BOTTOM_LEFT;
@@ -1148,6 +1162,12 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
         attributeNode = attributeNode->GetNext();
 
     }
+    if (smashed ){
+        component->GetField( VALUE )->SetVisible( valueAttributeFound );
+        component->GetField( REFERENCE )->SetVisible( nameAttributeFound );
+
+    }
+
 
     component->ClearFlags();
 
