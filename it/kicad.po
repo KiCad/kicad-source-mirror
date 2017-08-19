@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-17 14:39+0200\n"
-"PO-Revision-Date: 2017-08-17 14:56+0200\n"
+"POT-Creation-Date: 2017-08-19 17:20+0200\n"
+"PO-Revision-Date: 2017-08-19 17:23+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -961,7 +961,7 @@ msgstr "Denominazione"
 
 #: pcbnew/librairi.cpp:827
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:44
-#: common/dialog_about/AboutDialog_main.cpp:129 eeschema/sch_component.cpp:1758
+#: common/dialog_about/AboutDialog_main.cpp:115 eeschema/sch_component.cpp:1758
 #: eeschema/viewlibs.cpp:235 eeschema/libedit.cpp:508
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
@@ -1690,7 +1690,7 @@ msgid "Complex shape"
 msgstr "Forma complessa"
 
 #: pcbnew/muonde.cpp:457 pcbnew/dialogs/wizard_add_fplib.cpp:845
-#: common/dialog_about/dialog_about_base.cpp:73
+#: common/dialog_about/dialog_about_base.cpp:75
 #: eeschema/dialogs/dialog_netlist_base.cpp:126
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:143
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:178
@@ -1869,7 +1869,7 @@ msgid "Front"
 msgstr "Fronte"
 
 #: pcbnew/class_module.cpp:551 pcbnew/tools/pad_tool.cpp:77
-#: pcbnew/class_board.cpp:1095 pcbnew/pcb_draw_panel_gal.cpp:323
+#: pcbnew/class_board.cpp:1101 pcbnew/pcb_draw_panel_gal.cpp:323
 #: pcbnew/class_netinfo_item.cpp:120
 msgid "Pads"
 msgstr "Piazzole"
@@ -3148,103 +3148,103 @@ msgstr "Cancellare tutti gli elementi dello strato %s?"
 msgid "This is the default net class."
 msgstr "Questo è il gruppo di collegamenti predefinito"
 
-#: pcbnew/class_board.cpp:1098 pcbnew/pcb_draw_panel_gal.cpp:326
+#: pcbnew/class_board.cpp:1104 pcbnew/pcb_draw_panel_gal.cpp:326
 #: pcbnew/class_netinfo_item.cpp:140
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:159
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 msgid "Vias"
 msgstr "Via"
 
-#: pcbnew/class_board.cpp:1101 pcbnew/pcb_draw_panel_gal.cpp:329
+#: pcbnew/class_board.cpp:1107 pcbnew/pcb_draw_panel_gal.cpp:329
 msgid "Track Segments"
 msgstr "Segmenti di pista"
 
-#: pcbnew/class_board.cpp:1104 pcbnew/pcb_draw_panel_gal.cpp:332
+#: pcbnew/class_board.cpp:1110 pcbnew/pcb_draw_panel_gal.cpp:332
 msgid "Nodes"
 msgstr "Nodi"
 
-#: pcbnew/class_board.cpp:1107 pcbnew/pcb_draw_panel_gal.cpp:335
+#: pcbnew/class_board.cpp:1113 pcbnew/pcb_draw_panel_gal.cpp:335
 #: pcbnew/dialogs/dialog_select_net_from_list_base.h:58
 msgid "Nets"
 msgstr "Piste"
 
-#: pcbnew/class_board.cpp:1110 pcbnew/pcb_draw_panel_gal.cpp:338
+#: pcbnew/class_board.cpp:1116 pcbnew/pcb_draw_panel_gal.cpp:338
 #: pcbnew/dialogs/dialog_drc_base.cpp:266
 msgid "Unconnected"
 msgstr "Disconnessi"
 
-#: pcbnew/class_board.cpp:2396
+#: pcbnew/class_board.cpp:2402
 #, c-format
 msgid "Checking netlist component footprint \"%s:%s:%s\".\n"
 msgstr "Verifica netlist componenti impronte \"%s:%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2414 pcbnew/board_netlist_updater.cpp:108
+#: pcbnew/class_board.cpp:2420 pcbnew/board_netlist_updater.cpp:108
 #, c-format
 msgid "Adding new component \"%s:%s\" footprint \"%s\".\n"
 msgstr "Aggiungi nuovo componente \"%s:%s\" impronta \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2423 pcbnew/board_netlist_updater.cpp:142
+#: pcbnew/class_board.cpp:2429 pcbnew/board_netlist_updater.cpp:142
 #, c-format
 msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "Impossibile aggiungere nuovo componente \"%s:%s\" a causa dell'impronta "
 "mancante \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2457 pcbnew/board_netlist_updater.cpp:176
+#: pcbnew/class_board.cpp:2463 pcbnew/board_netlist_updater.cpp:176
 #, c-format
 msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
 msgstr "Sostituzione componente \"%s:%s\" impronta \"%s\" con  \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2468 pcbnew/board_netlist_updater.cpp:213
+#: pcbnew/class_board.cpp:2474 pcbnew/board_netlist_updater.cpp:213
 #, c-format
 msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "Impossibile rimpiazzare il componente \"%s:%s\" a causa dell'impronta "
 "mancante \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2521 pcbnew/board_netlist_updater.cpp:248
+#: pcbnew/class_board.cpp:2527 pcbnew/board_netlist_updater.cpp:248
 #, c-format
 msgid "Changing component \"%s:%s\" reference to \"%s\".\n"
 msgstr "Cambiamento riferimento componente \"%s:%s\" in \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2537 pcbnew/board_netlist_updater.cpp:272
+#: pcbnew/class_board.cpp:2543 pcbnew/board_netlist_updater.cpp:272
 #, c-format
 msgid "Changing component \"%s:%s\" value from \"%s\" to \"%s\".\n"
 msgstr "Cambio valore componente \"%s:%s\" da \"%s\" a \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2554 pcbnew/board_netlist_updater.cpp:290
+#: pcbnew/class_board.cpp:2560 pcbnew/board_netlist_updater.cpp:290
 #, c-format
 msgid "Changing component path \"%s:%s\" to \"%s\".\n"
 msgstr "Cambio percorso componente \"%s:%s\" a \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2578 pcbnew/board_netlist_updater.cpp:335
+#: pcbnew/class_board.cpp:2584 pcbnew/board_netlist_updater.cpp:335
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
 msgstr "Cancellazione componente \"%s:%s\" pin \"%s\" nome collegamento.\n"
 
-#: pcbnew/class_board.cpp:2597 pcbnew/board_netlist_updater.cpp:396
+#: pcbnew/class_board.cpp:2603 pcbnew/board_netlist_updater.cpp:396
 #, c-format
 msgid ""
 "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
 msgstr "Cambio componente \"%s:%s\" pin \"%s\" nome net da \"%s\" a \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2649 pcbnew/board_netlist_updater.cpp:452
+#: pcbnew/class_board.cpp:2655 pcbnew/board_netlist_updater.cpp:452
 #, c-format
 msgid "Removing unused component \"%s:%s\".\n"
 msgstr "Rimozione componente non usato \"%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2712 pcbnew/board_netlist_updater.cpp:521
+#: pcbnew/class_board.cpp:2718 pcbnew/board_netlist_updater.cpp:521
 #, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad '%s'\n"
 msgstr ""
 "Rimozione collegamento singola piazzola \"%s\" su \"%s\" piazzola \"%s\"\n"
 
-#: pcbnew/class_board.cpp:2756
+#: pcbnew/class_board.cpp:2762
 #, c-format
 msgid "Component '%s' pad '%s' not found in footprint '%s'\n"
 msgstr "Componente \"%s\" piazzola \"%s\" non trovato nell'impronta \"%s\"\n"
 
-#: pcbnew/class_board.cpp:2774
+#: pcbnew/class_board.cpp:2780
 #, c-format
 msgid "Copper zone (net name '%s'): net has no pads connected."
 msgstr ""
@@ -6236,7 +6236,9 @@ msgstr "&Archivia impronte in libreria di progetto"
 msgid ""
 "Archive all footprints in existing library in footprint Lib table(does not "
 "remove other footprints in this library)"
-msgstr "Archivia tutte le impronte in una libreria presente nella tabella librerie impronte (non rimuove le altre impronte presenti in questa libreria)"
+msgstr ""
+"Archivia tutte le impronte in una libreria presente nella tabella librerie "
+"impronte (non rimuove le altre impronte presenti in questa libreria)"
 
 #: pcbnew/menubar_pcbframe.cpp:802
 msgid "&Create New Library and Archive Footprints"
@@ -7377,17 +7379,17 @@ msgstr ""
 "Questo file è stato creato con una precedente versione di PcbNew.\n"
 "Al prossimo salvataggio verrà memorizzato nel nuovo formato."
 
-#: pcbnew/files.cpp:658
+#: pcbnew/files.cpp:655
 #, c-format
 msgid "Warning: unable to create backup file '%s'"
 msgstr "Attenzione: Impossibile creare il file di salvataggio \"%s\""
 
-#: pcbnew/files.cpp:685 pcbnew/files.cpp:778
+#: pcbnew/files.cpp:682 pcbnew/files.cpp:775
 #, c-format
 msgid "No access rights to write to file '%s'"
 msgstr "Nessun diritto di accesso scrivendo il file \"%s\""
 
-#: pcbnew/files.cpp:724 pcbnew/files.cpp:803
+#: pcbnew/files.cpp:721 pcbnew/files.cpp:800
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -7396,22 +7398,22 @@ msgstr ""
 "Errore durante il salvataggio del file scheda \"%s\".\n"
 "%s"
 
-#: pcbnew/files.cpp:730
+#: pcbnew/files.cpp:727
 #, c-format
 msgid "Failed to create '%s'"
 msgstr "Impossibile creare \"%s\""
 
-#: pcbnew/files.cpp:756
+#: pcbnew/files.cpp:753
 #, c-format
 msgid "Backup file: '%s'"
 msgstr "File di salvataggio: \"%s\""
 
-#: pcbnew/files.cpp:758
+#: pcbnew/files.cpp:755
 #, c-format
 msgid "Wrote board file: '%s'"
 msgstr "File scheda scritto: \"%s\""
 
-#: pcbnew/files.cpp:812
+#: pcbnew/files.cpp:809
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -8420,7 +8422,7 @@ msgstr ""
 "tastiera di rotazione."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:74
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:48
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:49
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:26
 #: pcbnew/dialogs/dialog_block_options_base.cpp:20
 #: eeschema/dialogs/dialog_erc_base.cpp:147
@@ -9214,7 +9216,7 @@ msgstr "File rapporto"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:198
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:159
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:107
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:102
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:56
 #: pcbnew/dialogs/dialog_update_pcb.cpp:149
@@ -9235,7 +9237,6 @@ msgid "Close"
 msgstr "Chiudi"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:208
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:89
 #: pcbnew/dialogs/dialog_drc_base.cpp:167
 #: common/dialogs/dialog_list_selector_base.cpp:37
 #: eeschema/dialogs/dialog_erc_base.cpp:71
@@ -9806,43 +9807,43 @@ msgstr "Imposta tutti i via (non le piste) al valore della loro netclass"
 msgid "Set all tracks (no via) to their Netclass value"
 msgstr "Imposta tutte le piste (non i via) al valore della loro netclass"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:25
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:27
 msgid "Component value"
 msgstr "Valore componente"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:33
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:34
 msgid "Component reference"
 msgstr "Riferimento componente"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:46
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:47
 msgid "Change footprint"
 msgstr "Cambia impronta"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:46
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:47
 msgid "Change footprints"
 msgstr "Cambia impronte"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:46
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:47
 msgid "Change footprints having same value"
 msgstr "Cambia impronte con lo stesso valore"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:46
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:47
 msgid "Update all footprints of the board"
 msgstr "Aggiorna tutte le impronte della scheda"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:58
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:59
 msgid "Export Footprint Association File"
 msgstr "Esporta file associazione impronte"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:61
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:62
 msgid "List Footprints"
 msgstr "Elenca impronte"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:64
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:65
 msgid "View Footprints"
 msgstr "Mostra impronte"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:73
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:74
 msgid "Current footprint name (FPID)"
 msgstr "Nome impronta corrente (FPID)"
 
@@ -9850,7 +9851,7 @@ msgstr "Nome impronta corrente (FPID)"
 msgid "New footprint name (FPID)"
 msgstr "Nuovo nome impronta (FPID)"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:104
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:99
 msgid "Apply"
 msgstr "Applica"
 
@@ -13825,54 +13826,58 @@ msgstr "Filtro strati"
 msgid "Current layer:"
 msgstr "Strato corrente"
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:81
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:83
 #, c-format
 msgid "Change footprint of '%s'"
 msgstr "Cambia impronta di \"%s\""
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:89
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:91
 #, c-format
 msgid "Change footprints '%s'"
 msgstr "Cambia impronte \"%s\""
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:168
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:175
 #, c-format
 msgid "File '%s' created\n"
 msgstr "File \"%s\" creato\n"
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:173
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:180
 #, c-format
 msgid "** Could not create file '%s' ***\n"
 msgstr "** Impossibile creare il file \"%s\" ***\n"
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:216
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:222
 #, c-format
 msgid "Change footprint %s -> %s (for value = %s)?"
 msgstr "Cambiare impronta %s -> %s (per valore = %s)?"
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:223
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:229
 #, c-format
 msgid "Change footprint %s -> %s ?"
 msgstr "Cambiare impronta %s -> %s ?"
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:271
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:277
 msgid "Are you sure you want to change all footprints?"
 msgstr "Sicuri di voler cambiare tutte le impronte?"
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:312
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:319
 #, c-format
 msgid "Change footprint '%s' (from '%s') to '%s'"
 msgstr "Cambia impronta \"%s\" (da \"%s\") a \"%s\""
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:415
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:328
+msgid "footprint not found"
+msgstr "Impronta non trovata"
+
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:423
 msgid "No footprints!"
 msgstr "Nessuna impronta!"
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:426
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:434
 msgid "Save Footprint Association File"
 msgstr "Salva file di associazione impronte"
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:437
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:445
 #, c-format
 msgid "Could not create file '%s'"
 msgstr "Impossibile creare il file \"%s\""
@@ -14587,7 +14592,7 @@ msgstr "Generazione file di forature"
 msgid "Pad enumeration settings"
 msgstr "Impostazioni enumerazione piazzole"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.h:71
+#: pcbnew/dialogs/dialog_exchange_modules_base.h:72
 msgid "Change Footprint"
 msgstr "Cambia impronta"
 
@@ -14988,11 +14993,19 @@ msgstr "Informazioni sulla versione"
 
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
-msgstr "Informazioni sulle librerie"
+msgstr "Info di versione librerie"
+
+#: common/dialog_about/dialog_about_base.cpp:67
+msgid "Show Version Info"
+msgstr "Mostra info di versione"
 
 #: common/dialog_about/dialog_about_base.cpp:70
 msgid "Copy Version Info"
 msgstr "Copia info di versione"
+
+#: common/dialog_about/dialog_about_base.cpp:71
+msgid "Copy KiCad version info to the clipboard"
+msgstr "Copia le info di versione di KiCad negli appunti"
 
 #: common/dialog_about/dialog_about.cpp:116
 msgid "Information"
@@ -15022,20 +15035,24 @@ msgstr "Pacchetti"
 msgid "License"
 msgstr "Licenza"
 
-#: common/dialog_about/dialog_about.cpp:437
+#: common/dialog_about/dialog_about.cpp:533
+msgid "Version Info"
+msgstr "Info di versione"
+
+#: common/dialog_about/dialog_about.cpp:545
 msgid "Could not open clipboard to write version information."
 msgstr ""
 "Impossibile aprire gli appunti per scrivere le informazioni sulla versione."
 
-#: common/dialog_about/dialog_about.cpp:438
+#: common/dialog_about/dialog_about.cpp:546
 msgid "Clipboard Error"
 msgstr "Errore degli appunti"
 
-#: common/dialog_about/dialog_about.cpp:551
+#: common/dialog_about/dialog_about.cpp:555
 msgid "Copied..."
 msgstr "Copiate..."
 
-#: common/dialog_about/AboutDialog_main.cpp:133
+#: common/dialog_about/AboutDialog_main.cpp:119
 msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and to design printed circuit boards."
@@ -15043,71 +15060,71 @@ msgstr ""
 "KiCad è un insieme di applicazioni libere per la creazione di schemi "
 "elettrici e circuiti stampati"
 
-#: common/dialog_about/AboutDialog_main.cpp:141
+#: common/dialog_about/AboutDialog_main.cpp:127
 msgid "KiCad on the web"
 msgstr "KiCad sul Web"
 
-#: common/dialog_about/AboutDialog_main.cpp:148
+#: common/dialog_about/AboutDialog_main.cpp:134
 msgid "The official KiCad website"
 msgstr "Il sito web ufficiale di KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:152
+#: common/dialog_about/AboutDialog_main.cpp:138
 msgid "Developer's website on Launchpad"
 msgstr "La pagina web degli sviluppatori su Launchpad"
 
-#: common/dialog_about/AboutDialog_main.cpp:157
+#: common/dialog_about/AboutDialog_main.cpp:143
 msgid "Official repository for component and footprint libraries"
 msgstr "L'archivio ufficiale di librerie di componenti e impronte"
 
-#: common/dialog_about/AboutDialog_main.cpp:162
+#: common/dialog_about/AboutDialog_main.cpp:148
 msgid "Footprint wizards info on our official repository "
 msgstr "Info sugli assistenti impronte sul nostro repository ufficiale "
 
-#: common/dialog_about/AboutDialog_main.cpp:167
+#: common/dialog_about/AboutDialog_main.cpp:153
 msgid "Non official repositories"
 msgstr "Repository non ufficiali"
 
-#: common/dialog_about/AboutDialog_main.cpp:174
+#: common/dialog_about/AboutDialog_main.cpp:160
 msgid "Additional component libraries repository (smisioto)"
 msgstr "Repository aggiuntivi di librerie componenti (smisioto)"
 
-#: common/dialog_about/AboutDialog_main.cpp:180
+#: common/dialog_about/AboutDialog_main.cpp:166
 msgid "Bug tracker"
 msgstr "Bug tracker"
 
-#: common/dialog_about/AboutDialog_main.cpp:187
+#: common/dialog_about/AboutDialog_main.cpp:173
 msgid "Report or examine bugs"
 msgstr "Rapporto o verifica bug"
 
-#: common/dialog_about/AboutDialog_main.cpp:192
+#: common/dialog_about/AboutDialog_main.cpp:178
 msgid "KiCad user's groups and community"
 msgstr "Comunità e gruppi di utenti KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:198
+#: common/dialog_about/AboutDialog_main.cpp:184
 msgid "KiCad user's group"
 msgstr "Gruppo utenti KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:203
+#: common/dialog_about/AboutDialog_main.cpp:189
 msgid "KiCad forum"
 msgstr "Forum KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:216
+#: common/dialog_about/AboutDialog_main.cpp:202
 msgid "The complete KiCad EDA Suite is released under the"
 msgstr "La suite EDA di KiCad è realizzata secondo la"
 
-#: common/dialog_about/AboutDialog_main.cpp:218
+#: common/dialog_about/AboutDialog_main.cpp:204
 msgid "GNU General Public License (GPL) version 3 or any later version"
 msgstr "GNU General Public License (GPL) versione 3 o successive"
 
-#: common/dialog_about/AboutDialog_main.cpp:412
+#: common/dialog_about/AboutDialog_main.cpp:398
 msgid "Others"
 msgstr "Altri"
 
-#: common/dialog_about/AboutDialog_main.cpp:427
+#: common/dialog_about/AboutDialog_main.cpp:413
 msgid "Icons by"
 msgstr "Autori icone"
 
-#: common/dialog_about/AboutDialog_main.cpp:442
+#: common/dialog_about/AboutDialog_main.cpp:428
 msgid "3D models by"
 msgstr "Autori modelli 3D"
 
@@ -15730,36 +15747,37 @@ msgstr ""
 msgid "Help file '%s' could not be found."
 msgstr "File aiuto \"%s\" non trovato."
 
-#: common/basicframe.cpp:518
+#: common/basicframe.cpp:519
+#, c-format
 msgid ""
-"Could not launch the default browser. For information on how to help the "
-"KiCad project, visit "
+"Could not launch the default browser.\n"
+"For information on how to help the KiCad project, visit %s"
 msgstr ""
-"Impossibile eseguire il programma di navigazione Internet predefinito. Per "
-"informazioni su come aiutare il progetto KiCad, visitare "
+"Impossibile eseguire il browser Internet predefinito.\n"
+"Per informazioni su come aiutare il progetto KiCad, visitare %s"
 
-#: common/basicframe.cpp:520
+#: common/basicframe.cpp:522
 msgid "Get involved with KiCad"
 msgstr "Collabora a KiCad"
 
-#: common/basicframe.cpp:552
+#: common/basicframe.cpp:554
 #, c-format
 msgid "You do not have write permissions to folder <%s>."
 msgstr "Non si possiedono i permessi di scrittura per la cartella \"%s\"."
 
-#: common/basicframe.cpp:557
+#: common/basicframe.cpp:559
 #, c-format
 msgid "You do not have write permissions to save file <%s> to folder <%s>."
 msgstr ""
 "Non si possiedono i permessi di scrittura per salvare il file \"%s\" nella "
 "cartella \"%s\"."
 
-#: common/basicframe.cpp:562
+#: common/basicframe.cpp:564
 #, c-format
 msgid "You do not have write permissions to save file <%s>."
 msgstr "Non si dispone dei permessi necessari per salvare il file \"%s\"."
 
-#: common/basicframe.cpp:594
+#: common/basicframe.cpp:596
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -15774,26 +15792,26 @@ msgstr ""
 "\"%s\"\n"
 "non è stato salvato correttamente. Recuperare le ultime modifiche effettuate?"
 
-#: common/basicframe.cpp:622
+#: common/basicframe.cpp:624
 #, c-format
 msgid "Could not create backup file <%s>"
 msgstr "Impossibile creare il file di salvataggio \"%s\""
 
-#: common/basicframe.cpp:630
+#: common/basicframe.cpp:632
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
 "Il file di salvataggio automatico non può essere rinominato con il nome file "
 "della scheda"
 
-#: common/basicframe.cpp:682
+#: common/basicframe.cpp:684
 msgid "Icons in Menus"
 msgstr "Icone nei menu"
 
-#: common/basicframe.cpp:688
+#: common/basicframe.cpp:690
 msgid "Icons Options"
 msgstr "Opzioni icone"
 
-#: common/basicframe.cpp:689
+#: common/basicframe.cpp:691
 msgid "Select show icons in menus and icons sizes"
 msgstr "Seleziona di mostrare icone nei menu e la loro dimensione"
 
@@ -16333,8 +16351,8 @@ msgid "Actions"
 msgstr "Azioni"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:62
-msgid "Save Output"
-msgstr "Salva risultato"
+msgid "Save Report File"
+msgstr "Salva il file rapporto"
 
 #: common/dialogs/dialog_page_settings.cpp:63
 msgid "A4 210x297mm"
@@ -16449,7 +16467,7 @@ msgstr ""
 msgid "Items:"
 msgstr "Elementi:"
 
-#: common/dialog_about/dialog_about_base.h:50
+#: common/dialog_about/dialog_about_base.h:56
 msgid "About"
 msgstr "Info"
 
@@ -17053,7 +17071,8 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Errore durante il salvataggio della tabella librerie simboli specifica del progetto:\n"
+"Errore durante il salvataggio della tabella librerie simboli specifica del "
+"progetto:\n"
 "\n"
 "\"%s\""
 
@@ -17150,7 +17169,7 @@ msgstr ""
 "Definizioni delle dimensioni errate alla linea %d.\n"
 "Il file verrà chiuso.\n"
 
-#: eeschema/widgets/component_tree.cpp:136
+#: eeschema/widgets/component_tree.cpp:92
 msgid "Search"
 msgstr "Cerca"
 
@@ -18273,7 +18292,7 @@ msgstr "Elemento da bus a filo"
 msgid "Bus to Bus Entry"
 msgstr "Elemento da bus a bus "
 
-#: eeschema/getpart.cpp:145
+#: eeschema/getpart.cpp:137
 msgid "History"
 msgstr "Cronologia"
 
@@ -19765,7 +19784,7 @@ msgstr "Desc"
 msgid "none"
 msgstr "nessuno"
 
-#: eeschema/class_libentry.cpp:549
+#: eeschema/class_libentry.cpp:548
 #, c-format
 msgid ""
 "An attempt was made to remove the %s field from component %s in library %s."
@@ -22829,7 +22848,8 @@ msgstr "Filtrato per %s"
 #: cvpcb/cvpcb_mainframe.cpp:724
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
-msgstr "Nessuna libreria impronte elencata nella tabella librerie impronte corrente."
+msgstr ""
+"Nessuna libreria impronte elencata nella tabella librerie impronte corrente."
 
 #: cvpcb/cvpcb_mainframe.cpp:725
 msgid "Configuration Error"
@@ -26487,6 +26507,9 @@ msgstr "Percorso libreria"
 #: include/lib_table_grid.h:172
 msgid "Plugin Type"
 msgstr "Tipo plugin"
+
+#~ msgid "Save Output"
+#~ msgstr "Salva risultato"
 
 #~ msgid "Too many include files!!"
 #~ msgstr "Inclusi troppi file!!"
