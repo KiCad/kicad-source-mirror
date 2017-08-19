@@ -74,9 +74,6 @@ protected:
      */
     void postSelectEvent();
 
-    // Event handlers
-    void onInitDialog( wxInitDialogEvent& aEvent );
-
     void onQueryText( wxCommandEvent& aEvent );
     void onQueryEnter( wxCommandEvent& aEvent );
     void onQueryCharHook( wxKeyEvent& aEvent );

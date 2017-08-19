@@ -80,11 +80,22 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent,
 
     SetSizer( sizer );
 
-    Bind( wxEVT_INIT_DIALOG, &COMPONENT_TREE::onInitDialog, this );
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &COMPONENT_TREE::onTreeActivate, this );
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED, &COMPONENT_TREE::onTreeSelect, this );
 
     Bind( COMPONENT_PRESELECTED, &COMPONENT_TREE::onPreselect, this );
+
+    // If wxTextCtrl::SetHint() is called before binding wxEVT_TEXT, the event
+    // handler will intermittently fire.
+    if( m_query_ctrl )
+    {
+        m_query_ctrl->SetHint( _( "Search" ) );
+        m_query_ctrl->SetFocus();
+        m_query_ctrl->SetValue( wxEmptyString );
+    }
+
+    // There may be a part preselected in the model. Make sure it is displayed.
+    postPreselectEvent();
 
     Layout();
     sizer->Fit( this );
@@ -124,22 +135,6 @@ void COMPONENT_TREE::postSelectEvent()
 {
     wxCommandEvent event( COMPONENT_SELECTED );
     wxPostEvent( this, event );
-}
-
-
-void COMPONENT_TREE::onInitDialog( wxInitDialogEvent& aEvent )
-{
-    // If wxTextCtrl::SetHint() is called before binding wxEVT_TEXT, the event
-    // handler will intermittently fire.
-    if( m_query_ctrl )
-    {
-        m_query_ctrl->SetHint( _( "Search" ) );
-        m_query_ctrl->SetFocus();
-        m_query_ctrl->SetValue( wxEmptyString );
-    }
-
-    // There may be a part preselected in the model. Make sure it is displayed.
-    postPreselectEvent();
 }
 
 

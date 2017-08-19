@@ -126,14 +126,6 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
 
     }
 
-    if( !loaded )
-    {
-        for( PART_LIB& lib : *libs )
-        {
-            adapter->AddLibrary( lib );
-        }
-    }
-
 
     if( !aHistoryList.empty() )
     {
@@ -144,6 +136,14 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
 
         adapter->AddAliasList( "-- " + _( "History" ) + " --", history_list, NULL );
         adapter->SetPreselectNode( aHistoryList[0].Name, aHistoryList[0].Unit );
+    }
+
+    if( !loaded )
+    {
+        for( PART_LIB& lib : *libs )
+        {
+            adapter->AddLibrary( lib );
+        }
     }
 
     if( !aHighlight.IsEmpty() )
