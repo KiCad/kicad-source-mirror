@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-05 09:39+0300\n"
-"PO-Revision-Date: 2017-08-05 10:14+0300\n"
+"POT-Creation-Date: 2017-08-19 10:00+0300\n"
+"PO-Revision-Date: 2017-08-19 10:39+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -180,7 +180,7 @@ msgid "Alias"
 msgstr "Псевдоним"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:83
-#: common/dialog_about/AboutDialog_main.cpp:129 eeschema/bom_table_column.h:34
+#: common/dialog_about/AboutDialog_main.cpp:115 eeschema/bom_table_column.h:34
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163 eeschema/libedit.cpp:508
 #: eeschema/sch_component.cpp:1758 eeschema/viewlibs.cpp:235
@@ -201,6 +201,7 @@ msgstr "Удалить псевдоним"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:44
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:136
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:38
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:144
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:85
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:146
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:67
@@ -210,6 +211,7 @@ msgstr "Сдвинуть вверх"
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:113
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:674
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:47
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:149
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:151
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:72
 msgid "Move Down"
@@ -232,7 +234,7 @@ msgid "Configure Path"
 msgstr "Настроить пути"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:143
-#: common/dialog_about/dialog_about_base.cpp:73
+#: common/dialog_about/dialog_about_base.cpp:75
 #: eeschema/dialogs/dialog_netlist_base.cpp:126
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:178
 #: pcbnew/dialogs/wizard_add_fplib.cpp:845 pcbnew/muonde.cpp:457
@@ -293,15 +295,15 @@ msgstr "Переключиться на изометрическую персп�
 msgid "Reload board and 3D models"
 msgstr "Перезагрузить плату и 3D модели"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:591
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:601
 msgid "Invalid X scale"
 msgstr "Неверный масштаб по X"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:602
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:612
 msgid "Invalid Y scale"
 msgstr "Неверный масштаб по Y"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:613
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:623
 msgid "Invalid Z scale"
 msgstr "Неверный масштаб по Z"
 
@@ -534,7 +536,7 @@ msgid "Enable/Disable orthographic projection"
 msgstr "Вкл./Выкл. ортогональную проекцию"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:142 eeschema/menubar.cpp:118
-#: eeschema/menubar_libedit.cpp:293 eeschema/tool_viewlib.cpp:239
+#: eeschema/menubar_libedit.cpp:299 eeschema/tool_viewlib.cpp:239
 #: gerbview/menubar.cpp:274 kicad/menubar.cpp:448 pagelayout_editor/menubar.cpp:184
 #: pcbnew/menubar_modedit.cpp:375 pcbnew/menubar_pcbframe.cpp:153
 #: pcbnew/tool_modview.cpp:203
@@ -708,7 +710,7 @@ msgid "Choose Colors"
 msgstr "Выбрать цвета"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:288
-#: eeschema/widgets/widget_eeschema_color_config.cpp:207
+#: eeschema/widgets/widget_eeschema_color_config.cpp:208
 msgid "Background Color"
 msgstr "Цвет фона"
 
@@ -847,7 +849,7 @@ msgid "Reset to default settings"
 msgstr "Установить настройки по умолчанию"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:402 cvpcb/menubar.cpp:134 eeschema/menubar.cpp:124
-#: eeschema/menubar_libedit.cpp:298 eeschema/tool_viewlib.cpp:242
+#: eeschema/menubar_libedit.cpp:304 eeschema/tool_viewlib.cpp:242
 #: gerbview/menubar.cpp:277 kicad/menubar.cpp:452 pagelayout_editor/menubar.cpp:186
 #: pcbnew/menubar_modedit.cpp:381 pcbnew/menubar_pcbframe.cpp:162
 #: pcbnew/tool_modview.cpp:206
@@ -855,13 +857,13 @@ msgid "&Help"
 msgstr "Справка"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:405 eeschema/menubar.cpp:556
-#: eeschema/menubar_libedit.cpp:273 gerbview/menubar.cpp:251 kicad/menubar.cpp:426
+#: eeschema/menubar_libedit.cpp:279 gerbview/menubar.cpp:251 kicad/menubar.cpp:426
 #: pagelayout_editor/menubar.cpp:163 pcbnew/menubar_modedit.cpp:356
 #: pcbnew/menubar_pcbframe.cpp:437
 msgid "&List Hotkeys"
 msgstr "Список горячих клавиш"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:406 eeschema/menubar_libedit.cpp:274
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:406 eeschema/menubar_libedit.cpp:280
 #: gerbview/menubar.cpp:252 kicad/menubar.cpp:427 pagelayout_editor/menubar.cpp:164
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Отображает текущий список горячих клавиш и соответствующих команд"
@@ -1106,7 +1108,7 @@ msgstr "пикселей"
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:251
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:264
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:46
-#: pcbnew/dialogs/dialog_export_step_base.cpp:97
+#: pcbnew/dialogs/dialog_export_step_base.cpp:105
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:63
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:111
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:60
@@ -1143,7 +1145,7 @@ msgstr "DPI"
 msgid "Load Bitmap"
 msgstr "Загрузить растровое изображение"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:124 eeschema/libeditframe.cpp:1204
+#: bitmap2component/bitmap2cmp_gui_base.cpp:124 eeschema/libeditframe.cpp:1210
 msgid "Export"
 msgstr "Экспорт"
 
@@ -1181,8 +1183,8 @@ msgstr "Формат"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:93
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95 eeschema/libedit.cpp:498
-#: eeschema/sch_text.cpp:781 gerbview/class_gerber_file_image.cpp:342
-#: gerbview/class_gerber_file_image.cpp:346 gerbview/class_gerber_file_image.cpp:349
+#: eeschema/sch_text.cpp:781 gerbview/class_gerber_file_image.cpp:338
+#: gerbview/class_gerber_file_image.cpp:342 gerbview/class_gerber_file_image.cpp:345
 #: pcbnew/class_module.cpp:570 pcbnew/dialogs/dialog_dimension_editor_base.cpp:77
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:109
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:71
@@ -1190,7 +1192,7 @@ msgstr "Формат"
 msgid "Normal"
 msgstr "Нормально"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:135 gerbview/class_gerber_file_image.cpp:342
+#: bitmap2component/bitmap2cmp_gui_base.cpp:135 gerbview/class_gerber_file_image.cpp:338
 msgid "Negative"
 msgstr "Негативно"
 
@@ -1200,7 +1202,7 @@ msgstr "Негативно"
 #: eeschema/dialogs/dialog_erc_base.cpp:147
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:75 include/lib_table_grid.h:173
 #: pcbnew/dialogs/dialog_block_options_base.cpp:20
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:48
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:49
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:74
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:26
 msgid "Options"
@@ -1351,34 +1353,35 @@ msgstr ""
 msgid "Help file '%s' could not be found."
 msgstr "Не удалось найти файл руководства пользователя '%s'."
 
-#: common/basicframe.cpp:518
+#: common/basicframe.cpp:519
+#, c-format
 msgid ""
-"Could not launch the default browser. For information on how to help the KiCad "
-"project, visit "
+"Could not launch the default browser.\n"
+"For information on how to help the KiCad project, visit %s"
 msgstr ""
-"Невозможно запустить браузер по умолчанию. Для информации о том как помочь проекту "
-"KiCad посетите "
+"Не удалось запустить браузер по умолчанию.\n"
+"Для получении информации о том как помочь проекту KiCad посетите %s"
 
-#: common/basicframe.cpp:520
+#: common/basicframe.cpp:522
 msgid "Get involved with KiCad"
 msgstr "Принять участие в KiCad"
 
-#: common/basicframe.cpp:552
+#: common/basicframe.cpp:554
 #, c-format
 msgid "You do not have write permissions to folder <%s>."
 msgstr "У Вас нет прав на запись в каталог <%s>."
 
-#: common/basicframe.cpp:557
+#: common/basicframe.cpp:559
 #, c-format
 msgid "You do not have write permissions to save file <%s> to folder <%s>."
 msgstr "У Вас нет прав на запись для сохранения файла <%s> в каталог <%s>."
 
-#: common/basicframe.cpp:562
+#: common/basicframe.cpp:564
 #, c-format
 msgid "You do not have write permissions to save file <%s>."
 msgstr "У Вас нет прав на запись для сохранения файла <%s>."
 
-#: common/basicframe.cpp:594
+#: common/basicframe.cpp:596
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -1390,24 +1393,24 @@ msgstr ""
 "При последнем редактировании файл '%s'\n"
 "не был корректно сохранён. Хотите восстановить последние изменения?"
 
-#: common/basicframe.cpp:622
+#: common/basicframe.cpp:624
 #, c-format
 msgid "Could not create backup file <%s>"
 msgstr "Не удалось создать файл резервной копии <%s>"
 
-#: common/basicframe.cpp:630
+#: common/basicframe.cpp:632
 msgid "The auto save file could not be renamed to the board file name."
 msgstr "Файл автосохранения не может быть переименован в файл платы."
 
-#: common/basicframe.cpp:682
+#: common/basicframe.cpp:684
 msgid "Icons in Menus"
 msgstr "Иконки в меню"
 
-#: common/basicframe.cpp:688
+#: common/basicframe.cpp:690
 msgid "Icons Options"
 msgstr "Параметры иконок"
 
-#: common/basicframe.cpp:689
+#: common/basicframe.cpp:691
 msgid "Select show icons in menus and icons sizes"
 msgstr "Выбрать показ иконок в меню и размеры иконок"
 
@@ -1439,7 +1442,7 @@ msgstr "Копировать блок"
 msgid "Block Paste"
 msgstr "Вставить блок"
 
-#: common/block_commande.cpp:97 eeschema/libeditframe.cpp:1151 eeschema/schedit.cpp:539
+#: common/block_commande.cpp:97 eeschema/libeditframe.cpp:1157 eeschema/schedit.cpp:539
 #: eeschema/tool_lib.cpp:183 eeschema/tool_sch.cpp:127
 #: gerbview/events_called_functions.cpp:217 gerbview/toolbars_gerber.cpp:92
 #: pagelayout_editor/events_functions.cpp:137
@@ -1600,13 +1603,13 @@ msgstr "Каталог '%s' создан.\n"
 msgid "Cannot create output directory '%s'.\n"
 msgstr "Не удалось создать выходной каталог '%s'.\n"
 
-#: common/confirm.cpp:77 common/pgm_base.cpp:925 eeschema/symbedit.cpp:103
-#: eeschema/widgets/widget_eeschema_color_config.cpp:297
+#: common/confirm.cpp:77 common/pgm_base.cpp:931 eeschema/symbedit.cpp:103
+#: eeschema/widgets/widget_eeschema_color_config.cpp:294
 #: pcbnew/dialogs/dialog_export_idf.cpp:169 pcbnew/dialogs/dialog_export_vrml.cpp:178
 msgid "Warning"
 msgstr "Предупреждение"
 
-#: common/confirm.cpp:89 kicad/prjconfig.cpp:140 pcbnew/router/length_tuner_tool.cpp:146
+#: common/confirm.cpp:89 kicad/prjconfig.cpp:140 pcbnew/router/length_tuner_tool.cpp:142
 msgid "Error"
 msgstr "Ошибка"
 
@@ -1618,7 +1621,7 @@ msgstr "Информация"
 msgid "Confirmation"
 msgstr "Подтверждение"
 
-#: common/dialog_about/AboutDialog_main.cpp:133
+#: common/dialog_about/AboutDialog_main.cpp:119
 msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and to design printed circuit boards."
@@ -1626,71 +1629,71 @@ msgstr ""
 "KiCad EDA Suite — программный комплекс с открытыми исходными текстами, "
 "предназначенный для разработки электрических схем и печатных плат."
 
-#: common/dialog_about/AboutDialog_main.cpp:141
+#: common/dialog_about/AboutDialog_main.cpp:127
 msgid "KiCad on the web"
 msgstr "KiCad в Интернете"
 
-#: common/dialog_about/AboutDialog_main.cpp:148
+#: common/dialog_about/AboutDialog_main.cpp:134
 msgid "The official KiCad website"
 msgstr "Официальный сайт KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:152
+#: common/dialog_about/AboutDialog_main.cpp:138
 msgid "Developer's website on Launchpad"
 msgstr "Веб-сайт разработчиков на Launchpad"
 
-#: common/dialog_about/AboutDialog_main.cpp:157
+#: common/dialog_about/AboutDialog_main.cpp:143
 msgid "Official repository for component and footprint libraries"
 msgstr "Официальное хранилище библиотек компонентов и посад.мест"
 
-#: common/dialog_about/AboutDialog_main.cpp:162
+#: common/dialog_about/AboutDialog_main.cpp:148
 msgid "Footprint wizards info on our official repository "
 msgstr "Информация о мастере посад.мест на нашем официальном репозитории "
 
-#: common/dialog_about/AboutDialog_main.cpp:167
+#: common/dialog_about/AboutDialog_main.cpp:153
 msgid "Non official repositories"
 msgstr "Неофициальные репозитории"
 
-#: common/dialog_about/AboutDialog_main.cpp:174
+#: common/dialog_about/AboutDialog_main.cpp:160
 msgid "Additional component libraries repository (smisioto)"
 msgstr "Дополнительный репозиторий библиотек компонентов (smisioto)"
 
-#: common/dialog_about/AboutDialog_main.cpp:180
+#: common/dialog_about/AboutDialog_main.cpp:166
 msgid "Bug tracker"
 msgstr "Багтрекер"
 
-#: common/dialog_about/AboutDialog_main.cpp:187
+#: common/dialog_about/AboutDialog_main.cpp:173
 msgid "Report or examine bugs"
 msgstr "Сообщить или изучить ошибки"
 
-#: common/dialog_about/AboutDialog_main.cpp:192
+#: common/dialog_about/AboutDialog_main.cpp:178
 msgid "KiCad user's groups and community"
 msgstr "Пользовательская группа и сообщество KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:198
+#: common/dialog_about/AboutDialog_main.cpp:184
 msgid "KiCad user's group"
 msgstr "Пользовательская группа KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:203
+#: common/dialog_about/AboutDialog_main.cpp:189
 msgid "KiCad forum"
 msgstr "Форум KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:216
+#: common/dialog_about/AboutDialog_main.cpp:202
 msgid "The complete KiCad EDA Suite is released under the"
 msgstr "Программный комплекс KiCad EDA Suite распространяется под"
 
-#: common/dialog_about/AboutDialog_main.cpp:218
+#: common/dialog_about/AboutDialog_main.cpp:204
 msgid "GNU General Public License (GPL) version 3 or any later version"
 msgstr "GNU General Public License (GPL) version 3 или любая поздняя версия"
 
-#: common/dialog_about/AboutDialog_main.cpp:412
+#: common/dialog_about/AboutDialog_main.cpp:398
 msgid "Others"
 msgstr "Другие"
 
-#: common/dialog_about/AboutDialog_main.cpp:427
+#: common/dialog_about/AboutDialog_main.cpp:413
 msgid "Icons by"
 msgstr "По иконкам"
 
-#: common/dialog_about/AboutDialog_main.cpp:442
+#: common/dialog_about/AboutDialog_main.cpp:428
 msgid "3D models by"
 msgstr "По 3D моделям"
 
@@ -1722,15 +1725,19 @@ msgstr "Упаковщики"
 msgid "License"
 msgstr "Лицензия"
 
-#: common/dialog_about/dialog_about.cpp:437
+#: common/dialog_about/dialog_about.cpp:533
+msgid "Version Info"
+msgstr "Информация о версии"
+
+#: common/dialog_about/dialog_about.cpp:545
 msgid "Could not open clipboard to write version information."
 msgstr "Не удалось открыть буфер обмена, чтобы записать информацию о версии."
 
-#: common/dialog_about/dialog_about.cpp:438
+#: common/dialog_about/dialog_about.cpp:546
 msgid "Clipboard Error"
 msgstr "Ошибка буфера обмена"
 
-#: common/dialog_about/dialog_about.cpp:551
+#: common/dialog_about/dialog_about.cpp:555
 msgid "Copied..."
 msgstr "Скопировано..."
 
@@ -1750,11 +1757,20 @@ msgstr "Информация о версии сборки"
 msgid "Lib Version Info"
 msgstr "Информация о версии библиотек"
 
+#: common/dialog_about/dialog_about_base.cpp:67
+msgid "Show Version Info"
+msgstr "Показать информацию о версии"
+
 #: common/dialog_about/dialog_about_base.cpp:70
 msgid "Copy Version Info"
 msgstr "Копировать информацию о версии"
 
-#: common/dialog_about/dialog_about_base.h:50
+#: common/dialog_about/dialog_about_base.cpp:71
+#| msgid "Copy 3D image to clipboard"
+msgid "Copy KiCad version info to the clipboard"
+msgstr "Копировать информацию о версии KiCad в буфер обмена"
+
+#: common/dialog_about/dialog_about_base.h:56
 msgid "About"
 msgstr "О"
 
@@ -1767,7 +1783,7 @@ msgstr "О"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:125
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:107
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:129
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:107
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:102
 #: pcbnew/dialogs/dialog_find_base.cpp:46 pcbnew/dialogs/dialog_gendrill_base.cpp:198
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:95 pcbnew/dialogs/dialog_plot_base.cpp:386
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
@@ -1908,7 +1924,7 @@ msgstr "Добавить новую запись в таблицу."
 #: pcbnew/onrightclick.cpp:286 pcbnew/onrightclick.cpp:316 pcbnew/onrightclick.cpp:495
 #: pcbnew/onrightclick.cpp:642 pcbnew/onrightclick.cpp:724 pcbnew/onrightclick.cpp:831
 #: pcbnew/onrightclick.cpp:901 pcbnew/onrightclick.cpp:958 pcbnew/onrightclick.cpp:1010
-#: pcbnew/tools/edit_tool.cpp:134 pcbnew/tools/edit_tool.cpp:805
+#: pcbnew/tools/edit_tool.cpp:138 pcbnew/tools/edit_tool.cpp:839
 msgid "Delete"
 msgstr "Удалить"
 
@@ -2006,7 +2022,7 @@ msgstr "Отразить по гор."
 #: common/dialogs/dialog_image_editor_base.cpp:39
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:176
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:85
-#: pcbnew/onrightclick.cpp:998 pcbnew/tools/edit_tool.cpp:622
+#: pcbnew/onrightclick.cpp:998 pcbnew/tools/edit_tool.cpp:656
 msgid "Rotate"
 msgstr "Повернуть"
 
@@ -2048,10 +2064,8 @@ msgstr "Элементы:"
 
 #: common/dialogs/dialog_list_selector_base.cpp:37
 #: eeschema/dialogs/dialog_erc_base.cpp:71
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1151
-#: pcbnew/dialogs/dialog_drc_base.cpp:167
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:89
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:208
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1172
+#: pcbnew/dialogs/dialog_drc_base.cpp:167 pcbnew/dialogs/dialog_gendrill_base.cpp:208
 msgid "Messages:"
 msgstr "Сообщения:"
 
@@ -2357,8 +2371,8 @@ msgid "Actions"
 msgstr "Действия"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:62
-msgid "Save Output"
-msgstr "Сохранить выход"
+msgid "Save Report File"
+msgstr "Сохранить файл отчёта"
 
 #: common/draw_frame.cpp:191 common/draw_frame.cpp:510
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:31
@@ -2761,36 +2775,36 @@ msgstr "Болгарский"
 msgid "Lithuanian"
 msgstr "Литовский"
 
-#: common/pgm_base.cpp:357
+#: common/pgm_base.cpp:359
 msgid "No default editor found, you must choose it"
 msgstr "Редактор по умолчанию не найден, нужно выбрать его"
 
-#: common/pgm_base.cpp:377
+#: common/pgm_base.cpp:379
 msgid "Executable file (*.exe)|*.exe"
 msgstr "Исполняемый файл (*.exe)|*.exe"
 
-#: common/pgm_base.cpp:379
+#: common/pgm_base.cpp:381
 msgid "Executable file (*)|*"
 msgstr "Исполняемый файл (*)|*"
 
-#: common/pgm_base.cpp:389
+#: common/pgm_base.cpp:391
 msgid "Select Preferred Editor"
 msgstr "Выбор предпочитаемого редактора"
 
-#: common/pgm_base.cpp:410
+#: common/pgm_base.cpp:412
 #, c-format
 msgid "%s is already running, Continue?"
 msgstr "%s уже запущен, продолжить?"
 
-#: common/pgm_base.cpp:842
+#: common/pgm_base.cpp:848
 msgid "Set Language"
 msgstr "Установить язык"
 
-#: common/pgm_base.cpp:843
+#: common/pgm_base.cpp:849
 msgid "Select application language (only for testing)"
 msgstr "Выбрать язык приложения (только для тестирования)"
 
-#: common/pgm_base.cpp:918
+#: common/pgm_base.cpp:924
 msgid ""
 "Warning!  Some of paths you have configured have been defined \n"
 "externally to the running process and will be temporarily overwritten."
@@ -2798,7 +2812,7 @@ msgstr ""
 "Предупреждение! Некоторые пути, сконфигурированные вами, были определены \n"
 "внешне рабочему процессу и будут временно перезаписаны."
 
-#: common/pgm_base.cpp:920
+#: common/pgm_base.cpp:926
 msgid ""
 "The next time KiCad is launched, any paths that have already\n"
 "been defined are honored and any settings defined in the path\n"
@@ -2813,7 +2827,7 @@ msgstr ""
 "либо удалите внешние определения переменных окружения\n"
 "из вашей системы."
 
-#: common/pgm_base.cpp:927
+#: common/pgm_base.cpp:933
 msgid "Do not show this message again."
 msgstr "Больше не показывать данное сообщение."
 
@@ -2889,7 +2903,7 @@ msgstr "Уменьшить"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:156
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:55
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:63
-#: gerbview/class_gerber_file_image.cpp:346 gerbview/class_gerber_file_image.cpp:349
+#: gerbview/class_gerber_file_image.cpp:342 gerbview/class_gerber_file_image.cpp:345
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:105
@@ -2910,7 +2924,7 @@ msgstr "Переключить всегда показывать курсор"
 msgid "Toogle display of the cursor, even when not in an interactive tool"
 msgstr "Переключить отображение курсора даже вне интерактивного инструмента"
 
-#: common/tool/grid_menu.cpp:40 eeschema/widgets/widget_eeschema_color_config.cpp:93
+#: common/tool/grid_menu.cpp:40 eeschema/widgets/widget_eeschema_color_config.cpp:94
 #: gerbview/class_gerbview_layer_widget.cpp:109 pcbnew/class_pcb_layer_widget.cpp:75
 msgid "Grid"
 msgstr "Сетка"
@@ -3439,6 +3453,7 @@ msgstr ""
 "%s"
 
 #: cvpcb/cvpcb_mainframe.cpp:431 cvpcb/cvpcb_mainframe.cpp:451
+#: eeschema/sch_base_frame.cpp:238 eeschema/sch_base_frame.cpp:254
 #: pcbnew/moduleframe.cpp:909 pcbnew/moduleframe.cpp:929 pcbnew/pcbnew_config.cpp:141
 #: pcbnew/pcbnew_config.cpp:163
 msgid "File Save Error"
@@ -3507,7 +3522,7 @@ msgstr ""
 msgid "Configuration Error"
 msgstr "Ошибка конфигурации"
 
-#: cvpcb/cvpcb_mainframe.cpp:756 eeschema/schframe.cpp:1401 kicad/prjconfig.cpp:334
+#: cvpcb/cvpcb_mainframe.cpp:756 eeschema/schframe.cpp:1407 kicad/prjconfig.cpp:334
 #: pcbnew/moduleframe.cpp:815 pcbnew/pcbframe.cpp:1035
 msgid " [Read Only]"
 msgstr " [Только чтение]"
@@ -3576,7 +3591,7 @@ msgstr "Доступные переменные окружения для отн
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45 eeschema/lib_field.cpp:624
 #: eeschema/lib_field.cpp:803 eeschema/sch_component.cpp:1736
 #: eeschema/sch_component.cpp:1769 eeschema/template_fieldnames.cpp:42
-#: eeschema/widgets/widget_eeschema_color_config.cpp:76 pcbnew/class_edge_mod.cpp:241
+#: eeschema/widgets/widget_eeschema_color_config.cpp:77 pcbnew/class_edge_mod.cpp:241
 #: pcbnew/class_text_mod.cpp:354
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:42
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:56
@@ -3712,7 +3727,7 @@ msgstr "Руководство CvPcb"
 msgid "Open CvPcb Manual"
 msgstr "Открыть руководство CvPcb"
 
-#: cvpcb/menubar.cpp:121 eeschema/menubar.cpp:550 eeschema/menubar_libedit.cpp:267
+#: cvpcb/menubar.cpp:121 eeschema/menubar.cpp:550 eeschema/menubar_libedit.cpp:273
 #: eeschema/tool_viewlib.cpp:222 kicad/menubar.cpp:420 pagelayout_editor/menubar.cpp:158
 #: pcbnew/menubar_modedit.cpp:351 pcbnew/menubar_pcbframe.cpp:432
 #: pcbnew/tool_modview.cpp:191
@@ -3728,7 +3743,7 @@ msgstr "Открыть руководство для начинающих \"На
 msgid "&About Kicad"
 msgstr "О Kicad"
 
-#: cvpcb/menubar.cpp:128 eeschema/menubar.cpp:570 eeschema/menubar_libedit.cpp:289
+#: cvpcb/menubar.cpp:128 eeschema/menubar.cpp:570 eeschema/menubar_libedit.cpp:295
 #: gerbview/menubar.cpp:270 kicad/menubar.cpp:444 pagelayout_editor/menubar.cpp:180
 #: pcbnew/menubar_modedit.cpp:371
 msgid "About KiCad"
@@ -3880,7 +3895,7 @@ msgstr ""
 #: eeschema/bom_table_column.h:33 eeschema/dialogs/dialog_rescue_each.cpp:109
 #: eeschema/lib_field.cpp:617 eeschema/sch_component.cpp:1732
 #: eeschema/sch_component.cpp:1766 eeschema/template_fieldnames.cpp:39
-#: eeschema/widgets/widget_eeschema_color_config.cpp:75
+#: eeschema/widgets/widget_eeschema_color_config.cpp:76
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:40
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:33 pcbnew/dialogs/dialog_update_pcb_base.cpp:30
@@ -3953,7 +3968,7 @@ msgstr "Глобальные метки одинаковы (разница то�
 msgid "none"
 msgstr "нет имени"
 
-#: eeschema/class_libentry.cpp:549
+#: eeschema/class_libentry.cpp:548
 #, c-format
 msgid "An attempt was made to remove the %s field from component %s in library %s."
 msgstr "Была сделана попытка удалить поле %s у компонента %s в библиотеке %s."
@@ -4065,7 +4080,7 @@ msgstr "Различаются значения для %s%d%s (%s) и %s%d%s (%s
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "Дубликат временной метки (%s) для %s%d и %s%d"
 
-#: eeschema/controle.cpp:177 eeschema/libeditframe.cpp:1325 pcbnew/controle.cpp:231
+#: eeschema/controle.cpp:177 eeschema/libeditframe.cpp:1331 pcbnew/controle.cpp:231
 #: pcbnew/modedit.cpp:133
 msgid "Clarify Selection"
 msgstr "Уточнение выбора"
@@ -4207,7 +4222,7 @@ msgstr "Имя плагина"
 msgid "This name already exists. Abort"
 msgstr "Такое наименование существует. Прервано"
 
-#: eeschema/dialogs/dialog_bom.cpp:529 eeschema/dialogs/dialog_netlist.cpp:821
+#: eeschema/dialogs/dialog_bom.cpp:529 eeschema/dialogs/dialog_netlist.cpp:837
 msgid "Plugin files:"
 msgstr "Файлы плагинов:"
 
@@ -4323,7 +4338,7 @@ msgid "Regroup components"
 msgstr "Перегруппировать компоненты"
 
 #: eeschema/dialogs/dialog_bom_editor_base.cpp:53
-#: eeschema/widgets/widget_eeschema_color_config.cpp:77
+#: eeschema/widgets/widget_eeschema_color_config.cpp:78
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:24
 msgid "Fields"
 msgstr "Поля"
@@ -4428,7 +4443,7 @@ msgstr "Редактировать фильтр посад.места"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:28
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:22
-#: eeschema/widgets/widget_eeschema_color_config.cpp:100
+#: eeschema/widgets/widget_eeschema_color_config.cpp:101
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:414
 msgid "General"
 msgstr "Общие"
@@ -4706,8 +4721,8 @@ msgstr "Взаимозаменяемая часть:"
 #: pcbnew/dialogs/dialog_drc_base.cpp:219 pcbnew/dialogs/dialog_drc_base.cpp:230
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:62
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:83
-#: pcbnew/dialogs/dialog_export_step_base.cpp:110
-#: pcbnew/dialogs/dialog_export_step_base.cpp:128
+#: pcbnew/dialogs/dialog_export_step_base.cpp:118
+#: pcbnew/dialogs/dialog_export_step_base.cpp:136
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:73
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:88
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:34
@@ -5635,7 +5650,6 @@ msgstr "Файл '%s' не найден."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:124
 #, c-format
-#| msgid "Failed to save symbol library file '%s'"
 msgid ""
 "File '%s' is not a valid symbol library table file.\n"
 "\n"
@@ -5647,7 +5661,6 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:144
 #, c-format
-#| msgid "Cannot create global library table path '%s'."
 msgid ""
 "Cannot copy global symbol library table file:\n"
 "\n"
@@ -5842,7 +5855,7 @@ msgstr "Номер"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:163
 #: pcbnew/class_drawsegment.cpp:342 pcbnew/class_marker_pcb.cpp:98
 #: pcbnew/class_text_mod.cpp:364 pcbnew/class_track.cpp:1150 pcbnew/class_track.cpp:1177
-#: pcbnew/class_track.cpp:1226 pcbnew/class_zone.cpp:661
+#: pcbnew/class_track.cpp:1226 pcbnew/class_zone.cpp:660
 #: pcbnew/dialogs/dialog_layers_setup.cpp:346
 msgid "Type"
 msgstr "Тип"
@@ -6028,70 +6041,70 @@ msgstr "Показать электр.тип вывода"
 msgid "Library Editor Options"
 msgstr "Параметры редактора библиотек"
 
-#: eeschema/dialogs/dialog_netlist.cpp:291
+#: eeschema/dialogs/dialog_netlist.cpp:297
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:75
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Options:"
 msgstr "Параметры:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:295
+#: eeschema/dialogs/dialog_netlist.cpp:301
 msgid "Default format"
 msgstr "Формат по умолчанию"
 
-#: eeschema/dialogs/dialog_netlist.cpp:384
+#: eeschema/dialogs/dialog_netlist.cpp:398
 msgid "Reformat passive component values"
 msgstr "Переформатировать значения пассивных компонентов"
 
-#: eeschema/dialogs/dialog_netlist.cpp:386
+#: eeschema/dialogs/dialog_netlist.cpp:400
 msgid "Reformat passive component values e.g. 1M -> 1Meg"
 msgstr "Переформатировать значения пассивных компонентов, например 1M -> 1Meg"
 
-#: eeschema/dialogs/dialog_netlist.cpp:390
+#: eeschema/dialogs/dialog_netlist.cpp:404
 msgid "Simulator command:"
 msgstr "Команда симулятора:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:403
+#: eeschema/dialogs/dialog_netlist.cpp:417
 msgid "&Run Simulator"
 msgstr "Запустить симулятор"
 
-#: eeschema/dialogs/dialog_netlist.cpp:443 eeschema/dialogs/dialog_netlist_base.cpp:104
+#: eeschema/dialogs/dialog_netlist.cpp:457 eeschema/dialogs/dialog_netlist_base.cpp:104
 msgid "Netlist command:"
 msgstr "Команда списка цепей:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:456
+#: eeschema/dialogs/dialog_netlist.cpp:470
 msgid "Title:"
 msgstr "Наименование изделия (и документа):"
 
-#: eeschema/dialogs/dialog_netlist.cpp:535
+#: eeschema/dialogs/dialog_netlist.cpp:551
 msgid "Save Netlist File"
 msgstr "Сохранить файл списка цепей"
 
-#: eeschema/dialogs/dialog_netlist.cpp:567
+#: eeschema/dialogs/dialog_netlist.cpp:583
 #, c-format
 msgid "%s Export"
 msgstr "%s экспорт"
 
-#: eeschema/dialogs/dialog_netlist.cpp:618
+#: eeschema/dialogs/dialog_netlist.cpp:634
 msgid "SPICE netlist file (.cir)|*.cir"
 msgstr "Файл цепей SPICE (.cir)|*.cir"
 
-#: eeschema/dialogs/dialog_netlist.cpp:623
+#: eeschema/dialogs/dialog_netlist.cpp:639
 msgid "CadStar netlist file (.frp)|*.frp"
 msgstr "Файл цепей CadStar (.frp)|*.frp"
 
-#: eeschema/dialogs/dialog_netlist.cpp:770
+#: eeschema/dialogs/dialog_netlist.cpp:786
 msgid "This plugin already exists. Abort"
 msgstr "Этот плагин уже есть. Прервано"
 
-#: eeschema/dialogs/dialog_netlist.cpp:797
+#: eeschema/dialogs/dialog_netlist.cpp:813
 msgid "Error. You must provide a command String"
 msgstr "Ошибка. Не задана командная строка"
 
-#: eeschema/dialogs/dialog_netlist.cpp:803
+#: eeschema/dialogs/dialog_netlist.cpp:819
 msgid "Error. You must provide a Title"
 msgstr "Ошибка. Не задан заголовок"
 
-#: eeschema/dialogs/dialog_netlist.cpp:855
+#: eeschema/dialogs/dialog_netlist.cpp:871
 msgid "Do not forget to choose a title for this netlist control page"
 msgstr "Не забудьте выбрать заголовок для этой закладки управления списком цепей"
 
@@ -7116,6 +7129,111 @@ msgstr "Не симулировать компонент"
 msgid "Alternate node sequence:"
 msgstr "Изменить последовательность выводов:"
 
+#: eeschema/dialogs/dialog_sym_lib_table.cpp:259
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:302
+#, c-format
+msgid "Illegal character '%s' found in Nickname: '%s' in row %d"
+msgstr "Неправильный символ '%s' найден в уникальном имени: '%s' в строке %d"
+
+#: eeschema/dialogs/dialog_sym_lib_table.cpp:273
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:316
+msgid "No Colon in Nicknames"
+msgstr "Нет двоеточия в уникальном имени"
+
+#: eeschema/dialogs/dialog_sym_lib_table.cpp:303
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:346
+#, c-format
+msgid "Duplicate Nickname: '%s' in rows %d and %d"
+msgstr "Дубликат уникального имени: '%s' в строке %d и %d"
+
+#: eeschema/dialogs/dialog_sym_lib_table.cpp:318
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:361
+msgid "Please Delete or Modify One"
+msgstr "Удалите или исправьте один"
+
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:20
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:20
+msgid "Library Tables by Scope"
+msgstr "Таблицы библиотек посадочных мест"
+
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:32
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:85
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:32
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:84
+msgid "Table:"
+msgstr "Таблица:"
+
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:36
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:89
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:36
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:88
+msgid "Table Name"
+msgstr "Имя таблицы"
+
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:75
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:74
+msgid "Global Libraries"
+msgstr "Глобальные библиотеки"
+
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:127
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:126
+msgid "Project Specific Libraries"
+msgstr "Библиотеки проекта"
+
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:134
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:136
+msgid "Append Library"
+msgstr "Добавить библиотеку"
+
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:135
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:137
+msgid "Add a PCB library row to this table"
+msgstr "Добавить строку библиотеки печатной платы в таблицу"
+
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:139
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:141
+msgid "Remove Library"
+msgstr "Удалить библиотеку"
+
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:140
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:142
+msgid "Remove a PCB library from this library table"
+msgstr "Удалить строку библиотеки печатной платы из данной таблицы библиотеки"
+
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:145
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:147
+msgid "Move the currently selected row up one position"
+msgstr "Переместить выбранную строку вверх"
+
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:150
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:152
+msgid "Move the currently selected row down one position"
+msgstr "Переместить выбранную строку вниз"
+
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:161
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:168
+msgid "Path Substitutions"
+msgstr "Значения подстановок"
+
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:179
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:186
+msgid "Environment Variable"
+msgstr "Переменные окружения"
+
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:180
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:187
+msgid "Path Segment"
+msgstr "Путь сегмента"
+
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:192
+#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:199
+msgid "This is a read-only table which shows pertinent environment variables."
+msgstr "Таблица для отображения используемых переменных окружения."
+
+#: eeschema/dialogs/dialog_sym_lib_table_base.h:73
+msgid "Schematic Library Tables"
+msgstr "Таблицы библиотек схемы"
+
 #: eeschema/dialogs/dialog_symbol_remap.cpp:161
 #, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
@@ -7518,7 +7636,7 @@ msgstr "Ключевые слова:"
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: eeschema/getpart.cpp:145
+#: eeschema/getpart.cpp:137
 msgid "History"
 msgstr "История"
 
@@ -7548,7 +7666,7 @@ msgstr "Масштаб листа схемы по экрану"
 msgid "Redraw schematic view"
 msgstr "Перерисовать изображение схемы на экране"
 
-#: eeschema/help_common_strings.h:48 eeschema/libeditframe.cpp:1216
+#: eeschema/help_common_strings.h:48 eeschema/libeditframe.cpp:1222
 #: eeschema/schedit.cpp:613 pcbnew/edit.cpp:1514 pcbnew/modedit.cpp:977
 #: pcbnew/tool_modedit.cpp:192 pcbnew/tools/pcbnew_control.cpp:770
 msgid "Delete item"
@@ -8111,7 +8229,7 @@ msgstr "Ширина"
 msgid "Height"
 msgstr "Высота"
 
-#: eeschema/lib_pin.cpp:156 eeschema/widgets/widget_eeschema_color_config.cpp:72
+#: eeschema/lib_pin.cpp:156 eeschema/widgets/widget_eeschema_color_config.cpp:73
 msgid "Pin"
 msgstr "Вывод"
 
@@ -8237,7 +8355,7 @@ msgstr "Желаете изменить активную библиотеку?"
 msgid "Part name '%s' not found in library '%s'"
 msgstr "Компонент '%s' не найден в библиотеке '%s'"
 
-#: eeschema/libedit.cpp:322 eeschema/libeditframe.cpp:700
+#: eeschema/libedit.cpp:322 eeschema/libeditframe.cpp:706
 msgid "No library specified."
 msgstr "Не указана библиотека."
 
@@ -8298,7 +8416,7 @@ msgstr "Отсутствует"
 msgid "Convert"
 msgstr "Преобразовать"
 
-#: eeschema/libedit.cpp:500 eeschema/widgets/widget_eeschema_color_config.cpp:70
+#: eeschema/libedit.cpp:500 eeschema/widgets/widget_eeschema_color_config.cpp:71
 msgid "Body"
 msgstr "Контур"
 
@@ -8377,7 +8495,7 @@ msgstr "Отложить инструмент"
 #: pcbnew/modedit_onclick.cpp:405 pcbnew/onrightclick.cpp:195
 #: pcbnew/onrightclick.cpp:271 pcbnew/onrightclick.cpp:297 pcbnew/onrightclick.cpp:529
 #: pcbnew/onrightclick.cpp:722 pcbnew/onrightclick.cpp:799 pcbnew/onrightclick.cpp:874
-#: pcbnew/onrightclick.cpp:990 pcbnew/tools/edit_tool.cpp:95
+#: pcbnew/onrightclick.cpp:990 pcbnew/tools/edit_tool.cpp:99
 msgid "Move"
 msgstr "Переместить"
 
@@ -8414,7 +8532,7 @@ msgstr "Перетащить сторону прямоугольника"
 #: eeschema/onrightclick.cpp:502 eeschema/onrightclick.cpp:538
 #: eeschema/onrightclick.cpp:766 pcbnew/modedit_onclick.cpp:353
 #: pcbnew/onrightclick.cpp:812 pcbnew/onrightclick.cpp:884
-#: pcbnew/tools/edit_tool.cpp:116
+#: pcbnew/tools/edit_tool.cpp:120
 msgid "Rotate Clockwise"
 msgstr "Повернуть по ч.с."
 
@@ -8494,7 +8612,7 @@ msgstr "Отразить блок верт."
 #: eeschema/onrightclick.cpp:574 eeschema/onrightclick.cpp:608
 #: eeschema/onrightclick.cpp:769 eeschema/onrightclick.cpp:893
 #: pcbnew/modedit_onclick.cpp:294 pcbnew/onrightclick.cpp:494
-#: pcbnew/onrightclick.cpp:808 pcbnew/tools/edit_tool.cpp:121
+#: pcbnew/onrightclick.cpp:808 pcbnew/tools/edit_tool.cpp:125
 msgid "Rotate Counterclockwise"
 msgstr "Повернуть против ч.ст."
 
@@ -8515,11 +8633,11 @@ msgstr "Имя файла:"
 msgid "Can't save file <%s>"
 msgstr "Не удалось сохранить файл <%s>"
 
-#: eeschema/libeditframe.cpp:323
+#: eeschema/libeditframe.cpp:329
 msgid "Save the changes in the library before closing?"
 msgstr "Сохранить изменения в библиотеке перед закрытием?"
 
-#: eeschema/libeditframe.cpp:350
+#: eeschema/libeditframe.cpp:356
 #, c-format
 msgid ""
 "Library '%s' was modified!\n"
@@ -8528,55 +8646,55 @@ msgstr ""
 "Библиотека '%s' была изменена!\n"
 "Игнорировать изменения?"
 
-#: eeschema/libeditframe.cpp:456 eeschema/onrightclick.cpp:454
+#: eeschema/libeditframe.cpp:462 eeschema/onrightclick.cpp:454
 #, c-format
 msgid "Unit %s"
 msgstr "Часть %s"
 
-#: eeschema/libeditframe.cpp:687
+#: eeschema/libeditframe.cpp:693
 msgid "No part to save."
 msgstr "Нет компонента для сохранения."
 
-#: eeschema/libeditframe.cpp:711
+#: eeschema/libeditframe.cpp:717
 #, c-format
 msgid "Unexpected error occured saving symbol '%s' to symbol library '%s'."
 msgstr ""
 "Произошла неожиданная ошибка при сохранении символа '%s' в библиотеку символов '%s'."
 
-#: eeschema/libeditframe.cpp:1159
+#: eeschema/libeditframe.cpp:1165
 msgid "Add pin"
 msgstr "Добавить вывод"
 
-#: eeschema/libeditframe.cpp:1163
+#: eeschema/libeditframe.cpp:1169
 msgid "Set pin options"
 msgstr "Установка параметров вывода"
 
-#: eeschema/libeditframe.cpp:1174 eeschema/schedit.cpp:577 pcbnew/edit.cpp:1502
+#: eeschema/libeditframe.cpp:1180 eeschema/schedit.cpp:577 pcbnew/edit.cpp:1502
 #: pcbnew/modedit.cpp:952 pcbnew/tools/drawing_tool.cpp:327
 msgid "Add text"
 msgstr "Добавить текст"
 
-#: eeschema/libeditframe.cpp:1178
+#: eeschema/libeditframe.cpp:1184
 msgid "Add rectangle"
 msgstr "Добавить прямоугольник"
 
-#: eeschema/libeditframe.cpp:1182 pcbnew/modedit.cpp:948
+#: eeschema/libeditframe.cpp:1188 pcbnew/modedit.cpp:948
 msgid "Add circle"
 msgstr "Добавить окружность"
 
-#: eeschema/libeditframe.cpp:1186 pcbnew/modedit.cpp:944
+#: eeschema/libeditframe.cpp:1192 pcbnew/modedit.cpp:944
 msgid "Add arc"
 msgstr "Добавить дугу"
 
-#: eeschema/libeditframe.cpp:1190 pcbnew/modedit.cpp:940
+#: eeschema/libeditframe.cpp:1196 pcbnew/modedit.cpp:940
 msgid "Add line"
 msgstr "Добавить линию"
 
-#: eeschema/libeditframe.cpp:1194
+#: eeschema/libeditframe.cpp:1200
 msgid "Set anchor position"
 msgstr "Установить позиция привязки"
 
-#: eeschema/libeditframe.cpp:1198
+#: eeschema/libeditframe.cpp:1204
 msgid "Import"
 msgstr "Импорт"
 
@@ -8696,23 +8814,23 @@ msgstr ""
 "Ошибка определения размеров в файле Eeschema в строке %d,\n"
 "чтение файла прервано.\n"
 
-#: eeschema/menubar.cpp:119 eeschema/menubar_libedit.cpp:294
+#: eeschema/menubar.cpp:119 eeschema/menubar_libedit.cpp:300
 #: pcbnew/menubar_modedit.cpp:376 pcbnew/menubar_pcbframe.cpp:154
 msgid "&Edit"
 msgstr "Правка"
 
-#: eeschema/menubar.cpp:120 eeschema/menubar_libedit.cpp:295
+#: eeschema/menubar.cpp:120 eeschema/menubar_libedit.cpp:301
 #: eeschema/tool_viewlib.cpp:241 pcbnew/menubar_modedit.cpp:377
 #: pcbnew/menubar_pcbframe.cpp:155 pcbnew/tool_modview.cpp:205
 msgid "&View"
 msgstr "Просмотр"
 
-#: eeschema/menubar.cpp:121 eeschema/menubar_libedit.cpp:296
+#: eeschema/menubar.cpp:121 eeschema/menubar_libedit.cpp:302
 #: pcbnew/menubar_modedit.cpp:378 pcbnew/menubar_pcbframe.cpp:156
 msgid "&Place"
 msgstr "Разместить"
 
-#: eeschema/menubar.cpp:122 eeschema/menubar_libedit.cpp:297
+#: eeschema/menubar.cpp:122 eeschema/menubar_libedit.cpp:303
 #: pcbnew/menubar_modedit.cpp:379 pcbnew/menubar_pcbframe.cpp:158
 msgid "P&references"
 msgstr "Настройки"
@@ -9016,7 +9134,7 @@ msgstr "Симулятор"
 msgid "Simulate circuit"
 msgstr "Симулировать схему"
 
-#: eeschema/menubar.cpp:544 eeschema/menubar_libedit.cpp:261
+#: eeschema/menubar.cpp:544 eeschema/menubar_libedit.cpp:267
 #: eeschema/tool_viewlib.cpp:217
 msgid "Eeschema &Manual"
 msgstr "Руководство Eeschema"
@@ -9029,7 +9147,7 @@ msgstr "Открыть руководство Eeschema"
 msgid "Displays current hotkeys list and corresponding commands"
 msgstr "Отображает текущий список горячих клавиш и соответствующих команд"
 
-#: eeschema/menubar.cpp:562 eeschema/menubar_libedit.cpp:279
+#: eeschema/menubar.cpp:562 eeschema/menubar_libedit.cpp:285
 #: eeschema/tool_viewlib.cpp:228 gerbview/menubar.cpp:260 kicad/menubar.cpp:435
 #: pagelayout_editor/menubar.cpp:169 pcbnew/menubar_modedit.cpp:363
 #: pcbnew/menubar_pcbframe.cpp:444
@@ -9040,7 +9158,7 @@ msgstr "Принять участие"
 msgid "Contribute to KiCad (open web browser)"
 msgstr "Внести вклад в KiCad (открыть веб-браузер)"
 
-#: eeschema/menubar.cpp:569 eeschema/menubar_libedit.cpp:288 kicad/menubar.cpp:443
+#: eeschema/menubar.cpp:569 eeschema/menubar_libedit.cpp:294 kicad/menubar.cpp:443
 #: pcbnew/menubar_modedit.cpp:370 pcbnew/menubar_pcbframe.cpp:451
 msgid "&About KiCad"
 msgstr "О KiСad"
@@ -9074,19 +9192,27 @@ msgstr "Библиотеки компонентов"
 msgid "Configure component libraries and paths"
 msgstr "Конфигурация библиотек компонентов и путей"
 
-#: eeschema/menubar.cpp:619
+#: eeschema/menubar.cpp:615 eeschema/menubar_libedit.cpp:244
+msgid "Symbol Library &Table"
+msgstr "Таблица библиотек символов"
+
+#: eeschema/menubar.cpp:616 eeschema/menubar_libedit.cpp:245
+msgid "Edit the symbol library table."
+msgstr "Редактировать таблицу библиотек символов."
+
+#: eeschema/menubar.cpp:625
 msgid "Schematic Editor &Options"
 msgstr "Параметры редактора схем"
 
-#: eeschema/menubar.cpp:620
+#: eeschema/menubar.cpp:626
 msgid "Edit Eeschema preferences"
 msgstr "Редактировать настройки Eeschema"
 
-#: eeschema/menubar.cpp:638
+#: eeschema/menubar.cpp:644
 msgid "&Import and Export"
 msgstr "Импорт и экспорт"
 
-#: eeschema/menubar.cpp:639
+#: eeschema/menubar.cpp:645
 msgid "Import and export settings"
 msgstr "Импорт и экспорт настроек"
 
@@ -9181,24 +9307,24 @@ msgstr "Дуга"
 msgid "&Line or Polygon"
 msgstr "Линия или полигон"
 
-#: eeschema/menubar_libedit.cpp:245
+#: eeschema/menubar_libedit.cpp:251
 msgid "Component Editor &Options"
 msgstr "Параметры редактора компонентов"
 
-#: eeschema/menubar_libedit.cpp:246
+#: eeschema/menubar_libedit.cpp:252
 msgid "Set Component Editor default values and options"
 msgstr "Установка значений и опций по умолчанию редактора компонентов"
 
-#: eeschema/menubar_libedit.cpp:262
+#: eeschema/menubar_libedit.cpp:268
 msgid "Open the Eeschema Manual"
 msgstr "Открыть руководство Eeschema"
 
-#: eeschema/menubar_libedit.cpp:268 eeschema/tool_viewlib.cpp:223
+#: eeschema/menubar_libedit.cpp:274 eeschema/tool_viewlib.cpp:223
 #: pcbnew/menubar_modedit.cpp:352 pcbnew/tool_modview.cpp:192
 msgid "Open the \"Getting Started in KiCad\" guide for beginners"
 msgstr "Открыть руководство для начинающих \"Начало работы с KiCad\""
 
-#: eeschema/menubar_libedit.cpp:280 eeschema/tool_viewlib.cpp:229
+#: eeschema/menubar_libedit.cpp:286 eeschema/tool_viewlib.cpp:229
 #: gerbview/menubar.cpp:261 kicad/menubar.cpp:436 pagelayout_editor/menubar.cpp:170
 msgid "Contribute to KiCad (opens a web browser)"
 msgstr "Внести вклад в KiCad (открывает веб-браузер)"
@@ -9344,7 +9470,7 @@ msgstr "Переместить %s"
 #: eeschema/onrightclick.cpp:368 eeschema/onrightclick.cpp:494
 #: eeschema/onrightclick.cpp:531 eeschema/onrightclick.cpp:567
 #: eeschema/onrightclick.cpp:762 pcbnew/onrightclick.cpp:803
-#: pcbnew/tools/edit_tool.cpp:507
+#: pcbnew/tools/edit_tool.cpp:535
 msgid "Drag"
 msgstr "Перетащить"
 
@@ -9363,7 +9489,7 @@ msgstr "Отразить гориз."
 #: pcbnew/modedit_onclick.cpp:366 pcbnew/modedit_onclick.cpp:409
 #: pcbnew/onrightclick.cpp:200 pcbnew/onrightclick.cpp:276 pcbnew/onrightclick.cpp:307
 #: pcbnew/onrightclick.cpp:492 pcbnew/onrightclick.cpp:545 pcbnew/onrightclick.cpp:843
-#: pcbnew/tools/edit_tool.cpp:99 pcbnew/tools/edit_tool.cpp:103
+#: pcbnew/tools/edit_tool.cpp:103 pcbnew/tools/edit_tool.cpp:107
 msgid "Duplicate"
 msgstr "Дубликат"
 
@@ -9386,7 +9512,7 @@ msgstr "Править в редакторе библиотек"
 #: eeschema/onrightclick.cpp:480 pagelayout_editor/pl_editor_frame.cpp:141
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:293
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:234
-#: pcbnew/tools/edit_tool.cpp:149
+#: pcbnew/tools/edit_tool.cpp:153
 msgid "Properties"
 msgstr "Свойства"
 
@@ -9682,6 +9808,28 @@ msgstr "Этот проект не имеет ничего для спасени
 msgid "No symbols were rescued."
 msgstr "Символы не были спасены."
 
+#: eeschema/sch_base_frame.cpp:235
+#, c-format
+msgid ""
+"Error occurred saving the global symbol library table:\n"
+"\n"
+"%s"
+msgstr ""
+"Произошла ошибка при сохранении глобальной таблицы библиотек символов:\n"
+"\n"
+"%s"
+
+#: eeschema/sch_base_frame.cpp:251
+#, c-format
+msgid ""
+"Error occurred saving project specific symbol library table:\n"
+"\n"
+"%s"
+msgstr ""
+"Произошла ошибка при сохранении таблицы библиотек символов проекта:\n"
+"\n"
+"%s"
+
 #: eeschema/sch_bitmap.h:131
 msgid "Image"
 msgstr "Изображение"
@@ -9709,7 +9857,7 @@ msgid "Power symbol"
 msgstr "Символ питания"
 
 #: eeschema/sch_component.cpp:1741 eeschema/sch_component.cpp:1771
-#: eeschema/widgets/widget_eeschema_color_config.cpp:101
+#: eeschema/widgets/widget_eeschema_color_config.cpp:102
 msgid "Component"
 msgstr "Компонент"
 
@@ -9755,7 +9903,7 @@ msgstr "Расширение типа '%s' не найдено."
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Неизвестное SCH_FILE_T значение: %d"
 
-#: eeschema/sch_junction.h:86 eeschema/widgets/widget_eeschema_color_config.cpp:60
+#: eeschema/sch_junction.h:86 eeschema/widgets/widget_eeschema_color_config.cpp:61
 msgid "Junction"
 msgstr "Соединение"
 
@@ -9921,7 +10069,7 @@ msgstr "Иерархический вывод листа %s"
 msgid "Graphic Text"
 msgstr "Графический текст"
 
-#: eeschema/sch_text.cpp:735 eeschema/widgets/widget_eeschema_color_config.cpp:61
+#: eeschema/sch_text.cpp:735 eeschema/widgets/widget_eeschema_color_config.cpp:62
 msgid "Label"
 msgstr "Метка"
 
@@ -10117,7 +10265,7 @@ msgstr "Добавить пробник симулятора"
 msgid "Select a value to be tuned"
 msgstr "Выбрать значение для подстройки"
 
-#: eeschema/schframe.cpp:174 pcbnew/class_zone.cpp:909
+#: eeschema/schframe.cpp:174 pcbnew/class_zone.cpp:908
 msgid "Not Found"
 msgstr "Не найдено"
 
@@ -10125,7 +10273,7 @@ msgstr "Не найдено"
 msgid "The following libraries were not found:"
 msgstr "Следующие библиотеки не найдены:"
 
-#: eeschema/schframe.cpp:641 pcbnew/pcbframe.cpp:610
+#: eeschema/schframe.cpp:647 pcbnew/pcbframe.cpp:610
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -10136,23 +10284,23 @@ msgstr ""
 "'%s'\n"
 "перед закрытием?"
 
-#: eeschema/schframe.cpp:790
+#: eeschema/schframe.cpp:796
 msgid "Draw wires and buses in any direction"
 msgstr "Рисовать проводники и шины в любом направлении"
 
-#: eeschema/schframe.cpp:791
+#: eeschema/schframe.cpp:797
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Рисовать только гориз. и верт. проводники и шины"
 
-#: eeschema/schframe.cpp:800
+#: eeschema/schframe.cpp:806
 msgid "Do not show hidden pins"
 msgstr "Не показывать скрытые выводы"
 
-#: eeschema/schframe.cpp:801 eeschema/tool_sch.cpp:299
+#: eeschema/schframe.cpp:807 eeschema/tool_sch.cpp:299
 msgid "Show hidden pins"
 msgstr "Показать скрытые выводы"
 
-#: eeschema/schframe.cpp:855
+#: eeschema/schframe.cpp:861
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone mode. In "
 "order to create/update PCBs from schematics, you need to launch Kicad shell and "
@@ -10162,15 +10310,15 @@ msgstr ""
 "Для создания/обновления печатной платы необходимо запустить KiCAD оболочку и создать "
 "проект печатной платы."
 
-#: eeschema/schframe.cpp:985
+#: eeschema/schframe.cpp:991
 msgid "Schematic"
 msgstr "Схема"
 
-#: eeschema/schframe.cpp:1004
+#: eeschema/schframe.cpp:1010
 msgid "New Schematic"
 msgstr "Новая схема"
 
-#: eeschema/schframe.cpp:1017
+#: eeschema/schframe.cpp:1023
 #, c-format
 msgid "Schematic file '%s' already exists, use Open instead"
 msgstr ""
@@ -10178,15 +10326,15 @@ msgstr ""
 "\n"
 "Используйте Отрыть вместо Создать"
 
-#: eeschema/schframe.cpp:1038
+#: eeschema/schframe.cpp:1044
 msgid "Open Schematic"
 msgstr "Открыть схему"
 
-#: eeschema/schframe.cpp:1168
+#: eeschema/schframe.cpp:1174
 msgid "Error: not a component or no component"
 msgstr "Ошибка: не компонент или нет компонента"
 
-#: eeschema/schframe.cpp:1404
+#: eeschema/schframe.cpp:1410
 msgid " [no file]"
 msgstr " [нет файла]"
 
@@ -10735,7 +10883,7 @@ msgstr "О дизайнере схем Eeschema"
 msgid "Library Browser"
 msgstr "Обозреватель библиотек"
 
-#: eeschema/widgets/component_tree.cpp:136
+#: eeschema/widgets/component_tree.cpp:92
 msgid "Search"
 msgstr "Поиск"
 
@@ -10747,82 +10895,82 @@ msgstr " X "
 msgid "Save"
 msgstr "Сохранить"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:58
+#: eeschema/widgets/widget_eeschema_color_config.cpp:59
 msgid "Wire"
 msgstr "Проводник"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:59
+#: eeschema/widgets/widget_eeschema_color_config.cpp:60
 msgid "Bus"
 msgstr "Шина"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:62
+#: eeschema/widgets/widget_eeschema_color_config.cpp:63
 msgid "Global label"
 msgstr "Глобальная метка"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:63
+#: eeschema/widgets/widget_eeschema_color_config.cpp:64
 #: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:54
 msgid "Net name"
 msgstr "Имя цепи"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:64
+#: eeschema/widgets/widget_eeschema_color_config.cpp:65
 msgid "Notes"
 msgstr "Заметки"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:65
+#: eeschema/widgets/widget_eeschema_color_config.cpp:66
 msgid "No connect symbol"
 msgstr "Символ \"Не подключено\""
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:71
+#: eeschema/widgets/widget_eeschema_color_config.cpp:72
 msgid "Body background"
 msgstr "Заливка фона"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:73
+#: eeschema/widgets/widget_eeschema_color_config.cpp:74
 msgid "Pin number"
 msgstr "Номер вывода"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:74
+#: eeschema/widgets/widget_eeschema_color_config.cpp:75
 msgid "Pin name"
 msgstr "Имя вывода"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:82
-#: eeschema/widgets/widget_eeschema_color_config.cpp:102
+#: eeschema/widgets/widget_eeschema_color_config.cpp:83
+#: eeschema/widgets/widget_eeschema_color_config.cpp:103
 #: pcbnew/tools/selection_tool.cpp:103
 msgid "Sheet"
 msgstr "Лист"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:83
+#: eeschema/widgets/widget_eeschema_color_config.cpp:84
 msgid "Sheet file name"
 msgstr "Имя файла листа"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:84
+#: eeschema/widgets/widget_eeschema_color_config.cpp:85
 msgid "Sheet name"
 msgstr "Имя листа"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:85
+#: eeschema/widgets/widget_eeschema_color_config.cpp:86
 msgid "Sheet label"
 msgstr "Метка листа"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:86
+#: eeschema/widgets/widget_eeschema_color_config.cpp:87
 msgid "Hierarchical label"
 msgstr "Иерарх.метка"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:91
+#: eeschema/widgets/widget_eeschema_color_config.cpp:92
 msgid "ERC warning"
 msgstr "Предупреждение ERC"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:92
+#: eeschema/widgets/widget_eeschema_color_config.cpp:93
 msgid "ERC error"
 msgstr "Ошибка ERС"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:94
+#: eeschema/widgets/widget_eeschema_color_config.cpp:95
 msgid "Brightened"
 msgstr "Подсвеченный"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:103
+#: eeschema/widgets/widget_eeschema_color_config.cpp:104
 msgid "Miscellaneous"
 msgstr "Разное"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:294
+#: eeschema/widgets/widget_eeschema_color_config.cpp:291
 msgid ""
 "Some items have the same color as the background\n"
 "and they will not be seen on the screen.  Are you\n"
@@ -10859,7 +11007,7 @@ msgstr "Светлый"
 msgid "Dark"
 msgstr "Темный"
 
-#: gerbview/class_gerber_draw_item.cpp:529 gerbview/class_gerber_file_image.cpp:343
+#: gerbview/class_gerber_draw_item.cpp:529 gerbview/class_gerber_file_image.cpp:339
 msgid "Polarity"
 msgstr "Полярность"
 
@@ -10868,7 +11016,7 @@ msgstr "Полярность"
 #: pcbnew/class_pcb_text.cpp:131 pcbnew/class_text_mod.cpp:381
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:77
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:115 pcbnew/modedit_onclick.cpp:296
-#: pcbnew/tools/edit_tool.cpp:130 pcbnew/tools/edit_tool.cpp:729
+#: pcbnew/tools/edit_tool.cpp:134 pcbnew/tools/edit_tool.cpp:763
 msgid "Mirror"
 msgstr "Отражение"
 
@@ -10891,27 +11039,27 @@ msgstr "Компонент: %s;  конт.пл.: %s"
 msgid "Cmp:"
 msgstr "Компонент:"
 
-#: gerbview/class_gerber_file_image.cpp:330
+#: gerbview/class_gerber_file_image.cpp:326
 msgid "Image name"
 msgstr "Имя образа"
 
-#: gerbview/class_gerber_file_image.cpp:335
+#: gerbview/class_gerber_file_image.cpp:331
 msgid "Graphic layer"
 msgstr "Графический слой"
 
-#: gerbview/class_gerber_file_image.cpp:339
+#: gerbview/class_gerber_file_image.cpp:335
 msgid "Img Rot."
 msgstr "Повернуто"
 
-#: gerbview/class_gerber_file_image.cpp:347
+#: gerbview/class_gerber_file_image.cpp:343
 msgid "X Justify"
 msgstr "Выровнять по X"
 
-#: gerbview/class_gerber_file_image.cpp:350
+#: gerbview/class_gerber_file_image.cpp:346
 msgid "Y Justify"
 msgstr "Выровнять по Y"
 
-#: gerbview/class_gerber_file_image.cpp:359
+#: gerbview/class_gerber_file_image.cpp:355
 msgid "Image Justify Offset"
 msgstr "Выровнять смещение изображения"
 
@@ -10925,7 +11073,7 @@ msgstr "Слой графики %d"
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:163 pcbnew/class_drawsegment.cpp:384
 #: pcbnew/class_pad.cpp:663 pcbnew/class_pcb_layer_widget.cpp:378
 #: pcbnew/class_pcb_text.cpp:126 pcbnew/class_text_mod.cpp:374
-#: pcbnew/class_track.cpp:1160 pcbnew/class_track.cpp:1187 pcbnew/class_zone.cpp:707
+#: pcbnew/class_track.cpp:1160 pcbnew/class_track.cpp:1187 pcbnew/class_zone.cpp:706
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:111
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:140 pcbnew/layer_widget.cpp:387
@@ -11279,7 +11427,7 @@ msgid "Flashed items"
 msgstr "Подсвеченные элементы"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:67
-#: pcbnew/class_zone.cpp:715
+#: pcbnew/class_zone.cpp:714
 msgid "Polygons"
 msgstr "Полигоны"
 
@@ -11728,17 +11876,13 @@ msgstr ""
 "Возможно, что это файл RS274D старого формата\n"
 "Поэтому размер элементов не определен"
 
-#: gerbview/rs274x.cpp:557
+#: gerbview/rs274x.cpp:552
 msgid "RS274X: Command \"IR\" rotation value not allowed"
 msgstr "RS274X: Команда \"IR\" недопустимое значение угла поворота"
 
-#: gerbview/rs274x.cpp:648
+#: gerbview/rs274x.cpp:643
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
 msgstr "RS274X: Команда KNOCKOUT проигнорирована GerbView"
-
-#: gerbview/rs274x.cpp:711
-msgid "Too many include files!!"
-msgstr "Слишком много вложенных файлов!"
 
 #: gerbview/select_layers_to_pcb.cpp:186
 #, c-format
@@ -12951,7 +13095,7 @@ msgstr "мил"
 #: pcb_calculator/UnitSelector.cpp:42 pcb_calculator/UnitSelector.cpp:74
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:191
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:46
-#: pcbnew/dialogs/dialog_export_step_base.cpp:97
+#: pcbnew/dialogs/dialog_export_step_base.cpp:105
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:63
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:90
 msgid "inch"
@@ -13040,7 +13184,7 @@ msgid "Regulator Parameters"
 msgstr "Параметры стабилизатора"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:62
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1162
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1183
 msgid "Formula"
 msgstr "Формула"
 
@@ -13049,12 +13193,12 @@ msgid "Vout = Vref * (R1 + R2) / R2"
 msgstr "Vout = Vref * (R1 + R2) / R2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:89
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1112
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1133
 msgid "R1"
 msgstr "R1"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:103
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1123
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1144
 msgid "R2"
 msgstr "R2"
 
@@ -13100,7 +13244,7 @@ msgid "3 Terminal Type"
 msgstr "3-х выводной тип"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:181
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1094
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1115
 msgid "Calculate"
 msgstr "Расчитать"
 
@@ -13200,20 +13344,20 @@ msgstr "Площадь поперечного сечения"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:476
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:488
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:500
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:951
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:955
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:959
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:963
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:967
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:971
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:975
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:979
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:983
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:987
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:991
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:995
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:999
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1003
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:972
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:976
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:980
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:984
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:988
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:992
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:996
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1000
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1004
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1008
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1012
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1016
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1020
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1024
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:245
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:170
 msgid "dummy"
@@ -13263,7 +13407,7 @@ msgstr "Обновить значения"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:553
 msgid "Note: Values are minimal values (from IPC 2221)"
-msgstr "Примечание: значения как минимальные значения (из IPC 2221)"
+msgstr "Примечание: минимальные значения (из IPC 2221)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:572
 msgid "B1"
@@ -13466,208 +13610,216 @@ msgstr "Параметры компонента:"
 msgid "Frequency"
 msgstr "Частота"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:802
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:798
+msgid "Zdiff = Zodd * 2"
+msgstr "Zdiff = Zodd * 2"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:804
+msgid "Zcommon = Zeven / 2"
+msgstr "Zcommon = Zeven / 2"
+
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:823
 msgid "Physical Parameters"
 msgstr "Физические параметры"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:813
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:834
 msgid "Prm1"
 msgstr "Prm1"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:828
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:849
 msgid "prm2"
 msgstr "prm2"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:843
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:864
 msgid "prm3"
 msgstr "prm3"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:876
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:897
 msgid "Analyze"
 msgstr "Анализ"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:879
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:900
 msgid "Synthetize"
 msgstr "Синтез"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:892
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:913
 msgid "Electrical Parameters:"
 msgstr "Электрические параметры:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:900
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:912
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:921
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:933
 msgid "Z"
 msgstr "Z"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:924
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:945
 #: pcbnew/class_drawsegment.cpp:355 pcbnew/class_drawsegment.cpp:373
 #: pcbnew/class_pad.cpp:698 pcbnew/class_pcb_text.cpp:134 pcbnew/class_text_mod.cpp:384
 msgid "Angle"
 msgstr "Угол"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:943
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:964
 msgid "Results:"
 msgstr "Результаты:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1020
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1041
 msgid "TransLine"
 msgstr "Линия передачи"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1023
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1044
 msgid "label"
 msgstr "метка"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1028
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1049
 msgid "PI"
 msgstr "П-образный"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1028
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1049
 msgid "Tee"
 msgstr "Т-образный"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1028
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1049
 msgid "Bridged Tee"
 msgstr "Т-образный мост"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1028
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1049
 msgid "Resistive Splitter"
 msgstr "Резистивный разветвлитель"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1030
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1051
 msgid "Attenuators:"
 msgstr "Аттенюаторы:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1044
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1065
 msgid "Parameters:"
 msgstr "Параметры:"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1052
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1073
 msgid "Attenuation"
 msgstr "Ослабление"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1059
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1080
 msgid "dB"
 msgstr "дБ"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1063
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1084
 msgid "Zin"
 msgstr "Zin"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1070
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1081
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1119
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1130
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1141
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1091
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1102
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1140
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1151
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1162
 msgid "Ohms"
 msgstr "Ом"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1074
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1095
 msgid "Zout"
 msgstr "Zout"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1104
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1125
 #: pcbnew/class_pcb_layer_widget.cpp:79
 msgid "Values"
 msgstr "Значения"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1134
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1155
 msgid "R3"
 msgstr "R3"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1174
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1195
 msgid "RF Attenuators"
 msgstr "СВЧ аттенюатор"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1179
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1200
 msgid "10% / 5%"
 msgstr "10% / 5%"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1179
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1200
 msgid "<= 2%"
 msgstr "<= 2%"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1181
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1210
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1202
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1231
 msgid "Tolerance"
 msgstr "Точность"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1190
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1211
 msgid "1st Band"
 msgstr "1-я полоска"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1194
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1215
 msgid "2nd Band"
 msgstr "2-я полоска"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1198
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1219
 msgid "3rd Band"
 msgstr "3-я полоска"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1202
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1223
 msgid "4th Band"
 msgstr "4-я полоска"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1206
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1227
 msgid "Multiplier"
 msgstr "Множитель"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1239
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1260
 msgid "Color Code"
 msgstr "Цветовой код"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1252
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1273
 msgid "Note: Values are minimal values"
-msgstr "Примечание: значения как минимальные значения"
+msgstr "Примечание: минимальные значения"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1271
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1292
 msgid "Class 1"
 msgstr "Класс 1"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1272
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1293
 msgid "Class 2"
 msgstr "Класс 2"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1273
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1294
 msgid "Class 3"
 msgstr "Класс 3"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1274
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1295
 msgid "Class 4"
 msgstr "Класс 4"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1275
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1296
 msgid "Class 5"
 msgstr "Класс 5"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1276
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1297
 msgid "Class 6"
 msgstr "Класс 6"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1283
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1304
 msgid "Lines width"
 msgstr "Ширина дорожек"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1284
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1305
 msgid "Min clearance"
 msgstr "Мин. зазор"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1285
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1306
 msgid "Via: (diam - drill)"
 msgstr "Перех.отв.: (диаметр - сверло)"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1286
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1307
 msgid "Plated Pad: (diam - drill)"
 msgstr "Метал. конт.пл.: (диаметр - сверло)"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1287
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1308
 msgid "NP Pad: (diam - drill)"
 msgstr "Неметал. конт.пл.: (диаметр - сверло)"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1306
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1327
 msgid "Board Classes"
 msgstr "Классы плат"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.h:308
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.h:311
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
 
@@ -14158,7 +14310,7 @@ msgstr "Масштаб "
 msgid "Block Operation"
 msgstr "Блочные операции"
 
-#: pcbnew/board_netlist_updater.cpp:108 pcbnew/class_board.cpp:2414
+#: pcbnew/board_netlist_updater.cpp:108 pcbnew/class_board.cpp:2420
 #, c-format
 msgid "Adding new component \"%s:%s\" footprint \"%s\".\n"
 msgstr "Добавление нового компонента \"%s:%s\" с посад.местом \"%s\".\n"
@@ -14173,7 +14325,7 @@ msgstr "Добавлен компонент %s, посад.место %s.\n"
 msgid "Cannot add component %s due to missing footprint %s.\n"
 msgstr "Не удалось добавить компонент %s из-за отсутствия посад.места %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:142 pcbnew/class_board.cpp:2423
+#: pcbnew/board_netlist_updater.cpp:142 pcbnew/class_board.cpp:2429
 #, c-format
 msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
@@ -14184,7 +14336,7 @@ msgstr ""
 msgid "Change component %s footprint from %s to %s.\n"
 msgstr "Изменён компонент %s посадочное место с %s на %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:176 pcbnew/class_board.cpp:2457
+#: pcbnew/board_netlist_updater.cpp:176 pcbnew/class_board.cpp:2463
 #, c-format
 msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
 msgstr "Замена компонента \"%s:%s\" с посад.местом \"%s\" с \"%s\".\n"
@@ -14195,7 +14347,7 @@ msgid "Cannot change component %s footprint due to missing footprint %s.\n"
 msgstr ""
 "Не удалось изменить посад.место компонента %s из-за отсутствия посад.места %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:213 pcbnew/class_board.cpp:2468
+#: pcbnew/board_netlist_updater.cpp:213 pcbnew/class_board.cpp:2474
 #, c-format
 msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr "Не удалось заменить компонент \"%s:%s\" из-за отсутствия посад.места \"%s\".\n"
@@ -14205,7 +14357,7 @@ msgstr "Не удалось заменить компонент \"%s:%s\" из-�
 msgid "Change component %s reference to %s.\n"
 msgstr "Изменение обозначение компонента %s на %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:248 pcbnew/class_board.cpp:2521
+#: pcbnew/board_netlist_updater.cpp:248 pcbnew/class_board.cpp:2527
 #, c-format
 msgid "Changing component \"%s:%s\" reference to \"%s\".\n"
 msgstr "Изменение компонента \"%s:%s\", ссылающегося на \"%s\".\n"
@@ -14215,12 +14367,12 @@ msgstr "Изменение компонента \"%s:%s\", ссылающего�
 msgid "Change component %s value from %s to %s.\n"
 msgstr "Изменён компонент %s значение с %s на %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:272 pcbnew/class_board.cpp:2537
+#: pcbnew/board_netlist_updater.cpp:272 pcbnew/class_board.cpp:2543
 #, c-format
 msgid "Changing component \"%s:%s\" value from \"%s\" to \"%s\".\n"
 msgstr "Изменение значения компонента \"%s:%s\" с \"%s\" на \"%s\".\n"
 
-#: pcbnew/board_netlist_updater.cpp:290 pcbnew/class_board.cpp:2554
+#: pcbnew/board_netlist_updater.cpp:290 pcbnew/class_board.cpp:2560
 #, c-format
 msgid "Changing component path \"%s:%s\" to \"%s\".\n"
 msgstr "Изменение пути компонента \"%s:%s\" на \"%s\".\n"
@@ -14230,7 +14382,7 @@ msgstr "Изменение пути компонента \"%s:%s\" на \"%s\".\
 msgid "Disconnect component %s pin %s.\n"
 msgstr "Отключён компонент %s вывод %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:335 pcbnew/class_board.cpp:2578
+#: pcbnew/board_netlist_updater.cpp:335 pcbnew/class_board.cpp:2584
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
 msgstr "Очистка компонента \"%s:%s\" вывод \"%s\" имя цепи.\n"
@@ -14250,7 +14402,7 @@ msgstr "Переподсоединён компонент %s вывод %s от 
 msgid "Connect component %s pin %s to net %s.\n"
 msgstr "Подсоединён компонент %s вывод %s к цепи цепи %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:396 pcbnew/class_board.cpp:2597
+#: pcbnew/board_netlist_updater.cpp:396 pcbnew/class_board.cpp:2603
 #, c-format
 msgid "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
 msgstr "Изменение компонента \"%s:%s\" вывод \"%s\" имя цепи с \"%s\" на \"%s\".\n"
@@ -14265,7 +14417,7 @@ msgstr "Компонент %s заблокирован, пропустить у�
 msgid "Remove component %s."
 msgstr "Удалён компонент %s."
 
-#: pcbnew/board_netlist_updater.cpp:452 pcbnew/class_board.cpp:2649
+#: pcbnew/board_netlist_updater.cpp:452 pcbnew/class_board.cpp:2655
 #, c-format
 msgid "Removing unused component \"%s:%s\".\n"
 msgstr "Удаление неиспользуемого компонента \"%s:%s\".\n"
@@ -14275,7 +14427,7 @@ msgstr "Удаление неиспользуемого компонента \"%
 msgid "Remove single pad net %s."
 msgstr "Удалена цепь %s с одной конт.пл."
 
-#: pcbnew/board_netlist_updater.cpp:521 pcbnew/class_board.cpp:2712
+#: pcbnew/board_netlist_updater.cpp:521 pcbnew/class_board.cpp:2718
 #, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad '%s'\n"
 msgstr "Удалить цепь \"%s\" с одним конт.пл. на \"%s\" конт.пл. '%s'\n"
@@ -14357,48 +14509,48 @@ msgstr "Поставщик и справка"
 msgid "This is the default net class."
 msgstr "Это класс цепей по умолчанию."
 
-#: pcbnew/class_board.cpp:1095 pcbnew/class_module.cpp:551
+#: pcbnew/class_board.cpp:1101 pcbnew/class_module.cpp:551
 #: pcbnew/class_netinfo_item.cpp:120 pcbnew/pcb_draw_panel_gal.cpp:323
 #: pcbnew/tools/pad_tool.cpp:77
 msgid "Pads"
 msgstr "Конт.пл."
 
-#: pcbnew/class_board.cpp:1098 pcbnew/class_netinfo_item.cpp:140
+#: pcbnew/class_board.cpp:1104 pcbnew/class_netinfo_item.cpp:140
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:159
 #: pcbnew/pcb_draw_panel_gal.cpp:326
 msgid "Vias"
 msgstr "Перех.отв."
 
-#: pcbnew/class_board.cpp:1101 pcbnew/pcb_draw_panel_gal.cpp:329
+#: pcbnew/class_board.cpp:1107 pcbnew/pcb_draw_panel_gal.cpp:329
 msgid "Track Segments"
 msgstr "Сегментов дорожек"
 
-#: pcbnew/class_board.cpp:1104 pcbnew/pcb_draw_panel_gal.cpp:332
+#: pcbnew/class_board.cpp:1110 pcbnew/pcb_draw_panel_gal.cpp:332
 msgid "Nodes"
 msgstr "Узлов"
 
-#: pcbnew/class_board.cpp:1107 pcbnew/dialogs/dialog_select_net_from_list_base.h:58
+#: pcbnew/class_board.cpp:1113 pcbnew/dialogs/dialog_select_net_from_list_base.h:58
 #: pcbnew/pcb_draw_panel_gal.cpp:335
 msgid "Nets"
 msgstr "Цепей"
 
-#: pcbnew/class_board.cpp:1110 pcbnew/dialogs/dialog_drc_base.cpp:266
+#: pcbnew/class_board.cpp:1116 pcbnew/dialogs/dialog_drc_base.cpp:266
 #: pcbnew/pcb_draw_panel_gal.cpp:338
 msgid "Unconnected"
 msgstr "Не подсоединены"
 
-#: pcbnew/class_board.cpp:2396
+#: pcbnew/class_board.cpp:2402
 #, c-format
 msgid "Checking netlist component footprint \"%s:%s:%s\".\n"
 msgstr "Проверка посад.места компонента из списка цепей \"%s:%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2756
+#: pcbnew/class_board.cpp:2762
 #, c-format
 msgid "Component '%s' pad '%s' not found in footprint '%s'\n"
 msgstr "Компонент '%s' конт.пл. '%s' не найдена в посад.месте '%s'\n"
 
-#: pcbnew/class_board.cpp:2774
+#: pcbnew/class_board.cpp:2780
 #, c-format
 msgid "Copper zone (net name '%s'): net has no pads connected."
 msgstr "Медная зона (цепь '%s'): цепь не имеет подключённых конт.пл."
@@ -14905,7 +15057,6 @@ msgid "Show worksheet"
 msgstr "Показать рабочий лист"
 
 #: pcbnew/class_pcb_layer_widget.cpp:82
-#| msgid "Cursor"
 msgid "PCB Cursor"
 msgstr "PCB курсор"
 
@@ -15125,12 +15276,12 @@ msgstr "Размер перех.отв. КЦ"
 msgid "NC Via Drill"
 msgstr "Сверло перех.отв. КЦ"
 
-#: pcbnew/class_track.cpp:1099 pcbnew/class_zone.cpp:692
+#: pcbnew/class_track.cpp:1099 pcbnew/class_zone.cpp:691
 #: pcbnew/zones_by_polygon_fill_functions.cpp:116
 msgid "NetName"
 msgstr "Имя цепи"
 
-#: pcbnew/class_track.cpp:1103 pcbnew/class_zone.cpp:696
+#: pcbnew/class_track.cpp:1103 pcbnew/class_zone.cpp:695
 msgid "NetCode"
 msgstr "Код цепи"
 
@@ -15176,71 +15327,71 @@ msgstr "Не найдено"
 msgid "Track %s, net [%s] (%d) on layer %s, length: %s"
 msgstr "Дорожка %s, цепь [%s] (%d) на слое %s, длина: %s"
 
-#: pcbnew/class_zone.cpp:653
+#: pcbnew/class_zone.cpp:652
 msgid "Zone Outline"
 msgstr "Контур зоны"
 
-#: pcbnew/class_zone.cpp:659 pcbnew/class_zone.cpp:879
+#: pcbnew/class_zone.cpp:658 pcbnew/class_zone.cpp:878
 msgid "(Cutout)"
 msgstr "(очертание)"
 
-#: pcbnew/class_zone.cpp:668
+#: pcbnew/class_zone.cpp:667
 msgid "No via"
 msgstr "Без перех.отв."
 
-#: pcbnew/class_zone.cpp:671
+#: pcbnew/class_zone.cpp:670
 msgid "No track"
 msgstr "Без дорожек"
 
-#: pcbnew/class_zone.cpp:674 pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:67
+#: pcbnew/class_zone.cpp:673 pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:67
 msgid "No copper pour"
 msgstr "Без меди"
 
-#: pcbnew/class_zone.cpp:676
+#: pcbnew/class_zone.cpp:675
 msgid "Keepout"
 msgstr "Область запрета"
 
-#: pcbnew/class_zone.cpp:687
+#: pcbnew/class_zone.cpp:686
 msgid "<unknown>"
 msgstr "<неизвестно>"
 
-#: pcbnew/class_zone.cpp:700
+#: pcbnew/class_zone.cpp:699
 msgid "Priority"
 msgstr "Приоритет"
 
-#: pcbnew/class_zone.cpp:704
+#: pcbnew/class_zone.cpp:703
 msgid "Non Copper Zone"
 msgstr "Не медная зона"
 
-#: pcbnew/class_zone.cpp:710
+#: pcbnew/class_zone.cpp:709
 msgid "Corners"
 msgstr "Углы"
 
-#: pcbnew/class_zone.cpp:713
+#: pcbnew/class_zone.cpp:712
 msgid "Segments"
 msgstr "Сегменты"
 
-#: pcbnew/class_zone.cpp:717
+#: pcbnew/class_zone.cpp:716
 msgid "Fill Mode"
 msgstr "Режим заливки"
 
-#: pcbnew/class_zone.cpp:721
+#: pcbnew/class_zone.cpp:720
 msgid "Hatch Lines"
 msgstr "Штрих.линии"
 
-#: pcbnew/class_zone.cpp:726
+#: pcbnew/class_zone.cpp:725
 msgid "Corner Count"
 msgstr "Количество углов"
 
-#: pcbnew/class_zone.cpp:882
+#: pcbnew/class_zone.cpp:881
 msgid "(Keepout)"
 msgstr "(Область запрета)"
 
-#: pcbnew/class_zone.cpp:902
+#: pcbnew/class_zone.cpp:901
 msgid "** NO BOARD DEFINED **"
 msgstr "** ПЛАТА НЕ ОПРЕДЕЛЕНА **"
 
-#: pcbnew/class_zone.cpp:914
+#: pcbnew/class_zone.cpp:913
 #, c-format
 msgid "Zone Outline %s on %s"
 msgstr "Контур зоны %s на %s"
@@ -15981,7 +16132,7 @@ msgstr "Круговой массив"
 #: pcbnew/dialogs/dialog_create_array_base.h:115 pcbnew/hotkeys.cpp:123
 #: pcbnew/modedit_onclick.cpp:371 pcbnew/modedit_onclick.cpp:415
 #: pcbnew/onrightclick.cpp:210 pcbnew/onrightclick.cpp:848
-#: pcbnew/tools/edit_tool.cpp:112
+#: pcbnew/tools/edit_tool.cpp:116
 msgid "Create Array"
 msgstr "Создать массив"
 
@@ -16599,7 +16750,7 @@ msgstr "Список не подсоединённых конт.пл., прав�
 msgid "DRC Control"
 msgstr "Контроль DRC"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:328
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:329
 msgid ""
 "Use this attribute for most non SMD components\n"
 "Components with this option are not put in the footprint position list file"
@@ -16607,8 +16758,8 @@ msgstr ""
 "Используйте этот атрибут для не-SMD компонентов.\n"
 "Компоненты с таким атрибутом не попадут в файл списка позиций посад.мест"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:331
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:182
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:332
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:183
 msgid ""
 "Use this attribute for SMD components.\n"
 "Only components with this option are put in the footprint position list file"
@@ -16616,8 +16767,8 @@ msgstr ""
 "Используйте этот атрибут для SMD компонентов.\n"
 "Компоненты только с таким атрибутом попадут в файл списка позиций посад.мест"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:334
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:185
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:335
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:186
 msgid ""
 "Use this attribute for \"virtual\" components drawn on board\n"
 "like an edge connector (old ISA PC bus for instance)"
@@ -16625,7 +16776,7 @@ msgstr ""
 "Используйте этот атрибут для \"виртуальных\" компонентов, отображаемых на плате,\n"
 "как краевой соединитель (старый разъем шины ISA PC для примера)"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:365
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:366
 msgid ""
 "Component can be freely moved and auto placed. User can arbitrarily select and edit "
 "component's pads."
@@ -16633,7 +16784,7 @@ msgstr ""
 "Компонент может быть свободно перемещён и автоматически размещён. Пользователь может "
 "произвольно выбирать и редактировать конт.пл. компонента."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:368
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:369
 msgid ""
 "Component can be freely moved and auto placed, but its pads cannot be selected or "
 "edited."
@@ -16641,38 +16792,38 @@ msgstr ""
 "Компонент может быть свободно перемещён и автоматически размещён, но конт.пл. не "
 "могут быть выбраны или отредактированы."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:371
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:372
 msgid "Component is locked: it cannot be freely moved or auto placed."
 msgstr "Компонент заблокирован: невозможно перемещать и автоматически размещать."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:496
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:354
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:497
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:355
 msgid "Invalid filename: "
 msgstr "Неверное имя файла: "
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:498
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:356
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:499
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:357
 msgid "Edit 3D file name"
 msgstr "Редактировать имя файла 3D"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:588
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:589
 msgid "Error: invalid footprint parameter"
 msgstr "Ошибка: неверный параметр посад.места"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:594
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:595
 msgid "Error: invalid 3D parameter"
 msgstr "Ошибка: неверный параметр 3D"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:614
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:615
 msgid "Error: invalid or missing footprint parameter"
 msgstr "Ошибка: неверный или пропущенный параметр посад.места"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:620
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:621
 msgid "Error: invalid or missing 3D parameter"
 msgstr "Ошибка: неверный или пропущенный параметр 3D"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:743
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:528
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:744
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:529
 msgid "Modify module properties"
 msgstr "Изменение свойств модуля"
 
@@ -16910,19 +17061,19 @@ msgstr "Настройки 3D"
 msgid "Footprint Properties"
 msgstr "Свойства посад.места"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:180
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:181
 msgid "Use this attribute for most non SMD components"
 msgstr "Использовать этот атрибут для большинства не-SMD компонентов"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:209
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:210
 msgid "Enable hotkey move commands and Auto Placement"
 msgstr "Включить горячие клавиши команд перемещения и авторазмещения"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:210
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:211
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr "Отключить горячие клавиши команд перемещения и авторазмещения"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:449
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:450
 #, c-format
 msgid ""
 "Error:\n"
@@ -17059,95 +17210,99 @@ msgstr "Первый номер конт.пл.:"
 msgid "Pad enumeration settings"
 msgstr "Настройки нумерации конт.пл."
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:81
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:83
 #, c-format
 msgid "Change footprint of '%s'"
 msgstr "Изменить посад.место на '%s'"
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:89
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:91
 #, c-format
 msgid "Change footprints '%s'"
 msgstr "Изменить посад.места '%s'"
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:168
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:175
 #, c-format
 msgid "File '%s' created\n"
 msgstr "Файл '%s' создан\n"
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:173
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:180
 #, c-format
 msgid "** Could not create file '%s' ***\n"
 msgstr "** Не удалось создать файл '%s' ***\n"
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:216
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:222
 #, c-format
 msgid "Change footprint %s -> %s (for value = %s)?"
 msgstr "Изменить посад.место %s -> %s (для значений = %s)?"
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:223
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:229
 #, c-format
 msgid "Change footprint %s -> %s ?"
 msgstr "Изменить посад.место %s -> %s ?"
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:271
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:277
 msgid "Are you sure you want to change all footprints?"
 msgstr "Вы уверены что хотите изменить все посад.места?"
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:312
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:319
 #, c-format
 msgid "Change footprint '%s' (from '%s') to '%s'"
 msgstr "Изменено посад.место '%s' (из '%s') на '%s'"
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:415
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:328
+msgid "footprint not found"
+msgstr "посад.место не найдено"
+
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:423
 msgid "No footprints!"
 msgstr "Нет посад.мест!"
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:426
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:434
 msgid "Save Footprint Association File"
 msgstr "Сохранить файл связи посад.мест"
 
-#: pcbnew/dialogs/dialog_exchange_modules.cpp:437
+#: pcbnew/dialogs/dialog_exchange_modules.cpp:445
 #, c-format
 msgid "Could not create file '%s'"
 msgstr "Не удалось создать файл '%s'"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:25
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:27
 msgid "Component value"
 msgstr "Значение компонента"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:33
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:34
 msgid "Component reference"
 msgstr "Обозначение компонента"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:46
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:47
 msgid "Change footprint"
 msgstr "Изменить посад.место"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:46
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:47
 msgid "Change footprints"
 msgstr "Изменить посад.места"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:46
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:47
 msgid "Change footprints having same value"
 msgstr "Изменить посад.места, имеющие такое же значение"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:46
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:47
 msgid "Update all footprints of the board"
 msgstr "Обновить все посад.места на плате"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:58
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:59
 msgid "Export Footprint Association File"
 msgstr "Экспортировать файл связи посад.мест"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:61
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:62
 msgid "List Footprints"
 msgstr "Список посад.мест"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:64
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:65
 msgid "View Footprints"
 msgstr "Смотреть посад.места"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:73
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:74
 msgid "Current footprint name (FPID)"
 msgstr "Текущее имя посад.места (FPID)"
 
@@ -17155,11 +17310,11 @@ msgstr "Текущее имя посад.места (FPID)"
 msgid "New footprint name (FPID)"
 msgstr "Новое имя посад.места (FPID)"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:104
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:99
 msgid "Apply"
 msgstr "Применить"
 
-#: pcbnew/dialogs/dialog_exchange_modules_base.h:71
+#: pcbnew/dialogs/dialog_exchange_modules_base.h:72
 msgid "Change Footprint"
 msgstr "Изменить посад.место"
 
@@ -17172,6 +17327,7 @@ msgid "Unable to create "
 msgstr "Не удалось создать "
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:19
+#: pcbnew/dialogs/dialog_export_step_base.cpp:19
 msgid "File name:"
 msgstr "Имя файла:"
 
@@ -17189,7 +17345,7 @@ msgid "Adjust automatically"
 msgstr "Разместить автоматически"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:42
-#: pcbnew/dialogs/dialog_export_step_base.cpp:93
+#: pcbnew/dialogs/dialog_export_step_base.cpp:101
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:59
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:62
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:86
@@ -17197,13 +17353,11 @@ msgid "Units:"
 msgstr "Ед.изм.:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:58
-#: pcbnew/dialogs/dialog_export_step_base.cpp:106
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:54
 msgid "X Position:"
 msgstr "Позиция по X:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:79
-#: pcbnew/dialogs/dialog_export_step_base.cpp:124
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:70
 msgid "Y Position:"
 msgstr "Позиция по Y:"
@@ -17221,38 +17375,37 @@ msgstr "Выходные ед.изм.:"
 msgid "Export IDFv3"
 msgstr "Экспорт IDFv3"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:192
-msgid "STEP export failed; please save the PCB and try again"
-msgstr "Неудачный экспорт в STEP ; пожалуйста сохраните PCB и попробуйте снова"
+#: pcbnew/dialogs/dialog_export_step.cpp:172
+#, c-format
+msgid ""
+"File: %s\n"
+"already exists. Do you want overwrite this file?"
+msgstr ""
+"Файл: %s\n"
+"уже существует. Вы хотите перезаписать этот файл?"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:193 pcbnew/dialogs/dialog_export_step.cpp:232
-#: pcbnew/dialogs/dialog_export_step.cpp:312
+#: pcbnew/dialogs/dialog_export_step.cpp:176
 msgid "STEP Export"
 msgstr "Экспорт в STEP"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:228
-msgid "File: "
-msgstr "Файл: "
+#: pcbnew/dialogs/dialog_export_step.cpp:236
+msgid "STEP export failed!  Please save the PCB and try again"
+msgstr ""
+"Не удалось выполнить экспорт в STEP! Пожалуйста сохраните печатную плату и попробуйте "
+"снова"
 
-#: pcbnew/dialogs/dialog_export_step.cpp:231
-msgid "File exists, overwrite?"
-msgstr "Файл существует, перезаписать?"
-
-#: pcbnew/dialogs/dialog_export_step.cpp:311
-msgid "Unable to create STEP file; check that the board has a valid outline and models."
-msgstr "Не удалось создать STEP файл; проверьте, что у платы верные контур и модели."
-
-#: pcbnew/dialogs/dialog_export_step_base.cpp:19
-msgid "STEP File name:"
-msgstr "Имя STEP файла:"
+#: pcbnew/dialogs/dialog_export_step.cpp:337
+msgid ""
+"Unable to create STEP file.  Check that the board has a valid outline and models."
+msgstr "Не удаётся создать STEP файл. Проверьте, что у платы верные контур и модели."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:23
 msgid "Select a STEP export filename"
 msgstr "Выбор имени файла экспорта в STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:35
-msgid "STEP coordinates origin options:"
-msgstr "Параметры начала координат STEP:"
+msgid "Coordinate origin options:"
+msgstr "Опции начала координат:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:49
 msgid "Drill and plot axis origin"
@@ -17283,19 +17436,36 @@ msgid "Use this option if you want to define a specific coordinate origin value.
 msgstr ""
 "Используйте эту опцию, если вы хотите указать конкретные значения начала координат."
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:79
+#: pcbnew/dialogs/dialog_export_step_base.cpp:73
+msgid "Board center origin"
+msgstr "Начало координат в центре платы"
+
+#: pcbnew/dialogs/dialog_export_step_base.cpp:74
+msgid "Use this option if you want to define coordinate origin at board center."
+msgstr ""
+"Используйте эту опцию, если вы хотите определить начало координат в центре платы."
+
+#: pcbnew/dialogs/dialog_export_step_base.cpp:87
 msgid "User defined origin:"
 msgstr "Начало координат определённое пользователем:"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:148
+#: pcbnew/dialogs/dialog_export_step_base.cpp:114
+msgid "X position:"
+msgstr "Позиция по X:"
+
+#: pcbnew/dialogs/dialog_export_step_base.cpp:132
+msgid "Y position:"
+msgstr "Позиция по Y:"
+
+#: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Other options:"
 msgstr "Другие параметры:"
 
-#: pcbnew/dialogs/dialog_export_step_base.cpp:162
-msgid "Ignore Virtual Components"
+#: pcbnew/dialogs/dialog_export_step_base.cpp:170
+msgid "Ignore virtual components"
 msgstr "Игнорировать виртуальные компоненты"
 
-#: pcbnew/dialogs/dialog_export_step_base.h:66
+#: pcbnew/dialogs/dialog_export_step_base.h:71
 msgid "Export STEP"
 msgstr "Экспорт в STEP"
 
@@ -17418,73 +17588,9 @@ msgstr "Генераторы посад.мест"
 msgid "Traceback of errors in not loadable python scripts"
 msgstr "Выявление ошибок в не загружаемых python скриптах"
 
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:302
-#, c-format
-msgid "Illegal character '%s' found in Nickname: '%s' in row %d"
-msgstr "Неправильный символ '%s' найден в уникальном имени: '%s' в строке %d"
-
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:316
-msgid "No Colon in Nicknames"
-msgstr "Нет двоеточия в уникальном имени"
-
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:346
-#, c-format
-msgid "Duplicate Nickname: '%s' in rows %d and %d"
-msgstr "Дубликат уникального имени: '%s' в строке %d и %d"
-
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:361
-msgid "Please Delete or Modify One"
-msgstr "Удалите или исправьте один"
-
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:20
-msgid "Library Tables by Scope"
-msgstr "Таблицы библиотек посадочных мест"
-
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:32
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:84
-msgid "Table:"
-msgstr "Таблица:"
-
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:36
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:88
-msgid "Table Name"
-msgstr "Имя таблицы"
-
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:74
-msgid "Global Libraries"
-msgstr "Глобальные библиотеки"
-
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:126
-msgid "Project Specific Libraries"
-msgstr "Библиотеки проекта"
-
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:133
 msgid "Append with Wizard"
 msgstr "Добавить с помощью мастера"
-
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:136
-msgid "Append Library"
-msgstr "Добавить библиотеку"
-
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:137
-msgid "Add a PCB library row to this table"
-msgstr "Добавить строку библиотеки печатной платы в таблицу"
-
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:141
-msgid "Remove Library"
-msgstr "Удалить библиотеку"
-
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:142
-msgid "Remove a PCB library from this library table"
-msgstr "Удалить строку библиотеки печатной платы из данной таблицы библиотеки"
-
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:147
-msgid "Move the currently selected row up one position"
-msgstr "Переместить выбранную строку вверх"
-
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:152
-msgid "Move the currently selected row down one position"
-msgstr "Переместить выбранную строку вниз"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:156
 msgid "Options Editor"
@@ -17493,22 +17599,6 @@ msgstr "Параметры редактора"
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:157
 msgid "Zoom into the options table for current row"
 msgstr "Раскрыть таблицу параметров для текущей строки"
-
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:168
-msgid "Path Substitutions"
-msgstr "Значения подстановок"
-
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:186
-msgid "Environment Variable"
-msgstr "Переменные окружения"
-
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:187
-msgid "Path Segment"
-msgstr "Путь сегмента"
-
-#: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:199
-msgid "This is a read-only table which shows pertinent environment variables."
-msgstr "Таблица для отображения используемых переменных окружения."
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.h:81
 msgid "PCB Library Tables"
@@ -19496,7 +19586,7 @@ msgid "Keep"
 msgstr "Оставить"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:43 pcbnew/onrightclick.cpp:854
-#: pcbnew/tools/edit_tool.cpp:144
+#: pcbnew/tools/edit_tool.cpp:148
 msgid "Exchange Footprint"
 msgstr "Замена посад.места"
 
@@ -20647,7 +20737,7 @@ msgid "Select Anchor Item"
 msgstr "Выбрать элемент привязки"
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:75
-#: pcbnew/tools/position_relative_tool.cpp:155
+#: pcbnew/tools/position_relative_tool.cpp:156
 msgid "Position Relative"
 msgstr "Позиция относительно"
 
@@ -20838,22 +20928,22 @@ msgstr "+"
 msgid "Target Properties"
 msgstr "Параметры цели"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:433
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:436
 #: pcbnew/dialogs/dialog_track_via_size.cpp:60
 msgid "Invalid track width"
 msgstr "Недопустимая ширина дорожки"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:442
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:445
 #: pcbnew/dialogs/dialog_track_via_size.cpp:67
 msgid "Invalid via diameter"
 msgstr "Недопустимый диаметр перех.отв."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:449
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:452
 #: pcbnew/dialogs/dialog_track_via_size.cpp:74
 msgid "Invalid via drill size"
 msgstr "Недопустимый размер сверла перех.отв."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:456
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:459
 #: pcbnew/dialogs/dialog_track_via_size.cpp:81
 msgid "Via drill size has to be smaller than via diameter"
 msgstr "Размер сверла перех.отв. должен быть меньше, чем диаметр перех.отв."
@@ -21551,17 +21641,17 @@ msgstr ""
 "Этот файл создан старой версией Pcbnew.\n"
 "При сохранении файла он будет записан в новом формате."
 
-#: pcbnew/files.cpp:658
+#: pcbnew/files.cpp:655
 #, c-format
 msgid "Warning: unable to create backup file '%s'"
 msgstr "Предупреждение: не удалось создать резервную копию файла '%s'"
 
-#: pcbnew/files.cpp:685 pcbnew/files.cpp:778
+#: pcbnew/files.cpp:682 pcbnew/files.cpp:775
 #, c-format
 msgid "No access rights to write to file '%s'"
 msgstr "Нет права записи в файл '%s'"
 
-#: pcbnew/files.cpp:724 pcbnew/files.cpp:803
+#: pcbnew/files.cpp:721 pcbnew/files.cpp:800
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -21570,22 +21660,22 @@ msgstr ""
 "Ошибка сохранения платы '%s':\n"
 "%s"
 
-#: pcbnew/files.cpp:730
+#: pcbnew/files.cpp:727
 #, c-format
 msgid "Failed to create '%s'"
 msgstr "Не удалось создать '%s'"
 
-#: pcbnew/files.cpp:756
+#: pcbnew/files.cpp:753
 #, c-format
 msgid "Backup file: '%s'"
 msgstr "Файл резервной копии: '%s'"
 
-#: pcbnew/files.cpp:758
+#: pcbnew/files.cpp:755
 #, c-format
 msgid "Wrote board file: '%s'"
 msgstr "Записан файл платы: '%s'"
 
-#: pcbnew/files.cpp:812
+#: pcbnew/files.cpp:809
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -21881,7 +21971,7 @@ msgstr "Добавить глухое/внутр. перех.отв."
 msgid "Select Layer and Add Blind/Buried Via"
 msgstr "Выбрать слой и добавить глухое/внутр. перех.отв."
 
-#: pcbnew/hotkeys.cpp:110 pcbnew/onrightclick.cpp:602 pcbnew/router/router_tool.cpp:173
+#: pcbnew/hotkeys.cpp:110 pcbnew/onrightclick.cpp:602 pcbnew/router/router_tool.cpp:191
 msgid "Switch Track Posture"
 msgstr "Переключить положение дорожки"
 
@@ -22005,7 +22095,7 @@ msgstr "Выбрать тривиальное соединение"
 msgid "Select Copper Connection"
 msgstr "Выбрать медное соединение"
 
-#: pcbnew/hotkeys.cpp:246 pcbnew/router/router_tool.cpp:167
+#: pcbnew/hotkeys.cpp:246 pcbnew/router/router_tool.cpp:185
 msgid "Custom Track/Via Size"
 msgstr "Польз. размер дорожки/перех.отв."
 
@@ -23231,20 +23321,20 @@ msgid "Plot board in HPGL, PostScript or Gerber RS-274X format)"
 msgstr "Чертить плату в HPGL, PostScript или Gerber RS-274X формат)"
 
 #: pcbnew/menubar_pcbframe.cpp:796
-msgid "&Archive Footprints in Project Library."
-msgstr "Архивировать посад.места в библиотеку проекта."
+msgid "&Archive Footprints in Project Library"
+msgstr "Архивировать посад.места в библиотеку проекта"
 
 #: pcbnew/menubar_pcbframe.cpp:797
 msgid ""
-"Archive footprints in existing library in footprint Lib table(does not remove other "
-"footprints in this library)"
+"Archive all footprints in existing library in footprint Lib table(does not remove "
+"other footprints in this library)"
 msgstr ""
-"Архивировать посад.места в существующей библиотеке в таблице библиотек посад.мест(не "
-"удаляет другие посад.места в этой библиотеке)"
+"Архивировать все посад.места в существующей библиотеке в таблице библиотек посад.мест "
+"(не удаляет другие посад.места в этой библиотеке)"
 
 #: pcbnew/menubar_pcbframe.cpp:802
-msgid "&Create Library and Archive Footprints."
-msgstr "Создать библиотеку и архивировать посад.места."
+msgid "&Create New Library and Archive Footprints"
+msgstr "Создать новую библиотеку и архивировать посад.места"
 
 #: pcbnew/menubar_pcbframe.cpp:803
 msgid ""
@@ -23259,8 +23349,8 @@ msgid "Arc&hive Footprints"
 msgstr "Архивировать посад.места"
 
 #: pcbnew/menubar_pcbframe.cpp:810
-msgid "Archive or add footprints in library file"
-msgstr "Архивировать или добавить посад.места в файл библиотеки"
+msgid "Archive or add all footprints in library file"
+msgstr "Архивировать или добавить все посад.места в файл библиотеки"
 
 #: pcbnew/menubar_pcbframe.cpp:814
 msgid "Close Pcbnew"
@@ -23316,19 +23406,19 @@ msgstr ""
 "Экспорт файла компонентов (*.cmp) для обратного аннотирования поля посад.место в "
 "Eeschema"
 
-#: pcbnew/microwave/microwave_inductor.cpp:310
+#: pcbnew/microwave/microwave_inductor.cpp:309
 msgid "Length of Trace:"
 msgstr "Длина трассировки:"
 
-#: pcbnew/microwave/microwave_inductor.cpp:321
+#: pcbnew/microwave/microwave_inductor.cpp:320
 msgid "Requested length < minimum length"
 msgstr "Заданная длина меньше минимальной"
 
-#: pcbnew/microwave/microwave_inductor.cpp:333
+#: pcbnew/microwave/microwave_inductor.cpp:332
 msgid "Requested length too large"
 msgstr "Заданная длина очень велика"
 
-#: pcbnew/microwave/microwave_inductor.cpp:339
+#: pcbnew/microwave/microwave_inductor.cpp:338
 msgid "Component Value:"
 msgstr "Значение компонента:"
 
@@ -23403,7 +23493,7 @@ msgstr "Переместить блок точно"
 #: pcbnew/modedit_onclick.cpp:412 pcbnew/onrightclick.cpp:205
 #: pcbnew/onrightclick.cpp:281 pcbnew/onrightclick.cpp:302 pcbnew/onrightclick.cpp:550
 #: pcbnew/onrightclick.cpp:838 pcbnew/onrightclick.cpp:878
-#: pcbnew/tools/edit_tool.cpp:107
+#: pcbnew/tools/edit_tool.cpp:111
 msgid "Move Exactly"
 msgstr "Переместить точно"
 
@@ -23669,7 +23759,7 @@ msgstr ""
 msgid "Graphic not allowed on Copper layers"
 msgstr "Графика не разрешена на слоях меди"
 
-#: pcbnew/onleftclick.cpp:283 pcbnew/router/router_tool.cpp:641
+#: pcbnew/onleftclick.cpp:283 pcbnew/router/router_tool.cpp:657
 msgid "Tracks on Copper layers only"
 msgstr "Дорожки только на слоях меди"
 
@@ -23791,7 +23881,7 @@ msgid "Zoom Block"
 msgstr "Масштабировать блок"
 
 #: pcbnew/onrightclick.cpp:493 pcbnew/onrightclick.cpp:813 pcbnew/onrightclick.cpp:1000
-#: pcbnew/tools/edit_tool.cpp:126 pcbnew/tools/edit_tool.cpp:762
+#: pcbnew/tools/edit_tool.cpp:130 pcbnew/tools/edit_tool.cpp:796
 msgid "Flip"
 msgstr "На другую сторону"
 
@@ -23811,7 +23901,7 @@ msgstr "Перетащить сегмент"
 msgid "Create Track Array"
 msgstr "Создать массив дорожек"
 
-#: pcbnew/onrightclick.cpp:561
+#: pcbnew/onrightclick.cpp:561 pcbnew/router/router_tool.cpp:121
 msgid "Break Track"
 msgstr "Разорвать дорожку"
 
@@ -23820,23 +23910,23 @@ msgid "Place Node"
 msgstr "Разместить узел"
 
 #: pcbnew/onrightclick.cpp:578 pcbnew/router/length_tuner_tool.cpp:52
-#: pcbnew/router/router_tool.cpp:124
+#: pcbnew/router/router_tool.cpp:142
 msgid "End Track"
 msgstr "Закончить дорожку"
 
-#: pcbnew/onrightclick.cpp:582 pcbnew/router/router_tool.cpp:131
+#: pcbnew/onrightclick.cpp:582 pcbnew/router/router_tool.cpp:149
 msgid "Place Through Via"
 msgstr "Разместить сквозное перех.отв."
 
-#: pcbnew/onrightclick.cpp:585 pcbnew/router/router_tool.cpp:152
+#: pcbnew/onrightclick.cpp:585 pcbnew/router/router_tool.cpp:170
 msgid "Select Layer and Place Through Via"
 msgstr "Выбрать слой и разместить перех.отв."
 
-#: pcbnew/onrightclick.cpp:592 pcbnew/router/router_tool.cpp:138
+#: pcbnew/onrightclick.cpp:592 pcbnew/router/router_tool.cpp:156
 msgid "Place Blind/Buried Via"
 msgstr "Разместить глухое/внутр. перех.отв."
 
-#: pcbnew/onrightclick.cpp:596 pcbnew/router/router_tool.cpp:160
+#: pcbnew/onrightclick.cpp:596 pcbnew/router/router_tool.cpp:178
 msgid "Select Layer and Place Blind/Buried Via"
 msgstr "Выбрать слой и разместить глухое/внутр. перех.отв."
 
@@ -24136,7 +24226,7 @@ msgstr "Файл автосохранения '%s' не может быть уд
 msgid " [new file]"
 msgstr " [новый файл]"
 
-#: pcbnew/pcbframe.cpp:1140
+#: pcbnew/pcbframe.cpp:1153
 msgid ""
 "Cannot update the PCB, because the Kicad is opened in stand-alone mode. In order to "
 "create/update PCBs from schematics, you need to launch Kicad shell and create a PCB "
@@ -24195,11 +24285,11 @@ msgstr "Ввод python-модуль, который реализует функ
 msgid "Multiple Layers"
 msgstr "Несколько слоёв"
 
-#: pcbnew/router/length_tuner_tool.cpp:49 pcbnew/router/router_tool.cpp:121
+#: pcbnew/router/length_tuner_tool.cpp:49 pcbnew/router/router_tool.cpp:139
 msgid "New Track"
 msgstr "Новая дорожка"
 
-#: pcbnew/router/length_tuner_tool.cpp:49 pcbnew/router/router_tool.cpp:121
+#: pcbnew/router/length_tuner_tool.cpp:49 pcbnew/router/router_tool.cpp:139
 msgid "Starts laying a new track."
 msgstr "Начинает прокладку новой дорожки."
 
@@ -24394,104 +24484,120 @@ msgstr "Перетащить дорожку/перех.отв."
 msgid "Drags tracks and vias without breaking connections"
 msgstr "Перетаскивает дорожки и перех.отв. без разрыва соединений"
 
-#: pcbnew/router/router_tool.cpp:124
+#: pcbnew/router/router_tool.cpp:122
+msgid "Splits the track segment into two segments connected at the cursor position."
+msgstr "Разделить сегмент дорожки на два сегмента соединённых в расположении курсора."
+
+#: pcbnew/router/router_tool.cpp:127
+msgid "Drag (45 degree mode)"
+msgstr "Перетаскивать (режим 45°)"
+
+#: pcbnew/router/router_tool.cpp:128 pcbnew/router/router_tool.cpp:134
+msgid "todo"
+msgstr "сделать"
+
+#: pcbnew/router/router_tool.cpp:133
+msgid "Drag (free angle)"
+msgstr "Перетаскивать (свободный угол)"
+
+#: pcbnew/router/router_tool.cpp:142
 msgid "Stops laying the current track."
 msgstr "Останавливает прокладку текущей дорожки."
 
-#: pcbnew/router/router_tool.cpp:127
+#: pcbnew/router/router_tool.cpp:145
 msgid "Auto-end Track"
 msgstr "Автоматически закончить дорожку"
 
-#: pcbnew/router/router_tool.cpp:127
+#: pcbnew/router/router_tool.cpp:145
 msgid "Automagically finishes currently routed track."
 msgstr "Автоматически заканчивает текущую разведённую дорожку."
 
-#: pcbnew/router/router_tool.cpp:132
+#: pcbnew/router/router_tool.cpp:150
 msgid "Adds a through-hole via at the end of currently routed track."
 msgstr "Добавляет сквозное перех.отв. в конце текущей разведённой дорожки."
 
-#: pcbnew/router/router_tool.cpp:139
+#: pcbnew/router/router_tool.cpp:157
 msgid "Adds a blind or buried via at the end of currently routed track."
 msgstr "Добавляет глухое или внутр. перех.отв. в конце текущей разведённой дорожки."
 
-#: pcbnew/router/router_tool.cpp:145
+#: pcbnew/router/router_tool.cpp:163
 msgid "Place Microvia"
 msgstr "Разместить перех.микроотв."
 
-#: pcbnew/router/router_tool.cpp:145
+#: pcbnew/router/router_tool.cpp:163
 msgid "Adds a microvia at the end of currently routed track."
 msgstr "Добавляет перех.микроотв. в конце текущей разведённой дорожки."
 
-#: pcbnew/router/router_tool.cpp:153
+#: pcbnew/router/router_tool.cpp:171
 msgid ""
 "Select a layer, then add a through-hole via at the end of currently routed track."
 msgstr ""
 "Выбрать слой, затем добавить сквозное перех.отв. в конце текущей разведённой дорожки."
 
-#: pcbnew/router/router_tool.cpp:161
+#: pcbnew/router/router_tool.cpp:179
 msgid ""
 "Select a layer, then add a blind or buried via at the end of currently routed track."
 msgstr ""
 "Выбрать слой, затем добавить глухое или внутр. перех.отв. в конце текущей разведённой "
 "дорожки."
 
-#: pcbnew/router/router_tool.cpp:168
+#: pcbnew/router/router_tool.cpp:186
 msgid "Shows a dialog for changing the track width and via size."
 msgstr "Показывает диалог для изменения ширины дорожки и размера перех.отв."
 
-#: pcbnew/router/router_tool.cpp:174
+#: pcbnew/router/router_tool.cpp:192
 msgid "Switches posture of the currently routed track."
 msgstr "Меняет положение текущей разведённой дорожки."
 
-#: pcbnew/router/router_tool.cpp:179
+#: pcbnew/router/router_tool.cpp:197
 msgid "Differential Pair Dimensions..."
 msgstr "Размеры диф.пары..."
 
-#: pcbnew/router/router_tool.cpp:180
+#: pcbnew/router/router_tool.cpp:198
 msgid "Sets the width and gap of the currently routed differential pair."
 msgstr "Устанавливает ширину и зазор текущей разведённой диф.пары."
 
-#: pcbnew/router/router_tool.cpp:196
+#: pcbnew/router/router_tool.cpp:213
 msgid "Select Track/Via Width"
 msgstr "Выбрать ширину дорожки/перех.отв."
 
-#: pcbnew/router/router_tool.cpp:206
+#: pcbnew/router/router_tool.cpp:223
 msgid "Custom size"
 msgstr "Пользовательский размер"
 
-#: pcbnew/router/router_tool.cpp:209
+#: pcbnew/router/router_tool.cpp:226
 msgid "Use the starting track width"
 msgstr "Использовать ширину дорожки начала"
 
-#: pcbnew/router/router_tool.cpp:210
+#: pcbnew/router/router_tool.cpp:227
 msgid "Route using the width of the starting track."
 msgstr "Трассировать с шириной начальной дорожки."
 
-#: pcbnew/router/router_tool.cpp:212
+#: pcbnew/router/router_tool.cpp:229
 msgid "Use net class values"
 msgstr "Использовать значения класса цепи"
 
-#: pcbnew/router/router_tool.cpp:213
+#: pcbnew/router/router_tool.cpp:230
 msgid "Use track and via sizes from the net class"
 msgstr "Использовать размеры дорожки и перех.отв. из класса цепи"
 
-#: pcbnew/router/router_tool.cpp:295
+#: pcbnew/router/router_tool.cpp:312
 msgid "Interactive Router"
 msgstr "Интерактивный трассировщик"
 
-#: pcbnew/router/router_tool.cpp:517
+#: pcbnew/router/router_tool.cpp:533
 msgid "Blind/buried vias have to be enabled in the design settings."
 msgstr "Глухие/внутр. перех.отв. должны быть разрешены в настройках проектирования."
 
-#: pcbnew/router/router_tool.cpp:523
+#: pcbnew/router/router_tool.cpp:539
 msgid "Microvias have to be enabled in the design settings."
 msgstr "Перех.микроотв. должны быть разрешены в настройках проектирования."
 
-#: pcbnew/router/router_tool.cpp:530
+#: pcbnew/router/router_tool.cpp:546
 msgid "Only through vias are allowed on 2 layer boards."
 msgstr "Только сквозные перех.отв. допустимы на 2-х слойных платах."
 
-#: pcbnew/router/router_tool.cpp:537
+#: pcbnew/router/router_tool.cpp:553
 msgid ""
 "Microvias can be placed only between the outer layers (F.Cu/B.Cu) and the ones "
 "directly adjacent to them."
@@ -24499,15 +24605,15 @@ msgstr ""
 "Перех.микроотв. могут быть размещены только между внешними слоями (F.Cu/B.Cu) и теми, "
 "которые непосредственно прилегают к ним."
 
-#: pcbnew/router/router_tool.cpp:816
+#: pcbnew/router/router_tool.cpp:832
 msgid "Route Track"
 msgstr "Трассировать дорожку"
 
-#: pcbnew/router/router_tool.cpp:823
+#: pcbnew/router/router_tool.cpp:839
 msgid "Router Differential Pair"
 msgstr "Трассировка диф.пары"
 
-#: pcbnew/router/router_tool.cpp:906 pcbnew/router/router_tool.cpp:977
+#: pcbnew/router/router_tool.cpp:942 pcbnew/router/router_tool.cpp:1013
 msgid "The item is locked. Do you want to continue?"
 msgstr "Элемент заблокирован. Хотите продолжить?"
 
@@ -24666,7 +24772,7 @@ msgstr "Свойства контактной площадки"
 msgid "Check footprint"
 msgstr "Проверить посад.место"
 
-#: pcbnew/tool_modedit.cpp:201 pcbnew/tool_pcb.cpp:491 pcbnew/tools/edit_tool.cpp:1066
+#: pcbnew/tool_modedit.cpp:201 pcbnew/tool_pcb.cpp:491 pcbnew/tools/edit_tool.cpp:1100
 msgid "Measure distance"
 msgstr "Измерить расстояние"
 
@@ -25122,78 +25228,82 @@ msgid "Changes pad properties globally."
 msgstr "Изменяет свойства конт.пл. глобально."
 
 #: pcbnew/tools/edit_tool.cpp:95
+msgid "Edit Activate"
+msgstr "Активировать редактирование"
+
+#: pcbnew/tools/edit_tool.cpp:99
 msgid "Moves the selected item(s)"
 msgstr "Перемещает выбранный(ые) элемент(ы)"
 
-#: pcbnew/tools/edit_tool.cpp:99
+#: pcbnew/tools/edit_tool.cpp:103
 msgid "Duplicates the selected item(s)"
 msgstr "Дублирует выбранный(ые) элемент(ы)"
 
-#: pcbnew/tools/edit_tool.cpp:103
+#: pcbnew/tools/edit_tool.cpp:107
 msgid "Duplicates the selected item(s), incrementing pad numbers"
 msgstr "Дублирует выбранный(ые) элемент(ы), увеличивая номер конт.пл."
 
-#: pcbnew/tools/edit_tool.cpp:107
+#: pcbnew/tools/edit_tool.cpp:111
 msgid "Moves the selected item(s) by an exact amount"
 msgstr "Перемещает выбранный(ые) элемент(ы) на точную величину"
 
-#: pcbnew/tools/edit_tool.cpp:112
+#: pcbnew/tools/edit_tool.cpp:116
 msgid "Create array"
 msgstr "Создать массив"
 
-#: pcbnew/tools/edit_tool.cpp:116
+#: pcbnew/tools/edit_tool.cpp:120
 msgid "Rotates selected item(s) clockwise"
 msgstr "Вращает выбранный(ые) элемент(ы) по часовой стрелке"
 
-#: pcbnew/tools/edit_tool.cpp:121
+#: pcbnew/tools/edit_tool.cpp:125
 msgid "Rotates selected item(s) counterclockwise"
 msgstr "Вращает выбранные элементы против часовой стрелки"
 
-#: pcbnew/tools/edit_tool.cpp:126
+#: pcbnew/tools/edit_tool.cpp:130
 msgid "Flips selected item(s)"
 msgstr "Размещает выбранный(ые) элемент(ы) на другую сторону"
 
-#: pcbnew/tools/edit_tool.cpp:130
+#: pcbnew/tools/edit_tool.cpp:134
 msgid "Mirrors selected item"
 msgstr "Отразить выбранный элемент"
 
-#: pcbnew/tools/edit_tool.cpp:134 pcbnew/tools/edit_tool.cpp:139
+#: pcbnew/tools/edit_tool.cpp:138 pcbnew/tools/edit_tool.cpp:143
 msgid "Deletes selected item(s)"
 msgstr "Удаляет выбранный(ые) элемент(ы)"
 
-#: pcbnew/tools/edit_tool.cpp:139
+#: pcbnew/tools/edit_tool.cpp:143
 msgid "Delete (Alternative)"
 msgstr "Удалить (альтернативный)"
 
-#: pcbnew/tools/edit_tool.cpp:144
+#: pcbnew/tools/edit_tool.cpp:148
 msgid "Change the footprint used for modules"
 msgstr "Изменить посад.места использоваемые модулями"
 
-#: pcbnew/tools/edit_tool.cpp:149
+#: pcbnew/tools/edit_tool.cpp:153
 msgid "Displays item properties dialog"
 msgstr "Отображает диалог свойств элемента"
 
-#: pcbnew/tools/edit_tool.cpp:157
+#: pcbnew/tools/edit_tool.cpp:161
 msgid "Measuring tool"
 msgstr "Инструмент измерения"
 
-#: pcbnew/tools/edit_tool.cpp:157
+#: pcbnew/tools/edit_tool.cpp:161
 msgid "Interactively measure distance between points"
 msgstr "Интерактивно измерить расстояние между точками"
 
-#: pcbnew/tools/edit_tool.cpp:557
+#: pcbnew/tools/edit_tool.cpp:574
 msgid "Edit track width/via size"
 msgstr "Редактировать размеры ширина/перех.отв. дорожки"
 
-#: pcbnew/tools/edit_tool.cpp:566
+#: pcbnew/tools/edit_tool.cpp:600
 msgid "Edit track/via properties"
 msgstr "Редактировать свойства дорожки/перех.отв."
 
-#: pcbnew/tools/edit_tool.cpp:851
+#: pcbnew/tools/edit_tool.cpp:885
 msgid "Move exact"
 msgstr "Переместить точно"
 
-#: pcbnew/tools/edit_tool.cpp:926
+#: pcbnew/tools/edit_tool.cpp:960
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "Скопирован(о) %d элемент(ов)"
