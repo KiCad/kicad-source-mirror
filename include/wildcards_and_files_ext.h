@@ -51,6 +51,7 @@ extern const wxString ProjectFileExtension;
 extern const wxString SchematicFileExtension;
 extern const wxString NetlistFileExtension;
 extern const wxString GerberFileExtension;
+extern const wxString GerberJobFileExtension;
 extern const wxString HtmlFileExtension;
 
 extern const wxString LegacyPcbFileExtension;

@@ -31,9 +31,11 @@
 #include <confirm.h>
 #include <wxPcbStruct.h>
 #include <pcbplot.h>
+#include <gerber_jobfile_writer.h>
 #include <base_units.h>
 #include <macros.h>
 #include <reporter.h>
+#include <wildcards_and_files_ext.h>
 
 #include <class_board.h>
 #include <wx/ffile.h>
@@ -163,6 +165,9 @@ void DIALOG_PLOT::init_Dialog()
 
     // Grey out if m_useGerberX2Attributes is not checked
     m_useGerberNetAttributes->Enable( m_useGerberX2Attributes->GetValue() );
+
+    // Option to generate a Gerber job file
+    m_generateGerberJobFile->SetValue( m_plotOpts.GetCreateGerberJobFile() );
 
     // Gerber precision for coordinates
     m_rbGerberFormat->SetSelection( m_plotOpts.GetGerberPrecision() == 5 ? 0 : 1 );
@@ -682,6 +687,8 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetUseGerberProtelExtensions( m_useGerberExtensions->GetValue() );
     tempOptions.SetUseGerberAttributes( m_useGerberX2Attributes->GetValue() );
     tempOptions.SetIncludeGerberNetlistInfo( m_useGerberNetAttributes->GetValue() );
+    tempOptions.SetCreateGerberJobFile( m_generateGerberJobFile->GetValue() );
+
     tempOptions.SetGerberPrecision( m_rbGerberFormat->GetSelection() == 0 ? 5 : 6 );
 
     LSET selectedLayers;
@@ -740,6 +747,14 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 {
     applyPlotSettings();
 
+    // If no layer selected, we have nothing plotted.
+    // Prompt user if it happens because he could think there is a bug in Pcbnew.
+    if( !m_plotOpts.GetLayerSelection().any() )
+    {
+        DisplayError( this, _( "No layer selected, Nothing to plot" ) );
+        return;
+    }
+
     // Create output directory if it does not exist (also transform it in
     // absolute form). Bail if it fails
     wxFileName  outputDir = wxFileName::DirName( m_plotOpts.GetOutputDirectory() );
@@ -781,7 +796,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     }
 
     /* If the scale factor edit controls are disabled or the scale value
-     * is 0, don't adjust the base scale factor.   This fixes a bug when
+     * is 0, don't adjust the base scale factor. This fixes a bug when
      * the default scale adjust is initialized to 0 and saved in program
      * settings resulting in a divide by zero fault.
      */
@@ -806,6 +821,8 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     if( m_plotOpts.GetScale() > PLOT_MAX_SCALE )
         DisplayInfoMessage( this,
                             _( "Warning: Scale option set to a very large value" ) );
+
+    GERBER_JOBFILE_WRITER jobfile_writer( m_board, &reporter );
 
     // Save the current plot options in the board
     m_parent->SetPlotSettings( m_plotOpts );
@@ -833,9 +850,9 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         if( m_plotOpts.GetFormat() == PLOT_FORMAT_GERBER && m_useGerberExtensions->GetValue() )
             file_ext = GetGerberProtelExtension( layer );
 
-        BuildPlotFileName( &fn, outputDir.GetPath(),
-                           m_board->GetLayerName( layer ),
-                           file_ext );
+        BuildPlotFileName( &fn, outputDir.GetPath(), m_board->GetLayerName( layer ), file_ext );
+        wxString fullname = fn.GetFullName();
+        jobfile_writer.AddGbrFile( layer, fullname );
 
         LOCALE_IO toggle;
 
@@ -861,10 +878,14 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         }
     }
 
-    // If no layer selected, we have nothing plotted.
-    // Prompt user if it happens because he could think there is a bug in Pcbnew.
-    if( !m_plotOpts.GetLayerSelection().any() )
-        DisplayError( this, _( "No layer selected" ) );
+    if( m_plotOpts.GetFormat() == PLOT_FORMAT_GERBER && m_plotOpts.GetCreateGerberJobFile() )
+    {
+        // Pick the basename from the board file
+        wxFileName fn( boardFilename );
+        // Build gerber job file from basename
+        BuildPlotFileName( &fn, outputDir.GetPath(), "job", GerberJobFileExtension );
+        jobfile_writer.CreateJobFile( fn.GetFullPath() );
+    }
 }
 
 #include <drc_stuff.h>

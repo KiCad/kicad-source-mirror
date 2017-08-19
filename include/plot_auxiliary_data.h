@@ -151,6 +151,7 @@ private:
     bool m_isCopper;
 };
 
+
 /**
  * This helper function "normalize" aString and convert it to a Gerber std::string
  * Normalisation means convert any code > 0x7F and unautorized code to a hexadecimal
@@ -160,6 +161,14 @@ private:
  * @return a std::string (ASCII7 coded) compliant with a gerber string
  */
 std::string formatStringToGerber( const wxString& aString );
+
+/**
+ * This helper function make the inverse conversion of formatStringToGerber()
+ * It converts a "normalized" gerber string and convert it to a 16 bits sequence unicode
+ * @param aString = the wxString compliant with a gerber string format
+ * @return a wxString (unicode 16) from the gerber string
+ */
+wxString FormatStringFromGerber( const wxString& aString );
 
 /**
  * Generates the string to print to a gerber file, to set a net attribute

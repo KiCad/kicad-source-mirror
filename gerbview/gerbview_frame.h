@@ -163,6 +163,9 @@ protected:
     // Auxiliary file history used to store drill files history.
     wxFileHistory           m_drillFileHistory;
 
+    // Auxiliary file history used to store job files history.
+    wxFileHistory           m_jobFileHistory;
+
     /// The last filename chosen to be proposed to the user
     wxString                m_lastFileName;
 
@@ -607,6 +610,12 @@ public:
     void                OnZipFileHistory( wxCommandEvent& event );
 
     /**
+     * deletes the current data and load a gerber job file selected from the
+     * history list.
+     */
+    void                OnJobFileHistory( wxCommandEvent& event );
+
+    /**
      * Extracts gerber and drill files from the zip archive, and load them
      * @param aFullFileName is the full filename of the zip archive
      * @param aReporter a REPORTER to collect warning and error messages
@@ -646,6 +655,17 @@ public:
      * @return true if file was opened successfully.
      */
     bool                LoadZipArchiveFile( const wxString& aFileName );
+
+
+    /**
+     * Load a Gerber job file, and load gerber files found in job files.
+     * @param aFileName - void string or file name with full path to open or empty string to
+     *                    open a new file.
+     *                    if empty string: user will be prompted for filename(s)
+     * @return true if file(s) was opened successfully.
+     */
+    bool                LoadGerberJobFile( const wxString& aFileName );
+
 
     bool                GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
 

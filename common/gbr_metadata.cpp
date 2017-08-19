@@ -122,6 +122,41 @@ std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribu
     return attribute_string;
 }
 
+wxString FormatStringFromGerber( const wxString& aString )
+{
+    // make the inverse conversion of formatStringToGerber()
+    // It converts a "normalized" gerber string and convert it to a 16 bits sequence unicode
+    // and return a wxString (unicode 16) from the gerber string
+    wxString txt;
+
+    for( unsigned ii = 0; ii < aString.Length(); ++ii )
+    {
+        unsigned code = aString[ii];
+
+        if( code == '\\' )
+        {
+            // Convert 4 hexadecimal digits to a 16 bit unicode
+            // (Gerber allows only 4 hexadecimal digits)
+            long value = 0;
+
+            for( int jj = 0; jj < 4; jj++ )
+            {
+                value <<= 4;
+                code = aString[++ii];
+                // Very basic conversion, but it expects a valid gerber file
+                int hexa = (code <= '9' ? code - '0' : code - 'A' + 10) & 0xF;
+                value += hexa;
+            }
+
+            txt.Append( wxChar( value ) );
+        }
+        else
+            txt.Append( aString[ii] );
+    }
+
+    return txt;
+}
+
 
 std::string formatStringToGerber( const wxString& aString )
 {

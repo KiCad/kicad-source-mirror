@@ -238,6 +238,7 @@ set( BMAPS_MID
     gbr_select_mode1
     gbr_select_mode2
     gerber_file
+    gerber_job_file
     gerbview_show_negative_objects
     gerbview_drill_file
     gerbview_clear_layers

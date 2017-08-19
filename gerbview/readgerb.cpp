@@ -69,9 +69,9 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
     }
 
     /* if the gerber file is only a RS274D file
-     * (i.e. without any aperture information), wran the user:
+     * (i.e. without any aperture information, but with items), warn the user:
      */
-    if( !gerber->m_Has_DCode )
+    if( !gerber->m_Has_DCode && gerber->GetItemsList() )
     {
         msg = _("Warning: this file has no D-Code definition\n"
                 "It is perhaps an old RS274D file\n"
@@ -100,12 +100,6 @@ bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
         return false;
 
     m_FileName = aFullFileName;
-
-    wxString path = wxPathOnly( aFullFileName );
-
-    // This change is needed to load included files, if exists:
-    if( path != wxEmptyString )
-        wxSetWorkingDirectory( path );
 
     LOCALE_IO toggleIo;
 

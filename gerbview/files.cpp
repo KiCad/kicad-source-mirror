@@ -74,6 +74,7 @@ void GERBVIEW_FRAME::OnDrlFileHistory( wxCommandEvent& event )
     }
 }
 
+
 void GERBVIEW_FRAME::OnZipFileHistory( wxCommandEvent& event )
 {
     wxString filename;
@@ -83,6 +84,18 @@ void GERBVIEW_FRAME::OnZipFileHistory( wxCommandEvent& event )
     {
         Erase_Current_DrawLayer( false );
         LoadZipArchiveFile( filename );
+    }
+}
+
+
+void GERBVIEW_FRAME::OnJobFileHistory( wxCommandEvent& event )
+{
+    wxString filename;
+    filename = GetFileFromHistory( event.GetId(), _( "Job files" ), &m_jobFileHistory );
+
+    if( !filename.IsEmpty() )
+    {
+        LoadGerberJobFile( filename );
     }
 }
 
@@ -113,6 +126,11 @@ void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
 
     case ID_GERBVIEW_LOAD_ZIP_ARCHIVE_FILE:
         LoadZipArchiveFile( wxEmptyString );
+        m_canvas->Refresh();
+        break;
+
+    case ID_GERBVIEW_LOAD_JOB_FILE:
+        LoadGerberJobFile( wxEmptyString );
         m_canvas->Refresh();
         break;
 

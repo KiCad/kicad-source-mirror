@@ -42,7 +42,8 @@ const wxString ProjectFileExtension( wxT( "pro" ) );
 const wxString SchematicFileExtension( wxT( "sch" ) );
 const wxString NetlistFileExtension( wxT( "net" ) );
 const wxString ComponentFileExtension( wxT( "cmp" ) );
-const wxString GerberFileExtension( wxT( ".((gbr|(gb|gt)[alops])|pho)" ) );
+const wxString GerberFileExtension( "gbr" );
+const wxString GerberJobFileExtension( "gbj" );
 const wxString HtmlFileExtension( wxT( "html" ) );
 
 const wxString LegacyPcbFileExtension( wxT( "brd" ) );

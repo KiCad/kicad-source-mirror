@@ -182,6 +182,7 @@ set( PCBNEW_EXPORTERS
     exporters/gendrill_Excellon_writer.cpp
     exporters/gendrill_file_writer_base.cpp
     exporters/gendrill_gerber_writer.cpp
+    exporters/gerber_jobfile_writer.cpp
     )
 
 set( PCBNEW_MICROWAVE_SRCS

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -94,6 +94,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_useGerberExtensions;
 		wxCheckBox* m_useGerberX2Attributes;
 		wxCheckBox* m_useGerberNetAttributes;
+		wxCheckBox* m_generateGerberJobFile;
 		wxCheckBox* m_subtractMaskFromSilk;
 		wxRadioBox* m_rbGerberFormat;
 		wxStaticBoxSizer* m_HPGLOptionsSizer;

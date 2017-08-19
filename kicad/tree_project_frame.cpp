@@ -75,9 +75,10 @@ static const wxChar* s_allowedExtensionsToList[] =
     wxT( "^.*\\.txt$" ),
     wxT( "^.*\\.pho$" ),            // Gerber file (Old Kicad extension)
     wxT( "^.*\\.gbr$" ),            // Gerber file
-    wxT( "^.*\\.gb[alops]$" ),      // Gerber back (or bottom) layer file
-    wxT( "^.*\\.gt[alops]$" ),      // Gerber front (or top) layer file
-    wxT( "^.*\\.g[0-9]{1,2}$" ),    // Gerber inner layer file
+    wxT( "^.*\\.gbj$" ),            // Gerber job file
+    wxT( "^.*\\.gb[alops]$" ),      // Gerber back (or bottom) layer file (deprecated Protel ext)
+    wxT( "^.*\\.gt[alops]$" ),      // Gerber front (or top) layer file (deprecated Protel ext)
+    wxT( "^.*\\.g[0-9]{1,2}$" ),    // Gerber inner layer file (deprecated Protel ext)
     wxT( "^.*\\.odt$" ),
     wxT( "^.*\\.htm$" ),
     wxT( "^.*\\.html$" ),
@@ -101,6 +102,9 @@ const wxChar  TextFileExtension[] = wxT( "txt" );
 
 // File wildcard definitions.
 const wxChar  TextFileWildcard[] = wxT( "Text files (*.txt)|*.txt" );
+
+// Gerber file extension wildcard.
+const wxString GerberFileExtensionWildCard( ".((gbr|gbj|(gb|gt)[alops])|pho)" );
 
 
 /**
@@ -255,7 +259,7 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
         break;
 
     case TREE_GERBER:
-        ext = GerberFileExtension;
+        ext = GerberFileExtensionWildCard;
         break;
 
     case TREE_HTML:

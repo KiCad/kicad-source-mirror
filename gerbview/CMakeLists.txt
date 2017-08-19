@@ -51,7 +51,7 @@ set( GERBVIEW_SRCS
     gerbview_config.cpp
     gerbview_frame.cpp
     hotkeys.cpp
-    clear_gbr_drawlayers.cpp
+    job_file_reader.cpp
     locate.cpp
     menubar.cpp
     onleftclick.cpp

@@ -37,6 +37,7 @@
 #include <class_gbr_layer_box_selector.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
+#include <wildcards_and_files_ext.h>
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
@@ -81,6 +82,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_displayMode   = 0;
     m_drillFileHistory.SetBaseId( ID_GERBVIEW_DRILL_FILE1 );
     m_zipFileHistory.SetBaseId( ID_GERBVIEW_ZIP_FILE1 );
+    m_jobFileHistory.SetBaseId( ID_GERBVIEW_JOB_FILE1 );
 
     if( m_canvas )
         m_canvas->SetEnableBlockCommands( true );
@@ -230,8 +232,10 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             wxFileName fn( aFileSet[i] );
             wxString ext = fn.GetExt();
 
-            if( ext == "drl" )
+            if( ext == DrillFileExtension )     // In Excellon format
                 LoadExcellonFiles( aFileSet[i] );
+            else if( ext == GerberJobFileExtension )
+                LoadGerberJobFile( aFileSet[i] );
             else
                 LoadGerberFiles( aFileSet[i] );
         }
@@ -307,6 +311,12 @@ void GERBVIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->SetPath( wxT( "zip_files" ) );
     m_zipFileHistory.Load( *aCfg );
     aCfg->SetPath( wxT( ".." ) );
+
+    // because we have more than one file history, we must read this one
+    // using a specific path
+    aCfg->SetPath( "job_files" );
+    m_jobFileHistory.Load( *aCfg );
+    aCfg->SetPath( wxT( ".." ) );
 }
 
 
@@ -334,6 +344,11 @@ void GERBVIEW_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->SetPath( wxT( "zip_files" ) );
     m_zipFileHistory.Save( *aCfg );
     aCfg->SetPath( wxT( ".." ) );
+
+    // Save the job file history list.
+    aCfg->SetPath( "job_files" );
+    m_jobFileHistory.Save( *aCfg );
+    aCfg->SetPath( ".." );
 }
 
 

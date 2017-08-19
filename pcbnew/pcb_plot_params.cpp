@@ -82,6 +82,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_useGerberProtelExtensions  = false;
     m_useGerberAttributes        = false;
     m_includeGerberNetlistInfo   = false;
+    m_createGerberJobFile        = false;
     m_gerberPrecision            = gbrDefaultPrecision;
     m_excludeEdgeLayer           = true;
     m_lineWidth                  = g_DrawDefaultLineThickness;
@@ -146,14 +147,11 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberextensions ),
                        m_useGerberProtelExtensions ? trueStr : falseStr );
 
-    if( m_useGerberAttributes ) // save this option only if active,
-                                // to avoid incompatibility with older Pcbnew version
-    {
-        aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberattributes ), trueStr );
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberattributes ), trueStr );
 
-        if( GetIncludeGerberNetlistInfo() )
-            aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberadvancedattributes ), trueStr );
-    }
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberadvancedattributes ), trueStr );
+
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_creategerberjobfile ), trueStr );
 
     if( m_gerberPrecision != gbrDefaultPrecision ) // save this option only if it is not the default value,
                                                    // to avoid incompatibility with older Pcbnew version
@@ -227,6 +225,8 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams, bool aCom
     if( m_useGerberAttributes != aPcbPlotParams.m_useGerberAttributes )
         return false;
     if( m_useGerberAttributes && m_includeGerberNetlistInfo != aPcbPlotParams.m_includeGerberNetlistInfo )
+        return false;
+    if( m_createGerberJobFile != aPcbPlotParams.m_createGerberJobFile )
         return false;
     if( m_gerberPrecision != aPcbPlotParams.m_gerberPrecision )
         return false;
@@ -390,6 +390,10 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
 
         case T_usegerberadvancedattributes:
             aPcbPlotParams->m_includeGerberNetlistInfo = parseBool();
+            break;
+
+        case T_creategerberjobfile:
+            aPcbPlotParams->m_createGerberJobFile = parseBool();
             break;
 
         case T_gerberprecision:

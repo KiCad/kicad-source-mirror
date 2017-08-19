@@ -29,7 +29,6 @@
 */
 
 #include <fctsys.h>
-#include <macros.h>
 #include <id.h>
 #include <common.h>
 #include <class_drawpanel.h>
@@ -39,9 +38,6 @@
 #include <gerbview_frame.h>
 #include <hotkeys.h>
 #include <dialog_hotkeys_editor.h>
-
-
-#define GROUP wxT("/gerbview")
 
 
 void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )

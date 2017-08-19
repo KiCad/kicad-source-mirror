@@ -41,6 +41,7 @@ enum gerbview_ids
 
     ID_GERBVIEW_SHOW_LIST_DCODES,
     ID_GERBVIEW_LOAD_DRILL_FILE,
+    ID_GERBVIEW_LOAD_JOB_FILE,
     ID_GERBVIEW_LOAD_ZIP_ARCHIVE_FILE,
     ID_GERBVIEW_ERASE_ALL,
     ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE,
@@ -66,7 +67,19 @@ enum gerbview_ids
     ID_GERBVIEW_DRILL_FILE8,
     ID_GERBVIEW_DRILL_FILE9,
 
-    // IDs for drill file history (wxID_FILEnn is already in use)
+    // IDs for job file history (wxID_FILEnn is already in use)
+    ID_GERBVIEW_JOB_FILE,
+    ID_GERBVIEW_JOB_FILE1,
+    ID_GERBVIEW_JOB_FILE2,
+    ID_GERBVIEW_JOB_FILE3,
+    ID_GERBVIEW_JOB_FILE4,
+    ID_GERBVIEW_JOB_FILE5,
+    ID_GERBVIEW_JOB_FILE6,
+    ID_GERBVIEW_JOB_FILE7,
+    ID_GERBVIEW_JOB_FILE8,
+    ID_GERBVIEW_JOB_FILE9,
+
+    // IDs for zip file history (wxID_FILEnn is already in use)
     ID_GERBVIEW_ZIP_FILE,
     ID_GERBVIEW_ZIP_FILE1,
     ID_GERBVIEW_ZIP_FILE2,

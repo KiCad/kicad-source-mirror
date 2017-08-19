@@ -108,6 +108,9 @@ private:
     /// Include netlist info (only in Gerber X2 format) (chapter ? in revision ?)
     bool        m_includeGerberNetlistInfo;
 
+    /// generate the auxiliary "job file" in gerber format
+    bool        m_createGerberJobFile;
+
     /// precision of coordinates in Gerber files: accepted 5 or 6
     /// when units are in mm (6 or 7 in inches, but Pcbnew uses mm).
     /// 6 is the internal resolution of Pcbnew, but not alwys accepted by board maker
@@ -244,6 +247,9 @@ public:
 
     void        SetIncludeGerberNetlistInfo( bool aUse ) { m_includeGerberNetlistInfo = aUse; }
     bool        GetIncludeGerberNetlistInfo() const { return m_includeGerberNetlistInfo; }
+
+    void        SetCreateGerberJobFile( bool aCreate ) { m_createGerberJobFile = aCreate; }
+    bool        GetCreateGerberJobFile() const { return m_createGerberJobFile; }
 
     void        SetUseGerberProtelExtensions( bool aUse ) { m_useGerberProtelExtensions = aUse; }
     bool        GetUseGerberProtelExtensions() const { return m_useGerberProtelExtensions; }
