@@ -2,10 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-03 21:33-0300\n"
-"PO-Revision-Date: 2016-08-04 00:06-0300\n"
-"Last-Translator: GQLee <gqlee@outlook.com>\n"
-"Language-Team: GQLee <gqlee@outlook.com>\n"
+"POT-Creation-Date: 2017-06-20 09:50-0800\n"
+"PO-Revision-Date: 2017-06-20 09:50-0800\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -65,17 +63,17 @@ msgstr "Eeschema  - 原理图编辑器"
 msgid "Schematic library editor"
 msgstr "原理图库编辑器"
 
-#: kicad/commandframe.cpp:71
-msgid "Pcbnew - Printed circuit board editor"
-msgstr "Pcbnew - PCB编辑器"
-
-#: kicad/commandframe.cpp:74
-msgid "PCB footprint editor"
-msgstr "PCB 封装编辑器"
-
 #: kicad/commandframe.cpp:77
-msgid "GerbView - Gerber viewer"
-msgstr "GerbView - Gerber 浏览器"
+msgid "PCB layout editor"
+msgstr "PCB板编辑器"
+
+#: kicad/commandframe.cpp:81
+msgid "PCB library editor"
+msgstr "PCB封装库编辑器"
+
+#: kicad/commandframe.cpp:85
+msgid "Gerber viewer"
+msgstr "Gerber浏览器"
 
 #: kicad/commandframe.cpp:81 kicad/menubar.cpp:388
 msgid ""
@@ -83,9 +81,13 @@ msgid ""
 "or Pcbnew elements"
 msgstr "Bitmap2Component - 转换位图到 Eeschema 或  Pcbnew "
 
-#: kicad/commandframe.cpp:85 kicad/menubar.cpp:394
+#: kicad/commandframe.cpp:94
+msgid "Calculator tools"
+msgstr "计量工具"
+
+#: kicad/menubar.cpp:402
 msgid "Pcb calculator - Calculator for components, track width, etc."
-msgstr "PCB计算器 - 计算布线宽度等"
+msgstr "计量工具 - 计算布线宽度等"
 
 #: kicad/commandframe.cpp:88 kicad/menubar.cpp:399
 msgid "Pl editor - Worksheet layout editor"
@@ -93,7 +95,7 @@ msgstr "Pl 编辑器 - 图框编辑器"
 
 #: kicad/dialogs/dialog_template_selector.cpp:120
 msgid "<html><h1>Template Selector</h1></html>"
-msgstr "选择模板"
+msgstr "<html><h1>选择模板</h1></html>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:211
 msgid "Select Templates Directory"
@@ -370,11 +372,11 @@ msgstr "关闭KiCad"
 
 #: kicad/menubar.cpp:292
 msgid "Open Text E&ditor"
-msgstr "打开文件编辑器(&D)"
+msgstr "打开文本编辑器(&D)"
 
 #: kicad/menubar.cpp:293
 msgid "Launch preferred text editor"
-msgstr "打开文本编辑器"
+msgstr "打开首选文本编辑器"
 
 #: kicad/menubar.cpp:299
 msgid "&Open Local File"
@@ -400,7 +402,7 @@ msgstr "设置文本编辑器(&S)"
 
 #: kicad/menubar.cpp:317
 msgid "Set your preferred text editor"
-msgstr "设置自定义文本编辑器"
+msgstr "设置首选文本编辑器"
 
 #: kicad/menubar.cpp:325
 msgid "System &Default PDF Viewer"
@@ -9952,7 +9954,7 @@ msgstr "线或多边形(&L)"
 #: pcbnew/menubar_modedit.cpp:281 pcbnew/menubar_pcbframe.cpp:417
 #: pcbnew/tool_modedit.cpp:173 pcbnew/tool_pcb.cpp:453
 msgid "Add graphic line or polygon"
-msgstr "添加图形  线/多边形"
+msgstr "添加线或多边形"
 
 #: pcbnew/menubar_modedit.cpp:286 pcbnew/menubar_pcbframe.cpp:409
 #: eeschema/menubar_libedit.cpp:213
@@ -11112,7 +11114,7 @@ msgstr ""
 #: pcbnew/onleftclick.cpp:259 pcbnew/tools/drawing_tool.cpp:726
 #: pcbnew/tools/drawing_tool.cpp:901
 msgid "Graphic not allowed on Copper layers"
-msgstr "图形不允放出现在铜层"
+msgstr "图形不允许出现在铜层"
 
 #: pcbnew/onleftclick.cpp:283
 msgid "Tracks on Copper layers only "
@@ -11252,27 +11254,27 @@ msgstr "封装文档文件"
 
 #: pcbnew/onrightclick.cpp:429
 msgid "Global Spread and Place"
-msgstr "全局扩展和放置"
+msgstr "打散和放置"
 
 #: pcbnew/onrightclick.cpp:431
 msgid "Unlock All Footprints"
-msgstr "解锁所有封装"
+msgstr "解锁全部封装"
 
 #: pcbnew/onrightclick.cpp:433
 msgid "Lock All Footprints"
-msgstr "锁定所有封装"
+msgstr "锁定全部封装"
 
 #: pcbnew/onrightclick.cpp:436
 msgid "Spread out All Footprints"
-msgstr "展开所有封装"
+msgstr "打散放置全部封装"
 
 #: pcbnew/onrightclick.cpp:438
 msgid "Spread out Footprints not Already on Board"
-msgstr "不在电路板上展开封装"
+msgstr "打散放置尚未在板子上出现过的封装"
 
 #: pcbnew/onrightclick.cpp:441
 msgid "Automatically Place All Footprints"
-msgstr "自动放置所有封装"
+msgstr "自动放置全部封装"
 
 #: pcbnew/onrightclick.cpp:443
 msgid "Automatically Place New Footprints"
@@ -12963,10 +12965,10 @@ msgstr ", 钻孔: 默认"
 msgid ", drill: "
 msgstr ", 钻孔: "
 
-#: pcbnew/tools/zoom_menu.cpp:49
+#: common/tool/zoom_menu.cpp:49
 #, c-format
 msgid "Zoom: %.2f"
-msgstr "缩放: %.2f"
+msgstr "倍数: %.2f"
 
 #: pcbnew/xchgmod.cpp:123
 #, c-format
@@ -14524,19 +14526,19 @@ msgstr "立陶宛"
 
 #: common/pgm_base.cpp:347
 msgid "No default editor found, you must choose it"
-msgstr "未找到编辑器 请选择默认文本编辑器"
+msgstr "未找到默认编辑器 请先设置首选文本编辑器"
 
 #: common/pgm_base.cpp:367
 msgid "Executable file (*.exe)|*.exe"
-msgstr "可执行文件（* .EXE）| *.exe文件"
+msgstr "可执行文件 (*.exe)|*.exe"
 
 #: common/pgm_base.cpp:369
 msgid "Executable file (*)|*"
-msgstr "可执行文件 （*） | *"
+msgstr "可执行文件 (*)|*"
 
 #: common/pgm_base.cpp:379
 msgid "Select Preferred Editor"
-msgstr "选择默认编辑器"
+msgstr "选择首选编辑器"
 
 #: common/pgm_base.cpp:400
 #, c-format
