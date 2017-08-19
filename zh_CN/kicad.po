@@ -25411,3 +25411,7 @@ msgstr ""
 #~ "输入名称和路径。\n"
 #~ "\n"
 #~ "灰色项目是由系统或用户已在外部被定义环境变量的名称。"
+
+#: common/pgm_base.cpp:848
+msgid "Set Language"
+msgstr "设置语言"
