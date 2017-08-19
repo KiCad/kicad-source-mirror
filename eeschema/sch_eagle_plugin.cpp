@@ -1728,8 +1728,7 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymboltext( std::unique_ptr< LIB_PART >& aPart, 
     libtext->SetUnit( gateNumber );
     libtext->SetPosition( wxPoint( etext.x * EUNIT_TO_MIL, etext.y * EUNIT_TO_MIL ) );
     libtext->SetText( aLibText->GetNodeContent() );
-    libtext->SetTextSize( wxSize( etext.size * EUNIT_TO_MIL*0.95,
-                    etext.size * EUNIT_TO_MIL*0.95 ) );
+    libtext->SetTextSize( convertTextSize( etext ) );
 
     if( etext.ratio )
     {
@@ -1753,6 +1752,29 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymboltext( std::unique_ptr< LIB_PART >& aPart, 
     return libtext.release();
 }
 
+wxSize SCH_EAGLE_PLUGIN::convertTextSize(ETEXT& etext ) {
+
+    wxSize textsize;
+    if(etext.font){
+        wxString font = etext.font.Get();
+        if(font == "vector")
+        {
+            textsize = wxSize( etext.size * EUNIT_TO_MIL, etext.size * EUNIT_TO_MIL );
+        }
+        else if ( font == "fixed")
+        {
+            textsize = wxSize( etext.size * EUNIT_TO_MIL, etext.size * EUNIT_TO_MIL*0.80 );
+        }
+
+    }
+    else
+    {
+        textsize =  wxSize( etext.size * EUNIT_TO_MIL*0.85, etext.size * EUNIT_TO_MIL );
+    }
+    return textsize;
+
+}
+
 
 SCH_TEXT* SCH_EAGLE_PLUGIN::loadplaintext( wxXmlNode* aSchText )
 {
@@ -1763,6 +1785,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadplaintext( wxXmlNode* aSchText )
 
     schtext->SetItalic( false );
     schtext->SetPosition( wxPoint( etext.x * EUNIT_TO_MIL, -etext.y * EUNIT_TO_MIL ) );
+
     wxString thetext = aSchText->GetNodeContent();
     thetext.Replace("~", "~~");
     thetext.Replace("!", "~");
@@ -1777,8 +1800,8 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadplaintext( wxXmlNode* aSchText )
         }
     }
 
-    schtext->SetTextSize( wxSize( int(etext.size * EUNIT_TO_MIL),
-                    int(etext.size * EUNIT_TO_MIL) ) );
+    schtext->SetTextSize( convertTextSize ( etext ) );
+
 
     int align = etext.align ? *etext.align : ETEXT::BOTTOM_LEFT;
 
