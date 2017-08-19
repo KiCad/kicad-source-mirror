@@ -130,7 +130,8 @@ static const wxString getPinOrientationName( unsigned aPinOrientationCode )
 
 static int InternalPinDecoSize( const LIB_PIN &aPin )
 {
-    return aPin.GetNameTextSize() / 2;
+
+    return aPin.GetNameTextSize() != 0 ? aPin.GetNameTextSize() / 2 : aPin.GetNumberTextSize() / 2;
 }
 
 /// Utility for getting the size of the 'external' pin decorators (as a radius)

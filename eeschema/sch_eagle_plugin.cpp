@@ -1693,6 +1693,28 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( std::unique_ptr< LIB_PART >& aPart, wxXmlNod
         */
     }
 
+    if( epin->function)
+    {
+        wxString function = epin->function.Get();
+
+        if( function == "dot")
+        {
+            pin->SetShape(PINSHAPE_INVERTED);
+        }
+        else if( function == "dot")
+        {
+            pin->SetShape(PINSHAPE_CLOCK);
+        }
+        else if( function == "clk")
+        {
+            pin->SetShape(PINSHAPE_CLOCK);
+        }
+        else if( function == "dotclk")
+        {
+            pin->SetShape(PINSHAPE_INVERTED_CLOCK);
+        }
+    }
+
     return pin.release();
 }
 
