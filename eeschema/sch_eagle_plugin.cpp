@@ -1499,7 +1499,7 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr< LIB_PART >& aPart, 
     if( ewire.curve )
     {
         std::unique_ptr<LIB_ARC> arc( new LIB_ARC( aPart.get() ) );
-        wxRealPoint center = kicad_arc_center( begin, end, *ewire.curve);
+        wxRealPoint center = kicad_arc_center( begin, end, *ewire.curve*-1);
 
         arc->SetPosition(center);
         if(*ewire.curve >0)
