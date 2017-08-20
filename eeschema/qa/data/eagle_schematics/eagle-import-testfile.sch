@@ -13112,6 +13112,87 @@ DIN A4, landscape with location and doc. field</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="atmel" urn="urn:adsk.eagle:library:105">
+<description>&lt;b&gt;AVR Devices&lt;/b&gt;&lt;p&gt;
+Configurable logic, microcontrollers, nonvolatile memories&lt;p&gt;
+Based on the following sources:&lt;p&gt;
+&lt;ul&gt;
+&lt;li&gt;www.atmel.com
+&lt;li&gt;CD-ROM : Configurable Logic Microcontroller Nonvolatile Memory
+&lt;li&gt;CadSoft download site, www.cadsoft.de or www.cadsoftusa.com , file at90smcu_v400.zip
+&lt;li&gt;avr.lbr
+&lt;/ul&gt;
+&lt;author&gt;Revised by librarian@cadsoft.de&lt;/author&gt;</description>
+<packages>
+<package name="DIL08" library_version="1">
+<description>&lt;B&gt;Dual In Line&lt;/B&gt;</description>
+<wire x1="-5.08" y1="-0.635" x2="-5.08" y2="0.635" width="0.1524" layer="21" curve="180"/>
+<wire x1="-5.08" y1="-0.635" x2="-5.08" y2="-2.794" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="-2.794" x2="5.08" y2="-2.794" width="0.1524" layer="21"/>
+<wire x1="5.08" y1="-2.794" x2="5.08" y2="2.794" width="0.1524" layer="21"/>
+<wire x1="5.08" y1="2.794" x2="-5.08" y2="2.794" width="0.1524" layer="21"/>
+<wire x1="-5.08" y1="2.794" x2="-5.08" y2="0.635" width="0.1524" layer="21"/>
+<pad name="1" x="-3.81" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="2" x="-1.27" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="3" x="1.27" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="4" x="3.81" y="-3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="5" x="3.81" y="3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="6" x="1.27" y="3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="7" x="-1.27" y="3.81" drill="0.8128" shape="long" rot="R90"/>
+<pad name="8" x="-3.81" y="3.81" drill="0.8128" shape="long" rot="R90"/>
+<text x="-5.3594" y="-2.54" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
+<text x="-3.81" y="-0.9906" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
+</package>
+</packages>
+<symbols>
+<symbol name="24CXX" library_version="1">
+<wire x1="-7.62" y1="10.16" x2="7.62" y2="10.16" width="0.254" layer="94"/>
+<wire x1="7.62" y1="10.16" x2="7.62" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="7.62" y1="-10.16" x2="-7.62" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="-10.16" x2="-7.62" y2="10.16" width="0.254" layer="94"/>
+<text x="-7.62" y="10.795" size="1.778" layer="95">&gt;NAME</text>
+<text x="-7.62" y="-12.7" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="A2" x="10.16" y="7.62" length="short" direction="in" rot="R180"/>
+<pin name="A1" x="10.16" y="5.08" length="short" direction="in" rot="R180"/>
+<pin name="A0" x="10.16" y="2.54" length="short" direction="in" rot="R180"/>
+<pin name="WP" x="10.16" y="-2.54" length="short" direction="in" rot="R180"/>
+<pin name="SCL" x="10.16" y="-5.08" length="short" rot="R180"/>
+<pin name="SDA" x="10.16" y="-7.62" length="short" rot="R180"/>
+<pin name="GND" x="-10.16" y="-7.62" length="short" direction="pwr"/>
+<pin name="VCC" x="-10.16" y="7.62" length="short" direction="pwr"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="AT24C*" prefix="IC" library_version="1">
+<description>2-wire serial &lt;B&gt;EEPROM&lt;/B&gt;</description>
+<gates>
+<gate name="G$1" symbol="24CXX" x="0" y="0"/>
+</gates>
+<devices>
+<device name="P" package="DIL08">
+<connects>
+<connect gate="G$1" pin="A0" pad="1"/>
+<connect gate="G$1" pin="A1" pad="2"/>
+<connect gate="G$1" pin="A2" pad="3"/>
+<connect gate="G$1" pin="GND" pad="4"/>
+<connect gate="G$1" pin="SCL" pad="6"/>
+<connect gate="G$1" pin="SDA" pad="5"/>
+<connect gate="G$1" pin="VCC" pad="8"/>
+<connect gate="G$1" pin="WP" pad="7"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="MF" value="" constant="no"/>
+<attribute name="MPN" value="AT24C1024BW-SH-B" constant="no"/>
+<attribute name="OC_FARNELL" value="1362646" constant="no"/>
+<attribute name="OC_NEWARK" value="03P2044" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -13142,6 +13223,10 @@ DIN A4, landscape with location and doc. field</description>
 <part name="U$1" library="rcl" deviceset="ARCTEST" device=""/>
 <part name="FRAME1" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A4L-LOC" device=""/>
 <part name="U$2" library="pinhead" deviceset="PINSHAPETEST" device=""/>
+<part name="R3" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="0204/2V"/>
+<part name="IC1" library="atmel" library_urn="urn:adsk.eagle:library:105" deviceset="AT24C*" device="P"/>
+<part name="IC2" library="atmel" library_urn="urn:adsk.eagle:library:105" deviceset="AT24C*" device="P"/>
+<part name="IC3" library="atmel" library_urn="urn:adsk.eagle:library:105" deviceset="AT24C*" device="P"/>
 </parts>
 <sheets>
 <sheet>
@@ -13154,6 +13239,9 @@ DIN A4, landscape with location and doc. field</description>
 <text x="83.82" y="68.58" size="1.778" layer="91">Bus B is present on both sheets, therefore global labels should be used</text>
 <text x="48.26" y="88.9" size="1.778" layer="91">Arc test symbol.
 Eagle used think lines and no line ending to emulate a filled arc. Kicad expands the arc to the necessary radius and uses a direct fill</text>
+<text x="-33.02" y="132.08" size="1.778" layer="91">normal</text>
+<text x="-7.62" y="132.08" size="1.778" layer="91">Smashed</text>
+<text x="20.32" y="132.08" size="1.778" layer="91">hidden name and value</text>
 </plain>
 <instances>
 <instance part="GND1" gate="1" x="10.16" y="0"/>
@@ -13172,6 +13260,16 @@ Eagle used think lines and no line ending to emulate a filled arc. Kicad expands
 <instance part="U$1" gate="A" x="35.56" y="76.2"/>
 <instance part="FRAME1" gate="G$1" x="-53.34" y="-17.78"/>
 <instance part="U$2" gate="1" x="10.16" y="76.2"/>
+<instance part="R3" gate="G$1" x="-7.62" y="55.88"/>
+<instance part="IC1" gate="G$1" x="-25.4" y="116.84"/>
+<instance part="IC2" gate="G$1" x="0" y="116.84" smashed="yes">
+<attribute name="NAME" x="-7.62" y="102.235" size="1.778" layer="95"/>
+<attribute name="VALUE" x="-7.62" y="96.52" size="1.778" layer="96"/>
+</instance>
+<instance part="IC3" gate="G$1" x="27.94" y="116.84" smashed="yes">
+<attribute name="NAME" x="20.32" y="102.235" size="1.778" layer="95" display="off"/>
+<attribute name="VALUE" x="20.32" y="96.52" size="1.778" layer="96" display="off"/>
+</instance>
 </instances>
 <busses>
 <bus name="A[1..3]">

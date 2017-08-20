@@ -1034,7 +1034,11 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     EPART* epart = m_partlist[einstance.part].get();
 
     std::string gatename = epart->deviceset + epart->device + einstance.gate;
-    std::string symbolname = epart->deviceset + epart->device;
+    wxString sntemp( epart->deviceset + epart->device );
+    sntemp.Replace("*", "");
+    std::string symbolname = sntemp.ToStdString();
+
+	
     // KiCad enumerates units starting from 1, Eagle starts with 0
     int unit = m_eaglelibraries[epart->library].gate_unit[gatename];
     std::string package = m_eaglelibraries[epart->library].package[symbolname];
@@ -1085,10 +1089,8 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     }
     else
     {
-        if(epart->device.length()>0)
-        component->GetField( VALUE )->SetText( epart->device );
-        else  if(epart->deviceset.length()>0)
-        component->GetField( VALUE )->SetText( epart->deviceset );
+        
+        component->GetField( VALUE )->SetText( symbolname );
     }
 
     if(part->GetField(REFERENCE)->IsVisible())
@@ -1238,6 +1240,7 @@ EAGLE_LIBRARY SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
         EDEVICESET edeviceset = EDEVICESET( devicesetNode );
 
         // std::cout << "Importing Eagle device set "<< edeviceset.name << std::endl;
+        wxString prefix = edeviceset.prefix ? edeviceset.prefix.Get() : "" ;
 
         NODE_MAP aDeviceSetChildren = MapChildren( devicesetNode );
         wxXmlNode* deviceNode = getChildrenNodes( aDeviceSetChildren, "devices" );
@@ -1251,6 +1254,7 @@ EAGLE_LIBRARY SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
             // Create symbol name from deviceset and device names.
             wxString symbolName = wxString( edeviceset.name + edevice.name );
             // std::cout << "Creating Kicad Symbol: " << symbolName.ToStdString() << '\n';
+            symbolName.Replace("*", "");
 
             if( edevice.package )
                 elib.package[symbolName.ToStdString()] = edevice.package.Get();
@@ -1262,6 +1266,19 @@ EAGLE_LIBRARY SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
             wxXmlNode* gateNode = getChildrenNodes( aDeviceSetChildren, "gates" );
             int gates_count = countChildren( aDeviceSetChildren["gates"], "gate" );
             kpart->SetUnitCount( gates_count );
+
+            LIB_FIELD* reference = kpart->GetField(REFERENCE);
+            if(  prefix.length() ==0  )
+            {
+                std::cout << "length == 0" << '\n';
+                reference->SetVisible( false );
+            }
+            else
+            {
+                std::cout << "a prefix" << '\n';
+                reference->SetText( prefix );
+            }
+            std::cout << "after prefix" << '\n';
             int gateindex;
             bool ispower = false;
 
