@@ -1131,6 +1131,12 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
                 }
                 bool spin = attr.rot ? attr.rot->spin : false;
 
+                if(attr.display == EATTR::Off)
+                {
+                        field->SetVisible( false );
+
+                }
+
                 int rotation = einstance.rot ? einstance.rot->degrees : 0;
                 int reldegrees = ( absdegrees - rotation + 360.0);
                 reldegrees %= 360;
@@ -1152,6 +1158,12 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
                     mirror = !mirror;
                 }
 
+                if(attr.display == EATTR::Off)
+                {
+                        field->SetVisible( false );
+
+                }
+
                 int rotation = einstance.rot ? einstance.rot->degrees : 0;
                 int reldegrees = ( absdegrees - rotation + 360.0);
                 reldegrees %= 360;
@@ -1163,8 +1175,8 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     }
     if (smashed ){
-        component->GetField( VALUE )->SetVisible( valueAttributeFound );
-        component->GetField( REFERENCE )->SetVisible( nameAttributeFound );
+        if(!valueAttributeFound) component->GetField( VALUE )->SetVisible( false );
+        if(!nameAttributeFound) component->GetField( REFERENCE )->SetVisible( false );
 
     }
 
