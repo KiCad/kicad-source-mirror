@@ -25415,3 +25415,6 @@ msgstr ""
 #: common/pgm_base.cpp:848
 msgid "Set Language"
 msgstr "设置语言"
+
+msgid "Rotate Clockwise"
+msgstr "顺时针旋转"
