@@ -157,6 +157,14 @@ public:
         m_dirty = true;
     }
 
+    /**
+     * Clears the dirty flag to prevent reuploading vertices to the GPU memory.
+     */
+    void ClearDirty()
+    {
+        m_dirty = false;
+    }
+
 protected:
     VERTEX_CONTAINER( unsigned int aSize = DEFAULT_SIZE );
 

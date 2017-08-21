@@ -717,25 +717,6 @@ struct VIEW::changeItemsDepth
 };
 
 
-void VIEW::ChangeLayerDepth( int aLayer, int aDepth )
-{
-    // There is no point in updating non-cached layers
-    if( !IsCached( aLayer ) )
-        return;
-
-    BOX2I r;
-
-    r.SetMaximum();
-
-    m_gal->BeginUpdate();
-    changeItemsDepth visitor( aLayer, aDepth, m_gal );
-    m_layers[aLayer].items->Query( r, visitor );
-    m_gal->EndUpdate();
-
-    MarkTargetDirty( m_layers[aLayer].target );
-}
-
-
 int VIEW::GetTopLayer() const
 {
     if( m_topLayers.size() == 0 )
@@ -814,13 +795,20 @@ void VIEW::ClearTopLayers()
 
 void VIEW::UpdateAllLayersOrder()
 {
+    BOX2I r;
+    r.SetMaximum();
+
     sortLayers();
+    m_gal->BeginUpdate();
 
     for( LAYER_MAP::value_type& l : m_layers )
     {
-        ChangeLayerDepth( l.first, l.second.renderingOrder );
+        int layer = l.first;
+        changeItemsDepth visitor( layer, l.second.renderingOrder, m_gal );
+        m_layers[layer].items->Query( r, visitor );
     }
 
+    m_gal->EndUpdate();
     MarkDirty();
 }
 

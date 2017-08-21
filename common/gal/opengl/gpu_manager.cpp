@@ -183,6 +183,7 @@ void GPU_CACHED_MANAGER::EndDrawing()
 
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
+    cached->ClearDirty();
 
     // Deactivate vertex array
     glDisableClientState( GL_COLOR_ARRAY );

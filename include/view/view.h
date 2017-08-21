@@ -470,14 +470,6 @@ public:
     void UpdateAllLayersColor();
 
     /**
-     * Function ChangeLayerDepth()
-     * Changes the depth of items on the given layer.
-     * @param aLayer is a number of the layer to be updated.
-     * @param aDepth is the new depth.
-     */
-    void ChangeLayerDepth( int aLayer, int aDepth );
-
-    /**
      * Function SetTopLayer()
      * Sets given layer to be displayed on the top or sets back the default order of layers.
      * @param aEnabled = true to display aLayer on the top.
