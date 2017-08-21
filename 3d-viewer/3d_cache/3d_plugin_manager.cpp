@@ -131,6 +131,18 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
 
     std::string testpath = std::string( fn.GetPathWithSep().ToUTF8() );
     checkPluginPath( testpath, searchpaths );
+
+    // add subdirectories too
+    wxDir debugPluginDir( testpath );
+    wxString subdir;
+
+    if( debugPluginDir.GetFirst( &subdir, wxEmptyString, wxDIR_DIRS ) )
+    {
+        checkPluginPath( testpath + subdir, searchpaths );
+
+        while( debugPluginDir.GetNext( &subdir ) )
+            checkPluginPath( testpath + subdir, searchpaths );
+    }
     #endif
 
     #ifndef _WIN32
