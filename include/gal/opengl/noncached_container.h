@@ -62,7 +62,7 @@ public:
     virtual void Clear() override;
 
     /// @copydoc VERTEX_CONTAINER::GetSize()
-    virtual inline unsigned int GetSize() const override
+    virtual unsigned int GetSize() const override
     {
         // As the m_freePtr points to the first free space, we can safely assume
         // that this is the number of vertices stored inside

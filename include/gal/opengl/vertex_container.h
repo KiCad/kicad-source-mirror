@@ -41,7 +41,6 @@ class VERTEX_CONTAINER
 {
 public:
     /**
-     * Function MakeContainer()
      * Returns a pointer to a new container of an appropriate type.
      */
     static VERTEX_CONTAINER* MakeContainer( bool aCached );
@@ -55,35 +54,29 @@ public:
     virtual bool IsCached() const = 0;
 
     /**
-     * Function Map()
-     * prepares the container for vertices updates.
+     * Prepares the container for vertices updates.
      */
     virtual void Map() {}
 
     /**
-     * Function Unmap()
-     * finishes the vertices updates stage.
+     * Finishes the vertices updates stage.
      */
     virtual void Unmap() {}
 
     /**
-     * Function SetItem()
-     * sets the item in order to modify or finishes its current modifications.
+     * Sets the item for the further actions.
      * @param aItem is the item or NULL in case of finishing the item.
      */
     virtual void SetItem( VERTEX_ITEM* aItem ) = 0;
 
     /**
-     * Function FinishItem()
-     * does the cleaning after adding an item.
+     * Clean up after adding an item.
      */
     virtual void FinishItem() {};
 
     /**
-     * Function Allocate()
-     * returns allocated space (possibly resizing the used memory chunk or allocating a new
-     * chunk if it was not stored before) for the given number of vertices associated with the
-     * current item (set by SetItem()). The newly allocated space is added at the end of the chunk
+     * Returns allocated space for the requested number of vertices associated with the
+     * current item (set with SetItem()). The allocated space is added at the end of the chunk
      * used by the current item and may serve to store new vertices.
      * @param aSize is the number of vertices to be allocated.
      * @return Pointer to the allocated space or NULL in case of failure.
@@ -91,25 +84,20 @@ public:
     virtual VERTEX* Allocate( unsigned int aSize ) = 0;
 
     /**
-     * Function Delete()
-     * erases the selected item.
-     *
+     * Erases the data related to an item.
      * @param aItem is the item to be erased.
      */
     virtual void Delete( VERTEX_ITEM* aItem ) = 0;
 
     /**
-     * Function Clear()
-     * removes all the data stored in the container and restores its original state.
+     * Removes all data stored in the container and restores its original state.
      */
     virtual void Clear() = 0;
 
     /**
-     * Function GetAllVertices()
-     * returns all the vertices stored in the container. It is especially useful for transferring
-     * data to the GPU memory.
+     * Returns pointer to the vertices stored in the container.
      */
-    inline virtual VERTEX* GetAllVertices() const
+    VERTEX* GetAllVertices() const
     {
         return m_vertices;
     }
@@ -119,7 +107,7 @@ public:
      * returns vertices stored at the specific offset.
      * @param aOffset is the offset.
      */
-    virtual inline VERTEX* GetVertices( unsigned int aOffset ) const
+    virtual VERTEX* GetVertices( unsigned int aOffset ) const
     {
         return &m_vertices[aOffset];
     }
@@ -128,31 +116,25 @@ public:
      * Function GetSize()
      * returns amount of vertices currently stored in the container.
      */
-    virtual inline unsigned int GetSize() const
+    virtual unsigned int GetSize() const
     {
         return m_currentSize;
     }
 
     /**
-     * Function IsDirty()
-     * returns information about container cache state. Clears the flag after calling the function.
-     * @return true in case the vertices have to be reuploaded.
+     * Returns information about the container cache state.
+     * @return True in case the vertices have to be reuploaded.
      */
-    inline bool IsDirty()
+    bool IsDirty() const
     {
-        bool state = m_dirty;
-
-        m_dirty = false;
-
-        return state;
+        return m_dirty;
     }
 
     /**
-     * Function SetDirty()
-     * sets the dirty flag, so vertices in the container are going to be reuploaded to the GPU on
+     * Sets the dirty flag, so vertices in the container are going to be reuploaded to the GPU on
      * the next frame.
      */
-    inline void SetDirty()
+    void SetDirty()
     {
         m_dirty = true;
     }
@@ -168,19 +150,19 @@ public:
 protected:
     VERTEX_CONTAINER( unsigned int aSize = DEFAULT_SIZE );
 
-    ///< How many vertices we can store in the container
+    ///> Free space left in the container, expressed in vertices
     unsigned int    m_freeSpace;
 
-    ///< How big is the current container, expressed in vertices
+    ///> Current container size, expressed in vertices
     unsigned int    m_currentSize;
 
-    ///< Store the initial size, so it can be resized to this on Clear()
+    ///> Store the initial size, so it can be resized to this on Clear()
     unsigned int    m_initialSize;
 
-    ///< Actual storage memory (should be handled using malloc/realloc/free to speed up resizing)
+    ///> Actual storage memory
     VERTEX*         m_vertices;
 
-    ///< State flags
+    // Status flags
     bool            m_failed;
     bool            m_dirty;
 
@@ -189,7 +171,7 @@ protected:
      * returns size of the used memory space.
      * @return Size of the used memory space (expressed as a number of vertices).
      */
-    inline unsigned int usedSpace() const
+    unsigned int usedSpace() const
     {
         return m_currentSize - m_freeSpace;
     }

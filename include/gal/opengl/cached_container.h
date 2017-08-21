@@ -67,14 +67,12 @@ public:
     virtual void Clear() override;
 
     /**
-     * Function GetBufferHandle()
-     * returns handle to the vertex buffer. It might be negative if the buffer is not initialized.
+     * Returns handle to the vertex buffer. It might be negative if the buffer is not initialized.
      */
     virtual unsigned int GetBufferHandle() const = 0;
 
     /**
-     * Function IsMapped()
-     * returns true if vertex buffer is currently mapped.
+     * Returns true if vertex buffer is currently mapped.
      */
     virtual bool IsMapped() const = 0;
 
@@ -106,8 +104,7 @@ protected:
     unsigned int        m_chunkOffset;
 
     /**
-     * Function reallocate()
-     * resizes the chunk that stores the current item to the given size. The current item has
+     * Resizes the chunk that stores the current item to the given size. The current item has
      * its offset adjusted after the call, and the new chunk parameters are stored
      * in m_chunkOffset and m_chunkSize.
      *
@@ -117,8 +114,7 @@ protected:
     bool reallocate( unsigned int aSize );
 
     /**
-     * Function defragmentResize()
-     * removes empty spaces between chunks and optionally resizes the container.
+     * Removes empty spaces between chunks and optionally resizes the container.
      * After the operation there is continous space for storing vertices at the end of the container.
      *
      * @param aNewSize is the new size of container, expressed in number of vertices
@@ -134,15 +130,13 @@ protected:
     void defragment( VERTEX* aTarget );
 
     /**
-     * Function mergeFreeChunks()
-     * looks for consecutive free memory chunks and merges them, decreasing fragmentation of
+     * Looks for consecutive free memory chunks and merges them, decreasing fragmentation of
      * memory.
      */
     void mergeFreeChunks();
 
     /**
-     * Function getChunkSize()
-     * returns size of the given chunk.
+     * Returns the size of a chunk.
      *
      * @param aChunk is the chunk.
      */
@@ -152,8 +146,7 @@ protected:
     }
 
     /**
-     * Function getChunkOffset()
-     * returns offset of the chunk.
+     * Returns the offset of a chunk.
      *
      * @param aChunk is the chunk.
      */
@@ -163,8 +156,7 @@ protected:
     }
 
     /**
-     * Function addFreeChunk
-     * Adds a chunk marked as free.
+     * Adds a chunk marked as a free space.
      */
     void addFreeChunk( unsigned int aOffset, unsigned int aSize );
 
