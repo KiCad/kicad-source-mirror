@@ -78,6 +78,8 @@ public:
     /// @copydoc VIEW_CONTROLS::GetCursorPosition()
     VECTOR2D GetCursorPosition( bool aSnappingEnabled ) const override;
 
+    void SetCursorPosition( const VECTOR2D& aPosition ) override;
+
     /// @copydoc VIEW_CONTROLS::CursorWarp()
     void WarpCursor( const VECTOR2D& aPosition, bool aWorldCoordinates = false,
             bool aWarpView = false ) const override;
@@ -137,6 +139,12 @@ private:
 
     /// Current scrollbar position
     VECTOR2I    m_scrollPos;
+
+    /// Current cursor position (world coordinates)
+    VECTOR2D    m_cursorPos;
+
+    /// Flag deciding whether the cursor position should be calculated using the mouse position
+    bool        m_updateCursor;
 };
 } // namespace KIGFX
 

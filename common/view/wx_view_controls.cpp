@@ -36,7 +36,8 @@ using namespace KIGFX;
 const wxEventType WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE = wxNewEventType();
 
 WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel ) :
-    VIEW_CONTROLS( aView ), m_state( IDLE ), m_parentPanel( aParentPanel ), m_scrollScale( 1.0, 1.0 )
+    VIEW_CONTROLS( aView ), m_state( IDLE ), m_parentPanel( aParentPanel ),
+    m_scrollScale( 1.0, 1.0 ), m_cursorPos( 0, 0 ), m_updateCursor( true )
 {
     m_parentPanel->Connect( wxEVT_MOTION,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onMotion ), NULL, this );
@@ -72,6 +73,7 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
 void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 {
     bool isAutoPanning = false;
+    VECTOR2D mousePos( aEvent.GetX(), aEvent.GetY() );
 
     if( m_settings.m_autoPanEnabled )
         isAutoPanning = handleAutoPanning( aEvent );
@@ -80,13 +82,18 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
     {
         if( m_state == DRAG_PANNING )
         {
-            VECTOR2D d = m_dragStartPoint - VECTOR2D( aEvent.GetX(), aEvent.GetY() );
+            VECTOR2D d = m_dragStartPoint - mousePos;
             VECTOR2D delta = m_view->ToWorld( d, false );
 
             m_view->SetCenter( m_lookStartPoint + delta );
             aEvent.StopPropagation();
         }
     }
+
+    if( m_updateCursor )        // do not update the cursor position if it was explicitly set
+        m_cursorPos = m_view->ToWorld( mousePos );
+    else
+        m_updateCursor = true;
 
     aEvent.Skip();
 }
@@ -355,8 +362,8 @@ void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
 VECTOR2D WX_VIEW_CONTROLS::GetMousePosition( bool aWorldCoordinates ) const
 {
     wxPoint msp = wxGetMousePosition();
-    wxPoint winp = m_parentPanel->GetScreenPosition();
-    VECTOR2D screenPos( msp.x - winp.x, msp.y - winp.y );
+    m_parentPanel->ScreenToClient( &msp.x, &msp.y );
+    VECTOR2D screenPos( msp.x, msp.y );
 
     return aWorldCoordinates ? m_view->ToWorld( screenPos ) : screenPos;
 }
@@ -370,13 +377,19 @@ VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition( bool aEnableSnapping ) const
     }
     else
     {
-        VECTOR2D mousePosition = GetMousePosition();
-
         if( aEnableSnapping )
-            return m_view->GetGAL()->GetGridPoint( mousePosition );
+            return m_view->GetGAL()->GetGridPoint( m_cursorPos );
         else
-            return mousePosition;
+            return m_cursorPos;
     }
+}
+
+
+void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition )
+{
+    m_updateCursor = false;
+    WarpCursor( aPosition, true, true );
+    m_cursorPos = aPosition;
 }
 
 

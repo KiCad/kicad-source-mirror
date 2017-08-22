@@ -492,7 +492,6 @@ int PCBNEW_CONTROL::CursorControl( const TOOL_EVENT& aEvent )
     GRID_HELPER gridHelper( m_frame );
     VECTOR2D cursor = getViewControls()->GetCursorPosition();
     VECTOR2I gridSize = gridHelper.GetGrid();
-    VECTOR2D newCursor = gridHelper.Align( cursor );
 
     if( fastMove )
         gridSize = gridSize * 10;
@@ -500,19 +499,19 @@ int PCBNEW_CONTROL::CursorControl( const TOOL_EVENT& aEvent )
     switch( type )
     {
         case PCB_ACTIONS::CURSOR_UP:
-            newCursor -= VECTOR2D( 0, gridSize.y );
+            cursor -= VECTOR2D( 0, gridSize.y );
             break;
 
         case PCB_ACTIONS::CURSOR_DOWN:
-            newCursor += VECTOR2D( 0, gridSize.y );
+            cursor += VECTOR2D( 0, gridSize.y );
             break;
 
         case PCB_ACTIONS::CURSOR_LEFT:
-            newCursor -= VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
+            cursor -= VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
             break;
 
         case PCB_ACTIONS::CURSOR_RIGHT:
-            newCursor += VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
+            cursor += VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
             break;
 
         case PCB_ACTIONS::CURSOR_CLICK:              // fall through
@@ -541,50 +540,7 @@ int PCBNEW_CONTROL::CursorControl( const TOOL_EVENT& aEvent )
         break;
     }
 
-    // Handler cursor movement
-    KIGFX::VIEW* view = getView();
-    newCursor = view->ToScreen( newCursor );
-    newCursor.x = KiROUND( newCursor.x );
-    newCursor.y = KiROUND( newCursor.y );
-
-    // Pan the screen if required
-    const VECTOR2I& screenSize = view->GetGAL()->GetScreenPixelSize();
-    BOX2I screenBox( VECTOR2I( 0, 0 ), screenSize );
-
-    if( !screenBox.Contains( newCursor ) )
-    {
-        VECTOR2D delta( 0, 0 );
-
-        if( newCursor.x < screenBox.GetLeft() )
-        {
-            delta.x = newCursor.x - screenBox.GetLeft();
-            newCursor.x = screenBox.GetLeft();
-        }
-        else if( newCursor.x > screenBox.GetRight() )
-        {
-            delta.x = newCursor.x - screenBox.GetRight();
-            // -1 is to keep the cursor within the drawing area,
-            // so the cursor coordinates are still updated
-            newCursor.x = screenBox.GetRight() - 1;
-        }
-
-        if( newCursor.y < screenBox.GetTop() )
-        {
-            delta.y = newCursor.y - screenBox.GetTop();
-            newCursor.y = screenBox.GetTop();
-        }
-        else if( newCursor.y > screenBox.GetBottom() )
-        {
-            delta.y = newCursor.y - screenBox.GetBottom();
-            // -1 is to keep the cursor within the drawing area,
-            // so the cursor coordinates are still updated
-            newCursor.y = screenBox.GetBottom() - 1;
-        }
-
-        view->SetCenter( view->GetCenter() + view->ToWorld( delta, false ) );
-    }
-
-    m_frame->GetGalCanvas()->WarpPointer( newCursor.x, newCursor.y );
+    getViewControls()->SetCursorPosition( cursor );
 
     return 0;
 }

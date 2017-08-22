@@ -200,6 +200,14 @@ public:
     }
 
     /**
+     * Moves cursor to the requested position expressed in world coordinates. The position is not
+     * forced and will be overridden with the next mouse motion event. Mouse cursor follows the
+     * world cursor.
+     * @param aPosition is the requested cursor position in the world coordinates.
+     */
+    virtual void SetCursorPosition( const VECTOR2D& aPosition ) = 0;
+
+    /**
      * Function ForcedCursorPosition()
      * Returns true if the current cursor position is forced to a specific location, ignoring
      * the mouse cursor position.
