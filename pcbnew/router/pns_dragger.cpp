@@ -129,7 +129,7 @@ bool DRAGGER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_lastNode = NULL;
     m_draggedItems.Clear();
     m_currentMode = Settings().Mode();
-    m_freeAngleMode = Settings().GetFreeAngleMode() || (m_mode & DM_FREE_ANGLE);
+    m_freeAngleMode = (m_mode & DM_FREE_ANGLE);
 
     aStartItem->Unmark( MK_LOCKED );
 
