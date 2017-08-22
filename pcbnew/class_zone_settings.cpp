@@ -5,9 +5,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ ZONE_SETTINGS::ZONE_SETTINGS()
 {
     m_ZonePriority = 0;
     m_FillMode = 0;                                             // Mode for filling zone : 1 use segments, 0 use polygons
-    // Clearance value
+    // Zone clearance value
     m_ZoneClearance      = Mils2iu( ZONE_CLEARANCE_MIL );
     // Min thickness value in filled areas (this is the minimum width of copper to fill solid areas) :
     m_ZoneMinThickness   = Mils2iu( ZONE_THICKNESS_MIL );
@@ -74,7 +74,7 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
 {
     m_ZonePriority = aSource.GetPriority();
     m_FillMode           = aSource.GetFillMode();
-    m_ZoneClearance      = aSource.GetClearance();
+    m_ZoneClearance      = aSource.GetZoneClearance();
     m_ZoneMinThickness   = aSource.GetMinThickness();
     m_NetcodeSelection   = aSource.GetNetCode();
     m_CurrentZone_Layer  = aSource.GetLayer();
