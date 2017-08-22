@@ -63,17 +63,17 @@ msgstr "Eeschema  - 原理图编辑器"
 msgid "Schematic library editor"
 msgstr "原理图库编辑器"
 
-#: kicad/commandframe.cpp:71
-msgid "Pcbnew - Printed circuit board editor"
-msgstr "Pcbnew - PCB编辑器"
-
-#: kicad/commandframe.cpp:74
-msgid "PCB footprint editor"
-msgstr "PCB 封装编辑器"
-
 #: kicad/commandframe.cpp:77
-msgid "GerbView - Gerber viewer"
-msgstr "GerbView - Gerber 浏览器"
+msgid "PCB layout editor"
+msgstr "PCB板编辑器"
+
+#: kicad/commandframe.cpp:81
+msgid "PCB library editor"
+msgstr "PCB封装库编辑器"
+
+#: kicad/commandframe.cpp:85
+msgid "Gerber viewer"
+msgstr "Gerber浏览器"
 
 #: kicad/commandframe.cpp:81 kicad/menubar.cpp:388
 msgid ""
@@ -81,9 +81,13 @@ msgid ""
 "or Pcbnew elements"
 msgstr "Bitmap2Component - 转换位图到 Eeschema 或  Pcbnew "
 
-#: kicad/commandframe.cpp:85 kicad/menubar.cpp:394
+#: kicad/commandframe.cpp:94
+msgid "Calculator tools"
+msgstr "计量工具"
+
+#: kicad/menubar.cpp:402
 msgid "Pcb calculator - Calculator for components, track width, etc."
-msgstr "PCB计算器 - 计算布线宽度等"
+msgstr "计量工具 - 计算布线宽度等"
 
 #: kicad/commandframe.cpp:88 kicad/menubar.cpp:399
 msgid "Pl editor - Worksheet layout editor"
@@ -9950,7 +9954,7 @@ msgstr "线或多边形(&L)"
 #: pcbnew/menubar_modedit.cpp:281 pcbnew/menubar_pcbframe.cpp:417
 #: pcbnew/tool_modedit.cpp:173 pcbnew/tool_pcb.cpp:453
 msgid "Add graphic line or polygon"
-msgstr "添加图形  线/多边形"
+msgstr "添加线或多边形"
 
 #: pcbnew/menubar_modedit.cpp:286 pcbnew/menubar_pcbframe.cpp:409
 #: eeschema/menubar_libedit.cpp:213
@@ -11110,7 +11114,7 @@ msgstr ""
 #: pcbnew/onleftclick.cpp:259 pcbnew/tools/drawing_tool.cpp:726
 #: pcbnew/tools/drawing_tool.cpp:901
 msgid "Graphic not allowed on Copper layers"
-msgstr "图形不允放出现在铜层"
+msgstr "图形不允许出现在铜层"
 
 #: pcbnew/onleftclick.cpp:283
 msgid "Tracks on Copper layers only "
@@ -25407,3 +25411,7 @@ msgstr ""
 #~ "输入名称和路径。\n"
 #~ "\n"
 #~ "灰色项目是由系统或用户已在外部被定义环境变量的名称。"
+
+#: common/pgm_base.cpp:848
+msgid "Set Language"
+msgstr "设置语言"
