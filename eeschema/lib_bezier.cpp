@@ -42,7 +42,7 @@
 #include <transform.h>
 
 
-LIB_BEZIER::LIB_BEZIER( LIB_PART*      aParent ) :
+LIB_BEZIER::LIB_BEZIER( LIB_PART* aParent ) :
     LIB_ITEM( LIB_BEZIER_T, aParent )
 {
     m_Fill       = NO_FILL;
@@ -58,10 +58,8 @@ bool LIB_BEZIER::Save( OUTPUTFORMATTER& aFormatter )
 
     aFormatter.Print( 0, "B %d %d %d %d", ccount, m_Unit, m_Convert, m_Width );
 
-    for( unsigned i = 0; i < GetCornerCount(); i++ )
-    {
-        aFormatter.Print( 0, "  %d %d", m_BezierPoints[i].x, m_BezierPoints[i].y );
-    }
+    for( const auto& pt : m_BezierPoints )
+        aFormatter.Print( 0, "  %d %d", pt.x, pt.y );
 
     aFormatter.Print( 0, " %c\n", fill_tab[m_Fill] );
 

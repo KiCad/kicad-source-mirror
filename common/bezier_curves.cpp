@@ -47,6 +47,7 @@ static inline double sqrt_len( int dx, int dy )
 
 void BEZIER_POLY::GetPoly( std::vector<wxPoint>& aOutput )
 {
+    wxCHECK( !m_ctrlPts.empty(), /* void */ );
     m_output = &aOutput;
     m_output->clear();
     m_output->push_back( wxPoint( m_ctrlPts.front() ) );
