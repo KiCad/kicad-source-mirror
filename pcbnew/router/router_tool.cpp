@@ -798,7 +798,9 @@ int ROUTER_TOOL::SettingsDialog( const TOOL_EVENT& aEvent )
     DIALOG_PNS_SETTINGS settingsDlg( frame(), m_router->Settings() );
 
     if( settingsDlg.ShowModal() )
+    {
         m_savedSettings = m_router->Settings();
+    }
 
     return 0;
 }

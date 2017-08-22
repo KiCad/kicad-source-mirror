@@ -160,6 +160,7 @@ private:
     int editFootprintInFpEditor( const TOOL_EVENT& aEvent );
 
     bool invokeInlineRouter( int aDragMode );
+    bool isInteractiveDragEnabled() const;
 
     bool changeTrackWidthOnClick( const SELECTION& selection );
 

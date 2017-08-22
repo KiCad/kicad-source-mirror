@@ -235,7 +235,6 @@ void LENGTH_TUNER_TOOL::setTransitions()
     Go( &LENGTH_TUNER_TOOL::TuneDiffPair, PCB_ACTIONS::routerActivateTuneDiffPair.MakeEvent() );
     Go( &LENGTH_TUNER_TOOL::TuneDiffPairSkew, PCB_ACTIONS::routerActivateTuneDiffPairSkew.MakeEvent() );
 
-    Go( &LENGTH_TUNER_TOOL::routerOptionsDialog, ACT_RouterOptions.MakeEvent() );
     Go( &LENGTH_TUNER_TOOL::meanderSettingsDialog, ACT_Settings.MakeEvent() );
 }
 
@@ -283,20 +282,6 @@ int LENGTH_TUNER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
 
     return 0;
 }
-
-
-int LENGTH_TUNER_TOOL::routerOptionsDialog( const TOOL_EVENT& aEvent )
-{
-    DIALOG_PNS_SETTINGS settingsDlg( frame(), m_router->Settings() );
-
-    if( settingsDlg.ShowModal() == wxID_OK )
-    {
-        // FIXME: do we need an explicit update?
-    }
-
-    return 0;
-}
-
 
 int LENGTH_TUNER_TOOL::meanderSettingsDialog( const TOOL_EVENT& aEvent )
 {

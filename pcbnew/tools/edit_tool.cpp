@@ -310,21 +310,24 @@ bool EDIT_TOOL::invokeInlineRouter( int aDragMode )
     TRACK* track = uniqueSelected<TRACK>();
     VIA* via = uniqueSelected<VIA>();
 
-
-
     if( track || via )
     {
         auto theRouter = static_cast<ROUTER_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveRouter" ) );
         assert( theRouter );
-
-        if( !theRouter->Router()->Settings().InlineDragEnabled() )
-            return false;
 
         m_toolMgr->RunAction( PCB_ACTIONS::routerInlineDrag, true, aDragMode );
         return true;
     }
 
     return false;
+}
+
+bool EDIT_TOOL::isInteractiveDragEnabled() const
+{
+    auto theRouter = static_cast<ROUTER_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveRouter" ) );
+    assert( theRouter );
+
+    return theRouter->Router()->Settings().InlineDragEnabled();
 }
 
 int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
@@ -401,7 +404,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 bool invokedRouter = false;
 
-                if ( !evt->IsAction( &PCB_ACTIONS::move ) )
+                if ( !evt->IsAction( &PCB_ACTIONS::move ) && isInteractiveDragEnabled() )
                     invokedRouter = invokeInlineRouter( PNS::DM_ANY );
 
                 if( !invokedRouter )
