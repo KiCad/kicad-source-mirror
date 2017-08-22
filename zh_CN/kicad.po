@@ -25418,3 +25418,36 @@ msgstr "设置语言"
 
 msgid "Rotate Clockwise"
 msgstr "顺时针旋转"
+
+msgid "Rotate Counterclockwise"
+msgstr "逆时针旋转"
+
+msgid "Select All"
+msgstr "全选"
+
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:27
+msgid "Net Classes"
+msgstr "网络类表"
+
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:97
+msgid "Net Class Membership"
+msgstr "网络类全部成员"
+
+msgid Routing Options"
+msgstr "布线选项"
+
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:191
+msgid "Minimum track width"
+msgstr "导线最小宽度"
+
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:202
+msgid "Minimum via diameter"
+msgstr "导孔最小直径"
+
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:213
+msgid "Minimum via drill"
+msgstr "钻孔最小直径"
+
+msgid "Allow micro vias (uVias)"
+msgstr "允许微孔"
+
