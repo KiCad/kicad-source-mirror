@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -277,8 +277,8 @@ static void resizeSheetWithMouseCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const
 
     wxPoint pos = sheet->GetPosition();
 
-    int width  = aPanel->GetParent()->GetCrossHairPosition().x - sheet->GetPosition().x;
-    int height = aPanel->GetParent()->GetCrossHairPosition().y - sheet->GetPosition().y;
+    int width  = aPanel->GetParent()->GetCrossHairPosition().x - pos.x;
+    int height = aPanel->GetParent()->GetCrossHairPosition().y - pos.y;
 
     // If the sheet doesn't have any pins, clamp the minimum size to the default values.
     width = ( width < MIN_SHEET_WIDTH ) ? MIN_SHEET_WIDTH : width;
@@ -289,7 +289,7 @@ static void resizeSheetWithMouseCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const
         int gridSizeX = KiROUND( screen->GetGridSize().x );
         int gridSizeY = KiROUND( screen->GetGridSize().y );
 
-        // If the sheet has pins, use the pin positions to clamp the minimum height.
+        // If the sheet has pins, use the pin positions to clamp the minimum width and height.
         height = ( height < sheet->GetMinHeight() + gridSizeY ) ?
                  sheet->GetMinHeight() + gridSizeY : height;
         width = ( width < sheet->GetMinWidth() + gridSizeX ) ?

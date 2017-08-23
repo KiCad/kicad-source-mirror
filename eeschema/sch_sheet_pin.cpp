@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,29 +184,29 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
         SetTextY( Pos.y );
 
         if( GetTextPos().y < sheet->m_pos.y )
-            SetTextY( sheet->m_pos.y );
+            SetTextY( sheet->m_pos.y + 50 );
 
         if( GetTextPos().y > (sheet->m_pos.y + sheet->m_size.y) )
-            SetTextY( sheet->m_pos.y + sheet->m_size.y );
+            SetTextY( sheet->m_pos.y + sheet->m_size.y - 50 );
     }
-    else // vertical sheetpin
+    else
     {
         if( Pos.y > center.y )
         {
-            SetEdge( SHEET_BOTTOM_SIDE ); //bottom
+            SetEdge( SHEET_BOTTOM_SIDE );
         }
         else
         {
-            SetEdge( SHEET_TOP_SIDE ); //top
+            SetEdge( SHEET_TOP_SIDE );
         }
 
         SetTextX( Pos.x );
 
         if( GetTextPos().x < sheet->m_pos.x )
-            SetTextX( sheet->m_pos.x );
+            SetTextX( sheet->m_pos.x + 50 );
 
         if( GetTextPos().x > (sheet->m_pos.x + sheet->m_size.x) )
-            SetTextX( sheet->m_pos.x + sheet->m_size.x );
+            SetTextX( sheet->m_pos.x + sheet->m_size.x - 50 );
     }
 }
 

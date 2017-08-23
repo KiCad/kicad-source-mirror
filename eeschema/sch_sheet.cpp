@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,8 +82,6 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
 
 SCH_SHEET::~SCH_SHEET()
 {
-//    wxLogDebug( wxT( "Destroying sheet " ) + m_name );
-
     // also, look at the associated sheet & its reference count
     // perhaps it should be deleted also.
     if( m_screen )
@@ -460,6 +458,7 @@ int SCH_SHEET::GetMinWidth() const
 
         for( size_t j = 0; j < m_pins.size(); j++ )
         {
+            // Check for pin directly across from the current pin.
             if( (i == j) || (m_pins[i].GetPosition().y != m_pins[j].GetPosition().y) )
                 continue;
 
@@ -481,19 +480,35 @@ int SCH_SHEET::GetMinHeight() const
 
     for( size_t i = 0; i < m_pins.size();  i++ )
     {
-        int pinY = m_pins[i].GetPosition().y - m_pos.y;
+        int edge = m_pins[i].GetEdge();
 
-        if( pinY > height )
-            height = pinY;
+        // Make sure pin is on top or bottom side of sheet.
+        if( edge < 2 )
+            continue;
+
+        EDA_RECT rect = m_pins[i].GetBoundingBox();
+
+        if( height < rect.GetHeight() )
+            height = rect.GetHeight();
+
+        for( size_t j = 0; j < m_pins.size(); j++ )
+        {
+            // Check for pin directly above or below the current pin.
+            if( (i == j) || (m_pins[i].GetPosition().x != m_pins[j].GetPosition().x) )
+                continue;
+
+            if( height < rect.GetHeight() + m_pins[j].GetBoundingBox().GetHeight() )
+            {
+                height = rect.GetHeight() + m_pins[j].GetBoundingBox().GetHeight();
+                break;
+            }
+        }
     }
 
     return height;
 }
 
 
-/**
- * Delete sheet labels which do not have corresponding hierarchical label.
- */
 void SCH_SHEET::CleanupSheet()
 {
     SCH_SHEET_PINS::iterator i = m_pins.begin();
@@ -636,13 +651,19 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, lineWidth,
                      false, false );
 
-
     /* Draw text : SheetLabel */
     for( SCH_SHEET_PIN& sheetPin : m_pins )
     {
         if( !sheetPin.IsMoving() )
             sheetPin.Draw( aPanel, aDC, aOffset, aDrawMode, aColor );
     }
+
+
+#if 0
+    // Only for testing purposes, draw the component bounding box
+    EDA_RECT boundingBox = GetBoundingBox();
+    GRRect( aPanel->GetClipBox(), aDC, boundingBox, 0, BROWN );
+#endif
 }
 
 
