@@ -3,11 +3,13 @@ msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-06-20 09:50-0800\n"
-"PO-Revision-Date: 2017-06-20 09:50-0800\n"
+"PO-Revision-Date: 2017-08-23 11:22+0200\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
+"Language-Team:\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Last-Translator:\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: E:/kicad\n"
 "X-Generator: Poedit 1.8.8\n"
@@ -25428,12 +25430,6 @@ msgstr "OpenGL画布(推荐)(&G)"
 msgid "&Cairo Canvas"
 msgstr "Cairo画布(&C)"
  
-msgid "Rotate Clockwise"
-msgstr "顺时针旋转"
-
-msgid "Rotate Counterclockwise"
-msgstr "逆时针旋转"
-
 msgid "Select All"
 msgstr "全选"
 
@@ -25445,7 +25441,7 @@ msgstr "网络类表"
 msgid "Net Class Membership"
 msgstr "网络类全部成员"
 
-msgid Routing Options"
+msgid "Routing Options"
 msgstr "布线选项"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:191
