@@ -446,26 +446,31 @@ int SCH_SHEET::GetMinWidth() const
     for( size_t i = 0; i < m_pins.size();  i++ )
     {
         int edge = m_pins[i].GetEdge();
+        EDA_RECT pinRect = m_pins[i].GetBoundingBox();
 
-        // Make sure pin is on right or left side of sheet.
-        if( edge >= 2 )
-            continue;
+        wxASSERT( edge != SCH_SHEET_PIN::SHEET_UNDEFINED_SIDE );
 
-        EDA_RECT rect = m_pins[i].GetBoundingBox();
-
-        if( width < rect.GetWidth() )
-            width = rect.GetWidth();
-
-        for( size_t j = 0; j < m_pins.size(); j++ )
+        if( edge == SCH_SHEET_PIN::SHEET_TOP_SIDE || edge == SCH_SHEET_PIN::SHEET_BOTTOM_SIDE )
         {
-            // Check for pin directly across from the current pin.
-            if( (i == j) || (m_pins[i].GetPosition().y != m_pins[j].GetPosition().y) )
-                continue;
+            if( width < pinRect.GetRight() - m_pos.x )
+                width = pinRect.GetRight() - m_pos.x;
+        }
+        else
+        {
+            if( width < pinRect.GetWidth() )
+                width = pinRect.GetWidth();
 
-            if( width < rect.GetWidth() + m_pins[j].GetBoundingBox().GetWidth() )
+            for( size_t j = 0; j < m_pins.size(); j++ )
             {
-                width = rect.GetWidth() + m_pins[j].GetBoundingBox().GetWidth();
-                break;
+                // Check for pin directly across from the current pin.
+                if( (i == j) || (m_pins[i].GetPosition().y != m_pins[j].GetPosition().y) )
+                    continue;
+
+                if( width < pinRect.GetWidth() + m_pins[j].GetBoundingBox().GetWidth() )
+                {
+                    width = pinRect.GetWidth() + m_pins[j].GetBoundingBox().GetWidth();
+                    break;
+                }
             }
         }
     }
@@ -481,26 +486,30 @@ int SCH_SHEET::GetMinHeight() const
     for( size_t i = 0; i < m_pins.size();  i++ )
     {
         int edge = m_pins[i].GetEdge();
+        EDA_RECT pinRect = m_pins[i].GetBoundingBox();
 
         // Make sure pin is on top or bottom side of sheet.
-        if( edge < 2 )
-            continue;
-
-        EDA_RECT rect = m_pins[i].GetBoundingBox();
-
-        if( height < rect.GetHeight() )
-            height = rect.GetHeight();
-
-        for( size_t j = 0; j < m_pins.size(); j++ )
+        if( edge == SCH_SHEET_PIN::SHEET_RIGHT_SIDE || edge == SCH_SHEET_PIN::SHEET_LEFT_SIDE )
         {
-            // Check for pin directly above or below the current pin.
-            if( (i == j) || (m_pins[i].GetPosition().x != m_pins[j].GetPosition().x) )
-                continue;
+            if( height < pinRect.GetBottom() - m_pos.y )
+                height = pinRect.GetBottom() - m_pos.y;
+        }
+        else
+        {
+            if( height < pinRect.GetHeight() )
+                height = pinRect.GetHeight();
 
-            if( height < rect.GetHeight() + m_pins[j].GetBoundingBox().GetHeight() )
+            for( size_t j = 0; j < m_pins.size(); j++ )
             {
-                height = rect.GetHeight() + m_pins[j].GetBoundingBox().GetHeight();
-                break;
+                // Check for pin directly above or below the current pin.
+                if( (i == j) || (m_pins[i].GetPosition().x != m_pins[j].GetPosition().x) )
+                    continue;
+
+                if( height < pinRect.GetHeight() + m_pins[j].GetBoundingBox().GetHeight() )
+                {
+                    height = pinRect.GetHeight() + m_pins[j].GetBoundingBox().GetHeight();
+                    break;
+                }
             }
         }
     }
@@ -659,10 +668,11 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     }
 
 
-#if 0
+#if 1
     // Only for testing purposes, draw the component bounding box
     EDA_RECT boundingBox = GetBoundingBox();
     GRRect( aPanel->GetClipBox(), aDC, boundingBox, 0, BROWN );
+    GRFilledCircle( aPanel->GetClipBox(), aDC, m_pos.x, m_pos.y, 10, 0, color, color );
 #endif
 }
 

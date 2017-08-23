@@ -184,10 +184,10 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
         SetTextY( Pos.y );
 
         if( GetTextPos().y < sheet->m_pos.y )
-            SetTextY( sheet->m_pos.y + 50 );
+            SetTextY( sheet->m_pos.y );
 
         if( GetTextPos().y > (sheet->m_pos.y + sheet->m_size.y) )
-            SetTextY( sheet->m_pos.y + sheet->m_size.y - 50 );
+            SetTextY( sheet->m_pos.y + sheet->m_size.y );
     }
     else
     {
@@ -203,10 +203,10 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
         SetTextX( Pos.x );
 
         if( GetTextPos().x < sheet->m_pos.x )
-            SetTextX( sheet->m_pos.x + 50 );
+            SetTextX( sheet->m_pos.x );
 
         if( GetTextPos().x > (sheet->m_pos.x + sheet->m_size.x) )
-            SetTextX( sheet->m_pos.x + sheet->m_size.x - 50 );
+            SetTextX( sheet->m_pos.x + sheet->m_size.x );
     }
 }
 
