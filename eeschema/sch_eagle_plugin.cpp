@@ -509,8 +509,14 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
     while( libraryNode )
     {
-        EAGLE_LIBRARY elib  = loadLibrary( libraryNode );
-        m_eaglelibraries[elib.name] = elib;
+        // Read the library name
+        wxString libName = libraryNode->GetAttribute( "name" );
+
+        EAGLE_LIBRARY* elib  = &m_eaglelibraries[libName.ToStdString()];
+        elib->name = libName.ToStdString();
+
+        loadLibrary( libraryNode , &m_eaglelibraries[libName.ToStdString()]);
+
         libraryNode = libraryNode->GetNext();
     }
 
@@ -1030,22 +1036,26 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     // Calculate the unit number from the gate entry of the instance
     // Assign the the LIB_ID from deviceset and device names
 
-
     EPART* epart = m_partlist[einstance.part].get();
 
+    std::string libraryname = epart->library;
     std::string gatename = epart->deviceset + epart->device + einstance.gate;
     wxString sntemp( epart->deviceset + epart->device );
     sntemp.Replace("*", "");
     std::string symbolname = sntemp.ToStdString();
 
-	
-    // KiCad enumerates units starting from 1, Eagle starts with 0
-    int unit = m_eaglelibraries[epart->library].gate_unit[gatename];
-    std::string package = m_eaglelibraries[epart->library].package[symbolname];
+    int unit = m_eaglelibraries[libraryname].gate_unit[gatename];
 
-    // std::cout << "Instance> part: " << einstance.part << " Gate: " << einstance.gate << " " << symbolname << '\n';
+    std::string package;
+    EAGLE_LIBRARY* elib = &m_eaglelibraries[libraryname];
 
+    auto p = elib->package.find(symbolname);
+    if(p != elib->package.end() )
+    {
+        package = p->second;
+    }
 
+    //std::cout << "Instance> part: " << einstance.part << " Library: \"" << libraryname << "\" Gate: " << einstance.gate << " Symbol \"" << symbolname << " "<<symbolname.length() << "\" package " << package <<'\n';
     LIB_ID libId( wxEmptyString, symbolname );
 
     LIB_PART* part = m_partlib->FindPart(symbolname);
@@ -1194,15 +1204,8 @@ void SCH_EAGLE_PLUGIN::loadModuleinst( wxXmlNode* aModuleinstNode )
 }
 
 
-EAGLE_LIBRARY SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
+EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode, EAGLE_LIBRARY* elib )
 {
-
-    EAGLE_LIBRARY elib;
-
-
-    // Read the library name
-    wxString libName = aLibraryNode->GetAttribute( "name" );
-    elib.name = libName.ToStdString();
 
     ////std::cout << "Importing Eagle Library "<< libName.ToStdString() << std::endl;
 
@@ -1227,7 +1230,7 @@ EAGLE_LIBRARY SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
     while( symbolNode )
     {
         string symbolName = symbolNode->GetAttribute( "name" ).ToStdString();
-        elib.symbolnodes[symbolName] = symbolNode;
+        elib->symbolnodes[symbolName] = symbolNode;
         symbolNode = symbolNode->GetNext();
     }
 
@@ -1253,11 +1256,19 @@ EAGLE_LIBRARY SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
 
             // Create symbol name from deviceset and device names.
             wxString symbolName = wxString( edeviceset.name + edevice.name );
-            // std::cout << "Creating Kicad Symbol: " << symbolName.ToStdString() << '\n';
-            symbolName.Replace("*", "");
+            //std::cout << "edevice.name \""<< edevice.name << "\"\n";
+            //symbolName.Replace("*", "");
 
+
+            std::string symbolname = symbolName.ToStdString();
+
+            std::string package;
             if( edevice.package )
-                elib.package[symbolName.ToStdString()] = edevice.package.Get();
+            {
+                package = edevice.package.Get();
+                elib->package[symbolname] = package;
+            }
+            //std::cout << "Creating Kicad Symbol: " << symbolname << " in library \""<< elib->name<<"\" "<< symbolname.length() << " with package \""<< package << "\"\n";
 
             // Create kicad symbol.
             unique_ptr<LIB_PART> kpart( new LIB_PART( symbolName ) );
@@ -1270,15 +1281,12 @@ EAGLE_LIBRARY SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
             LIB_FIELD* reference = kpart->GetField(REFERENCE);
             if(  prefix.length() ==0  )
             {
-                std::cout << "length == 0" << '\n';
                 reference->SetVisible( false );
             }
             else
             {
-                std::cout << "a prefix" << '\n';
                 reference->SetText( prefix );
             }
-            std::cout << "after prefix" << '\n';
             int gateindex;
             bool ispower = false;
 
@@ -1288,10 +1296,10 @@ EAGLE_LIBRARY SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
             {
                 EGATE egate = EGATE( gateNode );
 
-                elib.gate_unit[edeviceset.name + edevice.name + egate.name] = gateindex;
+                elib->gate_unit[edeviceset.name + edevice.name + egate.name] = gateindex;
 
 
-                ispower = loadSymbol( elib.symbolnodes[egate.symbol],
+                ispower = loadSymbol( elib->symbolnodes[egate.symbol],
                         kpart, &edevice, gateindex, egate.name );
 
                 gateindex++;
@@ -1303,7 +1311,7 @@ EAGLE_LIBRARY SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode )
 
             string name = kpart->GetName().ToStdString();
             m_partlib->AddPart( kpart.get() );
-            elib.kicadsymbols.insert( name, kpart.release() );
+            elib->kicadsymbols.insert( name, kpart.release() );
 
             deviceNode = deviceNode->GetNext();
         }    // devicenode

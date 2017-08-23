@@ -137,7 +137,7 @@ private:
     void loadSheet( wxXmlNode* aSheetNode, int sheetcount );
     void loadInstance( wxXmlNode* aInstanceNode );
     void loadModuleinst( wxXmlNode* aModuleinstNode );
-    EAGLE_LIBRARY loadLibrary( wxXmlNode* aLibraryNode );
+    EAGLE_LIBRARY* loadLibrary( wxXmlNode* aLibraryNode, EAGLE_LIBRARY* elib);
     void countNets( wxXmlNode* aSchematicNode );
     void moveLabels( SCH_ITEM* wire, wxPoint newendpoint);
     void addBusEntries();
