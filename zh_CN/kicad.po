@@ -25416,6 +25416,18 @@ msgstr ""
 msgid "Set Language"
 msgstr "设置语言"
 
+#: pcbnew/menubar_modedit.cpp:243 pcbnew/menubar_pcbframe.cpp:557
+msgid "Legacy Canva&s"
+msgstr "金典画布(&S)"
+
+#: pcbnew/menubar_modedit.cpp:251 pcbnew/menubar_pcbframe.cpp:565
+msgid "Open&GL Canvas"
+msgstr "OpenGL画布(推荐)(&G)"
+
+#: pcbnew/menubar_modedit.cpp:259 pcbnew/menubar_pcbframe.cpp:573
+msgid "&Cairo Canvas"
+msgstr "Cairo画布(&C)"
+ 
 msgid "Rotate Clockwise"
 msgstr "顺时针旋转"
 
