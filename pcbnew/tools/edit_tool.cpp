@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2013-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
@@ -313,7 +313,9 @@ bool EDIT_TOOL::invokeInlineRouter( int aDragMode )
     if( track || via )
     {
         auto theRouter = static_cast<ROUTER_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveRouter" ) );
-        assert( theRouter );
+
+        if( !theRouter )
+            return false;
 
         m_toolMgr->RunAction( PCB_ACTIONS::routerInlineDrag, true, aDragMode );
         return true;
@@ -322,13 +324,14 @@ bool EDIT_TOOL::invokeInlineRouter( int aDragMode )
     return false;
 }
 
+
 bool EDIT_TOOL::isInteractiveDragEnabled() const
 {
     auto theRouter = static_cast<ROUTER_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveRouter" ) );
-    assert( theRouter );
 
-    return theRouter->Router()->Settings().InlineDragEnabled();
+    return theRouter ? theRouter->Router()->Settings().InlineDragEnabled() : false;
 }
+
 
 int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
 {
