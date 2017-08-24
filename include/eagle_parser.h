@@ -41,6 +41,9 @@
 #include <trigo.h>
 #include <kicad_string.h>
 
+// Eagle schematic internal units are millimeters
+// Kicad schematic units are thousandths of an inch
+constexpr double EUNIT_TO_MIL = 1000.0 / 25.4;
 
 using std::string;
 
@@ -607,6 +610,8 @@ struct ETEXT
     ETEXT( wxXmlNode* aText );
 };
 
+/// Calculate text size based on font type and size;
+wxSize convertTextSize(ETEXT& etext );
 
 /// Eagle thru hol pad
 struct EPAD

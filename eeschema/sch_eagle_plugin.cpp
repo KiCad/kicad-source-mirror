@@ -53,9 +53,6 @@
 
 using std::string;
 
-// Eagle schematic internal units are millimeters
-// Kicad schematic units are thousandths of an inch
-constexpr double EUNIT_TO_MIL = 1000.0 / 25.4;
 
 // Eagle schematic axes are aligned with x increasing left to right and Y increasing bottom to top
 // Kicad schematic axes are aligned with x increasing left to rigth and Y increasing top to bottom.
@@ -1814,32 +1811,6 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymboltext( std::unique_ptr< LIB_PART >& aPart, 
 
     return libtext.release();
 }
-
-// convert text method.
-
-wxSize SCH_EAGLE_PLUGIN::convertTextSize(ETEXT& etext ) {
-
-    wxSize textsize;
-    if(etext.font){
-        wxString font = etext.font.Get();
-        if(font == "vector")
-        {
-            textsize = wxSize( etext.size * EUNIT_TO_MIL, etext.size * EUNIT_TO_MIL );
-        }
-        else if ( font == "fixed")
-        {
-            textsize = wxSize( etext.size * EUNIT_TO_MIL, etext.size * EUNIT_TO_MIL*0.80 );
-        }
-
-    }
-    else
-    {
-        textsize =  wxSize( etext.size * EUNIT_TO_MIL*0.85, etext.size * EUNIT_TO_MIL );
-    }
-    return textsize;
-
-}
-
 
 SCH_TEXT* SCH_EAGLE_PLUGIN::loadplaintext( wxXmlNode* aSchText )
 {

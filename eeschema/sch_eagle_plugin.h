@@ -142,7 +142,6 @@ private:
     void moveLabels( SCH_ITEM* wire, wxPoint newendpoint);
     void addBusEntries();
     static wxString fixNetName( const wxString& aNetName );
-    static wxSize convertTextSize(ETEXT& etext );
 
     SCH_LAYER_ID kicadLayer( int aEagleLayer );
     wxPoint findNearestLinePoint(wxPoint aPoint, const DLIST< SCH_LINE >& lines);

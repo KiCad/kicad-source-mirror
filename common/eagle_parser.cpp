@@ -237,6 +237,30 @@ int parseAlignment(wxString alignment)
     return DEFAULT_ALIGNMENT;
 }
 
+// convert textsize method.
+wxSize convertTextSize(ETEXT& etext ) {
+
+    wxSize textsize;
+    if(etext.font){
+        wxString font = etext.font.Get();
+        if(font == "vector")
+        {
+            textsize = wxSize( etext.size * EUNIT_TO_MIL, etext.size * EUNIT_TO_MIL );
+        }
+        else if ( font == "fixed")
+        {
+            textsize = wxSize( etext.size * EUNIT_TO_MIL, etext.size * EUNIT_TO_MIL*0.80 );
+        }
+
+    }
+    else
+    {
+        textsize =  wxSize( etext.size * EUNIT_TO_MIL*0.85, etext.size * EUNIT_TO_MIL );
+    }
+    return textsize;
+
+}
+
 
 EWIRE::EWIRE( wxXmlNode* aWire )
 {
