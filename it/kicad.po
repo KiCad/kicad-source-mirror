@@ -74,7 +74,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-19 17:20+0200\n"
-"PO-Revision-Date: 2017-08-19 17:23+0200\n"
+"PO-Revision-Date: 2017-08-24 09:39+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -16469,7 +16469,7 @@ msgstr "Elementi:"
 
 #: common/dialog_about/dialog_about_base.h:56
 msgid "About"
-msgstr "Info"
+msgstr "Informazioni su KiCad"
 
 #: common/dialogs/dialog_page_settings_base.h:121
 msgid "Page Settings"
