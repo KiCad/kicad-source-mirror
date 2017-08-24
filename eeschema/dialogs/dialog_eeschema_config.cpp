@@ -348,9 +348,8 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
         for( unsigned ll = 0; ll < paths.GetCount(); ll++ )
         {
             wxFileName relfn = fn;
-            relfn.MakeRelativeTo( paths[ll] );
 
-            if( relfn.GetPath()[0] != '.' )
+            if( relfn.MakeRelativeTo( paths[ll] ) && relfn.GetPath()[0] != '.' )
             {
                 fn = relfn;
                 break;
