@@ -72,6 +72,7 @@ const wxString SchematicSymbolFileWildcard( _( "KiCad drawing symbol file (*.sym
 const wxString SchematicLibraryFileWildcard( _( "KiCad component library file (*.lib)|*.lib" ) );
 const wxString ProjectFileWildcard( _( "KiCad project files (*.pro)|*.pro" ) );
 const wxString SchematicFileWildcard( _( "KiCad schematic files (*.sch)|*.sch|Eagle 6.x XML schematic file (*.sch)|*.sch" ) );
+const wxString EagleSchematicFileWildcard( _( "Eagle XML schematic file (*.sch)|*.sch" ) );
 const wxString NetlistFileWildcard( _( "KiCad netlist files (*.net)|*.net" ) );
 const wxString GerberFileWildcard( _( "Gerber files (*.pho)|*.pho" ) );
 const wxString LegacyPcbFileWildcard( _( "KiCad printed circuit board files (*.brd)|*.brd" ) );

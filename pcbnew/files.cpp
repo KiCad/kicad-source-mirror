@@ -42,6 +42,8 @@
 #include <msgpanel.h>
 #include <fp_lib_table.h>
 #include <ratsnest_data.h>
+#include <kiway.h>
+#include <kiway_player.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -858,6 +860,25 @@ bool PCB_EDIT_FRAME::doAutoSave()
     }
 
     GetBoard()->SetFileName( tmpFileName.GetFullPath() );
+
+    return false;
+}
+
+bool PCB_EDIT_FRAME::ImportFile( const wxString aFileName )
+{
+    if( OpenProjectFiles( std::vector<wxString>( 1, aFileName ),
+                KICTL_EAGLE_BRD ) )
+    {
+        wxString projectpath = Kiway().Prj().GetProjectPath();
+
+        wxFileName newfilename( aFileName );
+        newfilename.SetPath( projectpath );
+
+        GetBoard()->SetFileName( newfilename.GetFullPath() );
+        UpdateTitle();
+
+        return true;
+    }
 
     return false;
 }

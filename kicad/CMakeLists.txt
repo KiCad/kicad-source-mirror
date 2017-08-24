@@ -7,6 +7,8 @@ add_definitions( -DKICAD )
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
+    ../pcbnew
+    ../eeschema
     ${INC_AFTER}
     )
 
@@ -25,6 +27,7 @@ set( KICAD_SRCS
     prjconfig.cpp
     project_template.cpp
     tree_project_frame.cpp
+    import_project.cpp
     )
 
 if( MINGW )

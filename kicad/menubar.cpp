@@ -66,6 +66,7 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     EVT_MENU( wxID_INDEX, KICAD_MANAGER_FRAME::GetKicadHelp )
     EVT_MENU( ID_HELP_GET_INVOLVED, KICAD_MANAGER_FRAME::GetKicadContribute )
     EVT_MENU( wxID_ABOUT, KICAD_MANAGER_FRAME::GetKicadAbout )
+    EVT_MENU( ID_IMPORT_EAGLE_PROJECT, KICAD_MANAGER_FRAME::OnImportEagleFiles )
 
     // Range menu events
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
@@ -265,7 +266,21 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  KiBitmap( save_project_xpm ) );
 #endif
 
-    // Separator
+    fileMenu->AppendSeparator();
+    wxMenu* importprjSubMenu = new wxMenu();
+
+    AddMenuItem( importprjSubMenu, ID_IMPORT_EAGLE_PROJECT, _( "Eagle CAD" ),
+            _( "Import Eagle CAD XML schematic and board" ),
+            KiBitmap( new_project_xpm ) );
+
+
+    AddMenuItem( fileMenu, importprjSubMenu,
+            wxID_ANY,
+            _( "Import Project" ),
+            _( "Import project files from other software" ),
+            KiBitmap( new_project_xpm ) );
+
+
     fileMenu->AppendSeparator();
 
     // Archive

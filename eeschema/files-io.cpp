@@ -48,6 +48,8 @@
 #include <eeschema_config.h>
 #include <sch_legacy_plugin.h>
 #include <sch_eagle_plugin.h>
+#include <schframe.h>
+#include <netlist.h>
 
 
 //#define USE_SCH_LEGACY_IO_PLUGIN
@@ -619,4 +621,61 @@ bool SCH_EDIT_FRAME::doAutoSave()
         m_autoSaveState = false;
 
     return autoSaveOk;
+}
+
+bool SCH_EDIT_FRAME::ImportFile( const wxString aFileName)
+{
+    wxString    fullFileName( aFileName );
+
+    // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
+    wxASSERT_MSG( wxFileName( fullFileName ).IsAbsolute(),
+        wxT( "Import eagle schematic caller didn't send full filename" ) );
+
+    if( !LockFile( fullFileName ) )
+    {
+        wxString msg = wxString::Format( _(
+                "Schematic file '%s' is already open." ),
+                GetChars( fullFileName )
+                );
+        DisplayError( this, msg );
+        return false;
+    }
+
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi;
+
+   pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ) );
+
+
+
+
+    g_RootSheet = pi->Load( fullFileName, &Kiway() );
+
+    wxString projectpath = Kiway().Prj().GetProjectPath();
+
+    wxFileName newfilename( fullFileName );
+
+    newfilename.SetPath(projectpath);
+
+    m_CurrentSheet->clear();
+    m_CurrentSheet->push_back( g_RootSheet );
+    SetScreen( m_CurrentSheet->LastScreen() );
+
+    g_RootSheet->SetFileName( newfilename.GetFullPath() );
+    GetScreen()->SetFileName( newfilename.GetFullPath() );
+    GetScreen()->SetModify();
+
+    SCH_SHEET_LIST sheetList( g_RootSheet );
+    SCH_SCREENS schematic;
+
+    UpdateFileHistory( fullFileName );
+    schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
+    GetScreen()->TestDanglingEnds();    // Only perform the dangling end test on root sheet.
+
+    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
+    Zoom_Automatique( false );
+    SetSheetNumberAndCount();
+    m_canvas->Refresh( true );
+    UpdateTitle();
+
+    return true;
 }

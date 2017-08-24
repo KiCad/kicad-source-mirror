@@ -532,7 +532,7 @@ public:
     bool CreateNetlist( int             aFormat,
                         const wxString& aFullFileName,
                         unsigned        aNetlistOptions,
-                        REPORTER*       aReporter = NULL );
+                        REPORTER*       aReporter = NULL ) override;
 
     /**
      * Function  WriteNetListFile
@@ -784,6 +784,7 @@ public:
 
     bool IsSearchCacheObsolete( const SCH_FIND_REPLACE_DATA& aSearchCriteria );
 
+    bool ImportFile( const wxString aFileName ) override ;
 
 private:
 

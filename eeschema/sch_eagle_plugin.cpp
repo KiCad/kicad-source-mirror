@@ -36,6 +36,7 @@
 #include <class_libentry.h>
 #include <lib_draw_item.h>
 #include <sch_component.h>
+#include <sch_sheet_path.h>
 #include <lib_arc.h>
 #include <lib_circle.h>
 #include <lib_rectangle.h>
@@ -550,9 +551,10 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
             sheet->SetScreen( screen );
 
             m_currentSheet = sheet.get();
-            loadSheet( sheetNode, i);
             sheet->GetScreen()->SetFileName( sheet->GetFileName() );
             m_rootSheet->GetScreen()->Append( sheet.release() );
+            loadSheet( sheetNode, i);
+
 
             sheetNode = sheetNode->GetNext();
             x += 2;
@@ -1040,7 +1042,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     std::string libraryname = epart->library;
     std::string gatename = epart->deviceset + epart->device + einstance.gate;
-    wxString sntemp( epart->deviceset + epart->device );
+    wxString sntemp = wxString( epart->deviceset + epart->device );
     sntemp.Replace("*", "");
     std::string symbolname = sntemp.ToStdString();
 
@@ -1060,6 +1062,8 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     LIB_PART* part = m_partlib->FindPart(symbolname);
 
+    if( !part ) return;
+
     std::unique_ptr<SCH_COMPONENT> component( new SCH_COMPONENT() );
     component->SetLibId( libId );
     component->SetUnit( unit );
@@ -1067,7 +1071,6 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     component->SetPosition( wxPoint( einstance.x * EUNIT_TO_MIL, -einstance.y * EUNIT_TO_MIL ) );
     component->GetField( FOOTPRINT )->SetText( wxString( package ) );
     component->SetTimeStamp( moduleTstamp( einstance.part, epart->value ? *epart->value : "", unit ) );
-    // component->AddHierarchicalReference( path, reference, (int)tmp ); // TODO ??
 
     if( einstance.rot )
     {
@@ -1091,7 +1094,15 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     component->GetField( REFERENCE )->SetText( einstance.part );
 
+    SCH_SHEET_PATH sheetpath;
+    m_rootSheet->LocatePathOfScreen(screen, &sheetpath);
+    wxString current_sheetpath = sheetpath.Path();
 
+    wxString tstamp;
+    tstamp.Printf( "%8.8lX", (unsigned long)component->GetTimeStamp() );
+    current_sheetpath += tstamp;
+
+    component->AddHierarchicalReference( current_sheetpath, wxString(einstance.part), unit );
 
     if( epart->value )
     {
@@ -1099,7 +1110,6 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     }
     else
     {
-        
         component->GetField( VALUE )->SetText( symbolname );
     }
 
@@ -1257,7 +1267,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode, EAGLE_LIB
             // Create symbol name from deviceset and device names.
             wxString symbolName = wxString( edeviceset.name + edevice.name );
             //std::cout << "edevice.name \""<< edevice.name << "\"\n";
-            //symbolName.Replace("*", "");
+            symbolName.Replace("*", "");
 
 
             std::string symbolname = symbolName.ToStdString();
@@ -1758,10 +1768,6 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( std::unique_ptr< LIB_PART >& aPart, wxXmlNod
         {
             pin->SetShape(PINSHAPE_INVERTED);
         }
-        else if( function == "dot")
-        {
-            pin->SetShape(PINSHAPE_CLOCK);
-        }
         else if( function == "clk")
         {
             pin->SetShape(PINSHAPE_CLOCK);
@@ -1808,6 +1814,8 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymboltext( std::unique_ptr< LIB_PART >& aPart, 
 
     return libtext.release();
 }
+
+// convert text method.
 
 wxSize SCH_EAGLE_PLUGIN::convertTextSize(ETEXT& etext ) {
 

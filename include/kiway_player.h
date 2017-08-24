@@ -180,6 +180,47 @@ public:
     }
 
     /**
+     * Function OpenProjectFiles
+     *  load the given filename but sets the path to the current project path.
+     */
+    VTBL_ENTRY bool ImportFile( const wxString aFileName)
+    {
+        // overload me for your wxFrame type.
+
+        return false;
+    }
+
+    /**
+     * Function ReadPcbNetlist
+     *  provides access to PcbNew's function.
+     */
+
+    VTBL_ENTRY void ReadPcbNetlist( const wxString& aNetlistFileName,
+            const wxString& aCmpFileName,
+            REPORTER* aReporter,
+            bool aChangeFootprint,
+            bool aDeleteBadTracks,
+            bool aDeleteExtraFootprints,
+            bool aSelectByTimestamp,
+            bool aDeleteSinglePadNets,
+            bool aIsDryRun )
+    {
+    };
+
+    /**
+     * Function ReadPcbNetlist
+     *  provides access to Eeschema's function.
+     */
+    VTBL_ENTRY bool CreateNetlist( int aFormat,
+            const wxString& aFullFileName,
+            unsigned aNetlistOptions,
+            REPORTER* aReporter = NULL )
+    {
+        return false;
+    };
+
+
+    /**
      * Function ShowModal
      * puts up this wxFrame as if it were a modal dialog, with all other instantiated
      * wxFrames disabled until this KIWAY_PLAYER derivative calls DismissModal().
