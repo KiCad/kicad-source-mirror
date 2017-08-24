@@ -668,7 +668,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     }
 
 
-#if 1
+#if 0
     // Only for testing purposes, draw the component bounding box
     EDA_RECT boundingBox = GetBoundingBox();
     GRRect( aPanel->GetClipBox(), aDC, boundingBox, 0, BROWN );
