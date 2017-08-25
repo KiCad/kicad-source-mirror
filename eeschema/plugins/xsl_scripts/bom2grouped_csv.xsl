@@ -91,13 +91,14 @@
 		    <xsl:if test="@name=$allnames">
 			<!-- content of the field -->
 			<xsl:value-of select="."/>
-            <xsl:text>"</xsl:text>
 		    </xsl:if>
 		    <!--
 			If it does not exist, use an empty cell in output for this row.
 			Every non-blank entry is assigned to its proper column.
 		    -->
-		</xsl:for-each>
+                </xsl:for-each>
+
+                <xsl:text>"</xsl:text>
 	    </xsl:for-each>
 	</xsl:template>
 
