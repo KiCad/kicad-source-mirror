@@ -59,14 +59,14 @@ private:
     ///> Checks if the dialog values are correct.
     bool check() const;
 
-    ///> Sets wxTextCtrl to the value stored in boost::optional<T> or "<...>" if it is not available.
+    ///> Sets wxTextEntry to the value stored in boost::optional<T> or "<...>" if it is not available.
     template<typename T>
-        void setCommonVal( const boost::optional<T>& aVal, wxTextCtrl* aTxtCtrl, WX_UNIT_BINDER& aBinder )
+        void setCommonVal( const boost::optional<T>& aVal, wxTextEntry* aTxtEntry, WX_UNIT_BINDER& aBinder )
     {
         if( aVal )
             aBinder.SetValue( *aVal );
         else
-            aTxtCtrl->SetValue( "<...>" );
+            aTxtEntry->SetValue( "<...>" );
     }
 
     ///> Selected items to be modified.

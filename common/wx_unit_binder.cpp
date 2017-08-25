@@ -24,7 +24,7 @@
 
 #include <wx/stattext.h>
 #include <wx/sizer.h>
-#include <wx/textctrl.h>
+#include <wx/textentry.h>
 #include <limits>
 #include <base_units.h>
 #include <wx/valnum.h>
@@ -33,9 +33,9 @@
 
 #include "wx_unit_binder.h"
 
-WX_UNIT_BINDER::WX_UNIT_BINDER( wxWindow* aParent, wxTextCtrl* aTextInput,
+WX_UNIT_BINDER::WX_UNIT_BINDER( wxWindow* aParent, wxTextEntry* aTextInput,
                                 wxStaticText* aUnitLabel, wxSpinButton* aSpinButton ) :
-    m_textCtrl( aTextInput ),
+    m_textEntry( aTextInput ),
     m_unitLabel( aUnitLabel ),
     m_units( g_UserUnit ),
     m_step( 1 ),
@@ -43,7 +43,7 @@ WX_UNIT_BINDER::WX_UNIT_BINDER( wxWindow* aParent, wxTextCtrl* aTextInput,
     m_max( 1 )
 {
     // Use the currently selected units
-    m_textCtrl->SetValue( wxT( "0" ) );
+    m_textEntry->SetValue( wxT( "0" ) );
     m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units ) );
 }
 
@@ -57,7 +57,7 @@ void WX_UNIT_BINDER::SetValue( int aValue )
 {
     wxString s = StringFromValue( m_units, aValue, false );
 
-    m_textCtrl->SetValue( s );
+    m_textEntry->SetValue( s );
 
     m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units ) );
 }
@@ -65,7 +65,7 @@ void WX_UNIT_BINDER::SetValue( int aValue )
 
 int WX_UNIT_BINDER::GetValue() const
 {
-    wxString s = m_textCtrl->GetValue();
+    wxString s = m_textEntry->GetValue();
 
     return ValueFromString( m_units, s );
 }
@@ -75,12 +75,14 @@ bool WX_UNIT_BINDER::Valid() const
 {
     double dummy;
 
-    return m_textCtrl->GetValue().ToDouble( &dummy );
+    return m_textEntry->GetValue().ToDouble( &dummy );
 }
 
 
 void WX_UNIT_BINDER::Enable( bool aEnable )
 {
-    m_textCtrl->Enable( aEnable );
+    wxWindow* wxWin = dynamic_cast<wxWindow*> ( m_textEntry );
+    wxWin->Enable( aEnable );
     m_unitLabel->Enable( aEnable );
 }
+

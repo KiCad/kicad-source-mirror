@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Aug 20 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -65,7 +65,7 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_TrackEndYUnit;
 		wxStaticLine* m_trackStaticLine;
 		wxStaticText* m_TrackWidthLabel;
-		wxTextCtrl* m_TrackWidthCtrl;
+		wxComboBox* m_TrackWidthCtrl;
 		wxStaticText* m_TrackWidthUnit;
 		wxCheckBox* m_trackNetclass;
 		wxStaticText* m_TrackLayerLabel;

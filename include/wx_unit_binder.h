@@ -28,7 +28,7 @@
 #include <common.h>
 #include <wx/spinbutt.h>
 
-class wxTextCtrl;
+class wxTextEntry;
 class wxSpinButton;
 class wxStaticText;
 
@@ -39,11 +39,11 @@ public:
     /**
      * Constructor.
      * @param aParent is the parent window.
-     * @param aTextInput is the text input widget used to edit the given value.
+     * @param aTextInput is the text input widget used to edit the given value (wxTextCtrl, wxComboBox, ...).
      * @param aUnitLabel is the units label displayed next to the text field.
      * @param aSpinButton is an optional spin button (for adjusting the input value)
      */
-    WX_UNIT_BINDER( wxWindow* aParent, wxTextCtrl* aTextInput, wxStaticText* aUnitLabel, wxSpinButton* aSpinButton = NULL );
+    WX_UNIT_BINDER( wxWindow* aParent, wxTextEntry* aTextInput, wxStaticText* aUnitLabel, wxSpinButton* aSpinButton = NULL );
 
     virtual ~WX_UNIT_BINDER();
 
@@ -77,7 +77,7 @@ protected:
     void onTextChanged( wxEvent& aEvent );
 
     ///> Text input control.
-    wxTextCtrl*   m_textCtrl;
+    wxTextEntry*   m_textEntry;
 
     ///> Label showing currently used units.
     wxStaticText* m_unitLabel;

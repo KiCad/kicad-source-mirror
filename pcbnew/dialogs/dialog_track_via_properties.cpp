@@ -204,6 +204,13 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         setCommonVal( trackEndY, m_TrackEndYCtrl, m_trackEndY );
         setCommonVal( trackWidth, m_TrackWidthCtrl, m_trackWidth );
 
+        for( unsigned ii = 0; ii < aParent->GetDesignSettings().m_TrackWidthList.size(); ii++ )
+        {
+            int width = aParent->GetDesignSettings().m_TrackWidthList[ii];
+            wxString msg = StringFromValue( g_UserUnit, width, false );
+            m_TrackWidthCtrl->Append( msg );
+        }
+
         m_TrackLayerCtrl->SetLayersHotkeys( false );
         m_TrackLayerCtrl->SetLayerSet( LSET::AllNonCuMask() );
         m_TrackLayerCtrl->SetBoardFrame( aParent );
