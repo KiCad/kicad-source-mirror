@@ -42,6 +42,7 @@
 #include <sch_component.h>
 #include <dialog_helpers.h>
 #include <sch_validators.h>
+#include <kicad_device_context.h>
 
 #include <bitmaps.h>
 
@@ -126,6 +127,7 @@ private:
     void OnCancelButtonClick( wxCommandEvent& event ) override;
     void OnOKButtonClick( wxCommandEvent& event ) override;
     void SetInitCmp( wxCommandEvent& event ) override;
+    void UpdateFields( wxCommandEvent& event ) override;
     void addFieldButtonHandler( wxCommandEvent& event ) override;
     void deleteFieldButtonHandler( wxCommandEvent& event ) override;
     void moveUpButtonHandler( wxCommandEvent& event ) override;
@@ -152,7 +154,7 @@ private:
      */
     void updateDisplay()
     {
-        for( unsigned ii = FIELD1;  ii<m_FieldsBuf.size(); ii++ )
+        for( unsigned ii = 0; ii < m_FieldsBuf.size(); ii++ )
             setRowItem( ii, m_FieldsBuf[ii] );
     }
 };
@@ -1148,9 +1150,6 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
 }
 
 
-#include <kicad_device_context.h>
-
-
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 {
     if( !m_cmp )
@@ -1203,4 +1202,46 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 
         EndQuasiModal( wxID_OK );
     }
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::UpdateFields( wxCommandEvent& event )
+{
+    if( !m_cmp )
+        return;
+
+    LIB_PART* part = Prj().SchLibs()->FindLibPart( m_cmp->GetLibId() );
+
+    if( !part )
+        return;
+
+    LIB_FIELDS fields;
+    part->GetFields( fields );
+
+    for( const LIB_FIELD& field : fields )
+    {
+        if( field.GetName().IsEmpty() )
+            continue;
+
+        int idx = field.GetId();
+        SCH_FIELD* schField;
+
+        if( idx == REFERENCE )
+            continue;
+        else if( idx < MANDATORY_FIELDS )
+            schField = &m_FieldsBuf[idx];
+        else
+            schField = findField( field.GetName() );
+
+        if( !schField )
+        {
+            SCH_FIELD fld( wxPoint( 0, 0 ), m_FieldsBuf.size(), m_cmp, field.GetName() );
+            m_FieldsBuf.push_back( fld );
+            schField = &m_FieldsBuf.back();
+        }
+
+        schField->SetText( field.GetText() );
+    }
+
+    updateDisplay();
 }
