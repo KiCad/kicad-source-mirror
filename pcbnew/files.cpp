@@ -870,9 +870,10 @@ bool PCB_EDIT_FRAME::ImportFile( const wxString aFileName )
                 KICTL_EAGLE_BRD ) )
     {
         wxString projectpath = Kiway().Prj().GetProjectPath();
+        wxFileName newfilename = Prj().AbsolutePath( Prj().GetProjectName() );
 
-        wxFileName newfilename( aFileName );
-        newfilename.SetPath( projectpath );
+        newfilename.SetExt( KiCadPcbFileExtension );
+
 
         GetBoard()->SetFileName( newfilename.GetFullPath() );
         UpdateTitle();

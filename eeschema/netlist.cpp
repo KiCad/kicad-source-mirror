@@ -110,18 +110,30 @@ void SCH_EDIT_FRAME::sendNetlist()
 
 
 bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
-                                    unsigned aNetlistOptions, REPORTER* aReporter )
+        unsigned aNetlistOptions, REPORTER* aReporter, bool silent )
 {
-    if( !prepareForNetlist() )
-        return false;
+    if( !silent )
+    {
+        if( !prepareForNetlist() )
+            return false;
+    }
+    else
+    {
+        SCH_SCREENS schematic;
+        schematic.UpdateSymbolLinks();
+        SCH_SHEET_LIST sheets( g_RootSheet );
+        sheets.AnnotatePowerSymbols( Prj().SchLibs() );
+        schematic.SchematicCleanUp();
+    }
 
     std::unique_ptr<NETLIST_OBJECT_LIST> connectedItemsList( BuildNetListBase() );
 
     bool success = WriteNetListFile( connectedItemsList.release(), aFormat,
-                                     aFullFileName, aNetlistOptions, aReporter );
+            aFullFileName, aNetlistOptions, aReporter );
 
     return success;
 }
+
 
 
 //#define NETLIST_DEBUG

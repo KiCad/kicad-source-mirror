@@ -532,7 +532,8 @@ public:
     bool CreateNetlist( int             aFormat,
                         const wxString& aFullFileName,
                         unsigned        aNetlistOptions,
-                        REPORTER*       aReporter = NULL ) override;
+                        REPORTER*       aReporter = NULL,
+                        bool silent = false ) override;
 
     /**
      * Function  WriteNetListFile

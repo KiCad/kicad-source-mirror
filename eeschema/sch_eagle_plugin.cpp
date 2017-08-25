@@ -371,8 +371,9 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
     }
 
     // Create a schematic symbol library
-    wxFileName libfn = aFileName;
-    libfn.SetName( libfn.GetName() );
+    wxString projectpath = m_kiway->Prj().GetProjectPath();
+    wxFileName libfn = m_kiway->Prj().AbsolutePath( m_kiway->Prj().GetProjectName() );
+
     libfn.SetExt( SchematicLibraryFileExtension );
     std::unique_ptr<PART_LIB> lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, libfn.GetFullPath() ) );
     lib->EnableBuffering();

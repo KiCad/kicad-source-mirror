@@ -214,7 +214,8 @@ public:
     VTBL_ENTRY bool CreateNetlist( int aFormat,
             const wxString& aFullFileName,
             unsigned aNetlistOptions,
-            REPORTER* aReporter = NULL )
+            REPORTER* aReporter = NULL,
+            bool silent = false )
     {
         return false;
     };

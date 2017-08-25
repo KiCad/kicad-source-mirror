@@ -433,7 +433,7 @@ void DIALOG_BOM::OnRunPlugin( wxCommandEvent& event )
         m_parent->SetExecFlags( wxEXEC_SHOW_CONSOLE );
 #endif
 
-    m_parent->CreateNetlist( -1, fullfilename, 0, &reporter );
+    m_parent->CreateNetlist( -1, fullfilename, 0, &reporter, false );
 
     m_Messages->SetValue( reportmsg );
 }

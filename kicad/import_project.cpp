@@ -67,7 +67,7 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
     ClearMsg();
 
     wxFileDialog schdlg( this, title, default_dir, wxEmptyString,
-            EagleSchematicFileWildcard, style );
+            EagleFilesWildcard, style );
 
     if( schdlg.ShowModal() == wxID_CANCEL )
         return;
@@ -75,9 +75,12 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
     wxFileName sch( schdlg.GetPath() );
 
+    sch.SetExt( SchematicFileExtension );
+
+
     wxString protitle = _( "Kicad Project Destination" );
 
-    wxFileDialog prodlg( this, protitle, default_dir, wxEmptyString,
+    wxFileDialog prodlg( this, protitle, sch.GetPath(), sch.GetName(),
             ProjectFileWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( prodlg.ShowModal() == wxID_CANCEL )
@@ -122,80 +125,86 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
     wxString sch_filename = sch.GetFullPath();
 
-    SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) Kiway.Player( FRAME_SCH, false );
-
-    if( !schframe )
+    if( sch.FileExists() )
     {
-        try
+        SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) Kiway.Player( FRAME_SCH, false );
+
+        if( !schframe )
         {
-            schframe = (SCH_EDIT_FRAME*) Kiway.Player( FRAME_SCH, true );
+            try
+            {
+                schframe = (SCH_EDIT_FRAME*) Kiway.Player( FRAME_SCH, true );
+            }
+            catch( IO_ERROR err )
+            {
+                wxMessageBox( _( "Eeschema failed to load:\n" ) + err.What(),
+                        _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
+                return;
+            }
         }
-        catch( IO_ERROR err )
+
+        schframe->ImportFile( sch_filename );
+
+        if( !schframe->IsShown() )      // the frame exists, (created by the dialog field editor)
+                                        // but no project loaded.
         {
-            wxMessageBox( _( "Eeschema failed to load:\n" ) + err.What(),
-                    _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
-            return;
+            schframe->Show( true );
         }
+
+        if( schframe->IsIconized() )
+            schframe->Iconize( false );
+
+        schframe->Raise();
+
+        schframe->CreateNetlist( NET_TYPE_PCBNEW, netlist.GetFullPath(), 0, NULL,  true );
     }
 
-    schframe->ImportFile( sch_filename );
-
-    if( !schframe->IsShown() )      // the frame exists, (created by the dialog field editor)
-                                    // but no project loaded.
+    if( pcb.FileExists() )
     {
-        schframe->Show( true );
-    }
+        PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Kiway.Player( FRAME_PCB, false );
 
-    if( schframe->IsIconized() )
-        schframe->Iconize( false );
-
-    schframe->Raise();
-
-
-    // Calculate the netlist filename
-    wxString nestlistFileFullpath = netlist.GetFullPath();
-    schframe->CreateNetlist( NET_TYPE_PCBNEW, nestlistFileFullpath, 0 );
-
-    PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Kiway.Player( FRAME_PCB, false );
-
-    if( !pcbframe )
-    {
-        try
+        if( !pcbframe )
         {
-            pcbframe = (PCB_EDIT_FRAME*) Kiway.Player( FRAME_PCB, true );
+            try
+            {
+                pcbframe = (PCB_EDIT_FRAME*) Kiway.Player( FRAME_PCB, true );
+            }
+            catch( IO_ERROR err )
+            {
+                wxMessageBox( _( "Pcbnew failed to load:\n" ) + err.What(), _( "KiCad Error" ),
+                        wxOK | wxICON_ERROR, this );
+                return;
+            }
         }
-        catch( IO_ERROR err )
+
+        // a pcb frame can be already existing, but not yet used.
+        // this is the case when running the footprint editor, or the footprint viewer first
+        // if the frame is not visible, the board is not yet loaded
+        if( !pcbframe->IsVisible() )
         {
-            wxMessageBox( _( "Pcbnew failed to load:\n" ) + err.What(), _( "KiCad Error" ),
-                    wxOK | wxICON_ERROR, this );
-            return;
+            pcbframe->ImportFile(  pcb.GetFullPath() );
+            pcbframe->Show( true );
+        }
+
+        // On Windows, Raise() does not bring the window on screen, when iconized
+        if( pcbframe->IsIconized() )
+            pcbframe->Iconize( false );
+
+        pcbframe->Raise();
+
+        if( netlist.FileExists() )
+        {
+            pcbframe->ReadPcbNetlist( netlist.GetFullPath(),
+                    wxEmptyString,
+                    NULL,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false );
         }
     }
-
-    // a pcb frame can be already existing, but not yet used.
-    // this is the case when running the footprint editor, or the footprint viewer first
-    // if the frame is not visible, the board is not yet loaded
-    if( !pcbframe->IsVisible() )
-    {
-        pcbframe->ImportFile(  pcb.GetFullPath() );
-        pcbframe->Show( true );
-    }
-
-    // On Windows, Raise() does not bring the window on screen, when iconized
-    if( pcbframe->IsIconized() )
-        pcbframe->Iconize( false );
-
-    pcbframe->Raise();
-
-    pcbframe->ReadPcbNetlist( nestlistFileFullpath,
-            wxEmptyString,
-            NULL,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false );
 
     ReCreateTreePrj();
 }

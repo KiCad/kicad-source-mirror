@@ -650,11 +650,11 @@ bool SCH_EDIT_FRAME::ImportFile( const wxString aFileName)
 
     g_RootSheet = pi->Load( fullFileName, &Kiway() );
 
+
     wxString projectpath = Kiway().Prj().GetProjectPath();
+    wxFileName newfilename = Prj().AbsolutePath( Prj().GetProjectName() );
 
-    wxFileName newfilename( fullFileName );
-
-    newfilename.SetPath(projectpath);
+    newfilename.SetExt( SchematicFileExtension );
 
     m_CurrentSheet->clear();
     m_CurrentSheet->push_back( g_RootSheet );
