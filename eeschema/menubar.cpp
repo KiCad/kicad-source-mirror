@@ -443,6 +443,12 @@ void prepareEditMenu( wxMenu* aParentMenu )
                  _( "Import Footprint Association File" ),
                  HELP_IMPORT_FOOTPRINTS,
                  KiBitmap( import_footprint_names_xpm ) );
+
+    // Update field values
+    AddMenuItem( aParentMenu, ID_UPDATE_FIELDS,
+                 _( "Update Field Values" ),
+                 _( "Sets component fields to original library values" ),
+                 KiBitmap( update_fields_xpm ) );
 }
 
 

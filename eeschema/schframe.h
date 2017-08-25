@@ -864,6 +864,7 @@ private:
 
     void OnLoadFile( wxCommandEvent& event );
     void OnLoadCmpToFootprintLinkFile( wxCommandEvent& event );
+    void OnUpdateFields( wxCommandEvent& event );
     void OnNewProject( wxCommandEvent& event );
     void OnLoadProject( wxCommandEvent& event );
     void OnAppendProject( wxCommandEvent& event );

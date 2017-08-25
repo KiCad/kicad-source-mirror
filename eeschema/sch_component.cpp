@@ -143,43 +143,8 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit,
     if( setNewItemFlag )
         m_Flags = IS_NEW | IS_MOVED;
 
-    // Import user defined fields from the library component:
-    LIB_FIELDS libFields;
-
-    aPart.GetFields( libFields );
-
-    for( LIB_FIELDS::iterator it = libFields.begin();  it!=libFields.end();  ++it )
-    {
-        // Can no longer insert an empty name, since names are now keys.  The
-        // field index is not used beyond the first MANDATORY_FIELDS
-        if( it->GetName().IsEmpty() )
-            continue;
-
-        // See if field already exists (mandatory fields always exist).
-        // for mandatory fields, the name and field id are fixed, so we use the
-        // known and fixed id to get them (more reliable than names, which can be translated)
-        // for other fields (custom fields), locate the field by same name
-        // (field id has no known meaning for custom fields)
-        int idx = it->GetId();
-        SCH_FIELD* schField;
-
-        if( idx < MANDATORY_FIELDS )
-            schField = GetField( idx );
-        else
-            schField = FindField( it->GetName() );
-
-        if( !schField )
-        {
-            SCH_FIELD fld( wxPoint( 0, 0 ), GetFieldCount(), this, it->GetName() );
-            schField = AddField( fld );
-        }
-
-        schField->ImportValues( *it );
-        schField->SetText( it->GetText() );
-
-        // Now the field is initialized, place it to the right position:
-        schField->SetTextPos( m_Pos + it->GetTextPos() );
-    }
+    // Import user defined fields from the library component
+    UpdateFields( true, true );
 
     wxString msg = aPart.GetReferenceField().GetText();
 
@@ -882,6 +847,53 @@ SCH_FIELD* SCH_COMPONENT::FindField( const wxString& aFieldName, bool aIncludeDe
     }
 
     return NULL;
+}
+
+
+void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
+{
+    if( PART_SPTR part = m_part.lock() )
+    {
+        LIB_FIELDS fields;
+        part->GetFields( fields );
+
+        for( const LIB_FIELD& field : fields )
+        {
+            // Can no longer insert an empty name, since names are now keys.  The
+            // field index is not used beyond the first MANDATORY_FIELDS
+            if( field.GetName().IsEmpty() )
+                continue;
+
+            // See if field already exists (mandatory fields always exist).
+            // for mandatory fields, the name and field id are fixed, so we use the
+            // known and fixed id to get them (more reliable than names, which can be translated)
+            // for other fields (custom fields), locate the field by same name
+            // (field id has no known meaning for custom fields)
+            int idx = field.GetId();
+            SCH_FIELD* schField;
+
+            if( idx == REFERENCE && !aResetRef )
+                continue;
+            if( idx < MANDATORY_FIELDS )
+                schField = GetField( idx );
+            else
+                schField = FindField( field.GetName() );
+
+            if( !schField )
+            {
+                SCH_FIELD fld( wxPoint( 0, 0 ), GetFieldCount(), this, field.GetName() );
+                schField = AddField( fld );
+            }
+
+            if( aResetStyle )
+            {
+                schField->ImportValues( field );
+                schField->SetTextPos( m_Pos + field.GetTextPos() );
+            }
+
+            schField->SetText( field.GetText() );
+        }
+    }
 }
 
 

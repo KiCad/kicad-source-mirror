@@ -272,6 +272,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_FIND_ITEMS, SCH_EDIT_FRAME::OnFindItems )
     EVT_TOOL( wxID_REPLACE, SCH_EDIT_FRAME::OnFindItems )
     EVT_TOOL( ID_BACKANNO_ITEMS, SCH_EDIT_FRAME::OnLoadCmpToFootprintLinkFile )
+    EVT_TOOL( ID_UPDATE_FIELDS, SCH_EDIT_FRAME::OnUpdateFields )
     EVT_TOOL( ID_SCH_MOVE_ITEM, SCH_EDIT_FRAME::OnMoveItem )
     EVT_TOOL( ID_AUTOPLACE_FIELDS, SCH_EDIT_FRAME::OnAutoplaceFields )
     EVT_MENU( wxID_HELP, EDA_DRAW_FRAME::GetKicadHelp )
@@ -1000,6 +1001,33 @@ void SCH_EDIT_FRAME::OnLoadCmpToFootprintLinkFile( wxCommandEvent& event )
 {
     LoadCmpToFootprintLinkFile();
     m_canvas->Refresh();
+}
+
+
+void SCH_EDIT_FRAME::OnUpdateFields( wxCommandEvent& event )
+{
+    PICKED_ITEMS_LIST itemsList;
+    SCH_TYPE_COLLECTOR c;
+    c.Collect( GetScreen()->GetDrawItems(), SCH_COLLECTOR::ComponentsOnly );
+
+    // Create a single undo buffer entry for all components
+    for( int i = 0; i < c.GetCount(); ++i )
+    {
+        SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( c[i] );
+        itemsList.PushItem( ITEM_PICKER( component, UR_CHANGED ) );
+    }
+
+    SaveCopyInUndoList( itemsList, UR_CHANGED );
+
+    // Update fields
+    for( int i = 0; i < c.GetCount(); ++i )
+    {
+        SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( c[i] );
+        component->UpdateFields( false );
+    }
+
+    m_canvas->Refresh();
+    DisplayInfoMessage( this, _( "Fields updated successfully" ) );
 }
 
 
