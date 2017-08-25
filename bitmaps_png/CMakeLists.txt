@@ -514,8 +514,9 @@ set( BMAPS_MID
     unknown
     unlocked
     unzip
-    update_module_board
     up
+    update_fields
+    update_module_board
     use_3D_copper_thickness
     via
     via_buried
