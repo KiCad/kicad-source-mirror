@@ -118,8 +118,13 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
 
     int outline_half_thickness = m_ZoneMinThickness / 2;
 
-    int zone_clearance = std::max( m_ZoneClearance, GetClearance() );
-    zone_clearance += outline_half_thickness;
+    // When removing holes, the holes must be expanded by outline_half_thickness
+    // to take in account the thickness of the zone outlines
+    int zone_clearance = GetClearance() + outline_half_thickness;
+
+    // When holes are created by non copper items (edge cut items), use only
+    // the m_ZoneClearance parameter (zone clearance with no netclass clearance)
+    int zone_to_edgecut_clearance = GetZoneClearance() + outline_half_thickness;
 
     /* store holes (i.e. tracks and pads areas as polygons outlines)
      * in a polygon list
@@ -138,12 +143,11 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
      * First : Add pads. Note: pads having the same net as zone are left in zone.
      * Thermal shapes will be created later if necessary
      */
-    int item_clearance;
 
-    /* Use a dummy pad to calculate hole clerance when a pad is not on all copper layers
+    /* Use a dummy pad to calculate hole clearance when a pad is not on all copper layers
      * and this pad has a hole
      * This dummy pad has the size and shape of the hole
-    * Therefore, this dummy pad is a circle or an oval.
+     * Therefore, this dummy pad is a circle or an oval.
      * A pad must have a parent because some functions expect a non null parent
      * to find the parent board, and some other data
      */
@@ -183,7 +187,7 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
             // Note: netcode <=0 means not connected item
             if( ( pad->GetNetCode() != GetNetCode() ) || ( pad->GetNetCode() <= 0 ) )
             {
-                item_clearance   = pad->GetClearance() + outline_half_thickness;
+                int item_clearance = pad->GetClearance() + outline_half_thickness;
                 item_boundingbox = pad->GetBoundingBox();
                 item_boundingbox.Inflate( item_clearance );
 
@@ -230,7 +234,7 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
         if( track->GetNetCode() == GetNetCode()  && (GetNetCode() != 0) )
             continue;
 
-        item_clearance   = track->GetClearance() + outline_half_thickness;
+        int item_clearance = track->GetClearance() + outline_half_thickness;
         item_boundingbox = track->GetBoundingBox();
 
         if( item_boundingbox.Intersects( zone_boundingbox ) )
@@ -261,30 +265,45 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
 
             if( item_boundingbox.Intersects( zone_boundingbox ) )
             {
+                int zclearance = zone_clearance;
+
+                if( item->IsOnLayer( Edge_Cuts ) )
+                    // use only the m_ZoneClearance, not the clearance using
+                    // the netclass value, because we do not have a copper item
+                    zclearance = zone_to_edgecut_clearance;
+
                 ( (EDGE_MODULE*) item )->TransformShapeWithClearanceToPolygon(
-                    aFeatures, zone_clearance,
-                    segsPerCircle, correctionFactor );
+                    aFeatures, zclearance, segsPerCircle, correctionFactor );
             }
         }
     }
 
     // Add graphic items (copper texts) and board edges
+    // Currently copper texts have no net, so only the zone_clearance
+    // is used.
     for( auto item : aPcb->Drawings() )
     {
         if( item->GetLayer() != GetLayer() && item->GetLayer() != Edge_Cuts )
             continue;
+
+        int zclearance = zone_clearance;
+
+        if( item->GetLayer() == Edge_Cuts )
+            // use only the m_ZoneClearance, not the clearance using
+            // the netclass value, because we do not have a copper item
+            zclearance = zone_to_edgecut_clearance;
 
         switch( item->Type() )
         {
         case PCB_LINE_T:
             ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon(
                 aFeatures,
-                zone_clearance, segsPerCircle, correctionFactor );
+                zclearance, segsPerCircle, correctionFactor );
             break;
 
         case PCB_TEXT_T:
             ( (TEXTE_PCB*) item )->TransformBoundingBoxWithClearanceToPolygon(
-                aFeatures, zone_clearance );
+                aFeatures, zclearance );
             break;
 
         default:
@@ -296,6 +315,7 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
     for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = GetBoard()->GetArea( ii );
+
         if( zone->GetLayer() != GetLayer() )
             continue;
 
@@ -307,6 +327,7 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
 
         // A highter priority zone or keepout area is found: remove this area
         item_boundingbox = zone->GetBoundingBox();
+
         if( !item_boundingbox.Intersects( zone_boundingbox ) )
             continue;
 
@@ -335,8 +356,7 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
         }
 
         zone->TransformOutlinesShapeWithClearanceToPolygon(
-                    aFeatures,
-                    min_clearance, use_net_clearance );
+                    aFeatures, min_clearance, use_net_clearance );
     }
 
    // Remove thermal symbols
@@ -346,11 +366,11 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
         {
             // Rejects non-standard pads with tht-only thermal reliefs
             if( GetPadConnection( pad ) == PAD_ZONE_CONN_THT_THERMAL
-             && pad->GetAttribute() != PAD_ATTRIB_STANDARD )
+                && pad->GetAttribute() != PAD_ATTRIB_STANDARD )
                 continue;
 
             if( GetPadConnection( pad ) != PAD_ZONE_CONN_THERMAL
-             && GetPadConnection( pad ) != PAD_ZONE_CONN_THT_THERMAL )
+                && GetPadConnection( pad ) != PAD_ZONE_CONN_THT_THERMAL )
                 continue;
 
             if( !pad->IsOnLayer( GetLayer() ) )
@@ -358,6 +378,7 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
 
             if( pad->GetNetCode() != GetNetCode() )
                 continue;
+
             item_boundingbox = pad->GetBoundingBox();
             int thermalGap = GetThermalReliefGap( pad );
             item_boundingbox.Inflate( thermalGap, thermalGap );
