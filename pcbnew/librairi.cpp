@@ -441,24 +441,43 @@ bool FOOTPRINT_EDIT_FRAME::SaveCurrentModule( const wxString* aLibPath )
     return true;
 }
 
-wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary()
+wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
 {
     // Kicad cannot write legacy format libraries, only .pretty new format
     // because the legacy format cannot handle current features.
     // The footprint library is actually a directory
 
-    // prompt user for footprint library name, ending by ".pretty"
+    // if a library name is not given, prompt user for footprint library name, ending by ".pretty"
     // Because there are constraints for the directory name to create,
     // (the name should have the extension ".pretty", and the folder cannot be inside
     // a footprint library), we do not use the standard wxDirDialog.
 
+
     wxString initialPath = wxPathOnly( Prj().GetProjectFullName() );
-    DIALOG_SELECT_PRETTY_LIB dlg( this, initialPath );
 
-    if( dlg.ShowModal() != wxID_OK )
-        return wxEmptyString;
+    wxString libPath;
 
-    wxString libPath = dlg.GetFullPrettyLibName();
+    if( aLibName.IsEmpty() )
+    {
+        DIALOG_SELECT_PRETTY_LIB dlg( this, initialPath );
+        if( dlg.ShowModal() != wxID_OK )
+            return wxEmptyString;
+
+        libPath = dlg.GetFullPrettyLibName();
+    }
+    else
+    {
+        wxFileName fn = aLibName;
+
+        if( !fn.IsAbsolute() )
+            fn.MakeAbsolute( initialPath );
+
+        // Enforce the extension:
+        fn.SetExt( KiCadFootprintLibPathExtension );
+
+        libPath = fn.GetFullPath();
+    }
+
 
     // We can save fp libs only using IO_MGR::KICAD format (.pretty libraries)
     IO_MGR::PCB_FILE_T  piType = IO_MGR::KICAD;
@@ -570,7 +589,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
 }
 
 
-void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib )
+void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString& aLibName )
 {
     if( GetBoard()->m_Modules == NULL )
     {
@@ -611,7 +630,7 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib )
     {
         // The footprints are saved in a new .pretty library.
         // If this library already exists, all previous footprints will be deleted
-        wxString libPath = CreateNewLibrary();
+        wxString libPath = CreateNewLibrary( aLibName );
 
         if( libPath.IsEmpty() )     // Aborted
             return;

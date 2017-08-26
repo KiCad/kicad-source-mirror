@@ -939,8 +939,12 @@ public:
      *              This lib should be in fp lib table, and is type is .pretty
      *              false: save modules in a new lib. It it is an existing lib,
      *              previous footprints will be removed
+     *
+     * @param aLibName:
+     *              optional library name to create, stops dialog call.
+     *              must be called with aStoreInNewLib as true
      */
-    void ArchiveModulesOnBoard( bool aStoreInNewLib );
+    void ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString& aLibName = wxEmptyString );
 
     /**
      * Function RecreateBOMFileFromBoard

@@ -878,6 +878,8 @@ bool PCB_EDIT_FRAME::ImportFile( const wxString aFileName )
         GetBoard()->SetFileName( newfilename.GetFullPath() );
         UpdateTitle();
 
+        ArchiveModulesOnBoard( true, newfilename.GetName() );
+
         return true;
     }
 
