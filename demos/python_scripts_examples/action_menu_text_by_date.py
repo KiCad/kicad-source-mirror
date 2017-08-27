@@ -48,7 +48,7 @@ class text_by_date( pcbnew.ActionPlugin ):
 
     def Run( self ):
         pcb = pcbnew.GetBoard()
-        for draw in pcb.m_Drawings:
+        for draw in pcb.GetDrawings():
             if draw.GetClass() == 'PTEXT':
                 txt = re.sub( "\$date\$ [0-9]{4}-[0-9]{2}-[0-9]{2}",
                                  "$date$", draw.GetText() )

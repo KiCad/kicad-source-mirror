@@ -40,20 +40,20 @@
 #include <macros.h>
 #include <stdlib.h>
 
-static PCB_EDIT_FRAME* PcbEditFrame = NULL;
+static PCB_EDIT_FRAME* s_PcbEditFrame = NULL;
 
 BOARD* GetBoard()
 {
-    if( PcbEditFrame )
-        return PcbEditFrame->GetBoard();
+    if( s_PcbEditFrame )
+        return s_PcbEditFrame->GetBoard();
     else
         return NULL;
 }
 
 
-void ScriptingSetPcbEditFrame( PCB_EDIT_FRAME* aPCBEdaFrame )
+void ScriptingSetPcbEditFrame( PCB_EDIT_FRAME* aPcbEditFrame )
 {
-    PcbEditFrame = aPCBEdaFrame;
+    s_PcbEditFrame = aPcbEditFrame;
 }
 
 
@@ -101,13 +101,29 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard )
 
 void Refresh()
 {
-    // first argument is erase background, second is a wxRect
-    PcbEditFrame->GetCanvas()->Refresh( true, NULL );
+    if( s_PcbEditFrame )
+    {
+        if( s_PcbEditFrame->IsGalCanvasActive() )
+            s_PcbEditFrame->GetGalCanvas()->Refresh();
+        else
+            // first argument is erase background, second is a wxRect that
+            // defines a reftresh area (all canvas if null)
+            s_PcbEditFrame->GetCanvas()->Refresh( true, NULL );
+    }
 }
 
 
 void WindowZoom( int xl, int yl, int width, int height )
 {
     EDA_RECT Rect( wxPoint( xl, yl ), wxSize( width, height )) ;
-    PcbEditFrame->Window_Zoom( Rect );
+
+    if( s_PcbEditFrame )
+        s_PcbEditFrame->Window_Zoom( Rect );
+}
+
+
+void UpdateUserInterface()
+{
+    if( s_PcbEditFrame )
+        s_PcbEditFrame->UpdateUserInterface();
 }

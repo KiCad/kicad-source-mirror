@@ -724,8 +724,7 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
     }
 
     // Re-create the layer manager to allow arbitrary colors when GAL is enabled
-    ReFillLayerWidget();
-    m_Layers->ReFillRender();
+    UpdateUserInterface();
 }
 
 
@@ -1045,6 +1044,32 @@ void PCB_EDIT_FRAME::UpdateTitle()
             fileinfo );
 
     SetTitle( title );
+}
+
+
+void PCB_EDIT_FRAME::UpdateUserInterface()
+{
+    // Update the layer manager and other widgets from the board setup
+    // (layer and items visibility, colors ...)
+
+    // Rebuild list of nets (full ratsnest rebuild)
+    Compile_Ratsnest( NULL, true );
+    GetBoard()->BuildConnectivity();
+
+    // Update info shown by the horizontal toolbars
+    ReCreateLayerBox();
+
+    // Update the layer manager
+    m_Layers->Freeze();
+    ReFillLayerWidget();
+    m_Layers->ReFillRender();
+
+    // upate the layer widget to match board visibility states, both layers and render columns.
+    syncLayerVisibilities();
+    syncLayerWidgetLayer();
+    syncRenderStates();
+
+    m_Layers->Thaw();
 }
 
 

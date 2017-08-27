@@ -270,6 +270,12 @@ public:
     void PythonPluginsReload();
 
     /**
+     * Update the layer manager and other widgets from the board setup
+     * (layer and items visibility, colors ...)
+     */
+    void UpdateUserInterface();
+
+    /**
      * Function GetAutoSaveFilePrefix
      *
      * @return the string to prepend to a file name for automatic save.

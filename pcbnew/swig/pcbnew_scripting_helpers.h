@@ -49,7 +49,24 @@ BOARD*  LoadBoard( wxString& aFileName );
 // so no option to choose the file format.
 bool    SaveBoard( wxString& aFileName, BOARD* aBoard );
 
+/**
+ * Update the board display after modifying it bu a python script
+ * (note: it is automatically called by action plugins, after running the plugin,
+ * so call this function is usually not needed inside action plugins
+ *
+ * Could be deprecated because modifying a board (especially deleting items) outside
+ * a action plugin can crash Pcbnew.
+ */
 void    Refresh();
+
 void    WindowZoom( int xl, int yl, int width, int height );
 
-#endif
+/**
+ * Update the layer manager and other widgets from the board setup
+ * (layer and items visibility, colors ...)
+ * (note: it is automatically called by action plugins, after running the plugin,
+ * so call this function is usually not needed inside action plugins
+ */
+void UpdateUserInterface();
+
+#endif      // __PCBNEW_SCRIPTING_HELPERS_H

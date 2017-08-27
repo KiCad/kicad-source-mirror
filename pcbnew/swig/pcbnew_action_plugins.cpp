@@ -368,6 +368,7 @@ void PCB_EDIT_FRAME::OnActionPlugin( wxCommandEvent& aEvent )
         }
         else
         {
+            UpdateUserInterface();
             GetScreen()->SetModify();
             Refresh();
         }
