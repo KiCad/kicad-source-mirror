@@ -164,27 +164,27 @@ void COLORS_DESIGN_SETTINGS::setupConfigParams()
     for( int i = 0;  i<PCB_LAYER_ID_COUNT;  ++i )
     {
         wxString vn = wxString::Format(
-                        wxT( "ColorPCBLayer_%s" ),
+                        wxT( "Color4DPCBLayer_%s" ),
                         LSET::Name( PCB_LAYER_ID( i ) ) );
 
         Add( vn, LOC_COLOR(i), m_LayersColors[i] );
     }
 
-    Add( wxT( "ColorTxtFrontEx" ), ITEM_COLOR( LAYER_MOD_TEXT_FR ), LIGHTGRAY );
-    Add( wxT( "ColorTxtBackEx" ), ITEM_COLOR( LAYER_MOD_TEXT_BK ), BLUE );
-    Add( wxT( "ColorTxtInvisEx" ), ITEM_COLOR( LAYER_MOD_TEXT_INVISIBLE ), DARKGRAY );
-    Add( wxT( "ColorPadBackEx" ), ITEM_COLOR( LAYER_PAD_BK ), GREEN );
-    Add( wxT( "ColorAnchorEx" ), ITEM_COLOR( LAYER_ANCHOR ), BLUE );
-    Add( wxT( "ColorPadFrontEx" ), ITEM_COLOR( LAYER_PAD_FR ), RED );
-    Add( wxT( "ColorViaThruEx" ), ITEM_COLOR( LAYER_VIA_THROUGH ), LIGHTGRAY );
-    Add( wxT( "ColorViaBBlindEx" ), ITEM_COLOR( LAYER_VIA_BBLIND ), BROWN );
-    Add( wxT( "ColorViaMicroEx" ), ITEM_COLOR( LAYER_VIA_MICROVIA ), CYAN );
-    Add( wxT( "ColorNonPlatedEx" ), ITEM_COLOR( LAYER_NON_PLATED ), YELLOW );
-    Add( wxT( "ColorRatsEx" ), ITEM_COLOR( LAYER_RATSNEST ), WHITE );
-    Add( wxT( "ColorPCBBackground" ), ITEM_COLOR( LAYER_PCB_BACKGROUND ), BLACK );
-    Add( wxT( "ColorPCBCursor" ), ITEM_COLOR( LAYER_CURSOR ), WHITE );
-    Add( wxT( "ColorAuxItems" ), ITEM_COLOR( LAYER_AUX_ITEMS ), WHITE );
-    Add( wxT( "ColorWorksheet" ), ITEM_COLOR( LAYER_WORKSHEET ), DARKRED );
+    Add( wxT( "Color4DTxtFrontEx" ), ITEM_COLOR( LAYER_MOD_TEXT_FR ), LIGHTGRAY );
+    Add( wxT( "Color4DTxtBackEx" ), ITEM_COLOR( LAYER_MOD_TEXT_BK ), BLUE );
+    Add( wxT( "Color4DTxtInvisEx" ), ITEM_COLOR( LAYER_MOD_TEXT_INVISIBLE ), DARKGRAY );
+    Add( wxT( "Color4DPadBackEx" ), ITEM_COLOR( LAYER_PAD_BK ), GREEN );
+    Add( wxT( "Color4DAnchorEx" ), ITEM_COLOR( LAYER_ANCHOR ), BLUE );
+    Add( wxT( "Color4DPadFrontEx" ), ITEM_COLOR( LAYER_PAD_FR ), RED );
+    Add( wxT( "Color4DViaThruEx" ), ITEM_COLOR( LAYER_VIA_THROUGH ), LIGHTGRAY );
+    Add( wxT( "Color4DViaBBlindEx" ), ITEM_COLOR( LAYER_VIA_BBLIND ), BROWN );
+    Add( wxT( "Color4DViaMicroEx" ), ITEM_COLOR( LAYER_VIA_MICROVIA ), CYAN );
+    Add( wxT( "Color4DNonPlatedEx" ), ITEM_COLOR( LAYER_NON_PLATED ), YELLOW );
+    Add( wxT( "Color4DRatsEx" ), ITEM_COLOR( LAYER_RATSNEST ), WHITE );
+    Add( wxT( "Color4DPCBBackground" ), ITEM_COLOR( LAYER_PCB_BACKGROUND ), BLACK );
+    Add( wxT( "Color4DPCBCursor" ), ITEM_COLOR( LAYER_CURSOR ), WHITE );
+    Add( wxT( "Color4DAuxItems" ), ITEM_COLOR( LAYER_AUX_ITEMS ), WHITE );
+    Add( wxT( "Color4DWorksheet" ), ITEM_COLOR( LAYER_WORKSHEET ), DARKRED );
 
 }
 
