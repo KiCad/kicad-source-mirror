@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -91,7 +91,7 @@ class COLOR4D_PICKER_DLG_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Color Picker"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 707,406 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Color Picker"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 707,375 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~COLOR4D_PICKER_DLG_BASE();
 	
 };

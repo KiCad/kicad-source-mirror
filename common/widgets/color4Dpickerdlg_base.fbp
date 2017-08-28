@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">COLOR4D_PICKER_DLG_BASE</property>
             <property name="pos"></property>
-            <property name="size">707,406</property>
+            <property name="size">707,375</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Color Picker</property>
@@ -291,7 +291,7 @@
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND|wxALIGN_CENTER_HORIZONTAL</property>
+                                                                <property name="flag">wxALIGN_CENTER_HORIZONTAL</property>
                                                                 <property name="proportion">1</property>
                                                                 <object class="spacer" expanded="1">
                                                                     <property name="height">0</property>
@@ -382,7 +382,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND|wxALIGN_CENTER_HORIZONTAL</property>
+                                                                <property name="flag">wxALIGN_CENTER_HORIZONTAL</property>
                                                                 <property name="proportion">1</property>
                                                                 <object class="spacer" expanded="1">
                                                                     <property name="height">0</property>
@@ -407,7 +407,7 @@
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND|wxALIGN_CENTER_HORIZONTAL</property>
+                                                                <property name="flag">wxALIGN_CENTER_HORIZONTAL</property>
                                                                 <property name="proportion">1</property>
                                                                 <object class="spacer" expanded="1">
                                                                     <property name="height">0</property>
@@ -498,7 +498,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND|wxALIGN_CENTER_HORIZONTAL</property>
+                                                                <property name="flag">wxALIGN_CENTER_HORIZONTAL</property>
                                                                 <property name="proportion">1</property>
                                                                 <object class="spacer" expanded="1">
                                                                     <property name="height">0</property>

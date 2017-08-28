@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -31,7 +31,7 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	sbSizerViewRGB = new wxStaticBoxSizer( new wxStaticBox( m_panelFreeColors, wxID_ANY, wxT("RGB") ), wxVERTICAL );
 	
 	
-	sbSizerViewRGB->Add( 0, 0, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
+	sbSizerViewRGB->Add( 0, 0, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_RgbBitmap = new wxStaticBitmap( sbSizerViewRGB->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 264,264 ), 0 );
 	m_RgbBitmap->SetMinSize( wxSize( 264,264 ) );
@@ -39,7 +39,7 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	sbSizerViewRGB->Add( m_RgbBitmap, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
-	sbSizerViewRGB->Add( 0, 0, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
+	sbSizerViewRGB->Add( 0, 0, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
 	bSizerPanels->Add( sbSizerViewRGB, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
@@ -48,7 +48,7 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	sbSizerViewHSV = new wxStaticBoxSizer( new wxStaticBox( m_panelFreeColors, wxID_ANY, wxT("Hue and Saturation") ), wxVERTICAL );
 	
 	
-	sbSizerViewHSV->Add( 0, 0, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
+	sbSizerViewHSV->Add( 0, 0, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_HsvBitmap = new wxStaticBitmap( sbSizerViewHSV->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 264,264 ), 0 );
 	m_HsvBitmap->SetMinSize( wxSize( 264,264 ) );
@@ -56,7 +56,7 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	sbSizerViewHSV->Add( m_HsvBitmap, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
-	sbSizerViewHSV->Add( 0, 0, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
+	sbSizerViewHSV->Add( 0, 0, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
 	bSizerPanels->Add( sbSizerViewHSV, 1, wxEXPAND|wxBOTTOM, 5 );

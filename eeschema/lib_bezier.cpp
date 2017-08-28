@@ -54,7 +54,8 @@ LIB_BEZIER::LIB_BEZIER( LIB_PART* aParent ) :
 
 bool LIB_BEZIER::Save( OUTPUTFORMATTER& aFormatter )
 {
-    aFormatter.Print( 0, "B %lu %d %d %d", m_BezierPoints.size(), m_Unit, m_Convert, m_Width );
+    aFormatter.Print( 0, "B %lu %d %d %d", (long unsigned)m_BezierPoints.size(),
+                      m_Unit, m_Convert, m_Width );
 
     for( const auto& pt : m_BezierPoints )
         aFormatter.Print( 0, " %d %d", pt.x, pt.y );
