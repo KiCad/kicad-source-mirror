@@ -291,6 +291,7 @@ void DIALOG_DESIGN_RULES::InitGlobalRules()
 
     m_OptAllowBlindBuriedVias->SetValue( m_BrdSettings->m_BlindBuriedViaAllowed );
     m_OptAllowMicroVias->SetValue( m_BrdSettings->m_MicroViasAllowed );
+    CheckAllowMicroVias();
 
     PutValueInLocalUnits( *m_SetMicroViasMinSizeCtrl, m_BrdSettings->m_MicroViasMinSize );
     PutValueInLocalUnits( *m_SetMicroViasMinDrillCtrl, m_BrdSettings->m_MicroViasMinDrill );
@@ -808,15 +809,20 @@ void DIALOG_DESIGN_RULES::OnRemoveNetclassClick( wxCommandEvent& event )
     }
 }
 
+void DIALOG_DESIGN_RULES::CheckAllowMicroVias()
+{
+    bool enabled = m_OptAllowMicroVias->GetValue();
+    m_SetMicroViasMinSizeCtrl->Enable( enabled );
+    m_SetMicroViasMinDrillCtrl->Enable( enabled );
+}
+
 /**
  * Function OnAllowMicroVias
  * is called whenever the AllowMicroVias checkbox is toggled
  */
 void DIALOG_DESIGN_RULES::OnAllowMicroVias( wxCommandEvent& event )
 {
-    bool enabled = m_OptAllowMicroVias->GetValue();
-    m_SetMicroViasMinSizeCtrl->Enable( enabled );
-    m_SetMicroViasMinDrillCtrl->Enable( enabled );
+    CheckAllowMicroVias();
 }
 
 void DIALOG_DESIGN_RULES::OnMoveUpSelectedNetClass( wxCommandEvent& event )

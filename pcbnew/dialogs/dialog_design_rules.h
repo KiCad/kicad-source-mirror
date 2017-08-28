@@ -95,6 +95,7 @@ private:
     void OnNetClassesNameRightClick( wxGridEvent& event ) override { event.Skip(); }
     void OnAddNetclassClick( wxCommandEvent& event ) override;
     void OnRemoveNetclassClick( wxCommandEvent& event ) override;
+    void CheckAllowMicroVias();
     void OnAllowMicroVias( wxCommandEvent& event ) override;
 
     /*
