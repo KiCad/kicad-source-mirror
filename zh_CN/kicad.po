@@ -25424,7 +25424,7 @@ msgstr "金典画布(&S)"
 
 #: pcbnew/menubar_modedit.cpp:251 pcbnew/menubar_pcbframe.cpp:565
 msgid "Open&GL Canvas"
-msgstr "OpenGL画布(推荐)(&G)"
+msgstr "OpenGL画布(&G)"
 
 #: pcbnew/menubar_modedit.cpp:259 pcbnew/menubar_pcbframe.cpp:573
 msgid "&Cairo Canvas"
@@ -25458,3 +25458,19 @@ msgstr "钻孔最小直径"
 
 msgid "Allow micro vias (uVias)"
 msgstr "允许微孔"
+
+#: kicad/menubar.cpp:269
+msgid "&Archive Current Project"
+msgstr "把当前工程打包存档(&A)"
+
+#: kicad/menubar.cpp:270
+msgid "Archive all needed project files into zip archive"
+msgstr "把当前工程打包成ZIP文件"
+
+#: kicad/menubar.cpp:276
+msgid "&Unarchive Project"
+msgstr "把存档文件解压缩(&U)"
+
+#: kicad/menubar.cpp:277
+msgid "Unarchive project files from zip archive"
+msgstr "选择一个ZIP工程文件，并解压缩"
