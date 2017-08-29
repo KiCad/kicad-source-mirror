@@ -890,10 +890,12 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
         }
         else if( evt->IsAction( &PCB_ACTIONS::dragFreeAngle ) )
         {
+            updateStartItem( *evt );
             performDragging( PNS::DM_ANY | PNS::DM_FREE_ANGLE );
         }
         else if( evt->IsAction( &PCB_ACTIONS::drag45Degree ) )
         {
+            updateStartItem( *evt );
             performDragging( PNS::DM_ANY );
         }
         else if( evt->IsAction( &PCB_ACTIONS::breakTrack ) )
@@ -916,10 +918,12 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
         }
         else if( evt->IsAction( &PCB_ACTIONS::remove ) )
         {
+            updateStartItem( *evt );
             deleteTraces( m_startItem, false );
         }
         else if( evt->IsAction( &PCB_ACTIONS::removeAlt ) )
         {
+            updateStartItem( *evt );
             deleteTraces( m_startItem, true );
         }
     }
@@ -981,7 +985,7 @@ void ROUTER_TOOL::performDragging( int aMode )
     if( m_router->RoutingInProgress() )
         m_router->StopRouting();
 
-    m_startItem = NULL;
+    m_startItem = nullptr;
 
     frame()->UndoRedoBlock( false );
     ctls->SetAutoPan( false );
