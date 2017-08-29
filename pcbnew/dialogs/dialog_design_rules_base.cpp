@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb  6 2017)
+// C++ code generated with wxFormBuilder (version Aug 29 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -250,7 +250,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	
 	m_MicroViaMinSizeUnits = new wxStaticText( sbViasOptionSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_MicroViaMinSizeUnits->Wrap( -1 );
-	fgViaOptionsSize->Add( m_MicroViaMinSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgViaOptionsSize->Add( m_MicroViaMinSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 	
 	m_MicroViaMinDrillTitle = new wxStaticText( sbViasOptionSizer->GetStaticBox(), wxID_ANY, _("Minimum uVia drill"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MicroViaMinDrillTitle->Wrap( -1 );
@@ -263,7 +263,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	
 	m_MicroViaMinDrillUnits = new wxStaticText( sbViasOptionSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_MicroViaMinDrillUnits->Wrap( -1 );
-	fgViaOptionsSize->Add( m_MicroViaMinDrillUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgViaOptionsSize->Add( m_MicroViaMinDrillUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT, 5 );
 	
 	
 	sbViasOptionSizer->Add( fgViaOptionsSize, 1, wxEXPAND, 5 );
