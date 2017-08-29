@@ -25474,3 +25474,9 @@ msgstr "把存档文件解压缩(&U)"
 #: kicad/menubar.cpp:277
 msgid "Unarchive project files from zip archive"
 msgstr "选择一个ZIP工程文件，并解压缩"
+
+#: kicad/commandframe.cpp:89
+msgid "Import bitmap\n"
+"Convert bitmap images to schematic or PCB elements"
+msgstr "位图导入\n"
+"把位图转换为原理图或PCB可使用的元件"
