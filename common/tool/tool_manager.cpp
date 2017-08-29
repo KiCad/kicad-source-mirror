@@ -580,6 +580,7 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                     // got match? Run the handler.
                     pushViewControls();
                     applyViewControls( st );
+                    st->idle = false;
                     st->cofunc->Call( aEvent );
                     saveViewControls( st );
                     popViewControls();
@@ -721,6 +722,7 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
     if( tool->GetType() == INTERACTIVE )
         static_cast<TOOL_INTERACTIVE*>( tool )->resetTransitions();
 
+    aState->idle = true;
 
     return it;
 }
@@ -874,4 +876,10 @@ void TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
         m_eventQueue.pop_front();
         processEvent( event );
     }
+}
+
+bool TOOL_MANAGER::IsToolActive( TOOL_ID aId ) const
+{
+    auto it = m_toolIdIndex.find( aId );
+    return !it->second->idle;
 }

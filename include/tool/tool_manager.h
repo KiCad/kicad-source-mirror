@@ -202,6 +202,14 @@ public:
      */
     void DeactivateTool();
 
+
+    /**
+     * Function IsToolActive()
+     * Returns true if a tool with given id is active (executing)
+     */
+     bool IsToolActive( TOOL_ID aId ) const;
+
+
     /**
      * Function ResetTools()
      * Resets all tools (i.e. calls their Reset() method).

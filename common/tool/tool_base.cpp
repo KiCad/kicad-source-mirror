@@ -27,6 +27,11 @@
 
 #include <wxPcbStruct.h> // LAME!
 
+bool TOOL_BASE::IsToolActive() const
+{
+    return m_toolMgr->IsToolActive( m_toolId );
+}
+
 KIGFX::VIEW* TOOL_BASE::getView() const
 {
     return m_toolMgr->GetView();

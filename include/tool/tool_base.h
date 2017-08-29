@@ -148,6 +148,8 @@ public:
 
     TOOL_SETTINGS& GetSettings();
 
+    bool IsToolActive() const;
+    
 protected:
     friend class TOOL_MANAGER;
     friend class TOOL_SETTINGS;

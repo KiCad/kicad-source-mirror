@@ -307,16 +307,20 @@ bool EDIT_TOOL::Init()
 
 bool EDIT_TOOL::invokeInlineRouter( int aDragMode )
 {
+    auto theRouter = static_cast<ROUTER_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveRouter" ) );
+
+    if( !theRouter )
+        return false;
+
+	// make sure we don't accidentally invoke inline routing mode while the router is already active!
+    if ( theRouter->IsToolActive() )
+        return false;
+
     TRACK* track = uniqueSelected<TRACK>();
     VIA* via = uniqueSelected<VIA>();
 
     if( track || via )
     {
-        auto theRouter = static_cast<ROUTER_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveRouter" ) );
-
-        if( !theRouter )
-            return false;
-
         m_toolMgr->RunAction( PCB_ACTIONS::routerInlineDrag, true, aDragMode );
         return true;
     }
