@@ -48,12 +48,11 @@ void AddNewItemsCommand( wxMenu* aMainMenu )
                  KiBitmap( add_rectangle_xpm ) );
     AddMenuItem( aMainMenu, ID_POPUP_ITEM_ADD_TEXT, _( "Add Text" ),
                  KiBitmap( text_xpm ) );
-    AddMenuItem( aMainMenu, ID_POPUP_ITEM_APPEND_PAGE_LAYOUT,
-                 _( "Append Page Layout Descr File" ),
-                 KiBitmap( import_xpm ) );
-    AddMenuItem( aMainMenu, ID_POPUP_ITEM_ADD_BITMAP,
-                 _( "Add Bitmap" ),
+    AddMenuItem( aMainMenu, ID_POPUP_ITEM_ADD_BITMAP, _( "Add Bitmap" ),
                  KiBitmap( image_xpm ) );
+    AddMenuItem( aMainMenu, ID_POPUP_ITEM_APPEND_PAGE_LAYOUT,
+                 _( "Append Existing Page Layout Design File" ),
+                 KiBitmap( pagelayout_load_xpm ) );
 }
 
 /* Prepare the right-click pullup menu.

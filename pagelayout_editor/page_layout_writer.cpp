@@ -97,7 +97,7 @@ public:
         }
         catch( const IO_ERROR& ioe )
         {
-            wxMessageBox( ioe.What(), _( "Error writing page layout descr file" ) );
+            wxMessageBox( ioe.What(), _( "Error writing page layout design file" ) );
         }
     }
 
@@ -125,7 +125,7 @@ public:
         }
         catch( const IO_ERROR& ioe )
         {
-            wxMessageBox( ioe.What(), _( "Error writing page layout descr file" ) );
+            wxMessageBox( ioe.What(), _( "Error writing page layout design file" ) );
         }
     }
 

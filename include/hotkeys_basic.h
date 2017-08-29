@@ -234,6 +234,11 @@ void ParseHotkeyConfig( const wxString& data, struct EDA_HOTKEY_CONFIG* aDescLis
 // these hotkey ID are used in many files, so they are define here only once.
 enum common_hotkey_id_commnand {
     HK_NOT_FOUND = 0,
+    HK_NEW,
+    HK_OPEN,
+    HK_SAVE,
+    HK_SAVEAS,
+    HK_PRINT,
     HK_RESET_LOCAL_COORD,
     HK_SET_GRID_ORIGIN,
     HK_RESET_GRID_ORIGIN,

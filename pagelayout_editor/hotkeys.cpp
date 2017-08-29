@@ -88,17 +88,23 @@ static EDA_HOTKEY    HkMoveEndPoint( _HKI( "Move End Point" ), HK_MOVE_END_POINT
 static EDA_HOTKEY    HkDeleteItem( _HKI( "Delete Item" ), HK_DELETE_ITEM, WXK_DELETE,
                                    ID_POPUP_ITEM_DELETE );
 
-// Undo Redo
+// Common: hotkeys_basic.h
 static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
 static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
+static EDA_HOTKEY HkNew( _HKI( "New" ), HK_NEW, GR_KB_CTRL + 'N', (int) wxID_NEW );
+static EDA_HOTKEY HkOpen( _HKI( "Open" ), HK_OPEN, GR_KB_CTRL + 'O', (int) wxID_OPEN );
+static EDA_HOTKEY HkSave( _HKI( "Save" ), HK_SAVE, GR_KB_CTRL + 'S', (int) wxID_SAVE );
+static EDA_HOTKEY HkSaveAs( _HKI( "Save As" ), HK_SAVEAS, GR_KB_CTRL + GR_KB_SHIFT + 'S', (int) wxID_SAVEAS );
+static EDA_HOTKEY HkPrint( _HKI( "Print" ), HK_PRINT, GR_KB_CTRL + 'P', (int) wxID_PRINT );
 
 // List of common hotkey descriptors
 EDA_HOTKEY* s_Common_Hotkey_List[] =
 {
-    &HkHelp,
+    &HkNew, &HkOpen, &HkSave, &HkSaveAs, &HkPrint,
+    &HkUndo, &HkRedo,
     &HkZoomIn,    &HkZoomOut,      &HkZoomRedraw, &HkZoomCenter,
     &HkZoomAuto,  &HkZoomSelection, &HkResetLocalCoord,
-    &HkUndo, &HkRedo,
+    &HkHelp,
     &HkMouseLeftClick,
     &HkMouseLeftDClick,
     NULL
@@ -176,8 +182,29 @@ bool PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
         OnLeftDClick( aDC, aPosition );
         break;
 
-    case HK_HELP:       // Display Current hotkey list
-        DisplayHotkeyList( this, PlEditorHokeysDescr );
+    case HK_NEW:
+        cmd.SetId( wxID_NEW );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_OPEN:
+        cmd.SetId( wxID_OPEN );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_SAVE:
+        cmd.SetId( wxID_SAVE );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_SAVEAS:
+        cmd.SetId( wxID_SAVEAS );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_PRINT:
+        cmd.SetId( wxID_PRINT );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_UNDO:
@@ -220,6 +247,10 @@ bool PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
 
     case HK_RESET_LOCAL_COORD:      // Reset the relative coord
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
+        break;
+
+    case HK_HELP:       // Display Current hotkey list
+        DisplayHotkeyList( this, PlEditorHokeysDescr );
         break;
 
     case HK_SET_GRID_ORIGIN:

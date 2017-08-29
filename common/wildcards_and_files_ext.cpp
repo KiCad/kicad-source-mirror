@@ -83,7 +83,7 @@ const wxString LegacyFootprintLibPathWildcard( _( "Legacy footprint library file
 const wxString EagleFootprintLibPathWildcard( _( "Eagle ver. 6.x XML library files (*.lbr)|*.lbr" ) );
 const wxString GedaPcbFootprintLibFileWildcard( _( "Geda PCB footprint library file (*.fp)|*.fp" ) );
 const wxString ComponentFileExtensionWildcard( _( "Component-footprint link file (*.cmp)|*cmp" ) );
-const wxString PageLayoutDescrFileWildcard( _( "Page layout descr file (*.kicad_wks)|*kicad_wks" ) );
+const wxString PageLayoutDescrFileWildcard( _( "Page layout design file (*.kicad_wks)|*kicad_wks" ) );
 // generic:
 const wxString AllFilesWildcard( _( "All files (*)|*" ) );
 

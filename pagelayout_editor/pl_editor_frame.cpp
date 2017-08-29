@@ -243,7 +243,7 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
         {
             if( filename.IsEmpty() )
             {
-                wxFileDialog openFileDialog(this, _("Create file"), wxEmptyString,
+                wxFileDialog openFileDialog(this, _("Save As"), wxEmptyString,
                         wxEmptyString, PageLayoutDescrFileWildcard, wxFD_SAVE);
 
                 if (openFileDialog.ShowModal() == wxID_CANCEL)

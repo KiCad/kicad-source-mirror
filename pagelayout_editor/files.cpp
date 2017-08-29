@@ -78,7 +78,6 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_LOAD_DEFAULT_PAGE_LAYOUT:
     case wxID_NEW:
     case wxID_OPEN:
         if( GetScreen()->IsModify() && !IsOK( this,
@@ -94,11 +93,6 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_LOAD_DEFAULT_PAGE_LAYOUT:
-        pglayout.SetPageLayout();
-        OnNewPageLayout();
-        break;
-
     case wxID_NEW:
         pglayout.AllowVoidList( true );
         SetCurrFileName( wxEmptyString );
@@ -108,7 +102,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
     case ID_APPEND_DESCR_FILE:
     {
-         wxFileDialog openFileDialog(this, _("Append Page Layout Descr File"),
+         wxFileDialog openFileDialog(this, _("Append Existing Page Layout File"),
                 wxEmptyString,
                 wxEmptyString, PageLayoutDescrFileWildcard, wxFD_OPEN);
 
@@ -134,7 +128,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
     case wxID_OPEN:
     {
-         wxFileDialog openFileDialog(this, _("Open file"), wxEmptyString,
+         wxFileDialog openFileDialog(this, _("Open"), wxEmptyString,
                 wxEmptyString, PageLayoutDescrFileWildcard, wxFD_OPEN);
 
         if (openFileDialog.ShowModal() == wxID_CANCEL)
@@ -170,7 +164,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
     case wxID_SAVEAS:
     {
-         wxFileDialog openFileDialog(this, _("Create file"), wxEmptyString,
+         wxFileDialog openFileDialog(this, _("Save As"), wxEmptyString,
                 wxEmptyString, PageLayoutDescrFileWildcard, wxFD_SAVE);
 
         if (openFileDialog.ShowModal() == wxID_CANCEL)

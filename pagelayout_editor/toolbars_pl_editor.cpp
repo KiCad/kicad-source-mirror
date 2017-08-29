@@ -52,12 +52,13 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
                             _( "New page layout design" ) );
 
     m_mainToolBar->AddTool( wxID_OPEN, wxEmptyString, KiBitmap( pagelayout_load_xpm ),
-                            _( "Load a page layout file. Previous data will be deleted" ) );
+                            _( "Open an existing page layout design file" ) );
 
     m_mainToolBar->AddTool( wxID_SAVE, wxEmptyString, KiBitmap( save_project_xpm ),
                             _( "Save page layout design" ) );
 
     m_mainToolBar->AddSeparator();
+
     m_mainToolBar->AddTool( ID_SHEET_SET, wxEmptyString, KiBitmap( sheetset_xpm ),
                             _( "Page settings" ) );
 
@@ -65,14 +66,17 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
                             _( "Print page layout" ) );
 
     m_mainToolBar->AddSeparator();
+
     m_mainToolBar->AddTool( wxID_CUT, wxEmptyString, KiBitmap( delete_xpm ),
                             _( "Delete selected item" ) );
 
     m_mainToolBar->AddSeparator();
+
     m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString,
-                            KiBitmap( undo_xpm ), wxEmptyString );
+                            KiBitmap( undo_xpm ), _( "Undo" ) );
+
     m_mainToolBar->AddTool( wxID_REDO, wxEmptyString,
-                            KiBitmap( redo_xpm ), wxEmptyString );
+                            KiBitmap( redo_xpm ), _( "Redo" ) );
 
     // Standard Zoom controls:
     m_mainToolBar->AddSeparator();
