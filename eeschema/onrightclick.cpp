@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -847,11 +847,13 @@ void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame )
         msg = AddHotkeyName( _( "Copy Block" ), g_Schematic_Hokeys_Descr,
                              HK_COPY_BLOCK );
         AddMenuItem( PopMenu, wxID_COPY, msg, KiBitmap( copy_xpm ) );
-        AddMenuItem( PopMenu, ID_POPUP_DUPLICATE_BLOCK, _( "Duplicate Block" ), KiBitmap( duplicate_xpm ) );
+        AddMenuItem( PopMenu, ID_POPUP_DUPLICATE_BLOCK, _( "Duplicate Block" ),
+                     KiBitmap( duplicate_xpm ) );
         msg = AddHotkeyName( _( "Drag Block" ), g_Schematic_Hokeys_Descr,
                              HK_MOVEBLOCK_TO_DRAGBLOCK );
         AddMenuItem( PopMenu, ID_POPUP_DRAG_BLOCK, msg, KiBitmap( drag_xpm ) );
-        AddMenuItem( PopMenu, ID_POPUP_DELETE_BLOCK, _( "Delete Block" ), KiBitmap( delete_xpm ) );
+        msg = AddHotkeyName( _( "Delete Block" ), g_Schematic_Hokeys_Descr, HK_DELETE );
+        AddMenuItem( PopMenu, ID_POPUP_DELETE_BLOCK, msg, KiBitmap( delete_xpm ) );
         msg = AddHotkeyName( _( "Flip Block Vertical" ), g_Schematic_Hokeys_Descr,
                              HK_MIRROR_Y );
         AddMenuItem( PopMenu, ID_SCH_MIRROR_Y, msg, KiBitmap( mirror_h_xpm ) );
