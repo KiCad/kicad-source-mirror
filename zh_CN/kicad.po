@@ -25480,3 +25480,14 @@ msgid "Import bitmap\n"
 "Convert bitmap images to schematic or PCB elements"
 msgstr "位图导入\n"
 "把位图转换为原理图或PCB可使用的元件"
+
+msgid "&Hotkeys Options"
+msgstr "快捷键选项(&H)"
+
+#: common/basicframe.cpp:694
+msgid "Icons Options"
+msgstr "图标选项"
+
+#: common/basicframe.cpp +684
+msgid "Icons in Menus"
+msgstr "在菜单中显示图标"
