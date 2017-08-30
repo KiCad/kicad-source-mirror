@@ -151,7 +151,7 @@ bool GERBER_JOBFILE_WRITER::CreateJobFile( const wxString& aFullFilename )
         if( header[ii].Contains( "TF.SameCoordinates" ) )
             continue;   // This attribute is not useful in job file, skip it
 
-        fputs( header[ii], jobFile );
+        fputs( TO_UTF8( header[ii] ), jobFile );
         fputs( "\n", jobFile );
     }
 
