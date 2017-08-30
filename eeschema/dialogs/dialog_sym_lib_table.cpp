@@ -202,9 +202,15 @@ DIALOG_SYMBOL_LIB_TABLE::DIALOG_SYMBOL_LIB_TABLE( wxTopLevelWindow* aParent,
 
     // for ALT+A handling, we want the initial focus to be on the first selected grid.
     if( m_pageNdx == 0 )
+    {
         m_global_grid->SetFocus();
+        m_cur_grid = m_global_grid;
+    }
     else
+    {
         m_project_grid->SetFocus();
+        m_cur_grid = m_project_grid;
+    }
 
     // On some window managers (Unity, XFCE), this dialog is
     // not always raised, depending on this dialog is run.
