@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Brian Sidebotham <brian.sidebotham@gmail.com>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -112,38 +112,36 @@
 
 
 class wxBitmap;
+class wxFileName;
 
 /**
- * @brief A directory which contains information about the project template and does not get
+ * A directory which contains information about the project template and does not get
  * copied. This define is the default filename for this directory
  *
  */
-#define METADIR             wxT("meta")
+#define METADIR             wxT( "meta" )
 
 
 /**
- * @brief A required html formatted file which contains information about the project template.
+ * A required html formatted file which contains information about the project template.
  * This define is the default filename for this file
  *
  */
-#define METAFILE_INFO_HTML  wxT("info.html")
+#define METAFILE_INFO_HTML  wxT( "info.html" )
 
 
 /**
- * @brief An optional png icon, exactly 64px x 64px which is used in the template selector if
+ * An optional png icon, exactly 64px x 64px which is used in the template selector if
  * present. This define is the default filename for this file
  *
  */
-#define METAFILE_ICON       wxT("icon.png")
+#define METAFILE_ICON       wxT( "icon.png" )
 
 /**
- * @brief A class which provides project template functionality.
- *
- *
- *
+ * A class which provides project template functionality.
  */
-class PROJECT_TEMPLATE {
-private:
+class PROJECT_TEMPLATE
+{
 protected:
     wxFileName templateBasePath;
     wxFileName templateMetaPath;
@@ -155,7 +153,7 @@ protected:
 public:
 
     /**
-     * @brief Create a new project instance from \a aPath. \a aPath should be a directory that
+     * Create a new project instance from \a aPath. \a aPath should be a directory that
      * conforms to the project template requirements
      *
      * @param aPath Should be a directory containing the template
@@ -163,45 +161,61 @@ public:
     PROJECT_TEMPLATE( const wxString& aPath );
 
     /**
-     * @brief Non-virtual destructor (so no dervied classes)
+     * Non-virtual destructor (so no derived classes)
      */
     ~PROJECT_TEMPLATE();
 
     /**
-     * @brief Get the dir name of the project template
-     * (i.e. the name of the last folder containing the template files)
+     * Get the dir name of the project template (i.e. the name of the last folder containing
+     * the template files)
+     *
      * @return the dir name of the template
      */
     wxString GetPrjDirName();
 
     /**
-     * @brief Get the full Html filename for the project template
+     * Get the full Html filename for the project template
+     *
      * @return the html meta information file for this template
      */
     wxFileName GetHtmlFile();
 
     /**
-     * @brief Copies and renames all template files to create a new project.
+     * Copies and renames all template files to create a new project.
+     *
      * @param aNewProjectPath The full path of the new project file to create
+     * @param aErrorMsg is an optional string to place project creation error messages.
+     * @return true if the project creation was successful otherwise false.
      */
-    bool CreateProject( wxFileName& aNewProjectPath );
+    bool CreateProject( wxFileName& aNewProjectPath, wxString* aErrorMsg = nullptr );
 
     /**
-     * @brief Get the 64px^2 icon for the project template
+     * Get the 64px^2 icon for the project template
+     *
      * @return an image file of 64px x 64px which is the templates icon
      */
     wxBitmap* GetIcon();
 
     /**
-     * @brief Get the title of the project (extracted from the html title tag)
+     * Get the title of the project (extracted from the html title tag)
      */
     wxString* GetTitle();
 
     /**
-     * @brief Get a vector list of filenames for the template. The files are the source files,
+     * Get a vector list of filenames for the template. The files are the source files,
      * and have not yet been through any renaming
      */
     std::vector<wxFileName> GetFileList();
+
+    /**
+     * Fetch the list of destination files to be copied when the new project is created.
+     *
+     * @param aNewProjectPath is the path to the project to be created.
+     * @param aDestFiles is a container to place the list of destination files to be created.
+     * @return the number of destination files added to the container.
+     */
+    size_t GetDestinationFiles( const wxFileName& aNewProjectPath,
+                                std::vector< wxFileName >& aDestFiles );
 };
 
 #endif

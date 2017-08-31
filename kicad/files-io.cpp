@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,24 +46,12 @@
 
 void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
 {
-    wxString fn = GetFileFromHistory( event.GetId(),
-                    _( "KiCad project file" ), &PgmTop().GetFileHistory() );
+    wxFileName projFileName = GetFileFromHistory( event.GetId(), _( "KiCad project file" ),
+                                                  &PgmTop().GetFileHistory() );
+    if( !projFileName.FileExists() )
+        return;
 
-    if( fn.size() )
-    {
-        // Any open KIFACE's must be closed before changing the project.
-        // We never want a KIWAY_PLAYER open on a KIWAY that isn't in the same project,
-        // and then break one project.
-        // Remember when saving files, the full path is build from the current project path
-        // User is prompted here to close those KIWAY_PLAYERs:
-        if( !Kiway.PlayersClose( false ) )
-            return;
-
-        // We can now set the new project filename and load this project
-        SetProjectFileName( fn );
-        wxCommandEvent cmd( 0, wxID_ANY );
-        OnLoadProject( cmd );
-    }
+    LoadProject( projFileName );
 }
 
 
@@ -74,13 +62,13 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     fn.SetExt( ZipFileExtension );
 
     wxFileDialog zipfiledlg( this, _( "Unzip Project" ), fn.GetPath(),
-                      fn.GetFullName(), ZipFileWildcard,
-                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                             fn.GetFullName(), ZipFileWildcard,
+                             wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( zipfiledlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxString msg = wxString::Format( _("\nOpen '%s'\n" ), GetChars( zipfiledlg.GetPath() ) );
+    wxString msg = wxString::Format( _( "\nOpen '%s'\n" ), GetChars( zipfiledlg.GetPath() ) );
     PrintMsg( msg );
 
     wxDirDialog dirDlg( this, _( "Target Directory" ), fn.GetPath(),
@@ -178,7 +166,8 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 
     if( !ostream.IsOk() )   // issue to create the file. Perhaps not writable dir
     {
-        wxMessageBox( wxString::Format( _( "Unable to create zip archive file '%s'" ), zipfilename ) );
+        wxMessageBox( wxString::Format( _( "Unable to create zip archive file '%s'" ),
+                                        zipfilename ) );
         return;
     }
 

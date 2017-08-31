@@ -37,6 +37,7 @@
 #include <wildcards_and_files_ext.h>
 #include <bitmaps.h>
 #include <executable_names.h>
+#include <build_version.h>
 
 #include "pgm_kicad.h"
 #include "tree_project_frame.h"
@@ -112,6 +113,8 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent,
     m_auimgr.GetPane( m_LeftWin ).BestSize(wxSize(m_leftWinWidth, -1) );
 
     m_auimgr.Update();
+
+    SetTitle( wxString( "KiCad " ) + GetBuildVersion() );
 }
 
 

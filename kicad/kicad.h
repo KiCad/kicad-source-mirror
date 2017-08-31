@@ -43,7 +43,7 @@ class LAUNCHER_PANEL;
 class TREEPROJECTFILES;
 class TREE_PROJECT_FRAME;
 
-// Enum to identify the type of files handled by Kicad manager
+// Identify the type of files handled by Kicad manager
 //
 // When changing this enum  please verify (and perhaps update)
 // TREE_PROJECT_FRAME::GetFileExt(),
@@ -131,14 +131,13 @@ enum id_kicad_frm {
 
 
 /**
- * Class KICAD_MANAGER_FRAME
- * is the main KiCad project manager frame.  It is not a KIWAY_PLAYER.
+ * The main KiCad project manager frame.  It is not a KIWAY_PLAYER.
  */
 class KICAD_MANAGER_FRAME : public EDA_BASE_FRAME
 {
 public:
     KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
-                             const wxPoint& pos, const wxSize& size );
+                         const wxPoint& pos, const wxSize& size );
 
     ~KICAD_MANAGER_FRAME();
 
@@ -146,29 +145,26 @@ public:
     void OnSize( wxSizeEvent& event );
 
     /**
-     * Function OnChangeIconsOptions
-     * Selects the current icons options in menus (or toolbars) in Kicad
+     * Select the current icons options in menus (or toolbars) in Kicad
      * (the default for toolbars/menus is 26x26 pixels, and shows icons in menus).
      */
     void OnChangeIconsOptions( wxCommandEvent& event ) override;
 
     /**
-     * Function OnLoadProject
-     * loads an exiting or creates a new project (.pro) file.
+     * Load an exiting project (.pro) file.
      */
     void OnLoadProject( wxCommandEvent& event );
 
     /**
-     * Function OnCreateProjectFromTemplate
      * Creates a new project folder, copy a template into this new folder.
      * and open this new projrct as working project
      */
     void OnCreateProjectFromTemplate( wxCommandEvent& event );
 
+    void OnNewProject( wxCommandEvent& aEvent );
+
     /**
-     * Function OnSaveProject
-     * is the command event hendler to Save the project (.pro) file containing the top level
-     * configuration parameters.
+     * Save the project (.pro) file containing the top level configuration parameters.
      */
     void OnSaveProject( wxCommandEvent& event );
 
@@ -199,21 +195,18 @@ public:
     void RecreateBaseHToolbar();
 
     /**
-     * Function PrintMsg
-     * displays \a aText in the text panel.
+     * Displays \a aText in the text panel.
      *
      * @param aText The text to display.
      */
     void PrintMsg( const wxString& aText );
 
     /**
-     * a minor helper function:
-     * Prints the Current Working Dir name and the projet name on the text panel.
+     * Prints the current working directory name and the projet name on the text panel.
      */
     void PrintPrjInfo();
 
     /**
-     * a minor helper function:
      * Erase the text panel.
      */
     void ClearMsg();
@@ -226,15 +219,17 @@ public:
     void OnUpdatePreferredPdfBrowser( wxUpdateUIEvent& event );
     void OnUpdateRequiresProject( wxUpdateUIEvent& event );
 
-    void CreateNewProject( const wxString& aPrjFullFileName, bool aTemplateSelector );
+    void CreateNewProject( const wxFileName& aProjectFileName );
+    void LoadProject( const wxFileName& aProjectFileName );
+
 
     void LoadSettings( wxConfigBase* aCfg ) override;
 
     void SaveSettings( wxConfigBase* aCfg ) override;
 
     /**
-     * Function Execute
-     * opens another KiCad application and logs a message.
+     * Open another KiCad application and logs a message.
+     *
      * @param frame = owner frame.
      * @param execFile = name of the executable file.
      * @param param = parameters to be passed to the executable.
@@ -249,7 +244,7 @@ public:
 
     public:
         TERMINATE_HANDLER( const wxString& appName ) :
-            m_appName(appName)
+            m_appName( appName )
         {
         }
 
@@ -260,7 +255,7 @@ public:
      * Called by sending a event with id = ID_INIT_WATCHED_PATHS
      * rebuild the list of wahtched paths
      */
-    void OnChangeWatchedPaths(wxCommandEvent& aEvent );
+    void OnChangeWatchedPaths( wxCommandEvent& aEvent );
 
 
     void SetProjectFileName( const wxString& aFullProjectProFileName );
@@ -284,7 +279,6 @@ public:
     DECLARE_EVENT_TABLE()
 
 private:
-
     wxConfigBase*       config() override;
 
     const SEARCH_STACK& sys_search() override;

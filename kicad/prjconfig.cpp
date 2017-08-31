@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@
 #include <wx/dir.h>
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
+#include <wx/msgdlg.h>
 
 #include <build_version.h>
 #include <config_params.h>
@@ -56,121 +57,69 @@
 
 PARAM_CFG_ARRAY     s_KicadManagerParams;
 
-void KICAD_MANAGER_FRAME::CreateNewProject( const wxString& aPrjFullFileName,
-                                            bool aTemplateSelector = false )
+
+void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
 {
-    wxFileName  newProjectName = aPrjFullFileName;
-    wxChar      sep[2] = { SEP(), 0 };  // nul terminated separator wxChar string.
+    // The project file should be valid by the time we get here or something has gone wrong.
+    if( !aProjectFileName.Exists() )
+        return;
 
+    // Any open KIFACE's must be closed if they are not part of the new project.
+    // (We never want a KIWAY_PLAYER open on a KIWAY that isn't in the same project.)
+    // User is prompted here to close those KIWAY_PLAYERs:
+    if( !Kiway.PlayersClose( false ) )
+        return;
+
+    SetTitle( wxString( "KiCad " ) + GetBuildVersion() );
+
+    // Save the project file for the currently loaded project.
+    if( m_active_project )
+        Prj().ConfigLoad( PgmTop().SysSearch(), GeneralGroupName, s_KicadManagerParams );
+
+    m_active_project = true;
     ClearMsg();
+    SetProjectFileName( aProjectFileName.GetFullPath() );
+    Prj().ConfigLoad( PgmTop().SysSearch(), GeneralGroupName, s_KicadManagerParams );
 
-    // If we are creating a project from a template, make sure the template directory is sane
-    if( aTemplateSelector )
-    {
-        DIALOG_TEMPLATE_SELECTOR* ps = new DIALOG_TEMPLATE_SELECTOR( this );
+    wxString title = GetTitle() + " " + aProjectFileName.GetFullPath();
 
-        wxFileName  templatePath;
-        wxString    envStr;
+    if( !aProjectFileName.IsDirWritable() )
+        title += _( " [Read Only]" );
+    else
+        SetMruPath( Prj().GetProjectPath() ); // Only set MRU path if we have write access. Why?
 
-#ifndef __WXMAC__
-        wxGetEnv( wxT( "KICAD" ), &envStr );
+    SetTitle( title );
 
-        // Add a new tab for system templates
-        if( !envStr.empty() )
-        {
-            // user may or may not have including terminating separator.
-            if( !envStr.EndsWith( sep ) )
-                envStr += sep;
+    UpdateFileHistory( aProjectFileName.GetFullPath(), &PgmTop().GetFileHistory() );
 
-            templatePath = envStr + wxT( "template" ) + sep;
-        }
-        else
-        {
-            // The standard path should be in the share directory for kicad. As
-            // it is normal on Windows to only have the share directory and not
-            // the kicad sub-directory we fall back to that if the directory
-            // doesn't exist
-            templatePath = wxPathOnly( wxStandardPaths::Get().GetExecutablePath() ) +
-                sep + wxT( ".." ) + sep + wxT( "share" ) + sep + wxT( "kicad" ) +
-                sep + wxT( "template" ) + sep;
+    m_LeftWin->ReCreateTreePrj();
 
-            if( !wxDirExists( templatePath.GetFullPath() ) )
-            {
-                templatePath = wxPathOnly( wxStandardPaths::Get().GetExecutablePath() ) +
-                sep + wxT( ".." ) + sep + wxT( "share" ) + sep + wxT( "template" ) + sep;
-            }
-        }
-#else
-        // Use what is provided in the bundle data dir
-        templatePath = GetOSXKicadDataDir() + sep + wxT( "template" );
-#endif
+    // Rebuild the list of watched paths.
+    // however this is possible only when the main loop event handler is running,
+    // so we use it to run the rebuild function.
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED, ID_INIT_WATCHED_PATHS );
 
-        ps->AddTemplatesPage( _( "System Templates" ), templatePath );
+    wxPostEvent( this, cmd );
 
-        // Add a new tab for user templates
-        wxFileName userPath = wxStandardPaths::Get().GetDocumentsDir() +
-                sep + wxT( "kicad" ) + sep + wxT( "template" ) + sep;
+    PrintPrjInfo();
+}
 
-        ps->AddTemplatesPage( _( "User Templates" ), userPath );
 
-        // Check to see if a custom template location is available and setup a
-        // new selection tab if there is.
-        envStr.clear();
-        wxGetEnv( wxT( "KICAD_PTEMPLATES" ), &envStr );
-
-        if( !envStr.empty() )
-        {
-            if( !envStr.EndsWith( sep ) )
-                envStr += sep;
-
-            wxFileName envPath = envStr;
-
-            ps->AddTemplatesPage( _( "Portable Templates" ), envPath );
-        }
-
-        // Show the project template selector dialog
-        int result = ps->ShowModal();
-
-        if( ( result != wxID_OK ) || ( ps->GetSelectedTemplate() == NULL ) )
-        {
-            if( ps->GetSelectedTemplate() == NULL )
-            {
-                wxMessageBox( _( "No project template was selected.  Cannot generate new "
-                                 "project." ),
-                              _( "Error" ),
-                              wxOK | wxICON_ERROR,
-                              this );
-            }
-        }
-        else
-        {
-            // The selected template widget contains the template we're attempting to use to
-            // create a project
-            if( !ps->GetSelectedTemplate()->CreateProject( newProjectName ) )
-            {
-                wxMessageBox( _( "Problem whilst creating new project from template!" ),
-                              _( "Template Error" ),
-                              wxOK | wxICON_ERROR,
-                              this );
-            }
-        }
-    }
+void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName )
+{
+    wxCHECK_RET( aProjectFileName.DirExists() && aProjectFileName.IsDirWritable(),
+                 "Project folder must exist and be writable to create a new project." );
 
     // Init project filename
-    SetProjectFileName( newProjectName.GetFullPath() );
-
-    // Write settings to project file
-    // was: wxGetApp().WriteProjectConfig( aPrjFullFileName, GeneralGroupName, s_KicadManagerParams );
-    Prj().ConfigSave( PgmTop().SysSearch(), GeneralGroupName, s_KicadManagerParams );
+    SetProjectFileName( aProjectFileName.GetFullPath() );
 
     // Ensure a "stub" for a schematic root sheet and a board exist.
     // It will avoid messages from the schematic editor or the board editor to create a new file
     // And forces the user to create main files under the right name for the project manager
-    wxFileName fn( newProjectName.GetFullPath() );
+    wxFileName fn( aProjectFileName.GetFullPath() );
     fn.SetExt( SchematicFileExtension );
 
-    // If a <project>.sch file does not exist, create a "stub" file
-    // ( minimal schematic file )
+    // If a <project>.sch file does not exist, create a "stub" file ( minimal schematic file )
     if( !fn.FileExists() )
     {
         wxFile file( fn.GetFullPath(), wxFile::write );
@@ -197,169 +146,76 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString& aPrjFullFileName,
 
         // wxFile dtor will close the file
     }
-
-    // Enable the toolbar and menubar buttons and clear the help text.
-    m_active_project = true;
-    m_MessagesBox->Clear();
 }
 
 
 void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 {
-    // Any open KIFACE's must be closed if they are not part of the new project.
-    // (We never want a KIWAY_PLAYER open on a KIWAY that isn't in the same project.)
-    // User is prompted here to close those KIWAY_PLAYERs:
-    if( !Kiway.PlayersClose( false ) )
+    wxString     default_dir = GetMruPath();
+    wxFileDialog dlg( this, _( "Open Existing Project" ), default_dir, wxEmptyString,
+                      ProjectFileWildcard, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    // evt_id can be one of:
-    //   ID_NEW_PROJECT, ID_NEW_PROJECT_FROM_TEMPLATE, ID_LOAD_PROJECT, and
-    //   wxID_ANY from 3 different places.
-    int evt_id = event.GetId();
+    wxFileName pro( dlg.GetPath() );
+    pro.SetExt( ProjectFileExtension );     // enforce extension
 
-    wxString    title;
+    if( !pro.IsAbsolute() )
+        pro.MakeAbsolute();
 
-    ClearMsg();
-
-    bool newProject = ( evt_id == ID_NEW_PROJECT ) ||
-                        ( evt_id == ID_NEW_PROJECT_FROM_TEMPLATE );
-
-    if( evt_id != wxID_ANY )
-    {
-        int  style;
-
-        if( newProject )
-        {
-            title = _( "Create New Project" );
-            style = wxFD_SAVE | wxFD_OVERWRITE_PROMPT;
-        }
-        else
-        {
-            title = _( "Open Existing Project" );
-            style = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
-        }
-
-        wxString        default_dir = GetMruPath();
-        wxFileDialog    dlg( this, title, default_dir, wxEmptyString,
-                             ProjectFileWildcard, style );
-
-        if( dlg.ShowModal() == wxID_CANCEL )
-            return;
-
-        //DBG( printf( "%s: wxFileDialog::GetPath=%s\n", __func__, TO_UTF8( dlg.GetPath() ) );)
-
-        wxFileName pro( dlg.GetPath() );
-        pro.SetExt( ProjectFileExtension );     // enforce extension
-
-        if( !pro.IsAbsolute() )
-            pro.MakeAbsolute();
-
-        if( newProject )
-        {
-            // Check if the project directory is empty
-            wxDir directory( pro.GetPath() );
-
-            if( directory.HasFiles() )
-            {
-                wxString msg = _( "The selected directory is not empty.  We recommend you "
-                                  "create projects in their own clean directory.\n\nDo you "
-                                  "want to create a new empty directory for the project?" );
-
-                if( IsOK( this, msg ) )
-                {
-                    // Append a new directory with the same name of the project file
-                    // and try to create it
-                    pro.AppendDir( pro.GetName() );
-
-                    if( !wxMkdir( pro.GetPath() ) )
-                        // There was a problem, undo
-                        pro.RemoveLastDir();
-                }
-            }
-
-            if( evt_id == ID_NEW_PROJECT )
-            {
-                CreateNewProject( pro.GetFullPath() );
-            }
-            else if( evt_id == ID_NEW_PROJECT_FROM_TEMPLATE )
-            {
-                // Launch the template selector dialog
-                CreateNewProject( pro.GetFullPath(), true );
-            }
-        }
-
-        SetProjectFileName( pro.GetFullPath() );
-    }
-
-    wxString prj_filename = GetProjectFileName();
-
-    wxString nameless_prj = NAMELESS_PROJECT  wxT( ".pro" );
-
-    wxLogDebug( wxT( "%s: %s" ),
-                GetChars( wxFileName( prj_filename ).GetFullName() ),
-                GetChars( nameless_prj ) );
-
-    // Check if project file exists and if it is not noname.pro
-    if( !wxFileExists( prj_filename )
-      && !wxFileName( prj_filename ).GetFullName().IsSameAs( nameless_prj ) )
-    {
-        wxString msg = wxString::Format( _(
-                "KiCad project file '%s' not found" ),
-                GetChars( prj_filename ) );
-
-        DisplayError( this, msg );
+    if( !pro.FileExists() )
         return;
-    }
 
-    // Either this is the first time kicad has been run or one of the projects in the
-    // history list is no longer valid.  This prevents kicad from automatically creating
-    // a noname.pro file in the same folder as the kicad binary.
-    if( wxFileName( prj_filename ).GetFullName().IsSameAs( nameless_prj ) && !newProject )
-    {
-        m_active_project = false;
-        m_MessagesBox->SetValue( _( "To proceed, you can use the File menu to start a new project." ) );
-        return;
-    }
-    else
-    {
-        m_active_project = true;
-        m_MessagesBox->Clear();
-    }
-
-    Prj().ConfigLoad( PgmTop().SysSearch(), GeneralGroupName, s_KicadManagerParams );
-
-    title = L"KiCad \u2014 " + prj_filename;
-
-    if( !wxFileName( prj_filename ).IsDirWritable() )
-        title += _( " [Read Only]" );
-    else
-        SetMruPath( Prj().GetProjectPath() );    // Only set MRU path if we have write access.
-
-    SetTitle( title );
-
-    if( !prj_filename.IsSameAs( nameless_prj ) )
-        UpdateFileHistory( prj_filename, &PgmTop().GetFileHistory() );
-
-    m_LeftWin->ReCreateTreePrj();
-
-    // Rebuild the list of watched paths.
-    // however this is possible only when the main loop event handler is running,
-    // so we use it to run the rebuild function.
-    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED, ID_INIT_WATCHED_PATHS );
-
-    wxPostEvent( this, cmd );
-
-    PrintPrjInfo();
+    LoadProject( pro );
 }
 
 
-/* Creates a new project folder, copy a template into this new folder.
- * and open this new project as working project
- */
+void KICAD_MANAGER_FRAME::OnNewProject( wxCommandEvent& aEvent )
+{
+    wxString        default_dir = GetMruPath();
+    wxFileDialog    dlg( this, _( "Create New Project" ), default_dir, wxEmptyString,
+                         ProjectFileWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxFileName pro( dlg.GetPath() );
+    pro.SetExt( ProjectFileExtension );     // enforce extension
+
+    if( !pro.IsAbsolute() )
+        pro.MakeAbsolute();
+
+    // Check if the project directory is empty.
+    wxDir directory( pro.GetPath() );
+
+    if( directory.HasFiles() )
+    {
+        wxString msg = _( "The selected directory is not empty.  We recommend you "
+                          "create projects in their own clean directory.\n\nDo you "
+                          "want to create a new empty directory for the project?" );
+
+        if( IsOK( this, msg ) )
+        {
+            // Append a new directory with the same name of the project file
+            // and try to create it
+            pro.AppendDir( pro.GetName() );
+
+            if( !wxMkdir( pro.GetPath() ) )
+                // There was a problem, undo
+                pro.RemoveLastDir();
+        }
+    }
+
+    CreateNewProject( pro.GetFullPath() );
+    LoadProject( pro );
+}
+
+
 void KICAD_MANAGER_FRAME::OnCreateProjectFromTemplate( wxCommandEvent& event )
 {
     wxString    default_dir = wxFileName( Prj().GetProjectFullName() ).GetPathWithSep();
-    wxString    title = _("New Project Folder");
+    wxString    title = _( "New Project Folder" );
     wxDirDialog dlg( this, title, default_dir );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -371,12 +227,158 @@ void KICAD_MANAGER_FRAME::OnCreateProjectFromTemplate( wxCommandEvent& event )
     fn.SetName( dlg.GetPath().AfterLast( SEP() ) );
     fn.SetExt( wxT( "pro" ) );
 
-    // Launch the template selector dialog, and copy files
-    CreateNewProject( fn.GetFullPath(), true );
+    wxChar      sep[2] = { SEP(), 0 };  // nul terminated separator wxChar string.
 
-    // Initialize the project
-    event.SetId( wxID_ANY );
-    OnLoadProject( event );
+    ClearMsg();
+
+    DIALOG_TEMPLATE_SELECTOR* ps = new DIALOG_TEMPLATE_SELECTOR( this );
+
+    wxFileName  templatePath;
+    wxString    envStr;
+
+#ifndef __WXMAC__
+    wxGetEnv( wxT( "KICAD" ), &envStr );
+
+    // Add a new tab for system templates
+    if( !envStr.empty() )
+    {
+        // user may or may not have including terminating separator.
+        if( !envStr.EndsWith( sep ) )
+            envStr += sep;
+
+        templatePath = envStr + wxT( "template" ) + sep;
+    }
+    else
+    {
+        // The standard path should be in the share directory for kicad. As
+        // it is normal on Windows to only have the share directory and not
+        // the kicad sub-directory we fall back to that if the directory
+        // doesn't exist
+        templatePath = wxPathOnly( wxStandardPaths::Get().GetExecutablePath() ) +
+                       sep + wxT( ".." ) + sep + wxT( "share" ) + sep + wxT( "kicad" ) +
+                       sep + wxT( "template" ) + sep;
+
+        if( !wxDirExists( templatePath.GetFullPath() ) )
+        {
+            templatePath = wxPathOnly( wxStandardPaths::Get().GetExecutablePath() ) + sep +
+                           wxT( ".." ) + sep + wxT( "share" ) + sep + wxT( "template" ) + sep;
+        }
+    }
+#else
+        // Use what is provided in the bundle data dir
+    templatePath = GetOSXKicadDataDir() + sep + wxT( "template" );
+#endif
+
+    ps->AddTemplatesPage( _( "System Templates" ), templatePath );
+
+    // Add a new tab for user templates
+    wxFileName userPath = wxStandardPaths::Get().GetDocumentsDir() + sep + wxT( "kicad" ) +
+                          sep + wxT( "template" ) + sep;
+
+    ps->AddTemplatesPage( _( "User Templates" ), userPath );
+
+    // Check to see if a custom template location is available and setup a
+    // new selection tab if there is.
+    envStr.clear();
+    wxGetEnv( wxT( "KICAD_PTEMPLATES" ), &envStr );
+
+    if( !envStr.empty() )
+    {
+        if( !envStr.EndsWith( sep ) )
+            envStr += sep;
+
+        wxFileName envPath = envStr;
+
+        ps->AddTemplatesPage( _( "Portable Templates" ), envPath );
+    }
+
+    // Show the project template selector dialog
+    if( ps->ShowModal() != wxID_OK )
+        return;
+
+    if( ps->GetSelectedTemplate() == NULL )
+    {
+        wxMessageBox( _( "No project template was selected.  Cannot generate new project." ),
+                      _( "Error" ),
+                      wxOK | wxICON_ERROR,
+                      this );
+
+        return;
+    }
+
+    // Make sure the user has write permissions to the base path.
+    wxFileName prjPath = fn;
+
+    while( !prjPath.DirExists() )
+        prjPath.RemoveLastDir();
+
+    if( !prjPath.IsDirWritable() )
+    {
+        wxString msg;
+
+        msg.Printf( _( "Cannot write to folder '%s'." ), prjPath.GetPath() );
+        wxMessageDialog msgDlg( this, msg, _( "Error!" ), wxICON_ERROR | wxOK | wxCENTER );
+        msgDlg.SetExtendedMessage( _( "Plese check your access permissions to this folder "
+                                      "and try again." ) );
+        msgDlg.ShowModal();
+        return;
+    }
+
+    // Make sure we are not overwriting anything in the destination folder.
+    std::vector< wxFileName > destFiles;
+
+    if( ps->GetSelectedTemplate()->GetDestinationFiles( fn, destFiles ) )
+    {
+        std::vector< wxFileName > overwrittenFiles;
+
+        for( auto file : destFiles )
+        {
+            if( file.FileExists() )
+                overwrittenFiles.push_back( file );
+        }
+
+        if( !overwrittenFiles.empty() )
+        {
+            wxString extendedMsg = _( "Overwriting files:" ) + "\n";
+
+            for( auto file : overwrittenFiles )
+            {
+                extendedMsg += "\n" + file.GetFullName();
+            }
+
+            wxMessageDialog owDlg( this,
+                                   _( "Are you sure you want to overwrite files in "
+                                      "the destination folder?" ),
+                                   _( "Warning!" ),
+                                   wxYES_NO | wxICON_QUESTION | wxCENTER );
+            owDlg.SetExtendedMessage( extendedMsg );
+            owDlg.SetYesNoLabels( _( "Overwrite" ), _( "Do Not Overwrite" ) );
+
+            if( owDlg.ShowModal() == wxID_NO )
+                return;
+        }
+    }
+
+    wxString errorMsg;
+
+    // The selected template widget contains the template we're attempting to use to
+    // create a project
+    if( !ps->GetSelectedTemplate()->CreateProject( fn, &errorMsg ) )
+    {
+        wxMessageDialog createDlg( this,
+                                   _( "A problem occurred creating new project from template!" ),
+                                   _( "Template Error" ),
+                                   wxOK | wxICON_ERROR );
+
+        if( !errorMsg.empty() )
+            createDlg.SetExtendedMessage( errorMsg );
+
+        createDlg.ShowModal();
+        return;
+    }
+
+    CreateNewProject( fn.GetFullPath() );
+    LoadProject( fn );
 }
 
 
@@ -385,8 +387,6 @@ void KICAD_MANAGER_FRAME::OnSaveProject( wxCommandEvent& event )
     if( !wxIsWritable( GetProjectFileName() ) )
         return;
 
-    // was: wxGetApp().WriteProjectConfig( m_ProjectFileName.GetFullPath(),
-    //          GeneralGroupName, s_KicadManagerParams );
     Prj().ConfigSave( PgmTop().SysSearch(), GeneralGroupName, s_KicadManagerParams );
 }
 
