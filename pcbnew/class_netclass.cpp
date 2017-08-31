@@ -86,6 +86,7 @@ NETCLASS::~NETCLASS()
 
 NETCLASSES::NETCLASSES()
 {
+    m_default = std::make_shared<NETCLASS>( NETCLASS::Default );
 }
 
 

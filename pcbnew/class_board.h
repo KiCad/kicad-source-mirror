@@ -188,7 +188,6 @@ private:
 
     int                     m_fileFormatVersionAtLoad;  ///< the version loaded from the file
 
-    NETINFO_LIST            m_NetInfo;              ///< net info list (name, design constraints ..
     std::shared_ptr<CONNECTIVITY_DATA>      m_connectivity;
 
     BOARD_DESIGN_SETTINGS   m_designSettings;
@@ -197,6 +196,7 @@ private:
     PAGE_INFO               m_paper;
     TITLE_BLOCK             m_titles;               ///< text in lower right of screen and plots
     PCB_PLOT_PARAMS         m_plotOptions;
+    NETINFO_LIST            m_NetInfo;              ///< net info list (name, design constraints ..
 
     /**
      * Function chainMarkedSegments
