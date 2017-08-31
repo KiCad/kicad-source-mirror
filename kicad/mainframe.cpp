@@ -219,7 +219,8 @@ void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
     {
         int px, py;
 
-        UpdateFileHistory( GetProjectFileName(), &PgmTop().GetFileHistory() );
+        if( !GetProjectFileName().empty() )
+            UpdateFileHistory( GetProjectFileName(), &PgmTop().GetFileHistory() );
 
         if( !IsIconized() )   // save main frame position and size
         {
@@ -359,7 +360,6 @@ void KICAD_MANAGER_FRAME::OnRunSchLibEditor( wxCommandEvent& event )
             return;
         }
 
-        // frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectSchematicFileName ) );
         frame->Show( true );
     }
 
@@ -432,7 +432,6 @@ void KICAD_MANAGER_FRAME::OnRunPcbFpEditor( wxCommandEvent& event )
             return;
         }
 
-//        frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectBoardFileName ) );
         frame->Show( true );
     }
 
@@ -546,10 +545,6 @@ void KICAD_MANAGER_FRAME::SaveSettings( wxConfigBase* aCfg )
 }
 
 
-/**
- * a minor helper function:
- * Prints the Current Project full name on the text panel.
- */
 void KICAD_MANAGER_FRAME::PrintPrjInfo()
 {
     wxString msg = wxString::Format( _( "Project name:\n%s\n" ),
