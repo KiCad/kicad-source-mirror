@@ -1491,6 +1491,7 @@ void LIB_PART::CopySelectedItems( const wxPoint& aOffset )
      * a memory reallocation can happen and will break pointers
      */
     unsigned icnt = drawings.size();
+    std::vector< LIB_ITEM* > tmp;
 
     for( unsigned ii = 0; ii < icnt; ii++  )
     {
@@ -1507,8 +1508,11 @@ void LIB_PART::CopySelectedItems( const wxPoint& aOffset )
         item.ClearFlags( SELECTED );
         LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
         newItem->SetFlags( SELECTED );
-        drawings.push_back( newItem );
+        tmp.push_back( newItem );
     }
+
+    for( unsigned ii = 0;  ii < tmp.size();  ii++ )
+        drawings.push_back( tmp[ii] );
 
     MoveSelectedItems( aOffset );
 }
