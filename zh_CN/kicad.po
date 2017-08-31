@@ -25488,6 +25488,9 @@ msgstr "快捷键选项(&H)"
 msgid "Icons Options"
 msgstr "图标选项"
 
-#: common/basicframe.cpp +684
+#: common/basicframe.cpp:684
 msgid "Icons in Menus"
 msgstr "在菜单中显示图标"
+
+msgid "Get &Involved"
+msgstr "加入KiCad"
