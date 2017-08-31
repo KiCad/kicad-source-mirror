@@ -55,6 +55,7 @@ public:
     static TOOL_ACTION zoomCenter;
     static TOOL_ACTION zoomFitScreen;
     static TOOL_ACTION zoomPreset;
+    static TOOL_ACTION zoomTool;
 
     // Grid control
     static TOOL_ACTION gridFast1;

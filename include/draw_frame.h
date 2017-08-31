@@ -393,6 +393,20 @@ public:
     wxAuiToolBar* GetMainToolBar() const { return m_mainToolBar; }
 
     /**
+     * Checks all the toolbars and returns true if the given tool id is toggled.
+     *
+     * This is needed because GerbView and Pcbnew put some of the same tools in
+     * different toolbars (for example, zoom selection is in the main bar in
+     * Pcbnew and in the options bar in GerbView).
+     */
+    bool GetToolToggled( int aToolId )
+    {
+        return ( m_mainToolBar->GetToolToggled( aToolId ) ||
+                 m_optionsToolBar->GetToolToggled( aToolId ) ||
+                 m_drawToolBar->GetToolToggled( aToolId ) );
+    }
+
+    /**
      * Function SetToolID
      * sets the tool command ID to \a aId and sets the cursor to \a aCursor.  The
      * command ID must be greater or equal ::ID_NO_TOOL_SELECTED.  If the command

@@ -197,10 +197,6 @@ TOOL_ACTION PCB_ACTIONS::selectionTool( "pcbnew.Control.selectionTool",
         AS_GLOBAL, 0,
         "", "", NULL, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::zoomTool( "pcbnew.Control.zoomTool",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_SELECTION ),
-        _( "Zoom to Selection" ), "", NULL, AF_ACTIVATE );
-
 TOOL_ACTION PCB_ACTIONS::resetCoords( "pcbnew.Control.resetCoords",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_RESET_LOCAL_COORD ),
         "", "" );

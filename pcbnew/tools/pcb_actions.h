@@ -204,7 +204,7 @@ public:
 
     /// Activation of the Push and Shove router (inline dragging mode)
     static TOOL_ACTION routerInlineDrag;
-    
+
     // Point Editor
     /// Break outline (insert additional points to an edge)
     static TOOL_ACTION pointEditorAddCorner;
@@ -354,7 +354,6 @@ public:
 
     // Miscellaneous
     static TOOL_ACTION selectionTool;
-    static TOOL_ACTION zoomTool;
     static TOOL_ACTION pickerTool;
     static TOOL_ACTION resetCoords;
     static TOOL_ACTION measureTool;

@@ -310,7 +310,6 @@ set( PCBNEW_CLASS_SRCS
     tools/grid_helper.cpp
     tools/pad_tool.cpp
     tools/picker_tool.cpp
-    tools/zoom_tool.cpp
     tools/zone_create_helper.cpp
     tools/tools_common.cpp
     tools/tool_event_utils.cpp

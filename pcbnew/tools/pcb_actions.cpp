@@ -145,7 +145,7 @@ boost::optional<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
         return PCB_ACTIONS::selectionTool.MakeEvent();
 
     case ID_ZOOM_SELECTION:
-        return PCB_ACTIONS::zoomTool.MakeEvent();
+        return ACTIONS::zoomTool.MakeEvent();
 
     case ID_PCB_DELETE_ITEM_BUTT:
     case ID_MODEDIT_DELETE_TOOL:

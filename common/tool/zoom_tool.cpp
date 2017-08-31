@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -23,14 +23,13 @@
 #include <view/view_controls.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>
+#include <tool/actions.h>
+#include <tool/zoom_tool.h>
 #include <preview_items/selection_area.h>
-
-#include "zoom_tool.h"
-#include "pcb_actions.h"
 
 
 ZOOM_TOOL::ZOOM_TOOL() :
-        TOOL_INTERACTIVE( "pcbnew.Control.zoomTool" )
+        TOOL_INTERACTIVE( "common.Control.zoomTool" )
 {
     m_frame = NULL;
 }
@@ -41,14 +40,14 @@ ZOOM_TOOL::~ZOOM_TOOL() {}
 
 void ZOOM_TOOL::Reset( RESET_REASON aReason )
 {
-    m_frame = getEditFrame<PCB_EDIT_FRAME>();
+    m_frame = getEditFrame<EDA_DRAW_FRAME>();
 }
 
 
 int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     // This method is called both when the zoom tool is activated (on) or deactivated (off)
-    bool zoom_tool_is_on = m_frame->GetMainToolBar()->GetToolToggled( ID_ZOOM_SELECTION );
+    bool zoom_tool_is_on = m_frame->GetToolToggled( ID_ZOOM_SELECTION );
 
     if( !zoom_tool_is_on )  // This is a tool deselection: do nothing
         return 0;
@@ -60,7 +59,7 @@ int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
         if( evt->IsCancel() || evt->IsActivate() )
             break;
 
-        else if( evt->IsDrag( BUT_LEFT ) )
+        else if( evt->IsDrag( BUT_LEFT ) || evt->IsDrag( BUT_RIGHT ) )
         {
             if( selectRegion() )
                 break;
@@ -94,7 +93,7 @@ bool ZOOM_TOOL::selectRegion()
             break;
         }
 
-        if( evt->IsDrag( BUT_LEFT ) )
+        if( evt->IsDrag( BUT_LEFT ) || evt->IsDrag( BUT_RIGHT ) )
         {
             area.SetOrigin( evt->DragOrigin() );
             area.SetEnd( evt->Position() );
@@ -102,7 +101,7 @@ bool ZOOM_TOOL::selectRegion()
             view->Update( &area, KIGFX::GEOMETRY );
         }
 
-        if( evt->IsMouseUp( BUT_LEFT ) )
+        if( evt->IsMouseUp( BUT_LEFT ) || evt->IsMouseUp( BUT_RIGHT ) )
         {
             view->SetVisible( &area, false );
             auto selectionBox = area.ViewBBox();
@@ -116,8 +115,19 @@ bool ZOOM_TOOL::selectRegion()
             else
             {
                 VECTOR2D vsize = selectionBox.GetSize();
-                double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
-                                                            fabs( vsize.y / screenSize.y ) );
+                double scale;
+                double ratio = std::max( fabs( vsize.x / screenSize.x ),
+                                         fabs( vsize.y / screenSize.y ) );
+
+                if( evt->IsMouseUp( BUT_LEFT ) )
+                {
+                    scale = view->GetScale() / ratio;
+                }
+                else
+                {
+                    scale = view->GetScale() * ratio;
+                }
+
                 view->SetScale( scale );
                 view->SetCenter( selectionBox.Centre() );
 
@@ -136,5 +146,5 @@ bool ZOOM_TOOL::selectRegion()
 
 void ZOOM_TOOL::setTransitions()
 {
-    Go( &ZOOM_TOOL::Main, PCB_ACTIONS::zoomTool.MakeEvent() );
+    Go( &ZOOM_TOOL::Main, ACTIONS::zoomTool.MakeEvent() );
 }

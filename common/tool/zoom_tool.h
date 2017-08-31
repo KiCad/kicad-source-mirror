@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -22,7 +22,7 @@
 
 #include <tool/tool_interactive.h>
 
-class PCB_EDIT_FRAME;
+class EDA_DRAW_FRAME;
 
 
 class ZOOM_TOOL : public TOOL_INTERACTIVE
@@ -42,7 +42,7 @@ public:
 
 private:
     bool selectRegion();
-    PCB_EDIT_FRAME* m_frame;
+    EDA_DRAW_FRAME* m_frame;
 };
 
 #endif // _ZOOM_TOOL_H

@@ -27,9 +27,9 @@
 
 #include <tool/tool_manager.h>
 #include <tool/common_tools.h>
+#include <tool/zoom_tool.h>
 
 #include <tools/selection_tool.h>
-#include <tools/zoom_tool.h>
 #include <tools/picker_tool.h>
 #include <tools/edit_tool.h>
 #include <tools/drawing_tool.h>

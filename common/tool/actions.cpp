@@ -35,6 +35,10 @@ TOOL_ACTION ACTIONS::zoomFitScreen( "common.Control.zoomFitScreen",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_AUTO ),
         _( "Zoom Auto" ), "", zoom_fit_in_page_xpm );
 
+TOOL_ACTION ACTIONS::zoomTool( "common.Control.zoomTool",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_SELECTION ),
+        _( "Zoom to Selection" ), "", NULL, AF_ACTIVATE );
+
 TOOL_ACTION ACTIONS::zoomPreset( "common.Control.zoomPreset",
         AS_GLOBAL, 0,
         "", "" );
