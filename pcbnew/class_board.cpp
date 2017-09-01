@@ -68,8 +68,7 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 
 BOARD::BOARD() :
     BOARD_ITEM_CONTAINER( (BOARD_ITEM*) NULL, PCB_T ),
-    m_NetInfo( this ),
-    m_paper( PAGE_INFO::A4 )
+        m_paper( PAGE_INFO::A4 ), m_NetInfo( this )
 {
     // we have not loaded a board yet, assume latest until then.
     m_fileFormatVersionAtLoad = LEGACY_BOARD_FILE_VERSION;
