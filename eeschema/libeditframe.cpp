@@ -1284,6 +1284,7 @@ void LIB_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
 LIB_ITEM* LIB_EDIT_FRAME::LocateItemUsingCursor( const wxPoint& aPosition,
                                                  const KICAD_T aFilterList[] )
 {
+    wxPoint        pos;
     LIB_PART*      part = GetCurPart();
 
     if( !part )
@@ -1291,7 +1292,12 @@ LIB_ITEM* LIB_EDIT_FRAME::LocateItemUsingCursor( const wxPoint& aPosition,
 
     LIB_ITEM* item = locateItem( aPosition, aFilterList );
 
-    wxPoint pos = GetNearestGridPosition( aPosition );
+    // If the user aborted the clarification context menu, don't show it again at the
+    // grid position.
+    if( !item && m_canvas->GetAbortRequest() )
+        return NULL;
+
+    pos = GetNearestGridPosition( aPosition );
 
     if( item == NULL && aPosition != pos )
         item = locateItem( pos, aFilterList );

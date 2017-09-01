@@ -120,8 +120,12 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         if( m_drawItem )
             deleteItem( DC );
         else
+        {
             DisplayCmpDoc();
 
+            if( m_canvas->GetAbortRequest() )
+                m_canvas->SetAbortRequest( false );
+        }
         break;
 
     case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
@@ -156,6 +160,9 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
 
         if( m_drawItem == NULL )
         {
+            if( m_canvas->GetAbortRequest() )
+                m_canvas->SetAbortRequest( false );
+
             wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
 
             cmd.SetId( ID_LIBEDIT_GET_FRAME_EDIT_PART );
