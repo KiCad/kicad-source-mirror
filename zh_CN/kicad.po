@@ -25494,3 +25494,23 @@ msgstr "在菜单中显示图标"
 
 msgid "Get &Involved"
 msgstr "加入KiCad"
+
+#: pcbnew/dialogs/dialog_design_rules.cpp:1096
+msgid "Netclass: <b>%s</b><br>"
+msgstr "网络类: <b>%s</b><br>"
+
+#: pcbnew/dialogs/dialog_design_rules.cpp:1005
+msgid " - <b>Track Size</b> (%f %s) &lt; <b>Min Track Size</b> (%f %s)<br>"
+msgstr " - <b>此网络类的布线宽度</b>(%f %s) &lt; <b>全局的导线最小宽度</b>(%f %s)<br>"
+
+#: pcbnew/dialogs/dialog_design_rules.cpp:1018
+msgid " - <b>Differential Pair Size</b> (%f %s) &lt; <b>Min Track Size</b> (%f %s)<br>"
+msgstr " - <b>此网络类的差分线宽度</b>(%f %s) &lt; <b>全局的导线最小宽度</b>(%f %s)<br>"
+
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:54
+msgid "Diff Pair Width"
+msgstr "差分线宽度"
+
+#:pcbnew/dialogs/dialog_design_rules_base.cpp:55
+msgid "Diff Pair Gap"
+msgstr "差分线间距"
