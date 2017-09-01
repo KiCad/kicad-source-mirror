@@ -61,11 +61,10 @@
 # mc: - chamfer = smuss(o/amento)
 # mc: - fillet = stond(o/amento)
 # mc: - edge = spigolo
-# mc: Layout editor (norma UNI 8187, ISO 7200):
-# mc: - layout = disposizione
-# mc: - title block = secondo le norme UNI, riquadro (delle) iscrizioni,
-#       gergalmente detto cartiglio.
-# mc: - frame references = squadratura
+# mc: - Layout editor (norma UNI 8187, ISO 7200):
+# mc:   - (page) layout = disposizione (pagina)
+# mc:   - title block = secondo le norme UNI, riquadro (delle) iscrizioni, gergalmente detto cartiglio.
+# mc:   - frame references = squadratura
 # mc: - workbook = libretto di lavoro (simulazioni)
 # mc: - thermal relief = supporto termico
 # mc: - cutout zone = zona ritaglio
@@ -74,7 +73,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-31 22:11+0200\n"
-"PO-Revision-Date: 2017-09-01 10:21+0200\n"
+"PO-Revision-Date: 2017-09-01 11:11+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -401,11 +400,11 @@ msgstr "Pcb calculator - Calcolatrice per componenti, larghezza piste, ecc."
 
 #: kicad/menubar.cpp:406
 msgid "Run Page Layout Editor"
-msgstr "Avvia editor fogli di lavoro"
+msgstr "Avvia editor disposizione pagina"
 
 #: kicad/menubar.cpp:408
 msgid "Pl editor - Worksheet layout editor"
-msgstr "Pl editor - Editor modelli fogli di lavoro"
+msgstr "Pl editor - Editor disposizione pagine"
 
 #: kicad/menubar.cpp:416
 msgid "KiCad &Manual"
@@ -513,11 +512,11 @@ msgstr "Impossibile aprire il percorso dei modelli! "
 
 #: kicad/project_template.cpp:57
 msgid "Couldn't open the meta information directory for this template! "
-msgstr ""
+msgstr "Impossibile aprire la cartella delle meta informazioni per questo modello!"
 
 #: kicad/project_template.cpp:63
 msgid "Cound't find the meta HTML information file for this template!"
-msgstr ""
+msgstr "Impossibile trovare il file HTML delle meta informazioni per questo modello!"
 
 #: kicad/project_template.cpp:205
 #, c-format
@@ -771,16 +770,15 @@ msgstr "Errore!"
 
 #: kicad/prjconfig.cpp:321
 msgid "Plese check your access permissions to this folder and try again."
-msgstr ""
+msgstr "Controllare i permessi di accesso a questa cartella e riprovare."
 
 #: kicad/prjconfig.cpp:342
 msgid "Overwriting files:"
 msgstr "Sovrascrittura file:"
 
 #: kicad/prjconfig.cpp:350
-#, fuzzy
 msgid "Are you sure you want to overwrite files in the destination folder?"
-msgstr "Cancellare il file selezionato?"
+msgstr "Sovrascrivere i file nella cartella di destinazione?"
 
 #: kicad/prjconfig.cpp:352 common/dialogs/dialog_page_settings.cpp:473
 msgid "Warning!"
@@ -795,9 +793,8 @@ msgid "Do Not Overwrite"
 msgstr "Sono sovrascrivere"
 
 #: kicad/prjconfig.cpp:369
-#, fuzzy
 msgid "A problem occurred creating new project from template!"
-msgstr "Problemi durante la creazione del nuovo progetto da modello!"
+msgstr "Problema durante la creazione del nuovo progetto da modello!"
 
 #: kicad/prjconfig.cpp:370
 msgid "Template Error"
@@ -1261,7 +1258,7 @@ msgstr "Documentazione impronta"
 
 #: pcbnew/onrightclick.cpp:430
 msgid "Global Spread and Place"
-msgstr "Disposizione globale"
+msgstr "Distribuzione e piazzamento globali"
 
 #: pcbnew/onrightclick.cpp:432
 msgid "Unlock All Footprints"
@@ -15283,9 +15280,8 @@ msgid "Component-footprint link file (*.cmp)|*cmp"
 msgstr "File collegamento componenti-impronte (*.cmp)|*cmp"
 
 #: common/wildcards_and_files_ext.cpp:87
-#, fuzzy
 msgid "Page layout design file (*.kicad_wks)|*kicad_wks"
-msgstr "File di descrizione disposizione pagina (*.kicad_wks)|*kicad_wks"
+msgstr "File di disposizione pagina (*.kicad_wks)|*kicad_wks"
 
 #: common/wildcards_and_files_ext.cpp:89
 msgid "All files (*)|*"
@@ -16172,7 +16168,7 @@ msgstr "Commento4"
 
 #: common/dialogs/dialog_page_settings_base.cpp:346
 msgid "Page layout description file"
-msgstr "File di descrizione disposizione pagina"
+msgstr "File di disposizione pagina"
 
 #: common/dialogs/dialog_get_component_base.cpp:33
 msgid "History list:"
@@ -16496,7 +16492,7 @@ msgstr "Personalizzato"
 #: common/dialogs/dialog_page_settings.cpp:436
 #, c-format
 msgid "Page layout description file <%s> not found. Abort"
-msgstr "File di descrizione disposizione pagina \"%s\" non trovato. Interrotto"
+msgstr "File di disposizione pagina \"%s\" non trovato. Interrotto"
 
 #: common/dialogs/dialog_page_settings.cpp:467
 #, c-format
@@ -16513,7 +16509,7 @@ msgstr ""
 
 #: common/dialogs/dialog_page_settings.cpp:806
 msgid "Select Page Layout Descr File"
-msgstr "Seleziona il file di descr. disposizione pagina"
+msgstr "Seleziona il file di disposizione pagina"
 
 #: common/dialogs/dialog_page_settings.cpp:824
 #, c-format
@@ -16524,7 +16520,7 @@ msgid ""
 "instead of\n"
 "'%s'"
 msgstr ""
-"Il nome file della descrizione di disposizione pagina è cambiato.\n"
+"Il nome file di disposizione pagina è cambiato.\n"
 "Volete usare il percorso relativo:\n"
 "\"%s\"\n"
 "invece che\n"
@@ -24324,7 +24320,7 @@ msgstr "Carica file di &lavoro Gerber"
 
 #: gerbview/menubar.cpp:76
 msgid "Load a Gerber job file, and load gerber files depending on the job"
-msgstr ""
+msgstr "Carica un file di lavoro Gerber, e carica i file Gerbere a seconda del lavoro"
 
 #: gerbview/menubar.cpp:81
 msgid "Load &Zip Archive File"
@@ -26140,7 +26136,7 @@ msgstr "Aggiungi bitmap"
 
 #: pagelayout_editor/onrightclick.cpp:54
 msgid "Append Existing Page Layout Design File"
-msgstr "Accoda file di descr. disposizione pagina"
+msgstr "Accoda file di disposizione pagina esistente"
 
 #: pagelayout_editor/onrightclick.cpp:90 pagelayout_editor/hotkeys.cpp:84
 msgid "Move Start Point"
@@ -26172,35 +26168,31 @@ msgstr "&Nuovo"
 
 #: pagelayout_editor/menubar.cpp:73
 msgid "Create new page layout design"
-msgstr "Nuovo progetto disposizione pagina"
+msgstr "Nuovo progetto di disposizione pagina"
 
 #: pagelayout_editor/menubar.cpp:76
 msgid "&Open..."
 msgstr "&Apri..."
 
 #: pagelayout_editor/menubar.cpp:78 pagelayout_editor/toolbars_pl_editor.cpp:55
-#, fuzzy
 msgid "Open an existing page layout design file"
-msgstr "Errore durante la scrittura del file di descr. diposizione pagina"
+msgstr "Apri file di disposizione pagina esistente"
 
 #: pagelayout_editor/menubar.cpp:87
-#, fuzzy
 msgid "Open recent page layout design file"
-msgstr "Apri file di disposizione pagina &recente"
+msgstr "Apri file di disposizione pagina recente"
 
 #: pagelayout_editor/menubar.cpp:94
-#, fuzzy
 msgid "Save current page layout design file"
-msgstr "Salva progetto disposizione pagina"
+msgstr "Salva il file di disposizione pagina corrente"
 
 #: pagelayout_editor/menubar.cpp:97
 msgid "Save &As"
 msgstr "S&alva con nome"
 
 #: pagelayout_editor/menubar.cpp:99
-#, fuzzy
 msgid "Save current page layout design file with a different name"
-msgstr "Salva foglio schema corrente con un nuovo nome"
+msgstr "Salva il file di disposizione pagina corrente con un nuovo nome"
 
 #: pagelayout_editor/menubar.cpp:104
 msgid "&Print..."
@@ -26211,9 +26203,8 @@ msgid "Print Pre&view..."
 msgstr "_Visualizza anteprima di stampa..."
 
 #: pagelayout_editor/menubar.cpp:114
-#, fuzzy
 msgid "Close Page Layout Editor"
-msgstr "&Chiudi editor disposizione pagina"
+msgstr "Chiudi editor disposizione pagina"
 
 #: pagelayout_editor/menubar.cpp:140
 msgid "Zoom all"
@@ -26236,14 +26227,12 @@ msgid "&Bitmap..."
 msgstr "&Bitmap..."
 
 #: pagelayout_editor/menubar.cpp:169
-#, fuzzy
 msgid "&Append Existing Page Layout Design File..."
-msgstr "Accoda file di descr. disposizione pagina"
+msgstr "&Accoda file di disposizione pagina esistente..."
 
 #: pagelayout_editor/menubar.cpp:170
-#, fuzzy
 msgid "Append an existing page layout design file to current file"
-msgstr "Errore durante la scrittura del file di descr. diposizione pagina"
+msgstr "Accoda un file di disposizione pagina esistente al file corrente"
 
 #: pagelayout_editor/menubar.cpp:210
 msgid "Page Layout Editor &Manual"
@@ -26251,7 +26240,7 @@ msgstr "&Manuale editor disposizione pagina"
 
 #: pagelayout_editor/menubar.cpp:211
 msgid "Open the Page Layout Editor Manual"
-msgstr "Apri il manuale editor di disposizione pagina"
+msgstr "Apri il manuale dell'editor disposizione pagina"
 
 #: pagelayout_editor/hotkeys.cpp:95 pagelayout_editor/files.cpp:131
 msgid "Open"
@@ -26268,9 +26257,8 @@ msgstr "Editor disposizione pagina"
 
 #: pagelayout_editor/page_layout_writer.cpp:100
 #: pagelayout_editor/page_layout_writer.cpp:128
-#, fuzzy
 msgid "Error writing page layout design file"
-msgstr "Errore durante la scrittura del file di descr. diposizione pagina"
+msgstr "Errore durante la scrittura del file di disposizione pagina"
 
 #: pagelayout_editor/pl_editor_frame.cpp:116
 msgid "coord origin: Right Bottom page corner"
@@ -26341,11 +26329,11 @@ msgstr "Errore nel caricare il file \"%s\""
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:52
 msgid "New page layout design"
-msgstr "Nuovo progetto disposizione pagina"
+msgstr "Nuovo disposizione pagina"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:58
 msgid "Save page layout design"
-msgstr "Salva progetto disposizione pagina"
+msgstr "Salva disposizione pagina"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:63
 msgid "Page settings"
@@ -26419,14 +26407,14 @@ msgstr ""
 
 #: pagelayout_editor/files.cpp:46
 msgid "Page Layout Description File"
-msgstr "File di descrizione disposizione pagina"
+msgstr "File di disposizione pagina"
 
 #: pagelayout_editor/files.cpp:51 pagelayout_editor/files.cpp:84
 msgid ""
 "The current page layout has been modified.\n"
 "Do you wish to discard the changes?"
 msgstr ""
-"La pagina di disposizione è stata modificata.\n"
+"La pagina di disposizione corrente è stata modificata.\n"
 "Annullare le modifiche?"
 
 #: pagelayout_editor/files.cpp:60 pagelayout_editor/files.cpp:146
@@ -26435,9 +26423,8 @@ msgid "File <%s> loaded"
 msgstr "File \"%s\" caricato"
 
 #: pagelayout_editor/files.cpp:105
-#, fuzzy
 msgid "Append Existing Page Layout File"
-msgstr "Accoda file di descr. disposizione pagina"
+msgstr "Accoda file di disposizione pagina"
 
 #: pagelayout_editor/files.cpp:115 pagelayout_editor/files.cpp:140
 #, c-format
