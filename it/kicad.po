@@ -73,7 +73,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-31 22:11+0200\n"
-"PO-Revision-Date: 2017-09-01 11:11+0200\n"
+"PO-Revision-Date: 2017-09-01 11:20+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -638,7 +638,7 @@ msgstr "Strumenti di calcolo"
 
 #: kicad/commandframe.cpp:98
 msgid "Worksheet layout editor"
-msgstr "Editor modelli fogli di lavoro"
+msgstr "Editor disposizione fogli di lavoro"
 
 #: kicad/tree_project_frame.cpp:223
 #, c-format
