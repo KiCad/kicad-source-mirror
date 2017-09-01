@@ -1312,7 +1312,9 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
             parseUnquotedString( libName, aReader, line, &line );
             libName.Replace( "~", " " );
 
-            LIB_ID libId( wxEmptyString, libName );
+            LIB_ID libId;
+
+            libId.Parse( libName );
 
             component->SetLibId( libId );
 
@@ -1687,7 +1689,7 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
             name1 = toUTFTildaText( aComponent->GetField( REFERENCE )->GetText() );
     }
 
-    wxString part_name = aComponent->GetLibId().GetLibItemName();
+    wxString part_name = aComponent->GetLibId().Format();
 
     if( part_name.size() )
     {
@@ -2409,6 +2411,9 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::loadPart( FILE_LINE_READER& aReader )
         value.SetText( name );
         value.SetVisible( false );
     }
+
+    // Don't set the library alias, this is determined by the symbol library table.
+    part->SetLibId( LIB_ID( wxEmptyString, part->GetName() ) );
 
     // There are some code paths in SetText() that do not set the root alias to the
     // alias list so add it here if it didn't get added by SetText().

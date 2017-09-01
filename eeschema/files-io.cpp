@@ -48,9 +48,8 @@
 #include <eeschema_config.h>
 #include <sch_legacy_plugin.h>
 #include <sch_eagle_plugin.h>
-
-
-//#define USE_SCH_LEGACY_IO_PLUGIN
+#include <symbol_lib_table.h>
+#include <dialog_symbol_remap.h>
 
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
@@ -342,6 +341,18 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
 
         SCH_SCREENS schematic;
+
+        // Convert old projects over to use symbol library table.
+        if( schematic.HasNoFullyDefinedLibIds() )
+        {
+            // Make backups of current schematics just in case something goes wrong.
+            for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
+                SaveEEFile( screen, false, CREATE_BACKUP_FILE );
+
+            DIALOG_SYMBOL_REMAP dlgRemap( this );
+
+            dlgRemap.ShowQuasiModal();
+        }
 
         schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
         GetScreen()->TestDanglingEnds();    // Only perform the dangling end test on root sheet.

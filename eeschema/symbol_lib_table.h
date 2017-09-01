@@ -101,6 +101,8 @@ class SYMBOL_LIB_TABLE : public LIB_TABLE
     friend class SYMBOL_LIB_TABLE_GRID;
     friend class DIALOG_SYMBOL_LIB_TABLE;
 
+    static int m_modifyHash;     ///< helper for GetModifyHash()
+
 public:
     virtual void Parse( LIB_TABLE_LEXER* aLexer ) override;
 
@@ -130,6 +132,8 @@ public:
      * @throw IO_ERROR if \a aNickName cannot be found.
      */
     const SYMBOL_LIB_TABLE_ROW* FindRow( const wxString& aNickName );
+
+    int GetModifyHash();
 
     //-----<PLUGIN API SUBSET, REBASED ON aNickname>---------------------------
 

@@ -258,6 +258,8 @@ public:
 
     PART_LIB* FindLibraryByFullFileName( const wxString& aFullFileName );
 
+    PART_LIB* GetCacheLibrary();
+
     /**
      * Function GetLibraryNames
      * returns the list of part library file names without path and extension.

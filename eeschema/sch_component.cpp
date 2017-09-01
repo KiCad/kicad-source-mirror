@@ -241,23 +241,27 @@ void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId, PART_LIBS* aLibs )
 }
 
 
-void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aSymLibTable )
+void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aSymLibTable,
+                              PART_LIB* aCacheLib )
 {
-    if( m_lib_id != aLibId )
-    {
-        wxCHECK_RET( aSymLibTable, "No symbol library table provided." );
+    if( m_lib_id == aLibId )
+        return;
 
-        m_lib_id = aLibId;
-        SetModified();
+    m_lib_id = aLibId;
+    SetModified();
 
-        LIB_ALIAS* alias = aSymLibTable->LoadSymbol( m_lib_id.GetLibNickname(),
-                                                     m_lib_id.GetLibItemName() );
+    LIB_ALIAS* alias = nullptr;
 
-        if( alias && alias->GetPart() )
-            m_part = alias->GetPart()->SharedPtr();
-        else
-            m_part.reset();
-    }
+    if( aSymLibTable && aSymLibTable->HasLibrary( m_lib_id.GetLibNickname() ) )
+        alias = aSymLibTable->LoadSymbol( m_lib_id.GetLibNickname(), m_lib_id.GetLibItemName() );
+
+    if( !alias && aCacheLib )
+        alias = aCacheLib->FindAlias( m_lib_id.GetLibItemName() );
+
+    if( alias && alias->GetPart() )
+        m_part = alias->GetPart()->SharedPtr();
+    else
+        m_part.reset();
 }
 
 
@@ -307,9 +311,17 @@ bool SCH_COMPONENT::Resolve( PART_LIBS* aLibs )
 }
 
 
-bool SCH_COMPONENT::Resolve( SYMBOL_LIB_TABLE& aLibTable )
+bool SCH_COMPONENT::Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib )
 {
-    LIB_ALIAS* alias = aLibTable.LoadSymbol( m_lib_id );
+    LIB_ALIAS* alias = nullptr;
+
+    if( !m_lib_id.GetLibNickname().empty() && aLibTable.HasLibrary( m_lib_id.GetLibNickname() ) )
+        alias = aLibTable.LoadSymbol( m_lib_id );
+
+    // Fall back to cache library.  This is temporary until the new schematic file
+    // format is implemented.
+    if( !alias && aCacheLib )
+        alias = aCacheLib->FindAlias( m_lib_id.GetLibItemName() );
 
     if( alias && alias->GetPart() )
     {
@@ -373,7 +385,8 @@ void SCH_COMPONENT::ResolveAll( const SCH_COLLECTOR& aComponents, PART_LIBS* aLi
 }
 
 
-void SCH_COMPONENT::ResolveAll( const SCH_COLLECTOR& aComponents, SYMBOL_LIB_TABLE& aLibTable )
+void SCH_COMPONENT::ResolveAll( const SCH_COLLECTOR& aComponents, SYMBOL_LIB_TABLE& aLibTable,
+                                PART_LIB* aCacheLib )
 {
     std::vector<SCH_COMPONENT*> cmp_list;
 
@@ -394,7 +407,8 @@ void SCH_COMPONENT::ResolveAll( const SCH_COLLECTOR& aComponents, SYMBOL_LIB_TAB
     for( unsigned ii = 0; ii < cmp_list.size (); ++ii )
     {
         SCH_COMPONENT* cmp = cmp_list[ii];
-        cmp->Resolve( aLibTable );
+        curr_libid = cmp->m_lib_id;
+        cmp->Resolve( aLibTable, aCacheLib );
 
         // Propagate the m_part pointer to other members using the same lib_id
         for( unsigned jj = ii+1; jj < cmp_list.size (); ++jj )
@@ -1258,7 +1272,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
             name1 = toUTFTildaText( GetField( REFERENCE )->GetText() );
     }
 
-    wxString part_name = GetLibId().GetLibItemName();
+    wxString part_name = GetLibId().Format();
 
     if( part_name.size() )
     {
@@ -1756,7 +1770,13 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
             if( alias->GetName() != part->GetName() )
                 aList.push_back( MSG_PANEL_ITEM( _( "Alias of" ), part->GetName(), BROWN ) );
 
-            aList.push_back( MSG_PANEL_ITEM( _( "Library" ), alias->GetLibraryName(), BROWN ) );
+            if( m_lib_id.GetLibNickname().empty() && alias->GetLib() && alias->GetLib()->IsCache() )
+                aList.push_back( MSG_PANEL_ITEM( _( "Library" ), alias->GetLibraryName(), RED ) );
+            else if( !m_lib_id.GetLibNickname().empty() )
+                aList.push_back( MSG_PANEL_ITEM( _( "Library" ), m_lib_id.GetLibNickname(),
+                                                 BROWN ) );
+            else
+                aList.push_back( MSG_PANEL_ITEM( _( "Library" ), _( "Undefined!!!" ), RED ) );
 
             // Display the current associated footprint, if exists.
             if( !GetField( FOOTPRINT )->IsVoid() )

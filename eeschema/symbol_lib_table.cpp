@@ -40,6 +40,9 @@ using namespace LIB_TABLE_T;
 static const wxString global_tbl_name( "sym-lib-table" );
 
 
+int SYMBOL_LIB_TABLE::m_modifyHash = 1;     // starts at 1 and goes up
+
+
 /// The global symbol library table.  This is not dynamically allocated because
 /// in a multiple project environment we must keep its address constant (since it is
 /// the fallback table for multiple projects).
@@ -220,6 +223,26 @@ void SYMBOL_LIB_TABLE::Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) cons
 }
 
 
+int SYMBOL_LIB_TABLE::GetModifyHash()
+{
+    int                     hash = 0;
+    std::vector< wxString > libNames = GetLogicalLibs();
+
+    for( auto libName : libNames )
+    {
+        const SYMBOL_LIB_TABLE_ROW* row = FindRow( libName );
+
+        wxASSERT( row && (SCH_PLUGIN*) row->plugin );
+
+        hash += row->plugin->GetModifyHash();
+    }
+
+    hash += m_modifyHash;
+
+    return hash;
+}
+
+
 void SYMBOL_LIB_TABLE::EnumerateSymbolLib( const wxString& aNickname, wxArrayString& aAliasNames )
 {
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
@@ -269,12 +292,6 @@ LIB_ALIAS* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxStri
         // remove "const"-ness, I really do want to set nickname without
         // having to copy the LIB_ID and its two strings, twice each.
         LIB_ID& id = (LIB_ID&) ret->GetPart()->GetLibId();
-
-        // Catch any misbehaving plugin, which should be setting internal alias name properly:
-        wxASSERT( aAliasName == id.GetLibItemName().wx_str() );
-
-        // and clearing nickname
-        wxASSERT( !id.GetLibNickname().size() );
 
         id.SetLibNickname( row->GetNickName() );
     }

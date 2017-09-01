@@ -358,6 +358,18 @@ PART_LIB* PART_LIBS::FindLibrary( const wxString& aName )
 }
 
 
+PART_LIB* PART_LIBS::GetCacheLibrary()
+{
+    for( PART_LIBS::iterator it = begin();  it!=end();  ++it )
+    {
+        if( it->IsCache() )
+            return &*it;
+    }
+
+    return NULL;
+}
+
+
 PART_LIB* PART_LIBS::FindLibraryByFullFileName( const wxString& aFullFileName )
 {
     for( PART_LIBS::iterator it = begin();  it!=end();  ++it )

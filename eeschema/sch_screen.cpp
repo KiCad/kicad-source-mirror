@@ -4,7 +4,7 @@
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,6 +53,7 @@
 #include <sch_component.h>
 #include <sch_text.h>
 #include <lib_pin.h>
+#include <symbol_lib_table.h>
 
 
 #define EESCHEMA_FILE_STAMP   "EESchema"
@@ -534,8 +535,8 @@ void SCH_SCREEN::CheckComponentsToPartsLinks()
 
     if( m_drawList.GetCount() )
     {
-        PART_LIBS*  libs = Prj().SchLibs();
-        int         mod_hash = libs->GetModifyHash();
+        SYMBOL_LIB_TABLE* libs = Prj().SchSymbolLibTable();
+        int mod_hash = libs->GetModifyHash();
 
         // Must we resolve?
         if( m_modification_sync != mod_hash )
@@ -544,7 +545,7 @@ void SCH_SCREEN::CheckComponentsToPartsLinks()
 
             c.Collect( GetDrawItems(), SCH_COLLECTOR::ComponentsOnly );
 
-            SCH_COMPONENT::ResolveAll( c, libs );
+            SCH_COMPONENT::ResolveAll( c, *libs, Prj().SchLibs()->GetCacheLibrary() );
 
             m_modification_sync = mod_hash;     // note the last mod_hash
         }

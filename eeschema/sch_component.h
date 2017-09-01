@@ -46,7 +46,7 @@ class LIB_ITEM;
 class LIB_PIN;
 class LIB_PART;
 class NETLIST_OBJECT_LIST;
-class LIB_PART;
+class PART_LIB;
 class PART_LIBS;
 class SCH_COLLECTOR;
 class SCH_SCREEN;
@@ -166,7 +166,7 @@ public:
     bool IsMovableFromAnchorPoint() override { return false; }
 
     void SetLibId( const LIB_ID& aName, PART_LIBS* aLibs=NULL );
-    void SetLibId( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aSymLibTable );
+    void SetLibId( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aSymLibTable, PART_LIB* aCacheLib );
 
     const LIB_ID& GetLibId() const        { return m_lib_id; }
 
@@ -189,11 +189,12 @@ public:
      */
     bool Resolve( PART_LIBS* aLibs );
 
-    bool Resolve( SYMBOL_LIB_TABLE& aLibTable );
+    bool Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib = NULL );
 
     static void ResolveAll( const SCH_COLLECTOR& aComponents, PART_LIBS* aLibs );
 
-    static void ResolveAll( const SCH_COLLECTOR& aComponents, SYMBOL_LIB_TABLE& aLibTable );
+    static void ResolveAll( const SCH_COLLECTOR& aComponents, SYMBOL_LIB_TABLE& aLibTable,
+                            PART_LIB* aCacheLib = NULL );
 
     int GetUnit() const { return m_unit; }
 

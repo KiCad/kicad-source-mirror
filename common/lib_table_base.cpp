@@ -251,6 +251,14 @@ const wxString LIB_TABLE::GetDescription( const wxString& aNickname )
 }
 
 
+bool LIB_TABLE::HasLibrary( const wxString& aNickname ) const
+{
+    const LIB_TABLE_ROW* row = findRow( aNickname );
+
+    return row != nullptr;
+}
+
+
 LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName ) const
 {
     LIB_TABLE* cur = (LIB_TABLE*) this;

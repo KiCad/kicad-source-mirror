@@ -372,6 +372,13 @@ public:
     const wxString GetDescription( const wxString& aNickname );
 
     /**
+     * Test for the existence of \a aNickname in the library table.
+     *
+     * @return true if a library \a aNickname exists in the table.
+     */
+    bool HasLibrary( const wxString& aNickname ) const;
+
+    /**
      * Function GetLogicalLibs
      *
      * returns the logical library names, all of them that are pertinent to

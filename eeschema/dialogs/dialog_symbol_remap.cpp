@@ -150,7 +150,6 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
                         fullFileName += tmp;
 
                     fullFileName += fn.GetFullName();
-                    break;
                 }
             }
 
@@ -214,9 +213,12 @@ void DIALOG_SYMBOL_REMAP::remapSymbolsToLibTable( REPORTER& aReporter )
                             symbol->GetLibId().GetLibItemName().wx_str(),
                             symbol->GetLibId().GetLibNickname().wx_str() );
                 aReporter.Report( msg, REPORTER::RPT_ACTION );
+                screen->SetModify();
             }
         }
     }
+
+    aReporter.Report( _( "Symbol library table mapping complete!" ), REPORTER::RPT_INFO );
 }
 
 
@@ -253,7 +255,9 @@ bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_COMPONENT* aSymbol )
                 LIB_ID id = aSymbol->GetLibId();
 
                 id.SetLibNickname( row->GetNickName() );
-                aSymbol->SetLibId( id, Prj().SchSymbolLibTable() );
+
+                // Don't resolve symbol library links now.
+                aSymbol->SetLibId( id, nullptr, nullptr );
                 return true;
             }
         }
