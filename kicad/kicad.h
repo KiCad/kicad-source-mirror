@@ -219,6 +219,16 @@ public:
     void OnUpdatePreferredPdfBrowser( wxUpdateUIEvent& event );
     void OnUpdateRequiresProject( wxUpdateUIEvent& event );
 
+    /**
+     * Creates a new project by setting up and initial project, schematic, and board files.
+     *
+     * The project file is copied from the kicad.pro template file if possible.  Otherwise,
+     * a minimal project file is created from an empty project.  A minimal schematic and
+     * board file are created to prevent the schematic and board editors from complaining.
+     * If any of these files already exist, they are not overwritten.
+     *
+     * @param aProjectFileName is the absolute path of the project file name.
+     */
     void CreateNewProject( const wxFileName& aProjectFileName );
     void LoadProject( const wxFileName& aProjectFileName );
 

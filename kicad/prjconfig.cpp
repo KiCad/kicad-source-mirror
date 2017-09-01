@@ -110,8 +110,21 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName )
     wxCHECK_RET( aProjectFileName.DirExists() && aProjectFileName.IsDirWritable(),
                  "Project folder must exist and be writable to create a new project." );
 
-    // Init project filename
+    // Init project filename.  This clears all elements from the project object.
     SetProjectFileName( aProjectFileName.GetFullPath() );
+
+    // Copy kicad.pro file from template folder.
+    if( !aProjectFileName.FileExists() )
+    {
+        wxString srcFileName = sys_search().FindValidPath( "kicad.pro" );
+
+        // Create a minimal project (.pro) file if the template project file could not be copied.
+        if( !wxFileName::FileExists( srcFileName )
+          || !wxCopyFile( srcFileName, aProjectFileName.GetFullPath() ) )
+        {
+            Prj().ConfigSave( PgmTop().SysSearch(), GeneralGroupName, s_KicadManagerParams );
+        }
+    }
 
     // Ensure a "stub" for a schematic root sheet and a board exist.
     // It will avoid messages from the schematic editor or the board editor to create a new file
@@ -186,28 +199,35 @@ void KICAD_MANAGER_FRAME::OnNewProject( wxCommandEvent& aEvent )
     if( !pro.IsAbsolute() )
         pro.MakeAbsolute();
 
-    // Check if the project directory is empty.
+    // Append a new directory with the same name of the project file.
+    pro.AppendDir( pro.GetName() );
+
+    // Check if the project directory is empty if it already exists.
     wxDir directory( pro.GetPath() );
 
-    if( directory.HasFiles() )
+    if( !pro.DirExists() )
     {
-        wxString msg = _( "The selected directory is not empty.  We recommend you "
-                          "create projects in their own clean directory.\n\nDo you "
-                          "want to create a new empty directory for the project?" );
-
-        if( IsOK( this, msg ) )
+        if( !pro.Mkdir() )
         {
-            // Append a new directory with the same name of the project file
-            // and try to create it
-            pro.AppendDir( pro.GetName() );
-
-            if( !wxMkdir( pro.GetPath() ) )
-                // There was a problem, undo
-                pro.RemoveLastDir();
+            wxString msg;
+            msg.Printf( _( "Directory '%s' could not be created.\n\n"
+                           "Please make sure you have write permissions and try again." ),
+                        pro.GetPath() );
+            DisplayErrorMessage( this, msg );
+            return;
         }
     }
+    else if( directory.HasFiles() )
+    {
+        wxString msg = _( "The selected directory is not empty.  It is recommended that you "
+                          "create projects in their own empty directory.\n\nDo you "
+                          "want to continue?" );
 
-    CreateNewProject( pro.GetFullPath() );
+        if( !IsOK( this, msg ) )
+            return;
+    }
+
+    CreateNewProject( pro );
     LoadProject( pro );
 }
 
