@@ -306,11 +306,11 @@ bool GERBER_JOBFILE_WRITER::CreateJobFile( const wxString& aFullFilename )
             gbr_layer_id << ",";
 
             if( layer == B_Cu )
-                gbr_layer_id << "Bottom";
+                gbr_layer_id << "Bot";
             else if( layer == F_Cu )
                 gbr_layer_id << "Top";
             else
-                gbr_layer_id << "Inner";
+                gbr_layer_id << "Inr";
         }
 
         else
@@ -318,22 +318,22 @@ bool GERBER_JOBFILE_WRITER::CreateJobFile( const wxString& aFullFilename )
             switch( layer )
             {
                 case B_Adhes:
-                    gbr_layer_id = "Glue,Bottom"; break;
+                    gbr_layer_id = "Glue,Bot"; break;
                 case F_Adhes:
                     gbr_layer_id = "Glue,Top"; break;
 
                 case B_Paste:
-                    gbr_layer_id = "SolderPaste,Bottom"; break;
+                    gbr_layer_id = "SolderPaste,Bot"; break;
                 case F_Paste:
                     gbr_layer_id = "SolderPaste,Top"; break;
 
                 case B_SilkS:
-                    gbr_layer_id = "Legend,Bottom"; break;
+                    gbr_layer_id = "Legend,Bot"; break;
                 case F_SilkS:
                     gbr_layer_id = "Legend,Top"; break;
 
                 case B_Mask:
-                    gbr_layer_id = "SolderMask,Bottom"; polarity = "Negative"; break;
+                    gbr_layer_id = "SolderMask,Bot"; polarity = "Negative"; break;
                 case F_Mask:
                     gbr_layer_id = "SolderMask,Top"; polarity = "Negative"; break;
 
@@ -341,7 +341,7 @@ bool GERBER_JOBFILE_WRITER::CreateJobFile( const wxString& aFullFilename )
                     gbr_layer_id = "Profile"; break;
 
                 case B_Fab:
-                    gbr_layer_id = "AssemblyDrawing,Bottom"; break;
+                    gbr_layer_id = "AssemblyDrawing,Bot"; break;
                 case F_Fab:
                     gbr_layer_id = "AssemblyDrawing,Top"; break;
 
