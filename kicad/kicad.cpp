@@ -173,7 +173,7 @@ void PGM_KICAD::MacOpenFile( const wxString& aFileName )
 
     KICAD_MANAGER_FRAME* frame = (KICAD_MANAGER_FRAME*) App().GetTopWindow();
 
-    if( !aFileName.empty && wxFileExists( aFileName ) )
+    if( !aFileName.empty() && wxFileExists( aFileName ) )
         frame->LoadProject( wxFileName( aFileName ) );
 
 #endif
