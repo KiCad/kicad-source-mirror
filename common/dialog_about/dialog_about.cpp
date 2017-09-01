@@ -424,17 +424,29 @@ void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
     aMsg << "Version: " << m_info.GetBuildVersion() << eol;
     aMsg << "Libraries:" << eol;
     aMsg << indent4 << wxGetLibraryVersionInfo().GetVersionString() << eol;
+
 #ifdef BUILD_GITHUB_PLUGIN
     aMsg << indent4 << KICAD_CURL::GetVersion() << eol;
 #endif
     aMsg << "Platform: " << wxGetOsDescription() << ", "
-                << platform.GetArchName() << ", "
-                << platform.GetEndiannessName() << ", "
-                << platform.GetPortIdName() << eol;
+         << platform.GetArchName() << ", "
+         << platform.GetEndiannessName() << ", "
+         << platform.GetPortIdName() << eol;
 
     aMsg << "Build Info:" << eol;
     aMsg << indent4 << "wxWidgets: " << wxVERSION_NUM_DOT_STRING << " (";
-    aMsg << __WX_BO_UNICODE __WX_BO_STL __WX_BO_WXWIN_COMPAT_2_8 ")" << eol;
+    aMsg << __WX_BO_UNICODE __WX_BO_STL __WX_BO_WXWIN_COMPAT_2_8 ")";
+
+    // Get the GTK+ version where possible.
+#ifdef __WXGTK__
+    int major, minor;
+
+    major = wxPlatformInfo().Get().GetToolkitMajorVersion();
+    minor = wxPlatformInfo().Get().GetToolkitMinorVersion();
+    aMsg << " GTK+ " <<  major << "." << minor;
+#endif
+
+    aMsg << eol;
 
     aMsg << indent4 << "Boost: " << ( BOOST_VERSION / 100000 ) << wxT( "." )
                       << ( BOOST_VERSION / 100 % 1000 ) << wxT( "." )
@@ -444,7 +456,7 @@ void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
     aMsg << indent4 << "Curl: " << LIBCURL_VERSION << eol;
 #endif
 
-    aMsg << indent4 << "KiCad compiler: ";
+    aMsg << indent4 << "Compiler: ";
 #if defined(__clang__)
     aMsg << "Clang " << __clang_major__ << "." << __clang_minor__ << "." << __clang_patchlevel__;
 #elif defined(__GNUG__)
@@ -460,11 +472,12 @@ void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
 #if defined(__GXX_ABI_VERSION)
     aMsg << " with C++ ABI " << __GXX_ABI_VERSION << eol;
 #else
-    aMsg << " without C++ ABI\n";
+    aMsg << " without C++ ABI";
 #endif
 
-    // Add build settings config (build options):
+    aMsg << eol;
 
+    // Add build settings config (build options):
     aMsg << "Build settings:" << eol;
 
     aMsg << indent4 << "USE_WX_GRAPHICS_CONTEXT=";
@@ -518,6 +531,13 @@ void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
 
     aMsg << indent4 << "KICAD_USE_OCE=";
 #ifdef KICAD_USE_OCE
+    aMsg << ON;
+#else
+    aMsg << OFF;
+#endif
+
+    aMsg << indent4 << "KICAD_SPICE=";
+#ifdef KICAD_SPICE
     aMsg << ON;
 #else
     aMsg << OFF;
