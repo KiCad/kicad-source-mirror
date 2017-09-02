@@ -1630,6 +1630,7 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr< LIB_PART >& aPart, 
 
         return (LIB_ITEM*) arc.release();
 
+        arc->SetUnit( gateNumber );
     }
     else
     {
@@ -1637,6 +1638,7 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr< LIB_PART >& aPart, 
 
         polyLine->AddPoint( begin );
         polyLine->AddPoint( end );
+        polyLine->SetUnit( gateNumber );
 
         return (LIB_ITEM*) polyLine.release();
 
