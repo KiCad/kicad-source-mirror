@@ -40,14 +40,14 @@
 constexpr auto DEFAULT_ALIGNMENT = ETEXT::BOTTOM_LEFT;
 
 template<>
-string Convert<string>( wxString aValue )
+string Convert<string>( const wxString& aValue )
 {
     return aValue.ToStdString();
 }
 
 
 template <>
-double Convert<double>( wxString aValue )
+double Convert<double>( const wxString& aValue )
 {
     double value;
 
@@ -60,7 +60,7 @@ double Convert<double>( wxString aValue )
 
 
 template <>
-int Convert<int>( wxString aValue )
+int Convert<int>( const wxString& aValue )
 {
     if( aValue.IsEmpty() )
         throw XML_PARSER_ERROR( "Conversion to int failed. Original value is empty." );
@@ -70,7 +70,7 @@ int Convert<int>( wxString aValue )
 
 
 template <>
-bool Convert<bool>( wxString aValue )
+bool Convert<bool>( const wxString& aValue )
 {
     if( aValue != "yes" && aValue != "no" )
         throw XML_PARSER_ERROR( "Conversion to bool failed. Original value, '" +
@@ -84,7 +84,7 @@ bool Convert<bool>( wxString aValue )
 /// parse an Eagle XML "rot" field.  Unfortunately the DTD seems not to explain
 /// this format very well.  [S][M]R<degrees>.   Examples: "R90", "MR180", "SR180"
 template<>
-EROT Convert<EROT>( wxString aRot )
+EROT Convert<EROT>( const wxString& aRot )
 {
     EROT value;
 

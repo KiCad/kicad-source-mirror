@@ -173,7 +173,7 @@ public:
  *        type T is unknown.
  */
 template<typename T>
-T Convert( wxString aValue )
+T Convert( const wxString& aValue )
 {
     throw XML_PARSER_ERROR( "Conversion failed. Unknown type." );
 }
