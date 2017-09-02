@@ -281,6 +281,28 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName ) const
 }
 
 
+LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName )
+{
+    LIB_TABLE* cur = (LIB_TABLE*) this;
+
+    do
+    {
+        cur->ensureIndex();
+
+        INDEX_ITER it = cur->nickIndex.find( aNickName );
+
+        if( it != cur->nickIndex.end() )
+        {
+            return &cur->rows[it->second];  // found
+        }
+
+        // not found, search fall back table(s), if any
+    } while( ( cur = cur->fallBack ) != 0 );
+
+    return NULL;   // not found
+}
+
+
 const LIB_TABLE_ROW* LIB_TABLE::FindRowByURI( const wxString& aURI )
 {
     LIB_TABLE* cur = this;

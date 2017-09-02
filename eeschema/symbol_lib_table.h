@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2016 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2016-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -104,6 +104,9 @@ class SYMBOL_LIB_TABLE : public LIB_TABLE
     static int m_modifyHash;     ///< helper for GetModifyHash()
 
 public:
+    static const char* PropPowerSymsOnly;
+    static const char* PropNonPowerSymsOnly;
+
     virtual void Parse( LIB_TABLE_LEXER* aLexer ) override;
 
     virtual void Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) const override;
@@ -141,11 +144,13 @@ public:
      * Return a list of symbol alias names contained within the library given by @a aNickname.
      *
      * @param aNickname is a locator for the "library", it is a "name" in LIB_TABLE_ROW.
-     * @param aAliasNames is a reference to an array for the alias names
+     * @param aAliasNames is a reference to an array for the alias names.
+     * @param aPowerSymbolsOnly is a flag to enumerate only power symbols.
      *
      * @throw IO_ERROR if the library cannot be found or loaded.
      */
-    void EnumerateSymbolLib( const wxString& aNickname, wxArrayString& aAliasNames );
+    void EnumerateSymbolLib( const wxString& aNickname, wxArrayString& aAliasNames,
+                             bool aPowerSymbolsOnly = false );
 
     /**
      * Load a #LIB_ALIAS having @a aAliasName from the library given by @a aNickname.

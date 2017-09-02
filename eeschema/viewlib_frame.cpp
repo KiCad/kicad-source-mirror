@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -30,17 +30,20 @@
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
-#include <eeschema_id.h>
 #include <class_drawpanel.h>
-#include <schframe.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
 
+#include <schframe.h>
+#include <eeschema_id.h>
 #include <general.h>
 #include <viewlib_frame.h>
-#include <class_library.h>
+#include <symbol_lib_table.h>
+#include <sch_legacy_plugin.h>
 #include <hotkeys.h>
 #include <dialog_helpers.h>
+#include <class_libentry.h>
+#include <class_library.h>
 
 
 // Save previous component library viewer state.
@@ -81,7 +84,8 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
 
     EVT_UPDATE_UI( ID_LIBVIEW_VIEWDOC, LIB_VIEW_FRAME::onUpdateViewDoc )
     EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, LIB_VIEW_FRAME::onUpdateNormalBodyStyleButton )
-    EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, LIB_VIEW_FRAME::onUpdateAlternateBodyStyleButton )
+    EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT,
+                   LIB_VIEW_FRAME::onUpdateAlternateBodyStyleButton )
     EVT_UPDATE_UI( ID_LIBVIEW_SHOW_ELECTRICAL_TYPE, LIB_VIEW_FRAME::OnUpdateElectricalType )
 
 END_EVENT_TABLE()
@@ -109,7 +113,7 @@ END_EVENT_TABLE()
 #define LIB_VIEW_FRAME_NAME_MODAL "ViewlibFrameModal"
 
 LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
-        PART_LIB* aLibrary ) :
+                                const wxString& aLibraryName ) :
     SCH_BASE_FRAME( aKiway, aParent, aFrameType, _( "Library Browser" ),
             wxDefaultPosition, wxDefaultSize,
             aFrameType == FRAME_SCH_VIEWER_MODAL ?
@@ -157,7 +161,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     ReCreateHToolbar();
     ReCreateVToolbar();
 
-    if( !aLibrary )
+    if( aLibraryName.empty() )
     {
         // Creates the libraries window display
         m_libList = new wxListBox( this, ID_LIBVIEW_LIB_LIST,
@@ -166,7 +170,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     }
     else
     {
-        m_libraryName = aLibrary->GetName();
+        m_libraryName = aLibraryName;
         m_entryName.Clear();
         m_unit = 1;
         m_convert = 1;
@@ -265,10 +269,7 @@ LIB_ALIAS* LIB_VIEW_FRAME::getSelectedAlias()
 
     if( !m_libraryName.IsEmpty() && !m_entryName.IsEmpty() )
     {
-        PART_LIB* lib = Prj().SchLibs()->FindLibrary( m_libraryName );
-
-        if( lib )
-            alias = lib->FindAlias( m_entryName );
+        alias = Prj().SchSymbolLibTable()->LoadSymbol( m_libraryName, m_entryName );
     }
 
     return alias;
@@ -376,10 +377,10 @@ double LIB_VIEW_FRAME::BestZoom()
 
     LIB_PART*   part = NULL;
     double      bestzoom = 16.0;      // default value for bestzoom
-    PART_LIB*   lib = Prj().SchLibs()->FindLibrary( m_libraryName );
+    LIB_ALIAS*  alias = Prj().SchSymbolLibTable()->LoadSymbol( m_libraryName, m_entryName );
 
-    if( lib  )
-        part = lib->FindPart( m_entryName );
+    if( alias )
+        part = alias->GetPart();
 
     if( !part )
     {
@@ -419,15 +420,15 @@ bool LIB_VIEW_FRAME::ReCreateListLib()
 
     m_libList->Clear();
 
-    wxArrayString libs = Prj().SchLibs()->GetLibraryNames();
+    std::vector< wxString > libs = Prj().SchSymbolLibTable()->GetLogicalLibs();
 
     // Remove not allowed libs from main list, if the allowed lib list is not empty
     if( m_allowedLibs.GetCount() )
     {
-        for( unsigned ii = 0; ii < libs.GetCount(); )
+        for( unsigned ii = 0; ii < libs.size(); )
         {
             if( m_allowedLibs.Index( libs[ii] ) == wxNOT_FOUND )
-                libs.RemoveAt( ii );
+                libs.erase( libs.begin() + ii );
             else
                 ii++;
         }
@@ -436,21 +437,28 @@ bool LIB_VIEW_FRAME::ReCreateListLib()
     // Remove libs which have no power components, if this filter is activated
     if( m_listPowerCmpOnly )
     {
-        for( unsigned ii = 0; ii < libs.GetCount(); )
+        for( unsigned ii = 0; ii < libs.size(); )
         {
-            PART_LIB* lib = Prj().SchLibs()->FindLibrary( libs[ii] );
+            wxArrayString aliasNames;
 
-            if( lib && !lib->HasPowerParts() )
-                libs.RemoveAt( ii );
+            Prj().SchSymbolLibTable()->EnumerateSymbolLib( libs[ii], aliasNames, true );
+
+            if( aliasNames.IsEmpty() )
+                libs.erase( libs.begin() + ii );
             else
                 ii++;
         }
     }
 
-    if( libs.IsEmpty() )
+    if( libs.empty() )
         return true;
 
-    m_libList->Append( libs );
+    wxArrayString libNames;
+
+    for( auto name : libs )
+        libNames.Add( name );
+
+    m_libList->Append( libNames );
 
     // Search for a previous selection:
     int index = m_libList->FindString( m_libraryName );
@@ -485,9 +493,11 @@ bool LIB_VIEW_FRAME::ReCreateListCmp()
 
     m_cmpList->Clear();
 
-    PART_LIB* lib = Prj().SchLibs()->FindLibrary( m_libraryName );
+    wxArrayString aliasNames;
 
-    if( !lib || lib->IsEmpty() )
+    Prj().SchSymbolLibTable()->EnumerateSymbolLib( m_libraryName, aliasNames, m_listPowerCmpOnly );
+
+    if( aliasNames.IsEmpty() )
     {
         m_libraryName = wxEmptyString;
         m_entryName = wxEmptyString;
@@ -496,14 +506,7 @@ bool LIB_VIEW_FRAME::ReCreateListCmp()
         return true;
     }
 
-    wxArrayString  nameList;
-
-    if( m_listPowerCmpOnly )
-        lib->GetEntryTypePowerNames( nameList );
-    else
-        lib->GetAliasNames( nameList );
-
-    m_cmpList->Append( nameList );
+    m_cmpList->Append( aliasNames );
 
     int index = m_cmpList->FindString( m_entryName );
     bool changed = false;

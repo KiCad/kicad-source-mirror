@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2012-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -53,8 +53,6 @@ typedef LIB_TABLE_ROWS::const_iterator     LIB_TABLE_ROWS_CITER;
 
 
 /**
- * Function new_clone
- *
  * Allows boost pointer containers to make clones of the data stored in them.  Since they
  * store pointers the data is cloned.  Copying and assigning pointers would cause ownership
  * issues if the standard C++ containers were used.
@@ -63,9 +61,7 @@ LIB_TABLE_ROW* new_clone( const LIB_TABLE_ROW& aRow );
 
 
 /**
- * Class LIB_TABLE_ROW
- *
- * holds a record identifying a library accessed by the appropriate plug in object in the
+ * Hold a record identifying a library accessed by the appropriate plug in object in the
  * #LIB_TABLE.  This is an abstract base class from which to derive library specific rows.
  */
 class LIB_TABLE_ROW : boost::noncopyable
@@ -94,90 +90,68 @@ public:
     bool operator!=( const LIB_TABLE_ROW& r ) const   { return !( *this == r ); }
 
     /**
-     * Function GetNickName
-     *
      * @return the logical name of this library table row.
      */
     const wxString& GetNickName() const         { return nickName; }
 
     /**
-     * Function SetNickName
-     *
-     * changes the logical name of this library, useful for an editor.
+     * Change the logical name of this library, useful for an editor.
      */
     void SetNickName( const wxString& aNickName ) { nickName = aNickName; }
 
     /**
-     * Function GetType
-     *
-     * is a pure virtual function that returns the type of LIB represented by this row.
+     * Return the type of library represented by this row.
      */
     virtual const wxString GetType() const = 0;
 
     /**
-     * Function SetType
-     *
-     * is a pure virtual function changes the type represented by this row that must
-     * be implemented in the derived object to provide the library table row type.
+     * Change the type of library represented by this row that must be implemented in the
+     * derived object to provide the library table row type.
      */
     virtual void SetType( const wxString& aType ) = 0;
 
     /**
-     * Function GetFullURI
-     *
-     * returns the full location specifying URI for the LIB, either in original
-     * UI form or in environment variable expanded form.
+     * Return the full location specifying URI for the LIB, either in original UI form or
+     * in environment variable expanded form.
      *
      * @param aSubstituted Tells if caller wanted the substituted form, else not.
      */
     const wxString GetFullURI( bool aSubstituted = false ) const;
 
     /**
-     * Function SetFullURI
-     *
-     * changes the full URI for the library.
+     * Change the full URI for the library.
      */
     void SetFullURI( const wxString& aFullURI );
 
     /**
-     * Function GetOptions
-     *
-     * returns the options string, which may hold a password or anything else needed to
-     * instantiate the underlying LIB_SOURCE.
+     * Return the options string, which may hold a password or anything else needed to
+     * instantiate the underlying library plugin.
      */
     const wxString& GetOptions() const          { return options; }
 
     /**
-     * Function SetOptions
+     * Change the library options strings.
      */
     void SetOptions( const wxString& aOptions );
 
     /**
-     * Function GetDescr
-     *
-     * returns the description of the library referenced by this row.
+     * Return the description of the library referenced by this row.
      */
     const wxString& GetDescr() const            { return description; }
 
     /**
-     * Function SetDescr
-     *
-     * changes the description of the library referenced by this row.
+     * Change the description of the library referenced by this row.
      */
     void SetDescr( const wxString& aDescr )     { description = aDescr; }
 
     /**
-     * Function GetProperties
-     *
-     * returns the constant PROPERTIES for this library (LIB_TABLE_ROW).  These are
+     * Return the constant #PROPERTIES for this library (#LIB_TABLE_ROW).  These are
      * the "options" in a table.
      */
     const PROPERTIES* GetProperties() const     { return properties.get(); }
 
     /**
-     * Function Format
-     *
-     * serializes this object as utf8 text to an OUTPUTFORMATTER, and tries to
+     * Serialize this object as utf8 text to an #OUTPUTFORMATTER, and tries to
      * make it look good using multiple lines and indentation.
      *
      * @param out is an #OUTPUTFORMATTER
@@ -231,9 +205,8 @@ private:
 
 
 /**
- * Class LIB_TABLE
+ * Manage #LIB_TABLE_ROW records (rows), and can be searched based on library nickname.
  *
- * holds #LIB_TABLE_ROW records (rows), and can be searched based on library nickname.
  * <p>
  * This class owns the <b>library table</b>, which is like fstab in concept and maps
  * logical library name to the library URI, type, and options. It is heavily based on
@@ -284,9 +257,7 @@ class LIB_TABLE : public PROJECT::_ELEM
 public:
 
     /**
-     * Function Parse
-     *
-     * Parses the \a #LIB_TABLE_LEXER s-expression library table format into the appropriate
+     * Parse the #LIB_TABLE_LEXER s-expression library table format into the appropriate
      * #LIB_TABLE_ROW objects.
      *
      * @param aLexer is the lexer to parse.
@@ -312,9 +283,8 @@ public:
     virtual void Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) const = 0;
 
     /**
-     * Constructor LIB_TABLE
-     * builds a library table by pre-pending this table fragment in front of
-     * @a aFallBackTable.  Loading of this table fragment is done by using Parse().
+     * Build a library table by pre-pending this table fragment in front of \a aFallBackTable.
+     * Loading of this table fragment is done by using Parse().
      *
      * @param aFallBackTable is another LIB_TABLE which is searched only when
      *                       a row is not found in this table.  No ownership is
@@ -354,7 +324,7 @@ public:
     LIB_TABLE_ROW* At( int aIndex ) { return &rows[aIndex]; }
 
     /**
-     * Function IsEmpty
+     * Return true if the table is empty.
      *
      * @param aIncludeFallback is used to determine if the fallback table should be
      *                         included in the test.
@@ -364,8 +334,6 @@ public:
     bool IsEmpty( bool aIncludeFallback = true );
 
     /**
-     * Function GetDescription
-     *
      * @return the library description from @a aNickname, or an empty string
      *         if @a aNickname does not exist.
      */
@@ -379,17 +347,13 @@ public:
     bool HasLibrary( const wxString& aNickname ) const;
 
     /**
-     * Function GetLogicalLibs
-     *
-     * returns the logical library names, all of them that are pertinent to
+     * Return the logical library names, all of them that are pertinent to
      * a look up done on this LIB_TABLE.
      */
     std::vector<wxString> GetLogicalLibs();
 
     /**
-     * Function InsertRow
-     *
-     * adds aRow if it does not already exist or if doReplace is true.  If doReplace
+     * Adds \a aRow if it does not already exist or if doReplace is true.  If doReplace
      * is not true and the key for aRow already exists, the function fails and returns false.
      *
      * The key for the table is the nickName, and all in this table must be unique.
@@ -403,17 +367,13 @@ public:
     bool InsertRow( LIB_TABLE_ROW* aRow, bool doReplace = false );
 
     /**
-     * Function FindRowByURI
-     *
      * @return a #LIB_TABLE_ROW pointer if \a aURI is found in this table or in any chained
      *         fallBack table fragments, else NULL.
      */
     const LIB_TABLE_ROW* FindRowByURI( const wxString& aURI );
 
     /**
-     * Function Load
-     *
-     * loads the library table using the path defined by \a aFileName aFallBackTable.
+     * Load the library table using the path defined by \a aFileName aFallBackTable.
      *
      * @param aFileName contains the full path to the s-expression file.
      *
@@ -423,9 +383,7 @@ public:
     void Load( const wxString& aFileName );
 
     /**
-     * Function Save
-     *
-     * writes this library table to \a aFileName in s-expression form.
+     * Write this library table to \a aFileName in s-expression form.
      *
      * @param aFileName is the name of the file to write to.
      */
@@ -444,11 +402,10 @@ public:
     size_t GetEnvVars( wxArrayString& aEnvVars ) const;
 
     /**
-     * Function ParseOptions
-     *
-     * parses @a aOptionsList and places the result into a PROPERTIES object which is
+     * Parses \a aOptionsList and places the result into a #PROPERTIES object which is
      * returned.  If the options field is empty, then the returned PROPERTIES will be
      * a NULL pointer.
+     *
      * <p>
      * Typically aOptionsList comes from the "options" field within a LIB_TABLE_ROW and
      * the format is simply a comma separated list of name value pairs. e.g.:
@@ -459,11 +416,10 @@ public:
     static PROPERTIES* ParseOptions( const std::string& aOptionsList );
 
     /**
-     * Function FormatOptions
+     * Returns a list of options from the aProperties parameter.
      *
-     * returns a list of options from the aProperties parameter.  The name=value
-     * pairs will be separated with the '|' character.  The =value portion may not
-     * be present.  You might expect something like "name1=value1|name2=value2|flag_me".
+     * The name=value pairs will be separated with the '|' character.  The =value portion may
+     * not be present.  You might expect something like "name1=value1|name2=value2|flag_me".
      * Notice that flag_me does not have a value.  This is ok.
      *
      * @param aProperties is the PROPERTIES to format or NULL.  If NULL the returned
@@ -472,23 +428,23 @@ public:
     static UTF8 FormatOptions( const PROPERTIES* aProperties );
 
     /**
-     * Function ExpandSubstitutions
+     * Replaces any environment variable references with their values and is here to fully
+     * embellish the TABLE_ROW::uri in a platform independent way.
      *
-     * replaces any environment variable references with their values and is here to fully
-     * embellish the TABLE_ROW::uri in a platform independent way.  This enables library
-     * tables to have platform dependent environment variables in them, allowing for a
-     * uniform table across platforms.
+     * This enables library tables to have platform dependent environment variables in them,
+     * allowing for a uniform table across platforms.
      */
     static const wxString ExpandSubstitutions( const wxString& aString );
 
 protected:
 
     /**
-     * Function findRow
-     * returns a LIB_TABLE_ROW if aNickname is found in this table or in any chained
+     * Return a #LIB_TABLE_ROW if \a aNickname is found in this table or in any chained
      * fallBack table fragment, else NULL.
      */
     LIB_TABLE_ROW* findRow( const wxString& aNickname ) const;
+
+    LIB_TABLE_ROW* findRow( const wxString& aNickname );
 
     void reindex()
     {

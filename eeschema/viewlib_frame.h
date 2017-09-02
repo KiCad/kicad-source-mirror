@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -37,14 +37,14 @@
 #include <class_sch_screen.h>
 
 class wxListBox;
-class PART_LIB;
 class SCHLIB_FILTER;
 class LIB_ALIAS;
 class LIB_PART;
+class SYMBOL_LIB_TABLE_ROW;
 
 
 /**
- * Component library viewer main window.
+ * Symbol library viewer main window.
  */
 class LIB_VIEW_FRAME : public SCH_BASE_FRAME
 {
@@ -59,17 +59,14 @@ public:
      * @param aLibrary = the library to open when starting (default = NULL)
      */
     LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent,
-                    FRAME_T aFrameType, PART_LIB* aLibrary = NULL );
+                    FRAME_T aFrameType, const wxString& aLibraryName = wxEmptyString );
 
     ~LIB_VIEW_FRAME();
 
     void OnSize( wxSizeEvent& event ) override;
 
     /**
-     * Function ReCreateListLib
-     *
-     * Creates or recreates the list of current loaded libraries.
-     * This list is sorted, with the library cache always at end of the list
+     * Creates or recreates a sorted list of currently loaded libraries.
      *
      * @return whether the selection of either library or component was changed (i.e. because the
      * selected library no longer exists)
@@ -105,9 +102,9 @@ public:
     EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
     /**
-     * Function OnHotKey
-     * handle hot key events.
-     * <p?
+     * Handle hot key events.
+     *
+     * <p>
      * Some commands are relative to the item under the mouse cursor.  Commands are
      * case insensitive
      * </p>
@@ -119,13 +116,11 @@ public:
     void SaveSettings( wxConfigBase* aCfg ) override;
 
     /**
-     * set a filter to display only libraries and/or components
-     * which match the filter
+     * Set a filter to display only libraries and/or components which match the filter.
      *
-     * @param aFilter is a filter to pass the allowed library name list
-     *          and/or some other filter
-     *  see SCH_BASE_FRAME::SelectComponentFromLibrary() for details.
-     * if aFilter == NULL, remove all filtering
+     * @param aFilter is a filter to pass the allowed library name list and/or some other filter
+     *                see SCH_BASE_FRAME::SelectComponentFromLibrary() for details.
+     *                if aFilter == NULL, remove all filtering
      */
     void SetFilter( const SCHLIB_FILTER* aFilter );
 
@@ -146,6 +141,7 @@ public:
     // Accessors:
     /**
      * Set unit and convert, and set flag preventing them from automatically resetting to 1
+     *
      * @param aUnit - unit; if invalid will be set to 1
      * @param aConvert - convert; if invalid will be set to 1
      */
@@ -158,8 +154,7 @@ public:
 
 private:
     /**
-     * Function OnActivate
-     * is called when the frame frame is activate to reload the libraries and component lists
+     * Called when the frame is activated to reload the libraries and component lists
      * that can be changed by the schematic editor or the library editor.
      */
     virtual void OnActivate( wxActivateEvent& event ) override;

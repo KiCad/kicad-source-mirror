@@ -33,8 +33,8 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <eda_doc.h>
-#include <class_sch_screen.h>
 
+#include <class_sch_screen.h>
 #include <general.h>
 #include <viewlib_frame.h>
 #include <eeschema_id.h>
@@ -42,6 +42,7 @@
 #include <dialog_helpers.h>
 #include <dialog_choose_component.h>
 #include <cmp_tree_model_adapter.h>
+#include <symbol_lib_table.h>
 
 
 void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
@@ -114,8 +115,8 @@ void LIB_VIEW_FRAME::onSelectPreviousSymbol( wxCommandEvent& aEvent )
 
 void LIB_VIEW_FRAME::onViewSymbolDocument( wxCommandEvent& aEvent )
 {
-    LIB_ID id( wxEmptyString, m_entryName );
-    LIB_ALIAS* entry = Prj().SchLibs()->FindLibraryAlias( id, m_libraryName );
+    LIB_ID id( m_libraryName, m_entryName );
+    LIB_ALIAS* entry = Prj().SchSymbolLibTable()->LoadSymbol( id );
 
     if( entry && !entry->GetDocFileName().IsEmpty() )
     {
@@ -171,14 +172,12 @@ bool LIB_VIEW_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 
 void LIB_VIEW_FRAME::DisplayLibInfos()
 {
-    PART_LIBS*  libs = Prj().SchLibs();
-
-    if( libs )
+    if( m_libList && !m_libList->IsEmpty() && !m_libraryName.IsEmpty() )
     {
-        PART_LIB* lib = libs->FindLibrary( m_libraryName );
+        const SYMBOL_LIB_TABLE_ROW* row = Prj().SchSymbolLibTable()->FindRow( m_libraryName );
 
-        wxString title = wxString::Format( L"Library Browser \u2014 %s",
-            lib ? lib->GetFullFileName() : "no library selected" );
+        wxString title = wxString::Format( L"Symbol Library Browser \u2014 %s",
+            row ? row->GetFullURI() : "no library selected" );
         SetTitle( title );
     }
 }
@@ -186,8 +185,8 @@ void LIB_VIEW_FRAME::DisplayLibInfos()
 
 void LIB_VIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
-    LIB_ID id( wxEmptyString, m_entryName );
-    LIB_ALIAS* entry = Prj().SchLibs()->FindLibraryAlias( id, m_libraryName );
+    LIB_ID id( m_libraryName, m_entryName );
+    LIB_ALIAS* entry = Prj().SchSymbolLibTable()->LoadSymbol( id );
 
     if( !entry )
         return;

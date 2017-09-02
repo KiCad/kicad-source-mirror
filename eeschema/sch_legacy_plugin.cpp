@@ -57,7 +57,8 @@
 #include <lib_polyline.h>
 #include <lib_rectangle.h>
 #include <lib_text.h>
-#include <eeschema_id.h>    // for MAX_UNIT_COUNT_PER_PACKAGE definition
+#include <eeschema_id.h>       // for MAX_UNIT_COUNT_PER_PACKAGE definition
+#include <symbol_lib_table.h>  // for PropPowerSymsOnly definintion.
 
 
 // Must be the first line of part library document (.dcm) files.
@@ -3456,12 +3457,17 @@ void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( wxArrayString&    aAliasNameList,
 
     m_props = aProperties;
 
+    bool powerSymbolsOnly = ( aProperties &&
+                              aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) != aProperties->end() );
     cacheLib( aLibraryPath );
 
     const LIB_ALIAS_MAP& aliases = m_cache->m_aliases;
 
     for( LIB_ALIAS_MAP::const_iterator it = aliases.begin();  it != aliases.end();  ++it )
-        aAliasNameList.Add( it->first );
+    {
+        if( !powerSymbolsOnly || it->second->GetPart()->IsPower() )
+            aAliasNameList.Add( it->first );
+    }
 }
 
 
@@ -3473,12 +3479,17 @@ void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( std::vector<LIB_ALIAS*>& aAliasList,
 
     m_props = aProperties;
 
+    bool powerSymbolsOnly = ( aProperties &&
+                              aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) != aProperties->end() );
     cacheLib( aLibraryPath );
 
     const LIB_ALIAS_MAP& aliases = m_cache->m_aliases;
 
     for( LIB_ALIAS_MAP::const_iterator it = aliases.begin();  it != aliases.end();  ++it )
-        aAliasList.push_back( it->second );
+    {
+        if( !powerSymbolsOnly || it->second->GetPart()->IsPower() )
+            aAliasList.push_back( it->second );
+    }
 }
 
 

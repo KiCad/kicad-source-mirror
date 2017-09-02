@@ -40,6 +40,8 @@ using namespace LIB_TABLE_T;
 static const wxString global_tbl_name( "sym-lib-table" );
 
 
+const char* SYMBOL_LIB_TABLE::PropPowerSymsOnly = "pwr_sym_only";
+const char* SYMBOL_LIB_TABLE::PropNonPowerSymsOnly = "non_pwr_sym_only";
 int SYMBOL_LIB_TABLE::m_modifyHash = 1;     // starts at 1 and goes up
 
 
@@ -243,11 +245,21 @@ int SYMBOL_LIB_TABLE::GetModifyHash()
 }
 
 
-void SYMBOL_LIB_TABLE::EnumerateSymbolLib( const wxString& aNickname, wxArrayString& aAliasNames )
+void SYMBOL_LIB_TABLE::EnumerateSymbolLib( const wxString& aNickname, wxArrayString& aAliasNames,
+                                           bool aPowerSymbolsOnly )
 {
-    const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
+    SYMBOL_LIB_TABLE_ROW* row = dynamic_cast< SYMBOL_LIB_TABLE_ROW* >( findRow( aNickname ) );
     wxASSERT( (SCH_PLUGIN*) row->plugin );
+
+    wxString options = row->GetOptions();
+
+    if( aPowerSymbolsOnly )
+        row->SetOptions( row->GetOptions() + " " + PropPowerSymsOnly );
+
     row->plugin->EnumerateSymbolLib( aAliasNames, row->GetFullURI( true ), row->GetProperties() );
+
+    if( aPowerSymbolsOnly )
+        row->SetOptions( options );
 }
 
 
