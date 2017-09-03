@@ -247,6 +247,8 @@ set( BMAPS_MID
     glabel2label
     glabel2text
     gl_change
+    go_down
+    go_up
     green
     grid_select
     grid_select_axis
@@ -319,6 +321,7 @@ set( BMAPS_MID
     local_ratsnest
     locked
     measurement
+    minus
     mirepcb
     mirror_h
     mirror_v
@@ -421,6 +424,7 @@ set( BMAPS_MID
     plot_pdf
     plot_ps
     plot_svg
+    plus
     polar_coord
     post_compo
     post_drill
