@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Mar 22 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -25,20 +25,34 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	fieldListCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
 	bSizerFiledsList->Add( fieldListCtrl, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 6 );
 	
-	addFieldButton = new wxButton( this, wxID_ANY, _("Add Field"), wxDefaultPosition, wxDefaultSize, 0 );
-	addFieldButton->SetToolTip( _("Add a new custom field") );
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
 	
-	bSizerFiledsList->Add( addFieldButton, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	deleteFieldButton = new wxButton( this, wxID_ANY, _("Clear and Delete Field"), wxDefaultPosition, wxDefaultSize, 0 );
-	deleteFieldButton->SetToolTip( _("Delete one of the optional fields") );
-	
-	bSizerFiledsList->Add( deleteFieldButton, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	moveUpButton = new wxButton( this, wxID_ANY, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
+	moveUpButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	moveUpButton->SetToolTip( _("Move the selected optional fields up one position") );
 	
-	bSizerFiledsList->Add( moveUpButton, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer8->Add( moveUpButton, 0, wxALL, 5 );
+	
+	moveDownButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	moveDownButton->SetToolTip( _("Move Move the selected optional fields down one position down") );
+	
+	bSizer8->Add( moveDownButton, 0, wxALL, 5 );
+	
+	
+	bSizer8->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	deleteFieldButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	deleteFieldButton->SetToolTip( _("Delete one of the optional fields") );
+	
+	bSizer8->Add( deleteFieldButton, 0, wxALL, 5 );
+	
+	addFieldButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	addFieldButton->SetToolTip( _("Add a new custom field") );
+	
+	bSizer8->Add( addFieldButton, 0, wxALL, 5 );
+	
+	
+	bSizerFiledsList->Add( bSizer8, 0, wxEXPAND, 5 );
 	
 	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("Edit Spice model"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerFiledsList->Add( m_spiceFieldsButton, 0, wxALL|wxEXPAND, 5 );
@@ -202,9 +216,10 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnInitDialog ) );
 	fieldListCtrl->Connect( wxEVT_COMMAND_LIST_ITEM_DESELECTED, wxListEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnListItemDeselected ), NULL, this );
 	fieldListCtrl->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnListItemSelected ), NULL, this );
-	addFieldButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::addFieldButtonHandler ), NULL, this );
-	deleteFieldButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::deleteFieldButtonHandler ), NULL, this );
 	moveUpButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::moveUpButtonHandler ), NULL, this );
+	moveDownButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::moveDownButtonHandler ), NULL, this );
+	deleteFieldButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::deleteFieldButtonHandler ), NULL, this );
+	addFieldButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::addFieldButtonHandler ), NULL, this );
 	m_spiceFieldsButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::EditSpiceModel ), NULL, this );
 	m_show_datasheet_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::showButtonHandler ), NULL, this );
 	stdDialogButtonSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnCancelButtonClick ), NULL, this );
@@ -218,9 +233,10 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::~DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BAS
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnInitDialog ) );
 	fieldListCtrl->Disconnect( wxEVT_COMMAND_LIST_ITEM_DESELECTED, wxListEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnListItemDeselected ), NULL, this );
 	fieldListCtrl->Disconnect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnListItemSelected ), NULL, this );
-	addFieldButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::addFieldButtonHandler ), NULL, this );
-	deleteFieldButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::deleteFieldButtonHandler ), NULL, this );
 	moveUpButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::moveUpButtonHandler ), NULL, this );
+	moveDownButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::moveDownButtonHandler ), NULL, this );
+	deleteFieldButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::deleteFieldButtonHandler ), NULL, this );
+	addFieldButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::addFieldButtonHandler ), NULL, this );
 	m_spiceFieldsButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::EditSpiceModel ), NULL, this );
 	m_show_datasheet_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::showButtonHandler ), NULL, this );
 	stdDialogButtonSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnCancelButtonClick ), NULL, this );

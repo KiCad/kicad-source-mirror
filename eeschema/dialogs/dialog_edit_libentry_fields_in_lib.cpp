@@ -44,6 +44,8 @@
 #include <dialog_helpers.h>
 #include <sch_validators.h>
 
+#include <bitmaps.h>
+
 #include <dialog_edit_libentry_fields_in_lib_base.h>
 #ifdef KICAD_SPICE
 #include <dialog_spice_model.h>
@@ -82,6 +84,7 @@ private:
     void deleteFieldButtonHandler( wxCommandEvent& event ) override;
 
     void moveUpButtonHandler( wxCommandEvent& event ) override;
+    void moveDownButtonHandler( wxCommandEvent& event ) override;
     void OnCancelButtonClick( wxCommandEvent& event ) override;
     void OnOKButtonClick( wxCommandEvent& event ) override;
     void showButtonHandler( wxCommandEvent& event ) override;
@@ -180,6 +183,12 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB(
 #ifndef KICAD_SPICE
     m_spiceFieldsButton->Show(false);
 #endif
+
+    // Configure button logos
+    addFieldButton->SetBitmap( KiBitmap( plus_xpm ) );
+    deleteFieldButton->SetBitmap( KiBitmap( minus_xpm ) );
+    moveUpButton->SetBitmap( KiBitmap( go_up_xpm ) );
+    moveDownButton->SetBitmap( KiBitmap( go_down_xpm ) );
 }
 
 
@@ -408,6 +417,44 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::deleteFieldButtonHandler( wxCommandEven
 
     setRowItem( fieldNdx, m_FieldsBuf[fieldNdx] );
     setSelectedFieldNdx( fieldNdx );
+    m_skipCopyFromPanel = false;
+}
+
+
+void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::moveDownButtonHandler( wxCommandEvent& event )
+{
+    unsigned int fieldNdx = getSelectedFieldNdx();
+
+    // Ensure there is at least one field after this one
+    if( fieldNdx >= ( m_FieldsBuf.size() - 1 ) )
+    {
+        return;
+    }
+
+    // The first field which can be moved up is the second user field
+    // so any field which id < MANDATORY_FIELDS cannot be moved down
+    if( fieldNdx < MANDATORY_FIELDS )
+        return;
+
+    if( !copyPanelToSelectedField() )
+        return;
+
+    // swap the fieldNdx field with the one before it, in both the vector
+    // and in the fieldListCtrl
+    LIB_FIELD tmp = m_FieldsBuf[fieldNdx + 1];
+
+    m_FieldsBuf[fieldNdx + 1] = m_FieldsBuf[fieldNdx];
+    setRowItem( fieldNdx + 1, m_FieldsBuf[fieldNdx] );
+    m_FieldsBuf[fieldNdx + 1].SetId( fieldNdx + 1 );
+
+    m_FieldsBuf[fieldNdx] = tmp;
+    setRowItem( fieldNdx, tmp );
+    m_FieldsBuf[fieldNdx].SetId( fieldNdx );
+
+    updateDisplay( );
+
+    m_skipCopyFromPanel = true;
+    setSelectedFieldNdx( fieldNdx + 1 );
     m_skipCopyFromPanel = false;
 }
 
@@ -721,6 +768,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
     // only user defined fields may be moved, and not the top most user defined
     // field since it would be moving up into the fixed fields, > not >=
     moveUpButton->Enable( fieldNdx > MANDATORY_FIELDS );
+    moveDownButton->Enable( ( fieldNdx >= MANDATORY_FIELDS ) && ( fieldNdx < ( m_FieldsBuf.size() - 1 ) ) );
 
     // if fieldNdx == REFERENCE, VALUE, then disable delete button
     deleteFieldButton->Enable( fieldNdx >= MANDATORY_FIELDS );

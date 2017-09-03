@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Mar 22 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -20,6 +20,10 @@ class DIALOG_SHIM;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/radiobox.h>
@@ -42,9 +46,10 @@ class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE : public DIALOG_SHIM
 	
 	protected:
 		wxListCtrl* fieldListCtrl;
-		wxButton* addFieldButton;
-		wxButton* deleteFieldButton;
-		wxButton* moveUpButton;
+		wxBitmapButton* moveUpButton;
+		wxBitmapButton* moveDownButton;
+		wxBitmapButton* deleteFieldButton;
+		wxBitmapButton* addFieldButton;
 		wxButton* m_spiceFieldsButton;
 		wxRadioBox* m_FieldHJustifyCtrl;
 		wxRadioBox* m_FieldVJustifyCtrl;
@@ -75,9 +80,10 @@ class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE : public DIALOG_SHIM
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnListItemDeselected( wxListEvent& event ) { event.Skip(); }
 		virtual void OnListItemSelected( wxListEvent& event ) { event.Skip(); }
-		virtual void addFieldButtonHandler( wxCommandEvent& event ) { event.Skip(); }
-		virtual void deleteFieldButtonHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void moveUpButtonHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void moveDownButtonHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void deleteFieldButtonHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void addFieldButtonHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EditSpiceModel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void showButtonHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
