@@ -26,13 +26,16 @@
 
 /*
  * KICAD_CURL_EASY.h must included before wxWidgets because on Windows,
- * because kicad_curl.h includes curl.h, wxWidgets ends up including windows.h
- * before winsocks2.h inside curl and this causes build warnings
+ * kicad_curl.h does not include curl.h, because wxWidgets ends up including windows.h
+ * before winsocks2.h inside curl and curl.h causes build warnings if included before and wxxxx.h
+ *
+ * so including kicad_curl.h could be needed in a few sources
  */
 
-#include <kicad_curl/kicad_curl.h>
 #include <string>
 
+typedef void CURL;
+struct curl_slist;
 
 /**
  * Class KICAD_CURL_EASY
@@ -51,6 +54,8 @@
  *   curl.Perform();
  * @endcode
  */
+
+
 class KICAD_CURL_EASY
 {
 public:
@@ -73,11 +78,7 @@ public:
      * @param aName is the left hand side of the header, i.e. Accept without the colon
      * @param aValue is the right hand side of the header, i.e. application/json
      */
-    void SetHeader( const std::string& aName, const std::string& aValue )
-    {
-        std::string header = aName + ':' + aValue;
-        m_headers = curl_slist_append( m_headers, header.c_str() );
-    }
+    void SetHeader( const std::string& aName, const std::string& aValue );
 
     /**
      * Function SetUserAgent
@@ -86,14 +87,7 @@ public:
      * @param aAgent is the string to set for the user agent
      * @return bool - True if successful, false if not
      */
-    bool SetUserAgent( const std::string& aAgent )
-    {
-        if( SetOption<const char*>( CURLOPT_USERAGENT, aAgent.c_str() ) == CURLE_OK )
-        {
-            return true;
-        }
-        return false;
-    }
+    bool SetUserAgent( const std::string& aAgent );
 
     /**
      * Function SetURL
@@ -102,14 +96,7 @@ public:
      * @param aURL is the URL
      * @return bool - True if successful, false if not
      */
-    bool SetURL( const std::string& aURL )
-    {
-        if( SetOption<const char *>( CURLOPT_URL, aURL.c_str() ) == CURLE_OK )
-        {
-            return true;
-        }
-        return false;
-    }
+    bool SetURL( const std::string& aURL );
 
     /**
      * Function SetFollowRedirects
@@ -119,14 +106,7 @@ public:
      * @param aFollow is a boolean where true will enable following redirects
      * @return bool - True if successful, false if not
      */
-    bool SetFollowRedirects( bool aFollow )
-    {
-        if( SetOption<long>( CURLOPT_FOLLOWLOCATION , (aFollow ? 1 : 0) ) == CURLE_OK )
-        {
-            return true;
-        }
-        return false;
-    }
+    bool SetFollowRedirects( bool aFollow );
 
     /**
      * Function GetErrorText
@@ -135,23 +115,7 @@ public:
      * @param aCode is CURL error code
      * @return const std::string - the corresponding error string for the given code
      */
-    const std::string GetErrorText( CURLcode aCode )
-    {
-        return curl_easy_strerror( aCode );
-    }
-
-    /**
-     * Function SetOption
-     * sets a curl option, only supports single parameter curl options
-     *
-     * @param aOption is CURL option, see CURL manual for options
-     * @param aArg is the argument being passed to CURL, ensure it is the right type per manual
-     * @return CURLcode - CURL error code, will return CURLE_OK unless a problem was encountered
-     */
-    template <typename T> CURLcode SetOption( CURLoption aOption, T aArg )
-    {
-        return curl_easy_setopt( m_CURL, aOption, aArg );
-    }
+    const std::string GetErrorText( int aCode );
 
     /**
      * Function GetBuffer
@@ -163,6 +127,17 @@ public:
     }
 
 private:
+    /**
+     * Function setOption
+     * sets a curl option, only supports single parameter curl options
+     *
+     * @param aOption is CURL option, see CURL manual for options
+     * @param aArg is the argument being passed to CURL, ensure it is the right type per manual
+     * @return int  - a CURL error code, will return CURLE_OK unless a problem was encountered
+     */
+    template <typename T> int setOption( int aOption, T aArg );
+
+
     CURL*           m_CURL;
     curl_slist*     m_headers;
     std::string     m_buffer;

@@ -22,13 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <kicad_curl/kicad_curl.h>
 #include <kicad_curl/kicad_curl_easy.h>
 
 #include <cstddef>
 #include <exception>
 #include <stdarg.h>
 #include <sstream>
-#include <richio.h>
+#include <ki_exception.h>   // THROW_IO_ERROR
 
 
 static size_t write_callback( void* contents, size_t size, size_t nmemb, void* userp )
@@ -87,8 +88,57 @@ void KICAD_CURL_EASY::Perform()
 
     if( res != CURLE_OK )
     {
-        std::string msg = StrPrintf( "curl_easy_perform()=%d: %s",
-                            res, GetErrorText( res ).c_str() );
+        std::string msg = "curl_easy_perform()=";
+        msg += (int)res; msg += " "; msg += GetErrorText( res ).c_str();
         THROW_IO_ERROR( msg );
     }
+}
+
+
+void KICAD_CURL_EASY::SetHeader( const std::string& aName, const std::string& aValue )
+{
+    std::string header = aName + ':' + aValue;
+    m_headers = curl_slist_append( m_headers, header.c_str() );
+}
+
+
+template <typename T> int KICAD_CURL_EASY::setOption( int aOption, T aArg )
+{
+    return curl_easy_setopt( m_CURL, (CURLoption)aOption, aArg );
+}
+
+
+const std::string KICAD_CURL_EASY::GetErrorText( int aCode )
+{
+    return curl_easy_strerror( (CURLcode)aCode );
+}
+
+
+bool KICAD_CURL_EASY::SetUserAgent( const std::string& aAgent )
+{
+    if( setOption<const char*>( CURLOPT_USERAGENT, aAgent.c_str() ) == CURLE_OK )
+    {
+        return true;
+    }
+    return false;
+}
+
+
+bool KICAD_CURL_EASY::SetURL( const std::string& aURL )
+{
+    if( setOption<const char *>( CURLOPT_URL, aURL.c_str() ) == CURLE_OK )
+    {
+        return true;
+    }
+    return false;
+}
+
+
+bool KICAD_CURL_EASY::SetFollowRedirects( bool aFollow )
+{
+    if( setOption<long>( CURLOPT_FOLLOWLOCATION , (aFollow ? 1 : 0) ) == CURLE_OK )
+    {
+        return true;
+    }
+    return false;
 }

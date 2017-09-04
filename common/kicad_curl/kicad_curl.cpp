@@ -27,13 +27,8 @@
 // conflicts for some defines, at least on Windows
 #include <kicad_curl/kicad_curl.h>
 
-#include <wx/log.h>
-#include <wx/dynlib.h>
-
-#include <macros.h>
-#include <fctsys.h>
 #include <ki_mutex.h>       // MUTEX and MUTLOCK
-#include <richio.h>
+#include <ki_exception.h>   // THROW_IO_ERROR
 
 
 
@@ -57,8 +52,6 @@ static void lock_callback( int mode, int type, const char* file, int line )
     (void)line;
 
     wxASSERT( s_crypto_locks && unsigned( type ) < unsigned( CRYPTO_num_locks() ) );
-
-    //DBG( printf( "%s: mode=0x%x type=%d file=%s line=%d\n", __func__, mode, type, file, line );)
 
     if( mode & CRYPTO_LOCK )
     {
@@ -150,7 +143,7 @@ void KICAD_CURL::Init()
 
             init_locks();
 
-            wxLogDebug( "Using %s", GetVersion() );
+            //wxLogDebug( "Using %s", GetVersion() );
 
             s_initialized = true;
         }
