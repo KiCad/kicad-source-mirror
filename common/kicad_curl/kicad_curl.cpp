@@ -222,3 +222,13 @@ std::string KICAD_CURL::GetSimpleVersion()
 
     return res;
 }
+
+std::string GetKicadCurlVersion()
+{
+    return KICAD_CURL::GetVersion();
+}
+
+std::string GetCurlLibVersion()
+{
+    return LIBCURL_VERSION;
+}

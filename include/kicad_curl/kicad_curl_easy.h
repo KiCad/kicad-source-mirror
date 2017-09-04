@@ -26,25 +26,12 @@
 
 /*
  * KICAD_CURL_EASY.h must included before wxWidgets because on Windows,
- * wxWidgets ends up including windows.h before winsocks2.h inside curl
- * this causes build warnings
- * Because we are before wx, we must explicitly define we are building with unicode
- * wxWidgets defaults to supporting unicode now, so this should be safe.
+ * because kicad_curl.h includes curl.h, wxWidgets ends up including windows.h
+ * before winsocks2.h inside curl and this causes build warnings
  */
-#if defined(WIN32)
-    #ifndef UNICODE
-    #    define UNICODE
-    #endif
 
-    #ifndef _UNICODE
-    #    define _UNICODE
-    #endif
-#endif
-
-
-#include <string>
-#include <curl/curl.h>
 #include <kicad_curl/kicad_curl.h>
+#include <string>
 
 
 /**

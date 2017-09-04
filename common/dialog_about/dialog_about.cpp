@@ -24,12 +24,16 @@
 
 
 #include <config.h>
+#include <string>
 
 // kicad_curl.h must be included before wx headers, to avoid
 // conflicts for some defines, at least on Windows
 #ifdef BUILD_GITHUB_PLUGIN
-#include <curl/curlver.h>
-#include <kicad_curl/kicad_curl.h>
+// kicad_curl.h can create conflicts for some defines, at least on Windows
+// so we are using here 2 proxy functions to know Curl version to avoid
+// including kicad_curl.h to know Curl version
+extern std::string GetKicadCurlVersion();
+extern std::string GetCurlLibVersion();
 #endif
 
 #include <boost/version.hpp>
@@ -426,7 +430,7 @@ void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
     aMsg << indent4 << wxGetLibraryVersionInfo().GetVersionString() << eol;
 
 #ifdef BUILD_GITHUB_PLUGIN
-    aMsg << indent4 << KICAD_CURL::GetVersion() << eol;
+    aMsg << indent4 << GetKicadCurlVersion() << eol;
 #endif
     aMsg << "Platform: " << wxGetOsDescription() << ", "
          << platform.GetArchName() << ", "
@@ -453,7 +457,7 @@ void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
                       << ( BOOST_VERSION % 100 ) << eol;
 
 #ifdef BUILD_GITHUB_PLUGIN
-    aMsg << indent4 << "Curl: " << LIBCURL_VERSION << eol;
+    aMsg << indent4 << "Curl: " << GetCurlLibVersion() << eol;
 #endif
 
     aMsg << indent4 << "Compiler: ";
