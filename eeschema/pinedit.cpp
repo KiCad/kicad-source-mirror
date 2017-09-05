@@ -511,7 +511,7 @@ void LIB_EDIT_FRAME::CreateImagePins( LIB_PIN* aPin, int aUnit, int aConvert, bo
 
     for( ii = 1; ii <= aPin->GetParent()->GetUnitCount(); ii++ )
     {
-        if( ii == aUnit || aPin->GetUnit() == 0 )
+        if( ii == aUnit || aPin->GetUnit() != 0 )
             continue;                       // Pin common to all units.
 
         NewPin = (LIB_PIN*) aPin->Clone();
