@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-31 22:11+0200\n"
-"PO-Revision-Date: 2017-09-06 02:21+0200\n"
+"POT-Creation-Date: 2017-09-06 18:20+0200\n"
+"PO-Revision-Date: 2017-09-06 18:22+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -512,11 +512,13 @@ msgstr "Impossibile aprire il percorso dei modelli! "
 
 #: kicad/project_template.cpp:57
 msgid "Couldn't open the meta information directory for this template! "
-msgstr "Impossibile aprire la cartella delle meta informazioni per questo modello!"
+msgstr ""
+"Impossibile aprire la cartella delle meta informazioni per questo modello!"
 
 #: kicad/project_template.cpp:63
 msgid "Cound't find the meta HTML information file for this template!"
-msgstr "Impossibile trovare il file HTML delle meta informazioni per questo modello!"
+msgstr ""
+"Impossibile trovare il file HTML delle meta informazioni per questo modello!"
 
 #: kicad/project_template.cpp:205
 #, c-format
@@ -715,88 +717,99 @@ msgstr "Seleziona visualizzatore PDF preferito"
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
 
-#: kicad/prjconfig.cpp:155
+#: kicad/prjconfig.cpp:168
 msgid "Open Existing Project"
 msgstr "Apri un progetto esistente"
 
-#: kicad/prjconfig.cpp:177
+#: kicad/prjconfig.cpp:190
 msgid "Create New Project"
 msgstr "Crea nuovo progetto"
 
-#: kicad/prjconfig.cpp:194
+#: kicad/prjconfig.cpp:213
+#, c-format
 msgid ""
-"The selected directory is not empty.  We recommend you create projects in "
-"their own clean directory.\n"
+"Directory '%s' could not be created.\n"
 "\n"
-"Do you want to create a new empty directory for the project?"
+"Please make sure you have write permissions and try again."
 msgstr ""
-"La cartella selezionata non è vuota. Si raccomanda la creazione di nuovi "
-"progetti in una cartella dedicata e vuota.\n"
-"Creare per il progetto una nuova cartella vuota?"
+"La cartella \"%s\" non può essere creata.\n"
+"\n"
+"Assicurarsi di avere i permessi di scrittura e riprovare."
 
-#: kicad/prjconfig.cpp:218
+#: kicad/prjconfig.cpp:222
+msgid ""
+"The selected directory is not empty.  It is recommended that you create "
+"projects in their own empty directory.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"La cartella selezionata non è vuota. Si raccomanda la creazione di nuovi progetti in una cartella dedicata e vuota.\n"
+"\n"
+"Continuare?"
+
+#: kicad/prjconfig.cpp:238
 msgid "New Project Folder"
 msgstr "Nuova cartella progetto"
 
-#: kicad/prjconfig.cpp:272
+#: kicad/prjconfig.cpp:292
 msgid "System Templates"
 msgstr "Modelli di sistema"
 
-#: kicad/prjconfig.cpp:278
+#: kicad/prjconfig.cpp:298
 msgid "User Templates"
 msgstr "Modelli personali"
 
-#: kicad/prjconfig.cpp:292
+#: kicad/prjconfig.cpp:312
 msgid "Portable Templates"
 msgstr "Modelli portabili"
 
-#: kicad/prjconfig.cpp:301
+#: kicad/prjconfig.cpp:321
 msgid "No project template was selected.  Cannot generate new project."
 msgstr "Nessun modello selezionato. Impossibile generare un nuovo progetto."
 
-#: kicad/prjconfig.cpp:302 pcbnew/router/length_tuner_tool.cpp:142
+#: kicad/prjconfig.cpp:322 pcbnew/router/length_tuner_tool.cpp:142
 #: common/confirm.cpp:89
 msgid "Error"
 msgstr "Errore"
 
-#: kicad/prjconfig.cpp:319
+#: kicad/prjconfig.cpp:339
 #, c-format
 msgid "Cannot write to folder '%s'."
 msgstr "Impossibile scrivere nella cartella \"%s\"."
 
-#: kicad/prjconfig.cpp:320
+#: kicad/prjconfig.cpp:340
 msgid "Error!"
 msgstr "Errore!"
 
-#: kicad/prjconfig.cpp:321
+#: kicad/prjconfig.cpp:341
 msgid "Plese check your access permissions to this folder and try again."
 msgstr "Controllare i permessi di accesso a questa cartella e riprovare."
 
-#: kicad/prjconfig.cpp:342
+#: kicad/prjconfig.cpp:362
 msgid "Overwriting files:"
 msgstr "Sovrascrittura file:"
 
-#: kicad/prjconfig.cpp:350
+#: kicad/prjconfig.cpp:370
 msgid "Are you sure you want to overwrite files in the destination folder?"
 msgstr "Sovrascrivere i file nella cartella di destinazione?"
 
-#: kicad/prjconfig.cpp:352 common/dialogs/dialog_page_settings.cpp:473
+#: kicad/prjconfig.cpp:372 common/dialogs/dialog_page_settings.cpp:473
 msgid "Warning!"
 msgstr "Attenzione!"
 
-#: kicad/prjconfig.cpp:355
+#: kicad/prjconfig.cpp:375
 msgid "Overwrite"
 msgstr "Sovrascrivere"
 
-#: kicad/prjconfig.cpp:355
+#: kicad/prjconfig.cpp:375
 msgid "Do Not Overwrite"
 msgstr "Sono sovrascrivere"
 
-#: kicad/prjconfig.cpp:369
+#: kicad/prjconfig.cpp:389
 msgid "A problem occurred creating new project from template!"
 msgstr "Problema durante la creazione del nuovo progetto da modello!"
 
-#: kicad/prjconfig.cpp:370
+#: kicad/prjconfig.cpp:390
 msgid "Template Error"
 msgstr "Errore modello"
 
@@ -1913,7 +1926,7 @@ msgid "Front"
 msgstr "Fronte"
 
 #: pcbnew/class_module.cpp:551 pcbnew/tools/pad_tool.cpp:77
-#: pcbnew/class_board.cpp:1101 pcbnew/pcb_draw_panel_gal.cpp:323
+#: pcbnew/class_board.cpp:1100 pcbnew/pcb_draw_panel_gal.cpp:323
 #: pcbnew/class_netinfo_item.cpp:120
 msgid "Pads"
 msgstr "Piazzole"
@@ -3171,107 +3184,107 @@ msgstr "La cancellazione globale di uno strato in rame non è consentita!"
 msgid "Delete everything on layer %s?"
 msgstr "Cancellare tutti gli elementi dello strato %s?"
 
-#: pcbnew/class_board.cpp:95
+#: pcbnew/class_board.cpp:94
 msgid "This is the default net class."
 msgstr "Questo è il gruppo di collegamenti predefinito"
 
-#: pcbnew/class_board.cpp:1104 pcbnew/pcb_draw_panel_gal.cpp:326
+#: pcbnew/class_board.cpp:1103 pcbnew/pcb_draw_panel_gal.cpp:326
 #: pcbnew/class_netinfo_item.cpp:140
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:154
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 msgid "Vias"
 msgstr "Via"
 
-#: pcbnew/class_board.cpp:1107 pcbnew/pcb_draw_panel_gal.cpp:329
+#: pcbnew/class_board.cpp:1106 pcbnew/pcb_draw_panel_gal.cpp:329
 msgid "Track Segments"
 msgstr "Segmenti di pista"
 
-#: pcbnew/class_board.cpp:1110 pcbnew/pcb_draw_panel_gal.cpp:332
+#: pcbnew/class_board.cpp:1109 pcbnew/pcb_draw_panel_gal.cpp:332
 msgid "Nodes"
 msgstr "Nodi"
 
-#: pcbnew/class_board.cpp:1113 pcbnew/pcb_draw_panel_gal.cpp:335
+#: pcbnew/class_board.cpp:1112 pcbnew/pcb_draw_panel_gal.cpp:335
 #: pcbnew/dialogs/dialog_select_net_from_list_base.h:58
 msgid "Nets"
 msgstr "Piste"
 
-#: pcbnew/class_board.cpp:1116 pcbnew/pcb_draw_panel_gal.cpp:338
+#: pcbnew/class_board.cpp:1115 pcbnew/pcb_draw_panel_gal.cpp:338
 #: pcbnew/dialogs/dialog_drc_base.cpp:266
 msgid "Unconnected"
 msgstr "Disconnessi"
 
-#: pcbnew/class_board.cpp:2402
+#: pcbnew/class_board.cpp:2401
 #, c-format
 msgid "Checking netlist component footprint \"%s:%s:%s\".\n"
 msgstr "Verifica netlist componenti impronte \"%s:%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2420 pcbnew/board_netlist_updater.cpp:108
+#: pcbnew/class_board.cpp:2419 pcbnew/board_netlist_updater.cpp:108
 #, c-format
 msgid "Adding new component \"%s:%s\" footprint \"%s\".\n"
 msgstr "Aggiungi nuovo componente \"%s:%s\" impronta \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2429 pcbnew/board_netlist_updater.cpp:142
+#: pcbnew/class_board.cpp:2428 pcbnew/board_netlist_updater.cpp:142
 #, c-format
 msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "Impossibile aggiungere nuovo componente \"%s:%s\" a causa dell'impronta "
 "mancante \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2463 pcbnew/board_netlist_updater.cpp:176
+#: pcbnew/class_board.cpp:2462 pcbnew/board_netlist_updater.cpp:176
 #, c-format
 msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
 msgstr "Sostituzione componente \"%s:%s\" impronta \"%s\" con  \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2474 pcbnew/board_netlist_updater.cpp:213
+#: pcbnew/class_board.cpp:2473 pcbnew/board_netlist_updater.cpp:213
 #, c-format
 msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "Impossibile rimpiazzare il componente \"%s:%s\" a causa dell'impronta "
 "mancante \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2527 pcbnew/board_netlist_updater.cpp:248
+#: pcbnew/class_board.cpp:2526 pcbnew/board_netlist_updater.cpp:248
 #, c-format
 msgid "Changing component \"%s:%s\" reference to \"%s\".\n"
 msgstr "Cambiamento riferimento componente \"%s:%s\" in \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2543 pcbnew/board_netlist_updater.cpp:272
+#: pcbnew/class_board.cpp:2542 pcbnew/board_netlist_updater.cpp:272
 #, c-format
 msgid "Changing component \"%s:%s\" value from \"%s\" to \"%s\".\n"
 msgstr "Cambio valore componente \"%s:%s\" da \"%s\" a \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2560 pcbnew/board_netlist_updater.cpp:290
+#: pcbnew/class_board.cpp:2559 pcbnew/board_netlist_updater.cpp:290
 #, c-format
 msgid "Changing component path \"%s:%s\" to \"%s\".\n"
 msgstr "Cambio percorso componente \"%s:%s\" a \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2584 pcbnew/board_netlist_updater.cpp:335
+#: pcbnew/class_board.cpp:2583 pcbnew/board_netlist_updater.cpp:335
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
 msgstr "Cancellazione componente \"%s:%s\" pin \"%s\" nome collegamento.\n"
 
-#: pcbnew/class_board.cpp:2603 pcbnew/board_netlist_updater.cpp:396
+#: pcbnew/class_board.cpp:2602 pcbnew/board_netlist_updater.cpp:396
 #, c-format
 msgid ""
 "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
 msgstr "Cambio componente \"%s:%s\" pin \"%s\" nome net da \"%s\" a \"%s\".\n"
 
-#: pcbnew/class_board.cpp:2655 pcbnew/board_netlist_updater.cpp:452
+#: pcbnew/class_board.cpp:2654 pcbnew/board_netlist_updater.cpp:452
 #, c-format
 msgid "Removing unused component \"%s:%s\".\n"
 msgstr "Rimozione componente non usato \"%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2718 pcbnew/board_netlist_updater.cpp:521
+#: pcbnew/class_board.cpp:2717 pcbnew/board_netlist_updater.cpp:521
 #, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad '%s'\n"
 msgstr ""
 "Rimozione collegamento singola piazzola \"%s\" su \"%s\" piazzola \"%s\"\n"
 
-#: pcbnew/class_board.cpp:2762
+#: pcbnew/class_board.cpp:2761
 #, c-format
 msgid "Component '%s' pad '%s' not found in footprint '%s'\n"
 msgstr "Componente \"%s\" piazzola \"%s\" non trovato nell'impronta \"%s\"\n"
 
-#: pcbnew/class_board.cpp:2780
+#: pcbnew/class_board.cpp:2779
 #, c-format
 msgid "Copper zone (net name '%s'): net has no pads connected."
 msgstr ""
@@ -3692,7 +3705,7 @@ msgid "Dimension \"%s\" on %s"
 msgstr "Dimensioni \"%s\" su %s"
 
 #: pcbnew/controle.cpp:231 pcbnew/modedit.cpp:133
-#: eeschema/libeditframe.cpp:1331 eeschema/controle.cpp:177
+#: eeschema/libeditframe.cpp:1337 eeschema/controle.cpp:177
 msgid "Clarify Selection"
 msgstr "Disambigua selezione"
 
@@ -15086,48 +15099,48 @@ msgstr "Copia info di versione"
 msgid "Copy KiCad version info to the clipboard"
 msgstr "Copia le info di versione di KiCad negli appunti"
 
-#: common/dialog_about/dialog_about.cpp:116
+#: common/dialog_about/dialog_about.cpp:120
 msgid "Information"
 msgstr "Info"
 
-#: common/dialog_about/dialog_about.cpp:119
+#: common/dialog_about/dialog_about.cpp:123
 msgid "Developers"
 msgstr "Sviluppo"
 
-#: common/dialog_about/dialog_about.cpp:120
+#: common/dialog_about/dialog_about.cpp:124
 msgid "Doc Writers"
 msgstr "Manuali"
 
-#: common/dialog_about/dialog_about.cpp:122
+#: common/dialog_about/dialog_about.cpp:126
 msgid "Artists"
 msgstr "Artisti"
 
-#: common/dialog_about/dialog_about.cpp:123
+#: common/dialog_about/dialog_about.cpp:127
 msgid "Translators"
 msgstr "Traduttori"
 
-#: common/dialog_about/dialog_about.cpp:125
+#: common/dialog_about/dialog_about.cpp:129
 msgid "Packagers"
 msgstr "Pacchetti"
 
-#: common/dialog_about/dialog_about.cpp:128
+#: common/dialog_about/dialog_about.cpp:132
 msgid "License"
 msgstr "Licenza"
 
-#: common/dialog_about/dialog_about.cpp:533
+#: common/dialog_about/dialog_about.cpp:557
 msgid "Version Info"
 msgstr "Info di versione"
 
-#: common/dialog_about/dialog_about.cpp:545
+#: common/dialog_about/dialog_about.cpp:569
 msgid "Could not open clipboard to write version information."
 msgstr ""
 "Impossibile aprire gli appunti per scrivere le informazioni sulla versione."
 
-#: common/dialog_about/dialog_about.cpp:546
+#: common/dialog_about/dialog_about.cpp:570
 msgid "Clipboard Error"
 msgstr "Errore degli appunti"
 
-#: common/dialog_about/dialog_about.cpp:555
+#: common/dialog_about/dialog_about.cpp:579
 msgid "Copied..."
 msgstr "Copiate..."
 
@@ -24320,7 +24333,8 @@ msgstr "Carica file di &lavoro Gerber"
 
 #: gerbview/menubar.cpp:76
 msgid "Load a Gerber job file, and load gerber files depending on the job"
-msgstr "Carica un file di lavoro Gerber, e carica i file Gerbere a seconda del lavoro"
+msgstr ""
+"Carica un file di lavoro Gerber, e carica i file Gerbere a seconda del lavoro"
 
 #: gerbview/menubar.cpp:81
 msgid "Load &Zip Archive File"
