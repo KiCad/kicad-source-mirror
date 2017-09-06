@@ -120,10 +120,8 @@ END_EVENT_TABLE()
 enum hotkey_id_commnand
 {
     HK_RUN_EESCHEMA = HK_COMMON_END,
-    HK_LOAD_PROJECT,
-    HK_SAVE_PROJECT,
-    HK_NEW_PRJ,
     HK_NEW_PRJ_TEMPLATE,
+    HK_REFRESH,
     HK_RUN_LIBEDIT,
     HK_RUN_PCBNEW,
     HK_RUN_FPEDITOR,
@@ -141,13 +139,9 @@ enum hotkey_id_commnand
 // See hotkeys_basic.h for more info
 
 // hotkeys command:
-static EDA_HOTKEY HkHelp( _HKI( "Help (this window)" ), HK_HELP, '?' );
-static EDA_HOTKEY HkLoadPrj( _HKI( "Load project" ), HK_LOAD_PROJECT, 'O' + GR_KB_CTRL );
-static EDA_HOTKEY HkSavePrj( _HKI( "Save project" ), HK_SAVE_PROJECT, 'S' + GR_KB_CTRL );
-static EDA_HOTKEY HkNewProject( _HKI( "New Project" ), HK_NEW_PRJ, 'N' + GR_KB_CTRL );
-static EDA_HOTKEY HkNewPrjFromTemplate( _HKI( "New Prj From Template" ),
+static EDA_HOTKEY HkNewProjectFromTemplate( _HKI( "New Project From Template" ),
                                         HK_NEW_PRJ_TEMPLATE, 'T' + GR_KB_CTRL );
-
+static EDA_HOTKEY HkRefresh( _HKI( "Refresh Project Tree" ), HK_REFRESH, GR_KB_CTRL + 'R' );
 static EDA_HOTKEY HkRunEeschema( _HKI( "Run Eeschema" ), HK_RUN_EESCHEMA, 'E' + GR_KB_CTRL, 0 );
 static EDA_HOTKEY HkRunLibedit( _HKI( "Run LibEdit" ), HK_RUN_LIBEDIT, 'L' + GR_KB_CTRL, 0 );
 static EDA_HOTKEY HkRunPcbnew( _HKI( "Run Pcbnew" ), HK_RUN_PCBNEW, 'P' + GR_KB_CTRL, 0 );
@@ -159,11 +153,22 @@ static EDA_HOTKEY HkRunPcbCalc( _HKI( "Run PcbCalculator" ),
                                 HK_RUN_PCBCALCULATOR, 'A' + GR_KB_CTRL, 0 );
 static EDA_HOTKEY HkRunPleditor( _HKI( "Run PlEditor" ), HK_RUN_PLEDITOR, 'Y' + GR_KB_CTRL, 0 );
 
+// Common: hotkeys_basic.h
+static EDA_HOTKEY HkNewProject( _HKI( "New Project" ), HK_NEW, GR_KB_CTRL + 'N' );
+static EDA_HOTKEY HkOpenProject( _HKI( "Open Project" ), HK_OPEN, GR_KB_CTRL + 'O' );
+static EDA_HOTKEY HkSaveProject( _HKI( "Save Project" ), HK_SAVE, GR_KB_CTRL + 'S' );
+static EDA_HOTKEY HkHelp( _HKI( "Help (this window)" ), HK_HELP, '?' );
+
 // List of hotkey descriptors
 EDA_HOTKEY* common_Hotkey_List[] =
 {
-    &HkHelp,
-    &HkLoadPrj,     &HkSavePrj,     &HkNewProject,  &HkNewPrjFromTemplate,
+    &HkNewProject,  &HkNewProjectFromTemplate, &HkOpenProject,
+    // Currently there is nothing to save
+    // (Kicad manager does not save any info in .pro file)
+#if 0
+    &HkSaveProject,
+#endif
+    &HkRefresh,     &HkHelp,
     &HkRunEeschema, &HkRunLibedit,
     &HkRunPcbnew,   &HkRunModedit,  &HkRunGerbview,
     &HkRunBm2Cmp,   &HkRunPcbCalc,  &HkRunPleditor,
@@ -217,10 +222,27 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Menu File:
     wxMenu* fileMenu = new wxMenu;
 
+    // New project creation
+    wxMenu* newprjSubMenu = new wxMenu();
+    msg = AddHotkeyName( _( "&Project..." ), kicad_Manager_Hokeys_Descr, HK_NEW );
+    AddMenuItem( newprjSubMenu, ID_NEW_PROJECT, msg,
+                 _( "Create new blank project" ),
+                 KiBitmap( new_project_xpm ) );
+    msg = AddHotkeyName( _( "Project from &Template..." ),
+                         kicad_Manager_Hokeys_Descr, HK_NEW_PRJ_TEMPLATE );
+    AddMenuItem( newprjSubMenu, ID_NEW_PROJECT_FROM_TEMPLATE, msg,
+                 _( "Create new project from template" ),
+                 KiBitmap( new_project_with_template_xpm ) );
+    AddMenuItem( fileMenu, newprjSubMenu,
+                 wxID_ANY,
+                 _( "&New" ),
+                 _( "Create new project" ),
+                 KiBitmap( new_project_xpm ) );
+
     // Open
-    msg = AddHotkeyName( _( "&Open Project" ), kicad_Manager_Hokeys_Descr, HK_LOAD_PROJECT );
+    msg = AddHotkeyName( _( "&Open Project..." ), kicad_Manager_Hokeys_Descr, HK_OPEN );
     AddMenuItem( fileMenu, ID_LOAD_PROJECT, msg,
-                 _( "Open existing project" ),
+                 _( "Open an existing project" ),
                  KiBitmap( open_project_xpm ) );
 
     // File history
@@ -230,51 +252,33 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu, openRecentMenu,
                  wxID_ANY,
                  _( "Open &Recent" ),
-                 _( "Open recent schematic project" ),
+                 _( "Open a recent project" ),
                  KiBitmap( recent_xpm ) );
-
-    // New project creation
-    wxMenu* newprjSubMenu = new wxMenu();
-
-    msg = AddHotkeyName( _( "&New Project" ), kicad_Manager_Hokeys_Descr, HK_NEW_PRJ );
-    AddMenuItem( newprjSubMenu, ID_NEW_PROJECT, msg,
-                 _( "Create new blank project" ),
-                 KiBitmap( new_project_xpm ) );
-
-    msg = AddHotkeyName( _( "New Project from &Template" ),
-                         kicad_Manager_Hokeys_Descr, HK_NEW_PRJ_TEMPLATE );
-    AddMenuItem( newprjSubMenu, ID_NEW_PROJECT_FROM_TEMPLATE, msg,
-                 _( "Create new project from template" ),
-                 KiBitmap( new_project_with_template_xpm ) );
-
-    AddMenuItem( fileMenu, newprjSubMenu,
-                 wxID_ANY,
-                 _( "New Project" ),
-                 _( "Create new project" ),
-                 KiBitmap( new_project_xpm ) );
 
     // Currently there is nothing to save
     // (Kicad manager does not save any info in .pro file)
 #if 0
     // Save
-    msg = AddHotkeyName( _( "&Save" ), kicad_Manager_Hokeys_Descr, HK_SAVE_PROJECT );
+    msg = AddHotkeyName( _( "&Save" ), kicad_Manager_Hokeys_Descr, HK_SAVE );
     AddMenuItem( fileMenu, ID_SAVE_PROJECT, msg,
                  _( "Save current project" ),
                  KiBitmap( save_project_xpm ) );
 #endif
 
-    // Archive
+    // Separator
     fileMenu->AppendSeparator();
+
+    // Archive
     AddMenuItem( fileMenu,
                  ID_SAVE_AND_ZIP_FILES,
-                 _( "&Archive Current Project" ),
+                 _( "&Archive Project..." ),
                  _( "Archive all needed project files into zip archive" ),
                  KiBitmap( zip_xpm ) );
 
     // Unarchive
     AddMenuItem( fileMenu,
                  ID_READ_ZIP_ARCHIVE,
-                 _( "&Unarchive Project" ),
+                 _( "&Unarchive Project..." ),
                  _( "Unarchive project files from zip archive" ),
                  KiBitmap( unzip_xpm ) );
 
@@ -287,6 +291,15 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  _( "&Close" ),
                  _( "Close KiCad" ),
                  KiBitmap( exit_xpm ) );
+
+     // View Menu:
+     wxMenu* viewMenu = new wxMenu();
+
+     // Refresh project tree
+     msg = AddHotkeyName( _( "&Refresh" ), kicad_Manager_Hokeys_Descr, HK_REFRESH );
+     AddMenuItem( viewMenu, ID_PROJECT_TREE_REFRESH, msg,
+                  _( "Refresh project tree" ),
+                  KiBitmap( reload_xpm ) );
 
     // Menu Browse:
     wxMenu* browseMenu = new wxMenu();
@@ -447,9 +460,10 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     // Create the menubar and append all submenus
     menuBar->Append( fileMenu, _( "&File" ) );
+    menuBar->Append( viewMenu, _( "&View" ) );
+    menuBar->Append( toolsMenu, _( "&Tools" ) );
     menuBar->Append( browseMenu, _( "&Browse" ) );
     menuBar->Append( preferencesMenu, _( "&Preferences" ) );
-    menuBar->Append( toolsMenu, _( "&Tools" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
     menuBar->Thaw();
@@ -498,10 +512,14 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
                             KiBitmap( open_project_xpm ),
                             _( "Open existing project" ) );
 
+    // Currently there is nothing to save
+    // (Kicad manager does not save any info in .pro file)
+#if 0
     // Save
     m_mainToolBar->AddTool( ID_SAVE_PROJECT, wxEmptyString,
                             KiBitmap( save_project_xpm ),
                             _( "Save current project" ) );
+#endif
 
     // Separator
     m_mainToolBar->AddSeparator();
@@ -510,6 +528,11 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
     m_mainToolBar->AddTool( ID_SAVE_AND_ZIP_FILES, wxEmptyString,
                             KiBitmap( zip_xpm ),
                             _( "Archive all project files" ) );
+
+    // Unarchive
+    m_mainToolBar->AddTool( ID_READ_ZIP_ARCHIVE, wxEmptyString,
+                            KiBitmap( unzip_xpm ),
+                            _( "Unarchive project files from zip archive" ) );
 
     // Separator
     m_mainToolBar->AddSeparator();
