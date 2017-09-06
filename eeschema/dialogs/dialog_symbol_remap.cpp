@@ -157,25 +157,43 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
             if( fullFileName.IsEmpty() )
                 fullFileName = lib->GetFullFileName();
 
-            msg.Printf( _( "Adding library '%s', file '%s' to project symbol library table." ),
-                        libName, fullFileName );
-            aReporter.Report( msg, REPORTER::RPT_INFO );
+            wxFileName tmpFn = fullFileName;
 
-            prjLibTable.InsertRow( new SYMBOL_LIB_TABLE_ROW( libName, fullFileName, pluginType ) );
+            // Don't add symbol libraries that do not exist.
+            if( tmpFn.Normalize() && tmpFn.FileExists() )
+            {
+                msg.Printf( _( "Adding library '%s', file '%s' to project symbol library table." ),
+                            libName, fullFileName );
+                aReporter.Report( msg, REPORTER::RPT_INFO );
+
+                prjLibTable.InsertRow( new SYMBOL_LIB_TABLE_ROW( libName, fullFileName,
+                                                                 pluginType ) );
+            }
+            else
+            {
+                msg.Printf( _( "Library '%s' not found." ), fullFileName );
+                aReporter.Report( msg, REPORTER::RPT_WARNING );
+            }
         }
 
-        wxFileName fn( Prj().GetProjectPath(), SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+        // Don't save empty project symbol library table.
+        if( !prjLibTable.IsEmpty() )
+        {
+            wxFileName fn( Prj().GetProjectPath(), SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
 
-        try
-        {
-            FILE_OUTPUTFORMATTER formatter( fn.GetFullPath() );
-            prjLibTable.Format( &formatter, 0 );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            msg.Printf( _( "Failed to write project symbol library table. Error:\n  %s" ),
-                        ioe.What() );
-            aReporter.Report( msg, REPORTER::RPT_ERROR );
+            try
+            {
+                FILE_OUTPUTFORMATTER formatter( fn.GetFullPath() );
+                prjLibTable.Format( &formatter, 0 );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                msg.Printf( _( "Failed to write project symbol library table. Error:\n  %s" ),
+                            ioe.What() );
+                aReporter.Report( msg, REPORTER::RPT_ERROR );
+            }
+
+            aReporter.Report( _( "Created project symbol library table.\n" ), REPORTER::RPT_INFO );
         }
     }
 }

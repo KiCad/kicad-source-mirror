@@ -153,6 +153,7 @@ void LIB_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
         // Force a reload of the PART_LIBS
         prj->SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
         prj->SetElem( PROJECT::ELEM_SCH_SEARCH_STACK, NULL );
+        prj->SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
 
         // Update the schematic symbol library links.
         SCH_SCREENS schematic;
@@ -232,6 +233,7 @@ void SCH_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
         // Force a reload of the PART_LIBS
         prj->SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
         prj->SetElem( PROJECT::ELEM_SCH_SEARCH_STACK, NULL );
+        prj->SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
 
         // Update the schematic symbol library links.
         SCH_SCREENS schematic;

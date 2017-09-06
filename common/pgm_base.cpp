@@ -493,7 +493,7 @@ bool PGM_BASE::InitPgm()
         tmpFileName.AppendDir( wxT( "modules" ) );
         envVarItem.SetDefinedExternally( false );
     }
-    envVarItem.SetValue( tmpFileName.GetFullPath() );
+    envVarItem.SetValue( tmpFileName.GetPath() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
     // KISYS3DMOD
@@ -524,7 +524,7 @@ bool PGM_BASE::InitPgm()
         tmpFileName.AppendDir( wxT( "template" ) );
         envVarItem.SetDefinedExternally( false );
     }
-    envVarItem.SetValue( tmpFileName.GetFullPath() );
+    envVarItem.SetValue( tmpFileName.GetPath() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
     // KICAD_SYMBOLS
@@ -540,7 +540,7 @@ bool PGM_BASE::InitPgm()
         tmpFileName.AppendDir( wxT( "library" ) );
         envVarItem.SetDefinedExternally( false );
     }
-    envVarItem.SetValue( tmpFileName.GetFullPath() );
+    envVarItem.SetValue( tmpFileName.GetPath() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
     ReadPdfBrowserInfos();      // needs m_common_settings
