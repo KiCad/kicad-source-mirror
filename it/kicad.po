@@ -73,7 +73,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-31 22:11+0200\n"
-"PO-Revision-Date: 2017-09-01 11:20+0200\n"
+"PO-Revision-Date: 2017-09-06 02:21+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -14765,7 +14765,7 @@ msgstr "Opzioni di cancellazione"
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.h:86
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:22
 msgid "General Settings"
-msgstr "Opzioni generali"
+msgstr "Impostazioni generali"
 
 #: common/grid_tricks.cpp:115
 msgid "Cut\tCTRL+X"
