@@ -83,6 +83,12 @@ struct VC_SETTINGS
 
     ///> Mousewheel (2-finger touchpad) panning
     bool m_enableMousewheelPan;
+
+    ///> Allow panning with the right button in addition to middle
+    bool m_panWithRightButton;
+
+    ///> Allow panning with the left button in addition to middle
+    bool m_panWithLeftButton;
 };
 
 
@@ -308,6 +314,12 @@ public:
      * screen center.
      */
     virtual void CenterOnCursor() const = 0;
+
+    void SetAdditionalPanButtons( bool aLeft = false, bool aRight = false )
+    {
+        m_settings.m_panWithLeftButton = aLeft;
+        m_settings.m_panWithRightButton = aRight;
+    }
 
     /**
      * Function Reset()

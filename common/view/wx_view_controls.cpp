@@ -55,6 +55,10 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), NULL, this );
     m_parentPanel->Connect( wxEVT_LEFT_DOWN,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), NULL, this );
+    m_parentPanel->Connect( wxEVT_RIGHT_UP,
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), NULL, this );
+    m_parentPanel->Connect( wxEVT_RIGHT_DOWN,
+                            wxMouseEventHandler( WX_VIEW_CONTROLS::onButton ), NULL, this );
 #if defined _WIN32 || defined _WIN64
     m_parentPanel->Connect( wxEVT_ENTER_WINDOW,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onEnter ), NULL, this );
@@ -223,7 +227,9 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
     {
     case IDLE:
     case AUTO_PANNING:
-        if( aEvent.MiddleDown() )
+        if( aEvent.MiddleDown() ||
+            ( aEvent.LeftDown() && m_settings.m_panWithLeftButton ) ||
+            ( aEvent.RightDown() && m_settings.m_panWithRightButton ) )
         {
             m_dragStartPoint = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
             m_lookStartPoint = m_view->GetCenter();
@@ -236,7 +242,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
         break;
 
     case DRAG_PANNING:
-        if( aEvent.MiddleUp() )
+        if( aEvent.MiddleUp() || aEvent.LeftUp() || aEvent.RightUp() )
             m_state = IDLE;
 
         break;

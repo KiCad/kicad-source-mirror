@@ -66,6 +66,8 @@ void VC_SETTINGS::Reset()
     m_autoPanSpeed = 0.15;
     m_warpCursor = false;
     m_enableMousewheelPan = false;
+    m_panWithRightButton = false;
+    m_panWithLeftButton = false;
 }
 
 
