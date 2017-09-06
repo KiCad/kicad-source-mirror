@@ -168,7 +168,7 @@ const LIB_ITEM& LIB_ITEMS_LIST::operator[]( unsigned int aIdx ) const
 
     for( const auto& type : m_data )
     {
-        if( counter + type.second.size() < aIdx )
+        if( aIdx < counter + type.second.size() )
             return type.second[aIdx - counter];
         else
             counter += type.second.size();
