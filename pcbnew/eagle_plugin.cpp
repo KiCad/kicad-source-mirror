@@ -272,7 +272,7 @@ void EAGLE_PLUGIN::init( const PROPERTIES* aProperties )
     m_min_via_hole = 0;
     m_xpath->clear();
     m_pads_to_nets.clear();
-    deleteTemplates();
+    m_templates.clear();
 
     m_board = NULL;
     m_props = aProperties;
