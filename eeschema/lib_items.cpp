@@ -35,7 +35,7 @@ LIB_ITEMS_LIST::ITERATOR::ITERATOR( LIB_ITEMS_MAP& aItems, int aType )
     m_type = m_filter ? aType : FIRST_TYPE;
     m_it = (*m_parent)[m_type].begin();
 
-    // be sure the enum order is correct for the type assert
+    // be sure the enum order is correct for the type
     static_assert( (int) ( ITERATOR::FIRST_TYPE ) < (int) ( ITERATOR::LAST_TYPE ),
             "fix FIRST_TYPE and LAST_TYPE definitions" );
     wxASSERT( m_type >= ITERATOR::FIRST_TYPE && m_type <= ITERATOR::LAST_TYPE );
@@ -107,10 +107,7 @@ LIB_ITEMS_LIST::ITERATOR LIB_ITEMS_LIST::erase( const ITERATOR& aIterator )
 {
     LIB_ITEMS_LIST::ITERATOR it( aIterator );
     it.m_it = (*aIterator.m_parent)[aIterator.m_type].erase( aIterator.m_it );
-
-    // if we reached the end, then move to the next type
-    if( it.m_it == (*it.m_parent)[it.m_type].end() && !it.m_filter )
-        ++it;
+    it.validate();
 
     return it;
 }
@@ -183,7 +180,26 @@ LIB_ITEMS_LIST::ITERATOR& LIB_ITEMS_LIST::ITERATOR::operator++()
     if( m_it != (*m_parent)[m_type].end() )
         ++m_it;
 
-    // should the iterator move to the next type?
+    validate();
+
+    return *this;
+}
+
+
+bool LIB_ITEMS_LIST::ITERATOR::operator!=( const LIB_ITEMS_LIST::ITERATOR& aOther ) const
+{
+    wxASSERT( aOther.m_parent == m_parent );
+    wxASSERT( aOther.m_filter == m_filter );
+    wxASSERT( !m_filter || aOther.m_type == m_type );
+
+    return aOther.m_it != m_it;
+}
+
+
+void LIB_ITEMS_LIST::ITERATOR::validate()
+{
+    // for all-items iterators (unfiltered): check if this is the end of the
+    // current type container, if so switch to the next non-empty container
     if( m_it == (*m_parent)[m_type].end() && !m_filter )
     {
         auto typeIt = m_parent->find( m_type );
@@ -202,16 +218,4 @@ LIB_ITEMS_LIST::ITERATOR& LIB_ITEMS_LIST::ITERATOR::operator++()
             m_type = typeIt->first;
         }
     }
-
-    return *this;
-}
-
-
-bool LIB_ITEMS_LIST::ITERATOR::operator!=( const LIB_ITEMS_LIST::ITERATOR& aOther ) const
-{
-    wxASSERT( aOther.m_parent == m_parent );
-    wxASSERT( aOther.m_filter == m_filter );
-    wxASSERT( !m_filter || aOther.m_type == m_type );
-
-    return aOther.m_it != m_it;
 }

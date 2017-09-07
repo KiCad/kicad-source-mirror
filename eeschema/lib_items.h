@@ -81,6 +81,9 @@ public:
          */
         ITERATOR( LIB_ITEMS_MAP& aItems, int aType = TYPE_NOT_INIT );
 
+        ///> Assures the iterator is in a valid state.
+        void validate();
+
         ///> Wrapped container
         LIB_ITEMS_MAP* m_parent;
 
