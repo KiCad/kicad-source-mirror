@@ -79,7 +79,7 @@ LIB_ITEMS_LIST::ITERATOR LIB_ITEMS_LIST::end( int aType ) const
     }
     else                    // iterates over all items
     {
-        // find a not empty container
+        // find a not empty container, starting from the last type
         auto i = m_data.rbegin();
 
         while( i->second.empty() && i != m_data.rend() )
@@ -183,18 +183,24 @@ LIB_ITEMS_LIST::ITERATOR& LIB_ITEMS_LIST::ITERATOR::operator++()
     if( m_it != (*m_parent)[m_type].end() )
         ++m_it;
 
-    if( m_it == (*m_parent)[m_type].end() && !m_filter && m_type < LAST_TYPE )
+    // should the iterator move to the next type?
+    if( m_it == (*m_parent)[m_type].end() && !m_filter )
     {
-        // switch to the next type for not filtered iterator
-        do
-            ++m_type;
-        while( ( !m_parent->count( m_type ) || (*m_parent)[m_type].empty() ) && m_type < LAST_TYPE );
+        auto typeIt = m_parent->find( m_type );
+        wxASSERT( typeIt != m_parent->end() );
 
-        // is it the real end of the list?
-        if( m_type == LAST_TYPE && (*m_parent)[LAST_TYPE].empty() )
-            m_it = (*m_parent)[LAST_TYPE].end();
-        else
-            m_it = (*m_parent)[m_type].begin();
+        // switch to the next type (look for a not empty container)
+        do
+            ++typeIt;
+        while( typeIt != m_parent->end() && typeIt->second.empty() );
+
+        // there is another not empty container, so make the iterator point to it,
+        // otherwise it means the iterator points to the last item
+        if( typeIt != m_parent->end() )
+        {
+            m_it = typeIt->second.begin();
+            m_type = typeIt->first;
+        }
     }
 
     return *this;
