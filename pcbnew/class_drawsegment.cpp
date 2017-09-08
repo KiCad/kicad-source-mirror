@@ -192,7 +192,7 @@ void DRAWSEGMENT::SetAngle( double aAngle )
 
 MODULE* DRAWSEGMENT::GetParentModule() const
 {
-    if( m_Parent->Type() != PCB_MODULE_T )
+    if( !m_Parent || m_Parent->Type() != PCB_MODULE_T )
         return NULL;
 
     return (MODULE*) m_Parent;
