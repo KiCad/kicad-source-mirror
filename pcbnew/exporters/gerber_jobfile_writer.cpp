@@ -211,23 +211,23 @@ bool GERBER_JOBFILE_WRITER::CreateJobFile( const wxString& aFullFilename )
     }
 
 
-    fprintf( jobFile, "%%TJ.D.PadToPad.Outer,%.3f*%%\n", minPadClearanceOuter*m_conversionUnits );
+    fprintf( jobFile, "%%TJ.D.PadToPad.Out,%.3f*%%\n", minPadClearanceOuter*m_conversionUnits );
 
     if( hasInnerLayers )
-        fprintf( jobFile, "%%TJ.D.PadToPad.Inner,%.3f*%%\n", minPadClearanceInner*m_conversionUnits );
+        fprintf( jobFile, "%%TJ.D.PadToPad.Inr,%.3f*%%\n", minPadClearanceInner*m_conversionUnits );
 
-    fprintf( jobFile, "%%TJ.D.PadToTrack.Outer,%.3f*%%\n", minPadClearanceOuter*m_conversionUnits );
+    fprintf( jobFile, "%%TJ.D.PadToTrack.Out,%.3f*%%\n", minPadClearanceOuter*m_conversionUnits );
 
     if( hasInnerLayers )
-        fprintf( jobFile, "%%TJ.D.PadToTrack.Inner,%.3f*%%\n", minPadClearanceInner*m_conversionUnits );
+        fprintf( jobFile, "%%TJ.D.PadToTrack.Inr,%.3f*%%\n", minPadClearanceInner*m_conversionUnits );
 
     // Until this is changed in Kicad, use the same value for internal tracks
     int minclearanceInner = minclearanceOuter;
 
-    fprintf( jobFile, "%%TJ.D.TrackToTrack.Outer,%.3f*%%\n", minclearanceOuter*m_conversionUnits );
+    fprintf( jobFile, "%%TJ.D.TrackToTrack.Out,%.3f*%%\n", minclearanceOuter*m_conversionUnits );
 
     if( hasInnerLayers )
-        fprintf( jobFile, "%%TJ.D.TrackToTrack.Inner,%.3f*%%\n", minclearanceInner*m_conversionUnits );
+        fprintf( jobFile, "%%TJ.D.TrackToTrack.Inr,%.3f*%%\n", minclearanceInner*m_conversionUnits );
 
     // Output the minimal track width
     int mintrackWidthOuter = INT_MAX;
@@ -245,10 +245,10 @@ bool GERBER_JOBFILE_WRITER::CreateJobFile( const wxString& aFullFilename )
     }
 
     if( mintrackWidthOuter != INT_MAX )
-        fprintf( jobFile, "%%TJ.D.MinLineWidth.Outer,%.3f*%%\n", mintrackWidthOuter*m_conversionUnits );
+        fprintf( jobFile, "%%TJ.D.MinLineWidth.Out,%.3f*%%\n", mintrackWidthOuter*m_conversionUnits );
 
     if( mintrackWidthInner != INT_MAX )
-        fprintf( jobFile, "%%TJ.D.MinLineWidth.Inner,%.3f*%%\n", mintrackWidthInner*m_conversionUnits );
+        fprintf( jobFile, "%%TJ.D.MinLineWidth.Inr,%.3f*%%\n", mintrackWidthInner*m_conversionUnits );
 
     // Output the minimal zone to xx clearance
     // Note: zones can have a zone clearance set to 0
@@ -272,16 +272,16 @@ bool GERBER_JOBFILE_WRITER::CreateJobFile( const wxString& aFullFilename )
     }
 
     if( minclearanceOuter != INT_MAX )
-        fprintf( jobFile, "%%TJ.D.TrackToRegion.Outer,%.3f*%%\n", minclearanceOuter*m_conversionUnits );
+        fprintf( jobFile, "%%TJ.D.TrackToRegion.Out,%.3f*%%\n", minclearanceOuter*m_conversionUnits );
 
     if( hasInnerLayers && minclearanceInner != INT_MAX )
-        fprintf( jobFile, "%%TJ.D.TrackToRegion.Inner,%.3f*%%\n", minclearanceInner*m_conversionUnits );
+        fprintf( jobFile, "%%TJ.D.TrackToRegion.Inr,%.3f*%%\n", minclearanceInner*m_conversionUnits );
 
     if( minclearanceOuter != INT_MAX )
-        fprintf( jobFile, "%%TJ.D.RegionToRegion.Outer,%.3f*%%\n", minclearanceOuter*m_conversionUnits );
+        fprintf( jobFile, "%%TJ.D.RegionToRegion.Out,%.3f*%%\n", minclearanceOuter*m_conversionUnits );
 
     if( hasInnerLayers && minclearanceInner != INT_MAX )
-        fprintf( jobFile, "%%TJ.D.RegionToRegion.Inner,%.3f*%%\n", minclearanceInner*m_conversionUnits );
+        fprintf( jobFile, "%%TJ.D.RegionToRegion.Inr,%.3f*%%\n", minclearanceInner*m_conversionUnits );
 
     // output the gerber file list:
     fputs( "G04 Layer Structure*\n", jobFile );

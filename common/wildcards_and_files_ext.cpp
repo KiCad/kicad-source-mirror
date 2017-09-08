@@ -43,7 +43,7 @@ const wxString SchematicFileExtension( wxT( "sch" ) );
 const wxString NetlistFileExtension( wxT( "net" ) );
 const wxString ComponentFileExtension( wxT( "cmp" ) );
 const wxString GerberFileExtension( "gbr" );
-const wxString GerberJobFileExtension( "gbj" );
+const wxString GerberJobFileExtension( "gbrjob" );
 const wxString HtmlFileExtension( wxT( "html" ) );
 
 const wxString LegacyPcbFileExtension( wxT( "brd" ) );
