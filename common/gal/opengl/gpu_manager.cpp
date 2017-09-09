@@ -160,15 +160,15 @@ void GPU_CACHED_MANAGER::EndDrawing()
 
     // Bind vertices data buffers
     glBindBuffer( GL_ARRAY_BUFFER, cached->GetBufferHandle() );
-    glVertexPointer( CoordStride, GL_FLOAT, VertexSize, 0 );
-    glColorPointer( ColorStride, GL_UNSIGNED_BYTE, VertexSize, (GLvoid*) ColorOffset );
+    glVertexPointer( COORD_STRIDE, GL_FLOAT, VERTEX_SIZE, (GLvoid*) COORD_OFFSET );
+    glColorPointer( COLOR_STRIDE, GL_UNSIGNED_BYTE, VERTEX_SIZE, (GLvoid*) COLOR_OFFSET );
 
     if( m_shader != NULL )    // Use shader if applicable
     {
         m_shader->Use();
         glEnableVertexAttribArray( m_shaderAttrib );
-        glVertexAttribPointer( m_shaderAttrib, ShaderStride, GL_FLOAT, GL_FALSE,
-                               VertexSize, (GLvoid*) ShaderOffset );
+        glVertexAttribPointer( m_shaderAttrib, SHADER_STRIDE, GL_FLOAT, GL_FALSE,
+                               VERTEX_SIZE, (GLvoid*) SHADER_OFFSET );
     }
 
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_indicesBuffer );
@@ -252,23 +252,23 @@ void GPU_NONCACHED_MANAGER::EndDrawing()
 
     VERTEX*  vertices       = m_container->GetAllVertices();
     GLfloat* coordinates    = (GLfloat*) ( vertices );
-    GLubyte* colors         = (GLubyte*) ( vertices ) + ColorOffset;
+    GLubyte* colors         = (GLubyte*) ( vertices ) + COLOR_OFFSET;
 
     // Prepare buffers
     glEnableClientState( GL_VERTEX_ARRAY );
     glEnableClientState( GL_COLOR_ARRAY );
 
-    glVertexPointer( CoordStride, GL_FLOAT, VertexSize, coordinates );
-    glColorPointer( ColorStride, GL_UNSIGNED_BYTE, VertexSize, colors );
+    glVertexPointer( COORD_STRIDE, GL_FLOAT, VERTEX_SIZE, coordinates );
+    glColorPointer( COLOR_STRIDE, GL_UNSIGNED_BYTE, VERTEX_SIZE, colors );
 
     if( m_shader != NULL )    // Use shader if applicable
     {
-        GLfloat* shaders = (GLfloat*) ( vertices ) + ShaderOffset / sizeof(GLfloat);
+        GLfloat* shaders = (GLfloat*) ( vertices ) + SHADER_OFFSET / sizeof(GLfloat);
 
         m_shader->Use();
         glEnableVertexAttribArray( m_shaderAttrib );
-        glVertexAttribPointer( m_shaderAttrib, ShaderStride, GL_FLOAT, GL_FALSE,
-                               VertexSize, shaders );
+        glVertexAttribPointer( m_shaderAttrib, SHADER_STRIDE, GL_FLOAT, GL_FALSE,
+                               VERTEX_SIZE, shaders );
     }
 
     glDrawArrays( GL_TRIANGLES, 0, m_container->GetSize() );

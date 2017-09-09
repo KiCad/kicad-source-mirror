@@ -91,17 +91,17 @@ protected:
     typedef std::set<VERTEX_ITEM*> ITEMS;
 
     ///> Stores size & offset of free chunks.
-    FREE_CHUNK_MAP      m_freeChunks;
+    FREE_CHUNK_MAP  m_freeChunks;
 
     ///> Stored VERTEX_ITEMs
-    ITEMS               m_items;
+    ITEMS m_items;
 
     ///> Currently modified item
-    VERTEX_ITEM*        m_item;
+    VERTEX_ITEM* m_item;
 
     ///> Properties of currently modified chunk & item
-    unsigned int        m_chunkSize;
-    unsigned int        m_chunkOffset;
+    unsigned int m_chunkSize;
+    unsigned int m_chunkOffset;
 
     /**
      * Resizes the chunk that stores the current item to the given size. The current item has

@@ -361,9 +361,9 @@ protected:
     /// Stack of transformation matrices, used for Push/PopMatrix
     std::stack<glm::mat4>   m_transformStack;
     /// Currently used color
-    GLubyte                 m_color[ColorStride];
+    GLubyte                 m_color[COLOR_STRIDE];
     /// Currently used shader and its parameters
-    GLfloat                 m_shader[ShaderStride];
+    GLfloat                 m_shader[SHADER_STRIDE];
 
     /// Currently reserved chunk to store vertices
     VERTEX*                 m_reserved;

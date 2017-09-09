@@ -45,7 +45,7 @@ CACHED_CONTAINER_RAM::CACHED_CONTAINER_RAM( unsigned int aSize ) :
     glGenBuffers( 1, &m_verticesBuffer );
     checkGlError( "generating vertices buffer" );
 
-    m_vertices = static_cast<VERTEX*>( malloc( aSize * VertexSize ) );
+    m_vertices = static_cast<VERTEX*>( malloc( aSize * VERTEX_SIZE ) );
 }
 
 
@@ -64,7 +64,7 @@ void CACHED_CONTAINER_RAM::Unmap()
     // Upload vertices coordinates and shader types to GPU memory
     glBindBuffer( GL_ARRAY_BUFFER, m_verticesBuffer );
     checkGlError( "binding vertices buffer" );
-    glBufferData( GL_ARRAY_BUFFER, usedSpace() * VertexSize, m_vertices, GL_STREAM_DRAW );
+    glBufferData( GL_ARRAY_BUFFER, usedSpace() * VERTEX_SIZE, m_vertices, GL_STREAM_DRAW );
     checkGlError( "transferring vertices" );
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
     checkGlError( "unbinding vertices buffer" );
@@ -85,7 +85,7 @@ bool CACHED_CONTAINER_RAM::defragmentResize( unsigned int aNewSize )
     PROF_COUNTER totalTime;
 #endif /* __WXDEBUG__ */
 
-    VERTEX* newBufferMem = static_cast<VERTEX*>( malloc( aNewSize * VertexSize ) );
+    VERTEX* newBufferMem = static_cast<VERTEX*>( malloc( aNewSize * VERTEX_SIZE ) );
 
     if( !newBufferMem )
         return false;

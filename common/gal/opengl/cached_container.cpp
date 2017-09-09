@@ -257,7 +257,7 @@ bool CACHED_CONTAINER::reallocate( unsigned int aSize )
                     (int) m_item, oldChunkOffset, newChunkOffset );
 #endif
         // The item was reallocated, so we have to copy all the old data to the new place
-        memcpy( &m_vertices[newChunkOffset], &m_vertices[m_chunkOffset], itemSize * VertexSize );
+        memcpy( &m_vertices[newChunkOffset], &m_vertices[m_chunkOffset], itemSize * VERTEX_SIZE );
 
         // Free the space used by the previous chunk
         addFreeChunk( m_chunkOffset, m_chunkSize );
@@ -288,7 +288,7 @@ void CACHED_CONTAINER::defragment( VERTEX* aTarget )
         int itemSize      = item->GetSize();
 
         // Move an item to the new container
-        memcpy( &aTarget[newOffset], &m_vertices[itemOffset], itemSize * VertexSize );
+        memcpy( &aTarget[newOffset], &m_vertices[itemOffset], itemSize * VERTEX_SIZE );
 
         // Update new offset
         item->setOffset( newOffset );
@@ -301,7 +301,7 @@ void CACHED_CONTAINER::defragment( VERTEX* aTarget )
     if( m_item->GetSize() > 0 )
     {
         memcpy( &aTarget[newOffset], &m_vertices[m_item->GetOffset()],
-                m_item->GetSize() * VertexSize );
+                m_item->GetSize() * VERTEX_SIZE );
         m_item->setOffset( newOffset );
         m_chunkOffset = newOffset;
     }

@@ -45,7 +45,7 @@ CACHED_CONTAINER_GPU::CACHED_CONTAINER_GPU( unsigned int aSize ) :
 
     glGenBuffers( 1, &m_glBufferHandle );
     glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );
-    glBufferData( GL_ARRAY_BUFFER, m_currentSize * VertexSize, NULL, GL_DYNAMIC_DRAW );
+    glBufferData( GL_ARRAY_BUFFER, m_currentSize * VERTEX_SIZE, NULL, GL_DYNAMIC_DRAW );
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
     checkGlError( "allocating video memory for cached container" );
 }
@@ -120,7 +120,7 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
     assert( eaBuffer == 0 );
 #endif /* __WXDEBUG__ */
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, newBuffer );
-    glBufferData( GL_ELEMENT_ARRAY_BUFFER, aNewSize * VertexSize, NULL, GL_DYNAMIC_DRAW );
+    glBufferData( GL_ELEMENT_ARRAY_BUFFER, aNewSize * VERTEX_SIZE, NULL, GL_DYNAMIC_DRAW );
     checkGlError( "creating buffer during defragmentation" );
 
     ITEMS::iterator it, it_end;
@@ -135,7 +135,7 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
 
         // Move an item to the new container
         glCopyBufferSubData( GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER,
-                itemOffset * VertexSize, newOffset * VertexSize, itemSize * VertexSize );
+                itemOffset * VERTEX_SIZE, newOffset * VERTEX_SIZE, itemSize * VERTEX_SIZE );
 
         // Update new offset
         item->setOffset( newOffset );
@@ -148,8 +148,8 @@ bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
     if( m_item->GetSize() > 0 )
     {
         glCopyBufferSubData( GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER,
-                m_item->GetOffset() * VertexSize, newOffset * VertexSize,
-                m_item->GetSize() * VertexSize );
+                m_item->GetOffset() * VERTEX_SIZE, newOffset * VERTEX_SIZE,
+                m_item->GetSize() * VERTEX_SIZE );
 
         m_item->setOffset( newOffset );
         m_chunkOffset = newOffset;
@@ -217,7 +217,7 @@ bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
     assert( eaBuffer == 0 );
 #endif /* __WXDEBUG__ */
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, newBuffer );
-    glBufferData( GL_ELEMENT_ARRAY_BUFFER, aNewSize * VertexSize, NULL, GL_DYNAMIC_DRAW );
+    glBufferData( GL_ELEMENT_ARRAY_BUFFER, aNewSize * VERTEX_SIZE, NULL, GL_DYNAMIC_DRAW );
     newBufferMem = static_cast<VERTEX*>( glMapBuffer( GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY ) );
     checkGlError( "creating buffer during defragmentation" );
 
