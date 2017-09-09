@@ -64,7 +64,7 @@ void CACHED_CONTAINER_RAM::Unmap()
     // Upload vertices coordinates and shader types to GPU memory
     glBindBuffer( GL_ARRAY_BUFFER, m_verticesBuffer );
     checkGlError( "binding vertices buffer" );
-    glBufferData( GL_ARRAY_BUFFER, usedSpace() * VERTEX_SIZE, m_vertices, GL_STREAM_DRAW );
+    glBufferData( GL_ARRAY_BUFFER, m_maxIndex * VERTEX_SIZE, m_vertices, GL_STREAM_DRAW );
     checkGlError( "transferring vertices" );
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
     checkGlError( "unbinding vertices buffer" );
@@ -110,6 +110,7 @@ bool CACHED_CONTAINER_RAM::defragmentResize( unsigned int aNewSize )
     // Now there is only one big chunk of free memory
     m_freeChunks.clear();
     m_freeChunks.insert( std::make_pair( m_freeSpace, m_currentSize - m_freeSpace ) );
+    m_dirty = true;
 
     return true;
 }

@@ -45,7 +45,7 @@
 using namespace KIGFX;
 
 CACHED_CONTAINER::CACHED_CONTAINER( unsigned int aSize ) :
-    VERTEX_CONTAINER( aSize ), m_item( NULL ), m_chunkSize( 0 ), m_chunkOffset( 0 )
+    VERTEX_CONTAINER( aSize ), m_item( NULL ), m_chunkSize( 0 ), m_chunkOffset( 0 ), m_maxIndex( 0 )
 {
     // In the beginning there is only free space
     m_freeChunks.insert( std::make_pair( aSize, 0 ) );
@@ -84,6 +84,8 @@ void CACHED_CONTAINER::FinishItem()
         // Add the not used memory back to the pool
         addFreeChunk( itemOffset + itemSize, m_chunkSize - itemSize );
         // mergeFreeChunks();   // veery slow and buggy
+
+        m_maxIndex = std::max( itemOffset + itemSize, m_maxIndex );
     }
 
     if( itemSize > 0 )
@@ -189,6 +191,7 @@ void CACHED_CONTAINER::Delete( VERTEX_ITEM* aItem )
 void CACHED_CONTAINER::Clear()
 {
     m_freeSpace = m_currentSize;
+    m_maxIndex = 0;
     m_failed = false;
 
     // Set the size of all the stored VERTEX_ITEMs to 0, so it is clear that they are not held
@@ -305,6 +308,8 @@ void CACHED_CONTAINER::defragment( VERTEX* aTarget )
         m_item->setOffset( newOffset );
         m_chunkOffset = newOffset;
     }
+
+    m_maxIndex = usedSpace();
 }
 
 

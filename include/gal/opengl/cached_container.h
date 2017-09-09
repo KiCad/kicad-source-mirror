@@ -103,6 +103,9 @@ protected:
     unsigned int m_chunkSize;
     unsigned int m_chunkOffset;
 
+    ///> Maximal vertex index number stored in the container
+    unsigned int m_maxIndex;
+
     /**
      * Resizes the chunk that stores the current item to the given size. The current item has
      * its offset adjusted after the call, and the new chunk parameters are stored
