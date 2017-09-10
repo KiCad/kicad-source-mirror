@@ -35,10 +35,6 @@
 #include <hotkeys.h>
 #include <gerbview_frame.h>
 
-// Colors for layers and items
-COLORS_DESIGN_SETTINGS g_ColorsSettings;
-
-
 const wxChar* g_GerberPageSizeList[] = {
     wxT( "GERBER" ),    // index 0: full size page selection, and do not show page limits
     wxT( "GERBER" ),    // index 1: full size page selection, and show page limits

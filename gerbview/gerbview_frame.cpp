@@ -57,6 +57,9 @@ static const wxString   cfgShowNegativeObjects( wxT( "ShowNegativeObjectsOpt" ) 
 static const wxString   cfgShowBorderAndTitleBlock( wxT( "ShowBorderAndTitleBlock" ) );
 
 
+// Colors for layers and items
+COLORS_DESIGN_SETTINGS g_ColorsSettings( FRAME_GERBER );
+
 GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     EDA_DRAW_FRAME( aKiway, aParent, FRAME_GERBER, wxT( "GerbView" ),
         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GERBVIEW_FRAME_NAME )

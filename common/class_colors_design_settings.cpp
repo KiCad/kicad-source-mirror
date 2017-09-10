@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,11 +35,12 @@
  * in Eeschema, Pcbnew and GerbView
  */
 
-/* Initial colors values: optimized for Pcbnew 64 layers.
+/* Initial colors values: optimized for Pcbnew up to 64 layers.
  * The table is not actually used by Eeschema.
  * these values are superseded by config reading
  */
 static const EDA_COLOR_T default_layer_color[] = {
+    // Copper layers
     RED,            YELLOW,         LIGHTMAGENTA,   LIGHTRED,
     CYAN,           GREEN,          BLUE,           DARKGRAY,
     MAGENTA,        LIGHTGRAY,      MAGENTA,        RED,
@@ -50,17 +51,20 @@ static const EDA_COLOR_T default_layer_color[] = {
     MAGENTA,        LIGHTGRAY,      MAGENTA,        RED,
     BROWN,          LIGHTGRAY,      BLUE,           GREEN,
 
-    BLUE,         MAGENTA,
-    LIGHTCYAN,    RED,
-    MAGENTA,      CYAN,
-    BROWN,        MAGENTA,
-    LIGHTGRAY,
-    BLUE,
-    GREEN,        YELLOW,
-    YELLOW,
-    LIGHTMAGENTA,
-    YELLOW,
-    DARKGRAY
+    // tech layers
+    BLUE,         MAGENTA,  // B_Adhes, F_Adhes
+    LIGHTCYAN,    RED,      // B_Paste, F_Paste
+    MAGENTA,      CYAN,     // B_SilkS, F_SilkS
+    BROWN,        MAGENTA,  // B_Mask, F_Mask
+
+    // user layers
+    LIGHTGRAY,    BLUE, GREEN, YELLOW,  // Dwgs_User, Cmts_User, Eco1_User, Eco2_User
+
+    // Special layers
+    YELLOW,                 // Edge_Cuts
+    LIGHTMAGENTA,           // Margin
+    DARKGRAY,     LIGHTGRAY, // B_CrtYd, F_CrtYd,
+    BLUE,         DARKGRAY  // B_Fab, F_Fab
 };
 
 
@@ -86,8 +90,10 @@ static const EDA_COLOR_T default_items_color[] = {
 };
 
 
-COLORS_DESIGN_SETTINGS::COLORS_DESIGN_SETTINGS()
+COLORS_DESIGN_SETTINGS::COLORS_DESIGN_SETTINGS( FRAME_T aFrameType )
 {
+    m_frameType = aFrameType;
+
     for( unsigned src = 0, dst = 0; dst < DIM( m_LayersColors ); ++dst )
     {
         m_LayersColors[dst] = COLOR4D( default_layer_color[src++] );
@@ -105,6 +111,7 @@ COLORS_DESIGN_SETTINGS::COLORS_DESIGN_SETTINGS()
     m_LayersColors[ LAYER_CURSOR ] = WHITE;
     m_LayersColors[ LAYER_AUX_ITEMS ] = WHITE;
     m_LayersColors[ LAYER_WORKSHEET ] = DARKRED;
+    m_LayersColors[ LAYER_GRID ] = DARKGRAY;
 
     setupConfigParams();
 }
@@ -161,31 +168,65 @@ void COLORS_DESIGN_SETTINGS::SetAllColorsAs( COLOR4D aColor )
 void COLORS_DESIGN_SETTINGS::setupConfigParams()
 {
     wxASSERT( DIM( m_LayersColors ) >= PCB_LAYER_ID_COUNT );
-    for( int i = 0;  i<PCB_LAYER_ID_COUNT;  ++i )
-    {
-        wxString vn = wxString::Format(
-                        wxT( "Color4DPCBLayer_%s" ),
-                        LSET::Name( PCB_LAYER_ID( i ) ) );
 
-        Add( vn, LOC_COLOR(i), m_LayersColors[i] );
+    wxString currprefix = GetConfigPrefix();
+
+    switch( m_frameType )
+    {
+    case FRAME_PCB: break;   // no prefix
+
+    case FRAME_PCB_MODULE_EDITOR:
+        SetConfigPrefix( "ModEdit" );
+        break;
+
+    case FRAME_PCB_MODULE_VIEWER:
+    case FRAME_PCB_MODULE_VIEWER_MODAL:
+    case FRAME_PCB_FOOTPRINT_WIZARD_MODAL:
+    case FRAME_PCB_FOOTPRINT_PREVIEW:
+        SetConfigPrefix( "fpview_" );
+        break;
+
+    case FRAME_PCB_DISPLAY3D:
+        SetConfigPrefix( "fp3d_" );
+        break;
+
+    default:
+        break;
     }
 
-    Add( wxT( "Color4DTxtFrontEx" ), ITEM_COLOR( LAYER_MOD_TEXT_FR ), LIGHTGRAY );
-    Add( wxT( "Color4DTxtBackEx" ), ITEM_COLOR( LAYER_MOD_TEXT_BK ), BLUE );
-    Add( wxT( "Color4DTxtInvisEx" ), ITEM_COLOR( LAYER_MOD_TEXT_INVISIBLE ), DARKGRAY );
-    Add( wxT( "Color4DPadBackEx" ), ITEM_COLOR( LAYER_PAD_BK ), GREEN );
-    Add( wxT( "Color4DAnchorEx" ), ITEM_COLOR( LAYER_ANCHOR ), BLUE );
-    Add( wxT( "Color4DPadFrontEx" ), ITEM_COLOR( LAYER_PAD_FR ), RED );
-    Add( wxT( "Color4DViaThruEx" ), ITEM_COLOR( LAYER_VIA_THROUGH ), LIGHTGRAY );
-    Add( wxT( "Color4DViaBBlindEx" ), ITEM_COLOR( LAYER_VIA_BBLIND ), BROWN );
-    Add( wxT( "Color4DViaMicroEx" ), ITEM_COLOR( LAYER_VIA_MICROVIA ), CYAN );
-    Add( wxT( "Color4DNonPlatedEx" ), ITEM_COLOR( LAYER_NON_PLATED ), YELLOW );
-    Add( wxT( "Color4DRatsEx" ), ITEM_COLOR( LAYER_RATSNEST ), WHITE );
-    Add( wxT( "Color4DPCBBackground" ), ITEM_COLOR( LAYER_PCB_BACKGROUND ), BLACK );
-    Add( wxT( "Color4DPCBCursor" ), ITEM_COLOR( LAYER_CURSOR ), WHITE );
-    Add( wxT( "Color4DAuxItems" ), ITEM_COLOR( LAYER_AUX_ITEMS ), WHITE );
-    Add( wxT( "Color4DWorksheet" ), ITEM_COLOR( LAYER_WORKSHEET ), DARKRED );
 
+    wxString fmt( "Color4DPCBLayer_%s" );
+
+    for( int i = 0; i < PCB_LAYER_ID_COUNT;  ++i )
+    {
+        wxString cfgkey = wxString::Format( fmt, LSET::Name( PCB_LAYER_ID( i ) ) );
+        Add( cfgkey, LOC_COLOR(i), m_LayersColors[i] );
+    }
+
+    Add( "Color4DTxtFrontEx", ITEM_COLOR( LAYER_MOD_TEXT_FR ), LIGHTGRAY );
+    Add( "Color4DTxtBackEx", ITEM_COLOR( LAYER_MOD_TEXT_BK ), BLUE );
+    Add( "Color4DTxtInvisEx", ITEM_COLOR( LAYER_MOD_TEXT_INVISIBLE ), DARKGRAY );
+    Add( "Color4DPadBackEx", ITEM_COLOR( LAYER_PAD_BK ), GREEN );
+    Add( "Color4DAnchorEx", ITEM_COLOR( LAYER_ANCHOR ), BLUE );
+    Add( "Color4DPadFrontEx", ITEM_COLOR( LAYER_PAD_FR ), RED );
+    Add( "Color4DNonPlatedEx", ITEM_COLOR( LAYER_NON_PLATED ), YELLOW );
+    Add( "Color4DPCBBackground", ITEM_COLOR( LAYER_PCB_BACKGROUND ), BLACK );
+    Add( "Color4DPCBCursor", ITEM_COLOR( LAYER_CURSOR ), WHITE );
+    Add( "Color4DAuxItems", ITEM_COLOR( LAYER_AUX_ITEMS ), WHITE );
+    Add( "Color4DWorksheet", ITEM_COLOR( LAYER_WORKSHEET ), DARKRED );
+    Add( "Color4DGrid", ITEM_COLOR( LAYER_GRID ), DARKGRAY );
+
+
+    // Add prms only relevant in board editor
+    if( m_frameType == FRAME_PCB )
+    {
+        Add( "Color4DViaThruEx", ITEM_COLOR( LAYER_VIA_THROUGH ), LIGHTGRAY );
+        Add( "Color4DViaBBlindEx", ITEM_COLOR( LAYER_VIA_BBLIND ), BROWN );
+        Add( "Color4DViaMicroEx", ITEM_COLOR( LAYER_VIA_MICROVIA ), CYAN );
+        Add( "Color4DRatsEx", ITEM_COLOR( LAYER_RATSNEST ), WHITE );
+    }
+
+    SetConfigPrefix( currprefix );
 }
 
 void COLORS_DESIGN_SETTINGS::Load( wxConfigBase *aConfig )

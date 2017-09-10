@@ -50,6 +50,9 @@
 
 #include <3d_viewer/eda_3d_viewer.h>
 
+// Colors for layers and items
+COLORS_DESIGN_SETTINGS g_ColorsSettings( FRAME_CVPCB_DISPLAY );
+
 
 BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
     EVT_CLOSE( DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow )
@@ -78,7 +81,6 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, CVPCB_MAINFRA
 
     // Give an icon
     wxIcon  icon;
-
     icon.CopyFromBitmap( KiBitmap( icon_cvpcb_xpm ) );
     SetIcon( icon );
 

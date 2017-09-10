@@ -98,7 +98,8 @@ END_EVENT_TABLE()
 PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
         long aStyle, const wxString & aFrameName ) :
-    EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName )
+    EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
+    m_configSettings( aFrameType )
 {
     m_Pcb                 = NULL;
 

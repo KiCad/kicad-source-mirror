@@ -259,7 +259,7 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL(
     EnableScrolling( false, false );    // otherwise Zoom Auto disables GAL canvas
 
     m_dummyBoard = std::make_unique<BOARD>();
-    m_colorsSettings = std::make_unique<COLORS_DESIGN_SETTINGS>();
+    m_colorsSettings = std::make_unique<COLORS_DESIGN_SETTINGS>( FRAME_PCB_FOOTPRINT_PREVIEW );
 
     UseColorScheme( m_colorsSettings.get() );
     SyncLayersVisibility( &*m_dummyBoard );

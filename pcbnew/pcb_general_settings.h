@@ -39,7 +39,7 @@ enum MAGNETIC_PAD_OPTION_VALUES
 class PCB_GENERAL_SETTINGS : public SETTINGS
 {
 public:
-    PCB_GENERAL_SETTINGS();
+    PCB_GENERAL_SETTINGS( FRAME_T aFrameType );
 
     void Load ( wxConfigBase* aCfg ) override;
     void Save( wxConfigBase* aCfg ) override;
@@ -51,18 +51,20 @@ public:
         return m_colorsSettings;
     }
 
-    bool         m_legacyDrcOn = true;
-    bool         m_legacyAutoDeleteOldTrack = true;
-    bool         m_legacyAlternateTrackPosture = false;
-    bool         m_legacyUse45DegreeTracks = true;  // True to allow horiz, vert. and 45deg only tracks
-    bool         m_use45DegreeGraphicSegments = false;  // True to allow horiz, vert. and 45deg only graphic segments
-    bool         m_legacyUseTwoSegmentTracks = true;
+    FRAME_T m_frameType;
 
-    bool m_editActionChangesTrackWidth = false;
-    bool m_showFilterDialogAfterEachSelection = false;
+    bool    m_legacyDrcOn = true;                   // Not stored, always true when starting pcbnew,
+                                                    // false only on request during routing, and
+                                                    // always for temporary use
+    bool    m_legacyAutoDeleteOldTrack = true;
+    bool    m_legacyUse45DegreeTracks = true;       // True to allow horiz, vert. and 45deg only tracks
+    bool    m_use45DegreeGraphicSegments = false;   // True to allow horiz, vert. and 45deg only graphic segments
+    bool    m_legacyUseTwoSegmentTracks = true;
 
-    MAGNETIC_PAD_OPTION_VALUES          m_magneticPads  = CAPTURE_CURSOR_IN_TRACK_TOOL;
-    MAGNETIC_PAD_OPTION_VALUES          m_magneticTracks = CAPTURE_CURSOR_IN_TRACK_TOOL;
+    bool    m_editActionChangesTrackWidth = false;
+
+    MAGNETIC_PAD_OPTION_VALUES  m_magneticPads  = CAPTURE_CURSOR_IN_TRACK_TOOL;
+    MAGNETIC_PAD_OPTION_VALUES  m_magneticTracks = CAPTURE_CURSOR_IN_TRACK_TOOL;
 };
 
 #endif

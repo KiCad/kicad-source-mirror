@@ -44,9 +44,19 @@ class SETTINGS
         virtual ~SETTINGS()
             {}
 
-        void SetConfigPrefix ( const wxString& aPrefix )
+        /** Set a prefix that will be prepent to the keywords when adding a setting in list
+         * @param aPrefix is the string to prepend to the keywords
+         */
+        void SetConfigPrefix( const wxString& aPrefix )
         {
             m_prefix = aPrefix;
+        }
+
+        /** @return the current prefix
+         */
+        const wxString& GetConfigPrefix()
+        {
+            return m_prefix;
         }
 
         virtual void Load( wxConfigBase *aConfig );
@@ -82,22 +92,22 @@ class SETTINGS
 
         void Add ( const wxString& name, int* aPtr, int aDefaultValue )
         {
-            m_params.push_back ( new PARAM_CFG_INT ( name, aPtr, aDefaultValue ) );
+            m_params.push_back ( new PARAM_CFG_INT ( m_prefix+name, aPtr, aDefaultValue ) );
         }
 
         void Add ( const wxString& name, bool* aPtr, bool aDefaultValue )
         {
-            m_params.push_back ( new PARAM_CFG_BOOL ( name, aPtr, aDefaultValue ) );
+            m_params.push_back ( new PARAM_CFG_BOOL ( m_prefix+name, aPtr, aDefaultValue ) );
         }
 
         void Add ( const wxString& name, KIGFX::COLOR4D* aPtr, KIGFX::COLOR4D aDefaultValue )
         {
-            m_params.push_back ( new PARAM_CFG_SETCOLOR ( name, aPtr, aDefaultValue ) );
+            m_params.push_back ( new PARAM_CFG_SETCOLOR ( m_prefix+name, aPtr, aDefaultValue ) );
         }
 
         void Add ( const wxString& name, KIGFX::COLOR4D* aPtr, EDA_COLOR_T aDefaultValue )
         {
-            m_params.push_back ( new PARAM_CFG_SETCOLOR ( name, aPtr, aDefaultValue ) );
+            m_params.push_back ( new PARAM_CFG_SETCOLOR ( m_prefix+name, aPtr, aDefaultValue ) );
         }
 
 

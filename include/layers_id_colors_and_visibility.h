@@ -195,7 +195,7 @@ enum GAL_LAYER_ID: int
     LAYER_GP_OVERLAY,           ///< general purpose overlay
     LAYER_PCB_BACKGROUND,       ///< PCB background color
     LAYER_CURSOR,               ///< PCB cursor
-    LAYER_AUX_ITEMS,            ///< Auxillary items (guides, rulre, etc)
+    LAYER_AUX_ITEMS,            ///< Auxillary items (guides, rule, etc)
 
     /// This is the end of the layers used for visibility bitmasks in Pcbnew
     /// There can be at most 32 layers above here.

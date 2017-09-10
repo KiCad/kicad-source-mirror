@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,23 +37,22 @@ using KIGFX::COLOR4D;
 
 class wxConfigBase;
 class wxString;
+#include <frame_type.h>
 
 class PARAM_CFG_ARRAY;
 
 /**
  * Class COLORS_DESIGN_SETTINGS
- * is a list of color settings for designs in Eeschema, Pcbnew and GerbView
+ * is a list of color settings for designs in Pcbnew
  */
 class COLORS_DESIGN_SETTINGS : public SETTINGS
 {
 public:
-    // Color options for screen display of the Printed Board and schematic:
-
-    // Common to Eeschema, Pcbnew, GerbView
+    // Color options for screen display of the Printed Board or schematic:
     COLOR4D m_LayersColors[LAYER_ID_COUNT];     ///< Layer colors (tracks and graphic items)
 
 public:
-    COLORS_DESIGN_SETTINGS();
+    COLORS_DESIGN_SETTINGS( FRAME_T aFrameType );
 
     ~COLORS_DESIGN_SETTINGS() override
         {}
@@ -96,6 +95,7 @@ public:
     void SetAllColorsAs( COLOR4D aColor );
 
 private:
+    FRAME_T m_frameType;
 
     void setupConfigParams();
 

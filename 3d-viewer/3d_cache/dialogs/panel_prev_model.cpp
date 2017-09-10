@@ -55,7 +55,7 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager,
             m_dummyBoard->SetColorsSettings( aColors );
         else
         {
-            static COLORS_DESIGN_SETTINGS defaultColors;
+            static COLORS_DESIGN_SETTINGS defaultColors( FRAME_PCB_DISPLAY3D );
             m_dummyBoard->SetColorsSettings( &defaultColors );
         }
 

@@ -555,6 +555,7 @@ void FOOTPRINT_VIEWER_FRAME::ExportSelectedFootprint( wxCommandEvent& event )
 void FOOTPRINT_VIEWER_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
+    m_configSettings.Load( aCfg );  // mainly, load the color config
 }
 
 

@@ -264,7 +264,10 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), font.GetPointSize(), true );
 
+    // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
+    // initialize parameters in m_LayersManager
     LoadSettings( config() );
+
     SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
     GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
     GetScreen()->SetCurItem( NULL );
@@ -498,6 +501,8 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     PCB_BASE_FRAME::LoadSettings( aCfg );
     wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
+    m_configSettings.Load( aCfg );  // mainly, load the color config
+
     // Ensure some params are valid
     BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
 
@@ -513,6 +518,8 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
 void FOOTPRINT_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
+    m_configSettings.Save( aCfg );
+
     PCB_BASE_FRAME::SaveSettings( aCfg );
     wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
 }

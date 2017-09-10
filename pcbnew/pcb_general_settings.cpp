@@ -23,16 +23,21 @@
 
 #include <pcb_general_settings.h>
 
-PCB_GENERAL_SETTINGS::PCB_GENERAL_SETTINGS()
+PCB_GENERAL_SETTINGS::PCB_GENERAL_SETTINGS( FRAME_T aFrameType )
+    : m_colorsSettings( aFrameType )
 {
-    Add( "LegacyDRCOn", &m_legacyDrcOn, true );
-    Add( "LegacyAutoDeleteOldTrack", &m_legacyAutoDeleteOldTrack, true );
-    Add( "LegacyUse45DegreeTracks",&m_legacyUse45DegreeTracks, true);
-    Add( "LegacyUseTwoSegmentTracks", &m_legacyUseTwoSegmentTracks, true);
-    Add( "Use45DegreeGraphicSegments", &m_use45DegreeGraphicSegments, false);
-    Add( "MagneticPads", reinterpret_cast<int*>( &m_magneticPads ), CAPTURE_CURSOR_IN_TRACK_TOOL );
-    Add( "MagneticTracks", reinterpret_cast<int*>( &m_magneticTracks ), CAPTURE_CURSOR_IN_TRACK_TOOL );
-    Add( "EditActionChangesTrackWidth", &m_editActionChangesTrackWidth, false );
+    m_frameType = aFrameType;
+
+    if( m_frameType == FRAME_PCB )
+    {
+        Add( "LegacyAutoDeleteOldTrack", &m_legacyAutoDeleteOldTrack, true );
+        Add( "LegacyUse45DegreeTracks",&m_legacyUse45DegreeTracks, true);
+        Add( "LegacyUseTwoSegmentTracks", &m_legacyUseTwoSegmentTracks, true);
+        Add( "Use45DegreeGraphicSegments", &m_use45DegreeGraphicSegments, false);
+        Add( "MagneticPads", reinterpret_cast<int*>( &m_magneticPads ), CAPTURE_CURSOR_IN_TRACK_TOOL );
+        Add( "MagneticTracks", reinterpret_cast<int*>( &m_magneticTracks ), CAPTURE_CURSOR_IN_TRACK_TOOL );
+        Add( "EditActionChangesTrackWidth", &m_editActionChangesTrackWidth, false );
+    }
 }
 
 void PCB_GENERAL_SETTINGS::Load( wxConfigBase* aCfg )

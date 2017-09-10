@@ -474,9 +474,10 @@ protected:
     /// protected so only friend PCB::IFACE::CreateWindow() can act as sole factory.
     FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
-    PCB_LAYER_WIDGET* m_Layers;
+    PCB_LAYER_WIDGET* m_Layers;     ///< the layer manager
 
-    PARAM_CFG_ARRAY   m_configSettings;         ///< List of footprint editor configuration settings.
+    /// List of footprint editor configuration parameters.
+    PARAM_CFG_ARRAY   m_configParams;
 
     /**
      * Function UpdateTitle

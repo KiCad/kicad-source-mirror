@@ -44,9 +44,6 @@
 
 #include <wx/snglinst.h>
 
-// Colors for layers and items
-COLORS_DESIGN_SETTINGS g_ColorsSettings;
-
 // Constant string definitions for CvPcb
 const wxString EquFileExtension( wxT( "equ" ) );
 
