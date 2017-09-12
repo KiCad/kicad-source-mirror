@@ -634,6 +634,9 @@ void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
 
     if( galCanvas && myframe->IsGalCanvasActive() )
     {
+        if( aId == LAYER_GRID )
+            galCanvas->GetGAL()->SetGridColor( aColor );
+
         KIGFX::VIEW* view = galCanvas->GetView();
         view->GetPainter()->GetSettings()->ImportLegacyColors( &myframe->Settings().Colors() );
         view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );   // useful to update rastnest

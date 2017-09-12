@@ -714,6 +714,12 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 
     PCB_BASE_EDIT_FRAME::UseGalCanvas( aEnable );
 
+    if( aEnable )
+    {
+        COLORS_DESIGN_SETTINGS& cds = Settings().Colors();
+        GetGalCanvas()->GetGAL()->SetGridColor( cds.GetLayerColor( LAYER_GRID ) );
+    }
+
     enableGALSpecificMenus();
 
     // Force colors to be legacy-compatible in case they were changed in GAL
