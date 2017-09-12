@@ -600,10 +600,11 @@ struct ETEXT
     opt_int align;
 
     ETEXT( wxXmlNode* aText );
+
+    /// Calculate text size based on font type and size
+    wxSize ConvertSize() const;
 };
 
-/// Calculate text size based on font type and size;
-wxSize convertTextSize(ETEXT& etext );
 
 /// Eagle thru hol pad
 struct EPAD

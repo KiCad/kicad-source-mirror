@@ -1729,7 +1729,7 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymbolText( std::unique_ptr<LIB_PART>& aPart,
     libtext->SetUnit( aGateNumber );
     libtext->SetPosition( wxPoint( etext.x * EUNIT_TO_MIL, etext.y * EUNIT_TO_MIL ) );
     libtext->SetText( aLibText->GetNodeContent() );
-    libtext->SetTextSize( convertTextSize( etext ) );
+    libtext->SetTextSize( etext.ConvertSize() );
 
     if( etext.ratio )
     {
@@ -1773,8 +1773,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadPlainText( wxXmlNode* aSchText )
         }
     }
 
-    schtext->SetTextSize( convertTextSize( etext ) );
-
+    schtext->SetTextSize( etext.ConvertSize() );
 
     int align = etext.align ? *etext.align : ETEXT::BOTTOM_LEFT;
     int degrees = etext.rot ? etext.rot->degrees : 0;

@@ -220,31 +220,6 @@ static int parseAlignment( const wxString& aAlignment )
 }
 
 
-// convert textsize method.
-wxSize convertTextSize(ETEXT& etext ) {
-
-    wxSize textsize;
-    if(etext.font){
-        wxString font = etext.font.Get();
-        if(font == "vector")
-        {
-            textsize = wxSize( etext.size * EUNIT_TO_MIL, etext.size * EUNIT_TO_MIL );
-        }
-        else if ( font == "fixed")
-        {
-            textsize = wxSize( etext.size * EUNIT_TO_MIL, etext.size * EUNIT_TO_MIL*0.80 );
-        }
-
-    }
-    else
-    {
-        textsize =  wxSize( etext.size * EUNIT_TO_MIL*0.85, etext.size * EUNIT_TO_MIL );
-    }
-    return textsize;
-
-}
-
-
 EWIRE::EWIRE( wxXmlNode* aWire )
 {
     /*
@@ -516,6 +491,37 @@ ETEXT::ETEXT( wxXmlNode* aText )
     opt_string stemp = parseOptionalAttribute<string>( aText, "align" );
 
     align = stemp ? parseAlignment( *stemp ) : DEFAULT_ALIGNMENT;
+}
+
+
+wxSize ETEXT::ConvertSize() const
+{
+    wxSize textsize;
+
+    if( font )
+    {
+        const wxString& fontName = font.CGet();
+
+        if( fontName == "vector" )
+        {
+            textsize = wxSize( size * EUNIT_TO_MIL, size * EUNIT_TO_MIL );
+        }
+        else if( fontName == "fixed" )
+        {
+            textsize = wxSize( size * EUNIT_TO_MIL, size * EUNIT_TO_MIL * 0.80 );
+        }
+        else
+        {
+            wxASSERT( false );
+            textsize = wxSize( size * EUNIT_TO_MIL, size * EUNIT_TO_MIL );
+        }
+    }
+    else
+    {
+        textsize = wxSize( size * EUNIT_TO_MIL * 0.85, size * EUNIT_TO_MIL );
+    }
+
+    return textsize;
 }
 
 
