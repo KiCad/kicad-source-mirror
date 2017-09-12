@@ -315,24 +315,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     {
         delete g_RootSheet;   // Delete the current project.
         g_RootSheet = NULL;   // Force CreateScreens() to build new empty project on load failure.
-        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi;
-
-        // Iterate through the available plugins to determine the file type
-        for( auto pluginType : SCH_IO_MGR::SCH_FILE_T_vector )
-        {
-            pi.set( SCH_IO_MGR::FindPlugin( pluginType ) );
-
-            if( pi && pi->CheckHeader( fullFileName ) )
-                break;  // got the right plugin
-            else
-                pi.set( nullptr );  // do not give a false impression that we have a valid plugin
-        }
+        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
 
         try
         {
-            if( !pi )
-                THROW_IO_ERROR( _( "File format not recognized" ) );
-
             g_RootSheet = pi->Load( fullFileName, &Kiway() );
             m_CurrentSheet->clear();
             m_CurrentSheet->push_back( g_RootSheet );

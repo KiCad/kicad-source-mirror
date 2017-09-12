@@ -71,7 +71,7 @@ const wxString GedaPcbFootprintLibFileExtension( wxT( "fp" ) );
 const wxString SchematicSymbolFileWildcard( _( "KiCad drawing symbol file (*.sym)|*.sym" ) );
 const wxString SchematicLibraryFileWildcard( _( "KiCad component library file (*.lib)|*.lib" ) );
 const wxString ProjectFileWildcard( _( "KiCad project files (*.pro)|*.pro" ) );
-const wxString SchematicFileWildcard( _( "KiCad schematic files (*.sch)|*.sch|Eagle 6.x XML schematic file (*.sch)|*.sch" ) );
+const wxString SchematicFileWildcard( _( "KiCad schematic files (*.sch)|*.sch" ) );
 const wxString EagleSchematicFileWildcard( _( "Eagle XML schematic file (*.sch)|*.sch" ) );
 const wxString EagleFilesWildcard( _( "Eagle XML files (*.sch *.brd)|*.sch;*.brd" ) );
 const wxString NetlistFileWildcard( _( "KiCad netlist files (*.net)|*.net" ) );
