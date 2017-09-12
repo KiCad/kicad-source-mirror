@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 19 2017)
+// C++ code generated with wxFormBuilder (version Mar 22 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -29,6 +29,10 @@ class DIALOG_SHIM;
 #include <wx/statbox.h>
 #include <wx/statline.h>
 #include <wx/listctrl.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/bmpbuttn.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -58,9 +62,10 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public DIALOG_SHIM
 		wxButton* spiceFieldsButton;
 		wxButton* defaultsButton;
 		wxListCtrl* fieldListCtrl;
-		wxButton* addFieldButton;
-		wxButton* deleteFieldButton;
-		wxButton* moveUpButton;
+		wxBitmapButton* moveUpButton;
+		wxBitmapButton* moveDownButton;
+		wxBitmapButton* deleteFieldButton;
+		wxBitmapButton* addFieldButton;
 		wxRadioBox* m_FieldHJustifyCtrl;
 		wxRadioBox* m_FieldVJustifyCtrl;
 		wxCheckBox* showCheckBox;
@@ -93,9 +98,10 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public DIALOG_SHIM
 		virtual void SetInitCmp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnListItemDeselected( wxListEvent& event ) { event.Skip(); }
 		virtual void OnListItemSelected( wxListEvent& event ) { event.Skip(); }
-		virtual void addFieldButtonHandler( wxCommandEvent& event ) { event.Skip(); }
-		virtual void deleteFieldButtonHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void moveUpButtonHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void moveDownButtonHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void deleteFieldButtonHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void addFieldButtonHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void showButtonHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }

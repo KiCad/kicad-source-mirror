@@ -21,9 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file dialog_edit_component_in_schematic.cpp
- */
 
 #include <wx/tooltip.h>
 #include <wx/hyperlink.h>
@@ -45,6 +42,8 @@
 #include <sch_component.h>
 #include <dialog_helpers.h>
 #include <sch_validators.h>
+
+#include <bitmaps.h>
 
 #include <dialog_edit_component_in_schematic_fbp.h>
 #ifdef KICAD_SPICE
@@ -130,6 +129,7 @@ private:
     void addFieldButtonHandler( wxCommandEvent& event ) override;
     void deleteFieldButtonHandler( wxCommandEvent& event ) override;
     void moveUpButtonHandler( wxCommandEvent& event ) override;
+    void moveDownButtonHandler( wxCommandEvent& event ) override;
     void showButtonHandler( wxCommandEvent& event ) override;
     void OnTestChipName( wxCommandEvent& event ) override;
     void OnSelectChipName( wxCommandEvent& event ) override;
@@ -222,6 +222,12 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
 
     wxToolTip::Enable( true );
     stdDialogButtonSizerOK->SetDefault();
+
+    // Configure button logos
+    addFieldButton->SetBitmap( KiBitmap( plus_xpm ) );
+    deleteFieldButton->SetBitmap( KiBitmap( minus_xpm ) );
+    moveUpButton->SetBitmap( KiBitmap( go_up_xpm ) );
+    moveDownButton->SetBitmap( KiBitmap( go_down_xpm ) );
 
     Fit();
 }
@@ -633,6 +639,44 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::moveUpButtonHandler( wxCommandEvent& ev
 
     m_skipCopyFromPanel = true;
     setSelectedFieldNdx( fieldNdx - 1 );
+    m_skipCopyFromPanel = false;
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::moveDownButtonHandler( wxCommandEvent& event )
+{
+    unsigned fieldNdx = getSelectedFieldNdx();
+
+    // Ensure there is at least one field after this one
+    if( fieldNdx >= ( m_FieldsBuf.size() - 1 ) )
+    {
+        return;
+    }
+
+    // The first field which can be moved up is the second user field
+    // so any field which id < MANDATORY_FIELDS cannot be moved down
+    if( fieldNdx < MANDATORY_FIELDS )
+        return;
+
+    if( !copyPanelToSelectedField() )
+        return;
+
+    // swap the fieldNdx field with the one before it, in both the vector
+    // and in the fieldListCtrl
+    SCH_FIELD tmp = m_FieldsBuf[fieldNdx + 1];
+
+    m_FieldsBuf[fieldNdx + 1] = m_FieldsBuf[fieldNdx];
+    setRowItem( fieldNdx + 1, m_FieldsBuf[fieldNdx] );
+    m_FieldsBuf[fieldNdx + 1].SetId( fieldNdx + 1 );
+
+    m_FieldsBuf[fieldNdx] = tmp;
+    setRowItem( fieldNdx, tmp );
+    m_FieldsBuf[fieldNdx].SetId( fieldNdx );
+
+    updateDisplay( );
+
+    m_skipCopyFromPanel = true;
+    setSelectedFieldNdx( fieldNdx + 1 );
     m_skipCopyFromPanel = false;
 }
 
