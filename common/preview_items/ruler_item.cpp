@@ -232,7 +232,7 @@ void RULER_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     auto& gal = *aView->GetGAL();
-    auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
+    auto rs = static_cast<KIGFX::RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
 
     const auto origin = m_geomMgr.GetOrigin();
     const auto end = m_geomMgr.GetEnd();
@@ -240,6 +240,8 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     gal.SetLineWidth( 1.0 );
     gal.SetIsStroke( true );
     gal.SetIsFill( false );
+
+    gal.SetTextMirrored( false );
     gal.SetStrokeColor( rs->GetLayerColor( LAYER_AUX_ITEMS ) );
 
     gal.ResetTextAttributes();
