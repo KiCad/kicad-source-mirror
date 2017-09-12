@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-08 23:51+0200\n"
-"PO-Revision-Date: 2017-09-08 23:50+0200\n"
+"POT-Creation-Date: 2017-09-12 23:05+0200\n"
+"PO-Revision-Date: 2017-09-12 23:08+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -712,7 +712,7 @@ msgstr "File eseguibili ("
 msgid "Select Preferred PDF Browser"
 msgstr "Seleziona visualizzatore PDF preferito"
 
-#: kicad/prjconfig.cpp:87 pcbnew/moduleframe.cpp:815 pcbnew/pcbframe.cpp:1034
+#: kicad/prjconfig.cpp:87 pcbnew/moduleframe.cpp:822 pcbnew/pcbframe.cpp:1040
 #: eeschema/schframe.cpp:1407 cvpcb/cvpcb_mainframe.cpp:756
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
@@ -1387,11 +1387,11 @@ msgstr "Seleziona strato e piazza via passante"
 
 #: pcbnew/onrightclick.cpp:592 pcbnew/router/router_tool.cpp:156
 msgid "Place Blind/Buried Via"
-msgstr "Piazza via coperto/interno"
+msgstr "Piazza via cieco/sepolto"
 
 #: pcbnew/onrightclick.cpp:596 pcbnew/router/router_tool.cpp:178
 msgid "Select Layer and Place Blind/Buried Via"
-msgstr "Seleziona strato e piazza via coperto/interno"
+msgstr "Seleziona strato e piazza via cieco/sepolto"
 
 #: pcbnew/onrightclick.cpp:602 pcbnew/router/router_tool.cpp:191
 #: pcbnew/hotkeys.cpp:110
@@ -3317,34 +3317,34 @@ msgstr "Errore DRC: chiudere quest'area crea un errore DRC con un'altra area"
 msgid "Modify zone properties"
 msgstr "Modifica proprietà della zona"
 
-#: pcbnew/moduleframe.cpp:306 pcbnew/pcbframe.cpp:413 pcbnew/pcbframe.cpp:959
-#: gerbview/gerbview_frame.cpp:145 gerbview/events_called_functions.cpp:398
+#: pcbnew/moduleframe.cpp:309 pcbnew/pcbframe.cpp:413 pcbnew/pcbframe.cpp:965
+#: gerbview/gerbview_frame.cpp:148 gerbview/events_called_functions.cpp:398
 msgid "Visibles"
 msgstr "Visibili"
 
-#: pcbnew/moduleframe.cpp:525
+#: pcbnew/moduleframe.cpp:532
 msgid "Save the changes to the footprint before closing?"
 msgstr "Salvare le modifiche all'impronta prima di chiudere?"
 
-#: pcbnew/moduleframe.cpp:546
+#: pcbnew/moduleframe.cpp:553
 msgid "Library is not set, the footprint could not be saved."
 msgstr "Nessuna libreria selezionata. L'impronta non può esere salvata."
 
-#: pcbnew/moduleframe.cpp:724 pcbnew/hotkeys.cpp:191 pcbnew/pcbframe.cpp:703
-#: pcbnew/modview_frame.cpp:689 cvpcb/class_DisplayFootprintsFrame.cpp:406
+#: pcbnew/moduleframe.cpp:731 pcbnew/hotkeys.cpp:191 pcbnew/pcbframe.cpp:703
+#: pcbnew/modview_frame.cpp:690 cvpcb/class_DisplayFootprintsFrame.cpp:408
 msgid "3D Viewer"
 msgstr "Visualizzatore 3D"
 
-#: pcbnew/moduleframe.cpp:783
+#: pcbnew/moduleframe.cpp:790
 msgid "no active library"
 msgstr "nessuna libreria attiva"
 
-#: pcbnew/moduleframe.cpp:813 pcbnew/hotkeys.cpp:335
+#: pcbnew/moduleframe.cpp:820 pcbnew/hotkeys.cpp:335
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:129
 msgid "Footprint Editor"
 msgstr "Editor impronte"
 
-#: pcbnew/moduleframe.cpp:905 pcbnew/pcbnew_config.cpp:137
+#: pcbnew/moduleframe.cpp:912 pcbnew/pcbnew_config.cpp:137
 #, c-format
 msgid ""
 "Error occurred saving the global footprint library table:\n"
@@ -3355,14 +3355,14 @@ msgstr ""
 "\n"
 "\"%s\""
 
-#: pcbnew/moduleframe.cpp:909 pcbnew/moduleframe.cpp:929
+#: pcbnew/moduleframe.cpp:916 pcbnew/moduleframe.cpp:936
 #: pcbnew/pcbnew_config.cpp:141 pcbnew/pcbnew_config.cpp:163
 #: eeschema/sch_base_frame.cpp:238 eeschema/sch_base_frame.cpp:254
 #: cvpcb/cvpcb_mainframe.cpp:431 cvpcb/cvpcb_mainframe.cpp:451
 msgid "File Save Error"
 msgstr "Errore salvataggio file"
 
-#: pcbnew/moduleframe.cpp:925 pcbnew/pcbnew_config.cpp:159
+#: pcbnew/moduleframe.cpp:932 pcbnew/pcbnew_config.cpp:159
 #, c-format
 msgid ""
 "Error occurred saving project specific footprint library table:\n"
@@ -3724,7 +3724,7 @@ msgstr "Via coperti/interni"
 
 #: pcbnew/class_pcb_layer_widget.cpp:62
 msgid "Show blind or buried vias"
-msgstr "Mostra Via coperti o interni"
+msgstr "Mostra Via ciechi o sepolti"
 
 #: pcbnew/class_pcb_layer_widget.cpp:63 pcbnew/class_track.cpp:1212
 msgid "Micro Via"
@@ -4363,9 +4363,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:157
 msgid "Adds a blind or buried via at the end of currently routed track."
-msgstr ""
-"Aggiunge un via coperto/interno alla fine della pista sbrogliata "
-"correntemente."
+msgstr "Aggiunge un via cieco o sepolto alla fine della pista sbrogliata correntemente."
 
 #: pcbnew/router/router_tool.cpp:163
 msgid "Place Microvia"
@@ -4387,9 +4385,7 @@ msgstr ""
 msgid ""
 "Select a layer, then add a blind or buried via at the end of currently "
 "routed track."
-msgstr ""
-"Seleziona uno strato, poi aggiunge un via coperto/interno alla fine della "
-"pista sbrogliata correntemente."
+msgstr "Seleziona uno strato, poi aggiunge un via cieco o sepolto alla fine della pista sbrogliata correntemente."
 
 #: pcbnew/router/router_tool.cpp:185 pcbnew/hotkeys.cpp:246
 msgid "Custom Track/Via Size"
@@ -4444,9 +4440,7 @@ msgstr "Sbroglio interattivo"
 
 #: pcbnew/router/router_tool.cpp:533
 msgid "Blind/buried vias have to be enabled in the design settings."
-msgstr ""
-"I via coperti/interni devono essere abilitati nelle impostazioni di "
-"progettazione."
+msgstr "I via ciechi/sepolti devono essere abilitati nelle impostazioni di progettazione."
 
 #: pcbnew/router/router_tool.cpp:539
 msgid "Microvias have to be enabled in the design settings."
@@ -4481,35 +4475,35 @@ msgstr "Sbroglia coppia differenziale"
 msgid "The item is locked. Do you want to continue?"
 msgstr "Questo elemento è bloccato. Continuare?"
 
-#: pcbnew/basepcbframe.cpp:164
+#: pcbnew/basepcbframe.cpp:165
 msgid "Error loading project footprint libraries"
 msgstr "Errore durante il caricamento delle librerie impronte del progetto"
 
-#: pcbnew/basepcbframe.cpp:477
+#: pcbnew/basepcbframe.cpp:478
 msgid "Display rectangular coordinates"
 msgstr "Mostra coordinate rettangolari"
 
-#: pcbnew/basepcbframe.cpp:478 pcbnew/tool_pcb.cpp:341
-#: cvpcb/class_DisplayFootprintsFrame.cpp:180
+#: pcbnew/basepcbframe.cpp:479 pcbnew/tool_pcb.cpp:341
+#: cvpcb/class_DisplayFootprintsFrame.cpp:182
 msgid "Display polar coordinates"
 msgstr "Mostra coordinate polari"
 
-#: pcbnew/basepcbframe.cpp:488 pcbnew/tool_pcb.cpp:379
-#: cvpcb/class_DisplayFootprintsFrame.cpp:199
+#: pcbnew/basepcbframe.cpp:489 pcbnew/tool_pcb.cpp:379
+#: cvpcb/class_DisplayFootprintsFrame.cpp:201
 msgid "Show pads in outline mode"
 msgstr "Mostra contorni piazzole"
 
-#: pcbnew/basepcbframe.cpp:489
+#: pcbnew/basepcbframe.cpp:490
 msgid "Show pads in fill mode"
 msgstr "Mostra piazzole in modalità piena"
 
-#: pcbnew/basepcbframe.cpp:849 pcbnew/hotkeys.cpp:160 pcbnew/hotkeys.cpp:162
+#: pcbnew/basepcbframe.cpp:850 pcbnew/hotkeys.cpp:160 pcbnew/hotkeys.cpp:162
 #: common/tool/actions.cpp:36 eeschema/hotkeys.cpp:89 gerbview/hotkeys.cpp:61
 #: pagelayout_editor/hotkeys.cpp:74
 msgid "Zoom Auto"
 msgstr "Inquadra tutto"
 
-#: pcbnew/basepcbframe.cpp:854
+#: pcbnew/basepcbframe.cpp:855
 msgid "Zoom "
 msgstr "Zoom "
 
@@ -4822,11 +4816,11 @@ msgstr "Aggiungi microvia"
 
 #: pcbnew/hotkeys.cpp:107
 msgid "Add Blind/Buried Via"
-msgstr "Aggiungi via coperto/interno"
+msgstr "Aggiungi via cieco/sepolto"
 
 #: pcbnew/hotkeys.cpp:108
 msgid "Select Layer and Add Blind/Buried Via"
-msgstr "Seleziona strato e piazza via coperto/interno"
+msgstr "Seleziona strato e piazza via cieco/sepolto"
 
 #: pcbnew/hotkeys.cpp:111
 msgid "Drag Track Keep Slope"
@@ -5502,7 +5496,7 @@ msgid "Set grid origin"
 msgstr "Imposta origine griglia"
 
 #: pcbnew/tool_modedit.cpp:217 pcbnew/tool_pcb.cpp:338
-#: common/draw_frame.cpp:351 cvpcb/class_DisplayFootprintsFrame.cpp:176
+#: common/draw_frame.cpp:351 cvpcb/class_DisplayFootprintsFrame.cpp:178
 msgid "Hide grid"
 msgstr "Nascondi griglia"
 
@@ -5511,13 +5505,13 @@ msgid "Display Polar Coord ON"
 msgstr "Mostra coordinate polari "
 
 #: pcbnew/tool_modedit.cpp:225 pcbnew/tool_pcb.cpp:344
-#: eeschema/tool_lib.cpp:236 cvpcb/class_DisplayFootprintsFrame.cpp:184
+#: eeschema/tool_lib.cpp:236 cvpcb/class_DisplayFootprintsFrame.cpp:186
 #: gerbview/toolbars_gerber.cpp:232
 msgid "Set units to inches"
 msgstr "Unità in pollici"
 
 #: pcbnew/tool_modedit.cpp:229 pcbnew/tool_pcb.cpp:347
-#: eeschema/tool_lib.cpp:241 cvpcb/class_DisplayFootprintsFrame.cpp:188
+#: eeschema/tool_lib.cpp:241 cvpcb/class_DisplayFootprintsFrame.cpp:190
 #: gerbview/toolbars_gerber.cpp:236
 msgid "Set units to millimeters"
 msgstr "Unità in millimetri"
@@ -6397,11 +6391,11 @@ msgstr ""
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Il file di salvataggio automatico \"%s\" non può essere rimosso!"
 
-#: pcbnew/pcbframe.cpp:1038
+#: pcbnew/pcbframe.cpp:1044
 msgid " [new file]"
 msgstr " [nuovo file]"
 
-#: pcbnew/pcbframe.cpp:1178
+#: pcbnew/pcbframe.cpp:1184
 msgid ""
 "Cannot update the PCB, because the Kicad is opened in stand-alone mode. In "
 "order to create/update PCBs from schematics, you need to launch Kicad shell "
@@ -6442,11 +6436,11 @@ msgstr ""
 "\n"
 "Errore %s."
 
-#: pcbnew/modview_frame.cpp:743 eeschema/viewlib_frame.cpp:113
+#: pcbnew/modview_frame.cpp:744 eeschema/viewlib_frame.cpp:113
 msgid "Library Browser"
 msgstr "Esploratore librerie"
 
-#: pcbnew/modview_frame.cpp:746 eeschema/libedit.cpp:59
+#: pcbnew/modview_frame.cpp:747 eeschema/libedit.cpp:59
 msgid "no library selected"
 msgstr "nessuna libreria selezionata"
 
@@ -6954,7 +6948,7 @@ msgstr "Zona (%08lX) [%s] su %s"
 #: pcbnew/class_track.cpp:181
 #, c-format
 msgid "Blind/Buried Via %s, net[%s] (%d) on layers %s/%s"
-msgstr "Via coperto/interno %s, collegamento[%s] (%d) su strati %s/%s"
+msgstr "Via cieco/sepolto %s, collegamento[%s] (%d) su strati %s/%s"
 
 #: pcbnew/class_track.cpp:184
 #, c-format
@@ -7008,7 +7002,7 @@ msgstr "Zona"
 
 #: pcbnew/class_track.cpp:1217
 msgid "Blind/Buried Via"
-msgstr "Via coperto/interno"
+msgstr "Via cieco/sepolto"
 
 #: pcbnew/class_track.cpp:1242 pcbnew/dialogs/dialog_layers_setup_base.cpp:94
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:316
@@ -7089,7 +7083,7 @@ msgid "Enable design rule checking"
 msgstr "Abilita controllo regole"
 
 #: pcbnew/tool_pcb.cpp:352 eeschema/tool_sch.cpp:293 eeschema/tool_lib.cpp:246
-#: cvpcb/class_DisplayFootprintsFrame.cpp:193 gerbview/toolbars_gerber.cpp:241
+#: cvpcb/class_DisplayFootprintsFrame.cpp:195 gerbview/toolbars_gerber.cpp:241
 msgid "Change cursor shape"
 msgstr "Cambia dimensione puntatore"
 
@@ -11793,7 +11787,7 @@ msgstr "Foro via minimo"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:227
 msgid "Allow blind/buried vias"
-msgstr "Consenti via coperti/interni"
+msgstr "Consenti via ciechi/sepolti"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:236
 msgid "Allow micro vias (uVias)"
@@ -12437,7 +12431,7 @@ msgstr "Micro"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:220
 msgid "Blind/buried"
-msgstr "Coperto/interno"
+msgstr "Cieco/sepolto"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:231
 msgid "Start layer:"
@@ -12781,7 +12775,7 @@ msgid "Footprints:"
 msgstr "Impronte:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:67
-#: cvpcb/class_DisplayFootprintsFrame.cpp:268
+#: cvpcb/class_DisplayFootprintsFrame.cpp:270
 msgid "Show outlines in sketch mode"
 msgstr "Mostra contorni in modalità schizzo"
 
@@ -22944,11 +22938,11 @@ msgstr ""
 msgid "Configuration Error"
 msgstr "Errore di configurazione"
 
-#: cvpcb/cvpcb.cpp:54
+#: cvpcb/cvpcb.cpp:51
 msgid "Component/footprint equ files (*.equ)|*.equ"
 msgstr "File equivalenze componenti/impronte (*.equ)|*.equ"
 
-#: cvpcb/cvpcb.cpp:166
+#: cvpcb/cvpcb.cpp:163
 msgid ""
 "You have run CvPcb for the first time using the new footprint library table "
 "method for finding footprints.  CvPcb has either copied the default table or "
@@ -22964,7 +22958,7 @@ msgstr ""
 "impronte non incluse in KiCad. Consultare la sezione \"Tabella librerie "
 "impronte\" della documentazione di CvPcb per ulteriori informazioni."
 
-#: cvpcb/cvpcb.cpp:181
+#: cvpcb/cvpcb.cpp:178
 msgid "An error occurred attempting to load the global footprint library table"
 msgstr "Errore durante il caricamento della tabella librerie impronte globale"
 
@@ -23065,65 +23059,65 @@ msgstr ""
 msgid "Footprint association sent to Eeschema"
 msgstr "Associazione impronte inviata a Eeschema"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:73
+#: cvpcb/class_DisplayFootprintsFrame.cpp:76
 msgid "Footprint Viewer"
 msgstr "Visualizzatore impronte"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:203
+#: cvpcb/class_DisplayFootprintsFrame.cpp:205
 msgid "Show texts in line mode"
 msgstr "Mostra testo in modalità linea"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:207
+#: cvpcb/class_DisplayFootprintsFrame.cpp:209
 msgid "Show outlines in line mode"
 msgstr "Mostra contorni in modalità linea"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:222
+#: cvpcb/class_DisplayFootprintsFrame.cpp:224
 msgid "Display options"
 msgstr "Opzioni schermo"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:227
+#: cvpcb/class_DisplayFootprintsFrame.cpp:229
 msgid "Zoom in (F1)"
 msgstr "Ingrandisci (F1)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:230
+#: cvpcb/class_DisplayFootprintsFrame.cpp:232
 msgid "Zoom out (F2)"
 msgstr "Rimpicciolisci (F2)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:233
+#: cvpcb/class_DisplayFootprintsFrame.cpp:235
 msgid "Redraw view (F3)"
 msgstr "Aggiorna vista (F3)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:236
+#: cvpcb/class_DisplayFootprintsFrame.cpp:238
 msgid "Zoom auto (Home)"
 msgstr "Inquadra tutto (Home)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:240
+#: cvpcb/class_DisplayFootprintsFrame.cpp:242
 msgid "3D Display (Alt+3)"
 msgstr "Schermo 3D (Alt+3)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:252
+#: cvpcb/class_DisplayFootprintsFrame.cpp:254
 msgid "Show texts in filled mode"
 msgstr "Mostra testo in modalità piena"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:253
+#: cvpcb/class_DisplayFootprintsFrame.cpp:255
 msgid "Show texts in sketch mode"
 msgstr "Mostra testo in modalità schizzo"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:267
+#: cvpcb/class_DisplayFootprintsFrame.cpp:269
 msgid "Show outlines in filled mode"
 msgstr "Mostra contorni in modalità piena"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:478
+#: cvpcb/class_DisplayFootprintsFrame.cpp:480
 #, c-format
 msgid "Footprint '%s' not found"
 msgstr "Impronta \"%s\" non trovata"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:494
+#: cvpcb/class_DisplayFootprintsFrame.cpp:496
 #, c-format
 msgid "Footprint: %s"
 msgstr "Impronta: %s"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:507
+#: cvpcb/class_DisplayFootprintsFrame.cpp:509
 #, c-format
 msgid "Lib: %s"
 msgstr "Lib: %s"
@@ -24453,25 +24447,25 @@ msgstr "Apri il manuale di GerbView"
 msgid "&Miscellaneous"
 msgstr "&Miscellanea"
 
-#: gerbview/gerbview_frame.cpp:513
+#: gerbview/gerbview_frame.cpp:516
 msgid "D Codes"
 msgstr "Codici D"
 
-#: gerbview/gerbview_frame.cpp:532
+#: gerbview/gerbview_frame.cpp:535
 #, c-format
 msgid "Drawing layer %d not in use"
 msgstr "Strato grafico %d non in uso"
 
-#: gerbview/gerbview_frame.cpp:547
+#: gerbview/gerbview_frame.cpp:550
 msgid "(with X2 attributes)"
 msgstr "(con attributi X2)"
 
-#: gerbview/gerbview_frame.cpp:555
+#: gerbview/gerbview_frame.cpp:558
 #, c-format
 msgid "Image name: '%s'  Layer name: '%s'"
 msgstr "Nome immagine: \"%s\"  Nome strato: \"%s\""
 
-#: gerbview/gerbview_frame.cpp:569
+#: gerbview/gerbview_frame.cpp:572
 msgid "X2 attr"
 msgstr "Attr X2"
 
