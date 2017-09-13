@@ -155,22 +155,23 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         wxLongLong  timeStamp   = wxGetLocalTimeMillis();
         double      timeDiff    = timeStamp.ToDouble() - m_timeStamp.ToDouble();
         int         rotation    = aEvent.GetWheelRotation();
-        double      zoomScale;
+        double      zoomScale = 1.0;
 
 #ifdef __WXMAC__
-        // The following is to support Apple pointer devices (MagicMouse &
-        // Macbook touchpad), which send events more frequently, but with smaller
-        // wheel rotation.
-        //
-        // It should not break other platforms, but I prefer to be safe than
-        // sorry. If you find a device that behaves in the same way on another
-        // platform, feel free to remove #ifdef directives.
-        if( timeDiff > 0 && timeDiff < 100 && std::abs( rotation ) < 20 )
-        {
-            aEvent.Skip();
-            return;
-        }
-#endif
+        // On Apple pointer devices, wheel events occur frequently and with
+        // smaller rotation values.  For those devices, let's handle zoom
+        // based on the rotation amount rather than the time difference.
+
+        // Unused
+        ( void )timeDiff;
+
+        rotation = ( rotation > 0 ) ? std::min( rotation , 100 )
+                                    : std::max( rotation , -100 );
+
+        double dscale = rotation * 0.01;
+        zoomScale = ( rotation > 0 ) ? (1 + dscale)  : 1/(1 - dscale);
+
+#else
 
         m_timeStamp = timeStamp;
 
@@ -186,6 +187,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         {
             zoomScale = ( rotation > 0 ) ? 1.05 : 1/1.05;
         }
+#endif
 
         if( IsCursorWarpingEnabled() )
         {
