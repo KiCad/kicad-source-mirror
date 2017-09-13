@@ -611,6 +611,8 @@ void PGM_BASE::loadCommonSettings()
     m_help_size.y = 400;
     m_iconsScale  = 1.0;
 
+    // This only effect the first time KiCad is run.  The user's setting will be used for all
+    // subsequent runs.  Menu icons are off by default on OSX and on for all other platforms.
 #if defined( __WXMAC__ )
     m_useIconsInMenus = false;
 #else
@@ -618,7 +620,7 @@ void PGM_BASE::loadCommonSettings()
 #endif
 
     m_common_settings->Read( showEnvVarWarningDialog, &m_show_env_var_dialog );
-    m_common_settings->Read( entryUseIconsInMenus, &m_useIconsInMenus, true );
+    m_common_settings->Read( entryUseIconsInMenus, &m_useIconsInMenus, m_useIconsInMenus );
 
     m_editor_name = m_common_settings->Read( wxT( "Editor" ) );
 
