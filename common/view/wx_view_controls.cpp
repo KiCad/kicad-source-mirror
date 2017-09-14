@@ -63,6 +63,14 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onLeave ), NULL, this );
     m_parentPanel->Connect( wxEVT_SCROLLWIN_THUMBTRACK,
                             wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
+    m_parentPanel->Connect( wxEVT_SCROLLWIN_LINEUP,
+                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
+    m_parentPanel->Connect( wxEVT_SCROLLWIN_LINEDOWN,
+                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
+    m_parentPanel->Connect( wxEVT_SCROLLWIN_PAGEUP,
+                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
+    m_parentPanel->Connect( wxEVT_SCROLLWIN_PAGEDOWN,
+                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
 
     m_panTimer.SetOwner( this );
     this->Connect( wxEVT_TIMER,
@@ -335,15 +343,52 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
 
 void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
 {
-    VECTOR2D center = m_view->GetCenter();
-    const BOX2I& boundary = m_view->GetBoundary();
+    const double linePanDelta = 0.05;
+    const double pagePanDelta = 0.5;
 
-    if( aEvent.GetOrientation() == wxHORIZONTAL )
-        center.x = boundary.GetLeft() + aEvent.GetPosition() / m_scrollScale.x;
-    else if( aEvent.GetOrientation() == wxVERTICAL )
-        center.y = boundary.GetTop() + aEvent.GetPosition() / m_scrollScale.y;
+    int type = aEvent.GetEventType();
+    int dir = aEvent.GetOrientation();
 
-    m_view->SetCenter( center );
+    if( type == wxEVT_SCROLLWIN_THUMBTRACK )
+    {
+        VECTOR2D center = m_view->GetCenter();
+        const BOX2I& boundary = m_view->GetBoundary();
+
+        if( dir == wxHORIZONTAL )
+            center.x = boundary.GetLeft() + aEvent.GetPosition() / m_scrollScale.x;
+        else
+            center.y = boundary.GetTop() + aEvent.GetPosition() / m_scrollScale.y;
+
+        m_view->SetCenter( center );
+    }
+    else
+    {
+        double dist = 0;
+
+        if( type == wxEVT_SCROLLWIN_PAGEUP )
+            dist = pagePanDelta;
+        else if( type == wxEVT_SCROLLWIN_PAGEDOWN )
+            dist = -pagePanDelta;
+        else if( type == wxEVT_SCROLLWIN_LINEUP )
+            dist = linePanDelta;
+        else if( type == wxEVT_SCROLLWIN_LINEDOWN )
+            dist = -linePanDelta;
+
+        VECTOR2D scroll = m_view->ToWorld( m_view->GetScreenPixelSize(), false ) * dist;
+
+        double scrollX = 0.0;
+        double scrollY = 0.0;
+
+        if ( dir == wxHORIZONTAL )
+            scrollX = -scroll.x;
+        else
+            scrollY = -scroll.y;
+
+        VECTOR2D delta( scrollX, scrollY );
+
+        m_view->SetCenter( m_view->GetCenter() + delta );
+    }
+
     m_parentPanel->Refresh();
 }
 
