@@ -36,8 +36,8 @@ namespace KIGFX
      */
     enum class GRID_STYLE
     {
-        LINES,      ///< Use lines for the grid
         DOTS,       ///< Use dots for the grid
+        LINES,      ///< Use lines for the grid
         SMALL_CROSS ///< Use small cross instead of dots for the grid
     };
 
