@@ -120,8 +120,8 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     Connect( wxEVT_ENTER_WINDOW,    wxMouseEventHandler( OPENGL_GAL::skipMouseEvent ) );
 #endif
 
-    SetSize( aParent->GetSize() );
-    screenSize = VECTOR2I( aParent->GetSize() );
+    SetSize( aParent->GetClientSize() );
+    screenSize = VECTOR2I( aParent->GetClientSize() );
 
     // Grid color settings are different in Cairo and OpenGL
     SetGridColor( COLOR4D( 0.8, 0.8, 0.8, 0.1 ) );

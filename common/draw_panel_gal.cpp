@@ -71,12 +71,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     SwitchBackend( aGalType );
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 
-// Scrollbars broken in GAL on OSX
-#ifdef __WXMAC__
-    ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
-#else
     ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
-#endif
     EnableScrolling( false, false );    // otherwise Zoom Auto disables GAL canvas
 
     m_view = new KIGFX::VIEW( true );
@@ -169,10 +164,7 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     m_drawing = true;
     KIGFX::RENDER_SETTINGS* settings = static_cast<KIGFX::RENDER_SETTINGS*>( m_painter->GetSettings() );
 
-// Scrollbars broken in GAL on OSX
-#ifndef __WXMAC__
     m_viewControls->UpdateScrollbars();
-#endif
 
     m_view->UpdateItems();
 
@@ -222,7 +214,8 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
 void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 {
-    m_gal->ResizeScreen( aEvent.GetSize().x, aEvent.GetSize().y );
+    wxSize clientSize = GetClientSize();
+    m_gal->ResizeScreen( clientSize.x, clientSize.y );
     m_view->MarkTargetDirty( KIGFX::TARGET_CACHED );
     m_view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 }
