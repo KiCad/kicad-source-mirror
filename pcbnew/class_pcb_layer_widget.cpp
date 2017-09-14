@@ -614,6 +614,8 @@ void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal 
 
     brd->SetVisibleLayers( visibleLayers );
 
+    myframe->OnModify();
+
     EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
 
     if( galCanvas )
