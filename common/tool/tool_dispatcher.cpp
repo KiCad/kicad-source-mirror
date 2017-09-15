@@ -323,9 +323,30 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
     if( evt )
         m_toolMgr->ProcessEvent( *evt );
-    else
-        // pass the event to the GUI, it might still be interested in it
+
+    // pass the event to the GUI, it might still be interested in it
+#ifdef __APPLE__
+    // On OS X, key events are always meant to be caught.  An uncaught key event is assumed
+    // to be a user input error by OS X (as they are pressing keys in a context where nothing
+    // is there to catch the event).  This annoyingly makes OS X beep and/or flash the screen
+    // in pcbnew and the footprint editor any time a hotkey is used.  The correct procedure is
+    // to NOT pass key events to the GUI under OS X.
+
+    if( type != wxEVT_CHAR )
         aEvent.Skip();
+
+#elif defined ( __WINDOWS__ )
+    // On Windows, mouse wheel event and some keys event (PAGE UP, PAGE DOWN, ARROW KEYS) are previoulsy
+    // called, and calling aEvent.Skip() calls default handler for these specific keys equivalent to move
+    // the thumbtrack cursor.
+    // TODO: see a better filtering could be just mouse wheel and these special keys only.
+
+    if( !evt )
+        aEvent.Skip();
+#else
+    // on Linux, the event must be passed to the GUI
+    aEvent.Skip();
+#endif
 
     updateUI();
 }
