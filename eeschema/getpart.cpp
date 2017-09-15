@@ -45,6 +45,7 @@
 #include <libeditframe.h>
 #include <viewlib_frame.h>
 #include <eeschema_id.h>
+#include <symbol_lib_table.h>
 
 #include <dialog_choose_component.h>
 #include <cmp_tree_model_adapter.h>
@@ -53,7 +54,7 @@
 
 SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowser(
         const SCHLIB_FILTER* aFilter,
-        LIB_ALIAS* aPreselectedAlias,
+        const LIB_ID& aPreselectedLibId,
         int aUnit, int aConvert )
 {
     // Close any open non-modal Lib browser, and open a new one, in "modal" mode:
@@ -67,10 +68,10 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowse
     if( aFilter )
         viewlibFrame->SetFilter( aFilter );
 
-    if( aPreselectedAlias )
+    if( aPreselectedLibId.IsValid() )
     {
-        viewlibFrame->SetSelectedLibrary( aPreselectedAlias->GetLibraryName() );
-        viewlibFrame->SetSelectedComponent( aPreselectedAlias->GetName() );
+        viewlibFrame->SetSelectedLibrary( aPreselectedLibId.GetLibNickname() );
+        viewlibFrame->SetSelectedComponent( aPreselectedLibId.GetLibItemName() );
     }
 
     viewlibFrame->SetUnitAndConvert( aUnit, aConvert );
@@ -100,8 +101,8 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
         const wxString&                     aHighlight,
         bool                                aAllowFields )
 {
-    wxString        dialogTitle;
-    PART_LIBS*      libs = Prj().SchLibs();
+    wxString          dialogTitle;
+    SYMBOL_LIB_TABLE* libs = Prj().SchSymbolLibTable();
 
     auto adapter( CMP_TREE_MODEL_ADAPTER::Create( libs ) );
     bool loaded = false;
@@ -112,12 +113,10 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
 
         for( unsigned ii = 0; ii < liblist.GetCount(); ii++ )
         {
-            PART_LIB* currLibrary = libs->FindLibrary( liblist[ii] );
-
-            if( currLibrary )
+            if( libs->HasLibrary( liblist[ii] ) )
             {
                 loaded = true;
-                adapter->AddLibrary( *currLibrary );
+                adapter->AddLibrary( liblist[ii] );
             }
         }
 
@@ -126,23 +125,41 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
 
     }
 
-
     if( !aHistoryList.empty() )
     {
-        wxArrayString history_list;
+        std::vector< LIB_ALIAS* > history_list;
 
         for( auto const& i : aHistoryList )
-            history_list.push_back( i.Name );
+        {
+            LIB_ALIAS* alias = nullptr;
 
-        adapter->AddAliasList( "-- " + _( "History" ) + " --", history_list, NULL );
-        adapter->SetPreselectNode( aHistoryList[0].Name, aHistoryList[0].Unit );
+            try
+            {
+                alias = libs->LoadSymbol( i.LibNickname, i.Name );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                wxLogError( wxString::Format( _( "Error occurred loading symbol %s from library %s."
+                                                 "\n\n%s" ), i.Name, i.LibNickname, ioe.What() ) );
+                continue;
+            }
+
+            if( alias )
+                history_list.push_back( alias );
+        }
+
+        adapter->AddAliasList( "-- " + _( "History" ) + " --", history_list );
+        adapter->SetPreselectNode( LIB_ID( aHistoryList[0].LibNickname, aHistoryList[0].Name ),
+                                   aHistoryList[0].Unit );
     }
+
+    std::vector< wxString > libNicknames = libs->GetLogicalLibs();
 
     if( !loaded )
     {
-        for( PART_LIB& lib : *libs )
+        for( auto nickname : libNicknames )
         {
-            adapter->AddLibrary( lib );
+            adapter->AddLibrary( nickname );
         }
     }
 
@@ -157,21 +174,19 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
         return COMPONENT_SELECTION();
 
     COMPONENT_SELECTION sel;
-    LIB_ALIAS* const alias = dlg.GetSelectedAlias( &sel.Unit );
+    LIB_ID id = dlg.GetSelectedLibId( &sel.Unit );
 
-    if( alias == nullptr )      // Dialog closed by OK button, but no symbol selected
+    if( !id.IsValid() )      // Dialog closed by OK button, but no symbol selected
         return COMPONENT_SELECTION();
 
     if( sel.Unit == 0 )
         sel.Unit = 1;
 
     sel.Fields = dlg.GetFields();
-
-    if ( alias )
-        sel.Name = alias->GetName();
+    sel.Name = id.GetLibItemName();
 
     if( dlg.IsExternalBrowserSelected() )   // User requested component browser.
-        sel = SelectComponentFromLibBrowser( aFilter, alias, sel.Unit, sel.Convert );
+        sel = SelectComponentFromLibBrowser( aFilter, id, sel.Unit, sel.Convert );
 
     if( !sel.Name.empty() )
     {

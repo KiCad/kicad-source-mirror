@@ -60,14 +60,18 @@ class SCH_BASE_FRAME;
  * for thorough documentation. A simple example usage follows:
  *
  *     // Create the adapter class
- *     auto adapter( CMP_TREE_MODEL_ADAPTER::Create( Prj().SchLibs() ) );
+ *     auto adapter( CMP_TREE_MODEL_ADAPTER::Create( Prj().SchSymbolLibTable() ) );
  *
  *     // Perform any configuration of adapter properties here
- *     adapter->SetPreselectNode( "TL072", 2 );
+ *     adapter->SetPreselectNode( "LIB_NICKNAME", "SYMBO_NAME", 2 );
  *
- *     // Initialize model from PART_LIBs
- *     for( PART_LIB& lib: *libs )
- *         adapter->AddLibrary( lib );
+ *     // Initialize model from #SYMBOL_LIB_TABLE
+ *     libNicknames = libs->GetLogicalLibs();
+ *
+ *     for( auto nickname : libNicknames )
+ *     {
+ *         adapter->AddLibrary( nickname );
+ *     }
  *
  *     // Create and display dialog
  *     DIALOG_CHOOSE_COMPONENT dlg( this, title, adapter, 1 );
@@ -77,8 +81,8 @@ class SCH_BASE_FRAME;
  *     if( selected )
  *     {
  *         int unit;
- *         LIB_ALIAS* alias = dlg.GetSelectedAlias( &unit );
- *         do_something( alias, unit );
+ *         #LIB_ID id = dlg.GetSelectedAlias( &unit );
+ *         do_something( id, unit );
  *     }
  *
  */
@@ -111,9 +115,9 @@ public:
      * with whatever default is desired (usually 1).
      *
      * @param aUnit if not NULL, the selected unit is filled in here.
-     * @return the alias that has been selected, or NULL if there is none.
+     * @return the #LIB_ID of the symbol that has been selected.
      */
-    LIB_ALIAS* GetSelectedAlias( int* aUnit = nullptr ) const;
+    LIB_ID GetSelectedLibId( int* aUnit = nullptr ) const;
 
     /**
      * Get a list of fields edited by the user.
@@ -159,21 +163,21 @@ protected:
     void OnComponentSelected( wxCommandEvent& aEvent );
 
     /**
-     * Look up the footprint for a given alias and display it.
+     * Look up the footprint for a given symbol specified in the #LIB_ID and display it.
      */
-    void ShowFootprintFor( LIB_ALIAS* aAlias );
+    void ShowFootprintFor( LIB_ID const& aLibId );
 
     /**
      * Display the given footprint by name.
      */
-    void ShowFootprint( wxString const& aName );
+    void ShowFootprint( wxString const& aFootprint );
 
     /**
      * Populate the footprint selector for a given alias.
      *
-     * @param aAlias alias, or null to clear
+     * @param aLibId the #LIB_ID of the selection or invalid to clear
      */
-    void PopulateFootprintSelector( LIB_ALIAS* aAlias );
+    void PopulateFootprintSelector( LIB_ID const& aLibId );
 
     /**
      * Display a given component into the schematic symbol preview.

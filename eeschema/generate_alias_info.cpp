@@ -21,6 +21,9 @@
 #include <generate_alias_info.h>
 #include <kicad_string.h>
 #include <template_fieldnames.h>
+#include <class_libentry.h>
+#include <symbol_lib_table.h>
+
 
 static const wxString DescriptionFormat =
     "<b>__NAME__</b>"
@@ -45,13 +48,17 @@ static const wxString DatasheetLinkFormat = "<a href=\"__VALUE__\">__VALUE__</a>
 class ALIAS_INFO_GENERATOR
 {
     wxString m_html;
-    LIB_ALIAS const * m_part;
+    SYMBOL_LIB_TABLE* m_sym_lib_table;
+    LIB_ID const m_lib_id;
+    LIB_ALIAS* m_alias;
     int m_unit;
 
 public:
-    ALIAS_INFO_GENERATOR( LIB_ALIAS const * aAlias, int aUnit )
+    ALIAS_INFO_GENERATOR( SYMBOL_LIB_TABLE* aSymbolLibTable, LIB_ID const& aLibId, int aUnit )
         : m_html( DescriptionFormat ),
-          m_part( aAlias ),
+          m_sym_lib_table( aSymbolLibTable ),
+          m_lib_id( aLibId ),
+          m_alias( nullptr ),
           m_unit( aUnit )
     { }
 
@@ -60,11 +67,33 @@ public:
      */
     void GenerateHtml()
     {
-        SetHtmlName();
-        SetHtmlAliasOf();
-        SetHtmlDesc();
-        SetHtmlKeywords();
-        SetHtmlFieldTable();
+        wxCHECK_RET( m_sym_lib_table, "Symbol library table pointer is not valid" );
+
+        if( !m_lib_id.IsValid() )
+            return;
+
+        try
+        {
+            m_alias = const_cast< LIB_ALIAS* >( m_sym_lib_table->LoadSymbol( m_lib_id ) );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxLogError( wxString::Format( _( "Error occurred loading symbol %s from library %s."
+                                             "\n\n%s" ),
+                                          m_lib_id.GetLibItemName().wx_str(),
+                                          m_lib_id.GetLibNickname().wx_str(),
+                                          ioe.What() ) );
+            return;
+        }
+
+        if( m_alias )
+        {
+            SetHtmlName();
+            SetHtmlAliasOf();
+            SetHtmlDesc();
+            SetHtmlKeywords();
+            SetHtmlFieldTable();
+        }
     }
 
     /**
@@ -78,13 +107,13 @@ public:
 protected:
     void SetHtmlName()
     {
-        m_html.Replace( "__NAME__", EscapedHTML( m_part->GetName() ) );
+        m_html.Replace( "__NAME__", EscapedHTML( m_alias->GetName() ) );
     }
 
 
     void SetHtmlAliasOf()
     {
-        if( m_part->IsRoot() )
+        if( m_alias->IsRoot() )
         {
             m_html.Replace( "__ALIASOF__", wxEmptyString );
         }
@@ -93,7 +122,7 @@ protected:
             wxString root_name = _( "Unknown" );
             wxString root_desc = "";
 
-            LIB_PART* root = m_part->GetPart();
+            LIB_PART* root = m_alias->GetPart();
             LIB_ALIAS* root_alias = root ? root->GetAlias( 0 ) : nullptr;
 
             if( root )
@@ -111,7 +140,7 @@ protected:
 
     void SetHtmlDesc()
     {
-        wxString raw_desc = m_part->GetDescription();
+        wxString raw_desc = m_alias->GetDescription();
 
         m_html.Replace( "__DESC__", wxString::Format( DescFormat, EscapedHTML( raw_desc ) ) );
     }
@@ -119,7 +148,7 @@ protected:
 
     void SetHtmlKeywords()
     {
-        wxString keywords = m_part->GetKeyWords();
+        wxString keywords = m_alias->GetKeyWords();
 
         if( keywords.empty() )
             m_html.Replace( "__KEY__", wxEmptyString );
@@ -159,7 +188,7 @@ protected:
     {
         wxString fieldtable;
         LIB_FIELDS fields;
-        m_part->GetPart()->GetFields( fields );
+        m_alias->GetPart()->GetFields( fields );
 
         for( auto const & field: fields )
         {
@@ -171,9 +200,9 @@ protected:
 };
 
 
-wxString GenerateAliasInfo( LIB_ALIAS const * aAlias, int aUnit )
+wxString GenerateAliasInfo( SYMBOL_LIB_TABLE* aSymLibTable, LIB_ID const& aLibId, int aUnit )
 {
-    ALIAS_INFO_GENERATOR gen( aAlias, aUnit );
+    ALIAS_INFO_GENERATOR gen( aSymLibTable, aLibId, aUnit );
     gen.GenerateHtml();
     return gen.GetHtml();
 }

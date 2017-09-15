@@ -21,9 +21,9 @@
 
 #include <cmp_tree_model_adapter.h>
 
-#include <class_library.h>
 #include <eda_pattern_match.h>
 #include <wx/tokenzr.h>
+#include <symbol_lib_table.h>
 
 
 CMP_TREE_MODEL_ADAPTER::WIDTH_CACHE CMP_TREE_MODEL_ADAPTER::m_width_cache;
@@ -70,7 +70,7 @@ static unsigned int IntoArray( CMP_TREE_NODE const& aNode, wxDataViewItemArray& 
 }
 
 
-CMP_TREE_MODEL_ADAPTER::PTR CMP_TREE_MODEL_ADAPTER::Create( PART_LIBS* aLibs )
+CMP_TREE_MODEL_ADAPTER::PTR CMP_TREE_MODEL_ADAPTER::Create( SYMBOL_LIB_TABLE* aLibs )
 {
     auto adapter = new CMP_TREE_MODEL_ADAPTER( aLibs );
     auto container = CMP_TREE_MODEL_ADAPTER::PTR( adapter );
@@ -78,7 +78,7 @@ CMP_TREE_MODEL_ADAPTER::PTR CMP_TREE_MODEL_ADAPTER::Create( PART_LIBS* aLibs )
 }
 
 
-CMP_TREE_MODEL_ADAPTER::CMP_TREE_MODEL_ADAPTER( PART_LIBS* aLibs )
+CMP_TREE_MODEL_ADAPTER::CMP_TREE_MODEL_ADAPTER( SYMBOL_LIB_TABLE* aLibs )
     :m_filter( CMP_FILTER_NONE ),
      m_show_units( true ),
      m_libs( aLibs ),
@@ -105,27 +105,31 @@ void CMP_TREE_MODEL_ADAPTER::ShowUnits( bool aShow )
 }
 
 
-void CMP_TREE_MODEL_ADAPTER::SetPreselectNode( wxString const& aName, int aUnit )
+void CMP_TREE_MODEL_ADAPTER::SetPreselectNode( LIB_ID const& aLibId, int aUnit )
 {
-    m_preselect_name = aName;
+    m_preselect_lib_id = aLibId;
     m_preselect_unit = aUnit;
 }
 
 
-void CMP_TREE_MODEL_ADAPTER::AddLibrary( PART_LIB& aLib )
+void CMP_TREE_MODEL_ADAPTER::AddLibrary( wxString const& aLibNickname )
 {
-    if( m_filter == CMP_FILTER_POWER )
+    bool onlyPowerSymbols = ( m_filter == CMP_FILTER_POWER );
+
+    wxArrayString aliases;
+
+    try
     {
-        wxArrayString all_aliases;
-        aLib.GetEntryTypePowerNames( all_aliases );
-        AddAliasList( aLib.GetName(), all_aliases, &aLib );
+        m_libs->EnumerateSymbolLib( aLibNickname, aliases, onlyPowerSymbols );
     }
-    else
+    catch( const IO_ERROR& ioe )
     {
-        std::vector<LIB_ALIAS*> all_aliases;
-        aLib.GetAliases( all_aliases );
-        AddAliasList( aLib.GetName(), all_aliases, &aLib );
+        wxLogError( wxString::Format( _( "Error occurred loading symbol  library %s."
+                                         "\n\n%s" ), aLibNickname, ioe.What() ) );
+        return;
     }
+
+    AddAliasList( aLibNickname, aliases );
 
     m_tree.AssignIntrinsicRanks();
 }
@@ -133,32 +137,36 @@ void CMP_TREE_MODEL_ADAPTER::AddLibrary( PART_LIB& aLib )
 
 void CMP_TREE_MODEL_ADAPTER::AddAliasList(
             wxString const&         aNodeName,
-            wxArrayString const&    aAliasNameList,
-            PART_LIB*               aOptionalLib )
+            wxArrayString const&    aAliasNameList )
 {
     std::vector<LIB_ALIAS*> alias_list;
 
     for( const wxString& name: aAliasNameList )
     {
-        LIB_ALIAS* a;
+        LIB_ALIAS* a = nullptr;
 
-        if( aOptionalLib )
-            a = aOptionalLib->FindAlias( name );
-        else
-            a = m_libs->FindLibraryAlias( LIB_ID( wxEmptyString, name ), wxEmptyString );
+        try
+        {
+            a = m_libs->LoadSymbol( aNodeName, name );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxLogError( wxString::Format( _( "Error occurred loading symbol %s from library %s."
+                                             "\n\n%s" ), name, aNodeName, ioe.What() ) );
+            continue;
+        }
 
         if( a )
             alias_list.push_back( a );
     }
 
-    AddAliasList( aNodeName, alias_list, aOptionalLib );
+    AddAliasList( aNodeName, alias_list );
 }
 
 
 void CMP_TREE_MODEL_ADAPTER::AddAliasList(
             wxString const&         aNodeName,
-            std::vector<LIB_ALIAS*> const&  aAliasList,
-            PART_LIB*               aOptionalLib )
+            std::vector<LIB_ALIAS*> const&  aAliasList )
 {
     auto& lib_node = m_tree.AddLib( aNodeName );
 
@@ -213,10 +221,16 @@ void CMP_TREE_MODEL_ADAPTER::AttachTo( wxDataViewCtrl* aDataViewCtrl )
 }
 
 
-LIB_ALIAS* CMP_TREE_MODEL_ADAPTER::GetAliasFor( wxDataViewItem aSelection ) const
+LIB_ID CMP_TREE_MODEL_ADAPTER::GetAliasFor( wxDataViewItem aSelection ) const
 {
     auto node = ToNode( aSelection );
-    return node ? node->Alias : nullptr;
+
+    LIB_ID emptyId;
+
+    if( !node )
+        return emptyId;
+
+    return node->LibId;
 }
 
 
@@ -324,7 +338,7 @@ bool CMP_TREE_MODEL_ADAPTER::GetAttr(
         return false;
     }
 
-    if( node->Alias && !node->Alias->IsRoot() && aCol == 0 )
+    if( !node->IsRoot && aCol == 0 )
     {
         // Names of non-root aliases are italicized
         aAttr.SetItalic( true );
@@ -432,16 +446,16 @@ bool CMP_TREE_MODEL_ADAPTER::ShowResults()
 
 bool CMP_TREE_MODEL_ADAPTER::ShowPreselect()
 {
-    if( m_preselect_name == wxEmptyString )
+    if( !m_preselect_lib_id.IsValid() )
         return false;
 
     return FindAndExpand( m_tree,
             [&]( CMP_TREE_NODE const* n )
             {
                 if( n->Type == CMP_TREE_NODE::ALIAS && ( n->Children.empty() || !m_preselect_unit ) )
-                    return m_preselect_name == n->Name;
+                    return m_preselect_lib_id == n->LibId;
                 else if( n->Type == CMP_TREE_NODE::UNIT && m_preselect_unit )
-                    return m_preselect_name == n->Parent->Name && m_preselect_unit == n->Unit;
+                    return m_preselect_lib_id == n->Parent->LibId && m_preselect_unit == n->Unit;
                 else
                     return false;
             } );

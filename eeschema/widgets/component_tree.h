@@ -33,6 +33,9 @@ class wxDataViewCtrl;
 class wxTextCtrl;
 class wxHtmlWindow;
 class wxHtmlLinkEvent;
+class LIB_ID;
+class SYMBOL_LIB_TABLE;
+
 
 /**
  * Widget displaying a tree of components with optional search text control and description panel.
@@ -43,8 +46,8 @@ public:
     ///> Flags to select extra widgets
     enum WIDGETS { NONE = 0x00, SEARCH = 0x01, DETAILS = 0x02, ALL = 0xFF };
 
-    COMPONENT_TREE( wxWindow* aParent,
-            CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, WIDGETS aWidgets = ALL );
+    COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTable,
+                    CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, WIDGETS aWidgets = ALL );
 
     /**
      * For multi-unit components, if the user selects the component itself
@@ -53,9 +56,9 @@ public:
      * with whatever default is desired (usually 1).
      *
      * @param aUnit if not NULL, the selected unit is filled in here.
-     * @return the alias that has been selected, or NULL if there is none.
+     * @return the library id of the symbol that has been selected.
      */
-    LIB_ALIAS* GetSelectedAlias( int* aUnit = nullptr ) const;
+    LIB_ID GetSelectedLibId( int* aUnit = nullptr ) const;
 
 protected:
     /**
@@ -84,8 +87,8 @@ protected:
     void onDetailsLink( wxHtmlLinkEvent& aEvent );
     void onPreselect( wxCommandEvent& aEvent );
 
+    SYMBOL_LIB_TABLE* m_sym_lib_table;
     CMP_TREE_MODEL_ADAPTER::PTR m_adapter;
-
     wxTextCtrl*     m_query_ctrl;
     wxDataViewCtrl* m_tree_ctrl;
     wxHtmlWindow*   m_details_ctrl;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -45,6 +45,7 @@
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
 #include <schframe.h>
+#include <symbol_lib_table.h>
 
 #include <dialog_choose_component.h>
 #include <cmp_tree_model_adapter.h>
@@ -514,7 +515,6 @@ void LIB_EDIT_FRAME::DisplayCmpDoc()
 void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
 {
     wxString      cmp_name;
-    LIB_ALIAS*    libEntry;
     wxArrayString nameList;
     wxString      msg;
 
@@ -538,12 +538,12 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
         }
     }
 
-    auto adapter( CMP_TREE_MODEL_ADAPTER::Create( Prj().SchLibs() ) );
+    auto adapter( CMP_TREE_MODEL_ADAPTER::Create( Prj().SchSymbolLibTable() ) );
 
     wxString name = part ? part->GetName() : wxString( wxEmptyString );
     adapter->SetPreselectNode( name, /* aUnit */ 0 );
     adapter->ShowUnits( false );
-    adapter->AddLibrary( *lib );
+    adapter->AddLibrary( lib->GetName() );
 
     wxString dialogTitle;
     dialogTitle.Printf( _( "Delete Component (%u items loaded)" ), adapter->GetComponentsCount() );
@@ -555,25 +555,29 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
         return;
     }
 
-    libEntry = dlg.GetSelectedAlias( NULL );
+    LIB_ID id;
 
-    if( !libEntry )
-    {
+    id = dlg.GetSelectedLibId();
+
+    if( !id.IsValid() )
         return;
-    }
+
+    LIB_ALIAS* alias = Prj().SchSymbolLibTable()->LoadSymbol( id );
+
+    if( !alias )
+        return;
 
     msg.Printf( _( "Delete component '%s' from library '%s' ?" ),
-                GetChars( libEntry->GetName() ),
-                GetChars( lib->GetName() ) );
+                id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
 
     if( !IsOK( this, msg ) )
         return;
 
     part = GetCurPart();
 
-    if( !part || !part->HasAlias( libEntry->GetName() ) )
+    if( !part || !part->HasAlias( id.GetLibItemName() ) )
     {
-        lib->RemoveAlias( libEntry );
+        Prj().SchSymbolLibTable()->DeleteAlias( id.GetLibNickname(), id.GetLibItemName() );
         m_canvas->Refresh();
         return;
     }
@@ -588,19 +592,10 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
         return;
     }
 
-    LIB_ALIAS* nextEntry = lib->RemoveAlias( libEntry );
+    Prj().SchSymbolLibTable()->DeleteAlias( id.GetLibNickname(), id.GetLibItemName() );
 
-    if( nextEntry != NULL )
-    {
-        if( LoadOneLibraryPartAux( nextEntry, lib ) )
-            Zoom_Automatique( false );
-    }
-    else
-    {
-        SetCurPart( NULL );     // delete CurPart
-        m_aliasName.Empty();
-    }
-
+    SetCurPart( NULL );     // delete CurPart
+    m_aliasName.Empty();
     m_canvas->Refresh();
 }
 

@@ -107,7 +107,6 @@ CMP_TREE_NODE::CMP_TREE_NODE()
         Type( INVALID ),
         IntrinsicRank( 0 ),
         Score( kLowestDefaultScore ),
-        Alias( nullptr ),
         Unit( 0 )
 {}
 
@@ -118,7 +117,7 @@ CMP_TREE_NODE_UNIT::CMP_TREE_NODE_UNIT( CMP_TREE_NODE* aParent, int aUnit )
     Type = UNIT;
 
     Unit = aUnit;
-    Alias = aParent->Alias;
+    LibId = aParent->LibId;
 
     Name = _( "Unit" ) + " " + LIB_PART::SubReference( aUnit, false );
     Desc = wxEmptyString;
@@ -128,13 +127,17 @@ CMP_TREE_NODE_UNIT::CMP_TREE_NODE_UNIT( CMP_TREE_NODE* aParent, int aUnit )
 }
 
 
-CMP_TREE_NODE_ALIAS::CMP_TREE_NODE_ALIAS( CMP_TREE_NODE* aParent, LIB_ALIAS* aAlias )
+CMP_TREE_NODE_LIB_ID::CMP_TREE_NODE_LIB_ID( CMP_TREE_NODE* aParent, LIB_ALIAS* aAlias )
 {
     Parent      = aParent;
-    Type        = ALIAS;
     Name        = aAlias->GetName();
     Desc        = aAlias->GetDescription();
-    Alias       = aAlias;
+
+    // Parent node is the library nickname so set the LIB_ID library nickname.
+    LibId.SetLibNickname( aParent->Name );
+    LibId.SetLibItemName( aAlias->GetName() );
+
+    IsRoot = aAlias->IsRoot();
 
     // Pre-normalized strings for fast case-insensitive matching
     // Search text spaces out keywords and description to penalize description
@@ -170,7 +173,7 @@ CMP_TREE_NODE_ALIAS::CMP_TREE_NODE_ALIAS( CMP_TREE_NODE* aParent, LIB_ALIAS* aAl
 }
 
 
-CMP_TREE_NODE_UNIT& CMP_TREE_NODE_ALIAS::AddUnit( int aUnit )
+CMP_TREE_NODE_UNIT& CMP_TREE_NODE_LIB_ID::AddUnit( int aUnit )
 {
     CMP_TREE_NODE_UNIT* unit = new CMP_TREE_NODE_UNIT( this, aUnit );
     Children.push_back( std::unique_ptr<CMP_TREE_NODE>( unit ) );
@@ -178,7 +181,7 @@ CMP_TREE_NODE_UNIT& CMP_TREE_NODE_ALIAS::AddUnit( int aUnit )
 }
 
 
-void CMP_TREE_NODE_ALIAS::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
+void CMP_TREE_NODE_LIB_ID::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
 {
     if( Score <= 0 )
         return; // Leaf nodes without scores are out of the game.
@@ -235,9 +238,9 @@ CMP_TREE_NODE_LIB::CMP_TREE_NODE_LIB( CMP_TREE_NODE* aParent, wxString const& aN
 }
 
 
-CMP_TREE_NODE_ALIAS& CMP_TREE_NODE_LIB::AddAlias( LIB_ALIAS* aAlias )
+CMP_TREE_NODE_LIB_ID& CMP_TREE_NODE_LIB::AddAlias( LIB_ALIAS* aAlias )
 {
-    CMP_TREE_NODE_ALIAS* alias = new CMP_TREE_NODE_ALIAS( this, aAlias );
+    CMP_TREE_NODE_LIB_ID* alias = new CMP_TREE_NODE_LIB_ID( this, aAlias );
     Children.push_back( std::unique_ptr<CMP_TREE_NODE>( alias ) );
     return *alias;
 }

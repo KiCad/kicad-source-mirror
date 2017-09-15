@@ -21,12 +21,15 @@
 #ifndef GENERATE_ALIAS_INFO_H
 #define GENERATE_ALIAS_INFO_H
 
-#include <class_libentry.h>
+#include <wx/string.h>
+
+class LIB_ID;
+class SYMBOL_LIB_TABLE;
 
 /**
- * Return an HTML page describing a LIB_ALIAS. This is suitable for inclusion
+ * Return an HTML page describing a #LIB_ID in a #SYMBOL_LIB_TABLE. This is suitable for inclusion
  * in a wxHtmlWindow.
  */
-wxString GenerateAliasInfo( LIB_ALIAS const * aAlias, int aUnit );
+wxString GenerateAliasInfo( SYMBOL_LIB_TABLE* aSymLibTable, LIB_ID const& aLibId, int aUnit );
 
 #endif // GENERATE_ALIAS_INFO_H

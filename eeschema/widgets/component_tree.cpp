@@ -32,9 +32,16 @@
 #include <wx/statbmp.h>
 #include <wx/html/htmlwin.h>
 
-COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent,
+#include <symbol_lib_table.h>
+
+
+COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTable,
         CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, WIDGETS aWidgets )
-    : wxPanel( aParent ), m_adapter( aAdapter ), m_query_ctrl( nullptr ), m_details_ctrl( nullptr )
+    : wxPanel( aParent ),
+      m_sym_lib_table( aSymLibTable ),
+      m_adapter( aAdapter ),
+      m_query_ctrl( nullptr ),
+      m_details_ctrl( nullptr )
 {
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
@@ -43,8 +50,8 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent,
     {
         auto search_sizer = new wxBoxSizer( wxHORIZONTAL );
 
-        m_query_ctrl = new wxTextCtrl(
-                this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+        m_query_ctrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                       wxDefaultSize, wxTE_PROCESS_ENTER );
 
 // Additional visual cue for GTK, which hides the placeholder text on focus
 #ifdef __WXGTK__
@@ -102,9 +109,16 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent,
 }
 
 
-LIB_ALIAS* COMPONENT_TREE::GetSelectedAlias( int* aUnit ) const
+LIB_ID COMPONENT_TREE::GetSelectedLibId( int* aUnit ) const
 {
     auto sel = m_tree_ctrl->GetSelection();
+
+    if( !sel )
+    {
+        LIB_ID emptyId;
+
+        return emptyId;
+    }
 
     if( aUnit )
         *aUnit = m_adapter->GetUnitFor( sel );
@@ -151,7 +165,7 @@ void COMPONENT_TREE::onQueryText( wxCommandEvent& aEvent )
 
 void COMPONENT_TREE::onQueryEnter( wxCommandEvent& aEvent )
 {
-    if( GetSelectedAlias() )
+    if( GetSelectedLibId().IsValid() )
         postSelectEvent();
 }
 
@@ -181,7 +195,7 @@ void COMPONENT_TREE::onTreeSelect( wxDataViewEvent& aEvent )
 
 void COMPONENT_TREE::onTreeActivate( wxDataViewEvent& aEvent )
 {
-    if( !GetSelectedAlias() )
+    if( !GetSelectedLibId().IsValid() )
     {
         // Expand library/part units subtree
         auto const sel = m_tree_ctrl->GetSelection();
@@ -210,10 +224,10 @@ void COMPONENT_TREE::onPreselect( wxCommandEvent& aEvent )
     if( m_details_ctrl )
     {
         int unit = 0;
-        LIB_ALIAS* alias = GetSelectedAlias( &unit );
+        LIB_ID id = GetSelectedLibId( &unit );
 
-        if( alias )
-            m_details_ctrl->SetPage( GenerateAliasInfo( alias, unit ) );
+        if( id.IsValid() )
+            m_details_ctrl->SetPage( GenerateAliasInfo( m_sym_lib_table, id, unit ) );
         else
             m_details_ctrl->SetPage( wxEmptyString );
     }

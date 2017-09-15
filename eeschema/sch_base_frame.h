@@ -34,6 +34,7 @@ class LIB_EDIT_FRAME;
 class LIB_ALIAS;
 class PART_LIB;
 class SCHLIB_FILTER;
+class LIB_ID;
 
 /**
  * Class SCH_BASE_FRAME
@@ -127,6 +128,7 @@ public:
 
     struct COMPONENT_SELECTION
     {
+        wxString    LibNickname;
         wxString    Name;
         int         Unit;
         int         Convert;
@@ -134,9 +136,10 @@ public:
         std::vector<std::pair<int, wxString>>   Fields;
 
         COMPONENT_SELECTION():
-            Name(""),
-            Unit(1),
-            Convert(1)
+            LibNickname( "" ),
+            Name( "" ),
+            Unit( 1 ),
+            Convert( 1 )
         {}
     };
 
@@ -185,14 +188,14 @@ protected:
      * in modal mode.
      * @param aFilter is a filter to pass the allowed library names
      *          and/or some other filter
-     * @param aPreselectedAlias Preselected component alias. NULL if none.
+     * @param aPreselectedLibId Preselected component LIB_ID. Not valid if none selected.
      * @param aUnit             preselected unit
      * @param aConvert          preselected deMorgan conversion
      * @return the selected component
      */
     COMPONENT_SELECTION SelectComponentFromLibBrowser(
             const SCHLIB_FILTER* aFilter,
-            LIB_ALIAS* aPreselectedAlias,
+            const LIB_ID& aPreselectedLibid,
             int aUnit, int aConvert );
 
     /**

@@ -48,14 +48,18 @@
 void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
 {
     wxString   dialogTitle;
-    PART_LIBS* libs = Prj().SchLibs();
+    SYMBOL_LIB_TABLE* libs = Prj().SchSymbolLibTable();
 
     // Container doing search-as-you-type.
     auto adapter( CMP_TREE_MODEL_ADAPTER::Create( libs ) );
 
-    for( PART_LIB& lib : *libs )
+    std::vector< wxString > libNicknames;
+
+    libNicknames = libs->GetLogicalLibs();
+
+    for( auto nickname : libNicknames )
     {
-        adapter->AddLibrary( lib );
+        adapter->AddLibrary( nickname );
     }
 
     dialogTitle.Printf( _( "Choose Component (%d items loaded)" ),
@@ -67,21 +71,24 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
 
     /// @todo: The unit selection gets reset to 1 by SetSelectedComponent() so the unit
     ///        selection feature of the choose symbol dialog doesn't work.
-    LIB_ALIAS* const alias = dlg.GetSelectedAlias( &m_unit );
+    LIB_ID id = dlg.GetSelectedLibId( &m_unit );
 
-    if( !alias || !alias->GetLib() )
+    if( !id.IsValid() || id.GetLibNickname().empty() )
         return;
 
-    if( m_libraryName == alias->GetLib()->GetName() )
+    if( m_libraryName == id.GetLibNickname() )
     {
-        if( m_entryName != alias->GetName() )
-            SetSelectedComponent( alias->GetName() );
+        if( m_entryName != id.GetLibItemName() )
+            SetSelectedComponent( id.GetLibItemName() );
     }
     else
     {
-        m_entryName = alias->GetName();
-        SetSelectedLibrary( alias->GetLib()->GetName() );
+        m_entryName = id.GetLibItemName();
+        SetSelectedLibrary( id.GetLibNickname() );
+        SetSelectedComponent( id.GetLibItemName() );
     }
+
+    Zoom_Automatique( false );
 }
 
 

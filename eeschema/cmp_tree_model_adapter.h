@@ -22,6 +22,8 @@
 #ifndef _CMP_TREE_MODEL_ADAPTER_H
 #define _CMP_TREE_MODEL_ADAPTER_H
 
+#include <lib_id.h>
+
 #include <cmp_tree_model.h>
 
 #include <wx/hashmap.h>
@@ -29,9 +31,7 @@
 #include <vector>
 #include <functional>
 
-class LIB_ALIAS;
-class PART_LIB;
-class PART_LIBS;
+class SYMBOL_LIB_TABLE;
 
 
 /**
@@ -112,7 +112,7 @@ public:
      *
      * @param aLibs library set from which parts will be loaded
      */
-    static PTR Create( PART_LIBS* aLibs );
+    static PTR Create( SYMBOL_LIB_TABLE* aLibs );
 
     /**
      * This enum allows a selective filtering of components to list
@@ -142,18 +142,18 @@ public:
      * Set the component name to be selected if there are no search results.
      * May be set at any time; updates at the next UpdateSearchString().
      *
-     * @param aName     component name to be selected
+     * @param aLibId    symbol #LIB_ID to be selected
      * @param aUnit     unit to be selected, if > 0 (0 selects the alias itself)
      */
-    void SetPreselectNode( wxString const& aName, int aUnit );
+    void SetPreselectNode( LIB_ID const& aLibId, int aUnit );
 
     /**
      * Add all the components and their aliases in this library. To be called
      * in the setup phase.
      *
-     * @param aLib  reference to a library
+     * @param aLibNickname reference to a symbol library nickname
      */
-    void AddLibrary( PART_LIB& aLib );
+    void AddLibrary( wxString const& aLibNickname );
 
     /**
      * Add the given list of components, by name. To be called in the setup
@@ -161,12 +161,10 @@ public:
      *
      * @param aNodeName         the parent node the components will appear under
      * @param aAliasNameList    list of alias names
-     * @param aOptionalLib      library to look up names in (null = global)
      */
     void AddAliasList(
-            wxString const&         aNodeName,
-            wxArrayString const&    aAliasNameList,
-            PART_LIB*               aOptionalLib = nullptr );
+            wxString const&      aNodeName,
+            wxArrayString const& aAliasNameList );
 
     /**
      * Add the given list of components by alias. To be called in the setup
@@ -174,12 +172,10 @@ public:
      *
      * @param aNodeName     the parent node the components will appear under
      * @param aAliasList    list of aliases
-     * @param aOptionalLib  library to look up names in (null = global)
      */
     void AddAliasList(
-            wxString const&         aNodeName,
-            std::vector<LIB_ALIAS*> const&  aAliasList,
-            PART_LIB*               aOptionalLib = nullptr );
+            wxString const&                 aNodeName,
+            std::vector<LIB_ALIAS*> const&  aAliasList );
 
     /**
      * Set the search string provided by the user.
@@ -204,7 +200,7 @@ public:
      *
      * @return alias, or nullptr if none is selected
      */
-    LIB_ALIAS* GetAliasFor( wxDataViewItem aSelection ) const;
+    LIB_ID GetAliasFor( wxDataViewItem aSelection ) const;
 
     /**
      * Return the unit for the given item.
@@ -227,7 +223,7 @@ protected:
     /**
      * Constructor; takes a set of libraries to be included in the search.
      */
-    CMP_TREE_MODEL_ADAPTER( PART_LIBS* aLibs );
+    CMP_TREE_MODEL_ADAPTER( SYMBOL_LIB_TABLE* aLibs );
 
     /**
      * Check whether a container has columns too
@@ -305,8 +301,8 @@ protected:
 private:
     CMP_FILTER_TYPE     m_filter;
     bool                m_show_units;
-    PART_LIBS*          m_libs;
-    wxString            m_preselect_name;
+    SYMBOL_LIB_TABLE*   m_libs;
+    LIB_ID              m_preselect_lib_id;
     int                 m_preselect_unit;
 
     CMP_TREE_NODE_ROOT  m_tree;

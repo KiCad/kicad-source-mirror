@@ -40,6 +40,7 @@
 #include <class_library.h>
 #include <sch_base_frame.h>
 #include <template_fieldnames.h>
+#include <symbol_lib_table.h>
 #include <widgets/component_tree.h>
 #include <widgets/footprint_preview_widget.h>
 #include <widgets/footprint_select_widget.h>
@@ -63,7 +64,7 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
 
     auto splitter = new wxSplitterWindow(
             this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE );
-    m_tree = new COMPONENT_TREE( splitter, aAdapter );
+    m_tree = new COMPONENT_TREE( splitter, Prj().SchSymbolLibTable(), aAdapter );
     auto right_panel = ConstructRightPanel( splitter );
     auto buttons = new wxStdDialogButtonSizer();
     m_dbl_click_timer = new wxTimer( this );
@@ -153,9 +154,9 @@ void DIALOG_CHOOSE_COMPONENT::OnInitDialog( wxInitDialogEvent& aEvent )
 }
 
 
-LIB_ALIAS* DIALOG_CHOOSE_COMPONENT::GetSelectedAlias( int* aUnit ) const
+LIB_ID DIALOG_CHOOSE_COMPONENT::GetSelectedLibId( int* aUnit ) const
 {
-    return m_tree->GetSelectedAlias( aUnit );
+    return m_tree->GetSelectedLibId( aUnit );
 }
 
 
@@ -187,12 +188,32 @@ void DIALOG_CHOOSE_COMPONENT::OnSchViewDClick( wxMouseEvent& aEvent )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::ShowFootprintFor( LIB_ALIAS* aAlias )
+void DIALOG_CHOOSE_COMPONENT::ShowFootprintFor( LIB_ID const& aLibId )
 {
     if( !m_fp_view_ctrl->IsInitialized() )
         return;
 
-    LIB_FIELD* fp_field = aAlias->GetPart()->GetField( FOOTPRINT );
+    LIB_ALIAS* alias = nullptr;
+
+    try
+    {
+        alias = Prj().SchSymbolLibTable()->LoadSymbol( aLibId );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxLogError( wxString::Format( _( "Error occurred loading symbol %s from library %s."
+                                         "\n\n%s" ),
+                                      aLibId.GetLibItemName().wx_str(),
+                                      aLibId.GetLibNickname().wx_str(),
+                                      ioe.What() ) );
+    }
+
+    if( alias == nullptr )
+    {
+        return;
+    }
+
+    LIB_FIELD* fp_field = alias->GetPart()->GetField( FOOTPRINT );
     wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 
     ShowFootprint( fp_name );
@@ -207,32 +228,54 @@ void DIALOG_CHOOSE_COMPONENT::ShowFootprint( wxString const& aName )
     }
     else
     {
-        LIB_ID lib_id( aName );
+        LIB_ID lib_id;
 
-        m_fp_view_ctrl->ClearStatus();
-        m_fp_view_ctrl->CacheFootprint( lib_id );
-        m_fp_view_ctrl->DisplayFootprint( lib_id );
+        if( lib_id.Parse( aName ) == -1 && lib_id.IsValid() )
+        {
+            m_fp_view_ctrl->ClearStatus();
+            m_fp_view_ctrl->CacheFootprint( lib_id );
+            m_fp_view_ctrl->DisplayFootprint( lib_id );
+        }
+        else
+        {
+            m_fp_view_ctrl->SetStatusText( _( "Invalid footprint specified" ) );
+        }
     }
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::PopulateFootprintSelector( LIB_ALIAS* aAlias )
+void DIALOG_CHOOSE_COMPONENT::PopulateFootprintSelector( LIB_ID const& aLibId )
 {
     if( !m_fp_sel_ctrl )
         return;
 
     m_fp_sel_ctrl->ClearFilters();
 
-    if( aAlias )
+    LIB_ALIAS* alias = nullptr;
+
+    try
+    {
+        alias = Prj().SchSymbolLibTable()->LoadSymbol( aLibId );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxLogError( wxString::Format( _( "Error occurred loading symbol %s from library %s."
+                                         "\n\n%s" ),
+                                      aLibId.GetLibItemName().wx_str(),
+                                      aLibId.GetLibNickname().wx_str(),
+                                      ioe.What() ) );
+    }
+
+    if( alias != nullptr )
     {
         LIB_PINS   temp_pins;
-        LIB_FIELD* fp_field = aAlias->GetPart()->GetField( FOOTPRINT );
+        LIB_FIELD* fp_field = alias->GetPart()->GetField( FOOTPRINT );
         wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 
-        aAlias->GetPart()->GetPins( temp_pins );
+        alias->GetPart()->GetPins( temp_pins );
 
         m_fp_sel_ctrl->FilterByPinCount( temp_pins.size() );
-        m_fp_sel_ctrl->FilterByFootprintFilters( aAlias->GetPart()->GetFootPrints(), true );
+        m_fp_sel_ctrl->FilterByFootprintFilters( alias->GetPart()->GetFootPrints(), true );
         m_fp_sel_ctrl->SetDefaultFootprint( fp_name );
         m_fp_sel_ctrl->UpdateList();
         m_fp_sel_ctrl->Enable();
@@ -248,7 +291,29 @@ void DIALOG_CHOOSE_COMPONENT::PopulateFootprintSelector( LIB_ALIAS* aAlias )
 void DIALOG_CHOOSE_COMPONENT::OnSchViewPaint( wxPaintEvent& aEvent )
 {
     int unit = 0;
-    LIB_ALIAS* alias = m_tree->GetSelectedAlias( &unit );
+    LIB_ID id = m_tree->GetSelectedLibId( &unit );
+
+    if( !id.IsValid() )
+        return;
+
+    LIB_ALIAS* alias = nullptr;
+
+    try
+    {
+        alias = Prj().SchSymbolLibTable()->LoadSymbol( id );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxLogError( wxString::Format( _( "Error occurred loading symbol %s from library %s."
+                                         "\n\n%s" ),
+                                      id.GetLibItemName().wx_str(),
+                                      id.GetLibNickname().wx_str(),
+                                      ioe.What() ) );
+    }
+
+    if( alias == nullptr )
+        return;
+
     LIB_PART*  part = alias ? alias->GetPart() : nullptr;
 
     // Don't draw anything (not even the background) if we don't have
@@ -292,28 +357,29 @@ void DIALOG_CHOOSE_COMPONENT::OnFootprintSelected( wxCommandEvent& aEvent )
 void DIALOG_CHOOSE_COMPONENT::OnComponentPreselected( wxCommandEvent& aEvent )
 {
     int unit = 0;
-    LIB_ALIAS* alias = m_tree->GetSelectedAlias( &unit );
+
+    LIB_ID id = m_tree->GetSelectedLibId( &unit );
 
     m_sch_view_ctrl->Refresh();
 
-    if( alias )
+    if( id.IsValid() )
     {
-        ShowFootprintFor( alias );
-        PopulateFootprintSelector( alias );
+        ShowFootprintFor( id );
+        PopulateFootprintSelector( id );
     }
     else
     {
         if( m_fp_view_ctrl->IsInitialized() )
             m_fp_view_ctrl->SetStatusText( wxEmptyString );
 
-        PopulateFootprintSelector( nullptr );
+        PopulateFootprintSelector( id );
     }
 }
 
 
 void DIALOG_CHOOSE_COMPONENT::OnComponentSelected( wxCommandEvent& aEvent )
 {
-    if( m_tree->GetSelectedAlias() )
+    if( m_tree->GetSelectedLibId().IsValid() )
     {
         // Got a selection. We can't just end the modal dialog here, because
         // wx leaks some events back to the parent window (in particular, the

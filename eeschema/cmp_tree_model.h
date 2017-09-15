@@ -25,6 +25,7 @@
 #include <vector>
 #include <memory>
 #include <wx/string.h>
+#include <lib_id.h>
 
 
 class EDA_COMBINED_MATCHER;
@@ -70,7 +71,7 @@ class LIB_ALIAS;
  * - `Desc` - description of the alias, to be displayed
  * - `MatchName` - Name, normalized to lowercase for matching
  * - `SearchText` - normalized composite of keywords and description
- * - `Alias` - the LIB_ALIAS* this alias or unit is from, or nullptr
+ * - `LibId` - the #LIB_ID this alias or unit is from, or not valid
  * - `Unit` - the unit number, or zero for non-units
  */
 class CMP_TREE_NODE {
@@ -93,21 +94,20 @@ public:
     /// The score of an item resulting from the search algorithm.
     int Score;
 
-    wxString    Name;           ///< Actual name of the part
-    wxString    Desc;           ///< Description to be displayed
-    wxString    MatchName;      ///< Normalized name for matching
-    wxString    SearchText;     ///< Descriptive text to search
+    wxString    Name;        ///< Actual name of the part
+    wxString    Desc;        ///< Description to be displayed
+    wxString    MatchName;   ///< Normalized name for matching
+    wxString    SearchText;  ///< Descriptive text to search
 
-    LIB_ALIAS*  Alias;          ///< Actual LIB_ALIAS*, or null
-    int         Unit;           ///< Actual unit, or zero
-
+    LIB_ID      LibId;       ///< LIB_ID determined by the parent library nickname and alias name.
+    int         Unit;        ///< Actual unit, or zero
+    bool        IsRoot;      ///< Indicates if the symbol is a root symbol instead of an alias.
 
     /**
      * Update the score for this part. This is accumulative - it will be
      * called once per search term.
      *
-     * @param aMatcher  an EDA_COMBINED_MATCHER initialized with the search
-     *                  term
+     * @param aMatcher  an EDA_COMBINED_MATCHER initialized with the search term
      */
     virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher ) = 0;
 
@@ -173,29 +173,32 @@ public:
 
 
 /**
- * Node type: alias.
+ * Node type: #LIB_ID.
  */
-class CMP_TREE_NODE_ALIAS: public CMP_TREE_NODE
+class CMP_TREE_NODE_LIB_ID: public CMP_TREE_NODE
 {
 public:
     /**
      * The addresses of CMP_TREE_NODEs are used as unique IDs for the
      * wxDataViewModel, so don't let them be copied around.
      */
-    CMP_TREE_NODE_ALIAS( CMP_TREE_NODE_ALIAS const& _ ) = delete;
-    void operator=( CMP_TREE_NODE_ALIAS const& _ ) = delete;
+    CMP_TREE_NODE_LIB_ID( CMP_TREE_NODE_LIB_ID const& _ ) = delete;
+    void operator=( CMP_TREE_NODE_LIB_ID const& _ ) = delete;
 
 
     /**
-     * Construct an alias node.
+     * Construct a #LIB_ID node.
      *
      * All fields will be populated from the LIB_ALIAS, including children
-     * (unit nodes will be generated automatically).
+     * (unit nodes will be generated automatically).  This does not keep
+     * the pointer to the #LIB_ALIAS object because at any time, a #LIB_ALIAS
+     * can be remove from a libray which will result in an invalid pointer.
+     * The alias must be resolved at the time of use.  Anything else is a bug.
      *
      * @param aParent   parent node, should be a CMP_TREE_NODE_LIB
-     * @param aAlias    LIB_ALIAS to populate the node
+     * @param aAlias    LIB_ALIAS to populate the node.
      */
-    CMP_TREE_NODE_ALIAS( CMP_TREE_NODE* aParent, LIB_ALIAS* aAlias );
+    CMP_TREE_NODE_LIB_ID( CMP_TREE_NODE* aParent, LIB_ALIAS* aAlias );
 
 
     /**
@@ -240,7 +243,7 @@ public:
      *
      * @param aAlias    LIB_ALIAS to provide data
      */
-    CMP_TREE_NODE_ALIAS& AddAlias( LIB_ALIAS* aAlias );
+    CMP_TREE_NODE_LIB_ID& AddAlias( LIB_ALIAS* aAlias );
 
     virtual void UpdateScore( EDA_COMBINED_MATCHER& aMatcher ) override;
 };
