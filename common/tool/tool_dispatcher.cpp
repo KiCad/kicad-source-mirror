@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Last changez: 2017
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -244,14 +245,75 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 }
 
 
+// Helper function to know if a special key ( see key list ) should be captured
+// or if the event can be skipped
+// on Linux, the event must be passed to the GUI if they are not used by Kicad,
+// especially the wxEVENT_CHAR_HOOK, if it is not handled
+// unfortunately, m_toolMgr->ProcessEvent( const TOOL_EVENT& aEvent)
+// does not return info about that. So the event is filtered before passed to
+// the GUI. These key codes are known to be used in pcbnew to move the cursor
+// or change active layer, and have a default action (moving scrollbar button) if
+// the event is skipped
+bool isKeySpecialCode( int aKeyCode )
+{
+    const enum wxKeyCode special_keys[] =
+    {
+        WXK_UP, WXK_DOWN, WXK_LEFT, WXK_RIGHT,
+        WXK_PAGEUP, WXK_PAGEDOWN,
+        WXK_NUMPAD_UP,  WXK_NUMPAD_DOWN, WXK_NUMPAD_LEFT,  WXK_NUMPAD_RIGHT,
+        WXK_NUMPAD_PAGEUP,  WXK_NUMPAD_PAGEDOWN
+    };
+
+    bool isInList = false;
+
+    for( unsigned ii = 0; ii < DIM( special_keys ) && !isInList; ii++ )
+    {
+        if( special_keys[ii] == aKeyCode )
+            isInList = true;
+    }
+
+    return isInList;
+}
+
+/* aHelper class that convert some special key codes to an equivalent.
+ *  WXK_NUMPAD_UP to WXK_UP,
+ *  WXK_NUMPAD_DOWN to WXK_DOWN,
+ *  WXK_NUMPAD_LEFT to WXK_LEFT,
+ *  WXK_NUMPAD_RIGHT,
+ *  WXK_NUMPAD_PAGEUP,
+ *  WXK_NUMPAD_PAGEDOWN
+ * note:
+ * wxEVT_CHAR_HOOK does this conversion when it is skipped by fireing a wxEVT_CHAR
+ * with this converted code, but we do not skip these key events because they also
+ * have default action (scroll the panel)
+ */
+int translateSpecialCode( int aKeyCode )
+{
+    switch( aKeyCode )
+    {
+    case WXK_NUMPAD_UP: return WXK_UP;
+    case WXK_NUMPAD_DOWN: return WXK_DOWN;
+    case WXK_NUMPAD_LEFT: return WXK_LEFT;
+    case WXK_NUMPAD_RIGHT: return WXK_RIGHT;
+    case WXK_NUMPAD_PAGEUP: return WXK_PAGEUP;
+    case WXK_NUMPAD_PAGEDOWN: return WXK_PAGEDOWN;
+    default: break;
+    };
+
+    return aKeyCode;
+}
+
+
 void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 {
     bool motion = false, buttonEvents = false;
     boost::optional<TOOL_EVENT> evt;
+    int key = 0;    // key = 0 if the event is not a key event
 
     int type = aEvent.GetEventType();
 
     // Mouse handling
+    // Note: wxEVT_LEFT_DOWN event must always be skipped.
     if( type == wxEVT_MOTION || type == wxEVT_MOUSEWHEEL ||
 #if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
         type == wxEVT_MAGNIFY ||
@@ -291,26 +353,36 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
             static_cast<PCB_BASE_FRAME*>( m_toolMgr->GetEditFrame() )->GetGalCanvas()->SetFocus();
 #endif /* __APPLE__ */
     }
-
-    // Keyboard handling
-    else if( type == wxEVT_CHAR )
+    else if( type == wxEVT_CHAR_HOOK || type == wxEVT_CHAR )
     {
         wxKeyEvent* ke = static_cast<wxKeyEvent*>( &aEvent );
-        int key = ke->GetKeyCode();
+        key = ke->GetKeyCode();
+
+        // if the key event must be skipped, skip it here if the event is a wxEVT_CHAR_HOOK
+        // and do nothing.
+        // a wxEVT_CHAR will be fired by wxWidgets later for this key.
+        if( type == wxEVT_CHAR_HOOK )
+        {
+            if( !isKeySpecialCode( key ) )
+            {
+                aEvent.Skip();
+                return;
+            }
+            else
+            key = translateSpecialCode( key );
+        }
+
         int mods = decodeModifiers( ke );
+
+        // wxLogMessage( "key %d evt type %d", key, type );
 
         if( mods & MD_CTRL )
         {
-#if !wxCHECK_VERSION( 2, 9, 0 )
-            // I really look forward to the day when we will use only one version of wxWidgets..
-            const int WXK_CONTROL_A = 1;
-            const int WXK_CONTROL_Z = 26;
-#endif
-
-            // wxWidgets have a quirk related to Ctrl+letter hot keys handled by CHAR_EVT
-            // http://docs.wxwidgets.org/trunk/classwx_key_event.html:
-            // "char events for ASCII letters in this case carry codes corresponding to the ASCII
-            // value of Ctrl-Latter, i.e. 1 for Ctrl-A, 2 for Ctrl-B and so on until 26 for Ctrl-Z."
+            // wxWidgets maps key codes related to Ctrl+letter handled by CHAR_EVT
+            // (http://docs.wxwidgets.org/trunk/classwx_key_event.html):
+            // char events for ASCII letters in this case carry codes corresponding to the ASCII
+            // value of Ctrl-Latter, i.e. 1 for Ctrl-A, 2 for Ctrl-B and so on until 26 for Ctrl-Z.
+            // They are remapped here to be more easy to handle in code
             if( key >= WXK_CONTROL_A && key <= WXK_CONTROL_Z )
                 key += 'A' - 1;
         }
@@ -325,27 +397,28 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         m_toolMgr->ProcessEvent( *evt );
 
     // pass the event to the GUI, it might still be interested in it
-#ifdef __APPLE__
+    // Note wxEVT_CHAR_HOOK event is already skipped for special keys not used by kicad
+    // and wxEVT_LEFT_DOWN must be always Skipped.
+    //
     // On OS X, key events are always meant to be caught.  An uncaught key event is assumed
     // to be a user input error by OS X (as they are pressing keys in a context where nothing
     // is there to catch the event).  This annoyingly makes OS X beep and/or flash the screen
     // in pcbnew and the footprint editor any time a hotkey is used.  The correct procedure is
-    // to NOT pass key events to the GUI under OS X.
+    // to NOT pass wxEVT_CHAR events to the GUI under OS X.
+    //
+    // On Windows, avoid to call wxEvent::Skip because some keys (ARROWS, PAGE_UP, PAGE_DOWN
+    // have predefined actions (like move thumbtrack cursor), and we do not want these
+    // actions executed (most are handled by Kicad)
 
-    if( type != wxEVT_CHAR )
+    if( !evt || type == wxEVT_LEFT_DOWN )
         aEvent.Skip();
 
-#elif defined ( __WINDOWS__ )
-    // On Windows, mouse wheel event and some keys event (PAGE UP, PAGE DOWN, ARROW KEYS) are previoulsy
-    // called, and calling aEvent.Skip() calls default handler for these specific keys equivalent to move
-    // the thumbtrack cursor.
-    // TODO: see a better filtering could be just mouse wheel and these special keys only.
-
-    if( !evt )
+    // On Linux, the suitable Skip is already called, but the wxEVT_CHAR
+    // must be Skipped (sent to GUI).
+    // Otherwise accelerators are not seen.
+#ifdef __LINUX__
+    if( type == wxEVT_CHAR )
         aEvent.Skip();
-#else
-    // on Linux, the event must be passed to the GUI
-    aEvent.Skip();
 #endif
 
     updateUI();
