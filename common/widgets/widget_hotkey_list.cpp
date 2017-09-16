@@ -377,11 +377,11 @@ void WIDGET_HOTKEY_LIST::OnContextMenu( wxTreeListEvent& aEvent )
     wxMenu menu;
 
     menu.Append( ID_EDIT, _( "Edit..." ) );
-    menu.Append( ID_RESET, _( "Reset" ) );
-    menu.Append( ID_DEFAULT, _( "Default" ) );
+    menu.Append( ID_RESET, _( "Undo Changes" ) );
+    menu.Append( ID_DEFAULT, _( "Restore Default" ) );
     menu.Append( wxID_SEPARATOR );
-    menu.Append( ID_RESET_ALL, _( "Reset all" ) );
-    menu.Append( ID_DEFAULT_ALL, _( "Reset all to default" ) );
+    menu.Append( ID_RESET_ALL, _( "Undo All Changes" ) );
+    menu.Append( ID_DEFAULT_ALL, _( "Restore All to Default" ) );
 
     PopupMenu( &menu );
 }
