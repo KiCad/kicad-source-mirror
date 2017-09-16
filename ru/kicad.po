@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-03 10:32+0300\n"
-"PO-Revision-Date: 2017-09-03 11:21+0300\n"
+"POT-Creation-Date: 2017-09-16 09:52+0300\n"
+"PO-Revision-Date: 2017-09-16 10:00+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -199,8 +199,6 @@ msgstr "Удалить псевдоним"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:110
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:44
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:136
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:38
 #: eeschema/dialogs/dialog_sym_lib_table_base.cpp:144
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:85
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:146
@@ -540,7 +538,7 @@ msgstr "Вкл./Выкл. ортогональную проекцию"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:142 eeschema/menubar.cpp:118
 #: eeschema/menubar_libedit.cpp:299 eeschema/tool_viewlib.cpp:239
-#: gerbview/menubar.cpp:273 kicad/menubar.cpp:449 pagelayout_editor/menubar.cpp:242
+#: gerbview/menubar.cpp:273 kicad/menubar.cpp:462 pagelayout_editor/menubar.cpp:242
 #: pcbnew/menubar_modedit.cpp:375 pcbnew/menubar_pcbframe.cpp:153
 #: pcbnew/tool_modview.cpp:203
 msgid "&File"
@@ -563,7 +561,7 @@ msgid "&Exit"
 msgstr "Выход"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:162 cvpcb/menubar.cpp:133 gerbview/menubar.cpp:274
-#: kicad/menubar.cpp:451
+#: kicad/menubar.cpp:466
 msgid "&Preferences"
 msgstr "Настройки"
 
@@ -853,21 +851,21 @@ msgstr "Установить настройки по умолчанию"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:402 cvpcb/menubar.cpp:134 eeschema/menubar.cpp:124
 #: eeschema/menubar_libedit.cpp:304 eeschema/tool_viewlib.cpp:242
-#: gerbview/menubar.cpp:276 kicad/menubar.cpp:453 pagelayout_editor/menubar.cpp:247
+#: gerbview/menubar.cpp:276 kicad/menubar.cpp:467 pagelayout_editor/menubar.cpp:247
 #: pcbnew/menubar_modedit.cpp:381 pcbnew/menubar_pcbframe.cpp:162
 #: pcbnew/tool_modview.cpp:206
 msgid "&Help"
 msgstr "Справка"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:405 eeschema/menubar.cpp:556
-#: eeschema/menubar_libedit.cpp:279 gerbview/menubar.cpp:252 kicad/menubar.cpp:427
+#: eeschema/menubar_libedit.cpp:279 gerbview/menubar.cpp:252 kicad/menubar.cpp:440
 #: pagelayout_editor/menubar.cpp:220 pcbnew/menubar_modedit.cpp:356
 #: pcbnew/menubar_pcbframe.cpp:437
 msgid "&List Hotkeys"
 msgstr "Список горячих клавиш"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:406 eeschema/menubar_libedit.cpp:280
-#: gerbview/menubar.cpp:253 kicad/menubar.cpp:428 pagelayout_editor/menubar.cpp:222
+#: gerbview/menubar.cpp:253 kicad/menubar.cpp:441 pagelayout_editor/menubar.cpp:222
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Отображает текущий список горячих клавиш и соответствующих команд"
 
@@ -1182,9 +1180,9 @@ msgid "Format"
 msgstr "Формат"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:135 common/eda_text.cpp:404
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:184
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:198
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:93
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:107
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95 eeschema/libedit.cpp:498
 #: eeschema/sch_text.cpp:781 gerbview/class_gerber_file_image.cpp:338
 #: gerbview/class_gerber_file_image.cpp:342 gerbview/class_gerber_file_image.cpp:345
@@ -1606,7 +1604,7 @@ msgstr "Каталог '%s' создан.\n"
 msgid "Cannot create output directory '%s'.\n"
 msgstr "Не удалось создать выходной каталог '%s'.\n"
 
-#: common/confirm.cpp:77 common/pgm_base.cpp:931 eeschema/symbedit.cpp:103
+#: common/confirm.cpp:77 common/pgm_base.cpp:933 eeschema/symbedit.cpp:103
 #: eeschema/widgets/widget_eeschema_color_config.cpp:294
 #: pcbnew/dialogs/dialog_export_idf.cpp:169 pcbnew/dialogs/dialog_export_vrml.cpp:178
 msgid "Warning"
@@ -1700,47 +1698,47 @@ msgstr "По иконкам"
 msgid "3D models by"
 msgstr "По 3D моделям"
 
-#: common/dialog_about/dialog_about.cpp:116
+#: common/dialog_about/dialog_about.cpp:120
 msgid "Information"
 msgstr "Информация"
 
-#: common/dialog_about/dialog_about.cpp:119
+#: common/dialog_about/dialog_about.cpp:123
 msgid "Developers"
 msgstr "Разработчики"
 
-#: common/dialog_about/dialog_about.cpp:120
+#: common/dialog_about/dialog_about.cpp:124
 msgid "Doc Writers"
 msgstr "Авторы документации"
 
-#: common/dialog_about/dialog_about.cpp:122
+#: common/dialog_about/dialog_about.cpp:126
 msgid "Artists"
 msgstr "Художники"
 
-#: common/dialog_about/dialog_about.cpp:123
+#: common/dialog_about/dialog_about.cpp:127
 msgid "Translators"
 msgstr "Переводчики"
 
-#: common/dialog_about/dialog_about.cpp:125
+#: common/dialog_about/dialog_about.cpp:129
 msgid "Packagers"
 msgstr "Упаковщики"
 
-#: common/dialog_about/dialog_about.cpp:128
+#: common/dialog_about/dialog_about.cpp:132
 msgid "License"
 msgstr "Лицензия"
 
-#: common/dialog_about/dialog_about.cpp:553
+#: common/dialog_about/dialog_about.cpp:557
 msgid "Version Info"
 msgstr "Информация о версии"
 
-#: common/dialog_about/dialog_about.cpp:565
+#: common/dialog_about/dialog_about.cpp:569
 msgid "Could not open clipboard to write version information."
 msgstr "Не удалось открыть буфер обмена, чтобы записать информацию о версии."
 
-#: common/dialog_about/dialog_about.cpp:566
+#: common/dialog_about/dialog_about.cpp:570
 msgid "Clipboard Error"
 msgstr "Ошибка буфера обмена"
 
-#: common/dialog_about/dialog_about.cpp:575
+#: common/dialog_about/dialog_about.cpp:579
 msgid "Copied..."
 msgstr "Скопировано..."
 
@@ -1881,7 +1879,7 @@ msgstr ""
 #: common/dialogs/dialog_env_var_config_base.cpp:38
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:82
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:213
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:193
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:202
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:318
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:321
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:182 eeschema/lib_pin.cpp:2085
@@ -2022,8 +2020,8 @@ msgid "Mirror Y"
 msgstr "Отразить по гор."
 
 #: common/dialogs/dialog_image_editor_base.cpp:39
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:176
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:85
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:190
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:99
 #: pcbnew/onrightclick.cpp:998 pcbnew/tools/edit_tool.cpp:665
 msgid "Rotate"
 msgstr "Повернуть"
@@ -2387,7 +2385,7 @@ msgstr "Сохранить файл отчёта"
 msgid "Inches"
 msgstr "дюймы"
 
-#: common/draw_frame.cpp:351 cvpcb/class_DisplayFootprintsFrame.cpp:176
+#: common/draw_frame.cpp:351 cvpcb/class_DisplayFootprintsFrame.cpp:178
 #: pcbnew/tool_modedit.cpp:217 pcbnew/tool_pcb.cpp:338
 msgid "Hide grid"
 msgstr "Скрыть сетку"
@@ -2450,9 +2448,9 @@ msgid "Unknown MIME type for doc file <%s>"
 msgstr "Неизвестный MIME-тип для файла документации <%s>"
 
 #: common/eda_text.cpp:405
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:184
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:198
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:93
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:107
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95 eeschema/sch_text.cpp:781
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:109
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:109
@@ -2461,9 +2459,9 @@ msgid "Italic"
 msgstr "Курсив"
 
 #: common/eda_text.cpp:406
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:184
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:198
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:93
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:107
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95 eeschema/sch_text.cpp:781
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:90
 msgid "Bold"
@@ -2798,15 +2796,15 @@ msgstr "Выбор предпочитаемого редактора"
 msgid "%s is already running, Continue?"
 msgstr "%s уже запущен, продолжить?"
 
-#: common/pgm_base.cpp:848
+#: common/pgm_base.cpp:850
 msgid "Set Language"
 msgstr "Установить язык"
 
-#: common/pgm_base.cpp:849
+#: common/pgm_base.cpp:851
 msgid "Select application language (only for testing)"
 msgstr "Выбрать язык приложения (только для тестирования)"
 
-#: common/pgm_base.cpp:924
+#: common/pgm_base.cpp:926
 msgid ""
 "Warning!  Some of paths you have configured have been defined \n"
 "externally to the running process and will be temporarily overwritten."
@@ -2814,7 +2812,7 @@ msgstr ""
 "Предупреждение! Некоторые пути, сконфигурированные вами, были определены \n"
 "внешне рабочему процессу и будут временно перезаписаны."
 
-#: common/pgm_base.cpp:926
+#: common/pgm_base.cpp:928
 msgid ""
 "The next time KiCad is launched, any paths that have already\n"
 "been defined are honored and any settings defined in the path\n"
@@ -2829,7 +2827,7 @@ msgstr ""
 "либо удалите внешние определения переменных окружения\n"
 "из вашей системы."
 
-#: common/pgm_base.cpp:933
+#: common/pgm_base.cpp:935
 msgid "Do not show this message again."
 msgstr "Больше не показывать данное сообщение."
 
@@ -2901,10 +2899,10 @@ msgid "Zoom Out"
 msgstr "Уменьшить"
 
 #: common/tool/actions.cpp:32 common/widgets/mathplot.cpp:1765 common/zoom.cpp:246
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:150
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:156
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:55
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:63
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:164
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:170
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:69
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:77
 #: gerbview/class_gerber_file_image.cpp:342 gerbview/class_gerber_file_image.cpp:345
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
@@ -2913,7 +2911,7 @@ msgid "Center"
 msgstr "Центр"
 
 #: common/tool/actions.cpp:36 eeschema/hotkeys.cpp:89 gerbview/hotkeys.cpp:61
-#: pagelayout_editor/hotkeys.cpp:74 pcbnew/basepcbframe.cpp:849 pcbnew/hotkeys.cpp:160
+#: pagelayout_editor/hotkeys.cpp:74 pcbnew/basepcbframe.cpp:850 pcbnew/hotkeys.cpp:160
 #: pcbnew/hotkeys.cpp:162
 msgid "Zoom Auto"
 msgstr "Автомасштаб"
@@ -3312,100 +3310,100 @@ msgstr "Предупреждение CVPcb"
 msgid "Project file '%s' is not writable"
 msgstr "Файл проекта '%s' доступен только для чтения"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:73
+#: cvpcb/class_DisplayFootprintsFrame.cpp:76
 msgid "Footprint Viewer"
 msgstr "Просмотрщик посад.мест"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:180 pcbnew/basepcbframe.cpp:478
+#: cvpcb/class_DisplayFootprintsFrame.cpp:182 pcbnew/basepcbframe.cpp:479
 #: pcbnew/tool_pcb.cpp:341
 msgid "Display polar coordinates"
 msgstr "Отображать полярные координаты"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:184 eeschema/tool_lib.cpp:236
+#: cvpcb/class_DisplayFootprintsFrame.cpp:186 eeschema/tool_lib.cpp:236
 #: gerbview/toolbars_gerber.cpp:232 pcbnew/tool_modedit.cpp:225 pcbnew/tool_pcb.cpp:344
 msgid "Set units to inches"
 msgstr "Установить единицы измерения - дюймы"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:188 eeschema/tool_lib.cpp:241
+#: cvpcb/class_DisplayFootprintsFrame.cpp:190 eeschema/tool_lib.cpp:241
 #: gerbview/toolbars_gerber.cpp:236 pcbnew/tool_modedit.cpp:229 pcbnew/tool_pcb.cpp:347
 msgid "Set units to millimeters"
 msgstr "Установить единицы измерения - мм"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:193 eeschema/tool_lib.cpp:246
+#: cvpcb/class_DisplayFootprintsFrame.cpp:195 eeschema/tool_lib.cpp:246
 #: eeschema/tool_sch.cpp:293 gerbview/toolbars_gerber.cpp:241 pcbnew/tool_pcb.cpp:352
 msgid "Change cursor shape"
 msgstr "Изменить форму курсора"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:199 pcbnew/basepcbframe.cpp:488
+#: cvpcb/class_DisplayFootprintsFrame.cpp:201 pcbnew/basepcbframe.cpp:489
 #: pcbnew/tool_pcb.cpp:379
 msgid "Show pads in outline mode"
 msgstr "Показать конт.пл. в контурном режиме"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:203
+#: cvpcb/class_DisplayFootprintsFrame.cpp:205
 msgid "Show texts in line mode"
 msgstr "Показать текст в режиме линий"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:207
+#: cvpcb/class_DisplayFootprintsFrame.cpp:209
 msgid "Show outlines in line mode"
 msgstr "Показать границы в линейном режиме"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:222
+#: cvpcb/class_DisplayFootprintsFrame.cpp:224
 msgid "Display options"
 msgstr "Параметры отображения"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:227
+#: cvpcb/class_DisplayFootprintsFrame.cpp:229
 msgid "Zoom in (F1)"
 msgstr "Увеличить (F1)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:230
+#: cvpcb/class_DisplayFootprintsFrame.cpp:232
 msgid "Zoom out (F2)"
 msgstr "Уменьшить (F2)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:233
+#: cvpcb/class_DisplayFootprintsFrame.cpp:235
 msgid "Redraw view (F3)"
 msgstr "Перерисовать (F3)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:236
+#: cvpcb/class_DisplayFootprintsFrame.cpp:238
 msgid "Zoom auto (Home)"
 msgstr "Автомасштаб (Home)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:240
+#: cvpcb/class_DisplayFootprintsFrame.cpp:242
 msgid "3D Display (Alt+3)"
 msgstr "3D отображение (Alt+3)"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:252
+#: cvpcb/class_DisplayFootprintsFrame.cpp:254
 msgid "Show texts in filled mode"
 msgstr "Показать текст залитым"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:253
+#: cvpcb/class_DisplayFootprintsFrame.cpp:255
 msgid "Show texts in sketch mode"
 msgstr "Показать текст в контурном режиме"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:267
+#: cvpcb/class_DisplayFootprintsFrame.cpp:269
 msgid "Show outlines in filled mode"
 msgstr "Показать границы залитыми"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:268
+#: cvpcb/class_DisplayFootprintsFrame.cpp:270
 #: pcbnew/dialogs/dialog_display_options_base.cpp:67
 msgid "Show outlines in sketch mode"
 msgstr "Показать границы в контурном режиме"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:406 pcbnew/hotkeys.cpp:191
-#: pcbnew/moduleframe.cpp:724 pcbnew/modview_frame.cpp:689 pcbnew/pcbframe.cpp:703
+#: cvpcb/class_DisplayFootprintsFrame.cpp:408 pcbnew/hotkeys.cpp:191
+#: pcbnew/moduleframe.cpp:731 pcbnew/modview_frame.cpp:690 pcbnew/pcbframe.cpp:703
 msgid "3D Viewer"
 msgstr "Просмотрщик 3D"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:478
+#: cvpcb/class_DisplayFootprintsFrame.cpp:480
 #, c-format
 msgid "Footprint '%s' not found"
 msgstr "Посад.место '%s' не найдено"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:494
+#: cvpcb/class_DisplayFootprintsFrame.cpp:496
 #, c-format
 msgid "Footprint: %s"
 msgstr "Посад.место: %s"
 
-#: cvpcb/class_DisplayFootprintsFrame.cpp:507
+#: cvpcb/class_DisplayFootprintsFrame.cpp:509
 #, c-format
 msgid "Lib: %s"
 msgstr "Библиотека: %s"
@@ -3414,11 +3412,11 @@ msgstr "Библиотека: %s"
 msgid "Save footprint association in schematic component footprint fields"
 msgstr "Сохранить связь посад.места в поле посад.места схемного компонента"
 
-#: cvpcb/cvpcb.cpp:54
+#: cvpcb/cvpcb.cpp:51
 msgid "Component/footprint equ files (*.equ)|*.equ"
 msgstr "Файлы эквивалентностей компонент/посад.место (*.equ)|*.equ"
 
-#: cvpcb/cvpcb.cpp:166
+#: cvpcb/cvpcb.cpp:163
 msgid ""
 "You have run CvPcb for the first time using the new footprint library table method "
 "for finding footprints.  CvPcb has either copied the default table or created an "
@@ -3432,7 +3430,7 @@ msgstr ""
 "библиотек, включив все посад.места не включённые KiCad. Подробности смотрите в "
 "разделе \"Таблица библиотек посадочных мест\" документации CvPcb."
 
-#: cvpcb/cvpcb.cpp:181
+#: cvpcb/cvpcb.cpp:178
 msgid "An error occurred attempting to load the global footprint library table"
 msgstr "Ошибка произошла при попытке загрузки глобальной таблицы библиотек посад.мест"
 
@@ -3461,7 +3459,7 @@ msgstr ""
 
 #: cvpcb/cvpcb_mainframe.cpp:431 cvpcb/cvpcb_mainframe.cpp:451
 #: eeschema/sch_base_frame.cpp:238 eeschema/sch_base_frame.cpp:254
-#: pcbnew/moduleframe.cpp:909 pcbnew/moduleframe.cpp:929 pcbnew/pcbnew_config.cpp:141
+#: pcbnew/moduleframe.cpp:916 pcbnew/moduleframe.cpp:936 pcbnew/pcbnew_config.cpp:141
 #: pcbnew/pcbnew_config.cpp:163
 msgid "File Save Error"
 msgstr "Ошибка записи файла"
@@ -3530,7 +3528,7 @@ msgid "Configuration Error"
 msgstr "Ошибка конфигурации"
 
 #: cvpcb/cvpcb_mainframe.cpp:756 eeschema/schframe.cpp:1407 kicad/prjconfig.cpp:87
-#: pcbnew/moduleframe.cpp:815 pcbnew/pcbframe.cpp:1034
+#: pcbnew/moduleframe.cpp:822 pcbnew/pcbframe.cpp:1040
 msgid " [Read Only]"
 msgstr " [Только чтение]"
 
@@ -3593,7 +3591,7 @@ msgstr "Доступные переменные окружения для отн
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:83 eeschema/bom_table_column.h:36
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:216
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:196
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:205
 #: eeschema/dialogs/dialog_rescue_each.cpp:110
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45 eeschema/lib_field.cpp:624
 #: eeschema/lib_field.cpp:803 eeschema/sch_component.cpp:1736
@@ -3680,7 +3678,7 @@ msgid "&Save Footprint Associations\tCtrl+S"
 msgstr "Сохранить связь посад.мест\tCtrl+S"
 
 #: cvpcb/menubar.cpp:74 eeschema/menubar.cpp:404 gerbview/menubar.cpp:178
-#: kicad/menubar.cpp:287 pagelayout_editor/menubar.cpp:113
+#: kicad/menubar.cpp:291 pagelayout_editor/menubar.cpp:113
 #: pcbnew/menubar_pcbframe.cpp:814
 msgid "&Close"
 msgstr "Закрыть"
@@ -3701,7 +3699,7 @@ msgstr "Конфигурация библиотек посад.мест"
 msgid "Configure &Paths"
 msgstr "Настроить пути"
 
-#: cvpcb/menubar.cpp:88 kicad/menubar.cpp:315 pcbnew/menubar_modedit.cpp:322
+#: cvpcb/menubar.cpp:88 kicad/menubar.cpp:328 pcbnew/menubar_modedit.cpp:322
 #: pcbnew/menubar_pcbframe.cpp:293
 msgid "Edit path configuration environment variables"
 msgstr "Редактировать настройки путей переменных окружения"
@@ -3735,13 +3733,13 @@ msgid "Open CvPcb Manual"
 msgstr "Открыть руководство CvPcb"
 
 #: cvpcb/menubar.cpp:121 eeschema/menubar.cpp:550 eeschema/menubar_libedit.cpp:273
-#: eeschema/tool_viewlib.cpp:222 kicad/menubar.cpp:421 pagelayout_editor/menubar.cpp:216
+#: eeschema/tool_viewlib.cpp:222 kicad/menubar.cpp:434 pagelayout_editor/menubar.cpp:216
 #: pcbnew/menubar_modedit.cpp:351 pcbnew/menubar_pcbframe.cpp:432
 #: pcbnew/tool_modview.cpp:191
 msgid "&Getting Started in KiCad"
 msgstr "Начало работы с KiCad"
 
-#: cvpcb/menubar.cpp:122 eeschema/menubar.cpp:551 kicad/menubar.cpp:422
+#: cvpcb/menubar.cpp:122 eeschema/menubar.cpp:551 kicad/menubar.cpp:435
 #: pagelayout_editor/menubar.cpp:217 pcbnew/menubar_pcbframe.cpp:433
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "Открыть руководство для начинающих \"Начало работы с KiCad\""
@@ -3751,12 +3749,12 @@ msgid "&About Kicad"
 msgstr "О Kicad"
 
 #: cvpcb/menubar.cpp:128 eeschema/menubar.cpp:570 eeschema/menubar_libedit.cpp:295
-#: gerbview/menubar.cpp:269 kicad/menubar.cpp:445 pagelayout_editor/menubar.cpp:238
+#: gerbview/menubar.cpp:269 kicad/menubar.cpp:458 pagelayout_editor/menubar.cpp:238
 #: pcbnew/menubar_modedit.cpp:371
 msgid "About KiCad"
 msgstr "О KiCad"
 
-#: cvpcb/menubar.cpp:132 kicad/menubar.cpp:260 pagelayout_editor/menubar.cpp:92
+#: cvpcb/menubar.cpp:132 kicad/menubar.cpp:262 pagelayout_editor/menubar.cpp:92
 #: pcbnew/menubar_pcbframe.cpp:671
 msgid "&Save"
 msgstr "Сохранить"
@@ -4301,8 +4299,8 @@ msgid "Field"
 msgstr "Поле"
 
 #: eeschema/dialogs/dialog_bom_editor.cpp:62
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:171
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:80
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:185
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:94
 msgid "Show"
 msgstr "Показать"
 
@@ -4620,39 +4618,39 @@ msgstr ""
 msgid "Edit"
 msgstr "Править"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:248
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:254
 #, c-format
 msgid "Component '%s' found in library '%s'"
 msgstr "Компонент '%s' найден в библиотеке '%s'"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:254
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:260
 #, c-format
 msgid "Component '%s' not found in any library"
 msgstr "Компонент '%s' не найден в библиотеках"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:270
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:276
 msgid "However, some candidates are found:"
 msgstr "Тем не менее, некоторые кандидаты найдены:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:276
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:282
 #, c-format
 msgid "'%s' found in library '%s'"
 msgstr "'%s' найден в библиотеке '%s'"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:353
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:359
 msgid "No Component Name!"
 msgstr "Нет имени компонента!"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:361
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:367
 #, c-format
 msgid "Component '%s' not found!"
 msgstr "Компонент '%s' не найден!"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:436
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:442
 msgid "Illegal reference. A reference must start with a letter"
 msgstr "Неправильное обозначение. Обозначение должно начинаться с буквы"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:462
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:468
 #, c-format
 msgid ""
 "The field name <%s> does not have a value and is not defined in the field template "
@@ -4663,18 +4661,18 @@ msgstr ""
 "быть не должно и они будут удалены из компонента. Желаете удалить это и все остальные "
 "пустые поля?"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:469
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:475
 msgid "Remove Fields"
 msgstr "Удалить поля"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:905
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:737
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:949
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:785
 msgid "Show Datasheet"
 msgstr "Показать документацию"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:907
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:739
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:124
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:951
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:787
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:138
 msgid ""
 "If your datasheet is given as an http:// link, then pressing this button should bring "
 "it up in your webbrowser."
@@ -4682,22 +4680,22 @@ msgstr ""
 "Если ваша документация доступна по ссылке http://, то нажав эту кнопку можно "
 "просмотреть её в браузере."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:912
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:744
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:956
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:792
 msgid "Browse Footprints"
 msgstr "Обзор посад.мест"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:914
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:746
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:958
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:794
 msgid "Open the footprint browser to choose a footprint and assign it."
 msgstr "Открыть обозреватель посад.мест для выбора посад.места и его назначения."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:920
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:752
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:964
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:800
 msgid "Used only for fields Footprint and Datasheet."
 msgstr "Используется только для полей посад.места и документации."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1059
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1103
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
 #: eeschema/lib_pin.cpp:2103 gerbview/class_gerber_draw_item.cpp:533
 #: gerbview/class_gerber_draw_item.cpp:534 pcbnew/class_pcb_text.cpp:131
@@ -4705,7 +4703,7 @@ msgstr "Используется только для полей посад.ме�
 msgid "Yes"
 msgstr "Да"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1061
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1105
 #: eeschema/lib_pin.cpp:2105 gerbview/class_gerber_draw_item.cpp:533
 #: gerbview/class_gerber_draw_item.cpp:534 pcbnew/class_pcb_text.cpp:129
 #: pcbnew/class_text_mod.cpp:367
@@ -4762,7 +4760,7 @@ msgid "Orientation (degrees):"
 msgstr "Ориентация ( ° ):"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:52
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:59
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:73
 msgid "Select if the component is to be rotated when drawn"
 msgstr "Выбрать, если компонент нужно повернуть при рисовании"
 
@@ -4779,7 +4777,7 @@ msgid "Position:"
 msgstr "Позиция:"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:60
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:67
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:81
 msgid ""
 "Pick the graphical transformation to be used when displaying the component, if any"
 msgstr "Выберите графическое преобразование, используемое при рисовании компонента"
@@ -4844,91 +4842,87 @@ msgstr ""
 msgid "  Fields"
 msgstr "  Поля"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:126
-msgid "New Field"
-msgstr "Новое поле"
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:130
+msgid "Move the selected optional field up one position"
+msgstr "Переместить выбранное дополнительное поле вверх на одну позицию"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:127
-msgid "Create new custom field"
-msgstr "Создать новое пользовательское поле"
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:135
+msgid "Move the selected optional field down one position"
+msgstr "Переместить выбранное дополнительное поле вниз на одну позицию"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:131
-msgid "Delete Field"
-msgstr "Удалить поле"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:132
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:143
 msgid "Delete optional field"
 msgstr "Удалить опциональное поле"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:137
-msgid "Move the selected optional field up one position"
-msgstr "Переместить выбранное опциональное поле вверх на одну позицию"
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:148
+msgid "Create new custom field"
+msgstr "Создать новое пользовательское поле"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:150
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:164
 msgid "Align Left"
 msgstr "По правому краю"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:150
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:164
 msgid "Align Right"
 msgstr "По левому краю"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:152
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:166
 msgid "Horizontal Position:"
 msgstr "Позиция по гориз.:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:156
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:170
 msgid "Align Top"
 msgstr "По нижнему краю"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:156
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:170
 msgid "Align Bottom"
 msgstr "По верхнему краю"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:158
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:172
 msgid "Vertical Position:"
 msgstr "Позиция по верт.:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:169
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:183
 msgid "Visibility:"
 msgstr "Видимость:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:172
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:186
 msgid "Make selected field visible"
 msgstr "Сделать выделенное поле видимым"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:177
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:191
 msgid "Rotated 90 degrees the selected field"
 msgstr "Поворот на 90° выбранного поля"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:184
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:198
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:93
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:107
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95 eeschema/sch_text.cpp:781
 msgid "Bold Italic"
 msgstr "Полужирный курсив"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:186
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:200
 msgid "Font Style:"
 msgstr "Стиль шрифта:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:196
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:210
 msgid "Field Name:"
 msgstr "Имя поля:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:201
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:210
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:215
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:224
 msgid "Name of the selected field. Fixed field names are not editable"
 msgstr "Имя выбранного поля. Имена фиксированных полей не изменяемы"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:205
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:219
 msgid "Field Value:"
 msgstr "Значение поля:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:214
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:228
 msgid "Open in Browser"
 msgstr "Открыть в обозревателе"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:215
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:229
 msgid ""
 "If your datasheet is an http:// link or a complete file path, then it may show in "
 "your browser by pressing this button."
@@ -4936,20 +4930,20 @@ msgstr ""
 "Если ваша документация имеет ссылку http:// или полный путь, то можно просмотреть её "
 "в браузере, нажав эту кнопку."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:228
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:242
 msgid "Font Size:"
 msgstr "Размер шрифта:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:233
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:247
 msgid "Font Size of the selected field"
 msgstr "Размер шрифта выбранного поля"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:237
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:250
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:263
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:146
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:157
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:170
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:251
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:264
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:277
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:160
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:171
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:184
 #: pcbnew/dialogs/dialog_drc_base.cpp:69 pcbnew/dialogs/dialog_drc_base.cpp:84
 #: pcbnew/dialogs/dialog_drc_base.cpp:99
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:94
@@ -4977,26 +4971,26 @@ msgstr "Размер шрифта выбранного поля"
 msgid "unit"
 msgstr "ед.изм."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:241
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:255
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:50
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:161
 msgid "Position X:"
 msgstr "Позиция X:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:246
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:259
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:260
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:273
 msgid "X coordinate of the selected field"
 msgstr "X координата выбранного поля"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:254
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:268
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:92
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:172
 msgid "Position Y:"
 msgstr "Позиция Y:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.h:106
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.h:112
 #: eeschema/dialogs/dialog_lib_new_component_base.h:62
 msgid "Component Properties"
 msgstr "Свойства компонента"
@@ -5045,7 +5039,7 @@ msgid "&Size:"
 msgstr "Размер:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:55
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:69
 #: eeschema/lib_pin.cpp:114 pagelayout_editor/dialogs/properties_frame_base.cpp:84
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:105
 msgid "Right"
@@ -5057,7 +5051,7 @@ msgid "Up"
 msgstr "Вверх"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:55
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:69
 #: eeschema/lib_pin.cpp:115 pagelayout_editor/dialogs/properties_frame_base.cpp:84
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:105
 msgid "Left"
@@ -5113,11 +5107,11 @@ msgstr "Форма"
 msgid "Text Editor"
 msgstr "Текстовый редактор"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:258
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:267
 msgid "Illegal reference.  References must start with a letter."
 msgstr "Неправильное обозначение. Обозначения должны начинаться с буквы."
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:274
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:283
 #, c-format
 msgid ""
 "A new name is entered for this component\n"
@@ -5128,111 +5122,107 @@ msgstr ""
 "Псевдоним %s уже существует!\n"
 "Не удалось обновить компонент"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:708
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:755
 msgid "Chip Name"
 msgstr "Имя компонента"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:28
-msgid "Add Field"
-msgstr "Добавить поле"
-
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:29
-msgid "Add a new custom field"
-msgstr "Добавить новое поле"
-
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:33
-msgid "Clear and Delete Field"
-msgstr "Очистить и удалить поле"
-
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:34
-msgid "Delete one of the optional fields"
-msgstr "Удалить одно из дополнительных полей"
-
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:39
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:32
 msgid "Move the selected optional fields up one position"
 msgstr "Переместить выбранное дополнительное поле вверх на одну позицию"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:43
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:37
+msgid "Move Move the selected optional fields down one position down"
+msgstr "Переместить выбранное дополнительное поле вниз на одну позицию"
+
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:45
+msgid "Delete one of the optional fields"
+msgstr "Удалить одно из дополнительных полей"
+
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:50
+msgid "Add a new custom field"
+msgstr "Добавить новое поле"
+
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:57
 msgid "Edit Spice model"
 msgstr "Редактировать Spice модель"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:57
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:71
 msgid "Horiz. Justify"
 msgstr "Гориз. выравнивание"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:63
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:77
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
 msgid "Bottom"
 msgstr "Вниз"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:63
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:77
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
 msgid "Top"
 msgstr "Вверх"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:65
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:79
 msgid "Vert. Justify"
 msgstr "Верт. выравнивание"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:78
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:121
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:150
 msgid "Visibility"
 msgstr "Видимость"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:81
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:95
 msgid "Check if you want this field visible"
 msgstr "Установите, если хотите видеть это поле"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:86
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:100
 msgid "Check if you want this field's text rotated 90 degrees"
 msgstr "Установить для поворота текста выбранных полей на 90°"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:95
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:109
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:85
 msgid "Style:"
 msgstr "Стиль:"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:105
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:119
 msgid "Field Name"
 msgstr "Имя поля"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:110
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:119
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:124
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:133
 msgid "The text (or value) of the currently selected field"
 msgstr "Текст (или значение) текущего выбранного поля"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:114
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:128
 msgid "Field Value"
 msgstr "Значение поля"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:123
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:137
 msgid "Show in Browser"
 msgstr "Показать в обозревателе"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:137
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:151
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:52 eeschema/sch_text.cpp:813
 #: pcbnew/muonde.cpp:478
 msgid "Size"
 msgstr "Размер"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:142
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:156
 msgid "The vertical height of the currently selected field's text in the schematic"
 msgstr "Верт. высота текущего выбранного текста поля в схематике"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:150
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:164
 msgid "X Position"
 msgstr "Позиция по X"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:161
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:175
 msgid "Y Position"
 msgstr "Позиция по Y"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:166
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:180
 msgid "The Y coordinate of the text relative to the component"
 msgstr "Координата X текста относительно компонента"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.h:89
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.h:95
 msgid "Field Properties"
 msgstr "Свойства поля"
 
@@ -7834,7 +7824,7 @@ msgstr "По центру"
 msgid "Zoom Redraw"
 msgstr "Перерисовать"
 
-#: eeschema/hotkeys.cpp:118 gerbview/hotkeys.cpp:68 kicad/menubar.cpp:144
+#: eeschema/hotkeys.cpp:118 gerbview/hotkeys.cpp:68 kicad/menubar.cpp:160
 #: pagelayout_editor/hotkeys.cpp:81 pcbnew/hotkeys.cpp:193
 msgid "Help (this window)"
 msgstr "Помощь (данное окно)"
@@ -8330,7 +8320,7 @@ msgstr "Не удалось сохранить файл библиотеки с�
 msgid "Part Library Editor -- %s %s"
 msgstr "Part Library Editor -- %s %s"
 
-#: eeschema/libedit.cpp:59 pcbnew/modview_frame.cpp:746
+#: eeschema/libedit.cpp:59 pcbnew/modview_frame.cpp:747
 msgid "no library selected"
 msgstr "не выбрана библиотека"
 
@@ -8827,7 +8817,7 @@ msgid "&Edit"
 msgstr "Правка"
 
 #: eeschema/menubar.cpp:120 eeschema/menubar_libedit.cpp:301
-#: eeschema/tool_viewlib.cpp:241 pagelayout_editor/menubar.cpp:244
+#: eeschema/tool_viewlib.cpp:241 kicad/menubar.cpp:463 pagelayout_editor/menubar.cpp:244
 #: pcbnew/menubar_modedit.cpp:377 pcbnew/menubar_pcbframe.cpp:155
 #: pcbnew/tool_modview.cpp:205
 msgid "&View"
@@ -8845,7 +8835,7 @@ msgstr "Разместить"
 msgid "P&references"
 msgstr "Настройки"
 
-#: eeschema/menubar.cpp:123 kicad/menubar.cpp:452 pcbnew/menubar_pcbframe.cpp:160
+#: eeschema/menubar.cpp:123 kicad/menubar.cpp:464 pcbnew/menubar_pcbframe.cpp:160
 msgid "&Tools"
 msgstr "Инструменты"
 
@@ -8969,7 +8959,7 @@ msgstr "Открыть проект схемы"
 msgid "Open existing schematic hierarchy"
 msgstr "Открыть существующую иерархию схемы"
 
-#: eeschema/menubar.cpp:335 kicad/menubar.cpp:232 pagelayout_editor/menubar.cpp:86
+#: eeschema/menubar.cpp:335 kicad/menubar.cpp:254 pagelayout_editor/menubar.cpp:86
 #: pcbnew/menubar_pcbframe.cpp:654
 msgid "Open &Recent"
 msgstr "Открыть недавнее"
@@ -9081,7 +9071,7 @@ msgstr "Обновляет проект печатной платы с теку�
 msgid "&Open PCB Editor"
 msgstr "Открыть редактор платы"
 
-#: eeschema/menubar.cpp:464 kicad/menubar.cpp:153 kicad/menubar.cpp:382
+#: eeschema/menubar.cpp:464 kicad/menubar.cpp:147 kicad/menubar.cpp:395
 msgid "Run Pcbnew"
 msgstr "Запустить Pcbnew"
 
@@ -9159,7 +9149,7 @@ msgid "Displays current hotkeys list and corresponding commands"
 msgstr "Отображает текущий список горячих клавиш и соответствующих команд"
 
 #: eeschema/menubar.cpp:562 eeschema/menubar_libedit.cpp:285
-#: eeschema/tool_viewlib.cpp:228 gerbview/menubar.cpp:261 kicad/menubar.cpp:436
+#: eeschema/tool_viewlib.cpp:228 gerbview/menubar.cpp:261 kicad/menubar.cpp:449
 #: pagelayout_editor/menubar.cpp:227 pcbnew/menubar_modedit.cpp:363
 #: pcbnew/menubar_pcbframe.cpp:444
 msgid "Get &Involved"
@@ -9169,7 +9159,7 @@ msgstr "Принять участие"
 msgid "Contribute to KiCad (open web browser)"
 msgstr "Внести вклад в KiCad (открыть веб-браузер)"
 
-#: eeschema/menubar.cpp:569 eeschema/menubar_libedit.cpp:294 kicad/menubar.cpp:444
+#: eeschema/menubar.cpp:569 eeschema/menubar_libedit.cpp:294 kicad/menubar.cpp:457
 #: pcbnew/menubar_modedit.cpp:370 pcbnew/menubar_pcbframe.cpp:451
 msgid "&About KiCad"
 msgstr "О KiСad"
@@ -9336,7 +9326,7 @@ msgid "Open the \"Getting Started in KiCad\" guide for beginners"
 msgstr "Открыть руководство для начинающих \"Начало работы с KiCad\""
 
 #: eeschema/menubar_libedit.cpp:286 eeschema/tool_viewlib.cpp:229
-#: gerbview/menubar.cpp:262 kicad/menubar.cpp:437 pagelayout_editor/menubar.cpp:228
+#: gerbview/menubar.cpp:262 kicad/menubar.cpp:450 pagelayout_editor/menubar.cpp:228
 msgid "Contribute to KiCad (opens a web browser)"
 msgstr "Внести вклад в KiCad (открывает веб-браузер)"
 
@@ -10890,7 +10880,7 @@ msgstr "О Eeschema"
 msgid "About Eeschema schematic designer"
 msgstr "О дизайнере схем Eeschema"
 
-#: eeschema/viewlib_frame.cpp:113 pcbnew/modview_frame.cpp:743
+#: eeschema/viewlib_frame.cpp:113 pcbnew/modview_frame.cpp:744
 msgid "Library Browser"
 msgstr "Обозреватель библиотек"
 
@@ -11473,8 +11463,8 @@ msgstr "Не выбран редактор. Выберите один"
 msgid "No file loaded on the active layer %d"
 msgstr "Не загружен файл на активном слое %d"
 
-#: gerbview/events_called_functions.cpp:398 gerbview/gerbview_frame.cpp:145
-#: pcbnew/moduleframe.cpp:306 pcbnew/pcbframe.cpp:413 pcbnew/pcbframe.cpp:959
+#: gerbview/events_called_functions.cpp:398 gerbview/gerbview_frame.cpp:148
+#: pcbnew/moduleframe.cpp:309 pcbnew/pcbframe.cpp:413 pcbnew/pcbframe.cpp:965
 msgid "Visibles"
 msgstr "Видимость"
 
@@ -11671,25 +11661,25 @@ msgstr "Открыть Zip файл"
 msgid "Messages"
 msgstr "Сообщения"
 
-#: gerbview/gerbview_frame.cpp:513
+#: gerbview/gerbview_frame.cpp:516
 msgid "D Codes"
 msgstr "D коды"
 
-#: gerbview/gerbview_frame.cpp:532
+#: gerbview/gerbview_frame.cpp:535
 #, c-format
 msgid "Drawing layer %d not in use"
 msgstr "Слой рисунков %d не используется"
 
-#: gerbview/gerbview_frame.cpp:547
+#: gerbview/gerbview_frame.cpp:550
 msgid "(with X2 attributes)"
 msgstr "(с X2 атрибутами)"
 
-#: gerbview/gerbview_frame.cpp:555
+#: gerbview/gerbview_frame.cpp:558
 #, c-format
 msgid "Image name: '%s'  Layer name: '%s'"
 msgstr "Название образа: '%s' Название слоя: '%s'"
 
-#: gerbview/gerbview_frame.cpp:569
+#: gerbview/gerbview_frame.cpp:572
 msgid "X2 attr"
 msgstr "X2 атрибуты"
 
@@ -12285,179 +12275,195 @@ msgstr ""
 "Проект:\n"
 "'%s'\n"
 
-#: kicad/menubar.cpp:145
-msgid "Load project"
-msgstr "Загрузить проект"
-
-#: kicad/menubar.cpp:146
-msgid "Save project"
-msgstr "Сохранить проект"
-
-#: kicad/menubar.cpp:147 kicad/menubar.cpp:252
-msgid "New Project"
-msgstr "Новый проект"
-
-#: kicad/menubar.cpp:148
-msgid "New Prj From Template"
+#: kicad/menubar.cpp:142
+msgid "New Project From Template"
 msgstr "Новый проект из шаблона"
 
-#: kicad/menubar.cpp:151 kicad/menubar.cpp:375
+#: kicad/menubar.cpp:144
+msgid "Refresh Project Tree"
+msgstr "Обновить дерево проекта"
+
+#: kicad/menubar.cpp:145 kicad/menubar.cpp:388
 msgid "Run Eeschema"
 msgstr "Запустить Eeschema"
 
-#: kicad/menubar.cpp:152
+#: kicad/menubar.cpp:146
 msgid "Run LibEdit"
 msgstr "Запустить LibEdit"
 
-#: kicad/menubar.cpp:154
+#: kicad/menubar.cpp:148
 msgid "Run FpEditor"
 msgstr "Запустить FpEditor"
 
-#: kicad/menubar.cpp:155 kicad/menubar.cpp:390
+#: kicad/menubar.cpp:149 kicad/menubar.cpp:403
 msgid "Run Gerbview"
 msgstr "Запустить Gerbview"
 
-#: kicad/menubar.cpp:156 kicad/menubar.cpp:394
+#: kicad/menubar.cpp:150 kicad/menubar.cpp:407
 msgid "Run Bitmap2Component"
 msgstr "Запустить Bitmap2Component"
 
-#: kicad/menubar.cpp:158
+#: kicad/menubar.cpp:152
 msgid "Run PcbCalculator"
 msgstr "Запустить PcbCalculator"
 
-#: kicad/menubar.cpp:160
+#: kicad/menubar.cpp:154
 msgid "Run PlEditor"
 msgstr "Запустить PlEditor"
 
-#: kicad/menubar.cpp:176
+#: kicad/menubar.cpp:157
+msgid "New Project"
+msgstr "Новый проект"
+
+#: kicad/menubar.cpp:158
+msgid "Open Project"
+msgstr "Открыть проект"
+
+#: kicad/menubar.cpp:159
+msgid "Save Project"
+msgstr "Сохранить проект"
+
+#: kicad/menubar.cpp:181
 msgid "Kicad Manager Hotkeys"
 msgstr "Горячие клавиши менеджера проектов KiCad"
 
-#: kicad/menubar.cpp:221
-msgid "&Open Project"
-msgstr "Открыть проект"
+#: kicad/menubar.cpp:227
+msgid "&Project..."
+msgstr "Проект..."
 
-#: kicad/menubar.cpp:223 kicad/menubar.cpp:499
-msgid "Open existing project"
-msgstr "Открыть существующий проект"
-
-#: kicad/menubar.cpp:233
-msgid "Open recent schematic project"
-msgstr "Открыть недавний проект схемы"
-
-#: kicad/menubar.cpp:239
-msgid "&New Project"
-msgstr "Новый проект"
-
-#: kicad/menubar.cpp:241
+#: kicad/menubar.cpp:229
 msgid "Create new blank project"
 msgstr "Создать новый пустой проект"
 
-#: kicad/menubar.cpp:244
-msgid "New Project from &Template"
-msgstr "Новый проект из шаблона"
+#: kicad/menubar.cpp:231
+msgid "Project from &Template..."
+msgstr "Проект из шаблона..."
 
-#: kicad/menubar.cpp:247 kicad/menubar.cpp:494
+#: kicad/menubar.cpp:234 kicad/menubar.cpp:508
 msgid "Create new project from template"
 msgstr "Создать новый проект из шаблона"
 
-#: kicad/menubar.cpp:253 kicad/menubar.cpp:490
+#: kicad/menubar.cpp:238 pagelayout_editor/menubar.cpp:71
+msgid "&New"
+msgstr "Новый"
+
+#: kicad/menubar.cpp:239 kicad/menubar.cpp:504
 msgid "Create new project"
 msgstr "Создать новый проект"
 
-#: kicad/menubar.cpp:262 kicad/menubar.cpp:504
+#: kicad/menubar.cpp:243
+msgid "&Open Project..."
+msgstr "Открыть проект..."
+
+#: kicad/menubar.cpp:245
+msgid "Open an existing project"
+msgstr "Открыть существующий проект"
+
+#: kicad/menubar.cpp:255
+msgid "Open a recent project"
+msgstr "Открыть недавний проект"
+
+#: kicad/menubar.cpp:264 kicad/menubar.cpp:521
 msgid "Save current project"
 msgstr "Сохранить текущий проект"
 
-#: kicad/menubar.cpp:270
-msgid "&Archive Current Project"
-msgstr "Архивировать текущий проект"
+#: kicad/menubar.cpp:274
+msgid "&Archive Project..."
+msgstr "Архивировать проект..."
 
-#: kicad/menubar.cpp:271
+#: kicad/menubar.cpp:275
 msgid "Archive all needed project files into zip archive"
 msgstr "Архивировать все необходимые файлы проекта в zip-архив"
 
-#: kicad/menubar.cpp:277
-msgid "&Unarchive Project"
-msgstr "Разархивировать проект"
+#: kicad/menubar.cpp:281
+msgid "&Unarchive Project..."
+msgstr "Разархивировать проект..."
 
-#: kicad/menubar.cpp:278
+#: kicad/menubar.cpp:282 kicad/menubar.cpp:535
 msgid "Unarchive project files from zip archive"
 msgstr "Разархивировать файлы проекта из zip-архива"
 
-#: kicad/menubar.cpp:288
+#: kicad/menubar.cpp:292
 msgid "Close KiCad"
 msgstr "Закрыть KiCad"
 
-#: kicad/menubar.cpp:297
+#: kicad/menubar.cpp:299
+msgid "&Refresh"
+msgstr "Обновить"
+
+#: kicad/menubar.cpp:301 kicad/menubar.cpp:543
+msgid "Refresh project tree"
+msgstr "Обновить дерево проекта"
+
+#: kicad/menubar.cpp:310
 msgid "Open Text E&ditor"
 msgstr "Открыть текстовый редактор"
 
-#: kicad/menubar.cpp:298
+#: kicad/menubar.cpp:311
 msgid "Launch preferred text editor"
 msgstr "Запуск редактора текста"
 
-#: kicad/menubar.cpp:304
+#: kicad/menubar.cpp:317
 msgid "&Open Local File"
 msgstr "Открыть локальный файл"
 
-#: kicad/menubar.cpp:305
+#: kicad/menubar.cpp:318
 msgid "Edit local file"
 msgstr "Редактировать локальный файл"
 
-#: kicad/menubar.cpp:314 pcbnew/menubar_modedit.cpp:321 pcbnew/menubar_pcbframe.cpp:292
+#: kicad/menubar.cpp:327 pcbnew/menubar_modedit.cpp:321 pcbnew/menubar_pcbframe.cpp:292
 msgid "Configure Pa&ths"
 msgstr "Настройка путей"
 
-#: kicad/menubar.cpp:321
+#: kicad/menubar.cpp:334
 msgid "&Set Text Editor"
 msgstr "Выбрать текстовый редактор"
 
-#: kicad/menubar.cpp:322
+#: kicad/menubar.cpp:335
 msgid "Set your preferred text editor"
 msgstr "Выбор предпочитаемого редактора текстов"
 
-#: kicad/menubar.cpp:330
+#: kicad/menubar.cpp:343
 msgid "System &Default PDF Viewer"
 msgstr "Системный PDF просмотрщик по умолчанию"
 
-#: kicad/menubar.cpp:331
+#: kicad/menubar.cpp:344
 msgid "Use system default PDF viewer"
 msgstr "Использовать системный просмотрщик PDF по умолчанию"
 
-#: kicad/menubar.cpp:339
+#: kicad/menubar.cpp:352
 msgid "&Favourite PDF Viewer"
 msgstr "Предпочитаемый PDF просмотрщик"
 
-#: kicad/menubar.cpp:340
+#: kicad/menubar.cpp:353
 msgid "Use favourite PDF viewer"
 msgstr "Использовать предпочитаемый просмотрщик PDF"
 
-#: kicad/menubar.cpp:350
+#: kicad/menubar.cpp:363
 msgid "Set &PDF Viewer"
 msgstr "Выбрать PDF просмотрщик"
 
-#: kicad/menubar.cpp:351
+#: kicad/menubar.cpp:364
 msgid "Set favourite PDF viewer"
 msgstr "Выбрать предпочитаемый PDF просмотрщик"
 
-#: kicad/menubar.cpp:356
+#: kicad/menubar.cpp:369
 msgid "&PDF Viewer"
 msgstr "PDF просмотрщик"
 
-#: kicad/menubar.cpp:357
+#: kicad/menubar.cpp:370
 msgid "PDF viewer preferences"
 msgstr "Выбор просмотрщика PDF"
 
-#: kicad/menubar.cpp:378
+#: kicad/menubar.cpp:391
 msgid "Run Library Editor"
 msgstr "Запустить редактор библиотек"
 
-#: kicad/menubar.cpp:386
+#: kicad/menubar.cpp:399
 msgid "Run Footprint Editor"
 msgstr "Запустить редактор посадочных мест"
 
-#: kicad/menubar.cpp:397
+#: kicad/menubar.cpp:410
 msgid ""
 "Bitmap2Component - Convert bitmap images to Eeschema\n"
 "or Pcbnew elements"
@@ -12465,41 +12471,41 @@ msgstr ""
 "Bitmap2Component - преобразование растрового изображения\n"
 "в элементы Eeschema или Pcbnew"
 
-#: kicad/menubar.cpp:401
+#: kicad/menubar.cpp:414
 msgid "Run Pcb Calculator"
 msgstr "Запустить калькулятор печатных плат"
 
-#: kicad/menubar.cpp:403
+#: kicad/menubar.cpp:416
 msgid "Pcb calculator - Calculator for components, track width, etc."
 msgstr "Pcb calculator - калькулятор компонентов, ширины дорожек и т.п."
 
-#: kicad/menubar.cpp:406
+#: kicad/menubar.cpp:419
 msgid "Run Page Layout Editor"
 msgstr "Запустить редактор макета листа"
 
-#: kicad/menubar.cpp:408
+#: kicad/menubar.cpp:421
 msgid "Pl editor - Worksheet layout editor"
 msgstr "Pl editor - редактор макета рабочего листа"
 
-#: kicad/menubar.cpp:416
+#: kicad/menubar.cpp:429
 msgid "KiCad &Manual"
 msgstr "Руководство KiCad"
 
-#: kicad/menubar.cpp:417
+#: kicad/menubar.cpp:430
 msgid "Open KiCad user manual"
 msgstr "Открыть руководство пользователя KiCad"
 
-#: kicad/menubar.cpp:450
+#: kicad/menubar.cpp:465
 msgid "&Browse"
 msgstr "Просмотр"
 
-#: kicad/menubar.cpp:512
+#: kicad/menubar.cpp:513
+msgid "Open existing project"
+msgstr "Открыть существующий проект"
+
+#: kicad/menubar.cpp:530
 msgid "Archive all project files"
 msgstr "Архивировать все файлы проекта"
-
-#: kicad/menubar.cpp:520
-msgid "Refresh project tree"
-msgstr "Обновить дерево проекта"
 
 #: kicad/preferences.cpp:63
 msgid "You must choose a PDF viewer before using this option."
@@ -12959,10 +12965,6 @@ msgstr "Новая"
 #: pagelayout_editor/hotkeys.cpp:128 pagelayout_editor/pl_editor_frame.cpp:345
 msgid "Page Layout Editor"
 msgstr "Редактор макета листа"
-
-#: pagelayout_editor/menubar.cpp:71
-msgid "&New"
-msgstr "Новый"
 
 #: pagelayout_editor/menubar.cpp:73
 msgid "Create new page layout design"
@@ -14435,19 +14437,19 @@ msgstr "Прервать трассировку?"
 msgid "Could not automatically place footprints. No board outlines detected."
 msgstr "Не удалось автоматически разместить посад.места. Не обнаружен контур платы."
 
-#: pcbnew/basepcbframe.cpp:164
+#: pcbnew/basepcbframe.cpp:165
 msgid "Error loading project footprint libraries"
 msgstr "Ошибка загрузки библиотек посад.мест проекта"
 
-#: pcbnew/basepcbframe.cpp:477
+#: pcbnew/basepcbframe.cpp:478
 msgid "Display rectangular coordinates"
 msgstr "Отображать прямоугольные координаты"
 
-#: pcbnew/basepcbframe.cpp:489
+#: pcbnew/basepcbframe.cpp:490
 msgid "Show pads in fill mode"
 msgstr "Показать конт.пл. в режиме заливки"
 
-#: pcbnew/basepcbframe.cpp:854
+#: pcbnew/basepcbframe.cpp:855
 msgid "Zoom "
 msgstr "Масштаб "
 
@@ -17024,7 +17026,7 @@ msgid "Change Footprint(s)"
 msgstr "Изменить посад.место(а)"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:129 pcbnew/hotkeys.cpp:335
-#: pcbnew/moduleframe.cpp:813
+#: pcbnew/moduleframe.cpp:820
 msgid "Footprint Editor"
 msgstr "Редактор посад.мест"
 
@@ -23732,19 +23734,19 @@ msgstr "Изменить слой контура"
 msgid "Set Line Width"
 msgstr "Установить ширину линии"
 
-#: pcbnew/moduleframe.cpp:525
+#: pcbnew/moduleframe.cpp:532
 msgid "Save the changes to the footprint before closing?"
 msgstr "Сохранить изменения в посад.месте перед закрытием?"
 
-#: pcbnew/moduleframe.cpp:546
+#: pcbnew/moduleframe.cpp:553
 msgid "Library is not set, the footprint could not be saved."
 msgstr "Библиотека не выбрана, посад.место не удастся сохранить."
 
-#: pcbnew/moduleframe.cpp:783
+#: pcbnew/moduleframe.cpp:790
 msgid "no active library"
 msgstr "нет активной библиотеки"
 
-#: pcbnew/moduleframe.cpp:905 pcbnew/pcbnew_config.cpp:137
+#: pcbnew/moduleframe.cpp:912 pcbnew/pcbnew_config.cpp:137
 #, c-format
 msgid ""
 "Error occurred saving the global footprint library table:\n"
@@ -23755,7 +23757,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/moduleframe.cpp:925 pcbnew/pcbnew_config.cpp:159
+#: pcbnew/moduleframe.cpp:932 pcbnew/pcbnew_config.cpp:159
 #, c-format
 msgid ""
 "Error occurred saving project specific footprint library table:\n"
@@ -24389,11 +24391,11 @@ msgstr ""
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Файл автосохранения '%s' не может быть удалён!"
 
-#: pcbnew/pcbframe.cpp:1038
+#: pcbnew/pcbframe.cpp:1044
 msgid " [new file]"
 msgstr " [новый файл]"
 
-#: pcbnew/pcbframe.cpp:1178
+#: pcbnew/pcbframe.cpp:1184
 msgid ""
 "Cannot update the PCB, because the Kicad is opened in stand-alone mode. In order to "
 "create/update PCBs from schematics, you need to launch Kicad shell and create a PCB "
