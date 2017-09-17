@@ -82,8 +82,6 @@ public:
     /// Filters the items in the current selection (invokes dialog)
     static TOOL_ACTION filterSelection;
 
-    /// Copy selected items to clipboard
-    static TOOL_ACTION selectionToClipboard;
 
     // Edit Tool
     /// Activation of the edit tool
@@ -303,6 +301,15 @@ public:
     /// Pasting module items from clipboard
     static TOOL_ACTION pasteItems;
 
+    /// Copy selected items to clipboard
+    static TOOL_ACTION copyToClipboard;
+
+    /// Paste from clipboard
+    static TOOL_ACTION pasteFromClipboard;
+
+    /// Paste from clipboard
+    static TOOL_ACTION cutToClipboard;
+
     /// Display module edges as outlines
     static TOOL_ACTION moduleEdgeOutlines;
 
@@ -368,7 +375,6 @@ public:
     static TOOL_ACTION drillOrigin;
     static TOOL_ACTION crossProbeSchToPcb;
     static TOOL_ACTION appendBoard;
-    static TOOL_ACTION appendClipboard;
     static TOOL_ACTION showHelp;
     static TOOL_ACTION showLocalRatsnest;
     static TOOL_ACTION toBeDone;

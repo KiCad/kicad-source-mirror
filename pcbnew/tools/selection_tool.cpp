@@ -59,7 +59,6 @@ using namespace std::placeholders;
 #include "pcb_actions.h"
 
 #include "kicad_plugin.h"
-#include "kicad_clipboard.h"
 
 // Selection tool actions
 TOOL_ACTION PCB_ACTIONS::selectionActivate( "pcbnew.InteractiveSelection",
@@ -122,13 +121,6 @@ TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSel
         AS_GLOBAL, 0,
         _( "Filter Selection" ), _( "Filter the types of items in the selection" ),
         nullptr );
-
-TOOL_ACTION PCB_ACTIONS::selectionToClipboard( "pcbnew.InteractiveSelection.CopyToClipboard",
-        AS_GLOBAL, MD_CTRL + int( 'C' ),
-        _( "Copy to Clipboard" ), _( "Copy selected content to clipboard" ),
-        nullptr );
-
-
 
 class SELECT_MENU: public CONTEXT_MENU
 {
@@ -618,25 +610,11 @@ void SELECTION_TOOL::setTransitions()
     Go( &SELECTION_TOOL::selectNet, PCB_ACTIONS::selectNet.MakeEvent() );
     Go( &SELECTION_TOOL::selectSameSheet, PCB_ACTIONS::selectSameSheet.MakeEvent() );
 
-    Go( &SELECTION_TOOL::selectionToClipboard, PCB_ACTIONS::selectionToClipboard.MakeEvent() );
-
     Go( &SELECTION_TOOL::selectOnSheetFromEeschema, PCB_ACTIONS::selectOnSheetFromEeschema.MakeEvent() );
     Go( &SELECTION_TOOL::updateSelection, PCB_ACTIONS::selectionModified.MakeEvent() );
 }
 
 
-int SELECTION_TOOL::selectionToClipboard( const TOOL_EVENT& aEvent )
-{
-    CLIPBOARD_IO io;
-    BOARD*  board = getModel<BOARD>();
-
-    io.setBoard( board );
-    //auto& selection = RequestSelection( SELECTION_DELETABLE | SELECTION_SANITIZE_PADS );
-    auto& selection = GetSelection();
-    io.SaveSelection( selection );
-
-    return 0;
-}
 
 SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
 {

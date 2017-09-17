@@ -55,6 +55,8 @@ using namespace std::placeholders;
 #include "selection_tool.h"
 #include "edit_tool.h"
 #include "grid_helper.h"
+#include "kicad_clipboard.h"
+#include "pcbnew_control.h"
 
 #include <router/router_tool.h>
 
@@ -161,6 +163,17 @@ TOOL_ACTION PCB_ACTIONS::measureTool( "pcbnew.InteractiveEdit.measureTool",
         _( "Measuring tool" ), _( "Interactively measure distance between points" ),
         nullptr, AF_ACTIVATE );
 
+TOOL_ACTION PCB_ACTIONS::copyToClipboard( "pcbnew.InteractiveEdit.CopyToClipboard",
+        AS_GLOBAL, MD_CTRL + int( 'C' ),
+        _( "Copy to Clipboard" ), _( "Copy selected content to clipboard" ),
+        copy_xpm );
+
+TOOL_ACTION PCB_ACTIONS::cutToClipboard( "pcbnew.InteractiveEdit.CutToClipboard",
+        AS_GLOBAL, MD_CTRL + int( 'X' ),
+        _( "Cut to Clipboard" ), _( "Cut selected content to clipboard" ),
+        cut_xpm );
+
+
 static wxPoint getAnchorPoint( const SELECTION &selection, const MOVE_PARAMETERS &params )
 {
     wxPoint anchorPoint;
@@ -235,8 +248,6 @@ static wxPoint getAnchorPoint( const SELECTION &selection, const MOVE_PARAMETERS
 }
 
 
-
-
 EDIT_TOOL::EDIT_TOOL() :
     PCB_TOOL( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL ),
     m_dragging( false )
@@ -288,6 +299,12 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::positionRelative, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::createArray, SELECTION_CONDITIONS::NotEmpty );
+
+    menu.AddSeparator();
+    menu.AddItem( PCB_ACTIONS::copyToClipboard, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::cutToClipboard, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::pasteFromClipboard );
+    menu.AddSeparator();
 
     // Mirror only available in modedit
     menu.AddItem( PCB_ACTIONS::mirror, editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
@@ -1211,6 +1228,10 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::editFootprintInFpEditor, PCB_ACTIONS::editFootprintInFpEditor.MakeEvent() );
     Go( &EDIT_TOOL::ExchangeFootprints,      PCB_ACTIONS::exchangeFootprints.MakeEvent() );
     Go( &EDIT_TOOL::MeasureTool,             PCB_ACTIONS::measureTool.MakeEvent() );
+
+    Go( &EDIT_TOOL::copyToClipboard, PCB_ACTIONS::copyToClipboard.MakeEvent() );
+    Go( &EDIT_TOOL::cutToClipboard, PCB_ACTIONS::cutToClipboard.MakeEvent() );
+
 }
 
 
@@ -1265,6 +1286,25 @@ int EDIT_TOOL::editFootprintInFpEditor( const TOOL_EVENT& aEvent )
     if( selection.IsHover() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
+    return 0;
+}
+
+int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
+{
+    CLIPBOARD_IO io;
+    BOARD*  board = getModel<BOARD>();
+
+    io.setBoard( board );
+    auto& selection = m_selectionTool->RequestSelection();
+    io.SaveSelection( selection );
+
+    return 0;
+}
+
+int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
+{
+    copyToClipboard( aEvent );
+    Remove( aEvent );
     return 0;
 }
 

@@ -142,10 +142,6 @@ TOOL_ACTION PCB_ACTIONS::appendBoard( "pcbnew.EditorControl.appendBoard",
         AS_GLOBAL, 0,
         "", "" );
 
-TOOL_ACTION PCB_ACTIONS::appendClipboard( "pcbnew.EditorControl.appendClipboard",
-        AS_GLOBAL, MD_CTRL + int( 'V' ),
-        "", "" );
-
 TOOL_ACTION PCB_ACTIONS::highlightNet( "pcbnew.EditorControl.highlightNet",
         AS_GLOBAL, 0,
         "", "" );
@@ -411,17 +407,21 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
     m_frame->SetToolID( ID_PCB_MODULE_BUTT, wxCURSOR_PENCIL, _( "Add footprint" ) );
 
     // Add all the drawable parts to preview
+    VECTOR2I cursorPos = controls->GetCursorPosition();
     if( module )
     {
+        module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
         preview.Add( module );
+        module->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Add, &preview, _1 ) );
+        view->Update( &preview );
     }
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        VECTOR2I cursorPos = controls->GetCursorPosition();
+        cursorPos = controls->GetCursorPosition();
 
-        if( evt->IsCancel() || evt->IsActivate() )
+        if( evt->IsCancel() )
         {
             if( module )
             {

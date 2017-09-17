@@ -54,6 +54,7 @@
 #include <pcb_painter.h>
 #include <origin_viewitem.h>
 #include <board_commit.h>
+#include <bitmaps.h>
 
 #include <functional>
 using namespace std::placeholders;
@@ -223,6 +224,11 @@ TOOL_ACTION PCB_ACTIONS::showHelp( "pcbnew.Control.showHelp",
 TOOL_ACTION PCB_ACTIONS::toBeDone( "pcbnew.Control.toBeDone",
         AS_GLOBAL, 0,           // dialog saying it is not implemented yet
         "", "" );               // so users are aware of that
+
+TOOL_ACTION PCB_ACTIONS::pasteFromClipboard( "pcbnew.InteractiveEdit.pasteFromClipboard",
+        AS_GLOBAL, MD_CTRL + int( 'V' ),
+        _( "Paste from Clipboard" ), _( "Paste content from clipboard" ),
+        paste_xpm );
 
 
 PCBNEW_CONTROL::PCBNEW_CONTROL() :
@@ -763,7 +769,7 @@ int PCBNEW_CONTROL::AppendBoardFromClipboard( const TOOL_EVENT& aEvent )
             }
             break;
         case PCB_MODULE_T:
-
+            clipItem->SetParent( board );
             if(frame->IsType( FRAME_PCB) )
             {
                 m_toolMgr->RunAction( "pcbnew.EditorControl.placeModule", true,
@@ -1019,8 +1025,9 @@ void PCBNEW_CONTROL::setTransitions()
     // Append control
     Go( &PCBNEW_CONTROL::AppendBoardFromFile,
             PCB_ACTIONS::appendBoard.MakeEvent() );
+
     Go( &PCBNEW_CONTROL::AppendBoardFromClipboard,
-            PCB_ACTIONS::appendClipboard.MakeEvent() );
+            PCB_ACTIONS::pasteFromClipboard.MakeEvent() );
 }
 
 

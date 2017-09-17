@@ -139,6 +139,22 @@ public:
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
+    /**
+     * Function copyToClipboard()
+     * Sends the current selection to the clipboard by formatting it as a fake pcb
+     * see AppendBoardFromClipboard for importing
+     * @return True if it was sent succesfully
+     */
+    int copyToClipboard( const TOOL_EVENT& aEvent );
+
+    /**
+     * Function cutToClipboard()
+     * Sends the current selection to the clipboard by formatting it as a fake pcb
+     * see AppendBoardFromClipboard for importing
+     * @return True if it was sent succesfully
+     */
+    int cutToClipboard( const TOOL_EVENT& aEvent );
+
 private:
     ///> Selection tool used for obtaining selected items
     SELECTION_TOOL* m_selectionTool;

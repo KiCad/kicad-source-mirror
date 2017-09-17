@@ -300,14 +300,6 @@ private:
     void unselectVisually( BOARD_ITEM* aItem );
 
     /**
-     * Function selectionToClipboard()
-     * Sends the current selection to the clipboard by formatting it as a fake pcb
-     * see AppendBoardFromClipboard for importing
-     * @return True if it was sent succesfully
-     */
-    int selectionToClipboard( const TOOL_EVENT& aEvent );
-
-    /**
      * Function selectionContains()
      * Checks if the given point is placed within any of selected items' bounding box.
      *
