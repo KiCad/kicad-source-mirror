@@ -580,18 +580,16 @@ void LIB_PART::AddDrawItem( LIB_ITEM* aItem )
 
 LIB_ITEM* LIB_PART::GetNextDrawItem( LIB_ITEM* aItem, KICAD_T aType )
 {
-    /* Return the next draw object pointer.
-     * If item is NULL return the first item of type in the list.
-     */
     if( m_drawings.empty( aType ) )
         return NULL;
 
     if( aItem == NULL )
         return &( *( m_drawings.begin( aType ) ) );
 
-    // Search for last item, assume aItem is of type aType
+    // Search for the last item, assume aItem is of type aType
     wxASSERT( ( aType == TYPE_NOT_INIT ) || ( aType == aItem->Type() ) );
     LIB_ITEMS_CONTAINER::ITERATOR it = m_drawings.begin( aType );
+
     while( ( it != m_drawings.end( aType ) ) && ( aItem != &( *it ) ) )
         ++it;
 
@@ -599,6 +597,7 @@ LIB_ITEM* LIB_PART::GetNextDrawItem( LIB_ITEM* aItem, KICAD_T aType )
     if( it != m_drawings.end( aType ) )
     {
         ++it;
+
         if( it != m_drawings.end( aType ) )
             return &( *it );
     }
@@ -1492,7 +1491,7 @@ void LIB_PART::CopySelectedItems( const wxPoint& aOffset )
         tmp.push_back( newItem );
     }
 
-    for( auto item : tmp)
+    for( auto item : tmp )
         m_drawings.push_back( item );
 
     MoveSelectedItems( aOffset );
@@ -1598,7 +1597,11 @@ void LIB_PART::SetUnitCount( int aCount )
     {
         int prevCount = m_unitCount;
 
+        // Temporary storage for new items, as adding new items directly to
+        // m_drawings may cause the buffer reallocation which invalidates the
+        // iterators
         std::vector< LIB_ITEM* > tmp;
+
         for( LIB_ITEM& item : m_drawings )
         {
             if( item.m_Unit != 1 )
@@ -1608,13 +1611,10 @@ void LIB_PART::SetUnitCount( int aCount )
             {
                 LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
                 newItem->m_Unit = j;
-
-                // We cannot use push_back here, because when adding items in vector
-                // the buffer can be reallocated, that change the previous value of
-                // .begin() and .end() iterators and invalidate others iterators
                 tmp.push_back( newItem );
             }
         }
+
         for( auto item : tmp )
             m_drawings.push_back( item );
     }

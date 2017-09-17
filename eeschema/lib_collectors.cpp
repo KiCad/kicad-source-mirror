@@ -125,6 +125,8 @@ void LIB_COLLECTOR::Collect( LIB_ITEMS_CONTAINER& aItems, const KICAD_T aFilterL
     m_data.m_convert = aConvert;
 
     for( LIB_ITEM& item : aItems )
+    {
         if( SEARCH_QUIT == item.Visit( m_inspector, NULL, m_ScanTypes ) )
             break;
+    }
 }
