@@ -27,12 +27,9 @@
 
 
 #include <class_collector.h>
-#include <lib_draw_item.h>
+#include <class_libentry.h>
 
-
-class LIB_ITEMS_CONTAINER;
 class LIB_COLLECTOR;
-
 
 class LIB_COLLECTOR_DATA
 {

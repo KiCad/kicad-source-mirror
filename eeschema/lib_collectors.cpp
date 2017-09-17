@@ -26,7 +26,6 @@
 #include <general.h>
 #include <transform.h>
 #include <lib_collectors.h>
-#include <lib_items.h>
 
 
 const KICAD_T LIB_COLLECTOR::AllItems[] = {

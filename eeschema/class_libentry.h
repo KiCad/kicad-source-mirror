@@ -34,8 +34,8 @@
 #include <lib_id.h>
 #include <lib_draw_item.h>
 #include <lib_field.h>
-#include <lib_items.h>
 #include <vector>
+#include <multivector.h>
 
 class EDA_RECT;
 class LINE_READER;
@@ -49,6 +49,8 @@ class LIB_FIELD;
 typedef std::vector<LIB_ALIAS*>         LIB_ALIASES;
 typedef std::shared_ptr<LIB_PART>       PART_SPTR;      ///< shared pointer to LIB_PART
 typedef std::weak_ptr<LIB_PART>         PART_REF;       ///< weak pointer to LIB_PART
+typedef MULTIVECTOR<LIB_ITEM, LIB_ARC_T, LIB_FIELD_T> LIB_ITEMS_CONTAINER;
+typedef LIB_ITEMS_CONTAINER::ITEM_PTR_VECTOR LIB_ITEMS;
 
 
 /* values for member .m_options */

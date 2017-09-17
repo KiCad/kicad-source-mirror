@@ -138,7 +138,6 @@ set( EESCHEMA_SRCS
     lib_draw_item.cpp
     lib_export.cpp
     lib_field.cpp
-    lib_items.cpp
     lib_pin.cpp
     lib_polyline.cpp
     lib_rectangle.cpp
