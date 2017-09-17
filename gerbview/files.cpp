@@ -222,7 +222,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
 
     // Read gerber files: each file is loaded on a new GerbView layer
     bool success = true;
-    int layer = getActiveLayer();
+    int layer = GetActiveLayer();
 
     // Manage errors when loading files
     wxString msg;
@@ -237,7 +237,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
 
         m_lastFileName = filename.GetFullPath();
 
-        setActiveLayer( layer, false );
+        SetActiveLayer( layer, false );
 
         if( Read_GERBER_File( filename.GetFullPath() ) )
         {
@@ -263,7 +263,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
                 break;
             }
 
-            setActiveLayer( layer, false );
+            SetActiveLayer( layer, false );
         }
     }
 
@@ -278,7 +278,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
 
     // Synchronize layers tools with actual active layer:
     ReFillLayerWidget();
-    setActiveLayer( getActiveLayer() );
+    SetActiveLayer( GetActiveLayer() );
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();
     return success;
@@ -325,7 +325,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
 
     // Read Excellon drill files: each file is loaded on a new GerbView layer
     bool success = true;
-    int layer = getActiveLayer();
+    int layer = GetActiveLayer();
 
     // Manage errors when loading files
     wxString msg;
@@ -340,7 +340,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
 
         m_lastFileName = filename.GetFullPath();
 
-        setActiveLayer( layer, false );
+        SetActiveLayer( layer, false );
 
         if( Read_EXCELLON_File( filename.GetFullPath() ) )
         {
@@ -367,7 +367,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
                 break;
             }
 
-            setActiveLayer( layer, false );
+            SetActiveLayer( layer, false );
         }
     }
 
@@ -382,7 +382,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
 
     // Synchronize layers tools with actual active layer:
     ReFillLayerWidget();
-    setActiveLayer( getActiveLayer() );
+    SetActiveLayer( GetActiveLayer() );
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();
 
@@ -454,7 +454,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
             continue;
         }
 
-        int layer = getActiveLayer();
+        int layer = GetActiveLayer();
 
         if( layer == NO_AVAILABLE_LAYERS )
         {
@@ -531,7 +531,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
                 gerber_image->m_FileName = fname;
 
             layer = getNextAvailableLayer( layer );
-            setActiveLayer( layer, false );
+            SetActiveLayer( layer, false );
         }
     }
 
@@ -584,7 +584,7 @@ bool GERBVIEW_FRAME::LoadZipArchiveFile( const wxString& aFullFileName )
 
     // Synchronize layers tools with actual active layer:
     ReFillLayerWidget();
-    setActiveLayer( getActiveLayer() );
+    SetActiveLayer( GetActiveLayer() );
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();
 

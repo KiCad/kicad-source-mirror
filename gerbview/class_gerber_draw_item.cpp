@@ -33,6 +33,7 @@
 #include <class_drawpanel.h>
 #include <msgpanel.h>
 #include <gerbview_frame.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 #include <class_gerber_draw_item.h>
 #include <class_gerber_file_image.h>
@@ -40,7 +41,7 @@
 
 
 GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GERBER_FILE_IMAGE* aGerberImageFile ) :
-    EDA_ITEM( (EDA_ITEM*)NULL, TYPE_GERBER_DRAW_ITEM )
+    EDA_ITEM( (EDA_ITEM*)NULL, GERBER_DRAW_ITEM_T )
 {
     m_GerberImageFile = aGerberImageFile;
     m_Shape         = GBR_SEGMENT;
@@ -158,7 +159,7 @@ void GERBER_DRAW_ITEM::SetLayerParameters()
 }
 
 
-wxString GERBER_DRAW_ITEM::ShowGBRShape()
+wxString GERBER_DRAW_ITEM::ShowGBRShape() const
 {
     switch( m_Shape )
     {
@@ -203,7 +204,7 @@ wxString GERBER_DRAW_ITEM::ShowGBRShape()
 }
 
 
-D_CODE* GERBER_DRAW_ITEM::GetDcodeDescr()
+D_CODE* GERBER_DRAW_ITEM::GetDcodeDescr() const
 {
     if( (m_DCode < FIRST_DCODE) || (m_DCode > LAST_DCODE) )
         return NULL;
@@ -211,7 +212,7 @@ D_CODE* GERBER_DRAW_ITEM::GetDcodeDescr()
     if( m_GerberImageFile == NULL )
         return NULL;
 
-    return m_GerberImageFile->GetDCODE( m_DCode, false );
+    return m_GerberImageFile->GetDCODE( m_DCode );
 }
 
 
@@ -219,8 +220,100 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
 {
     // return a rectangle which is (pos,dim) in nature.  therefore the +1
     EDA_RECT bbox( m_Start, wxSize( 1, 1 ) );
+    D_CODE* code = GetDcodeDescr();
 
-    bbox.Inflate( m_Size.x / 2, m_Size.y / 2 );
+    // TODO(JE) GERBER_DRAW_ITEM maybe should actually be a number of subclasses.
+    // Until/unless that is changed, we need to do different things depending on
+    // what is actually being represented by this GERBER_DRAW_ITEM.
+
+    switch( m_Shape )
+    {
+    case GBR_POLYGON:
+    {
+        auto bb = m_Polygon.BBox();
+        bbox.Inflate( bb.GetWidth() / 2, bb.GetHeight() / 2 );
+        bbox.SetOrigin( bb.GetOrigin().x, bb.GetOrigin().y );
+        break;
+    }
+
+    case GBR_CIRCLE:
+    {
+        double radius = GetLineLength( m_Start, m_End );
+        bbox.Inflate( radius, radius );
+        break;
+    }
+
+    case GBR_ARC:
+    {
+        // Note: using a larger-than-necessary BB to simplify computation
+        double radius = GetLineLength( m_Start, m_ArcCentre );
+        bbox.Inflate( radius, radius );
+        break;
+    }
+
+    case GBR_SPOT_CIRCLE:
+    {
+        int radius = code->m_Size.x >> 1;
+        bbox.Inflate( radius, radius );
+        break;
+    }
+
+    case GBR_SPOT_RECT:
+    {
+        bbox.Inflate( code->m_Size.x / 2, code->m_Size.y / 2 );
+        break;
+    }
+
+    case GBR_SPOT_OVAL:
+    {
+        bbox.Inflate( code->m_Size.x, code->m_Size.y );
+        break;
+    }
+
+    case GBR_SPOT_POLY:
+    {
+        if( code->m_Polygon.OutlineCount() == 0 )
+            code->ConvertShapeToPolygon();
+
+        bbox.Inflate( code->m_Polygon.BBox().GetWidth() / 2, code->m_Polygon.BBox().GetHeight() / 2 );
+        break;
+    }
+    case GBR_SPOT_MACRO:
+    {
+        bbox = code->GetMacro()->GetBoundingBox();
+        break;
+    }
+
+    case GBR_SEGMENT:
+    {
+        if( code && code->m_Shape == APT_RECT )
+        {
+            if( m_Polygon.OutlineCount() > 0 )
+            {
+                auto bb = m_Polygon.BBox();
+                bbox.Inflate( bb.GetWidth() / 2, bb.GetHeight() / 2 );
+                bbox.SetOrigin( bb.GetOrigin().x, bb.GetOrigin().y );
+            }
+        }
+        else
+        {
+            int radius = ( m_Size.x + 1 ) / 2;
+
+            int ymax = std::max( m_Start.y, m_End.y ) + radius;
+            int xmax = std::max( m_Start.x, m_End.x ) + radius;
+
+            int ymin = std::min( m_Start.y, m_End.y ) - radius;
+            int xmin = std::min( m_Start.x, m_End.x ) - radius;
+
+            bbox = EDA_RECT( wxPoint( xmin, ymin ), wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
+        }
+
+        break;
+    }
+    default:
+        wxASSERT_MSG( false, wxT( "GERBER_DRAW_ITEM shape is unknown!" ) );
+        break;
+    }
 
     // calculate the corners coordinates in current gerber axis orientations
     wxPoint org = GetABPosition( bbox.GetOrigin() );
@@ -243,8 +336,11 @@ void GERBER_DRAW_ITEM::MoveAB( const wxPoint& aMoveVector )
     m_End       += xymove;
     m_ArcCentre += xymove;
 
-    for( unsigned ii = 0; ii < m_PolyCorners.size(); ii++ )
-        m_PolyCorners[ii] += xymove;
+    if( m_Polygon.OutlineCount() > 0 )
+    {
+        for( auto it = m_Polygon.Iterate( 0 ); it; ++it )
+            *it += xymove;
+    }
 }
 
 
@@ -254,8 +350,11 @@ void GERBER_DRAW_ITEM::MoveXY( const wxPoint& aMoveVector )
     m_End       += aMoveVector;
     m_ArcCentre += aMoveVector;
 
-    for( unsigned ii = 0; ii < m_PolyCorners.size(); ii++ )
-        m_PolyCorners[ii] += aMoveVector;
+    if( m_Polygon.OutlineCount() > 0 )
+    {
+        for( auto it = m_Polygon.Iterate( 0 ); it; ++it )
+            *it += aMoveVector;
+    }
 }
 
 
@@ -378,8 +477,8 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
          */
         if( d_codeDescr->m_Shape == APT_RECT )
         {
-            if( m_PolyCorners.size() == 0 )
-                ConvertSegmentToPolygon( );
+            if( m_Polygon.OutlineCount() == 0 )
+                ConvertSegmentToPolygon();
 
             DrawGbrPoly( aPanel->GetClipBox(), aDC, color, aOffset, isFilled );
         }
@@ -411,10 +510,10 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
 }
 
 
-void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( )
+void GERBER_DRAW_ITEM::ConvertSegmentToPolygon()
 {
-    m_PolyCorners.clear();
-    m_PolyCorners.reserve(6);
+    m_Polygon.RemoveAllContours();
+    m_Polygon.NewOutline();
 
     wxPoint start = m_Start;
     wxPoint end = m_End;
@@ -443,34 +542,37 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( )
     wxPoint corner;
     corner.x -= m_Size.x/2;
     corner.y -= m_Size.y/2;
-    m_PolyCorners.push_back( corner );  // Lower left corner, start point (1)
+    wxPoint close = corner;
+    m_Polygon.Append( VECTOR2I( corner ) );  // Lower left corner, start point (1)
     corner.y += m_Size.y;
-    m_PolyCorners.push_back( corner );  // upper left corner, start point (2)
+    m_Polygon.Append( VECTOR2I( corner ) );  // upper left corner, start point (2)
 
     if( delta.x || delta.y)
     {
         corner += delta;
-        m_PolyCorners.push_back( corner );  // upper left corner, end point (3)
+        m_Polygon.Append( VECTOR2I( corner ) );  // upper left corner, end point (3)
     }
 
     corner.x += m_Size.x;
-    m_PolyCorners.push_back( corner );  // upper right corner, end point (4)
+    m_Polygon.Append( VECTOR2I( corner ) );  // upper right corner, end point (4)
     corner.y -= m_Size.y;
-    m_PolyCorners.push_back( corner );  // lower right corner, end point (5)
+    m_Polygon.Append( VECTOR2I( corner ) );  // lower right corner, end point (5)
 
     if( delta.x || delta.y )
     {
         corner -= delta;
-        m_PolyCorners.push_back( corner );  // lower left corner, start point (6)
+        m_Polygon.Append( VECTOR2I( corner ) );  // lower left corner, start point (6)
     }
 
+    m_Polygon.Append( VECTOR2I( close ) );  // close the shape
+
     // Create final polygon:
-    for( unsigned ii = 0; ii < m_PolyCorners.size(); ii++ )
+    for( auto it = m_Polygon.Iterate( 0 ); it; ++it )
     {
         if( change )
-            m_PolyCorners[ii].y = -m_PolyCorners[ii].y;
+            ( *it ).y = -( *it ).y;
 
-         m_PolyCorners[ii] += start;
+        *it += start;
     }
 }
 
@@ -482,15 +584,19 @@ void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_RECT*      aClipBox,
                                     bool           aFilledShape )
 {
     std::vector<wxPoint> points;
+    SHAPE_LINE_CHAIN& poly = m_Polygon.Outline( 0 );
+    int pointCount = poly.PointCount() - 1;
 
-    points = m_PolyCorners;
-    for( unsigned ii = 0; ii < points.size(); ii++ )
+    points.reserve( pointCount );
+
+    for( int ii = 0; ii < pointCount; ii++ )
     {
-        points[ii] += aOffset;
-        points[ii]  = GetABPosition( points[ii] );
+        wxPoint p( poly.Point( ii ).x, poly.Point( ii ).y );
+        points[ii] = p + aOffset;
+        points[ii] = GetABPosition( points[ii] );
     }
 
-    GRClosedPoly( aClipBox, aDC, points.size(), &points[0], aFilledShape, aColor, aColor );
+    GRClosedPoly( aClipBox, aDC, pointCount, &points[0], aFilledShape, aColor, aColor );
 }
 
 
@@ -506,7 +612,7 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     msg.Printf( _( "D Code %d" ), m_DCode );
     D_CODE* apertDescr = GetDcodeDescr();
 
-    if( apertDescr->m_AperFunction.IsEmpty() )
+    if( !apertDescr || apertDescr->m_AperFunction.IsEmpty() )
         text = _( "No attribute" );
     else
         text = apertDescr->m_AperFunction;
@@ -582,6 +688,37 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos ) const
     // TODO: a better analyze of the shape (perhaps create a D_CODE::HitTest for flashed items)
     int     radius = std::min( m_Size.x, m_Size.y ) >> 1;
 
+    SHAPE_POLY_SET poly;
+
+    switch( m_Shape )
+    {
+    case GBR_POLYGON:
+        poly = m_Polygon;
+        return poly.Contains( VECTOR2I( ref_pos ), 0 );
+        break;
+
+    case GBR_SPOT_POLY:
+        poly = GetDcodeDescr()->m_Polygon;
+        poly.Move( m_Start );
+        return poly.Contains( VECTOR2I( ref_pos ), 0 );
+        break;
+
+    case GBR_SPOT_RECT:
+        return GetBoundingBox().Contains( aRefPos );
+        break;
+
+    case GBR_SPOT_MACRO:
+        // Aperture macro polygons are already in absolute coordinates
+        poly = GetDcodeDescr()->GetMacro()->m_shape;
+        for( int i = 0; i < poly.OutlineCount(); ++i )
+        {
+            if( poly.Contains( VECTOR2I( aRefPos ), i ) )
+                return true;
+        }
+        return false;
+        break;
+    }
+
     if( m_Flashed )
         return HitTestPoints( m_Start, ref_pos, radius );
     else
@@ -624,3 +761,60 @@ void GERBER_DRAW_ITEM::Show( int nestLevel, std::ostream& os ) const
 }
 
 #endif
+
+
+void GERBER_DRAW_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount = 2;
+    aLayers[0] = GERBER_DRAW_LAYER( GetLayer() );
+    aLayers[1] = GERBER_DCODE_LAYER( aLayers[0] );
+}
+
+
+const BOX2I GERBER_DRAW_ITEM::ViewBBox() const
+{
+    EDA_RECT bbox = GetBoundingBox();
+    return BOX2I( VECTOR2I( bbox.GetOrigin() ),
+                  VECTOR2I( bbox.GetSize() ) );
+}
+
+
+unsigned int GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+{
+    // DCodes will be shown only if zoom is appropriate
+    if( IsDCodeLayer( aLayer ) )
+    {
+        return ( 400000 / ( m_Size.x + 1 ) );
+    }
+
+    // Other layers are shown without any conditions
+    return 0;
+}
+
+
+SEARCH_RESULT GERBER_DRAW_ITEM::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
+{
+    KICAD_T stype = *scanTypes;
+
+    // If caller wants to inspect my type
+    if( stype == Type() )
+    {
+        if( SEARCH_QUIT == inspector( this, testData ) )
+            return SEARCH_QUIT;
+    }
+
+    return SEARCH_CONTINUE;
+}
+
+
+wxString GERBER_DRAW_ITEM::GetSelectMenuText() const
+{
+    wxString text, layerName;
+
+    layerName = GERBER_FILE_IMAGE_LIST::GetImagesList().GetDisplayName( GetLayer(), true );
+
+    text.Printf( _( "%s (D%d) on layer %d: %s" ), ShowGBRShape(), m_DCode,
+                 GetLayer() + 1, layerName );
+
+    return text;
+}

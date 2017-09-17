@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Nov 30 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -38,13 +38,13 @@ class DIALOG_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
+		wxBoxSizer* m_UpperSizer;
 		wxRadioBox* m_PolarDisplay;
 		wxRadioBox* m_BoxUnits;
-		wxRadioBox* m_CursorShape;
-		wxCheckBox* m_OptDisplayDCodes;
-		wxRadioBox* m_OptDisplayLines;
 		wxRadioBox* m_OptDisplayFlashedItems;
+		wxRadioBox* m_OptDisplayLines;
 		wxRadioBox* m_OptDisplayPolygons;
+		wxCheckBox* m_OptDisplayDCodes;
 		wxRadioBox* m_ShowPageLimits;
 		wxCheckBox* m_OptZoomNoCenter;
 		wxCheckBox* m_OptMousewheelPan;

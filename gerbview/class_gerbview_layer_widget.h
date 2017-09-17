@@ -65,6 +65,8 @@ class GERBER_LAYER_WIDGET : public LAYER_WIDGET
      */
     virtual bool useAlternateBitmap(int aRow) override;
 
+    virtual bool AreArbitraryColorsAllowed() override;
+
     GERBER_FILE_IMAGE_LIST* GetImagesList();
 
 public:

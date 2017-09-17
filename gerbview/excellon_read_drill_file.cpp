@@ -73,6 +73,7 @@
 #include <class_excellon.h>
 #include <kicad_string.h>
 #include <class_X2_gerber_attributes.h>
+#include <view/view.h>
 
 #include <cmath>
 
@@ -160,7 +161,7 @@ static EXCELLON_CMD excellon_G_CmdList[] =
 bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
 {
     wxString msg;
-    int layerId = getActiveLayer();      // current layer used in GerbView
+    int layerId = GetActiveLayer();      // current layer used in GerbView
     GERBER_FILE_IMAGE_LIST* images = GetGerberLayout()->GetImagesList();
     EXCELLON_IMAGE* drill_Layer = (EXCELLON_IMAGE*) images->GetGbrImage( layerId );
 
@@ -193,6 +194,21 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
         dlg.ListSet( drill_Layer->GetMessages() );
         dlg.ShowModal();
     }
+
+    // TODO(JE) Is this the best place to add items to the view?
+    if( success )
+    {
+        EDA_DRAW_PANEL_GAL* canvas = GetGalCanvas();
+        if( canvas )
+        {
+            KIGFX::VIEW* view = canvas->GetView();
+            for( GERBER_DRAW_ITEM* item = drill_Layer->GetItemsList(); item; item = item->Next() )
+            {
+                view->Add( (KIGFX::VIEW_ITEM*) item );
+            }
+        }
+    }
+
     return success;
 }
 
@@ -494,7 +510,7 @@ bool EXCELLON_IMAGE::readToolInformation( char*& aText )
 
     // Initialize Dcode to handle this Tool
     // Remember: dcodes are >= FIRST_DCODE
-    D_CODE* dcode = GetDCODE( iprm + FIRST_DCODE );
+    D_CODE* dcode = GetDCODEOrCreate( iprm + FIRST_DCODE );
 
     if( dcode == NULL )
         return false;
@@ -532,7 +548,7 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
                 Execute_EXCELLON_G_Command( text );
                 break;
             case 0:     // E.O.L: execute command
-                tool = GetDCODE( m_Current_Tool, false );
+                tool = GetDCODE( m_Current_Tool );
 
                 if( !tool )
                 {
@@ -593,13 +609,13 @@ bool EXCELLON_IMAGE::Select_Tool( char*& text )
             dcode_id = TOOLS_MAX_COUNT - 1;
 
         m_Current_Tool = dcode_id;
-        D_CODE* currDcode = GetDCODE( dcode_id , false );
+        D_CODE* currDcode = GetDCODEOrCreate( dcode_id, true );
 
         if( currDcode == NULL && tool_id > 0 )   // if the definition is embedded, enter it
         {
             text = startline;   // text starts at the beginning of the command
             readToolInformation( text );
-            currDcode = GetDCODE( dcode_id , false );
+            currDcode = GetDCODE( dcode_id );
         }
 
         if( currDcode )

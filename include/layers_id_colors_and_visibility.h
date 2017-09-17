@@ -276,8 +276,8 @@ enum GERBVIEW_LAYER_ID: int
 {
     GERBVIEW_LAYER_ID_START = SCH_LAYER_ID_END,
 
-    /// GerbView draw layers
-    GERBVIEW_LAYER_ID_RESERVED = GERBVIEW_LAYER_ID_START + GERBER_DRAWLAYERS_COUNT,
+    /// GerbView draw layers and d-code layers
+    GERBVIEW_LAYER_ID_RESERVED = GERBVIEW_LAYER_ID_START + ( 2 * GERBER_DRAWLAYERS_COUNT ),
 
     LAYER_DCODES,
     LAYER_NEGATIVE_OBJECTS,
@@ -287,6 +287,12 @@ enum GERBVIEW_LAYER_ID: int
 
     GERBVIEW_LAYER_ID_END
 };
+
+#define GERBER_DRAW_LAYER( x ) ( GERBVIEW_LAYER_ID_START + x )
+
+#define GERBER_DCODE_LAYER( x ) ( GERBER_DRAWLAYERS_COUNT + x )
+
+#define GERBER_DRAW_LAYER_INDEX( x ) ( x - GERBVIEW_LAYER_ID_START )
 
 /// Must update this if you add any enums after GerbView!
 #define LAYER_ID_COUNT GERBVIEW_LAYER_ID_END
@@ -605,6 +611,7 @@ private:
     }
 };
 
+
 /**
  * Function IsValidLayer
  * tests whether a given integer is a valid layer index, i.e. can
@@ -771,6 +778,13 @@ inline bool IsNetnameLayer( LAYER_NUM aLayer )
 {
     return aLayer >= NETNAMES_LAYER_INDEX( F_Cu ) &&
            aLayer < NETNAMES_LAYER_ID_END;
+}
+
+
+inline bool IsDCodeLayer( int aLayer )
+{
+    return aLayer >= (GERBVIEW_LAYER_ID_START + GERBER_DRAWLAYERS_COUNT) &&
+           aLayer < (GERBVIEW_LAYER_ID_START + (2 * GERBER_DRAWLAYERS_COUNT));
 }
 
 

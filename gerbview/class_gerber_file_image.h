@@ -95,7 +95,7 @@ private:
  * holds the Image data and parameters for one gerber file
  * and layer parameters (TODO: move them in GERBER_LAYER class
  */
-class GERBER_FILE_IMAGE
+class GERBER_FILE_IMAGE : public EDA_ITEM
 {
     D_CODE*            m_Aperture_List[TOOLS_MAX_COUNT];    ///< Dcode (Aperture) List for this layer (max 999)
     bool               m_Exposure;                          ///< whether an aperture macro tool is flashed on or off
@@ -179,6 +179,11 @@ private:
 public:
     GERBER_FILE_IMAGE( int layer );
     virtual ~GERBER_FILE_IMAGE();
+
+    wxString GetClass() const override
+    {
+        return wxT( "GERBER_FILE_IMAGE" );
+    }
 
     void Clear_GERBER_FILE_IMAGE();
 
@@ -300,7 +305,7 @@ public:
 
 
     /**
-     * Function GetDCODE
+     * Function GetDCODEOrCreate
      * returns a pointer to the D_CODE within this GERBER for the given
      * \a aDCODE.
      * @param aDCODE The numeric value of the D_CODE to look up.
@@ -309,7 +314,17 @@ public:
      * @return D_CODE* - the one implied by the given \a aDCODE, or NULL
      *            if the requested \a aDCODE is out of range.
      */
-    D_CODE*         GetDCODE( int aDCODE, bool aCreateIfNoExist = true );
+    D_CODE*         GetDCODEOrCreate( int aDCODE, bool aCreateIfNoExist = true );
+
+    /**
+     * Function GetDCODE
+     * returns a pointer to the D_CODE within this GERBER for the given
+     * \a aDCODE.
+     * @param aDCODE The numeric value of the D_CODE to look up.
+     * @return D_CODE* - the one implied by the given \a aDCODE, or NULL
+     *            if the requested \a aDCODE is out of range.
+     */
+    D_CODE*         GetDCODE( int aDCODE ) const;
 
     /**
      * Function FindApertureMacro
@@ -350,6 +365,15 @@ public:
      * only this attribute is cleared
      */
     void RemoveAttribute( X2_ATTRIBUTE& aAttribute );
+
+    ///> @copydoc EDA_ITEM::Visit()
+    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
+
+#if defined(DEBUG)
+
+    void    Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
+
+#endif
 };
 
 #endif  // ifndef CLASS_GERBER_FILE_IMAGE_H

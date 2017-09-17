@@ -35,6 +35,7 @@
 
 #include <base_struct.h>
 #include <class_am_param.h>
+#include <class_eda_rect.h>
 
 class SHAPE_POLY_SET;
 
@@ -170,6 +171,9 @@ struct APERTURE_MACRO
      */
     AM_PARAMS m_localparamStack;
 
+    SHAPE_POLY_SET m_shape;     ///< The shape of the item, calculated by GetApertureMacroShape
+    EDA_RECT m_boundingBox;     ///< The bounding box of the item, calculated by GetApertureMacroShape
+
     /**
      * function GetLocalParam
      * Usually, parameters are defined inside the aperture primitive
@@ -182,6 +186,16 @@ struct APERTURE_MACRO
      * @param aParamId = the param id (defined by $3 or $5 ..) to evaluate
      */
     double GetLocalParam( const D_CODE* aDcode, unsigned aParamId ) const;
+
+
+    /**
+     * Function GetApertureMacroShape
+     * Calculate the primitive shape for flashed items.
+     * When an item is flashed, this is the shape of the item
+     * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
+     * @return The shape of the item
+     */
+    SHAPE_POLY_SET* GetApertureMacroShape( GERBER_DRAW_ITEM* aParent, wxPoint aShapePos );
 
    /**
      * Function DrawApertureMacroShape
@@ -210,6 +224,12 @@ struct APERTURE_MACRO
      * @return a dimension, or -1 if no dim to calculate
      */
     int  GetShapeDim( GERBER_DRAW_ITEM* aParent );
+
+    /// Returns the bounding box of the shape
+    EDA_RECT GetBoundingBox() const
+    {
+        return m_boundingBox;
+    }
 };
 
 

@@ -710,7 +710,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
         code = ReadInt( text );
 
         D_CODE* dcode;
-        dcode = GetDCODE( code );
+        dcode = GetDCODEOrCreate( code );
 
         if( dcode == NULL )
             break;

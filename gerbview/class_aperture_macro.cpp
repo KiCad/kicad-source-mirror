@@ -100,7 +100,8 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
 {
     #define TO_POLY_SHAPE { aShapeBuffer.NewOutline(); \
                             for( unsigned jj = 0; jj < polybuffer.size(); jj++ )\
-                                aShapeBuffer.Append( polybuffer[jj].x, polybuffer[jj].y );}
+                                aShapeBuffer.Append( polybuffer[jj].x, polybuffer[jj].y );\
+                            aShapeBuffer.Append( polybuffer[0].x, polybuffer[0].y );}
 
     // Draw the primitive shape for flashed items.
     static std::vector<wxPoint> polybuffer;     // create a static buffer to avoid a lot of memory reallocation
@@ -746,6 +747,50 @@ int AM_PRIMITIVE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 }
 
 
+SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( GERBER_DRAW_ITEM* aParent,
+                                                       wxPoint aShapePos )
+{
+    SHAPE_POLY_SET holeBuffer;
+    bool hasHole = false;
+
+    m_shape.RemoveAllContours();
+
+    for( AM_PRIMITIVES::iterator prim_macro = primitives.begin();
+         prim_macro != primitives.end(); ++prim_macro )
+    {
+        if( prim_macro->primitive_id == AMP_COMMENT )
+            continue;
+
+        if( prim_macro->IsAMPrimitiveExposureOn( aParent ) )
+            prim_macro->DrawBasicShape( aParent, m_shape, aShapePos );
+        else
+        {
+            prim_macro->DrawBasicShape( aParent, holeBuffer, aShapePos );
+
+            if( holeBuffer.OutlineCount() )     // we have a new hole in shape: remove the hole
+            {
+                m_shape.BooleanSubtract( holeBuffer, SHAPE_POLY_SET::PM_FAST );
+                holeBuffer.RemoveAllContours();
+                hasHole = true;
+            }
+        }
+    }
+
+    // If a hole is defined inside a polygon, we must fracture the polygon
+    // to be able to drawn it (i.e link holes by overlapping edges)
+    if( hasHole )
+        m_shape.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+    m_boundingBox = EDA_RECT( wxPoint( 0, 0 ), wxSize( 1, 1 ) );
+    auto bb = m_shape.BBox();
+    wxPoint center( bb.Centre().x, bb.Centre().y );
+    m_boundingBox.Move( aParent->GetABPosition( center ) );
+    m_boundingBox.Inflate( bb.GetWidth() / 2, bb.GetHeight() / 2 );
+
+    return &m_shape;
+}
+
+
 /*
  * Function DrawApertureMacroShape
  * Draw the primitive shape for flashed items.
@@ -756,39 +801,14 @@ void APERTURE_MACRO::DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent,
                                              COLOR4D aColor,
                                              wxPoint aShapePos, bool aFilledShape )
 {
-    SHAPE_POLY_SET shapeBuffer;
-    SHAPE_POLY_SET holeBuffer;
-    bool hasHole = false;
+    SHAPE_POLY_SET* shapeBuffer = GetApertureMacroShape( aParent, aShapePos );
 
-    for( AM_PRIMITIVES::iterator prim_macro = primitives.begin();
-         prim_macro != primitives.end(); ++prim_macro )
-    {
-        if( prim_macro->IsAMPrimitiveExposureOn( aParent ) )
-            prim_macro->DrawBasicShape( aParent, shapeBuffer, aShapePos );
-        else
-        {
-            prim_macro->DrawBasicShape( aParent, holeBuffer, aShapePos );
-
-            if( holeBuffer.OutlineCount() )     // we have a new hole in shape: remove the hole
-            {
-                shapeBuffer.BooleanSubtract( holeBuffer, SHAPE_POLY_SET::PM_FAST );
-                holeBuffer.RemoveAllContours();
-                hasHole = true;
-            }
-        }
-    }
-
-    if( shapeBuffer.OutlineCount() == 0 )
+    if( shapeBuffer->OutlineCount() == 0 )
         return;
 
-    // If a hole is defined inside a polygon, we must fracture the polygon
-    // to be able to drawn it (i.e link holes by overlapping edges)
-    if( hasHole )
-        shapeBuffer.Fracture( SHAPE_POLY_SET::PM_FAST );
-
-    for( int ii = 0; ii < shapeBuffer.OutlineCount(); ii++ )
+    for( int ii = 0; ii < shapeBuffer->OutlineCount(); ii++ )
     {
-        SHAPE_LINE_CHAIN& poly = shapeBuffer.Outline( ii );
+        SHAPE_LINE_CHAIN& poly = shapeBuffer->Outline( ii );
 
         GRClosedPoly( aClipBox, aDC,
                       poly.PointCount(), (wxPoint*)&poly.Point( 0 ), aFilledShape, aColor, aColor );

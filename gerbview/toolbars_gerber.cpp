@@ -206,17 +206,27 @@ void GERBVIEW_FRAME::ReCreateVToolbar( void )
 void GERBVIEW_FRAME::ReCreateOptToolbar( void )
 {
     if( m_optionsToolBar )
-        return;
-
-    // creation of tool bar options
-    m_optionsToolBar = new wxAuiToolBar( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                         wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_VERTICAL );
+        m_optionsToolBar->Clear();
+    else
+        m_optionsToolBar = new wxAuiToolBar( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                             wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_VERTICAL );
 
     // TODO: these can be moved to the 'proper' vertical toolbar if and when there are
     // actual tools to put there. That, or I'll get around to implementing configurable
     // toolbars.
     m_optionsToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ),
                                wxEmptyString, wxITEM_CHECK );
+
+    m_optionsToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiBitmap( zoom_area_xpm ),
+                               _( "Zoom to selection" ), wxITEM_CHECK );
+
+    if( IsGalCanvasActive() )
+    {
+        m_optionsToolBar->AddTool( ID_TB_MEASUREMENT_TOOL, wxEmptyString,
+                                   KiBitmap( measurement_xpm ),
+                                   _( "Measure distance between two points" ),
+                                   wxITEM_CHECK );
+    }
 
     m_optionsToolBar->AddSeparator();
 
@@ -264,23 +274,39 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
                                KiBitmap( show_dcodenumber_xpm ),
                                _( "Show dcode number" ), wxITEM_CHECK );
 
-    // tools to select draw mode in GerbView
-    m_optionsToolBar->AddSeparator();
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_0, wxEmptyString,
-                               KiBitmap( gbr_select_mode0_xpm ),
-                               _( "Show layers in raw mode \
-(could have problems with negative items when more than one gerber file is shown)" ),
-                               wxITEM_CHECK );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_1, wxEmptyString,
-                               KiBitmap( gbr_select_mode1_xpm ),
-                               _( "Show layers in stacked mode \
-(show negative items without artifacts, sometimes slow)" ),
-                               wxITEM_CHECK );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_2, wxEmptyString,
-                               KiBitmap( gbr_select_mode2_xpm ),
-                               _( "Show layers in transparency mode \
-(show negative items without artifacts, sometimes slow)" ),
-                               wxITEM_CHECK );
+    // tools to select draw mode in GerbView, unused in GAL
+    if( !IsGalCanvasActive() )
+    {
+        m_optionsToolBar->AddSeparator();
+        m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_0, wxEmptyString,
+                                   KiBitmap( gbr_select_mode0_xpm ),
+                                   _( "Show layers in raw mode \
+    (could have problems with negative items when more than one gerber file is shown)" ),
+                                   wxITEM_CHECK );
+        m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_1, wxEmptyString,
+                                   KiBitmap( gbr_select_mode1_xpm ),
+                                   _( "Show layers in stacked mode \
+    (show negative items without artifacts, sometimes slow)" ),
+                                   wxITEM_CHECK );
+        m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_2, wxEmptyString,
+                                   KiBitmap( gbr_select_mode2_xpm ),
+                                   _( "Show layers in transparency mode \
+    (show negative items without artifacts, sometimes slow)" ),
+                                   wxITEM_CHECK );
+    }
+    else
+    {
+        m_optionsToolBar->AddTool( ID_TB_OPTIONS_DIFF_MODE, wxEmptyString,
+                                   KiBitmap( gbr_select_mode2_xpm ),
+                                   _( "Show layers in diff (compare) mode" ),
+                                   wxITEM_CHECK );
+
+        m_optionsToolBar->AddTool( ID_TB_OPTIONS_HIGH_CONTRAST_MODE, wxEmptyString,
+                                   KiBitmap( contrast_mode_xpm ),
+                                   _( "Enable high contrast display mode" ),
+                                   wxITEM_CHECK );
+
+    }
 
     // Tools to show/hide toolbars:
     m_optionsToolBar->AddSeparator();
@@ -304,7 +330,7 @@ void GERBVIEW_FRAME::updateDCodeSelectBox()
     // Add an empty string to deselect net highlight
     m_DCodeSelector->Append( NO_SELECTION_STRING );
 
-    int layer = getActiveLayer();
+    int layer = GetActiveLayer();
     GERBER_FILE_IMAGE* gerber = GetGbrImage( layer );
 
     if( !gerber || gerber->GetDcodesCount() == 0 )
@@ -323,7 +349,7 @@ void GERBVIEW_FRAME::updateDCodeSelectBox()
 
     for( int ii = 0; ii < TOOLS_MAX_COUNT; ii++ )
     {
-        D_CODE* dcode = gerber->GetDCODE( ii + FIRST_DCODE, false );
+        D_CODE* dcode = gerber->GetDCODE( ii + FIRST_DCODE );
 
         if( dcode == NULL )
             continue;
@@ -433,7 +459,7 @@ void GERBVIEW_FRAME::updateAperAttributesSelectBox()
 
         for( int ii = 0; ii < TOOLS_MAX_COUNT; ii++ )
         {
-            D_CODE* aperture = gerber->GetDCODE( ii + FIRST_DCODE, false );
+            D_CODE* aperture = gerber->GetDCODE( ii + FIRST_DCODE );
 
             if( aperture == NULL )
                 continue;
@@ -534,7 +560,7 @@ void GERBVIEW_FRAME::OnUpdateSelectDCode( wxUpdateUIEvent& aEvent )
     if( !m_DCodeSelector )
         return;
 
-    int layer = getActiveLayer();
+    int layer = GetActiveLayer();
     GERBER_FILE_IMAGE* gerber = GetGbrImage( layer );
     int selected = ( gerber ) ? gerber->m_Selected_Tool : 0;
 
@@ -553,8 +579,8 @@ void GERBVIEW_FRAME::OnUpdateSelectDCode( wxUpdateUIEvent& aEvent )
 
 void GERBVIEW_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
 {
-    if( m_SelLayerBox->GetSelection() != getActiveLayer() )
+    if( m_SelLayerBox->GetSelection() != GetActiveLayer() )
     {
-        m_SelLayerBox->SetSelection( getActiveLayer() );
+        m_SelLayerBox->SetSelection( GetActiveLayer() );
     }
 }

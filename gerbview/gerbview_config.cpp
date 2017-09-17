@@ -92,6 +92,11 @@ PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings()
                                                         &g_ColorsSettings.m_LayersColors[
                                                             LAYER_NEGATIVE_OBJECTS],
                                                         DARKGRAY ) );
+    m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true,
+                                                        wxT( "GridColorEx" ),
+                                                        &g_ColorsSettings.m_LayersColors[
+                                                            LAYER_GERBVIEW_GRID],
+                                                        DARKGRAY ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true,
                                                     wxT( "DisplayPolarCoordinates" ),
                                                     &m_DisplayOptions.m_DisplayPolarCood,
@@ -129,7 +134,7 @@ PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings()
 
     for( unsigned i = 0; i < DIM(keys);  ++i )
     {
-        COLOR4D* prm = &g_ColorsSettings.m_LayersColors[i];
+        COLOR4D* prm = &g_ColorsSettings.m_LayersColors[ GERBER_DRAW_LAYER( i ) ];
 
         PARAM_CFG_SETCOLOR* prm_entry =
             new PARAM_CFG_SETCOLOR( true, keys[i], prm, color_default[i] );

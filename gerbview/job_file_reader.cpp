@@ -193,7 +193,7 @@ bool GERBVIEW_FRAME::LoadGerberJobFile( const wxString& aFullFileName )
             wxFileName gbr_fn = filename;
             bool read_ok;
             int layer = 0;
-            setActiveLayer( layer, false );
+            SetActiveLayer( layer, false );
 
             for( unsigned ii = 0; ii < gbrfiles.GetCount(); ii++ )
             {
@@ -207,7 +207,7 @@ bool GERBVIEW_FRAME::LoadGerberJobFile( const wxString& aFullFileName )
                     if( read_ok )
                     {
                         layer = getNextAvailableLayer( layer );
-                        setActiveLayer( layer, false );
+                        SetActiveLayer( layer, false );
                     }
                 }
                 else

@@ -28,7 +28,7 @@
 
 #include <fctsys.h>
 #include <common.h>
-#include <id.h>
+#include <gerbview_id.h>
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
@@ -86,6 +86,25 @@ static EDA_HOTKEY   HkSwitch2NextCopperLayer( _HKI( "Switch to Next Layer" ),
 static EDA_HOTKEY   HkSwitch2PreviousCopperLayer( _HKI( "Switch to Previous Layer" ),
                                               HK_SWITCH_LAYER_TO_PREVIOUS, '-' );
 
+static EDA_HOTKEY HkCanvasDefault( _HKI( "Switch to Legacy Canvas" ),
+                                   HK_CANVAS_LEGACY,
+#ifdef __WXMAC__
+                                   GR_KB_ALT +
+#endif
+                                   WXK_F9 );
+static EDA_HOTKEY HkCanvasOpenGL( _HKI( "Switch to OpenGL Canvas" ),
+                                  HK_CANVAS_OPENGL,
+#ifdef __WXMAC__
+                                  GR_KB_ALT +
+#endif
+                                  WXK_F11 );
+static EDA_HOTKEY HkCanvasCairo( _HKI( "Switch to Cairo Canvas" ),
+                                 HK_CANVAS_CAIRO,
+#ifdef __WXMAC__
+                                 GR_KB_ALT +
+#endif
+                                 WXK_F12 );
+
 // List of common hotkey descriptors
 EDA_HOTKEY* gerbviewHotkeyList[] = {
     &HkHelp,
@@ -95,6 +114,9 @@ EDA_HOTKEY* gerbviewHotkeyList[] = {
     &HkDCodesDisplayMode, &HkNegativeObjDisplayMode,
     &HkSwitch2NextCopperLayer,
     &HkSwitch2PreviousCopperLayer,
+    &HkCanvasDefault,
+    &HkCanvasOpenGL,
+    &HkCanvasCairo,
     NULL
 };
 
@@ -205,21 +227,36 @@ bool GERBVIEW_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:
-        if( getActiveLayer() > 0 )
+        if( GetActiveLayer() > 0 )
         {
-            setActiveLayer( getActiveLayer() - 1 );
+            SetActiveLayer( GetActiveLayer() - 1 );
             m_LayersManager->OnLayerSelected();
             m_canvas->Refresh();
         }
         break;
 
     case HK_SWITCH_LAYER_TO_NEXT:
-        if( getActiveLayer() < 31 )
+        if( GetActiveLayer() < GERBER_DRAWLAYERS_COUNT - 1 )
         {
-            setActiveLayer( getActiveLayer() + 1 );
+            SetActiveLayer( GetActiveLayer() + 1 );
             m_LayersManager->OnLayerSelected();
             m_canvas->Refresh();
         }
+        break;
+
+    case HK_CANVAS_CAIRO:
+        cmd.SetId( ID_MENU_CANVAS_CAIRO );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_CANVAS_OPENGL:
+        cmd.SetId( ID_MENU_CANVAS_OPENGL );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_CANVAS_LEGACY:
+        cmd.SetId( ID_MENU_CANVAS_LEGACY );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
     }
 

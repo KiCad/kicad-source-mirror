@@ -35,12 +35,18 @@
 #include <gr_basic.h>
 #include <gbr_netlist_metadata.h>
 #include <dcode.h>
+#include <geometry/shape_poly_set.h>
 
 class GERBER_FILE_IMAGE;
 class GBR_LAYOUT;
 class D_CODE;
 class MSG_PANEL_ITEM;
 class GBR_DISPLAY_OPTIONS;
+
+namespace KIGFX
+{
+    class VIEW;
+};
 
 
 /* Shapes id for basic shapes ( .m_Shape member ) */
@@ -76,7 +82,7 @@ public:
                                             // for flashed items
     wxPoint m_End;                          // Line or arc end point
     wxPoint m_ArcCentre;                    // for arcs only: Centre of arc
-    std::vector <wxPoint> m_PolyCorners;    // list of corners for polygons (G36 to G37 coordinates)
+    SHAPE_POLY_SET m_Polygon;               // Polygon shape data (G36 to G37 coordinates)
                                             // or for complex shapes which are converted to polygon
     wxSize  m_Size;                         // Flashed shapes: size of the shape
                                             // Lines : m_Size.x = m_Size.y = line width
@@ -116,7 +122,7 @@ public:
     GERBER_DRAW_ITEM* Back() const { return static_cast<GERBER_DRAW_ITEM*>( Pback ); }
 
     void SetNetAttributes( const GBR_NETLIST_METADATA& aNetAttributes );
-    const GBR_NETLIST_METADATA& GetNetAttributes()  { return m_netAttributes; }
+    const GBR_NETLIST_METADATA& GetNetAttributes() const { return m_netAttributes; }
 
     /**
      * Function GetLayer
@@ -124,7 +130,7 @@ public:
      */
     int GetLayer() const;
 
-    bool GetLayerPolarity()
+    bool GetLayerPolarity() const
     {
         return m_LayerNegative;
     }
@@ -186,6 +192,11 @@ public:
      */
     wxPoint GetABPosition( const wxPoint& aXYPosition ) const;
 
+    VECTOR2I GetABPosition( const VECTOR2I& aXYPosition ) const
+    {
+        return VECTOR2I( GetABPosition( wxPoint( aXYPosition.x, aXYPosition.y ) ) );
+    }
+
     /**
      * Function GetXYPosition
      * returns the image position of aPosition for this object.
@@ -201,7 +212,7 @@ public:
      * returns the GetDcodeDescr of this object, or NULL.
      * @return D_CODE* - a pointer to the DCode description (for flashed items).
      */
-    D_CODE* GetDcodeDescr();
+    D_CODE* GetDcodeDescr() const;
 
     const EDA_RECT GetBoundingBox() const override;
 
@@ -229,7 +240,7 @@ public:
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    wxString ShowGBRShape();
+    wxString ShowGBRShape() const;
 
     /**
      * Function HitTest
@@ -283,6 +294,26 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
+
+    /// @copydoc VIEW_ITEM::ViewGetLayers()
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
+    /// @copydoc VIEW_ITEM::ViewBBox()
+    virtual const BOX2I ViewBBox() const override;
+
+    /// @copydoc VIEW_ITEM::ViewGetLOD()
+    virtual unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
+
+    ///> @copydoc EDA_ITEM::Visit()
+    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
+
+    virtual wxString GetSelectMenuText() const override;
+
+};
+
+
+class GERBER_NEGATIVE_IMAGE_BACKDROP : public EDA_ITEM
+{
 
 };
 
