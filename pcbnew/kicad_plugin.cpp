@@ -527,7 +527,7 @@ void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
         m_out->Print( 0, " (layer %s)", m_out->Quotew( aItem->GetLayerName() ).c_str() );
 }
 
-void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const throw(IO_ERROR)
+void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const
 {
 
     const BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
@@ -609,7 +609,6 @@ void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const throw(IO_ERROR)
     m_out->Print( aNestLevel, ")\n\n" );
 
     // Setup
-    const BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
     m_out->Print( aNestLevel, "(setup\n" );
 
     // Save current default track width, for compatibility with older Pcbnew version;
@@ -722,24 +721,17 @@ void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const throw(IO_ERROR)
     m_out->Print( aNestLevel, ")\n\n" );
 }
 
-void PCB_IO::formatGeneral( BOARD* aBoard, int aNestLevel ) const throw(IO_ERROR)
+void PCB_IO::formatGeneral( BOARD* aBoard, int aNestLevel ) const
 {
     const BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
 
     m_out->Print( 0, "\n" );
     m_out->Print( aNestLevel, "(general\n" );
-    m_out->Print( aNestLevel+1, "(links %d)\n", aBoard->GetRatsnestsCount() );
-    m_out->Print( aNestLevel+1, "(no_connects %d)\n", aBoard->GetUnconnectedNetCount() );
-
     // Write Bounding box info
-    EDA_RECT bbox = aBoard->GetBoundingBox();
-    m_out->Print( aNestLevel+1,  "(area %s %s %s %s)\n",
-                  FMTIU( bbox.GetX() ).c_str(), FMTIU( bbox.GetY() ).c_str(),
-                  FMTIU( bbox.GetRight() ).c_str(), FMTIU( bbox.GetBottom() ).c_str() );
     m_out->Print( aNestLevel+1, "(thickness %s)\n",
                   FMTIU( dsnSettings.GetBoardThickness() ).c_str() );
 
-    m_out->Print( aNestLevel+1, "(drawings %d)\n", aBoard->m_Drawings.GetCount() );
+    m_out->Print( aNestLevel+1, "(drawings %d)\n", aBoard->Drawings().Size() );
     m_out->Print( aNestLevel+1, "(tracks %d)\n", aBoard->GetNumSegmTrack() );
     m_out->Print( aNestLevel+1, "(zones %d)\n", aBoard->GetNumSegmZone() );
     m_out->Print( aNestLevel+1, "(modules %d)\n", aBoard->m_Modules.GetCount() );
@@ -750,7 +742,7 @@ void PCB_IO::formatGeneral( BOARD* aBoard, int aNestLevel ) const throw(IO_ERROR
     aBoard->GetTitleBlock().Format( m_out, aNestLevel, m_ctl );
 }
 
-void PCB_IO::formatBoardLayers( BOARD* aBoard, int aNestLevel ) const throw(IO_ERROR)
+void PCB_IO::formatBoardLayers( BOARD* aBoard, int aNestLevel ) const
 {
     m_out->Print( aNestLevel, "(layers\n" );
 
@@ -810,7 +802,7 @@ void PCB_IO::formatBoardLayers( BOARD* aBoard, int aNestLevel ) const throw(IO_E
     m_out->Print( aNestLevel, ")\n\n" );
 }
 
-void PCB_IO::formatNetInformation( BOARD* aBoard, int aNestLevel ) const throw(IO_ERROR)
+void PCB_IO::formatNetInformation( BOARD* aBoard, int aNestLevel ) const
 {
     const BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
     for( NETINFO_MAPPING::iterator net = m_mapping->begin(), netEnd = m_mapping->end();
@@ -839,7 +831,7 @@ void PCB_IO::formatNetInformation( BOARD* aBoard, int aNestLevel ) const throw(I
     }
 }
 
-void PCB_IO::formatHeader( BOARD* aBoard, int aNestLevel ) const throw(IO_ERROR)
+void PCB_IO::formatHeader( BOARD* aBoard, int aNestLevel ) const
 {
     formatGeneral(aBoard);
     // Layers.
@@ -851,7 +843,6 @@ void PCB_IO::formatHeader( BOARD* aBoard, int aNestLevel ) const throw(IO_ERROR)
 }
 
 void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
-    throw( IO_ERROR )
 {
     formatHeader( aBoard );
 
@@ -2132,7 +2123,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
 
     if( !fn.IsOk() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Footprint file name '%s' is not valid." ),
+ THROW_IO_ERROR( wxString::Format( _( "Footprint file name '%s' is not valid." ),
                                           GetChars( fn.GetFullPath() ) ) );
     }
 

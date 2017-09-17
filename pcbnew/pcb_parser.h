@@ -117,13 +117,6 @@ class PCB_PARSER : public PCB_LEXER
     DRAWSEGMENT*    parseDRAWSEGMENT();
     TEXTE_PCB*      parseTEXTE_PCB();
     DIMENSION*      parseDIMENSION();
-    /**
-     * Function parseMODULE
-     * @param aInitialComments may be a pointer to a heap allocated initial comment block
-     *   or NULL.  If not NULL, then caller has given ownership of a wxArrayString to
-     *   this function and care must be taken to delete it even on exception.
-     */
-    MODULE*         parseMODULE( wxArrayString* aInitialComments = 0 );
 
     /**
      * Function parseMODULE_unchecked
@@ -308,6 +301,13 @@ public:
     }
 
     BOARD_ITEM* Parse();
+    /**
+     * Function parseMODULE
+     * @param aInitialComments may be a pointer to a heap allocated initial comment block
+     *   or NULL.  If not NULL, then caller has given ownership of a wxArrayString to
+     *   this function and care must be taken to delete it even on exception.
+     */
+    MODULE*         parseMODULE( wxArrayString* aInitialComments = 0 );
 
     /**
      * Return whether a version number, if any was parsed, was too recent

@@ -92,7 +92,7 @@ void CLIPBOARD_IO::SaveSelection( SELECTION& aSelected )
     {
         // make the module safe to transfer to other pcbs
         MODULE* mod = static_cast<MODULE*>( aSelected.Front() );
-        for( D_PAD* pad = mod->Pads().GetFirst(); pad; pad = pad->Next() )
+        for( D_PAD* pad = mod->PadsList().begin(); pad; pad = pad->Next() )
         {
             pad->SetNetCode( 0,0 );
         }

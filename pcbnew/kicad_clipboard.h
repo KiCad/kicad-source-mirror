@@ -44,7 +44,6 @@ public:
     CLIPBOARD_PARSER( LINE_READER* aReader = NULL ): PCB_PARSER( aReader ) {};
 
     MODULE* parseMODULE( wxArrayString* aInitialComments )
-        throw( IO_ERROR, PARSE_ERROR, FUTURE_FORMAT_ERROR ) override
     {
        MODULE* mod = PCB_PARSER::parseMODULE( aInitialComments );
 
@@ -77,7 +76,6 @@ public:
     void setBoard( BOARD* aBoard );
     void writeHeader( BOARD* aBoard );
     STRING_FORMATTER* GetFormatter();
-
 
 };
 

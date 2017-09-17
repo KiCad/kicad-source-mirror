@@ -189,24 +189,19 @@ protected:
     void init( const PROPERTIES* aProperties );
 
     /// formats the board setup information
-    void formatSetup( BOARD* aBoard, int aNestLevel = 0 ) const
-        throw( IO_ERROR );
+    void formatSetup( BOARD* aBoard, int aNestLevel = 0 ) const;
 
     /// formats the General section of the file
-    void formatGeneral( BOARD* aBoard, int aNestLevel = 0 ) const
-        throw( IO_ERROR );
+    void formatGeneral( BOARD* aBoard, int aNestLevel = 0 ) const;
 
     /// formats the board layer information
-    void formatBoardLayers( BOARD* aBoard, int aNestLevel = 0 ) const
-        throw( IO_ERROR );
+    void formatBoardLayers( BOARD* aBoard, int aNestLevel = 0 ) const;
 
     /// formats the Nets and Netclasses
-    void formatNetInformation( BOARD* aBoard, int aNestLevel = 0 ) const
-        throw( IO_ERROR );
+    void formatNetInformation( BOARD* aBoard, int aNestLevel = 0 ) const;
 
     /// writes everything that comes before the board_items, like settings and layers etc
-    void formatHeader( BOARD* aBoard, int aNestLevel = 0 ) const
-        throw( IO_ERROR );
+    void formatHeader( BOARD* aBoard, int aNestLevel = 0 ) const;
 
 private:
     void format( BOARD* aBoard, int aNestLevel = 0 ) const;

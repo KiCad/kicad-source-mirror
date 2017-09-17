@@ -337,14 +337,13 @@ int MODULE_EDITOR_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
 
     MODULE* pastedModule = aEvent.Parameter<MODULE*>();
 
-    for( BOARD_ITEM* item = pastedModule->GraphicalItems().GetFirst(); item;
-            item = item->Next() )
-    {
-        frame()->DisplayToolMsg( _( "Invalid clipboard contents" ) );
-        if( item->Type() == PCB_MODULE_TEXT_T )
-            std::cout << "Crashing on this" << std::endl;
-        return 0;
-    }
+    /* for( BOARD_ITEM* item = pastedModule->GraphicalItems().begin(); item; */
+    /*         item = item->Next() ) */
+    /* { */
+    /*     if( item->Type() == PCB_MODULE_TEXT_T ) */
+    /*         std::cout << "Crashing on this" << std::endl; */
+    /*     return 0; */
+    /* } */
 
     // Placement tool part
     VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
