@@ -239,6 +239,9 @@ public:
     /// @copydoc GAL::ClearTarget()
     virtual void ClearTarget( RENDER_TARGET aTarget ) override;
 
+    /// @copydoc GAL::SetNegativeDrawMode()
+    virtual void SetNegativeDrawMode( bool aSetting ) override {}
+
     // -------
     // Cursor
     // -------

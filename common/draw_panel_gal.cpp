@@ -391,7 +391,11 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
         m_painter->SetGAL( m_gal );
 
     if( m_view )
+    {
         m_view->SetGAL( m_gal );
+        // Note: OpenGL requires reverse draw order when draw priority is enabled
+        m_view->ReverseDrawOrder( aGalType == GAL_TYPE_OPENGL );
+    }
 
     m_backend = aGalType;
 

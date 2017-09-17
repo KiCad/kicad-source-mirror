@@ -630,6 +630,25 @@ public:
         m_useDrawPriority = aFlag;
     }
 
+    /**
+     * Function IsDrawOrderReversed()
+     * @return true if draw order is reversed
+     */
+    bool IsDrawOrderReversed() const
+    {
+        return m_reverseDrawOrder;
+    }
+
+    /**
+     * Function ReverseDrawOrder()
+     * Only takes effect if UseDrawPriority is true.
+     * @param aFlag is true if draw order should be reversed
+     */
+    void ReverseDrawOrder( bool aFlag )
+    {
+        m_reverseDrawOrder = aFlag;
+    }
+
     static const int VIEW_MAX_LAYERS = 512;      ///< maximum number of layers that may be shown
 
 
@@ -796,6 +815,9 @@ private:
 
     /// The next sequential drawing priority
     int m_nextDrawPriority;
+
+    /// Flag to reverse the draw order when using draw priority
+    bool m_reverseDrawOrder;
 };
 } // namespace KIGFX
 

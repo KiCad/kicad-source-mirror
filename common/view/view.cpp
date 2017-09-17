@@ -267,7 +267,8 @@ VIEW::VIEW( bool aIsDynamic ) :
     m_gal( NULL ),
     m_dynamic( aIsDynamic ),
     m_useDrawPriority( false ),
-    m_nextDrawPriority( 0 )
+    m_nextDrawPriority( 0 ),
+    m_reverseDrawOrder( false )
 {
     m_boundary.SetMaximum();
     m_allItems.reserve( 32768 );
@@ -815,8 +816,10 @@ void VIEW::UpdateAllLayersOrder()
 
 struct VIEW::drawItem
 {
-    drawItem( VIEW* aView, int aLayer, bool aUseDrawPriority ) :
-        view( aView ), layer( aLayer ), useDrawPriority( aUseDrawPriority )
+    drawItem( VIEW* aView, int aLayer, bool aUseDrawPriority, bool aReverseDrawOrder ) :
+        view( aView ), layer( aLayer ),
+        useDrawPriority( aUseDrawPriority ),
+        reverseDrawOrder( aReverseDrawOrder )
     {
     }
 
@@ -840,10 +843,16 @@ struct VIEW::drawItem
 
     void deferredDraw()
     {
-        std::sort( drawItems.begin(), drawItems.end(),
-                   []( VIEW_ITEM* a, VIEW_ITEM* b ) -> bool {
-                       return b->viewPrivData()->m_drawPriority < a->viewPrivData()->m_drawPriority;
-                   });
+        if( reverseDrawOrder )
+            std::sort( drawItems.begin(), drawItems.end(),
+                       []( VIEW_ITEM* a, VIEW_ITEM* b ) -> bool {
+                           return b->viewPrivData()->m_drawPriority < a->viewPrivData()->m_drawPriority;
+                       });
+        else
+            std::sort( drawItems.begin(), drawItems.end(),
+                       []( VIEW_ITEM* a, VIEW_ITEM* b ) -> bool {
+                           return a->viewPrivData()->m_drawPriority < b->viewPrivData()->m_drawPriority;
+                       });
 
         for( auto item : drawItems )
             view->draw( item, layer );
@@ -851,7 +860,7 @@ struct VIEW::drawItem
 
     VIEW* view;
     int layer, layers[VIEW_MAX_LAYERS];
-    bool useDrawPriority;
+    bool useDrawPriority, reverseDrawOrder;
     std::vector<VIEW_ITEM*> drawItems;
 };
 
@@ -862,7 +871,7 @@ void VIEW::redrawRect( const BOX2I& aRect )
     {
         if( l->visible && IsTargetDirty( l->target ) && areRequiredLayersEnabled( l->id ) )
         {
-            drawItem drawFunc( this, l->id, m_useDrawPriority );
+            drawItem drawFunc( this, l->id, m_useDrawPriority, m_reverseDrawOrder );
 
             m_gal->SetTarget( l->target );
             m_gal->SetLayerDepth( l->renderingOrder );

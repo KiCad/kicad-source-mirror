@@ -857,6 +857,12 @@ void CAIRO_GAL::ClearTarget( RENDER_TARGET aTarget )
 }
 
 
+void CAIRO_GAL::SetNegativeDrawMode( bool aSetting )
+{
+    cairo_set_operator( currentContext, aSetting ? CAIRO_OPERATOR_CLEAR : CAIRO_OPERATOR_OVER );
+}
+
+
 void CAIRO_GAL::DrawCursor( const VECTOR2D& aCursorPosition )
 {
     cursorPosition = aCursorPosition;
