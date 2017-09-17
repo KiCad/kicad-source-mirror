@@ -96,7 +96,7 @@ void CLIPBOARD_IO::SaveSelection( SELECTION& aSelected )
         {
             pad->SetNetCode( 0,0 );
         }
-        mod->SetPath( "" );
+
         Format(static_cast<BOARD_ITEM*>( mod ) );
     }
 
@@ -130,7 +130,7 @@ void CLIPBOARD_IO::SaveSelection( SELECTION& aSelected )
         Format( &module, 0 );
 
     }
-    // lots of shite selected
+    // lots of stuff selected
     else
     {
         // we will fake being a .kicad_pcb to get the full parser kicking
@@ -154,7 +154,6 @@ void CLIPBOARD_IO::SaveSelection( SELECTION& aSelected )
                 ( i->Type() != PCB_MODULE_TEXT_T ) &&
                 ( i->Type() != PCB_PAD_T ) )
             {
-                //std::cout <<"type "<< i->Type() << std::endl;
                 auto item = static_cast<BOARD_ITEM*>( i );
                 Format( item, 1 );
             }
