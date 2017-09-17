@@ -110,7 +110,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     wxCHECK_RET( !aliasNames.IsEmpty(), "No aliases found in library " + filename );
 
     LIB_PART*   first = lib->FindAlias( aliasNames[0] )->GetPart();
-    LIB_ITEMS_LIST&  drawList = first->GetDrawItemList();
+    LIB_ITEMS_CONTAINER&  drawList = first->GetDrawItems();
 
     for( LIB_ITEM& item : drawList )
     {
@@ -146,7 +146,7 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
     SEARCH_STACK*   search = prj.SchSearchS();
     LIB_PART*       part = GetCurPart();
 
-    if( !part || part->GetDrawItemList().empty() )
+    if( !part || part->GetDrawItems().empty() )
         return;
 
     wxString default_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
@@ -213,7 +213,7 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
             part->GetValueField().Save( formatter );
             formatter.Print( 0, "DRAW\n" );
 
-            LIB_ITEMS_LIST& drawList = part->GetDrawItemList();
+            LIB_ITEMS_CONTAINER& drawList = part->GetDrawItems();
 
             for( LIB_ITEM& item : drawList )
             {

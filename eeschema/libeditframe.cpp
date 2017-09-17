@@ -1315,7 +1315,7 @@ LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aF
 
     LIB_ITEM* item = NULL;
 
-    m_collectedItems.Collect( part->GetDrawItemList(), aFilterList, aPosition,
+    m_collectedItems.Collect( part->GetDrawItems(), aFilterList, aPosition,
                               m_unit, m_convert );
 
     if( m_collectedItems.GetCount() == 0 )

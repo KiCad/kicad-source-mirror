@@ -3,6 +3,7 @@
  *
  * Copyright 2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
+ * @author Bernhard Stegmaier <stegmaier@sw-systems.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +32,6 @@
 
 #include <core/typeinfo.h>
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <map>
 
 class LIB_ITEM;
 
@@ -43,89 +43,131 @@ class LIB_ITEM;
  */
 typedef boost::ptr_vector<LIB_ITEM> LIB_ITEMS;
 
-/**
- * LIB_ITEM container to keep them sorted by their type.
- */
-typedef std::map<int, LIB_ITEMS> LIB_ITEMS_MAP;
 
 /**
- * Wrapper for LIB_ITEMS_MAP to provide flat (list-like) access to the items
- * stored in the map (@see LIB_ITEMS_MAP).
+ * LIB_ITEM container class. Provides both access as a flat list as well as
+ * access by type of item.
  */
-class LIB_ITEMS_LIST
+class LIB_ITEMS_CONTAINER
 {
 public:
-    class ITERATOR
+    /**
+     * Compile-time helper class to define some types depending on const/non-const iterator.
+     */
+    template< typename ITEM_TYPE > struct ITERATOR_ADAPTER;
+
+    /**
+     * Generic implementation of a flat const/non-const iterator over contained items.
+     */
+    template< typename ITEM_TYPE > class ITERATOR_BASE
     {
     public:
-        ITERATOR& operator++();
+        ITERATOR_BASE& operator++();
 
-        LIB_ITEM& operator*()
+        ITEM_TYPE& operator*()
         {
             return *m_it;
         }
 
-        LIB_ITEM* operator->()
+        ITEM_TYPE* operator->()
         {
-            return &(*m_it);
+            return &( *m_it );
         }
 
-        bool operator!=( const ITERATOR& aOther ) const;
+        bool operator!=( const ITERATOR_BASE& aOther ) const;
 
-    private:
+    protected:
         /**
          * Constructor.
          * @param aItems is the container to wrap.
+         * @param aIt is the iterator to initialize this iterator (usually some begin() or end()
+         * iterator).
+         * @param aBucket is the type ID of the given iterator.
          * @param aType enables item type filtering. When aType is TYPE_NOT_INIT, there is no
          * filtering and all item types are accessible by the iterator.
          */
-        ITERATOR( LIB_ITEMS_MAP& aItems, int aType = TYPE_NOT_INIT );
+        ITERATOR_BASE( typename ITERATOR_ADAPTER<ITEM_TYPE>::CONTAINER* aItems,
+                       typename ITERATOR_ADAPTER<ITEM_TYPE>::ITERATOR aIt,
+                       int aBucket, int aType = TYPE_NOT_INIT );
 
         ///> Assures the iterator is in a valid state.
         void validate();
 
         ///> Wrapped container
-        LIB_ITEMS_MAP* m_parent;
+        typename ITERATOR_ADAPTER<ITEM_TYPE>::CONTAINER* m_parent;
+
+        ///> Iterator for one of the LIB_ITEMS containers stored in the map
+        typename ITERATOR_ADAPTER<ITEM_TYPE>::ITERATOR m_it;
 
         ///> Flag indicating whether type filtering is enabled
         bool m_filter;
 
         ///> Type of the currently iterated items (@see KICAD_T)
-        int m_type;
+        int m_curType;
 
-        ///> Iterator for one of the LIB_ITEMS containers stored in the map
-        LIB_ITEMS::iterator m_it;
-
-        // Range of valid types handled by the iterator
-        static constexpr KICAD_T FIRST_TYPE = LIB_ARC_T;
-        static constexpr KICAD_T LAST_TYPE = LIB_FIELD_T;
-
-        friend class LIB_ITEMS_LIST;
+        friend class LIB_ITEMS_CONTAINER;
     };
 
+    ///> The non-const iterator
+    typedef ITERATOR_BASE< LIB_ITEM > ITERATOR;
+    ///> The const iterator
+    typedef ITERATOR_BASE< const LIB_ITEM > CONST_ITERATOR;
 
-    LIB_ITEMS_LIST( LIB_ITEMS_MAP& aData )
-        : m_data( aData )
+
+    LIB_ITEMS_CONTAINER()
     {
     }
-
-    ITERATOR begin( int aType = TYPE_NOT_INIT ) const;
-    ITERATOR end( int aType = TYPE_NOT_INIT ) const;
 
     void push_back( LIB_ITEM* aItem );
     ITERATOR erase( const ITERATOR& aIterator );
 
-    size_t size() const;
-    bool empty() const;
-    void sort();
+    ITERATOR begin( int aType = TYPE_NOT_INIT );
+    ITERATOR end( int aType = TYPE_NOT_INIT );
+    CONST_ITERATOR begin( int aType = TYPE_NOT_INIT ) const;
+    CONST_ITERATOR end( int aType = TYPE_NOT_INIT ) const;
 
-    LIB_ITEM& operator[]( unsigned int aIdx );
-    const LIB_ITEM& operator[]( unsigned int aIdx ) const;
+    size_t size( int aType = TYPE_NOT_INIT ) const;
+    bool empty( int aType = TYPE_NOT_INIT ) const;
+    void sort();
+    void unique();
+
+    LIB_ITEMS& operator[]( int aType );
+    const LIB_ITEMS& operator[]( int aType ) const;
+
+    // Range of valid types handled by the iterator
+    static constexpr KICAD_T FIRST_TYPE = LIB_ARC_T;
+    static constexpr KICAD_T LAST_TYPE = LIB_FIELD_T;
+    static constexpr size_t TYPES_COUNT = LAST_TYPE - FIRST_TYPE + 1;
 
 private:
-    ///> Wrapped container
-    LIB_ITEMS_MAP& m_data;
+    ///> Get first non-empty type or first type if all are empty.
+    size_t first() const;
+
+    ///> Get last non-empty type or first type if all are empty.
+    size_t last() const;
+
+    ///> Contained items by type
+    LIB_ITEMS m_data[ TYPES_COUNT ];
 };
 
+/*
+ * Definitions for non-const iterator
+ */
+template<>
+struct LIB_ITEMS_CONTAINER::ITERATOR_ADAPTER< LIB_ITEM >
+{
+    typedef LIB_ITEMS::iterator ITERATOR;
+    typedef LIB_ITEMS_CONTAINER CONTAINER;
+};
+
+/*
+ * Definitions for const iterator
+ */
+template<>
+struct LIB_ITEMS_CONTAINER::ITERATOR_ADAPTER< const LIB_ITEM >
+{
+    typedef LIB_ITEMS::const_iterator ITERATOR;
+    typedef const LIB_ITEMS_CONTAINER CONTAINER;
+};
 
 #endif /* LIB_ITEMS_H */

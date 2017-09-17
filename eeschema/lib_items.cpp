@@ -3,6 +3,7 @@
  *
  * Copyright 2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
+ * @author Bernhard Stegmaier <stegmaier@sw-systems.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,194 +29,169 @@
 #include <wx/debug.h>
 
 
-LIB_ITEMS_LIST::ITERATOR::ITERATOR( LIB_ITEMS_MAP& aItems, int aType )
-    : m_parent( &aItems )
+void LIB_ITEMS_CONTAINER::push_back( LIB_ITEM *aItem )
 {
-    m_filter = ( aType != TYPE_NOT_INIT );
-    m_type = m_filter ? aType : FIRST_TYPE;
-    m_it = (*m_parent)[m_type].begin();
-
-    // be sure the enum order is correct for the type
-    static_assert( (int) ( ITERATOR::FIRST_TYPE ) < (int) ( ITERATOR::LAST_TYPE ),
-            "fix FIRST_TYPE and LAST_TYPE definitions" );
-    wxASSERT( m_type >= ITERATOR::FIRST_TYPE && m_type <= ITERATOR::LAST_TYPE );
+    operator[]( aItem->Type() ).push_back( aItem );
 }
 
-
-LIB_ITEMS_LIST::ITERATOR LIB_ITEMS_LIST::begin( int aType ) const
+LIB_ITEMS_CONTAINER::ITERATOR LIB_ITEMS_CONTAINER::erase(const LIB_ITEMS_CONTAINER::ITERATOR &aIterator)
 {
-    LIB_ITEMS_LIST::ITERATOR it( m_data, aType );
-
-    if( it.m_filter )       // iterates over a specific type
-    {
-        it.m_it = (*it.m_parent)[it.m_type].begin();
-    }
-    else                    // iterates over all items
-    {
-        // find a not empty container
-        auto i = m_data.begin();
-
-        while( i->second.empty() && i != m_data.end() )
-            ++i;
-
-        if( i == m_data.end() )
-            --i;
-
-        it.m_it = i->second.begin();
-        it.m_type = i->first;
-    }
-
-    return it;
-}
-
-
-LIB_ITEMS_LIST::ITERATOR LIB_ITEMS_LIST::end( int aType ) const
-{
-    LIB_ITEMS_LIST::ITERATOR it( m_data, aType );
-
-    if( it.m_filter )       // iterates over a specific type
-    {
-        it.m_it = (*it.m_parent)[it.m_type].end();
-    }
-    else                    // iterates over all items
-    {
-        // find a not empty container, starting from the last type
-        auto i = m_data.rbegin();
-
-        while( i->second.empty() && i != m_data.rend() )
-            ++i;
-
-        if( i == m_data.rend() )
-            --i;
-
-        it.m_it = i->second.end();
-        it.m_type = i->first;
-    }
-
-    return it;
-}
-
-
-void LIB_ITEMS_LIST::push_back( LIB_ITEM* aItem )
-{
-    wxASSERT( aItem->Type() >= ITERATOR::FIRST_TYPE && aItem->Type() <= ITERATOR::LAST_TYPE );
-    m_data[aItem->Type()].push_back( aItem );
-}
-
-
-LIB_ITEMS_LIST::ITERATOR LIB_ITEMS_LIST::erase( const ITERATOR& aIterator )
-{
-    LIB_ITEMS_LIST::ITERATOR it( aIterator );
-    it.m_it = (*aIterator.m_parent)[aIterator.m_type].erase( aIterator.m_it );
+    LIB_ITEMS_CONTAINER::ITERATOR it( aIterator );
+    it.m_it = (*aIterator.m_parent)[ aIterator.m_curType ].erase( aIterator.m_it );
     it.validate();
 
     return it;
 }
 
-
-size_t LIB_ITEMS_LIST::size() const
+LIB_ITEMS_CONTAINER::ITERATOR LIB_ITEMS_CONTAINER::begin( int aType )
 {
-    size_t counter = 0;
-
-    for( auto& type : m_data )
-        counter += type.second.size();
-
-    return counter;
+    size_t bucket = ( aType != TYPE_NOT_INIT ) ? aType : first();
+    return ITERATOR( this, operator[]( bucket ).begin(), bucket, aType );
 }
 
-
-bool LIB_ITEMS_LIST::empty() const
+LIB_ITEMS_CONTAINER::ITERATOR LIB_ITEMS_CONTAINER::end(int aType)
 {
-    for( auto& type : m_data )
+    size_t bucket = ( aType != TYPE_NOT_INIT ) ? aType : last();
+    return ITERATOR( this, operator[]( bucket ).end(), bucket, aType );
+}
+
+LIB_ITEMS_CONTAINER::CONST_ITERATOR LIB_ITEMS_CONTAINER::begin( int aType ) const
+{
+    size_t bucket = ( aType != TYPE_NOT_INIT ) ? aType : first();
+    return CONST_ITERATOR( this, operator[]( bucket ).begin(), bucket, aType );
+}
+
+LIB_ITEMS_CONTAINER::CONST_ITERATOR LIB_ITEMS_CONTAINER::end( int aType ) const
+{
+    size_t bucket = ( aType != TYPE_NOT_INIT ) ? aType : last();
+    return CONST_ITERATOR( this, operator[]( bucket ).end(), bucket, aType );
+}
+
+size_t LIB_ITEMS_CONTAINER::size( int aType ) const
+{
+    if( aType != TYPE_NOT_INIT )
     {
-        if( !type.second.empty() )
-            return false;
+        return operator[]( aType ).size();
     }
-
-    return true;
-}
-
-
-void LIB_ITEMS_LIST::sort()
-{
-    for( auto& itemType : m_data )
-        itemType.second.sort();
-}
-
-
-LIB_ITEM& LIB_ITEMS_LIST::operator[]( unsigned int aIdx )
-{
-    int counter = 0;
-
-    for( auto& type : m_data )
+    else
     {
-        if( aIdx < counter + type.second.size() )
-            return type.second[aIdx - counter];
-        else
-            counter += type.second.size();
-    }
+        size_t cnt = 0;
+        for( int i = 0; i < TYPES_COUNT; ++i)
+            cnt += m_data[ i ].size();
 
-    throw std::out_of_range( "LIB_ITEMS_LIST out of range" );
+        return cnt;
+    }
 }
 
-
-const LIB_ITEM& LIB_ITEMS_LIST::operator[]( unsigned int aIdx ) const
+bool LIB_ITEMS_CONTAINER::empty( int aType ) const
 {
-    int counter = 0;
-
-    for( const auto& type : m_data )
-    {
-        if( aIdx < counter + type.second.size() )
-            return type.second[aIdx - counter];
-        else
-            counter += type.second.size();
-    }
-
-    throw std::out_of_range( "LIB_ITEMS_LIST out of range" );
+    return ( size( aType ) == 0 );
 }
 
-
-LIB_ITEMS_LIST::ITERATOR& LIB_ITEMS_LIST::ITERATOR::operator++()
+void LIB_ITEMS_CONTAINER::sort()
 {
-    if( m_it != (*m_parent)[m_type].end() )
+    for( int i = 0; i < TYPES_COUNT; ++i )
+        m_data[ i ].sort();
+}
+
+void LIB_ITEMS_CONTAINER::unique()
+{
+    for( int i = 0; i < TYPES_COUNT; ++i )
+        m_data[ i ].unique();
+}
+
+LIB_ITEMS &LIB_ITEMS_CONTAINER::operator[]( int aType )
+{
+    if( ( aType < FIRST_TYPE ) || ( aType > LAST_TYPE ) )
+        throw std::out_of_range( "LIB_ITEMS_CONTAINER out of range" );
+
+    return m_data[ aType - FIRST_TYPE ];
+}
+
+const LIB_ITEMS &LIB_ITEMS_CONTAINER::operator[]( int aType ) const
+{
+    if( ( aType < FIRST_TYPE ) || ( aType > LAST_TYPE ) )
+        throw std::out_of_range( "LIB_ITEMS_CONTAINER out of range" );
+
+    return m_data[ aType - FIRST_TYPE ];
+}
+
+size_t LIB_ITEMS_CONTAINER::first() const
+{
+    int i = 0;
+    while( ( i < TYPES_COUNT ) && ( m_data[ i ].empty() ) )
+        ++i;
+
+    return ( i == TYPES_COUNT ) ? FIRST_TYPE : FIRST_TYPE + i;
+}
+
+size_t LIB_ITEMS_CONTAINER::last() const
+{
+    int i = TYPES_COUNT - 1;
+    while( ( i >= 0 ) && ( m_data[ i ].empty() ) )
+        --i;
+
+    return ( i < 0 ) ? FIRST_TYPE : FIRST_TYPE + i;
+}
+
+template< typename ITEM_TYPE >
+LIB_ITEMS_CONTAINER::ITERATOR_BASE<ITEM_TYPE>& LIB_ITEMS_CONTAINER::ITERATOR_BASE<ITEM_TYPE>::operator++()
+{
+    if( m_it != (*m_parent)[ m_curType ].end() )
         ++m_it;
-
     validate();
 
     return *this;
 }
 
-
-bool LIB_ITEMS_LIST::ITERATOR::operator!=( const LIB_ITEMS_LIST::ITERATOR& aOther ) const
+template< typename ITEM_TYPE >
+bool LIB_ITEMS_CONTAINER::ITERATOR_BASE<ITEM_TYPE>::operator!=(const LIB_ITEMS_CONTAINER::ITERATOR_BASE<ITEM_TYPE> &aOther) const
 {
-    wxASSERT( aOther.m_parent == m_parent );
-    wxASSERT( aOther.m_filter == m_filter );
-    wxASSERT( !m_filter || aOther.m_type == m_type );
-
+    if( aOther.m_parent != m_parent )
+        return true;
+    if( aOther.m_filter != m_filter )
+        return true;
+    if( aOther.m_curType != m_curType )
+        return true;
     return aOther.m_it != m_it;
 }
 
+template< typename ITEM_TYPE >
+LIB_ITEMS_CONTAINER::ITERATOR_BASE<ITEM_TYPE>::ITERATOR_BASE( typename LIB_ITEMS_CONTAINER::ITERATOR_ADAPTER< ITEM_TYPE >::CONTAINER* aItems,
+                                                              typename LIB_ITEMS_CONTAINER::ITERATOR_ADAPTER< ITEM_TYPE >::ITERATOR aIt,
+                                                              int aBucket, int aType )
+    : m_parent( aItems )
+    , m_it( aIt )
+    , m_curType( aBucket )
+{
+    m_filter = ( aType != TYPE_NOT_INIT );
+}
 
-void LIB_ITEMS_LIST::ITERATOR::validate()
+template< typename ITEM_TYPE >
+void LIB_ITEMS_CONTAINER::ITERATOR_BASE<ITEM_TYPE>::validate()
 {
     // for all-items iterators (unfiltered): check if this is the end of the
     // current type container, if so switch to the next non-empty container
-    if( m_it == (*m_parent)[m_type].end() && !m_filter )
+    if( !m_filter && m_it == (*m_parent)[ m_curType ].end() )
     {
-        auto typeIt = m_parent->find( m_type );
-        wxASSERT( typeIt != m_parent->end() );
-
         // switch to the next type (look for a not empty container)
+        int nextType = m_curType;
         do
-            ++typeIt;
-        while( typeIt != m_parent->end() && typeIt->second.empty() );
+            ++nextType;
+        while( ( nextType <= LAST_TYPE ) && (*m_parent)[ nextType ].empty() );
 
         // there is another not empty container, so make the iterator point to it,
         // otherwise it means the iterator points to the last item
-        if( typeIt != m_parent->end() )
+        if( nextType <= LAST_TYPE )
         {
-            m_it = typeIt->second.begin();
-            m_type = typeIt->first;
+            m_curType = nextType;
+            m_it = (*m_parent)[ m_curType ].begin();
         }
     }
 }
+
+/*
+ * Template instantiation for const/non-const iterator
+ */
+template class LIB_ITEMS_CONTAINER::ITERATOR_BASE< LIB_ITEM >;
+template class LIB_ITEMS_CONTAINER::ITERATOR_BASE< const LIB_ITEM >;

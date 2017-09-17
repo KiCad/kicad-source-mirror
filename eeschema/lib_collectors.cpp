@@ -111,7 +111,7 @@ SEARCH_RESULT LIB_COLLECTOR::Inspect( EDA_ITEM* aItem, void* testData )
 }
 
 
-void LIB_COLLECTOR::Collect( LIB_ITEMS_LIST& aItems, const KICAD_T aFilterList[],
+void LIB_COLLECTOR::Collect( LIB_ITEMS_CONTAINER& aItems, const KICAD_T aFilterList[],
                              const wxPoint& aPosition, int aUnit, int aConvert )
 {
     Empty();        // empty the collection just in case
@@ -124,9 +124,7 @@ void LIB_COLLECTOR::Collect( LIB_ITEMS_LIST& aItems, const KICAD_T aFilterList[]
     m_data.m_unit = aUnit;
     m_data.m_convert = aConvert;
 
-    for( size_t i = 0;  i < aItems.size();  i++ )
-    {
-        if( SEARCH_QUIT == aItems[i].Visit( m_inspector, NULL, m_ScanTypes ) )
+    for( LIB_ITEM& item : aItems )
+        if( SEARCH_QUIT == item.Visit( m_inspector, NULL, m_ScanTypes ) )
             break;
-    }
 }

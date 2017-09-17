@@ -236,8 +236,7 @@ class LIB_PART : public EDA_ITEM
     long                m_dateModified;     ///< Date the part was last modified.
     LIBRENTRYOPTIONS    m_options;          ///< Special part features such as POWER or NORMAL.)
     int                 m_unitCount;        ///< Number of units (parts) per package.
-    LIB_ITEMS_MAP       drawingsMap;        ///< How to draw this part.
-    LIB_ITEMS_LIST      drawings;           ///< Wrapper to drawingsMap to present as a flat structure
+    LIB_ITEMS_CONTAINER m_drawings;         ///< Drawing items of this part.
     wxArrayString       m_FootprintList;    /**< List of suitable footprint names for the
                                                  part (wild card names accepted). */
     LIB_ALIASES         m_aliases;          ///< List of alias object pointers associated with the
@@ -683,19 +682,11 @@ public:
     /**
      * Return a reference to the draw item list.
      *
-     * @return LIB_ITEMS_LIST& - Reference to the draw item object list.
+     * @return LIB_ITEMS_CONTAINER& - Reference to the draw item object container.
      */
-    LIB_ITEMS_LIST& GetDrawItemList()
+    LIB_ITEMS_CONTAINER& GetDrawItems()
     {
-        return drawings;
-    }
-
-    /**
-     * Returns a reference to the draw item map that stores items per their type.
-     */
-    LIB_ITEMS_MAP& GetDrawItemMap()
-    {
-        return drawingsMap;
+        return m_drawings;
     }
 
     /**

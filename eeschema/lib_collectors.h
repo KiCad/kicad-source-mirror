@@ -30,7 +30,7 @@
 #include <lib_draw_item.h>
 
 
-class LIB_ITEMS_LIST;
+class LIB_ITEMS_CONTAINER;
 class LIB_COLLECTOR;
 
 
@@ -128,7 +128,7 @@ public:
      * @param aUnit The unit of the items to collect or zero if all units.
      * @param aConvert The convert of the items to collect or zero if all conversions.
      */
-    void Collect( LIB_ITEMS_LIST& aItem, const KICAD_T aFilterList[], const wxPoint& aPosition,
+    void Collect( LIB_ITEMS_CONTAINER& aItem, const KICAD_T aFilterList[], const wxPoint& aPosition,
                   int aUnit = 0, int aConvert = 0 );
 };
 
