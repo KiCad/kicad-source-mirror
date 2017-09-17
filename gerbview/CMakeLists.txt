@@ -63,6 +63,14 @@ set( GERBVIEW_SRCS
     rs274x.cpp
     select_layers_to_pcb.cpp
     toolbars_gerber.cpp
+
+    gerbview_draw_panel_gal.cpp
+    gerbview_painter.cpp
+
+    tools/gerbview_actions.cpp
+    tools/selection_tool.cpp
+    tools/gerbview_control.cpp
+    gerber_collectors.cpp
     )
 
 set( GERBVIEW_EXTRA_SRCS
