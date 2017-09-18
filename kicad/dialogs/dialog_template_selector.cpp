@@ -107,7 +107,7 @@ void DIALOG_TEMPLATE_SELECTOR::onNotebookResize(wxSizeEvent& event)
 
 void DIALOG_TEMPLATE_SELECTOR::OnPageChange( wxNotebookEvent& event )
 {
-    int page = m_notebook->GetSelection();
+    int page = event.GetSelection();
 
     if( page != wxNOT_FOUND && (unsigned)page < m_panels.size() )
         m_tcTemplatePath->SetValue( m_panels[page]->GetPath() );
@@ -219,9 +219,6 @@ void DIALOG_TEMPLATE_SELECTOR::onDirectoryBrowseClicked( wxCommandEvent& event )
 
     m_tcTemplatePath->SetValue( dirName.GetFullPath() );
 
-    if( currPath == m_tcTemplatePath->GetValue() )
-        return;     // No change
-
     // Rebuild the page from the new templates path:
     replaceCurrentPage();
 }
@@ -235,9 +232,6 @@ void DIALOG_TEMPLATE_SELECTOR::onValidatePath( wxCommandEvent& event )
         return;     // Should not happen
 
     wxString currPath = m_tcTemplatePath->GetValue();
-
-    if( currPath == m_panels[page]->GetPath() )     // No change
-        return;
 
     wxFileName fn;
     fn.AssignDir( m_tcTemplatePath->GetValue() );
