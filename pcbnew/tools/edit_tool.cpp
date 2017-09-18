@@ -1304,9 +1304,7 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
 {
     copyToClipboard( aEvent );
-    TOOL_EVENT ev;
-    ev.SetParameter( PCB_ACTIONS::REMOVE_FLAGS::NORMAL );
-    Remove( ev );
+    Remove( aEvent );
     return 0;
 }
 
