@@ -305,9 +305,9 @@ void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFin
     long visibleLayers = myframe->GetVisibleLayers();
 
     if( isVisible )
-        visibleLayers |= 1 << aLayer;
+        visibleLayers |= 1 << ( aLayer - GERBVIEW_LAYER_ID_START );
     else
-        visibleLayers &= ~( 1 << aLayer );
+        visibleLayers &= ~( 1 << ( aLayer - GERBVIEW_LAYER_ID_START ) );
 
     myframe->SetVisibleLayers( visibleLayers );
 

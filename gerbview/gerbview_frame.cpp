@@ -677,7 +677,23 @@ bool GERBVIEW_FRAME::IsElementVisible( GERBVIEW_LAYER_ID aItemIdVisible ) const
 
 long GERBVIEW_FRAME::GetVisibleLayers() const
 {
-    return -1;    // TODO
+    long layerMask = 0;
+
+    if( auto canvas = GetGalCanvas() )
+    {
+        // NOTE: This assumes max 32 drawlayers!
+        for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; i++ )
+        {
+            if( canvas->GetView()->IsLayerVisible( GERBER_DRAW_LAYER( i ) ) )
+                layerMask |= ( 1 << i );
+        }
+
+        return layerMask;
+    }
+    else
+    {
+        return -1;
+    }
 }
 
 
