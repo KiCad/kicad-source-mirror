@@ -541,6 +541,18 @@ void GERBVIEW_FRAME::OnUpdateShowNegativeItems( wxUpdateUIEvent& aEvent )
 }
 
 
+void GERBVIEW_FRAME::OnUpdateDiffMode( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Check( m_DisplayOptions.m_DiffMode );
+}
+
+
+void GERBVIEW_FRAME::OnUpdateHighContrastMode( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Check( m_DisplayOptions.m_HighContrastMode );
+}
+
+
 void GERBVIEW_FRAME::OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( m_show_layer_manager_tools );

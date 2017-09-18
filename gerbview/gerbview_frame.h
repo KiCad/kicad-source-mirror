@@ -563,6 +563,8 @@ public:
     void                OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent );
     void                OnUpdateSelectDCode( wxUpdateUIEvent& aEvent );
     void                OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
+    void                OnUpdateDiffMode( wxUpdateUIEvent& aEvent );
+    void                OnUpdateHighContrastMode( wxUpdateUIEvent& aEvent );
 
     /**
      * Function BlockCommand
