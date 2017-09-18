@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-14 14:48+0200\n"
-"PO-Revision-Date: 2017-09-14 14:53+0200\n"
+"POT-Creation-Date: 2017-09-15 15:26+0200\n"
+"PO-Revision-Date: 2017-09-15 15:26+0200\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -200,8 +200,6 @@ msgstr "Eliminar alias"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:110
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:44
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:136
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:38
 #: eeschema/dialogs/dialog_sym_lib_table_base.cpp:144
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:85
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:146
@@ -1197,9 +1195,9 @@ msgid "Format"
 msgstr "Formato"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:135 common/eda_text.cpp:404
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:184
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:198
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:93
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:107
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95 eeschema/libedit.cpp:498
 #: eeschema/sch_text.cpp:781 gerbview/class_gerber_file_image.cpp:338
 #: gerbview/class_gerber_file_image.cpp:342
@@ -1922,7 +1920,7 @@ msgstr ""
 #: common/dialogs/dialog_env_var_config_base.cpp:38
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:82
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:213
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:193
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:202
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:318
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:321
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:182 eeschema/lib_pin.cpp:2085
@@ -2060,8 +2058,8 @@ msgid "Mirror Y"
 msgstr "Invertir Y"
 
 #: common/dialogs/dialog_image_editor_base.cpp:39
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:176
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:85
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:190
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:99
 #: pcbnew/onrightclick.cpp:998 pcbnew/tools/edit_tool.cpp:665
 msgid "Rotate"
 msgstr "Rotar"
@@ -2487,9 +2485,9 @@ msgid "Unknown MIME type for doc file <%s>"
 msgstr "Tipo MIME desconocido del archivo <%s>"
 
 #: common/eda_text.cpp:405
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:184
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:198
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:93
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:107
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95 eeschema/sch_text.cpp:781
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:109
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:109
@@ -2498,9 +2496,9 @@ msgid "Italic"
 msgstr "Cursiva"
 
 #: common/eda_text.cpp:406
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:184
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:198
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:93
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:107
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95 eeschema/sch_text.cpp:781
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:90
 msgid "Bold"
@@ -2949,10 +2947,10 @@ msgstr "Zoom -"
 
 #: common/tool/actions.cpp:32 common/widgets/mathplot.cpp:1765
 #: common/zoom.cpp:246
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:150
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:156
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:55
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:63
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:164
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:170
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:69
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:77
 #: gerbview/class_gerber_file_image.cpp:342
 #: gerbview/class_gerber_file_image.cpp:345
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
@@ -3661,7 +3659,7 @@ msgstr "Variables de entorno disponibles para rutas relativas:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:83
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:216
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:196
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:205
 #: eeschema/dialogs/dialog_rescue_each.cpp:110
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45 eeschema/lib_field.cpp:624
 #: eeschema/lib_field.cpp:803 eeschema/sch_component.cpp:1736
@@ -4364,8 +4362,8 @@ msgid "Field"
 msgstr "Campo"
 
 #: eeschema/dialogs/dialog_bom_editor.cpp:62
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:171
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:80
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:185
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:94
 msgid "Show"
 msgstr "Mostrar"
 
@@ -4695,39 +4693,39 @@ msgstr ""
 msgid "Edit"
 msgstr "Editar"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:248
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:254
 #, c-format
 msgid "Component '%s' found in library '%s'"
 msgstr "Se ha encontrado el componente '%s' en la librería '%s'"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:254
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:260
 #, c-format
 msgid "Component '%s' not found in any library"
 msgstr "No se ha encontrado el componente '%s' en la librería"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:270
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:276
 msgid "However, some candidates are found:"
 msgstr "En cambio, se han encontrado algunos candidatos:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:276
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:282
 #, c-format
 msgid "'%s' found in library '%s'"
 msgstr "Se ha encrontrado '%s' en la librería '%s'"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:353
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:359
 msgid "No Component Name!"
 msgstr "¡Falta el nombre del componente!"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:361
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:367
 #, c-format
 msgid "Component '%s' not found!"
 msgstr "¡No se ha encontrado el componente '%s'!"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:436
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:442
 msgid "Illegal reference. A reference must start with a letter"
 msgstr "Referencia ilegal. Una referencia debe comenzar por una letra"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:462
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:468
 #, c-format
 msgid ""
 "The field name <%s> does not have a value and is not defined in the field "
@@ -4738,18 +4736,18 @@ msgstr ""
 "de campos. Los campos de valor nulo son inválidos y serán eliminados del "
 "componente. ¿Desea elminar tanto este como los demás campos sin definir?"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:469
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:475
 msgid "Remove Fields"
 msgstr "Eliminar campos"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:905
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:737
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:949
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:785
 msgid "Show Datasheet"
 msgstr "Mostrar hoja de datos"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:907
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:739
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:124
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:951
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:787
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:138
 msgid ""
 "If your datasheet is given as an http:// link, then pressing this button "
 "should bring it up in your webbrowser."
@@ -4757,22 +4755,22 @@ msgstr ""
 "Si la hoja de datos se introduce como un enlace http://, al presionar este "
 "botón se mostrará en el navegador web."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:912
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:744
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:956
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:792
 msgid "Browse Footprints"
 msgstr "Explorar huellas"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:914
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:746
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:958
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:794
 msgid "Open the footprint browser to choose a footprint and assign it."
 msgstr "Abrir el explorador de huellas para elegir y asignar una."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:920
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:752
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:964
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:800
 msgid "Used only for fields Footprint and Datasheet."
 msgstr "Utilizado únicamente para los campos Huella y Hoja de datos."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1059
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1103
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
 #: eeschema/lib_pin.cpp:2103 gerbview/class_gerber_draw_item.cpp:533
 #: gerbview/class_gerber_draw_item.cpp:534 pcbnew/class_pcb_text.cpp:131
@@ -4780,7 +4778,7 @@ msgstr "Utilizado únicamente para los campos Huella y Hoja de datos."
 msgid "Yes"
 msgstr "Sí"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1061
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1105
 #: eeschema/lib_pin.cpp:2105 gerbview/class_gerber_draw_item.cpp:533
 #: gerbview/class_gerber_draw_item.cpp:534 pcbnew/class_pcb_text.cpp:129
 #: pcbnew/class_text_mod.cpp:367
@@ -4838,7 +4836,7 @@ msgid "Orientation (degrees):"
 msgstr "Orientación (grados):"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:52
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:59
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:73
 msgid "Select if the component is to be rotated when drawn"
 msgstr "Seleccionar si el componente ha de ser girado al representarlo"
 
@@ -4855,7 +4853,7 @@ msgid "Position:"
 msgstr "Posición:"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:60
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:67
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:81
 msgid ""
 "Pick the graphical transformation to be used when displaying the component, "
 "if any"
@@ -4924,92 +4922,88 @@ msgstr ""
 msgid "  Fields"
 msgstr "  Campos"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:126
-msgid "New Field"
-msgstr "Nuevo campo"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:127
-msgid "Create new custom field"
-msgstr "Crear un nuevo campo personalizado"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:131
-msgid "Delete Field"
-msgstr "Eliminar campo"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:132
-msgid "Delete optional field"
-msgstr "Eliminar campo opcional"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:137
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:130
 msgid "Move the selected optional field up one position"
 msgstr "Mover el campo opcional seleccionado una posición arriba"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:150
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:135
+msgid "Move the selected optional field down one position"
+msgstr "Mover el campo opcional seleccionado una posición hacia abajo"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:143
+msgid "Delete optional field"
+msgstr "Eliminar campo opcional"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:148
+msgid "Create new custom field"
+msgstr "Crear un nuevo campo personalizado"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:164
 msgid "Align Left"
 msgstr "Alineación izquierda"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:150
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:164
 msgid "Align Right"
 msgstr "Alineación derecha"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:152
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:166
 msgid "Horizontal Position:"
 msgstr "Posición horizontal:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:156
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:170
 msgid "Align Top"
 msgstr "Alinear arriba"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:156
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:170
 msgid "Align Bottom"
 msgstr "Alinear abajo"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:158
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:172
 msgid "Vertical Position:"
 msgstr "Posición vertical:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:169
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:183
 msgid "Visibility:"
 msgstr "Visibilidad:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:172
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:186
 msgid "Make selected field visible"
 msgstr "Hacer el campo seleccionado visible"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:177
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:191
 msgid "Rotated 90 degrees the selected field"
 msgstr "Campo seleccionado rotado 90 grados"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:184
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:198
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:93
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:107
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95 eeschema/sch_text.cpp:781
 msgid "Bold Italic"
 msgstr "Cursiva negrita"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:186
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:200
 msgid "Font Style:"
 msgstr "Estilo de fuente:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:196
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:210
 msgid "Field Name:"
 msgstr "Nombre de Campo:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:201
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:210
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:215
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:224
 msgid "Name of the selected field. Fixed field names are not editable"
 msgstr ""
 "Nombre del campo seleccionado. Los nombres de campo fijos no pueden editarse"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:205
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:219
 msgid "Field Value:"
 msgstr "Valor del campo:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:214
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:228
 msgid "Open in Browser"
 msgstr "Abrir en el navegador"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:215
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:229
 msgid ""
 "If your datasheet is an http:// link or a complete file path, then it may "
 "show in your browser by pressing this button."
@@ -5017,20 +5011,20 @@ msgstr ""
 "Si la hoja de datos es un enlace http:// o una ruta de archivo completa, "
 "puede mostrarse en el explorador pulsando este botón."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:228
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:242
 msgid "Font Size:"
 msgstr "Tamaño de fuente:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:233
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:247
 msgid "Font Size of the selected field"
 msgstr "Tamaño de letra del campo seleccionado"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:237
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:250
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:263
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:146
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:157
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:170
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:251
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:264
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:277
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:160
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:171
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:184
 #: pcbnew/dialogs/dialog_drc_base.cpp:69 pcbnew/dialogs/dialog_drc_base.cpp:84
 #: pcbnew/dialogs/dialog_drc_base.cpp:99
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:94
@@ -5058,19 +5052,19 @@ msgstr "Tamaño de letra del campo seleccionado"
 msgid "unit"
 msgstr "unidad"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:241
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:255
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:50
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:161
 msgid "Position X:"
 msgstr "Posición X:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:246
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:259
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:260
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:273
 msgid "X coordinate of the selected field"
 msgstr "Coordenada X del campo seleccionado"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:254
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:268
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:92
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:172
@@ -5121,7 +5115,7 @@ msgid "&Size:"
 msgstr "&Tamaño:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:55
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:69
 #: eeschema/lib_pin.cpp:114
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:105
@@ -5134,7 +5128,7 @@ msgid "Up"
 msgstr "Arriba"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:55
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:69
 #: eeschema/lib_pin.cpp:115
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:105
@@ -5187,11 +5181,11 @@ msgstr "Pasivo"
 msgid "S&hape"
 msgstr "F&orma"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:258
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:267
 msgid "Illegal reference.  References must start with a letter."
 msgstr "Referencia ilegal. La referencia debe comenzar con una letra."
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:274
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:283
 #, c-format
 msgid ""
 "A new name is entered for this component\n"
@@ -5202,108 +5196,104 @@ msgstr ""
 "¡Ya existe un alias %s!\n"
 "El componente no puede actualizarse"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:708
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:755
 msgid "Chip Name"
 msgstr "Nombre del componente"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:28
-msgid "Add Field"
-msgstr "Añadir campo"
-
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:29
-msgid "Add a new custom field"
-msgstr "Añadir campo personalizado"
-
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:33
-msgid "Clear and Delete Field"
-msgstr "Vaciar y eliminar campo"
-
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:34
-msgid "Delete one of the optional fields"
-msgstr "Eliminar uno de los campos opcionales"
-
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:39
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:32
 msgid "Move the selected optional fields up one position"
 msgstr "Mover el campo seleccionado una posición hacia arriba"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:43
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:37
+msgid "Move Move the selected optional fields down one position down"
+msgstr "Mueve los campos opcionales seleccionados una posición hacia abajo"
+
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:45
+msgid "Delete one of the optional fields"
+msgstr "Eliminar uno de los campos opcionales"
+
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:50
+msgid "Add a new custom field"
+msgstr "Añadir campo personalizado"
+
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:57
 msgid "Edit Spice model"
 msgstr "Editar modelo Spice"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:57
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:71
 msgid "Horiz. Justify"
 msgstr "Justificación horizontal"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:63
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:77
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
 msgid "Bottom"
 msgstr "Inferior"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:63
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:77
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
 msgid "Top"
 msgstr "Superior"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:65
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:79
 msgid "Vert. Justify"
 msgstr "Justificación vertical"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:78
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:121
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:150
 msgid "Visibility"
 msgstr "Visibilidad"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:81
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:95
 msgid "Check if you want this field visible"
 msgstr "Marcar para que este campo sea visible"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:86
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:100
 msgid "Check if you want this field's text rotated 90 degrees"
 msgstr "Marcar para que el texto de este campo se gire 90 grados"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:95
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:109
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:85
 msgid "Style:"
 msgstr "Estilo"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:105
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:119
 msgid "Field Name"
 msgstr "Nombre del campo"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:110
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:119
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:124
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:133
 msgid "The text (or value) of the currently selected field"
 msgstr "El texto (o valor) del campo seleccionado"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:114
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:128
 msgid "Field Value"
 msgstr "Valor del campo"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:123
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:137
 msgid "Show in Browser"
 msgstr "Mostrar en explorador"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:137
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:151
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:52 eeschema/sch_text.cpp:813
 #: pcbnew/muonde.cpp:478
 msgid "Size"
 msgstr "Tamaño "
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:142
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:156
 msgid ""
 "The vertical height of the currently selected field's text in the schematic"
 msgstr "La altura del texto del campo seleccionado en el esquema"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:150
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:164
 msgid "X Position"
 msgstr "Posición X"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:161
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:175
 msgid "Y Position"
 msgstr "Posición Y"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:166
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:180
 msgid "The Y coordinate of the text relative to the component"
 msgstr "La coordenada Y del texto con respecto al componente"
 
@@ -26412,7 +26402,7 @@ msgstr "Lista de materiales"
 msgid "BOM editor"
 msgstr "Editor de BOM"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.h:106
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.h:112
 #: eeschema/dialogs/dialog_lib_new_component_base.h:62
 msgid "Component Properties"
 msgstr "Propiedades del componente"
@@ -26421,7 +26411,7 @@ msgstr "Propiedades del componente"
 msgid "Text Editor"
 msgstr "Abrir el editor de texto"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.h:89
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.h:95
 msgid "Field Properties"
 msgstr "Propiedades de campo"
 
@@ -26880,6 +26870,18 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importar archivo DXF"
+
+#~ msgid "New Field"
+#~ msgstr "Nuevo campo"
+
+#~ msgid "Delete Field"
+#~ msgstr "Eliminar campo"
+
+#~ msgid "Add Field"
+#~ msgstr "Añadir campo"
+
+#~ msgid "Clear and Delete Field"
+#~ msgstr "Vaciar y eliminar campo"
 
 #~ msgid "Load project"
 #~ msgstr "Cargar proyecto"
