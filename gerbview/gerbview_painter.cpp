@@ -232,6 +232,10 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
 
     color = m_gerbviewSettings.GetColor( aItem, aLayer );
 
+    // TODO: Should brightened color be a preference?
+    if( aItem->IsBrightened() )
+        color = COLOR4D( 0.0, 1.0, 0.0, 0.75 );
+
     if( isNegative )
     {
         if( m_gerbviewSettings.m_showNegativeItems )

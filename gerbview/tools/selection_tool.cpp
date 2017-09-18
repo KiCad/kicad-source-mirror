@@ -636,8 +636,6 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
     BRIGHT_BOX brightBox;
     CONTEXT_MENU menu;
 
-    getView()->Add( &brightBox );
-
     int limit = std::min( 10, aCollector->GetCount() );
 
     for( int i = 0; i < limit; ++i )
@@ -657,7 +655,11 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
         if( evt->Action() == TA_CONTEXT_MENU_UPDATE )
         {
             if( current )
+            {
                 current->ClearBrightened();
+                getView()->Update( current, KIGFX::LAYERS );
+                getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+            }
 
             int id = *evt->GetCommandId();
 
@@ -666,6 +668,8 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
             {
                 current = ( *aCollector )[id - 1];
                 current->SetBrightened();
+                getView()->Update( current, KIGFX::LAYERS );
+                getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
             }
             else
             {
@@ -684,19 +688,14 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
 
             break;
         }
-
-        // Draw a mark to show which item is available to be selected
-        if( current && current->IsBrightened() )
-        {
-            brightBox.SetItem( current );
-            getView()->SetVisible( &brightBox, true );
-//          getView()->Hide( &brightBox, false );
-            getView()->Update( &brightBox, KIGFX::GEOMETRY );
-            getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
-        }
     }
 
-    getView()->Remove( &brightBox );
+    if( current && current->IsBrightened() )
+    {
+        current->ClearBrightened();
+        getView()->Update( current, KIGFX::LAYERS );
+        getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+    }
 
     return current;
 }
@@ -762,7 +761,7 @@ void GERBVIEW_SELECTION_TOOL::selectVisually( EDA_ITEM* aItem ) const
 {
     // Move the item's layer to the front
     int layer = static_cast<GERBER_DRAW_ITEM*>( aItem )->GetLayer();
-    m_frame->GetGalCanvas()->SetTopLayer( GERBER_DRAW_LAYER( layer ) );
+    m_frame->SetActiveLayer( layer, true );
 
     // Hide the original item, so it is shown only on overlay
     aItem->SetSelected();
