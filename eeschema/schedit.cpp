@@ -833,31 +833,32 @@ void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem, wxDC* aDC )
     m_canvas->Refresh();
 }
 
+
 void SCH_EDIT_FRAME::SelectAllFromSheet( wxCommandEvent& aEvent )
 {
-   SCH_SCREEN* screen = GetScreen();
-   SCH_ITEM* item = screen->GetCurItem();
+    SCH_SCREEN* screen = GetScreen();
+    SCH_ITEM*   item = screen->GetCurItem();
 
-   if( item != NULL )
-   {
+    if( item != NULL )
+    {
         item = LocateAndShowItem( item->GetPosition() );
-        SendMessageToPCBNEW(item, NULL);
-   }
-   else
-   {
+        SendMessageToPCBNEW( item, NULL );
+    }
+    else
+    {
         // If we didn't get here by a hot key, then something has gone wrong.
         if( aEvent.GetInt() == 0 )
             return;
+
         EDA_HOTKEY_CLIENT_DATA* data = (EDA_HOTKEY_CLIENT_DATA*) aEvent.GetClientObject();
 
         wxCHECK_RET( data != NULL, wxT( "Invalid hot key client object." ) );
 
         item = LocateAndShowItem( data->GetPosition() );
-        SendMessageToPCBNEW(item, NULL);
-
-   }
-
+        SendMessageToPCBNEW( item, NULL );
+    }
 }
+
 
 void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
 {

@@ -915,10 +915,12 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
 
     // auto select trivial connections segments which are launched from the pads
     std::list<TRACK*> launchTracks;
+
     for( auto pad : padList )
     {
         launchTracks = board()->GetTracksByPosition( pad->GetPosition() );
-        for ( auto track : launchTracks )
+
+        for( auto track : launchTracks )
         {
             selectAllItemsConnectedToTrack( *track );
         }

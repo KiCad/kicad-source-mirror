@@ -763,8 +763,8 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
         AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( drag_xpm ) );
 
         PopMenu->AppendSeparator();
-        msg = AddHotkeyName( _( "Select Items On PCB"), g_Schematic_Hokeys_Descr, HK_SELECT_ITEMS_ON_PCB );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_SELECT_ON_PCB, msg, KiBitmap( select_same_sheet_xpm ));
+        msg = AddHotkeyName( _( "Select Items On PCB" ), g_Schematic_Hokeys_Descr, HK_SELECT_ITEMS_ON_PCB );
+        AddMenuItem( PopMenu, ID_POPUP_SCH_SELECT_ON_PCB, msg, KiBitmap( select_same_sheet_xpm ) );
         PopMenu->AppendSeparator();
 
         wxMenu* orientmenu = new wxMenu;

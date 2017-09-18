@@ -498,6 +498,9 @@ inline VIA* GetFirstVia( TRACK* aTrk, const TRACK* aStopPoint = NULL )
     else
         return NULL;
 }
+
+
+/// Scan a track list for the first TRACK object. Returns  NULL if not found (or NULL passed)
 inline TRACK* GetFirstTrack( TRACK* aTrk, const TRACK* aStopPoint = NULL )
 {
     while( aTrk && ( aTrk != aStopPoint ) && ( aTrk->Type() != PCB_TRACE_T ) )

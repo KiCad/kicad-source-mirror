@@ -1564,17 +1564,20 @@ D_PAD* BOARD::GetPad( TRACK* aTrace, ENDPOINT_T aEndPoint )
 
 }
 
+
 std::list<TRACK*> BOARD::GetTracksByPosition( const wxPoint& aPosition, PCB_LAYER_ID aLayer ) const
 {
     std::list<TRACK*> tracks;
-    for( TRACK *track = GetFirstTrack( m_Track); track; track = GetFirstTrack( track->Next() ) )
+
+    for( TRACK* track = GetFirstTrack( m_Track ); track; track = GetFirstTrack( track->Next() ) )
     {
-        if( ( ( track->GetStart() == aPosition) || track->GetEnd() == aPosition ) &&
+        if( ( ( track->GetStart() == aPosition ) || track->GetEnd() == aPosition ) &&
                 ( track->GetState( BUSY | IS_DELETED ) == 0 ) &&
                 ( ( aLayer == UNDEFINED_LAYER ) || ( track->IsOnLayer( aLayer ) ) ) )
 
         tracks.push_back( track );
     }
+
     return tracks;
 }
 
