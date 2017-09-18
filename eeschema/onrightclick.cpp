@@ -762,6 +762,11 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
         msg = AddHotkeyName( _( "Drag" ), g_Schematic_Hokeys_Descr, HK_DRAG );
         AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( drag_xpm ) );
 
+        PopMenu->AppendSeparator();
+        msg = AddHotkeyName( _( "Select Items On PCB" ), g_Schematic_Hokeys_Descr, HK_SELECT_ITEMS_ON_PCB );
+        AddMenuItem( PopMenu, ID_POPUP_SCH_SELECT_ON_PCB, msg, KiBitmap( select_same_sheet_xpm ) );
+        PopMenu->AppendSeparator();
+
         wxMenu* orientmenu = new wxMenu;
         msg = AddHotkeyName( _( "Rotate Clockwise" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
         AddMenuItem( orientmenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_cw_xpm ) );

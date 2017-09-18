@@ -1152,6 +1152,16 @@ public:
                            PCB_LAYER_ID aLayer = PCB_LAYER_ID( -1 ) ) const;
 
     /**
+     * Function GetTracksByPosition
+     * finds the list of tracks that starts or ends at \a aPosition on \a aLayer.
+     *
+     * @param aPosition The wxPoint to check start agains against.
+     * @param aLayer The layer to search.  Use -1 (<PCB_LAYER_ID>::UNDEFINED_LAYER) for a don't care.
+     * @return std::list<TRACK*> A list of TRACK* items that can be zero if no track is found.
+     */
+    std::list<TRACK*> GetTracksByPosition( const wxPoint& aPosition, PCB_LAYER_ID aLayer = PCB_LAYER_ID( -1 ) ) const;
+
+    /**
      * Function GetPad
      * finds a pad \a aPosition on \a aLayer.
      *

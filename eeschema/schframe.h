@@ -813,6 +813,13 @@ private:
     void OnEditItem( wxCommandEvent& aEvent );
 
     /**
+     * Function SelectAllFromSheet
+     * handles the #ID_POPUP_SCH_SELECT_ON_PCB event used to select items in pcbnew
+     * based on the sheet they are placed on.
+     */
+    void SelectAllFromSheet( wxCommandEvent& aEvent );
+
+    /**
      * Function OnDragItem
      * handles the #ID_SCH_DRAG_ITEM event used to drag schematic itams.
      */
