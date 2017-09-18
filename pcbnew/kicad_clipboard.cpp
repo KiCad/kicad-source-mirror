@@ -71,7 +71,7 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
 
     // Differentiate how it is formatted depending on what selection contains
     bool onlyModuleParts = true;
-    for( auto i : aSelected )
+    for( const auto i : aSelected )
     {
         // check if it not one of the module primitives
         if( ( i->Type() != PCB_MODULE_EDGE_T ) &&
@@ -85,25 +85,27 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
 
     // if there is only parts of a module selected, format it as a new module else
     // format it as an entire board
-    MODULE module( m_board );
+    MODULE partialModule( m_board );
 
     // only a module selected.
     if( aSelected.Size() == 1 && aSelected.Front()->Type() == PCB_MODULE_T )
     {
         // make the module safe to transfer to other pcbs
-        MODULE* mod = static_cast<MODULE*>( aSelected.Front() );
-        for( D_PAD* pad = mod->PadsList().begin(); pad; pad = pad->Next() )
+        const MODULE* mod = static_cast<MODULE*>( aSelected.Front() );
+        // Do not modify existing board
+        MODULE newModule(*mod);
+
+        for( D_PAD* pad = newModule.PadsList().begin(); pad; pad = pad->Next() )
         {
             pad->SetNetCode( 0,0 );
         }
 
-        Format(static_cast<BOARD_ITEM*>( mod ) );
+        Format( static_cast<BOARD_ITEM*>( &newModule ) );
     }
-
     // partial module selected.
     else if( onlyModuleParts )
     {
-        for( auto item : aSelected )
+        for( const auto item : aSelected )
         {
             auto clone = static_cast<BOARD_ITEM*>( item->Clone() );
 
@@ -118,16 +120,16 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
                pad->SetNetCode( 0, 0 );
             }
 
-            module.Add( clone );
+            partialModule.Add( clone );
         }
 
         // Set the new relative internal local coordinates of copied items
         MODULE* editedModule = m_board->m_Modules;
-        wxPoint moveVector = module.GetPosition() + editedModule->GetPosition();
+        wxPoint moveVector = partialModule.GetPosition() + editedModule->GetPosition();
 
-        module.MoveAnchorPosition( moveVector );
+        partialModule.MoveAnchorPosition( moveVector );
 
-        Format( &module, 0 );
+        Format( &partialModule, 0 );
 
     }
     // lots of stuff selected
@@ -147,7 +149,7 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
         m_formatter.Print( 0, "\n" );
 
 
-        for( auto i : aSelected )
+        for( const auto i : aSelected )
         {
             // Dont format stuff that cannot exist standalone!
             if( ( i->Type() != PCB_MODULE_EDGE_T ) &&
