@@ -58,7 +58,7 @@ void CLIPBOARD_IO::setBoard( BOARD* aBoard )
     m_board = aBoard;
 }
 
-void CLIPBOARD_IO::SaveSelection( SELECTION& aSelected )
+void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 

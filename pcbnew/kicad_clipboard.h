@@ -65,7 +65,7 @@ public:
     /* Writes all the settings of the BOARD* set by setBoard() and then adds all
      * the BOARD_ITEM* found in selection formatted by PCB_IO to clipboard as a text
      */
-    void SaveSelection( SELECTION& selected );
+    void SaveSelection( const SELECTION& selected );
 
     BOARD_ITEM* Parse();
 

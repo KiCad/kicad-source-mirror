@@ -421,7 +421,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
     {
         cursorPos = controls->GetCursorPosition();
 
-        if( evt->IsCancel() )
+        if( evt->IsCancel() || evt->IsActivate() )
         {
             if( module )
             {

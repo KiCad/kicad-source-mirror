@@ -165,12 +165,12 @@ TOOL_ACTION PCB_ACTIONS::measureTool( "pcbnew.InteractiveEdit.measureTool",
 
 TOOL_ACTION PCB_ACTIONS::copyToClipboard( "pcbnew.InteractiveEdit.CopyToClipboard",
         AS_GLOBAL, MD_CTRL + int( 'C' ),
-        _( "Copy to Clipboard" ), _( "Copy selected content to clipboard" ),
+        _( "Copy" ), _( "Copy selected content to clipboard" ),
         copy_xpm );
 
 TOOL_ACTION PCB_ACTIONS::cutToClipboard( "pcbnew.InteractiveEdit.CutToClipboard",
         AS_GLOBAL, MD_CTRL + int( 'X' ),
-        _( "Cut to Clipboard" ), _( "Cut selected content to clipboard" ),
+        _( "Cut" ), _( "Cut selected content to clipboard" ),
         cut_xpm );
 
 
@@ -1304,7 +1304,9 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
 {
     copyToClipboard( aEvent );
-    Remove( aEvent );
+    TOOL_EVENT ev;
+    ev.SetParameter( PCB_ACTIONS::REMOVE_FLAGS::NORMAL );
+    Remove( ev );
     return 0;
 }
 

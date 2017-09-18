@@ -227,7 +227,7 @@ TOOL_ACTION PCB_ACTIONS::toBeDone( "pcbnew.Control.toBeDone",
 
 TOOL_ACTION PCB_ACTIONS::pasteFromClipboard( "pcbnew.InteractiveEdit.pasteFromClipboard",
         AS_GLOBAL, MD_CTRL + int( 'V' ),
-        _( "Paste from Clipboard" ), _( "Paste content from clipboard" ),
+        _( "Paste" ), _( "Paste content from clipboard" ),
         paste_xpm );
 
 
