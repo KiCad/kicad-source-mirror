@@ -191,6 +191,19 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgViaRightSizer->SetFlexibleDirection( wxBOTH );
 	fgViaRightSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
+	m_DesignRuleVias = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Design rule vias:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DesignRuleVias->Wrap( -1 );
+	fgViaRightSizer->Add( m_DesignRuleVias, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	
+	wxArrayString m_DesignRuleViasCtrlChoices;
+	m_DesignRuleViasCtrl = new wxChoice( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_DesignRuleViasCtrlChoices, 0 );
+	m_DesignRuleViasCtrl->SetSelection( 0 );
+	fgViaRightSizer->Add( m_DesignRuleViasCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	
+	m_DesignRuleViasUnit = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DesignRuleViasUnit->Wrap( -1 );
+	fgViaRightSizer->Add( m_DesignRuleViasUnit, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
 	m_ViaDiameterLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Diameter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaDiameterLabel->Wrap( -1 );
 	fgViaRightSizer->Add( m_ViaDiameterLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );

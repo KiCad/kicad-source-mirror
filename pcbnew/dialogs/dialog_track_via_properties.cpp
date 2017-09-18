@@ -189,6 +189,30 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         setCommonVal( viaY, m_ViaYCtrl, m_viaY );
         setCommonVal( viaDiameter, m_ViaDiameterCtrl, m_viaDiameter );
         setCommonVal( viaDrill, m_ViaDrillCtrl, m_viaDrill );
+        m_DesignRuleViasUnit->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+
+        int viaSelection = wxNOT_FOUND;
+
+        for( unsigned ii = 0; ii < aParent->GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
+        {
+            VIA_DIMENSION* viaDimension = &aParent->GetDesignSettings().m_ViasDimensionsList[ii];
+            wxString msg = StringFromValue( g_UserUnit, viaDimension->m_Diameter, false )
+                + " / " + StringFromValue( g_UserUnit, viaDimension->m_Drill, false );
+            m_DesignRuleViasCtrl->Append( msg, viaDimension );
+
+            if( viaSelection == wxNOT_FOUND && viaDiameter == viaDimension->m_Diameter
+                && viaDrill == viaDimension->m_Drill )
+            {
+                viaSelection = ii;
+            }
+        }
+
+        m_DesignRuleViasCtrl->SetSelection( viaSelection );
+
+        m_DesignRuleViasCtrl->Connect( wxEVT_CHOICE, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onViaSelect ), NULL, this );
+        m_ViaDiameterCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onViaEdit ), NULL, this );
+        m_ViaDrillCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onViaEdit ), NULL, this );
+
         m_ViaDiameterCtrl->SetFocus();
     }
     else
@@ -410,6 +434,10 @@ void DIALOG_TRACK_VIA_PROPERTIES::onViaNetclassCheck( wxCommandEvent& aEvent )
 {
     bool enableNC = aEvent.IsChecked();
 
+    m_DesignRuleVias->Enable( !enableNC );
+    m_DesignRuleViasCtrl->Enable( !enableNC );
+    m_DesignRuleViasUnit->Enable( !enableNC );
+
     m_ViaDiameterLabel->Enable( !enableNC );
     m_ViaDiameterCtrl->Enable( !enableNC );
     m_ViaDiameterUnit->Enable( !enableNC );
@@ -430,6 +458,24 @@ void DIALOG_TRACK_VIA_PROPERTIES::onOkClick( wxCommandEvent& aEvent )
 {
     if( check() )
         EndModal( 1 );
+}
+
+
+void DIALOG_TRACK_VIA_PROPERTIES::onViaSelect( wxCommandEvent& aEvent )
+{
+    VIA_DIMENSION* viaDimension = static_cast<VIA_DIMENSION*> ( aEvent.GetClientData() );
+
+    wxString msg = StringFromValue( g_UserUnit, viaDimension->m_Diameter, false );
+    m_ViaDiameterCtrl->ChangeValue( msg );
+
+    msg = StringFromValue( g_UserUnit, viaDimension->m_Drill, false );
+    m_ViaDrillCtrl->ChangeValue( msg );
+}
+
+
+void DIALOG_TRACK_VIA_PROPERTIES::onViaEdit( wxCommandEvent& aEvent )
+{
+    m_DesignRuleViasCtrl->SetSelection( wxNOT_FOUND );
 }
 
 

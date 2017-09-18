@@ -78,6 +78,9 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_ViaYCtrl;
 		wxStaticText* m_ViaYUnit;
 		wxStaticLine* m_viaStaticLine;
+		wxStaticText* m_DesignRuleVias;
+		wxChoice* m_DesignRuleViasCtrl;
+		wxStaticText* m_DesignRuleViasUnit;
 		wxStaticText* m_ViaDiameterLabel;
 		wxTextCtrl* m_ViaDiameterCtrl;
 		wxStaticText* m_ViaDiameterUnit;
