@@ -585,7 +585,7 @@ bool LIB_PIN::Save( OUTPUTFORMATTER& aFormatter )
     }
 
     if( aFormatter.Print( 0, " %s %d %d %d %c %d %d %d %d %c",
-                          TO_UTF8( m_number.IsEmpty() ? wxT( "~" ) : m_number ),
+                          m_number.IsEmpty() ? "~" : TO_UTF8( m_number ),
                           m_position.x, m_position.y,
                           (int) m_length, (int) m_orientation, m_numTextSize, m_nameTextSize,
                           m_Unit, m_Convert, Etype ) < 0 )
