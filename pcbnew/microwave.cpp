@@ -215,7 +215,7 @@ MODULE* PCB_EDIT_FRAME::CreateMuWaveBaseFootprint( const wxString& aValue,
         pad->SetLayerSet( F_Cu );
 
         Line.Printf( wxT( "%d" ), pad_num );
-        pad->SetPadName( Line );
+        pad->SetName( Line );
         pad_num++;
     }
 
@@ -329,7 +329,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
         break;
 
     case 1:     //Stub :
-        pad->SetPadName( wxT( "1" ) );
+        pad->SetName( wxT( "1" ) );
         pad = pad->Next();
         pad->SetY0( -( gap_size + pad->GetSize().y ) / 2 );
         pad->SetSize( wxSize( pad->GetSize().x, gap_size ) );

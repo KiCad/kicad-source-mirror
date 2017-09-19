@@ -464,7 +464,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     m_staticTextWarningPadFlipped->Show(m_isFlipped);
 
-    m_PadNumCtrl->SetValue( m_dummyPad->GetPadName() );
+    m_PadNumCtrl->SetValue( m_dummyPad->GetName() );
     m_PadNetNameCtrl->SetValue( m_dummyPad->GetNetname() );
 
     // Set the unit name in dialog:
@@ -1306,7 +1306,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
         m_currentPad->SetLayerSet( FlipLayerMask( m_currentPad->GetLayerSet() ) );
     }
 
-    m_currentPad->SetPadName( m_padMaster->GetPadName() );
+    m_currentPad->SetName( m_padMaster->GetName() );
 
     wxString padNetname;
 
@@ -1513,9 +1513,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     aPad->SetOffset( wxPoint( x, y ) );
 
     aPad->SetOrientation( m_OrientValue * 10.0 );
-
-    msg = m_PadNumCtrl->GetValue().Left( 4 );
-    aPad->SetPadName( msg );
+    aPad->SetName( m_PadNumCtrl->GetValue() );
 
     // Check if user has set an existing net name
     const NETINFO_ITEM* netinfo = m_board->FindNet( m_PadNetNameCtrl->GetValue() );
@@ -1595,7 +1593,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
         // Mechanical purpose only:
         // no offset, no net name, no pad name allowed
         aPad->SetOffset( wxPoint( 0, 0 ) );
-        aPad->SetPadName( wxEmptyString );
+        aPad->SetName( wxEmptyString );
         aPad->SetNetCode( NETINFO_LIST::UNCONNECTED );
         break;
 

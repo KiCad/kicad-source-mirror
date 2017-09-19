@@ -373,7 +373,7 @@ void MODULE::CopyNetlistSettings( MODULE* aModule, bool aCopyLocalSettings )
         // because we copy settings from the first pad found.
         // When old and new footprints have very few differences, a better
         // algo can be used.
-        D_PAD* oldPad = FindPadByName( pad->GetPadName() );
+        D_PAD* oldPad = FindPadByName( pad->GetName() );
 
         if( oldPad )
             oldPad->CopyNetlistSettings( pad, aCopyLocalSettings );
@@ -642,16 +642,9 @@ bool MODULE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) co
 
 D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 {
-    wxString buf;
-
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
-        pad->StringPadName( buf );
-#if 1
-        if( buf.CmpNoCase( aPadName ) == 0 )    // why case insensitive?
-#else
-        if( buf == aPadName )
-#endif
+        if( pad->GetName().CmpNoCase( aPadName ) == 0 )    // why case insensitive?
             return pad;
     }
 
@@ -716,7 +709,7 @@ unsigned MODULE::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 
 unsigned MODULE::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 {
-    std::set<wxUint32> usedNames;
+    std::set<wxString> usedNames;
 
     // Create a set of used pad numbers
     for( D_PAD* pad = PadsList(); pad; pad = pad->Next() )
@@ -728,7 +721,7 @@ unsigned MODULE::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 
         // Skip pads with no name, because they are usually "mechanical"
         // pads, not "electrical" pads
-        if( pad->GetPadName().IsEmpty() )
+        if( pad->GetName().IsEmpty() )
             continue;
 
         if( !aIncludeNPTH )
@@ -740,7 +733,7 @@ unsigned MODULE::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
             }
         }
 
-        usedNames.insert( pad->GetPackedPadName() );
+        usedNames.insert( pad->GetName() );
     }
 
     return usedNames.size();
@@ -1215,7 +1208,7 @@ wxString MODULE::GetNextPadName( bool aFillSequenceGaps ) const
     // Create a set of used pad numbers
     for( D_PAD* pad = PadsList(); pad; pad = pad->Next() )
     {
-        int padNumber = getTrailingInt( pad->GetPadName() );
+        int padNumber = getTrailingInt( pad->GetName() );
         usedNumbers.insert( padNumber );
     }
 

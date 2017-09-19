@@ -669,20 +669,16 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
      * chars.  Of course, pads numbers and nets names can have less than 3
      * chars. but after some tries, i found this is gives the best look
      */
-    #define MIN_CHAR_COUNT 3
-    wxString buffer;
+    constexpr int MIN_CHAR_COUNT = 3;
 
-    int      tsize;
+    unsigned int tsize;
     EDA_RECT* clipBox = aDrawInfo.m_DrawPanel?
                         aDrawInfo.m_DrawPanel->GetClipBox() : NULL;
 
     if( aDrawInfo.m_Display_padnum )
     {
-        StringPadName( buffer );
-        int numpad_len = buffer.Len();
-        numpad_len = std::max( numpad_len, MIN_CHAR_COUNT );
-
-        tsize = std::min( AreaSize.y, AreaSize.x / numpad_len );
+        int numpad_len = std::max( (int) m_name.Length(), MIN_CHAR_COUNT );
+        tsize = std::min( (int) AreaSize.y, AreaSize.x / numpad_len );
 
         if( aDC->LogicalToDeviceXRel( tsize ) >= MIN_TEXT_SIZE ) // Not drawable when size too small.
         {
@@ -690,7 +686,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             tsize = ( tsize * 7 ) / 10;
             DrawGraphicHaloText( clipBox, aDC, tpos,
                                  aDrawInfo.m_Color, BLACK, WHITE,
-                                 buffer, t_angle,
+                                 m_name, t_angle,
                                  wxSize( tsize , tsize ), GR_TEXT_HJUSTIFY_CENTER,
                                  GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false );
 

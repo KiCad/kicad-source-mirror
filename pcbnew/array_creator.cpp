@@ -104,7 +104,7 @@ void ARRAY_CREATOR::Invoke()
                 if( new_item->Type() == PCB_PAD_T )
                 {
                     const wxString padName = array_opts->GetItemNumber( ptN );
-                    static_cast<D_PAD*>( new_item )->SetPadName( padName );
+                    static_cast<D_PAD*>( new_item )->SetName( padName );
                 }
             }
         }

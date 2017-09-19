@@ -51,7 +51,7 @@ class FPC_FootprintWizard(FootprintWizardBase.FootprintWizard):
         pad.SetLayerSet( pad.SMDMask() )
         pad.SetPos0(pos)
         pad.SetPosition(pos)
-        pad.SetPadName(name)
+        pad.SetName(name)
         return pad
 
     def CheckParameters(self):

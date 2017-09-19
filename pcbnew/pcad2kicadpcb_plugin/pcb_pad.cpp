@@ -245,7 +245,7 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
             // actually this is a thru-hole pad
             pad->SetLayerSet( LSET::AllCuMask() | LSET( 2, B_Mask, F_Mask ) );
 
-        pad->SetPadName( m_name.text );
+        pad->SetName( m_name.text );
 
         if( padShapeName == wxT( "Oval" )
             || padShapeName == wxT( "Ellipse" )

@@ -162,24 +162,20 @@ public:
 
     /**
      * Set the pad name (sometimes called pad number, although
-     * it can be an array ref like AA12
-     * the pad name is limited to 4 ASCII chars
+     * it can be an array reference like AA12).
      */
-    void SetPadName( const wxString& name );    // Change pad name
+    void SetName( const wxString& aName )
+    {
+        m_name = aName;
+    }
 
     /**
      * @return the pad name
-     * the pad name is limited to 4 ASCII chars
      */
-    wxString GetPadName() const;
-
-    /**
-     * @return the pad name in a wxUint32 which is possible
-     * because the pad name is limited to 4 ASCII chars
-     * The packed pad name should be used only to compare 2
-     * pad names, not to try to print this name
-     */
-    wxUint32 GetPackedPadName() const { return m_NumPadName; }
+    const wxString& GetName() const
+    {
+        return m_name;
+    }
 
     /**
      * Function IncrementPadName
@@ -195,7 +191,7 @@ public:
 
     bool PadNameEqual( const D_PAD* other ) const
     {
-        return m_NumPadName == other->m_NumPadName; // hide tricks behind sensible API
+        return m_name == other->m_name; // hide tricks behind sensible API
     }
 
     /**
@@ -564,8 +560,6 @@ public:
     int BuildSegmentFromOvalShape( wxPoint& aSegStart, wxPoint& aSegEnd,
                                    double aRotation, const wxSize& aMargin ) const;
 
-    void StringPadName( wxString& text ) const; // Return pad name as string in a buffer
-
     /**
      * Function GetBoundingRadius
      * returns the radius of a minimum sized circle which fully encloses this pad.
@@ -736,16 +730,7 @@ private:    // Private variable members:
     // Actually computed and cached on demand by the accessor
     mutable int m_boundingRadius;  ///< radius of the circle containing the pad shape
 
-#ifndef SWIG
-    /// Pad name (4 char) or a long identifier (used in pad name
-    /// comparisons because this is faster than string comparison)
-    union
-    {
-#define PADNAMEZ    4
-        char        m_Padname[PADNAMEZ];    // zero padded at end to full size
-        wxUint32    m_NumPadName;           // same number of bytes as m_Padname[]
-    };
-#endif
+    wxString    m_name;
 
     wxPoint     m_Pos;              ///< pad Position on board
 

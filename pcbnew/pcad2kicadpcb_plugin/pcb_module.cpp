@@ -372,7 +372,7 @@ void PCB_MODULE::DoLayerContentsObjects( XNODE*                 aNode,
 }
 
 
-void PCB_MODULE::SetPadName( wxString aPin, wxString aName )
+void PCB_MODULE::SetName( wxString aPin, wxString aName )
 {
     int     i;
     long    num;
@@ -465,7 +465,7 @@ void PCB_MODULE::Parse( XNODE*   aNode, wxStatusBar* aStatusBar,
                     break;
 
                 mNode->GetAttribute( wxT( "Name" ), &propValue );
-                SetPadName( str, propValue );
+                SetName( str, propValue );
                 mNode = mNode->GetNext();
             }
             else

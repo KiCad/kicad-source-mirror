@@ -150,7 +150,7 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
             layers = pcbnew.LSET(pcbnew.F_Mask)
             layers.AddLayer(pcbnew.F_Cu)
             layers.AddLayer(pcbnew.F_Paste)
-            epad.SetPadName(epad_num)
+            epad.SetName(epad_num)
 
             array = PA.EPADGridArray( epad, epad_ny, epad_nx, epad_l, epad_w, pcbnew.wxPoint(0,0) )
             array.SetFirstPadInArray(epad_num)

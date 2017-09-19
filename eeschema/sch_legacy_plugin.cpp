@@ -3022,7 +3022,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr< LIB_PART >& aPart,
     parseUnquotedString( number, aReader, line, &line );
 
     pin->SetName( name );
-    pin->SetPinNumFromString( number );
+    pin->SetNumber( number );
 
     wxPoint pos;
 

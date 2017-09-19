@@ -303,7 +303,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
                 kplate = IDF3::PTH;
 
             // hole type
-            tstr = TO_UTF8( pad->GetPadName() );
+            tstr = TO_UTF8( pad->GetName() );
 
             if( tstr.empty() || !tstr.compare( "0" ) || !tstr.compare( "~" )
                 || ( kplate == IDF3::NPTH )

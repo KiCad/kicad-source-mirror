@@ -33,7 +33,7 @@
 
 
 #include <sch_sheet_path.h>
-#include <lib_pin.h>      // LIB_PIN::PinStringNum( m_PinNum )
+#include <lib_pin.h>
 #include <sch_item_struct.h>
 
 class NETLIST_OBJECT_LIST;
@@ -111,7 +111,7 @@ public:
                                          * created from the BUS label ) member number.
                                          */
     NET_CONNECTION_T m_ConnectionType;  // Used to store the connection type
-    long m_PinNum;                      // pin number ( 1 long = 4 bytes -> 4 ascii codes)
+    wxString    m_PinNum;               // pin number
     wxString    m_Label;                // Label text (for labels) or Pin name (for pins)
     wxPoint     m_Start;                // Position of object or for segments: starting point
     wxPoint     m_End;                  // For segments (wire and buses): ending point
@@ -182,10 +182,9 @@ public:
      * returns a pin number in wxString form.  Pin numbers are not always
      * numbers.  \"A23\" would be a valid pin number.
      */
-    wxString GetPinNumText()
+    const wxString& GetPinNumText() const
     {
-        // hide the ugliness in here, but do it inline.
-        return LIB_PIN::PinStringNum( m_PinNum );
+        return m_PinNum;
     }
 
     /**  For Pins (NET_PINS):

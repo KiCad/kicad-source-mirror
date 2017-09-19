@@ -212,7 +212,7 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField,
         aComponent->GetPins( pins );
 
         for( auto pin : pins )
-            nodeSeq += pin->GetNumberString() + " ";
+            nodeSeq += pin->GetNumber() + " ";
 
         nodeSeq.Trim();
 

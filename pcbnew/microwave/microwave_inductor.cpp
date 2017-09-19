@@ -369,7 +369,7 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
 
     module->PadsList().PushFront( pad );
 
-    pad->SetPadName( "1" );
+    pad->SetName( "1" );
     pad->SetPosition( inductorPattern.m_End );
     pad->SetPos0( pad->GetPosition() - module->GetPosition() );
 
@@ -384,7 +384,7 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
     module->PadsList().Insert( newpad, pad->Next() );
 
     pad = newpad;
-    pad->SetPadName( "2" );
+    pad->SetName( "2" );
     pad->SetPosition( inductorPattern.m_Start );
     pad->SetPos0( pad->GetPosition() - module->GetPosition() );
 

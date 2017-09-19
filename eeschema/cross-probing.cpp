@@ -141,13 +141,9 @@ std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aPart )
 
             LIB_PIN* pin = (LIB_PIN*) aItem;
 
-            if( pin->GetNumber() )
+            if( !pin->GetNumber().IsEmpty() )
             {
-                wxString pinnum;
-
-                pin->PinStringNum( pinnum );
-
-                return StrPrintf( "$PIN: %s $PART: %s", TO_UTF8( pinnum ),
+                return StrPrintf( "$PIN: %s $PART: %s", TO_UTF8( pin->GetNumber() ),
                          TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
             }
             else

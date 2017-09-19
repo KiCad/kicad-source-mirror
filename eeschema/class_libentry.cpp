@@ -643,7 +643,6 @@ void LIB_PART::GetPins( LIB_PINS& aList, int aUnit, int aConvert )
 
 LIB_PIN* LIB_PART::GetPin( const wxString& aNumber, int aUnit, int aConvert )
 {
-    wxString pNumber;
     LIB_PINS pinList;
 
     GetPins( pinList, aUnit, aConvert );
@@ -652,9 +651,7 @@ LIB_PIN* LIB_PART::GetPin( const wxString& aNumber, int aUnit, int aConvert )
     {
         wxASSERT( pinList[i]->Type() == LIB_PIN_T );
 
-        pinList[i]->PinStringNum( pNumber );
-
-        if( aNumber == pNumber )
+        if( aNumber == pinList[i]->GetNumber() )
             return pinList[i];
     }
 
@@ -683,10 +680,7 @@ bool LIB_PART::PinsConflictWith( LIB_PART& aOtherPart, bool aTestNums, bool aTes
                 continue;
 
             // Same number?
-            wxString eachThisPinNumber, eachOtherPinNumber;
-            eachThisPin->PinStringNum( eachThisPinNumber );
-            eachOtherPin->PinStringNum( eachOtherPinNumber );
-            if( aTestNums && ( eachThisPinNumber != eachOtherPinNumber ))
+            if( aTestNums && ( eachThisPin->GetNumber() != eachOtherPin->GetNumber() ))
                 continue;
 
             // Same name?

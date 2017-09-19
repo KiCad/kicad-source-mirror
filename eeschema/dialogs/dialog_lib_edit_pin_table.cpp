@@ -530,7 +530,7 @@ wxString DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Pin::GetString( unsigned int 
     switch( aCol )
     {
     case PIN_NUMBER:
-        return m_Backing->GetNumberString();
+        return m_Backing->GetNumber();
 
     case PIN_NAME:
         if( m_Model.m_UnitCount > 1 )

@@ -86,7 +86,7 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
             layerset.AddLayer(pcbnew.F_Mask)
             pad.SetLayerSet( layerset )
             pad.SetPosition(pcbnew.wxPoint(xposition,yposition))
-            pad.SetPadName("1")
+            pad.SetName("1")
             self.module.Add(pad)
         if self.UseSilkS:
             polygon=self.drawSquareArea(pcbnew.F_SilkS, self.X, xposition, yposition)

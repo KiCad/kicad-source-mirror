@@ -719,7 +719,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
 
         for( D_PAD* pad = Module->PadsList(); pad != NULL; pad = pad->Next() )
         {
-            fprintf( rptfile, "$PAD \"%s\"\n", TO_UTF8( pad->GetPadName() ) );
+            fprintf( rptfile, "$PAD \"%s\"\n", TO_UTF8( pad->GetName() ) );
             int layer = 0;
 
             if( pad->GetLayerSet()[B_Cu] )

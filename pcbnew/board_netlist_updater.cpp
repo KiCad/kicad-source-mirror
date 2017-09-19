@@ -321,7 +321,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
     // At this point, the component footprint is updated.  Now update the nets.
     for( D_PAD* pad = aPcbComponent->PadsList(); pad; pad = pad->Next() )
     {
-        COMPONENT_NET net = aNewComponent->GetNet( pad->GetPadName() );
+        COMPONENT_NET net = aNewComponent->GetNet( pad->GetName() );
 
         if( !net.IsValid() )                // New footprint pad has no net.
         {
@@ -329,13 +329,13 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
             {
                 msg.Printf( _( "Disconnect component %s pin %s.\n" ),
                             GetChars( aPcbComponent->GetReference() ),
-                            GetChars( pad->GetPadName() ) );
+                            GetChars( pad->GetName() ) );
                 m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
                 msg.Printf( _( "Clearing component \"%s:%s\" pin \"%s\" net name.\n" ),
                             GetChars( aPcbComponent->GetReference() ),
                             GetChars( aPcbComponent->GetPath() ),
-                            GetChars( pad->GetPadName() ) );
+                            GetChars( pad->GetName() ) );
                 m_reporter->Report( msg, REPORTER::RPT_INFO );
             }
 
@@ -380,14 +380,14 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
                 {
                     msg.Printf( _( "Reconnect component %s pin %s from net %s to net %s.\n"),
                             GetChars( aPcbComponent->GetReference() ),
-                            GetChars( pad->GetPadName() ),
+                            GetChars( pad->GetName() ),
                             GetChars( pad->GetNetname() ),
                             GetChars( netName ) );
 
                 } else {
                     msg.Printf( _( "Connect component %s pin %s to net %s.\n"),
                             GetChars( aPcbComponent->GetReference() ),
-                            GetChars( pad->GetPadName() ),
+                            GetChars( pad->GetName() ),
                             GetChars( netName ) );
                 }
 
@@ -397,7 +397,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
                                "\"%s\" to \"%s\".\n" ),
                             GetChars( aPcbComponent->GetReference() ),
                             GetChars( aPcbComponent->GetPath() ),
-                            GetChars( pad->GetPadName() ),
+                            GetChars( pad->GetName() ),
                             GetChars( pad->GetNetname() ),
                             GetChars( netName ) );
                 m_reporter->Report( msg, REPORTER::RPT_INFO );
@@ -521,7 +521,7 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
                     msg.Printf( _( "Remove single pad net \"%s\" on \"%s\" pad '%s'\n" ),
                                 GetChars( previouspad->GetNetname() ),
                                 GetChars( previouspad->GetParent()->GetReference() ),
-                                GetChars( previouspad->GetPadName() ) );
+                                GetChars( previouspad->GetName() ) );
                     m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
                     previouspad->SetNetCode( NETINFO_LIST::UNCONNECTED );

@@ -2593,7 +2593,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
         // At this point, the component footprint is updated.  Now update the nets.
         for( auto pad : footprint->Pads() )
         {
-            COMPONENT_NET net = component->GetNet( pad->GetPadName() );
+            COMPONENT_NET net = component->GetNet( pad->GetName() );
 
             if( !net.IsValid() )                // Footprint pad had no net.
             {
@@ -2602,7 +2602,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     msg.Printf( _( "Clearing component \"%s:%s\" pin \"%s\" net name.\n" ),
                                 GetChars( footprint->GetReference() ),
                                 GetChars( footprint->GetPath() ),
-                                GetChars( pad->GetPadName() ) );
+                                GetChars( pad->GetName() ) );
                     aReporter->Report( msg, REPORTER::RPT_ACTION );
                 }
 
@@ -2622,7 +2622,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                                        "\"%s\" to \"%s\".\n" ),
                                     GetChars( footprint->GetReference() ),
                                     GetChars( footprint->GetPath() ),
-                                    GetChars( pad->GetPadName() ),
+                                    GetChars( pad->GetName() ),
                                     GetChars( pad->GetNetname() ),
                                     GetChars( net.GetNetName() ) );
                         aReporter->Report( msg, REPORTER::RPT_ACTION );
@@ -2736,7 +2736,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                         msg.Printf( _( "Remove single pad net \"%s\" on \"%s\" pad '%s'\n" ),
                                     GetChars( pad->GetNetname() ),
                                     GetChars( pad->GetParent()->GetReference() ),
-                                    GetChars( pad->GetPadName() ) );
+                                    GetChars( pad->GetName() ) );
                         aReporter->Report( msg, REPORTER::RPT_ACTION );
                     }
 

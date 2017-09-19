@@ -165,7 +165,7 @@ class PadGridArray(PadArray):
                 posY = pin1posY + (self.py * y)
                 pos = dc.TransformPoint(posX, posY)
                 pad = self.GetPad(x == 0 and y == 0, pos)
-                pad.SetPadName(self.GetName(x,y))
+                pad.SetName(self.GetName(x,y))
                 self.AddPad(pad)
 
 class EPADGridArray(PadGridArray):
@@ -207,7 +207,7 @@ class PadZGridArray(PadArray):
 
             pos = dc.TransformPoint(posX, posY)
             pad = self.GetPad(padnum == 0, pos)
-            pad.SetPadName(self.GetName(padnum))
+            pad.SetName(self.GetName(padnum))
             self.AddPad(pad)
 
             line += 1
@@ -255,7 +255,7 @@ class PadCircleArray(PadArray):
             pos_y = -math.cos(angle  * math.pi / 180) * self.r
             pos = dc.TransformPoint(pos_x, pos_y)
             pad = self.GetPad(pin == 0, pos)
-            pad.SetPadName(self.GetName(pin))
+            pad.SetName(self.GetName(pin))
             self.AddPad(pad)
 
 class PadCustomArray(PadArray):
@@ -277,5 +277,5 @@ class PadCustomArray(PadArray):
         for i in range(len(self.array)):
             pos = dc.TransformPoint(self.array[i][0], self.array[i][1])
             pad = self.GetPad(i == 0, pos)
-            pad.SetPadName(self.GetName(i))
+            pad.SetName(self.GetName(i))
             self.AddPad(pad)

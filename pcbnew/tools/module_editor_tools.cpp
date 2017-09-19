@@ -209,8 +209,8 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 
                     // Rename pad and store the old name
                     wxString newName = wxString::Format( wxT( "%s%d" ), padPrefix.c_str(), padNumber++ );
-                    oldNames[newName] = pad->GetPadName();
-                    pad->SetPadName( newName );
+                    oldNames[newName] = pad->GetName();
+                    pad->SetName( newName );
                     pad->SetSelected();
                     getView()->Update( pad );
                 }
@@ -218,12 +218,12 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
                 // ..or restore the old name if it was enumerated and clicked again
                 else if( pad->IsSelected() && evt->IsClick( BUT_LEFT ) )
                 {
-                    auto it = oldNames.find( pad->GetPadName() );
+                    auto it = oldNames.find( pad->GetName() );
                     wxASSERT( it != oldNames.end() );
 
                     if( it != oldNames.end() )
                     {
-                        pad->SetPadName( it->second );
+                        pad->SetName( it->second );
                         oldNames.erase( it );
                     }
 

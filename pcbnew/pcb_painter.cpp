@@ -548,7 +548,6 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     PAD_SHAPE_T shape;
     double m, n;
     double orientation = aPad->GetOrientation();
-    wxString buffer;
 
     // Draw description layer
     if( IsNetnameLayer( aLayer ) )
@@ -624,10 +623,9 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
             if( m_pcbSettings.m_padNumbers )
             {
+                const wxString& padName = aPad->GetName();
                 textpos.y = -textpos.y;
-                aPad->StringPadName( buffer );
-                int len = buffer.Length();
-                double tsize = 1.5 * padsize.x / len;
+                double tsize = 1.5 * padsize.x / padName.Length();
                 tsize = std::min( tsize, size );
                 // Use a smaller text size to handle interline, pen size..
                 tsize *= 0.7;
@@ -636,7 +634,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
                 m_gal->SetGlyphSize( numsize );
                 m_gal->SetLineWidth( numsize.x / 12.0 );
-                m_gal->BitmapText( aPad->GetPadName(), textpos, 0.0 );
+                m_gal->BitmapText( padName, textpos, 0.0 );
             }
 
             m_gal->Restore();
