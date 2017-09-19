@@ -53,7 +53,7 @@ class SCH_PLUGIN;
  * Part Library version and file header  macros.
  */
 #define LIB_VERSION_MAJOR 2
-#define LIB_VERSION_MINOR 3
+#define LIB_VERSION_MINOR 4
 
 /* Must be the first line of part library (.lib) files. */
 #define LIBFILE_IDENT     "EESchema-LIBRARY Version"
