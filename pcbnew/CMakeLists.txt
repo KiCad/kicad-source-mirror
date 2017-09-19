@@ -253,7 +253,7 @@ set( PCBNEW_CLASS_SRCS
     modules.cpp
     move-drag_pads.cpp
     move_or_drag_track.cpp
-    muonde.cpp
+    microwave.cpp
     muwave_command.cpp
     netlist.cpp
     onleftclick.cpp
