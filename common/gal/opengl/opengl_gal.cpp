@@ -894,7 +894,7 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
 
     for( unsigned int ii = 0; ii < aText.length(); ++ii )
     {
-        const unsigned int c = aText[ii];
+        unsigned int c = aText[ii];
 
         wxASSERT_MSG( LookupGlyph(c) != nullptr, wxT( "Missing character in bitmap font atlas." ) );
         wxASSERT_MSG( c != '\n' && c != '\r', wxT( "No support for multiline bitmap text yet" ) );
@@ -1537,6 +1537,7 @@ int OPENGL_GAL::drawBitmapChar( unsigned long aChar )
     const float TEX_Y = font_image.height;
 
     const FONT_GLYPH_TYPE* glyph = LookupGlyph(aChar);
+
     if( !glyph ) return 0;
 
     const float X = glyph->atlas_x + font_information.smooth_pixels;
@@ -1638,8 +1639,21 @@ std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const wxString& aT
             }
         }
 
-        const FONT_GLYPH_TYPE* glyph = LookupGlyph(aText[i]);
-        if( glyph ) {
+        unsigned int c = aText[i];
+
+        const FONT_GLYPH_TYPE* glyph = LookupGlyph( c );
+
+        // a few chars
+        if( !glyph || // Not coded in font
+            c == '-' || c == '_' )     // Strange size of these 2 chars
+        {
+            c = 'x';    // For calculation of the char size, replace by a medium sized char
+            glyph = LookupGlyph( c );
+        }
+
+
+        if( glyph )
+        {
             textSize.x  += glyph->advance;
             textSize.y   = std::max<float>( textSize.y, font_information.max_y - glyph->miny );
             commonOffset = std::min<float>( font_information.max_y - glyph->maxy, commonOffset );
