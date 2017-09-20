@@ -284,7 +284,7 @@
                                                 <property name="style">wxBU_AUTODRAW</property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Move the selected optional fields up one position</property>
+                                                <property name="tooltip">Move the selected optional field up one position</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -377,7 +377,7 @@
                                                 <property name="style">wxBU_AUTODRAW</property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Move the selected optional fields down one position</property>
+                                                <property name="tooltip">Move the selected optional field down one position</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>

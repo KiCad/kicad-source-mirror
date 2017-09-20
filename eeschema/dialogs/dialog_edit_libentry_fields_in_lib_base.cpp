@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug 29 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -29,12 +29,12 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
 	
 	moveUpButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	moveUpButton->SetToolTip( _("Move the selected optional fields up one position") );
+	moveUpButton->SetToolTip( _("Move the selected optional field up one position") );
 	
 	bSizer8->Add( moveUpButton, 0, wxALL, 5 );
 	
 	moveDownButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	moveDownButton->SetToolTip( _("Move the selected optional fields down one position") );
+	moveDownButton->SetToolTip( _("Move the selected optional field down one position") );
 	
 	bSizer8->Add( moveDownButton, 0, wxALL, 5 );
 	
