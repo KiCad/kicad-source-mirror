@@ -364,7 +364,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
         // Close the polygon:
         polyPoints.push_back( polyPoints[0] );
 
-        pad->AddBasicShape( polyPoints, 0 );  // add a polygonal basic shape
+        pad->AddPrimitive( polyPoints, 0 );  // add a polygonal basic shape
     }
         break;
 

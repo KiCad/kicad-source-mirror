@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -161,11 +161,11 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextcps;
 		wxChoice* m_ZoneCustomPadShape;
 		wxStaticText* m_staticTextWarning;
-		wxPanel* m_panelCustomShape;
-		wxBoxSizer* m_bSizerPanelShapes;
-		wxStaticText* m_staticTextShapesList;
-		wxStaticText* m_staticTextShapesListWraning;
-		wxListView* m_listCtrlShapes;
+		wxPanel* m_panelCustomShapePrimitives;
+		wxBoxSizer* m_bSizerPanelPrimitives;
+		wxStaticText* m_staticTextPrimitivesList;
+		wxStaticText* m_staticTextPrimitiveListWarning;
+		wxListView* m_listCtrlPrimitives;
 		wxButton* m_buttonDel;
 		wxButton* m_buttonEditShape;
 		wxButton* m_buttonAddShape;
@@ -189,14 +189,14 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnSetLayers( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCornerSizePercentChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDrillShapeSelected( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onCustomShapeDClick( wxMouseEvent& event ) { event.Skip(); }
+		virtual void onPrimitiveDClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnPrimitiveSelection( wxListEvent& event ) { event.Skip(); }
-		virtual void onDeleteShape( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onEditShape( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onAddShape( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onDuplicateShape( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onDeletePrimitive( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onEditPrimitive( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onAddPrimitive( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onDuplicatePrimitive( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onGeometryTransform( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onImportShape( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onImportPrimitives( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPaintShowPanel( wxPaintEvent& event ) { event.Skip(); }
 		
 	
@@ -208,9 +208,9 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_PAD_BASICSHAPES_PROPERTIES_BASE
+/// Class DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_PAD_BASICSHAPES_PROPERTIES_BASE : public DIALOG_SHIM
+class DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -241,15 +241,15 @@ class DIALOG_PAD_BASICSHAPES_PROPERTIES_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PAD_BASICSHAPES_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 561,243 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~DIALOG_PAD_BASICSHAPES_PROPERTIES_BASE();
+		DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 561,243 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE();
 	
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_PAD_BASICSHAPES_TRANSFORM_BASE
+/// Class DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_PAD_BASICSHAPES_TRANSFORM_BASE : public DIALOG_SHIM
+class DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -274,20 +274,20 @@ class DIALOG_PAD_BASICSHAPES_TRANSFORM_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PAD_BASICSHAPES_TRANSFORM_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pad Custom Shape Geometry Transform"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 472,208 ), long style = wxDEFAULT_DIALOG_STYLE ); 
-		~DIALOG_PAD_BASICSHAPES_TRANSFORM_BASE();
+		DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pad Custom Shape Geometry Transform"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 472,208 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		~DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE();
 	
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_PAD_BASIC_SHP_POLY_PROPS_BASE
+/// Class DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_PAD_BASIC_SHP_POLY_PROPS_BASE : public DIALOG_SHIM
+class DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE : public DIALOG_SHIM
 {
 	private:
 	
 	protected:
-		wxStaticText* m_staticTextShapesListWarning;
+		wxStaticText* m_staticTextCornerListWarning;
 		wxStaticText* m_staticTextValidate;
 		wxGrid* m_gridCornersList;
 		wxButton* m_buttonAdd;
@@ -313,8 +313,8 @@ class DIALOG_PAD_BASIC_SHP_POLY_PROPS_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PAD_BASIC_SHP_POLY_PROPS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Basic Shape Polygon"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 503,396 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~DIALOG_PAD_BASIC_SHP_POLY_PROPS_BASE();
+		DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Basic Shape Polygon"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 503,396 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE();
 	
 };
 

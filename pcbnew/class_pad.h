@@ -271,10 +271,10 @@ public:
      *   a filled circle or ring ( if thickness == 0, this is a filled circle, else a ring)
      *   a arc
      */
-    void AddBasicShape( std::vector<wxPoint>& aPoly, int aThickness );  ///< add a polygonal basic shape
-    void AddBasicShape( wxPoint aStart, wxPoint aEnd, int aThickness ); ///< segment basic shape
-    void AddBasicShape( wxPoint aCenter, int aRadius, int aThickness ); ///< ring or circle basic shape
-    void AddBasicShape( wxPoint aCenter, wxPoint aStart,
+    void AddPrimitive( std::vector<wxPoint>& aPoly, int aThickness );  ///< add a polygonal basic shape
+    void AddPrimitive( wxPoint aStart, wxPoint aEnd, int aThickness ); ///< segment basic shape
+    void AddPrimitive( wxPoint aCenter, int aRadius, int aThickness ); ///< ring or circle basic shape
+    void AddPrimitive( wxPoint aCenter, wxPoint aStart,
                         int aArcAngle, int aThickness );    ///< arc basic shape
 
 
@@ -289,18 +289,18 @@ public:
      * (default = 32)
      * Note: The corners coordinates are relative to the pad position, orientation 0,
      */
-    bool MergeBasicShapesAsPolygon( SHAPE_POLY_SET * aMergedPolygon = NULL,
+    bool MergePrimitivesAsPolygon( SHAPE_POLY_SET * aMergedPolygon = NULL,
                                     int aCircleToSegmentsCount = 32 );
 
     /**
      * clear the basic shapes list
      */
-    void DeleteBasicShapesList();
+    void DeletePrimitivesList();
 
     /**
      * When created, the corners coordinates are relative to the pad position, orientation 0,
      * in m_customShapeAsPolygon
-     * BasicShapesAsPolygonToBoardPosition transform these coordinates to actual
+     * CustomShapeAsPolygonToBoardPosition transform these coordinates to actual
      * (board) coordinates
      * @param aMergedPolygon = the corners coordinates, relative to aPosition and
      *  rotated by aRotation
@@ -309,13 +309,13 @@ public:
      * @param aRotation = the rotation of the shape (usually the pad rotation, but
      * not always, in DRC)
      */
-    void BasicShapesAsPolygonToBoardPosition( SHAPE_POLY_SET * aMergedPolygon,
+    void CustomShapeAsPolygonToBoardPosition( SHAPE_POLY_SET * aMergedPolygon,
                                     wxPoint aPosition, double aRotation ) const;
 
     /**
      * Accessor to the basic shape list
      */
-    const std::vector<PAD_CS_PRIMITIVE>& GetBasicShapes() const { return m_basicShapes; }
+    const std::vector<PAD_CS_PRIMITIVE>& GetPrimitives() const { return m_basicShapes; }
 
     /**
      * Accessor to the custom shape as one polygon
@@ -327,14 +327,14 @@ public:
     /**
      * Flip the basic shapes, in custom pads
      */
-    void FlipBasicShapes();
+    void FlipPrimitives();
 
     /**
      * Import to the basic shape list
      * @return true if OK, false if issues
      * (more than one polygon to build the polygon shape list)
      */
-    bool SetBasicShapes( const std::vector<PAD_CS_PRIMITIVE>& aBasicShapesList );
+    bool SetPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList );
 
 
     /**

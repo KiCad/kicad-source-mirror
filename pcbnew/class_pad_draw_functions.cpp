@@ -500,7 +500,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 
         SHAPE_POLY_SET outline;     // Will contain the corners in board coordinates
         outline.Append( m_customShapeAsPolygon );
-        BasicShapesAsPolygonToBoardPosition( &outline, pad_pos, GetOrientation() );
+        CustomShapeAsPolygonToBoardPosition( &outline, pad_pos, GetOrientation() );
         SHAPE_LINE_CHAIN* poly;
 
         const int segmentToCircleCount = 32;

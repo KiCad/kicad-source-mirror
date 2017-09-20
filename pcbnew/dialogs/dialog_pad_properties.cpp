@@ -274,7 +274,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 
     // draw selected primitives:
     COLOR4D hcolor = CYAN;
-    long select = m_listCtrlShapes->GetFirstSelected();
+    long select = m_listCtrlPrimitives->GetFirstSelected();
     wxPoint start, end, center;
 
     while( select >= 0 )
@@ -325,7 +325,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
             break;
         }
 
-        select = m_listCtrlShapes->GetNextSelected( select );
+        select = m_listCtrlPrimitives->GetNextSelected( select );
     }
 
     // Draw X and Y axis. This is particularly useful to show the
@@ -457,10 +457,10 @@ void DIALOG_PAD_PROPERTIES::initValues()
         m_dummyPad->SetLayerSet( FlipLayerMask( m_dummyPad->GetLayerSet() ) );
 
         // flip custom pad shapes
-        m_dummyPad->FlipBasicShapes();
+        m_dummyPad->FlipPrimitives();
     }
 
-    m_primitives = m_dummyPad->GetBasicShapes();
+    m_primitives = m_dummyPad->GetPrimitives();
 
     m_staticTextWarningPadFlipped->Show(m_isFlipped);
 
@@ -664,7 +664,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     updateRoundRectCornerValues();
 
     // Update basic shapes list
-    displayBasicShapesList();
+    displayPrimitivesList();
 }
 
 // A small helper function, to display coordinates:
@@ -675,15 +675,15 @@ static wxString formatCoord( wxPoint aCoord )
                 CoordinateToString( aCoord.y, true ) );
 }
 
-void DIALOG_PAD_PROPERTIES::displayBasicShapesList()
+void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
 {
-    m_listCtrlShapes->ClearAll();
+    m_listCtrlPrimitives->ClearAll();
 
     wxListItem itemCol;
     itemCol.SetImage(-1);
 
     for( int ii = 0; ii < 5; ++ii )
-        m_listCtrlShapes->InsertColumn(ii, itemCol);
+        m_listCtrlPrimitives->InsertColumn(ii, itemCol);
 
     wxString bs_info[5];
 
@@ -733,18 +733,18 @@ void DIALOG_PAD_PROPERTIES::displayBasicShapesList()
             break;
         }
 
-        long tmp = m_listCtrlShapes->InsertItem(ii, bs_info[0]);
-        m_listCtrlShapes->SetItemData(tmp, ii);
+        long tmp = m_listCtrlPrimitives->InsertItem(ii, bs_info[0]);
+        m_listCtrlPrimitives->SetItemData(tmp, ii);
 
         for( int jj = 0, col = 0; jj < 5; ++jj )
         {
-            m_listCtrlShapes->SetItem(tmp, col++, bs_info[jj]);
+            m_listCtrlPrimitives->SetItem(tmp, col++, bs_info[jj]);
         }
     }
 
     // Now columns are filled, ensure correct width of columns
     for( unsigned ii = 0; ii < 5; ++ii )
-        m_listCtrlShapes->SetColumnWidth( ii, wxLIST_AUTOSIZE );
+        m_listCtrlPrimitives->SetColumnWidth( ii, wxLIST_AUTOSIZE );
 }
 
 void DIALOG_PAD_PROPERTIES::OnResize( wxSizeEvent& event )
@@ -1073,7 +1073,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
     if( m_dummyPad->GetShape() == PAD_SHAPE_CUSTOM )
     {
-        if( !m_dummyPad->MergeBasicShapesAsPolygon( ) )
+        if( !m_dummyPad->MergePrimitivesAsPolygon( ) )
             error_msgs.Add(
                 _( "Incorrect pad shape: the shape must be equivalent to only one polygon" ) );
     }
@@ -1109,7 +1109,7 @@ void DIALOG_PAD_PROPERTIES::redraw()
         }
 
         // highlight selected primitives:
-        long select = m_listCtrlShapes->GetFirstSelected();
+        long select = m_listCtrlPrimitives->GetFirstSelected();
 
         while( select >= 0 )
         {
@@ -1163,7 +1163,7 @@ void DIALOG_PAD_PROPERTIES::redraw()
                 m_highligth.push_back( dummySegment );
             }
 
-            select = m_listCtrlShapes->GetNextSelected( select );
+            select = m_listCtrlPrimitives->GetNextSelected( select );
         }
 
         BOX2I bbox = m_dummyPad->ViewBBox();
@@ -1283,16 +1283,16 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_currentPad->SetPadToDieLength( m_padMaster->GetPadToDieLength() );
 
     if( m_padMaster->GetShape() != PAD_SHAPE_CUSTOM )
-        m_padMaster->DeleteBasicShapesList();
+        m_padMaster->DeletePrimitivesList();
 
 
     m_currentPad->SetAnchorPadShape( m_padMaster->GetAnchorPadShape() );
-    m_currentPad->SetBasicShapes( m_padMaster->GetBasicShapes() );
+    m_currentPad->SetPrimitives( m_padMaster->GetPrimitives() );
 
     if( m_isFlipped )
     {
         m_currentPad->SetLayerSet( FlipLayerMask( m_currentPad->GetLayerSet() ) );
-        m_currentPad->FlipBasicShapes();
+        m_currentPad->FlipPrimitives();
     }
 
     if( m_currentPad->GetLayerSet() != m_padMaster->GetLayerSet() )
@@ -1386,7 +1386,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
                                 PAD_SHAPE_RECT : PAD_SHAPE_CIRCLE );
 
     if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
-        aPad->SetBasicShapes( m_primitives );
+        aPad->SetPrimitives( m_primitives );
 
     // Read pad clearances values:
     aPad->SetLocalClearance( ValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
@@ -1683,9 +1683,9 @@ void DIALOG_PAD_PROPERTIES::OnValuesChanged( wxCommandEvent& event )
     }
 }
 
-void DIALOG_PAD_PROPERTIES::editBasicShape()
+void DIALOG_PAD_PROPERTIES::editPrimitive()
 {
-    long select = m_listCtrlShapes->GetFirstSelected();
+    long select = m_listCtrlPrimitives->GetFirstSelected();
 
     if( select < 0 )
     {
@@ -1697,7 +1697,7 @@ void DIALOG_PAD_PROPERTIES::editBasicShape()
 
     if( shape.m_Shape == S_POLYGON )
     {
-        DIALOG_PAD_BASIC_SHP_POLY_PROPS dlg( this, &shape );
+        DIALOG_PAD_PRIMITIVE_POLY_PROPS dlg( this, &shape );
 
         if( dlg.ShowModal() != wxID_OK )
             return;
@@ -1707,7 +1707,7 @@ void DIALOG_PAD_PROPERTIES::editBasicShape()
 
     else
     {
-        DIALOG_PAD_BASICSHAPES_PROPERTIES dlg( this, &shape );
+        DIALOG_PAD_PRIMITIVES_PROPERTIES dlg( this, &shape );
 
         if( dlg.ShowModal() != wxID_OK )
             return;
@@ -1715,7 +1715,7 @@ void DIALOG_PAD_PROPERTIES::editBasicShape()
         dlg.TransferDataFromWindow();
     }
 
-    displayBasicShapesList();
+    displayPrimitivesList();
 
     if( m_canUpdate )
     {
@@ -1734,22 +1734,22 @@ void DIALOG_PAD_PROPERTIES::OnPrimitiveSelection( wxListEvent& event )
 
 
 /// Called on a double click on the basic shapes list
-void DIALOG_PAD_PROPERTIES::onCustomShapeDClick( wxMouseEvent& event )
+void DIALOG_PAD_PROPERTIES::onPrimitiveDClick( wxMouseEvent& event )
 {
-    editBasicShape();
+    editPrimitive();
 }
 
 
 // Called on a click on basic shapes list panel button
-void DIALOG_PAD_PROPERTIES::onEditShape( wxCommandEvent& event )
+void DIALOG_PAD_PROPERTIES::onEditPrimitive( wxCommandEvent& event )
 {
-    editBasicShape();
+    editPrimitive();
 }
 
 // Called on a click on basic shapes list panel button
-void DIALOG_PAD_PROPERTIES::onDeleteShape( wxCommandEvent& event )
+void DIALOG_PAD_PROPERTIES::onDeletePrimitive( wxCommandEvent& event )
 {
-    long select = m_listCtrlShapes->GetFirstSelected();
+    long select = m_listCtrlPrimitives->GetFirstSelected();
 
     if( select < 0 )
         return;
@@ -1758,14 +1758,14 @@ void DIALOG_PAD_PROPERTIES::onDeleteShape( wxCommandEvent& event )
     std::vector<long> indexes;
     indexes.push_back( select );
 
-    while( ( select = m_listCtrlShapes->GetNextSelected( select ) ) >= 0 )
+    while( ( select = m_listCtrlPrimitives->GetNextSelected( select ) ) >= 0 )
         indexes.push_back( select );
 
     // Erase all select shapes
     for( unsigned ii = indexes.size(); ii > 0; --ii )
         m_primitives.erase( m_primitives.begin() + indexes[ii-1] );
 
-    displayBasicShapesList();
+    displayPrimitivesList();
 
     if( m_canUpdate )
     {
@@ -1775,7 +1775,7 @@ void DIALOG_PAD_PROPERTIES::onDeleteShape( wxCommandEvent& event )
 }
 
 
-void DIALOG_PAD_PROPERTIES::onAddShape( wxCommandEvent& event )
+void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
 {
     // Ask user for shape type
     wxString shapelist[] =
@@ -1791,26 +1791,26 @@ void DIALOG_PAD_PROPERTIES::onAddShape( wxCommandEvent& event )
         S_SEGMENT, S_ARC, S_CIRCLE, S_POLYGON
     };
 
-    PAD_CS_PRIMITIVE basicShape( listtype[type] );
+    PAD_CS_PRIMITIVE primitive( listtype[type] );
 
     if( listtype[type] == S_POLYGON )
     {
-        DIALOG_PAD_BASIC_SHP_POLY_PROPS dlg( this, &basicShape );
+        DIALOG_PAD_PRIMITIVE_POLY_PROPS dlg( this, &primitive );
 
         if( dlg.ShowModal() != wxID_OK )
             return;
     }
     else
     {
-        DIALOG_PAD_BASICSHAPES_PROPERTIES dlg( this, &basicShape );
+        DIALOG_PAD_PRIMITIVES_PROPERTIES dlg( this, &primitive );
 
         if( dlg.ShowModal() != wxID_OK )
             return;
     }
 
-    m_primitives.push_back( basicShape );
+    m_primitives.push_back( primitive );
 
-    displayBasicShapesList();
+    displayPrimitivesList();
 
     if( m_canUpdate )
     {
@@ -1820,7 +1820,7 @@ void DIALOG_PAD_PROPERTIES::onAddShape( wxCommandEvent& event )
 }
 
 
-void DIALOG_PAD_PROPERTIES::onImportShape( wxCommandEvent& event )
+void DIALOG_PAD_PROPERTIES::onImportPrimitives( wxCommandEvent& event )
 {
     wxMessageBox( "Not yet available" );
 }
@@ -1828,7 +1828,7 @@ void DIALOG_PAD_PROPERTIES::onImportShape( wxCommandEvent& event )
 
 void DIALOG_PAD_PROPERTIES::onGeometryTransform( wxCommandEvent& event )
 {
-    long select = m_listCtrlShapes->GetFirstSelected();
+    long select = m_listCtrlPrimitives->GetFirstSelected();
 
     if( select < 0 )
     {
@@ -1843,13 +1843,13 @@ void DIALOG_PAD_PROPERTIES::onGeometryTransform( wxCommandEvent& event )
     std::vector<PAD_CS_PRIMITIVE*> shapeList;
     shapeList.push_back( &m_primitives[select] );
 
-    while( ( select = m_listCtrlShapes->GetNextSelected( select ) ) >= 0 )
+    while( ( select = m_listCtrlPrimitives->GetNextSelected( select ) ) >= 0 )
     {
         indexes.push_back( select );
         shapeList.push_back( &m_primitives[select] );
     }
 
-    DIALOG_PAD_BASICSHAPES_TRANSFORM dlg( this, shapeList );
+    DIALOG_PAD_PRIMITIVES_TRANSFORM dlg( this, shapeList );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
@@ -1857,7 +1857,7 @@ void DIALOG_PAD_PROPERTIES::onGeometryTransform( wxCommandEvent& event )
     // Transfert new settings:
     dlg.Transform();
 
-    displayBasicShapesList();
+    displayPrimitivesList();
 
     if( m_canUpdate )
     {
@@ -1867,9 +1867,9 @@ void DIALOG_PAD_PROPERTIES::onGeometryTransform( wxCommandEvent& event )
 }
 
 
-void DIALOG_PAD_PROPERTIES::onDuplicateShape( wxCommandEvent& event )
+void DIALOG_PAD_PROPERTIES::onDuplicatePrimitive( wxCommandEvent& event )
 {
-    long select = m_listCtrlShapes->GetFirstSelected();
+    long select = m_listCtrlPrimitives->GetFirstSelected();
 
     if( select < 0 )
     {
@@ -1884,13 +1884,13 @@ void DIALOG_PAD_PROPERTIES::onDuplicateShape( wxCommandEvent& event )
     std::vector<PAD_CS_PRIMITIVE*> shapeList;
     shapeList.push_back( &m_primitives[select] );
 
-    while( ( select = m_listCtrlShapes->GetNextSelected( select ) ) >= 0 )
+    while( ( select = m_listCtrlPrimitives->GetNextSelected( select ) ) >= 0 )
     {
         indexes.push_back( select );
         shapeList.push_back( &m_primitives[select] );
     }
 
-    DIALOG_PAD_BASICSHAPES_TRANSFORM dlg( this, shapeList, true );
+    DIALOG_PAD_PRIMITIVES_TRANSFORM dlg( this, shapeList, true );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
@@ -1898,7 +1898,7 @@ void DIALOG_PAD_PROPERTIES::onDuplicateShape( wxCommandEvent& event )
     // Transfert new settings:
     dlg.Transform( &m_primitives, dlg.GetDuplicateCount() );
 
-    displayBasicShapesList();
+    displayPrimitivesList();
 
     if( m_canUpdate )
     {

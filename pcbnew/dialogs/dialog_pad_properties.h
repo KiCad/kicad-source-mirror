@@ -93,10 +93,10 @@ private:
 private:
     void prepareCanvas();       // Initialize the canvases (legacy or gal) to display the pad
     void initValues();
-    void displayBasicShapesList();
+    void displayPrimitivesList();
     bool padValuesOK();         ///< test if all values are acceptable for the pad
     void redraw();
-    void editBasicShape();
+    void editPrimitive();
     void updateRoundRectCornerValues();
 
     /**
@@ -136,15 +136,15 @@ private:
     bool TransferDataToWindow() override;
 
     /// Event handlers of basic shapes list panel
-    void onDeleteShape( wxCommandEvent& event ) override;
-    void onEditShape( wxCommandEvent& event ) override;
-    void onAddShape( wxCommandEvent& event ) override;
-    void onImportShape( wxCommandEvent& event ) override;
+    void onDeletePrimitive( wxCommandEvent& event ) override;
+    void onEditPrimitive( wxCommandEvent& event ) override;
+    void onAddPrimitive( wxCommandEvent& event ) override;
+    void onImportPrimitives( wxCommandEvent& event ) override;
     void onGeometryTransform( wxCommandEvent& event ) override;
-    void onDuplicateShape( wxCommandEvent& event ) override;
+    void onDuplicatePrimitive( wxCommandEvent& event ) override;
 
     /// Called on a double click on the basic shapes list
-    void onCustomShapeDClick( wxMouseEvent& event ) override;
+    void onPrimitiveDClick( wxMouseEvent& event ) override;
     /// Called on selection/deselection of a basic shape
 	void OnPrimitiveSelection( wxListEvent& event ) override;
 };
@@ -153,10 +153,10 @@ private:
  * a dialog to edit basics shapes parameters.
  * Polygonal shape is not handles by this dialog
  */
-class DIALOG_PAD_BASICSHAPES_PROPERTIES: public DIALOG_PAD_BASICSHAPES_PROPERTIES_BASE
+class DIALOG_PAD_PRIMITIVES_PROPERTIES: public DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE
 {
 public:
-    DIALOG_PAD_BASICSHAPES_PROPERTIES( wxWindow* aParent, PAD_CS_PRIMITIVE * aShape );
+    DIALOG_PAD_PRIMITIVES_PROPERTIES( wxWindow* aParent, PAD_CS_PRIMITIVE * aShape );
 
     /**
      * Function TransferDataFromWindow
@@ -179,7 +179,7 @@ private:
 /**
  * a dialog to edit basic polygonal shape parameters
  */
-class DIALOG_PAD_BASIC_SHP_POLY_PROPS: public DIALOG_PAD_BASIC_SHP_POLY_PROPS_BASE
+class DIALOG_PAD_PRIMITIVE_POLY_PROPS: public DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE
 {
     // The basic shape currently edited
     PAD_CS_PRIMITIVE * m_shape;
@@ -188,8 +188,8 @@ class DIALOG_PAD_BASIC_SHP_POLY_PROPS: public DIALOG_PAD_BASIC_SHP_POLY_PROPS_BA
     PAD_CS_PRIMITIVE m_currshape;
 
 public:
-    DIALOG_PAD_BASIC_SHP_POLY_PROPS( wxWindow* aParent, PAD_CS_PRIMITIVE * aShape );
-    ~DIALOG_PAD_BASIC_SHP_POLY_PROPS();
+    DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aParent, PAD_CS_PRIMITIVE * aShape );
+    ~DIALOG_PAD_PRIMITIVE_POLY_PROPS();
 
     /**
      * Function TransferDataFromWindow
@@ -231,10 +231,10 @@ private:
  * if aShowDuplicate == false, the parameter "Duplicate count" is disabled
  */
 
-class DIALOG_PAD_BASICSHAPES_TRANSFORM : public DIALOG_PAD_BASICSHAPES_TRANSFORM_BASE
+class DIALOG_PAD_PRIMITIVES_TRANSFORM : public DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE
 {
 public:
-    DIALOG_PAD_BASICSHAPES_TRANSFORM( wxWindow* aParent,
+    DIALOG_PAD_PRIMITIVES_TRANSFORM( wxWindow* aParent,
                                       std::vector<PAD_CS_PRIMITIVE*>& aList, bool aShowDuplicate = false );
 
     /**

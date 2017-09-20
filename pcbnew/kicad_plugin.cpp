@@ -1376,11 +1376,11 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         int nested_level = aNestLevel+2;
 
         // Output all basic shapes
-        for( unsigned icnt = 0; icnt < aPad->GetBasicShapes().size(); ++icnt )
+        for( unsigned icnt = 0; icnt < aPad->GetPrimitives().size(); ++icnt )
         {
             m_out->Print( 0, "\n");
 
-            const PAD_CS_PRIMITIVE& primitive = aPad->GetBasicShapes()[icnt];
+            const PAD_CS_PRIMITIVE& primitive = aPad->GetPrimitives()[icnt];
 
             switch( primitive.m_Shape )
             {

@@ -204,7 +204,7 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
                         // the shape itself
                         SHAPE_POLY_SET outline( pad->GetCustomShapeAsPolygon() );
                         outline.Inflate( KiROUND( clearance*correctionFactor) , segsPerCircle );
-                        pad->BasicShapesAsPolygonToBoardPosition( &outline,
+                        pad->CustomShapeAsPolygonToBoardPosition( &outline,
                                     pad->GetPosition(), pad->GetOrientation() );
 
                         if( pad->GetCustomShapeInZoneOpt() == CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL )
@@ -252,7 +252,7 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
                         // the shape itself
                         SHAPE_POLY_SET outline( pad->GetCustomShapeAsPolygon() );
                         outline.Inflate( KiROUND( gap*correctionFactor) , segsPerCircle );
-                        pad->BasicShapesAsPolygonToBoardPosition( &outline,
+                        pad->CustomShapeAsPolygonToBoardPosition( &outline,
                                     pad->GetPosition(), pad->GetOrientation() );
 
                         std::vector<wxPoint> convex_hull;

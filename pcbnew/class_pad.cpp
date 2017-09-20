@@ -328,7 +328,7 @@ const EDA_RECT D_PAD::GetBoundingBox() const
         {
         SHAPE_POLY_SET polySet( m_customShapeAsPolygon );
         // Move shape to actual position
-        BasicShapesAsPolygonToBoardPosition( &polySet, GetPosition(), GetOrientation() );
+        CustomShapeAsPolygonToBoardPosition( &polySet, GetPosition(), GetOrientation() );
         quadrant1 = m_Pos;
         quadrant2 = m_Pos;
 
@@ -424,14 +424,14 @@ void D_PAD::Flip( const wxPoint& aCentre )
     SetLayerSet( FlipLayerMask( m_layerMask ) );
 
     // Flip the basic shapes, in custom pads
-    FlipBasicShapes();
+    FlipPrimitives();
 
     // m_boundingRadius = -1;  the shape has not been changed
 }
 
 
 // Flip the basic shapes, in custom pads
-void D_PAD::FlipBasicShapes()
+void D_PAD::FlipPrimitives()
 {
     // Flip custom shapes
     for( unsigned ii = 0; ii < m_basicShapes.size(); ++ii )
@@ -1388,7 +1388,7 @@ void D_PAD::ImportSettingsFromMaster( const D_PAD& aMasterPad )
     }
 
     // Add or remove custom pad shapes:
-    SetBasicShapes( aMasterPad.GetBasicShapes() );
+    SetPrimitives( aMasterPad.GetPrimitives() );
     SetAnchorPadShape( aMasterPad.GetAnchorPadShape() );
-    MergeBasicShapesAsPolygon();
+    MergePrimitivesAsPolygon();
 }

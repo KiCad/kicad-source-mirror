@@ -630,7 +630,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
             {
                 SHAPE_POLY_SET outline;
                 outline.Append( aPad->GetCustomShapeAsPolygon() );
-                aPad->BasicShapesAsPolygonToBoardPosition( &outline, wx_c, aPad->GetOrientation() );
+                aPad->CustomShapeAsPolygonToBoardPosition( &outline, wx_c, aPad->GetOrientation() );
 
                 for( int jj = 0; jj < outline.OutlineCount(); ++jj )
                 {
@@ -746,7 +746,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
             {
                 SHAPE_POLY_SET outline;
                 outline.Append( aPad->GetCustomShapeAsPolygon() );
-                aPad->BasicShapesAsPolygonToBoardPosition( &outline, wx_c, aPad->GetOrientation() );
+                aPad->CustomShapeAsPolygonToBoardPosition( &outline, wx_c, aPad->GetOrientation() );
 
                 for( int jj = 0; jj < outline.OutlineCount(); ++jj )
                 {

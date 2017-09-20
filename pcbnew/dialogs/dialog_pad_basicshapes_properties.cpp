@@ -44,9 +44,9 @@
 
 #include <dialog_pad_properties.h>
 
-DIALOG_PAD_BASICSHAPES_PROPERTIES::DIALOG_PAD_BASICSHAPES_PROPERTIES(
+DIALOG_PAD_PRIMITIVES_PROPERTIES::DIALOG_PAD_PRIMITIVES_PROPERTIES(
                             wxWindow* aParent, PAD_CS_PRIMITIVE * aShape )
-    : DIALOG_PAD_BASICSHAPES_PROPERTIES_BASE( aParent )
+    : DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE( aParent )
 {
     m_shape = aShape;
     TransferDataToWindow();
@@ -55,7 +55,7 @@ DIALOG_PAD_BASICSHAPES_PROPERTIES::DIALOG_PAD_BASICSHAPES_PROPERTIES(
     GetSizer()->SetSizeHints( this );
 }
 
-bool DIALOG_PAD_BASICSHAPES_PROPERTIES::TransferDataToWindow()
+bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
 {
     if( m_shape == NULL )
         return false;
@@ -139,7 +139,7 @@ bool DIALOG_PAD_BASICSHAPES_PROPERTIES::TransferDataToWindow()
     return true;
 }
 
-bool DIALOG_PAD_BASICSHAPES_PROPERTIES::TransferDataFromWindow()
+bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
 {
     // Transfer data out of the GUI.
     m_shape->m_Thickness = ValueFromString( g_UserUnit, m_textCtrlThickness->GetValue() );
@@ -183,9 +183,9 @@ bool DIALOG_PAD_BASICSHAPES_PROPERTIES::TransferDataFromWindow()
 }
 
 
-DIALOG_PAD_BASIC_SHP_POLY_PROPS::DIALOG_PAD_BASIC_SHP_POLY_PROPS(
+DIALOG_PAD_PRIMITIVE_POLY_PROPS::DIALOG_PAD_PRIMITIVE_POLY_PROPS(
                             wxWindow* aParent, PAD_CS_PRIMITIVE * aShape )
-    : DIALOG_PAD_BASIC_SHP_POLY_PROPS_BASE( aParent ),
+    : DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE( aParent ),
         m_shape( aShape ), m_currshape( *m_shape )
 {
     TransferDataToWindow();
@@ -195,18 +195,18 @@ DIALOG_PAD_BASIC_SHP_POLY_PROPS::DIALOG_PAD_BASIC_SHP_POLY_PROPS(
 
     // TODO: move wxEVT_GRID_CELL_CHANGING in wxFormbuilder, when it support it
 	m_gridCornersList->Connect( wxEVT_GRID_CELL_CHANGING,
-                                wxGridEventHandler( DIALOG_PAD_BASIC_SHP_POLY_PROPS::onCellChanging ), NULL, this );
+                                wxGridEventHandler( DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging ), NULL, this );
 }
 
 
-DIALOG_PAD_BASIC_SHP_POLY_PROPS::~DIALOG_PAD_BASIC_SHP_POLY_PROPS()
+DIALOG_PAD_PRIMITIVE_POLY_PROPS::~DIALOG_PAD_PRIMITIVE_POLY_PROPS()
 {
 	m_gridCornersList->Disconnect( wxEVT_GRID_CELL_CHANGING,
-                                   wxGridEventHandler( DIALOG_PAD_BASIC_SHP_POLY_PROPS::onCellChanging ), NULL, this );
+                                   wxGridEventHandler( DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging ), NULL, this );
 }
 
 
-bool DIALOG_PAD_BASIC_SHP_POLY_PROPS::TransferDataToWindow()
+bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::TransferDataToWindow()
 {
     if( m_shape == NULL )
         return false;
@@ -256,7 +256,7 @@ bool DIALOG_PAD_BASIC_SHP_POLY_PROPS::TransferDataToWindow()
     return true;
 }
 
-bool DIALOG_PAD_BASIC_SHP_POLY_PROPS::TransferDataFromWindow()
+bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::TransferDataFromWindow()
 {
     if( !Validate() )
         return false;
@@ -270,7 +270,7 @@ bool DIALOG_PAD_BASIC_SHP_POLY_PROPS::TransferDataFromWindow()
 
 
 // test for a valid polygon (a not self intersectiong polygon)
-bool DIALOG_PAD_BASIC_SHP_POLY_PROPS::Validate()
+bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::Validate()
 {
     if( m_currshape.m_Poly.size() < 3 )
     {
@@ -321,7 +321,7 @@ bool DIALOG_PAD_BASIC_SHP_POLY_PROPS::Validate()
 }
 
 
-void DIALOG_PAD_BASIC_SHP_POLY_PROPS::onButtonAdd( wxCommandEvent& event )
+void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onButtonAdd( wxCommandEvent& event )
 {
     // Insert a new corner after the currently selected:
     int row = -1;
@@ -361,7 +361,7 @@ void DIALOG_PAD_BASIC_SHP_POLY_PROPS::onButtonAdd( wxCommandEvent& event )
     m_panelPoly->Refresh();
 }
 
-void DIALOG_PAD_BASIC_SHP_POLY_PROPS::OnButtonDelete( wxCommandEvent& event )
+void DIALOG_PAD_PRIMITIVE_POLY_PROPS::OnButtonDelete( wxCommandEvent& event )
 {
     wxArrayInt selections =	m_gridCornersList->GetSelectedRows();
     std::sort( selections.begin(), selections.end() );
@@ -380,7 +380,7 @@ void DIALOG_PAD_BASIC_SHP_POLY_PROPS::OnButtonDelete( wxCommandEvent& event )
     m_panelPoly->Refresh();
 }
 
-void DIALOG_PAD_BASIC_SHP_POLY_PROPS::onPaintPolyPanel( wxPaintEvent& event )
+void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onPaintPolyPanel( wxPaintEvent& event )
 {
     wxPaintDC dc( m_panelPoly );
     wxSize dc_size = dc.GetSize();
@@ -450,18 +450,18 @@ void DIALOG_PAD_BASIC_SHP_POLY_PROPS::onPaintPolyPanel( wxPaintEvent& event )
     event.Skip();
 }
 
-void DIALOG_PAD_BASIC_SHP_POLY_PROPS::onPolyPanelResize( wxSizeEvent& event )
+void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onPolyPanelResize( wxSizeEvent& event )
 {
     m_panelPoly->Refresh();
     event.Skip();
 }
 
-void DIALOG_PAD_BASIC_SHP_POLY_PROPS::onGridSelect( wxGridRangeSelectEvent& event )
+void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onGridSelect( wxGridRangeSelectEvent& event )
 {
     m_panelPoly->Refresh();
 }
 
-void DIALOG_PAD_BASIC_SHP_POLY_PROPS::onCellChanging( wxGridEvent& event )
+void DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging( wxGridEvent& event )
 {
     int row = event.GetRow();
     int col = event.GetCol();
@@ -488,10 +488,10 @@ void DIALOG_PAD_BASIC_SHP_POLY_PROPS::onCellChanging( wxGridEvent& event )
 
 // A dialog to apply geometry transforms to a shape or set of shapes
 // (move, rotate around origin, scaling factor, duplication).
-DIALOG_PAD_BASICSHAPES_TRANSFORM::DIALOG_PAD_BASICSHAPES_TRANSFORM(
+DIALOG_PAD_PRIMITIVES_TRANSFORM::DIALOG_PAD_PRIMITIVES_TRANSFORM(
                                         wxWindow* aParent,
                                         std::vector<PAD_CS_PRIMITIVE*>& aList, bool aShowDuplicate )
-    :DIALOG_PAD_BASICSHAPES_TRANSFORM_BASE( aParent ), m_list( aList )
+    :DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE( aParent ), m_list( aList )
 {
     wxString unit = GetAbbreviatedUnitsLabel();
     m_staticTextMoveUnit->SetLabel( unit );
@@ -515,7 +515,7 @@ inline void geom_transf( wxPoint& aCoord, wxPoint& aMove, double aScale, double 
     RotatePoint( &aCoord, aRotation );
 }
 
-void DIALOG_PAD_BASICSHAPES_TRANSFORM::Transform( std::vector<PAD_CS_PRIMITIVE>* aList, int aDuplicateCount )
+void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<PAD_CS_PRIMITIVE>* aList, int aDuplicateCount )
 {
     // Get parameters from dlg:
     wxPoint moveVect;

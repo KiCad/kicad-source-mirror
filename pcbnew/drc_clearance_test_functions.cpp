@@ -708,7 +708,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
             // The reference pad can be rotated. calculate the rotated
             // coordiantes ( note, the ref pad position is the origin of
             // coordinates for this drc test)
-            aRefPad->BasicShapesAsPolygonToBoardPosition( &polysetref,
+            aRefPad->CustomShapeAsPolygonToBoardPosition( &polysetref,
                         wxPoint( 0, 0 ), aRefPad->GetOrientation() );
         }
         else
@@ -738,7 +738,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
                 // The pad to compare can be rotated. calculate the rotated
                 // coordinattes ( note, the pad to compare position
                 // is the relativePadPos for this drc test
-                aPad->BasicShapesAsPolygonToBoardPosition( &polysetcompare,
+                aPad->CustomShapeAsPolygonToBoardPosition( &polysetcompare,
                             relativePadPos, aPad->GetOrientation() );
             }
             else
@@ -1079,7 +1079,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         // relatives to the segment being tested
         // Note, the pad position relative to the segment origin
         // is m_padToTestPos
-        aPad->BasicShapesAsPolygonToBoardPosition( &polyset,
+        aPad->CustomShapeAsPolygonToBoardPosition( &polyset,
                     m_padToTestPos, orient );
 
         // Rotate all coordinates by m_segmAngle, because the segment orient
@@ -1088,7 +1088,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         // only the lenght and orientation+ of the segment
         // therefore all coordinates of the pad to test must be rotated by
         // m_segmAngle (they are already relative to the segment origin)
-        aPad->BasicShapesAsPolygonToBoardPosition( &polyset,
+        aPad->CustomShapeAsPolygonToBoardPosition( &polyset,
                     wxPoint( 0, 0 ), m_segmAngle );
 
         const SHAPE_LINE_CHAIN& refpoly = polyset.COutline( 0 );

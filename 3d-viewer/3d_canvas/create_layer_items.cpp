@@ -499,7 +499,7 @@ void CINFO3D_VISU::createNewPadWithClearance( const D_PAD* aPad,
     {
         SHAPE_POLY_SET polyList;     // Will contain the pad outlines in board coordinates
         polyList.Append( aPad->GetCustomShapeAsPolygon() );
-        aPad->BasicShapesAsPolygonToBoardPosition( &polyList, aPad->ShapePos(), aPad->GetOrientation() );
+        aPad->CustomShapeAsPolygonToBoardPosition( &polyList, aPad->ShapePos(), aPad->GetOrientation() );
 
         if( aClearanceValue )
             polyList.Inflate( aClearanceValue, 32 );

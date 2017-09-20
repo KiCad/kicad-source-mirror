@@ -2504,25 +2504,25 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
                 {
                 case T_gr_arc:
                     dummysegm = parseDRAWSEGMENT();
-                    pad->AddBasicShape( dummysegm->GetCenter(), dummysegm->GetArcStart(),
+                    pad->AddPrimitive( dummysegm->GetCenter(), dummysegm->GetArcStart(),
                                         dummysegm->GetAngle(), dummysegm->GetWidth() );
                     break;
 
                 case T_gr_line:
                     dummysegm = parseDRAWSEGMENT();
-                    pad->AddBasicShape( dummysegm->GetStart(), dummysegm->GetEnd(),
+                    pad->AddPrimitive( dummysegm->GetStart(), dummysegm->GetEnd(),
                                         dummysegm->GetWidth() );
                     break;
 
                 case T_gr_circle:
                     dummysegm = parseDRAWSEGMENT();
-                    pad->AddBasicShape( dummysegm->GetCenter(), dummysegm->GetRadius(),
+                    pad->AddPrimitive( dummysegm->GetCenter(), dummysegm->GetRadius(),
                                         dummysegm->GetWidth() );
                     break;
 
                 case T_gr_poly:
                     dummysegm = parseDRAWSEGMENT();
-                    pad->AddBasicShape( dummysegm->GetPolyPoints(), dummysegm->GetWidth() );
+                    pad->AddPrimitive( dummysegm->GetPolyPoints(), dummysegm->GetWidth() );
                     break;
 
                 default:
@@ -2543,7 +2543,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
 
     // Be sure the custom shape polygon is built:
     if( pad->GetShape() == PAD_SHAPE_CUSTOM )
-        pad->MergeBasicShapesAsPolygon();
+        pad->MergePrimitivesAsPolygon();
 
     return pad.release();
 }

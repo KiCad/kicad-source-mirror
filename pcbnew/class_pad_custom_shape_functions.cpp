@@ -66,18 +66,18 @@ void PAD_CS_PRIMITIVE::ExportTo( DRAWSEGMENT* aTarget )
  * add a free shape to the shape list.
  * the shape is a polygon (can be with thick outline), segment, circle or arc
  */
-void D_PAD::AddBasicShape( std::vector<wxPoint>& aPoly, int aThickness )
+void D_PAD::AddPrimitive( std::vector<wxPoint>& aPoly, int aThickness )
 {
     PAD_CS_PRIMITIVE shape( S_POLYGON );
     shape.m_Poly = aPoly;
     shape.m_Thickness = aThickness;
     m_basicShapes.push_back( shape );
 
-    MergeBasicShapesAsPolygon();
+    MergePrimitivesAsPolygon();
 }
 
 
-void D_PAD::AddBasicShape( wxPoint aStart, wxPoint aEnd, int aThickness )
+void D_PAD::AddPrimitive( wxPoint aStart, wxPoint aEnd, int aThickness )
 {
     PAD_CS_PRIMITIVE shape( S_SEGMENT );
     shape.m_Start = aStart;
@@ -85,11 +85,11 @@ void D_PAD::AddBasicShape( wxPoint aStart, wxPoint aEnd, int aThickness )
     shape.m_Thickness = aThickness;
     m_basicShapes.push_back( shape );
 
-    MergeBasicShapesAsPolygon();
+    MergePrimitivesAsPolygon();
 }
 
 
-void D_PAD::AddBasicShape( wxPoint aCenter, wxPoint aStart, int aArcAngle, int aThickness )
+void D_PAD::AddPrimitive( wxPoint aCenter, wxPoint aStart, int aArcAngle, int aThickness )
 {
     PAD_CS_PRIMITIVE shape( S_ARC );
     shape.m_Start = aCenter;
@@ -98,11 +98,11 @@ void D_PAD::AddBasicShape( wxPoint aCenter, wxPoint aStart, int aArcAngle, int a
     shape.m_Thickness = aThickness;
     m_basicShapes.push_back( shape );
 
-    MergeBasicShapesAsPolygon();
+    MergePrimitivesAsPolygon();
 }
 
 
-void D_PAD::AddBasicShape( wxPoint aCenter, int aRadius, int aThickness )
+void D_PAD::AddPrimitive( wxPoint aCenter, int aRadius, int aThickness )
 {
     PAD_CS_PRIMITIVE shape( S_CIRCLE );
     shape.m_Start = aCenter;
@@ -110,25 +110,25 @@ void D_PAD::AddBasicShape( wxPoint aCenter, int aRadius, int aThickness )
     shape.m_Thickness = aThickness;
     m_basicShapes.push_back( shape );
 
-    MergeBasicShapesAsPolygon();
+    MergePrimitivesAsPolygon();
 }
 
 
-bool D_PAD::SetBasicShapes( const std::vector<PAD_CS_PRIMITIVE>& aBasicShapesList )
+bool D_PAD::SetPrimitives( const std::vector<PAD_CS_PRIMITIVE>& aPrimitivesList )
 {
     // clear old list
     m_basicShapes.clear();
 
     // Import to the basic shape list
-    if( aBasicShapesList.size() )
-        m_basicShapes = aBasicShapesList;
+    if( aPrimitivesList.size() )
+        m_basicShapes = aPrimitivesList;
 
     // Only one polygon is expected (pad area = only one copper area)
-    return MergeBasicShapesAsPolygon();
+    return MergePrimitivesAsPolygon();
 }
 
 // clear the basic shapes list and associated data
-void D_PAD::DeleteBasicShapesList()
+void D_PAD::DeletePrimitivesList()
 {
     m_basicShapes.clear();
     m_customShapeAsPolygon.RemoveAllContours();
@@ -139,7 +139,7 @@ void D_PAD::DeleteBasicShapesList()
  * return true if OK, false in there is more than one polygon
  * in aMergedPolygon
  */
-bool D_PAD::MergeBasicShapesAsPolygon(  SHAPE_POLY_SET* aMergedPolygon,
+bool D_PAD::MergePrimitivesAsPolygon(  SHAPE_POLY_SET* aMergedPolygon,
                                         int aCircleToSegmentsCount )
 {
     // if aMergedPolygon == NULL, use m_customShapeAsPolygon as target
@@ -242,7 +242,7 @@ bool D_PAD::MergeBasicShapesAsPolygon(  SHAPE_POLY_SET* aMergedPolygon,
     return aMergedPolygon->OutlineCount() <= 1;
 }
 
-void D_PAD::BasicShapesAsPolygonToBoardPosition( SHAPE_POLY_SET * aMergedPolygon,
+void D_PAD::CustomShapeAsPolygonToBoardPosition( SHAPE_POLY_SET * aMergedPolygon,
                         wxPoint aPosition, double aRotation ) const
 {
     if( aMergedPolygon->OutlineCount() == 0 )

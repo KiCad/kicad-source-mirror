@@ -711,7 +711,7 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
         SHAPE_POLY_SET outline;     // Will contain the corners in board coordinates
         outline.Append( m_customShapeAsPolygon );
-        BasicShapesAsPolygonToBoardPosition( &outline, GetPosition(), GetOrientation() );
+        CustomShapeAsPolygonToBoardPosition( &outline, GetPosition(), GetOrientation() );
         outline.Inflate( clearance, aCircleToSegmentsCount );
         aCornerBuffer.Append( outline );
     }
