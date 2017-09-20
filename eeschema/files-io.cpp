@@ -191,8 +191,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 {
     // implement the pseudo code from KIWAY_PLAYER.h:
 
-    SCH_SCREENS screenList;
-
     // This is for python:
     if( aFileSet.size() != 1 )
     {
@@ -217,34 +215,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         return false;
     }
 
-    // Save any currently open and modified project files.
-    for( SCH_SCREEN* screen = screenList.GetFirst(); screen; screen = screenList.GetNext() )
-    {
-        if( screen->IsModify() )
-        {
-            int response = YesNoCancelDialog( this, _(
-                "The current schematic has been modified.  Do you wish to save the changes?" ),
-                wxEmptyString,
-                _( "Save and Load" ),
-                _( "Load Without Saving" )
-                );
-
-            if( response == wxID_CANCEL )
-            {
-                return false;
-            }
-            else if( response == wxID_YES )
-            {
-                wxCommandEvent dummy;
-                OnSaveProject( dummy );
-            }
-            else
-            {
-                // response == wxID_NO, fall thru
-            }
-            break;
-        }
-    }
+    if( !AskToSaveChanges() )
+        return false;
 
     wxFileName pro = fullFileName;
     pro.SetExt( ProjectFileExtension );
@@ -399,7 +371,7 @@ bool SCH_EDIT_FRAME::AppendOneEEProject()
     // open file chooser dialog
     wxString path = wxPathOnly( Prj().GetProjectFullName() );
 
-    wxFileDialog dlg( this, _( "Import Schematic" ), path,
+    wxFileDialog dlg( this, _( "Append Schematic" ), path,
                       wxEmptyString, SchematicFileWildcard,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
@@ -530,6 +502,25 @@ void SCH_EDIT_FRAME::OnAppendProject( wxCommandEvent& event )
         OnSaveProject( event );
 
     AppendOneEEProject();
+}
+
+
+void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
+{
+    if( !AskToSaveChanges() )
+        return;
+
+    wxString path = wxPathOnly( Prj().GetProjectFullName() );
+
+    wxFileDialog dlg( this, _( "Import Schematic" ), path,
+                      wxEmptyString, EagleSchematicFileWildcard,
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    // For now there is only one import plugin
+    ImportFile( dlg.GetPath(), SCH_IO_MGR::SCH_EAGLE );
 }
 
 
@@ -667,4 +658,39 @@ bool SCH_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
     }
 
     return false;
+}
+
+
+bool SCH_EDIT_FRAME::AskToSaveChanges()
+{
+    SCH_SCREENS screenList;
+
+    // Save any currently open and modified project files.
+    for( SCH_SCREEN* screen = screenList.GetFirst(); screen; screen = screenList.GetNext() )
+    {
+        if( screen->IsModify() )
+        {
+            int response = YesNoCancelDialog( m_parent, _(
+                "The current schematic has been modified.  Do you wish to save the changes?" ),
+                wxEmptyString,
+                _( "Save and Load" ),
+                _( "Load Without Saving" )
+                );
+
+            if( response == wxID_CANCEL )
+            {
+                return false;
+            }
+            else if( response == wxID_YES )
+            {
+                wxCommandEvent dummy;
+                OnSaveProject( dummy );
+            }
+            // else wxID_NO, so do not save
+
+            break;
+        }
+    }
+
+    return true;
 }

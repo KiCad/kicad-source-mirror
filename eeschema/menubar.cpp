@@ -338,9 +338,14 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     }
 
     AddMenuItem( aParentMenu,
-                 ID_APPEND_PROJECT, _( "Imp&ort Schematic Sheet Content" ),
-                 _( "Import schematic sheet content from other project in current sheet" ),
+                 ID_APPEND_PROJECT, _( "App&end Schematic Sheet" ),
+                 _( "Import schematic sheet content from another project to current sheet" ),
                  KiBitmap( open_document_xpm ) );
+
+    AddMenuItem( aParentMenu,
+                 ID_IMPORT_NON_KICAD_SCH, _( "&Import Non-Kicad Schematic File" ),
+                _( "Import schematic file from other applications" ),
+                 KiBitmap( open_document_xpm ) );   // TODO needs a different icon
 
     aParentMenu->AppendSeparator();
 

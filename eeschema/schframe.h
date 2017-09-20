@@ -793,6 +793,14 @@ public:
      */
     bool ImportFile( const wxString& aFileName, int aFileType ) override;
 
+    /**
+     * Checks whether any of the screens has unsaved changes and asks the user
+     * whether to save or drop them.
+     * @return True if user decided to save or drop changes, false if the
+     * operation should be cancelled.
+     */
+    bool AskToSaveChanges();
+
 private:
 
     /**
@@ -876,6 +884,7 @@ private:
     void OnNewProject( wxCommandEvent& event );
     void OnLoadProject( wxCommandEvent& event );
     void OnAppendProject( wxCommandEvent& event );
+    void OnImportProject( wxCommandEvent& event );
     void OnOpenPcbnew( wxCommandEvent& event );
     void OnOpenPcbModuleEditor( wxCommandEvent& event );
     void OnOpenCvpcb( wxCommandEvent& event );
