@@ -98,6 +98,7 @@ private:
     void redraw();
     void editPrimitive();
     void updateRoundRectCornerValues();
+    void enablePrimitivePage( bool aEnable );   ///< enable (or disable) the primitive page editor
 
     /**
      * Function setPadLayersList

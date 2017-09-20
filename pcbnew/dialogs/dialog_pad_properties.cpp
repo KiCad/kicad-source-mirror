@@ -150,6 +150,20 @@ void DIALOG_PAD_PROPERTIES::OnInitDialog( wxInitDialogEvent& event )
     m_PadNumCtrl->SetSelection( -1, -1 );
 }
 
+
+void DIALOG_PAD_PROPERTIES::enablePrimitivePage( bool aEnable )
+{
+    // Enable or disable the widgets in page managing custom shape primitives
+	m_listCtrlPrimitives->Enable( aEnable );
+	m_buttonDel->Enable( aEnable );
+	m_buttonEditShape->Enable( aEnable );
+	m_buttonAddShape->Enable( aEnable );
+	m_buttonDup->Enable( aEnable );
+	m_buttonGeometry->Enable( aEnable );
+	m_buttonImport->Enable( aEnable );
+}
+
+
 void DIALOG_PAD_PROPERTIES::prepareCanvas()
 {
     // Initialize the canvases (legacy or gal) to display the pad
@@ -629,6 +643,8 @@ void DIALOG_PAD_PROPERTIES::initValues()
         break;
     }
 
+    enablePrimitivePage( PAD_SHAPE_CUSTOM == m_dummyPad->GetShape() );
+
     m_OrientValue = angle / 10.0;
 
     // Type of pad selection
@@ -814,6 +830,8 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         m_ShapeOffset_Y_Ctrl->Enable( false );
         break;
     }
+
+    enablePrimitivePage( is_custom );
 
     // A few widgets are enabled only for rounded rect pads:
     m_tcCornerSizeRatio->Enable( m_PadShape->GetSelection() == CHOICE_SHAPE_ROUNDRECT );
