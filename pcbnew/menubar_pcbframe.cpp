@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -547,7 +547,7 @@ void prepareViewMenu( wxMenu* aParentMenu )
     aParentMenu->AppendSeparator();
 
     AddMenuItem( aParentMenu, ID_MENU_PCB_FLIP_VIEW,
-                 _( "&Flip Board View" ),
+                 _( "Flip &Board View" ),
                  _( "Flip (mirror) the board view" ),
                  KiBitmap( flip_board_xpm ), wxITEM_CHECK );
 
