@@ -1867,7 +1867,7 @@ void DIALOG_PAD_PROPERTIES::onGeometryTransform( wxCommandEvent& event )
         shapeList.push_back( &m_primitives[select] );
     }
 
-    DIALOG_PAD_PRIMITIVES_TRANSFORM dlg( this, shapeList );
+    DIALOG_PAD_PRIMITIVES_TRANSFORM dlg( this, shapeList, false );
 
     if( dlg.ShowModal() != wxID_OK )
         return;

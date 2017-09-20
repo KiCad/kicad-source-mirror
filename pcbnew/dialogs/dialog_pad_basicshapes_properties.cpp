@@ -498,8 +498,8 @@ DIALOG_PAD_PRIMITIVES_TRANSFORM::DIALOG_PAD_PRIMITIVES_TRANSFORM(
 
     if( !aShowDuplicate )     // means no duplicate transform
     {
-		m_staticTextDupCnt->Enable( false );
-		m_spinCtrlDuplicateCount->Enable( false );
+		m_staticTextDupCnt->Show( false );
+		m_spinCtrlDuplicateCount->Show( false );
     }
 
     m_sdbSizerOK->SetDefault();

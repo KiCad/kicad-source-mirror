@@ -236,7 +236,7 @@ class DIALOG_PAD_PRIMITIVES_TRANSFORM : public DIALOG_PAD_PRIMITIVES_TRANSFORM_B
 {
 public:
     DIALOG_PAD_PRIMITIVES_TRANSFORM( wxWindow* aParent,
-                                      std::vector<PAD_CS_PRIMITIVE*>& aList, bool aShowDuplicate = false );
+                                      std::vector<PAD_CS_PRIMITIVE*>& aList, bool aShowDuplicate );
 
     /**
      * Apply geometric transform (rotation, move, scale) defined in dialog
