@@ -309,6 +309,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
         SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
 {
     wxASSERT( !aFileName || aKiway != NULL );
+    LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
     // Load the document
     wxXmlDocument xmlDocument;
