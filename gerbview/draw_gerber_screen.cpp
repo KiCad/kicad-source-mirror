@@ -139,11 +139,13 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         // On macOS, the call to create overlaydc fails for some reason due to
         // the DC having zero size initially.
         wxCoord w = 0, h = 0;
-        ( (wxWindowDC*)DC )->GetSize( &w, &h );
+        static_cast<wxWindowDC*>( DC )->GetSize( &w, &h );
+
         if( w == 0 || h == 0)
         {
             w = h = 1;
         }
+
         wxDCOverlay overlaydc( m_overlay, (wxWindowDC*)DC, 0, 0, 1, 1 );
         overlaydc.Clear();
     }

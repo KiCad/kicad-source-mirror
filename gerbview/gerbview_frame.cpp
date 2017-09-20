@@ -217,6 +217,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     {
         if( GetGalCanvas()->SwitchBackend( canvasType ) )
             UseGalCanvas( true );
+
         wxUpdateUIEvent e;
         OnUpdateSwitchCanvas( e );
     }

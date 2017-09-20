@@ -302,7 +302,6 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 }
 
 
-// Handles the changing of the highlighted component/net/attribute
 void GERBVIEW_FRAME::OnSelectHighlightChoice( wxCommandEvent& event )
 {
     if( IsGalCanvasActive() )

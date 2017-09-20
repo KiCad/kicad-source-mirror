@@ -128,7 +128,7 @@ void GERBVIEW_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetLayerDisplayOnly( LAYER_GERBVIEW_AXES );
     m_view->SetLayerDisplayOnly( LAYER_GERBVIEW_BACKGROUND );
 
-    m_view->SetLayerTarget( LAYER_GP_OVERLAY , KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerTarget( LAYER_GP_OVERLAY, KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_GP_OVERLAY );
 }
 

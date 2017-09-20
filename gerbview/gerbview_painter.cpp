@@ -178,7 +178,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
     bool     isFilled = true;
     COLOR4D  color;
     // TODO(JE) This doesn't actually work properly for ImageNegative
-    bool     isNegative = (aItem->GetLayerPolarity() ^ aItem->m_GerberImageFile->m_ImageNegative);
+    bool     isNegative = ( aItem->GetLayerPolarity() ^ aItem->m_GerberImageFile->m_ImageNegative );
 
     // Draw DCODEs if enabled
     if( IsDCodeLayer( aLayer ) )
@@ -206,9 +206,8 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
         }
         else
         {
-
-            textPosition.x = (start.x + end.x) / 2;
-            textPosition.y = (start.y + end.y) / 2;
+            textPosition.x = ( start.x + end.x ) / 2;
+            textPosition.y = ( start.y + end.y ) / 2;
         }
 
         color = m_gerbviewSettings.GetColor( aItem, aLayer );
