@@ -633,8 +633,11 @@ void GERBVIEW_SELECTION_TOOL::zoomFitSelection( void )
 EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollector )
 {
     EDA_ITEM* current = NULL;
-    BRIGHT_BOX brightBox;
+    KIGFX::VIEW_GROUP highlightGroup;
     CONTEXT_MENU menu;
+
+    highlightGroup.SetLayer( LAYER_GP_OVERLAY );
+    getView()->Add( &highlightGroup );
 
     int limit = std::min( 10, aCollector->GetCount() );
 
@@ -657,7 +660,8 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
             if( current )
             {
                 current->ClearBrightened();
-                getView()->Update( current, KIGFX::LAYERS );
+                getView()->Hide( current, false );
+                highlightGroup.Remove( current );
                 getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
             }
 
@@ -668,7 +672,8 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
             {
                 current = ( *aCollector )[id - 1];
                 current->SetBrightened();
-                getView()->Update( current, KIGFX::LAYERS );
+                getView()->Hide( current, true );
+                highlightGroup.Add( current );
                 getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
             }
             else
@@ -693,9 +698,12 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
     if( current && current->IsBrightened() )
     {
         current->ClearBrightened();
-        getView()->Update( current, KIGFX::LAYERS );
+        getView()->Hide( current, false );
         getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
     }
+
+    getView()->Remove( &highlightGroup );
+
 
     return current;
 }

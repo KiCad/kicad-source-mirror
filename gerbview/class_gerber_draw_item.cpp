@@ -765,17 +765,10 @@ void GERBER_DRAW_ITEM::Show( int nestLevel, std::ostream& os ) const
 
 void GERBER_DRAW_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount = IsBrightened() ? 1 : 2;
+    aCount = 2;
 
-    if( IsBrightened() )
-    {
-        aLayers[0] = LAYER_GP_OVERLAY;
-    }
-    else
-    {
-        aLayers[0] = GERBER_DRAW_LAYER( GetLayer() );
-        aLayers[1] = GERBER_DCODE_LAYER( aLayers[0] );
-    }
+    aLayers[0] = GERBER_DRAW_LAYER( GetLayer() );
+    aLayers[1] = GERBER_DCODE_LAYER( aLayers[0] );
 }
 
 

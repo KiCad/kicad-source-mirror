@@ -53,6 +53,7 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_clearance = CL_NONE;
     m_sketchBoardGfx = false;
     m_sketchFpGfx = false;
+    m_selectionCandidateColor = COLOR4D( 0.0, 1.0, 0.0, 0.75 );
 
     // By default everything should be displayed as filled
     for( unsigned int i = 0; i < PCB_LAYER_ID_COUNT; ++i )
@@ -210,6 +211,12 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
 
     if( item )
     {
+        // Selection disambiguation
+        if( item->IsBrightened() )
+        {
+            return m_selectionCandidateColor;
+        }
+
         if( item->IsSelected() )
         {
             return m_layerColorsSel[aLayer];
