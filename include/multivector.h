@@ -257,7 +257,7 @@ public:
     // Range of valid types handled by the iterator
     static constexpr int FIRST_TYPE = FIRST_TYPE_VAL;
     static constexpr int LAST_TYPE = LAST_TYPE_VAL;
-    static constexpr size_t TYPES_COUNT = LAST_TYPE - FIRST_TYPE + 1;
+    static constexpr int TYPES_COUNT = LAST_TYPE - FIRST_TYPE + 1;
 
 private:
     ///> Get first non-empty type or first type if all are empty.
