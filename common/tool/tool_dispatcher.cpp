@@ -309,6 +309,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     bool motion = false, buttonEvents = false;
     boost::optional<TOOL_EVENT> evt;
     int key = 0;    // key = 0 if the event is not a key event
+    bool keyIsSpecial = false;  // True if the key is a special key code
 
     int type = aEvent.GetEventType();
 
@@ -357,13 +358,14 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     {
         wxKeyEvent* ke = static_cast<wxKeyEvent*>( &aEvent );
         key = ke->GetKeyCode();
+        keyIsSpecial = isKeySpecialCode( key );
 
         // if the key event must be skipped, skip it here if the event is a wxEVT_CHAR_HOOK
         // and do nothing.
         // a wxEVT_CHAR will be fired by wxWidgets later for this key.
         if( type == wxEVT_CHAR_HOOK )
         {
-            if( !isKeySpecialCode( key ) )
+            if( !keyIsSpecial )
             {
                 aEvent.Skip();
                 return;
@@ -406,18 +408,18 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     // in pcbnew and the footprint editor any time a hotkey is used.  The correct procedure is
     // to NOT pass wxEVT_CHAR events to the GUI under OS X.
     //
-    // On Windows, avoid to call wxEvent::Skip because some keys (ARROWS, PAGE_UP, PAGE_DOWN
+    // On Windows, avoid to call wxEvent::Skip for special keys because some keys (ARROWS, PAGE_UP, PAGE_DOWN
     // have predefined actions (like move thumbtrack cursor), and we do not want these
     // actions executed (most are handled by Kicad)
 
     if( !evt || type == wxEVT_LEFT_DOWN )
         aEvent.Skip();
 
-    // On Linux, the suitable Skip is already called, but the wxEVT_CHAR
+    // The suitable Skip is already called, but the wxEVT_CHAR
     // must be Skipped (sent to GUI).
-    // Otherwise accelerators are not seen.
-#ifdef __LINUX__
-    if( type == wxEVT_CHAR )
+    // Otherwise accelerators and shortcuts in main menu or toolbars are not seen.
+#ifndef __APPLE__
+    if( type == wxEVT_CHAR && !keyIsSpecial )
         aEvent.Skip();
 #endif
 
