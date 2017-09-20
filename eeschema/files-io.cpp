@@ -624,32 +624,50 @@ bool SCH_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
                 return false;
             }
 
-            pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ) );
+            try
+            {
+                pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ) );
+                g_RootSheet = pi->Load( fullFileName, &Kiway() );
 
-            g_RootSheet = pi->Load( fullFileName, &Kiway() );
+                projectpath = Kiway().Prj().GetProjectPath();
+                newfilename = Prj().AbsolutePath( Prj().GetProjectName() );
+                newfilename.SetExt( SchematicFileExtension );
 
-            projectpath = Kiway().Prj().GetProjectPath();
-            newfilename = Prj().AbsolutePath( Prj().GetProjectName() );
+                m_CurrentSheet->clear();
+                m_CurrentSheet->push_back( g_RootSheet );
+                SetScreen( m_CurrentSheet->LastScreen() );
 
-            newfilename.SetExt( SchematicFileExtension );
+                g_RootSheet->SetFileName( newfilename.GetFullPath() );
+                GetScreen()->SetFileName( newfilename.GetFullPath() );
+                GetScreen()->SetModify();
 
-            m_CurrentSheet->clear();
-            m_CurrentSheet->push_back( g_RootSheet );
-            SetScreen( m_CurrentSheet->LastScreen() );
+                UpdateFileHistory( fullFileName );
+                schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
+                GetScreen()->TestDanglingEnds();    // Only perform the dangling end test on root sheet.
 
-            g_RootSheet->SetFileName( newfilename.GetFullPath() );
-            GetScreen()->SetFileName( newfilename.GetFullPath() );
-            GetScreen()->SetModify();
+                GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
+                Zoom_Automatique( false );
+                SetSheetNumberAndCount();
+                m_canvas->Refresh( true );
+                UpdateTitle();
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                // Do not leave g_RootSheet == NULL because it is expected to be
+                // a valid sheet. Therefore create a dummy empty root sheet and screen.
+                CreateScreens();
+                Zoom_Automatique( false );
 
-            UpdateFileHistory( fullFileName );
-            schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
-            GetScreen()->TestDanglingEnds();    // Only perform the dangling end test on root sheet.
+                wxString msg;
+                msg.Printf( _( "Error loading schematic file '%s'.\n%s" ),
+                            GetChars( fullFileName ), GetChars( ioe.What() ) );
+                DisplayError( this, msg );
 
-            GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
-            Zoom_Automatique( false );
-            SetSheetNumberAndCount();
-            m_canvas->Refresh( true );
-            UpdateTitle();
+                msg.Printf( _( "Failed to load '%s'" ), GetChars( fullFileName ) );
+                AppendMsgPanel( wxEmptyString, msg, CYAN );
+
+                return false;
+            }
 
             return true;
 
