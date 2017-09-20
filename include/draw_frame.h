@@ -31,6 +31,7 @@
 #include <climits>
 #include <gal/gal_display_options.h>
 #include <gal/color4d.h>
+#include <class_draw_panel_gal.h>
 
 class wxSingleInstanceChecker;
 class EDA_HOTKEY;
@@ -169,6 +170,19 @@ protected:
      * @return true if an item edit or a block operation is in progress.
      */
     bool isBusy() const;
+
+    /**
+     * Returns the canvas type stored in the application settings.
+     */
+    EDA_DRAW_PANEL_GAL::GAL_TYPE loadCanvasTypeSetting() const;
+
+    /**
+     * Stores the canvas type in the application settings.
+     */
+    bool saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
+
+    ///> Key in KifaceSettings to store the canvas type.
+    static const wxChar CANVAS_TYPE_KEY[];
 
 public:
     EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,

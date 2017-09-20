@@ -468,7 +468,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     Zoom_Automatique( false );
 
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = LoadCanvasTypeSetting();
+    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = loadCanvasTypeSetting();
 
     if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
     {

@@ -64,8 +64,6 @@ static const wxString   cfgShowDCodes( wxT( "ShowDCodesOpt" ) );
 static const wxString   cfgShowNegativeObjects( wxT( "ShowNegativeObjectsOpt" ) );
 static const wxString   cfgShowBorderAndTitleBlock( wxT( "ShowBorderAndTitleBlock" ) );
 
-const wxChar GERBVIEW_FRAME::CANVAS_TYPE_KEY[] = wxT( "canvas_type" );
-
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings( FRAME_GERBER );
@@ -211,7 +209,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     Zoom_Automatique( false );           // Gives a default zoom value
     UpdateTitleAndInfo();
 
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = LoadCanvasTypeSetting();
+    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = loadCanvasTypeSetting();
 
     if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
     {
@@ -1092,44 +1090,6 @@ void GERBVIEW_FRAME::UseGalCanvas( bool aEnable )
     m_LayersManager->ReFillRender();
 
     ReCreateOptToolbar();
-}
-
-
-EDA_DRAW_PANEL_GAL::GAL_TYPE GERBVIEW_FRAME::LoadCanvasTypeSetting() const
-{
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    wxConfigBase* cfg = Kiface().KifaceSettings();
-
-    if( cfg )
-        canvasType = (EDA_DRAW_PANEL_GAL::GAL_TYPE) cfg->ReadLong( CANVAS_TYPE_KEY,
-                                                                   EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
-
-    if( canvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
-            || canvasType >= EDA_DRAW_PANEL_GAL::GAL_TYPE_LAST )
-    {
-        assert( false );
-        canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    }
-
-    return canvasType;
-}
-
-
-bool GERBVIEW_FRAME::SaveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
-{
-    if( aCanvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
-            || aCanvasType >= EDA_DRAW_PANEL_GAL::GAL_TYPE_LAST )
-    {
-        assert( false );
-        return false;
-    }
-
-    wxConfigBase* cfg = Kiface().KifaceSettings();
-
-    if( cfg )
-        return cfg->Write( CANVAS_TYPE_KEY, (long) aCanvasType );
-
-    return false;
 }
 
 

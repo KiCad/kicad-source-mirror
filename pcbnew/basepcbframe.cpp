@@ -958,7 +958,7 @@ void PCB_BASE_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
         break;
     }
 
-    SaveCanvasTypeSetting( canvasType );
+    saveCanvasTypeSetting( canvasType );
     UseGalCanvas( use_gal );
 }
 
@@ -998,44 +998,6 @@ void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
         // Redirect all events to the legacy canvas
         galCanvas->SetEventDispatcher( NULL );
     }
-}
-
-
-EDA_DRAW_PANEL_GAL::GAL_TYPE PCB_BASE_FRAME::LoadCanvasTypeSetting() const
-{
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    wxConfigBase* cfg = Kiface().KifaceSettings();
-
-    if( cfg )
-        canvasType = (EDA_DRAW_PANEL_GAL::GAL_TYPE) cfg->ReadLong( CANVAS_TYPE_KEY,
-                                                                   EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
-
-    if( canvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
-            || canvasType >= EDA_DRAW_PANEL_GAL::GAL_TYPE_LAST )
-    {
-        assert( false );
-        canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    }
-
-    return canvasType;
-}
-
-
-bool PCB_BASE_FRAME::SaveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
-{
-    if( aCanvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
-            || aCanvasType >= EDA_DRAW_PANEL_GAL::GAL_TYPE_LAST )
-    {
-        assert( false );
-        return false;
-    }
-
-    wxConfigBase* cfg = Kiface().KifaceSettings();
-
-    if( cfg )
-        return cfg->Write( CANVAS_TYPE_KEY, (long) aCanvasType );
-
-    return false;
 }
 
 

@@ -563,7 +563,7 @@ void GERBVIEW_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
         break;
     }
 
-    SaveCanvasTypeSetting( canvasType );
+    saveCanvasTypeSetting( canvasType );
     UseGalCanvas( use_gal );
     wxUpdateUIEvent e;
     OnUpdateSwitchCanvas( e );

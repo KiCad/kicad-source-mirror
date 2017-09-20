@@ -41,7 +41,6 @@
 #include <richio.h>
 #include <class_pcb_screen.h>
 #include <pcbstruct.h>
-#include <class_draw_panel_gal.h>
 
 #include <pcb_general_settings.h>
 
@@ -693,18 +692,6 @@ public:
      * Update UI called when switches currently used canvas (default / Cairo / OpenGL).
      */
     void OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent );
-
-    /**
-     * Function LoadCanvasTypeSetting()
-     * Returns the canvas type stored in the application settings.
-     */
-    EDA_DRAW_PANEL_GAL::GAL_TYPE LoadCanvasTypeSetting() const;
-
-    /**
-     * Function SaveCanvasTypeSetting()
-     * Stores the canvas type in the application settings.
-     */
-    bool SaveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
 
     PCB_GENERAL_SETTINGS& Settings()
     {

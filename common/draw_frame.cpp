@@ -36,7 +36,6 @@
 #include <macros.h>
 #include <id.h>
 #include <class_drawpanel.h>
-#include <class_draw_panel_gal.h>
 #include <class_base_screen.h>
 #include <msgpanel.h>
 #include <draw_frame.h>
@@ -52,7 +51,6 @@
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <gal/gal_display_options.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/actions.h>
@@ -75,6 +73,9 @@ static const wxString GridColorEntryKeyword( wxT( "GridColor" ) );
 static const wxString LastGridSizeIdKeyword( wxT( "_LastGridSize" ) );
 /// GAL Display Options
 static const wxString GalDisplayOptionsKeyword( wxT( "GalDisplayOptions" ) );
+
+const wxChar EDA_DRAW_FRAME::CANVAS_TYPE_KEY[] = wxT( "canvas_type" );
+
 
 ///@}
 
@@ -1167,6 +1168,44 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     SetNoToolSelected();
 
     m_galCanvasActive = aEnable;
+}
+
+
+EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::loadCanvasTypeSetting() const
+{
+    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
+    wxConfigBase* cfg = Kiface().KifaceSettings();
+
+    if( cfg )
+        canvasType = (EDA_DRAW_PANEL_GAL::GAL_TYPE) cfg->ReadLong( CANVAS_TYPE_KEY,
+                                                                   EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
+
+    if( canvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
+            || canvasType >= EDA_DRAW_PANEL_GAL::GAL_TYPE_LAST )
+    {
+        assert( false );
+        canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
+    }
+
+    return canvasType;
+}
+
+
+bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
+{
+    if( aCanvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
+            || aCanvasType >= EDA_DRAW_PANEL_GAL::GAL_TYPE_LAST )
+    {
+        assert( false );
+        return false;
+    }
+
+    wxConfigBase* cfg = Kiface().KifaceSettings();
+
+    if( cfg )
+        return cfg->Write( CANVAS_TYPE_KEY, (long) aCanvasType );
+
+    return false;
 }
 
 //-----< BASE_SCREEN API moved here >--------------------------------------------
