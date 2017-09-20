@@ -1366,7 +1366,7 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
                     if( connect.gate == aGateName and pin->GetName().ToStdString() == connect.pin )
                     {
                         wxString padname( connect.pad );
-                        pin->SetPinNumFromString( padname );
+                        pin->SetNumber( padname );
                         pin->SetPartNumber( aGateNumber );
                         pin->SetUnit( aGateNumber );
 
@@ -1386,7 +1386,7 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
                 pin->SetPartNumber( aGateNumber );
                 pin->SetUnit( aGateNumber );
                 wxString stringPinNum = wxString::Format( wxT( "%i" ), pincount );
-                pin->SetPinNumFromString( stringPinNum );
+                pin->SetNumber( stringPinNum );
                 aPart->AddDrawItem( pin.release() );
             }
         }
