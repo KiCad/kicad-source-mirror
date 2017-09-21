@@ -56,10 +56,12 @@ using namespace PCB_KEYS_T;
 #define FMTIU        BOARD_ITEM::FormatInternalUnits
 
 /**
- * Definition for enabling and disabling footprint library trace output.  See the
- * wxWidgets documentation on using the WXTRACE environment variable.
+ * @ingroup trace_env_vars
+ *
+ * Flag to enable KiCad PCB plugin debug output.
  */
-static const wxString traceFootprintLibrary( wxT( "KicadFootprintLib" ) );
+static const wxString traceFootprintLibrary = wxT( "KICAD_TRACE_FP_PLUGIN" );
+
 
 ///> Removes empty nets (i.e. with node count equal zero) from net classes
 void filterNetClass( const BOARD& aBoard, NETCLASS& aNetClass )

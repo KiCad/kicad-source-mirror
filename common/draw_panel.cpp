@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
- * Copyright (C) 2007-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2007 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -65,12 +65,11 @@ static const int CURSOR_SIZE = 12; ///< Cursor size in pixels
 
 
 /**
- * Trace mask used to enable or disable the trace output of coordinates during drawing
- * functions.  The coordinate dumping can be turned on by setting the WXTRACE environment
- * variable to "kicad_dump_coords".  See the wxWidgets documentation on wxLogTrace for
- * more information.
+ * @ingroup trace_env_vars
+ *
+ * Flag to enable draw panel coordinate debug tracing.
  */
-#define KICAD_TRACE_COORDS wxT( "kicad_dump_coords" )
+static const wxString kicadTraceCoords = wxT( "KICAD_TRACE_COORDS" );
 
 
 // Events used by EDA_DRAW_PANEL
@@ -314,7 +313,7 @@ void EDA_DRAW_PANEL::RefreshDrawingRect( const EDA_RECT& aRect, bool aEraseBackg
     rect.width = dc.LogicalToDeviceXRel( rect.width );
     rect.height = dc.LogicalToDeviceYRel( rect.height );
 
-    wxLogTrace( KICAD_TRACE_COORDS,
+    wxLogTrace( kicadTraceCoords,
                 wxT( "Refresh area: drawing (%d, %d, %d, %d), device (%d, %d, %d, %d)" ),
                 aRect.GetX(), aRect.GetY(), aRect.GetWidth(), aRect.GetHeight(),
                 rect.x, rect.y, rect.width, rect.height );
@@ -371,7 +370,7 @@ void EDA_DRAW_PANEL::MoveCursor( const wxPoint& aPosition )
         GetScrollPixelsPerUnit( &xPpu, &yPpu );
         CalcUnscrolledPosition( screenPos.x, screenPos.y, &drawingPos.x, &drawingPos.y );
 
-        wxLogTrace( KICAD_TRACE_COORDS,
+        wxLogTrace( kicadTraceCoords,
                     wxT( "MoveCursor() initial screen position(%d, %d) " ) \
                     wxT( "rectangle(%d, %d, %d, %d) view(%d, %d)" ),
                     screenPos.x, screenPos.y, clientRect.x, clientRect.y,
@@ -389,7 +388,7 @@ void EDA_DRAW_PANEL::MoveCursor( const wxPoint& aPosition )
         Scroll( x, y );
         CalcScrolledPosition( drawingPos.x, drawingPos.y, &screenPos.x, &screenPos.y );
 
-        wxLogTrace( KICAD_TRACE_COORDS,
+        wxLogTrace( kicadTraceCoords,
                     wxT( "MoveCursor() scrolled screen position(%d, %d) view(%d, %d)" ),
                     screenPos.x, screenPos.y, x, y );
     }
@@ -488,7 +487,7 @@ void EDA_DRAW_PANEL::OnScroll( wxScrollWinEvent& event )
         return;
     }
 
-    wxLogTrace( KICAD_TRACE_COORDS,
+    wxLogTrace( kicadTraceCoords,
                 wxT( "Setting scroll bars ppuX=%d, ppuY=%d, unitsX=%d, unitsY=%d, posX=%d, posY=%d" ),
                 ppux, ppuy, unitsX, unitsY, x, y );
 
@@ -544,7 +543,7 @@ void EDA_DRAW_PANEL::SetClipBox( wxDC& aDC, const wxRect* aRect )
     m_ClipBox.SetSize( wxSize( aDC.DeviceToLogicalXRel( clipBox.width ),
                                aDC.DeviceToLogicalYRel( clipBox.height ) ) );
 
-    wxLogTrace( KICAD_TRACE_COORDS,
+    wxLogTrace( kicadTraceCoords,
                 wxT( "Device clip box=(%d, %d, %d, %d), Logical clip box=(%d, %d, %d, %d)" ),
                 clipBox.x, clipBox.y, clipBox.width, clipBox.height,
                 m_ClipBox.GetX(), m_ClipBox.GetY(), m_ClipBox.GetWidth(), m_ClipBox.GetHeight() );
@@ -638,7 +637,7 @@ void EDA_DRAW_PANEL::ReDraw( wxDC* DC, bool erasebg )
 
     // Verfies that the clipping is working correctly.  If these two sets of numbers are
     // not the same or really close.  The clipping algorithms are broken.
-    wxLogTrace( KICAD_TRACE_COORDS,
+    wxLogTrace( kicadTraceCoords,
                 wxT( "Clip box: (%d, %d, %d, %d), Draw extents (%d, %d, %d, %d)" ),
                 m_ClipBox.GetX(), m_ClipBox.GetY(), m_ClipBox.GetRight(), m_ClipBox.GetBottom(),
                 DC->MinX(), DC->MinY(), DC->MaxX(), DC->MaxY() );
@@ -958,7 +957,7 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
     if( event.GetWheelRotation() == 0 || !GetParent()->IsEnabled()
        || !rect.Contains( event.GetPosition() ) )
     {
-        wxLogTrace( KICAD_TRACE_COORDS,
+        wxLogTrace( kicadTraceCoords,
                     wxT( "OnMouseWheel() position(%d, %d) rectangle(%d, %d, %d, %d)" ),
                     event.GetPosition().x, event.GetPosition().y,
                     rect.x, rect.y, rect.width, rect.height );
@@ -1422,7 +1421,7 @@ void EDA_DRAW_PANEL::OnPan( wxCommandEvent& event )
     unitsX /= ppux;
     unitsY /= ppuy;
 
-    wxLogTrace( KICAD_TRACE_COORDS,
+    wxLogTrace( kicadTraceCoords,
                 wxT( "Scroll center position before pan: (%d, %d)" ), tmpX, tmpY );
 
     switch( event.GetId() )
@@ -1483,7 +1482,7 @@ void EDA_DRAW_PANEL::OnPan( wxCommandEvent& event )
         center.y += KiROUND( (double) ( y - tmpY ) / scale );
         GetParent()->SetScrollCenterPosition( center );
 
-        wxLogTrace( KICAD_TRACE_COORDS,
+        wxLogTrace( kicadTraceCoords,
                     wxT( "Scroll center position after pan: (%d, %d)" ), center.x, center.y );
     }
 

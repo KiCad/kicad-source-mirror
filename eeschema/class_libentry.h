@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -61,7 +61,11 @@ enum  LIBRENTRYOPTIONS
 };
 
 
-/// WXTRACE value to enable schematic library memory deletion debug output.
+/**
+ * @ingroup trace_env_vars
+ *
+ * Flag to enable schematic library memory deletion debug output.
+ */
 extern const wxChar traceSchLibMem[];
 
 

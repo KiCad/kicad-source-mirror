@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -48,10 +48,11 @@
 #include <memory.h>
 
 /**
- * Definition for enabling and disabling footprint library trace output.  See the
- * wxWidgets documentation on using the WXTRACE environment variable.
+ * @ingroup trace_env_vars
+ *
+ * Flag to enable GEDA PCB plugin debug output.
  */
-static const wxString traceFootprintLibrary( wxT( "GedaPcbFootprintLib" ) );
+static const wxString traceFootprintLibrary = wxT( "KICAD_TRACE_GEDA_PLUGIN" );
 
 #ifdef DEBUG
 static void inline traceParams( wxArrayString& aParams )

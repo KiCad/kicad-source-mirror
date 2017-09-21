@@ -55,8 +55,13 @@ typedef std::vector< SCH_ITEMS_ITR > SCH_ITEMS_ITRS;
 #define FMT_ANGLE       SCH_ITEM::FormatAngle
 
 
-/// Flag to enable find item tracing using the WXTRACE environment variable.  This
-/// flag generates a lot of debug output.
+/**
+ * @ingroup trace_env_vars
+ *
+ * Flag to enable finding schematic item debug output.
+ *
+ * @warning This generates a log of debug output.
+ */
 extern const wxString traceFindItem;
 
 

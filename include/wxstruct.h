@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2015 Jean-Pierre Charras, jp.charras wanadoo.fr
- * Copyright (C) 2011-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -95,7 +95,11 @@ enum id_librarytype {
 };
 
 
-/// Custom trace mask to enable and disable auto save tracing.
+/**
+ * @ingroup trace_env_vars
+ *
+ * Flag to enable auto save feature debug tracing.
+ */
 extern const wxChar traceAutoSave[];
 
 

@@ -55,7 +55,7 @@ static const unsigned char dummy_png[] = {
 
 static const BITMAP_OPAQUE dummy_xpm[1] = {{ dummy_png, sizeof( dummy_png ), "dummy_xpm" }};
 
-const wxString traceFindReplace( wxT( "KicadFindReplace" ) );
+const wxString traceFindReplace = "KICAD_TRACE_FIND_REPLACE";
 
 
 enum textbox {
