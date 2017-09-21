@@ -32,7 +32,7 @@ usage()
     echo ""
     echo " usage:"
     echo ""
-    echo "./library-sources-install.sh <cmd>"
+    echo "./library-repos-install.sh <cmd>"
     echo "    where <cmd> is one of:"
     echo "      --install-prerequisites     (install command tools needed here, run once first.)"
     echo "      --install-or-update         (from github, the library sources.)"
@@ -42,8 +42,8 @@ usage()
     echo "      --create-bat-file           (cat a windows batch file, redirect to capture to disk.)"
     echo ""
     echo "examples (with --install-prerequisites once first):"
-    echo '    $ ./library-sources-install.sh --install-prerequisites'
-    echo '    $ ./library-sources-install.sh --install-or-update'
+    echo '    $ ./library-repos-install.sh --install-prerequisites'
+    echo '    $ ./library-repos-install.sh --install-or-update'
 }
 
 
