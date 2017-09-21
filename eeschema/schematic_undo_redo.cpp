@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -338,7 +338,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 
 void SCH_EDIT_FRAME::GetSchematicFromUndoList( wxCommandEvent& event )
 {
-    if( GetScreen()->GetUndoCommandCount() <= 0 )
+    if( GetScreen()->GetUndoCommandCount() <= 0 || isBusy() )
         return;
 
     /* Get the old list */
@@ -361,7 +361,7 @@ void SCH_EDIT_FRAME::GetSchematicFromUndoList( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::GetSchematicFromRedoList( wxCommandEvent& event )
 {
-    if( GetScreen()->GetRedoCommandCount() == 0 )
+    if( GetScreen()->GetRedoCommandCount() == 0 || isBusy() )
         return;
 
     /* Get the old list */

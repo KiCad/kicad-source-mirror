@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011-2017 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -154,11 +154,16 @@ protected:
      * cursor keys (i.e. cursor movement by keyboard) */
     void GeneralControlKeyMovement( int aHotKey, wxPoint *aPos, bool aSnapToGrid );
 
-    /* Function RefreshCrosshair
-     * Move and refresh the crosshair after movement; also call the
-     * mouse capture function, if active.
+    /**
+     * Move and refresh the crosshair after movement and call the mouse capture function.
      */
     void RefreshCrossHair( const wxPoint &aOldPos, const wxPoint &aEvtPos, wxDC* aDC );
+
+    /**
+     * @return true if an item edit or a block operation is in progress.
+     */
+    bool isBusy() const;
+
 public:
     EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
                     FRAME_T aFrameType,

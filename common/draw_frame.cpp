@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -1370,3 +1370,14 @@ void EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos,
     }
 }
 
+
+bool EDA_DRAW_FRAME::isBusy() const
+{
+    const BASE_SCREEN* screen = const_cast< BASE_SCREEN* >( GetScreen() );
+
+    if( !screen )
+        return false;
+
+    return ( screen->GetCurItem() && screen->GetCurItem()->GetFlags() )
+           || ( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK );
+}
