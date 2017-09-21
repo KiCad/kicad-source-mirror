@@ -38,10 +38,11 @@
 #include <macros.h>
 #include <common.h>
 
-#include <widgets/color_swatch.h>
 #include <widgets/indicator_icon.h>
 
 #include <algorithm>
+
+#include <menus_helpers.h>
 
 
 const wxEventType LAYER_WIDGET::EVT_LAYER_COLOR_CHANGE = wxNewEventType();
@@ -126,6 +127,30 @@ void LAYER_WIDGET::OnLeftDownLayers( wxMouseEvent& event )
 }
 
 
+void LAYER_WIDGET::OnRightDownLayer( wxMouseEvent& aEvent, COLOR_SWATCH* aColorSwatch, const wxString& aLayerName )
+{
+    wxMenu menu;
+
+    AddMenuItem( &menu, ID_CHANGE_LAYER_COLOR,
+                 _( "Change Layer Color for " ) + aLayerName,
+                 KiBitmap( setcolor_copper_xpm ) );
+    menu.AppendSeparator();
+
+    OnLayerRightClick( menu );
+
+    menu.Bind( wxEVT_COMMAND_MENU_SELECTED, [this, aColorSwatch]( wxCommandEvent& event ) {
+        if ( event.GetId() == ID_CHANGE_LAYER_COLOR ) {
+            aColorSwatch->GetNewSwatchColor();
+        } else {
+            event.Skip();
+        }
+    } );
+
+    PopupMenu( &menu );
+    passOnFocus();
+}
+
+
 void LAYER_WIDGET::OnLayerSwatchChanged( wxCommandEvent& aEvent )
 {
     auto eventSource = static_cast<COLOR_SWATCH*>( aEvent.GetEventObject() );
@@ -150,6 +175,27 @@ void LAYER_WIDGET::OnLayerCheckBox( wxCommandEvent& event )
     wxCheckBox* eventSource = (wxCheckBox*) event.GetEventObject();
     LAYER_NUM layer = getDecodedId( eventSource->GetId() );
     OnLayerVisible( layer, eventSource->IsChecked() );
+    passOnFocus();
+}
+
+
+void LAYER_WIDGET::OnRightDownRender( wxMouseEvent& aEvent, COLOR_SWATCH* aColorSwatch, const wxString& aRenderName )
+{
+    wxMenu menu;
+
+    AddMenuItem( &menu, ID_CHANGE_RENDER_COLOR,
+                 _( "Change Render Color for " ) + aRenderName,
+                 KiBitmap( setcolor_board_body_xpm ) );
+
+    menu.Bind( wxEVT_COMMAND_MENU_SELECTED, [this, aColorSwatch]( wxCommandEvent& event ) {
+        if ( event.GetId() == ID_CHANGE_RENDER_COLOR ) {
+            aColorSwatch->GetNewSwatchColor();
+        } else {
+            event.Skip();
+        }
+    } );
+
+    PopupMenu( &menu );
     passOnFocus();
 }
 
@@ -288,6 +334,22 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     st->Bind( wxEVT_LEFT_DOWN, &LAYER_WIDGET::OnLeftDownLayers, this );
     st->SetToolTip( aSpec.tooltip );
     m_LayersFlexGridSizer->wxSizer::Insert( index+col, st, 0, flags );
+
+    // Bind right click eventhandler to all columns
+    wxString layerName( aSpec.rowName );
+
+    sbm->Bind( wxEVT_RIGHT_DOWN, [this, bmb, layerName] ( wxMouseEvent& aEvt ) {
+        OnRightDownLayer( aEvt, bmb, layerName );
+    } );
+    bmb->Bind( wxEVT_RIGHT_DOWN, [this, bmb, layerName] ( wxMouseEvent& aEvt ) {
+        OnRightDownLayer( aEvt, bmb, layerName );
+    } );
+    cb->Bind( wxEVT_RIGHT_DOWN, [this, bmb, layerName] ( wxMouseEvent& aEvt ) {
+        OnRightDownLayer( aEvt, bmb, layerName );
+    } );
+    st->Bind( wxEVT_RIGHT_DOWN, [this, bmb, layerName] ( wxMouseEvent& aEvt ) {
+        OnRightDownLayer( aEvt, bmb, layerName );
+    } );
 }
 
 
@@ -299,24 +361,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
     int         index = aRow * RND_COLUMN_COUNT;
     const int   flags = wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT;
 
-    // column 0
-    col = 0;
-    if( aSpec.color != COLOR4D::UNSPECIFIED )
-    {
-        auto bmb = new COLOR_SWATCH( m_RenderScrolledWindow, aSpec.color, encodeId( col, aSpec.id ),
-                                     AreArbitraryColorsAllowed() );
-        bmb->Bind( COLOR_SWATCH_CHANGED, &LAYER_WIDGET::OnRenderSwatchChanged, this );
-        bmb->SetToolTip( _( "Left double click or middle click for color change" ) );
-        m_RenderFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );
-
-        // could add a left click handler on the color button that toggles checkbox.
-    }
-    else    // == -1, no color selection wanted
-    {
-        // need a place holder within the sizer to keep grid full.
-        wxPanel* invisible = new wxPanel( m_RenderScrolledWindow, encodeId( col, aSpec.id ) );
-        m_RenderFlexGridSizer->wxSizer::Insert( index+col, invisible, 0, flags );
-    }
+    wxString renderName( aSpec.rowName );
 
     // column 1
     col = 1;
@@ -327,6 +372,35 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
     cb->Enable( aSpec.changeable );
     cb->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED, &LAYER_WIDGET::OnRenderCheckBox, this );
     cb->SetToolTip( aSpec.tooltip );
+
+    // column 0
+    col = 0;
+    if( aSpec.color != COLOR4D::UNSPECIFIED )
+    {
+        auto bmb = new COLOR_SWATCH( m_RenderScrolledWindow, aSpec.color, encodeId( col, aSpec.id ),
+                                     AreArbitraryColorsAllowed() );
+        bmb->Bind( COLOR_SWATCH_CHANGED, &LAYER_WIDGET::OnRenderSwatchChanged, this );
+        bmb->SetToolTip( _( "Left double click or middle click for color change" ) );
+        m_RenderFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );
+
+        bmb->Bind( wxEVT_RIGHT_DOWN, [this, bmb, renderName] ( wxMouseEvent& aEvt ) {
+            OnRightDownRender( aEvt, bmb, renderName );
+        } );
+        cb->Bind( wxEVT_RIGHT_DOWN, [this, bmb, renderName] ( wxMouseEvent& aEvt ) {
+            OnRightDownRender( aEvt, bmb, renderName );
+        } );
+
+        // could add a left click handler on the color button that toggles checkbox.
+    }
+    else    // == -1, no color selection wanted
+    {
+        // need a place holder within the sizer to keep grid full.
+        wxPanel* invisible = new wxPanel( m_RenderScrolledWindow, encodeId( col, aSpec.id ) );
+        m_RenderFlexGridSizer->wxSizer::Insert( index+col, invisible, 0, flags );
+    }
+
+    // Items have to be inserted in order
+    col = 1;
     m_RenderFlexGridSizer->wxSizer::Insert( index+col, cb, 0, flags );
 }
 

@@ -114,8 +114,6 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwn
     Connect( ID_SHOW_ALL_COPPER_LAYERS, ID_LAST_VALUE - 1,
         wxEVT_COMMAND_MENU_SELECTED,
         wxCommandEventHandler( PCB_LAYER_WIDGET::onPopupSelection ), NULL, this );
-    // install the right click handler into each control at end of ReFill()
-    // using installRightLayerClickHandler
 }
 
 
@@ -145,27 +143,8 @@ bool PCB_LAYER_WIDGET::isLayerAllowedInFpMode( PCB_LAYER_ID aLayer )
 }
 
 
-void PCB_LAYER_WIDGET::installRightLayerClickHandler()
+void PCB_LAYER_WIDGET::AddRightClickMenuItems( wxMenu& menu )
 {
-    int rowCount = GetLayerRowCount();
-
-    for( int row=0; row < rowCount; ++row )
-    {
-        for( int col=0; col<LYR_COLUMN_COUNT; ++col )
-        {
-            wxWindow* w = getLayerComp( row, col );
-
-            w->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler(
-                PCB_LAYER_WIDGET::onRightDownLayers ), NULL, this );
-        }
-    }
-}
-
-
-void PCB_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
-{
-    wxMenu          menu;
-
     // menu text is capitalized:
     // http://library.gnome.org/devel/hig-book/2.20/design-text-labels.html.en#layout-capitalization
     AddMenuItem( &menu, ID_SHOW_ALL_COPPER_LAYERS,
@@ -204,7 +183,14 @@ void PCB_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
 
     AddMenuItem( &menu, ID_SHOW_ALL_BACK, _( "Show All Back Layers" ),
                  KiBitmap( show_all_layers_xpm ) );
+}
 
+
+void PCB_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
+{
+    wxMenu          menu;
+
+    AddRightClickMenuItems( menu );
     PopupMenu( &menu );
 
     passOnFocus();
@@ -224,7 +210,6 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
 
     switch( menuId )
     {
-
         case ID_SHOW_NO_LAYERS:
         case ID_SHOW_ALL_LAYERS:
             {
@@ -536,8 +521,6 @@ void PCB_LAYER_WIDGET::ReFill()
                           COLUMN_COLORBM )->SetToolTip( wxEmptyString );
         }
     }
-
-    installRightLayerClickHandler();
 }
 
 
@@ -623,6 +606,12 @@ void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal 
 
     if( isFinal )
         myframe->GetCanvas()->Refresh();
+}
+
+
+void PCB_LAYER_WIDGET::OnLayerRightClick( wxMenu& aMenu )
+{
+    AddRightClickMenuItems( aMenu );
 }
 
 

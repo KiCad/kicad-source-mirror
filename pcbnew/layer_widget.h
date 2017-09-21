@@ -43,6 +43,7 @@
 #include <wx/icon.h>
 #include <layers_id_colors_and_visibility.h>
 #include <gal/color4d.h>
+#include <widgets/color_swatch.h>
 
 #define LYR_COLUMN_COUNT        4           ///< Layer tab column count
 #define RND_COLUMN_COUNT        2           ///< Rendering tab column count
@@ -154,6 +155,12 @@ protected:
     void OnLeftDownLayers( wxMouseEvent& event );
 
     /**
+     * Function OnRightDownLayer
+     * Called when user right-clicks a layer
+     */
+    void OnRightDownLayer( wxMouseEvent& event, COLOR_SWATCH* aColorSwatch, const wxString& aLayerName );
+
+    /**
      * Function OnSwatchChanged()
      * is called when a user changes a swatch color
      */
@@ -165,6 +172,12 @@ protected:
      * event to the client's notification function.
      */
     void OnLayerCheckBox( wxCommandEvent& event );
+
+    /**
+     * Function OnRightDownRender
+     * Called when user right-clicks a render option
+     */
+    void OnRightDownRender( wxMouseEvent& aEvent, COLOR_SWATCH* aColorSwatch, const wxString& aRenderName );
 
     /**
      * Function OnRenderSwatchChanged
@@ -209,6 +222,14 @@ protected:
      * gives away the keyboard focus up to the main parent window.
      */
     void passOnFocus();
+
+    // popup menu ids.
+    enum POPUP_ID
+    {
+        ID_CHANGE_LAYER_COLOR = wxID_HIGHEST,
+        ID_CHANGE_RENDER_COLOR,
+        ID_LAST_VALUE
+    };
 
 public:
 
@@ -415,6 +436,15 @@ public:
      *  one time instead of several times in the midst of a multiple layer change.
      */
     virtual void OnLayerVisible( LAYER_NUM aLayer, bool isVisible, bool isFinal = true ) = 0;
+
+    /**
+     * Function OnLayerRightClick
+     * is called to notify client code about a layer being right-clicked.
+     *
+     * @param aMenu is the right-click menu containing layer-scoped options.
+     *  It can be used to add extra, wider scoped menu items.
+     */
+    virtual void OnLayerRightClick( wxMenu& aMenu ) = 0;
 
     /**
      * Function OnRenderColorChange

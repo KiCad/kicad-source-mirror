@@ -91,6 +91,7 @@ public:
     void OnLayerColorChange( int aLayer, COLOR4D aColor ) override;
     bool OnLayerSelect( int aLayer ) override;
     void OnLayerVisible( int aLayer, bool isVisible, bool isFinal ) override;
+    void OnLayerRightClick( wxMenu& aMenu ) override;
     void OnRenderColorChange( int aId, COLOR4D aColor ) override;
     void OnRenderEnable( int aId, bool isEnabled ) override;
     //-----</implement LAYER_WIDGET abstract callback functions>----------
@@ -107,6 +108,13 @@ public:
                                 // ensure active layer visible if
                                 // m_alwaysShowActiveCopperLayer is true;
 
+    /**
+     * Function addRightClickMenuItems
+     * add menu items to a menu that should be shown when right-clicking
+     * the PCB layer widget.
+     */
+    void AddRightClickMenuItems( wxMenu& menu );
+
 
 protected:
 
@@ -120,7 +128,7 @@ protected:
     // popup menu ids.
     enum POPUP_ID
     {
-        ID_SHOW_ALL_COPPER_LAYERS                    = wxID_HIGHEST,
+        ID_SHOW_ALL_COPPER_LAYERS                    = LAYER_WIDGET::ID_LAST_VALUE,
         ID_SHOW_NO_COPPER_LAYERS,
         ID_SHOW_NO_COPPER_LAYERS_BUT_ACTIVE,
         ID_ALWAYS_SHOW_NO_COPPER_LAYERS_BUT_ACTIVE,
