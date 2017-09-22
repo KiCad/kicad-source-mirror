@@ -53,7 +53,7 @@ STRING_FORMATTER* CLIPBOARD_IO::GetFormatter()
     return &m_formatter;
 }
 
-void CLIPBOARD_IO::setBoard( BOARD* aBoard )
+void CLIPBOARD_IO::SetBoard( BOARD* aBoard )
 {
     m_board = aBoard;
 }
@@ -61,10 +61,14 @@ void CLIPBOARD_IO::setBoard( BOARD* aBoard )
 void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
+    VECTOR2I refPoint(0, 0);
 
     // dont even start if the selection is empty
     if( aSelected.Empty() )
         return;
+
+    if( aSelected.HasReferencePoint() )
+        refPoint = aSelected.GetReferencePoint();
 
     // Prepare net mapping that assures that net codes saved in a file are consecutive integers
     m_mapping->SetBoard( m_board );
@@ -97,8 +101,11 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
 
         for( D_PAD* pad = newModule.PadsList().begin(); pad; pad = pad->Next() )
         {
-            pad->SetNetCode( 0,0 );
+            pad->SetNetCode( 0, 0 );
         }
+
+        // locate the reference point at (0, 0) in the copied items
+        newModule.Move( wxPoint(-refPoint.x, -refPoint.y ) );
 
         Format( static_cast<BOARD_ITEM*>( &newModule ) );
     }
@@ -119,6 +126,9 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
                D_PAD* pad = static_cast<D_PAD*>( clone );
                pad->SetNetCode( 0, 0 );
             }
+
+            // locate the reference point at (0, 0) in the copied items
+            clone->Move( wxPoint(-refPoint.x, -refPoint.y ) );
 
             partialModule.Add( clone );
         }
@@ -157,7 +167,12 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
                 ( i->Type() != PCB_PAD_T ) )
             {
                 auto item = static_cast<BOARD_ITEM*>( i );
-                Format( item, 1 );
+                std::unique_ptr<BOARD_ITEM> clone( static_cast<BOARD_ITEM*> ( item->Clone() ) );
+
+                // locate the reference point at (0, 0) in the copied items
+                clone->Move( wxPoint(-refPoint.x, -refPoint.y ) );
+
+                Format( clone.get(), 1 );
             }
 
         }
@@ -187,7 +202,15 @@ BOARD_ITEM* CLIPBOARD_IO::Parse()
         wxTheClipboard->Close();
     }
 
-    return PCB_IO::Parse( result );
+    BOARD_ITEM *item;
+    try
+    {
+        item = PCB_IO::Parse( result );
+    } catch (...) {
+        item = nullptr;
+    }
+
+    return item;
 }
 
 void CLIPBOARD_IO::Save( const wxString& aFileName, BOARD* aBoard,
@@ -282,4 +305,3 @@ BOARD* CLIPBOARD_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const 
 
     return board;
 }
-

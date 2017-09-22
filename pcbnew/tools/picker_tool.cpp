@@ -24,6 +24,7 @@
 
 #include "picker_tool.h"
 #include "pcb_actions.h"
+#include "grid_helper.h"
 
 #include <wxPcbStruct.h>
 #include <view/view_controls.h>
@@ -33,7 +34,7 @@ TOOL_ACTION PCB_ACTIONS::pickerTool( "pcbnew.Picker", AS_GLOBAL, 0, "", "", NULL
 
 
 PICKER_TOOL::PICKER_TOOL()
-    : TOOL_INTERACTIVE( "pcbnew.Picker" )
+    : PCB_TOOL( "pcbnew.Picker" )
 {
     reset();
 }
@@ -42,6 +43,7 @@ PICKER_TOOL::PICKER_TOOL()
 int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    GRID_HELPER grid( frame() );
 
     assert( !m_picking );
     m_picking = true;
@@ -49,12 +51,14 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     setControls();
 
+
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         if( evt->IsClick( BUT_LEFT ) )
         {
             bool getNext = false;
-            m_picked = controls->GetCursorPosition();
+            auto cursorPos = controls->GetCursorPosition();
+            m_picked = grid.BestSnapAnchor( cursorPos, nullptr );
 
             if( m_clickHandler )
             {

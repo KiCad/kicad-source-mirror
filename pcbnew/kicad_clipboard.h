@@ -55,8 +55,6 @@ public:
 
 class CLIPBOARD_IO : public PCB_IO
 {
-    STRING_FORMATTER m_formatter;
-    CLIPBOARD_PARSER* m_parser;
 
 public:
     /* Saves the entire board to the clipboard formatted using the PCB_IO formatting */
@@ -73,10 +71,14 @@ public:
     CLIPBOARD_IO();
     ~CLIPBOARD_IO();
 
-    void setBoard( BOARD* aBoard );
-    void writeHeader( BOARD* aBoard );
+    void SetBoard( BOARD* aBoard );
     STRING_FORMATTER* GetFormatter();
 
+private:
+    void writeHeader( BOARD* aBoard );
+
+    STRING_FORMATTER m_formatter;
+    CLIPBOARD_PARSER* m_parser;
 };
 
 

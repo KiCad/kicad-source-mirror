@@ -25,22 +25,23 @@
 #ifndef PCBNEW_CONTROL_H
 #define PCBNEW_CONTROL_H
 
-#include <tool/tool_interactive.h>
 #include <io_mgr.h>
 #include <memory>
+#include <tools/pcb_tool.h>
 
 namespace KIGFX {
     class ORIGIN_VIEWITEM;
 }
-class PCB_BASE_FRAME;
 
+class PCB_BASE_FRAME;
+class BOARD_ITEM;
 /**
  * Class PCBNEW_CONTROL
  *
  * Handles actions that are shared between different frames in pcbnew.
  */
 
-class PCBNEW_CONTROL : public TOOL_INTERACTIVE
+class PCBNEW_CONTROL : public PCB_TOOL
 {
 public:
     PCBNEW_CONTROL();
@@ -80,7 +81,7 @@ public:
     int SwitchCursor( const TOOL_EVENT& aEvent );
     int SwitchUnits( const TOOL_EVENT& aEvent );
     int DeleteItemCursor( const TOOL_EVENT& aEvent );
-    int AppendBoardFromClipboard( const TOOL_EVENT& aEvent );
+    int PasteItemsFromClipboard( const TOOL_EVENT& aEvent );
     int AppendBoardFromFile( const TOOL_EVENT& aEvent );
     int AppendBoard( PLUGIN& pi, wxString& fileName );
     int ShowHelp( const TOOL_EVENT& aEvent );
@@ -90,6 +91,10 @@ public:
     void setTransitions() override;
 
 private:
+
+    int placeBoardItems( BOARD* aBoard );
+    int placeBoardItems( std::vector<BOARD_ITEM*>& aItems );
+
     ///> Pointer to the currently used edit frame.
     PCB_BASE_FRAME* m_frame;
 

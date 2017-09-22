@@ -155,6 +155,12 @@ public:
      */
     int cutToClipboard( const TOOL_EVENT& aEvent );
 
+
+    BOARD_COMMIT* GetCurrentCommit() const
+    {
+        return m_commit.get();
+    }
+
 private:
     ///> Selection tool used for obtaining selected items
     SELECTION_TOOL* m_selectionTool;
@@ -163,7 +169,7 @@ private:
     bool m_dragging;
 
     ///> Offset from the dragged item's center (anchor)
-    wxPoint m_offset;
+    VECTOR2I m_offset;
 
     ///> Last cursor position (needed for getModificationPoint() to avoid changes
     ///> of edit reference point).
@@ -179,6 +185,7 @@ private:
     bool isInteractiveDragEnabled() const;
 
     bool changeTrackWidthOnClick( const SELECTION& selection );
+    bool pickCopyReferencePoint( VECTOR2I& aP );
 
 
     /**

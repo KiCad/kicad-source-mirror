@@ -170,7 +170,30 @@ public:
 
     virtual const VIEW_GROUP::ITEMS updateDrawList() const override;
 
+    bool HasReferencePoint() const
+    {
+        return m_referencePoint != boost::none;
+    }
+
+    VECTOR2I GetReferencePoint() const
+    {
+        return *m_referencePoint;
+    }
+
+    void SetReferencePoint( const VECTOR2I& aP )
+    {
+        m_referencePoint = aP;
+    }
+
+    void ClearReferencePoint()
+    {
+        m_referencePoint = boost::none;
+    }
+
 private:
+
+    boost::optional<VECTOR2I> m_referencePoint;
+
     /// Set of selected items
     std::set<EDA_ITEM*> m_items;
 

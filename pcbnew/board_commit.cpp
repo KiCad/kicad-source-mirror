@@ -132,6 +132,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
                     // modules inside modules are not supported yet
                     assert( boardItem->Type() != PCB_MODULE_T );
 
+                    boardItem->SetParent( board->m_Modules.GetFirst() );
                     if( !( changeFlags & CHT_DONE ) )
                         board->m_Modules->Add( boardItem );
                 }

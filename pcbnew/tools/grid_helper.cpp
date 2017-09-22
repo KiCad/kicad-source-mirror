@@ -251,7 +251,13 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDrag
         computeAnchors( item, aOrigin );
     }
 
-    LSET layers( aDraggedItem->GetLayer() );
+    LSET layers;
+
+    if( aDraggedItem )
+        layers = aDraggedItem->GetLayer();
+    else
+        layers = LSET::AllLayersMask();
+
     ANCHOR* nearest = nearestAnchor( aOrigin, CORNER | SNAPPABLE, layers );
 
     VECTOR2I nearestGrid = Align( aOrigin );

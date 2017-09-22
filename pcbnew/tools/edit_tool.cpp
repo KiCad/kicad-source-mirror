@@ -54,6 +54,7 @@ using namespace std::placeholders;
 #include "pcb_actions.h"
 #include "selection_tool.h"
 #include "edit_tool.h"
+#include "picker_tool.h"
 #include "grid_helper.h"
 #include "kicad_clipboard.h"
 #include "pcbnew_control.h"
@@ -172,7 +173,6 @@ TOOL_ACTION PCB_ACTIONS::cutToClipboard( "pcbnew.InteractiveEdit.CutToClipboard"
         AS_GLOBAL, MD_CTRL + int( 'X' ),
         _( "Cut" ), _( "Cut selected content to clipboard" ),
         cut_xpm );
-
 
 static wxPoint getAnchorPoint( const SELECTION &selection, const MOVE_PARAMETERS &params )
 {
@@ -393,10 +393,10 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     controls->SetAutoPan( true );
 
     // cumulative translation
-    wxPoint totalMovement( 0, 0 );
-
+    VECTOR2I totalMovement;
     GRID_HELPER grid( editFrame );
     OPT_TOOL_EVENT evt = aEvent;
+    VECTOR2I prevPos;
 
     // Main loop: keep receiving events
     do
@@ -415,14 +415,20 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             if( m_dragging && evt->Category() == TC_MOUSE )
             {
                 m_cursor = grid.BestSnapAnchor( evt->Position(), curr_item );
+
                 controls->ForceCursorPosition( true, m_cursor );
 
-                wxPoint movement = wxPoint( m_cursor.x, m_cursor.y ) - curr_item->GetPosition();
+                VECTOR2I movement( m_cursor - prevPos );// - curr_item->GetPosition();
+
                 totalMovement += movement;
+                prevPos = m_cursor;
+                auto delta = movement + m_offset;
 
                 // Drag items to the current cursor position
                 for( auto item : selection )
-                    static_cast<BOARD_ITEM*>( item )->Move( movement + m_offset );
+                    static_cast<BOARD_ITEM*>( item )->Move( wxPoint( delta.x, delta.y ) );
+
+                m_offset = VECTOR2I(0, 0);
             }
             else if( !m_dragging )    // Prepare to start dragging
             {
@@ -446,8 +452,25 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                         m_commit->Modify( item );
 
                     m_cursor = controls->GetCursorPosition();
+                    m_offset = VECTOR2I(0, 0);
 
-                    if( selection.Size() == 1 )
+                    auto refPoint = VECTOR2I( curr_item->GetPosition() );
+
+                    if ( selection.HasReferencePoint() )
+                    {
+                        // start moving with the reference point attached to the cursor
+                        refPoint = selection.GetReferencePoint();
+                        grid.SetAuxAxes( false );
+
+                        auto delta = m_cursor - selection.GetReferencePoint();
+
+                        // Drag items to the current cursor position
+                        for( auto item : selection )
+                            static_cast<BOARD_ITEM*>( item )->Move( wxPoint( delta.x, delta.y ) );
+
+                        selection.ClearReferencePoint();
+                    }
+                    else if( selection.Size() == 1 )
                     {
                         // Set the current cursor position to the first dragged item origin, so the
                         // movement vector could be computed later
@@ -461,10 +484,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
                     controls->SetCursorPosition( m_cursor, false );
 
-                    VECTOR2I o = VECTOR2I( curr_item->GetPosition() );
-                    m_offset.x = o.x - m_cursor.x;
-                    m_offset.y = o.y - m_cursor.y;
-
+                    prevPos = m_cursor;
                     controls->SetAutoPan( true );
                     m_dragging = true;
                 }
@@ -512,7 +532,8 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 for( auto item : selection )
                 {
                     BOARD_ITEM* i = static_cast<BOARD_ITEM*>( item );
-                    i->SetPosition( i->GetPosition() - totalMovement );
+                    auto delta = VECTOR2I( i->GetPosition() ) - totalMovement;
+                    i->SetPosition( wxPoint( delta.x, delta.y ) );
 
                     // And what about flipping and rotation?
                     // for now, they won't be undone, but maybe that is how
@@ -1239,7 +1260,9 @@ wxPoint EDIT_TOOL::getModificationPoint( const SELECTION& aSelection )
 {
     if( aSelection.Size() == 1 )
     {
-        return static_cast<BOARD_ITEM*>( aSelection.Front() )->GetPosition() - m_offset;
+        auto item =  static_cast<BOARD_ITEM*>( aSelection.Front() );
+        auto pos = item->GetPosition();
+        return wxPoint( pos.x - m_offset.x, pos.y - m_offset.y );
     }
     else
     {
@@ -1289,13 +1312,38 @@ int EDIT_TOOL::editFootprintInFpEditor( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aP )
+{
+    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    assert( picker );
+
+    picker->Activate();
+
+    while ( picker->IsPicking() )
+        Wait();
+
+    if( !picker->GetPoint() )
+        return false;
+
+    aP = *picker->GetPoint();
+    return true;
+}
+
 int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 {
     CLIPBOARD_IO io;
     BOARD*  board = getModel<BOARD>();
+    VECTOR2I refPoint;
 
-    io.setBoard( board );
-    auto& selection = m_selectionTool->RequestSelection();
+    Activate();
+
+    SELECTION selection = m_selectionTool->RequestSelection();
+
+    if( !pickCopyReferencePoint( refPoint ) )
+        return 0;
+
+    selection.SetReferencePoint( refPoint );
+    io.SetBoard( board );
     io.SaveSelection( selection );
 
     return 0;

@@ -25,21 +25,20 @@
 #ifndef PICKER_TOOL_H
 #define PICKER_TOOL_H
 
-#include <tool/tool_interactive.h>
 #include <boost/optional/optional.hpp>
-#include <boost/function.hpp>
 
+#include "pcb_tool.h"
 /**
  * @brief Generic tool for picking a point.
  */
-class PICKER_TOOL : public TOOL_INTERACTIVE
+class PICKER_TOOL : public PCB_TOOL
 {
 public:
     PICKER_TOOL();
     ~PICKER_TOOL() {}
 
     ///> Mouse event click handler type.
-    typedef boost::function<bool(const VECTOR2D&)> CLICK_HANDLER;
+    typedef std::function<bool(const VECTOR2D&)> CLICK_HANDLER;
 
     ///> @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override {}
