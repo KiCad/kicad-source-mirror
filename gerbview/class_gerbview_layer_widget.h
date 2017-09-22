@@ -33,18 +33,6 @@
 
 #include <layer_widget.h>
 
-// popup menu ids. in layer manager
-enum LAYER_MANAGER
-{
-    ID_LAYER_MANAGER_START = wxID_HIGHEST+1,
-    ID_SHOW_ALL_LAYERS = ID_LAYER_MANAGER_START,
-    ID_SHOW_NO_LAYERS,
-    ID_SHOW_NO_LAYERS_BUT_ACTIVE,
-    ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE,
-    ID_SORT_GBR_LAYERS,
-    ID_LAYER_MANAGER_END = ID_SORT_GBR_LAYERS,
-};
-
 /**
  * Class GERBER_LAYER_WIDGET
  * is here to implement the abtract functions of LAYER_WIDGET so they
@@ -100,6 +88,7 @@ public:
     void ReFillRender();
 
     //-----<implement LAYER_WIDGET abstract callback functions>-----------
+    void OnLayerRightClick( wxMenu& aMenu ) override;
     void OnLayerColorChange( int aLayer, COLOR4D aColor ) override;
     bool OnLayerSelect( int aLayer ) override;
     void OnLayerVisible( int aLayer, bool isVisible, bool isFinal ) override;
@@ -125,6 +114,26 @@ public:
     bool OnLayerSelected();     // postprocess after an active layer selection
                                 // ensure active layer visible if
                                 // m_alwaysShowActiveCopperLayer is true;
+
+    /**
+     * Function addRightClickMenuItems
+     * add menu items to a menu that should be shown when right-clicking
+     * the Gerber layer widget.
+     */
+    void AddRightClickMenuItems( wxMenu& menu );
+
+protected:
+    // popup menu ids. in layer manager
+    enum LAYER_MANAGER
+    {
+        ID_LAYER_MANAGER_START = LAYER_WIDGET::ID_LAST_VALUE,
+        ID_SHOW_ALL_LAYERS = ID_LAYER_MANAGER_START,
+        ID_SHOW_NO_LAYERS,
+        ID_SHOW_NO_LAYERS_BUT_ACTIVE,
+        ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE,
+        ID_SORT_GBR_LAYERS,
+        ID_LAYER_MANAGER_END = ID_SORT_GBR_LAYERS,
+    };
 };
 
 #endif  // _CLASS_GERBER_LAYER_WIDGET_H_

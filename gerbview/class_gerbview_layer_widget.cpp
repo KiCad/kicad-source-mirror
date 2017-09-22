@@ -72,9 +72,6 @@ GERBER_LAYER_WIDGET::GERBER_LAYER_WIDGET( GERBVIEW_FRAME* aParent, wxWindow* aFo
     Connect( ID_LAYER_MANAGER_START, ID_LAYER_MANAGER_END,
         wxEVT_COMMAND_MENU_SELECTED,
         wxCommandEventHandler( GERBER_LAYER_WIDGET::onPopupSelection ), NULL, this );
-
-    // install the right click handler into each control at end of ReFill()
-    // using installRightLayerClickHandler
 }
 
 GERBER_FILE_IMAGE_LIST* GERBER_LAYER_WIDGET::GetImagesList()
@@ -126,27 +123,9 @@ void GERBER_LAYER_WIDGET::ReFillRender()
     AppendRenderRows( renderRows, DIM(renderRows) );
 }
 
-void GERBER_LAYER_WIDGET::installRightLayerClickHandler()
+
+void GERBER_LAYER_WIDGET::AddRightClickMenuItems( wxMenu& menu )
 {
-    int rowCount = GetLayerRowCount();
-
-    for( int row=0;  row<rowCount;  ++row )
-    {
-        for( int col=0; col<LYR_COLUMN_COUNT;  ++col )
-        {
-            wxWindow* w = getLayerComp( row, col );
-
-            w->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler(
-                GERBER_LAYER_WIDGET::onRightDownLayers ), NULL, this );
-        }
-    }
-}
-
-
-void GERBER_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
-{
-    wxMenu          menu;
-
     // Remember: menu text is capitalized (see our rules_for_capitalization_in_Kicad_UI.txt)
     menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_LAYERS,
                                  _("Show All Layers") ) );
@@ -163,6 +142,14 @@ void GERBER_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
     menu.AppendSeparator();
     menu.Append( new wxMenuItem( &menu, ID_SORT_GBR_LAYERS,
                                  _( "Sort Layers if X2 Mode" ) ) );
+}
+
+
+void GERBER_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
+{
+    wxMenu          menu;
+
+    AddRightClickMenuItems( menu );
     PopupMenu( &menu );
 
     passOnFocus();
@@ -246,11 +233,14 @@ void GERBER_LAYER_WIDGET::ReFill()
     }
 
     Thaw();
-
-    installRightLayerClickHandler();
 }
 
 //-----<LAYER_WIDGET callbacks>-------------------------------------------
+
+void GERBER_LAYER_WIDGET::OnLayerRightClick( wxMenu& aMenu )
+{
+    AddRightClickMenuItems( aMenu );
+}
 
 void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
 {
