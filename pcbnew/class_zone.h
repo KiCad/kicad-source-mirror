@@ -120,6 +120,10 @@ public:
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
+    void SetLayerSet( LSET aLayerSet );
+
+    virtual LSET GetLayerSet() const override;
+
     /**
      * Function Draw
      * Draws the zone outline.
@@ -178,8 +182,15 @@ public:
      */
     bool IsOnCopperLayer() const
     {
+        //TODO fixme!
         return  IsCopperLayer( GetLayer() );
     }
+
+    virtual void SetLayer( PCB_LAYER_ID aLayer ) override;
+
+    virtual PCB_LAYER_ID GetLayer() const override;
+
+    virtual bool IsOnLayer( PCB_LAYER_ID ) const override;
 
     /// How to fill areas: 0 = use filled polygons, 1 => fill with segments.
     void SetFillMode( int aFillMode )                   { m_FillMode = aFillMode; }
@@ -724,6 +735,8 @@ private:
     SHAPE_POLY_SET*       m_smoothedPoly;        // Corner-smoothed version of m_Poly
     int                   m_cornerSmoothingType;
     unsigned int          m_cornerRadius;
+
+    LSET                  m_layerSet;
 
     /* Priority: when a zone outline is inside and other zone, if its priority is higher
      * the other zone priority, it will be created inside.

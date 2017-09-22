@@ -129,7 +129,7 @@ public:
      * Function GetLayer
      * returns the primary layer this item is on.
      */
-    PCB_LAYER_ID GetLayer() const { return m_Layer; }
+    virtual PCB_LAYER_ID GetLayer() const { return m_Layer; }
 
     /**
      * Function GetLayerSet

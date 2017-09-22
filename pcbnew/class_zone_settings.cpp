@@ -77,7 +77,6 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
     m_ZoneClearance      = aSource.GetZoneClearance();
     m_ZoneMinThickness   = aSource.GetMinThickness();
     m_NetcodeSelection   = aSource.GetNetCode();
-    m_CurrentZone_Layer  = aSource.GetLayer();
     m_Zone_HatchingStyle = aSource.GetHatchStyle();
     m_ArcToSegmentsCount = aSource.GetArcSegmentCount();
     m_ThermalReliefGap = aSource.GetThermalReliefGap();
@@ -89,6 +88,9 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
     m_keepoutDoNotAllowCopperPour = aSource.GetDoNotAllowCopperPour();
     m_keepoutDoNotAllowVias = aSource.GetDoNotAllowVias();
     m_keepoutDoNotAllowTracks = aSource.GetDoNotAllowTracks();
+
+    m_CurrentZone_Layer  = aSource.GetLayer();
+    m_Layers = aSource.GetLayerSet();
 
     return *this;
 }
@@ -114,7 +116,16 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
     {
         aTarget.SetPriority( m_ZonePriority );
         aTarget.SetNetCode( m_NetcodeSelection );
-        aTarget.SetLayer( m_CurrentZone_Layer );
+
+        // Keepout zones can have multiple layers
+        if( m_isKeepout )
+        {
+            aTarget.SetLayerSet( m_Layers );
+        }
+        else
+        {
+            aTarget.SetLayer( m_CurrentZone_Layer );
+        }
     }
 
     // call SetHatch last, because hatch lines will be rebuilt,

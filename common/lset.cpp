@@ -563,6 +563,7 @@ LSET FlipLayerMask( LSET aMask, int aCopperLayersCount )
 
             for( int ii = 0; ii < innerLayerCnt; ii++ )
             {
+                //TODO there is a problem with this code
                 if( internalMask[innerLayerCnt - ii + In1_Cu] )
                     newMask.set( ii + In1_Cu );
                 else

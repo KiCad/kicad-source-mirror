@@ -64,6 +64,8 @@ public:
     int  m_ZoneMinThickness;            ///< Min thickness value in filled areas
     int  m_NetcodeSelection;            ///< Net code selection for the current zone
 
+    LSET m_Layers;
+
     PCB_LAYER_ID    m_CurrentZone_Layer;    ///< Layer used to create the current zone
 
     /// Option to show the zone area (outlines only, short hatches or full hatches

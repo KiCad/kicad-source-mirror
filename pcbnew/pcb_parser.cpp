@@ -2825,6 +2825,12 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
             NeedRIGHT();
             break;
 
+        case T_layers:
+            // If multiple layers are specified, it is a keepout zone
+            zone->SetIsKeepout( true );
+            zone->SetLayerSet( parseBoardItemLayersAsMask() );
+            break;
+
         case T_tstamp:
             zone->SetTimeStamp( parseHex() );
             NeedRIGHT();
@@ -3075,7 +3081,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
             break;
 
         default:
-            Expecting( "net, layer, tstamp, hatch, priority, connect_pads, min_thickness, "
+            Expecting( "net, layer/layers, tstamp, hatch, priority, connect_pads, min_thickness, "
                        "fill, polygon, filled_polygon, or fill_segments" );
         }
     }

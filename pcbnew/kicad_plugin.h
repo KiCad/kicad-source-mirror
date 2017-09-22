@@ -43,7 +43,8 @@ class NETINFO_MAPPING;
 //                                              // went to 32 Cu layers from 16.
 //#define SEXPR_BOARD_FILE_VERSION    20160815  // differential pair settings per net class
 //#define SEXPR_BOARD_FILE_VERSION    20170123  // EDA_TEXT refactor, moved 'hide'
-#define SEXPR_BOARD_FILE_VERSION      20170920  // long pad names and custom pad shape
+//#define SEXPR_BOARD_FILE_VERSION    20170920  // long pad names and custom pad shape
+#define SEXPR_BOARD_FILE_VERSION      20170922  // Keepout zones can exist on multiple layers
 
 #define CTL_STD_LAYER_NAMES         (1 << 0)    ///< Use English Standard layer names
 #define CTL_OMIT_NETS               (1 << 1)    ///< Omit pads net names (useless in library)

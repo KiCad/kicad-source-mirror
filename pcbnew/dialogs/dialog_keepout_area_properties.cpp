@@ -89,7 +89,7 @@ private:
 
 
 #define LAYER_BITMAP_SIZE_X     20
-#define LAYER_BITMAP_SIZE_Y     10
+#define LAYER_BITMAP_SIZE_Y     15
 
 ZONE_EDIT_T InvokeKeepoutAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings )
 {
@@ -155,6 +155,7 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
 
     // Build copper layer list and append to layer widget
     LSET show = LSET::AllCuMask( board->GetCopperLayerCount() );
+
     int imgIdx = 0;
 
     for( LSEQ cu_stack = show.UIOrder();  cu_stack;  ++cu_stack, imgIdx++ )
@@ -173,7 +174,15 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
                 m_LayerSelectionCtrl->GetItemCount(), msg, imgIdx );
 
         if( m_zonesettings.m_CurrentZone_Layer == layer )
+        {
+            //m_LayerSelectionCtrl->Select( itemIndex );
+        }
+
+        if( m_zonesettings.m_Layers.test( layer ) )
+        {
             m_LayerSelectionCtrl->Select( itemIndex );
+        }
+
     }
 
     m_LayerSelectionCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE);
@@ -213,6 +222,25 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::AcceptOptionsForKeepOut()
         return false;
     }
 
+    // Copy the layers across
+    LSET layers;
+
+    for( int ii = 0; ii < m_LayerSelectionCtrl->GetItemCount(); ii++ )
+    {
+        if( m_LayerSelectionCtrl->IsSelected( ii ) )
+        {
+            layers.set( ToLAYER_ID( m_layerId[ii] ) );
+        }
+    }
+
+    if( layers.count() == 0 )
+    {
+        DisplayError( NULL, _( "No layers selected." ) );
+        return false;
+    }
+
+    m_zonesettings.m_Layers = layers;
+
     // Get the layer selection for this zone
     int ii = m_LayerSelectionCtrl->GetFirstSelected();
 
@@ -223,6 +251,8 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::AcceptOptionsForKeepOut()
     }
 
     m_zonesettings.m_CurrentZone_Layer = ToLAYER_ID( m_layerId[ii] );
+
+    // Set zone layers
 
     switch( m_OutlineAppearanceCtrl->GetSelection() )
     {

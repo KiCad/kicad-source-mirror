@@ -1609,7 +1609,15 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
                   aZone->GetIsKeepout() ? 0 : m_mapping->Translate( aZone->GetNetCode() ),
                   m_out->Quotew( aZone->GetIsKeepout() ? wxT("") : aZone->GetNetname() ).c_str() );
 
-    formatLayer( aZone );
+    // Keepout zones can exist on multiple layers
+    if( aZone->GetIsKeepout() && aZone->GetLayerSet().count() > 1 )
+    {
+        formatLayers( aZone->GetLayerSet() );
+    }
+    else
+    {
+        formatLayer( aZone );
+    }
 
     m_out->Print( 0, " (tstamp %lX)", (unsigned long) aZone->GetTimeStamp() );
 
