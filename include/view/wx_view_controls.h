@@ -113,6 +113,13 @@ private:
      */
     bool handleAutoPanning( const wxMouseEvent& aEvent );
 
+    /**
+     * Sends an event to refresh mouse position. It is mostly used for notifying the tools
+     * that the cursor position in the world coordinates has changed, whereas the screen coordinates
+     * remained the same (e.g. frame edge autopanning).
+     */
+    void refreshMouse() const;
+
     /// Current state of VIEW_CONTROLS
     STATE       m_state;
 
