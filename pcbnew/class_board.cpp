@@ -2776,7 +2776,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             // Explore all pins/pads in component
             for( unsigned jj = 0; jj < component->GetNetCount(); jj++ )
             {
-                COMPONENT_NET net = component->GetNet( jj );
+                const COMPONENT_NET& net = component->GetNet( jj );
                 padname = net.GetPinName();
 
                 if( footprint->FindPadByName( padname ) )

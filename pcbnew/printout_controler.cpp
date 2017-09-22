@@ -156,7 +156,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage( const wxString& aLayerName, int aPageN
 
     BOARD* brd = ((PCB_BASE_FRAME*) m_Parent)->GetBoard();
     boardBoundingBox = brd->ComputeBoundingBox();
-    wxString titleblockFilename = brd->GetFileName();
+    const wxString& titleblockFilename = brd->GetFileName();
 
     // Use the page size as the drawing area when the board is shown or the user scale
     // is less than 1.

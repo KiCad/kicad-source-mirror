@@ -100,7 +100,7 @@ void X3DIFACESET::readFields( wxXmlNode* aNode )
          prop != NULL;
          prop = prop->GetNext() )
     {
-        wxString pname = prop->GetName();
+        const wxString& pname = prop->GetName();
 
         if( pname == "DEF" )
         {

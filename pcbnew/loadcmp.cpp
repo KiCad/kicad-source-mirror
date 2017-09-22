@@ -165,11 +165,11 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
                                                bool            aUseFootprintViewer,
                                                wxDC*           aDC )
 {
-    MODULE*     module = NULL;
-    wxPoint     curspos = GetCrossHairPosition();
-    wxString    moduleName, keys;
-    wxString    libName = aLibrary;
-    bool        allowWildSeach = true;
+    MODULE*         module = NULL;
+    wxPoint         curspos = GetCrossHairPosition();
+    wxString        moduleName, keys;
+    const wxString& libName = aLibrary;
+    bool            allowWildSeach = true;
 
     static wxArrayString HistoryList;
     static wxString      lastComponentName;

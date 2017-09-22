@@ -134,7 +134,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage( const wxString& aLayerName,
     wxBusyCursor  dummy;
 
     boardBoundingBox = ((GERBVIEW_FRAME*) m_Parent)->GetGerberLayoutBoundingBox();
-    wxString titleblockFilename = aLayerName;    // TODO see if we uses the gerber file name
+    const wxString& titleblockFilename = aLayerName;    // TODO see if we uses the gerber file name
 
     // Use the page size as the drawing area when the board is shown or the user scale
     // is less than 1.

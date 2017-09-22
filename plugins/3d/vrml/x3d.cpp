@@ -111,7 +111,7 @@ bool X3DPARSER::getGroupingNodes( wxXmlNode* aNode, std::vector<wxXmlNode*>& aRe
          child != NULL;
          child = child->GetNext() )
     {
-        wxString name = child->GetName();
+        const wxString& name = child->GetName();
 
         if( name == "Transform" || name == "Switch" || name == "Group" )
             aResult.push_back( child );

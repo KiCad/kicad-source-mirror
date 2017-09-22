@@ -319,7 +319,7 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             if( fieldSeq )
             {
                 // Get the string containing the sequence of nodes:
-                wxString nodeSeqIndexLineStr = fieldSeq->GetText();
+                const wxString& nodeSeqIndexLineStr = fieldSeq->GetText();
 
                 // Verify field exists and is not empty:
                 if( !nodeSeqIndexLineStr.IsEmpty() )

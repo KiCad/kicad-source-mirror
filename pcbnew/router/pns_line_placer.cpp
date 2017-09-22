@@ -436,7 +436,7 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead )
 
 const LINE LINE_PLACER::reduceToNearestObstacle( const LINE& aOriginalLine )
 {
-    auto l0  = aOriginalLine.CLine();
+    const auto& l0 = aOriginalLine.CLine();
 
     if ( !l0.PointCount() )
         return aOriginalLine;

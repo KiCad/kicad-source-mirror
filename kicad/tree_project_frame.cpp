@@ -919,7 +919,7 @@ wxTreeItemId TREE_PROJECT_FRAME::findSubdirTreeItem( const wxString& aSubDir )
 
 void TREE_PROJECT_FRAME::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
 {
-    wxFileName pathModified = event.GetPath();
+    const wxFileName& pathModified = event.GetPath();
     wxString subdir = pathModified.GetPath();
     wxString fn = pathModified.GetFullPath();
 
@@ -970,8 +970,8 @@ void TREE_PROJECT_FRAME::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
 
     case wxFSW_EVENT_RENAME :
         {
-            wxFileName  newpath = event.GetNewPath();
-            wxString    newfn = newpath.GetFullPath();
+            const wxFileName& newpath = event.GetNewPath();
+            wxString newfn = newpath.GetFullPath();
 
             while( kid.IsOk() )
             {
@@ -1057,7 +1057,7 @@ void TREE_PROJECT_FRAME::FileWatcherReset()
         if( itemData && itemData->GetType() == TREE_DIRECTORY )
         {
             // we can see wxString under a debugger, not a wxFileName
-            wxString path = itemData->GetFileName();
+            const wxString& path = itemData->GetFileName();
 
             wxLogDebug( "%s: add '%s'\n", __func__, TO_UTF8( path ) );
 

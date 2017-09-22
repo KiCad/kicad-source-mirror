@@ -42,7 +42,7 @@ bool X3D::ReadTransform( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
          prop != NULL;
          prop = prop->GetNext() )
     {
-        wxString pname = prop->GetName();
+        const wxString& pname = prop->GetName();
 
         if( pname == "USE" )
         {
@@ -89,7 +89,7 @@ bool X3D::ReadShape( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
          prop != NULL;
          prop = prop->GetNext() )
     {
-        wxString pname = prop->GetName();
+        const wxString& pname = prop->GetName();
 
         if( pname == "USE" )
         {
@@ -129,7 +129,7 @@ bool X3D::ReadAppearance( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
          prop != NULL;
          prop = prop->GetNext() )
     {
-        wxString pname = prop->GetName();
+        const wxString& pname = prop->GetName();
 
         if( pname == "USE" )
         {
@@ -169,7 +169,7 @@ bool X3D::ReadIndexedFaceSet( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDic
          prop != NULL;
          prop = prop->GetNext() )
     {
-        wxString pname = prop->GetName();
+        const wxString& pname = prop->GetName();
 
         if( pname == "USE" )
         {
@@ -209,7 +209,7 @@ bool X3D::ReadCoordinates( wxXmlNode* aNode, X3DNODE* aParent, X3D_DICT& aDict )
          prop != NULL;
          prop = prop->GetNext() )
     {
-        wxString pname = prop->GetName();
+        const wxString& pname = prop->GetName();
 
         if( pname == "USE" )
         {

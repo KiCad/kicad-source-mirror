@@ -176,7 +176,7 @@ static bool getNumberingOffset( const wxString& str,
         DIALOG_CREATE_ARRAY::ARRAY_NUMBERING_TYPE_T type,
         int& offsetToFill )
 {
-    const wxString alphabet = alphabetFromNumberingScheme( type );
+    const wxString& alphabet = alphabetFromNumberingScheme( type );
 
     int offset = 0;
     const int radix = alphabet.length();

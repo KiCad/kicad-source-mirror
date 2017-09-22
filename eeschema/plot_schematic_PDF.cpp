@@ -165,7 +165,7 @@ void DIALOG_PLOT_SCHEMATIC::setupPlotPagePDF( PLOTTER * aPlotter, SCH_SCREEN* aS
 {
     PAGE_INFO   plotPage;                               // page size selected to plot
     // Considerations on page size and scaling requests
-    PAGE_INFO   actualPage = aScreen->GetPageSettings(); // page size selected in schematic
+    const PAGE_INFO& actualPage = aScreen->GetPageSettings(); // page size selected in schematic
 
     switch( m_pageSizeSelect )
     {

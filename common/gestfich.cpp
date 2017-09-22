@@ -392,17 +392,17 @@ bool OpenPDF( const wxString& file )
 void OpenFile( const wxString& file )
 {
     wxString    command;
-    wxString    filename = file;
 
-    wxFileName  CurrentFileName( filename );
-    wxString    ext, type;
+    wxFileName  currentFileName( file );
+    wxString    ext;
+    wxString    type;
 
-    ext = CurrentFileName.GetExt();
+    ext = currentFileName.GetExt();
     wxFileType* filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( ext );
 
     bool        success = false;
 
-    wxFileType::MessageParameters params( filename, type );
+    wxFileType::MessageParameters params( file, type );
 
     if( filetype )
         success = filetype->GetOpenCommand( &command, params );

@@ -110,7 +110,7 @@ void X3DAPP::readFields( wxXmlNode* aNode )
          prop != NULL;
          prop = prop->GetNext() )
     {
-        wxString pname = prop->GetName();
+        const wxString& pname = prop->GetName();
 
         if( pname == "DEF" )
         {
@@ -163,7 +163,7 @@ bool X3DAPP::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
          prop != NULL;
          prop = prop->GetNext() )
     {
-        wxString pname = prop->GetName();
+        const wxString& pname = prop->GetName();
 
         if( pname == "DEF" )
         {

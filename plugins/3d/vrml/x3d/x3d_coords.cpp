@@ -78,7 +78,7 @@ bool X3DCOORDS::Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict )
          prop != NULL;
          prop = prop->GetNext() )
     {
-        wxString pname = prop->GetName();
+        const wxString& pname = prop->GetName();
 
         if( pname == "DEF" )
         {
