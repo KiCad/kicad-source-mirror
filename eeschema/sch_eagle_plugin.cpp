@@ -1737,7 +1737,7 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymbolText( std::unique_ptr<LIB_PART>& aPart,
 
     libtext->SetUnit( aGateNumber );
     libtext->SetPosition( wxPoint( etext.x * EUNIT_TO_MIL, etext.y * EUNIT_TO_MIL ) );
-    libtext->SetText( aLibText->GetNodeContent() );
+    libtext->SetText( aLibText->GetNodeContent().IsEmpty() ? "~~" : aLibText->GetNodeContent() );
     libtext->SetTextSize( etext.ConvertSize() );
 
     if( etext.ratio )
