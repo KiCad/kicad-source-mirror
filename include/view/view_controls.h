@@ -210,8 +210,9 @@ public:
      * forced and will be overridden with the next mouse motion event. Mouse cursor follows the
      * world cursor.
      * @param aPosition is the requested cursor position in the world coordinates.
+     * @param aWarpView enables/disables view warp if the cursor is outside the current viewport.
      */
-    virtual void SetCursorPosition( const VECTOR2D& aPosition ) = 0;
+    virtual void SetCursorPosition( const VECTOR2D& aPosition, bool aWarpView = true ) = 0;
 
     /**
      * Function ForcedCursorPosition()

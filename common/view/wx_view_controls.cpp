@@ -443,10 +443,10 @@ VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition( bool aEnableSnapping ) const
 }
 
 
-void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition )
+void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition, bool aWarpView )
 {
     m_updateCursor = false;
-    WarpCursor( aPosition, true, true );
+    WarpCursor( aPosition, true, aWarpView );
     m_cursorPos = aPosition;
 }
 

@@ -442,7 +442,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                         m_cursor = grid.Align( m_cursor );
                     }
 
-                    controls->SetCursorPosition( m_cursor );
+                    controls->SetCursorPosition( m_cursor, false );
 
                     VECTOR2I o = VECTOR2I( curr_item->GetPosition() );
                     m_offset.x = o.x - m_cursor.x;
