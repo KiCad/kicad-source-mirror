@@ -180,17 +180,15 @@ public:
      * Function IsOnCopperLayer
      * @return true if this zone is on a copper layer, false if on a technical layer
      */
-    bool IsOnCopperLayer() const
-    {
-        //TODO fixme!
-        return  IsCopperLayer( GetLayer() );
-    }
+    bool IsOnCopperLayer() const;
 
     virtual void SetLayer( PCB_LAYER_ID aLayer ) override;
 
     virtual PCB_LAYER_ID GetLayer() const override;
 
     virtual bool IsOnLayer( PCB_LAYER_ID ) const override;
+
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     /// How to fill areas: 0 = use filled polygons, 1 => fill with segments.
     void SetFillMode( int aFillMode )                   { m_FillMode = aFillMode; }

@@ -301,7 +301,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         break;
 
     case PCB_ZONE_AREA_T:
-        draw( static_cast<const ZONE_CONTAINER*>( item ) );
+        draw( static_cast<const ZONE_CONTAINER*>( item ), aLayer );
         break;
 
     case PCB_DIMENSION_T:
@@ -1082,9 +1082,15 @@ void PCB_PAINTER::draw( const MODULE* aModule, int aLayer )
 }
 
 
-void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
+void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone, int aLayer )
 {
-    const COLOR4D& color = m_pcbSettings.GetColor( aZone, aZone->GetLayer() );
+
+    if( !aZone->IsOnLayer( (PCB_LAYER_ID) aLayer ) )
+    {
+        return;
+    }
+
+    const COLOR4D& color = m_pcbSettings.GetColor( aZone, aLayer );
     std::deque<VECTOR2D> corners;
     PCB_RENDER_SETTINGS::DISPLAY_ZONE_MODE displayMode = m_pcbSettings.m_displayZone;
 

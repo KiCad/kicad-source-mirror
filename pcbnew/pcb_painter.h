@@ -204,7 +204,7 @@ protected:
     void draw( const TEXTE_PCB* aText, int aLayer );
     void draw( const TEXTE_MODULE* aText, int aLayer );
     void draw( const MODULE* aModule, int aLayer );
-    void draw( const ZONE_CONTAINER* aZone );
+    void draw( const ZONE_CONTAINER* aZone, int aLayer );
     void draw( const DIMENSION* aDimension, int aLayer );
     void draw( const PCB_TARGET* aTarget );
     void draw( const MARKER_PCB* aMarker );

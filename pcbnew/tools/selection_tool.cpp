@@ -34,6 +34,7 @@ using namespace std::placeholders;
 #include <class_module.h>
 #include <class_pcb_text.h>
 #include <class_drawsegment.h>
+#include <class_zone.h>
 
 #include <wxPcbStruct.h>
 #include <collectors.h>
@@ -1388,15 +1389,17 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
     // Is high contrast mode enabled?
     bool highContrast = getView()->GetPainter()->GetSettings()->GetHighContrast();
 
+    int layers[KIGFX::VIEW::VIEW_MAX_LAYERS], layers_count;
+
+    // Filter out items that do not belong to active layers
+    const std::set<unsigned int>& activeLayers = getView()->GetPainter()->
+                                                 GetSettings()->GetActiveLayers();
+
+    aItem->ViewGetLayers( layers, layers_count );
+
     if( highContrast )
     {
         bool onActive = false;          // Is the item on any of active layers?
-        int layers[KIGFX::VIEW::VIEW_MAX_LAYERS], layers_count;
-
-        // Filter out items that do not belong to active layers
-        const std::set<unsigned int>& activeLayers = getView()->GetPainter()->
-                                                     GetSettings()->GetActiveLayers();
-        aItem->ViewGetLayers( layers, layers_count );
 
         for( int i = 0; i < layers_count; ++i )
         {
@@ -1408,11 +1411,35 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         }
 
         if( !onActive ) // We do not want to select items that are in the background
+        {
             return false;
+        }
     }
 
     switch( aItem->Type() )
     {
+    case PCB_ZONE_AREA_T:
+        // Keepout zones can exist on multiple layers!
+        {
+            auto* zone = static_cast<const ZONE_CONTAINER*>( aItem );
+
+            if( zone && zone->GetIsKeepout() )
+            {
+                auto zoneLayers = zone->GetLayerSet().Seq();
+
+                for( unsigned int i = 0; i < zoneLayers.size(); i++ )
+                {
+                    if( board()->IsLayerVisible( zoneLayers[i] ) )
+                    {
+                        return true;
+                    }
+                }
+
+                // No active layers selected!
+                return false;
+            }
+        }
+        break;
     case PCB_VIA_T:
         {
             // For vias it is enough if only one of layers is visible

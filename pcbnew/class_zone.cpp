@@ -178,13 +178,20 @@ const wxPoint& ZONE_CONTAINER::GetPosition() const
 
 PCB_LAYER_ID ZONE_CONTAINER::GetLayer() const
 {
-    // Testing only
+    return BOARD_ITEM::GetLayer();
+}
+
+
+bool ZONE_CONTAINER::IsOnCopperLayer() const
+{
     if( GetIsKeepout() )
     {
-        std::cout << "GetLayer() called for keepout!" << std::endl;
+        return ( m_layerSet & LSET::AllCuMask() ).count() > 0;
     }
-
-    return BOARD_ITEM::GetLayer();
+    else
+    {
+        return IsCopperLayer( GetLayer() );
+    }
 }
 
 
@@ -207,8 +214,6 @@ void ZONE_CONTAINER::SetLayerSet( LSET aLayerSet )
     {
         // Keepouts can only exist on copper layers
         m_layerSet = aLayerSet & LSET::AllCuMask();
-
-        std::cout << "Setting layers of keepout: " << aLayerSet.FmtBin() << std::endl;
     }
 
     // Set the single layer to the first selected layer
@@ -225,6 +230,26 @@ LSET ZONE_CONTAINER::GetLayerSet() const
     else
     {
         return LSET( m_Layer );
+    }
+}
+
+void ZONE_CONTAINER::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    if( GetIsKeepout() )
+    {
+        LSEQ layers = m_layerSet.Seq();
+
+        for( unsigned int idx = 0; idx < layers.size(); idx++ )
+        {
+            aLayers[idx] = layers[idx];
+        }
+
+        aCount = layers.size();
+    }
+    else
+    {
+        aLayers[0] = m_Layer;
+        aCount = 1;
     }
 }
 
@@ -252,9 +277,15 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
 
     auto frame = static_cast<PCB_BASE_FRAME*> ( panel->GetParent() );
 
-    std::cout << "Drawing zone container" << std::endl;
-
     PCB_LAYER_ID draw_layer = UNDEFINED_LAYER;
+
+    LSET layers = GetLayerSet() & brd->GetVisibleLayers();
+
+    // If there are no visible layers and the zone is not highlighted, return
+    if( layers.count() == 0 && !( aDrawMode & GR_HIGHLIGHT ) )
+    {
+        return;
+    }
 
     /* Keepout zones can exist on multiple layers
      * Thus, determining which color to use to render them is a bit tricky.
@@ -279,7 +310,6 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
         // Not on any visible layer?
         if( layers.count() == 0 && !( aDrawMode & GR_HIGHLIGHT ) )
         {
-            std::cout << "No visible layers found" << std::endl;
             return;
         }
 
@@ -287,12 +317,9 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
         if( layers.test( curr_layer ) )
         {
             draw_layer = curr_layer;
-            std::cout << "Selecting color of selected layer" << std::endl;
         }
         else
         {
-            std::cout << "Selecting color of first visible layer";
-
             // Select the first (top) visible layer
             if( layers.count() > 0 )
             {
@@ -311,7 +338,6 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
     {
         if( brd->IsLayerVisible( GetLayer() ) == false && !( aDrawMode & GR_HIGHLIGHT ) )
         {
-            std::cout << "Not on visible layer" << std::endl;
             return;
         }
 
@@ -375,8 +401,6 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
 void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
                                      wxDC* DC, GR_DRAWMODE aDrawMode, const wxPoint& offset )
 {
-
-    std::cout << "DrawFilledArea" << std::endl;
 
     static std::vector <wxPoint> CornersBuffer;
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
