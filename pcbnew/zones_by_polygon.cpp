@@ -127,11 +127,20 @@ void PCB_EDIT_FRAME::duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone )
 
     // If the new zone is on the same layer as the the initial zone,
     // do nothing
-    if( success && ( aZone->GetLayer() == zoneSettings.m_CurrentZone_Layer ) )
+    if( success )
     {
-        DisplayErrorMessage( this,
-            _( "The duplicated zone cannot be on the same layer as the original zone." ) );
-        success = false;
+        if( aZone->GetIsKeepout() && ( aZone->GetLayerSet() == zoneSettings.m_Layers ) )
+        {
+            DisplayErrorMessage(
+                        this, _( "The duplicated zone cannot be on the same layers as the original zone." ) );
+            success = false;
+        }
+        else if( !aZone->GetIsKeepout() && ( aZone->GetLayer() == zoneSettings.m_CurrentZone_Layer ) )
+        {
+            DisplayErrorMessage(
+                    this, _(  "The duplicated zone cannot be on the same layer as the original zone." ) );
+            success = false;
+        }
     }
 
     if( success )

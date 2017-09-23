@@ -182,6 +182,12 @@ public:
      */
     bool IsOnCopperLayer() const;
 
+    /**
+     * Function CommonLayerExist
+     * Test if this zone shares a common layer with the given layer set
+     */
+    bool CommonLayerExists( const LSET aLayerSet ) const;
+
     virtual void SetLayer( PCB_LAYER_ID aLayer ) override;
 
     virtual PCB_LAYER_ID GetLayer() const override;

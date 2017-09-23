@@ -195,6 +195,14 @@ bool ZONE_CONTAINER::IsOnCopperLayer() const
 }
 
 
+bool ZONE_CONTAINER::CommonLayerExists( const LSET aLayerSet ) const
+{
+    auto common = GetLayerSet() & aLayerSet;
+
+    return common.size() > 0;
+}
+
+
 void ZONE_CONTAINER::SetLayer( PCB_LAYER_ID aLayer )
 {
     SetLayerSet( LSET( aLayer ) );

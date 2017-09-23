@@ -621,7 +621,9 @@ void DRC::testKeepoutAreas()
         ZONE_CONTAINER* area = m_pcb->GetArea( ii );
 
         if( !area->GetIsKeepout() )
+        {
             continue;
+        }
 
         for( TRACK* segm = m_pcb->m_Track; segm != NULL; segm = segm->Next() )
         {
@@ -630,7 +632,8 @@ void DRC::testKeepoutAreas()
                 if( ! area->GetDoNotAllowTracks()  )
                     continue;
 
-                if( segm->GetLayer() != area->GetLayer() )
+                // Ignore if the keepout zone is not on the same layer
+                if( !area->IsOnLayer( segm->GetLayer() ) )
                     continue;
 
                 if( area->Outline()->Distance( SEG( segm->GetStart(), segm->GetEnd() ),
@@ -646,7 +649,9 @@ void DRC::testKeepoutAreas()
                 if( ! area->GetDoNotAllowVias()  )
                     continue;
 
-                if( ! ((VIA*)segm)->IsOnLayer( area->GetLayer() ) )
+                auto viaLayers = segm->GetLayerSet();
+
+                if( !area->CommonLayerExists( viaLayers ) )
                     continue;
 
                 if( area->Outline()->Distance( segm->GetPosition() ) < segm->GetWidth()/2 )
@@ -801,7 +806,7 @@ bool DRC::doTrackKeepoutDrc( TRACK* aRefSeg )
             if( ! area->GetDoNotAllowTracks()  )
                 continue;
 
-            if( aRefSeg->GetLayer() != area->GetLayer() )
+            if( !area->IsOnLayer( aRefSeg->GetLayer() ) )
                 continue;
 
             if( area->Outline()->Distance( SEG( aRefSeg->GetStart(), aRefSeg->GetEnd() ),
@@ -817,7 +822,9 @@ bool DRC::doTrackKeepoutDrc( TRACK* aRefSeg )
             if( ! area->GetDoNotAllowVias()  )
                 continue;
 
-            if( ! ((VIA*)aRefSeg)->IsOnLayer( area->GetLayer() ) )
+            auto viaLayers = aRefSeg->GetLayerSet();
+
+            if( !area->CommonLayerExists( viaLayers ) )
                 continue;
 
             if( area->Outline()->Distance( aRefSeg->GetPosition() ) < aRefSeg->GetWidth()/2 )
