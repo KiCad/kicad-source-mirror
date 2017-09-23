@@ -68,7 +68,7 @@ PCB_MODULE::~PCB_MODULE()
 }
 
 
-XNODE* PCB_MODULE::FindModulePatternDefName( XNODE* aNode, wxString aName )
+XNODE* PCB_MODULE::FindModulePatternDefName( XNODE* aNode, const wxString& aName )
 {
     XNODE*      result, * lNode;
     wxString    propValue1, propValue2;
@@ -218,8 +218,8 @@ void PCB_MODULE::DoLayerContentsObjects( XNODE*                 aNode,
                                          PCB_MODULE*            aPCBModule,
                                          PCB_COMPONENTS_ARRAY*  aList,
                                          wxStatusBar*           aStatusBar,
-                                         wxString               aDefaultMeasurementUnit,
-                                         wxString               aActualConversion )
+                                         const wxString&        aDefaultMeasurementUnit,
+                                         const wxString&        aActualConversion )
 {
     PCB_ARC*            arc;
     PCB_POLYGON*        polygon;
@@ -369,7 +369,7 @@ void PCB_MODULE::DoLayerContentsObjects( XNODE*                 aNode,
 }
 
 
-void PCB_MODULE::SetName( wxString aPin, wxString aName )
+void PCB_MODULE::SetName( const wxString& aPin, const wxString& aName )
 {
     int     i;
     long    num;
@@ -388,7 +388,8 @@ void PCB_MODULE::SetName( wxString aPin, wxString aName )
 
 
 void PCB_MODULE::Parse( XNODE*   aNode, wxStatusBar* aStatusBar,
-                        wxString aDefaultMeasurementUnit, wxString aActualConversion )
+                        const wxString& aDefaultMeasurementUnit,
+                        const wxString& aActualConversion )
 {
     XNODE*      lNode, * tNode, * mNode;
     PCB_PAD*    pad;

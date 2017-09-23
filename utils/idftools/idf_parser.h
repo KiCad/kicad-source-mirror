@@ -110,7 +110,7 @@ private:
      * @return bool: true if data was successfully written, otherwise false
      */
     void writePlaceData( std::ostream& aBoardFile, double aXpos, double aYpos, double aAngle,
-                         const std::string aRefDes, IDF3::IDF_PLACEMENT aPlacement,
+                         const std::string& aRefDes, IDF3::IDF_PLACEMENT aPlacement,
                          IDF3::IDF_LAYER aSide );
 
 public:
@@ -318,7 +318,7 @@ public:
      */
     IDF_DRILL_DATA* AddDrill( double aDia, double aXpos, double aYpos,
                               IDF3::KEY_PLATING aPlating,
-                              const std::string aHoleType,
+                              const std::string& aHoleType,
                               IDF3::KEY_OWNER aOwner );
 
     /**
@@ -516,13 +516,13 @@ private:
 
     IDF_DRILL_DATA* addCompDrill( double aDia, double aXpos, double aYpos,
                                   IDF3::KEY_PLATING aPlating,
-                                  const std::string aHoleType,
+                                  const std::string& aHoleType,
                                   IDF3::KEY_OWNER aOwner,
                                   const std::string& aRefDes );
 
     IDF_DRILL_DATA* addCompDrill( IDF_DRILL_DATA* aDrilledHole );
 
-    bool delCompDrill( double aDia, double aXpos, double aYpos, std::string aRefDes );
+    bool delCompDrill( double aDia, double aXpos, double aYpos, const std::string& aRefDes );
 
     // read the DRILLED HOLES section
     void readBrdDrills( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState );
@@ -676,7 +676,7 @@ public:
 
     IDF_DRILL_DATA* AddBoardDrill( double aDia, double aXpos, double aYpos,
                                    IDF3::KEY_PLATING aPlating,
-                                   const std::string aHoleType,
+                                   const std::string& aHoleType,
                                    IDF3::KEY_OWNER aOwner );
 
     IDF_DRILL_DATA* AddDrill( IDF_DRILL_DATA* aDrilledHole );
@@ -693,15 +693,15 @@ public:
     bool DelComponent( size_t aIndex );
     size_t GetComponentsSize( void );
     std::map< std::string, IDF3_COMPONENT* >*const GetComponents( void );
-    IDF3_COMPONENT* FindComponent( std::string aRefDes );
+    IDF3_COMPONENT* FindComponent( const std::string& aRefDes );
 
     // returns a pointer to a component outline object or NULL
     // if the object doesn't exist
-    IDF3_COMP_OUTLINE* GetComponentOutline( wxString aFullFileName );
+    IDF3_COMP_OUTLINE* GetComponentOutline( const wxString& aFullFileName );
 
     // returns a pointer to the component outline object with the
     // unique ID aComponentID
-    IDF3_COMP_OUTLINE* GetComponentOutline( std::string aComponentID );
+    IDF3_COMP_OUTLINE* GetComponentOutline( const std::string& aComponentID );
 
     // returns a pointer to the outline "NOGEOM NOPART" which is substituted
     // whenever a true outline cannot be found or is defective

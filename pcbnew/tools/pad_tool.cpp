@@ -37,6 +37,8 @@
 
 #include <dialogs/dialog_global_pads_edition.h>
 
+#include <utility>
+
 #include "pcb_actions.h"
 #include "selection_tool.h"
 #include "pcb_selection_conditions.h"
@@ -71,7 +73,7 @@ public:
     PAD_CONTEXT_MENU( bool aEditingFootprint,
                       SHOW_FUNCTOR aHaveGlobalPadSetting ):
         m_editingFootprint( aEditingFootprint ),
-        m_haveGlobalPadSettings( aHaveGlobalPadSetting )
+        m_haveGlobalPadSettings( std::move( aHaveGlobalPadSetting ) )
     {
         SetIcon( pad_xpm );
         SetTitle( _( "Pads" ) );

@@ -41,7 +41,7 @@ public:
     DXF2IDF() : m_scale( 1.0 ) {};
     ~DXF2IDF();
 
-    bool ReadDxf( const std::string aFile );
+    bool ReadDxf( const std::string& aFile );
     bool WriteOutline( FILE* aFile, bool isInch );
 
 private:

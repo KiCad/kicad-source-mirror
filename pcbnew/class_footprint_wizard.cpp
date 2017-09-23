@@ -50,7 +50,7 @@ FOOTPRINT_WIZARD* FOOTPRINT_WIZARDS::GetWizard( int aIndex )
 }
 
 
-FOOTPRINT_WIZARD* FOOTPRINT_WIZARDS::GetWizard( wxString aName )
+FOOTPRINT_WIZARD* FOOTPRINT_WIZARDS::GetWizard( const wxString& aName )
 {
     int max = GetWizardsCount();
 

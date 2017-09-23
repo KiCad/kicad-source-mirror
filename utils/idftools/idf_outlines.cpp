@@ -25,6 +25,7 @@
 #include <iomanip>
 #include <sstream>
 #include <cmath>
+#include <utility>
 
 #include <idf_helpers.h>
 #include <idf_outlines.h>
@@ -1556,7 +1557,7 @@ OTHER_OUTLINE::OTHER_OUTLINE( IDF3_BOARD* aParent )
     return;
 }
 
-bool OTHER_OUTLINE::SetOutlineIdentifier( const std::string aUniqueID )
+bool OTHER_OUTLINE::SetOutlineIdentifier( const std::string& aUniqueID )
 {
 #ifndef DISABLE_IDF_OWNERSHIP
     if( !CheckOwnership( __LINE__, __FUNCTION__, parent, owner, outlineType, errormsg ) )
@@ -2730,7 +2731,7 @@ bool GROUP_OUTLINE::SetGroupName( std::string aGroupName )
         return false;
 #endif
 
-    groupName = aGroupName;
+    groupName = std::move(aGroupName);
 
     return true;
 }

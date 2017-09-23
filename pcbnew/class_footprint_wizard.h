@@ -204,7 +204,7 @@ public:
      * @param aName is the footprint wizard name
      * @return a wizard object by it's name or NULL if it isn't available.
      */
-    static FOOTPRINT_WIZARD*    GetWizard( wxString aName );
+    static FOOTPRINT_WIZARD*    GetWizard( const wxString& aName );
 
     /**
      * Function GetWizard

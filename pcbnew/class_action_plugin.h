@@ -127,7 +127,7 @@ public:
      * @param aName is the action plugin name
      * @return a action object by it's name or NULL if it isn't available.
      */
-    static ACTION_PLUGIN* GetAction( wxString aName );
+    static ACTION_PLUGIN* GetAction( const wxString& aName );
 
     /**
      * Function SetActionMenu

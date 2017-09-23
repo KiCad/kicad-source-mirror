@@ -436,7 +436,7 @@ SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet )
 }
 
 
-SCH_SHEET_PATH* SCH_SHEET_LIST::GetSheetByPath( const wxString aPath, bool aHumanReadable )
+SCH_SHEET_PATH* SCH_SHEET_LIST::GetSheetByPath( const wxString& aPath, bool aHumanReadable )
 {
     wxString sheetPath;
 

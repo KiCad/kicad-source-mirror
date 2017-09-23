@@ -32,6 +32,7 @@
 #include <ki_mutex.h>
 
 #include <boost/bind.hpp>
+#include <utility>
 #include <make_unique.h>
 #include <class_colors_design_settings.h>
 
@@ -103,7 +104,7 @@ class FP_THREAD_IFACE
         void SetCurrentFootprint( LIB_ID aFp )
         {
             MUTLOCK lock( m_lock );
-            m_current_fp = aFp;
+            m_current_fp = std::move( aFp );
         }
 
         /**

@@ -525,7 +525,7 @@ public:
     /** @param name  Label
      *  @param flags Label alignment, pass one of #mpALIGN_RIGHT, #mpALIGN_CENTER, #mpALIGN_LEFT.
      */
-    mpFX( wxString name = wxEmptyString, int flags = mpALIGN_RIGHT );
+    mpFX( const wxString& name = wxEmptyString, int flags = mpALIGN_RIGHT );
 
     /** Get function value for argument.
      *  Override this function in your implementation.
@@ -557,7 +557,7 @@ public:
     /** @param name  Label
      *  @param flags Label alignment, pass one of #mpALIGN_BOTTOM, #mpALIGN_CENTER, #mpALIGN_TOP.
      */
-    mpFY( wxString name = wxEmptyString, int flags = mpALIGN_TOP );
+    mpFY( const wxString& name = wxEmptyString, int flags = mpALIGN_TOP );
 
     /** Get function value for argument.
      *  Override this function in your implementation.
@@ -591,7 +591,7 @@ public:
     /** @param name  Label
      *  @param flags Label alignment, pass one of #mpALIGN_NE, #mpALIGN_NW, #mpALIGN_SW, #mpALIGN_SE.
      */
-    mpFXY( wxString name = wxEmptyString, int flags = mpALIGN_NE );
+    mpFXY( const wxString& name = wxEmptyString, int flags = mpALIGN_NE );
 
     /** Rewind value enumeration with mpFXY::GetNextXY.
      *  Override this function in your implementation.
@@ -650,7 +650,7 @@ public:
     /** @param name  Label
      *  @param flags Label alignment, pass one of #mpALIGN_BOTTOM, #mpALIGN_CENTER, #mpALIGN_TOP.
      */
-    mpProfile( wxString name = wxEmptyString, int flags = mpALIGN_TOP );
+    mpProfile( const wxString& name = wxEmptyString, int flags = mpALIGN_TOP );
 
     /** Get function value for argument.
      *  Override this function in your implementation.
@@ -845,7 +845,7 @@ public:
      *  @param ticks Select ticks or grid. Give TRUE (default) for drawing axis ticks, FALSE for drawing the grid.
      *  @param type mpX_NORMAL for normal labels, mpX_TIME for time axis in hours, minutes, seconds.
      */
-    mpScaleXBase( wxString name = wxT("X"), int flags = mpALIGN_CENTER,
+    mpScaleXBase( const wxString& name = wxT("X"), int flags = mpALIGN_CENTER,
                   bool ticks = true, unsigned int type = mpX_NORMAL );
     virtual ~mpScaleXBase() {};
 
@@ -871,7 +871,7 @@ public:
      *  @param flags Set the position of the scale with respect to the window.
      *  @param ticks Select ticks or grid. Give TRUE (default) for drawing axis ticks, FALSE for drawing the grid.
      *  @param type mpX_NORMAL for normal labels, mpX_TIME for time axis in hours, minutes, seconds. */
-    mpScaleX( wxString name = wxT("X"), int flags = mpALIGN_CENTER,
+    mpScaleX( const wxString& name = wxT("X"), int flags = mpALIGN_CENTER,
               bool ticks = true, unsigned int type = mpX_NORMAL );
 
     /** Layer plot handler.
@@ -900,7 +900,7 @@ public:
      *  @param ticks Select ticks or grid. Give TRUE (default) for drawing axis ticks, FALSE for drawing the grid.
      *  @param type mpX_NORMAL for normal labels, mpX_TIME for time axis in hours, minutes, seconds.
      */
-    mpScaleXLog( wxString name = wxT("log(X)"), int flags = mpALIGN_CENTER,
+    mpScaleXLog( const wxString& name = wxT("log(X)"), int flags = mpALIGN_CENTER,
                  bool ticks = true, unsigned int type = mpX_NORMAL );
 
     virtual double  TransformToPlot( double x ) override;
@@ -942,7 +942,7 @@ public:
      *  @param flags Set position of the scale respect to the window.
      *  @param ticks Select ticks or grid. Give TRUE (default) for drawing axis ticks, FALSE for drawing the grid
      */
-    mpScaleY( wxString name = wxT("Y"), int flags = mpALIGN_CENTER, bool ticks = true );
+    mpScaleY( const wxString& name = wxT("Y"), int flags = mpALIGN_CENTER, bool ticks = true );
 
     virtual bool IsHorizontal() override { return false; }
 
@@ -1544,7 +1544,7 @@ public:
     /** @param name  Label
      *  @param flags Label alignment, pass one of #mpALIGN_NE, #mpALIGN_NW, #mpALIGN_SW, #mpALIGN_SE.
      */
-    mpFXYVector( wxString name = wxEmptyString, int flags = mpALIGN_NE );
+    mpFXYVector( const wxString& name = wxEmptyString, int flags = mpALIGN_NE );
 
     virtual ~mpFXYVector() {}
 
@@ -1644,7 +1644,7 @@ public:
     /** @param name text to be drawn in the plot
      *  @param offsetx holds offset for the X location in percentage (0-100)
      *  @param offsety holds offset for the Y location in percentage (0-100) */
-    mpText( wxString name = wxT("Title"), int offsetx = 5, int offsety = 50 );
+    mpText( const wxString& name = wxT("Title"), int offsetx = 5, int offsety = 50 );
 
     /** Text Layer plot handler.
      *  This implementation will plot text adjusted to the visible area. */

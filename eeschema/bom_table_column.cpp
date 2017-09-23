@@ -82,7 +82,7 @@ BOM_COLUMN* BOM_COLUMN_LIST::GetColumnById( unsigned int aColId )
 /**
  * Return a column based on its string title
  */
-BOM_COLUMN* BOM_COLUMN_LIST::GetColumnByTitle( wxString aColTitle )
+BOM_COLUMN* BOM_COLUMN_LIST::GetColumnByTitle( const wxString& aColTitle )
 {
     for( unsigned int ii=0; ii<Columns.size(); ii++ )
     {
@@ -110,7 +110,7 @@ bool BOM_COLUMN_LIST::ContainsColumn( unsigned int aColId )
 /**
  * Test if the list includes a column with the given title
  */
-bool BOM_COLUMN_LIST::ContainsColumn( wxString aColTitle )
+bool BOM_COLUMN_LIST::ContainsColumn( const wxString& aColTitle )
 {
     return nullptr != GetColumnByTitle( aColTitle );
 }

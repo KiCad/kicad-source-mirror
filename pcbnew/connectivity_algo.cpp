@@ -34,7 +34,7 @@
 
 using namespace std::placeholders;
 
-bool operator<( const CN_ANCHOR_PTR a, const CN_ANCHOR_PTR b )
+bool operator<( const CN_ANCHOR_PTR& a, const CN_ANCHOR_PTR& b )
 {
     if( a->Pos().x == b->Pos().x )
         return a->Pos().y < b->Pos().y;
@@ -1033,35 +1033,35 @@ void CN_CONNECTIVITY_ALGO::Clear()
 }
 
 
-void CN_CONNECTIVITY_ALGO::ForEachItem( std::function<void(CN_ITEM*)> aFunc )
+void CN_CONNECTIVITY_ALGO::ForEachItem( const std::function<void( CN_ITEM& )>& aFunc )
 {
     for( auto item : m_padList )
-        aFunc( item );
+        aFunc( *item );
 
     for( auto item : m_viaList )
-        aFunc( item );
+        aFunc( *item );
 
     for( auto item : m_trackList )
-        aFunc( item );
+        aFunc( *item );
 
     for( auto item : m_zoneList )
-        aFunc( item );
+        aFunc( *item );
 }
 
 
-void CN_CONNECTIVITY_ALGO::ForEachAnchor( std::function<void(CN_ANCHOR_PTR)> aFunc )
+void CN_CONNECTIVITY_ALGO::ForEachAnchor( const std::function<void( CN_ANCHOR& )>& aFunc )
 {
     for( auto anchor : m_padList.Anchors() )
-        aFunc( anchor );
+        aFunc( *anchor );
 
     for( auto anchor : m_viaList.Anchors() )
-        aFunc( anchor );
+        aFunc( *anchor );
 
     for( auto anchor : m_trackList.Anchors() )
-        aFunc( anchor );
+        aFunc( *anchor );
 
     for( auto anchor : m_zoneList.Anchors() )
-        aFunc( anchor );
+        aFunc( *anchor );
 }
 
 

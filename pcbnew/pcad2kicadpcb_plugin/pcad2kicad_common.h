@@ -69,43 +69,42 @@ typedef struct _TTEXTVALUE
 
 extern wxString     GetWord( wxString* aStr );
 extern XNODE*       FindPinMap( XNODE* aNode );
-extern int          StrToIntUnits( wxString aStr, char aAxe, wxString aActualConversion );
-extern wxString     GetAndCutWordWithMeasureUnits( wxString*    aStr,
-                                                   wxString     aDefaultMeasurementUnit );
-extern int          StrToInt1Units( wxString aStr );
+extern int          StrToIntUnits( const wxString& aStr, char aAxe, const wxString& aActualConversion );
+extern wxString     GetAndCutWordWithMeasureUnits( wxString*       aStr,
+                                                   const wxString& aDefaultMeasurementUnit );
+extern int          StrToInt1Units( const wxString& aStr );
 extern wxString     ValidateName( wxString aName );
 extern wxString     ValidateReference( wxString aRef );
-extern void         SetWidth( wxString  aStr,
-                              wxString  aDefaultMeasurementUnit,
-                              int*      aWidth,
-                              wxString  aActualConversion );
-extern void         SetPosition( wxString   aStr,
-                                 wxString   aDefaultMeasurementUnit,
-                                 int*       aX,
-                                 int*       aY,
-                                 wxString   aActualConversion );
-extern void         SetDoublePrecisionPosition( wxString    aStr,
-                                                wxString    aDefaultMeasurementUnit,
-                                                double*     aX,
-                                                double*     aY,
-                                                wxString    aActualConversion );
-extern TTEXT_JUSTIFY GetJustifyIdentificator( wxString aJustify );
-extern void         SetTextParameters( XNODE*       aNode,
-                                       TTEXTVALUE*  aTextValue,
-                                       wxString     aDefaultMeasurementUnit,
-                                       wxString     aActualConversion );
-extern void         SetFontProperty( XNODE*         aNode,
-                                     TTEXTVALUE*    aTextValue,
-                                     wxString       aDefaultMeasurementUnit,
-                                     wxString       aActualConversion );
+extern void         SetWidth( wxString        aStr,
+                              const wxString& aDefaultMeasurementUnit,
+                              int*            aWidth,
+                              const wxString& aActualConversion );
+extern void         SetPosition( wxString        aStr,
+                                 const wxString& aDefaultMeasurementUnit,
+                                 int*            aX,
+                                 int*            aY,
+                                 const wxString& aActualConversion );
+extern void         SetDoublePrecisionPosition( wxString        aStr,
+                                                const wxString& aDefaultMeasurementUnit,
+                                                double*         aX,
+                                                double*         aY,
+                                                const wxString& aActualConversion );
+extern TTEXT_JUSTIFY GetJustifyIdentificator( const wxString& aJustify );
+extern void         SetTextParameters( XNODE*          aNode,
+                                       TTEXTVALUE*     aTextValue,
+                                       const wxString& aDefaultMeasurementUnit,
+                                       const wxString& aActualConversion );
+extern void         SetFontProperty( XNODE*          aNode,
+                                     TTEXTVALUE*     aTextValue,
+                                     const wxString& aDefaultMeasurementUnit,
+                                     const wxString& aActualConversion );
 extern void         SetTextJustify( EDA_TEXT* aText, TTEXT_JUSTIFY aJustify );
 extern int          CalculateTextLengthSize( TTEXTVALUE* aText );
 extern void         CorrectTextPosition( TTEXTVALUE* aValue );
-extern void         SetTextSizeFromStrokeFontHeight( EDA_TEXT* aText,
-                                                     int aTextHeight );
+extern void         SetTextSizeFromStrokeFontHeight( EDA_TEXT* aText, int aTextHeight );
 extern void         SetTextSizeFromTrueTypeFontHeight( EDA_TEXT* aText, int aTextHeight );
-extern XNODE*       FindNode( XNODE* aChild, wxString aTag );
-extern wxString     FindNodeGetContent( XNODE* aChild, wxString aTag );
+extern XNODE*       FindNode( XNODE* aChild, const wxString& aTag );
+extern wxString     FindNodeGetContent( XNODE* aChild, const wxString& aTag );
 extern void         InitTTextValue( TTEXTVALUE* aTextValue );
 
 } // namespace PCAD2KICAD

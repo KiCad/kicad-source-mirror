@@ -49,7 +49,7 @@ DXF2IDF::~DXF2IDF()
 }
 
 
-bool DXF2IDF::ReadDxf( const std::string aFile )
+bool DXF2IDF::ReadDxf( const std::string& aFile )
 {
     dxfRW* reader = new dxfRW( aFile.c_str() );
 

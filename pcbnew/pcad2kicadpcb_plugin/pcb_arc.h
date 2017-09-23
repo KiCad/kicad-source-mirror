@@ -47,8 +47,10 @@ public:
     PCB_ARC( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_ARC();
 
-    virtual void    Parse( XNODE* aNode, int aLayer,
-                           wxString aDefaultMeasurementUnit, wxString aActualConversion );
+    virtual void    Parse( XNODE* aNode,
+                           int aLayer,
+                           const wxString& aDefaultMeasurementUnit,
+                           const wxString& aActualConversion );
 
     virtual void    SetPosOffset( int aX_offs, int aY_offs ) override;
     virtual void    Flip() override;

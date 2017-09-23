@@ -47,6 +47,7 @@
 #include <macros.h>
 #include <pgm_base.h>
 #include <thread>
+#include <utility>
 #include <wildcards_and_files_ext.h>
 
 
@@ -205,7 +206,7 @@ int FOOTPRINT_ASYNC_LOADER::GetProgress() const
 
 void FOOTPRINT_ASYNC_LOADER::SetCompletionCallback( std::function<void()> aCallback )
 {
-    m_completion_cb = aCallback;
+    m_completion_cb = std::move(aCallback);
 }
 
 

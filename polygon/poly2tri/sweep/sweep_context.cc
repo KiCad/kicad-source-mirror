@@ -30,6 +30,7 @@
  */
 #include "sweep_context.h"
 #include <algorithm>
+#include <utility>
 #include "advancing_front.h"
 
 namespace p2t {
@@ -45,7 +46,7 @@ SweepContext::SweepContext(std::vector<Point*> polyline) :
   basin = Basin();
   edge_event = EdgeEvent();
 
-  points_ = polyline;
+  points_ = std::move( polyline );
 
   InitEdges(points_);
 }

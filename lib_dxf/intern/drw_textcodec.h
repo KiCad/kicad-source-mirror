@@ -43,7 +43,7 @@ public:
     virtual ~DRW_Converter() {}
     virtual std::string fromUtf8( std::string* s ) { return *s; }
     virtual std::string toUtf8( std::string* s );
-    std::string         encodeText( std::string stmp );
+    std::string         encodeText( const std::string& stmp );
     std::string         decodeText( int c );
     std::string         encodeNum( int c );
     int                 decodeNum( std::string s, int* b );

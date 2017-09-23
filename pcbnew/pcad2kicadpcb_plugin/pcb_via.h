@@ -44,9 +44,9 @@ public:
     PCB_VIA( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_VIA();
 
-    virtual void Parse( XNODE*      aNode,
-                        wxString    aDefaultMeasurementUnit,
-                        wxString    aActualConversion ) override;
+    virtual void Parse( XNODE*          aNode,
+                        const wxString& aDefaultMeasurementUnit,
+                        const wxString& aActualConversion ) override;
 };
 
 } // namespace PCAD2KICAD

@@ -52,7 +52,7 @@ class wxConfigBase;
 class DIALOG_ANNOTATE: public DIALOG_ANNOTATE_BASE
 {
 public:
-    DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, wxString message );
+    DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, const wxString& message );
 
 
 private:
@@ -98,7 +98,7 @@ private:
 };
 
 
-DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, wxString message )
+DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, const wxString& message )
     : DIALOG_ANNOTATE_BASE( parent )
 {
     m_Parent = parent;
@@ -311,7 +311,7 @@ int DIALOG_ANNOTATE::GetAnnotateAlgo()
 }
 
 
-int InvokeDialogAnnotate( SCH_EDIT_FRAME* aCaller, wxString message )
+int InvokeDialogAnnotate( SCH_EDIT_FRAME* aCaller, const wxString& message )
 {
     DIALOG_ANNOTATE dlg( aCaller, message );
 

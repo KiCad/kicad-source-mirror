@@ -28,6 +28,7 @@
 #include <cmath>
 #include <cerrno>
 #include <algorithm>
+#include <utility>
 #include <wx/string.h>
 #include <wx/filename.h>
 
@@ -717,7 +718,7 @@ bool IDF3_COMP_OUTLINE_DATA::readPlaceData( std::istream &aBoardFile,
 
 void IDF3_COMP_OUTLINE_DATA::writePlaceData( std::ostream& aBoardFile,
                                              double aXpos, double aYpos, double aAngle,
-                                             const std::string aRefDes,
+                                             const std::string& aRefDes,
                                              IDF3::IDF_PLACEMENT aPlacement,
                                              IDF3::IDF_LAYER aSide )
 {
@@ -988,7 +989,7 @@ const std::string& IDF3_COMPONENT::GetRefDes( void )
 
 IDF_DRILL_DATA* IDF3_COMPONENT::AddDrill( double aDia, double aXpos, double aYpos,
                                           IDF3::KEY_PLATING aPlating,
-                                          const std::string aHoleType,
+                                          const std::string& aHoleType,
                                           IDF3::KEY_OWNER aOwner )
 {
     IDF_DRILL_DATA* dp = new IDF_DRILL_DATA( aDia, aXpos, aYpos, aPlating,
@@ -1422,7 +1423,7 @@ IDF3::CAD_TYPE IDF3_BOARD::GetCadType( void )
 
 void IDF3_BOARD::SetBoardName( std::string aBoardName )
 {
-    boardName = aBoardName;
+    boardName = std::move(aBoardName);
     return;
 }
 
@@ -3405,7 +3406,7 @@ const std::list< IDF_OUTLINE* >*const IDF3_BOARD::GetBoardOutlines( void )
 
 IDF_DRILL_DATA* IDF3_BOARD::AddBoardDrill( double aDia, double aXpos, double aYpos,
                                    IDF3::KEY_PLATING aPlating,
-                                   const std::string aHoleType,
+                                   const std::string& aHoleType,
                                    IDF3::KEY_OWNER aOwner )
 {
     IDF_DRILL_DATA* drill = new IDF_DRILL_DATA( aDia, aXpos, aYpos, aPlating,
@@ -3599,7 +3600,7 @@ bool IDF3_BOARD::AddSlot( double aWidth, double aLength, double aOrientation, do
 
 IDF_DRILL_DATA* IDF3_BOARD::addCompDrill( double aDia, double aXpos, double aYpos,
                                   IDF3::KEY_PLATING aPlating,
-                                  const std::string aHoleType,
+                                  const std::string& aHoleType,
                                   IDF3::KEY_OWNER aOwner,
                                   const std::string& aRefDes )
 {
@@ -3723,7 +3724,7 @@ IDF_DRILL_DATA* IDF3_BOARD::addCompDrill( IDF_DRILL_DATA* aDrilledHole )
 }
 
 
-bool IDF3_BOARD::delCompDrill( double aDia, double aXpos, double aYpos, std::string aRefDes )
+bool IDF3_BOARD::delCompDrill( double aDia, double aXpos, double aYpos, const std::string& aRefDes )
 {
     errormsg.clear();
 
@@ -3831,7 +3832,7 @@ std::map< std::string, IDF3_COMPONENT* >*const IDF3_BOARD::GetComponents( void )
 }
 
 
-IDF3_COMPONENT* IDF3_BOARD::FindComponent( std::string aRefDes )
+IDF3_COMPONENT* IDF3_BOARD::FindComponent( const std::string& aRefDes )
 {
     std::map<std::string, IDF3_COMPONENT*>::iterator it = components.find( aRefDes );
 
@@ -3844,7 +3845,7 @@ IDF3_COMPONENT* IDF3_BOARD::FindComponent( std::string aRefDes )
 
 // returns a pointer to a component outline object or NULL
 // if the object doesn't exist
-IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( wxString aFullFileName )
+IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( const wxString& aFullFileName )
 {
     std::string fname = TO_UTF8( aFullFileName );
     wxFileName idflib( aFullFileName );
@@ -4054,7 +4055,7 @@ IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( wxString aFullFileName )
 
 // returns a pointer to the component outline object with the
 // unique ID aComponentID
-IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( std::string aComponentID )
+IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( const std::string& aComponentID )
 {
     std::map< std::string, IDF3_COMP_OUTLINE*>::iterator its = compOutlines.find( aComponentID );
 

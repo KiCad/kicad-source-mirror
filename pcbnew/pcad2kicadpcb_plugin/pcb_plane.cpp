@@ -49,9 +49,9 @@ PCB_PLANE::~PCB_PLANE()
 }
 
 
-bool PCB_PLANE::Parse( XNODE*         aNode,
-                       wxString       aDefaultMeasurementUnit,
-                       wxString       aActualConversion )
+bool PCB_PLANE::Parse( XNODE*          aNode,
+                       const wxString& aDefaultMeasurementUnit,
+                       const wxString& aActualConversion )
 {
     XNODE*          lNode;
     wxString        pourType, str, propValue;

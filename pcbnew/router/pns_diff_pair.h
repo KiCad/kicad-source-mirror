@@ -219,7 +219,7 @@ class DP_GATEWAYS
         void BuildForCursor( const VECTOR2I& aCursorPos );
         void BuildOrthoProjections( DP_GATEWAYS &aEntries, const VECTOR2I& aCursorPos, int aOrthoScore );
         void BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, bool aBuildEntries = false, bool aViaMode = false );
-        void BuildFromPrimitivePair( DP_PRIMITIVE_PAIR aPair, bool aPreferDiagonal );
+        void BuildFromPrimitivePair( const DP_PRIMITIVE_PAIR& aPair, bool aPreferDiagonal );
 
         bool FitGateways( DP_GATEWAYS& aEntry, DP_GATEWAYS& aTarget, bool aPrefDiagonal, DIFF_PAIR& aDp );
 
@@ -244,7 +244,7 @@ class DP_GATEWAYS
         };
 
         bool checkDiagonalAlignment( const VECTOR2I& a, const VECTOR2I& b ) const;
-        void buildDpContinuation( DP_PRIMITIVE_PAIR aPair, bool aIsDiagonal );
+        void buildDpContinuation( const DP_PRIMITIVE_PAIR& aPair, bool aIsDiagonal );
         void buildEntries( const VECTOR2I& p0_p, const VECTOR2I& p0_n );
 
         int m_gap;

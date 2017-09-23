@@ -133,7 +133,7 @@ int PCB::GetNetCode( wxString aNetName )
     return 0;
 }
 
-XNODE* PCB::FindCompDefName( XNODE* aNode, wxString aName )
+XNODE* PCB::FindCompDefName( XNODE* aNode, const wxString& aName )
 {
     XNODE*      result = NULL, * lNode;
     wxString    propValue;
@@ -162,8 +162,9 @@ XNODE* PCB::FindCompDefName( XNODE* aNode, wxString aName )
 
 
 void PCB::SetTextProperty( XNODE*   aNode, TTEXTVALUE* aTextValue,
-                           wxString aPatGraphRefName, wxString aXmlName,
-                           wxString aActualConversion )
+                           const wxString& aPatGraphRefName,
+                           const wxString& aXmlName,
+                           const wxString& aActualConversion )
 {
     XNODE*      tNode, * t1Node;
     wxString    n, nnew, pn, propValue, str;
@@ -233,7 +234,7 @@ void PCB::SetTextProperty( XNODE*   aNode, TTEXTVALUE* aTextValue,
 
 void PCB::DoPCBComponents( XNODE*           aNode,
                            wxXmlDocument*   aXmlDoc,
-                           wxString         aActualConversion,
+                           const wxString&  aActualConversion,
                            wxStatusBar*     aStatusBar )
 {
     XNODE*        lNode, * tNode, * mNode;
@@ -420,7 +421,9 @@ void PCB::DoPCBComponents( XNODE*           aNode,
 }
 
 
-void PCB::ConnectPinToNet( wxString aCompRef, wxString aPinRef, wxString aNetName )
+void PCB::ConnectPinToNet( const wxString& aCompRef,
+                           const wxString& aPinRef,
+                           const wxString& aNetName )
 {
     PCB_MODULE* module;
     PCB_PAD*    cp;
@@ -447,7 +450,7 @@ void PCB::ConnectPinToNet( wxString aCompRef, wxString aPinRef, wxString aNetNam
 }
 
 
-int PCB::FindLayer( wxString aLayerName )
+int PCB::FindLayer( const wxString& aLayerName )
 {
     for( LAYER_NUM i = 0; i < (int)m_layersStackup.GetCount(); ++i )
     {
@@ -575,7 +578,7 @@ double PCB::GetDistance( wxRealPoint* aPoint1, wxRealPoint* aPoint2 )
                   ( aPoint1->y - aPoint2->y ) );
 }
 
-void PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, wxString aActualConversion )
+void PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConversion )
 {
     XNODE*       iNode, *lNode, *pNode;
     long         PCadLayer = 0;
@@ -666,7 +669,7 @@ void PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, wxString aActualConversion )
     }
 }
 
-void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc, wxString aActualConversion )
+void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc, const wxString& aActualConversion )
 {
     XNODE*          aNode;//, *aaNode;
     PCB_NET*        net;

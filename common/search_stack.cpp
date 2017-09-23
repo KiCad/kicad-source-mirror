@@ -34,7 +34,7 @@
 #endif
 
 
-int SEARCH_STACK::Split( wxArrayString* aResult, const wxString aPathString )
+int SEARCH_STACK::Split( wxArrayString* aResult, const wxString& aPathString )
 {
     wxStringTokenizer   tokenizer( aPathString, PATH_SEPS, wxTOKEN_STRTOK );
 

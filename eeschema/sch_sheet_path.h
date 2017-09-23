@@ -349,7 +349,7 @@ public:
      * @return The sheet that matches \a aPath or NULL if no sheet matching
      *         \a aPath is found.
      */
-    SCH_SHEET_PATH* GetSheetByPath( const wxString aPath, bool aHumanReadable = true );
+    SCH_SHEET_PATH* GetSheetByPath( const wxString& aPath, bool aHumanReadable = true );
 
     /**
      * Function IsModified

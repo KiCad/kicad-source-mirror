@@ -382,7 +382,7 @@ public:
      * sets the Outline Identifier string of this OTHER_OUTLINE object
      * as per IDFv3 spec.
      */
-    virtual bool SetOutlineIdentifier( const std::string aUniqueID );
+    virtual bool SetOutlineIdentifier( const std::string& aUniqueID );
 
     /**
      * Function GetOutlineIdentifier

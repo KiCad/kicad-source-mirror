@@ -43,8 +43,8 @@ public:
     ~PCB_PLANE();
 
     virtual bool Parse( XNODE*          aNode,
-                        wxString        aDefaultMeasurementUnit,
-                        wxString        aActualConversion ) override;
+                        const wxString& aDefaultMeasurementUnit,
+                        const wxString& aActualConversion ) override;
 };
 
 } // namespace PCAD2KICAD

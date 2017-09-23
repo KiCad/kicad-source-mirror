@@ -59,14 +59,14 @@ public:
     bool            writeLWPolyline( DRW_LWPolyline* ent );
     bool            writePolyline( DRW_Polyline* ent );
     bool            writeSpline( DRW_Spline* ent );
-    bool            writeBlockRecord( std::string name );
+    bool            writeBlockRecord( const std::string& name );
     bool            writeBlock( DRW_Block* ent );
     bool            writeInsert( DRW_Insert* ent );
     bool            writeMText( DRW_MText* ent );
     bool            writeText( DRW_Text* ent );
     bool            writeHatch( DRW_Hatch* ent );
     bool            writeViewport( DRW_Viewport* ent );
-    DRW_ImageDef*   writeImage( DRW_Image* ent, std::string name );
+    DRW_ImageDef*   writeImage( DRW_Image* ent, const std::string& name );
     bool            writeLeader( DRW_Leader* ent );
     bool            writeDimension( DRW_Dimension* ent );
 

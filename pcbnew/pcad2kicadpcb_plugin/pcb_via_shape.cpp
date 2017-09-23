@@ -47,9 +47,9 @@ PCB_VIA_SHAPE::~PCB_VIA_SHAPE()
 }
 
 
-void PCB_VIA_SHAPE::Parse( XNODE*       aNode,
-                           wxString     aDefaultMeasurementUnit,
-                           wxString     aActualConversion )
+void PCB_VIA_SHAPE::Parse( XNODE*          aNode,
+                           const wxString& aDefaultMeasurementUnit,
+                           const wxString& aActualConversion )
 {
     XNODE*      lNode;
     wxString    str;

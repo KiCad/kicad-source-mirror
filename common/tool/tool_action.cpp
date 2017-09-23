@@ -28,7 +28,7 @@
 #include <algorithm>
 
 TOOL_ACTION::TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope,
-        int aDefaultHotKey, const wxString aMenuItem, const wxString& aMenuDesc,
+        int aDefaultHotKey, const wxString& aMenuItem, const wxString& aMenuDesc,
         const BITMAP_OPAQUE* aIcon, TOOL_ACTION_FLAGS aFlags, void* aParam ) :
     m_name( aName ), m_scope( aScope ), m_defaultHotKey( aDefaultHotKey ),
     m_menuItem( aMenuItem ), m_menuDescription( aMenuDesc ),

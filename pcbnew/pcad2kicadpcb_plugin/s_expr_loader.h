@@ -29,9 +29,12 @@
 #ifndef S_EXPR_LOADER_H_
 #define S_EXPR_LOADER_H_
 
+#include <wx/wx.h>
+#include <wx/xml/xml.h>
+
 namespace PCAD2KICAD
 {
-    void LoadInputFile( wxString aFileName, wxXmlDocument* aXmlDoc );
+    void LoadInputFile( const wxString& aFileName, wxXmlDocument* aXmlDoc );
 }
 
 #endif    // S_EXPR_LOADER_H_

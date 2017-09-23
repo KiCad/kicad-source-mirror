@@ -122,7 +122,7 @@ void CONNECTIVITY_DATA::updateRatsnest()
 }
 
 
-void CONNECTIVITY_DATA::addRatsnestCluster( std::shared_ptr<CN_CLUSTER> aCluster )
+void CONNECTIVITY_DATA::addRatsnestCluster( const std::shared_ptr<CN_CLUSTER>& aCluster )
 {
     auto rnNet = m_nets[ aCluster->OriginNet() ];
 
@@ -281,7 +281,7 @@ void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& 
 
 void CONNECTIVITY_DATA::ClearDynamicRatsnest()
 {
-    m_connAlgo->ForEachAnchor( [] (CN_ANCHOR_PTR anchor ) { anchor->SetNoLine( false ); } );
+    m_connAlgo->ForEachAnchor( [] ( CN_ANCHOR& anchor ) { anchor.SetNoLine( false ); } );
     HideDynamicRatsnest();
 }
 
@@ -359,11 +359,11 @@ const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetNetItems( int aNe
     std::set<BOARD_CONNECTED_ITEM*> items;
     std::vector<BOARD_CONNECTED_ITEM*> rv;
 
-    m_connAlgo->ForEachItem( [&items, aNetCode, &aTypes] ( CN_ITEM* aItem )
+    m_connAlgo->ForEachItem( [&items, aNetCode, &aTypes] ( CN_ITEM& aItem )
     {
-        if( aItem->Valid() && aItem->Net() == aNetCode )
+        if( aItem.Valid() && ( aItem.Net() == aNetCode ) )
         {
-            KICAD_T itemType = aItem->Parent()->Type();
+            KICAD_T itemType = aItem.Parent()->Type();
 
             for( int i = 0; aTypes[i] > 0; ++i )
             {
@@ -371,7 +371,7 @@ const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetNetItems( int aNe
 
                 if( itemType == aTypes[i] )
                 {
-                    items.insert( aItem->Parent() );
+                    items.insert( aItem.Parent() );
                     break;
                 }
             }

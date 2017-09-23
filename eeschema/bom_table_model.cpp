@@ -56,7 +56,7 @@ static BOM_TABLE_ROW const* ItemToRow( wxDataViewItem aItem )
 }
 
 
-BOM_FIELD_VALUES::BOM_FIELD_VALUES( wxString aRefDes, FIELD_VALUE_MAP* aTemplate ) :
+BOM_FIELD_VALUES::BOM_FIELD_VALUES( const wxString& aRefDes, FIELD_VALUE_MAP* aTemplate ) :
         m_refDes( aRefDes ),
         m_templateValues( aTemplate )
 {
@@ -542,7 +542,7 @@ BOM_TABLE_COMPONENT::BOM_TABLE_COMPONENT( BOM_TABLE_GROUP* aParent,
  * Try to add a unit to this component
  * If the references match, it will be added
  */
-bool BOM_TABLE_COMPONENT::AddUnit( SCH_REFERENCE aUnit )
+bool BOM_TABLE_COMPONENT::AddUnit( const SCH_REFERENCE& aUnit )
 {
     // Addition is successful if the references match or there are currently no units in the group
     if( Units.size() == 0  || Units[0].GetRef().Cmp( aUnit.GetRef() ) == 0 )

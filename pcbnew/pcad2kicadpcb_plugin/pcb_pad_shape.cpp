@@ -50,9 +50,9 @@ PCB_PAD_SHAPE::~PCB_PAD_SHAPE()
 }
 
 
-void PCB_PAD_SHAPE::Parse( XNODE*       aNode,
-                           wxString     aDefaultMeasurementUnit,
-                           wxString     aActualConversion )
+void PCB_PAD_SHAPE::Parse( XNODE*          aNode,
+                           const wxString& aDefaultMeasurementUnit,
+                           const wxString& aActualConversion )
 {
     wxString    str, s;
     long        num;

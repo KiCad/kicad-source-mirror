@@ -29,6 +29,8 @@
 
 #include <common.h>
 
+#include <utility>
+
 void EC_VERTICAL::Apply( EDIT_POINT& aHandle )
 {
     VECTOR2I point = aHandle.GetPosition();
@@ -178,7 +180,7 @@ void EC_CONVERGING::Apply( EDIT_LINE& aHandle )
 
 
 EC_SNAPLINE::EC_SNAPLINE( EDIT_LINE& aLine, V2D_TRANSFORM_FUN aSnapFun ) :
-    EDIT_CONSTRAINT<EDIT_LINE>( aLine ), m_snapFun( aSnapFun )
+    EDIT_CONSTRAINT<EDIT_LINE>( aLine ), m_snapFun( std::move(aSnapFun) )
 {}
 
 

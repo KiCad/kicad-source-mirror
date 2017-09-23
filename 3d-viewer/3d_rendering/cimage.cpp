@@ -512,7 +512,7 @@ void CIMAGE::SetPixelsFromNormalizedFloat( const float * aNormalizedFloatArray )
 }
 
 
-void CIMAGE::SaveAsPNG( wxString aFileName ) const
+void CIMAGE::SaveAsPNG( const wxString& aFileName ) const
 {
     DBG_SaveBuffer( aFileName, m_pixels, m_width, m_height );
 }

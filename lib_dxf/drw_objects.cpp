@@ -11,6 +11,7 @@
 ******************************************************************************/
 
 #include <iostream>
+#include <utility>
 #include <math.h>
 #include "drw_objects.h"
 #include "intern/dxfreader.h"
@@ -731,7 +732,7 @@ void DRW_ImageDef::parseCode( int code, dxfReader* reader )
 }
 
 
-void DRW_Header::addComment( std::string c )
+void DRW_Header::addComment( const std::string& c )
 {
     if( !comments.empty() )
         comments += '\n';
@@ -1303,7 +1304,7 @@ void DRW_Header::write( dxfWriter* writer, DRW::Version ver )
 }
 
 
-void DRW_Header::addDouble( std::string key, double value, int code )
+void DRW_Header::addDouble( const std::string& key, double value, int code )
 {
     curr = new DRW_Variant();
     curr->addDouble( value );
@@ -1312,7 +1313,7 @@ void DRW_Header::addDouble( std::string key, double value, int code )
 }
 
 
-void DRW_Header::addInt( std::string key, int value, int code )
+void DRW_Header::addInt( const std::string& key, int value, int code )
 {
     curr = new DRW_Variant();
     curr->addInt( value );
@@ -1321,16 +1322,16 @@ void DRW_Header::addInt( std::string key, int value, int code )
 }
 
 
-void DRW_Header::addStr( std::string key, std::string value, int code )
+void DRW_Header::addStr( const std::string& key, std::string value, int code )
 {
     curr = new DRW_Variant();
-    curr->addString( value );
+    curr->addString( std::move(value) );
     curr->code  = code;
     vars[key]   = curr;
 }
 
 
-void DRW_Header::addCoord( std::string key, DRW_Coord value, int code )
+void DRW_Header::addCoord( const std::string& key, DRW_Coord value, int code )
 {
     curr = new DRW_Variant();
     curr->addCoord( value );
@@ -1339,7 +1340,7 @@ void DRW_Header::addCoord( std::string key, DRW_Coord value, int code )
 }
 
 
-bool DRW_Header::getDouble( std::string key, double* varDouble )
+bool DRW_Header::getDouble( const std::string& key, double* varDouble )
 {
     bool result = false;
     std::map<std::string, DRW_Variant*>::iterator it;
@@ -1363,7 +1364,7 @@ bool DRW_Header::getDouble( std::string key, double* varDouble )
 }
 
 
-bool DRW_Header::getInt( std::string key, int* varInt )
+bool DRW_Header::getInt( const std::string& key, int* varInt )
 {
     bool result = false;
     std::map<std::string, DRW_Variant*>::iterator it;
@@ -1387,7 +1388,7 @@ bool DRW_Header::getInt( std::string key, int* varInt )
 }
 
 
-bool DRW_Header::getStr( std::string key, std::string* varStr )
+bool DRW_Header::getStr( const std::string& key, std::string* varStr )
 {
     bool result = false;
     std::map<std::string, DRW_Variant*>::iterator it;
@@ -1411,7 +1412,7 @@ bool DRW_Header::getStr( std::string key, std::string* varStr )
 }
 
 
-bool DRW_Header::getCoord( std::string key, DRW_Coord* varCoord )
+bool DRW_Header::getCoord( const std::string& key, DRW_Coord* varCoord )
 {
     bool result = false;
     std::map<std::string, DRW_Variant*>::iterator it;

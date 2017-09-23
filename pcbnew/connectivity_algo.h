@@ -896,14 +896,14 @@ public:
 
     CN_PAD_LIST& PadList() { return m_padList; }
 
-    void ForEachAnchor(  std::function<void(CN_ANCHOR_PTR)> aFunc );
-    void ForEachItem(  std::function<void(CN_ITEM*)> aFunc );
+    void ForEachAnchor( const std::function<void( CN_ANCHOR& )>& aFunc );
+    void ForEachItem( const std::function<void( CN_ITEM& )>& aFunc );
 
     void MarkNetAsDirty( int aNet );
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
 
 };
 
-bool operator<( const CN_ANCHOR_PTR a, const CN_ANCHOR_PTR b );
+bool operator<( const CN_ANCHOR_PTR& a, const CN_ANCHOR_PTR& b );
 
 #endif

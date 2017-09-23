@@ -376,7 +376,7 @@ private:
      * @param aPointGetter is a function to obtain coordinates of n-th vertex.
      * @param aPointCount is the number of points to be drawn.
      */
-    void drawPolyline( std::function<VECTOR2D (int)> aPointGetter, int aPointCount );
+    void drawPolyline( const std::function<VECTOR2D (int)>& aPointGetter, int aPointCount );
 
     /**
      * @brief Draws a filled polygon. It does not need the last point to have the same coordinates

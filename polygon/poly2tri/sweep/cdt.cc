@@ -30,11 +30,13 @@
  */
 #include "cdt.h"
 
+#include <utility>
+
 namespace p2t {
 
 CDT::CDT(std::vector<Point*> polyline)
 {
-  sweep_context_ = new SweepContext(polyline);
+  sweep_context_ = new SweepContext( std::move( polyline ) );
   sweep_ = new Sweep;
 }
 

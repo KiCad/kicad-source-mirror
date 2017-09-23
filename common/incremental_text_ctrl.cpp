@@ -24,6 +24,8 @@
 
 #include <incremental_text_ctrl.h>
 
+#include <utility>
+
 /**
  * Check that a string looks like a floating point number that can
  * be dealt with.
@@ -61,7 +63,7 @@ void INCREMENTAL_TEXT_CTRL::SetStep( double aMin, double aMax,
 
     m_minVal = std::min( aMin, aMax );
     m_maxVal = std::max( aMin, aMax );
-    m_stepFunc = aStepFunc;
+    m_stepFunc = std::move( aStepFunc );
 
     // finally, clamp the current value and re-display
     updateTextValue();

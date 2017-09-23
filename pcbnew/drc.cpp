@@ -501,7 +501,7 @@ void DRC::updatePointers()
 }
 
 
-bool DRC::doNetClass( NETCLASSPTR nc, wxString& msg )
+bool DRC::doNetClass( const NETCLASSPTR& nc, wxString& msg )
 {
     bool ret = true;
 

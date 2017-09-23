@@ -48,19 +48,20 @@ public:
     PCB_MODULE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_MODULE();
 
-    XNODE*      FindModulePatternDefName( XNODE* aNode, wxString aName );
+    XNODE*      FindModulePatternDefName( XNODE* aNode, const wxString& aName );
 
     void        DoLayerContentsObjects( XNODE*                  aNode,
                                         PCB_MODULE*             aPCBModule,
                                         PCB_COMPONENTS_ARRAY*   aList,
                                         wxStatusBar*            aStatusBar,
-                                        wxString                aDefaultMeasurementUnit,
-                                        wxString                aActualConversion );
+                                        const wxString&         aDefaultMeasurementUnit,
+                                        const wxString&         aActualConversion );
 
-    void            SetName( wxString aPin, wxString aName );
+    void            SetName( const wxString& aPin, const wxString& aName );
 
     virtual void    Parse( XNODE*   aNode, wxStatusBar* aStatusBar,
-                           wxString aDefaultMeasurementUnit, wxString aActualConversion );
+                           const wxString& aDefaultMeasurementUnit,
+                           const wxString& aActualConversion );
 
     virtual void    Flip() override;
     void            AddToBoard() override;

@@ -49,12 +49,12 @@ class SHAPE_FILE_IO
         SHAPE_FILE_IO( const std::string& aFilename, IO_MODE aMode = IOM_READ );
         ~SHAPE_FILE_IO();
 
-        void BeginGroup( const std::string aName = "<noname>");
+        void BeginGroup( const std::string& aName = "<noname>");
         void EndGroup();
 
         SHAPE* Read();
 
-        void Write( const SHAPE* aShape, const std::string aName = "<noname>" );
+        void Write( const SHAPE* aShape, const std::string& aName = "<noname>" );
 
         void Write( const SHAPE& aShape, const std::string aName = "<noname>" )
         {

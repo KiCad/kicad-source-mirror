@@ -91,7 +91,7 @@ static void get_components( std::vector<SCH_COMPONENT*>& aComponents )
  * @param aLibs - the loaded PART_LIBS
  * @param aCached - whether we are looking for the cached part
  */
-static LIB_PART* find_component( wxString aName, PART_LIBS* aLibs, bool aCached )
+static LIB_PART* find_component( const wxString& aName, PART_LIBS* aLibs, bool aCached )
 {
     LIB_PART *part = NULL;
 

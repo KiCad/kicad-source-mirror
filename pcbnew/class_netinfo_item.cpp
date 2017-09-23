@@ -78,7 +78,7 @@ void NETINFO_ITEM::Draw( EDA_DRAW_PANEL* panel,
 }
 
 
-void NETINFO_ITEM::SetClass( NETCLASSPTR aNetClass )
+void NETINFO_ITEM::SetClass( const NETCLASSPTR& aNetClass )
 {
     wxCHECK( m_parent, /* void */ );
     m_NetClass = aNetClass ? aNetClass : m_parent->GetDesignSettings().m_NetClasses.GetDefault();

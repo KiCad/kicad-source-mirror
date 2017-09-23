@@ -339,7 +339,7 @@ private:
      */
     void            CreateCommandToolbar( void );
 
-    void AddButton( wxWindowID aId, const wxBitmap& aBitmap, wxString aToolTip );
+    void AddButton( wxWindowID aId, const wxBitmap& aBitmap, const wxString& aToolTip );
 };
 
 // The C++ project manager includes a single PROJECT in its link image.

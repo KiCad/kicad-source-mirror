@@ -58,7 +58,7 @@ typedef std::map<unsigned int, wxString> FIELD_VALUE_MAP;
 class BOM_FIELD_VALUES
 {
 public:
-    BOM_FIELD_VALUES( wxString aRefDes, FIELD_VALUE_MAP* aTemplate );
+    BOM_FIELD_VALUES( const wxString& aRefDes, FIELD_VALUE_MAP* aTemplate );
 
     /**
      * Return the current value for the provided field ID
@@ -218,7 +218,7 @@ public:
 
     BOM_TABLE_COMPONENT( BOM_TABLE_GROUP* aParent, BOM_COLUMN_LIST* aColumnList, BOM_FIELD_VALUES* aValues );
 
-    bool AddUnit( SCH_REFERENCE aUnit );
+    bool AddUnit( const SCH_REFERENCE& aUnit );
 
     virtual wxString GetFieldValue( unsigned int aFieldId ) const override;
 

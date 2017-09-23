@@ -3819,7 +3819,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
      * Function exportNETCLASS
      * exports \a aNetClass to the DSN file.
      */
-    void exportNETCLASS( std::shared_ptr<NETCLASS> aNetClass, BOARD* aBoard );
+    void exportNETCLASS( const std::shared_ptr<NETCLASS>& aNetClass, BOARD* aBoard );
 
     //-----</FromBOARD>------------------------------------------------------
 
@@ -3931,7 +3931,7 @@ public:
      *          and also to to be changed in the output file.
      * @throw IO_ERROR, if an i/o error occurs saving the file.
      */
-    void ExportPCB( wxString aFilename,  bool aNameChange=false );
+    void ExportPCB( const wxString& aFilename,  bool aNameChange=false );
 
     /**
      * Function FromBOARD
@@ -3962,7 +3962,7 @@ public:
      *
      * @param aFilename The file to save to.
      */
-    void ExportSESSION( wxString aFilename );
+    void ExportSESSION( const wxString& aFilename );
 
     /**
      * Function FlipMODULEs

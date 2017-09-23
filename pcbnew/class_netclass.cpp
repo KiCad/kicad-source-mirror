@@ -99,7 +99,7 @@ NETCLASSES::~NETCLASSES()
 }
 
 
-bool NETCLASSES::Add( NETCLASSPTR aNetClass )
+bool NETCLASSES::Add( const NETCLASSPTR& aNetClass )
 {
     const wxString& name = aNetClass->GetName();
 

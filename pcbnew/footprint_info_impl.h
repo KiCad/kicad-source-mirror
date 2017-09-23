@@ -68,7 +68,7 @@ class FOOTPRINT_LIST_IMPL : public FOOTPRINT_LIST
      *
      * @return true if no error occurred.
      */
-    bool CatchErrors( std::function<void()> aFunc );
+    bool CatchErrors( const std::function<void()>& aFunc );
 
 protected:
     virtual void StartWorkers( FP_LIB_TABLE* aTable, wxString const* aNickname,

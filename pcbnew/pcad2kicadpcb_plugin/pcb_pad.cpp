@@ -56,8 +56,9 @@ PCB_PAD::~PCB_PAD()
 }
 
 
-void PCB_PAD::Parse( XNODE*   aNode, wxString aDefaultMeasurementUnit,
-                     wxString aActualConversion )
+void PCB_PAD::Parse( XNODE*          aNode,
+                     const wxString& aDefaultMeasurementUnit,
+                     const wxString& aActualConversion )
 {
     XNODE*          lNode, *cNode;
     long            num;

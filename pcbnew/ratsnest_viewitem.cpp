@@ -35,13 +35,14 @@
 #include <layers_id_colors_and_visibility.h>
 
 #include <memory>
+#include <utility>
 
 #include <view/view.h>
 
 namespace KIGFX {
 
 RATSNEST_VIEWITEM::RATSNEST_VIEWITEM(  std::shared_ptr<CONNECTIVITY_DATA> aData ) :
-        EDA_ITEM( NOT_USED ), m_data( aData )
+        EDA_ITEM( NOT_USED ), m_data( std::move(aData) )
 {
 }
 

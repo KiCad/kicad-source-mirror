@@ -117,7 +117,7 @@ public:
      * Function SetClass
      * sets \a aNetclass into this NET
      */
-    void SetClass( NETCLASSPTR aNetClass );
+    void SetClass( const NETCLASSPTR& aNetClass );
 
     NETCLASSPTR GetNetClass()
     {

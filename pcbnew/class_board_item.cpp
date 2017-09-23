@@ -198,7 +198,7 @@ void BOARD_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-int BOARD_ITEM::getTrailingInt( wxString aStr )
+int BOARD_ITEM::getTrailingInt( const wxString& aStr )
 {
     int number = 0;
     int base = 1;

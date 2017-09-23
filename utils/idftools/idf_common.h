@@ -401,8 +401,8 @@ public:
      */
     IDF_DRILL_DATA( double aDrillDia, double aPosX, double aPosY,
                     IDF3::KEY_PLATING aPlating,
-                    const std::string aRefDes,
-                    const std::string aHoleType,
+                    const std::string& aRefDes,
+                    const std::string& aHoleType,
                     IDF3::KEY_OWNER aOwner );
 
     /**

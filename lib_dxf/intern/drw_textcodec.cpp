@@ -235,7 +235,7 @@ std::string DRW_ConvTable::toUtf8( std::string* s )
 }
 
 
-std::string DRW_Converter::encodeText( std::string stmp )
+std::string DRW_Converter::encodeText( const std::string& stmp )
 {
     int code;
 

@@ -84,7 +84,7 @@ private:
     };
 
     int localPadClearance( const PNS::ITEM* aItem ) const;
-    int matchDpSuffix( wxString aNetName, wxString& aComplementNet, wxString& aBaseDpName );
+    int matchDpSuffix( const wxString& aNetName, wxString& aComplementNet, wxString& aBaseDpName );
 
     PNS::ROUTER* m_router;
     BOARD*       m_board;
@@ -225,7 +225,7 @@ void PNS_PCBNEW_RULE_RESOLVER::OverrideClearance( bool aEnable, int aNetA, int a
 }
 
 
-int PNS_PCBNEW_RULE_RESOLVER::matchDpSuffix( wxString aNetName, wxString& aComplementNet, wxString& aBaseDpName )
+int PNS_PCBNEW_RULE_RESOLVER::matchDpSuffix( const wxString& aNetName, wxString& aComplementNet, wxString& aBaseDpName )
 {
     int rv = 0;
 

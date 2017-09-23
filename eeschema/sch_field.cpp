@@ -52,7 +52,7 @@
 #include <kicad_string.h>
 
 
-SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent, wxString aName ) :
+SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent, const wxString& aName ) :
     SCH_ITEM( aParent, SCH_FIELD_T ),
     EDA_TEXT()
 {

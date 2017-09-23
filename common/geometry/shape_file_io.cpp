@@ -115,7 +115,7 @@ SHAPE* SHAPE_FILE_IO::Read()
 }
 
 
-void SHAPE_FILE_IO::BeginGroup( const std::string aName )
+void SHAPE_FILE_IO::BeginGroup( const std::string& aName )
 {
     assert( m_mode != IOM_READ );
 
@@ -139,7 +139,7 @@ void SHAPE_FILE_IO::EndGroup()
 }
 
 
-void SHAPE_FILE_IO::Write( const SHAPE* aShape, const std::string aName )
+void SHAPE_FILE_IO::Write( const SHAPE* aShape, const std::string& aName )
 {
     assert( m_mode != IOM_READ );
 

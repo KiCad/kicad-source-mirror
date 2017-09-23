@@ -52,8 +52,8 @@ public:
     ~PCB_POLYGON();
 
     virtual bool Parse( XNODE*          aNode,
-                        wxString        aDefaultMeasurementUnit,
-                        wxString        aActualConversion );
+                        const wxString& aDefaultMeasurementUnit,
+                        const wxString& aActualConversion );
 
     virtual void    SetPosOffset( int aX_offs, int aY_offs ) override;
     virtual void    Flip() override;
@@ -61,11 +61,12 @@ public:
     void            AddToBoard() override;
 
 // protected:
-    void            AssignNet( wxString aNetName );
+    void            AssignNet( const wxString& aNetName );
     void            SetOutline( VERTICES_ARRAY* aOutline );
 
     void            FormPolygon( XNODE*   aNode, VERTICES_ARRAY* aPolygon,
-                                 wxString aDefaultMeasurementUnit, wxString actualConversion );
+                                 const wxString& aDefaultMeasurementUnit,
+                                 const wxString& actualConversion );
 protected:
     bool            m_filled;
 };

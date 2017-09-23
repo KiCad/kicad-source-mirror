@@ -900,7 +900,7 @@ SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
 }
 
 
-wxString SCH_COMPONENT::GetFieldText( wxString aFieldName, bool aIncludeDefaultFields ) const
+wxString SCH_COMPONENT::GetFieldText( const wxString& aFieldName, bool aIncludeDefaultFields ) const
 {
     // Field name for comparison
     wxString cmpFieldName;

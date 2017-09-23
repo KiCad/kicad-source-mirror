@@ -69,7 +69,7 @@ GAL_DISPLAY_OPTIONS::GAL_DISPLAY_OPTIONS()
 {}
 
 
-void GAL_DISPLAY_OPTIONS::ReadConfig( wxConfigBase* aCfg, wxString aBaseName )
+void GAL_DISPLAY_OPTIONS::ReadConfig( wxConfigBase* aCfg, const wxString& aBaseName )
 {
     long readLong; // Temp value buffer
 
@@ -100,7 +100,7 @@ void GAL_DISPLAY_OPTIONS::ReadConfig( wxConfigBase* aCfg, wxString aBaseName )
 }
 
 
-void GAL_DISPLAY_OPTIONS::WriteConfig( wxConfigBase* aCfg, wxString aBaseName )
+void GAL_DISPLAY_OPTIONS::WriteConfig( wxConfigBase* aCfg, const wxString& aBaseName )
 {
     aCfg->Write( aBaseName + GalGLAntialiasingKeyword,
                  UTIL::GetConfigForVal( aaModeConfigVals, gl_antialiasing_mode ) );

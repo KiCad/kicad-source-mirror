@@ -14,6 +14,7 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <utility>
 #include "dxfwriter.h"
 
 #ifdef DRW_DBG
@@ -100,7 +101,7 @@
 
 bool dxfWriter::writeUtf8String( int code, std::string text )
 {
-    std::string t = encoder.fromUtf8( text );
+    std::string t = encoder.fromUtf8( std::move(text) );
 
     return writeString( code, t );
 }
@@ -108,7 +109,7 @@ bool dxfWriter::writeUtf8String( int code, std::string text )
 
 bool dxfWriter::writeUtf8Caps( int code, std::string text )
 {
-    std::string strname = text;
+    std::string strname = std::move(text);
     std::transform( strname.begin(), strname.end(), strname.begin(), ::toupper );
     std::string t = encoder.fromUtf8( strname );
 

@@ -79,7 +79,7 @@ PCB_POLYGON::~PCB_POLYGON()
     }
 }
 
-void PCB_POLYGON::AssignNet( wxString aNetName )
+void PCB_POLYGON::AssignNet( const wxString& aNetName )
 {
     m_net = aNetName;
     m_netCode = GetNetCode( m_net );
@@ -102,7 +102,8 @@ void PCB_POLYGON::SetOutline( VERTICES_ARRAY* aOutline )
 }
 
 void PCB_POLYGON::FormPolygon( XNODE*   aNode, VERTICES_ARRAY* aPolygon,
-                               wxString aDefaultMeasurementUnit, wxString aActualConversion )
+                               const wxString& aDefaultMeasurementUnit,
+                               const wxString& aActualConversion )
 {
     XNODE*      lNode;
     double      x, y;
@@ -123,9 +124,9 @@ void PCB_POLYGON::FormPolygon( XNODE*   aNode, VERTICES_ARRAY* aPolygon,
 }
 
 
-bool PCB_POLYGON::Parse( XNODE*         aNode,
-                         wxString       aDefaultMeasurementUnit,
-                         wxString       aActualConversion )
+bool PCB_POLYGON::Parse( XNODE*          aNode,
+                         const wxString& aDefaultMeasurementUnit,
+                         const wxString& aActualConversion )
 {
     XNODE*      lNode;
     wxString    propValue;

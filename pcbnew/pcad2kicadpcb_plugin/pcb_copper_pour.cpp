@@ -50,9 +50,9 @@ PCB_COPPER_POUR::~PCB_COPPER_POUR()
 }
 
 
-bool PCB_COPPER_POUR::Parse( XNODE*         aNode,
-                             wxString       aDefaultMeasurementUnit,
-                             wxString       aActualConversion )
+bool PCB_COPPER_POUR::Parse( XNODE*          aNode,
+                             const wxString& aDefaultMeasurementUnit,
+                             const wxString& aActualConversion )
 {
     XNODE*          lNode;
     wxString        pourType, str, propValue;

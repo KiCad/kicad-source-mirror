@@ -138,10 +138,10 @@ public:
 
     BOM_COLUMN* GetColumnByIndex( unsigned int aColIndex );
     BOM_COLUMN* GetColumnById( unsigned int aColId );
-    BOM_COLUMN* GetColumnByTitle( const wxString aColTitle ) ;
+    BOM_COLUMN* GetColumnByTitle( const wxString& aColTitle ) ;
 
     bool ContainsColumn( unsigned int aColId );
-    bool ContainsColumn( const wxString aColTitle );
+    bool ContainsColumn( const wxString& aColTitle );
 
     bool AddColumn( BOM_COLUMN* aCol );
 

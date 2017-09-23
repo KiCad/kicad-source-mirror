@@ -56,7 +56,7 @@ class PCB_CALCULATOR_DATAFILE_PARSER : public PCB_CALCULATOR_DATAFILE_LEXER
 {
 public:
     PCB_CALCULATOR_DATAFILE_PARSER( LINE_READER* aReader );
-    PCB_CALCULATOR_DATAFILE_PARSER( char* aLine, wxString aSource );
+    PCB_CALCULATOR_DATAFILE_PARSER( char* aLine, const wxString& aSource );
     LINE_READER* GetReader() { return reader; };
     void Parse( PCB_CALCULATOR_DATAFILE* aDataList );
     void ParseRegulatorDescr( PCB_CALCULATOR_DATAFILE* aDataList );

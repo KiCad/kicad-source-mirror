@@ -1497,7 +1497,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 }
 
 
-void SPECCTRA_DB::exportNETCLASS( NETCLASSPTR aNetClass, BOARD* aBoard )
+void SPECCTRA_DB::exportNETCLASS( const NETCLASSPTR& aNetClass, BOARD* aBoard )
 {
     /*  From page 11 of specctra spec:
      *

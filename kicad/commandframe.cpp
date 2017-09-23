@@ -109,7 +109,7 @@ void LAUNCHER_PANEL::CreateCommandToolbar()
  * @param aBitmap is the image to be used
  * @param aToolTip is the button mouse-over tool tip
  */
-void LAUNCHER_PANEL::AddButton( wxWindowID aId, const wxBitmap& aBitmap, wxString aToolTip )
+void LAUNCHER_PANEL::AddButton( wxWindowID aId, const wxBitmap& aBitmap, const wxString& aToolTip )
 {
     wxSize  buttSize( aBitmap.GetWidth() + 2 * BUTTON_EXPANSION,
                       aBitmap.GetHeight() + 2 * BUTTON_EXPANSION );

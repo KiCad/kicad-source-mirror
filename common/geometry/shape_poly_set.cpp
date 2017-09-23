@@ -1657,7 +1657,7 @@ int SHAPE_POLY_SET::Distance( VECTOR2I aPoint )
 }
 
 
-int SHAPE_POLY_SET::Distance( SEG aSegment, int aSegmentWidth )
+int SHAPE_POLY_SET::Distance( const SEG& aSegment, int aSegmentWidth )
 {
     int currentDistance;
     int minDistance = DistanceToPolygon( aSegment, 0 );

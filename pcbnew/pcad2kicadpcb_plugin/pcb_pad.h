@@ -48,9 +48,9 @@ public:
     PCB_PAD( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_PAD();
 
-    virtual void    Parse( XNODE*       aNode,
-                           wxString     aDefaultMeasurementUnit,
-                           wxString     aActualConversion );
+    virtual void    Parse( XNODE*          aNode,
+                           const wxString& aDefaultMeasurementUnit,
+                           const wxString& aActualConversion );
     virtual void    Flip() override;
     void            AddToModule( MODULE* aModule ) override
     {

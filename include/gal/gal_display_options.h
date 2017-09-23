@@ -66,8 +66,8 @@ namespace KIGFX
     public:
         GAL_DISPLAY_OPTIONS();
 
-        void ReadConfig ( wxConfigBase* aCfg, wxString aBaseName );
-        void WriteConfig( wxConfigBase* aCfg, wxString aBaseName );
+        void ReadConfig ( wxConfigBase* aCfg, const wxString& aBaseName );
+        void WriteConfig( wxConfigBase* aCfg, const wxString& aBaseName );
 
         void NotifyChanged();
 

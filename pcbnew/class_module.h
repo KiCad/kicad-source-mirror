@@ -589,7 +589,7 @@ public:
      * Invokes a function on all BOARD_ITEMs that belong to the module (pads, drawings, texts).
      * @param aFunction is the function to be invoked.
      */
-    void RunOnChildren( std::function<void (BOARD_ITEM*)> aFunction );
+    void RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction );
 
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;

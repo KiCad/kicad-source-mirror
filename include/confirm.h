@@ -66,7 +66,7 @@ void DisplayError( wxWindow* parent, const wxString& aMessage, int displaytime =
  * @param aMessage is the message text to display
  * @param aExtraInfo is extra data that can be optionally displayed in a collapsible pane
  */
-void DisplayErrorMessage( wxWindow* aParent, const wxString& aMessage, const wxString aExtraInfo = wxEmptyString );
+void DisplayErrorMessage( wxWindow* aParent, const wxString& aMessage, const wxString& aExtraInfo = wxEmptyString );
 
 
 /**
@@ -77,7 +77,7 @@ void DisplayErrorMessage( wxWindow* aParent, const wxString& aMessage, const wxS
  * @param aMessage is the message text to display
  * @param aExtraInfo is the extra data that can be optionally displayed in a collapsible pane
  */
-void DisplayInfoMessage( wxWindow* parent, const wxString& aMessage, const wxString aExtraInfo = wxEmptyString );
+void DisplayInfoMessage( wxWindow* parent, const wxString& aMessage, const wxString& aExtraInfo = wxEmptyString );
 
 /**
  * Function IsOK

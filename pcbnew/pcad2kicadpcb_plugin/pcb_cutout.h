@@ -43,9 +43,9 @@ public:
     PCB_CUTOUT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );
     ~PCB_CUTOUT();
 
-    virtual bool    Parse( XNODE*       aNode,
-                           wxString     aDefaultMeasurementUnit,
-                           wxString     aActualConversion ) override;
+    virtual bool    Parse( XNODE*          aNode,
+                           const wxString& aDefaultMeasurementUnit,
+                           const wxString& actualConversion ) override;
 };
 
 } // namespace PCAD2KICAD

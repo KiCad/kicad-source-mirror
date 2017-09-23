@@ -109,7 +109,7 @@ XNODE* FindPinMap( XNODE* aNode )
 }
 
 
-double StrToDoublePrecisionUnits( wxString aStr, char aAxe, wxString aActualConversion )
+double StrToDoublePrecisionUnits( const wxString& aStr, char aAxe, const wxString& aActualConversion )
 {
     wxString    ls;
     double      i;
@@ -168,13 +168,13 @@ double StrToDoublePrecisionUnits( wxString aStr, char aAxe, wxString aActualConv
 }
 
 
-int StrToIntUnits( wxString aStr, char aAxe, wxString aActualConversion )
+int StrToIntUnits( const wxString& aStr, char aAxe, const wxString& aActualConversion )
 {
     return KiROUND( StrToDoublePrecisionUnits( aStr, aAxe, aActualConversion ) );
 }
 
 
-wxString GetAndCutWordWithMeasureUnits( wxString* aStr, wxString aDefaultMeasurementUnit )
+wxString GetAndCutWordWithMeasureUnits( wxString* aStr, const wxString& aDefaultMeasurementUnit )
 {
     wxString result;
 
@@ -213,7 +213,7 @@ wxString GetAndCutWordWithMeasureUnits( wxString* aStr, wxString aDefaultMeasure
 }
 
 
-int StrToInt1Units( wxString aStr )
+int StrToInt1Units( const wxString& aStr )
 {
     double num, precision = 10;
 
@@ -244,10 +244,10 @@ wxString ValidateReference( wxString aRef )
 }
 
 
-void SetWidth( wxString aStr,
-               wxString aDefaultMeasurementUnit,
-               int*     aWidth,
-               wxString aActualConversion )
+void SetWidth( wxString        aStr,
+               const wxString& aDefaultMeasurementUnit,
+               int*            aWidth,
+               const wxString& aActualConversion )
 {
     *aWidth = StrToIntUnits( GetAndCutWordWithMeasureUnits( &aStr,
                                                             aDefaultMeasurementUnit ), wxT( ' ' ),
@@ -255,10 +255,10 @@ void SetWidth( wxString aStr,
 }
 
 
-void SetHeight( wxString    aStr,
-                wxString    aDefaultMeasurementUnit,
-                int*        aHeight,
-                wxString    aActualConversion )
+void SetHeight( wxString        aStr,
+                const wxString& aDefaultMeasurementUnit,
+                int*            aHeight,
+                const wxString& aActualConversion )
 {
     *aHeight = StrToIntUnits( GetAndCutWordWithMeasureUnits( &aStr,
                                                              aDefaultMeasurementUnit ), wxT( ' ' ),
@@ -266,11 +266,11 @@ void SetHeight( wxString    aStr,
 }
 
 
-void SetPosition( wxString  aStr,
-                  wxString  aDefaultMeasurementUnit,
-                  int*      aX,
-                  int*      aY,
-                  wxString  aActualConversion )
+void SetPosition( wxString        aStr,
+                  const wxString& aDefaultMeasurementUnit,
+                  int*            aX,
+                  int*            aY,
+                  const wxString& aActualConversion )
 {
     *aX = StrToIntUnits( GetAndCutWordWithMeasureUnits( &aStr,
                                                         aDefaultMeasurementUnit ), wxT( 'X' ),
@@ -281,11 +281,11 @@ void SetPosition( wxString  aStr,
 }
 
 
-void SetDoublePrecisionPosition( wxString   aStr,
-                                 wxString   aDefaultMeasurementUnit,
-                                 double*    aX,
-                                 double*    aY,
-                                 wxString   aActualConversion )
+void SetDoublePrecisionPosition( wxString        aStr,
+                                 const wxString& aDefaultMeasurementUnit,
+                                 double*         aX,
+                                 double*         aY,
+                                 const wxString& aActualConversion )
 {
     *aX = StrToDoublePrecisionUnits( GetAndCutWordWithMeasureUnits( &aStr,
                                                                     aDefaultMeasurementUnit ), wxT( 'X' ),
@@ -296,7 +296,7 @@ void SetDoublePrecisionPosition( wxString   aStr,
 }
 
 
-TTEXT_JUSTIFY GetJustifyIdentificator( wxString aJustify )
+TTEXT_JUSTIFY GetJustifyIdentificator( const wxString& aJustify )
 {
     TTEXT_JUSTIFY id;
 
@@ -323,10 +323,10 @@ TTEXT_JUSTIFY GetJustifyIdentificator( wxString aJustify )
 }
 
 
-void SetTextParameters( XNODE*      aNode,
-                        TTEXTVALUE* aTextValue,
-                        wxString    aDefaultMeasurementUnit,
-                        wxString    aActualConversion )
+void SetTextParameters( XNODE*          aNode,
+                        TTEXTVALUE*     aTextValue,
+                        const wxString& aDefaultMeasurementUnit,
+                        const wxString& aActualConversion )
 {
     XNODE*      tNode;
     wxString    str;
@@ -377,10 +377,10 @@ void SetTextParameters( XNODE*      aNode,
 }
 
 
-void SetFontProperty( XNODE*        aNode,
-                      TTEXTVALUE*   aTextValue,
-                      wxString      aDefaultMeasurementUnit,
-                      wxString      aActualConversion )
+void SetFontProperty( XNODE*          aNode,
+                      TTEXTVALUE*     aTextValue,
+                      const wxString& aDefaultMeasurementUnit,
+                      const wxString& aActualConversion )
 {
     wxString n, propValue;
 
@@ -558,7 +558,7 @@ void SetTextSizeFromTrueTypeFontHeight( EDA_TEXT* aText, int aTextHeight )
 }
 
 
-XNODE* FindNode( XNODE* aChild, wxString aTag )
+XNODE* FindNode( XNODE* aChild, const wxString& aTag )
 {
     aChild = aChild->GetChildren();
 
@@ -573,7 +573,7 @@ XNODE* FindNode( XNODE* aChild, wxString aTag )
     return NULL;
 }
 
-wxString FindNodeGetContent( XNODE* aChild, wxString aTag )
+wxString FindNodeGetContent( XNODE* aChild, const wxString& aTag )
 {
     wxString str = wxEmptyString;
 

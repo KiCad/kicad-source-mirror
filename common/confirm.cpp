@@ -30,6 +30,7 @@
 #include <wx/stockitem.h>
 #include <wx/richmsgdlg.h>
 
+#include <confirm.h>
 #include <bitmaps.h>
 #include <html_messagebox.h>
 #include <dialog_exit_base.h>
@@ -84,7 +85,7 @@ void DisplayError( wxWindow* parent, const wxString& text, int displaytime )
 }
 
 
-void DisplayErrorMessage( wxWindow* aParent, const wxString& aText, const wxString aExtraInfo )
+void DisplayErrorMessage( wxWindow* aParent, const wxString& aText, const wxString& aExtraInfo )
 {
     wxRichMessageDialog* dlg;
 
@@ -101,7 +102,7 @@ void DisplayErrorMessage( wxWindow* aParent, const wxString& aText, const wxStri
 }
 
 
-void DisplayInfoMessage( wxWindow* aParent, const wxString& aMessage, const wxString aExtraInfo )
+void DisplayInfoMessage( wxWindow* aParent, const wxString& aMessage, const wxString& aExtraInfo )
 {
     wxRichMessageDialog* dlg;
 

@@ -3435,7 +3435,7 @@ void SPECCTRA_DB::doSUPPLY_PIN( SUPPLY_PIN* growth )
 }
 
 
-void SPECCTRA_DB::ExportPCB( wxString aFilename, bool aNameChange )
+void SPECCTRA_DB::ExportPCB( const wxString& aFilename, bool aNameChange )
 {
     if( pcb )
     {
@@ -3449,7 +3449,7 @@ void SPECCTRA_DB::ExportPCB( wxString aFilename, bool aNameChange )
 }
 
 
-void SPECCTRA_DB::ExportSESSION( wxString aFilename )
+void SPECCTRA_DB::ExportSESSION( const wxString& aFilename )
 {
     if( session )
     {

@@ -473,7 +473,7 @@ void DIALOG_DESIGN_RULES::InitializeRulesSelectionBoxes()
 /* Initialize the rules list from board
  */
 
-static void class2gridRow( wxGrid* grid, int row, NETCLASSPTR nc )
+static void class2gridRow( wxGrid* grid, int row, const NETCLASSPTR& nc )
 {
     wxString msg;
 
@@ -532,7 +532,7 @@ void DIALOG_DESIGN_RULES::InitRulesList()
 }
 
 
-static void gridRow2class( wxGrid* grid, int row, NETCLASSPTR nc )
+static void gridRow2class( wxGrid* grid, int row, const NETCLASSPTR& nc )
 {
 #define MYCELL( col )   \
     ValueFromString( g_UserUnit, grid->GetCellValue( row, col ) )

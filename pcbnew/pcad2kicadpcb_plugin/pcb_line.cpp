@@ -51,10 +51,10 @@ PCB_LINE::~PCB_LINE()
 }
 
 
-void PCB_LINE::Parse( XNODE*        aNode,
-                      int           aLayer,
-                      wxString      aDefaultMeasurementUnit,
-                      wxString      aActualConversion )
+void PCB_LINE::Parse( XNODE*          aNode,
+                      int             aLayer,
+                      const wxString& aDefaultMeasurementUnit,
+                      const wxString& aActualConversion )
 {
     XNODE*      lNode;
     wxString    propValue;

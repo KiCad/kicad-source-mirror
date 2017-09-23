@@ -76,7 +76,7 @@ int ACTION_PLUGINS::GetActionMenu( int aIndex )
 }
 
 
-ACTION_PLUGIN* ACTION_PLUGINS::GetAction( wxString aName )
+ACTION_PLUGIN* ACTION_PLUGINS::GetAction( const wxString& aName )
 {
     int max = GetActionsCount();
 

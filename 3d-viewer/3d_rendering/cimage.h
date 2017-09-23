@@ -186,7 +186,7 @@ public:
      * each of RGB channel will have the 8bit-channel from the image.
      * @param aFileName fime name (without extension)
      */
-    void SaveAsPNG( wxString aFileName ) const;
+    void SaveAsPNG( const wxString& aFileName ) const;
 
     /**
      * Function SetPixelsFromNormalizedFloat

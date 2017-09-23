@@ -33,21 +33,21 @@
 #include <plugins/3dapi/xv3d_types.h>
 #include <wx/string.h>
 
-void DBG_SaveBuffer( wxString aFileName,
+void DBG_SaveBuffer( const wxString& aFileName,
                      const unsigned char *aInBuffer,
                      unsigned int aXSize, unsigned int aYSize );
 
-void DBG_SaveBuffer( wxString aFileName,
+void DBG_SaveBuffer( const wxString& aFileName,
                      const float *aInBuffer,
                      unsigned int aXSize,
                      unsigned int aYSize );
 
-void DBG_SaveBuffer( wxString aFileName,
+void DBG_SaveBuffer( const wxString& aFileName,
                      const SFVEC3F *aInBuffer,
                      unsigned int aXSize,
                      unsigned int aYSize );
 
-void DBG_SaveNormalsBuffer( wxString aFileName,
+void DBG_SaveNormalsBuffer( const wxString& aFileName,
                             const SFVEC3F *aInNormalsBuffer,
                             unsigned int aXSize,
                             unsigned int aYSize );

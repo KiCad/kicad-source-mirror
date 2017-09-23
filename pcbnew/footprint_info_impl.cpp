@@ -66,7 +66,7 @@ void FOOTPRINT_INFO_IMPL::load()
 }
 
 
-bool FOOTPRINT_LIST_IMPL::CatchErrors( std::function<void()> aFunc )
+bool FOOTPRINT_LIST_IMPL::CatchErrors( const std::function<void()>& aFunc )
 {
     try
     {

@@ -305,7 +305,7 @@ private:
 
     //-----<single "item" tests>-----------------------------------------
 
-    bool doNetClass( std::shared_ptr<NETCLASS> aNetClass, wxString& msg );
+    bool doNetClass( const std::shared_ptr<NETCLASS>& aNetClass, wxString& msg );
 
     /**
      * Function doPadToPadsDrc

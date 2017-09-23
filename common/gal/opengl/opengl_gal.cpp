@@ -1545,7 +1545,7 @@ void OPENGL_GAL::drawPolygon( GLdouble* aPoints, int aPointCount )
 }
 
 
-void OPENGL_GAL::drawPolyline( std::function<VECTOR2D (int)> aPointGetter, int aPointCount )
+void OPENGL_GAL::drawPolyline( const std::function<VECTOR2D (int)>& aPointGetter, int aPointCount )
 {
     if( aPointCount < 2 )
         return;

@@ -452,7 +452,7 @@ double mpScaleY::P2x( mpWindow& w, double x )
 
 IMPLEMENT_ABSTRACT_CLASS( mpFX, mpLayer )
 
-mpFX::mpFX( wxString name, int flags )
+mpFX::mpFX( const wxString& name, int flags )
 {
     SetName( name );
     m_flags = flags;
@@ -529,7 +529,7 @@ void mpFX::Plot( wxDC& dc, mpWindow& w )
 
 IMPLEMENT_ABSTRACT_CLASS( mpFY, mpLayer )
 
-mpFY::mpFY( wxString name, int flags )
+mpFY::mpFY( const wxString& name, int flags )
 {
     SetName( name );
     m_flags = flags;
@@ -598,7 +598,7 @@ void mpFY::Plot( wxDC& dc, mpWindow& w )
 
 IMPLEMENT_ABSTRACT_CLASS( mpFXY, mpLayer )
 
-mpFXY::mpFXY( wxString name, int flags )
+mpFXY::mpFXY( const wxString& name, int flags )
 {
     SetName( name );
     m_flags     = flags;
@@ -790,7 +790,7 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
 
 IMPLEMENT_ABSTRACT_CLASS( mpProfile, mpLayer )
 
-mpProfile::mpProfile( wxString name, int flags )
+mpProfile::mpProfile( const wxString& name, int flags )
 {
     SetName( name );
     m_flags = flags;
@@ -1273,7 +1273,7 @@ IMPLEMENT_ABSTRACT_CLASS( mpScaleXBase, mpLayer )
 IMPLEMENT_DYNAMIC_CLASS( mpScaleX, mpScaleXBase )
 IMPLEMENT_DYNAMIC_CLASS( mpScaleXLog, mpScaleXBase )
 
-mpScaleXBase::mpScaleXBase( wxString name, int flags, bool ticks, unsigned int type )
+mpScaleXBase::mpScaleXBase( const wxString& name, int flags, bool ticks, unsigned int type )
 {
     SetName( name );
     SetFont( (wxFont&) *wxSMALL_FONT );
@@ -1285,13 +1285,13 @@ mpScaleXBase::mpScaleXBase( wxString name, int flags, bool ticks, unsigned int t
 }
 
 
-mpScaleX::mpScaleX( wxString name, int flags, bool ticks, unsigned int type ) :
+mpScaleX::mpScaleX( const wxString& name, int flags, bool ticks, unsigned int type ) :
     mpScaleXBase( name, flags, ticks, type )
 {
 }
 
 
-mpScaleXLog::mpScaleXLog( wxString name, int flags, bool ticks, unsigned int type ) :
+mpScaleXLog::mpScaleXLog( const wxString& name, int flags, bool ticks, unsigned int type ) :
     mpScaleXBase( name, flags, ticks, type )
 {
 }
@@ -1501,7 +1501,7 @@ void mpScaleXBase::Plot( wxDC& dc, mpWindow& w )
 
 IMPLEMENT_DYNAMIC_CLASS( mpScaleY, mpLayer )
 
-mpScaleY::mpScaleY( wxString name, int flags, bool ticks )
+mpScaleY::mpScaleY( const wxString& name, int flags, bool ticks )
 {
     SetName( name );
     SetFont( (wxFont&) *wxSMALL_FONT );
@@ -3268,7 +3268,7 @@ void mpWindow::SetColourTheme( const wxColour& bgColour,
 IMPLEMENT_DYNAMIC_CLASS( mpFXYVector, mpFXY )
 
 // Constructor
-mpFXYVector::mpFXYVector( wxString name, int flags ) : mpFXY( name, flags )
+mpFXYVector::mpFXYVector( const wxString& name, int flags ) : mpFXY( name, flags )
 {
     m_index = 0;
     // printf("FXYVector::FXYVector!\n");
@@ -3425,7 +3425,7 @@ IMPLEMENT_DYNAMIC_CLASS( mpText, mpLayer )
  *  @param offsetx x position in percentage (0-100)
  *  @param offsetx y position in percentage (0-100)
  */
-mpText::mpText( wxString name, int offsetx, int offsety )
+mpText::mpText( const wxString& name, int offsetx, int offsety )
 {
     SetName( name );
 

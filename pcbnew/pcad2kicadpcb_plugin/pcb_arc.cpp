@@ -52,10 +52,10 @@ PCB_ARC::~PCB_ARC()
 }
 
 
-void PCB_ARC::Parse( XNODE*     aNode,
-                     int        aLayer,
-                     wxString   aDefaultMeasurementUnit,
-                     wxString   aActualConversion )
+void PCB_ARC::Parse( XNODE*          aNode,
+                     int             aLayer,
+                     const wxString& aDefaultMeasurementUnit,
+                     const wxString& aActualConversion )
 {
     XNODE*      lNode;
     double      a = 0.0;

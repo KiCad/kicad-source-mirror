@@ -72,7 +72,7 @@ void LOGGER::EndGroup()
 }
 
 
-void LOGGER::Log ( const ITEM* aItem, int aKind, const std::string aName )
+void LOGGER::Log ( const ITEM* aItem, int aKind, const std::string& aName )
 {
     m_theLog << "item " << aKind << " " << aName << " ";
     m_theLog << aItem->Net() << " " << aItem->Layers().Start() << " " <<
@@ -122,7 +122,7 @@ void LOGGER::Log ( const ITEM* aItem, int aKind, const std::string aName )
 }
 
 
-void LOGGER::Log( const SHAPE_LINE_CHAIN *aL, int aKind, const std::string aName )
+void LOGGER::Log( const SHAPE_LINE_CHAIN *aL, int aKind, const std::string& aName )
 {
     m_theLog << "item " << aKind << " " << aName << " ";
     m_theLog << 0 << " " << 0 << " " << 0 << " " << 0 << " " << 0;
@@ -134,7 +134,7 @@ void LOGGER::Log( const SHAPE_LINE_CHAIN *aL, int aKind, const std::string aName
 
 
 void LOGGER::Log( const VECTOR2I& aStart, const VECTOR2I& aEnd,
-                      int aKind, const std::string aName)
+                      int aKind, const std::string& aName)
 {
 }
 

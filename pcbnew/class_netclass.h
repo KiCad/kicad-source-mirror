@@ -284,7 +284,7 @@ public:
      * @return true if the name within aNetclass is unique and it could be inserted OK,
      *  else false because the name was not unique.
      */
-    bool Add( NETCLASSPTR aNetclass );
+    bool Add( const NETCLASSPTR& aNetclass );
 
     /**
      * Function Remove

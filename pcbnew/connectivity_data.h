@@ -230,7 +230,7 @@ public:
 private:
 
     void    updateRatsnest();
-    void    addRatsnestCluster( std::shared_ptr<CN_CLUSTER> aCluster );
+    void    addRatsnestCluster( const std::shared_ptr<CN_CLUSTER>& aCluster );
 
     std::unique_ptr<CONNECTIVITY_DATA> m_dynamicConnectivity;
     std::shared_ptr<CN_CONNECTIVITY_ALGO> m_connAlgo;

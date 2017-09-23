@@ -617,7 +617,7 @@ static bool parallelismTest( int dx1, int dy1, int dx2, int dy2 )
  *  else return NULL
  */
 
-static void updateConn( TRACK *track, std::shared_ptr<CONNECTIVITY_DATA> connectivity )
+static void updateConn( TRACK *track, const std::shared_ptr<CONNECTIVITY_DATA>& connectivity )
 {
     for( auto pad : connectivity->GetConnectedPads( track ) )
     {

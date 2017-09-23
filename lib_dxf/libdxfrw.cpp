@@ -1685,7 +1685,7 @@ bool dxfRW::writeViewport( DRW_Viewport* ent )
 }
 
 
-DRW_ImageDef* dxfRW::writeImage( DRW_Image* ent, std::string name )
+DRW_ImageDef* dxfRW::writeImage( DRW_Image* ent, const std::string& name )
 {
     if( version > DRW::AC1009 )
     {
@@ -1741,7 +1741,7 @@ DRW_ImageDef* dxfRW::writeImage( DRW_Image* ent, std::string name )
 }
 
 
-bool dxfRW::writeBlockRecord( std::string name )
+bool dxfRW::writeBlockRecord( const std::string& name )
 {
     if( version > DRW::AC1009 )
     {

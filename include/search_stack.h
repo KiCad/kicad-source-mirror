@@ -105,7 +105,7 @@ public:
      * @param aPathString is concatonated string with interposing ';' or ':' separators.
      * @return int - the count of paths found in aPathString
      */
-    static int Split( wxArrayString* aResult, const wxString aPathString );
+    static int Split( wxArrayString* aResult, const wxString& aPathString );
 
 #if 1   // this function is so poorly designed it deserves not to exist.
     /**

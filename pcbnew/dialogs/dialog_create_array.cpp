@@ -265,7 +265,7 @@ static bool validateNumberingTypeAndOffset( const wxTextCtrl& offsetEntry,
  */
 static bool validateLongEntry( const wxTextEntry& entry,
                         long& dest,
-                        const wxString description,
+                        const wxString& description,
                         wxArrayString& errors )
 {
     bool ok = true;

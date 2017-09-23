@@ -1058,7 +1058,7 @@ class SHAPE_POLY_SET : public SHAPE
          * @return int -    The minimum distance between aSegment and all the polygons in the set.
          *                  If the point is contained in the polygon, the distance is zero.
          */
-        int Distance( SEG aSegment, int aSegmentWidth = 0 );
+        int Distance( const SEG& aSegment, int aSegmentWidth = 0 );
 
         /**
          * Function IsVertexInHole.
