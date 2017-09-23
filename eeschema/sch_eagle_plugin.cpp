@@ -1349,19 +1349,31 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
                 {
                     if( connect.gate == aGateName and pin->GetName().ToStdString() == connect.pin )
                     {
-                        wxString padname( connect.pad );
-                        pin->SetNumber( padname );
+                        wxArrayString pads = wxSplit( wxString(connect.pad), ' ');
+
                         pin->SetPartNumber( aGateNumber );
                         pin->SetUnit( aGateNumber );
-
 
                         wxString pinname = pin->GetName();
                         pinname.Replace( "~", "~~" );
                         pinname.Replace( "!", "~" );
                         pin->SetName( pinname );
 
-                        aPart->AddDrawItem( pin.release() );
+                        if( pads.GetCount() > 1)
+                        {
+                            pin->SetNumberTextSize( 0 );
+                        }
+
+                        for( int i = 0; i < pads.GetCount(); i++)
+                        {
+                            LIB_PIN* apin = new LIB_PIN( *pin );
+
+                            wxString padname( pads[i] );
+                            apin->SetNumber( padname );
+                            aPart->AddDrawItem( apin);
+                        }
                         break;
+
                     }
                 }
             }
