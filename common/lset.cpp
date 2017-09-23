@@ -554,20 +554,25 @@ LSET FlipLayerMask( LSET aMask, int aCopperLayersCount )
 
     if( aCopperLayersCount >= 4 )   // Internal layers exist
     {
-        LSET internalMask = aMask & ~LSET::InternalCuMask();
+        LSET internalMask = aMask & LSET::InternalCuMask();
 
         if( internalMask != LSET::InternalCuMask() )
-        {   // the mask does not include all internal layers. Therefore
+        {
+            // the mask does not include all internal layers. Therefore
             // the flipped mask for internal copper layers must be built
+
             int innerLayerCnt = aCopperLayersCount -2;
 
             for( int ii = 0; ii < innerLayerCnt; ii++ )
             {
-                //TODO there is a problem with this code
-                if( internalMask[innerLayerCnt - ii + In1_Cu] )
+                if( internalMask[innerLayerCnt - ii] )
+                {
                     newMask.set( ii + In1_Cu );
+                }
                 else
+                {
                     newMask.reset( ii + In1_Cu );
+                }
             }
         }
     }
