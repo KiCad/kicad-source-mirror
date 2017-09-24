@@ -123,7 +123,7 @@ size_t PROJECT_TEMPLATE::GetDestinationFiles( const wxFileName& aNewProjectPath,
     // Find the template file name base. this is the name of the .pro template file
     wxString basename;
 
-    for( auto file : srcFiles )
+    for( const auto& file : srcFiles )
     {
         if( file.GetExt() == wxT( "pro" ) )
         {
@@ -132,7 +132,7 @@ size_t PROJECT_TEMPLATE::GetDestinationFiles( const wxFileName& aNewProjectPath,
         }
     }
 
-    for( auto file :  srcFiles )
+    for( const auto& file :  srcFiles )
     {
         wxFileName destFile = file;
 

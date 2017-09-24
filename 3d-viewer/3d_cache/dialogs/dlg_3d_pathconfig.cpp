@@ -341,7 +341,7 @@ void DLG_3D_PATH_CONFIG::updateEnvVars( void )
 
     int j = 0;
 
-    for( auto i : epaths )
+    for( const auto& i : epaths )
     {
         wxString val = ExpandEnvVarSubstitutions( i );
         m_EnvVars->SetCellValue( j, 0, i );

@@ -187,7 +187,7 @@ bool S3D_FILENAME_RESOLVER::createPathList( void )
 
     if( GetKicadPaths( epaths ) )
     {
-        for( auto i : epaths )
+        for( const auto& i : epaths )
         {
             wxString pathVal = ExpandEnvVarSubstitutions( i );
 

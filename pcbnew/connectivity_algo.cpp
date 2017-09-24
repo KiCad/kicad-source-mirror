@@ -797,7 +797,7 @@ void CN_CONNECTIVITY_ALGO::Build( const std::vector<BOARD_ITEM*>& aItems )
 
 void CN_CONNECTIVITY_ALGO::propagateConnections()
 {
-    for( auto cluster : m_connClusters )
+    for( const auto& cluster : m_connClusters )
     {
         if( cluster->IsConflicting() )
         {
@@ -862,7 +862,7 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( ZONE_CONTAINER* aZone, std
 
     m_connClusters = SearchClusters( CSM_CONNECTIVITY_CHECK );
 
-    for( auto cluster : m_connClusters )
+    for( const auto& cluster : m_connClusters )
     {
         if( cluster->Contains( aZone ) && cluster->IsOrphaned() )
         {
@@ -897,7 +897,7 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLAT
         if( zone.m_zone->GetFilledPolysList().IsEmpty() )
             continue;
 
-        for( auto cluster : m_connClusters )
+        for( const auto& cluster : m_connClusters )
         {
             if( cluster->Contains( zone.m_zone ) && cluster->IsOrphaned() )
             {
@@ -1051,16 +1051,16 @@ void CN_CONNECTIVITY_ALGO::ForEachItem( const std::function<void( CN_ITEM& )>& a
 
 void CN_CONNECTIVITY_ALGO::ForEachAnchor( const std::function<void( CN_ANCHOR& )>& aFunc )
 {
-    for( auto anchor : m_padList.Anchors() )
+    for( const auto& anchor : m_padList.Anchors() )
         aFunc( *anchor );
 
-    for( auto anchor : m_viaList.Anchors() )
+    for( const auto& anchor : m_viaList.Anchors() )
         aFunc( *anchor );
 
-    for( auto anchor : m_trackList.Anchors() )
+    for( const auto& anchor : m_trackList.Anchors() )
         aFunc( *anchor );
 
-    for( auto anchor : m_zoneList.Anchors() )
+    for( const auto& anchor : m_zoneList.Anchors() )
         aFunc( *anchor );
 }
 

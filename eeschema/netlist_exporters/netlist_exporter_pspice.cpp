@@ -69,7 +69,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
     aFormatter->Print( 0, ".title KiCad schematic\n" );
 
     // Write .include directives
-    for( auto lib : m_libraries )
+    for( const auto& lib : m_libraries )
     {
         wxString full_path;
 

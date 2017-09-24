@@ -103,7 +103,7 @@ void WX_HTML_REPORT_PANEL::refreshView()
 {
     wxString html;
 
-    for( REPORT_LINE l : m_report )
+    for( const REPORT_LINE& l : m_report )
     {
         html += generateHtml( l );
     }
@@ -271,7 +271,7 @@ void WX_HTML_REPORT_PANEL::onBtnSaveToFile( wxCommandEvent& event )
         return;
     }
 
-    for( REPORT_LINE l : m_report )
+    for( const REPORT_LINE& l : m_report )
     {
         f.Write( generatePlainText( l ) );
     }

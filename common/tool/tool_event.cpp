@@ -155,7 +155,7 @@ const std::string TOOL_EVENT_LIST::Format() const
 {
     std::string s;
 
-    for( TOOL_EVENT e : m_events )
+    for( const TOOL_EVENT& e : m_events )
         s += e.Format() + " ";
 
     return s;

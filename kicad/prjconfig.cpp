@@ -351,7 +351,7 @@ void KICAD_MANAGER_FRAME::OnCreateProjectFromTemplate( wxCommandEvent& event )
     {
         std::vector< wxFileName > overwrittenFiles;
 
-        for( auto file : destFiles )
+        for( const auto& file : destFiles )
         {
             if( file.FileExists() )
                 overwrittenFiles.push_back( file );
@@ -361,7 +361,7 @@ void KICAD_MANAGER_FRAME::OnCreateProjectFromTemplate( wxCommandEvent& event )
         {
             wxString extendedMsg = _( "Overwriting files:" ) + "\n";
 
-            for( auto file : overwrittenFiles )
+            for( const auto& file : overwrittenFiles )
             {
                 extendedMsg += "\n" + file.GetFullName();
             }

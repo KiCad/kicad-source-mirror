@@ -91,7 +91,7 @@ wxString SCH_BASE_FRAME::SelectLibraryFromList()
     std::vector< wxString > libNicknames = prj.SchSymbolLibTable()->GetLogicalLibs();
 
     // Conversion from wxArrayString to vector of ArrayString
-    for( auto name : libNicknames )
+    for( const auto& name : libNicknames )
     {
         wxArrayString item;
 

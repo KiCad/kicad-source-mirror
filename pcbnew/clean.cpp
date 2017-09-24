@@ -365,7 +365,7 @@ bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK* aTrack, ENDPOINT_T aEndPo
 
     auto anchors = citem->Anchors();
 
-    for( auto anchor : anchors )
+    for( const auto& anchor : anchors )
     {
         if( anchor->Pos() == endpoint && anchor->IsDangling() )
             return true;

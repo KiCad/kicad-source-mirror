@@ -207,7 +207,7 @@ void SCH_SHEET::RemovePin( SCH_SHEET_PIN* aSheetPin )
 
 bool SCH_SHEET::HasPin( const wxString& aName )
 {
-    for( SCH_SHEET_PIN pin : m_pins )
+    for( const SCH_SHEET_PIN& pin : m_pins )
     {
         if( pin.GetText().CmpNoCase( aName ) == 0 )
             return true;
@@ -219,7 +219,7 @@ bool SCH_SHEET::HasPin( const wxString& aName )
 
 bool SCH_SHEET::IsVerticalOrientation() const
 {
-    for( SCH_SHEET_PIN pin : m_pins )
+    for( const SCH_SHEET_PIN& pin : m_pins )
     {
         if( pin.GetEdge() > 1 )
             return true;
@@ -230,7 +230,7 @@ bool SCH_SHEET::IsVerticalOrientation() const
 
 bool SCH_SHEET::HasUndefinedPins()
 {
-    for( SCH_SHEET_PIN pin : m_pins )
+    for( const SCH_SHEET_PIN& pin : m_pins )
     {
         /* Search the schematic for a hierarchical label corresponding to this sheet label. */
         EDA_ITEM* DrawStruct  = m_screen->GetDrawItems();

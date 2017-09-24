@@ -469,7 +469,7 @@ bool LIB_VIEW_FRAME::ReCreateListLib()
 
     wxArrayString libNames;
 
-    for( auto name : libs )
+    for( const auto& name : libs )
         libNames.Add( name );
 
     m_libList->Append( libNames );

@@ -198,7 +198,7 @@ void DIALOG_BOM_EDITOR::ApplyAllChanges()
     ITEM_PICKER picker;
 
     // Iterate through each of the components that were changed
-    for( auto ref : changed )
+    for( const auto& ref : changed )
     {
         // Extract the SCH_COMPONENT* object
         auto cmp = ref.GetComp();

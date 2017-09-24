@@ -120,7 +120,7 @@ void CMP_TREE_MODEL_ADAPTER_BASE::AddLibrariesWithProgress(
 
     unsigned int ii = 0;
 
-    for( auto nickname : aNicknames )
+    for( const auto& nickname : aNicknames )
     {
         if( prg )
             prg->Update( ii++, wxString::Format( _( "Loading library \"%s\"" ), nickname ) );

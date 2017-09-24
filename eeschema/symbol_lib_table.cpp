@@ -240,7 +240,7 @@ int SYMBOL_LIB_TABLE::GetModifyHash()
     int                     hash = 0;
     std::vector< wxString > libNames = GetLogicalLibs();
 
-    for( auto libName : libNames )
+    for( const auto& libName : libNames )
     {
         const SYMBOL_LIB_TABLE_ROW* row = FindRow( libName );
 
