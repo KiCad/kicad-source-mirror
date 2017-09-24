@@ -33,6 +33,8 @@
 #include <stdio.h>
 #include <wx/debug.h>
 
+#include <cmath>
+
 //static unsigned int gs_next_rayID = 0;
 
 void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
@@ -185,7 +187,7 @@ bool IntersectSegment( const SFVEC2F &aStartA, const SFVEC2F &aEnd_minus_startA,
                 aEnd_minus_startB.y - aEnd_minus_startA.y *
                 aEnd_minus_startB.x;
 
-    if( fabs(rxs) >  glm::epsilon<float>() )
+    if( std::abs( rxs ) >  glm::epsilon<float>() )
     {
         float inv_rxs = 1.0f / rxs;
 
@@ -294,7 +296,7 @@ bool RAYSEG2D::IntersectSegment( const SFVEC2F &aStart,
                 aEnd_minus_start.y - m_End_minus_start.y *
             aEnd_minus_start.x;
 
-    if( fabs( rxs ) >  glm::epsilon<float>() )
+    if( std::abs( rxs ) >  glm::epsilon<float>() )
     {
         const float inv_rxs = 1.0f / rxs;
 
@@ -371,7 +373,7 @@ bool RAYSEG2D::IntersectCircle( const SFVEC2F &aCenter,
 
     // Otherwise check and make sure that the intersections occur on the ray (t
     // > 0) and return the closer one
-    const float discriminant = sqrt( discriminantsqr );
+    const float discriminant = std::sqrt( discriminantsqr );
     const float t1 = (-qd - discriminant);
     const float t2 = (-qd + discriminant);
 
