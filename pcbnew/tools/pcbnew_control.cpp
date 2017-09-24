@@ -871,6 +871,7 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems )
 
     for ( auto item : aItems )
     {
+        item->SetSelected();
         selection.Add( item );
         editTool->GetCurrentCommit()->Add( item );
     }

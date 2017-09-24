@@ -54,12 +54,16 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
+        auto mousePos = controls->GetMousePosition();
+        auto p = grid.BestSnapAnchor( mousePos, nullptr );
+        controls->ForceCursorPosition( true, p );
+
         if( evt->IsClick( BUT_LEFT ) )
         {
             bool getNext = false;
-            auto cursorPos = controls->GetCursorPosition();
-            m_picked = grid.BestSnapAnchor( cursorPos, nullptr );
 
+            m_picked = p;
+            
             if( m_clickHandler )
             {
                 try
@@ -87,6 +91,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
     }
 
     reset();
+    controls->ForceCursorPosition( false );
     getEditFrame<PCB_BASE_FRAME>()->SetNoToolSelected();
 
     return 0;
