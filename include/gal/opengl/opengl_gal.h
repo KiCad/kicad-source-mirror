@@ -41,7 +41,7 @@
 
 #include <wx/glcanvas.h>
 
-#include <map>
+#include <unordered_map>
 #include <boost/smart_ptr/shared_array.hpp>
 #include <memory>
 
@@ -299,7 +299,7 @@ private:
     static GLuint fontTexture;                  ///< Bitmap font texture handle (shared)
 
     // Vertex buffer objects related fields
-    typedef std::map< unsigned int, std::shared_ptr<VERTEX_ITEM> > GROUPS_MAP;
+    typedef std::unordered_map< unsigned int, std::shared_ptr<VERTEX_ITEM> > GROUPS_MAP;
     GROUPS_MAP              groups;                 ///< Stores informations about VBO objects (groups)
     unsigned int            groupCounter;           ///< Counter used for generating keys for groups
     VERTEX_MANAGER*         currentManager;         ///< Currently used VERTEX_MANAGER (for storing VERTEX_ITEMs)
