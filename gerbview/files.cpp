@@ -220,6 +220,9 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
         m_mruPath = currentPath;
     }
 
+    // Set the busy cursor
+    wxBusyCursor wait;
+
     // Read gerber files: each file is loaded on a new GerbView layer
     bool success = true;
     int layer = GetActiveLayer();

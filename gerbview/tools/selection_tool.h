@@ -203,14 +203,14 @@ private:
      * Marks item as selected, but does not add it to the ITEMS_PICKED_LIST.
      * @param aItem is an item to be be marked.
      */
-    void selectVisually( EDA_ITEM* aItem ) const;
+    void selectVisually( EDA_ITEM* aItem );
 
     /**
      * Function unselectVisually()
      * Marks item as selected, but does not add it to the ITEMS_PICKED_LIST.
      * @param aItem is an item to be be marked.
      */
-    void unselectVisually( EDA_ITEM* aItem ) const;
+    void unselectVisually( EDA_ITEM* aItem );
 
     /**
      * Function selectionContains()

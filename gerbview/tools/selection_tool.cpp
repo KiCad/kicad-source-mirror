@@ -704,7 +704,6 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
 
     getView()->Remove( &highlightGroup );
 
-
     return current;
 }
 
@@ -732,9 +731,9 @@ void GERBVIEW_SELECTION_TOOL::select( EDA_ITEM* aItem )
         return;
     }
 
-    selectVisually( aItem );
     m_selection.Add( aItem );
     getView()->Add( &m_selection );
+    selectVisually( aItem );
 
     if( m_selection.Size() == 1 )
     {
@@ -765,7 +764,7 @@ void GERBVIEW_SELECTION_TOOL::unselect( EDA_ITEM* aItem )
 }
 
 
-void GERBVIEW_SELECTION_TOOL::selectVisually( EDA_ITEM* aItem ) const
+void GERBVIEW_SELECTION_TOOL::selectVisually( EDA_ITEM* aItem )
 {
     // Move the item's layer to the front
     int layer = static_cast<GERBER_DRAW_ITEM*>( aItem )->GetLayer();
@@ -774,16 +773,19 @@ void GERBVIEW_SELECTION_TOOL::selectVisually( EDA_ITEM* aItem ) const
     // Hide the original item, so it is shown only on overlay
     aItem->SetSelected();
     getView()->Hide( aItem, true );
-    getView()->Update( aItem, KIGFX::GEOMETRY );
+
+    getView()->Update( &m_selection );
 }
 
 
-void GERBVIEW_SELECTION_TOOL::unselectVisually( EDA_ITEM* aItem ) const
+void GERBVIEW_SELECTION_TOOL::unselectVisually( EDA_ITEM* aItem )
 {
     // Restore original item visibility
     aItem->ClearSelected();
     getView()->Hide( aItem, false );
     getView()->Update( aItem, KIGFX::ALL );
+
+    getView()->Update( &m_selection );
 }
 
 
