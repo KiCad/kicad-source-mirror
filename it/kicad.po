@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-19 20:40+0200\n"
-"PO-Revision-Date: 2017-09-19 20:49+0200\n"
+"POT-Creation-Date: 2017-09-25 09:25+0200\n"
+"PO-Revision-Date: 2017-09-25 09:26+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -11358,8 +11358,8 @@ msgid "Vertical"
 msgstr "Verticale"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:226
-msgid "Corner size (% of width):"
-msgstr "Dimensione angolo (% della larghezza):"
+msgid "Corner size (percent of width):"
+msgstr "Dimensione angolo (percentuale della larghezza):"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:228
 msgid ""
@@ -20733,11 +20733,13 @@ msgstr ""
 "%s"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:32
-msgid "Move the selected optional fields up one position"
-msgstr "Sposta il il campo opzionale selezionato su di una posizione"
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:130
+msgid "Move the selected optional field up one position"
+msgstr "Sposta il campo opzionale selezionato in su di una posizione"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:37
-msgid "Move the selected optional fields down one position"
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:135
+msgid "Move the selected optional field down one position"
 msgstr "Sposta il campo opzionale selezionato in giù di una posizione"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:45
@@ -22361,14 +22363,6 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:116
 msgid "  Fields"
 msgstr "  Campi"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:130
-msgid "Move the selected optional field up one position"
-msgstr "Sposta il campo opzionale selezionato in su di una posizione"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:135
-msgid "Move the selected optional field down one position"
-msgstr "Sposta il campo opzionale selezionato in giù di una posizione"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:143
 msgid "Delete optional field"
@@ -26954,3 +26948,9 @@ msgstr "Percorso libreria"
 #: include/lib_table_grid.h:172
 msgid "Plugin Type"
 msgstr "Tipo plugin"
+
+#~ msgid "Move the selected optional fields up one position"
+#~ msgstr "Sposta il il campo opzionale selezionato su di una posizione"
+
+#~ msgid "Move the selected optional fields down one position"
+#~ msgstr "Sposta il campo opzionale selezionato in giù di una posizione"
