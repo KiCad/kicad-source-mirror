@@ -73,7 +73,7 @@ COLOR4D GBR_LAYER_BOX_SELECTOR::GetLayerColor( int aLayer ) const
 {
     GERBVIEW_FRAME* frame = (GERBVIEW_FRAME*) GetParent()->GetParent();
 
-    return frame->GetLayerColor( aLayer );
+    return frame->GetLayerColor( GERBER_DRAW_LAYER( aLayer ) );
 }
 
 

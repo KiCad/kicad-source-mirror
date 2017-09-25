@@ -35,6 +35,7 @@
 #include <class_gerber_file_image.h>
 #include <class_gerber_file_image_list.h>
 #include <class_gerbview_layer_widget.h>
+#include <view/view.h>
 
 bool GERBVIEW_FRAME::Clear_DrawLayers( bool query )
 {
@@ -47,11 +48,16 @@ bool GERBVIEW_FRAME::Clear_DrawLayers( bool query )
             return false;
     }
 
+    if( auto canvas = GetGalCanvas() )
+    {
+        canvas->GetView()->Clear();
+    }
+
     GetImagesList()->DeleteAllImages();
 
     GetGerberLayout()->SetBoundingBox( EDA_RECT() );
 
-    setActiveLayer( 0 );
+    SetActiveLayer( 0 );
     ReFillLayerWidget();
     syncLayerBox();
     return true;
@@ -60,7 +66,7 @@ bool GERBVIEW_FRAME::Clear_DrawLayers( bool query )
 
 void GERBVIEW_FRAME::Erase_Current_DrawLayer( bool query )
 {
-    int layer = getActiveLayer();
+    int layer = GetActiveLayer();
     wxString msg;
 
     msg.Printf( _( "Clear layer %d?" ), layer + 1 );

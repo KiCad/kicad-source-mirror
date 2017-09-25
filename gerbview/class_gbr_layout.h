@@ -50,10 +50,10 @@ class GERBER_FILE_IMAGE_LIST;
  * Class GBR_LAYOUT
  * holds list of GERBER_DRAW_ITEM currently loaded.
  */
-class GBR_LAYOUT
+class GBR_LAYOUT : public EDA_ITEM
 {
 private:
-    EDA_RECT            m_BoundingBox;
+    mutable EDA_RECT    m_BoundingBox;
     TITLE_BLOCK         m_titles;
     wxPoint             m_originAxisPosition;
     std::vector<int>    m_printLayersList;  // When printing: the list of graphic layers Id to print
@@ -63,9 +63,14 @@ public:
     GBR_LAYOUT();
     ~GBR_LAYOUT();
 
+    wxString GetClass() const override
+    {
+        return wxT( "GBR_LAYOUT" );
+    }
+
     // Accessor to the GERBER_FILE_IMAGE_LIST,
     // which handles the list of gerber files (and drill files) images loaded
-    GERBER_FILE_IMAGE_LIST* GetImagesList();
+    GERBER_FILE_IMAGE_LIST* GetImagesList() const;
 
     const wxPoint&      GetAuxOrigin() const
     {
@@ -92,14 +97,15 @@ public:
      * calculates the bounding box containing all Gerber items.
      * @return EDA_RECT - the full item list bounding box
      */
-    EDA_RECT ComputeBoundingBox();
+    EDA_RECT ComputeBoundingBox() const;
 
     /**
      * Function GetBoundingBox
-     * may be called soon after ComputeBoundingBox() to return the same EDA_RECT,
-     * as long as the CLASS_GBR_LAYOUT has not changed.
      */
-    EDA_RECT GetBoundingBox() const { return m_BoundingBox; }
+    const EDA_RECT GetBoundingBox() const override
+    {
+        return ComputeBoundingBox();
+    }
 
     void SetBoundingBox( const EDA_RECT& aBox ) { m_BoundingBox = aBox; }
 
@@ -176,8 +182,13 @@ public:
      */
     bool    IsLayerPrintable( int aLayer ) const;
 
+    ///> @copydoc EDA_ITEM::Visit()
+    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
+
+
 #if defined(DEBUG)
-    void    Show( int nestLevel, std::ostream& os ) const;
+
+    void    Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 
 #endif
 };

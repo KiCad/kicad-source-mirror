@@ -120,7 +120,7 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
 
         D_CODE* apertDescr = currItem->GetDcodeDescr();
 
-        if( !apertDescr->m_AperFunction.IsEmpty() )
+        if( apertDescr && !apertDescr->m_AperFunction.IsEmpty() )
         {
             AddMenuItem( aPopMenu, ID_HIGHLIGHT_APER_ATTRIBUTE_ITEMS,
                          wxString::Format( _( "Highlight aperture type '%s'" ),

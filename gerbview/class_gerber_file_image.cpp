@@ -89,7 +89,8 @@ void GERBER_LAYER::ResetDefaultValues()
 }
 
 
-GERBER_FILE_IMAGE::GERBER_FILE_IMAGE( int aLayer )
+GERBER_FILE_IMAGE::GERBER_FILE_IMAGE( int aLayer ) :
+    EDA_ITEM( (EDA_ITEM*)NULL, GERBER_IMAGE_T )
 {
     m_GraphicLayer = aLayer;        // Graphic layer Number
     m_IsVisible    = true;          // must be drawn
@@ -126,7 +127,8 @@ GERBER_DRAW_ITEM * GERBER_FILE_IMAGE::GetItemsList()
     return m_Drawings;
 }
 
-D_CODE* GERBER_FILE_IMAGE::GetDCODE( int aDCODE, bool aCreateIfNoExist )
+
+D_CODE* GERBER_FILE_IMAGE::GetDCODEOrCreate( int aDCODE, bool aCreateIfNoExist )
 {
     unsigned ndx = aDCODE - FIRST_DCODE;
 
@@ -139,6 +141,19 @@ D_CODE* GERBER_FILE_IMAGE::GetDCODE( int aDCODE, bool aCreateIfNoExist )
                 m_Aperture_List[ndx] = new D_CODE( ndx + FIRST_DCODE );
         }
 
+        return m_Aperture_List[ndx];
+    }
+
+    return NULL;
+}
+
+
+D_CODE* GERBER_FILE_IMAGE::GetDCODE( int aDCODE ) const
+{
+    unsigned ndx = aDCODE - FIRST_DCODE;
+
+    if( ndx < (unsigned) DIM( m_Aperture_List ) )
+    {
         return m_Aperture_List[ndx];
     }
 
@@ -369,4 +384,44 @@ void GERBER_FILE_IMAGE::RemoveAttribute( X2_ATTRIBUTE& aAttribute )
 
     if( aAttribute.GetPrm( 1 ).IsEmpty() || aAttribute.GetPrm( 1 ) == ".AperFunction" )
         m_AperFunction.Clear();
+}
+
+
+SEARCH_RESULT GERBER_FILE_IMAGE::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
+{
+    KICAD_T        stype;
+    SEARCH_RESULT  result = SEARCH_CONTINUE;
+    const KICAD_T* p    = scanTypes;
+    bool           done = false;
+
+#if 0 && defined(DEBUG)
+    std::cout << GetClass().mb_str() << ' ';
+#endif
+
+    while( !done )
+    {
+        stype = *p;
+
+        switch( stype )
+        {
+        case GERBER_IMAGE_T:
+        case GERBER_IMAGE_LIST_T:
+            ++p;
+            break;
+
+        case GERBER_DRAW_ITEM_T:
+            result = IterateForward( &m_Drawings[0], inspector, testData, p );
+            ++p;
+            break;
+
+        default:        // catch EOT or ANY OTHER type here and return.
+            done = true;
+            break;
+        }
+
+        if( result == SEARCH_QUIT )
+            break;
+    }
+
+    return result;
 }

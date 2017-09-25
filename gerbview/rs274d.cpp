@@ -140,6 +140,9 @@ void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
 
     case APT_MACRO:
         aGbrItem->m_Shape = GBR_SPOT_MACRO;
+
+        // Cache the bounding box for aperture macros
+        aGbrItem->GetDcodeDescr()->GetMacro()->GetApertureMacroShape( aGbrItem, aPos );
         break;
     }
 }
@@ -379,6 +382,9 @@ static void fillArcPOLY(  GERBER_DRAW_ITEM* aGbrItem,
     const int increment_angle = 3600 / 36;
     int count = std::abs( arc_angle / increment_angle );
 
+    if( aGbrItem->m_Polygon.OutlineCount() == 0 )
+        aGbrItem->m_Polygon.NewOutline();
+
     // calculate polygon corners
     // when arc is counter-clockwise, dummyGbrItem arc goes from end to start
     // and we must always create a polygon from start to end.
@@ -397,7 +403,7 @@ static void fillArcPOLY(  GERBER_DRAW_ITEM* aGbrItem,
         else    // last point
             end_arc = aClockwise ? end : start;
 
-        aGbrItem->m_PolyCorners.push_back( end_arc + center );
+        aGbrItem->m_Polygon.Append( VECTOR2I( end_arc + center ) );
 
         start_arc = end_arc;
     }
@@ -510,7 +516,7 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
         if( D_commande > (TOOLS_MAX_COUNT - 1) )
             D_commande = TOOLS_MAX_COUNT - 1;
         m_Current_Tool = D_commande;
-        D_CODE* pt_Dcode = GetDCODE( D_commande, false );
+        D_CODE* pt_Dcode = GetDCODE( D_commande );
         if( pt_Dcode )
             pt_Dcode->m_InUse = true;
         break;
@@ -552,6 +558,7 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
         if( m_Exposure && GetItemsList() )    // End of polygon
         {
             GERBER_DRAW_ITEM * gbritem = m_Drawings.GetLast();
+            gbritem->m_Polygon.Append( gbritem->m_Polygon.Vertex( 0 ) );
             StepAndRepeatItem( *gbritem );
         }
         m_Exposure = false;
@@ -594,7 +601,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
         // call
         m_Current_Tool = D_commande;
 
-        D_CODE* pt_Dcode = GetDCODE( D_commande, false );
+        D_CODE* pt_Dcode = GetDCODE( D_commande );
         if( pt_Dcode )
             pt_Dcode->m_InUse = true;
 
@@ -635,11 +642,14 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
                 gbritem = m_Drawings.GetLast();
 
                 gbritem->m_Start = m_PreviousPos;       // m_Start is used as temporary storage
-                if( gbritem->m_PolyCorners.size() == 0 )
-                    gbritem->m_PolyCorners.push_back( gbritem->m_Start );
+                if( gbritem->m_Polygon.OutlineCount() == 0 )
+                {
+                    gbritem->m_Polygon.NewOutline();
+                    gbritem->m_Polygon.Append( VECTOR2I( gbritem->m_Start ) );
+                }
 
                 gbritem->m_End = m_CurrentPos;       // m_End is used as temporary storage
-                gbritem->m_PolyCorners.push_back( gbritem->m_End );
+                gbritem->m_Polygon.Append( VECTOR2I( gbritem->m_End ) );
                 break;
             }
 
@@ -651,6 +661,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             if( m_Exposure && GetItemsList() )    // End of polygon
             {
                 gbritem = m_Drawings.GetLast();
+                gbritem->m_Polygon.Append( gbritem->m_Polygon.Vertex( 0 ) );
                 StepAndRepeatItem( *gbritem );
             }
             m_Exposure    = false;
@@ -669,7 +680,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
         case 1:     // code D01 Draw line, exposure ON
             m_Exposure = true;
 
-            tool = GetDCODE( m_Current_Tool, false );
+            tool = GetDCODE( m_Current_Tool );
             if( tool )
             {
                 size     = tool->m_Size;
@@ -722,7 +733,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             break;
 
         case 3:     // code D3: flash aperture
-            tool = GetDCODE( m_Current_Tool, false );
+            tool = GetDCODE( m_Current_Tool );
             if( tool )
             {
                 size     = tool->m_Size;

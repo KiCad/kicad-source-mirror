@@ -123,11 +123,8 @@ protected:
      */
     virtual void SwitchCanvas( wxCommandEvent& aEvent ) override;
 
-    /**
-     * Helper function to coerce all colors to legacy-compatible when
-     * switching from GAL to legacy canvas
-     */
-    void forceColorsToLegacy();
+    ///> @copydoc EDA_DRAW_FRAME::forceColorsToLegacy()
+    virtual void forceColorsToLegacy() override;
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     /**

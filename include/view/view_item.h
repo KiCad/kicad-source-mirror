@@ -56,7 +56,8 @@ enum VIEW_UPDATE_FLAGS {
     COLOR       = 0x02,     /// Color has changed
     GEOMETRY    = 0x04,     /// Position or shape has changed
     LAYERS      = 0x08,     /// Layers have changed
-    ALL         = 0xff
+    INITIAL_ADD = 0x10,     /// Item is being added to the view
+    ALL         = 0xef      /// All except INITIAL_ADD
 };
 
 /**

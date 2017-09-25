@@ -41,6 +41,10 @@
 #include <layer_widget.h>
 #include <class_gerbview_layer_widget.h>
 
+#include <view/view.h>
+#include <gerbview_painter.h>
+#include <gal/graphics_abstraction_layer.h>
+
 
 /*
  * Class GERBER_LAYER_WIDGET
@@ -77,6 +81,12 @@ GERBER_LAYER_WIDGET::GERBER_LAYER_WIDGET( GERBVIEW_FRAME* aParent, wxWindow* aFo
 GERBER_FILE_IMAGE_LIST* GERBER_LAYER_WIDGET::GetImagesList()
 {
     return &GERBER_FILE_IMAGE_LIST::GetImagesList();
+}
+
+
+bool GERBER_LAYER_WIDGET::AreArbitraryColorsAllowed()
+{
+    return myframe->IsGalCanvasActive();
 }
 
 
@@ -180,8 +190,11 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
             int layer = getDecodedId( cb->GetId() );
             bool loc_visible = visible;
 
-            if( force_active_layer_visible && (layer == myframe->getActiveLayer() ) )
+            if( force_active_layer_visible &&
+                (layer == GERBER_DRAW_LAYER( myframe->GetActiveLayer() ) ) )
+            {
                 loc_visible = true;
+            }
 
             cb->SetValue( loc_visible );
 
@@ -228,8 +241,19 @@ void GERBER_LAYER_WIDGET::ReFill()
     {
         wxString msg = GetImagesList()->GetDisplayName( layer );
 
-        AppendLayerRow( LAYER_WIDGET::ROW( msg, layer,
-                        myframe->GetLayerColor( layer ), wxEmptyString, true ) );
+        bool visible = true;
+        if( auto canvas = myframe->GetGalCanvas() )
+        {
+            visible = canvas->GetView()->IsLayerVisible( GERBER_DRAW_LAYER( layer ) );
+        }
+        else
+        {
+            visible = myframe->IsLayerVisible( layer );
+        }
+
+        AppendLayerRow( LAYER_WIDGET::ROW( msg, GERBER_DRAW_LAYER( layer ),
+                        myframe->GetLayerColor( GERBER_DRAW_LAYER( layer ) ),
+                        wxEmptyString, visible, true ) );
     }
 
     Thaw();
@@ -246,6 +270,14 @@ void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
 {
     myframe->SetLayerColor( aLayer, aColor );
     myframe->m_SelLayerBox->ResyncBitmapOnly();
+
+    if( myframe->IsGalCanvasActive() )
+    {
+        KIGFX::VIEW* view = myframe->GetGalCanvas()->GetView();
+        view->GetPainter()->GetSettings()->ImportLegacyColors( myframe->m_colorsSettings );
+        view->UpdateLayerColor( aLayer );
+    }
+
     myframe->GetCanvas()->Refresh();
 }
 
@@ -253,11 +285,13 @@ bool GERBER_LAYER_WIDGET::OnLayerSelect( int aLayer )
 {
     // the layer change from the GERBER_LAYER_WIDGET can be denied by returning
     // false from this function.
-    int layer = myframe->getActiveLayer( );
-    myframe->setActiveLayer( aLayer, false );
+    int layer = myframe->GetActiveLayer( );
+    // TODO(JE) ActiveLayer is stored as an index from 0 rather than as a layer
+    // id matching GERBER_DRAW_LAYER( idx ), is this what we want long-term?
+    myframe->SetActiveLayer( GERBER_DRAW_LAYER_INDEX( aLayer ), false );
     myframe->syncLayerBox();
 
-    if( layer != myframe->getActiveLayer( ) )
+    if( layer != myframe->GetActiveLayer( ) )
     {
         if( ! OnLayerSelected() )
             myframe->GetCanvas()->Refresh();
@@ -271,9 +305,9 @@ void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFin
     long visibleLayers = myframe->GetVisibleLayers();
 
     if( isVisible )
-        visibleLayers |= 1 << aLayer;
+        visibleLayers |= 1 << ( aLayer - GERBVIEW_LAYER_ID_START );
     else
-        visibleLayers &= ~( 1 << aLayer );
+        visibleLayers &= ~( 1 << ( aLayer - GERBVIEW_LAYER_ID_START ) );
 
     myframe->SetVisibleLayers( visibleLayers );
 
@@ -284,13 +318,48 @@ void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFin
 void GERBER_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
 {
     myframe->SetVisibleElementColor( (GERBVIEW_LAYER_ID) aId, aColor );
-    myframe->GetCanvas()->Refresh();
+
+    auto galCanvas = myframe->GetGalCanvas();
+
+    if( galCanvas && myframe->IsGalCanvasActive() )
+    {
+        auto view = galCanvas->GetView();
+        view->GetPainter()->GetSettings()->ImportLegacyColors( myframe->m_colorsSettings );
+        view->UpdateLayerColor( aId );
+        // TODO(JE) Why are the below two lines needed? Not needed in pcbnew
+        view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+        view->RecacheAllItems();
+    }
+
+    if( galCanvas && myframe->IsGalCanvasActive() )
+        galCanvas->Refresh();
+    else
+        myframe->GetCanvas()->Refresh();
 }
 
 void GERBER_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 {
     myframe->SetElementVisibility( (GERBVIEW_LAYER_ID) aId, isEnabled );
-    myframe->GetCanvas()->Refresh();
+
+    auto galCanvas = myframe->GetGalCanvas();
+
+    if( galCanvas )
+    {
+        if( aId == LAYER_GERBVIEW_GRID )
+        {
+            galCanvas->GetGAL()->SetGridVisibility( myframe->IsGridVisible() );
+            galCanvas->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+            // TODO(JE) Why is the below line needed? Not needed in pcbnew
+            galCanvas->GetView()->RecacheAllItems();
+        }
+        else
+            galCanvas->GetView()->SetLayerVisible( aId, isEnabled );
+    }
+
+    if( galCanvas && myframe->IsGalCanvasActive() )
+        galCanvas->Refresh();
+    else
+        myframe->GetCanvas()->Refresh();
 }
 
 //-----</LAYER_WIDGET callbacks>------------------------------------------

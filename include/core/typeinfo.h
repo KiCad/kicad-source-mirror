@@ -171,7 +171,10 @@ enum KICAD_T
     /*
      * For GerbView: items type:
      */
-    TYPE_GERBER_DRAW_ITEM,
+    GERBER_LAYOUT_T,
+    GERBER_DRAW_ITEM_T,
+    GERBER_IMAGE_LIST_T,
+    GERBER_IMAGE_T,
 
     /*
      * for Pl_Editor, in undo/redo commands

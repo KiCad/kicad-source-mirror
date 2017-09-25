@@ -43,7 +43,8 @@ GERBER_FILE_IMAGE_LIST s_GERBER_List;
 
 
 // GERBER_FILE_IMAGE_LIST is a helper class to handle a list of GERBER_FILE_IMAGE files
-GERBER_FILE_IMAGE_LIST::GERBER_FILE_IMAGE_LIST()
+GERBER_FILE_IMAGE_LIST::GERBER_FILE_IMAGE_LIST() :
+    EDA_ITEM( (EDA_ITEM*)NULL, GERBER_IMAGE_LIST_T )
 {
     m_GERBER_List.reserve( GERBER_DRAWLAYERS_COUNT );
 
@@ -244,4 +245,3 @@ void GERBER_FILE_IMAGE_LIST::SortImagesByZOrder()
         gerber->m_GraphicLayer = layer ;
     }
 }
-

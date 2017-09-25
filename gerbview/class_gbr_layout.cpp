@@ -36,7 +36,8 @@
 #include <class_gerber_file_image.h>
 #include <class_gerber_file_image_list.h>
 
-GBR_LAYOUT::GBR_LAYOUT()
+GBR_LAYOUT::GBR_LAYOUT() :
+    EDA_ITEM( (EDA_ITEM*)NULL, GERBER_LAYOUT_T )
 {
 }
 
@@ -46,7 +47,7 @@ GBR_LAYOUT::~GBR_LAYOUT()
 }
 
 // Accessor to the list of gerber files (and drill files) images
-GERBER_FILE_IMAGE_LIST* GBR_LAYOUT::GetImagesList()
+GERBER_FILE_IMAGE_LIST* GBR_LAYOUT::GetImagesList() const
 {
     return &GERBER_FILE_IMAGE_LIST::GetImagesList();
 }
@@ -64,7 +65,7 @@ bool GBR_LAYOUT::IsLayerPrintable( int aLayer ) const
 }
 
 
-EDA_RECT GBR_LAYOUT::ComputeBoundingBox()
+EDA_RECT GBR_LAYOUT::ComputeBoundingBox() const
 {
     EDA_RECT bbox;
     bool first_item = true;
@@ -88,7 +89,10 @@ EDA_RECT GBR_LAYOUT::ComputeBoundingBox()
         }
     }
 
-    SetBoundingBox( bbox );
+    bbox.Inflate( ( bbox.GetWidth() / 10 ) + 100 );
+    bbox.Normalize();
+
+    m_BoundingBox = bbox;
     return bbox;
 }
 
@@ -185,7 +189,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     // In non transparent modes, the last layer drawn masks others layers
     for( int layer = GERBER_DRAWLAYERS_COUNT-1; !end; --layer )
     {
-        int active_layer = gerbFrame->getActiveLayer();
+        int active_layer = gerbFrame->GetActiveLayer();
 
         if( layer == active_layer ) // active layer will be drawn after other layers
             continue;
@@ -204,12 +208,12 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         if( aDisplayOptions->m_IsPrinting )
             gerber->m_IsVisible = IsLayerPrintable( layer );
         else
-            gerber->m_IsVisible = gerbFrame->IsLayerVisible( layer );
+            gerber->m_IsVisible = gerbFrame->IsLayerVisible( GERBER_DRAW_LAYER( layer ) );
 
         if( !gerber->m_IsVisible )
             continue;
 
-        gerber->m_PositiveDrawColor = gerbFrame->GetLayerColor( layer );
+        gerber->m_PositiveDrawColor = gerbFrame->GetLayerColor( GERBER_DRAW_LAYER( layer ) );
 
        // Force black and white draw mode on request:
         if( aDisplayOptions->m_ForceBlackAndWhite )
@@ -277,7 +281,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
         int dcode_highlight = 0;
 
-        if( layer == gerbFrame->getActiveLayer() )
+        if( layer == gerbFrame->GetActiveLayer() )
             dcode_highlight = gerber->m_Selected_Tool;
 
         GR_DRAWMODE layerdrawMode = GR_COPY;
@@ -432,4 +436,51 @@ void GBR_LAYOUT::DrawItemsDCodeID( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                              0, false, false );
         }
     }
+}
+
+
+SEARCH_RESULT GBR_LAYOUT::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
+{
+    KICAD_T        stype;
+    SEARCH_RESULT  result = SEARCH_CONTINUE;
+    const KICAD_T* p    = scanTypes;
+    bool           done = false;
+
+#if 0 && defined(DEBUG)
+    std::cout << GetClass().mb_str() << ' ';
+#endif
+
+    while( !done )
+    {
+        stype = *p;
+
+        switch( stype )
+        {
+        case GERBER_IMAGE_LIST_T:
+            for( unsigned layer = 0; layer < GetImagesList()->ImagesMaxCount(); ++layer )
+            {
+                GERBER_FILE_IMAGE* gerber = GetImagesList()->GetGbrImage( layer );
+
+                if( gerber == NULL )    // Graphic layer not yet used
+                    continue;
+
+                result = gerber->Visit( inspector, testData, p );
+
+                if( result == SEARCH_QUIT )
+                    break;
+            }
+
+            ++p;
+            break;
+
+        default:        // catch EOT or ANY OTHER type here and return.
+            done = true;
+            break;
+        }
+
+        if( result == SEARCH_QUIT )
+            break;
+    }
+
+    return result;
 }

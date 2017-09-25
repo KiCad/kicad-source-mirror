@@ -36,6 +36,7 @@
 #include <layers_id_colors_and_visibility.h>
 
 #include <gerbview.h>
+#include <convert_to_biu.h>
 #include <class_gbr_layout.h>
 #include <class_gbr_screen.h>
 #include <class_page_info.h>
@@ -154,6 +155,9 @@ public:
      */
     int SelectPCBLayer( int aDefaultLayer, int aOpperLayerCount, bool aNullLayer = false );
 
+    ///> @copydoc EDA_DRAW_FRAME::SetGridColor()
+    virtual void SetGridColor( COLOR4D aColor ) override;
+
 protected:
     GERBER_LAYER_WIDGET*    m_LayersManager;
 
@@ -169,6 +173,9 @@ protected:
     /// The last filename chosen to be proposed to the user
     wxString                m_lastFileName;
 
+    ///> @copydoc EDA_DRAW_FRAME::forceColorsToLegacy()
+    virtual void forceColorsToLegacy() override;
+
 public:
     wxChoice* m_SelComponentBox;                // a choice box to display and highlight component graphic items
     wxChoice* m_SelNetnameBox;                  // a choice box to display and highlight netlist graphic items
@@ -179,6 +186,8 @@ public:
     wxTextCtrl*             m_TextInfo;         // a wxTextCtrl used to display some info about
                                                 // gerber data (format..)
 
+    COLORS_DESIGN_SETTINGS* m_colorsSettings;
+
 private:
     /// Auxiliary tool bar typically shown below the main tool bar at the top of the
     /// main window.
@@ -186,7 +195,6 @@ private:
 
     // list of PARAM_CFG_xxx to read/write parameters saved in config
     PARAM_CFG_ARRAY         m_configSettings;
-    COLORS_DESIGN_SETTINGS* m_colorsSettings;
 
     int m_displayMode;                  // Gerber images ("layers" in Gerbview) can be drawn:
                                         // - in fast mode (write mode) but if there are negative
@@ -206,8 +214,14 @@ private:
     void            updateDCodeSelectBox();
     virtual void    unitsChangeRefresh() override;      // See class EDA_DRAW_FRAME
 
+    // The Tool Framework initalization
+    void setupTools();
+
     // An array string to store warning messages when reading a gerber file.
     wxArrayString   m_Messages;
+
+    /// Updates the GAL with display settings changes
+    void applyDisplaySettingsToGAL();
 
 public:
     GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent );
@@ -242,6 +256,8 @@ public:
     void    OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
     double  BestZoom() override;
     void    UpdateStatusBar() override;
+
+    wxAuiToolBar* GetMainToolBar() { return m_optionsToolBar; }
 
     /**
      * Function GetZoomLevelIndicator
@@ -332,7 +348,7 @@ public:
     /**
      * Function IsLayerVisible
      * tests whether a given layer is visible
-     * @param aLayer = The layer to be tested
+     * @param aLayer = The layer to be tested (still 0-31!)
      * @return bool - true if the layer is visible.
      */
     bool    IsLayerVisible( int aLayer ) const;
@@ -403,17 +419,17 @@ public:
     void    ReFillLayerWidget();
 
     /**
-     * Function setActiveLayer
+     * Function SetActiveLayer
      * will change the currently active layer to \a aLayer and also
      * update the GERBER_LAYER_WIDGET.
      */
-    void    setActiveLayer( int aLayer, bool doLayerWidgetUpdate = true );
+    void SetActiveLayer( int aLayer, bool doLayerWidgetUpdate = true );
 
     /**
-     * Function getActiveLayer
+     * Function SetActiveLayer
      * returns the active layer
      */
-    int getActiveLayer();
+    int GetActiveLayer();
 
     /**
      * Function getNextAvailableLayer
@@ -432,7 +448,7 @@ public:
     /**
      * Function syncLayerWidget
      * updates the currently "selected" layer within the GERBER_LAYER_WIDGET.
-     * The currently active layer is defined by the return value of getActiveLayer().
+     * The currently active layer is defined by the return value of GetActiveLayer().
      * <p>
      * This function cannot be inline without including layer_widget.h in
      * here and we do not want to do that.
@@ -443,7 +459,7 @@ public:
      * Function syncLayerBox
      * updates the currently "selected" layer within m_SelLayerBox
      * The currently active layer, as defined by the return value of
-     * getActiveLayer().
+     * GetActiveLayer().
      * @param aRebuildLayerBox = true to rebuild the layer box
      *  false to just updates the selection.
      */
@@ -479,6 +495,9 @@ public:
 
     void                Process_Special_Functions( wxCommandEvent& event );
     void                OnSelectOptionToolbar( wxCommandEvent& event );
+
+    /// Handles the changing of the highlighted component/net/attribute
+    void                OnSelectHighlightChoice( wxCommandEvent& event );
 
     /**
      * Function OnSelectActiveDCode
@@ -545,6 +564,8 @@ public:
     void                OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent );
     void                OnUpdateSelectDCode( wxUpdateUIEvent& aEvent );
     void                OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
+    void                OnUpdateDiffMode( wxUpdateUIEvent& aEvent );
+    void                OnUpdateHighContrastMode( wxUpdateUIEvent& aEvent );
 
     /**
      * Function BlockCommand
@@ -713,6 +734,19 @@ public:
      */
     virtual void    PrintPage( wxDC* aDC, LSET aPrintMasklayer, bool aPrintMirrorMode,
                                void* aData = NULL ) override;
+
+    ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas
+    virtual void UseGalCanvas( bool aEnable ) override;
+
+    /**
+     * switches currently used canvas (default / Cairo / OpenGL).
+     */
+    void SwitchCanvas( wxCommandEvent& aEvent );
+
+    /**
+     * Update UI called when switches currently used canvas (default / Cairo / OpenGL).
+     */
+    void OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent );
 
     DECLARE_EVENT_TABLE()
 };

@@ -42,7 +42,10 @@ enum hotkey_id_commnand {
     HK_GBR_NEGATIVE_DISPLAY_ONOFF,
     HK_GBR_DCODE_DISPLAY_ONOFF,
     HK_SWITCH_LAYER_TO_NEXT,
-    HK_SWITCH_LAYER_TO_PREVIOUS
+    HK_SWITCH_LAYER_TO_PREVIOUS,
+    HK_CANVAS_LEGACY,
+    HK_CANVAS_OPENGL,
+    HK_CANVAS_CAIRO
 };
 
 // List of hotkey descriptors for GerbView.

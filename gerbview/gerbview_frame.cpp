@@ -49,6 +49,14 @@
 #include <class_DCodeSelectionbox.h>
 #include <class_gerbview_layer_widget.h>
 
+#include <gerbview_draw_panel_gal.h>
+#include <gal/graphics_abstraction_layer.h>
+#include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
+#include <tools/gerbview_actions.h>
+#include <view/view.h>
+#include <gerbview_painter.h>
+
 
 // Config keywords
 static const wxString   cfgShowPageSizeOption( wxT( "PageSizeOpt" ) );
@@ -86,6 +94,16 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_drillFileHistory.SetBaseId( ID_GERBVIEW_DRILL_FILE1 );
     m_zipFileHistory.SetBaseId( ID_GERBVIEW_ZIP_FILE1 );
     m_jobFileHistory.SetBaseId( ID_GERBVIEW_JOB_FILE1 );
+
+    EDA_DRAW_PANEL_GAL* galCanvas = new GERBVIEW_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ),
+                                            m_FrameSize,
+                                            GetGalDisplayOptions(),
+                                            EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
+
+    SetGalCanvas( galCanvas );
+
+    // GerbView requires draw priority for rendering negative objects
+    galCanvas->GetView()->UseDrawPriority( true );
 
     if( m_canvas )
         m_canvas->SetEnableBlockCommands( true );
@@ -174,22 +192,60 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
         m_auimgr.AddPane( m_canvas,
                           wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
+    if( GetGalCanvas() )
+        m_auimgr.AddPane( (wxWindow*) GetGalCanvas(),
+                          wxAuiPaneInfo().Name( wxT( "DrawFrameGal" ) ).CentrePane().Hide() );
+
     if( m_messagePanel )
         m_auimgr.AddPane( m_messagePanel,
                           wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer( 10 ) );
 
     ReFillLayerWidget();                // this is near end because contents establish size
-    m_LayersManager->ReFillRender();    // Update colors in Render after the config is read
     m_auimgr.Update();
 
-    setActiveLayer( 0, true );
+    setupTools();
+
+    SetActiveLayer( 0, true );
     Zoom_Automatique( false );           // Gives a default zoom value
     UpdateTitleAndInfo();
+
+    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = loadCanvasTypeSetting();
+
+    if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
+    {
+        if( GetGalCanvas()->SwitchBackend( canvasType ) )
+            UseGalCanvas( true );
+
+        wxUpdateUIEvent e;
+        OnUpdateSwitchCanvas( e );
+    }
+    else
+    {
+        forceColorsToLegacy();
+        m_canvas->Refresh();
+    }
+
+    // Enable the axes to match legacy draw style
+    auto& galOptions = GetGalDisplayOptions();
+    galOptions.m_axesEnabled = true;
+    galOptions.NotifyChanged();
+
+    m_LayersManager->ReFill();
+    m_LayersManager->ReFillRender();    // Update colors in Render after the config is read
 }
 
 
 GERBVIEW_FRAME::~GERBVIEW_FRAME()
 {
+    if( m_toolManager )
+        m_toolManager->DeactivateTool();
+
+    if( auto canvas = GetGalCanvas() )
+    {
+        canvas->GetView()->Clear();
+    }
+
+    GetGerberLayout()->GetImagesList()->DeleteAllImages();
 }
 
 
@@ -228,7 +284,7 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         for( unsigned i=0;  i<limit;  ++i, ++layer )
         {
-            setActiveLayer( layer );
+            SetActiveLayer( layer );
 
             // Try to guess the type of file by its ext
             // if it is .drl (Kicad files), it is a drill file
@@ -400,7 +456,22 @@ void GERBVIEW_FRAME::SetElementVisibility( GERBVIEW_LAYER_ID aItemIdVisible,
         wxLogDebug( wxT( "GERBVIEW_FRAME::SetElementVisibility(): bad arg %d" ), aItemIdVisible );
     }
 
+    applyDisplaySettingsToGAL();
     m_LayersManager->SetRenderState( aItemIdVisible, aNewState );
+}
+
+
+void GERBVIEW_FRAME::applyDisplaySettingsToGAL()
+{
+    auto view = GetGalCanvas()->GetView();
+    auto painter = static_cast<KIGFX::GERBVIEW_PAINTER*>( view->GetPainter() );
+    auto settings = static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>( painter->GetSettings() );
+    settings->LoadDisplayOptions( &m_DisplayOptions );
+
+    settings->ImportLegacyColors( m_colorsSettings );
+
+    view->RecacheAllItems();
+    view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 }
 
 
@@ -427,7 +498,7 @@ int GERBVIEW_FRAME::getNextAvailableLayer( int aLayer ) const
 
 void GERBVIEW_FRAME::syncLayerWidget()
 {
-    m_LayersManager->SelectLayer( getActiveLayer() );
+    m_LayersManager->SelectLayer( GetActiveLayer() );
     UpdateTitleAndInfo();
 }
 
@@ -437,10 +508,10 @@ void GERBVIEW_FRAME::syncLayerBox( bool aRebuildLayerBox )
     if( aRebuildLayerBox )
         m_SelLayerBox->Resync();
 
-    m_SelLayerBox->SetSelection( getActiveLayer() );
+    m_SelLayerBox->SetSelection( GetActiveLayer() );
 
     int dcodeSelected = -1;
-    GERBER_FILE_IMAGE*   gerber = GetGbrImage( getActiveLayer() );
+    GERBER_FILE_IMAGE*   gerber = GetGbrImage( GetActiveLayer() );
 
     if( gerber )
         dcodeSelected = gerber->m_Selected_Tool;
@@ -462,7 +533,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
     wxString        Line;
     wxArrayString   list;
     double          scale = g_UserUnit == INCHES ? IU_PER_MILS * 1000 : IU_PER_MM;
-    int       curr_layer = getActiveLayer();
+    int       curr_layer = GetActiveLayer();
 
     for( int layer = 0; layer < (int)ImagesMaxCount(); ++layer )
     {
@@ -485,7 +556,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
 
         for( ii = 0, jj = 1; ii < TOOLS_MAX_COUNT; ii++ )
         {
-            D_CODE* pt_D_code = gerber->GetDCODE( ii + FIRST_DCODE, false );
+            D_CODE* pt_D_code = gerber->GetDCODE( ii + FIRST_DCODE );
 
             if( pt_D_code == NULL )
                 continue;
@@ -522,7 +593,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
 
 void GERBVIEW_FRAME::UpdateTitleAndInfo()
 {
-    GERBER_FILE_IMAGE* gerber = GetGbrImage( getActiveLayer() );
+    GERBER_FILE_IMAGE* gerber = GetGbrImage( GetActiveLayer() );
 
     // Display the gerber filename
     if( gerber == NULL )
@@ -532,7 +603,7 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
         SetStatusText( wxEmptyString, 0 );
 
         wxString info;
-        info.Printf( _( "Drawing layer %d not in use" ), getActiveLayer() + 1 );
+        info.Printf( _( "Drawing layer %d not in use" ), GetActiveLayer() + 1 );
         m_TextInfo->SetValue( info );
 
         if( EnsureTextCtrlWidth( m_TextInfo, &info ) )  // Resized
@@ -605,20 +676,51 @@ bool GERBVIEW_FRAME::IsElementVisible( GERBVIEW_LAYER_ID aItemIdVisible ) const
 
 long GERBVIEW_FRAME::GetVisibleLayers() const
 {
-    return -1;    // TODO
+    long layerMask = 0;
+
+    if( auto canvas = GetGalCanvas() )
+    {
+        // NOTE: This assumes max 32 drawlayers!
+        for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; i++ )
+        {
+            if( canvas->GetView()->IsLayerVisible( GERBER_DRAW_LAYER( i ) ) )
+                layerMask |= ( 1 << i );
+        }
+
+        return layerMask;
+    }
+    else
+    {
+        return -1;
+    }
 }
 
 
 void GERBVIEW_FRAME::SetVisibleLayers( long aLayerMask )
 {
-//    GetGerberLayout()->SetVisibleLayers( aLayerMask );
+    if( auto canvas = GetGalCanvas() )
+    {
+        // NOTE: This assumes max 32 drawlayers!
+        for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; i++ )
+        {
+            bool v = ( aLayerMask & ( 1 << i ) );
+            int layer = GERBER_DRAW_LAYER( i );
+            canvas->GetView()->SetLayerVisible( layer, v );
+            canvas->GetView()->SetLayerVisible( GERBER_DCODE_LAYER( layer ), v );
+        }
+    }
 }
 
 
 bool GERBVIEW_FRAME::IsLayerVisible( int aLayer ) const
 {
     if( ! m_DisplayOptions.m_IsPrinting )
+    {
+        if( IsGalCanvasActive() )
+            aLayer = GERBER_DRAW_LAYER( aLayer );
+
         return m_LayersManager->IsLayerVisible( aLayer );
+    }
     else
         return GetGerberLayout()->IsLayerPrintable( aLayer );
 }
@@ -666,6 +768,8 @@ void GERBVIEW_FRAME::SetVisibleElementColor( GERBVIEW_LAYER_ID aItemIdVisible,
         break;
 
     case LAYER_GERBVIEW_GRID:
+        // Ensure grid always has low alpha
+        aColor.a = 0.8;
         SetGridColor( aColor );
         m_colorsSettings->SetItemColor( aItemIdVisible, aColor );
         break;
@@ -694,21 +798,34 @@ COLOR4D GERBVIEW_FRAME::GetLayerColor( int aLayer ) const
 void GERBVIEW_FRAME::SetLayerColor( int aLayer, COLOR4D aColor )
 {
     m_colorsSettings->SetLayerColor( aLayer, aColor );
+    applyDisplaySettingsToGAL();
 }
 
 
-int GERBVIEW_FRAME::getActiveLayer()
+int GERBVIEW_FRAME::GetActiveLayer()
 {
     return ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer;
 }
 
 
-void GERBVIEW_FRAME::setActiveLayer( int aLayer, bool doLayerWidgetUpdate )
+void GERBVIEW_FRAME::SetActiveLayer( int aLayer, bool doLayerWidgetUpdate )
 {
     ( (GBR_SCREEN*) GetScreen() )->m_Active_Layer = aLayer;
 
     if( doLayerWidgetUpdate )
-        m_LayersManager->SelectLayer( getActiveLayer() );
+        m_LayersManager->SelectLayer( GetActiveLayer() );
+
+    if( IsGalCanvasActive() )
+    {
+        m_toolManager->RunAction( GERBVIEW_ACTIONS::layerChanged );       // notify other tools
+        GetGalCanvas()->SetFocus();                 // otherwise hotkeys are stuck somewhere
+
+        // NOTE(JE) The next two calls are slow (scales with number of items)
+        GetGalCanvas()->SetTopLayer( GERBER_DRAW_LAYER( aLayer ) );
+        GetGalCanvas()->SetHighContrastLayer( GERBER_DRAW_LAYER( aLayer ) );
+
+        GetGalCanvas()->Refresh();
+    }
 }
 
 
@@ -781,6 +898,17 @@ void GERBVIEW_FRAME::SetCurItem( GERBER_DRAW_ITEM* aItem, bool aDisplayInfo )
     {
         EraseMsgBox();
     }
+}
+
+
+void GERBVIEW_FRAME::SetGridColor( COLOR4D aColor )
+{
+    if( IsGalCanvasActive() )
+    {
+        GetGalCanvas()->GetGAL()->SetGridColor( aColor );
+    }
+
+    m_gridColor = aColor;
 }
 
 
@@ -909,3 +1037,75 @@ void GERBVIEW_FRAME::unitsChangeRefresh()
     EDA_DRAW_FRAME::unitsChangeRefresh();
     updateDCodeSelectBox();
 }
+
+
+void GERBVIEW_FRAME::forceColorsToLegacy()
+{
+    for( int i = 0; i < LAYER_ID_COUNT; i++ )
+    {
+        COLOR4D c = m_colorsSettings->GetLayerColor( i );
+        c.SetToNearestLegacyColor();
+        m_colorsSettings->SetLayerColor( i, c );
+    }
+}
+
+
+void GERBVIEW_FRAME::UseGalCanvas( bool aEnable )
+{
+    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
+
+    EDA_DRAW_PANEL_GAL* galCanvas = GetGalCanvas();
+
+    if( m_toolManager )
+        m_toolManager->SetEnvironment( m_gerberLayout, GetGalCanvas()->GetView(),
+                                       GetGalCanvas()->GetViewControls(), this );
+
+    if( aEnable )
+    {
+        if( m_toolManager )
+            m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
+
+        galCanvas->GetGAL()->SetGridColor( GetLayerColor( LAYER_GERBVIEW_GRID ) );
+
+        galCanvas->GetView()->RecacheAllItems();
+        galCanvas->SetEventDispatcher( m_toolDispatcher );
+        galCanvas->StartDrawing();
+    }
+    else
+    {
+        if( m_toolManager )
+            m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
+
+        galCanvas->StopDrawing();
+
+        // Redirect all events to the legacy canvas
+        galCanvas->SetEventDispatcher( NULL );
+
+        forceColorsToLegacy();
+        m_canvas->Refresh();
+    }
+
+    m_LayersManager->ReFill();
+    m_LayersManager->ReFillRender();
+
+    ReCreateOptToolbar();
+}
+
+
+void GERBVIEW_FRAME::setupTools()
+{
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( m_gerberLayout, GetGalCanvas()->GetView(),
+                                   GetGalCanvas()->GetViewControls(), this );
+    m_actions = new GERBVIEW_ACTIONS();
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+
+    // Register tools
+    m_actions->RegisterAllTools( m_toolManager );
+    m_toolManager->InitTools();
+
+    // Run the selection tool, it is supposed to be always active
+    m_toolManager->InvokeTool( "gerbview.InteractiveSelection" );
+}
+

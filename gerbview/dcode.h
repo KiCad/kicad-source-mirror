@@ -34,6 +34,7 @@
 
 #include <base_struct.h>
 #include <gal/color4d.h>
+#include <geometry/shape_poly_set.h>
 
 using KIGFX::COLOR4D;
 
@@ -89,11 +90,6 @@ private:
      */
     std::vector<double>   m_am_params;
 
-    std::vector <wxPoint> m_PolyCorners;    /* Polygon used to draw APT_POLYGON shape and some other
-                                             * complex shapes which are converted to polygon
-                                             * (shapes with hole )
-                                             */
-
 public:
     wxSize                m_Size;           ///< Horizontal and vertical dimensions.
     APERTURE_T            m_Shape;          ///< shape ( Line, rectangle, circle , oval .. )
@@ -108,7 +104,10 @@ public:
     bool                  m_Defined;        ///< false if the aperture is not defined in the header
     wxString              m_AperFunction;   ///< the aperture attribute (created by a %TA.AperFunction command)
                                             ///< attached to the D_CODE
-
+    SHAPE_POLY_SET        m_Polygon;        /* Polygon used to draw APT_POLYGON shape and some other
+                                             * complex shapes which are converted to polygon
+                                             * (shapes with hole )
+                                             */
 
 public:
     D_CODE( int num_dcode );

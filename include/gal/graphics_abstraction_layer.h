@@ -772,6 +772,19 @@ public:
      */
     virtual void ClearTarget( RENDER_TARGET aTarget ) {};
 
+    /**
+     * @brief Sets negative draw mode in the renderer
+     *
+     * When negative mode is enabled, drawn items will subtract from
+     * previously drawn items.  This is mainly needed for Gerber
+     * negative item support in Cairo, since unlike in OpenGL, objects
+     * drawn with zero opacity on top of other objects would not normally
+     * mask objects in Cairo.  This method is a no-op in OpenGL.
+     *
+     * @param aSetting is true if negative mode should be enabled
+     */
+    virtual void SetNegativeDrawMode( bool aSetting ) {};
+
     // -------------
     // Grid methods
     // -------------

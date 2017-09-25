@@ -32,10 +32,17 @@
 #include <common.h>
 #include <macros.h>
 #include <class_drawpanel.h>
+#include <config_map.h>
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerbview_dialog_display_options_frame_base.h>
+
+#include <class_draw_panel_gal.h>
+#include <view/view.h>
+#include <gerbview_painter.h>
+#include <gal/gal_display_options.h>
+#include <widgets/gal_options_panel.h>
 
 
 /*******************************************/
@@ -45,6 +52,7 @@ class DIALOG_DISPLAY_OPTIONS : public DIALOG_DISPLAY_OPTIONS_BASE
 {
 private:
     GERBVIEW_FRAME* m_Parent;
+    GAL_OPTIONS_PANEL* m_galOptsPanel;
 
 public:
 
@@ -79,6 +87,8 @@ DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( GERBVIEW_FRAME *parent) :
     GetSizer()->SetSizeHints( this );
     Center();
     m_sdbSizer1OK->SetDefault();
+
+    FinishDialogSettings();
 }
 
 
@@ -90,22 +100,13 @@ void DIALOG_DISPLAY_OPTIONS::OnCancelButtonClick( wxCommandEvent& event )
 
 void DIALOG_DISPLAY_OPTIONS::initOptDialog( )
 {
+    KIGFX::GAL_DISPLAY_OPTIONS& galOptions = m_Parent->GetGalDisplayOptions();
+    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, galOptions );
+    m_UpperSizer->Add( m_galOptsPanel, 0, wxEXPAND, 0 );
+    m_galOptsPanel->TransferDataToWindow();
+
     m_PolarDisplay->SetSelection( m_Parent->m_DisplayOptions.m_DisplayPolarCood ? 1 : 0 );
     m_BoxUnits->SetSelection( g_UserUnit ? 1 : 0 );
-
-    // @todo: LEGACY: Cursor shape can be set using the GAL options
-    // widget, when that is added to gerbview. For now, access the
-    // setting via the frame's GAL options object directly
-
-    // Cursor shape cannot be implemented on OS X
-#ifdef __APPLE__
-    m_CursorShape->Hide();
-#else
-    {
-        auto& galOpts = m_Parent->GetGalDisplayOptions();
-        m_CursorShape->SetSelection( galOpts.m_fullscreenCursor ? 1 : 0 );
-    }
-#endif // __APPLE__
 
     // Show Option Draw Lines. We use DisplayPcbTrackFill as Lines draw option
     m_OptDisplayLines->SetSelection( m_Parent->m_DisplayOptions.m_DisplayLinesFill ? 1 : 0 );
@@ -131,8 +132,6 @@ void DIALOG_DISPLAY_OPTIONS::initOptDialog( )
     }
 
     m_OptDisplayDCodes->SetValue( m_Parent->IsElementVisible( LAYER_DCODES ) );
-
-
     m_OptZoomNoCenter->SetValue( m_Parent->GetCanvas()->GetEnableZoomNoCenter() );
     m_OptMousewheelPan->SetValue( m_Parent->GetCanvas()->GetEnableMousewheelPan() );
 }
@@ -140,17 +139,11 @@ void DIALOG_DISPLAY_OPTIONS::initOptDialog( )
 
 void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
 {
+    auto displayOptions = (GBR_DISPLAY_OPTIONS*) m_Parent->GetDisplayOptions();
+
     m_Parent->m_DisplayOptions.m_DisplayPolarCood =
         (m_PolarDisplay->GetSelection() == 0) ? false : true;
     g_UserUnit  = (m_BoxUnits->GetSelection() == 0) ? INCHES : MILLIMETRES;
-
-    // @todo LEGACY: as above, this should be via the GAL display widget
-#ifndef __APPLE__
-    {
-        auto& galOpts = m_Parent->GetGalDisplayOptions();
-        galOpts.m_fullscreenCursor = m_CursorShape->GetSelection();
-    }
-#endif // !__APPLE__
 
     if( m_OptDisplayLines->GetSelection() == 1 )
         m_Parent->m_DisplayOptions.m_DisplayLinesFill = true;
@@ -165,7 +158,6 @@ void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
     {
         m_Parent->m_DisplayOptions.m_DisplayFlashedItemsFill = false;
     }
-
 
     if( m_OptDisplayPolygons->GetSelection() == 0 )
         m_Parent->m_DisplayOptions.m_DisplayPolygonsFill = false;
@@ -184,6 +176,16 @@ void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
 
     m_Parent->GetCanvas()->SetEnableZoomNoCenter( m_OptZoomNoCenter->GetValue() );
     m_Parent->GetCanvas()->SetEnableMousewheelPan( m_OptMousewheelPan->GetValue() );
+
+    m_galOptsPanel->TransferDataFromWindow();
+
+    // Apply changes to the GAL
+    auto view = m_Parent->GetGalCanvas()->GetView();
+    auto painter = static_cast<KIGFX::GERBVIEW_PAINTER*>( view->GetPainter() );
+    auto settings = static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>( painter->GetSettings() );
+    settings->LoadDisplayOptions( displayOptions );
+    view->RecacheAllItems();
+    view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 
     m_Parent->GetCanvas()->Refresh();
 

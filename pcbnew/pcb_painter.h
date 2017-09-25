@@ -163,6 +163,9 @@ protected:
 
     ///> Clearance visibility settings
     int m_clearance;
+
+    ///> Color used for highlighting selection candidates
+    COLOR4D m_selectionCandidateColor;
 };
 
 

@@ -42,6 +42,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 {
     // Create and try to get the current menubar
     wxMenuBar* menuBar = GetMenuBar();
+    wxString   text;
 
     if( !menuBar )
         menuBar = new wxMenuBar();
@@ -206,6 +207,33 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     // Hotkey submenu
     AddHotkeyConfigMenu( configMenu );
+
+    // Canvas selection
+    configMenu->AppendSeparator();
+
+    text = AddHotkeyName( _( "Legacy Canva&s" ), GerbviewHokeysDescr,
+                          HK_CANVAS_LEGACY );
+
+    configMenu->Append(
+        new wxMenuItem( configMenu, ID_MENU_CANVAS_LEGACY,
+                        text, _( "Switch the canvas implementation to Legacy" ),
+                        wxITEM_RADIO ) );
+
+    text = AddHotkeyName( _( "Open&GL Canvas" ), GerbviewHokeysDescr,
+                          HK_CANVAS_OPENGL );
+
+    configMenu->Append(
+        new wxMenuItem( configMenu, ID_MENU_CANVAS_OPENGL,
+                        text, _( "Switch the canvas implementation to OpenGL" ),
+                        wxITEM_RADIO ) );
+
+    text = AddHotkeyName( _( "&Cairo Canvas" ), GerbviewHokeysDescr,
+                          HK_CANVAS_CAIRO );
+
+    configMenu->Append(
+        new wxMenuItem( configMenu, ID_MENU_CANVAS_CAIRO,
+                        text, _( "Switch the canvas implementation to Cairo" ),
+                        wxITEM_RADIO ) );
 
     // Menu miscellaneous
     wxMenu* miscellaneousMenu = new wxMenu;

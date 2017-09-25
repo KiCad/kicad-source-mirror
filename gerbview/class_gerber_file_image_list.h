@@ -59,7 +59,7 @@ class GERBER_FILE_IMAGE;
  * which are loaded and can be displayed
  * there are 32 images max which can be loaded
  */
-class GERBER_FILE_IMAGE_LIST
+class GERBER_FILE_IMAGE_LIST : public EDA_ITEM
 {
     // the list of loaded images (1 image = 1 gerber file)
     std::vector<GERBER_FILE_IMAGE*> m_GERBER_List;
@@ -67,6 +67,11 @@ class GERBER_FILE_IMAGE_LIST
 public:
     GERBER_FILE_IMAGE_LIST();
     ~GERBER_FILE_IMAGE_LIST();
+
+    wxString GetClass() const override
+    {
+        return wxT( "GERBER_FILE_IMAGE_LIST" );
+    }
 
     //Accessor
     static GERBER_FILE_IMAGE_LIST& GetImagesList();
@@ -115,6 +120,12 @@ public:
      * (SortImagesByZOrder updates the graphic layer of these items)
      */
     void SortImagesByZOrder();
+
+    #if defined(DEBUG)
+
+        void    Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
+
+    #endif
 };
 
 #endif  // ifndef CLASS_GERBER_FILE_IMAGE_LIST_H

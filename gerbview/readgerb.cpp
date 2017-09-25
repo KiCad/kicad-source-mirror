@@ -30,6 +30,7 @@
 #include <gerbview_frame.h>
 #include <class_gerber_file_image.h>
 #include <class_gerber_file_image_list.h>
+#include <view/view.h>
 
 #include <html_messagebox.h>
 #include <macros.h>
@@ -40,7 +41,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
 {
     wxString msg;
 
-    int layer = getActiveLayer();
+    int layer = GetActiveLayer();
     GERBER_FILE_IMAGE_LIST* images = GetImagesList();
     GERBER_FILE_IMAGE* gerber = GetGbrImage( layer );
 
@@ -77,6 +78,23 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
                 "It is perhaps an old RS274D file\n"
                 "Therefore the size of items is undefined");
         wxMessageBox( msg );
+    }
+
+    auto canvas = GetGalCanvas();
+    if( canvas )
+    {
+        auto view = canvas->GetView();
+
+        if( gerber->m_ImageNegative )
+        {
+            // TODO: find a way to handle negative images
+            // (maybe convert geometry into positives?)
+        }
+
+        for( auto item = gerber->GetItemsList(); item; item = item->Next() )
+        {
+            view->Add( (KIGFX::VIEW_ITEM*) item );
+        }
     }
 
     return true;
