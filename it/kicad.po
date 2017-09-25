@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-25 09:25+0200\n"
-"PO-Revision-Date: 2017-09-25 09:26+0200\n"
+"POT-Creation-Date: 2017-09-25 09:28+0200\n"
+"PO-Revision-Date: 2017-09-25 09:30+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -1014,8 +1014,8 @@ msgstr "File di esportazione impronte datati (*.emp)|*.emp"
 msgid "Unable to create or write file '%s'"
 msgstr "Impossibile creare o scrivere il file \"%s\""
 
-#: pcbnew/librairi.cpp:527 pcbnew/gpcb_plugin.cpp:1048
-#: pcbnew/kicad_plugin.cpp:1999 pcbnew/kicad_plugin.cpp:2065
+#: pcbnew/librairi.cpp:527 pcbnew/gpcb_plugin.cpp:1049
+#: pcbnew/kicad_plugin.cpp:2001 pcbnew/kicad_plugin.cpp:2067
 #, c-format
 msgid "Library '%s' is read only"
 msgstr "La libreria \"%s\" è in sola lettura"
@@ -1209,49 +1209,49 @@ msgstr "Spazio:"
 msgid "Create Microwave Gap"
 msgstr "Crea spazio Microonde"
 
-#: pcbnew/gpcb_plugin.cpp:112
+#: pcbnew/gpcb_plugin.cpp:113
 #, c-format
 msgid "Cannot convert \"%s\" to an integer"
 msgstr "Impossibile convertire \"%s\" come numero intero"
 
-#: pcbnew/gpcb_plugin.cpp:297 pcbnew/gpcb_plugin.cpp:983
-#: pcbnew/kicad_plugin.cpp:1929
+#: pcbnew/gpcb_plugin.cpp:298 pcbnew/gpcb_plugin.cpp:984
+#: pcbnew/kicad_plugin.cpp:1931
 #, c-format
 msgid "footprint library path '%s' does not exist"
 msgstr "il percorso libreria impronte \"%s\" non esiste"
 
-#: pcbnew/gpcb_plugin.cpp:353
+#: pcbnew/gpcb_plugin.cpp:354
 #, c-format
 msgid "library <%s> has no footprint '%s' to delete"
 msgstr "La libreria \"%s\" non ha impronta \"%s\" da cancellare"
 
-#: pcbnew/gpcb_plugin.cpp:457 pcbnew/pcb_parser.cpp:436
+#: pcbnew/gpcb_plugin.cpp:458 pcbnew/pcb_parser.cpp:436
 #: pcbnew/pcb_parser.cpp:541
 #, c-format
 msgid "unknown token \"%s\""
 msgstr "token sconosciuto \"%s\""
 
-#: pcbnew/gpcb_plugin.cpp:464
+#: pcbnew/gpcb_plugin.cpp:465
 #, c-format
 msgid "Element token contains %d parameters."
 msgstr "L'elemento token contiene i parameteri %d "
 
-#: pcbnew/gpcb_plugin.cpp:1067 pcbnew/kicad_plugin.cpp:2102
+#: pcbnew/gpcb_plugin.cpp:1068 pcbnew/kicad_plugin.cpp:2104
 #, c-format
 msgid "user does not have permission to delete directory '%s'"
 msgstr "l'utente non ha i permessi per cancellare la cartella \"%s\""
 
-#: pcbnew/gpcb_plugin.cpp:1075 pcbnew/kicad_plugin.cpp:2110
+#: pcbnew/gpcb_plugin.cpp:1076 pcbnew/kicad_plugin.cpp:2112
 #, c-format
 msgid "library directory '%s' has unexpected sub-directories"
 msgstr "la cartella libreria \"%s\" ha sottocartelle inattese"
 
-#: pcbnew/gpcb_plugin.cpp:1094 pcbnew/kicad_plugin.cpp:2129
+#: pcbnew/gpcb_plugin.cpp:1095 pcbnew/kicad_plugin.cpp:2131
 #, c-format
 msgid "unexpected file '%s' was found in library path '%s'"
 msgstr "file inatteso \"%s\" trovato nel percorso libreria \"%s\""
 
-#: pcbnew/gpcb_plugin.cpp:1112 pcbnew/kicad_plugin.cpp:2147
+#: pcbnew/gpcb_plugin.cpp:1113 pcbnew/kicad_plugin.cpp:2149
 #, c-format
 msgid "footprint library '%s' cannot be deleted"
 msgstr "la libreria impronte \"%s\" non può essere cancellata"
@@ -2627,11 +2627,11 @@ msgstr "Seleziona..."
 msgid "Selection contains locked items. Do you want to continue?"
 msgstr "Le selezione contiene elementi bloccati. Continuare?"
 
-#: pcbnew/tools/selection_tool.cpp:1213
+#: pcbnew/tools/selection_tool.cpp:1217
 msgid "Filter selection"
 msgstr "Filtra selezione"
 
-#: pcbnew/tools/selection_tool.cpp:1284
+#: pcbnew/tools/selection_tool.cpp:1288
 msgid "Clarify selection"
 msgstr "Chiarisci selezione"
 
@@ -5196,8 +5196,8 @@ msgid "Shape"
 msgstr "Forma "
 
 #: pcbnew/class_drawsegment.cpp:353 pcbnew/class_board_item.cpp:44
-#: pcbnew/dialogs/dialog_pad_properties.cpp:709
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1783
+#: pcbnew/dialogs/dialog_pad_properties.cpp:725
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1801
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:92
 #: eeschema/lib_arc.cpp:96 gerbview/class_gerber_draw_item.cpp:169
 msgid "Arc"
@@ -5208,8 +5208,8 @@ msgid "Curve"
 msgstr "Curva"
 
 #: pcbnew/class_drawsegment.cpp:364
-#: pcbnew/dialogs/dialog_pad_properties.cpp:703
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1783
+#: pcbnew/dialogs/dialog_pad_properties.cpp:719
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1801
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:81
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:200
 msgid "Segment"
@@ -6079,8 +6079,8 @@ msgid "View list of nets with names and IDs"
 msgstr "Mostra l'elenco dei collegamenti con nomi e id"
 
 #: pcbnew/menubar_pcbframe.cpp:550
-msgid "&Flip Board View"
-msgstr "Ri&fletti vista scheda"
+msgid "Flip &Board View"
+msgstr "Ri&balta vista scheda"
 
 #: pcbnew/menubar_pcbframe.cpp:551
 msgid "Flip (mirror) the board view"
@@ -6917,12 +6917,12 @@ msgstr ""
 msgid "unknown graphic type: %d"
 msgstr "tipo di grafico sconosciuto: %d"
 
-#: pcbnew/legacy_plugin.cpp:97 pcbnew/kicad_plugin.cpp:1249
+#: pcbnew/legacy_plugin.cpp:97 pcbnew/kicad_plugin.cpp:1251
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "tipo piazzola sconosciuta: %d"
 
-#: pcbnew/legacy_plugin.cpp:98 pcbnew/kicad_plugin.cpp:1262
+#: pcbnew/legacy_plugin.cpp:98 pcbnew/kicad_plugin.cpp:1264
 #, c-format
 msgid "unknown pad attribute: %d"
 msgstr "attributo piazzola sconosciuto: %d"
@@ -6966,7 +6966,7 @@ msgstr ""
 msgid "File '%s' is empty or is not a legacy library"
 msgstr "Il file \"%s\" è vuoto o non è una libreria datata"
 
-#: pcbnew/legacy_plugin.cpp:3460 eeschema/sch_legacy_plugin.cpp:3569
+#: pcbnew/legacy_plugin.cpp:3460 eeschema/sch_legacy_plugin.cpp:3574
 #, c-format
 msgid "library '%s' cannot be deleted"
 msgstr "La libreria '%s' non può essere cancellata"
@@ -7542,7 +7542,7 @@ msgstr ""
 msgid "Your BOARD has a bad layer number for footprint %s"
 msgstr "La scheda ha un numero di strati errato per l'impronta %s "
 
-#: pcbnew/printout_controler.cpp:109
+#: pcbnew/printout_controler.cpp:110
 msgid "Multiple Layers"
 msgstr "Strati multipli"
 
@@ -7851,58 +7851,58 @@ msgstr "Esportazione VRML fallita: impossibile aggiungere fori ai contorni."
 msgid "IDF Export Failed:\n"
 msgstr "Esportazione IDF fallita:\n"
 
-#: pcbnew/kicad_plugin.cpp:216
+#: pcbnew/kicad_plugin.cpp:218
 #, c-format
 msgid "Cannot create footprint library path '%s'"
 msgstr "Impossibile creare il percorso libreria impronte \"%s\""
 
-#: pcbnew/kicad_plugin.cpp:222
+#: pcbnew/kicad_plugin.cpp:224
 #, c-format
 msgid "Footprint library path '%s' is read only"
 msgstr "Il percorso libreria impronte \"%s\" è in sola lettura"
 
-#: pcbnew/kicad_plugin.cpp:261
+#: pcbnew/kicad_plugin.cpp:263
 #, c-format
 msgid "Cannot rename temporary file '%s' to footprint library file '%s'"
 msgstr ""
 "Impossibile rinominare il file temporaneo \"%s\" nel file libreria impronte "
 "\"%s\""
 
-#: pcbnew/kicad_plugin.cpp:281
+#: pcbnew/kicad_plugin.cpp:283
 #, c-format
 msgid "Footprint library path '%s' does not exist"
 msgstr "Il percorso libreria impronte \"%s\" non esiste"
 
-#: pcbnew/kicad_plugin.cpp:342
+#: pcbnew/kicad_plugin.cpp:344
 #, c-format
 msgid "library '%s' has no footprint '%s' to delete"
 msgstr "la libreria \"%s\" non ha impronte \"%s\" da cancellare"
 
-#: pcbnew/kicad_plugin.cpp:1566
+#: pcbnew/kicad_plugin.cpp:1568
 #, c-format
 msgid "unknown via type %d"
 msgstr "tipo via sconosciuto %d"
 
-#: pcbnew/kicad_plugin.cpp:1696
+#: pcbnew/kicad_plugin.cpp:1698
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "tipo arrotondamento vertici zona sconosciuto %d"
 
-#: pcbnew/kicad_plugin.cpp:1886
+#: pcbnew/kicad_plugin.cpp:1888
 msgid "this file does not contain a PCB"
 msgstr "questo file non contiene un circuito stampato"
 
-#: pcbnew/kicad_plugin.cpp:2016
+#: pcbnew/kicad_plugin.cpp:2018
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Il nome file impronta \"%s\" non è valido."
 
-#: pcbnew/kicad_plugin.cpp:2022
+#: pcbnew/kicad_plugin.cpp:2024
 #, c-format
 msgid "user does not have write permission to delete file '%s' "
 msgstr "Non si dispone dei permessi necessari per salvare il file '%s'."
 
-#: pcbnew/kicad_plugin.cpp:2077
+#: pcbnew/kicad_plugin.cpp:2079
 #, c-format
 msgid "cannot overwrite library path '%s'"
 msgstr "impossibile sovrascrivere il percorso libreria \"%s\""
@@ -11261,12 +11261,12 @@ msgid "Rounded Rectangle"
 msgstr "Rettangolo stondato"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:66
-msgid "Custom Shape with Circular Anchor"
-msgstr "Forma personalizzata con àncora circolare"
+msgid "Custom Shape (Circular Anchor)"
+msgstr "Forma personalizzata (àncora circolare)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:66
-msgid "Custom Shape with Rectangular Anchor"
-msgstr "Forma personalizzata con àncora rettangolare"
+msgid "Custom Shape (Rectangular Anchor)"
+msgstr "Forma personalizzata (àncora rettangolare)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:161
@@ -11358,8 +11358,8 @@ msgid "Vertical"
 msgstr "Verticale"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:226
-msgid "Corner size (percent of width):"
-msgstr "Dimensione angolo (percentuale della larghezza):"
+msgid "Corner size:"
+msgstr "Dimensione vertice:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:228
 msgid ""
@@ -11644,32 +11644,32 @@ msgstr ""
 " Le coordinate sono relative alla piazzola di ancoraggio, orientamento 0"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:589
-msgid "Delete Shape"
-msgstr "Cancella forma"
+msgid "Delete Primitive"
+msgstr "Cancella primitiva"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:592
-msgid "Edit Shape"
-msgstr "Modifica forma"
+msgid "Edit Primitive"
+msgstr "Modifica primitiva"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:595
-msgid "Add Shape"
-msgstr "Aggiungi forma"
+msgid "Add Primitive"
+msgstr "Aggiungi primitiva"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:598
-msgid "Duplicate Shape"
-msgstr "Duplica forma"
+msgid "Duplicate Primitive"
+msgstr "Duplica primitiva"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:607
 msgid "Geometry Transform"
 msgstr "Trasformazione di geometria"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:610
-msgid "Import Shapes"
-msgstr "Importa forma"
+msgid "Import Primitives"
+msgstr "Importa primitive"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:623
-msgid "Custom Shape"
-msgstr "Forma personalizzata"
+msgid "Custom Shape Primitives"
+msgstr "Primitive di forme personalizzate"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:645
 msgid ""
@@ -12443,77 +12443,77 @@ msgstr "Nessun strato selezionato, niente da tracciare"
 msgid "Plot file '%s' created."
 msgstr "File tracciatura \"%s\" creato."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:433
+#: pcbnew/dialogs/dialog_pad_properties.cpp:447
 msgid "Back side (footprint is mirrored)"
 msgstr "Lato retrostante (impronta speculare)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:441
+#: pcbnew/dialogs/dialog_pad_properties.cpp:455
 msgid "No footprint"
 msgstr "Nessuna impronta"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:697
+#: pcbnew/dialogs/dialog_pad_properties.cpp:713
 #, c-format
 msgid "width %s"
 msgstr "larghezza %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:704
+#: pcbnew/dialogs/dialog_pad_properties.cpp:720
 msgid "from "
 msgstr "da"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:705
+#: pcbnew/dialogs/dialog_pad_properties.cpp:721
 msgid "to "
 msgstr "a"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:710
+#: pcbnew/dialogs/dialog_pad_properties.cpp:726
 msgid "center "
 msgstr "centro "
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:711
+#: pcbnew/dialogs/dialog_pad_properties.cpp:727
 msgid "start "
 msgstr "inizio"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:712
+#: pcbnew/dialogs/dialog_pad_properties.cpp:728
 #, c-format
 msgid "angle %s"
 msgstr "angolo %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:717
+#: pcbnew/dialogs/dialog_pad_properties.cpp:733
 msgid "ring"
 msgstr "anello"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:719
+#: pcbnew/dialogs/dialog_pad_properties.cpp:735
 msgid "circle"
 msgstr "cerchio"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:722
+#: pcbnew/dialogs/dialog_pad_properties.cpp:738
 #, c-format
 msgid "radius %s"
 msgstr "raggio %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:728
+#: pcbnew/dialogs/dialog_pad_properties.cpp:744
 #, c-format
 msgid "corners count %d"
 msgstr "conteggio vertici %d"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:978
+#: pcbnew/dialogs/dialog_pad_properties.cpp:996
 msgid "Pad size must be greater than zero"
 msgstr "La dimensione piazzola deve essere maggiore di zero"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:984
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1002
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
 msgstr ""
 "Valore errato per la foratura della piazzola: foro maggiore della dimensione "
 "piazzola"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:992
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1010
 msgid "Error: pad has no layer"
 msgstr "Errore: la piazzola non ha strati"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:999
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1017
 msgid "Error: the pad is not on a copper layer and has a hole"
 msgstr "Errore: la piazzola non è su uno strato in rame ed ha un foro"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1004
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1022
 msgid ""
 "For NPTH pad, set pad size value to pad drill value, if you do not want this "
 "pad plotted in gerber files"
@@ -12522,19 +12522,19 @@ msgstr ""
 "foratura identiche a quelle della piazzola, se non si desidera tracciare "
 "questa piazzola nei file Gerber"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1024
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1042
 msgid "Incorrect value for pad offset"
 msgstr "Valore sbagliato per scarto piazzola"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1030
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1048
 msgid "Too large value for pad delta size"
 msgstr "Valore eccessivo per scarto piazzola "
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1038
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1056
 msgid "Error: Through hole pad: drill diameter set to 0"
 msgstr "Errore: piazzola con foro passante: diametro foro impostato a 0"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1043
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1061
 msgid ""
 "Error: Connector pads are not on the solder paste layer\n"
 "Use SMD pads instead"
@@ -12542,56 +12542,56 @@ msgstr ""
 "Errore: le piazzole del connettore non sono sullo strato pasta salda\n"
 "Usare piazzole SMD"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1052
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1070
 msgid "Error: only one external copper layer allowed for SMD or Connector pads"
 msgstr ""
 "Errore: solo uno strato esterno in rame è consentito per SMD o piazzole "
 "connettori"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1064
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1082
 msgid "Incorrect corner size value"
 msgstr "Valore dimensione angolo errato"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1068
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1086
 msgid "Incorrect (negative) corner size value"
 msgstr "Errato (negativo) valore dimensione angolo"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1070
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1088
 msgid "Corner size value must be smaller than 50%"
 msgstr "Il valore dimensione angolo deve essere inferiore al 50%"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1078
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1096
 msgid "Incorrect pad shape: the shape must be equivalent to only one polygon"
 msgstr ""
 "Forma piazzola errata: la forma deve essere equivalente ad un poligono solo"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1084
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1102
 msgid "Pad setup errors list"
 msgstr "Elenco errori impostazioni piazzole"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1323
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1341
 msgid "Unknown netname, netname not changed"
 msgstr "Collegamento sconosciuto"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1360
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1378
 msgid "Modify pad"
 msgstr "Modifica piazzola"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1692
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1835
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1876
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1710
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1853
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1894
 msgid "No shape selected"
 msgstr "Nessuna forma selezionata"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1783
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1801
 msgid "ring/circle"
 msgstr "anello/cerchio"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1783
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1801
 msgid "polygon"
 msgstr "poligono"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1786
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1804
 msgid " Select shape type:"
 msgstr " Seleziona il tipo di forma:"
 
@@ -17703,11 +17703,11 @@ msgstr "Errore: simbolo non trovato!!!"
 msgid "Component %s, %s"
 msgstr "Componente %s, %s"
 
-#: eeschema/hierarch.cpp:151
+#: eeschema/hierarch.cpp:160
 msgid "Navigator"
 msgstr "Navigatore"
 
-#: eeschema/hierarch.cpp:161
+#: eeschema/hierarch.cpp:171
 msgid "Root"
 msgstr "Principale"
 
@@ -19529,61 +19529,61 @@ msgstr "Nascondi puntatore"
 msgid "Show cursor"
 msgstr "Mostra puntatore"
 
-#: eeschema/sch_legacy_plugin.cpp:146 eeschema/sch_legacy_plugin.cpp:191
-#: eeschema/sch_legacy_plugin.cpp:239 eeschema/sch_legacy_plugin.cpp:285
-#: eeschema/sch_legacy_plugin.cpp:329 eeschema/sch_legacy_plugin.cpp:342
-#: eeschema/sch_legacy_plugin.cpp:393 eeschema/sch_legacy_plugin.cpp:406
-#: eeschema/sch_legacy_plugin.cpp:425 eeschema/sch_legacy_plugin.cpp:920
-#: eeschema/sch_legacy_plugin.cpp:2563
+#: eeschema/sch_legacy_plugin.cpp:151 eeschema/sch_legacy_plugin.cpp:196
+#: eeschema/sch_legacy_plugin.cpp:244 eeschema/sch_legacy_plugin.cpp:290
+#: eeschema/sch_legacy_plugin.cpp:334 eeschema/sch_legacy_plugin.cpp:347
+#: eeschema/sch_legacy_plugin.cpp:398 eeschema/sch_legacy_plugin.cpp:411
+#: eeschema/sch_legacy_plugin.cpp:430 eeschema/sch_legacy_plugin.cpp:925
+#: eeschema/sch_legacy_plugin.cpp:2568
 msgid "unexpected end of line"
 msgstr "fine riga non previsto"
 
-#: eeschema/sch_legacy_plugin.cpp:353
+#: eeschema/sch_legacy_plugin.cpp:358
 msgid "expected unquoted string"
 msgstr "attesa stringa senza virgolette"
 
-#: eeschema/sch_legacy_plugin.cpp:720
+#: eeschema/sch_legacy_plugin.cpp:725
 #, c-format
 msgid "'%s' does not appear to be an Eeschema file"
 msgstr "\"%s\" non sembra essere un file di Eeschema"
 
-#: eeschema/sch_legacy_plugin.cpp:748
+#: eeschema/sch_legacy_plugin.cpp:753
 msgid "Missing 'EELAYER END'"
 msgstr "'EELAYER END' mancante"
 
-#: eeschema/sch_legacy_plugin.cpp:796 eeschema/sch_legacy_plugin.cpp:1058
-#: eeschema/sch_legacy_plugin.cpp:1066 eeschema/sch_legacy_plugin.cpp:2164
+#: eeschema/sch_legacy_plugin.cpp:801 eeschema/sch_legacy_plugin.cpp:1063
+#: eeschema/sch_legacy_plugin.cpp:1071 eeschema/sch_legacy_plugin.cpp:2169
 msgid "unexpected end of file"
 msgstr "fine file inaspettata"
 
-#: eeschema/sch_legacy_plugin.cpp:1025
+#: eeschema/sch_legacy_plugin.cpp:1030
 msgid "Unexpected end of file"
 msgstr "Fine file non prevista"
 
-#: eeschema/sch_legacy_plugin.cpp:1257
+#: eeschema/sch_legacy_plugin.cpp:1262
 msgid "expected 'Italics' or '~'"
 msgstr "previsto \"Italics\" o \"~\""
 
-#: eeschema/sch_legacy_plugin.cpp:1472
+#: eeschema/sch_legacy_plugin.cpp:1477
 msgid "component field text attributes must be 3 characters wide"
 msgstr ""
 "gli attributi del campo testo del componente devono essere larghi 3 caratteri"
 
-#: eeschema/sch_legacy_plugin.cpp:2248
+#: eeschema/sch_legacy_plugin.cpp:2253
 #, c-format
 msgid "user does not have permission to read library document file '%s'"
 msgstr "non si dispone dei permessi necessari per salvare il file \"%s\"."
 
-#: eeschema/sch_legacy_plugin.cpp:2256
+#: eeschema/sch_legacy_plugin.cpp:2261
 msgid "symbol document library file is empty"
 msgstr "il file della libreria di documentazione componenti è vuoto"
 
-#: eeschema/sch_legacy_plugin.cpp:3333 eeschema/sch_legacy_plugin.cpp:3368
+#: eeschema/sch_legacy_plugin.cpp:3338 eeschema/sch_legacy_plugin.cpp:3373
 #, c-format
 msgid "library %s does not contain an alias %s"
 msgstr "la libreria %s non contiene un alias %s"
 
-#: eeschema/sch_legacy_plugin.cpp:3541
+#: eeschema/sch_legacy_plugin.cpp:3546
 #, c-format
 msgid "symbol library '%s' already exists, cannot create a new library"
 msgstr ""
@@ -26948,9 +26948,3 @@ msgstr "Percorso libreria"
 #: include/lib_table_grid.h:172
 msgid "Plugin Type"
 msgstr "Tipo plugin"
-
-#~ msgid "Move the selected optional fields up one position"
-#~ msgstr "Sposta il il campo opzionale selezionato su di una posizione"
-
-#~ msgid "Move the selected optional fields down one position"
-#~ msgstr "Sposta il campo opzionale selezionato in giù di una posizione"
