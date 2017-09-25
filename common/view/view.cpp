@@ -335,7 +335,7 @@ void VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
     }
 
     SetVisible( aItem, true );
-    Update( aItem, KIGFX::ALL );
+    Update( aItem, KIGFX::INITIAL_ADD );
 }
 
 
@@ -827,7 +827,7 @@ struct VIEW::drawItem
     {
         wxASSERT( aItem->viewPrivData() );
 
-        // Conditions that have te be fulfilled for an item to be drawn
+        // Conditions that have to be fulfilled for an item to be drawn
         bool drawCondition = aItem->viewPrivData()->isRenderable() &&
                              aItem->ViewGetLOD( layer, view ) < view->m_scale;
         if( !drawCondition )
@@ -1076,14 +1076,23 @@ void VIEW::clearGroupCache()
 
 void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
 {
-    // updateLayers updates geometry too, so we do not have to update both of them at the same time
-    if( aUpdateFlags & LAYERS )
+    if( aUpdateFlags & INITIAL_ADD )
     {
-        updateLayers( aItem );
+        // Don't update layers or bbox, since it was done in VIEW::Add()
+        // Now that we have initialized, set flags to ALL for the code below
+        aUpdateFlags = ALL;
     }
-    else if( aUpdateFlags & GEOMETRY )
+    else
     {
-        updateBbox( aItem );
+        // updateLayers updates geometry too, so we do not have to update both of them at the same time
+        if( aUpdateFlags & LAYERS )
+        {
+            updateLayers( aItem );
+        }
+        else if( aUpdateFlags & GEOMETRY )
+        {
+            updateBbox( aItem );
+        }
     }
 
     int layers[VIEW_MAX_LAYERS], layers_count;
