@@ -785,7 +785,7 @@ unsigned int GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) cons
     // DCodes will be shown only if zoom is appropriate
     if( IsDCodeLayer( aLayer ) )
     {
-        return ( 400000 / ( m_Size.x + 1 ) );
+        return ( 100000000 / ( m_Size.x + 1 ) );
     }
 
     // Other layers are shown without any conditions
