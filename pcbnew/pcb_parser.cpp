@@ -2826,8 +2826,6 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
             break;
 
         case T_layers:
-            // If multiple layers are specified, it is a keepout zone
-            zone->SetIsKeepout( true );
             zone->SetLayerSet( parseBoardItemLayersAsMask() );
             break;
 

@@ -160,6 +160,8 @@ int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
     for( ii = 0; ii < areaCount; ii++ )
     {
         ZONE_CONTAINER* zoneContainer = GetBoard()->GetArea( ii );
+
+        // Keepout zones are not filled
         if( zoneContainer->GetIsKeepout() )
             continue;
 

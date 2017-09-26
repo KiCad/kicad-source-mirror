@@ -594,6 +594,9 @@ public:
      * returns a reference to the list of filled polygons.
      * @return Reference to the list of filled polygons.
      */
+
+    //TODO - This should be called for each layer on which the zone exists
+
     const SHAPE_POLY_SET& GetFilledPolysList() const
     {
         return m_FilledPolysList;

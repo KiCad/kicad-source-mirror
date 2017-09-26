@@ -197,9 +197,9 @@ bool ZONE_CONTAINER::IsOnCopperLayer() const
 
 bool ZONE_CONTAINER::CommonLayerExists( const LSET aLayerSet ) const
 {
-    auto common = GetLayerSet() & aLayerSet;
+    LSET common = GetLayerSet() & aLayerSet;
 
-    return common.size() > 0;
+    return common.count() > 0;
 }
 
 
@@ -221,8 +221,10 @@ void ZONE_CONTAINER::SetLayerSet( LSET aLayerSet )
     if( GetIsKeepout() )
     {
         // Keepouts can only exist on copper layers
-        m_layerSet = aLayerSet & LSET::AllCuMask();
+        aLayerSet &= LSET::AllCuMask();
     }
+
+    m_layerSet = aLayerSet;
 
     // Set the single layer to the first selected layer
     m_Layer = aLayerSet.Seq()[0];
@@ -231,6 +233,8 @@ void ZONE_CONTAINER::SetLayerSet( LSET aLayerSet )
 
 LSET ZONE_CONTAINER::GetLayerSet() const
 {
+    // TODO - Enable multi-layer zones for all zone types
+    // not just keepout zones
     if( GetIsKeepout() )
     {
         return m_layerSet;
@@ -311,9 +315,6 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
     {
         // At least one layer must be provided!
         assert( GetLayerSet().count() > 0 );
-
-        // If none of the keepout layers are actually visible, return
-        LSET layers = GetLayerSet() & brd->GetVisibleLayers();
 
         // Not on any visible layer?
         if( layers.count() == 0 && !( aDrawMode & GR_HIGHLIGHT ) )

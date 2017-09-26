@@ -363,7 +363,8 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
     {
         ZONE_CONTAINER* zone = GetBoard()->GetArea( ii );
 
-        if( zone->GetLayer() != GetLayer() )
+        // If the zones share no common layers
+        if( !CommonLayerExists( zone->GetLayerSet() ) )
             continue;
 
         if( !zone->GetIsKeepout() && zone->GetPriority() <= GetPriority() )

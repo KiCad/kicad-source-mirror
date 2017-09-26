@@ -912,11 +912,20 @@ int PCB_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
 
     // If the new zone is on the same layer as the the initial zone,
     // do nothing
-    if( success && ( oldZone->GetLayer() == zoneSettings.m_CurrentZone_Layer ) )
+    if( success )
     {
-        DisplayError( m_frame,
-            _( "The duplicated zone cannot be on the same layer as the original zone." ) );
-        success = false;
+        if( oldZone->GetIsKeepout() && ( oldZone->GetLayerSet() == zoneSettings.m_Layers ) )
+        {
+            DisplayError(
+                    m_frame, _( "The duplicated keepout zone cannot be on the same layers as the original zone." ) );
+            success = false;
+        }
+        else if( !oldZone->GetIsKeepout() && ( oldZone->GetLayer() == zoneSettings.m_CurrentZone_Layer ) )
+        {
+            DisplayError(
+                    m_frame, _( "The duplicated zone cannot be on the same layer as the original zone." ) );
+            success = false;
+        }
     }
 
     // duplicate the zone

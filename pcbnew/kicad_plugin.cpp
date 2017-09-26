@@ -1609,8 +1609,8 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
                   aZone->GetIsKeepout() ? 0 : m_mapping->Translate( aZone->GetNetCode() ),
                   m_out->Quotew( aZone->GetIsKeepout() ? wxT("") : aZone->GetNetname() ).c_str() );
 
-    // Keepout zones can exist on multiple layers
-    if( aZone->GetIsKeepout() && aZone->GetLayerSet().count() > 1 )
+    // If a zone exists on multiple layers, format accordingly
+    if( aZone->GetLayerSet().count() > 1 )
     {
         formatLayers( aZone->GetLayerSet() );
     }
