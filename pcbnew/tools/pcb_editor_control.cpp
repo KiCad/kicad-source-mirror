@@ -1161,9 +1161,12 @@ int PCB_EDITOR_CONTROL::ShowLocalRatsnest( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
 {
+    return 0;
     auto selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     auto& selection = selectionTool->GetSelection();
     auto connectivity = getModel<BOARD>()->GetConnectivity();
+
+    printf("UpdSelRat!\n");
 
     if( selection.Empty() )
     {

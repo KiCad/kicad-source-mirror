@@ -47,6 +47,7 @@ CONNECTIVITY_DATA::~CONNECTIVITY_DATA()
 
 bool CONNECTIVITY_DATA::Add( BOARD_ITEM* aItem )
 {
+    printf("add %p type %d\n", aItem, aItem->Type() );
     m_connAlgo->Add( aItem );
     return true;
 }

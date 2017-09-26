@@ -1356,6 +1356,8 @@ public:
      *         aPosition and a pointer to the via are returned.
      */
     TRACK* CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS_LIST* aList );
+
+    void ClearAllNetCodes();
 };
 
 #endif      // CLASS_BOARD_H_
