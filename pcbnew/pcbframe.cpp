@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2013-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -1181,18 +1181,16 @@ void PCB_EDIT_FRAME::OnUpdatePCBFromSch( wxCommandEvent& event )
 {
     if( Kiface().IsSingle() )
     {
-        DisplayError( this,  _( "Cannot update the PCB, because the Kicad is"
-                                 " opened in stand-alone mode. In order to create/update"
-                                 " PCBs from schematics, you need to launch Kicad shell"
-                                 " and create a PCB project." ) );
+        DisplayError( this,  _( "Cannot update the PCB, because the Kicad is "
+                                "opened in stand-alone mode. In order to create or update "
+                                "PCBs from schematics, you need to launch the Kicad shell "
+                                "and create a PCB project." ) );
         return;
     }
     else
     {
         KIWAY_PLAYER* frame = Kiway().Player( FRAME_SCH, true );
-        wxFileName schfn = Prj().AbsolutePath( Prj().GetProjectName() );
-
-        schfn.SetExt( SchematicFileExtension );
+        wxFileName schfn( Prj().GetProjectPath(), Prj().GetProjectName(), SchematicFileExtension );
 
         if( !frame->IsVisible() )
         {
