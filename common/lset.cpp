@@ -560,9 +560,10 @@ LSET FlipLayerMask( LSET aMask, int aCopperLayersCount )
         {
             // the mask does not include all internal layers. Therefore
             // the flipped mask for internal copper layers must be built
-
             int innerLayerCnt = aCopperLayersCount -2;
 
+            // the flipped mask is the innerLayerCnt bits rewritten in reverse order
+            // ( bits innerLayerCnt to 1 rewritten in bits 1 to innerLayerCnt )
             for( int ii = 0; ii < innerLayerCnt; ii++ )
             {
                 if( internalMask[innerLayerCnt - ii] )

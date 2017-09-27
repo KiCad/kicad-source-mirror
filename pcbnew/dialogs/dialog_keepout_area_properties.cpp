@@ -7,7 +7,7 @@
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -163,11 +163,8 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
         COLOR4D layerColor = m_parent->Settings().Colors().GetLayerColor( layer );
 
         row.clear();
-
         row.push_back( m_zonesettings.m_Layers.test( layer ) );
-
         auto iconItem = wxDataViewIconText( msg, makeLayerIcon( layerColor ) );
-
         row.push_back( wxVariant( iconItem ) );
 
         m_layers->AppendItem( row );
@@ -180,14 +177,16 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
     m_cbCopperPourCtrl->SetValue( m_zonesettings.GetDoNotAllowCopperPour() );
 
     checkColumn->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-    checkColumn->SetMinWidth( 50 );
-    layerColumn->SetMinWidth( 350 );
+    layerColumn->SetWidth( wxCOL_WIDTH_AUTOSIZE );
 
     m_layers->SetExpanderColumn( layerColumn );
+    m_layers->SetMinSize( wxSize( 300, -1 ) );
 
     m_layers->Update();
 
     Update();
+
+    m_sdbSizerButtonsOK->Enable( m_zonesettings.m_Layers.count() > 0 );
 }
 
 
@@ -217,7 +216,7 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::OnLayerSelection( wxDataViewEvent& event )
     BOARD* board = m_parent->GetBoard();
     LSEQ cu_stack = LSET::AllCuMask( board->GetCopperLayerCount() ).UIOrder();
 
-    if( row < cu_stack.size() )
+    if( row < (int)cu_stack.size() )
     {
         m_zonesettings.m_Layers.set( cu_stack[ row ], selected );
     }
@@ -296,8 +295,6 @@ wxIcon DIALOG_KEEPOUT_AREA_PROPERTIES::makeLayerIcon( COLOR4D aColor )
     iconDC.DrawRectangle( 0, 0, LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
 
     wxIcon icon;
-
     icon.CopyFromBitmap( bitmap );
-
     return icon;
 }

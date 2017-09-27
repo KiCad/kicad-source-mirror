@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -561,13 +561,10 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
         {
             ZONE_EDIT_T edited;
 
-            // Init zone params to reasonable values
-            zone->SetLayer( GetActiveLayer() );
-
             // Prompt user for parameters:
             m_canvas->SetIgnoreMouseEvents( true );
 
-            if( zone->IsOnCopperLayer() )
+            if( IsCopperLayer( GetActiveLayer() ) )
             {
                 // Put a zone on a copper layer
                 if( GetBoard()->GetHighLightNetCode() > 0 )
@@ -594,8 +591,6 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                 cfg->Read( ZONE_MIN_THICKNESS_WIDTH_STRING_KEY, &tmp );
                 zoneInfo.m_ZoneMinThickness = KiROUND( tmp * IU_PER_MILS );
 
-                zoneInfo.m_CurrentZone_Layer = zone->GetLayer();
-
                 if( GetToolId() == ID_PCB_KEEPOUT_AREA_BUTT )
                 {
                     zoneInfo.SetIsKeepout( true );
@@ -609,14 +604,16 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                 }
                 else
                 {
+                    zoneInfo.m_CurrentZone_Layer = GetActiveLayer();    // Preselect a layer
                     zoneInfo.SetIsKeepout( false );
                     edited = InvokeCopperZonesEditor( this, &zoneInfo );
                 }
             }
             else   // Put a zone on a non copper layer (technical layer)
             {
+                zone->SetLayer( GetActiveLayer() );     // Preselect a layer
                 zoneInfo.SetIsKeepout( false );
-                zoneInfo.m_NetcodeSelection = 0;     // No net for non copper zones
+                zoneInfo.m_NetcodeSelection = 0;        // No net for non copper zones
                 edited = InvokeNonCopperZonesEditor( this, zone, &zoneInfo );
             }
 
@@ -674,8 +671,6 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
     if( zone->GetNumCorners() == 0 )
     {
         zoneInfo.ExportSetting( *zone );
-
-        zone->SetLayer( zoneInfo.m_CurrentZone_Layer );
 
         // A duplicated corner is needed; null segments are removed when the zone is finished.
         zone->AppendCorner( GetCrossHairPosition(), -1 );
