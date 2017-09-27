@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 2012-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2820,12 +2820,13 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
             NeedRIGHT();
             break;
 
-        case T_layer:
+        case T_layer:   // keyword for zones that are on only one layer
             zone->SetLayer( parseBoardItemLayer() );
             NeedRIGHT();
             break;
 
-        case T_layers:
+        case T_layers:  // keyword for zones that can live on a set of layer
+                        // currently: keepout zones
             zone->SetLayerSet( parseBoardItemLayersAsMask() );
             break;
 
@@ -3128,6 +3129,8 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
             // and update the zone netcode
             zone->SetNetCode( net->GetNet() );
 
+            // FIXME: a call to any GUI item is not allowed in io plugins:
+            // Change this code to generate a warning message outside this plugin
             // Prompt the user
             wxString msg;
             msg.Printf( _( "There is a zone that belongs to a not existing net\n"
