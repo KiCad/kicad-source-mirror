@@ -106,6 +106,9 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
     // hook wxEVT_CLOSE_WINDOW so we can call SaveSettings().  This function seems
     // to be called before any other hook for wxCloseEvent, which is necessary.
     Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( EDA_BASE_FRAME::windowClosing ) );
+
+    // remove border from wxAui panes for all derived classes
+    Connect( wxEVT_SHOW, wxShowEventHandler( EDA_BASE_FRAME::removePaneBorder ) );
 }
 
 
@@ -150,6 +153,18 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
         SaveSettings( cfg );       // virtual, wxFrame specific
 
     event.Skip();       // we did not "handle" the event, only eavesdropped on it.
+}
+
+
+void EDA_BASE_FRAME::removePaneBorder( wxShowEvent& event )
+{
+    // remove the ugly 1-pixel white border on AUI panes
+    wxAuiPaneInfoArray panes = m_auimgr.GetAllPanes();
+
+    for( size_t i = 0; i < panes.GetCount(); i++ )
+        m_auimgr.GetPane( panes.Item( i ).name ).PaneBorder( false );
+
+    m_auimgr.Update();
 }
 
 

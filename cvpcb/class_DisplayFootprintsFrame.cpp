@@ -172,7 +172,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
 
     // Create options tool bar.
     m_optionsToolBar = new wxAuiToolBar( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                         wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_VERTICAL );
+                                         KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiBitmap( grid_xpm ),
                                _( "Hide grid" ), wxITEM_CHECK );
@@ -218,7 +218,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
         return;
 
     m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                      wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
+                                      KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     m_mainToolBar->AddTool( ID_OPTIONS_SETUP, wxEmptyString, KiBitmap( display_options_xpm ),
                             _( "Display options" ) );

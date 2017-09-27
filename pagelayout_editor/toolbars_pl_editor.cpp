@@ -46,7 +46,7 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
 
     // Standard file commands
     m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                      wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
+                                      KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     m_mainToolBar->AddTool( wxID_NEW, wxEmptyString, KiBitmap( new_generic_xpm ),
                             _( "New page layout design" ) );
@@ -161,7 +161,7 @@ void PL_EDITOR_FRAME::ReCreateVToolbar( void )
         return;
 
     m_drawToolBar = new wxAuiToolBar( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                      wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_VERTICAL );
+                                      KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
     m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ) );

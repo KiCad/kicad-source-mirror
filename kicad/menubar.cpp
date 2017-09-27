@@ -496,7 +496,7 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
 
     // Allocate memory for m_mainToolBar
     m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                      wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
+                                      KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // New
     m_mainToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString,

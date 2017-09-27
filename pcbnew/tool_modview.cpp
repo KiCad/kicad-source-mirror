@@ -49,7 +49,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     if( m_mainToolBar == NULL )
     {
         m_mainToolBar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT
+                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT
                                             | wxAUI_TB_OVERFLOW );
 
         // Set up toolbar

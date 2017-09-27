@@ -49,7 +49,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
     if( m_mainToolBar == NULL )
     {
         m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
+                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
         m_mainToolBar->AddTool( ID_LIBVIEW_SELECT_PART, wxEmptyString,
                                 KiBitmap( add_component_xpm ),

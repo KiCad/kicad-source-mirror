@@ -129,6 +129,11 @@ class EDA_BASE_FRAME : public wxFrame
      */
     void windowClosing( wxCloseEvent& event );
 
+    /**
+     * Removes border from wxAui panes.
+     */
+    void removePaneBorder( wxShowEvent& event );
+
 protected:
     FRAME_T      m_Ident;           ///< Id Type (pcb, schematic, library..)
     wxPoint      m_FramePos;
@@ -158,6 +163,9 @@ protected:
     wxString     m_perspective;     ///< wxAuiManager perspective.
 
     wxString     m_mruPath;         ///< Most recently used path.
+
+    ///> Default style flags used for wxAUI toolbars
+    static constexpr int KICAD_AUI_TB_STYLE = wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_PLAIN_BACKGROUND;
 
     /**
      * Function onAutoSaveTimer
