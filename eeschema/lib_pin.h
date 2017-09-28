@@ -170,8 +170,9 @@ public:
      * This will also all of the pin names marked by EnableEditMode().
      *
      * @param aName New pin name.
+     * @param aTestOtherPins determines if other pins need to be updated
      */
-    void SetName( const wxString& aName );
+    void SetName( const wxString& aName, bool aTestOtherPins = true );
 
     /**
      * Set the \a aSize of the pin name text.
@@ -180,8 +181,9 @@ public:
      * by EnableEditMode().
      *
      * @param aSize The text size of the pin name in schematic units ( mils ).
+     * @param aTestOtherPins determines if other pins need to be updated
      */
-    void SetNameTextSize( int aSize );
+    void SetNameTextSize( int aSize, bool aTestOtherPins = true );
 
     int GetNameTextSize() const { return m_nameTextSize; }
 
@@ -209,8 +211,9 @@ public:
      * by EnableEditMode().
      *
      * @param aSize The text size of the pin number in schematic units ( mils ).
+     * @param aTestOtherPins determines if other pins need to be updated
      */
-    void SetNumberTextSize( int aSize );
+    void SetNumberTextSize( int aSize, bool aTestOtherPins = true );
 
     int GetNumberTextSize() const { return m_numTextSize; }
 
@@ -222,8 +225,9 @@ public:
      * This will also update the orientation of the pins marked by EnableEditMode().
      *
      * @param aOrientation - The orientation of the pin.
+     * @param aTestOtherPins determines if other pins need to be updated
      */
-    void SetOrientation( int aOrientation );
+    void SetOrientation( int aOrientation, bool aTestOtherPins = true );
 
     void Rotate() override;
 
@@ -279,8 +283,9 @@ public:
      * EnableEditMode().
      *
      * @param aType - The electrical type of the pin(see enun ELECTRICAL_PINTYPE for values).
+     * @param aTestOtherPins determines if other pins need to be updated
      */
-    void SetType( ELECTRICAL_PINTYPE aType );
+    void SetType( ELECTRICAL_PINTYPE aType, bool aTestOtherPins = true );
 
     /**
      * Set the pin length.
@@ -288,8 +293,9 @@ public:
      * This will also update the length of the pins marked by EnableEditMode().
      *
      * @param aLength - The length of the pin in mils.
+     * @param aTestOtherPins determines if other pins need to be updated
      */
-    void SetLength( int aLength );
+    void SetLength( int aLength, bool aTestOtherPins = true );
 
     int GetLength() { return m_length; }
 
