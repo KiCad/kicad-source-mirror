@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 22 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,7 +11,6 @@
 
 BEGIN_EVENT_TABLE( DIALOG_KEEPOUT_AREA_PROPERTIES_BASE, DIALOG_SHIM )
 	EVT_DATAVIEW_ITEM_VALUE_CHANGED( wxID_ANY, DIALOG_KEEPOUT_AREA_PROPERTIES_BASE::_wxFB_OnLayerSelection )
-	EVT_BUTTON( wxID_OK, DIALOG_KEEPOUT_AREA_PROPERTIES_BASE::_wxFB_OnOkClick )
 END_EVENT_TABLE()
 
 DIALOG_KEEPOUT_AREA_PROPERTIES_BASE::DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
@@ -44,7 +43,7 @@ DIALOG_KEEPOUT_AREA_PROPERTIES_BASE::DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( wxWind
 	m_staticTextprops->Wrap( -1 );
 	bSizerRight->Add( m_staticTextprops, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	wxString m_OrientEdgesOptChoices[] = { _("Any"), _("180, 90, and 45 degrees") };
+	wxString m_OrientEdgesOptChoices[] = { _("Any orientation"), _("180, 90, and 45 degrees") };
 	int m_OrientEdgesOptNChoices = sizeof( m_OrientEdgesOptChoices ) / sizeof( wxString );
 	m_OrientEdgesOpt = new wxRadioBox( this, wxID_ANY, _("Zone Edge Orientation:"), wxDefaultPosition, wxDefaultSize, m_OrientEdgesOptNChoices, m_OrientEdgesOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_OrientEdgesOpt->SetSelection( 1 );

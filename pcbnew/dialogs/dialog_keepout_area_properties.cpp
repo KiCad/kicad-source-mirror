@@ -58,8 +58,9 @@ public:
 private:
     PCB_BASE_FRAME* m_parent;
     wxConfigBase*   m_config;               ///< Current config
-    ZONE_SETTINGS   m_zonesettings;
-    ZONE_SETTINGS*  m_ptr;
+    ZONE_SETTINGS   m_zonesettings;         ///< the working copy of zone settings
+    ZONE_SETTINGS*  m_ptr;                  ///< the pointer to the zone settings
+                                            ///< of the zone to edit
 
     /**
      * Function initDialog
@@ -67,7 +68,10 @@ private:
      */
     void initDialog();
 
-    virtual void OnOkClick( wxCommandEvent& event ) override;
+    /**
+     * automatically called by wxWidgets before closing the dialog
+     */
+    virtual bool TransferDataFromWindow() override;
 
     virtual void OnLayerSelection( wxDataViewEvent& event ) override;
 
@@ -190,13 +194,15 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
 }
 
 
-void DIALOG_KEEPOUT_AREA_PROPERTIES::OnOkClick( wxCommandEvent& event )
+bool DIALOG_KEEPOUT_AREA_PROPERTIES::TransferDataFromWindow()
 {
     if( AcceptOptionsForKeepOut() )
     {
         *m_ptr = m_zonesettings;
-        event.Skip();       // ends returning wxID_OK (default behavior)
+        return true;
     }
+
+    return false;
 }
 
 
@@ -210,7 +216,6 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::OnLayerSelection( wxDataViewEvent& event )
     wxDataViewItem item = event.GetItem();
 
     int row = m_layers->ItemToRow( item );
-
     bool selected = m_layers->GetToggleValue( row, 0 );
 
     BOARD* board = m_parent->GetBoard();
@@ -275,8 +280,8 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::AcceptOptionsForKeepOut()
     else
         m_zonesettings.m_Zone_45_Only = true;
 
-    m_zonesettings.m_ZonePriority = 0; //m_PriorityLevelCtrl->GetValue();
-
+    m_zonesettings.m_ZonePriority = 0;  // for a keepout, this param is not used.
+                                        // set it to 0
     return true;
 }
 
