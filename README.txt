@@ -7,12 +7,13 @@ Files
 -----
 AUTHORS.txt       - The authors, contributors, document writers and translators list
 CMakeList.txt     - Main CMAKE build tool script
-COPYRIGHT.txt     - A copy of the GNU General Public License Version 2
+copyright.h       - A very short copy of the GNU General Public License to be included in new source files
 CTestConfig.cmake - Support for CTest and CDash testing tools
 Doxyfile          - Doxygen config file for KiCad
 INSTALL.txt       - The release (binary) installation instructions
 TODO.txt          - Todo list (looks outdated)
 uncrustify.cfg    - Uncrustify config file for uncrustify sources formatting tool
+_clang-format     - clang config file for clang-format sources formatting tool
 
 Subdirectories
 --------------
@@ -29,14 +30,14 @@ gerbview          - Sourcecode of the gerber viewer
 helpers           - Helper tools and utilities for development
 include           - Interfaces to the common library
 kicad             - Sourcecode of the project manager
-lib_dxf           - Sourcecode of the polygon library
+lib_dxf           - Sourcecode of the dxf reader/writer library
 new               - Staging area for the new schematic library format
 pagelayout_editor - Sourcecode of the pagelayout editor
 patches           - Collection of patches for external dependencies
 pcbnew            - Sourcecode of the printed circuit board editor
 plugins           - Sourcecode of the new plugin concept
 polygon           - Sourcecode of the polygon library
-potrace           - Sourcecode of the potrace library
+potrace           - Sourcecode of the potrace library, used in bitmap2component
 qa                - Testcases using the python interface
 resources         - Resources for freedesktop mime-types for linux
 scripting         - SWIG Python scripting definitions

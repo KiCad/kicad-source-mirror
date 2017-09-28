@@ -280,18 +280,18 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
         m_optionsToolBar->AddSeparator();
         m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_0, wxEmptyString,
                                    KiBitmap( gbr_select_mode0_xpm ),
-                                   _( "Show layers in raw mode \
-    (could have problems with negative items when more than one gerber file is shown)" ),
+                                   _( "Show layers in raw mode\n"
+        "(could have problems with negative items when more than one gerber file is shown)" ),
                                    wxITEM_CHECK );
         m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_1, wxEmptyString,
                                    KiBitmap( gbr_select_mode1_xpm ),
-                                   _( "Show layers in stacked mode \
-    (show negative items without artifacts, sometimes slow)" ),
+                                   _( "Show layers in stacked mode\n"
+                                      "(show negative items without artifacts)" ),
                                    wxITEM_CHECK );
         m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_2, wxEmptyString,
                                    KiBitmap( gbr_select_mode2_xpm ),
-                                   _( "Show layers in transparency mode \
-    (show negative items without artifacts, sometimes slow)" ),
+                                   _( "Show layers in transparency mode\n"
+                                      "(show negative items without artifacts)" ),
                                    wxITEM_CHECK );
     }
     else

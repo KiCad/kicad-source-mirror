@@ -1181,9 +1181,9 @@ void PCB_EDIT_FRAME::OnUpdatePCBFromSch( wxCommandEvent& event )
 {
     if( Kiface().IsSingle() )
     {
-        DisplayError( this,  _( "Cannot update the PCB, because the Kicad is "
+        DisplayError( this,  _( "Cannot update the PCB, because Pcbnew is "
                                 "opened in stand-alone mode. In order to create or update "
-                                "PCBs from schematics, you need to launch the Kicad shell "
+                                "PCBs from schematics, you need to launch the KiCad project manager "
                                 "and create a PCB project." ) );
         return;
     }
