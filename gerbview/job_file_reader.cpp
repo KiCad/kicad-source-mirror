@@ -39,9 +39,6 @@
 #include <plot_auxiliary_data.h>
 #include <html_messagebox.h>
 
-extern int ReadInt( char*& text, bool aSkipSeparator = true );
-extern double ReadDouble( char*& text, bool aSkipSeparator = true );
-extern bool GetEndOfBlock( char* buff, char*& text, FILE* gerber_file );
 
 /**
  * this class read and parse a Gerber job file to extract useful info

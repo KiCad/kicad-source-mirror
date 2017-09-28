@@ -125,8 +125,6 @@ public:
     bool               m_GerbMetric;                            // false = Inches, true = metric
     bool               m_Relative;                              // false = absolute Coord, true = relative Coord
     bool               m_NoTrailingZeros;                       // true: remove tailing zeros.
-    bool               m_DecimalFormat;                         // true: use floating point notations for coordinates
-                                                                // If true, overrides m_NoTrailingZeros parameter.
     wxPoint            m_ImageOffset;                           // Coord Offset, from IO command
     wxSize             m_FmtScale;                              // Fmt 2.3: m_FmtScale = 3, fmt 3.4: m_FmtScale = 4
     wxSize             m_FmtLen;                                // Nb chars per coord. ex fmt 2.3, m_FmtLen = 5
@@ -143,6 +141,7 @@ public:
     int                m_Current_Tool;                          // Current Tool (Dcode) number selected
     int                m_Last_Pen_Command;                      // Current or last pen state (0..9, set by Dn option with n <10
     int                m_CommandState;                          // state of gerber analysis command.
+    int                m_LineNum;                               // Line number of the gerber file while reading
     wxPoint            m_CurrentPos;                            // current specified coord for plot
     wxPoint            m_PreviousPos;                           // old current specified coord for plot
     wxPoint            m_IJPos;                                 // IJ coord (for arcs & circles )
@@ -175,6 +174,20 @@ private:
                                                                 // -1 = negative items are
                                                                 // 0 = no negative items found
                                                                 // 1 = have negative items found
+    /**
+     * Function GetNextLine
+     * test for an end of line
+     * if an end of line is found:
+     *   read a new line
+     * @param aBuff = buffer (size = GERBER_BUFZ) to fill with a new line
+     * @param aText = pointer to the last useful char in aBuff
+     *          on return: points the beginning of the next line.
+     * @param aFile = the opened GERBER file to read
+     * @return a pointer to the beginning of the next line or NULL if end of file
+    */
+    char* GetNextLine( char *aBuff, char* aText, FILE* aFile );
+
+    bool GetEndOfBlock( char* buff, char*& text, FILE* gerber_file );
 
 public:
     GERBER_FILE_IMAGE( int layer );

@@ -307,7 +307,8 @@ bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName )
     // Add our file attribute, to identify the drill file
     X2_ATTRIBUTE dummy;
     char* text = (char*)file_attribute;
-    dummy.ParseAttribCmd( m_Current_File, NULL, 0, text );
+    int dummyline = 0;
+    dummy.ParseAttribCmd( m_Current_File, NULL, 0, text, dummyline );
     delete m_FileFunction;
     m_FileFunction = new X2_ATTRIBUTE_FILEFUNCTION( dummy );
 

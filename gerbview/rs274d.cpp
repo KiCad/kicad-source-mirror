@@ -484,7 +484,7 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
         {
             text += 7;
             X2_ATTRIBUTE dummy;
-            dummy.ParseAttribCmd( m_Current_File, NULL, 0, text );
+            dummy.ParseAttribCmd( m_Current_File, NULL, 0, text, m_LineNum );
             if( dummy.IsFileFunction() )
             {
                 delete m_FileFunction;

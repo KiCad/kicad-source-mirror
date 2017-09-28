@@ -73,7 +73,7 @@ wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& Text )
 {
     wxPoint pos;
     int     type_coord = 0, current_coord, nbdigits;
-    bool    is_float   = m_DecimalFormat;
+    bool    is_float   = false;
     char*   text;
     char    line[256];
 

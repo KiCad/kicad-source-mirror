@@ -37,7 +37,6 @@
 
 extern int ReadInt( char*& text, bool aSkipSeparator = true );
 extern double ReadDouble( char*& text, bool aSkipSeparator = true );
-extern bool GetEndOfBlock( char* buff, char*& text, FILE* gerber_file );
 
 
 #define CODE( x, y ) ( ( (x) << 8 ) + (y) )
@@ -233,7 +232,7 @@ bool GERBER_FILE_IMAGE::ReadRS274XCommand( char* buff, char*& text )
             ok = false;
             break;
         }
-
+        m_LineNum++;
         text = buff;
     }
 
@@ -273,14 +272,21 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
                 text++;
                 break;
 
+            case 'D':       // Non-standard option for all zeros (leading + tailing)
+                msg.Printf( _( "RS274X: Invalid GERBER format command '%c' at line %d: \"%s\"" ),
+                        'D', m_LineNum, buff );
+                AddMessageToList( msg );
+                msg.Printf( _("GERBER file \"%s\" may not display as intended." ),
+                        m_FileName.ToAscii() );
+                AddMessageToList( msg );
+                // Fallthrough
+
             case 'L':       // No Leading 0
-                m_DecimalFormat = false;
                 m_NoTrailingZeros = false;
                 text++;
                 break;
 
             case 'T':       // No trailing 0
-                m_DecimalFormat = false;
                 m_NoTrailingZeros = true;
                 text++;
                 break;
@@ -305,16 +311,12 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
                     seq_len = seq_char - '0';
                 break;
 
-            case 'D':
             case 'M':       // Sequence code (followed by one digit: the sequence len)
                             // (sometimes found after the X,Y sequence)
                             // Obscure option
                 code = *text++;
                 if( ( *text >= '0' ) && ( *text<= '9' ) )
                     text++;     // skip the digit
-                else if( code == 'D' )
-                    // Decimal format: sometimes found, but not really documented
-                    m_DecimalFormat = true;
                 break;
 
             case 'X':
@@ -411,7 +413,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
         m_IsX2_file = true;
     {
         X2_ATTRIBUTE dummy;
-        dummy.ParseAttribCmd( m_Current_File, buff, GERBER_BUFZ, text );
+        dummy.ParseAttribCmd( m_Current_File, buff, GERBER_BUFZ, text, m_LineNum );
 
         if( dummy.IsFileFunction() )
         {
@@ -432,7 +434,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
     case APERTURE_ATTRIBUTE:    // Command %TA ... Not yet supported
         {
         X2_ATTRIBUTE dummy;
-        dummy.ParseAttribCmd( m_Current_File, buff, GERBER_BUFZ, text );
+        dummy.ParseAttribCmd( m_Current_File, buff, GERBER_BUFZ, text, m_LineNum );
 
         if( dummy.GetAttribute() == ".AperFunction" )
         {
@@ -449,7 +451,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
         {
         X2_ATTRIBUTE dummy;
 
-        dummy.ParseAttribCmd( m_Current_File, buff, GERBER_BUFZ, text );
+        dummy.ParseAttribCmd( m_Current_File, buff, GERBER_BUFZ, text, m_LineNum );
 
         if( dummy.GetAttribute() == ".N" )
         {
@@ -473,7 +475,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
     case REMOVE_APERTURE_ATTRIBUTE:    // Command %TD ...
         {
         X2_ATTRIBUTE dummy;
-        dummy.ParseAttribCmd( m_Current_File, buff, GERBER_BUFZ, text );
+        dummy.ParseAttribCmd( m_Current_File, buff, GERBER_BUFZ, text, m_LineNum );
         RemoveAttribute( dummy );
         }
         break;
@@ -902,7 +904,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
 }
 
 
-bool GetEndOfBlock( char* buff, char*& text, FILE* gerber_file )
+bool GERBER_FILE_IMAGE::GetEndOfBlock( char* buff, char*& text, FILE* gerber_file )
 {
     for( ; ; )
     {
@@ -920,6 +922,7 @@ bool GetEndOfBlock( char* buff, char*& text, FILE* gerber_file )
         if( fgets( buff, GERBER_BUFZ, gerber_file ) == NULL )
             break;
 
+        m_LineNum++;
         text = buff;
     }
 
@@ -927,18 +930,7 @@ bool GetEndOfBlock( char* buff, char*& text, FILE* gerber_file )
 }
 
 
-/**
- * Function GetNextLine
- * test for an end of line
- * if an end of line is found:
- *   read a new line
- * @param aBuff = buffer (size = GERBER_BUFZ) to fill with a new line
- * @param aText = pointer to the last useful char in aBuff
- *          on return: points the beginning of the next line.
- * @param aFile = the opened GERBER file to read
- * @return a pointer to the beginning of the next line or NULL if end of file
-*/
-static char* GetNextLine(  char *aBuff, char* aText, FILE* aFile  )
+char* GERBER_FILE_IMAGE::GetNextLine( char *aBuff, char* aText, FILE* aFile )
 {
     for( ; ; )
     {
@@ -953,6 +945,8 @@ static char* GetNextLine(  char *aBuff, char* aText, FILE* aFile  )
             case 0:    // End of text found in aBuff: Read a new string
                 if( fgets( aBuff, GERBER_BUFZ, aFile ) == NULL )
                     return NULL;
+
+                m_LineNum++;
                 aText = aBuff;
                 return aText;
 
@@ -1078,9 +1072,8 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *buff,
             break;
 
         default:
-            // @todo, there needs to be a way of reporting the line number
-            msg.Printf( wxT( "RS274X: Aperture Macro \"%s\": Invalid primitive id code %d, line: \"%s\"" ),
-                        GetChars( am.name ), primitive_type,  GetChars( FROM_UTF8( buff ) ) );
+            msg.Printf( wxT( "RS274X: Aperture Macro \"%s\": Invalid primitive id code %d, line %d: \"%s\"" ),
+                        GetChars( am.name ), primitive_type, m_LineNum, GetChars( FROM_UTF8( buff ) ) );
             AddMessageToList( msg );
             return false;
         }

@@ -96,9 +96,10 @@ public:
      * @param aText = a pointer to the first char to read from Gerber data stored in aBuffer
      *  After parsing, text points the last char of the command line ('%') (X2 mode)
      *  or the end of line if the line does not contain '%' or aBuffer == NULL (X1 mode)
+     * @oaram aLineNum = a point to the current line number of aFile
      * @return true if no error.
      */
-    bool ParseAttribCmd( FILE* aFile, char *aBuffer, int aBuffSize, char* &aText );
+    bool ParseAttribCmd( FILE* aFile, char *aBuffer, int aBuffSize, char* &aText, int& aLineNum );
 
     /**
      * Debug function: pring using wxLogMessage le list of parameters
