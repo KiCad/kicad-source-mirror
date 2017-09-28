@@ -897,19 +897,9 @@ void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate )
         int group = viewData->getGroup( aLayer );
 
         if( group >= 0 )
-        {
             m_gal->DrawGroup( group );
-        }
         else
-        {
-            group = m_gal->BeginGroup();
-            viewData->setGroup( aLayer, group );
-
-            if( !m_painter->Draw( aItem, aLayer ) )
-                aItem->ViewDraw( aLayer, this ); // Alternative drawing method
-
-            m_gal->EndGroup();
-        }
+            Update( aItem );
     }
     else
     {

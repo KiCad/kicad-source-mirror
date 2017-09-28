@@ -126,15 +126,15 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     else    // We are editing a "master" pad, i.e. a template to create new pads
         *m_dummyPad = *m_padMaster;
 
-    // Initialize canvas to be able to display the dummy pad:
-    prepareCanvas();
-
     initValues();
 
     // Usually, TransferDataToWindow is called by OnInitDialog
     // calling it here fixes all widgets sizes, and FinishDialogSettings can
     // safely fix minsizes
     TransferDataToWindow();
+
+    // Initialize canvas to be able to display the dummy pad:
+    prepareCanvas();
 
     m_sdbSizerOK->SetDefault();
     m_canUpdate = true;
