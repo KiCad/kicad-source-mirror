@@ -353,6 +353,7 @@ SELECTION& SELECTION_TOOL::RequestSelection( int aFlags )
     {
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, 0 );
         m_selection.SetIsHover( true );
+        m_selection.ClearReferencePoint();
     }
 
     // Be careful with iterators: items can be removed from list
@@ -420,6 +421,8 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag )
         if( !selectable( collector[i] ) || ( aOnDrag && collector[i]->IsLocked() ) )
             collector.Remove( i );
     }
+
+    m_selection.ClearReferencePoint();
 
     switch( collector.GetCount() )
     {
@@ -588,6 +591,9 @@ bool SELECTION_TOOL::selectMultiple()
     view->Remove( &area );
     m_multiple = false;         // Multiple selection mode is inactive
     getViewControls()->SetAutoPan( false );
+
+    if ( !cancelled )
+        m_selection.ClearReferencePoint();
 
     return cancelled;
 }

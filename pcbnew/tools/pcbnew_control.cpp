@@ -741,16 +741,15 @@ int PCBNEW_CONTROL::PasteItemsFromClipboard( const TOOL_EVENT& aEvent )
 {
     CLIPBOARD_IO pi;
     BOARD tmpBoard;
-
-    pi.SetBoard( &tmpBoard );
     BOARD_ITEM* clipItem = pi.Parse();
-
-    tmpBoard.ClearAllNetCodes();
 
     if(!clipItem )
     {
         return 0;
     }
+
+    if ( clipItem->Type() == PCB_T )
+        static_cast<BOARD*>(clipItem)->ClearAllNetCodes();
 
     bool editModules = m_editModules || frame()->IsType( FRAME_PCB_MODULE_EDITOR );
 
@@ -877,18 +876,11 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems )
         item->SetSelected();
         selection.Add( item );
         editTool->GetCurrentCommit()->Add( item );
-        printf("pb-add %p\n", item );
     }
 
     selection.SetReferencePoint( VECTOR2I( 0, 0 ) );
 
-        printf("SSSS\n");
-
     m_toolMgr->ProcessEvent( SELECTION_TOOL::SelectedEvent );
-
-
-        printf("Begin-PLACE\n");
-
     m_toolMgr->RunAction( PCB_ACTIONS::move, true );
 
     return 0;

@@ -168,9 +168,6 @@ private:
     ///> Flag determining if anything is being dragged right now
     bool m_dragging;
 
-    ///> Offset from the dragged item's center (anchor)
-    VECTOR2I m_offset;
-
     ///> Last cursor position (needed for getModificationPoint() to avoid changes
     ///> of edit reference point).
     VECTOR2I m_cursor;
@@ -178,6 +175,7 @@ private:
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.
     wxPoint getModificationPoint( const SELECTION& aSelection );
+    bool updateModificationPoint( SELECTION& aSelection );
 
     int editFootprintInFpEditor( const TOOL_EVENT& aEvent );
 

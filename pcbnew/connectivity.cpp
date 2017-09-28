@@ -47,7 +47,6 @@ CONNECTIVITY_DATA::~CONNECTIVITY_DATA()
 
 bool CONNECTIVITY_DATA::Add( BOARD_ITEM* aItem )
 {
-    printf("add %p type %d\n", aItem, aItem->Type() );
     m_connAlgo->Add( aItem );
     return true;
 }
@@ -72,7 +71,6 @@ void CONNECTIVITY_DATA::Build( BOARD* aBoard )
 {
     m_connAlgo.reset( new CN_CONNECTIVITY_ALGO );
     m_connAlgo->Build( aBoard );
-
     RecalculateRatsnest();
 }
 
@@ -194,12 +192,15 @@ void CONNECTIVITY_DATA::BlockRatsnestItems( const std::vector<BOARD_ITEM*>& aIte
 
     for( auto item : citems )
     {
-        auto& entry = m_connAlgo->ItemEntry( item );
-
-        for( auto cnItem : entry.GetItems() )
+        if ( m_connAlgo->ItemExists( item ) )
         {
-            for( auto anchor : cnItem->Anchors() )
-                anchor->SetNoLine( true );
+            auto& entry = m_connAlgo->ItemEntry( item );
+
+            for( auto cnItem : entry.GetItems() )
+            {
+                for( auto anchor : cnItem->Anchors() )
+                    anchor->SetNoLine( true );
+            }
         }
     }
 }

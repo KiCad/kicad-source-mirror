@@ -244,6 +244,11 @@ public:
         wxMessageBox( wxT( "virtual BOARD_ITEM::Move used, should not occur" ), GetClass() );
     }
 
+    void Move( const VECTOR2I& aMoveVector )
+    {
+        Move( wxPoint( aMoveVector.x, aMoveVector.y ) );
+    }
+
     /**
      * Function Rotate
      * Rotate this object.
@@ -255,6 +260,12 @@ public:
         wxMessageBox( wxT( "virtual BOARD_ITEM::Rotate used, should not occur" ), GetClass() );
     }
 
+    void Rotate( const VECTOR2I& aRotCentre, double aAngle )
+    {
+        Rotate( wxPoint( aRotCentre.x, aRotCentre.y ), aAngle );
+    }
+
+
     /**
      * Function Flip
      * Flip this object, i.e. change the board side for this object
@@ -263,6 +274,11 @@ public:
     virtual void Flip( const wxPoint& aCentre )
     {
         wxMessageBox( wxT( "virtual BOARD_ITEM::Flip used, should not occur" ), GetClass() );
+    }
+
+    void Flip( const VECTOR2I& aCentre )
+    {
+        Flip( wxPoint( aCentre.x, aCentre.y ) );
     }
 
     /**

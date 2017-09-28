@@ -103,7 +103,6 @@ BOARD::BOARD() :
 
     // Initialize ratsnest
     m_connectivity.reset( new CONNECTIVITY_DATA() );
-    m_connectivity->Build( this );
 }
 
 

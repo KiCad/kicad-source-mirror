@@ -830,6 +830,11 @@ public:
     CN_CONNECTIVITY_ALGO();
     ~CN_CONNECTIVITY_ALGO();
 
+    bool ItemExists( const BOARD_CONNECTED_ITEM* aItem )
+    {
+        return m_itemMap.find( aItem ) != m_itemMap.end();
+    }
+
     ITEM_MAP_ENTRY& ItemEntry( const BOARD_CONNECTED_ITEM* aItem )
     {
         return m_itemMap[ aItem ];

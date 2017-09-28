@@ -220,7 +220,6 @@ void CN_CONNECTIVITY_ALGO::markItemNetAsDirty( const BOARD_ITEM* aItem )
 
 bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
 {
-    printf("%p add %p\n", this, aItem );
     markItemNetAsDirty ( aItem );
 
     switch( aItem->Type() )
@@ -286,8 +285,6 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
     default:
         return false;
     }
-
-    printf("post-dirty %d\n", isDirty()?1:0);
 
     return true;
 }
@@ -592,15 +589,11 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
     CN_ITEM* head = nullptr;
     CLUSTERS clusters;
 
-    printf("searchcl isdirty %d\n", isDirty() ? 1:  0);
-
     if( isDirty() )
         searchConnections( includeZones );
 
-    printf("%p: search\n", this);
     auto addToSearchList = [&head, withinAnyNet, aSingleNet, aTypes] ( CN_ITEM *aItem )
     {
-        printf("ASL %p %d %d\n", aItem, aItem->Net(), aItem->Parent()->Type() );
         if( withinAnyNet && aItem->Net() <= 0 )
             return;
 
@@ -755,12 +748,7 @@ void CN_CONNECTIVITY_ALGO::propagateConnections()
 {
     for( auto cluster : m_connClusters )
     {
-        if( cluster->IsConflicting() )
-        {
-
-            printf( "Conflicting nets in cluster %p\n", cluster.get() );
-        }
-        else if( cluster->IsOrphaned() )
+        if( cluster->IsOrphaned() )
         {
             wxLogTrace( "CN", "Skipping orphaned cluster %p [net: %s]\n", cluster.get(),
                     (const char*) cluster->OriginNetName().c_str() );
@@ -770,10 +758,8 @@ void CN_CONNECTIVITY_ALGO::propagateConnections()
             // normal cluster: just propagate from the pads
             int n_changed = 0;
 
-            printf("propagate %d\n", cluster->OriginNet() );
             for( auto item : *cluster )
             {
-                printf("item %p net %d type %d\n", item, item->Parent()->GetNetCode(), item->Parent()->Type() );
                 if( item->CanChangeNet() )
                 {
                     if( item->Valid() && item->Parent()->GetNetCode() != cluster->OriginNet() )
