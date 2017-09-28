@@ -101,13 +101,14 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
                 cur_layer = F_Cu;
 
             SetActiveLayer( cur_layer );
-
             OnModify();
             ReCreateLayerBox();
             ReFillLayerWidget();
 
             if( IsGalCanvasActive() )
                 static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->SyncLayersVisibility( GetBoard() );
+
+            GetCanvas()->Refresh();
         }
         break;
 

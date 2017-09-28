@@ -126,9 +126,8 @@ public:
     }
 
     /**
-     * Operator []
-     * overloads COLLECTOR::operator[](int) to return a SCH_ITEM* instead of
-     * an EDA_ITEM* type.
+     * Overload COLLECTOR::operator[](int) to return a SCH_ITEM instead of an EDA_ITEM.
+     *
      * @param aIndex The index into the list.
      * @return SCH_ITEM* at \a aIndex or NULL.
      */
