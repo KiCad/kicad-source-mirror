@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-28 17:32+0200\n"
-"PO-Revision-Date: 2017-09-28 17:33+0200\n"
+"POT-Creation-Date: 2017-09-29 16:17+0200\n"
+"PO-Revision-Date: 2017-09-29 16:28+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -199,7 +199,7 @@ msgstr "Supprimer Alias"
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:146
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:67
 msgid "Move Up"
-msgstr "Vers le haut ^"
+msgstr "Déplacer vers le Haut "
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:113
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:674
@@ -208,7 +208,7 @@ msgstr "Vers le haut ^"
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:151
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:72
 msgid "Move Down"
-msgstr "Vers le bas"
+msgstr "Déplacer vers le Bas"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.h:64
 msgid "3D Search Path Configuration"
@@ -377,9 +377,12 @@ msgid "Zoom -"
 msgstr "Zoom -"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:623
-#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:628
 msgid "Top View"
-msgstr "Vue de dessus"
+msgstr "Vue de Dessus"
+
+#: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:628
+msgid "Bottom View"
+msgstr "Vue de Dessous"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:635
 msgid "Right View"
@@ -391,23 +394,23 @@ msgstr "Vue à Gauche"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:647
 msgid "Front View"
-msgstr "Vue de face"
+msgstr "Vue de Face"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:652
 msgid "Back View"
-msgstr "Vue arrière"
+msgstr "Vue Arrière"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:659
-msgid "Move left <-"
-msgstr "Vers la gauche <-"
+msgid "Move Left <-"
+msgstr "Déplacer vers la Gauche <-"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:664
-msgid "Move right ->"
-msgstr "Vers la droite ->"
+msgid "Move Right ->"
+msgstr "Déplacer vers la Droite ->"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:669
 msgid "Move Up ^"
-msgstr "Vers le haut ^"
+msgstr "Déplacer vers le Haut ^"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:366
 msgid "Load OpenGL: board"
@@ -986,7 +989,7 @@ msgstr "Déplacer CI vers le haut"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1195
 msgid "Move board Down"
-msgstr "Déplacer CI vers le bas"
+msgstr "Déplacer CI vers le Bas"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1196
 msgid "Home view"
@@ -1010,15 +1013,15 @@ msgstr "Vue de gauche"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1202
 msgid "View Right"
-msgstr "Vue de droite"
+msgstr "Vue de Droite"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1203
 msgid "View Top"
-msgstr "Vue de dessus"
+msgstr "Vue de Dessus"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1204
 msgid "View Bot"
-msgstr "Vue de dessous"
+msgstr "Vue de Dessous"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1206
 msgid "Rotate 45 degrees over Z axis"
@@ -1941,11 +1944,11 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:202
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:318
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:321
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:182 eeschema/lib_pin.cpp:2015
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:182 eeschema/lib_pin.cpp:2033
 #: eeschema/libedit.cpp:477 eeschema/widgets/tuner_slider_base.cpp:20
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
-#: pcbnew/dialogs/dialog_layers_setup.cpp:342
+#: pcbnew/dialogs/dialog_layers_setup.cpp:336
 msgid "Name"
 msgstr "Nom"
 
@@ -3592,7 +3595,7 @@ msgstr ""
 #: cvpcb/cvpcb_mainframe.cpp:431 cvpcb/cvpcb_mainframe.cpp:451
 #: eeschema/sch_base_frame.cpp:238 eeschema/sch_base_frame.cpp:254
 #: pcbnew/moduleframe.cpp:916 pcbnew/moduleframe.cpp:936
-#: pcbnew/pcbnew_config.cpp:141 pcbnew/pcbnew_config.cpp:163
+#: pcbnew/pcbnew_config.cpp:142 pcbnew/pcbnew_config.cpp:164
 msgid "File Save Error"
 msgstr "Erreur Écriture  Fichier"
 
@@ -4883,14 +4886,14 @@ msgstr "Utilisé uniquement pour les champs empreinte et documentation."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1103
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
-#: eeschema/lib_pin.cpp:2028 gerbview/class_gerber_draw_item.cpp:639
+#: eeschema/lib_pin.cpp:2046 gerbview/class_gerber_draw_item.cpp:639
 #: gerbview/class_gerber_draw_item.cpp:640 pcbnew/class_pcb_text.cpp:131
 #: pcbnew/class_text_mod.cpp:369
 msgid "Yes"
 msgstr "Oui"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1105
-#: eeschema/lib_pin.cpp:2030 gerbview/class_gerber_draw_item.cpp:639
+#: eeschema/lib_pin.cpp:2048 gerbview/class_gerber_draw_item.cpp:639
 #: gerbview/class_gerber_draw_item.cpp:640 pcbnew/class_pcb_text.cpp:129
 #: pcbnew/class_text_mod.cpp:367
 msgid "No"
@@ -5703,7 +5706,7 @@ msgid "Default Value"
 msgstr "Valeur par Défaut"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:320
-#: eeschema/lib_pin.cpp:2032
+#: eeschema/lib_pin.cpp:2050
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:103
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:125
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:154
@@ -6061,14 +6064,14 @@ msgstr "Pin Pos Y:"
 msgid "Pin Properties"
 msgstr "Propriétés des Pins"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:175 eeschema/lib_pin.cpp:2017
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:175 eeschema/lib_pin.cpp:2035
 msgid "Number"
 msgstr "Numéro"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:189
 #: eeschema/dialogs/dialog_spice_model_base.cpp:30
 #: eeschema/dialogs/dialog_spice_model_base.cpp:207
-#: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:2019
+#: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:2037
 #: eeschema/libedit.cpp:507 eeschema/sch_text.cpp:808
 #: gerbview/class_gerber_draw_item.cpp:609
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
@@ -6077,7 +6080,7 @@ msgstr "Numéro"
 #: pcbnew/class_drawsegment.cpp:342 pcbnew/class_marker_pcb.cpp:98
 #: pcbnew/class_text_mod.cpp:364 pcbnew/class_track.cpp:1150
 #: pcbnew/class_track.cpp:1177 pcbnew/class_track.cpp:1226
-#: pcbnew/class_zone.cpp:829 pcbnew/dialogs/dialog_layers_setup.cpp:346
+#: pcbnew/class_zone.cpp:829 pcbnew/dialogs/dialog_layers_setup.cpp:342
 msgid "Type"
 msgstr "Type"
 
@@ -6129,7 +6132,7 @@ msgid "Invisible"
 msgstr "Invisible"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/lib_field.cpp:790
-#: eeschema/lib_pin.cpp:2025 eeschema/sch_text.cpp:790
+#: eeschema/lib_pin.cpp:2043 eeschema/sch_text.cpp:790
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:111
 msgid "Style"
 msgstr "Style"
@@ -6816,7 +6819,7 @@ msgstr "Vers la &fin"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:63
 msgid "&Backward"
-msgstr "&Vers le haut"
+msgstr "A&rrière"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:74
 msgid "Match whole wor&d"
@@ -7531,11 +7534,11 @@ msgstr ""
 "SVP éditer cette table des librairies de symboles globale dans le menu "
 "Préférences."
 
-#: eeschema/eeschema_config.cpp:261 pcbnew/pcbnew_config.cpp:216
+#: eeschema/eeschema_config.cpp:261 pcbnew/pcbnew_config.cpp:217
 msgid "Read Project File"
 msgstr "Lire Fichier Projet"
 
-#: eeschema/eeschema_config.cpp:494 pcbnew/pcbnew_config.cpp:292
+#: eeschema/eeschema_config.cpp:494 pcbnew/pcbnew_config.cpp:293
 msgid "Save Project File"
 msgstr "Sauver Fichier Projet"
 
@@ -8516,28 +8519,28 @@ msgstr "Hauteur"
 msgid "Pin"
 msgstr "Pin"
 
-#: eeschema/lib_pin.cpp:2036 pcbnew/class_drawsegment.cpp:367
+#: eeschema/lib_pin.cpp:2054 pcbnew/class_drawsegment.cpp:367
 #: pcbnew/class_track.cpp:1053
 msgid "Length"
 msgstr "Longueur"
 
-#: eeschema/lib_pin.cpp:2039 eeschema/onrightclick.cpp:384
+#: eeschema/lib_pin.cpp:2057 eeschema/onrightclick.cpp:384
 #: eeschema/onrightclick.cpp:783 eeschema/sch_text.cpp:779
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:120
 msgid "Orientation"
 msgstr "Orientation"
 
-#: eeschema/lib_pin.cpp:2052 eeschema/lib_pin.cpp:2071
+#: eeschema/lib_pin.cpp:2070 eeschema/lib_pin.cpp:2089
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1046
 msgid "Pos X"
 msgstr "Pos X"
 
-#: eeschema/lib_pin.cpp:2055 eeschema/lib_pin.cpp:2074
+#: eeschema/lib_pin.cpp:2073 eeschema/lib_pin.cpp:2092
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1047
 msgid "Pos Y"
 msgstr "Pos Y"
 
-#: eeschema/lib_pin.cpp:2275
+#: eeschema/lib_pin.cpp:2293
 #, c-format
 msgid "Pin %s, %s, %s"
 msgstr "Pin %s, %s, %s"
@@ -11844,7 +11847,7 @@ msgstr "Affiche le &Gestionnaire de Couches"
 msgid "No room to load file"
 msgstr "Plus de place pour charger le fichier"
 
-#: gerbview/excellon_read_drill_file.cpp:185 pcbnew/pcbnew_config.cpp:226
+#: gerbview/excellon_read_drill_file.cpp:185 pcbnew/pcbnew_config.cpp:227
 #, c-format
 msgid "File %s not found"
 msgstr "Fichier %s non trouvé"
@@ -11853,37 +11856,37 @@ msgstr "Fichier %s non trouvé"
 msgid "Error reading EXCELLON drill file"
 msgstr "Erreur de lecture du fichier de forage EXCELLON"
 
-#: gerbview/excellon_read_drill_file.cpp:392
+#: gerbview/excellon_read_drill_file.cpp:393
 msgid "METRIC command has no parameter"
 msgstr "METRIC commande sans paramètre"
 
-#: gerbview/excellon_read_drill_file.cpp:410
+#: gerbview/excellon_read_drill_file.cpp:411
 msgid "INCH command has no parameter"
 msgstr "INCH commande sans paramètre"
 
-#: gerbview/excellon_read_drill_file.cpp:438
+#: gerbview/excellon_read_drill_file.cpp:439
 msgid "ICI command has no parameter"
 msgstr "ICI commande n'a pas de paramètre"
 
-#: gerbview/excellon_read_drill_file.cpp:448
+#: gerbview/excellon_read_drill_file.cpp:449
 msgid "ICI command has incorrect parameter"
 msgstr "ICI commande un paramètre incorrect"
 
-#: gerbview/excellon_read_drill_file.cpp:502
+#: gerbview/excellon_read_drill_file.cpp:503
 msgid "Tool definition shape not found"
 msgstr "Definition de l'outil de forme non trouvée"
 
-#: gerbview/excellon_read_drill_file.cpp:505
+#: gerbview/excellon_read_drill_file.cpp:506
 #, c-format
 msgid "Tool definition '%c' not supported"
 msgstr "Définition de l'outil '%c' non pris en charge"
 
-#: gerbview/excellon_read_drill_file.cpp:558
+#: gerbview/excellon_read_drill_file.cpp:559
 #, c-format
 msgid "Tool %d not defined"
 msgstr "Outil %d non défini"
 
-#: gerbview/excellon_read_drill_file.cpp:705
+#: gerbview/excellon_read_drill_file.cpp:706
 #, c-format
 msgid "Unknown Excellon G Code: &lt;%s&gt;"
 msgstr "Excellon G Code: &lt;%s&gt; inconnu"
@@ -12020,7 +12023,7 @@ msgstr "Fichier Zip (*.zip)|*.zip;.zip"
 msgid "Open Zip File"
 msgstr "Ouvrir Fichier Zip"
 
-#: gerbview/files.cpp:598 gerbview/job_file_reader.cpp:237
+#: gerbview/files.cpp:598 gerbview/job_file_reader.cpp:234
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:91
 msgid "Messages"
 msgstr "Messages"
@@ -12095,15 +12098,15 @@ msgstr "Commuter sur l'Affichage Cairo"
 msgid "Gerbview Hotkeys"
 msgstr "Raccourcis de Gerbview"
 
-#: gerbview/job_file_reader.cpp:145
+#: gerbview/job_file_reader.cpp:142
 msgid "Gerber job file (*.gbj)|*.gbj;.gbj"
 msgstr "Fichier Gerber job (*.gbj)|*.gbj;.gbj"
 
-#: gerbview/job_file_reader.cpp:157
+#: gerbview/job_file_reader.cpp:154
 msgid "Open Gerber Job File"
 msgstr "Ouvrir Fichier Gerber Job"
 
-#: gerbview/job_file_reader.cpp:219
+#: gerbview/job_file_reader.cpp:216
 #, c-format
 msgid "Can't load Gerber file:<br><i>%s</i><br>"
 msgstr "Ne peut charger le fichier Gerber:<br><i>%s</i><br>"
@@ -12319,11 +12322,21 @@ msgstr ""
 "C'est peut-être un ancien fichier RS274D\n"
 "Par conséquent la taille des éléments n'est pas définie"
 
-#: gerbview/rs274x.cpp:552
+#: gerbview/rs274x.cpp:276
+#, c-format
+msgid "RS274X: Invalid GERBER format command '%c' at line %d: \"%s\""
+msgstr "RS274X:  format de commande GERBER '%c' invalide à la ligne %d: \"%s\""
+
+#: gerbview/rs274x.cpp:279
+#, c-format
+msgid "GERBER file \"%s\" may not display as intended."
+msgstr "Le fichier GERBER « %s » peut ne pas être affiché comme prévu."
+
+#: gerbview/rs274x.cpp:554
 msgid "RS274X: Command \"IR\" rotation value not allowed"
 msgstr "RS274X: Commande \"IR\"valeur pour rotation non autorisée"
 
-#: gerbview/rs274x.cpp:643
+#: gerbview/rs274x.cpp:645
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
 msgstr "RS274X: Commande KNOCKOUT ignorée par GerVview"
 
@@ -19509,25 +19522,39 @@ msgstr "Couche Inférieure"
 msgid "Select Copper Layer Pair:"
 msgstr "Sélection Paire de Couches:"
 
-#: pcbnew/dialogs/dialog_layers_setup.cpp:344
+#: pcbnew/dialogs/dialog_layers_setup.cpp:339
 msgid "Enabled"
 msgstr "Activé"
 
-#: pcbnew/dialogs/dialog_layers_setup.cpp:700
-msgid "Layer name may not be empty"
+#: pcbnew/dialogs/dialog_layers_setup.cpp:624
+#, c-format
+msgid "Board thickness %s is out of range."
+msgstr "L'épaisseur du C.I. %s est hors limites."
+
+#: pcbnew/dialogs/dialog_layers_setup.cpp:634
+msgid ""
+"Items have been found on removed layers. This operation will delete all "
+"items from removed layers and cannot be undone. Do you wish to continue?"
+msgstr ""
+"Des éléments ont été trouvés sur des couches enlevées. Cette opération "
+"supprimera tous les éléments appartenant aux couches supprimées et ne peut "
+"être annulée. Voulez-vous continuer ?"
+
+#: pcbnew/dialogs/dialog_layers_setup.cpp:756
+msgid "Layer name may not be empty."
 msgstr "Le nom d'une couche ne peut pas être vide"
 
-#: pcbnew/dialogs/dialog_layers_setup.cpp:707
+#: pcbnew/dialogs/dialog_layers_setup.cpp:763
 msgid "Layer name has an illegal character, one of: '"
 msgstr "Le nom d'une couche contient un des caracteres interdit: '"
 
-#: pcbnew/dialogs/dialog_layers_setup.cpp:714
-msgid "'signal' is a reserved layer name"
+#: pcbnew/dialogs/dialog_layers_setup.cpp:771
+msgid "Layer name 'signal' is reserved."
 msgstr "'signal' est un nom de couche réservé"
 
-#: pcbnew/dialogs/dialog_layers_setup.cpp:723
-msgid "Layer name is a duplicate of another"
-msgstr "Le nom de la couche est un double d'une autre couche"
+#: pcbnew/dialogs/dialog_layers_setup.cpp:780
+msgid "Duplicate layer names are not permitted."
+msgstr "Les doublons de nom de couche ne sont pas autorisés."
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:25
 msgid "Preset Layer Groupings"
@@ -20108,7 +20135,7 @@ msgstr "Drawings_réserve"
 msgid "If you want a layer for documentation drawings"
 msgstr "Si vous voulez une couche de dessins pour documentation."
 
-#: pcbnew/dialogs/dialog_layers_setup_base.h:418
+#: pcbnew/dialogs/dialog_layers_setup_base.h:417
 msgid "Layer Setup"
 msgstr "Options Couches"
 
@@ -24854,7 +24881,7 @@ msgstr "La librairie n'est pas sélectionnée, l'empreinte ne peut être sauvée
 msgid "no active library"
 msgstr "pas de librairie active"
 
-#: pcbnew/moduleframe.cpp:912 pcbnew/pcbnew_config.cpp:137
+#: pcbnew/moduleframe.cpp:912 pcbnew/pcbnew_config.cpp:138
 #, c-format
 msgid ""
 "Error occurred saving the global footprint library table:\n"
@@ -24866,7 +24893,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/moduleframe.cpp:932 pcbnew/pcbnew_config.cpp:159
+#: pcbnew/moduleframe.cpp:932 pcbnew/pcbnew_config.cpp:160
 #, c-format
 msgid ""
 "Error occurred saving project specific footprint library table:\n"
@@ -27048,793 +27075,3 @@ msgstr "Démarrage du remplissage de zones..."
 #: pcbnew/zones_by_polygon_fill_functions.cpp:184
 msgid "Updating ratsnest..."
 msgstr "Mise à jour du chevelu..."
-
-#~ msgid "Reset all"
-#~ msgstr "Réinitialiser tous"
-
-#~ msgid "Corner size (percent of width):"
-#~ msgstr "Taille des coins (pourcent de la largeur):"
-
-#~ msgid "Delete Shape"
-#~ msgstr "Supprimer Forme"
-
-#~ msgid "Edit Shape"
-#~ msgstr "Éditer Forme"
-
-#~ msgid "Add Shape"
-#~ msgstr "Ajout Forme"
-
-#~ msgid "Duplicate Shape"
-#~ msgstr "Dupliquer Forme"
-
-#~ msgid "Import Shapes"
-#~ msgstr "Importer Formes"
-
-#~ msgid "Move the selected optional fields up one position"
-#~ msgstr ""
-#~ "Déplacer le champ optionnel sélectionné de une position vers le haut"
-
-#~ msgid "Move the selected optional fields down one position"
-#~ msgstr "Déplacer le champ optionnel sélectionné de une position vers le bas"
-
-#~ msgid "New Field"
-#~ msgstr "Nouveau Champ"
-
-#~ msgid "Delete Field"
-#~ msgstr "Supprimer Champ"
-
-#~ msgid "Add Field"
-#~ msgstr "Ajouter Champ"
-
-#~ msgid "Clear and Delete Field"
-#~ msgstr "Effacer et Supprimer champ"
-
-#~ msgid "Symbol Library &Table"
-#~ msgstr "&Table des Librairies de Symboles"
-
-#~ msgid "Schematic Editor &Options"
-#~ msgstr "&Options de l'Éditeur de Schématique"
-
-#~ msgid "Component Editor &Options"
-#~ msgstr "&Options de l'Éditeur de Composants"
-
-#~ msgid "Load project"
-#~ msgstr "Charger projet"
-
-#~ msgid "New Prj From Template"
-#~ msgstr "Nouveau Prj à partir d'un Modèle"
-
-#~ msgid "&New Project"
-#~ msgstr "&Nouveau Projet"
-
-#~ msgid "&Archive Current Project"
-#~ msgstr "&Archiver le Projet Actuel"
-
-#~ msgid "Run Library Editor"
-#~ msgstr "Lancer l'Éditeur de Librairie"
-
-#~ msgid "Run Footprint Editor"
-#~ msgstr "Lancer l'Éditeur d'Empreintes"
-
-#~ msgid "Run Page Layout Editor"
-#~ msgstr "Lancer l'Éditeur de Description de Page"
-
-#~ msgid "Footprint Li&braries Manager"
-#~ msgstr "Gestionnaire des Li&brairies d'Empreintes"
-
-#~ msgid "KiCad project file '%s' not found"
-#~ msgstr "Fichier projet KiCad '%s' non trouvé"
-
-#~ msgid "To proceed, you can use the File menu to start a new project."
-#~ msgstr ""
-#~ "Pour continuer, vous pouvez utiliser le menu Fichiers pour démarrer un "
-#~ "nouveau projet."
-
-#~ msgid "Open file"
-#~ msgstr "Ouverture fichier"
-
-#~ msgid "Create file"
-#~ msgstr "Création fichier"
-
-#~ msgid "&New Page Layout Design"
-#~ msgstr "&Nouvelle Description de Page "
-
-#~ msgid "Load Page Layout &File"
-#~ msgstr "Charger &Fichier de Descr de Page"
-
-#~ msgid "Load &Default Page Layout"
-#~ msgstr "Charger la Descr de Page par &Défaut"
-
-#~ msgid "&Save Page Layout Design"
-#~ msgstr "&Sauver la Description de Page"
-
-#~ msgid "Save Page Layout Design &As"
-#~ msgstr "Sauver la Description de Page S&ous"
-
-#~ msgid "Load a page layout file. Previous data will be deleted"
-#~ msgstr ""
-#~ "Charger un nouveau fichier de description de page. Les données "
-#~ "précédentes seront supprimées"
-
-#~ msgid "Save Output"
-#~ msgstr "Sauver Sortie"
-
-#~ msgid "Too many include files!!"
-#~ msgstr "Trop de fichiers include!!"
-
-#~ msgid "File: "
-#~ msgstr "Fichier: "
-
-#~ msgid "File exists, overwrite?"
-#~ msgstr "Le fichier existe. L'écraser?"
-
-#~ msgid "STEP File name:"
-#~ msgstr "Nom du fichier STEP:"
-
-#~ msgid ""
-#~ "You have run Eeschema for the first time using the new symbol library "
-#~ "table method for finding symbols.\n"
-#~ "\n"
-#~ "Eeschema has either copied the default table or created an empty table in "
-#~ "the kicad configuration folder.\n"
-#~ "\n"
-#~ "You must first configure the library table to include all symbol "
-#~ "libraries you want to use.\n"
-#~ "\n"
-#~ "See the \"Symbol Library Table\" section of Eeschema documentation for "
-#~ "more information."
-#~ msgstr ""
-#~ "Vous avez exécuté Eeschema pour la première fois la méthode nouvelle de "
-#~ "la table des librairies de symbole pour trouver les composants.\n"
-#~ "\n"
-#~ "EeSchema a copié la table par défaut ou créé une table vide dans le "
-#~ "dossier de configuration kicad.\n"
-#~ "\n"
-#~ "Vous devez d’abord configurer la table de la bibliothèque afin d’inclure "
-#~ "toutes les bibliothèques de symboles à utiliser.\n"
-#~ "\n"
-#~ "Consultez la section « Table de bibliothèque de symboles » de la "
-#~ "documentation Eeschema pour plus d’informations."
-
-#~ msgid "expected single character token"
-#~ msgstr "attendu caractère clé unique"
-
-#~ msgid "expecting opening quote"
-#~ msgstr "expecting opening quote"
-
-#~ msgid "expected quoted string"
-#~ msgstr "attendu chaîne de caractères entre guillemets"
-
-#~ msgid "no closing quote for string found"
-#~ msgstr "no closing quote for string found"
-
-#~ msgid "invalid page size"
-#~ msgstr "taille de page non valide"
-
-#~ msgid "missing 'EndDescr'"
-#~ msgstr "'EndDescr' manquant"
-
-#~ msgid "invalid sheet pin type"
-#~ msgstr "type pour pin de hiérarchie non valide"
-
-#~ msgid "invalid sheet pin side"
-#~ msgstr "coté pour pin de hiérarchie non valide"
-
-#~ msgid "missing '$EndSheet`"
-#~ msgstr "'$EndSheet` manquant"
-
-#~ msgid "invalid label type"
-#~ msgstr "type de label non valide"
-
-#~ msgid "component field text horizontal justification must be L, R, or C"
-#~ msgstr ""
-#~ "la justification horizontale du texte du champ composant doit être L, R "
-#~ "ou C"
-
-#~ msgid "component field text vertical justification must be B, T, or C"
-#~ msgstr ""
-#~ "la justification verticale du texte du champ composant doit être B, T, or "
-#~ "C"
-
-#~ msgid "component field text italics indicator must be I or N"
-#~ msgstr "indicateur italique du texte du champ du composant doit être I ou N"
-
-#~ msgid "component field text bold indicator must be B or N"
-#~ msgstr "indicateur 'gras' du texte du champ composant doit être B ou N"
-
-#~ msgid "component field orientation must be H or V"
-#~ msgstr "L'orientation du champ composant doit être H ou V"
-
-#~ msgid "invalid component X1 transform value"
-#~ msgstr "valeur de transformation de composante non valide X1"
-
-#~ msgid "invalid component Y1 transform value"
-#~ msgstr "invalid component Y1 transform value"
-
-#~ msgid "invalid component X2 transform value"
-#~ msgstr "invalid component X2 transform value"
-
-#~ msgid "invalid component Y2 transform value"
-#~ msgstr "invalid component Y2 transform value"
-
-#~ msgid "invalid field ID"
-#~ msgstr "ID de champ invalide"
-
-#~ msgid "invalid field text orientation parameter"
-#~ msgstr "parametre orientation du texte de champ non valide"
-
-#~ msgid "invalid field text visibility parameter"
-#~ msgstr "parametre visibilité du texte de champ non valide"
-
-#~ msgid "invalid field text horizontal justification parameter"
-#~ msgstr "parametre justification horizontale du texte de champ non valide"
-
-#~ msgid "invalid field text attributes size"
-#~ msgstr "attributs de taille du texte de champ invalides"
-
-#~ msgid "invalid field text vertical justification parameter"
-#~ msgstr "parametre justification verticale du texte de champ non valide"
-
-#~ msgid "invalid field text italic parameter"
-#~ msgstr "parametre italique du texte de champ non valide"
-
-#~ msgid "invalid field text bold parameter"
-#~ msgstr "parametre gras du texte de champ non valide"
-
-#~ msgid "undefined DRAW entry"
-#~ msgstr "DRAW entry indéfinie"
-
-#~ msgid "file ended prematurely loading component draw element"
-#~ msgstr ""
-#~ "fin de fichier prématurée lors du chargement d'élément de graphique du "
-#~ "composant"
-
-#~ msgid "invalid fill type, expected f, F, or N"
-#~ msgstr "type de remplissage non valide, attendu f,F ou N"
-
-#~ msgid "invalid text stype, expected 'Normal' or 'Italic'"
-#~ msgstr "stype text invalide, attendu 'Normal' ou 'Italic'"
-
-#~ msgid "invalid horizontal text justication parameter, expected L, C, or R"
-#~ msgstr ""
-#~ "parametre justification horizontale du texte de champ non valide, attendu "
-#~ "L,C ou R"
-
-#~ msgid "invalid vertical text justication parameter, expected T, C, or B"
-#~ msgstr ""
-#~ "parametre justification verticale du texte de champ non valide, attendu T,"
-#~ "C ou B"
-
-#~ msgid "unknown pin type"
-#~ msgstr "type de pin inconnu"
-
-#~ msgid "unknown pin attribute"
-#~ msgstr "attribut de pin inconnu"
-
-#~ msgid "pin attributes do not define a valid pin shape"
-#~ msgstr "les attributs de pin ne définissent pas une forme de pin valide"
-
-#~ msgid "file ended prematurely while loading footprint filters"
-#~ msgstr ""
-#~ "fin de fichier prématurée lors du chargement des filtres d'empreintes"
-
-#~ msgid "&Maximum links:"
-#~ msgstr "Liens &max:"
-
-#~ msgid "Adjust the number of ratsnets shown from cursor to closest pads."
-#~ msgstr ""
-#~ "Ajuster le nombre de ratsnets montré du curseur aux pads les plus proches."
-
-#, fuzzy
-#~| msgid "invalid field ID"
-#~ msgid "Invalid tool ID "
-#~ msgstr "ID de champ invalide"
-
-#, fuzzy
-#~| msgid "Invalid clipboard contents"
-#~ msgid "Invalid toolbar option"
-#~ msgstr "Contenu du presse-papier invalide"
-
-#~ msgid "Plot all text as lines"
-#~ msgstr "Tracer tous les texts en filaire"
-
-#~ msgid "Fix problem and try again."
-#~ msgstr "Fixer le problème et recommencer."
-
-#~ msgid "Save report to file..."
-#~ msgstr "Enregistrer le rapport ..."
-
-#~ msgid "Force size A4"
-#~ msgstr "Force page A4"
-
-#~ msgid "Force size A"
-#~ msgstr "Force page A"
-
-#~ msgid "Page size A4"
-#~ msgstr "Page A4"
-
-#~ msgid "Page size A3"
-#~ msgstr "Page A3"
-
-#~ msgid "Page size A2"
-#~ msgstr "Page A2"
-
-#~ msgid "Page size A1"
-#~ msgstr "Page A1"
-
-#~ msgid "Page size A0"
-#~ msgstr "Page  A0"
-
-#~ msgid "Page size A"
-#~ msgstr "Page A"
-
-#~ msgid "Page size B"
-#~ msgstr "Page B"
-
-#~ msgid "Page size C"
-#~ msgstr "Page C"
-
-#~ msgid "Page size D"
-#~ msgstr "Page D"
-
-#~ msgid "Page size E"
-#~ msgstr "Page E"
-
-#~ msgid "Center of the page"
-#~ msgstr "Centre de la page"
-
-#~ msgid "Move Arc"
-#~ msgstr "Déplacer Arc"
-
-#~ msgid "Delete Arc"
-#~ msgstr "Effacer Arc"
-
-#~ msgid "Move Circle"
-#~ msgstr "Déplacer Cercle"
-
-#~ msgid "Delete Circle"
-#~ msgstr "Supprimer Cercle"
-
-#~ msgid "Delete Rectangle"
-#~ msgstr "Supprimer Rectangle"
-
-#~ msgid "Move Text"
-#~ msgstr "Déplacer Texte"
-
-#~ msgid "Rotate Text"
-#~ msgstr "Rot. Texte"
-
-#~ msgid "Delete Text"
-#~ msgstr "Effacer Texte"
-
-#~ msgid "Move Line"
-#~ msgstr "Déplacer Ligne"
-
-#~ msgid "Delete Line"
-#~ msgstr "Effacer Ligne"
-
-#~ msgid "Field Rotate"
-#~ msgstr "Rotation Champ"
-
-#~ msgid "Field Edit"
-#~ msgstr "Édition du champ"
-
-#~ msgid "Move Pin"
-#~ msgstr "Déplace Pin"
-
-#~ msgid "Edit Pin"
-#~ msgstr "Éditer Pin"
-
-#~ msgid "Rotate Pin"
-#~ msgstr "Rotation Pin"
-
-#~ msgid "Delete Pin"
-#~ msgstr "Supprimer Pin"
-
-#~ msgid "Rotate 90 deg CCW"
-#~ msgstr "Rotation de 90° CCW"
-
-#~ msgid "Rotate 90 deg CW"
-#~ msgstr "Rotation de 90° CW"
-
-#~ msgid "Move Hierarchical Label"
-#~ msgstr "Déplacer Label Hiérarchique"
-
-#~ msgid "Drag Hierarchical Label"
-#~ msgstr "Drag Label Hiérarchique"
-
-#~ msgid "Copy Hierarchical Label"
-#~ msgstr "Copier Label Hiérarchique"
-
-#~ msgid "Rotate Hierarchical Label"
-#~ msgstr "Rot. Label Hiérarchique"
-
-#~ msgid "Delete Hierarchical Label"
-#~ msgstr "Supprimer Label Hiérarchique"
-
-#~ msgid "Move Label"
-#~ msgstr "Déplacer Label"
-
-#~ msgid "Drag Label"
-#~ msgstr "Drag Label"
-
-#~ msgid "Rotate Label"
-#~ msgstr "Rot. Label"
-
-#~ msgid "Delete Label"
-#~ msgstr "Supprimer Label"
-
-#~ msgid "Move Sheet"
-#~ msgstr "Déplacer Feuille"
-
-#~ msgid "Drag Sheet"
-#~ msgstr "Drag Feuille"
-
-#~ msgid "Move Sheet Pin"
-#~ msgstr "Déplacer Pins de Hiérarchie"
-
-#~ msgid "Edit Sheet Pin"
-#~ msgstr "Éditer Pins de Hiérarchie"
-
-#~ msgid "Delete Sheet Pin"
-#~ msgstr "Supprimer Pins de Hiérarchie"
-
-#~ msgid "Rotate Image"
-#~ msgstr "Rot. Image"
-
-#~ msgid "Delete Image"
-#~ msgstr "Supprimer Image"
-
-#~ msgid "Default line width"
-#~ msgstr "Épaiss. ligne par défaut"
-
-#~ msgid "Current solder mask settings:"
-#~ msgstr "Réglages courants du masque de soudure:"
-
-#~ msgid "Perform PCB Update"
-#~ msgstr "Effectuer Mise à Jour du PCB"
-
-#~ msgid "Duplicate Text"
-#~ msgstr "Dupliquer Texte"
-
-#~ msgid "Create Text Array"
-#~ msgstr "Créer Matrice de Texte"
-
-#~ msgid "Move Text Exactly"
-#~ msgstr "Déplacer Texte Exactement"
-
-#~ msgid "Move Edge"
-#~ msgstr "Déplacer Contour"
-
-#~ msgid "Duplicate Edge"
-#~ msgstr "Dupliquer Contour"
-
-#~ msgid "Move Edge Exactly"
-#~ msgstr "Déplacer Contour Exactement"
-
-#~ msgid "Create Edge Array"
-#~ msgstr "Créer Matrice de Contour"
-
-#~ msgid "Delete Edge"
-#~ msgstr "Effacer Contour"
-
-#~ msgid "Move Drawing"
-#~ msgstr "Déplace Tracé"
-
-#~ msgid "Duplicate Drawing"
-#~ msgstr "Dupliquer Graphique"
-
-#~ msgid "Move Drawing Exactly"
-#~ msgstr "Déplacer Graphique Exactement"
-
-#~ msgid "Create Drawing Array"
-#~ msgstr "Créer Matrice d'Éléments Graphiques"
-
-#~ msgid "Edit Drawing"
-#~ msgstr "Éditer Tracé"
-
-#~ msgid "Edit Dimension"
-#~ msgstr "Éditer Cote"
-
-#~ msgid "Move Dimension Text"
-#~ msgstr "Déplacer le Texte de la Cote"
-
-#~ msgid "Duplicate Dimension"
-#~ msgstr "Dupliquer Cote"
-
-#~ msgid "Move Dimension Exactly"
-#~ msgstr "Déplacer Cote Exactement"
-
-#~ msgid "Delete Dimension"
-#~ msgstr "Suppression Cote"
-
-#~ msgid "Move Target"
-#~ msgstr "Déplacer Mire"
-
-#~ msgid "Move Target Exactly"
-#~ msgstr "Déplacer Mire Exactement"
-
-#~ msgid "Duplicate Target"
-#~ msgstr "Dupliquer Mire"
-
-#~ msgid "Edit Target"
-#~ msgstr "Éditer Mire"
-
-#~ msgid "Delete Target"
-#~ msgstr "Supprimer Mire"
-
-#~ msgid "Flip Block"
-#~ msgstr "Retourner Bloc"
-
-#~ msgid "Rotate Block"
-#~ msgstr "Rotation Bloc"
-
-#~ msgid "Move Node"
-#~ msgstr "Déplacer Nœud"
-
-#~ msgid "Duplicate Track"
-#~ msgstr "Dupliquer Piste"
-
-#~ msgid "Move Track Exactly"
-#~ msgstr "Déplacer Piste Exactement"
-
-#~ msgid "Move Corner"
-#~ msgstr "Déplace Sommet"
-
-#~ msgid "Delete Corner"
-#~ msgstr "Supprimer Sommet"
-
-#~ msgid "Delete Footprint"
-#~ msgstr "Supprimer Empreinte"
-
-#~ msgid "Move Footprint Exactly"
-#~ msgstr "Déplacer Empreinte Exactement"
-
-#~ msgid "Duplicate Footprint"
-#~ msgstr "Dupliquer Empreinte"
-
-#~ msgid "Create Footprint Array"
-#~ msgstr "Créer Matrice d'Empreintes"
-
-#~ msgid "'%s' is a duplicate footprint library nickName"
-#~ msgstr "'%s' est un pseudo nom de librairie dupliqué"
-
-#~ msgid "The %s field cannot contain leading and/or trailing white space."
-#~ msgstr "Le champ %s ne peut pas contenir des espaces en début et/ou fin."
-
-#~ msgid "'%s' is a duplicate symbol library nickname"
-#~ msgstr "'%s' est un nom logique dupliqué de bibliothèque de symboles"
-
-#~ msgid "http://github.com/KiCad"
-#~ msgstr "http://github.com/KiCad"
-
-#~ msgid "Block Save"
-#~ msgstr "Sauve Bloc"
-
-#~ msgid "°"
-#~ msgstr "°"
-
-#~ msgid "Save Block"
-#~ msgstr "Sauver Bloc"
-
-#~ msgid "Copy Label"
-#~ msgstr "Copier Label"
-
-#~ msgid "Copy Block (shift + drag mouse)"
-#~ msgstr "Copie Bloc (shift + drag souris)"
-
-#~ msgid "Descend or ascend hierarchy"
-#~ msgstr "Naviguer dans la hiérarchie"
-
-#~ msgid "Ascend/descend hierarchy"
-#~ msgstr "Naviguer dans la hiérarchie"
-
-#~ msgid "Links"
-#~ msgstr "Liens"
-
-#~ msgid "Connections"
-#~ msgstr "Connexions"
-
-#~ msgid "Compile ratsnest...\n"
-#~ msgstr "Calcul du chevelu...\n"
-
-#~ msgid " [Read Only] "
-#~ msgstr " [Lecture Seule]"
-
-#~ msgid "No tool selected"
-#~ msgstr "Pas d'outil sélectionné"
-
-#~ msgid "Win Zoom"
-#~ msgstr "Win Zoom"
-
-#~ msgid "&Edit Footprint Association File"
-#~ msgstr "&Editer le Fichier d'Association d'empreinte"
-
-#, fuzzy
-#~| msgid "Contribute to KiCad (opens a web browser)"
-#~ msgid "Contribute to KiCad (opens in web browser)"
-#~ msgstr "Contribuer à KiCad (ouvre le navigateur Web)"
-
-#, fuzzy
-#~| msgid "Fast access to the web based FreeROUTE advanced router"
-#~ msgid "Fast access to web-based FreeROUTE advanced router"
-#~ msgstr "Accès rapide au routeur avancé  FreeROUTE sur le Web"
-
-#~ msgid "Call the hotkeys editor"
-#~ msgstr "Appeler l'éditeur de raccourcis"
-
-#~ msgid "&Hotkeys"
-#~ msgstr "&Raccourcis"
-
-#~ msgid "Generate bill of materials and/or cross references"
-#~ msgstr "Génération de la liste des composants ou/et références croisées"
-
-#~ msgid "Mirror Block ||"
-#~ msgstr "Miroir Bloc ||"
-
-#~ msgid "Mirror Block --"
-#~ msgstr "Miroir Bloc --"
-
-#~ msgid "&Find..."
-#~ msgstr "&Chercher..."
-
-#~ msgid "Find and Re&place..."
-#~ msgstr "Chercher et  Rem&placer..."
-
-#~ msgid "&Annotate Schematic..."
-#~ msgstr "&Annotation de la Schématique..."
-
-#~ msgid "Move Component %s"
-#~ msgstr "Déplacer Composant %s"
-
-#~ msgid "Drag Component"
-#~ msgstr "Drag Composant"
-
-#~ msgid "Mirror --"
-#~ msgstr "Miroir--"
-
-#~ msgid "Mirror ||"
-#~ msgstr "Miroir ||"
-
-#~ msgid "Orient Component"
-#~ msgstr "Orienter Composant"
-
-#~ msgid "Copy Component"
-#~ msgstr "Copier Composant"
-
-#~ msgid "Delete Component"
-#~ msgstr "Supprimer Composant"
-
-#~ msgid "Move Global Label"
-#~ msgstr "Déplacer Label Global"
-
-#~ msgid "Drag Global Label"
-#~ msgstr "Drag Label Global"
-
-#~ msgid "Copy Global Label"
-#~ msgstr "Copier Label Global"
-
-#~ msgid "Rotate Global Label"
-#~ msgstr "Rot. Label Global"
-
-#~ msgid "Delete Global Label"
-#~ msgstr "Supprimer Label Global"
-
-#~ msgid "Copy Text"
-#~ msgstr "Copier Texte"
-
-#~ msgid "Rotate Sheet CW"
-#~ msgstr "Rotation Feuille CW"
-
-#~ msgid "Rotate Sheet CCW"
-#~ msgstr "Rotation Feuille CCW"
-
-#~ msgid "Orient Sheet"
-#~ msgstr "Orientation de la Feuille"
-
-#~ msgid "Place Sheet"
-#~ msgstr "Placer Feuille"
-
-#~ msgid "Resize Sheet"
-#~ msgstr "Redimensionner Feuille"
-
-#~ msgid "Save current library to disk"
-#~ msgstr "Sauver la librairie courante sur disque"
-
-#~ msgid "Redo the last command"
-#~ msgstr "Refaire la dernière commande défaite"
-
-#~ msgid "Add and remove fields and edit field properties"
-#~ msgstr "Ajouter, supprimer des champs et éditer leurs propriétés"
-
-#~ msgid "Show the pins electrical type"
-#~ msgstr "Montrer le type electrique des pins"
-
-#~ msgid "Component table view"
-#~ msgstr "Montrer la table des composants "
-
-#~ msgid "Click to highlight net"
-#~ msgstr "Cliquez pour mettre en surbrillance une équipotentielle."
-
-#~ msgid "Eeschema - Electronic schematic editor"
-#~ msgstr "Eeschema - Éditeur de Schématique"
-
-#~ msgid "Pcbnew - Printed circuit board editor"
-#~ msgstr "Pcbnew - Éditeur de C.I."
-
-#~ msgid "PCB footprint editor"
-#~ msgstr "Éditeur d'empreintes PCB"
-
-#~ msgid "GerbView - Gerber viewer"
-#~ msgstr "GerbView - visualisateur  Gerber"
-
-#~ msgid "Create a new project from a template"
-#~ msgstr "Créer un nouveau projet à partir d'un modèle"
-
-#~ msgid "Load a footprint from the current board"
-#~ msgstr "Charger une empreinte à partir du C.I. courant"
-
-#~ msgid "&Export Footprint..."
-#~ msgstr "&Export Empreinte"
-
-#~ msgid "&User Grid Size"
-#~ msgstr "Dim Grille &Utilisateur"
-
-#~ msgid "&Pad Setting"
-#~ msgstr "Caract &Pad"
-
-#~ msgid "&Settings"
-#~ msgstr "&Réglages"
-
-#~ msgid "&General"
-#~ msgstr "&Général "
-
-#~ msgid "&DRC"
-#~ msgstr "&DRC"
-
-#~ msgid "&Swap Layers..."
-#~ msgstr "&Permutation Couches..."
-
-#~ msgid "G&rid"
-#~ msgstr "G&rille"
-
-#~ msgid "&Pads"
-#~ msgstr "&Pads"
-
-#~ msgid "&Save..."
-#~ msgstr "&Sauver..."
-
-#~ msgid "Save the current board as..."
-#~ msgstr "Sauver le circuit imprimé courant sous..."
-
-#~ msgid "Rotate +"
-#~ msgstr "Rotation +"
-
-#~ msgid "Rotate -"
-#~ msgstr "Rotation -"
-
-#~ msgid "Exchange Footprint(s)"
-#~ msgstr "Échanger Empreinte(s)"
-
-#~ msgid "Place the footprint reference anchor"
-#~ msgstr "Placer le point d'ancrage, point de référence de l'empreinte"
-
-#~ msgid "Move Exactly..."
-#~ msgstr "Déplacer Exactement..."
-
-#~ msgid "Rotate Counter-clockwise"
-#~ msgstr "Rotation Anti-Horaire"
-
-#~ msgid "Properties..."
-#~ msgstr "Propriétés..."
-
-#~ msgid "Bottom View"
-#~ msgstr "Vue de dessous"
-
-#~ msgid "GPcb foot print files (*)|*"
-#~ msgstr "Fichiers empreintes GPcb (*)|*"
-
-#~ msgid "Reload table (reverts component field changes)"
-#~ msgstr ""
-#~ "Rechargement de la table (annule les modifications des champs des "
-#~ "composants)"
