@@ -174,6 +174,20 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Separator
     editMenu->AppendSeparator();
 
+    if( IsGalCanvasActive() )
+    {
+        text = AddHotkeyName( _( "&Cut" ), g_Module_Viewer_Hokeys_Descr, HK_EDIT_CUT );
+        AddMenuItem( editMenu, ID_EDIT_CUT, text, _(
+                        "Cuts the selected item(s) to the Clipboard" ), KiBitmap( cut_xpm ) );
+        text = AddHotkeyName( _( "&Copy" ), g_Module_Viewer_Hokeys_Descr, HK_EDIT_COPY );
+        AddMenuItem( editMenu, ID_EDIT_COPY, text, _(
+                        "Copies the selected item(s) to the Clipboard" ), KiBitmap( copy_xpm ) );
+        text = AddHotkeyName( _( "&Paste" ), g_Module_Viewer_Hokeys_Descr, HK_EDIT_PASTE );
+        AddMenuItem( editMenu, ID_EDIT_PASTE, text, _(
+                        "Pastes item(s) from the Clipboard" ), KiBitmap( paste_xpm ) );
+        editMenu->AppendSeparator();
+    }
+
     // Properties
     AddMenuItem( editMenu, ID_MODEDIT_EDIT_MODULE_PROPERTIES,
                  _( "Footprint &Properties" ),

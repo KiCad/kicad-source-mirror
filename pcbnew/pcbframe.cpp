@@ -754,6 +754,8 @@ void PCB_EDIT_FRAME::enableGALSpecificMenus()
     // some menus are active only in GAL mode and do nothing in legacy mode.
     // So enable or disable them, depending on the display mode
 
+    ReCreateMenuBar();
+
     if( GetMenuBar() )
     {
         // Enable / disable some menus which are usable only on GAL
@@ -775,6 +777,7 @@ void PCB_EDIT_FRAME::enableGALSpecificMenus()
             if( GetMenuBar()->FindItem( id_list[ii] ) )
                 GetMenuBar()->FindItem( id_list[ii] )->Enable( enbl );
         }
+
     }
 }
 

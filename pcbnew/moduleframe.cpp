@@ -1011,4 +1011,6 @@ void FOOTPRINT_EDIT_FRAME::UseGalCanvas( bool aEnable )
         GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
         updateView();
     }
+
+    ReCreateMenuBar();
 }

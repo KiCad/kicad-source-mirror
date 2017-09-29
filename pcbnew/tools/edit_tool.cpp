@@ -1316,18 +1316,27 @@ bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aP )
 int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 {
     CLIPBOARD_IO io;
-    BOARD*  board = getModel<BOARD>();
     VECTOR2I refPoint;
 
     Activate();
 
+    auto item1 = MSG_PANEL_ITEM( _(""), _("Select reference point for the block being copied..."), COLOR4D::BLACK );
+    std::vector<MSG_PANEL_ITEM> msgItems = { item1 };
+
     SELECTION selection = m_selectionTool->RequestSelection();
 
-    if( !pickCopyReferencePoint( refPoint ) )
+    if( selection.Empty() )
+        return 0;
+
+    frame()->SetMsgPanel( msgItems );
+    bool rv = pickCopyReferencePoint( refPoint );
+    frame()->SetMsgPanel( board() );
+
+    if( !rv )
         return 0;
 
     selection.SetReferencePoint( refPoint );
-    io.SetBoard( board );
+    io.SetBoard( board() );
     io.SaveSelection( selection );
 
     return 0;
