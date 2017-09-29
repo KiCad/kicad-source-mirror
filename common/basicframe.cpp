@@ -158,6 +158,10 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
 
 void EDA_BASE_FRAME::removePaneBorder( wxShowEvent& event )
 {
+    // nothing to be set
+    if( !m_auimgr.GetManagedWindow() )
+        return;
+
     // remove the ugly 1-pixel white border on AUI panes
     wxAuiPaneInfoArray panes = m_auimgr.GetAllPanes();
 
