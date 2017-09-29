@@ -1357,6 +1357,10 @@ public:
      */
     TRACK* CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS_LIST* aList );
 
+    /**
+     * Function ClearAllNetCodes()
+     * Resets all items' netcodes to 0 (no net).
+     */
     void ClearAllNetCodes();
 };
 

@@ -62,20 +62,6 @@ public:
     int EnumeratePads( const TOOL_EVENT& aEvent );
 
     /**
-     * Function CopyItems()
-     *
-     * Copies selected items to the clipboard. Works only in "edit modules" mode.
-     */
-    int CopyItems( const TOOL_EVENT& aEvent );
-
-    /**
-     * Function PastePad()
-     *
-     * Pastes items from the clipboard. Works only in "edit modules" mode.
-     */
-    int PasteItems( const TOOL_EVENT& aEvent );
-
-    /**
      * Function CreateArray
      *
      * Creates an array of objects using settings from a dialog

@@ -423,7 +423,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 // Drag items to the current cursor position
                 for( auto item : selection )
                     static_cast<BOARD_ITEM*>( item )->Move( movement );
-
             }
             else if( !m_dragging )    // Prepare to start dragging
             {
@@ -1225,19 +1224,19 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::Duplicate,  PCB_ACTIONS::duplicateIncrement.MakeEvent() );
     Go( &EDIT_TOOL::CreateArray,PCB_ACTIONS::createArray.MakeEvent() );
     Go( &EDIT_TOOL::Mirror,     PCB_ACTIONS::mirror.MakeEvent() );
+
     Go( &EDIT_TOOL::editFootprintInFpEditor, PCB_ACTIONS::editFootprintInFpEditor.MakeEvent() );
     Go( &EDIT_TOOL::ExchangeFootprints,      PCB_ACTIONS::exchangeFootprints.MakeEvent() );
     Go( &EDIT_TOOL::MeasureTool,             PCB_ACTIONS::measureTool.MakeEvent() );
-
-    Go( &EDIT_TOOL::copyToClipboard, PCB_ACTIONS::copyToClipboard.MakeEvent() );
-    Go( &EDIT_TOOL::cutToClipboard, PCB_ACTIONS::cutToClipboard.MakeEvent() );
+    Go( &EDIT_TOOL::copyToClipboard,         PCB_ACTIONS::copyToClipboard.MakeEvent() );
+    Go( &EDIT_TOOL::cutToClipboard,          PCB_ACTIONS::cutToClipboard.MakeEvent() );
 
 }
 
 
 bool EDIT_TOOL::updateModificationPoint( SELECTION& aSelection )
 {
-    if ( aSelection.HasReferencePoint() )
+    if( aSelection.HasReferencePoint() )
         return false;
 
     if( aSelection.Size() == 1 )
@@ -1320,7 +1319,10 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 
     Activate();
 
-    auto item1 = MSG_PANEL_ITEM( _(""), _("Select reference point for the block being copied..."), COLOR4D::BLACK );
+    auto item1 = MSG_PANEL_ITEM( _(""),
+                                 _("Select reference point for the block being copied..."),
+                                  COLOR4D::BLACK );
+
     std::vector<MSG_PANEL_ITEM> msgItems = { item1 };
 
     SELECTION selection = m_selectionTool->RequestSelection();

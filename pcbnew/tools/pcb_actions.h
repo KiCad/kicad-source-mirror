@@ -82,7 +82,6 @@ public:
     /// Filters the items in the current selection (invokes dialog)
     static TOOL_ACTION filterSelection;
 
-
     // Edit Tool
     /// Activation of the edit tool
     static TOOL_ACTION editActivate;
@@ -294,12 +293,6 @@ public:
 
     /// Tool for creating an array of objects
     static TOOL_ACTION createArray;
-
-    /// Copying module items to clipboard
-    static TOOL_ACTION copyItems;
-
-    /// Pasting module items from clipboard
-    static TOOL_ACTION pasteItems;
 
     /// Copy selected items to clipboard
     static TOOL_ACTION copyToClipboard;

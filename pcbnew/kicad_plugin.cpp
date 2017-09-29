@@ -529,7 +529,6 @@ void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
 
 void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const
 {
-
     const BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
 
     m_out->Print( 0, "\n" );
@@ -2123,7 +2122,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
 
     if( !fn.IsOk() )
     {
- THROW_IO_ERROR( wxString::Format( _( "Footprint file name '%s' is not valid." ),
+        THROW_IO_ERROR( wxString::Format( _( "Footprint file name '%s' is not valid." ),
                                           GetChars( fn.GetFullPath() ) ) );
     }
 

@@ -126,7 +126,6 @@ protected:
     BOARD* board() const { return getModel<BOARD>(); }
     MODULE* module() const { return board()->m_Modules; }
 
-
     bool m_editModules;
 };
 

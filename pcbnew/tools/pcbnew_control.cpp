@@ -743,12 +743,12 @@ int PCBNEW_CONTROL::PasteItemsFromClipboard( const TOOL_EVENT& aEvent )
     BOARD tmpBoard;
     BOARD_ITEM* clipItem = pi.Parse();
 
-    if(!clipItem )
+    if( !clipItem )
     {
         return 0;
     }
 
-    if ( clipItem->Type() == PCB_T )
+    if( clipItem->Type() == PCB_T )
         static_cast<BOARD*>(clipItem)->ClearAllNetCodes();
 
     bool editModules = m_editModules || frame()->IsType( FRAME_PCB_MODULE_EDITOR );
@@ -756,7 +756,7 @@ int PCBNEW_CONTROL::PasteItemsFromClipboard( const TOOL_EVENT& aEvent )
     // The clipboard can contain two different things, an entire kicad_pcb
     // or a single module
 
-    if ( editModules && ( !board() || !module() ) )
+    if( editModules && ( !board() || !module() ) )
     {
         wxLogDebug( wxT( "Attempting to paste to empty module editor window\n") );
         return 0;
@@ -787,12 +787,12 @@ int PCBNEW_CONTROL::PasteItemsFromClipboard( const TOOL_EVENT& aEvent )
             {
                 auto mod = static_cast<MODULE *>( clipItem );
 
-                for ( auto pad : mod->Pads() )
+                for( auto pad : mod->Pads() )
                 {
                     pad->SetParent ( board()->m_Modules.GetFirst() );
                     items.push_back( pad );
                 }
-                for ( auto item : mod->GraphicalItems() )
+                for( auto item : mod->GraphicalItems() )
                 {
                     item->SetParent ( board()->m_Modules.GetFirst() );
                     items.push_back( item );
@@ -871,7 +871,7 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems )
 
     SELECTION& selection = selectionTool->GetSelection();
 
-    for ( auto item : aItems )
+    for( auto item : aItems )
     {
         item->SetSelected();
         selection.Add( item );
@@ -888,7 +888,6 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems )
 
 int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
 {
-
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
     if( !editFrame )
         return 1;

@@ -63,14 +63,6 @@ TOOL_ACTION PCB_ACTIONS::enumeratePads( "pcbnew.ModuleEditor.enumeratePads",
         AS_GLOBAL, 0,
         _( "Enumerate Pads" ), _( "Enumerate pads" ), pad_enumerate_xpm, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::copyItems( "pcbnew.ModuleEditor.copyItems",
-        AS_ACTIVE, 0,
-        _( "Copy" ), _( "Copy items" ), NULL, AF_ACTIVATE );
-
-TOOL_ACTION PCB_ACTIONS::pasteItems( "pcbnew.ModuleEditor.pasteItems",
-        AS_GLOBAL, 0,
-        _( "Paste" ), _( "Paste items" ), NULL, AF_ACTIVATE );
-
 TOOL_ACTION PCB_ACTIONS::moduleEdgeOutlines( "pcbnew.ModuleEditor.graphicOutlines",
         AS_GLOBAL, 0,
         "", "" );
@@ -265,183 +257,6 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_EDITOR_TOOLS::CopyItems( const TOOL_EVENT& aEvent )
-{
-    const SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
-
-    Activate();
-
-    getViewControls()->SetSnapping( true );
-    getViewControls()->ShowCursor( true );
-    getViewControls()->SetAutoPan( true );
-
-    frame()->DisplayToolMsg( _( "Select reference point" ) );
-
-    bool cancelled = false;
-    VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
-
-    while( OPT_TOOL_EVENT evt = Wait() )
-    {
-        if( evt->IsMotion() )
-        {
-            cursorPos = getViewControls()->GetCursorPosition();
-        }
-        else if( evt->IsClick( BUT_LEFT ) )
-        {
-            break;
-        }
-        else if( evt->IsCancel() || evt->IsActivate() )
-        {
-            cancelled = true;
-            break;
-        }
-    }
-
-    if( !cancelled )
-    {
-        PCB_IO io( CTL_FOR_CLIPBOARD );
-
-        // Create a temporary module that contains selected items to ease serialization
-        MODULE module( board() );
-
-        for( auto item : selection )
-        {
-            auto clone = static_cast<BOARD_ITEM*>( item->Clone() );
-
-            // Do not add reference/value - convert them to the common type
-            if( TEXTE_MODULE* text = dyn_cast<TEXTE_MODULE*>( clone ) )
-                text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
-
-            module.Add( clone );
-        }
-
-        // Set the new relative internal local coordinates of copied items
-        MODULE* editedModule = board()->m_Modules;
-        wxPoint moveVector = module.GetPosition() + editedModule->GetPosition() -
-                             wxPoint( cursorPos.x, cursorPos.y );
-        module.MoveAnchorPosition( moveVector );
-
-        io.Format( &module, 0 );
-        std::string data = io.GetStringOutput( true );
-        m_toolMgr->SaveClipboard( data );
-    }
-
-    frame()->DisplayToolMsg( wxString::Format( _( "Copied %d item(s)" ), selection.Size() ) );
-
-    return 0;
-}
-
-
-int MODULE_EDITOR_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
-{
-
-    MODULE* pastedModule = aEvent.Parameter<MODULE*>();
-
-    /* for( BOARD_ITEM* item = pastedModule->GraphicalItems().begin(); item; */
-    /*         item = item->Next() ) */
-    /* { */
-    /*     if( item->Type() == PCB_MODULE_TEXT_T ) */
-    /*         std::cout << "Crashing on this" << std::endl; */
-    /*     return 0; */
-    /* } */
-
-    // Placement tool part
-    VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
-
-    // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( view() );
-    pastedModule->SetParent( board() );
-    pastedModule->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-    pastedModule->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Add,
-                                                std::ref( preview ),  _1 ) );
-    preview.Add( pastedModule );
-    view()->Add( &preview );
-
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    getViewControls()->ShowCursor( true );
-    getViewControls()->SetSnapping( true );
-    getViewControls()->SetAutoPan( true );
-
-    Activate();
-
-    // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
-    {
-        cursorPos = getViewControls()->GetCursorPosition();
-
-        if( evt->IsMotion() )
-        {
-            pastedModule->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-            view()->Update( &preview );
-        }
-
-        else if( evt->Category() == TC_COMMAND )
-        {
-            if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) )
-            {
-                const auto rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle(
-                        *frame(), *evt );
-                pastedModule->Rotate( pastedModule->GetPosition(), rotationAngle );
-                view()->Update( &preview );
-            }
-            else if( evt->IsAction( &PCB_ACTIONS::flip ) )
-            {
-                pastedModule->Flip( pastedModule->GetPosition() );
-                view()->Update( &preview );
-            }
-            else if( evt->IsCancel() || evt->IsActivate() )
-            {
-                preview.Clear();
-                break;
-            }
-        }
-
-        else if( evt->IsClick( BUT_LEFT ) )
-        {
-            BOARD_COMMIT commit( frame() );
-
-            board()->m_Status_Pcb = 0;    // I have no clue why, but it is done in the legacy view
-
-            // MODULE::RunOnChildren is infeasible here: we need to create copies of items, do not
-            // directly modify them
-
-            for( auto pad : pastedModule->Pads() )
-            {
-                D_PAD* clone = static_cast<D_PAD*>( pad->Clone() );
-                commit.Add( clone );
-            }
-
-            for( auto drawing : pastedModule->GraphicalItems() )
-            {
-                BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( drawing->Clone() );
-
-                if( TEXTE_MODULE* text = dyn_cast<TEXTE_MODULE*>( clone ) )
-                {
-                    // Do not add reference/value - convert them to the common type
-                    text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
-
-                    // Whyyyyyyyyyyyyyyyyyyyyyy?! All other items conform to rotation performed
-                    // on its parent module, but texts are so independent..
-                    text->Rotate( text->GetPosition(), pastedModule->GetOrientation() );
-                }
-
-                commit.Add( clone );
-            }
-
-            commit.Push( _( "Paste clipboard contents" ) );
-            preview.Clear();
-
-            break;
-        }
-    }
-
-    delete pastedModule;
-    view()->Remove( &preview );
-
-    return 0;
-}
-
-
 int MODULE_EDITOR_TOOLS::ModuleTextOutlines( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = getView();
@@ -511,8 +326,6 @@ void MODULE_EDITOR_TOOLS::setTransitions()
 {
     Go( &MODULE_EDITOR_TOOLS::PlacePad,            PCB_ACTIONS::placePad.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::EnumeratePads,       PCB_ACTIONS::enumeratePads.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::CopyItems,           PCB_ACTIONS::copyItems.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::PasteItems,          PCB_ACTIONS::pasteItems.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::ModuleTextOutlines,  PCB_ACTIONS::moduleTextOutlines.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::ModuleEdgeOutlines,  PCB_ACTIONS::moduleEdgeOutlines.MakeEvent() );
 }

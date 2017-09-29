@@ -265,7 +265,6 @@ public:
         Rotate( wxPoint( aRotCentre.x, aRotCentre.y ), aAngle );
     }
 
-
     /**
      * Function Flip
      * Flip this object, i.e. change the board side for this object

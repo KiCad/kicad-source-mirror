@@ -592,7 +592,7 @@ bool SELECTION_TOOL::selectMultiple()
     m_multiple = false;         // Multiple selection mode is inactive
     getViewControls()->SetAutoPan( false );
 
-    if ( !cancelled )
+    if( !cancelled )
         m_selection.ClearReferencePoint();
 
     return cancelled;
@@ -615,11 +615,9 @@ void SELECTION_TOOL::setTransitions()
     Go( &SELECTION_TOOL::selectCopper, PCB_ACTIONS::selectCopper.MakeEvent() );
     Go( &SELECTION_TOOL::selectNet, PCB_ACTIONS::selectNet.MakeEvent() );
     Go( &SELECTION_TOOL::selectSameSheet, PCB_ACTIONS::selectSameSheet.MakeEvent() );
-
     Go( &SELECTION_TOOL::selectOnSheetFromEeschema, PCB_ACTIONS::selectOnSheetFromEeschema.MakeEvent() );
     Go( &SELECTION_TOOL::updateSelection, PCB_ACTIONS::selectionModified.MakeEvent() );
 }
-
 
 
 SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()

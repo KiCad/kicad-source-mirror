@@ -149,12 +149,11 @@ public:
 
     /**
      * Function cutToClipboard()
-     * Sends the current selection to the clipboard by formatting it as a fake pcb
+     * Cuts the current selection to the clipboard by formatting it as a fake pcb
      * see AppendBoardFromClipboard for importing
      * @return True if it was sent succesfully
      */
     int cutToClipboard( const TOOL_EVENT& aEvent );
-
 
     BOARD_COMMIT* GetCurrentCommit() const
     {
@@ -174,7 +173,6 @@ private:
 
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.
-    wxPoint getModificationPoint( const SELECTION& aSelection );
     bool updateModificationPoint( SELECTION& aSelection );
 
     int editFootprintInFpEditor( const TOOL_EVENT& aEvent );

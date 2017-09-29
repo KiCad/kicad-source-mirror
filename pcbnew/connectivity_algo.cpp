@@ -748,7 +748,11 @@ void CN_CONNECTIVITY_ALGO::propagateConnections()
 {
     for( auto cluster : m_connClusters )
     {
-        if( cluster->IsOrphaned() )
+        if( cluster->IsConflicting() )
+        {
+            wxLogTrace( "CN", "Conflicting nets in cluster %p\n", cluster.get() );
+        }
+        else if( cluster->IsOrphaned() )
         {
             wxLogTrace( "CN", "Skipping orphaned cluster %p [net: %s]\n", cluster.get(),
                     (const char*) cluster->OriginNetName().c_str() );

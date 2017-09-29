@@ -91,7 +91,6 @@ public:
     void setTransitions() override;
 
 private:
-
     int placeBoardItems( BOARD* aBoard );
     int placeBoardItems( std::vector<BOARD_ITEM*>& aItems );
 

@@ -326,5 +326,4 @@ public:
 };
 
 
-
 #endif    // _PCBNEW_PARSER_H_

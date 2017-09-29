@@ -284,7 +284,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
 
     if ( !m_editModules )
     {
-        auto panel = static_cast<PCB_DRAW_PANEL_GAL *>( frame->GetGalCanvas() );
+        auto panel = static_cast<PCB_DRAW_PANEL_GAL*>( frame->GetGalCanvas() );
         connectivity->RecalculateRatsnest();
         panel->RedrawRatsnest();
     }

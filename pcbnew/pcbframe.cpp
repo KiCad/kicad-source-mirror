@@ -777,7 +777,6 @@ void PCB_EDIT_FRAME::enableGALSpecificMenus()
             if( GetMenuBar()->FindItem( id_list[ii] ) )
                 GetMenuBar()->FindItem( id_list[ii] )->Enable( enbl );
         }
-
     }
 }
 
