@@ -41,7 +41,7 @@ class COLOR4D
 public:
     // Constructor (creates the Color 0,0,0,0)
     COLOR4D() :
-        r( 0 ), g( 0 ), b( 0 ), a( 0 )
+        r( 0 ), g( 0 ), b( 0 ), a( 1.0 )
     {
     }
 
