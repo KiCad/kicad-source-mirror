@@ -105,6 +105,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     m_hatchPitch = aZone.m_hatchPitch;
     m_HatchLines = aZone.m_HatchLines;
 
+    SetLayerSet( aZone.GetLayerSet() );
     SetLocalFlags( aZone.GetLocalFlags() );
 }
 
@@ -132,6 +133,8 @@ ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
     m_FilledPolysList.Append( aOther.m_FilledPolysList );
     m_FillSegmList.clear();
     m_FillSegmList = aOther.m_FillSegmList;
+
+    SetLayerSet( aOther.GetLayerSet() );
 
     return *this;
 }
@@ -213,15 +216,15 @@ void ZONE_CONTAINER::SetLayer( PCB_LAYER_ID aLayer )
 
 void ZONE_CONTAINER::SetLayerSet( LSET aLayerSet )
 {
-    if( aLayerSet.count() == 0 )
-    {
-        return;
-    }
-
     if( GetIsKeepout() )
     {
         // Keepouts can only exist on copper layers
         aLayerSet &= LSET::AllCuMask();
+    }
+
+    if( aLayerSet.count() == 0 )
+    {
+        return;
     }
 
     m_layerSet = aLayerSet;
