@@ -625,7 +625,7 @@ void EDA_3D_CANVAS::OnRightClick( wxMouseEvent &event )
     AddMenuItem( &PopUpMenu, ID_POPUP_VIEW_ZPOS,
                  msg, KiBitmap( axis3d_top_xpm ) );
 
-    msg = AddHotkeyName( _( "Top View" ), g_3DViewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Bottom View" ), g_3DViewer_Hokeys_Descr,
                          ID_POPUP_VIEW_ZNEG );
     AddMenuItem( &PopUpMenu, ID_POPUP_VIEW_ZNEG,
                  msg, KiBitmap( axis3d_bottom_xpm ) );
@@ -656,12 +656,12 @@ void EDA_3D_CANVAS::OnRightClick( wxMouseEvent &event )
 
     PopUpMenu.AppendSeparator();
 
-    msg = AddHotkeyName( _( "Move left <-" ), g_3DViewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Move Left <-" ), g_3DViewer_Hokeys_Descr,
                          ID_POPUP_MOVE3D_LEFT );
     AddMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_LEFT,
                  msg, KiBitmap( left_xpm ) );
 
-    msg = AddHotkeyName( _( "Move right ->" ), g_3DViewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Move Right ->" ), g_3DViewer_Hokeys_Descr,
                          ID_POPUP_MOVE3D_RIGHT );
     AddMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_RIGHT,
                  msg, KiBitmap( right_xpm ) );
