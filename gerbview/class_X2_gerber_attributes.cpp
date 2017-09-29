@@ -89,15 +89,12 @@ void X2_ATTRIBUTE::DbgListPrms()
         wxLogMessage( m_Prms.Item( ii ) );
 }
 
-/*
- * parse a TF command and fill m_Prms by the parameters found.
- * aFile = a FILE* ptr to the current Gerber file.
- * buff = the buffer containing current Gerber data (GERBER_BUFZ size)
- * text = a pointer to the first char to read in Gerber data
- */
 bool X2_ATTRIBUTE::ParseAttribCmd( FILE* aFile, char *aBuffer, int aBuffSize, char* &aText,
-        int& aLineNum )
+                                   int& aLineNum )
 {
+    // parse a TF command and fill m_Prms by the parameters found.
+    // the "%TF" (start of command) is already read by the caller
+
     bool ok = true;
     wxString data;
 
@@ -122,7 +119,7 @@ bool X2_ATTRIBUTE::ParseAttribCmd( FILE* aFile, char *aBuffer, int aBuffSize, ch
                 aText++;
                 break;
 
-            case ',':       // End of parameter
+            case ',':       // End of parameter (separator)
                 aText++;
                 m_Prms.Add( data );
                 data.Empty();
