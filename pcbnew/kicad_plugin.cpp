@@ -571,7 +571,8 @@ void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const
 
     // Save used non-copper layers in the order they are defined.
     // desired sequence for non Cu BOARD layers.
-    static const PCB_LAYER_ID non_cu[] = {
+    static const PCB_LAYER_ID non_cu[] =
+    {
         B_Adhes,        // 32
         F_Adhes,
         B_Paste,
@@ -720,6 +721,7 @@ void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel, ")\n\n" );
 }
 
+
 void PCB_IO::formatGeneral( BOARD* aBoard, int aNestLevel ) const
 {
     const BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
@@ -740,6 +742,7 @@ void PCB_IO::formatGeneral( BOARD* aBoard, int aNestLevel ) const
     aBoard->GetPageSettings().Format( m_out, aNestLevel, m_ctl );
     aBoard->GetTitleBlock().Format( m_out, aNestLevel, m_ctl );
 }
+
 
 void PCB_IO::formatBoardLayers( BOARD* aBoard, int aNestLevel ) const
 {
@@ -764,7 +767,8 @@ void PCB_IO::formatBoardLayers( BOARD* aBoard, int aNestLevel ) const
 
     // Save used non-copper layers in the order they are defined.
     // desired sequence for non Cu BOARD layers.
-    static const PCB_LAYER_ID non_cu[] = {
+    static const PCB_LAYER_ID non_cu[] =
+    {
         B_Adhes,        // 32
         F_Adhes,
         B_Paste,
@@ -801,6 +805,7 @@ void PCB_IO::formatBoardLayers( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel, ")\n\n" );
 }
 
+
 void PCB_IO::formatNetInformation( BOARD* aBoard, int aNestLevel ) const
 {
     const BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
@@ -830,11 +835,12 @@ void PCB_IO::formatNetInformation( BOARD* aBoard, int aNestLevel ) const
     }
 }
 
+
 void PCB_IO::formatHeader( BOARD* aBoard, int aNestLevel ) const
 {
-    formatGeneral(aBoard);
+    formatGeneral( aBoard );
     // Layers.
-    formatBoardLayers(aBoard);
+    formatBoardLayers( aBoard );
     // Setup
     formatSetup( aBoard, aNestLevel );
     // Save net codes and names
@@ -1640,7 +1646,7 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
     {
         PCB_LAYER_ID  layer1, layer2;
 
-        const VIA*  via = static_cast<const VIA*>(aTrack);
+        const VIA*  via = static_cast<const VIA*>( aTrack );
         BOARD*      board = (BOARD*) via->GetParent();
 
         wxCHECK_RET( board != 0, wxT( "Via " ) + via->GetSelectMenuText() +

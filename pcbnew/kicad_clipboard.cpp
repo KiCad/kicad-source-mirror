@@ -1,14 +1,8 @@
-/**
- * @file kicad_clipboard.cpp
- * @brief Kicad clipboard plugin that piggybacks on the kicad_plugin
- *
- * @author Kristoffer Ödmark
- * @version 1.0
- * @date 2017-05-03
- *
+/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * @author Kristoffer Ödmark
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,22 +40,26 @@ CLIPBOARD_IO::CLIPBOARD_IO():
     m_out = &m_formatter;
 }
 
+
 CLIPBOARD_IO::~CLIPBOARD_IO(){}
+
 
 STRING_FORMATTER* CLIPBOARD_IO::GetFormatter()
 {
     return &m_formatter;
 }
 
+
 void CLIPBOARD_IO::SetBoard( BOARD* aBoard )
 {
     m_board = aBoard;
 }
 
+
 void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
-    VECTOR2I refPoint(0, 0);
+    VECTOR2I refPoint( 0, 0 );
 
     // dont even start if the selection is empty
     if( aSelected.Empty() )
@@ -105,7 +103,7 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
         }
 
         // locate the reference point at (0, 0) in the copied items
-        newModule.Move( wxPoint(-refPoint.x, -refPoint.y ) );
+        newModule.Move( wxPoint( -refPoint.x, -refPoint.y ) );
 
         Format( static_cast<BOARD_ITEM*>( &newModule ) );
     }
@@ -147,8 +145,8 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
     {
         // we will fake being a .kicad_pcb to get the full parser kicking
         // This means we also need layers and nets
-        m_formatter.Print( 0, "(kicad_pcb (version %d) (host pcbnew %s)\n", SEXPR_BOARD_FILE_VERSION,
-                m_formatter.Quotew( GetBuildVersion() ).c_str() );
+        m_formatter.Print( 0, "(kicad_pcb (version %d) (host pcbnew %s)\n",
+                SEXPR_BOARD_FILE_VERSION, m_formatter.Quotew( GetBuildVersion() ).c_str() );
 
 
         m_formatter.Print( 0, "\n" );
@@ -180,10 +178,12 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
     }
     if( wxTheClipboard->Open() )
     {
-        wxTheClipboard->SetData( new wxTextDataObject( wxString( m_formatter.GetString().c_str(), wxConvUTF8 ) ) );
+        wxTheClipboard->SetData( new wxTextDataObject(
+                    wxString( m_formatter.GetString().c_str(), wxConvUTF8 ) ) );
         wxTheClipboard->Close();
     }
 }
+
 
 BOARD_ITEM* CLIPBOARD_IO::Parse()
 {
@@ -213,6 +213,7 @@ BOARD_ITEM* CLIPBOARD_IO::Parse()
     return item;
 }
 
+
 void CLIPBOARD_IO::Save( const wxString& aFileName, BOARD* aBoard,
                 const PROPERTIES* aProperties )
 {
@@ -238,13 +239,16 @@ void CLIPBOARD_IO::Save( const wxString& aFileName, BOARD* aBoard,
 
     if( wxTheClipboard->Open() )
     {
-        wxTheClipboard->SetData( new wxTextDataObject( wxString( m_formatter.GetString().c_str(), wxConvUTF8 ) ) );
+        wxTheClipboard->SetData( new wxTextDataObject(
+                    wxString( m_formatter.GetString().c_str(), wxConvUTF8 ) ) );
         wxTheClipboard->Close();
     }
 
 }
 
-BOARD* CLIPBOARD_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties )
+
+BOARD* CLIPBOARD_IO::Load( const wxString& aFileName,
+        BOARD* aAppendToMe, const PROPERTIES* aProperties )
 {
     std::string result;
 
