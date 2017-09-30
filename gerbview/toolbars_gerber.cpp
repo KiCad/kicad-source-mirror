@@ -217,9 +217,6 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
     m_optionsToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ),
                                wxEmptyString, wxITEM_CHECK );
 
-    m_optionsToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiBitmap( zoom_area_xpm ),
-                               _( "Zoom to selection" ), wxITEM_CHECK );
-
     if( IsGalCanvasActive() )
     {
         m_optionsToolBar->AddTool( ID_TB_MEASUREMENT_TOOL, wxEmptyString,
