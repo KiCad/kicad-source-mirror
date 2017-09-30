@@ -139,7 +139,7 @@ bool GERBER_JOBFILE_READER::parseTJLayerString( wxString& aText )
 
 bool GERBVIEW_FRAME::LoadGerberJobFile( const wxString& aFullFileName )
 {
-#define jobFileWildcard  _( "Gerber job file (*.gbj)|*.gbj;.gbj" )
+#define jobFileWildcard  _( "Gerber job file (*.gbrjob)|*.gbrjob;.gbrjob" )
     wxFileName filename = aFullFileName;
     wxString currentPath;
 
