@@ -1801,7 +1801,7 @@ void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
         _( "Segment" ), _( "Arc" ), _( "ring/circle" ), _( "polygon" )
     };
 
-    int type = wxGetSingleChoiceIndex( wxEmptyString, _( " Select shape type:" ),
+    int type = wxGetSingleChoiceIndex( wxEmptyString, _( "Select shape type:" ),
                     DIM( shapelist ), shapelist, 0 );
 
     STROKE_T listtype[] =

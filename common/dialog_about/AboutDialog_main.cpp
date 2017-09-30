@@ -145,7 +145,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     description << wxT( "<li>" )
                 << HtmlHyperlink( wxT( "https://github.com/KiCad/Footprint_Wizards" ),
-                                  _( "Footprint wizards info on our official repository " ) )
+                                  _( "Footprint wizards info on our official repository" ) )
                 << wxT( "</li>" );
     description << wxT( "</ul></p>" );
 
