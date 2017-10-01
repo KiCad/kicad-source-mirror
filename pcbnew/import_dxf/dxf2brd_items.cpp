@@ -127,12 +127,18 @@ void DXF2BRD_CONVERTER::addLine( const DRW_Line& aData )
 
 void DXF2BRD_CONVERTER::addPolyline(const DRW_Polyline& aData )
 {
-    // Currently, Pcbnew does not know polylines, for boards.
-    // So we have to convert a polyline to a set of segments.
-    // Obviously, the z coordinate is ignored
+    // Convert DXF Polylines into a series of KiCad Lines and Arcs.
+    // A Polyline (as opposed to a LWPolyline) may be a 3D line or
+    // even a 3D Mesh. The only type of Polyline which is guaranteed
+    // to import correctly is a 2D Polyline in X and Y, which is what
+    // we assume of all Polylines. The width used is the width of the
+    // Polyline; per-vertex line widths, if present, are ignored.
 
-    wxPoint polyline_startpoint;
-    wxPoint segment_startpoint;
+    wxRealPoint seg_start;
+    wxRealPoint poly_start;
+    double bulge = 0.0;
+    int lineWidth = mapDim( aData.thickness == 0 ? m_defaultThickness / m_DXF2mm
+                                                 : aData.thickness );
 
     for( unsigned ii = 0; ii < aData.vertlist.size(); ii++ )
     {
@@ -140,39 +146,32 @@ void DXF2BRD_CONVERTER::addPolyline(const DRW_Polyline& aData )
 
         if( ii == 0 )
         {
-            segment_startpoint.x = mapX( vertex->basePoint.x );
-            segment_startpoint.y = mapY( vertex->basePoint.y );
-            polyline_startpoint  = segment_startpoint;
+            seg_start.x = m_xOffset + vertex->basePoint.x * m_DXF2mm;
+            seg_start.y = m_yOffset - vertex->basePoint.y * m_DXF2mm;
+            bulge = vertex->bulge;
+            poly_start = seg_start;
             continue;
         }
 
-        DRAWSEGMENT* segm = ( m_useModuleItems ) ?
-                            static_cast< DRAWSEGMENT* >( new EDGE_MODULE( NULL ) ) :
-                            new DRAWSEGMENT;
+        wxRealPoint seg_end( m_xOffset + vertex->basePoint.x * m_DXF2mm,
+                             m_yOffset - vertex->basePoint.y * m_DXF2mm );
 
-        segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
-        segm->SetStart( segment_startpoint );
-        wxPoint segment_endpoint( mapX( vertex->basePoint.x ), mapY( vertex->basePoint.y ) );
-        segm->SetEnd( segment_endpoint );
-        segm->SetWidth( mapDim( aData.thickness == 0 ? m_defaultThickness / m_DXF2mm
-                                : aData.thickness ) );
-        m_newItemsList.push_back( segm );
-        segment_startpoint = segment_endpoint;
+        if( std::abs( bulge ) < MIN_BULGE )
+            insertLine( seg_start, seg_end, lineWidth );
+        else
+            insertArc( seg_start, seg_end, bulge, lineWidth );
+
+        bulge = vertex->bulge;
+        seg_start = seg_end;
     }
 
-    // Polyline flags bit 0 indicates closed (1) or open (0) polyline
+    // LWPolyline flags bit 0 indicates closed (1) or open (0) polyline
     if( aData.flags & 1 )
     {
-        DRAWSEGMENT* closing_segm = ( m_useModuleItems ) ?
-                                    static_cast< DRAWSEGMENT* >( new EDGE_MODULE( NULL ) ) :
-                                    new DRAWSEGMENT;
-
-        closing_segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
-        closing_segm->SetStart( segment_startpoint );
-        closing_segm->SetEnd( polyline_startpoint );
-        closing_segm->SetWidth( mapDim( aData.thickness == 0 ? m_defaultThickness / m_DXF2mm
-                                : aData.thickness ) );
-        m_newItemsList.push_back( closing_segm );
+        if( std::abs( bulge ) < MIN_BULGE )
+            insertLine( seg_start, poly_start, lineWidth );
+        else
+            insertArc( seg_start, poly_start, bulge, lineWidth );
     }
 }
 
