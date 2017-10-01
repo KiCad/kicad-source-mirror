@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Mar  1 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -531,13 +531,13 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	m_staticTextcps = new wxStaticText( m_sbSizerZonesSettings->GetStaticBox(), wxID_ANY, _("Custom pad shape in zone:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextcps->Wrap( -1 );
-	fgSizerCopperZonesOpts->Add( m_staticTextcps, 0, wxALL, 5 );
+	fgSizerCopperZonesOpts->Add( m_staticTextcps, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	wxString m_ZoneCustomPadShapeChoices[] = { _("Use pad shape"), _("Use pad convex hull") };
 	int m_ZoneCustomPadShapeNChoices = sizeof( m_ZoneCustomPadShapeChoices ) / sizeof( wxString );
 	m_ZoneCustomPadShape = new wxChoice( m_sbSizerZonesSettings->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ZoneCustomPadShapeNChoices, m_ZoneCustomPadShapeChoices, 0 );
 	m_ZoneCustomPadShape->SetSelection( 0 );
-	fgSizerCopperZonesOpts->Add( m_ZoneCustomPadShape, 0, wxALL|wxEXPAND, 5 );
+	fgSizerCopperZonesOpts->Add( m_ZoneCustomPadShape, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 	
 	
 	fgSizerCopperZonesOpts->Add( 0, 0, 1, wxEXPAND, 5 );
