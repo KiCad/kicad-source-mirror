@@ -422,7 +422,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         viastacks.push_back( via );
         fprintf( aFile, "PAD V%d.%d.%s ROUND %g\nCIRCLE 0 0 %g\n",
                 via->GetWidth(), via->GetDrillValue(),
-                fmt_mask( via->GetLayerSet() ).c_str(),
+                fmt_mask( via->GetLayerSet() & master_layermask ).c_str(),
                 via->GetDrillValue() / SCALE_FACTOR,
                 via->GetWidth() / (SCALE_FACTOR * 2) );
     }
