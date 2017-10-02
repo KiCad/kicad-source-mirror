@@ -62,7 +62,7 @@
 # mc: - fillet = stond(o/amento)
 # mc: - edge = spigolo
 # mc: - Layout editor (norma UNI 8187, ISO 7200):
-# mc:   - (page) layout = sarebbe disposizione (pagina) ma lascio layout visto che tutti usano questo termine
+# mc:   - (page) layout = disposizione (pagina)
 # mc:   - title block = secondo le norme UNI, riquadro (delle) iscrizioni, gergalmente detto cartiglio.
 # mc:   - frame references = squadratura
 # mc: - workbook = libretto di lavoro (simulazioni)
@@ -73,7 +73,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-10-02 21:52+0200\n"
-"PO-Revision-Date: 2017-10-02 16:58+0200\n"
+"PO-Revision-Date: 2017-10-02 21:56+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
