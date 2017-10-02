@@ -1230,7 +1230,6 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::MeasureTool,             PCB_ACTIONS::measureTool.MakeEvent() );
     Go( &EDIT_TOOL::copyToClipboard,         PCB_ACTIONS::copyToClipboard.MakeEvent() );
     Go( &EDIT_TOOL::cutToClipboard,          PCB_ACTIONS::cutToClipboard.MakeEvent() );
-
 }
 
 
@@ -1295,6 +1294,7 @@ int EDIT_TOOL::editFootprintInFpEditor( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+
 bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aP )
 {
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
@@ -1312,6 +1312,7 @@ bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aP )
     return true;
 }
 
+
 int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 {
     CLIPBOARD_IO io;
@@ -1319,8 +1320,7 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 
     Activate();
 
-    auto item1 = MSG_PANEL_ITEM( _(""),
-                                 _("Select reference point for the block being copied..."),
+    auto item1 = MSG_PANEL_ITEM( "", _( "Select reference point for the block being copied..." ),
                                   COLOR4D::BLACK );
 
     std::vector<MSG_PANEL_ITEM> msgItems = { item1 };
@@ -1343,6 +1343,7 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 
     return 0;
 }
+
 
 int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
 {
