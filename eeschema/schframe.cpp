@@ -1014,7 +1014,7 @@ void SCH_EDIT_FRAME::OnUpdateFields( wxCommandEvent& event )
             components.push_back( static_cast<SCH_COMPONENT*>( item ) );
     }
 
-    if( InvokeDialogUpdateFields( this, components, true ) )
+    if( InvokeDialogUpdateFields( this, components, true ) == wxID_OK )
         m_canvas->Refresh();
 }
 

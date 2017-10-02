@@ -58,7 +58,7 @@ bool DIALOG_UPDATE_FIELDS::TransferDataFromWindow()
     // Create the set of fields to be updated
     m_fields.clear();
 
-    for( int i = 0; i < m_fieldsBox->GetCount(); ++i )
+    for( unsigned i = 0; i < m_fieldsBox->GetCount(); ++i )
     {
         if( m_fieldsBox->IsChecked( i ) )
             m_fields.insert( m_fieldsBox->GetString( i ) );
@@ -175,6 +175,6 @@ void DIALOG_UPDATE_FIELDS::updateFields( SCH_COMPONENT* aComponent )
 
 void DIALOG_UPDATE_FIELDS::checkAll( bool aCheck )
 {
-    for( int i = 0; i < m_fieldsBox->GetCount(); ++i )
+    for( unsigned i = 0; i < m_fieldsBox->GetCount(); ++i )
         m_fieldsBox->Check( i, aCheck );
 }
