@@ -68,13 +68,12 @@
 # mc: - workbook = libretto di lavoro (simulazioni)
 # mc: - thermal relief = supporto termico
 # mc: - cutout zone = zona ritaglio
-#: pcbnew/tools/edit_tool.cpp:1322
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-02 08:25+0200\n"
-"PO-Revision-Date: 2017-10-02 08:43+0200\n"
+"POT-Creation-Date: 2017-10-02 09:54+0200\n"
+"PO-Revision-Date: 2017-10-02 09:59+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -9448,8 +9447,10 @@ msgid "Exclude contents of Edges_Pcb layer from all other layers"
 msgstr "Esclude il contenuto dello strato Ingombro scheda"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
-msgid "fit to page"
-msgstr "adatta alla pagina"
+#: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
+msgid "Fit to page"
+msgstr "Adatta alla pagina"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
@@ -9910,7 +9911,10 @@ msgstr "Lo spessore scheda %s è fuori range."
 msgid ""
 "Items have been found on removed layers. This operation will delete all "
 "items from removed layers and cannot be undone. Do you wish to continue?"
-msgstr "Sono stati trovati degli elementi su strati rimossi. Questa operazione cancellerà tutti gli elementi dagli strati rimossi e non può essere annullata. Continuare?"
+msgstr ""
+"Sono stati trovati degli elementi su strati rimossi. Questa operazione "
+"cancellerà tutti gli elementi dagli strati rimossi e non può essere "
+"annullata. Continuare?"
 
 #: pcbnew/dialogs/dialog_layers_setup.cpp:756
 msgid "Layer name may not be empty."
@@ -10745,15 +10749,20 @@ msgstr "X"
 #: pcbnew/dialogs/dialog_drc.cpp:217 pcbnew/dialogs/dialog_drc.cpp:287
 #, c-format
 msgid "Report file \"%s\" created"
-msgstr "Il file di rapporto \"%s\" è sato creato"
+msgstr "Il file di rapporto \"%s\" è stato creato"
 
 #: pcbnew/dialogs/dialog_drc.cpp:219 pcbnew/dialogs/dialog_drc.cpp:288
 msgid "Disk File Report Completed"
 msgstr "Creazione file di rapporto completata"
 
-#: pcbnew/dialogs/dialog_drc.cpp:224 pcbnew/dialogs/dialog_drc.cpp:293
+#: pcbnew/dialogs/dialog_drc.cpp:224
 #, c-format
 msgid "Unable to create report file '%s' "
+msgstr "Impossibile creare il file di rapporto \"%s\""
+
+#: pcbnew/dialogs/dialog_drc.cpp:293
+#, c-format
+msgid "Unable to create report file '%s'"
 msgstr "Impossibile creare il file di rapporto \"%s\""
 
 #: pcbnew/dialogs/dialog_drc.cpp:313
@@ -11222,10 +11231,6 @@ msgid "high"
 msgstr "alto"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
-msgid "Fit to page"
-msgstr "Adatta alla pagina"
-
-#: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
 msgid "Scale 1"
 msgstr "Scala 1"
 
@@ -11280,6 +11285,10 @@ msgstr "cancella segmenti di piste con un capo non connesso"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:38
 msgid "Pad number:"
 msgstr "Numero piazzola:"
+
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:42
+msgid "w"
+msgstr "w"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:45
 msgid "Net name:"
@@ -11695,10 +11704,8 @@ msgid "Primitives list"
 msgstr "Elenco primitive"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:574
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1012
-msgid " Coordinates are relative to anchor pad, orientation 0"
-msgstr ""
-" Le coordinate sono relative alla piazzola di ancoraggio, orientamento 0"
+msgid "Coordinates are relative to anchor pad, orientation 0"
+msgstr "Le coordinate sono relative alla piazzola di ancoraggio, orientamento 0"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:589
 msgid "Delete Primitive"
@@ -11783,6 +11790,11 @@ msgstr "1.0"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:960
 msgid "Duplicate count"
 msgstr "Duplica conteggio"
+
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1012
+msgid " Coordinates are relative to anchor pad, orientation 0"
+msgstr ""
+" Le coordinate sono relative alla piazzola di ancoraggio, orientamento 0"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1018
 msgid "Incorrect polygon"
@@ -12648,8 +12660,8 @@ msgid "polygon"
 msgstr "poligono"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1804
-msgid " Select shape type:"
-msgstr " Seleziona il tipo di forma:"
+msgid "Select shape type:"
+msgstr "Seleziona il tipo di forma:"
 
 #: pcbnew/dialogs/dialog_find.cpp:131
 #, c-format
@@ -14329,8 +14341,8 @@ msgid "corners count"
 msgstr "conteggio vertici"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:277
-msgid " Incorrect polygon: less than 3 corners"
-msgstr " Poligono errato: meno di 3 vertici"
+msgid "Incorrect polygon: less than 3 corners"
+msgstr "Poligono errato: meno di 3 vertici"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:297
 msgid "Incorrect polygon: too few corners after simplification"
@@ -15543,8 +15555,8 @@ msgid "Official repository for component and footprint libraries"
 msgstr "L'archivio ufficiale di librerie di componenti e impronte"
 
 #: common/dialog_about/AboutDialog_main.cpp:148
-msgid "Footprint wizards info on our official repository "
-msgstr "Info sugli assistenti impronte sul nostro repository ufficiale "
+msgid "Footprint wizards info on our official repository"
+msgstr "Info sugli assistenti impronte sul nostro repository ufficiale"
 
 #: common/dialog_about/AboutDialog_main.cpp:153
 msgid "Non official repositories"
@@ -24501,7 +24513,8 @@ msgid ""
 "shown)"
 msgstr ""
 "Mostra gli strati in modalità grezza\n"
-"(potrebbero esserci dei problemi con gli elementi negativi se si mostrano più file Gerber contemporaneamente)"
+"(potrebbero esserci dei problemi con gli elementi negativi se si mostrano "
+"più file Gerber contemporaneamente)"
 
 #: gerbview/toolbars_gerber.cpp:288
 msgid ""
@@ -24945,7 +24958,8 @@ msgstr ""
 #: gerbview/rs274x.cpp:276
 #, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: \"%s\""
-msgstr "RS274X: comando di formato GERBER \"%c\" non valido alla riga %d: \"%s\""
+msgstr ""
+"RS274X: comando di formato GERBER \"%c\" non valido alla riga %d: \"%s\""
 
 #: gerbview/rs274x.cpp:279
 #, c-format
@@ -25111,10 +25125,6 @@ msgstr "Apri file zip"
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:30
 msgid "Graphic layers:"
 msgstr "Strati grafici:"
-
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
-msgid "fit in page"
-msgstr "Adatta alla pagina"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:46
 msgid "Approx. Scale:"
