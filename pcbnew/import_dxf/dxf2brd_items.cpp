@@ -47,6 +47,7 @@
 #include <class_edge_mod.h>
 #include <class_pcb_text.h>
 #include <class_text_mod.h>
+#include "common.h"
 #include <drw_base.h>
 
 // minimum bulge value before resorting to a line segment;
@@ -91,6 +92,7 @@ int DXF2BRD_CONVERTER::mapDim( double aDxfValue )
 
 bool DXF2BRD_CONVERTER::ImportDxfFile( const wxString& aFile )
 {
+    LOCALE_IO locale;
     dxfRW* dxf = new dxfRW( aFile.ToUTF8() );
     bool success = dxf->read( this, true );
 
