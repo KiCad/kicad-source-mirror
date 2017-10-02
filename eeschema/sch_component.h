@@ -364,6 +364,13 @@ public:
     }
 
     /**
+     * Restores fields to the original library values.
+     * @param aResetStyle selects whether fields should reset the position and text attribute.
+     * @param aResetRef selects whether the reference field should be restored.
+     */
+    void UpdateFields( bool aResetStyle, bool aResetRef = false );
+
+    /**
      * Return the number of fields in this symbol.
      */
     int GetFieldCount() const { return (int)m_Fields.size(); }

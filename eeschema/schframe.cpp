@@ -272,6 +272,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_FIND_ITEMS, SCH_EDIT_FRAME::OnFindItems )
     EVT_TOOL( wxID_REPLACE, SCH_EDIT_FRAME::OnFindItems )
     EVT_TOOL( ID_BACKANNO_ITEMS, SCH_EDIT_FRAME::OnLoadCmpToFootprintLinkFile )
+    EVT_TOOL( ID_UPDATE_FIELDS, SCH_EDIT_FRAME::OnUpdateFields )
     EVT_TOOL( ID_SCH_MOVE_ITEM, SCH_EDIT_FRAME::OnMoveItem )
     EVT_TOOL( ID_AUTOPLACE_FIELDS, SCH_EDIT_FRAME::OnAutoplaceFields )
     EVT_MENU( wxID_HELP, EDA_DRAW_FRAME::GetKicadHelp )
@@ -1000,6 +1001,21 @@ void SCH_EDIT_FRAME::OnLoadCmpToFootprintLinkFile( wxCommandEvent& event )
 {
     LoadCmpToFootprintLinkFile();
     m_canvas->Refresh();
+}
+
+
+void SCH_EDIT_FRAME::OnUpdateFields( wxCommandEvent& event )
+{
+    std::list<SCH_COMPONENT*> components;
+
+    for( SCH_ITEM* item = GetScreen()->GetDrawItems(); item; item = item->Next() )
+    {
+        if( item->Type() == SCH_COMPONENT_T )
+            components.push_back( static_cast<SCH_COMPONENT*>( item ) );
+    }
+
+    if( InvokeDialogUpdateFields( this, components, true ) )
+        m_canvas->Refresh();
 }
 
 

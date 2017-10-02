@@ -42,6 +42,7 @@
 
 #include <set>
 #include <vector>
+#include <list>
 
 class wxFrame;
 class wxDialog;
@@ -83,13 +84,17 @@ int InvokeDialogCreateBOM( SCH_EDIT_FRAME* aCaller );
 /// Create and show DIALOG_BOM_EDITOR
 void InvokeDialogCreateBOMEditor( SCH_EDIT_FRAME* aCaller );
 
+/// Update symbol fields
+int InvokeDialogUpdateFields( SCH_EDIT_FRAME* aCaller,
+        const std::list<SCH_COMPONENT*> aComponents, bool aCreateUndoEntry );
+
 /**
  * Function InvokeDialogNetList
  * creates and shows NETLIST_DIALOG and returns whatever
  * NETLIST_DIALOG::ShowModal() returns.
  * @param int - NET_PLUGIN_CHANGE means user added or deleted a plugin,
  *              wxID_OK, or wxID_CANCEL.
-*/
+ */
 #define NET_PLUGIN_CHANGE   1
 int InvokeDialogNetList( SCH_EDIT_FRAME* aCaller );
 

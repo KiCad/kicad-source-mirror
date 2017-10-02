@@ -46,6 +46,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_eeschema_options.cpp
     dialogs/dialog_erc.cpp
     dialogs/dialog_erc_base.cpp
+    dialogs/dialog_global_sym_lib_table_config.cpp
+    dialogs/dialog_global_sym_lib_table_config_base.cpp
     dialogs/dialog_lib_edit_draw_item.cpp
     dialogs/dialog_lib_edit_draw_item_base.cpp
     dialogs/dialog_libedit_options_base.cpp
@@ -74,8 +76,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_sym_lib_table_base.cpp
     dialogs/dialog_symbol_remap.cpp
     dialogs/dialog_symbol_remap_base.cpp
-    dialogs/dialog_global_sym_lib_table_config.cpp
-    dialogs/dialog_global_sym_lib_table_config_base.cpp
+    dialogs/dialog_update_fields.cpp
+    dialogs/dialog_update_fields_base.cpp
     )
 
 set( EESCHEMA_WIDGETS
