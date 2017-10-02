@@ -1006,28 +1006,16 @@ void SCH_EDIT_FRAME::OnLoadCmpToFootprintLinkFile( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnUpdateFields( wxCommandEvent& event )
 {
-    PICKED_ITEMS_LIST itemsList;
-    SCH_TYPE_COLLECTOR c;
-    c.Collect( GetScreen()->GetDrawItems(), SCH_COLLECTOR::ComponentsOnly );
+    std::list<SCH_COMPONENT*> components;
 
-    // Create a single undo buffer entry for all components
-    for( int i = 0; i < c.GetCount(); ++i )
+    for( SCH_ITEM* item = GetScreen()->GetDrawItems(); item; item = item->Next() )
     {
-        SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( c[i] );
-        itemsList.PushItem( ITEM_PICKER( component, UR_CHANGED ) );
+        if( item->Type() == SCH_COMPONENT_T )
+            components.push_back( static_cast<SCH_COMPONENT*>( item ) );
     }
 
-    SaveCopyInUndoList( itemsList, UR_CHANGED );
-
-    // Update fields
-    for( int i = 0; i < c.GetCount(); ++i )
-    {
-        SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( c[i] );
-        component->UpdateFields( false );
-    }
-
-    m_canvas->Refresh();
-    DisplayInfoMessage( this, _( "Fields updated successfully" ) );
+    if( InvokeDialogUpdateFields( this, components, true ) )
+        m_canvas->Refresh();
 }
 
 

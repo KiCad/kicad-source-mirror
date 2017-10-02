@@ -47,12 +47,14 @@
 #include <bitmaps.h>
 
 #include <dialog_edit_component_in_schematic_fbp.h>
+#include <invoke_sch_dialog.h>
 #ifdef KICAD_SPICE
 #include <dialog_spice_model.h>
 #include <netlist_exporter_pspice.h>
 #endif /* KICAD_SPICE */
 
 #include "common.h"
+#include <list>
 
 
 /**
@@ -154,6 +156,8 @@ private:
      */
     void updateDisplay()
     {
+        fieldListCtrl->DeleteAllItems();
+
         for( unsigned ii = 0; ii < m_FieldsBuf.size(); ii++ )
             setRowItem( ii, m_FieldsBuf[ii] );
     }
@@ -1207,41 +1211,22 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::UpdateFields( wxCommandEvent& event )
 {
-    if( !m_cmp )
-        return;
+    SCH_COMPONENT copy( *m_cmp );
+    std::list<SCH_COMPONENT*> components;
+    components.push_back( &copy );
+    InvokeDialogUpdateFields( m_parent, components, false );
 
-    LIB_PART* part = Prj().SchLibs()->FindLibPart( m_cmp->GetLibId() );
+    // Copy fields from the modified component copy to the dialog buffer
+    m_FieldsBuf.clear();
 
-    if( !part )
-        return;
-
-    LIB_FIELDS fields;
-    part->GetFields( fields );
-
-    for( const LIB_FIELD& field : fields )
+    for( int i = 0; i < copy.GetFieldCount(); ++i )
     {
-        if( field.GetName().IsEmpty() )
-            continue;
-
-        int idx = field.GetId();
-        SCH_FIELD* schField;
-
-        if( idx == REFERENCE )
-            continue;
-        else if( idx < MANDATORY_FIELDS )
-            schField = &m_FieldsBuf[idx];
-        else
-            schField = findField( field.GetName() );
-
-        if( !schField )
-        {
-            SCH_FIELD fld( wxPoint( 0, 0 ), m_FieldsBuf.size(), m_cmp, field.GetName() );
-            m_FieldsBuf.push_back( fld );
-            schField = &m_FieldsBuf.back();
-        }
-
-        schField->SetText( field.GetText() );
+        copy.m_Fields[i].SetParent( m_cmp );
+        m_FieldsBuf.push_back( copy.m_Fields[i] );
+        m_FieldsBuf[i].Offset( -m_cmp->m_Pos );
     }
 
+    // Update the selected field as well
+    copySelectedFieldToPanel();
     updateDisplay();
 }
