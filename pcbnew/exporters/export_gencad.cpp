@@ -434,6 +434,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
     for( unsigned i = 0; i<pads.size(); ++i )
     {
         D_PAD* pad = pads[i];
+        const wxPoint& off = pad->GetOffset();
 
         pad->SetSubRatsnest( pad_name_number );
 
@@ -454,13 +455,16 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         switch( pad->GetShape() )
         {
         default:
+            wxASSERT_MSG( false, "Pad type not implemented" );
+            // fall-through
+
         case PAD_SHAPE_CIRCLE:
             fprintf( aFile, " ROUND %g\n",
                      pad->GetDrillSize().x / SCALE_FACTOR );
             /* Circle is center, radius */
             fprintf( aFile, "CIRCLE %g %g %g\n",
-                    pad->GetOffset().x / SCALE_FACTOR,
-                    -pad->GetOffset().y / SCALE_FACTOR,
+                    off.x / SCALE_FACTOR,
+                    -off.y / SCALE_FACTOR,
                     pad->GetSize().x / (SCALE_FACTOR * 2) );
             break;
 
@@ -470,78 +474,95 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 
             // Rectangle is begin, size *not* begin, end!
             fprintf( aFile, "RECTANGLE %g %g %g %g\n",
-                    (-dx + pad->GetOffset().x ) / SCALE_FACTOR,
-                    (-dy - pad->GetOffset().y ) / SCALE_FACTOR,
+                    (-dx + off.x ) / SCALE_FACTOR,
+                    (-dy - off.y ) / SCALE_FACTOR,
                     dx / (SCALE_FACTOR / 2), dy / (SCALE_FACTOR / 2) );
             break;
 
-        case PAD_SHAPE_OVAL:     // Create outline by 2 lines and 2 arcs
+        case PAD_SHAPE_ROUNDRECT:
+        case PAD_SHAPE_OVAL:
             {
-                // OrCAD Layout call them OVAL or OBLONG - GenCAD call them FINGERs
-                fprintf( aFile, " FINGER %g\n",
-                         pad->GetDrillSize().x / SCALE_FACTOR );
-                int dr = dx - dy;
+                const wxSize& size = pad->GetSize();
+                int radius;
 
-                if( dr >= 0 )       // Horizontal oval
+                if( pad->GetShape() == PAD_SHAPE_ROUNDRECT )
+                    radius = pad->GetRoundRectCornerRadius();
+                else
+                    radius = std::min( size.x, size.y ) / 2;
+
+                int lineX = size.x / 2 - radius;
+                int lineY = size.y / 2 - radius;
+
+                fprintf( aFile, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
+
+                // bottom left arc
+                fprintf( aFile, "ARC %g %g %g %g %g %g\n",
+                        ( off.x - lineX - radius ) / SCALE_FACTOR,
+                        ( -off.y - lineY ) / SCALE_FACTOR, ( off.x - lineX ) / SCALE_FACTOR,
+                        ( -off.y - lineY - radius ) / SCALE_FACTOR,
+                        ( off.x - lineX ) / SCALE_FACTOR, ( -off.y - lineY ) / SCALE_FACTOR );
+
+                // bottom line
+                if( lineX > 0 )
                 {
-                    int radius = dy;
                     fprintf( aFile, "LINE %g %g %g %g\n",
-                             (-dr + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y - radius) / SCALE_FACTOR,
-                             (dr + pad->GetOffset().x ) / SCALE_FACTOR,
-                             (-pad->GetOffset().y - radius) / SCALE_FACTOR );
-
-                    // GenCAD arcs are (start, end, center)
-                    fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                             (dr + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y - radius) / SCALE_FACTOR,
-                             (dr + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y + radius) / SCALE_FACTOR,
-                             (dr + pad->GetOffset().x) / SCALE_FACTOR,
-                             -pad->GetOffset().y / SCALE_FACTOR );
-
-                    fprintf( aFile, "LINE %g %g %g %g\n",
-                             (dr + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y + radius) / SCALE_FACTOR,
-                             (-dr + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y + radius) / SCALE_FACTOR );
-                    fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                             (-dr + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y + radius) / SCALE_FACTOR,
-                             (-dr + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y - radius) / SCALE_FACTOR,
-                             (-dr + pad->GetOffset().x) / SCALE_FACTOR,
-                             -pad->GetOffset().y / SCALE_FACTOR );
+                            ( off.x - lineX ) / SCALE_FACTOR,
+                            ( -off.y - lineY - radius ) / SCALE_FACTOR,
+                            ( off.x + lineX ) / SCALE_FACTOR,
+                            ( -off.y - lineY - radius ) / SCALE_FACTOR );
                 }
-                else        // Vertical oval
-                {
-                    dr = -dr;
-                    int radius = dx;
-                    fprintf( aFile, "LINE %g %g %g %g\n",
-                             (-radius + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y - dr) / SCALE_FACTOR,
-                             (-radius + pad->GetOffset().x ) / SCALE_FACTOR,
-                             (-pad->GetOffset().y + dr) / SCALE_FACTOR );
-                    fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                             (-radius + pad->GetOffset().x ) / SCALE_FACTOR,
-                             (-pad->GetOffset().y + dr) / SCALE_FACTOR,
-                             (radius + pad->GetOffset().x ) / SCALE_FACTOR,
-                             (-pad->GetOffset().y + dr) / SCALE_FACTOR,
-                             pad->GetOffset().x / SCALE_FACTOR,
-                             (-pad->GetOffset().y + dr) / SCALE_FACTOR );
 
+                // bottom right arc
+                fprintf( aFile, "ARC %g %g %g %g %g %g\n",
+                        ( off.x + lineX ) / SCALE_FACTOR,
+                        ( -off.y - lineY - radius ) / SCALE_FACTOR,
+                        ( off.x + lineX + radius ) / SCALE_FACTOR,
+                        ( -off.y - lineY ) / SCALE_FACTOR, ( off.x + lineX ) / SCALE_FACTOR,
+                        ( -off.y - lineY ) / SCALE_FACTOR );
+
+                // right line
+                if( lineY > 0 )
+                {
                     fprintf( aFile, "LINE %g %g %g %g\n",
-                             (radius + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y + dr) / SCALE_FACTOR,
-                             (radius + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y - dr) / SCALE_FACTOR );
-                    fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                             (radius + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y - dr) / SCALE_FACTOR,
-                             (-radius + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y - dr) / SCALE_FACTOR,
-                             pad->GetOffset().x / SCALE_FACTOR,
-                             (-pad->GetOffset().y - dr) / SCALE_FACTOR );
+                            ( off.x + lineX + radius ) / SCALE_FACTOR,
+                            ( -off.y + lineY ) / SCALE_FACTOR,
+                            ( off.x + lineX + radius ) / SCALE_FACTOR,
+                            ( -off.y - lineY ) / SCALE_FACTOR );
+                }
+
+                // top right arc
+                fprintf( aFile, "ARC %g %g %g %g %g %g\n",
+                        ( off.x + lineX + radius ) / SCALE_FACTOR,
+                        ( -off.y + lineY ) / SCALE_FACTOR, ( off.x + lineX ) / SCALE_FACTOR,
+                        ( -off.y + lineY + radius ) / SCALE_FACTOR,
+                        ( off.x + lineX ) / SCALE_FACTOR, ( -off.y + lineY ) / SCALE_FACTOR );
+
+                // top line
+                if( lineX > 0 )
+                {
+                    fprintf( aFile, "LINE %g %g %g %g\n"
+                            , ( off.x - lineX ) / SCALE_FACTOR,
+                            ( -off.y + lineY + radius ) / SCALE_FACTOR,
+                            ( off.x + lineX ) / SCALE_FACTOR,
+                            ( -off.y + lineY + radius ) / SCALE_FACTOR );
+                }
+
+                // top left arc
+                fprintf( aFile, "ARC %g %g %g %g %g %g\n",
+                        ( off.x - lineX ) / SCALE_FACTOR,
+                        ( -off.y + lineY + radius ) / SCALE_FACTOR,
+                        ( off.x - lineX - radius ) / SCALE_FACTOR,
+                        ( -off.y + lineY ) / SCALE_FACTOR, ( off.x - lineX ) / SCALE_FACTOR,
+                        ( -off.y + lineY ) / SCALE_FACTOR );
+
+                // left line
+                if( lineY > 0 )
+                {
+                    fprintf( aFile, "LINE %g %g %g %g\n",
+                            ( off.x - lineX - radius ) / SCALE_FACTOR,
+                            ( -off.y - lineY ) / SCALE_FACTOR,
+                            ( off.x - lineX - radius ) / SCALE_FACTOR,
+                            ( -off.y + lineY ) / SCALE_FACTOR );
                 }
             }
             break;
