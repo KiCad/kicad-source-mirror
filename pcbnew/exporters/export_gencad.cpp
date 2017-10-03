@@ -1239,20 +1239,20 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module )
                     {
                         // Flipping Y flips the arc direction too
                         fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                                 (arcendx) / SCALE_FACTOR,
-                                 (Yaxis_sign * arcendy) / SCALE_FACTOR,
                                  (PtEdge->m_End0.x) / SCALE_FACTOR,
                                  (Yaxis_sign * PtEdge->GetEnd0().y) / SCALE_FACTOR,
+                                 (arcendx) / SCALE_FACTOR,
+                                 (Yaxis_sign * arcendy) / SCALE_FACTOR,
                                  (PtEdge->GetStart0().x) / SCALE_FACTOR,
                                  (Yaxis_sign * PtEdge->GetStart0().y) / SCALE_FACTOR );
                     }
                     else
                     {
                         fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                                 (PtEdge->GetEnd0().x) / SCALE_FACTOR,
-                                 (Yaxis_sign * PtEdge->GetEnd0().y) / SCALE_FACTOR,
                                  (arcendx) / SCALE_FACTOR,
                                  (Yaxis_sign * arcendy) / SCALE_FACTOR,
+                                 (PtEdge->GetEnd0().x) / SCALE_FACTOR,
+                                 (Yaxis_sign * PtEdge->GetEnd0().y) / SCALE_FACTOR,
                                  (PtEdge->GetStart0().x) / SCALE_FACTOR,
                                  (Yaxis_sign * PtEdge->GetStart0().y) / SCALE_FACTOR );
                     }
