@@ -94,6 +94,14 @@ static double parseEagle( const wxString& aDistance )
     return ret;
 }
 
+/// Assemble a two part key as a simple concatenation of aFirst and aSecond parts,
+/// using a separator.
+static string makeKey( const string& aFirst, const string& aSecond )
+{
+    string key = aFirst + '\x02' +  aSecond;
+    return key;
+}
+
 
 void ERULES::parse( wxXmlNode* aRules )
 {
@@ -457,7 +465,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 }
                 else
                 {
-                    wxPoint center = kicad_arc_center( start, end, *w.curve);
+                    wxPoint center = ConvertArcCenter( start, end, *w.curve );
 
                     dseg->SetShape( S_ARC );
                     dseg->SetStart( center );
@@ -465,7 +473,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     dseg->SetAngle( *w.curve * -10.0 ); // KiCad rotates the other way
                 }
 
-                dseg->SetTimeStamp( timeStamp( gr ) );
+                dseg->SetTimeStamp( EagleTimeStamp( gr ) );
                 dseg->SetLayer( layer );
                 dseg->SetWidth( Millimeter2iu( DEFAULT_PCB_EDGE_THICKNESS ) );
             }
@@ -484,7 +492,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 m_board->Add( pcbtxt, ADD_APPEND );
 
                 pcbtxt->SetLayer( layer );
-                pcbtxt->SetTimeStamp( timeStamp( gr ) );
+                pcbtxt->SetTimeStamp( EagleTimeStamp( gr ) );
                 pcbtxt->SetText( FROM_UTF8( t.text.c_str() ) );
                 pcbtxt->SetTextPos( wxPoint( kicad_x( t.x ), kicad_y( t.y ) ) );
 
@@ -592,7 +600,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 m_board->Add( dseg, ADD_APPEND );
 
                 dseg->SetShape( S_CIRCLE );
-                dseg->SetTimeStamp( timeStamp( gr ) );
+                dseg->SetTimeStamp( EagleTimeStamp( gr ) );
                 dseg->SetLayer( layer );
                 dseg->SetStart( wxPoint( kicad_x( c.x ), kicad_y( c.y ) ) );
                 dseg->SetEnd( wxPoint( kicad_x( c.x + c.radius ), kicad_y( c.y ) ) );
@@ -615,7 +623,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
                 m_board->Add( zone, ADD_APPEND );
 
-                zone->SetTimeStamp( timeStamp( gr ) );
+                zone->SetTimeStamp( EagleTimeStamp( gr ) );
                 zone->SetLayer( layer );
                 zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
@@ -853,9 +861,6 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 
         // copy constructor to clone the template
         MODULE* m = new MODULE( *mi->second );
-        // TODO currently not handled correctly for multisheet schematics
-        //m->SetTimeStamp( moduleTstamp( e.name, e.value ) );
-        //m->SetPath( modulePath( e.name, e.value ) );
         m_board->Add( m, ADD_APPEND );
 
         // update the nets within the pads of the clone
@@ -1239,7 +1244,7 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
         else
         {
             dwg = new EDGE_MODULE( aModule, S_ARC );
-            wxPoint center = kicad_arc_center( start, end, *w.curve);
+            wxPoint center = ConvertArcCenter( start, end, *w.curve );
 
             dwg->SetStart0( center );
             dwg->SetEnd0( start );
@@ -1365,7 +1370,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
         aModule->GraphicalItemsList().PushBack( txt );
     }
 
-    txt->SetTimeStamp( timeStamp( aTree ) );
+    txt->SetTimeStamp( EagleTimeStamp( aTree ) );
     txt->SetText( FROM_UTF8( t.text.c_str() ) );
 
     wxPoint pos( kicad_x( t.x ), kicad_y( t.y ) );
@@ -1461,7 +1466,7 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
         dwg->SetLayer( layer );
         dwg->SetWidth( 0 );
 
-        dwg->SetTimeStamp( timeStamp( aTree ) );
+        dwg->SetTimeStamp( EagleTimeStamp( aTree ) );
 
         std::vector<wxPoint> pts;
 
@@ -1505,9 +1510,10 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
         }
         */
 
+
         dwg->SetLayer( layer );
 
-        dwg->SetTimeStamp( timeStamp( aTree ) );
+        dwg->SetTimeStamp( EagleTimeStamp( aTree ) );
 
         std::vector<wxPoint> pts;
         // TODO: I think there's no way to know a priori the number of children in wxXmlNode :()
@@ -1558,7 +1564,7 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
     }
 
     gr->SetLayer( layer );
-    gr->SetTimeStamp( timeStamp( aTree ) );
+    gr->SetTimeStamp( EagleTimeStamp( aTree ) );
 
     gr->SetStart0( wxPoint( kicad_x( e.x ), kicad_y( e.y ) ) );
     gr->SetEnd0( wxPoint( kicad_x( e.x + e.radius ), kicad_y( e.y ) ) );
@@ -1710,7 +1716,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                 {
                     TRACK*  t = new TRACK( m_board );
 
-                    t->SetTimeStamp( timeStamp( netItem ) );
+                    t->SetTimeStamp( EagleTimeStamp( netItem ) );
 
                     t->SetPosition( wxPoint( kicad_x( w.x1 ), kicad_y( w.y1 ) ) );
                     t->SetEnd( wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
@@ -1788,7 +1794,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     else
                         via->SetViaType( VIA_BLIND_BURIED );
 
-                    via->SetTimeStamp( timeStamp( netItem ) );
+                    via->SetTimeStamp( EagleTimeStamp( netItem ) );
 
                     wxPoint pos( kicad_x( v.x ), kicad_y( v.y ) );
 
@@ -1834,7 +1840,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     m_board->Add( zone, ADD_APPEND );
                     zones.push_back( zone );
 
-                    zone->SetTimeStamp( timeStamp( netItem ) );
+                    zone->SetTimeStamp( EagleTimeStamp( netItem ) );
                     zone->SetLayer( layer );
                     zone->SetNetCode( netCode );
 

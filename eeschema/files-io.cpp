@@ -48,8 +48,6 @@
 #include <eeschema_config.h>
 #include <sch_legacy_plugin.h>
 #include <sch_eagle_plugin.h>
-#include <schframe.h>
-#include <netlist.h>
 
 
 //#define USE_SCH_LEGACY_IO_PLUGIN
@@ -634,7 +632,7 @@ bool SCH_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
     SCH_SHEET_LIST sheetList( g_RootSheet );
     SCH_SCREENS schematic;
 
-    switch( (SCH_IO_MGR::SCH_FILE_T)aFileType )
+    switch( (SCH_IO_MGR::SCH_FILE_T) aFileType )
     {
         case SCH_IO_MGR::SCH_EAGLE:
             // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
@@ -643,10 +641,8 @@ bool SCH_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
 
             if( !LockFile( fullFileName ) )
             {
-                wxString msg = wxString::Format( _(
-                                "Schematic file '%s' is already open." ),
-                        GetChars( fullFileName )
-                        );
+                wxString msg = wxString::Format( _( "Schematic file '%s' is already open." ),
+                        GetChars( fullFileName ) );
                 DisplayError( this, msg );
                 return false;
             }

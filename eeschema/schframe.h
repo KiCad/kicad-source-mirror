@@ -791,7 +791,7 @@ public:
      *  @param full filepath of file to be imported.
      *  @param aFileType SCH_FILE_T value for filetype
      */
-    bool ImportFile( const wxString& aFileName, int aFileType ) override ;
+    bool ImportFile( const wxString& aFileName, int aFileType ) override;
 
 private:
 

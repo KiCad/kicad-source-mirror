@@ -133,65 +133,38 @@ OPTIONAL_XML_ATTRIBUTE<T> parseOptionalAttribute( wxXmlNode* aNode, string aAttr
 }
 
 
-NODE_MAP MapChildren( wxXmlNode* currentNode )
+NODE_MAP MapChildren( wxXmlNode* aCurrentNode )
 {
     // Map node_name -> node_pointer
     NODE_MAP nodesMap;
 
     // Loop through all children mapping them in nodesMap
-    if( currentNode )
-        currentNode = currentNode->GetChildren();
+    if( aCurrentNode )
+        aCurrentNode = aCurrentNode->GetChildren();
 
-    while( currentNode )
+    while( aCurrentNode )
     {
         // Create a new pair in the map
         //      key: current node name
         //      value: current node pointer
-        nodesMap[currentNode->GetName().ToStdString()] = currentNode;
-
-        // Get next child
-        currentNode = currentNode->GetNext();
-    }
-
-    return nodesMap;
-}
-
-int CountChildren( wxXmlNode* aCurrentNode, const std::string& aName )
-{
-    // Map node_name -> node_pointer
-    int count = 0;
-
-    // Loop through all children counting them if they match the given name
-    aCurrentNode = aCurrentNode->GetChildren();
-
-    while( aCurrentNode )
-    {
-        if( aCurrentNode->GetName().ToStdString() == aName )
-            count++;
+        nodesMap[aCurrentNode->GetName().ToStdString()] = aCurrentNode;
 
         // Get next child
         aCurrentNode = aCurrentNode->GetNext();
     }
 
-    return count;
+    return nodesMap;
 }
 
 
-string makeKey( const string& aFirst, const string& aSecond )
-{
-    string key = aFirst + '\x02' +  aSecond;
-    return key;
-}
-
-
-unsigned long timeStamp( wxXmlNode* aTree )
+unsigned long EagleTimeStamp( wxXmlNode* aTree )
 {
     // in this case from a unique tree memory location
     return (unsigned long)(void*) aTree;
 }
 
 
-time_t moduleTstamp( const string& aName, const string& aValue, int aUnit )
+time_t EagleModuleTstamp( const string& aName, const string& aValue, int aUnit )
 {
     std::size_t h1 = std::hash<string>{}( aName );
     std::size_t h2 = std::hash<string>{}( aValue );
@@ -201,19 +174,7 @@ time_t moduleTstamp( const string& aName, const string& aValue, int aUnit )
 }
 
 
-string modulePath( const string& aName, const string& aValue )
-{
-    // TODO handle subsheet
-    std::ostringstream s;
-
-    s << '/' << std::setfill( '0' ) << std::uppercase << std::hex << std::setw( 8 )
-      << moduleTstamp( aName, aValue, 0 );
-
-    return s.str();
-}
-
-
-wxPoint kicad_arc_center( const wxPoint& aStart, const wxPoint& aEnd, double aAngle )
+wxPoint ConvertArcCenter( const wxPoint& aStart, const wxPoint& aEnd, double aAngle )
 {
     // Eagle give us start and end.
     // S_ARC wants start to give the center, and end to give the start.
@@ -231,27 +192,28 @@ wxPoint kicad_arc_center( const wxPoint& aStart, const wxPoint& aEnd, double aAn
     return center;
 }
 
-int parseAlignment( const wxString& alignment )
+
+static int parseAlignment( const wxString& aAlignment )
 {
     // (bottom-left | bottom-center | bottom-right | center-left |
     // center | center-right | top-left | top-center | top-right)
-    if( alignment == "center" )
+    if( aAlignment == "center" )
         return ETEXT::CENTER;
-    else if( alignment == "center-right" )
+    else if( aAlignment == "center-right" )
         return ETEXT::CENTER_RIGHT;
-    else if( alignment == "top-left" )
+    else if( aAlignment == "top-left" )
         return ETEXT::TOP_LEFT;
-    else if( alignment == "top-center" )
+    else if( aAlignment == "top-center" )
         return ETEXT::TOP_CENTER;
-    else if( alignment == "top-right" )
+    else if( aAlignment == "top-right" )
         return ETEXT::TOP_RIGHT;
-    else if( alignment == "bottom-left" )
+    else if( aAlignment == "bottom-left" )
         return ETEXT::BOTTOM_LEFT;
-    else if( alignment == "bottom-center" )
+    else if( aAlignment == "bottom-center" )
         return ETEXT::BOTTOM_CENTER;
-    else if( alignment == "bottom-right" )
+    else if( aAlignment == "bottom-right" )
         return ETEXT::BOTTOM_RIGHT;
-    else if( alignment == "center-left" )
+    else if( aAlignment == "center-left" )
         return ETEXT::CENTER_LEFT;
 
     return DEFAULT_ALIGNMENT;

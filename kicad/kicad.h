@@ -196,7 +196,7 @@ public:
     void RecreateBaseHToolbar();
 
     /**
-     *  Open dialog to import Eagle schematic and board files. 
+     *  Open dialog to import Eagle schematic and board files.
      */
     void OnImportEagleFiles( wxCommandEvent& event );
 

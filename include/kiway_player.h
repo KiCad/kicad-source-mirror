@@ -196,7 +196,6 @@ public:
      * Function ReadPcbNetlist
      *  provides access to PcbNew's function ReadPcbNetlist.
      */
-
     VTBL_ENTRY void ReadPcbNetlist( const wxString& aNetlistFileName,
             const wxString& aCmpFileName,
             REPORTER* aReporter,

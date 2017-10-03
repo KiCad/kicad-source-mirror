@@ -58,16 +58,6 @@ class LIB_PIN;
 class LIB_TEXT;
 
 
-
-/**
- * Class SCH_EAGLE_PLUGIN
- * is a #SCH_PLUGIN derivation for loading 6.x+ Eagle schematic files.
- *
- *
- * As with all SCH_PLUGINs there is no UI dependencies i.e. windowing
- * calls allowed.
- */
-
 typedef struct EAGLE_LIBRARY
 {
     std::string name;
@@ -75,16 +65,20 @@ typedef struct EAGLE_LIBRARY
     std::unordered_map<std::string, wxXmlNode*> SymbolNodes;
     std::unordered_map<std::string, int> GateUnit;
     std::unordered_map<std::string, std::string> package;
-
 } EAGLE_LIBRARY;
 
-typedef boost::ptr_map< std::string, EPART > EPART_LIST;
+typedef boost::ptr_map<std::string, EPART> EPART_LIST;
 
 
+/**
+ * Class SCH_EAGLE_PLUGIN
+ * is a #SCH_PLUGIN derivation for loading 6.x+ Eagle schematic files.
+ *
+ * As with all SCH_PLUGINs there is no UI dependencies i.e. windowing calls allowed.
+ */
 class SCH_EAGLE_PLUGIN : public SCH_PLUGIN
 {
 public:
-
     SCH_EAGLE_PLUGIN();
     ~SCH_EAGLE_PLUGIN();
 
@@ -100,7 +94,7 @@ public:
     bool CheckHeader( const wxString& aFileName ) override;
 
 
-// unimplemented functions. Will trigger a not_implemented IO error.
+    // unimplemented functions. Will trigger a not_implemented IO error.
     //void SaveLibrary( const wxString& aFileName, const PROPERTIES* aProperties = NULL ) override;
 
     //void Save( const wxString& aFileName, SCH_SCREEN* aSchematic, KIWAY* aKiway,
@@ -134,38 +128,43 @@ public:
 
     //void SymbolLibOptions( PROPERTIES* aListToAppendTo ) const override;
 
-
-
 private:
     void loadDrawing( wxXmlNode* aDrawingNode );
     void loadLayerDefs( wxXmlNode* aLayers );
     void loadSchematic( wxXmlNode* aSchematicNode );
     void loadSheet( wxXmlNode* aSheetNode, int sheetcount );
     void loadInstance( wxXmlNode* aInstanceNode );
-    //void loadModuleinst( wxXmlNode* aModuleinstNode ); // Eagle 8 feature that defines a replicatable schematic circuit and pcb layout. 
-    EAGLE_LIBRARY* loadLibrary( wxXmlNode* aLibraryNode, EAGLE_LIBRARY* elib);
+    EAGLE_LIBRARY* loadLibrary( wxXmlNode* aLibraryNode, EAGLE_LIBRARY* aEagleLib );
     void countNets( wxXmlNode* aSchematicNode );
-    void moveLabels( SCH_ITEM* wire, wxPoint newendpoint);
+
+    /// Moves any labels on the wire to the new end point of the wire.
+    void moveLabels( SCH_ITEM* aWire, const wxPoint& aNewEndPoint );
+
+    /// This function finds best way to place a bus entry symbol for when an Eagle wire segment
+    /// ends on an Eagle bus segment.
     void addBusEntries();
+
     static wxString fixNetName( const wxString& aNetName );
 
+    /// Return the matching layer or return LAYER_NOTES
     SCH_LAYER_ID kiCadLayer( int aEagleLayer );
-    wxPoint findNearestLinePoint(wxPoint aPoint, const DLIST< SCH_LINE >& lines);
+
+    wxPoint findNearestLinePoint( const wxPoint& aPoint, const DLIST<SCH_LINE>& aLines );
 
     void                loadSegments( wxXmlNode* aSegmentsNode, const wxString& aNetName,
-            const wxString& aNetClass );
+                                      const wxString& aNetClass );
     SCH_LINE*           loadWire( wxXmlNode* aWireNode );
     SCH_TEXT*           loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName, const DLIST< SCH_LINE >& segmentWires);
     SCH_JUNCTION*       loadJunction( wxXmlNode* aJunction );
     SCH_TEXT*           loadPlainText( wxXmlNode* aSchText );
 
-    bool            loadSymbol(wxXmlNode *aSymbolNode, std::unique_ptr< LIB_PART >& aPart, EDEVICE* aDevice, int aGateNumber, string aGateName);
-    LIB_CIRCLE*     loadSymbolCircle( std::unique_ptr< LIB_PART >& aPart, wxXmlNode* aCircleNode, int aGateNumber);
-    LIB_RECTANGLE*  loadSymbolRectangle( std::unique_ptr< LIB_PART >& aPart, wxXmlNode* aRectNode, int aGateNumber );
-    LIB_POLYLINE*   loadSymbolPolyLine( std::unique_ptr< LIB_PART >& aPart, wxXmlNode* aPolygonNode, int aGateNumber );
-    LIB_ITEM*       loadSymbolWire( std::unique_ptr< LIB_PART >& aPart, wxXmlNode* aWireNode, int aGateNumber);
-    LIB_PIN*        loadPin( std::unique_ptr< LIB_PART >& aPart, wxXmlNode*, EPIN* epin, int aGateNumber);
-    LIB_TEXT*       loadSymbolText(  std::unique_ptr< LIB_PART >& aPart, wxXmlNode* aLibText, int aGateNumber);
+    bool            loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_PART>& aPart, EDEVICE* aDevice, int aGateNumber, string aGateName );
+    LIB_CIRCLE*     loadSymbolCircle( std::unique_ptr<LIB_PART>& aPart, wxXmlNode* aCircleNode, int aGateNumber );
+    LIB_RECTANGLE*  loadSymbolRectangle( std::unique_ptr<LIB_PART>& aPart, wxXmlNode* aRectNode, int aGateNumber );
+    LIB_POLYLINE*   loadSymbolPolyLine( std::unique_ptr<LIB_PART>& aPart, wxXmlNode* aPolygonNode, int aGateNumber );
+    LIB_ITEM*       loadSymbolWire( std::unique_ptr<LIB_PART>& aPart, wxXmlNode* aWireNode, int aGateNumber );
+    LIB_PIN*        loadPin( std::unique_ptr<LIB_PART>& aPart, wxXmlNode*, EPIN* epin, int aGateNumber );
+    LIB_TEXT*       loadSymbolText( std::unique_ptr<LIB_PART>& aPart, wxXmlNode* aLibText, int aGateNumber );
 
     KIWAY* m_kiway;      ///< For creating sub sheets.
     SCH_SHEET* m_rootSheet; ///< The root sheet of the schematic being loaded..
@@ -175,12 +174,10 @@ private:
     PART_LIB* m_partlib; ///< symbol library for imported file.
 
     EPART_MAP m_partlist;
-    std::map<std::string, EAGLE_LIBRARY> m_eaglelibraries;
+    std::map<std::string, EAGLE_LIBRARY> m_eagleLibs;
 
-    std::map<std::string, int > m_NetCounts;
-    std::map<int, SCH_LAYER_ID> m_LayerMap;
-
-protected:
+    std::map<std::string, int> m_netCounts;
+    std::map<int, SCH_LAYER_ID> m_layerMap;
 };
 
 #endif  // _SCH_EAGLE_PLUGIN_H_

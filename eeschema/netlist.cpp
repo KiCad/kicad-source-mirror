@@ -110,9 +110,9 @@ void SCH_EDIT_FRAME::sendNetlist()
 
 
 bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
-        unsigned aNetlistOptions, REPORTER* aReporter, bool silent )
+        unsigned aNetlistOptions, REPORTER* aReporter, bool aSilent )
 {
-    if( !silent ) // checks for errors and invokes annotation dialog as neccessary
+    if( !aSilent ) // checks for errors and invokes annotation dialog as neccessary
     {
         if( !prepareForNetlist() )
             return false;
@@ -133,7 +133,6 @@ bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
 
     return success;
 }
-
 
 
 //#define NETLIST_DEBUG

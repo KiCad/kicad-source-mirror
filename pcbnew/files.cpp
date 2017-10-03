@@ -96,10 +96,10 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
         IO_MGR::PCB_FILE_T  pluginType;
     } loaders[] =
     {
-        { PcbFileWildcard,          IO_MGR::KICAD_SEXP },    // Current Kicad board files
-        { LegacyPcbFileWildcard,    IO_MGR::LEGACY },   // Old Kicad board files
-        { EaglePcbFileWildcard,     IO_MGR::EAGLE },    // Import board files
-        { PCadPcbFileWildcard,      IO_MGR::PCAD },     // Import board files
+        { PcbFileWildcard,          IO_MGR::KICAD_SEXP },   // Current Kicad board files
+        { LegacyPcbFileWildcard,    IO_MGR::LEGACY },       // Old Kicad board files
+        { EaglePcbFileWildcard,     IO_MGR::EAGLE },        // Import board files
+        { PCadPcbFileWildcard,      IO_MGR::PCAD },         // Import board files
     };
 
     wxFileName  fileName( *aFileName );

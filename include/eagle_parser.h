@@ -50,6 +50,7 @@ using std::string;
 class MODULE;
 struct EINSTANCE;
 struct EPART;
+struct ETEXT;
 
 typedef std::unordered_map<string, wxXmlNode*> NODE_MAP;
 typedef std::map<string, MODULE*> MODULE_MAP;
@@ -358,35 +359,16 @@ public:
  * @return NODE_MAP - a map linking the name of each children to the children itself (via a
  *                  wxXmlNode*)
  */
-NODE_MAP MapChildren( wxXmlNode* currentNode );
-
-
-/**
- * Function CountChildren
- * provides an easy access to the children of an XML node via their names.
- * @param  aCurrentNode is a pointer to a wxXmlNode, whose children will be mapped.
- * @param aName the name of the specific child names to be counted.
- * @return number of children with the give node name.
- */
-int CountChildren( wxXmlNode* aCurrentNode, const std::string& aName );
-
-/// Assemble a two part key as a simple concatenation of aFirst and aSecond parts,
-/// using a separator.
-string makeKey( const string& aFirst, const string& aSecond );
+NODE_MAP MapChildren( wxXmlNode* aCurrentNode );
 
 /// Make a unique time stamp
-unsigned long timeStamp( wxXmlNode* aTree );
+unsigned long EagleTimeStamp( wxXmlNode* aTree );
 
 /// Computes module timestamp basing on its name, value and unit
-time_t moduleTstamp( const string& aName, const string& aValue, int aUnit );
-
-/// Returns module path using the module timestamp
-// TODO does not handle multisheet schematics correctly
-string modulePath( const string& aName, const string& aValue );
+time_t EagleModuleTstamp( const string& aName, const string& aValue, int aUnit );
 
 /// Convert an Eagle curve end to a KiCad center for S_ARC
-wxPoint kicad_arc_center( const wxPoint& aStart, const wxPoint& aEnd, double aAngle );
-
+wxPoint ConvertArcCenter( const wxPoint& aStart, const wxPoint& aEnd, double aAngle );
 
 // Pre-declare for typedefs
 struct EROT;
@@ -396,8 +378,6 @@ typedef OPTIONAL_XML_ATTRIBUTE<int>     opt_int;
 typedef OPTIONAL_XML_ATTRIBUTE<double>  opt_double;
 typedef OPTIONAL_XML_ATTRIBUTE<bool>    opt_bool;
 typedef OPTIONAL_XML_ATTRIBUTE<EROT>    opt_erot;
-
-
 
 
 // All of the 'E'STRUCTS below merely hold Eagle XML information verbatim, in binary.
@@ -475,6 +455,7 @@ struct EWIRE
     EWIRE( wxXmlNode* aWire );
 };
 
+
 /// Eagle Junction
 struct EJUNCTION
 {
@@ -483,6 +464,7 @@ struct EJUNCTION
 
     EJUNCTION( wxXmlNode* aJunction);
 };
+
 
 /// Eagle label
 struct ELABEL
@@ -615,7 +597,7 @@ struct ETEXT
         BOTTOM_RIGHT  = -TOP_LEFT,
     };
 
-    opt_int     align;
+    opt_int align;
 
     ETEXT( wxXmlNode* aText );
 };
@@ -668,6 +650,7 @@ struct ESMD
     ESMD( wxXmlNode* aSMD );
 };
 
+
 /// Eagle pin element
 struct EPIN
 {
@@ -684,6 +667,7 @@ struct EPIN
 
     EPIN( wxXmlNode* aPin );
 };
+
 
 /// Eagle vertex
 struct EVERTEX
@@ -835,7 +819,6 @@ struct EAGLE_LAYER
 };
 
 
-
 struct EPART
 {
     /*
@@ -884,6 +867,7 @@ struct EINSTANCE
 
     EINSTANCE( wxXmlNode* aInstance );
 };
+
 
 struct EGATE
 {
@@ -941,7 +925,7 @@ struct ECONNECT
 };
 
 
-typedef struct EDEVICE
+struct EDEVICE
 {
     /*
     <!ELEMENT device (connects?, technologies?)>
@@ -956,7 +940,8 @@ typedef struct EDEVICE
     std::vector<ECONNECT> connects;
 
     EDEVICE( wxXmlNode* aDevice );
-} EDEVICE;
+};
+
 
 struct EDEVICE_SET
 {
@@ -978,7 +963,6 @@ struct EDEVICE_SET
 
     EDEVICE_SET( wxXmlNode* aDeviceSet );
 };
-
 
 
 #endif // _EAGLE_PARSER_H_

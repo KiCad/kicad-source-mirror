@@ -61,6 +61,32 @@ using std::string;
 
 using namespace std;
 
+/**
+ * Provides an easy access to the children of an XML node via their names.
+ * @param aCurrentNode is a pointer to a wxXmlNode, whose children will be mapped.
+ * @param aName the name of the specific child names to be counted.
+ * @return number of children with the give node name.
+ */
+static int countChildren( wxXmlNode* aCurrentNode, const std::string& aName )
+{
+    // Map node_name -> node_pointer
+    int count = 0;
+
+    // Loop through all children counting them if they match the given name
+    aCurrentNode = aCurrentNode->GetChildren();
+
+    while( aCurrentNode )
+    {
+        if( aCurrentNode->GetName().ToStdString() == aName )
+            count++;
+
+        // Get next child
+        aCurrentNode = aCurrentNode->GetNext();
+    }
+
+    return count;
+}
+
 
 void SCH_EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
 {
@@ -100,39 +126,31 @@ void SCH_EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
 
         if( elayer.name == "Nets" )
         {
-            m_LayerMap[elayer.number] = LAYER_WIRE;
+            m_layerMap[elayer.number] = LAYER_WIRE;
         }
         else if( elayer.name == "Info" || elayer.name == "Guide" )
         {
-            m_LayerMap[elayer.number] = LAYER_NOTES;
+            m_layerMap[elayer.number] = LAYER_NOTES;
         }
         else if( elayer.name == "Busses" )
         {
-            m_LayerMap[elayer.number] = LAYER_BUS;
+            m_layerMap[elayer.number] = LAYER_BUS;
         }
     }
 }
 
 
-// Return the matching layer or return LAYER_NOTES
 SCH_LAYER_ID SCH_EAGLE_PLUGIN::kiCadLayer( int aEagleLayer )
 {
-    if( m_LayerMap.find( aEagleLayer ) == m_LayerMap.end() )
-    {
-        return LAYER_NOTES;
-    }
-    else
-    {
-        return m_LayerMap[aEagleLayer];
-    }
+    auto it = m_layerMap.find( aEagleLayer );
+    return it == m_layerMap.end() ? LAYER_NOTES : it->second;
 }
 
 
 // Return the kicad component orientation based on eagle rotation degrees.
 static COMPONENT_ORIENTATION_T kiCadComponentRotation( float eagleDegrees )
 {
-    int roti = int(eagleDegrees);
-
+    int roti = int( eagleDegrees );
 
     switch( roti )
     {
@@ -157,30 +175,26 @@ static COMPONENT_ORIENTATION_T kiCadComponentRotation( float eagleDegrees )
 
 
 // Calculate text alignment based on the given Eagle text alignment parameters.
-void eagleToKicadAlignment( EDA_TEXT* aText,
-        int aEagleAlignment,
-        int reldegrees,
-        bool mirror,
-        bool spin,
-        int absdegrees )
+static void eagleToKicadAlignment( EDA_TEXT* aText, int aEagleAlignment,
+        int aRelDegress, bool aMirror, bool aSpin, int aAbsDegress )
 {
     int align = aEagleAlignment;
 
-    if( reldegrees == 90 )
+    if( aRelDegress == 90 )
     {
         aText->SetTextAngle( 900 );
     }
-    else if( reldegrees == 180 )
+    else if( aRelDegress == 180 )
         align = -align;
-    else if( reldegrees == 270 )
+    else if( aRelDegress == 270 )
     {
         aText->SetTextAngle( 900 );
         align = -align;
     }
 
-    if( mirror == true )
+    if( aMirror == true )
     {
-        if( absdegrees == 90 || absdegrees == 270 )
+        if( aAbsDegress == 90 || aAbsDegress == 270 )
         {
             if( align == ETEXT::BOTTOM_RIGHT )
                 align = ETEXT::TOP_RIGHT;
@@ -191,7 +205,7 @@ void eagleToKicadAlignment( EDA_TEXT* aText,
             else if( align == ETEXT::TOP_RIGHT )
                 align = ETEXT::BOTTOM_RIGHT;
         }
-        else if( absdegrees == 0 || absdegrees == 180 )
+        else if( aAbsDegress == 0 || aAbsDegress == 180 )
         {
             if( align == ETEXT::BOTTOM_RIGHT )
                 align = ETEXT::BOTTOM_LEFT;
@@ -207,7 +221,6 @@ void eagleToKicadAlignment( EDA_TEXT* aText,
                 align = ETEXT::CENTER_LEFT;
         }
     }
-
 
     switch( align )
     {
@@ -291,12 +304,6 @@ int SCH_EAGLE_PLUGIN::GetModifyHash() const
     return 0;
 }
 
-
-/*
- *  void SCH_EAGLE_PLUGIN::SaveLibrary( const wxString& aFileName, const PROPERTIES* aProperties )
- *  {
- *  }
- */
 
 SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
         SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
@@ -416,15 +423,14 @@ void SCH_EAGLE_PLUGIN::countNets( wxXmlNode* aSchematicNode )
         {
             std::string netName = netNode->GetAttribute( "name" ).ToStdString();
 
-            if( m_NetCounts.count( netName ) )
-                m_NetCounts[netName] = m_NetCounts[netName] + 1;
+            if( m_netCounts.count( netName ) )
+                m_netCounts[netName] = m_netCounts[netName] + 1;
             else
-                m_NetCounts[netName] = 1;
+                m_netCounts[netName] = 1;
 
             // Get next net
             netNode = netNode->GetNext();
         }
-
 
         sheetNode = sheetNode->GetNext();
     }
@@ -455,10 +461,10 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
         // Read the library name
         wxString libName = libraryNode->GetAttribute( "name" );
 
-        EAGLE_LIBRARY* elib = &m_eaglelibraries[libName.ToStdString()];
+        EAGLE_LIBRARY* elib = &m_eagleLibs[libName.ToStdString()];
         elib->name = libName.ToStdString();
 
-        loadLibrary( libraryNode, &m_eaglelibraries[libName.ToStdString()] );
+        loadLibrary( libraryNode, &m_eagleLibs[libName.ToStdString()] );
 
         libraryNode = libraryNode->GetNext();
     }
@@ -470,7 +476,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
     // Loop through all the sheets
     wxXmlNode* sheetNode = schematicChildren["sheets"]->GetChildren();
 
-    int sheet_count = CountChildren( schematicChildren["sheets"], "sheet" );
+    int sheet_count = countChildren( schematicChildren["sheets"], "sheet" );
 
     // If eagle schematic has multiple sheets.
 
@@ -527,7 +533,6 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     NODE_MAP sheetChildren = MapChildren( aSheetNode );
 
     // Get description node
-
     wxXmlNode* descriptionNode = getChildrenNodes( sheetChildren, "description" );
 
     wxString des;
@@ -689,7 +694,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
     wxXmlNode* currentSegment = aSegmentsNode->GetChildren();
     SCH_SCREEN* screen = m_currentSheet->GetScreen();
 
-    int segmentCount = CountChildren( aSegmentsNode, "segment" );
+    int segmentCount = countChildren( aSegmentsNode, "segment" );
 
     // wxCHECK( screen, [>void<] );
     while( currentSegment )
@@ -759,7 +764,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
             wxString netname = fixNetName( netName );
 
             // Add a global label if the net appears on more than one Eagle sheet
-            if( m_NetCounts[netName.ToStdString()]>1 )
+            if( m_netCounts[netName.ToStdString()]>1 )
             {
                 std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
                 glabel->SetPosition( wire->MidPoint() );
@@ -841,7 +846,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode,
 
 
     // Determine if the Label is a local and global label based on the number of sheets the net appears on.
-    if( m_NetCounts[aNetName.ToStdString()]>1 )
+    if( m_netCounts[aNetName.ToStdString()]>1 )
     {
         std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
         glabel->SetPosition( elabelpos );
@@ -944,13 +949,13 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode,
 }
 
 
-wxPoint SCH_EAGLE_PLUGIN::findNearestLinePoint( const wxPoint aPoint, const DLIST<SCH_LINE>& lines )
+wxPoint SCH_EAGLE_PLUGIN::findNearestLinePoint( const wxPoint& aPoint, const DLIST<SCH_LINE>& aLines )
 {
     wxPoint nearestPoint;
 
     float   mindistance = std::numeric_limits<float>::max();
     float   d;
-    SCH_LINE* line = lines.begin();
+    SCH_LINE* line = aLines.begin();
 
     // Find the nearest start, middle or end of a line from the list of lines.
     while( line != NULL )
@@ -1011,10 +1016,10 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     sntemp.Replace( "*", "" );
     std::string symbolname = sntemp.ToStdString();
 
-    int unit = m_eaglelibraries[libraryname].GateUnit[gatename];
+    int unit = m_eagleLibs[libraryname].GateUnit[gatename];
 
     std::string package;
-    EAGLE_LIBRARY* elib = &m_eaglelibraries[libraryname];
+    EAGLE_LIBRARY* elib = &m_eagleLibs[libraryname];
 
     auto p = elib->package.find( symbolname );
 
@@ -1035,7 +1040,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     component->SetUnit( unit );
     component->SetPosition( wxPoint( einstance.x * EUNIT_TO_MIL, -einstance.y * EUNIT_TO_MIL ) );
     component->GetField( FOOTPRINT )->SetText( wxString( package ) );
-    component->SetTimeStamp( moduleTstamp( einstance.part, epart->value ? *epart->value : "",
+    component->SetTimeStamp( EagleModuleTstamp( einstance.part, epart->value ? *epart->value : "",
                     unit ) );
 
     if( einstance.rot )
@@ -1096,8 +1101,8 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
         smashed = einstance.smashed.Get();
     }
 
-    bool    valueAttributeFound = false;
-    bool    nameAttributeFound  = false;
+    bool valueAttributeFound = false;
+    bool nameAttributeFound  = false;
 
 
     wxXmlNode* attributeNode = aInstanceNode->GetChildren();
@@ -1127,16 +1132,13 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
                 field->SetPosition( wxPoint( *attr.x * EUNIT_TO_MIL, *attr.y * -EUNIT_TO_MIL ) );
                 int align = attr.align ? *attr.align : ETEXT::BOTTOM_LEFT;
-
                 int absdegrees = attr.rot ? attr.rot->degrees : 0;
                 bool mirror = attr.rot ? attr.rot->mirror : false;
 
-                if( einstance.rot )
-                    if( einstance.rot->mirror )
-                    {
-                        mirror = !mirror;
-                    }
-
+                if( einstance.rot && einstance.rot->mirror )
+                {
+                    mirror = !mirror;
+                }
 
 
                 bool spin = attr.rot ? attr.rot->spin : false;
@@ -1173,17 +1175,10 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 }
 
 
-/*
- *  void SCH_EAGLE_PLUGIN::loadModuleinst( wxXmlNode* aModuleinstNode )
- *  {
- *  }
- */
-
 EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
         EAGLE_LIBRARY* aEagleLibrary )
 {
     NODE_MAP libraryChildren = MapChildren( aLibraryNode );
-
 
     // Loop through the symbols and load each of them
     wxXmlNode* symbolNode = libraryChildren["symbols"]->GetChildren();
@@ -1218,24 +1213,15 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
             wxString symbolName = wxString( edeviceset.name + edevice.name );
             symbolName.Replace( "*", "" );
 
-
-            std::string symbolname = symbolName.ToStdString();
-
-            std::string package;
-
             if( edevice.package )
-            {
-                package = edevice.package.Get();
-                aEagleLibrary->package[symbolname] = package;
-            }
-
+                aEagleLibrary->package[symbolName.ToStdString()] = edevice.package.Get();
 
             // Create KiCad symbol.
             unique_ptr<LIB_PART> kpart( new LIB_PART( symbolName ) );
 
             // Process each gate in the deviceset for this device.
             wxXmlNode* gateNode = getChildrenNodes( aDeviceSetChildren, "gates" );
-            int gates_count = CountChildren( aDeviceSetChildren["gates"], "gate" );
+            int gates_count = countChildren( aDeviceSetChildren["gates"], "gate" );
             kpart->SetUnitCount( gates_count );
 
             LIB_FIELD* reference = kpart->GetField( REFERENCE );
@@ -1249,17 +1235,14 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
                 reference->SetText( prefix );
             }
 
-            int gateindex;
+            int gateindex = 1;
             bool ispower = false;
-
-            gateindex = 1;
 
             while( gateNode )
             {
                 EGATE egate = EGATE( gateNode );
 
                 aEagleLibrary->GateUnit[edeviceset.name + edevice.name + egate.name] = gateindex;
-
 
                 ispower = loadSymbol( aEagleLibrary->SymbolNodes[egate.symbol],
                         kpart, &edevice, gateindex, egate.name );
@@ -1514,7 +1497,7 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_PART>& aPart,
     if( ewire.curve )
     {
         std::unique_ptr<LIB_ARC> arc( new LIB_ARC( aPart.get() ) );
-        wxRealPoint center = kicad_arc_center( begin, end, *ewire.curve * -1 );
+        wxRealPoint center = ConvertArcCenter( begin, end, *ewire.curve * -1 );
 
         arc->SetPosition( center );
 
@@ -1632,22 +1615,15 @@ LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( std::unique_ptr<LIB_PART>& a
 
 LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( std::unique_ptr<LIB_PART>& aPart,
         wxXmlNode* aPin,
-        EPIN* epin,
+        EPIN* aEPin,
         int aGateNumber )
 {
     std::unique_ptr<LIB_PIN> pin( new LIB_PIN( aPart.get() ) );
-
-
-    pin->SetPosition( wxPoint( epin->x * EUNIT_TO_MIL, epin->y * EUNIT_TO_MIL ) );
-    pin->SetName( epin->name );
+    pin->SetPosition( wxPoint( aEPin->x * EUNIT_TO_MIL, aEPin->y * EUNIT_TO_MIL ) );
+    pin->SetName( aEPin->name );
     pin->SetUnit( aGateNumber );
 
-    int roti = 0;
-
-    if( epin->rot )
-    {
-        roti = int(epin->rot->degrees);
-    }
+    int roti = aEPin->rot ? aEPin->rot->degrees : 0;
 
     switch( roti )
     {
@@ -1672,9 +1648,9 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( std::unique_ptr<LIB_PART>& aPart,
         break;
     }
 
-    if( epin->length )
+    if( aEPin->length )
     {
-        wxString length = epin->length.Get();
+        wxString length = aEPin->length.Get();
 
         if( length =="short" )
         {
@@ -1695,9 +1671,9 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( std::unique_ptr<LIB_PART>& aPart,
     }
 
     // emaulate the visibility of pin elements
-    if( epin->visible )
+    if( aEPin->visible )
     {
-        wxString visible = epin->visible.Get();
+        wxString visible = aEPin->visible.Get();
 
         if( visible == "off" )
         {
@@ -1720,9 +1696,9 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( std::unique_ptr<LIB_PART>& aPart,
          */
     }
 
-    if( epin->function )
+    if( aEPin->function )
     {
-        wxString function = epin->function.Get();
+        wxString function = aEPin->function.Get();
 
         if( function == "dot" )
         {
@@ -1765,14 +1741,11 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymbolText( std::unique_ptr<LIB_PART>& aPart,
     }
 
     int align = etext.align ? *etext.align : ETEXT::BOTTOM_LEFT;
-
-
     int degrees = etext.rot ? etext.rot->degrees : 0;
-    bool    mirror = etext.rot ? etext.rot->mirror : false;
-    bool    spin = etext.rot ? etext.rot->spin : false;
+    bool mirror = etext.rot ? etext.rot->mirror : false;
+    bool spin = etext.rot ? etext.rot->spin : false;
 
     eagleToKicadAlignment( (EDA_TEXT*) libtext.get(), align, degrees, mirror, spin, 0 );
-
 
     return libtext.release();
 }
@@ -1781,9 +1754,7 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymbolText( std::unique_ptr<LIB_PART>& aPart,
 SCH_TEXT* SCH_EAGLE_PLUGIN::loadPlainText( wxXmlNode* aSchText )
 {
     std::unique_ptr<SCH_TEXT> schtext( new SCH_TEXT() );
-
     auto etext = ETEXT( aSchText );
-
 
     schtext->SetItalic( false );
     schtext->SetPosition( wxPoint( etext.x * EUNIT_TO_MIL, -etext.y * EUNIT_TO_MIL ) );
@@ -1806,14 +1777,11 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadPlainText( wxXmlNode* aSchText )
 
 
     int align = etext.align ? *etext.align : ETEXT::BOTTOM_LEFT;
-
-
     int degrees = etext.rot ? etext.rot->degrees : 0;
-    bool    mirror = etext.rot ? etext.rot->mirror : false;
-    bool    spin = etext.rot ? etext.rot->spin : false;
+    bool mirror = etext.rot ? etext.rot->mirror : false;
+    bool spin = etext.rot ? etext.rot->spin : false;
 
     eagleToKicadAlignment( (EDA_TEXT*) schtext.get(), align, degrees, mirror, spin, 0 );
-
 
     return schtext.release();
 }
@@ -1837,32 +1805,28 @@ bool SCH_EAGLE_PLUGIN::CheckHeader( const wxString& aFileName )
 }
 
 
-// Moves any labels on the wire to the new end point of the wire.
-void SCH_EAGLE_PLUGIN::moveLabels( SCH_ITEM* wire, wxPoint newendpoint )
+void SCH_EAGLE_PLUGIN::moveLabels( SCH_ITEM* aWire, const wxPoint& aNewEndPoint )
 {
     for( SCH_ITEM* item = m_currentSheet->GetScreen()->GetDrawItems(); item; item = item->Next() )
     {
         if( item->Type() == SCH_LABEL_T || item->Type() == SCH_GLOBAL_LABEL_T )
         {
-            if( TestSegmentHit( item->GetPosition(), ( (SCH_LINE*) wire )->GetStartPoint(),
-                        ( (SCH_LINE*) wire )->GetEndPoint(), 0 ) )
+            if( TestSegmentHit( item->GetPosition(), ( (SCH_LINE*) aWire )->GetStartPoint(),
+                        ( (SCH_LINE*) aWire )->GetEndPoint(), 0 ) )
             {
-                item->SetPosition( newendpoint );
+                item->SetPosition( aNewEndPoint );
             }
         }
     }
 }
 
 
-// This monster of a function finds best way to place a bus entry symbol for when an Eagle wire segment
-// ends on an Eagle bus segment
 void SCH_EAGLE_PLUGIN::addBusEntries()
 {
     // Add bus entry symbols
 
     // for each wire segment, compare each end with all busess.
     // If the wire end is found to end on a bus segment, place a bus entry symbol.
-
 
     for( SCH_ITEM* bus = m_currentSheet->GetScreen()->GetDrawItems(); bus; bus = bus->Next() )
     {
@@ -1880,7 +1844,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
 
         SCH_ITEM* nextline;
 
-        for(  SCH_ITEM* line = m_currentSheet->GetScreen()->GetDrawItems(); line; line = nextline )
+        for( SCH_ITEM* line = m_currentSheet->GetScreen()->GetDrawItems(); line; line = nextline )
         {
             nextline = line->Next();
 
@@ -2437,76 +2401,3 @@ wxString SCH_EAGLE_PLUGIN::fixNetName( const wxString& aNetName )
 
     return ret;
 }
-
-
-// The below functions are not overriden and will trigger an assert if called for this plugin.
-/*
- *  void SCH_EAGLE_PLUGIN::Save( const wxString& aFileName, SCH_SCREEN* aSchematic, KIWAY* aKiway,
- *       const PROPERTIES* aProperties )
- *  {
- *  }
- *
- *
- *  size_t SCH_EAGLE_PLUGIN::GetSymbolLibCount( const wxString& aLibraryPath,
- *       const PROPERTIES* aProperties )
- *  {
- *   return 0;
- *  }
- *
- *
- *  void SCH_EAGLE_PLUGIN::EnumerateSymbolLib( wxArrayString& aAliasNameList,
- *       const wxString& aLibraryPath,
- *       const PROPERTIES* aProperties )
- *  {
- *  }
- *
- *
- *  LIB_ALIAS* SCH_EAGLE_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
- *       const PROPERTIES* aProperties )
- *  {
- *   return nullptr;
- *  }
- *
- *
- *  void SCH_EAGLE_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
- *       const PROPERTIES* aProperties )
- *  {
- *  }
- *
- *
- *  void SCH_EAGLE_PLUGIN::DeleteAlias( const wxString& aLibraryPath, const wxString& aAliasName,
- *       const PROPERTIES* aProperties )
- *  {
- *  }
- *
- *
- *  void SCH_EAGLE_PLUGIN::DeleteSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
- *       const PROPERTIES* aProperties )
- *  {
- *  }
- *
- *
- *  void SCH_EAGLE_PLUGIN::CreateSymbolLib( const wxString& aLibraryPath,
- *       const PROPERTIES* aProperties )
- *  {
- *  }
- *
- *
- *  bool SCH_EAGLE_PLUGIN::DeleteSymbolLib( const wxString& aLibraryPath,
- *       const PROPERTIES* aProperties )
- *  {
- *   return false;
- *  }
- *
- *
- *  bool SCH_EAGLE_PLUGIN::IsSymbolLibWritable( const wxString& aLibraryPath )
- *  {
- *   return false;
- *  }
- *
- *
- *  void SCH_EAGLE_PLUGIN::SymbolLibOptions( PROPERTIES* aListToAppendTo ) const
- *  {
- *  }
- *
- */
