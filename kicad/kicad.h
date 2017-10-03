@@ -195,6 +195,9 @@ public:
     void ReCreateMenuBar() override;
     void RecreateBaseHToolbar();
 
+    /**
+     *  Open dialog to import Eagle schematic and board files. 
+     */
     void OnImportEagleFiles( wxCommandEvent& event );
 
     /**

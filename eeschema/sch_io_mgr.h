@@ -488,8 +488,6 @@ public:
     /**
      * Function CheckHeader
      * returns true if the first line in @a aFileName begins with the expected header
-     * system libraries are read only because of where they are installed.)
-     *
      * @param aFileName is the name of the file to use as input
      *
      */

@@ -1,0 +1,39 @@
+Eagle Plugin Implementation Notes.  2017 Russell Oliver
+
+Below is some notes on the correspondence between Eagle schematics and symbols libraries and the
+KiCad equivalent.
+
+Eagle libraries are a many to many listing of symbols and footprints connected by a device set and
+device definitions. They are embedded in the schematic and board files if there are used, and
+therefore the schematic symbols and footprints can be recovered from either file.
+
+An Eagle device set definition is the information needed to represent a physical part at the
+schematic level including the functional gates of the device. Each gate is lists the symbol to be
+displayed for that gate. This is equivalent to a KiCad symbol unit. Since the symbol is defined
+outside of the device set, multiple devices sets in the library can use the same symbol for a gate.
+Lower to a device set, is the device definition. This establishes the link between the schematic
+symbols and a physical part through the 'connect' elements. These map the symbol pins for each gate
+to the physical pins provided by the package (footprint) definition. An Eagle Symbol outlines the
+layout of graphical of items including pins.  Pins for multi gate symbols are generally labelled
+per their function, i.e. input / output. An Eagle symbol pin is not numbered but merely labelled. A
+connect element gives the pad number for each pin found in that gate.  Therefore the equivalent
+KiCad pin number is read from the connect element pad number. Since an Eagle gate is equivalent to
+a KiCad symbol unit, the graphical items for that unit will be copied from the Eagle symbol for
+that gate and will be unique for that unit. This will yield duplication of the graphical elements
+if the same symbol is used for multiple gates but the conversion will be complete.
+
+An Eagle sheet contains a list of instances, which are equivalent to KiCad schematic component
+entries. An instance describes the part, the gate used and its location on the sheet. This is
+translated into the equivalent KiCad symbol with the given unit number.
+
+Eagle 'plain' items describe graphical items with no electrical connection, such as note text,
+lines etc. Of importance is the use of wire elements to describe both electrical connections and
+graphical items. A wire element will act as an electrical connection when defined within a net and
+segment. Anywhere else it is a graphical line. The layer for the wire element will change the
+displayed colour for the wire. Connections between regular wires and busses occur when a wire ends
+on a bus segment. When translated to KiCad a bus connection symbol is created. Within an Eagle
+schematic there can be multiple sheets in a flat hierarchy. For each sheet, there is a list of
+electrically connected nets. Each net is broken up into graphically connected segments, defined by
+a list of wires and labels. Labels remain associate with wires of that net segment, even if they
+are not located on a wire element. This necessitates the movement of such a label to the nearest
+wire segment within KiCad.

@@ -96,7 +96,7 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
         IO_MGR::PCB_FILE_T  pluginType;
     } loaders[] =
     {
-        { PcbFileWildcard,          IO_MGR::KICAD },    // Current Kicad board files
+        { PcbFileWildcard,          IO_MGR::KICAD_SEXP },    // Current Kicad board files
         { LegacyPcbFileWildcard,    IO_MGR::LEGACY },   // Old Kicad board files
         { EaglePcbFileWildcard,     IO_MGR::EAGLE },    // Import board files
         { PCadPcbFileWildcard,      IO_MGR::PCAD },     // Import board files
@@ -396,7 +396,7 @@ IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl )
     }
     else
     {
-        pluginType = IO_MGR::KICAD;
+        pluginType = IO_MGR::KICAD_SEXP;
     }
 
     return pluginType;
@@ -469,7 +469,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     IO_MGR::PCB_FILE_T  pluginType = plugin_type( fullFileName, aCtl );
 
-    bool converted =  pluginType != IO_MGR::LEGACY && pluginType != IO_MGR::KICAD;
+    bool converted =  pluginType != IO_MGR::LEGACY && pluginType != IO_MGR::KICAD_SEXP;
 
     if( !converted )
     {
@@ -711,7 +711,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
     try
     {
-        PLUGIN::RELEASER    pi( IO_MGR::PluginFind( IO_MGR::KICAD ) );
+        PLUGIN::RELEASER    pi( IO_MGR::PluginFind( IO_MGR::KICAD_SEXP ) );
 
         wxASSERT( pcbFileName.IsAbsolute() );
 
@@ -790,7 +790,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName )
 
     try
     {
-        PLUGIN::RELEASER    pi( IO_MGR::PluginFind( IO_MGR::KICAD ) );
+        PLUGIN::RELEASER    pi( IO_MGR::PluginFind( IO_MGR::KICAD_SEXP ) );
 
         wxASSERT( pcbFileName.IsAbsolute() );
 
@@ -864,23 +864,32 @@ bool PCB_EDIT_FRAME::doAutoSave()
     return false;
 }
 
-bool PCB_EDIT_FRAME::ImportFile( const wxString aFileName )
+
+bool PCB_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
 {
-    if( OpenProjectFiles( std::vector<wxString>( 1, aFileName ),
-                KICTL_EAGLE_BRD ) )
+    switch( (IO_MGR::PCB_FILE_T) aFileType )
     {
-        wxString projectpath = Kiway().Prj().GetProjectPath();
-        wxFileName newfilename = Prj().AbsolutePath( Prj().GetProjectName() );
+    case IO_MGR::EAGLE:
+        if( OpenProjectFiles( std::vector<wxString>( 1, aFileName ),
+                    KICTL_EAGLE_BRD ) )
+        {
+            wxString projectpath = Kiway().Prj().GetProjectPath();
+            wxFileName newfilename = Prj().AbsolutePath( Prj().GetProjectName() );
 
-        newfilename.SetExt( KiCadPcbFileExtension );
+            newfilename.SetExt( KiCadPcbFileExtension );
 
+            GetBoard()->SetFileName( newfilename.GetFullPath() );
+            UpdateTitle();
 
-        GetBoard()->SetFileName( newfilename.GetFullPath() );
-        UpdateTitle();
+            ArchiveModulesOnBoard( true, newfilename.GetName() );
 
-        ArchiveModulesOnBoard( true, newfilename.GetName() );
+            return true;
+        }
 
-        return true;
+        return false;
+
+    default:
+        return false;
     }
 
     return false;

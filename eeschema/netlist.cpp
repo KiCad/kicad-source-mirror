@@ -112,12 +112,12 @@ void SCH_EDIT_FRAME::sendNetlist()
 bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
         unsigned aNetlistOptions, REPORTER* aReporter, bool silent )
 {
-    if( !silent )
+    if( !silent ) // checks for errors and invokes annotation dialog as neccessary
     {
         if( !prepareForNetlist() )
             return false;
     }
-    else
+    else // performs similar function as prepareForNetlist but without a dialog.
     {
         SCH_SCREENS schematic;
         schematic.UpdateSymbolLinks();

@@ -866,9 +866,11 @@ public:
 
     /**
      * Function ImportFile
-     * import a board file and sets file path to current project path.
+     *  load the given filename but sets the path to the current project path.
+     *  @param full filepath of file to be imported.
+     *  @param aFileType PCB_FILE_T value for filetype
      */
-    bool ImportFile( const wxString aFileName) override;
+    bool ImportFile( const wxString& aFileName, int aFileType ) override;
 
     /**
      * Function SavePcbFile

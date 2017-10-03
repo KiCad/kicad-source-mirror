@@ -785,7 +785,13 @@ public:
 
     bool IsSearchCacheObsolete( const SCH_FIND_REPLACE_DATA& aSearchCriteria );
 
-    bool ImportFile( const wxString aFileName ) override ;
+    /**
+     * Function ImportFile
+     *  load the given filename but sets the path to the current project path.
+     *  @param full filepath of file to be imported.
+     *  @param aFileType SCH_FILE_T value for filetype
+     */
+    bool ImportFile( const wxString& aFileName, int aFileType ) override ;
 
 private:
 

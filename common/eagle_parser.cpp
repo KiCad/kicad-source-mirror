@@ -156,6 +156,26 @@ NODE_MAP MapChildren( wxXmlNode* currentNode )
     return nodesMap;
 }
 
+int CountChildren( wxXmlNode* aCurrentNode, const std::string& aName )
+{
+    // Map node_name -> node_pointer
+    int count = 0;
+
+    // Loop through all children counting them if they match the given name
+    aCurrentNode = aCurrentNode->GetChildren();
+
+    while( aCurrentNode )
+    {
+        if( aCurrentNode->GetName().ToStdString() == aName )
+            count++;
+
+        // Get next child
+        aCurrentNode = aCurrentNode->GetNext();
+    }
+
+    return count;
+}
+
 
 string makeKey( const string& aFirst, const string& aSecond )
 {
@@ -211,31 +231,32 @@ wxPoint kicad_arc_center( const wxPoint& aStart, const wxPoint& aEnd, double aAn
     return center;
 }
 
-int parseAlignment(wxString alignment)
+int parseAlignment( const wxString& alignment )
 {
     // (bottom-left | bottom-center | bottom-right | center-left |
-    //   center | center-right | top-left | top-center | top-right)
+    // center | center-right | top-left | top-center | top-right)
     if( alignment == "center" )
         return ETEXT::CENTER;
     else if( alignment == "center-right" )
-        return  ETEXT::CENTER_RIGHT;
+        return ETEXT::CENTER_RIGHT;
     else if( alignment == "top-left" )
-        return  ETEXT::TOP_LEFT;
+        return ETEXT::TOP_LEFT;
     else if( alignment == "top-center" )
-        return  ETEXT::TOP_CENTER;
+        return ETEXT::TOP_CENTER;
     else if( alignment == "top-right" )
-        return  ETEXT::TOP_RIGHT;
+        return ETEXT::TOP_RIGHT;
     else if( alignment == "bottom-left" )
-        return  ETEXT::BOTTOM_LEFT;
+        return ETEXT::BOTTOM_LEFT;
     else if( alignment == "bottom-center" )
-        return  ETEXT::BOTTOM_CENTER;
+        return ETEXT::BOTTOM_CENTER;
     else if( alignment == "bottom-right" )
-        return  ETEXT::BOTTOM_RIGHT;
+        return ETEXT::BOTTOM_RIGHT;
     else if( alignment == "center-left" )
-        return  ETEXT::CENTER_LEFT;
+        return ETEXT::CENTER_LEFT;
 
     return DEFAULT_ALIGNMENT;
 }
+
 
 // convert textsize method.
 wxSize convertTextSize(ETEXT& etext ) {
@@ -909,7 +930,7 @@ EDEVICE::EDEVICE( wxXmlNode* aDevice )
 };
 
 
-EDEVICESET::EDEVICESET( wxXmlNode* aDeviceSet )
+EDEVICE_SET::EDEVICE_SET( wxXmlNode* aDeviceSet )
 {
     /*
     <!ELEMENT deviceset (description?, gates, devices)>

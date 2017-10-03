@@ -180,10 +180,12 @@ public:
     }
 
     /**
-     * Function OpenProjectFiles
+     * Function ImportFile
      *  load the given filename but sets the path to the current project path.
+     *  @param full filepath of file to be imported.
+     *  @param aFileType enum value for filetype
      */
-    VTBL_ENTRY bool ImportFile( const wxString aFileName)
+    VTBL_ENTRY bool ImportFile( const wxString& aFileName, int aFileType )
     {
         // overload me for your wxFrame type.
 
@@ -192,7 +194,7 @@ public:
 
     /**
      * Function ReadPcbNetlist
-     *  provides access to PcbNew's function.
+     *  provides access to PcbNew's function ReadPcbNetlist.
      */
 
     VTBL_ENTRY void ReadPcbNetlist( const wxString& aNetlistFileName,
@@ -209,7 +211,7 @@ public:
 
     /**
      * Function ReadPcbNetlist
-     *  provides access to Eeschema's function.
+     *  provides access to Eeschema's function CreateNetlist.
      */
     VTBL_ENTRY bool CreateNetlist( int aFormat,
             const wxString& aFullFileName,

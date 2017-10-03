@@ -144,7 +144,7 @@ static IO_MGR::PCB_FILE_T detect_file_type( FILE* aFile, const wxFileName& aFile
 
     if( !strncasecmp( line, "(module", strlen( "(module" ) ) )
     {
-        file_type = IO_MGR::KICAD;
+        file_type = IO_MGR::KICAD_SEXP;
         *aName = aFileName.GetName();
     }
     else if( !strncasecmp( line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) )
@@ -240,7 +240,7 @@ MODULE* try_load_footprint( const wxFileName& aFileName, IO_MGR::PCB_FILE_T aFil
         module = parse_module_with_plugin( aFileName, aFileType, aName );
         break;
 
-    case IO_MGR::KICAD:
+    case IO_MGR::KICAD_SEXP:
         module = parse_module_kicad( aFileName );
         break;
 
@@ -479,8 +479,8 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
     }
 
 
-    // We can save fp libs only using IO_MGR::KICAD format (.pretty libraries)
-    IO_MGR::PCB_FILE_T  piType = IO_MGR::KICAD;
+    // We can save fp libs only using IO_MGR::KICAD_SEXP format (.pretty libraries)
+    IO_MGR::PCB_FILE_T  piType = IO_MGR::KICAD_SEXP;
 
     try
     {
@@ -635,7 +635,7 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString&
         if( libPath.IsEmpty() )     // Aborted
             return;
 
-        IO_MGR::PCB_FILE_T  piType = IO_MGR::KICAD;
+        IO_MGR::PCB_FILE_T  piType = IO_MGR::KICAD_SEXP;
         PLUGIN::RELEASER  pi( IO_MGR::PluginFind( piType ) );
 
         for( MODULE* curr_fp = GetBoard()->m_Modules; curr_fp; curr_fp = curr_fp->Next() )

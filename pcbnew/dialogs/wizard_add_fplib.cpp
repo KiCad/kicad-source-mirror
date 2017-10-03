@@ -65,7 +65,7 @@ static const struct
     IO_MGR::PCB_FILE_T m_Plugin;
 } fileFilters[FILTER_COUNT] =
 {
-    { "KiCad (folder with .kicad_mod files)",   "kicad_mod",   false,   IO_MGR::KICAD },
+    { "KiCad (folder with .kicad_mod files)",   "kicad_mod",   false,   IO_MGR::KICAD_SEXP },
     { "Eagle 6.x (*.lbr)",                      "lbr",         true,    IO_MGR::EAGLE },
     { "KiCad legacy (*.mod)",                   "mod",         true,    IO_MGR::LEGACY },
     { "Geda (folder with *.fp files)",          "fp",          false,   IO_MGR::GEDA_PCB },
@@ -206,7 +206,7 @@ wxString WIZARD_FPLIB_TABLE::LIBRARY::GetPluginName() const
         case IO_MGR::LEGACY:
             return wxT( "Legacy" );
 
-        case IO_MGR::KICAD:
+        case IO_MGR::KICAD_SEXP:
             return wxT( "KiCad" );
 
         case IO_MGR::EAGLE:
@@ -544,7 +544,7 @@ void WIZARD_FPLIB_TABLE::OnWizardFinished( wxWizardEvent& aEvent )
                 wxString path = it->GetAbsolutePath();
                 path.Replace( GetGithubURL(), getDownloadDir() );
                 it->setPath( path );
-                it->setPluginType( IO_MGR::KICAD );
+                it->setPluginType( IO_MGR::KICAD_SEXP );
             }
         }
     }
@@ -654,7 +654,7 @@ bool WIZARD_FPLIB_TABLE::downloadGithubLibsFromList( wxArrayString& aUrlList,
         try
         {
             PLUGIN::RELEASER src( IO_MGR::PluginFind( IO_MGR::GITHUB ) );
-            PLUGIN::RELEASER dst( IO_MGR::PluginFind( IO_MGR::KICAD ) );
+            PLUGIN::RELEASER dst( IO_MGR::PluginFind( IO_MGR::KICAD_SEXP ) );
 
             wxArrayString footprints;
 

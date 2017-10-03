@@ -623,59 +623,66 @@ bool SCH_EDIT_FRAME::doAutoSave()
     return autoSaveOk;
 }
 
-bool SCH_EDIT_FRAME::ImportFile( const wxString aFileName)
+
+bool SCH_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
 {
-    wxString    fullFileName( aFileName );
-
-    // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
-    wxASSERT_MSG( wxFileName( fullFileName ).IsAbsolute(),
-        wxT( "Import eagle schematic caller didn't send full filename" ) );
-
-    if( !LockFile( fullFileName ) )
-    {
-        wxString msg = wxString::Format( _(
-                "Schematic file '%s' is already open." ),
-                GetChars( fullFileName )
-                );
-        DisplayError( this, msg );
-        return false;
-    }
+    wxString fullFileName( aFileName );
 
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi;
-
-   pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ) );
-
-
-
-
-    g_RootSheet = pi->Load( fullFileName, &Kiway() );
-
-
-    wxString projectpath = Kiway().Prj().GetProjectPath();
-    wxFileName newfilename = Prj().AbsolutePath( Prj().GetProjectName() );
-
-    newfilename.SetExt( SchematicFileExtension );
-
-    m_CurrentSheet->clear();
-    m_CurrentSheet->push_back( g_RootSheet );
-    SetScreen( m_CurrentSheet->LastScreen() );
-
-    g_RootSheet->SetFileName( newfilename.GetFullPath() );
-    GetScreen()->SetFileName( newfilename.GetFullPath() );
-    GetScreen()->SetModify();
-
+    wxString projectpath;
+    wxFileName newfilename;
     SCH_SHEET_LIST sheetList( g_RootSheet );
     SCH_SCREENS schematic;
 
-    UpdateFileHistory( fullFileName );
-    schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
-    GetScreen()->TestDanglingEnds();    // Only perform the dangling end test on root sheet.
+    switch( (SCH_IO_MGR::SCH_FILE_T)aFileType )
+    {
+        case SCH_IO_MGR::SCH_EAGLE:
+            // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
+            wxASSERT_MSG( wxFileName( fullFileName ).IsAbsolute(),
+                    wxT( "Import eagle schematic caller didn't send full filename" ) );
 
-    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
-    Zoom_Automatique( false );
-    SetSheetNumberAndCount();
-    m_canvas->Refresh( true );
-    UpdateTitle();
+            if( !LockFile( fullFileName ) )
+            {
+                wxString msg = wxString::Format( _(
+                                "Schematic file '%s' is already open." ),
+                        GetChars( fullFileName )
+                        );
+                DisplayError( this, msg );
+                return false;
+            }
 
-    return true;
+            pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ) );
+
+            g_RootSheet = pi->Load( fullFileName, &Kiway() );
+
+            projectpath = Kiway().Prj().GetProjectPath();
+            newfilename = Prj().AbsolutePath( Prj().GetProjectName() );
+
+            newfilename.SetExt( SchematicFileExtension );
+
+            m_CurrentSheet->clear();
+            m_CurrentSheet->push_back( g_RootSheet );
+            SetScreen( m_CurrentSheet->LastScreen() );
+
+            g_RootSheet->SetFileName( newfilename.GetFullPath() );
+            GetScreen()->SetFileName( newfilename.GetFullPath() );
+            GetScreen()->SetModify();
+
+            UpdateFileHistory( fullFileName );
+            schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
+            GetScreen()->TestDanglingEnds();    // Only perform the dangling end test on root sheet.
+
+            GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
+            Zoom_Automatique( false );
+            SetSheetNumberAndCount();
+            m_canvas->Refresh( true );
+            UpdateTitle();
+
+            return true;
+
+        default:
+            return false;
+    }
+
+    return false;
 }

@@ -210,7 +210,7 @@ public:
      *               aData is empty, the attribute is understood as unavailable; otherwise, the
      *               conversion to T is tried.
      */
-    OPTIONAL_XML_ATTRIBUTE( wxString aData )
+    OPTIONAL_XML_ATTRIBUTE( const wxString& aData )
     {
         m_isAvailable = !aData.IsEmpty();
 
@@ -243,7 +243,7 @@ public:
      * @param aData is a wxString that should be converted to T. If the string is empty, the
      *              attribute is set to unavailable.
      */
-    OPTIONAL_XML_ATTRIBUTE<T>& operator =( wxString aData )
+    OPTIONAL_XML_ATTRIBUTE<T>& operator =( const wxString& aData )
     {
         m_isAvailable = !aData.IsEmpty();
 
@@ -282,7 +282,7 @@ public:
      * tries to convert a string to the base type.
      * @param aString is the string that will be converted to the base type.
      */
-    void Set( wxString aString )
+    void Set( const wxString& aString )
     {
         m_data = Convert<T>( aString );
     }
@@ -359,6 +359,16 @@ public:
  *                  wxXmlNode*)
  */
 NODE_MAP MapChildren( wxXmlNode* currentNode );
+
+
+/**
+ * Function CountChildren
+ * provides an easy access to the children of an XML node via their names.
+ * @param  aCurrentNode is a pointer to a wxXmlNode, whose children will be mapped.
+ * @param aName the name of the specific child names to be counted.
+ * @return number of children with the give node name.
+ */
+int CountChildren( wxXmlNode* aCurrentNode, const std::string& aName );
 
 /// Assemble a two part key as a simple concatenation of aFirst and aSecond parts,
 /// using a separator.
@@ -948,7 +958,7 @@ typedef struct EDEVICE
     EDEVICE( wxXmlNode* aDevice );
 } EDEVICE;
 
-struct EDEVICESET
+struct EDEVICE_SET
 {
     /*
     <!ELEMENT deviceset (description?, gates, devices)>
@@ -966,7 +976,7 @@ struct EDEVICESET
     //std::vector<EGATE> gates;
 
 
-    EDEVICESET( wxXmlNode* aDeviceSet );
+    EDEVICE_SET( wxXmlNode* aDeviceSet );
 };
 
 

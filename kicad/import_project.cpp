@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * @author Russell Oliver <roliver8143@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
  */
 
 /**
- * @file eagle_project.cpp
+ * @file import_project.cpp
  * @brief routines for importing an eagle project
  */
 
@@ -45,6 +45,8 @@
 #include <stdexcept>
 #include "pgm_kicad.h"
 
+#include <io_mgr.h>
+#include <sch_io_mgr.h>
 #include <wxPcbStruct.h>
 #include <schframe.h>
 #include <netlist.h>
@@ -143,7 +145,7 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
             }
         }
 
-        schframe->ImportFile( sch_filename );
+        schframe->ImportFile( sch_filename, SCH_IO_MGR::SCH_EAGLE );
 
         if( !schframe->IsShown() )      // the frame exists, (created by the dialog field editor)
                                         // but no project loaded.
@@ -182,7 +184,7 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
         // if the frame is not visible, the board is not yet loaded
         if( !pcbframe->IsVisible() )
         {
-            pcbframe->ImportFile(  pcb.GetFullPath() );
+            pcbframe->ImportFile(  pcb.GetFullPath(), IO_MGR::EAGLE );
             pcbframe->Show( true );
         }
 

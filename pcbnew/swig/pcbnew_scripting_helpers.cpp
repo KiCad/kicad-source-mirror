@@ -60,7 +60,7 @@ void ScriptingSetPcbEditFrame( PCB_EDIT_FRAME* aPcbEditFrame )
 BOARD* LoadBoard( wxString& aFileName )
 {
     if( aFileName.EndsWith( wxT( ".kicad_pcb" ) ) )
-        return LoadBoard( aFileName, IO_MGR::KICAD );
+        return LoadBoard( aFileName, IO_MGR::KICAD_SEXP );
 
     else if( aFileName.EndsWith( wxT( ".brd" ) ) )
         return LoadBoard( aFileName, IO_MGR::LEGACY );
@@ -95,7 +95,7 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard, IO_MGR::PCB_FILE_T aFormat )
 
 bool SaveBoard( wxString& aFileName, BOARD* aBoard )
 {
-    return SaveBoard( aFileName, aBoard, IO_MGR::KICAD );
+    return SaveBoard( aFileName, aBoard, IO_MGR::KICAD_SEXP );
 }
 
 
