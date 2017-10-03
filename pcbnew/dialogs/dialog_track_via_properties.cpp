@@ -61,8 +61,6 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     m_haveUniqueNet = true;
     int prevNet = -1;
 
-    printf("Create!\n");
-
     m_NetComboBox->SetBoard( aParent->GetBoard() );
     m_NetComboBox->Enable( true );
 
