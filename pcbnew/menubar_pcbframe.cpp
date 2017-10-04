@@ -337,7 +337,7 @@ void preparePlaceMenu( wxMenu* aParentMenu )
     AddMenuItem( aParentMenu, ID_PCB_ADD_LINE_BUTT,
                  _( "&Line or Polygon" ),
                  _( "Add graphic line or polygon" ),
-                 KiBitmap( add_dashed_line_xpm ) );
+                 KiBitmap( add_polygon_xpm ) );
 
     aParentMenu->AppendSeparator();
 
