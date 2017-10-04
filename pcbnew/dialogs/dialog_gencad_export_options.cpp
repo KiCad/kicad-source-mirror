@@ -127,7 +127,8 @@ void DIALOG_GENCAD_EXPORT_OPTIONS::createOptCheckboxes()
 {
     std::map<GENCAD_EXPORT_OPT, wxString> opts =
     {
-        { FLIP_BOTTOM_LAYERS, _( "Flip layer stack for bottom components" ) }
+        { FLIP_BOTTOM_LAYERS,   _( "Flip layer stack for bottom components" ) },
+        { UNIQUE_PIN_NAMES,     _( "Generate unique pin names" ) }
     };
 
     for( const auto& option : opts )

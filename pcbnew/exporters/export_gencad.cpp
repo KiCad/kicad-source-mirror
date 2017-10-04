@@ -226,6 +226,7 @@ const static double SCALE_FACTOR = 1000.0 * IU_PER_MILS;
 
 // Export options
 bool flipBottomLayers;
+bool uniquePins;
 
 /* Two helper functions to calculate coordinates of modules in gencad values
  * (GenCAD Y axis from bottom to top)
@@ -261,6 +262,7 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
 
     // Get options
     flipBottomLayers = optionsDialog.GetOption( FLIP_BOTTOM_LAYERS );
+    uniquePins = optionsDialog.GetOption( UNIQUE_PIN_NAMES );
 
     // Switch the locale to standard C (needed to print floating point numbers)
     LOCALE_IO toggle;
@@ -637,6 +639,9 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
 
     for( module = aPcb->m_Modules; module; module = module->Next() )
     {
+        // already emitted pins to check for duplicates
+        std::set<wxString> pins;
+
         FootprintWriteShape( aFile, module );
 
         for( pad = module->PadsList(); pad; pad = pad->Next() )
@@ -661,6 +666,23 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
 
             if( pinname.IsEmpty() )
                 pinname = wxT( "none" );
+
+            if( uniquePins )
+            {
+                int suffix = 0;
+                wxString origPinname( pinname );
+
+                auto it = pins.find( pinname );
+
+                while( it != pins.end() )
+                {
+                    pinname = wxString::Format( "%s_%d", origPinname, suffix );
+                    ++suffix;
+                    it = pins.find( pinname );
+                }
+
+                pins.insert( pinname );
+            }
 
             double orient = pad->GetOrientation() - module->GetOrientation();
             NORMALIZE_ANGLE_POS( orient );
