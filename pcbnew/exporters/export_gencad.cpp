@@ -543,10 +543,22 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
             break;
 
         case PAD_SHAPE_TRAPEZOID:
-            fprintf( aFile, " POLYGON %g\n",
-                     pad->GetDrillSize().x / SCALE_FACTOR );
+            {
+                fprintf( aFile, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
 
-            // XXX TO BE IMPLEMENTED! and I don't know if it could be actually imported by something
+                wxPoint poly[4];
+                pad->BuildPadPolygon( poly, wxSize( 0, 0 ), 0 );
+
+                for( int cur = 0; cur < 4; ++cur )
+                {
+                    int next = ( cur + 1 ) % 4;
+                    fprintf( aFile, "LINE %g %g %g %g\n",
+                            ( off.x + poly[cur].x ) / SCALE_FACTOR,
+                            ( -off.y - poly[cur].y ) / SCALE_FACTOR,
+                            ( off.x + poly[next].x ) / SCALE_FACTOR,
+                            ( -off.y - poly[next].y ) / SCALE_FACTOR );
+                }
+            }
             break;
         }
     }
