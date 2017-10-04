@@ -33,7 +33,7 @@ class wxTextCtrl;
 ///> Settings for GenCAD exporter
 enum GENCAD_EXPORT_OPT
 {
-    FLIP_BOTTOM_COMPONENTS, // flip components geometry instead of using MIRRORX directive
+    FLIP_BOTTOM_PADS,       // flip bottom components padstacks geometry
     UNIQUE_PIN_NAMES        // generate unique pin names
 };
 
