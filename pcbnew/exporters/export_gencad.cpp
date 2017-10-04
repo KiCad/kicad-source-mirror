@@ -40,6 +40,7 @@
 #include <macros.h>
 
 #include <pcbnew.h>
+#include <dialogs/dialog_gencad_export_options.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -223,6 +224,8 @@ static int GencadOffsetX, GencadOffsetY;
 // GerbTool chokes on units different than INCH so this is the conversion factor
 const static double SCALE_FACTOR = 1000.0 * IU_PER_MILS;
 
+// Export options
+bool flipBottomLayers;
 
 /* Two helper functions to calculate coordinates of modules in gencad values
  * (GenCAD Y axis from bottom to top)
@@ -242,30 +245,22 @@ static double MapYTo( int aY )
 /* Driver function: processing starts here */
 void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
 {
-    wxFileName  fn = GetBoard()->GetFileName();
-    FILE*       file;
+    DIALOG_GENCAD_EXPORT_OPTIONS optionsDialog( this );
 
-    wxString    ext = wxT( "cad" );
-    wxString    wildcard = _( "GenCAD 1.4 board files (.cad)|*.cad" );
-
-    fn.SetExt( ext );
-
-    wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
-
-    wxFileDialog dlg( this, _( "Save GenCAD Board File" ), pro_dir,
-                      fn.GetFullName(), wildcard,
-                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
+    if( optionsDialog.ShowModal() == wxID_CANCEL )
         return;
 
-    if( ( file = wxFopen( dlg.GetPath(), wxT( "wt" ) ) ) == NULL )
-    {
-        wxString    msg;
+    FILE* file = wxFopen( optionsDialog.GetFileName(), "wt" );
 
-        msg.Printf( _( "Unable to create <%s>" ), GetChars( dlg.GetPath() ) );
-        DisplayError( this, msg ); return;
+    if( !file )
+    {
+        DisplayError( this, wxString::Format( _( "Unable to create <%s>" ),
+                    GetChars( optionsDialog.GetFileName() ) ) );
+        return;
     }
+
+    // Get options
+    flipBottomLayers = optionsDialog.GetOption( FLIP_BOTTOM_LAYERS );
 
     // Switch the locale to standard C (needed to print floating point numbers)
     LOCALE_IO toggle;
@@ -606,14 +601,17 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         }
 
         // Flipped padstack
-        fprintf( aFile, "PADSTACK PAD%uF %g\n", i, pad->GetDrillSize().x / SCALE_FACTOR );
-
-        // the normal PCB_LAYER_ID sequence is inverted from gc_seq[]
-        for( LSEQ seq = pad_set.Seq();  seq;  ++seq )
+        if( flipBottomLayers )
         {
-            PCB_LAYER_ID layer = *seq;
+            fprintf( aFile, "PADSTACK PAD%uF %g\n", i, pad->GetDrillSize().x / SCALE_FACTOR );
 
-            fprintf( aFile, "PAD P%u %s 0 0\n", i, GenCADLayerNameFlipped( cu_count, layer ).c_str() );
+            // the normal PCB_LAYER_ID sequence is inverted from gc_seq[]
+            for( LSEQ seq = pad_set.Seq();  seq;  ++seq )
+            {
+                PCB_LAYER_ID layer = *seq;
+
+                fprintf( aFile, "PAD P%u %s 0 0\n", i, GenCADLayerNameFlipped( cu_count, layer ).c_str() );
+            }
         }
     }
 
@@ -652,11 +650,11 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
 
             if( ( pad->GetLayerSet() & all_cu ) == LSET( B_Cu ) )
             {
-                layer = module->GetLayer() == B_Cu ? "TOP" : "BOTTOM";
+                layer = flipBottomLayers && module->GetLayer() == B_Cu ? "TOP" : "BOTTOM";
             }
             else if( ( pad->GetLayerSet() & all_cu ) == LSET( F_Cu ) )
             {
-                layer = module->GetLayer() == B_Cu ? "BOTTOM" : "TOP";
+                layer = flipBottomLayers && module->GetLayer() == B_Cu ? "BOTTOM" : "TOP";
             }
 
             pinname = pad->GetName();
@@ -668,7 +666,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
             NORMALIZE_ANGLE_POS( orient );
 
             // Bottom side modules use the flipped padstack
-            fprintf( aFile, (module->GetLayer() == B_Cu) ?
+            fprintf( aFile, ( flipBottomLayers && module->GetLayer() == B_Cu ) ?
                      "PIN %s PAD%dF %g %g %s %g %s\n" :
                      "PIN %s PAD%d %g %g %s %g %s\n",
                      TO_UTF8( pinname ), pad->GetSubRatsnest(),
@@ -733,7 +731,8 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
         for( int ii = 0; ii < 2; ii++ )
         {
             double      txt_orient = textmod->GetTextAngle();
-            std::string layer = GenCADLayerName( cu_count, module->GetLayer() == B_Cu ? B_SilkS : F_SilkS );
+            std::string layer = GenCADLayerName( cu_count,
+                    flipBottomLayers && module->GetLayer() == B_Cu ? B_SilkS : F_SilkS );
 
             fprintf( aFile, "TEXT %g %g %g %g %s %s \"%s\"",
                      textmod->GetPos0().x / SCALE_FACTOR,
