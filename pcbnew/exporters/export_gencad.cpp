@@ -287,18 +287,6 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
      * these changes will be undone later
      */
     BOARD*  pcb = GetBoard();
-    MODULE* module;
-
-    for( module = pcb->m_Modules; module; module = module->Next() )
-    {
-        module->SetFlag( 0 );
-
-        if( module->GetLayer() == B_Cu )
-        {
-            module->Flip( module->GetPosition() );
-            module->SetFlag( 1 );
-        }
-    }
 
     /* Gencad has some mandatory and some optional sections: some importer
      *  need the padstack section (which is optional) anyway. Also the
@@ -323,16 +311,6 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     CreateRoutesSection( file, pcb );
 
     fclose( file );
-
-    // Undo the footprints modifications (flipped footprints)
-    for( module = pcb->m_Modules; module; module = module->Next() )
-    {
-        if( module->GetFlag() )
-        {
-            module->Flip( module->GetPosition() );
-            module->SetFlag( 0 );
-        }
-    }
 }
 
 
@@ -674,11 +652,11 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
 
             if( ( pad->GetLayerSet() & all_cu ) == LSET( B_Cu ) )
             {
-                layer = module->GetFlag() ? "TOP" : "BOTTOM";
+                layer = module->GetLayer() == B_Cu ? "TOP" : "BOTTOM";
             }
             else if( ( pad->GetLayerSet() & all_cu ) == LSET( F_Cu ) )
             {
-                layer = module->GetFlag() ? "BOTTOM" : "TOP";
+                layer = module->GetLayer() == B_Cu ? "BOTTOM" : "TOP";
             }
 
             pinname = pad->GetName();
@@ -690,7 +668,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
             NORMALIZE_ANGLE_POS( orient );
 
             // Bottom side modules use the flipped padstack
-            fprintf( aFile, (module->GetFlag()) ?
+            fprintf( aFile, (module->GetLayer() == B_Cu) ?
                      "PIN %s PAD%dF %g %g %s %g %s\n" :
                      "PIN %s PAD%d %g %g %s %g %s\n",
                      TO_UTF8( pinname ), pad->GetSubRatsnest(),
@@ -721,9 +699,9 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
         const char*   flip;
         double        fp_orient = module->GetOrientation();
 
-        if( module->GetFlag() )
+        if( module->GetLayer() == B_Cu )
         {
-            mirror = "0";
+            mirror = "MIRRORX";
             flip   = "FLIP";
             NEGATE_AND_NORMALIZE_ANGLE_POS( fp_orient );
         }
@@ -742,7 +720,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
                  MapXTo( module->GetPosition().x ),
                  MapYTo( module->GetPosition().y ) );
         fprintf( aFile, "LAYER %s\n",
-                 (module->GetFlag()) ? "BOTTOM" : "TOP" );
+                 module->GetFlag() ? "BOTTOM" : "TOP" );
         fprintf( aFile, "ROTATION %g\n",
                  fp_orient / 10.0 );
         fprintf( aFile, "SHAPE %s %s %s\n",
@@ -755,7 +733,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
         for( int ii = 0; ii < 2; ii++ )
         {
             double      txt_orient = textmod->GetTextAngle();
-            std::string layer  = GenCADLayerName( cu_count, module->GetFlag() ? B_SilkS : F_SilkS );
+            std::string layer = GenCADLayerName( cu_count, module->GetLayer() == B_Cu ? B_SilkS : F_SilkS );
 
             fprintf( aFile, "TEXT %g %g %g %g %s %s \"%s\"",
                      textmod->GetPos0().x / SCALE_FACTOR,
@@ -1145,13 +1123,6 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module )
     EDGE_MODULE* PtEdge;
     EDA_ITEM*    PtStruct;
 
-    // Control Y axis change sign for flipped modules
-    int          Yaxis_sign = -1;
-
-    // Flip for bottom side components
-    if( module->GetFlag() )
-        Yaxis_sign = 1;
-
     /* creates header: */
     fprintf( aFile, "\nSHAPE %s\n", TO_UTF8( module->GetReference() ) );
 
@@ -1203,17 +1174,17 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module )
 
         case PCB_MODULE_EDGE_T:
             PtEdge = (EDGE_MODULE*) PtStruct;
-            if( PtEdge->GetLayer() == F_SilkS
-                || PtEdge->GetLayer() == B_SilkS )
+
+            if( PtEdge->GetLayer() == F_SilkS || PtEdge->GetLayer() == B_SilkS )
             {
                 switch( PtEdge->GetShape() )
                 {
                 case S_SEGMENT:
                     fprintf( aFile, "LINE %g %g %g %g\n",
-                             (PtEdge->m_Start0.x) / SCALE_FACTOR,
-                             (Yaxis_sign * PtEdge->m_Start0.y) / SCALE_FACTOR,
-                             (PtEdge->m_End0.x) / SCALE_FACTOR,
-                             (Yaxis_sign * PtEdge->m_End0.y ) / SCALE_FACTOR );
+                             PtEdge->m_Start0.x / SCALE_FACTOR,
+                             -PtEdge->m_Start0.y / SCALE_FACTOR,
+                             PtEdge->m_End0.x / SCALE_FACTOR,
+                             -PtEdge->m_End0.y / SCALE_FACTOR );
                     break;
 
                 case S_CIRCLE:
@@ -1222,7 +1193,7 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module )
                                                          PtEdge->m_Start0 ) );
                     fprintf( aFile, "CIRCLE %g %g %g\n",
                              PtEdge->m_Start0.x / SCALE_FACTOR,
-                             Yaxis_sign * PtEdge->m_Start0.y / SCALE_FACTOR,
+                             -PtEdge->m_Start0.y / SCALE_FACTOR,
                              radius / SCALE_FACTOR );
                     break;
                 }
@@ -1235,27 +1206,14 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module )
                     RotatePoint( &arcendx, &arcendy, -PtEdge->GetAngle() );
                     arcendx += PtEdge->GetStart0().x;
                     arcendy += PtEdge->GetStart0().y;
-                    if( Yaxis_sign == -1 )
-                    {
-                        // Flipping Y flips the arc direction too
-                        fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                                 (PtEdge->m_End0.x) / SCALE_FACTOR,
-                                 (Yaxis_sign * PtEdge->GetEnd0().y) / SCALE_FACTOR,
-                                 (arcendx) / SCALE_FACTOR,
-                                 (Yaxis_sign * arcendy) / SCALE_FACTOR,
-                                 (PtEdge->GetStart0().x) / SCALE_FACTOR,
-                                 (Yaxis_sign * PtEdge->GetStart0().y) / SCALE_FACTOR );
-                    }
-                    else
-                    {
-                        fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                                 (arcendx) / SCALE_FACTOR,
-                                 (Yaxis_sign * arcendy) / SCALE_FACTOR,
-                                 (PtEdge->GetEnd0().x) / SCALE_FACTOR,
-                                 (Yaxis_sign * PtEdge->GetEnd0().y) / SCALE_FACTOR,
-                                 (PtEdge->GetStart0().x) / SCALE_FACTOR,
-                                 (Yaxis_sign * PtEdge->GetStart0().y) / SCALE_FACTOR );
-                    }
+                    // Flipping Y flips the arc direction too
+                    fprintf( aFile, "ARC %g %g %g %g %g %g\n",
+                            PtEdge->m_End0.x / SCALE_FACTOR,
+                            -PtEdge->GetEnd0().y / SCALE_FACTOR,
+                            arcendx / SCALE_FACTOR,
+                            -arcendy / SCALE_FACTOR,
+                            PtEdge->GetStart0().x / SCALE_FACTOR,
+                            -PtEdge->GetStart0().y / SCALE_FACTOR );
                     break;
                 }
 
