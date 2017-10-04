@@ -560,6 +560,30 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
                 }
             }
             break;
+
+        case PAD_SHAPE_CUSTOM:
+            {
+                fprintf( aFile, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
+
+                const SHAPE_POLY_SET& outline = pad->GetCustomShapeAsPolygon();
+
+                for( int jj = 0; jj < outline.OutlineCount(); ++jj )
+                {
+                    const SHAPE_LINE_CHAIN& poly = outline.COutline( jj );
+                    int pointCount = poly.PointCount();
+
+                    for( int ii = 0; ii < pointCount; ii++ )
+                    {
+                        int next = ( ii + 1 ) % pointCount;
+                        fprintf( aFile, "LINE %g %g %g %g\n",
+                                ( off.x + poly.CPoint( ii ).x ) / SCALE_FACTOR,
+                                ( -off.y - poly.CPoint( ii ).y ) / SCALE_FACTOR,
+                                ( off.x + poly.CPoint( next ).x ) / SCALE_FACTOR,
+                                ( -off.y - poly.CPoint( next ).y ) / SCALE_FACTOR );
+                    }
+                }
+            }
+            break;
         }
     }
 
