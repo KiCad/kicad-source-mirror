@@ -115,6 +115,9 @@ bool COLOR4D_PICKER_DLG::TransferDataToWindow()
     SetEditVals( ALL_CHANGED );
     drawAll();
 
+    // Now the bitmaps are built, fix the minsizes:
+    GetSizer()->SetSizeHints( this );
+
     return true;
 }
 
