@@ -501,29 +501,29 @@ public:
      * Function IsElementVisible
      * tests whether a given element category is visible. Keep this as an
      * inline function.
-     * @param LAYER_aPCB is from the enum by the same name
+     * @param aLayer is from the enum by the same name
      * @return bool - true if the element is visible.
      * @see enum GAL_LAYER_ID
      */
-    bool IsElementVisible( GAL_LAYER_ID LAYER_aPCB ) const;
+    bool IsElementVisible( GAL_LAYER_ID aLayer ) const;
 
     /**
      * Function SetElementVisibility
      * changes the visibility of an element category
-     * @param LAYER_aPCB is from the enum by the same name
+     * @param aLayer is from the enum by the same name
      * @param aNewState = The new visibility state of the element category
      * @see enum GAL_LAYER_ID
      */
-    void SetElementVisibility( GAL_LAYER_ID LAYER_aPCB, bool aNewState );
+    void SetElementVisibility( GAL_LAYER_ID aLayer, bool aNewState );
 
     /**
      * Function IsModuleLayerVisible
      * expects either of the two layers on which a module can reside, and returns
      * whether that layer is visible.
-     * @param layer One of the two allowed layers for modules: F_Cu or B_Cu
+     * @param aLayer One of the two allowed layers for modules: F_Cu or B_Cu
      * @return bool - true if the layer is visible, else false.
      */
-    bool IsModuleLayerVisible( PCB_LAYER_ID layer );
+    bool IsModuleLayerVisible( PCB_LAYER_ID aLayer );
 
     /**
      * Function GetDesignSettings

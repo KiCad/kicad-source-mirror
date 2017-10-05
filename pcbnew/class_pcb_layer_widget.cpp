@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2016 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
+ * Copyright (C) 2004-2017 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2010-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,32 +56,33 @@
 const LAYER_WIDGET::ROW PCB_LAYER_WIDGET::s_render_rows[] = {
 
 #define RR  LAYER_WIDGET::ROW   // Render Row abbreviation to reduce source width
+#define NOCOLOR COLOR4D::UNSPECIFIED    // specify rows that do not have a color selector icon
 
          // text                id                      color       tooltip
-    RR( _( "Through Via" ),     LAYER_VIA_THROUGH,    WHITE,      _( "Show through vias" ) ),
-    RR( _( "Bl/Buried Via" ),   LAYER_VIA_BBLIND,     WHITE,      _( "Show blind or buried vias" )  ),
-    RR( _( "Micro Via" ),       LAYER_VIA_MICROVIA,   WHITE,      _( "Show micro vias") ),
-    RR( _( "Non Plated Holes" ),LAYER_NON_PLATED,     WHITE,      _( "Show non plated holes in specific color") ),
-    RR( _( "Ratsnest" ),        LAYER_RATSNEST,       WHITE,      _( "Show unconnected nets as a ratsnest") ),
+    RR( _( "Through Via" ),     LAYER_VIA_THROUGH,    WHITE,    _( "Show through vias" ) ),
+    RR( _( "Bl/Buried Via" ),   LAYER_VIA_BBLIND,     WHITE,    _( "Show blind or buried vias" )  ),
+    RR( _( "Micro Via" ),       LAYER_VIA_MICROVIA,   WHITE,    _( "Show micro vias") ),
+    RR( _( "Non Plated Holes" ),LAYER_NON_PLATED,     WHITE,    _( "Show non plated holes in specific color") ),
+    RR( _( "Ratsnest" ),        LAYER_RATSNEST,       WHITE,    _( "Show unconnected nets as a ratsnest") ),
 
-    RR( _( "Pads Front" ),      LAYER_PAD_FR,         WHITE,      _( "Show footprint pads on board's front" ) ),
-    RR( _( "Pads Back" ),       LAYER_PAD_BK,         WHITE,      _( "Show footprint pads on board's back" ) ),
+    RR( _( "No-Connects" ),     LAYER_NO_CONNECTS,    BLUE,     _( "Show a marker on pads which have no net connected" ) ),
+    RR( _( "Pads Front" ),      LAYER_PAD_FR,         WHITE,    _( "Show footprint pads on board's front" ) ),
+    RR( _( "Pads Back" ),       LAYER_PAD_BK,         WHITE,    _( "Show footprint pads on board's back" ) ),
 
-    RR( _( "Text Front" ),      LAYER_MOD_TEXT_FR,        COLOR4D::UNSPECIFIED,  _( "Show footprint text on board's front" ) ),
-    RR( _( "Text Back" ),       LAYER_MOD_TEXT_BK,        COLOR4D::UNSPECIFIED,  _( "Show footprint text on board's back" ) ),
-    RR( _( "Hidden Text" ),     LAYER_MOD_TEXT_INVISIBLE, WHITE,                 _( "Show footprint text marked as invisible" ) ),
+    RR( _( "Text Front" ),      LAYER_MOD_TEXT_FR,    NOCOLOR,  _( "Show footprint text on board's front" ) ),
+    RR( _( "Text Back" ),       LAYER_MOD_TEXT_BK,    NOCOLOR,  _( "Show footprint text on board's back" ) ),
+    RR( _( "Hidden Text" ),     LAYER_MOD_TEXT_INVISIBLE, WHITE,    _( "Show footprint text marked as invisible" ) ),
 
-    RR( _( "Anchors" ),         LAYER_ANCHOR,         WHITE,                _( "Show footprint and text origins as a cross" ) ),
-    RR( _( "Grid" ),            LAYER_GRID,           WHITE,                _( "Show the (x,y) grid dots" ) ),
-    RR( _( "No-Connects" ),     LAYER_NO_CONNECTS,    COLOR4D::UNSPECIFIED, _( "Show a marker on pads which have no net connected" ) ),
-    RR( _( "Footprints Front" ),LAYER_MOD_FR,         COLOR4D::UNSPECIFIED, _( "Show footprints that are on board's front") ),
-    RR( _( "Footprints Back" ), LAYER_MOD_BK,         COLOR4D::UNSPECIFIED, _( "Show footprints that are on board's back") ),
-    RR( _( "Values" ),          LAYER_MOD_VALUES,     COLOR4D::UNSPECIFIED, _( "Show footprint's values") ),
-    RR( _( "References" ),      LAYER_MOD_REFERENCES, COLOR4D::UNSPECIFIED, _( "Show footprint's references") ),
-    RR( _( "Worksheet" ),       LAYER_WORKSHEET,      DARKRED,              _( "Show worksheet") ),
-    RR( _( "Cursor" ),          LAYER_CURSOR,         WHITE,                _( "PCB Cursor" ), true, false ),
-    RR( _( "Aux items" ),       LAYER_AUX_ITEMS,      WHITE,                _( "Auxillary items (rulers, assistants, axes, etc.)" ), true, false ),
-    RR( _( "Background" ),      LAYER_PCB_BACKGROUND, BLACK,                _( "PCB Background" ), true, false )
+    RR( _( "Anchors" ),         LAYER_ANCHOR,         WHITE,    _( "Show footprint and text origins as a cross" ) ),
+    RR( _( "Grid" ),            LAYER_GRID,           WHITE,    _( "Show the (x,y) grid dots" ) ),
+    RR( _( "Footprints Front" ),LAYER_MOD_FR,         NOCOLOR,  _( "Show footprints that are on board's front") ),
+    RR( _( "Footprints Back" ), LAYER_MOD_BK,         NOCOLOR,  _( "Show footprints that are on board's back") ),
+    RR( _( "Values" ),          LAYER_MOD_VALUES,     NOCOLOR,  _( "Show footprint's values") ),
+    RR( _( "References" ),      LAYER_MOD_REFERENCES, NOCOLOR,  _( "Show footprint's references") ),
+    RR( _( "Worksheet" ),       LAYER_WORKSHEET,      DARKRED,  _( "Show worksheet") ),
+    RR( _( "Cursor" ),          LAYER_CURSOR,         WHITE,    _( "PCB Cursor" ), true, false ),
+    RR( _( "Aux items" ),       LAYER_AUX_ITEMS,      WHITE,    _( "Auxillary items (rulers, assistants, axes, etc.)" ), true, false ),
+    RR( _( "Background" ),      LAYER_PCB_BACKGROUND, BLACK,    _( "PCB Background" ), true, false )
 };
 
 static int s_allowed_in_FpEditor[] =
@@ -188,7 +189,7 @@ void PCB_LAYER_WIDGET::AddRightClickMenuItems( wxMenu& menu )
 
 void PCB_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
 {
-    wxMenu          menu;
+    wxMenu menu;
 
     AddRightClickMenuItems( menu );
     PopupMenu( &menu );

@@ -68,6 +68,7 @@ static const EDA_COLOR_T default_layer_color[] = {
 };
 
 
+// for color order, see enum GAL_LAYER_ID
 static const EDA_COLOR_T default_items_color[] = {
     LIGHTGRAY, // unused
     CYAN,      // LAYER_VIA_MICROVIA
@@ -82,7 +83,9 @@ static const EDA_COLOR_T default_items_color[] = {
     GREEN,     // LAYER_PAD_BK
     LIGHTGRAY, // LAYER_RATSNEST
     DARKGRAY,  // LAYER_GRID
-    LIGHTRED,  LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
+    LIGHTRED,  // LAYER_GRID_AXES
+    BLUE,      // LAYER_NO_CONNECTS
+    LIGHTGRAY, LIGHTGRAY,
     LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
     LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
     LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
@@ -224,6 +227,7 @@ void COLORS_DESIGN_SETTINGS::setupConfigParams()
         Add( "Color4DViaBBlindEx", ITEM_COLOR( LAYER_VIA_BBLIND ), BROWN );
         Add( "Color4DViaMicroEx", ITEM_COLOR( LAYER_VIA_MICROVIA ), CYAN );
         Add( "Color4DRatsEx", ITEM_COLOR( LAYER_RATSNEST ), WHITE );
+        Add( "Color4DNoNetPadMarker", ITEM_COLOR( LAYER_NO_CONNECTS ), BLUE );
     }
 
     SetConfigPrefix( currprefix );

@@ -261,6 +261,10 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // to edit a bad layer
     GetBoard()->SetVisibleAlls();
 
+    // However the "no net" mark on pads is useless, because there is
+    // no net in footprint editor: make it non visible
+    GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
+
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), font.GetPointSize(), true );
 

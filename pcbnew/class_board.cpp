@@ -739,17 +739,17 @@ int BOARD::GetVisibleElements() const
 }
 
 
-bool BOARD::IsElementVisible( GAL_LAYER_ID LAYER_aPCB ) const
+bool BOARD::IsElementVisible( GAL_LAYER_ID aLayer ) const
 {
-    return m_designSettings.IsElementVisible( LAYER_aPCB );
+    return m_designSettings.IsElementVisible( aLayer );
 }
 
 
-void BOARD::SetElementVisibility( GAL_LAYER_ID LAYER_aPCB, bool isEnabled )
+void BOARD::SetElementVisibility( GAL_LAYER_ID aLayer, bool isEnabled )
 {
-    m_designSettings.SetElementVisibility( LAYER_aPCB, isEnabled );
+    m_designSettings.SetElementVisibility( aLayer, isEnabled );
 
-    switch( LAYER_aPCB )
+    switch( aLayer )
     {
     case LAYER_RATSNEST:
     {
@@ -791,9 +791,9 @@ void BOARD::SetElementVisibility( GAL_LAYER_ID LAYER_aPCB, bool isEnabled )
 }
 
 
-bool BOARD::IsModuleLayerVisible( PCB_LAYER_ID layer )
+bool BOARD::IsModuleLayerVisible( PCB_LAYER_ID aLayer )
 {
-    switch( layer )
+    switch( aLayer )
     {
     case F_Cu:
         return IsElementVisible( LAYER_MOD_FR );

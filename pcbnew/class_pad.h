@@ -68,6 +68,7 @@ public:
                                   // visible layers
     COLOR4D m_HoleColor;          // color used to draw the pad hole
     COLOR4D m_NPHoleColor;        // color used to draw a pad Not Plated hole
+    COLOR4D m_NoNetMarkColor;     // color used to draw a mark on pads having no net
     int m_PadClearance;           // clearance value, used to draw the pad area outlines
     wxSize m_Mask_margin;         // margin, used to draw solder paste when only one layer is shown
     bool m_Display_padnum;        // true to show pad number
