@@ -32,16 +32,41 @@ class TITLE_BLOCK;
 class LIB_VIEW_FRAME;
 class LIB_EDIT_FRAME;
 class LIB_ALIAS;
+class LIB_PART;
 class PART_LIB;
 class SCHLIB_FILTER;
 class LIB_ID;
+class SYMBOL_LIB_TABLE;
+
 
 /**
- * Class SCH_BASE_FRAME
- * is a shim class between EDA_DRAW_FRAME and several derived classes:
+ * Load symbol from symbol library table.
+ *
+ * Check the symbol library table for the part defined by \a aLibId and optionally
+ * check the optional cache library.
+ *
+ * @param aLibId is the symbol library identifier to load.
+ * @param aLibTable is the #SYMBOL_LIBRARY_TABLE to load the alias from.
+ * @param aCacheLib is an optional cache library.
+ * @param aParent is an optiona parent window when displaying an error message.
+ * @param aShowErrorMessage set to true to show any error messages.
+ *
+ * @return The symbol found in the library or NULL if the symbol was not found.
+ */
+LIB_ALIAS* SchGetLibAlias( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
+                           PART_LIB* aCacheLib = NULL, wxWindow* aParent = NULL,
+                           bool aShowErrorMsg = false );
+
+LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
+                         PART_LIB* aCacheLib = NULL, wxWindow* aParent = NULL,
+                         bool aShowErrorMsg = false );
+
+
+/**
+ * A shim class between EDA_DRAW_FRAME and several derived classes:
  * LIB_EDIT_FRAME, LIB_VIEW_FRAME, and SCH_EDIT_FRAME, and it brings in a
  * common way of handling the provided virtual functions for the derived classes.
- * <p>
+ *
  * The motivation here is to switch onto GetScreen() for the underlying data model.
  *
  * @author Dick Hollenbeck
@@ -179,6 +204,21 @@ public:
 
     void OnEditSymbolLibTable( wxCommandEvent& aEvent );
 
+    /**
+     * Load symbol from symbol library table.
+     *
+     * @param aLibId is the symbol library identifier to load.
+     * @param aUseCacheLib set to true to fall back to cache library if symbol is not found in
+     *                     symbol library table.
+     * @param aShowErrorMessage set to true to show any error messages.
+     * @return The symbol found in the library or NULL if the symbol was not found.
+     */
+    LIB_ALIAS* GetLibAlias( const LIB_ID& aLibId, bool aUseCacheLib = false,
+                            bool aShowErrorMsg = false );
+
+    LIB_PART* GetLibPart( const LIB_ID& aLibId, bool aUseCacheLib = false,
+                          bool aShowErrorMsg = false );
+
 protected:
 
     /**
@@ -199,7 +239,6 @@ protected:
             int aUnit, int aConvert );
 
     /**
-     * Function OnOpenLibraryViewer
      * Open the library viewer only to browse library contents.
      * If the viewed is already opened from this, raise the viewer
      * If the viewed is already opened from an other window, close it and reopen
@@ -207,11 +246,10 @@ protected:
     void OnOpenLibraryViewer( wxCommandEvent& event );
 
     /**
-     * Function DisplayComponentsNamesInLib
      * Select a component from the list of components in a library
      *
-     * @param aLibrary = a reference to the library to explore
-     *                If NULL the user will be prompted tp chose a library
+     * @param aLibrary  a reference to the library nickname to explore
+     *                  If empty, the user will be prompted tp chose a library
      * @param aBuffer = a wxString to put the selected component name
      * @param aPreviousChoice = the previously selected component name.
      * it will be added to the selection list. Can be empty.
@@ -219,30 +257,31 @@ protected:
      * @return true if a component is selected
      *         false on cancel
      */
-    bool DisplayListComponentsInLib( PART_LIB*  aLibrary, wxString&  aBuffer,
-                                     wxString&  aPreviousChoice );
+    bool DisplayListComponentsInLib( wxString& aLibrary, wxString& aBuffer,
+                                     wxString& aPreviousChoice );
 
     /**
-     * Function SelectLibraryFromList
-     * displays a list of current loaded libraries, and allows the user to select
-     * a library
+     * Dispaly a list of loaded libraries in the symbol library and allows the user to select
+     * a library.
+     *
      * This list is sorted, with the library cache always at end of the list
-     * @return a reference to the selected library, or NULL
+     *
+     * @return the library nickname used in the symbol library table.
      */
-    PART_LIB* SelectLibraryFromList();
+    wxString SelectLibraryFromList();
 
     /**
      * Function SelectPartNameToLoad
      * Select a part name from the list of components (parts) found in a library.
      *
-     * @param aLibrary = a reference to the library to explore
-     *                If NULL the user will be prompted tp chose a library
-     * @param aBufName = a wxString to put the selected component name
+     * @param aLibrary is the nickname of the library in the symbol library table.
+     *                 If empty the user will be prompted tp chose a library
+     * @param aBufName a wxString to put the selected component name
      *
      * @return true if a component is selected
      *         false on cancel
      */
-    bool SelectPartNameToLoad( PART_LIB* aLibrary, wxString& aBufName );
+    bool SelectPartNameToLoad( wxString& aLibrary, wxString& aBufName );
 };
 
 #endif // SCH_BASE_FRAME_H_

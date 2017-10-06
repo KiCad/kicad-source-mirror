@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,7 +62,7 @@ bool SCH_EDIT_FRAME::prepareForNetlist()
 
     // Ensure all power symbols have a valid reference
     SCH_SHEET_LIST sheets( g_RootSheet );
-    sheets.AnnotatePowerSymbols( Prj().SchLibs() );
+    sheets.AnnotatePowerSymbols();
 
     // Performs some controls:
     if( CheckAnnotate( NULL, 0 ) )
@@ -94,7 +94,7 @@ void SCH_EDIT_FRAME::sendNetlist()
 {
     NETLIST_OBJECT_LIST* net_atoms = BuildNetListBase();
 
-    NETLIST_EXPORTER_KICAD exporter( net_atoms, Prj().SchLibs() );
+    NETLIST_EXPORTER_KICAD exporter( net_atoms, Prj().SchSymbolLibTable() );
 
     STRING_FORMATTER    formatter;
 

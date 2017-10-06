@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -85,7 +85,7 @@ class SCH_SCREEN;
 class SCH_MARKER;
 class SCH_ITEM;
 class SCH_REFERENCE_LIST;
-class PART_LIBS;
+
 
 #define SHEET_NOT_FOUND          -1
 
@@ -204,23 +204,22 @@ public:
     /**
      * Function GetComponents
      * adds a SCH_REFERENCE() object to \a aReferences for each component in the sheet.
-     * @param aLibs the library list to use
+     *
      * @param aReferences List of references to populate.
      * @param aIncludePowerSymbols : false to only get normal components.
      */
-    void GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
-                        bool aIncludePowerSymbols = true  );
+    void GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true );
 
     /**
      * Function GetMultiUnitComponents
      * adds a SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
      * multi-unit parts in the sheet. The map key for each element will be the
      * reference designator.
-     * @param aLibs the library list to use
+     *
      * @param aRefList Map of reference designators to reference lists
      * @param aIncludePowerSymbols : false to only get normal components.
      */
-    void GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
+    void GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
                                  bool aIncludePowerSymbols = true );
 
     /**
@@ -364,31 +363,29 @@ public:
      * It is called before creating a netlist, to annotate power symbols, without prompting
      * the user about not annotated or duplicate for these symbols, if only these symbols
      * need annotation ( a very frequent case ).
-     * @param aLib the library list to use
      */
-    void AnnotatePowerSymbols( PART_LIBS* aLib );
+    void AnnotatePowerSymbols();
 
     /**
      * Function GetComponents
      * adds a SCH_REFERENCE() object to \a aReferences for each component in the list
      * of sheets.
-     * @param aLibs the library list to use
+     *
      * @param aReferences List of references to populate.
      * @param aIncludePowerSymbols Set to false to only get normal components.
      */
-    void GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
-                        bool aIncludePowerSymbols = true  );
+    void GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true );
 
     /**
      * Function GetMultiUnitComponents
      * adds a SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
      * multi-unit parts in the list of sheets. The map key for each element will be the
      * reference designator.
-     * @param aLibs the library list to use
+     *
      * @param aRefList Map of reference designators to reference lists
      * @param aIncludePowerSymbols Set to false to only get normal components.
      */
-    void GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
+    void GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
                                  bool aIncludePowerSymbols = true );
 
     /**

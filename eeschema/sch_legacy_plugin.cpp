@@ -3634,5 +3634,12 @@ bool SCH_LEGACY_PLUGIN::CheckHeader( const wxString& aFileName )
     return firstline.StartsWith( "EESchema" );
 }
 
+
+bool SCH_LEGACY_PLUGIN::IsSymbolLibWritable( const wxString& aLibraryPath )
+{
+    return wxFileName::IsFileWritable( aLibraryPath );
+}
+
+
 const char* SCH_LEGACY_PLUGIN::PropBuffering = "buffering";
 const char* SCH_LEGACY_PLUGIN::PropNoDocFile = "no_doc_file";

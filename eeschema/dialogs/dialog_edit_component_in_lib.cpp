@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,7 @@
 #include <libeditframe.h>
 #include <class_library.h>
 #include <eeschema_id.h>    // for MAX_UNIT_COUNT_PER_PACKAGE definition
+#include <symbol_lib_table.h>
 
 #include <dialog_edit_component_in_lib.h>
 
@@ -316,14 +317,14 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllAliasOfPart( wxCommandEvent& eve
  */
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& event )
 {
-    wxString aliasname;
-    LIB_PART*      component = m_Parent->GetCurPart();
-    PART_LIB* library = m_Parent->GetCurLib();
+    wxString  aliasname;
+    LIB_PART* component = m_Parent->GetCurPart();
+    wxString  library = m_Parent->GetCurLib();
 
     if( component == NULL )
         return;
 
-    wxTextEntryDialog dlg( this, _( "New alias:" ), _( "Component Alias" ), aliasname );
+    wxTextEntryDialog dlg( this, _( "New Alias:" ), _( "Symbol alias:" ), aliasname );
 
     if( dlg.ShowModal() != wxID_OK )
         return; // cancelled by user
@@ -331,6 +332,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& event )
     aliasname = dlg.GetValue( );
 
     aliasname.Replace( wxT( " " ), wxT( "_" ) );
+
     if( aliasname.IsEmpty() )
         return;
 
@@ -343,12 +345,10 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& event )
         return;
     }
 
-    if( library && library->FindAlias( aliasname ) != NULL )
+    if( !library.empty() && Prj().SchSymbolLibTable()->LoadSymbol( library, aliasname ) != NULL )
     {
         wxString msg;
-        msg.Printf( _( "Alias or component name <%s> already exists in library <%s>." ),
-                    GetChars( aliasname ),
-                    GetChars( library->GetName() ) );
+        msg.Printf( _( "Symbol name '%s' already exists in library '%s'." ), aliasname, library );
         DisplayError( this, msg );
         return;
     }

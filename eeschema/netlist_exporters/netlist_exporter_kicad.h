@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2015 KiCad Developers
+ * Copyright (C) 1992-2017 KiCad Developers
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,8 +38,8 @@ class OUTPUTFORMATTER;
 class NETLIST_EXPORTER_KICAD : public NETLIST_EXPORTER_GENERIC
 {
 public:
-    NETLIST_EXPORTER_KICAD( NETLIST_OBJECT_LIST* aMasterList, PART_LIBS* aLibs ) :
-        NETLIST_EXPORTER_GENERIC( aMasterList, aLibs )
+    NETLIST_EXPORTER_KICAD( NETLIST_OBJECT_LIST* aMasterList, SYMBOL_LIB_TABLE* aLibTable ) :
+        NETLIST_EXPORTER_GENERIC( aMasterList, aLibTable )
     {
     }
 

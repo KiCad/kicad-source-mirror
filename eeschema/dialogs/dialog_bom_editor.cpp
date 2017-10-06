@@ -308,7 +308,7 @@ void DIALOG_BOM_EDITOR::LoadComponents()
 
     // Generate a list of schematic sheets
     SCH_SHEET_LIST sheets( g_RootSheet );
-    sheets.GetComponents( m_parent->Prj().SchLibs(), refs, false );
+    sheets.GetComponents( refs, false );
 
     // Pass the references through to the model
     m_bom->SetComponents( refs, m_parent->GetTemplateFieldNames() );

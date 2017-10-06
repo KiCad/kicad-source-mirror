@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,114 +31,139 @@
 #include <confirm.h>
 #include <pgm_base.h>
 #include <sch_base_frame.h>
+#include <symbol_lib_table.h>
 
 #include <general.h>
 #include <class_library.h>
 #include <dialog_helpers.h>
 
-// Used in DisplayListComponentsInLib: this is a callback function for EDA_LIST_DIALOG
-// to display keywords and description of a component
-static void DisplayCmpDocAndKeywords( wxString& aName, void* aData )
+
+static void DisplayCmpDocAndKeywords( wxString& aSelection, void* aData )
 {
-    PART_LIBS*  libs = (PART_LIBS*) aData;
+    SYMBOL_LIB_TABLE* libs = (SYMBOL_LIB_TABLE*) aData;
 
     wxASSERT( libs );
 
-    LIB_ID id( wxEmptyString, aName );
-    LIB_ALIAS* part = libs->FindLibraryAlias( id );
+    LIB_ID id;
+
+    if( id.Parse( aSelection ) != -1 )
+    {
+        aSelection = _( "Invalid symbol library indentifier!" );
+        return;
+    }
+
+    LIB_ALIAS* part = nullptr;
+
+    try
+    {
+        part = libs->LoadSymbol( id );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        aSelection.Printf( _( "Error occurred loading symbol '%s' from library '%s'." ),
+                           id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
+        return;
+    }
 
     if( !part )
         return;
 
-    aName  = wxT( "Description: " ) + part->GetDescription();
-    aName += wxT( "\nKey Words: " ) + part->GetKeyWords();
+    aSelection  = _( "Description: " ) + part->GetDescription() + "\n";
+    aSelection += _( "Key Words: " ) + part->GetKeyWords();
 }
 
 
-PART_LIB* SCH_BASE_FRAME::SelectLibraryFromList()
+wxString SCH_BASE_FRAME::SelectLibraryFromList()
 {
-    PROJECT&    prj = Prj();
+    PROJECT& prj = Prj();
 
-    if( PART_LIBS* libs = prj.SchLibs() )
+    if( prj.SchSymbolLibTable()->IsEmpty() )
     {
-        if( !libs->GetLibraryCount() )
-        {
-            DisplayError( this, _( "No component libraries are loaded." ) );
-            return NULL;
-        }
-
-        wxArrayString headers;
-
-        headers.Add( wxT( "Library" ) );
-
-        wxArrayString   libNamesList = libs->GetLibraryNames();
-
-        std::vector<wxArrayString> itemsToDisplay;
-
-        // Conversion from wxArrayString to vector of ArrayString
-        for( unsigned i = 0; i < libNamesList.GetCount(); i++ )
-        {
-            wxArrayString item;
-
-            item.Add( libNamesList[i] );
-
-            itemsToDisplay.push_back( item );
-        }
-
-        wxString old_lib_name = prj.GetRString( PROJECT::SCH_LIB_SELECT );
-
-        EDA_LIST_DIALOG dlg( this, _( "Select Library" ), headers, itemsToDisplay, old_lib_name );
-
-        if( dlg.ShowModal() != wxID_OK )
-            return NULL;
-
-        wxString libname = dlg.GetTextSelection();
-
-        if( !libname )
-            return NULL;
-
-        PART_LIB* lib = libs->FindLibrary( libname );
-
-        if( lib )
-            prj.SetRString( PROJECT::SCH_LIB_SELECT, libname );
-
-        return lib;
+        DisplayError( this, _( "No symbol libraries are loaded." ) );
+        return wxEmptyString;
     }
 
-    return NULL;
+    wxArrayString headers;
+
+    headers.Add( _( "Library" ) );
+
+    std::vector< wxArrayString > itemsToDisplay;
+    std::vector< wxString > libNicknames = prj.SchSymbolLibTable()->GetLogicalLibs();
+
+    // Conversion from wxArrayString to vector of ArrayString
+    for( auto name : libNicknames )
+    {
+        wxArrayString item;
+
+        item.Add( name );
+        itemsToDisplay.push_back( item );
+    }
+
+    wxString old_lib_name = prj.GetRString( PROJECT::SCH_LIB_SELECT );
+
+    EDA_LIST_DIALOG dlg( this, _( "Select Symbol Library" ), headers, itemsToDisplay,
+                         old_lib_name );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return wxEmptyString;
+
+    wxString libname = dlg.GetTextSelection();
+
+    if( !libname.empty() )
+    {
+        if( prj.SchSymbolLibTable()->HasLibrary( libname ) )
+            prj.SetRString( PROJECT::SCH_LIB_SELECT, libname );
+        else
+            libname = wxEmptyString;
+    }
+
+    return libname;
 }
 
 
 
-bool SCH_BASE_FRAME::DisplayListComponentsInLib( PART_LIB*  aLibrary,
-                        wxString&  aBuffer, wxString&  aPreviousChoice )
+bool SCH_BASE_FRAME::DisplayListComponentsInLib( wxString& aLibrary, wxString& aBuffer,
+                                                 wxString& aPreviousChoice )
 {
-    wxArrayString  nameList;
+    wxArrayString nameList;
 
-    if( aLibrary == NULL )
+    if( !aLibrary )
         aLibrary = SelectLibraryFromList();
 
-    if( aLibrary == NULL )
+    if( !aLibrary )
         return false;
 
-    aLibrary->GetAliasNames( nameList );
+    try
+    {
+        Prj().SchSymbolLibTable()->EnumerateSymbolLib( aLibrary, nameList );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxString msg;
+
+        msg.Printf( _( "Error occurred loading symbol library '%s'." ), aLibrary );
+        DisplayErrorMessage( this, msg, ioe.What() );
+        return false;
+    }
 
     wxArrayString headers;
-    headers.Add( wxT("Component") );
-    headers.Add( wxT("Library") );
+    headers.Add( _( "Library:Symbol" ) );
+
     std::vector<wxArrayString> itemsToDisplay;
 
     // Conversion from wxArrayString to vector of ArrayString
     for( unsigned i = 0; i < nameList.GetCount(); i++ )
     {
+        LIB_ID id;
         wxArrayString item;
-        item.Add( nameList[i] );
-        item.Add( aLibrary->GetLogicalName() );
+        id.SetLibItemName( nameList[i] );
+        id.SetLibNickname( aLibrary );
+        item.Add( id.Format() );
         itemsToDisplay.push_back( item );
     }
 
-    EDA_LIST_DIALOG dlg( this, _( "Select Component" ), headers, itemsToDisplay,
-                         aPreviousChoice, DisplayCmpDocAndKeywords, Prj().SchLibs() );
+    EDA_LIST_DIALOG dlg( this, _( "Select Symbol" ), headers, itemsToDisplay, aPreviousChoice,
+                         DisplayCmpDocAndKeywords, Prj().SchSymbolLibTable() );
 
     if( dlg.ShowModal() != wxID_OK )
         return false;
@@ -149,14 +174,11 @@ bool SCH_BASE_FRAME::DisplayListComponentsInLib( PART_LIB*  aLibrary,
 }
 
 
-bool SCH_BASE_FRAME::SelectPartNameToLoad( PART_LIB* aLibrary, wxString& aBufName )
+bool SCH_BASE_FRAME::SelectPartNameToLoad( wxString& aLibrary, wxString& aBufName )
 {
-    int             ii;
     static wxString previousCmpName;
 
-    ii = DisplayListComponentsInLib( aLibrary, aBufName, previousCmpName );
-
-    if( ii <= 0 || aBufName.IsEmpty() )
+    if( !DisplayListComponentsInLib( aLibrary, aBufName, previousCmpName ) || aBufName.empty() )
         return false;
 
     previousCmpName = aBufName;

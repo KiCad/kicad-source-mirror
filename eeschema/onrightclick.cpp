@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -47,6 +47,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_bitmap.h>
+#include <symbol_lib_table.h>
 
 #include <iostream>
 
@@ -59,8 +60,10 @@ static void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text );
 static void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label );
 static void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel );
 static void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* GLabel );
-static void AddMenusForEditComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_LIBS* aLibs );
-static void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_LIBS* aLibs );
+static void AddMenusForEditComponent( wxMenu* PopMenu, SCH_COMPONENT* Component,
+                                      SYMBOL_LIB_TABLE* aLibs );
+static void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component,
+                                  SYMBOL_LIB_TABLE* aLibs );
 static void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field );
 static void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker, SCH_EDIT_FRAME* aFrame );
 static void AddMenusForBitmap( wxMenu* aPopMenu, SCH_BITMAP * aBitmap );
@@ -88,7 +91,8 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
             switch( item->Type() )
             {
             case SCH_COMPONENT_T:
-                AddMenusForEditComponent( PopMenu, (SCH_COMPONENT *) item, Prj().SchLibs() );
+                AddMenusForEditComponent( PopMenu, (SCH_COMPONENT *) item,
+                                          Prj().SchSymbolLibTable() );
                 PopMenu->AppendSeparator();
                 break;
 
@@ -244,7 +248,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         break;
 
     case SCH_COMPONENT_T:
-        AddMenusForComponent( PopMenu, (SCH_COMPONENT*) item, Prj().SchLibs() );
+        AddMenusForComponent( PopMenu, (SCH_COMPONENT*) item, Prj().SchSymbolLibTable() );
         break;
 
     case SCH_BITMAP_T:
@@ -348,7 +352,7 @@ void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field )
 }
 
 
-void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_LIBS* aLibs )
+void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, SYMBOL_LIB_TABLE* aLibs )
 {
     if( Component->Type() != SCH_COMPONENT_T )
     {
@@ -377,7 +381,8 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_LIBS*
     AddMenuItem( orientmenu, ID_SCH_MIRROR_X, msg, KiBitmap( mirror_v_xpm ) );
     msg = AddHotkeyName( _( "Flip Horizontal" ), g_Schematic_Hokeys_Descr, HK_MIRROR_Y );
     AddMenuItem( orientmenu, ID_SCH_MIRROR_Y, msg, KiBitmap( mirror_h_xpm ) );
-    msg = AddHotkeyName( _( "Reset to Default" ), g_Schematic_Hokeys_Descr, HK_ORIENT_NORMAL_COMPONENT );
+    msg = AddHotkeyName( _( "Reset to Default" ), g_Schematic_Hokeys_Descr,
+                         HK_ORIENT_NORMAL_COMPONENT );
     AddMenuItem( orientmenu, ID_SCH_ORIENT_NORMAL, msg, KiBitmap( normal_xpm ) );
     AddMenuItem( PopMenu, orientmenu, ID_POPUP_SCH_GENERIC_ORIENT_CMP,
                  _( "Orientation" ), KiBitmap( orient_xpm ) );
@@ -397,11 +402,12 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_LIBS*
     AddMenuItem( PopMenu, ID_AUTOPLACE_FIELDS, msg, KiBitmap( autoplace_fields_xpm ) );
 
     if( !Component->GetField( DATASHEET )->GetFullyQualifiedText().IsEmpty() )
-        AddMenuItem( PopMenu, ID_POPUP_SCH_DISPLAYDOC_CMP, _( "Open Documentation" ), KiBitmap( datasheet_xpm ) );
+        AddMenuItem( PopMenu, ID_POPUP_SCH_DISPLAYDOC_CMP, _( "Open Documentation" ),
+                     KiBitmap( datasheet_xpm ) );
 }
 
 
-void AddMenusForEditComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_LIBS* aLibs )
+void AddMenusForEditComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, SYMBOL_LIB_TABLE* aLibs )
 {
     if( Component->Type() != SCH_COMPONENT_T )
     {
@@ -411,10 +417,18 @@ void AddMenusForEditComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_L
 
     wxString    msg;
     LIB_PART*   part = NULL;
-    LIB_ALIAS*  libEntry = aLibs->FindLibraryAlias( Component->GetLibId() );
+    LIB_ALIAS*  alias = NULL;
 
-    if( libEntry )
-        part = libEntry->GetPart();
+    try
+    {
+        alias = aLibs->LoadSymbol( Component->GetLibId() );
+    }
+    catch( ... )
+    {
+    }
+
+    if( alias )
+        part = alias->GetPart();
 
     wxMenu* editmenu = new wxMenu;
     msg = AddHotkeyName( _( "Edit Properties" ), g_Schematic_Hokeys_Descr, HK_EDIT );

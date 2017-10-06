@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2007-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2007-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@
 #include <sch_component.h>
 #include <libeditframe.h>
 #include <class_library.h>
+#include <symbol_lib_table.h>
 #include <template_fieldnames.h>
 #include <dialog_edit_one_field.h>
 
@@ -81,17 +82,16 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
     if( aField->GetId() == VALUE && newFieldValue != aField->GetText() )
     {
         wxString msg;
-
-        PART_LIB* lib = GetCurLib();
+        wxString lib = GetCurLib();
 
         // Test the current library for name conflicts.
-        if( lib && lib->FindAlias( newFieldValue ) )
+        if( !lib.empty() && Prj().SchSymbolLibTable()->LoadSymbol( lib, newFieldValue ) )
         {
             msg.Printf( _(
                 "The name '%s' conflicts with an existing entry in the component library '%s'.\n\n"
                 "Do you wish to replace the current component in the library with this one?" ),
-                GetChars( newFieldValue ),
-                GetChars( lib->GetName() )
+                newFieldValue,
+                lib
                 );
 
             int rsp = wxMessageBox( msg, _( "Confirm" ),
@@ -119,12 +119,12 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
         parent->SetName( newFieldValue );
 
         // Test the library for any conflicts with the any aliases in the current component.
-        if( parent->GetAliasCount() > 1 && lib )
+        if( parent->GetAliasCount() > 1 && !lib.empty() )
         {
             bool conflicts = false;
             wxArrayString libAliasNames, symbolAliasNames;
 
-            lib->GetAliasNames( libAliasNames );
+            Prj().SchSymbolLibTable()->EnumerateSymbolLib( lib, libAliasNames );
             symbolAliasNames = parent->GetAliasNames();
 
             for( size_t i = 0; i < symbolAliasNames.GetCount(); i++ )
@@ -138,12 +138,11 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
 
             if( conflicts )
             {
-                msg.Printf( _( "The new component contains alias names that conflict with "
-                               "entries in the component library '%s'.\n\n"
+                msg.Printf( _( "The new symbol contains alias names that conflict with "
+                               "entries in the library '%s'.\n\n"
                                "Do you wish to remove all of the conflicting aliases from "
-                               "this component?" ),
-                            GetChars( lib->GetName() )
-                    );
+                               "this symbol?" ),
+                            lib );
 
                 int rsp = wxMessageBox( msg, _( "Confirm" ), wxYES_NO | wxICON_QUESTION, this );
 
@@ -157,7 +156,7 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
 
                 for( size_t i = 0;  i < aliases.GetCount();  i++ )
                 {
-                    if( lib->FindAlias( aliases[ i ] ) != NULL )
+                    if( Prj().SchSymbolLibTable()->LoadSymbol( lib, aliases[ i ] ) != NULL )
                         parent->RemoveAlias( aliases[ i ] );
                 }
             }

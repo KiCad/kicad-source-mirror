@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,7 @@
 #include "help_common_strings.h"
 #include "hotkeys.h"
 #include "viewlib_frame.h"
+#include <symbol_lib_table.h>
 
 
 void LIB_VIEW_FRAME::ReCreateHToolbar()
@@ -124,9 +125,9 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
 
     if( m_libraryName.size() && m_entryName.size() )
     {
-        if( PART_LIB* lib = Prj().SchLibs()->FindLibrary( m_libraryName ) )
+        if( Prj().SchSymbolLibTable()->HasLibrary( m_libraryName ) )
         {
-            part = lib->FindPart( m_entryName );
+            part = GetLibPart( LIB_ID( m_libraryName, m_entryName ) );
         }
     }
 

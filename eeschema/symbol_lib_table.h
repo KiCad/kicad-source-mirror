@@ -134,11 +134,16 @@ public:
      *
      * @throw IO_ERROR if \a aNickName cannot be found.
      */
-    const SYMBOL_LIB_TABLE_ROW* FindRow( const wxString& aNickName );
+    SYMBOL_LIB_TABLE_ROW* FindRow( const wxString& aNickName );
 
     int GetModifyHash();
 
     //-----<PLUGIN API SUBSET, REBASED ON aNickname>---------------------------
+
+    /**
+     * Return the number of symbols in the symbol library mapped to \a aNickname
+     */
+    size_t GetSymbolCount( const wxString& aNickname );
 
     /**
      * Return a list of symbol alias names contained within the library given by @a aNickname.

@@ -353,6 +353,11 @@ public:
     std::vector<wxString> GetLogicalLibs();
 
     /**
+     * Return the full URI of the library mapped to \a aLibNickname.
+     */
+    wxString GetFullURI( const wxString& aLibNickname, bool aExpandEnvVars = true ) const;
+
+    /**
      * Adds \a aRow if it does not already exist or if doReplace is true.  If doReplace
      * is not true and the key for aRow already exists, the function fails and returns false.
      *

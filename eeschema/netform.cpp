@@ -57,19 +57,19 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
     switch( aFormat )
     {
     case NET_TYPE_PCBNEW:
-        helper = new NETLIST_EXPORTER_KICAD( aConnectedItemsList, Prj().SchLibs() );
+        helper = new NETLIST_EXPORTER_KICAD( aConnectedItemsList, Prj().SchSymbolLibTable() );
         break;
 
     case NET_TYPE_ORCADPCB2:
-        helper = new NETLIST_EXPORTER_ORCADPCB2( aConnectedItemsList, Prj().SchLibs() );
+        helper = new NETLIST_EXPORTER_ORCADPCB2( aConnectedItemsList );
         break;
 
     case NET_TYPE_CADSTAR:
-        helper = new NETLIST_EXPORTER_CADSTAR( aConnectedItemsList, Prj().SchLibs() );
+        helper = new NETLIST_EXPORTER_CADSTAR( aConnectedItemsList );
         break;
 
     case NET_TYPE_SPICE:
-        helper = new NETLIST_EXPORTER_PSPICE( aConnectedItemsList, Prj().SchLibs() );
+        helper = new NETLIST_EXPORTER_PSPICE( aConnectedItemsList );
         break;
 
     default:
@@ -78,7 +78,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
             tmpFile.SetExt( GENERIC_INTERMEDIATE_NETLIST_EXT );
             fileName = tmpFile.GetFullPath();
 
-            helper = new NETLIST_EXPORTER_GENERIC( aConnectedItemsList, Prj().SchLibs() );
+            helper = new NETLIST_EXPORTER_GENERIC( aConnectedItemsList, Prj().SchSymbolLibTable() );
             executeCommandLine = true;
         }
         break;

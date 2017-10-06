@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,11 +94,11 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     {
         if( aAnnotateSchematic )
         {
-            sheets.GetMultiUnitComponents( Prj().SchLibs(), lockedComponents );
+            sheets.GetMultiUnitComponents( lockedComponents );
         }
         else
         {
-            m_CurrentSheet->GetMultiUnitComponents( Prj().SchLibs(), lockedComponents );
+            m_CurrentSheet->GetMultiUnitComponents( lockedComponents );
         }
     }
 
@@ -112,11 +112,11 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     // Build component list
     if( aAnnotateSchematic )
     {
-        sheets.GetComponents( Prj().SchLibs(), references );
+        sheets.GetComponents( references );
     }
     else
     {
-        m_CurrentSheet->GetComponents( Prj().SchLibs(), references );
+        m_CurrentSheet->GetComponents( references );
     }
 
     // Break full components reference in name (prefix) and number:
@@ -192,9 +192,9 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
 
     // Build the list of components
     if( !aOneSheetOnly )
-        sheetList.GetComponents( Prj().SchLibs(), componentsList );
+        sheetList.GetComponents( componentsList );
     else
-        m_CurrentSheet->GetComponents( Prj().SchLibs(), componentsList );
+        m_CurrentSheet->GetComponents( componentsList );
 
     return componentsList.CheckAnnotation( aMessageList );
 }

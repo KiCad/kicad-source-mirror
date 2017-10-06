@@ -28,6 +28,8 @@
 #include <class_library.h>
 
 #include <schframe.h>
+#include <symbol_lib_table.h>
+
 #include "netlist_exporter_generic.h"
 
 static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 );
@@ -214,6 +216,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
         for( EDA_ITEM* schItem = sheetList[i].LastDrawList();  schItem;  schItem = schItem->Next() )
         {
             SCH_COMPONENT*  comp = findNextComponent( schItem, &sheetList[i] );
+
             if( !comp )
                 break;  // No component left
 
@@ -237,9 +240,10 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
             // "logical" library name, which is in anticipation of a better search
             // algorithm for parts based on "logical_lib.part" and where logical_lib
             // is merely the library name minus path and extension.
-            LIB_PART* part = m_libs->FindLibPart( comp->GetLibId() );
+            PART_SPTR part = comp->GetPartRef().lock();
+
             if( part )
-                xlibsource->AddAttribute( "lib", part->GetLib()->GetLogicalName() );
+                xlibsource->AddAttribute( "lib", part->GetLibId().GetLibNickname() );
 
             // We only want the symbol name, not the full LIB_ID.
             xlibsource->AddAttribute( "part", comp->GetLibId().GetLibItemName() );
@@ -335,14 +339,17 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibraries()
 {
     XNODE*  xlibs = node( "libraries" );     // auto_ptr
 
-    for( std::set<void*>::iterator it = m_Libraries.begin(); it!=m_Libraries.end();  ++it )
+    for( std::set<wxString>::iterator it = m_libraries.begin(); it!=m_libraries.end();  ++it )
     {
-        PART_LIB*    lib = (PART_LIB*) *it;
+        wxString    libNickname = *it;
         XNODE*      xlibrary;
 
-        xlibs->AddChild( xlibrary = node( "library" ) );
-        xlibrary->AddAttribute( "logical", lib->GetLogicalName() );
-        xlibrary->AddChild( node( "uri",  lib->GetFullFileName() ) );
+        if( m_libTable->HasLibrary( libNickname ) )
+        {
+            xlibs->AddChild( xlibrary = node( "library" ) );
+            xlibrary->AddAttribute( "logical", libNickname );
+            xlibrary->AddChild( node( "uri",  m_libTable->GetFullURI( libNickname ) ) );
+        }
 
         // @todo: add more fun stuff here
     }
@@ -358,18 +365,20 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
     LIB_PINS    pinList;
     LIB_FIELDS  fieldList;
 
-    m_Libraries.clear();
+    m_libraries.clear();
 
     for( std::set<LIB_PART*>::iterator it = m_LibParts.begin(); it!=m_LibParts.end();  ++it )
     {
         LIB_PART* lcomp = *it;
-        PART_LIB* library = lcomp->GetLib();
+        wxString libNickname = lcomp->GetLibId().GetLibNickname();;
 
-        m_Libraries.insert( library );  // inserts component's library if unique
+        // The library nickname will be empty if the cache library is used.
+        if( !libNickname.IsEmpty() )
+            m_libraries.insert( libNickname );  // inserts component's library if unique
 
         XNODE* xlibpart;
         xlibparts->AddChild( xlibpart = node( "libpart" ) );
-        xlibpart->AddAttribute( "lib", library->GetLogicalName() );
+        xlibpart->AddAttribute( "lib", libNickname );
         xlibpart->AddAttribute( "part", lcomp->GetName()  );
 
         if( lcomp->GetAliasCount() )

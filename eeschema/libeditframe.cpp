@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -44,6 +44,7 @@
 #include <class_library.h>
 #include <lib_polyline.h>
 #include <lib_pin.h>
+#include <symbol_lib_table.h>
 
 #include <kicad_device_context.h>
 #include <hotkeys.h>
@@ -166,7 +167,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( wxID_UNDO, LIB_EDIT_FRAME::OnUpdateUndo )
     EVT_UPDATE_UI( wxID_REDO, LIB_EDIT_FRAME::OnUpdateRedo )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE_CURRENT_LIB, LIB_EDIT_FRAME::OnUpdateSaveCurrentLib )
-    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_CURRENT_LIB_AS, LIB_EDIT_FRAME::OnUpdateSaveCurrentLib )
+    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_CURRENT_LIB_AS, LIB_EDIT_FRAME::OnUpdateSaveCurrentLibAs )
     EVT_UPDATE_UI( ID_LIBEDIT_VIEW_DOC, LIB_EDIT_FRAME::OnUpdateViewDoc )
     EVT_UPDATE_UI( ID_LIBEDIT_EDIT_PIN_BY_PIN, LIB_EDIT_FRAME::OnUpdatePinByPin )
     EVT_UPDATE_UI( ID_LIBEDIT_EDIT_PIN_BY_TABLE, LIB_EDIT_FRAME::OnUpdatePinTable )
@@ -256,7 +257,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
             m_aliasName = part->GetName();
     }
 
-
     CreateOptionToolbar();
     DisplayLibInfos();
     DisplayCmpDoc();
@@ -334,7 +334,7 @@ void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
             break;
 
         case wxID_YES:
-            if ( this->SaveActiveLibrary( false ) )
+            if( SaveActiveLibrary( false ) )
                 break;
 
             // fall through: cancel the close because of an error
@@ -343,26 +343,8 @@ void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
             Event.Veto();
             return;
         }
+
         GetScreen()->ClrModify();
-    }
-
-    PART_LIBS* libs = Prj().SchLibs();
-
-    for( const PART_LIB& lib : *libs )
-    {
-        if( lib.IsModified() )
-        {
-            wxString msg = wxString::Format( _(
-                "Library '%s' was modified!\nDiscard changes?" ),
-                GetChars( lib.GetName() )
-                );
-
-            if( !IsOK( this, msg ) )
-            {
-                Event.Veto();
-                return;
-            }
-        }
     }
 
     Destroy();
@@ -525,10 +507,20 @@ void LIB_EDIT_FRAME::OnUpdateRedo( wxUpdateUIEvent& event )
 
 void LIB_EDIT_FRAME::OnUpdateSaveCurrentLib( wxUpdateUIEvent& event )
 {
-    PART_LIB* lib = GetCurLib();
+    wxString lib = GetCurLib();
+    SYMBOL_LIB_TABLE* table = Prj().SchSymbolLibTable();
 
-    event.Enable( lib && !lib->IsReadOnly()
-                  && ( lib->IsModified() || GetScreen()->IsModify() ) );
+    event.Enable( !lib.empty() && table->HasLibrary( lib ) && table->IsSymbolLibWritable( lib ) &&
+                  GetScreen()->IsModify() );
+}
+
+
+void LIB_EDIT_FRAME::OnUpdateSaveCurrentLibAs( wxUpdateUIEvent& event )
+{
+    wxString lib = GetCurLib();
+    SYMBOL_LIB_TABLE* table = Prj().SchSymbolLibTable();
+
+    event.Enable( !lib.empty() && table->HasLibrary( lib ) );
 }
 
 
@@ -536,14 +528,15 @@ void LIB_EDIT_FRAME::OnUpdateViewDoc( wxUpdateUIEvent& event )
 {
     bool enable = false;
 
-    PART_LIB*    lib  = GetCurLib();
-    LIB_PART*       part = GetCurPart();
+    LIB_PART* part = GetCurPart();
 
-    if( part && lib )
+    if( part )
     {
         LIB_ALIAS* alias = part->GetAlias( m_aliasName );
 
-        wxCHECK_RET( alias != NULL, wxT( "Alias <" ) + m_aliasName + wxT( "> not found." ) );
+        wxCHECK_RET( alias != NULL,
+                     wxString::Format( "Alias '%s' not found in symbol '%s'.",
+                                       m_aliasName, part->GetName() ) );
 
         enable = !alias->GetDocFileName().IsEmpty();
     }
@@ -694,28 +687,28 @@ void LIB_EDIT_FRAME::OnSaveCurrentPart( wxCommandEvent& aEvent )
         return;
     }
 
-    PART_LIB* lib  = GetCurLib();
+    wxString libNickname = GetCurLib();
 
-    if( !lib )
+    if( libNickname.empty() )
         SelectActiveLibrary();
 
-    lib = GetCurLib();
+    libNickname = GetCurLib();
 
-    if( !lib )
+    if( !libNickname )
     {
-        DisplayError( this, _( "No library specified." ) );
+        DisplayError( this, _( "No valid library specified." ) );
         return;
     }
 
     try
     {
-        SaveOnePart( lib );
+        Prj().SchSymbolLibTable()->SaveSymbol( libNickname, new LIB_PART( *part ) );
     }
     catch( ... )
     {
         wxString msg;
         msg.Printf( _( "Unexpected error occured saving symbol '%s' to symbol library '%s'." ),
-                    part->GetName(), lib->GetName() );
+                    part->GetName(), libNickname );
         DisplayError( this, msg );
         return;
     }
@@ -976,32 +969,31 @@ void LIB_EDIT_FRAME::OnActivate( wxActivateEvent& event )
 }
 
 
-PART_LIB* LIB_EDIT_FRAME::GetCurLib()
+wxString LIB_EDIT_FRAME::GetCurLib()
 {
-    wxString  name = Prj().GetRString( PROJECT::SCH_LIBEDIT_CUR_LIB );
+    wxString libNickname = Prj().GetRString( PROJECT::SCH_LIBEDIT_CUR_LIB );
 
-    if( !!name )
+    if( !libNickname.empty() )
     {
-        PART_LIB* lib = Prj().SchLibs()->FindLibrary( name );
-
-        if( !lib )
+        if( !Prj().SchSymbolLibTable()->HasLibrary( libNickname ) )
+        {
             Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, wxEmptyString );
-
-        return lib;
+            libNickname = wxEmptyString;
+        }
     }
 
-    return NULL;
+    return libNickname;
 }
 
 
-PART_LIB* LIB_EDIT_FRAME::SetCurLib( PART_LIB* aLib )
+wxString LIB_EDIT_FRAME::SetCurLib( const wxString& aLibNickname )
 {
-    PART_LIB* old = GetCurLib();
+    wxString old = GetCurLib();
 
-    if( !aLib || !aLib->GetName() )
+    if( aLibNickname.empty() || !Prj().SchSymbolLibTable()->HasLibrary( aLibNickname ) )
         Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, wxEmptyString );
     else
-        Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, aLib->GetName() );
+        Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, aLibNickname );
 
     return old;
 }
@@ -1009,20 +1001,6 @@ PART_LIB* LIB_EDIT_FRAME::SetCurLib( PART_LIB* aLib )
 
 LIB_PART* LIB_EDIT_FRAME::GetCurPart()
 {
-    if( !m_my_part )
-    {
-        wxString    name = Prj().GetRString( PROJECT::SCH_LIBEDIT_CUR_PART );
-        LIB_PART*   part;
-
-        if( !!name && ( part = Prj().SchLibs()->FindLibPart( LIB_ID( wxEmptyString, name ) ) ) )
-        {
-            // clone it from the PART_LIB and own it.
-            m_my_part = new LIB_PART( *part );
-        }
-        else
-            Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_PART, wxEmptyString );
-    }
-
     return m_my_part;
 }
 
@@ -1033,8 +1011,7 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
     m_my_part = aPart;      // take ownership here
 
     // retain in case this wxFrame is re-opened later on the same PROJECT
-    Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_PART,
-            aPart ? aPart->GetName() : wxString() );
+    Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_PART, aPart ? aPart->GetName() : wxString() );
 }
 
 

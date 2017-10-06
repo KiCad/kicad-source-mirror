@@ -527,9 +527,9 @@ public:
 
 
 /**
- * Class SCH_SCREENS
- * is a container class that holds multiple SCH_SCREENs in a hierarchy.
- * Individual SCH_SCREENs are unique, and correspond to .sch files.
+ * Container class that holds multiple #SCH_SCREEN objects in a hierarchy.
+ *
+ * Individual #SCH_SCREEN objects are unique and correspond to .sch files.
  */
 class SCH_SCREENS
 {
@@ -546,37 +546,33 @@ public:
     SCH_SCREEN* GetScreen( unsigned int aIndex ) const;
 
     /**
-     * Function ClearAnnotation
-     * clears the annotation for all components in the hierarchy.
+     * Clear the annotation for all components in the hierarchy.
      */
     void ClearAnnotation();
 
     /**
-     * Function SchematicCleanUp
-     * merges and breaks wire segments in the entire schematic hierarchy.
+     * Merge and break wire segments in the entire schematic hierarchy.
      */
     void SchematicCleanUp();
 
     /**
-     * Function ReplaceDuplicateTimeStamps
-     * test all sheet and component objects in the schematic for duplicate time stamps
-     * an replaces them as necessary.  Time stamps must be unique in order for complex
-     * hierarchies know which components go to which sheets.
+     * Test all sheet and component objects in the schematic for duplicate time stamps
+     * and replaces them as necessary.
+     * Time stamps must be unique in order for complex hierarchies know which components go
+     * to which sheets.
      * @return The number of duplicate time stamps replaced.
      */
     int ReplaceDuplicateTimeStamps();
 
     /**
-     * Function DeleteAllMarkers
-     * deletes all electronic rules check markers of \a aMarkerType from all the screens in
+     * Delete all electronic rules check markers of \a aMarkerType from all the screens in
      * the list.
      * @param aMarkerType Type of markers to be deleted.
      */
     void DeleteAllMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType );
 
     /**
-     * Function GetMarkerCount
-     * returns the number of ERC markers of \a aMarkerType from all of the screens in the list.
+     * Return the number of ERC markers of \a aMarkerType from all of the screens in the list.
      *
      * @param aMarkerType Indicates the type of marker to count. if MARKER_UNSPEC
      *                    all markers are counted.
@@ -588,8 +584,9 @@ public:
                         enum MARKER_BASE::MARKER_SEVERITY aSeverity );
 
     /**
-      * initializes or reinitializes the weak reference
-     * to the LIB_PART for each SCH_COMPONENT found in the full schematic
+     * Initialize or reinitialize the weak reference to the #LIB_PART for each #SCH_COMPONENT
+     * found in the full schematic.
+     *
      * It must be called from:
      * - Draw function
      * - when loading a schematic file
@@ -600,15 +597,14 @@ public:
     void TestDanglingEnds();
 
     /**
-     * Function HasNoFullyDefinedLibIds
-     *
-     * tests all of the schematic symbols to see if all #LIB_ID objects library nickname is not
+     * Test all of the schematic symbols to see if all #LIB_ID objects library nickname is not
      * set.
      *
      * If none of the #LIB_ID object library nicknames are not set, this indicates that the
      * project was created before the symbol library implementation.
      *
-     * @return true if all of the #LIB_ID object library nick names are empty, otherwise false.
+     * @return true in there are any symbols and if all of the #LIB_ID object library nicknames
+     *         are empty, otherwise false.
      */
     bool HasNoFullyDefinedLibIds();
 

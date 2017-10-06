@@ -1528,6 +1528,7 @@ bool SCH_SCREENS::HasNoFullyDefinedLibIds()
     SCH_ITEM* item;
     SCH_ITEM* nextItem;
     SCH_SCREEN* screen;
+    unsigned cnt = 0;
 
     for( screen = GetFirst(); screen; screen = GetNext() )
     {
@@ -1538,12 +1539,16 @@ bool SCH_SCREENS::HasNoFullyDefinedLibIds()
             if( item->Type() != SCH_COMPONENT_T )
                 continue;
 
+            cnt += 1;
             symbol = dynamic_cast< SCH_COMPONENT* >( item );
 
             if( !symbol->GetLibId().GetLibNickname().empty() )
                 return false;
         }
     }
+
+    if( cnt == 0 )
+        return false;
 
     return true;
 }

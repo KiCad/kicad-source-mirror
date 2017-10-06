@@ -245,10 +245,19 @@ int SYMBOL_LIB_TABLE::GetModifyHash()
 }
 
 
+size_t SYMBOL_LIB_TABLE::GetSymbolCount( const wxString& aNickname )
+{
+    SYMBOL_LIB_TABLE_ROW* row = dynamic_cast< SYMBOL_LIB_TABLE_ROW* >( findRow( aNickname ) );
+    wxASSERT( (SCH_PLUGIN*) row->plugin );
+
+    return row->plugin->GetSymbolLibCount( row->GetFullURI( true ) );
+}
+
+
 void SYMBOL_LIB_TABLE::EnumerateSymbolLib( const wxString& aNickname, wxArrayString& aAliasNames,
                                            bool aPowerSymbolsOnly )
 {
-    SYMBOL_LIB_TABLE_ROW* row = dynamic_cast< SYMBOL_LIB_TABLE_ROW* >( findRow( aNickname ) );
+    SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
     wxASSERT( (SCH_PLUGIN*) row->plugin );
 
     wxString options = row->GetOptions();
@@ -263,7 +272,7 @@ void SYMBOL_LIB_TABLE::EnumerateSymbolLib( const wxString& aNickname, wxArrayStr
 }
 
 
-const SYMBOL_LIB_TABLE_ROW* SYMBOL_LIB_TABLE::FindRow( const wxString& aNickname )
+SYMBOL_LIB_TABLE_ROW* SYMBOL_LIB_TABLE::FindRow( const wxString& aNickname )
 
 {
     SYMBOL_LIB_TABLE_ROW* row = dynamic_cast< SYMBOL_LIB_TABLE_ROW* >( findRow( aNickname ) );

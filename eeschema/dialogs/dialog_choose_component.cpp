@@ -253,17 +253,20 @@ void DIALOG_CHOOSE_COMPONENT::PopulateFootprintSelector( LIB_ID const& aLibId )
 
     LIB_ALIAS* alias = nullptr;
 
-    try
+    if( aLibId.IsValid() )
     {
-        alias = Prj().SchSymbolLibTable()->LoadSymbol( aLibId );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        wxLogError( wxString::Format( _( "Error occurred loading symbol %s from library %s."
-                                         "\n\n%s" ),
-                                      aLibId.GetLibItemName().wx_str(),
-                                      aLibId.GetLibNickname().wx_str(),
-                                      ioe.What() ) );
+        try
+        {
+            alias = Prj().SchSymbolLibTable()->LoadSymbol( aLibId );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxLogError( wxString::Format( _( "Error occurred loading symbol %s from library %s."
+                                             "\n\n%s" ),
+                                          aLibId.GetLibItemName().wx_str(),
+                                          aLibId.GetLibNickname().wx_str(),
+                                          ioe.What() ) );
+        }
     }
 
     if( alias != nullptr )

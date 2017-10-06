@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -39,14 +39,15 @@
 
 
 class SCH_EDIT_FRAME;
-class PART_LIB;
 class LIB_PART;
 class LIB_ALIAS;
 class LIB_FIELD;
 class DIALOG_LIB_EDIT_TEXT;
+class LIB_ID;
+
 
 /**
- * The component library editor main window.
+ * The symbol library editor main window.
  */
 class LIB_EDIT_FRAME : public SCH_BASE_FRAME
 {
@@ -135,23 +136,21 @@ public:
 
     ~LIB_EDIT_FRAME();
 
-    /** The current library being edited, or NULL if none. */
-    PART_LIB* GetCurLib();
+    /** The nickname of the current library being edited and empty string if none. */
+    wxString GetCurLib();
 
-    /** Sets the current library and return the old. */
-    PART_LIB* SetCurLib( PART_LIB* aLib );
+    /** Sets the current library nickname and returns the old library nickname. */
+    wxString SetCurLib( const wxString& aLibNickname );
 
     /**
-     * Function GetCurPart
-     * returns the current part being edited, or NULL if none selected.
+     * Return the current part being edited or NULL if none selected.
+     *
      * This is a LIB_PART that I own, it is at best a copy of one in a library.
      */
     LIB_PART* GetCurPart();
 
     /**
-     * Function SetCurPart
-     * takes ownership over aPart and notes that it is the one currently
-     * being edited.
+     * Take ownership of aPart and notes that it is the one currently being edited.
      */
     void SetCurPart( LIB_PART* aPart );
 
@@ -187,19 +186,11 @@ public:
 
     void ReCreateMenuBar() override;
 
-    /**
-     * Function EnsureActiveLibExists
-     * must be called after the libraries are reloaded
-     * (for instance after loading a schematic project)
-     */
-    static void EnsureActiveLibExists();
-
     void InstallConfigFrame( wxCommandEvent& event );
     void OnPreferencesOptions( wxCommandEvent& event );
     void Process_Config( wxCommandEvent& event );
 
     /**
-     * Function SycnronizePins
      * @return True if the edit pins per part or convert is false and the current
      *         component has multiple parts or body styles.  Otherwise false is
      *         returned.
@@ -207,8 +198,7 @@ public:
     bool SynchronizePins();
 
     /**
-     * Function OnPlotCurrentComponent
-     * plot the current component in SVG or PNG format.
+     * Plot the current symbol in SVG or PNG format.
      */
     void OnPlotCurrentComponent( wxCommandEvent& event );
     void Process_Special_Functions( wxCommandEvent& event );
@@ -237,8 +227,7 @@ public:
     void OnShowElectricalType( wxCommandEvent& event );
 
     /**
-     * Function DeleteOnePart
-     * is the command event handler to delete an entry from the current library.
+     * Delete a symbol from the current library.
      *
      * The deleted entry can be an alias or a component.  If the entry is an alias,
      * it is removed from the component and the list of alias is updated.  If the
@@ -252,8 +241,7 @@ public:
     void DeleteOnePart( wxCommandEvent& event );
 
     /**
-     * Function CreateNewLibraryPart
-     * is the command event handler to create a new library component.
+     * Create a new library symbol.
      *
      * If an old component is currently in edit, it is deleted.
      */
@@ -264,8 +252,7 @@ public:
     void InstallFieldsEditorDialog(  wxCommandEvent& event );
 
     /**
-     * Function LoadOneLibraryPart
-     * loads a library component from the currently selected library.
+     * Loads a symbol from the currently selected library.
      *
      * If a library is already selected, the user is prompted for the component name
      * to load.  If there is no current selected library, the user is prompted to select
@@ -289,6 +276,7 @@ public:
     void OnUpdateUndo( wxUpdateUIEvent& event );
     void OnUpdateRedo( wxUpdateUIEvent& event );
     void OnUpdateSaveCurrentLib( wxUpdateUIEvent& event );
+    void OnUpdateSaveCurrentLibAs( wxUpdateUIEvent& event );
     void OnUpdateViewDoc( wxUpdateUIEvent& event );
     void OnUpdatePinByPin( wxUpdateUIEvent& event );
     void OnUpdatePinTable( wxUpdateUIEvent& event );
@@ -302,14 +290,12 @@ public:
     void UpdatePartSelectList();
 
     /**
-     * Function DisplayLibInfos
-     * updates the main window title bar with the current library name and read only status
+     * Updates the main window title bar with the current library name and read only status
      * of the library.
      */
     void DisplayLibInfos();
 
     /**
-     * Function RedrawComponent
      * Redraw the current component loaded in library editor
      * Display reference like in schematic (a reference U is shown U? or U?A)
      * accordint to the current selected unit and De Morgan selection
@@ -321,7 +307,6 @@ public:
     void RedrawComponent( wxDC* aDC, wxPoint aOffset );
 
     /**
-     * Function RedrawActiveWindow
      * Redraw the current component loaded in library editor, an axes
      * Display reference like in schematic (a reference U is shown U? or U?A)
      * update status bar and info shown in the bottom of the window
@@ -349,11 +334,10 @@ public:
     void SaveSettings( wxConfigBase* aCfg ) override;
 
     /**
-     * Function CloseWindow
-     * triggers the wxCloseEvent, which is handled by the function given
-     * to EVT_CLOSE() macro:
+     * Trigger the wxCloseEvent, which is handled by the function given to EVT_CLOSE() macro:
      * <p>
      * EVT_CLOSE( LIB_EDIT_FRAME::OnCloseWindow )
+     * </p>
      */
     void CloseWindow( wxCommandEvent& event )
     {
@@ -362,9 +346,8 @@ public:
     }
 
     /**
-     * Function OnModify
-     * Must be called after a schematic change
-     * in order to set the "modify" flag of the current screen
+     * Must be called after a schematic change in order to set the "modify" flag of the
+     * current screen.
      */
     void OnModify()
     {
@@ -411,28 +394,25 @@ public:
     FILL_T GetFillStyle() { return m_drawFillStyle; }
 
     /**
-     * Function TempCopyComponent
-     * create a temporary copy of the current edited component
-     * Used to prepare an Undo ant/or abort command before editing the component
+     * Create a temporary copy of the current edited component.
+     *
+     * Used to prepare an undo and/or abort command before editing the symbol.
      */
     void TempCopyComponent();
 
     /**
-     * Function RestoreComponent
      * Restore the current edited component from its temporary copy.
      * Used to abort a command
      */
     void RestoreComponent();
 
     /**
-     * Function GetTempCopyComponent
      * @return the temporary copy of the current component.
      */
     LIB_PART*      GetTempCopyComponent() { return m_tempCopyComponent; }
 
     /**
-     * Function ClearTempCopyComponent
-     * delete temporary copy of the current component and clear pointer
+     * Delete temporary copy of the current component and clear pointer
      */
     void ClearTempCopyComponent();
 
@@ -441,8 +421,7 @@ public:
 private:
 
     /**
-     * Function OnActivate
-     * is called when the frame is activated. Tests if the current library exists.
+     * Called when the frame is activated.  Tests if the current library exists.
      * The library list can be changed by the schematic editor after reloading a new schematic
      * and the current library can point a non existent lib.
      */
@@ -451,31 +430,15 @@ private:
     // General:
 
     /**
-     * Function SaveOnePart
-     * saves the current LIB_PART into the provided PART_LIB.
+     * Set the current active library to \a aLibrary.
      *
-     * Any changes are updated in memory only and NOT to a file.  The old component is
-     * deleted from the library and/or any aliases before the edited component is updated
-     * in the library.
-     * @param aLib - the part library where the part must be saved.
-     * @param aPromptUser true to ask for confirmation, when the part_lib is already existing
-     *      in memory, false to save silently
-     * @return true if the part was saved, false if aborted by user
+     * @param aLibrary the nickname of the library in the symbol library table.  If wxEmptyString,
+     *                 then display list of available libraries to select from.
      */
-    bool SaveOnePart( PART_LIB* aLib, bool aPromptUser = true );
+    void SelectActiveLibrary( const wxString& aLibrary = wxEmptyString );
 
     /**
-     * Function SelectActiveLibrary
-     * sets the current active library to \a aLibrary.
-     *
-     * @param aLibrary A pointer to the PART_LIB object to select.  If NULL, then display
-     *                 list of available libraries to select from.
-     */
-    void SelectActiveLibrary( PART_LIB* aLibrary = NULL );
-
-    /**
-     * Function OnSaveActiveLibrary
-     * it the command event handler to save the changes to the current library.
+     * The command event handler to save the changes to the current library.
      *
      * A backup file of the current library is saved with the .bak extension before the
      * changes made to the library are saved.
@@ -483,8 +446,7 @@ private:
     void OnSaveActiveLibrary( wxCommandEvent& event );
 
     /**
-     * Function SaveActiveLibrary
-     * saves the changes to the current library.
+     * Saves the changes to the current library.
      *
      * A backup file of the current library is saved with the .bak extension before the
      * changes made to the library are saved.
@@ -494,47 +456,44 @@ private:
     bool SaveActiveLibrary( bool newFile );
 
     /**
-     * Function LoadComponentFromCurrentLib
-     * loads a component from the current active library, optionally setting the selected
-     * unit and convert
-     * @param aLibEntry The component to load from \a aLibrary (can be an alias)
+     * Loads a symbol from the current active library, optionally setting the selected
+     * unit and convert.
+     *
+     * @param aAliasName The symbol alias name to load from the current library.
      * @param aUnit Unit to be selected
      * @param aConvert Convert to be selected
-     * @return true if \a aLibEntry loaded correctly.
+     * @return true if the symbol loaded correctly.
      */
-    bool LoadComponentFromCurrentLib( LIB_ALIAS* aLibEntry, int aUnit = 0, int aConvert = 0 );
+    bool LoadComponentFromCurrentLib( const wxString& aAliasName, int aUnit = 0, int aConvert = 0 );
 
     /**
-     * Function LoadOneLibraryPartAux
-     * loads a copy of \a aLibEntry from \a aLibrary into memory.
+     * Create a copy of \a aLibEntry into memory.
      *
-     * @param aLibEntry A pointer to the LIB_ALIAS object to load.
-     * @param aLibrary A pointer to the PART_LIB object to load \a aLibEntry from.
-     * @return True if a copy of \a aLibEntry was successfully loaded from \a aLibrary.
+     * @param aLibEntry A pointer to the LIB_ALIAS object to an already loaded.
+     * @param aLibrary the path to the library file that \a aLibEntry was loaded from.  This is
+     *                 for error messaging purposes only.
+     * @return True if a copy of \a aLibEntry was successfully copied.
      */
-    bool LoadOneLibraryPartAux( LIB_ALIAS* aLibEntry, PART_LIB* aLibrary );
+    bool LoadOneLibraryPartAux( LIB_ALIAS* aLibEntry, const wxString& aLibrary );
 
     /**
-     * Function DisplayCmpDoc
-     * displays the documentation of the selected component.
+     * Display the documentation of the selected component.
      */
     void DisplayCmpDoc();
 
     /**
-     * Function OnRotateItem
-     * rotates the current item.
+     * Rotates the current item.
      */
     void OnRotateItem( wxCommandEvent& aEvent );
 
     /**
-     * Function OnOrient
      * Handles the ID_LIBEDIT_MIRROR_X and ID_LIBEDIT_MIRROR_Y events.
      */
     void OnOrient( wxCommandEvent& aEvent );
 
     /**
-     * Function deleteItem
-     * deletes the currently selected draw item.
+     * Deletes the currently selected draw item.
+     *
      * @param aDC The device context to draw upon when removing item.
      */
     void deleteItem( wxDC* aDC );
@@ -542,8 +501,8 @@ private:
     // General editing
 public:
     /**
-     * Function SaveCopyInUndoList.
      * Create a copy of the current component, and save it in the undo list.
+     *
      * Because a component in library editor does not a lot of primitives,
      * the full data is duplicated. It is not worth to try to optimize this save funtion
      */
@@ -558,8 +517,7 @@ private:
     void StartMovePin( wxDC* DC );
 
     /**
-     * Function CreateImagePins
-     * adds copies of \a aPin for \a aUnit in components with multiple parts and
+     * Adds copies of \a aPin for \a aUnit in components with multiple parts and
      * \a aConvert for components that have multiple body styles.
      *
      * @param aPin The pin to copy.
@@ -571,8 +529,7 @@ private:
     void CreateImagePins( LIB_PIN* aPin, int aUnit, int aConvert, bool aDeMorgan );
 
     /**
-     * Function PlaceAnchor
-     * places an  anchor reference coordinate for the current component.
+     * Places an  anchor reference coordinate for the current component.
      * <p>
      * All object coordinates are offset to the current cursor position.
      * </p>
@@ -580,26 +537,22 @@ private:
     void PlaceAnchor();
 
     // Editing graphic items
-    LIB_ITEM* CreateGraphicItem( LIB_PART*      LibEntry, wxDC* DC );
+    LIB_ITEM* CreateGraphicItem( LIB_PART* LibEntry, wxDC* DC );
     void GraphicItemBeginDraw( wxDC* DC );
     void StartMoveDrawSymbol( wxDC* DC );
     void StartModifyDrawSymbol( wxDC* DC ); //<! Modify the item, adjust size etc.
     void EndDrawGraphicItem( wxDC* DC );
 
     /**
-     * Function LoadOneSymbol
-     * read a component symbol file (*.sym ) and add graphic items to the current component.
-     * <p>
-     * A symbol file *.sym has the same format as a library, and contains only
-     * one symbol.
-     * </p>
+     * Read a component symbol file (*.sym ) and add graphic items to the current component.
+     *
+     * A symbol file *.sym has the same format as a library, and contains only one symbol.
      */
     void LoadOneSymbol();
 
     /**
-     * Function SaveOneSymbol
-     * saves the current component to a symbol file.
-     * <p>
+     * Saves the current symbol to a symbol file.
+     *
      * The symbol file format is similar to the standard component library file format, but
      * there is only one symbol.  Invisible pins are not saved.
      */
@@ -615,47 +568,41 @@ private:
 
 public:
     /**
-     * Function LoadComponentAndSelectLib
-     * selects the current active library.
+     * Selects the currently active library and loads the symbol from \a aLibId.
      *
-     * @param aLibrary The PART_LIB to select
-     * @param aLibEntry The component to load from aLibrary (can be an alias).
-     * @return true if \a aLibEntry was loaded from \a aLibrary.
+     * @param aLibId is the #LIB_ID of the symbol to select.
+     * @return true if the symbol defined by \a aLibId was loaded.
      */
-    bool LoadComponentAndSelectLib( LIB_ALIAS* aLibEntry, PART_LIB* aLibrary );
+    bool LoadComponentAndSelectLib( const LIB_ID& aLibId );
 
     /* Block commands: */
 
     /**
-     * Function BlockCommand
-     * returns the block command (BLOCK_MOVE, BLOCK_DUPLICATE...) corresponding to
+     * Returns the block command (BLOCK_MOVE, BLOCK_DUPLICATE...) corresponding to
      * the \a aKey (ALT, SHIFT ALT ..)
      */
     virtual int BlockCommand( EDA_KEY aKey ) override;
 
     /**
-     * Function HandleBlockPlace
-     * handles the block place command.
+     * Handles the block place command.
      */
     virtual void HandleBlockPlace( wxDC* DC ) override;
 
     /**
-     * Function HandleBlockEnd
-     * performs a block end command.
+     * Performs a block end command.
+     *
      * @return If command finished (zoom, delete ...) false is returned otherwise true
      *         is returned indicating more processing is required.
      */
     virtual bool HandleBlockEnd( wxDC* DC ) override;
 
     /**
-     * Function PlacePin
      * Place at cursor location the pin currently moved (i.e. pin pointed by m_drawItem)
      * (and the linked pins, if any)
      */
     void PlacePin();
 
     /**
-     * Function GlobalSetPins
      * @param aMasterPin is the "template" pin
      * @param aId is a param to select what should be mofified:
      * - aId = ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNAMESIZE_ITEM:
@@ -674,16 +621,15 @@ public:
     void RepeatPinItem( wxDC* DC, LIB_PIN* Pin );
 
     /**
-     * Function CreatePNGorJPEGFile
-     * creates an image (screenshot) of the current component in PNG or JPEG format.
+     * Creates an image (screenshot) of the current component in PNG or JPEG format.
      * @param aFileName = the full filename
      * @param aFmt_jpeg = true to use JPEG file format, false to use PNG file format
      */
     void CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_jpeg );
 
     /**
-     * Virtual function PrintPage
-     * used to print a page
+     * Print a page
+     *
      * @param aDC = wxDC given by the calling print function
      * @param aPrintMask = not used here
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
@@ -693,8 +639,8 @@ public:
                             bool aPrintMirrorMode, void* aData = NULL ) override;
 
     /**
-     * Function SVG_PlotComponent
      * Creates the SVG print file for the current edited component.
+     *
      * @param aFullFileName = the full filename
      */
     void SVG_PlotComponent( const wxString& aFullFileName );

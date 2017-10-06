@@ -45,6 +45,7 @@
 #include <class_library.h>
 #include <schframe.h>
 #include <sch_component.h>
+#include <symbol_lib_table.h>
 
 #include <dialog_helpers.h>
 #include <libeditframe.h>
@@ -853,6 +854,7 @@ void SCH_EDIT_FRAME::OnErc( wxCommandEvent& event )
         InvokeDialogERC( this );
 }
 
+
 void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
 {
     wxFileName fn = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
@@ -895,7 +897,7 @@ void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
         return;
 
     NETLIST_OBJECT_LIST* net_atoms = BuildNetListBase();
-    NETLIST_EXPORTER_KICAD exporter( net_atoms, Prj().SchLibs() );
+    NETLIST_EXPORTER_KICAD exporter( net_atoms, Prj().SchSymbolLibTable() );
     STRING_FORMATTER formatter;
 
     exporter.Format( &formatter, GNL_ALL );
@@ -904,6 +906,7 @@ void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
     Kiway().ExpressMail( FRAME_PCB, MAIL_SCH_PCB_UPDATE,
                          formatter.GetString(), this );
 }
+
 
 void SCH_EDIT_FRAME::OnCreateNetlist( wxCommandEvent& event )
 {
@@ -924,6 +927,7 @@ void SCH_EDIT_FRAME::OnCreateBillOfMaterials( wxCommandEvent& )
     InvokeDialogCreateBOM( this );
 }
 
+
 void SCH_EDIT_FRAME::OnLaunchBomManager( wxCommandEvent& event )
 {
     // First ensure that entire schematic is annotated
@@ -932,6 +936,7 @@ void SCH_EDIT_FRAME::OnLaunchBomManager( wxCommandEvent& event )
 
     InvokeDialogCreateBOMEditor( this );
 }
+
 
 void SCH_EDIT_FRAME::OnFindItems( wxCommandEvent& aEvent )
 {
@@ -1214,17 +1219,27 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
 
     if( component )
     {
-        if( PART_LIBS* libs = Prj().SchLibs() )
+        LIB_ID id = component->GetLibId();
+        LIB_ALIAS* entry = nullptr;
+
+        try
         {
-            LIB_ALIAS* entry = libs->FindLibraryAlias( component->GetLibId() );
-
-            if( !entry )     // Should not occur
-                return;
-
-            PART_LIB* library = entry->GetLib();
-
-            libeditFrame->LoadComponentAndSelectLib( entry, library );
+            entry = Prj().SchSymbolLibTable()->LoadSymbol( id );
         }
+        catch( const IO_ERROR& ioe )
+        {
+            wxString msg;
+
+            msg.Printf( _( "Error occurred loading symbol '%s' from library '%s'." ),
+                        id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
+            DisplayErrorMessage( this, msg, ioe.What() );
+            return;
+        }
+
+        if( !entry )     // Should not occur
+            return;
+
+        libeditFrame->LoadComponentAndSelectLib( id );
     }
 
     GetScreen()->SchematicCleanUp();

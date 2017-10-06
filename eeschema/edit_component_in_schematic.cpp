@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -38,6 +38,7 @@
 #include <general.h>
 #include <class_library.h>
 #include <sch_component.h>
+#include <symbol_lib_table.h>
 
 #include <dialog_edit_one_field.h>
 
@@ -52,10 +53,22 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
     wxCHECK_RET( component != NULL && component->Type() == SCH_COMPONENT_T,
                  wxT( "Invalid schematic field parent item." ) );
 
-    LIB_PART* part = Prj().SchLibs()->FindLibPart( component->GetLibId() );
+    LIB_ID id = component->GetLibId();
+    LIB_ALIAS* alias = NULL;
 
-    wxCHECK_RET( part, wxT( "Library part for component <" ) +
-                 component->GetLibId().GetLibItemName() + wxT( "> could not be found." ) );
+    try
+    {
+        alias = Prj().SchSymbolLibTable()->LoadSymbol( id );
+    }
+    catch( ... )
+    {
+    }
+
+    LIB_PART* part = ( alias ) ? alias->GetPart() : NULL;
+
+    wxCHECK_RET( part, wxString::Format( "Symbol '%s' not found in library '%s'",
+                                         id.GetLibItemName().wx_str(),
+                                         id.GetLibNickname().wx_str() ) );
 
     // Save old component in undo list if not already in edit, or moving.
     if( aField->GetFlags() == 0 )

@@ -43,11 +43,13 @@
 #include <dialog_helpers.h>
 #include <sch_validators.h>
 #include <kicad_device_context.h>
+#include <symbol_lib_table.h>
 
 #include <bitmaps.h>
 
 #include <dialog_edit_component_in_schematic_fbp.h>
 #include <invoke_sch_dialog.h>
+
 #ifdef KICAD_SPICE
 #include <dialog_spice_model.h>
 #include <netlist_exporter_pspice.h>
@@ -59,36 +61,36 @@
 
 
 /**
- * class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC
- * is hand coded and implements DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP which
- * is maintained by wxFormBuilder.  Do not auto-generate this class or file,
- * it is hand coded.
+ * Dialog used to edit #SCH_COMPONENT objects in a schematic.
+ *
+ * This is derived from DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP which is maintained by
+ * wxFormBuilder.  Do not auto-generate this class or file, it is hand coded.
  */
 class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP
 {
 public:
-    /** Constructor */
     DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow* aParent );
 
     /**
-     * Function InitBuffers
-     * sets up to edit the given component.
+     * Initialize controls with \a aComponent.
+     *.
      * @param aComponent The component to edit.
      */
     void InitBuffers( SCH_COMPONENT* aComponent );
+
+    SCH_EDIT_FRAME* GetParent() { return dynamic_cast< SCH_EDIT_FRAME* >( wxDialog::GetParent() ); }
 
 private:
 
     friend class SCH_EDIT_FRAME;
 
-    SCH_EDIT_FRAME* m_parent;
     SCH_COMPONENT*  m_cmp;
     LIB_PART*       m_part;
     bool            m_skipCopyFromPanel;
 
     static int      s_SelectedRow;
 
-    /// a copy of the edited component's SCH_FIELDs
+    /// a copy of the edited symbol's SCH_FIELDs
     SCH_FIELDS      m_FieldsBuf;
 
     void setSelectedFieldNdx( int aFieldNdx );
@@ -96,17 +98,13 @@ private:
     int getSelectedFieldNdx();
 
     /**
-     * Function copySelectedFieldToPanel
-     * sets the values displayed on the panel according to
-     * the currently selected field row
+     * Sets the values displayed on the panel according to the currently selected field row.
      */
     void copySelectedFieldToPanel();
 
-
     /**
-     * Function copyPanelToSelectedField
-     * copies the values displayed on the panel fields to the currently
-     * selected field
+     * Copy the values displayed on the panel fields to the currently selected field.
+     *
      * @return bool - true if all fields are OK, else false if the user has put
      *   bad data into a field, and this value can be used to deny a row change.
      */
@@ -151,9 +149,9 @@ private:
     SCH_FIELD* findField( const wxString& aFieldName );
 
     /**
-     * Function updateDisplay
-     * update the listbox showing fields, according to the fields texts
-     * must be called after a text change in fields, if this change is not an edition
+     * Update the listbox showing fields according to the field's text.
+     *
+     * This must be called after a text change in fields if this change is not an edition.
      */
     void updateDisplay()
     {
@@ -203,11 +201,11 @@ void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
 DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow* aParent ) :
     DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( aParent )
 {
+    wxASSERT( dynamic_cast< SCH_EDIT_FRAME* >( aParent ) );
+
 #ifndef KICAD_SPICE
     spiceFieldsButton->Hide();
 #endif /* not KICAD_SPICE */
-
-    m_parent = (SCH_EDIT_FRAME*) aParent;
 
     m_cmp = NULL;
     m_part = NULL;
@@ -251,47 +249,39 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnListItemDeselected( wxListEvent& even
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnTestChipName( wxCommandEvent& event )
 {
-    wxString partname = chipnameTextCtrl->GetValue();
-    LIB_PART* entry = Prj().SchLibs()->FindLibPart( partname );
-
+    LIB_ID id;
     wxString msg;
+    wxString partname = chipnameTextCtrl->GetValue();
 
-    if( entry )
+    if( id.Parse( partname ) != -1 || !id.IsValid() )
     {
-        msg.Printf( _( "Component '%s' found in library '%s'" ),
-                    GetChars( partname ), GetChars( entry->GetLibraryName() ) );
-        wxMessageBox( msg );
+        msg.Printf( _( "'%s' is not a valid library symbol indentifier." ), partname );
+        DisplayError( this, msg );
         return;
     }
 
-    msg.Printf( _( "Component '%s' not found in any library" ), GetChars( partname ) );
+    LIB_ALIAS* alias = NULL;
 
-    // Try to find components which have a name "near" the current chip name,
-    // i.e. the same name when the comparison is case insensitive.
-    // Could be helpful for old designs when lower cases and upper case were
-    // equivalent.
-    std::vector<LIB_ALIAS*> candidates;
-    Prj().SchLibs()->FindLibraryNearEntries( candidates, partname );
-
-    if( candidates.size() == 0 )
+    try
     {
-        wxMessageBox( msg );
+        alias = Prj().SchSymbolLibTable()->LoadSymbol( id );
+    }
+    catch( ... )
+    {
+    }
+
+    if( !alias )
+    {
+        msg.Printf( _( "Symbol '%s' not found in library '%s'" ),
+                    id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
+        DisplayError( this, msg );
         return;
     }
 
-    // Some candidates are found. Show them:
-    msg << wxT("\n") << _( "However, some candidates are found:" );
+    msg.Printf( _( "Symbol '%s' found in library '%s'" ),
+                id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
 
-    // add candidate names:
-    for( unsigned ii = 0; ii < candidates.size(); ii++ )
-    {
-        msg << wxT("\n") <<
-            wxString::Format( _( "'%s' found in library '%s'" ),
-                              GetChars( candidates[ii]->GetName() ),
-                              GetChars( candidates[ii]->GetLibraryName() ) );
-    }
-
-    wxMessageBox( msg );
+    DisplayInfoMessage( this, msg );
 }
 
 
@@ -299,12 +289,14 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnSelectChipName( wxCommandEvent& event
 {
     SCH_BASE_FRAME::HISTORY_LIST dummy;
 
-    auto sel = m_parent->SelectComponentFromLibrary( NULL, dummy, true, 0, 0 );
+    auto sel = GetParent()->SelectComponentFromLibrary( NULL, dummy, true, 0, 0 );
 
-    if( sel.Name.IsEmpty() )
+    if( sel.Name.IsEmpty() || sel.LibNickname.IsEmpty() )
         return;
 
-    chipnameTextCtrl->SetValue( sel.Name );
+    LIB_ID id( sel.LibNickname, sel.Name );
+
+    chipnameTextCtrl->SetValue( id.Format() );
 }
 
 
@@ -322,8 +314,6 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::EditSpiceModel( wxCommandEvent& event )
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnListItemSelected( wxListEvent& event )
 {
-    DBG( printf( "OnListItemSelected()\n" ); )
-
     // remember the selected row, statically
     s_SelectedRow = event.GetIndex();
 
@@ -352,36 +342,46 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnCancelButtonClick( wxCommandEvent& ev
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
 {
     LIB_ID id;
+    wxString msg;
     wxString tmp = chipnameTextCtrl->GetValue();
 
     tmp.Replace( wxT( " " ), wxT( "_" ) );
 
-    id.SetLibItemName( tmp, false );
+    id.Parse( tmp );
 
     // Save current flags which could be modified by next change settings
     STATUS_FLAGS flags = m_cmp->GetFlags();
 
-    if( id.empty() )
+    if( !id.IsValid() )
     {
-        DisplayError( NULL, _( "No Component Name!" ) );
+        msg.Printf( _( "Symbol library identifier '%s' is not valid!" ), tmp );
+        DisplayError( this, msg );
     }
     else if( id != m_cmp->GetLibId() )
     {
-        PART_LIBS* libs = Prj().SchLibs();
+        LIB_ALIAS* alias = NULL;
 
-        if( libs->FindLibraryAlias( id ) == NULL )
+        try
         {
-            wxString msg = wxString::Format( _( "Component '%s' not found!" ),
-                                             GetChars( id.Format() ) );
+            alias = Prj().SchSymbolLibTable()->LoadSymbol( id );
+        }
+        catch( ... )
+        {
+        }
+
+        if( !alias )
+        {
+            msg.Printf( _( "Symbol '%s' not found in library '%s'!" ),
+                        id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
             DisplayError( this, msg );
         }
-        else    // Change component from lib!
+        else    // Change symbol from lib!
         {
-            m_cmp->SetLibId( id, libs );
+            m_cmp->SetLibId( id, Prj().SchSymbolLibTable(), Prj().SchLibs()->GetCacheLibrary() );
         }
     }
 
-    // For components with multiple shapes (De Morgan representation) Set the selected shape:
+    // For symbols with multiple shapes (De Morgan representation) Set the selected shape:
     if( convertCheckBox->IsEnabled() )
     {
         m_cmp->SetConvert( convertCheckBox->GetValue() ? 2 : 1 );
@@ -392,7 +392,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
     {
         int unit_selection = unitChoice->GetCurrentSelection() + 1;
 
-        m_cmp->SetUnitSelection( &m_parent->GetCurrentSheet(), unit_selection );
+        m_cmp->SetUnitSelection( &GetParent()->GetCurrentSheet(), unit_selection );
         m_cmp->SetUnit( unit_selection );
     }
 
@@ -453,8 +453,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     // save old cmp in undo list if not already in edit, or moving ...
     // or the component to be edited is part of a block
     if( m_cmp->GetFlags() == 0
-      || m_parent->GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
-        m_parent->SaveCopyInUndoList( m_cmp, UR_CHANGED );
+      || GetParent()->GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
+        GetParent()->SaveCopyInUndoList( m_cmp, UR_CHANGED );
 
     copyPanelToOptions();
 
@@ -468,8 +468,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
             // correct the problem before removing the undefined fields.  It should also
             // resolve most of the bug reports and questions regarding missing fields.
             if( !m_FieldsBuf[i].GetName( false ).IsEmpty() && m_FieldsBuf[i].GetText().IsEmpty()
-                && !m_parent->GetTemplates().HasFieldName( m_FieldsBuf[i].GetName( false ) )
-                && !removeRemainingFields )
+              && !GetParent()->GetTemplates().HasFieldName( m_FieldsBuf[i].GetName( false ) )
+              && !removeRemainingFields )
             {
                 wxString msg = wxString::Format(
                     _( "The field name <%s> does not have a value and is not defined in "
@@ -500,7 +500,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
         m_FieldsBuf[i].Offset( m_cmp->m_Pos );
     }
 
-    LIB_PART* entry = Prj().SchLibs()->FindLibPart( m_cmp->GetLibId() );
+    LIB_PART* entry = GetParent()->GetLibPart( m_cmp->GetLibId() );
 
     if( entry && entry->IsPower() )
         m_FieldsBuf[VALUE].SetText( m_cmp->GetLibId().GetLibItemName() );
@@ -511,10 +511,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     // Reference has a specific initialization, depending on the current active sheet
     // because for a given component, in a complex hierarchy, there are more than one
     // reference.
-    m_cmp->SetRef( &m_parent->GetCurrentSheet(), m_FieldsBuf[REFERENCE].GetText() );
+    m_cmp->SetRef( &GetParent()->GetCurrentSheet(), m_FieldsBuf[REFERENCE].GetText() );
 
-    m_parent->OnModify();
-    m_parent->GetScreen()->TestDanglingEnds();
+    GetParent()->OnModify();
+    GetParent()->GetScreen()->TestDanglingEnds();
 
     EndQuasiModal( wxID_OK );
 }
@@ -598,7 +598,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::showButtonHandler( wxCommandEvent& even
         // pick a footprint using the footprint picker.
         wxString fpid;
 
-        KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true, m_parent );
+        KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true, GetParent() );
 
         if( frame->ShowModal( &fpid, this ) )
         {
@@ -743,7 +743,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
         which came from the component.
     */
 
-    m_part = Prj().SchLibs()->FindLibPart( m_cmp->GetLibId() );
+    m_part = GetParent()->GetLibPart( m_cmp->GetLibId() );
 
 #if 0 && defined(DEBUG)
     for( int i = 0;  i<aComponent->GetFieldCount();  ++i )
@@ -773,7 +773,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
     // Add template fieldnames:
     // Now copy in the template fields, in the order that they are present in the
     // template field editor UI.
-    const TEMPLATE_FIELDNAMES& tfnames = m_parent->GetTemplateFieldNames();
+    const TEMPLATE_FIELDNAMES& tfnames = GetParent()->GetTemplateFieldNames();
 
     for( TEMPLATE_FIELDNAMES::const_iterator it = tfnames.begin();  it!=tfnames.end();  ++it )
     {
@@ -832,7 +832,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
     }
 #endif
 
-    m_FieldsBuf[REFERENCE].SetText( m_cmp->GetRef( &m_parent->GetCurrentSheet() ) );
+    m_FieldsBuf[REFERENCE].SetText( m_cmp->GetRef( &GetParent()->GetCurrentSheet() ) );
 
     for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
     {
@@ -1092,7 +1092,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
         unitChoice->Append( LIB_PART::SubReference(  ii, false ) );
     }
 
-    // For components with multiple parts per package, set the unit selection
+    // For symbols with multiple parts per package, set the unit selection
     if( m_cmp->GetUnit() <= (int)unitChoice->GetCount() )
         unitChoice->SetSelection( m_cmp->GetUnit() - 1 );
 
@@ -1160,14 +1160,14 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     if( !m_cmp )
         return;
 
-    if( LIB_PART* part = Prj().SchLibs()->FindLibPart( m_cmp->GetLibId() ) )
+    if( LIB_PART* part = GetParent()->GetLibPart( m_cmp->GetLibId() ) )
     {
         // save old cmp in undo list if not already in edit, or moving ...
         if( m_cmp->GetFlags() == 0 )
-            m_parent->SaveCopyInUndoList( m_cmp, UR_CHANGED );
+            GetParent()->SaveCopyInUndoList( m_cmp, UR_CHANGED );
 
-        INSTALL_UNBUFFERED_DC( dc, m_parent->GetCanvas() );
-        m_cmp->Draw( m_parent->GetCanvas(), &dc, wxPoint( 0, 0 ), g_XorMode );
+        INSTALL_UNBUFFERED_DC( dc, GetParent()->GetCanvas() );
+        m_cmp->Draw( GetParent()->GetCanvas(), &dc, wxPoint( 0, 0 ), g_XorMode );
 
         // Initialize fixed field values to default values found in library
         // Note: the field texts are not modified because they are set in schematic,
@@ -1201,9 +1201,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 
         m_cmp->SetOrientation( CMP_NORMAL );
 
-        m_parent->OnModify();
+        GetParent()->OnModify();
 
-        m_cmp->Draw( m_parent->GetCanvas(), &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        m_cmp->Draw( GetParent()->GetCanvas(), &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
         EndQuasiModal( wxID_OK );
     }

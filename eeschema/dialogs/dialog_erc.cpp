@@ -458,7 +458,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
 
     // Build the whole sheet list in hierarchy (sheet, not screen)
     SCH_SHEET_LIST sheets( g_RootSheet );
-    sheets.AnnotatePowerSymbols( Prj().SchLibs() );
+    sheets.AnnotatePowerSymbols();
 
     if( m_parent->CheckAnnotate( aMessagesList, false ) )
     {

@@ -259,6 +259,19 @@ bool LIB_TABLE::HasLibrary( const wxString& aNickname ) const
 }
 
 
+wxString LIB_TABLE::GetFullURI( const wxString& aNickname, bool aExpandEnvVars ) const
+{
+    const LIB_TABLE_ROW* row = findRow( aNickname );
+
+    wxString retv;
+
+    if( row )
+        retv = row->GetFullURI( aExpandEnvVars );
+
+    return retv;
+}
+
+
 LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName ) const
 {
     LIB_TABLE* cur = (LIB_TABLE*) this;

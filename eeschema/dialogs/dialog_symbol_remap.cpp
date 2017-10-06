@@ -221,7 +221,7 @@ void DIALOG_SYMBOL_REMAP::remapSymbolsToLibTable( REPORTER& aReporter )
 
             if( !remapSymbolToLibTable( symbol ) )
             {
-                msg.Printf( _( "No symbol '%s' founded in symbol library table." ),
+                msg.Printf( _( "No symbol '%s' found in symbol library table." ),
                             symbol->GetLibId().GetLibItemName().wx_str() );
                 aReporter.Report( msg, REPORTER::RPT_WARNING );
             }
@@ -237,6 +237,7 @@ void DIALOG_SYMBOL_REMAP::remapSymbolsToLibTable( REPORTER& aReporter )
     }
 
     aReporter.Report( _( "Symbol library table mapping complete!" ), REPORTER::RPT_INFO );
+    schematic.UpdateSymbolLinks();
 }
 
 

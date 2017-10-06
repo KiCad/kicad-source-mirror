@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2011-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -182,8 +182,7 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
 
 
 
-void SCH_SHEET_PATH::GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
-                                    bool aIncludePowerSymbols )
+void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols )
 {
     for( SCH_ITEM* item = LastDrawList(); item; item = item->Next() )
     {
@@ -210,8 +209,7 @@ void SCH_SHEET_PATH::GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aRefer
 }
 
 
-void SCH_SHEET_PATH::GetMultiUnitComponents( PART_LIBS* aLibs,
-                                             SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
+void SCH_SHEET_PATH::GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
                                              bool aIncludePowerSymbols )
 {
 
@@ -512,7 +510,7 @@ void SCH_SHEET_LIST::ClearModifyStatus()
 }
 
 
-void SCH_SHEET_LIST::AnnotatePowerSymbols( PART_LIBS* aLibs )
+void SCH_SHEET_LIST::AnnotatePowerSymbols()
 {
     // List of reference for power symbols
     SCH_REFERENCE_LIST references;
@@ -590,21 +588,19 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols( PART_LIBS* aLibs )
 }
 
 
-void SCH_SHEET_LIST::GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
-                                    bool aIncludePowerSymbols )
+void SCH_SHEET_LIST::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols )
 {
     for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
-        (*it).GetComponents( aLibs, aReferences, aIncludePowerSymbols );
+        (*it).GetComponents( aReferences, aIncludePowerSymbols );
 }
 
-void SCH_SHEET_LIST::GetMultiUnitComponents( PART_LIBS* aLibs,
-                                             SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
+void SCH_SHEET_LIST::GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
                                              bool aIncludePowerSymbols )
 {
     for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
     {
         SCH_MULTI_UNIT_REFERENCE_MAP tempMap;
-        (*it).GetMultiUnitComponents( aLibs, tempMap );
+        (*it).GetMultiUnitComponents( tempMap );
 
         for( SCH_MULTI_UNIT_REFERENCE_MAP::value_type& pair : tempMap )
         {

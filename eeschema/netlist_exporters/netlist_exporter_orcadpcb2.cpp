@@ -31,11 +31,14 @@
 #include <sch_reference_list.h>
 #include <class_library.h>
 #include <class_netlist_object.h>
+#include <symbol_lib_table.h>
 
 #include <netlist.h>
 #include "netlist_exporter_orcadpcb2.h"
 
-bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
+
+bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
+                                               unsigned aNetlistOptions )
 {
     (void)aNetlistOptions;      //unused
     FILE* f = NULL;
@@ -79,15 +82,13 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName, uns
 
             item = comp;
 
-            // Get the Component FootprintFilter and put the component in
-            // cmpList if filter is present
-            LIB_PART* part = m_libs->FindLibPart( comp->GetLibId() );
+            PART_SPTR part = comp->GetPartRef().lock();
 
             if( part )
             {
                 if( part->GetFootPrints().GetCount() != 0 )    // Put in list
                 {
-                    cmpList.push_back( SCH_REFERENCE( comp, part, sheetList[i] ) );
+                    cmpList.push_back( SCH_REFERENCE( comp, part.get(), sheetList[i] ) );
                 }
             }
 

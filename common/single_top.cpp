@@ -186,6 +186,40 @@ struct APP_SINGLE_TOP : public wxApp
         return ret;
     }
 
+
+#if defined( DEBUG )
+    /**
+     * Override main loop exception handling on debug builds.
+     *
+     * It can be painfully difficult to debug exceptions that happen in wxUpdateUIEvent
+     * handlers.  The override provides a bit more useful information about the exception
+     * and a breakpoint can be set to pin point the event where the exception was thrown.
+     */
+    virtual bool OnExceptionInMainLoop() override
+    {
+        try
+        {
+            throw;
+        }
+        catch( const std::exception& e )
+        {
+            wxLogError( "Unhandled exception class: %s  what: %s",
+                        FROM_UTF8( typeid(e).name() ),
+                        FROM_UTF8( e.what() ) );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            wxLogError( ioe.What() );
+        }
+        catch(...)
+        {
+            wxLogError( "Unhandled exception of unknown type" );
+        }
+
+        return false;   // continue on. Return false to abort program
+    }
+#endif
+
 #ifdef __WXMAC__
 
     /**

@@ -458,8 +458,7 @@ void SIM_PLOT_FRAME::removePlot( const wxString& aPlotName, bool aErase )
 
 void SIM_PLOT_FRAME::updateNetlistExporter()
 {
-    m_exporter.reset( new NETLIST_EXPORTER_PSPICE_SIM( m_schematicFrame->BuildNetListBase(),
-        Prj().SchLibs(), Prj().SchSearchS() ) );
+    m_exporter.reset( new NETLIST_EXPORTER_PSPICE_SIM( m_schematicFrame->BuildNetListBase() ) );
 }
 
 

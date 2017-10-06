@@ -25,7 +25,9 @@
 #include <base_units.h>
 #include <kiway.h>
 #include <class_drawpanel.h>
+#include <confirm.h>
 
+#include <class_library.h>
 #include <eeschema_id.h>
 #include <libeditframe.h>
 #include <viewlib_frame.h>
@@ -34,8 +36,48 @@
 #include "dialogs/dialog_sym_lib_table.h"
 
 
-// Sttaic members:
 
+LIB_ALIAS* SchGetLibAlias( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PART_LIB* aCacheLib,
+                           wxWindow* aParent, bool aShowErrorMsg )
+{
+    wxCHECK_MSG( aLibId.IsValid(), NULL, "LIB_ID is not valid." );
+    wxCHECK_MSG( aLibTable, NULL, "Invalid symbol library table." );
+
+    LIB_ALIAS* alias = NULL;
+
+    try
+    {
+        alias = aLibTable->LoadSymbol( aLibId );
+
+        if( !alias && aCacheLib )
+            alias = aCacheLib->FindAlias( aLibId.GetLibItemName() );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        if( aShowErrorMsg )
+        {
+            wxString msg;
+
+            msg.Printf( _( "Could not load symbol '%s' from library '%s'." ),
+                        aLibId.GetLibItemName().wx_str(), aLibId.GetLibNickname().wx_str() );
+            DisplayErrorMessage( aParent, msg, ioe.What() );
+        }
+    }
+
+    return alias;
+}
+
+
+LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PART_LIB* aCacheLib,
+                         wxWindow* aParent, bool aShowErrorMsg )
+{
+    LIB_ALIAS* alias = SchGetLibAlias( aLibId, aLibTable, aCacheLib, aParent, aShowErrorMsg );
+
+    return ( alias ) ? alias->GetPart() : NULL;
+}
+
+
+// Sttaic members:
 
 SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
         FRAME_T aWindowType, const wxString& aTitle,
@@ -81,7 +123,7 @@ COLOR4D SCH_BASE_FRAME::GetDrawBgColor() const
 }
 
 
-void SCH_BASE_FRAME::SetDrawBgColor( COLOR4D aColor)
+void SCH_BASE_FRAME::SetDrawBgColor( COLOR4D aColor )
 {
     m_drawBgColor= aColor;
     SetLayerColor( aColor, LAYER_SCHEMATIC_BACKGROUND );
@@ -93,10 +135,12 @@ SCH_SCREEN* SCH_BASE_FRAME::GetScreen() const
     return (SCH_SCREEN*) EDA_DRAW_FRAME::GetScreen();
 }
 
+
 const wxString SCH_BASE_FRAME::GetZoomLevelIndicator() const
 {
     return EDA_DRAW_FRAME::GetZoomLevelIndicator();
 }
+
 
 void SCH_BASE_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
@@ -259,4 +303,25 @@ void SCH_BASE_FRAME::OnEditSymbolLibTable( wxCommandEvent& aEvent )
 
     if( viewer )
         viewer->ReCreateListLib();
+}
+
+
+LIB_ALIAS* SCH_BASE_FRAME::GetLibAlias( const LIB_ID& aLibId, bool aUseCacheLib,
+                                        bool aShowErrorMsg )
+{
+    wxCHECK_MSG( aLibId.IsValid(), NULL, "LIB_ID is not valid." );
+
+    PART_LIB* cache = ( aUseCacheLib ) ? Prj().SchLibs()->GetCacheLibrary() : NULL;
+
+    return SchGetLibAlias( aLibId, Prj().SchSymbolLibTable(), cache, this, aShowErrorMsg );
+}
+
+
+LIB_PART* SCH_BASE_FRAME::GetLibPart( const LIB_ID& aLibId, bool aUseCacheLib, bool aShowErrorMsg )
+{
+    wxCHECK_MSG( aLibId.IsValid(), NULL, "LIB_ID is not valid." );
+
+    PART_LIB* cache = ( aUseCacheLib ) ? Prj().SchLibs()->GetCacheLibrary() : NULL;
+
+    return SchGetLibPart( aLibId, Prj().SchSymbolLibTable(), cache, this, aShowErrorMsg );
 }

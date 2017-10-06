@@ -123,6 +123,7 @@ public:
     void SaveLibrary( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL ) override;
 
     bool CheckHeader( const wxString& aFileName ) override;
+    bool IsSymbolLibWritable( const wxString& aLibraryPath ) override;
 
 private:
     void loadHierarchy( SCH_SHEET* aSheet );
