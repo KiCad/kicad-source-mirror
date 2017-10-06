@@ -158,8 +158,13 @@ protected:
     /**
      * Function GeneralControlKeyMovement
      * Handle the common part of GeneralControl dedicated to global
-     * cursor keys (i.e. cursor movement by keyboard) */
-    void GeneralControlKeyMovement( int aHotKey, wxPoint *aPos, bool aSnapToGrid );
+     * cursor keys (i.e. cursor movement by keyboard)
+     * @param aHotKey is the hotkey code
+     * @param aPos is the position of the cursor (initial then new)
+     * @param aSnapToGrid = true to force the cursor position on grid
+     * @return true if the hotkey code is handled (captured).
+     */
+    bool GeneralControlKeyMovement( int aHotKey, wxPoint *aPos, bool aSnapToGrid );
 
     /**
      * Move and refresh the crosshair after movement and call the mouse capture function.
@@ -193,6 +198,14 @@ public:
                     const wxString& aFrameName );
 
     ~EDA_DRAW_FRAME();
+
+    /** this function capture the key event before it is sent to the GUI.
+     * the basic frame does not capture this event.
+     * editor frames should override this event function to capture and filter
+     * these keys when they are used as hotkeys, and skip it if the key is not
+     * used as hotkey (otherwise the key events will be not sent to menus)
+     */
+    virtual void OnCharHook( wxKeyEvent& event );
 
     /**
      * Function LockFile
@@ -571,6 +584,7 @@ public:
      * @param aDC A device context.
      * @param aPosition The current cursor position in logical (drawing) units.
      * @param aHotKey A key event used for application specific control if not zero.
+     * @return true if the hotkey code is handled (captured).
      */
     virtual bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 )
     {

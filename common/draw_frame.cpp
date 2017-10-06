@@ -95,6 +95,8 @@ const wxChar EDA_DRAW_FRAME::CANVAS_TYPE_KEY[] = wxT( "canvas_type" );
 static const wxString MaxUndoItemsEntry(wxT( "DevelMaxUndoItems" ) );
 
 BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
+    EVT_CHAR_HOOK( EDA_DRAW_FRAME::OnCharHook )
+
     EVT_MOUSEWHEEL( EDA_DRAW_FRAME::OnMouseEvent )
     EVT_MENU_OPEN( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_ACTIVATE( EDA_DRAW_FRAME::OnActivate )
@@ -224,6 +226,14 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
     m_auimgr.UnInit();
 
     ReleaseFile();
+}
+
+
+void EDA_DRAW_FRAME::OnCharHook( wxKeyEvent& event )
+{
+    // Key events can be filtered here.
+    // Currently no filtering is made.
+    event.Skip();
 }
 
 
@@ -1317,9 +1327,10 @@ void EDA_DRAW_FRAME::RefreshCrossHair( const wxPoint &aOldPos,
     }
 }
 
-void EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos,
+bool EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos,
                                                 bool aSnapToGrid )
 {
+    bool key_handled = false;
 
     // If requested snap the current position to the grid
     if( aSnapToGrid )
@@ -1344,6 +1355,7 @@ void EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos,
     case WXK_LEFT:
     case WXK_NUMPAD6:
     case WXK_RIGHT:
+        key_handled = true;
         {
             /* Here's a tricky part: when doing cursor key movement, the
              * 'previous' point should be taken from memory, *not* from the
@@ -1399,6 +1411,7 @@ void EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos,
             default: /* Can't happen since we entered the statement */
                 break;
             }
+
             m_canvas->MoveCursor( *aPos );
             m_movingCursorWithKeyboard = true;
         }
@@ -1407,6 +1420,8 @@ void EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos,
     default:
         break;
     }
+
+    return key_handled;
 }
 
 

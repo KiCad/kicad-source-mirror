@@ -276,8 +276,6 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 
 bool PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey )
 {
-    bool eventHandled = true;
-
     // Filter out the 'fake' mouse motion after a keyboard movement
     if( !aHotKey && m_movingCursorWithKeyboard )
     {
@@ -295,7 +293,7 @@ bool PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
 
     wxPoint oldpos = GetCrossHairPosition();
     wxPoint pos = aPosition;
-    GeneralControlKeyMovement( aHotKey, &pos, snapToGrid );
+    bool keyHandled = GeneralControlKeyMovement( aHotKey, &pos, snapToGrid );
 
     // Put cursor in new position, according to the zoom keys (if any).
     SetCrossHairPosition( pos, snapToGrid );
@@ -336,12 +334,12 @@ bool PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
 
     RefreshCrossHair( oldpos, aPosition, aDC );
 
-    if( aHotKey )
+    if( aHotKey && OnHotKey( aDC, aHotKey, aPosition ) )
     {
-        eventHandled = OnHotKey( aDC, aHotKey, aPosition );
+        keyHandled = true;
     }
 
     UpdateStatusBar();    // Display new cursor coordinates
 
-    return eventHandled;
+    return keyHandled;
 }

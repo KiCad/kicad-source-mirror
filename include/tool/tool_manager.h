@@ -227,8 +227,9 @@ public:
     /**
      * Propagates an event to tools that requested events of matching type(s).
      * @param aEvent is the event to be processed.
+     * @return true if the event is a managed hotkey
      */
-    void ProcessEvent( const TOOL_EVENT& aEvent );
+    bool ProcessEvent( const TOOL_EVENT& aEvent );
 
     /**
      * Puts an event to the event queue to be processed at the end of event processing cycle.
@@ -491,7 +492,8 @@ private:
     void popViewControls();
 
     ///> Main function for event processing.
-    void processEvent( const TOOL_EVENT& aEvent );
+    ///> @return true if a hotkey was handled
+    bool processEvent( const TOOL_EVENT& aEvent );
 
     /// Index of registered tools current states, associated by tools' objects.
     TOOL_STATE_MAP m_toolState;

@@ -728,9 +728,9 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 }
 
 
-void TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
+bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 {
-    processEvent( aEvent );
+    bool hotkey_handled = processEvent( aEvent );
 
     if( TOOL_STATE* active = GetCurrentToolState() )
     {
@@ -742,6 +742,8 @@ void TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
         EDA_DRAW_FRAME* f = static_cast<EDA_DRAW_FRAME*>( GetEditFrame() );
         f->GetGalCanvas()->Refresh();    // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
     }
+
+    return hotkey_handled;
 }
 
 
@@ -859,11 +861,11 @@ void TOOL_MANAGER::popViewControls()
 }
 
 
-void TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
+bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
 {
     // Early dispatch of events destined for the TOOL_MANAGER
     if( !dispatchStandardEvents( aEvent ) )
-        return;
+        return true;
 
     dispatchInternal( aEvent );
     dispatchActivation( aEvent );
@@ -876,6 +878,8 @@ void TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
         m_eventQueue.pop_front();
         processEvent( event );
     }
+
+    return false;
 }
 
 bool TOOL_MANAGER::IsToolActive( TOOL_ID aId ) const

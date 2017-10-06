@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2010 <Jean-Pierre Charras>
- * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2017 <Jean-Pierre Charras>
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,8 +33,6 @@
 
 bool GERBVIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey )
 {
-    bool eventHandled = true;
-
     // Filter out the 'fake' mouse motion after a keyboard movement
     if( !aHotKey && m_movingCursorWithKeyboard )
     {
@@ -44,14 +42,14 @@ bool GERBVIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
 
     wxPoint pos = aPosition;
     wxPoint oldpos = GetCrossHairPosition();
-    GeneralControlKeyMovement( aHotKey, &pos, true );
+    bool eventHandled = GeneralControlKeyMovement( aHotKey, &pos, true );
 
     SetCrossHairPosition( pos );
     RefreshCrossHair( oldpos, aPosition, aDC );
 
-    if( aHotKey )
+    if( aHotKey && OnHotKey( aDC, aHotKey, aPosition ) )
     {
-        eventHandled = OnHotKey( aDC, aHotKey, aPosition );
+        eventHandled = true;
     }
 
     UpdateStatusBar();

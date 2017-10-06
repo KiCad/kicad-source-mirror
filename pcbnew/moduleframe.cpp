@@ -740,8 +740,6 @@ void FOOTPRINT_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 
 bool FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey )
 {
-    bool eventHandled = true;
-
     // Filter out the 'fake' mouse motion after a keyboard movement
     if( !aHotKey && m_movingCursorWithKeyboard )
     {
@@ -759,19 +757,19 @@ bool FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, 
 
     wxPoint oldpos = GetCrossHairPosition();
     wxPoint pos = aPosition;
-    GeneralControlKeyMovement( aHotKey, &pos, snapToGrid );
+    bool keyHandled = GeneralControlKeyMovement( aHotKey, &pos, snapToGrid );
 
     SetCrossHairPosition( pos, snapToGrid );
     RefreshCrossHair( oldpos, aPosition, aDC );
 
-    if( aHotKey )
+    if( aHotKey && OnHotKey( aDC, aHotKey, aPosition ) )
     {
-        eventHandled = OnHotKey( aDC, aHotKey, aPosition );
+        keyHandled = true;
     }
 
     UpdateStatusBar();
 
-    return eventHandled;
+    return keyHandled;
 }
 
 

@@ -216,8 +216,6 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
 
 bool SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey )
 {
-    bool eventHandled = true;
-
     // Filter out the 'fake' mouse motion after a keyboard movement
     if( !aHotKey && m_movingCursorWithKeyboard )
     {
@@ -239,7 +237,7 @@ bool SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
 
     wxPoint pos = aPosition;
     wxPoint oldpos = GetCrossHairPosition();
-    GeneralControlKeyMovement( aHotKey, &pos, snapToGrid );
+    bool keyHandled = GeneralControlKeyMovement( aHotKey, &pos, snapToGrid );
 
     // Update cursor position.
     SetCrossHairPosition( pos, snapToGrid );
@@ -248,23 +246,25 @@ bool SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
     if( aHotKey )
     {
         SCH_SCREEN* screen = GetScreen();
+        bool hk_handled;
 
         if( screen->GetCurItem() && screen->GetCurItem()->GetFlags() )
-            eventHandled = OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
+            hk_handled = OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
         else
-            eventHandled = OnHotKey( aDC, aHotKey, aPosition, NULL );
+            hk_handled = OnHotKey( aDC, aHotKey, aPosition, NULL );
+
+        if( hk_handled )
+            keyHandled = true;
     }
 
     UpdateStatusBar();    /* Display cursor coordinates info */
 
-    return eventHandled;
+    return keyHandled;
 }
 
 
 bool LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey )
 {
-    bool eventHandled = true;
-
     // Filter out the 'fake' mouse motion after a keyboard movement
     if( !aHotKey && m_movingCursorWithKeyboard )
     {
@@ -286,20 +286,20 @@ bool LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
 
     wxPoint pos = aPosition;
     wxPoint oldpos = GetCrossHairPosition();
-    GeneralControlKeyMovement( aHotKey, &pos, snapToGrid );
+    bool keyHandled = GeneralControlKeyMovement( aHotKey, &pos, snapToGrid );
 
     // Update the cursor position.
     SetCrossHairPosition( pos, snapToGrid );
     RefreshCrossHair( oldpos, aPosition, aDC );
 
-    if( aHotKey )
+    if( aHotKey && OnHotKey( aDC, aHotKey, aPosition, NULL ) )
     {
-        eventHandled = OnHotKey( aDC, aHotKey, aPosition, NULL );
+        keyHandled = true;
     }
 
     UpdateStatusBar();
 
-    return eventHandled;
+    return keyHandled;
 }
 
 
