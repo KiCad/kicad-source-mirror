@@ -146,11 +146,8 @@ void LIB_CIRCLE::SetOffset( const wxPoint& aOffset )
 
 bool LIB_CIRCLE::Inside( EDA_RECT& aRect ) const
 {
-    /*
-     * FIXME: This fails to take into account the radius around the center
-     *        point.
-     */
-    return aRect.Contains( m_Pos.x, -m_Pos.y );
+    wxPoint center(m_Pos.x, -m_Pos.y);
+    return aRect.IntersectsCircle( center, m_Radius );
 }
 
 

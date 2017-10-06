@@ -268,11 +268,7 @@ void LIB_TEXT::SetOffset( const wxPoint& aOffset )
 
 bool LIB_TEXT::Inside( EDA_RECT& rect ) const
 {
-    /*
-     * FIXME: This should calculate the text size and justification and
-     *        use rectangle intersect.
-     */
-    return rect.Contains( GetTextPos().x, -GetTextPos().y );
+    return rect.Intersects( GetBoundingBox() );
 }
 
 

@@ -447,11 +447,7 @@ void LIB_FIELD::SetOffset( const wxPoint& aOffset )
 
 bool LIB_FIELD::Inside( EDA_RECT& rect ) const
 {
-    /*
-     * FIXME: This fails to take into account the size and/or orientation of
-     *        the text.
-     */
-    return rect.Contains( GetTextPos().x, -GetTextPos().y );
+    return rect.Intersects( GetBoundingBox() );
 }
 
 
