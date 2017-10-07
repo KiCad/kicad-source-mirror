@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-10-07 10:19+0300\n"
-"PO-Revision-Date: 2017-10-07 10:38+0300\n"
+"PO-Revision-Date: 2017-10-07 11:20+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -6851,7 +6851,7 @@ msgstr "Spice приставки в значениях (нечувствител
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:81
 msgid "f"
-msgstr "ф"
+msgstr "f"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:85
 msgid "fempto"
@@ -6863,7 +6863,7 @@ msgstr "1e-15"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:93
 msgid "p"
-msgstr "п"
+msgstr "p"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:97
 msgid "pico"
@@ -6875,7 +6875,7 @@ msgstr "1e-12"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:105
 msgid "n"
-msgstr "н"
+msgstr "n"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:109
 msgid "nano"
@@ -6890,7 +6890,7 @@ msgstr "1e-9"
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:43
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:60
 msgid "u"
-msgstr "мк"
+msgstr "u"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:121
 msgid "micro"
@@ -6902,7 +6902,7 @@ msgstr "1e-6"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:129
 msgid "m"
-msgstr "м"
+msgstr "m"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:133
 msgid "milli"
@@ -6914,7 +6914,7 @@ msgstr "1e-3"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:141
 msgid "k"
-msgstr "к"
+msgstr "k"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:145
 msgid "kilo"
@@ -6926,7 +6926,7 @@ msgstr "1e3"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:153
 msgid "meg"
-msgstr "мег"
+msgstr "meg"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:157
 msgid "mega"
@@ -6938,7 +6938,7 @@ msgstr "1e6"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:165
 msgid "g"
-msgstr "г"
+msgstr "g"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:169
 msgid "giga"
@@ -6950,7 +6950,7 @@ msgstr "1e9"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:177
 msgid "t"
-msgstr "т"
+msgstr "t"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:181
 msgid "tera"
