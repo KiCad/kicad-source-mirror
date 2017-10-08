@@ -66,6 +66,12 @@
  */
 wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 
+// this is a dummy colors settings (defined colors are the vdefulat values)
+// used to initialize the board.
+// these settings will be overriden later, depending on the draw frame that displays the board.
+// However, when a board is created by a python script, outside a frame, the colors must be set
+// so dummyColorsSettings provide this default initialization
+static COLORS_DESIGN_SETTINGS dummyColorsSettings( FRAME_PCB );
 
 BOARD::BOARD() :
     BOARD_ITEM_CONTAINER( (BOARD_ITEM*) NULL, PCB_T ),
@@ -74,6 +80,7 @@ BOARD::BOARD() :
     // we have not loaded a board yet, assume latest until then.
     m_fileFormatVersionAtLoad = LEGACY_BOARD_FILE_VERSION;
 
+    m_colorsSettings = &dummyColorsSettings;
     m_Status_Pcb    = 0;                    // Status word: bit 1 = calculate.
     m_CurrentZoneContour = NULL;            // This ZONE_CONTAINER handle the
                                             // zone contour currently in progress

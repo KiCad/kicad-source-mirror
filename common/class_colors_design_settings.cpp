@@ -61,10 +61,10 @@ static const EDA_COLOR_T default_layer_color[] = {
     LIGHTGRAY,    BLUE, GREEN, YELLOW,  // Dwgs_User, Cmts_User, Eco1_User, Eco2_User
 
     // Special layers
-    YELLOW,                 // Edge_Cuts
-    LIGHTMAGENTA,           // Margin
-    DARKGRAY,     LIGHTGRAY, // B_CrtYd, F_CrtYd,
-    BLUE,         DARKGRAY  // B_Fab, F_Fab
+    YELLOW,                     // Edge_Cuts
+    LIGHTMAGENTA,               // Margin
+    DARKGRAY,     LIGHTGRAY,    // B_CrtYd, F_CrtYd,
+    BLUE,         DARKGRAY      // B_Fab, F_Fab
 };
 
 
