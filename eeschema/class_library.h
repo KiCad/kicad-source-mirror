@@ -67,13 +67,13 @@ class SCH_PLUGIN;
     )
 
 /*
- * Library versions 2.3 and lower use the old separate library (.lib) and
- * document (.dcm) files.  Part libraries after 2.3 merged the library
+ * Library versions 2.4 and lower use the old separate library (.lib) and
+ * document (.dcm) files.  Part libraries after 2.4 merged the library
  * and document files into a single library file.  This macro checks if the
  * library version supports the old format
  */
 #define USE_OLD_DOC_FILE_FORMAT( major, minor )                 \
-    ( LIB_VERSION( major, minor ) <= LIB_VERSION( 2, 3 ) )
+    ( LIB_VERSION( major, minor ) <= LIB_VERSION( 2, 4 ) )
 
 // Helper class to filter a list of libraries, and/or a list of PART_LIB
 // in dialogs
