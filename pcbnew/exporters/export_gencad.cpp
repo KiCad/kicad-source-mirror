@@ -47,6 +47,7 @@
 #include <class_track.h>
 #include <class_edge_mod.h>
 
+#include <hash_eda.h>
 
 static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* frame );
 static void CreateArtworksSection( FILE* aFile );
@@ -58,7 +59,7 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb );
 static void CreateSignalsSection( FILE* aFile, BOARD* aPcb );
 static void CreateShapesSection( FILE* aFile, BOARD* aPcb );
 static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb );
-static void FootprintWriteShape( FILE* File, MODULE* module );
+static void FootprintWriteShape( FILE* File, MODULE* module, const wxString& aShapeName );
 
 // layer names for Gencad export
 
@@ -221,12 +222,16 @@ static std::string fmt_mask( LSET aSet )
 // These are the export origin (the auxiliary axis)
 static int GencadOffsetX, GencadOffsetY;
 
+// Association between shapes and components
+static std::map<MODULE*, wxString> m_componentShapes;
+
 // GerbTool chokes on units different than INCH so this is the conversion factor
 const static double SCALE_FACTOR = 1000.0 * IU_PER_MILS;
 
 // Export options
 bool flipBottomPads;
 bool uniquePins;
+bool individualShapes;
 
 /* Two helper functions to calculate coordinates of modules in gencad values
  * (GenCAD Y axis from bottom to top)
@@ -263,6 +268,7 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     // Get options
     flipBottomPads = optionsDialog.GetOption( FLIP_BOTTOM_PADS );
     uniquePins = optionsDialog.GetOption( UNIQUE_PIN_NAMES );
+    individualShapes = optionsDialog.GetOption( INDIVIDUAL_SHAPES );
 
     // Switch the locale to standard C (needed to print floating point numbers)
     LOCALE_IO toggle;
@@ -679,6 +685,23 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 }
 
 
+/// Compute hashes for modules without taking into account their position, rotation or layer
+static size_t hashModule( const MODULE* aModule )
+{
+    size_t ret = 0x11223344;
+    constexpr int flags = HASH_FLAGS::POSITION | HASH_FLAGS::REL_COORD
+                | HASH_FLAGS::ROTATION | HASH_FLAGS::LAYER;
+
+    for( const BOARD_ITEM* i = aModule->GraphicalItemsList(); i; i = i->Next() )
+        ret ^= hash_eda( i, flags );
+
+    for( const D_PAD* i = aModule->PadsList(); i; i = i->Next() )
+        ret ^= hash_eda( i, flags );
+
+    return ret;
+}
+
+
 /* Creates the footprint shape list.
  * Since module shape is customizable after the placement we cannot share them;
  * instead we opt for the one-module-one-shape-one-component-one-device approach
@@ -690,15 +713,65 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
     const char* layer;
     wxString    pinname;
     const char* mirror = "0";
+    std::map<wxString, size_t> shapes;
 
     fputs( "$SHAPES\n", aFile );
 
     for( module = aPcb->m_Modules; module; module = module->Next() )
     {
-        // already emitted pins to check for duplicates
-        std::set<wxString> pins;
+        if( !individualShapes )
+        {
+            // Check if such shape has been already generated, and if so - reuse it
+            // It is necessary to compute hash (i.e. check all children objects) as
+            // certain components instances might have been modified on the board.
+            // In such case the shape will be different despite the same LIB_ID.
+            wxString shapeName = module->GetFPID().Format();
+            shapeName.Replace( " ", "_" );
 
-        FootprintWriteShape( aFile, module );
+            auto shapeIt = shapes.find( shapeName );
+            size_t modHash = hashModule( module );
+
+            if( shapeIt != shapes.end() )
+            {
+                if( modHash != shapeIt->second )
+                {
+                    // there is an entry for this footprint, but it has a modified shape,
+                    // so we need to create a new entry
+                    wxString newShapeName;
+                    int suffix = 0;
+
+                    // find an unused name or matching entry
+                    do
+                    {
+                        newShapeName = wxString::Format( "%s_%d", shapeName, suffix );
+                        shapeIt = shapes.find( newShapeName );
+                        ++suffix;
+                    }
+                    while( shapeIt != shapes.end() && shapeIt->second != modHash );
+
+                    shapeName = newShapeName;
+                }
+
+                if( shapeIt != shapes.end() && modHash == shapeIt->second )
+                {
+                    // shape found, so reuse it
+                    m_componentShapes[module] = shapeName;
+                    continue;
+                }
+            }
+
+            // output and store the hashed shape in the map
+            m_componentShapes[module] = shapeName;
+            shapes[shapeName] = modHash;
+            FootprintWriteShape( aFile, module, shapeName );
+        }
+        else // individual shape for each component
+        {
+            FootprintWriteShape( aFile, module, module->GetReference() );
+        }
+
+        // set of already emitted pins to check for duplicates
+        std::set<wxString> pins;
 
         for( pad = module->PadsList(); pad; pad = pad->Next() )
         {
@@ -788,7 +861,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
         fprintf( aFile, "ROTATION %g\n",
                  fp_orient / 10.0 );
         fprintf( aFile, "SHAPE %s %s %s\n",
-                 TO_UTF8( module->GetReference() ),
+                 TO_UTF8( individualShapes ? module->GetReference() : m_componentShapes[module] ),
                  mirror, flip );
 
         // Text on silk layer: RefDes and value (are they actually useful?)
@@ -1182,13 +1255,13 @@ static void CreateTracksInfoData( FILE* aFile, BOARD* aPcb )
  * It's almost guaranteed that the silk layer will be imported wrong but
  * the shape also contains the pads!
  */
-static void FootprintWriteShape( FILE* aFile, MODULE* module )
+static void FootprintWriteShape( FILE* aFile, MODULE* module, const wxString& aShapeName )
 {
     EDGE_MODULE* PtEdge;
     EDA_ITEM*    PtStruct;
 
     /* creates header: */
-    fprintf( aFile, "\nSHAPE %s\n", TO_UTF8( module->GetReference() ) );
+    fprintf( aFile, "\nSHAPE %s\n", TO_UTF8( aShapeName ) );
 
     if( module->GetAttributes() & MOD_VIRTUAL )
     {

@@ -34,7 +34,8 @@ class wxTextCtrl;
 enum GENCAD_EXPORT_OPT
 {
     FLIP_BOTTOM_PADS,       // flip bottom components padstacks geometry
-    UNIQUE_PIN_NAMES        // generate unique pin names
+    UNIQUE_PIN_NAMES,       // generate unique pin names
+    INDIVIDUAL_SHAPES       // generate a shape for each component
 };
 
 

@@ -128,7 +128,8 @@ void DIALOG_GENCAD_EXPORT_OPTIONS::createOptCheckboxes()
     std::map<GENCAD_EXPORT_OPT, wxString> opts =
     {
         { FLIP_BOTTOM_PADS,         _( "Flip bottom components padstacks" ) },
-        { UNIQUE_PIN_NAMES,         _( "Generate unique pin names" ) }
+        { UNIQUE_PIN_NAMES,         _( "Generate unique pin names" ) },
+        { INDIVIDUAL_SHAPES,        _( "Generate a new shape for each component (do not reuse shapes)" ) }
     };
 
     for( const auto& option : opts )
