@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 22 2016)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -24,7 +24,7 @@ END_EVENT_TABLE()
 
 DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	this->SetSizeHints( wxSize( 500,-1 ), wxDefaultSize );
 	
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
@@ -96,20 +96,20 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bbottomSizer->Add( m_textCtrlCommand, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_checkBoxShowConsole = new wxCheckBox( this, wxID_ANY, _("Show console window"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkBoxShowConsole->Hide();
-	m_checkBoxShowConsole->SetToolTip( _("By default, command line runs with hidden console window and output is redirected to \"Plugin info\" field. Set this option to show the window of the running command.") );
+	m_checkBoxShowConsole->SetValue(true); 
+	m_checkBoxShowConsole->SetToolTip( _("By default, command line runs with hidden console window and output is redirected to \"Plugin info\" field.\nSet this option to show the window of the running command.") );
 	
-	bbottomSizer->Add( m_checkBoxShowConsole, 0, wxBOTTOM|wxLEFT, 5 );
+	bbottomSizer->Add( m_checkBoxShowConsole, 0, wxALL, 5 );
 	
 	
 	bMainSizer->Add( bbottomSizer, 0, wxEXPAND, 5 );
 	
 	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("Plugin Info:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfo->Wrap( -1 );
-	bMainSizer->Add( m_staticTextInfo, 0, wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( m_staticTextInfo, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_Messages = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
-	bMainSizer->Add( m_Messages, 1, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( m_Messages, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
 	this->SetSizer( bMainSizer );

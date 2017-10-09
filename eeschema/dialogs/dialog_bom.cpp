@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras@wanadoo.fr
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -233,8 +233,8 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
     m_config = Kiface().KifaceSettings();
     installPluginsList();
 
-#ifdef __WINDOWS__
-    m_checkBoxShowConsole->Show( true );
+#ifndef __WINDOWS__
+    m_checkBoxShowConsole->Show( false );
 #endif
 
     // Now all widgets have the size fixed, call FinishDialogSettings
@@ -545,20 +545,20 @@ wxString DIALOG_BOM::choosePlugin()
     wxFileName  fn( fullFileName );
     wxString    ext = fn.GetExt();
 
-    if( ext == wxT("xsl" ) )
-        cmdLine.Printf(wxT("xsltproc -o \"%%O\" \"%s\" \"%%I\""), GetChars( fullFileName ) );
-    else if( ext == wxT("exe" ) || ext.IsEmpty() )
-        cmdLine.Printf(wxT("\"%s\" < \"%%I\" > \"%%O\""), GetChars( fullFileName ) );
+    if( ext == "xsl" )
+        cmdLine.Printf( "xsltproc -o \"%%O\" \"%s\" \"%%I\"", GetChars( fullFileName ) );
+    else if( ext == "exe" || ext.IsEmpty() )
+        cmdLine.Printf( "\"%s\" < \"%%I\" > \"%%O\"", GetChars( fullFileName ) );
     else if( ext == wxT("py" ) || ext.IsEmpty() )
-        cmdLine.Printf(wxT("python \"%s\" \"%%I\" \"%%O\""), GetChars( fullFileName ) );
-    else if( ext == wxT("pyw" ) || ext.IsEmpty() )
+        cmdLine.Printf( "python \"%s\" \"%%I\" \"%%O\"", GetChars( fullFileName ) );
+    else if( ext == "pyw" || ext.IsEmpty() )
 #ifdef __WINDOWS__
         cmdLine.Printf(wxT("pythonw \"%s\" \"%%I\" \"%%O\""), GetChars( fullFileName ) );
 #else
-        cmdLine.Printf(wxT("python \"%s\" \"%%I\" \"%%O\""), GetChars( fullFileName ) );
+        cmdLine.Printf( "python \"%s\" \"%%I\" \"%%O\"", GetChars( fullFileName ) );
 #endif
     else
-        cmdLine.Printf(wxT("\"%s\""), GetChars( fullFileName ) );
+        cmdLine.Printf( "\"%s\"", GetChars( fullFileName ) );
 
     return cmdLine;
 }

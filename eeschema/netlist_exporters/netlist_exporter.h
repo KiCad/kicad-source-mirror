@@ -209,9 +209,9 @@ public:
      *   <li>formatting sequences, see below.
      *   </ul>
      *
-     * @param aTempfile is the name of an input file to the
-     *  external program.
-     * @param aFinalFile is the name of an output file that
+     * @param aNetlistFile is the name of the input file for the
+     *  external program, that is a intermediate netlist file in xml format.
+     * @param aFinalFile is the name of the output file that
      *  the user expects.
      * @param aProjectDirectory is used for %P replacement, it should omit
      *  the trailing '/'.
@@ -228,7 +228,7 @@ public:
      *  </ul>
      */
     static wxString MakeCommandLine( const wxString& aFormatString,
-            const wxString& aTempfile, const wxString& aFinalFile,
+            const wxString& aNetlistFile, const wxString& aFinalFile,
             const wxString& aProjectDirectory
             );
 };

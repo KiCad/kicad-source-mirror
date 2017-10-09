@@ -48,7 +48,7 @@
 
 
 wxString NETLIST_EXPORTER::MakeCommandLine( const wxString& aFormatString,
-            const wxString& aTempfile, const wxString& aFinalFile, const wxString& aProjectPath )
+            const wxString& aNetlistFile, const wxString& aFinalFile, const wxString& aProjectPath )
 {
     // Expand format symbols in the command line:
     // %B => base filename of selected output file, minus path and extension.
@@ -56,14 +56,27 @@ wxString NETLIST_EXPORTER::MakeCommandLine( const wxString& aFormatString,
     // %I => full filename of the input file (the intermediate net file).
     // %O => complete filename and path (but without extension) of the user chosen output file.
 
-    wxString    ret  = aFormatString;
-    wxFileName  in   = aTempfile;
-    wxFileName  out  = aFinalFile;
+    wxString   ret  = aFormatString;
+    wxFileName in   = aNetlistFile;
+    wxFileName out  = aFinalFile;
 
-    ret.Replace( wxT( "%P" ), aProjectPath.GetData(), true );
-    ret.Replace( wxT( "%B" ), out.GetName().GetData(), true );
-    ret.Replace( wxT( "%I" ), in.GetFullPath().GetData(), true );
-    ret.Replace( wxT( "%O" ), out.GetFullPath().GetData(), true );
+    ret.Replace( "%P", aProjectPath, true );
+    ret.Replace( "%B", out.GetName(), true );
+    ret.Replace( "%I", in.GetFullPath(), true );
+
+#ifdef __WINDOWS__
+    // A ugly hack to run xsltproc that has a serious bug on Window since  along time:
+    // the filename given after -o option (output filename) cannot use '\' in filename
+    // so replace if by '/' if possible (I mean if the filename does not start by "\\"
+    // that is a filename on a Windows server)
+
+    wxString str_out  = out.GetFullPath();
+
+    if( !str_out.StartsWith( "\\\\" ) )
+        str_out.Replace( "\\", "/" );
+#endif
+
+    ret.Replace( "%O", str_out, true );
 
     return ret;
 }
@@ -84,7 +97,7 @@ void NETLIST_EXPORTER::sprintPinNetName( wxString& aResult,
     {
         if( aUseNetcodeAsNetName )
         {
-            aResult.Printf( wxT("%d"), netcode );
+            aResult.Printf( "%d", netcode );
         }
         else
         {
