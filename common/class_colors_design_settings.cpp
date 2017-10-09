@@ -105,9 +105,9 @@ COLORS_DESIGN_SETTINGS::COLORS_DESIGN_SETTINGS( FRAME_T aFrameType )
             src = 0;        // wrap the source.
     }
 
-    for( unsigned src = 0, dst = LAYER_VIAS; dst < DIM( default_items_color ); ++dst )
+    for( unsigned src = 0, dst = LAYER_VIAS; src < DIM( default_items_color ); ++dst, ++src )
     {
-        m_LayersColors[dst] = COLOR4D( default_items_color[src++] );
+        m_LayersColors[dst] = COLOR4D( default_items_color[src] );
     }
 
     m_LayersColors[ LAYER_PCB_BACKGROUND ] = BLACK;
