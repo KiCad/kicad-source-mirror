@@ -59,6 +59,7 @@ wxString NETLIST_EXPORTER::MakeCommandLine( const wxString& aFormatString,
     wxString   ret  = aFormatString;
     wxFileName in   = aNetlistFile;
     wxFileName out  = aFinalFile;
+    wxString str_out  = out.GetFullPath();
 
     ret.Replace( "%P", aProjectPath, true );
     ret.Replace( "%B", out.GetName(), true );
@@ -69,8 +70,6 @@ wxString NETLIST_EXPORTER::MakeCommandLine( const wxString& aFormatString,
     // the filename given after -o option (output filename) cannot use '\' in filename
     // so replace if by '/' if possible (I mean if the filename does not start by "\\"
     // that is a filename on a Windows server)
-
-    wxString str_out  = out.GetFullPath();
 
     if( !str_out.StartsWith( "\\\\" ) )
         str_out.Replace( "\\", "/" );
