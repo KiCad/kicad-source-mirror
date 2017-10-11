@@ -38,9 +38,13 @@
 
 // Conversion to application internal units defined at build time.
 #if defined( PCBNEW )
-    #include <class_board_item.h>       // for FMT_IU
+    #include <class_board_item.h>
+    #define FMT_IU     BOARD_ITEM::FormatInternalUnits
+    #define FMT_ANGLE  BOARD_ITEM::FormatAngle
 #elif defined( EESCHEMA )
-    #include <sch_item_struct.h>        // for FMT_IU
+    #include <sch_item_struct.h>
+    #define FMT_IU          SCH_ITEM::FormatInternalUnits
+    #define FMT_ANGLE       SCH_ITEM::FormatAngle
 #elif defined( GERBVIEW )
 #elif defined( PL_EDITOR )
     #include <base_units.h>
