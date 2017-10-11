@@ -1225,37 +1225,42 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
     EWIRE        w( aTree );
     PCB_LAYER_ID layer = kicad_layer( w.layer );
 
-    if( IsNonCopperLayer( layer ) )     // only valid non-copper wires, skip copper package wires
+    if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
-        wxPoint start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
-        wxPoint end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
-        int     width = kicad( w.width );
-
-        // FIXME: the cap attribute is ignored because kicad can't create lines
-        //        with flat ends.
-        EDGE_MODULE* dwg;
-        if( !w.curve )
-        {
-            dwg = new EDGE_MODULE( aModule, S_SEGMENT );
-
-            dwg->SetStart0( start );
-            dwg->SetEnd0( end );
-        }
-        else
-        {
-            dwg = new EDGE_MODULE( aModule, S_ARC );
-            wxPoint center = ConvertArcCenter( start, end, *w.curve );
-
-            dwg->SetStart0( center );
-            dwg->SetEnd0( start );
-            dwg->SetAngle( *w.curve * -10.0 ); // KiCad rotates the other way
-        }
-
-        dwg->SetLayer( layer );
-        dwg->SetWidth( width );
-
-        aModule->GraphicalItemsList().PushBack( dwg );
+        wxLogMessage( wxString::Format( "Line on copper layer in package %s ( %f, %f ) ( %f, %f )\n Moving to drawings layer", aModule->GetFPID().GetLibItemName().c_str(),  w.x1 ,  w.y1 ,  w.x2 ,  w.y2  ) );
+        layer = Dwgs_User;
     }
+
+    wxPoint start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
+    wxPoint end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
+    int     width = kicad( w.width );
+
+    // FIXME: the cap attribute is ignored because kicad can't create lines
+    //        with flat ends.
+    EDGE_MODULE* dwg;
+    if( !w.curve )
+    {
+        dwg = new EDGE_MODULE( aModule, S_SEGMENT );
+
+        dwg->SetStart0( start );
+        dwg->SetEnd0( end );
+    }
+    else
+    {
+        dwg = new EDGE_MODULE( aModule, S_ARC );
+        wxPoint center = ConvertArcCenter( start, end, *w.curve );
+
+        dwg->SetStart0( center );
+        dwg->SetEnd0( start );
+        dwg->SetAngle( *w.curve * -10.0 ); // KiCad rotates the other way
+    }
+
+    dwg->SetLayer( layer );
+    dwg->SetWidth( width );
+
+    dwg->SetDrawCoord();
+    aModule->GraphicalItemsList().PushBack( dwg );
+
 }
 
 
@@ -1351,6 +1356,12 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
 {
     ETEXT        t( aTree );
     PCB_LAYER_ID layer = kicad_layer( t.layer );
+
+    if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
+    {
+        wxLogMessage( wxString::Format( "Unsupported text on copper layer in package %s \n Moving to drawings layer.", aModule->GetFPID().GetLibItemName().c_str() ) );
+        layer = Dwgs_User;
+    }
 
     if( layer == UNDEFINED_LAYER )
     {
@@ -1458,31 +1469,40 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
     ERECT        r( aTree );
     PCB_LAYER_ID layer = kicad_layer( r.layer );
 
-    if( IsNonCopperLayer( layer ) )  // skip copper "package.rectangle"s
+    // Rectangles are not supported yet in footprints as they are not editable.
+    wxLogMessage( wxString::Format( "Unsupported rectangle in package %s ( %f, %f ) ( %f, %f )", aModule->GetFPID().GetLibItemName().c_str(),  r.x1 ,  r.y1 ,  r.x2 ,  r.y2  ) );
+
+    return;
+
+    if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
-        EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
-        aModule->GraphicalItemsList().PushBack( dwg );
-
-        dwg->SetLayer( layer );
-        dwg->SetWidth( 0 );
-
-        dwg->SetTimeStamp( EagleTimeStamp( aTree ) );
-
-        std::vector<wxPoint> pts;
-
-        wxPoint start( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ) );
-        wxPoint end(   wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ) );
-
-        pts.push_back( start );
-        pts.push_back( wxPoint( kicad_x( r.x2 ), kicad_y( r.y1 ) ) );
-        pts.push_back( wxPoint( kicad_x( r.x2 ), kicad_y( r.y2 ) ) );
-        pts.push_back( end );
-
-        dwg->SetPolyPoints( pts );
-
-        dwg->SetStart0( start );
-        dwg->SetEnd0( end );
+        wxLogMessage( wxString::Format( "Unsupported rectangle on copper layer in package %s \n Moving to drawings layer.", aModule->GetFPID().GetLibItemName().c_str() ) );
+        layer = Dwgs_User;
     }
+
+    EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
+    aModule->GraphicalItemsList().PushBack( dwg );
+
+    dwg->SetLayer( layer );
+    dwg->SetWidth( 0 );
+
+    dwg->SetTimeStamp( EagleTimeStamp( aTree ) );
+
+    std::vector<wxPoint> pts;
+
+    wxPoint start( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ) );
+    wxPoint end(   wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ) );
+
+    pts.push_back( start );
+    pts.push_back( wxPoint( kicad_x( r.x2 ), kicad_y( r.y1 ) ) );
+    pts.push_back( wxPoint( kicad_x( r.x2 ), kicad_y( r.y2 ) ) );
+    pts.push_back( end );
+
+    dwg->SetPolyPoints( pts );
+
+    dwg->SetStart0( start );
+    dwg->SetEnd0( end );
+
 }
 
 
@@ -1491,54 +1511,46 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
     EPOLYGON    p( aTree );
     PCB_LAYER_ID    layer = kicad_layer( p.layer );
 
-    if( IsNonCopperLayer( layer ) )  // skip copper "package.rectangle"s
+    if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
-        EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
-        aModule->GraphicalItemsList().PushBack( dwg );
-
-        dwg->SetWidth( 0 );     // it's filled, no need for boundary width
-
-        /*
-        switch( layer )
-        {
-        case Eco1_User:    layer = F_SilkS; break;
-        case Eco2_User:    layer = B_SilkS;  break;
-
-        // all MODULE templates (created from eagle packages) are on front layer
-        // until cloned.
-        case Cmts_User: layer = F_SilkS; break;
-        }
-        */
-
-
-        dwg->SetLayer( layer );
-
-        dwg->SetTimeStamp( EagleTimeStamp( aTree ) );
-
-        std::vector<wxPoint> pts;
-        // TODO: I think there's no way to know a priori the number of children in wxXmlNode :()
-        // pts.reserve( aTree.size() );
-
-        // Get the first vertex and iterate
-        wxXmlNode* vertex = aTree->GetChildren();
-
-        while( vertex )
-        {
-            if( vertex->GetName() != "vertex" )     // skip <xmlattr> node
-                continue;
-
-            EVERTEX v( vertex );
-
-            pts.push_back( wxPoint( kicad_x( v.x ), kicad_y( v.y ) ) );
-
-            vertex = vertex->GetNext();
-        }
-
-        dwg->SetPolyPoints( pts );
-
-        dwg->SetStart0( *pts.begin() );
-        dwg->SetEnd0( pts.back() );
+        wxLogMessage( wxString::Format( "Unsupported polygon on copper layer in package %s \n Moving to drawings layer.", aModule->GetFPID().GetLibItemName().c_str() ) );
+        layer = Dwgs_User;
     }
+
+    EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
+    aModule->GraphicalItemsList().PushBack( dwg );
+
+    dwg->SetWidth( 0 );     // it's filled, no need for boundary width
+
+    dwg->SetLayer( layer );
+
+    dwg->SetTimeStamp( EagleTimeStamp( aTree ) );
+
+    std::vector<wxPoint> pts;
+    // TODO: I think there's no way to know a priori the number of children in wxXmlNode :()
+    // pts.reserve( aTree.size() );
+
+    // Get the first vertex and iterate
+    wxXmlNode* vertex = aTree->GetChildren();
+
+    while( vertex )
+    {
+        if( vertex->GetName() != "vertex" )     // skip <xmlattr> node
+            continue;
+
+        EVERTEX v( vertex );
+
+        pts.push_back( wxPoint( kicad_x( v.x ), kicad_y( v.y ) ) );
+
+        vertex = vertex->GetNext();
+    }
+
+    dwg->SetPolyPoints( pts );
+
+    dwg->SetStart0( *pts.begin() );
+    dwg->SetEnd0( pts.back() );
+    dwg->SetDrawCoord();
+
 }
 
 
@@ -1546,6 +1558,13 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
 {
     ECIRCLE         e( aTree );
     PCB_LAYER_ID    layer = kicad_layer( e.layer );
+
+    if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
+    {
+        wxLogMessage( wxString::Format( "Unsupported circle on copper layer in package %s \n Moving to drawings layer.", aModule->GetFPID().GetLibItemName().c_str() ) );
+        layer = Dwgs_User;
+    }
+
     EDGE_MODULE*    gr = new EDGE_MODULE( aModule, S_CIRCLE );
 
     aModule->GraphicalItemsList().PushBack( gr );
@@ -1568,6 +1587,9 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
 
     gr->SetStart0( wxPoint( kicad_x( e.x ), kicad_y( e.y ) ) );
     gr->SetEnd0( wxPoint( kicad_x( e.x + e.radius ), kicad_y( e.y ) ) );
+    gr->SetDrawCoord();
+
+
 }
 
 
