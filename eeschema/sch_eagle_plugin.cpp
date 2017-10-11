@@ -762,7 +762,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
         // this preserves the named net feature of Eagle schematics.
         if( labelled == false && wire != NULL )
         {
-            wxString netname = fixNetName( netName );
+            wxString netname = escapeName( netName );
 
             // Add a global label if the net appears on more than one Eagle sheet
             if( m_netCounts[netName.ToStdString()]>1 )
@@ -843,7 +843,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode,
 
     wxPoint elabelpos( elabel.x * EUNIT_TO_MIL, -elabel.y * EUNIT_TO_MIL );
 
-    wxString netname = fixNetName( elabel.netname );
+    wxString netname = escapeName( elabel.netname );
 
 
     // Determine if the Label is a local and global label based on the number of sheets the net appears on.
@@ -1353,11 +1353,7 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
 
                         pin->SetPartNumber( aGateNumber );
                         pin->SetUnit( aGateNumber );
-
-                        wxString pinname = pin->GetName();
-                        pinname.Replace( "~", "~~" );
-                        pinname.Replace( "!", "~" );
-                        pin->SetName( pinname );
+                        pin->SetName( escapeName( pin->GetName() ) );
 
                         if( pads.GetCount() > 1)
                         {
@@ -1773,9 +1769,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadPlainText( wxXmlNode* aSchText )
     schtext->SetPosition( wxPoint( etext.x * EUNIT_TO_MIL, -etext.y * EUNIT_TO_MIL ) );
 
     wxString thetext = aSchText->GetNodeContent();
-    thetext.Replace( "~", "~~" );
-    thetext.Replace( "!", "~" );
-    schtext->SetText( thetext );
+    schtext->SetText( aSchText->GetNodeContent().IsEmpty() ? "\" \"" : escapeName( thetext ) );
 
     if( etext.ratio )
     {
@@ -2404,7 +2398,7 @@ void SCH_EAGLE_PLUGIN::addBusEntries()
 }
 
 
-wxString SCH_EAGLE_PLUGIN::fixNetName( const wxString& aNetName )
+wxString SCH_EAGLE_PLUGIN::escapeName( const wxString& aNetName )
 {
     wxString ret( aNetName );
 

@@ -144,7 +144,8 @@ private:
     /// ends on an Eagle bus segment.
     void addBusEntries();
 
-    static wxString fixNetName( const wxString& aNetName );
+    ///> Translates Eagle special characters to their counterparts in KiCad.
+    static wxString escapeName( const wxString& aNetName );
 
     /// Return the matching layer or return LAYER_NOTES
     SCH_LAYER_ID kiCadLayer( int aEagleLayer );
