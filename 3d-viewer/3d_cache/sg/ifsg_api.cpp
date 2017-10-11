@@ -128,11 +128,10 @@ bool S3D::WriteVRML( const char* filename, bool overwrite, SGNODE* aTopNode,
 
     if( op.fail() )
     {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "failed to open file" );
-        ostr << " * [INFO] " << errmsg.ToUTF8() << " '" << filename << "'";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+        wxString errmsg;
+        errmsg << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        errmsg << " * [INFO] " << "failed to open file" << " '" << filename << "'";
+        wxLogTrace( MASK_3D_SG, errmsg );
         return false;
     }
 
@@ -155,13 +154,10 @@ bool S3D::WriteVRML( const char* filename, bool overwrite, SGNODE* aTopNode,
 
     CLOSE_STREAM( op );
 
-    do {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "problems encountered writing file" );
-        ostr << " * [INFO] " << errmsg.ToUTF8() << " '" << filename << "'";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-    } while( 0 );
+    wxString errmsg;
+    errmsg << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    errmsg << " * [INFO] " << "problems encountered writing file" << " '" << filename << "'";
+    wxLogTrace( MASK_3D_SG, errmsg );
 
     return false;
 }
@@ -260,12 +256,11 @@ bool S3D::WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode,
     {
         if( !overwrite )
         {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            wxString errmsg = _( "file exists; not overwriting" );
-            ostr << " * [INFO] " << errmsg.ToUTF8() << " '";
-            ostr << aFileName << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+            wxString errmsg;
+            errmsg << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            errmsg << " * [INFO] " << "file exists; not overwriting" << " '";
+            errmsg << aFileName << "'";
+            wxLogTrace( MASK_3D_SG, errmsg );
 
             return false;
         }
@@ -273,12 +268,11 @@ bool S3D::WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode,
         // make sure we make no attempt to write a directory
         if( !wxFileName::FileExists( aFileName ) )
         {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            wxString errmsg = _( "specified path is a directory" );
-            ostr << " * [INFO] " << errmsg.ToUTF8() << " '";
-            ostr << aFileName << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+            wxString errmsg;
+            errmsg << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            errmsg << " * [INFO] " << "specified path is a directory" << " '";
+            errmsg << aFileName << "'";
+            wxLogTrace( MASK_3D_SG, errmsg );
             return false;
         }
     }
@@ -287,11 +281,10 @@ bool S3D::WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode,
 
     if( output.fail() )
     {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "failed to open file" );
-        ostr << " * [INFO] " << errmsg.ToUTF8() << " '" << aFileName << "'";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+        wxString errmsg;
+        errmsg << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        errmsg << " * [INFO] " << "failed to open file" << " '" << aFileName << "'";
+        wxLogTrace( MASK_3D_SG, errmsg );
         return false;
     }
 
