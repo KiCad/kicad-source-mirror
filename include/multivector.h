@@ -232,10 +232,16 @@ public:
             m_data[ i ].sort();
     }
 
+    /**
+     * Remove duplicate elements in list
+     */
     void unique()
     {
         for( int i = 0; i < TYPES_COUNT; ++i )
-            m_data[ i ].unique();
+        {
+            if( m_data[ i ].size() > 1 )
+                m_data[ i ].unique();
+        }
     }
 
     ITEM_PTR_VECTOR& operator[]( int aType )
