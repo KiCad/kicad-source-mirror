@@ -119,152 +119,51 @@ bool SegmentIntersectsSegment( const wxPoint &a_p1_l1, const wxPoint &a_p2_l1,
 }
 
 
-/* Function TestSegmentHit
- * test for hit on line segment
- * i.e. a reference point is within a given distance from segment
- * aRefPoint = reference point to test
- * aStart, aEnd are coordinates of end points segment
- * aDist = maximum distance for hit
- * Note: for calculation time reasons, the distance between the ref point
- * and the segment is not always exactly calculated
- * (we only know if the actual dist is < aDist, not exactly know this dist.
- * Because many times we have horizontal or vertical segments,
- * a special calcultaion is made for them
- * Note: sometimes we need to calculate the distande between 2 points
- * A square root should be calculated.
- * However, because we just compare 2 distnaces, to avoid calculating square root,
- * the square of distances are compared.
-*/
-static inline double square( int x )    // helper function to calculate x*x
+bool TestSegmentHit( const wxPoint &aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist )
 {
-    return (double) x * x;
-}
-bool TestSegmentHit( const wxPoint &aRefPoint, wxPoint aStart,
-                     wxPoint aEnd, int aDist )
-{
-    // test for vertical or horizontal segment
-    if( aEnd.x == aStart.x )
-    {
-        // vertical segment
-        int ll = abs( aRefPoint.x - aStart.x );
+    int xmin = aStart.x;
+    int xmax = aEnd.x;
+    int ymin = aStart.y;
+    int ymax = aEnd.y;
+    wxPoint delta = aStart - aRefPoint;
 
-        if( ll > aDist )
-            return false;
+    if( xmax < xmin )
+        std::swap( xmax, xmin );
 
-        // To have only one case to examine, ensure aEnd.y > aStart.y
-        if( aEnd.y < aStart.y )
-            std::swap( aStart.y, aEnd.y );
+    if( ymax < ymin )
+        std::swap( ymax, ymin );
 
-        if( aRefPoint.y <= aEnd.y && aRefPoint.y >= aStart.y )
-            return true;
+    // First, check if we are outside of the bounding box
+    if( ( ymin - aRefPoint.y > aDist ) || ( aRefPoint.y - ymax > aDist ) )
+        return false;
 
-        // there is a special case: x,y near an end point (distance < dist )
-        // the distance should be carefully calculated
-        if( (aStart.y - aRefPoint.y) < aDist )
-        {
-            double dd = square( aRefPoint.x - aStart.x) +
-                 square( aRefPoint.y - aStart.y );
-            if( dd <= square( aDist ) )
-                return true;
-        }
+    if( ( xmin - aRefPoint.x > aDist ) || ( aRefPoint.x - xmax > aDist ) )
+        return false;
 
-        if( (aRefPoint.y - aEnd.y) < aDist )
-        {
-            double dd = square( aRefPoint.x - aEnd.x ) +
-                 square( aRefPoint.y - aEnd.y );
-            if( dd <= square( aDist ) )
-                return true;
-        }
-    }
-    else if( aEnd.y == aStart.y )
-    {
-        // horizontal segment
-        int ll = abs( aRefPoint.y - aStart.y );
+    // Next, eliminate easy cases
+    if( aStart.x == aEnd.x && aRefPoint.y > ymin && aRefPoint.y < ymax )
+        return std::abs( delta.x ) <= aDist;
 
-        if( ll > aDist )
-            return false;
+    if( aStart.y == aEnd.y && aRefPoint.x > xmin && aRefPoint.x < xmax )
+        return std::abs( delta.y ) <= aDist;
 
-        // To have only one case to examine, ensure xf > xi
-        if( aEnd.x < aStart.x )
-            std::swap( aStart.x, aEnd.x );
+    wxPoint len = aEnd - aStart;
+    // Precision note here:
+    // These are 32-bit integers, so squaring requires 64 bits to represent
+    // exactly.  64-bit Doubles have only 52 bits in the mantissa, so we start to lose
+    // precision at 2^53, which corresponds to ~ ±1nm @ 9.5cm, 2nm at 90cm, etc...
+    // Long doubles avoid this ambiguity as well as the more expensive denormal double calc
+    // Long doubles usually (sometimes more if SIMD) have at least 64 bits in the mantissa
+    long double length_square = (long double) len.x * len.x + (long double) len.y * len.y;
+    long double cross = std::abs( (long double) len.x * delta.y - (long double) len.y * delta.x );
+    long double dist_square = (long double) aDist * aDist;
 
-        if( aRefPoint.x <= aEnd.x && aRefPoint.x >= aStart.x )
-            return true;
+    // The perpendicular distance to a line is the vector magnitude of the line from
+    // a test point to the test line.  That is the 2d determinant.  Because we handled
+    // the zero length case above, so we are guaranteed a unique solution.
 
-        // there is a special case: x,y near an end point (distance < dist )
-        // the distance should be carefully calculated
-        if( (aStart.x - aRefPoint.x) <= aDist )
-        {
-            double dd = square( aRefPoint.x - aStart.x ) +
-                        square( aRefPoint.y - aStart.y );
-            if( dd <= square( aDist ) )
-                return true;
-        }
-
-        if( (aRefPoint.x - aEnd.x) <= aDist )
-        {
-            double dd = square( aRefPoint.x - aEnd.x ) +
-                        square( aRefPoint.y - aEnd.y );
-            if( dd <= square( aDist ) )
-                return true;
-        }
-    }
-    else
-    {
-        // oblique segment:
-        // First, we need to calculate the distance between the point
-        // and the line defined by aStart and aEnd
-        // this dist should be < dist
-        //
-        // find a,slope such that aStart and aEnd lie on y = a + slope*x
-        double  slope   = (double) (aEnd.y - aStart.y) / (aEnd.x - aStart.x);
-        double  a   = (double) aStart.y - slope * aStart.x;
-        // find c,orthoslope such that (x,y) lies on y = c + orthoslope*x,
-        // where orthoslope=(-1/slope)
-        // to calculate xp, yp = near point from aRefPoint
-        // which is on the line defined by aStart, aEnd
-        double  orthoslope   = -1.0 / slope;
-        double  c   = (double) aRefPoint.y - orthoslope * aRefPoint.x;
-        // find nearest point to (x,y) on line defined by aStart, aEnd
-        double  xp  = (a - c) / (orthoslope - slope);
-        double  yp  = a + slope * xp;
-        // find distance to line, in fact the square of dist,
-        // because we just know if it is > or < aDist
-        double dd = square( aRefPoint.x - xp ) + square( aRefPoint.y - yp );
-        double dist = square( aDist );
-
-        if( dd > dist )    // this reference point is not a good candiadte.
-            return false;
-
-        // dd is < dist, therefore we should make a fine test
-        if( fabs( slope ) > 0.7 )
-        {
-            // line segment more vertical than horizontal
-            if( (aEnd.y > aStart.y && yp <= aEnd.y && yp >= aStart.y) ||
-                (aEnd.y < aStart.y && yp >= aEnd.y && yp <= aStart.y) )
-                return true;
-        }
-        else
-        {
-            // line segment more horizontal than vertical
-            if( (aEnd.x > aStart.x && xp <= aEnd.x && xp >= aStart.x) ||
-                (aEnd.x < aStart.x && xp >= aEnd.x && xp <= aStart.x) )
-                return true;
-        }
-
-        // Here, the test point is still a good candidate,
-        // however it is not "between" the end points of the segment.
-        // It is "outside" the segment, but it could be near a segment end point
-        // Therefore, we test the dist from the test point to each segment end point
-        dd = square( aRefPoint.x - aEnd.x ) + square( aRefPoint.y - aEnd.y );
-        if( dd <= dist )
-            return true;
-        dd = square( aRefPoint.x - aStart.x ) + square( aRefPoint.y - aStart.y );
-        if( dd <= dist )
-            return true;
-    }
-
-    return false;    // no hit
+    return ( ( length_square >= cross && dist_square >= cross ) ||
+             ( length_square * dist_square >= cross * cross ) );
 }
 
 
