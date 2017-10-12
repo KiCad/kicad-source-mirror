@@ -648,7 +648,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool aFullConnection )
 
     if( screen->GetConnection( pos, pickList, aFullConnection ) != 0 )
     {
-        DeleteItemsInList( m_canvas, pickList );
+        DeleteItemsInList( pickList );
         OnModify();
     }
 }

@@ -272,7 +272,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
 
             if( block->GetCount() )
             {
-                DeleteItemsInList( m_canvas, block->GetItems() );
+                DeleteItemsInList( block->GetItems() );
                 OnModify();
             }
             block->ClearItemsList();
@@ -303,7 +303,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 wxPoint move_vector = -GetScreen()->m_BlockLocate.GetLastCursorPosition();
                 copyBlockItems( block->GetItems() );
                 MoveItemsInList( m_blockItems.GetItems(), move_vector );
-                DeleteItemsInList( m_canvas, block->GetItems() );
+                DeleteItemsInList( block->GetItems() );
                 OnModify();
             }
 
