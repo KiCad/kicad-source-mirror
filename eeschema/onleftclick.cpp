@@ -315,7 +315,8 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 #ifdef KICAD_SPICE
     case ID_SIM_PROBE:
         {
-            const KICAD_T wiresAndComponents[] = { SCH_LINE_T, SCH_COMPONENT_T, SCH_SHEET_PIN_T };
+            constexpr KICAD_T wiresAndComponents[] = { SCH_LINE_T,
+                SCH_COMPONENT_T, SCH_SHEET_PIN_T, EOT };
             item = LocateAndShowItem( aPosition, wiresAndComponents );
 
             if( !item )
@@ -340,7 +341,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
     case ID_SIM_TUNE:
         {
-            const KICAD_T fieldsAndComponents[] = { SCH_COMPONENT_T, SCH_FIELD_T };
+            constexpr KICAD_T fieldsAndComponents[] = { SCH_COMPONENT_T, SCH_FIELD_T, EOT };
             item = LocateAndShowItem( aPosition, fieldsAndComponents );
 
             if( !item )
