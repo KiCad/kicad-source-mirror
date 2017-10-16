@@ -197,7 +197,8 @@ INDEX::ITEM_SHAPE_INDEX* INDEX::getSubindex( const ITEM* aItem )
 
     if( idx_n < 0 || idx_n >= MaxSubIndices )
     {
-        assert( false );
+        wxASSERT( idx_n >= 0 );
+        wxASSERT( idx_n < MaxSubIndices );
         return nullptr;
     }
 
