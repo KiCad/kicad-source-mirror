@@ -299,6 +299,7 @@ wxIcon DIALOG_KEEPOUT_AREA_PROPERTIES::makeLayerIcon( COLOR4D aColor )
     iconDC.SetBrush( brush );
     iconDC.DrawRectangle( 0, 0, LAYER_BITMAP_SIZE_X, LAYER_BITMAP_SIZE_Y );
 
+    iconDC.SelectObject( wxNullBitmap );    // mandatory before using bitmap data
     wxIcon icon;
     icon.CopyFromBitmap( bitmap );
     return icon;
