@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -82,9 +82,9 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_staticText341->Wrap( -1 );
 	fgSizerUnitSymbols->Add( m_staticText341, 0, wxALL, 5 );
 	
-	m_staticText351 = new wxStaticText( m_passive, wxID_ANY, _("fempto"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText351->Wrap( -1 );
-	fgSizerUnitSymbols->Add( m_staticText351, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_staticText_femto = new wxStaticText( m_passive, wxID_ANY, _("femto"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText_femto->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText_femto, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_staticText36 = new wxStaticText( m_passive, wxID_ANY, _("1e-15"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText36->Wrap( -1 );
