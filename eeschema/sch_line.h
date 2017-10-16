@@ -142,6 +142,18 @@ public:
      */
     bool MergeOverlap( SCH_LINE* aLine );
 
+    /**
+     * Check if two lines are in the same quadrant as each other, using a reference point as
+     * the origin
+     *
+     * @param aLine - Line to compare
+     * @param aPosition - Point to reference against lines
+     * @return true if lines are mostly in different quadrants of aPosition, false otherwise
+     */
+    bool IsSameQuadrant( SCH_LINE* aLine, const wxPoint& aPosition );
+
+    bool IsParallel( SCH_LINE* aLine );
+
     void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 
     bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList ) override;

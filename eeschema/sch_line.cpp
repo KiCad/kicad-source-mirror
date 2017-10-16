@@ -352,6 +352,42 @@ void SCH_LINE::Rotate( wxPoint aPosition )
 }
 
 
+bool SCH_LINE::IsSameQuadrant( SCH_LINE* aLine, const wxPoint& aPosition )
+{
+    wxPoint first;
+    wxPoint second;
+
+    if( m_start == aPosition )
+        first = m_end - aPosition;
+    else if( m_end == aPosition )
+        first = m_start - aPosition;
+    else
+        return false;
+
+    if( aLine->m_start == aPosition )
+        second = aLine->m_end - aPosition;
+    else if( aLine->m_end == aPosition )
+        second = aLine->m_start - aPosition;
+    else
+        return false;
+
+    return (std::signbit( first.x ) == std::signbit( second.x ) &&
+            std::signbit( first.y ) == std::signbit( second.y ) );
+}
+
+
+bool SCH_LINE::IsParallel( SCH_LINE* aLine )
+{
+    wxCHECK_MSG( aLine != NULL && aLine->Type() == SCH_LINE_T, false,
+                 wxT( "Cannot test line segment for overlap." ) );
+
+    wxPoint firstSeg   = m_end - m_start;
+    wxPoint secondSeg = aLine->m_end - aLine->m_start;
+
+    // Use long long here to avoid overflow in calculations
+    return !( (long long) firstSeg.x * secondSeg.y - (long long) firstSeg.y * secondSeg.x );
+}
+
 bool SCH_LINE::MergeOverlap( SCH_LINE* aLine )
 {
     auto less = []( const wxPoint& lhs, const wxPoint& rhs ) -> bool
