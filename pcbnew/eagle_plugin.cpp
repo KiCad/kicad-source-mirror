@@ -1167,9 +1167,9 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
 
 MODULE* EAGLE_PLUGIN::makeModule( wxXmlNode* aPackage, const string& aPkgName ) const
 {
-    std::unique_ptr<MODULE>   m( new MODULE( m_board ) );
+    std::unique_ptr<MODULE> m( new MODULE( m_board ) );
 
-    m->SetFPID( LIB_ID( UTF8(aPkgName) ) );
+    m->SetFPID( LIB_ID( UTF8( aPkgName ) ) );
 
     // Get the first package item and iterate
     wxXmlNode* packageItem = aPackage->GetChildren();
@@ -1233,6 +1233,7 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
     // FIXME: the cap attribute is ignored because kicad can't create lines
     //        with flat ends.
     EDGE_MODULE* dwg;
+
     if( !w.curve )
     {
         dwg = new EDGE_MODULE( aModule, S_SEGMENT );
@@ -1252,10 +1253,9 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
 
     dwg->SetLayer( layer );
     dwg->SetWidth( width );
-
     dwg->SetDrawCoord();
-    aModule->GraphicalItemsList().PushBack( dwg );
 
+    aModule->GraphicalItemsList().PushBack( dwg );
 }
 
 
@@ -1352,7 +1352,9 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
 
     if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
-        wxLogMessage( wxString::Format( "Unsupported text on copper layer in package %s \n Moving to drawings layer.", aModule->GetFPID().GetLibItemName().c_str() ) );
+        wxLogMessage( wxString::Format(
+                "Unsupported text on copper layer in package %s\nMoving to drawings layer.",
+                aModule->GetFPID().GetLibItemName().c_str() ) );
         layer = Dwgs_User;
     }
 
@@ -1471,7 +1473,9 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
 
     if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
-        wxLogMessage( wxString::Format( "Unsupported rectangle on copper layer in package %s \n Moving to drawings layer.", aModule->GetFPID().GetLibItemName().c_str() ) );
+        wxLogMessage( wxString::Format(
+                "Unsupported rectangle on copper layer in package %s\nMoving to drawings layer.",
+                aModule->GetFPID().GetLibItemName().c_str() ) );
         layer = Dwgs_User;
     }
 
@@ -1497,7 +1501,6 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
 
     dwg->SetStart0( start );
     dwg->SetEnd0( end );
-
 }
 
 
@@ -1508,7 +1511,9 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
 
     if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
-        wxLogMessage( wxString::Format( "Unsupported polygon on copper layer in package %s \n Moving to drawings layer.", aModule->GetFPID().GetLibItemName().c_str() ) );
+        wxLogMessage( wxString::Format(
+                "Unsupported polygon on copper layer in package %s\nMoving to drawings layer.",
+                aModule->GetFPID().GetLibItemName().c_str() ) );
         layer = Dwgs_User;
     }
 
@@ -1541,11 +1546,9 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
     }
 
     dwg->SetPolyPoints( pts );
-
     dwg->SetStart0( *pts.begin() );
     dwg->SetEnd0( pts.back() );
     dwg->SetDrawCoord();
-
 }
 
 
@@ -1556,7 +1559,9 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
 
     if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
-        wxLogMessage( wxString::Format( "Unsupported circle on copper layer in package %s \n Moving to drawings layer.", aModule->GetFPID().GetLibItemName().c_str() ) );
+        wxLogMessage( wxString::Format(
+                "Unsupported circle on copper layer in package%s\nMoving to drawings layer.",
+                aModule->GetFPID().GetLibItemName().c_str() ) );
         layer = Dwgs_User;
     }
 
@@ -1579,12 +1584,9 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
 
     gr->SetLayer( layer );
     gr->SetTimeStamp( EagleTimeStamp( aTree ) );
-
     gr->SetStart0( wxPoint( kicad_x( e.x ), kicad_y( e.y ) ) );
     gr->SetEnd0( wxPoint( kicad_x( e.x + e.radius ), kicad_y( e.y ) ) );
     gr->SetDrawCoord();
-
-
 }
 
 

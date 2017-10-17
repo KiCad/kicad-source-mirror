@@ -446,10 +446,10 @@ struct ECOORD
 /// Eagle net
 struct ENET
 {
-    int         netcode;
-    std::string netname;
+    int     netcode;
+    string  netname;
 
-    ENET( int aNetCode, const std::string& aNetName ) :
+    ENET( int aNetCode, const string& aNetName ) :
         netcode( aNetCode ),
         netname( aNetName )
     {}
@@ -991,7 +991,7 @@ struct EDEVICE
               package       %String;       #IMPLIED
               >
 */
-    std::string  name;
+    string      name;
     opt_string  package;
 
     std::vector<ECONNECT> connects;
@@ -1011,7 +1011,7 @@ struct EDEVICE_SET
               >
     */
 
-    std::string name;
+    string name;
     opt_string prefix;
     opt_bool uservalue;
     //std::vector<EDEVICE> devices;

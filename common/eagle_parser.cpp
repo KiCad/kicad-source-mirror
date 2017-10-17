@@ -178,7 +178,7 @@ ECOORD Convert<ECOORD>( const wxString& aCoord )
  * @return T - the attributed parsed as the specified type.
  */
 template<typename T>
-T parseRequiredAttribute( wxXmlNode* aNode, string aAttribute )
+T parseRequiredAttribute( wxXmlNode* aNode, const string& aAttribute )
 {
     wxString value;
 
@@ -197,7 +197,7 @@ T parseRequiredAttribute( wxXmlNode* aNode, string aAttribute )
  *                                   found.
  */
 template<typename T>
-OPTIONAL_XML_ATTRIBUTE<T> parseOptionalAttribute( wxXmlNode* aNode, string aAttribute )
+OPTIONAL_XML_ATTRIBUTE<T> parseOptionalAttribute( wxXmlNode* aNode, const string& aAttribute )
 {
     return OPTIONAL_XML_ATTRIBUTE<T>( aNode->GetAttribute( aAttribute ) );
 }
@@ -859,7 +859,6 @@ EPART::EPART( wxXmlNode* aPart )
     device = parseRequiredAttribute<string>( aPart, "device" );
     technology = parseOptionalAttribute<string>( aPart, "technology" );
     value = parseOptionalAttribute<string>( aPart, "value" );
-
 }
 
 

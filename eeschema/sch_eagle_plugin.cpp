@@ -658,10 +658,10 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     PAGE_INFO pageInfo  = m_currentSheet->GetScreen()->GetPageSettings();
 
     // Increase if necessary
-    if( pageSizeIU.x<targetSheetSize.x )
+    if( pageSizeIU.x < targetSheetSize.x )
         pageInfo.SetWidthMils( targetSheetSize.x );
 
-    if( pageSizeIU.y<targetSheetSize.y )
+    if( pageSizeIU.y < targetSheetSize.y )
         pageInfo.SetHeightMils( targetSheetSize.y );
 
     // Set the new sheet size.
@@ -765,7 +765,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
             wxString netname = escapeName( netName );
 
             // Add a global label if the net appears on more than one Eagle sheet
-            if( m_netCounts[netName.ToStdString()]>1 )
+            if( m_netCounts[netName.ToStdString()] > 1 )
             {
                 std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
                 glabel->SetPosition( wire->MidPoint() );
@@ -847,7 +847,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode,
 
 
     // Determine if the Label is a local and global label based on the number of sheets the net appears on.
-    if( m_netCounts[aNetName.ToStdString()]>1 )
+    if( m_netCounts[aNetName.ToStdString()] > 1 )
     {
         std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
         glabel->SetPosition( elabelpos );
@@ -902,7 +902,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode,
         std::unique_ptr<SCH_LABEL> label( new SCH_LABEL );
         label->SetPosition( elabelpos );
         label->SetText( netname );
-        label->SetTextSize( wxSize( elabel.size * EUNIT_TO_MIL, elabel.size * EUNIT_TO_MIL ) );
+        label->SetTextSize( wxSize( elabel.size.ToSchUnits(), elabel.size.ToSchUnits() ) );
 
         label->SetLabelSpinStyle( 0 );
 
@@ -998,8 +998,6 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 {
     auto einstance = EINSTANCE( aInstanceNode );
 
-    bool smashed = false;
-
     SCH_SCREEN* screen = m_currentSheet->GetScreen();
 
     // Find the part in the list for the sheet.
@@ -1011,8 +1009,8 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     std::string libraryname = epart->library;
     std::string gatename = epart->deviceset + epart->device + einstance.gate;
-    wxString sntemp = wxString( epart->deviceset + epart->device );
 
+    wxString sntemp = wxString( epart->deviceset + epart->device );
     sntemp.Replace( "*", "" );
     std::string symbolname = sntemp.ToStdString();
 
@@ -1086,20 +1084,8 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     }
 
     // Set the visibility of fields.
-    if( part->GetField( REFERENCE )->IsVisible() )
-        component->GetField( REFERENCE )->SetVisible( true );
-    else
-        component->GetField( REFERENCE )->SetVisible( false );
-
-    if( part->GetField( VALUE )->IsVisible() )
-        component->GetField( VALUE )->SetVisible( true );
-    else
-        component->GetField( VALUE )->SetVisible( false );
-
-    if( einstance.smashed )
-    {
-        smashed = einstance.smashed.Get();
-    }
+    component->GetField( REFERENCE )->SetVisible( part->GetField( REFERENCE )->IsVisible() );
+    component->GetField( VALUE )->SetVisible( part->GetField( VALUE )->IsVisible() );
 
     bool valueAttributeFound = false;
     bool nameAttributeFound  = false;
@@ -1108,7 +1094,6 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     wxXmlNode* attributeNode = aInstanceNode->GetChildren();
 
     // Parse attributes for the instance
-    //
     while( attributeNode )
     {
         if( attributeNode->GetName() == "attribute" )
@@ -1136,20 +1121,15 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
                 bool mirror = attr.rot ? attr.rot->mirror : false;
 
                 if( einstance.rot && einstance.rot->mirror )
-                {
                     mirror = !mirror;
-                }
-
 
                 bool spin = attr.rot ? attr.rot->spin : false;
 
                 if( attr.display == EATTR::Off )
-                {
                     field->SetVisible( false );
-                }
 
                 int rotation = einstance.rot ? einstance.rot->degrees : 0;
-                int reldegrees = ( absdegrees - rotation + 360.0);
+                int reldegrees = ( absdegrees - rotation + 360.0 );
                 reldegrees %= 360;
 
                 eagleToKicadAlignment( (EDA_TEXT*) field, align, reldegrees, mirror, spin,
@@ -1160,7 +1140,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
         attributeNode = attributeNode->GetNext();
     }
 
-    if( smashed )
+    if( einstance.smashed && einstance.smashed.Get() )
     {
         if( !valueAttributeFound )
             component->GetField( VALUE )->SetVisible( false );
@@ -1226,14 +1206,10 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
 
             LIB_FIELD* reference = kpart->GetField( REFERENCE );
 
-            if(  prefix.length() ==0  )
-            {
+            if( prefix.length() == 0 )
                 reference->SetVisible( false );
-            }
             else
-            {
                 reference->SetText( prefix );
-            }
 
             int gateindex = 1;
             bool ispower = false;
@@ -1348,7 +1324,7 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
                 {
                     if( connect.gate == aGateName and pin->GetName().ToStdString() == connect.pin )
                     {
-                        wxArrayString pads = wxSplit( wxString(connect.pad), ' ');
+                        wxArrayString pads = wxSplit( wxString( connect.pad ), ' ');
 
                         pin->SetPartNumber( aGateNumber );
                         pin->SetUnit( aGateNumber );
@@ -1365,10 +1341,9 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
 
                             wxString padname( pads[i] );
                             apin->SetNumber( padname );
-                            aPart->AddDrawItem( apin);
+                            aPart->AddDrawItem( apin );
                         }
                         break;
-
                     }
                 }
             }
