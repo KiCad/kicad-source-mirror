@@ -825,7 +825,7 @@ void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( ZONE_CONTAINER* aZone, std
         }
     }
 
-    wxLogTrace( "CN", "Found %llu isolated islands\n", aIslands.size() );
+    wxLogTrace( "CN", "Found %u isolated islands\n", (unsigned)aIslands.size() );
 }
 
 
