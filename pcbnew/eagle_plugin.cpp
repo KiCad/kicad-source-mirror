@@ -83,16 +83,16 @@ typedef MODULE_MAP::const_iterator    MODULE_CITER;
 
 /// Parse an eagle distance which is either mm, or mils if there is "mil" suffix.
 /// Return is in BIU.
-static double parseEagle( const wxString& aDistance )
+static int parseEagle( const wxString& aDistance )
 {
-    double ret = strtod( aDistance.c_str(), NULL );
-    if( aDistance.npos != aDistance.find( "mil" ) )
-        ret = IU_PER_MILS * ret;
-    else
-        ret = IU_PER_MM * ret;
+    ECOORD::UNIT unit = ( aDistance.npos != aDistance.find( "mil" ) )
+        ? ECOORD::UNIT::MIL : ECOORD::UNIT::MM;
 
-    return ret;
+    ECOORD coord( aDistance, unit );
+
+    return coord.ToPcbUnits();
 }
+
 
 /// Assemble a two part key as a simple concatenation of aFirst and aSecond parts,
 /// using a separator.
@@ -170,16 +170,10 @@ const wxString EAGLE_PLUGIN::GetFileExtension() const
 }
 
 
-int inline EAGLE_PLUGIN::kicad( double d ) const
-{
-    return KiROUND( biu_per_mm * d );
-}
-
-
-wxSize inline EAGLE_PLUGIN::kicad_fontz( double d ) const
+wxSize inline EAGLE_PLUGIN::kicad_fontz( const ECOORD& d ) const
 {
     // texts seem to better match eagle when scaled down by 0.95
-    int kz = kicad( d ) * 95 / 100;
+    int kz = d.ToPcbUnits() * 95 / 100;
     return wxSize( kz, kz );
 }
 
@@ -285,8 +279,6 @@ void EAGLE_PLUGIN::init( const PROPERTIES* aProperties )
     m_board = NULL;
     m_props = aProperties;
 
-    mm_per_biu = 1/IU_PER_MM;
-    biu_per_mm = IU_PER_MM;
 
     delete m_rules;
     m_rules = new ERULES();
@@ -498,9 +490,9 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
                 pcbtxt->SetTextSize( kicad_fontz( t.size ) );
 
-                double  ratio = t.ratio ? *t.ratio : 8;     // DTD says 8 is default
+                double ratio = t.ratio ? *t.ratio : 8;     // DTD says 8 is default
 
-                pcbtxt->SetThickness( kicad( t.size * ratio / 100 ) );
+                pcbtxt->SetThickness( t.size.ToPcbUnits() * ratio / 100 );
 
                 int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;
 
@@ -604,7 +596,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 dseg->SetLayer( layer );
                 dseg->SetStart( wxPoint( kicad_x( c.x ), kicad_y( c.y ) ) );
                 dseg->SetEnd( wxPoint( kicad_x( c.x + c.radius ), kicad_y( c.y ) ) );
-                dseg->SetWidth( kicad( c.width ) );
+                dseg->SetWidth( c.width.ToPcbUnits() );
             }
             m_xpath->pop();
         }
@@ -675,7 +667,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
             pad->SetPosition( padpos + module->GetPosition() );
             */
 
-            wxSize  sz( kicad( e.drill ), kicad( e.drill ) );
+            wxSize  sz( e.drill.ToPcbUnits(), e.drill.ToPcbUnits() );
 
             pad->SetDrillSize( sz );
             pad->SetSize( sz );
@@ -721,7 +713,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 // because the "height" of the dimension is perpendicular to that axis
                 // Note the check is just if two axes are close enough to each other
                 // Eagle appears to have some rounding errors
-                if( fabs( d.x1 - d.x2 ) < 0.05 )
+                if( abs( ( d.x1 - d.x2 ).ToPcbUnits() ) < 50000 )   // 50000 nm = 0.05 mm
                     dimension->SetHeight( kicad_x( d.x1 - d.x3 ) );
                 else
                     dimension->SetHeight( kicad_y( d.y3 - d.y1 ) );
@@ -1096,7 +1088,7 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
                 ratio = *a.ratio;
         }
 
-        int  lw = int( fontz.y * ratio / 100.0 );
+        int  lw = int( fontz.y * ratio / 100 );
         txt->SetThickness( lw );
 
         int align = ETEXT::BOTTOM_LEFT;     // bottom-left is eagle default
@@ -1227,13 +1219,16 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
 
     if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
-        wxLogMessage( wxString::Format( "Line on copper layer in package %s ( %f, %f ) ( %f, %f )\n Moving to drawings layer", aModule->GetFPID().GetLibItemName().c_str(),  w.x1 ,  w.y1 ,  w.x2 ,  w.y2  ) );
+        wxLogMessage( wxString::Format(
+                    "Line on copper layer in package %s ( %d, %d ) ( %d, %d )\n Moving to drawings layer",
+                    aModule->GetFPID().GetLibItemName().c_str(), w.x1.ToPcbUnits(), w.y1.ToPcbUnits(),
+                    w.x2.ToPcbUnits(), w.y2.ToPcbUnits() ) );
         layer = Dwgs_User;
     }
 
     wxPoint start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
     wxPoint end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
-    int     width = kicad( w.width );
+    int     width = w.width.ToPcbUnits();
 
     // FIXME: the cap attribute is ignored because kicad can't create lines
     //        with flat ends.
@@ -1284,9 +1279,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
     RotatePoint( &padpos, aModule->GetOrientation() );
 
     pad->SetPosition( padpos + aModule->GetPosition() );
-
-    pad->SetDrillSize( wxSize( kicad( e.drill ), kicad( e.drill ) ) );
-
+    pad->SetDrillSize( wxSize( e.drill.ToPcbUnits(), e.drill.ToPcbUnits() ) );
     pad->SetLayerSet( LSET::AllCuMask().set( B_Mask ).set( F_Mask ) );
 
     if( e.shape )
@@ -1322,7 +1315,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
 
     if( e.diameter )
     {
-        int diameter = kicad( *e.diameter );
+        int diameter = e.diameter->ToPcbUnits();
         pad->SetSize( wxSize( diameter, diameter ) );
     }
     else
@@ -1394,7 +1387,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
 
     double ratio = t.ratio ? *t.ratio : 8;  // DTD says 8 is default
 
-    txt->SetThickness( kicad( t.size * ratio / 100 ) );
+    txt->SetThickness( t.size.ToPcbUnits() * ratio / 100 );
 
     int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;  // bottom-left is eagle default
 
@@ -1470,7 +1463,9 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
     PCB_LAYER_ID layer = kicad_layer( r.layer );
 
     // Rectangles are not supported yet in footprints as they are not editable.
-    wxLogMessage( wxString::Format( "Unsupported rectangle in package %s ( %f, %f ) ( %f, %f )", aModule->GetFPID().GetLibItemName().c_str(),  r.x1 ,  r.y1 ,  r.x2 ,  r.y2  ) );
+    wxLogMessage( wxString::Format( "Unsupported rectangle in package %s (%d, %d) (%d, %d)",
+            aModule->GetFPID().GetLibItemName().c_str(), r.x1.ToPcbUnits(), r.y1.ToPcbUnits(),
+            r.x2.ToPcbUnits(), r.y2.ToPcbUnits() ) );
 
     return;
 
@@ -1569,7 +1564,7 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
 
     aModule->GraphicalItemsList().PushBack( gr );
 
-    gr->SetWidth( kicad( e.width ) );
+    gr->SetWidth( e.width.ToPcbUnits() );
 
     switch( (int) layer )
     {
@@ -1614,7 +1609,7 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, wxXmlNode* aTree ) const
     pad->SetPos0( padpos );
     pad->SetPosition( padpos + aModule->GetPosition() );
 
-    wxSize  sz( kicad( e.drill ), kicad( e.drill ) );
+    wxSize  sz( e.drill.ToPcbUnits(), e.drill.ToPcbUnits() );
 
     pad->SetDrillSize( sz );
     pad->SetSize( sz );
@@ -1651,7 +1646,7 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
 
     pad->SetPosition( padpos + aModule->GetPosition() );
 
-    pad->SetSize( wxSize( kicad( e.dx ), kicad( e.dy ) ) );
+    pad->SetSize( wxSize( e.dx.ToPcbUnits(), e.dy.ToPcbUnits() ) );
 
     pad->SetLayer( layer );
 
@@ -1743,7 +1738,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     t->SetPosition( wxPoint( kicad_x( w.x1 ), kicad_y( w.y1 ) ) );
                     t->SetEnd( wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
 
-                    int width = kicad( w.width );
+                    int width = w.width.ToPcbUnits();
                     if( width < m_min_trace )
                         m_min_trace = width;
 
@@ -1773,7 +1768,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     IsCopperLayer( layer_back_most ) )
                 {
                     int  kidiam;
-                    int  drillz = kicad( v.drill );
+                    int  drillz = v.drill.ToPcbUnits();
                     VIA* via = new VIA( m_board );
                     m_board->m_Track.Insert( via, NULL );
 
@@ -1781,7 +1776,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                     if( v.diam )
                     {
-                        kidiam = kicad( *v.diam );
+                        kidiam = v.diam->ToPcbUnits();
                         via->SetWidth( kidiam );
                     }
                     else
@@ -1898,14 +1893,14 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                     // clearances, etc.
                     zone->SetArcSegmentCount( 32 );     // @todo: should be a constructor default?
-                    zone->SetMinThickness( kicad( p.width ) );
+                    zone->SetMinThickness( p.width.ToPcbUnits() );
 
                     // FIXME: KiCad zones have very rounded corners compared to eagle.
                     //        This means that isolation amounts that work well in eagle
                     //        tend to make copper intrude in soldermask free areas around pads.
                     if( p.isolate )
                     {
-                        zone->SetZoneClearance( kicad( *p.isolate ) );
+                        zone->SetZoneClearance( p.isolate->ToPcbUnits() );
                     } else
                     {
                         zone->SetZoneClearance( 0 );
@@ -1920,8 +1915,8 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                         //        based on what the zone is connecting to.
                         //        (i.e. width of spoke is half of the smaller side of an smd pad)
                         //        This is a basic workaround
-                        zone->SetThermalReliefGap( kicad( p.width + 0.05 ) );
-                        zone->SetThermalReliefCopperBridge( kicad( p.width + 0.05 ) );
+                        zone->SetThermalReliefGap( p.width.ToPcbUnits() + 50000 ); // 50000nm == 0.05mm
+                        zone->SetThermalReliefCopperBridge( p.width.ToPcbUnits() + 50000 );
                     }
 
                     int rank = p.rank ? (p.max_priority - *p.rank) : p.max_priority;

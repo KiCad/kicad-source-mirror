@@ -29,6 +29,68 @@
 #include <functional>
 #include <sstream>
 #include <iomanip>
+#include <cstdio>
+
+constexpr auto DEFAULT_ALIGNMENT = ETEXT::BOTTOM_LEFT;
+
+
+ECOORD::ECOORD( const wxString& aValue, enum ECOORD::UNIT aUnit )
+{
+    // this array is used to adjust the fraction part value basing on the number of digits in the fraction
+    constexpr int DIVIDERS[] = { 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000 };
+    constexpr unsigned int DIVIDERS_MAX_IDX = sizeof( DIVIDERS ) / sizeof( DIVIDERS[0] ) - 1;
+
+    int integer, fraction, pre_fraction, post_fraction;
+
+    // the following check is needed to handle correctly negative fractions where the integer part == 0
+    bool negative = ( aValue[0] == '-' );
+
+    // %n is used to find out how many digits contains the fraction part, e.g. 0.001 contains 3 digits
+    int ret = sscanf( aValue.c_str(), "%d.%n%d%n", &integer, &pre_fraction, &fraction, &post_fraction );
+
+    if( ret == 0 )
+        throw XML_PARSER_ERROR( "Invalid coordinate" );
+
+    // process the integer part
+    value = ToNanoMeters( integer, aUnit );
+
+    // process the fraction part
+    if( ret == 2 )
+    {
+        int digits = post_fraction - pre_fraction;
+
+        // adjust the number of digits if necessary as we cannot handle anything smaller than nanometers (rounding)
+        if( (unsigned) digits > DIVIDERS_MAX_IDX )
+        {
+            int diff = digits - DIVIDERS_MAX_IDX;
+            digits = DIVIDERS_MAX_IDX;
+            fraction /= DIVIDERS[diff];
+        }
+
+        int frac_value = ToNanoMeters( fraction, aUnit ) / DIVIDERS[digits];
+
+        // keep the sign in mind
+        value = negative ? value - frac_value : value + frac_value;
+    }
+}
+
+
+long long int ECOORD::ToNanoMeters( int aValue, enum UNIT aUnit )
+{
+    long long int ret;
+
+    switch( aUnit )
+    {
+        case NM:    ret = aValue; break;
+        case MM:    ret = (long long) aValue * 1000000; break;
+        case INCH:  ret = (long long) aValue * 25400000; break;
+        case MIL:   ret = (long long) aValue * 25400; break;
+    }
+
+    wxASSERT( ( ret > 0 ) == ( aValue > 0 ) );  // check for overflow
+    return ret;
+}
+
 
 // Template specializations below parse wxString to the used types:
 //      - string
@@ -36,8 +98,7 @@
 //      - int
 //      - bool
 //      - EROT
-
-constexpr auto DEFAULT_ALIGNMENT = ETEXT::BOTTOM_LEFT;
+//      - ECOORD
 
 template<>
 string Convert<string>( const wxString& aValue )
@@ -98,6 +159,15 @@ EROT Convert<EROT>( const wxString& aRot )
 
     return value;
 }
+
+
+template<>
+ECOORD Convert<ECOORD>( const wxString& aCoord )
+{
+    // Eagle uses millimeters as the default unit
+    return ECOORD( aCoord, ECOORD::UNIT::MM );
+}
+
 
 /**
  * Function parseRequiredAttribute
@@ -182,6 +252,8 @@ wxPoint ConvertArcCenter( const wxPoint& aStart, const wxPoint& aEnd, double aAn
     wxPoint mid = ( aStart + aEnd ) / 2;
 
     double dlen = sqrt( dx*dx + dy*dy );
+    wxASSERT( dlen != 0 );
+    wxASSERT( aAngle != 0 );
     double dist = dlen / ( 2 * tan( DEG2RAD( aAngle ) / 2 ) );
 
     wxPoint center(
@@ -238,11 +310,11 @@ EWIRE::EWIRE( wxXmlNode* aWire )
         >
     */
 
-    x1    = parseRequiredAttribute<double>( aWire, "x1" );
-    y1    = parseRequiredAttribute<double>( aWire, "y1" );
-    x2    = parseRequiredAttribute<double>( aWire, "x2" );
-    y2    = parseRequiredAttribute<double>( aWire, "y2" );
-    width = parseRequiredAttribute<double>( aWire, "width" );
+    x1    = parseRequiredAttribute<ECOORD>( aWire, "x1" );
+    y1    = parseRequiredAttribute<ECOORD>( aWire, "y1" );
+    x2    = parseRequiredAttribute<ECOORD>( aWire, "x2" );
+    y2    = parseRequiredAttribute<ECOORD>( aWire, "y2" );
+    width = parseRequiredAttribute<ECOORD>( aWire, "width" );
     layer = parseRequiredAttribute<int>( aWire, "layer" );
     curve = parseOptionalAttribute<double>( aWire, "curve" );
 
@@ -276,8 +348,8 @@ EJUNCTION::EJUNCTION( wxXmlNode* aJunction )
           >
     */
 
-    x    = parseRequiredAttribute<double>( aJunction, "x" );
-    y    = parseRequiredAttribute<double>( aJunction, "y" );
+    x    = parseRequiredAttribute<ECOORD>( aJunction, "x" );
+    y    = parseRequiredAttribute<ECOORD>( aJunction, "y" );
 }
 
 
@@ -297,9 +369,9 @@ ELABEL::ELABEL( wxXmlNode* aLabel, const wxString& aNetName )
           >
     */
 
-    x    = parseRequiredAttribute<double>( aLabel, "x" );
-    y    = parseRequiredAttribute<double>( aLabel, "y" );
-    size = parseRequiredAttribute<double>( aLabel, "size" );
+    x    = parseRequiredAttribute<ECOORD>( aLabel, "x" );
+    y    = parseRequiredAttribute<ECOORD>( aLabel, "y" );
+    size = parseRequiredAttribute<ECOORD>( aLabel, "size" );
     layer = parseRequiredAttribute<int>( aLabel, "layer" );
     rot   = parseOptionalAttribute<EROT>( aLabel, "rot" );
     xref  = parseOptionalAttribute<string>( aLabel, "xref" );
@@ -322,15 +394,15 @@ EVIA::EVIA( wxXmlNode* aVia )
           >
     */
 
-    x = parseRequiredAttribute<double>( aVia, "x" );
-    y = parseRequiredAttribute<double>( aVia, "y" );
+    x = parseRequiredAttribute<ECOORD>( aVia, "x" );
+    y = parseRequiredAttribute<ECOORD>( aVia, "y" );
 
     string ext = parseRequiredAttribute<string>( aVia, "extent" );
 
     sscanf( ext.c_str(), "%d-%d", &layer_front_most, &layer_back_most );
 
-    drill = parseRequiredAttribute<double>( aVia, "drill" );
-    diam  = parseOptionalAttribute<double>( aVia, "diameter" );
+    drill = parseRequiredAttribute<ECOORD>( aVia, "drill" );
+    diam  = parseOptionalAttribute<ECOORD>( aVia, "diameter" );
     shape = parseOptionalAttribute<string>( aVia, "shape" );
 }
 
@@ -348,10 +420,10 @@ ECIRCLE::ECIRCLE( wxXmlNode* aCircle )
           >
     */
 
-    x      = parseRequiredAttribute<double>( aCircle, "x" );
-    y      = parseRequiredAttribute<double>( aCircle, "y" );
-    radius = parseRequiredAttribute<double>( aCircle, "radius" );
-    width  = parseRequiredAttribute<double>( aCircle, "width" );
+    x      = parseRequiredAttribute<ECOORD>( aCircle, "x" );
+    y      = parseRequiredAttribute<ECOORD>( aCircle, "y" );
+    radius = parseRequiredAttribute<ECOORD>( aCircle, "radius" );
+    width  = parseRequiredAttribute<ECOORD>( aCircle, "width" );
     layer  = parseRequiredAttribute<int>( aCircle, "layer" );
 }
 
@@ -370,10 +442,10 @@ ERECT::ERECT( wxXmlNode* aRect )
           >
     */
 
-    x1    = parseRequiredAttribute<double>( aRect, "x1" );
-    y1    = parseRequiredAttribute<double>( aRect, "y1" );
-    x2    = parseRequiredAttribute<double>( aRect, "x2" );
-    y2    = parseRequiredAttribute<double>( aRect, "y2" );
+    x1    = parseRequiredAttribute<ECOORD>( aRect, "x1" );
+    y1    = parseRequiredAttribute<ECOORD>( aRect, "y1" );
+    x2    = parseRequiredAttribute<ECOORD>( aRect, "x2" );
+    y2    = parseRequiredAttribute<ECOORD>( aRect, "y2" );
     layer = parseRequiredAttribute<int>( aRect, "layer" );
     rot   = parseOptionalAttribute<EROT>( aRect, "rot" );
 }
@@ -401,9 +473,9 @@ EATTR::EATTR( wxXmlNode* aTree )
     name  = parseRequiredAttribute<string>( aTree, "name" );
     value = parseOptionalAttribute<string>( aTree, "value" );
 
-    x     = parseOptionalAttribute<double>( aTree, "x" );
-    y     = parseOptionalAttribute<double>( aTree, "y" );
-    size  = parseOptionalAttribute<double>( aTree, "size" );
+    x     = parseOptionalAttribute<ECOORD>( aTree, "x" );
+    y     = parseOptionalAttribute<ECOORD>( aTree, "y" );
+    size  = parseOptionalAttribute<ECOORD>( aTree, "size" );
 
     // KiCad cannot currently put a TEXTE_MODULE on a different layer than the MODULE
     // Eagle can it seems.
@@ -445,12 +517,12 @@ EDIMENSION::EDIMENSION( wxXmlNode* aDimension )
           >
     */
 
-    x1    = parseRequiredAttribute<double>( aDimension, "x1" );
-    y1    = parseRequiredAttribute<double>( aDimension, "y1" );
-    x2    = parseRequiredAttribute<double>( aDimension, "x2" );
-    y2    = parseRequiredAttribute<double>( aDimension, "y2" );
-    x3    = parseRequiredAttribute<double>( aDimension, "x3" );
-    y3    = parseRequiredAttribute<double>( aDimension, "y3" );
+    x1    = parseRequiredAttribute<ECOORD>( aDimension, "x1" );
+    y1    = parseRequiredAttribute<ECOORD>( aDimension, "y1" );
+    x2    = parseRequiredAttribute<ECOORD>( aDimension, "x2" );
+    y2    = parseRequiredAttribute<ECOORD>( aDimension, "y2" );
+    x3    = parseRequiredAttribute<ECOORD>( aDimension, "x3" );
+    y3    = parseRequiredAttribute<ECOORD>( aDimension, "y3" );
     layer = parseRequiredAttribute<int>( aDimension, "layer" );
 
     opt_string dimType = parseOptionalAttribute<string>( aDimension, "dtype" );
@@ -479,9 +551,9 @@ ETEXT::ETEXT( wxXmlNode* aText )
     */
 
     text  = aText->GetNodeContent();
-    x     = parseRequiredAttribute<double>( aText, "x" );
-    y     = parseRequiredAttribute<double>( aText, "y" );
-    size  = parseRequiredAttribute<double>( aText, "size" );
+    x     = parseRequiredAttribute<ECOORD>( aText, "x" );
+    y     = parseRequiredAttribute<ECOORD>( aText, "y" );
+    size  = parseRequiredAttribute<ECOORD>( aText, "size" );
     layer = parseRequiredAttribute<int>( aText, "layer" );
 
     font  = parseOptionalAttribute<string>( aText, "font" );
@@ -504,21 +576,21 @@ wxSize ETEXT::ConvertSize() const
 
         if( fontName == "vector" )
         {
-            textsize = wxSize( size * EUNIT_TO_MIL, size * EUNIT_TO_MIL );
+            textsize = wxSize( size.ToSchUnits(), size.ToSchUnits() );
         }
         else if( fontName == "fixed" )
         {
-            textsize = wxSize( size * EUNIT_TO_MIL, size * EUNIT_TO_MIL * 0.80 );
+            textsize = wxSize( size.ToSchUnits(), size.ToSchUnits() * 0.80 );
         }
         else
         {
             wxASSERT( false );
-            textsize = wxSize( size * EUNIT_TO_MIL, size * EUNIT_TO_MIL );
+            textsize = wxSize( size.ToSchUnits(), size.ToSchUnits() );
         }
     }
     else
     {
-        textsize = wxSize( size * EUNIT_TO_MIL * 0.85, size * EUNIT_TO_MIL );
+        textsize = wxSize( size.ToSchUnits() * 0.85, size.ToSchUnits() );
     }
 
     return textsize;
@@ -545,12 +617,12 @@ EPAD::EPAD( wxXmlNode* aPad )
 
     // #REQUIRED says DTD, throw exception if not found
     name         = parseRequiredAttribute<string>( aPad, "name" );
-    x            = parseRequiredAttribute<double>( aPad, "x" );
-    y            = parseRequiredAttribute<double>( aPad, "y" );
-    drill        = parseRequiredAttribute<double>( aPad, "drill" );
+    x            = parseRequiredAttribute<ECOORD>( aPad, "x" );
+    y            = parseRequiredAttribute<ECOORD>( aPad, "y" );
+    drill        = parseRequiredAttribute<ECOORD>( aPad, "drill" );
 
     // Optional attributes
-    diameter     = parseOptionalAttribute<double>( aPad, "diameter" );
+    diameter     = parseOptionalAttribute<ECOORD>( aPad, "diameter" );
 
     opt_string s = parseOptionalAttribute<string>( aPad, "shape" );
 
@@ -593,10 +665,10 @@ ESMD::ESMD( wxXmlNode* aSMD )
 
     // DTD #REQUIRED, throw exception if not found
     name      = parseRequiredAttribute<string>( aSMD, "name" );
-    x         = parseRequiredAttribute<double>( aSMD, "x" );
-    y         = parseRequiredAttribute<double>( aSMD, "y" );
-    dx        = parseRequiredAttribute<double>( aSMD, "dx" );
-    dy        = parseRequiredAttribute<double>( aSMD, "dy" );
+    x         = parseRequiredAttribute<ECOORD>( aSMD, "x" );
+    y         = parseRequiredAttribute<ECOORD>( aSMD, "y" );
+    dx        = parseRequiredAttribute<ECOORD>( aSMD, "dx" );
+    dy        = parseRequiredAttribute<ECOORD>( aSMD, "dy" );
     layer     = parseRequiredAttribute<int>( aSMD, "layer" );
 
     roundness = parseOptionalAttribute<int>( aSMD, "roundness" );
@@ -627,8 +699,8 @@ EPIN::EPIN( wxXmlNode* aPin )
 
     // DTD #REQUIRED, throw exception if not found
     name      = parseRequiredAttribute<string>( aPin, "name" );
-    x         = parseRequiredAttribute<double>( aPin, "x" );
-    y         = parseRequiredAttribute<double>( aPin, "y" );
+    x         = parseRequiredAttribute<ECOORD>( aPin, "x" );
+    y         = parseRequiredAttribute<ECOORD>( aPin, "y" );
 
     visible   = parseOptionalAttribute<string>( aPin, "visible" );
     length    = parseOptionalAttribute<string>( aPin, "length" );
@@ -650,8 +722,8 @@ EVERTEX::EVERTEX( wxXmlNode* aVertex )
           >
     */
 
-    x = parseRequiredAttribute<double>( aVertex, "x" );
-    y = parseRequiredAttribute<double>( aVertex, "y" );
+    x = parseRequiredAttribute<ECOORD>( aVertex, "x" );
+    y = parseRequiredAttribute<ECOORD>( aVertex, "y" );
 }
 
 
@@ -670,11 +742,11 @@ EPOLYGON::EPOLYGON( wxXmlNode* aPolygon )
           >
     */
 
-    width        = parseRequiredAttribute<double>( aPolygon, "width" );
+    width        = parseRequiredAttribute<ECOORD>( aPolygon, "width" );
     layer        = parseRequiredAttribute<int>( aPolygon, "layer" );
 
-    spacing      = parseOptionalAttribute<double>( aPolygon, "spacing" );
-    isolate      = parseOptionalAttribute<double>( aPolygon, "isolate" );
+    spacing      = parseOptionalAttribute<ECOORD>( aPolygon, "spacing" );
+    isolate      = parseOptionalAttribute<ECOORD>( aPolygon, "isolate" );
     opt_string s = parseOptionalAttribute<string>( aPolygon, "pour" );
 
     // default pour to solid fill
@@ -704,9 +776,9 @@ EHOLE::EHOLE( wxXmlNode* aHole )
     */
 
     // #REQUIRED:
-    x     = parseRequiredAttribute<double>( aHole, "x" );
-    y     = parseRequiredAttribute<double>( aHole, "y" );
-    drill = parseRequiredAttribute<double>( aHole, "drill" );
+    x     = parseRequiredAttribute<ECOORD>( aHole, "x" );
+    y     = parseRequiredAttribute<ECOORD>( aHole, "y" );
+    drill = parseRequiredAttribute<ECOORD>( aHole, "drill" );
 }
 
 
@@ -734,8 +806,8 @@ EELEMENT::EELEMENT( wxXmlNode* aElement )
     package = parseRequiredAttribute<string>( aElement, "package" );
     ReplaceIllegalFileNameChars( &package );
 
-    x       = parseRequiredAttribute<double>( aElement, "x" );
-    y       = parseRequiredAttribute<double>( aElement, "y" );
+    x       = parseRequiredAttribute<ECOORD>( aElement, "x" );
+    y       = parseRequiredAttribute<ECOORD>( aElement, "y" );
 
     // optional
     locked  = parseOptionalAttribute<bool>( aElement, "locked" );
@@ -807,8 +879,8 @@ EINSTANCE::EINSTANCE( wxXmlNode* aInstance )
     part    = parseRequiredAttribute<string>( aInstance, "part" );
     gate    = parseRequiredAttribute<string>( aInstance, "gate" );
 
-    x   = parseRequiredAttribute<double>( aInstance, "x" );
-    y   = parseRequiredAttribute<double>( aInstance, "y" );
+    x   = parseRequiredAttribute<ECOORD>( aInstance, "x" );
+    y   = parseRequiredAttribute<ECOORD>( aInstance, "y" );
 
     // optional
     smashed = parseOptionalAttribute<bool>( aInstance, "smashed" );
@@ -833,8 +905,8 @@ EGATE::EGATE( wxXmlNode* aGate )
     name = parseRequiredAttribute<string>( aGate, "name" );
     symbol = parseRequiredAttribute<string>( aGate, "symbol" );
 
-    x   = parseRequiredAttribute<double>( aGate, "x" );
-    y   = parseRequiredAttribute<double>( aGate, "y" );
+    x   = parseRequiredAttribute<ECOORD>( aGate, "x" );
+    y   = parseRequiredAttribute<ECOORD>( aGate, "y" );
 
     opt_string stemp = parseOptionalAttribute<string>( aGate, "addlevel" );
 

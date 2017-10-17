@@ -41,10 +41,6 @@
 #include <trigo.h>
 #include <kicad_string.h>
 
-// Eagle schematic internal units are millimeters
-// Kicad schematic units are thousandths of an inch
-constexpr double EUNIT_TO_MIL = 1000.0 / 25.4;
-
 using std::string;
 
 class MODULE;
@@ -372,12 +368,13 @@ wxPoint ConvertArcCenter( const wxPoint& aStart, const wxPoint& aEnd, double aAn
 
 // Pre-declare for typedefs
 struct EROT;
-
+struct ECOORD;
 typedef OPTIONAL_XML_ATTRIBUTE<string>  opt_string;
 typedef OPTIONAL_XML_ATTRIBUTE<int>     opt_int;
 typedef OPTIONAL_XML_ATTRIBUTE<double>  opt_double;
 typedef OPTIONAL_XML_ATTRIBUTE<bool>    opt_bool;
 typedef OPTIONAL_XML_ATTRIBUTE<EROT>    opt_erot;
+typedef OPTIONAL_XML_ATTRIBUTE<ECOORD>  opt_ecoord;
 
 
 // All of the 'E'STRUCTS below merely hold Eagle XML information verbatim, in binary.
@@ -385,6 +382,65 @@ typedef OPTIONAL_XML_ATTRIBUTE<EROT>    opt_erot;
 // separate the conversion process into distinct steps. There is no intent to have KiCad
 // forms of information in these 'E'STRUCTS.  They are only binary forms
 // of the Eagle information in the corresponding Eagle XML nodes.
+
+// Eagle coordinates
+struct ECOORD
+{
+    enum UNIT
+    {
+        NM,     ///< nanometers
+        MM,     ///< millimeters
+        INCH,   ///< inches
+        MIL,    ///< mils/thous
+    };
+
+    ///> Value expressed in nanometers
+    long long int value;
+
+    ///> Unit used for the value field
+    static constexpr UNIT ECOORD_UNIT = NM;
+
+    ECOORD()
+        : value( 0 )
+    {
+    }
+
+    ECOORD( int aValue, enum UNIT aUnit )
+        : value( ToNanoMeters( aValue, aUnit ) )
+    {
+    }
+
+    ECOORD( const wxString& aValue, enum UNIT aUnit );
+
+    int ToSchUnits() const
+    {
+        // mils
+        return value / 25400;
+    }
+
+    int ToPcbUnits() const
+    {
+        // nanometers
+        return value;
+    }
+
+    ECOORD operator+( const ECOORD& aOther ) const
+    {
+        return ECOORD( value + aOther.value, ECOORD_UNIT );
+    }
+
+    ECOORD operator-( const ECOORD& aOther ) const
+    {
+        return ECOORD( value - aOther.value, ECOORD_UNIT );
+    }
+
+    bool operator==( const ECOORD& aOther ) const
+    {
+        return value == aOther.value;
+    }
+
+    static long long int ToNanoMeters( int aValue, enum UNIT aUnit );
+};
 
 
 /// Eagle net
@@ -428,11 +484,11 @@ struct EROT
 /// Eagle wire
 struct EWIRE
 {
-    double     x1;
-    double     y1;
-    double     x2;
-    double     y2;
-    double     width;
+    ECOORD     x1;
+    ECOORD     y1;
+    ECOORD     x2;
+    ECOORD     y2;
+    ECOORD     width;
     LAYER_NUM  layer;
 
     // for style: (continuous | longdash | shortdash | dashdot)
@@ -459,8 +515,8 @@ struct EWIRE
 /// Eagle Junction
 struct EJUNCTION
 {
-    double     x;
-    double     y;
+    ECOORD     x;
+    ECOORD     y;
 
     EJUNCTION( wxXmlNode* aJunction);
 };
@@ -469,9 +525,9 @@ struct EJUNCTION
 /// Eagle label
 struct ELABEL
 {
-    double     x;
-    double     y;
-    double size;
+    ECOORD     x;
+    ECOORD     y;
+    ECOORD     size;
     LAYER_NUM  layer;
     opt_erot rot;
     opt_string xref;
@@ -484,12 +540,12 @@ struct ELABEL
 /// Eagle via
 struct EVIA
 {
-    double     x;
-    double     y;
+    ECOORD     x;
+    ECOORD     y;
     int        layer_front_most;   /// < extent
     int        layer_back_most;    /// < inclusive
-    double     drill;
-    opt_double diam;
+    ECOORD     drill;
+    opt_ecoord diam;
     opt_string shape;
 
     EVIA( wxXmlNode* aVia );
@@ -499,10 +555,10 @@ struct EVIA
 /// Eagle circle
 struct ECIRCLE
 {
-    double    x;
-    double    y;
-    double    radius;
-    double    width;
+    ECOORD    x;
+    ECOORD    y;
+    ECOORD    radius;
+    ECOORD    width;
     LAYER_NUM layer;
 
     ECIRCLE( wxXmlNode* aCircle );
@@ -512,10 +568,10 @@ struct ECIRCLE
 /// Eagle XML rectangle in binary
 struct ERECT
 {
-    double   x1;
-    double   y1;
-    double   x2;
-    double   y2;
+    ECOORD   x1;
+    ECOORD   y1;
+    ECOORD   x2;
+    ECOORD   y2;
     int      layer;
     opt_erot rot;
 
@@ -533,9 +589,9 @@ struct EATTR
 {
     string     name;
     opt_string value;
-    opt_double x;
-    opt_double y;
-    opt_double size;
+    opt_ecoord x;
+    opt_ecoord y;
+    opt_ecoord size;
     opt_int    layer;
     opt_double ratio;
     opt_erot   rot;
@@ -557,12 +613,12 @@ struct EATTR
 /// Eagle dimension element
 struct EDIMENSION
 {
-    double x1;
-    double y1;
-    double x2;
-    double y2;
-    double x3;
-    double y3;
+    ECOORD x1;
+    ECOORD y1;
+    ECOORD x2;
+    ECOORD y2;
+    ECOORD x3;
+    ECOORD y3;
     int    layer;
 
     opt_string dimensionType;
@@ -575,9 +631,9 @@ struct EDIMENSION
 struct ETEXT
 {
     string     text;
-    double     x;
-    double     y;
-    double     size;
+    ECOORD     x;
+    ECOORD     y;
+    ECOORD     size;
     int        layer;
     opt_string font;
     opt_double ratio;
@@ -610,10 +666,10 @@ struct ETEXT
 struct EPAD
 {
     string     name;
-    double     x;
-    double     y;
-    double     drill;
-    opt_double diameter;
+    ECOORD     x;
+    ECOORD     y;
+    ECOORD     drill;
+    opt_ecoord diameter;
 
     // for shape: (square | round | octagon | long | offset)
     enum {
@@ -637,10 +693,10 @@ struct EPAD
 struct ESMD
 {
     string   name;
-    double   x;
-    double   y;
-    double   dx;
-    double   dy;
+    ECOORD   x;
+    ECOORD   y;
+    ECOORD   dx;
+    ECOORD   dy;
     int      layer;
     opt_int  roundness;
     opt_erot rot;
@@ -656,8 +712,8 @@ struct ESMD
 struct EPIN
 {
     string   name;
-    double   x;
-    double   y;
+    ECOORD   x;
+    ECOORD   y;
 
     opt_string visible;
     opt_string length;
@@ -673,8 +729,8 @@ struct EPIN
 /// Eagle vertex
 struct EVERTEX
 {
-    double      x;
-    double      y;
+    ECOORD      x;
+    ECOORD      y;
 
     EVERTEX( wxXmlNode* aVertex );
 };
@@ -683,9 +739,9 @@ struct EVERTEX
 /// Eagle polygon, without vertices which are parsed as needed
 struct EPOLYGON
 {
-    double     width;
+    ECOORD     width;
     int        layer;
-    opt_double spacing;
+    opt_ecoord spacing;
 
     // KiCad priority is opposite of Eagle rank, that is:
     //  - Eagle Low rank drawn first
@@ -700,7 +756,7 @@ struct EPOLYGON
         CUTOUT,
     };
     int        pour;
-    opt_double isolate;
+    opt_ecoord isolate;
     opt_bool   orphans;
     opt_bool   thermals;
     opt_int    rank;
@@ -712,9 +768,9 @@ struct EPOLYGON
 /// Eagle hole element
 struct EHOLE
 {
-    double x;
-    double y;
-    double drill;
+    ECOORD x;
+    ECOORD y;
+    ECOORD drill;
 
     EHOLE( wxXmlNode* aHole );
 };
@@ -727,8 +783,8 @@ struct EELEMENT
     string   library;
     string   package;
     string   value;
-    double   x;
-    double   y;
+    ECOORD   x;
+    ECOORD   y;
     opt_bool locked;
     opt_bool smashed;
     opt_erot rot;
@@ -861,8 +917,8 @@ struct EINSTANCE
 
     string  part;
     string  gate;
-    double  x;
-    double  y;
+    ECOORD  x;
+    ECOORD  y;
     opt_bool    smashed;
     opt_erot    rot;
 
@@ -887,8 +943,8 @@ struct EGATE
     string  name;
     string  symbol;
 
-    double  x;
-    double  y;
+    ECOORD  x;
+    ECOORD  y;
 
     opt_int addlevel;
     opt_int swaplevel;

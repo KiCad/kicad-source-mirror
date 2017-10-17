@@ -810,10 +810,10 @@ SCH_LINE* SCH_EAGLE_PLUGIN::loadWire( wxXmlNode* aWireNode )
 
     wxPoint begin, end;
 
-    begin.x = ewire.x1 * EUNIT_TO_MIL;
-    begin.y = -ewire.y1 * EUNIT_TO_MIL;
-    end.x   = ewire.x2 * EUNIT_TO_MIL;
-    end.y   = -ewire.y2 * EUNIT_TO_MIL;
+    begin.x = ewire.x1.ToSchUnits();
+    begin.y = -ewire.y1.ToSchUnits();
+    end.x   = ewire.x2.ToSchUnits();
+    end.y   = -ewire.y2.ToSchUnits();
 
     wire->SetStartPoint( begin );
     wire->SetEndPoint( end );
@@ -827,7 +827,7 @@ SCH_JUNCTION* SCH_EAGLE_PLUGIN::loadJunction( wxXmlNode* aJunction )
     std::unique_ptr<SCH_JUNCTION> junction( new SCH_JUNCTION );
 
     auto ejunction = EJUNCTION( aJunction );
-    wxPoint pos( ejunction.x * EUNIT_TO_MIL, -ejunction.y * EUNIT_TO_MIL );
+    wxPoint pos( ejunction.x.ToSchUnits(), -ejunction.y.ToSchUnits() );
 
     junction->SetPosition( pos  );
 
@@ -841,7 +841,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode,
 {
     auto elabel = ELABEL( aLabelNode, aNetName );
 
-    wxPoint elabelpos( elabel.x * EUNIT_TO_MIL, -elabel.y * EUNIT_TO_MIL );
+    wxPoint elabelpos( elabel.x.ToSchUnits(), -elabel.y.ToSchUnits() );
 
     wxString netname = escapeName( elabel.netname );
 
@@ -852,8 +852,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode,
         std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
         glabel->SetPosition( elabelpos );
         glabel->SetText( netname );
-        glabel->SetTextSize( wxSize( elabel.size * EUNIT_TO_MIL, elabel.size * EUNIT_TO_MIL ) );
-
+        glabel->SetTextSize( wxSize( elabel.size.ToSchUnits(), elabel.size.ToSchUnits() ) );
         glabel->SetLabelSpinStyle( 0 );
 
         if( elabel.rot )
@@ -1039,7 +1038,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     std::unique_ptr<SCH_COMPONENT> component( new SCH_COMPONENT() );
     component->SetLibId( libId );
     component->SetUnit( unit );
-    component->SetPosition( wxPoint( einstance.x * EUNIT_TO_MIL, -einstance.y * EUNIT_TO_MIL ) );
+    component->SetPosition( wxPoint( einstance.x.ToSchUnits(), -einstance.y.ToSchUnits() ) );
     component->GetField( FOOTPRINT )->SetText( wxString( package ) );
     component->SetTimeStamp( EagleModuleTstamp( einstance.part, epart->value ? *epart->value : "",
                     unit ) );
@@ -1050,7 +1049,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
         if( einstance.rot->mirror )
         {
-            component->MirrorY( einstance.x * EUNIT_TO_MIL );
+            component->MirrorY( einstance.x.ToSchUnits() );
         }
     }
 
@@ -1131,7 +1130,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
                     valueAttributeFound = true;
                 }
 
-                field->SetPosition( wxPoint( *attr.x * EUNIT_TO_MIL, *attr.y * -EUNIT_TO_MIL ) );
+                field->SetPosition( wxPoint( attr.x->ToSchUnits(), -attr.y->ToSchUnits() ) );
                 int align = attr.align ? *attr.align : ETEXT::BOTTOM_LEFT;
                 int absdegrees = attr.rot ? attr.rot->degrees : 0;
                 bool mirror = attr.rot ? attr.rot->mirror : false;
@@ -1461,9 +1460,9 @@ LIB_CIRCLE* SCH_EAGLE_PLUGIN::loadSymbolCircle( std::unique_ptr<LIB_PART>& aPart
 
     unique_ptr<LIB_CIRCLE> circle( new LIB_CIRCLE( aPart.get() ) );
 
-    circle->SetPosition( wxPoint( c.x * EUNIT_TO_MIL, c.y * EUNIT_TO_MIL ) );
-    circle->SetRadius( c.radius * EUNIT_TO_MIL );
-    circle->SetWidth( c.width * EUNIT_TO_MIL );
+    circle->SetPosition( wxPoint( c.x.ToSchUnits(), c.y.ToSchUnits() ) );
+    circle->SetRadius( c.radius.ToSchUnits() );
+    circle->SetWidth( c.width.ToSchUnits() );
     circle->SetUnit( aGateNumber );
 
     return circle.release();
@@ -1478,8 +1477,8 @@ LIB_RECTANGLE* SCH_EAGLE_PLUGIN::loadSymbolRectangle( std::unique_ptr<LIB_PART>&
 
     unique_ptr<LIB_RECTANGLE> rectangle( new LIB_RECTANGLE( aPart.get() ) );
 
-    rectangle->SetPosition( wxPoint( rect.x1 * EUNIT_TO_MIL, rect.y1 * EUNIT_TO_MIL ) );
-    rectangle->SetEnd( wxPoint( rect.x2 * EUNIT_TO_MIL, rect.y2 * EUNIT_TO_MIL ) );
+    rectangle->SetPosition( wxPoint( rect.x1.ToSchUnits(), rect.y1.ToSchUnits() ) );
+    rectangle->SetEnd( wxPoint( rect.x2.ToSchUnits(), rect.y2.ToSchUnits() ) );
 
     rectangle->SetUnit( aGateNumber );
     // Eagle rectangles are filled by definition.
@@ -1495,22 +1494,51 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_PART>& aPart,
 {
     auto ewire = EWIRE( aWireNode );
 
-    wxRealPoint begin, end;
+    wxPoint begin, end;
 
-    begin.x = ewire.x1 * EUNIT_TO_MIL;
-    begin.y = ewire.y1 * EUNIT_TO_MIL;
-    end.x   = ewire.x2 * EUNIT_TO_MIL;
-    end.y   = ewire.y2 * EUNIT_TO_MIL;
+    begin.x = ewire.x1.ToSchUnits();
+    begin.y = ewire.y1.ToSchUnits();
+    end.x   = ewire.x2.ToSchUnits();
+    end.y   = ewire.y2.ToSchUnits();
 
     // if the wire is an arc
     if( ewire.curve )
     {
         std::unique_ptr<LIB_ARC> arc( new LIB_ARC( aPart.get() ) );
-        wxRealPoint center = ConvertArcCenter( begin, end, *ewire.curve * -1 );
+        wxPoint center = ConvertArcCenter( begin, end, *ewire.curve * -1 );
+
+        double radius = sqrt( abs( ( ( center.x - begin.x ) * ( center.x - begin.x ) )
+                        + ( ( center.y - begin.y ) * ( center.y - begin.y ) ) ) ) * 2;
+
+        // this emulates the filled semicircles created by a thick arc with flat ends caps.
+        if( ewire.width.ToSchUnits() * 2 > radius )
+        {
+            wxPoint centerStartVector = begin - center;
+            wxPoint centerEndVector = end - center;
+
+            centerStartVector.x = centerStartVector.x * ewire.width.ToSchUnits() * 2 / radius;
+            centerStartVector.y = centerStartVector.y * ewire.width.ToSchUnits() * 2 / radius;
+
+            centerEndVector.x = centerEndVector.x * ewire.width.ToSchUnits() * 2 / radius;
+            centerEndVector.y = centerEndVector.y * ewire.width.ToSchUnits() * 2 / radius;
+
+            begin = center + centerStartVector;
+            end = center + centerEndVector;
+
+            radius = sqrt( abs( ( ( center.x - begin.x ) * ( center.x - begin.x ) )
+                            + ( ( center.y - begin.y ) * ( center.y - begin.y ) ) ) ) * 2;
+
+            arc->SetWidth( 1 );
+            arc->SetFillMode( FILLED_SHAPE );
+        }
+        else
+        {
+            arc->SetWidth( ewire.width.ToSchUnits() );
+        }
 
         arc->SetPosition( center );
 
-        if( *ewire.curve >0 )
+        if( *ewire.curve > 0 )
         {
             arc->SetStart( begin );
             arc->SetEnd( end );
@@ -1521,60 +1549,8 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_PART>& aPart,
             arc->SetEnd( begin );
         }
 
-        arc->SetWidth( ewire.width * EUNIT_TO_MIL );
-
-
-        double radius = sqrt( abs( ( ( center.x - begin.x ) * ( center.x - begin.x ) )
-                        + ( ( center.y - begin.y ) * ( center.y - begin.y ) ) ) ) * 2;
-
         arc->SetRadius( radius );
         arc->CalcRadiusAngles();
-
-        // this emulates the filled semicircles created by a thick arc with flat ends caps.
-        if( ewire.width * 2 * EUNIT_TO_MIL > radius )
-        {
-            wxRealPoint centerStartVector = begin - center;
-
-            wxRealPoint centerEndVector = end - center;
-            centerStartVector.x = centerStartVector.x / radius;
-            centerStartVector.y = centerStartVector.y / radius;
-
-
-            centerEndVector.x   = centerEndVector.x / radius;
-            centerEndVector.y   = centerEndVector.y / radius;
-            centerStartVector.x = centerStartVector.x * (ewire.width * EUNIT_TO_MIL + radius);
-            centerStartVector.y = centerStartVector.y * (ewire.width * EUNIT_TO_MIL + radius);
-
-            centerEndVector.x   = centerEndVector.x * (ewire.width * EUNIT_TO_MIL + radius);
-            centerEndVector.y   = centerEndVector.y * (ewire.width * EUNIT_TO_MIL + radius);
-
-
-            begin = center + centerStartVector;
-            end = center + centerEndVector;
-            radius = sqrt( abs( ( ( center.x - begin.x ) * ( center.x - begin.x ) )
-                            + ( ( center.y - begin.y ) * ( center.y - begin.y ) ) ) ) * 2;
-
-
-            arc->SetPosition( center );
-
-            if( *ewire.curve >0 )
-            {
-                arc->SetStart( begin );
-                arc->SetEnd( end );
-            }
-            else
-            {
-                arc->SetStart( end );
-                arc->SetEnd( begin );
-            }
-
-            arc->SetRadius( radius );
-            arc->CalcRadiusAngles();
-            arc->SetWidth( 1 );
-            arc->SetFillMode( FILLED_SHAPE );
-        }
-
-
         arc->SetUnit( aGateNumber );
 
         return (LIB_ITEM*) arc.release();
@@ -1586,14 +1562,14 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_PART>& aPart,
         polyLine->AddPoint( begin );
         polyLine->AddPoint( end );
         polyLine->SetUnit( aGateNumber );
+
         return (LIB_ITEM*) polyLine.release();
     }
 }
 
 
 LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( std::unique_ptr<LIB_PART>& aPart,
-        wxXmlNode* aPolygonNode,
-        int aGateNumber )
+        wxXmlNode* aPolygonNode, int aGateNumber )
 {
     std::unique_ptr<LIB_POLYLINE> polyLine( new LIB_POLYLINE( aPart.get() ) );
 
@@ -1608,7 +1584,7 @@ LIB_POLYLINE* SCH_EAGLE_PLUGIN::loadSymbolPolyLine( std::unique_ptr<LIB_PART>& a
         if( vertex->GetName() == "vertex" )     // skip <xmlattr> node
         {
             EVERTEX evertex( vertex );
-            pt = wxPoint( evertex.x * EUNIT_TO_MIL, evertex.y * EUNIT_TO_MIL );
+            pt = wxPoint( evertex.x.ToSchUnits(), evertex.y.ToSchUnits() );
             polyLine->AddPoint( pt );
         }
 
@@ -1628,7 +1604,7 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( std::unique_ptr<LIB_PART>& aPart,
         int aGateNumber )
 {
     std::unique_ptr<LIB_PIN> pin( new LIB_PIN( aPart.get() ) );
-    pin->SetPosition( wxPoint( aEPin->x * EUNIT_TO_MIL, aEPin->y * EUNIT_TO_MIL ) );
+    pin->SetPosition( wxPoint( aEPin->x.ToSchUnits(), aEPin->y.ToSchUnits() ) );
     pin->SetName( aEPin->name );
     pin->SetUnit( aGateNumber );
 
@@ -1736,7 +1712,7 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymbolText( std::unique_ptr<LIB_PART>& aPart,
     ETEXT etext( aLibText );
 
     libtext->SetUnit( aGateNumber );
-    libtext->SetPosition( wxPoint( etext.x * EUNIT_TO_MIL, etext.y * EUNIT_TO_MIL ) );
+    libtext->SetPosition( wxPoint( etext.x.ToSchUnits(), etext.y.ToSchUnits() ) );
     libtext->SetText( aLibText->GetNodeContent().IsEmpty() ? "~~" : aLibText->GetNodeContent() );
     libtext->SetTextSize( etext.ConvertSize() );
 
@@ -1766,7 +1742,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadPlainText( wxXmlNode* aSchText )
     auto etext = ETEXT( aSchText );
 
     schtext->SetItalic( false );
-    schtext->SetPosition( wxPoint( etext.x * EUNIT_TO_MIL, -etext.y * EUNIT_TO_MIL ) );
+    schtext->SetPosition( wxPoint( etext.x.ToSchUnits(), -etext.y.ToSchUnits() ) );
 
     wxString thetext = aSchText->GetNodeContent();
     schtext->SetText( aSchText->GetNodeContent().IsEmpty() ? "\" \"" : escapeName( thetext ) );
