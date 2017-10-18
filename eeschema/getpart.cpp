@@ -254,6 +254,18 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component(
     // Set the component value that can differ from component name in lib, for aliases
     component->GetField( VALUE )->SetText( sel.Name );
 
+    // If there is no field defined in the component, copy one over from the library
+    // ( from the .dcm file )
+    // This way the Datasheet field will not be empty and can be changed from the schematic
+    auto libs = Prj().SchLibs();
+    if( component->GetField( DATASHEET )->GetText().IsEmpty() )
+    {
+        LIB_ALIAS* entry = libs->FindLibraryAlias( component->GetLibId() );
+
+        if( entry && !!entry->GetDocFileName() )
+            component->GetField( DATASHEET )->SetText( entry->GetDocFileName() );
+    }
+
     MSG_PANEL_ITEMS items;
 
     component->SetCurrentSheetPath( &GetCurrentSheet() );

@@ -45,6 +45,7 @@
 #include <sch_validators.h>
 
 #include <bitmaps.h>
+#include "eda_doc.h"
 
 #include <dialog_edit_libentry_fields_in_lib_base.h>
 #ifdef KICAD_SPICE
@@ -501,7 +502,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::showButtonHandler( wxCommandEvent& even
     if( fieldNdx == DATASHEET )
     {
         wxString datasheet_uri = fieldValueTextCtrl->GetValue();
-        ::wxLaunchDefaultBrowser( datasheet_uri );
+        GetAssociatedDocument( this, datasheet_uri );
     }
     else if( fieldNdx == FOOTPRINT )
     {

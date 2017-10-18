@@ -302,16 +302,11 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         // Ensure the struct is a component (could be a piece of a component, like Field, text..)
         if( item && item->Type() == SCH_COMPONENT_T )
         {
-            if( PART_LIBS* libs = Prj().SchLibs() )
+            auto text = static_cast<SCH_COMPONENT*>( item )->GetFieldText( "Datasheet" );
+
+            if( !text.IsEmpty() )
             {
-                LIB_ALIAS* entry = libs->FindLibraryAlias( ( (SCH_COMPONENT*) item )->GetLibId() );
-
-                if( entry && !!entry->GetDocFileName() )
-                {
-                    SEARCH_STACK* lib_search = Prj().SchSearchS();
-
-                    GetAssociatedDocument( this, entry->GetDocFileName(), lib_search );
-                }
+                GetAssociatedDocument( this, text );
             }
         }
         break;

@@ -54,6 +54,7 @@
 #endif /* KICAD_SPICE */
 
 #include "common.h"
+#include "eda_doc.h"
 #include <list>
 
 
@@ -590,7 +591,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::showButtonHandler( wxCommandEvent& even
     {
         wxString datasheet_uri = fieldValueTextCtrl->GetValue();
         datasheet_uri = resolveUriByEnvVars( datasheet_uri );
-        ::wxLaunchDefaultBrowser( datasheet_uri );
+        GetAssociatedDocument( this, datasheet_uri );
     }
     else if( fieldNdx == FOOTPRINT )
     {
