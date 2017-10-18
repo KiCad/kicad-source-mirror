@@ -1075,13 +1075,9 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     component->AddHierarchicalReference( current_sheetpath, wxString( einstance.part ), unit );
 
     if( epart->value )
-    {
-        component->GetField( VALUE )->SetText( *epart->value );
-    }
+        component->GetField( VALUE )->SetText( wxString::FromUTF8( epart->value->c_str() ) );
     else
-    {
         component->GetField( VALUE )->SetText( symbolname );
-    }
 
     // Set the visibility of fields.
     component->GetField( REFERENCE )->SetVisible( part->GetField( REFERENCE )->IsVisible() );
@@ -1102,9 +1098,9 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
             SCH_FIELD* field;
 
-            if( attr.name == "NAME" || attr.name == "VALUE" )
+            if( attr.name == "name" || attr.name == "value" )
             {
-                if( attr.name == "NAME" )
+                if( attr.name == "name" )
                 {
                     field = component->GetField( REFERENCE );
                     nameAttributeFound = true;

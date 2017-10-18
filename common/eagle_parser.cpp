@@ -103,7 +103,7 @@ long long int ECOORD::ToNanoMeters( int aValue, enum UNIT aUnit )
 template<>
 string Convert<string>( const wxString& aValue )
 {
-    return aValue.ToStdString();
+    return string( aValue.ToUTF8() );
 }
 
 
