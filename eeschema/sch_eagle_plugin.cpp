@@ -853,15 +853,15 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode,
         glabel->SetPosition( elabelpos );
         glabel->SetText( netname );
         glabel->SetTextSize( wxSize( elabel.size.ToSchUnits(), elabel.size.ToSchUnits() ) );
-        glabel->SetLabelSpinStyle( 0 );
+        glabel->SetLabelSpinStyle( 2 );
 
         if( elabel.rot )
         {
-            glabel->SetLabelSpinStyle( int(elabel.rot->degrees / 90) % 4 );
+            glabel->SetLabelSpinStyle( ( int( elabel.rot->degrees ) / 90 + 2 ) % 4 );
 
             if( elabel.rot->mirror
                 && ( glabel->GetLabelSpinStyle() == 0 || glabel->GetLabelSpinStyle() == 2 ) )
-                glabel->SetLabelSpinStyle( (glabel->GetLabelSpinStyle() + 2) % 4 );
+                glabel->SetLabelSpinStyle( glabel->GetLabelSpinStyle() % 4 );
         }
 
         SCH_LINE*   wire;
