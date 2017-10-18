@@ -694,6 +694,24 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 DIMENSION* dimension = new DIMENSION( m_board );
                 m_board->Add( dimension, ADD_APPEND );
 
+                if( d.dimensionType )
+                {
+                    // Eagle dimension graphic arms may have different lengths, but they look
+                    // incorrect in KiCad (the graphic is tilted). Make them even lenght in such case.
+                    if( *d.dimensionType == "horizontal" )
+                    {
+                        int newY = ( d.y1.ToPcbUnits() + d.y2.ToPcbUnits() ) / 2;
+                        d.y1 = ECOORD( newY, ECOORD::UNIT::NM );
+                        d.y2 = ECOORD( newY, ECOORD::UNIT::NM );
+                    }
+                    else if( *d.dimensionType == "vertical" )
+                    {
+                        int newX = ( d.x1.ToPcbUnits() + d.x2.ToPcbUnits() ) / 2;
+                        d.x1 = ECOORD( newX, ECOORD::UNIT::NM );
+                        d.x2 = ECOORD( newX, ECOORD::UNIT::NM );
+                    }
+                }
+
                 dimension->SetLayer( layer );
                 // The origin and end are assumed to always be in this order from eagle
                 dimension->SetOrigin( wxPoint( kicad_x( d.x1 ), kicad_y( d.y1 ) ) );
@@ -714,7 +732,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 // Note the check is just if two axes are close enough to each other
                 // Eagle appears to have some rounding errors
                 if( abs( ( d.x1 - d.x2 ).ToPcbUnits() ) < 50000 )   // 50000 nm = 0.05 mm
-                    dimension->SetHeight( kicad_x( d.x1 - d.x3 ) );
+                    dimension->SetHeight( kicad_x( d.x3 - d.x1 ) );
                 else
                     dimension->SetHeight( kicad_y( d.y3 - d.y1 ) );
 

@@ -524,13 +524,7 @@ EDIMENSION::EDIMENSION( wxXmlNode* aDimension )
     x3    = parseRequiredAttribute<ECOORD>( aDimension, "x3" );
     y3    = parseRequiredAttribute<ECOORD>( aDimension, "y3" );
     layer = parseRequiredAttribute<int>( aDimension, "layer" );
-
-    opt_string dimType = parseOptionalAttribute<string>( aDimension, "dtype" );
-
-    if( !dimType )
-    {
-        // default type is parallel
-    }
+    dimensionType = parseOptionalAttribute<string>( aDimension, "dtype" );
 }
 
 
