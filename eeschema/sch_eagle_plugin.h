@@ -53,6 +53,7 @@ class LIB_PART;
 class PART_LIB;
 class LIB_ALIAS;
 class LIB_CIRCLE;
+class LIB_FIELD;
 class LIB_RECTANGLE;
 class LIB_POLYLINE;
 class LIB_PIN;
@@ -169,6 +170,7 @@ private:
     LIB_TEXT*       loadSymbolText( std::unique_ptr<LIB_PART>& aPart, wxXmlNode* aLibText, int aGateNumber );
 
     void            loadTextAttributes( EDA_TEXT* aText, const ETEXT& aAttribs ) const;
+    void            loadFieldAttributes( LIB_FIELD* aField, const LIB_TEXT* aText ) const;
 
     KIWAY* m_kiway;      ///< For creating sub sheets.
     SCH_SHEET* m_rootSheet; ///< The root sheet of the schematic being loaded..

@@ -1368,28 +1368,17 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
         {
             std::unique_ptr<LIB_TEXT> libtext( loadSymbolText( aPart, currentNode, aGateNumber ) );
 
-            LIB_FIELD* field;
-
-            if( libtext->GetText().Upper() ==">NAME" || libtext->GetText().Upper() == ">VALUE" )
+            if( libtext->GetText().Upper() ==">NAME" )
             {
-                if( libtext->GetText().Upper() ==">NAME" )
-                {
-                    field = aPart->GetField( REFERENCE );
-                    foundName = true;
-                }
-                else
-                {
-                    field = aPart->GetField( REFERENCE );
-                    foundValue = true;
-                }
-
-                field->SetTextPos( libtext->GetPosition() );
-                field->SetTextSize( libtext->GetTextSize() );
-                field->SetTextAngle( libtext->GetTextAngle() );
-                field->SetBold( libtext->IsBold() );
-                field->SetVertJustify( libtext->GetVertJustify() );
-                field->SetHorizJustify( libtext->GetHorizJustify() );
-                field->SetVisible( true );
+                LIB_FIELD* field = aPart->GetField( REFERENCE );
+                loadFieldAttributes( field, libtext.get() );
+                foundName = true;
+            }
+            else if( libtext->GetText().Upper() ==">VALUE" )
+            {
+                LIB_FIELD* field = aPart->GetField( VALUE );
+                loadFieldAttributes( field, libtext.get() );
+                foundValue = true;
             }
             else
             {
@@ -1630,7 +1619,7 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( std::unique_ptr<LIB_PART>& aPart,
         }
     }
 
-    // emaulate the visibility of pin elements
+    // emulate the visibility of pin elements
     if( aEPin->visible )
     {
         wxString visible = aEPin->visible.Get();
@@ -1727,6 +1716,18 @@ void SCH_EAGLE_PLUGIN::loadTextAttributes( EDA_TEXT* aText, const ETEXT& aAttrib
     bool spin = aAttribs.rot ? aAttribs.rot->spin : false;
 
     eagleToKicadAlignment( aText, align, degrees, mirror, spin, 0 );
+}
+
+
+void SCH_EAGLE_PLUGIN::loadFieldAttributes( LIB_FIELD* aField, const LIB_TEXT* aText ) const
+{
+    aField->SetTextPos( aText->GetPosition() );
+    aField->SetTextSize( aText->GetTextSize() );
+    aField->SetTextAngle( aText->GetTextAngle() );
+    aField->SetBold( aText->IsBold() );
+    aField->SetVertJustify( aText->GetVertJustify() );
+    aField->SetHorizJustify( aText->GetHorizJustify() );
+    aField->SetVisible( true );
 }
 
 
