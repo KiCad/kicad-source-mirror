@@ -145,15 +145,6 @@ EAGLE_PLUGIN::EAGLE_PLUGIN() :
     m_mod_time( wxDateTime::Now() )
 {
     init( NULL );
-
-    // add a dummy layer, so the layers numbers match the vector index
-    // (in Eagle layers are enumerated from 1)
-    wxXmlNode dummy( wxXML_ELEMENT_NODE, "dummyLayer" );
-    dummy.AddAttribute( "number", "0" );
-    dummy.AddAttribute( "name", "invalid" );
-    dummy.AddAttribute( "color", "black" );
-    m_eagleLayers.push_back( ELAYER( &dummy ) );
-
     clear_cu_map();
 }
 
@@ -367,18 +358,20 @@ void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
     // Get the first layer and iterate
     wxXmlNode* layerNode = aLayers->GetChildren();
 
-    // find the subset of layers that are copper, and active
+    m_eagleLayers.clear();
+
     while( layerNode )
     {
         ELAYER elayer( layerNode );
+        m_eagleLayers.insert( std::make_pair( elayer.number, elayer ) );
 
+        // find the subset of layers that are copper and active
         if( elayer.number >= 1 && elayer.number <= 16 && ( !elayer.active || *elayer.active ) )
         {
             cu.push_back( elayer );
         }
 
         layerNode = layerNode->GetNext();
-        m_eagleLayers.push_back( elayer );
     }
 
     // establish cu layer map:
@@ -1244,7 +1237,7 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
     if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
         wxLogMessage( wxString::Format(
-                    "Line on copper layer in package %s (%d mm, %d mm) (%d mm, %d mm)."
+                    "Line on copper layer in package %s (%f mm, %f mm) (%f mm, %f mm)."
                     "\nMoving to Dwgs.User layer",
                     aModule->GetFPID().GetLibItemName().c_str(), w.x1.ToMm(), w.y1.ToMm(),
                     w.x2.ToMm(), w.y2.ToMm() ) );
@@ -1493,7 +1486,7 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
     wxLogMessage( wxString::Format( "Unsupported rectangle in package %s"
                 " (%f mm, %f mm) (%f mm, %f mm), layer: %s",
             aModule->GetFPID().GetLibItemName().c_str(), r.x1.ToMm(), r.y1.ToMm(),
-            r.x2.ToMm(), r.y2.ToMm(), m_eagleLayers[r.layer].name ) );
+            r.x2.ToMm(), r.y2.ToMm(), eagle_layer_name( r.layer ) ) );
 
     return;
 
@@ -2034,12 +2027,20 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         default:
             // some layers do not map to KiCad
             wxLogMessage( wxString::Format( "Unsupported Eagle layer '%s' (%d), converted to Dwgs.User layer",
-                                            m_eagleLayers[aEagleLayer].name, aEagleLayer ) );
+                    eagle_layer_name( aEagleLayer ), aEagleLayer ) );
             kiLayer = Dwgs_User;      break;
         }
     }
 
     return PCB_LAYER_ID( kiLayer );
+}
+
+
+const string& EAGLE_PLUGIN::eagle_layer_name( int aLayer ) const
+{
+    static const string unknown( "unknown" );
+    auto it = m_eagleLayers.find( aLayer );
+    return it == m_eagleLayers.end() ? unknown : it->second.name;
 }
 
 
