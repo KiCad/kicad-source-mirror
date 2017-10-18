@@ -33,6 +33,7 @@
 
 #include <boost/ptr_container/ptr_map.hpp>
 
+class EDA_TEXT;
 class KIWAY;
 class LINE_READER;
 class SCH_SCREEN;
@@ -166,6 +167,8 @@ private:
     LIB_ITEM*       loadSymbolWire( std::unique_ptr<LIB_PART>& aPart, wxXmlNode* aWireNode, int aGateNumber );
     LIB_PIN*        loadPin( std::unique_ptr<LIB_PART>& aPart, wxXmlNode*, EPIN* epin, int aGateNumber );
     LIB_TEXT*       loadSymbolText( std::unique_ptr<LIB_PART>& aPart, wxXmlNode* aLibText, int aGateNumber );
+
+    void            loadTextAttributes( EDA_TEXT* aText, const ETEXT& aAttribs ) const;
 
     KIWAY* m_kiway;      ///< For creating sub sheets.
     SCH_SHEET* m_rootSheet; ///< The root sheet of the schematic being loaded..

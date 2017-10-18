@@ -1679,33 +1679,15 @@ LIB_PIN* SCH_EAGLE_PLUGIN::loadPin( std::unique_ptr<LIB_PART>& aPart,
 
 
 LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymbolText( std::unique_ptr<LIB_PART>& aPart,
-        wxXmlNode* aLibText,
-        int aGateNumber )
+        wxXmlNode* aLibText, int aGateNumber )
 {
     std::unique_ptr<LIB_TEXT> libtext( new LIB_TEXT( aPart.get() ) );
-
     ETEXT etext( aLibText );
 
     libtext->SetUnit( aGateNumber );
     libtext->SetPosition( wxPoint( etext.x.ToSchUnits(), etext.y.ToSchUnits() ) );
     libtext->SetText( aLibText->GetNodeContent().IsEmpty() ? "~~" : aLibText->GetNodeContent() );
-    libtext->SetTextSize( etext.ConvertSize() );
-
-    if( etext.ratio )
-    {
-        if( etext.ratio.Get()>12 )
-        {
-            libtext->SetBold( true );
-            libtext->SetThickness( GetPenSizeForBold( libtext->GetTextWidth() ) );
-        }
-    }
-
-    int align = etext.align ? *etext.align : ETEXT::BOTTOM_LEFT;
-    int degrees = etext.rot ? etext.rot->degrees : 0;
-    bool mirror = etext.rot ? etext.rot->mirror : false;
-    bool spin = etext.rot ? etext.rot->spin : false;
-
-    eagleToKicadAlignment( (EDA_TEXT*) libtext.get(), align, degrees, mirror, spin, 0 );
+    loadTextAttributes( libtext.get(), etext );
 
     return libtext.release();
 }
@@ -1714,33 +1696,37 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymbolText( std::unique_ptr<LIB_PART>& aPart,
 SCH_TEXT* SCH_EAGLE_PLUGIN::loadPlainText( wxXmlNode* aSchText )
 {
     std::unique_ptr<SCH_TEXT> schtext( new SCH_TEXT() );
-    auto etext = ETEXT( aSchText );
+    ETEXT etext = ETEXT( aSchText );
 
-    schtext->SetItalic( false );
+    const wxString& thetext = aSchText->GetNodeContent();
+    schtext->SetText( thetext.IsEmpty() ? "\" \"" : escapeName( thetext ) );
     schtext->SetPosition( wxPoint( etext.x.ToSchUnits(), -etext.y.ToSchUnits() ) );
+    loadTextAttributes( schtext.get(), etext );
+    schtext->SetItalic( false );
 
-    wxString thetext = aSchText->GetNodeContent();
-    schtext->SetText( aSchText->GetNodeContent().IsEmpty() ? "\" \"" : escapeName( thetext ) );
+    return schtext.release();
+}
 
-    if( etext.ratio )
+
+void SCH_EAGLE_PLUGIN::loadTextAttributes( EDA_TEXT* aText, const ETEXT& aAttribs ) const
+{
+    aText->SetTextSize( aAttribs.ConvertSize() );
+
+    if( aAttribs.ratio )
     {
-        if( etext.ratio.Get()>12 )
+        if( aAttribs.ratio.CGet() > 12 )
         {
-            schtext->SetBold( true );
-            schtext->SetThickness( GetPenSizeForBold( schtext->GetTextWidth() ) );
+            aText->SetBold( true );
+            aText->SetThickness( GetPenSizeForBold( aText->GetTextWidth() ) );
         }
     }
 
-    schtext->SetTextSize( etext.ConvertSize() );
+    int align = aAttribs.align ? *aAttribs.align : ETEXT::BOTTOM_LEFT;
+    int degrees = aAttribs.rot ? aAttribs.rot->degrees : 0;
+    bool mirror = aAttribs.rot ? aAttribs.rot->mirror : false;
+    bool spin = aAttribs.rot ? aAttribs.rot->spin : false;
 
-    int align = etext.align ? *etext.align : ETEXT::BOTTOM_LEFT;
-    int degrees = etext.rot ? etext.rot->degrees : 0;
-    bool mirror = etext.rot ? etext.rot->mirror : false;
-    bool spin = etext.rot ? etext.rot->spin : false;
-
-    eagleToKicadAlignment( (EDA_TEXT*) schtext.get(), align, degrees, mirror, spin, 0 );
-
-    return schtext.release();
+    eagleToKicadAlignment( aText, align, degrees, mirror, spin, 0 );
 }
 
 
