@@ -125,8 +125,11 @@ public:
     ~EAGLE_PLUGIN();
 
 private:
+    typedef std::vector<ELAYER>     ELAYERS;
+    typedef ELAYERS::const_iterator EITER;
 
     int         m_cu_map[17];       ///< map eagle to kicad, cu layers only.
+    ELAYERS     m_eagleLayers;      ///< Eagle layers data
 
     ERULES*     m_rules;            ///< Eagle design rules.
     XPATH*      m_xpath;            ///< keeps track of what we are working on within

@@ -146,6 +146,14 @@ EAGLE_PLUGIN::EAGLE_PLUGIN() :
 {
     init( NULL );
 
+    // add a dummy layer, so the layers numbers match the vector index
+    // (in Eagle layers are enumerated from 1)
+    wxXmlNode dummy( wxXML_ELEMENT_NODE, "dummyLayer" );
+    dummy.AddAttribute( "number", "0" );
+    dummy.AddAttribute( "name", "invalid" );
+    dummy.AddAttribute( "color", "black" );
+    m_eagleLayers.push_back( ELAYER( &dummy ) );
+
     clear_cu_map();
 }
 
@@ -354,10 +362,7 @@ void EAGLE_PLUGIN::loadDesignRules( wxXmlNode* aDesignRules )
 
 void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
 {
-    typedef std::vector<ELAYER>     ELAYERS;
-    typedef ELAYERS::const_iterator EITER;
-
-    ELAYERS     cu;  // copper layers
+    ELAYERS cu;  // copper layers
 
     // Get the first layer and iterate
     wxXmlNode* layerNode = aLayers->GetChildren();
@@ -365,7 +370,7 @@ void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
     // find the subset of layers that are copper, and active
     while( layerNode )
     {
-        ELAYER  elayer( layerNode );
+        ELAYER elayer( layerNode );
 
         if( elayer.number >= 1 && elayer.number <= 16 && ( !elayer.active || *elayer.active ) )
         {
@@ -373,6 +378,7 @@ void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
         }
 
         layerNode = layerNode->GetNext();
+        m_eagleLayers.push_back( elayer );
     }
 
     // establish cu layer map:
@@ -1238,9 +1244,10 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
     if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
         wxLogMessage( wxString::Format(
-                    "Line on copper layer in package %s ( %d, %d ) ( %d, %d )\n Moving to drawings layer",
-                    aModule->GetFPID().GetLibItemName().c_str(), w.x1.ToPcbUnits(), w.y1.ToPcbUnits(),
-                    w.x2.ToPcbUnits(), w.y2.ToPcbUnits() ) );
+                    "Line on copper layer in package %s (%d mm, %d mm) (%d mm, %d mm)."
+                    "\nMoving to Dwgs.User layer",
+                    aModule->GetFPID().GetLibItemName().c_str(), w.x1.ToMm(), w.y1.ToMm(),
+                    w.x2.ToMm(), w.y2.ToMm() ) );
         layer = Dwgs_User;
     }
 
@@ -1368,10 +1375,10 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
     ETEXT        t( aTree );
     PCB_LAYER_ID layer = kicad_layer( t.layer );
 
-    if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
+    if( IsCopperLayer( layer ) )  // skip copper texts
     {
         wxLogMessage( wxString::Format(
-                "Unsupported text on copper layer in package %s\nMoving to drawings layer.",
+                "Unsupported text on copper layer in package %s.\nMoving to Dwgs.User layer.",
                 aModule->GetFPID().GetLibItemName().c_str() ) );
         layer = Dwgs_User;
     }
@@ -1483,16 +1490,17 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
     PCB_LAYER_ID layer = kicad_layer( r.layer );
 
     // Rectangles are not supported yet in footprints as they are not editable.
-    wxLogMessage( wxString::Format( "Unsupported rectangle in package %s (%d, %d) (%d, %d)",
-            aModule->GetFPID().GetLibItemName().c_str(), r.x1.ToPcbUnits(), r.y1.ToPcbUnits(),
-            r.x2.ToPcbUnits(), r.y2.ToPcbUnits() ) );
+    wxLogMessage( wxString::Format( "Unsupported rectangle in package %s"
+                " (%f mm, %f mm) (%f mm, %f mm), layer: %s",
+            aModule->GetFPID().GetLibItemName().c_str(), r.x1.ToMm(), r.y1.ToMm(),
+            r.x2.ToMm(), r.y2.ToMm(), m_eagleLayers[r.layer].name ) );
 
     return;
 
     if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
         wxLogMessage( wxString::Format(
-                "Unsupported rectangle on copper layer in package %s\nMoving to drawings layer.",
+                "Unsupported rectangle on copper layer in package %s.\nMoving to Dwgs.User layer.",
                 aModule->GetFPID().GetLibItemName().c_str() ) );
         layer = Dwgs_User;
     }
@@ -1530,7 +1538,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
     if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
         wxLogMessage( wxString::Format(
-                "Unsupported polygon on copper layer in package %s\nMoving to drawings layer.",
+                "Unsupported polygon on copper layer in package %s.\nMoving to Dwgs.User layer.",
                 aModule->GetFPID().GetLibItemName().c_str() ) );
         layer = Dwgs_User;
     }
@@ -1578,7 +1586,7 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
     if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
         wxLogMessage( wxString::Format(
-                "Unsupported circle on copper layer in package%s\nMoving to drawings layer.",
+                "Unsupported circle on copper layer in package %s.\nMoving to Dwgs.User layer.",
                 aModule->GetFPID().GetLibItemName().c_str() ) );
         layer = Dwgs_User;
     }
@@ -2025,8 +2033,8 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         case EAGLE_LAYER::HOLES:
         default:
             // some layers do not map to KiCad
-            wxLogMessage( wxString::Format( "Unsupported Eagle layer %d. Use drawings layer",
-                                            aEagleLayer ) );
+            wxLogMessage( wxString::Format( "Unsupported Eagle layer '%s' (%d), converted to Dwgs.User layer",
+                                            m_eagleLayers[aEagleLayer].name, aEagleLayer ) );
             kiLayer = Dwgs_User;      break;
         }
     }

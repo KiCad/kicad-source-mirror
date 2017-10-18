@@ -424,6 +424,11 @@ struct ECOORD
         return value;
     }
 
+    float ToMm() const
+    {
+        return value / 1000000.0;
+    }
+
     ECOORD operator+( const ECOORD& aOther ) const
     {
         return ECOORD( value + aOther.value, ECOORD_UNIT );
