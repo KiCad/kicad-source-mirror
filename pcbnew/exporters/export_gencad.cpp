@@ -851,9 +851,8 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
 
         fprintf( aFile, "\nCOMPONENT %s\n",
                  TO_UTF8( module->GetReference() ) );
-        fprintf( aFile, "DEVICE %s_%s\n",
-                 TO_UTF8( module->GetReference() ),
-                 TO_UTF8( module->GetValue() ) );
+        fprintf( aFile, "DEVICE DEV_%s\n",
+                 TO_UTF8( m_componentShapes[module] ) );
         fprintf( aFile, "PLACE %g %g\n",
                  MapXTo( module->GetPosition().x ),
                  MapYTo( module->GetPosition().y ) );
@@ -1129,13 +1128,20 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb )
  */
 static void CreateDevicesSection( FILE* aFile, BOARD* aPcb )
 {
-    MODULE* module;
-
+    std::set<wxString> emitted;
     fputs( "$DEVICES\n", aFile );
 
-    for( module = aPcb->m_Modules; module; module = module->Next() )
+    for( const auto& componentShape : m_componentShapes )
     {
-        fprintf( aFile, "DEVICE \"%s\"\n", TO_UTF8( module->GetReference() ) );
+        bool newDevice;
+        const wxString& shapeName = componentShape.second;
+        std::tie( std::ignore, newDevice ) = emitted.insert( shapeName );
+
+        if( !newDevice )        // do not repeat device definitions
+            continue;
+
+        const MODULE* module = componentShape.first;
+        fprintf( aFile, "\nDEVICE \"DEV_%s\"\n", TO_UTF8( shapeName ) );
         fprintf( aFile, "PART \"%s\"\n", TO_UTF8( module->GetValue() ) );
         fprintf( aFile, "PACKAGE \"%s\"\n", module->GetFPID().Format().c_str() );
 
