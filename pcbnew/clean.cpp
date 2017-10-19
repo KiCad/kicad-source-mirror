@@ -444,6 +444,8 @@ bool TRACKS_CLEANER::deleteNullSegments()
 
 void TRACKS_CLEANER::removeDuplicatesOfTrack( const TRACK *aTrack, std::set<BOARD_ITEM*>& aToRemove )
 {
+    if( aTrack->GetFlags() & STRUCT_DELETED )
+        return;
 
     for( auto other : m_brd->Tracks() )
     {
@@ -452,6 +454,9 @@ void TRACKS_CLEANER::removeDuplicatesOfTrack( const TRACK *aTrack, std::set<BOAR
             continue;
 
         if( aTrack == other )
+            continue;
+
+        if( other->GetFlags() & STRUCT_DELETED )
             continue;
 
         // Must be of the same type, on the same layer and the endpoints
@@ -464,6 +469,7 @@ void TRACKS_CLEANER::removeDuplicatesOfTrack( const TRACK *aTrack, std::set<BOAR
                 ( ( aTrack->GetStart() == other->GetEnd() ) &&
                  ( aTrack->GetEnd() == other->GetStart() ) ) )
             {
+                other->SetFlags( STRUCT_DELETED );
                 aToRemove.insert( other );
             }
         }
