@@ -380,6 +380,17 @@ void RotatePoint( wxPoint* point, const wxPoint& centre, double angle )
     point->y = oy + centre.y;
 }
 
+void RotatePoint( VECTOR2I& point, const VECTOR2I& centre, double angle )
+{
+    wxPoint c( centre.x, centre.y );
+    wxPoint p( point.x, point.y );
+
+    RotatePoint(&p, c, angle);
+
+    point.x = p.x;
+    point.y = p.y;
+}
+
 
 void RotatePoint( double* pX, double* pY, double cx, double cy, double angle )
 {

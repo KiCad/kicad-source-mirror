@@ -30,6 +30,7 @@
 
 #include <math.h>
 #include <wx/gdicmn.h> // For wxPoint
+#include <math/vector2d.h>
 
 /**
  * Function IsPointOnSegment
@@ -77,6 +78,13 @@ inline void RotatePoint( wxPoint* point, double angle )
 {
     RotatePoint( &point->x, &point->y, angle );
 }
+
+inline void RotatePoint( VECTOR2I& point, double angle )
+{
+    RotatePoint( &point.x, &point.y, angle );
+}
+
+void RotatePoint( VECTOR2I& point, const VECTOR2I& centre, double angle );
 
 /*
  * Calculates the new coord point point
