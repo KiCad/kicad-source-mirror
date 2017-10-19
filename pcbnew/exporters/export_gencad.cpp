@@ -218,6 +218,10 @@ static std::string fmt_mask( LSET aSet )
 #endif
 }
 
+// Export options
+static bool flipBottomPads;
+static bool uniquePins;
+static bool individualShapes;
 
 // These are the export origin (the auxiliary axis)
 static int GencadOffsetX, GencadOffsetY;
@@ -227,11 +231,6 @@ static std::map<MODULE*, wxString> m_componentShapes;
 
 // GerbTool chokes on units different than INCH so this is the conversion factor
 const static double SCALE_FACTOR = 1000.0 * IU_PER_MILS;
-
-// Export options
-bool flipBottomPads;
-bool uniquePins;
-bool individualShapes;
 
 /* Two helper functions to calculate coordinates of modules in gencad values
  * (GenCAD Y axis from bottom to top)
