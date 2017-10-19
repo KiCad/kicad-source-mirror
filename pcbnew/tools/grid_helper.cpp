@@ -353,6 +353,12 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos )
                     break;
                 }
 
+                case S_POLYGON:
+                {
+                    // no anchors for the moment
+                    break;
+                }
+
                 default:
                 {
                     origin = dseg->GetStart();

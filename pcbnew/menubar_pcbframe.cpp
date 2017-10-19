@@ -335,9 +335,14 @@ void preparePlaceMenu( wxMenu* aParentMenu )
                  KiBitmap( add_circle_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_ADD_LINE_BUTT,
-                 _( "&Line or Polygon" ),
-                 _( "Add graphic line or polygon" ),
-                 KiBitmap( add_polygon_xpm ) );
+                 _( "&Lines" ),
+                 _( "Add graphic lines" ),
+                 KiBitmap( add_graphical_segments_xpm ) );
+
+    AddMenuItem( aParentMenu, ID_PCB_ADD_POLYGON_BUTT,
+                  _( "&Polygons" ),
+                  _( "Add graphic polygons" ),
+                  KiBitmap( add_graphical_polygon_xpm ) );
 
     aParentMenu->AppendSeparator();
 
@@ -469,25 +474,12 @@ void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
                  _( "&Delete" ), _( "Delete items" ),
                  KiBitmap( delete_xpm ) );
 
+    aParentMenu->AppendSeparator();
+
     text = AddHotkeyName( _( "&Find" ), g_Pcbnew_Editor_Hokeys_Descr, HK_FIND_ITEM );
     AddMenuItem( aParentMenu, ID_FIND_ITEMS, text, HELP_FIND , KiBitmap( find_xpm ) );
 
     aParentMenu->AppendSeparator();
-
-    if( aUseGal )
-    {
-        text = AddHotkeyName( _( "&Cut" ), g_Pcbnew_Editor_Hokeys_Descr, HK_EDIT_CUT );
-        AddMenuItem( aParentMenu, ID_EDIT_CUT, text, _(
-                        "Cuts the selected item(s) to the Clipboard" ), KiBitmap( cut_xpm ) );
-        text = AddHotkeyName( _( "&Copy" ), g_Pcbnew_Editor_Hokeys_Descr, HK_EDIT_COPY );
-        AddMenuItem( aParentMenu, ID_EDIT_COPY, text, _(
-                        "Copies the selected item(s) to the Clipboard" ), KiBitmap( copy_xpm ) );
-        text = AddHotkeyName( _( "&Paste" ), g_Pcbnew_Editor_Hokeys_Descr, HK_EDIT_PASTE );
-        AddMenuItem( aParentMenu, ID_EDIT_PASTE, text, _(
-                        "Pastes item(s) from the Clipboard" ), KiBitmap( paste_xpm ) );
-        aParentMenu->AppendSeparator();
-    }
-
     AddMenuItem( aParentMenu, ID_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE,
                      _( "Edit All Tracks and Vias" ), KiBitmap( width_track_via_xpm ) );
 
@@ -526,7 +518,7 @@ void prepareViewMenu( wxMenu* aParentMenu )
      * From hotkeys, zooming is made around the mouse cursor position
      * (obviously not possible from the toolbar or menubar command)
      *
-     * in other words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerator
+     * in other words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
      * for Zoom in and Zoom out sub menus
      */
     text = AddHotkeyName( _( "Zoom &In" ), g_Pcbnew_Editor_Hokeys_Descr,

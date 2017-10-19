@@ -79,9 +79,50 @@ enum DIMENSION_POINTS
     DIM_FEATUREDO,
 };
 
-
 class EDIT_POINTS_FACTORY
 {
+private:
+
+    static void buildForPolyOutline( std::shared_ptr<EDIT_POINTS> points, const SHAPE_POLY_SET* aOutline, KIGFX::GAL* aGal )
+    {
+
+        int cornersCount = aOutline->TotalVertices();
+
+        for( auto iterator = aOutline->CIterateWithHoles(); iterator; iterator++ )
+        {
+            points->AddPoint( *iterator );
+
+            if( iterator.IsEndContour() )
+                points->AddBreak();
+        }
+
+    // Lines have to be added after creating edit points,
+    // as they use EDIT_POINT references
+        for( int i = 0; i < cornersCount - 1; ++i )
+        {
+            if( points->IsContourEnd( i ) )
+            {
+                points->AddLine( points->Point( i ),
+                        points->Point( points->GetContourStartIdx( i ) ) );
+            }
+            else
+            {
+                points->AddLine( points->Point( i ), points->Point( i + 1 ) );
+            }
+
+            points->Line( i ).SetConstraint( new EC_SNAPLINE( points->Line( i ),
+                            std::bind( &KIGFX::GAL::GetGridPoint, aGal, _1 ) ) );
+        }
+
+    // The last missing line, connecting the last and the first polygon point
+        points->AddLine( points->Point( cornersCount - 1 ),
+                points->Point( points->GetContourStartIdx( cornersCount - 1 ) ) );
+
+        points->Line( points->LinesSize() - 1 ).SetConstraint(
+                new EC_SNAPLINE( points->Line( points->LinesSize() - 1 ),
+                        std::bind( &KIGFX::GAL::GetGridPoint, aGal, _1 ) ) );
+    }
+
 public:
     static std::shared_ptr<EDIT_POINTS> Make( EDA_ITEM* aItem, KIGFX::GAL* aGal )
     {
@@ -122,6 +163,12 @@ public:
                     points->AddPoint( segment->GetEnd() );
                     break;
 
+                case S_POLYGON:
+                {
+                    buildForPolyOutline( points, &segment->GetPolyShape(), aGal );
+                    break;
+                }
+
                 default:        // suppress warnings
                     break;
                 }
@@ -131,44 +178,8 @@ public:
 
             case PCB_ZONE_AREA_T:
             {
-                const SHAPE_POLY_SET* outline;
-                outline = static_cast<const ZONE_CONTAINER*>( aItem )->Outline();
-
-                int cornersCount = outline->TotalVertices();
-
-                for( auto iterator = outline->CIterateWithHoles(); iterator; iterator++ )
-                {
-                    points->AddPoint( *iterator );
-
-                    if( iterator.IsEndContour() )
-                        points->AddBreak();
-                }
-
-                // Lines have to be added after creating edit points,
-                // as they use EDIT_POINT references
-                for( int i = 0; i < cornersCount - 1; ++i )
-                {
-                    if( points->IsContourEnd( i ) )
-                    {
-                        points->AddLine( points->Point( i ),
-                                         points->Point( points->GetContourStartIdx( i ) ) );
-                    }
-                    else
-                    {
-                        points->AddLine( points->Point( i ), points->Point( i + 1 ) );
-                    }
-
-                    points->Line( i ).SetConstraint( new EC_SNAPLINE( points->Line( i ),
-                            std::bind( &KIGFX::GAL::GetGridPoint, aGal, _1 ) ) );
-                }
-
-                // The last missing line, connecting the last and the first polygon point
-                points->AddLine( points->Point( cornersCount - 1 ),
-                                 points->Point( points->GetContourStartIdx( cornersCount - 1 ) ) );
-
-                points->Line( points->LinesSize() - 1 ).SetConstraint(
-                        new EC_SNAPLINE( points->Line( points->LinesSize() - 1 ),
-                        std::bind( &KIGFX::GAL::GetGridPoint, aGal, _1 ) ) );
+                auto zone = static_cast<const ZONE_CONTAINER*>( aItem );
+                buildForPolyOutline( points, zone->Outline(), aGal );
                 break;
             }
 
@@ -453,6 +464,17 @@ void POINT_EDITOR::updateItem() const
             }
 
             break;
+        }
+
+        case S_POLYGON:
+        {
+            SHAPE_POLY_SET* outline = &segment->GetPolyShape();
+
+            for( int i = 0; i < outline->TotalVertices(); ++i )
+            {
+                VECTOR2I point = m_editPoints->Point( i ).GetPosition();
+                outline->Vertex( i ) = point;
+            }
         }
 
         default:        // suppress warnings
@@ -908,28 +930,43 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
     if( !item )
         return 0;
 
-    if( item->Type() == PCB_ZONE_AREA_T )
+    SHAPE_POLY_SET *outline = nullptr;
+
+    if( item->Type() == PCB_ZONE_AREA_T)
     {
-        PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
-        BOARD_COMMIT commit( frame );
-
-        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
-        SHAPE_POLY_SET* zoneOutline = zone->Outline();
-        commit.Modify( zone );
-
-        for( int i = 0; i < zoneOutline->TotalVertices(); ++i )
-        {
-            if( zoneOutline->Vertex( i ) == m_editedPoint->GetPosition() )
-            {
-                zoneOutline->RemoveVertex( i );
-                setEditedPoint( NULL );
-                commit.Push( _( "Remove a zone corner" ) );
-                break;
-            }
-        }
-
-        updatePoints();
+        auto zone = static_cast<ZONE_CONTAINER*>( item );
+        outline = zone->Outline();
     }
+    else if ( item->Type() == PCB_LINE_T )
+    {
+        auto ds = static_cast<DRAWSEGMENT*>( item );
+        if( ds->GetShape() == S_POLYGON )
+        {
+            outline = &ds->GetPolyShape();
+        }
+    }
+
+    if( !outline )
+        return 0;
+
+    PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
+    BOARD_COMMIT commit( frame );
+
+    commit.Modify( item );
+
+    for( int i = 0; i < outline->TotalVertices(); ++i )
+    {
+        if( outline->Vertex( i ) == m_editedPoint->GetPosition() )
+        {
+            outline->RemoveVertex( i );
+            setEditedPoint( NULL );
+            commit.Push( _( "Remove a zone/polygon corner" ) );
+            break;
+        }
+    }
+
+    updatePoints();
+
 
     return 0;
 }

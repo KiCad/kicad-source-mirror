@@ -77,6 +77,7 @@ public:
         DIMENSION,
         KEEPOUT,
         ZONE,
+        GRAPHIC_POLYGON
     };
 
     /**
@@ -134,6 +135,7 @@ public:
      * polyline finishes the drawing.
      */
     int DrawZone( const TOOL_EVENT& aEvent );
+    int DrawGraphicPolygon( const TOOL_EVENT& aEvent );
 
     int DrawVia( const TOOL_EVENT& aEvent );
 
@@ -185,7 +187,8 @@ private:
     {
         ADD,            ///< Add a new zone/keepout with fresh settings
         CUTOUT,         ///< Make a cutout to an existing zone
-        SIMILAR         ///< Add a new zone with the same settings as an existing one
+        SIMILAR,         ///< Add a new zone with the same settings as an existing one
+        GRAPHIC_POLYGON
     };
 
     ///> Shows the context menu for the drawing tool

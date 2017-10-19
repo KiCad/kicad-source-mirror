@@ -68,6 +68,10 @@ TOOL_ACTION PCB_ACTIONS::drawLine( "pcbnew.InteractiveDrawing.line",
         AS_GLOBAL, 0,
         _( "Draw Line" ), _( "Draw a line" ), NULL, AF_ACTIVATE );
 
+TOOL_ACTION PCB_ACTIONS::drawGraphicPolygon( "pcbnew.InteractiveDrawing.graphicPolygon",
+        AS_GLOBAL, 0,
+        _( "Draw Graphic Polygon" ), _( "Draw a graphic polygon" ), NULL, AF_ACTIVATE );
+
 TOOL_ACTION PCB_ACTIONS::drawCircle( "pcbnew.InteractiveDrawing.circle",
         AS_GLOBAL, 0,
         _( "Draw Circle" ), _( "Draw a circle" ), NULL, AF_ACTIVATE );
@@ -668,6 +672,15 @@ int DRAWING_TOOL::DrawZoneCutout( const TOOL_EVENT& aEvent )
     return drawZone( false, ZONE_MODE::CUTOUT );
 }
 
+int DRAWING_TOOL::DrawGraphicPolygon( const TOOL_EVENT& aEvent )
+{
+    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::GRAPHIC_POLYGON );
+
+    m_frame->SetToolID( ID_PCB_ADD_POLYGON_BUTT, wxCURSOR_PENCIL, _( "Add graphic polygon" ) );
+
+    return drawZone( false, ZONE_MODE::GRAPHIC_POLYGON );
+}
+
 
 int DRAWING_TOOL::DrawSimilarZone( const TOOL_EVENT& aEvent )
 {
@@ -1207,7 +1220,7 @@ bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER*& aZo
     aZone = nullptr;
 
     // not an action that needs a source zone
-    if( aMode == ZONE_MODE::ADD )
+    if( aMode == ZONE_MODE::ADD || aMode == ZONE_MODE::GRAPHIC_POLYGON )
         return true;
 
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
@@ -1531,6 +1544,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 void DRAWING_TOOL::setTransitions()
 {
     Go( &DRAWING_TOOL::DrawLine, PCB_ACTIONS::drawLine.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawGraphicPolygon, PCB_ACTIONS::drawGraphicPolygon.MakeEvent() );
     Go( &DRAWING_TOOL::DrawCircle, PCB_ACTIONS::drawCircle.MakeEvent() );
     Go( &DRAWING_TOOL::DrawArc, PCB_ACTIONS::drawArc.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension, PCB_ACTIONS::drawDimension.MakeEvent() );

@@ -132,6 +132,9 @@ public:
     /// Activation of the drawing tool (line)
     static TOOL_ACTION drawLine;
 
+    // Activation of the drawing tool (graphic polygons)
+    static TOOL_ACTION drawGraphicPolygon;
+
     /// Activation of the drawing tool (circle)
     static TOOL_ACTION drawCircle;
 
@@ -287,6 +290,9 @@ public:
     // Module editor tools
     /// Activation of the drawing tool (placing a PAD)
     static TOOL_ACTION placePad;
+
+    static TOOL_ACTION createPadFromShapes;
+    static TOOL_ACTION explodePadToShapes;
 
     /// Tool for quick pad enumeration
     static TOOL_ACTION enumeratePads;

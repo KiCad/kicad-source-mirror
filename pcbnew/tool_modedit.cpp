@@ -170,14 +170,17 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
                             _( "Add pad" ), wxITEM_CHECK );
 
     m_drawToolBar->AddSeparator();
-    m_drawToolBar->AddTool( ID_MODEDIT_LINE_TOOL, wxEmptyString, KiBitmap( add_polygon_xpm ),
-                            _( "Add graphic line or polygon" ), wxITEM_CHECK );
+    m_drawToolBar->AddTool( ID_MODEDIT_LINE_TOOL, wxEmptyString, KiBitmap( add_graphical_segments_xpm ),
+                            _( "Add graphic line" ), wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_MODEDIT_CIRCLE_TOOL, wxEmptyString, KiBitmap( add_circle_xpm ),
                             _( "Add graphic circle" ), wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_MODEDIT_ARC_TOOL, wxEmptyString, KiBitmap( add_arc_xpm ),
                             _( "Add graphic arc" ), wxITEM_CHECK );
+
+    m_drawToolBar->AddTool( ID_MODEDIT_POLYGON_TOOL, wxEmptyString, KiBitmap( add_graphical_polygon_xpm ),
+                            _( "Add graphic polygon" ), wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_MODEDIT_TEXT_TOOL, wxEmptyString, KiBitmap( text_xpm ),
                             _( "Add Text" ), wxITEM_CHECK );

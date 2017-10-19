@@ -452,14 +452,18 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
                             _( "Add keepout areas" ), wxITEM_CHECK );
 
     m_drawToolBar->AddSeparator();
-    m_drawToolBar->AddTool( ID_PCB_ADD_LINE_BUTT, wxEmptyString, KiBitmap( add_dashed_line_xpm ),
-                            _( "Add graphic line or polygon" ), wxITEM_CHECK );
+
+    m_drawToolBar->AddTool( ID_PCB_ADD_LINE_BUTT, wxEmptyString, KiBitmap( add_graphical_segments_xpm ),
+                            _( "Add graphic lines" ), wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_PCB_CIRCLE_BUTT, wxEmptyString, KiBitmap( add_circle_xpm ),
                             _( "Add graphic circle" ), wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_PCB_ARC_BUTT, wxEmptyString, KiBitmap( add_arc_xpm ),
                             _( "Add graphic arc" ), wxITEM_CHECK );
+
+    m_drawToolBar->AddTool( ID_PCB_ADD_POLYGON_BUTT, wxEmptyString, KiBitmap( add_graphical_polygon_xpm ),
+                            _( "Add graphic polygon" ), wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_PCB_ADD_TEXT_BUTT, wxEmptyString, KiBitmap( text_xpm ),
                             _( "Add text on copper layers or graphic text" ), wxITEM_CHECK );

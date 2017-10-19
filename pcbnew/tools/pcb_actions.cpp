@@ -68,6 +68,10 @@ boost::optional<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
     case ID_MODEDIT_LINE_TOOL:
         return PCB_ACTIONS::drawLine.MakeEvent();
 
+    case ID_PCB_ADD_POLYGON_BUTT:
+    case ID_MODEDIT_POLYGON_TOOL:
+        return PCB_ACTIONS::drawGraphicPolygon.MakeEvent();
+
     case ID_PCB_CIRCLE_BUTT:
     case ID_MODEDIT_CIRCLE_TOOL:
         return PCB_ACTIONS::drawCircle.MakeEvent();

@@ -116,6 +116,8 @@ set( BMAPS_MID
     add_dimension
     add_entry
     add_glabel
+    add_graphical_segments
+    add_graphical_polygon
     add_hierarchical_label
     add_hierar_pin
     add_hierarchical_subsheet

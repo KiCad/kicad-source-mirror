@@ -25,6 +25,9 @@
 #include <view/view.h>
 #include <tool/tool_manager.h>
 #include <class_zone.h>
+#include <class_drawsegment.h>
+#include <class_edge_mod.h>
+#include <class_pad.h>
 #include <board_commit.h>
 #include <pcb_painter.h>
 
@@ -61,22 +64,27 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
     zoneInfo.m_NetcodeSelection = board.GetHighLightNetCode();
     zoneInfo.SetIsKeepout( m_params.m_keepout );
 
-    // Show options dialog
-    ZONE_EDIT_T dialogResult;
-
-    if( m_params.m_keepout )
-        dialogResult = InvokeKeepoutAreaEditor( &frame, &zoneInfo );
-    else
+    if ( m_params.m_mode != DRAWING_TOOL::ZONE_MODE::GRAPHIC_POLYGON  )
     {
-        if( IsCopperLayer( zoneInfo.m_CurrentZone_Layer ) )
-            dialogResult = InvokeCopperZonesEditor( &frame, &zoneInfo );
+        // Get the current default settings for zones
+
+        // Show options dialog
+        ZONE_EDIT_T dialogResult;
+
+        if( m_params.m_keepout )
+            dialogResult = InvokeKeepoutAreaEditor( &frame, &zoneInfo );
         else
-            dialogResult = InvokeNonCopperZonesEditor( &frame, nullptr, &zoneInfo );
-    }
+        {
+            if( IsCopperLayer( zoneInfo.m_CurrentZone_Layer ) )
+                dialogResult = InvokeCopperZonesEditor( &frame, &zoneInfo );
+            else
+                dialogResult = InvokeNonCopperZonesEditor( &frame, nullptr, &zoneInfo );
+        }
 
-    if( dialogResult == ZONE_ABORT )
-    {
-        return nullptr;
+        if( dialogResult == ZONE_ABORT )
+        {
+            return nullptr;
+        }
     }
 
     auto newZone = std::make_unique<ZONE_CONTAINER>( &board );
@@ -137,24 +145,41 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
 
     BOARD_COMMIT bCommit( &m_tool );
 
-    if( m_params.m_mode == DRAWING_TOOL::ZONE_MODE::CUTOUT )
+    switch ( m_params.m_mode )
     {
-        // For cutouts, subtract from the source
-        bCommit.Modify( m_params.m_sourceZone );
-        performZoneCutout( *m_params.m_sourceZone, *aZone );
-        bCommit.Push( _( "Add a zone cutout" ) );
-        m_params.m_sourceZone->Hatch();
-    }
-    else
-    {
-        // Add the zone as a new board item
-        aZone->Hatch();
+        case DRAWING_TOOL::ZONE_MODE::CUTOUT:
+                // For cutouts, subtract from the source
+            bCommit.Modify( m_params.m_sourceZone );
+            performZoneCutout( *m_params.m_sourceZone, *aZone );
+            bCommit.Push( _( "Add a zone cutout" ) );
+            m_params.m_sourceZone->Hatch();
+            break;
 
-        if( !m_params.m_keepout )
-            frame.Fill_Zone( aZone.get() );
+        case DRAWING_TOOL::ZONE_MODE::ADD:
+        case DRAWING_TOOL::ZONE_MODE::SIMILAR:
+            aZone->Hatch();
 
-        bCommit.Add( aZone.release() );
-        bCommit.Push( _( "Add a zone" ) );
+            if( !m_params.m_keepout )
+                frame.Fill_Zone( aZone.get() );
+
+            bCommit.Add( aZone.release() );
+            bCommit.Push( _( "Add a zone" ) );
+            break;
+
+        case DRAWING_TOOL::ZONE_MODE::GRAPHIC_POLYGON:
+        {
+            BOARD_ITEM_CONTAINER* parent = frame.GetModel();
+            auto poly = m_tool.m_editModules ? new EDGE_MODULE( (MODULE *) parent ) : new DRAWSEGMENT();
+
+            poly->SetShape ( S_POLYGON );
+            poly->SetLayer( aZone->GetLayer() );
+            poly->SetPolyShape ( *aZone->Outline() );
+
+            bCommit.Add( poly );
+            bCommit.Push( _( "Add a graphical polygon" ) );
+
+            break;
+        }
     }
 };
 
