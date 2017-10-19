@@ -1008,3 +1008,21 @@ void FOOTPRINT_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
         GetGalCanvas()->Refresh();
     }
 }
+
+bool FOOTPRINT_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
+{
+    if( ! Clear_Pcb( true ) )
+        return false;                  // //this command is aborted
+
+    SetCrossHairPosition( wxPoint( 0, 0 ) );
+    Import_Module( aFileSet[0] );
+
+    if( GetBoard()->m_Modules )
+        GetBoard()->m_Modules->ClearFlags();
+
+    GetScreen()->ClrModify();
+    Zoom_Automatique( false );
+    m_canvas->Refresh();
+
+    return true;
+}

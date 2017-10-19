@@ -239,19 +239,60 @@ bool PGM_SINGLE_TOP::OnPgmInit()
     Kiway.set_kiface( KIWAY::KifaceType( TOP_FRAME ), kiface );
 #endif
 
+    // Open project or file specified on the command line:
+    int argc = App().argc;
+
+    int args_offset = 1;
+
+    FRAME_T appType = TOP_FRAME;
+
+    const struct
+    {
+        wxString name;
+        FRAME_T type;
+    } frameTypes[] = {
+        { wxT( "pcb" ), FRAME_PCB },
+        { wxT( "fpedit" ), FRAME_PCB_MODULE_EDITOR },
+        { wxT( "" ), FRAME_T_COUNT }
+    };
+
+    if( argc > 2 )
+    {
+        if( App().argv[1] == "--frame" )
+        {
+            wxString appName = App().argv[2];
+            appType = FRAME_T_COUNT;
+
+            for( int i = 0; frameTypes[i].type != FRAME_T_COUNT; i++ )
+            {
+                const auto& frame = frameTypes[i];
+                if(frame.name == appName)
+                {
+                    appType = frame.type;
+                }
+            }
+            args_offset += 2;
+
+            if( appType == FRAME_T_COUNT )
+            {
+                wxLogError( wxT( "Unknown frame: %s" ), appName );
+                return false;
+            }
+        }
+    }
+
+
     // Use KIWAY to create a top window, which registers its existence also.
     // "TOP_FRAME" is a macro that is passed on compiler command line from CMake,
     // and is one of the types in FRAME_T.
-    KIWAY_PLAYER* frame = Kiway.Player( TOP_FRAME, true );
+    KIWAY_PLAYER* frame = Kiway.Player( appType, true );
 
     Kiway.SetTop( frame );
 
     App().SetTopWindow( frame );      // wxApp gets a face.
 
-    // Open project or file specified on the command line:
-    int argc = App().argc;
 
-    if( argc > 1 )
+    if( argc > args_offset )
     {
         /*
             gerbview handles multiple project data files, i.e. gerber files on
@@ -264,7 +305,7 @@ bool PGM_SINGLE_TOP::OnPgmInit()
 
         std::vector<wxString>   argSet;
 
-        for( int i=1;  i<argc;  ++i )
+        for( int i = args_offset;  i < argc;  ++i )
         {
             argSet.push_back( App().argv[i] );
         }
@@ -272,7 +313,7 @@ bool PGM_SINGLE_TOP::OnPgmInit()
         // special attention to the first argument: argv[1] (==argSet[0])
         wxFileName argv1( argSet[0] );
 
-        if( argc == 2 )
+        if( argc - args_offset > 1 )
         {
 #if defined(PGM_DATA_FILE_EXT)
             // PGM_DATA_FILE_EXT, if present, may be different for each compile,

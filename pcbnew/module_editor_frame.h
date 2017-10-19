@@ -315,7 +315,8 @@ public:
      * The import function can also read gpcb footprint file, in Newlib format
      * (One footprint per file, Newlib files have no special ext.)
      */
-    MODULE* Import_Module();
+     MODULE* Import_Module( const wxString& aName = wxT("") );
+
 
     /**
      * Function SaveCurrentModule
@@ -466,6 +467,23 @@ public:
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     virtual void UseGalCanvas( bool aEnable ) override;
+
+    /**
+     * Function OpenProjectFiles    (was LoadOnePcbFile)
+     * loads a KiCad board (.kicad_pcb) from \a aFileName.
+     *
+     * @param aFileSet - hold the BOARD file to load, a vector of one element.
+     *
+     * @param aCtl      - KICTL_ bits, one to indicate that an append of the board file
+     *                      aFileName to the currently loaded file is desired.
+     *                    @see #KIWAY_PLAYER for bit defines.
+     *
+     * @return bool - false if file load fails, otherwise true.
+    bool LoadOnePcbFile( const wxString& aFileName, bool aAppend = false,
+                         bool aForceFileDialog = false );
+     */
+    bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
+
 
     DECLARE_EVENT_TABLE()
 
