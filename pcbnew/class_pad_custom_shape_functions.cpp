@@ -66,7 +66,18 @@ void PAD_CS_PRIMITIVE::ExportTo( DRAWSEGMENT* aTarget )
  * add a free shape to the shape list.
  * the shape is a polygon (can be with thick outline), segment, circle or arc
  */
-void D_PAD::AddPrimitive( std::vector<wxPoint>& aPoly, int aThickness )
+
+void D_PAD::AddPrimitive( const SHAPE_POLY_SET& aPoly, int aThickness )
+{
+    std::vector<wxPoint> points;
+
+    for( auto iter = aPoly.CIterate(); iter; iter++ )
+        points.push_back( wxPoint( iter->x, iter->y ) );
+
+    AddPrimitive( points, aThickness );
+}
+
+void D_PAD::AddPrimitive( const std::vector<wxPoint>& aPoly, int aThickness )
 {
     PAD_CS_PRIMITIVE shape( S_POLYGON );
     shape.m_Poly = aPoly;
@@ -135,38 +146,10 @@ void D_PAD::DeletePrimitivesList()
 }
 
 
-/* Merge all basic shapes, converted to a polygon in one polygon,
- * return true if OK, false in there is more than one polygon
- * in aMergedPolygon
- */
-bool D_PAD::MergePrimitivesAsPolygon(  SHAPE_POLY_SET* aMergedPolygon,
-                                        int aCircleToSegmentsCount )
+bool D_PAD::buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon,
+                                   int aCircleToSegmentsCount )
+
 {
-    // if aMergedPolygon == NULL, use m_customShapeAsPolygon as target
-
-    if( !aMergedPolygon )
-        aMergedPolygon = &m_customShapeAsPolygon;
-
-    aMergedPolygon->RemoveAllContours();
-
-    // Add the anchor pad shape in aMergedPolygon, others in aux_polyset:
-    // The anchor pad is always at 0,0
-    switch( GetAnchorPadShape() )
-    {
-    default:
-    case PAD_SHAPE_CIRCLE:
-        TransformCircleToPolygon( *aMergedPolygon, wxPoint( 0,0 ), GetSize().x/2,
-                              aCircleToSegmentsCount );
-        break;
-
-    case PAD_SHAPE_RECT:
-        {
-        SHAPE_RECT rect( -GetSize().x/2, -GetSize().y/2, GetSize().x, GetSize().y );
-        aMergedPolygon->AddOutline( rect.Outline() );
-        }
-        break;
-    }
-
     SHAPE_POLY_SET aux_polyset;
 
     for( unsigned cnt = 0; cnt < m_basicShapes.size(); ++cnt )
@@ -212,7 +195,9 @@ bool D_PAD::MergePrimitivesAsPolygon(  SHAPE_POLY_SET* aMergedPolygon,
                 polyset.NewOutline();
 
                 for( unsigned ii = 0; ii < poly.size(); ii++ )
+                {
                     polyset.Append( poly[ii].x, poly[ii].y );
+                }
 
                 polyset.Inflate( bshape.m_Thickness/2, 32 );
 
@@ -230,12 +215,78 @@ bool D_PAD::MergePrimitivesAsPolygon(  SHAPE_POLY_SET* aMergedPolygon,
         }
     }
 
-    // Merge all polygons:
+    aux_polyset.Simplify( SHAPE_POLY_SET::PM_FAST );
+
+    // Merge all polygons, if more than one, pick the largest (area-wise)
     if( aux_polyset.OutlineCount() )
     {
+
+        if( aux_polyset.OutlineCount() >= 2)
+        {
+            int bestOutline = 0;
+            double maxArea = 0.0;
+
+            for( int i = 0; i < aux_polyset.OutlineCount(); i++ )
+            {
+                double area = aux_polyset.COutline(i).Area();
+
+                if ( area > maxArea )
+                {
+                    maxArea = area;
+                    bestOutline = i;
+                }
+            }
+
+            if( bestOutline != 0 )
+                aux_polyset.Polygon( 0 ) = aux_polyset.Polygon( bestOutline );
+
+            for (int i = 1; i < aux_polyset.OutlineCount(); i++ )
+            {
+                aux_polyset.DeletePolygon( i );
+            }
+        }
+
         aMergedPolygon->BooleanAdd( aux_polyset, SHAPE_POLY_SET::PM_FAST );
         aMergedPolygon->Fracture( SHAPE_POLY_SET::PM_FAST );
     }
+
+    return aMergedPolygon->OutlineCount() <= 1;
+}
+
+/* Merge all basic shapes, converted to a polygon in one polygon,
+ * return true if OK, false in there is more than one polygon
+ * in aMergedPolygon
+ */
+bool D_PAD::MergePrimitivesAsPolygon(  SHAPE_POLY_SET* aMergedPolygon,
+                                        int aCircleToSegmentsCount )
+{
+    // if aMergedPolygon == NULL, use m_customShapeAsPolygon as target
+
+    if( !aMergedPolygon )
+        aMergedPolygon = &m_customShapeAsPolygon;
+
+    aMergedPolygon->RemoveAllContours();
+
+    // Add the anchor pad shape in aMergedPolygon, others in aux_polyset:
+    // The anchor pad is always at 0,0
+    switch( GetAnchorPadShape() )
+    {
+    default:
+    case PAD_SHAPE_CIRCLE:
+        TransformCircleToPolygon( *aMergedPolygon, wxPoint( 0,0 ), GetSize().x/2,
+                              aCircleToSegmentsCount );
+        break;
+
+    case PAD_SHAPE_RECT:
+        {
+        SHAPE_RECT rect( -GetSize().x/2, -GetSize().y/2, GetSize().x, GetSize().y );
+        aMergedPolygon->AddOutline( rect.Outline() );
+        }
+        break;
+    }
+
+    if ( !buildCustomPadPolygon( aMergedPolygon, aCircleToSegmentsCount ) )
+        return false;
 
     m_boundingRadius = -1;  // The current bouding radius is no more valid.
 
@@ -264,4 +315,80 @@ void D_PAD::CustomShapeAsPolygonToBoardPosition( SHAPE_POLY_SET * aMergedPolygon
             poly.Point( ii ).y = corner.y;
         }
     }
+}
+
+bool D_PAD::GetBestAnchorPosition( VECTOR2I& aPos )
+{
+    SHAPE_POLY_SET poly;
+
+    if ( !buildCustomPadPolygon( &poly, 16 ) )
+        return false;
+
+    const int minSteps = 10;
+    const int maxSteps = 50;
+
+    int stepsX, stepsY;
+
+    auto bbox = poly.BBox();
+
+    if( bbox.GetWidth() < bbox.GetHeight() )
+    {
+        stepsX = minSteps;
+        stepsY = minSteps * (double) bbox.GetHeight() / (double )(bbox.GetWidth() + 1);
+    }
+    else
+    {
+        stepsY = minSteps;
+        stepsX = minSteps * (double) bbox.GetWidth() / (double )(bbox.GetHeight() + 1);
+    }
+
+    stepsX = std::max(minSteps, std::min( maxSteps, stepsX ) );
+    stepsY = std::max(minSteps, std::min( maxSteps, stepsY ) );
+
+    auto center = bbox.Centre();
+
+    auto minDist = std::numeric_limits<int64_t>::max();
+    int64_t minDistEdge;
+
+    if( GetAnchorPadShape() == PAD_SHAPE_CIRCLE )
+    {
+        minDistEdge = GetSize().x;
+    }
+    else
+    {
+        minDistEdge = std::max( GetSize().x, GetSize().y );
+    }
+
+    boost::optional<VECTOR2I> bestAnchor;
+
+    for ( int y = 0; y < stepsY ; y++ )
+        for ( int x = 0; x < stepsX; x++ )
+        {
+            VECTOR2I p = bbox.GetPosition();
+            p.x += rescale( x, bbox.GetWidth(), (stepsX - 1) );
+            p.y += rescale( y, bbox.GetHeight(), (stepsY - 1) );
+
+            if ( poly.Contains(p) )
+            {
+
+                auto dist = (center - p).EuclideanNorm();
+                auto distEdge = poly.COutline(0).Distance( p, true );
+                if ( distEdge >= minDistEdge )
+                {
+                    if ( dist < minDist )
+                    {
+                        bestAnchor = p;
+                        minDist = dist;
+                    }
+                }
+            }
+        }
+
+        if ( bestAnchor )
+        {
+            aPos = *bestAnchor;
+            return true;
+        }
+
+        return false;
 }

@@ -272,12 +272,15 @@ public:
      *   a filled circle or ring ( if thickness == 0, this is a filled circle, else a ring)
      *   a arc
      */
-    void AddPrimitive( std::vector<wxPoint>& aPoly, int aThickness );  ///< add a polygonal basic shape
+    void AddPrimitive( const SHAPE_POLY_SET& aPoly, int aThickness );  ///< add a polygonal basic shape
+    void AddPrimitive( const std::vector<wxPoint>& aPoly, int aThickness );  ///< add a polygonal basic shape
     void AddPrimitive( wxPoint aStart, wxPoint aEnd, int aThickness ); ///< segment basic shape
     void AddPrimitive( wxPoint aCenter, int aRadius, int aThickness ); ///< ring or circle basic shape
     void AddPrimitive( wxPoint aCenter, wxPoint aStart,
                         int aArcAngle, int aThickness );    ///< arc basic shape
 
+
+    bool GetBestAnchorPosition( VECTOR2I& aPos );
 
     /**
      * Merge all basic shapes, converted to a polygon in one polygon,
@@ -725,6 +728,9 @@ private:
      * returns a calculated radius of a bounding circle for this pad.
      */
     int boundingRadius() const;
+
+    bool buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon,
+                                int aCircleToSegmentsCount );
 
 private:    // Private variable members:
 

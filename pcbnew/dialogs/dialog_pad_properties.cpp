@@ -329,7 +329,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 
         case S_POLYGON:         // polygon
         {
-            std::vector<wxPoint>& poly = dummySegment.GetPolyPoints();
+            std::vector<wxPoint> poly = dummySegment.GetPolyPoints();
             GRClosedPoly( NULL, &dc, poly.size(), &poly[0], /* filled */ true,
                           primitive.m_Thickness, hcolor, hcolor );
         }
@@ -1160,11 +1160,9 @@ void DIALOG_PAD_PROPERTIES::redraw()
 
             case S_POLYGON:         // polygon
             {
-                std::vector<wxPoint>& poly = dummySegment->GetPolyPoints();
-
-                for( unsigned ii = 0; ii < poly.size(); ii++ )
+                for( auto iter = dummySegment->GetPolyShape().Iterate(); iter; iter++ )
                 {
-                    poly[ii] += m_dummyPad->GetPosition();
+                    (*iter) += VECTOR2I( m_dummyPad->GetPosition() );
                 }
             }
                 break;

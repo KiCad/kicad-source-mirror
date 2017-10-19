@@ -312,6 +312,9 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
 
         break;
 
+    case S_POLYGON:
+        break;
+
     default:
 
         // Check start and end are not the same.

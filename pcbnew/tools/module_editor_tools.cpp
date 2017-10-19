@@ -59,6 +59,14 @@ TOOL_ACTION PCB_ACTIONS::placePad( "pcbnew.ModuleEditor.placePad",
         AS_GLOBAL, 0,
         _( "Add Pad" ), _( "Add a pad" ), NULL, AF_ACTIVATE );
 
+TOOL_ACTION PCB_ACTIONS::createPadFromShapes( "pcbnew.ModuleEditor.createPadFromShapes",
+        AS_CONTEXT, 0,
+        _( "Create Pad from Selected Shapes" ), _( "Creates a custom-shaped pads from a set of selected shapes" ) );
+
+TOOL_ACTION PCB_ACTIONS::explodePadToShapes( "pcbnew.ModuleEditor.explodePadToShapes",
+        AS_CONTEXT, 0,
+        _( "Explode Selected Pad to Graphical Shapes" ), _( "Converts a custom-shaped pads to a set of graphical shapes" ) );
+
 TOOL_ACTION PCB_ACTIONS::enumeratePads( "pcbnew.ModuleEditor.enumeratePads",
         AS_GLOBAL, 0,
         _( "Enumerate Pads" ), _( "Enumerate pads" ), pad_enumerate_xpm, AF_ACTIVATE );
@@ -321,10 +329,209 @@ int MODULE_EDITOR_TOOLS::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+int MODULE_EDITOR_TOOLS::ExplodePadToShapes( const TOOL_EVENT& aEvent )
+{
+    SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+    BOARD_COMMIT commit( frame() );
+
+    if( selection.Size() != 1 )
+        return 0;
+
+    if( selection[0]->Type() != PCB_PAD_T )
+        return 0;
+
+    auto pad = static_cast<D_PAD*>( selection[0] );
+
+    if( pad->GetShape() != PAD_SHAPE_CUSTOM )
+        return 0;
+
+    commit.Modify( pad );
+
+    wxPoint anchor = pad->GetPosition();
+
+    for( auto prim : pad->GetPrimitives() )
+    {
+        auto ds = new EDGE_MODULE( board()->m_Modules );
+
+        ds->SetLayer( pad->GetLayer() );
+        ds->SetShape( prim.m_Shape );
+        ds->SetStart( prim.m_Start + anchor );
+        ds->SetEnd( prim.m_End + anchor );
+        ds->SetWidth( prim.m_Thickness );
+
+        for( auto&p : prim.m_Poly )
+            p += anchor;
+
+        ds->SetPolyPoints( prim.m_Poly );
+        ds->SetAngle( prim.m_ArcAngle );
+
+        commit.Add( ds );
+    }
+
+    pad->SetShape( pad->GetAnchorPadShape() );
+    commit.Push( _("Explode pad to shapes") );
+
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
+    return 0;
+}
+
+
+int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
+{
+    SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+
+    std::unique_ptr<D_PAD> pad ( new D_PAD ( board()->m_Modules ) );
+    D_PAD *refPad = nullptr;
+    bool multipleRefPadsFound = false;
+    bool illegalItemsFound = false;
+
+    std::vector<PAD_CS_PRIMITIVE> shapes;
+
+    BOARD_COMMIT commit( frame() );
+
+    for( auto item : selection )
+    {
+        switch( item->Type() )
+        {
+            case PCB_PAD_T:
+            {
+                if( refPad )
+                    multipleRefPadsFound = true;
+
+                refPad = static_cast<D_PAD*>( item );
+                break;
+            }
+
+            case PCB_MODULE_EDGE_T:
+            {
+                auto em = static_cast<EDGE_MODULE*> ( item );
+
+                PAD_CS_PRIMITIVE shape( em->GetShape() );
+                shape.m_Start = em->GetStart();
+                shape.m_End = em->GetEnd();
+                shape.m_Radius = em->GetRadius();
+                shape.m_Thickness = em->GetWidth();
+                shape.m_ArcAngle = em->GetAngle();
+
+                for ( auto p : em->GetPolyPoints() )
+                    shape.m_Poly.push_back(p);
+
+                shapes.push_back(shape);
+
+                break;
+            }
+
+            default:
+            {
+                illegalItemsFound = true;
+                break;
+            }
+        }
+    }
+
+    if( refPad && selection.Size() == 1 )
+    {
+        // don't convert a pad into itself...
+        return 0;
+    }
+
+    if( multipleRefPadsFound )
+    {
+        DisplayErrorMessage( frame(), _("Cannot convert items to a custom-shaped pad: selection contains more than one reference pad. ") );
+        return 0;
+    }
+
+    if( illegalItemsFound )
+    {
+        DisplayErrorMessage( frame(), _("Cannot convert items to a custom-shaped pad: selection contains unsupported items. Only graphical lines, circles, arcs and polygons are allowed.") );
+        return 0;
+    }
+
+    if( refPad )
+    {
+        pad.reset( static_cast<D_PAD*>( refPad->Clone() ) );
+    }
+    else
+    {
+        pad->SetAnchorPadShape( PAD_SHAPE_CIRCLE );
+        pad->SetAttribute( PAD_ATTRIB_SMD );
+        pad->SetLayerSet( D_PAD::SMDMask() );
+        pad->SetSize ( wxSize( 10000, 10000 ) );
+        pad->IncrementPadName( true, true );
+    }
+
+
+    pad->SetPrimitives( shapes );
+    pad->SetShape ( PAD_SHAPE_CUSTOM );
+
+    boost::optional<VECTOR2I> anchor;
+    VECTOR2I tmp;
+
+    if( refPad )
+    {
+        anchor = pad->GetPosition();
+    }
+    else if( pad->GetBestAnchorPosition( tmp ) )
+    {
+        anchor = tmp;
+    }
+
+    if( !anchor )
+    {
+        DisplayErrorMessage( frame(), _("Cannot convert items to a custom-shaped pad: unable to determine the anchor point position. Consider adding a small anchor pad to the selection and try again.") );
+        return 0;
+    }
+
+
+    // relocate the shapes, they are relative to the anchor pad position
+    for( auto& shape : shapes )
+    {
+        shape.m_Start.x -= anchor->x;
+        shape.m_Start.y -= anchor->y;
+        shape.m_End.x -= anchor->x;
+        shape.m_End.y -= anchor->y;
+
+        for( auto&p : shape.m_Poly )
+        {
+            p.x -= anchor->x;
+            p.y -= anchor->y;
+        }
+    }
+
+
+    pad->SetPosition( wxPoint( anchor->x, anchor->y ) );
+    pad->SetPrimitives( shapes );
+
+    bool result = pad->MergePrimitivesAsPolygon();
+
+    if( !result )
+    {
+        DisplayErrorMessage( frame(), _("Cannot convert items to a custom-shaped pad: selected items do not form a single solid shape.") );
+        return 0;
+    }
+
+    auto padPtr = pad.release();
+
+    commit.Add( padPtr );
+    for ( auto item : selection )
+    {
+        commit.Remove( item );
+    }
+
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, padPtr );
+
+    commit.Push(_("Create Pad From Selected Shapes") );
+
+    return 0;
+}
 
 void MODULE_EDITOR_TOOLS::setTransitions()
 {
     Go( &MODULE_EDITOR_TOOLS::PlacePad,            PCB_ACTIONS::placePad.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::CreatePadFromShapes, PCB_ACTIONS::createPadFromShapes.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::ExplodePadToShapes,  PCB_ACTIONS::explodePadToShapes.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::EnumeratePads,       PCB_ACTIONS::enumeratePads.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::ModuleTextOutlines,  PCB_ACTIONS::moduleTextOutlines.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::ModuleEdgeOutlines,  PCB_ACTIONS::moduleEdgeOutlines.MakeEvent() );

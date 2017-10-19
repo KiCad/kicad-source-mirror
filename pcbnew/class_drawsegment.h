@@ -36,6 +36,7 @@
 #include <trigo.h>
 #include <common.h>
 
+#include <geometry/shape_poly_set.h>
 
 class LINE_READER;
 class EDA_DRAW_FRAME;
@@ -57,7 +58,7 @@ protected:
     wxPoint     m_BezierC2;     ///< Bezier Control Point 2
 
     std::vector<wxPoint>    m_BezierPoints;
-    std::vector<wxPoint>    m_PolyPoints;
+    SHAPE_POLY_SET    m_Poly;
 
     // Computes the bounding box for an arc
     void computeArcBBox( EDA_RECT& aBBox ) const;
@@ -165,19 +166,18 @@ public:
 
     // Accessors:
     const std::vector<wxPoint>& GetBezierPoints() const { return m_BezierPoints; }
-    const std::vector<wxPoint>& GetPolyPoints() const   { return m_PolyPoints; }
-    // same accessor, to add/change corners of the polygon
-    std::vector<wxPoint>& GetPolyPoints()               { return m_PolyPoints; }
+
+    const std::vector<wxPoint> GetPolyPoints() const;
+    SHAPE_POLY_SET& GetPolyShape() { return m_Poly; }
+    const SHAPE_POLY_SET& GetPolyShape() const { return m_Poly; }
+    void SetPolyShape( const SHAPE_POLY_SET& aShape ) { m_Poly = aShape; }
 
     void SetBezierPoints( const std::vector<wxPoint>& aPoints )
     {
         m_BezierPoints = aPoints;
     }
 
-    void SetPolyPoints( const std::vector<wxPoint>& aPoints )
-    {
-        m_PolyPoints = aPoints;
-    }
+    void SetPolyPoints( const std::vector<wxPoint>& aPoints );
 
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset ) override;

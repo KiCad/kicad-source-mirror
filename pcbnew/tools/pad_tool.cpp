@@ -80,6 +80,7 @@ public:
         Add( PCB_ACTIONS::applyPadSettings );
         Add( PCB_ACTIONS::pushPadSettings );
 
+
         // show modedit-specific items
         if( m_editingFootprint )
         {

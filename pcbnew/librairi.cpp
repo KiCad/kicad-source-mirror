@@ -253,7 +253,7 @@ MODULE* try_load_footprint( const wxFileName& aFileName, IO_MGR::PCB_FILE_T aFil
 }
 
 
-MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
+MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
 {
     wxString        lastOpenedPathForLoading = m_mruPath;
     wxConfigBase*   config = Kiface().KifaceSettings();
@@ -261,7 +261,12 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
     if( config )
         config->Read( EXPORT_IMPORT_LASTPATH_KEY, &lastOpenedPathForLoading );
 
-    wxFileName fn = getFootprintFilenameFromUser( this, lastOpenedPathForLoading );
+    wxFileName fn;
+
+    if( aName != wxT("") )
+        fn = aName;
+    else
+        fn = getFootprintFilenameFromUser( this, lastOpenedPathForLoading );
 
     if( !fn.IsOk() )
         return NULL;

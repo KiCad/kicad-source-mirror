@@ -202,7 +202,12 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         {
         // We must compute absolute coordinates from m_PolyPoints
         // which are relative to module position, orientation 0
-        std::vector<wxPoint> points = m_PolyPoints;
+        std::vector<wxPoint> points;
+
+        for( auto iter = m_Poly.CIterate(); iter; iter++ )
+        {
+            points.push_back( wxPoint( iter->x,iter->y ) );
+        }
 
         for( unsigned ii = 0; ii < points.size(); ii++ )
         {
@@ -300,8 +305,11 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre )
     case S_POLYGON:
         // polygon corners coordinates are always relative to the
         // footprint position, orientation 0
-        for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
-            MIRROR( m_PolyPoints[ii].y, 0 );
+        for( auto iter = m_Poly.Iterate(); iter; iter++ )
+        {
+            MIRROR( iter->y, 0 );
+        }
+	break;
     }
 
     // DRAWSEGMENT items are not usually on copper layers, but
@@ -338,12 +346,12 @@ void EDGE_MODULE::Mirror( wxPoint aCentre, bool aMirrorAroundXAxis )
     case S_POLYGON:
         // polygon corners coordinates are always relative to the
         // footprint position, orientation 0
-        for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
+        for( auto iter = m_Poly.Iterate(); iter; iter++ )
         {
             if( aMirrorAroundXAxis )
-                MIRROR( m_PolyPoints[ii].y, aCentre.y );
+                MIRROR( iter->y, aCentre.y );
             else
-                MIRROR( m_PolyPoints[ii].x, aCentre.x );
+                MIRROR( iter->x, aCentre.x );
         }
     }
 
@@ -378,8 +386,8 @@ void EDGE_MODULE::Move( const wxPoint& aMoveVector )
     case S_POLYGON:
         // polygon corners coordinates are always relative to the
         // footprint position, orientation 0
-        for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
-            m_PolyPoints[ii] += aMoveVector;
+        for( auto iter = m_Poly.Iterate(); iter; iter++ )
+            *iter += VECTOR2I( aMoveVector );
     }
 
     SetDrawCoord();

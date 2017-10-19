@@ -634,7 +634,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     module->GraphicalItemsList().PushFront( edge );
 
     // Get the corner buffer of the polygonal edge
-    std::vector<wxPoint>& polyPoints = edge->GetPolyPoints();
+    std::vector<wxPoint> polyPoints;
     polyPoints.reserve( PolyEdges.size() + 2 );
 
     // Init start point coord:
@@ -670,6 +670,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
         break;
     }
 
+    edge->SetPolyPoints( polyPoints );
     PolyEdges.clear();
     module->CalculateBoundingBox();
     GetBoard()->m_Status_Pcb = 0;

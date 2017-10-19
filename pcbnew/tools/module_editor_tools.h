@@ -82,6 +82,21 @@ public:
      */
     int ModuleEdgeOutlines( const TOOL_EVENT& aEvent );
 
+    /**
+     * Function CreatePadFromShapes()
+     *
+     * Creates a custom-shaped pad from a set of selected graphical shapes
+     */
+    int CreatePadFromShapes( const TOOL_EVENT& aEvent );
+
+    /**
+     * Function ExplodePadToShapes()
+     *
+     * Breaks apart a complex-shaped part into a set of graphical shapes
+     */
+    int ExplodePadToShapes( const TOOL_EVENT& aEvent );
+
+
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
