@@ -123,11 +123,11 @@ void SHAPE_LINE_CHAIN::Remove( int aStartIndex, int aEndIndex )
 }
 
 
-int SHAPE_LINE_CHAIN::Distance( const VECTOR2I& aP ) const
+int SHAPE_LINE_CHAIN::Distance( const VECTOR2I& aP, bool aOutlineOnly ) const
 {
     int d = INT_MAX;
 
-    if( IsClosed() && PointInside( aP ) )
+    if( IsClosed() && PointInside( aP ) && !aOutlineOnly )
         return 0;
 
     for( int s = 0; s < SegmentCount(); s++ )
@@ -611,4 +611,21 @@ const VECTOR2I SHAPE_LINE_CHAIN::PointAlong( int aPathLength ) const
     }
 
     return CPoint( -1 );
+}
+
+double SHAPE_LINE_CHAIN::Area() const
+{
+    if( !m_closed )
+        return 0.0;
+
+    double area = 0.0;
+    int size = m_points.size();
+
+    for( int i = 0, j = size - 1; i < size; ++i )
+    {
+        area += ( (double) m_points[j].x + m_points[i].x ) * ( (double) m_points[j].y - m_points[i].y );
+        j = i;
+    }
+
+    return -area * 0.5;
 }

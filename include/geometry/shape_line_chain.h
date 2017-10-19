@@ -299,7 +299,7 @@ public:
      * @param aP the point
      * @return minimum distance.
      */
-    int Distance( const VECTOR2I& aP ) const;
+    int Distance( const VECTOR2I& aP, bool aOutlineOnly = false ) const;
 
     /**
      * Function Reverse()
@@ -601,6 +601,8 @@ public:
     }
 
     const VECTOR2I PointAlong( int aPathLength ) const;
+
+    double Area() const;
 
 private:
     /// array of vertices
