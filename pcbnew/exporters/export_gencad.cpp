@@ -767,6 +767,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
         }
         else // individual shape for each component
         {
+            m_componentShapes[module] = module->GetReference();
             FootprintWriteShape( aFile, module, module->GetReference() );
         }
 
@@ -861,7 +862,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
         fprintf( aFile, "ROTATION %g\n",
                  fp_orient / 10.0 );
         fprintf( aFile, "SHAPE %s %s %s\n",
-                 TO_UTF8( individualShapes ? module->GetReference() : m_componentShapes[module] ),
+                 TO_UTF8( m_componentShapes[module] ),
                  mirror, flip );
 
         // Text on silk layer: RefDes and value (are they actually useful?)
