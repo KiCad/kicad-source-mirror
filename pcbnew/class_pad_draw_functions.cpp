@@ -402,11 +402,17 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             TransformShapeWithClearanceToPolygon( outline, aDrawInfo.m_PadClearance, SEGCOUNT, 1.0 );
 
             // Draw the polygon: Inflate creates only one convex polygon
-            SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
+            if( outline.OutlineCount() > 0 )
+            {
+                SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
 
-            GRClosedPoly( aClipBox, aDC, poly.PointCount(),
-                          (wxPoint*)&poly.Point( 0 ), false, 0,
-                          aDrawInfo.m_Color, aDrawInfo.m_Color );
+                if( poly.PointCount() > 0 )
+                {
+                    GRClosedPoly( aClipBox, aDC, poly.PointCount(),
+                                  (wxPoint*)&poly.Point( 0 ), false, 0,
+                                  aDrawInfo.m_Color, aDrawInfo.m_Color );
+                }
+            }
         }
         break;
 
@@ -434,11 +440,17 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             TransformRoundRectToPolygon( outline, shape_pos, size, GetOrientation(),
                                          corner_radius, 64 );
 
-            SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
+            if( outline.OutlineCount() > 0 )
+            {
+                SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
 
-            GRClosedPoly( aClipBox, aDC, poly.PointCount(),
-                          (wxPoint*)&poly.Point( 0 ), aDrawInfo.m_ShowPadFilled, 0,
-                          aDrawInfo.m_Color, aDrawInfo.m_Color );
+                if( poly.PointCount() > 0 )
+                {
+                    GRClosedPoly( aClipBox, aDC, poly.PointCount(),
+                                  (wxPoint*)&poly.Point( 0 ), aDrawInfo.m_ShowPadFilled, 0,
+                                  aDrawInfo.m_Color, aDrawInfo.m_Color );
+                }
+            }
         }
 
         if( aDrawInfo.m_PadClearance )
@@ -452,12 +464,18 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             TransformRoundRectToPolygon( outline, shape_pos, size, GetOrientation(),
                                      corner_radius, 32 );
 
-            // Draw the polygon: Inflate creates only one convex polygon
-            SHAPE_LINE_CHAIN& clearance_poly = outline.Outline( 0 );
+            if( outline.OutlineCount() > 0 )
+            {
+                // Draw the polygon: Inflate creates only one convex polygon
+                SHAPE_LINE_CHAIN& clearance_poly = outline.Outline( 0 );
 
-            GRClosedPoly( aClipBox, aDC, clearance_poly.PointCount(),
-                          (wxPoint*)&clearance_poly.Point( 0 ), false, 0,
-                          aDrawInfo.m_Color, aDrawInfo.m_Color );
+                if( clearance_poly.PointCount() > 0 )
+                {
+                    GRClosedPoly( aClipBox, aDC, clearance_poly.PointCount(),
+                                  (wxPoint*)&clearance_poly.Point( 0 ), false, 0,
+                                  aDrawInfo.m_Color, aDrawInfo.m_Color );
+                }
+            }
         }
     }
         break;
@@ -541,9 +559,12 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             {
                 poly = &clearance_outline.Outline( jj );
 
-                GRClosedPoly( aClipBox, aDC, poly->PointCount(),
-                              (wxPoint*)&poly->Point( 0 ), false, 0,
-                              aDrawInfo.m_Color, aDrawInfo.m_Color );
+                if( poly->PointCount() > 0 )
+                {
+                    GRClosedPoly( aClipBox, aDC, poly->PointCount(),
+                                  (wxPoint*)&poly->Point( 0 ), false, 0,
+                                  aDrawInfo.m_Color, aDrawInfo.m_Color );
+                }
             }
         }
         break;
