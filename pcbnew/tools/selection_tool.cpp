@@ -1263,7 +1263,8 @@ void SELECTION_TOOL::clearSelection()
 
     m_selection.Clear();
     m_selection.SetIsHover( false );
-
+    m_selection.ClearReferencePoint();
+    
     m_frame->SetCurItem( NULL );
     m_locked = true;
 
