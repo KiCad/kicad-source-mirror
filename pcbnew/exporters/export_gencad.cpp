@@ -207,6 +207,13 @@ static std::string GenCADLayerNameFlipped( int aCuCount, PCB_LAYER_ID aId )
 };
 
 
+static wxString escapeString( const wxString& aString )
+{
+    wxString copy( aString );
+    copy.Replace( "\"", "\\\"" );
+    return copy;
+}
+
 #endif
 
 static std::string fmt_mask( LSET aSet )
@@ -745,7 +752,6 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
             // certain components instances might have been modified on the board.
             // In such case the shape will be different despite the same LIB_ID.
             wxString shapeName = module->GetFPID().Format();
-            shapeName.Replace( " ", "_" );
 
             auto shapeIt = shapes.find( shapeName );
             size_t modHash = hashModule( module );
@@ -826,9 +832,9 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
 
             // Bottom side modules use the flipped padstack
             fprintf( aFile, ( flipBottomPads && module->GetFlag() ) ?
-                     "PIN %s PAD%dF %g %g %s %g %s\n" :
-                     "PIN %s PAD%d %g %g %s %g %s\n",
-                     TO_UTF8( pinname ), pad->GetSubRatsnest(),
+                     "PIN \"%s\" PAD%dF %g %g %s %g %s\n" :
+                     "PIN \"%s\" PAD%d %g %g %s %g %s\n",
+                     TO_UTF8( escapeString( pinname ) ), pad->GetSubRatsnest(),
                      pad->GetPos0().x / SCALE_FACTOR,
                      -pad->GetPos0().y / SCALE_FACTOR,
                      layer, orient / 10.0, mirror );
@@ -868,10 +874,10 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
             flip   = "0";
         }
 
-        fprintf( aFile, "\nCOMPONENT %s\n",
-                 TO_UTF8( module->GetReference() ) );
-        fprintf( aFile, "DEVICE DEV_%s\n",
-                 TO_UTF8( getShapeName( module ) ) );
+        fprintf( aFile, "\nCOMPONENT \"%s\"\n",
+                 TO_UTF8( escapeString( module->GetReference() ) ) );
+        fprintf( aFile, "DEVICE \"DEV_%s\"\n",
+                 TO_UTF8( escapeString( getShapeName( module ) ) ) );
         fprintf( aFile, "PLACE %g %g\n",
                  MapXTo( module->GetPosition().x ),
                  MapYTo( module->GetPosition().y ) );
@@ -879,8 +885,8 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
                  module->GetFlag() ? "BOTTOM" : "TOP" );
         fprintf( aFile, "ROTATION %g\n",
                  fp_orient / 10.0 );
-        fprintf( aFile, "SHAPE %s %s %s\n",
-                 TO_UTF8( getShapeName( module ) ),
+        fprintf( aFile, "SHAPE \"%s\" %s %s\n",
+                 TO_UTF8( escapeString( getShapeName( module ) ) ),
                  mirror, flip );
 
         // Text on silk layer: RefDes and value (are they actually useful?)
@@ -898,7 +904,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
                      txt_orient / 10.0,
                      mirror,
                      layer.c_str(),
-                     TO_UTF8( textmod->GetText() ) );
+                     TO_UTF8( escapeString( textmod->GetText() ) ) );
 
             // Please note, the width is approx
             fprintf( aFile, " 0 0 %g %g\n",
@@ -942,7 +948,7 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
         if( net->GetNet() <= 0 )  // dummy netlist (no connection)
             continue;
 
-        msg = wxT( "SIGNAL " ) + net->GetNetname();
+        msg = wxT( "SIGNAL \"" ) + escapeString( net->GetNetname() ) + "\"";
 
         fputs( TO_UTF8( msg ), aFile );
         fputs( "\n", aFile );
@@ -954,9 +960,9 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
                 if( pad->GetNetCode() != net->GetNet() )
                     continue;
 
-                msg.Printf( wxT( "NODE %s %s" ),
-                            GetChars( module->GetReference() ),
-                            GetChars( pad->GetName() ) );
+                msg.Printf( wxT( "NODE \"%s\" \"%s\"" ),
+                            GetChars( escapeString( module->GetReference() ) ),
+                            GetChars( escapeString( pad->GetName() ) ) );
 
                 fputs( TO_UTF8( msg ), aFile );
                 fputs( "\n", aFile );
@@ -1097,7 +1103,7 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb )
             else
                 netname = wxT( "_noname_" );
 
-            fprintf( aFile, "ROUTE %s\n", TO_UTF8( netname ) );
+            fprintf( aFile, "ROUTE \"%s\"\n", TO_UTF8( escapeString( netname ) ) );
         }
 
         if( old_width != track->GetWidth() )
@@ -1160,9 +1166,9 @@ static void CreateDevicesSection( FILE* aFile, BOARD* aPcb )
             continue;
 
         const MODULE* module = componentShape.first;
-        fprintf( aFile, "\nDEVICE \"DEV_%s\"\n", TO_UTF8( shapeName ) );
-        fprintf( aFile, "PART \"%s\"\n", TO_UTF8( module->GetValue() ) );
-        fprintf( aFile, "PACKAGE \"%s\"\n", module->GetFPID().Format().c_str() );
+        fprintf( aFile, "\nDEVICE \"DEV_%s\"\n", TO_UTF8( escapeString( shapeName ) ) );
+        fprintf( aFile, "PART \"%s\"\n", TO_UTF8( escapeString( module->GetValue() ) ) );
+        fprintf( aFile, "PACKAGE \"%s\"\n", TO_UTF8( escapeString( module->GetFPID().Format() ) ) );
 
         // The TYPE attribute is almost freeform
         const char* ty = "TH";
@@ -1287,7 +1293,7 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module, const wxString& aS
     EDA_ITEM*    PtStruct;
 
     /* creates header: */
-    fprintf( aFile, "\nSHAPE %s\n", TO_UTF8( aShapeName ) );
+    fprintf( aFile, "\nSHAPE \"%s\"\n", TO_UTF8( escapeString( aShapeName ) ) );
 
     if( module->GetAttributes() & MOD_VIRTUAL )
     {
