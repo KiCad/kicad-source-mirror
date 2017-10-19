@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-11 09:43+0200\n"
-"PO-Revision-Date: 2017-10-11 09:44+0200\n"
+"POT-Creation-Date: 2017-10-18 12:50+0200\n"
+"PO-Revision-Date: 2017-10-18 12:50+0200\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -200,6 +200,7 @@ msgstr "Eliminar alias"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:110
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:44
+#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:53
 #: eeschema/dialogs/dialog_sym_lib_table_base.cpp:144
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:85
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:146
@@ -210,6 +211,7 @@ msgstr "Subir"
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:113
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:674
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:47
+#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:56
 #: eeschema/dialogs/dialog_sym_lib_table_base.cpp:149
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:151
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:72
@@ -306,27 +308,13 @@ msgstr "Escala Y no válida"
 msgid "Invalid Z scale"
 msgstr "Escala Z no válida"
 
-#: 3d-viewer/3d_cache/sg/ifsg_api.cpp:133
-#: 3d-viewer/3d_cache/sg/ifsg_api.cpp:292
-#: 3d-viewer/3d_cache/sg/ifsg_api.cpp:371
-msgid "failed to open file"
-msgstr "no puede abrirse el archivo"
-
-#: 3d-viewer/3d_cache/sg/ifsg_api.cpp:161
-msgid "problems encountered writing file"
-msgstr "se han encontrado problemas al escribir el archivo"
-
-#: 3d-viewer/3d_cache/sg/ifsg_api.cpp:265
-msgid "file exists; not overwriting"
-msgstr "el archivo existe; no se sobreescribirá"
-
-#: 3d-viewer/3d_cache/sg/ifsg_api.cpp:278
-msgid "specified path is a directory"
-msgstr "la ruta especificada es una carpeta"
-
-#: 3d-viewer/3d_cache/sg/ifsg_api.cpp:340
+#: 3d-viewer/3d_cache/sg/ifsg_api.cpp:333
 msgid "no such file"
 msgstr "no existe el archivo"
+
+#: 3d-viewer/3d_cache/sg/ifsg_api.cpp:364
+msgid "failed to open file"
+msgstr "no puede abrirse el archivo"
 
 #: 3d-viewer/3d_canvas/cinfo3d_visu.cpp:446
 msgid "Build board body"
@@ -5162,8 +5150,7 @@ msgstr "&Tamaño:"
 msgid "Right"
 msgstr "Derecha"
 
-#: eeschema/dialogs/dialog_edit_label_base.cpp:70
-#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:53 eeschema/lib_pin.cpp:116
+#: eeschema/dialogs/dialog_edit_label_base.cpp:70 eeschema/lib_pin.cpp:116
 msgid "Up"
 msgstr "Arriba"
 
@@ -5175,8 +5162,7 @@ msgstr "Arriba"
 msgid "Left"
 msgstr "Izquierda"
 
-#: eeschema/dialogs/dialog_edit_label_base.cpp:70
-#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:56 eeschema/lib_pin.cpp:117
+#: eeschema/dialogs/dialog_edit_label_base.cpp:70 eeschema/lib_pin.cpp:117
 msgid "Down"
 msgstr "Abajo"
 
@@ -6921,8 +6907,8 @@ msgid "f"
 msgstr "f"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:85
-msgid "fempto"
-msgstr "fempto"
+msgid "femto"
+msgstr "femto"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:89
 msgid "1e-15"
@@ -27314,6 +27300,18 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importar archivo DXF"
+
+#~ msgid "fempto"
+#~ msgstr "fempto"
+
+#~ msgid "problems encountered writing file"
+#~ msgstr "se han encontrado problemas al escribir el archivo"
+
+#~ msgid "file exists; not overwriting"
+#~ msgstr "el archivo existe; no se sobreescribirá"
+
+#~ msgid "specified path is a directory"
+#~ msgstr "la ruta especificada es una carpeta"
 
 #~ msgid ""
 #~ "By default, command line runs with hidden console window and output is "
