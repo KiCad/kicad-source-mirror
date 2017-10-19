@@ -226,8 +226,25 @@ static bool individualShapes;
 // These are the export origin (the auxiliary axis)
 static int GencadOffsetX, GencadOffsetY;
 
-// Association between shapes and components
-static std::map<MODULE*, wxString> m_componentShapes;
+// Association between shape names (using shapeName index) and components
+static std::map<MODULE*, int> componentShapes;
+static std::map<int, wxString> shapeNames;
+
+static const wxString& getShapeName( MODULE* aModule )
+{
+    static const wxString invalid( "invalid" );
+
+    if( individualShapes )
+        return aModule->GetReference();
+
+    auto itShape = componentShapes.find( aModule );
+    wxCHECK( itShape != componentShapes.end(), invalid );
+
+    auto itName = shapeNames.find( itShape->second );
+    wxCHECK( itName != shapeNames.end(), invalid );
+
+    return itName->second;
+}
 
 // GerbTool chokes on units different than INCH so this is the conversion factor
 const static double SCALE_FACTOR = 1000.0 * IU_PER_MILS;
@@ -754,19 +771,19 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
                 if( shapeIt != shapes.end() && modHash == shapeIt->second )
                 {
                     // shape found, so reuse it
-                    m_componentShapes[module] = shapeName;
+                    componentShapes[module] = modHash;
                     continue;
                 }
             }
 
-            // output and store the hashed shape in the map
-            m_componentShapes[module] = shapeName;
+            // new shape
+            componentShapes[module] = modHash;
+            shapeNames[modHash] = shapeName;
             shapes[shapeName] = modHash;
             FootprintWriteShape( aFile, module, shapeName );
         }
         else // individual shape for each component
         {
-            m_componentShapes[module] = module->GetReference();
             FootprintWriteShape( aFile, module, module->GetReference() );
         }
 
@@ -851,7 +868,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
         fprintf( aFile, "\nCOMPONENT %s\n",
                  TO_UTF8( module->GetReference() ) );
         fprintf( aFile, "DEVICE DEV_%s\n",
-                 TO_UTF8( m_componentShapes[module] ) );
+                 TO_UTF8( getShapeName( module ) ) );
         fprintf( aFile, "PLACE %g %g\n",
                  MapXTo( module->GetPosition().x ),
                  MapYTo( module->GetPosition().y ) );
@@ -860,7 +877,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
         fprintf( aFile, "ROTATION %g\n",
                  fp_orient / 10.0 );
         fprintf( aFile, "SHAPE %s %s %s\n",
-                 TO_UTF8( m_componentShapes[module] ),
+                 TO_UTF8( getShapeName( module ) ),
                  mirror, flip );
 
         // Text on silk layer: RefDes and value (are they actually useful?)
@@ -1130,10 +1147,10 @@ static void CreateDevicesSection( FILE* aFile, BOARD* aPcb )
     std::set<wxString> emitted;
     fputs( "$DEVICES\n", aFile );
 
-    for( const auto& componentShape : m_componentShapes )
+    for( const auto& componentShape : componentShapes )
     {
+        const wxString& shapeName = shapeNames[componentShape.second];
         bool newDevice;
-        const wxString& shapeName = componentShape.second;
         std::tie( std::ignore, newDevice ) = emitted.insert( shapeName );
 
         if( !newDevice )        // do not repeat device definitions
