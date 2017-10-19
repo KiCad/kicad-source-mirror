@@ -352,6 +352,9 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
             module->SetFlag( 0 );
         }
     }
+
+    componentShapes.clear();
+    shapeNames.clear();
 }
 
 
