@@ -362,6 +362,7 @@ bool D_PAD::GetBestAnchorPosition( VECTOR2I& aPos )
     boost::optional<VECTOR2I> bestAnchor;
 
     for ( int y = 0; y < stepsY ; y++ )
+    {
         for ( int x = 0; x < stepsX; x++ )
         {
             VECTOR2I p = bbox.GetPosition();
@@ -383,12 +384,13 @@ bool D_PAD::GetBestAnchorPosition( VECTOR2I& aPos )
                 }
             }
         }
+    }
 
-        if ( bestAnchor )
-        {
-            aPos = *bestAnchor;
-            return true;
-        }
+    if ( bestAnchor )
+    {
+        aPos = *bestAnchor;
+        return true;
+    }
 
-        return false;
+    return false;
 }

@@ -1331,7 +1331,7 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
                             pin->SetNumberTextSize( 0 );
                         }
 
-                        for( int i = 0; i < pads.GetCount(); i++)
+                        for( unsigned i = 0; i < pads.GetCount(); i++)
                         {
                             LIB_PIN* apin = new LIB_PIN( *pin );
 
