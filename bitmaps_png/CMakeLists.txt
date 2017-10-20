@@ -173,6 +173,7 @@ set( BMAPS_MID
     copper_layers_setup
     cursor_shape
     cursor
+    custom_pad_to_primitives
     cut
     cvpcb
     dashline
@@ -431,6 +432,7 @@ set( BMAPS_MID
     post_drill
     post_module
     preference
+    primitives_to_custom_pad
     print_button
     ps_router
     ps_diff_pair

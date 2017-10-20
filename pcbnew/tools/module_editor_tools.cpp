@@ -61,11 +61,15 @@ TOOL_ACTION PCB_ACTIONS::placePad( "pcbnew.ModuleEditor.placePad",
 
 TOOL_ACTION PCB_ACTIONS::createPadFromShapes( "pcbnew.ModuleEditor.createPadFromShapes",
         AS_CONTEXT, 0,
-        _( "Create Pad from Selected Shapes" ), _( "Creates a custom-shaped pads from a set of selected shapes" ) );
+        _( "Create Pad from Selected Shapes" ),
+        _( "Creates a custom-shaped pads from a set of selected shapes" ),
+        primitives_to_custom_pad_xpm );
 
 TOOL_ACTION PCB_ACTIONS::explodePadToShapes( "pcbnew.ModuleEditor.explodePadToShapes",
         AS_CONTEXT, 0,
-        _( "Explode Selected Pad to Graphical Shapes" ), _( "Converts a custom-shaped pads to a set of graphical shapes" ) );
+        _( "Explode Selected Pad to Graphical Shapes" ),
+        _( "Converts a custom-shaped pads to a set of graphical shapes" ),
+        custom_pad_to_primitives_xpm );
 
 TOOL_ACTION PCB_ACTIONS::enumeratePads( "pcbnew.ModuleEditor.enumeratePads",
         AS_GLOBAL, 0,
