@@ -106,7 +106,9 @@ bool GERBER_JOBFILE_READER::ReadGerberJobFile()
         text.Trim( false );
 
         // Search for lines starting by '%', others are not usefull
-        if( text.StartsWith( "%TJ.L.", &data ) )
+        if( text.StartsWith( "%TJ.L.", &data )  // First job file syntax
+            || text.StartsWith( "%TJ.L_", &data )   // current job file syntax
+            )
         {
             parseTJLayerString( data );
             continue;

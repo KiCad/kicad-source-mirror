@@ -161,19 +161,19 @@ bool GERBER_JOBFILE_WRITER::CreateJobFile( const wxString& aFullFilename )
     fputs( "G04 Overall board parameters*\n", jobFile );
     // output the bord size in mm:
     EDA_RECT brect = m_pcb->GetBoardEdgesBoundingBox();
-    fprintf( jobFile, "%%TJ.B.Size.X,%.3f*%%\n", brect.GetWidth()*m_conversionUnits );
-    fprintf( jobFile, "%%TJ.B.Size.Y,%.3f*%%\n", brect.GetHeight()*m_conversionUnits );
+    fprintf( jobFile, "%%TJ.B_Size_X,%.3f*%%\n", brect.GetWidth()*m_conversionUnits );
+    fprintf( jobFile, "%%TJ.B_Size_Y,%.3f*%%\n", brect.GetHeight()*m_conversionUnits );
 
     // number of copper layers
-    fprintf( jobFile, "%%TJ.B.LayerNum,%d*%%\n", m_pcb->GetCopperLayerCount() );
+    fprintf( jobFile, "%%TJ.B_LayerNum,%d*%%\n", m_pcb->GetCopperLayerCount() );
 
     // Board thickness
-    fprintf( jobFile, "%%TJ.B.Overall.Thickness,%.3f*%%\n",
+    fprintf( jobFile, "%%TJ.B_Overall_Thickness,%.3f*%%\n",
              m_pcb->GetDesignSettings().GetBoardThickness()*m_conversionUnits );
 
-    fprintf( jobFile, "%%TJ.B.Legend.Present,%s*%%\n", sideKeyValue( hasSilkLayers() ) );
+    fprintf( jobFile, "%%TJ.B_Legend_Present,%s*%%\n", sideKeyValue( hasSilkLayers() ) );
 
-    fprintf( jobFile, "%%TJ.B.SolderMask.Present,%s*%%\n", sideKeyValue( hasSolderMasks() ) );
+    fprintf( jobFile, "%%TJ.B_SolderMask_Present,%s*%%\n", sideKeyValue( hasSolderMasks() ) );
 
     // Job file support a few design rules:
     fputs( "G04 board design rules*\n", jobFile );
@@ -211,23 +211,23 @@ bool GERBER_JOBFILE_WRITER::CreateJobFile( const wxString& aFullFilename )
     }
 
 
-    fprintf( jobFile, "%%TJ.D.PadToPad.Out,%.3f*%%\n", minPadClearanceOuter*m_conversionUnits );
+    fprintf( jobFile, "%%TJ.D_PadToPad_Out,%.3f*%%\n", minPadClearanceOuter*m_conversionUnits );
 
     if( hasInnerLayers )
-        fprintf( jobFile, "%%TJ.D.PadToPad.Inr,%.3f*%%\n", minPadClearanceInner*m_conversionUnits );
+        fprintf( jobFile, "%%TJ.D_PadToPad_Inr,%.3f*%%\n", minPadClearanceInner*m_conversionUnits );
 
-    fprintf( jobFile, "%%TJ.D.PadToTrack.Out,%.3f*%%\n", minPadClearanceOuter*m_conversionUnits );
+    fprintf( jobFile, "%%TJ.D_PadToTrack_Out,%.3f*%%\n", minPadClearanceOuter*m_conversionUnits );
 
     if( hasInnerLayers )
-        fprintf( jobFile, "%%TJ.D.PadToTrack.Inr,%.3f*%%\n", minPadClearanceInner*m_conversionUnits );
+        fprintf( jobFile, "%%TJ.D_PadToTrack_Inr,%.3f*%%\n", minPadClearanceInner*m_conversionUnits );
 
     // Until this is changed in Kicad, use the same value for internal tracks
     int minclearanceInner = minclearanceOuter;
 
-    fprintf( jobFile, "%%TJ.D.TrackToTrack.Out,%.3f*%%\n", minclearanceOuter*m_conversionUnits );
+    fprintf( jobFile, "%%TJ.D_TrackToTrack_Out,%.3f*%%\n", minclearanceOuter*m_conversionUnits );
 
     if( hasInnerLayers )
-        fprintf( jobFile, "%%TJ.D.TrackToTrack.Inr,%.3f*%%\n", minclearanceInner*m_conversionUnits );
+        fprintf( jobFile, "%%TJ.D_TrackToTrack_Inr,%.3f*%%\n", minclearanceInner*m_conversionUnits );
 
     // Output the minimal track width
     int mintrackWidthOuter = INT_MAX;
@@ -245,10 +245,10 @@ bool GERBER_JOBFILE_WRITER::CreateJobFile( const wxString& aFullFilename )
     }
 
     if( mintrackWidthOuter != INT_MAX )
-        fprintf( jobFile, "%%TJ.D.MinLineWidth.Out,%.3f*%%\n", mintrackWidthOuter*m_conversionUnits );
+        fprintf( jobFile, "%%TJ.D_MinLineWidth_Out,%.3f*%%\n", mintrackWidthOuter*m_conversionUnits );
 
     if( mintrackWidthInner != INT_MAX )
-        fprintf( jobFile, "%%TJ.D.MinLineWidth.Inr,%.3f*%%\n", mintrackWidthInner*m_conversionUnits );
+        fprintf( jobFile, "%%TJ.D_MinLineWidth_Inr,%.3f*%%\n", mintrackWidthInner*m_conversionUnits );
 
     // Output the minimal zone to xx clearance
     // Note: zones can have a zone clearance set to 0
@@ -272,16 +272,16 @@ bool GERBER_JOBFILE_WRITER::CreateJobFile( const wxString& aFullFilename )
     }
 
     if( minclearanceOuter != INT_MAX )
-        fprintf( jobFile, "%%TJ.D.TrackToRegion.Out,%.3f*%%\n", minclearanceOuter*m_conversionUnits );
+        fprintf( jobFile, "%%TJ.D_TrackToRegion_Out,%.3f*%%\n", minclearanceOuter*m_conversionUnits );
 
     if( hasInnerLayers && minclearanceInner != INT_MAX )
-        fprintf( jobFile, "%%TJ.D.TrackToRegion.Inr,%.3f*%%\n", minclearanceInner*m_conversionUnits );
+        fprintf( jobFile, "%%TJ.D_TrackToRegion_Inr,%.3f*%%\n", minclearanceInner*m_conversionUnits );
 
     if( minclearanceOuter != INT_MAX )
-        fprintf( jobFile, "%%TJ.D.RegionToRegion.Out,%.3f*%%\n", minclearanceOuter*m_conversionUnits );
+        fprintf( jobFile, "%%TJ.D_RegionToRegion_Out,%.3f*%%\n", minclearanceOuter*m_conversionUnits );
 
     if( hasInnerLayers && minclearanceInner != INT_MAX )
-        fprintf( jobFile, "%%TJ.D.RegionToRegion.Inr,%.3f*%%\n", minclearanceInner*m_conversionUnits );
+        fprintf( jobFile, "%%TJ.D_RegionToRegion_Inr,%.3f*%%\n", minclearanceInner*m_conversionUnits );
 
     // output the gerber file list:
     fputs( "G04 Layer Structure*\n", jobFile );
@@ -368,7 +368,7 @@ bool GERBER_JOBFILE_WRITER::CreateJobFile( const wxString& aFullFilename )
             // Only ASCII7 chars are accepted in gerber files. others must be converted to
             // a gerber hexa sequence.
             std::string strname = formatStringToGerber( name );
-            fprintf( jobFile, "%%TJ.L.\"%s\",%s,%s*%%\n", TO_UTF8( gbr_layer_id ),
+            fprintf( jobFile, "%%TJ.L_\"%s\",%s,%s*%%\n", TO_UTF8( gbr_layer_id ),
                      polarity, strname.c_str() );
         }
     }
