@@ -83,15 +83,23 @@ typedef MODULE_MAP::const_iterator    MODULE_CITER;
 
 /// Parse an eagle distance which is either mm, or mils if there is "mil" suffix.
 /// Return is in BIU.
-static double parseEagle( const wxString& aDistance )
+static int parseEagle( const wxString& aDistance )
 {
-    double ret = strtod( aDistance.c_str(), NULL );
-    if( aDistance.npos != aDistance.find( "mil" ) )
-        ret = IU_PER_MILS * ret;
-    else
-        ret = IU_PER_MM * ret;
+    ECOORD::UNIT unit = ( aDistance.npos != aDistance.find( "mil" ) )
+        ? ECOORD::UNIT::MIL : ECOORD::UNIT::MM;
 
-    return ret;
+    ECOORD coord( aDistance, unit );
+
+    return coord.ToPcbUnits();
+}
+
+
+/// Assemble a two part key as a simple concatenation of aFirst and aSecond parts,
+/// using a separator.
+static string makeKey( const string& aFirst, const string& aSecond )
+{
+    string key = aFirst + '\x02' +  aSecond;
+    return key;
 }
 
 
@@ -137,7 +145,6 @@ EAGLE_PLUGIN::EAGLE_PLUGIN() :
     m_mod_time( wxDateTime::Now() )
 {
     init( NULL );
-
     clear_cu_map();
 }
 
@@ -162,16 +169,10 @@ const wxString EAGLE_PLUGIN::GetFileExtension() const
 }
 
 
-int inline EAGLE_PLUGIN::kicad( double d ) const
-{
-    return KiROUND( biu_per_mm * d );
-}
-
-
-wxSize inline EAGLE_PLUGIN::kicad_fontz( double d ) const
+wxSize inline EAGLE_PLUGIN::kicad_fontz( const ECOORD& d ) const
 {
     // texts seem to better match eagle when scaled down by 0.95
-    int kz = kicad( d ) * 95 / 100;
+    int kz = d.ToPcbUnits() * 95 / 100;
     return wxSize( kz, kz );
 }
 
@@ -277,8 +278,6 @@ void EAGLE_PLUGIN::init( const PROPERTIES* aProperties )
     m_board = NULL;
     m_props = aProperties;
 
-    mm_per_biu = 1/IU_PER_MM;
-    biu_per_mm = IU_PER_MM;
 
     delete m_rules;
     m_rules = new ERULES();
@@ -354,19 +353,19 @@ void EAGLE_PLUGIN::loadDesignRules( wxXmlNode* aDesignRules )
 
 void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
 {
-    typedef std::vector<ELAYER>     ELAYERS;
-    typedef ELAYERS::const_iterator EITER;
-
-    ELAYERS     cu;  // copper layers
+    ELAYERS cu;  // copper layers
 
     // Get the first layer and iterate
     wxXmlNode* layerNode = aLayers->GetChildren();
 
-    // find the subset of layers that are copper, and active
+    m_eagleLayers.clear();
+
     while( layerNode )
     {
-        ELAYER  elayer( layerNode );
+        ELAYER elayer( layerNode );
+        m_eagleLayers.insert( std::make_pair( elayer.number, elayer ) );
 
+        // find the subset of layers that are copper and active
         if( elayer.number >= 1 && elayer.number <= 16 && ( !elayer.active || *elayer.active ) )
         {
             cu.push_back( elayer );
@@ -457,7 +456,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 }
                 else
                 {
-                    wxPoint center = kicad_arc_center( start, end, *w.curve);
+                    wxPoint center = ConvertArcCenter( start, end, *w.curve );
 
                     dseg->SetShape( S_ARC );
                     dseg->SetStart( center );
@@ -465,7 +464,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     dseg->SetAngle( *w.curve * -10.0 ); // KiCad rotates the other way
                 }
 
-                dseg->SetTimeStamp( timeStamp( gr ) );
+                dseg->SetTimeStamp( EagleTimeStamp( gr ) );
                 dseg->SetLayer( layer );
                 dseg->SetWidth( Millimeter2iu( DEFAULT_PCB_EDGE_THICKNESS ) );
             }
@@ -484,15 +483,15 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 m_board->Add( pcbtxt, ADD_APPEND );
 
                 pcbtxt->SetLayer( layer );
-                pcbtxt->SetTimeStamp( timeStamp( gr ) );
+                pcbtxt->SetTimeStamp( EagleTimeStamp( gr ) );
                 pcbtxt->SetText( FROM_UTF8( t.text.c_str() ) );
                 pcbtxt->SetTextPos( wxPoint( kicad_x( t.x ), kicad_y( t.y ) ) );
 
                 pcbtxt->SetTextSize( kicad_fontz( t.size ) );
 
-                double  ratio = t.ratio ? *t.ratio : 8;     // DTD says 8 is default
+                double ratio = t.ratio ? *t.ratio : 8;     // DTD says 8 is default
 
-                pcbtxt->SetThickness( kicad( t.size * ratio / 100 ) );
+                pcbtxt->SetThickness( t.size.ToPcbUnits() * ratio / 100 );
 
                 int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;
 
@@ -592,11 +591,11 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 m_board->Add( dseg, ADD_APPEND );
 
                 dseg->SetShape( S_CIRCLE );
-                dseg->SetTimeStamp( timeStamp( gr ) );
+                dseg->SetTimeStamp( EagleTimeStamp( gr ) );
                 dseg->SetLayer( layer );
                 dseg->SetStart( wxPoint( kicad_x( c.x ), kicad_y( c.y ) ) );
                 dseg->SetEnd( wxPoint( kicad_x( c.x + c.radius ), kicad_y( c.y ) ) );
-                dseg->SetWidth( kicad( c.width ) );
+                dseg->SetWidth( c.width.ToPcbUnits() );
             }
             m_xpath->pop();
         }
@@ -615,7 +614,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 ZONE_CONTAINER* zone = new ZONE_CONTAINER( m_board );
                 m_board->Add( zone, ADD_APPEND );
 
-                zone->SetTimeStamp( timeStamp( gr ) );
+                zone->SetTimeStamp( EagleTimeStamp( gr ) );
                 zone->SetLayer( layer );
                 zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
@@ -667,7 +666,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
             pad->SetPosition( padpos + module->GetPosition() );
             */
 
-            wxSize  sz( kicad( e.drill ), kicad( e.drill ) );
+            wxSize  sz( e.drill.ToPcbUnits(), e.drill.ToPcbUnits() );
 
             pad->SetDrillSize( sz );
             pad->SetSize( sz );
@@ -694,6 +693,24 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 DIMENSION* dimension = new DIMENSION( m_board );
                 m_board->Add( dimension, ADD_APPEND );
 
+                if( d.dimensionType )
+                {
+                    // Eagle dimension graphic arms may have different lengths, but they look
+                    // incorrect in KiCad (the graphic is tilted). Make them even lenght in such case.
+                    if( *d.dimensionType == "horizontal" )
+                    {
+                        int newY = ( d.y1.ToPcbUnits() + d.y2.ToPcbUnits() ) / 2;
+                        d.y1 = ECOORD( newY, ECOORD::UNIT::NM );
+                        d.y2 = ECOORD( newY, ECOORD::UNIT::NM );
+                    }
+                    else if( *d.dimensionType == "vertical" )
+                    {
+                        int newX = ( d.x1.ToPcbUnits() + d.x2.ToPcbUnits() ) / 2;
+                        d.x1 = ECOORD( newX, ECOORD::UNIT::NM );
+                        d.x2 = ECOORD( newX, ECOORD::UNIT::NM );
+                    }
+                }
+
                 dimension->SetLayer( layer );
                 // The origin and end are assumed to always be in this order from eagle
                 dimension->SetOrigin( wxPoint( kicad_x( d.x1 ), kicad_y( d.y1 ) ) );
@@ -713,8 +730,8 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 // because the "height" of the dimension is perpendicular to that axis
                 // Note the check is just if two axes are close enough to each other
                 // Eagle appears to have some rounding errors
-                if( fabs( d.x1 - d.x2 ) < 0.05 )
-                    dimension->SetHeight( kicad_x( d.x1 - d.x3 ) );
+                if( abs( ( d.x1 - d.x2 ).ToPcbUnits() ) < 50000 )   // 50000 nm = 0.05 mm
+                    dimension->SetHeight( kicad_x( d.x3 - d.x1 ) );
                 else
                     dimension->SetHeight( kicad_y( d.y3 - d.y1 ) );
 
@@ -871,18 +888,21 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
         refanceNamePresetInPackageLayout = true;
         valueNamePresetInPackageLayout = true;
         m->SetPosition( wxPoint( kicad_x( e.x ), kicad_y( e.y ) ) );
+
         // Is >NAME field set in package layout ?
         if( m->GetReference().size() == 0 )
         {
             m->Reference().SetVisible( false ); // No so no show
             refanceNamePresetInPackageLayout = false;
         }
+
         // Is >VALUE field set in package layout
         if( m->GetValue().size() == 0 )
         {
             m->Value().SetVisible( false );     // No so no show
             valueNamePresetInPackageLayout = false;
         }
+
         m->SetReference( FROM_UTF8( e.name.c_str() ) );
         m->SetValue( FROM_UTF8( e.value.c_str() ) );
 
@@ -890,6 +910,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
         { // Not smashed so show NAME & VALUE
             if( valueNamePresetInPackageLayout )
                 m->Value().SetVisible( true );  // Only if place holder in package layout
+
             if( refanceNamePresetInPackageLayout )
                 m->Reference().SetVisible( true );   // Only if place holder in package layout
         }
@@ -1084,7 +1105,7 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
                 ratio = *a.ratio;
         }
 
-        int  lw = int( fontz.y * ratio / 100.0 );
+        int  lw = int( fontz.y * ratio / 100 );
         txt->SetThickness( lw );
 
         int align = ETEXT::BOTTOM_LEFT;     // bottom-left is eagle default
@@ -1163,9 +1184,9 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
 
 MODULE* EAGLE_PLUGIN::makeModule( wxXmlNode* aPackage, const string& aPkgName ) const
 {
-    std::unique_ptr<MODULE>   m( new MODULE( m_board ) );
+    std::unique_ptr<MODULE> m( new MODULE( m_board ) );
 
-    m->SetFPID( LIB_ID( UTF8(aPkgName) ) );
+    m->SetFPID( LIB_ID( UTF8( aPkgName ) ) );
 
     // Get the first package item and iterate
     wxXmlNode* packageItem = aPackage->GetChildren();
@@ -1213,37 +1234,46 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
     EWIRE        w( aTree );
     PCB_LAYER_ID layer = kicad_layer( w.layer );
 
-    if( IsNonCopperLayer( layer ) )     // only valid non-copper wires, skip copper package wires
+    if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
-        wxPoint start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
-        wxPoint end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
-        int     width = kicad( w.width );
-
-        // FIXME: the cap attribute is ignored because kicad can't create lines
-        //        with flat ends.
-        EDGE_MODULE* dwg;
-        if( !w.curve )
-        {
-            dwg = new EDGE_MODULE( aModule, S_SEGMENT );
-
-            dwg->SetStart0( start );
-            dwg->SetEnd0( end );
-        }
-        else
-        {
-            dwg = new EDGE_MODULE( aModule, S_ARC );
-            wxPoint center = kicad_arc_center( start, end, *w.curve);
-
-            dwg->SetStart0( center );
-            dwg->SetEnd0( start );
-            dwg->SetAngle( *w.curve * -10.0 ); // KiCad rotates the other way
-        }
-
-        dwg->SetLayer( layer );
-        dwg->SetWidth( width );
-
-        aModule->GraphicalItemsList().PushBack( dwg );
+        wxLogMessage( wxString::Format(
+                    "Line on copper layer in package %s (%f mm, %f mm) (%f mm, %f mm)."
+                    "\nMoving to Dwgs.User layer",
+                    aModule->GetFPID().GetLibItemName().c_str(), w.x1.ToMm(), w.y1.ToMm(),
+                    w.x2.ToMm(), w.y2.ToMm() ) );
+        layer = Dwgs_User;
     }
+
+    wxPoint start( kicad_x( w.x1 ), kicad_y( w.y1 ) );
+    wxPoint end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
+    int     width = w.width.ToPcbUnits();
+
+    // FIXME: the cap attribute is ignored because kicad can't create lines
+    //        with flat ends.
+    EDGE_MODULE* dwg;
+
+    if( !w.curve )
+    {
+        dwg = new EDGE_MODULE( aModule, S_SEGMENT );
+
+        dwg->SetStart0( start );
+        dwg->SetEnd0( end );
+    }
+    else
+    {
+        dwg = new EDGE_MODULE( aModule, S_ARC );
+        wxPoint center = ConvertArcCenter( start, end, *w.curve );
+
+        dwg->SetStart0( center );
+        dwg->SetEnd0( start );
+        dwg->SetAngle( *w.curve * -10.0 ); // KiCad rotates the other way
+    }
+
+    dwg->SetLayer( layer );
+    dwg->SetWidth( width );
+    dwg->SetDrawCoord();
+
+    aModule->GraphicalItemsList().PushBack( dwg );
 }
 
 
@@ -1267,9 +1297,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
     RotatePoint( &padpos, aModule->GetOrientation() );
 
     pad->SetPosition( padpos + aModule->GetPosition() );
-
-    pad->SetDrillSize( wxSize( kicad( e.drill ), kicad( e.drill ) ) );
-
+    pad->SetDrillSize( wxSize( e.drill.ToPcbUnits(), e.drill.ToPcbUnits() ) );
     pad->SetLayerSet( LSET::AllCuMask().set( B_Mask ).set( F_Mask ) );
 
     if( e.shape )
@@ -1305,7 +1333,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
 
     if( e.diameter )
     {
-        int diameter = kicad( *e.diameter );
+        int diameter = e.diameter->ToPcbUnits();
         pad->SetSize( wxSize( diameter, diameter ) );
     }
     else
@@ -1340,6 +1368,14 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
     ETEXT        t( aTree );
     PCB_LAYER_ID layer = kicad_layer( t.layer );
 
+    if( IsCopperLayer( layer ) )  // skip copper texts
+    {
+        wxLogMessage( wxString::Format(
+                "Unsupported text on copper layer in package %s.\nMoving to Dwgs.User layer.",
+                aModule->GetFPID().GetLibItemName().c_str() ) );
+        layer = Dwgs_User;
+    }
+
     if( layer == UNDEFINED_LAYER )
     {
         layer = Cmts_User;
@@ -1358,7 +1394,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
         aModule->GraphicalItemsList().PushBack( txt );
     }
 
-    txt->SetTimeStamp( timeStamp( aTree ) );
+    txt->SetTimeStamp( EagleTimeStamp( aTree ) );
     txt->SetText( FROM_UTF8( t.text.c_str() ) );
 
     wxPoint pos( kicad_x( t.x ), kicad_y( t.y ) );
@@ -1371,7 +1407,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
 
     double ratio = t.ratio ? *t.ratio : 8;  // DTD says 8 is default
 
-    txt->SetThickness( kicad( t.size * ratio / 100 ) );
+    txt->SetThickness( t.size.ToPcbUnits() * ratio / 100 );
 
     int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;  // bottom-left is eagle default
 
@@ -1446,31 +1482,44 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
     ERECT        r( aTree );
     PCB_LAYER_ID layer = kicad_layer( r.layer );
 
-    if( IsNonCopperLayer( layer ) )  // skip copper "package.rectangle"s
+    // Rectangles are not supported yet in footprints as they are not editable.
+    wxLogMessage( wxString::Format( "Unsupported rectangle in package %s"
+                " (%f mm, %f mm) (%f mm, %f mm), layer: %s",
+            aModule->GetFPID().GetLibItemName().c_str(), r.x1.ToMm(), r.y1.ToMm(),
+            r.x2.ToMm(), r.y2.ToMm(), eagle_layer_name( r.layer ) ) );
+
+    return;
+
+    if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
-        EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
-        aModule->GraphicalItemsList().PushBack( dwg );
-
-        dwg->SetLayer( layer );
-        dwg->SetWidth( 0 );
-
-        dwg->SetTimeStamp( timeStamp( aTree ) );
-
-        std::vector<wxPoint> pts;
-
-        wxPoint start( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ) );
-        wxPoint end(   wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ) );
-
-        pts.push_back( start );
-        pts.push_back( wxPoint( kicad_x( r.x2 ), kicad_y( r.y1 ) ) );
-        pts.push_back( wxPoint( kicad_x( r.x2 ), kicad_y( r.y2 ) ) );
-        pts.push_back( end );
-
-        dwg->SetPolyPoints( pts );
-
-        dwg->SetStart0( start );
-        dwg->SetEnd0( end );
+        wxLogMessage( wxString::Format(
+                "Unsupported rectangle on copper layer in package %s.\nMoving to Dwgs.User layer.",
+                aModule->GetFPID().GetLibItemName().c_str() ) );
+        layer = Dwgs_User;
     }
+
+    EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
+    aModule->GraphicalItemsList().PushBack( dwg );
+
+    dwg->SetLayer( layer );
+    dwg->SetWidth( 0 );
+
+    dwg->SetTimeStamp( EagleTimeStamp( aTree ) );
+
+    std::vector<wxPoint> pts;
+
+    wxPoint start( wxPoint( kicad_x( r.x1 ), kicad_y( r.y1 ) ) );
+    wxPoint end(   wxPoint( kicad_x( r.x1 ), kicad_y( r.y2 ) ) );
+
+    pts.push_back( start );
+    pts.push_back( wxPoint( kicad_x( r.x2 ), kicad_y( r.y1 ) ) );
+    pts.push_back( wxPoint( kicad_x( r.x2 ), kicad_y( r.y2 ) ) );
+    pts.push_back( end );
+
+    dwg->SetPolyPoints( pts );
+
+    dwg->SetStart0( start );
+    dwg->SetEnd0( end );
 }
 
 
@@ -1479,53 +1528,46 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
     EPOLYGON    p( aTree );
     PCB_LAYER_ID    layer = kicad_layer( p.layer );
 
-    if( IsNonCopperLayer( layer ) )  // skip copper "package.rectangle"s
+    if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
-        EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
-        aModule->GraphicalItemsList().PushBack( dwg );
-
-        dwg->SetWidth( 0 );     // it's filled, no need for boundary width
-
-        /*
-        switch( layer )
-        {
-        case Eco1_User:    layer = F_SilkS; break;
-        case Eco2_User:    layer = B_SilkS;  break;
-
-        // all MODULE templates (created from eagle packages) are on front layer
-        // until cloned.
-        case Cmts_User: layer = F_SilkS; break;
-        }
-        */
-
-        dwg->SetLayer( layer );
-
-        dwg->SetTimeStamp( timeStamp( aTree ) );
-
-        std::vector<wxPoint> pts;
-        // TODO: I think there's no way to know a priori the number of children in wxXmlNode :()
-        // pts.reserve( aTree.size() );
-
-        // Get the first vertex and iterate
-        wxXmlNode* vertex = aTree->GetChildren();
-
-        while( vertex )
-        {
-            if( vertex->GetName() != "vertex" )     // skip <xmlattr> node
-                continue;
-
-            EVERTEX v( vertex );
-
-            pts.push_back( wxPoint( kicad_x( v.x ), kicad_y( v.y ) ) );
-
-            vertex = vertex->GetNext();
-        }
-
-        dwg->SetPolyPoints( pts );
-
-        dwg->SetStart0( *pts.begin() );
-        dwg->SetEnd0( pts.back() );
+        wxLogMessage( wxString::Format(
+                "Unsupported polygon on copper layer in package %s.\nMoving to Dwgs.User layer.",
+                aModule->GetFPID().GetLibItemName().c_str() ) );
+        layer = Dwgs_User;
     }
+
+    EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
+    aModule->GraphicalItemsList().PushBack( dwg );
+
+    dwg->SetWidth( 0 );     // it's filled, no need for boundary width
+
+    dwg->SetLayer( layer );
+
+    dwg->SetTimeStamp( EagleTimeStamp( aTree ) );
+
+    std::vector<wxPoint> pts;
+    // TODO: I think there's no way to know a priori the number of children in wxXmlNode :()
+    // pts.reserve( aTree.size() );
+
+    // Get the first vertex and iterate
+    wxXmlNode* vertex = aTree->GetChildren();
+
+    while( vertex )
+    {
+        if( vertex->GetName() != "vertex" )     // skip <xmlattr> node
+            continue;
+
+        EVERTEX v( vertex );
+
+        pts.push_back( wxPoint( kicad_x( v.x ), kicad_y( v.y ) ) );
+
+        vertex = vertex->GetNext();
+    }
+
+    dwg->SetPolyPoints( pts );
+    dwg->SetStart0( *pts.begin() );
+    dwg->SetEnd0( pts.back() );
+    dwg->SetDrawCoord();
 }
 
 
@@ -1533,11 +1575,20 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
 {
     ECIRCLE         e( aTree );
     PCB_LAYER_ID    layer = kicad_layer( e.layer );
+
+    if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
+    {
+        wxLogMessage( wxString::Format(
+                "Unsupported circle on copper layer in package %s.\nMoving to Dwgs.User layer.",
+                aModule->GetFPID().GetLibItemName().c_str() ) );
+        layer = Dwgs_User;
+    }
+
     EDGE_MODULE*    gr = new EDGE_MODULE( aModule, S_CIRCLE );
 
     aModule->GraphicalItemsList().PushBack( gr );
 
-    gr->SetWidth( kicad( e.width ) );
+    gr->SetWidth( e.width.ToPcbUnits() );
 
     switch( (int) layer )
     {
@@ -1551,10 +1602,10 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
     }
 
     gr->SetLayer( layer );
-    gr->SetTimeStamp( timeStamp( aTree ) );
-
+    gr->SetTimeStamp( EagleTimeStamp( aTree ) );
     gr->SetStart0( wxPoint( kicad_x( e.x ), kicad_y( e.y ) ) );
     gr->SetEnd0( wxPoint( kicad_x( e.x + e.radius ), kicad_y( e.y ) ) );
+    gr->SetDrawCoord();
 }
 
 
@@ -1579,7 +1630,7 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, wxXmlNode* aTree ) const
     pad->SetPos0( padpos );
     pad->SetPosition( padpos + aModule->GetPosition() );
 
-    wxSize  sz( kicad( e.drill ), kicad( e.drill ) );
+    wxSize  sz( e.drill.ToPcbUnits(), e.drill.ToPcbUnits() );
 
     pad->SetDrillSize( sz );
     pad->SetSize( sz );
@@ -1616,7 +1667,7 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
 
     pad->SetPosition( padpos + aModule->GetPosition() );
 
-    pad->SetSize( wxSize( kicad( e.dx ), kicad( e.dy ) ) );
+    pad->SetSize( wxSize( e.dx.ToPcbUnits(), e.dy.ToPcbUnits() ) );
 
     pad->SetLayer( layer );
 
@@ -1703,12 +1754,12 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                 {
                     TRACK*  t = new TRACK( m_board );
 
-                    t->SetTimeStamp( timeStamp( netItem ) );
+                    t->SetTimeStamp( EagleTimeStamp( netItem ) );
 
                     t->SetPosition( wxPoint( kicad_x( w.x1 ), kicad_y( w.y1 ) ) );
                     t->SetEnd( wxPoint( kicad_x( w.x2 ), kicad_y( w.y2 ) ) );
 
-                    int width = kicad( w.width );
+                    int width = w.width.ToPcbUnits();
                     if( width < m_min_trace )
                         m_min_trace = width;
 
@@ -1738,7 +1789,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     IsCopperLayer( layer_back_most ) )
                 {
                     int  kidiam;
-                    int  drillz = kicad( v.drill );
+                    int  drillz = v.drill.ToPcbUnits();
                     VIA* via = new VIA( m_board );
                     m_board->m_Track.Insert( via, NULL );
 
@@ -1746,7 +1797,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                     if( v.diam )
                     {
-                        kidiam = kicad( *v.diam );
+                        kidiam = v.diam->ToPcbUnits();
                         via->SetWidth( kidiam );
                     }
                     else
@@ -1781,7 +1832,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     else
                         via->SetViaType( VIA_BLIND_BURIED );
 
-                    via->SetTimeStamp( timeStamp( netItem ) );
+                    via->SetTimeStamp( EagleTimeStamp( netItem ) );
 
                     wxPoint pos( kicad_x( v.x ), kicad_y( v.y ) );
 
@@ -1827,7 +1878,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     m_board->Add( zone, ADD_APPEND );
                     zones.push_back( zone );
 
-                    zone->SetTimeStamp( timeStamp( netItem ) );
+                    zone->SetTimeStamp( EagleTimeStamp( netItem ) );
                     zone->SetLayer( layer );
                     zone->SetNetCode( netCode );
 
@@ -1863,14 +1914,14 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
                     // clearances, etc.
                     zone->SetArcSegmentCount( 32 );     // @todo: should be a constructor default?
-                    zone->SetMinThickness( kicad( p.width ) );
+                    zone->SetMinThickness( p.width.ToPcbUnits() );
 
                     // FIXME: KiCad zones have very rounded corners compared to eagle.
                     //        This means that isolation amounts that work well in eagle
                     //        tend to make copper intrude in soldermask free areas around pads.
                     if( p.isolate )
                     {
-                        zone->SetZoneClearance( kicad( *p.isolate ) );
+                        zone->SetZoneClearance( p.isolate->ToPcbUnits() );
                     } else
                     {
                         zone->SetZoneClearance( 0 );
@@ -1885,8 +1936,8 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                         //        based on what the zone is connecting to.
                         //        (i.e. width of spoke is half of the smaller side of an smd pad)
                         //        This is a basic workaround
-                        zone->SetThermalReliefGap( kicad( p.width + 0.05 ) );
-                        zone->SetThermalReliefCopperBridge( kicad( p.width + 0.05 ) );
+                        zone->SetThermalReliefGap( p.width.ToPcbUnits() + 50000 ); // 50000nm == 0.05mm
+                        zone->SetThermalReliefCopperBridge( p.width.ToPcbUnits() + 50000 );
                     }
 
                     int rank = p.rank ? (p.max_priority - *p.rank) : p.max_priority;
@@ -1975,13 +2026,21 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         case EAGLE_LAYER::HOLES:
         default:
             // some layers do not map to KiCad
-            wxLogMessage( wxString::Format( "Unsupported Eagle layer %d. Use drawings layer",
-                                            aEagleLayer ) );
+            wxLogMessage( wxString::Format( "Unsupported Eagle layer '%s' (%d), converted to Dwgs.User layer",
+                    eagle_layer_name( aEagleLayer ), aEagleLayer ) );
             kiLayer = Dwgs_User;      break;
         }
     }
 
     return PCB_LAYER_ID( kiLayer );
+}
+
+
+const string& EAGLE_PLUGIN::eagle_layer_name( int aLayer ) const
+{
+    static const string unknown( "unknown" );
+    auto it = m_eagleLayers.find( aLayer );
+    return it == m_eagleLayers.end() ? unknown : it->second.name;
 }
 
 

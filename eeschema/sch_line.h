@@ -143,6 +143,8 @@ public:
 
     void Plot( PLOTTER* aPlotter ) override;
 
+    wxPoint MidPoint();
+
     EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)

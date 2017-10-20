@@ -611,7 +611,7 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
     else
         m_Parent->SetNetListerCommand( wxEmptyString );
 
-    m_Parent->CreateNetlist( currPage->m_IdNetType, fullpath, netlist_opt );
+    m_Parent->CreateNetlist( currPage->m_IdNetType, fullpath, netlist_opt, NULL, false );
 
     WriteCurrentNetlistSetup();
 
@@ -689,7 +689,7 @@ void NETLIST_DIALOG::RunSimulator( wxCommandEvent& event )
         netlist_opt |= NET_ADJUST_PASSIVE_VALS;
 
     if( ! m_Parent->CreateNetlist( currPage->m_IdNetType, fn.GetFullPath(),
-                                   netlist_opt ) )
+                                   netlist_opt, NULL, false ) )
         return;
 
     ExecuteFile( this, ExecFile, CommandLine );
@@ -878,4 +878,3 @@ int InvokeDialogNetList( SCH_EDIT_FRAME* aCaller )
 
     return dlg.ShowModal();
 }
-

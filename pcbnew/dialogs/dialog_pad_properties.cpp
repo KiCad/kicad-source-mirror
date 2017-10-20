@@ -38,6 +38,7 @@
 #include <pcbnew.h>
 #include <wxBasePcbFrame.h>
 #include <base_units.h>
+#include <unit_format.h>
 #include <board_commit.h>
 
 #include <class_board.h>

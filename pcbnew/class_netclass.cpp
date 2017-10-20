@@ -33,6 +33,10 @@
 #include <class_board.h>
 #include <class_netclass.h>
 
+/// Abbrevation for fomatting internal units to a string.
+#define FMT_IU     BOARD_ITEM::FormatInternalUnits
+#define FMT_ANGLE  BOARD_ITEM::FormatAngle
+
 
 // This will get mapped to "kicad_default" in the specctra_export.
 const char NETCLASS::Default[] = "Default";

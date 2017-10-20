@@ -35,20 +35,7 @@
 #include <class_drawpanel.h>     // EDA_DRAW_PANEL
 
 #include <basic_gal.h>
-
-// Conversion to application internal units defined at build time.
-#if defined( PCBNEW )
-    #include <class_board_item.h>       // for FMT_IU
-#elif defined( EESCHEMA )
-    #include <sch_item_struct.h>        // for FMT_IU
-#elif defined( GERBVIEW )
-#elif defined( PL_EDITOR )
-    #include <base_units.h>
-    #define FMT_IU Double2Str
-#else
-#error "Cannot resolve units formatting due to no definition of EESCHEMA or PCBNEW."
-#endif
-
+#include <unit_format.h>
 #include <convert_to_biu.h>
 
 EDA_TEXT::EDA_TEXT( const wxString& text ) :

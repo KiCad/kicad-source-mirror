@@ -47,6 +47,7 @@
 #include <project_rescue.h>
 #include <eeschema_config.h>
 #include <sch_legacy_plugin.h>
+#include <sch_eagle_plugin.h>
 
 
 //#define USE_SCH_LEGACY_IO_PLUGIN
@@ -190,8 +191,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 {
     // implement the pseudo code from KIWAY_PLAYER.h:
 
-    SCH_SCREENS screenList;
-
     // This is for python:
     if( aFileSet.size() != 1 )
     {
@@ -216,34 +215,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         return false;
     }
 
-    // Save any currently open and modified project files.
-    for( SCH_SCREEN* screen = screenList.GetFirst(); screen; screen = screenList.GetNext() )
-    {
-        if( screen->IsModify() )
-        {
-            int response = YesNoCancelDialog( this, _(
-                "The current schematic has been modified.  Do you wish to save the changes?" ),
-                wxEmptyString,
-                _( "Save and Load" ),
-                _( "Load Without Saving" )
-                );
-
-            if( response == wxID_CANCEL )
-            {
-                return false;
-            }
-            else if( response == wxID_YES )
-            {
-                wxCommandEvent dummy;
-                OnSaveProject( dummy );
-            }
-            else
-            {
-                // response == wxID_NO, fall thru
-            }
-            break;
-        }
-    }
+    if( !AskToSaveChanges() )
+        return false;
 
     wxFileName pro = fullFileName;
     pro.SetExt( ProjectFileExtension );
@@ -314,7 +287,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     {
         delete g_RootSheet;   // Delete the current project.
         g_RootSheet = NULL;   // Force CreateScreens() to build new empty project on load failure.
-
         SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
 
         try
@@ -399,7 +371,7 @@ bool SCH_EDIT_FRAME::AppendOneEEProject()
     // open file chooser dialog
     wxString path = wxPathOnly( Prj().GetProjectFullName() );
 
-    wxFileDialog dlg( this, _( "Import Schematic" ), path,
+    wxFileDialog dlg( this, _( "Append Schematic" ), path,
                       wxEmptyString, SchematicFileWildcard,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
@@ -533,6 +505,25 @@ void SCH_EDIT_FRAME::OnAppendProject( wxCommandEvent& event )
 }
 
 
+void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
+{
+    if( !AskToSaveChanges() )
+        return;
+
+    wxString path = wxPathOnly( Prj().GetProjectFullName() );
+
+    wxFileDialog dlg( this, _( "Import Schematic" ), path,
+                      wxEmptyString, EagleSchematicFileWildcard,
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    // For now there is only one import plugin
+    ImportFile( dlg.GetPath(), SCH_IO_MGR::SCH_EAGLE );
+}
+
+
 void SCH_EDIT_FRAME::OnSaveProject( wxCommandEvent& aEvent )
 {
     SCH_SCREEN* screen;
@@ -605,4 +596,119 @@ bool SCH_EDIT_FRAME::doAutoSave()
         m_autoSaveState = false;
 
     return autoSaveOk;
+}
+
+
+bool SCH_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
+{
+    wxString fullFileName( aFileName );
+
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi;
+    wxString projectpath;
+    wxFileName newfilename;
+    SCH_SHEET_LIST sheetList( g_RootSheet );
+    SCH_SCREENS schematic;
+
+    switch( (SCH_IO_MGR::SCH_FILE_T) aFileType )
+    {
+        case SCH_IO_MGR::SCH_EAGLE:
+            // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
+            wxASSERT_MSG( wxFileName( fullFileName ).IsAbsolute(),
+                    wxT( "Import eagle schematic caller didn't send full filename" ) );
+
+            if( !LockFile( fullFileName ) )
+            {
+                wxString msg = wxString::Format( _( "Schematic file '%s' is already open." ),
+                        GetChars( fullFileName ) );
+                DisplayError( this, msg );
+                return false;
+            }
+
+            try
+            {
+                pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ) );
+                g_RootSheet = pi->Load( fullFileName, &Kiway() );
+
+                projectpath = Kiway().Prj().GetProjectPath();
+                newfilename = Prj().AbsolutePath( Prj().GetProjectName() );
+                newfilename.SetExt( SchematicFileExtension );
+
+                m_CurrentSheet->clear();
+                m_CurrentSheet->push_back( g_RootSheet );
+                SetScreen( m_CurrentSheet->LastScreen() );
+
+                g_RootSheet->SetFileName( newfilename.GetFullPath() );
+                GetScreen()->SetFileName( newfilename.GetFullPath() );
+                GetScreen()->SetModify();
+
+                UpdateFileHistory( fullFileName );
+                schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
+                GetScreen()->TestDanglingEnds();    // Only perform the dangling end test on root sheet.
+
+                GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
+                Zoom_Automatique( false );
+                SetSheetNumberAndCount();
+                m_canvas->Refresh( true );
+                UpdateTitle();
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                // Do not leave g_RootSheet == NULL because it is expected to be
+                // a valid sheet. Therefore create a dummy empty root sheet and screen.
+                CreateScreens();
+                Zoom_Automatique( false );
+
+                wxString msg;
+                msg.Printf( _( "Error loading schematic file '%s'.\n%s" ),
+                            GetChars( fullFileName ), GetChars( ioe.What() ) );
+                DisplayError( this, msg );
+
+                msg.Printf( _( "Failed to load '%s'" ), GetChars( fullFileName ) );
+                AppendMsgPanel( wxEmptyString, msg, CYAN );
+
+                return false;
+            }
+
+            return true;
+
+        default:
+            return false;
+    }
+
+    return false;
+}
+
+
+bool SCH_EDIT_FRAME::AskToSaveChanges()
+{
+    SCH_SCREENS screenList;
+
+    // Save any currently open and modified project files.
+    for( SCH_SCREEN* screen = screenList.GetFirst(); screen; screen = screenList.GetNext() )
+    {
+        if( screen->IsModify() )
+        {
+            int response = YesNoCancelDialog( m_parent, _(
+                "The current schematic has been modified.  Do you wish to save the changes?" ),
+                wxEmptyString,
+                _( "Save and Load" ),
+                _( "Load Without Saving" )
+                );
+
+            if( response == wxID_CANCEL )
+            {
+                return false;
+            }
+            else if( response == wxID_YES )
+            {
+                wxCommandEvent dummy;
+                OnSaveProject( dummy );
+            }
+            // else wxID_NO, so do not save
+
+            break;
+        }
+    }
+
+    return true;
 }

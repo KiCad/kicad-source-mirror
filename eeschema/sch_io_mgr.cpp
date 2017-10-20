@@ -25,6 +25,7 @@
 
 #include <sch_io_mgr.h>
 #include <sch_legacy_plugin.h>
+#include <sch_eagle_plugin.h>
 
 #include <wildcards_and_files_ext.h>
 
@@ -54,6 +55,8 @@ SCH_PLUGIN* SCH_IO_MGR::FindPlugin( SCH_FILE_T aFileType )
     {
     case SCH_LEGACY:
         return new SCH_LEGACY_PLUGIN();
+    case SCH_EAGLE:
+        return new SCH_EAGLE_PLUGIN();
     case SCH_KICAD:
         return NULL;
     }
@@ -85,6 +88,9 @@ const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aType )
 
     case SCH_LEGACY:
         return wxString( wxT( "Legacy" ) );
+
+    case SCH_EAGLE:
+	   return wxString( wxT( "EAGLE" ) );
     }
 }
 
@@ -97,6 +103,8 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::EnumFromStr( const wxString& aType )
 
     if( aType == wxT( "Legacy" ) )
         return SCH_LEGACY;
+    else if( aType == wxT( "EAGLE" ) )
+        return SCH_EAGLE;
 
     // wxASSERT( blow up here )
 
@@ -162,3 +170,6 @@ void SCH_IO_MGR::Save( SCH_FILE_T aFileType, const wxString& aFileName,
 
     THROW_IO_ERROR( wxString::Format( FMT_NOTFOUND, ShowType( aFileType ).GetData() ) );
 }
+
+
+DECLARE_ENUM_VECTOR( SCH_IO_MGR, SCH_FILE_T );

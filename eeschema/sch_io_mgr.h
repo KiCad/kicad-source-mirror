@@ -24,7 +24,9 @@
  */
 
 #include <richio.h>
+#include <import_export.h>
 #include <map>
+#include <enum_vector.h>
 
 
 class SCH_SHEET;
@@ -49,15 +51,16 @@ public:
      * A set of file types that the #SCH_IO_MGR knows about, and for which there
      * has been a plugin written.
      */
-    enum SCH_FILE_T
+    DEFINE_ENUM_VECTOR( SCH_FILE_T,
     {
         SCH_LEGACY,      ///< Legacy Eeschema file formats prior to s-expression.
         SCH_KICAD,       ///< The s-expression version of the schematic file formats.
+        SCH_EAGLE,       ///< Autodesk Eagle file format
         // Add your schematic type here.
 
         // ALTIUM,
         // etc.
-    };
+    } );
 
     /**
      * Return a #SCH_PLUGIN which the caller can use to import, export, save, or load
@@ -72,6 +75,7 @@ public:
      * @return the plugin corresponding to aFileType or NULL if not found.
      *  Caller owns the returned object, and must call PluginRelease when done using it.
      */
+    APIEXPORT
     static SCH_PLUGIN* FindPlugin( SCH_FILE_T aFileType );
 
     /**
@@ -480,6 +484,14 @@ public:
      *   #SCH_PLUGIN, which has been avoided to date.
      */
     virtual void SymbolLibOptions( PROPERTIES* aListToAppendTo ) const;
+
+    /**
+     * Function CheckHeader
+     * returns true if the first line in @a aFileName begins with the expected header
+     * @param aFileName is the name of the file to use as input
+     *
+     */
+    virtual bool CheckHeader( const wxString& aFileName );
 
     //-----</PUBLIC SCH_PLUGIN API>------------------------------------------------
 

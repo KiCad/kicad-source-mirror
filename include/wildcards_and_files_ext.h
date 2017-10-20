@@ -88,6 +88,8 @@ extern const wxString CsvFileWildcard;
 extern const wxString LegacyPcbFileWildcard;
 extern const wxString PcbFileWildcard;
 extern const wxString EaglePcbFileWildcard;
+extern const wxString EagleSchematicFileWildcard;
+extern const wxString EagleFilesWildcard;
 extern const wxString PCadPcbFileWildcard;
 extern const wxString PdfFileWildcard;
 extern const wxString PSFileWildcard;

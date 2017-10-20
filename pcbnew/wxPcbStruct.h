@@ -30,10 +30,10 @@
 #define  WXPCB_STRUCT_H_
 
 
-#include <pcb_base_edit_frame.h>
-#include <config_params.h>
-#include <class_undoredo_container.h>
-#include <zones.h>
+#include "pcb_base_edit_frame.h"
+#include "config_params.h"
+#include "class_undoredo_container.h"
+#include "zones.h"
 
 
 /*  Forward declarations of classes. */
@@ -865,6 +865,14 @@ public:
     bool AppendBoardFile( const wxString& aFullFileName, int aCtl );
 
     /**
+     * Function ImportFile
+     *  load the given filename but sets the path to the current project path.
+     *  @param full filepath of file to be imported.
+     *  @param aFileType PCB_FILE_T value for filetype
+     */
+    bool ImportFile( const wxString& aFileName, int aFileType ) override;
+
+    /**
      * Function SavePcbFile
      * writes the board data structures to \a a aFileName
      * Creates backup when requested and update flags (modified and saved flgs)
@@ -933,8 +941,12 @@ public:
      *              This lib should be in fp lib table, and is type is .pretty
      *              false: save modules in a new lib. It it is an existing lib,
      *              previous footprints will be removed
+     *
+     * @param aLibName:
+     *              optional library name to create, stops dialog call.
+     *              must be called with aStoreInNewLib as true
      */
-    void ArchiveModulesOnBoard( bool aStoreInNewLib );
+    void ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString& aLibName = wxEmptyString );
 
     /**
      * Function RecreateBOMFileFromBoard
@@ -1546,7 +1558,7 @@ public:
                          bool             aDeleteExtraFootprints,
                          bool             aSelectByTimestamp,
                          bool             aDeleteSinglePadNets,
-                         bool             aIsDryRun );
+                         bool             aIsDryRun ) override;
 
     /**
      * Function RemoveMisConnectedTracks

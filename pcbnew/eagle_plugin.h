@@ -125,8 +125,11 @@ public:
     ~EAGLE_PLUGIN();
 
 private:
+    typedef std::vector<ELAYER>     ELAYERS;
+    typedef ELAYERS::const_iterator EITER;
 
     int         m_cu_map[17];       ///< map eagle to kicad, cu layers only.
+    std::map<int, ELAYER> m_eagleLayers; ///< Eagle layers data stored by the layer number
 
     ERULES*     m_rules;            ///< Eagle design rules.
     XPATH*      m_xpath;            ///< keeps track of what we are working on within
@@ -148,9 +151,6 @@ private:
     int         m_min_via;          ///< smallest via we find on Load(), in BIU.
     int         m_min_via_hole;     ///< smallest via diameter hole we find on Load(), in BIU.
 
-    double      mm_per_biu;         ///< how many mm in each BIU
-    double      biu_per_mm;         ///< how many bius in a mm
-
     wxString    m_lib_path;
     wxDateTime  m_mod_time;
 
@@ -160,20 +160,17 @@ private:
     void    clear_cu_map();
 
     /// Convert an Eagle distance to a KiCad distance.
-    int     kicad( double d ) const;
-    int     kicad_y( double y ) const       { return -kicad( y ); }
-    int     kicad_x( double x ) const       { return kicad( x ); }
+    int     kicad_y( const ECOORD& y ) const       { return -y.ToPcbUnits(); }
+    int     kicad_x( const ECOORD& x ) const       { return x.ToPcbUnits(); }
 
     /// create a font size (fontz) from an eagle font size scalar
-    wxSize  kicad_fontz( double d ) const;
+    wxSize  kicad_fontz( const ECOORD& d ) const;
 
     /// Convert an Eagle layer to a KiCad layer.
     PCB_LAYER_ID kicad_layer( int aLayer ) const;
 
-    /// Convert a KiCad distance to an Eagle distance.
-    double  eagle( BIU d ) const            { return mm_per_biu * d; }
-    double  eagle_x( BIU x ) const          { return eagle( x ); }
-    double  eagle_y( BIU y ) const          { return eagle( y ); }
+    /// Get Eagle layer name by its number
+    const std::string& eagle_layer_name( int aLayer ) const;
 
     /// This PLUGIN only caches one footprint library, this determines which one.
     void    cacheLib( const wxString& aLibraryPath );

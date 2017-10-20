@@ -54,7 +54,7 @@ public:
     }
 
     FP_LIB_TABLE_ROW() :
-        type( IO_MGR::KICAD )
+        type( IO_MGR::KICAD_SEXP )
     {
     }
 

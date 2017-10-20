@@ -598,3 +598,9 @@ void SCH_LINE::SetPosition( const wxPoint& aPosition )
     m_end = m_end - ( m_start - aPosition );
     m_start = aPosition;
 }
+
+
+wxPoint SCH_LINE::MidPoint()
+{
+    return wxPoint( ( m_start.x + m_end.x ) / 2, ( m_start.y + m_end.y ) / 2 );
+}

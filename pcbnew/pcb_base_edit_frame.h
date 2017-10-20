@@ -52,14 +52,16 @@ public:
 
     /**
      * Function CreateNewLibrary
-     * prompts user for a library path, then creates a new footprint library at that
-     * location.  If library exists, user is warned about that, and is given a chance
+     * If a library name is given, creates a new footprint library in the project folder
+     * with the given name. If no library name is given it prompts user for a library path,
+     * then creates a new footprint library at that location.
+     * If library exists, user is warned about that, and is given a chance
      * to abort the new creation, and in that case existing library is first deleted.
      *
      * @return wxString - the newly created library path if library was successfully
      *   created, else wxEmptyString because user aborted or error.
      */
-    wxString CreateNewLibrary();
+    wxString CreateNewLibrary(const wxString& aLibName = wxEmptyString);
 
     /**
      * Function OnEditItemRequest

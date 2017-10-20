@@ -78,10 +78,6 @@ class LIB_ARC : public LIB_ITEM
      */
     void calcEdit( const wxPoint& aPosition ) override;
 
-    /**
-     * Calculate the radius and angle of an arc using the start, end, and center points.
-     */
-    void calcRadiusAngles();
 
 public:
     LIB_ARC( LIB_PART * aParent );
@@ -152,6 +148,12 @@ public:
     void SetStart( const wxPoint& aPoint ) { m_ArcStart = aPoint; }
 
     void SetEnd( const wxPoint& aPoint ) { m_ArcEnd = aPoint; }
+
+    /**
+     * Calculate the radius and angle of an arc using the start, end, and center points.
+     */
+    void CalcRadiusAngles();
+
 
     wxString GetSelectMenuText() const override;
 

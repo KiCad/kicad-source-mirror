@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012-2016 KiCad Developers, see AUTHORS.txt for contributors.
- * Copyright (C) 2017 CERN.
+ * Copyright (C) 2017 CERN
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -44,9 +44,20 @@
 using std::string;
 
 class MODULE;
+struct EINSTANCE;
+struct EPART;
+struct ETEXT;
 
-typedef std::unordered_map< string,  wxXmlNode* > NODE_MAP;
-typedef std::map< string, MODULE* > MODULE_MAP;
+typedef std::unordered_map<string, wxXmlNode*> NODE_MAP;
+typedef std::map<string, MODULE*> MODULE_MAP;
+typedef std::map<string, EINSTANCE*> EINSTANCE_MAP;
+typedef std::map<string, std::unique_ptr<EPART>> EPART_MAP;
+
+static inline wxXmlNode* getChildrenNodes( NODE_MAP& aMap, const string& aName )
+{
+    auto it = aMap.find( aName );
+    return it == aMap.end() ? nullptr : it->second->GetChildren();
+}
 
 
 /**
@@ -98,7 +109,7 @@ struct TRIPLET
  */
 class XPATH
 {
-    std::vector<TRIPLET>    p;
+    std::vector<TRIPLET> p;
 
 public:
     void push( const char* aPathSegment, const char* aAttribute="" )
@@ -336,14 +347,34 @@ public:
     }
 };
 
+
+/**
+ * Function MapChildren
+ * provides an easy access to the children of an XML node via their names.
+ * @param  currentNode is a pointer to a wxXmlNode, whose children will be mapped.
+ * @return NODE_MAP - a map linking the name of each children to the children itself (via a
+ *                  wxXmlNode*)
+ */
+NODE_MAP MapChildren( wxXmlNode* aCurrentNode );
+
+/// Make a unique time stamp
+unsigned long EagleTimeStamp( wxXmlNode* aTree );
+
+/// Computes module timestamp basing on its name, value and unit
+time_t EagleModuleTstamp( const string& aName, const string& aValue, int aUnit );
+
+/// Convert an Eagle curve end to a KiCad center for S_ARC
+wxPoint ConvertArcCenter( const wxPoint& aStart, const wxPoint& aEnd, double aAngle );
+
 // Pre-declare for typedefs
 struct EROT;
-
+struct ECOORD;
 typedef OPTIONAL_XML_ATTRIBUTE<string>  opt_string;
 typedef OPTIONAL_XML_ATTRIBUTE<int>     opt_int;
 typedef OPTIONAL_XML_ATTRIBUTE<double>  opt_double;
 typedef OPTIONAL_XML_ATTRIBUTE<bool>    opt_bool;
 typedef OPTIONAL_XML_ATTRIBUTE<EROT>    opt_erot;
+typedef OPTIONAL_XML_ATTRIBUTE<ECOORD>  opt_ecoord;
 
 
 // All of the 'E'STRUCTS below merely hold Eagle XML information verbatim, in binary.
@@ -352,14 +383,78 @@ typedef OPTIONAL_XML_ATTRIBUTE<EROT>    opt_erot;
 // forms of information in these 'E'STRUCTS.  They are only binary forms
 // of the Eagle information in the corresponding Eagle XML nodes.
 
+// Eagle coordinates
+struct ECOORD
+{
+    enum UNIT
+    {
+        NM,     ///< nanometers
+        MM,     ///< millimeters
+        INCH,   ///< inches
+        MIL,    ///< mils/thous
+    };
+
+    ///> Value expressed in nanometers
+    long long int value;
+
+    ///> Unit used for the value field
+    static constexpr UNIT ECOORD_UNIT = NM;
+
+    ECOORD()
+        : value( 0 )
+    {
+    }
+
+    ECOORD( int aValue, enum UNIT aUnit )
+        : value( ToNanoMeters( aValue, aUnit ) )
+    {
+    }
+
+    ECOORD( const wxString& aValue, enum UNIT aUnit );
+
+    int ToSchUnits() const
+    {
+        // mils
+        return value / 25400;
+    }
+
+    int ToPcbUnits() const
+    {
+        // nanometers
+        return value;
+    }
+
+    float ToMm() const
+    {
+        return value / 1000000.0;
+    }
+
+    ECOORD operator+( const ECOORD& aOther ) const
+    {
+        return ECOORD( value + aOther.value, ECOORD_UNIT );
+    }
+
+    ECOORD operator-( const ECOORD& aOther ) const
+    {
+        return ECOORD( value - aOther.value, ECOORD_UNIT );
+    }
+
+    bool operator==( const ECOORD& aOther ) const
+    {
+        return value == aOther.value;
+    }
+
+    static long long int ToNanoMeters( int aValue, enum UNIT aUnit );
+};
+
 
 /// Eagle net
 struct ENET
 {
-    int         netcode;
-    std::string netname;
+    int     netcode;
+    string  netname;
 
-    ENET( int aNetCode, const std::string& aNetName ) :
+    ENET( int aNetCode, const string& aNetName ) :
         netcode( aNetCode ),
         netname( aNetName )
     {}
@@ -394,11 +489,11 @@ struct EROT
 /// Eagle wire
 struct EWIRE
 {
-    double     x1;
-    double     y1;
-    double     x2;
-    double     y2;
-    double     width;
+    ECOORD     x1;
+    ECOORD     y1;
+    ECOORD     x2;
+    ECOORD     y2;
+    ECOORD     width;
     LAYER_NUM  layer;
 
     // for style: (continuous | longdash | shortdash | dashdot)
@@ -422,15 +517,40 @@ struct EWIRE
 };
 
 
+/// Eagle Junction
+struct EJUNCTION
+{
+    ECOORD     x;
+    ECOORD     y;
+
+    EJUNCTION( wxXmlNode* aJunction);
+};
+
+
+/// Eagle label
+struct ELABEL
+{
+    ECOORD     x;
+    ECOORD     y;
+    ECOORD     size;
+    LAYER_NUM  layer;
+    opt_erot rot;
+    opt_string xref;
+    wxString netname;
+
+    ELABEL( wxXmlNode* aLabel, const wxString& aNetName );
+};
+
+
 /// Eagle via
 struct EVIA
 {
-    double     x;
-    double     y;
+    ECOORD     x;
+    ECOORD     y;
     int        layer_front_most;   /// < extent
     int        layer_back_most;    /// < inclusive
-    double     drill;
-    opt_double diam;
+    ECOORD     drill;
+    opt_ecoord diam;
     opt_string shape;
 
     EVIA( wxXmlNode* aVia );
@@ -440,10 +560,10 @@ struct EVIA
 /// Eagle circle
 struct ECIRCLE
 {
-    double    x;
-    double    y;
-    double    radius;
-    double    width;
+    ECOORD    x;
+    ECOORD    y;
+    ECOORD    radius;
+    ECOORD    width;
     LAYER_NUM layer;
 
     ECIRCLE( wxXmlNode* aCircle );
@@ -453,10 +573,10 @@ struct ECIRCLE
 /// Eagle XML rectangle in binary
 struct ERECT
 {
-    double   x1;
-    double   y1;
-    double   x2;
-    double   y2;
+    ECOORD   x1;
+    ECOORD   y1;
+    ECOORD   x2;
+    ECOORD   y2;
     int      layer;
     opt_erot rot;
 
@@ -474,9 +594,9 @@ struct EATTR
 {
     string     name;
     opt_string value;
-    opt_double x;
-    opt_double y;
-    opt_double size;
+    opt_ecoord x;
+    opt_ecoord y;
+    opt_ecoord size;
     opt_int    layer;
     opt_double ratio;
     opt_erot   rot;
@@ -488,6 +608,7 @@ struct EATTR
         BOTH,
     };
     opt_int     display;
+    opt_int     align;
 
     EATTR( wxXmlNode* aTree );
     EATTR() {}
@@ -497,12 +618,12 @@ struct EATTR
 /// Eagle dimension element
 struct EDIMENSION
 {
-    double x1;
-    double y1;
-    double x2;
-    double y2;
-    double x3;
-    double y3;
+    ECOORD x1;
+    ECOORD y1;
+    ECOORD x2;
+    ECOORD y2;
+    ECOORD x3;
+    ECOORD y3;
     int    layer;
 
     opt_string dimensionType;
@@ -515,9 +636,9 @@ struct EDIMENSION
 struct ETEXT
 {
     string     text;
-    double     x;
-    double     y;
-    double     size;
+    ECOORD     x;
+    ECOORD     y;
+    ECOORD     size;
     int        layer;
     opt_string font;
     opt_double ratio;
@@ -537,9 +658,12 @@ struct ETEXT
         BOTTOM_RIGHT  = -TOP_LEFT,
     };
 
-    opt_int     align;
+    opt_int align;
 
     ETEXT( wxXmlNode* aText );
+
+    /// Calculate text size based on font type and size
+    wxSize ConvertSize() const;
 };
 
 
@@ -547,10 +671,10 @@ struct ETEXT
 struct EPAD
 {
     string     name;
-    double     x;
-    double     y;
-    double     drill;
-    opt_double diameter;
+    ECOORD     x;
+    ECOORD     y;
+    ECOORD     drill;
+    opt_ecoord diameter;
 
     // for shape: (square | round | octagon | long | offset)
     enum {
@@ -574,10 +698,10 @@ struct EPAD
 struct ESMD
 {
     string   name;
-    double   x;
-    double   y;
-    double   dx;
-    double   dy;
+    ECOORD   x;
+    ECOORD   y;
+    ECOORD   dx;
+    ECOORD   dy;
     int      layer;
     opt_int  roundness;
     opt_erot rot;
@@ -589,11 +713,29 @@ struct ESMD
 };
 
 
+/// Eagle pin element
+struct EPIN
+{
+    string   name;
+    ECOORD   x;
+    ECOORD   y;
+
+    opt_string visible;
+    opt_string length;
+    opt_string direction;
+    opt_string function;
+    opt_int swaplevel;
+    opt_erot rot;
+
+    EPIN( wxXmlNode* aPin );
+};
+
+
 /// Eagle vertex
 struct EVERTEX
 {
-    double      x;
-    double      y;
+    ECOORD      x;
+    ECOORD      y;
 
     EVERTEX( wxXmlNode* aVertex );
 };
@@ -602,9 +744,9 @@ struct EVERTEX
 /// Eagle polygon, without vertices which are parsed as needed
 struct EPOLYGON
 {
-    double     width;
+    ECOORD     width;
     int        layer;
-    opt_double spacing;
+    opt_ecoord spacing;
 
     // KiCad priority is opposite of Eagle rank, that is:
     //  - Eagle Low rank drawn first
@@ -619,7 +761,7 @@ struct EPOLYGON
         CUTOUT,
     };
     int        pour;
-    opt_double isolate;
+    opt_ecoord isolate;
     opt_bool   orphans;
     opt_bool   thermals;
     opt_int    rank;
@@ -631,9 +773,9 @@ struct EPOLYGON
 /// Eagle hole element
 struct EHOLE
 {
-    double x;
-    double y;
-    double drill;
+    ECOORD x;
+    ECOORD y;
+    ECOORD drill;
 
     EHOLE( wxXmlNode* aHole );
 };
@@ -646,8 +788,8 @@ struct EELEMENT
     string   library;
     string   package;
     string   value;
-    double   x;
-    double   y;
+    ECOORD   x;
+    ECOORD   y;
     opt_bool locked;
     opt_bool smashed;
     opt_erot rot;
@@ -738,23 +880,151 @@ struct EAGLE_LAYER
     };
 };
 
-/**
- * Function MapChildren
- * provides an easy access to the children of an XML node via their names.
- * @param  currentNode is a pointer to a wxXmlNode, whose children will be mapped.
- * @return NODE_MAP - a map linking the name of each children to the children itself (via a
- *                  wxXmlNode*)
- */
-NODE_MAP MapChildren( wxXmlNode* currentNode );
 
-/// Assemble a two part key as a simple concatenation of aFirst and aSecond parts,
-/// using a separator.
-string makeKey( const string& aFirst, const string& aSecond );
+struct EPART
+{
+    /*
+     *  <!ELEMENT part (attribute*, variant*)>
+     *  <!ATTLIST part
+     *  name          %String;       #REQUIRED
+     *  library       %String;       #REQUIRED
+     *  deviceset     %String;       #REQUIRED
+     *  device        %String;       #REQUIRED
+     *  technology    %String;       ""
+     *  value         %String;       #IMPLIED
+     *  >
+     */
 
-/// Make a unique time stamp
-unsigned long timeStamp( wxXmlNode* aTree );
+    string name;
+    string library;
+    string deviceset;
+    string device;
+    opt_string technology;
+    opt_string value;
 
-/// Convert an Eagle curve end to a KiCad center for S_ARC
-wxPoint kicad_arc_center( const wxPoint& aStart, const wxPoint& aEnd, double aAngle );
+    EPART( wxXmlNode* aPart );
+};
+
+
+struct EINSTANCE
+{
+    /*
+     *  <!ELEMENT instance (attribute)*>
+     *  <!ATTLIST instance
+     *     part          %String;       #REQUIRED
+     *     gate          %String;       #REQUIRED
+     *     x             %Coord;        #REQUIRED
+     *     y             %Coord;        #REQUIRED
+     *     smashed       %Bool;         "no"
+     *     rot           %Rotation;     "R0"
+     *     >
+     */
+
+    string  part;
+    string  gate;
+    ECOORD  x;
+    ECOORD  y;
+    opt_bool    smashed;
+    opt_erot    rot;
+
+    EINSTANCE( wxXmlNode* aInstance );
+};
+
+
+struct EGATE
+{
+    /*
+     *   <!ELEMENT gate EMPTY>
+     *   <!ATTLIST gate
+     *   name          %String;       #REQUIRED
+     *   symbol        %String;       #REQUIRED
+     *   x             %Coord;        #REQUIRED
+     *   y             %Coord;        #REQUIRED
+     *   addlevel      %GateAddLevel; "next"
+     *   swaplevel     %Int;          "0"
+     *   >
+     */
+
+    string  name;
+    string  symbol;
+
+    ECOORD  x;
+    ECOORD  y;
+
+    opt_int addlevel;
+    opt_int swaplevel;
+
+    enum
+    {
+        MUST,
+        CAN,
+        NEXT,
+        REQUEST,
+        ALWAYS
+    };
+
+    EGATE( wxXmlNode* aGate );
+};
+
+
+struct ECONNECT
+{
+    /*
+     *  <!ELEMENT connect EMPTY>
+     *  <!ATTLIST connect
+     *         gate          %String;       #REQUIRED
+     *         pin           %String;       #REQUIRED
+     *         pad           %String;       #REQUIRED
+     *         route         %ContactRoute; "all"
+     *         >
+     */
+    string  gate;
+    string  pin;
+    string  pad;
+    int contactroute;
+
+    ECONNECT( wxXmlNode* aConnect );
+};
+
+
+struct EDEVICE
+{
+    /*
+    <!ELEMENT device (connects?, technologies?)>
+    <!ATTLIST device
+              name          %String;       ""
+              package       %String;       #IMPLIED
+              >
+*/
+    string      name;
+    opt_string  package;
+
+    std::vector<ECONNECT> connects;
+
+    EDEVICE( wxXmlNode* aDevice );
+};
+
+
+struct EDEVICE_SET
+{
+    /*
+    <!ELEMENT deviceset (description?, gates, devices)>
+    <!ATTLIST deviceset
+              name          %String;       #REQUIRED
+              prefix        %String;       ""
+              uservalue     %Bool;         "no"
+              >
+    */
+
+    string name;
+    opt_string prefix;
+    opt_bool uservalue;
+    //std::vector<EDEVICE> devices;
+    //std::vector<EGATE> gates;
+
+
+    EDEVICE_SET( wxXmlNode* aDeviceSet );
+};
+
 
 #endif // _EAGLE_PARSER_H_

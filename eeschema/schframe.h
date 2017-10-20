@@ -532,7 +532,8 @@ public:
     bool CreateNetlist( int             aFormat,
                         const wxString& aFullFileName,
                         unsigned        aNetlistOptions,
-                        REPORTER*       aReporter = NULL );
+                        REPORTER*       aReporter = NULL,
+                        bool silent = false ) override;
 
     /**
      * Function  WriteNetListFile
@@ -784,6 +785,21 @@ public:
 
     bool IsSearchCacheObsolete( const SCH_FIND_REPLACE_DATA& aSearchCriteria );
 
+    /**
+     * Function ImportFile
+     *  load the given filename but sets the path to the current project path.
+     *  @param full filepath of file to be imported.
+     *  @param aFileType SCH_FILE_T value for filetype
+     */
+    bool ImportFile( const wxString& aFileName, int aFileType ) override;
+
+    /**
+     * Checks whether any of the screens has unsaved changes and asks the user
+     * whether to save or drop them.
+     * @return True if user decided to save or drop changes, false if the
+     * operation should be cancelled.
+     */
+    bool AskToSaveChanges();
 
 private:
 
@@ -868,6 +884,7 @@ private:
     void OnNewProject( wxCommandEvent& event );
     void OnLoadProject( wxCommandEvent& event );
     void OnAppendProject( wxCommandEvent& event );
+    void OnImportProject( wxCommandEvent& event );
     void OnOpenPcbnew( wxCommandEvent& event );
     void OnOpenPcbModuleEditor( wxCommandEvent& event );
     void OnOpenCvpcb( wxCommandEvent& event );

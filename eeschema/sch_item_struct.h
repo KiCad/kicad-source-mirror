@@ -51,8 +51,6 @@ typedef SCH_ITEMS::iterator SCH_ITEMS_ITR;
 typedef std::vector< SCH_ITEMS_ITR > SCH_ITEMS_ITRS;
 
 
-#define FMT_IU          SCH_ITEM::FormatInternalUnits
-#define FMT_ANGLE       SCH_ITEM::FormatAngle
 
 
 /**

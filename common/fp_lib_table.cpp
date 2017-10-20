@@ -52,7 +52,7 @@ void FP_LIB_TABLE_ROW::SetType( const wxString& aType )
     type = IO_MGR::EnumFromStr( aType );
 
     if( IO_MGR::PCB_FILE_T( -1 ) == type )
-        type = IO_MGR::KICAD;
+        type = IO_MGR::KICAD_SEXP;
 }
 
 

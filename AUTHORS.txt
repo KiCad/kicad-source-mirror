@@ -42,6 +42,7 @@ Cheng Sheng <chengsheng[at]google-dot-com> Google Inc.
 Kristoffer Ödmark <kristoffer.odmark90[at]gmail-dot-com>
 Oliver Walters <oliver.henry.walters[at]gmail-dot-com>
 Jon Evans <jon[at]craftyjon-dot-com>
+Russell Oliver <roliver8143[at]gmail-dot-com>
 
 See also CHANGELOG.txt for contributors.
 

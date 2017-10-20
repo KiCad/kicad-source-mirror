@@ -185,7 +185,7 @@ public:
 
         wxArrayString choices;
 
-        choices.Add( IO_MGR::ShowType( IO_MGR::KICAD ) );
+        choices.Add( IO_MGR::ShowType( IO_MGR::KICAD_SEXP ) );
         choices.Add( IO_MGR::ShowType( IO_MGR::GITHUB ) );
         choices.Add( IO_MGR::ShowType( IO_MGR::LEGACY ) );
         choices.Add( IO_MGR::ShowType( IO_MGR::EAGLE ) );

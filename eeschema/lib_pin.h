@@ -37,6 +37,7 @@ class SCH_COMPONENT;
 
 #include "pin_shape.h"
 #include "pin_type.h"
+#include "class_libentry.h"
 
 // Circle diameter drawn at the active end of pins:
 #define TARGET_PIN_RADIUS   12
@@ -362,7 +363,13 @@ public:
      * Return whether this pin forms an implicit power connection: i.e., is hidden
      * and of type POWER_IN.
      */
-    bool IsPowerConnection() const { return !IsVisible() && GetType() == PIN_POWER_IN; }
+    bool IsPowerConnection() const {
+
+        return (
+            ( !IsVisible() && GetType() == PIN_POWER_IN )
+            ||
+            ( (LIB_PART*)GetParent()->IsPower()  && GetType() == PIN_POWER_IN )
+        ) ; }
 
     int GetPenSize() const override;
 

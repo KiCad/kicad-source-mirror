@@ -65,7 +65,7 @@ PLUGIN* IO_MGR::PluginFind( PCB_FILE_T aFileType )
     case LEGACY:
         return new LEGACY_PLUGIN();
 
-    case KICAD:
+    case KICAD_SEXP:
         return new PCB_IO();
 
     case EAGLE:
@@ -116,7 +116,7 @@ const wxString IO_MGR::ShowType( PCB_FILE_T aType )
     case LEGACY:
         return wxString( wxT( "Legacy" ) );
 
-    case KICAD:
+    case KICAD_SEXP:
         return wxString( wxT( "KiCad" ) );
 
     case EAGLE:
@@ -141,7 +141,7 @@ IO_MGR::PCB_FILE_T IO_MGR::EnumFromStr( const wxString& aType )
     // library tables, so don't do change, only additions are ok.
 
     if( aType == wxT( "KiCad" ) )
-        return KICAD;
+        return KICAD_SEXP;
 
     if( aType == wxT( "Legacy" ) )
         return LEGACY;
@@ -181,7 +181,7 @@ const wxString IO_MGR::GetFileExtension( PCB_FILE_T aFileType )
 
 IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath )
 {
-    PCB_FILE_T  ret = KICAD;        // default guess, unless detected otherwise.
+    PCB_FILE_T  ret = KICAD_SEXP;        // default guess, unless detected otherwise.
     wxFileName  fn( aLibPath );
 
     if( fn.GetExt() == LegacyFootprintLibPathExtension )
@@ -209,7 +209,7 @@ IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath 
     else if( fn.GetExt() == KiCadFootprintLibPathExtension &&
              !aLibPath.StartsWith( wxT( "http" ) ) )
     {
-        ret = KICAD;
+        ret = KICAD_SEXP;
     }
     else
     {
@@ -254,4 +254,3 @@ void IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoar
 
     THROW_IO_ERROR( wxString::Format( FMT_NOTFOUND, ShowType( aFileType ).GetData() ) );
 }
-

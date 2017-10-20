@@ -37,6 +37,7 @@
 #include <macros.h>
 #include <wxBasePcbFrame.h>
 #include <base_units.h>
+#include <unit_format.h>
 #include <gr_basic.h>
 
 #include <class_board.h>
