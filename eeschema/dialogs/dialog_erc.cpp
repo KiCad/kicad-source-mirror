@@ -478,15 +478,6 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     // Erase all previous DRC markers.
     screens.DeleteAllMarkers( MARKER_BASE::MARKER_ERC );
 
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
-    {
-        /* Ff wire list has changed, delete Undo Redo list to avoid pointers on deleted
-         * data problems.
-         */
-        if( screen->SchematicCleanUp() )
-            screen->ClearUndoRedoList();
-    }
-
     /* Test duplicate sheet names inside a given sheet, one cannot have sheets with
      * duplicate names (file names can be duplicated).
      */

@@ -83,9 +83,6 @@ bool SCH_EDIT_FRAME::prepareForNetlist()
             return false;
     }
 
-    // Cleanup the entire hierarchy
-    schematic.SchematicCleanUp();
-
     return true;
 }
 
@@ -123,7 +120,6 @@ bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
         schematic.UpdateSymbolLinks();
         SCH_SHEET_LIST sheets( g_RootSheet );
         sheets.AnnotatePowerSymbols();
-        schematic.SchematicCleanUp();
     }
 
     std::unique_ptr<NETLIST_OBJECT_LIST> connectedItemsList( BuildNetListBase() );
