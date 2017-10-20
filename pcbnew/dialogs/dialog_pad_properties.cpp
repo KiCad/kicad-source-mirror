@@ -1005,6 +1005,21 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
                                 // is incorrect the offset prm is always seen as incorrect, even if it is 0
     }
 
+    if( m_dummyPad->GetLocalClearance() < 0 )
+    {
+        error_msgs.Add( _( "Pad local clearance must be zero or greater than zero" ) );
+    }
+
+    if( m_dummyPad->GetLocalSolderMaskMargin() < 0 )
+    {
+        error_msgs.Add( _( "Pad local solder mask clearance must be zero or greater than zero" ) );
+    }
+
+    if( m_dummyPad->GetLocalSolderPasteMargin() > 0 )
+    {
+        error_msgs.Add( _( "Pad local solder paste clearance must be zero or less than zero" ) );
+    }
+
     LSET padlayers_mask = m_dummyPad->GetLayerSet();
 
     if( padlayers_mask == 0 )
