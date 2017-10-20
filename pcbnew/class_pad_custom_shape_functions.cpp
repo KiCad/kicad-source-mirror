@@ -369,7 +369,7 @@ bool D_PAD::GetBestAnchorPosition( VECTOR2I& aPos )
         minDistEdge = std::max( GetSize().x, GetSize().y );
     }
 
-    boost::optional<VECTOR2I> bestAnchor;
+    auto bestAnchor( []()->boost::optional<VECTOR2I>{ return boost::none; }() );
 
     for ( int y = 0; y < stepsY ; y++ )
     {
