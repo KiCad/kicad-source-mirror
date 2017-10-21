@@ -36,6 +36,7 @@
 
 #include <class_pad.h>
 #include <class_drawsegment.h>
+#include <class_edge_mod.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/shape_rect.h>
 #include <geometry/convex_hull.h>
@@ -60,6 +61,15 @@ void PAD_CS_PRIMITIVE::ExportTo( DRAWSEGMENT* aTarget )
     aTarget->SetAngle( m_ArcAngle );
     aTarget->SetPolyPoints( m_Poly );
 }
+
+
+void PAD_CS_PRIMITIVE::ExportTo( EDGE_MODULE* aTarget )
+{
+    ExportTo( static_cast<DRAWSEGMENT*>( aTarget ) );
+    // Initialize coordinates specific to the EDGE_MODULE (m_Start0 and m_End0)
+    aTarget->SetLocalCoord();
+}
+
 
 /*
  * Has meaning only for free shape pads.

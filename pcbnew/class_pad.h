@@ -50,6 +50,7 @@ class LINE_READER;
 class EDA_3D_CANVAS;
 class EDA_DRAW_PANEL;
 class MODULE;
+class EDGE_MODULE;
 class TRACK;
 class MSG_PANEL_INFO;
 
@@ -114,6 +115,13 @@ public:
      * @param aTarget is the DRAWSEGMENT to initialize
      */
     void ExportTo( DRAWSEGMENT* aTarget );
+
+    /** Export the PAD_CS_PRIMITIVE parameters to a EDGE_MODULE
+     * useful to convert a primitive shape to a EDGE_MODULE shape for edition
+     * in footprint editor
+     * @param aTarget is the EDGE_MODULE to initialize
+     */
+    void ExportTo( EDGE_MODULE* aTarget );
 };
 
 

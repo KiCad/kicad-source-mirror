@@ -357,17 +357,10 @@ int MODULE_EDITOR_TOOLS::ExplodePadToShapes( const TOOL_EVENT& aEvent )
     {
         auto ds = new EDGE_MODULE( board()->m_Modules );
 
-        ds->SetLayer( pad->GetLayer() );
-        ds->SetShape( prim.m_Shape );
-        ds->SetStart( prim.m_Start + anchor );
-        ds->SetEnd( prim.m_End + anchor );
-        ds->SetWidth( prim.m_Thickness );
-
-        for( auto&p : prim.m_Poly )
-            p += anchor;
-
-        ds->SetPolyPoints( prim.m_Poly );
-        ds->SetAngle( prim.m_ArcAngle );
+        prim.ExportTo( ds );    // ExportTo exports to a DRAWSEGMENT
+        // Fix an arbitray draw layer for this EDGE_MODULE
+        ds->SetLayer( Dwgs_User ); //pad->GetLayer() );
+        ds->Move( anchor );
 
         commit.Add( ds );
     }
@@ -442,13 +435,18 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
 
     if( multipleRefPadsFound )
     {
-        DisplayErrorMessage( frame(), _("Cannot convert items to a custom-shaped pad: selection contains more than one reference pad. ") );
+        DisplayErrorMessage( frame(),
+            _(  "Cannot convert items to a custom-shaped pad:\n"
+                "selection contains more than one reference pad." ) );
         return 0;
     }
 
     if( illegalItemsFound )
     {
-        DisplayErrorMessage( frame(), _("Cannot convert items to a custom-shaped pad: selection contains unsupported items. Only graphical lines, circles, arcs and polygons are allowed.") );
+        DisplayErrorMessage( frame(),
+            _( "Cannot convert items to a custom-shaped pad:\n"
+               "selection contains unsupported items.\n"
+               "Only graphical lines, circles, arcs and polygons are allowed." ) );
         return 0;
     }
 
@@ -458,10 +456,12 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
     }
     else
     {
+        // Create a default pad anchor:
         pad->SetAnchorPadShape( PAD_SHAPE_CIRCLE );
         pad->SetAttribute( PAD_ATTRIB_SMD );
         pad->SetLayerSet( D_PAD::SMDMask() );
-        pad->SetSize ( wxSize( 10000, 10000 ) );
+        int radius = Millimeter2iu( 0.2 );
+        pad->SetSize ( wxSize( radius, radius ) );
         pad->IncrementPadName( true, true );
     }
 
@@ -483,7 +483,10 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
 
     if( !anchor )
     {
-        DisplayErrorMessage( frame(), _("Cannot convert items to a custom-shaped pad: unable to determine the anchor point position. Consider adding a small anchor pad to the selection and try again.") );
+        DisplayErrorMessage( frame(),
+            _( "Cannot convert items to a custom-shaped pad:\n"
+               "unable to determine the anchor point position.\n"
+               "Consider adding a small anchor pad to the selection and try again.") );
         return 0;
     }
 
