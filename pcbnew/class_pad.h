@@ -110,6 +110,12 @@ public:
     wxPoint GetCenter() { return m_Start; }     /// returns the center of a circle or arc
     wxPoint GetArcStart() { return m_End; }     /// returns the start point of an arc
 
+    // Geometric transform
+    /** Move the primitive
+     * @param aMoveVector is the deplacement vector
+     */
+    void Move( wxPoint aMoveVector );
+
     /** Export the PAD_CS_PRIMITIVE parameters to a DRAWSEGMENT
      * useful to draw a primitive shape
      * @param aTarget is the DRAWSEGMENT to initialize

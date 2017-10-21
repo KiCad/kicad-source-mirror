@@ -494,16 +494,7 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
     // relocate the shapes, they are relative to the anchor pad position
     for( auto& shape : shapes )
     {
-        shape.m_Start.x -= anchor->x;
-        shape.m_Start.y -= anchor->y;
-        shape.m_End.x -= anchor->x;
-        shape.m_End.y -= anchor->y;
-
-        for( auto&p : shape.m_Poly )
-        {
-            p.x -= anchor->x;
-            p.y -= anchor->y;
-        }
+        shape.Move( wxPoint( -anchor->x, -anchor->y ) );
     }
 
 
@@ -514,7 +505,9 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
 
     if( !result )
     {
-        DisplayErrorMessage( frame(), _("Cannot convert items to a custom-shaped pad: selected items do not form a single solid shape.") );
+        DisplayErrorMessage( frame(),
+                _( "Cannot convert items to a custom-shaped pad:\n"
+                   "selected items do not form a single solid shape.") );
         return 0;
     }
 
@@ -529,7 +522,7 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, padPtr );
 
-    commit.Push(_("Create Pad From Selected Shapes") );
+    commit.Push(_("Create Pad from Selected Shapes") );
 
     return 0;
 }

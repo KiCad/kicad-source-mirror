@@ -71,6 +71,18 @@ void PAD_CS_PRIMITIVE::ExportTo( EDGE_MODULE* aTarget )
 }
 
 
+void PAD_CS_PRIMITIVE::Move( wxPoint aMoveVector )
+{
+    m_Start += aMoveVector;
+    m_End   += aMoveVector;
+
+    for( auto& corner : m_Poly )
+    {
+        corner += aMoveVector;
+    }
+}
+
+
 /*
  * Has meaning only for free shape pads.
  * add a free shape to the shape list.
@@ -369,7 +381,8 @@ bool D_PAD::GetBestAnchorPosition( VECTOR2I& aPos )
         minDistEdge = std::max( GetSize().x, GetSize().y );
     }
 
-    auto bestAnchor( []()->boost::optional<VECTOR2I>{ return boost::none; }() );
+    boost::optional<VECTOR2I> bestAnchor( []()->
+                    boost::optional<VECTOR2I>{ return boost::none; }() );
 
     for ( int y = 0; y < stepsY ; y++ )
     {
