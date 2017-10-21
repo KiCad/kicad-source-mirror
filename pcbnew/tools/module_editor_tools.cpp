@@ -410,9 +410,7 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
                 shape.m_Radius = em->GetRadius();
                 shape.m_Thickness = em->GetWidth();
                 shape.m_ArcAngle = em->GetAngle();
-
-                for ( auto p : em->GetPolyPoints() )
-                    shape.m_Poly.push_back(p);
+                shape.m_Poly = em->GetPolyPoints();
 
                 shapes.push_back(shape);
 

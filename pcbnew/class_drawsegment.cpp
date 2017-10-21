@@ -417,7 +417,6 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
         {
             wxPoint pt ( iter->x, iter->y );
 
-
             if( module ) // Transform, if we belong to a module
             {
                 RotatePoint( &pt, module->GetOrientation() );
@@ -737,7 +736,7 @@ void DRAWSEGMENT::SetPolyPoints( const std::vector<wxPoint>& aPoints )
 {
     m_Poly.RemoveAllContours();
     m_Poly.NewOutline();
-    
+
     for ( auto p : aPoints )
     {
         m_Poly.Append( p.x, p.y );
@@ -748,9 +747,12 @@ const std::vector<wxPoint> DRAWSEGMENT::GetPolyPoints() const
 {
     std::vector<wxPoint> rv;
 
-    for ( auto iter = m_Poly.CIterate(); iter; iter++ )
+    if( m_Poly.VertexCount() > 0 )
     {
-        rv.push_back( wxPoint( iter->x, iter->y ) );
+        for ( auto iter = m_Poly.CIterate(); iter; iter++ )
+        {
+            rv.push_back( wxPoint( iter->x, iter->y ) );
+        }
     }
 
     return rv;
