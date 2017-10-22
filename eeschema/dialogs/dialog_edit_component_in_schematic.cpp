@@ -1215,7 +1215,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::UpdateFields( wxCommandEvent& event )
     SCH_COMPONENT copy( *m_cmp );
     std::list<SCH_COMPONENT*> components;
     components.push_back( &copy );
-    InvokeDialogUpdateFields( m_parent, components, false );
+    InvokeDialogUpdateFields( GetParent(), components, false );
 
     // Copy fields from the modified component copy to the dialog buffer
     m_FieldsBuf.clear();

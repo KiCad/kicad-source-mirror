@@ -196,15 +196,18 @@ public:
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC ) { };
 
     /**
-     * Function CheckComponentsToPartsLink
-     * initializes or reinitializes the weak reference
-     * to the LIB_PART for each SCH_COMPONENT found in m_drawList.
+     * Initialize or reinitialize the weak reference to the #LIB_PART for each #SCH_COMPONENT
+     * found in m_drawList.
+     *
      * It must be called from:
      * - Draw function
      * - when loading a schematic file
      * - before creating a netlist (in case a library is modified)
+     * - whenever a symbol library is modified
+     *
+     * @param aForce true forces a refresh even if the library modification has hasn't changed.
      */
-    void CheckComponentsToPartsLinks();
+    void UpdateSymbolLinks( bool aForce = false );
 
     /**
      * Function Draw
@@ -588,11 +591,12 @@ public:
      * found in the full schematic.
      *
      * It must be called from:
-     * - Draw function
+     * - draw functions
      * - when loading a schematic file
      * - before creating a netlist (in case a library is modified)
+     * - whenever any of the libraries are modified.
      */
-    void UpdateSymbolLinks();
+    void UpdateSymbolLinks( bool aForce = false );
 
     void TestDanglingEnds();
 

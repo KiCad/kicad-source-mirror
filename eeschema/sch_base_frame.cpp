@@ -40,7 +40,7 @@
 LIB_ALIAS* SchGetLibAlias( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PART_LIB* aCacheLib,
                            wxWindow* aParent, bool aShowErrorMsg )
 {
-    wxCHECK_MSG( aLibId.IsValid(), NULL, "LIB_ID is not valid." );
+    // wxCHECK_MSG( aLibId.IsValid(), NULL, "LIB_ID is not valid." );
     wxCHECK_MSG( aLibTable, NULL, "Invalid symbol library table." );
 
     LIB_ALIAS* alias = NULL;
@@ -309,7 +309,7 @@ void SCH_BASE_FRAME::OnEditSymbolLibTable( wxCommandEvent& aEvent )
 LIB_ALIAS* SCH_BASE_FRAME::GetLibAlias( const LIB_ID& aLibId, bool aUseCacheLib,
                                         bool aShowErrorMsg )
 {
-    wxCHECK_MSG( aLibId.IsValid(), NULL, "LIB_ID is not valid." );
+    // wxCHECK_MSG( aLibId.IsValid(), NULL, "LIB_ID is not valid." );
 
     PART_LIB* cache = ( aUseCacheLib ) ? Prj().SchLibs()->GetCacheLibrary() : NULL;
 
@@ -319,7 +319,7 @@ LIB_ALIAS* SCH_BASE_FRAME::GetLibAlias( const LIB_ID& aLibId, bool aUseCacheLib,
 
 LIB_PART* SCH_BASE_FRAME::GetLibPart( const LIB_ID& aLibId, bool aUseCacheLib, bool aShowErrorMsg )
 {
-    wxCHECK_MSG( aLibId.IsValid(), NULL, "LIB_ID is not valid." );
+    // wxCHECK_MSG( aLibId.IsValid(), NULL, "LIB_ID is not valid." );
 
     PART_LIB* cache = ( aUseCacheLib ) ? Prj().SchLibs()->GetCacheLibrary() : NULL;
 

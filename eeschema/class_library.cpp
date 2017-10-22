@@ -444,9 +444,6 @@ LIB_ALIAS* PART_LIBS::FindLibraryAlias( const LIB_ID& aLibId, const wxString& aL
 }
 
 
-/* searches all libraries in the list for an entry, using a case insensitive comparison.
- * Used to find an entry, when the normal (case sensitive) search fails.
-  */
 void PART_LIBS::FindLibraryNearEntries( std::vector<LIB_ALIAS*>& aCandidates,
                                         const wxString& aEntryName,
                                         const wxString& aLibraryName )

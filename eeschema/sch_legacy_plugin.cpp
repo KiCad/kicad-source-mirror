@@ -479,12 +479,13 @@ static void parseQuotedString( wxString& aString, FILE_LINE_READER& aReader,
  */
 class SCH_LEGACY_PLUGIN_CACHE
 {
+    static int      m_modHash;      // Keep track of the modification status of the library.
+
     wxFileName      m_libFileName;  // Absolute path and file name is required here.
     wxDateTime      m_fileModTime;
     LIB_ALIAS_MAP   m_aliases;      // Map of names of LIB_ALIAS pointers.
     bool            m_isWritable;
     bool            m_isModified;
-    int             m_modHash;      // Keep track of the modification status of the library.
     int             m_versionMajor;
     int             m_versionMinor;
     int             m_libType;      // Is this cache a component or symbol library.
@@ -2031,11 +2032,13 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
 }
 
 
+int SCH_LEGACY_PLUGIN_CACHE::m_modHash = 1;     // starts at 1 and goes up
+
+
 SCH_LEGACY_PLUGIN_CACHE::SCH_LEGACY_PLUGIN_CACHE( const wxString& aFullPathAndFileName ) :
     m_libFileName( aFullPathAndFileName ),
     m_isWritable( true ),
-    m_isModified( false ),
-    m_modHash( 1 )
+    m_isModified( false )
 {
     m_versionMajor = -1;
     m_versionMinor = -1;

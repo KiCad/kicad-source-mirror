@@ -38,9 +38,10 @@ class DIALOG_RESCUE_EACH: public DIALOG_RESCUE_EACH_BASE
 {
 public:
     /**
-     * Constructor
      * This dialog asks the user which rescuable, cached parts he wants to rescue.
+     *
      * Any rejects will be pruned from aCandidates.
+     *
      * @param aParent - the SCH_EDIT_FRAME calling this
      * @param aRescuer - the active RESCUER instance
      * @param aAskShowAgain - if true, a "Never Show Again" button will be included
@@ -70,7 +71,7 @@ private:
 
 
 DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, RESCUER& aRescuer,
-            bool aAskShowAgain )
+                                        bool aAskShowAgain )
     : DIALOG_RESCUE_EACH_BASE( aParent ),
       m_Parent( aParent ),
       m_Rescuer( &aRescuer ),
@@ -81,7 +82,7 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, RESCUER& aRescu
 
     // Set the info message, customized to include the proper suffix.
     wxString info_message =
-        _( "It looks like this project was made using older schematic component libraries.\n"
+        _( "It looks like this project was made using older schematic symbol libraries.\n"
            "Some parts may need to be relinked to a different symbol name, and some symbols\n"
            "may need to be \"rescued\" (cloned and renamed) into a new library.\n"
            "\n"
@@ -157,6 +158,7 @@ void DIALOG_RESCUE_EACH::PopulateInstanceList()
 
     wxVector<wxVariant> data;
     int count = 0;
+
     for( SCH_COMPONENT* each_component : *m_Rescuer->GetComponents() )
     {
         if( each_component->GetLibId().Format() != UTF8( selected_part.GetRequestedName() ) )
@@ -290,9 +292,9 @@ void DIALOG_RESCUE_EACH::OnNeverShowClick( wxCommandEvent& aEvent )
     wxMessageDialog dlg( m_Parent,
                 _(  "Stop showing this tool?\n"
                     "No changes will be made.\n\n"
-                    "This setting can be changed from the \"Component Libraries\" dialog,\n"
+                    "This setting can be changed from the \"Symbol Libraries\" dialog,\n"
                     "and the tool can be activated manually from the \"Tools\" menu." ),
-            _( "Rescue Components" ), wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION );
+            _( "Rescue Symbolss" ), wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION );
     int resp = dlg.ShowModal ();
 
     if( resp == wxID_YES )

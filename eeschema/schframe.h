@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras wanadoo.fr
- * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -64,6 +64,7 @@ class DIALOG_SCH_FIND;
 class wxFindDialogEvent;
 class wxFindReplaceData;
 class SCHLIB_FILTER;
+class RESCUER;
 
 
 /// enum used in RotationMiroir()
@@ -890,6 +891,7 @@ private:
     void OnOpenCvpcb( wxCommandEvent& event );
     void OnOpenLibraryEditor( wxCommandEvent& event );
     void OnRescueProject( wxCommandEvent& event );
+    void OnRemapSymbols( wxCommandEvent& aEvent );
     void OnPreferencesOptions( wxCommandEvent& event );
     void OnCancelCurrentCommand( wxCommandEvent& aEvent );
 
@@ -910,6 +912,7 @@ private:
     void OnUpdateSave( wxUpdateUIEvent& aEvent );
     void OnUpdateSaveSheet( wxUpdateUIEvent& aEvent );
     void OnUpdateHierarchySheet( wxUpdateUIEvent& aEvent );
+    void OnUpdateRemapSymbols( wxUpdateUIEvent& aEvent );
 
     /**
      * Function UpdateTitle
@@ -1378,7 +1381,9 @@ public:
      *      if there are no components to rescue, and a "Never Show Again" button is
      *      displayed.
      */
-    bool RescueProject( bool aRunningOnDemand );
+    bool rescueProject( RESCUER& aRescuer, bool aRunningOnDemand );
+    bool RescueLegacyProject( bool aRunningOnDemand );
+    bool RescueSymbolLibTableProject( bool aRunningOnDemand );
 
     /**
      * Function PrintPage

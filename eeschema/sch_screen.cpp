@@ -527,7 +527,7 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
 }
 
 
-void SCH_SCREEN::CheckComponentsToPartsLinks()
+void SCH_SCREEN::UpdateSymbolLinks( bool aForce )
 {
     // Initialize or reinitialize the pointer to the LIB_PART for each component
     // found in m_drawList, but only if needed (change in lib or schematic)
@@ -539,7 +539,7 @@ void SCH_SCREEN::CheckComponentsToPartsLinks()
         int mod_hash = libs->GetModifyHash();
 
         // Must we resolve?
-        if( m_modification_sync != mod_hash )
+        if( (m_modification_sync != mod_hash) || aForce )
         {
             SCH_TYPE_COLLECTOR c;
 
@@ -561,7 +561,7 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
      */
 
     // Ensure links are up to date, even if a library was reloaded for some reason:
-    CheckComponentsToPartsLinks();
+    UpdateSymbolLinks();
 
     for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
     {
@@ -582,7 +582,7 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
 void SCH_SCREEN::Plot( PLOTTER* aPlotter )
 {
     // Ensure links are up to date, even if a library was reloaded for some reason:
-    CheckComponentsToPartsLinks();
+    UpdateSymbolLinks();
 
     for( SCH_ITEM* item = m_drawList.begin();  item;  item = item->Next() )
     {
@@ -1508,10 +1508,10 @@ int SCH_SCREENS::GetMarkerCount( enum MARKER_BASE::TYPEMARKER aMarkerType,
 }
 
 
-void SCH_SCREENS::UpdateSymbolLinks()
+void SCH_SCREENS::UpdateSymbolLinks( bool aForce )
 {
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
-        screen->CheckComponentsToPartsLinks();
+        screen->UpdateSymbolLinks( aForce );
 }
 
 

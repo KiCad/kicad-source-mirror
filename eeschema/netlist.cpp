@@ -122,7 +122,7 @@ bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
         SCH_SCREENS schematic;
         schematic.UpdateSymbolLinks();
         SCH_SHEET_LIST sheets( g_RootSheet );
-        sheets.AnnotatePowerSymbols( Prj().SchLibs() );
+        sheets.AnnotatePowerSymbols();
         schematic.SchematicCleanUp();
     }
 

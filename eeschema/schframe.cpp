@@ -58,6 +58,7 @@
 
 #include <invoke_sch_dialog.h>
 #include <dialogs/dialog_schematic_find.h>
+#include <dialog_symbol_remap.h>
 
 #include <wx/display.h>
 #include <build_version.h>
@@ -251,6 +252,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP, SCH_EDIT_FRAME::OnOpenLibraryEditor )
     EVT_TOOL( ID_TO_LIBVIEW, SCH_EDIT_FRAME::OnOpenLibraryViewer )
     EVT_TOOL( ID_RESCUE_CACHED, SCH_EDIT_FRAME::OnRescueProject )
+    EVT_MENU( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnRemapSymbols )
 
     EVT_TOOL( ID_RUN_PCB, SCH_EDIT_FRAME::OnOpenPcbnew )
     EVT_TOOL( ID_RUN_PCB_MODULE_EDITOR, SCH_EDIT_FRAME::OnOpenPcbModuleEditor )
@@ -333,6 +335,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_SAVE_PROJECT, SCH_EDIT_FRAME::OnUpdateSave )
     EVT_UPDATE_UI( ID_UPDATE_ONE_SHEET, SCH_EDIT_FRAME::OnUpdateSaveSheet )
     EVT_UPDATE_UI( ID_POPUP_SCH_LEAVE_SHEET, SCH_EDIT_FRAME::OnUpdateHierarchySheet )
+    EVT_UPDATE_UI( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnUpdateRemapSymbols )
 
     /* Search dialog events. */
     EVT_FIND_CLOSE( wxID_ANY, SCH_EDIT_FRAME::OnFindDialogClose )
@@ -823,6 +826,15 @@ void SCH_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
 }
 
 
+void SCH_EDIT_FRAME::OnUpdateRemapSymbols( wxUpdateUIEvent& aEvent )
+{
+    SCH_SCREENS schematic;
+
+    // The remapping can only be performed on legacy projects.
+    aEvent.Enable( schematic.HasNoFullyDefinedLibIds() );
+}
+
+
 void SCH_EDIT_FRAME::OnUpdateSaveSheet( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( GetScreen()->IsModify() );
@@ -1249,7 +1261,20 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnRescueProject( wxCommandEvent& event )
 {
-    RescueProject( true );
+    SCH_SCREENS schematic;
+
+    if( schematic.HasNoFullyDefinedLibIds() )
+        RescueLegacyProject( true );
+    else
+        RescueSymbolLibTableProject( true );
+}
+
+
+void SCH_EDIT_FRAME::OnRemapSymbols( wxCommandEvent& event )
+{
+    DIALOG_SYMBOL_REMAP dlgRemap( this );
+
+    dlgRemap.ShowQuasiModal();
 }
 
 

@@ -108,12 +108,12 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
                     DisplayError( this, msg );
                     return false;
                 }
+            }
 
-                if( part )
-                {
-                    // AddPart() does first clone the part before adding.
-                    archLib->AddPart( part );
-                }
+            if( part )
+            {
+                // AddPart() does first clone the part before adding.
+                archLib->AddPart( part );
             }
         }
     }

@@ -237,7 +237,7 @@ void DIALOG_SYMBOL_REMAP::remapSymbolsToLibTable( REPORTER& aReporter )
     }
 
     aReporter.Report( _( "Symbol library table mapping complete!" ), REPORTER::RPT_INFO );
-    schematic.UpdateSymbolLinks();
+    schematic.UpdateSymbolLinks( true );
 }
 
 

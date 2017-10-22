@@ -1744,6 +1744,8 @@ const EDA_RECT SCH_COMPONENT::GetBoundingBox() const
 
 void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 {
+    wxString msg;
+
     // part and alias can differ if alias is not the root
     if( PART_SPTR part = m_part.lock() )
     {
@@ -1759,7 +1761,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
                                                  GetRef( m_currentSheetPath ),
                                                  DARKCYAN ) );
 
-            wxString msg = part->IsPower() ? _( "Power symbol" ) : _( "Value" );
+            msg = part->IsPower() ? _( "Power symbol" ) : _( "Value" );
 
             aList.push_back( MSG_PANEL_ITEM( msg, GetField( VALUE )->GetShownText(), DARKCYAN ) );
 
@@ -1800,8 +1802,20 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
         aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetField( VALUE )->GetShownText(),
                                          DARKCYAN ) );
-        aList.push_back( MSG_PANEL_ITEM( _( "Component" ), GetLibId().GetLibItemName(), BROWN ) );
-        aList.push_back( MSG_PANEL_ITEM( _( "Library" ), _( "Error: symbol not found!!!" ), RED ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Symbol" ), GetLibId().GetLibItemName(), BROWN ) );
+
+        wxString libNickname = GetLibId().GetLibNickname();
+
+        if( libNickname.empty() )
+        {
+            aList.push_back( MSG_PANEL_ITEM( _( "Library" ),
+                                             _( "No library defined!!!" ), RED ) );
+        }
+        else
+        {
+            msg.Printf( _( "Symbol not found in %s!!!" ), libNickname );
+            aList.push_back( MSG_PANEL_ITEM( _( "Library" ), msg , RED ) );
+        }
     }
 }
 

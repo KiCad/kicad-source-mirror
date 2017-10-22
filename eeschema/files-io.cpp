@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2013-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2013 CERN (www.cern.ch)
  * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -329,22 +329,16 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         UpdateFileHistory( fullFileName );
 
-        // Check to see whether some old library parts need to be rescued
-        // Only do this if RescueNeverShow was not set.
-        wxConfigBase *config = Kiface().KifaceSettings();
-        bool rescueNeverShow = false;
-        config->Read( RescueNeverShowEntry, &rescueNeverShow, false );
-
-        if( !rescueNeverShow )
-        {
-            RescueProject( false );
-        }
-
         SCH_SCREENS schematic;
 
         // Convert old projects over to use symbol library table.
         if( schematic.HasNoFullyDefinedLibIds() )
         {
+            // Ignore the never show rescue setting for one last rescue of legacy symbol
+            // libraries before remapping to the symbol library table.  This ensures the
+            // best remapping results.
+            RescueLegacyProject( false );
+
             // Make backups of current schematics just in case something goes wrong.
             for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
                 SaveEEFile( screen, false, CREATE_BACKUP_FILE );
@@ -352,6 +346,17 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             DIALOG_SYMBOL_REMAP dlgRemap( this );
 
             dlgRemap.ShowQuasiModal();
+        }
+        else
+        {
+            // Check to see whether some old library parts need to be rescued
+            // Only do this if RescueNeverShow was not set.
+            wxConfigBase *config = Kiface().KifaceSettings();
+            bool rescueNeverShow = false;
+            config->Read( RescueNeverShowEntry, &rescueNeverShow, false );
+
+            if( !rescueNeverShow )
+                RescueSymbolLibTableProject( false );
         }
 
         schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.

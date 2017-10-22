@@ -274,7 +274,7 @@ again." );
 #endif
 
     // Build links between each components and its part lib LIB_PART
-    aScreen->CheckComponentsToPartsLinks();
+    aScreen->UpdateSymbolLinks();
 
     aScreen->TestDanglingEnds();
 
