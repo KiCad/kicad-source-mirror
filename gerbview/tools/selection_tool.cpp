@@ -24,9 +24,9 @@
 using namespace std::placeholders;
 
 #include <base_struct.h>
+#include <bitmaps.h>
 
 #include <gerber_collectors.h>
-//#include <confirm.h>
 
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
@@ -80,6 +80,7 @@ class HIGHLIGHT_MENU: public CONTEXT_MENU
 public:
     HIGHLIGHT_MENU()
     {
+        SetIcon( net_highlight_schematic_xpm );
         SetTitle( _( "Highlight..." ) );
     }
 
@@ -87,6 +88,8 @@ private:
 
     void update() override
     {
+        bool addSeparator = false;
+
         const auto& selection = getToolManager()->GetTool<GERBVIEW_SELECTION_TOOL>()->GetSelection();
 
         if( selection.Size() == 1 )
@@ -100,6 +103,7 @@ private:
                 auto menuEntry = Add( GERBVIEW_ACTIONS::highlightComponent );
                 menuEntry->SetItemLabel( wxString::Format( _( "Highlight items of component '%s'" ),
                                          GetChars( net_attr.m_Cmpref ) ) );
+                addSeparator = true;
             }
 
             if( ( net_attr.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_NET ) )
@@ -107,6 +111,7 @@ private:
                 auto menuEntry = Add( GERBVIEW_ACTIONS::highlightNet );
                 menuEntry->SetItemLabel( wxString::Format( _( "Highlight items of net '%s'" ),
                                          GetChars( net_attr.m_Netname ) ) );
+                addSeparator = true;
             }
 
             D_CODE* apertDescr = item->GetDcodeDescr();
@@ -116,8 +121,12 @@ private:
                 auto menuEntry = Add( GERBVIEW_ACTIONS::highlightAttribute );
                 menuEntry->SetItemLabel( wxString::Format( _( "Highlight aperture type '%s'" ),
                                          GetChars( apertDescr->m_AperFunction ) ) );
+                addSeparator = true;
             }
         }
+
+        if( addSeparator )
+            AppendSeparator();
 
         Add( GERBVIEW_ACTIONS::highlightClear );
     }

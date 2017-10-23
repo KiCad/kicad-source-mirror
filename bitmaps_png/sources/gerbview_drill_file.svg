@@ -12,7 +12,7 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.92.0 r15299"
    sodipodi:docname="gerbview_drill_file.svg">
   <metadata
      id="metadata172">
@@ -22,7 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -35,15 +35,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1366"
-     inkscape:window-height="744"
+     inkscape:window-width="1920"
+     inkscape:window-height="1033"
      id="namedview170"
      showgrid="true"
      inkscape:zoom="21.730769"
      inkscape:cx="21.05919"
      inkscape:cy="13.700887"
-     inkscape:window-x="0"
-     inkscape:window-y="24"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
      inkscape:window-maximized="1"
      inkscape:current-layer="g4756">
     <inkscape:grid
@@ -53,8 +53,10 @@
        visible="true"
        enabled="true"
        snapvisiblegridlinesonly="true"
-       spacingx="0.5px"
-       spacingy="0.5px" />
+       spacingx="0.5"
+       spacingy="0.5"
+       originx="0"
+       originy="0" />
   </sodipodi:namedview>
   <defs
      id="defs4">
@@ -1650,7 +1652,7 @@
          sodipodi:cy="13.5"
          sodipodi:rx="8.4938049"
          sodipodi:ry="8.4938049"
-         d="m 21.993805,13.5 a 8.4938049,8.4938049 0 1 1 -16.9876099,0 8.4938049,8.4938049 0 1 1 16.9876099,0 z"
+         d="M 21.993805,13.5 A 8.4938049,8.4938049 0 0 1 13.5,21.993805 8.4938049,8.4938049 0 0 1 5.0061951,13.5 8.4938049,8.4938049 0 0 1 13.5,5.0061951 8.4938049,8.4938049 0 0 1 21.993805,13.5 Z"
          transform="matrix(0.79837563,0,0,0.79837563,2.7929676,2.6420082)" />
       <path
          style="fill:none;stroke:#1a1a1a;stroke-width:0.80000001;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"

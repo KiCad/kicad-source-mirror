@@ -38,7 +38,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::layerChanged( "gerbview.Control.layerChanged",
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightClear( "gerbview.Control.highlightClear",
         AS_GLOBAL, 0,
-        _( "Clear Highlight" ), "", gerbview_clear_layers_xpm );
+        _( "Clear Highlight" ), "", highlight_remove_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightNet( "gerbview.Control.highlightNet",
         AS_GLOBAL, 0,

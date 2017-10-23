@@ -28,6 +28,7 @@
 #include <tool/tool_interactive.h>
 #include <tool/context_menu.h>
 #include <wx/log.h>
+#include <pgm_base.h>
 
 #include <functional>
 using namespace std::placeholders;
@@ -50,6 +51,33 @@ CONTEXT_MENU::~CONTEXT_MENU()
 
     if( parent )
         parent->m_submenus.remove( this );
+}
+
+/*
+ * Helper function.
+ * Assigns an icon to the wxMenuItem aMenu.
+ * aIcon is the icon to be assigned can be NULL.
+ */
+static void set_wxMenuIcon( wxMenuItem* aMenu, const BITMAP_OPAQUE* aIcon )
+{
+        bool useImagesInMenus = Pgm().GetUseIconsInMenus();
+
+        if( aIcon && useImagesInMenus )
+        {
+            aMenu->SetBitmap( KiBitmap( aIcon ) );
+        }
+}
+
+
+void CONTEXT_MENU::SetIcon( const BITMAP_OPAQUE* aIcon )
+{
+    // Retrieve the global applicaton show icon option:
+    bool useImagesInMenus = Pgm().GetUseIconsInMenus();
+
+    if( useImagesInMenus )
+        m_icon = aIcon;
+    else
+        m_icon = nullptr;
 }
 
 
@@ -113,9 +141,7 @@ wxMenuItem* CONTEXT_MENU::Add( const wxString& aLabel, int aId, const BITMAP_OPA
 #endif
 
     wxMenuItem* item = new wxMenuItem( this, aId, aLabel, wxEmptyString, wxITEM_NORMAL );
-
-    if( aIcon )
-        item->SetBitmap( KiBitmap( aIcon ) );
+    set_wxMenuIcon( item, aIcon );
 
     return Append( item );
 }
@@ -129,8 +155,7 @@ wxMenuItem* CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
     wxMenuItem* item = new wxMenuItem( this, getMenuId( aAction ), aAction.GetMenuItem(),
                                        aAction.GetDescription(), wxITEM_NORMAL );
 
-    if( icon )
-        item->SetBitmap( KiBitmap( icon ) );
+    set_wxMenuIcon( item, icon );
 
     m_toolActions[getMenuId( aAction )] = &aAction;
 
@@ -160,7 +185,7 @@ std::list<wxMenuItem*> CONTEXT_MENU::Add( CONTEXT_MENU* aMenu, bool aExpand )
         if( aMenu->m_icon )
         {
             wxMenuItem* newItem = new wxMenuItem( this, -1, menuCopy->m_title );
-            newItem->SetBitmap( KiBitmap( aMenu->m_icon ) );
+            set_wxMenuIcon( newItem, aMenu->m_icon );
             newItem->SetSubMenu( menuCopy );
             items.push_back( Append( newItem ) );
         }
@@ -423,7 +448,9 @@ wxMenuItem* CONTEXT_MENU::appendCopy( const wxMenuItem* aSource )
     wxMenuItem* newItem = new wxMenuItem( this, aSource->GetId(), aSource->GetItemLabel(),
                                           aSource->GetHelp(), aSource->GetKind() );
 
-    if( aSource->GetKind() == wxITEM_NORMAL )
+    bool useImagesInMenus = Pgm().GetUseIconsInMenus();
+
+    if( aSource->GetKind() == wxITEM_NORMAL && useImagesInMenus )
         newItem->SetBitmap( aSource->GetBitmap() );
 
     if( aSource->IsSubMenu() )

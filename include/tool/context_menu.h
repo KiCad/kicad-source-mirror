@@ -71,10 +71,7 @@ public:
      * Assigns an icon for the entry.
      * @param aIcon is the icon to be assigned. NULL is used to remove icon.
      */
-    inline void SetIcon( const BITMAP_OPAQUE* aIcon )
-    {
-        m_icon = aIcon;
-    }
+    void SetIcon( const BITMAP_OPAQUE* aIcon );
 
     /**
      * Function Add()

@@ -260,6 +260,7 @@ set( BMAPS_MID
     help
     hidden_pin
     hierarchy_nav
+    highlight_remove
     hotkeys
     hotkeys_import
     hotkeys_export

@@ -12,7 +12,7 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.92.0 r15299"
    sodipodi:docname="gerbview_clear_layers.svg">
   <metadata
      id="metadata172">
@@ -35,15 +35,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1301"
-     inkscape:window-height="744"
+     inkscape:window-width="1920"
+     inkscape:window-height="1033"
      id="namedview170"
      showgrid="true"
      inkscape:zoom="21.730769"
      inkscape:cx="13"
      inkscape:cy="13.936747"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
      inkscape:window-maximized="1"
      inkscape:current-layer="g4756">
     <inkscape:grid
@@ -53,8 +53,10 @@
        visible="true"
        enabled="true"
        snapvisiblegridlinesonly="true"
-       spacingx="0.5px"
-       spacingy="0.5px" />
+       spacingx="0.5"
+       spacingy="0.5"
+       originx="0"
+       originy="0" />
   </sodipodi:namedview>
   <defs
      id="defs4">
