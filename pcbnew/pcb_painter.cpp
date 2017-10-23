@@ -931,6 +931,9 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
         break;
 
     case S_ARC:
+printf( "S_ARC st %f end %f angle %f\n",
+aSegment->GetArcAngleStart()/10.0, (aSegment->GetArcAngleStart() + aSegment->GetAngle())/10.0,
+aSegment->GetAngle()/10.0 );
         m_gal->DrawArcSegment( start, aSegment->GetRadius(),
                         DECIDEG2RAD( aSegment->GetArcAngleStart() ),
                         DECIDEG2RAD( aSegment->GetArcAngleStart() + aSegment->GetAngle() ),

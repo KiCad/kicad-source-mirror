@@ -62,7 +62,7 @@ TEXTE_PCB::~TEXTE_PCB()
 
 void TEXTE_PCB::SetTextAngle( double aAngle )
 {
-    EDA_TEXT::SetTextAngle( NormalizeAngle360( aAngle ) );
+    EDA_TEXT::SetTextAngle( NormalizeAngle360Min( aAngle ) );
 }
 
 

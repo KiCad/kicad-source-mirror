@@ -85,7 +85,7 @@ TEXTE_MODULE::~TEXTE_MODULE()
 
 void TEXTE_MODULE::SetTextAngle( double aAngle )
 {
-    EDA_TEXT::SetTextAngle( NormalizeAngle360( aAngle ) );
+    EDA_TEXT::SetTextAngle( NormalizeAngle360Min( aAngle ) );
 }
 
 

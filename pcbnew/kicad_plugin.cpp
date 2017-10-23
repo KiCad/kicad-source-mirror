@@ -1545,7 +1545,7 @@ void PCB_IO::format( TEXTE_MODULE* aText, int aNestLevel ) const
 #else
         // Choose compatibility for now, even though this is only a 720 degree clamp
         // with two possible values for every angle.
-        orient = NormalizeAngle360( orient + parent->GetOrientation() );
+        orient = NormalizeAngle360Min( orient + parent->GetOrientation() );
 #endif
     }
 

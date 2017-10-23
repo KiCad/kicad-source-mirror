@@ -263,14 +263,17 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
 
 /* Move selected sheet with the cursor.
  * Callback function used by m_mouseCaptureCallback.
- * Note also now this function is aclled only when resizing the sheet
+ * Note also now this function is called only when resizing the sheet
  * But the (very small code) relative to sheet move is still present here
  */
 static void resizeSheetWithMouseCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                         bool aErase )
 {
     BASE_SCREEN*   screen = aPanel->GetScreen();
-    SCH_SHEET*     sheet = (SCH_SHEET*) screen->GetCurItem();
+    SCH_SHEET*     sheet = dynamic_cast<SCH_SHEET*>( screen->GetCurItem() );
+
+    if( sheet == nullptr )  // Be sure we are using the right object
+        return;
 
     if( aErase )
         sheet->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );

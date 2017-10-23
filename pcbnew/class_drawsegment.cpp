@@ -186,7 +186,8 @@ double DRAWSEGMENT::GetArcAngleStart() const
 
 void DRAWSEGMENT::SetAngle( double aAngle )
 {
-    m_Angle = NormalizeAngle360( aAngle );
+    // m_Angle must be >= -360 and <= +360 degrees
+    m_Angle = NormalizeAngle360Max( aAngle );
 }
 
 

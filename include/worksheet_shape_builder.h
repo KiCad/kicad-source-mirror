@@ -299,7 +299,7 @@ public:
 
     void SetTextAngle( double aAngle )
     {
-        EDA_TEXT::SetTextAngle( NormalizeAngle360( aAngle ) );
+        EDA_TEXT::SetTextAngle( NormalizeAngle360Min( aAngle ) );
     }
 
     /**

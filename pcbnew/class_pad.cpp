@@ -1120,7 +1120,7 @@ void D_PAD::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     RotatePoint( &m_Pos, aRotCentre, aAngle );
 
-    m_Orient = NormalizeAngle360( m_Orient + aAngle );
+    m_Orient = NormalizeAngle360Min( m_Orient + aAngle );
 
     SetLocalCoord();
 }

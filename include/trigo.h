@@ -206,8 +206,20 @@ inline double RAD2DECIDEG( double rad ) { return rad * 1800.0 / M_PI; }
 /* These are templated over T (and not simply double) because eeschema
    is still using int for angles in some place */
 
-/// Normalize angle to be in the -360.0 .. 360.0:
-template <class T> inline T NormalizeAngle360( T Angle )
+/// Normalize angle to be  >=-360.0 and <= 360.0
+/// Angle can be equal to -360 or +360
+template <class T> inline T NormalizeAngle360Max( T Angle )
+{
+    while( Angle < -3600 )
+        Angle += 3600;
+    while( Angle > 3600 )
+        Angle -= 3600;
+    return Angle;
+}
+
+/// Normalize angle to be > -360.0 and < 360.0
+/// Angle equal to -360 or +360 are set to 0
+template <class T> inline T NormalizeAngle360Min( T Angle )
 {
     while( Angle <= -3600 )
         Angle += 3600;
@@ -215,7 +227,6 @@ template <class T> inline T NormalizeAngle360( T Angle )
         Angle -= 3600;
     return Angle;
 }
-
 
 /// Normalize angle to be in the 0.0 .. 360.0 range:
 /// angle is in 1/10 degees
@@ -243,6 +254,8 @@ inline double NormalizeAngleDegreesPos( double Angle )
         Angle -= 360.0;
     return Angle;
 }
+
+
 inline void NORMALIZE_ANGLE_DEGREES_POS( double& Angle )
 {
     Angle = NormalizeAngleDegreesPos( Angle );
@@ -257,6 +270,7 @@ template <class T, class T2> inline T AddAngles( T a1, T2 a2 )
     NORMALIZE_ANGLE_POS( a1 );
     return a1;
 }
+
 
 template <class T> inline T NegateAndNormalizeAnglePos( T Angle )
 {
