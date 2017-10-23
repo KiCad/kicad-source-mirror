@@ -85,8 +85,8 @@ typedef MODULE_MAP::const_iterator    MODULE_CITER;
 /// Return is in BIU.
 static int parseEagle( const wxString& aDistance )
 {
-    ECOORD::UNIT unit = ( aDistance.npos != aDistance.find( "mil" ) )
-        ? ECOORD::UNIT::MIL : ECOORD::UNIT::MM;
+    ECOORD::EAGLE_UNIT unit = ( aDistance.npos != aDistance.find( "mil" ) )
+        ? ECOORD::EAGLE_UNIT::EAGLE_MIL : ECOORD::EAGLE_UNIT::EAGLE_MM;
 
     ECOORD coord( aDistance, unit );
 
@@ -700,14 +700,14 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     if( *d.dimensionType == "horizontal" )
                     {
                         int newY = ( d.y1.ToPcbUnits() + d.y2.ToPcbUnits() ) / 2;
-                        d.y1 = ECOORD( newY, ECOORD::UNIT::NM );
-                        d.y2 = ECOORD( newY, ECOORD::UNIT::NM );
+                        d.y1 = ECOORD( newY, ECOORD::EAGLE_UNIT::EAGLE_NM );
+                        d.y2 = ECOORD( newY, ECOORD::EAGLE_UNIT::EAGLE_NM );
                     }
                     else if( *d.dimensionType == "vertical" )
                     {
                         int newX = ( d.x1.ToPcbUnits() + d.x2.ToPcbUnits() ) / 2;
-                        d.x1 = ECOORD( newX, ECOORD::UNIT::NM );
-                        d.x2 = ECOORD( newX, ECOORD::UNIT::NM );
+                        d.x1 = ECOORD( newX, ECOORD::EAGLE_UNIT::EAGLE_NM );
+                        d.x2 = ECOORD( newX, ECOORD::EAGLE_UNIT::EAGLE_NM );
                     }
                 }
 

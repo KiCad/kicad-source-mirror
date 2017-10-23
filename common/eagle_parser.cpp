@@ -34,7 +34,7 @@
 constexpr auto DEFAULT_ALIGNMENT = ETEXT::BOTTOM_LEFT;
 
 
-ECOORD::ECOORD( const wxString& aValue, enum ECOORD::UNIT aUnit )
+ECOORD::ECOORD( const wxString& aValue, enum ECOORD::EAGLE_UNIT aUnit )
 {
     // this array is used to adjust the fraction part value basing on the number of digits in the fraction
     constexpr int DIVIDERS[] = { 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000 };
@@ -75,16 +75,17 @@ ECOORD::ECOORD( const wxString& aValue, enum ECOORD::UNIT aUnit )
 }
 
 
-long long int ECOORD::ToNanoMeters( int aValue, enum UNIT aUnit )
+long long int ECOORD::ToNanoMeters( int aValue, enum EAGLE_UNIT aUnit )
 {
     long long int ret;
 
     switch( aUnit )
     {
-        case NM:    ret = aValue; break;
-        case MM:    ret = (long long) aValue * 1000000; break;
-        case INCH:  ret = (long long) aValue * 25400000; break;
-        case MIL:   ret = (long long) aValue * 25400; break;
+        default:
+        case EAGLE_NM:    ret = aValue; break;
+        case EAGLE_MM:    ret = (long long) aValue * 1000000; break;
+        case EAGLE_INCH:  ret = (long long) aValue * 25400000; break;
+        case EAGLE_MIL:   ret = (long long) aValue * 25400; break;
     }
 
     wxASSERT( ( ret > 0 ) == ( aValue > 0 ) );  // check for overflow
@@ -165,7 +166,7 @@ template<>
 ECOORD Convert<ECOORD>( const wxString& aCoord )
 {
     // Eagle uses millimeters as the default unit
-    return ECOORD( aCoord, ECOORD::UNIT::MM );
+    return ECOORD( aCoord, ECOORD::EAGLE_UNIT::EAGLE_MM );
 }
 
 

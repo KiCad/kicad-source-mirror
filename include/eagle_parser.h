@@ -386,31 +386,31 @@ typedef OPTIONAL_XML_ATTRIBUTE<ECOORD>  opt_ecoord;
 // Eagle coordinates
 struct ECOORD
 {
-    enum UNIT
+    enum EAGLE_UNIT
     {
-        NM,     ///< nanometers
-        MM,     ///< millimeters
-        INCH,   ///< inches
-        MIL,    ///< mils/thous
+        EAGLE_NM,     ///< nanometers
+        EAGLE_MM,     ///< millimeters
+        EAGLE_INCH,   ///< inches
+        EAGLE_MIL,    ///< mils/thous
     };
 
     ///> Value expressed in nanometers
     long long int value;
 
     ///> Unit used for the value field
-    static constexpr UNIT ECOORD_UNIT = NM;
+    static constexpr EAGLE_UNIT ECOORD_UNIT = EAGLE_NM;
 
     ECOORD()
         : value( 0 )
     {
     }
 
-    ECOORD( int aValue, enum UNIT aUnit )
+    ECOORD( int aValue, enum EAGLE_UNIT aUnit )
         : value( ToNanoMeters( aValue, aUnit ) )
     {
     }
 
-    ECOORD( const wxString& aValue, enum UNIT aUnit );
+    ECOORD( const wxString& aValue, enum EAGLE_UNIT aUnit );
 
     int ToSchUnits() const
     {
@@ -444,7 +444,7 @@ struct ECOORD
         return value == aOther.value;
     }
 
-    static long long int ToNanoMeters( int aValue, enum UNIT aUnit );
+    static long long int ToNanoMeters( int aValue, enum EAGLE_UNIT aUnit );
 };
 
 
