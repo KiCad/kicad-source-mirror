@@ -601,8 +601,6 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, d
     SWAP( aStartAngle, >, aEndAngle );
 
     const double alphaIncrement = calcAngleStep( aRadius );
-printf( "st %f end %f alphaIncrement = %f\n",
-aStartAngle * 180/M_PI, aEndAngle * 180/M_PI, alphaIncrement * 180/M_PI);
 
     Save();
     currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0 );

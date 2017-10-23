@@ -22,6 +22,7 @@
 #include <gerbview_painter.h>
 #include <gerbview_frame.h>
 #include <tool/tool_manager.h>
+#include <menus_helpers.h>
 
 #include "gerbview_actions.h"
 #include "gerbview_control.h"
@@ -37,19 +38,19 @@ TOOL_ACTION GERBVIEW_ACTIONS::layerChanged( "gerbview.Control.layerChanged",
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightClear( "gerbview.Control.highlightClear",
         AS_GLOBAL, 0,
-        _( "Clear Highlight" ), "" );
+        _( "Clear Highlight" ), "", gerbview_clear_layers_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightNet( "gerbview.Control.highlightNet",
         AS_GLOBAL, 0,
-        _( "Highlight Net" ), "" );
+        _( "Highlight Net" ), "", general_ratsnest_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightComponent( "gerbview.Control.highlightComponent",
         AS_GLOBAL, 0,
-        _( "Highlight Component" ), "" );
+        _( "Highlight Component" ), "", file_footprint_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightAttribute( "gerbview.Control.highlightAttribute",
         AS_GLOBAL, 0,
-        _( "Highlight Attribute" ), "" );
+        _( "Highlight Attribute" ), "", flag_xpm );
 
 GERBVIEW_CONTROL::GERBVIEW_CONTROL() :
     TOOL_INTERACTIVE( "gerbview.Control" ), m_frame( NULL )
