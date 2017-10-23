@@ -60,24 +60,19 @@ CONTEXT_MENU::~CONTEXT_MENU()
  */
 static void set_wxMenuIcon( wxMenuItem* aMenu, const BITMAP_OPAQUE* aIcon )
 {
-        bool useImagesInMenus = Pgm().GetUseIconsInMenus();
+    // Retrieve the global applicaton show icon option:
+    bool useImagesInMenus = Pgm().GetUseIconsInMenus();
 
-        if( aIcon && useImagesInMenus )
-        {
-            aMenu->SetBitmap( KiBitmap( aIcon ) );
-        }
+    if( aIcon && useImagesInMenus )
+    {
+        aMenu->SetBitmap( KiBitmap( aIcon ) );
+    }
 }
 
 
 void CONTEXT_MENU::SetIcon( const BITMAP_OPAQUE* aIcon )
 {
-    // Retrieve the global applicaton show icon option:
-    bool useImagesInMenus = Pgm().GetUseIconsInMenus();
-
-    if( useImagesInMenus )
-        m_icon = aIcon;
-    else
-        m_icon = nullptr;
+    m_icon = aIcon;
 }
 
 
