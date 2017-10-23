@@ -685,9 +685,6 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos ) const
     // calculate aRefPos in XY gerber axis:
     wxPoint ref_pos = GetXYPosition( aRefPos );
 
-    // TODO: a better analyze of the shape (perhaps create a D_CODE::HitTest for flashed items)
-    int     radius = std::min( m_Size.x, m_Size.y ) >> 1;
-
     SHAPE_POLY_SET poly;
 
     switch( m_Shape )
@@ -695,17 +692,14 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos ) const
     case GBR_POLYGON:
         poly = m_Polygon;
         return poly.Contains( VECTOR2I( ref_pos ), 0 );
-        break;
 
     case GBR_SPOT_POLY:
         poly = GetDcodeDescr()->m_Polygon;
         poly.Move( m_Start );
         return poly.Contains( VECTOR2I( ref_pos ), 0 );
-        break;
 
     case GBR_SPOT_RECT:
         return GetBoundingBox().Contains( aRefPos );
-        break;
 
     case GBR_SPOT_MACRO:
         // Aperture macro polygons are already in absolute coordinates
@@ -716,8 +710,10 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos ) const
                 return true;
         }
         return false;
-        break;
     }
+
+    // TODO: a better analyze of the shape (perhaps create a D_CODE::HitTest for flashed items)
+    int radius = std::min( m_Size.x, m_Size.y ) >> 1;
 
     if( m_Flashed )
         return HitTestPoints( m_Start, ref_pos, radius );

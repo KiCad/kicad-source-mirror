@@ -61,13 +61,13 @@ public:
         m_DisplayLinesFill = true;
         m_DisplayPolygonsFill = true;
         m_DisplayPolarCood = false;
-        m_DisplayDCodes = true;
+        m_DisplayDCodes = false;
         m_IsPrinting = false;
         m_DisplayNegativeObjects = false;
         m_ForceBlackAndWhite    = false;
         m_NegativeDrawColor     = COLOR4D( DARKGRAY );
         m_BgDrawColor = COLOR4D::BLACK;
-        m_DiffMode = true;
+        m_DiffMode = false;
         m_HighContrastMode = false;
     }
 };
