@@ -842,6 +842,7 @@ void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth )
 
         case T_polyline_path:
             tok = T_path;
+            // Fall through
         case T_path:
         case T_polygon:
             if( growth->shape )
@@ -936,6 +937,7 @@ void SPECCTRA_DB::doWINDOW( WINDOW* growth )
 
         case T_polyline_path:
             tok = T_path;
+            // Fall through
         case T_path:
         case T_polygon:
             if( growth->shape )
@@ -2053,6 +2055,7 @@ void SPECCTRA_DB::doSHAPE( SHAPE* growth )
         {
         case T_polyline_path:
             tok = T_path;
+            // Fall through
         case T_rect:
         case T_circle:
         case T_path:

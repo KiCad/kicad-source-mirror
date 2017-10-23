@@ -48,11 +48,7 @@ TOOL_ACTION PCB_ACTIONS::positionRelative( "pcbnew.PositionRelative.positionRela
 
 TOOL_ACTION PCB_ACTIONS::selectpositionRelativeItem(
         "pcbnew.PositionRelative.selectpositionRelativeItem",
-        AS_GLOBAL,
-        0,
-        "",
-        "",
-        nullptr );
+        AS_GLOBAL, 0, "", "", nullptr );
 
 
 POSITION_RELATIVE_TOOL::POSITION_RELATIVE_TOOL() :
