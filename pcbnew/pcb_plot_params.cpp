@@ -113,8 +113,9 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_outputDirectory.clear();
     m_color                      = BLACK;
     m_textMode                   = PLOTTEXTMODE_DEFAULT;
-    m_layerSelection = LSET( 2, F_SilkS, B_SilkS) | LSET::AllCuMask();
-
+    m_layerSelection             = LSET( 7, F_SilkS, B_SilkS, F_Mask, B_Mask,
+                                         F_Paste, B_Paste, Edge_Cuts )
+                                         | LSET::AllCuMask();
     // This parameter controls if the NPTH pads will be plotted or not
     // it is a "local" parameter
     m_skipNPTH_Pads              = false;
