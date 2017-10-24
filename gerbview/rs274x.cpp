@@ -65,7 +65,7 @@ enum RS274X_PARAMETERS {
     SCALE_FACTOR   = CODE( 'S', 'F' ),          // Default:  A = 1.0, B = 1.0
 
     // Image parameters:
-    // commands used only once at the beginning of the file
+    // commands used only once at the beginning of the file, and are deprecated
     IMAGE_JUSTIFY  = CODE( 'I', 'J' ),          // Default: no justification
     IMAGE_NAME     = CODE( 'I', 'N' ),          // Default: void
     IMAGE_OFFSET   = CODE( 'I', 'O' ),          // Default: A = 0, B = 0
@@ -102,11 +102,12 @@ enum RS274X_PARAMETERS {
     // May be used singly or may be layer specfic
     // theses parameters are at the beginning of the file or layer
     // and reset some layer parameters (like interpolation)
-    LAYER_NAME      = CODE( 'L', 'N' ),         // Default: Positive
-    LAYER_POLARITY  = CODE( 'L', 'P' ),
     KNOCKOUT = CODE( 'K', 'O' ),                // Default: off
     STEP_AND_REPEAT = CODE( 'S', 'R' ),         //  Default: A = 1, B = 1
     ROTATE = CODE( 'R', 'O' ),                  //  Default: 0
+
+    LOAD_POLARITY  = CODE( 'L', 'P' ),          //LPC or LPD. Default: Dark (LPD)
+    LOAD_NAME      = CODE( 'L', 'N' ),          // Deprecated: equivalent to G04
 };
 
 
@@ -660,12 +661,11 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
 
         break;
 
-    case LAYER_NAME:
-        m_Iterpolation = GERB_INTERPOL_LINEAR_1X;       // Start a new Gerber layer
-        GetLayerParams( ).m_LayerName.Empty();
-        while( *text != '*' )
+    case LOAD_NAME:
+        // %LN is a (deprecated) equivalentto G04: a comment
+        while( *text && *text != '*' )
         {
-            GetLayerParams( ).m_LayerName.Append( *text++ );
+            text++; // Skip text
         }
 
         break;
@@ -679,7 +679,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
                    m_ImageNegative ? "true" : "false" ); )
         break;
 
-    case LAYER_POLARITY:
+    case LOAD_POLARITY:
         if( *text == 'C' )
             GetLayerParams().m_LayerNegative = true;
         else

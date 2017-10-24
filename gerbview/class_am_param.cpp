@@ -127,7 +127,8 @@ double AM_PARAM::GetValue( const D_CODE* aDcode ) const
                 break;
 
             default:
-                wxLogDebug( "AM_PARAM::GetValue(): unexpected type\n" );
+                wxLogDebug( "AM_PARAM::GetValue(): dcode %d prm %d/%d: unexpected type %d",
+                            aDcode->m_Num_Dcode, ii, m_paramStack.size(), item.GetType() );
                 break;
         }
     }
