@@ -287,7 +287,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_EDIT_CONVERT_CMP:
-
         // Ensure the struct is a component (could be a struct of a component, like Field, text..)
         if( item && item->Type() == SCH_COMPONENT_T )
         {
@@ -298,16 +297,14 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_DISPLAYDOC_CMP:
-
         // Ensure the struct is a component (could be a piece of a component, like Field, text..)
         if( item && item->Type() == SCH_COMPONENT_T )
         {
-            auto text = static_cast<SCH_COMPONENT*>( item )->GetFieldText( "Datasheet" );
+            wxString text = static_cast<SCH_COMPONENT*>( item )->
+                                    GetField( DATASHEET )->GetFullyQualifiedText();
 
             if( !text.IsEmpty() )
-            {
                 GetAssociatedDocument( this, text );
-            }
         }
         break;
 

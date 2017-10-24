@@ -357,7 +357,6 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_LIBS*
     }
 
     wxString       msg;
-    LIB_ALIAS*     libEntry = aLibs->FindLibraryAlias( Component->GetLibId() );
 
     if( !Component->GetFlags() )
     {
@@ -397,7 +396,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_LIBS*
     msg = AddHotkeyName( _( "Autoplace Fields" ), g_Schematic_Hokeys_Descr, HK_AUTOPLACE_FIELDS );
     AddMenuItem( PopMenu, ID_AUTOPLACE_FIELDS, msg, KiBitmap( autoplace_fields_xpm ) );
 
-    if( !Component->GetFieldText("Datasheet").IsEmpty() )
+    if( !Component->GetField( DATASHEET )->GetFullyQualifiedText().IsEmpty() )
         AddMenuItem( PopMenu, ID_POPUP_SCH_DISPLAYDOC_CMP, _( "Open Documentation" ), KiBitmap( datasheet_xpm ) );
 }
 
