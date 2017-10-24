@@ -89,6 +89,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_fp_plugin_options.cpp
     dialogs/dialog_freeroute_exchange.cpp
     dialogs/dialog_freeroute_exchange_base.cpp
+    dialogs/dialog_gencad_export_options.cpp
     dialogs/dialog_gendrill.cpp
     dialogs/dialog_gendrill_base.cpp
     dialogs/dialog_gen_module_position_file_base.cpp

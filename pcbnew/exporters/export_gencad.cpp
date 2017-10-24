@@ -40,12 +40,14 @@
 #include <macros.h>
 
 #include <pcbnew.h>
+#include <dialogs/dialog_gencad_export_options.h>
 
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
 #include <class_edge_mod.h>
 
+#include <hash_eda.h>
 
 static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* frame );
 static void CreateArtworksSection( FILE* aFile );
@@ -57,7 +59,7 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb );
 static void CreateSignalsSection( FILE* aFile, BOARD* aPcb );
 static void CreateShapesSection( FILE* aFile, BOARD* aPcb );
 static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb );
-static void FootprintWriteShape( FILE* File, MODULE* module );
+static void FootprintWriteShape( FILE* File, MODULE* module, const wxString& aShapeName );
 
 // layer names for Gencad export
 
@@ -205,6 +207,13 @@ static std::string GenCADLayerNameFlipped( int aCuCount, PCB_LAYER_ID aId )
 };
 
 
+static wxString escapeString( const wxString& aString )
+{
+    wxString copy( aString );
+    copy.Replace( "\"", "\\\"" );
+    return copy;
+}
+
 #endif
 
 static std::string fmt_mask( LSET aSet )
@@ -216,13 +225,36 @@ static std::string fmt_mask( LSET aSet )
 #endif
 }
 
+// Export options
+static bool flipBottomPads;
+static bool uniquePins;
+static bool individualShapes;
 
 // These are the export origin (the auxiliary axis)
 static int GencadOffsetX, GencadOffsetY;
 
+// Association between shape names (using shapeName index) and components
+static std::map<MODULE*, int> componentShapes;
+static std::map<int, wxString> shapeNames;
+
+static const wxString& getShapeName( MODULE* aModule )
+{
+    static const wxString invalid( "invalid" );
+
+    if( individualShapes )
+        return aModule->GetReference();
+
+    auto itShape = componentShapes.find( aModule );
+    wxCHECK( itShape != componentShapes.end(), invalid );
+
+    auto itName = shapeNames.find( itShape->second );
+    wxCHECK( itName != shapeNames.end(), invalid );
+
+    return itName->second;
+}
+
 // GerbTool chokes on units different than INCH so this is the conversion factor
 const static double SCALE_FACTOR = 1000.0 * IU_PER_MILS;
-
 
 /* Two helper functions to calculate coordinates of modules in gencad values
  * (GenCAD Y axis from bottom to top)
@@ -242,30 +274,24 @@ static double MapYTo( int aY )
 /* Driver function: processing starts here */
 void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
 {
-    wxFileName  fn = GetBoard()->GetFileName();
-    FILE*       file;
+    DIALOG_GENCAD_EXPORT_OPTIONS optionsDialog( this );
 
-    wxString    ext = wxT( "cad" );
-    wxString    wildcard = _( "GenCAD 1.4 board files (.cad)|*.cad" );
-
-    fn.SetExt( ext );
-
-    wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
-
-    wxFileDialog dlg( this, _( "Save GenCAD Board File" ), pro_dir,
-                      fn.GetFullName(), wildcard,
-                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
+    if( optionsDialog.ShowModal() == wxID_CANCEL )
         return;
 
-    if( ( file = wxFopen( dlg.GetPath(), wxT( "wt" ) ) ) == NULL )
-    {
-        wxString    msg;
+    FILE* file = wxFopen( optionsDialog.GetFileName(), "wt" );
 
-        msg.Printf( _( "Unable to create <%s>" ), GetChars( dlg.GetPath() ) );
-        DisplayError( this, msg ); return;
+    if( !file )
+    {
+        DisplayError( this, wxString::Format( _( "Unable to create <%s>" ),
+                    GetChars( optionsDialog.GetFileName() ) ) );
+        return;
     }
+
+    // Get options
+    flipBottomPads = optionsDialog.GetOption( FLIP_BOTTOM_PADS );
+    uniquePins = optionsDialog.GetOption( UNIQUE_PIN_NAMES );
+    individualShapes = optionsDialog.GetOption( INDIVIDUAL_SHAPES );
 
     // Switch the locale to standard C (needed to print floating point numbers)
     LOCALE_IO toggle;
@@ -333,6 +359,9 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
             module->SetFlag( 0 );
         }
     }
+
+    componentShapes.clear();
+    shapeNames.clear();
 }
 
 
@@ -422,7 +451,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         viastacks.push_back( via );
         fprintf( aFile, "PAD V%d.%d.%s ROUND %g\nCIRCLE 0 0 %g\n",
                 via->GetWidth(), via->GetDrillValue(),
-                fmt_mask( via->GetLayerSet() ).c_str(),
+                fmt_mask( via->GetLayerSet() & master_layermask ).c_str(),
                 via->GetDrillValue() / SCALE_FACTOR,
                 via->GetWidth() / (SCALE_FACTOR * 2) );
     }
@@ -434,6 +463,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
     for( unsigned i = 0; i<pads.size(); ++i )
     {
         D_PAD* pad = pads[i];
+        const wxPoint& off = pad->GetOffset();
 
         pad->SetSubRatsnest( pad_name_number );
 
@@ -454,13 +484,16 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         switch( pad->GetShape() )
         {
         default:
+            wxASSERT_MSG( false, "Pad type not implemented" );
+            // fall-through
+
         case PAD_SHAPE_CIRCLE:
             fprintf( aFile, " ROUND %g\n",
                      pad->GetDrillSize().x / SCALE_FACTOR );
             /* Circle is center, radius */
             fprintf( aFile, "CIRCLE %g %g %g\n",
-                    pad->GetOffset().x / SCALE_FACTOR,
-                    -pad->GetOffset().y / SCALE_FACTOR,
+                    off.x / SCALE_FACTOR,
+                    -off.y / SCALE_FACTOR,
                     pad->GetSize().x / (SCALE_FACTOR * 2) );
             break;
 
@@ -470,87 +503,140 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 
             // Rectangle is begin, size *not* begin, end!
             fprintf( aFile, "RECTANGLE %g %g %g %g\n",
-                    (-dx + pad->GetOffset().x ) / SCALE_FACTOR,
-                    (-dy - pad->GetOffset().y ) / SCALE_FACTOR,
+                    (-dx + off.x ) / SCALE_FACTOR,
+                    (-dy - off.y ) / SCALE_FACTOR,
                     dx / (SCALE_FACTOR / 2), dy / (SCALE_FACTOR / 2) );
             break;
 
-        case PAD_SHAPE_OVAL:     // Create outline by 2 lines and 2 arcs
+        case PAD_SHAPE_ROUNDRECT:
+        case PAD_SHAPE_OVAL:
             {
-                // OrCAD Layout call them OVAL or OBLONG - GenCAD call them FINGERs
-                fprintf( aFile, " FINGER %g\n",
-                         pad->GetDrillSize().x / SCALE_FACTOR );
-                int dr = dx - dy;
+                const wxSize& size = pad->GetSize();
+                int radius;
 
-                if( dr >= 0 )       // Horizontal oval
+                if( pad->GetShape() == PAD_SHAPE_ROUNDRECT )
+                    radius = pad->GetRoundRectCornerRadius();
+                else
+                    radius = std::min( size.x, size.y ) / 2;
+
+                int lineX = size.x / 2 - radius;
+                int lineY = size.y / 2 - radius;
+
+                fprintf( aFile, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
+
+                // bottom left arc
+                fprintf( aFile, "ARC %g %g %g %g %g %g\n",
+                        ( off.x - lineX - radius ) / SCALE_FACTOR,
+                        ( -off.y - lineY ) / SCALE_FACTOR, ( off.x - lineX ) / SCALE_FACTOR,
+                        ( -off.y - lineY - radius ) / SCALE_FACTOR,
+                        ( off.x - lineX ) / SCALE_FACTOR, ( -off.y - lineY ) / SCALE_FACTOR );
+
+                // bottom line
+                if( lineX > 0 )
                 {
-                    int radius = dy;
                     fprintf( aFile, "LINE %g %g %g %g\n",
-                             (-dr + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y - radius) / SCALE_FACTOR,
-                             (dr + pad->GetOffset().x ) / SCALE_FACTOR,
-                             (-pad->GetOffset().y - radius) / SCALE_FACTOR );
-
-                    // GenCAD arcs are (start, end, center)
-                    fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                             (dr + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y - radius) / SCALE_FACTOR,
-                             (dr + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y + radius) / SCALE_FACTOR,
-                             (dr + pad->GetOffset().x) / SCALE_FACTOR,
-                             -pad->GetOffset().y / SCALE_FACTOR );
-
-                    fprintf( aFile, "LINE %g %g %g %g\n",
-                             (dr + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y + radius) / SCALE_FACTOR,
-                             (-dr + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y + radius) / SCALE_FACTOR );
-                    fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                             (-dr + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y + radius) / SCALE_FACTOR,
-                             (-dr + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y - radius) / SCALE_FACTOR,
-                             (-dr + pad->GetOffset().x) / SCALE_FACTOR,
-                             -pad->GetOffset().y / SCALE_FACTOR );
+                            ( off.x - lineX ) / SCALE_FACTOR,
+                            ( -off.y - lineY - radius ) / SCALE_FACTOR,
+                            ( off.x + lineX ) / SCALE_FACTOR,
+                            ( -off.y - lineY - radius ) / SCALE_FACTOR );
                 }
-                else        // Vertical oval
-                {
-                    dr = -dr;
-                    int radius = dx;
-                    fprintf( aFile, "LINE %g %g %g %g\n",
-                             (-radius + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y - dr) / SCALE_FACTOR,
-                             (-radius + pad->GetOffset().x ) / SCALE_FACTOR,
-                             (-pad->GetOffset().y + dr) / SCALE_FACTOR );
-                    fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                             (-radius + pad->GetOffset().x ) / SCALE_FACTOR,
-                             (-pad->GetOffset().y + dr) / SCALE_FACTOR,
-                             (radius + pad->GetOffset().x ) / SCALE_FACTOR,
-                             (-pad->GetOffset().y + dr) / SCALE_FACTOR,
-                             pad->GetOffset().x / SCALE_FACTOR,
-                             (-pad->GetOffset().y + dr) / SCALE_FACTOR );
 
+                // bottom right arc
+                fprintf( aFile, "ARC %g %g %g %g %g %g\n",
+                        ( off.x + lineX ) / SCALE_FACTOR,
+                        ( -off.y - lineY - radius ) / SCALE_FACTOR,
+                        ( off.x + lineX + radius ) / SCALE_FACTOR,
+                        ( -off.y - lineY ) / SCALE_FACTOR, ( off.x + lineX ) / SCALE_FACTOR,
+                        ( -off.y - lineY ) / SCALE_FACTOR );
+
+                // right line
+                if( lineY > 0 )
+                {
                     fprintf( aFile, "LINE %g %g %g %g\n",
-                             (radius + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y + dr) / SCALE_FACTOR,
-                             (radius + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y - dr) / SCALE_FACTOR );
-                    fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                             (radius + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y - dr) / SCALE_FACTOR,
-                             (-radius + pad->GetOffset().x) / SCALE_FACTOR,
-                             (-pad->GetOffset().y - dr) / SCALE_FACTOR,
-                             pad->GetOffset().x / SCALE_FACTOR,
-                             (-pad->GetOffset().y - dr) / SCALE_FACTOR );
+                            ( off.x + lineX + radius ) / SCALE_FACTOR,
+                            ( -off.y + lineY ) / SCALE_FACTOR,
+                            ( off.x + lineX + radius ) / SCALE_FACTOR,
+                            ( -off.y - lineY ) / SCALE_FACTOR );
+                }
+
+                // top right arc
+                fprintf( aFile, "ARC %g %g %g %g %g %g\n",
+                        ( off.x + lineX + radius ) / SCALE_FACTOR,
+                        ( -off.y + lineY ) / SCALE_FACTOR, ( off.x + lineX ) / SCALE_FACTOR,
+                        ( -off.y + lineY + radius ) / SCALE_FACTOR,
+                        ( off.x + lineX ) / SCALE_FACTOR, ( -off.y + lineY ) / SCALE_FACTOR );
+
+                // top line
+                if( lineX > 0 )
+                {
+                    fprintf( aFile, "LINE %g %g %g %g\n"
+                            , ( off.x - lineX ) / SCALE_FACTOR,
+                            ( -off.y + lineY + radius ) / SCALE_FACTOR,
+                            ( off.x + lineX ) / SCALE_FACTOR,
+                            ( -off.y + lineY + radius ) / SCALE_FACTOR );
+                }
+
+                // top left arc
+                fprintf( aFile, "ARC %g %g %g %g %g %g\n",
+                        ( off.x - lineX ) / SCALE_FACTOR,
+                        ( -off.y + lineY + radius ) / SCALE_FACTOR,
+                        ( off.x - lineX - radius ) / SCALE_FACTOR,
+                        ( -off.y + lineY ) / SCALE_FACTOR, ( off.x - lineX ) / SCALE_FACTOR,
+                        ( -off.y + lineY ) / SCALE_FACTOR );
+
+                // left line
+                if( lineY > 0 )
+                {
+                    fprintf( aFile, "LINE %g %g %g %g\n",
+                            ( off.x - lineX - radius ) / SCALE_FACTOR,
+                            ( -off.y - lineY ) / SCALE_FACTOR,
+                            ( off.x - lineX - radius ) / SCALE_FACTOR,
+                            ( -off.y + lineY ) / SCALE_FACTOR );
                 }
             }
             break;
 
         case PAD_SHAPE_TRAPEZOID:
-            fprintf( aFile, " POLYGON %g\n",
-                     pad->GetDrillSize().x / SCALE_FACTOR );
+            {
+                fprintf( aFile, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
 
-            // XXX TO BE IMPLEMENTED! and I don't know if it could be actually imported by something
+                wxPoint poly[4];
+                pad->BuildPadPolygon( poly, wxSize( 0, 0 ), 0 );
+
+                for( int cur = 0; cur < 4; ++cur )
+                {
+                    int next = ( cur + 1 ) % 4;
+                    fprintf( aFile, "LINE %g %g %g %g\n",
+                            ( off.x + poly[cur].x ) / SCALE_FACTOR,
+                            ( -off.y - poly[cur].y ) / SCALE_FACTOR,
+                            ( off.x + poly[next].x ) / SCALE_FACTOR,
+                            ( -off.y - poly[next].y ) / SCALE_FACTOR );
+                }
+            }
+            break;
+
+        case PAD_SHAPE_CUSTOM:
+            {
+                fprintf( aFile, " POLYGON %g\n", pad->GetDrillSize().x / SCALE_FACTOR );
+
+                const SHAPE_POLY_SET& outline = pad->GetCustomShapeAsPolygon();
+
+                for( int jj = 0; jj < outline.OutlineCount(); ++jj )
+                {
+                    const SHAPE_LINE_CHAIN& poly = outline.COutline( jj );
+                    int pointCount = poly.PointCount();
+
+                    for( int ii = 0; ii < pointCount; ii++ )
+                    {
+                        int next = ( ii + 1 ) % pointCount;
+                        fprintf( aFile, "LINE %g %g %g %g\n",
+                                ( off.x + poly.CPoint( ii ).x ) / SCALE_FACTOR,
+                                ( -off.y - poly.CPoint( ii ).y ) / SCALE_FACTOR,
+                                ( off.x + poly.CPoint( next ).x ) / SCALE_FACTOR,
+                                ( -off.y - poly.CPoint( next ).y ) / SCALE_FACTOR );
+                    }
+                }
+            }
             break;
         }
     }
@@ -585,10 +671,10 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
     }
 
     /* Component padstacks
-     *  CAM350 don't apply correctly the FLIP semantics for padstacks, i.e. doesn't
-     *  swap the top and bottom layers... so I need to define the shape as MIRRORX
-     *  and define a separate 'flipped' padstack... until it appears yet another
-     *  noncompliant importer */
+     *  Older versions of CAM350 don't apply correctly the FLIP semantics for
+     *  padstacks, i.e. doesn't swap the top and bottom layers... so I need to
+     *  define the shape as MIRRORX and define a separate 'flipped' padstack...
+     *  until it appears yet another noncompliant importer */
     for( unsigned i = 1; i < padstacks.size(); i++ )
     {
         D_PAD* pad = padstacks[i];
@@ -607,18 +693,38 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         }
 
         // Flipped padstack
-        fprintf( aFile, "PADSTACK PAD%uF %g\n", i, pad->GetDrillSize().x / SCALE_FACTOR );
-
-        // the normal PCB_LAYER_ID sequence is inverted from gc_seq[]
-        for( LSEQ seq = pad_set.Seq();  seq;  ++seq )
+        if( flipBottomPads )
         {
-            PCB_LAYER_ID layer = *seq;
+            fprintf( aFile, "PADSTACK PAD%uF %g\n", i, pad->GetDrillSize().x / SCALE_FACTOR );
 
-            fprintf( aFile, "PAD P%u %s 0 0\n", i, GenCADLayerNameFlipped( cu_count, layer ).c_str() );
+            // the normal PCB_LAYER_ID sequence is inverted from gc_seq[]
+            for( LSEQ seq = pad_set.Seq();  seq;  ++seq )
+            {
+                PCB_LAYER_ID layer = *seq;
+
+                fprintf( aFile, "PAD P%u %s 0 0\n", i, GenCADLayerNameFlipped( cu_count, layer ).c_str() );
+            }
         }
     }
 
     fputs( "$ENDPADSTACKS\n\n", aFile );
+}
+
+
+/// Compute hashes for modules without taking into account their position, rotation or layer
+static size_t hashModule( const MODULE* aModule )
+{
+    size_t ret = 0x11223344;
+    constexpr int flags = HASH_FLAGS::POSITION | HASH_FLAGS::REL_COORD
+                | HASH_FLAGS::ROTATION | HASH_FLAGS::LAYER;
+
+    for( const BOARD_ITEM* i = aModule->GraphicalItemsList(); i; i = i->Next() )
+        ret ^= hash_eda( i, flags );
+
+    for( const D_PAD* i = aModule->PadsList(); i; i = i->Next() )
+        ret ^= hash_eda( i, flags );
+
+    return ret;
 }
 
 
@@ -633,46 +739,102 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
     const char* layer;
     wxString    pinname;
     const char* mirror = "0";
+    std::map<wxString, size_t> shapes;
 
     fputs( "$SHAPES\n", aFile );
 
-    const LSET all_cu = LSET::AllCuMask();
-
     for( module = aPcb->m_Modules; module; module = module->Next() )
     {
-        FootprintWriteShape( aFile, module );
+        if( !individualShapes )
+        {
+            // Check if such shape has been already generated, and if so - reuse it
+            // It is necessary to compute hash (i.e. check all children objects) as
+            // certain components instances might have been modified on the board.
+            // In such case the shape will be different despite the same LIB_ID.
+            wxString shapeName = module->GetFPID().Format();
+
+            auto shapeIt = shapes.find( shapeName );
+            size_t modHash = hashModule( module );
+
+            if( shapeIt != shapes.end() )
+            {
+                if( modHash != shapeIt->second )
+                {
+                    // there is an entry for this footprint, but it has a modified shape,
+                    // so we need to create a new entry
+                    wxString newShapeName;
+                    int suffix = 0;
+
+                    // find an unused name or matching entry
+                    do
+                    {
+                        newShapeName = wxString::Format( "%s_%d", shapeName, suffix );
+                        shapeIt = shapes.find( newShapeName );
+                        ++suffix;
+                    }
+                    while( shapeIt != shapes.end() && shapeIt->second != modHash );
+
+                    shapeName = newShapeName;
+                }
+
+                if( shapeIt != shapes.end() && modHash == shapeIt->second )
+                {
+                    // shape found, so reuse it
+                    componentShapes[module] = modHash;
+                    continue;
+                }
+            }
+
+            // new shape
+            componentShapes[module] = modHash;
+            shapeNames[modHash] = shapeName;
+            shapes[shapeName] = modHash;
+            FootprintWriteShape( aFile, module, shapeName );
+        }
+        else // individual shape for each component
+        {
+            FootprintWriteShape( aFile, module, module->GetReference() );
+        }
+
+        // set of already emitted pins to check for duplicates
+        std::set<wxString> pins;
 
         for( pad = module->PadsList(); pad; pad = pad->Next() )
         {
-            /* Funny thing: GenCAD requires the pad side even if you use
-             *  padstacks (which are theorically optional but gerbtools
-             *requires* them). Now the trouble thing is that 'BOTTOM'
-             *  is interpreted by someone as a padstack flip even
-             *  if the spec explicitly says it's not... */
-            layer = "ALL";
-
-            if( ( pad->GetLayerSet() & all_cu ) == LSET( B_Cu ) )
-            {
-                layer = module->GetFlag() ? "TOP" : "BOTTOM";
-            }
-            else if( ( pad->GetLayerSet() & all_cu ) == LSET( F_Cu ) )
-            {
-                layer = module->GetFlag() ? "BOTTOM" : "TOP";
-            }
-
+            /* Padstacks are defined using the correct layers for the pads, therefore to
+             * all pads need to be marked as TOP to use the padstack information correctly.
+             */
+            layer = "TOP";
             pinname = pad->GetName();
 
             if( pinname.IsEmpty() )
                 pinname = wxT( "none" );
 
+            if( uniquePins )
+            {
+                int suffix = 0;
+                wxString origPinname( pinname );
+
+                auto it = pins.find( pinname );
+
+                while( it != pins.end() )
+                {
+                    pinname = wxString::Format( "%s_%d", origPinname, suffix );
+                    ++suffix;
+                    it = pins.find( pinname );
+                }
+
+                pins.insert( pinname );
+            }
+
             double orient = pad->GetOrientation() - module->GetOrientation();
             NORMALIZE_ANGLE_POS( orient );
 
             // Bottom side modules use the flipped padstack
-            fprintf( aFile, (module->GetFlag()) ?
-                     "PIN %s PAD%dF %g %g %s %g %s\n" :
-                     "PIN %s PAD%d %g %g %s %g %s\n",
-                     TO_UTF8( pinname ), pad->GetSubRatsnest(),
+            fprintf( aFile, ( flipBottomPads && module->GetFlag() ) ?
+                     "PIN \"%s\" PAD%dF %g %g %s %g %s\n" :
+                     "PIN \"%s\" PAD%d %g %g %s %g %s\n",
+                     TO_UTF8( escapeString( pinname ) ), pad->GetSubRatsnest(),
                      pad->GetPos0().x / SCALE_FACTOR,
                      -pad->GetPos0().y / SCALE_FACTOR,
                      layer, orient / 10.0, mirror );
@@ -702,7 +864,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
 
         if( module->GetFlag() )
         {
-            mirror = "0";
+            mirror = "MIRRORX";
             flip   = "FLIP";
             NEGATE_AND_NORMALIZE_ANGLE_POS( fp_orient );
         }
@@ -712,20 +874,19 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
             flip   = "0";
         }
 
-        fprintf( aFile, "\nCOMPONENT %s\n",
-                 TO_UTF8( module->GetReference() ) );
-        fprintf( aFile, "DEVICE %s_%s\n",
-                 TO_UTF8( module->GetReference() ),
-                 TO_UTF8( module->GetValue() ) );
+        fprintf( aFile, "\nCOMPONENT \"%s\"\n",
+                 TO_UTF8( escapeString( module->GetReference() ) ) );
+        fprintf( aFile, "DEVICE \"DEV_%s\"\n",
+                 TO_UTF8( escapeString( getShapeName( module ) ) ) );
         fprintf( aFile, "PLACE %g %g\n",
                  MapXTo( module->GetPosition().x ),
                  MapYTo( module->GetPosition().y ) );
         fprintf( aFile, "LAYER %s\n",
-                 (module->GetFlag()) ? "BOTTOM" : "TOP" );
+                 module->GetFlag() ? "BOTTOM" : "TOP" );
         fprintf( aFile, "ROTATION %g\n",
                  fp_orient / 10.0 );
-        fprintf( aFile, "SHAPE %s %s %s\n",
-                 TO_UTF8( module->GetReference() ),
+        fprintf( aFile, "SHAPE \"%s\" %s %s\n",
+                 TO_UTF8( escapeString( getShapeName( module ) ) ),
                  mirror, flip );
 
         // Text on silk layer: RefDes and value (are they actually useful?)
@@ -733,8 +894,8 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
 
         for( int ii = 0; ii < 2; ii++ )
         {
-            double      txt_orient = textmod->GetTextAngle();
-            std::string layer  = GenCADLayerName( cu_count, module->GetFlag() ? B_SilkS : F_SilkS );
+            double txt_orient = textmod->GetTextAngle();
+            std::string layer = GenCADLayerName( cu_count, module->GetFlag() ? B_SilkS : F_SilkS );
 
             fprintf( aFile, "TEXT %g %g %g %g %s %s \"%s\"",
                      textmod->GetPos0().x / SCALE_FACTOR,
@@ -743,7 +904,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
                      txt_orient / 10.0,
                      mirror,
                      layer.c_str(),
-                     TO_UTF8( textmod->GetText() ) );
+                     TO_UTF8( escapeString( textmod->GetText() ) ) );
 
             // Please note, the width is approx
             fprintf( aFile, " 0 0 %g %g\n",
@@ -787,7 +948,7 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
         if( net->GetNet() <= 0 )  // dummy netlist (no connection)
             continue;
 
-        msg = wxT( "SIGNAL " ) + net->GetNetname();
+        msg = wxT( "SIGNAL \"" ) + escapeString( net->GetNetname() ) + "\"";
 
         fputs( TO_UTF8( msg ), aFile );
         fputs( "\n", aFile );
@@ -799,9 +960,9 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
                 if( pad->GetNetCode() != net->GetNet() )
                     continue;
 
-                msg.Printf( wxT( "NODE %s %s" ),
-                            GetChars( module->GetReference() ),
-                            GetChars( pad->GetName() ) );
+                msg.Printf( wxT( "NODE \"%s\" \"%s\"" ),
+                            GetChars( escapeString( module->GetReference() ) ),
+                            GetChars( escapeString( pad->GetName() ) ) );
 
                 fputs( TO_UTF8( msg ), aFile );
                 fputs( "\n", aFile );
@@ -942,7 +1103,7 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb )
             else
                 netname = wxT( "_noname_" );
 
-            fprintf( aFile, "ROUTE %s\n", TO_UTF8( netname ) );
+            fprintf( aFile, "ROUTE \"%s\"\n", TO_UTF8( escapeString( netname ) ) );
         }
 
         if( old_width != track->GetWidth() )
@@ -992,15 +1153,22 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb )
  */
 static void CreateDevicesSection( FILE* aFile, BOARD* aPcb )
 {
-    MODULE* module;
-
+    std::set<wxString> emitted;
     fputs( "$DEVICES\n", aFile );
 
-    for( module = aPcb->m_Modules; module; module = module->Next() )
+    for( const auto& componentShape : componentShapes )
     {
-        fprintf( aFile, "DEVICE \"%s\"\n", TO_UTF8( module->GetReference() ) );
-        fprintf( aFile, "PART \"%s\"\n", TO_UTF8( module->GetValue() ) );
-        fprintf( aFile, "PACKAGE \"%s\"\n", module->GetFPID().Format().c_str() );
+        const wxString& shapeName = shapeNames[componentShape.second];
+        bool newDevice;
+        std::tie( std::ignore, newDevice ) = emitted.insert( shapeName );
+
+        if( !newDevice )        // do not repeat device definitions
+            continue;
+
+        const MODULE* module = componentShape.first;
+        fprintf( aFile, "\nDEVICE \"DEV_%s\"\n", TO_UTF8( escapeString( shapeName ) ) );
+        fprintf( aFile, "PART \"%s\"\n", TO_UTF8( escapeString( module->GetValue() ) ) );
+        fprintf( aFile, "PACKAGE \"%s\"\n", TO_UTF8( escapeString( module->GetFPID().Format() ) ) );
 
         // The TYPE attribute is almost freeform
         const char* ty = "TH";
@@ -1119,20 +1287,13 @@ static void CreateTracksInfoData( FILE* aFile, BOARD* aPcb )
  * It's almost guaranteed that the silk layer will be imported wrong but
  * the shape also contains the pads!
  */
-static void FootprintWriteShape( FILE* aFile, MODULE* module )
+static void FootprintWriteShape( FILE* aFile, MODULE* module, const wxString& aShapeName )
 {
     EDGE_MODULE* PtEdge;
     EDA_ITEM*    PtStruct;
 
-    // Control Y axis change sign for flipped modules
-    int          Yaxis_sign = -1;
-
-    // Flip for bottom side components
-    if( module->GetFlag() )
-        Yaxis_sign = 1;
-
     /* creates header: */
-    fprintf( aFile, "\nSHAPE %s\n", TO_UTF8( module->GetReference() ) );
+    fprintf( aFile, "\nSHAPE \"%s\"\n", TO_UTF8( escapeString( aShapeName ) ) );
 
     if( module->GetAttributes() & MOD_VIRTUAL )
     {
@@ -1189,10 +1350,10 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module )
                 {
                 case S_SEGMENT:
                     fprintf( aFile, "LINE %g %g %g %g\n",
-                             (PtEdge->m_Start0.x) / SCALE_FACTOR,
-                             (Yaxis_sign * PtEdge->m_Start0.y) / SCALE_FACTOR,
-                             (PtEdge->m_End0.x) / SCALE_FACTOR,
-                             (Yaxis_sign * PtEdge->m_End0.y ) / SCALE_FACTOR );
+                             PtEdge->m_Start0.x / SCALE_FACTOR,
+                             -PtEdge->m_Start0.y / SCALE_FACTOR,
+                             PtEdge->m_End0.x / SCALE_FACTOR,
+                             -PtEdge->m_End0.y / SCALE_FACTOR );
                     break;
 
                 case S_CIRCLE:
@@ -1201,7 +1362,7 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module )
                                                          PtEdge->m_Start0 ) );
                     fprintf( aFile, "CIRCLE %g %g %g\n",
                              PtEdge->m_Start0.x / SCALE_FACTOR,
-                             Yaxis_sign * PtEdge->m_Start0.y / SCALE_FACTOR,
+                             -PtEdge->m_Start0.y / SCALE_FACTOR,
                              radius / SCALE_FACTOR );
                     break;
                 }
@@ -1214,27 +1375,14 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module )
                     RotatePoint( &arcendx, &arcendy, -PtEdge->GetAngle() );
                     arcendx += PtEdge->GetStart0().x;
                     arcendy += PtEdge->GetStart0().y;
-                    if( Yaxis_sign == -1 )
-                    {
-                        // Flipping Y flips the arc direction too
-                        fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                                 (arcendx) / SCALE_FACTOR,
-                                 (Yaxis_sign * arcendy) / SCALE_FACTOR,
-                                 (PtEdge->m_End0.x) / SCALE_FACTOR,
-                                 (Yaxis_sign * PtEdge->GetEnd0().y) / SCALE_FACTOR,
-                                 (PtEdge->GetStart0().x) / SCALE_FACTOR,
-                                 (Yaxis_sign * PtEdge->GetStart0().y) / SCALE_FACTOR );
-                    }
-                    else
-                    {
-                        fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                                 (PtEdge->GetEnd0().x) / SCALE_FACTOR,
-                                 (Yaxis_sign * PtEdge->GetEnd0().y) / SCALE_FACTOR,
-                                 (arcendx) / SCALE_FACTOR,
-                                 (Yaxis_sign * arcendy) / SCALE_FACTOR,
-                                 (PtEdge->GetStart0().x) / SCALE_FACTOR,
-                                 (Yaxis_sign * PtEdge->GetStart0().y) / SCALE_FACTOR );
-                    }
+
+                    fprintf( aFile, "ARC %g %g %g %g %g %g\n",
+                                PtEdge->m_End0.x / SCALE_FACTOR,
+                                -PtEdge->GetEnd0().y / SCALE_FACTOR,
+                                arcendx / SCALE_FACTOR,
+                                -arcendy / SCALE_FACTOR,
+                                PtEdge->GetStart0().x / SCALE_FACTOR,
+                                -PtEdge->GetStart0().y / SCALE_FACTOR );
                     break;
                 }
 
