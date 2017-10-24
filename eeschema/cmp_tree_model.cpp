@@ -135,7 +135,7 @@ CMP_TREE_NODE_LIB_ID::CMP_TREE_NODE_LIB_ID( CMP_TREE_NODE* aParent, LIB_ALIAS* a
 
     // Parent node is the library nickname so set the LIB_ID library nickname.
     LibId.SetLibNickname( aParent->Name );
-    LibId.SetLibItemName( aAlias->GetName() );
+    LibId.SetLibItemName( aAlias->GetName(), false );
 
     IsRoot = aAlias->IsRoot();
 

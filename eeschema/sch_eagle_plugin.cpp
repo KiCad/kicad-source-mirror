@@ -50,6 +50,8 @@
 #include <sch_marker.h>
 #include <sch_bus_entry.h>
 #include <eagle_parser.h>
+#include <symbol_lib_table.h>
+#include <sch_legacy_plugin.h>
 #include <sch_eagle_plugin.h>
 
 
@@ -85,6 +87,20 @@ static int countChildren( wxXmlNode* aCurrentNode, const std::string& aName )
     }
 
     return count;
+}
+
+
+wxString SCH_EAGLE_PLUGIN::getLibName() const
+{
+    return m_kiway->Prj().GetProjectName() + "-eagle-import";
+}
+
+
+wxFileName SCH_EAGLE_PLUGIN::getLibFileName() const
+{
+    wxFileName fn( m_kiway->Prj().GetProjectPath(), getLibName(), SchematicLibraryFileExtension );
+
+    return fn;
 }
 
 
@@ -344,20 +360,40 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
         m_rootSheet->SetScreen( screen );
     }
 
-    // Create a schematic symbol library
-    wxString projectpath = m_kiway->Prj().GetProjectPath();
-    wxFileName libfn = m_kiway->Prj().AbsolutePath( m_kiway->Prj().GetProjectName() );
+    SYMBOL_LIB_TABLE* libTable = m_kiway->Prj().SchSymbolLibTable();
 
-    libfn.SetExt( SchematicLibraryFileExtension );
-    std::unique_ptr<PART_LIB> lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, libfn.GetFullPath() ) );
-    lib->EnableBuffering();
+    wxCHECK_MSG( libTable, NULL, "Could not load symbol lib table." );
 
-    if( !wxFileName::FileExists( lib->GetFullFileName() ) )
+    m_pi.set( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+    m_properties = std::make_unique<PROPERTIES>();
+    (*m_properties)[ SCH_LEGACY_PLUGIN::PropBuffering ] = "";
+
+    /// @note No check is being done here to see if the existing symbol library exists so this
+    ///       will overwrite the existing one.
+    if( !libTable->HasLibrary( getLibName() ) )
     {
-        lib->Create();
-    }
+        // Create a new empty symbol library.
+        m_pi->CreateSymbolLib( getLibFileName().GetFullPath() );
 
-    m_partlib = lib.release();
+        wxString libTableUri = "${KIPRJMOD}/" + getLibFileName().GetFullName();
+        // Add the new library to the project symbol library table.
+        libTable->InsertRow( new SYMBOL_LIB_TABLE_ROW( getLibName(), libTableUri,
+                                                       wxString( "Legacy" ) ) );
+
+        // Save project symbol library table.
+        wxFileName fn( m_kiway->Prj().GetProjectPath(),
+                       SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+
+        // So output formatter goes out of scope and closes the file before reloading.
+        {
+        FILE_OUTPUTFORMATTER formatter( fn.GetFullPath() );
+        libTable->Format( &formatter, 0 );
+        }
+
+        // Relaod the symbol library table.
+        m_kiway->Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
+        m_kiway->Prj().SchSymbolLibTable();
+    }
 
     // Retrieve the root as current node
     wxXmlNode* currentNode = xmlDocument.GetRoot();
@@ -372,15 +408,8 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
     // Load drawing
     loadDrawing( children["drawing"] );
 
-    PART_LIBS* prjLibs = aKiway->Prj().SchLibs();
+    m_pi->SaveLibrary( getLibFileName().GetFullPath() );
 
-    // There are two ways to add a new library, the official one that requires creating a file:
-    m_partlib->Save( false );
-    // prjLibs->AddLibrary( m_partlib->GetFullFileName() );
-    // or undocumented one:
-    prjLibs->insert( prjLibs->begin(), m_partlib );
-
-    deleter.release();
     return m_rootSheet;
 }
 
@@ -1027,13 +1056,18 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
         package = p->second;
     }
 
-    LIB_ID libId( wxEmptyString, symbolname );
+    std::string kisymbolname = symbolname;
+    std::replace( kisymbolname.begin(), kisymbolname.end(), ':', '_' );
+    std::replace( kisymbolname.begin(), kisymbolname.end(), '/', '_' );
 
-    LIB_PART* part = m_partlib->FindPart( symbolname );
+    LIB_ALIAS* alias = m_pi->LoadSymbol( getLibFileName().GetFullPath(), kisymbolname,
+                                         m_properties.get() );
 
-    if( !part )
+    if( !alias || !alias->GetPart() )
         return;
 
+    LIB_PART* part = alias->GetPart();
+    LIB_ID libId( getLibName(), kisymbolname );
     std::unique_ptr<SCH_COMPONENT> component( new SCH_COMPONENT() );
     component->SetLibId( libId );
     component->SetUnit( unit );
@@ -1230,7 +1264,11 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
                 kpart->SetPower();
 
             string name = kpart->GetName().ToStdString();
-            m_partlib->AddPart( kpart.get() );
+            std::replace( name.begin(), name.end(), ':', '_' );
+            std::replace( name.begin(), name.end(), '/', '_' );
+            kpart->SetName( name );
+            m_pi->SaveSymbol( getLibFileName().GetFullPath(), new LIB_PART( *kpart.get() ),
+                              m_properties.get() );
             aEagleLibrary->KiCadSymbols.insert( name, kpart.release() );
 
             deviceNode = deviceNode->GetNext();

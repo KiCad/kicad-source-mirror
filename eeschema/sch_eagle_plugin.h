@@ -172,15 +172,20 @@ private:
     void            loadTextAttributes( EDA_TEXT* aText, const ETEXT& aAttribs ) const;
     void            loadFieldAttributes( LIB_FIELD* aField, const LIB_TEXT* aText ) const;
 
+    wxString        getLibName() const;
+    wxFileName      getLibFileName() const;
+
     KIWAY* m_kiway;      ///< For creating sub sheets.
     SCH_SHEET* m_rootSheet; ///< The root sheet of the schematic being loaded..
     SCH_SHEET* m_currentSheet; ///< The current sheet of the schematic being loaded..
     wxString m_version; ///< Eagle file version.
     wxFileName m_filename;
-    PART_LIB* m_partlib; ///< symbol library for imported file.
 
     EPART_MAP m_partlist;
     std::map<std::string, EAGLE_LIBRARY> m_eagleLibs;
+
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER m_pi;         ///< Plugin to create the KiCad symbol library.
+    std::unique_ptr< PROPERTIES > m_properties;   ///< Library plugin properties.
 
     std::map<std::string, int> m_netCounts;
     std::map<int, SCH_LAYER_ID> m_layerMap;

@@ -156,7 +156,7 @@ bool SCH_BASE_FRAME::DisplayListComponentsInLib( wxString& aLibrary, wxString& a
     {
         LIB_ID id;
         wxArrayString item;
-        id.SetLibItemName( nameList[i] );
+        id.SetLibItemName( nameList[i], false );
         id.SetLibNickname( aLibrary );
         item.Add( id.Format() );
         itemsToDisplay.push_back( item );
