@@ -262,16 +262,7 @@ public:
     bool CheckIfOnDrawList( SCH_ITEM* st );
 
     /**
-     * Perform routine schematic cleaning including breaking wire and buses and
-     * deleting identical objects superimposed on top of each other.
-     *
-     * @return True if any schematic clean up was performed.
-     */
-    bool SchematicCleanUp();
-
-    /**
      * Test all of the connectable objects in the schematic for unused connection points.
-     *
      * @return True if any connection state changes were made.
      */
     bool TestDanglingEnds();
@@ -540,11 +531,6 @@ public:
      * Clear the annotation for all components in the hierarchy.
      */
     void ClearAnnotation();
-
-    /**
-     * Merge and break wire segments in the entire schematic hierarchy.
-     */
-    void SchematicCleanUp();
 
     /**
      * Test all sheet and component objects in the schematic for duplicate time stamps

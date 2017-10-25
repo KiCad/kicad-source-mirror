@@ -299,7 +299,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
         screen->m_FirstRedraw = false;
         SetCrossHairPosition( GetScrollCenterPosition() );
         m_canvas->MoveCursorToCrossHair();
-        screen->SchematicCleanUp();
+        SchematicCleanUp();
     }
     else
     {

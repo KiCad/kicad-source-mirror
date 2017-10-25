@@ -435,55 +435,6 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
 }
 
 
-bool SCH_SCREEN::SchematicCleanUp()
-{
-    bool      modified = false;
-
-    for( SCH_ITEM* item = m_drawList.begin() ; item; item = item->Next() )
-    {
-        if( ( item->Type() != SCH_LINE_T ) && ( item->Type() != SCH_JUNCTION_T ) )
-            continue;
-
-        bool restart;
-
-        for( SCH_ITEM* testItem = item->Next(); testItem; testItem = restart ? m_drawList.begin() : testItem->Next() )
-        {
-            restart = false;
-
-            if( ( item->Type() == SCH_LINE_T ) && ( testItem->Type() == SCH_LINE_T ) )
-            {
-                SCH_LINE* line = (SCH_LINE*) item;
-
-                if( line->MergeOverlap( (SCH_LINE*) testItem ) )
-                {
-                    // Keep the current flags, because the deleted segment can be flagged.
-                    item->SetFlags( testItem->GetFlags() );
-                    DeleteItem( testItem );
-                    restart = true;
-                    modified = true;
-                }
-            }
-            else if ( ( ( item->Type() == SCH_JUNCTION_T )
-                      && ( testItem->Type() == SCH_JUNCTION_T ) ) && ( testItem != item ) )
-            {
-                if ( testItem->HitTest( item->GetPosition() ) )
-                {
-                    // Keep the current flags, because the deleted segment can be flagged.
-                    item->SetFlags( testItem->GetFlags() );
-                    DeleteItem( testItem );
-                    restart = true;
-                    modified = true;
-                }
-            }
-        }
-    }
-
-    TestDanglingEnds();
-
-    return modified;
-}
-
-
 void SCH_SCREEN::UpdateSymbolLinks( bool aForce )
 {
     // Initialize or reinitialize the pointer to the LIB_PART for each component
@@ -1374,19 +1325,6 @@ void SCH_SCREENS::ClearAnnotation()
     for( size_t i = 0;  i < m_screens.size();  i++ )
         m_screens[i]->ClearAnnotation( NULL );
 }
-
-
-void SCH_SCREENS::SchematicCleanUp()
-{
-    for( size_t i = 0;  i < m_screens.size();  i++ )
-    {
-        // if wire list has changed, delete the undo/redo list to avoid
-        // pointer problems with deleted data.
-        if( m_screens[i]->SchematicCleanUp() )
-            m_screens[i]->ClearUndoRedoList();
-    }
-}
-
 
 int SCH_SCREENS::ReplaceDuplicateTimeStamps()
 {

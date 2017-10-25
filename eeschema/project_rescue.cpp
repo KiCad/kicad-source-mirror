@@ -556,7 +556,7 @@ bool SCH_EDIT_FRAME::rescueProject( RESCUER& aRescuer, bool aRunningOnDemand )
         viewer->ReCreateListLib();
 
     // Clean up wire ends
-    GetScreen()->SchematicCleanUp();
+    SchematicCleanUp();
     m_canvas->Refresh( true );
     OnModify();
 

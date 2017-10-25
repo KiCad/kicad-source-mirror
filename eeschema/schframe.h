@@ -909,6 +909,15 @@ private:
     SCH_JUNCTION* AddJunction( wxDC* aDC, const wxPoint& aPosition, bool aPutInUndoList = false );
 
     /**
+     * Function SchematicCleanUp
+     * performs routine schematic cleaning including breaking wire and buses and
+     * deleting identical objects superimposed on top of each other.
+     *
+     * @return True if any schematic clean up was performed.
+     */
+    bool SchematicCleanUp();
+
+    /**
      * Start moving \a aItem using the mouse.
      *
      * @param aItem A pointer to an SCH_ITEM to move.
@@ -1072,6 +1081,7 @@ public:
      * Remove \a aItem from the current screen and saves it in the undo list.
      *
      * @param aItem The item to remove from the current screen.
+     * @param aAppend True if we are updating a previous Undo state
      */
     void DeleteItem( SCH_ITEM* aItem, bool aAppend = false );
 

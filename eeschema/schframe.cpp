@@ -1249,7 +1249,7 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
         libeditFrame->LoadComponentAndSelectLib( id );
     }
 
-    GetScreen()->SchematicCleanUp();
+    SchematicCleanUp();
     m_canvas->Refresh();
 }
 

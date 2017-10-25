@@ -330,7 +330,7 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
     screen->Append( s_wires );
 
     // Correct and remove segments that need to be merged.
-    screen->SchematicCleanUp();
+    SchematicCleanUp();
 
     // A junction could be needed to connect the end point of the last created segment.
     if( screen->IsJunctionNeeded( endpoint ) )
@@ -417,6 +417,55 @@ void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
 }
 
 
+bool SCH_EDIT_FRAME::SchematicCleanUp()
+{
+    bool      modified = false;
+
+    for( SCH_ITEM* item = GetScreen()->GetDrawItems() ; item; item = item->Next() )
+    {
+        if( ( item->Type() != SCH_LINE_T ) && ( item->Type() != SCH_JUNCTION_T ) )
+            continue;
+
+        bool restart;
+
+        for( SCH_ITEM* testItem = item->Next(); testItem; testItem = restart ? GetScreen()->GetDrawItems() : testItem->Next() )
+        {
+            restart = false;
+
+            if( ( item->Type() == SCH_LINE_T ) && ( testItem->Type() == SCH_LINE_T ) )
+            {
+                SCH_LINE* line = (SCH_LINE*) item;
+
+                if( line->MergeOverlap( (SCH_LINE*) testItem ) )
+                {
+                    // Keep the current flags, because the deleted segment can be flagged.
+                    item->SetFlags( testItem->GetFlags() );
+                    DeleteItem( testItem );
+                    restart = true;
+                    modified = true;
+                }
+            }
+            else if ( ( ( item->Type() == SCH_JUNCTION_T )
+                      && ( testItem->Type() == SCH_JUNCTION_T ) ) && ( testItem != item ) )
+            {
+                if ( testItem->HitTest( item->GetPosition() ) )
+                {
+                    // Keep the current flags, because the deleted segment can be flagged.
+                    item->SetFlags( testItem->GetFlags() );
+                    DeleteItem( testItem );
+                    restart = true;
+                    modified = true;
+                }
+            }
+        }
+    }
+
+    GetScreen()->TestDanglingEnds();
+
+    return modified;
+}
+
+
 SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( wxDC* aDC, const wxPoint& aPosition,
                                            bool aPutInUndoList )
 {
@@ -445,7 +494,7 @@ SCH_NO_CONNECT* SCH_EDIT_FRAME::AddNoConnect( wxDC* aDC, const wxPoint& aPositio
 
     SetRepeatItem( no_connect );
     GetScreen()->Append( no_connect );
-    GetScreen()->SchematicCleanUp();
+    SchematicCleanUp();
     OnModify();
     m_canvas->Refresh();
     SaveCopyInUndoList( no_connect, UR_NEW );
