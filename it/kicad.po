@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-24 21:22+0200\n"
-"PO-Revision-Date: 2017-10-25 00:30+0200\n"
+"POT-Creation-Date: 2017-10-25 08:12+0200\n"
+"PO-Revision-Date: 2017-10-25 08:15+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -897,6 +897,7 @@ msgstr "Percorso modelli"
 #: kicad/dialogs/dialog_template_selector_base.cpp:36
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:33
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:28
+#: pcbnew/dialogs/dialog_gencad_export_options.cpp:52
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:73
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:69
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
@@ -7974,15 +7975,7 @@ msgstr "Rapporto impronta"
 msgid "Unable to create '%s'"
 msgstr "Impossibile creare \"%s\""
 
-#: pcbnew/exporters/export_gencad.cpp:249
-msgid "GenCAD 1.4 board files (.cad)|*.cad"
-msgstr "File scheda GenCAD 1.4 (.cad)|*.cad"
-
-#: pcbnew/exporters/export_gencad.cpp:255
-msgid "Save GenCAD Board File"
-msgstr "Salva file scheda GenCAD"
-
-#: pcbnew/exporters/export_gencad.cpp:266
+#: pcbnew/exporters/export_gencad.cpp:286
 #: pagelayout_editor/pl_editor_frame.cpp:257 pagelayout_editor/files.cpp:185
 #, c-format
 msgid "Unable to create <%s>"
@@ -9843,6 +9836,35 @@ msgstr "Altre opzioni:"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:170
 msgid "Ignore virtual components"
 msgstr "Ignora componenti virtuali"
+
+#: pcbnew/dialogs/dialog_gencad_export_options.cpp:36
+msgid "Export to GenCAD settings"
+msgstr "Esporta sulle impostazioni GenCAD"
+
+#: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
+#, c-format
+msgid "File %s already exists. Overwrite?"
+msgstr "Il file \"%s\" esiste già. Sovrascrivere?"
+
+#: pcbnew/dialogs/dialog_gencad_export_options.cpp:130
+msgid "Flip bottom components padstacks"
+msgstr "Ribalta lo stack piazzole dei componenti dietro"
+
+#: pcbnew/dialogs/dialog_gencad_export_options.cpp:131
+msgid "Generate unique pin names"
+msgstr "Genera nomi pin univoci"
+
+#: pcbnew/dialogs/dialog_gencad_export_options.cpp:132
+msgid "Generate a new shape for each component (do not reuse shapes)"
+msgstr "Genera una nuova forma per ogni componente (non riusare le forme)"
+
+#: pcbnew/dialogs/dialog_gencad_export_options.cpp:146
+msgid "Save GenCAD Board File"
+msgstr "Salva file scheda GenCAD"
+
+#: pcbnew/dialogs/dialog_gencad_export_options.cpp:149
+msgid "GenCAD 1.4 board files (.cad)|*.cad"
+msgstr "File scheda GenCAD 1.4 (.cad)|*.cad"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:329
 msgid ""
