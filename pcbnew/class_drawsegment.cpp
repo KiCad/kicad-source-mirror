@@ -409,6 +409,8 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
         break;
 
     case S_POLYGON:
+        if( m_Poly.IsEmpty() )
+            break;
     {
         wxPoint p_end;
         MODULE* module = GetParentModule();
@@ -442,6 +444,7 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
                 p_end.y   = std::max( p_end.y, pt.y );
             }
         }
+
         bbox.SetEnd( p_end );
         break;
 	}
@@ -748,7 +751,7 @@ const std::vector<wxPoint> DRAWSEGMENT::GetPolyPoints() const
 {
     std::vector<wxPoint> rv;
 
-    if( m_Poly.VertexCount() > 0 )
+    if( !m_Poly.IsEmpty() )
     {
         for ( auto iter = m_Poly.CIterate(); iter; iter++ )
         {

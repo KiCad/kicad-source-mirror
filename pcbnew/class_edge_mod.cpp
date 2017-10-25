@@ -199,6 +199,9 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         break;
 
     case S_POLYGON:
+        if( m_Poly.IsEmpty() )
+            break;
+
         {
         // We must compute absolute coordinates from m_PolyPoints
         // which are relative to module position, orientation 0

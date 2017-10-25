@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -56,7 +56,14 @@ DIALOG_DXF_IMPORT_BASE::DIALOG_DXF_IMPORT_BASE( wxWindow* parent, wxWindowID id,
 	bSizer6->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_DXFPCBXCoord = new wxTextCtrl( this, wxID_ANY, _("0.0"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_DXFPCBXCoord->SetMaxLength( 10 ); 
+	#ifdef __WXGTK__
+	if ( !m_DXFPCBXCoord->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_DXFPCBXCoord->SetMaxLength( 10 );
+	}
+	#else
+	m_DXFPCBXCoord->SetMaxLength( 10 );
+	#endif
 	m_DXFPCBXCoord->SetToolTip( _("DXF origin on PCB Grid, X Coordinate") );
 	
 	bSizer6->Add( m_DXFPCBXCoord, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
@@ -72,7 +79,14 @@ DIALOG_DXF_IMPORT_BASE::DIALOG_DXF_IMPORT_BASE( wxWindow* parent, wxWindowID id,
 	bSizer7->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_DXFPCBYCoord = new wxTextCtrl( this, wxID_ANY, _("0.0"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_DXFPCBYCoord->SetMaxLength( 10 ); 
+	#ifdef __WXGTK__
+	if ( !m_DXFPCBYCoord->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_DXFPCBYCoord->SetMaxLength( 10 );
+	}
+	#else
+	m_DXFPCBYCoord->SetMaxLength( 10 );
+	#endif
 	m_DXFPCBYCoord->SetToolTip( _("DXF origin on PCB Grid, Y Coordinate") );
 	
 	bSizer7->Add( m_DXFPCBYCoord, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
@@ -112,7 +126,7 @@ DIALOG_DXF_IMPORT_BASE::DIALOG_DXF_IMPORT_BASE( wxWindow* parent, wxWindowID id,
 	bSizer8->Add( m_staticTextBrdlayer, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
 	m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	bSizer8->Add( m_SelLayerBox, 1, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	bSizer8->Add( m_SelLayerBox, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
 	bSizerMain->Add( bSizer8, 0, wxALL|wxEXPAND, 5 );
@@ -132,7 +146,6 @@ DIALOG_DXF_IMPORT_BASE::DIALOG_DXF_IMPORT_BASE( wxWindow* parent, wxWindowID id,
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
-	bSizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

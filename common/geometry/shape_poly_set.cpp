@@ -220,7 +220,10 @@ void SHAPE_POLY_SET::InsertVertex( int aGlobalIndex, VECTOR2I aNewVertex )
 
 int SHAPE_POLY_SET::VertexCount( int aOutline , int aHole  ) const
 {
-    if( aOutline < 0 )
+    if( m_polys.size() == 0 )       // Empty poly set
+        return 0;
+
+    if( aOutline < 0 )              // Use last outline
         aOutline += m_polys.size();
 
     int idx;
@@ -230,8 +233,11 @@ int SHAPE_POLY_SET::VertexCount( int aOutline , int aHole  ) const
     else
         idx = aHole + 1;
 
-    assert ( aOutline < (int)m_polys.size() );
-    assert ( idx < (int)m_polys[aOutline].size() );
+    if( aOutline >= (int)m_polys.size() )       // not existing outline
+        return 0;
+
+    if( idx >= (int)m_polys[aOutline].size() )  // not existing hole
+        return 0;
 
     return m_polys[aOutline][idx].PointCount();
 }

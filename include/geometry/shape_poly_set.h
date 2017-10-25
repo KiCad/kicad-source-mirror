@@ -496,8 +496,11 @@ class SHAPE_POLY_SET : public SHAPE
         ///> Returns the number of holes in a given outline
         int HoleCount( int aOutline ) const
         {
-            if( (aOutline > (int)m_polys.size()) || (m_polys[aOutline].size() < 2) )
+            if( ( aOutline < 0 ) || (aOutline >= (int)m_polys.size()) || (m_polys[aOutline].size() < 2) )
                 return 0;
+
+            // the first polygon in m_polys[aOutline] is the main contour,
+            // only others are holes:
             return m_polys[aOutline].size() - 1;
         }
 
@@ -1053,9 +1056,9 @@ class SHAPE_POLY_SET : public SHAPE
         POLYGON chamferFilletPolygon( CORNER_MODE aMode, unsigned int aDistance,
                                       int aIndex, int aSegments = -1 );
 
-        typedef std::vector<POLYGON> Polyset;
+        typedef std::vector<POLYGON> POLYSET;
 
-        Polyset m_polys;
+        POLYSET m_polys;
 };
 
 #endif

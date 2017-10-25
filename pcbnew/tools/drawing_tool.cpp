@@ -838,6 +838,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
                         modSeg->SetBezControl2( seg->GetBezControl2() );
                         modSeg->SetBezierPoints( seg->GetBezierPoints() );
                         modSeg->SetPolyPoints( seg->GetPolyPoints() );
+                        modSeg->SetLocalCoord();
                         converted = modSeg;
                         break;
                     }
