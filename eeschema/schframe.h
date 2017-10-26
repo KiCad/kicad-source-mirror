@@ -466,6 +466,35 @@ public:
                                     bool            aWarpMouse );
 
     /**
+     * Breaks a single segment into two at the specified point
+     *
+     * @param aSegment Line segment to break
+     * @param aPoint Point at which to break the segment
+     * @param aAppend Add the changes to the previous undo state
+     * @return True if any wires or buses were broken.
+     */
+    bool BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint, bool aAppend = false );
+
+    /**
+     * Checks every wire and bus for a intersection at \a aPoint and break into two segments
+     * at \a aPoint if an intersection is found.
+     *
+     * @param aPoint Test this point for an intersection.
+     * @param aAppend Add the changes to the previous undo state
+     * @return True if any wires or buses were broken.
+     */
+    bool BreakSegments( const wxPoint& aPoint, bool aAppend = false );
+
+    /**
+     * Tests all junctions and bus entries in the schematic for intersections with wires and
+     * buses and breaks any intersections into multiple segments.
+     *
+     * @param aAppend Add the changes to the previous undo state
+     * @return True if any wires or buses were broken.
+     */
+    bool BreakSegmentsOnJunctions( bool aApped = false );
+
+    /**
      * Send a message to Pcbnew via a socket connection.
      *
      * Commands are:
@@ -906,6 +935,12 @@ private:
      * Add a new junction at \a aPosition.
      */
     SCH_JUNCTION* AddJunction( const wxPoint& aPosition, bool aPutInUndoList = false );
+
+    /**
+     * Function SaveWireImage
+     * saves a copy of the current wire image in the undo list
+     */
+    void SaveWireImage();
 
     /**
      * Function SchematicCleanUp

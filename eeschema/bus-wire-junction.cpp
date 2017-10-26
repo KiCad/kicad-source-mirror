@@ -417,6 +417,30 @@ void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
 }
 
 
+void SCH_EDIT_FRAME::SaveWireImage()
+{
+    DLIST< SCH_ITEM > oldWires;
+
+    oldWires.SetOwnership( false );      // Prevent DLIST for deleting items in destructor.
+    GetScreen()->ExtractWires( oldWires, true );
+
+    if( oldWires.GetCount() != 0 )
+    {
+        PICKED_ITEMS_LIST oldItems;
+
+        oldItems.m_Status = UR_WIRE_IMAGE;
+
+        while( oldWires.GetCount() != 0 )
+        {
+            ITEM_PICKER picker = ITEM_PICKER( oldWires.PopFront(), UR_WIRE_IMAGE );
+            oldItems.PushItem( picker );
+        }
+
+        SaveCopyInUndoList( oldItems, UR_WIRE_IMAGE );
+    }
+}
+
+
 bool SCH_EDIT_FRAME::SchematicCleanUp()
 {
     bool      modified = false;
@@ -463,6 +487,68 @@ bool SCH_EDIT_FRAME::SchematicCleanUp()
     GetScreen()->TestDanglingEnds();
 
     return modified;
+}
+
+bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE *aSegment, const wxPoint& aPoint, bool aAppend )
+{
+    if( !IsPointOnSegment( aSegment->GetStartPoint(), aSegment->GetEndPoint(), aPoint )
+            || aSegment->IsEndPoint( aPoint ) )
+        return false;
+
+    SaveCopyInUndoList( aSegment, UR_CHANGED, aAppend );
+    SCH_LINE* newSegment = new SCH_LINE( *aSegment );
+    SaveCopyInUndoList( newSegment, UR_NEW, true );
+
+    newSegment->SetStartPoint( aPoint );
+    aSegment->SetEndPoint( aPoint );
+    GetScreen()->Append( newSegment );
+
+    return true;
+}
+
+
+bool SCH_EDIT_FRAME::BreakSegments( const wxPoint& aPoint, bool aAppend )
+{
+    bool brokenSegments = false;
+
+    for( SCH_ITEM* segment = GetScreen()->GetDrawItems(); segment; segment = segment->Next() )
+    {
+        if( ( segment->Type() != SCH_LINE_T ) || ( segment->GetLayer() == LAYER_NOTES ) )
+            continue;
+
+        brokenSegments |= BreakSegment( (SCH_LINE*) segment, aPoint, aAppend || brokenSegments );
+    }
+
+    return brokenSegments;
+}
+
+
+bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( bool aAppend )
+{
+    bool brokenSegments = false;
+
+    for( SCH_ITEM* item = GetScreen()->GetDrawItems(); item; item = item->Next() )
+    {
+        if( item->Type() == SCH_JUNCTION_T )
+        {
+            SCH_JUNCTION* junction = ( SCH_JUNCTION* ) item;
+
+            if( BreakSegments( junction->GetPosition(), brokenSegments || aAppend ) )
+                brokenSegments = true;
+        }
+        else
+        {
+            SCH_BUS_ENTRY_BASE* busEntry = dynamic_cast<SCH_BUS_ENTRY_BASE*>( item );
+            if( busEntry )
+            {
+                if( BreakSegments( busEntry->GetPosition(), brokenSegments || aAppend )
+                 || BreakSegments( busEntry->m_End(), brokenSegments || aAppend ) )
+                    brokenSegments = true;
+            }
+        }
+    }
+
+    return brokenSegments;
 }
 
 

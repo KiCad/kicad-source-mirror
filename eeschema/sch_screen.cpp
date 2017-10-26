@@ -845,64 +845,6 @@ bool SCH_SCREEN::TestDanglingEnds()
 }
 
 
-bool SCH_SCREEN::BreakSegment( const wxPoint& aPoint )
-{
-    SCH_LINE* segment;
-    SCH_LINE* newSegment;
-    bool brokenSegments = false;
-
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
-    {
-        if( (item->Type() != SCH_LINE_T) || (item->GetLayer() == LAYER_NOTES) )
-            continue;
-
-        segment = (SCH_LINE*) item;
-
-        if( !segment->HitTest( aPoint, 0 ) || segment->IsEndPoint( aPoint ) )
-            continue;
-
-        // Break the segment at aPoint and create a new segment.
-        newSegment = new SCH_LINE( *segment );
-        newSegment->SetStartPoint( aPoint );
-        segment->SetEndPoint( aPoint );
-        m_drawList.Insert( newSegment, segment->Next() );
-        item = newSegment;
-        brokenSegments = true;
-    }
-
-    return brokenSegments;
-}
-
-
-bool SCH_SCREEN::BreakSegmentsOnJunctions()
-{
-    bool brokenSegments = false;
-
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
-    {
-        if( item->Type() == SCH_JUNCTION_T )
-        {
-            SCH_JUNCTION* junction = ( SCH_JUNCTION* ) item;
-
-            if( BreakSegment( junction->GetPosition() ) )
-                brokenSegments = true;
-        }
-        else
-        {
-            SCH_BUS_ENTRY_BASE* busEntry = dynamic_cast<SCH_BUS_ENTRY_BASE*>( item );
-            if( busEntry )
-            {
-                if( BreakSegment( busEntry->GetPosition() )
-                 || BreakSegment( busEntry->m_End() ) )
-                    brokenSegments = true;
-            }
-        }
-    }
-
-    return brokenSegments;
-}
-
-
 int SCH_SCREEN::GetNode( const wxPoint& aPosition, EDA_ITEMS& aList )
 {
     for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
@@ -1047,7 +989,6 @@ int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aLis
 
     // Clear flags member for all items.
     ClearDrawingState();
-    BreakSegmentsOnJunctions();
 
     if( GetNode( aPosition, list ) == 0 )
         return 0;

@@ -228,9 +228,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
 
         case BLOCK_DRAG:
         case BLOCK_DRAG_ITEM:   // Drag from a drag command
-            GetScreen()->BreakSegmentsOnJunctions();
-            // fall through
-
         case BLOCK_MOVE:
         case BLOCK_DUPLICATE:
             if( block->GetCommand() == BLOCK_DRAG_ITEM &&

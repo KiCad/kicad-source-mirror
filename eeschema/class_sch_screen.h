@@ -308,23 +308,6 @@ public:
      */
     int GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aList, bool aFullConnection );
 
-    /**
-     * Checks every wire and bus for a intersection at \a aPoint and break into two segments
-     * at \a aPoint if an intersection is found.
-     *
-     * @param aPoint Test this point for an intersection.
-     * @return True if any wires or buses were broken.
-     */
-    bool BreakSegment( const wxPoint& aPoint );
-
-    /**
-     * Tests all junctions and bus entries in the schematic for intersections with wires and
-     * buses and breaks any intersections into multiple segments.
-     *
-     * @return True if any wires or buses were broken.
-     */
-    bool BreakSegmentsOnJunctions();
-
     /* full undo redo management : */
     // use BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aItem )
     // use BASE_SCREEN::PushCommandToRedoList( PICKED_ITEMS_LIST* aItem )
