@@ -54,12 +54,12 @@ private:
     bool generatePowerSource( wxString& aTarget ) const;
 
     /**
-     * Loads a list of components from a file and adds them to a combo box.
+     * Loads a list of components (.model and .subckt) from a spice library
+     * file and adds them to a combo box.
      * @param aComboBox is the target combo box
-     * @param aFilePath is the file to be processed
-     * @param aKeyword is the keyword to select the type of components (e.g. "subckt" or "model")
+     * @param aFilePath is path to the library file
      */
-    void updateFromFile( wxComboBox* aComboBox, const wxString& aFilePath, const wxString& aKeyword );
+    void updateFromFile( wxComboBox* aComboBox, const wxString& aFilePath );
 
     /**
      * Returns or creates a field in the edited schematic fields vector.

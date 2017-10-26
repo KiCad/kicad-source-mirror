@@ -265,7 +265,7 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
             {
                 const wxString& libFile = m_semiLib->GetValue();
                 m_fieldsTmp[SF_LIB_FILE] = libFile;
-                updateFromFile( m_semiModel, libFile, ".model" );
+                updateFromFile( m_semiModel, libFile );
             }
             break;
 
@@ -278,7 +278,7 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
             {
                 const wxString& libFile = m_icLib->GetValue();
                 m_fieldsTmp[SF_LIB_FILE] = libFile;
-                updateFromFile( m_icModel, libFile, ".subckt" );
+                updateFromFile( m_icModel, libFile );
             }
             break;
 
@@ -615,12 +615,11 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
 }
 
 
-void DIALOG_SPICE_MODEL::updateFromFile( wxComboBox* aComboBox,
-        const wxString& aFilePath, const wxString& aKeyword )
+void DIALOG_SPICE_MODEL::updateFromFile( wxComboBox* aComboBox, const wxString& aFilePath )
 {
     wxString curValue = aComboBox->GetValue();
-    const wxString keyword( aKeyword.Lower() );
     wxFileName filePath( aFilePath );
+    bool in_subckt = false;        // flag indicating that the parser is inside a .subckt section
 
     if( !filePath.Exists() )
     {
@@ -642,9 +641,29 @@ void DIALOG_SPICE_MODEL::updateFromFile( wxComboBox* aComboBox,
 
         while( tokenizer.HasMoreTokens() )
         {
+            bool model_found = false;
             wxString token = tokenizer.GetNextToken().Lower();
 
-            if( token == keyword )
+            // some subckts contain .model clauses inside,
+            // skip them as they are a part of the subckt, not another model
+            if( token == ".model" && !in_subckt )
+            {
+                model_found = true;
+            }
+            else if( token == ".subckt" )
+            {
+                wxASSERT( !in_subckt );
+                in_subckt = true;
+                model_found = true;
+
+            }
+            else if( token == ".ends" )
+            {
+                wxASSERT( in_subckt );
+                in_subckt = false;
+            }
+
+            if( model_found )
             {
                 token = tokenizer.GetNextToken();
 
@@ -727,7 +746,7 @@ void DIALOG_SPICE_MODEL::onSemiSelectLib( wxCommandEvent& event )
     else
         m_semiLib->SetValue( openDlg.GetPath() );
 
-    updateFromFile( m_semiModel, openDlg.GetPath(), ".model" );
+    updateFromFile( m_semiModel, openDlg.GetPath() );
     m_semiModel->Popup();
 }
 
@@ -754,7 +773,7 @@ void DIALOG_SPICE_MODEL::onSelectIcLib( wxCommandEvent& event )
     else
         m_icLib->SetValue( openDlg.GetPath() );
 
-    updateFromFile( m_icModel, openDlg.GetPath(), ".subckt" );
+    updateFromFile( m_icModel, openDlg.GetPath() );
     m_icModel->Popup();
 }
 
