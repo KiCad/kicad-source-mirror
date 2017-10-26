@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 CERN
+ * Copyright (C) 2016-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -60,10 +60,8 @@ DIALOG_SPICE_MODEL::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aCompo
 {
     m_pasValue->SetValidator( m_spiceValidator );
 
-    m_semiType->SetValidator( m_notEmptyValidator );
-    m_semiModel->SetValidator( m_notEmptyValidator );
-
-    m_icModel->SetValidator( m_notEmptyValidator );
+    m_modelType->SetValidator( m_notEmptyValidator );
+    m_modelName->SetValidator( m_notEmptyValidator );
 
     m_genDc->SetValidator( m_spiceEmptyValidator );
     m_genAcMag->SetValidator( m_spiceEmptyValidator );
@@ -127,17 +125,18 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
     }
 
 
-    // Semiconductor
-    else if( page == m_semiconductor )
+    // Model
+    else if( page == m_model )
     {
-        if( !m_semiconductor->Validate() )
+        if( !m_model->Validate() )
             return false;
 
-        switch( m_semiType->GetSelection() )
+        switch( m_modelType->GetSelection() )
         {
-            case 0: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_DIODE; break;
+            case 0: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_SUBCKT; break;
             case 1: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_BJT; break;
             case 2: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_MOSFET; break;
+            case 3: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_DIODE; break;
 
             default:
                 wxASSERT_MSG( false, "Unhandled semiconductor type" );
@@ -145,24 +144,10 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
                 break;
         }
 
-        m_fieldsTmp[SF_MODEL] = m_semiModel->GetValue();
+        m_fieldsTmp[SF_MODEL] = m_modelName->GetValue();
 
-        if( !empty( m_semiLib ) )
-            m_fieldsTmp[SF_LIB_FILE] = m_semiLib->GetValue();
-    }
-
-
-    // Integrated circuit
-    else if( page == m_ic )
-    {
-        if( !m_ic->Validate() )
-            return false;
-
-        m_fieldsTmp[SF_PRIMITIVE] = (char) SP_SUBCKT;
-        m_fieldsTmp[SF_MODEL] = m_icModel->GetValue();
-
-        if( !empty( m_icLib ) )
-            m_fieldsTmp[SF_LIB_FILE] = m_icLib->GetValue();
+        if( !empty( m_modelLibrary ) )
+            m_fieldsTmp[SF_LIB_FILE] = m_modelLibrary->GetValue();
     }
 
 
@@ -250,35 +235,24 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
             m_pasValue->SetValue( m_fieldsTmp[SF_MODEL] );
             break;
 
+        case SP_SUBCKT:
         case SP_DIODE:
         case SP_BJT:
         case SP_MOSFET:
-            m_notebook->SetSelection( m_notebook->FindPage( m_semiconductor ) );
-            m_semiType->SetSelection( primitive == SP_DIODE ? 0
+            m_notebook->SetSelection( m_notebook->FindPage( m_model ) );
+            m_modelType->SetSelection( primitive == SP_SUBCKT ? 0
                     : primitive == SP_BJT ? 1
                     : primitive == SP_MOSFET ? 2
+                    : primitive == SP_DIODE ? 3
                     : -1 );
-            m_semiModel->SetValue( m_fieldsTmp[SF_MODEL] );
-            m_semiLib->SetValue( m_fieldsTmp[SF_LIB_FILE] );
+            m_modelName->SetValue( m_fieldsTmp[SF_MODEL] );
+            m_modelLibrary->SetValue( m_fieldsTmp[SF_LIB_FILE] );
 
-            if( !empty( m_semiLib ) )
+            if( !empty( m_modelLibrary ) )
             {
-                const wxString& libFile = m_semiLib->GetValue();
+                const wxString& libFile = m_modelLibrary->GetValue();
                 m_fieldsTmp[SF_LIB_FILE] = libFile;
-                updateFromFile( m_semiModel, libFile );
-            }
-            break;
-
-        case SP_SUBCKT:
-            m_notebook->SetSelection( m_notebook->FindPage( m_ic ) );
-            m_icModel->SetValue( m_fieldsTmp[SF_MODEL] );
-            m_icLib->SetValue( m_fieldsTmp[SF_LIB_FILE] );
-
-            if( !empty( m_icLib ) )
-            {
-                const wxString& libFile = m_icLib->GetValue();
-                m_fieldsTmp[SF_LIB_FILE] = libFile;
-                updateFromFile( m_icModel, libFile );
+                loadLibrary( libFile );
             }
             break;
 
@@ -615,9 +589,10 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
 }
 
 
-void DIALOG_SPICE_MODEL::updateFromFile( wxComboBox* aComboBox, const wxString& aFilePath )
+void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
 {
-    wxString curValue = aComboBox->GetValue();
+    wxString curModel = m_modelName->GetValue();
+    m_models.clear();
     wxFileName filePath( aFilePath );
     bool in_subckt = false;        // flag indicating that the parser is inside a .subckt section
 
@@ -628,56 +603,69 @@ void DIALOG_SPICE_MODEL::updateFromFile( wxComboBox* aComboBox, const wxString& 
     }
 
     wxTextFile file;
+    int line_counter = 0;
 
     if( !file.Open( filePath.GetFullPath() ) )
         return;
 
-    aComboBox->Clear();
-
     // Process the file, looking for components
     for( wxString line = file.GetFirstLine().Lower(); !file.Eof(); line = file.GetNextLine() )
     {
-        wxStringTokenizer tokenizer( line, " " );
+        ++line_counter;
+        wxStringTokenizer tokenizer( line, wxDEFAULT_DELIMITERS );
 
         while( tokenizer.HasMoreTokens() )
         {
-            bool model_found = false;
             wxString token = tokenizer.GetNextToken().Lower();
 
             // some subckts contain .model clauses inside,
             // skip them as they are a part of the subckt, not another model
             if( token == ".model" && !in_subckt )
             {
-                model_found = true;
+                wxString name = tokenizer.GetNextToken();
+
+                if( name.IsEmpty() )
+                    break;
+
+                token = tokenizer.GetNextToken();
+                MODEL::TYPE type = MODEL::parseModelType( token );
+
+                if( type != MODEL::UNKNOWN )
+                    m_models.emplace( name, MODEL( line_counter, type ) );
             }
+
             else if( token == ".subckt" )
             {
                 wxASSERT( !in_subckt );
                 in_subckt = true;
-                model_found = true;
 
+                wxString name = tokenizer.GetNextToken();
+
+                if( name.IsEmpty() )
+                    break;
+
+                m_models.emplace( name, MODEL( line_counter, MODEL::SUBCKT ) );
             }
+
             else if( token == ".ends" )
             {
                 wxASSERT( in_subckt );
                 in_subckt = false;
             }
-
-            if( model_found )
-            {
-                token = tokenizer.GetNextToken();
-
-                if( !token.IsEmpty() )
-                    aComboBox->Append( token );
-            }
         }
     }
 
+    // Refresh the model name combobox values
+    m_modelName->Clear();
+
+    for( const auto& model : m_models )
+        m_modelName->Append( model.first );
+
     // Restore the previous value or if there is none - pick the first one from the loaded library
-    if( !curValue.IsEmpty() )
-        aComboBox->SetValue( curValue );
-    else if( aComboBox->GetCount() > 0 )
-        aComboBox->SetSelection( 0 );
+    if( !curModel.IsEmpty() )
+        m_modelName->SetValue( curModel );
+    else if( m_modelName->GetCount() > 0 )
+        m_modelName->SetSelection( 0 );
 }
 
 
@@ -724,9 +712,9 @@ bool DIALOG_SPICE_MODEL::addPwlValue( const wxString& aTime, const wxString& aVa
 }
 
 
-void DIALOG_SPICE_MODEL::onSemiSelectLib( wxCommandEvent& event )
+void DIALOG_SPICE_MODEL::onSelectLibrary( wxCommandEvent& event )
 {
-    wxString searchPath = wxFileName( m_semiLib->GetValue() ).GetPath();
+    wxString searchPath = wxFileName( m_modelLibrary->GetValue() ).GetPath();
 
     if( searchPath.IsEmpty() )
         searchPath = Prj().GetProjectPath();
@@ -742,39 +730,24 @@ void DIALOG_SPICE_MODEL::onSemiSelectLib( wxCommandEvent& event )
 
     // Try to convert the path to relative to project
     if( libPath.MakeRelativeTo( Prj().GetProjectPath() ) && !libPath.GetFullPath().StartsWith( ".." ) )
-        m_semiLib->SetValue( libPath.GetFullPath() );
+        m_modelLibrary->SetValue( libPath.GetFullPath() );
     else
-        m_semiLib->SetValue( openDlg.GetPath() );
+        m_modelLibrary->SetValue( openDlg.GetPath() );
 
-    updateFromFile( m_semiModel, openDlg.GetPath() );
-    m_semiModel->Popup();
+    loadLibrary( openDlg.GetPath() );
+    m_modelName->Popup();
 }
 
 
-void DIALOG_SPICE_MODEL::onSelectIcLib( wxCommandEvent& event )
+void DIALOG_SPICE_MODEL::onModelSelected( wxCommandEvent& event )
 {
-    wxString searchPath = wxFileName( m_icLib->GetValue() ).GetPath();
+    // autoselect the model type
+    auto it = m_models.find( m_modelName->GetValue() );
 
-    if( searchPath.IsEmpty() )
-        searchPath = Prj().GetProjectPath();
-
-    wxFileDialog openDlg( this, wxT( "Select library" ), searchPath, "",
-            "Spice library file (*.lib)|*.lib;*.LIB|Any file|*",
-            wxFD_OPEN | wxFD_FILE_MUST_EXIST );
-
-    if( openDlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    wxFileName libPath( openDlg.GetPath() );
-
-    // Try to convert the path to relative to project
-    if( libPath.MakeRelativeTo( Prj().GetProjectPath() ) && !libPath.GetFullPath().StartsWith( ".." ) )
-        m_icLib->SetValue( libPath.GetFullPath() );
+    if( it != m_models.end() )
+        m_modelType->SetSelection( (int) it->second.model );
     else
-        m_icLib->SetValue( openDlg.GetPath() );
-
-    updateFromFile( m_icModel, openDlg.GetPath() );
-    m_icModel->Popup();
+        m_modelType->SetSelection( wxNOT_FOUND );
 }
 
 
@@ -788,4 +761,22 @@ void DIALOG_SPICE_MODEL::onPwlRemove( wxCommandEvent& event )
 {
     long idx = m_pwlValList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
     m_pwlValList->DeleteItem( idx );
+}
+
+
+DIALOG_SPICE_MODEL::MODEL::TYPE DIALOG_SPICE_MODEL::MODEL::parseModelType( const wxString& aValue )
+{
+    if( aValue.IsEmpty() )
+        return UNKNOWN;
+
+    const wxString val( aValue.Lower() );
+
+    if( val.StartsWith( "npn" ) || val.StartsWith( "pnp" ) )
+        return BJT;
+    else if( val.StartsWith( "nmos" ) || val.StartsWith( "pmos" ) )
+        return MOSFET;
+    else if( val[0] == 'd' )
+        return DIODE;
+
+    return UNKNOWN;
 }

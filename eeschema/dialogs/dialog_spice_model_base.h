@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jul 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -85,20 +85,14 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText58;
 		wxStaticText* m_staticText59;
 		wxStaticText* m_staticText60;
-		wxPanel* m_semiconductor;
-		wxStaticText* m_staticText4;
-		wxComboBox* m_semiType;
-		wxStaticText* m_staticText5;
-		wxComboBox* m_semiModel;
+		wxPanel* m_model;
 		wxStaticText* m_staticText7;
-		wxTextCtrl* m_semiLib;
-		wxButton* m_semiSelectLib;
-		wxPanel* m_ic;
-		wxStaticText* m_staticText8;
-		wxComboBox* m_icModel;
-		wxStaticText* m_staticText9;
-		wxTextCtrl* m_icLib;
-		wxButton* m_icSelectLib;
+		wxTextCtrl* m_modelLibrary;
+		wxButton* m_selectLibrary;
+		wxStaticText* m_staticText5;
+		wxComboBox* m_modelName;
+		wxStaticText* m_staticText4;
+		wxComboBox* m_modelType;
 		wxPanel* m_power;
 		wxStaticText* m_staticText10;
 		wxTextCtrl* m_genDc;
@@ -171,15 +165,15 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void onInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
-		virtual void onSemiSelectLib( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onSelectIcLib( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSelectLibrary( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onModelSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPwlAdd( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPwlRemove( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 640,582 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Spice Model Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 640,582 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_SPICE_MODEL_BASE();
 	
 };

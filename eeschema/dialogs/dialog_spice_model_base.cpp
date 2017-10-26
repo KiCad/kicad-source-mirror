@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jul 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -196,86 +196,53 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_passive->SetSizer( bSizer41 );
 	m_passive->Layout();
 	bSizer41->Fit( m_passive );
-	m_notebook->AddPage( m_passive, _("Passive"), true );
-	m_semiconductor = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_notebook->AddPage( m_passive, _("Passive"), false );
+	m_model = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer3;
 	fgSizer3 = new wxFlexGridSizer( 0, 3, 0, 0 );
 	fgSizer3->AddGrowableCol( 1 );
 	fgSizer3->SetFlexibleDirection( wxBOTH );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText4 = new wxStaticText( m_semiconductor, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText4->Wrap( -1 );
-	fgSizer3->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_semiType = new wxComboBox( m_semiconductor, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
-	m_semiType->Append( _("Diode") );
-	m_semiType->Append( _("Bipolar transistor (BJT)") );
-	m_semiType->Append( _("MOSFET") );
-	fgSizer3->Add( m_semiType, 0, wxALL|wxEXPAND, 5 );
-	
-	
-	fgSizer3->Add( 0, 0, 0, 0, 5 );
-	
-	m_staticText5 = new wxStaticText( m_semiconductor, wxID_ANY, _("Model"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText5->Wrap( -1 );
-	fgSizer3->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_semiModel = new wxComboBox( m_semiconductor, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	fgSizer3->Add( m_semiModel, 0, wxALL|wxEXPAND, 5 );
-	
-	
-	fgSizer3->Add( 0, 0, 0, 0, 5 );
-	
-	m_staticText7 = new wxStaticText( m_semiconductor, wxID_ANY, _("Library"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText7 = new wxStaticText( m_model, wxID_ANY, _("Library"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7->Wrap( -1 );
 	fgSizer3->Add( m_staticText7, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_semiLib = new wxTextCtrl( m_semiconductor, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	fgSizer3->Add( m_semiLib, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	m_modelLibrary = new wxTextCtrl( m_model, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	fgSizer3->Add( m_modelLibrary, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
-	m_semiSelectLib = new wxButton( m_semiconductor, wxID_ANY, _("Select file..."), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_semiSelectLib, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_selectLibrary = new wxButton( m_model, wxID_ANY, _("Select file..."), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_selectLibrary, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
+	m_staticText5 = new wxStaticText( m_model, wxID_ANY, _("Model"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText5->Wrap( -1 );
+	fgSizer3->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_semiconductor->SetSizer( fgSizer3 );
-	m_semiconductor->Layout();
-	fgSizer3->Fit( m_semiconductor );
-	m_notebook->AddPage( m_semiconductor, _("Semiconductor"), false );
-	m_ic = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxFlexGridSizer* fgSizer4;
-	fgSizer4 = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizer4->AddGrowableCol( 1 );
-	fgSizer4->SetFlexibleDirection( wxBOTH );
-	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	
-	m_staticText8 = new wxStaticText( m_ic, wxID_ANY, _("Model"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText8->Wrap( -1 );
-	fgSizer4->Add( m_staticText8, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_icModel = new wxComboBox( m_ic, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	m_icModel->SetMinSize( wxSize( 200,-1 ) );
-	
-	fgSizer4->Add( m_icModel, 0, wxALL|wxEXPAND, 5 );
+	m_modelName = new wxComboBox( m_model, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_SORT ); 
+	fgSizer3->Add( m_modelName, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	fgSizer4->Add( 0, 0, 0, 0, 5 );
+	fgSizer3->Add( 0, 0, 0, 0, 5 );
 	
-	m_staticText9 = new wxStaticText( m_ic, wxID_ANY, _("Library"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText9->Wrap( -1 );
-	fgSizer4->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_staticText4 = new wxStaticText( m_model, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4->Wrap( -1 );
+	fgSizer3->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_icLib = new wxTextCtrl( m_ic, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	fgSizer4->Add( m_icLib, 0, wxALL|wxEXPAND, 5 );
+	m_modelType = new wxComboBox( m_model, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
+	m_modelType->Append( _("Subcircuit") );
+	m_modelType->Append( _("BJT") );
+	m_modelType->Append( _("MOSFET") );
+	m_modelType->Append( _("Diode") );
+	fgSizer3->Add( m_modelType, 0, wxALL|wxEXPAND, 5 );
 	
-	m_icSelectLib = new wxButton( m_ic, wxID_ANY, _("Select file..."), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer4->Add( m_icSelectLib, 0, wxALL, 5 );
+	
+	fgSizer3->Add( 0, 0, 0, 0, 5 );
 	
 	
-	m_ic->SetSizer( fgSizer4 );
-	m_ic->Layout();
-	fgSizer4->Fit( m_ic );
-	m_notebook->AddPage( m_ic, _("Integrated circuit"), false );
+	m_model->SetSizer( fgSizer3 );
+	m_model->Layout();
+	fgSizer3->Fit( m_model );
+	m_notebook->AddPage( m_model, _("Model"), true );
 	m_power = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_power->SetMinSize( wxSize( 650,-1 ) );
 	
@@ -634,8 +601,9 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SPICE_MODEL_BASE::onInitDlg ) );
-	m_semiSelectLib->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onSemiSelectLib ), NULL, this );
-	m_icSelectLib->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onSelectIcLib ), NULL, this );
+	m_selectLibrary->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onSelectLibrary ), NULL, this );
+	m_modelName->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onModelSelected ), NULL, this );
+	m_modelName->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onModelSelected ), NULL, this );
 	m_pwlAddButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onPwlAdd ), NULL, this );
 	m_pwlRemoveBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onPwlRemove ), NULL, this );
 }
@@ -644,8 +612,9 @@ DIALOG_SPICE_MODEL_BASE::~DIALOG_SPICE_MODEL_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SPICE_MODEL_BASE::onInitDlg ) );
-	m_semiSelectLib->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onSemiSelectLib ), NULL, this );
-	m_icSelectLib->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onSelectIcLib ), NULL, this );
+	m_selectLibrary->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onSelectLibrary ), NULL, this );
+	m_modelName->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onModelSelected ), NULL, this );
+	m_modelName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onModelSelected ), NULL, this );
 	m_pwlAddButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onPwlAdd ), NULL, this );
 	m_pwlRemoveBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onPwlRemove ), NULL, this );
 	
