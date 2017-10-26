@@ -596,23 +596,22 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
     wxFileName filePath( aFilePath );
     bool in_subckt = false;        // flag indicating that the parser is inside a .subckt section
 
+    // Look for the file in the project path
     if( !filePath.Exists() )
     {
-        // Look for the file in the project path
         filePath.SetPath( Prj().GetProjectPath() + filePath.GetPath() );
+
+        if( !filePath.Exists() )
+            return;
     }
 
-    wxTextFile file;
-    int line_counter = 0;
-
-    if( !file.Open( filePath.GetFullPath() ) )
-        return;
+    // Display the library contents
+    m_libraryContents->LoadFile( filePath.GetFullPath() );
 
     // Process the file, looking for components
-    for( wxString line = file.GetFirstLine().Lower(); !file.Eof(); line = file.GetNextLine() )
+    for( int line_nr = 0; line_nr < m_libraryContents->GetNumberOfLines(); ++line_nr )
     {
-        ++line_counter;
-        wxStringTokenizer tokenizer( line, wxDEFAULT_DELIMITERS );
+        wxStringTokenizer tokenizer( m_libraryContents->GetLineText( line_nr ) );
 
         while( tokenizer.HasMoreTokens() )
         {
@@ -631,7 +630,7 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
                 MODEL::TYPE type = MODEL::parseModelType( token );
 
                 if( type != MODEL::UNKNOWN )
-                    m_models.emplace( name, MODEL( line_counter, type ) );
+                    m_models.emplace( name, MODEL( line_nr, type ) );
             }
 
             else if( token == ".subckt" )
@@ -644,7 +643,7 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
                 if( name.IsEmpty() )
                     break;
 
-                m_models.emplace( name, MODEL( line_counter, MODEL::SUBCKT ) );
+                m_models.emplace( name, MODEL( line_nr, MODEL::SUBCKT ) );
             }
 
             else if( token == ".ends" )
@@ -745,9 +744,19 @@ void DIALOG_SPICE_MODEL::onModelSelected( wxCommandEvent& event )
     auto it = m_models.find( m_modelName->GetValue() );
 
     if( it != m_models.end() )
+    {
         m_modelType->SetSelection( (int) it->second.model );
+
+        // scroll to the bottom, so the model definition is shown in the first line
+        m_libraryContents->ShowPosition(
+                m_libraryContents->XYToPosition( 0, m_libraryContents->GetNumberOfLines() ) );
+        m_libraryContents->ShowPosition( m_libraryContents->XYToPosition( 0, it->second.line ) );
+    }
     else
+    {
         m_modelType->SetSelection( wxNOT_FOUND );
+        m_libraryContents->ShowPosition( 0 );
+    }
 }
 
 

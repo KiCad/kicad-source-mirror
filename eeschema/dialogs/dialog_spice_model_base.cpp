@@ -198,8 +198,11 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	bSizer41->Fit( m_passive );
 	m_notebook->AddPage( m_passive, _("Passive"), false );
 	m_model = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxVERTICAL );
+	
 	wxFlexGridSizer* fgSizer3;
-	fgSizer3 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer3 = new wxFlexGridSizer( 0, 2, 0, 0 );
 	fgSizer3->AddGrowableCol( 1 );
 	fgSizer3->SetFlexibleDirection( wxBOTH );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -208,11 +211,17 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_staticText7->Wrap( -1 );
 	fgSizer3->Add( m_staticText7, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
+	
 	m_modelLibrary = new wxTextCtrl( m_model, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	fgSizer3->Add( m_modelLibrary, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	bSizer7->Add( m_modelLibrary, 1, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
 	m_selectLibrary = new wxButton( m_model, wxID_ANY, _("Select file..."), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_selectLibrary, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer7->Add( m_selectLibrary, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	
+	fgSizer3->Add( bSizer7, 1, wxEXPAND, 5 );
 	
 	m_staticText5 = new wxStaticText( m_model, wxID_ANY, _("Model"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
@@ -220,9 +229,6 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	
 	m_modelName = new wxComboBox( m_model, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_SORT ); 
 	fgSizer3->Add( m_modelName, 0, wxALL|wxEXPAND, 5 );
-	
-	
-	fgSizer3->Add( 0, 0, 0, 0, 5 );
 	
 	m_staticText4 = new wxStaticText( m_model, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
@@ -236,12 +242,17 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	fgSizer3->Add( m_modelType, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	fgSizer3->Add( 0, 0, 0, 0, 5 );
+	bSizer6->Add( fgSizer3, 0, wxEXPAND, 5 );
+	
+	m_libraryContents = new wxTextCtrl( m_model, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_DONTWRAP|wxTE_MULTILINE|wxTE_READONLY );
+	m_libraryContents->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	
+	bSizer6->Add( m_libraryContents, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	m_model->SetSizer( fgSizer3 );
+	m_model->SetSizer( bSizer6 );
 	m_model->Layout();
-	fgSizer3->Fit( m_model );
+	bSizer6->Fit( m_model );
 	m_notebook->AddPage( m_model, _("Model"), true );
 	m_power = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_power->SetMinSize( wxSize( 650,-1 ) );

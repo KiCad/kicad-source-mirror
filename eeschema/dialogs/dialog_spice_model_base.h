@@ -93,6 +93,7 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 		wxComboBox* m_modelName;
 		wxStaticText* m_staticText4;
 		wxComboBox* m_modelType;
+		wxTextCtrl* m_libraryContents;
 		wxPanel* m_power;
 		wxStaticText* m_staticText10;
 		wxTextCtrl* m_genDc;
