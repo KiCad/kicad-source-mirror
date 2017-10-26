@@ -294,12 +294,17 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
     {
         isFilled = m_gerbviewSettings.m_lineFill;
 
+        // These are swapped because wxDC fills arcs counterclockwise and GAL
+        // fills them clockwise.
+        wxPoint arcStart = aItem->m_End;
+        wxPoint arcEnd = aItem->m_Start;
+
         // Gerber arcs are 3-point (start, center, end)
         // GAL needs center, radius, start angle, end angle
-        double   radius = GetLineLength( aItem->m_Start, aItem->m_ArcCentre );
+        double   radius = GetLineLength( arcStart, aItem->m_ArcCentre );
         VECTOR2D center = aItem->GetABPosition( aItem->m_ArcCentre );
-        VECTOR2D startVec = VECTOR2D( aItem->GetABPosition( aItem->m_Start ) ) - center;
-        VECTOR2D endVec = VECTOR2D( aItem->GetABPosition( aItem->m_End ) ) - center;
+        VECTOR2D startVec = VECTOR2D( aItem->GetABPosition( arcStart ) ) - center;
+        VECTOR2D endVec = VECTOR2D( aItem->GetABPosition( arcEnd ) ) - center;
 
         m_gal->SetIsFill( isFilled );
         m_gal->SetIsStroke( !isFilled );
@@ -308,11 +313,14 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
         double startAngle = startVec.Angle();
         double endAngle = endVec.Angle();
 
-        if( endAngle >= M_PI )
-            endAngle *= -1;
+        // GAL fills in direction of increasing angle, so we have to convert
+        // the angle from the -PI to PI domain of atan2() to ensure that
+        // the arc goes in the right direction
+        if( ( startAngle > endAngle ) && ( endAngle < 0 ) )
+            endAngle += (2 * M_PI);
 
         // 360-degree arcs are stored in the file with start equal to end
-        if( aItem->m_Start == aItem->m_End )
+        if( arcStart == arcEnd )
         {
             startAngle = 0;
             endAngle = 2 * M_PI;
@@ -323,9 +331,9 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
         // Arc Debugging
         // m_gal->SetLineWidth( 5 );
         // m_gal->SetStrokeColor( COLOR4D( 0.0, 1.0, 0.0, 1.0 ) );
-        // m_gal->DrawLine( center, aItem->GetABPosition( aItem->m_Start ) );
+        // m_gal->DrawLine( center, aItem->GetABPosition( arcStart ) );
         // m_gal->SetStrokeColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
-        // m_gal->DrawLine( center, aItem->GetABPosition( aItem->m_End ) );
+        // m_gal->DrawLine( center, aItem->GetABPosition( arcEnd ) );
         break;
     }
 
