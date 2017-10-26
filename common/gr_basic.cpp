@@ -788,7 +788,7 @@ void GRClosedPoly( EDA_RECT* ClipBox, wxDC* DC, int n, wxPoint Points[],
 }
 
 
-void GRCircle( EDA_RECT* ClipBox, wxDC* DC, int xc, int yc, int r, int width, COLOR4D Color )
+static bool ClipCircle( EDA_RECT* ClipBox, int xc, int yc, int r, int width )
 {
     /* Clip circles off screen. */
     if( ClipBox )
@@ -800,17 +800,26 @@ void GRCircle( EDA_RECT* ClipBox, wxDC* DC, int xc, int yc, int r, int width, CO
         ym = ClipBox->GetBottom();
 
         if( xc < ( x0 - r - width ) )
-            return;
+            return true;
 
         if( yc < ( y0 - r - width ) )
-            return;
+            return true;
 
         if( xc > ( r + xm + width ) )
-            return;
+            return true;
 
         if( yc > ( r + ym + width ) )
-            return;
+            return true;
     }
+
+    return false;
+}
+
+
+void GRCircle( EDA_RECT* ClipBox, wxDC* DC, int xc, int yc, int r, int width, COLOR4D Color )
+{
+    if( ClipCircle( ClipBox, xc, yc, r, width ) )
+        return;
 
     GRSetBrush( DC, Color, NOT_FILLED );
     GRSetColorPen( DC, Color, width );
@@ -833,27 +842,8 @@ void GRCircle( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aPos, int aRadius, int aWi
 void GRFilledCircle( EDA_RECT* ClipBox, wxDC* DC, int x, int y, int r,
                      int width, COLOR4D Color, COLOR4D BgColor )
 {
-    /* Clip circles off screen. */
-    if( ClipBox )
-    {
-        int x0, y0, xm, ym;
-        x0 = ClipBox->GetX();
-        y0 = ClipBox->GetY();
-        xm = ClipBox->GetRight();
-        ym = ClipBox->GetBottom();
-
-        if( x < ( x0 - r ) )
-            return;
-
-        if( y < ( y0 - r ) )
-            return;
-
-        if( x > ( r + xm ) )
-            return;
-
-        if( y > ( r + ym ) )
-            return;
-    }
+    if( ClipCircle( ClipBox, x, y, r, width ) )
+        return;
 
     GRSetBrush( DC, BgColor, FILLED );
     GRSetColorPen( DC, Color, width );
