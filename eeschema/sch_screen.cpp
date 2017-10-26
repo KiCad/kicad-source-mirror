@@ -215,9 +215,6 @@ SCH_ITEM* SCH_SCREEN::GetItem( const wxPoint& aPosition, int aAccuracy, KICAD_T 
 {
     for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
     {
-        if( item->HitTest( aPosition, aAccuracy ) && (aType == NOT_USED) )
-            return item;
-
         if( (aType == SCH_FIELD_T) && (item->Type() == SCH_COMPONENT_T) )
         {
             SCH_COMPONENT* component = (SCH_COMPONENT*) item;
@@ -239,7 +236,8 @@ SCH_ITEM* SCH_SCREEN::GetItem( const wxPoint& aPosition, int aAccuracy, KICAD_T 
             if( label )
                 return (SCH_ITEM*) label;
         }
-        else if( (item->Type() == aType) && item->HitTest( aPosition, aAccuracy ) )
+        else if( ( ( item->Type() == aType ) || ( aType == NOT_USED ) )
+                && item->HitTest( aPosition, aAccuracy ) )
         {
             return item;
         }
