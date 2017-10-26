@@ -28,32 +28,52 @@
 
 #include <dialog_env_var_config.h>
 
+#include <confirm.h>
+
 #include <validators.h>
 #include <html_messagebox.h>
 
 #include <wx/regex.h>
 
+/** A helper dialog to edit a env var name and/or its value (often a path)
+ */
+class DIALOG_ENV_VAR_SINGLE : public DIALOG_ENV_VAR_SINGLE_BASE
+{
+public:
+    DIALOG_ENV_VAR_SINGLE( wxWindow* parent, const wxString& aEnvVarName,
+                           const wxString& aEnvVarPath );
+
+    /// @return the new environment variable name
+    wxString GetEnvVarName() const
+    {
+        return m_envVarName->GetValue();
+    }
+
+    /// @return the new environment variable value
+    wxString GetEnvVarValue() const
+    {
+        return m_envVarPath->GetValue();
+    }
+
+    /// disable  the environment variable name (must be called
+    /// for predefined environment variable names, not editable
+    void SetEnvVarProtected()
+    {
+        m_envVarName->Enable( false );
+    }
+
+protected:
+    void OnSelectPath( wxCommandEvent& event ) override;
+    void onHelpClick( wxCommandEvent& event ) override;
+    bool TransferDataFromWindow() override;
+};
+
 
 DIALOG_ENV_VAR_CONFIG::DIALOG_ENV_VAR_CONFIG( wxWindow* aParent, const ENV_VAR_MAP& aEnvVarMap ) :
     DIALOG_ENV_VAR_CONFIG_BASE( aParent )
 {
-    m_extDefsChanged = false;
+    // Copy environment variables across
     m_envVarMap = aEnvVarMap;
-
-    m_grid->AppendRows( (int) m_envVarMap.size() );
-
-    for( size_t row = 0;  row < m_envVarMap.size();  row++ )
-    {
-        wxGridCellTextEditor* editor = new wxGridCellTextEditor;
-        ENVIRONMENT_VARIABLE_CHAR_VALIDATOR envVarValidator;
-        editor->SetValidator( envVarValidator );
-        m_grid->SetCellEditor( (int) row, 0, editor );
-
-        editor = new wxGridCellTextEditor;
-        FILE_NAME_WITH_PATH_CHAR_VALIDATOR pathValidator;
-        editor->SetValidator( pathValidator );
-        m_grid->SetCellEditor( (int) row, 1, editor );
-    }
 }
 
 
@@ -64,26 +84,24 @@ bool DIALOG_ENV_VAR_CONFIG::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    long row = 0L;
+    //TODO
+    /*
+    // Grab the project path var (not editable)
+    wxString prjPath;
 
-    for( ENV_VAR_MAP_ITER it = m_envVarMap.begin(); it != m_envVarMap.end(); ++it )
-    {
-        m_grid->SetCellValue( row, 0, it->first );
-        m_grid->SetCellValue( row, 1, it->second.GetValue() );
+    wxGetEnv( PROJECT_VAR_NAME, &prjPath );
 
-        // Highlight environment variables that are externally defined.
-        if( it->second.GetDefinedExternally() )
-        {
-            wxGridCellAttr* attr = m_grid->GetOrCreateCellAttr( row, 0 );
-            attr->SetBackgroundColour( *wxLIGHT_GREY );
-            m_grid->SetRowAttr( row, attr );
-        }
+    m_kiprjmod->SetLabel( prjPath );
+    */
 
-        row++;
-    }
+    //TODO - Call SetAlternateRowColour first to prevent assertion error
+    //m_pathList->EnableAlternateRowColours( true );
 
-    m_grid->AutoSizeColumns();
-    m_grid->AutoSizeRows();
+    PopulatePathList();
+
+    // Select the first item in the list
+    SelectListIndex( 0 );
+
     GetSizer()->Layout();
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
@@ -95,162 +113,168 @@ bool DIALOG_ENV_VAR_CONFIG::TransferDataToWindow()
 bool DIALOG_ENV_VAR_CONFIG::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )
+    {
         return false;
-
-    int row;
-    wxArrayString envVarNames;
-
-    for( row = 0; row < m_grid->GetNumberRows(); row++ )
-    {
-        wxString caption = _( "Invalid Input" );
-        wxString name = m_grid->GetCellValue( row, 0 );
-        wxString value = m_grid->GetCellValue( row, 1 );
-
-        // Ignore completely empty rows.
-        if( name.IsEmpty() && value.IsEmpty() )
-            continue;
-
-        wxLogDebug( wxT( "Row %d, name: %s, value %s." ), row,
-                    GetChars( name ), GetChars( value ) );
-
-        // Name cannot be empty.
-        if( name.IsEmpty() )
-        {
-            wxMessageBox( _( "Environment variable name cannot be empty." ),
-                          caption, wxOK | wxICON_ERROR, this );
-            m_grid->GoToCell( row, 0 );
-            m_grid->SetGridCursor( row, 0 );
-            return false;
-        }
-
-        // Value cannot be empty.
-        if( value.IsEmpty() )
-        {
-            wxMessageBox( _( "Environment variable value cannot be empty." ), caption,
-                          wxOK | wxICON_ERROR, this );
-            m_grid->GoToCell( row, 1 );
-            m_grid->SetGridCursor( row, 1 );
-            m_grid->SetFocus();
-            return false;
-        }
-
-        // First character of the environment variable name cannot be a digit (0-9).
-        if( name.Left( 1 ).IsNumber() )
-        {
-            wxMessageBox( _( "The first character of an environment variable name cannot be "
-                             "a digit (0-9)." ), caption, wxOK | wxICON_ERROR, this );
-            m_grid->GoToCell( row, 0 );
-            m_grid->SetGridCursor( row, 0 );
-            m_grid->SelectBlock( row, 0, row, 0 );
-            m_grid->SetFocus();
-            return false;
-        }
-
-        // Check for duplicate environment variable names.
-        if( envVarNames.Index( name ) != wxNOT_FOUND )
-        {
-            wxMessageBox( _( "Cannot have duplicate environment variable names." ), caption,
-                          wxOK | wxICON_ERROR, this );
-            m_grid->GoToCell( row, 0 );
-            m_grid->SetGridCursor( row, 0 );
-            m_grid->SelectRow( row );
-            m_grid->SetFocus();
-            return false;
-        }
-
-        envVarNames.Add( name );
     }
 
-    // Add new entries and update any modified entries.
-    for( row = 0; row < m_grid->GetNumberRows(); row++ )
-    {
-        wxString name = m_grid->GetCellValue( row, 0 );
-        wxString value = m_grid->GetCellValue( row, 1 );
-        ENV_VAR_MAP_ITER it = m_envVarMap.find( name );
-
-        if( it == m_envVarMap.end() )
-        {
-            ENV_VAR_ITEM item( value, wxGetEnv( name, NULL ) );
-
-            // Add new environment variable.
-            m_envVarMap[ name ] = item;
-        }
-        else if( it->second.GetValue() != value )
-        {
-            // Environment variable already defined but it's value changed.
-            it->second.SetValue( value );
-
-            // Externally defined variable has been changed.
-            if( it->second.GetDefinedExternally() )
-                m_extDefsChanged = true;
-        }
-    }
-
-    std::vector< wxString > removeFromMap;
-
-    // Remove deleted entries from the map.
-    for( ENV_VAR_MAP_ITER it = m_envVarMap.begin(); it != m_envVarMap.end(); ++it )
-    {
-        bool found = false;
-
-        for( row = 0; row < m_grid->GetNumberRows(); row++ )
-        {
-            if( m_grid->GetCellValue( row, 0 ) == it->first )
-            {
-                found = true;
-                break;
-            }
-        }
-
-        if( !found )
-            removeFromMap.push_back( it->first );
-    }
-
-    for( size_t i = 0; i < removeFromMap.size(); i++ )
-        m_envVarMap.erase( removeFromMap[i] );
+    Pgm().SetLocalEnvVariables( m_envVarMap );
 
     return true;
 }
 
 
-void DIALOG_ENV_VAR_CONFIG::OnAddRow( wxCommandEvent& aEvent )
+void DIALOG_ENV_VAR_CONFIG::PopulatePathList()
 {
-    m_grid->AppendRows();
+    m_pathList->Freeze();
 
-    int row = m_grid->GetNumberRows() - 1;
-    wxGridCellTextEditor* editor = new wxGridCellTextEditor;
-    ENVIRONMENT_VARIABLE_CHAR_VALIDATOR envVarNameValidator;
-    editor->SetValidator( envVarNameValidator );
-    m_grid->SetCellEditor( row, 0, editor );
+    m_pathList->ClearAll();
 
-    editor = new wxGridCellTextEditor;
-    FILE_NAME_WITH_PATH_CHAR_VALIDATOR pathValidator;
-    editor->SetValidator( pathValidator );
-    m_grid->SetCellEditor( row, 1, editor );
-    m_grid->GoToCell( row, 0 );
-    m_grid->SetGridCursor( row, 0 );
-    m_grid->SetFocus();
+    m_pathList->AppendColumn( _( "Name" ) );
+    m_pathList->AppendColumn( _( "Path" ) );
+
+    int row = 0;
+
+    for( auto it = m_envVarMap.begin(); it != m_envVarMap.end(); ++it )
+    {
+        long index = m_pathList->InsertItem( row, it->first );
+
+        m_pathList->SetItem( index, 1, it->second.GetValue() );
+
+        //TODO - Indicate via background colour if the path is defined external to KiCad
+
+        row++;
+    }
+
+    m_pathList->SetColumnWidth( 0, wxLIST_AUTOSIZE );
+    m_pathList->SetColumnWidth( 1, wxLIST_AUTOSIZE );
+
+    m_pathList->Update();
+
+    m_pathList->Thaw();
 }
 
 
-void DIALOG_ENV_VAR_CONFIG::OnDeleteSelectedRows( wxCommandEvent& aEvent )
+bool DIALOG_ENV_VAR_CONFIG::GetPathAtIndex( unsigned int aIndex, wxString& aEnvVar, wxString& aEnvPath )
 {
-    if( !m_grid->IsSelection() )
-        return;
-
-    wxGridUpdateLocker locker( m_grid );
-
-    for( int n = 0; n < m_grid->GetNumberRows(); )
+    if( aIndex < 0 || aIndex > m_envVarMap.size() )
     {
-        if( m_grid->IsInSelection( n , 0 ) )
-            m_grid->DeleteRows( n, 1 );
+        return false;
+    }
+
+    unsigned int idx = 0;
+
+    for( auto it = m_envVarMap.begin(); it != m_envVarMap.end(); ++it )
+    {
+        if( idx == aIndex )
+        {
+            aEnvVar = it->first;
+            aEnvPath = it->second.GetValue();
+
+            return true;
+        }
+
+        idx++;
+    }
+
+    return false;
+}
+
+
+
+void DIALOG_ENV_VAR_CONFIG::OnAddButton( wxCommandEvent& event )
+{
+    DIALOG_ENV_VAR_SINGLE dlg( this, wxEmptyString, wxEmptyString );
+
+    if( dlg.ShowModal() == wxID_OK )
+    {
+        wxString newName = dlg.GetEnvVarName();
+        wxString newPath = dlg.GetEnvVarValue();
+
+        // Check that the name does not already exist
+        if( m_envVarMap.count( newName ) > 0 )
+        {
+            //TODO - Improve this message, use DisplayErrorMessage instead
+            DisplayError( this, _( "Path already exists" ) );
+        }
         else
-            n++;
+        {
+            m_envVarMap[newName] = ENV_VAR_ITEM( newPath );
+
+            // Update path list
+            PopulatePathList();
+        }
     }
 }
 
 
-void DIALOG_ENV_VAR_CONFIG::OnHelpRequest( wxCommandEvent& aEvent )
+void DIALOG_ENV_VAR_CONFIG::OnEditButton( wxCommandEvent& event )
+{
+    EditSelectedEntry();
+}
+
+
+void DIALOG_ENV_VAR_CONFIG::EditSelectedEntry()
+{
+    wxString envName;
+    wxString envPath;
+
+    if( GetPathAtIndex( m_pathIndex, envName, envPath ) )
+    {
+        auto dlg = new DIALOG_ENV_VAR_SINGLE( nullptr, envName, envPath );
+
+        if( IsEnvVarImmutable( envName ) )
+        {
+            dlg->SetEnvVarProtected();
+        }
+
+        if( dlg->ShowModal() == wxID_OK )
+        {
+            wxString newName = dlg->GetEnvVarName();
+            wxString newPath = dlg->GetEnvVarValue();
+
+            // If the path name has not been changed
+            if( envName.Cmp( newName ) == 0 )
+            {
+                m_envVarMap[envName].SetValue( newPath );
+
+                if( m_envVarMap[envName].GetDefinedExternally() )
+                {
+                    m_extDefsChanged = true;
+                }
+            }
+            // Path-name needs to be updated
+            else
+            {
+                if( IsEnvVarImmutable( envName ) )
+                {
+                    DisplayErrorMessage( this,
+                                         wxString::Format( _( "Environment variable '%s' cannot be renamed" ),
+                                         envName.ToStdString() ),
+                                         _( "The selected environment variable name "
+                                            "is required for KiCad functionality and "
+                                            "can not be renamed." ) );
+
+                    return;
+                }
+
+                auto envVar = m_envVarMap[envName];
+
+                m_envVarMap.erase( envName );
+
+                envVar.SetValue( newPath );
+                envVar.SetDefinedExternally( false );
+                m_envVarMap[newName] = envVar;
+            }
+
+            // Update the path list
+            PopulatePathList();
+        }
+
+        dlg->Destroy();
+    }
+}
+
+void DIALOG_ENV_VAR_CONFIG::OnHelpButton( wxCommandEvent& event )
 {
     wxString msg = _( "Enter the name and path for each environment variable.  Grey entries "
                       "are names that have been defined externally at the system or user "
@@ -261,6 +285,8 @@ void DIALOG_ENV_VAR_CONFIG::OnHelpRequest( wxCommandEvent& aEvent )
     msg << _( "To ensure environment variable names are valid on all platforms, the name field "
               "will only accept upper case letters, digits, and the underscore characters." );
     msg << wxT( "</b><br><br>" );
+    msg << _( "<b>KICAD_SYMBOL_DIR</b> is the base path of the locally installed symbol libraries." );
+    msg << wxT( "<br><br>" );
     msg << _( "<b>KIGITHUB</b> is used by KiCad to define the URL of the repository "
               "of the official KiCad libraries." );
     msg << wxT( "<br><br>" );
@@ -279,7 +305,165 @@ void DIALOG_ENV_VAR_CONFIG::OnHelpRequest( wxCommandEvent& aEvent )
     msg << _( "<b>KICAD_PTEMPLATES</b> is optional and can be defined if you want to "
               "create your own project templates folder." );
 
-    HTML_MESSAGE_BOX dlg( GetParent(), _( "Environment Variable Help" ) );
-    dlg.AddHTML_Text( msg );
-    dlg.ShowModal();
+    DisplayHtmlInfoMessage( GetParent(), _( "Environment Variable Help" ), msg );
+}
+
+
+bool DIALOG_ENV_VAR_CONFIG::IsEnvVarImmutable( const wxString aEnvVar )
+{
+    /*
+     * TODO - Instead of defining these values here,
+     * extract them from elsewhere in the program
+     * (where they are originally defined)
+     */
+
+    static const wxString immutable[] = {
+            "KIGITHUB",
+            "KISYS3DMOD",
+            "KISYSMOD",
+            "KIPRJMOD",
+            "KICAD_PTEMPLATES",
+            "KICAD_SYMBOL_DIR"
+    };
+
+    for( unsigned int ii=0; ii<6; ii++ )
+    {
+        if( aEnvVar.Cmp( immutable[ii] ) == 0 )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+void DIALOG_ENV_VAR_CONFIG::OnRemoveButton( wxCommandEvent& event )
+{
+    wxString envName;
+    wxString envPath;
+
+    if( GetPathAtIndex( m_pathIndex, envName, envPath ) )
+    {
+        if( IsEnvVarImmutable( envName ) )
+        {
+            return;
+        }
+
+        m_envVarMap.erase( envName );
+
+        PopulatePathList();
+    }
+}
+
+
+void DIALOG_ENV_VAR_CONFIG::SelectListIndex( unsigned int aIndex )
+{
+    if( aIndex >= m_envVarMap.size() )
+    {
+        aIndex = 0;
+    }
+
+    m_pathIndex = aIndex;
+
+    wxString envName;
+    wxString envPath;
+
+    if( GetPathAtIndex( m_pathIndex, envName, envPath ) )
+    {
+        // Disable the 'delete' button if the path cannot be deleted
+        m_deletePathButton->Enable( !IsEnvVarImmutable( envName ) );
+    }
+}
+
+void DIALOG_ENV_VAR_CONFIG::OnPathSelected( wxListEvent& event )
+{
+    SelectListIndex( event.GetIndex() );
+}
+
+
+void DIALOG_ENV_VAR_CONFIG::OnPathActivated( wxListEvent& event )
+{
+    SelectListIndex( event.GetIndex() );
+
+    EditSelectedEntry();
+}
+
+
+///////////////////////////
+// DIALOG_ENV_VAR_SINGLE //
+///////////////////////////
+
+DIALOG_ENV_VAR_SINGLE::DIALOG_ENV_VAR_SINGLE( wxWindow* parent,
+                                              const wxString& aEnvVarName,
+                                              const wxString& aEnvVarPath ) :
+    DIALOG_ENV_VAR_SINGLE_BASE( parent )
+{
+    m_envVarName->SetValue( aEnvVarName );
+    m_envVarPath->SetValue( aEnvVarPath );
+    m_envVarName->SetValidator( ENVIRONMENT_VARIABLE_CHAR_VALIDATOR() );
+}
+
+
+void DIALOG_ENV_VAR_SINGLE::OnSelectPath( wxCommandEvent& event )
+{
+    wxString title = _( "Set path for ENV_VAR" );
+    wxString path;  // Currently the first opened path is not initialized
+
+    wxDirDialog dlg( nullptr, title, path, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+
+    if( dlg.ShowModal() == wxID_OK )
+         m_envVarPath->SetValue( dlg.GetPath() );
+}
+
+
+bool DIALOG_ENV_VAR_SINGLE::TransferDataFromWindow()
+{
+    // The user pressed the OK button, test data validity
+    wxString name = m_envVarName->GetValue();
+    wxString path = m_envVarPath->GetValue();
+
+    // Neither name nor path can be empty
+    if( name.IsEmpty() )
+    {
+        DisplayError( this, _( "Environment variable name cannot be empty." ) );
+        //  Veto:
+        return false;
+    }
+
+    if( path.IsEmpty() )
+    {
+        DisplayError( this, _( "Environment variable value cannot be empty." ) );
+        //  Veto:
+        return false;
+    }
+
+    // Name cannot start with a number
+    if( name.Left( 1 ).IsNumber() )
+    {
+        DisplayError( this, _( "Environment variable name cannot start with a digit (0-9)." ) );
+        //  Veto:
+        return false;
+    }
+
+    // No errors detected
+    return true;
+}
+
+
+void DIALOG_ENV_VAR_SINGLE::onHelpClick( wxCommandEvent& event )
+{
+    wxString msg = _( "An environment variable is as an equivalence of a string.<br>"
+                      "It is used mainly in paths to make them portable between installs<br><br>"
+                      "For instance, if an environment variable is defined as<br>"
+                      "<b>MYLIBPATH</b> with a value like <b>e:/kicad_libs</b>, "
+                      "if a library name is <br><b>${MYLIBPATH}/mylib.lib</b>, the actual path is"
+                      "<br><b>e:/kicad_libs/mylib.lib</b>"
+                      "<br><br>"
+                      "<b>Note:</b><br>"
+                      "Only chars <b>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_</b> are allowed in environment variable names<br>"
+                      "and the environment variable name cannot start with a digit (0-9)"
+                    );
+
+    DisplayHtmlInfoMessage( GetParent(), _( "Environment Variable Help" ), msg );
 }

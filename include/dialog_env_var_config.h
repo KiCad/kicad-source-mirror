@@ -40,15 +40,53 @@ class DIALOG_ENV_VAR_CONFIG: public DIALOG_ENV_VAR_CONFIG_BASE
 {
 private:
     ENV_VAR_MAP  m_envVarMap;
-    bool         m_extDefsChanged;
+    bool         m_extDefsChanged = false;
 
 protected:
-    virtual void OnAddRow( wxCommandEvent& aEvent ) override;
-    virtual void OnDeleteSelectedRows( wxCommandEvent& aEvent ) override;
-    virtual void OnHelpRequest( wxCommandEvent& aEvent ) override;
+
+    /**
+     * Update the displayed list of ENV_VAR paths
+     */
+    void PopulatePathList();
+
+    /**
+     * Edit the currently selected ENV_VAR entry
+     */
+    void EditSelectedEntry();
+
+    // Various button callbacks
+    virtual void OnAddButton( wxCommandEvent& event ) override;
+    virtual void OnEditButton( wxCommandEvent& event ) override;
+    virtual void OnRemoveButton( wxCommandEvent& event ) override;
+    virtual void OnHelpButton( wxCommandEvent& event ) override;
+
+    virtual void OnPathSelected( wxListEvent& event ) override;
+    virtual void OnPathActivated( wxListEvent& event ) override;
+
+    // Variable for keeping track of currently selected list index
+    unsigned int m_pathIndex = 0;
+
+    /**
+     * Extract the NAME and PATH data from the ENV_VAR at the provided index
+     * @param aIndex is the index to extract data from
+     * @return true if data was extracted else false
+     */
+    bool GetPathAtIndex( unsigned int aIndex, wxString& aEnvVar, wxString& aEnvPath );
+
+    /**
+     * Determine if a particular ENV_VAR is protected
+     * @param aEnvVar is the name of the ENV_VAR
+     */
+    bool IsEnvVarImmutable( const wxString aEnvVar );
+
+    /**
+     * Select the ENV_VAR at the provided index
+     */
+    void SelectListIndex( unsigned int aIndex );
 
 public:
     DIALOG_ENV_VAR_CONFIG( wxWindow* parent, const ENV_VAR_MAP& aEnvVarMap );
+    virtual ~DIALOG_ENV_VAR_CONFIG() {}
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
