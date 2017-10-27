@@ -43,7 +43,6 @@ class WIDGET_EESCHEMA_COLOR_CONFIG : public wxPanel
 {
 private:
     EDA_DRAW_FRAME*         m_drawFrame;
-    wxColourPickerCtrl*     m_SelBgColor;
     wxBoxSizer*             m_mainBoxSizer;
 
     // Creates the controls and sizers
