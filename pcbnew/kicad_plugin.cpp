@@ -532,8 +532,6 @@ void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const
 {
     const BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
 
-    m_out->Print( 0, "\n" );
-
     // Setup
     m_out->Print( aNestLevel, "(setup\n" );
 
@@ -764,9 +762,9 @@ void PCB_IO::formatNetInformation( BOARD* aBoard, int aNestLevel ) const
 
 void PCB_IO::formatHeader( BOARD* aBoard, int aNestLevel ) const
 {
-    formatGeneral( aBoard ,aNestLevel );
+    formatGeneral( aBoard, aNestLevel );
     // Layers.
-    formatBoardLayers( aBoard ,aNestLevel );
+    formatBoardLayers( aBoard, aNestLevel );
     // Setup
     formatSetup( aBoard, aNestLevel );
     // Save net codes and names
@@ -775,7 +773,7 @@ void PCB_IO::formatHeader( BOARD* aBoard, int aNestLevel ) const
 
 void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 {
-    formatHeader( aBoard , aNestLevel);
+    formatHeader( aBoard, aNestLevel );
 
     // Save the modules.
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
