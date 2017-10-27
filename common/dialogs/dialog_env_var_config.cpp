@@ -407,7 +407,7 @@ DIALOG_ENV_VAR_SINGLE::DIALOG_ENV_VAR_SINGLE( wxWindow* parent,
 
 void DIALOG_ENV_VAR_SINGLE::OnSelectPath( wxCommandEvent& event )
 {
-    wxString title = _( "Set path for ENV_VAR" );
+    wxString title = _( "Set path for environment variable" );
     wxString path;  // Currently the first opened path is not initialized
 
     wxDirDialog dlg( nullptr, title, path, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
