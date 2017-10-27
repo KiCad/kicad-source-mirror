@@ -1867,7 +1867,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
 
 void LEGACY_PLUGIN::load3D( MODULE* aModule )
 {
-    S3D_INFO t3D;
+    MODULE_3D_SETTINGS t3D;
 
     char*   line;
     while( ( line = READLINE( m_reader ) ) != NULL )
@@ -3071,8 +3071,8 @@ void LEGACY_PLUGIN::init( const PROPERTIES* aProperties )
 
 void LEGACY_PLUGIN::SaveModule3D( const MODULE* me ) const
 {
-    std::list<S3D_INFO>::const_iterator sM = me->Models().begin();
-    std::list<S3D_INFO>::const_iterator eM = me->Models().end();
+    auto sM = me->Models().begin();
+    auto eM = me->Models().end();
 
     while( sM != eM )
     {

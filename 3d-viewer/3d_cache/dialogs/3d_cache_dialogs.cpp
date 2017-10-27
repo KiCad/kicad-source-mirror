@@ -32,7 +32,7 @@
 
 
 bool S3D::Select3DModel( wxWindow* aParent, S3D_CACHE* aCache,
-    wxString& prevModelSelectDir, int& prevModelWildcard, S3D_INFO* aModel )
+    wxString& prevModelSelectDir, int& prevModelWildcard, MODULE_3D_SETTINGS* aModel )
 {
     if( NULL == aModel )
         return false;

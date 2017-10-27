@@ -31,6 +31,7 @@
 #include "3d_cache_dialogs.h"
 #include <3d_model_viewer/c3d_model_viewer.h>
 #include <common_ogl/cogl_att_list.h>
+#include <pcbnew/class_module.h>
 
 #define ID_FILE_TREE    ( wxID_LAST + 1 )
 #define ID_SET_DIR      ( ID_FILE_TREE + 1 )
@@ -46,7 +47,7 @@ wxEND_EVENT_TABLE()
 
 
 DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheManager,
-    S3D_INFO* aModelItem, wxString& prevModelSelectDir, int& prevModelWildcard ) :
+    MODULE_3D_SETTINGS* aModelItem, wxString& prevModelSelectDir, int& prevModelWildcard ) :
     wxDialog( aParent, wxID_ANY, _( "Select 3D Model" ), wxDefaultPosition,
              wxSize( 500,200 ), wxCAPTION | wxRESIZE_BORDER | wxCLOSE_BOX
              | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxSYSTEM_MENU ),

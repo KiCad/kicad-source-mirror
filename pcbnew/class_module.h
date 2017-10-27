@@ -42,7 +42,6 @@
 #include <class_text_mod.h>
 #include <PolyLine.h>
 #include "zones.h"
-#include <3d_cache/3d_info.h>
 
 #include <core/iterators.h>
 
@@ -80,6 +79,19 @@ enum MODULE_ATTR_T
                         ///<  board (Like edge card connectors, mounting hole...)
 };
 
+class MODULE_3D_SETTINGS
+{
+    public:
+        struct VECTOR3D
+        {
+            double x, y, z;
+        };
+
+        VECTOR3D m_Scale;
+        VECTOR3D m_Rotation;
+        VECTOR3D m_Offset;
+        wxString m_Filename;    ///< The 3D shape filename in 3D library
+};
 
 class MODULE : public BOARD_ITEM_CONTAINER
 {
@@ -147,8 +159,8 @@ public:
         return DLIST_ITERATOR_WRAPPER<BOARD_ITEM>( m_Drawings );
     }
 
-    std::list<S3D_INFO>& Models()             { return m_3D_Drawings; }
-    const std::list<S3D_INFO>& Models() const { return m_3D_Drawings; }
+    std::list<MODULE_3D_SETTINGS>& Models()             { return m_3D_Drawings; }
+    const std::list<MODULE_3D_SETTINGS>& Models() const { return m_3D_Drawings; }
 
     void SetPosition( const wxPoint& aPos ) override;
 
@@ -546,9 +558,9 @@ public:
      * Function Add3DModel
      * adds \a a3DModel definition to the end of the 3D model list.
      *
-     * @param a3DModel A pointer to a #S3D_INFO to add to the list.
+     * @param a3DModel A pointer to a #MODULE_3D_SETTINGS to add to the list.
      */
-    void Add3DModel( S3D_INFO* a3DModel );
+    void Add3DModel( MODULE_3D_SETTINGS* a3DModel );
 
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
@@ -669,7 +681,7 @@ public:
 private:
     DLIST<D_PAD> m_Pads;                ///< Linked list of pads.
     DLIST<BOARD_ITEM> m_Drawings;       ///< Linked list of graphical items.
-    std::list<S3D_INFO> m_3D_Drawings;  ///< Linked list of 3D models.
+    std::list<MODULE_3D_SETTINGS> m_3D_Drawings;  ///< Linked list of 3D models.
     double m_Orient;                    ///< Orientation in tenths of a degree, 900=90.0 degrees.
     wxPoint m_Pos;                      ///< Position of module on the board in internal units.
     TEXTE_MODULE* m_Reference;          ///< Component reference designator value (U34, R18..)

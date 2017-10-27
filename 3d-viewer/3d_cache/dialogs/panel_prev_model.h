@@ -38,7 +38,6 @@
 
 #include "panel_prev_3d_base.h"
 
-#include "../3d_info.h"
 #include <vector>
 
 #include <3d_canvas/eda_3d_canvas.h>
@@ -76,7 +75,7 @@ public:
     PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager,
                      MODULE* aModuleCopy,
                      COLORS_DESIGN_SETTINGS *aColors,
-                     std::vector<S3D_INFO> *aParentInfoList = NULL );
+                     std::vector<MODULE_3D_SETTINGS> *aParentInfoList = NULL );
 
     ~PANEL_PREV_3D();
 
@@ -96,14 +95,14 @@ private:
     /// A pointer to a new copy of the original module
     MODULE          *m_copyModule;
 
-    /// A pointer to the parent S3D_INFO list that we will use to copy to the preview module
-    std::vector<S3D_INFO> *m_parentInfoList;
+    /// A pointer to the parent MODULE_3D_SETTINGS list that we will use to copy to the preview module
+    std::vector<MODULE_3D_SETTINGS> *m_parentInfoList;
 
-    /// The current selected index of the S3D_INFO list
+    /// The current selected index of the MODULE_3D_SETTINGS list
     int             m_currentSelectedIdx;
 
-    /// Current S3D_INFO that is being edited
-    S3D_INFO        m_modelInfo;
+    /// Current MODULE_3D_SETTINGS that is being edited
+    MODULE_3D_SETTINGS        m_modelInfo;
 
     // Methods of the class
 private:

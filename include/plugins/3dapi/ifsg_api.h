@@ -35,7 +35,6 @@
 
 class SGNODE;
 class SCENEGRAPH;
-struct S3D_INFO;
 struct S3D_POINT;
 
 namespace S3D

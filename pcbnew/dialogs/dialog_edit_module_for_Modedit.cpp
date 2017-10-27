@@ -139,8 +139,8 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
 
     // Init 3D shape list
     m_3D_ShapeNameListBox->Clear();
-    std::list<S3D_INFO>::iterator sM = m_currentModule->Models().begin();
-    std::list<S3D_INFO>::iterator eM = m_currentModule->Models().end();
+    auto sM = m_currentModule->Models().begin();
+    auto eM = m_currentModule->Models().end();
     m_shapes3D_list.clear();
 
 
@@ -383,7 +383,7 @@ void DIALOG_MODULE_MODULE_EDITOR::Edit3DShapeFileName()
 void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DShapeFile()
 {
     PROJECT&        prj = Prj();
-    S3D_INFO model;
+    MODULE_3D_SETTINGS model;
 
     wxString initialpath = prj.GetRString( PROJECT::VIEWER_3D_PATH );
     wxString sidx = prj.GetRString( PROJECT::VIEWER_3D_FILTER_INDEX );
@@ -520,7 +520,7 @@ bool DIALOG_MODULE_MODULE_EDITOR::TransferDataFromWindow()
 
     m_currentModule->SetLocalSolderPasteMarginRatio( dtmp / 100 );
 
-    std::list<S3D_INFO>* draw3D  = &m_currentModule->Models();
+    std::list<MODULE_3D_SETTINGS>* draw3D  = &m_currentModule->Models();
     draw3D->clear();
     draw3D->insert( draw3D->end(), m_shapes3D_list.begin(), m_shapes3D_list.end() );
 

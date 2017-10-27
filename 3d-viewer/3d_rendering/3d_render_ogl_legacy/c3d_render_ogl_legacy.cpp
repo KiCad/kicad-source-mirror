@@ -1026,8 +1026,8 @@ void C3D_RENDER_OGL_LEGACY::render_3D_module( const MODULE* module,
                   modelunit_to_3d_units_factor );
 
         // Get the list of model files for this model
-        std::list<S3D_INFO>::const_iterator sM = module->Models().begin();
-        std::list<S3D_INFO>::const_iterator eM = module->Models().end();
+        auto sM = module->Models().begin();
+        auto eM = module->Models().end();
 
         while( sM != eM )
         {

@@ -35,7 +35,6 @@
 #include <layers_id_colors_and_visibility.h>    // PCB_LAYER_ID
 #include <common.h>                             // KiROUND
 #include <convert_to_biu.h>                     // IU_PER_MM
-#include <3d_cache/3d_info.h>
 
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
@@ -55,6 +54,7 @@ class MODULE;
 class PCB_TARGET;
 class VIA;
 class ZONE_CONTAINER;
+class MODULE_3D_SETTINGS;
 struct LAYER;
 
 
@@ -198,7 +198,7 @@ class PCB_PARSER : public PCB_LEXER
      */
     void parseEDA_TEXT( EDA_TEXT* aText );
 
-    S3D_INFO* parse3DModel();
+    MODULE_3D_SETTINGS* parse3DModel();
 
     /**
      * Function parseDouble

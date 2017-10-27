@@ -1304,8 +1304,8 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb,
     bool isFlipped = aModule->GetLayer() == B_Cu;
 
     // Export the object VRML model(s)
-    std::list<S3D_INFO>::iterator sM = aModule->Models().begin();
-    std::list<S3D_INFO>::iterator eM = aModule->Models().end();
+    auto sM = aModule->Models().begin();
+    auto eM = aModule->Models().end();
 
     wxFileName subdir( SUBDIR_3D, "" );
 

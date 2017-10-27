@@ -289,8 +289,8 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
 
     // Init 3D shape list
     m_3D_ShapeNameListBox->Clear();
-    std::list<S3D_INFO>::iterator sM = m_CurrentModule->Models().begin();
-    std::list<S3D_INFO>::iterator eM = m_CurrentModule->Models().end();
+    auto sM = m_CurrentModule->Models().begin();
+    auto eM = m_CurrentModule->Models().end();
     m_shapes3D_list.clear();
 
     wxString origPath;
@@ -525,7 +525,7 @@ void DIALOG_MODULE_BOARD_EDITOR::Edit3DShapeFileName()
 void DIALOG_MODULE_BOARD_EDITOR::BrowseAndAdd3DShapeFile()
 {
     PROJECT& prj = Prj();
-    S3D_INFO model;
+    MODULE_3D_SETTINGS model;
 
     wxString initialpath = prj.GetRString( PROJECT::VIEWER_3D_PATH );
     wxString sidx = prj.GetRString( PROJECT::VIEWER_3D_FILTER_INDEX );
@@ -733,7 +733,7 @@ bool DIALOG_MODULE_BOARD_EDITOR::TransferDataFromWindow()
         return false;
     }
 
-    std::list<S3D_INFO>* draw3D = &m_CurrentModule->Models();
+    std::list<MODULE_3D_SETTINGS>* draw3D = &m_CurrentModule->Models();
     draw3D->clear();
     draw3D->insert( draw3D->end(), m_shapes3D_list.begin(), m_shapes3D_list.end() );
 

@@ -44,7 +44,6 @@ class  S3D_CACHE_ENTRY;
 class  SCENEGRAPH;
 class  S3D_FILENAME_RESOLVER;
 class  S3D_PLUGIN_MANAGER;
-struct S3D_INFO;
 
 
 class S3D_CACHE

@@ -379,8 +379,8 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule,
 
     IDF3_COMPONENT* comp = NULL;
 
-    std::list<S3D_INFO>::const_iterator sM = aModule->Models().begin();
-    std::list<S3D_INFO>::const_iterator eM = aModule->Models().end();
+    auto sM = aModule->Models().begin();
+    auto eM = aModule->Models().end();
     wxFileName idfFile;
     wxString   idfExt;
 

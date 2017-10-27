@@ -1248,8 +1248,8 @@ void C3D_RENDER_RAYTRACING::load_3D_models()
 
 
             // Get the list of model files for this model
-            std::list<S3D_INFO>::const_iterator sM = module->Models().begin();
-            std::list<S3D_INFO>::const_iterator eM = module->Models().end();
+            auto sM = module->Models().begin();
+            auto eM = module->Models().end();
 
             while( sM != eM )
             {

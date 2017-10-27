@@ -40,7 +40,7 @@ private:
     MODULE*                     m_CurrentModule;
     TEXTE_MODULE*               m_ReferenceCopy;
     TEXTE_MODULE*               m_ValueCopy;
-    std::vector <S3D_INFO>      m_shapes3D_list;
+    std::vector <MODULE_3D_SETTINGS>      m_shapes3D_list;
     int                         m_LastSelected3DShapeIndex;
     static size_t               m_page; // remember the last open page during session
     PANEL_PREV_3D*              m_PreviewPane;

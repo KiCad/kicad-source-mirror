@@ -332,14 +332,14 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
 }
 
 
-S3D_INFO* PCB_PARSER::parse3DModel()
+MODULE_3D_SETTINGS* PCB_PARSER::parse3DModel()
 {
     wxCHECK_MSG( CurTok() == T_model, NULL,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as S3D_INFO." ) );
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as MODULE_3D_SETTINGS." ) );
 
     T token;
 
-    S3D_INFO* n3D = new S3D_INFO;
+    MODULE_3D_SETTINGS* n3D = new MODULE_3D_SETTINGS;
     NeedSYMBOLorNUMBER();
     n3D->m_Filename = FromUTF8();
 

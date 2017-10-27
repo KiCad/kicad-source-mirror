@@ -45,7 +45,7 @@
 PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager,
                                   MODULE* aModuleCopy,
                                   COLORS_DESIGN_SETTINGS *aColors,
-                                  std::vector<S3D_INFO> *aParentInfoList ):
+                                  std::vector<MODULE_3D_SETTINGS> *aParentInfoList ):
                 PANEL_PREV_3D_BASE( aParent, wxID_ANY )
     {
         initPanel();
@@ -204,7 +204,7 @@ void PANEL_PREV_3D::SetModelDataIdx( int idx, bool aReloadPreviewModule )
                                         // next updates, it will set first an
                                         // invalid selection
 
-            const S3D_INFO *aModel = (const S3D_INFO *)&((*m_parentInfoList)[idx]);
+            const MODULE_3D_SETTINGS *aModel = (const MODULE_3D_SETTINGS *)&((*m_parentInfoList)[idx]);
 
             xscale->SetValue( wxString::Format( "%.4f", aModel->m_Scale.x ) );
             yscale->SetValue( wxString::Format( "%.4f", aModel->m_Scale.y ) );
@@ -360,9 +360,15 @@ void PANEL_PREV_3D::updateOrientation( wxCommandEvent &event )
 
     getOrientationVars( scale, rotation, offset );
 
-    m_modelInfo.m_Scale = scale;
-    m_modelInfo.m_Offset = offset;
-    m_modelInfo.m_Rotation = rotation;
+    m_modelInfo.m_Scale.x = scale.x;
+    m_modelInfo.m_Scale.y = scale.y;
+    m_modelInfo.m_Scale.z = scale.z;
+    m_modelInfo.m_Offset.x = offset.x;
+    m_modelInfo.m_Offset.y = offset.y;
+    m_modelInfo.m_Offset.z = offset.z;
+    m_modelInfo.m_Rotation.x = rotation.x;
+    m_modelInfo.m_Rotation.y = rotation.y;
+    m_modelInfo.m_Rotation.z = rotation.z;
 
     if( m_currentSelectedIdx >= 0 )
     {
@@ -590,9 +596,12 @@ bool PANEL_PREV_3D::ValidateWithMessage( wxString& aErrorMessage )
     {
         wxString msg;
         bool addError = false;
-        S3D_INFO& s3dshape = (*m_parentInfoList)[idx];
+        MODULE_3D_SETTINGS& s3dshape = (*m_parentInfoList)[idx];
 
-        SGPOINT scale = s3dshape.m_Scale;
+        SGPOINT scale;
+        scale.x = s3dshape.m_Scale.x;
+        scale.y = s3dshape.m_Scale.y;
+        scale.z = s3dshape.m_Scale.z;
 
         if( 1/MAX_SCALE > scale.x || MAX_SCALE < scale.x )
         {
@@ -646,7 +655,7 @@ bool PANEL_PREV_3D::ValidateWithMessage( wxString& aErrorMessage )
 
 void PANEL_PREV_3D::updateListOnModelCopy()
 {
-    std::list<S3D_INFO>* draw3D  = &m_copyModule->Models();
+    auto draw3D  = &m_copyModule->Models();
     draw3D->clear();
     draw3D->insert( draw3D->end(), m_parentInfoList->begin(), m_parentInfoList->end() );
 }

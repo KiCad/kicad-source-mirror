@@ -36,9 +36,13 @@
 #include <wx/string.h>
 #include <plugins/3dapi/sg_base.h>
 
+class MODULE_3D_SETTINGS;
 
 struct S3D_INFO
 {
+    S3D_INFO();
+    S3D_INFO( const MODULE_3D_SETTINGS& aModel );
+
     SGPOINT m_Scale;        ///< scaling factors for the 3D footprint shape
     SGPOINT m_Rotation;     ///< an X,Y,Z rotation (unit = degrees) for the 3D shape
     SGPOINT m_Offset;       ///< an offset (unit = inch) for the 3D shape

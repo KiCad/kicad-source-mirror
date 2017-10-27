@@ -36,7 +36,6 @@
 
 class wxWindow;
 class KICAD_PLUGIN_LDR_3D;
-struct S3D_INFO;
 class SCENEGRAPH;
 
 class S3D_PLUGIN_MANAGER
