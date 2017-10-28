@@ -261,6 +261,13 @@ int CMP_TREE_MODEL_ADAPTER::GetUnitFor( const wxDataViewItem& aSelection ) const
 }
 
 
+CMP_TREE_NODE::TYPE CMP_TREE_MODEL_ADAPTER::GetTypeFor( const wxDataViewItem& aSelection ) const
+{
+    auto node = ToNode( aSelection );
+    return node ? node->Type : CMP_TREE_NODE::INVALID;
+}
+
+
 int CMP_TREE_MODEL_ADAPTER::GetComponentsCount() const
 {
     int n = 0;

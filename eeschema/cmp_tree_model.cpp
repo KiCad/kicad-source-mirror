@@ -133,6 +133,7 @@ CMP_TREE_NODE_LIB_ID::CMP_TREE_NODE_LIB_ID( CMP_TREE_NODE* aParent, LIB_ALIAS* a
 
     Type        = LIBID;
     Parent      = aParent;
+    Type        = ALIAS;
     Name        = aAlias->GetName();
     Desc        = aAlias->GetDescription();
 

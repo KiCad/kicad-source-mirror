@@ -60,6 +60,25 @@ public:
      */
     LIB_ID GetSelectedLibId( int* aUnit = nullptr ) const;
 
+    /**
+     * Associates a right click context menu for a specific node type.
+     * @param aType is the node type to have a menu associated.
+     * @param aMenu is the associated menu.
+     */
+    void SetMenu( CMP_TREE_NODE::TYPE aType, std::unique_ptr<wxMenu> aMenu )
+    {
+        m_menus[aType] = std::move( aMenu );
+    }
+
+    /**
+     * Returns the status of right-click context menu.
+     * @return True in case a right-click context menu is active.
+     */
+    bool IsMenuActive() const
+    {
+        return m_menuActive;
+    }
+
 protected:
     /**
      * If a wxDataViewitem is valid, select it and post a selection event.
@@ -86,12 +105,20 @@ protected:
 
     void onDetailsLink( wxHtmlLinkEvent& aEvent );
     void onPreselect( wxCommandEvent& aEvent );
+    void onContextMenu( wxDataViewEvent& aEvent );
 
     SYMBOL_LIB_TABLE* m_sym_lib_table;
     CMP_TREE_MODEL_ADAPTER::PTR m_adapter;
+
     wxTextCtrl*     m_query_ctrl;
     wxDataViewCtrl* m_tree_ctrl;
     wxHtmlWindow*   m_details_ctrl;
+
+    ///> Right click context menus for each tree level
+    std::vector<std::unique_ptr<wxMenu>> m_menus;
+
+    ///> Flag indicating whether a right-click context menu is active
+    bool m_menuActive;
 };
 
 ///> Custom event sent when a new component is preselected

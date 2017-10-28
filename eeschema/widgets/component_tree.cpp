@@ -43,6 +43,9 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTabl
       m_query_ctrl( nullptr ),
       m_details_ctrl( nullptr )
 {
+    // create space for context menu pointers, INVALID is the max value
+    m_menus.resize( CMP_TREE_NODE::TYPE::INVALID + 1 );
+
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
     // Search text control
@@ -89,6 +92,7 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTabl
 
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &COMPONENT_TREE::onTreeActivate, this );
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED, &COMPONENT_TREE::onTreeSelect, this );
+    m_tree_ctrl->Bind( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, &COMPONENT_TREE::onContextMenu, this );
 
     Bind( COMPONENT_PRESELECTED, &COMPONENT_TREE::onPreselect, this );
 
@@ -233,6 +237,20 @@ void COMPONENT_TREE::onPreselect( wxCommandEvent& aEvent )
     }
 
     aEvent.Skip();
+}
+
+
+void COMPONENT_TREE::onContextMenu( wxDataViewEvent& aEvent )
+{
+    auto const sel = m_tree_ctrl->GetSelection();
+    auto type = sel.IsOk() ? m_adapter->GetTypeFor( sel ) : CMP_TREE_NODE::INVALID;
+
+    if( m_menus[type] )
+    {
+        m_menuActive = true;
+        PopupMenu( m_menus[type].get() );
+        m_menuActive = false;
+    }
 }
 
 

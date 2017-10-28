@@ -226,6 +226,16 @@ public:
     int GetUnitFor( const wxDataViewItem& aSelection ) const;
 
     /**
+     * Return node type for the given item.
+     *
+     * @param aSelection    item from the wxDataViewCtrl
+     *                      (see wxDataViewCtrl::GetSelection())
+     *
+     * @return Type of the selected node, might be INVALID.
+     */
+    CMP_TREE_NODE::TYPE GetTypeFor( const wxDataViewItem& aSelection ) const;
+
+    /**
      * Return the number of components loaded in the tree.
      */
     int GetComponentsCount() const;
