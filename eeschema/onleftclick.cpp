@@ -322,7 +322,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             if( !item )
                 break;
 
-            NETLIST_OBJECT_LIST* netlist = BuildNetListBase();
+            std::unique_ptr<NETLIST_OBJECT_LIST> netlist( BuildNetListBase() );
 
             for( NETLIST_OBJECT* obj : *netlist )
             {
