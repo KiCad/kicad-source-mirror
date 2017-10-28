@@ -212,7 +212,7 @@ public:
      *
      * @return alias, or nullptr if none is selected
      */
-    LIB_ID GetAliasFor( wxDataViewItem aSelection ) const;
+    LIB_ID GetAliasFor( const wxDataViewItem& aSelection ) const;
 
     /**
      * Return the unit for the given item.
@@ -223,7 +223,7 @@ public:
      * @return Unit, or zero if the alias itself is selected. Return valid is
      *         invalid if GetAliasFor() returns nullptr.
      */
-    int GetUnitFor( wxDataViewItem aSelection ) const;
+    int GetUnitFor( const wxDataViewItem& aSelection ) const;
 
     /**
      * Return the number of components loaded in the tree.

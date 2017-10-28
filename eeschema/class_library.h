@@ -401,21 +401,21 @@ public:
      *
      * @param aNames - String array to place entry names into.
      */
-    void GetAliasNames( wxArrayString& aNames );
+    void GetAliasNames( wxArrayString& aNames ) const;
 
     /**
      * Load a vector with all the entries in this library.
      *
      * @param aAliases - vector to receive the aliases.
      */
-    void GetAliases( std::vector<LIB_ALIAS*>& aAliases );
+    void GetAliases( std::vector<LIB_ALIAS*>& aAliases ) const;
 
     /**
      * Load a string array with the names of  entries of type POWER in this library.
      *
      * @param aNames - String array to place entry names into.
      */
-    void GetEntryTypePowerNames( wxArrayString& aNames );
+    void GetEntryTypePowerNames( wxArrayString& aNames ) const;
 
     /**
      * Find #LIB_ALIAS by \a aName.
@@ -423,7 +423,7 @@ public:
      * @param aName - Name of entry, case sensitive.
      * @return #LIB_ALIAS* if found.  NULL if not found.
      */
-    LIB_ALIAS* FindAlias( const wxString& aName );
+    LIB_ALIAS* FindAlias( const wxString& aName ) const;
 
     /**
      * Find part by \a aName.
@@ -434,7 +434,7 @@ public:
      * @param aName - Name of part, case sensitive.
      * @return LIB_PART* - part if found, else NULL.
      */
-    LIB_PART* FindPart( const wxString& aName );
+    LIB_PART* FindPart( const wxString& aName ) const;
 
     /**
      * Add \a aPart entry to library.
@@ -481,14 +481,14 @@ public:
      *
      * @return wxString - Full library file name with path and extension.
      */
-    wxString GetFullFileName()          { return fileName.GetFullPath(); }
+    wxString GetFullFileName() const          { return fileName.GetFullPath(); }
 
     /**
      * Function GetLogicalName
      * returns the logical name of the library.
      * @return wxString - The logical name of this library.
      */
-    const wxString GetLogicalName()
+    const wxString GetLogicalName() const
     {
         /*  for now is the filename without path or extension.
 
@@ -518,7 +518,7 @@ public:
      * @return true if at least one power part is found in lib
      * Useful to select or list only libs containing power parts
      */
-    bool HasPowerParts();
+    bool HasPowerParts() const;
 };
 
 
