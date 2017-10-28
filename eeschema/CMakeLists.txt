@@ -124,6 +124,7 @@ set( EESCHEMA_SRCS
     getpart.cpp
     cmp_tree_model.cpp
     cmp_tree_model_adapter.cpp
+    cmp_tree_model_adapter_base.cpp
     generate_alias_info.cpp
     hierarch.cpp
     highlight_connection.cpp

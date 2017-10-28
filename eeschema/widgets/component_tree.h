@@ -47,7 +47,7 @@ public:
     enum WIDGETS { NONE = 0x00, SEARCH = 0x01, DETAILS = 0x02, ALL = 0xFF };
 
     COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTable,
-                    CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, WIDGETS aWidgets = ALL );
+                    CMP_TREE_MODEL_ADAPTER_BASE::PTR& aAdapter, WIDGETS aWidgets = ALL );
 
     /**
      * For multi-unit components, if the user selects the component itself

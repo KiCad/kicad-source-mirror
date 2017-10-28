@@ -36,7 +36,7 @@
 
 
 COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTable,
-        CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, WIDGETS aWidgets )
+        CMP_TREE_MODEL_ADAPTER_BASE::PTR& aAdapter, WIDGETS aWidgets )
     : wxPanel( aParent ),
       m_sym_lib_table( aSymLibTable ),
       m_adapter( aAdapter ),
