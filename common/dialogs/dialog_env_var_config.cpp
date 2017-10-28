@@ -156,7 +156,7 @@ void DIALOG_ENV_VAR_CONFIG::PopulatePathList()
 
 bool DIALOG_ENV_VAR_CONFIG::GetPathAtIndex( unsigned int aIndex, wxString& aEnvVar, wxString& aEnvPath )
 {
-    if( aIndex < 0 || aIndex > m_envVarMap.size() )
+    if( aIndex > m_envVarMap.size() )
     {
         return false;
     }
