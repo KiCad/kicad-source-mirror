@@ -60,35 +60,7 @@ PLUGIN* IO_MGR::PluginFind( PCB_FILE_T aFileType )
     // This implementation is subject to change, any magic is allowed here.
     // The public IO_MGR API is the only pertinent public information.
 
-    switch( aFileType )
-    {
-    case LEGACY:
-        return new LEGACY_PLUGIN();
-
-    case KICAD_SEXP:
-        return new PCB_IO();
-
-    case EAGLE:
-        return new EAGLE_PLUGIN();
-
-    case PCAD:
-        return new PCAD_PLUGIN();
-
-    case GEDA_PCB:
-        return new GPCB_PLUGIN();
-
-    case GITHUB:
-#if defined(BUILD_GITHUB_PLUGIN)
-        return new GITHUB_PLUGIN();
-#else
-        THROW_IO_ERROR( "BUILD_GITHUB_PLUGIN not enabled in cmake build environment" );
-#endif
-
-    case FILE_TYPE_NONE:
-        return NULL;
-    }
-
-    return NULL;
+    return PLUGIN_REGISTRY::Instance()->Create( aFileType );
 }
 
 
@@ -108,29 +80,17 @@ const wxString IO_MGR::ShowType( PCB_FILE_T aType )
     // text spellings.  If you change the spellings, you will obsolete
     // library tables, so don't do change, only additions are ok.
 
-    switch( aType )
+    const auto& plugins = PLUGIN_REGISTRY::Instance()->AllPlugins();
+
+    for( const auto& plugin : plugins )
     {
-    default:
-        return wxString::Format( _( "Unknown PCB_FILE_T value: %d" ), aType );
-
-    case LEGACY:
-        return wxString( wxT( "Legacy" ) );
-
-    case KICAD_SEXP:
-        return wxString( wxT( "KiCad" ) );
-
-    case EAGLE:
-        return wxString( wxT( "Eagle" ) );
-
-    case PCAD:
-        return wxString( wxT( "P-Cad" ) );
-
-    case GEDA_PCB:
-        return wxString( wxT( "Geda-PCB" ) );
-
-    case GITHUB:
-        return wxString( wxT( "Github" ) );
+        if ( plugin.m_type == aType )
+        {
+            return plugin.m_name;
+        }
     }
+
+    return wxString::Format( _( "Unknown PCB_FILE_T value: %d" ), aType );
 }
 
 
@@ -140,25 +100,15 @@ IO_MGR::PCB_FILE_T IO_MGR::EnumFromStr( const wxString& aType )
     // text spellings.  If you change the spellings, you will obsolete
     // library tables, so don't do change, only additions are ok.
 
-    if( aType == wxT( "KiCad" ) )
-        return KICAD_SEXP;
+    const auto& plugins = PLUGIN_REGISTRY::Instance()->AllPlugins();
 
-    if( aType == wxT( "Legacy" ) )
-        return LEGACY;
-
-    if( aType == wxT( "Eagle" ) )
-        return EAGLE;
-
-    if( aType == wxT( "P-Cad" ) )
-        return PCAD;
-
-    if( aType == wxT( "Geda-PCB" ) )
-        return GEDA_PCB;
-
-    if( aType == wxT( "Github" ) )
-        return GITHUB;
-
-    // wxASSERT( blow up here )
+    for( const auto& plugin : plugins )
+    {
+        if ( plugin.m_name == aType )
+        {
+            return plugin.m_type;
+        }
+    }
 
     return PCB_FILE_T( -1 );
 }

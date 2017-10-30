@@ -89,3 +89,7 @@ BOARD* PCAD_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, const P
 
     return m_board;
 }
+
+namespace {
+    static IO_MGR::REGISTER_PLUGIN registerSelf( IO_MGR::PCAD, wxT("P-Cad"), []() -> PLUGIN* { return new PCAD_PLUGIN; } );
+};

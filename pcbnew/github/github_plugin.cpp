@@ -594,6 +594,10 @@ void GITHUB_PLUGIN::remoteGetZip( const wxString& aRepoURL )
     }
 }
 
+namespace {
+    static IO_MGR::REGISTER_PLUGIN registerSelf( IO_MGR::GITHUB, wxT("Github"), []() -> PLUGIN* { return new GITHUB_PLUGIN; } );
+};
+
 #if 0 && defined(STANDALONE)
 
 int main( int argc, char** argv )

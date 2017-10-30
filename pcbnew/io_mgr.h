@@ -27,7 +27,7 @@
 
 #include <richio.h>
 #include <map>
-
+#include <functional>
 
 class BOARD;
 class PLUGIN;
@@ -64,6 +64,78 @@ public:
 
         FILE_TYPE_NONE
     };
+
+    /**
+     * Class PLUGIN_REGISTRY
+     * Holds a list of available plugins, created using a singleton REGISTER_PLUGIN object.
+     * This way, plugins can be added link-time.
+     */
+    class PLUGIN_REGISTRY
+    {
+        public:
+            struct ENTRY
+            {
+                PCB_FILE_T m_type;
+                std::function<PLUGIN*(void)> m_createFunc;
+                wxString m_name;
+            };
+
+            static PLUGIN_REGISTRY *Instance()
+            {
+                static PLUGIN_REGISTRY *self = nullptr;
+
+                if( !self )
+                {
+                    self = new PLUGIN_REGISTRY;
+                }
+                return self;
+            }
+
+            void Register( PCB_FILE_T aType, const wxString& aName, std::function<PLUGIN*(void)> aCreateFunc )
+            {
+                ENTRY ent;
+                ent.m_type = aType;
+                ent.m_createFunc = aCreateFunc;
+                ent.m_name = aName;
+                m_plugins.push_back( ent );
+            }
+
+            PLUGIN* Create( PCB_FILE_T aFileType ) const
+            {
+                for( auto& ent : m_plugins )
+                {
+                    if ( ent.m_type == aFileType )
+                    {
+                        return ent.m_createFunc();
+                    }
+                }
+                return nullptr;
+            }
+
+            const std::vector<ENTRY>& AllPlugins() const
+            {
+                return m_plugins;
+            }
+
+        private:
+            std::vector<ENTRY> m_plugins;
+    };
+
+    /**
+     * Class REGISTER_PLUGIN
+     * Registers a plugin. Declare as a static variable in an anonymous namespace.
+     * @param aType: type of the plugin
+     * @param aName: name of the file format
+     * @param aCreateFunc: function that creates a new object for the plugin.
+     */
+    struct REGISTER_PLUGIN
+    {
+         REGISTER_PLUGIN( PCB_FILE_T aType, const wxString& aName, std::function<PLUGIN*(void)> aCreateFunc )
+         {
+             PLUGIN_REGISTRY::Instance()->Register( aType, aName, aCreateFunc );
+         }
+    };
+
 
     /**
      * Function PluginFind

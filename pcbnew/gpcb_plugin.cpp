@@ -1141,3 +1141,7 @@ bool GPCB_PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
 
     return m_cache->IsWritable();
 }
+
+namespace {
+    static IO_MGR::REGISTER_PLUGIN registerSelf( IO_MGR::GEDA_PCB, wxT("GEDA/Pcb"), []() -> PLUGIN* { return new GPCB_PLUGIN; } );
+};

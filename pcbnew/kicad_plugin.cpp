@@ -2214,3 +2214,7 @@ bool PCB_IO::IsFootprintLibWritable( const wxString& aLibraryPath )
 
     return m_cache->IsWritable();
 }
+
+namespace {
+    static IO_MGR::REGISTER_PLUGIN registerSelf( IO_MGR::KICAD_SEXP, wxT("KiCad"), []() -> PLUGIN* { return new PCB_IO; } );
+};
