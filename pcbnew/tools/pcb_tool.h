@@ -32,6 +32,7 @@
 #include <wxPcbStruct.h>
 #include <class_board.h>
 #include <view/view_group.h>
+#include <pcb_view.h>
 
 #include <functional>
 
@@ -44,6 +45,8 @@
 
 class PCB_TOOL;
 class PCB_EDIT_FRAME;
+class PCB_DISPLAY_OPTIONS;
+class PCB_DRAW_PANEL_GAL;
 
 struct INTERACTIVE_PLACER_BASE
 {
@@ -120,11 +123,13 @@ protected:
                                      const wxString& aCommitMessage,
                                      int aOptions = IPO_ROTATE | IPO_FLIP | IPO_REPEAT );
 
-    KIGFX::VIEW* view() const { return getView(); }
+    KIGFX::PCB_VIEW* view() const { return static_cast<KIGFX::PCB_VIEW*>( getView() ); }
     KIGFX::VIEW_CONTROLS* controls() const { return getViewControls(); }
     PCB_EDIT_FRAME* frame() const { return getEditFrame<PCB_EDIT_FRAME>(); }
     BOARD* board() const { return getModel<BOARD>(); }
     MODULE* module() const { return board()->m_Modules; }
+    PCB_DISPLAY_OPTIONS* displayOptions() const;
+    PCB_DRAW_PANEL_GAL* canvas() const;
 
     bool m_editModules;
 };

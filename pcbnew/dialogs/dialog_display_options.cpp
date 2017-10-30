@@ -40,7 +40,7 @@
 #include <dialog_display_options_base.h>
 
 #include <class_draw_panel_gal.h>
-#include <view/view.h>
+#include <pcb_view.h>
 #include <pcb_painter.h>
 
 #include <widgets/gal_options_panel.h>

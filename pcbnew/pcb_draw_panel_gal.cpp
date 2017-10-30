@@ -23,7 +23,7 @@
  */
 
 #include "pcb_draw_panel_gal.h"
-#include <view/view.h>
+#include <pcb_view.h>
 #include <view/wx_view_controls.h>
 #include <pcb_painter.h>
 #include <worksheet_viewitem.h>
@@ -104,11 +104,18 @@ PCB_DRAW_PANEL_GAL::PCB_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
                                         KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
 EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalType )
 {
-    setDefaultLayerOrder();
-    setDefaultLayerDeps();
+    m_view = new KIGFX::PCB_VIEW( true );
+    m_view->SetGAL( m_gal );
 
     m_painter.reset( new KIGFX::PCB_PAINTER( m_gal ) );
     m_view->SetPainter( m_painter.get() );
+
+    setDefaultLayerOrder();
+    setDefaultLayerDeps();
+
+    // View controls is the first in the event handler chain, so the Tool Framework operates
+    // on updated viewport data.
+    m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
 
     // Load display options (such as filled/outline display of items).
     // Can be made only if the parent window is an EDA_DRAW_FRAME (or a derived class)
@@ -117,8 +124,8 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalTy
 
     if( frame )
     {
-        auto displ_opts = (PCB_DISPLAY_OPTIONS*) frame->GetDisplayOptions();
-        static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() )->LoadDisplayOptions( displ_opts );
+        auto opts = (PCB_DISPLAY_OPTIONS*) frame->GetDisplayOptions();
+        static_cast<KIGFX::PCB_VIEW*>( m_view )->UpdateDisplayOptions( opts );
     }
 }
 
@@ -441,4 +448,10 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetLayerDisplayOnly( LAYER_WORKSHEET ) ;
     m_view->SetLayerDisplayOnly( LAYER_GRID );
     m_view->SetLayerDisplayOnly( LAYER_DRC );
+}
+
+
+KIGFX::PCB_VIEW* PCB_DRAW_PANEL_GAL::view() const
+{
+    return static_cast<KIGFX::PCB_VIEW*>( m_view );
 }

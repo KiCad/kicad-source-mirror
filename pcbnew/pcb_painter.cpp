@@ -63,6 +63,9 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
         m_sketchMode[i] = false;
     }
 
+    COLORS_DESIGN_SETTINGS dummyCds( FRAME_PCB );
+    ImportLegacyColors( &dummyCds );
+
     update();
 }
 

@@ -256,16 +256,17 @@ void PCBNEW_CONTROL::Reset( RESET_REASON aReason )
     }
 }
 
+template<class T> void Flip( T& aValue )
+{
+    aValue = !aValue;
+}
 
 int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
 {
-    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
-    auto settings = painter->GetSettings();
+    auto opts = displayOptions();
 
-    // Apply new display options to the GAL canvas
-    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
-    displ_opts->m_DisplayPcbTrackFill = !displ_opts->m_DisplayPcbTrackFill;
-    settings->LoadDisplayOptions( displ_opts );
+    Flip( opts->m_DisplayPcbTrackFill );
+    view()->UpdateDisplayOptions( opts );
 
     for( auto track : board()->Tracks() )
     {
@@ -273,30 +274,25 @@ int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
             view()->Update( track, KIGFX::GEOMETRY );
     }
 
-    m_frame->GetGalCanvas()->Refresh();
+    canvas()->Refresh();
 
     return 0;
 }
 
-
 int PCBNEW_CONTROL::PadDisplayMode( const TOOL_EVENT& aEvent )
 {
-    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
-    auto settings = painter->GetSettings();
+    auto opts = displayOptions();
 
-    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
+    Flip( opts->m_DisplayPadFill );
+    view()->UpdateDisplayOptions( opts );
 
-    // Apply new display options to the GAL canvas
-    displ_opts->m_DisplayPadFill = !displ_opts->m_DisplayPadFill;
-    settings->LoadDisplayOptions( displ_opts );
-
-    for( auto module : board()->Modules() )
+    for( auto module : board()->Modules() ) // fixme: move to PCB_VIEW
     {
         for( auto pad : module->Pads() )
-            getView()->Update( pad, KIGFX::GEOMETRY );
+            view()->Update( pad, KIGFX::GEOMETRY );
     }
 
-    m_frame->GetGalCanvas()->Refresh();
+    canvas()->Refresh();
 
     return 0;
 }
@@ -304,21 +300,18 @@ int PCBNEW_CONTROL::PadDisplayMode( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 {
-    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
-    auto settings = painter->GetSettings();
-    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
+    auto opts = displayOptions();
 
-    // Apply new display options to the GAL canvas
-    displ_opts->m_DisplayViaFill = !displ_opts->m_DisplayViaFill;
-    settings->LoadDisplayOptions( displ_opts );
+    Flip( opts->m_DisplayViaFill );
+    view()->UpdateDisplayOptions( opts );
 
     for( auto track : board()->Tracks() )
     {
         if( track->Type() == PCB_TRACE_T || track->Type() == PCB_VIA_T )
-            getView()->Update( track, KIGFX::GEOMETRY );
+            view()->Update( track, KIGFX::GEOMETRY );
     }
 
-    m_frame->GetGalCanvas()->Refresh();
+    canvas()->Refresh();
 
     return 0;
 }
@@ -326,26 +319,24 @@ int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 {
-    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
-    auto settings = painter->GetSettings();
-    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
+    auto opts = displayOptions();
 
     // Apply new display options to the GAL canvas
     if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayEnable ) )
-        displ_opts->m_DisplayZonesMode = 0;
+        opts->m_DisplayZonesMode = 0;
     else if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayDisable ) )
-        displ_opts->m_DisplayZonesMode = 1;
+        opts->m_DisplayZonesMode = 1;
     else if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayOutlines ) )
-        displ_opts->m_DisplayZonesMode = 2;
+        opts->m_DisplayZonesMode = 2;
     else
         assert( false );
 
-    settings->LoadDisplayOptions( displ_opts );
+    view()->UpdateDisplayOptions( opts );
 
     for( int i = 0; i < board()->GetAreaCount(); ++i )
         view()->Update( board()->GetArea( i ), KIGFX::GEOMETRY );
 
-    m_frame->GetGalCanvas()->Refresh();
+    canvas()->Refresh();
 
     return 0;
 }
@@ -353,13 +344,11 @@ int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
 {
-    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
-    auto settings = painter->GetSettings();
-    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
+    auto opts = displayOptions();
 
-    displ_opts->m_ContrastModeDisplay = !displ_opts->m_ContrastModeDisplay;
-    settings->LoadDisplayOptions( displ_opts );
-    m_frame->GetGalCanvas()->SetHighContrastLayer( m_frame->GetActiveLayer() );
+    Flip( opts->m_ContrastModeDisplay );
+    view()->UpdateDisplayOptions( opts );
+    canvas()->SetHighContrastLayer( m_frame->GetActiveLayer() );
 
     return 0;
 }

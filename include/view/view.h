@@ -68,7 +68,7 @@ public:
      */
     VIEW( bool aIsDynamic = true );
 
-    ~VIEW();
+    virtual ~VIEW();
 
     // nasty hack, invoked by the destructor of VIEW_ITEM to auto-remove the item
     // from the owning VIEW if there is any. Kicad relies too much on this mechanism.
@@ -83,14 +83,14 @@ public:
      * @param aItem: item to be added. No ownership is given
      * @param aDrawPriority: priority to draw this item on its layer, lowest first.
      */
-    void Add( VIEW_ITEM* aItem, int aDrawPriority = -1 );
+    virtual void Add( VIEW_ITEM* aItem, int aDrawPriority = -1 );
 
     /**
      * Function Remove()
      * Removes a VIEW_ITEM from the view.
      * @param aItem: item to be removed. Caller must dispose the removed item if necessary
      */
-    void Remove( VIEW_ITEM* aItem );
+    virtual void Remove( VIEW_ITEM* aItem );
 
 
     /**
@@ -102,7 +102,7 @@ public:
      *  first).
      * @return Number of found items.
      */
-    int Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult ) const;
+    virtual int Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult ) const;
 
     /**
      * Sets the item visibility.
@@ -136,8 +136,8 @@ public:
      * @param aItem: the item to update.
      * @param aUpdateFlags: how much the object has changed.
      */
-    void Update( VIEW_ITEM* aItem, int aUpdateFlags );
-    void Update( VIEW_ITEM* aItem );
+    virtual void Update( VIEW_ITEM* aItem, int aUpdateFlags );
+    virtual void Update( VIEW_ITEM* aItem );
 
     /**
      * Function SetRequired()
@@ -476,7 +476,7 @@ public:
      * @param aLayer: the layer or -1 in case when no particular layer should
      * be displayed on the top.
      */
-    void SetTopLayer( int aLayer, bool aEnabled = true );
+    virtual void SetTopLayer( int aLayer, bool aEnabled = true );
 
     /**
      * Function EnableTopLayer()
@@ -485,9 +485,9 @@ public:
      * layer set previously with SetTopLayer function.
      * @param aEnable whether to enable or disable display of the top layer.
      */
-    void EnableTopLayer( bool aEnable );
+    virtual void EnableTopLayer( bool aEnable );
 
-    int GetTopLayer() const;
+    virtual int GetTopLayer() const;
 
     /**
      * Function ClearTopLayers()
@@ -513,7 +513,7 @@ public:
      * Function Redraw()
      * Immediately redraws the whole view.
      */
-    void Redraw();
+    virtual void Redraw();
 
     /**
      * Function RecacheAllItems()

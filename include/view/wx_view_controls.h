@@ -47,7 +47,7 @@ class WX_VIEW_CONTROLS : public VIEW_CONTROLS, public wxEvtHandler
 {
 public:
     WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel );
-    ~WX_VIEW_CONTROLS()
+    virtual ~WX_VIEW_CONTROLS()
     {}
 
     /// Handler functions

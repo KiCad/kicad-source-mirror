@@ -52,7 +52,7 @@
 #include <collectors.h>
 #include <class_drawpanel.h>
 #include <pcb_draw_panel_gal.h>
-#include <view/view.h>
+#include <pcb_view.h>
 #include <math/vector2d.h>
 #include <trigo.h>
 #include <pcb_painter.h>
@@ -450,10 +450,8 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
     if( gal )
     {
     // Apply new display options to the GAL canvas
-        auto view = gal->GetView();
-        auto painter = static_cast<KIGFX::PCB_PAINTER*> ( view->GetPainter() );
-        auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
-        settings->LoadDisplayOptions( displ_opts );
+        auto view = static_cast<KIGFX::PCB_VIEW*>( gal->GetView() );
+        view->UpdateDisplayOptions( displ_opts );
 
         // Update pads
         BOARD* board = GetBoard();

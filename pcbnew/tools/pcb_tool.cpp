@@ -30,6 +30,7 @@
 #include <board_commit.h>
 
 #include <class_module.h>
+#include <pcb_draw_panel_gal.h>
 
 #include "selection_tool.h"
 #include "pcb_actions.h"
@@ -192,4 +193,14 @@ void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer,
     }
 
     view()->Remove( &preview );
+}
+
+PCB_DISPLAY_OPTIONS* PCB_TOOL::displayOptions() const
+{
+    return static_cast<PCB_DISPLAY_OPTIONS*>( frame()->GetDisplayOptions() );
+}
+
+PCB_DRAW_PANEL_GAL* PCB_TOOL::canvas() const
+{
+    return static_cast<PCB_DRAW_PANEL_GAL*>( frame()->GetGalCanvas() );
 }

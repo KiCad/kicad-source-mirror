@@ -74,9 +74,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
     EnableScrolling( false, false );    // otherwise Zoom Auto disables GAL canvas
 
-    m_view = new KIGFX::VIEW( true );
-    m_view->SetGAL( m_gal );
-
     Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
     Connect( wxEVT_ENTER_WINDOW, wxEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
     Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( EDA_DRAW_PANEL_GAL::onLostFocus ), NULL, this );
@@ -102,10 +99,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         Connect( eventType, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ),
                  NULL, m_eventDispatcher );
     }
-
-    // View controls is the first in the event handler chain, so the Tool Framework operates
-    // on updated viewport data.
-    m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
 
     m_pendingRefresh = false;
     m_drawing = false;

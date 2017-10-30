@@ -32,6 +32,7 @@ namespace KIGFX
 {
     class WORKSHEET_VIEWITEM;
     class RATSNEST_VIEWITEM;
+    class PCB_VIEW;
 }
 class COLORS_DESIGN_SETTINGS;
 
@@ -103,6 +104,9 @@ public:
     void RedrawRatsnest();
 
 protected:
+
+    KIGFX::PCB_VIEW* view() const;
+    
     ///> Reassigns layer order to the initial settings.
     void setDefaultLayerOrder();
 
