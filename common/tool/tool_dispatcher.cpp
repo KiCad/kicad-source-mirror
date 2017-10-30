@@ -313,6 +313,13 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
     int type = aEvent.GetEventType();
 
+    // Sometimes there is no window that has the focus (it happens when an other PCB_BASE_FRAME
+    // is opened and is iconized on Windows).
+    // In this case, gives the focus to the parent PCB_BASE_FRAME (for an obscure reason,
+    // when happens, the GAL canvas itself does not accept the focus)
+    if( wxWindow::FindFocus() == nullptr )
+        static_cast<PCB_BASE_FRAME*>( m_toolMgr->GetEditFrame() )->SetFocus();
+
     // Mouse handling
     // Note: wxEVT_LEFT_DOWN event must always be skipped.
     if( type == wxEVT_MOTION || type == wxEVT_MOUSEWHEEL ||
