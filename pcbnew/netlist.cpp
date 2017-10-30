@@ -284,9 +284,10 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
         if( !aNetlist.GetReplaceFootprints() )
             footprintMisMatch = false;
 
-        bool loadFootprint = (fpOnBoard == NULL) || footprintMisMatch;
+        if( fpOnBoard && !footprintMisMatch )   // nothing else to do here
+            continue;
 
-        if( loadFootprint && (component->GetFPID() != lastFPID) )
+        if( component->GetFPID() != lastFPID )
         {
             module = NULL;
 
@@ -340,7 +341,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
             module = new MODULE( *module );
         }
 
-        if( loadFootprint && module != NULL )
+        if( module )
             component->SetModule( module );
     }
 }
