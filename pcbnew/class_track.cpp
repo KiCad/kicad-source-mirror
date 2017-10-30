@@ -29,6 +29,7 @@
  * @brief Functions relatives to tracks, vias and segments used to fill zones.
  */
 
+
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <common.h>
@@ -51,14 +52,14 @@
  * tests to see if the clearance border is drawn on the given track.
  * @return bool - true if should draw clearance, else false.
  */
-static bool ShowClearance( DISPLAY_OPTIONS* aDisplOpts, const TRACK* aTrack )
+static bool ShowClearance( PCB_DISPLAY_OPTIONS* aDisplOpts, const TRACK* aTrack )
 {
     // maybe return true for tracks and vias, not for zone segments
     return IsCopperLayer( aTrack->GetLayer() )
            && ( aTrack->Type() == PCB_TRACE_T || aTrack->Type() == PCB_VIA_T )
-           && ( ( aDisplOpts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS
+           && ( ( aDisplOpts->m_ShowTrackClearanceMode == PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS
                   && ( aTrack->IsDragging() || aTrack->IsMoving() || aTrack->IsNew() ) )
-            || ( aDisplOpts->m_ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS )
+            || ( aDisplOpts->m_ShowTrackClearanceMode == PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_ALWAYS )
             );
 
 }
@@ -554,7 +555,7 @@ void TRACK::DrawShortNetname( EDA_DRAW_PANEL* panel,
      *  - only tracks with a length > 10 * thickness are eligible
      * and, of course, if we are not printing the board
      */
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
 
     if( displ_opts->m_DisplayNetNamesMode == 0 || displ_opts->m_DisplayNetNamesMode == 1 )
         return;
@@ -649,7 +650,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
       return;
 #endif
 
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) panel->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
 
     if( ( aDrawMode & GR_ALLOW_HIGHCONTRAST ) && displ_opts->m_ContrastModeDisplay )
     {
@@ -701,7 +702,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 void SEGZONE::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
                     const wxPoint& aOffset )
 {
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
 
     if( displ_opts->m_DisplayZonesMode != 0 )
         return;
@@ -789,7 +790,7 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
     int fillvia = 0;
     PCB_BASE_FRAME* frame  = (PCB_BASE_FRAME*) panel->GetParent();
     PCB_SCREEN*     screen = frame->GetScreen();
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)frame->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( frame->GetDisplayOptions() );
 
     if( displ_opts->m_DisplayViaFill == FILLED )
         fillvia = 1;

@@ -37,7 +37,7 @@
 
 #include <confirm.h>
 #include <wxPcbStruct.h>
-#include <pcbstruct.h>
+#include <pcb_display_options.h>
 #include <layer_widget.h>
 #include <macros.h>
 #include <menus_helpers.h>
@@ -562,7 +562,7 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
         return false;
 
     myframe->SetActiveLayer( layer );
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)myframe->GetDisplayOptions();
+    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*)myframe->GetDisplayOptions();
 
     if( m_alwaysShowActiveCopperLayer )
         OnLayerSelected();

@@ -154,7 +154,6 @@ TOOL_ACTION PCB_ACTIONS::showLocalRatsnest( "pcbnew.Control.showLocalRatsnest",
         AS_GLOBAL, 0,
         "", "" );
 
-
 class ZONE_CONTEXT_MENU : public CONTEXT_MENU
 {
 public:

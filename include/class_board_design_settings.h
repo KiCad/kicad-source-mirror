@@ -25,7 +25,6 @@
 #ifndef BOARD_DESIGN_SETTINGS_H_
 #define BOARD_DESIGN_SETTINGS_H_
 
-#include <pcbstruct.h>      // NB_COLORS
 #include <class_pad.h>
 #include <class_track.h>
 #include <class_netclass.h>

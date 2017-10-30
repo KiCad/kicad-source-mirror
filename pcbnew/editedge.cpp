@@ -113,7 +113,7 @@ static void Move_Segment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos
 void PCB_EDIT_FRAME::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 {
     EDA_ITEM* PtStruct;
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
     bool tmp = displ_opts->m_DisplayDrawItemsFill;
 
     if( Segment == NULL )
@@ -347,7 +347,7 @@ static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     if( Segment == NULL )
         return;
 
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)aPanel->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*) ( aPanel->GetDisplayOptions() );
     bool tmp = displ_opts->m_DisplayDrawItemsFill;
 
     displ_opts->m_DisplayDrawItemsFill = SKETCH;

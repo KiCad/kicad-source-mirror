@@ -51,9 +51,8 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
 {
     const GR_DRAWMODE drawmode = (GR_DRAWMODE) 0;
     int     defaultPenSize = Millimeter2iu( 0.2 );
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
-
-    DISPLAY_OPTIONS save_opt;
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
+    PCB_DISPLAY_OPTIONS save_opt;
 
     PRINT_PARAMETERS * printParameters = (PRINT_PARAMETERS*) aData; // can be null
     PRINT_PARAMETERS::DrillShapeOptT drillShapeOpt = PRINT_PARAMETERS::FULL_DRILL_SHAPE;
@@ -73,7 +72,7 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
     displ_opts->m_DisplayModEdgeFill    = FILLED;
     displ_opts->m_DisplayModTextFill    = FILLED;
     displ_opts->m_DisplayPcbTrackFill = true;
-    displ_opts->m_ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
+    displ_opts->m_ShowTrackClearanceMode = PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE;
     displ_opts->m_DisplayDrawItemsFill    = FILLED;
     displ_opts->m_DisplayZonesMode    = 0;
     displ_opts->m_DisplayNetNamesMode = 0;
@@ -110,13 +109,13 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
                                 void* aData)
 {
     const GR_DRAWMODE drawmode = (GR_DRAWMODE) 0;
-    DISPLAY_OPTIONS save_opt;
+    PCB_DISPLAY_OPTIONS save_opt;
     BOARD*          Pcb   = GetBoard();
     int             defaultPenSize = Millimeter2iu( 0.2 );
     bool            onePagePerLayer = false;
 
     PRINT_PARAMETERS* printParameters = (PRINT_PARAMETERS*) aData; // can be null
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
 
     if( printParameters && printParameters->m_OptionPrintPage == 0 )
         onePagePerLayer = true;
@@ -186,7 +185,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     displ_opts->m_DisplayModEdgeFill = FILLED;
     displ_opts->m_DisplayModTextFill = FILLED;
     displ_opts->m_DisplayPcbTrackFill = true;
-    displ_opts->m_ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
+    displ_opts->m_ShowTrackClearanceMode = PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE;
     displ_opts->m_DisplayDrawItemsFill    = FILLED;
     displ_opts->m_DisplayZonesMode    = 0;
     displ_opts->m_DisplayNetNamesMode = 0;

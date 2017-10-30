@@ -898,9 +898,9 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aColor, int aClea
         if( m_dispOptions )
         {
             auto clearanceDisp = m_dispOptions->m_ShowTrackClearanceMode;
-            pitem->ShowTrackClearance( clearanceDisp != DO_NOT_SHOW_CLEARANCE );
-            pitem->ShowViaClearance( clearanceDisp != DO_NOT_SHOW_CLEARANCE
-                    && clearanceDisp != SHOW_CLEARANCE_NEW_TRACKS );
+            pitem->ShowTrackClearance( clearanceDisp != PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE );
+            pitem->ShowViaClearance( clearanceDisp != PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE
+                    && clearanceDisp != PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS );
         }
     }
 
@@ -1037,5 +1037,5 @@ void PNS_KICAD_IFACE::SetHostFrame( PCB_EDIT_FRAME* aFrame )
     m_frame = aFrame;
 
     m_commit.reset( new BOARD_COMMIT( m_frame ) );
-    m_dispOptions = (DISPLAY_OPTIONS*) m_frame->GetDisplayOptions();
+    m_dispOptions = (PCB_DISPLAY_OPTIONS*) m_frame->GetDisplayOptions();
 }

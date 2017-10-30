@@ -117,7 +117,7 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalTy
 
     if( frame )
     {
-        DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) frame->GetDisplayOptions();
+        auto displ_opts = (PCB_DISPLAY_OPTIONS*) frame->GetDisplayOptions();
         static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() )->LoadDisplayOptions( displ_opts );
     }
 }
@@ -345,7 +345,7 @@ void PCB_DRAW_PANEL_GAL::OnShow()
     if( frame )
     {
         SetTopLayer( frame->GetActiveLayer() );
-        DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) frame->GetDisplayOptions();
+        PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*) frame->GetDisplayOptions();
         static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
             m_view->GetPainter()->GetSettings() )->LoadDisplayOptions( displ_opts );
     }

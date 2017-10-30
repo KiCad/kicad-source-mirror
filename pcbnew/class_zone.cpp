@@ -361,7 +361,7 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
     auto color = frame->Settings().Colors().GetLayerColor( draw_layer );
 
     GRSetDrawMode( DC, aDrawMode );
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
 
     if( displ_opts->m_ContrastModeDisplay )
     {
@@ -415,7 +415,7 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
 {
 
     static std::vector <wxPoint> CornersBuffer;
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
 
     // outline_mode is false to show filled polys,
     // and true to show polygons outlines only (test and debug purposes)
@@ -563,7 +563,7 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC,
     auto frame = static_cast<PCB_BASE_FRAME*> ( panel->GetParent() );
     auto color = frame->Settings().Colors().GetLayerColor( GetLayer() );
 
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
 
     if( displ_opts->m_ContrastModeDisplay )
     {

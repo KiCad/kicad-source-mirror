@@ -68,7 +68,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
     MODULE* module;
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
 
     m_canvas->CrossHairOff( &dc );
 
@@ -1352,7 +1352,7 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
 void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
 {
     PCB_LAYER_ID curLayer = GetActiveLayer();
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
 
     // Check if the specified layer matches the present layer
     if( layer == curLayer )
@@ -1427,7 +1427,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     int lastToolID = GetToolId();
 
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
 
     // Stop the current command and deselect the current tool.
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );

@@ -34,7 +34,9 @@
 #include <pcbnew.h>
 #include <class_board_item.h>
 #include <class_board_connected_item.h>
-#include <PolyLine.h>
+#include <pcb_display_options.h>
+
+//#include <PolyLine.h>
 #include <trigo.h>
 
 
@@ -42,7 +44,7 @@ class TRACK;
 class VIA;
 class D_PAD;
 class MSG_PANEL_ITEM;
-
+class SHAPE_POLY_SET;
 
 // Via types
 // Note that this enum must be synchronized to GAL_LAYER_ID

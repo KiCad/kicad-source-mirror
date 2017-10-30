@@ -254,7 +254,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMod
         color = frame->Settings().Colors().GetItemColor( LAYER_MOD_TEXT_INVISIBLE );
     }
 
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)aPanel->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( aPanel->GetDisplayOptions() );
 
     // shade text if high contrast mode is active
     if( ( aDrawMode & GR_ALLOW_HIGHCONTRAST ) && displ_opts && displ_opts->m_ContrastModeDisplay )

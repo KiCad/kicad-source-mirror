@@ -44,7 +44,7 @@
 void FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int        id = event.GetId();
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
     bool state = m_optionsToolBar->GetToolToggled( id );
 
     switch( id )
@@ -83,7 +83,7 @@ void FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
 PARAM_CFG_ARRAY& FOOTPRINT_EDIT_FRAME::GetConfigurationSettings()
 {
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
     BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
 
     // Update everything
@@ -148,4 +148,3 @@ PARAM_CFG_ARRAY& FOOTPRINT_EDIT_FRAME::GetConfigurationSettings()
 
     return m_configParams;
 }
-

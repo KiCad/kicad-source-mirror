@@ -127,7 +127,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
 
     wxCHECK_RET( frame != NULL, wxT( "Panel has no parent frame window." ) );
 
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)frame->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( frame->GetDisplayOptions() );
     PCB_SCREEN*     screen = frame->GetScreen();
 
     if( displ_opts && displ_opts->m_DisplayPadFill == SKETCH )

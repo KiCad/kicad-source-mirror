@@ -157,7 +157,7 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer )
 
     ITEM* rv = NULL;
     PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)frame->GetDisplayOptions();
+    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*)frame->GetDisplayOptions();
 
     for( int i = 0; i < 4; i++ )
     {

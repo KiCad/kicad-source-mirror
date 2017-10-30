@@ -104,7 +104,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
     BOARD_ITEM* item;
 
     GENERAL_COLLECTORS_GUIDE guide = GetCollectorsGuide();
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( GetDisplayOptions() );
 
     // Assign to scanList the proper item types desired based on tool type
     // or hotkey that is in play.

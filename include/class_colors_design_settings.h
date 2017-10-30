@@ -61,15 +61,13 @@ public:
     virtual void Save( wxConfigBase *aConfig ) override;
     /**
      * Function GetLayerColor
-     * @return the color for aLayer which is one of the layer indices given
-     * in pcbstruct.h or in schematic
+     * @return the color for aLayer which
      */
     COLOR4D GetLayerColor( LAYER_NUM aLayer ) const;
 
     /**
      * Function SetLayerColor
-     * sets the color for aLayer which is one of the layer indices given
-     * in pcbstruct.h or in schematic
+     * sets the color for aLayer
      */
     void SetLayerColor( LAYER_NUM aLayer, COLOR4D aColor );
 

@@ -407,6 +407,7 @@ set( PCB_COMMON_SRCS
     ../pcbnew/kicad_clipboard.cpp
     ../pcbnew/gpcb_plugin.cpp
     ../pcbnew/pcb_netlist.cpp
+    ../pcbnew/pcb_display_options.cpp
     widgets/widget_net_selector.cpp
     pcb_plot_params_keywords.cpp
     pcb_keywords.cpp
@@ -532,7 +533,7 @@ target_link_libraries( dsntest common ${wxWidgets_LIBRARIES} rt )
 
 add_dependencies( dsntest lib-dependencies )
 
-target_link_libraries( pcbcommon 3d-viewer )
+target_link_libraries( pcbcommon )
 
 
 # _kiway.so

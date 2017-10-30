@@ -38,11 +38,10 @@
 #include <wx/sizer.h>
 #include <wx/frame.h>
 
-struct MODULE_3D_SETTINGS;
+class MODULE_3D_SETTINGS;
 class  S3D_CACHE;
 class  S3D_FILENAME_RESOLVER;
 class  C3D_MODEL_VIEWER;
-//class  wxGenericDirCtrl;
 
 class DLG_SELECT_3DMODEL : public wxDialog
 {

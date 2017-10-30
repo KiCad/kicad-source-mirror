@@ -143,7 +143,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
 
     // Set some display options here, because the FOOTPRINT_WIZARD_FRAME
     // does not have a config menu to do that:
-    DISPLAY_OPTIONS* disp_opts = (DISPLAY_OPTIONS*) GetDisplayOptions();
+    auto disp_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
     disp_opts->m_DisplayPadIsol = false;
     disp_opts->m_DisplayPadNum = true;
     GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );

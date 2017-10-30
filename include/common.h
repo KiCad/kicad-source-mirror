@@ -33,7 +33,6 @@
 #define INCLUDE__COMMON_H_
 
 #include <vector>
-#include <boost/cstdint.hpp>
 
 #include <wx/wx.h>
 #include <wx/confbase.h>

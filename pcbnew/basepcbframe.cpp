@@ -382,7 +382,7 @@ void PCB_BASE_FRAME::Show3D_Frame( wxCommandEvent& event )
 void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
 {
     PCB_LAYER_ID preslayer = GetActiveLayer();
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
 
     // Check if the specified layer matches the present layer
     if( layer == preslayer )
@@ -431,7 +431,7 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
 
 void PCB_BASE_FRAME::OnTogglePolarCoords( wxCommandEvent& aEvent )
 {
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
     SetStatusText( wxEmptyString );
 
     displ_opts->m_DisplayPolarCood = !displ_opts->m_DisplayPolarCood;
@@ -442,7 +442,7 @@ void PCB_BASE_FRAME::OnTogglePolarCoords( wxCommandEvent& aEvent )
 
 void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 {
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
 
     displ_opts->m_DisplayPadFill = !displ_opts->m_DisplayPadFill;
     EDA_DRAW_PANEL_GAL* gal = GetGalCanvas();
@@ -470,7 +470,7 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 
 void PCB_BASE_FRAME::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
 {
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
 
     aEvent.Check( displ_opts->m_DisplayPolarCood );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLAR_COORD,
@@ -482,7 +482,8 @@ void PCB_BASE_FRAME::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
 
 void PCB_BASE_FRAME::OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent )
 {
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+
     aEvent.Check( !displ_opts->m_DisplayPadFill );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
                                         displ_opts->m_DisplayPadFill ?
@@ -621,7 +622,7 @@ void PCB_BASE_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
     if( aId < 0 )
         return;
 
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
 
     // handle color changes for transitions in and out of ID_TRACK_BUTT
     if( ( GetToolId() == ID_TRACK_BUTT && aId != ID_TRACK_BUTT )
@@ -654,7 +655,7 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     double dYpos;
     wxString line;
     wxString locformatter;
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
 
     EDA_DRAW_FRAME::UpdateStatusBar();
 
@@ -983,7 +984,7 @@ void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
         // Transfer latest current display options from legacy to GAL canvas:
         auto painter = static_cast<KIGFX::PCB_PAINTER*>( galCanvas->GetView()->GetPainter() );
         auto settings = painter->GetSettings();
-        DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+        auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
         settings->LoadDisplayOptions( displ_opts );
 
         galCanvas->GetView()->RecacheAllItems();

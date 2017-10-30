@@ -1088,7 +1088,6 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
 }
 
 
-// virtual, see pcbstruct.h
 void BOARD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString txt;
@@ -1123,7 +1122,6 @@ void BOARD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 }
 
 
-// virtual, see pcbstruct.h
 SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
 {
     KICAD_T        stype;

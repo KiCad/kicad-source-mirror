@@ -380,7 +380,7 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreat
         s_PickedList.ClearItemsList();
     }
 
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
 
     if( displ_opts->m_Show_Module_Ratsnest && aDC )
         TraceModuleRatsNest( aDC );

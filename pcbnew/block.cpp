@@ -489,7 +489,7 @@ static void drawMovingBlock( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
     BASE_SCREEN* screen = aPanel->GetScreen();
 
     // do not show local module rastnest in block move, it is not usable.
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)aPanel->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( aPanel->GetDisplayOptions() );
     bool showRats = displ_opts->m_Show_Module_Ratsnest;
     displ_opts->m_Show_Module_Ratsnest = false;
 

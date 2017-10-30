@@ -34,7 +34,7 @@
 
 class EDA_ITEM;
 class COLORS_DESIGN_SETTINGS;
-class DISPLAY_OPTIONS;
+class PCB_DISPLAY_OPTIONS;
 
 class BOARD_ITEM;
 class BOARD;
@@ -99,7 +99,7 @@ public:
      * for vias/pads/tracks and so on).
      * @param aOptions are settings that you want to use for displaying items.
      */
-    void LoadDisplayOptions( const DISPLAY_OPTIONS* aOptions );
+    void LoadDisplayOptions( const PCB_DISPLAY_OPTIONS* aOptions );
 
     /// @copydoc RENDER_SETTINGS::GetColor()
     virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const override;

@@ -1,9 +1,3 @@
-/**
- * @file classpcb.cpp
- * @brief Member functions of classes used in Pcbnew (see pcbstruct.h)
- *        except for tracks (see class_track.cpp).
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -197,32 +191,4 @@ PCB_SCREEN::~PCB_SCREEN()
 int PCB_SCREEN::MilsToIuScalar()
 {
     return (int)IU_PER_MILS;
-}
-
-
-DISPLAY_OPTIONS::DISPLAY_OPTIONS()
-{
-    m_DisplayPadFill          = FILLED;
-    m_DisplayViaFill          = FILLED;
-    m_DisplayPadNum           = true;
-    m_DisplayPadIsol          = true;
-
-    m_DisplayModEdgeFill      = FILLED;
-    m_DisplayModTextFill      = FILLED;
-    m_DisplayPcbTrackFill     = FILLED;   // false = sketch , true = filled
-    m_ShowTrackClearanceMode  = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
-
-    m_DisplayPolarCood        = false;  /* false = display absolute coordinates,
-                                         * true = display polar cordinates */
-    m_DisplayZonesMode        = 0;      /* 0 = Show filled areas outlines in zones,
-                                         * 1 = do not show filled areas outlines
-                                         * 2 = show outlines of filled areas */
-    m_DisplayNetNamesMode     = 3;      /* 0 do not show netnames,
-                                         * 1 show netnames on pads
-                                         * 2 show netnames on tracks
-                                         * 3 show netnames on tracks and pads */
-    m_DisplayDrawItemsFill    = FILLED;
-    m_ContrastModeDisplay     = false;
-    m_MaxLinksShowed   = 3;             // in track creation: number of hairwires shown
-    m_Show_Module_Ratsnest  = true;     // When moving a footprint: allows displaying a ratsnest
 }

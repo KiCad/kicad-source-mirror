@@ -618,7 +618,7 @@ int getOptimalModulePlacement( PCB_EDIT_FRAME* aFrame, MODULE* aModule, wxDC* aD
     wxPoint LastPosOK;
     double  min_cost, curr_cost, Score;
     bool    TstOtherSide;
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)aFrame->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)aFrame->GetDisplayOptions();
     BOARD*  brd = aFrame->GetBoard();
 
     aModule->CalculateBoundingBox();

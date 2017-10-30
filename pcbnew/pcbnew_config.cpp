@@ -326,7 +326,7 @@ PARAM_CFG_ARRAY PCB_EDIT_FRAME::GetProjectFileParameters()
 
 PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
 {
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
 
     if( m_configParams.empty() )
     {
@@ -344,7 +344,7 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
                                                         &displ_opts->m_DisplayPcbTrackFill, true ) );
         m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "TrackDisplayClearance" ),
                                                        (int*) &displ_opts->m_ShowTrackClearanceMode,
-                                                       SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS ) );
+                                                       PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS ) );
         m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "PadFill" ),
                                                         &displ_opts->m_DisplayPadFill, true ) );
         m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "ViaFill" ),

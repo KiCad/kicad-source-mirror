@@ -263,7 +263,7 @@ int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
     auto settings = painter->GetSettings();
 
     // Apply new display options to the GAL canvas
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
+    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
     displ_opts->m_DisplayPcbTrackFill = !displ_opts->m_DisplayPcbTrackFill;
     settings->LoadDisplayOptions( displ_opts );
 
@@ -284,7 +284,7 @@ int PCBNEW_CONTROL::PadDisplayMode( const TOOL_EVENT& aEvent )
     auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
     auto settings = painter->GetSettings();
 
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
+    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
     // Apply new display options to the GAL canvas
     displ_opts->m_DisplayPadFill = !displ_opts->m_DisplayPadFill;
@@ -306,7 +306,7 @@ int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 {
     auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
     auto settings = painter->GetSettings();
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
+    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
     // Apply new display options to the GAL canvas
     displ_opts->m_DisplayViaFill = !displ_opts->m_DisplayViaFill;
@@ -328,7 +328,7 @@ int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 {
     auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
     auto settings = painter->GetSettings();
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
+    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
     // Apply new display options to the GAL canvas
     if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayEnable ) )
@@ -355,7 +355,7 @@ int PCBNEW_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
 {
     auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
     auto settings = painter->GetSettings();
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
+    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
     displ_opts->m_ContrastModeDisplay = !displ_opts->m_ContrastModeDisplay;
     settings->LoadDisplayOptions( displ_opts );

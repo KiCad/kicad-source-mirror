@@ -295,7 +295,7 @@ void BOARD::DrawHighLight( EDA_DRAW_PANEL* am_canvas, wxDC* DC, int aNetCode )
 static void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* aModule,
                              int ox, int oy, LSET aLayerMask, GR_DRAWMODE draw_mode )
 {
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
 
     int tmp = displ_opts->m_DisplayPadFill;
 

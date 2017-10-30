@@ -675,19 +675,19 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
 
     PCB_SCREEN*     screen = (PCB_SCREEN*) aPanel->GetScreen();
     PCB_BASE_FRAME* frame  = (PCB_BASE_FRAME*) aPanel->GetParent();
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) aPanel->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*) aPanel-> GetDisplayOptions();
 
     bool tmp = displ_opts->m_DisplayPcbTrackFill;
     displ_opts->m_DisplayPcbTrackFill = true;
-    TRACE_CLEARANCE_DISPLAY_MODE_T showTrackClearanceMode = displ_opts->m_ShowTrackClearanceMode;
+    auto showTrackClearanceMode = displ_opts->m_ShowTrackClearanceMode;
 
     if ( g_FirstTrackSegment == NULL )
         return;
 
     NETCLASSPTR netclass = g_FirstTrackSegment->GetNetClass();
 
-    if( showTrackClearanceMode != DO_NOT_SHOW_CLEARANCE )
-        displ_opts->m_ShowTrackClearanceMode = SHOW_CLEARANCE_ALWAYS;
+    if( showTrackClearanceMode != PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE )
+        displ_opts->m_ShowTrackClearanceMode = PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_ALWAYS;
 
     // Values to Via circle
     int boardViaRadius = frame->GetDesignSettings().GetCurrentViaSize()/2;
@@ -702,7 +702,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
 
         frame->TraceAirWiresToTargets( aDC );
 
-        if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )
+        if( showTrackClearanceMode >= PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )
         {
             COLOR4D color = frame->Settings().Colors().GetLayerColor( g_CurrentTrackSegment->GetLayer() );
             DrawViaCirclesWhenEditingNewTrack( panelClipBox, aDC, g_CurrentTrackSegment->GetEnd(),
@@ -766,7 +766,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     DBG( g_CurrentTrackList.VerifyListIntegrity(); );
     DrawTraces( aPanel, aDC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
 
-    if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )
+    if( showTrackClearanceMode >= PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )
     {
         COLOR4D color = frame->Settings().Colors().GetLayerColor(g_CurrentTrackSegment->GetLayer());
 

@@ -31,7 +31,7 @@ class PNS_PCBNEW_DEBUG_DECORATOR;
 
 class BOARD;
 class BOARD_COMMIT;
-class DISPLAY_OPTIONS;
+class PCB_DISPLAY_OPTIONS;
 
 namespace KIGFX
 {
@@ -78,7 +78,7 @@ private:
     BOARD* m_board;
     PCB_EDIT_FRAME* m_frame;
     std::unique_ptr<BOARD_COMMIT> m_commit;
-    DISPLAY_OPTIONS* m_dispOptions;
+    PCB_DISPLAY_OPTIONS* m_dispOptions;
 };
 
 #endif

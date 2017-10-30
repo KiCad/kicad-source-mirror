@@ -72,7 +72,7 @@ void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::initDialog()
     /* mandatory to use escape key as cancel under wxGTK. */
     SetFocus();
 
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
 
     m_EdgesDisplayOption->SetValue( not displ_opts->m_DisplayModEdgeFill );
     m_TextDisplayOption->SetValue( not displ_opts->m_DisplayModTextFill );
@@ -89,7 +89,7 @@ void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::initDialog()
 
 void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::UpdateObjectSettings( void )
 {
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
 
     displ_opts->m_DisplayModEdgeFill = not m_EdgesDisplayOption->GetValue();
     displ_opts->m_DisplayModTextFill = not m_TextDisplayOption->GetValue();

@@ -59,7 +59,7 @@ void DIALOG_GENERALOPTIONS::init()
     m_sdbSizerOK->SetDefault();
 
     m_Board = GetParent()->GetBoard();
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetParent()->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetParent()->GetDisplayOptions();
 
     /* Set display options */
     m_PolarDisplay->SetSelection( displ_opts->m_DisplayPolarCood ? 1 : 0 );
@@ -97,7 +97,7 @@ void DIALOG_GENERALOPTIONS::OnCancelClick( wxCommandEvent& event )
 void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
 {
     EDA_UNITS_T ii;
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetParent()->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetParent()->GetDisplayOptions();
 
     displ_opts->m_DisplayPolarCood = ( m_PolarDisplay->GetSelection() == 0 ) ? false : true;
     ii = g_UserUnit;

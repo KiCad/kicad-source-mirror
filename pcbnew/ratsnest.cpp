@@ -196,7 +196,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule, wxPoint aMoveVector
 void PCB_BASE_FRAME::TraceAirWiresToTargets( wxDC* aDC )
 {
     auto connectivity = GetBoard()->GetConnectivity();
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
 
     auto targets = connectivity->NearestUnconnectedTargets( s_ref, s_CursorPos, s_refNet );
 
@@ -221,7 +221,7 @@ void MODULE::DrawOutlinesWhenMoving( EDA_DRAW_PANEL* panel, wxDC* DC,
     D_PAD* pt_pad;
 
     DrawEdgesOnly( panel, DC, aMoveVector, GR_XOR );
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) panel->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*) ( panel->GetDisplayOptions() );
 
     // Show pads in sketch mode to speedu up drawings
     pad_fill_tmp = displ_opts->m_DisplayPadFill;

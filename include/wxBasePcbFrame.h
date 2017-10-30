@@ -40,8 +40,8 @@
 #include <eda_text.h>                // EDA_DRAW_MODE_T
 #include <richio.h>
 #include <class_pcb_screen.h>
-#include <pcbstruct.h>
 
+#include <pcb_display_options.h>
 #include <pcb_general_settings.h>
 
 /* Forward declarations of classes. */
@@ -68,7 +68,7 @@ class PCB_GENERAL_SETTINGS ;
 class PCB_BASE_FRAME : public EDA_DRAW_FRAME
 {
 public:
-    DISPLAY_OPTIONS m_DisplayOptions;
+    PCB_DISPLAY_OPTIONS m_DisplayOptions;
     EDA_UNITS_T m_UserGridUnit;
     wxRealPoint m_UserGridSize;
 

@@ -31,7 +31,7 @@
 #include <confirm.h>
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
-#include <pcbstruct.h>
+#include <pcb_display_options.h>
 #include <config_map.h>
 
 #include <pcbnew_id.h>
@@ -46,13 +46,13 @@
 #include <widgets/gal_options_panel.h>
 
 
-static const UTIL::CFG_MAP<TRACE_CLEARANCE_DISPLAY_MODE_T> traceClearanceSelectMap =
+static const UTIL::CFG_MAP<PCB_DISPLAY_OPTIONS::TRACE_CLEARANCE_DISPLAY_MODE_T> traceClearanceSelectMap =
 {
-    { SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS,            2 },     // Default
-    { DO_NOT_SHOW_CLEARANCE,                              0 },
-    { SHOW_CLEARANCE_NEW_TRACKS,                          1 },
-    { SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS, 3 },
-    { SHOW_CLEARANCE_ALWAYS,                              4 },
+    { PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS,            2 },     // Default
+    { PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE,                              0 },
+    { PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS,                          1 },
+    { PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS, 3 },
+    { PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_ALWAYS,                              4 },
 };
 
 
@@ -83,7 +83,7 @@ DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( PCB_EDIT_FRAME* parent ) :
 
 bool DIALOG_DISPLAY_OPTIONS::TransferDataToWindow()
 {
-    const DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) m_parent->GetDisplayOptions();
+    const PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*) m_parent->GetDisplayOptions();
 
     m_OptDisplayTracks->SetValue( displ_opts->m_DisplayPcbTrackFill == SKETCH );
 
@@ -114,7 +114,7 @@ bool DIALOG_DISPLAY_OPTIONS::TransferDataToWindow()
  */
 bool DIALOG_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) m_parent->GetDisplayOptions();
+    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*) m_parent->GetDisplayOptions();
 
     m_parent->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
 
