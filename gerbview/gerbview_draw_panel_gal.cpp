@@ -38,8 +38,8 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalTy
 {
     setDefaultLayerDeps();
 
-    m_painter = new KIGFX::GERBVIEW_PAINTER( m_gal );
-    m_view->SetPainter( m_painter );
+    m_painter.reset( new KIGFX::GERBVIEW_PAINTER( m_gal ) );
+    m_view->SetPainter( m_painter.get() );
 
     // Load display options (such as filled/outline display of items).
     auto frame = static_cast< GERBVIEW_FRAME* >( GetParentEDAFrame() );

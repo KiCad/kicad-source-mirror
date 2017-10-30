@@ -35,6 +35,7 @@
 #include <wx/timer.h>
 #include <math/vector2d.h>
 #include <msgpanel.h>
+#include <memory>
 
 class BOARD;
 class EDA_DRAW_FRAME;
@@ -271,7 +272,7 @@ protected:
     KIGFX::VIEW*             m_view;
 
     /// Contains information about how to draw items using GAL
-    KIGFX::PAINTER*          m_painter;
+    std::unique_ptr<KIGFX::PAINTER> m_painter;
 
     /// Control for VIEW (moving, zooming, etc.)
     KIGFX::WX_VIEW_CONTROLS* m_viewControls;

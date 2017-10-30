@@ -107,8 +107,8 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalTy
     setDefaultLayerOrder();
     setDefaultLayerDeps();
 
-    m_painter = new KIGFX::PCB_PAINTER( m_gal );
-    m_view->SetPainter( m_painter );
+    m_painter.reset( new KIGFX::PCB_PAINTER( m_gal ) );
+    m_view->SetPainter( m_painter.get() );
 
     // Load display options (such as filled/outline display of items).
     // Can be made only if the parent window is an EDA_DRAW_FRAME (or a derived class)
@@ -125,7 +125,6 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalTy
 
 PCB_DRAW_PANEL_GAL::~PCB_DRAW_PANEL_GAL()
 {
-    delete m_painter;
 }
 
 
