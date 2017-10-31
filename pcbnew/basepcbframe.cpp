@@ -129,7 +129,7 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
 EDA_3D_VIEWER* PCB_BASE_FRAME::Get3DViewerFrame()
 {
     // return the 3D viewer frame, when exists, or NULL
-    return dynamic_cast<EDA_3D_VIEWER*>
+    return static_cast<EDA_3D_VIEWER*>
         ( wxWindow::FindWindowByName( VIEWER3D_FRAMENAME ) );
 }
 
