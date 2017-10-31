@@ -1147,6 +1147,27 @@ SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( FILE_LINE_READER& aReader )
     end.x = parseInt( aReader, line, &line );
     end.y = parseInt( aReader, line, &line );
 
+    if( !is_eol( *line ) )
+    {
+        int size = parseInt( aReader, line, &line );
+        wire->SetLineWidth( size );
+    }
+
+    if( !is_eol( *line ) )
+    {
+        int style = parseInt( aReader, line, &line );
+        wire->SetLineStyle( style );
+    }
+
+    if( !is_eol( *line ) )
+    {
+        double color[ 4 ] = { 0. };
+        for( int i = 0; i < 4 && !is_eol( *line ); i++ )
+            color[i] = parseDouble( aReader, line, &line );
+
+        wire->SetLineColor( color[0], color[1], color[2], color[3] );
+    }
+
     wire->SetStartPoint( begin );
     wire->SetEndPoint( end );
 
@@ -1958,6 +1979,9 @@ void SCH_LEGACY_PLUGIN::saveLine( SCH_LINE* aLine )
 
     const char* layer = "Notes";
     const char* width = "Line";
+    bool styled = aLine->GetPenSize() != aLine->GetDefaultWidth()
+            || aLine->GetLineStyle() != aLine->GetDefaultStyle()
+            || aLine->GetLineColor() != aLine->GetDefaultColor();
 
     if( aLine->GetLayer() == LAYER_WIRE )
         layer = "Wire";
@@ -1965,8 +1989,15 @@ void SCH_LEGACY_PLUGIN::saveLine( SCH_LINE* aLine )
         layer = "Bus";
 
     m_out->Print( 0, "Wire %s %s\n", layer, width );
-    m_out->Print( 0, "\t%-4d %-4d %-4d %-4d\n", aLine->GetStartPoint().x, aLine->GetStartPoint().y,
+    m_out->Print( 0, "\t%-4d %-4d %-4d %-4d", aLine->GetStartPoint().x, aLine->GetStartPoint().y,
                   aLine->GetEndPoint().x, aLine->GetEndPoint().y );
+    if( styled )
+        m_out->Print( 0, " %-4d %-4d %-.4f %-.4f %-.4f %-.4f",
+                aLine->GetLineSize(), aLine->GetLineStyle(),
+                aLine->GetLineColor().r, aLine->GetLineColor().g,
+                aLine->GetLineColor().b, aLine->GetLineColor().a );
+
+    m_out->Print( 0, "\n");
 }
 
 

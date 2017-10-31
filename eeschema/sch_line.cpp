@@ -37,8 +37,10 @@
 #include <general.h>
 #include <protos.h>
 #include <sch_line.h>
+#include <schframe.h>
 #include <class_netlist_object.h>
 
+#include <dialogs/dialog_edit_line_style.h>
 
 SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
     SCH_ITEM( NULL, SCH_LINE_T )
@@ -46,6 +48,9 @@ SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
     m_start = pos;
     m_end   = pos;
     m_startIsDangling = m_endIsDangling = false;
+    m_size  = 0;
+    m_style = 0;
+    m_color = COLOR4D::UNSPECIFIED;
 
     switch( layer )
     {
@@ -69,6 +74,9 @@ SCH_LINE::SCH_LINE( const SCH_LINE& aLine ) :
 {
     m_start = aLine.m_start;
     m_end = aLine.m_end;
+    m_size = aLine.m_size;
+    m_style = aLine.m_style;
+    m_color = aLine.m_color;
     m_startIsDangling = m_endIsDangling = false;
 }
 
@@ -201,8 +209,93 @@ bool SCH_LINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
+COLOR4D SCH_LINE::GetDefaultColor() const
+{
+    return GetLayerColor( m_Layer );
+}
+
+
+void SCH_LINE::SetLineColor( const COLOR4D aColor )
+{
+    if( aColor == GetDefaultColor() )
+        m_color = COLOR4D::UNSPECIFIED;
+    else
+        m_color = aColor;
+}
+
+
+void SCH_LINE::SetLineColor( const double r, const double g, const double b, const double a )
+{
+    COLOR4D newColor(r, g, b, a);
+
+    if( newColor == GetDefaultColor() )
+        m_color = COLOR4D::UNSPECIFIED;
+    else
+        m_color = newColor;
+}
+
+
+COLOR4D SCH_LINE::GetLineColor() const
+{
+    if( m_color == COLOR4D::UNSPECIFIED )
+        return GetLayerColor( m_Layer );
+
+    return m_color;
+}
+
+
+enum wxPenStyle SCH_LINE::GetDefaultStyle() const
+{
+    if( m_Layer == LAYER_NOTES )
+        return wxPENSTYLE_SHORT_DASH;
+
+    return wxPENSTYLE_SOLID;
+}
+
+
+void SCH_LINE::SetLineStyle( const int aStyle )
+{
+    if( aStyle == GetDefaultStyle() )
+        m_style = 0;
+    else
+        m_style = aStyle;
+}
+
+
+enum wxPenStyle SCH_LINE::GetLineStyle() const
+{
+    if( m_style > 0 )
+        return (enum wxPenStyle) m_style;
+
+    if( m_Layer == LAYER_NOTES )
+        return wxPENSTYLE_SHORT_DASH;
+
+    return wxPENSTYLE_SOLID;
+}
+
+
+int SCH_LINE::GetDefaultWidth() const
+{
+    if( m_Layer == LAYER_BUS )
+        return GetDefaultBusThickness();
+
+    return GetDefaultLineThickness();
+}
+
+
+void SCH_LINE::SetLineWidth( const int aSize )
+{
+    if( aSize == GetDefaultWidth() )
+        m_size = 0;
+    else
+        m_size = aSize;
+}
+
+
 int SCH_LINE::GetPenSize() const
 {
+    if( m_size > 0 )
+        return m_size;
 
     if( m_Layer == LAYER_BUS )
         return GetDefaultBusThickness();
@@ -219,6 +312,8 @@ void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
 
     if( Color != COLOR4D::UNSPECIFIED )
         color = Color;
+    else if( m_color != COLOR4D::UNSPECIFIED )
+        color = m_color;
     else
         color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );
 
@@ -233,10 +328,7 @@ void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
     if( ( m_Flags & ENDPOINT ) == 0 )
         end += offset;
 
-    if( m_Layer == LAYER_NOTES )
-        GRDashedLine( panel->GetClipBox(), DC, start.x, start.y, end.x, end.y, width, color );
-    else
-        GRLine( panel->GetClipBox(), DC, start, end, width, color );
+    GRLine( panel->GetClipBox(), DC, start.x, start.y, end.x, end.y, width, color, GetLineStyle() );
 
     if( m_startIsDangling )
         DrawDanglingSymbol( panel, DC, start, color );
@@ -567,6 +659,20 @@ bool SCH_LINE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) 
     return rect.Intersects( m_start, m_end );
 }
 
+void SCH_LINE::SwapData( SCH_ITEM* aItem )
+{
+    SCH_LINE* item = (SCH_LINE*) aItem;
+
+    std::swap( m_Layer, item->m_Layer );
+
+    std::swap( m_start, item->m_start );
+    std::swap( m_end, item->m_end );
+    std::swap( m_startIsDangling, item->m_startIsDangling );
+    std::swap( m_endIsDangling, item->m_endIsDangling );
+    std::swap( m_style, item->m_style );
+    std::swap( m_size, item->m_size );
+    std::swap( m_color, item->m_color );
+}
 
 bool SCH_LINE::doIsConnected( const wxPoint& aPosition ) const
 {
@@ -603,4 +709,54 @@ void SCH_LINE::SetPosition( const wxPoint& aPosition )
 wxPoint SCH_LINE::MidPoint()
 {
     return wxPoint( ( m_start.x + m_end.x ) / 2, ( m_start.y + m_end.y ) / 2 );
+}
+
+
+int SCH_EDIT_FRAME::EditLine( SCH_LINE* aLine, bool aRedraw )
+{
+    if( aLine == NULL )
+        return wxID_CANCEL;
+
+    // We purposely disallow editing everything except graphic lines
+    if( aLine->GetLayer() != LAYER_NOTES )
+        return wxID_CANCEL;
+
+    DIALOG_EDIT_LINE_STYLE dlg( this );
+    wxString units = GetUnitsLabel( g_UserUnit );
+    int old_style = aLine->GetLineStyle();
+    int old_width = aLine->GetPenSize();
+    COLOR4D old_color = aLine->GetLineColor();
+
+    dlg.SetDefaultStyle( aLine->GetDefaultStyle() );
+    dlg.SetDefaultWidth( StringFromValue( g_UserUnit, aLine->GetDefaultWidth(), false ) );
+    dlg.SetDefaultColor( aLine->GetDefaultColor() );
+
+    dlg.SetWidth( StringFromValue( g_UserUnit, old_width, false ) );
+    dlg.SetStyle( old_style );
+    dlg.SetLineWidthUnits( units );
+    dlg.SetColor( old_color );
+
+    dlg.Layout();
+    dlg.Fit();
+    dlg.SetMinSize( dlg.GetSize() );
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return wxID_CANCEL;
+
+    int new_width = std::max( 1, ValueFromString( dlg.GetWidth() ) );
+    int new_style = dlg.GetStyle();
+    COLOR4D new_color = dlg.GetColor();
+
+    if( new_width != old_width || new_style != old_style || new_color != old_color )
+    {
+        SaveCopyInUndoList( (SCH_ITEM*) aLine, UR_CHANGED );
+        aLine->SetLineWidth( new_width );
+        aLine->SetLineStyle( new_style );
+        aLine->SetLineColor( new_color );
+
+        OnModify();
+        if( aRedraw )
+            m_canvas->Refresh();
+    }
+
+    return wxID_OK;
 }

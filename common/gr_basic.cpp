@@ -208,6 +208,7 @@ void GRResetPenAndBrush( wxDC* DC )
  */
 void GRSetColorPen( wxDC* DC, COLOR4D Color, int width, wxPenStyle style )
 {
+    wxDash dots[2] = { 1, 3 };
     // Under OSX and while printing when wxPen is set to 0, renderer follows the request drawing
     // nothing & in the bitmap world the minimum is enough to light a pixel, in vectorial one not
     if( width <= 1 )
@@ -224,6 +225,11 @@ void GRSetColorPen( wxDC* DC, COLOR4D Color, int width, wxPenStyle style )
     {
         wxPen pen;
         pen.SetColour( Color.ToColour() );
+        if( style == wxPENSTYLE_DOT )
+        {
+            style = wxPENSTYLE_USER_DASH;
+            pen.SetDashes( 2, dots );
+        }
         pen.SetWidth( width );
         pen.SetStyle( style );
         DC->SetPen( pen );
@@ -356,18 +362,19 @@ void GRLine( EDA_RECT* ClipBox,
              int       x2,
              int       y2,
              int       width,
-             COLOR4D   Color )
+             COLOR4D   Color,
+             wxPenStyle aStyle)
 {
-    GRSetColorPen( DC, Color, width );
+    GRSetColorPen( DC, Color, width, aStyle );
     WinClipAndDrawLine( ClipBox, DC, x1, y1, x2, y2, width );
     GRLastMoveToX = x2;
     GRLastMoveToY = y2;
 }
 
 
-void GRLine( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd, int aWidth, COLOR4D aColor )
+void GRLine( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd, int aWidth, COLOR4D aColor, wxPenStyle aStyle )
 {
-    GRLine( aClipBox, aDC, aStart.x, aStart.y, aEnd.x, aEnd.y, aWidth, aColor );
+    GRLine( aClipBox, aDC, aStart.x, aStart.y, aEnd.x, aEnd.y, aWidth, aColor, aStyle );
 }
 
 
@@ -375,13 +382,15 @@ void GRDashedLine( EDA_RECT* ClipBox, wxDC*     DC,
                    int x1, int y1, int x2, int  y2,
                    int       width, COLOR4D Color )
 {
-    GRLastMoveToX  = x2;
-    GRLastMoveToY  = y2;
-    s_DC_lastcolor = COLOR4D::UNSPECIFIED;
-    GRSetColorPen( DC, Color, width, wxPENSTYLE_SHORT_DASH );
-    WinClipAndDrawLine( ClipBox, DC, x1, y1, x2, y2, width );
-    s_DC_lastcolor = COLOR4D::UNSPECIFIED;
-    GRSetColorPen( DC, Color, width );
+    GRLine( ClipBox, DC, x1, y1, x2, y2, width, Color, wxPENSTYLE_SHORT_DASH );
+}
+
+
+void GRDottedLine( EDA_RECT* ClipBox, wxDC* DC,
+                   int x1, int y1, int x2, int y2,
+                   int width, COLOR4D Color )
+{
+    GRLine( ClipBox, DC, x1, y1, x2, y2, width, Color, wxPENSTYLE_DOT );
 }
 
 
@@ -407,9 +416,7 @@ void GRLineTo( EDA_RECT* ClipBox, wxDC* DC, int x, int y, int width, COLOR4D Col
 void GRMixedLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
                   int width, COLOR4D Color )
 {
-    GRSetColorPen( DC, Color, width, wxPENSTYLE_DOT_DASH );
-    GRLine( ClipBox, DC, x1, y1, x2, y2, width, Color );
-    GRSetColorPen( DC, Color, width );
+    GRLine( ClipBox, DC, x1, y1, x2, y2, width, Color, wxPENSTYLE_DOT_DASH );
 }
 
 

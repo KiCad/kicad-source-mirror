@@ -1039,6 +1039,16 @@ private:
     /// Loads the cache library associated to the aFileName
     bool        LoadCacheLibrary( const wxString& aFileName );
 
+private:
+    /**
+     * Function EditLine
+     * displays the dialog for editing the parameters of \a aLine.
+     * @param aLine The Line/Wire/Bus to edit.
+     * @param aRedraw = true to refresh the screen
+     * @return The user response from the edit dialog.
+     */
+    int EditLine( SCH_LINE* aLine, bool aRedraw );
+
 public:
     /**
      * Function EditSheet

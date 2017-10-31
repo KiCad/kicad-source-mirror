@@ -1064,6 +1064,8 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
         break;
 
     case SCH_LINE_T:        // These items have no param to edit
+        EditLine( (SCH_LINE*) item, true );
+        break;
     case SCH_MARKER_T:
     case SCH_JUNCTION_T:
     case SCH_NO_CONNECT_T:
