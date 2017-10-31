@@ -1087,53 +1087,66 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             else
                 keepout_type = T_keepout;
 
-            KEEPOUT*   keepout = new KEEPOUT( pcb->structure, keepout_type );
-            pcb->structure->keepouts.push_back( keepout );
+            // Now, build keepout polygon on each copper layer where the item
+            // keepout is living (keepout zones can live on many copper layers)
+            const int copperCount = aBoard->GetCopperLayerCount();
 
-            PATH* mainPolygon = new PATH( keepout, T_polygon );
-            keepout->SetShape( mainPolygon );
-
-            mainPolygon->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
-
-            // Handle the main outlines
-            SHAPE_POLY_SET::ITERATOR iterator;
-            for( iterator = item->IterateWithHoles(); iterator; iterator++ )
+            for( int layer = 0; layer < copperCount; layer++ )
             {
-                wxPoint point( iterator->x, iterator->y );
-                mainPolygon->AppendPoint( mapPt(point) );
+                if( layer == copperCount-1)
+                    layer = B_Cu;
 
-                // this was the end of the main polygon
-                if( iterator.IsEndContour() )
-                    break;
-            }
+                if( !item->IsOnLayer( PCB_LAYER_ID( layer ) ) )
+                    continue;
 
-            WINDOW* window = 0;
-            PATH*   cutout = 0;
+                KEEPOUT*   keepout = new KEEPOUT( pcb->structure, keepout_type );
+                pcb->structure->keepouts.push_back( keepout );
 
-            bool isStartContour = true;
+                PATH* mainPolygon = new PATH( keepout, T_polygon );
+                keepout->SetShape( mainPolygon );
 
-            // handle the cutouts
-            for( iterator++; iterator; iterator++ )
-            {
-                if( isStartContour )
+                mainPolygon->layer_id = layerIds[ kicadLayer2pcb[ layer ] ];
+
+                // Handle the main outlines
+                SHAPE_POLY_SET::ITERATOR iterator;
+                for( iterator = item->IterateWithHoles(); iterator; iterator++ )
                 {
-                    window = new WINDOW( keepout );
-                    keepout->AddWindow( window );
+                    wxPoint point( iterator->x, iterator->y );
+                    mainPolygon->AppendPoint( mapPt(point) );
 
-                    cutout = new PATH( window, T_polygon );
-
-                    window->SetShape( cutout );
-
-                    cutout->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
+                    // this was the end of the main polygon
+                    if( iterator.IsEndContour() )
+                        break;
                 }
 
-                isStartContour = iterator.IsEndContour();
+                WINDOW* window = 0;
+                PATH*   cutout = 0;
 
-                wxASSERT( window );
-                wxASSERT( cutout );
+                bool isStartContour = true;
 
-                wxPoint point(iterator->x, iterator->y );
-                cutout->AppendPoint( mapPt(point) );
+                // handle the cutouts
+                for( iterator++; iterator; iterator++ )
+                {
+                    if( isStartContour )
+                    {
+                        window = new WINDOW( keepout );
+                        keepout->AddWindow( window );
+
+                        cutout = new PATH( window, T_polygon );
+
+                        window->SetShape( cutout );
+
+                        cutout->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
+                    }
+
+                    isStartContour = iterator.IsEndContour();
+
+                    wxASSERT( window );
+                    wxASSERT( cutout );
+
+                    wxPoint point(iterator->x, iterator->y );
+                    cutout->AppendPoint( mapPt(point) );
+                }
             }
         }
     }
