@@ -25,8 +25,8 @@
  */
 
 /**
- * @file class_mire.cpp
- * MIRE class definition (targets for photo plots)
+ * @file class_pcb_target.cpp
+ * PCB_TARGET class definition - targets for photo plots, formerly called MIRE (from French 'mire optique')
  */
 
 #include <fctsys.h>
@@ -41,7 +41,7 @@
 #include <wxPcbStruct.h>
 
 #include <class_board.h>
-#include <class_mire.h>
+#include <class_pcb_target.h>
 #include <base_units.h>
 
 
@@ -199,7 +199,7 @@ wxString PCB_TARGET::GetSelectMenuText() const
 
 BITMAP_DEF PCB_TARGET::GetMenuImage() const
 {
-    return  add_mires_xpm;
+    return  add_pcb_target_xpm;
 }
 
 EDA_ITEM* PCB_TARGET::Clone() const

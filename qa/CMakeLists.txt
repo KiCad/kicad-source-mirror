@@ -11,3 +11,4 @@ if( KICAD_SCRIPTING_MODULES )
 endif()
 
 add_subdirectory( geometry )
+add_subdirectory( pcb_test_window )

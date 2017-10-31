@@ -45,7 +45,7 @@
 #include <class_pcb_text.h>
 #include <class_zone.h>
 #include <class_drawsegment.h>
-#include <class_mire.h>
+#include <class_pcb_target.h>
 #include <class_dimension.h>
 
 #include <pcbnew.h>

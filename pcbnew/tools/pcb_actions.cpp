@@ -87,7 +87,7 @@ boost::optional<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
     case ID_PCB_DIMENSION_BUTT:
         return PCB_ACTIONS::drawDimension.MakeEvent();
 
-    case ID_PCB_MIRE_BUTT:
+    case ID_PCB_TARGET_BUTT:
         return PCB_ACTIONS::placeTarget.MakeEvent();
 
     case ID_MODEDIT_PAD_TOOL:

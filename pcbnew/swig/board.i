@@ -56,7 +56,7 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 %include dimension.i
 %include drawsegment.i
 %include marker_pcb.i
-%include mire.i
+%include pcb_target.i
 %include text_mod.i
 %include edge_mod.i
 %include netinfo.i

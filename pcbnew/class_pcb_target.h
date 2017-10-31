@@ -23,13 +23,12 @@
  */
 
 /**
- * @file class_mire.h
+ * @file class_pcb_target.h
  * @brief PCB_TARGET class definition.  (targets for photo plots).
  */
 
-#ifndef MIRE_H
-#define MIRE_H
-
+#ifndef PCB_TARGET_H_
+#define PCB_TARGET_H_
 
 #include <class_board_item.h>
 
@@ -112,4 +111,4 @@ public:
 };
 
 
-#endif  // #define MIRE_H
+#endif

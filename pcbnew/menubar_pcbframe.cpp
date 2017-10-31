@@ -350,9 +350,9 @@ void preparePlaceMenu( wxMenu* aParentMenu )
                  _( "&Dimension" ), _( "Add dimension" ),
                  KiBitmap( add_dimension_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_PCB_MIRE_BUTT,
+    AddMenuItem( aParentMenu, ID_PCB_TARGET_BUTT,
                  _( "La&yer Alignment Target" ), _( "Add layer alignment target" ),
-                 KiBitmap( add_mires_xpm ) );
+                 KiBitmap( add_pcb_target_xpm ) );
 
     aParentMenu->AppendSeparator();
 

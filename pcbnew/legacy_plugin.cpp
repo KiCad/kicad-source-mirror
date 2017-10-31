@@ -78,7 +78,7 @@
 #include <class_zone.h>
 #include <class_dimension.h>
 #include <class_drawsegment.h>
-#include <class_mire.h>
+#include <class_pcb_target.h>
 #include <class_edge_mod.h>
 #include <3d_cache/3d_info.h>
 #include <pcb_plot_params.h>

@@ -37,7 +37,7 @@
 #include <board_commit.h>
 
 #include <class_board.h>
-#include <class_mire.h>
+#include <class_pcb_target.h>
 
 #include <pcbnew.h>
 #include <dialog_target_properties_base.h>

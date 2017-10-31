@@ -83,7 +83,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_FLIP_TEXTEPCB:
     case ID_POPUP_PCB_COPY_TEXTEPCB:
     case ID_POPUP_PCB_EDIT_TEXTEPCB:
-    case ID_POPUP_PCB_EDIT_MIRE:
+    case ID_POPUP_PCB_EDIT_PCB_TARGET:
     case ID_POPUP_PCB_ROTATE_TEXTMODULE:
     case ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE:
     case ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE:
@@ -154,7 +154,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_DRAG_MODULE_REQUEST:
     case ID_POPUP_PCB_MOVE_MODULE_REQUEST:
     case ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST:
-    case ID_POPUP_PCB_MOVE_MIRE_REQUEST:
+    case ID_POPUP_PCB_MOVE_PCB_TARGET_REQUEST:
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -1069,17 +1069,17 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->MoveCursorToCrossHair();
         break;
 
-    case ID_POPUP_PCB_MOVE_MIRE_REQUEST:
+    case ID_POPUP_PCB_MOVE_PCB_TARGET_REQUEST:
         BeginMoveTarget( (PCB_TARGET*) GetCurItem(), &dc );
         m_canvas->MoveCursorToCrossHair();
         break;
 
-    case ID_POPUP_PCB_EDIT_MIRE:
+    case ID_POPUP_PCB_EDIT_PCB_TARGET:
         ShowTargetOptionsDialog( (PCB_TARGET*) GetCurItem(), &dc );
         m_canvas->MoveCursorToCrossHair();
         break;
 
-    case ID_POPUP_PCB_DELETE_MIRE:
+    case ID_POPUP_PCB_DELETE_PCB_TARGET:
         m_canvas->MoveCursorToCrossHair();
         DeleteTarget( (PCB_TARGET*) GetCurItem(), &dc );
         SetCurItem( NULL );
@@ -1474,7 +1474,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         SetToolID( id, wxCURSOR_PENCIL, _( "Add keepout" ) );
         break;
 
-    case ID_PCB_MIRE_BUTT:
+    case ID_PCB_TARGET_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add layer alignment target" ) );
         break;
 

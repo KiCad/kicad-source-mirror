@@ -1,6 +1,5 @@
 
-%include class_mire.h
+%include class_pcb_target.h
 %{
-#include <class_mire.h>
+#include <class_pcb_target.h>
 %}
-

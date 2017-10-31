@@ -35,7 +35,7 @@
 #include <class_module.h>
 #include <class_track.h>
 #include <class_pcb_text.h>
-#include <class_mire.h>
+#include <class_pcb_target.h>
 #include <class_drawsegment.h>
 
 #include <pcbnew.h>
@@ -642,7 +642,7 @@ bool PCB_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
 
     case PCB_TARGET_T:
         if( aIdCommand == HK_EDIT_ITEM )
-            evt_type = ID_POPUP_PCB_EDIT_MIRE;
+            evt_type = ID_POPUP_PCB_EDIT_PCB_TARGET;
 
         break;
 
@@ -781,7 +781,7 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
 
     case PCB_TARGET_T:
         if( aIdCommand == HK_MOVE_ITEM )
-            evt_type = ID_POPUP_PCB_MOVE_MIRE_REQUEST;
+            evt_type = ID_POPUP_PCB_MOVE_PCB_TARGET_REQUEST;
 
         break;
 

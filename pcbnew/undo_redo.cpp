@@ -39,7 +39,7 @@ using namespace std::placeholders;
 #include <class_track.h>
 #include <class_drawsegment.h>
 #include <class_pcb_text.h>
-#include <class_mire.h>
+#include <class_pcb_target.h>
 #include <class_module.h>
 #include <class_dimension.h>
 #include <class_zone.h>

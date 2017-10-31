@@ -56,7 +56,7 @@
 #include <class_marker_pcb.h>
 #include <class_drawsegment.h>
 #include <class_pcb_text.h>
-#include <class_mire.h>
+#include <class_pcb_target.h>
 #include <class_dimension.h>
 #include <connectivity.h>
 

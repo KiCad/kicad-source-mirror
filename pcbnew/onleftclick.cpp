@@ -41,7 +41,7 @@
 #include <class_pcb_text.h>
 #include <class_text_mod.h>
 #include <class_module.h>
-#include <class_mire.h>
+#include <class_pcb_target.h>
 #include <project.h>
 
 #include <pcbnew.h>
@@ -225,7 +225,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
         break;
 
-    case ID_PCB_MIRE_BUTT:
+    case ID_PCB_TARGET_BUTT:
         if( (curr_item == NULL) || (curr_item->GetFlags() == 0) )
         {
             SetCurItem( (BOARD_ITEM*) CreateTarget( aDC ) );

@@ -126,7 +126,7 @@ set( BMAPS_MID
     add_line2bus
     add_line_label
     add_line
-    add_mires
+    add_pcb_target
     add_polygon
     add_power
     add_rectangle
@@ -326,7 +326,7 @@ set( BMAPS_MID
     locked
     measurement
     minus
-    mirepcb
+    pcb_target
     mirror_h
     mirror_v
     mode_module

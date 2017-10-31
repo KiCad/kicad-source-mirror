@@ -37,7 +37,7 @@
 #include <class_track.h>
 #include <class_zone.h>
 #include <class_drawsegment.h>
-#include <class_mire.h>
+#include <class_pcb_target.h>
 #include <class_edge_mod.h>
 #include <pcb_plot_params.h>
 #include <zones.h>

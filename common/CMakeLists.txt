@@ -379,7 +379,7 @@ set( PCB_COMMON_SRCS
     ../pcbnew/class_netinfo_item.cpp
     ../pcbnew/class_netinfolist.cpp
     ../pcbnew/class_marker_pcb.cpp
-    ../pcbnew/class_mire.cpp
+    ../pcbnew/class_pcb_target.cpp
     ../pcbnew/class_module.cpp
     ../pcbnew/class_pad.cpp
     ../pcbnew/class_pad_custom_shape_functions.cpp

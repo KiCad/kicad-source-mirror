@@ -1221,10 +1221,10 @@ SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::SIGNAL_CONTEXT_MENU( const wxString& aSigna
 
     if( trace->HasCursor() )
         AddMenuItem( this, HIDE_CURSOR, _( "Hide cursor" ),
-                     wxEmptyString, KiBitmap( mirepcb_xpm ) );
+                     wxEmptyString, KiBitmap( pcb_target_xpm ) );
     else
         AddMenuItem( this, SHOW_CURSOR, _( "Show cursor" ),
-                     wxEmptyString, KiBitmap( mirepcb_xpm ) );
+                     wxEmptyString, KiBitmap( pcb_target_xpm ) );
 
     Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( SIGNAL_CONTEXT_MENU::onMenuEvent ), NULL, this );
 }

@@ -40,6 +40,6 @@ static const unsigned char png[] = {
  0x4e, 0x44, 0xae, 0x42, 0x60, 0x82,
 };
 
-const BITMAP_OPAQUE mirepcb_xpm[1] = {{ png, sizeof( png ), "mirepcb_xpm" }};
+const BITMAP_OPAQUE pcb_target_xpm[1] = {{ png, sizeof( png ), "pcb_target_xpm" }};
 
 //EOF

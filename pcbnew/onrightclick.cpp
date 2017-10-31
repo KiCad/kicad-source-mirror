@@ -296,7 +296,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             {
                 msg = AddHotkeyName( _( "Move" ), g_Board_Editor_Hokeys_Descr,
                                      HK_MOVE_ITEM );
-                AddMenuItem( aPopMenu, ID_POPUP_PCB_MOVE_MIRE_REQUEST,
+                AddMenuItem( aPopMenu, ID_POPUP_PCB_MOVE_PCB_TARGET_REQUEST,
                              msg, KiBitmap( move_target_xpm ) );
 
                 msg = AddHotkeyName( _("Move Exactly" ), g_Board_Editor_Hokeys_Descr,
@@ -311,10 +311,10 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
                 msg = AddHotkeyName( _( "Edit" ), g_Board_Editor_Hokeys_Descr,
                                      HK_EDIT_ITEM );
-                AddMenuItem( aPopMenu, ID_POPUP_PCB_EDIT_MIRE, msg, KiBitmap( edit_xpm ) );
+                AddMenuItem( aPopMenu, ID_POPUP_PCB_EDIT_PCB_TARGET, msg, KiBitmap( edit_xpm ) );
 
                 msg = AddHotkeyName( _( "Delete" ), g_Board_Editor_Hokeys_Descr, HK_DELETE );
-                AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_MIRE,
+                AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_PCB_TARGET,
                              msg, KiBitmap( delete_xpm ) );
             }
 

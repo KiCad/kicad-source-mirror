@@ -33,7 +33,7 @@
 #include <class_colors_design_settings.h>
 #include <class_marker_pcb.h>
 #include <class_dimension.h>
-#include <class_mire.h>
+#include <class_pcb_target.h>
 #include <class_marker_pcb.h>
 
 #include <layers_id_colors_and_visibility.h>

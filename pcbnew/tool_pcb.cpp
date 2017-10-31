@@ -472,7 +472,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->AddTool( ID_PCB_DIMENSION_BUTT, wxEmptyString, KiBitmap( add_dimension_xpm ),
                             _( "Add dimension" ), wxITEM_CHECK );
 
-    m_drawToolBar->AddTool( ID_PCB_MIRE_BUTT, wxEmptyString, KiBitmap( add_mires_xpm ),
+    m_drawToolBar->AddTool( ID_PCB_TARGET_BUTT, wxEmptyString, KiBitmap( add_pcb_target_xpm ),
                             _( "Add layer alignment target" ), wxITEM_CHECK );
 
     m_drawToolBar->AddSeparator();
