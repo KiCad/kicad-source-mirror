@@ -410,11 +410,29 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
     }
 }
 
+const GENERAL_COLLECTORS_GUIDE SELECTION_TOOL::getCollectorsGuide() const
+{
+    GENERAL_COLLECTORS_GUIDE guide( board()->GetVisibleLayers(),
+                                    (PCB_LAYER_ID) view()->GetTopLayer() );
+
+    // account for the globals
+    guide.SetIgnoreMTextsMarkedNoShow( ! board()->IsElementVisible( LAYER_MOD_TEXT_INVISIBLE ) );
+    guide.SetIgnoreMTextsOnBack( ! board()->IsElementVisible( LAYER_MOD_TEXT_BK ) );
+    guide.SetIgnoreMTextsOnFront( ! board()->IsElementVisible( LAYER_MOD_TEXT_FR ) );
+    guide.SetIgnoreModulesOnBack( ! board()->IsElementVisible( LAYER_MOD_BK ) );
+    guide.SetIgnoreModulesOnFront( ! board()->IsElementVisible( LAYER_MOD_FR ) );
+    guide.SetIgnorePadsOnBack( ! board()->IsElementVisible( LAYER_PAD_BK ) );
+    guide.SetIgnorePadsOnFront( ! board()->IsElementVisible( LAYER_PAD_FR ) );
+    guide.SetIgnoreModulesVals( ! board()->IsElementVisible( LAYER_MOD_VALUES ) );
+    guide.SetIgnoreModulesRefs( ! board()->IsElementVisible( LAYER_MOD_REFERENCES ) );
+
+    return guide;
+}
 
 bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag )
 {
     BOARD_ITEM* item;
-    GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
+    auto guide = getCollectorsGuide();
     GENERAL_COLLECTOR collector;
 
     collector.Collect( board(),
@@ -1275,8 +1293,12 @@ void SELECTION_TOOL::clearSelection()
     m_selection.Clear();
     m_selection.SetIsHover( false );
     m_selection.ClearReferencePoint();
-    
-    m_frame->SetCurItem( NULL );
+
+    if( m_frame )
+    {
+        m_frame->SetCurItem( NULL );
+    }
+
     m_locked = true;
 
     // Inform other potentially interested tools
@@ -1742,7 +1764,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
     // its unique area).
     const double commonAreaRatio = 0.6;
 
-    PCB_LAYER_ID actLayer = m_frame->GetActiveLayer();
+    PCB_LAYER_ID actLayer = (PCB_LAYER_ID) view()->GetTopLayer();
 
     LSET silkLayers( 2, B_SilkS, F_SilkS );
 

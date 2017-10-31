@@ -320,6 +320,8 @@ private:
      */
     int updateSelection( const TOOL_EVENT& aEvent );
 
+    const GENERAL_COLLECTORS_GUIDE getCollectorsGuide() const;
+
     /// Pointer to the parent frame.
     PCB_BASE_FRAME* m_frame;
 
