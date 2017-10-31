@@ -674,7 +674,14 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
         // Run update handlers on the created copy
         menu->UpdateAll();
         m_menuActive = true;
-        GetEditFrame()->PopupMenu( menu.get() );
+
+        auto frame = dynamic_cast<wxFrame*>( m_editFrame );
+
+        if( frame )
+        {
+            frame->PopupMenu( menu.get() );
+        }
+
         m_menuActive = false;
 
         m_viewControls->WarpCursor( cursor, true, false );
@@ -739,8 +746,11 @@ bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 
     if( m_view->IsDirty() )
     {
-        EDA_DRAW_FRAME* f = static_cast<EDA_DRAW_FRAME*>( GetEditFrame() );
-        f->GetGalCanvas()->Refresh();    // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
+        auto f = dynamic_cast<EDA_DRAW_FRAME*>( GetEditFrame() );
+	if( f )
+	{
+	    f->GetGalCanvas()->Refresh();    // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
+        }
     }
 
     return hotkey_handled;

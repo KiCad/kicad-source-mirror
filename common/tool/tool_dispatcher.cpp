@@ -146,7 +146,7 @@ void TOOL_DISPATCHER::ResetState()
 
 KIGFX::VIEW* TOOL_DISPATCHER::getView()
 {
-    return static_cast<EDA_DRAW_FRAME*>( m_toolMgr->GetEditFrame() )->GetGalCanvas()->GetView();
+    return m_toolMgr->GetView();
 }
 
 
@@ -451,7 +451,11 @@ void TOOL_DISPATCHER::updateUI()
 {
     // TODO I don't feel it is the right place for updating UI,
     // but at the moment I cannot think of a better one..
-    EDA_DRAW_FRAME* frame = static_cast<EDA_DRAW_FRAME*>( m_toolMgr->GetEditFrame() );
-    frame->UpdateStatusBar();
-    //frame->UpdateMsgPanel();
+
+    auto frame = dynamic_cast<EDA_DRAW_FRAME*>( m_toolMgr->GetEditFrame() );
+    if( frame )
+    {
+        frame->UpdateStatusBar();
+        //frame->UpdateMsgPanel();
+    }
 }

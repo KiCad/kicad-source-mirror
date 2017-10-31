@@ -195,6 +195,16 @@ void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer,
     view()->Remove( &preview );
 }
 
+void PCB_TOOL::Reset( RESET_REASON aReason )
+{
+
+}
+
+void PCB_TOOL::setTransitions()
+{
+
+}
+
 PCB_DISPLAY_OPTIONS* PCB_TOOL::displayOptions() const
 {
     return static_cast<PCB_DISPLAY_OPTIONS*>( frame()->GetDisplayOptions() );

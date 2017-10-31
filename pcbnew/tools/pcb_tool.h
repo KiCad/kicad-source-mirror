@@ -79,6 +79,8 @@ public:
 
     virtual ~PCB_TOOL() {};
 
+    virtual void Reset( RESET_REASON aReason ) override;
+
     /**
      * Function SetEditModules()
      *
@@ -122,6 +124,9 @@ protected:
     void doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE *aPlacer,
                                      const wxString& aCommitMessage,
                                      int aOptions = IPO_ROTATE | IPO_FLIP | IPO_REPEAT );
+
+    virtual void setTransitions() override;
+
 
     KIGFX::PCB_VIEW* view() const { return static_cast<KIGFX::PCB_VIEW*>( getView() ); }
     KIGFX::VIEW_CONTROLS* controls() const { return getViewControls(); }
