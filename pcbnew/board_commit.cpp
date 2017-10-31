@@ -264,9 +264,16 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
                     module->RunOnChildren( [&view] ( BOARD_ITEM* aItem ) { view->Update( aItem ); } );
                 }
 
-                view->Update ( boardItem );
-                connectivity->MarkItemNetAsDirty( static_cast<BOARD_ITEM*>( ent.m_copy ) );
+                if( ent.m_copy )
+                    connectivity->MarkItemNetAsDirty( static_cast<BOARD_ITEM*>( ent.m_copy ) );
+
                 connectivity->Update( boardItem );
+                view->Update( boardItem );
+
+                // if no undo entry is needed, the copy would create a memory leak
+                if( !aCreateUndoEntry )
+                    delete ent.m_copy;
+
                 break;
             }
 
