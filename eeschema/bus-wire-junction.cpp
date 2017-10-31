@@ -74,6 +74,12 @@ static void RemoveBacktracks( DLIST<SCH_ITEM>& aWires )
         SCH_LINE *line = static_cast<SCH_LINE*>( p );
         p = line->Next();
 
+        if( line->IsNull() )
+        {
+            delete s_wires.Remove( line );
+            continue;
+        }
+
         if( !last_lines.empty() )
         {
             SCH_LINE* last_line = last_lines[last_lines.size() - 1];
