@@ -100,7 +100,7 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
     m_iface = new PNS_KICAD_IFACE;
     m_iface->SetBoard( board() );
     m_iface->SetView( getView() );
-    m_iface->SetHostFrame( frame() );
+    m_iface->SetHostTool( this );
 
     m_router = new ROUTER;
     m_router->SetInterface( m_iface );
@@ -156,14 +156,12 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer )
     }
 
     ITEM* rv = NULL;
-    PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
-    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*)frame->GetDisplayOptions();
 
     for( int i = 0; i < 4; i++ )
     {
         ITEM* item = prioritized[i];
 
-        if( displ_opts->m_ContrastModeDisplay )
+        if( displayOptions()->m_ContrastModeDisplay )
             if( item && !item->Layers().Overlaps( tl ) )
                 item = NULL;
 
