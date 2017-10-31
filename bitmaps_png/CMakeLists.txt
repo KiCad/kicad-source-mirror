@@ -483,6 +483,7 @@ set( BMAPS_MID
     sim_probe
     sim_add_signal
     sim_settings
+    search_tree
     setcolor_3d_bg
     setcolor_silkscreen
     setcolor_soldermask
