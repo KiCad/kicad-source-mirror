@@ -45,11 +45,6 @@
 #endif
 
 
-extern int ExportPartId;
-extern int ImportPartId;
-extern int CreateNewLibAndSavePartId;
-
-
 void LIB_EDIT_FRAME::ReCreateVToolbar()
 {
     if( m_drawToolBar != NULL )
@@ -108,43 +103,26 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                                       KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Set up toolbar
-    m_mainToolBar->AddTool( ID_LIBEDIT_SELECT_CURRENT_LIB, wxEmptyString, KiBitmap( library_xpm ),
-                            _( "Select working library" ) );
+    m_mainToolBar->AddTool( ID_LIBEDIT_NEW_LIBRARY, wxEmptyString,
+                            KiBitmap( new_library_xpm ),
+                            _( "Create a new library" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_LIB, wxEmptyString,
                             KiBitmap( save_library_xpm ),
-                            _( "Save into current library" ) );
-
-    m_mainToolBar->AddTool( CreateNewLibAndSavePartId, wxEmptyString, KiBitmap( new_library_xpm ),
-                            _( "Save current component to new library" ) );
-
-    m_mainToolBar->AddTool( ID_TO_LIBVIEW, wxEmptyString, KiBitmap( library_browse_xpm ),
-                            HELP_RUN_LIB_VIEWER );
-
-    m_mainToolBar->AddSeparator();
-    m_mainToolBar->AddTool( ID_LIBEDIT_DELETE_PART, wxEmptyString, KiBitmap( delete_xpm ),
-                            _( "Delete component in current library" ) );
+                            _( "Save current library" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString, KiBitmap( new_component_xpm ),
                             _( "Create new component" ) );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_SELECT_PART, wxEmptyString,
-                            KiBitmap( import_cmp_from_lib_xpm ),
-                            _( "Load component from current library" ) );
-
-    m_mainToolBar->AddTool( ID_LIBEDIT_NEW_PART_FROM_EXISTING, wxEmptyString,
-                            KiBitmap( copycomponent_xpm ),
-                            _( "Create new component from current component" ) );
-
     m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_PART, wxEmptyString,
-                            KiBitmap( save_part_in_mem_xpm ),
-                            _( "Update current component in current library" ) );
+                            KiBitmap( save_part_in_mem_xpm ),   // TODO change icon
+                            _( "Save component" ) );
 
-    m_mainToolBar->AddTool( ImportPartId, wxEmptyString, KiBitmap( import_xpm ),
+    m_mainToolBar->AddTool( ID_LIBEDIT_IMPORT_PART, wxEmptyString, KiBitmap( import_xpm ),
                             _( "Import component" ) );
 
-    m_mainToolBar->AddTool( ExportPartId, wxEmptyString, KiBitmap( export_xpm ),
+    m_mainToolBar->AddTool( ID_LIBEDIT_EXPORT_PART, wxEmptyString, KiBitmap( export_xpm ),
                             _( "Export component" ) );
 
     m_mainToolBar->AddSeparator();
@@ -249,6 +227,10 @@ void LIB_EDIT_FRAME::CreateOptionToolbar()
     m_optionsToolBar->AddTool( ID_LIBEDIT_SHOW_ELECTRICAL_TYPE, wxEmptyString,
                                KiBitmap( pin_show_etype_xpm ),
                                _( "Show pins electrical type" ), wxITEM_CHECK );
+
+    m_optionsToolBar->AddTool( ID_LIBEDIT_SHOW_HIDE_SEARCH_TREE, wxEmptyString,
+                               KiBitmap( search_tree_xpm ),
+                               _( "Toggles the search tree" ), wxITEM_CHECK );
 
     m_optionsToolBar->Realize();
 }

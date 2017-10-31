@@ -43,6 +43,7 @@ class LIB_PART;
 class LIB_ALIAS;
 class LIB_FIELD;
 class DIALOG_LIB_EDIT_TEXT;
+class COMPONENT_TREE;
 class LIB_ID;
 
 
@@ -56,6 +57,7 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     LIB_COLLECTOR   m_collectedItems;       ///< Used for hit testing.
     wxComboBox*     m_partSelectBox;        ///< a Box to select a part to edit (if any)
     wxComboBox*     m_aliasSelectBox;       ///< a box to select the alias to edit (if any)
+    COMPONENT_TREE* m_componentTree;        ///< component search tree widget
 
     /** Convert of the item currently being drawn. */
     bool m_drawSpecificConvert;
@@ -129,6 +131,8 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     friend class DIALOG_LIB_EDIT_TEXT;
 
     LIB_ITEM* locateItem( const wxPoint& aPosition, const KICAD_T aFilterList[] );
+
+    void createComponentTree();
 
 public:
 
@@ -218,6 +222,7 @@ public:
      * the component of the current library.
      */
     void OnExportPart( wxCommandEvent& event );
+
     void OnSelectAlias( wxCommandEvent& event );
     void OnSelectPart( wxCommandEvent& event );
 
@@ -225,6 +230,10 @@ public:
      * From Option toolbar: option to show the electrical pin type name
      */
     void OnShowElectricalType( wxCommandEvent& event );
+
+    void OnToggleSearchTree( wxCommandEvent& event );
+
+    bool IsSearchTreeShown();
 
     /**
      * Delete a symbol from the current library.
@@ -247,7 +256,6 @@ public:
      */
     void CreateNewLibraryPart( wxCommandEvent& event );
 
-    void OnCreateNewPartFromExisting( wxCommandEvent& event );
     void OnEditComponentProperties( wxCommandEvent& event );
     void InstallFieldsEditorDialog(  wxCommandEvent& event );
 

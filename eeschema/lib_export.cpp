@@ -37,11 +37,9 @@
 #include <libeditframe.h>
 #include <class_library.h>
 #include <wildcards_and_files_ext.h>
+#include <eeschema_id.h>
 
 #include <wx/filename.h>
-
-
-extern int ExportPartId;
 
 
 void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
@@ -99,8 +97,6 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
 void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
 {
     wxString    msg, title;
-    bool        createLib = ( event.GetId() == ExportPartId ) ? false : true;
-
     LIB_PART*   part = GetCurPart();
 
     if( !part )
@@ -114,9 +110,7 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
     fn.SetName( part->GetName().Lower() );
     fn.SetExt( SchematicLibraryFileExtension );
 
-    title = createLib ? _( "New Symbol Library" ) : _( "Export Symbol" );
-
-    wxFileDialog dlg( this, title, m_mruPath, fn.GetFullName(),
+    wxFileDialog dlg( this, _( "Export Symbol" ), m_mruPath, fn.GetFullName(),
                       SchematicLibraryFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
