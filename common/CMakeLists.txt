@@ -365,6 +365,8 @@ set( PCB_COMMON_SRCS
     class_page_info.cpp
     lset.cpp
     ../pcbnew/basepcbframe.cpp
+    ../pcbnew/board_items_to_polygon_shape_transform.cpp
+    ../pcbnew/board_commit.cpp
     ../pcbnew/class_board.cpp
     ../pcbnew/class_board_connected_item.cpp
     ../pcbnew/class_board_design_settings.cpp
@@ -393,6 +395,7 @@ set( PCB_COMMON_SRCS
     ../pcbnew/convert_drawsegment_list_to_polygon.cpp
     ../pcbnew/ratsnest_data.cpp
     ../pcbnew/ratsnest_viewitem.cpp
+    ../pcbnew/pcb_general_settings.cpp
     ../pcbnew/collectors.cpp
     ../pcbnew/netlist_reader.cpp
     ../pcbnew/legacy_netlist_reader.cpp
