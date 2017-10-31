@@ -409,7 +409,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
     bool        reBuild_ratsnest = false;
     bool        deep_reBuild_ratsnest = false;  // true later if pointers must be rebuilt
 
-    KIGFX::VIEW* view = GetGalCanvas()->GetView();
+    auto view = GetGalCanvas()->GetView();
     auto connectivity = GetBoard()->GetConnectivity();
 
     // Undo in the reverse order of list creation: (this can allow stacked changes
@@ -488,12 +488,6 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
             // Remove all pads/drawings/texts, as they become invalid
             // for the VIEW after SwapData() called for modules
-            if( item->Type() == PCB_MODULE_T )
-            {
-                MODULE* oldModule = static_cast<MODULE*>( item );
-                oldModule->RunOnChildren( std::bind( &KIGFX::VIEW::Remove, view, _1 ) );
-            }
-
             view->Remove( item );
             connectivity->Remove( item );
 
@@ -504,7 +498,6 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* newModule = static_cast<MODULE*>( item );
-                newModule->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1, -1 ) );
                 newModule->RunOnChildren( std::bind( &BOARD_ITEM::ClearFlags, _1, EDA_ITEM_ALL_FLAGS ));
             }
 
@@ -518,26 +511,12 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         case UR_NEW:        /* new items are deleted */
             aList->SetPickedItemStatus( UR_DELETED, ii );
             GetModel()->Remove( item );
-
-            if( item->Type() == PCB_MODULE_T )
-            {
-                MODULE* module = static_cast<MODULE*>( item );
-                module->RunOnChildren( std::bind( &KIGFX::VIEW::Remove, view, _1 ) );
-            }
-
             view->Remove( item );
             break;
 
         case UR_DELETED:    /* deleted items are put in List, as new items */
             aList->SetPickedItemStatus( UR_NEW, ii );
             GetModel()->Add( item );
-
-            if( item->Type() == PCB_MODULE_T )
-            {
-                MODULE* module = static_cast<MODULE*>( item );
-                module->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1, -1 ) );
-            }
-
             view->Add( item );
             build_item_list = true;
             break;

@@ -252,7 +252,7 @@ void VIEW::OnDestroy( VIEW_ITEM* aItem )
         return;
 
     if( data->m_view )
-        data->m_view->Remove( aItem );
+        data->m_view->VIEW::Remove( aItem );
 
     delete data;
 }

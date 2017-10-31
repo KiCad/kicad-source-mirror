@@ -260,8 +260,8 @@ set( PCBNEW_CLASS_SRCS
     pad_edition_functions.cpp
     pcbnew_config.cpp
     pcbplot.cpp
-    pcb_draw_panel_gal.cpp
-    pcb_view.cpp
+#    pcb_draw_panel_gal.cpp
+#    pcb_view.cpp
     plot_board_layers.cpp
     plot_brditems_plotter.cpp
     print_board_functions.cpp

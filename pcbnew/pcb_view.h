@@ -27,6 +27,7 @@
 
 #include <layers_id_colors_and_visibility.h>
 #include <view/view.h>
+#include <class_board_item.h>
 
 class PCB_DISPLAY_OPTIONS;
 

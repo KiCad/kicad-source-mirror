@@ -411,6 +411,9 @@ set( PCB_COMMON_SRCS
     ../pcbnew/gpcb_plugin.cpp
     ../pcbnew/pcb_netlist.cpp
     ../pcbnew/pcb_display_options.cpp
+    ../pcbnew/pcb_draw_panel_gal.cpp
+    ../pcbnew/pcb_view.cpp
+    ../pcbnew/pcb_painter.cpp
     widgets/widget_net_selector.cpp
     pcb_plot_params_keywords.cpp
     pcb_keywords.cpp

@@ -1,47 +1,110 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2013-2017 CERN
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+
+#include <functional>
+using namespace std::placeholders;
+
 #include <pcb_view.h>
 #include <pcb_display_options.h>
 #include <pcb_painter.h>
 
-namespace KIGFX
-{
+#include <class_module.h>
 
+namespace KIGFX {
 PCB_VIEW::PCB_VIEW( bool aIsDynamic ) :
-    VIEW ( aIsDynamic )
+    VIEW( aIsDynamic )
 {
-
 }
+
 
 PCB_VIEW::~PCB_VIEW()
 {
-
 }
 
-void PCB_VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
+
+void PCB_VIEW::Add( KIGFX::VIEW_ITEM* aItem, int aDrawPriority )
 {
-    VIEW::Add( aItem, aDrawPriority );
+    auto item = static_cast<BOARD_ITEM*>( aItem );
+
+    if( item->Type() == PCB_MODULE_T )
+    {
+        auto mod = static_cast<MODULE*>( item );
+        mod->RunOnChildren([this] ( BOARD_ITEM* aModItem ) {
+                VIEW::Add( aModItem );
+            } );
+    }
+
+    VIEW::Add( item, aDrawPriority );
 }
 
-void PCB_VIEW::Remove( VIEW_ITEM* aItem )
+
+void PCB_VIEW::Remove( KIGFX::VIEW_ITEM* aItem )
 {
-    VIEW::Remove( aItem );
+    auto item = static_cast<BOARD_ITEM*>( aItem );
+
+
+    if( item->Type() == PCB_MODULE_T )
+    {
+        auto mod = static_cast<MODULE*>( item );
+        mod->RunOnChildren([this] ( BOARD_ITEM* aModItem ) {
+                VIEW::Remove( aModItem );
+            } );
+    }
+
+    VIEW::Remove( item );
 }
 
-void PCB_VIEW::Update( VIEW_ITEM* aItem, int aUpdateFlags )
+
+void PCB_VIEW::Update( KIGFX::VIEW_ITEM* aItem, int aUpdateFlags )
 {
-    VIEW::Update( aItem, aUpdateFlags );
+    auto item = static_cast<BOARD_ITEM*>( aItem );
+
+    if( item->Type() == PCB_MODULE_T )
+    {
+        auto mod = static_cast<MODULE*>( item );
+        mod->RunOnChildren([this, aUpdateFlags] ( BOARD_ITEM* aModItem ) {
+                VIEW::Update( aModItem, aUpdateFlags );
+            } );
+    }
+
+    VIEW::Update( item, aUpdateFlags );
 }
 
-/// @copydoc VIEW::Update()
-void PCB_VIEW::Update( VIEW_ITEM* aItem )
+
+void PCB_VIEW::Update( KIGFX::VIEW_ITEM* aItem )
 {
-    VIEW::Update( aItem );
+    PCB_VIEW::Update( aItem, KIGFX::ALL );
 }
+
 
 void PCB_VIEW::UpdateDisplayOptions( PCB_DISPLAY_OPTIONS* aOptions )
 {
-    auto painter = static_cast<KIGFX::PCB_PAINTER*>( GetPainter() );
-    auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+    auto    painter     = static_cast<KIGFX::PCB_PAINTER*>( GetPainter() );
+    auto    settings    = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+
     settings->LoadDisplayOptions( aOptions );
 }
-
 };
