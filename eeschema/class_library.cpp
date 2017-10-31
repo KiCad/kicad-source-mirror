@@ -546,6 +546,7 @@ const wxString PART_LIBS::CacheName( const wxString& aFullProjectFilename )
             return new_name.GetFullPath();
         }
     }
+
     return wxEmptyString;
 }
 
@@ -564,82 +565,74 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
 
     LibNamesAndPaths( aProject, false, NULL, &lib_names );
 
-    // If the list is empty, force loading the standard power symbol library.
-    if( !lib_names.GetCount() )
-        lib_names.Add( "power" );
-
-    wxASSERT( !size() );    // expect to load into "this" empty container.
-
-    wxProgressDialog lib_dialog( _( "Loading Symbol Libraries" ),
-                                 wxEmptyString,
-                                 lib_names.GetCount(),
-                                 NULL,
-                                 wxPD_APP_MODAL );
-
-    if( aShowProgress )
+    if( !lib_names.empty() )
     {
-        lib_dialog.Show();
-    }
+        wxProgressDialog lib_dialog( _( "Loading Symbol Libraries" ),
+                                     wxEmptyString,
+                                     lib_names.GetCount(),
+                                     NULL,
+                                     wxPD_APP_MODAL );
 
-    wxString progress_message;
-
-    for( unsigned i = 0; i < lib_names.GetCount();  ++i )
-    {
         if( aShowProgress )
         {
-            lib_dialog.Update( i, _( "Loading " + lib_names[i] ) );
+            lib_dialog.Show();
         }
 
-        // lib_names[] does not store the file extension. Set it.
-        // Remember lib_names[i] can contain a '.' in name, so using a wxFileName
-        // before adding the extension can create incorrect full filename
-        wxString fullname = lib_names[i] + "." + SchematicLibraryFileExtension;
-        // Now the full name is set, we can use a wxFileName.
-        wxFileName fn( fullname );
+        wxString progress_message;
 
-        // Skip if the file name is not valid..
-        if( !fn.IsOk() )
-            continue;
-
-        if( !fn.FileExists() )
+        for( unsigned i = 0; i < lib_names.GetCount();  ++i )
         {
-            filename = lib_search->FindValidPath( fn.GetFullPath() );
-
-            if( !filename )
+            if( aShowProgress )
             {
-                libs_not_found += fn.GetFullPath();
-                libs_not_found += '\n';
+                lib_dialog.Update( i, _( "Loading " + lib_names[i] ) );
+            }
+
+            // lib_names[] does not store the file extension. Set it.
+            // Remember lib_names[i] can contain a '.' in name, so using a wxFileName
+            // before adding the extension can create incorrect full filename
+            wxString fullname = lib_names[i] + "." + SchematicLibraryFileExtension;
+            // Now the full name is set, we can use a wxFileName.
+            wxFileName fn( fullname );
+
+            // Skip if the file name is not valid..
+            if( !fn.IsOk() )
                 continue;
+
+            if( !fn.FileExists() )
+            {
+                filename = lib_search->FindValidPath( fn.GetFullPath() );
+
+                if( !filename )
+                {
+                    libs_not_found += fn.GetFullPath();
+                    libs_not_found += '\n';
+                    continue;
+                }
+            }
+            else
+            {   // ensure the lib filename has a absolute path.
+                // If the lib has no absolute path, and is found in the cwd by fn.FileExists(),
+                // make a full absolute path, to avoid issues with load library functions which
+                // expects an absolute path.
+                if( !fn.IsAbsolute() )
+                    fn.MakeAbsolute();
+
+                filename = fn.GetFullPath();
+            }
+
+            try
+            {
+                AddLibrary( filename );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                wxString msg;
+                msg.Printf( _( "Part library '%s' failed to load. Error:\n %s" ),
+                            GetChars( filename ), GetChars( ioe.What() ) );
+
+                wxLogError( msg );
             }
         }
-        else
-        {   // ensure the lib filename has a absolute path.
-            // If the lib has no absolute path, and is found in the cwd by fn.FileExists(),
-            // make a full absolute path, to avoid issues with load library functions which
-            // expects an absolute path.
-            if( !fn.IsAbsolute() )
-                fn.MakeAbsolute();
-
-            filename = fn.GetFullPath();
-        }
-
-        try
-        {
-            AddLibrary( filename );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            wxString msg;
-            msg.Printf( _( "Part library '%s' failed to load. Error:\n %s" ),
-                        GetChars( filename ), GetChars( ioe.What() ) );
-
-            wxLogError( msg );
-        }
-    }
-
-    if( aShowProgress )
-    {
-        lib_dialog.Destroy();
     }
 
     // add the special cache library.
@@ -672,7 +665,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
     {
         // Use a different exception type so catch()er can route to proper use
         // of the HTML_MESSAGE_BOX.
-        THROW_PARSE_ERROR( wxEmptyString, __func__, TO_UTF8(libs_not_found), 0, 0 );
+        THROW_PARSE_ERROR( wxEmptyString, __func__, TO_UTF8( libs_not_found ), 0, 0 );
     }
 
 #if defined(DEBUG) && 1
