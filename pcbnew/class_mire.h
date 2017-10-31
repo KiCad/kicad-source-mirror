@@ -104,6 +104,8 @@ public:
 
     EDA_ITEM* Clone() const override;
 
+    virtual void SwapData( BOARD_ITEM* aImage ) override;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif

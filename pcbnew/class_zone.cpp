@@ -1305,3 +1305,10 @@ BITMAP_DEF ZONE_CONTAINER::GetMenuImage() const
 {
     return add_zone_xpm;
 }
+
+void ZONE_CONTAINER::SwapData( BOARD_ITEM* aImage )
+{
+    assert( aImage->Type() == PCB_ZONE_AREA_T );
+
+    std::swap( *((ZONE_CONTAINER*) this), *((ZONE_CONTAINER*) aImage) );
+}

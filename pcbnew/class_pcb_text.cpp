@@ -206,3 +206,10 @@ EDA_ITEM* TEXTE_PCB::Clone() const
 {
     return new TEXTE_PCB( *this );
 }
+
+void TEXTE_PCB::SwapData( BOARD_ITEM* aImage )
+{
+    assert( aImage->Type() == PCB_TEXT_T );
+
+    std::swap( *((TEXTE_PCB*) this), *((TEXTE_PCB*) aImage) );
+}

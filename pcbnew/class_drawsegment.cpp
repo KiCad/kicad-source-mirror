@@ -759,3 +759,10 @@ const std::vector<wxPoint> DRAWSEGMENT::GetPolyPoints() const
 
     return rv;
 }
+
+void DRAWSEGMENT::SwapData( BOARD_ITEM* aImage )
+{
+    assert( aImage->Type() == PCB_LINE_T );
+
+    std::swap( *((DRAWSEGMENT*) this), *((DRAWSEGMENT*) aImage) );
+}

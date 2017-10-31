@@ -505,3 +505,10 @@ EDA_ITEM* DIMENSION::Clone() const
 {
     return new DIMENSION( *this );
 }
+
+void DIMENSION::SwapData( BOARD_ITEM* aImage )
+{
+    assert( aImage->Type() == PCB_DIMENSION_T );
+
+    std::swap( *((DIMENSION*) this), *((DIMENSION*) aImage) );
+}

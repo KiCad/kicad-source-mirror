@@ -733,7 +733,7 @@ public:
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
-
+    virtual void SwapData( BOARD_ITEM* aImage ) override;
 
 private:
     void buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeatures );

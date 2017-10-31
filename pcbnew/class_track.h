@@ -302,6 +302,8 @@ public:
 
     virtual unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
+    virtual void SwapData( BOARD_ITEM* aImage ) override;
+
 #if defined (DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 
@@ -474,6 +476,8 @@ public:
      * @return true if the drill value is default value (-1)
     */
     bool IsDrillDefault() const { return m_Drill <= 0; }
+
+    virtual void SwapData( BOARD_ITEM* aImage ) override;
 
 protected:
     virtual void GetMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList ) override;

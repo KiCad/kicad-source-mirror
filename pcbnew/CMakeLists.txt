@@ -314,6 +314,7 @@ set( PCBNEW_CLASS_SRCS
     tools/tools_common.cpp
     tools/tool_event_utils.cpp
     tools/size_menu.cpp
+    tools/selection.cpp
 
     footprint_preview_panel.cpp
     )

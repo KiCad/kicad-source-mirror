@@ -258,3 +258,9 @@ void BOARD_ITEM::DeleteStructure()
 
     delete this;
 }
+
+
+void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
+{
+    
+}

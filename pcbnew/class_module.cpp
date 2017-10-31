@@ -1304,3 +1304,10 @@ bool MODULE::BuildPolyCourtyard()
 
     return success;
 }
+
+void MODULE::SwapData( BOARD_ITEM* aImage )
+{
+    assert( aImage->Type() == PCB_MODULE_T );
+
+    std::swap( *((MODULE*) this), *((MODULE*) aImage) );
+}

@@ -67,11 +67,6 @@ enum STROKE_T
  */
 class BOARD_ITEM : public EDA_ITEM
 {
-    // These are made private here so they may not be used.
-    // Instead everything derived from BOARD_ITEM is handled via DLIST<>'s
-    // use of DHEAD's member functions.
-    void SetNext( EDA_ITEM* aNext )       { Pnext = aNext; }
-    void SetBack( EDA_ITEM* aBack )       { Pback = aBack; }
 
 protected:
     PCB_LAYER_ID    m_Layer;
@@ -166,7 +161,7 @@ public:
      * Pnext and Pback because aItem is not changed in the linked list
      * @param aImage = the item image which contains data to swap
      */
-    void SwapData( BOARD_ITEM* aImage );
+    virtual void SwapData( BOARD_ITEM* aImage );
 
     /**
      * Function IsOnLayer

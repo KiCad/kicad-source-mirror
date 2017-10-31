@@ -206,3 +206,10 @@ EDA_ITEM* PCB_TARGET::Clone() const
 {
     return new PCB_TARGET( *this );
 }
+
+void PCB_TARGET::SwapData( BOARD_ITEM* aImage )
+{
+    assert( aImage->Type() == PCB_TARGET_T );
+
+    std::swap( *((PCB_TARGET*) this), *((PCB_TARGET*) aImage) );
+}

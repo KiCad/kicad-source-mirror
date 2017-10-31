@@ -1608,11 +1608,24 @@ wxString TRACK::GetSelectMenuText() const
 }
 
 
-BITMAP_DEF TRACK:: GetMenuImage() const
+BITMAP_DEF TRACK::GetMenuImage() const
 {
     return showtrack_xpm;
 }
 
+void TRACK::SwapData( BOARD_ITEM* aImage )
+{
+    assert( aImage->Type() == PCB_TRACE_T );
+
+    std::swap( *((TRACK*) this), *((TRACK*) aImage) );
+}
+
+void VIA::SwapData( BOARD_ITEM* aImage )
+{
+    assert( aImage->Type() == PCB_VIA_T );
+
+    std::swap( *((VIA*) this), *((VIA*) aImage) );
+}
 
 #if defined(DEBUG)
 

@@ -1392,3 +1392,10 @@ void D_PAD::ImportSettingsFromMaster( const D_PAD& aMasterPad )
     SetAnchorPadShape( aMasterPad.GetAnchorPadShape() );
     MergePrimitivesAsPolygon();
 }
+
+void D_PAD::SwapData( BOARD_ITEM* aImage )
+{
+    assert( aImage->Type() == PCB_PAD_T );
+
+    std::swap( *((MODULE*) this), *((MODULE*) aImage) );
+}

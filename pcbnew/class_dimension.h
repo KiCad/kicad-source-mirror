@@ -227,6 +227,8 @@ public:
 
     virtual const BOX2I ViewBBox() const override;
 
+    virtual void SwapData( BOARD_ITEM* aImage ) override;
+
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
