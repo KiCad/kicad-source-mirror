@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-26 10:25+0200\n"
-"PO-Revision-Date: 2017-10-26 10:34+0200\n"
+"POT-Creation-Date: 2017-10-31 09:07+0100\n"
+"PO-Revision-Date: 2017-10-31 09:12+0100\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -154,7 +154,8 @@ msgid "Alias names may not contain any of the characters "
 msgstr "Los nombres de alias no deben contener ninguno de los caracteres "
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:379
-#: common/dialogs/dialog_env_var_config.cpp:282
+#: common/dialogs/dialog_env_var_config.cpp:308
+#: common/dialogs/dialog_env_var_config.cpp:468
 msgid "Environment Variable Help"
 msgstr "Variable de entorno Ayuda"
 
@@ -164,7 +165,7 @@ msgstr "Variable de entorno"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:36
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:82
-#: common/dialogs/dialog_env_var_config_base.cpp:39
+#: common/dialogs/dialog_env_var_config.cpp:133
 msgid "Path"
 msgstr "Ruta"
 
@@ -1478,8 +1479,7 @@ msgstr "Pegar bBloque"
 #: eeschema/libeditframe.cpp:1157 eeschema/schedit.cpp:531
 #: eeschema/tool_lib.cpp:183 eeschema/tool_sch.cpp:127
 #: gerbview/events_called_functions.cpp:237 gerbview/toolbars_gerber.cpp:92
-#: gerbview/toolbars_gerber.cpp:221 pagelayout_editor/events_functions.cpp:136
-#: pagelayout_editor/menubar.cpp:143
+#: pagelayout_editor/events_functions.cpp:136 pagelayout_editor/menubar.cpp:143
 #: pagelayout_editor/toolbars_pl_editor.cpp:97 pcbnew/edit.cpp:1444
 #: pcbnew/modedit.cpp:934 pcbnew/tool_modedit.cpp:138 pcbnew/tool_pcb.cpp:266
 msgid "Zoom to selection"
@@ -1832,29 +1832,39 @@ msgstr "Acerca de"
 msgid "Close"
 msgstr "Cerrar"
 
-#: common/dialogs/dialog_env_var_config.cpp:105
-msgid "Invalid Input"
-msgstr "Entrada no válida"
+#: common/dialogs/dialog_env_var_config.cpp:132
+#: common/dialogs/dialog_env_var_config_base.cpp:118
+#: cvpcb/dialogs/dialog_config_equfiles_base.cpp:82
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:220
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:203
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:318
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:321
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:182 eeschema/lib_pin.cpp:2034
+#: eeschema/libedit.cpp:477 eeschema/widgets/tuner_slider_base.cpp:20
+#: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
+#: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
+#: pcbnew/dialogs/dialog_layers_setup.cpp:336
+msgid "Name"
+msgstr "Nombre"
 
-#: common/dialogs/dialog_env_var_config.cpp:119
-msgid "Environment variable name cannot be empty."
-msgstr "El nombre de la variable de entorno no puede estar vacío."
+#: common/dialogs/dialog_env_var_config.cpp:197
+msgid "Path already exists"
+msgstr "Ya existe la ruta"
 
-#: common/dialogs/dialog_env_var_config.cpp:129
-msgid "Environment variable value cannot be empty."
-msgstr "El valor de la variable de entorno no puede estar vacío."
+#: common/dialogs/dialog_env_var_config.cpp:251
+#, c-format
+msgid "Environment variable '%s' cannot be renamed"
+msgstr "La variable de entorno '%s' no puede renombrarse"
 
-#: common/dialogs/dialog_env_var_config.cpp:140
+#: common/dialogs/dialog_env_var_config.cpp:253
 msgid ""
-"The first character of an environment variable name cannot be a digit (0-9)."
+"The selected environment variable name is required for KiCad functionality "
+"and can not be renamed."
 msgstr ""
-"El primer carácter de una variable de entorno no puede ser una cifra (0-9)."
+"El nombre de la variable de entorno seleccionada es necesario para la "
+"funcionalidad de KiCad y no puede cambiarse."
 
-#: common/dialogs/dialog_env_var_config.cpp:152
-msgid "Cannot have duplicate environment variable names."
-msgstr "No puede haber nombres de variables de entorno duplicados."
-
-#: common/dialogs/dialog_env_var_config.cpp:255
+#: common/dialogs/dialog_env_var_config.cpp:279
 msgid ""
 "Enter the name and path for each environment variable.  Grey entries are "
 "names that have been defined externally at the system or user level.  "
@@ -1868,7 +1878,7 @@ msgstr ""
 "o sistema tienen precedencia sobre las definidas en esta tabla. Esto "
 "significa que dichos valores en esta tabla se ignoran."
 
-#: common/dialogs/dialog_env_var_config.cpp:261
+#: common/dialogs/dialog_env_var_config.cpp:285
 msgid ""
 "To ensure environment variable names are valid on all platforms, the name "
 "field will only accept upper case letters, digits, and the underscore "
@@ -1878,7 +1888,15 @@ msgstr ""
 "todas las plataformas, el campo solo acepta letras mayúsculas, números y el "
 "carácter de subrayado."
 
-#: common/dialogs/dialog_env_var_config.cpp:264
+#: common/dialogs/dialog_env_var_config.cpp:288
+msgid ""
+"<b>KICAD_SYMBOL_DIR</b> is the base path of the locally installed symbol "
+"libraries."
+msgstr ""
+"<b>KICAD_SYMBOL_DIR</b> es la ruta base de las librerías de huellas "
+"instaladas localmente."
+
+#: common/dialogs/dialog_env_var_config.cpp:290
 msgid ""
 "<b>KIGITHUB</b> is used by KiCad to define the URL of the repository of the "
 "official KiCad libraries."
@@ -1886,7 +1904,7 @@ msgstr ""
 "<b>KIGITHUB</b> es utilizada por KiCad para definir la URL del repositorio "
 "de librerías oficiales."
 
-#: common/dialogs/dialog_env_var_config.cpp:267
+#: common/dialogs/dialog_env_var_config.cpp:293
 msgid ""
 "<b>KISYS3DMOD</b> is the base path of system footprint 3D shapes (.3Dshapes "
 "folders)."
@@ -1894,7 +1912,7 @@ msgstr ""
 "<b>KISYS3DMOD</b> es la ruta base del sistema de los modelos 3D "
 "(carpetas .3Dshapes)."
 
-#: common/dialogs/dialog_env_var_config.cpp:270
+#: common/dialogs/dialog_env_var_config.cpp:296
 msgid ""
 "<b>KISYSMOD</b> is the base path of locally installed system footprint "
 "libraries (.pretty folders)."
@@ -1902,7 +1920,7 @@ msgstr ""
 "<b>KISYSMOD</b> es la ruta base de las librerías de huellas instaladas "
 "localmente (carpetas .pretty)."
 
-#: common/dialogs/dialog_env_var_config.cpp:273
+#: common/dialogs/dialog_env_var_config.cpp:299
 msgid ""
 "<b>KIPRJMOD</b> is internally defined by KiCad (cannot be edited) and is set "
 "to the absolute path of the currently loaded project file.  This environment "
@@ -1918,7 +1936,7 @@ msgstr ""
 "carpeta que contiene una librería de huellas específica al proyecto, de "
 "nombre footprints.pretty."
 
-#: common/dialogs/dialog_env_var_config.cpp:279
+#: common/dialogs/dialog_env_var_config.cpp:305
 msgid ""
 "<b>KICAD_PTEMPLATES</b> is optional and can be defined if you want to create "
 "your own project templates folder."
@@ -1926,70 +1944,145 @@ msgstr ""
 "<b>KICAD_PTEMPLATES</b> es opcional y puede definirse si quiere crearse una "
 "carpeta personal con plantillas de proyectos."
 
-#: common/dialogs/dialog_env_var_config_base.cpp:38
-#: cvpcb/dialogs/dialog_config_equfiles_base.cpp:82
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:220
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:203
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:318
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:321
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:182 eeschema/lib_pin.cpp:2034
-#: eeschema/libedit.cpp:477 eeschema/widgets/tuner_slider_base.cpp:20
-#: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
-#: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
-#: pcbnew/dialogs/dialog_layers_setup.cpp:336
-msgid "Name"
-msgstr "Nombre"
+#: common/dialogs/dialog_env_var_config.cpp:410
+msgid "Set path for environment variable"
+msgstr "Ajustar ruta de la variable de entorno"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:59
+#: common/dialogs/dialog_env_var_config.cpp:429
+msgid "Environment variable name cannot be empty."
+msgstr "El nombre de la variable de entorno no puede estar vacío."
+
+#: common/dialogs/dialog_env_var_config.cpp:436
+msgid "Environment variable value cannot be empty."
+msgstr "El valor de la variable de entorno no puede estar vacío."
+
+#: common/dialogs/dialog_env_var_config.cpp:444
+msgid "Environment variable name cannot start with a digit (0-9)."
+msgstr ""
+"El nombre de la variable de entorno no puede comenzar con una cifra (0-9)."
+
+#: common/dialogs/dialog_env_var_config.cpp:456
+msgid ""
+"An environment variable is as an equivalence of a string.<br>It is used "
+"mainly in paths to make them portable between installs<br><br>For instance, "
+"if an environment variable is defined as<br><b>MYLIBPATH</b> with a value "
+"like <b>e:/kicad_libs</b>, if a library name is <br><b>${MYLIBPATH}/mylib."
+"lib</b>, the actual path is<br><b>e:/kicad_libs/mylib.lib</b><br><br><b>Note:"
+"</b><br>Only chars <b>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_</b> are allowed "
+"in environment variable names<br>and the environment variable name cannot "
+"start with a digit (0-9)"
+msgstr ""
+"Una variable de entorno equivale a una cadena de texto.<br>Se utiliza "
+"principalmente en rutas para hacerlas portables entre "
+"instalaciones<br><br>Por ejemplo, si una variable de entorno se define "
+"como<br><b>MYLIBPATH</b> con un valor <b>e:/kicad_libs</b>, si el nombre de "
+"una librería es <br><b>${MYLIBPATH}/milibreria.lib</b>, la ruta real "
+"es<br><b>e:/kicad_libs/milibreria.lib</b><br><br><b>Nota:</b><br>Solo los "
+"caracteres <b>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_</b> están permitidos en "
+"los nombres de las variables de entorno<br>y el nombre no puede comenzar con "
+"una número (0-9)"
+
+#: common/dialogs/dialog_env_var_config_base.cpp:23
+msgid "KiCad Environment Paths"
+msgstr "Rutas de entorno de KiCad"
+
+#: common/dialogs/dialog_env_var_config_base.cpp:34
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:186
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:225
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:38
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:87
-#: eeschema/dialogs/dialog_spice_model_base.cpp:541
+#: eeschema/dialogs/dialog_spice_model_base.cpp:519
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:75
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1065
 msgid "Add"
 msgstr "Añadir"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:60
-msgid "Add a new entry to the table."
-msgstr "Añadir nueva entrada a la tabla."
+#: common/dialogs/dialog_env_var_config_base.cpp:35
+msgid "Add path prefix"
+msgstr "Añadir prefijo de ruta"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:64
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:189
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:231
-#: eeschema/libedit_onrightclick.cpp:131 eeschema/libedit_onrightclick.cpp:154
-#: eeschema/libedit_onrightclick.cpp:178 eeschema/libedit_onrightclick.cpp:202
-#: eeschema/libedit_onrightclick.cpp:230 eeschema/libedit_onrightclick.cpp:239
-#: eeschema/libedit_onrightclick.cpp:296 eeschema/onrightclick.cpp:392
-#: eeschema/onrightclick.cpp:505 eeschema/onrightclick.cpp:541
-#: eeschema/onrightclick.cpp:577 eeschema/onrightclick.cpp:611
-#: eeschema/onrightclick.cpp:805 eeschema/onrightclick.cpp:825
-#: eeschema/onrightclick.cpp:913 pagelayout_editor/events_functions.cpp:589
-#: pagelayout_editor/menubar.cpp:128 pagelayout_editor/onrightclick.cpp:110
-#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:62
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:55
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:71
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1068
-#: pcbnew/modedit_onclick.cpp:389 pcbnew/modedit_onclick.cpp:426
-#: pcbnew/onrightclick.cpp:221 pcbnew/onrightclick.cpp:286
-#: pcbnew/onrightclick.cpp:316 pcbnew/onrightclick.cpp:495
-#: pcbnew/onrightclick.cpp:642 pcbnew/onrightclick.cpp:724
-#: pcbnew/onrightclick.cpp:831 pcbnew/onrightclick.cpp:901
-#: pcbnew/onrightclick.cpp:958 pcbnew/onrightclick.cpp:1010
-#: pcbnew/tools/edit_tool.cpp:141 pcbnew/tools/edit_tool.cpp:867
-msgid "Delete"
+#: common/dialogs/dialog_env_var_config_base.cpp:39
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:228
+#: eeschema/libedit_onrightclick.cpp:194 eeschema/libedit_onrightclick.cpp:258
+#: eeschema/libedit_onrightclick.cpp:288 eeschema/onrightclick.cpp:503
+#: eeschema/onrightclick.cpp:539 eeschema/onrightclick.cpp:575
+#: eeschema/onrightclick.cpp:609 eeschema/onrightclick.cpp:791
+#: eeschema/onrightclick.cpp:822
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:36
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:52
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:50
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:66
+#: pcbnew/modedit_onclick.cpp:383 pcbnew/modedit_onclick.cpp:422
+#: pcbnew/onrightclick.cpp:215 pcbnew/onrightclick.cpp:267
+#: pcbnew/onrightclick.cpp:312 pcbnew/onrightclick.cpp:890
+#: pcbnew/onrightclick.cpp:1002
+msgid "Edit"
+msgstr "Editar"
+
+#: common/dialogs/dialog_env_var_config_base.cpp:40
+msgid "Edit selected path prefix"
+msgstr "Editar prefijo de ruta seleccionado"
+
+#: common/dialogs/dialog_env_var_config_base.cpp:44
+#: cvpcb/dialogs/dialog_config_equfiles_base.cpp:39
+#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:48
+#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:93
+#: eeschema/dialogs/dialog_spice_model_base.cpp:527
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:80
+msgid "Remove"
 msgstr "Eliminar"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:65
-msgid "Remove the selected entry from the table."
-msgstr "Eliminar entrada seleccionada de la table."
+#: common/dialogs/dialog_env_var_config_base.cpp:45
+msgid "Remove selected path prefix"
+msgstr "Eliminar prefijo de ruta seleccionado"
 
-#: common/dialogs/dialog_env_var_config_base.h:56
+#: common/dialogs/dialog_env_var_config_base.cpp:125
+#: eeschema/dialogs/dialog_bom_base.cpp:65
+msgid "Help"
+msgstr "Ayuda"
+
+#: common/dialogs/dialog_env_var_config_base.cpp:128
+#: cvpcb/dialogs/dialog_config_equfiles_base.cpp:83
+#: eeschema/bom_table_column.h:36
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:223
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:206
+#: eeschema/dialogs/dialog_rescue_each.cpp:110
+#: eeschema/dialogs/dialog_spice_model_base.cpp:45 eeschema/lib_field.cpp:620
+#: eeschema/lib_field.cpp:799 eeschema/sch_component.cpp:1748
+#: eeschema/sch_component.cpp:1781 eeschema/template_fieldnames.cpp:42
+#: eeschema/widgets/widget_eeschema_color_config.cpp:77
+#: pcbnew/class_edge_mod.cpp:249 pcbnew/class_text_mod.cpp:354
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:42
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:56
+#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:40
+#: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:31
+#: pcbnew/footprint_wizard_frame.cpp:294
+msgid "Value"
+msgstr "Valor"
+
+#: common/dialogs/dialog_env_var_config_base.cpp:135
+#: common/dialogs/dialog_page_settings_base.cpp:356
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:33
+#: kicad/dialogs/dialog_template_selector_base.cpp:36
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:204
+#: pcbnew/dialogs/dialog_gencad_export_options.cpp:52
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:28
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:152
+#: pcbnew/dialogs/dialog_plot_base.cpp:54
+#: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:69
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:73
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:33
+msgid "Browse"
+msgstr "Examinar"
+
+#: common/dialogs/dialog_env_var_config_base.h:66
 msgid "Path Configuration"
 msgstr "Configuración de rutas"
+
+#: common/dialogs/dialog_env_var_config_base.h:97
+msgid "Edit Environment Value Variable"
+msgstr "Editar valor de variable de entorno"
 
 #: common/dialogs/dialog_exit_base.cpp:34
 msgid "Save the changes before closing?"
@@ -2346,20 +2439,6 @@ msgstr "Comentario 4"
 #: common/dialogs/dialog_page_settings_base.cpp:346
 msgid "Page layout description file"
 msgstr "Archivo de descripción del diseño de hoja"
-
-#: common/dialogs/dialog_page_settings_base.cpp:356
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:33
-#: kicad/dialogs/dialog_template_selector_base.cpp:36
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:204
-#: pcbnew/dialogs/dialog_gencad_export_options.cpp:52
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:28
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:152
-#: pcbnew/dialogs/dialog_plot_base.cpp:54
-#: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:69
-#: pcbnew/dialogs/wizard_add_fplib_base.cpp:73
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:33
-msgid "Browse"
-msgstr "Examinar"
 
 #: common/dialogs/dialog_page_settings_base.h:121
 msgid "Page Settings"
@@ -3432,19 +3511,19 @@ msgid "Display polar coordinates"
 msgstr "Mostrar coordenadas polares"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:186 eeschema/tool_lib.cpp:236
-#: gerbview/toolbars_gerber.cpp:242 pcbnew/tool_modedit.cpp:228
+#: gerbview/toolbars_gerber.cpp:239 pcbnew/tool_modedit.cpp:228
 #: pcbnew/tool_pcb.cpp:344
 msgid "Set units to inches"
 msgstr "Aplicar unidades en pulgadas"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:190 eeschema/tool_lib.cpp:241
-#: gerbview/toolbars_gerber.cpp:246 pcbnew/tool_modedit.cpp:232
+#: gerbview/toolbars_gerber.cpp:243 pcbnew/tool_modedit.cpp:232
 #: pcbnew/tool_pcb.cpp:347
 msgid "Set units to millimeters"
 msgstr "Aplicar unidades en milímetros"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:195 eeschema/tool_lib.cpp:246
-#: eeschema/tool_sch.cpp:293 gerbview/toolbars_gerber.cpp:251
+#: eeschema/tool_sch.cpp:293 gerbview/toolbars_gerber.cpp:248
 #: pcbnew/tool_pcb.cpp:352
 msgid "Change cursor shape"
 msgstr "Cambiar forma del cursor"
@@ -3507,7 +3586,7 @@ msgstr "Mostrar contornos en modo boceto"
 #: pcbnew/moduleframe.cpp:735 pcbnew/modview_frame.cpp:690
 #: pcbnew/pcbframe.cpp:703
 msgid "3D Viewer"
-msgstr "Visualizador 3D"
+msgstr "Visor 3D"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:480
 #, c-format
@@ -3690,14 +3769,6 @@ msgstr "El archivo '%s' ya existe en la lista"
 msgid "Footprint/Component equ files (.equ files)"
 msgstr "Archivo Huella/Componente (.equ)"
 
-#: cvpcb/dialogs/dialog_config_equfiles_base.cpp:39
-#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:48
-#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:93
-#: eeschema/dialogs/dialog_spice_model_base.cpp:549
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:80
-msgid "Remove"
-msgstr "Eliminar"
-
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:40
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:49
 msgid "Unload the selected library"
@@ -3710,24 +3781,6 @@ msgstr "Editar archivo Equ"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:65
 msgid "Available environment variables for relative paths:"
 msgstr "Variables de entorno disponibles para rutas relativas:"
-
-#: cvpcb/dialogs/dialog_config_equfiles_base.cpp:83
-#: eeschema/bom_table_column.h:36
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:223
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:206
-#: eeschema/dialogs/dialog_rescue_each.cpp:110
-#: eeschema/dialogs/dialog_spice_model_base.cpp:45 eeschema/lib_field.cpp:620
-#: eeschema/lib_field.cpp:799 eeschema/sch_component.cpp:1748
-#: eeschema/sch_component.cpp:1781 eeschema/template_fieldnames.cpp:42
-#: eeschema/widgets/widget_eeschema_color_config.cpp:77
-#: pcbnew/class_edge_mod.cpp:249 pcbnew/class_text_mod.cpp:354
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:42
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:56
-#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:40
-#: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:31
-#: pcbnew/footprint_wizard_frame.cpp:294
-msgid "Value"
-msgstr "Valor"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
 msgid "Absolute path"
@@ -4403,10 +4456,6 @@ msgstr "Complementos"
 msgid "Generate"
 msgstr "Generar"
 
-#: eeschema/dialogs/dialog_bom_base.cpp:65
-msgid "Help"
-msgstr "Ayuda"
-
 #: eeschema/dialogs/dialog_bom_base.cpp:71
 #: eeschema/dialogs/dialog_netlist_base.cpp:52
 msgid "Add Plugin"
@@ -4751,6 +4800,32 @@ msgstr ""
 "Posee documentación y palabras clave propias.\n"
 "Son una form rápida de aumentar una librería con componentes similares."
 
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:189
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:231
+#: eeschema/libedit_onrightclick.cpp:131 eeschema/libedit_onrightclick.cpp:154
+#: eeschema/libedit_onrightclick.cpp:178 eeschema/libedit_onrightclick.cpp:202
+#: eeschema/libedit_onrightclick.cpp:230 eeschema/libedit_onrightclick.cpp:239
+#: eeschema/libedit_onrightclick.cpp:296 eeschema/onrightclick.cpp:392
+#: eeschema/onrightclick.cpp:505 eeschema/onrightclick.cpp:541
+#: eeschema/onrightclick.cpp:577 eeschema/onrightclick.cpp:611
+#: eeschema/onrightclick.cpp:805 eeschema/onrightclick.cpp:825
+#: eeschema/onrightclick.cpp:913 pagelayout_editor/events_functions.cpp:589
+#: pagelayout_editor/menubar.cpp:128 pagelayout_editor/onrightclick.cpp:110
+#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:62
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:55
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:71
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1068
+#: pcbnew/modedit_onclick.cpp:389 pcbnew/modedit_onclick.cpp:426
+#: pcbnew/onrightclick.cpp:221 pcbnew/onrightclick.cpp:286
+#: pcbnew/onrightclick.cpp:316 pcbnew/onrightclick.cpp:495
+#: pcbnew/onrightclick.cpp:642 pcbnew/onrightclick.cpp:724
+#: pcbnew/onrightclick.cpp:831 pcbnew/onrightclick.cpp:901
+#: pcbnew/onrightclick.cpp:958 pcbnew/onrightclick.cpp:1010
+#: pcbnew/tools/edit_tool.cpp:141 pcbnew/tools/edit_tool.cpp:867
+msgid "Delete"
+msgstr "Eliminar"
+
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:192
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:234
 msgid "Delete All"
@@ -4771,23 +4846,6 @@ msgstr ""
 "compoinente.\n"
 "Los nombres de huellas pueden utilizar comodines.\n"
 "(como sm* para filtrar todos los nombres que comienzan por sm)."
-
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:228
-#: eeschema/libedit_onrightclick.cpp:194 eeschema/libedit_onrightclick.cpp:258
-#: eeschema/libedit_onrightclick.cpp:288 eeschema/onrightclick.cpp:503
-#: eeschema/onrightclick.cpp:539 eeschema/onrightclick.cpp:575
-#: eeschema/onrightclick.cpp:609 eeschema/onrightclick.cpp:791
-#: eeschema/onrightclick.cpp:822
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:36
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:52
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:50
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:66
-#: pcbnew/modedit_onclick.cpp:383 pcbnew/modedit_onclick.cpp:422
-#: pcbnew/onrightclick.cpp:215 pcbnew/onrightclick.cpp:267
-#: pcbnew/onrightclick.cpp:312 pcbnew/onrightclick.cpp:890
-#: pcbnew/onrightclick.cpp:1002
-msgid "Edit"
-msgstr "Editar"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:261
 #, c-format
@@ -6056,7 +6114,7 @@ msgstr "Número"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:189
 #: eeschema/dialogs/dialog_spice_model_base.cpp:30
-#: eeschema/dialogs/dialog_spice_model_base.cpp:207
+#: eeschema/dialogs/dialog_spice_model_base.cpp:233
 #: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:2038
 #: eeschema/libedit.cpp:507 eeschema/sch_text.cpp:808
 #: gerbview/class_gerber_draw_item.cpp:609
@@ -7166,202 +7224,200 @@ msgstr "tera"
 msgid "1e12"
 msgstr "1e12"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:212
-msgid "Diode"
-msgstr "Diodo"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:213
-msgid "Bipolar transistor (BJT)"
-msgstr "Transistor bipolar (BJT)"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:214
-msgid "MOSFET"
-msgstr "MOSFET"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:220
-#: eeschema/dialogs/dialog_spice_model_base.cpp:252
-msgid "Model"
-msgstr "Modelo"
-
-#: eeschema/dialogs/dialog_spice_model_base.cpp:230
-#: eeschema/dialogs/dialog_spice_model_base.cpp:264
+#: eeschema/dialogs/dialog_spice_model_base.cpp:210
 #: eeschema/sch_component.cpp:1759 eeschema/sch_component.cpp:1784
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:185 pcbnew/loadcmp.cpp:446
 msgid "Library"
 msgstr "Librería"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:237
-#: eeschema/dialogs/dialog_spice_model_base.cpp:271
+#: eeschema/dialogs/dialog_spice_model_base.cpp:220
 msgid "Select file..."
 msgstr "Seleccionar archivo..."
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:244
-msgid "Semiconductor"
-msgstr "Semiconductor"
+#: eeschema/dialogs/dialog_spice_model_base.cpp:226
+#: eeschema/dialogs/dialog_spice_model_base.cpp:256
+msgid "Model"
+msgstr "Modelo"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:278
-msgid "Integrated circuit"
-msgstr "Circuito integrado"
+#: eeschema/dialogs/dialog_spice_model_base.cpp:238
+msgid "Subcircuit"
+msgstr "Subcircuito"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:286
+#: eeschema/dialogs/dialog_spice_model_base.cpp:239
+msgid "BJT"
+msgstr "BJT"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:240
+msgid "MOSFET"
+msgstr "MOSFET"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:241
+msgid "Diode"
+msgstr "Diodo"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:264
 msgid "DC/AC analysis"
 msgstr "Análisis DC/AC"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:295
+#: eeschema/dialogs/dialog_spice_model_base.cpp:273
 msgid "DC [V/A]"
 msgstr "DC [V/A]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:310
+#: eeschema/dialogs/dialog_spice_model_base.cpp:288
 msgid "AC magnitude [V/A]"
 msgstr "Magnitud AC [V/A]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:319
+#: eeschema/dialogs/dialog_spice_model_base.cpp:297
 msgid "AC phase [rad]"
 msgstr "Fase AC [rad]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:335
+#: eeschema/dialogs/dialog_spice_model_base.cpp:313
 msgid "Transient analysis"
 msgstr "Análisis de transitorios"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:345
-#: eeschema/dialogs/dialog_spice_model_base.cpp:457
+#: eeschema/dialogs/dialog_spice_model_base.cpp:323
+#: eeschema/dialogs/dialog_spice_model_base.cpp:435
 msgid "Initial value [V/A]"
 msgstr "Valor inicial [V/A]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:354
-#: eeschema/dialogs/dialog_spice_model_base.cpp:466
+#: eeschema/dialogs/dialog_spice_model_base.cpp:332
+#: eeschema/dialogs/dialog_spice_model_base.cpp:444
 msgid "Pulsed value [V/A]"
 msgstr "Valor pulso [V/A]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:361
+#: eeschema/dialogs/dialog_spice_model_base.cpp:339
 msgid "Delay time [s]"
 msgstr "Retardo [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:368
+#: eeschema/dialogs/dialog_spice_model_base.cpp:346
 msgid "Rise time [s]"
 msgstr "Tiempo de subida [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:375
+#: eeschema/dialogs/dialog_spice_model_base.cpp:353
 msgid "Fall time [s]"
 msgstr "Tiempo de bajada [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:382
+#: eeschema/dialogs/dialog_spice_model_base.cpp:360
 msgid "Pulse width [s]"
 msgstr "Ancho del pulso [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:389
+#: eeschema/dialogs/dialog_spice_model_base.cpp:367
 msgid "Period [s]"
 msgstr "Periodo [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:400
+#: eeschema/dialogs/dialog_spice_model_base.cpp:378
 msgid "Pulse"
 msgstr "Pulso"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:408
+#: eeschema/dialogs/dialog_spice_model_base.cpp:386
 msgid "DC offset [V/A]"
 msgstr "Desvío DC [V/A]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:417
+#: eeschema/dialogs/dialog_spice_model_base.cpp:395
 msgid "Amplitude [V/A]"
 msgstr "Amplitud [V/A]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:424
+#: eeschema/dialogs/dialog_spice_model_base.cpp:402
 msgid "Frequency [Hz]"
 msgstr "Frecuencia [Hz]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:431
+#: eeschema/dialogs/dialog_spice_model_base.cpp:409
 msgid "Delay [s]"
 msgstr "Retardo [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:438
+#: eeschema/dialogs/dialog_spice_model_base.cpp:416
 msgid "Damping factor [1/s]"
 msgstr "Factor de amortiguación [1/s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:449
+#: eeschema/dialogs/dialog_spice_model_base.cpp:427
 msgid "Sinusoidal"
 msgstr "Sinusoidal"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:473
+#: eeschema/dialogs/dialog_spice_model_base.cpp:451
 msgid "Rise delay time [s]"
 msgstr "Retardo de subida [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:480
+#: eeschema/dialogs/dialog_spice_model_base.cpp:458
 msgid "Rise time constant [s]"
 msgstr "Constante de tiempo de subida [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:487
+#: eeschema/dialogs/dialog_spice_model_base.cpp:465
 msgid "Fall delay time [s]"
 msgstr "Retraso de bajada [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:494
+#: eeschema/dialogs/dialog_spice_model_base.cpp:472
 msgid "Fall time constant [s]"
 msgstr "Constante de tiempo de bajada [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:505
+#: eeschema/dialogs/dialog_spice_model_base.cpp:483
 msgid "Exponential"
 msgstr "Exponencial"
 
 # Por confirmar
-#: eeschema/dialogs/dialog_spice_model_base.cpp:507
+#: eeschema/dialogs/dialog_spice_model_base.cpp:485
 msgid "Piece-wise linear"
 msgstr "Lineal por sección"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:522
+#: eeschema/dialogs/dialog_spice_model_base.cpp:500
 msgid "Time [s]"
 msgstr "Tiempo [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:531
+#: eeschema/dialogs/dialog_spice_model_base.cpp:509
 msgid "Value [V/A]"
 msgstr "Valor [V/A]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:556
+#: eeschema/dialogs/dialog_spice_model_base.cpp:534
 msgid "Piece-wise Linear"
 msgstr "Lineal por sección"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:560
+#: eeschema/dialogs/dialog_spice_model_base.cpp:538
 msgid "FM"
 msgstr "FM"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:564
+#: eeschema/dialogs/dialog_spice_model_base.cpp:542
 msgid "AM"
 msgstr "AM"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:568
+#: eeschema/dialogs/dialog_spice_model_base.cpp:546
 msgid "Transient noise"
 msgstr "Ruido transitorio"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:572
+#: eeschema/dialogs/dialog_spice_model_base.cpp:550
 msgid "Random"
 msgstr "Aleatorio"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:576
+#: eeschema/dialogs/dialog_spice_model_base.cpp:554
 msgid "External data"
 msgstr "Datos externos"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:583
+#: eeschema/dialogs/dialog_spice_model_base.cpp:561
 msgid "Voltage"
 msgstr "Voltaje"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:583
+#: eeschema/dialogs/dialog_spice_model_base.cpp:561
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:262
 msgid "Current"
 msgstr "Intensidad"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:585
+#: eeschema/dialogs/dialog_spice_model_base.cpp:563
 msgid "Source type"
 msgstr "Tipo de fuente"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:593
+#: eeschema/dialogs/dialog_spice_model_base.cpp:571
 msgid "Source"
 msgstr "Fuente"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:600
+#: eeschema/dialogs/dialog_spice_model_base.cpp:578
 msgid "Disable component for simulation"
 msgstr "Desactivar componente para la simulación"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:606
+#: eeschema/dialogs/dialog_spice_model_base.cpp:584
 msgid "Alternate node sequence:"
 msgstr "Secuencia alternativa de nodo:"
+
+#: eeschema/dialogs/dialog_spice_model_base.h:177
+msgid "Spice Model Editor"
+msgstr "Editor de modelo Spice"
 
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:265
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:302
@@ -11123,7 +11179,7 @@ msgid "Show pin table"
 msgstr "Mostrar tabla de pines"
 
 #: eeschema/tool_lib.cpp:233 eeschema/tool_sch.cpp:280
-#: gerbview/toolbars_gerber.cpp:234
+#: gerbview/toolbars_gerber.cpp:231
 msgid "Turn grid off"
 msgstr "Ocultar cuadrícula"
 
@@ -12444,35 +12500,35 @@ msgstr ""
 msgid "DCode:"
 msgstr "DCode:"
 
-#: gerbview/toolbars_gerber.cpp:227 gerbview/tools/selection_tool.cpp:827
+#: gerbview/toolbars_gerber.cpp:224 gerbview/tools/selection_tool.cpp:827
 msgid "Measure distance between two points"
 msgstr "Medir la distancia entre dos puntos"
 
-#: gerbview/toolbars_gerber.cpp:238
+#: gerbview/toolbars_gerber.cpp:235
 msgid "Turn polar coordinate on"
 msgstr "Activar coordenadas polares"
 
-#: gerbview/toolbars_gerber.cpp:257
+#: gerbview/toolbars_gerber.cpp:254
 msgid "Show spots in sketch mode"
 msgstr "Mostrar puntos en modo boceto"
 
-#: gerbview/toolbars_gerber.cpp:261
+#: gerbview/toolbars_gerber.cpp:258
 msgid "Show lines in sketch mode"
 msgstr "Mostrar líneas en modo boceto"
 
-#: gerbview/toolbars_gerber.cpp:265
+#: gerbview/toolbars_gerber.cpp:262
 msgid "Show polygons in sketch mode"
 msgstr "Mostrar polígonos en modo boceto"
 
-#: gerbview/toolbars_gerber.cpp:270
+#: gerbview/toolbars_gerber.cpp:267
 msgid "Show negatives objects in ghost color"
 msgstr "Mostrar elementos negativos en color difuminado"
 
-#: gerbview/toolbars_gerber.cpp:275
+#: gerbview/toolbars_gerber.cpp:272
 msgid "Show dcode number"
 msgstr "Mostrar el número de código D"
 
-#: gerbview/toolbars_gerber.cpp:283
+#: gerbview/toolbars_gerber.cpp:280
 msgid ""
 "Show layers in raw mode\n"
 "(could have problems with negative items when more than one gerber file is "
@@ -12482,7 +12538,7 @@ msgstr ""
 "(podría tener problemas con elementos negativos cuandose muestran más de un "
 "archivo de gerber)"
 
-#: gerbview/toolbars_gerber.cpp:288
+#: gerbview/toolbars_gerber.cpp:285
 msgid ""
 "Show layers in stacked mode\n"
 "(show negative items without artifacts)"
@@ -12490,7 +12546,7 @@ msgstr ""
 "Mostrar capas en el modo apilado\n"
 "(ver artículos negativos sin artefactos)"
 
-#: gerbview/toolbars_gerber.cpp:293
+#: gerbview/toolbars_gerber.cpp:290
 msgid ""
 "Show layers in transparency mode\n"
 "(show negative items without artifacts)"
@@ -12498,28 +12554,28 @@ msgstr ""
 "Mostrar capas en modo de transparencia\n"
 "(ver artículos negativos sin artefactos)"
 
-#: gerbview/toolbars_gerber.cpp:301
+#: gerbview/toolbars_gerber.cpp:298
 msgid "Show layers in diff (compare) mode"
 msgstr "Mostrar capas en modo diferencia (comparar)"
 
-#: gerbview/toolbars_gerber.cpp:306 pcbnew/tool_modedit.cpp:255
+#: gerbview/toolbars_gerber.cpp:303 pcbnew/tool_modedit.cpp:255
 #: pcbnew/tool_pcb.cpp:392
 msgid "Enable high contrast display mode"
 msgstr "Activar modo de pantalla de alto contraste"
 
-#: gerbview/toolbars_gerber.cpp:316 pcbnew/help_common_strings.h:24
+#: gerbview/toolbars_gerber.cpp:313 pcbnew/help_common_strings.h:24
 msgid "Show/hide the layers manager toolbar"
 msgstr "Mostrar/ocultar la barra de administración de capas"
 
-#: gerbview/toolbars_gerber.cpp:324
+#: gerbview/toolbars_gerber.cpp:321
 msgid "<No selection>"
 msgstr "<Sin selección>"
 
-#: gerbview/toolbars_gerber.cpp:563
+#: gerbview/toolbars_gerber.cpp:560
 msgid "Hide layers manager"
 msgstr "Ocultar administrador de capas"
 
-#: gerbview/toolbars_gerber.cpp:565
+#: gerbview/toolbars_gerber.cpp:562
 msgid "Show layers manager"
 msgstr "Mostrar administrador de capas"
 
@@ -15421,7 +15477,7 @@ msgid "This is the default net class."
 msgstr "Esta es la clase de red por defecto."
 
 #: pcbnew/class_board.cpp:1107 pcbnew/class_module.cpp:551
-#: pcbnew/class_netinfo_item.cpp:120 pcbnew/pcb_draw_panel_gal.cpp:323
+#: pcbnew/class_netinfo_item.cpp:120 pcbnew/pcb_draw_panel_gal.cpp:322
 #: pcbnew/tools/pad_tool.cpp:77
 msgid "Pads"
 msgstr "Pads"
@@ -15429,26 +15485,26 @@ msgstr "Pads"
 #: pcbnew/class_board.cpp:1110 pcbnew/class_netinfo_item.cpp:140
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:154
-#: pcbnew/pcb_draw_panel_gal.cpp:326
+#: pcbnew/pcb_draw_panel_gal.cpp:325
 msgid "Vias"
 msgstr "Vías"
 
-#: pcbnew/class_board.cpp:1113 pcbnew/pcb_draw_panel_gal.cpp:329
+#: pcbnew/class_board.cpp:1113 pcbnew/pcb_draw_panel_gal.cpp:328
 msgid "Track Segments"
 msgstr "Segmentos de pista"
 
-#: pcbnew/class_board.cpp:1116 pcbnew/pcb_draw_panel_gal.cpp:332
+#: pcbnew/class_board.cpp:1116 pcbnew/pcb_draw_panel_gal.cpp:331
 msgid "Nodes"
 msgstr "Nodos"
 
 #: pcbnew/class_board.cpp:1119
 #: pcbnew/dialogs/dialog_select_net_from_list_base.h:58
-#: pcbnew/pcb_draw_panel_gal.cpp:335
+#: pcbnew/pcb_draw_panel_gal.cpp:334
 msgid "Nets"
 msgstr "Redes"
 
 #: pcbnew/class_board.cpp:1122 pcbnew/dialogs/dialog_drc_base.cpp:266
-#: pcbnew/pcb_draw_panel_gal.cpp:338
+#: pcbnew/pcb_draw_panel_gal.cpp:337
 msgid "Unconnected"
 msgstr "No conectado"
 
@@ -20694,12 +20750,16 @@ msgstr ""
 "huella diferente"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:57
-msgid "Unconnected Tracks"
-msgstr "Pistas sin conectar"
+msgid "Tracks Connecting 2 Nets"
+msgstr "Pistas conectando dos redes"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:59
-msgid "Keep or delete bad tracks after a netlist change"
-msgstr "Mantener o eliminar pistas no correctas después de un cambio de redes"
+msgid ""
+"Keep or delete tracks creating a short circuit between two nets after a "
+"netlist change"
+msgstr ""
+"Mantener o eliminar pistas que crean un cortocircuito entre dos redes "
+"después de un cambio en el listado de redes"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:65
 msgid "Extra Footprints"
@@ -23119,7 +23179,7 @@ msgstr "Seleccionar la siguiente página de parámetros"
 #: pcbnew/footprint_wizard_frame.cpp:684 pcbnew/menubar_modedit.cpp:251
 #: pcbnew/tool_modview.cpp:76 pcbnew/tool_modview.cpp:178
 msgid "Show footprint in 3D viewer"
-msgstr "Mostrar huella en visor 3D"
+msgstr "Mostrar huella en el Visor 3D"
 
 #: pcbnew/footprint_wizard_frame.cpp:711
 msgid "Export footprint to editor"
@@ -23222,7 +23282,7 @@ msgid "Cannot convert \"%s\" to an integer"
 msgstr "No puede convertirse \"%s\" a un entero"
 
 #: pcbnew/gpcb_plugin.cpp:298 pcbnew/gpcb_plugin.cpp:984
-#: pcbnew/kicad_plugin.cpp:1970
+#: pcbnew/kicad_plugin.cpp:1968
 #, c-format
 msgid "footprint library path '%s' does not exist"
 msgstr "la ruta de librería '%s' no existe"
@@ -23244,29 +23304,29 @@ msgstr "símbolo desconocido \"%s\""
 msgid "Element token contains %d parameters."
 msgstr "El símbolo del elemento contiene %d parámetros"
 
-#: pcbnew/gpcb_plugin.cpp:1049 pcbnew/kicad_plugin.cpp:2040
-#: pcbnew/kicad_plugin.cpp:2106 pcbnew/librairi.cpp:552
+#: pcbnew/gpcb_plugin.cpp:1049 pcbnew/kicad_plugin.cpp:2038
+#: pcbnew/kicad_plugin.cpp:2104 pcbnew/librairi.cpp:552
 #, c-format
 msgid "Library '%s' is read only"
 msgstr "La librería '%s' es de solo lectura"
 
-#: pcbnew/gpcb_plugin.cpp:1068 pcbnew/kicad_plugin.cpp:2143
+#: pcbnew/gpcb_plugin.cpp:1068 pcbnew/kicad_plugin.cpp:2141
 #, c-format
 msgid "user does not have permission to delete directory '%s'"
 msgstr "el usuario no tiene permiso para eliminar la carpeta '%s'"
 
-#: pcbnew/gpcb_plugin.cpp:1076 pcbnew/kicad_plugin.cpp:2151
+#: pcbnew/gpcb_plugin.cpp:1076 pcbnew/kicad_plugin.cpp:2149
 #, c-format
 msgid "library directory '%s' has unexpected sub-directories"
 msgstr "la carpeta de librerías '%s' tiene subcarpetas no esperadas"
 
-#: pcbnew/gpcb_plugin.cpp:1095 pcbnew/kicad_plugin.cpp:2170
+#: pcbnew/gpcb_plugin.cpp:1095 pcbnew/kicad_plugin.cpp:2168
 #, c-format
 msgid "unexpected file '%s' was found in library path '%s'"
 msgstr ""
 "se ha encontrado el archivo inesperado '%s' en la ruta de librerías '%s'"
 
-#: pcbnew/gpcb_plugin.cpp:1113 pcbnew/kicad_plugin.cpp:2188
+#: pcbnew/gpcb_plugin.cpp:1113 pcbnew/kicad_plugin.cpp:2186
 #, c-format
 msgid "footprint library '%s' cannot be deleted"
 msgstr "no puede eliminarse la librería de huellas '%s'"
@@ -23617,41 +23677,41 @@ msgstr "No existe la ruta de librería de huellas '%s'"
 msgid "library '%s' has no footprint '%s' to delete"
 msgstr "la librería '%s' no contiene la huella '%s' a borrar"
 
-#: pcbnew/kicad_plugin.cpp:1282 pcbnew/legacy_plugin.cpp:97
+#: pcbnew/kicad_plugin.cpp:1280 pcbnew/legacy_plugin.cpp:97
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "tipo de pad desconocido: %d"
 
-#: pcbnew/kicad_plugin.cpp:1295 pcbnew/legacy_plugin.cpp:98
+#: pcbnew/kicad_plugin.cpp:1293 pcbnew/legacy_plugin.cpp:98
 #, c-format
 msgid "unknown pad attribute: %d"
 msgstr "atributo de pad desconocido: %d"
 
-#: pcbnew/kicad_plugin.cpp:1599
+#: pcbnew/kicad_plugin.cpp:1597
 #, c-format
 msgid "unknown via type %d"
 msgstr "tipo de vía desconocido %d"
 
-#: pcbnew/kicad_plugin.cpp:1737
+#: pcbnew/kicad_plugin.cpp:1735
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "tipo de suavizado de esquinas de zona desconocido %d"
 
-#: pcbnew/kicad_plugin.cpp:1927
+#: pcbnew/kicad_plugin.cpp:1925
 msgid "this file does not contain a PCB"
 msgstr "este archivo no contiene una placa"
 
-#: pcbnew/kicad_plugin.cpp:2057
+#: pcbnew/kicad_plugin.cpp:2055
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "El nombre del archivo de huellas '%s' no es válido."
 
-#: pcbnew/kicad_plugin.cpp:2063
+#: pcbnew/kicad_plugin.cpp:2061
 #, c-format
 msgid "user does not have write permission to delete file '%s' "
 msgstr "el usuario no tiene permiso de escritura para borrar el archivo '%s'"
 
-#: pcbnew/kicad_plugin.cpp:2118
+#: pcbnew/kicad_plugin.cpp:2116
 #, c-format
 msgid "cannot overwrite library path '%s'"
 msgstr "no puede sobreescribirse la ruta de librería '%s'"
@@ -24532,7 +24592,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcbframe.cpp:545
 msgid "Show board in 3D viewer"
-msgstr "Mostrar placa en Visor 3D"
+msgstr "Mostrar placa en el Visor 3D"
 
 #: pcbnew/menubar_pcbframe.cpp:549
 msgid "&List Nets"
@@ -25196,12 +25256,12 @@ msgstr ""
 "Ha cambiado la huella del componente '%s': huella en placa '%s', huella en "
 "listado de redes '%s'\n"
 
-#: pcbnew/netlist.cpp:303
+#: pcbnew/netlist.cpp:304
 #, c-format
 msgid "Component '%s' footprint ID '%s' is not valid.\n"
 msgstr "El componente '%s' tiene un ID de huella '%s' no válido.\n"
 
-#: pcbnew/netlist.cpp:324
+#: pcbnew/netlist.cpp:325
 #, c-format
 msgid ""
 "Component '%s' footprint '%s' was not found in any libraries in the "
@@ -27491,7 +27551,7 @@ msgstr "PcbNew diseño PCB"
 
 #: resources/linux/appdata/kicad.appdata.xml:41
 msgid "PcbNew 3D Viewer"
-msgstr "PcbNew Visor 3D"
+msgstr "Pcbnew Visor 3D"
 
 #: resources/linux/mime/applications/bitmap2component.desktop:5
 msgid "bitmap2component"
@@ -27603,6 +27663,40 @@ msgstr "excluir modelos 3D para componentes con atributo 'virtual'"
 #: utils/kicad2step/kicad2step.cpp:82
 msgid "display this message"
 msgstr "mostrar este mensaje"
+
+#~ msgid "Set path for ENV_VAR"
+#~ msgstr "Establecer ruta para ENV_VAR"
+
+#~ msgid "Bipolar transistor (BJT)"
+#~ msgstr "Transistor bipolar (BJT)"
+
+#~ msgid "Semiconductor"
+#~ msgstr "Semiconductor"
+
+#~ msgid "Integrated circuit"
+#~ msgstr "Circuito integrado"
+
+#~ msgid "Unconnected Tracks"
+#~ msgstr "Pistas sin conectar"
+
+#~ msgid "Invalid Input"
+#~ msgstr "Entrada no válida"
+
+#~ msgid ""
+#~ "The first character of an environment variable name cannot be a digit "
+#~ "(0-9)."
+#~ msgstr ""
+#~ "El primer carácter de una variable de entorno no puede ser una cifra "
+#~ "(0-9)."
+
+#~ msgid "Cannot have duplicate environment variable names."
+#~ msgstr "No puede haber nombres de variables de entorno duplicados."
+
+#~ msgid "Add a new entry to the table."
+#~ msgstr "Añadir nueva entrada a la tabla."
+
+#~ msgid "Remove the selected entry from the table."
+#~ msgstr "Eliminar entrada seleccionada de la table."
 
 #~ msgid "Create Pad From Selected Shapes"
 #~ msgstr "Crear pad con las formas seleccionadas"
@@ -30612,9 +30706,6 @@ msgstr "mostrar este mensaje"
 #~ msgid "Componment Placement File generation OK."
 #~ msgstr "Se ha generado correctamente el archivo de posicionamiento."
 
-#~ msgid "Legacy 3D environment path"
-#~ msgstr "Ruta del antiguo entorno 3D"
-
 #~ msgid ""
 #~ "[3D File Resolver] No such path; ensure KISYS3DMOD is correctly defined"
 #~ msgstr ""
@@ -32764,9 +32855,6 @@ msgstr "mostrar este mensaje"
 
 #~ msgid "page settings (size, texts)"
 #~ msgstr "Formato de página"
-
-#~ msgid "Open Module Editor"
-#~ msgstr "Abrir Editor de Módulos"
 
 #~ msgid "Undelete"
 #~ msgstr "Deshacer el último borrado"
