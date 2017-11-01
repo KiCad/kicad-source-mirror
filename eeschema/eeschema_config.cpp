@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,46 +127,6 @@ COLOR4D GetInvisibleItemColor()
 }
 
 
-void LIB_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
-{
-    // Identical to SCH_EDIT_FRAME::InstallConfigFrame()
-
-    PROJECT*        prj = &Prj();
-    wxArrayString   lib_names;
-    wxString        lib_paths;
-
-    try
-    {
-        PART_LIBS::LibNamesAndPaths( prj, false, &lib_paths, &lib_names );
-    }
-    catch( const IO_ERROR& DBG( ioe ) )
-    {
-        DBG(printf( "%s: %s\n", __func__, TO_UTF8( ioe.What() ) );)
-        return;
-    }
-
-    if( InvokeEeschemaConfig( this, &lib_paths, &lib_names ) )
-    {
-        // save the [changed] settings.
-        PART_LIBS::LibNamesAndPaths( prj, true, &lib_paths, &lib_names );
-
-        // Force a reload of the PART_LIBS
-        prj->SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
-        prj->SetElem( PROJECT::ELEM_SCH_SEARCH_STACK, NULL );
-        prj->SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
-
-        // Update the schematic symbol library links.
-        SCH_SCREENS schematic;
-
-        schematic.UpdateSymbolLinks();
-
-        // There may be no parent window so use KIWAY message to refresh the schematic editor
-        // in case any symbols have changed.
-        Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_REFRESH, std::string( "" ), this );
-    }
-}
-
-
 void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 {
     int        id = event.GetId();
@@ -193,53 +153,6 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
     default:
         DisplayError( this, wxT( "LIB_EDIT_FRAME::Process_Config error" ) );
-    }
-}
-
-
-void SCH_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
-{
-    // Identical to LIB_EDIT_FRAME::InstallConfigFrame()
-
-    PROJECT*        prj = &Prj();
-    wxArrayString   lib_names;
-    wxString        lib_paths;
-
-    try
-    {
-        PART_LIBS::LibNamesAndPaths( prj, false, &lib_paths, &lib_names );
-    }
-    catch( const IO_ERROR& DBG( ioe ) )
-    {
-        DBG(printf( "%s: %s\n", __func__, TO_UTF8( ioe.What() ) );)
-        return;
-    }
-
-    if( InvokeEeschemaConfig( this, &lib_paths, &lib_names ) )
-    {
-        // save the [changed] settings.
-        PART_LIBS::LibNamesAndPaths( prj, true, &lib_paths, &lib_names );
-
-#if defined(DEBUG)
-        printf( "%s: lib_names:\n", __func__ );
-        for( unsigned i=0; i<lib_names.size();  ++i )
-        {
-            printf( " %s\n", TO_UTF8( lib_names[i] ) );
-        }
-
-        printf( "%s: lib_paths:'%s'\n", __func__, TO_UTF8( lib_paths ) );
-#endif
-
-        // Force a reload of the PART_LIBS
-        prj->SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
-        prj->SetElem( PROJECT::ELEM_SCH_SEARCH_STACK, NULL );
-        prj->SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
-
-        // Update the schematic symbol library links.
-        SCH_SCREENS schematic;
-
-        schematic.UpdateSymbolLinks();
-        GetCanvas()->Refresh();
     }
 }
 
@@ -274,9 +187,11 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             else
             {
                 // Read library list and library path list
-                Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH, GetProjectFileParametersList() );
+                Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH,
+                                  GetProjectFileParametersList() );
                 // Read schematic editor setup
-                Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH_EDITOR, GetProjectFileParametersList() );
+                Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH_EDITOR,
+                                  GetProjectFileParametersList() );
             }
         }
         break;

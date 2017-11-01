@@ -35,12 +35,13 @@
 #include <sch_sheet.h>
 #include <sch_component.h>
 #include <class_sch_screen.h>
+#include <schframe.h>
 #include <symbol_lib_table.h>
 
 #include <dialog_symbol_remap.h>
 
 
-DIALOG_SYMBOL_REMAP::DIALOG_SYMBOL_REMAP( wxWindow* aParent ) :
+DIALOG_SYMBOL_REMAP::DIALOG_SYMBOL_REMAP( SCH_EDIT_FRAME* aParent ) :
     DIALOG_SYMBOL_REMAP_BASE( aParent )
 {
 }
@@ -62,6 +63,17 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
     }
 
     remapSymbolsToLibTable( m_messagePanel->Reporter() );
+
+    // Remove all of the libraries from the legacy library list.
+    PART_LIBS* libs = Prj().SchLibs();
+    libs->clear();
+    Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
+    Prj().SchLibs();
+
+    // Update the project file so the library list is cleared.
+    SCH_EDIT_FRAME* parent = static_cast< SCH_EDIT_FRAME* >( GetParent() );
+    wxCHECK_RET( parent, "Parent window was not and SCH_EDIT_FRAME" );
+    parent->SaveProjectSettings( false );
 }
 
 

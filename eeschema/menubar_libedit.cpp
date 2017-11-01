@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2009-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -234,15 +234,9 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     // Library list
     AddMenuItem( preferencesMenu,
-                 ID_CONFIG_REQ,
-                 _( "Component &Libraries" ),
-                 _( "Configure component libraries and paths" ),
-                 KiBitmap( library_xpm ) );
-
-    AddMenuItem( preferencesMenu,
                  ID_EDIT_SYM_LIB_TABLE,
-                 _( "Manage Symbol Library" ),
-                 _( "Edit the symbol library table." ),
+                 _( "Manage Symbol Libraries" ),
+                 _( "Edit the global and project symbol library tables." ),
                  KiBitmap( library_table_xpm ) );
 
     // Default values and options

@@ -37,15 +37,13 @@ class REPORTER;
 class DIALOG_SYMBOL_REMAP : public DIALOG_SYMBOL_REMAP_BASE
 {
 public:
-    DIALOG_SYMBOL_REMAP( wxWindow* aParent );
+    DIALOG_SYMBOL_REMAP( SCH_EDIT_FRAME* aParent );
 
     void OnRemapSymbols( wxCommandEvent& aEvent ) override;
 
 private:
     /**
-     * Function getLibsNotInGlobalSymbolLibTable
-     *
-     * adds libraries found in the legacy library list to \a aLibs that are not found in
+     * Add libraries found in the legacy library list to \a aLibs that are not found in
      * the global symbol library table.
      *
      * This function is used to create a project symbol library table when converting

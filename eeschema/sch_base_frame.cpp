@@ -299,6 +299,16 @@ void SCH_BASE_FRAME::OnEditSymbolLibTable( wxCommandEvent& aEvent )
         }
     }
 
+
+    LIB_EDIT_FRAME* editor = (LIB_EDIT_FRAME*) Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
+
+    if( this == editor )
+    {
+        // There may be no parent window so use KIWAY message to refresh the schematic editor
+        // in case any symbols have changed.
+        Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_REFRESH, std::string( "" ), this );
+    }
+
     LIB_VIEW_FRAME* viewer = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
 
     if( viewer )

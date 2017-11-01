@@ -3,7 +3,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,9 +97,5 @@ int InvokeDialogUpdateFields( SCH_EDIT_FRAME* aCaller,
  */
 #define NET_PLUGIN_CHANGE   1
 int InvokeDialogNetList( SCH_EDIT_FRAME* aCaller );
-
-bool InvokeEeschemaConfig( wxWindow* aParent,
-        wxString* aCallersProjectSpecificLibPaths, wxArrayString* aCallersLibNames );
-
 
 #endif  // INVOKE_SCH_DIALOG_H_
