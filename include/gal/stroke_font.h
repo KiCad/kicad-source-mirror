@@ -30,6 +30,8 @@
 #define STROKE_FONT_H_
 
 #include <deque>
+#include <algorithm>
+
 #include <utf8.h>
 
 #include <eda_text.h>

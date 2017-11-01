@@ -32,7 +32,7 @@
 #include <gal/gal_display_options.h>
 #include <lib_id.h>
 #include <kiway_player.h>
-#include <boost/optional.hpp>
+#include <core/optional.h>
 
 #include <widgets/footprint_preview_widget.h>
 

@@ -179,7 +179,7 @@ T Convert( const wxString& aValue )
 /**
  * Class OPTIONAL_XML_ATTRIBUTE
  * models an optional XML attribute.
- * This was implemented as an alternative to boost::optional. This class should be replaced with a
+ * This was implemented as an alternative to OPT. This class should be replaced with a
  * simple typedef per type using std::optional when C++17 is published.
  */
 template <class T>

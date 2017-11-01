@@ -219,7 +219,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
     DRAWSEGMENT* line = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
 
-    boost::optional<VECTOR2D> startingPoint;
+    OPT<VECTOR2D> startingPoint;
     BOARD_COMMIT commit( m_frame );
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::LINE );
@@ -234,11 +234,11 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
         {
             commit.Add( line );
             commit.Push( _( "Draw a line segment" ) );
-            startingPoint = line->GetEnd();
+            startingPoint = VECTOR2D( line->GetEnd() );
         }
         else
         {
-            startingPoint = boost::none;
+            startingPoint = NULLOPT;
         }
 
         line = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
@@ -920,7 +920,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
 
 bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
-        boost::optional<VECTOR2D> aStartingPoint )
+        OPT<VECTOR2D> aStartingPoint )
 {
     // Only two shapes are currently supported
     assert( aShape == S_SEGMENT || aShape == S_CIRCLE );

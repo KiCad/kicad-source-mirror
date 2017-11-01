@@ -21,7 +21,7 @@
 
 #include <wx/numdlg.h>
 
-#include <boost/optional.hpp>
+#include <core/optional.h>
 #include <functional>
 using namespace std::placeholders;
 
@@ -60,8 +60,6 @@ using namespace std::placeholders;
 #include "pns_router.h"
 
 using namespace KIGFX;
-using boost::optional;
-
 
 /**
  * Flags used by via tool actions
@@ -460,7 +458,7 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
         m_router->SwitchLayer( al );
     }
 
-    optional<int> newLayer = m_router->Sizes().PairedLayer( cl );
+    OPT<int> newLayer = m_router->Sizes().PairedLayer( cl );
 
     if( !newLayer )
         newLayer = m_router->Sizes().GetLayerTop();

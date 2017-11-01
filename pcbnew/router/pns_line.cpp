@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/optional.hpp>
+#include <core/optional.h>
 
 #include <math/vector2d.h>
 
@@ -30,8 +30,6 @@
 #include "pns_router.h"
 
 #include <geometry/shape_rect.h>
-
-using boost::optional;
 
 namespace PNS {
 
@@ -338,7 +336,7 @@ void LINE::ShowLinks() const
 
 SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECTOR2I& aP )
 {
-    optional<SHAPE_LINE_CHAIN> picked;
+    OPT<SHAPE_LINE_CHAIN> picked;
     int i;
     int d = 2;
 

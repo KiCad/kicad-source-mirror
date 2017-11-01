@@ -29,8 +29,6 @@
 #include <base_units.h>
 #include <wx/valnum.h>
 
-#include <boost/optional.hpp>
-
 #include "wx_unit_binder.h"
 
 WX_UNIT_BINDER::WX_UNIT_BINDER( wxWindow* aParent, wxTextEntry* aTextInput,

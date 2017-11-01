@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/optional.hpp>
+#include <core/optional.h>
 
 #include "class_draw_panel_gal.h"
 #include "class_board.h"
@@ -43,7 +43,6 @@
 #include "length_tuner_tool.h"
 
 using namespace KIGFX;
-using boost::optional;
 
 static TOOL_ACTION ACT_StartTuning( "pcbnew.LengthTuner.StartTuning", AS_CONTEXT, 'X',
     _( "New Track" ), _( "Starts laying a new track." ) );

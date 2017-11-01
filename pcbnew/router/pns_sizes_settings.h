@@ -23,7 +23,7 @@
 #define __PNS_SIZES_SETTINGS_H
 
 #include <map>
-#include <boost/optional.hpp>
+#include <core/optional.h>
 
 #include "../class_track.h" // for VIATYPE_T
 
@@ -82,10 +82,10 @@ public:
     int ViaDrill() const { return m_viaDrill; }
     void SetViaDrill( int aDrill ) { m_viaDrill = aDrill; }
 
-    boost::optional<int> PairedLayer( int aLayerId )
+    OPT<int> PairedLayer( int aLayerId )
     {
         if( m_layerPairs.find(aLayerId) == m_layerPairs.end() )
-            return boost::optional<int>();
+            return OPT<int>();
 
         return m_layerPairs[aLayerId];
     }

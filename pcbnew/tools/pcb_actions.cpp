@@ -27,7 +27,7 @@
 #include <pcbnew_id.h>
 
 
-boost::optional<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
+OPT<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
 {
     switch( aId )
     {
@@ -199,5 +199,5 @@ boost::optional<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
         return PCB_ACTIONS::pasteFromClipboard.MakeEvent();
     }
 
-    return boost::optional<TOOL_EVENT>();
+    return OPT<TOOL_EVENT>();
 }

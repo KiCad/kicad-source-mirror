@@ -24,6 +24,7 @@
 
 #include <layers_id_colors_and_visibility.h>
 #include <map>
+#include <unordered_set>
 
 #include <boost/range/adaptor/map.hpp>
 
@@ -47,7 +48,7 @@ class INDEX
 public:
     typedef std::list<ITEM*>            NET_ITEMS_LIST;
     typedef SHAPE_INDEX<ITEM*>          ITEM_SHAPE_INDEX;
-    typedef boost::unordered_set<ITEM*> ITEM_SET;
+    typedef std::unordered_set<ITEM*>   ITEM_SET;
 
     INDEX();
     ~INDEX();

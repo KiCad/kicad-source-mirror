@@ -141,14 +141,14 @@ const SHAPE_LINE_CHAIN ConvexHull( const SHAPE_CONVEX& aConvex, int aClearance )
     SHAPE_LINE_CHAIN octagon;
     octagon.SetClosed( true );
 
-    octagon.Append( leftline.IntersectLines( bottomleftline ).get() );
-    octagon.Append( bottomline.IntersectLines( bottomleftline ).get() );
-    octagon.Append( bottomline.IntersectLines( bottomrightline ).get() );
-    octagon.Append( rightline.IntersectLines( bottomrightline ).get() );
-    octagon.Append( rightline.IntersectLines( toprightline ).get() );
-    octagon.Append( topline.IntersectLines( toprightline ).get() );
-    octagon.Append( topline.IntersectLines( topleftline ).get() );
-    octagon.Append( leftline.IntersectLines( topleftline ).get() );
+    octagon.Append( *leftline.IntersectLines( bottomleftline ) );
+    octagon.Append( *bottomline.IntersectLines( bottomleftline ) );
+    octagon.Append( *bottomline.IntersectLines( bottomrightline ) );
+    octagon.Append( *rightline.IntersectLines( bottomrightline ) );
+    octagon.Append( *rightline.IntersectLines( toprightline ) );
+    octagon.Append( *topline.IntersectLines( toprightline ) );
+    octagon.Append( *topline.IntersectLines( topleftline ) );
+    octagon.Append( *leftline.IntersectLines( topleftline ) );
 
     return octagon;
 }

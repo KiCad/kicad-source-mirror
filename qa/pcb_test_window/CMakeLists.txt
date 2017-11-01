@@ -75,6 +75,7 @@ target_link_libraries( test_window
     common
     pcbcommon
     bitmaps
+    gal
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}

@@ -25,8 +25,6 @@
 #ifndef __SHAPE_INDEX_LIST_H
 #define __SHAPE_INDEX_LIST_H
 
-#include <boost/unordered_map.hpp>
-
 template <class T>
 const SHAPE* defaultShapeFunctor( const T aItem )
 {

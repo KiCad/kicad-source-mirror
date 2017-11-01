@@ -28,7 +28,7 @@
 
 #include <tool/tool_action.h>
 #include <tool/actions.h>
-#include <boost/optional.hpp>
+#include <core/optional.h>
 
 class TOOL_EVENT;
 class TOOL_MANAGER;
@@ -391,7 +391,7 @@ public:
 
 
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
-    virtual boost::optional<TOOL_EVENT> TranslateLegacyId( int aId ) override;
+    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override;
 
     ///> @copydoc COMMON_ACTIONS::RegisterAllTools()
     virtual void RegisterAllTools( TOOL_MANAGER* aToolManager ) override;

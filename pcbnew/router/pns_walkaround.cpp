@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/optional.hpp>
+#include <core/optional.h>
 
 #include <geometry/shape_line_chain.h>
 
@@ -27,7 +27,6 @@
 #include "pns_optimizer.h"
 #include "pns_utils.h"
 #include "pns_router.h"
-using boost::optional;
 
 namespace PNS {
 
@@ -55,7 +54,7 @@ NODE::OPT_OBSTACLE WALKAROUND::nearestObstacle( const LINE& aPath )
 WALKAROUND::WALKAROUND_STATUS WALKAROUND::singleStep( LINE& aPath,
                                                               bool aWindingDirection )
 {
-    optional<OBSTACLE>& current_obs =
+    OPT<OBSTACLE>& current_obs =
         aWindingDirection ? m_currentObstacle[0] : m_currentObstacle[1];
 
     bool& prev_recursive = aWindingDirection ? m_recursiveCollision[0] : m_recursiveCollision[1];

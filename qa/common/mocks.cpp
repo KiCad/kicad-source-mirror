@@ -28,10 +28,6 @@
  * @brief Pcbnew main program.
  */
 
-#ifdef KICAD_SCRIPTING
- #include <python_scripting.h>
- #include <pcbnew_scripting_helpers.h>
-#endif
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
@@ -51,7 +47,6 @@
 #include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
 #include <class_board.h>
-#include <3d_viewer.h>
 #include <fp_lib_table.h>
 #include <module_editor_frame.h>
 #include <modview_frame.h>

@@ -26,7 +26,7 @@
 
 #include <wizard_add_fplib_base.h>
 #include <io_mgr.h>
-#include <boost/optional.hpp>
+#include <core/optional.h>
 
 class KIWAY_PLAYER;
 
@@ -115,9 +115,9 @@ public:
         /**
          * Function GetPluginType
          * Returns the plugin type, autodetected basing on the path.
-         * @return Returns empty boost::optional if the type could not be autodetected.
+         * @return Returns empty OPT if the type could not be autodetected.
          */
-        inline boost::optional<IO_MGR::PCB_FILE_T> GetPluginType() const
+        inline OPT<IO_MGR::PCB_FILE_T> GetPluginType() const
         {
             return m_plugin;
         }
@@ -194,7 +194,7 @@ public:
 
         wxString m_path;
         wxString m_description;
-        boost::optional<IO_MGR::PCB_FILE_T> m_plugin;
+        OPT<IO_MGR::PCB_FILE_T> m_plugin;
         STATUS m_status;
 
         friend class WIZARD_FPLIB_TABLE;

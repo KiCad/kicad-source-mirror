@@ -26,6 +26,9 @@
 #include "kicad_clipboard.h"
 #include "selection_tool.h"
 #include "pcb_actions.h"
+
+#include <core/optional.h>
+
 #include <tool/tool_manager.h>
 
 #include <class_draw_panel_gal.h>
@@ -467,12 +470,12 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
     pad->SetPrimitives( shapes );
     pad->SetShape ( PAD_SHAPE_CUSTOM );
 
-    boost::optional<VECTOR2I> anchor;
+    OPT<VECTOR2I> anchor;
     VECTOR2I tmp;
 
     if( refPad )
     {
-        anchor = pad->GetPosition();
+        anchor = VECTOR2I( pad->GetPosition() );
     }
     else if( pad->GetBestAnchorPosition( tmp ) )
     {

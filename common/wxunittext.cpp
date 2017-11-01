@@ -29,7 +29,7 @@
 #include <limits>
 #include <base_units.h>
 #include <wx/valnum.h>
-#include <boost/optional.hpp>
+#include <core/optional.h>
 
 WX_UNIT_TEXT::WX_UNIT_TEXT( wxWindow* aParent, const wxString& aLabel, double aValue, double aStep ) :
     wxPanel( aParent, wxID_ANY ),
@@ -109,18 +109,18 @@ void WX_UNIT_TEXT::SetValue( double aValue )
 }
 
 
-boost::optional<double> WX_UNIT_TEXT::GetValue() const
+OPT<double> WX_UNIT_TEXT::GetValue() const
 {
     wxString text = m_inputValue->GetValue();
     double value;
 
     if( text == DEFAULT_VALUE )
-        return boost::optional<double>( -1.0 );
+        return OPT<double>( -1.0 );
 
     if( !text.ToDouble( &value ) )
-        return boost::optional<double>();
+        return OPT<double>();
 
-    return boost::optional<double>( value );
+    return OPT<double>( value );
 }
 
 

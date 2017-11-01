@@ -74,7 +74,7 @@ public:
      * Function GetPoint()
      * Returns picked point.
      */
-    inline boost::optional<VECTOR2D> GetPoint() const
+    inline OPT<VECTOR2D> GetPoint() const
     {
         assert( !m_picking );
         return m_picked;
@@ -108,10 +108,10 @@ private:
     bool m_autoPanning;
 
     ///> Optional mouse click event handler.
-    boost::optional<CLICK_HANDLER> m_clickHandler;
+    OPT<CLICK_HANDLER> m_clickHandler;
 
     ///> Picked point (if any).
-    boost::optional<VECTOR2D> m_picked;
+    OPT<VECTOR2D> m_picked;
 
     ///> Activity status.
     bool m_picking;

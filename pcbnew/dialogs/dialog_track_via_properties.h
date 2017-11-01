@@ -24,7 +24,7 @@
 
 #include <dialogs/dialog_track_via_properties_base.h>
 #include <wx_unit_binder.h>
-#include <boost/optional.hpp>
+#include <core/optional.h>
 #include <layers_id_colors_and_visibility.h>
 
 class SELECTION;
@@ -61,9 +61,9 @@ private:
     ///> Checks if the dialog values are correct.
     bool check() const;
 
-    ///> Sets wxTextEntry to the value stored in boost::optional<T> or "<...>" if it is not available.
+    ///> Sets wxTextEntry to the value stored in OPT<T> or "<...>" if it is not available.
     template<typename T>
-        void setCommonVal( const boost::optional<T>& aVal, wxTextEntry* aTxtEntry, WX_UNIT_BINDER& aBinder )
+        void setCommonVal( const OPT<T>& aVal, wxTextEntry* aTxtEntry, WX_UNIT_BINDER& aBinder )
     {
         if( aVal )
             aBinder.SetValue( *aVal );

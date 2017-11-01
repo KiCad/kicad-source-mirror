@@ -96,10 +96,10 @@ static wxString getFilterString()
 
 
 // Tries to guess the plugin type basing on the path
-static boost::optional<IO_MGR::PCB_FILE_T> getPluginType( const wxString& aPath )
+static OPT<IO_MGR::PCB_FILE_T> getPluginType( const wxString& aPath )
 {
     if( ( aPath.StartsWith( "http://" ) || aPath.StartsWith( "https://" ) ) )
-        return boost::optional<IO_MGR::PCB_FILE_T>( IO_MGR::GITHUB );
+        return OPT<IO_MGR::PCB_FILE_T>( IO_MGR::GITHUB );
 
     wxFileName path( aPath );
 
@@ -127,10 +127,10 @@ static boost::optional<IO_MGR::PCB_FILE_T> getPluginType( const wxString& aPath 
         }
 
         if( ok )
-            return boost::optional<IO_MGR::PCB_FILE_T>( fileFilters[i].m_Plugin );
+            return OPT<IO_MGR::PCB_FILE_T>( fileFilters[i].m_Plugin );
     }
 
-    return boost::none;
+    return NULLOPT;
 }
 
 
@@ -139,7 +139,7 @@ static bool passesFilter( const wxString& aFileName, int aFilterIndex )
 {
     wxASSERT( aFilterIndex <= FILTER_COUNT );
     wxFileName file( aFileName );
-    boost::optional<IO_MGR::PCB_FILE_T> result = getPluginType( aFileName );
+    OPT<IO_MGR::PCB_FILE_T> result = getPluginType( aFileName );
 
     if( !result )               // does not match any supported plugin
         return false;

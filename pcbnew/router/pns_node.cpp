@@ -38,13 +38,11 @@
 #include "pns_index.h"
 #include "pns_router.h"
 
-using boost::unordered_set;
-using boost::unordered_map;
 
 namespace PNS {
 
 #ifdef DEBUG
-static boost::unordered_set<NODE*> allocNodes;
+static std::unordered_set<NODE*> allocNodes;
 #endif
 
 NODE::NODE()
@@ -1082,7 +1080,7 @@ void NODE::unlinkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers,
 void NODE::Dump( bool aLong )
 {
 #if 0
-    boost::unordered_set<SEGMENT*> all_segs;
+    std::unordered_set<SEGMENT*> all_segs;
     SHAPE_INDEX_LIST<ITEM*>::iterator i;
 
     for( i = m_items.begin(); i != m_items.end(); i++ )

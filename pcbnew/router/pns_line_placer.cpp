@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/optional.hpp>
+#include <core/optional.h>
 
 #include "pns_node.h"
 #include "pns_line_placer.h"
@@ -31,8 +31,6 @@
 #include "pns_debug_decorator.h"
 
 #include <class_board_item.h>
-
-using boost::optional;
 
 namespace PNS {
 

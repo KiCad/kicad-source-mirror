@@ -1085,7 +1085,7 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
             txt->SetText( FROM_UTF8( a.value->c_str() ) );
         }
 
-        if( a.x && a.y )    // boost::optional
+        if( a.x && a.y )    // OPT
         {
             wxPoint pos( kicad_x( *a.x ), kicad_y( *a.y ) );
             txt->SetTextPos( pos );

@@ -692,7 +692,7 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
         }
         else if( evt->Action() == TA_CONTEXT_MENU_CHOICE )
         {
-            boost::optional<int> id = evt->GetCommandId();
+            OPT<int> id = evt->GetCommandId();
 
             // User has selected an item, so this one will be returned
             if( id && ( *id > 0 ) )

@@ -690,9 +690,9 @@ void DP_GATEWAYS::BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, bool
             ips[1] = st_p[i].IntersectLines( st_n[j] );
 
             if( d_n[i].Collinear( d_p[j] ) )
-                ips[0] = boost::none;
+                ips[0] = OPT_VECTOR2I();
             if( st_p[i].Collinear( st_p[j] ) )
-                ips[1] = boost::none;
+                ips[1] = OPT_VECTOR2I();
 
             // diagonal-diagonal and straight-straight cases - the most typical case if the pads
             // are on the same straight/diagonal line

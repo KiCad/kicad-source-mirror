@@ -172,7 +172,7 @@ public:
 
     bool HasReferencePoint() const
     {
-        return m_referencePoint != boost::none;
+        return m_referencePoint != NULLOPT;
     }
 
     VECTOR2I GetReferencePoint() const
@@ -187,12 +187,12 @@ public:
 
     void ClearReferencePoint()
     {
-        m_referencePoint = boost::none;
+        m_referencePoint = NULLOPT;
     }
 
 private:
 
-    boost::optional<VECTOR2I> m_referencePoint;
+    OPT<VECTOR2I> m_referencePoint;
 
     /// Set of selected items
     std::set<EDA_ITEM*> m_items;

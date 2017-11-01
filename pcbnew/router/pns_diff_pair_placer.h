@@ -247,7 +247,7 @@ private:
     int m_netP, m_netN;
 
     DP_PRIMITIVE_PAIR m_start;
-    boost::optional<DP_PRIMITIVE_PAIR> m_prevPair;
+    OPT<DP_PRIMITIVE_PAIR> m_prevPair;
 
     ///> current algorithm iteration
     int m_iteration;

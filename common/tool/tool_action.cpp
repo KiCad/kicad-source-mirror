@@ -25,6 +25,8 @@
 #include <tool/tool_action.h>
 #include <tool/action_manager.h>
 
+#include <algorithm>
+
 TOOL_ACTION::TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope,
         int aDefaultHotKey, const wxString aMenuItem, const wxString& aMenuDesc,
         const BITMAP_OPAQUE* aIcon, TOOL_ACTION_FLAGS aFlags, void* aParam ) :

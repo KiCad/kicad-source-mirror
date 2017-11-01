@@ -47,7 +47,7 @@ class FP_THREAD_IFACE
 
     public:
         /// Retrieve a cache entry by LIB_ID
-        boost::optional<CACHE_ENTRY> GetFromCache( LIB_ID const & aFPID )
+        OPT<CACHE_ENTRY> GetFromCache( LIB_ID const & aFPID )
         {
             MUTLOCK lock( m_lock );
             auto it = m_cachedFootprints.find( aFPID );
@@ -55,7 +55,7 @@ class FP_THREAD_IFACE
             if( it != m_cachedFootprints.end() )
                 return it->second;
             else
-                return boost::none;
+                return NULLOPT;
         }
 
         /**
@@ -74,13 +74,13 @@ class FP_THREAD_IFACE
         }
 
         /// Pop an entry from the queue, or empty option if none is available.
-        boost::optional<CACHE_ENTRY> PopFromQueue()
+        OPT<CACHE_ENTRY> PopFromQueue()
         {
             MUTLOCK lock( m_lock );
 
             if( m_loaderQueue.empty() )
             {
-                return boost::none;
+                return NULLOPT;
             }
             else
             {

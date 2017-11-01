@@ -27,7 +27,7 @@
 #define __ACTIONS_H
 
 #include <tool/tool_action.h>
-#include <boost/optional.hpp>
+#include <core/optional.h>
 
 class TOOL_EVENT;
 class TOOL_MANAGER;
@@ -73,7 +73,7 @@ public:
      * @return std::string is name of the corresponding TOOL_ACTION. It may be empty, if there is
      * no corresponding TOOL_ACTION.
      */
-    virtual boost::optional<TOOL_EVENT> TranslateLegacyId( int aId ) = 0;
+    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) = 0;
 
     ///> Registers all valid tools for an application with the tool manager
     virtual void RegisterAllTools( TOOL_MANAGER* aToolManager ) = 0;

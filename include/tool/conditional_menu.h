@@ -26,7 +26,6 @@
 #define CONDITIONAL_MENU_H
 
 #include "selection_conditions.h"
-#include <boost/unordered_map.hpp>
 #include <list>
 #include <wx/wx.h>
 

@@ -329,7 +329,7 @@ public:
      * The pause/resume operation is done through COROUTINE object.
      * Called only from coroutines.
      */
-    boost::optional<TOOL_EVENT> ScheduleWait( TOOL_BASE* aTool,
+    OPT<TOOL_EVENT> ScheduleWait( TOOL_BASE* aTool,
             const TOOL_EVENT_LIST& aConditions );
 
     /**
@@ -514,7 +514,7 @@ private:
     ACTION_MANAGER* m_actionMgr;
 
     /// Original cursor position, if overridden by the context menu handler
-    boost::optional<VECTOR2D> m_origCursor;
+    OPT<VECTOR2D> m_origCursor;
 
     EDA_ITEM* m_model;
     KIGFX::VIEW* m_view;

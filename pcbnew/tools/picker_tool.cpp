@@ -47,7 +47,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     assert( !m_picking );
     m_picking = true;
-    m_picked = boost::none;
+    m_picked = NULLOPT;
 
     setControls();
 
@@ -62,8 +62,8 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             bool getNext = false;
 
-            m_picked = p;
-            
+            m_picked = VECTOR2D( p );
+
             if( m_clickHandler )
             {
                 try
@@ -112,7 +112,7 @@ void PICKER_TOOL::reset()
     m_autoPanning = false;
 
     m_picking = false;
-    m_clickHandler = boost::none;
+    m_clickHandler = NULLOPT;
 }
 
 

@@ -25,7 +25,7 @@
 #include "dialog_track_via_size.h"
 #include <base_units.h>
 #include <confirm.h>
-#include <boost/optional.hpp>
+#include <core/optional.h>
 
 #include "class_board_design_settings.h"
 

@@ -29,10 +29,9 @@
 #include <climits>
 
 #include <math/vector2d.h>
+#include <core/optional.h>
 
-#include <boost/optional/optional.hpp>
-
-typedef boost::optional<VECTOR2I> OPT_VECTOR2I;
+typedef OPT<VECTOR2I> OPT_VECTOR2I;
 
 class SEG
 {

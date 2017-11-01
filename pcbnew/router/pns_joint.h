@@ -23,7 +23,6 @@
 #define __PNS_JOINT_H
 
 #include <vector>
-#include <boost/functional/hash.hpp>
 
 #include <math/vector2d.h>
 
@@ -52,6 +51,20 @@ public:
     {
         VECTOR2I pos;
         int net;
+    };
+
+    struct JOINT_TAG_HASH
+    {
+        std::size_t operator()( const JOINT::HASH_TAG& aP ) const
+        {
+            using std::size_t;
+            using std::hash;
+            using std::string;
+
+            return ( (hash<int>()( aP.pos.x )
+                      ^ (hash<int>()( aP.pos.y ) << 1) ) >> 1 )
+                   ^ (hash<int>()( aP.net ) << 1);
+        }
     };
 
     JOINT() :
@@ -247,16 +260,6 @@ private:
 inline bool operator==( JOINT::HASH_TAG const& aP1, JOINT::HASH_TAG const& aP2 )
 {
     return aP1.pos == aP2.pos && aP1.net == aP2.net;
-}
-
-inline std::size_t hash_value( JOINT::HASH_TAG const& aP )
-{
-    std::size_t seed = 0;
-    boost::hash_combine( seed, aP.pos.x );
-    boost::hash_combine( seed, aP.pos.y );
-    boost::hash_combine( seed, aP.net );
-
-    return seed;
 }
 
 }

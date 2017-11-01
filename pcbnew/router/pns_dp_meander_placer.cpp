@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/optional.hpp>
+#include <core/optional.h>
 
 #include <base_units.h> // God forgive me doing this...
 
@@ -32,8 +32,6 @@
 #include "pns_utils.h"
 
 namespace PNS {
-
-using boost::optional;
 
 DP_MEANDER_PLACER::DP_MEANDER_PLACER( ROUTER* aRouter ) :
     MEANDER_PLACER_BASE( aRouter )

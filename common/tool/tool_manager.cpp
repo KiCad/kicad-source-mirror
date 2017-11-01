@@ -27,7 +27,7 @@
 #include <stack>
 #include <algorithm>
 
-#include <boost/optional.hpp>
+#include <core/optional.h>
 
 #include <wx/event.h>
 #include <wx/clipbrd.h>
@@ -43,8 +43,6 @@
 
 #include <wxPcbStruct.h>
 #include <class_draw_panel_gal.h>
-
-using boost::optional;
 
 /// Struct describing the current execution state of a TOOL
 struct TOOL_MANAGER::TOOL_STATE
@@ -494,7 +492,7 @@ void TOOL_MANAGER::RunMainStack( TOOL_BASE* aTool, std::function<void()> aFunc )
 }
 
 
-optional<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
+OPT<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
                                                  const TOOL_EVENT_LIST& aConditions )
 {
     TOOL_STATE* st = m_toolState[aTool];
@@ -632,7 +630,6 @@ bool TOOL_MANAGER::dispatchActivation( const TOOL_EVENT& aEvent )
     return false;
 }
 
-
 void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
 {
     // Store the current tool ID to decide whether to restore the cursor position
@@ -703,10 +700,10 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
         if( activeTool == GetCurrentToolId() )
         {
             m_viewControls->ForceCursorPosition( (bool) m_origCursor,
-                    m_origCursor.get_value_or( VECTOR2D( 0, 0 ) ) );
+                    m_origCursor.value_or( VECTOR2D( 0, 0 ) ) );
         }
 
-        m_origCursor = boost::none;
+        m_origCursor = NULLOPT;
         break;
     }
 }

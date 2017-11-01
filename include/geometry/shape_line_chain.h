@@ -29,7 +29,7 @@
 #include <vector>
 #include <sstream>
 
-#include <boost/optional.hpp>
+#include <core/optional.h>
 
 #include <math/vector2d.h>
 #include <geometry/shape.h>
@@ -538,7 +538,7 @@ public:
      * Checks if the line chain is self-intersecting.
      * @return (optional) first found self-intersection point.
      */
-    const boost::optional<INTERSECTION> SelfIntersecting() const;
+    const OPT<INTERSECTION> SelfIntersecting() const;
 
     /**
      * Function Simplify()

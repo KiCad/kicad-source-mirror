@@ -47,16 +47,16 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     wxASSERT( !m_items.Empty() );
 
     // This is a way to trick gcc into considering these variables as initialized
-    boost::optional<int> trackStartX = boost::make_optional<int>( false, 0 );
-    boost::optional<int> trackStartY = boost::make_optional<int>( false, 0 );
-    boost::optional<int> trackEndX = boost::make_optional<int>( false, 0 );
-    boost::optional<int> trackEndY = boost::make_optional<int>( false, 0 );
-    boost::optional<int> trackWidth = boost::make_optional<int>( false, 0 );
-    boost::optional<PCB_LAYER_ID> trackLayer = boost::make_optional<PCB_LAYER_ID>( false, (PCB_LAYER_ID) 0 );
-    boost::optional<int> viaX = boost::make_optional<int>( false, 0 );
-    boost::optional<int> viaY = boost::make_optional<int>( false, 0 );
-    boost::optional<int> viaDiameter = boost::make_optional<int>( false, 0 );
-    boost::optional<int> viaDrill = boost::make_optional<int>( false, 0 );
+    OPT<int> trackStartX = NULLOPT;
+    OPT<int> trackStartY = NULLOPT;
+    OPT<int> trackEndX = NULLOPT;
+    OPT<int> trackEndY = NULLOPT;
+    OPT<int> trackWidth = NULLOPT;
+    OPT<PCB_LAYER_ID> trackLayer = NULLOPT;
+    OPT<int> viaX = NULLOPT;
+    OPT<int> viaY = NULLOPT;
+    OPT<int> viaDiameter = NULLOPT;
+    OPT<int> viaDrill = NULLOPT;
 
     m_haveUniqueNet = true;
     int prevNet = -1;
@@ -112,22 +112,22 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                 else        // check if values are the same for every selected track
                 {
                     if( trackStartX && ( *trackStartX != t->GetStart().x ) )
-                        trackStartX = boost::none;
+                        trackStartX = NULLOPT;
 
                     if( trackStartY && ( *trackStartY != t->GetStart().y ) )
-                        trackStartY = boost::none;
+                        trackStartY = NULLOPT;
 
                     if( trackEndX && ( *trackEndX != t->GetEnd().x ) )
-                        trackEndX = boost::none;
+                        trackEndX = NULLOPT;
 
                     if( trackEndY && ( *trackEndY != t->GetEnd().y ) )
-                        trackEndY = boost::none;
+                        trackEndY = NULLOPT;
 
                     if( trackWidth && ( *trackWidth != t->GetWidth() ) )
-                        trackWidth = boost::none;
+                        trackWidth = NULLOPT;
 
                     if( trackLayer && ( *trackLayer != t->GetLayer() ) )
-                        trackLayer = boost::none;
+                        trackLayer = NULLOPT;
                 }
 
                 if( t->IsLocked() )
@@ -153,16 +153,16 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                 else        // check if values are the same for every selected via
                 {
                     if( viaX && ( *viaX != v->GetPosition().x ) )
-                        viaX = boost::none;
+                        viaX = NULLOPT;
 
                     if( viaY && ( *viaY != v->GetPosition().y ) )
-                        viaY = boost::none;
+                        viaY = NULLOPT;
 
                     if( viaDiameter && ( *viaDiameter != v->GetWidth() ) )
-                        viaDiameter = boost::none;
+                        viaDiameter = NULLOPT;
 
                     if( viaDrill && ( *viaDrill != v->GetDrillValue() ) )
-                        viaDrill = boost::none;
+                        viaDrill = NULLOPT;
                 }
 
                 if( v->IsLocked() )

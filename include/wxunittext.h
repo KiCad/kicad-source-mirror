@@ -80,7 +80,7 @@ public:
      * Function GetValue
      * Returns the current value in currently used units.
      */
-    virtual boost::optional<double> GetValue() const;
+    virtual OPT<double> GetValue() const;
 
     /**
      * Function GetUnits

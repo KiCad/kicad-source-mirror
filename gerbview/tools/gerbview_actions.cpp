@@ -36,7 +36,7 @@ void GERBVIEW_ACTIONS::RegisterAllTools( TOOL_MANAGER* aToolManager )
     aToolManager->RegisterTool( new ZOOM_TOOL );
 }
 
-boost::optional<TOOL_EVENT> GERBVIEW_ACTIONS::TranslateLegacyId( int aId )
+OPT<TOOL_EVENT> GERBVIEW_ACTIONS::TranslateLegacyId( int aId )
 {
     switch( aId )
     {
@@ -72,5 +72,5 @@ boost::optional<TOOL_EVENT> GERBVIEW_ACTIONS::TranslateLegacyId( int aId )
         break;
     }
 
-    return boost::optional<TOOL_EVENT>();
+    return OPT<TOOL_EVENT>();
 }

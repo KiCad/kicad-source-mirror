@@ -103,9 +103,9 @@ public:
 
     virtual ~TEST_ACTIONS() {};
 
-    virtual boost::optional<TOOL_EVENT> TranslateLegacyId( int aId )
+    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId )
     {
-        return boost::none;
+        return NULLOPT;
     }
 
     void RegisterAllTools( TOOL_MANAGER* aToolManager )

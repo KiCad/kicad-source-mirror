@@ -36,8 +36,7 @@
 #include <common.h>                             // KiROUND
 #include <convert_to_biu.h>                     // IU_PER_MM
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
+#include <unordered_map>
 
 
 class BOARD;
@@ -65,8 +64,8 @@ struct LAYER;
  */
 class PCB_PARSER : public PCB_LEXER
 {
-    typedef boost::unordered_map< std::string, PCB_LAYER_ID >   LAYER_ID_MAP;
-    typedef boost::unordered_map< std::string, LSET >       LSET_MAP;
+    typedef std::unordered_map< std::string, PCB_LAYER_ID >   LAYER_ID_MAP;
+    typedef std::unordered_map< std::string, LSET >       LSET_MAP;
 
     BOARD*              m_board;
     LAYER_ID_MAP        m_layerIndices;     ///< map layer name to it's index

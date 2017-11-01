@@ -26,7 +26,7 @@
 #define __DRAWING_TOOL_H
 
 #include <tools/pcb_tool.h>
-#include <boost/optional.hpp>
+#include <core/optional.h>
 
 #include <tool/tool_menu.h>
 
@@ -206,7 +206,7 @@ private:
     ///> @return False if the tool was cancelled before the origin was set or origin and end are
     ///> the same point.
     bool drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
-                      boost::optional<VECTOR2D> aStartingPoint = boost::none );
+                      OPT<VECTOR2D> aStartingPoint = NULLOPT );
 
     ///> Starts drawing an arc.
     ///> @param aGraphic is an object that is going to be used by the tool for drawing. It has to

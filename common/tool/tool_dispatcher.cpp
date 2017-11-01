@@ -35,7 +35,7 @@
 #include <class_draw_panel_gal.h>
 #include <pcbnew_id.h>
 
-#include <boost/optional.hpp>
+#include <core/optional.h>
 
 ///> Stores information about a mouse button state
 struct TOOL_DISPATCHER::BUTTON_STATE
@@ -154,7 +154,7 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
 {
     BUTTON_STATE* st = m_buttons[aIndex];
     wxEventType type = aEvent.GetEventType();
-    boost::optional<TOOL_EVENT> evt;
+    OPT<TOOL_EVENT> evt;
     bool isClick = false;
 
 //    bool up = type == st->upEvent;
@@ -307,7 +307,7 @@ int translateSpecialCode( int aKeyCode )
 void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 {
     bool motion = false, buttonEvents = false;
-    boost::optional<TOOL_EVENT> evt;
+    OPT<TOOL_EVENT> evt;
     int key = 0;    // key = 0 if the event is not a key event
     bool keyIsSpecial = false;  // True if the key is a special key code
 
@@ -436,7 +436,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
 void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
 {
-    boost::optional<TOOL_EVENT> evt = m_actions->TranslateLegacyId( aEvent.GetId() );
+    OPT<TOOL_EVENT> evt = m_actions->TranslateLegacyId( aEvent.GetId() );
 
     if( evt )
         m_toolMgr->ProcessEvent( *evt );
