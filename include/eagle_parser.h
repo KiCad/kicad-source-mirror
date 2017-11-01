@@ -981,7 +981,7 @@ struct ECONNECT
     string  gate;
     string  pin;
     string  pad;
-    int contactroute;
+    //int contactroute; // TODO
 
     ECONNECT( wxXmlNode* aConnect );
 };

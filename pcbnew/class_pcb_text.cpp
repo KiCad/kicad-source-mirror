@@ -69,6 +69,11 @@ void TEXTE_PCB::SetTextAngle( double aAngle )
 void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                       GR_DRAWMODE DrawMode, const wxPoint& offset )
 {
+    wxASSERT( panel );
+
+    if( !panel )
+        return;
+
     BOARD* brd = GetBoard();
 
     if( brd->IsLayerVisible( m_Layer ) == false )
@@ -78,8 +83,7 @@ void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     auto color = frame->Settings().Colors().GetLayerColor( m_Layer );
 
     EDA_DRAW_MODE_T fillmode = FILLED;
-    DISPLAY_OPTIONS* displ_opts =
-        panel ? (DISPLAY_OPTIONS*)panel->GetDisplayOptions() : NULL;
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
 
     if( displ_opts && displ_opts->m_DisplayDrawItemsFill == SKETCH )
         fillmode = SKETCH;

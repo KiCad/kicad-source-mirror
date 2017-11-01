@@ -69,7 +69,8 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     GAL( aDisplayOptions ),
     wxGLCanvas( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
                 wxEXPAND, aName ),
-    mouseListener( aMouseListener ), paintListener( aPaintListener )
+    mouseListener( aMouseListener ), paintListener( aPaintListener ), currentManager( nullptr ),
+    cachedManager( nullptr ), nonCachedManager( nullptr ), overlayManager( nullptr )
 {
     if( glMainContext == NULL )
     {
@@ -1537,6 +1538,7 @@ int OPENGL_GAL::drawBitmapChar( unsigned long aChar )
     const float TEX_Y = font_image.height;
 
     const FONT_GLYPH_TYPE* glyph = LookupGlyph(aChar);
+    wxASSERT( glyph );
 
     if( !glyph ) return 0;
 
@@ -1592,6 +1594,11 @@ void OPENGL_GAL::drawBitmapOverbar( double aLength, double aHeight )
 {
     // To draw an overbar, simply draw an overbar
     const FONT_GLYPH_TYPE* glyph = LookupGlyph( '_' );
+    wxASSERT( glyph );
+
+    if( !glyph )
+        return;
+
     const float H = glyph->maxy - glyph->miny;
 
     Save();
@@ -1642,6 +1649,7 @@ std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const wxString& aT
         unsigned int c = aText[i];
 
         const FONT_GLYPH_TYPE* glyph = LookupGlyph( c );
+        wxASSERT( glyph );
 
         // a few chars
         if( !glyph || // Not coded in font

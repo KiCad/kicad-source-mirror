@@ -934,10 +934,6 @@ ECONNECT::ECONNECT( wxXmlNode* aConnect )
     gate =  parseRequiredAttribute<string>( aConnect, "gate" );
     pin =  parseRequiredAttribute<string>( aConnect, "pin" );
     pad = parseRequiredAttribute<string>( aConnect, "pad" );
-
-    //TODO:
-    //int contactroute;
-
 };
 
 

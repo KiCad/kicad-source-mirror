@@ -41,7 +41,10 @@ CLIPBOARD_IO::CLIPBOARD_IO():
 }
 
 
-CLIPBOARD_IO::~CLIPBOARD_IO(){}
+CLIPBOARD_IO::~CLIPBOARD_IO()
+{
+    delete m_parser;
+}
 
 
 STRING_FORMATTER* CLIPBOARD_IO::GetFormatter()
@@ -303,6 +306,7 @@ BOARD* CLIPBOARD_IO::Load( const wxString& aFileName,
     {
         board = dynamic_cast<BOARD*>( item );
     }
+
     // Give the filename to the board if it's new
     if( !aAppendToMe )
         board->SetFileName( aFileName );

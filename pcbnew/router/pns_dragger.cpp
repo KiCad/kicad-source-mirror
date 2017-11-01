@@ -37,6 +37,7 @@ DRAGGER::DRAGGER( ROUTER* aRouter ) :
     m_dragStatus = false;
     m_currentMode = RM_MarkObstacles;
     m_initialVia = NULL;
+    m_freeAngleMode = false;
 }
 
 

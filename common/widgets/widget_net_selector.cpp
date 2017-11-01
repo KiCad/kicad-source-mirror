@@ -30,15 +30,16 @@
 
 WIDGET_NET_SELECTOR::WIDGET_NET_SELECTOR (wxWindow *parent, wxWindowID id, const wxString &value, const wxPoint &pos, const wxSize &size,
     int n, const wxString choices[], long style, const wxValidator &validator, const wxString &name ) :
-    wxComboBox ( parent, id, value, pos, size, n, choices,  style, validator, name )
+    wxComboBox( parent, id, value, pos, size, n, choices, style, validator, name ),
+    m_multiple( false )
 {
-
 }
+
 
 WIDGET_NET_SELECTOR::~WIDGET_NET_SELECTOR()
 {
-
 }
+
 
 void WIDGET_NET_SELECTOR::SetMultiple( bool aMultiple )
 {
@@ -50,6 +51,7 @@ void WIDGET_NET_SELECTOR::SetMultiple( bool aMultiple )
         SetSelection( k );
     }
 }
+
 
 void WIDGET_NET_SELECTOR::SetSelectedNet ( int aNetcode )
 {
@@ -63,9 +65,11 @@ void WIDGET_NET_SELECTOR::SetSelectedNet ( int aNetcode )
     }
 }
 
+
 int WIDGET_NET_SELECTOR::GetSelectedNet()
 {
     int pos = GetSelection();
+
     for( const auto& n : m_nets )
     {
         if( n.pos == pos )
@@ -75,6 +79,7 @@ int WIDGET_NET_SELECTOR::GetSelectedNet()
     return 0;
 }
 
+
 bool WIDGET_NET_SELECTOR::IsUniqueNetSelected() const
 {
     if( m_multiple && ( GetSelection() == ( (int)GetCount() - 1 ) ) )
@@ -83,16 +88,17 @@ bool WIDGET_NET_SELECTOR::IsUniqueNetSelected() const
     return true;
 }
 
+
 void WIDGET_NET_SELECTOR::SetBoard( BOARD* aBoard )
 {
     auto& netinfo = aBoard->GetNetInfo();
 
-    Append( wxT( "<no net>" ));
+    Append( wxT( "<no net>" ) );
 
-    for(unsigned i = 1; i < netinfo.GetNetCount(); i++)
+    for( unsigned i = 1; i < netinfo.GetNetCount(); i++ )
     {
-        NETINFO_ITEM *ni = netinfo.GetNetItem(i);
-        NET n;
+        NETINFO_ITEM* ni = netinfo.GetNetItem( i );
+        NET           n;
         n.name = ni->GetNetname();
         n.code = i;
         m_nets.push_back( n );
@@ -100,7 +106,7 @@ void WIDGET_NET_SELECTOR::SetBoard( BOARD* aBoard )
 
     std::sort( m_nets.begin(), m_nets.end() );
 
-    for ( auto& n : m_nets )
+    for( auto& n : m_nets )
     {
         n.pos = Append( n.name );
     }
