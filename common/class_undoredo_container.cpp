@@ -26,8 +26,6 @@
 #include <fctsys.h>
 #include <common.h>
 #include <base_struct.h>
-
-#include <base_struct.h>
 #include <class_undoredo_container.h>
 
 
