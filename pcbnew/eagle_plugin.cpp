@@ -1482,14 +1482,6 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
     ERECT        r( aTree );
     PCB_LAYER_ID layer = kicad_layer( r.layer );
 
-    // Rectangles are not supported yet in footprints as they are not editable.
-    wxLogMessage( wxString::Format( "Unsupported rectangle in package %s"
-                " (%f mm, %f mm) (%f mm, %f mm), layer: %s",
-            aModule->GetFPID().GetLibItemName().c_str(), r.x1.ToMm(), r.y1.ToMm(),
-            r.x2.ToMm(), r.y2.ToMm(), eagle_layer_name( r.layer ) ) );
-
-    return;
-
     if( IsCopperLayer( layer ) )  // skip copper "package.circle"s
     {
         wxLogMessage( wxString::Format(
