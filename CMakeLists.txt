@@ -317,10 +317,6 @@ if( KICAD_SPICE )
     add_definitions( -DKICAD_SPICE )
 endif()
 
-if( KICAD_USE_SCH_IO_MANAGER )
-    add_definitions( -DKICAD_USE_SCH_IO_MANAGER )
-endif()
-
 if( KICAD_USE_OCE )
     add_definitions( -DKICAD_USE_OCE )
 endif()
