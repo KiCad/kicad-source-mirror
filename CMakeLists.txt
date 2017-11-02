@@ -770,6 +770,7 @@ if( UNIX )
     install( DIRECTORY scripts
         DESTINATION ${KICAD_DOCS}
         COMPONENT resources
+        PATTERN "*.bat" EXCLUDE
         )
 endif()
 
