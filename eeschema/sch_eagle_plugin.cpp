@@ -297,7 +297,6 @@ SCH_EAGLE_PLUGIN::SCH_EAGLE_PLUGIN()
     m_kiway = nullptr;
     m_rootSheet = nullptr;
     m_currentSheet = nullptr;
-    m_partlib = nullptr;
 }
 
 
