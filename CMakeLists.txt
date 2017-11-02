@@ -376,9 +376,9 @@ if( NOT APPLE )
             CACHE PATH "Location of KiCad user-loaded plugins" )
     endif()
 
-    set( KICAD_DATA share/kicad
+    set( KICAD_DATA ${CMAKE_INSTALL_DATADIR}/kicad
         CACHE PATH "Location of KiCad data files." )
-    set( KICAD_DOCS share/doc/kicad
+    set( KICAD_DOCS ${CMAKE_INSTALL_DATADIR}/doc/kicad
         CACHE PATH "Location of KiCad documentation files." )
     set( KICAD_DEMOS ${KICAD_DATA}/demos
         CACHE PATH "Location of KiCad demo files." )
