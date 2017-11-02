@@ -66,9 +66,6 @@ static double SchematicZoomList[] =
     13.0, 16.0, 20.0, 26.0, 32.0, 48.0, 64.0, 80.0, 128.0
 };
 
-#define MM_TO_SCH_UNITS 1000.0 / 25.4       //schematic internal unites are mils
-
-
 /* Default grid sizes for the schematic editor.
  * Do NOT add others values (mainly grid values in mm), because they
  * can break the schematic: Because wires and pins are considered as
