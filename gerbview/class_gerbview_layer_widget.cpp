@@ -367,7 +367,7 @@ void GERBER_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 /*
  * Virtual Function useAlternateBitmap
  * return true if bitmaps shown in Render layer list
- * must be alternate bitmap (when a gerber iùmage is loaded), or false to use "normal" bitmap
+ * must be alternate bitmap (when a gerber image is loaded), or false to use "normal" bitmap
  */
 bool GERBER_LAYER_WIDGET::useAlternateBitmap(int aRow)
 {
