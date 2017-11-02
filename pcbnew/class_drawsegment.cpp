@@ -102,7 +102,7 @@ void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, double aAngle )
                 + ShowShape( m_Shape ) ) );
         break;
     }
-};
+}
 
 void DRAWSEGMENT::Flip( const wxPoint& aCentre )
 {

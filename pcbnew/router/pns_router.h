@@ -42,7 +42,7 @@ namespace KIGFX
 class VIEW;
 class VIEW_GROUP;
 
-};
+}
 
 namespace PNS {
 

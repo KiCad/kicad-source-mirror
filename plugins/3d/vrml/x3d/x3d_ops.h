@@ -48,7 +48,7 @@ namespace X3D
     bool ParseSFVec3( const wxString& aSource, WRLVEC3F& aResult );
     bool ParseSFRotation( const wxString& aSource, WRLROTATION& aResult );
 
-};
+}
 
 #endif  // X3D_OPS_H
 

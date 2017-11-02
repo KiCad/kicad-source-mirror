@@ -105,7 +105,7 @@ private:
 
     void OnRightClick( wxMouseEvent &event );
 
-    DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE()
 
 
 private:

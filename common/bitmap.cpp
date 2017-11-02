@@ -132,7 +132,7 @@ wxMenuItem* AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId,
     aMenu->Append( item );
 
     return item;
-};
+}
 
 
 wxMenuItem* AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId,
@@ -153,4 +153,4 @@ wxMenuItem* AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId,
     aMenu->Append( item );
 
     return item;
-};
+}

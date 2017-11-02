@@ -181,7 +181,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
             break;
         }
     }
-};
+}
 
 
 bool ZONE_CREATE_HELPER::OnFirstPoint()

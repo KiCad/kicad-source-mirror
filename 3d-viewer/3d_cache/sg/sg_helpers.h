@@ -242,6 +242,6 @@ namespace S3D
 
     // read an RGB color
     bool ReadColor( std::istream& aFile, SGCOLOR& aColor );
-};
+}
 
 #endif  // SG_HELPERS_H

@@ -36,7 +36,7 @@ class ACTIONS;
 namespace KIGFX
 {
 class VIEW;
-};
+}
 
 /**
  * Class TOOL_DISPATCHER

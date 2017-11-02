@@ -1288,13 +1288,13 @@ mpScaleXBase::mpScaleXBase( wxString name, int flags, bool ticks, unsigned int t
 mpScaleX::mpScaleX( wxString name, int flags, bool ticks, unsigned int type ) :
     mpScaleXBase( name, flags, ticks, type )
 {
-};
+}
 
 
 mpScaleXLog::mpScaleXLog( wxString name, int flags, bool ticks, unsigned int type ) :
     mpScaleXBase( name, flags, ticks, type )
 {
-};
+}
 
 
 void mpScaleXBase::Plot( wxDC& dc, mpWindow& w )
@@ -2701,7 +2701,7 @@ void mpWindow::SetMPScrollbars( bool status )
     ////         SetVirtualSize((int) (m_maxX - m_minX), (int) (m_maxY - m_minY));
     // }
     // Refresh(false);*/
-};
+}
 
 bool mpWindow::UpdateBBox()
 {

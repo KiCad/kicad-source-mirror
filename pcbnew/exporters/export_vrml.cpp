@@ -1618,7 +1618,7 @@ static SGNODE* getSGColor( VRML_COLOR_INDEX colorIdx )
     sgmaterial[colorIdx] = vcolor.GetRawPtr();
 
     return sgmaterial[colorIdx];
-};
+}
 
 
 static void create_vrml_plane( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX colorID,

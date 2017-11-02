@@ -172,4 +172,4 @@ void SCH_IO_MGR::Save( SCH_FILE_T aFileType, const wxString& aFileName,
 }
 
 
-DECLARE_ENUM_VECTOR( SCH_IO_MGR, SCH_FILE_T );
+DECLARE_ENUM_VECTOR( SCH_IO_MGR, SCH_FILE_T )

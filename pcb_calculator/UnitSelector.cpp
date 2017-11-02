@@ -40,7 +40,7 @@ UNIT_SELECTOR_LEN::UNIT_SELECTOR_LEN( wxWindow *parent, wxWindowID id,
     Append( _( "cm" ) );
     Append( _( "mil" ) );
     Append( _( "inch" ) );
-};
+}
 
 
 /*
@@ -73,7 +73,7 @@ UNIT_SELECTOR_THICKNESS::UNIT_SELECTOR_THICKNESS( wxWindow *parent, wxWindowID i
     Append( _( "mil" ) );
     Append( _( "inch" ) );
     Append( _( "oz/ft^2" ) );
-};
+}
 
 
 /*
@@ -105,7 +105,7 @@ UNIT_SELECTOR_FREQUENCY::UNIT_SELECTOR_FREQUENCY( wxWindow *parent, wxWindowID i
     Append( _( "MHz" ) );
     Append( _( "KHz" ) );
     Append( _( "Hz" ) );
-};
+}
 
 /*
  * Function GetUnitScale
@@ -132,7 +132,7 @@ UNIT_SELECTOR_ANGLE::UNIT_SELECTOR_ANGLE( wxWindow *parent, wxWindowID id,
 {
     Append( _( "Radian" ) );
     Append( _( "Degree" ) );
-};
+}
 
 /*
  * Function GetUnitScale
@@ -157,7 +157,7 @@ UNIT_SELECTOR_RESISTOR::UNIT_SELECTOR_RESISTOR( wxWindow *parent, wxWindowID id,
 {
     Append( _( "Ohm" ) );
     Append( _( "KOhm" ) );
-};
+}
 
 
 /*

@@ -169,7 +169,7 @@ static SGNODE* getColor( IFSG_SHAPE& shape, int colorIdx )
         cidx = 1;
 
     return material.GetRawPtr();
-};
+}
 
 
 const char* GetKicadPluginName( void )

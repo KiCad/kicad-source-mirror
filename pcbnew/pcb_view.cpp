@@ -107,4 +107,4 @@ void PCB_VIEW::UpdateDisplayOptions( PCB_DISPLAY_OPTIONS* aOptions )
 
     settings->LoadDisplayOptions( aOptions );
 }
-};
+}
