@@ -771,10 +771,6 @@ add_custom_target( uninstall
 # Installation
 #================================================
 
-install( FILES INSTALL.txt
-    DESTINATION ${KICAD_DOCS}
-    COMPONENT resources )
-
 ###
 # Install scripts
 ###
