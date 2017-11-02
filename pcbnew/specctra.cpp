@@ -2799,6 +2799,7 @@ void SPECCTRA_DB::doWIRE( WIRE* growth )
 
         case T_polyline_path:
             tok = T_path;
+            // Fall through
         case T_path:
         case T_polygon:
             if( growth->shape )

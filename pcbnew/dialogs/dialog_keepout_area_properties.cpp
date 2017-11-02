@@ -221,7 +221,7 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::OnLayerSelection( wxDataViewEvent& event )
     BOARD* board = m_parent->GetBoard();
     LSEQ cu_stack = LSET::AllCuMask( board->GetCopperLayerCount() ).UIOrder();
 
-    if( row < (int)cu_stack.size() )
+    if( row >= 0 && row < (int)cu_stack.size() )
     {
         m_zonesettings.m_Layers.set( cu_stack[ row ], selected );
     }

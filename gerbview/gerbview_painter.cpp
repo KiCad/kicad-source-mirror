@@ -103,15 +103,15 @@ const COLOR4D& GERBVIEW_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int a
             return m_layerColorsSel[aLayer];
     }
 
-    if( !m_netHighlightString.IsEmpty() &&
+    if( !m_netHighlightString.IsEmpty() && item &&
         m_netHighlightString == item->GetNetAttributes().m_Netname )
         return m_layerColorsHi[aLayer];
 
-    if( !m_componentHighlightString.IsEmpty() &&
+    if( !m_componentHighlightString.IsEmpty() && item &&
         m_componentHighlightString == item->GetNetAttributes().m_Cmpref )
         return m_layerColorsHi[aLayer];
 
-    if( !m_attributeHighlightString.IsEmpty() && item->GetDcodeDescr() &&
+    if( !m_attributeHighlightString.IsEmpty() && item && item->GetDcodeDescr() &&
         m_attributeHighlightString == item->GetDcodeDescr()->m_AperFunction )
         return m_layerColorsHi[aLayer];
 
