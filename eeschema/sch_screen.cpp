@@ -559,6 +559,7 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
      * library editor and library viewer do not use m_drawList, and therefore
      * their SCH_SCREEN::Draw() draws nothing
      */
+    std::vector< SCH_ITEM* > junctions;
 
     // Ensure links are up to date, even if a library was reloaded for some reason:
     UpdateSymbolLinks();
@@ -568,10 +569,16 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
         if( item->IsMoving() || item->IsResized() )
             continue;
 
-        // uncomment line below when there is a virtual EDA_ITEM::GetBoundingBox()
-        // if( panel->GetClipBox().Intersects( item->GetBoundingBox() ) )
-        item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), aDrawMode, aColor );
+        if( item->Type() == SCH_JUNCTION_T )
+            junctions.push_back( item );
+        else
+            // uncomment line below when there is a virtual EDA_ITEM::GetBoundingBox()
+            // if( panel->GetClipBox().Intersects( item->GetBoundingBox() ) )
+            item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), aDrawMode, aColor );
     }
+
+    for( auto item : junctions )
+        item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), aDrawMode, aColor );
 }
 
 
