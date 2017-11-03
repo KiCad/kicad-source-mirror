@@ -2,7 +2,7 @@
 * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Oliver Walters
- * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,11 +60,38 @@ class BOM_FIELD_VALUES
 public:
     BOM_FIELD_VALUES( wxString aRefDes, FIELD_VALUE_MAP* aTemplate );
 
+    /**
+     * Return the current value for the provided field ID
+     * @return true if the field exists
+     * @param aFieldId = the field index
+     * @param aValue = a string to return the field value
+     */
     bool GetFieldValue( unsigned int aFieldId, wxString& aValue ) const;
+
+    /**
+     * Return the backup value for the provided field ID
+     * @return true if the field exists
+     * @param aFieldId = the field index
+     * @param aValue = a string to return the field backup value
+     */
     bool GetBackupValue( unsigned int aFieldId, wxString& aValue ) const;
+
+    /**
+     * Return the template value for a provided field ID (if it exists)
+     * @return true if the field exists
+     * @param aFieldId = the field index
+     * @param aValue = a string to return the field template value
+     */
     bool GetTemplateValue( unsigned int aFieldId, wxString& aValue ) const;
 
-    void SetFieldValue( unsigned int aFieldId, wxString aValue, bool aOverwrite = false );
+    /**
+     * Set the value for the provided field ID
+     * Field value is set under any of the following conditions:
+     * - param aOverwrite is true
+     * - There is no current value
+     * - The current value is empty
+     */
+    void SetFieldValue( unsigned int aFieldId, const wxString& aValue, bool aOverwrite = false );
 
     wxString GetReference() const { return m_refDes; }
 
@@ -139,47 +166,47 @@ protected:
 class BOM_TABLE_GROUP : public BOM_TABLE_ROW
 {
 public:
-    // List of components stored in this group
+    /// List of components stored in this group
     std::vector<BOM_TABLE_COMPONENT*> Components;
 
     BOM_TABLE_GROUP( BOM_COLUMN_LIST* aColumnList );
     virtual ~BOM_TABLE_GROUP() {}
 
-    // Set display properties for a group row
+    /// Set display properties for a group row
     virtual bool GetAttr( unsigned int aFieldId, wxDataViewItemAttr& aAttr ) const override;
 
-    // Get group row value
+    /// Get group row value
     virtual wxString GetFieldValue( unsigned int aFieldId ) const override;
 
-    // Set group row value
+    /// Set group row value
     virtual bool SetFieldValue( unsigned int aFieldId, const wxString aValue, bool aOverwrite = false ) override;
 
-    // Attempt to add a new component to the group
+    /// Attempt to add a new component to the group
     bool AddComponent( BOM_TABLE_COMPONENT* aComponent );
 
-    // Test if this group should display children
+    /// Test if this group should display children
     virtual bool HasChildren() const override { return Components.size() > 1; }
 
-    // Return a list of children items of this group
+    /// Return a list of children items of this group
     virtual unsigned int GetChildren( wxDataViewItemArray& aChildren ) const override;
 
-    // Test if any children have changed
+    /// Test if any children have changed
     virtual bool HasValueChanged( BOM_COLUMN* aField ) const override;
 
-    // Return the number of child items in this group
+    /// Return the number of child items in this group
     unsigned int GroupSize( void ) const { return Components.size(); }
 
-    // Return a sorted, concatenated list of references
+    /// Return a sorted, concatenated list of references
     wxArrayString GetReferences( bool aSort = true ) const;
 
-    // Function for sorting two reference strings
+    /// Function for sorting two reference strings
     static int SortReferences( const wxString& aFirst, const wxString& aSecond );
 
-    // Function for sorting two value strings
+    /// Function for sorting two value strings
     static int SortValues( const wxString& aFirst, const wxString& aSecond );
 
 protected:
-    // Test if a particular field matches against another component
+    /// Test if a particular field matches against another component
     bool TestField( BOM_COLUMN* aField, BOM_TABLE_COMPONENT* aComponent ) const;
 };
 
@@ -199,9 +226,12 @@ public:
 
     virtual bool HasValueChanged( BOM_COLUMN* aField ) const override;
 
-    // Return the reference of the first unit (all units must be the same
+    /// Return the reference of the first unit (all units must be the same
     wxString GetReference() const;
 
+    /**
+     * @return the prefix of a component e.g. "R23" returns "R"
+     */
     wxString GetPrefix() const;
 
     void ApplyFieldChanges();

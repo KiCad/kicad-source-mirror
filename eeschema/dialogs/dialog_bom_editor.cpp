@@ -47,6 +47,7 @@ void InvokeDialogCreateBOMEditor( SCH_EDIT_FRAME* aCaller )
     dlg.ShowQuasiModal();
 }
 
+
 DIALOG_BOM_EDITOR::DIALOG_BOM_EDITOR( SCH_EDIT_FRAME* parent ) :
         DIALOG_BOM_EDITOR_BASE( parent ),
         m_parent( parent )
@@ -342,7 +343,6 @@ void DIALOG_BOM_EDITOR::LoadColumnNames()
 void DIALOG_BOM_EDITOR::ReloadColumns()
 {
     m_bom->AttachTo( m_bomView );
-
     UpdateTitle();
 }
 
@@ -352,14 +352,15 @@ void DIALOG_BOM_EDITOR::OnColumnItemToggled( wxDataViewEvent& event )
     wxDataViewItem item = event.GetItem();
 
     int row = m_columnListCtrl->ItemToRow( item );
-
     int col = event.GetColumn();
 
-    if( row == wxNOT_FOUND || row < 0 || row >= (int) m_bom->ColumnCount() ) return;
+    if( row == wxNOT_FOUND || row < 0 || row >= (int) m_bom->ColumnCount() )
+        return;
 
     BOM_COLUMN* bomColumn = m_bom->ColumnList.GetColumnByIndex( row );
 
-    if( nullptr == bomColumn ) return;
+    if( nullptr == bomColumn )
+        return;
 
     bool bValue = m_columnListCtrl->GetToggleValue( row, col );
 
@@ -367,6 +368,7 @@ void DIALOG_BOM_EDITOR::OnColumnItemToggled( wxDataViewEvent& event )
     {
     default:
         break;
+
     case 1: // Column visibility
         bomColumn->SetVisible( bValue );
 
@@ -380,6 +382,7 @@ void DIALOG_BOM_EDITOR::OnColumnItemToggled( wxDataViewEvent& event )
             m_bom->RemoveColumn( bomColumn );
         }
         break;
+
     case 2: // Column used to sort
         bomColumn->SetUsedToSort( bValue );
         m_bom->ReloadTable();
@@ -427,6 +430,7 @@ void DIALOG_BOM_EDITOR::OnRegroupComponents( wxCommandEvent& event )
     Update();
 }
 
+
 void DIALOG_BOM_EDITOR::OnApplyFieldChanges( wxCommandEvent& event )
 {
     ApplyAllChanges();
@@ -445,6 +449,7 @@ void DIALOG_BOM_EDITOR::OnRevertFieldChanges( wxCommandEvent& event )
         }
     }
 }
+
 
 // Called when a cell is left-clicked
 void DIALOG_BOM_EDITOR::OnTableItemActivated( wxDataViewEvent& event )

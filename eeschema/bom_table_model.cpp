@@ -2,7 +2,7 @@
 * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Oliver Walters
- * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@
 static const wxColor ROW_COLOUR_ITEM_CHANGED( 200, 0, 0 );
 static const wxColor ROW_COLOUR_MULTIPLE_ITEMS( 60, 90, 200 );
 
+
 /**
  * Convert BOM_TABLE_ROW -> wxDataViewItem
  */
@@ -37,6 +38,7 @@ static wxDataViewItem RowToItem( BOM_TABLE_ROW const* aRow )
 {
     return wxDataViewItem( const_cast<void*>( static_cast<void const*>( aRow ) ) );
 }
+
 
 /**
  * Convert wxDataViewItem -> BOM_TABEL_ROW
@@ -53,15 +55,14 @@ static BOM_TABLE_ROW const* ItemToRow( wxDataViewItem aItem )
     }
 }
 
+
 BOM_FIELD_VALUES::BOM_FIELD_VALUES( wxString aRefDes, FIELD_VALUE_MAP* aTemplate ) :
         m_refDes( aRefDes ),
         m_templateValues( aTemplate )
 {
 }
 
-/**
- * Return the current value for the provided field ID
- */
+
 bool BOM_FIELD_VALUES::GetFieldValue( unsigned int aFieldId, wxString& aValue ) const
 {
     auto search = m_currentValues.find( aFieldId );
@@ -74,9 +75,7 @@ bool BOM_FIELD_VALUES::GetFieldValue( unsigned int aFieldId, wxString& aValue ) 
     return true;
 }
 
-/**
- * Return the backup value for the provided field ID
- */
+
 bool BOM_FIELD_VALUES::GetBackupValue( unsigned int aFieldId, wxString& aValue ) const
 {
     auto search = m_backupValues.find( aFieldId );
@@ -89,9 +88,7 @@ bool BOM_FIELD_VALUES::GetBackupValue( unsigned int aFieldId, wxString& aValue )
     return true;
 }
 
-/**
- * Return the template value for a provided field ID (if it exists)
- */
+
 bool BOM_FIELD_VALUES::GetTemplateValue( unsigned int aFieldId, wxString& aValue ) const
 {
     if( !m_templateValues )
@@ -107,20 +104,17 @@ bool BOM_FIELD_VALUES::GetTemplateValue( unsigned int aFieldId, wxString& aValue
     return true;
 }
 
-/**
- * Set the value for the provided field ID
- * Field value is set under any of the following conditions:
- * - param aOverwrite is true
- * - There is no current value
- * - The current value is empty
- */
-void BOM_FIELD_VALUES::SetFieldValue( unsigned int aFieldId, wxString aValue, bool aOverwrite )
+
+void BOM_FIELD_VALUES::SetFieldValue( unsigned int aFieldId, const wxString& aValue,
+                                      bool aOverwrite )
 {
-    if( aOverwrite || m_currentValues.count( aFieldId ) == 0 || m_currentValues[aFieldId].IsEmpty() )
+    if( aOverwrite || m_currentValues.count( aFieldId ) == 0 ||
+        m_currentValues[aFieldId].IsEmpty() )
     {
         m_currentValues[aFieldId] = aValue;
     }
 }
+
 
 bool BOM_FIELD_VALUES::HasValueChanged( unsigned int aFieldId) const
 {
@@ -131,6 +125,7 @@ bool BOM_FIELD_VALUES::HasValueChanged( unsigned int aFieldId) const
 
     return currentValue.Cmp( backupValue ) != 0;
 }
+
 
 void BOM_FIELD_VALUES::RevertChanges( unsigned int aFieldId )
 {
@@ -149,9 +144,11 @@ void BOM_FIELD_VALUES::SetBackupPoint()
     }
 }
 
+
 BOM_TABLE_ROW::BOM_TABLE_ROW() : m_columnList( nullptr )
 {
 }
+
 
 /**
  * Update cell attributes based on parameters of the cell
@@ -172,6 +169,7 @@ bool BOM_TABLE_ROW::GetAttr( unsigned int aFieldId, wxDataViewItemAttr& aAttr ) 
     return false;
 }
 
+
 bool BOM_TABLE_ROW::HasChanged() const
 {
     if( !m_columnList )
@@ -188,6 +186,7 @@ bool BOM_TABLE_ROW::HasChanged() const
     return false;
 }
 
+
 /**
  * Create a new group (which contains one or more components)
  */
@@ -195,6 +194,7 @@ BOM_TABLE_GROUP::BOM_TABLE_GROUP( BOM_COLUMN_LIST* aColumnList )
 {
     m_columnList = aColumnList;
 }
+
 
 bool BOM_TABLE_GROUP::GetAttr( unsigned int aFieldId, wxDataViewItemAttr& aAttr ) const
 {
@@ -207,6 +207,7 @@ bool BOM_TABLE_GROUP::GetAttr( unsigned int aFieldId, wxDataViewItemAttr& aAttr 
 
     return BOM_TABLE_ROW::GetAttr( aFieldId, aAttr );
 }
+
 
 /**
  * Return the value associated with a given field in the group.
@@ -223,10 +224,12 @@ wxString BOM_TABLE_GROUP::GetFieldValue( unsigned int aFieldId ) const
     case BOM_COL_ID_QUANTITY:
         value = wxString::Format( "%u", (unsigned int) GroupSize() );
         break;
+
     // REFERENCE field returns consolidated list of references
     case BOM_COL_ID_REFERENCE:
         value = wxJoin( GetReferences(), ' ' );
         break;
+
     // Otherwise, return component data
     default:
         if( Components.size() == 0 )
@@ -259,6 +262,7 @@ wxString BOM_TABLE_GROUP::GetFieldValue( unsigned int aFieldId ) const
     return value;
 }
 
+
 /**
  * Set the value of a field in a group
  * The new value is pushed to all components that are children of this group
@@ -274,6 +278,7 @@ bool BOM_TABLE_GROUP::SetFieldValue( unsigned int aFieldId, const wxString aValu
 
     return result;
 }
+
 
 /**
  * Determines if a given component matches against a particular field.
@@ -302,11 +307,13 @@ bool BOM_TABLE_GROUP::TestField( BOM_COLUMN* aField, BOM_TABLE_COMPONENT* aCompo
     // These fields should NOT be compared (return True)
     case BOM_COL_ID_QUANTITY:
         return true;
+
     // Reference matching is done only on prefix
     case BOM_COL_ID_REFERENCE:
         componentValue = aComponent->GetPrefix();
         comparisonValue = Components[0]->GetPrefix();
         break;
+
     default:
         componentValue = aComponent->GetFieldValue( aField->Id() );
         comparisonValue = Components[0]->GetFieldValue( aField->Id() );
@@ -317,6 +324,7 @@ bool BOM_TABLE_GROUP::TestField( BOM_COLUMN* aField, BOM_TABLE_COMPONENT* aCompo
 
     return result;
 }
+
 
 /**
  * Add a new component to the group.
@@ -378,6 +386,7 @@ unsigned int BOM_TABLE_GROUP::GetChildren( wxDataViewItemArray& aChildren ) cons
     return aChildren.size();
 }
 
+
 /**
  * Test if any components in this group have a new value in the provided field
  * @param aField is the field to test
@@ -409,6 +418,7 @@ bool BOM_TABLE_GROUP::HasValueChanged( BOM_COLUMN* aField ) const
     return changed;
 }
 
+
 /**
  * Return a list of (ordered) references
  * for all the components in this group
@@ -434,6 +444,7 @@ wxArrayString BOM_TABLE_GROUP::GetReferences( bool aSort ) const
 
     return refs;
 }
+
 
 /**
  * Compare two references (e.g. "R100", "R19") and perform a 'natural' sort
@@ -488,6 +499,7 @@ int BOM_TABLE_GROUP::SortReferences( const wxString& aFirst, const wxString& aSe
     return (int) (numFirst - numSecond);
 }
 
+
 /**
  * Compare two VALUE fields.
  * A value field can reasonably be expected to be one of:
@@ -511,6 +523,7 @@ int BOM_TABLE_GROUP::SortValues( const wxString& aFirst, const wxString& aSecond
     return aFirst.CmpNoCase( aSecond );
 }
 
+
 /**
  * Create a new COMPONENT row
  * Each COMPONENT row is associated with a single component item.
@@ -523,6 +536,7 @@ BOM_TABLE_COMPONENT::BOM_TABLE_COMPONENT( BOM_TABLE_GROUP* aParent,
     m_columnList = aColumnList;
     m_fieldValues = aFieldValues;
 }
+
 
 /**
  * Try to add a unit to this component
@@ -547,9 +561,11 @@ bool BOM_TABLE_COMPONENT::AddUnit( SCH_REFERENCE aUnit )
             case BOM_COL_ID_QUANTITY:
                 value = wxEmptyString;
                 break;
+
             case BOM_COL_ID_DESCRIPTION:
                 value = cmp->GetAliasDescription();
                 break;
+
             case BOM_COL_ID_DATASHEET:
                 value = cmp->GetField( DATASHEET )->GetText();
                 if( value.IsEmpty() )
@@ -557,12 +573,15 @@ bool BOM_TABLE_COMPONENT::AddUnit( SCH_REFERENCE aUnit )
                     value = cmp->GetAliasDocumentation();
                 }
                 break;
+
             case BOM_COL_ID_REFERENCE:
                 value = aUnit.GetRef();
                 break;
+
             case BOM_COL_ID_VALUE:
                 value = cmp->GetField( VALUE )->GetText();
                 break;
+
             case BOM_COL_ID_FOOTPRINT:
                 value = cmp->GetField( FOOTPRINT )->GetText();
                 break;
@@ -595,8 +614,10 @@ wxString BOM_TABLE_COMPONENT::GetFieldValue( unsigned int aFieldId ) const
     {
     case BOM_COL_ID_QUANTITY:
         return wxEmptyString;
+
     case BOM_COL_ID_REFERENCE:
         return GetReference();
+
     default:
         break;
     }
@@ -613,6 +634,7 @@ wxString BOM_TABLE_COMPONENT::GetFieldValue( unsigned int aFieldId ) const
 
     return value;
 }
+
 
 /**
  * Set the value of a field in the component
@@ -631,16 +653,16 @@ bool BOM_TABLE_COMPONENT::SetFieldValue( unsigned int aFieldId, const wxString a
     return false;
 }
 
-/**
- * Return the prefix of a component e.g. "R23" -> "R"
- */
+
 wxString BOM_TABLE_COMPONENT::GetPrefix() const
 {
+    // Return the prefix of a component e.g. "R23" -> "R"
     if( Units.size() == 0 )
         return wxEmptyString;
 
     return Units[0].GetComp()->GetPrefix();
 }
+
 
 /**
  * Return the reference of a component e.g. "R23"
@@ -652,6 +674,7 @@ wxString BOM_TABLE_COMPONENT::GetReference() const
 
     return Units[0].GetRef();
 }
+
 
 /**
  * Determines if the given field has been changed for this component
@@ -665,6 +688,7 @@ bool BOM_TABLE_COMPONENT::HasValueChanged( BOM_COLUMN* aField ) const
 
     return m_fieldValues->HasValueChanged( aField->Id() );
 }
+
 
 /**
  * If any changes have been made to this component,
@@ -694,16 +718,19 @@ void BOM_TABLE_COMPONENT::ApplyFieldChanges()
                 case BOM_COL_ID_REFERENCE:
                 case BOM_COL_ID_QUANTITY:
                     continue;
+
                 // Special field considerations
                 case BOM_COL_ID_FOOTPRINT:
                     field = cmp->GetField( FOOTPRINT );
                     break;
+
                 case BOM_COL_ID_VALUE:
                     field = cmp->GetField( VALUE );
                     break;
                 case BOM_COL_ID_DATASHEET:
                     field = cmp->GetField( DATASHEET );
                     break;
+
                 default:
                     // Find the field by name (but ignore default fields)
                     field = cmp->FindField( column->Title(), false );
@@ -726,6 +753,7 @@ void BOM_TABLE_COMPONENT::ApplyFieldChanges()
     }
 }
 
+
 /**
  * Revert the displayed fields for this component
  * to their original values (matching the schematic data)
@@ -747,6 +775,7 @@ void BOM_TABLE_COMPONENT::RevertFieldChanges()
     }
 }
 
+
 BOM_TABLE_MODEL::BOM_TABLE_MODEL() :
         m_widget( nullptr ),
         m_sortingColumn( BOM_COL_ID_REFERENCE ),
@@ -754,6 +783,7 @@ BOM_TABLE_MODEL::BOM_TABLE_MODEL() :
 {
     //TODO
 }
+
 
 /**
  * Create a container for the BOM_TABLE_MODEL
@@ -768,10 +798,12 @@ BOM_TABLE_MODEL::MODEL_PTR BOM_TABLE_MODEL::Create()
     return container;
 }
 
+
 BOM_TABLE_MODEL::~BOM_TABLE_MODEL()
 {
    //TODO
 }
+
 
 wxDataViewColumn* BOM_TABLE_MODEL::AddColumn( BOM_COLUMN* aColumn, int aPosition )
 {
@@ -838,6 +870,7 @@ wxDataViewColumn* BOM_TABLE_MODEL::AddColumn( BOM_COLUMN* aColumn, int aPosition
     return column;
 }
 
+
 /**
  * Gracefully remove the given column from the wxDataViewCtrl
  * Removing columns individually prevents bad redraw of entire table
@@ -860,6 +893,7 @@ bool BOM_TABLE_MODEL::RemoveColumn( BOM_COLUMN* aColumn )
 
     return false;
 }
+
 
 /**
  * Attach the MODEL to a particular VIEW
@@ -891,6 +925,7 @@ void BOM_TABLE_MODEL::AttachTo( wxDataViewCtrl* aView )
     aView->Update();
 }
 
+
 /**
  * Return the total number of components displayed by the model
  */
@@ -907,10 +942,12 @@ unsigned int BOM_TABLE_MODEL::ComponentCount() const
     return count;
 }
 
+
 void BOM_TABLE_MODEL::ClearColumns()
 {
     ColumnList.Clear();
 }
+
 
 /**
  * Add default columns to the table
@@ -958,6 +995,7 @@ void BOM_TABLE_MODEL::AddDefaultColumns()
                BOM_COL_TITLE_QUANTITY,
                true, true ) );
 }
+
 
 /**
  * Extract field data from all components
@@ -1018,6 +1056,7 @@ void BOM_TABLE_MODEL::AddComponentFields( SCH_COMPONENT* aCmp )
                                               true, false ) );
     }
 }
+
 
 /**
  * Add a list of component items to the BOM manager
@@ -1118,6 +1157,7 @@ void BOM_TABLE_MODEL::SetComponents( SCH_REFERENCE_LIST aRefs, const TEMPLATE_FI
     SetBackupPoint();
 }
 
+
 void BOM_TABLE_MODEL::SetBackupPoint()
 {
     // Mark backup locations for all values
@@ -1126,6 +1166,7 @@ void BOM_TABLE_MODEL::SetBackupPoint()
         vals->SetBackupPoint();
     }
 }
+
 
 /**
  *  Recalculate grouping of components and reload table
@@ -1178,6 +1219,7 @@ void BOM_TABLE_MODEL::ReloadTable()
     }
 }
 
+
 /**
  * Return a string array of data from a given row
  */
@@ -1209,13 +1251,12 @@ wxArrayString BOM_TABLE_MODEL::GetRowData( unsigned int aRow, std::vector<BOM_CO
     return row;
 }
 
+
 /**
  * Get the value of a particular item in the model
  */
-void BOM_TABLE_MODEL::GetValue(
-        wxVariant& aVariant,
-        const wxDataViewItem& aItem,
-        unsigned int aFieldId ) const
+void BOM_TABLE_MODEL::GetValue( wxVariant& aVariant, const wxDataViewItem& aItem,
+                                unsigned int aFieldId ) const
 {
     auto row = ItemToRow( aItem );
 
@@ -1225,13 +1266,12 @@ void BOM_TABLE_MODEL::GetValue(
     }
 }
 
+
 /**
  * Set the value of a particular item in the model
  */
-bool BOM_TABLE_MODEL::SetValue(
-        const wxVariant& aVariant,
-        const wxDataViewItem& aItem,
-        unsigned int aFieldId )
+bool BOM_TABLE_MODEL::SetValue( const wxVariant& aVariant, const wxDataViewItem& aItem,
+                                unsigned int aFieldId )
 {
     if( !aItem.IsOk() || !m_widget )
     {
@@ -1272,6 +1312,7 @@ bool BOM_TABLE_MODEL::SetValue(
     return false;
 }
 
+
 /**
  * Return the parent item for a given item in the model.
  * If no parent is found (or the item is invalid) return an invalid item.
@@ -1290,6 +1331,7 @@ wxDataViewItem BOM_TABLE_MODEL::GetParent( const wxDataViewItem& aItem ) const
     return wxDataViewItem();
 }
 
+
 /**
  * Returns true if the supplied item has children
  */
@@ -1305,13 +1347,13 @@ bool BOM_TABLE_MODEL::IsContainer( const wxDataViewItem& aItem ) const
     return true;
 }
 
+
 /**
  * Push all children of the supplied item into the list
  * If the supplied item is invalid, push all the top-level items
  */
-unsigned int BOM_TABLE_MODEL::GetChildren(
-        const wxDataViewItem& aItem,
-        wxDataViewItemArray& aChildren ) const
+unsigned int BOM_TABLE_MODEL::GetChildren( const wxDataViewItem& aItem,
+                                           wxDataViewItemArray& aChildren ) const
 {
     auto row = aItem.IsOk() ? ItemToRow( aItem ) : nullptr;
 
@@ -1331,6 +1373,7 @@ unsigned int BOM_TABLE_MODEL::GetChildren(
     }
 }
 
+
 bool BOM_TABLE_MODEL::GetAttr( const wxDataViewItem& aItem,
                            unsigned int aFieldId,
                            wxDataViewItemAttr& aAttr ) const
@@ -1341,11 +1384,10 @@ bool BOM_TABLE_MODEL::GetAttr( const wxDataViewItem& aItem,
     {
         return row->GetAttr( aFieldId, aAttr );
     }
-    else
-    {
-        return false;
-    }
+
+    return false;
 }
+
 
 /**
  * Custom comparison function for improved column sorting
@@ -1383,9 +1425,11 @@ int BOM_TABLE_MODEL::Compare( const wxDataViewItem& aItem1,
     case BOM_COL_ID_REFERENCE:
         result = BOM_TABLE_GROUP::SortReferences( strVal1, strVal2 );
         break;
+
     case BOM_COL_ID_VALUE:
         result = BOM_TABLE_GROUP::SortValues( strVal1, strVal2 );
         break;
+
     // These columns are sorted numerically
     case BOM_COL_ID_QUANTITY:
         if( strVal1.ToLong( &numVal1 ) && strVal2.ToLong( &numVal2 ) )
@@ -1397,6 +1441,7 @@ int BOM_TABLE_MODEL::Compare( const wxDataViewItem& aItem1,
             result = strVal1.Cmp( strVal2 );
         }
         break;
+
     default:
         // Default comparison (no special case)
         result = strVal1.Cmp( strVal2 );
@@ -1426,6 +1471,7 @@ int BOM_TABLE_MODEL::Compare( const wxDataViewItem& aItem1,
 
     return result;
 }
+
 
 /**
  * Revert all component data back to the original values.
@@ -1461,6 +1507,7 @@ void BOM_TABLE_MODEL::RevertFieldChanges()
     }
 }
 
+
 /**
  * Apply all outstanding field changes.
  * This is performed only when the window is closed
@@ -1484,6 +1531,7 @@ void BOM_TABLE_MODEL::ApplyFieldChanges()
         }
     }
 }
+
 
 /**
  * Tests if any component values in the table have been altered
@@ -1509,6 +1557,7 @@ bool BOM_TABLE_MODEL::HaveFieldsChanged() const
 
     return false;
 }
+
 
 /**
  * Returns a list of only those components that have been changed
@@ -1539,6 +1588,7 @@ std::vector<SCH_REFERENCE> BOM_TABLE_MODEL::GetChangedComponents()
 
     return components;
 }
+
 
 /**
  * Returns a count of the components that have been changed
