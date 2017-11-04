@@ -27,6 +27,8 @@ find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc R
 
 add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW)
 
+add_dependencies( pnsrouter pcbcommon )
+
 add_executable(test_window
   test.cpp
   ../common/pcb_test_frame.cpp
@@ -39,6 +41,7 @@ add_executable(test_window
   #../../pcbnew/tools/outline_editor.cpp
 )
 
+include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include
@@ -52,6 +55,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/common/geometry
     ${CMAKE_SOURCE_DIR}/qa/common
     ${Boost_INCLUDE_DIR}
+    ${INC_AFTER}
 )
 
 target_link_libraries( test_window
