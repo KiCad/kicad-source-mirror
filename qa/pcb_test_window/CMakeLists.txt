@@ -27,7 +27,7 @@ find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc R
 
 add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW)
 
-add_dependencies( pnsrouter pcbcommon )
+add_dependencies( pnsrouter pcbcommon pcad2kicadpcb github_plugin )
 
 add_executable(test_window
   test.cpp
@@ -80,6 +80,8 @@ target_link_libraries( test_window
     pcbcommon
     bitmaps
     gal
+    pcad2kicadpcb
+    github_plugin
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}

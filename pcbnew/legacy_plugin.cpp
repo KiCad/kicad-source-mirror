@@ -3505,7 +3505,3 @@ LEGACY_PLUGIN::~LEGACY_PLUGIN()
     delete m_cache;
     delete m_mapping;
 }
-
-namespace {
-    static IO_MGR::REGISTER_PLUGIN registerSelf( IO_MGR::LEGACY, wxT("Legacy"), []() -> PLUGIN* { return new LEGACY_PLUGIN; } );
-};

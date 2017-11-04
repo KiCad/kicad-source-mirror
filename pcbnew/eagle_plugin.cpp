@@ -2254,7 +2254,3 @@ bool EAGLE_PLUGIN::IsFootprintLibWritable( const wxString& aLibraryPath )
 }
 
 */
-
-namespace {
-    static IO_MGR::REGISTER_PLUGIN registerSelf( IO_MGR::EAGLE, wxT("Eagle"), []() -> PLUGIN* { return new EAGLE_PLUGIN; } );
-};
