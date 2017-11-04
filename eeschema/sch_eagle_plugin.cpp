@@ -1672,7 +1672,17 @@ LIB_TEXT* SCH_EAGLE_PLUGIN::loadSymbolText( std::unique_ptr<LIB_PART>& aPart,
 
     libtext->SetUnit( aGateNumber );
     libtext->SetPosition( wxPoint( etext.x.ToSchUnits(), etext.y.ToSchUnits() ) );
-    libtext->SetText( aLibText->GetNodeContent().IsEmpty() ? "~~" : aLibText->GetNodeContent() );
+
+    // Eagle supports multiple line text in library symbols.  Legacy library symbol text cannot
+    // contain CRs or LFs.
+    //
+    // @todo Split this into multiple text objects and offset the Y position so that it looks
+    //       more like the original Eagle schematic.
+    wxString text = aLibText->GetNodeContent();
+    std::replace( text.begin(), text.end(), '\n', '_' );
+    std::replace( text.begin(), text.end(), '\r', '_' );
+
+    libtext->SetText( text.IsEmpty() ? "~~" : text );
     loadTextAttributes( libtext.get(), etext );
 
     return libtext.release();
