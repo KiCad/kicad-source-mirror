@@ -148,7 +148,8 @@ enum FormatType
     FMT_STEP = 1,
     FMT_IGES = 2,
     FMT_EMN  = 3,
-    FMT_IDF  = 4
+    FMT_IDF  = 4,
+    FMT_WRL  = 5,  // .wrl files are replaced with MCAD equivalent
 };
 
 
@@ -167,6 +168,9 @@ FormatType fileType( const char* aFileName )
     }
 
     wxString ext = lfile.GetExt();
+
+    if( ext.Lower() == "wrl" )
+        return FMT_WRL;
 
     if( ext == "idf" || ext == "IDF" )
         return FMT_IDF;     // component outline
@@ -886,6 +890,57 @@ bool PCBMODEL::getModelLabel( const std::string aFileName, TDF_Label& aLabel )
                 wxLogMessage( "%s\n", ostr.str().c_str() );
                 return false;
             }
+            break;
+
+        case FMT_WRL:
+            /* WRL files are preferred for internal rendering,
+             * due to superior material properties, etc.
+             * However they are not suitable for MCAD export.
+             *
+             * If a .wrl file is specified, attempt to locate
+             * a replacement file for it.
+             *
+             * If a valid replacement file is found, the label
+             * for THAT file will be associated with the .wrl file
+             *
+             */
+            {
+                wxFileName wrlName( aFileName );
+
+                wxString basePath = wrlName.GetPath();
+                wxString baseName = wrlName.GetName();
+
+                // List of alternate files to look for
+                // Given in order of preference
+                // (Break if match is found)
+                wxArrayString alts;
+
+                // Step files
+                alts.Add( "stp" );
+                alts.Add( "step" );
+                alts.Add( "STP" );
+                alts.Add( "STEP" );
+                alts.Add( "Stp" );
+                alts.Add( "Step" );
+
+                //TODO - Other alternative formats?
+
+                for( auto alt : alts )
+                {
+                    wxFileName altFile( basePath, baseName + "." + alt );
+
+                    if( altFile.IsOk() && altFile.FileExists() )
+                    {
+                        std::string altFileName = altFile.GetFullPath().ToStdString();
+
+                        if( getModelLabel( altFileName, aLabel ) )
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
             break;
 
         // TODO: implement IDF and EMN converters
