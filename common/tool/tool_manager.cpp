@@ -700,7 +700,7 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
         if( activeTool == GetCurrentToolId() )
         {
             m_viewControls->ForceCursorPosition( (bool) m_origCursor,
-                    m_origCursor.value_or( VECTOR2D( 0, 0 ) ) );
+                    m_origCursor ? *m_origCursor : VECTOR2D( 0, 0  ) );
         }
 
         m_origCursor = NULLOPT;
