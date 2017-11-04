@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -21,9 +21,9 @@ DIALOG_DXF_IMPORT_BASE::DIALOG_DXF_IMPORT_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bSizerFile;
 	bSizerFile = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticText37 = new wxStaticText( this, wxID_ANY, _("File:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText37->Wrap( -1 );
-	bSizerFile->Add( m_staticText37, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_staticTextFile = new wxStaticText( this, wxID_ANY, _("File:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextFile->Wrap( -1 );
+	bSizerFile->Add( m_staticTextFile, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_textCtrlFileName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCtrlFileName->SetMinSize( wxSize( 300,-1 ) );
@@ -36,112 +36,160 @@ DIALOG_DXF_IMPORT_BASE::DIALOG_DXF_IMPORT_BASE( wxWindow* parent, wxWindowID id,
 	
 	bSizerMain->Add( bSizerFile, 0, wxALL|wxEXPAND, 5 );
 	
-	wxBoxSizer* bSizer3;
-	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerMiddle;
+	bSizerMiddle = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxString m_rbOffsetOptionChoices[] = { _("Center of page"), _("Upper left corner of page"), _("Center left side of page"), _("Lower left corner of page"), _("User defined position") };
 	int m_rbOffsetOptionNChoices = sizeof( m_rbOffsetOptionChoices ) / sizeof( wxString );
 	m_rbOffsetOption = new wxRadioBox( this, wxID_ORIGIN_SELECT, _("Place DXF origin (0,0) point:"), wxDefaultPosition, wxDefaultSize, m_rbOffsetOptionNChoices, m_rbOffsetOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbOffsetOption->SetSelection( 0 );
-	bSizer3->Add( m_rbOffsetOption, 0, wxALL|wxEXPAND, 5 );
+	bSizerMiddle->Add( m_rbOffsetOption, 1, wxALL, 5 );
 	
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerUserPos;
+	bSizerUserPos = new wxBoxSizer( wxVERTICAL );
 	
-	wxBoxSizer* bSizer6;
-	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerPosSettings;
+	bSizerPosSettings = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText4 = new wxStaticText( this, wxID_ANY, _("X Position:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText4->Wrap( -1 );
-	bSizer6->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_staticText6 = new wxStaticText( this, wxID_ANY, _("User defined position:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6->Wrap( -1 );
+	bSizerPosSettings->Add( m_staticText6, 0, wxALL, 5 );
 	
-	m_DXFPCBXCoord = new wxTextCtrl( this, wxID_ANY, _("0.0"), wxDefaultPosition, wxDefaultSize, 0 );
+	wxFlexGridSizer* fgSizerUserPosition;
+	fgSizerUserPosition = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizerUserPosition->AddGrowableCol( 2 );
+	fgSizerUserPosition->SetFlexibleDirection( wxBOTH );
+	fgSizerUserPosition->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	
+	fgSizerUserPosition->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
+	
+	m_staticTextXpos = new wxStaticText( this, wxID_ANY, _("X Position:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextXpos->Wrap( -1 );
+	fgSizerUserPosition->Add( m_staticTextXpos, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_DxfPcbXCoord = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
-	if ( !m_DXFPCBXCoord->HasFlag( wxTE_MULTILINE ) )
+	if ( !m_DxfPcbXCoord->HasFlag( wxTE_MULTILINE ) )
 	{
-	m_DXFPCBXCoord->SetMaxLength( 10 );
+	m_DxfPcbXCoord->SetMaxLength( 10 );
 	}
 	#else
-	m_DXFPCBXCoord->SetMaxLength( 10 );
+	m_DxfPcbXCoord->SetMaxLength( 10 );
 	#endif
-	m_DXFPCBXCoord->SetToolTip( _("DXF origin on PCB Grid, X Coordinate") );
+	m_DxfPcbXCoord->SetToolTip( _("DXF origin on PCB Grid, X Coordinate") );
 	
-	bSizer6->Add( m_DXFPCBXCoord, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizerUserPosition->Add( m_DxfPcbXCoord, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
 	
-	bSizer4->Add( bSizer6, 1, wxEXPAND, 5 );
+	fgSizerUserPosition->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
+	
+	m_staticTextYpos = new wxStaticText( this, wxID_ANY, _("Y Position:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextYpos->Wrap( -1 );
+	fgSizerUserPosition->Add( m_staticTextYpos, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_DxfPcbYCoord = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	#ifdef __WXGTK__
+	if ( !m_DxfPcbYCoord->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_DxfPcbYCoord->SetMaxLength( 10 );
+	}
+	#else
+	m_DxfPcbYCoord->SetMaxLength( 10 );
+	#endif
+	m_DxfPcbYCoord->SetToolTip( _("DXF origin on PCB Grid, Y Coordinate") );
+	
+	fgSizerUserPosition->Add( m_DxfPcbYCoord, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	
+	
+	fgSizerUserPosition->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
+	
+	m_staticTextUnits = new wxStaticText( this, wxID_ANY, _("Position Units:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextUnits->Wrap( -1 );
+	fgSizerUserPosition->Add( m_staticTextUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	wxString m_DxfPcbPositionUnitsChoices[] = { _("mm"), _("inch") };
+	int m_DxfPcbPositionUnitsNChoices = sizeof( m_DxfPcbPositionUnitsChoices ) / sizeof( wxString );
+	m_DxfPcbPositionUnits = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_DxfPcbPositionUnitsNChoices, m_DxfPcbPositionUnitsChoices, 0 );
+	m_DxfPcbPositionUnits->SetSelection( 0 );
+	m_DxfPcbPositionUnits->SetToolTip( _("Select PCB grid units") );
+	
+	fgSizerUserPosition->Add( m_DxfPcbPositionUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	
+	
+	bSizerPosSettings->Add( fgSizerUserPosition, 1, wxEXPAND, 5 );
+	
+	
+	bSizerUserPos->Add( bSizerPosSettings, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	
+	
+	bSizerMiddle->Add( bSizerUserPos, 1, 0, 5 );
+	
+	
+	bSizerMain->Add( bSizerMiddle, 1, wxALL|wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizerLayer;
+	bSizerLayer = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerLayer->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
+	
+	m_staticTextPrms = new wxStaticText( this, wxID_ANY, _("Import parameters:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPrms->Wrap( -1 );
+	bSizerLayer->Add( m_staticTextPrms, 0, wxALL, 5 );
 	
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Y Position:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText5->Wrap( -1 );
-	bSizer7->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_DXFPCBYCoord = new wxTextCtrl( this, wxID_ANY, _("0.0"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_DXFPCBYCoord->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_DXFPCBYCoord->SetMaxLength( 10 );
-	}
-	#else
-	m_DXFPCBYCoord->SetMaxLength( 10 );
-	#endif
-	m_DXFPCBYCoord->SetToolTip( _("DXF origin on PCB Grid, Y Coordinate") );
+	bSizer7->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
 	
-	bSizer7->Add( m_DXFPCBYCoord, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	wxFlexGridSizer* fgSizerImportSettings;
+	fgSizerImportSettings = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizerImportSettings->AddGrowableCol( 1 );
+	fgSizerImportSettings->SetFlexibleDirection( wxBOTH );
+	fgSizerImportSettings->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
+	m_staticTextLineWidth = new wxStaticText( this, wxID_ANY, _("Default Line Width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextLineWidth->Wrap( -1 );
+	fgSizerImportSettings->Add( m_staticTextLineWidth, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	bSizer4->Add( bSizer7, 1, wxEXPAND, 5 );
+	m_textCtrlLineWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerImportSettings->Add( m_textCtrlLineWidth, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	wxBoxSizer* bSizer5;
-	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
+	wxString m_choiceUnitLineWidthChoices[] = { _("mm"), _("mils"), _("inches") };
+	int m_choiceUnitLineWidthNChoices = sizeof( m_choiceUnitLineWidthChoices ) / sizeof( wxString );
+	m_choiceUnitLineWidth = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceUnitLineWidthNChoices, m_choiceUnitLineWidthChoices, 0 );
+	m_choiceUnitLineWidth->SetSelection( 0 );
+	fgSizerImportSettings->Add( m_choiceUnitLineWidth, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_staticText3 = new wxStaticText( this, wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText3->Wrap( -1 );
-	bSizer5->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	wxString m_DXFPCBGridUnitsChoices[] = { _("mm"), _("inch") };
-	int m_DXFPCBGridUnitsNChoices = sizeof( m_DXFPCBGridUnitsChoices ) / sizeof( wxString );
-	m_DXFPCBGridUnits = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_DXFPCBGridUnitsNChoices, m_DXFPCBGridUnitsChoices, 0 );
-	m_DXFPCBGridUnits->SetSelection( 0 );
-	m_DXFPCBGridUnits->SetToolTip( _("Select PCB grid units") );
-	
-	bSizer5->Add( m_DXFPCBGridUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	
-	bSizer4->Add( bSizer5, 1, wxEXPAND, 5 );
-	
-	
-	bSizer3->Add( bSizer4, 1, 0, 5 );
-	
-	
-	bSizerMain->Add( bSizer3, 1, wxALL|wxEXPAND, 5 );
-	
-	wxBoxSizer* bSizer8;
-	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_staticTextBrdlayer = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextBrdlayer = new wxStaticText( this, wxID_ANY, _("Graphic Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextBrdlayer->Wrap( -1 );
-	bSizer8->Add( m_staticTextBrdlayer, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
+	fgSizerImportSettings->Add( m_staticTextBrdlayer, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
 	m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	bSizer8->Add( m_SelLayerBox, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizerImportSettings->Add( m_SelLayerBox, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
 	
-	bSizerMain->Add( bSizer8, 0, wxALL|wxEXPAND, 5 );
+	bSizer7->Add( fgSizerImportSettings, 1, wxEXPAND, 5 );
 	
-	m_staticline8 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline8, 0, wxALL|wxEXPAND, 5 );
 	
-	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1OK = new wxButton( this, wxID_OK );
-	m_sdbSizer1->AddButton( m_sdbSizer1OK );
-	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
-	m_sdbSizer1->Realize();
+	bSizerLayer->Add( bSizer7, 1, wxEXPAND, 5 );
 	
-	bSizerMain->Add( m_sdbSizer1, 0, wxALIGN_RIGHT|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	
+	bSizerMain->Add( bSizerLayer, 0, wxALL|wxEXPAND, 5 );
+	
+	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerMain->Add( m_staticline, 0, wxALL|wxEXPAND, 5 );
+	
+	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerOK = new wxButton( this, wxID_OK );
+	m_sdbSizer->AddButton( m_sdbSizerOK );
+	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer->AddButton( m_sdbSizerCancel );
+	m_sdbSizer->Realize();
+	
+	bSizerMain->Add( m_sdbSizer, 0, wxALIGN_RIGHT|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
@@ -152,8 +200,8 @@ DIALOG_DXF_IMPORT_BASE::DIALOG_DXF_IMPORT_BASE( wxWindow* parent, wxWindowID id,
 	// Connect Events
 	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DXF_IMPORT_BASE::OnBrowseDxfFiles ), NULL, this );
 	m_rbOffsetOption->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_DXF_IMPORT_BASE::OriginOptionOnUpdateUI ), NULL, this );
-	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DXF_IMPORT_BASE::OnCancelClick ), NULL, this );
-	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DXF_IMPORT_BASE::OnOKClick ), NULL, this );
+	m_DxfPcbPositionUnits->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_DXF_IMPORT_BASE::onUnitPositionSelection ), NULL, this );
+	m_choiceUnitLineWidth->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_DXF_IMPORT_BASE::onUnitWidthSelection ), NULL, this );
 }
 
 DIALOG_DXF_IMPORT_BASE::~DIALOG_DXF_IMPORT_BASE()
@@ -161,7 +209,7 @@ DIALOG_DXF_IMPORT_BASE::~DIALOG_DXF_IMPORT_BASE()
 	// Disconnect Events
 	m_buttonBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DXF_IMPORT_BASE::OnBrowseDxfFiles ), NULL, this );
 	m_rbOffsetOption->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_DXF_IMPORT_BASE::OriginOptionOnUpdateUI ), NULL, this );
-	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DXF_IMPORT_BASE::OnCancelClick ), NULL, this );
-	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DXF_IMPORT_BASE::OnOKClick ), NULL, this );
+	m_DxfPcbPositionUnits->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_DXF_IMPORT_BASE::onUnitPositionSelection ), NULL, this );
+	m_choiceUnitLineWidth->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_DXF_IMPORT_BASE::onUnitWidthSelection ), NULL, this );
 	
 }

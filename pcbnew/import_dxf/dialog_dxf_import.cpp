@@ -39,12 +39,14 @@
 #include <class_pcb_text.h>
 
 // Keys to store setup in config
-#define DXF_IMPORT_LAYER_OPTION_KEY  "DxfImportBrdLayer"
-#define DXF_IMPORT_COORD_ORIGIN_KEY  "DxfImportCoordOrigin"
-#define DXF_IMPORT_LAST_FILE_KEY     "DxfImportLastFile"
-#define DXF_IMPORT_GRID_UNITS_KEY    "DxfImportGridUnits"
-#define DXF_IMPORT_GRID_OFFSET_X_KEY "DxfImportGridOffsetX"
-#define DXF_IMPORT_GRID_OFFSET_Y_KEY "DxfImportGridOffsetY"
+#define DXF_IMPORT_LAYER_OPTION_KEY     "DxfImportBrdLayer"
+#define DXF_IMPORT_COORD_ORIGIN_KEY     "DxfImportCoordOrigin"
+#define DXF_IMPORT_LAST_FILE_KEY        "DxfImportLastFile"
+#define DXF_IMPORT_IMPORT_UNITS_KEY     "DxfImportOffsetUnits"
+#define DXF_IMPORT_IMPORT_OFFSET_X_KEY  "DxfImportOffsetX"
+#define DXF_IMPORT_IMPORT_OFFSET_Y_KEY  "DxfImportOffsetY"
+#define DXF_IMPORT_LINEWIDTH_UNITS_KEY  "DxfImportLineWidthUnits"
+#define DXF_IMPORT_LINEWIDTH_KEY        "DxfImportLineWidth"
 
 
 // Static members of DIALOG_DXF_IMPORT, to remember
@@ -54,33 +56,34 @@ int DIALOG_DXF_IMPORT::m_offsetSelection = 0;
 LAYER_NUM DIALOG_DXF_IMPORT::m_layer = Dwgs_User;
 
 
-DIALOG_DXF_IMPORT::DIALOG_DXF_IMPORT( PCB_BASE_FRAME* aParent, bool aUseModuleItems )
+DIALOG_DXF_IMPORT::DIALOG_DXF_IMPORT( PCB_BASE_FRAME* aParent, bool aImportAsFootprintGraphic )
     : DIALOG_DXF_IMPORT_BASE( aParent )
 {
     m_parent = aParent;
-    m_dxfImporter.UseModuleItems( aUseModuleItems );
+    m_dxfImporter.ImportAsFootprintGraphic( aImportAsFootprintGraphic );
     m_config = Kiface().KifaceSettings();
-    m_PCBGridUnits = 0;
-    m_PCBGridOffsetX = 0.0;
-    m_PCBGridOffsetY = 0.0;
+    m_PcbImportUnits = 0;
+    m_PcbImportOffsetX = 0.0;   // always in mm
+    m_PcbImportOffsetY = 0.0;   // always in mm
 
     if( m_config )
     {
         m_layer = m_config->Read( DXF_IMPORT_LAYER_OPTION_KEY, (long)Dwgs_User );
         m_offsetSelection = m_config->Read( DXF_IMPORT_COORD_ORIGIN_KEY, (long)0 );
         m_dxfFilename =  m_config->Read( DXF_IMPORT_LAST_FILE_KEY, wxEmptyString );
-        m_config->Read( DXF_IMPORT_GRID_UNITS_KEY, &m_PCBGridUnits, 0 );
-        m_config->Read( DXF_IMPORT_GRID_OFFSET_X_KEY, &m_PCBGridOffsetX, 0.0 );
-        m_config->Read( DXF_IMPORT_GRID_OFFSET_Y_KEY, &m_PCBGridOffsetY, 0.0 );
+        m_config->Read( DXF_IMPORT_IMPORT_UNITS_KEY, &m_PcbImportUnits, 0 );
+        m_config->Read( DXF_IMPORT_IMPORT_OFFSET_X_KEY, &m_PcbImportOffsetX, 0.0 );
+        m_config->Read( DXF_IMPORT_IMPORT_OFFSET_Y_KEY, &m_PcbImportOffsetY, 0.0 );
+        m_config->Read( DXF_IMPORT_LINEWIDTH_UNITS_KEY, &m_PCBLineWidthUnits, 0 );
+        m_config->Read( DXF_IMPORT_LINEWIDTH_KEY, &m_PCBdefaultLineWidth, 0.2 );
     }
 
-    m_DXFPCBGridUnits->SetSelection( m_PCBGridUnits );
-    wxString tmpStr;
-    tmpStr << m_PCBGridOffsetX;
-    m_DXFPCBXCoord->SetValue( tmpStr );
-    tmpStr =  "";
-    tmpStr << m_PCBGridOffsetY;
-    m_DXFPCBYCoord->SetValue( tmpStr );
+    m_choiceUnitLineWidth->SetSelection( m_PCBLineWidthUnits );
+    showPCBdefaultLineWidth();
+    m_dxfImporter.SetDefaultLineWidthMM( m_PCBdefaultLineWidth );
+
+    m_DxfPcbPositionUnits->SetSelection( m_PcbImportUnits );
+    showPcbImportOffsets();
 
     m_textCtrlFileName->SetValue( m_dxfFilename );
     m_rbOffsetOption->SetSelection( m_offsetSelection );
@@ -97,7 +100,7 @@ DIALOG_DXF_IMPORT::DIALOG_DXF_IMPORT( PCB_BASE_FRAME* aParent, bool aUseModuleIt
         m_SelLayerBox->SetLayerSelection( m_layer );
     }
 
-    m_sdbSizer1OK->SetDefault();
+    m_sdbSizerOK->SetDefault();
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
     Centre();
@@ -107,6 +110,7 @@ DIALOG_DXF_IMPORT::DIALOG_DXF_IMPORT( PCB_BASE_FRAME* aParent, bool aUseModuleIt
 DIALOG_DXF_IMPORT::~DIALOG_DXF_IMPORT()
 {
     m_offsetSelection = m_rbOffsetOption->GetSelection();
+    getPcbImportOffsets();
     m_layer = m_SelLayerBox->GetLayerSelection();
 
     if( m_config )
@@ -115,10 +119,100 @@ DIALOG_DXF_IMPORT::~DIALOG_DXF_IMPORT()
         m_config->Write( DXF_IMPORT_COORD_ORIGIN_KEY, m_offsetSelection );
         m_config->Write( DXF_IMPORT_LAST_FILE_KEY, m_dxfFilename );
 
-        m_config->Write( DXF_IMPORT_GRID_UNITS_KEY, GetPCBGridUnits() );
-        m_config->Write( DXF_IMPORT_GRID_OFFSET_X_KEY, m_DXFPCBXCoord->GetValue() );
-        m_config->Write( DXF_IMPORT_GRID_OFFSET_Y_KEY, m_DXFPCBYCoord->GetValue() );
+        m_config->Write( DXF_IMPORT_IMPORT_UNITS_KEY, m_PcbImportUnits );
+        m_config->Write( DXF_IMPORT_IMPORT_OFFSET_X_KEY, m_PcbImportOffsetX );
+        m_config->Write( DXF_IMPORT_IMPORT_OFFSET_Y_KEY, m_PcbImportOffsetY );
+
+        m_config->Write( DXF_IMPORT_LINEWIDTH_UNITS_KEY, m_PCBLineWidthUnits );
+        m_PCBLineWidthUnits = getPCBdefaultLineWidthMM();
+        m_config->Write( DXF_IMPORT_LINEWIDTH_KEY, m_PCBdefaultLineWidth );
     }
+}
+
+
+void DIALOG_DXF_IMPORT::DIALOG_DXF_IMPORT::onUnitPositionSelection( wxCommandEvent& event )
+{
+    // Collect last entered values:
+    getPcbImportOffsets();
+
+    m_PcbImportUnits = m_DxfPcbPositionUnits->GetSelection();;
+    showPcbImportOffsets();
+}
+
+
+double DIALOG_DXF_IMPORT::getPCBdefaultLineWidthMM()
+{
+    double value = DoubleValueFromString( UNSCALED_UNITS, m_textCtrlLineWidth->GetValue() );
+
+    switch( m_PCBLineWidthUnits )
+    {
+        default:
+        case 0:     // display units = mm
+            break;
+
+        case 1:     // display units = mil
+            value *= 25.4 / 1000;
+            break;
+
+        case 2:     // display units = inch
+            value *= 25.4;
+            break;
+    }
+
+    return value;   // value is in mm
+}
+
+
+void DIALOG_DXF_IMPORT::onUnitWidthSelection( wxCommandEvent& event )
+{
+    m_PCBdefaultLineWidth = getPCBdefaultLineWidthMM();
+
+    // Switch to new units
+    m_PCBLineWidthUnits = m_choiceUnitLineWidth->GetSelection();
+    showPCBdefaultLineWidth();
+}
+
+
+void DIALOG_DXF_IMPORT::showPcbImportOffsets()
+{
+    // Display m_PcbImportOffsetX and m_PcbImportOffsetY values according to
+    // the unit selection:
+    double xoffset = m_PcbImportOffsetX;
+    double yoffset = m_PcbImportOffsetY;
+
+    if( m_PcbImportUnits )   // Units are inches
+    {
+        xoffset /= 25.4;
+        yoffset /= 25.4;
+    }
+
+    m_DxfPcbXCoord->SetValue( wxString::Format( "%f", xoffset ) );
+    m_DxfPcbYCoord->SetValue( wxString::Format( "%f", yoffset ) );
+
+}
+
+
+void DIALOG_DXF_IMPORT::showPCBdefaultLineWidth()
+{
+    double value;
+
+    switch( m_PCBLineWidthUnits )
+    {
+        default:
+        case 0:     // display units = mm
+            value = m_PCBdefaultLineWidth;
+            break;
+
+        case 1:     // display units = mil
+            value = m_PCBdefaultLineWidth / 25.4 * 1000;
+            break;
+
+        case 2:     // display units = inch
+            value = m_PCBdefaultLineWidth / 25.4;
+            break;
+    }
+
+    m_textCtrlLineWidth->SetValue( wxString::Format( "%f", value ) );
 }
 
 
@@ -153,12 +247,15 @@ void DIALOG_DXF_IMPORT::OnBrowseDxfFiles( wxCommandEvent& event )
 }
 
 
-void DIALOG_DXF_IMPORT::OnOKClick( wxCommandEvent& event )
+bool DIALOG_DXF_IMPORT::TransferDataFromWindow()
 {
     m_dxfFilename = m_textCtrlFileName->GetValue();
 
     if( m_dxfFilename.IsEmpty() )
-        return;
+    {
+        wxMessageBox( _( "Error: No DXF filename!" ) );
+        return false;
+    }
 
     double offsetX = 0;
     double offsetY = 0;
@@ -184,13 +281,9 @@ void DIALOG_DXF_IMPORT::OnOKClick( wxCommandEvent& event )
         break;
 
     case 4:
-        GetPCBGridOffsets( offsetX, offsetY );
-
-        if( GetPCBGridUnits() )
-        {
-            offsetX *= 25.4;
-            offsetY *= 25.4;
-        }
+        getPcbImportOffsets();
+        offsetX = m_PcbImportOffsetX;
+        offsetY = m_PcbImportOffsetY;
         break;
     }
 
@@ -198,11 +291,13 @@ void DIALOG_DXF_IMPORT::OnOKClick( wxCommandEvent& event )
     m_dxfImporter.SetOffset( offsetX, offsetY );
     m_layer = m_SelLayerBox->GetLayerSelection();
     m_dxfImporter.SetBrdLayer( m_layer );
+    m_PCBdefaultLineWidth = getPCBdefaultLineWidthMM();
+    m_dxfImporter.SetDefaultLineWidthMM( m_PCBdefaultLineWidth );
 
     // Read dxf file:
     m_dxfImporter.ImportDxfFile( m_dxfFilename );
 
-    EndModal( wxID_OK );
+   return true;
 }
 
 
@@ -265,21 +360,22 @@ void DIALOG_DXF_IMPORT::OriginOptionOnUpdateUI( wxUpdateUIEvent& event )
 {
     bool enable = m_rbOffsetOption->GetSelection() == 4;
 
-    m_DXFPCBGridUnits->Enable( enable );
-    m_DXFPCBXCoord->Enable( enable );
-    m_DXFPCBYCoord->Enable( enable );
+    m_DxfPcbPositionUnits->Enable( enable );
+    m_DxfPcbXCoord->Enable( enable );
+    m_DxfPcbYCoord->Enable( enable );
 }
 
 
-int  DIALOG_DXF_IMPORT::GetPCBGridUnits( void )
+void DIALOG_DXF_IMPORT::getPcbImportOffsets()
 {
-    return m_DXFPCBGridUnits->GetSelection();
-}
+    m_PcbImportOffsetX = DoubleValueFromString( UNSCALED_UNITS, m_DxfPcbXCoord->GetValue() );
+    m_PcbImportOffsetY = DoubleValueFromString( UNSCALED_UNITS, m_DxfPcbYCoord->GetValue() );
 
+    if( m_PcbImportUnits )   // Units are inches
+    {
+        m_PcbImportOffsetX *= 25.4;
+        m_PcbImportOffsetY *= 25.4;
+    }
 
-void DIALOG_DXF_IMPORT::GetPCBGridOffsets( double &aXOffset, double &aYOffset )
-{
-    aXOffset = DoubleValueFromString( UNSCALED_UNITS, m_DXFPCBXCoord->GetValue() );
-    aYOffset = DoubleValueFromString( UNSCALED_UNITS, m_DXFPCBYCoord->GetValue() );
     return;
 }

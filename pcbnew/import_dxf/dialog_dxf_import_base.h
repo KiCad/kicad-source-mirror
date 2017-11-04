@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -27,8 +27,8 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/radiobox.h>
 #include <wx/valtext.h>
 #include <wx/choice.h>
-#include <wx/bmpcbox.h>
 #include <wx/statline.h>
+#include <wx/bmpcbox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -43,33 +43,39 @@ class DIALOG_DXF_IMPORT_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		wxStaticText* m_staticText37;
+		wxStaticText* m_staticTextFile;
 		wxTextCtrl* m_textCtrlFileName;
 		wxButton* m_buttonBrowse;
 		wxRadioBox* m_rbOffsetOption;
-		wxStaticText* m_staticText4;
-		wxTextCtrl* m_DXFPCBXCoord;
-		wxStaticText* m_staticText5;
-		wxTextCtrl* m_DXFPCBYCoord;
-		wxStaticText* m_staticText3;
-		wxChoice* m_DXFPCBGridUnits;
+		wxStaticText* m_staticText6;
+		wxStaticText* m_staticTextXpos;
+		wxTextCtrl* m_DxfPcbXCoord;
+		wxStaticText* m_staticTextYpos;
+		wxTextCtrl* m_DxfPcbYCoord;
+		wxStaticText* m_staticTextUnits;
+		wxChoice* m_DxfPcbPositionUnits;
+		wxStaticLine* m_staticline2;
+		wxStaticText* m_staticTextPrms;
+		wxStaticText* m_staticTextLineWidth;
+		wxTextCtrl* m_textCtrlLineWidth;
+		wxChoice* m_choiceUnitLineWidth;
 		wxStaticText* m_staticTextBrdlayer;
 		PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;
-		wxStaticLine* m_staticline8;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
+		wxStaticLine* m_staticline;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnBrowseDxfFiles( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OriginOptionOnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOKClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onUnitPositionSelection( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onUnitWidthSelection( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_DXF_IMPORT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import DXF File"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 455,297 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_DXF_IMPORT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import DXF File"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 475,388 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_DXF_IMPORT_BASE();
 	
 };

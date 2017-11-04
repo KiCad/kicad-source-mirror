@@ -42,25 +42,45 @@ class BOARD_ITEM;
 class DXF2BRD_CONVERTER : public DRW_Interface
 {
 private:
-    std::list<BOARD_ITEM*> m_newItemsList;    // The list of new items added to the board
-    double m_xOffset;       // X coord offset for conversion (in mm)
-    double m_yOffset;       // Y coord offset for conversion (in mm)
+    std::list<BOARD_ITEM*> m_newItemsList;  // The list of new items added to the board
+    double m_xOffset;           // X coord offset for conversion (in mm)
+    double m_yOffset;           // Y coord offset for conversion (in mm)
     double m_defaultThickness;  // default line thickness for conversion (in mm)
-    double m_DXF2mm;        // The scale factor to convert DXF units to mm
-    int m_brdLayer;         // The board layer to place imported DXF items
-    int m_version;          // the dxf version, not used here
-    std::string m_codePage; // The code page, not used here
-    bool m_useModuleItems;  // Use module items instead of board items when true.
+    double m_DXF2mm;            // The scale factor to convert DXF units to mm
+    int m_brdLayer;             // The board layer to place imported DXF items
+    int m_version;              // the dxf version, not used here
+    std::string m_codePage;     // The code page, not used here
+    bool m_importAsfootprintGraphicItems;  // Use module items instead of board items when true.
+                                // true when the items are imported in the footprint editor
 
 public:
     DXF2BRD_CONVERTER();
     ~DXF2BRD_CONVERTER();
 
-    bool IsUsingModuleItems() const { return m_useModuleItems; }
-    void UseModuleItems( bool aUseModuleItems = true ) { m_useModuleItems = aUseModuleItems; }
+    /**
+     * Allows the import DXF items converted to board graphic items or footprint
+     * graphic items.
+     * @param aImportAsFootprintGraphic = true to import in a footprint, false to import on a board
+     */
+    void ImportAsFootprintGraphic( bool aImportAsFootprintGraphic )
+    {
+        m_importAsfootprintGraphicItems = aImportAsFootprintGraphic;
+    }
+
 
     /**
-     * Set the coordinate offset between the importede dxf items
+     * Set the default line width when importing dxf items like lines to Pcbnew.
+     * because dxf files have no line width explicit parameter, it will be most
+     * of time the line width of imported lines
+     * @param aWidth = line width in mm
+     */
+    void SetDefaultLineWidthMM( double aWidth )
+    {
+        m_defaultThickness = aWidth;
+    }
+
+    /**
+     * Set the coordinate offset between the imported dxf items
      * and Pcbnew.
      * because dxf files have the Y axis from bottom to top;
      * aOffsetX = 0, and aOffsetY = - vertical page size to import a full page
@@ -100,6 +120,9 @@ private:
     int mapX( double aDxfCoordX );
     int mapY( double aDxfCoordY );
     int mapDim( double aDxfValue );
+    // mapWidth returns ( in internal units) the aDxfValue if aDxfWidth > 0
+    // or m_defaultThickness
+    int mapWidth( double aDxfWidth );
 
     // Functions to aid in the creation of a LWPolyline
     void insertLine( const wxRealPoint& aSegStart, const wxRealPoint& aSegEnd, int aWidth );
