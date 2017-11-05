@@ -28,7 +28,7 @@
 #ifndef VECTOR2D_H_
 #define VECTOR2D_H_
 
-#include <climits>
+#include <limits>
 #include <iostream>
 #include <sstream>
 
@@ -54,8 +54,6 @@ template <>
 struct VECTOR2_TRAITS<int>
 {
     typedef int64_t extended_type;
-    static const extended_type ECOORD_MAX = 0x7fffffffffffffffULL;
-    static const extended_type ECOORD_MIN = 0x8000000000000000ULL;
 };
 
 // Forward declarations for template friends
@@ -73,11 +71,14 @@ std::ostream& operator<<( std::ostream& aStream, const VECTOR2<T>& aVector );
  *
  */
 template <class T = int>
-class VECTOR2 : public VECTOR2_TRAITS<T>
+class VECTOR2
 {
 public:
     typedef typename VECTOR2_TRAITS<T>::extended_type extended_type;
     typedef T coord_type;
+
+    static constexpr extended_type ECOORD_MAX = std::numeric_limits<extended_type>::max();
+    static constexpr extended_type ECOORD_MIN = std::numeric_limits<extended_type>::min();
 
     T x, y;
 
