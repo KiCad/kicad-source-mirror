@@ -205,6 +205,15 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
         pad->SetDrillSize( wxSize( m_hole, m_hole ) );
         pad->SetSize( wxSize( m_hole, m_hole ) );
 
+        // Mounting Hole: Solder Mask Margin from Top Layer Width size.
+        // Used the default zone clearance (simplify)
+        if( m_shapes.GetCount() && m_shapes[0]->m_shape == wxT( "MtHole" ) )
+        {
+            int sm_margin = ( m_shapes[0]->m_width - m_hole ) / 2;
+            pad->SetLocalSolderMaskMargin( sm_margin );
+            pad->SetLocalClearance( sm_margin + Millimeter2iu( 0.254 ) );
+        }
+
         pad->SetLayerSet( LSET::AllCuMask() | LSET( 2, B_Mask, F_Mask ) );
     }
     else
