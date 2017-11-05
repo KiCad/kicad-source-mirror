@@ -66,7 +66,8 @@ bool SCH_EDIT_FRAME::CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilenam
 
 bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 {
-    wxString          msg;
+    wxString          tmp;
+    wxString          errorMsg;
     SCH_SCREENS       screens;
 
     // Create a new empty library to archive components:
@@ -87,27 +88,28 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
             if( item->Type() != SCH_COMPONENT_T )
                 continue;
 
+            LIB_PART* part = nullptr;
             SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
-            if( archLib->FindAlias( component->GetLibId().GetLibItemName() ) )
-                continue;
-
-            LIB_PART* part = GetLibPart( component->GetLibId() );
-
-            if( !part )
+            try
             {
-                try
-                {
-                    part = Prj().SchLibs()->GetCacheLibrary()->FindPart(
-                        component->GetLibId().GetLibItemName() );
-                }
-                catch( ... /* IO_ERROR ioe */ )
-                {
-                    msg.Printf( _( "Failed to add symbol %s to library file '%s'" ),
-                                component->GetLibId().GetLibItemName().wx_str(), aFileName );
-                    DisplayError( this, msg );
-                    return false;
-                }
+                if( archLib->FindAlias( component->GetLibId().GetLibItemName() ) )
+                    continue;
+
+                part = GetLibPart( component->GetLibId(), true );
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                // Queue up error messages for later.
+                tmp.Printf( _( "Failed to add symbol %s to library file." ),
+                            component->GetLibId().GetLibItemName().wx_str(), aFileName );
+
+                // Don't bail out here.  Attempt to add as many of the symbols to the library
+                // as possible.
+            }
+            catch( ... )
+            {
+                tmp = _( "Unexpected exception occurred." );
             }
 
             if( part )
@@ -115,8 +117,29 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
                 // AddPart() does first clone the part before adding.
                 archLib->AddPart( part );
             }
+            else
+            {
+                tmp.Printf( _( "Symbol %s not found in any library or cache." ),
+                            component->GetLibId().Format().wx_str() );
+            }
+
+            if( !tmp.empty() )
+            {
+                if( errorMsg.empty() )
+                    errorMsg += tmp;
+                else
+                    errorMsg += "\n" + tmp;
+            }
         }
     }
+
+    if( !errorMsg.empty() )
+    {
+        tmp.Printf( _( "Errors occurred creating symbol library %s." ), aFileName );
+        DisplayErrorMessage( this, tmp, errorMsg );
+    }
+
+    archLib->EnableBuffering( false );
 
     try
     {
@@ -124,8 +147,8 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     }
     catch( ... /* IO_ERROR ioe */ )
     {
-        msg.Printf( _( "Failed to save symbol library file '%s'" ), aFileName );
-        DisplayError( this, msg );
+        errorMsg.Printf( _( "Failed to save symbol library file '%s'" ), aFileName );
+        DisplayError( this, errorMsg );
         return false;
     }
 

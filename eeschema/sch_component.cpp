@@ -315,18 +315,25 @@ bool SCH_COMPONENT::Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib )
 {
     LIB_ALIAS* alias = nullptr;
 
-    if( !m_lib_id.GetLibNickname().empty() && aLibTable.HasLibrary( m_lib_id.GetLibNickname() ) )
-        alias = aLibTable.LoadSymbol( m_lib_id );
-
-    // Fall back to cache library.  This is temporary until the new schematic file
-    // format is implemented.
-    if( !alias && aCacheLib )
-        alias = aCacheLib->FindAlias( m_lib_id.GetLibItemName() );
-
-    if( alias && alias->GetPart() )
+    try
     {
-        m_part = alias->GetPart()->SharedPtr();
-        return true;
+        if( m_lib_id.IsValid() )
+            alias = aLibTable.LoadSymbol( m_lib_id );
+
+        // Fall back to cache library.  This is temporary until the new schematic file
+        // format is implemented.
+        if( !alias && aCacheLib )
+            alias = aCacheLib->FindAlias( m_lib_id.GetLibItemName() );
+
+        if( alias && alias->GetPart() )
+        {
+            m_part = alias->GetPart()->SharedPtr();
+            return true;
+        }
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxLogDebug( "Cannot resolve library symbol %s", m_lib_id.Format().wx_str() );
     }
 
     return false;
