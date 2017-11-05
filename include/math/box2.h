@@ -47,7 +47,7 @@ private:
 public:
     typedef typename Vec::coord_type                 coord_type;
     typedef typename Vec::extended_type              ecoord_type;
-    typedef typename std::numeric_limits<coord_type> coord_limits;
+    typedef std::numeric_limits<coord_type>          coord_limits;
 
     BOX2() {};
 
