@@ -28,11 +28,9 @@
 #ifndef VECTOR2D_H_
 #define VECTOR2D_H_
 
-#include <cmath>
 #include <climits>
 #include <iostream>
 #include <sstream>
-#include <cmath>
 
 #include <math/math_util.h>
 
