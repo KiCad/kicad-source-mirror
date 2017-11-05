@@ -36,10 +36,16 @@ GERBVIEW_DRAW_PANEL_GAL::GERBVIEW_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWin
                                         KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
 EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalType )
 {
-    setDefaultLayerDeps();
+    m_view = new KIGFX::VIEW( true );
+    m_view->SetGAL( m_gal );
 
     m_painter.reset( new KIGFX::GERBVIEW_PAINTER( m_gal ) );
     m_view->SetPainter( m_painter.get() );
+
+    m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
+
+    setDefaultLayerDeps();
+
 
     // Load display options (such as filled/outline display of items).
     auto frame = static_cast< GERBVIEW_FRAME* >( GetParentEDAFrame() );
