@@ -129,14 +129,14 @@ CMP_TREE_NODE_UNIT::CMP_TREE_NODE_UNIT( CMP_TREE_NODE* aParent, int aUnit )
 
 CMP_TREE_NODE_LIB_ID::CMP_TREE_NODE_LIB_ID( CMP_TREE_NODE* aParent, LIB_ALIAS* aAlias )
 {
+    wxASSERT( aParent && aAlias );
+
+    Type        = LIBID;
     Parent      = aParent;
     Name        = aAlias->GetName();
     Desc        = aAlias->GetDescription();
 
     // Parent node is the library nickname so set the LIB_ID library nickname.
-    LibId.SetLibNickname( aParent->Name );
-    LibId.SetLibItemName( aAlias->GetName(), false );
-
     IsRoot = aAlias->IsRoot();
 
     // Pre-normalized strings for fast case-insensitive matching
@@ -152,6 +152,7 @@ CMP_TREE_NODE_LIB_ID::CMP_TREE_NODE_LIB_ID( CMP_TREE_NODE* aParent, LIB_ALIAS* a
 
     if( part )
     {
+        LibId = part->GetLibId();
         footprint = part->GetFootprintField().GetText();
     }
 
@@ -163,9 +164,9 @@ CMP_TREE_NODE_LIB_ID::CMP_TREE_NODE_LIB_ID( CMP_TREE_NODE* aParent, LIB_ALIAS* a
         SearchText += footprint.Lower();
     }
 
-    if( aAlias->GetPart()->IsMulti() )
+    if( part->IsMulti() )
     {
-        for( int u = 1; u <= aAlias->GetPart()->GetUnitCount(); ++u )
+        for( int u = 1; u <= part->GetUnitCount(); ++u )
         {
             AddUnit( u );
         }

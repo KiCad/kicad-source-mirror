@@ -291,12 +291,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnSelectChipName( wxCommandEvent& event
 
     auto sel = GetParent()->SelectComponentFromLibrary( NULL, dummy, true, 0, 0 );
 
-    if( sel.Name.IsEmpty() || sel.LibNickname.IsEmpty() )
+    if( !sel.LibId.IsValid() )
         return;
 
-    LIB_ID id( sel.LibNickname, sel.Name );
-
-    chipnameTextCtrl->SetValue( id.Format() );
+    chipnameTextCtrl->SetValue( sel.LibId.Format() );
 }
 
 

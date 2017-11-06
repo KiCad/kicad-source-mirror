@@ -80,8 +80,15 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowse
 
     COMPONENT_SELECTION sel;
 
-    if( viewlibFrame->ShowModal( &sel.Name, this ) )
+    wxString symbol = sel.LibId.Format();
+
+    if( viewlibFrame->ShowModal( &symbol, this ) )
     {
+        LIB_ID id;
+
+        if( id.Parse( symbol ) == -1 )
+            sel.LibId = id;
+
         sel.Unit = viewlibFrame->GetUnit();
         sel.Convert = viewlibFrame->GetConvert();
     }
@@ -98,7 +105,7 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
         bool                                aUseLibBrowser,
         int                                 aUnit,
         int                                 aConvert,
-        const wxString&                     aHighlight,
+        const LIB_ID*                       aHighlight,
         bool                                aAllowFields )
 {
     wxString          dialogTitle;
@@ -131,26 +138,14 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
 
         for( auto const& i : aHistoryList )
         {
-            LIB_ALIAS* alias = nullptr;
-
-            try
-            {
-                alias = libs->LoadSymbol( i.LibNickname, i.Name );
-            }
-            catch( const IO_ERROR& ioe )
-            {
-                wxLogError( wxString::Format( _( "Error occurred loading symbol %s from library %s."
-                                                 "\n\n%s" ), i.Name, i.LibNickname, ioe.What() ) );
-                continue;
-            }
+            LIB_ALIAS* alias = GetLibAlias( i.LibId );
 
             if( alias )
                 history_list.push_back( alias );
         }
 
         adapter->AddAliasList( "-- " + _( "History" ) + " --", history_list );
-        adapter->SetPreselectNode( LIB_ID( aHistoryList[0].LibNickname, aHistoryList[0].Name ),
-                                   aHistoryList[0].Unit );
+        adapter->SetPreselectNode( aHistoryList[0].LibId, aHistoryList[0].Unit );
     }
 
     std::vector< wxString > libNicknames = libs->GetLogicalLibs();
@@ -163,8 +158,8 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
         }
     }
 
-    if( !aHighlight.IsEmpty() )
-        adapter->SetPreselectNode( aHighlight, /* aUnit */ 0 );
+    if( aHighlight && aHighlight->IsValid() )
+        adapter->SetPreselectNode( *aHighlight, /* aUnit */ 0 );
 
     dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), adapter->GetComponentsCount() );
     DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, aConvert, aAllowFields );
@@ -182,20 +177,18 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
         sel.Unit = 1;
 
     sel.Fields = dlg.GetFields();
-    sel.Name = id.GetLibItemName();
-    sel.LibNickname = id.GetLibNickname();
+    sel.LibId = id;
 
     if( dlg.IsExternalBrowserSelected() )   // User requested component browser.
         sel = SelectComponentFromLibBrowser( aFilter, id, sel.Unit, sel.Convert );
 
-    if( !sel.Name.empty() )
+    if( sel.LibId.IsValid() )
     {
         aHistoryList.erase(
             std::remove_if(
                 aHistoryList.begin(),
                 aHistoryList.end(),
-                [ &sel ]( COMPONENT_SELECTION const& i ){ return i.Name == sel.Name
-                    && i.LibNickname == sel.LibNickname; } ),
+                [ &sel ]( COMPONENT_SELECTION const& i ){ return i.LibId == sel.LibId; } ),
             aHistoryList.end() );
 
         aHistoryList.insert( aHistoryList.begin(), sel );
@@ -217,7 +210,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*                          aD
 
     auto sel = SelectComponentFromLibrary( aFilter, aHistoryList, aUseLibBrowser, 1, 1 );
 
-    if( sel.Name.IsEmpty() || sel.LibNickname.IsEmpty() )
+    if( !sel.LibId.IsValid() )
     {
         m_canvas->SetIgnoreMouseEvents( false );
         m_canvas->MoveCursorToCrossHair();
@@ -232,10 +225,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*                          aD
     if( aFilter )
         libsource = aFilter->GetLibSource();
 
-    LIB_ID libId;
-
-    libId.SetLibItemName( sel.Name, false );
-    libId.SetLibNickname( sel.LibNickname );
+    LIB_ID libId = sel.LibId;
 
     LIB_PART* part = GetLibPart( libId, true );
 
@@ -263,15 +253,14 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*                          aD
     }
 
     // Set the component value that can differ from component name in lib, for aliases
-    component->GetField( VALUE )->SetText( sel.Name );
+    component->GetField( VALUE )->SetText( sel.LibId.GetLibItemName() );
 
     // If there is no field defined in the component, copy one over from the library
     // ( from the .dcm file )
     // This way the Datasheet field will not be empty and can be changed from the schematic
-    auto libs = Prj().SchLibs();
     if( component->GetField( DATASHEET )->GetText().IsEmpty() )
     {
-        LIB_ALIAS* entry = libs->FindLibraryAlias( component->GetLibId() );
+        LIB_ALIAS* entry = GetLibAlias( component->GetLibId(), true, true );
 
         if( entry && !!entry->GetDocFileName() )
             component->GetField( DATASHEET )->SetText( entry->GetDocFileName() );

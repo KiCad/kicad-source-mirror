@@ -163,15 +163,14 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
 
     // Get the name of the current part to preselect it
     LIB_PART* current_part = GetCurPart();
-    wxString part_name = current_part ? current_part->GetName() : wxString( wxEmptyString );
+    LIB_ID id = current_part->GetLibId();
 
     SCH_BASE_FRAME::HISTORY_LIST dummyHistoryList;
     SCHLIB_FILTER filter;
     filter.LoadFrom( lib );
-    auto sel = SelectComponentFromLibrary( &filter, dummyHistoryList,
-                                           true, 0, 0, part_name, false );
+    auto sel = SelectComponentFromLibrary( &filter, dummyHistoryList, true, 0, 0, &id, false );
 
-    if( sel.Name.empty() )
+    if( sel.LibId.GetLibItemName().empty() )
         return;
 
     GetScreen()->ClrModify();
@@ -182,7 +181,7 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
     m_aliasName.Empty();
 
     // Load the new library symbol
-    LoadComponentFromCurrentLib( sel.Name, sel.Unit, sel.Convert );
+    LoadComponentFromCurrentLib( sel.LibId.GetLibItemName(), sel.Unit, sel.Convert );
 }
 
 

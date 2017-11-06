@@ -24,7 +24,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <lib_id.h>
 #include <draw_frame.h>
+
 #include <class_sch_screen.h>
 
 class PAGE_INFO;
@@ -153,16 +155,13 @@ public:
 
     struct COMPONENT_SELECTION
     {
-        wxString    LibNickname;
-        wxString    Name;
+        LIB_ID      LibId;
         int         Unit;
         int         Convert;
 
         std::vector<std::pair<int, wxString>>   Fields;
 
         COMPONENT_SELECTION():
-            LibNickname( "" ),
-            Name( "" ),
             Unit( 1 ),
             Convert( 1 )
         {}
@@ -199,7 +198,7 @@ public:
             bool                                aUseLibBrowser,
             int                                 aUnit,
             int                                 aConvert,
-            const wxString& aHighlight = wxEmptyString,
+            const LIB_ID*                       aHighlight = nullptr,
             bool                                aAllowFields = true );
 
     void OnEditSymbolLibTable( wxCommandEvent& aEvent );

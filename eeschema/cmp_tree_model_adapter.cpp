@@ -295,7 +295,7 @@ unsigned int CMP_TREE_MODEL_ADAPTER::GetChildren(
 {
     auto node = ( aItem.IsOk() ? ToNode( aItem ) : &m_tree );
 
-    if( node->Type != CMP_TREE_NODE::TYPE::ALIAS || m_show_units )
+    if( node->Type != CMP_TREE_NODE::TYPE::LIBID || m_show_units )
         return IntoArray( *node, aChildren );
     else
         return 0;
@@ -332,7 +332,7 @@ bool CMP_TREE_MODEL_ADAPTER::GetAttr(
     auto node = ToNode( aItem );
     wxASSERT( node );
 
-    if( node->Type != CMP_TREE_NODE::ALIAS )
+    if( node->Type != CMP_TREE_NODE::LIBID )
     {
         // Currently only aliases are formatted at all
         return false;
@@ -439,7 +439,7 @@ bool CMP_TREE_MODEL_ADAPTER::ShowResults()
     return FindAndExpand( m_tree,
             []( CMP_TREE_NODE const* n )
             {
-                return n->Type == CMP_TREE_NODE::TYPE::ALIAS && n->Score > 1;
+                return n->Type == CMP_TREE_NODE::TYPE::LIBID && n->Score > 1;
             } );
 }
 
@@ -452,7 +452,7 @@ bool CMP_TREE_MODEL_ADAPTER::ShowPreselect()
     return FindAndExpand( m_tree,
             [&]( CMP_TREE_NODE const* n )
             {
-                if( n->Type == CMP_TREE_NODE::ALIAS && ( n->Children.empty() || !m_preselect_unit ) )
+                if( n->Type == CMP_TREE_NODE::LIBID && ( n->Children.empty() || !m_preselect_unit ) )
                     return m_preselect_lib_id == n->LibId;
                 else if( n->Type == CMP_TREE_NODE::UNIT && m_preselect_unit )
                     return m_preselect_lib_id == n->Parent->LibId && m_preselect_unit == n->Unit;
@@ -467,7 +467,7 @@ bool CMP_TREE_MODEL_ADAPTER::ShowSingleLibrary()
     return FindAndExpand( m_tree,
             []( CMP_TREE_NODE const* n )
             {
-                return n->Type == CMP_TREE_NODE::TYPE::ALIAS &&
+                return n->Type == CMP_TREE_NODE::TYPE::LIBID &&
                        n->Parent->Parent->Children.size() == 1;
             } );
 }
