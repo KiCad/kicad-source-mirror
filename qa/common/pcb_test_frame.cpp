@@ -103,12 +103,12 @@ public:
 
     virtual ~TEST_ACTIONS() {};
 
-    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId )
+    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override
     {
         return NULLOPT;
     }
 
-    void RegisterAllTools( TOOL_MANAGER* aToolManager )
+    void RegisterAllTools( TOOL_MANAGER* aToolManager ) override
     {
     }
 };

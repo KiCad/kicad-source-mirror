@@ -48,10 +48,10 @@ namespace KIGFX {
 class GAL_TEST_APP : public wxApp
 {
 public:
-    virtual bool OnInit();
+    virtual bool OnInit() override;
 
-    virtual void OnInitCmdLine(wxCmdLineParser& parser);
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
+    virtual void OnInitCmdLine( wxCmdLineParser& parser ) override;
+    virtual bool OnCmdLineParsed( wxCmdLineParser& parser ) override;
 
 private:
     wxString m_filename;
@@ -75,7 +75,7 @@ protected:
 
     virtual void OnExit(wxCommandEvent& event);
     virtual void OnMotion( wxMouseEvent& aEvent );
-    virtual void OnMenuFileOpen( wxCommandEvent& WXUNUSED(event) );
+    virtual void OnMenuFileOpen( wxCommandEvent& WXUNUSED( event ) );
 
     void buildView();
 
