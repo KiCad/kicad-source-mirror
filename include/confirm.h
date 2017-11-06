@@ -32,6 +32,7 @@
 #define __INCLUDE__CONFIRM_H__
 
 #include <wx/window.h>
+#include <vector>
 
 /**
  * Function DisplayExitDialog
@@ -120,5 +121,28 @@ void DisplayHtmlInfoMessage( wxWindow* parent, const wxString& title,
                              const wxString& aMessage,
                              const wxSize& size = wxDefaultSize );
 
+
+/**
+ * Displays a dialog with radioboxes asking the user to select an option.
+ * @param aParent is the parent window.
+ * @param aTitle is the dialog title.
+ * @param aMessage is a text label displayed in the first row of the dialog.
+ * @param aOptions is a vector of possible options.
+ * @return Index of the selected option or -1 when the dialog has been cancelled.
+ */
+int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxString& aMessage,
+        const wxArrayString& aOptions );
+
+/**
+ * Displays a dialog with checkboxes asking the user to select one or more options.
+ * @param aParent is the parent window.
+ * @param aTitle is the dialog title.
+ * @param aMessage is a text label displayed in the first row of the dialog.
+ * @param aOptions is a vector of possible options.
+ * @param aDefaultState is the default state for the checkboxes.
+ * @return Vector containing indices of the selected option. 
+ */
+std::pair<bool, std::vector<int>> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
+        const wxString& aMessage, const wxArrayString& aOptions, bool aDefaultState = false );
 
 #endif /* __INCLUDE__CONFIRM_H__ */
