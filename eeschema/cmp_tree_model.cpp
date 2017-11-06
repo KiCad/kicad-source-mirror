@@ -236,6 +236,7 @@ CMP_TREE_NODE_LIB::CMP_TREE_NODE_LIB( CMP_TREE_NODE* aParent, wxString const& aN
     Name = aName;
     MatchName = aName.Lower();
     Parent = aParent;
+    LibId.SetLibNickname( aName );
 }
 
 
