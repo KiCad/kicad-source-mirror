@@ -394,8 +394,19 @@ void GAL::DrawGrid()
 
 VECTOR2D GAL::GetGridPoint( const VECTOR2D& aPoint ) const
 {
+#if 0
+    // This old code expects a non zero grid size, which can be wrong here.
     return VECTOR2D( KiROUND( ( aPoint.x - gridOffset.x ) / gridSize.x ) * gridSize.x + gridOffset.x,
                      KiROUND( ( aPoint.y - gridOffset.y ) / gridSize.y ) * gridSize.y + gridOffset.y );
+#else
+    // if grid size == 0.0 there is no grid, so use aPoint as grid reference position
+    double cx = gridSize.x > 0.0 ? KiROUND( ( aPoint.x - gridOffset.x ) / gridSize.x ) * gridSize.x + gridOffset.x
+            : aPoint.x;
+    double cy = gridSize.y > 0.0 ? KiROUND( ( aPoint.y - gridOffset.y ) / gridSize.y ) * gridSize.y + gridOffset.y
+            : aPoint.y;
+
+    return VECTOR2D( cx, cy );
+#endif
 }
 
 const int GAL::MIN_DEPTH = -1024;
