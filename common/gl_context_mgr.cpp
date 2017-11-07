@@ -102,7 +102,9 @@ void GL_CONTEXT_MANAGER::UnlockCtx( wxGLContext* aContext )
     }
     else
     {
-        wxLogDebug( "Trying to unlock GL context mutex from a wrong context" );
+        wxLogDebug(
+            "Trying to unlock GL context mutex from a wrong context: aContext %p m_glCtx %p",
+            aContext, m_glCtx );
     }
 }
 

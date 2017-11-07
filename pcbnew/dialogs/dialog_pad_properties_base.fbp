@@ -88,12 +88,12 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxBoxSizer" expanded="0">
+            <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">m_MainSizer</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
-                <object class="sizeritem" expanded="0">
+                <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND</property>
                     <property name="proportion">1</property>
@@ -10210,7 +10210,7 @@
                                         <property name="center_pane">0</property>
                                         <property name="class">PCB_DRAW_PANEL_GAL</property>
                                         <property name="close_button">1</property>
-                                        <property name="construction">m_panelShowPadGal = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), wxDefaultSize, m_galOptions, EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );</property>
+                                        <property name="construction">m_panelShowPadGal = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), wxDefaultSize, m_galOptions, EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO);</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
                                         <property name="declaration">PCB_DRAW_PANEL_GAL* m_panelShowPadGal;&#x0A;KIGFX::GAL_DISPLAY_OPTIONS m_galOptions;</property>
@@ -10379,7 +10379,7 @@
                         <property name="name">m_sdbSizer</property>
                         <property name="permission">protected</property>
                         <event name="OnApplyButtonClick"></event>
-                        <event name="OnCancelButtonClick"></event>
+                        <event name="OnCancelButtonClick">OnCancel</event>
                         <event name="OnContextHelpButtonClick"></event>
                         <event name="OnHelpButtonClick"></event>
                         <event name="OnNoButtonClick"></event>

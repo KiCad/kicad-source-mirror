@@ -198,6 +198,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onGeometryTransform( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onImportPrimitives( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPaintShowPanel( wxPaintEvent& event ) { event.Skip(); }
+		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
