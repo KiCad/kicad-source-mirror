@@ -32,6 +32,7 @@
 #include <fctsys.h>
 #include <common.h>
 #include <gr_basic.h>
+#include <gal/graphics_abstraction_layer.h>
 #include <trigo.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
@@ -186,8 +187,12 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
         m_panelShowPadGal->SwitchBackend( m_parent->GetGalCanvas()->GetBackend() );
         m_panelShowPadGal->Show();
         m_panelShowPad->Hide();
-        m_panelShowPadGal->GetView()->Add( m_dummyPad );
-        m_panelShowPadGal->GetView()->Add( m_axisOrigin );
+        auto view = m_panelShowPadGal->GetView();
+        // gives a non null grid size (0.01mm) because GAL layer does not like a 0 size grid:
+        double gridsize = 0.01 * IU_PER_MM;
+        view->GetGAL()->SetGridSize( VECTOR2D( gridsize, gridsize ) );
+        view->Add( m_dummyPad );
+        view->Add( m_axisOrigin );
 
         m_panelShowPadGal->StartDrawing();
         Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_PAD_PROPERTIES::OnResize ) );
