@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  4 2016)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -227,7 +227,7 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	m_fgSizerButtons->Add( m_bpvBottom, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizer3DButtons->Add( m_fgSizerButtons, 6, wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bSizer3DButtons->Add( m_fgSizerButtons, 6, wxEXPAND, 5 );
 	
 	
 	bSizer3DButtons->Add( 0, 0, 1, wxEXPAND, 5 );
