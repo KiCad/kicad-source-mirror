@@ -923,6 +923,12 @@ bool PCBMODEL::getModelLabel( const std::string aFileName, TDF_Label& aLabel )
                 alts.Add( "Stp" );
                 alts.Add( "Step" );
 
+                // IGES files
+                alts.Add( "iges" );
+                alts.Add( "IGES" );
+                alts.Add( "igs" );
+                alts.Add( "IGS" );
+
                 //TODO - Other alternative formats?
 
                 for( auto alt : alts )
