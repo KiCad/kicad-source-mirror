@@ -895,7 +895,7 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
 
             if( idx == REFERENCE && !aResetRef )
                 continue;
-            if( idx < MANDATORY_FIELDS )
+            if( (unsigned) idx < MANDATORY_FIELDS )
                 schField = GetField( idx );
             else
                 schField = FindField( field.GetName() );

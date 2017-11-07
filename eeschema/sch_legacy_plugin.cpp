@@ -2747,7 +2747,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr< LIB_PART >& aPart,
     }
 
     // Fields in RAM must always have names.
-    if( id < MANDATORY_FIELDS )
+    if( (unsigned) id < MANDATORY_FIELDS )
     {
         // Fields in RAM must always have names, because we are trying to get
         // less dependent on field ids and more dependent on names.

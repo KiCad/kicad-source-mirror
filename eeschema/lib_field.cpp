@@ -264,7 +264,7 @@ bool LIB_FIELD::Load( LINE_READER& aLineReader, wxString& errorMsg )
     }
 
     // fields in RAM must always have names.
-    if( m_id < MANDATORY_FIELDS )
+    if( (unsigned) m_id < MANDATORY_FIELDS )
     {
         // Fields in RAM must always have names, because we are trying to get
         // less dependent on field ids and more dependent on names.
