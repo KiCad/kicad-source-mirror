@@ -82,6 +82,14 @@ enum MODULE_ATTR_T
 class MODULE_3D_SETTINGS
 {
     public:
+        MODULE_3D_SETTINGS() :
+            // Initialize with sensible values
+            m_Scale { 1, 1, 1 },
+            m_Rotation { 0, 0, 0 },
+            m_Offset { 0, 0, 0 }
+        {
+        }
+
         struct VECTOR3D
         {
             double x, y, z;

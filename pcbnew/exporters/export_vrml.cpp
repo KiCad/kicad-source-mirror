@@ -1349,11 +1349,13 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb,
         compose_quat( q1, q2, q1 );
         from_quat( q1, rot );
 
+        double offsetFactor = 1000.0f * IU_PER_MILS / 25.4f;
+
         // adjust 3D shape local offset position
-        // they are given in inch, so they are converted in board IU.
-        double offsetx = sM->m_Offset.x * IU_PER_MILS * 1000.0;
-        double offsety = sM->m_Offset.y * IU_PER_MILS * 1000.0;
-        double offsetz = sM->m_Offset.z * IU_PER_MILS * 1000.0;
+        // they are given in mm, so they are converted in board IU.
+        double offsetx = sM->m_Offset.x * offsetFactor;
+        double offsety = sM->m_Offset.y * offsetFactor;
+        double offsetz = sM->m_Offset.z * offsetFactor;
 
         if( isFlipped )
             offsetz = -offsetz;

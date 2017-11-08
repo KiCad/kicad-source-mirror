@@ -28,7 +28,10 @@
 #include "kicadmodel.h"
 
 
-KICADMODEL::KICADMODEL() : m_scale( 1.0, 1.0, 1.0 )
+KICADMODEL::KICADMODEL() :
+    m_scale( 1.0, 1.0, 1.0 ),
+    m_offset( 0.0, 0.0, 0.0 ),
+    m_rotation( 0.0, 0.0, 0.0 )
 {
     return;
 }
