@@ -229,6 +229,7 @@ static std::string fmt_mask( LSET aSet )
 static bool flipBottomPads;
 static bool uniquePins;
 static bool individualShapes;
+static bool storeOriginCoords;
 
 // These are the export origin (the auxiliary axis)
 static int GencadOffsetX, GencadOffsetY;
@@ -292,6 +293,7 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     flipBottomPads = optionsDialog.GetOption( FLIP_BOTTOM_PADS );
     uniquePins = optionsDialog.GetOption( UNIQUE_PIN_NAMES );
     individualShapes = optionsDialog.GetOption( INDIVIDUAL_SHAPES );
+    storeOriginCoords = optionsDialog.GetOption( STORE_ORIGIN_COORDS );
 
     // Switch the locale to standard C (needed to print floating point numbers)
     LOCALE_IO toggle;
@@ -300,8 +302,8 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     GetBoard()->ComputeBoundingBox();
 
     // Save the auxiliary origin for the rest of the module
-    GencadOffsetX = GetAuxOrigin().x;
-    GencadOffsetY = GetAuxOrigin().y;
+    GencadOffsetX = optionsDialog.GetOption( USE_AUX_ORIGIN ) ? GetAuxOrigin().x : 0;
+    GencadOffsetY = optionsDialog.GetOption( USE_AUX_ORIGIN ) ? GetAuxOrigin().y : 0;
 
     // No idea on *why* this should be needed... maybe to fix net names?
     Compile_Ratsnest( NULL, true );
@@ -999,9 +1001,10 @@ static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* aFrame )
     fputs( TO_UTF8( msg ), aFile );
     fputs( "UNITS INCH\n", aFile );
 
+    // giving 0 as the argument to Map{X,Y}To returns the scaled origin point
     msg.Printf( wxT( "ORIGIN %g %g\n" ),
-                MapXTo( aFrame->GetAuxOrigin().x ),
-                MapYTo( aFrame->GetAuxOrigin().y ) );
+            storeOriginCoords ? MapXTo( 0 ) : 0,
+            storeOriginCoords ? MapYTo( 0 ) : 0 );
     fputs( TO_UTF8( msg ), aFile );
 
     fputs( "INTERTRACK 0\n", aFile );

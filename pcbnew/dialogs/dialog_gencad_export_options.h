@@ -35,7 +35,9 @@ enum GENCAD_EXPORT_OPT
 {
     FLIP_BOTTOM_PADS,       // flip bottom components padstacks geometry
     UNIQUE_PIN_NAMES,       // generate unique pin names
-    INDIVIDUAL_SHAPES       // generate a shape for each component
+    INDIVIDUAL_SHAPES,      // generate a shape for each component
+    USE_AUX_ORIGIN,         // use auxiliary axis as origin
+    STORE_ORIGIN_COORDS     // saves the origin point coordinates or (0, 0)
 };
 
 
