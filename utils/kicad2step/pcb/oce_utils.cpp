@@ -996,10 +996,9 @@ bool PCBMODEL::getModelLocation( bool aBottom, DOUBLET aPosition, double aRotati
     gp_Trsf lPos;
     lPos.SetTranslation( gp_Vec( aPosition.x, -aPosition.y, 0.0 ) );
 
-    // offset (inches)
-    aOffset.x *= 25.4;
-    aOffset.y *= 25.4;
-    aOffset.z *= 25.4 + BOARD_OFFSET;
+    // Offset board thickness
+    aOffset.z += BOARD_OFFSET;
+
     gp_Trsf lRot;
 
     if( aBottom )
