@@ -198,9 +198,6 @@ TOOL_MANAGER::TOOL_MANAGER() :
     m_menuActive( false )
 {
     m_actionMgr = new ACTION_MANAGER( this );
-
-    // Keep default VIEW_CONTROLS settings at the bottom of the stack
-    m_vcStack.push( KIGFX::VC_SETTINGS() );
 }
 
 
@@ -533,11 +530,9 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 
                 if( st->cofunc )
                 {
-                    pushViewControls();
                     applyViewControls( st );
                     bool end = !st->cofunc->Resume();
                     saveViewControls( st );
-                    popViewControls();
 
                     if( end )
                         it = finishTool( st );
@@ -576,12 +571,10 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                     st->transitions.clear();
 
                     // got match? Run the handler.
-                    pushViewControls();
                     applyViewControls( st );
                     st->idle = false;
                     st->cofunc->Call( aEvent );
                     saveViewControls( st );
-                    popViewControls();
 
                     if( !st->cofunc->Running() )
                         finishTool( st ); // The couroutine has finished immediately?
@@ -734,20 +727,20 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 
 bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 {
+    if( TOOL_STATE* active = GetCurrentToolState() )
+        saveViewControls( active );
+
     bool hotkey_handled = processEvent( aEvent );
 
     if( TOOL_STATE* active = GetCurrentToolState() )
-    {
         applyViewControls( active );
-    }
 
     if( m_view->IsDirty() )
     {
         auto f = dynamic_cast<EDA_DRAW_FRAME*>( GetEditFrame() );
+
 	if( f )
-	{
 	    f->GetGalCanvas()->Refresh();    // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
-        }
     }
 
     return hotkey_handled;
@@ -852,19 +845,6 @@ void TOOL_MANAGER::saveViewControls( TOOL_STATE* aState )
 void TOOL_MANAGER::applyViewControls( TOOL_STATE* aState )
 {
     m_viewControls->ApplySettings( aState->vcSettings );
-}
-
-
-void TOOL_MANAGER::pushViewControls()
-{
-    m_vcStack.push( m_viewControls->GetSettings() );
-}
-
-
-void TOOL_MANAGER::popViewControls()
-{
-    m_viewControls->ApplySettings( m_vcStack.top() );
-    m_vcStack.pop();
 }
 
 

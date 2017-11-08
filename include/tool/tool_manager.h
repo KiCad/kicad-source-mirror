@@ -479,18 +479,6 @@ private:
      */
     void applyViewControls( TOOL_STATE* aState );
 
-    /**
-     * Function pushViewControls()
-     * Stores the current VIEW_CONTROLS settings on the stack.
-     */
-    void pushViewControls();
-
-    /**
-     * Function pushViewControls()
-     * Restores VIEW_CONTROLS settings from the stack.
-     */
-    void popViewControls();
-
     ///> Main function for event processing.
     ///> @return true if a hotkey was handled
     bool processEvent( const TOOL_EVENT& aEvent );
@@ -523,9 +511,6 @@ private:
 
     /// Queue that stores events to be processed at the end of the event processing cycle.
     std::list<TOOL_EVENT> m_eventQueue;
-
-    ///> VIEW_CONTROLS settings stack
-    std::stack<KIGFX::VC_SETTINGS> m_vcStack;
 
     /// Flag saying if the currently processed event should be passed to other tools.
     bool m_passEvent;
