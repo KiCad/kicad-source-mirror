@@ -599,22 +599,13 @@ void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
     if( aItemCount == 0 )
         return;
 
-    unsigned icnt = aList.m_CommandsList.size();
-
-    if( aItemCount > 0 )
-        icnt = aItemCount;
-
-    for( unsigned ii = 0; ii < icnt; ii++ )
+    for( auto& command : aList.m_CommandsList )
     {
-        if( aList.m_CommandsList.size() == 0 )
-            break;
-
-        PICKED_ITEMS_LIST* curr_cmd = aList.m_CommandsList[0];
-        aList.m_CommandsList.erase( aList.m_CommandsList.begin() );
-
-        curr_cmd->ClearListAndDeleteItems();
-        delete curr_cmd;    // Delete command
+        command->ClearListAndDeleteItems();
+        delete command;
     }
+
+    aList.m_CommandsList.clear();
 }
 
 

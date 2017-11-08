@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,8 +25,6 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 
-//#include <general.h>
-//#include <protos.h>
 #include <libeditframe.h>
 #include <class_libentry.h>
 
@@ -34,16 +32,15 @@
 void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy )
 {
     LIB_PART*          CopyItem;
-    PICKED_ITEMS_LIST* lastcmd;
+    PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
 
     CopyItem = new LIB_PART( * (LIB_PART*) ItemToCopy );
 
     // Clear current flags (which can be temporary set by a current edit command).
     CopyItem->ClearStatus();
 
-    lastcmd = new PICKED_ITEMS_LIST();
     ITEM_PICKER wrapper( CopyItem, UR_LIBEDIT );
-    lastcmd->PushItem(wrapper);
+    lastcmd->PushItem( wrapper );
     GetScreen()->PushCommandToUndoList( lastcmd );
 
     // Clear redo list, because after new save there is no redo to do.
@@ -56,19 +53,17 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
     if( GetScreen()->GetRedoCommandCount() <= 0 )
         return;
 
+    // Store the current part in the undo buffer
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-
     LIB_PART* part = GetCurPart();
-
     ITEM_PICKER wrapper( part, UR_LIBEDIT );
-
     lastcmd->PushItem( wrapper );
     GetScreen()->PushCommandToUndoList( lastcmd );
 
+    // Load the last redo entry
     lastcmd = GetScreen()->PopCommandFromRedoList();
-
     wrapper = lastcmd->PopItem();
-
+    delete lastcmd;
     part = (LIB_PART*) wrapper.GetItem();
 
     // Do not delete the previous part by calling SetCurPart( part )
@@ -99,20 +94,18 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
     if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
 
+    // Store the current part in the redo buffer
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-
-    LIB_PART*      part = GetCurPart();
-
+    LIB_PART* part = GetCurPart();
     ITEM_PICKER wrapper( part, UR_LIBEDIT );
-
     lastcmd->PushItem( wrapper );
     GetScreen()->PushCommandToRedoList( lastcmd );
 
+    // Load the last undo entry
     lastcmd = GetScreen()->PopCommandFromUndoList();
-
     wrapper = lastcmd->PopItem();
-
-    part = (LIB_PART*     ) wrapper.GetItem();
+    delete lastcmd;
+    part = (LIB_PART*) wrapper.GetItem();
 
     // Do not delete the previous part by calling SetCurPart( part ),
     // which calls delete <previous part>.
