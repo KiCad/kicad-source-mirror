@@ -37,7 +37,7 @@ using KIGFX::COLOR4D;
 class TRANSFORM;
 class SCH_SHEET;
 
-#define EESCHEMA_VERSION 3
+#define EESCHEMA_VERSION 4
 #define SCHEMATIC_HEAD_STRING "Schematic File Version"
 
 #define DANGLING_SYMBOL_SIZE 12

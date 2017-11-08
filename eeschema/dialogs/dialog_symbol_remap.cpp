@@ -65,15 +65,14 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
     remapSymbolsToLibTable( m_messagePanel->Reporter() );
 
     // Remove all of the libraries from the legacy library list.
-    PART_LIBS* libs = Prj().SchLibs();
-    libs->clear();
+    wxString paths;
+    wxArrayString libNames;
+
+    PART_LIBS::LibNamesAndPaths( &Prj(), true, &paths, &libNames );
+
+    // Reload the the cache symbol library.
     Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
     Prj().SchLibs();
-
-    // Update the project file so the library list is cleared.
-    SCH_EDIT_FRAME* parent = static_cast< SCH_EDIT_FRAME* >( GetParent() );
-    wxCHECK_RET( parent, "Parent window was not and SCH_EDIT_FRAME" );
-    parent->SaveProjectSettings( false );
 }
 
 

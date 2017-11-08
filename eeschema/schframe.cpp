@@ -1274,6 +1274,8 @@ void SCH_EDIT_FRAME::OnRemapSymbols( wxCommandEvent& event )
     DIALOG_SYMBOL_REMAP dlgRemap( this );
 
     dlgRemap.ShowQuasiModal();
+
+    m_canvas->Refresh( true );
 }
 
 
