@@ -70,7 +70,7 @@ std::string
     StrPrintf( const char* format, ... );
 
 
-#define LINE_READER_LINE_DEFAULT_MAX        100000
+#define LINE_READER_LINE_DEFAULT_MAX        1000000
 #define LINE_READER_LINE_INITIAL_SIZE       5000
 
 /**

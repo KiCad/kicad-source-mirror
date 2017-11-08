@@ -58,7 +58,6 @@ static int vprint( std::string* result, const char* format, va_list ap )
         // a buf for holding suffient characters.
 
         std::vector<char>   buf;
-
         buf.reserve( len+1 );   // reserve(), not resize() which writes. +1 for trailing nul.
 
         len = vsnprintf( &buf[0], len+1, format, tmp );
@@ -101,11 +100,8 @@ std::string StrPrintf( const char* format, ... )
 //-----<LINE_READER>------------------------------------------------------
 
 LINE_READER::LINE_READER( unsigned aMaxLineLength ) :
-    length( 0 ),
-    lineNum( 0 ),
-    line( NULL ),
-    capacity( 0 ),
-    maxLineLength( aMaxLineLength )
+                length( 0 ), lineNum( 0 ), line( NULL ),
+                capacity( 0 ), maxLineLength( aMaxLineLength )
 {
     if( aMaxLineLength != 0 )
     {
@@ -116,7 +112,10 @@ LINE_READER::LINE_READER( unsigned aMaxLineLength ) :
         if( capacity > aMaxLineLength+1 )
             capacity = aMaxLineLength+1;
 
-        line = new char[capacity];
+        // Be sure there is room for a null EOL char, so reserve at least capacity+1 bytes
+        // to ensure capacity line lenght and avoid corner cases
+        // Use capacity+5 to cover and corner case
+        line = new char[capacity+5];
 
         line[0] = '\0';
     }
@@ -141,7 +140,9 @@ void LINE_READER::expandCapacity( unsigned newsize )
         capacity = newsize;
 
         // resize the buffer, and copy the original data
-        char* bigger = new char[capacity];
+        // Be sure there is room for the null EOL char, so reserve capacity+1 bytes
+        // to ensure capacity line lenght. Use capacity+5 to cover and corner case
+        char* bigger = new char[capacity+5];
 
         wxASSERT( capacity >= length+1 );
 
@@ -155,12 +156,11 @@ void LINE_READER::expandCapacity( unsigned newsize )
 
 
 FILE_LINE_READER::FILE_LINE_READER( const wxString& aFileName,
-            unsigned aStartingLineNumber,
-            unsigned aMaxLineLength ):
-    LINE_READER( aMaxLineLength ),
-    iOwn( true )
+            unsigned aStartingLineNumber, unsigned aMaxLineLength ):
+    LINE_READER( aMaxLineLength ), iOwn( true )
 {
     fp = wxFopen( aFileName, wxT( "rt" ) );
+
     if( !fp )
     {
         wxString msg = wxString::Format(
@@ -207,6 +207,7 @@ char* FILE_LINE_READER::ReadLine()
 
         // faster, POSIX compatible fgetc(), no locking.
         int cc = getc_unlocked( fp );
+
         if( cc == EOF )
             break;
 
@@ -270,12 +271,10 @@ char* STRING_LINE_READER::ReadLine()
         wxASSERT( ndx + length <= lines.length() );
 
         memcpy( line, &lines[ndx], length );
-
         ndx += length;
     }
 
     ++lineNum;      // this gets incremented even if no bytes were read
-
     line[length] = 0;
 
     return length ? line : NULL;
