@@ -165,7 +165,7 @@ class FP_THREAD_IFACE
         std::deque<CACHE_ENTRY> m_loaderQueue;
         std::map<LIB_ID, CACHE_ENTRY> m_cachedFootprints;
         LIB_ID m_current_fp;
-        FOOTPRINT_PREVIEW_PANEL* m_panel;
+        FOOTPRINT_PREVIEW_PANEL* m_panel = nullptr;
         MUTEX m_lock;
 };
 

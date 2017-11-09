@@ -281,6 +281,7 @@ private:
     {
         SCAN_STATE()
         {
+            dist_prev   = INT_MAX;
             dist_max    = INT_MAX;
             nearest     = -1;
             nearest_prev = -1;

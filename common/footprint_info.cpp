@@ -141,6 +141,8 @@ std::unique_ptr<FOOTPRINT_LIST> FOOTPRINT_LIST::GetInstance( KIWAY& aKiway )
 
 FOOTPRINT_ASYNC_LOADER::FOOTPRINT_ASYNC_LOADER() : m_list( nullptr )
 {
+    m_started = false;
+    m_total_libs = 0;
 }
 
 

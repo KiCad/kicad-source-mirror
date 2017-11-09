@@ -72,6 +72,7 @@ FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( wxWindow* aParent,
           m_fp_loader( aLoader ),
           m_fp_list( aFpList )
 {
+    m_zero_filter = true;
     m_sizer = new wxBoxSizer( wxVERTICAL );
     m_progress_timer = std::make_unique<wxTimer>( this );
     m_book = new wxSimplebook( this, wxID_ANY );
