@@ -51,13 +51,13 @@ static bool sort_by_libid( const SCH_COMPONENT* ref, SCH_COMPONENT* cmp )
 
 
 /**
- * Fill a vector with all of the project's components, to ease iterating over them.
+ * Fill a vector with all of the project's symbols, to ease iterating over them.
  *
- * The list is sorted by lib id, therefore components using the same library
+ * The list is sorted by #LIB_ID, therefore components using the same library
  * symbol are grouped, allowing later faster calculations (one library search by group
  * of symbols)
  *
- * @param aComponents - a vector that will take the components
+ * @param aComponents - a vector that will take the symbols
  */
 static void get_components( std::vector<SCH_COMPONENT*>& aComponents )
 {
@@ -253,17 +253,15 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer,
             // Search the symbol names candidates only once for this group:
             old_part_name = part_name;
             cache_match = find_component( part_name, aRescuer.GetPrj()->SchLibs(), true );
-            LIB_ID id( wxEmptyString, part_name );
-            lib_match = aRescuer.GetPrj()->SchLibs()->FindLibPart( id );
+            lib_match = find_component( part_name, aRescuer.GetPrj()->SchLibs(), false );
 
-            // Test whether there is a conflict
-            if( !cache_match || !lib_match )
+            // Test whether there is a conflict or if the symbol can only be found in the cache.
+            if( ( cache_match && lib_match
+                && !cache_match->PinsConflictWith( *lib_match, true, true, true, true, false ) )
+              || (!cache_match && lib_match ) )
                 continue;
 
-            if( !cache_match->PinsConflictWith( *lib_match, true, true, true, true, false ) )
-                continue;
-
-            // May have been rescued already.
+            // Check if the symbol has already been rescued.
             wxString new_name = part_name;
 
             if( new_name.Find( part_name_suffix ) == wxNOT_FOUND )
@@ -366,11 +364,10 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
 
             lib_match = aRescuer.GetFrame()->GetLibPart( part_id );
 
-            // Test whether there is a conflict
-            if( !cache_match || !lib_match )
-                continue;
-
-            if( !cache_match->PinsConflictWith( *lib_match, true, true, true, true, false ) )
+            // Test whether there is a conflict or if the symbol can only be found in the cache.
+            if( ( cache_match && lib_match
+                && !cache_match->PinsConflictWith( *lib_match, true, true, true, true, false ) )
+              || (!cache_match && lib_match ) )
                 continue;
 
             // May have been rescued already.
@@ -718,7 +715,6 @@ SYMBOL_LIB_TABLE_RESCUER::SYMBOL_LIB_TABLE_RESCUER( SCH_EDIT_FRAME& aEditFrame,
 void SYMBOL_LIB_TABLE_RESCUER::FindCandidates()
 {
     RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues( *this, m_all_candidates );
-    RESCUE_CACHE_CANDIDATE::FindRescues( *this, m_all_candidates );
 }
 
 
