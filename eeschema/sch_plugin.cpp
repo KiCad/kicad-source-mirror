@@ -33,14 +33,6 @@
  * @param aPlugin is a SCH_PLUGIN instance
  * @param aCaller is the name of the unimplemented API function.
  */
-static void not_implemented( SCH_PLUGIN* aPlugin, const char* aCaller )
-{
-    THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED,
-                                      aPlugin->GetName().GetData(),
-                                      wxString::FromUTF8( aCaller ).GetData() ) );
-}
-
-
 static void not_implemented( const SCH_PLUGIN* aPlugin, const char* aCaller )
 {
     THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED,
@@ -194,5 +186,5 @@ bool SCH_PLUGIN::CheckHeader( const wxString& aFileName )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
     not_implemented( this, __FUNCTION__ );
-    return NULL;
+    return false;
 }
