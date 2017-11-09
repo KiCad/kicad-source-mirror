@@ -4214,7 +4214,7 @@
                                                                     <property name="style"></property>
                                                                     <property name="subclass"></property>
                                                                     <property name="toolbar_pane">0</property>
-                                                                    <property name="tooltip">Corner radius in percent  of the pad width.&#x0A;The width is the smaller value between size X and size Y&#x0A;The max value is 50 percent </property>
+                                                                    <property name="tooltip">Corner radius in percent  of the pad width.&#x0A;The width is the smaller value between size X and size Y.&#x0A;The max value is 50 percent.</property>
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
@@ -4471,7 +4471,7 @@
                                                                     <property name="style"></property>
                                                                     <property name="subclass"></property>
                                                                     <property name="toolbar_pane">0</property>
-                                                                    <property name="tooltip">Corner radius.&#x0A;Can be no more than half pad width.&#x0A;The width is the smaller value between size X and size Y&#x0A;Note: IPC norm gives a max value = 0.25mm</property>
+                                                                    <property name="tooltip">Corner radius.&#x0A;Can be no more than half pad width.&#x0A;The width is the smaller value between size X and size Y.&#x0A;Note: IPC norm gives a max value = 0.25mm.</property>
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>

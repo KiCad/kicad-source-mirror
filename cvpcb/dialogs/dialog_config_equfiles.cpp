@@ -96,7 +96,7 @@ void DIALOG_CONFIG_EQUFILES::OnEditEquFile( wxCommandEvent& event )
 
     if( editorname.IsEmpty() )
     {
-        wxMessageBox( _( "No editor defined in Kicad. Please chose it" ) );
+        wxMessageBox( _( "No editor defined in Kicad. Please choose it." ) );
         return;
     }
 
