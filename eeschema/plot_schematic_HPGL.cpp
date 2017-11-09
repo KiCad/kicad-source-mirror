@@ -93,7 +93,7 @@ static const wxChar* plot_sheet_list( int aSize )
     }
 
     return ret;
-};
+}
 
 
 void DIALOG_PLOT_SCHEMATIC::SetHPGLPenWidth()

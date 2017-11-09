@@ -161,7 +161,7 @@ class EDA_3D_CANVAS : public wxGLCanvas
 
     void OnTimerTimeout_Redraw( wxTimerEvent& event );
 
-    DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE()
 
  private:
 

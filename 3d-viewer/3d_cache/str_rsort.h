@@ -82,6 +82,6 @@ namespace S3D
         }
     };
 
-};  // end NAMESPACE
+} // end NAMESPACE
 
 #endif  // STR_RSORT_H

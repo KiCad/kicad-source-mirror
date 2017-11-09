@@ -57,7 +57,7 @@ class MSG_PANEL_INFO;
 namespace KIGFX
 {
     class VIEW;
-};
+}
 
 // Helper class to store parameters used to draw a pad
 class PAD_DRAWINFO

@@ -427,8 +427,4 @@ private:
     virtual bool doIsConnected( const wxPoint& aPosition ) const { return false; }
 };
 
-
-extern bool sort_schematic_items( const SCH_ITEM* aItem1, const SCH_ITEM* aItem2 );
-
-
 #endif /* SCH_ITEM_STRUCT_H */

@@ -59,6 +59,6 @@ private:
     PCB_LAYER_ID m_routeLayerBottom;
 };
 
-};
+}
 
 #endif

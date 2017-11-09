@@ -44,6 +44,6 @@ namespace S3D
         SGTYPE_SHAPE,
         SGTYPE_END
     };
-};
+}
 
 #endif  // SG_TYPES_H

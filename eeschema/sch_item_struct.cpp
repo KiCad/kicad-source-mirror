@@ -40,13 +40,6 @@
 
 const wxString traceFindItem = wxT( "KICAD_TRACE_FIND_ITEM" );
 
-
-bool sort_schematic_items( const SCH_ITEM* aItem1, const SCH_ITEM* aItem2 )
-{
-    return *aItem1 < *aItem2;
-}
-
-
 /* Constructor and destructor for SCH_ITEM */
 /* They are not inline because this creates problems with gcc at linking time
  * in debug mode

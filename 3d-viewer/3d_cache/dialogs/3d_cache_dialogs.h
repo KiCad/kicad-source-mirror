@@ -35,6 +35,6 @@ namespace S3D
         wxString& prevModelSelectDir, int& prevModelWildcard, MODULE_3D_SETTINGS* aModel );
 
     bool Configure3DPaths( wxWindow* aParent, S3D_FILENAME_RESOLVER* aResolver );
-};
+}
 
 #endif  // CACHE_DIALOGS_3D_H

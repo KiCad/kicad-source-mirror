@@ -156,7 +156,7 @@ static std::string GenCADLayerName( int aCuCount, PCB_LAYER_ID aId )
 
         return txt;
     }
-};
+}
 
 
 static const PCB_LAYER_ID gc_seq[] = {
@@ -204,7 +204,7 @@ static std::string GenCADLayerNameFlipped( int aCuCount, PCB_LAYER_ID aId )
     }
 
     return GenCADLayerName( aCuCount, aId );
-};
+}
 
 
 static wxString escapeString( const wxString& aString )

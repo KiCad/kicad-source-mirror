@@ -85,11 +85,11 @@ fcontext_t LIBCONTEXT_CALL_CONVENTION make_fcontext( void* sp, size_t size,
         void (* fn)( intptr_t ) );
 
 #ifdef __cplusplus
-};    // namespace
+}    // namespace
 #endif
 
 #ifdef __cplusplus
-};    // extern "C"
+}    // extern "C"
 #endif
 
 #endif

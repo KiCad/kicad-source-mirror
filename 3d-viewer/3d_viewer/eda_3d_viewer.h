@@ -222,7 +222,7 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
      */
     void RenderEngineChanged();
 
-    DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE()
 
  private:
 

@@ -49,7 +49,7 @@ class WX_VIEW_CONTROLS;
 class VIEW_CONTROLS;
 class PAINTER;
 class GAL_DISPLAY_OPTIONS;
-};
+}
 
 
 class EDA_DRAW_PANEL_GAL : public wxScrolledCanvas

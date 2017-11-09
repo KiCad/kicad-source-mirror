@@ -56,7 +56,7 @@ class MSG_PANEL_ITEM;
 
 namespace KIGFX {
 class VIEW;
-};
+}
 
 enum INCLUDE_NPTH_T
 {

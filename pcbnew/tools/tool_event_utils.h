@@ -72,6 +72,6 @@ namespace TOOL_EVT_UTILS
      */
     int GetEventRotationAngle( const PCB_BASE_EDIT_FRAME& aFrame,
                                const TOOL_EVENT& aEvt );
-};
+}
 
 #endif // TOOL_EVENT_UTILS_H

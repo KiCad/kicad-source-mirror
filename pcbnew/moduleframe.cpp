@@ -398,7 +398,7 @@ const wxString FOOTPRINT_EDIT_FRAME::getLibPath()
 const wxString FOOTPRINT_EDIT_FRAME::GetCurrentLib() const
 {
     return Prj().GetRString( PROJECT::PCB_LIB_NICKNAME );
-};
+}
 
 
 void FOOTPRINT_EDIT_FRAME::retainLastFootprint()

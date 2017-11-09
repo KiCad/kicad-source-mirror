@@ -101,4 +101,4 @@ BITMAP_DEF GetBitmap( GRAPHIC_PINSHAPE shape )
 
     assert( !"Invalid pin shape" );
     return 0;
-};
+}

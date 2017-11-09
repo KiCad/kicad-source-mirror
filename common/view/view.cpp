@@ -1397,4 +1397,4 @@ void VIEW::Update( VIEW_ITEM* aItem, int aUpdateFlags )
 
 const int VIEW::TOP_LAYER_MODIFIER = -VIEW_MAX_LAYERS;
 
-};
+}

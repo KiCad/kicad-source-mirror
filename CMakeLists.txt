@@ -376,9 +376,9 @@ if( NOT APPLE )
             CACHE PATH "Location of KiCad user-loaded plugins" )
     endif()
 
-    set( KICAD_DATA share/kicad
+    set( KICAD_DATA ${CMAKE_INSTALL_DATADIR}/kicad
         CACHE PATH "Location of KiCad data files." )
-    set( KICAD_DOCS share/doc/kicad
+    set( KICAD_DOCS ${CMAKE_INSTALL_DATADIR}/doc/kicad
         CACHE PATH "Location of KiCad documentation files." )
     set( KICAD_DEMOS ${KICAD_DATA}/demos
         CACHE PATH "Location of KiCad demo files." )
@@ -689,14 +689,6 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
 
 endif()
 
-if( EXISTS ${CMAKE_SOURCE_DIR}/include/config.h )
-    # This file may exist ( created by an alternate process to the svn test above),
-    # e.g. could be created by a checkout script that produces a source tar file.
-    # This directive means the about box will have the svn date & revision in it,
-    # but the hard coded release date ( program version) will be preserved.
-    add_definitions( -DHAVE_SVN_REVISION )
-endif()
-
 if( APPLE )
     # Remove app bundles in ${KICAD_BIN} before installing anything new.
     # Must be defined before all includes so that it is executed first.
@@ -771,10 +763,6 @@ add_custom_target( uninstall
 # Installation
 #================================================
 
-install( FILES INSTALL.txt
-    DESTINATION ${KICAD_DOCS}
-    COMPONENT resources )
-
 ###
 # Install scripts
 ###
@@ -782,6 +770,7 @@ if( UNIX )
     install( DIRECTORY scripts
         DESTINATION ${KICAD_DOCS}
         COMPONENT resources
+        PATTERN "*.bat" EXCLUDE
         )
 endif()
 

@@ -934,7 +934,7 @@ ECONNECT::ECONNECT( wxXmlNode* aConnect )
     gate =  parseRequiredAttribute<string>( aConnect, "gate" );
     pin =  parseRequiredAttribute<string>( aConnect, "pin" );
     pad = parseRequiredAttribute<string>( aConnect, "pad" );
-};
+}
 
 
 EDEVICE::EDEVICE( wxXmlNode* aDevice )
@@ -957,7 +957,7 @@ EDEVICE::EDEVICE( wxXmlNode* aDevice )
         connectNode = connectNode->GetNext();
     }
 
-};
+}
 
 
 EDEVICE_SET::EDEVICE_SET( wxXmlNode* aDeviceSet )

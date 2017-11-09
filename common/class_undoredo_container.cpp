@@ -26,8 +26,6 @@
 #include <fctsys.h>
 #include <common.h>
 #include <base_struct.h>
-
-#include <base_struct.h>
 #include <class_undoredo_container.h>
 
 
@@ -180,8 +178,8 @@ EDA_ITEM* PICKED_ITEMS_LIST::GetPickedItem( unsigned int aIdx ) const
 {
     if( aIdx < m_ItemsList.size() )
         return m_ItemsList[aIdx].GetItem();
-    else
-        return NULL;
+
+    return NULL;
 }
 
 
@@ -189,8 +187,8 @@ EDA_ITEM* PICKED_ITEMS_LIST::GetPickedItemLink( unsigned int aIdx ) const
 {
     if( aIdx < m_ItemsList.size() )
         return m_ItemsList[aIdx].GetLink();
-    else
-        return NULL;
+
+    return NULL;
 }
 
 
@@ -198,8 +196,8 @@ UNDO_REDO_T PICKED_ITEMS_LIST::GetPickedItemStatus( unsigned int aIdx ) const
 {
     if( aIdx < m_ItemsList.size() )
         return m_ItemsList[aIdx].GetStatus();
-    else
-        return UR_UNSPECIFIED;
+
+    return UR_UNSPECIFIED;
 }
 
 
@@ -207,8 +205,8 @@ STATUS_FLAGS PICKED_ITEMS_LIST::GetPickerFlags( unsigned aIdx ) const
 {
     if( aIdx < m_ItemsList.size() )
         return m_ItemsList[aIdx].GetFlags();
-    else
-        return 0;
+
+    return 0;
 }
 
 
@@ -219,8 +217,8 @@ bool PICKED_ITEMS_LIST::SetPickedItem( EDA_ITEM* aItem, unsigned aIdx )
         m_ItemsList[aIdx].SetItem( aItem );
         return true;
     }
-    else
-        return false;
+
+    return false;
 }
 
 
@@ -231,8 +229,8 @@ bool PICKED_ITEMS_LIST::SetPickedItemLink( EDA_ITEM* aLink, unsigned aIdx )
         m_ItemsList[aIdx].SetLink( aLink );
         return true;
     }
-    else
-        return false;
+
+    return false;
 }
 
 
@@ -244,8 +242,8 @@ bool PICKED_ITEMS_LIST::SetPickedItem( EDA_ITEM* aItem, UNDO_REDO_T aStatus, uns
         m_ItemsList[aIdx].SetStatus( aStatus );
         return true;
     }
-    else
-        return false;
+
+    return false;
 }
 
 
@@ -256,8 +254,8 @@ bool PICKED_ITEMS_LIST::SetPickedItemStatus( UNDO_REDO_T aStatus, unsigned aIdx 
         m_ItemsList[aIdx].SetStatus( aStatus );
         return true;
     }
-    else
-        return false;
+
+    return false;
 }
 
 
@@ -268,8 +266,8 @@ bool PICKED_ITEMS_LIST::SetPickerFlags( STATUS_FLAGS aFlags, unsigned aIdx )
         m_ItemsList[aIdx].SetFlags( aFlags );
         return true;
     }
-    else
-        return false;
+
+    return false;
 }
 
 
@@ -277,6 +275,7 @@ bool PICKED_ITEMS_LIST::RemovePicker( unsigned aIdx )
 {
     if( aIdx >= m_ItemsList.size() )
         return false;
+
     m_ItemsList.erase( m_ItemsList.begin() + aIdx );
     return true;
 }

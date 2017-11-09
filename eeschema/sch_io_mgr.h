@@ -60,7 +60,7 @@ public:
 
         // ALTIUM,
         // etc.
-    } );
+    } )
 
     /**
      * Return a #SCH_PLUGIN which the caller can use to import, export, save, or load

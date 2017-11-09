@@ -202,7 +202,7 @@ struct APP_SINGLE_TOP : public wxApp
 #endif
 };
 
-IMPLEMENT_APP( APP_SINGLE_TOP );
+IMPLEMENT_APP( APP_SINGLE_TOP )
 
 
 bool PGM_SINGLE_TOP::OnPgmInit()

@@ -46,7 +46,7 @@ class GBR_DISPLAY_OPTIONS;
 namespace KIGFX
 {
     class VIEW;
-};
+}
 
 
 /* Shapes id for basic shapes ( .m_Shape member ) */

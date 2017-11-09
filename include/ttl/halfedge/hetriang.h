@@ -61,7 +61,7 @@ class CN_CLUSTER;
 namespace ttl
 {
     class TRIANGULATION_HELPER;
-};
+}
 
 /**
  * The half-edge data structure
@@ -426,6 +426,6 @@ public:
 
     friend class ttl::TRIANGULATION_HELPER;
 };
-}; // End of hed namespace
+} // End of hed namespace
 
 #endif

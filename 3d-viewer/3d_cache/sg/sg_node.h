@@ -66,7 +66,7 @@ namespace S3D
 
     void FREE_SMESH( SMESH& aMesh);
     void FREE_S3DMODEL( S3DMODEL& aModel );
-};
+}
 
 
 /**

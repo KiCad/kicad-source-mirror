@@ -362,7 +362,7 @@ bool S3D::degenerate( glm::dvec3* pts )
         return true;
 
     return false;
-};
+}
 
 
 static void calcTriad( glm::dvec3* pts, glm::dvec3& tri )

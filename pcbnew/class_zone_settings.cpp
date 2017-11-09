@@ -142,4 +142,4 @@ void ZONE_SETTINGS::SetCornerRadius( int aRadius )
         m_cornerRadius = 0;
     else
         m_cornerRadius = aRadius;
-};
+}

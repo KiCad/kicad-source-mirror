@@ -262,7 +262,7 @@ struct APP_KICAD : public wxApp
     }
 };
 
-IMPLEMENT_APP( APP_KICAD );
+IMPLEMENT_APP( APP_KICAD )
 
 
 // The C++ project manager supports one open PROJECT, so Prj() calls within

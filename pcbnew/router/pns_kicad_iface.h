@@ -37,7 +37,7 @@ class PCB_TOOL;
 namespace KIGFX
 {
     class VIEW;
-};
+}
 
 class PNS_KICAD_IFACE : public PNS::ROUTER_IFACE {
 public:

@@ -184,6 +184,6 @@ struct TTLtraits
     //@} // End of Geometric Predicates Group
 };
 
-}; // End of hed namespace
+} // End of hed namespace
 
 #endif
