@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __WX_UNIT_BINDER_H_
-#define __WX_UNIT_BINDER_H_
+#ifndef __UNIT_BINDER_H_
+#define __UNIT_BINDER_H_
 
 #include <common.h>
 #include <wx/spinbutt.h>
@@ -32,7 +32,7 @@ class wxTextEntry;
 class wxSpinButton;
 class wxStaticText;
 
-class WX_UNIT_BINDER
+class UNIT_BINDER
 {
 public:
 
@@ -43,9 +43,9 @@ public:
      * @param aUnitLabel is the units label displayed next to the text field.
      * @param aSpinButton is an optional spin button (for adjusting the input value)
      */
-    WX_UNIT_BINDER( wxWindow* aParent, wxTextEntry* aTextInput, wxStaticText* aUnitLabel, wxSpinButton* aSpinButton = NULL );
+    UNIT_BINDER( wxWindow* aParent, wxTextEntry* aTextInput, wxStaticText* aUnitLabel, wxSpinButton* aSpinButton = NULL );
 
-    virtual ~WX_UNIT_BINDER();
+    virtual ~UNIT_BINDER();
 
     /**
      * Function SetValue
@@ -94,4 +94,4 @@ protected:
     static const wxString DEFAULT_VALUE;
 };
 
-#endif /* __WX_UNIT_BINDER_H_ */
+#endif /* __UNIT_BINDER_H_ */

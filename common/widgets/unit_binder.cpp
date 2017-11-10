@@ -29,9 +29,9 @@
 #include <base_units.h>
 #include <wx/valnum.h>
 
-#include "wx_unit_binder.h"
+#include "widgets/unit_binder.h"
 
-WX_UNIT_BINDER::WX_UNIT_BINDER( wxWindow* aParent, wxTextEntry* aTextInput,
+UNIT_BINDER::UNIT_BINDER( wxWindow* aParent, wxTextEntry* aTextInput,
                                 wxStaticText* aUnitLabel, wxSpinButton* aSpinButton ) :
     m_textEntry( aTextInput ),
     m_unitLabel( aUnitLabel ),
@@ -46,12 +46,12 @@ WX_UNIT_BINDER::WX_UNIT_BINDER( wxWindow* aParent, wxTextEntry* aTextInput,
 }
 
 
-WX_UNIT_BINDER::~WX_UNIT_BINDER()
+UNIT_BINDER::~UNIT_BINDER()
 {
 }
 
 
-void WX_UNIT_BINDER::SetValue( int aValue )
+void UNIT_BINDER::SetValue( int aValue )
 {
     wxString s = StringFromValue( m_units, aValue, false );
 
@@ -61,7 +61,7 @@ void WX_UNIT_BINDER::SetValue( int aValue )
 }
 
 
-int WX_UNIT_BINDER::GetValue() const
+int UNIT_BINDER::GetValue() const
 {
     wxString s = m_textEntry->GetValue();
 
@@ -69,7 +69,7 @@ int WX_UNIT_BINDER::GetValue() const
 }
 
 
-bool WX_UNIT_BINDER::Valid() const
+bool UNIT_BINDER::Valid() const
 {
     double dummy;
 
@@ -77,7 +77,7 @@ bool WX_UNIT_BINDER::Valid() const
 }
 
 
-void WX_UNIT_BINDER::Enable( bool aEnable )
+void UNIT_BINDER::Enable( bool aEnable )
 {
     wxWindow* wxWin = dynamic_cast<wxWindow*>( m_textEntry );
     wxASSERT( wxWin );

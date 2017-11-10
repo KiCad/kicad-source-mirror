@@ -178,6 +178,7 @@ set( COMMON_WIDGET_SRCS
     widgets/footprint_select_widget.cpp
     widgets/footprint_choice.cpp
     widgets/indicator_icon.cpp
+    widgets/unit_binder.cpp
     )
 
 set( COMMON_PAGE_LAYOUT_SRCS
@@ -293,7 +294,6 @@ set( COMMON_SRCS
     worksheet.cpp
     wxwineda.cpp
     wxdataviewctrl_helpers.cpp
-    wx_unit_binder.cpp
     wx_status_popup.cpp
     xnode.cpp
     zoom.cpp

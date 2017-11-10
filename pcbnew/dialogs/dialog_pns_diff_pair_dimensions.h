@@ -26,7 +26,7 @@
 #ifndef __dialog_diff_pair_dimensions_settings__
 #define __dialog_diff_pair_dimensions_settings__
 
-#include <wx_unit_binder.h>
+#include <widgets/unit_binder.h>
 
 #include "dialog_pns_diff_pair_dimensions_base.h"
 
@@ -47,9 +47,9 @@ private:
     virtual void OnOkClick( wxCommandEvent& aEvent ) override;
     virtual void OnViaTraceGapEqualCheck( wxCommandEvent& event ) override;
 
-    WX_UNIT_BINDER m_traceWidth;
-    WX_UNIT_BINDER m_traceGap;
-    WX_UNIT_BINDER m_viaGap;
+    UNIT_BINDER m_traceWidth;
+    UNIT_BINDER m_traceGap;
+    UNIT_BINDER m_viaGap;
 
     PNS::SIZES_SETTINGS& m_sizes;
 };
