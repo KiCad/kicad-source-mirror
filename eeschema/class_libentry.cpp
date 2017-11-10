@@ -190,6 +190,8 @@ LIB_PART::LIB_PART( const wxString& aName, PART_LIB* aLibrary ) :
     m_showPinNumbers      = true;
     m_showPinNames        = true;
 
+    m_libId.SetLibItemName( aName, false );
+
     // Create the default alias if the name parameter is not empty.
     if( !aName.IsEmpty() )
         m_aliases.push_back( new LIB_ALIAS( aName, this ) );
@@ -222,6 +224,7 @@ LIB_PART::LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary ) :
     m_showPinNames        = aPart.m_showPinNames;
     m_dateModified        = aPart.m_dateModified;
     m_options             = aPart.m_options;
+    m_libId               = aPart.m_libId;
 
     for( LIB_ITEM& oldItem : aPart.m_drawings )
     {

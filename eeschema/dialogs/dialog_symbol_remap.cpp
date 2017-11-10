@@ -49,6 +49,8 @@ DIALOG_SYMBOL_REMAP::DIALOG_SYMBOL_REMAP( SCH_EDIT_FRAME* aParent ) :
 
 void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
 {
+    wxBusyCursor busy;
+
     // The schematic is fully loaded, any legacy library symbols have been rescued.  Now
     // check to see if the schematic has not been converted to the symbol library table
     // method for looking up symbols.

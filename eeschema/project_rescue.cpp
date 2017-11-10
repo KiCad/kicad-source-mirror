@@ -255,6 +255,9 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer,
             cache_match = find_component( part_name, aRescuer.GetPrj()->SchLibs(), true );
             lib_match = find_component( part_name, aRescuer.GetPrj()->SchLibs(), false );
 
+            if( !cache_match && !lib_match )
+                continue;
+
             // Test whether there is a conflict or if the symbol can only be found in the cache.
             if( ( cache_match && lib_match
                 && !cache_match->PinsConflictWith( *lib_match, true, true, true, true, false ) )
@@ -363,6 +366,9 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
                                           true );
 
             lib_match = aRescuer.GetFrame()->GetLibPart( part_id );
+
+            if( !cache_match && !lib_match )
+                continue;
 
             // Test whether there is a conflict or if the symbol can only be found in the cache.
             if( ( cache_match && lib_match
@@ -609,6 +615,27 @@ void LEGACY_RESCUER::OpenRescueLibrary()
 
     m_rescue_lib = std::move( rescue_lib );
     m_rescue_lib->EnableBuffering();
+
+    // If a rescue library already exists copy the contents of that library so we do not
+    // lose an previous rescues.
+    PART_LIB* rescueLib = m_prj->SchLibs()->FindLibrary( fn.GetName() );
+
+    if( rescueLib )
+    {
+        // For items in the rescue library, aliases are the root symbol.
+        std::vector< LIB_ALIAS* > aliases;
+
+        rescueLib->GetAliases( aliases );
+
+        for( auto alias : aliases )
+        {
+            LIB_PART* part = alias->GetPart();
+
+            wxCHECK2( part, continue );
+
+            m_rescue_lib->AddPart( new LIB_PART( *part, m_rescue_lib.get() ) );
+        }
+    }
 }
 
 

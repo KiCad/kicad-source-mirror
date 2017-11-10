@@ -163,7 +163,10 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
 
     // Get the name of the current part to preselect it
     LIB_PART* current_part = GetCurPart();
-    LIB_ID id = current_part->GetLibId();
+    LIB_ID id;
+
+    if( current_part )
+        id = current_part->GetLibId();
 
     SCH_BASE_FRAME::HISTORY_LIST dummyHistoryList;
     SCHLIB_FILTER filter;
