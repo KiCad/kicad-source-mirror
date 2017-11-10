@@ -52,7 +52,8 @@
 #define KICAD_3DLIBS_LAST_DOWNLOAD_DIR wxT( "kicad_3Dlib_last_download_dir" )
 
 #define DEFAULT_GITHUB_3DSHAPES_LIBS_URL \
-    wxT( "https://github.com/KiCad/kicad-library/tree/master/modules/packages3d" )
+    "https://github.com/KiCad/kicad-packages3d"
+//    wxT( "https://github.com/KiCad/kicad-library/tree/master/modules/packages3d" )
 
 void Invoke3DShapeLibsDownloaderWizard( wxTopLevelWindow* aCaller )
 {
