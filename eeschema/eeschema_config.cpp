@@ -769,7 +769,9 @@ SYMBOL_LIB_TABLE* PROJECT::SchSymbolLibTable()
 
         wxString prjPath;
 
-        wxASSERT( wxGetEnv( PROJECT_VAR_NAME, &prjPath ) );
+        wxGetEnv( PROJECT_VAR_NAME, &prjPath );
+
+        wxASSERT( !prjPath.empty() );
 
         wxFileName fn( prjPath, SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
 
