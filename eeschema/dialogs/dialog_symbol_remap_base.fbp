@@ -134,7 +134,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">This schematic currently uses the symbol library look&#x0A;up method for loading schematic symbols.  KiCad will&#x0A;attempt to map the existing symbols to use the new&#x0A;symbol library table.  If you choose to choose to skip&#x0A;this step, you will be responsible for manually assigning&#x0A;symbols.</property>
+                                <property name="label">This schematic currently uses the symbol library look&#x0A;up method for loading schematic symbols.  KiCad will&#x0A;attempt to map the existing symbols to use the new&#x0A;symbol library table.  If you choose to skip&#x0A;this step, you will be responsible for manually assigning&#x0A;symbols.</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>

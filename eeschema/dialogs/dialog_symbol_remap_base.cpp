@@ -21,7 +21,7 @@ DIALOG_SYMBOL_REMAP_BASE::DIALOG_SYMBOL_REMAP_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, wxT("This schematic currently uses the symbol library look\nup method for loading schematic symbols.  KiCad will\nattempt to map the existing symbols to use the new\nsymbol library table.  If you choose to choose to skip\nthis step, you will be responsible for manually assigning\nsymbols."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1 = new wxStaticText( this, wxID_ANY, wxT("This schematic currently uses the symbol library look\nup method for loading schematic symbols.  KiCad will\nattempt to map the existing symbols to use the new\nsymbol library table.  If you choose to skip\nthis step, you will be responsible for manually assigning\nsymbols."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
 	bSizer2->Add( m_staticText1, 0, wxALL|wxEXPAND, 5 );
 	
