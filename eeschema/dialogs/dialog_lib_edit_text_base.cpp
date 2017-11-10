@@ -98,13 +98,13 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	m_TextShapeOpt->SetSelection( 0 );
 	bBottomtBoxSizer->Add( m_TextShapeOpt, 1, wxALL|wxEXPAND, 5 );
 	
-	wxString m_TextHJustificationOptChoices[] = { _("Align left"), _("Align center"), _("Align right") };
+	wxString m_TextHJustificationOptChoices[] = { _("Align Left"), _("Align Center"), _("Align Right") };
 	int m_TextHJustificationOptNChoices = sizeof( m_TextHJustificationOptChoices ) / sizeof( wxString );
 	m_TextHJustificationOpt = new wxRadioBox( this, wxID_ANY, _("Horizontal Justify"), wxDefaultPosition, wxDefaultSize, m_TextHJustificationOptNChoices, m_TextHJustificationOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_TextHJustificationOpt->SetSelection( 1 );
 	bBottomtBoxSizer->Add( m_TextHJustificationOpt, 1, wxALL|wxEXPAND, 5 );
 	
-	wxString m_TextVJustificationOptChoices[] = { _("Align bottom"), _("Align center"), _("Align top") };
+	wxString m_TextVJustificationOptChoices[] = { _("Align Top"), _("Align Center"), _("Align Bottom") };
 	int m_TextVJustificationOptNChoices = sizeof( m_TextVJustificationOptChoices ) / sizeof( wxString );
 	m_TextVJustificationOpt = new wxRadioBox( this, wxID_ANY, _("Vertical Justify"), wxDefaultPosition, wxDefaultSize, m_TextVJustificationOptNChoices, m_TextVJustificationOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_TextVJustificationOpt->SetSelection( 1 );

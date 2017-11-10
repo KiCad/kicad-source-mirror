@@ -923,9 +923,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
     else
         m_FieldHJustifyCtrl->SetSelection( 1 );
 
-    if( field.GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
+    if( field.GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
         m_FieldVJustifyCtrl->SetSelection( 0 );
-    else if( field.GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
+    else if( field.GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
         m_FieldVJustifyCtrl->SetSelection( 2 );
     else
         m_FieldVJustifyCtrl->SetSelection( 1 );
@@ -1039,9 +1039,9 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
     };
 
     static const EDA_TEXT_VJUSTIFY_T vjustify[] = {
-        GR_TEXT_VJUSTIFY_BOTTOM,
+        GR_TEXT_VJUSTIFY_TOP,
         GR_TEXT_VJUSTIFY_CENTER,
-        GR_TEXT_VJUSTIFY_TOP
+        GR_TEXT_VJUSTIFY_BOTTOM
     };
 
     field.SetHorizJustify( hjustify[m_FieldHJustifyCtrl->GetSelection()] );

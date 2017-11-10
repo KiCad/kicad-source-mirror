@@ -100,7 +100,7 @@ void DIALOG_LIB_EDIT_TEXT::initDlg( )
 
         switch ( m_graphicText->GetVertJustify() )
         {
-        case GR_TEXT_VJUSTIFY_BOTTOM:
+        case GR_TEXT_VJUSTIFY_TOP:
             m_TextVJustificationOpt->SetSelection( 0 );
             break;
 
@@ -108,7 +108,7 @@ void DIALOG_LIB_EDIT_TEXT::initDlg( )
             m_TextVJustificationOpt->SetSelection( 1 );
             break;
 
-        case GR_TEXT_VJUSTIFY_TOP:
+        case GR_TEXT_VJUSTIFY_BOTTOM:
             m_TextVJustificationOpt->SetSelection( 2 );
             break;
         }
@@ -199,7 +199,7 @@ void DIALOG_LIB_EDIT_TEXT::OnOkClick( wxCommandEvent& event )
         switch( m_TextVJustificationOpt->GetSelection() )
         {
         case 0:
-            m_graphicText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            m_graphicText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
             break;
 
         case 1:
@@ -207,7 +207,7 @@ void DIALOG_LIB_EDIT_TEXT::OnOkClick( wxCommandEvent& event )
             break;
 
         case 2:
-            m_graphicText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+            m_graphicText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
             break;
         }
     }

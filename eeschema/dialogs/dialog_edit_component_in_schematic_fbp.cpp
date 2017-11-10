@@ -166,13 +166,13 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	wxBoxSizer* bSizerJustification;
 	bSizerJustification = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxString m_FieldHJustifyCtrlChoices[] = { _("Align Left"), _("Center"), _("Align Right") };
+	wxString m_FieldHJustifyCtrlChoices[] = { _("Align Left"), _("Align Center"), _("Align Right") };
 	int m_FieldHJustifyCtrlNChoices = sizeof( m_FieldHJustifyCtrlChoices ) / sizeof( wxString );
 	m_FieldHJustifyCtrl = new wxRadioBox( fieldsSizer->GetStaticBox(), wxID_ANY, _("Horizontal Position:"), wxDefaultPosition, wxDefaultSize, m_FieldHJustifyCtrlNChoices, m_FieldHJustifyCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_FieldHJustifyCtrl->SetSelection( 0 );
 	bSizerJustification->Add( m_FieldHJustifyCtrl, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	wxString m_FieldVJustifyCtrlChoices[] = { _("Align Top"), _("Center"), _("Align Bottom") };
+	wxString m_FieldVJustifyCtrlChoices[] = { _("Align Top"), _("Align Center"), _("Align Bottom") };
 	int m_FieldVJustifyCtrlNChoices = sizeof( m_FieldVJustifyCtrlChoices ) / sizeof( wxString );
 	m_FieldVJustifyCtrl = new wxRadioBox( fieldsSizer->GetStaticBox(), wxID_ANY, _("Vertical Position:"), wxDefaultPosition, wxDefaultSize, m_FieldVJustifyCtrlNChoices, m_FieldVJustifyCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_FieldVJustifyCtrl->SetSelection( 0 );

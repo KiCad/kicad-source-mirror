@@ -1230,7 +1230,7 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="choices">&quot;Align left&quot; &quot;Align center&quot; &quot;Align right&quot;</property>
+                                        <property name="choices">&quot;Align Left&quot; &quot;Align Center&quot; &quot;Align Right&quot;</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
@@ -1320,7 +1320,7 @@
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
-                                        <property name="choices">&quot;Align bottom&quot; &quot;Align center&quot; &quot;Align top&quot;</property>
+                                        <property name="choices">&quot;Align Top&quot; &quot;Align Center&quot; &quot;Align Bottom&quot;</property>
                                         <property name="close_button">1</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
