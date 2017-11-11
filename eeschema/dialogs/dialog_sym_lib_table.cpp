@@ -146,7 +146,7 @@ DIALOG_SYMBOL_LIB_TABLE::DIALOG_SYMBOL_LIB_TABLE( wxTopLevelWindow* aParent,
     m_project( aProject )
 {
     // For user info, shows the table filenames:
-    m_PrjTableFilename->SetLabel( Prj().FootprintLibTblName() );
+    m_PrjTableFilename->SetLabel( Prj().SymbolLibTableName() );
     m_GblTableFilename->SetLabel( SYMBOL_LIB_TABLE::GetGlobalTableFileName() );
 
     // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),

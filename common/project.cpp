@@ -111,7 +111,19 @@ const wxString PROJECT::GetProjectName() const
 }
 
 
+const wxString PROJECT::SymbolLibTableName() const
+{
+    return libTableName( "sym-lib-table" );
+}
+
+
 const wxString PROJECT::FootprintLibTblName() const
+{
+    return libTableName( "fp-lib-table" );
+}
+
+
+const wxString PROJECT::libTableName( const wxString& aLibTableName ) const
 {
     wxFileName  fn = GetProjectFullName();
     wxString    path = fn.GetPath();
@@ -140,17 +152,16 @@ const wxString PROJECT::FootprintLibTblName() const
 #endif
 
         /*
-            The footprint library table name used when no project file is passed
-            to Pcbnew or CvPcb. This is used temporarily to store the project
-            specific library table until the project file being edited is saved.
-            It is then moved to the file fp-lib-table in the folder where the
-            project file is saved.
-        */
-        fn.SetName( wxT( "prj-fp-lib-table" ) );
+         * The library table name used when no project file is passed to the appropriate
+         * code.  This is used temporarily to store the project specific library table
+         * until the project file being edited is saved.  It is then moved to the correct
+         * file in the folder where the project file is saved.
+         */
+        fn.SetName( "prj-" + aLibTableName );
     }
     else    // normal path.
     {
-        fn.SetName( wxT( "fp-lib-table" ) );
+        fn.SetName( aLibTableName );
     }
 
     fn.ClearExt();

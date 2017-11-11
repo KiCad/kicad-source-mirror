@@ -115,6 +115,11 @@ public:
     VTBL_ENTRY const wxString FootprintLibTblName() const;
 
     /**
+     * Return the path and file name of this projects symbol library table.
+     */
+    VTBL_ENTRY const wxString SymbolLibTableName() const;
+
+    /**
      * Function ConfigSave
      * saves the current "project" parameters into the wxConfigBase* derivative.
      * Then the wxConfigBase derivative is written to the *.pro file for the project.
@@ -303,6 +308,11 @@ private:
      */
     wxConfigBase* configCreate( const SEARCH_STACK& aSList,
             const wxString& aGroupName, const wxString& aProjectFileName = wxEmptyString );
+
+    /**
+     * Return the full path and file name of the project specific library table \a aLibTableName..
+     */
+    const wxString libTableName( const wxString& aLibTableName ) const;
 
     wxFileName      m_project_name;         ///< \<fullpath\>/\<basename\>.pro
     wxString        m_pro_date_and_time;
