@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -10,6 +10,7 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
 class DIALOG_SHIM;
 class WX_HTML_REPORT_PANEL;
 
@@ -47,7 +48,7 @@ class DIALOG_SYMBOL_REMAP_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_SYMBOL_REMAP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Remap Symbols"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_SYMBOL_REMAP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Remap Symbols"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_SYMBOL_REMAP_BASE();
 	
 };

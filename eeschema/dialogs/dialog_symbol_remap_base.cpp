@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -21,17 +21,17 @@ DIALOG_SYMBOL_REMAP_BASE::DIALOG_SYMBOL_REMAP_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, wxT("This schematic currently uses the symbol library look\nup method for loading schematic symbols.  KiCad will\nattempt to map the existing symbols to use the new\nsymbol library table.  If you choose to skip\nthis step, you will be responsible for manually assigning\nsymbols."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1 = new wxStaticText( this, wxID_ANY, _("This schematic currently uses the symbol library look\nup method for loading schematic symbols.  KiCad will\nattempt to map the existing symbols to use the new\nsymbol library table.  If you choose to skip\nthis step, you will be responsible for manually assigning\nsymbols."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
 	bSizer2->Add( m_staticText1, 0, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
 	
-	m_buttonRemp = new wxButton( this, wxID_ANY, wxT("Remap Symbols"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonRemp = new wxButton( this, wxID_ANY, _("Remap Symbols"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer3->Add( m_buttonRemp, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonClose = new wxButton( this, wxID_CANCEL, wxT("Close"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonClose = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer3->Add( m_buttonClose, 0, wxALL|wxEXPAND, 5 );
 	
 	
@@ -44,7 +44,7 @@ DIALOG_SYMBOL_REMAP_BASE::DIALOG_SYMBOL_REMAP_BASE( wxWindow* parent, wxWindowID
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 	
 	m_messagePanel = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_messagePanel->SetMinSize( wxSize( -1,150 ) );
+	m_messagePanel->SetMinSize( wxSize( -1,200 ) );
 	
 	bSizer4->Add( m_messagePanel, 1, wxEXPAND | wxALL, 5 );
 	
