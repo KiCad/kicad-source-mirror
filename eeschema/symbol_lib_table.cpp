@@ -234,7 +234,11 @@ int SYMBOL_LIB_TABLE::GetModifyHash()
     {
         const SYMBOL_LIB_TABLE_ROW* row = FindRow( libName );
 
-        wxASSERT( row && (SCH_PLUGIN*) row->plugin );
+        if( !row || !row->plugin )
+        {
+            wxFAIL;
+            continue;
+        }
 
         hash += row->plugin->GetModifyHash();
     }
@@ -248,7 +252,7 @@ int SYMBOL_LIB_TABLE::GetModifyHash()
 size_t SYMBOL_LIB_TABLE::GetSymbolCount( const wxString& aNickname )
 {
     SYMBOL_LIB_TABLE_ROW* row = dynamic_cast< SYMBOL_LIB_TABLE_ROW* >( findRow( aNickname ) );
-    wxASSERT( (SCH_PLUGIN*) row->plugin );
+    wxCHECK( row && row->plugin, 0 );
 
     return row->plugin->GetSymbolLibCount( row->GetFullURI( true ) );
 }
@@ -258,7 +262,7 @@ void SYMBOL_LIB_TABLE::EnumerateSymbolLib( const wxString& aNickname, wxArrayStr
                                            bool aPowerSymbolsOnly )
 {
     SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
-    wxASSERT( (SCH_PLUGIN*) row->plugin );
+    wxCHECK( row && row->plugin, /* void */ );
 
     wxString options = row->GetOptions();
 
@@ -299,7 +303,7 @@ SYMBOL_LIB_TABLE_ROW* SYMBOL_LIB_TABLE::FindRow( const wxString& aNickname )
 LIB_ALIAS* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxString& aAliasName )
 {
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
-    wxASSERT( (SCH_PLUGIN*) row->plugin );
+    wxCHECK( row && row->plugin, nullptr );
 
     LIB_ALIAS* ret = row->plugin->LoadSymbol( row->GetFullURI( true ), aAliasName,
                                               row->GetProperties() );
@@ -325,7 +329,7 @@ SYMBOL_LIB_TABLE::SAVE_T SYMBOL_LIB_TABLE::SaveSymbol( const wxString& aNickname
                                                        const LIB_PART* aSymbol, bool aOverwrite )
 {
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
-    wxASSERT( (SCH_PLUGIN*) row->plugin );
+    wxCHECK( row && row->plugin, SAVE_SKIPPED );
 
     if( !aOverwrite )
     {
@@ -351,7 +355,7 @@ SYMBOL_LIB_TABLE::SAVE_T SYMBOL_LIB_TABLE::SaveSymbol( const wxString& aNickname
 void SYMBOL_LIB_TABLE::DeleteSymbol( const wxString& aNickname, const wxString& aSymbolName )
 {
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
-    wxASSERT( (SCH_PLUGIN*) row->plugin );
+    wxCHECK( row && row->plugin, /* void */ );
     return row->plugin->DeleteSymbol( row->GetFullURI( true ), aSymbolName,
                                       row->GetProperties() );
 }
@@ -360,7 +364,7 @@ void SYMBOL_LIB_TABLE::DeleteSymbol( const wxString& aNickname, const wxString& 
 void SYMBOL_LIB_TABLE::DeleteAlias( const wxString& aNickname, const wxString& aAliasName )
 {
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
-    wxASSERT( (SCH_PLUGIN*) row->plugin );
+    wxCHECK( row && row->plugin, /* void */ );
     return row->plugin->DeleteAlias( row->GetFullURI( true ), aAliasName,
                                      row->GetProperties() );
 }
@@ -369,7 +373,7 @@ void SYMBOL_LIB_TABLE::DeleteAlias( const wxString& aNickname, const wxString& a
 bool SYMBOL_LIB_TABLE::IsSymbolLibWritable( const wxString& aNickname )
 {
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
-    wxASSERT( (SCH_PLUGIN*) row->plugin );
+    wxCHECK( row && row->plugin, false );
     return row->plugin->IsSymbolLibWritable( row->GetFullURI( true ) );
 }
 
@@ -377,7 +381,7 @@ bool SYMBOL_LIB_TABLE::IsSymbolLibWritable( const wxString& aNickname )
 void SYMBOL_LIB_TABLE::DeleteSymbolLib( const wxString& aNickname )
 {
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
-    wxASSERT( (SCH_PLUGIN*) row->plugin );
+    wxCHECK( row && row->plugin, /* void */ );
     row->plugin->DeleteSymbolLib( row->GetFullURI( true ), row->GetProperties() );
 }
 
@@ -385,7 +389,7 @@ void SYMBOL_LIB_TABLE::DeleteSymbolLib( const wxString& aNickname )
 void SYMBOL_LIB_TABLE::CreateSymbolLib( const wxString& aNickname )
 {
     const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
-    wxASSERT( (SCH_PLUGIN*) row->plugin );
+    wxCHECK( row && row->plugin, /* void */ );
     row->plugin->CreateSymbolLib( row->GetFullURI( true ), row->GetProperties() );
 }
 
