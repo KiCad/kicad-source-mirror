@@ -92,7 +92,13 @@ public:
 
 private:
     int placeBoardItems( BOARD* aBoard );
-    int placeBoardItems( std::vector<BOARD_ITEM*>& aItems );
+
+    /** add and selec or just select for move/place command a list of board items.
+     * @param aItems is the list of items
+     * @param aIsNew = true to add items to the current board, false to just select if
+     * items are already managed by the current board
+     */
+    int placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew );
 
     ///> Pointer to the currently used edit frame.
     PCB_BASE_FRAME* m_frame;

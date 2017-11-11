@@ -792,7 +792,7 @@ int PCBNEW_CONTROL::PasteItemsFromClipboard( const TOOL_EVENT& aEvent )
                 items.push_back( clipItem );
             }
 
-            placeBoardItems( items );
+            placeBoardItems( items, true );
             break;
         }
         default:
@@ -829,29 +829,43 @@ int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard )
 
     for( auto track : aBoard->Tracks() )
     {
-        items.push_back( track );
+        if( track->GetFlags() & FLAG0 )
+            track->ClearFlags( FLAG0 );
+        else
+            items.push_back( track );
     }
 
     for( auto module : aBoard->Modules() )
     {
-        items.push_back( module );
+        if( module->GetFlags() & FLAG0 )
+            module->ClearFlags( FLAG0 );
+        else
+            items.push_back( module );
     }
 
     for( auto drawing : aBoard->Drawings() )
     {
-        items.push_back( drawing );
+        if( drawing->GetFlags() & FLAG0 )
+            drawing->ClearFlags( FLAG0 );
+        else
+            items.push_back( drawing );
     }
 
     for( auto zone : aBoard->Zones() )
     {
-        items.push_back( zone );
+        if( zone->GetFlags() & FLAG0 )
+            zone->ClearFlags( FLAG0 );
+        else
+            items.push_back( zone );
     }
 
-    return placeBoardItems( items );
+    // items are new if the current board is not the board source
+    bool isNew = board() != aBoard;
+    return placeBoardItems( items, isNew );
 }
 
 
-int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems )
+int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew )
 {
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
@@ -864,7 +878,12 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems )
     {
         item->SetSelected();
         selection.Add( item );
-        editTool->GetCurrentCommit()->Add( item );
+
+        // Add or just select items for the move/place command
+        if( aIsNew )
+            editTool->GetCurrentCommit()->Add( item );
+        else
+            editTool->GetCurrentCommit()->Added( item );
     }
 
     selection.SetReferencePoint( VECTOR2I( 0, 0 ) );
@@ -875,21 +894,40 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems )
     return 0;
 }
 
+
 int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
 {
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
+
     if( !editFrame )
         return 1;
 
-    // Mark existing tracks, in order to know what are the new tracks
-    // Tracks are inserted, not appended, so mark existing tracks to be
-    // able to select the new tracks only later
     BOARD* brd = board();
+
     if( !brd )
         return 1;
 
+    // Mark existing items, in order to know what are the new items
+    // to be ble to select only the new items after loadind
     for( auto track : brd->Tracks() )
+    {
         track->SetFlags( FLAG0 );
+    }
+
+    for( auto module : brd->Modules() )
+    {
+        module->SetFlags( FLAG0 );
+    }
+
+    for( auto drawing : brd->Drawings() )
+    {
+        drawing->SetFlags( FLAG0 );
+    }
+
+    for( auto zone : brd->Zones() )
+    {
+        zone->SetFlags( FLAG0 );
+    }
 
     // Keep also the count of copper layers, to adjust if necessary
     int initialCopperLayerCount = brd->GetCopperLayerCount();
@@ -923,7 +961,7 @@ int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
     // rebuild nets and ratsnest before any use of nets
     brd->BuildListOfNets();
     brd->SynchronizeNetsAndNetClasses();
-
+    brd->BuildConnectivity();
 
     // Synchronize layers
     // we should not ask PLUGINs to do these items:
