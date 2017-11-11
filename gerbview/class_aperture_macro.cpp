@@ -59,7 +59,7 @@ static wxPoint mapPt( double x, double y, bool isMetric )
 }
 
 
-bool AM_PRIMITIVE::IsAMPrimitiveExposureOn(GERBER_DRAW_ITEM* aParent) const
+bool AM_PRIMITIVE::IsAMPrimitiveExposureOn( const GERBER_DRAW_ITEM* aParent ) const
 {
     /*
      * Some but not all primitives use the first parameter as an exposure control.
@@ -94,7 +94,7 @@ bool AM_PRIMITIVE::IsAMPrimitiveExposureOn(GERBER_DRAW_ITEM* aParent) const
 
 const int seg_per_circle = 64;   // Number of segments to approximate a circle
 
-void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
+void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent,
                                    SHAPE_POLY_SET& aShapeBuffer,
                                    wxPoint aShapePos )
 {
@@ -448,7 +448,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
  * because circles are very easy to draw (no rotation problem) so convert them in polygons,
  * and draw them as polygons is not a good idea.
  */
-void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
+void AM_PRIMITIVE::ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
                                           std::vector<wxPoint>& aBuffer )
 {
     D_CODE* tool = aParent->GetDcodeDescr();
@@ -668,7 +668,7 @@ void AM_PRIMITIVE::ConvertShapeToPolygon( GERBER_DRAW_ITEM*     aParent,
  * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
  * @return a dimension, or -1 if no dim to calculate
   */
-int AM_PRIMITIVE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
+int AM_PRIMITIVE::GetShapeDim( const GERBER_DRAW_ITEM* aParent )
 {
     int dim = -1;
     D_CODE* tool = aParent->GetDcodeDescr();
@@ -773,7 +773,7 @@ int AM_PRIMITIVE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 }
 
 
-SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( GERBER_DRAW_ITEM* aParent,
+SHAPE_POLY_SET* APERTURE_MACRO::GetApertureMacroShape( const GERBER_DRAW_ITEM* aParent,
                                                        wxPoint aShapePos )
 {
     SHAPE_POLY_SET holeBuffer;

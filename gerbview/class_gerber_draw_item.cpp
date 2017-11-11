@@ -703,10 +703,10 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos ) const
 
     case GBR_SPOT_MACRO:
         // Aperture macro polygons are already in absolute coordinates
-        poly = GetDcodeDescr()->GetMacro()->m_shape;
-        for( int i = 0; i < poly.OutlineCount(); ++i )
+        auto p = GetDcodeDescr()->GetMacro()->GetApertureMacroShape( this, m_Start );
+        for( int i = 0; i < p->OutlineCount(); ++i )
         {
-            if( poly.Contains( VECTOR2I( aRefPos ), i ) )
+            if( p->Contains( VECTOR2I( aRefPos ), i ) )
                 return true;
         }
         return false;

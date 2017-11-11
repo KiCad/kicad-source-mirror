@@ -114,7 +114,7 @@ public: AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
      * In a aperture macro shape, a basic primitive with exposure off is a hole in the shape
      * it is NOT a negative shape
      */
-    bool  IsAMPrimitiveExposureOn( GERBER_DRAW_ITEM* aParent ) const;
+    bool  IsAMPrimitiveExposureOn( const GERBER_DRAW_ITEM* aParent ) const;
 
     /* Draw functions: */
 
@@ -128,7 +128,7 @@ public: AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
      * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
      * @return a dimension, or -1 if no dim to calculate
      */
-    int  GetShapeDim( GERBER_DRAW_ITEM* aParent );
+    int  GetShapeDim( const GERBER_DRAW_ITEM* aParent );
 
     /**
      * Function drawBasicShape
@@ -137,7 +137,8 @@ public: AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
      * @param aShapeBuffer = a SHAPE_POLY_SET to put the shape converted to a polygon
      * @param aShapePos = the actual shape position
      */
-    void DrawBasicShape( GERBER_DRAW_ITEM* aParent, SHAPE_POLY_SET& aShapeBuffer,
+    void DrawBasicShape( const GERBER_DRAW_ITEM* aParent,
+                         SHAPE_POLY_SET& aShapeBuffer,
                          wxPoint aShapePos );
 private:
 
@@ -148,7 +149,8 @@ private:
      * Useful when a shape is not a graphic primitive (shape with hole,
      * rotated shape ... ) and cannot be easily drawn.
      */
-    void ConvertShapeToPolygon( GERBER_DRAW_ITEM* aParent, std::vector<wxPoint>& aBuffer );
+    void ConvertShapeToPolygon( const GERBER_DRAW_ITEM* aParent,
+                                std::vector<wxPoint>& aBuffer );
 };
 
 
@@ -195,7 +197,7 @@ struct APERTURE_MACRO
      * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
      * @return The shape of the item
      */
-    SHAPE_POLY_SET* GetApertureMacroShape( GERBER_DRAW_ITEM* aParent, wxPoint aShapePos );
+    SHAPE_POLY_SET* GetApertureMacroShape( const GERBER_DRAW_ITEM* aParent, wxPoint aShapePos );
 
    /**
      * Function DrawApertureMacroShape
