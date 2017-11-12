@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015-2017 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -208,7 +208,7 @@ void DIALOG_RESCUE_EACH::OnHandleLibraryPreviewRepaint( wxPaintEvent& aRepaintEv
 
 void DIALOG_RESCUE_EACH::OnDialogResize( wxSizeEvent& aSizeEvent )
 {
-    // Placeholer - I was previously doing some extra reflow here.
+    // Placeholder - I was previously doing some extra reflow here.
     DIALOG_RESCUE_EACH_BASE::OnDialogResize( aSizeEvent );
 }
 
@@ -294,7 +294,7 @@ void DIALOG_RESCUE_EACH::OnNeverShowClick( wxCommandEvent& aEvent )
                     "No changes will be made.\n\n"
                     "This setting can be changed from the \"Symbol Libraries\" dialog,\n"
                     "and the tool can be activated manually from the \"Tools\" menu." ),
-            _( "Rescue Symbolss" ), wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION );
+            _( "Rescue Symbols" ), wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION );
     int resp = dlg.ShowModal ();
 
     if( resp == wxID_YES )
