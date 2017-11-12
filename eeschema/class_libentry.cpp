@@ -180,7 +180,6 @@ LIB_PART::LIB_PART( const wxString& aName, PART_LIB* aLibrary ) :
     EDA_ITEM( LIB_PART_T ),
     m_me( this, null_deleter() )
 {
-    m_library             = aLibrary;
     m_dateModified        = 0;
     m_unitCount           = 1;
     m_pinNameOffset       = 40;
@@ -189,8 +188,6 @@ LIB_PART::LIB_PART( const wxString& aName, PART_LIB* aLibrary ) :
     m_showPinNumbers      = true;
     m_showPinNames        = true;
 
-    wxASSERT( !aName.IsEmpty() );
-
     // Add the MANDATORY_FIELDS in RAM only.  These are assumed to be present
     // when the field editors are invoked.
     m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, VALUE ) );
@@ -198,6 +195,7 @@ LIB_PART::LIB_PART( const wxString& aName, PART_LIB* aLibrary ) :
     m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, FOOTPRINT ) );
     m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, DATASHEET ) );
 
+    SetLib( aLibrary );
     SetName( aName );
 }
 
@@ -298,13 +296,29 @@ wxString LIB_PART::SubReference( int aUnit, bool aAddSeparator )
 
 void LIB_PART::SetName( const wxString& aName )
 {
-    GetValueField().SetText( aName );
+    m_libId.SetLibItemName( aName, false );
 
     // The LIB_ALIAS that is the LIB_PART name has to be created so create it.
     if( m_aliases.size() == 0 )
         m_aliases.push_back( new LIB_ALIAS( aName, this ) );
     else
         m_aliases[0]->SetName( aName );
+
+    LIB_FIELD& valueField = GetValueField();
+
+    // LIB_FIELD::SetText() calls LIB_PART::SetName(),
+    // the following if-clause is to break an infinite loop
+    if( valueField.GetText() != aName )
+        valueField.SetText( aName );
+
+}
+
+
+void LIB_PART::SetLibId( const LIB_ID& aLibId )
+{
+    m_libId.SetLibNickname( aLibId.GetLibNickname() );
+    // SetName() sets LibItemName in m_libId
+    SetName( aLibId.GetLibItemName() );
 }
 
 
@@ -1653,6 +1667,15 @@ void LIB_PART::SetConversion( bool aSetConvert )
                 ++i;
         }
     }
+}
+
+
+void LIB_PART::SetLib( PART_LIB* aLibrary )
+{
+    m_library = aLibrary;
+
+    if( aLibrary )
+        m_libId.SetLibNickname( aLibrary->GetName() );
 }
 
 
