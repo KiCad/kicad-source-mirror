@@ -89,8 +89,6 @@ class LIB_ALIAS : public EDA_ITEM
      */
     LIB_PART*       shared;
 
-    friend class LIB_PART;
-
 protected:
     wxString        name;
     wxString        description;    ///< documentation for info
@@ -226,10 +224,6 @@ struct PART_DRAW_OPTIONS
  */
 class LIB_PART : public EDA_ITEM
 {
-    friend class PART_LIB;
-    friend class LIB_ALIAS;
-    friend class SCH_LEGACY_PLUGIN_CACHE;
-
     PART_SPTR           m_me;               ///< http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared
     LIB_ID              m_libId;
     int                 m_pinNameOffset;    ///< The offset in mils to draw the pin name.  Set to 0

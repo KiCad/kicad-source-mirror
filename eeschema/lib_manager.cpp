@@ -555,9 +555,9 @@ bool LIB_MANAGER::LIB_BUFFER::CreateBuffer( LIB_PART* aCopy, SCH_SCREEN* aScreen
 
     // Set the parent library name,
     // otherwise it is empty as no library has been given as the owner during object construction
-    LIB_ID libId = aCopy->GetLibId();
+    // TODO create a class derived from 
+    LIB_ID& libId = (LIB_ID&) aCopy->GetLibId();
     libId.SetLibNickname( m_libName );
-    aCopy->SetLibId( libId );
     ++m_hash;
 
     return true;
