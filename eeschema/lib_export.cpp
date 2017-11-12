@@ -157,7 +157,7 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
 
     if( fn.Exists() && !fn.IsDirWritable() )
     {
-        msg.Printf( _( "Write permissions are requured to save library '%s'." ), fn.GetFullPath() );
+        msg.Printf( _( "Write permissions are required to save library '%s'." ), fn.GetFullPath() );
         DisplayError( this, msg );
         return;
     }
