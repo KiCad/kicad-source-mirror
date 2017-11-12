@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,76 +100,76 @@ std::string StrPrintf( const char* format, ... )
 //-----<LINE_READER>------------------------------------------------------
 
 LINE_READER::LINE_READER( unsigned aMaxLineLength ) :
-                length( 0 ), lineNum( 0 ), line( NULL ),
-                capacity( 0 ), maxLineLength( aMaxLineLength )
+                m_length( 0 ), m_lineNum( 0 ), m_line( NULL ),
+                m_capacity( 0 ), m_maxLineLength( aMaxLineLength )
 {
     if( aMaxLineLength != 0 )
     {
         // start at the INITIAL size, expand as needed up to the MAX size in maxLineLength
-        capacity = LINE_READER_LINE_INITIAL_SIZE;
+        m_capacity = LINE_READER_LINE_INITIAL_SIZE;
 
         // but never go above user's aMaxLineLength, and leave space for trailing nul
-        if( capacity > aMaxLineLength+1 )
-            capacity = aMaxLineLength+1;
+        if( m_capacity > aMaxLineLength+1 )
+            m_capacity = aMaxLineLength+1;
 
         // Be sure there is room for a null EOL char, so reserve at least capacity+1 bytes
         // to ensure capacity line lenght and avoid corner cases
         // Use capacity+5 to cover and corner case
-        line = new char[capacity+5];
+        m_line = new char[m_capacity+5];
 
-        line[0] = '\0';
+        m_line[0] = '\0';
     }
 }
 
 
 LINE_READER::~LINE_READER()
 {
-    delete[] line;
+    delete[] m_line;
 }
 
 
-void LINE_READER::expandCapacity( unsigned newsize )
+void LINE_READER::expandCapacity( unsigned aNewsize )
 {
-    // length can equal maxLineLength and nothing breaks, there's room for
+    // m_length can equal maxLineLength and nothing breaks, there's room for
     // the terminating nul. cannot go over this.
-    if( newsize > maxLineLength+1 )
-        newsize = maxLineLength+1;
+    if( aNewsize > m_maxLineLength+1 )
+        aNewsize = m_maxLineLength+1;
 
-    if( newsize > capacity )
+    if( aNewsize > m_capacity )
     {
-        capacity = newsize;
+        m_capacity = aNewsize;
 
         // resize the buffer, and copy the original data
         // Be sure there is room for the null EOL char, so reserve capacity+1 bytes
         // to ensure capacity line lenght. Use capacity+5 to cover and corner case
-        char* bigger = new char[capacity+5];
+        char* bigger = new char[m_capacity+5];
 
-        wxASSERT( capacity >= length+1 );
+        wxASSERT( m_capacity >= m_length+1 );
 
-        memcpy( bigger, line, length );
-        bigger[length] = 0;
+        memcpy( bigger, m_line, m_length );
+        bigger[m_length] = 0;
 
-        delete[] line;
-        line = bigger;
+        delete[] m_line;
+        m_line = bigger;
     }
 }
 
 
 FILE_LINE_READER::FILE_LINE_READER( const wxString& aFileName,
             unsigned aStartingLineNumber, unsigned aMaxLineLength ):
-    LINE_READER( aMaxLineLength ), iOwn( true )
+    LINE_READER( aMaxLineLength ), m_iOwn( true )
 {
-    fp = wxFopen( aFileName, wxT( "rt" ) );
+    m_fp = wxFopen( aFileName, wxT( "rt" ) );
 
-    if( !fp )
+    if( !m_fp )
     {
         wxString msg = wxString::Format(
             _( "Unable to open filename '%s' for reading" ), aFileName.GetData() );
         THROW_IO_ERROR( msg );
     }
 
-    source  = aFileName;
-    lineNum = aStartingLineNumber;
+    m_source  = aFileName;
+    m_lineNum = aStartingLineNumber;
 }
 
 
@@ -177,107 +177,104 @@ FILE_LINE_READER::FILE_LINE_READER( FILE* aFile, const wxString& aFileName,
                     bool doOwn,
                     unsigned aStartingLineNumber,
                     unsigned aMaxLineLength ) :
-    LINE_READER( aMaxLineLength ),
-    iOwn( doOwn ),
-    fp( aFile )
+    LINE_READER( aMaxLineLength ), m_iOwn( doOwn ), m_fp( aFile )
 {
-    source  = aFileName;
-    lineNum = aStartingLineNumber;
+    m_source  = aFileName;
+    m_lineNum = aStartingLineNumber;
 }
 
 
 FILE_LINE_READER::~FILE_LINE_READER()
 {
-    if( iOwn && fp )
-        fclose( fp );
+    if( m_iOwn && m_fp )
+        fclose( m_fp );
 }
 
 
 char* FILE_LINE_READER::ReadLine()
 {
-    length = 0;
+    m_length = 0;
 
     for(;;)
     {
-        if( length >= maxLineLength )
+        if( m_length >= m_maxLineLength )
             THROW_IO_ERROR( _( "Maximum line length exceeded" ) );
 
-        if( length >= capacity )
-            expandCapacity( capacity * 2 );
+        if( m_length >= m_capacity )
+            expandCapacity( m_capacity * 2 );
 
         // faster, POSIX compatible fgetc(), no locking.
-        int cc = getc_unlocked( fp );
+        int cc = getc_unlocked( m_fp );
 
         if( cc == EOF )
             break;
 
-        line[ length++ ] = (char) cc;
+        m_line[ m_length++ ] = (char) cc;
 
         if( cc == '\n' )
             break;
     }
 
-    line[ length ] = 0;
+    m_line[ m_length ] = 0;
 
-    // lineNum is incremented even if there was no line read, because this
+    // m_lineNum is incremented even if there was no line read, because this
     // leads to better error reporting when we hit an end of file.
-    ++lineNum;
+    ++m_lineNum;
 
-    return length ? line : NULL;
+    return m_length ? m_line : NULL;
 }
 
 
 STRING_LINE_READER::STRING_LINE_READER( const std::string& aString, const wxString& aSource ):
     LINE_READER( LINE_READER_LINE_DEFAULT_MAX ),
-    lines( aString ),
-    ndx( 0 )
+    m_lines( aString ), m_ndx( 0 )
 {
     // Clipboard text should be nice and _use multiple lines_ so that
     // we can report _line number_ oriented error messages when parsing.
-    source = aSource;
+    m_source = aSource;
 }
 
 
 STRING_LINE_READER::STRING_LINE_READER( const STRING_LINE_READER& aStartingPoint ):
     LINE_READER( LINE_READER_LINE_DEFAULT_MAX ),
-    lines( aStartingPoint.lines ),
-    ndx( aStartingPoint.ndx )
+    m_lines( aStartingPoint.m_lines ),
+    m_ndx( aStartingPoint.m_ndx )
 {
     // since we are keeping the same "source" name, for error reporting purposes
     // we need to have the same notion of line number and offset.
 
-    source  = aStartingPoint.source;
-    lineNum = aStartingPoint.lineNum;
+    m_source  = aStartingPoint.m_source;
+    m_lineNum = aStartingPoint.m_lineNum;
 }
 
 
 char* STRING_LINE_READER::ReadLine()
 {
-    size_t  nlOffset = lines.find( '\n', ndx );
+    size_t  nlOffset = m_lines.find( '\n', m_ndx );
 
     if( nlOffset == std::string::npos )
-        length = lines.length() - ndx;
+        m_length = m_lines.length() - m_ndx;
     else
-        length = nlOffset - ndx + 1;     // include the newline, so +1
+        m_length = nlOffset - m_ndx + 1;     // include the newline, so +1
 
-    if( length )
+    if( m_length )
     {
-        if( length >= maxLineLength )
+        if( m_length >= m_maxLineLength )
             THROW_IO_ERROR( _("Line length exceeded") );
 
-        if( length+1 > capacity )   // +1 for terminating nul
-            expandCapacity( length+1 );
+        if( m_length+1 > m_capacity )   // +1 for terminating nul
+            expandCapacity( m_length+1 );
 
-        wxASSERT( ndx + length <= lines.length() );
+        wxASSERT( m_ndx + m_length <= m_lines.length() );
 
-        memcpy( line, &lines[ndx], length );
-        ndx += length;
+        memcpy( m_line, &m_lines[m_ndx], m_length );
+        m_ndx += m_length;
     }
 
-    ++lineNum;      // this gets incremented even if no bytes were read
-    line[length] = 0;
+    ++m_lineNum;      // this gets incremented even if no bytes were read
+    m_line[m_length] = 0;
 
-    return length ? line : NULL;
+    return m_length ? m_line : NULL;
 }
 
 
@@ -285,21 +282,21 @@ INPUTSTREAM_LINE_READER::INPUTSTREAM_LINE_READER( wxInputStream* aStream, const 
     LINE_READER( LINE_READER_LINE_DEFAULT_MAX ),
     m_stream( aStream )
 {
-    source = aSource;
+    m_source = aSource;
 }
 
 
 char* INPUTSTREAM_LINE_READER::ReadLine()
 {
-    length  = 0;
+    m_length  = 0;
 
     for(;;)
     {
-        if( length >= maxLineLength )
+        if( m_length >= m_maxLineLength )
             THROW_IO_ERROR( _( "Maximum line length exceeded" ) );
 
-        if( length + 1 > capacity )
-            expandCapacity( capacity * 2 );
+        if( m_length + 1 > m_capacity )
+            expandCapacity( m_capacity * 2 );
 
         // this read may fail, docs say to test LastRead() before trusting cc.
         char cc = m_stream->GetC();
@@ -307,19 +304,19 @@ char* INPUTSTREAM_LINE_READER::ReadLine()
         if( !m_stream->LastRead() )
             break;
 
-        line[ length++ ] = cc;
+        m_line[ m_length++ ] = cc;
 
         if( cc == '\n' )
             break;
     }
 
-    line[ length ] = 0;
+    m_line[ m_length ] = 0;
 
-    // lineNum is incremented even if there was no line read, because this
+    // m_lineNum is incremented even if there was no line read, because this
     // leads to better error reporting when we hit an end of file.
-    ++lineNum;
+    ++m_lineNum;
 
-    return length ? line : NULL;
+    return m_length ? m_line : NULL;
 }
 
 
@@ -375,18 +372,18 @@ int OUTPUTFORMATTER::vprint( const char* fmt,  va_list ap )
     // we make a copy of va_list ap for the second call, if happens
     va_list tmp;
     va_copy( tmp, ap );
-    int ret = vsnprintf( &buffer[0], buffer.size(), fmt, ap );
+    int ret = vsnprintf( &m_buffer[0], m_buffer.size(), fmt, ap );
 
-    if( ret >= (int) buffer.size() )
+    if( ret >= (int) m_buffer.size() )
     {
-        buffer.resize( ret + 1000 );
-        ret = vsnprintf( &buffer[0], buffer.size(), fmt, tmp );
+        m_buffer.resize( ret + 1000 );
+        ret = vsnprintf( &m_buffer[0], m_buffer.size(), fmt, tmp );
     }
 
     va_end( tmp );      // Release the temporary va_list, initialised from ap
 
     if( ret > 0 )
-        write( &buffer[0], ret );
+        write( &m_buffer[0], ret );
 
     return ret;
 }
@@ -497,20 +494,20 @@ std::string OUTPUTFORMATTER::Quotew( const wxString& aWrapee )
 
 void STRING_FORMATTER::write( const char* aOutBuf, int aCount )
 {
-    mystring.append( aOutBuf, aCount );
+    m_mystring.append( aOutBuf, aCount );
 }
 
 void STRING_FORMATTER::StripUseless()
 {
-    std::string  copy = mystring;
+    std::string  copy = m_mystring;
 
-    mystring.clear();
+    m_mystring.clear();
 
     for( std::string::iterator i=copy.begin();  i!=copy.end();  ++i )
     {
         if( !isspace( *i ) && *i!=')' && *i!='(' && *i!='"' )
         {
-            mystring += *i;
+            m_mystring += *i;
         }
     }
 }
@@ -563,9 +560,9 @@ void STREAM_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount )
     // a file it should only go through the loop once.
     for( int total = 0;  total<aCount;  total += lastWrite )
     {
-        lastWrite = os.Write( aOutBuf, aCount ).LastWrite();
+        lastWrite = m_os.Write( aOutBuf, aCount ).LastWrite();
 
-        if( !os.IsOk() )
+        if( !m_os.IsOk() )
         {
             THROW_IO_ERROR( _( "OUTPUTSTREAM_OUTPUTFORMATTER write error" ) );
         }

@@ -32,20 +32,20 @@ FILTER_READER::FILTER_READER( LINE_READER& aReader ) :
     LINE_READER( 1 ),
     reader( aReader )
 {
-    // Not using our own line buffer, will be using aReader's.  This changes
-    // the meaning of this->line to be merely a pointer to aReader's line, which of course
+    // Not using our own m_line buffer, will be using aReader's.  This changes
+    // the meaning of this->m_line to be merely a pointer to aReader's m_line, which of course
     // is not owned here.
-    delete [] line;
+    delete [] m_line;
 
-    line = 0;
+    m_line = 0;
 }
 
 
 FILTER_READER::~FILTER_READER()
 {
-    // Our 'line' points to aReader's, and he will delete that buffer.
+    // Our 'm_line' points to aReader's, and he will delete that buffer.
     // Prevent subsequent call to ~LINE_READER() from deleting a buffer we do not own.
-    line = 0;
+    m_line = 0;
 }
 
 
@@ -59,10 +59,10 @@ char* FILTER_READER::ReadLine()
             break;
     }
 
-    line   = reader.Line();
-    length = reader.Length();
+    m_line   = reader.Line();
+    m_length = reader.Length();
 
-    return length ? line : NULL;
+    return m_length ? m_line : NULL;
 }
 
 
@@ -70,20 +70,20 @@ WHITESPACE_FILTER_READER::WHITESPACE_FILTER_READER( LINE_READER& aReader ) :
     LINE_READER( 1 ),
     reader( aReader )
 {
-    // Not using our own line buffer, will be using aReader's.  This changes
-    // the meaning of this->line to be merely a pointer to aReader's line, which of course
+    // Not using our own m_line buffer, will be using aReader's.  This changes
+    // the meaning of this->m_line to be merely a pointer to aReader's m_line, which of course
     // is not owned here.
-    delete [] line;
+    delete [] m_line;
 
-    line = 0;
+    m_line = nullptr;
 }
 
 
 WHITESPACE_FILTER_READER::~WHITESPACE_FILTER_READER()
 {
-    // Our 'line' points to aReader's, and he will delete that buffer.
+    // Our 'm_line' points to aReader's, and he will delete that buffer.
     // Prevent subsequent call to ~LINE_READER() from deleting a buffer we do not own.
-    line = 0;
+    m_line = nullptr;
 }
 
 
@@ -100,8 +100,8 @@ char* WHITESPACE_FILTER_READER::ReadLine()
             break;
     }
 
-    line   = s;
-    length = reader.Length();
+    m_line   = s;
+    m_length = reader.Length();
 
-    return length ? line : NULL;
+    return m_length ? m_line : NULL;
 }

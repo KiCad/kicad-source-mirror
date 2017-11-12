@@ -29,15 +29,15 @@ STDISTREAM_LINE_READER::STDISTREAM_LINE_READER() :
     LINE_READER( 0 ),
     m_stream( nullptr )
 {
-    line = nullptr;
-    lineNum = 0;
+    m_line = nullptr;
+    m_lineNum = 0;
 }
 
 
 STDISTREAM_LINE_READER::~STDISTREAM_LINE_READER()
 {
     // this is only a view into a string, it cant be deleted by the base
-    line = nullptr;
+    m_line = nullptr;
 }
 
 
@@ -47,14 +47,14 @@ char* STDISTREAM_LINE_READER::ReadLine()
 
     m_buffer.append( 1, '\n' );
 
-    length = m_buffer.size();
-    line = (char*) m_buffer.data(); //ew why no const??
+    m_length = m_buffer.size();
+    m_line = (char*) m_buffer.data(); //ew why no const??
 
     // lineNum is incremented even if there was no line read, because this
     // leads to better error reporting when we hit an end of file.
-    ++lineNum;
+    ++m_lineNum;
 
-    return m_stream->eof() ? nullptr : line;
+    return m_stream->eof() ? nullptr : m_line;
 }
 
 
@@ -79,7 +79,7 @@ IFSTREAM_LINE_READER::IFSTREAM_LINE_READER( const wxFileName& aFileName )  :
 
     setStream( m_fStream );
 
-    source = aFileName.GetFullName();
+    m_source = aFileName.GetFullName();
 }
 
 
