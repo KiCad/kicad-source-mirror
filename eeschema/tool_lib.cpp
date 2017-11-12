@@ -107,7 +107,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                             KiBitmap( new_library_xpm ),
                             _( "Create a new library" ) );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_LIB, wxEmptyString,
+    m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_LIBRARY, wxEmptyString,
                             KiBitmap( save_library_xpm ),
                             _( "Save current library" ) );
 
@@ -115,7 +115,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString, KiBitmap( new_component_xpm ),
                             _( "Create new component" ) );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_PART, wxEmptyString,
+    m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_PART, wxEmptyString,
                             KiBitmap( save_part_in_mem_xpm ),   // TODO change icon
                             _( "Save component" ) );
 

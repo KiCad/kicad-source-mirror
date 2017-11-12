@@ -201,7 +201,7 @@ public:
             const LIB_ID*                       aHighlight = nullptr,
             bool                                aAllowFields = true );
 
-    void OnEditSymbolLibTable( wxCommandEvent& aEvent );
+    virtual void OnEditSymbolLibTable( wxCommandEvent& aEvent );
 
     /**
      * Load symbol from symbol library table.

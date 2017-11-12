@@ -38,6 +38,7 @@
 #include <class_library.h>
 #include <wildcards_and_files_ext.h>
 #include <eeschema_id.h>
+#include <lib_manager.h>
 
 #include <wx/filename.h>
 
@@ -46,6 +47,7 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
 {
     wxString msg;
     m_lastDrawItem = NULL;
+    wxString libName = getTargetLib();
 
     wxFileDialog dlg( this, _( "Import Symbol" ), m_mruPath,
                       wxEmptyString, SchematicLibraryFileWildcard(),
@@ -54,13 +56,13 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxFileName  fn = dlg.GetPath();
-
+    wxFileName fn = dlg.GetPath();
     m_mruPath = fn.GetPath();
 
     wxArrayString symbols;
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
 
+    // TODO dialog to select the part to be imported if there is more than one
     try
     {
         pi->EnumerateSymbolLib( symbols, fn.GetFullPath() );
@@ -79,25 +81,25 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
         return;
     }
 
-    LIB_ALIAS* entry = pi->LoadSymbol( fn.GetFullPath(), symbols[0] );
+    wxString symbolName = symbols[0];
+    LIB_ALIAS* entry = pi->LoadSymbol( fn.GetFullPath(), symbolName );
 
-    if( LoadOneLibraryPartAux( entry, fn.GetFullPath() ) )
+    if( m_libMgr->PartExists( symbols[0], libName ) )
     {
-        DisplayLibInfos();
-        GetScreen()->ClearUndoRedoList();
-        Zoom_Automatique( false );
-
-        // This effectively adds a new symbol to the library.  Set the modified flag so the
-        // save library toolbar button and menu entry are enabled.
-        OnModify();
+        msg.Printf( _( "Symbol '%s' already exists in library '%s'." ), symbolName, libName );
+        DisplayError( this,  msg );
+        return;
     }
+
+    m_libMgr->UpdatePart( entry->GetPart(), libName );
+    loadPart( symbolName, libName, 1 );
 }
 
 
 void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
 {
-    wxString    msg, title;
-    LIB_PART*   part = GetCurPart();
+    wxString msg, title;
+    LIB_PART* part = getTargetPart();
 
     if( !part )
     {
@@ -173,12 +175,6 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
     }
 
     m_mruPath = fn.GetPath();
-
-    /// @todo Give the user a choice to add the new library to the symbol library table.
-    DisplayInfoMessage( this, _( "This library will not be available until it is added to the "
-                                 "symbol library table." ) );
-
-    GetScreen()->ClrModify();
     m_drawItem = m_lastDrawItem = NULL;
 
     msg.Printf( _( "Symbol '%s' saved in library '%s'" ), part->GetName(), fn.GetFullPath() );

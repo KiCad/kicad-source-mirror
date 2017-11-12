@@ -4,6 +4,8 @@
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017 CERN
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,12 +41,14 @@
 
 
 class SCH_EDIT_FRAME;
+class SYMBOL_LIB_TABLE;
 class LIB_PART;
 class LIB_ALIAS;
 class LIB_FIELD;
 class DIALOG_LIB_EDIT_TEXT;
-class COMPONENT_TREE;
+class CMP_TREE_PANE;
 class LIB_ID;
+class LIB_MANAGER;
 
 
 /**
@@ -57,7 +61,8 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     LIB_COLLECTOR   m_collectedItems;       ///< Used for hit testing.
     wxComboBox*     m_partSelectBox;        ///< a Box to select a part to edit (if any)
     wxComboBox*     m_aliasSelectBox;       ///< a box to select the alias to edit (if any)
-    COMPONENT_TREE* m_componentTree;        ///< component search tree widget
+    CMP_TREE_PANE*  m_treePane;             ///< component search tree widget
+    LIB_MANAGER*    m_libMgr;               ///< manager taking care of temporary modificatoins
 
     /** Convert of the item currently being drawn. */
     bool m_drawSpecificConvert;
@@ -132,8 +137,6 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
 
     LIB_ITEM* locateItem( const wxPoint& aPosition, const KICAD_T aFilterList[] );
 
-    void createComponentTree();
-
 public:
 
     LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
@@ -141,7 +144,7 @@ public:
     ~LIB_EDIT_FRAME();
 
     /** The nickname of the current library being edited and empty string if none. */
-    wxString GetCurLib();
+    wxString GetCurLib() const;
 
     /** Sets the current library nickname and returns the old library nickname. */
     wxString SetCurLib( const wxString& aLibNickname );
@@ -151,7 +154,10 @@ public:
      *
      * This is a LIB_PART that I own, it is at best a copy of one in a library.
      */
-    LIB_PART* GetCurPart();
+    LIB_PART* GetCurPart() const
+    {
+        return m_my_part;
+    }
 
     /**
      * Take ownership of aPart and notes that it is the one currently being edited.
@@ -209,6 +215,50 @@ public:
     void OnSelectTool( wxCommandEvent& aEvent );
 
     /**
+     * Creates a new library. The library is added to the project libraries table.
+     */
+    void OnCreateNewLibrary( wxCommandEvent& aEvent )
+    {
+        addLibraryFile( true );
+    }
+
+    /**
+     * Adds an existing library. The library is added to the project libraries table.
+     */
+    void OnAddLibrary( wxCommandEvent& aEvent )
+    {
+        addLibraryFile( false );
+    }
+
+    /**
+     * The command event handler to save the changes to the current library.
+     *
+     * A backup file of the current library is saved with the .bak extension before the
+     * changes made to the library are saved.
+     */
+    void OnSaveLibrary( wxCommandEvent& event );
+
+    /**
+     * Saves all changes in modified libraries.
+     */
+    void OnSaveAllLibraries( wxCommandEvent& event );
+
+    /**
+     * Reverts unsaved changes in a library.
+     */
+    void OnRevertLibrary( wxCommandEvent& aEvent );
+
+    /**
+     * Creates a new part in the selected library.
+     */
+    void OnCreateNewPart( wxCommandEvent& aEvent );
+
+    /**
+     * Opens the selected part for editing.
+     */
+    void OnEditPart( wxCommandEvent& aEvent );
+
+    /**
      * Routine to read one part.
      * The format is that of libraries, but it loads only 1 component.
      * Or 1 component if there are several.
@@ -217,11 +267,26 @@ public:
     void OnImportPart( wxCommandEvent& event );
 
     /**
-     * Function OnExportPart
-     * creates a new library and backup the current component in this library or export
+     * Creates a new library and backup the current component in this library or exports
      * the component of the current library.
      */
     void OnExportPart( wxCommandEvent& event );
+
+    /**
+     * Saves a single part in the selected library. The library file is updated without including
+     * the remaining unsaved changes.
+     */
+    void OnSavePart( wxCommandEvent& aEvent );
+
+    /**
+     * Reverts unsaved changes in a part, restoring to the last saved state.
+     */
+    void OnRevertPart( wxCommandEvent& aEvent );
+
+    /**
+     * Removes a part from the working copy of a library.
+     */
+    void OnRemovePart( wxCommandEvent& aEvent );
 
     void OnSelectAlias( wxCommandEvent& event );
     void OnSelectPart( wxCommandEvent& event );
@@ -233,31 +298,12 @@ public:
 
     void OnToggleSearchTree( wxCommandEvent& event );
 
+    void OnEditSymbolLibTable( wxCommandEvent& aEvent ) override;
+
     bool IsSearchTreeShown();
 
-    /**
-     * Delete a symbol from the current library.
-     *
-     * The deleted entry can be an alias or a component.  If the entry is an alias,
-     * it is removed from the component and the list of alias is updated.  If the
-     * entry is a component and the list of aliases is empty, the component and all
-     * it drawable items are deleted.  Otherwise the first alias in the alias list
-     * becomes the new component name and the other aliases become dependent on
-     * renamed component.
-     *
-     * @note This only deletes the entry in memory.  The file does not change.
-     */
-    void DeleteOnePart( wxCommandEvent& event );
-
-    /**
-     * Create a new library symbol.
-     *
-     * If an old component is currently in edit, it is deleted.
-     */
-    void CreateNewLibraryPart( wxCommandEvent& event );
-
     void OnEditComponentProperties( wxCommandEvent& event );
-    void InstallFieldsEditorDialog(  wxCommandEvent& event );
+    void InstallFieldsEditorDialog( wxCommandEvent& event );
 
     /**
      * Loads a symbol from the currently selected library.
@@ -276,11 +322,12 @@ public:
 
     void OnOpenPinTable( wxCommandEvent& aEvent );
 
-    void OnSaveCurrentPart( wxCommandEvent& aEvent );
-
     void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
     void OnUpdateEditingPart( wxUpdateUIEvent& event );
-    void OnUpdateNotEditingPart( wxUpdateUIEvent& event );
+    void OnUpdateNotEditingPart( wxUpdateUIEvent& event );      // TODO?
+    void OnUpdatePartModified( wxUpdateUIEvent& aEvent );
+    void OnUpdateLibModified( wxUpdateUIEvent& aEvent );
+    void OnUpdateClipboardNotEmpty( wxUpdateUIEvent& aEvent );
     void OnUpdateUndo( wxUpdateUIEvent& event );
     void OnUpdateRedo( wxUpdateUIEvent& event );
     void OnUpdateSaveCurrentLib( wxUpdateUIEvent& event );
@@ -357,10 +404,7 @@ public:
      * Must be called after a schematic change in order to set the "modify" flag of the
      * current screen.
      */
-    void OnModify()
-    {
-        GetScreen()->SetModify();
-    }
+    void OnModify();
 
     const wxString& GetAliasName()      { return m_aliasName; }
 
@@ -427,6 +471,18 @@ public:
     bool IsEditingDrawItem() { return m_drawItem && m_drawItem->InEditMode(); }
 
 private:
+    void loadPart( const wxString& aLibrary, const wxString& aPart, int Unit );
+
+    /**
+     * Saves the changes to the current library.
+     *
+     * A backup file of the current library is saved with the .bak extension before the
+     * changes made to the library are saved.
+     * @param aLibrary is the library name.
+     * @param aNewFile Ask for a new file name to save the library.
+     * @return True if the library was successfully saved.
+     */
+    bool saveLibrary( const wxString& aLibrary, bool aNewFile );
 
     /**
      * Called when the frame is activated.  Tests if the current library exists.
@@ -444,24 +500,6 @@ private:
      *                 then display list of available libraries to select from.
      */
     void SelectActiveLibrary( const wxString& aLibrary = wxEmptyString );
-
-    /**
-     * The command event handler to save the changes to the current library.
-     *
-     * A backup file of the current library is saved with the .bak extension before the
-     * changes made to the library are saved.
-     */
-    void OnSaveActiveLibrary( wxCommandEvent& event );
-
-    /**
-     * Saves the changes to the current library.
-     *
-     * A backup file of the current library is saved with the .bak extension before the
-     * changes made to the library are saved.
-     * @param newFile Ask for a new file name to save the library.
-     * @return True if the library was successfully saved.
-     */
-    bool SaveActiveLibrary( bool newFile );
 
     /**
      * Loads a symbol from the current active library, optionally setting the selected
@@ -652,6 +690,33 @@ public:
      * @param aFullFileName = the full filename
      */
     void SVG_PlotComponent( const wxString& aFullFileName );
+
+    /**
+     * Displays a dialog asking the user to select a symbol library table.
+     * @return Pointer to the selected symbol library table or nullptr if cancelled.
+     */
+    SYMBOL_LIB_TABLE* SelectSymLibTable();
+
+    ///> Helper screen used when no part is loaded
+    SCH_SCREEN* m_dummyScreen;
+
+    // TODO
+    // TODO move to tree pane?
+    LIB_PART* getTargetPart() const;
+
+    LIB_ID getTargetLibId() const;
+
+    wxString getTargetLib() const;
+
+    bool addLibraryFile( bool aCreateNew );
+
+    wxFileName getLibraryFileName( bool aExisting );
+
+    void storeCurrentPart();
+
+    bool isCurrentPart( const LIB_ID& aLibId ) const;
+
+    void emptyScreen();
 
     DECLARE_EVENT_TABLE()
 };

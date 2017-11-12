@@ -46,6 +46,9 @@
 #include <wildcards_and_files_ext.h>
 #include <schframe.h>
 #include <symbol_lib_table.h>
+#include <lib_manager.h>
+#include <cmp_tree_pane.h>
+#include <component_tree.h>
 
 #include <dialog_choose_component.h>
 #include <cmp_tree_model_adapter.h>
@@ -201,25 +204,19 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& a
         return false;
     }
 
-    wxString cmpName = m_aliasName = aEntry->GetName();
-
-    LIB_PART* lib_part = aEntry->GetPart();
-
-    wxASSERT( lib_part );
-
-    LIB_PART* part = new LIB_PART( *lib_part );      // clone it and own it.
-    SetCurPart( part );
     m_aliasName = aEntry->GetName();
+
+    LIB_PART* lib_part = m_libMgr->GetBufferedPart( m_aliasName, aLibrary );
+    wxASSERT( lib_part );
+    SetScreen( m_libMgr->GetScreen( lib_part->GetName(), aLibrary ) );
+    SetCurPart( new LIB_PART( *lib_part ) );
+    SetCurLib( aLibrary );
 
     m_unit = 1;
     m_convert = 1;
+    SetShowDeMorgan( GetCurPart()->HasConversion() );
 
-    m_showDeMorgan = false;
-
-    if( part->HasConversion() )
-        m_showDeMorgan = true;
-
-    GetScreen()->ClrModify();
+    Zoom_Automatique( false );
     DisplayLibInfos();
     UpdateAliasSelectList();
     UpdatePartSelectList();
@@ -282,13 +279,181 @@ void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 }
 
 
-void LIB_EDIT_FRAME::OnSaveActiveLibrary( wxCommandEvent& event )
+void LIB_EDIT_FRAME::OnSaveLibrary( wxCommandEvent& event )
 {
-    SaveActiveLibrary( event.GetId() == ID_LIBEDIT_SAVE_CURRENT_LIB_AS );
+    saveLibrary( getTargetLib(), event.GetId() == ID_LIBEDIT_SAVE_LIBRARY_AS );
+    m_treePane->Refresh();
 }
 
 
-bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
+void LIB_EDIT_FRAME::OnSaveAllLibraries( wxCommandEvent& event )
+{
+    wxASSERT( false );
+}
+
+
+void LIB_EDIT_FRAME::OnRevertLibrary( wxCommandEvent& aEvent )
+{
+    wxString libName = getTargetLib();
+    bool currentLib = ( libName == GetCurLib() );
+
+    // Save the current part name/unit to reload after revert
+    wxString alias = m_aliasName;
+    int unit = m_unit;
+
+    if( !IsOK( this, _( "The revert operation cannot be undone!\n\nRevert changes?" ) ) )
+        return;
+
+    if( currentLib )
+        emptyScreen();
+
+    m_libMgr->RevertLibrary( libName );
+
+    if( currentLib && m_libMgr->PartExists( alias, libName ) )
+        loadPart( alias, libName, unit );
+}
+
+
+void LIB_EDIT_FRAME::OnCreateNewPart( wxCommandEvent& event )
+{
+    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
+    m_drawItem = NULL;
+
+    DIALOG_LIB_NEW_COMPONENT dlg( this );
+    dlg.SetMinSize( dlg.GetSize() );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    if( dlg.GetName().IsEmpty() )
+    {
+        wxMessageBox( _( "This new symbol has no name and cannot be created." ) );
+        return;
+    }
+
+    wxString name = dlg.GetName();
+    name.Replace( " ", "_" );
+
+    wxString lib = getTargetLib();
+
+    // Test if there is a component with this name already.
+    if( !lib.empty() && m_libMgr->PartExists( name, lib ) )
+    {
+        wxString msg = wxString::Format( _( "Symbol '%s' already exists in library '%s'" ),
+                                         name, lib );
+        DisplayError( this, msg );
+        return;
+    }
+
+    LIB_PART* new_part = new LIB_PART( name );
+    m_aliasName = new_part->GetName();
+
+    new_part->GetReferenceField().SetText( dlg.GetReference() );
+    new_part->SetUnitCount( dlg.GetUnitCount() );
+
+    // Initialize new_part->m_TextInside member:
+    // if 0, pin text is outside the body (on the pin)
+    // if > 0, pin text is inside the body
+    new_part->SetConversion( dlg.GetAlternateBodyStyle() );
+    SetShowDeMorgan( dlg.GetAlternateBodyStyle() );
+
+    if( dlg.GetPinNameInside() )
+    {
+        new_part->SetPinNameOffset( dlg.GetPinTextPosition() );
+
+        if( new_part->GetPinNameOffset() == 0 )
+            new_part->SetPinNameOffset( 1 );
+    }
+    else
+    {
+        new_part->SetPinNameOffset( 0 );
+    }
+
+    ( dlg.GetPowerSymbol() ) ? new_part->SetPower() : new_part->SetNormal();
+    new_part->SetShowPinNumbers( dlg.GetShowPinNumber() );
+    new_part->SetShowPinNames( dlg.GetShowPinName() );
+    new_part->LockUnits( dlg.GetLockItems() );
+
+    if( dlg.GetUnitCount() < 2 )
+        new_part->LockUnits( false );
+
+    m_libMgr->UpdatePart( new_part, lib );
+    loadPart( name, lib, 1 );
+}
+
+
+void LIB_EDIT_FRAME::OnEditPart( wxCommandEvent& aEvent )
+{
+    int unit = 0;
+    LIB_ID partId = m_treePane->GetCmpTree()->GetSelectedLibId( &unit );
+    loadPart( partId.GetLibItemName(), partId.GetLibNickname(), unit );
+}
+
+
+void LIB_EDIT_FRAME::OnSavePart( wxCommandEvent& aEvent )
+{
+    LIB_ID libId = getTargetLibId();
+    m_libMgr->FlushPart( libId.GetLibItemName(), libId.GetLibNickname() );
+}
+
+
+void LIB_EDIT_FRAME::OnRemovePart( wxCommandEvent& aEvent )
+{
+    LIB_ID libId = getTargetLibId();
+
+    if( m_libMgr->IsPartModified( libId.GetLibItemName(), libId.GetLibNickname() )
+        && !IsOK( this, _( wxString::Format( "Component %s has been modified\n"
+                        "Do you want to remove it from the library?", libId.GetLibItemName().c_str() ) ) ) )
+    {
+        return;
+    }
+
+    if( isCurrentPart( libId ) )
+        emptyScreen();
+
+    m_libMgr->RemovePart( libId.GetLibItemName(), libId.GetLibNickname() );
+}
+
+
+void LIB_EDIT_FRAME::OnRevertPart( wxCommandEvent& aEvent )
+{
+    LIB_ID libId = getTargetLibId();
+    bool currentPart = isCurrentPart( libId );
+    int unit = m_unit;
+
+    if( currentPart )
+        emptyScreen();
+
+    m_libMgr->RevertPart( libId.GetLibItemName(), libId.GetLibNickname() );
+
+    if( currentPart && m_libMgr->PartExists( libId.GetLibItemName(), libId.GetLibNickname() ) )
+        loadPart( libId.GetLibItemName(), libId.GetLibNickname(), unit );
+}
+
+
+void LIB_EDIT_FRAME::loadPart( const wxString& aAlias, const wxString& aLibrary, int aUnit )
+{
+    wxCHECK( m_libMgr->PartExists( aAlias, aLibrary ), /* void */ );
+    LIB_PART* part = m_libMgr->GetBufferedPart( aAlias, aLibrary );
+    LIB_ALIAS* alias = part ? part->GetAlias( aAlias ) : nullptr;
+
+    if( !alias )
+    {
+        wxString msg = wxString::Format( _( "Part name '%s' not found in library '%s'" ),
+            GetChars( aAlias ), GetChars( aLibrary ) );
+        DisplayError( this, msg );
+        return;
+    }
+
+    m_lastDrawItem = m_drawItem = nullptr;
+    m_aliasName = aAlias;
+    m_unit = ( aUnit <= part->GetUnitCount() ? aUnit : 1 );
+
+    LoadOneLibraryPartAux( alias, aLibrary );
+}
+
+
+bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 {
     wxFileName fn;
     wxString   msg;
@@ -296,18 +461,15 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
 
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
 
-    wxString lib = GetCurLib();
+    wxString lib = getTargetLib();
 
-    if( !newFile && ( lib.empty() || !prj.SchSymbolLibTable()->HasLibrary( lib ) ) )
+    if( !aNewFile && ( lib.empty() || !prj.SchSymbolLibTable()->HasLibrary( lib ) ) )
     {
         DisplayError( this, _( "No library specified." ) );
         return false;
     }
 
-    if( GetScreen()->IsModify() && !IsOK( this, _( "Include current symbol changes?" ) ) )
-        return false;
-
-    if( newFile )
+    if( aNewFile )
     {
         SEARCH_STACK*   search = prj.SchSearchS();
 
@@ -392,7 +554,7 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     }
 
     // Copy the library and document files to the new destination library files.
-    if( newFile )
+    if( aNewFile )
     {
         wxFileName src = prj.SchSymbolLibTable()->GetFullURI( GetCurLib() );
 
@@ -417,21 +579,13 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     // Update symbol changes in library.
     if( GetScreen()->IsModify() )
     {
-        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
-
-        try
-        {
-            pi->SaveSymbol( fn.GetFullPath(), new LIB_PART( *GetCurPart() ) );
-        }
-        catch( const IO_ERROR& ioe )
+        if( !m_libMgr->FlushLibrary( lib ) )
         {
             msg.Printf( _( "Failed to save changes to symbol library file '%s'" ),
                         libFileName.GetFullPath() );
-            DisplayErrorMessage( this, msg, ioe.What() );
+            DisplayErrorMessage( this, _( "Error saving library" ), msg );
             return false;
         }
-
-        GetScreen()->ClrModify();
     }
 
     msg.Printf( _( "Symbol library file '%s' saved" ), libFileName.GetFullPath() );
@@ -492,198 +646,4 @@ void LIB_EDIT_FRAME::DisplayCmpDoc()
     AppendMsgPanel( _( "Description" ), alias->GetDescription(), CYAN, 8 );
     AppendMsgPanel( _( "Key words" ), alias->GetKeyWords(), DARKDARKGRAY );
     AppendMsgPanel( _( "Datasheet" ), alias->GetDocFileName(), DARKDARKGRAY );
-}
-
-
-void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
-{
-    wxString      cmp_name;
-    wxArrayString nameList;
-    wxString      msg;
-
-    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
-
-    m_lastDrawItem = NULL;
-    m_drawItem = NULL;
-
-    LIB_PART *part = GetCurPart();
-    wxString lib = GetCurLib();
-
-    if( lib.empty() )
-    {
-        SelectActiveLibrary();
-
-        lib = GetCurLib();
-
-        if( !lib )
-        {
-            DisplayError( this, _( "Please select a symbol library." ) );
-            return;
-        }
-    }
-
-    auto adapter( CMP_TREE_MODEL_ADAPTER::Create( Prj().SchSymbolLibTable() ) );
-
-    wxString name = part ? part->GetName() : wxString( wxEmptyString );
-    adapter->SetPreselectNode( name, /* aUnit */ 0 );
-    adapter->ShowUnits( false );
-    adapter->AddLibrary( lib );
-
-    wxString dialogTitle;
-    dialogTitle.Printf( _( "Delete Symbol (%u items loaded)" ), adapter->GetComponentsCount() );
-
-    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, m_convert, false );
-
-    if( dlg.ShowQuasiModal() == wxID_CANCEL )
-    {
-        return;
-    }
-
-    LIB_ID id;
-
-    id = dlg.GetSelectedLibId();
-
-    if( !id.IsValid() )
-        return;
-
-    LIB_ALIAS* alias = Prj().SchSymbolLibTable()->LoadSymbol( id );
-
-    if( !alias )
-        return;
-
-    msg.Printf( _( "Delete symbol '%s' from library '%s'?" ),
-                id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
-
-    if( !IsOK( this, msg ) )
-        return;
-
-    part = GetCurPart();
-
-    if( !part || !part->HasAlias( id.GetLibItemName() ) )
-    {
-        Prj().SchSymbolLibTable()->DeleteAlias( id.GetLibNickname(), id.GetLibItemName() );
-        m_canvas->Refresh();
-        return;
-    }
-
-    // If deleting the current entry or removing one of the aliases for
-    // the current entry, sync the changes in the current entry as well.
-
-    if( GetScreen()->IsModify() && !IsOK( this, _(
-        "The symbol being deleted has been modified."
-        " All changes will be lost. Discard changes?" ) ) )
-    {
-        return;
-    }
-
-    try
-    {
-        Prj().SchSymbolLibTable()->DeleteAlias( id.GetLibNickname(), id.GetLibItemName() );
-    }
-    catch( ... /* IO_ERROR ioe */ )
-    {
-        msg.Printf( _( "Error occurred deleting symbol '%s' from library '%s'" ),
-                    id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
-        DisplayError( this, msg );
-        return;
-    }
-
-    SetCurPart( NULL );     // delete CurPart
-    m_aliasName.Empty();
-    m_canvas->Refresh();
-}
-
-
-void LIB_EDIT_FRAME::CreateNewLibraryPart( wxCommandEvent& event )
-{
-    wxString name;
-
-    if( GetCurPart() && GetScreen()->IsModify() && !IsOK( this, _(
-        "All changes to the current symbol will be lost!\n\n"
-        "Clear the current symbol from the screen?" ) ) )
-    {
-        return;
-    }
-
-    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
-
-    m_drawItem = NULL;
-
-    DIALOG_LIB_NEW_COMPONENT dlg( this );
-
-    dlg.SetMinSize( dlg.GetSize() );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    if( dlg.GetName().IsEmpty() )
-    {
-        wxMessageBox( _( "This new symbol has no name and cannot be created." ) );
-        return;
-    }
-
-    name = dlg.GetName();
-    name.Replace( " ", "_" );
-
-    wxString lib = GetCurLib();
-
-    // Test if there a component with this name already.
-    if( !lib.empty() && Prj().SchSymbolLibTable()->LoadSymbol( lib, name ) != NULL )
-    {
-        wxString msg = wxString::Format( _( "Symbol '%s' already exists in library '%s'" ),
-                                         name, lib );
-        DisplayError( this, msg );
-        return;
-    }
-
-    LIB_PART* new_part = new LIB_PART( name );
-
-    SetCurPart( new_part );
-    m_aliasName = new_part->GetName();
-
-    new_part->GetReferenceField().SetText( dlg.GetReference() );
-    new_part->SetUnitCount( dlg.GetUnitCount() );
-
-    // Initialize new_part->m_TextInside member:
-    // if 0, pin text is outside the body (on the pin)
-    // if > 0, pin text is inside the body
-    new_part->SetConversion( dlg.GetAlternateBodyStyle() );
-    SetShowDeMorgan( dlg.GetAlternateBodyStyle() );
-
-    if( dlg.GetPinNameInside() )
-    {
-        new_part->SetPinNameOffset( dlg.GetPinTextPosition() );
-
-        if( new_part->GetPinNameOffset() == 0 )
-            new_part->SetPinNameOffset( 1 );
-    }
-    else
-    {
-        new_part->SetPinNameOffset( 0 );
-    }
-
-    ( dlg.GetPowerSymbol() ) ? new_part->SetPower() : new_part->SetNormal();
-    new_part->SetShowPinNumbers( dlg.GetShowPinNumber() );
-    new_part->SetShowPinNames( dlg.GetShowPinName() );
-    new_part->LockUnits( dlg.GetLockItems() );
-
-    if( dlg.GetUnitCount() < 2 )
-        new_part->LockUnits( false );
-
-    m_unit = 1;
-    m_convert  = 1;
-
-    DisplayLibInfos();
-    DisplayCmpDoc();
-    UpdateAliasSelectList();
-    UpdatePartSelectList();
-
-    m_editPinsPerPartOrConvert = new_part->UnitsLocked() ? true : false;
-    m_lastDrawItem = NULL;
-
-    GetScreen()->ClearUndoRedoList();
-    OnModify();
-
-    m_canvas->Refresh();
-    m_mainToolBar->Refresh();
 }
