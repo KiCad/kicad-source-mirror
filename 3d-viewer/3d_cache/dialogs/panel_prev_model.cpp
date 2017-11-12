@@ -125,29 +125,7 @@ void PANEL_PREV_3D::initPanel()
     };
 
     for( int ii = 0; ii < 9; ii++ )
-    {
         spinButtonList[ii]->SetRange( INT_MIN, INT_MAX );
-    }
-
-    wxString units;
-
-    switch( g_UserUnit )
-    {
-    case INCHES:
-        units = _( "inches" );
-        break;
-    case MILLIMETRES:
-        units = _( "mm" );
-        break;
-    default:
-        break;
-    }
-
-    if( !units.IsEmpty() )
-    {
-        units = wxString::Format( _( "Offset (%s)" ), units );
-        vbOffset->GetStaticBox()->SetLabel( units );
-    }
 }
 
 
@@ -236,25 +214,25 @@ void PANEL_PREV_3D::SetModelDataIdx( int idx, bool aReloadPreviewModule )
             yrot->SetValue( wxString::Format( "%.2f", aModel->m_Rotation.y ) );
             zrot->SetValue( wxString::Format( "%.2f", aModel->m_Rotation.z ) );
 
-            // Convert from internal units (mm) to user units
-
-            double scaler = 1;
-
             switch( g_UserUnit )
             {
             case MILLIMETRES:
-                scaler = 1.0f;
+                xoff->SetValue( wxString::Format( "%.4f", aModel->m_Offset.x * 25.4 ) );
+                yoff->SetValue( wxString::Format( "%.4f", aModel->m_Offset.y * 25.4 ) );
+                zoff->SetValue( wxString::Format( "%.4f", aModel->m_Offset.z * 25.4 ) );
                 break;
-            case INCHES:
-                scaler = 25.4f;
-                break;
-            default:
-                wxASSERT( 0 );
-            }
 
-            xoff->SetValue( wxString::Format( "%.4f", aModel->m_Offset.x / scaler ) );
-            yoff->SetValue( wxString::Format( "%.4f", aModel->m_Offset.y / scaler ) );
-            zoff->SetValue( wxString::Format( "%.4f", aModel->m_Offset.z / scaler ) );
+            case INCHES:
+                xoff->SetValue( wxString::Format( "%.4f", aModel->m_Offset.x ) );
+                yoff->SetValue( wxString::Format( "%.4f", aModel->m_Offset.y ) );
+                zoff->SetValue( wxString::Format( "%.4f", aModel->m_Offset.z ) );
+                break;
+
+            case DEGREES:
+            case UNSCALED_UNITS:
+            default:
+                wxASSERT(0);
+            }
 
             UpdateModelName( aModel->m_Filename );
 
@@ -271,9 +249,7 @@ void PANEL_PREV_3D::SetModelDataIdx( int idx, bool aReloadPreviewModule )
     }
 
     if( m_previewPane )
-    {
         m_previewPane->SetFocus();
-    }
 
     return;
 }
@@ -589,25 +565,24 @@ void PANEL_PREV_3D::getOrientationVars( SGPOINT& aScale, SGPOINT& aRotation, SGP
     yoff->GetValue().ToDouble( &aOffset.y );
     zoff->GetValue().ToDouble( &aOffset.z );
 
-    // Convert from user units to internal units (mm)
-
-    double scaler = 1.0f;
-
     switch( g_UserUnit )
     {
     case MILLIMETRES:
-        scaler = 1.0f;
+        // Convert to Inches. Offset is stored in inches.
+        aOffset.x = aOffset.x / 25.4;
+        aOffset.y = aOffset.y / 25.4;
+        aOffset.z = aOffset.z / 25.4;
         break;
-    case INCHES:
-        scaler = 25.4f;
-        break;
-    default:
-        wxASSERT( 0 );
-    }
 
-    aOffset.x *= scaler;
-    aOffset.y *= scaler;
-    aOffset.z *= scaler;
+    case INCHES:
+        // It is already in Inches
+        break;
+
+    case DEGREES:
+    case UNSCALED_UNITS:
+    default:
+        wxASSERT(0);
+    }
 
     return;
 }

@@ -1046,7 +1046,9 @@ void C3D_RENDER_OGL_LEGACY::render_3D_module( const MODULE* module,
                         {
                             glPushMatrix();
 
-                            glTranslatef( sM->m_Offset.x, sM->m_Offset.y, sM->m_Offset.z );
+                            glTranslatef( sM->m_Offset.x * 25.4f,
+                                          sM->m_Offset.y * 25.4f,
+                                          sM->m_Offset.z * 25.4f );
 
                             glRotatef( -sM->m_Rotation.z, 0.0f, 0.0f, 1.0f );
                             glRotatef( -sM->m_Rotation.y, 0.0f, 1.0f, 0.0f );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 22 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -57,11 +57,11 @@ class PANEL_PREV_3D_BASE : public wxPanel
 		wxStaticText* m_staticText31;
 		wxTextCtrl* zrot;
 		wxSpinButton* m_spinZrot;
-		wxStaticBoxSizer* vbOffset;
 		wxStaticText* m_staticText12;
 		wxTextCtrl* xoff;
 		wxSpinButton* m_spinXoffset;
 		wxStaticText* m_staticText22;
+		wxTextCtrl* yoff;
 		wxSpinButton* m_spinYoffset;
 		wxStaticText* m_staticText32;
 		wxTextCtrl* zoff;
@@ -99,7 +99,6 @@ class PANEL_PREV_3D_BASE : public wxPanel
 		
 	
 	public:
-		wxTextCtrl* yoff;
 		
 		PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 503,371 ), long style = wxTAB_TRAVERSAL ); 
 		~PANEL_PREV_3D_BASE();

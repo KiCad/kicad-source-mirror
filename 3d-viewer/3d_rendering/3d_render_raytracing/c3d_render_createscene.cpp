@@ -1263,9 +1263,9 @@ void C3D_RENDER_RAYTRACING::load_3D_models()
                     glm::mat4 modelMatrix = moduleMatrix;
 
                     modelMatrix = glm::translate( modelMatrix,
-                                                  SFVEC3F( sM->m_Offset.x,
-                                                           sM->m_Offset.y,
-                                                           sM->m_Offset.z ) );
+                                                  SFVEC3F( sM->m_Offset.x * 25.4f,
+                                                           sM->m_Offset.y * 25.4f,
+                                                           sM->m_Offset.z * 25.4f ) );
 
                     modelMatrix = glm::rotate( modelMatrix,
                                                (float)-( sM->m_Rotation.z / 180.0f ) *
