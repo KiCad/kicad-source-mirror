@@ -247,7 +247,8 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
     {
         // Note: using a larger-than-necessary BB to simplify computation
         double radius = GetLineLength( m_Start, m_ArcCentre );
-        bbox.Inflate( radius, radius );
+        bbox.Move( m_ArcCentre - m_Start );
+        bbox.Inflate( radius + m_Size.x, radius + m_Size.x );
         break;
     }
 
@@ -280,6 +281,7 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
     }
     case GBR_SPOT_MACRO:
     {
+        code->GetMacro()->GetApertureMacroShape( this, m_Start );
         bbox = code->GetMacro()->GetBoundingBox();
         break;
     }
@@ -699,6 +701,7 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos ) const
         return poly.Contains( VECTOR2I( ref_pos ), 0 );
 
     case GBR_SPOT_RECT:
+    case GBR_ARC:
         return GetBoundingBox().Contains( aRefPos );
 
     case GBR_SPOT_MACRO:
@@ -781,7 +784,23 @@ unsigned int GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) cons
     // DCodes will be shown only if zoom is appropriate
     if( IsDCodeLayer( aLayer ) )
     {
-        return ( 100000000 / ( m_Size.x + 1 ) );
+        int size = 0;
+
+        switch( m_Shape )
+        {
+        case GBR_SPOT_MACRO:
+            size = GetDcodeDescr()->GetMacro()->GetBoundingBox().GetWidth();
+            break;
+
+        case GBR_ARC:
+            size = GetLineLength( m_Start, m_ArcCentre );
+            break;
+
+        default:
+            size = m_Size.x;
+        }
+
+        return ( 100000000 / ( size + 1 ) );
     }
 
     // Other layers are shown without any conditions
