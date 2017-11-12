@@ -314,14 +314,6 @@ void LIB_PART::SetName( const wxString& aName )
 }
 
 
-void LIB_PART::SetLibId( const LIB_ID& aLibId )
-{
-    m_libId.SetLibNickname( aLibId.GetLibNickname() );
-    // SetName() sets LibItemName in m_libId
-    SetName( aLibId.GetLibItemName() );
-}
-
-
 void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
             int aMulti, int aConvert, const PART_DRAW_OPTIONS& aOpts )
 {

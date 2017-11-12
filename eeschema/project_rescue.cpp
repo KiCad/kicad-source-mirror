@@ -409,7 +409,6 @@ wxString RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::GetActionDescription() const
 bool RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 {
     LIB_PART new_part( *m_cache_candidate );
-    new_part.SetLibId( m_new_id );
     new_part.SetName( m_new_id.GetLibItemName() );
     new_part.RemoveAllAliases();
     aRescuer->AddPart( &new_part );

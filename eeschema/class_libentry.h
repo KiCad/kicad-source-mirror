@@ -282,7 +282,6 @@ public:
     const wxString& GetName() const { return m_aliases[0]->GetName(); }
 
     const LIB_ID& GetLibId() const { return m_libId; }
-    void SetLibId( const LIB_ID& aLibId );
 
     const wxString GetLibraryName();
 
