@@ -193,7 +193,13 @@ void LIB_VIEW_FRAME::DisplayLibInfos()
 void LIB_VIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     LIB_ID id( m_libraryName, m_entryName );
-    LIB_ALIAS* entry = Prj().SchSymbolLibTable()->LoadSymbol( id );
+    LIB_ALIAS* entry = nullptr;
+
+    try
+    {
+        entry = Prj().SchSymbolLibTable()->LoadSymbol( id );
+    }
+    catch( const IO_ERROR& e ) {} // ignore, it is handled below
 
     if( !entry )
         return;

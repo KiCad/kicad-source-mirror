@@ -495,7 +495,11 @@ bool LIB_VIEW_FRAME::ReCreateListCmp()
 
     wxArrayString aliasNames;
 
-    Prj().SchSymbolLibTable()->EnumerateSymbolLib( m_libraryName, aliasNames, m_listPowerCmpOnly );
+    try
+    {
+        Prj().SchSymbolLibTable()->EnumerateSymbolLib( m_libraryName, aliasNames, m_listPowerCmpOnly );
+    }
+    catch( const IO_ERROR& e ) {}   // ignore, it is handled below
 
     if( aliasNames.IsEmpty() )
     {
