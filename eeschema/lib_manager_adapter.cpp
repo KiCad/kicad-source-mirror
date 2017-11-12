@@ -40,8 +40,6 @@ void LIB_MANAGER_ADAPTER::AddLibrary( const wxString& aLibNickname )
     auto& lib_node = m_tree.AddLib( aLibNickname );
     ItemAdded( wxDataViewItem( nullptr ), ToItem( &lib_node ) );
     updateLibrary( lib_node );
-    lib_node.AssignIntrinsicRanks();
-    m_tree.AssignIntrinsicRanks();
 }
 
 
@@ -65,7 +63,8 @@ void LIB_MANAGER_ADAPTER::UpdateLibrary( const wxString& aLibraryName )
     if( !node )
         return;
 
-    ItemChanged( ToItem( node ) );
+    updateLibrary( *(CMP_TREE_NODE_LIB*) node );
+    Resort();
 }
 
 
@@ -85,25 +84,26 @@ bool LIB_MANAGER_ADAPTER::IsContainer( const wxDataViewItem& aItem ) const
 
 void LIB_MANAGER_ADAPTER::Sync()
 {
-    if( getSyncHash() == m_libMgr->GetHash() )
+    int libMgrHash = m_libMgr->GetHash();
+
+    if( m_lastSyncHash == libMgrHash )
         return;
 
-    wxDataViewItem root( nullptr );
+    m_lastSyncHash = libMgrHash;
 
     // Process already stored libraries
     for( auto it = m_tree.Children.begin(); it != m_tree.Children.end(); /* iteration inside */ )
     {
-        int mgrHash = m_libMgr->GetLibraryHash( it->get()->Name );
+        const wxString& name = it->get()->Name;
 
-        if( mgrHash < 0 )
+        if( !m_libMgr->LibraryExists( name ) )
         {
-            deleteLibrary( * (CMP_TREE_NODE_LIB*) it->get() );
-            it = m_tree.Children.erase( it );
+            it = deleteLibrary( it );
             continue;
         }
-        else if( mgrHash != m_libHashes[it->get()->Name] )
+        else if( m_libMgr->GetLibraryHash( name ) != m_libHashes[name] )
         {
-            updateLibrary( * (CMP_TREE_NODE_LIB*) it->get() );
+            updateLibrary( *(CMP_TREE_NODE_LIB*) it->get() );
         }
 
         ++it;
@@ -113,46 +113,93 @@ void LIB_MANAGER_ADAPTER::Sync()
     for( const auto& libName : m_libMgr->GetLibraryNames() )
     {
         if( m_libHashes.count( libName ) == 0 )
-        {
-            auto& libNode = m_tree.AddLib( libName );       // Use AddLibrary?
-            ItemAdded( root, ToItem( &libNode ) );
-            updateLibrary( libNode );
-        }
+            AddLibrary( libName );
     }
 
+    m_tree.AssignIntrinsicRanks();
     Resort();
 }
 
 
 void LIB_MANAGER_ADAPTER::updateLibrary( CMP_TREE_NODE_LIB& aLibNode )
 {
+    if( m_libHashes.count( aLibNode.Name ) == 0 )
+    {
+        // add a new library
+        addAliases( aLibNode );
+    }
+    else
+    {
+        // update an existing libary
+#if 1
+        std::list<LIB_ALIAS*> aliases = m_libMgr->GetAliases( aLibNode.Name );
+        wxDataViewItem parent = ToItem( &aLibNode );
+
+        // remove the common part from the aliases list
+        //for( const auto& node : aLibNode.Children )
+        for( auto nodeIt = aLibNode.Children.begin(); nodeIt != aLibNode.Children.end(); /**/ )
+        {
+            auto aliasIt = std::find_if( aliases.begin(), aliases.end(),
+                    [&] ( const LIB_ALIAS* a ) {
+                        return a->GetName() == (*nodeIt)->Name;
+                    } );
+
+            if( aliasIt != aliases.end() )
+            {
+                // alias exists both in the component tree and the library manager,
+                // no need to update
+                aliases.erase( aliasIt );
+                ++nodeIt;
+            }
+            else
+            {
+                // node does not exist in the library manager, remove the corresponding node
+                ItemDeleted( parent, ToItem( nodeIt->get() ) );
+                nodeIt = aLibNode.Children.erase( nodeIt );
+            }
+        }
+
+        // now the aliases list contains only new aliases that need to be added to the tree
+        for( auto alias : aliases )
+        {
+            auto& aliasNode = aLibNode.AddAlias( alias );
+            ItemAdded( parent, ToItem( &aliasNode ) );
+        }
+#else
+        // Bruteforce approach - remove everything and rebuild the branch
+        wxDataViewItem parent = ToItem( &aLibNode );
+
+        for( const auto& node : aLibNode.Children )
+            ItemDeleted( parent, ToItem( node.get() ) );
+
+        aLibNode.Children.clear();
+        addAliases( aLibNode );
+#endif
+    }
+
+    aLibNode.AssignIntrinsicRanks();
+    m_libHashes[aLibNode.Name] = m_libMgr->GetLibraryHash( aLibNode.Name );
+}
+
+
+CMP_TREE_NODE::PTR_VECTOR::iterator LIB_MANAGER_ADAPTER::deleteLibrary(
+            CMP_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt )
+{
+    m_libHashes.erase( aLibNodeIt->get()->Name );
+    auto it = m_tree.Children.erase( aLibNodeIt );
+    return it;
+}
+
+
+void LIB_MANAGER_ADAPTER::addAliases( CMP_TREE_NODE_LIB& aLibNode )
+{
     wxDataViewItem parent = ToItem( &aLibNode );
-    aLibNode.Children.clear();
 
     for( auto alias : m_libMgr->GetAliases( aLibNode.Name ) )
     {
         auto& aliasNode = aLibNode.AddAlias( alias );
         ItemAdded( parent, ToItem( &aliasNode ) );
     }
-
-    // TODO faster?
-    /*
-    wxDataViewItemArray aliasItems;
-    aliasItems.reserve( aLibNode.Children.size() );
-
-    for( const auto& child : aLibNode.Children )
-        aliasItems.Add( ToItem( child.get() ) );
-
-    ItemsAdded( parent, aliasItems );
-    */
-
-    m_libHashes[aLibNode.Name] = m_libMgr->GetLibraryHash( aLibNode.Name );
-}
-
-
-void LIB_MANAGER_ADAPTER::deleteLibrary( CMP_TREE_NODE_LIB& aLibNode )
-{
-    wxASSERT( false );
 }
 
 
@@ -202,6 +249,6 @@ bool LIB_MANAGER_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsigned int aCo
 
 
 LIB_MANAGER_ADAPTER::LIB_MANAGER_ADAPTER( LIB_MANAGER* aLibMgr )
-    : m_libMgr( aLibMgr )
+    : m_libMgr( aLibMgr ), m_lastSyncHash( -1 )
 {
 }

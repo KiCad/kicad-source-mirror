@@ -50,13 +50,19 @@ public:
     LIB_MANAGER( LIB_EDIT_FRAME& aFrame );
 
     /**
-     * Updates the LIB_MANAGER data to account for the changes introduced to the project libraries.
-     * @see PROJECT::SchLibs()
+     * Updates the LIB_MANAGER data to synchronize with Symbol Library Table.
      */
-    void Sync();
+    void Sync( bool aForce = false );
 
     int GetHash() const;
 
+    /**
+     * Retruns a library hash value to determine if it has changed.
+     *
+     * For buffered libraries, it returns a number corresponding to the number
+     * of modifications. For original libraries, hash is computed basing on the
+     * library URI. Returns -1 when the requested library does not exist.
+     */
     int GetLibraryHash( const wxString& aLibrary ) const;
 
     /**
@@ -339,6 +345,9 @@ private:
 
     ///> The library buffers
     std::map<wxString, LIB_BUFFER> m_libs;
+
+    // TODO
+    int m_syncHash;
 
     LIB_MANAGER_ADAPTER::PTR m_adapter;
     LIB_MANAGER_ADAPTER* getAdapter() { return static_cast<LIB_MANAGER_ADAPTER*>( m_adapter.get() ); }

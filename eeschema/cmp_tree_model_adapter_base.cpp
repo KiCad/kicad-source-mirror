@@ -179,6 +179,7 @@ void CMP_TREE_MODEL_ADAPTER_BASE::AttachTo( wxDataViewCtrl* aDataViewCtrl )
                 ColWidth( m_tree, 0, part_head ) );
     m_col_desc = aDataViewCtrl->AppendTextColumn( desc_head, 1, wxDATAVIEW_CELL_INERT,
                 ColWidth( m_tree, 1, desc_head ) );
+    m_col_part->SetSortOrder( 0 );
     aDataViewCtrl->Thaw();
 }
 
@@ -281,14 +282,13 @@ void CMP_TREE_MODEL_ADAPTER_BASE::GetValue(
 
     switch( aCol )
     {
+    default:    // column == -1 is used for default Compare function
     case 0:
         aVariant = node->Name;
         break;
     case 1:
         aVariant = node->Desc;
         break;
-    default:
-        wxFAIL_MSG( "Invalid column ID!" );
     }
 }
 

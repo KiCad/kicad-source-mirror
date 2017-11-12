@@ -43,21 +43,15 @@ LIB_MANAGER::LIB_MANAGER( LIB_EDIT_FRAME& aFrame )
 }
 
 
-void LIB_MANAGER::Sync()
+void LIB_MANAGER::Sync( bool aForce )
 {
-    // TODO handle renaming libraries in the sym-lib-table dialog
-    // TODO using filepath as the key?
-    // TODO should not be compared with symboltable, but between the adapter and manager
-    // TODO move to treepane?
+    int libTableHash = m_symbolTable->GetModifyHash();
+
+    if( aForce || m_syncHash != libTableHash )
+    {
         getAdapter()->Sync();
-
-    //int libTableHash = m_symbolTable->GetModifyHash();
-
-    //if( m_syncHash != libTableHash )
-    //{
-        //getAdapter()->Sync();
-        //m_syncHash = libTableHash;
-    //}
+        m_syncHash = libTableHash;
+    }
 }
 
 
@@ -75,7 +69,14 @@ int LIB_MANAGER::GetHash() const
 int LIB_MANAGER::GetLibraryHash( const wxString& aLibrary ) const
 {
     const auto libBufIt = m_libs.find( aLibrary );
-    return libBufIt != m_libs.end() ? libBufIt->second.GetHash() : 0;
+
+    if( libBufIt != m_libs.end() )
+        return libBufIt->second.GetHash();
+
+    auto row = m_symbolTable->FindRow( aLibrary );
+
+    // return -1 if library does not exist or 0 if not modified
+    return row ? std::hash<std::string>{}( row->GetFullURI( true ).ToStdString() ) : -1;
 }
 
 
@@ -282,7 +283,7 @@ bool LIB_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibrary, wxStrin
         screen->SetModify();
     }
 
-    Sync();     // TODO update only the changed part
+    getAdapter()->UpdateLibrary( aLibrary );
 
     return true;
 }
@@ -377,6 +378,9 @@ bool LIB_MANAGER::PartExists( const wxString& aAlias, const wxString& aLibrary )
 
 bool LIB_MANAGER::LibraryExists( const wxString& aLibrary ) const
 {
+    if( aLibrary.IsEmpty() )
+        return false;
+
     if( m_libs.count( aLibrary ) > 0 )
         return true;
 

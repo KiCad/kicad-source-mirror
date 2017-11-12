@@ -50,7 +50,10 @@ public:
 protected:
     void updateLibrary( CMP_TREE_NODE_LIB& aLibNode );
 
-    void deleteLibrary( CMP_TREE_NODE_LIB& aLibNode );
+    CMP_TREE_NODE::PTR_VECTOR::iterator deleteLibrary(
+            CMP_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt );
+
+    void addAliases( CMP_TREE_NODE_LIB& aLibNode );
 
     CMP_TREE_NODE* findLibrary( const wxString& aLibNickName );
 
@@ -61,18 +64,11 @@ protected:
 
     LIB_MANAGER* m_libMgr;
 
-    // TODO? use hashes to determine whcih libraries to update?
+    ///> Hashes to decide whether a library needs an update
     std::map<wxString, int> m_libHashes;
 
-    int getSyncHash() const
-    {
-        int hash = 0;
-
-        for( const auto& h : m_libHashes )
-            hash += h.second;
-
-        return hash;
-    }
+    ///> LIB_MANAGER hash value returned in the last synchronization
+    int m_lastSyncHash;
 };
 
 #endif /* LIB_MANAGER_ADAPTER_H */

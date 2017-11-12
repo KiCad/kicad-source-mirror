@@ -488,6 +488,8 @@ void LIB_EDIT_FRAME::OnToggleSearchTree( wxCommandEvent& event )
 void LIB_EDIT_FRAME::OnEditSymbolLibTable( wxCommandEvent& aEvent )
 {
     SCH_BASE_FRAME::OnEditSymbolLibTable( aEvent );
+    m_libMgr->Sync( true );
+    m_treePane->Refresh();
 }
 
 
@@ -543,9 +545,8 @@ void LIB_EDIT_FRAME::OnUpdateRedo( wxUpdateUIEvent& event )
 void LIB_EDIT_FRAME::OnUpdateSaveCurrentLib( wxUpdateUIEvent& event )
 {
     wxString lib = getTargetLib();
-    SYMBOL_LIB_TABLE* table = Prj().SchSymbolLibTable();
 
-    event.Enable( !lib.empty() && table->HasLibrary( lib ) && table->IsSymbolLibWritable( lib ) &&
+    event.Enable( m_libMgr->LibraryExists( lib ) && !m_libMgr->IsLibraryReadOnly( lib ) &&
                   m_libMgr->IsLibraryModified( lib ) );
 }
 
@@ -553,9 +554,8 @@ void LIB_EDIT_FRAME::OnUpdateSaveCurrentLib( wxUpdateUIEvent& event )
 void LIB_EDIT_FRAME::OnUpdateSaveCurrentLibAs( wxUpdateUIEvent& event )
 {
     wxString lib = getTargetLib();
-    SYMBOL_LIB_TABLE* table = Prj().SchSymbolLibTable();
 
-    event.Enable( !lib.empty() && table->HasLibrary( lib ) );
+    event.Enable( m_libMgr->LibraryExists( lib ) );
 }
 
 
