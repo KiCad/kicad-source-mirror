@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-12 13:40+0200\n"
-"PO-Revision-Date: 2017-11-12 13:53+0200\n"
+"PO-Revision-Date: 2017-11-12 16:54+0200\n"
 "Last-Translator: Baranovskiy Konstantin <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -26632,3 +26632,966 @@ msgstr "Старт заливки зоны..."
 #: pcbnew/zones_by_polygon_fill_functions.cpp:184
 msgid "Updating ratsnest..."
 msgstr "Обновление связей..."
+
+#~ msgid "Create a logo file"
+#~ msgstr "Создать файл логотипа"
+
+#~ msgid "Create a Postscript file"
+#~ msgstr "Создать файл Postscript"
+
+#~ msgid "Create a component library file for Eeschema"
+#~ msgstr "Создать файл библиотеки компонентов для Eeschema"
+
+#~ msgid "Create a footprint file for Pcbnew"
+#~ msgstr "Создать файл посад.мест для Pcbnew"
+
+#~ msgid "Set path for ENV_VAR"
+#~ msgstr "Установите путь для ENV_VAR"
+
+#~ msgid "Select Page Layout Descr File"
+#~ msgstr "Выбор файла описания макета листа"
+
+#~ msgid "Save report to file"
+#~ msgstr "Сохранить отчёт в файл"
+
+#~ msgid "KiCad drawing symbol file (*.sym)|*.sym"
+#~ msgstr "Файлы графических символов KiCad (*.sym)|*.sym"
+
+#~ msgid "KiCad component library file (*.lib)|*.lib"
+#~ msgstr "Файлы библиотек компонентов KiCad (*.lib)|*.lib"
+
+#~ msgid "KiCad project files (*.pro)|*.pro"
+#~ msgstr "Файлы проекта KiCad (*.pro)|*.pro"
+
+#~ msgid "KiCad schematic files (*.sch)|*.sch"
+#~ msgstr "Файлы схемы KiCad (*.sch)|*.sch"
+
+#~ msgid "Eagle XML schematic file (*.sch)|*.sch"
+#~ msgstr "Файлы схемы Eagle XML (*.sch)|*.sch"
+
+#~| msgid "Eagle ver. 6.x XML PCB files (*.brd)|*.brd"
+#~ msgid "Eagle XML files (*.sch *.brd)|*.sch;*.brd"
+#~ msgstr "Файлы Eagle XML (*.sch *.brd)|*.sch;*.brd"
+
+#~ msgid "KiCad netlist files (*.net)|*.net"
+#~ msgstr "Файлы списка цепей KiCad (*.net)|*.net"
+
+#~ msgid "Gerber files (*.pho)|*.pho"
+#~ msgstr "Файлы Gerber (*.pho)|*.pho"
+
+#~ msgid "KiCad printed circuit board files (*.brd)|*.brd"
+#~ msgstr "Файлы печатной платы KiCad (*.brd)|*.brd"
+
+#~ msgid "Eagle ver. 6.x XML PCB files (*.brd)|*.brd"
+#~ msgstr "Eagle ver. 6.x XML PCB файлы (*.brd)|*.brd"
+
+#~ msgid "P-Cad 200x ASCII PCB files (*.pcb)|*.pcb"
+#~ msgstr "P-Cad 200x ASCII PCB файлы (*.pcb)|*.pcb"
+
+#~ msgid "KiCad s-expr printed circuit board files (*.kicad_pcb)|*.kicad_pcb"
+#~ msgstr "Файлы печатной платы s-формата (*.kicad_pcb)|*.kicad_pcb"
+
+#~ msgid "KiCad footprint s-expre file (*.kicad_mod)|*.kicad_mod"
+#~ msgstr "Файлы посад.мест KiCad s-expre (*.kicad_mod)|*.kicad_mod"
+
+#~ msgid "KiCad footprint s-expre library path (*.pretty)|*.pretty"
+#~ msgstr "Файлы библиотек посад.мест KiCad s-expre (*.pretty)|*.pretty"
+
+#~ msgid "Legacy footprint library file (*.mod)|*.mod"
+#~ msgstr "Файлы библиотек посад.мест KiCad (*.mod)|*.mod"
+
+#~ msgid "Eagle ver. 6.x XML library files (*.lbr)|*.lbr"
+#~ msgstr "Файлы библиотек Eagle ver. 6.x XML (*.lbr)|*.lbr"
+
+#~ msgid "Geda PCB footprint library file (*.fp)|*.fp"
+#~ msgstr "Файл библиотеки посад.мест Geda PCB (*.fp)|*.fp"
+
+#~ msgid "Component-footprint link file (*.cmp)|*cmp"
+#~ msgstr "Файл связи компонент-посад.место (*.cmp)|*cmp"
+
+#~ msgid "Page layout design file (*.kicad_wks)|*kicad_wks"
+#~ msgstr "Файл проекта макета листа (*.kicad_wks)|*kicad_wks"
+
+#~ msgid "KiCad cmp/footprint link files (*.cmp)|*.cmp"
+#~ msgstr "Файлы связи компонент/посад.место (*.cmp)|*.cmp"
+
+#~ msgid "Drill files (*.drl)|*.drl;*.DRL"
+#~ msgstr "Файлы сверловки (*.drl)|*.drl;*.DRL"
+
+#~ msgid "SVG files (*.svg)|*.svg;*.SVG"
+#~ msgstr "SVG файлы (*.svg)|*.svg;*.SVG"
+
+#~ msgid "HTML files (*.html)|*.htm;*.html"
+#~ msgstr "HTML файлы (*.html)|*.htm;*.html"
+
+#~ msgid "CSV Files (*.csv)|*.csv"
+#~ msgstr "CSV файлы (*.csv)|*.csv"
+
+#~ msgid "Portable document format files (*.pdf)|*.pdf"
+#~ msgstr "Файлы PDF (*.pdf)|*.pdf"
+
+#~ msgid "PostScript files (.ps)|*.ps"
+#~ msgstr "Файлы PostScript (.ps)|*.ps"
+
+#~ msgid "Report files (*.rpt)|*.rpt"
+#~ msgstr "Файлы отчёта (.rpt)|*.rpt"
+
+#~ msgid "Footprint place files (*.pos)|*.pos"
+#~ msgstr "Файлы размещения посад.мест (*.pos)|*.pos"
+
+#~ msgid "Vrml and x3d files (*.wrl *.x3d)|*.wrl;*.x3d"
+#~ msgstr "Vrml и x3d файлы (*.wrl *.x3d)|*.wrl;*.x3d"
+
+#~ msgid "IDFv3 component files (*.idf)|*.idf"
+#~ msgstr "Файлы компонентов IDFv3 (*.idf)|*.idf"
+
+#~ msgid "Text files (*.txt)|*.txt"
+#~ msgstr "Текстовые файлы (*.txt)|*.txt"
+
+#~ msgid "default "
+#~ msgstr "по умолчанию "
+
+#~ msgid "Component/footprint equ files (*.equ)|*.equ"
+#~ msgstr "Файлы эквивалентностей компонент/посад.место (*.equ)|*.equ"
+
+#~ msgid "No editor defined in Kicad. Please chose it"
+#~ msgstr "Не выбран редактор в Kicad. Пожалуйста, выберите его"
+
+#~ msgid "Equ files:"
+#~ msgstr "Файлы equ:"
+
+#~ msgid "Load Component Footprint Link File"
+#~ msgstr "Загрузить файл связи компонент-посад.место"
+
+#~ msgid "New alias:"
+#~ msgstr "Новый псевдоним:"
+
+#~ msgid "Component Alias"
+#~ msgstr "Псевдоним компонента"
+
+#~ msgid "Alias or component name <%s> already exists in library <%s>."
+#~ msgstr "Псевдоним или компонент <%s> уже имеется в библиотеке <%s>."
+
+#~ msgid "Component '%s' found in library '%s'"
+#~ msgstr "Компонент '%s' найден в библиотеке '%s'"
+
+#~ msgid "Component '%s' not found in any library"
+#~ msgstr "Компонент '%s' не найден в библиотеках"
+
+#~ msgid "However, some candidates are found:"
+#~ msgstr "Тем не менее, некоторые кандидаты найдены:"
+
+#~ msgid "'%s' found in library '%s'"
+#~ msgstr "'%s' найден в библиотеке '%s'"
+
+#~ msgid "No Component Name!"
+#~ msgstr "Нет имени компонента!"
+
+#~ msgid "Component '%s' not found!"
+#~ msgstr "Компонент '%s' не найден!"
+
+#~ msgid "Project '%s'"
+#~ msgstr "Проект '%s'"
+
+#~ msgid "Library files:"
+#~ msgstr "Файлы библиотек:"
+
+#~ msgid "'%s' : library already in use"
+#~ msgstr "'%s': библиотека уже используется"
+
+#~ msgid "Default Path for Libraries"
+#~ msgstr "Основные пути библиотек"
+
+#~ msgid "Path type"
+#~ msgstr "Тип пути"
+
+#~ msgid "Path already in use"
+#~ msgstr "Путь уже используется"
+
+#~ msgid "Component library files"
+#~ msgstr "Файлы библиотеки компонентов"
+
+#~ msgid ""
+#~ "List of active library files.\n"
+#~ "Only library files in this list are loaded by Eeschema.\n"
+#~ "The order of this list is important:\n"
+#~ "Eeschema searchs for a given component using this list order priority."
+#~ msgstr ""
+#~ "Список файлов активных библиотек.\n"
+#~ "Библиотеки только из этого списка загружены в Eeschema.\n"
+#~ "Порядок библиотек в этом списке важен:\n"
+#~ "Eeschema ищет требуемые компоненты используя этот список в порядке приоритета."
+
+#~ msgid "Add a new library after the selected library, and load it"
+#~ msgstr "Добавить новую библиотеку после выбранной и загрузить её"
+
+#~ msgid "Add a new library before the selected library, and load it"
+#~ msgstr "Добавить новую библиотеку перед выбранной и загрузить её"
+
+#~ msgid "User defined search path"
+#~ msgstr "Пользовательские пути поиска"
+
+#~ msgid ""
+#~ "Additional paths used in this project. The priority is higher than default KiCad "
+#~ "paths."
+#~ msgstr ""
+#~ "Дополнительные пути, используемые в проекте. Их приоритет выше, чем у стандартных "
+#~ "путей KiCad."
+
+#~ msgid "Current search path list"
+#~ msgstr "Текущий список путей поиска"
+
+#~ msgid ""
+#~ "System and user paths used to search and load library files and component doc "
+#~ "files.\n"
+#~ "Sorted by decreasing priority order."
+#~ msgstr ""
+#~ "Пути (системные и заданные пользователем) для поиска и загрузки\n"
+#~ "файлов библиотек и документации на компоненты.\n"
+#~ "Сортированы в порядке уменьшения приоритета."
+
+#~ msgid "Check for cache/library conflicts when loading schematic"
+#~ msgstr "Проверка конфликтов кэша/библиотеки при загрузке схемы"
+
+#~ msgid "Electronic rule check file (.erc)|*.erc"
+#~ msgstr "Файлы проверки электрических правил (.erc)|*.erc"
+
+#~ msgid "Align left"
+#~ msgstr "По левому краю"
+
+#~ msgid "Align center"
+#~ msgstr "По центру"
+
+#~ msgid "Align right"
+#~ msgstr "По правому краю"
+
+#~ msgid "Align bottom"
+#~ msgstr "По верхнему краю"
+
+#~ msgid "Align top"
+#~ msgstr "По нижнему краю"
+
+#~ msgid "SPICE netlist file (.cir)|*.cir"
+#~ msgstr "Файл цепей SPICE (.cir)|*.cir"
+
+#~ msgid "CadStar netlist file (.frp)|*.frp"
+#~ msgstr "Файл цепей CadStar (.frp)|*.frp"
+
+#~ msgid ""
+#~ "It looks like this project was made using older schematic component libraries.\n"
+#~ "Some parts may need to be relinked to a different symbol name, and some symbols\n"
+#~ "may need to be \"rescued\" (cloned and renamed) into a new library.\n"
+#~ "\n"
+#~ "The following changes are recommended to update the project."
+#~ msgstr ""
+#~ "Похоже этот проект был сделан с использованием старых библиотек компонентов "
+#~ "схемы.\n"
+#~ "Для некоторых частей может потребоваться перекомпоновка в другое имя символа и "
+#~ "некоторые \n"
+#~ "символы должны быть \"спасены\" (клонированы или переименованы) в новой "
+#~ "библиотеке.\n"
+#~ "\n"
+#~ "Следующие изменения рекомендуются для того, чтобы обновить проект."
+
+#~ msgid ""
+#~ "Stop showing this tool?\n"
+#~ "No changes will be made.\n"
+#~ "\n"
+#~ "This setting can be changed from the \"Component Libraries\" dialog,\n"
+#~ "and the tool can be activated manually from the \"Tools\" menu."
+#~ msgstr ""
+#~ "Остановить показ этого инструмента?\n"
+#~ "Никакие изменения не произойдут.\n"
+#~ "\n"
+#~ "Эта настройка может быть изменена через диалог \"Библиотеки компонентов\",\n"
+#~ "и этот инструмент может быть вручную активирован через меню \"Инструменты\"."
+
+#~ msgid "Rescue Components"
+#~ msgstr "Спасти компоненты"
+
+#~ msgid "No symbol '%s' founded in symbol library table."
+#~ msgstr "Символ '%s' не найден в таблице библиотек символов."
+
+#~ msgid "Failed to find part '%s' in library"
+#~ msgstr "Не удалось найти элемент '%s' в библиотеке"
+
+#~ msgid "Import Component"
+#~ msgstr "Импорт компонента"
+
+#~ msgid ""
+#~ "Unable to import library '%s'.  Error:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Не удалось импортировать библиотеку '%s'. Ошибка:\n"
+#~ "%s"
+
+#~ msgid "Part library file '%s' is empty."
+#~ msgstr "Файл библиотеки компонентов '%s' пуст."
+
+#~ msgid "There is no component selected to save."
+#~ msgstr "Нет компонента для сохранения."
+
+#~ msgid "New Library"
+#~ msgstr "Новая библиотека"
+
+#~ msgid "Export Component"
+#~ msgstr "Экспорт компонента"
+
+#~ msgid "'%s' - OK"
+#~ msgstr "'%s' - OK"
+
+#~ msgid ""
+#~ "This library will not be available until it is loaded by Eeschema.\n"
+#~ "\n"
+#~ "Modify the Eeschema library configuration if you want to include it as part of "
+#~ "this project."
+#~ msgstr ""
+#~ "Эта библиотека не будет доступна, пока она не будет загружена в Eeschema.\n"
+#~ "\n"
+#~ "Измените конфигурацию библиотек Eeschema, если хотите использовать эти компоненты "
+#~ "в проекте."
+
+#~ msgid "'%s' - Export OK"
+#~ msgstr "'%s' - Экспорт OK"
+
+#~ msgid "Failed to add symbol %s to library file '%s'"
+#~ msgstr "Не удалось добавить символ %s в файл библиотеки '%s'"
+
+#~ msgid "Part Library Editor -- %s %s"
+#~ msgstr "Part Library Editor -- %s %s"
+
+#~ msgid ""
+#~ "The current component is not saved.\n"
+#~ "\n"
+#~ "Discard current changes?"
+#~ msgstr ""
+#~ "Текущий компонент не сохранён.\n"
+#~ "\n"
+#~ "Отказаться от изменений?"
+
+#~ msgid "The selected component is not in the active library."
+#~ msgstr "Выбранный компонент не из активной библиотеки."
+
+#~ msgid "Do you want to change the active library?"
+#~ msgstr "Желаете изменить активную библиотеку?"
+
+#~ msgid "Part name '%s' not found in library '%s'"
+#~ msgstr "Компонент '%s' не найден в библиотеке '%s'"
+
+#~ msgid "Include last component changes?"
+#~ msgstr "Включая последние изменения компонента?"
+
+#~ msgid "Unexpected error occured saving part to '%s' symbol library."
+#~ msgstr ""
+#~ "Неожиданная ошибка произошла при сохранении компонента в библиотеку символов '%s'."
+
+#~ msgid "Part Library Name:"
+#~ msgstr "Имя библиотеки компонентов:"
+
+#~ msgid "Modify library file '%s' ?"
+#~ msgstr "Изменить файл библиотеки '%s'?"
+
+#~ msgid "Failed to rename old component library file "
+#~ msgstr "Не удалось переименовать старый файл библиотеки компонентов "
+
+#~ msgid "Failed to save old library document file "
+#~ msgstr "Не удалось сохранить старый файл документа библиотеки "
+
+#~ msgid "Library file '%s' saved"
+#~ msgstr "Файл библиотеки '%s' сохранён"
+
+#~ msgid "Documentation file '%s' saved"
+#~ msgstr "Файл документации '%s' сохранён"
+
+#~ msgid "Please select a component library."
+#~ msgstr "Выберите библиотеку компонентов."
+
+#~ msgid "Delete Component (%u items loaded)"
+#~ msgstr "Удалить компонент (загружено %u элементов)"
+
+#~ msgid "Delete component '%s' from library '%s' ?"
+#~ msgstr "Удалить компонент '%s' из библиотеки '%s' ?"
+
+#~ msgid ""
+#~ "The component being deleted has been modified. All changes will be lost. Discard "
+#~ "changes?"
+#~ msgstr ""
+#~ "Удаляемый компонент был изменён. Все изменения будут потеряны.\n"
+#~ "Отказаться от изменений?"
+
+#~ msgid ""
+#~ "All changes to the current component will be lost!\n"
+#~ "\n"
+#~ "Clear the current component from the screen?"
+#~ msgstr ""
+#~ "Все изменения текущего компонента будут потеряны!\n"
+#~ "\n"
+#~ "Очистить текущий компонент на экране?"
+
+#~ msgid "This new component has no name and cannot be created. Aborted"
+#~ msgstr "Новый компонент не имеет имени и не может быть создан. Создание прервано"
+
+#~ msgid "Part '%s' already exists in library '%s'"
+#~ msgstr "Компонент '%s' уже есть в библиотеке '%s'"
+
+#~ msgid "Part '%s' already exists. Change it?"
+#~ msgstr "Компонент '%s' уже существует. Заменить его?"
+
+#~ msgid "Part '%s' saved in library '%s'"
+#~ msgstr "Компонент '%s' сохранён в библиотеке '%s'"
+
+#~ msgid ""
+#~ "Library '%s' was modified!\n"
+#~ "Discard changes?"
+#~ msgstr ""
+#~ "Библиотека '%s' была изменена!\n"
+#~ "Игнорировать изменения?"
+
+#~ msgid ""
+#~ "The new component contains alias names that conflict with entries in the component "
+#~ "library '%s'.\n"
+#~ "\n"
+#~ "Do you wish to remove all of the conflicting aliases from this component?"
+#~ msgstr ""
+#~ "Новый компонент содержит псевдонимы, конфликтующие с записями в библиотеке "
+#~ "компонентов '%s'.\n"
+#~ "\n"
+#~ "Желаете удалить все конфликтующие псевдонимы из этого компонента?"
+
+#~ msgid "&Rescue Old Component"
+#~ msgstr "Спасти старые компоненты"
+
+#~ msgid "Find old components in project and rename/rescue them"
+#~ msgstr "Найти старые компоненты в проекте и переименовать/спасти их"
+
+#~ msgid "Component &Libraries"
+#~ msgstr "Библиотеки компонентов"
+
+#~ msgid "Configure component libraries and paths"
+#~ msgstr "Конфигурация библиотек компонентов и путей"
+
+#~ msgid "Manage Symbol Library"
+#~ msgstr "Менеджер библиотек компонентов"
+
+#~ msgid "Manage the symbol library"
+#~ msgstr "Менеджер библиотек компонентов"
+
+#~ msgid "Edit the symbol library table."
+#~ msgstr "Редактировать таблицу библиотек символов."
+
+#~ msgid "Failed to create component library file '%s'"
+#~ msgstr "Не удалось создать файл библиотеки компонентов '%s'"
+
+#~ msgid "Error: symbol not found!!!"
+#~ msgstr "Ошибка: символ не найден!!!"
+
+#~ msgid "No component libraries are loaded."
+#~ msgstr "Не загружены библиотеки компонентов."
+
+#~ msgid "Select Component"
+#~ msgstr "Выбрать компонент"
+
+#~ msgid "Workbook file (*.wbk)|*.wbk"
+#~ msgstr "Файл работы (*.wbk)|*.wbk"
+
+#~ msgid "Save simulation workbook"
+#~ msgstr "Созранить работу симуляции"
+
+#~ msgid "Save plot as image"
+#~ msgstr "Сохранить график как изображение"
+
+#~ msgid "PNG file (*.png)|*.png"
+#~ msgstr "PNG файл (*.png)|*.png"
+
+#~ msgid "Save plot data"
+#~ msgstr "Сохранить данные графика"
+
+#~ msgid "Board file name:"
+#~ msgstr "Имя файла платы:"
+
+#~ msgid "Zip file (*.zip)|*.zip;.zip"
+#~ msgstr "Zip файл (*.zip)|*.zip;.zip"
+
+#~ msgid "Gerber job file (*.gbrjob)|*.gbrjob;.gbrjob"
+#~ msgstr "Файл задания Gerber (*.gbrjob)|*.gbrjob;.gbrjob"
+
+#~ msgid "Zip file (*.zip)|*.zip"
+#~ msgstr "Zip файл (*.zip)|*.zip"
+
+#~ msgid "Kicad Project Destination"
+#~ msgstr "Расположение проекта KiCad"
+
+#~ msgid "Text file ("
+#~ msgstr "Текстовый файл ("
+
+#~ msgid "PCB Calculator data  file (*.%s)|*.%s"
+#~ msgstr "Файл данных для PCB Calculator (*.%s)|*.%s"
+
+#~ msgid "Select a PCB Calculator data file"
+#~ msgstr "Выбрать файл данных для PCB Calculator"
+
+#~ msgid "Comma separated value files (*.csv)|*.csv"
+#~ msgstr "Файлы разделённых запятыми значений (*.csv)|*.csv"
+
+#~ msgid "Rotation (-90.0 to 90.0)"
+#~ msgstr "Поворот (от -90,0 до 90,0)"
+
+#~ msgid "Generate a new shape for each component (do not reuse shapes)"
+#~ msgstr ""
+#~ "С генерировать новую форму для каждого компонента (не использовать формы повторно)"
+
+#~ msgid "GenCAD 1.4 board files (.cad)|*.cad"
+#~ msgstr "GenCAD 1.4 файлы платы (.cad)|*.cad"
+
+#~ msgid "Save contents of message window"
+#~ msgstr "Сохранить содержимое окна сообщения"
+
+#~ msgid "Unconnected Tracks"
+#~ msgstr "Неподключенные дорожки"
+
+#~ msgid "Keep or delete bad tracks after a netlist change"
+#~ msgstr "Оставлять или удалять плохие дорожки после изменения списка цепей"
+
+#~ msgid ""
+#~ "Corner radius in percent  of the pad width.\n"
+#~ "The width is the smaller value between size X and size Y\n"
+#~ "The max value is 50 percent "
+#~ msgstr ""
+#~ "Радиус скругления в процентах от ширины конт.пл.\n"
+#~ "Ширина - наименьшее значение среди размеров по X и Y\n"
+#~ "Максимальное значение - 50 процентов "
+
+#~ msgid "IPC-D-356 Test Files (.d356)|*.d356"
+#~ msgstr "IPC-D-356 тестовые файлы (.d356)|*.d356"
+
+#~ msgid "Use a relative path? "
+#~ msgstr "Использовать относительный путь? "
+
+#~ msgid "Import Non Kicad Board File"
+#~ msgstr "Импорт не Kicad файла платы"
+
+#~ msgid "Legacy foot print export files (*.emp)|*.emp"
+#~ msgstr "Файлы экспорта посад.мест (*.emp)|*.emp"
+
+#~ msgid "The Internet forum dedicated to KiCad Russian support, including GOST support"
+#~ msgstr ""
+#~ "Интернет форум, посвященный русскоязычной поддержке проекта KiCad, включая "
+#~ "поддержку ГОСТ"
+
+#~ msgid ""
+#~ "\n"
+#~ "#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n"
+#~ msgstr ""
+#~ "\n"
+#~ "#Global, Hierarchical Labels and PinSheets ( order = Sheet Number ) count = %d\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "#Global, Hierarchical Labels and PinSheets ( order = Alphab. ) count = %d\n"
+#~ "\n"
+
+#~ msgid "> %-28.28s PinSheet %-7.7s %s\n"
+#~ msgstr "> %-28.28s PinSheet %-7.7s %s\n"
+
+#~ msgid "#End labels\n"
+#~ msgstr "#End labels\n"
+
+#~ msgid "#Cmp ( order = Reference )"
+#~ msgstr "#Cmp ( порядок = Обозначение )"
+
+#~ msgid " (with SubCmp)"
+#~ msgstr " (с СубКомп)"
+
+#~ msgid "Item count"
+#~ msgstr "количество"
+
+#~ msgid ""
+#~ "\n"
+#~ "#Cmp ( order = Value )"
+#~ msgstr ""
+#~ "\n"
+#~ "#Cmp ( порядок = Значение )"
+
+#~ msgid "#End Cmp\n"
+#~ msgstr "#End Cmp\n"
+
+#~ msgid "Bill of Materials"
+#~ msgstr "Перечень элементов"
+
+#~ msgid "Failed to open file <%s>"
+#~ msgstr "Не удалось открыть файл  <%s>"
+
+#~ msgid ""
+#~ "\n"
+#~ "#End List\n"
+#~ msgstr ""
+#~ "\n"
+#~ "#End List\n"
+
+#~ msgid "List items:"
+#~ msgstr "Перечень элементов:"
+
+#~ msgid "Components by reference"
+#~ msgstr "Компоненты по обозначению"
+
+#~ msgid "Sub components (i.e. U2A, U2B ...)"
+#~ msgstr "Элементы (т.е. DD1.1, DD1.2 ...)"
+
+#~ msgid "Components by value"
+#~ msgstr "Компоненты по значению"
+
+#~ msgid "Hierarchical pins by name"
+#~ msgstr "Иерархия выводов по имени"
+
+#~ msgid "Hierarchical pins by sheet"
+#~ msgstr "Иерархия выводов по листам"
+
+#~ msgid "List"
+#~ msgstr "Список"
+
+#~ msgid "List for spreadsheet import (by ref)"
+#~ msgstr "Импорт в эл.таблицу (по обозн.)"
+
+#~ msgid "List for spreadsheet import (by grouped ref)"
+#~ msgstr "Импорт в эл.таблицу (с груп. по обозн.)"
+
+#~ msgid "List for spreadsheet import (by value)"
+#~ msgstr "Импорт в эл.таблицу (по значению)"
+
+#~ msgid "Tab"
+#~ msgstr "Tab"
+
+#~ msgid ";"
+#~ msgstr ";"
+
+#~ msgid ","
+#~ msgstr ","
+
+#~ msgid "Field separator for spreadsheet import:"
+#~ msgstr "Разделитель полей для импорта в эл.таблицу:"
+
+#~ msgid "Launch list browser"
+#~ msgstr "Просмотреть список"
+
+#~ msgid "Add to list:"
+#~ msgstr "Добавить в список:"
+
+#~ msgid "Component location"
+#~ msgstr "Обозначение"
+
+#~ msgid "System Fields:"
+#~ msgstr "Общие поля:"
+
+#~ msgid "Users fields:"
+#~ msgstr "Поля пользователя:"
+
+#~ msgid "Field 1"
+#~ msgstr "Поле 1"
+
+#~ msgid "Field 2"
+#~ msgstr "Поле 2"
+
+#~ msgid "Field 3"
+#~ msgstr "Поле 3"
+
+#~ msgid "Field 4"
+#~ msgstr "Поле 4"
+
+#~ msgid "Field 5"
+#~ msgstr "Поле 5"
+
+#~ msgid "Field 6"
+#~ msgstr "Поле 6"
+
+#~ msgid "Field 7"
+#~ msgstr "Поле 7"
+
+#~ msgid "Field 8"
+#~ msgstr "Поле 8"
+
+#~ msgid "All existing user fields"
+#~ msgstr "Все поля пользователя"
+
+#~ msgid "Note"
+#~ msgstr "Примечание"
+
+#~ msgid "For variants"
+#~ msgstr "Для исполнений"
+
+#~ msgid " note: "
+#~ msgstr " прим.: "
+
+#~ msgid "Editing the component with Reference "
+#~ msgstr "Редактирование компонента с поз.обозначением "
+
+#~ msgid "Group operation is not available in the 'variable part' mode"
+#~ msgstr "Групповая операция не доступна в режиме \"переменная часть\""
+
+#~ msgid ""
+#~ "Group operation is not available because one of the selected components has "
+#~ "different parameters along its variants"
+#~ msgstr ""
+#~ "Групповая операция не доступна, потому что один из выбранных компонентов имеет "
+#~ "различные значения полей в исполнениях компонента"
+
+#~ msgid "The selected components have different parameters. Continue?"
+#~ msgstr "Выбранные компоненты имеют отличающиеся значения полей. Продолжить?"
+
+#~ msgid "Enter a variant"
+#~ msgstr "Введите номер исполнения"
+
+#~ msgid "Add a new variant"
+#~ msgstr "Добавить новое исполнение"
+
+#~ msgid ""
+#~ "Some components were changed outside of the Component Manager.\n"
+#~ "\n"
+#~ "The changes have been transferred back to the Component Manager."
+#~ msgstr ""
+#~ "Некоторые компоненты были изменены вне Менеджера компонентов. \n"
+#~ "\n"
+#~ "Изменения были переданы обратно в Менеджер компонентов."
+
+#~ msgid "Unable to open file: "
+#~ msgstr "Не удается открыть файл: "
+
+#~ msgid "Unable to find OpenOffice or LibreOffice installation path"
+#~ msgstr "Не удается найти путь установки OpenOffice или LibreOffice"
+
+#~ msgid "Unspecified component reference: "
+#~ msgstr "Не задано поз.обозначение у компонента:"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "The Component Manager does not support components with unspecified reference.\n"
+#~ "\n"
+#~ "The Component Manager is going to be closed."
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Менеджер компонентов не поддерживает компоненты с незаданным поз.обозначением.\n"
+#~ "\n"
+#~ "Менеджер компонентов будет закрыт."
+
+#~ msgid ""
+#~ "Some components have equal 'Chip Name' and 'Value' attributes!\n"
+#~ "'Value' attributes will be copied to 'Type' ones including their position, "
+#~ "orientation and visibility. After that 'Value' attributes will be cleared.\n"
+#~ "If some of components do not have 'Type' attribute then such attributes will be "
+#~ "created.\n"
+#~ "Continue?"
+#~ msgstr ""
+#~ "Некоторые компоненты имеют одинаковые 'Chip Name' и 'Value' атрибуты!\n"
+#~ "'Value' атрибут будет скопирован в 'Type' включая позицию, ориентацию и видимость. "
+#~ "После этого атрибут 'Value' будет очищен.\n"
+#~ "Если некоторые компоненты не имеют атрибута 'Type', то он будет создан.\n"
+#~ "Продолжить?"
+
+#~ msgid ""
+#~ "Some components do not have 'Type' attribute!\n"
+#~ "'Type' attributes will be created for such components.\n"
+#~ "Also if some of components have equal 'Chip Name' and 'Value' attributes then "
+#~ "'Value' attributes will be copied to 'Type' ones including their position, "
+#~ "orientation and visibility. After that 'Value' attributes will be cleared.\n"
+#~ "Continue?"
+#~ msgstr ""
+#~ "Некоторые компоненты не имеют атрибута 'Type'!\n"
+#~ "Атрибут 'Type' будет создан для этих компонентов.\n"
+#~ "Также, если некоторые компоненты имеют одинаковые 'Chip Name' и 'Value' атрибуты,\n"
+#~ "то атрибут 'Value' будет скопирован в атрибут 'Type' включая позицию, ориентацию и "
+#~ "видимость. После этого атрибут 'Value' будет очищен.\n"
+#~ "Продолжить?"
+
+#~ msgid "Generate components index"
+#~ msgstr "Сформировать перечень элементов (ПЭ3)"
+
+#~ msgid "Generate specification"
+#~ msgstr "Сформировать спецификацию"
+
+#~ msgid "Remove existing variant"
+#~ msgstr "Удалить существующее исполнение"
+
+#~ msgid "Switch to English"
+#~ msgstr "Перейти в режим генерации КД на английском языке"
+
+#~ msgid "Debug on"
+#~ msgstr "Отладка включена"
+
+#~ msgid "Type:"
+#~ msgstr "Тип:"
+
+#~ msgid "Subtype:"
+#~ msgstr "Подтип:"
+
+#~ msgid "Precision:"
+#~ msgstr "Допуск:"
+
+#~ msgid "Note:"
+#~ msgstr "Примечание:"
+
+#~ msgid "Designation:"
+#~ msgstr "Обозначение:"
+
+#~ msgid "Manufacturer:"
+#~ msgstr "Производитель:"
+
+#~ msgid "Table represantation mode selection"
+#~ msgstr "Выбор режима отображения таблицы"
+
+#~ msgid "Full component list"
+#~ msgstr "Полный список компонентов"
+
+#~ msgid "Constant part"
+#~ msgstr "Постоянная часть"
+
+#~ msgid "Variable part, var. no."
+#~ msgstr "Переменная часть, исп. №"
+
+#~ msgid "Selected component by variant"
+#~ msgstr "Выбранный компонент по исполнениям"
+
+#~ msgid "Generating component index document..."
+#~ msgstr "Генерация перечня элементов..."
+
+#~ msgid "Please wait a moment"
+#~ msgstr "Пожалуйста подождите"
+
+#~ msgid "Generating specification document..."
+#~ msgstr "Генерация спецификации..."
+
+#~ msgid "Unable to find OpenOffice or LibreOffice embedded Python"
+#~ msgstr "Не удается найти встроенный Python у OpenOffice или LibreOffice"
+
+#~ msgid "Unable to launch the process: "
+#~ msgstr "Не удается запустить процесс: "
+
+#~ msgid ""
+#~ ".\n"
+#~ "Please make sure that OpenOffice / LibreOffice is installed."
+#~ msgstr ""
+#~ ".\n"
+#~ "Пожалуйста убедитесь что OpenOffice / LibreOffice установлены."
+
+#~ msgid "RPC_DOC_IFACE: Unable to connect to RPC document server"
+#~ msgstr "RPC_DOC_IFACE: Не удается подключится к RPC серверу документов"
+
+#~ msgid "RPC_DOC_IFACE: Unable to connect to office"
+#~ msgstr "RPC_DOC_IFACE: Не удается подключится к офису"
+
+#~ msgid "RPC_DOC_IFACE: Unable to disconnect from RPC document server"
+#~ msgstr "RPC_DOC_IFACE: Не удается отключится от RPC сервера документов"
+
+#~ msgid ""
+#~ "RPC_DOC_IFACE: Unable to load document\n"
+#~ "RPC command: "
+#~ msgstr ""
+#~ "RPC_DOC_IFACE: Не удается загрузить документ\n"
+#~ "RPC команда: "
+
+#~ msgid ""
+#~ "RPC_DOC_IFACE: Unable to append document\n"
+#~ "RPC command: "
+#~ msgstr ""
+#~ "RPC_DOC_IFACE: Не удается дописать документ\n"
+#~ "RPC команда: "
+
+#~ msgid "RPC_DOC_IFACE: Unable to select table"
+#~ msgstr "RPC_DOC_IFACE: Не удается выбрать таблицу"
+
+#~ msgid "RPC_DOC_IFACE: Unable to put cell"
+#~ msgstr "RPC_DOC_IFACE: Не удается вставить ячейку"
+
+#~ msgid "Generate Bill of &Materials (old implementation)"
+#~ msgstr "Сформировать ПЭ (старый вариант)"
+
+#~ msgid "GOST Tools"
+#~ msgstr "Инструменты ГОСТ"
+
+#~ msgid "Run pcad2kicadsch converter"
+#~ msgstr "Запустить конвертер pcad2kicadsch"
+
+#~ msgid " in part %d"
+#~ msgstr " в элементе %d"
+
+#~ msgid "Unit %d"
+#~ msgstr "Часть %d"
+
+#~ msgid "Convert P-Cad 200x ASCII schematic file"
+#~ msgstr "Конвертировать P-Cad 200x ASCII файл схемы"
+
+#~ msgid "Convert P-Cad 200x ASCII library file"
+#~ msgstr "Конвертировать P-Cad 200x ASCII файл библиотеки"
+
+#~ msgid "Actual input file :"
+#~ msgstr "Текущий входной файл :"
+
+#~ msgid "FileName"
+#~ msgstr "Имя файла"
+
+#~ msgid "Open lia file"
+#~ msgstr "Открыть lia файл"
+
+#~ msgid "P-Cad 200x ASCII schematic library |*.lia"
+#~ msgstr "P-Cad 200x ASCII библиотека схемы |*.lia"
+
+#~ msgid ""
+#~ "Error loading library.\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Ошибка загрузки библиотеки.\n"
+#~ "%s"
+
+#~ msgid "Open Library File"
+#~ msgstr "Открыть файл библиотеки"
+
+#~ msgid "Generating output file.... "
+#~ msgstr "Генерация выходного файла.... "
+
+#~ msgid "Done."
+#~ msgstr "Сделано."
+
+#~ msgid "Open sch file"
+#~ msgstr "Открыть sch файл"
+
+#~ msgid "P-Cad 200x ASCII schematic |*.sch"
+#~ msgstr "P-Cad 200x ASCII схема |*.sch"
+
+#~ msgid ""
+#~ "Error loading scheme.\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Ошибка загрузки схемы.\n"
+#~ "%s"
+
+#~ msgid "&About pcad2kicadsch ..."
+#~ msgstr "О pcad2kicadsch ..."
+
+#~ msgid ""
+#~ "An utility which allows schematic capture and schematic library file conversion "
+#~ "from P-CAD 200x ASCII to KiCad."
+#~ msgstr ""
+#~ "Утилита, которая позволяет конвертировать файлы схемотехнического проектирования и "
+#~ "библиотеки схемы из P-CAD 200x ASCII в KiCad."
+
+#~ msgid "Creating Component : "
+#~ msgstr "Создание компонента : "
+
+#~ msgid "List of Materials"
+#~ msgstr "Перечень материалов"
+
+#~ msgid "GOST Component Manager"
+#~ msgstr "ГОСТ Менеджер Компонентов"
+
+#~ msgid "GOST tools"
+#~ msgstr "Инструменты ГОСТ"
+
+#~ msgid "pcad2kicadsch converter"
+#~ msgstr "конвертер pcad2kicadsch"
+
+#~ msgid "PCad to Kicad converter"
+#~ msgstr "Конвертер PCad в Kicad"
