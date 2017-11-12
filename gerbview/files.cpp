@@ -297,8 +297,9 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
 
     if( !filename.IsOk() )
     {
-        filetypes = wxGetTranslation( DrillFileWildcard );
-        filetypes << wxT("|");
+        filetypes = DrillFileWildcard();
+        filetypes << wxT( "|" );
+
         /* All filetypes */
         filetypes += wxGetTranslation( AllFilesWildcard );
 
@@ -545,7 +546,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
 bool GERBVIEW_FRAME::LoadZipArchiveFile( const wxString& aFullFileName )
 {
 #define ZipFileExtension "zip"
-#define ZipFileWildcard  _( "Zip file (*.zip)|*.zip;.zip" )
+
     wxFileName filename = aFullFileName;
     wxString currentPath;
 
@@ -561,7 +562,7 @@ bool GERBVIEW_FRAME::LoadZipArchiveFile( const wxString& aFullFileName )
                           _( "Open Zip File" ),
                           currentPath,
                           filename.GetFullName(),
-                          ZipFileWildcard,
+                          ZipFileWildcard(),
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
 
         if( dlg.ShowModal() == wxID_CANCEL )

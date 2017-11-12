@@ -29,6 +29,7 @@
 #include <kiway.h>
 #include <confirm.h>
 #include <bitmaps.h>
+#include <wildcards_and_files_ext.h>
 
 #include <widgets/tuner_slider.h>
 #include <dialogs/dialog_signal_list.h>
@@ -782,7 +783,7 @@ void SIM_PLOT_FRAME::menuNewPlot( wxCommandEvent& aEvent )
 void SIM_PLOT_FRAME::menuOpenWorkbook( wxCommandEvent& event )
 {
     wxFileDialog openDlg( this, _( "Open simulation workbook" ), m_savedWorkbooksPath, "",
-            _( "Workbook file (*.wbk)|*.wbk" ), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                          WorkbookFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( openDlg.ShowModal() == wxID_CANCEL )
         return;
@@ -799,8 +800,8 @@ void SIM_PLOT_FRAME::menuSaveWorkbook( wxCommandEvent& event )
     if( !CurrentPlot() )
         return;
 
-    wxFileDialog saveDlg( this, _( "Save simulation workbook" ), m_savedWorkbooksPath, "",
-                _( "Workbook file (*.wbk)|*.wbk" ), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog saveDlg( this, _( "Save Simulation Workbook" ), m_savedWorkbooksPath, "",
+                          WorkbookFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveDlg.ShowModal() == wxID_CANCEL )
         return;
@@ -817,8 +818,8 @@ void SIM_PLOT_FRAME::menuSaveImage( wxCommandEvent& event )
     if( !CurrentPlot() )
         return;
 
-    wxFileDialog saveDlg( this, _( "Save plot as image" ), "", "",
-                _( "PNG file (*.png)|*.png" ), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog saveDlg( this, _( "Save Plot as Image" ), "", "",
+                          PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveDlg.ShowModal() == wxID_CANCEL )
         return;
@@ -834,8 +835,8 @@ void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
 
     const wxChar SEPARATOR = ';';
 
-    wxFileDialog saveDlg( this, _( "Save plot data" ), "", "",
-                "CSV file (*.csv)|*.csv", wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog saveDlg( this, _( "Save Plot Data" ), "", "",
+                          CsvFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveDlg.ShowModal() == wxID_CANCEL )
         return;

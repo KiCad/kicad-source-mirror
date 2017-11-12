@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2013 Lorenzo Marcantonio <l.marcantonio@logossrl.com>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,7 @@
 #include <trigo.h>
 #include <build_version.h>
 #include <macros.h>
+#include <wildcards_and_files_ext.h>
 
 #include <pcbnew.h>
 
@@ -355,8 +356,8 @@ void PCB_EDIT_FRAME::GenD356File( wxCommandEvent& aEvent )
     wxString    msg, ext, wildcard;
     FILE*       file;
 
-    ext = wxT( "d356" );
-    wildcard = _( "IPC-D-356 Test Files (.d356)|*.d356" );
+    ext = IpcD356FileExtension;
+    wildcard = IpcD356FileWildcard();
     fn.SetExt( ext );
 
     wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );

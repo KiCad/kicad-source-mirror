@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -218,9 +218,9 @@ bool SCH_EDIT_FRAME::LoadCmpToFootprintLinkFile()
 {
     wxString path = wxPathOnly( Prj().GetProjectFullName() );
 
-    wxFileDialog dlg( this, _( "Load Component Footprint Link File" ),
+    wxFileDialog dlg( this, _( "Load Symbol Footprint Link File" ),
                       path, wxEmptyString,
-                      ComponentFileExtensionWildcard,
+                      ComponentFileWildcard(),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )

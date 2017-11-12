@@ -28,6 +28,7 @@
 
 #include <fctsys.h>
 #include <wx/filename.h>
+#include <wildcards_and_files_ext.h>
 
 #include <gerbview.h>
 #include <richio.h>
@@ -141,7 +142,6 @@ bool GERBER_JOBFILE_READER::parseTJLayerString( wxString& aText )
 
 bool GERBVIEW_FRAME::LoadGerberJobFile( const wxString& aFullFileName )
 {
-#define jobFileWildcard  _( "Gerber job file (*.gbrjob)|*.gbrjob;.gbrjob" )
     wxFileName filename = aFullFileName;
     wxString currentPath;
 
@@ -156,7 +156,7 @@ bool GERBVIEW_FRAME::LoadGerberJobFile( const wxString& aFullFileName )
         wxFileDialog dlg( this, _( "Open Gerber Job File" ),
                           currentPath,
                           filename.GetFullName(),
-                          jobFileWildcard,
+                          GerberJobFileWildcard(),
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
 
         if( dlg.ShowModal() == wxID_CANCEL )

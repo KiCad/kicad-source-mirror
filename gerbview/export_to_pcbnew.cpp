@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -157,6 +157,7 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
     int layercount = 0;
 
     GERBER_FILE_IMAGE_LIST* images = GetGerberLayout()->GetImagesList();
+
     // Count the Gerber layers which are actually currently used
     for( LAYER_NUM ii = 0; ii < (LAYER_NUM)images->ImagesMaxCount(); ++ii )
     {
@@ -174,8 +175,8 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
     wxString        fileName;
     wxString        path = m_mruPath;
 
-    wxFileDialog    filedlg( this, _( "Board file name:" ),
-                             path, fileName, PcbFileWildcard,
+    wxFileDialog    filedlg( this, _( "Board File Name" ),
+                             path, fileName, PcbFileWildcard(),
                              wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( filedlg.ShowModal() == wxID_CANCEL )

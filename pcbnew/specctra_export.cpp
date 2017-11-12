@@ -49,6 +49,7 @@
 #include <class_zone.h>
 #include <class_drawsegment.h>
 #include <base_units.h>
+#include <wildcards_and_files_ext.h>
 
 #include <collectors.h>
 
@@ -77,8 +78,8 @@ void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
     wxString    path;
     wxString    name;
     wxString    ext;
-    wxString    dsn_ext = wxT( ".dsn" );
-    wxString    mask    = wxT( "*" ) + dsn_ext;
+    wxString    dsn_ext = SpecctraDsnFileExtension;
+    wxString    mask    = SpecctraDsnFileWildcard();
 
     wxFileName::SplitPath( fullFileName, &path, &name, &ext );
 

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -37,7 +37,6 @@
 #include <class_module.h>
 #include <project.h>
 #include <wx_html_report_panel.h>
-//#include <reporter.h>
 
 #include <pcbnew.h>
 #include <dialog_exchange_modules.h>
@@ -427,7 +426,7 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
     // Build the .cmp file name from the board name
     fn = GetBoard()->GetFileName();
     fn.SetExt( ComponentFileExtension );
-    wildcard = wxGetTranslation( ComponentFileWildcard );
+    wildcard = ComponentFileWildcard();
 
     wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
 

@@ -28,6 +28,7 @@
 #include <class_board.h>
 #include <project.h>
 #include <confirm.h>
+#include <wildcards_and_files_ext.h>
 
 #include <wx/statline.h>
 #include <wx/button.h>
@@ -146,10 +147,10 @@ void DIALOG_GENCAD_EXPORT_OPTIONS::createOptCheckboxes()
 void DIALOG_GENCAD_EXPORT_OPTIONS::onBrowse( wxCommandEvent& aEvent )
 {
     wxFileDialog dlg( this, _( "Save GenCAD Board File" ),
-        wxPathOnly( Prj().GetProjectFullName() ),
-        m_filePath->GetValue(),
-        _( "GenCAD 1.4 board files (.cad)|*.cad" ),
-        wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      wxPathOnly( Prj().GetProjectFullName() ),
+                      m_filePath->GetValue(),
+                      GencadFileWildcard(),
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

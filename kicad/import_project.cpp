@@ -69,7 +69,7 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
     ClearMsg();
 
     wxFileDialog schdlg( this, title, default_dir, wxEmptyString,
-            EagleFilesWildcard, style );
+                         EagleFilesWildcard(), style );
 
     if( schdlg.ShowModal() == wxID_CANCEL )
         return;
@@ -79,16 +79,20 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
     sch.SetExt( SchematicFileExtension );
 
+    wxFileName pro = sch;
 
-    wxString protitle = _( "Kicad Project Destination" );
+    pro.SetExt( ProjectFileExtension );
 
-    wxFileDialog prodlg( this, protitle, sch.GetPath(), sch.GetName(),
-            ProjectFileWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxString protitle = _( "KiCad Project Destination" );
+
+    wxFileDialog prodlg( this, protitle, pro.GetPath(), pro.GetFullName(),
+                         ProjectFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( prodlg.ShowModal() == wxID_CANCEL )
                 return;
 
-    wxFileName pro( prodlg.GetPath() );
+    pro.SetPath( prodlg.GetPath() );
+
     // Check if the project directory is empty
     wxDir directory( pro.GetPath() );
 

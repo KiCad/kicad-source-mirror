@@ -73,7 +73,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
     {
         wxFileDialog dlg( this, _( "Schematic Files" ),
                           wxPathOnly( Prj().GetProjectFullName() ),
-                          schematicFileName.GetFullName(), SchematicFileWildcard,
+                          schematicFileName.GetFullName(), SchematicFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( dlg.ShowModal() == wxID_CANCEL )
@@ -388,7 +388,7 @@ bool SCH_EDIT_FRAME::AppendOneEEProject()
     wxString path = wxPathOnly( Prj().GetProjectFullName() );
 
     wxFileDialog dlg( this, _( "Append Schematic" ), path,
-                      wxEmptyString, SchematicFileWildcard,
+                      wxEmptyString, SchematicFileWildcard(),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -529,7 +529,7 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     wxString path = wxPathOnly( Prj().GetProjectFullName() );
 
     wxFileDialog dlg( this, _( "Import Schematic" ), path,
-                      wxEmptyString, EagleSchematicFileWildcard,
+                      wxEmptyString, EagleSchematicFileWildcard(),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )

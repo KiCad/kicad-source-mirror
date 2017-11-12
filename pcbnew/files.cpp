@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,10 +96,10 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
         IO_MGR::PCB_FILE_T  pluginType;
     } loaders[] =
     {
-        { PcbFileWildcard,          IO_MGR::KICAD_SEXP },   // Current Kicad board files
-        { LegacyPcbFileWildcard,    IO_MGR::LEGACY },       // Old Kicad board files
-        { EaglePcbFileWildcard,     IO_MGR::EAGLE },        // Import board files
-        { PCadPcbFileWildcard,      IO_MGR::PCAD },         // Import board files
+        { PcbFileWildcard(),          IO_MGR::KICAD_SEXP },   // Current Kicad board files
+        { LegacyPcbFileWildcard(),    IO_MGR::LEGACY },       // Old Kicad board files
+        { EaglePcbFileWildcard(),     IO_MGR::EAGLE },        // Import board files
+        { PCadPcbFileWildcard(),      IO_MGR::PCAD },         // Import board files
     };
 
     wxFileName  fileName( *aFileName );
@@ -141,7 +141,7 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
     }
 
     wxFileDialog dlg( aParent,
-                      aKicadFilesOnly ? _( "Open Board File" ) : _( "Import Non Kicad Board File" ),
+                      aKicadFilesOnly ? _( "Open Board File" ) : _( "Import Non KiCad Board File" ),
                       path, name, fileFilters,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
@@ -171,7 +171,7 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
  */
 bool AskSaveBoardFileName( wxWindow* aParent, wxString* aFileName )
 {
-    wxString    wildcard =  wxGetTranslation( PcbFileWildcard );
+    wxString    wildcard =  PcbFileWildcard();
     wxFileName  fn = *aFileName;
 
     fn.SetExt( KiCadPcbFileExtension );

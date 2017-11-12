@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 Jean-Pierre Charras, jp.charras@wanadoo.fr
- * Copyright (C) 2013-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -197,7 +197,7 @@ private:
      * @return true for known netlist type, false for custom formats
      */
     bool FilenamePrms( NETLIST_TYPE_ID aNetTypeId,
-                             wxString * aExt, wxString * aWildCard );
+                       wxString * aExt, wxString * aWildCard );
 
     DECLARE_EVENT_TABLE()
 };
@@ -620,7 +620,7 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
 
 
 bool NETLIST_DIALOG::FilenamePrms( NETLIST_TYPE_ID aNetTypeId,
-                                         wxString * aExt, wxString * aWildCard )
+                                   wxString * aExt, wxString * aWildCard )
 {
     wxString fileExt;
     wxString fileWildcard;
@@ -631,18 +631,18 @@ bool NETLIST_DIALOG::FilenamePrms( NETLIST_TYPE_ID aNetTypeId,
     {
     case NET_TYPE_SPICE:
         fileExt = wxT( "cir" );
-        fileWildcard = _( "SPICE netlist file (.cir)|*.cir" );
+        fileWildcard = SpiceNetlistFileWildcard();
         break;
 
     case NET_TYPE_CADSTAR:
         fileExt = wxT( "frp" );
-        fileWildcard = _( "CadStar netlist file (.frp)|*.frp" );
+        fileWildcard = CadstarNetlistFileWildcard();
         break;
 
     case NET_TYPE_PCBNEW:
     case NET_TYPE_ORCADPCB2:
         fileExt = NetlistFileExtension;
-        fileWildcard = NetlistFileWildcard;
+        fileWildcard = NetlistFileWildcard();
         break;
 
     default:    // custom, NET_TYPE_CUSTOM1 and greater

@@ -34,14 +34,13 @@
 
 #include <confirm.h>
 #include <kiway.h>
-
 #include "pgm_kicad.h"
+#include "wildcards_and_files_ext.h"
 
 #include "kicad.h"
 
 
 #define     ZipFileExtension    wxT( "zip" )
-#define     ZipFileWildcard     _( "Zip file (*.zip)|*.zip" )
 
 
 void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
@@ -62,7 +61,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     fn.SetExt( ZipFileExtension );
 
     wxFileDialog zipfiledlg( this, _( "Unzip Project" ), fn.GetPath(),
-                             fn.GetFullName(), ZipFileWildcard,
+                             fn.GetFullName(), ZipFileWildcard(),
                              wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( zipfiledlg.ShowModal() == wxID_CANCEL )
@@ -144,7 +143,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 
     wxFileDialog dlg( this, _( "Archive Project Files" ),
                       fileName.GetPath(), fileName.GetFullName(),
-                      ZipFileWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      ZipFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

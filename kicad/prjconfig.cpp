@@ -166,7 +166,7 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 {
     wxString     default_dir = GetMruPath();
     wxFileDialog dlg( this, _( "Open Existing Project" ), default_dir, wxEmptyString,
-                      ProjectFileWildcard, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                      ProjectFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -188,7 +188,7 @@ void KICAD_MANAGER_FRAME::OnNewProject( wxCommandEvent& aEvent )
 {
     wxString        default_dir = GetMruPath();
     wxFileDialog    dlg( this, _( "Create New Project" ), default_dir, wxEmptyString,
-                         ProjectFileWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                         ProjectFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

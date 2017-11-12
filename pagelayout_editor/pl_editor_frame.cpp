@@ -222,9 +222,9 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
         wxString filename = GetCurrFileName();
 
         if( filename.IsEmpty() )
-            msg = _("Save changes in a new file before closing?");
+            msg = _( "Save changes in a new file before closing?" );
         else
-            msg.Printf( _("Save the changes in\n<%s>\nbefore closing?"),
+            msg.Printf( _( "Save the changes in\n<%s>\nbefore closing?" ),
                         GetChars( filename ) );
 
         int ii = DisplayExitDialog( this, msg );
@@ -243,10 +243,10 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
         {
             if( filename.IsEmpty() )
             {
-                wxFileDialog openFileDialog(this, _("Save As"), wxEmptyString,
-                        wxEmptyString, PageLayoutDescrFileWildcard, wxFD_SAVE);
+                wxFileDialog openFileDialog( this, _( "Save As" ), wxEmptyString, wxEmptyString,
+                                             PageLayoutDescrFileWildcard(), wxFD_SAVE );
 
-                if (openFileDialog.ShowModal() == wxID_CANCEL)
+                if(openFileDialog.ShowModal() == wxID_CANCEL )
                     return;
 
                 filename = openFileDialog.GetPath();
@@ -254,7 +254,7 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
             if( !SavePageLayoutDescrFile( filename ) )
             {
-                msg.Printf( _("Unable to create <%s>"), GetChars( filename ) );
+                msg.Printf( _( "Unable to create <%s>" ), GetChars( filename ) );
                 wxMessageBox( msg );
             }
         }
@@ -298,10 +298,12 @@ double PL_EDITOR_FRAME::BestZoom()
     return bestzoom;
 }
 
-static const wxChar designTreeWidthKey[] = wxT("DesignTreeWidth");
-static const wxChar propertiesFrameWidthKey[] = wxT("PropertiesFrameWidth");
-static const wxChar cornerOriginChoiceKey[] = wxT("CornerOriginChoice");
+
+static const wxChar designTreeWidthKey[] = wxT( "DesignTreeWidth" );
+static const wxChar propertiesFrameWidthKey[] = wxT( "PropertiesFrameWidth" );
+static const wxChar cornerOriginChoiceKey[] = wxT( "CornerOriginChoice" );
 static const wxChar blackBgColorKey[] = wxT( "BlackBgColor" );
+
 
 void PL_EDITOR_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
@@ -333,10 +335,6 @@ void PL_EDITOR_FRAME::SaveSettings( wxConfigBase* aCfg )
 }
 
 
-/*
- * Function UpdateTitleAndInfo
- * displays the filename (if exists) of the current page layout descr file.
- */
 void PL_EDITOR_FRAME::UpdateTitleAndInfo()
 {
     wxString title;
@@ -347,19 +345,18 @@ void PL_EDITOR_FRAME::UpdateTitleAndInfo()
     SetTitle( title );
 }
 
-/* return the filename of the current layout descr file
- */
+
 const wxString& PL_EDITOR_FRAME::GetCurrFileName() const
 {
     return BASE_SCREEN::m_PageLayoutDescrFileName;
 }
 
-/* Stores the current layout descr file filename
- */
+
 void PL_EDITOR_FRAME::SetCurrFileName( const wxString& aName )
 {
     BASE_SCREEN::m_PageLayoutDescrFileName = aName;
 }
+
 
 void PL_EDITOR_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
@@ -397,9 +394,6 @@ void PL_EDITOR_FRAME::SetTitleBlock( const TITLE_BLOCK& aTitleBlock )
 }
 
 
-/*
- * Update the status bar information.
- */
 void PL_EDITOR_FRAME::UpdateStatusBar()
 {
     PL_EDITOR_SCREEN* screen = (PL_EDITOR_SCREEN*) GetScreen();
@@ -509,12 +503,14 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     // Display units
 }
 
+
 void PL_EDITOR_FRAME::PrintPage( wxDC* aDC, LSET aPrintMasklayer,
                            bool aPrintMirrorMode, void * aData )
 {
     GetScreen()-> m_ScreenNumber = GetPageNumberOption() ? 1 : 2;
     DrawWorkSheet( aDC, GetScreen(), 0, IU_PER_MILS, wxEmptyString );
 }
+
 
 void PL_EDITOR_FRAME::RedrawActiveWindow( wxDC* aDC, bool aEraseBg )
 {
@@ -565,6 +561,7 @@ void PL_EDITOR_FRAME::RedrawActiveWindow( wxDC* aDC, bool aEraseBg )
     UpdateTitleAndInfo();
 }
 
+
 void PL_EDITOR_FRAME::RebuildDesignTree()
 {
     const WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
@@ -580,27 +577,27 @@ void PL_EDITOR_FRAME::RebuildDesignTree()
         switch( item->GetType() )
         {
             case WORKSHEET_DATAITEM::WS_TEXT:
-                item->m_Name = wxString::Format( wxT("text%d:%s"), ++textId,
+                item->m_Name = wxString::Format( wxT( "text%d:%s" ), ++textId,
                                                  GetChars(item->GetClassName()) );
                 break;
 
             case WORKSHEET_DATAITEM:: WS_SEGMENT:
-                item->m_Name = wxString::Format( wxT("segm%d:%s"), ++lineId,
+                item->m_Name = wxString::Format( wxT( "segm%d:%s" ), ++lineId,
                                                  GetChars(item->GetClassName()) );
                 break;
 
             case WORKSHEET_DATAITEM::WS_RECT:
-                item->m_Name = wxString::Format( wxT("rect%d:%s"), ++rectId,
+                item->m_Name = wxString::Format( wxT( "rect%d:%s" ), ++rectId,
                                                  GetChars(item->GetClassName()) );
                 break;
 
             case WORKSHEET_DATAITEM::WS_POLYPOLYGON:
-                item->m_Name = wxString::Format( wxT("poly%d:%s"), ++polyId,
+                item->m_Name = wxString::Format( wxT( "poly%d:%s" ), ++polyId,
                                                  GetChars(item->GetClassName()) );
                 break;
 
             case WORKSHEET_DATAITEM::WS_BITMAP:
-                item->m_Name = wxString::Format( wxT("bm%d:%s"), ++bitmapId,
+                item->m_Name = wxString::Format( wxT( "bm%d:%s" ), ++bitmapId,
                                                  GetChars(item->GetClassName()) );
                 break;
         }
@@ -609,59 +606,59 @@ void PL_EDITOR_FRAME::RebuildDesignTree()
     m_treePagelayout->ReCreateDesignTree();
 }
 
-/* Add a new item to the page layout item list.
- * aType = WS_TEXT, WS_SEGMENT, WS_RECT, WS_POLYPOLYGON
- */
+
 WORKSHEET_DATAITEM * PL_EDITOR_FRAME::AddPageLayoutItem( int aType, int aIdx )
 {
     WORKSHEET_DATAITEM * item = NULL;
 
     switch( aType )
     {
-        case WORKSHEET_DATAITEM::WS_TEXT:
-            item = new WORKSHEET_DATAITEM_TEXT( wxT("Text") );
-            break;
+    case WORKSHEET_DATAITEM::WS_TEXT:
+        item = new WORKSHEET_DATAITEM_TEXT( wxT( "Text") );
+        break;
 
-        case WORKSHEET_DATAITEM::WS_SEGMENT:
-            item = new WORKSHEET_DATAITEM( WORKSHEET_DATAITEM::WS_SEGMENT );
-            break;
+    case WORKSHEET_DATAITEM::WS_SEGMENT:
+        item = new WORKSHEET_DATAITEM( WORKSHEET_DATAITEM::WS_SEGMENT );
+        break;
 
-        case WORKSHEET_DATAITEM::WS_RECT:
-            item = new WORKSHEET_DATAITEM( WORKSHEET_DATAITEM::WS_RECT );
-            break;
+    case WORKSHEET_DATAITEM::WS_RECT:
+        item = new WORKSHEET_DATAITEM( WORKSHEET_DATAITEM::WS_RECT );
+        break;
 
-        case WORKSHEET_DATAITEM::WS_POLYPOLYGON:
-            item = new WORKSHEET_DATAITEM_POLYPOLYGON();
-            break;
+    case WORKSHEET_DATAITEM::WS_POLYPOLYGON:
+        item = new WORKSHEET_DATAITEM_POLYPOLYGON();
+        break;
 
-        case WORKSHEET_DATAITEM::WS_BITMAP:
+    case WORKSHEET_DATAITEM::WS_BITMAP:
+    {
+        wxFileDialog fileDlg( this, _( "Choose Image" ), wxEmptyString, wxEmptyString,
+                              _( "Image Files " ) + wxImage::GetImageExtWildcard(),
+                              wxFD_OPEN );
+
+        if( fileDlg.ShowModal() != wxID_OK )
+            return NULL;
+
+        wxString fullFilename = fileDlg.GetPath();
+
+        if( !wxFileExists( fullFilename ) )
         {
-            wxFileDialog fileDlg( this, _( "Choose Image" ), wxEmptyString, wxEmptyString,
-                                  _( "Image Files " ) + wxImage::GetImageExtWildcard(),
-                                  wxFD_OPEN );
-
-            if( fileDlg.ShowModal() != wxID_OK )
-                return NULL;
-
-            wxString fullFilename = fileDlg.GetPath();
-
-            if( !wxFileExists( fullFilename ) )
-            {
-                wxMessageBox( _( "Couldn't load image from <%s>" ), GetChars( fullFilename ) );
-                break;
-            }
-            BITMAP_BASE* image = new BITMAP_BASE();
-
-            if( !image->ReadImageFile( fullFilename ) )
-            {
-                wxMessageBox( _( "Couldn't load image from <%s>" ),
-                                 GetChars( fullFilename ) );
-                delete image;
-                break;
-            }
-            item = new WORKSHEET_DATAITEM_BITMAP( image );
-        }
+            wxMessageBox( _( "Couldn't load image from <%s>" ), GetChars( fullFilename ) );
             break;
+        }
+
+        BITMAP_BASE* image = new BITMAP_BASE();
+
+        if( !image->ReadImageFile( fullFilename ) )
+        {
+            wxMessageBox( _( "Couldn't load image from <%s>" ),
+                          GetChars( fullFilename ) );
+            delete image;
+            break;
+        }
+
+        item = new WORKSHEET_DATAITEM_BITMAP( image );
+    }
+    break;
     }
 
     if( item == NULL )
@@ -674,17 +671,14 @@ WORKSHEET_DATAITEM * PL_EDITOR_FRAME::AddPageLayoutItem( int aType, int aIdx )
     return item;
 }
 
-/* returns the current selected item, or NULL
- */
+
 WORKSHEET_DATAITEM * PL_EDITOR_FRAME::GetSelectedItem()
 {
     WORKSHEET_DATAITEM* item =  m_treePagelayout->GetPageLayoutSelectedItem();
     return item;
 }
 
-/* return the page layout item found at position aPosition
- * aPosition = the position (in user units) of the reference point
- */
+
 WORKSHEET_DATAITEM* PL_EDITOR_FRAME::Locate( const wxPoint& aPosition )
 {
     const PAGE_INFO&    pageInfo = GetPageSettings();
@@ -731,21 +725,22 @@ WORKSHEET_DATAITEM* PL_EDITOR_FRAME::Locate( const wxPoint& aPosition )
 
             if( (drawitem->m_Flags & (LOCATE_STARTPOINT|LOCATE_ENDPOINT))
                 == (LOCATE_STARTPOINT|LOCATE_ENDPOINT) )
-                text << wxT(" ") << _("(start or end point)");
+                text << wxT( " " ) << _( "(start or end point)" );
             else
             {
                 if( (drawitem->m_Flags & LOCATE_STARTPOINT) )
-                    text << wxT(" ") << _("(start point)");
+                    text << wxT( " " ) << _( "(start point)" );
 
                 if( (drawitem->m_Flags & LOCATE_ENDPOINT) )
-                    text << wxT(" ") << _("(end point)");
+                    text << wxT( " " ) << _( "(end point)" );
             }
 
             if( ! drawitem->GetParent()->m_Info.IsEmpty() )
-                text << wxT(" \"") << drawitem->GetParent()->m_Info << wxT("\"");
+                text << wxT( " \"" ) << drawitem->GetParent()->m_Info << wxT( "\"" );
 
             choices.Add( text );
         }
+
         int selection = wxGetSingleChoiceIndex ( wxEmptyString,
                                                 _( "Selection Clarification" ),
                                                 choices, this );
@@ -758,7 +753,7 @@ WORKSHEET_DATAITEM* PL_EDITOR_FRAME::Locate( const wxPoint& aPosition )
     }
 
     WORKSHEET_DATAITEM* item = drawitem->GetParent();
-    item->ClearFlags(LOCATE_STARTPOINT|LOCATE_ENDPOINT);
+    item->ClearFlags( LOCATE_STARTPOINT|LOCATE_ENDPOINT );
 
     if( (drawitem->m_Flags & LOCATE_STARTPOINT) )
         item->SetFlags( LOCATE_STARTPOINT );
@@ -769,9 +764,7 @@ WORKSHEET_DATAITEM* PL_EDITOR_FRAME::Locate( const wxPoint& aPosition )
     return item;
 }
 
-/* Must be called to initialize parameters when a new page layout
- * description is loaded
- */
+
 void PL_EDITOR_FRAME::OnNewPageLayout()
 {
     GetScreen()->ClearUndoRedoList();

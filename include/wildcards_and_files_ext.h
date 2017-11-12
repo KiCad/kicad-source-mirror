@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2007-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2008-2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,12 +35,18 @@
 #include <wx/wx.h>
 
 /**
- * File extension definitions.  Please do not changes these.  If a different
- * file extension is needed, create a new definition in the application.
- * Please note, just because they are defined as const doesn't guarantee
- * that they cannot be changed.
- * Mainly wild cards are most of time translated when displayed
+ * \defgroup file_extensions File Extension Definitions
+ *
+ * @note Please do not changes these.  If a different file extension is needed, create a new
+ *       definition in here.  If you create a extension definition in another file, make sure
+ *       to add it to the Doxygen group "file_extensions" using the "addtogroup" tag. Also
+ *       note, just because they are defined as const doesn't guarantee that they cannot be
+ *       changed.
+ *
+ * @{
  */
+
+extern const wxString AllFilesWildcard;
 
 extern const wxString SchematicSymbolFileExtension;
 extern const wxString SchematicLibraryFileExtension;
@@ -71,44 +77,78 @@ extern const wxString KiCadFootprintFileExtension;
 extern const wxString KiCadFootprintLibPathExtension;
 extern const wxString GedaPcbFootprintLibFileExtension;
 extern const wxString EagleFootprintLibPathExtension;
-extern const wxString ComponentFileExtensionWildcard;
-extern const wxString PageLayoutDescrFileWildcard;
+extern const wxString ComponentFileExtension;
+extern const wxString PageLayoutDescrFileExtension;
 extern const wxString KiCadLib3DShapesPathExtension;
+extern const wxString SpecctraDsnFileExtension;
+extern const wxString IpcD356FileExtension;
 
-/// Proper wxFileDialog wild card definitions.
-extern const wxString SchematicSymbolFileWildcard;
-extern const wxString SchematicLibraryFileWildcard;
-extern const wxString ProjectFileWildcard;
-extern const wxString SchematicFileWildcard;
-extern const wxString BoardFileWildcard;
-extern const wxString NetlistFileWildcard;
-extern const wxString GerberFileWildcard;
-extern const wxString HtmlFileWildcard;
-extern const wxString CsvFileWildcard;
-extern const wxString LegacyPcbFileWildcard;
-extern const wxString PcbFileWildcard;
-extern const wxString EaglePcbFileWildcard;
-extern const wxString EagleSchematicFileWildcard;
-extern const wxString EagleFilesWildcard;
-extern const wxString PCadPcbFileWildcard;
-extern const wxString PdfFileWildcard;
-extern const wxString PSFileWildcard;
-extern const wxString MacrosFileWildcard;
-extern const wxString AllFilesWildcard;
-extern const wxString ComponentFileWildcard;
-extern const wxString DrillFileWildcard;
-extern const wxString SVGFileWildcard;
-extern const wxString ReportFileWildcard;
-extern const wxString FootprintPlaceFileWildcard;
-extern const wxString Shapes3DFileWildcard;
-extern const wxString IDF3DFileWildcard;
-extern const wxString DocModulesFileName;
-extern const wxString LegacyFootprintLibPathWildcard;
-extern const wxString KiCadFootprintLibFileWildcard;
-extern const wxString KiCadFootprintLibPathWildcard;
-extern const wxString GedaPcbFootprintLibFileWildcard;
-extern const wxString EagleFootprintLibPathWildcard;
-extern const wxString TextWildcard;
+/**
+ * @}
+ */
 
+
+/**
+ * \defgroup file_wildcards File Wildcard Definitions
+ *
+ * @note Please do not changes these.  If a different file wildcard is needed, create a new
+ *       definition in here.  If you create a wildcard definition in another file, make sure
+ *       to add it to the Doxygen group "file_extensions" using the "addtogroup" tag and
+ *       correct handle the GTK+ file dialog case sensitivity issue.
+ * @{
+ */
+
+extern wxString ComponentFileWildcard();
+extern wxString PageLayoutDescrFileWildcard();
+extern wxString SchematicSymbolFileWildcard();
+extern wxString SchematicLibraryFileWildcard();
+extern wxString ProjectFileWildcard();
+extern wxString SchematicFileWildcard();
+extern wxString BoardFileWildcard();
+extern wxString NetlistFileWildcard();
+extern wxString GerberFileWildcard();
+extern wxString HtmlFileWildcard();
+extern wxString CsvFileWildcard();
+extern wxString LegacyPcbFileWildcard();
+extern wxString PcbFileWildcard();
+extern wxString EaglePcbFileWildcard();
+extern wxString EagleSchematicFileWildcard();
+extern wxString EagleFilesWildcard();
+extern wxString PCadPcbFileWildcard();
+extern wxString PdfFileWildcard();
+extern wxString PSFileWildcard();
+extern wxString MacrosFileWildcard();
+extern wxString ComponentFileWildcard();
+extern wxString DrillFileWildcard();
+extern wxString SVGFileWildcard();
+extern wxString ReportFileWildcard();
+extern wxString FootprintPlaceFileWildcard();
+extern wxString Shapes3DFileWildcard();
+extern wxString IDF3DFileWildcard();
+extern wxString DocModulesFileName();
+extern wxString LegacyFootprintLibPathWildcard();
+extern wxString KiCadFootprintLibFileWildcard();
+extern wxString KiCadFootprintLibPathWildcard();
+extern wxString GedaPcbFootprintLibFileWildcard();
+extern wxString EagleFootprintLibPathWildcard();
+extern wxString TextFileWildcard();
+extern wxString ModLegacyExportFileWildcard();
+extern wxString ErcFileWildcard();
+extern wxString SpiceLibraryFileWildcard();
+extern wxString SpiceNetlistFileWildcard();
+extern wxString CadstarNetlistFileWildcard();
+extern wxString EquFileWildcard();
+extern wxString ZipFileWildcard();
+extern wxString GencadFileWildcard();
+extern wxString DxfFileWildcard();
+extern wxString GerberJobFileWildcard();
+extern wxString SpecctraDsnFileWildcard();
+extern wxString IpcD356FileWildcard();
+extern wxString WorkbookFileWildcard();
+extern wxString PngFileWildcard();
+
+/**
+ * @}
+ */
 
 #endif  // INCLUDE_WILDCARDS_AND_FILES_EXT_H_

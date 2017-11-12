@@ -1038,11 +1038,10 @@ void SCH_EDIT_FRAME::OnUpdateFields( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnNewProject( wxCommandEvent& event )
 {
-//  wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
     wxString pro_dir = m_mruPath;
 
     wxFileDialog dlg( this, _( "New Schematic" ), pro_dir,
-                      wxEmptyString, SchematicFileWildcard,
+                      wxEmptyString, SchematicFileWildcard(),
                       wxFD_SAVE );
 
     if( dlg.ShowModal() != wxID_CANCEL )
@@ -1076,7 +1075,7 @@ void SCH_EDIT_FRAME::OnLoadProject( wxCommandEvent& event )
     wxString pro_dir = m_mruPath;
 
     wxFileDialog dlg( this, _( "Open Schematic" ), pro_dir,
-                      wxEmptyString, SchematicFileWildcard,
+                      wxEmptyString, SchematicFileWildcard(),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() != wxID_CANCEL )

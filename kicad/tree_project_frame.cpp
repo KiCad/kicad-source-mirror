@@ -100,9 +100,6 @@ static const wxChar* s_allowedExtensionsToList[] =
 // File extension definitions.
 const wxChar  TextFileExtension[] = wxT( "txt" );
 
-// File wildcard definitions.
-const wxChar  TextFileWildcard[] = wxT( "Text files (*.txt)|*.txt" );
-
 // Gerber file extension wildcard.
 const wxString GerberFileExtensionWildCard( ".((gbr|gbrjob|(gb|gt)[alops])|pho)" );
 
@@ -328,68 +325,68 @@ wxString TREE_PROJECT_FRAME::GetFileWildcard( TreeFileType type )
     switch( type )
     {
     case TREE_PROJECT:
-        ext = ProjectFileWildcard;
+        ext = ProjectFileWildcard();
         break;
 
     case TREE_SCHEMA:
-        ext = SchematicFileWildcard;
+        ext = SchematicFileWildcard();
         break;
 
     case TREE_LEGACY_PCB:
     case TREE_SEXP_PCB:
-        ext = PcbFileWildcard;
+        ext = PcbFileWildcard();
         break;
 
     case TREE_GERBER:
-        ext = GerberFileWildcard;
+        ext = GerberFileWildcard();
         break;
 
     case TREE_HTML:
-        ext = HtmlFileWildcard;
+        ext = HtmlFileWildcard();
         break;
 
     case TREE_PDF:
-        ext = PdfFileWildcard;
+        ext = PdfFileWildcard();
         break;
 
     case TREE_TXT:
-        ext = TextFileWildcard;
+        ext = TextFileWildcard();
         break;
 
     case TREE_NET:
-        ext = NetlistFileWildcard;
+        ext = NetlistFileWildcard();
         break;
 
     case TREE_CMP_LINK:
-        ext = ComponentFileWildcard;
+        ext = ComponentFileWildcard();
         break;
 
     case TREE_REPORT:
-        ext = ReportFileWildcard;
+        ext = ReportFileWildcard();
         break;
 
     case TREE_FP_PLACE:
-        ext = FootprintPlaceFileWildcard;
+        ext = FootprintPlaceFileWildcard();
         break;
 
     case TREE_DRILL:
-        ext = DrillFileWildcard;
+        ext = DrillFileWildcard();
         break;
 
     case TREE_SVG:
-        ext = SVGFileWildcard;
+        ext = SVGFileWildcard();
         break;
 
     case TREE_PAGE_LAYOUT_DESCR:
-        ext = PageLayoutDescrFileWildcard;
+        ext = PageLayoutDescrFileWildcard();
         break;
 
     case TREE_FOOTPRINT_FILE:
-        ext = KiCadFootprintLibFileWildcard;
+        ext = KiCadFootprintLibFileWildcard();
         break;
 
     case TREE_SCHEMATIC_LIBFILE:
-        ext = SchematicLibraryFileWildcard;
+        ext = SchematicLibraryFileWildcard();
         break;
 
      default:                       // Eliminates unnecessary GCC warning.

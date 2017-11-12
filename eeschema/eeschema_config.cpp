@@ -174,7 +174,7 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             fn.SetExt( ProjectFileExtension );
 
             wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
-                              fn.GetFullName(), ProjectFileWildcard,
+                              fn.GetFullName(), ProjectFileWildcard(),
                               wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
             if( dlg.ShowModal() == wxID_CANCEL )
@@ -410,7 +410,7 @@ void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
     {
         wxFileDialog dlg( this, _( "Save Project File" ),
                           fn.GetPath(), fn.GetFullName(),
-                          ProjectFileWildcard, wxFD_SAVE );
+                          ProjectFileWildcard(), wxFD_SAVE );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return;

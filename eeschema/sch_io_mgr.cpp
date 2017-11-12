@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -132,7 +132,7 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromLibPath( const wxString& a
     SCH_FILE_T  ret = SCH_LEGACY;        // default guess, unless detected otherwise.
     wxFileName  fn( aLibPath );
 
-    if( fn.GetExt() == SchematicFileWildcard )
+    if( fn.GetExt() == SchematicFileExtension )
     {
         ret = SCH_LEGACY;
     }

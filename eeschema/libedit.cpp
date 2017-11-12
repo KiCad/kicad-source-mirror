@@ -318,7 +318,7 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
             default_path = search->LastVisitedPath();
 
         wxFileDialog dlg( this, _( "Symbol Library Name" ), default_path,
-                          wxEmptyString, SchematicLibraryFileWildcard,
+                          wxEmptyString, SchematicLibraryFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( dlg.ShowModal() == wxID_CANCEL )

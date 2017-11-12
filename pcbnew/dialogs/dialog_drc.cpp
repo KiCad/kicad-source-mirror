@@ -311,7 +311,7 @@ void DIALOG_DRC_CONTROL::OnButtonBrowseRptFileClick( wxCommandEvent& event )
     wxString prj_path =  Prj().GetProjectPath();
 
     wxFileDialog dlg( this, _( "Save DRC Report File" ), prj_path,
-                      fn.GetFullName(), ReportFileWildcard,
+                      fn.GetFullName(), ReportFileWildcard(),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )

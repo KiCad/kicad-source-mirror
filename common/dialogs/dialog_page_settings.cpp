@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -803,9 +803,9 @@ void DIALOG_PAGES_SETTINGS::GetCustomSizeMilsFromDialog()
 void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
 {
     // Display a file picker dialog
-    wxFileDialog fileDialog( this, _( "Select Page Layout Descr File" ),
+    wxFileDialog fileDialog( this, _( "Select Page Layout Description File" ),
                              m_projectPath, GetWksFileName(),
-                             PageLayoutDescrFileWildcard,
+                             PageLayoutDescrFileWildcard(),
                              wxFD_DEFAULT_STYLE | wxFD_FILE_MUST_EXIST );
 
     if( fileDialog.ShowModal() != wxID_OK )

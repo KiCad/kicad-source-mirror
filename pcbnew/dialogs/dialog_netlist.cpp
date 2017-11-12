@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -147,7 +147,7 @@ void DIALOG_NETLIST::OnOpenNetlistClick( wxCommandEvent& event )
                 GetChars( lastPath ), GetChars( lastNetlistRead ) );
 
     wxFileDialog FilesDialog( this, _( "Select Netlist" ), lastPath, lastNetlistRead,
-                              NetlistFileWildcard, wxFD_DEFAULT_STYLE | wxFD_FILE_MUST_EXIST );
+                              NetlistFileWildcard(), wxFD_DEFAULT_STYLE | wxFD_FILE_MUST_EXIST );
 
     if( FilesDialog.ShowModal() != wxID_OK )
         return;
@@ -351,15 +351,15 @@ void DIALOG_NETLIST::OnSaveMessagesToFile( wxCommandEvent& aEvent )
     if( !m_parent->GetLastNetListRead().IsEmpty() )
     {
         fn = m_parent->GetLastNetListRead();
-        fn.SetExt( wxT( "txt" ) );
+        fn.SetExt( "txt" );
     }
     else
     {
         fn = wxPathOnly( Prj().GetProjectFullName() );
     }
 
-    wxFileDialog dlg( this, _( "Save contents of message window" ), fn.GetPath(), fn.GetName(),
-                      TextWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog dlg( this, _( "Save Contents of Message Window" ), fn.GetPath(), fn.GetFullName(),
+                      TextFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() != wxID_OK )
         return;

@@ -489,17 +489,12 @@ void KICAD_MANAGER_FRAME::OnOpenTextEditor( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::OnOpenFileInTextEditor( wxCommandEvent& event )
 {
-    wxString mask( wxT( "*" ) );
+    wxString wildcard = TextFileWildcard() + "|" + AllFilesWildcard;
 
-#ifdef __WINDOWS__
-    mask += wxT( ".*" );
-#endif
-
-    mask = _( "Text file (" ) + mask + wxT( ")|" ) + mask;
     wxString default_dir = Prj().GetProjectPath();
 
     wxFileDialog dlg( this, _( "Load File to Edit" ), default_dir,
-                      wxEmptyString, mask, wxFD_OPEN );
+                      wxEmptyString, wildcard, wxFD_OPEN );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

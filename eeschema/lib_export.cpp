@@ -50,7 +50,7 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
     m_lastDrawItem = NULL;
 
     wxFileDialog dlg( this, _( "Import Symbol" ), m_mruPath,
-                      wxEmptyString, SchematicLibraryFileWildcard,
+                      wxEmptyString, SchematicLibraryFileWildcard(),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -117,7 +117,7 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
     title = createLib ? _( "New Symbol Library" ) : _( "Export Symbol" );
 
     wxFileDialog dlg( this, title, m_mruPath, fn.GetFullName(),
-                      SchematicLibraryFileWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      SchematicLibraryFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

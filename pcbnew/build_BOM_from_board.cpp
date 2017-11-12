@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2014 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 #include <wxPcbStruct.h>
 #include <macros.h>
 #include <project.h>
+#include <wildcards_and_files_ext.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -57,8 +58,6 @@
  */
 
 const wxString CsvFileExtension( wxT( "csv" ) );    // BOM file extension
-
-const wxString CsvFileWildcard( _( "Comma separated value files (*.csv)|*.csv" ) );
 
 
 class cmp
@@ -94,7 +93,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
 
     wxFileDialog dlg( this, _( "Save Bill of Materials" ), pro_dir,
-                      fn.GetFullName(), CsvFileWildcard,
+                      fn.GetFullName(), CsvFileWildcard(),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )

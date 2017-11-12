@@ -7,7 +7,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@
 #include <kiface_i.h>
 #include <convert_to_biu.h>
 #include <class_pcb_layer_box_selector.h>
+#include <wildcards_and_files_ext.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -231,7 +232,7 @@ void DIALOG_DXF_IMPORT::OnBrowseDxfFiles( wxCommandEvent& event )
     wxFileDialog dlg( m_parent,
                       _( "Open File" ),
                       path, filename,
-                       "DXF Files (*.dxf)|*.dxf",
+                      DxfFileWildcard(),
                       wxFD_OPEN|wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() != wxID_OK )

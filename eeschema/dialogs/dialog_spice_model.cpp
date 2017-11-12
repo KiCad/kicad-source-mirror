@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "wildcards_and_files_ext.h"
 #include "dialog_spice_model.h"
 
 #include <netlist_exporters/netlist_exporter_pspice.h>
@@ -718,8 +719,8 @@ void DIALOG_SPICE_MODEL::onSelectLibrary( wxCommandEvent& event )
     if( searchPath.IsEmpty() )
         searchPath = Prj().GetProjectPath();
 
-    wxFileDialog openDlg( this, wxT( "Select library" ), searchPath, "",
-            "Spice library file (*.lib)|*.lib;*.LIB|Any file|*",
+    wxString wildcards = SpiceLibraryFileWildcard() + "|" + AllFilesWildcard;
+    wxFileDialog openDlg( this, _( "Select library" ), searchPath, "", wildcards,
             wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( openDlg.ShowModal() == wxID_CANCEL )

@@ -91,8 +91,6 @@ static const wxString INFO_LEGACY_LIB_WARN_DELETE(
             "and update your footprint lib table\n"\
             "before deleting a footprint" ) );
 
-static const wxString ModLegacyExportFileWildcard( _( "Legacy foot print export files (*.emp)|*.emp" ) );
-
 
 #define EXPORT_IMPORT_LASTPATH_KEY wxT( "import_last_path" )
 
@@ -107,9 +105,9 @@ static wxFileName getFootprintFilenameFromUser( wxWindow* aParent, const wxStrin
     static int lastFilterIndex = 0;     // To store the last choice during a session.
     wxString wildCard;
 
-    wildCard << wxGetTranslation( KiCadFootprintLibFileWildcard ) << wxChar( '|' )
-             << wxGetTranslation( ModLegacyExportFileWildcard ) << wxChar( '|' )
-             << wxGetTranslation( GedaPcbFootprintLibFileWildcard );
+    wildCard << KiCadFootprintLibFileWildcard() << wxChar( '|' )
+             << ModLegacyExportFileWildcard() << wxChar( '|' )
+             << GedaPcbFootprintLibFileWildcard();
 
     wxFileDialog dlg( aParent, FMT_IMPORT_MODULE, aLastPath, wxEmptyString, wildCard,
             wxFD_OPEN | wxFD_FILE_MUST_EXIST );
@@ -350,7 +348,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
 
     fn.SetName( aModule->GetFPID().GetLibItemName() );
 
-    wxString    wildcard = wxGetTranslation( KiCadFootprintLibFileWildcard );
+    wxString    wildcard = KiCadFootprintLibFileWildcard();
 
     fn.SetExt( KiCadFootprintFileExtension );
 

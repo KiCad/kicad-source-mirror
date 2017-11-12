@@ -455,7 +455,7 @@ void DIALOG_GENDRILL::OnGenReportFile( wxCommandEvent& event )
         defaultPath = wxStandardPaths::Get().GetDocumentsDir();
 
     wxFileDialog dlg( this, _( "Save Drill Report File" ), defaultPath, fn.GetFullName(),
-                      wxGetTranslation( ReportFileWildcard ), wxFD_SAVE );
+                      ReportFileWildcard(), wxFD_SAVE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

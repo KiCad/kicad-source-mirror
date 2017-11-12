@@ -30,6 +30,8 @@
 #include <kiface_i.h>
 #include <confirm.h>
 #include <gestfich.h>
+#include <wildcards_and_files_ext.h>
+
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <macros.h>
@@ -181,11 +183,11 @@ void DIALOG_FREEROUTE::OnLaunchButtonClick( wxCommandEvent& event )
 const wxString DIALOG_FREEROUTE::createDSN_File()
 {
     wxFileName fn( m_Parent->GetBoard()->GetFileName() );
-    wxString dsn_ext = wxT( "dsn" );
+    wxString dsn_ext = SpecctraDsnFileExtension;
     fn.SetExt( dsn_ext );
-    wxString mask    = wxT( "*." ) + dsn_ext;
+    wxString mask    = SpecctraDsnFileWildcard();
 
-    wxString fullFileName = EDA_FILE_SELECTOR( _( "Specctra DSN file:" ),
+    wxString fullFileName = EDA_FILE_SELECTOR( _( "Specctra DSN File" ),
                                                fn.GetPath(), fn.GetFullName(),
                                                dsn_ext, mask,
                                                this, wxFD_SAVE, false );

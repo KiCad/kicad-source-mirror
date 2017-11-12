@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2010 jean-pierre.charras
- * Copyright (C) 1992-2015 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2017 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -482,9 +482,8 @@ void BM2CMP_FRAME::OnExportLogo()
     if( path.IsEmpty() || !wxDirExists(path) )
         path = ::wxGetCwd();
 
-    wxFileDialog fileDlg( this, _( "Create a logo file" ),
-                          path, wxEmptyString,
-                          wxGetTranslation( PageLayoutDescrFileWildcard ),
+    wxFileDialog fileDlg( this, _( "Create Logo File" ), path, wxEmptyString,
+                          PageLayoutDescrFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
     int          diag = fileDlg.ShowModal();
 
@@ -519,9 +518,9 @@ void BM2CMP_FRAME::OnExportPostScript()
     if( path.IsEmpty() || !wxDirExists( path ) )
         path = ::wxGetCwd();
 
-    wxFileDialog fileDlg( this, _( "Create a Postscript file" ),
+    wxFileDialog fileDlg( this, _( "Create Postscript File" ),
                           path, wxEmptyString,
-                          wxGetTranslation( PSFileWildcard ),
+                          PSFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     int          diag = fileDlg.ShowModal();
@@ -557,9 +556,9 @@ void BM2CMP_FRAME::OnExportEeschema()
     if( path.IsEmpty() || !wxDirExists(path) )
         path = ::wxGetCwd();
 
-    wxFileDialog fileDlg( this, _( "Create a component library file for Eeschema" ),
+    wxFileDialog fileDlg( this, _( "Create Symbol Library" ),
                           path, wxEmptyString,
-                          wxGetTranslation( SchematicLibraryFileWildcard ),
+                          SchematicLibraryFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     int          diag = fileDlg.ShowModal();
@@ -594,9 +593,9 @@ void BM2CMP_FRAME::OnExportPcbnew()
     if( path.IsEmpty() || !wxDirExists( path ) )
         path = m_mruPath;
 
-    wxFileDialog fileDlg( this, _( "Create a footprint file for Pcbnew" ),
+    wxFileDialog fileDlg( this, _( "Create Footprint Library" ),
                           path, wxEmptyString,
-                          wxGetTranslation( KiCadFootprintLibFileWildcard ),
+                          KiCadFootprintLibFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     int          diag = fileDlg.ShowModal();

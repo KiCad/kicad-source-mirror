@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,7 +76,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
         GetMenuBar()->SetLabel( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER,
                                 m_show_layer_manager_tools ?
-                                _("Hide &Layers Manager" ) : _("Show &Layers Manager" ));
+                                _( "Hide &Layers Manager" ) : _( "Show &Layers Manager" ));
         break;
 
     case ID_MENU_PCB_SHOW_HIDE_MUWAVE_TOOLBAR:
@@ -215,7 +215,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             fn.SetExt( ProjectFileExtension );
 
             wxFileDialog dlg( this, _( "Read Project File" ), fn.GetPath(),
-                              fn.GetFullName(), ProjectFileWildcard,
+                              fn.GetFullName(), ProjectFileWildcard(),
                               wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
 
             if( dlg.ShowModal() == wxID_CANCEL )
@@ -292,7 +292,7 @@ void PCB_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
     {
         wxFileDialog dlg( this, _( "Save Project File" ),
                           fn.GetPath(), fn.GetFullName(),
-                          ProjectFileWildcard, wxFD_SAVE | wxFD_CHANGE_DIR );
+                          ProjectFileWildcard(), wxFD_SAVE | wxFD_CHANGE_DIR );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return;

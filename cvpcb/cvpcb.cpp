@@ -47,8 +47,6 @@
 // Constant string definitions for CvPcb
 const wxString EquFileExtension( wxT( "equ" ) );
 
-// Wildcard for schematic retroannotation (import footprint names in schematic):
-const wxString EquFilesWildcard( _( "Component/footprint equ files (*.equ)|*.equ" ) );
 
 namespace CV {
 

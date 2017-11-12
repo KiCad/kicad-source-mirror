@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -62,7 +62,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
         default_path = search->LastVisitedPath();
 
     wxFileDialog dlg( this, _( "Import Symbol Drawings" ), default_path,
-                      wxEmptyString, SchematicSymbolFileWildcard,
+                      wxEmptyString, SchematicSymbolFileWildcard(),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -150,11 +150,13 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
         return;
 
     wxString default_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
+
     if( !default_path )
         default_path = search->LastVisitedPath();
 
     wxFileDialog dlg( this, _( "Export Symbol Drawings" ), default_path,
-                      part->GetName(), SchematicSymbolFileWildcard,
+                      part->GetName() + "." + SchematicSymbolFileExtension,
+                      SchematicSymbolFileWildcard(),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )

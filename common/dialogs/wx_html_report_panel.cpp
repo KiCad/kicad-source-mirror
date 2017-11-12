@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
- * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2017 KiCad Developers, see change_log.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -237,8 +237,8 @@ void WX_HTML_REPORT_PANEL::onBtnSaveToFile( wxCommandEvent& event )
 {
     wxFileName fn( "./report.txt" );
 
-    wxFileDialog dlg( this, _( "Save report to file" ), fn.GetPath(), fn.GetName(),
-                      TextWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog dlg( this, _( "Save Report to File" ), fn.GetPath(), fn.GetFullName(),
+                      TextFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
