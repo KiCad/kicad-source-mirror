@@ -7967,7 +7967,7 @@ msgstr "Keine Element gefunden mit %s."
 
 #: eeschema/generate_alias_info.cpp:37
 msgid "Alias of "
-msgstr "Alias von"
+msgstr "Alias von "
 
 #: eeschema/generate_alias_info.cpp:39
 msgid "Keywords:"
