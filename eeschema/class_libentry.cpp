@@ -180,7 +180,6 @@ LIB_PART::LIB_PART( const wxString& aName, PART_LIB* aLibrary ) :
     EDA_ITEM( LIB_PART_T ),
     m_me( this, null_deleter() )
 {
-    m_name                = aName;
     m_library             = aLibrary;
     m_dateModified        = 0;
     m_unitCount           = 1;
@@ -190,21 +189,16 @@ LIB_PART::LIB_PART( const wxString& aName, PART_LIB* aLibrary ) :
     m_showPinNumbers      = true;
     m_showPinNames        = true;
 
-    m_libId.SetLibItemName( aName, false );
-
-    // Create the default alias if the name parameter is not empty.
-    if( !aName.IsEmpty() )
-        m_aliases.push_back( new LIB_ALIAS( aName, this ) );
+    wxASSERT( !aName.IsEmpty() );
 
     // Add the MANDATORY_FIELDS in RAM only.  These are assumed to be present
     // when the field editors are invoked.
-    LIB_FIELD* value = new LIB_FIELD( this, VALUE );
-    value->SetText( aName );
-    m_drawings[LIB_FIELD_T].push_back( value );
-
+    m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, VALUE ) );
     m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, REFERENCE ) );
     m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, FOOTPRINT ) );
     m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, DATASHEET ) );
+
+    SetName( aName );
 }
 
 
@@ -215,7 +209,6 @@ LIB_PART::LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary ) :
     LIB_ITEM* newItem;
 
     m_library             = aLibrary;
-    m_name                = aPart.m_name;
     m_FootprintList       = aPart.m_FootprintList;
     m_unitCount           = aPart.m_unitCount;
     m_unitsLocked         = aPart.m_unitsLocked;
@@ -305,7 +298,6 @@ wxString LIB_PART::SubReference( int aUnit, bool aAddSeparator )
 
 void LIB_PART::SetName( const wxString& aName )
 {
-    m_name = aName;
     GetValueField().SetText( aName );
 
     // The LIB_ALIAS that is the LIB_PART name has to be created so create it.
@@ -897,22 +889,15 @@ bool LIB_PART::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
     m_showPinNames = ( drawname == 'N' ) ? false : true;
 
     // Copy part name and prefix.
-    LIB_FIELD& value = GetValueField();
-
     if( componentName[0] != '~' )
     {
-        m_name = FROM_UTF8( componentName );
-        value.SetText( m_name );
+        SetName( FROM_UTF8( componentName ) );
     }
     else
     {
-        m_name = FROM_UTF8( &componentName[1] );
-        value.SetText( m_name );
-        value.SetVisible( false );
+        SetName( FROM_UTF8( &componentName[1] ) );
+        GetValueField().SetVisible( false );
     }
-
-    // Add the root alias to the alias list.
-    m_aliases.push_back( new LIB_ALIAS( m_name, this ) );
 
     LIB_FIELD& reference = GetReferenceField();
 
@@ -1111,7 +1096,7 @@ bool LIB_PART::LoadField( LINE_READER& aLineReader, wxString& aErrorMsg )
         *fixedField = *field;
 
         if( field->GetId() == VALUE )
-            m_name = field->GetText();
+            SetName( field->GetText() );
 
         delete field;
     }
@@ -1708,6 +1693,7 @@ void LIB_PART::SetAliases( const wxArrayString& aAliasList )
 {
     wxCHECK_RET( !m_library,
                  wxT( "Part aliases cannot be changed when they are owned by a library." ) );
+    wxCHECK_RET( !aAliasList.IsEmpty(), wxT( "Alias list cannot be empty" ) );
 
     if( aAliasList == GetAliasNames() )
         return;
@@ -1782,7 +1768,7 @@ LIB_ALIAS* LIB_PART::RemoveAlias( LIB_ALIAS* aAlias )
         wxLogTrace( traceSchLibMem,
                     wxT( "%s: part:'%s', alias:'%s', alias count %llu, reference count %ld." ),
                     GetChars( wxString::FromAscii( __WXFUNCTION__ ) ),
-                    GetChars( m_name ),
+                    GetChars( GetName() ),
                     GetChars( aAlias->GetName() ),
                     (long long unsigned) m_aliases.size(),
                     m_me.use_count() );
