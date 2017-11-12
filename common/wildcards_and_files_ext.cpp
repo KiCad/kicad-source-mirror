@@ -139,7 +139,8 @@ wxString EagleSchematicFileWildcard()
 
 wxString EagleFilesWildcard()
 {
-    return _( "Eagle XML files (*.sch *.brd)|*.sch;*." ) + FormatWildcardExt( "brd" );
+    return _( "Eagle XML files (*.sch *.brd)|*." ) +
+           FormatWildcardExt( "sch" ) + ";*." + FormatWildcardExt( "brd" );
 }
 
 
