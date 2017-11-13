@@ -45,7 +45,6 @@ enum hotkey_id_commnand {
     HK_COPY_BLOCK,
     HK_PASTE_BLOCK,
     HK_CUT_BLOCK,
-    HK_LIBEDIT_LOAD_PART,
     HK_LIBEDIT_CREATE_PIN,
     HK_DELETE_PIN,
     HK_ROTATE,

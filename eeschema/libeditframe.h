@@ -305,15 +305,6 @@ public:
     void OnEditComponentProperties( wxCommandEvent& event );
     void InstallFieldsEditorDialog( wxCommandEvent& event );
 
-    /**
-     * Loads a symbol from the currently selected library.
-     *
-     * If a library is already selected, the user is prompted for the component name
-     * to load.  If there is no current selected library, the user is prompted to select
-     * a library name and then select component to load.
-     */
-    void LoadOneLibraryPart( wxCommandEvent& event );
-
     void OnViewEntryDoc( wxCommandEvent& event );
     void OnCheckComponent( wxCommandEvent& event );
     void OnSelectBodyStyle( wxCommandEvent& event );

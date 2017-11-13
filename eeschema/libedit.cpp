@@ -143,54 +143,6 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, in
 }
 
 
-void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
-{
-    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
-
-    if( GetScreen()->IsModify()
-        && !IsOK( this, _( "The current symbol is not saved.\n\nDiscard current changes?" ) ) )
-        return;
-
-    wxString lib = GetCurLib();
-
-    // No current lib, ask user for the library to use.
-    if( lib.empty() )
-    {
-        SelectActiveLibrary();
-
-        lib = GetCurLib();
-
-        if( lib.empty() )
-            return;
-    }
-
-    // Get the name of the current part to preselect it
-    LIB_PART* current_part = GetCurPart();
-    LIB_ID id;
-
-    if( current_part )
-        id = current_part->GetLibId();
-
-    SCH_BASE_FRAME::HISTORY_LIST dummyHistoryList;
-    SCHLIB_FILTER filter;
-    filter.LoadFrom( lib );
-    auto sel = SelectComponentFromLibrary( &filter, dummyHistoryList, true, 0, 0, &id, false );
-
-    if( sel.LibId.GetLibItemName().empty() )
-        return;
-
-    GetScreen()->ClrModify();
-    m_lastDrawItem = m_drawItem = NULL;
-
-    // Delete previous library symbol, if any
-    SetCurPart( NULL );
-    m_aliasName.Empty();
-
-    // Load the new library symbol
-    LoadComponentFromCurrentLib( sel.LibId.GetLibItemName(), sel.Unit, sel.Convert );
-}
-
-
 bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& aLibrary )
 {
     wxString msg, rootName;
