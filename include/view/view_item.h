@@ -128,8 +128,13 @@ public:
 
     /**
      * Function ViewGetLOD()
-     * Returns the level of detail of the item. A level of detail is the minimal VIEW scale that
+     * Returns the level of detail (LOD) of the item.
+     * A level of detail is the minimal VIEW scale that
      * is sufficient for an item to be shown on a given layer.
+     * @param aLayer: current drawing layer
+     * @param aView: pointer to the VIEW device we are drawing on
+     * @return the level of detail. 0 always show the item, because the
+     * actual zoom level (or VIEW scale) is always > 0
      */
     virtual unsigned int ViewGetLOD( int aLayer, VIEW* aView ) const
     {

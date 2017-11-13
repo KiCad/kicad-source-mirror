@@ -430,10 +430,18 @@ void GBR_LAYOUT::DrawItemsDCodeID( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                 width /= 2;
             }
 
-            DrawGraphicText( aPanel->GetClipBox(), aDC, pos, aDrawColor, Line,
-                             orient, wxSize( width, width ),
-                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                             0, false, false );
+            // Avoid to draw text, if it is too small (size in pixel < 5 pixels)
+            // to be readable:
+            int size_pixel = aDC->LogicalToDeviceXRel( width );
+            const int threshold = 5;
+
+            if( size_pixel >= threshold )
+            {
+                DrawGraphicText( aPanel->GetClipBox(), aDC, pos, aDrawColor, Line,
+                                 orient, wxSize( width, width ),
+                                 GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                                 0, false, false );
+            }
         }
     }
 }

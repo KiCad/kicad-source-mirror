@@ -281,7 +281,9 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
     }
     case GBR_SPOT_MACRO:
     {
+        // Update the shape drawings and the bounding box coordiantes:
         code->GetMacro()->GetApertureMacroShape( this, m_Start );
+        // now the bounding box is valid:
         bbox = code->GetMacro()->GetBoundingBox();
         break;
     }
@@ -781,7 +783,10 @@ const BOX2I GERBER_DRAW_ITEM::ViewBBox() const
 
 unsigned int GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    // DCodes will be shown only if zoom is appropriate
+    // DCodes will be shown only if zoom is appropriate:
+    // Returns the level of detail of the item.
+    // A level of detail (LOD) is the minimal VIEW scale that
+    // is sufficient for an item to be shown on a given layer.
     if( IsDCodeLayer( aLayer ) )
     {
         int size = 0;
@@ -800,7 +805,10 @@ unsigned int GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) cons
             size = m_Size.x;
         }
 
-        return ( 100000000 / ( size + 1 ) );
+        // the level of details is chosen experimentally, to show
+        // only a readable text:
+        const int level = Millimeter2iu( 1000 );
+        return ( level / ( size + 1 ) );
     }
 
     // Other layers are shown without any conditions
