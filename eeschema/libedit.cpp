@@ -513,56 +513,26 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
     ClearMsgPanel();
 
-    wxFileName libFileName = fn;
-    wxFileName backupFileName = fn;
-
     // Copy .lib file to .bak.
-    if( libFileName.FileExists() )
-    {
-        backupFileName.SetExt( "bak" );
+    if( !backupFile( fn, "bak" ) )
+        return false;
 
-        if( backupFileName.FileExists() )
-            wxRemoveFile( backupFileName.GetFullPath() );
-
-        if( !wxCopyFile( libFileName.GetFullPath(), backupFileName.GetFullPath() ) )
-        {
-            libFileName.MakeAbsolute();
-            msg.Printf( _( "Failed to rename old symbol library to file '%s'" ),
-                  backupFileName.GetFullPath() );
-            DisplayError( this, msg );
-            return false;
-        }
-    }
-
-    wxFileName docFileName = libFileName;
+    wxFileName docFileName = fn;
     docFileName.SetExt( DOC_EXT );
 
-    // Copy .dcm file to .bck.      // handle
-    if( docFileName.FileExists() )
-    {
-        backupFileName.SetExt( "bck" );
+    // Copy .dcm file to .bck.
+    if( !backupFile( docFileName, "bck" ) )
+        return false;
 
-        if( backupFileName.FileExists() )
-            wxRemoveFile( backupFileName.GetFullPath() );
-
-        if( !wxCopyFile( docFileName.GetFullPath(), backupFileName.GetFullPath() ) )
-        {
-            msg.Printf( _( "Failed to save old library document to file '%s'" ),
-                        backupFileName.GetFullPath() );
-            DisplayError( this, msg );
-            return false;
-        }
-    }
-
-    if( !m_libMgr->SaveLibrary( aLibrary, libFileName.GetFullPath() ) )
+    if( !m_libMgr->SaveLibrary( aLibrary, fn.GetFullPath() ) )
     {
         msg.Printf( _( "Failed to save changes to symbol library file '%s'" ),
-                    libFileName.GetFullPath() );
+                    fn.GetFullPath() );
         DisplayErrorMessage( this, _( "Error saving library" ), msg );
         return false;
     }
 
-    msg.Printf( _( "Symbol library file '%s' saved" ), libFileName.GetFullPath() );
+    msg.Printf( _( "Symbol library file '%s' saved" ), fn.GetFullPath() );
     wxString msg1;
     msg1.Printf( _( "Symbol library documentation file '%s' saved" ), docFileName.GetFullPath() );
     AppendMsgPanel( msg, msg1, BLUE );

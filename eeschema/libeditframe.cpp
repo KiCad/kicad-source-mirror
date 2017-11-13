@@ -1552,6 +1552,28 @@ SYMBOL_LIB_TABLE* LIB_EDIT_FRAME::SelectSymLibTable()
 }
 
 
+bool LIB_EDIT_FRAME::backupFile( const wxFileName& aOriginalFile, const wxString& aBackupExt )
+{
+    if( aOriginalFile.FileExists() )
+    {
+        wxFileName backupFileName( aOriginalFile );
+        backupFileName.SetExt( "bck" );
+
+        if( backupFileName.FileExists() )
+            wxRemoveFile( backupFileName.GetFullPath() );
+
+        if( !wxCopyFile( aOriginalFile.GetFullPath(), backupFileName.GetFullPath() ) )
+        {
+            DisplayError( this, _( "Failed to save backup document to file " ) +
+                  backupFileName.GetFullPath() );
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
 void LIB_EDIT_FRAME::storeCurrentPart()
 {
     if( m_my_part && !GetCurLib().IsEmpty() && GetScreen()->IsModify() )

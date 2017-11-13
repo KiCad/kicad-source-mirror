@@ -698,6 +698,9 @@ public:
     ///> Helper screen used when no part is loaded
     SCH_SCREEN* m_dummyScreen;
 
+    ///> Creates a backup copy of a file with requested extension
+    bool backupFile( const wxFileName& aOriginalFile, const wxString& aBackupExt );
+
     // TODO
     // TODO move to tree pane?
     LIB_PART* getTargetPart() const;
