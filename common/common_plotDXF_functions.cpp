@@ -94,6 +94,19 @@ static const struct
     { "YELLOW4",    2 }
 };
 
+/**
+ * Line types in the boilerplate DXF header.  The
+ * element indices correspond to the eeschema line
+ * types.
+ */
+static const char *dxf_lines[] =
+{
+    [ PLOTDASHTYPE_SOLID ]   = "CONTINUOUS",
+    [ PLOTDASHTYPE_DASH ]    = "DASHED",
+    [ PLOTDASHTYPE_DOT ]     = "DOTTED",
+    [ PLOTDASHTYPE_DASHDOT ] = "DASHDOT"
+};
+
 
 // A helper function to create a color name acceptable in DXF files
 // DXF files do not use a RGB definition
@@ -144,7 +157,7 @@ bool DXF_PLOTTER::StartPlot()
 
     // DXF HEADER - Boilerplate
     // Defines the minimum for drawing i.e. the angle system and the
-    // continuous linetype
+    // 4 linetypes (CONTINUOUS, DOTDASH, DASHED and DOTTED)
     fputs( "  0\n"
            "SECTION\n"
            "  2\n"
@@ -172,9 +185,11 @@ bool DXF_PLOTTER::StartPlot()
            "  2\n"
            "LTYPE\n"
            "  70\n"
-           "1\n"
+           "4\n"
            "  0\n"
            "LTYPE\n"
+           "  5\n"
+           "40F\n"
            "  2\n"
            "CONTINUOUS\n"
            "  70\n"
@@ -187,6 +202,70 @@ bool DXF_PLOTTER::StartPlot()
            "0\n"
            "  40\n"
            "0.0\n"
+           "  0\n"
+           "LTYPE\n"
+           "  5\n"
+           "410\n"
+           "  2\n"
+           "DASHDOT\n"
+           " 70\n"
+           "0\n"
+           "  3\n"
+           "Dash Dot ____ _ ____ _\n"
+           " 72\n"
+           "65\n"
+           " 73\n"
+           "4\n"
+           " 40\n"
+           "2.0\n"
+           " 49\n"
+           "1.25\n"
+           " 49\n"
+           "-0.25\n"
+           " 49\n"
+           "0.25\n"
+           " 49\n"
+           "-0.25\n"
+           "  0\n"
+           "LTYPE\n"
+           "  5\n"
+           "411\n"
+           "  2\n"
+           "DASHED\n"
+           " 70\n"
+           "0\n"
+           "  3\n"
+           "Dashed __ __ __ __ __\n"
+           " 72\n"
+           "65\n"
+           " 73\n"
+           "2\n"
+           " 40\n"
+           "0.75\n"
+           " 49\n"
+           "0.5\n"
+           " 49\n"
+           "-0.25\n"
+           "  0\n"
+           "LTYPE\n"
+           "  5\n"
+           "43B\n"
+           "  2\n"
+           "DOTTED\n"
+           " 70\n"
+           "0\n"
+           "  3\n"
+           "Dotted .  .  .  .\n"
+           " 72\n"
+           "65\n"
+           " 73\n"
+           "2\n"
+           " 40\n"
+           "0.2\n"
+           " 49\n"
+           "0.0\n"
+           " 49\n"
+           "-0.2\n"
            "  0\n"
            "ENDTAB\n",
             outputFile );
@@ -483,22 +562,22 @@ void DXF_PLOTTER::PenTo( const wxPoint& pos, char plume )
 
     if( penLastpos != pos && plume == 'D' )
     {
+        wxASSERT( m_currentLineType >= 0 && m_currentLineType < 4 );
         // DXF LINE
         wxString cname = getDXFColorName( m_currentColor );
-        fprintf( outputFile, "0\nLINE\n8\n%s\n10\n%g\n20\n%g\n11\n%g\n21\n%g\n",
-                 TO_UTF8( cname ),
+        const char *lname = dxf_lines[ m_currentLineType ];
+        fprintf( outputFile, "0\nLINE\n8\n%s\n6\n%s\n10\n%g\n20\n%g\n11\n%g\n21\n%g\n",
+                 TO_UTF8( cname ), lname,
                  pen_lastpos_dev.x, pen_lastpos_dev.y, pos_dev.x, pos_dev.y );
     }
     penLastpos = pos;
 }
 
 
-/**
- * Dashed lines are not (yet) supported by DXF_PLOTTER
- */
 void DXF_PLOTTER::SetDash( int dashed )
 {
-    // NOP for now
+    wxASSERT( dashed >= 0 && dashed < 4 );
+    m_currentLineType = dashed;
 }
 
 

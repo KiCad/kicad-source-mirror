@@ -1224,6 +1224,7 @@ public:
     {
         textAsLines = true;
         m_currentColor = COLOR4D::BLACK;
+        m_currentLineType = 0;
     }
 
     virtual PlotFormat GetPlotterType() const override
@@ -1309,6 +1310,7 @@ public:
 protected:
     bool textAsLines;
     COLOR4D m_currentColor;
+    int m_currentLineType;
 };
 
 class TITLE_BLOCK;
