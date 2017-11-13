@@ -34,7 +34,7 @@
 #include <schframe.h>
 
 #include <general.h>
-#include <protos.h>
+#include <list_operations.h>
 #include <sch_bus_entry.h>
 #include <sch_marker.h>
 #include <sch_line.h>

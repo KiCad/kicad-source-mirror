@@ -24,7 +24,12 @@
 #ifndef LIST_OPERATIONS_H
 #define LIST_OPERATIONS_H
 
+namespace KIGFX {
+class COLOR4D;
+}
+
 class wxPoint;
+class wxDC;
 class EDA_DRAW_PANEL;
 class SCH_ITEM;
 class SCH_SCREEN;
@@ -68,6 +73,9 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
  *     (timestamp and sheet name)
  *      aClone must be false. use true only is undo/redo duplications
  */
-SCH_ITEM* DuplicateStruct( SCH_ITEM* aDrawStruct, bool aClone );
+SCH_ITEM* DuplicateStruct( SCH_ITEM* aDrawStruct, bool aClone = false );
+
+void DrawDanglingSymbol( EDA_DRAW_PANEL* panel, wxDC* DC,
+                         const wxPoint& pos, const KIGFX::COLOR4D& Color );
 
 #endif /* LIST_OPERATIONS_H */
