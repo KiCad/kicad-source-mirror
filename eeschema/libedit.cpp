@@ -353,39 +353,38 @@ void LIB_EDIT_FRAME::OnCreateNewPart( wxCommandEvent& event )
         return;
     }
 
-    LIB_PART* new_part = new LIB_PART( name );
-    m_aliasName = new_part->GetName();
+    LIB_PART new_part( name );      // do not create part on the heap, it will be buffered soon
+    m_aliasName = name;
+    new_part.GetReferenceField().SetText( dlg.GetReference() );
+    new_part.SetUnitCount( dlg.GetUnitCount() );
 
-    new_part->GetReferenceField().SetText( dlg.GetReference() );
-    new_part->SetUnitCount( dlg.GetUnitCount() );
-
-    // Initialize new_part->m_TextInside member:
+    // Initialize new_part.m_TextInside member:
     // if 0, pin text is outside the body (on the pin)
     // if > 0, pin text is inside the body
-    new_part->SetConversion( dlg.GetAlternateBodyStyle() );
+    new_part.SetConversion( dlg.GetAlternateBodyStyle() );
     SetShowDeMorgan( dlg.GetAlternateBodyStyle() );
 
     if( dlg.GetPinNameInside() )
     {
-        new_part->SetPinNameOffset( dlg.GetPinTextPosition() );
+        new_part.SetPinNameOffset( dlg.GetPinTextPosition() );
 
-        if( new_part->GetPinNameOffset() == 0 )
-            new_part->SetPinNameOffset( 1 );
+        if( new_part.GetPinNameOffset() == 0 )
+            new_part.SetPinNameOffset( 1 );
     }
     else
     {
-        new_part->SetPinNameOffset( 0 );
+        new_part.SetPinNameOffset( 0 );
     }
 
-    ( dlg.GetPowerSymbol() ) ? new_part->SetPower() : new_part->SetNormal();
-    new_part->SetShowPinNumbers( dlg.GetShowPinNumber() );
-    new_part->SetShowPinNames( dlg.GetShowPinName() );
-    new_part->LockUnits( dlg.GetLockItems() );
+    ( dlg.GetPowerSymbol() ) ? new_part.SetPower() : new_part.SetNormal();
+    new_part.SetShowPinNumbers( dlg.GetShowPinNumber() );
+    new_part.SetShowPinNames( dlg.GetShowPinName() );
+    new_part.LockUnits( dlg.GetLockItems() );
 
     if( dlg.GetUnitCount() < 2 )
-        new_part->LockUnits( false );
+        new_part.LockUnits( false );
 
-    m_libMgr->UpdatePart( new_part, lib );
+    m_libMgr->UpdatePart( &new_part, lib );
     loadPart( name, lib, 1 );
 }
 
