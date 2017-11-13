@@ -72,7 +72,7 @@ public:
      *
      * @param aText is the text to be drawn.
      * @param aPosition is the text position in world coordinates.
-     * @param aRotationAngle is the text rotation angle.
+     * @param aRotationAngle is the text rotation angle in radians.
      */
     void Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRotationAngle );
 

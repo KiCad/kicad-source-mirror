@@ -136,6 +136,21 @@ public:
     }
 
     /**
+     * Returns the best size and orientation to display the D_Code on screen
+     * @param aSize is a reference to return the text size
+     * @param aPos is a reference to return the text position
+     * @param aOrientation is a reference to return the text orientation
+     * @return true if the parameters can be calculated, false for unknown D_Code
+     */
+    bool GetTextD_CodePrms( int& aSize, wxPoint& aPos, double& aOrientation );
+
+    /**
+     * Returns the best size and orientation to display the D_Code in GAL
+     * aOrientation is returned in radians
+     */
+    bool GetTextD_CodePrms( double& aSize, VECTOR2D& aPos, double& aOrientation );
+
+    /**
      * Function HasNegativeItems
      * @return true if this item or at least one shape (when using aperture macros
      *    must be drawn in background color

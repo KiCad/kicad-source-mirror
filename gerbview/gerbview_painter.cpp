@@ -189,29 +189,13 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
         wxString codeText;
         VECTOR2D textPosition;
         double textSize;
+        double orient;
 
-        if( aItem->GetDcodeDescr() )
-            textSize = aItem->GetDcodeDescr()->GetShapeDim( aItem ) / 3.0;
-        else
-            textSize = std::min( aItem->m_Size.x, aItem->m_Size.y ) / 2.0;
-
-        if( aItem->m_Shape == GBR_ARC )
-        {
-            textPosition = start;
-        }
-        else if( aItem->m_Flashed )
-        {
-            BOX2I bb = aItem->ViewBBox();
-            textPosition = bb.Centre();
-        }
-        else
-        {
-            textPosition.x = ( start.x + end.x ) / 2;
-            textPosition.y = ( start.y + end.y ) / 2;
-        }
+        if( !aItem->GetTextD_CodePrms( textSize, textPosition, orient ) )
+            return;
 
         color = m_gerbviewSettings.GetColor( aItem, aLayer );
-        codeText.Printf( wxT( "D%d" ), aItem->m_DCode );
+        codeText.Printf( "D%d", aItem->m_DCode );
 
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( false );
@@ -224,7 +208,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
         m_gal->SetGlyphSize( VECTOR2D( textSize, textSize) );
         m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
         m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-        m_gal->BitmapText( codeText, textPosition, 0 );
+        m_gal->BitmapText( codeText, textPosition, orient );
 
         return;
     }

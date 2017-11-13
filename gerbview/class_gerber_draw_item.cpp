@@ -85,6 +85,72 @@ int GERBER_DRAW_ITEM::GetLayer() const
 }
 
 
+bool GERBER_DRAW_ITEM::GetTextD_CodePrms( int& aSize, wxPoint& aPos, double& aOrientation )
+{
+    // calculate the best size and orientation of the D_Code text
+
+    if( m_DCode <= 0 )
+        return false;       // No D_Code for this item
+
+    if( m_Flashed || m_Shape == GBR_ARC )
+    {
+        aPos = m_Start;
+    }
+    else    // it is a line:
+    {
+        aPos = ( m_Start + m_End) / 2;
+    }
+
+    aPos = GetABPosition( aPos );
+
+    int size;   // the best size for the text
+
+    if( GetDcodeDescr() )
+        size = GetDcodeDescr()->GetShapeDim( this );
+    else
+        size = std::min( m_Size.x, m_Size.y );
+
+    aOrientation = TEXT_ANGLE_HORIZ;
+
+    if( m_Flashed )
+    {
+        // A reasonable size for text is min_dim/3 because most of time this text has 3 chars.
+        aSize = size / 3;
+    }
+    else        // this item is a line
+    {
+        wxPoint delta = m_Start - m_End;
+
+        aOrientation = RAD2DECIDEG( atan2( (double)delta.y, (double)delta.x ) );
+        NORMALIZE_ANGLE_90( aOrientation );
+
+        // A reasonable size for text is size/2 because text needs margin below and above it.
+        // a margin = size/4 seems good, expecting the line len is large enough to show 3 chars,
+        // that is the case most of time.
+        aSize = size / 2;
+    }
+
+    return true;
+}
+
+
+bool GERBER_DRAW_ITEM::GetTextD_CodePrms( double& aSize, VECTOR2D& aPos, double& aOrientation )
+{
+    // aOrientation is returned in radians
+    int size;
+    wxPoint pos;
+
+    if( ! GetTextD_CodePrms( size, pos, aOrientation ) )
+        return false;
+
+    aPos = pos;
+    aSize = (double) size;
+    aOrientation = DECIDEG2RAD( aOrientation );
+
+    return true;
+}
+
+
 wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition ) const
 {
     /* Note: RS274Xrevd_e is obscure about the order of transforms:
@@ -807,7 +873,7 @@ unsigned int GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) cons
 
         // the level of details is chosen experimentally, to show
         // only a readable text:
-        const int level = Millimeter2iu( 1000 );
+        const int level = Millimeter2iu( 500 );
         return ( level / ( size + 1 ) );
     }
 
