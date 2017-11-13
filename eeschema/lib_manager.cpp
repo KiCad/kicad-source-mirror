@@ -136,6 +136,47 @@ bool LIB_MANAGER::FlushLibrary( const wxString& aLibrary )
 }
 
 
+bool LIB_MANAGER::SaveLibrary( const wxString& aLibrary, const wxString& aFileName )
+{
+    wxCHECK( LibraryExists( aLibrary ), false );
+    wxFileName fn( aFileName );
+    wxCHECK( !fn.FileExists() || fn.IsFileWritable(), false );
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+    bool res = true;    // assume all libraries are successfully saved
+
+    auto it = m_libs.find( aLibrary );
+
+    if( it != m_libs.end() )
+    {
+        // Handle buffered library
+        LIB_BUFFER& libBuf = it->second;
+
+        const auto& partBuffers = libBuf.GetBuffers();
+
+        for( const auto& partBuf : partBuffers )
+        {
+            if( !libBuf.SaveBuffer( partBuf, &*pi, true ) )
+            {
+                // Something went wrong, but try to save other libraries
+                res = false;
+            }
+        }
+    }
+    else
+    {
+        // Handle original library
+        PROPERTIES properties;
+        properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
+
+        for( auto part : getOriginalParts( aLibrary ) )
+            pi->SaveSymbol( aLibrary, new LIB_PART( *part ), &properties );
+    }
+
+    pi->SaveLibrary( aFileName );
+    return res;
+}
+
+
 bool LIB_MANAGER::IsLibraryModified( const wxString& aLibrary ) const
 {
     wxCHECK( LibraryExists( aLibrary ), false );
@@ -465,6 +506,22 @@ bool LIB_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate )
 }
 
 
+std::set<LIB_PART*> LIB_MANAGER::getOriginalParts( const wxString& aLibrary )
+{
+    wxArrayString aliases;
+    std::set<LIB_PART*> parts;
+    m_symbolTable->EnumerateSymbolLib( aLibrary, aliases );
+
+    for( const auto& aliasName : aliases )
+    {
+        LIB_ALIAS* alias = m_symbolTable->LoadSymbol( aLibrary, aliasName );
+        parts.insert( alias->GetPart() );
+    }
+
+    return parts;
+}
+
+
 LIB_MANAGER::LIB_BUFFER& LIB_MANAGER::getLibraryBuffer( const wxString& aLibrary )
 {
     auto it = m_libs.find( aLibrary );
@@ -472,24 +529,11 @@ LIB_MANAGER::LIB_BUFFER& LIB_MANAGER::getLibraryBuffer( const wxString& aLibrary
     if( it != m_libs.end() )
         return it->second;
 
-    wxArrayString aliases;
     auto ret = m_libs.emplace( aLibrary, LIB_BUFFER( aLibrary ) );
     LIB_BUFFER& buf = ret.first->second;
-    m_symbolTable->EnumerateSymbolLib( aLibrary, aliases );
-    // set collecting the processed LIB_PARTs
-    std::set<LIB_PART*> processed;
 
-    for( const auto& aliasName : aliases )
-    {
-        LIB_ALIAS* alias = m_symbolTable->LoadSymbol( aLibrary, aliasName );
-        LIB_PART* part = alias->GetPart();
-
-        if( !processed.count( part ) )
-        {
-            buf.CreateBuffer( new LIB_PART( *part, nullptr ), new SCH_SCREEN( &m_frame.Kiway() ) );
-            processed.insert( part );
-        }
-    }
+    for( auto part : getOriginalParts( aLibrary ) )
+        buf.CreateBuffer( new LIB_PART( *part, nullptr ), new SCH_SCREEN( &m_frame.Kiway() ) );
 
     return buf;
 }
@@ -555,7 +599,6 @@ bool LIB_MANAGER::LIB_BUFFER::CreateBuffer( LIB_PART* aCopy, SCH_SCREEN* aScreen
 
     // Set the parent library name,
     // otherwise it is empty as no library has been given as the owner during object construction
-    // TODO create a class derived from 
     LIB_ID& libId = (LIB_ID&) aCopy->GetLibId();
     libId.SetLibNickname( m_libName );
     ++m_hash;
@@ -593,23 +636,34 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
         SYMBOL_LIB_TABLE* aLibTable )
 {
     wxCHECK( aPartBuf, false );
+    LIB_PART* part = aPartBuf->GetPart();
+    wxCHECK( part, false );
+    wxCHECK( aLibTable->SaveSymbol( m_libName, new LIB_PART( *part ) ) != SYMBOL_LIB_TABLE::SAVE_OK, false );
 
+    aPartBuf->GetScreen()->ClrModify();
+    aPartBuf->SetOriginal( new LIB_PART( *part ) );
+    ++m_hash;
+    return true;
+}
+
+
+bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf,
+        SCH_PLUGIN* aPlugin, bool aBuffer )
+{
+    wxCHECK( aPartBuf, false );
     LIB_PART* part = aPartBuf->GetPart();
     wxCHECK( part, false );
 
-    // TODO Enable buffering to avoid to disable too frequent file saves
-    //PROPERTIES properties;
-    //properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
+    // set properties to prevent save file on every symbol save
+    PROPERTIES properties;
+    properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
 
-    if( aLibTable->SaveSymbol( m_libName, new LIB_PART( *part ) ) == SYMBOL_LIB_TABLE::SAVE_OK )
-    {
-        aPartBuf->GetScreen()->ClrModify();
-        aPartBuf->SetOriginal( new LIB_PART( *part ) );
-        ++m_hash;
-        return true;
-    }
-
-    return false;
+    // TODO there is no way to check if symbol has been successfully saved
+    aPlugin->SaveSymbol( m_libName, new LIB_PART( *part ), aBuffer ? &properties : nullptr );
+    aPartBuf->GetScreen()->ClrModify();
+    aPartBuf->SetOriginal( new LIB_PART( *part ) );
+    ++m_hash;
+    return true;
 }
 
 

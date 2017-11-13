@@ -38,6 +38,7 @@ class LIB_PART;
 class LIB_BUFFER;
 class PART_LIB;
 class SCH_SCREEN;
+class SCH_PLUGIN;
 class LIB_EDIT_FRAME;
 class SYMBOL_LIB_TABLE;
 
@@ -162,6 +163,14 @@ public:
      * @return True on success, false otherwise.
      */
     bool FlushLibrary( const wxString& aLibrary );
+
+    /**
+     * Saves library to a file, including unsaved changes.
+     * @param aLibrary is the library name.
+     * @param aFileName is the target file name.
+     * @return True on success, false otherwise.
+     */
+    bool SaveLibrary( const wxString& aLibrary, const wxString& aFileName );
 
     /**
      * Saves all changes to libraries.
@@ -328,8 +337,13 @@ private:
             m_deleted.clear();
         }
 
-        ///> Saves stored modifications to a Symbol Library Table
+        ///> Saves stored modifications to Symbol Lib Table. It may result in saving the symbol
+        ///> to disk as well, depending on the row properties.
         bool SaveBuffer( PART_BUFFER::PTR aPartBuf, SYMBOL_LIB_TABLE* aLibTable );
+
+        ///> Saves stored modificatiosn using a plugin. aBuffer decides whether the changes
+        ///> should be cached or stored directly to the disk (for SCH_LEGACY_PLUGIN).
+        bool SaveBuffer( PART_BUFFER::PTR aPartBuf, SCH_PLUGIN* aPlugin, bool aBuffer );
 
         ///> Returns a part buffer with LIB_PART holding a particular alias
         PART_BUFFER::PTR GetBuffer( const wxString& aAlias ) const
@@ -370,6 +384,9 @@ private:
 
         friend class PART_BUFFER;
     };
+
+    ///> Returns a set of LIB_PART objects belonging to the original library
+    std::set<LIB_PART*> getOriginalParts( const wxString& aLibrary );
 
     ///> Returns an existing library buffer or creates one to using
     ///> Symbol Library Table to get the original data.

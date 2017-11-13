@@ -535,10 +535,9 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     }
 
     wxFileName docFileName = libFileName;
-
     docFileName.SetExt( DOC_EXT );
 
-    // Copy .dcm file to .bck.
+    // Copy .dcm file to .bck.      // handle
     if( docFileName.FileExists() )
     {
         backupFileName.SetExt( "bck" );
@@ -555,39 +554,12 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
         }
     }
 
-    // Copy the library and document files to the new destination library files.
-    if( aNewFile )
+    if( !m_libMgr->SaveLibrary( aLibrary, libFileName.GetFullPath() ) )
     {
-        wxFileName src = prj.SchSymbolLibTable()->GetFullURI( GetCurLib() );
-
-        if( !wxCopyFile( src.GetFullPath(), libFileName.GetFullPath() ) )
-        {
-            msg.Printf( _( "Failed to copy symbol library file '%s'" ), libFileName.GetFullPath() );
-            DisplayError( this, msg );
-            return false;
-        }
-
-        src.SetExt( DOC_EXT );
-
-        if( !wxCopyFile( src.GetFullPath(), docFileName.GetFullPath() ) )
-        {
-            msg.Printf( _( "Failed to copy symbol library document file '%s'" ),
-                        docFileName.GetFullPath() );
-            DisplayError( this, msg );
-            return false;
-        }
-    }
-
-    // Update symbol changes in library.
-    if( GetScreen()->IsModify() )
-    {
-        if( !m_libMgr->FlushLibrary( aLibrary ) )
-        {
-            msg.Printf( _( "Failed to save changes to symbol library file '%s'" ),
-                        libFileName.GetFullPath() );
-            DisplayErrorMessage( this, _( "Error saving library" ), msg );
-            return false;
-        }
+        msg.Printf( _( "Failed to save changes to symbol library file '%s'" ),
+                    libFileName.GetFullPath() );
+        DisplayErrorMessage( this, _( "Error saving library" ), msg );
+        return false;
     }
 
     msg.Printf( _( "Symbol library file '%s' saved" ), libFileName.GetFullPath() );
