@@ -39,6 +39,7 @@
 #include <lib_draw_item.h>
 #include <lib_collectors.h>
 
+#include <core/optional.h>
 
 class SCH_EDIT_FRAME;
 class SYMBOL_LIB_TABLE;
@@ -288,6 +289,9 @@ public:
      */
     void OnRemovePart( wxCommandEvent& aEvent );
 
+    void OnCopyCutPart( wxCommandEvent& aEvent );
+    void OnPasteDuplicatePart( wxCommandEvent& aEvent );
+
     void OnSelectAlias( wxCommandEvent& event );
     void OnSelectPart( wxCommandEvent& event );
 
@@ -317,6 +321,7 @@ public:
     void OnUpdateEditingPart( wxUpdateUIEvent& event );
     void OnUpdatePartModified( wxUpdateUIEvent& aEvent );
     void OnUpdateLibModified( wxUpdateUIEvent& aEvent );
+    void OnUpdateClipboardNotEmpty( wxUpdateUIEvent& aEvent );
     void OnUpdateUndo( wxUpdateUIEvent& event );
     void OnUpdateRedo( wxUpdateUIEvent& event );
     void OnUpdateSaveLib( wxUpdateUIEvent& event );
@@ -713,6 +718,13 @@ public:
     bool isCurrentPart( const LIB_ID& aLibId ) const;
 
     void emptyScreen();
+
+private:
+    ///> Renames LIB_PART aliases to avoid conflicts before adding a component to a library
+    void fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibrary );
+
+    // Copy/cut/paste buffer
+    std::unique_ptr<LIB_PART> m_copiedPart;
 
     DECLARE_EVENT_TABLE()
 };

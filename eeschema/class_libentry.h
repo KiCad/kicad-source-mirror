@@ -251,7 +251,7 @@ class LIB_PART : public EDA_ITEM
 private:
     void deleteAllFields();
 
-    // LIB_PART()  { }     // not legal
+
 
 public:
 

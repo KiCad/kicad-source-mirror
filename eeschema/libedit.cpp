@@ -375,6 +375,81 @@ void LIB_EDIT_FRAME::OnRemovePart( wxCommandEvent& aEvent )
 }
 
 
+void LIB_EDIT_FRAME::OnCopyCutPart( wxCommandEvent& aEvent )
+{
+    int unit = 0;
+    LIB_ID partId = m_treePane->GetCmpTree()->GetSelectedLibId( &unit );
+    LIB_PART* part = m_libMgr->GetBufferedPart( partId.GetLibItemName(), partId.GetLibNickname() );
+
+    if( !part )
+        return;
+
+    LIB_ID libId = getTargetLibId();
+    m_copiedPart.reset( new LIB_PART( *part ) );
+
+    if( aEvent.GetId() == ID_LIBEDIT_CUT_PART )
+    {
+        if( isCurrentPart( libId ) )
+            emptyScreen();
+
+        m_libMgr->RemovePart( libId.GetLibItemName(), libId.GetLibNickname() );
+    }
+}
+
+
+void LIB_EDIT_FRAME::OnPasteDuplicatePart( wxCommandEvent& aEvent )
+{
+    int unit = 0;
+    LIB_ID libId = m_treePane->GetCmpTree()->GetSelectedLibId( &unit );
+    wxString lib = libId.GetLibNickname();
+
+    if( !m_libMgr->LibraryExists( lib ) )
+        return;
+
+    LIB_PART* srcPart = nullptr;
+
+    if( aEvent.GetId() == ID_LIBEDIT_DUPLICATE_PART )
+        srcPart = m_libMgr->GetBufferedPart( libId.GetLibItemName(), lib );
+    else if( aEvent.GetId() == ID_LIBEDIT_PASTE_PART )
+        srcPart = m_copiedPart.get();
+    else
+        wxFAIL;
+
+    if( !srcPart )
+        return;
+
+    LIB_PART newPart( *srcPart );
+    fixDuplicateAliases( &newPart, lib );
+    m_libMgr->UpdatePart( &newPart, lib );
+}
+
+
+void LIB_EDIT_FRAME::fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibrary )
+{
+    wxString newName;
+
+    for( int i = 0; i < aPart->GetAliasCount(); ++i )
+    {
+        LIB_ALIAS* alias = aPart->GetAlias( i );
+        int sfx = 0;
+        newName = alias->GetName();
+
+        while( m_libMgr->PartExists( newName, aLibrary ) )
+        {
+            wxString suffix = ( sfx == 0 ) ? wxT( " (copy)" )
+                : wxString::Format( _( " (copy %d)" ), sfx );
+            newName = alias->GetName() + suffix;
+            ++sfx;
+        }
+
+        if( i == 0 )
+            aPart->SetName( newName );
+        else
+            alias->SetName( newName );
+    }
+}
+
+
 void LIB_EDIT_FRAME::OnRevertPart( wxCommandEvent& aEvent )
 {
     LIB_ID libId = getTargetLibId();

@@ -201,6 +201,10 @@ enum id_eeschema_frm
     ID_LIBEDIT_SAVE_PART,
     ID_LIBEDIT_REVERT_PART,
     ID_LIBEDIT_REMOVE_PART,
+    ID_LIBEDIT_CUT_PART,
+    ID_LIBEDIT_COPY_PART,
+    ID_LIBEDIT_PASTE_PART,
+    ID_LIBEDIT_DUPLICATE_PART,
 
     /* Library editor horizontal toolbar IDs. */
     ID_DE_MORGAN_NORMAL_BUTT,

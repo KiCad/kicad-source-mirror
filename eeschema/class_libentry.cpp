@@ -175,7 +175,6 @@ struct null_deleter
     }
 };
 
-
 LIB_PART::LIB_PART( const wxString& aName, PART_LIB* aLibrary ) :
     EDA_ITEM( LIB_PART_T ),
     m_me( this, null_deleter() )
