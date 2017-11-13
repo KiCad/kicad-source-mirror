@@ -74,11 +74,13 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
     newFieldValue = dlg.GetText();
     wxString fieldText = aField->GetFullText( m_unit );
 
+    bool creatingNewComponent =  aField->GetId() == VALUE && newFieldValue != aField->GetText();
+
     /* If the value field is changed, this is equivalent to creating a new component from
      * the old one.  Rename the component and remove any conflicting aliases to prevent name
      * errors when updating the library.
      */
-    if( aField->GetId() == VALUE && newFieldValue != aField->GetText() )
+    if( creatingNewComponent )
     {
         wxString msg;
         wxString lib = GetCurLib();
@@ -168,11 +170,13 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
         m_libMgr->UpdatePart( parent, lib, fieldText );
     }
 
-    dlg.UpdateField( aField );
 
-    if( !aField->InEditMode() )
+    if( !aField->InEditMode() && !creatingNewComponent )
+    {
         SaveCopyInUndoList( parent );
+    }
 
+    dlg.UpdateField( aField );
     m_canvas->Refresh();
 
     OnModify();
