@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -437,6 +437,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         m_canvas->DrawGridAxis( aDC, GR_XOR, GetBoard()->GetGridOrigin() );
         SetGridOrigin( GetCrossHairPosition() );
         m_canvas->DrawGridAxis( aDC, GR_COPY, GetBoard()->GetGridOrigin() );
+        OnModify();
         break;
 
     case ID_PCB_DRAW_VIA_BUTT:
