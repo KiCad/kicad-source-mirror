@@ -233,9 +233,21 @@ void SVG_PLOTTER::setSVGPlotStyle()
              m_pen_rgb_color, pen_w  );
     fputs( "stroke-linecap:round; stroke-linejoin:round;", outputFile );
 
-    if( m_dashed )
+    switch( m_dashed )
+    {
+    case PLOTDASHTYPE_DASH:
         fprintf( outputFile, "stroke-dasharray:%g,%g;",
                  GetDashMarkLenIU(), GetDashGapLenIU() );
+        break;
+    case PLOTDASHTYPE_DOT:
+        fprintf( outputFile, "stroke-dasharray:%g,%g;",
+                 GetDotMarkLenIU(), GetDashGapLenIU() );
+        break;
+    case PLOTDASHTYPE_DASHDOT:
+        fprintf( outputFile, "stroke-dasharray:%g,%g,%g,%g;",
+                GetDashMarkLenIU(), GetDashGapLenIU(), GetDotMarkLenIU(), GetDashGapLenIU() );
+        break;
+    }
 
     fputs( "\">\n", outputFile );
 
@@ -289,7 +301,7 @@ void SVG_PLOTTER::emitSetRGBColor( double r, double g, double b )
 /**
  * SVG supports dashed lines
  */
-void SVG_PLOTTER::SetDash( bool dashed )
+void SVG_PLOTTER::SetDash( int dashed )
 {
     if( m_dashed != dashed )
     {

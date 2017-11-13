@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <cassert>
 #include <dialog_edit_line_style.h>
 
 
@@ -29,6 +30,7 @@ DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE( wxWindow* parent ) :
     DIALOG_EDIT_LINE_STYLE_BASE( parent )
 {
     m_sdbSizer1Apply->SetLabel( _( "Default" ) );
+
     m_lineStyle->SetSelection( 0 );
 
     m_lineWidth->SetFocus();
@@ -57,39 +59,24 @@ void DIALOG_EDIT_LINE_STYLE::resetDefaults( wxCommandEvent& event )
 
 void DIALOG_EDIT_LINE_STYLE::SetColor( const COLOR4D& aColor )
 {
+    assert( aColor.r >= 0.0 && aColor.r <= 1.0 );
+    assert( aColor.g >= 0.0 && aColor.g <= 1.0 );
+    assert( aColor.b >= 0.0 && aColor.b <= 1.0 );
+    assert( aColor.a >= 0.0 && aColor.a <= 1.0 );
+
     m_colorPicker->SetColour( aColor.ToColour() );
 }
 
 
 void DIALOG_EDIT_LINE_STYLE::SetStyle( const int aStyle )
 {
-    switch( aStyle )
-    {
-    case wxPENSTYLE_SHORT_DASH:
-        m_lineStyle->SetSelection( 1 );
-        break;
-    case wxPENSTYLE_DOT:
-        m_lineStyle->SetSelection( 2 );
-        break;
-    case wxPENSTYLE_DOT_DASH:
-        m_lineStyle->SetSelection( 3 );
-        break;
-    default:
-        m_lineStyle->SetSelection( 0 );
-        break;
-    }
+    assert( aStyle >= 0 && aStyle < 4 );
+
+    m_lineStyle->SetSelection( aStyle );
 }
 
 
 int DIALOG_EDIT_LINE_STYLE::GetStyle()
 {
-    const int retval[4] =
-    {
-            wxPENSTYLE_SOLID,
-            wxPENSTYLE_SHORT_DASH,
-            wxPENSTYLE_DOT,
-            wxPENSTYLE_DOT_DASH,
-    };
-
-    return retval[ m_lineStyle->GetSelection() ];
+    return m_lineStyle->GetSelection();
 }

@@ -50,6 +50,9 @@ class SCH_LINE : public SCH_ITEM
     COLOR4D m_color;            ///< Line color
 
 public:
+
+    static const enum wxPenStyle PenStyle[];
+
     SCH_LINE( const wxPoint& pos = wxPoint( 0, 0 ), int layer = LAYER_NOTES );
 
     SCH_LINE( const SCH_LINE& aLine );
@@ -79,11 +82,11 @@ public:
 
     void SetEndPoint( const wxPoint& aPosition ) { m_end = aPosition; }
 
-    enum wxPenStyle GetDefaultStyle() const;
+    int GetDefaultStyle() const;
 
     void SetLineStyle( const int aStyle );
 
-    enum wxPenStyle GetLineStyle() const;
+    int GetLineStyle() const;
 
     void SetLineColor( const COLOR4D aColor );
 

@@ -545,14 +545,26 @@ void PS_PLOTTER::emitSetRGBColor( double r, double g, double b )
 /**
  * Postscript supports dashed lines
  */
-void PS_PLOTTER::SetDash( bool dashed )
+void PS_PLOTTER::SetDash( int dashed )
 {
-    wxASSERT( outputFile );
-    if( dashed )
+    switch( dashed )
+    {
+    case PLOTDASHTYPE_DASH:
         fprintf( outputFile, "[%d %d] 0 setdash\n",
-                 (int) GetDashMarkLenIU(), (int) GetDashGapLenIU() );
-    else
+                (int) GetDashMarkLenIU(), (int) GetDashGapLenIU() );
+        break;
+    case PLOTDASHTYPE_DOT:
+        fprintf( outputFile, "[%d %d] 0 setdash\n",
+                (int) GetDotMarkLenIU(), (int) GetDashGapLenIU() );
+        break;
+    case PLOTDASHTYPE_DASHDOT:
+        fprintf( outputFile, "[%d %d %d %d] 0 setdash\n",
+                (int) GetDashMarkLenIU(), (int) GetDashGapLenIU(),
+                (int) GetDotMarkLenIU(), (int) GetDashGapLenIU() );
+        break;
+    default:
         fputs( "solidline\n", outputFile );
+    }
 }
 
 

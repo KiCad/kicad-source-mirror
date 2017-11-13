@@ -63,8 +63,9 @@ PLOTTER::PLOTTER( )
     // Temporary init to avoid not initialized vars, will be set later
     m_IUsPerDecimil = 1;        // will be set later to the actual value
     iuPerDeviceUnit = 1;        // will be set later to the actual value
-    m_dashMarkLength_mm = 0.5;  // Dashed line parameter in mm: segment
-    m_dashGapLength_mm = 0.25;   // Dashed line parameter in mm: gap
+    m_dotMarkLength_mm = 0.1;   // Dotted line parameter in mm: segment
+                                // Dashed line parameter is 5 * dotted line mark
+                                // Dashed line gap is 3 * dotted line mark
 }
 
 PLOTTER::~PLOTTER()
@@ -131,16 +132,22 @@ double PLOTTER::userToDeviceSize( double size ) const
 }
 
 
+double PLOTTER::GetDotMarkLenIU() const
+{
+    return userToDeviceSize( std::max( 1.0,
+            m_dotMarkLength_mm * 10000 / 25.4 * m_IUsPerDecimil - GetCurrentLineWidth() ) );
+}
+
+
 double PLOTTER::GetDashMarkLenIU() const
 {
-    double mark = userToDeviceSize( m_dashMarkLength_mm*10000/25.4*m_IUsPerDecimil - GetCurrentLineWidth() );
-    return ( mark < 0.0 ) ? 0.0 : mark;
+    return std::max( GetDashGapLenIU(), 5.0 * GetDotMarkLenIU() );
 }
 
 
 double PLOTTER::GetDashGapLenIU() const
 {
-    return userToDeviceSize( m_dashGapLength_mm*10000/25.4*m_IUsPerDecimil + GetCurrentLineWidth() );
+    return 3.0 * GetDotMarkLenIU() + userToDeviceSize( 2 * GetCurrentLineWidth() );
 }
 
 void PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,

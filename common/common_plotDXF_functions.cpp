@@ -496,7 +496,7 @@ void DXF_PLOTTER::PenTo( const wxPoint& pos, char plume )
 /**
  * Dashed lines are not (yet) supported by DXF_PLOTTER
  */
-void DXF_PLOTTER::SetDash( bool dashed )
+void DXF_PLOTTER::SetDash( int dashed )
 {
     // NOP for now
 }

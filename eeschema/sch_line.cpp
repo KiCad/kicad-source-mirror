@@ -42,6 +42,15 @@
 
 #include <dialogs/dialog_edit_line_style.h>
 
+const enum wxPenStyle SCH_LINE::PenStyle[] =
+{
+        [PLOTDASHTYPE_SOLID] = wxPENSTYLE_SOLID,
+        [PLOTDASHTYPE_DASH] = wxPENSTYLE_SHORT_DASH,
+        [PLOTDASHTYPE_DOT] = wxPENSTYLE_DOT,
+        [PLOTDASHTYPE_DASHDOT] = wxPENSTYLE_DOT_DASH
+};
+
+
 SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
     SCH_ITEM( NULL, SCH_LINE_T )
 {
@@ -49,7 +58,7 @@ SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
     m_end   = pos;
     m_startIsDangling = m_endIsDangling = false;
     m_size  = 0;
-    m_style = 0;
+    m_style = -1;
     m_color = COLOR4D::UNSPECIFIED;
 
     switch( layer )
@@ -243,34 +252,30 @@ COLOR4D SCH_LINE::GetLineColor() const
     return m_color;
 }
 
-
-enum wxPenStyle SCH_LINE::GetDefaultStyle() const
+int SCH_LINE::GetDefaultStyle() const
 {
     if( m_Layer == LAYER_NOTES )
-        return wxPENSTYLE_SHORT_DASH;
+        return PLOTDASHTYPE_DASH;
 
-    return wxPENSTYLE_SOLID;
+    return PLOTDASHTYPE_SOLID;
 }
 
 
 void SCH_LINE::SetLineStyle( const int aStyle )
 {
     if( aStyle == GetDefaultStyle() )
-        m_style = 0;
+        m_style = -1;
     else
         m_style = aStyle;
 }
 
 
-enum wxPenStyle SCH_LINE::GetLineStyle() const
+int SCH_LINE::GetLineStyle() const
 {
-    if( m_style > 0 )
-        return (enum wxPenStyle) m_style;
+    if( m_style >= 0 )
+        return m_style;
 
-    if( m_Layer == LAYER_NOTES )
-        return wxPENSTYLE_SHORT_DASH;
-
-    return wxPENSTYLE_SOLID;
+    return GetDefaultStyle();
 }
 
 
@@ -328,7 +333,8 @@ void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
     if( ( m_Flags & ENDPOINT ) == 0 )
         end += offset;
 
-    GRLine( panel->GetClipBox(), DC, start.x, start.y, end.x, end.y, width, color, GetLineStyle() );
+    GRLine( panel->GetClipBox(), DC, start.x, start.y, end.x, end.y, width, color,
+            PenStyle[ GetLineStyle() ] );
 
     if( m_startIsDangling )
         DrawDanglingSymbol( panel, DC, start, color );
@@ -685,17 +691,19 @@ bool SCH_LINE::doIsConnected( const wxPoint& aPosition ) const
 
 void SCH_LINE::Plot( PLOTTER* aPlotter )
 {
-    aPlotter->SetColor( GetLayerColor( GetLayer() ) );
+    if( m_color != COLOR4D::UNSPECIFIED )
+        aPlotter->SetColor( m_color );
+    else
+        aPlotter->SetColor( GetLayerColor( GetLayer() ) );
+
     aPlotter->SetCurrentLineWidth( GetPenSize() );
 
-    if( m_Layer == LAYER_NOTES )
-        aPlotter->SetDash( true );
+    aPlotter->SetDash( GetLineStyle() );
 
     aPlotter->MoveTo( m_start );
     aPlotter->FinishTo( m_end );
 
-    if( m_Layer == LAYER_NOTES )
-        aPlotter->SetDash( false );
+    aPlotter->SetDash( 0 );
 }
 
 

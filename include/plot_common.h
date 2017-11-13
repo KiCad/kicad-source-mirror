@@ -76,6 +76,16 @@ enum PlotTextMode {
     PLOTTEXTMODE_DEFAULT
 };
 
+/**
+ * Enum for choosing dashed line type
+ */
+enum PlotDashType {
+    PLOTDASHTYPE_SOLID,
+    PLOTDASHTYPE_DASH,
+    PLOTDASHTYPE_DOT,
+    PLOTDASHTYPE_DASHDOT,
+    PLOTDASHTYPE_COUNT,
+};
 
 /**
  * Base plotter engine class. General rule: all the interface with the caller
@@ -86,8 +96,7 @@ enum PlotTextMode {
 class PLOTTER
 {
 private:
-    double m_dashMarkLength_mm ;     ///< Dashed line parameter in mm: segment
-    double m_dashGapLength_mm;       ///< Dashed line parameter in mm: gap
+    double m_dotMarkLength_mm ;      ///< Dotted line parameter in mm: segment
 
 public:
     // These values are used as flag for pen or aperture selection
@@ -146,7 +155,7 @@ public:
 
     virtual void SetColor( COLOR4D color ) = 0;
 
-    virtual void SetDash( bool dashed ) = 0;
+    virtual void SetDash( int dashed ) = 0;
 
     virtual void SetCreator( const wxString& aCreator )
     {
@@ -501,6 +510,8 @@ protected:
      */
     virtual double userToDeviceSize( double size ) const;
 
+    double GetDotMarkLenIU() const;
+
     double GetDashMarkLenIU() const;
 
     double GetDashGapLenIU() const;
@@ -576,7 +587,7 @@ public:
     }
 
     virtual void SetDefaultLineWidth( int width ) override {}
-    virtual void SetDash( bool dashed ) override;
+    virtual void SetDash( int dashed ) override;
 
     virtual void SetColor( COLOR4D color ) override {}
 
@@ -751,7 +762,7 @@ public:
     virtual bool StartPlot() override;
     virtual bool EndPlot() override;
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
-    virtual void SetDash( bool dashed ) override;
+    virtual void SetDash( int dashed ) override;
 
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror ) override;
@@ -821,7 +832,7 @@ public:
     virtual void StartPage();
     virtual void ClosePage();
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
-    virtual void SetDash( bool dashed ) override;
+    virtual void SetDash( int dashed ) override;
 
     /** PDF can have multiple pages, so SetPageSettings can be called
      * with the outputFile open (but not inside a page stream!) */
@@ -894,7 +905,7 @@ public:
     virtual bool StartPlot() override;
     virtual bool EndPlot() override;
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
-    virtual void SetDash( bool dashed ) override;
+    virtual void SetDash( int dashed ) override;
 
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                   double aScale, bool aMirror ) override;
@@ -938,7 +949,10 @@ protected:
     bool m_graphics_changed;        // true if a pen/brush parameter is modified
                                     // color, pen size, fil mode ...
                                     // the new SVG stype must be output on file
-    bool m_dashed;                  // true to use plot dashed line style
+    int m_dashed;                   // 0 = plot solid line style
+                                    // 1 = plot dashed line style
+                                    // 2 = plot dotted line style
+                                    // 3 = plot dash-dot line style
 
     /**
      * function emitSetRGBColor()
@@ -1008,7 +1022,7 @@ public:
     virtual void SetDefaultLineWidth( int width ) override;
 
     // RS274X has no dashing, nor colours
-    virtual void SetDash( bool dashed ) override {}
+    virtual void SetDash( int dashed ) override {}
     virtual void SetColor( COLOR4D color ) override {}
     // Currently, aScale and aMirror are not used in gerber plotter
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
@@ -1246,7 +1260,7 @@ public:
         defaultPenWidth = 0;
     }
 
-    virtual void SetDash( bool dashed ) override;
+    virtual void SetDash( int dashed ) override;
 
     virtual void SetColor( COLOR4D color ) override;
 

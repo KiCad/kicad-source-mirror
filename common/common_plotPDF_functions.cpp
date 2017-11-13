@@ -131,14 +131,27 @@ void PDF_PLOTTER::emitSetRGBColor( double r, double g, double b )
 /**
  * PDF supports dashed lines
  */
-void PDF_PLOTTER::SetDash( bool dashed )
+void PDF_PLOTTER::SetDash( int dashed )
 {
     wxASSERT( workFile );
-    if( dashed )
+    switch( dashed )
+    {
+    case PLOTDASHTYPE_DASH:
         fprintf( workFile, "[%d %d] 0 d\n",
-                 (int) GetDashMarkLenIU(), (int) GetDashGapLenIU() );
-    else
+                (int) GetDashMarkLenIU(), (int) GetDashGapLenIU() );
+        break;
+    case PLOTDASHTYPE_DOT:
+        fprintf( workFile, "[%d %d] 0 d\n",
+                (int) GetDotMarkLenIU(), (int) GetDashGapLenIU() );
+        break;
+    case PLOTDASHTYPE_DASHDOT:
+        fprintf( workFile, "[%d %d %d %d] 0 d\n",
+                (int) GetDashMarkLenIU(), (int) GetDashGapLenIU(),
+                (int) GetDotMarkLenIU(), (int) GetDashGapLenIU() );
+        break;
+    default:
         fputs( "[] 0 d\n", workFile );
+    }
 }
 
 
