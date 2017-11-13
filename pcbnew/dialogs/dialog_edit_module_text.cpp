@@ -150,6 +150,7 @@ bool DialogEditModuleText::TransferDataToWindow()
     PutValueInLocalUnits( *m_TxtWidthCtlr, m_currentText->GetThickness() );
 
     double text_orient = m_currentText->GetTextAngle();
+    text_orient = NormalizeAngle180( text_orient );
 
     if( !m_currentText->IsVisible() )
         m_Show->SetSelection( 1 );

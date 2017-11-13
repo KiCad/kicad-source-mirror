@@ -330,13 +330,6 @@ double TEXTE_MODULE::GetDrawRotation() const
 
     NORMALIZE_ANGLE_POS( rotation );
 
-    // For angle = 0 .. 360 deg
-    while( rotation > 2700 )
-        rotation -= 3600;
-
-    while( rotation < -900 )
-        rotation += 1800;
-
     return rotation;
 }
 
