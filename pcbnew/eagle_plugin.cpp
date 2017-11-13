@@ -2020,7 +2020,9 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
             // some layers do not map to KiCad
             wxLogMessage( wxString::Format( "Unsupported Eagle layer '%s' (%d), converted to Dwgs.User layer",
                     eagle_layer_name( aEagleLayer ), aEagleLayer ) );
-            kiLayer = Dwgs_User;      break;
+
+            kiLayer = Dwgs_User;
+            break;
         }
     }
 
