@@ -338,31 +338,10 @@ void LIB_EDIT_FRAME::SetDrawItem( LIB_ITEM* drawItem )
 
 void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    // TODO check all libraries for modifications
-    if( GetScreen()->IsModify() )
-    {
-        int ii = DisplayExitDialog( this, _( "Save the changes in the library before closing?" ) );
-
-        switch( ii )
-        {
-        case wxID_NO:
-            break;
-
-        case wxID_YES:
-            if( saveLibrary( GetCurLib(), false ) )
-                break;
-
-            // fall through: cancel the close because of an error
-
-        case wxID_CANCEL:
-            Event.Veto();
-            return;
-        }
-
-        GetScreen()->ClrModify();
-    }
-
-    Destroy();
+    if( saveAllLibraries() )
+        Destroy();
+    else
+        Event.Veto();
 }
 
 

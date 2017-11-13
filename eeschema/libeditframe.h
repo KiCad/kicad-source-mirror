@@ -706,6 +706,10 @@ public:
 
     LIB_ID getTargetLibId() const;
 
+    ///> Returns true when the operation has succeded (all requested libraries have been saved or
+    ///> none was selected and confirmed by OK).
+    bool saveAllLibraries();
+
     wxString getTargetLib() const;
 
     bool addLibraryFile( bool aCreateNew );

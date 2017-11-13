@@ -288,7 +288,7 @@ void LIB_EDIT_FRAME::OnSaveLibrary( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::OnSaveAllLibraries( wxCommandEvent& event )
 {
-    wxASSERT( false );
+    saveAllLibraries();
 }
 
 
@@ -461,9 +461,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
 
-    wxString lib = getTargetLib();
-
-    if( !aNewFile && ( lib.empty() || !prj.SchSymbolLibTable()->HasLibrary( lib ) ) )
+    if( !aNewFile && ( aLibrary.empty() || !prj.SchSymbolLibTable()->HasLibrary( aLibrary ) ) )
     {
         DisplayError( this, _( "No library specified." ) );
         return false;
@@ -471,7 +469,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
     if( aNewFile )
     {
-        SEARCH_STACK*   search = prj.SchSearchS();
+        SEARCH_STACK* search = prj.SchSearchS();
 
         // Get a new name for the library
         wxString default_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
@@ -479,8 +477,11 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
         if( !default_path )
             default_path = search->LastVisitedPath();
 
-        wxFileDialog dlg( this, _( "Symbol Library Name" ), default_path,
-                          wxEmptyString, SchematicLibraryFileWildcard(),
+        fn.SetName( aLibrary );
+        fn.SetExt( SchematicLibraryFileExtension );
+
+        wxFileDialog dlg( this, wxString::Format( _( "Save Library '%s' As..." ), aLibrary ),
+                          default_path, fn.GetFullName(), SchematicLibraryFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( dlg.ShowModal() == wxID_CANCEL )
@@ -492,17 +493,10 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
         // file name so add it here.
         if( fn.GetExt().IsEmpty() )
             fn.SetExt( SchematicLibraryFileExtension );
-
-        prj.SetRString( PROJECT::SCH_LIB_PATH, fn.GetPath() );
     }
     else
     {
-        fn = prj.SchSymbolLibTable()->GetFullURI( lib );
-
-        msg.Printf( _( "Modify symbol library file '%s' ?" ), fn.GetFullPath() );
-
-        if( !IsOK( this, msg ) )
-            return false;
+        fn = prj.SchSymbolLibTable()->GetFullURI( aLibrary );
     }
 
     // Verify the user has write privileges before attempting to save the library file.
@@ -579,7 +573,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     // Update symbol changes in library.
     if( GetScreen()->IsModify() )
     {
-        if( !m_libMgr->FlushLibrary( lib ) )
+        if( !m_libMgr->FlushLibrary( aLibrary ) )
         {
             msg.Printf( _( "Failed to save changes to symbol library file '%s'" ),
                         libFileName.GetFullPath() );
@@ -595,6 +589,47 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     UpdateAliasSelectList();
     UpdatePartSelectList();
     refreshSchematic();
+
+    return true;
+}
+
+
+bool LIB_EDIT_FRAME::saveAllLibraries()
+{
+    wxArrayString unsavedLibraries;
+    // There are two stages: first try to save libraries to the original files.
+    // In case of problems, ask the user to save them in a new location.
+    bool firstRun = true;
+    bool allSaved = false;
+
+    while( !allSaved )
+    {
+        allSaved = true;
+        unsavedLibraries.Empty();
+
+        for( const auto& lib : m_libMgr->GetLibraryNames() )
+        {
+            if( m_libMgr->IsLibraryModified( lib ) )
+                unsavedLibraries.Add( lib );
+        }
+
+        if( !unsavedLibraries.IsEmpty() )
+        {
+            auto res = SelectMultipleOptions( this, _( "Save Libraries" ),
+                    firstRun ? _( "Select libraries to save before closing" )
+                             : _( "Some libraries could not be saved to their original files.\n\n"
+                                  "Do you want to save them to a new file?" ),
+                    unsavedLibraries, true );
+
+            if( !res.first )
+                return false;       // dialog has been cancelled
+
+            for( auto libIndex : res.second )
+                allSaved &= saveLibrary( unsavedLibraries[libIndex], !firstRun );
+
+            firstRun = false;
+        }
+    }
 
     return true;
 }
