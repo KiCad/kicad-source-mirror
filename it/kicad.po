@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-12 21:02+0100\n"
-"PO-Revision-Date: 2017-11-12 21:02+0100\n"
+"POT-Creation-Date: 2017-11-13 08:40+0100\n"
+"PO-Revision-Date: 2017-11-13 08:40+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -13513,7 +13513,7 @@ msgstr "..."
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:182
 msgid "Start DRC"
-msgstr "Avvia controllo regole"
+msgstr "Avvia controllo regole di progettazione"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:184
 msgid "Start the Design Rule Checker"
@@ -15237,7 +15237,7 @@ msgstr "Configurazione strati"
 
 #: pcbnew/dialogs/dialog_drc_base.h:116
 msgid "DRC Control"
-msgstr "Controllo regole"
+msgstr "Controllo regole di progettazione (DRC)"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.h:81
 msgid "PCB Library Tables"
