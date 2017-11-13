@@ -72,7 +72,7 @@ void SetSchItemParent( SCH_ITEM* Struct, SCH_SCREEN* Screen )
 }
 
 
-void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& rotationPoint )
+void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, const wxPoint& rotationPoint )
 {
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
@@ -83,7 +83,7 @@ void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& rotationPoint )
 }
 
 
-void MirrorY( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint )
+void MirrorY( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMirrorPoint )
 {
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
@@ -94,7 +94,7 @@ void MirrorY( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint )
 }
 
 
-void MirrorX( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint )
+void MirrorX( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMirrorPoint )
 {
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
@@ -105,13 +105,7 @@ void MirrorX( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint )
 }
 
 
-/**
- * Function MoveItemsInList
- *  Move a list of items to a given move vector
- * @param aItemsList = list of picked items
- * @param aMoveVector = the move vector value
- */
-void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector )
+void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMoveVector )
 {
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
@@ -121,11 +115,6 @@ void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector )
 }
 
 
-/**
- * Function DeleteItemsInList
- * delete schematic items in aItemsList
- * deleted items are put in undo list
- */
 void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList )
 {
     SCH_SCREEN*        screen = (SCH_SCREEN*) panel->GetScreen();
@@ -182,12 +171,8 @@ void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem )
 }
 
 
-/* Routine to copy a new entity of an object for each object in list and
- * reposition it.
- * Return the new created object list in aItemsList
- */
 void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
-                           const wxPoint aMoveVector )
+                           const wxPoint& aMoveVector )
 {
     SCH_ITEM* newitem;
 
@@ -238,16 +223,6 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
 }
 
 
-/**
- * Function DuplicateStruct
- *  Routine to create a new copy of given struct.
- *  The new object is not put in draw list (not linked)
- * @param aDrawStruct = the SCH_ITEM to duplicate
- * @param aClone (default = false)
- *     if true duplicate also some parameters that must be unique
- *     (timestamp and sheet name)
- *      aClone must be false. use true only is undo/redo duplications
- */
 SCH_ITEM* DuplicateStruct( SCH_ITEM* aDrawStruct, bool aClone )
 {
     wxCHECK_MSG( aDrawStruct != NULL, NULL,

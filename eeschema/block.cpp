@@ -47,20 +47,10 @@
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
-
-// Imported functions:
-extern void SetSchItemParent( SCH_ITEM* Struct, SCH_SCREEN* Screen );
-extern void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint aMoveVector );
-extern void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, wxPoint& Center );
-extern void MirrorX( PICKED_ITEMS_LIST& aItemsList, wxPoint& aMirrorPoint );
-extern void MirrorY( PICKED_ITEMS_LIST& aItemsList, wxPoint& Center );
-extern void DuplicateItemsInList( SCH_SCREEN*        screen,
-                                  PICKED_ITEMS_LIST& aItemsList,
-                                  const wxPoint      aMoveVector );
+#include <list_operations.h>
 
 static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                      const wxPoint& aPosition, bool aErase );
-
 
 int SCH_EDIT_FRAME::BlockCommand( EDA_KEY key )
 {
