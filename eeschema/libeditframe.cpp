@@ -520,7 +520,8 @@ void LIB_EDIT_FRAME::OnUpdatePartModified( wxUpdateUIEvent& aEvent )
     const wxString& libName = libId.GetLibNickname();
 
     aEvent.Enable( !partName.IsEmpty() && !libName.IsEmpty()
-            && m_libMgr->IsPartModified( partName, libName ) );
+            && m_libMgr->IsPartModified( partName, libName )
+            && ( aEvent.GetId() == ID_LIBEDIT_REVERT_PART || !m_libMgr->IsLibraryReadOnly( libName ) ) );
 }
 
 
