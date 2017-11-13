@@ -319,6 +319,15 @@ void LIB_EDIT_FRAME::OnCreateNewPart( wxCommandEvent& event )
 {
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
     m_drawItem = NULL;
+    wxString lib = getTargetLib();
+
+    if( !m_libMgr->LibraryExists( lib ) )
+    {
+        lib = SelectLibraryFromList();
+
+        if( !m_libMgr->LibraryExists( lib ) )
+            return;
+    }
 
     DIALOG_LIB_NEW_COMPONENT dlg( this );
     dlg.SetMinSize( dlg.GetSize() );
@@ -334,8 +343,6 @@ void LIB_EDIT_FRAME::OnCreateNewPart( wxCommandEvent& event )
 
     wxString name = dlg.GetName();
     name.Replace( " ", "_" );
-
-    wxString lib = getTargetLib();
 
     // Test if there is a component with this name already.
     if( !lib.empty() && m_libMgr->PartExists( name, lib ) )

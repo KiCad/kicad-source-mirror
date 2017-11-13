@@ -49,6 +49,14 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
     m_lastDrawItem = NULL;
     wxString libName = getTargetLib();
 
+    if( !m_libMgr->LibraryExists( libName ) )
+    {
+        libName = SelectLibraryFromList();
+
+        if( !m_libMgr->LibraryExists( libName ) )
+            return;
+    }
+
     wxFileDialog dlg( this, _( "Import Symbol" ), m_mruPath,
                       wxEmptyString, SchematicLibraryFileWildcard(),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
