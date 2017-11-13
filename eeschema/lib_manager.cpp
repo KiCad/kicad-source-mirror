@@ -111,11 +111,14 @@ bool LIB_MANAGER::FlushLibrary( const wxString& aLibrary )
 
     LIB_BUFFER& libBuf = it->second;
     wxArrayString aliases;
-    m_symbolTable->EnumerateSymbolLib( aLibrary, aliases );
 
-    // TODO probably this could be implemented more efficiently
-    for( const auto& alias : aliases )
-        m_symbolTable->DeleteAlias( aLibrary, alias );
+    try {
+        m_symbolTable->EnumerateSymbolLib( aLibrary, aliases );
+
+        // TODO probably this could be implemented more efficiently
+        for( const auto& alias : aliases )
+            m_symbolTable->DeleteAlias( aLibrary, alias );
+    } catch( IO_ERROR& e) {}
 
     // Assume all libraries are successfully saved
     bool res = true;
@@ -216,14 +219,9 @@ wxArrayString LIB_MANAGER::GetAliasNames( const wxString& aLibrary ) const
 
     if( it == m_libs.end() )
     {
-        try
-        {
+        try {
             m_symbolTable->EnumerateSymbolLib( aLibrary, names );
-        }
-        catch( IO_ERROR& e )
-        {
-            return names;
-        }
+        } catch( IO_ERROR& e ) {}
     }
     else
     {
@@ -253,17 +251,12 @@ std::list<LIB_ALIAS*> LIB_MANAGER::GetAliases( const wxString& aLibrary ) const
     {
         wxArrayString symbols;
 
-        try
-        {
+        try {
             m_symbolTable->EnumerateSymbolLib( aLibrary, symbols );
-        }
-        catch( IO_ERROR& e )
-        {
-            return ret;
-        }
 
-        for( const auto& symbol : symbols )
-            ret.push_back( m_symbolTable->LoadSymbol( aLibrary, symbol ) );
+            for( const auto& symbol : symbols )
+                ret.push_back( m_symbolTable->LoadSymbol( aLibrary, symbol ) );
+        } catch( IO_ERROR& e ) {}
     }
 
     return ret;
@@ -280,11 +273,13 @@ LIB_PART* LIB_MANAGER::GetBufferedPart( const wxString& aAlias, const wxString& 
 
     if( !bufferedPart ) // no buffer part found
     {
-        // create a partCopy
-        LIB_ALIAS* alias = m_symbolTable->LoadSymbol( aLibrary, aAlias );
-        wxCHECK( alias, nullptr );
-        bufferedPart = new LIB_PART( *alias->GetPart(), nullptr );
-        libBuf.CreateBuffer( bufferedPart, new SCH_SCREEN( &m_frame.Kiway() ) );
+        // create a copy of the part
+        try {
+            LIB_ALIAS* alias = m_symbolTable->LoadSymbol( aLibrary, aAlias );
+            wxCHECK( alias, nullptr );
+            bufferedPart = new LIB_PART( *alias->GetPart(), nullptr );
+            libBuf.CreateBuffer( bufferedPart, new SCH_SCREEN( &m_frame.Kiway() ) );
+        } catch( IO_ERROR& e ) {}
     }
 
     return bufferedPart;
@@ -402,18 +397,29 @@ LIB_ALIAS* LIB_MANAGER::GetAlias( const wxString& aAlias, const wxString& aLibra
     }
 
     // Get the original part
-    return m_symbolTable->LoadSymbol( aLibrary, aAlias );
+    LIB_ALIAS* alias = nullptr;
+
+    try {
+        alias = m_symbolTable->LoadSymbol( aLibrary, aAlias );
+    } catch( IO_ERROR& e ) {}
+
+    return alias;
 }
 
 
 bool LIB_MANAGER::PartExists( const wxString& aAlias, const wxString& aLibrary ) const
 {
     auto libBufIt = m_libs.find( aLibrary );
+    LIB_ALIAS* alias = nullptr;
 
     if( libBufIt != m_libs.end() )
         return !!libBufIt->second.GetBuffer( aAlias );
 
-    return !!m_symbolTable->LoadSymbol( aLibrary, aAlias );
+    try {
+        alias = m_symbolTable->LoadSymbol( aLibrary, aAlias );
+    } catch( IO_ERROR& e ) {}
+
+    return alias != nullptr;
 }
 
 
@@ -508,15 +514,19 @@ bool LIB_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate )
 
 std::set<LIB_PART*> LIB_MANAGER::getOriginalParts( const wxString& aLibrary )
 {
-    wxArrayString aliases;
     std::set<LIB_PART*> parts;
-    m_symbolTable->EnumerateSymbolLib( aLibrary, aliases );
+    wxCHECK( LibraryExists( aLibrary ), parts );
 
-    for( const auto& aliasName : aliases )
-    {
-        LIB_ALIAS* alias = m_symbolTable->LoadSymbol( aLibrary, aliasName );
-        parts.insert( alias->GetPart() );
-    }
+    try {
+        wxArrayString aliases;
+        m_symbolTable->EnumerateSymbolLib( aLibrary, aliases );
+
+        for( const auto& aliasName : aliases )
+        {
+            LIB_ALIAS* alias = m_symbolTable->LoadSymbol( aLibrary, aliasName );
+            parts.insert( alias->GetPart() );
+        }
+    } catch( IO_ERROR& e ) {}
 
     return parts;
 }
