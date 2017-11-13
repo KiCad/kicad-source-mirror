@@ -303,8 +303,8 @@ bool DIALOG_SYMBOL_REMAP::normalizeAbsolutePaths( const wxFileName& aPathA,
                                                   const wxFileName& aPathB,
                                                   wxString*         aResultPath )
 {
-    wxCHECK_MSG( aPathA.IsAbsolute(), false, "Arguement 'aPathA' must be an absolute path." );
-    wxCHECK_MSG( aPathB.IsAbsolute(), false, "Arguement 'aPathB' must be an absolute path." );
+    wxCHECK_MSG( aPathA.IsAbsolute(), false, aPathA.GetPath() + " is not an absolute path." );
+    wxCHECK_MSG( aPathB.IsAbsolute(), false, aPathB.GetPath() + " is not an absolute path." );
 
     if( aPathA.GetPath() == aPathB.GetPath() )
         return true;
