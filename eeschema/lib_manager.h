@@ -96,6 +96,7 @@ public:
 
     /**
      * Updates the part buffer with a new version of the part.
+     * The library buffer creates a copy of the part.
      * It is required to save the library to use the updated part in the schematic editor.
      */
     bool UpdatePart( LIB_PART* aPart, const wxString& aLibrary, wxString aOldName = wxEmptyString );

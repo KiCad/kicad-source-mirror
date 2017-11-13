@@ -691,35 +691,43 @@ public:
      */
     SYMBOL_LIB_TABLE* SelectSymLibTable();
 
+private:
     ///> Helper screen used when no part is loaded
     SCH_SCREEN* m_dummyScreen;
 
     ///> Creates a backup copy of a file with requested extension
     bool backupFile( const wxFileName& aOriginalFile, const wxString& aBackupExt );
 
-    // TODO
-    // TODO move to tree pane?
+    ///> Returns currently edited part.
     LIB_PART* getTargetPart() const;
 
+    ///> Returns either the part selected in the component tree, if context menu is active
+    ///> or the currently modified part.
     LIB_ID getTargetLibId() const;
+
+    ///> Returns either the library selected in the component tree, if context menu is active
+    ///> or the library that is currently modified.
+    wxString getTargetLib() const;
 
     ///> Returns true when the operation has succeded (all requested libraries have been saved or
     ///> none was selected and confirmed by OK).
     bool saveAllLibraries();
 
-    wxString getTargetLib() const;
-
+    ///> Creates or adds an existing library to the symbol library table.
     bool addLibraryFile( bool aCreateNew );
 
+    ///> Displays a file browser dialog to select a library file.
     wxFileName getLibraryFileName( bool aExisting );
 
+    ///> Stores the currently modified part in the library manager buffer.
     void storeCurrentPart();
 
+    ///> Returns true if currently modified part has the same LIB_ID.
     bool isCurrentPart( const LIB_ID& aLibId ) const;
 
+    ///> Restores the empty editor screen, without any part or library selected.
     void emptyScreen();
 
-private:
     ///> Renames LIB_PART aliases to avoid conflicts before adding a component to a library
     void fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibrary );
 
