@@ -268,37 +268,7 @@ void SCH_BASE_FRAME::OnEditSymbolLibTable( wxCommandEvent& aEvent )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    try
-    {
-        FILE_OUTPUTFORMATTER sf( SYMBOL_LIB_TABLE::GetGlobalTableFileName() );
-
-        SYMBOL_LIB_TABLE::GetGlobalLibTable().Format( &sf, 0 );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        wxString msg = wxString::Format( _( "Error occurred saving the global symbol library "
-                                            "table:\n\n%s" ),
-                                         GetChars( ioe.What().GetData() ) );
-        wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
-    }
-
-    if( !Prj().GetProjectName().IsEmpty() )
-    {
-        wxFileName fn( Prj().GetProjectPath(), SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
-
-        try
-        {
-            Prj().SchSymbolLibTable()->Save( fn.GetFullPath() );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            wxString msg = wxString::Format( _( "Error occurred saving project specific "
-                                                "symbol library table:\n\n%s" ),
-                                             GetChars( ioe.What() ) );
-            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
-        }
-    }
-
+    saveSymbolLibTables( true, true );
 
     LIB_EDIT_FRAME* editor = (LIB_EDIT_FRAME*) Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
 
@@ -334,4 +304,48 @@ LIB_PART* SCH_BASE_FRAME::GetLibPart( const LIB_ID& aLibId, bool aUseCacheLib, b
     PART_LIB* cache = ( aUseCacheLib ) ? Prj().SchLibs()->GetCacheLibrary() : NULL;
 
     return SchGetLibPart( aLibId, Prj().SchSymbolLibTable(), cache, this, aShowErrorMsg );
+}
+
+
+bool SCH_BASE_FRAME::saveSymbolLibTables( bool aGlobal, bool aProject )
+{
+    bool success = true;
+
+    if( aGlobal )
+    {
+        try
+        {
+            FILE_OUTPUTFORMATTER sf( SYMBOL_LIB_TABLE::GetGlobalTableFileName() );
+
+            SYMBOL_LIB_TABLE::GetGlobalLibTable().Format( &sf, 0 );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            success = false;
+            wxString msg = wxString::Format( _( "Error occurred saving the global symbol library "
+                                                "table:\n\n%s" ),
+                                            GetChars( ioe.What().GetData() ) );
+            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+        }
+    }
+
+    if( aProject && !Prj().GetProjectName().IsEmpty() )
+    {
+        wxFileName fn( Prj().GetProjectPath(), SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+
+        try
+        {
+            Prj().SchSymbolLibTable()->Save( fn.GetFullPath() );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            success = false;
+            wxString msg = wxString::Format( _( "Error occurred saving project specific "
+                                                "symbol library table:\n\n%s" ),
+                                             GetChars( ioe.What() ) );
+            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+        }
+    }
+
+    return success;
 }

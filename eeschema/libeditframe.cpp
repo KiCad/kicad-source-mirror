@@ -341,9 +341,14 @@ void LIB_EDIT_FRAME::SetDrawItem( LIB_ITEM* drawItem )
 void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( saveAllLibraries() )
+    {
+        saveSymbolLibTables( true, true );
         Destroy();
+    }
     else
+    {
         Event.Veto();
+    }
 }
 
 
