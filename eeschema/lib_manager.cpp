@@ -202,6 +202,40 @@ bool LIB_MANAGER::IsPartModified( const wxString& aAlias, const wxString& aLibra
 }
 
 
+bool LIB_MANAGER::ClearLibraryModified( const wxString& aLibrary ) const
+{
+    auto libIt = m_libs.find( aLibrary );
+
+    if( libIt == m_libs.end() )
+        return false;
+
+    for( auto& partBuf : libIt->second.GetBuffers() )
+    {
+        SCH_SCREEN* screen = partBuf->GetScreen();
+
+        if( screen )
+            screen->ClrModify();
+    }
+
+    return true;
+}
+
+
+bool LIB_MANAGER::ClearPartModified( const wxString& aAlias, const wxString& aLibrary ) const
+{
+    auto libI = m_libs.find( aLibrary );
+
+    if( libI == m_libs.end() )
+        return false;
+
+    auto partBuf = libI->second.GetBuffer( aAlias );
+    wxCHECK( partBuf, false );
+
+    partBuf->GetScreen()->ClrModify();
+    return true;
+}
+
+
 bool LIB_MANAGER::IsLibraryReadOnly( const wxString& aLibrary ) const
 {
     wxCHECK( LibraryExists( aLibrary ), true );
@@ -348,8 +382,6 @@ bool LIB_MANAGER::RevertPart( const wxString& aAlias, const wxString& aLibrary )
 
     auto partBuf = it->second.GetBuffer( aAlias );
     wxCHECK( partBuf, false );
-
-    partBuf->GetScreen()->ClrModify();
     partBuf->SetPart( new LIB_PART( *partBuf->GetOriginal() ) );
 
     return true;
@@ -648,9 +680,8 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
     wxCHECK( aPartBuf, false );
     LIB_PART* part = aPartBuf->GetPart();
     wxCHECK( part, false );
-    wxCHECK( aLibTable->SaveSymbol( m_libName, new LIB_PART( *part ) ) != SYMBOL_LIB_TABLE::SAVE_OK, false );
+    wxCHECK( aLibTable->SaveSymbol( m_libName, new LIB_PART( *part ) ) == SYMBOL_LIB_TABLE::SAVE_OK, false );
 
-    aPartBuf->GetScreen()->ClrModify();
     aPartBuf->SetOriginal( new LIB_PART( *part ) );
     ++m_hash;
     return true;
@@ -670,7 +701,6 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
 
     // TODO there is no way to check if symbol has been successfully saved
     aPlugin->SaveSymbol( m_libName, new LIB_PART( *part ), aBuffer ? &properties : nullptr );
-    aPartBuf->GetScreen()->ClrModify();
     aPartBuf->SetOriginal( new LIB_PART( *part ) );
     ++m_hash;
     return true;

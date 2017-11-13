@@ -145,6 +145,16 @@ public:
     bool IsPartModified( const wxString& aAlias, const wxString& aLibrary ) const;
 
     /**
+     * Clears the modified flag for all parts in a library.
+     */
+    bool ClearLibraryModified( const wxString& aLibrary ) const;
+
+    /**
+     * Clears the modified flag for a part.
+     */
+    bool ClearPartModified( const wxString& aAlias, const wxString& aLibrary ) const;
+
+    /**
      * Returns true if the library is stored in a read-only file.
      * @return True on success, false otherwise.
      */

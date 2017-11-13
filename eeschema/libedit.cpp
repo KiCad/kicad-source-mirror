@@ -352,8 +352,11 @@ void LIB_EDIT_FRAME::OnEditPart( wxCommandEvent& aEvent )
 void LIB_EDIT_FRAME::OnSavePart( wxCommandEvent& aEvent )
 {
     LIB_ID libId = getTargetLibId();
-    m_libMgr->FlushPart( libId.GetLibItemName(), libId.GetLibNickname() );
-    m_treePane->Refresh();;
+
+    if( m_libMgr->FlushPart( libId.GetLibItemName(), libId.GetLibNickname() ) )
+        m_libMgr->ClearPartModified( libId.GetLibItemName(), libId.GetLibNickname() );
+
+    m_treePane->Refresh();
 }
 
 
@@ -459,7 +462,8 @@ void LIB_EDIT_FRAME::OnRevertPart( wxCommandEvent& aEvent )
     if( currentPart )
         emptyScreen();
 
-    m_libMgr->RevertPart( libId.GetLibItemName(), libId.GetLibNickname() );
+    if( m_libMgr->RevertPart( libId.GetLibItemName(), libId.GetLibNickname() ) )
+        m_libMgr->ClearPartModified( libId.GetLibItemName(), libId.GetLibNickname() );
 
     if( currentPart && m_libMgr->PartExists( libId.GetLibItemName(), libId.GetLibNickname() ) )
         loadPart( libId.GetLibItemName(), libId.GetLibNickname(), unit );
@@ -558,6 +562,9 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
         DisplayErrorMessage( this, _( "Error saving library" ), msg );
         return false;
     }
+
+    if( !aNewFile )
+        m_libMgr->ClearLibraryModified( aLibrary );
 
     msg.Printf( _( "Symbol library file '%s' saved" ), fn.GetFullPath() );
     wxString msg1;
