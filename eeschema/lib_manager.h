@@ -203,6 +203,38 @@ public:
      */
     CMP_TREE_MODEL_ADAPTER_BASE::PTR& GetAdapter() { return m_adapter; }
 
+    /**
+     * Returns the currently modified library name.
+     */
+    const wxString& GetCurrentLib() const
+    {
+        return m_currentLib;
+    }
+
+    /**
+     * Sets the currently modified library name.
+     */
+    void SetCurrentLib( const wxString& aLibrary )
+    {
+        m_currentLib = aLibrary;
+    }
+
+    /**
+     * Returns the currently modified part name.
+     */
+    const wxString& GetCurrentPart() const
+    {
+        return m_currentPart;
+    }
+
+    /**
+     * Sets the currently modified part name.
+     */
+    void SetCurrentPart( const wxString& aPart )
+    {
+        m_currentPart = aPart;
+    }
+
 private:
     ///> Parent frame
     LIB_EDIT_FRAME& m_frame;
@@ -346,8 +378,14 @@ private:
     ///> The library buffers
     std::map<wxString, LIB_BUFFER> m_libs;
 
-    // TODO
+    ///> Symbol Lib Table hash value returned during the last synchronization
     int m_syncHash;
+
+    ///> Currently modified part
+    wxString m_currentLib;
+
+    ///> Currently modified library
+    wxString m_currentPart;
 
     LIB_MANAGER_ADAPTER::PTR m_adapter;
     LIB_MANAGER_ADAPTER* getAdapter() { return static_cast<LIB_MANAGER_ADAPTER*>( m_adapter.get() ); }

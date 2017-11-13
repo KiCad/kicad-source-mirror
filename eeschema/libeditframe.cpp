@@ -983,6 +983,8 @@ wxString LIB_EDIT_FRAME::SetCurLib( const wxString& aLibNickname )
     else
         Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, aLibNickname );
 
+    m_libMgr->SetCurrentLib( aLibNickname );
+
     return old;
 }
 
@@ -997,8 +999,11 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
         m_my_part = aPart;
     }
 
+    wxString partName = aPart ? aPart->GetName() : wxString();
+    m_libMgr->SetCurrentPart( partName );
+
     // retain in case this wxFrame is re-opened later on the same PROJECT
-    Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_PART, aPart ? aPart->GetName() : wxString() );
+    Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_PART, partName );
 }
 
 

@@ -230,6 +230,13 @@ bool LIB_MANAGER_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsigned int aCo
         case CMP_TREE_NODE::LIB:
             // mark modified libs with bold font
             aAttr.SetBold( m_libMgr->IsLibraryModified( node->Name ) );
+
+            // mark current library with inverted colors
+            if( node->Name == m_libMgr->GetCurrentLib() )
+            {
+                aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+                aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
+            }
             break;
 
         case CMP_TREE_NODE::LIBID:
@@ -238,6 +245,13 @@ bool LIB_MANAGER_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsigned int aCo
 
             // mark aliases with italic font
             aAttr.SetItalic( !node->IsRoot );
+
+            // mark current library with inverted colors
+            if( node->Name == m_libMgr->GetCurrentPart() )
+            {
+                aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+                aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
+            }
             break;
 
         default:
