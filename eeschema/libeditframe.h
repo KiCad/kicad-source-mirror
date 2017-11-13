@@ -324,14 +324,12 @@ public:
 
     void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
     void OnUpdateEditingPart( wxUpdateUIEvent& event );
-    void OnUpdateNotEditingPart( wxUpdateUIEvent& event );      // TODO?
     void OnUpdatePartModified( wxUpdateUIEvent& aEvent );
     void OnUpdateLibModified( wxUpdateUIEvent& aEvent );
-    void OnUpdateClipboardNotEmpty( wxUpdateUIEvent& aEvent );
     void OnUpdateUndo( wxUpdateUIEvent& event );
     void OnUpdateRedo( wxUpdateUIEvent& event );
-    void OnUpdateSaveCurrentLib( wxUpdateUIEvent& event );
-    void OnUpdateSaveCurrentLibAs( wxUpdateUIEvent& event );
+    void OnUpdateSaveLib( wxUpdateUIEvent& event );
+    void OnUpdateSaveLibAs( wxUpdateUIEvent& event );
     void OnUpdateViewDoc( wxUpdateUIEvent& event );
     void OnUpdatePinByPin( wxUpdateUIEvent& event );
     void OnUpdatePinTable( wxUpdateUIEvent& event );

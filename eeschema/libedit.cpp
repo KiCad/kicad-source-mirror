@@ -224,6 +224,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& a
     // Display the document information based on the entry selected just in
     // case the entry is an alias.
     DisplayCmpDoc();
+    Refresh();
 
     return true;
 }
@@ -394,6 +395,7 @@ void LIB_EDIT_FRAME::OnSavePart( wxCommandEvent& aEvent )
 {
     LIB_ID libId = getTargetLibId();
     m_libMgr->FlushPart( libId.GetLibItemName(), libId.GetLibNickname() );
+    m_treePane->Refresh();;
 }
 
 
