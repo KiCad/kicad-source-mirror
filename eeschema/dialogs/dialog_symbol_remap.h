@@ -63,10 +63,6 @@ private:
     void remapSymbolsToLibTable( REPORTER& aReporter );
 
     bool remapSymbolToLibTable( SCH_COMPONENT* aSymbol );
-
-    bool normalizeAbsolutePaths( const wxFileName& aPathA,
-                                 const wxFileName& aPathB,
-                                 wxString*         aResultPath );
 };
 
 #endif  // _DIALOG_SYMBOL_REMAP_H_

@@ -247,6 +247,7 @@ set( COMMON_SRCS
     eda_dde.cpp
     eda_doc.cpp
     eda_pattern_match.cpp
+    env_paths.cpp
     exceptions.cpp
     executable_names.cpp
     filter_reader.cpp

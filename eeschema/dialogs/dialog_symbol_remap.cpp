@@ -37,6 +37,7 @@
 #include <class_sch_screen.h>
 #include <schframe.h>
 #include <symbol_lib_table.h>
+#include <env_paths.h>
 
 #include <dialog_symbol_remap.h>
 
@@ -123,53 +124,13 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
                 libNameInc++;
             }
 
-            wxString tmp;
-            wxString fullFileName;
             wxString pluginType = SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY );
             wxFileName fn = lib->GetFullFileName();
 
             // Use environment variable substitution where possible.  This is based solely
             // on the internal user environment variable list.  Checking against all of the
             // system wide environment variables is probably not a good idea.
-            const ENV_VAR_MAP& envMap = Pgm().GetLocalEnvVariables();
-            wxFileName envPath;
-
-            for( auto& entry : envMap )
-            {
-                // Don't bother normalizing paths that don't exist or the user cannot read.
-                if( !wxFileName::DirExists( entry.second.GetValue() )
-                  || !wxFileName::IsDirReadable( entry.second.GetValue() ) )
-                    continue;
-
-                envPath.SetPath( entry.second.GetValue() );
-
-                if( normalizeAbsolutePaths( envPath, fn, &tmp ) )
-                {
-                    fullFileName = "${" + entry.first + "}/";
-
-                    if( !tmp.IsEmpty() )
-                        fullFileName += tmp;
-
-                    fullFileName += fn.GetFullName();
-                    break;
-                }
-            }
-
-            // Check the project path if no local environment variable paths where found.
-            if( fullFileName.IsEmpty() )
-            {
-                envPath.SetPath( Prj().GetProjectPath() );
-
-                if( normalizeAbsolutePaths( envPath, fn, &tmp ) )
-                {
-                    fullFileName = wxString( "${" ) + PROJECT_VAR_NAME + wxString( "}/" );
-
-                    if( !tmp.IsEmpty() )
-                        fullFileName += tmp;
-
-                    fullFileName += fn.GetFullName();
-                }
-            }
+            wxString fullFileName = NormalizePath( fn, &Pgm().GetLocalEnvVariables(), &Prj() );
 
             // Fall back to the absolute library path.
             if( fullFileName.IsEmpty() )
@@ -301,47 +262,4 @@ bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_COMPONENT* aSymbol )
     }
 
     return false;
-}
-
-
-bool DIALOG_SYMBOL_REMAP::normalizeAbsolutePaths( const wxFileName& aPathA,
-                                                  const wxFileName& aPathB,
-                                                  wxString*         aResultPath )
-{
-    wxCHECK_MSG( aPathA.IsAbsolute(), false, aPathA.GetPath() + " is not an absolute path." );
-    wxCHECK_MSG( aPathB.IsAbsolute(), false, aPathB.GetPath() + " is not an absolute path." );
-
-    if( aPathA.GetPath() == aPathB.GetPath() )
-        return true;
-
-    if( ( aPathA.GetDirCount() > aPathB.GetDirCount() )
-      || ( aPathA.HasVolume() && !aPathB.HasVolume() )
-      || ( !aPathA.HasVolume() && aPathB.HasVolume() )
-      || ( ( aPathA.HasVolume() && aPathB.HasVolume() )
-         && ( aPathA.GetVolume() == aPathB.GetVolume() ) ) )
-        return false;
-
-    wxArrayString aDirs = aPathA.GetDirs();
-    wxArrayString bDirs = aPathB.GetDirs();
-
-    size_t i = 0;
-
-    while( i < aDirs.GetCount() )
-    {
-        if( aDirs[i] != bDirs[i] )
-            return false;
-
-        i++;
-    }
-
-    if( aResultPath )
-    {
-        while( i < bDirs.GetCount() )
-        {
-            *aResultPath += bDirs[i] + wxT( "/" );
-            i++;
-        }
-    }
-
-    return true;
 }
