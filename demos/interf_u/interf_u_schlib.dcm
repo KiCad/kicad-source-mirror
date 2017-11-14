@@ -1,0 +1,41 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP Bus_ISA_8bit
+D 8-bit ISA-PC bus connector
+K ISA
+F https://en.wikipedia.org/wiki/Industry_Standard_Architecture
+$ENDCMP
+#
+$CMP C
+D Unpolarized capacitor
+K cap capacitor
+$ENDCMP
+#
+$CMP CP
+D Polarised capacitor
+K cap capacitor
+$ENDCMP
+#
+$CMP Conn_02x08_Odd_Even
+D Generic connector, double row, 02x08, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers)
+K connector
+F ~
+$ENDCMP
+#
+$CMP Crystal
+D Two pin crystal
+K quartz ceramic resonator oscillator
+$ENDCMP
+#
+$CMP DB25_Female
+D 25-pin female D-SUB connector
+K female D-SUB connector
+$ENDCMP
+#
+$CMP LED
+D LED generic, alternativ symbol
+K led diode
+F ~
+$ENDCMP
+#
+#End Doc Library

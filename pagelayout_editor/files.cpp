@@ -60,7 +60,7 @@ void PL_EDITOR_FRAME::OnFileHistory( wxCommandEvent& event )
          if( LoadPageLayoutDescrFile( filename ) )
          {
              wxString msg;
-             msg.Printf( _( "File <%s> loaded "), GetChars( filename ) );
+             msg.Printf( _( "File <%s> loaded"), GetChars( filename ) );
              SetStatusText( msg );
          }
 

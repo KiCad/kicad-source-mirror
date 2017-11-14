@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name interf_u_schlib)(type Legacy)(uri ${KIPRJMOD}/interf_u_schlib.lib)(options "")(descr ""))
+  (lib (name tux)(type Legacy)(uri ${KIPRJMOD}/tux.lib)(options Legacy)(descr ""))
+)

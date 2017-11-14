@@ -1,4 +1,4 @@
-update=23/01/2016 15:05:13
+update=14/11/2017 08:19:23
 version=1
 last_client=kicad
 [common]
@@ -35,6 +35,3 @@ ModuleOutlineThickness=0.381
 [eeschema]
 version=1
 LibDir=
-[eeschema/libraries]
-LibName1=interf_u_schlib
-LibName2=power
