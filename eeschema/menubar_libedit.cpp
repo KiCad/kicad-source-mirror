@@ -194,9 +194,10 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Create a new empty component" ),
                  KiBitmap( new_component_xpm ) );
 
+    text = AddHotkeyName( _( "&Save Component" ), g_Libedit_Hokeys_Descr, HK_SAVE_PART );
     AddMenuItem( componentMenu,
                  ID_LIBEDIT_SAVE_PART,
-                 _( "&Save Component" ),
+                 text,
                  _( "Saves the current component to the library" ),
                  KiBitmap( save_xpm ) );
 
