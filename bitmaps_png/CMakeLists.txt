@@ -123,6 +123,7 @@ set( BMAPS_MID
     add_hierarchical_subsheet
     add_junction
     add_keepout_area
+    add_library
     add_line2bus
     add_line_label
     add_line
@@ -466,6 +467,7 @@ set( BMAPS_MID
     rotate_pos_z
     save_as
     save_library
+    save_part
     save_part_in_mem
     save_project
     save_setup

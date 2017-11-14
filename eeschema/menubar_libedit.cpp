@@ -73,7 +73,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  ID_LIBEDIT_ADD_LIBRARY,
                  _( "&Add Existing Library" ),
                  _( "Adds a previously created library" ),
-                 KiBitmap( open_library_xpm ) );
+                 KiBitmap( add_library_xpm ) );
 
     // Separator
     fileMenu->AppendSeparator();
@@ -83,7 +83,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_SAVE_LIBRARY, text,
                  _( "Save the current active library" ),
-                 KiBitmap( save_xpm ) );
+                 KiBitmap( save_library_xpm ) );
 
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_SAVE_LIBRARY_AS,
@@ -199,7 +199,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  ID_LIBEDIT_SAVE_PART,
                  text,
                  _( "Saves the current component to the library" ),
-                 KiBitmap( save_xpm ) );
+                 KiBitmap( save_part_xpm ) );
 
     componentMenu->AppendSeparator();
 
