@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name ecc83_schlib)(type Legacy)(uri ${KIPRJMOD}/ecc83_schlib.lib)(options "")(descr ""))
+)

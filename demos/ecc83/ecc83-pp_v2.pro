@@ -1,4 +1,4 @@
-update=17/05/2015 17:05:45
+update=14/11/2017 18:55:49
 last_client=kicad
 [general]
 version=1
@@ -27,6 +27,3 @@ ModuleOutlineThickness=0.381
 [eeschema]
 version=1
 LibDir=
-[eeschema/libraries]
-LibName1=ecc83_schlib
-LibName2=power

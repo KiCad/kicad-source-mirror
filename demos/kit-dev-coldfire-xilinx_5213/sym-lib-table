@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name kit-dev-coldfire-xilinx_5213_schlib)(type Legacy)(uri ${KIPRJMOD}/kit-dev-coldfire-xilinx_5213_schlib.lib)(options "")(descr ""))
+)

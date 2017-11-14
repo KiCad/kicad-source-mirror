@@ -1,4 +1,4 @@
-update=18/05/2015 09:05:34
+update=14/11/2017 18:57:03
 last_client=kicad
 [general]
 version=1
@@ -32,6 +32,3 @@ LibDir=
 [eeschema]
 version=1
 LibDir=
-[eeschema/libraries]
-LibName1=kit-dev-coldfire-xilinx_5213_schlib
-LibName2=power

@@ -1,8 +1,6 @@
-EESchema Schematic File Version 2
-LIBS:ecc83_schlib
-LIBS:power
+EESchema Schematic File Version 4
 LIBS:ecc83-pp_v2-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -17,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L ECC83 U1
+L ecc83_schlib:ECC83 U1
 U 3 1 48B4F266
 P 3900 3050
 F 0 "U1" H 4400 3150 50  0000 C CNN
@@ -28,7 +26,7 @@ F 3 "" H 3900 3050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L ECC83 U1
+L ecc83_schlib:ECC83 U1
 U 2 1 48B4F263
 P 6500 4200
 F 0 "U1" H 7000 4300 50  0000 C CNN
@@ -39,7 +37,7 @@ F 3 "" H 6500 4200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L ECC83 U1
+L ecc83_schlib:ECC83 U1
 U 1 1 48B4F256
 P 6600 2300
 F 0 "U1" H 7100 2400 50  0000 C CNN
@@ -50,7 +48,7 @@ F 3 "" H 6600 2300 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR01
+L ecc83_schlib:GND #PWR01
 U 1 1 457DBAF8
 P 7850 3250
 F 0 "#PWR01" H 7850 3250 30  0001 C CNN
@@ -61,7 +59,7 @@ F 3 "" H 7850 3250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR02
+L ecc83_schlib:GND #PWR02
 U 1 1 457DBAF5
 P 7600 3800
 F 0 "#PWR02" H 7600 3800 30  0001 C CNN
@@ -72,7 +70,7 @@ F 3 "" H 7600 3800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR03
+L ecc83_schlib:GND #PWR03
 U 1 1 457DBAF1
 P 6400 5500
 F 0 "#PWR03" H 6400 5500 30  0001 C CNN
@@ -83,7 +81,7 @@ F 3 "" H 6400 5500 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR04
+L ecc83_schlib:GND #PWR04
 U 1 1 457DBAEF
 P 6000 5500
 F 0 "#PWR04" H 6000 5500 30  0001 C CNN
@@ -94,7 +92,7 @@ F 3 "" H 6000 5500 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L PWR_FLAG #FLG05
+L ecc83_schlib:PWR_FLAG #FLG05
 U 1 1 457DBAC0
 P 3700 2200
 F 0 "#FLG05" H 3700 2470 30  0001 C CNN
@@ -105,7 +103,7 @@ F 3 "" H 3700 2200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_2 P4
+L ecc83_schlib:CONN_2 P4
 U 1 1 456A8ACC
 P 3050 3700
 F 0 "P4" V 3000 3700 40  0000 C CNN
@@ -116,7 +114,7 @@ F 3 "" H 3050 3700 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L C C1
+L ecc83_schlib:C C1
 U 1 1 4549F4BE
 P 4100 2100
 F 0 "C1" H 4250 2150 50  0000 L CNN
@@ -127,7 +125,7 @@ F 3 "" H 4100 2100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_2 P3
+L ecc83_schlib:CONN_2 P3
 U 1 1 4549F4A5
 P 3050 1900
 F 0 "P3" V 3000 1900 40  0000 C CNN
@@ -138,7 +136,7 @@ F 3 "" H 3050 1900 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L CONN_2 P2
+L ecc83_schlib:CONN_2 P2
 U 1 1 4549F46C
 P 8350 3000
 F 0 "P2" V 8300 3000 40  0000 C CNN
@@ -149,7 +147,7 @@ F 3 "" H 8350 3000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_2 P1
+L ecc83_schlib:CONN_2 P1
 U 1 1 4549F464
 P 5350 4300
 F 0 "P1" V 5300 4300 40  0000 C CNN
@@ -160,7 +158,7 @@ F 3 "" H 5350 4300 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L C C2
+L ecc83_schlib:C C2
 U 1 1 4549F3BE
 P 7300 2900
 F 0 "C2" V 7150 2900 50  0000 C CNN
@@ -171,7 +169,7 @@ F 3 "" H 7300 2900 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R3
+L ecc83_schlib:R R3
 U 1 1 4549F3AD
 P 7600 3550
 F 0 "R3" H 7500 3750 50  0000 C CNN
@@ -182,7 +180,7 @@ F 3 "" H 7600 3550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R4
+L ecc83_schlib:R R4
 U 1 1 4549F3A2
 P 6000 5300
 F 0 "R4" H 5900 5500 50  0000 C CNN
@@ -193,7 +191,7 @@ F 3 "" H 6000 5300 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R2
+L ecc83_schlib:R R2
 U 1 1 4549F39D
 P 6400 5300
 F 0 "R2" H 6300 5500 50  0000 C CNN
@@ -204,7 +202,7 @@ F 3 "" H 6400 5300 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R1
+L ecc83_schlib:R R1
 U 1 1 4549F38A
 P 6500 3250
 F 0 "R1" H 6600 3050 50  0000 C CNN
@@ -215,7 +213,7 @@ F 3 "" H 6500 3250 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L CONN_1 P5
+L ecc83_schlib:CONN_1 P5
 U 1 1 54A5830A
 P 6300 6600
 F 0 "P5" H 6380 6600 40  0000 L CNN
@@ -226,7 +224,7 @@ F 3 "" H 6300 6600 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_1 P6
+L ecc83_schlib:CONN_1 P6
 U 1 1 54A58363
 P 6300 6700
 F 0 "P6" H 6380 6700 40  0000 L CNN
@@ -237,7 +235,7 @@ F 3 "" H 6300 6700 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_1 P7
+L ecc83_schlib:CONN_1 P7
 U 1 1 54A5837A
 P 6300 6800
 F 0 "P7" H 6380 6800 40  0000 L CNN
@@ -248,7 +246,7 @@ F 3 "" H 6300 6800 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_1 P8
+L ecc83_schlib:CONN_1 P8
 U 1 1 54A58391
 P 6300 6900
 F 0 "P8" H 6380 6900 40  0000 L CNN
@@ -263,7 +261,7 @@ NoConn ~ 6150 6700
 NoConn ~ 6150 6800
 NoConn ~ 6150 6900
 $Comp
-L PWR_FLAG #FLG06
+L ecc83_schlib:PWR_FLAG #FLG06
 U 1 1 550E41D9
 P 3700 1700
 F 0 "#FLG06" H 3700 1970 30  0001 C CNN
@@ -274,7 +272,7 @@ F 3 "" H 3700 1700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR07
+L ecc83_schlib:GND #PWR07
 U 1 1 550E42C4
 P 4100 2500
 F 0 "#PWR07" H 4100 2500 30  0001 C CNN
@@ -350,7 +348,7 @@ Wire Wire Line
 	6000 5150 6000 4200
 Connection ~ 6000 4200
 $Comp
-L GND #PWR08
+L ecc83_schlib:GND #PWR08
 U 1 1 550E4C85
 P 5800 4550
 F 0 "#PWR08" H 5800 4550 30  0001 C CNN

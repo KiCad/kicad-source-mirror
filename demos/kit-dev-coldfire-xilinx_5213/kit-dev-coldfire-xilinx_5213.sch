@@ -1,19 +1,6 @@
-EESchema Schematic File Version 2
-LIBS:power
-LIBS:device
-LIBS:transistors
-LIBS:conn
-LIBS:linear
-LIBS:regul
-LIBS:74xx
-LIBS:adc-dac
-LIBS:memory
-LIBS:xilinx
-LIBS:special
-LIBS:microcontrollers
-LIBS:motorola
+EESchema Schematic File Version 4
 LIBS:kit-dev-coldfire-xilinx_5213-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
@@ -31,55 +18,21 @@ Connection ~ 7100 1400
 Wire Wire Line
 	6900 1200 7100 1200
 Wire Wire Line
-	7100 1200 7100 1400
-Wire Wire Line
-	7100 1400 7100 1450
+	7100 1200 7100 1450
 Connection ~ 2900 10000
 Wire Wire Line
-	3850 10000 4000 10000
-Wire Wire Line
-	4000 10000 4200 10000
-Wire Wire Line
-	4200 10000 4400 10000
-Wire Wire Line
-	4400 10000 4750 10000
-Wire Wire Line
-	4750 10000 5150 10000
-Wire Wire Line
-	5150 10000 5550 10000
-Wire Wire Line
-	5550 10000 5900 10000
-Wire Wire Line
-	5900 10000 6250 10000
-Wire Wire Line
-	6250 10000 6600 10000
-Wire Wire Line
-	6600 10000 7000 10000
-Wire Wire Line
-	7000 10000 7350 10000
-Wire Wire Line
-	7350 10000 7750 10000
+	3850 10000 7750 10000
 Wire Wire Line
 	2350 7800 1100 7800
 Wire Wire Line
-	1100 7800 1100 8100
+	1100 7800 1100 8700
 Wire Wire Line
-	1100 8100 1100 8500
-Wire Wire Line
-	1100 8500 1100 8700
-Wire Wire Line
-	1800 8100 1900 8100
-Wire Wire Line
-	1900 8100 2350 8100
+	1800 8100 2350 8100
 Wire Wire Line
 	13900 4450 13850 4450
 Connection ~ 2300 3000
 Wire Wire Line
-	1600 3000 1900 3000
-Wire Wire Line
-	1900 3000 2300 3000
-Wire Wire Line
-	2300 3000 2400 3000
+	1600 3000 2400 3000
 Wire Wire Line
 	13100 6750 12200 6750
 Wire Wire Line
@@ -179,9 +132,7 @@ Wire Wire Line
 Wire Wire Line
 	2300 4500 2300 4600
 Wire Wire Line
-	2800 3000 2950 3000
-Wire Wire Line
-	2950 3000 3600 3000
+	2800 3000 3600 3000
 Wire Wire Line
 	850  2950 850  3000
 Wire Wire Line
@@ -204,45 +155,25 @@ Wire Wire Line
 Wire Wire Line
 	1050 10000 1050 9950
 Wire Wire Line
-	2450 10000 2600 10000
-Wire Wire Line
-	2600 10000 2900 10000
-Wire Wire Line
-	2900 10000 3200 10000
+	2450 10000 3200 10000
 Wire Wire Line
 	6150 6950 5700 6950
 Wire Wire Line
 	5700 6700 6150 6700
 Connection ~ 14450 1700
 Wire Wire Line
-	14350 1700 14450 1700
-Wire Wire Line
-	14450 1700 14600 1700
+	14350 1700 14600 1700
 Wire Wire Line
 	14450 1150 14450 1100
 Connection ~ 13300 1700
 Wire Wire Line
 	13300 1850 13300 1700
 Wire Wire Line
-	13100 1700 13300 1700
-Wire Wire Line
-	13300 1700 13450 1700
+	13100 1700 13450 1700
 Wire Wire Line
 	6150 3050 5750 3050
 Wire Bus Line
-	5550 5950 5550 6050
-Wire Bus Line
-	5550 6050 5550 6150
-Wire Bus Line
-	5550 6150 5550 6250
-Wire Bus Line
-	5550 6250 5550 6350
-Wire Bus Line
-	5550 6350 5550 6450
-Wire Bus Line
-	5550 6450 5550 6550
-Wire Bus Line
-	5550 6550 5550 6650
+	5550 5950 5550 6650
 Connection ~ 6750 1400
 Wire Wire Line
 	6750 1450 6750 1400
@@ -257,19 +188,7 @@ Wire Wire Line
 Wire Bus Line
 	5400 5900 4600 5900
 Wire Bus Line
-	5400 5150 5400 5250
-Wire Bus Line
-	5400 5250 5400 5350
-Wire Bus Line
-	5400 5350 5400 5450
-Wire Bus Line
-	5400 5450 5400 5550
-Wire Bus Line
-	5400 5550 5400 5650
-Wire Bus Line
-	5400 5650 5400 5750
-Wire Bus Line
-	5400 5750 5400 5900
+	5400 5150 5400 5900
 Connection ~ 4150 5150
 Wire Wire Line
 	4150 5150 4200 5150
@@ -280,25 +199,17 @@ Connection ~ 4750 5050
 Wire Wire Line
 	4750 5050 4800 5050
 Wire Wire Line
-	5300 5650 5400 5650
+	5300 5650 6150 5650
 Wire Wire Line
-	5400 5650 6150 5650
+	5300 5450 6150 5450
 Wire Wire Line
-	5300 5450 5400 5450
-Wire Wire Line
-	5400 5450 6150 5450
-Wire Wire Line
-	5300 5250 5400 5250
-Wire Wire Line
-	5400 5250 6150 5250
+	5300 5250 6150 5250
 Wire Wire Line
 	5300 5050 6150 5050
 Wire Wire Line
 	13600 4700 13600 4800
 Wire Wire Line
-	14550 4450 14550 4600
-Wire Wire Line
-	14550 4600 14550 4750
+	14550 4450 14550 4750
 Wire Wire Line
 	12800 4400 12100 4400
 Wire Wire Line
@@ -308,9 +219,7 @@ Wire Wire Line
 Wire Wire Line
 	12800 4100 12100 4100
 Wire Wire Line
-	12450 4700 12700 4700
-Wire Wire Line
-	12700 4700 12800 4700
+	12450 4700 12800 4700
 Connection ~ 14100 4600
 Wire Wire Line
 	14100 4600 14100 4700
@@ -318,9 +227,7 @@ Connection ~ 14350 3800
 Wire Wire Line
 	14350 3250 14350 3800
 Wire Wire Line
-	13600 3600 14100 3600
-Wire Wire Line
-	14100 3600 15150 3600
+	13600 3600 15150 3600
 Connection ~ 13850 3500
 Wire Wire Line
 	13850 3250 13850 3500
@@ -329,25 +236,13 @@ Wire Wire Line
 	14350 2700 14350 2750
 Connection ~ 13850 2700
 Wire Wire Line
-	13850 2650 13850 2700
+	13850 2650 13850 2750
 Wire Wire Line
-	13850 2700 13850 2750
+	13850 2700 14600 2700
 Wire Wire Line
-	13850 2700 14100 2700
+	13600 4600 15100 4600
 Wire Wire Line
-	14100 2700 14350 2700
-Wire Wire Line
-	14350 2700 14600 2700
-Wire Wire Line
-	13600 4600 14100 4600
-Wire Wire Line
-	14100 4600 14550 4600
-Wire Wire Line
-	14550 4600 15100 4600
-Wire Wire Line
-	13600 3800 14350 3800
-Wire Wire Line
-	14350 3800 15150 3800
+	13600 3800 15150 3800
 Wire Wire Line
 	5700 3850 6150 3850
 Wire Wire Line
@@ -356,29 +251,19 @@ Wire Wire Line
 	6150 3750 5650 3750
 Connection ~ 2850 1650
 Wire Wire Line
-	2750 1650 2850 1650
-Wire Wire Line
-	2850 1650 3600 1650
+	2750 1650 3600 1650
 Wire Wire Line
 	2850 1600 2850 1650
 Connection ~ 5150 10000
 Wire Wire Line
 	5150 10000 5150 10050
 Wire Wire Line
-	5000 3350 5050 3350
-Wire Wire Line
-	5050 3350 6150 3350
+	5000 3350 6150 3350
 Connection ~ 12600 4000
 Wire Wire Line
 	12600 4000 12800 4000
 Wire Wire Line
-	12600 3600 12600 3700
-Wire Wire Line
-	12600 3700 12600 4000
-Wire Wire Line
-	12600 4000 12600 4600
-Wire Wire Line
-	12600 4600 12600 4800
+	12600 3600 12600 4800
 Wire Wire Line
 	12600 3600 12800 3600
 Connection ~ 4750 10000
@@ -424,25 +309,7 @@ Connection ~ 7950 7500
 Wire Wire Line
 	7950 7500 7950 7450
 Wire Wire Line
-	7900 7500 7950 7500
-Wire Wire Line
-	7950 7500 8000 7500
-Wire Wire Line
-	8000 7500 8050 7500
-Wire Wire Line
-	8050 7500 8100 7500
-Wire Wire Line
-	8100 7500 8150 7500
-Wire Wire Line
-	8150 7500 8200 7500
-Wire Wire Line
-	8200 7500 8250 7500
-Wire Wire Line
-	8250 7500 8300 7500
-Wire Wire Line
-	8300 7500 8350 7500
-Wire Wire Line
-	8350 7500 8400 7500
+	7900 7500 8400 7500
 Wire Wire Line
 	7900 7500 7900 7450
 Connection ~ 8000 1700
@@ -475,9 +342,7 @@ Wire Wire Line
 	7950 1750 7950 1700
 Connection ~ 7950 1700
 Wire Wire Line
-	8400 7450 8400 7500
-Wire Wire Line
-	8400 7500 8400 7550
+	8400 7450 8400 7550
 Connection ~ 8400 7500
 Wire Wire Line
 	8000 7500 8000 7450
@@ -537,9 +402,7 @@ Wire Wire Line
 	3050 1600 3050 2000
 Connection ~ 3050 2000
 Wire Wire Line
-	2750 2000 3050 2000
-Wire Wire Line
-	3050 2000 3600 2000
+	2750 2000 3600 2000
 Wire Wire Line
 	5150 3750 4750 3750
 Wire Wire Line
@@ -550,18 +413,14 @@ Wire Wire Line
 	14100 2700 14100 2750
 Connection ~ 14100 2700
 Wire Wire Line
-	13600 3500 13850 3500
-Wire Wire Line
-	13850 3500 15150 3500
+	13600 3500 15150 3500
 Wire Wire Line
 	5700 3450 6150 3450
 Wire Wire Line
 	14100 3250 14100 3600
 Connection ~ 14100 3600
 Wire Wire Line
-	13600 3900 14600 3900
-Wire Wire Line
-	14600 3900 15150 3900
+	13600 3900 15150 3900
 Wire Wire Line
 	14600 3250 14600 3900
 Connection ~ 14600 3900
@@ -602,38 +461,22 @@ Wire Wire Line
 Wire Wire Line
 	13850 3700 13850 4450
 Wire Wire Line
-	4700 5150 5400 5150
+	4700 5150 6150 5150
 Wire Wire Line
-	5400 5150 6150 5150
+	4700 5350 6150 5350
 Wire Wire Line
-	4700 5350 5400 5350
-Wire Wire Line
-	5400 5350 6150 5350
-Wire Wire Line
-	4700 5550 5400 5550
-Wire Wire Line
-	5400 5550 6150 5550
+	4700 5550 6150 5550
 Wire Wire Line
 	4750 5650 4800 5650
 Wire Wire Line
-	4750 5000 4750 5050
-Wire Wire Line
-	4750 5050 4750 5250
-Wire Wire Line
-	4750 5250 4750 5450
-Wire Wire Line
-	4750 5450 4750 5650
+	4750 5000 4750 5650
 Wire Wire Line
 	4750 5250 4800 5250
 Connection ~ 4750 5250
 Wire Wire Line
 	4150 5550 4200 5550
 Wire Wire Line
-	4150 5000 4150 5150
-Wire Wire Line
-	4150 5150 4150 5350
-Wire Wire Line
-	4150 5350 4150 5550
+	4150 5000 4150 5550
 Wire Wire Line
 	4150 5350 4200 5350
 Connection ~ 4150 5350
@@ -654,9 +497,7 @@ Wire Wire Line
 Wire Wire Line
 	10600 3300 10150 3300
 Wire Wire Line
-	6150 1400 6750 1400
-Wire Wire Line
-	6750 1400 7100 1400
+	6150 1400 7100 1400
 Wire Wire Line
 	6150 1400 6150 2100
 Wire Wire Line
@@ -700,9 +541,7 @@ Wire Wire Line
 Wire Wire Line
 	1800 10500 1800 10550
 Wire Wire Line
-	2600 10450 2600 10500
-Wire Wire Line
-	2600 10500 2600 10600
+	2600 10450 2600 10600
 Wire Wire Line
 	10150 5700 11050 5700
 Wire Wire Line
@@ -777,9 +616,7 @@ Wire Wire Line
 Wire Wire Line
 	13100 6650 12200 6650
 Wire Wire Line
-	8400 1650 8400 1700
-Wire Wire Line
-	8400 1700 8400 1750
+	8400 1650 8400 1750
 Connection ~ 8400 1700
 Wire Wire Line
 	2300 3100 2300 3000
@@ -787,65 +624,19 @@ Connection ~ 1900 3000
 Wire Wire Line
 	14550 4450 14500 4450
 Wire Wire Line
-	4400 10500 4750 10500
+	4400 10500 8100 10500
 Wire Wire Line
-	4750 10500 5150 10500
-Wire Wire Line
-	5150 10500 5550 10500
-Wire Wire Line
-	5550 10500 5900 10500
-Wire Wire Line
-	5900 10500 6250 10500
-Wire Wire Line
-	6250 10500 6600 10500
-Wire Wire Line
-	6600 10500 7000 10500
-Wire Wire Line
-	7000 10500 7350 10500
-Wire Wire Line
-	7350 10500 7750 10500
-Wire Wire Line
-	7750 10500 7850 10500
-Wire Wire Line
-	7850 10500 8000 10500
-Wire Wire Line
-	8000 10500 8100 10500
-Wire Wire Line
-	1900 8100 1900 8500
-Wire Wire Line
-	1900 8500 1900 8650
+	1900 8100 1900 8650
 Wire Wire Line
 	12200 6850 13100 6850
 Wire Wire Line
-	2900 10450 2900 10500
-Wire Wire Line
-	2900 10500 2900 10600
+	2900 10450 2900 10600
 Wire Wire Line
 	8500 1700 8500 1750
 Wire Wire Line
-	7900 1700 7950 1700
-Wire Wire Line
-	7950 1700 8000 1700
-Wire Wire Line
-	8000 1700 8050 1700
-Wire Wire Line
-	8050 1700 8100 1700
-Wire Wire Line
-	8100 1700 8150 1700
-Wire Wire Line
-	8150 1700 8200 1700
-Wire Wire Line
-	8200 1700 8250 1700
-Wire Wire Line
-	8250 1700 8300 1700
-Wire Wire Line
-	8300 1700 8350 1700
-Wire Wire Line
-	8350 1700 8400 1700
-Wire Wire Line
-	8400 1700 8500 1700
+	7900 1700 8500 1700
 $Comp
-L MCF5213-LQFP100 U1
+L kit-dev-coldfire-xilinx_5213_schlib:MCF5213-LQFP100 U1
 U 1 1 46161C39
 P 8150 4600
 F 0 "U1" H 8150 7600 60  0000 C CNN
@@ -856,7 +647,7 @@ F 3 "" H 8150 4600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GNDA #PWR01
+L kit-dev-coldfire-xilinx_5213_schlib:GNDA #PWR01
 U 1 1 462382A4
 P 2900 10600
 F 0 "#PWR01" H 2900 10600 40  0001 C CNN
@@ -867,7 +658,7 @@ F 3 "" H 2900 10600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C18
+L kit-dev-coldfire-xilinx_5213_schlib:C C18
 U 1 1 46238286
 P 2900 10250
 F 0 "C18" H 2950 10350 50  0000 L CNN
@@ -882,7 +673,7 @@ XTAL
 Text Label 2050 8100 0    60   ~ 0
 XTAL
 $Comp
-L GNDA #PWR02
+L kit-dev-coldfire-xilinx_5213_schlib:GNDA #PWR02
 U 1 1 46602ECA
 P 5350 6950
 F 0 "#PWR02" H 5350 6950 40  0001 C CNN
@@ -893,7 +684,7 @@ F 3 "" H 5350 6950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_1 GND1
+L kit-dev-coldfire-xilinx_5213_schlib:CONN_1 GND1
 U 1 1 465FE6C5
 P 8250 10500
 F 0 "GND1" H 8330 10500 40  0000 L CNN
@@ -904,7 +695,7 @@ F 3 "" H 8250 10500 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GNDA #PWR03
+L kit-dev-coldfire-xilinx_5213_schlib:GNDA #PWR03
 U 1 1 46555AB9
 P 6100 7100
 F 0 "#PWR03" H 6100 7100 40  0001 C CNN
@@ -915,7 +706,7 @@ F 3 "" H 6100 7100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +3.3V #PWR04
+L kit-dev-coldfire-xilinx_5213_schlib:+3.3V #PWR04
 U 1 1 46554FD2
 P 13850 1450
 F 0 "#PWR04" H 13850 1410 30  0001 C CNN
@@ -926,7 +717,7 @@ F 3 "" H 13850 1450 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L GND #PWR05
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR05
 U 1 1 46554FCD
 P 13850 1950
 F 0 "#PWR05" H 13850 1950 30  0001 C CNN
@@ -937,7 +728,7 @@ F 3 "" H 13850 1950 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L 74AHC1G14 U2
+L kit-dev-coldfire-xilinx_5213_schlib:74AHC1G14 U2
 U 1 1 46554FB5
 P 13900 1700
 F 0 "U2" H 13950 1850 50  0000 C CNN
@@ -948,7 +739,7 @@ F 3 "" H 13900 1700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L JUMPER CT1
+L kit-dev-coldfire-xilinx_5213_schlib:JUMPER CT1
 U 1 1 46545507
 P 14200 4450
 F 0 "CT1" H 14600 4500 60  0000 C CNN
@@ -959,7 +750,7 @@ F 3 "" H 14200 4450 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR06
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR06
 U 1 1 465451F6
 P 2300 3750
 F 0 "#PWR06" H 2300 3750 30  0001 C CNN
@@ -970,7 +761,7 @@ F 3 "" H 2300 3750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH RST_SW1
+L kit-dev-coldfire-xilinx_5213_schlib:SW_PUSH RST_SW1
 U 1 1 465451D4
 P 2300 3400
 F 0 "RST_SW1" V 2250 3750 50  0000 C CNN
@@ -1001,7 +792,7 @@ IRQ-2
 Text Label 12650 5750 0    60   ~ 0
 IRQ-1
 $Comp
-L VCC #PWR07
+L kit-dev-coldfire-xilinx_5213_schlib:VCC #PWR07
 U 1 1 4652AF7E
 P 3850 9950
 F 0 "#PWR07" H 3850 10050 30  0001 C CNN
@@ -1012,7 +803,7 @@ F 3 "" H 3850 9950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L PWR_FLAG #FLG08
+L kit-dev-coldfire-xilinx_5213_schlib:PWR_FLAG #FLG08
 U 1 1 4652AF2F
 P 3150 10550
 F 0 "#FLG08" H 3150 10820 30  0001 C CNN
@@ -1027,7 +818,7 @@ VRL
 Text Label 15200 7950 0    60   ~ 0
 VRH
 $Comp
-L PWR_FLAG #FLG09
+L kit-dev-coldfire-xilinx_5213_schlib:PWR_FLAG #FLG09
 U 1 1 4652AE72
 P 8000 10550
 F 0 "#FLG09" H 8000 10820 30  0001 C CNN
@@ -1155,7 +946,7 @@ $EndSheet
 Text Label 1150 7800 0    60   ~ 0
 CLKIN/EXTAL
 $Comp
-L GND #PWR010
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR010
 U 1 1 46238A4E
 P 1100 9100
 F 0 "#PWR010" H 1100 9100 30  0001 C CNN
@@ -1166,7 +957,7 @@ F 3 "" H 1100 9100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR011
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR011
 U 1 1 46238A48
 P 1900 9050
 F 0 "#PWR011" H 1900 9050 30  0001 C CNN
@@ -1177,7 +968,7 @@ F 3 "" H 1900 9050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CRYSTAL Y1
+L kit-dev-coldfire-xilinx_5213_schlib:CRYSTAL Y1
 U 1 1 462389C7
 P 1500 8500
 F 0 "Y1" H 1500 8650 60  0000 C CNN
@@ -1188,7 +979,7 @@ F 3 "" H 1500 8500 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C2
+L kit-dev-coldfire-xilinx_5213_schlib:C C2
 U 1 1 462389C0
 P 1900 8850
 F 0 "C2" H 1950 8950 50  0000 L CNN
@@ -1199,7 +990,7 @@ F 3 "" H 1900 8850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C1
+L kit-dev-coldfire-xilinx_5213_schlib:C C1
 U 1 1 462389BC
 P 1100 8900
 F 0 "C1" H 1150 9000 50  0000 L CNN
@@ -1210,7 +1001,7 @@ F 3 "" H 1100 8900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R1
+L kit-dev-coldfire-xilinx_5213_schlib:R R1
 U 1 1 462389B6
 P 1550 8100
 F 0 "R1" V 1630 8100 50  0000 C CNN
@@ -1221,7 +1012,7 @@ F 3 "" H 1550 8100 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L CONN_1 ALLPST1
+L kit-dev-coldfire-xilinx_5213_schlib:CONN_1 ALLPST1
 U 1 1 46238965
 P 5350 4000
 F 0 "ALLPST1" H 5350 4100 40  0000 C CNN
@@ -1274,7 +1065,7 @@ GPT1
 Text Label 10300 2550 0    60   ~ 0
 GPT0
 $Comp
-L GND #PWR012
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR012
 U 1 1 462385BA
 P 2300 5700
 F 0 "#PWR012" H 2300 5700 30  0001 C CNN
@@ -1285,7 +1076,7 @@ F 3 "" H 2300 5700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L LED RED1
+L kit-dev-coldfire-xilinx_5213_schlib:LED RED1
 U 1 1 46238597
 P 2300 5400
 F 0 "RED1" V 2250 5700 50  0000 C CNN
@@ -1296,7 +1087,7 @@ F 3 "" H 2300 5400 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R22
+L kit-dev-coldfire-xilinx_5213_schlib:R R22
 U 1 1 4623857F
 P 2300 4850
 F 0 "R22" H 2150 5000 50  0000 C CNN
@@ -1309,7 +1100,7 @@ $EndComp
 Text Label 1200 4300 2    60   ~ 0
 RSTO-
 $Comp
-L R R21
+L kit-dev-coldfire-xilinx_5213_schlib:R R21
 U 1 1 46238545
 P 1650 4300
 F 0 "R21" V 1550 4300 50  0000 C CNN
@@ -1320,7 +1111,7 @@ F 3 "" H 1650 4300 60  0001 C CNN
 	0    -1   1    0   
 $EndComp
 $Comp
-L VDD #PWR013
+L kit-dev-coldfire-xilinx_5213_schlib:VDD #PWR013
 U 1 1 46238539
 P 2300 4050
 F 0 "#PWR013" H 2300 4150 30  0001 C CNN
@@ -1331,7 +1122,7 @@ F 3 "" H 2300 4050 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L GND #PWR014
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR014
 U 1 1 46238531
 P 8400 7550
 F 0 "#PWR014" H 8400 7550 30  0001 C CNN
@@ -1342,7 +1133,7 @@ F 3 "" H 8400 7550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L PNP Q1
+L kit-dev-coldfire-xilinx_5213_schlib:PNP Q1
 U 1 1 46238519
 P 2200 4300
 F 0 "Q1" H 2050 4150 60  0000 C CNN
@@ -1355,7 +1146,7 @@ $EndComp
 Text Label 3250 3000 0    60   ~ 0
 RSTI-
 $Comp
-L +3.3V #PWR015
+L kit-dev-coldfire-xilinx_5213_schlib:+3.3V #PWR015
 U 1 1 462384A7
 P 2950 2400
 F 0 "#PWR015" H 2950 2360 40  0001 C CNN
@@ -1366,7 +1157,7 @@ F 3 "" H 2950 2400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR016
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR016
 U 1 1 4623848E
 P 1900 3550
 F 0 "#PWR016" H 1900 3550 30  0001 C CNN
@@ -1377,7 +1168,7 @@ F 3 "" H 1900 3550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R15
+L kit-dev-coldfire-xilinx_5213_schlib:R R15
 U 1 1 4623847B
 P 2950 2650
 F 0 "R15" H 2800 2800 50  0000 C CNN
@@ -1388,7 +1179,7 @@ F 3 "" H 2950 2650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODE D3
+L kit-dev-coldfire-xilinx_5213_schlib:DIODE D3
 U 1 1 4623846D
 P 2600 3000
 F 0 "D3" H 2600 2800 50  0000 C CNN
@@ -1399,7 +1190,7 @@ F 3 "" H 2600 3000 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L C C3
+L kit-dev-coldfire-xilinx_5213_schlib:C C3
 U 1 1 46238468
 P 1900 3300
 F 0 "C3" H 1950 3400 50  0000 L CNN
@@ -1410,7 +1201,7 @@ F 3 "" H 1900 3300 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +3.3V #PWR017
+L kit-dev-coldfire-xilinx_5213_schlib:+3.3V #PWR017
 U 1 1 4623840E
 P 850 2950
 F 0 "#PWR017" H 850 2910 40  0001 C CNN
@@ -1421,7 +1212,7 @@ F 3 "" H 850 2950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR018
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR018
 U 1 1 46238409
 P 1250 3400
 F 0 "#PWR018" H 1250 3400 30  0001 C CNN
@@ -1432,7 +1223,7 @@ F 3 "" H 1250 3400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L MC34064P LV1
+L kit-dev-coldfire-xilinx_5213_schlib:MC34064P LV1
 U 1 1 462383E5
 P 1250 3050
 F 0 "LV1" H 1250 3350 60  0000 C CNN
@@ -1457,7 +1248,7 @@ DSPI_DOUT
 Text Label 10250 5800 0    60   ~ 0
 QSPI_DIN
 $Comp
-L CP C16
+L kit-dev-coldfire-xilinx_5213_schlib:CP C16
 U 1 1 462382CE
 P 2600 10250
 F 0 "C16" H 2650 10350 50  0000 L CNN
@@ -1468,7 +1259,7 @@ F 3 "" H 2600 10250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GNDA #PWR019
+L kit-dev-coldfire-xilinx_5213_schlib:GNDA #PWR019
 U 1 1 462380EB
 P 2600 10600
 F 0 "#PWR019" H 2600 10600 40  0001 C CNN
@@ -1479,7 +1270,7 @@ F 3 "" H 2600 10600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR020
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR020
 U 1 1 462380D3
 P 1800 10550
 F 0 "#PWR020" H 1800 10550 30  0001 C CNN
@@ -1490,7 +1281,7 @@ F 3 "" H 1800 10550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L INDUCTOR FB1
+L kit-dev-coldfire-xilinx_5213_schlib:INDUCTOR FB1
 U 1 1 462380B8
 P 2150 10500
 F 0 "FB1" V 2250 10500 50  0000 C CNN
@@ -1501,7 +1292,7 @@ F 3 "" H 2150 10500 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L INDUCTOR L1
+L kit-dev-coldfire-xilinx_5213_schlib:INDUCTOR L1
 U 1 1 46238092
 P 2150 10000
 F 0 "L1" V 2250 10000 50  0000 C CNN
@@ -1512,7 +1303,7 @@ F 3 "" H 2150 10000 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L JUMPER VDDA1
+L kit-dev-coldfire-xilinx_5213_schlib:JUMPER VDDA1
 U 1 1 46238079
 P 1400 10000
 F 0 "VDDA1" H 1400 10150 60  0000 C CNN
@@ -1523,7 +1314,7 @@ F 3 "" H 1400 10000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +3.3V #PWR021
+L kit-dev-coldfire-xilinx_5213_schlib:+3.3V #PWR021
 U 1 1 46238078
 P 1050 9950
 F 0 "#PWR021" H 1050 9910 30  0001 C CNN
@@ -1546,7 +1337,7 @@ VRH
 Text Label 15400 1700 2    60   ~ 0
 IRQ-7
 $Comp
-L DIODE D1
+L kit-dev-coldfire-xilinx_5213_schlib:DIODE D1
 U 1 1 46237F86
 P 14800 1700
 F 0 "D1" H 14800 1800 40  0000 C CNN
@@ -1557,7 +1348,7 @@ F 3 "" H 14800 1700 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L +3.3V #PWR022
+L kit-dev-coldfire-xilinx_5213_schlib:+3.3V #PWR022
 U 1 1 46237F59
 P 11800 1700
 F 0 "#PWR022" H 11800 1660 30  0001 C CNN
@@ -1568,7 +1359,7 @@ F 3 "" H 11800 1700 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH ABRT_SW1
+L kit-dev-coldfire-xilinx_5213_schlib:SW_PUSH ABRT_SW1
 U 1 1 46237F50
 P 12200 1700
 F 0 "ABRT_SW1" H 12200 1850 50  0000 C CNN
@@ -1579,7 +1370,7 @@ F 3 "" H 12200 1700 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L GND #PWR023
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR023
 U 1 1 46237F11
 P 13100 2350
 F 0 "#PWR023" H 13100 2350 30  0001 C CNN
@@ -1590,7 +1381,7 @@ F 3 "" H 13100 2350 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L GND #PWR024
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR024
 U 1 1 46237F0E
 P 13300 2350
 F 0 "#PWR024" H 13300 2350 30  0001 C CNN
@@ -1601,7 +1392,7 @@ F 3 "" H 13300 2350 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L +3.3V #PWR025
+L kit-dev-coldfire-xilinx_5213_schlib:+3.3V #PWR025
 U 1 1 46237E86
 P 14450 650
 F 0 "#PWR025" H 14450 610 30  0001 C CNN
@@ -1612,7 +1403,7 @@ F 3 "" H 14450 650 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L LED LEDABRT1
+L kit-dev-coldfire-xilinx_5213_schlib:LED LEDABRT1
 U 1 1 46237E52
 P 14450 900
 F 0 "LEDABRT1" H 14450 1000 50  0000 C CNN
@@ -1623,7 +1414,7 @@ F 3 "" H 14450 900 60  0001 C CNN
 	0    -1   1    0   
 $EndComp
 $Comp
-L R R14
+L kit-dev-coldfire-xilinx_5213_schlib:R R14
 U 1 1 46237E3D
 P 14450 1400
 F 0 "R14" V 14530 1400 50  0000 C CNN
@@ -1634,7 +1425,7 @@ F 3 "" H 14450 1400 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L C C15
+L kit-dev-coldfire-xilinx_5213_schlib:C C15
 U 1 1 46237E36
 P 13300 2050
 F 0 "C15" H 13050 2150 50  0000 L CNN
@@ -1645,7 +1436,7 @@ F 3 "" H 13300 2050 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L R R12
+L kit-dev-coldfire-xilinx_5213_schlib:R R12
 U 1 1 46237E2F
 P 13100 2050
 F 0 "R12" H 13250 2200 50  0000 C CNN
@@ -1656,7 +1447,7 @@ F 3 "" H 13100 2050 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L R R7
+L kit-dev-coldfire-xilinx_5213_schlib:R R7
 U 1 1 46237E28
 P 12850 1700
 F 0 "R7" V 12750 1700 50  0000 C CNN
@@ -1667,7 +1458,7 @@ F 3 "" H 12850 1700 60  0001 C CNN
 	0    -1   1    0   
 $EndComp
 $Comp
-L +3.3V #PWR026
+L kit-dev-coldfire-xilinx_5213_schlib:+3.3V #PWR026
 U 1 1 46237E18
 P 13300 1000
 F 0 "#PWR026" H 13300 960 30  0001 C CNN
@@ -1678,7 +1469,7 @@ F 3 "" H 13300 1000 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L GND #PWR027
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR027
 U 1 1 46237E07
 P 13300 1450
 F 0 "#PWR027" H 13300 1450 30  0001 C CNN
@@ -1689,7 +1480,7 @@ F 3 "" H 13300 1450 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L C C14
+L kit-dev-coldfire-xilinx_5213_schlib:C C14
 U 1 1 46237DF9
 P 13300 1250
 F 0 "C14" H 13400 1200 50  0000 L CNN
@@ -1702,7 +1493,7 @@ $EndComp
 Text Label 5650 4000 0    60   ~ 0
 ALLPST
 $Comp
-L VDD #PWR028
+L kit-dev-coldfire-xilinx_5213_schlib:VDD #PWR028
 U 1 1 461BE524
 P 5250 3000
 F 0 "#PWR028" H 5250 3100 30  0001 C CNN
@@ -1713,7 +1504,7 @@ F 3 "" H 5250 3000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R45
+L kit-dev-coldfire-xilinx_5213_schlib:R R45
 U 1 1 461BE50C
 P 5500 3050
 F 0 "R45" V 5600 2950 50  0000 C CNN
@@ -1760,7 +1551,7 @@ AN0
 Text Label 6200 1400 0    60   ~ 0
 VDDPLL
 $Comp
-L GND #PWR029
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR029
 U 1 1 461BE37E
 P 7100 1850
 F 0 "#PWR029" H 7100 1850 30  0001 C CNN
@@ -1771,7 +1562,7 @@ F 3 "" H 7100 1850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR030
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR030
 U 1 1 461BE36C
 P 6750 1850
 F 0 "#PWR030" H 6750 1850 30  0001 C CNN
@@ -1782,7 +1573,7 @@ F 3 "" H 6750 1850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C20
+L kit-dev-coldfire-xilinx_5213_schlib:C C20
 U 1 1 461BE364
 P 6750 1650
 F 0 "C20" H 6800 1750 50  0000 L CNN
@@ -1793,7 +1584,7 @@ F 3 "" H 6750 1650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C21
+L kit-dev-coldfire-xilinx_5213_schlib:C C21
 U 1 1 461BE35C
 P 7100 1650
 F 0 "C21" H 7150 1750 50  0000 L CNN
@@ -1804,7 +1595,7 @@ F 3 "" H 7100 1650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L INDUCTOR L2
+L kit-dev-coldfire-xilinx_5213_schlib:INDUCTOR L2
 U 1 1 461BE327
 P 6600 1200
 F 0 "L2" V 6550 1200 40  0000 C CNN
@@ -1815,7 +1606,7 @@ F 3 "" H 6600 1200 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L +3.3V #PWR031
+L kit-dev-coldfire-xilinx_5213_schlib:+3.3V #PWR031
 U 1 1 461BE318
 P 6250 1150
 F 0 "#PWR031" H 6250 1110 30  0001 C CNN
@@ -1826,7 +1617,7 @@ F 3 "" H 6250 1150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR032
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR032
 U 1 1 461BE2B7
 P 4350 3350
 F 0 "#PWR032" H 4350 3350 30  0001 C CNN
@@ -1841,7 +1632,7 @@ RSTO-
 Text Label 5600 2650 0    60   ~ 0
 RSTI-
 $Comp
-L R R9
+L kit-dev-coldfire-xilinx_5213_schlib:R R9
 U 1 1 461BE230
 P 5850 3150
 F 0 "R9" V 5930 3150 50  0000 C CNN
@@ -1852,7 +1643,7 @@ F 3 "" H 5850 3150 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #PWR033
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR033
 U 1 1 461BE20A
 P 6150 2200
 F 0 "#PWR033" H 6150 2200 30  0001 C CNN
@@ -1895,7 +1686,7 @@ Entry Wire Line
 Text Label 4650 5900 0    60   ~ 0
 IRQ-[1..7]
 $Comp
-L VDD #PWR034
+L kit-dev-coldfire-xilinx_5213_schlib:VDD #PWR034
 U 1 1 461BE128
 P 4750 5000
 F 0 "#PWR034" H 4750 5100 30  0001 C CNN
@@ -1906,7 +1697,7 @@ F 3 "" H 4750 5000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VDD #PWR035
+L kit-dev-coldfire-xilinx_5213_schlib:VDD #PWR035
 U 1 1 461BE125
 P 4150 5000
 F 0 "#PWR035" H 4150 5100 30  0001 C CNN
@@ -1917,7 +1708,7 @@ F 3 "" H 4150 5000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R13
+L kit-dev-coldfire-xilinx_5213_schlib:R R13
 U 1 1 461BE054
 P 5050 5650
 F 0 "R13" V 5130 5650 50  0000 C CNN
@@ -1928,7 +1719,7 @@ F 3 "" H 5050 5650 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R11
+L kit-dev-coldfire-xilinx_5213_schlib:R R11
 U 1 1 461BE051
 P 4450 5550
 F 0 "R11" V 4530 5550 50  0000 C CNN
@@ -1939,7 +1730,7 @@ F 3 "" H 4450 5550 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R10
+L kit-dev-coldfire-xilinx_5213_schlib:R R10
 U 1 1 461BE04B
 P 5050 5450
 F 0 "R10" V 5130 5450 50  0000 C CNN
@@ -1950,7 +1741,7 @@ F 3 "" H 5050 5450 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R8
+L kit-dev-coldfire-xilinx_5213_schlib:R R8
 U 1 1 461BE047
 P 4450 5350
 F 0 "R8" V 4530 5350 50  0000 C CNN
@@ -1961,7 +1752,7 @@ F 3 "" H 4450 5350 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R6
+L kit-dev-coldfire-xilinx_5213_schlib:R R6
 U 1 1 461BE046
 P 5050 5250
 F 0 "R6" V 5130 5250 50  0000 C CNN
@@ -1972,7 +1763,7 @@ F 3 "" H 5050 5250 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R5
+L kit-dev-coldfire-xilinx_5213_schlib:R R5
 U 1 1 461BE041
 P 4450 5150
 F 0 "R5" V 4530 5150 50  0000 C CNN
@@ -1983,7 +1774,7 @@ F 3 "" H 4450 5150 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R4
+L kit-dev-coldfire-xilinx_5213_schlib:R R4
 U 1 1 461BE039
 P 5050 5050
 F 0 "R4" V 5130 5050 50  0000 C CNN
@@ -2008,7 +1799,7 @@ IRQ-2
 Text Label 5650 5050 0    60   ~ 0
 IRQ-1
 $Comp
-L CONN_1 TA-1
+L kit-dev-coldfire-xilinx_5213_schlib:CONN_1 TA-1
 U 1 1 461BBA34
 P 13750 4800
 F 0 "TA-1" H 13800 4700 40  0000 C CNN
@@ -2022,7 +1813,7 @@ Text Label 12150 3800 0    60   ~ 0
 RSTI-
 NoConn ~ 12800 4500
 $Comp
-L +3.3V #PWR036
+L kit-dev-coldfire-xilinx_5213_schlib:+3.3V #PWR036
 U 1 1 461BB93F
 P 12450 4700
 F 0 "#PWR036" H 12450 4660 30  0001 C CNN
@@ -2067,7 +1858,7 @@ PST1
 Text Label 5650 4100 0    60   ~ 0
 PST0
 $Comp
-L GND #PWR037
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR037
 U 1 1 461BB8C6
 P 14100 5200
 F 0 "#PWR037" H 14100 5200 30  0001 C CNN
@@ -2078,7 +1869,7 @@ F 3 "" H 14100 5200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R26
+L kit-dev-coldfire-xilinx_5213_schlib:R R26
 U 1 1 461BB8C0
 P 14100 4950
 F 0 "R26" V 14180 4950 50  0000 C CNN
@@ -2089,7 +1880,7 @@ F 3 "" H 14100 4950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_1 CLKOUT1
+L kit-dev-coldfire-xilinx_5213_schlib:CONN_1 CLKOUT1
 U 1 1 461BB894
 P 14700 4750
 F 0 "CLKOUT1" H 14750 4650 40  0000 C CNN
@@ -2104,7 +1895,7 @@ DSCLK
 Text Label 5750 3450 0    60   ~ 0
 DSCLK
 $Comp
-L VDD #PWR038
+L kit-dev-coldfire-xilinx_5213_schlib:VDD #PWR038
 U 1 1 461BB7AD
 P 13850 2650
 F 0 "#PWR038" H 13850 2750 30  0001 C CNN
@@ -2115,7 +1906,7 @@ F 3 "" H 13850 2650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R20
+L kit-dev-coldfire-xilinx_5213_schlib:R R20
 U 1 1 461BB799
 P 14600 3000
 F 0 "R20" V 14680 3000 50  0000 C CNN
@@ -2126,7 +1917,7 @@ F 3 "" H 14600 3000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R19
+L kit-dev-coldfire-xilinx_5213_schlib:R R19
 U 1 1 461BB798
 P 14350 3000
 F 0 "R19" V 14430 3000 50  0000 C CNN
@@ -2137,7 +1928,7 @@ F 3 "" H 14350 3000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R18
+L kit-dev-coldfire-xilinx_5213_schlib:R R18
 U 1 1 461BB795
 P 14100 3000
 F 0 "R18" V 14180 3000 50  0000 C CNN
@@ -2148,7 +1939,7 @@ F 3 "" H 14100 3000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R17
+L kit-dev-coldfire-xilinx_5213_schlib:R R17
 U 1 1 461BB790
 P 13850 3000
 F 0 "R17" V 13930 3000 50  0000 C CNN
@@ -2169,7 +1960,7 @@ DSI
 Text Label 4800 3750 0    60   ~ 0
 TCLK
 $Comp
-L R R46
+L kit-dev-coldfire-xilinx_5213_schlib:R R46
 U 1 1 461BB742
 P 5400 3750
 F 0 "R46" V 5480 3750 50  0000 C CNN
@@ -2196,7 +1987,7 @@ CLKMOD1
 Text Label 5550 2850 0    60   ~ 0
 CLKMOD0
 $Comp
-L GND #PWR039
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR039
 U 1 1 461BB690
 P 5600 3150
 F 0 "#PWR039" H 5600 3150 30  0001 C CNN
@@ -2207,7 +1998,7 @@ F 3 "" H 5600 3150 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #PWR040
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR040
 U 1 1 461BB68E
 P 2100 2000
 F 0 "#PWR040" H 2100 2000 30  0001 C CNN
@@ -2218,7 +2009,7 @@ F 3 "" H 2100 2000 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L VDD #PWR041
+L kit-dev-coldfire-xilinx_5213_schlib:VDD #PWR041
 U 1 1 461BB662
 P 3050 1050
 F 0 "#PWR041" H 3050 1150 30  0001 C CNN
@@ -2229,7 +2020,7 @@ F 3 "" H 3050 1050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R2
+L kit-dev-coldfire-xilinx_5213_schlib:R R2
 U 1 1 461BB661
 P 3050 1350
 F 0 "R2" H 2950 1550 50  0000 C CNN
@@ -2240,7 +2031,7 @@ F 3 "" H 3050 1350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VDD #PWR042
+L kit-dev-coldfire-xilinx_5213_schlib:VDD #PWR042
 U 1 1 461BB660
 P 2850 1050
 F 0 "#PWR042" H 2850 1150 30  0001 C CNN
@@ -2251,7 +2042,7 @@ F 3 "" H 2850 1050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R25
+L kit-dev-coldfire-xilinx_5213_schlib:R R25
 U 1 1 461BB65F
 P 2850 1350
 F 0 "R25" H 2700 1550 50  0000 C CNN
@@ -2262,7 +2053,7 @@ F 3 "" H 2850 1350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L JUMPER CLK1
+L kit-dev-coldfire-xilinx_5213_schlib:JUMPER CLK1
 U 1 1 461BB648
 P 2450 2000
 F 0 "CLK1" H 2450 2150 60  0000 C CNN
@@ -2273,7 +2064,7 @@ F 3 "" H 2450 2000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L JUMPER CLK0
+L kit-dev-coldfire-xilinx_5213_schlib:JUMPER CLK0
 U 1 1 461BB62E
 P 2450 1650
 F 0 "CLK0" H 2450 1800 60  0000 C CNN
@@ -2284,7 +2075,7 @@ F 3 "" H 2450 1650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VDD #PWR043
+L kit-dev-coldfire-xilinx_5213_schlib:VDD #PWR043
 U 1 1 461BB60D
 P 8400 1650
 F 0 "#PWR043" H 8400 1750 30  0001 C CNN
@@ -2295,7 +2086,7 @@ F 3 "" H 8400 1650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C6
+L kit-dev-coldfire-xilinx_5213_schlib:C C6
 U 1 1 461BB5E5
 P 5150 10250
 F 0 "C6" H 5200 10350 50  0000 L CNN
@@ -2306,7 +2097,7 @@ F 3 "" H 5150 10250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VDD #PWR044
+L kit-dev-coldfire-xilinx_5213_schlib:VDD #PWR044
 U 1 1 461BB525
 P 5050 2750
 F 0 "#PWR044" H 5050 2850 30  0001 C CNN
@@ -2317,7 +2108,7 @@ F 3 "" H 5050 2750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR045
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR045
 U 1 1 461BAF82
 P 2100 1650
 F 0 "#PWR045" H 2100 1650 30  0001 C CNN
@@ -2328,7 +2119,7 @@ F 3 "" H 2100 1650 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R16
+L kit-dev-coldfire-xilinx_5213_schlib:R R16
 U 1 1 461BAF5C
 P 5050 3050
 F 0 "R16" V 5130 3050 50  0000 C CNN
@@ -2339,7 +2130,7 @@ F 3 "" H 5050 3050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L JUMPER BDM_EN1
+L kit-dev-coldfire-xilinx_5213_schlib:JUMPER BDM_EN1
 U 1 1 461BAF4F
 P 4700 3350
 F 0 "BDM_EN1" H 4700 3500 60  0000 C CNN
@@ -2350,7 +2141,7 @@ F 3 "" H 4700 3350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR046
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR046
 U 1 1 461BAF37
 P 13600 4400
 F 0 "#PWR046" H 13600 4400 30  0001 C CNN
@@ -2361,7 +2152,7 @@ F 3 "" H 13600 4400 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #PWR047
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR047
 U 1 1 461BAF13
 P 12600 4800
 F 0 "#PWR047" H 12600 4800 30  0001 C CNN
@@ -2372,7 +2163,7 @@ F 3 "" H 12600 4800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_13X2 BDM_PORT1
+L kit-dev-coldfire-xilinx_5213_schlib:CONN_13X2 BDM_PORT1
 U 1 1 461BAEE7
 P 13200 4100
 F 0 "BDM_PORT1" H 13200 4800 60  0000 C CNN
@@ -2383,7 +2174,7 @@ F 3 "" H 13200 4100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VDD #PWR048
+L kit-dev-coldfire-xilinx_5213_schlib:VDD #PWR048
 U 1 1 461BAEA3
 P 4200 9950
 F 0 "#PWR048" H 4200 10050 30  0001 C CNN
@@ -2394,7 +2185,7 @@ F 3 "" H 4200 9950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR049
+L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR049
 U 1 1 46161D48
 P 7850 10550
 F 0 "#PWR049" H 7850 10550 30  0001 C CNN
@@ -2405,7 +2196,7 @@ F 3 "" H 7850 10550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CP C17
+L kit-dev-coldfire-xilinx_5213_schlib:CP C17
 U 1 1 46161D3C
 P 7750 10250
 F 0 "C17" H 7800 10350 50  0000 L CNN
@@ -2416,7 +2207,7 @@ F 3 "" H 7750 10250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +3.3V #PWR050
+L kit-dev-coldfire-xilinx_5213_schlib:+3.3V #PWR050
 U 1 1 46161D18
 P 4000 9950
 F 0 "#PWR050" H 4000 9910 30  0001 C CNN
@@ -2427,7 +2218,7 @@ F 3 "" H 4000 9950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C12
+L kit-dev-coldfire-xilinx_5213_schlib:C C12
 U 1 1 46161CDA
 P 7350 10250
 F 0 "C12" H 7400 10350 50  0000 L CNN
@@ -2438,7 +2229,7 @@ F 3 "" H 7350 10250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C11
+L kit-dev-coldfire-xilinx_5213_schlib:C C11
 U 1 1 46161CD9
 P 7000 10250
 F 0 "C11" H 7050 10350 50  0000 L CNN
@@ -2449,7 +2240,7 @@ F 3 "" H 7000 10250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C10
+L kit-dev-coldfire-xilinx_5213_schlib:C C10
 U 1 1 46161CD8
 P 6600 10250
 F 0 "C10" H 6650 10350 50  0000 L CNN
@@ -2460,7 +2251,7 @@ F 3 "" H 6600 10250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C9
+L kit-dev-coldfire-xilinx_5213_schlib:C C9
 U 1 1 46161CD7
 P 6250 10250
 F 0 "C9" H 6300 10350 50  0000 L CNN
@@ -2471,7 +2262,7 @@ F 3 "" H 6250 10250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C8
+L kit-dev-coldfire-xilinx_5213_schlib:C C8
 U 1 1 46161CD4
 P 5900 10250
 F 0 "C8" H 5950 10350 50  0000 L CNN
@@ -2482,7 +2273,7 @@ F 3 "" H 5900 10250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C7
+L kit-dev-coldfire-xilinx_5213_schlib:C C7
 U 1 1 46161CD3
 P 5550 10250
 F 0 "C7" H 5600 10350 50  0000 L CNN
@@ -2493,7 +2284,7 @@ F 3 "" H 5550 10250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C5
+L kit-dev-coldfire-xilinx_5213_schlib:C C5
 U 1 1 46161CB8
 P 4750 10250
 F 0 "C5" H 4800 10350 50  0000 L CNN
@@ -2504,7 +2295,7 @@ F 3 "" H 4750 10250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C4
+L kit-dev-coldfire-xilinx_5213_schlib:C C4
 U 1 1 46161CB5
 P 4400 10250
 F 0 "C4" H 4450 10350 50  0000 L CNN
