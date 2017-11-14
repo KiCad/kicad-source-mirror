@@ -25,7 +25,7 @@
 
 /**
  * @file eeschema/menubar_libedit.cpp
- * @brief (Re)Create the main menubar for the component editor frame (LibEdit)
+ * @brief (Re)Create the main menubar for the part editor frame (LibEdit)
  */
 
 #include <menus_helpers.h>
@@ -39,7 +39,7 @@
 
 
 /**
- * @brief (Re)Create the menubar for the component editor frame
+ * @brief (Re)Create the menubar for the part editor frame
  */
 void LIB_EDIT_FRAME::ReCreateMenuBar()
 {
@@ -104,14 +104,14 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_GEN_PNG_FILE,
                  _( "Create &PNG File from Screen..." ),
-                 _( "Create a PNG file from the component displayed on screen" ),
+                 _( "Create a PNG file from the part displayed on screen" ),
                  KiBitmap( plot_xpm ) );
 
     // Export as SVG file
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_GEN_SVG_FILE,
                  _( "Create S&VG File..." ),
-                 _( "Create a SVG file from the current loaded component" ),
+                 _( "Create a SVG file from the current loaded part" ),
                  KiBitmap( plot_svg_xpm ) );
 
     // Separator
@@ -185,59 +185,59 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Toggles the search tree visibility" ),
                  KiBitmap( search_tree_xpm ) );
 
-    // Menu Component:
-    wxMenu* componentMenu = new wxMenu;
+    // Menu Part:
+    wxMenu* partMenu = new wxMenu;
 
-    AddMenuItem( componentMenu,
+    AddMenuItem( partMenu,
                  ID_LIBEDIT_NEW_PART,
-                 _( "Create &New Component" ),
-                 _( "Create a new empty component" ),
+                 _( "Create &New" ),
+                 _( "Create a new empty part" ),
                  KiBitmap( new_component_xpm ) );
 
-    text = AddHotkeyName( _( "&Save Component" ), g_Libedit_Hokeys_Descr, HK_SAVE_PART );
-    AddMenuItem( componentMenu,
+    text = AddHotkeyName( _( "&Save Part" ), g_Libedit_Hokeys_Descr, HK_SAVE_PART );
+    AddMenuItem( partMenu,
                  ID_LIBEDIT_SAVE_PART,
                  text,
-                 _( "Saves the current component to the library" ),
+                 _( "Saves the current part to the library" ),
                  KiBitmap( save_part_xpm ) );
 
-    componentMenu->AppendSeparator();
+    partMenu->AppendSeparator();
 
-    AddMenuItem( componentMenu,
+    AddMenuItem( partMenu,
                  ID_LIBEDIT_IMPORT_PART,
                  _( "&Import" ),
-                 _( "Import a component to the current library" ),
+                 _( "Import a part to the current library" ),
                  KiBitmap( export_xpm ) );
 
-    AddMenuItem( componentMenu,
+    AddMenuItem( partMenu,
                  ID_LIBEDIT_EXPORT_PART,
                  _( "&Export" ),
-                 _( "Export the current component" ),
+                 _( "Export the current part" ),
                  KiBitmap( import_xpm ) );
 
-    componentMenu->AppendSeparator();
+    partMenu->AppendSeparator();
 
-    AddMenuItem( componentMenu,
+    AddMenuItem( partMenu,
                  ID_LIBEDIT_GET_FRAME_EDIT_PART,
                  _( "&Properties" ),
                  _( "Edit part properties" ),
                  KiBitmap( part_properties_xpm ) );
 
-    AddMenuItem( componentMenu,
+    AddMenuItem( partMenu,
                  ID_LIBEDIT_GET_FRAME_EDIT_FIELDS,
                  _( "&Fields" ),
                  _( "Edit field properties" ),
                  KiBitmap( edit_text_xpm ) );
 
-    componentMenu->AppendSeparator();
+    partMenu->AppendSeparator();
 
-    AddMenuItem( componentMenu,
+    AddMenuItem( partMenu,
                  ID_LIBEDIT_EDIT_PIN_BY_TABLE,
-                 _( "Pi&n table" ),
+                 _( "Pi&n Table" ),
                  _( "Show pin table" ),
                  KiBitmap( pin_table_xpm ) );
 
-    AddMenuItem( componentMenu,
+    AddMenuItem( partMenu,
                  ID_LIBEDIT_CHECK_PART,
                  _( "ERC" ),
                  _( "Check duplicate and off grid pins" ),
@@ -302,7 +302,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( preferencesMenu,
                  wxID_PREFERENCES,
                  _( "General &Options" ),
-                 _( "Set Component Editor default values and options" ),
+                 _( "Set Part Editor default values and options" ),
                  KiBitmap( preference_xpm ) );
 
     // Language submenu
@@ -352,7 +352,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
-    menuBar->Append( componentMenu, _( "&Component" ) );
+    menuBar->Append( partMenu, _( "&Part" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( preferencesMenu, _( "P&references" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );

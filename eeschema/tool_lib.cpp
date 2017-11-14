@@ -117,17 +117,17 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString, KiBitmap( new_component_xpm ),
-                            _( "Create new component" ) );
+                            _( "Create new part" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_PART, wxEmptyString,
                             KiBitmap( save_part_xpm ),
-                            _( "Save current component" ) );
+                            _( "Save current part" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_IMPORT_PART, wxEmptyString, KiBitmap( import_xpm ),
-                            _( "Import component" ) );
+                            _( "Import part" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_EXPORT_PART, wxEmptyString, KiBitmap( export_xpm ),
-                            _( "Export component" ) );
+                            _( "Export part" ) );
 
     m_mainToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Undo last command" ), g_Libedit_Hokeys_Descr, HK_UNDO, IS_COMMENT );
@@ -138,7 +138,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_PART, wxEmptyString,
-                            KiBitmap( part_properties_xpm ), _( "Edit component properties" ) );
+                            KiBitmap( part_properties_xpm ), _( "Edit part properties" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, wxEmptyString,
                             KiBitmap( text_xpm ),

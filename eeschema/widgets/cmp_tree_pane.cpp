@@ -54,9 +54,9 @@ CMP_TREE_PANE::CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
     menuLibrary->Append( ID_LIBEDIT_SAVE_LIBRARY_AS, _( "Save library as..." ) );
     menuLibrary->Append( ID_LIBEDIT_REVERT_LIBRARY, _( "Revert library" ) );
     menuLibrary->AppendSeparator();
-    menuLibrary->Append( ID_LIBEDIT_NEW_PART, _( "New component..." ) );
-    menuLibrary->Append( ID_LIBEDIT_IMPORT_PART, _( "Import component..." ) );
-    menuLibrary->Append( ID_LIBEDIT_PASTE_PART, _( "Paste component" ) );
+    menuLibrary->Append( ID_LIBEDIT_NEW_PART, _( "New part..." ) );
+    menuLibrary->Append( ID_LIBEDIT_IMPORT_PART, _( "Import part..." ) );
+    menuLibrary->Append( ID_LIBEDIT_PASTE_PART, _( "Paste part" ) );
 
     std::unique_ptr<wxMenu> menuPart = std::make_unique<wxMenu>();
     menuPart->Append( ID_LIBEDIT_EDIT_PART, _( "Edit" ) );
@@ -65,12 +65,12 @@ CMP_TREE_PANE::CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
     menuPart->Append( ID_LIBEDIT_SAVE_PART, _( "Save" ) );
     menuPart->Append( ID_LIBEDIT_REVERT_PART, _( "Revert" ) );
     menuPart->AppendSeparator();
-    menuPart->Append( ID_LIBEDIT_CUT_PART, _( "Cut component" ) );
-    menuPart->Append( ID_LIBEDIT_COPY_PART, _( "Copy component" ) );
-    menuPart->Append( ID_LIBEDIT_DUPLICATE_PART, _( "Duplicate component" ) );
+    menuPart->Append( ID_LIBEDIT_CUT_PART, _( "Cut part" ) );
+    menuPart->Append( ID_LIBEDIT_COPY_PART, _( "Copy part" ) );
+    menuPart->Append( ID_LIBEDIT_DUPLICATE_PART, _( "Duplicate part" ) );
     menuPart->AppendSeparator();
 
-    // Append the library menu to the component menu
+    // Append the library menu to the part menu
     for( size_t i = 0; i < menuLibrary->GetMenuItemCount(); ++i )
     {
         wxMenuItem* menuItem = menuLibrary->FindItemByPosition( i );
