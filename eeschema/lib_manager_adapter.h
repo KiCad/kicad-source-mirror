@@ -45,7 +45,7 @@ public:
 
     void UpdateLibrary( const wxString& aLibraryName );
 
-    void Sync();
+    void Sync( bool aForce = false );
 
 protected:
     void updateLibrary( CMP_TREE_NODE_LIB& aLibNode );

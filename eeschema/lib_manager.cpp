@@ -49,7 +49,7 @@ void LIB_MANAGER::Sync( bool aForce )
 
     if( aForce || m_syncHash != libTableHash )
     {
-        getAdapter()->Sync();
+        getAdapter()->Sync( aForce );
         m_syncHash = libTableHash;
     }
 }
@@ -76,7 +76,7 @@ int LIB_MANAGER::GetLibraryHash( const wxString& aLibrary ) const
     auto row = m_symbolTable->FindRow( aLibrary );
 
     // return -1 if library does not exist or 0 if not modified
-    return row ? std::hash<std::string>{}( row->GetFullURI( true ).ToStdString() ) : -1;
+    return row ? std::hash<std::string>{}( aLibrary.ToStdString() + row->GetFullURI( true ).ToStdString() ) : -1;
 }
 
 

@@ -79,11 +79,11 @@ bool LIB_MANAGER_ADAPTER::IsContainer( const wxDataViewItem& aItem ) const
 }
 
 
-void LIB_MANAGER_ADAPTER::Sync()
+void LIB_MANAGER_ADAPTER::Sync( bool aForce )
 {
     int libMgrHash = m_libMgr->GetHash();
 
-    if( m_lastSyncHash == libMgrHash )
+    if( !aForce && m_lastSyncHash == libMgrHash )
         return;
 
     m_lastSyncHash = libMgrHash;
