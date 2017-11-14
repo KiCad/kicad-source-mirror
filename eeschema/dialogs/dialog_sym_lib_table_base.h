@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 29 2017)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -51,6 +51,7 @@ class DIALOG_SYMBOL_LIB_TABLE_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText4;
 		wxStaticText* m_PrjTableFilename;
 		wxGrid* m_project_grid;
+		wxButton* m_browse_button;
 		wxButton* m_append_button;
 		wxButton* m_delete_button;
 		wxButton* m_move_up_button;
@@ -62,6 +63,7 @@ class DIALOG_SYMBOL_LIB_TABLE_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) = 0;
+		virtual void browseLibrariesHandler( wxCommandEvent& event ) = 0;
 		virtual void appendRowHandler( wxCommandEvent& event ) = 0;
 		virtual void deleteRowHandler( wxCommandEvent& event ) = 0;
 		virtual void moveUpHandler( wxCommandEvent& event ) = 0;

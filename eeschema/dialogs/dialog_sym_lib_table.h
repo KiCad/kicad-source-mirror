@@ -57,6 +57,8 @@ private:
 
     void pageChangedHandler( wxAuiNotebookEvent& event ) override;
 
+    void browseLibrariesHandler( wxCommandEvent& event ) override;
+
     void appendRowHandler( wxCommandEvent& event ) override;
 
     void deleteRowHandler( wxCommandEvent& event ) override;
@@ -70,6 +72,9 @@ private:
     /// Populate the readonly environment variable table with names and values
     /// by examining all the full_uri columns.
     void populateEnvironReadOnlyTable();
+
+    /// Makes a specific row visible
+    void scrollToRow( int aRowNumber );
 
     // Caller's tables are modified only on OK button and successful verification.
     SYMBOL_LIB_TABLE*    m_global;

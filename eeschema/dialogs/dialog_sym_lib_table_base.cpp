@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 29 2017)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -131,6 +131,9 @@ DIALOG_SYMBOL_LIB_TABLE_BASE::DIALOG_SYMBOL_LIB_TABLE_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer51;
 	bSizer51 = new wxBoxSizer( wxHORIZONTAL );
 	
+	m_browse_button = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Browse Libraries..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer51->Add( m_browse_button, 0, wxALL, 5 );
+	
 	m_append_button = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Append Library"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_append_button->SetToolTip( _("Add a PCB library row to this table") );
 	
@@ -219,6 +222,7 @@ DIALOG_SYMBOL_LIB_TABLE_BASE::DIALOG_SYMBOL_LIB_TABLE_BASE( wxWindow* parent, wx
 	
 	// Connect Events
 	m_auinotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );
+	m_browse_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::browseLibrariesHandler ), NULL, this );
 	m_append_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
 	m_delete_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
 	m_move_up_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
@@ -229,6 +233,7 @@ DIALOG_SYMBOL_LIB_TABLE_BASE::~DIALOG_SYMBOL_LIB_TABLE_BASE()
 {
 	// Disconnect Events
 	m_auinotebook->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );
+	m_browse_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::browseLibrariesHandler ), NULL, this );
 	m_append_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
 	m_delete_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
 	m_move_up_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
