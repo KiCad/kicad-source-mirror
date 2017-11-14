@@ -61,6 +61,13 @@ public:
     LIB_ID GetSelectedLibId( int* aUnit = nullptr ) const;
 
     /**
+     * Select a part in the tree widget.
+     *
+     * @param aLibId is the identifier of part to be selected.
+     */
+    void SelectLibId( const LIB_ID& aLibId );
+
+    /**
      * Associates a right click context menu for a specific node type.
      * @param aType is the node type to have a menu associated.
      * @param aMenu is the associated menu.

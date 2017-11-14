@@ -228,6 +228,30 @@ int CMP_TREE_MODEL_ADAPTER_BASE::GetComponentsCount() const
 }
 
 
+wxDataViewItem CMP_TREE_MODEL_ADAPTER_BASE::FindItem( const LIB_ID& aLibId )
+{
+    for( auto& lib: m_tree.Children )
+    {
+        if( lib->Name != aLibId.GetLibNickname() )
+            continue;
+
+        // if part name is not specified, return the library node
+        if( aLibId.GetLibItemName() == "" )
+            return ToItem( lib.get() );
+
+        for( auto& alias: lib->Children )
+        {
+            if( alias->Name == aLibId.GetLibItemName() )
+                return ToItem( alias.get() );
+        }
+
+        break;  // could not find the part in the requested library
+    }
+
+    return wxDataViewItem();
+}
+
+
 bool CMP_TREE_MODEL_ADAPTER_BASE::HasContainerColumns( wxDataViewItem const& aItem ) const
 {
     return IsContainer( aItem );

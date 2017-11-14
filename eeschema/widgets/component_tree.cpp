@@ -131,6 +131,12 @@ LIB_ID COMPONENT_TREE::GetSelectedLibId( int* aUnit ) const
 }
 
 
+void COMPONENT_TREE::SelectLibId( const LIB_ID& aLibId )
+{
+    selectIfValid( m_adapter->FindItem( aLibId ) );
+}
+
+
 void COMPONENT_TREE::selectIfValid( const wxDataViewItem& aTreeId )
 {
     if( aTreeId.IsOk() )

@@ -1012,6 +1012,10 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
         m_my_part = aPart;
     }
 
+    // select the current component in the tree widget
+    if( aPart )
+        m_treePane->GetCmpTree()->SelectLibId( aPart->GetLibId() );
+
     wxString partName = aPart ? aPart->GetName() : wxString();
     m_libMgr->SetCurrentPart( partName );
 

@@ -424,6 +424,7 @@ void LIB_EDIT_FRAME::OnPasteDuplicatePart( wxCommandEvent& aEvent )
     LIB_PART newPart( *srcPart );
     fixDuplicateAliases( &newPart, lib );
     m_libMgr->UpdatePart( &newPart, lib );
+    m_treePane->GetCmpTree()->SelectLibId( LIB_ID( lib, newPart.GetName() ) );
 }
 
 

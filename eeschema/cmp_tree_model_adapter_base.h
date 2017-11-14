@@ -233,6 +233,14 @@ public:
      */
     int GetComponentsCount() const;
 
+    /**
+     * Returns tree item corresponding to part.
+     *
+     * @param aLibId specifies the part and library name to be searched for.
+     * @return Tree data item representing the part. Might be invalid if nothings was found.
+     */
+    wxDataViewItem FindItem( const LIB_ID& aLibId );
+
 protected:
     static wxDataViewItem ToItem( CMP_TREE_NODE const* aNode );
     static CMP_TREE_NODE const* ToNode( wxDataViewItem aItem );
