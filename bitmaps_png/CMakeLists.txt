@@ -228,6 +228,7 @@ set( BMAPS_MID
     export_idf
     export_footprint_names
     export_module
+    export_part
     export
     fabrication
     file_footprint
@@ -276,6 +277,7 @@ set( BMAPS_MID
     import_footprint_names
     import_hierarchical_label
     import_module
+    import_part
     import_setup
     import
     info

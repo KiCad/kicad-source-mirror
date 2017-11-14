@@ -123,10 +123,10 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                             KiBitmap( save_part_xpm ),
                             _( "Save current part" ) );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_IMPORT_PART, wxEmptyString, KiBitmap( import_xpm ),
+    m_mainToolBar->AddTool( ID_LIBEDIT_IMPORT_PART, wxEmptyString, KiBitmap( import_part_xpm ),
                             _( "Import part" ) );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_EXPORT_PART, wxEmptyString, KiBitmap( export_xpm ),
+    m_mainToolBar->AddTool( ID_LIBEDIT_EXPORT_PART, wxEmptyString, KiBitmap( export_part_xpm ),
                             _( "Export part" ) );
 
     m_mainToolBar->AddSeparator();

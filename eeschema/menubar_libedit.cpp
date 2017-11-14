@@ -207,13 +207,13 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  ID_LIBEDIT_IMPORT_PART,
                  _( "&Import" ),
                  _( "Import a part to the current library" ),
-                 KiBitmap( export_xpm ) );
+                 KiBitmap( import_part_xpm ) );
 
     AddMenuItem( partMenu,
                  ID_LIBEDIT_EXPORT_PART,
                  _( "&Export" ),
                  _( "Export the current part" ),
-                 KiBitmap( import_xpm ) );
+                 KiBitmap( export_part_xpm ) );
 
     partMenu->AppendSeparator();
 
