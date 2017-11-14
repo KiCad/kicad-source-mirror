@@ -95,9 +95,9 @@ class MODULE_3D_SETTINGS
             double x, y, z;
         };
 
-        VECTOR3D m_Scale;
-        VECTOR3D m_Rotation;
-        VECTOR3D m_Offset;
+        VECTOR3D m_Scale;       ///< 3D model scaling factor (dimensionless)
+        VECTOR3D m_Rotation;    ///< 3D model rotation (degrees)
+        VECTOR3D m_Offset;      ///< 3D model offset (mm)
         wxString m_Filename;    ///< The 3D shape filename in 3D library
 };
 

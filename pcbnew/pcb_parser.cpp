@@ -359,9 +359,26 @@ MODULE_3D_SETTINGS* PCB_PARSER::parse3DModel()
             if( token != T_xyz )
                 Expecting( T_xyz );
 
+            /* Note:
+             * Prior to SEXPR_BOARD_FILE_VERSION 20171114,
+             * 3D model offset was read and written in inches
+             *
+             * Now, the offset is explicitly written in mm.
+             * If a board is read with an older version,
+             * the offset is converted from inches to mm
+             */
+
             n3D->m_Offset.x = parseDouble( "x value" );
             n3D->m_Offset.y = parseDouble( "y value" );
             n3D->m_Offset.z = parseDouble( "z value" );
+
+            if(m_requiredVersion < 20171114UL)
+            {
+                n3D->m_Offset.x *= 25.4f;
+                n3D->m_Offset.y *= 25.4f;
+                n3D->m_Offset.z *= 25.4f;
+            }
+
             NeedRIGHT();
             break;
 

@@ -1140,6 +1140,7 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
             m_out->Print( aNestLevel+1, "(model %s\n",
                           m_out->Quotew( bs3D->m_Filename ).c_str() );
 
+            // Model offset is in mm
             m_out->Print( aNestLevel+2, "(at (xyz %s %s %s))\n",
                           Double2Str( bs3D->m_Offset.x ).c_str(),
                           Double2Str( bs3D->m_Offset.y ).c_str(),
