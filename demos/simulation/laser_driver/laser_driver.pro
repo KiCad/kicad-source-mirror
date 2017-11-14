@@ -1,6 +1,6 @@
-update=wto, 19 lip 2016, 23:56:07
+update=14/11/2017 20:17:47
 version=1
-last_client=eeschema
+last_client=kicad
 [general]
 version=1
 RootSch=
@@ -29,5 +29,4 @@ version=1
 NetIExt=net
 [eeschema]
 version=1
-[eeschema/libraries]
-LibName1=power
+LibDir=

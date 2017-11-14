@@ -1,36 +1,6 @@
-EESchema Schematic File Version 2
-LIBS:sallen_key-rescue
-LIBS:power
-LIBS:device
-LIBS:transistors
-LIBS:conn
-LIBS:linear
-LIBS:regul
-LIBS:74xx
-LIBS:cmos4000
-LIBS:adc-dac
-LIBS:memory
-LIBS:xilinx
-LIBS:microcontrollers
-LIBS:dsp
-LIBS:microchip
-LIBS:analog_switches
-LIBS:motorola
-LIBS:texas
-LIBS:intel
-LIBS:audio
-LIBS:interface
-LIBS:digital-audio
-LIBS:philips
-LIBS:display
-LIBS:cypress
-LIBS:siliconi
-LIBS:opto
-LIBS:atmel
-LIBS:contrib
-LIBS:valves
+EESchema Schematic File Version 4
 LIBS:sallen_key-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -45,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L VSOURCE-RESCUE-sallen_key V1
+L sallen_key_schlib:VSOURCE V1
 U 1 1 57336052
 P 6000 4700
 F 0 "V1" H 6128 4746 50  0000 L CNN
@@ -60,11 +30,11 @@ lowpass
 Text Notes 4300 5000 0    60   ~ 0
 .ac dec 10 1 1Meg\n
 $Comp
-L Generic_Opamp U1
+L sallen_key_schlib:Generic_Opamp U1
 U 1 1 5788FF9F
 P 7850 4400
-F 0 "U1" H 8191 4446 50  0000 L CNN
-F 1 "AD8051" H 8191 4355 50  0000 L CNN
+F 0 "U1" H 7950 4550 50  0000 L CNN
+F 1 "AD8051" H 7900 4250 50  0000 L CNN
 F 2 "" H 7750 4300 50  0000 C CNN
 F 3 "" H 7850 4400 50  0000 C CNN
 F 4 "X" H 7850 4400 60  0001 C CNN "Spice_Primitive"
@@ -75,7 +45,7 @@ F 7 "Y" H 7850 4400 60  0001 C CNN "Spice_Netlist_Enabled"
 	1    0    0    -1  
 $EndComp
 $Comp
-L VSOURCE-RESCUE-sallen_key V2
+L sallen_key_schlib:VSOURCE V2
 U 1 1 578900BA
 P 9650 1850
 F 0 "V2" H 9778 1896 50  0000 L CNN
@@ -89,7 +59,7 @@ F 6 "1 2" H 9350 2050 60  0001 C CNN "Spice_Node_Sequence"
 	1    0    0    -1  
 $EndComp
 $Comp
-L VSOURCE-RESCUE-sallen_key V3
+L sallen_key_schlib:VSOURCE V3
 U 1 1 57890232
 P 9650 2350
 F 0 "V3" H 9778 2396 50  0000 L CNN
@@ -103,7 +73,7 @@ F 6 "1 2" H 9350 2550 60  0001 C CNN "Spice_Node_Sequence"
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR5
+L sallen_key_schlib:GND #PWR5
 U 1 1 578902D2
 P 9400 2100
 F 0 "#PWR5" H 9400 1850 50  0001 C CNN
@@ -114,7 +84,7 @@ F 3 "" H 9400 2100 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VDD #PWR6
+L sallen_key_schlib:VDD #PWR6
 U 1 1 578903C0
 P 9650 1600
 F 0 "#PWR6" H 9650 1450 50  0001 C CNN
@@ -125,7 +95,7 @@ F 3 "" H 9650 1600 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VSS #PWR7
+L sallen_key_schlib:VSS #PWR7
 U 1 1 578903E2
 P 9650 2600
 F 0 "#PWR7" H 9650 2450 50  0001 C CNN
@@ -136,7 +106,7 @@ F 3 "" H 9650 2600 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L VDD #PWR3
+L sallen_key_schlib:VDD #PWR3
 U 1 1 57890425
 P 7750 4100
 F 0 "#PWR3" H 7750 3950 50  0001 C CNN
@@ -147,7 +117,7 @@ F 3 "" H 7750 4100 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VSS #PWR4
+L sallen_key_schlib:VSS #PWR4
 U 1 1 57890453
 P 7750 4700
 F 0 "#PWR4" H 7750 4550 50  0001 C CNN
@@ -158,7 +128,7 @@ F 3 "" H 7750 4700 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L R R2
+L sallen_key_schlib:R R2
 U 1 1 57890691
 P 6950 4300
 F 0 "R2" V 6743 4300 50  0000 C CNN
@@ -172,7 +142,7 @@ F 6 "R" V 6950 4300 60  0001 C CNN "Spice_Primitive"
 	0    1    1    0   
 $EndComp
 $Comp
-L R R1
+L sallen_key_schlib:R R1
 U 1 1 578906FF
 P 6400 4300
 F 0 "R1" V 6193 4300 50  0000 C CNN
@@ -186,7 +156,7 @@ F 6 "R" V 6400 4300 60  0001 C CNN "Spice_Primitive"
 	0    1    1    0   
 $EndComp
 $Comp
-L C C1
+L sallen_key_schlib:C C1
 U 1 1 5789077D
 P 7000 4950
 F 0 "C1" V 6748 4950 50  0000 C CNN
@@ -197,7 +167,7 @@ F 3 "" H 7000 4950 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L C C2
+L sallen_key_schlib:C C2
 U 1 1 5789085B
 P 7350 4000
 F 0 "C2" H 7465 4046 50  0000 L CNN
@@ -211,7 +181,7 @@ F 6 "1 2" H 7350 4000 60  0001 C CNN "SpiceMapping"
 	-1   0    0    1   
 $EndComp
 $Comp
-L GND #PWR2
+L sallen_key_schlib:GND #PWR2
 U 1 1 57890B95
 P 7350 3800
 F 0 "#PWR2" H 7350 3550 50  0001 C CNN
@@ -228,8 +198,6 @@ Wire Wire Line
 Wire Wire Line
 	8350 4950 8350 4400
 Wire Wire Line
-	7150 4950 8350 4950
-Wire Wire Line
 	7400 4950 7400 4500
 Wire Wire Line
 	7400 4500 7550 4500
@@ -242,8 +210,6 @@ Wire Wire Line
 Wire Wire Line
 	6650 4950 6650 4300
 Connection ~ 6650 4300
-Wire Wire Line
-	7400 4950 7450 4950
 Connection ~ 7400 4950
 Wire Wire Line
 	7350 4150 7350 4300
@@ -256,17 +222,6 @@ Wire Wire Line
 	6000 4300 6000 4500
 Wire Wire Line
 	6000 4900 6000 5000
-$Comp
-L GND #PWR1
-U 1 1 57890E7F
-P 6000 5000
-F 0 "#PWR1" H 6000 4750 50  0001 C CNN
-F 1 "GND" H 6005 4827 50  0000 C CNN
-F 2 "" H 6000 5000 50  0000 C CNN
-F 3 "" H 6000 5000 50  0000 C CNN
-	1    6000 5000
-	1    0    0    -1  
-$EndComp
 Connection ~ 8350 4400
 Wire Wire Line
 	9650 2600 9650 2550
@@ -275,4 +230,17 @@ Wire Wire Line
 Wire Wire Line
 	9650 2050 9650 2150
 Connection ~ 9650 2100
+Wire Wire Line
+	8350 4950 7150 4950
+$Comp
+L sallen_key_schlib:GND #PWR?
+U 1 1 5A0B57F1
+P 6000 5000
+F 0 "#PWR?" H 6000 4750 50  0001 C CNN
+F 1 "GND" H 6005 4827 50  0000 C CNN
+F 2 "" H 6000 5000 50  0000 C CNN
+F 3 "" H 6000 5000 50  0000 C CNN
+	1    6000 5000
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

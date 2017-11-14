@@ -1,35 +1,6 @@
-EESchema Schematic File Version 2
-LIBS:power
-LIBS:device
-LIBS:transistors
-LIBS:conn
-LIBS:linear
-LIBS:regul
-LIBS:74xx
-LIBS:cmos4000
-LIBS:adc-dac
-LIBS:memory
-LIBS:xilinx
-LIBS:microcontrollers
-LIBS:dsp
-LIBS:microchip
-LIBS:analog_switches
-LIBS:motorola
-LIBS:texas
-LIBS:intel
-LIBS:audio
-LIBS:interface
-LIBS:digital-audio
-LIBS:philips
-LIBS:display
-LIBS:cypress
-LIBS:siliconi
-LIBS:opto
-LIBS:atmel
-LIBS:contrib
-LIBS:valves
+EESchema Schematic File Version 4
 LIBS:laser_driver-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -44,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L VSOURCE V1
+L laser_driver_schlib:VSOURCE V1
 U 1 1 57336052
 P 2650 3550
 F 0 "V1" H 2778 3596 50  0000 L CNN
@@ -59,11 +30,11 @@ $EndComp
 Text Notes 3150 5400 0    60   ~ 0
 .tran 10p 150n
 $Comp
-L Generic_Opamp U1
+L laser_driver_schlib:Generic_Opamp U1
 U 1 1 5788FF9F
 P 5050 3500
-F 0 "U1" H 5391 3546 50  0000 L CNN
-F 1 "AD8009" H 5391 3455 50  0000 L CNN
+F 0 "U1" H 5050 3650 50  0000 L CNN
+F 1 "AD8009" H 5050 3350 50  0000 L CNN
 F 2 "" H 4950 3400 50  0000 C CNN
 F 3 "" H 5050 3500 50  0000 C CNN
 F 4 "Value" H 5050 3500 60  0001 C CNN "Fieldname"
@@ -75,7 +46,7 @@ F 8 "ad8009.lib" H 5050 3500 60  0001 C CNN "Spice_Lib_File"
 	1    0    0    -1  
 $EndComp
 $Comp
-L VSOURCE V2
+L laser_driver_schlib:VSOURCE V2
 U 1 1 578900BA
 P 9650 1850
 F 0 "V2" H 9778 1896 50  0000 L CNN
@@ -89,7 +60,7 @@ F 6 "1 2" H 9350 2050 60  0001 C CNN "Spice_Node_Sequence"
 	1    0    0    -1  
 $EndComp
 $Comp
-L VSOURCE V3
+L laser_driver_schlib:VSOURCE V3
 U 1 1 57890232
 P 9650 2350
 F 0 "V3" H 9778 2396 50  0000 L CNN
@@ -103,7 +74,7 @@ F 6 "1 2" H 9350 2550 60  0001 C CNN "Spice_Node_Sequence"
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR7
+L laser_driver_schlib:GND #PWR7
 U 1 1 578902D2
 P 9400 2100
 F 0 "#PWR7" H 9400 1850 50  0001 C CNN
@@ -114,7 +85,7 @@ F 3 "" H 9400 2100 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VDD #PWR8
+L laser_driver_schlib:VDD #PWR8
 U 1 1 578903C0
 P 9650 1600
 F 0 "#PWR8" H 9650 1450 50  0001 C CNN
@@ -125,7 +96,7 @@ F 3 "" H 9650 1600 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VSS #PWR9
+L laser_driver_schlib:VSS #PWR9
 U 1 1 578903E2
 P 9650 2600
 F 0 "#PWR9" H 9650 2450 50  0001 C CNN
@@ -136,7 +107,7 @@ F 3 "" H 9650 2600 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L VDD #PWR3
+L laser_driver_schlib:VDD #PWR3
 U 1 1 57890425
 P 4950 3200
 F 0 "#PWR3" H 4950 3050 50  0001 C CNN
@@ -147,7 +118,7 @@ F 3 "" H 4950 3200 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VSS #PWR4
+L laser_driver_schlib:VSS #PWR4
 U 1 1 57890453
 P 4950 3800
 F 0 "#PWR4" H 4950 3650 50  0001 C CNN
@@ -158,7 +129,7 @@ F 3 "" H 4950 3800 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L C C2
+L laser_driver_schlib:C C2
 U 1 1 5789085B
 P 6800 4000
 F 0 "C2" H 6915 3954 50  0000 L CNN
@@ -169,7 +140,7 @@ F 3 "" H 6800 4000 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L R R5
+L laser_driver_schlib:R R5
 U 1 1 578EA6D8
 P 6400 4000
 F 0 "R5" H 6469 3954 50  0000 L CNN
@@ -180,7 +151,7 @@ F 3 "" H 6400 4000 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L R R1
+L laser_driver_schlib:R R1
 U 1 1 578EA7EE
 P 4150 3600
 F 0 "R1" V 3943 3600 50  0000 C CNN
@@ -191,7 +162,7 @@ F 3 "" H 4150 3600 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R3
+L laser_driver_schlib:R R3
 U 1 1 578EA8B4
 P 5400 4150
 F 0 "R3" V 5193 4150 50  0000 C CNN
@@ -202,7 +173,7 @@ F 3 "" H 5400 4150 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L C C1
+L laser_driver_schlib:C C1
 U 1 1 578EB076
 P 5400 4400
 F 0 "C1" V 5240 4400 50  0000 C CNN
@@ -213,7 +184,7 @@ F 3 "" H 5400 4400 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L LED D1
+L laser_driver_schlib:LED D1
 U 1 1 578EB1E8
 P 6400 4900
 F 0 "D1" V 6446 4792 50  0000 R CNN
@@ -230,7 +201,7 @@ F 9 "2 1" V 6400 4900 60  0001 C CNN "Spice_Node_Sequence"
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #PWR6
+L laser_driver_schlib:GND #PWR6
 U 1 1 578EB42D
 P 6400 5100
 F 0 "#PWR6" H 6400 4850 50  0001 C CNN
@@ -241,7 +212,7 @@ F 3 "" H 6400 5100 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R4
+L laser_driver_schlib:R R4
 U 1 1 578EBA35
 P 6150 2900
 F 0 "R4" V 5943 2900 50  0000 C CNN
@@ -252,7 +223,7 @@ F 3 "" H 6150 2900 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R2
+L laser_driver_schlib:R R2
 U 1 1 578EBB39
 P 4350 2900
 F 0 "R2" V 4143 2900 50  0000 C CNN
@@ -263,7 +234,7 @@ F 3 "" H 4350 2900 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #PWR2
+L laser_driver_schlib:GND #PWR2
 U 1 1 578EBBE4
 P 4000 3600
 F 0 "#PWR2" H 4000 3350 50  0001 C CNN
@@ -272,17 +243,6 @@ F 2 "" H 4000 3600 50  0000 C CNN
 F 3 "" H 4000 3600 50  0000 C CNN
 	1    4000 3600
 	0    1    1    0   
-$EndComp
-$Comp
-L VDD #PWR5
-U 1 1 578EBCE4
-P 6400 3300
-F 0 "#PWR5" H 6400 3150 50  0001 C CNN
-F 1 "VDD" H 6417 3473 50  0000 C CNN
-F 2 "" H 6400 3300 50  0000 C CNN
-F 3 "" H 6400 3300 50  0000 C CNN
-	1    6400 3300
-	1    0    0    -1  
 $EndComp
 Wire Wire Line
 	9650 2100 9400 2100
@@ -330,7 +290,7 @@ Wire Wire Line
 Wire Wire Line
 	2650 2900 2650 3350
 $Comp
-L GND #PWR1
+L laser_driver_schlib:GND #PWR1
 U 1 1 578EC19D
 P 2650 4200
 F 0 "#PWR1" H 2650 3950 50  0001 C CNN
@@ -348,7 +308,7 @@ Wire Wire Line
 	7000 2900 7000 4350
 Connection ~ 6800 4350
 $Comp
-L Q_NPN_CBE Q1
+L laser_driver_schlib:Q_NPN_CBE Q1
 U 1 1 578EADCC
 P 6300 3500
 F 0 "Q1" H 6491 3546 50  0000 L CNN
@@ -379,4 +339,15 @@ Wire Wire Line
 Wire Wire Line
 	9650 2050 9650 2150
 Connection ~ 9650 2100
+$Comp
+L laser_driver_schlib:VDD #PWR?
+U 1 1 5A0B5A9D
+P 6400 3300
+F 0 "#PWR?" H 6400 3150 50  0001 C CNN
+F 1 "VDD" H 6417 3473 50  0000 C CNN
+F 2 "" H 6400 3300 50  0000 C CNN
+F 3 "" H 6400 3300 50  0000 C CNN
+	1    6400 3300
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

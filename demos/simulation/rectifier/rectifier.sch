@@ -1,7 +1,6 @@
-EESchema Schematic File Version 2
-LIBS:power
+EESchema Schematic File Version 4
 LIBS:rectifier-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -16,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L VSOURCE V1
+L rectifier_schlib:VSOURCE V1
 U 1 1 57336052
 P 4400 4050
 F 0 "V1" H 4528 4096 50  0000 L CNN
@@ -30,10 +29,10 @@ F 6 "1 2" H 4100 4250 60  0001 C CNN "Spice_Node_Sequence"
 	-1   0    0    1   
 $EndComp
 $Comp
-L GND #PWR1
+L rectifier_schlib:GND #PWR01
 U 1 1 573360D3
 P 4400 4350
-F 0 "#PWR1" H 4400 4100 50  0001 C CNN
+F 0 "#PWR01" H 4400 4100 50  0001 C CNN
 F 1 "GND" H 4405 4177 50  0000 C CNN
 F 2 "" H 4400 4350 50  0000 C CNN
 F 3 "" H 4400 4350 50  0000 C CNN
@@ -41,7 +40,7 @@ F 3 "" H 4400 4350 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R1
+L rectifier_schlib:R R1
 U 1 1 573360F5
 P 4650 3700
 F 0 "R1" V 4443 3700 50  0000 C CNN
@@ -55,7 +54,7 @@ F 6 "R" V 4650 3700 60  0001 C CNN "Spice_Primitive"
 	0    1    1    0   
 $EndComp
 $Comp
-L D D1
+L rectifier_schlib:D D1
 U 1 1 573361B8
 P 5100 3700
 F 0 "D1" H 5100 3485 50  0000 C CNN
@@ -69,7 +68,7 @@ F 6 "2 1" H 5100 3700 60  0001 C CNN "Spice_Node_Sequence"
 	-1   0    0    1   
 $EndComp
 $Comp
-L C C1
+L rectifier_schlib:C C1
 U 1 1 5733628F
 P 5400 4000
 F 0 "C1" H 5515 4046 50  0000 L CNN
@@ -83,7 +82,7 @@ F 6 "1 2" H 5400 4000 60  0001 C CNN "SpiceMapping"
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R2
+L rectifier_schlib:R R2
 U 1 1 573362F7
 P 5750 4000
 F 0 "R2" H 5680 3954 50  0000 R CNN
@@ -121,10 +120,10 @@ Wire Wire Line
 	4400 3850 4400 3700
 Wire Wire Line
 	4400 3700 4500 3700
-Text Label 4400 3800 0    60   ~ 0
-in
-Text Label 5550 3700 0    60   ~ 0
-rect
+Text Label 4400 3700 2    60   ~ 0
+signal_in
+Text Label 5750 3700 0    60   ~ 0
+rect_out
 Text Notes 4300 5000 0    60   ~ 0
 *.ac dec 10 1 1Meg\n
 $EndSCHEMATC

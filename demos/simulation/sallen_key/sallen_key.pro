@@ -1,6 +1,6 @@
-update=Fri 05 Aug 2016 05:58:16 PM CEST
+update=14/11/2017 21:16:02
 version=1
-last_client=eeschema
+last_client=kicad
 [general]
 version=1
 RootSch=
@@ -40,5 +40,4 @@ LabSize=60
 ERC_TestSimilarLabels=1
 [eeschema]
 version=1
-[eeschema/libraries]
-LibName2=power
+LibDir=
