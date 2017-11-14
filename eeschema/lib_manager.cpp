@@ -164,6 +164,12 @@ bool LIB_MANAGER::SaveLibrary( const wxString& aLibrary, const wxString& aFileNa
                 res = false;
             }
         }
+
+        // clear the deleted parts buffer only if data is saved to the original file
+        auto row = m_symbolTable->FindRow( aLibrary );
+
+        if( res && row && row->GetFullURI( true ) == aFileName )
+            libBuf.ClearDeletedBuffer();
     }
     else
     {
