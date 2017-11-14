@@ -34,6 +34,7 @@
 #include <dialog_edit_line_style_base.h>
 #include <sch_line.h>
 
+class WIDGET_EESCHEMA_COLOR_CONFIG;
 
 class DIALOG_EDIT_LINE_STYLE : public DIALOG_EDIT_LINE_STYLE_BASE
 {
@@ -44,9 +45,9 @@ public:
     void SetDefaultWidth( const wxString& aWidth ) { defaultWidth = aWidth; }
     wxString GetWidth() const { return m_lineWidth->GetValue(); }
 
-    COLOR4D GetColor() const { return COLOR4D( m_colorPicker->GetColour() ); }
-    void SetColor( const COLOR4D& aColor );
-    void SetDefaultColor( const COLOR4D& aColor ) { defaultColor = aColor; }
+    COLOR4D GetColor() const { return selectedColor; }
+    void SetColor( const COLOR4D& aColor, bool aRefresh );
+    void SetDefaultColor( const COLOR4D& aColor );
 
     void SetStyle( const int aStyle );
     void SetDefaultStyle( const int aStyle ) { defaultStyle = aStyle; }
@@ -56,12 +57,16 @@ public:
     {
         m_staticWidthUnits->SetLabel( aUnits );
     }
+
 private:
     int defaultStyle;
     wxString defaultWidth;
     COLOR4D defaultColor;
+    COLOR4D selectedColor;
 
     void resetDefaults( wxCommandEvent& event ) override;
+    void onColorButtonClicked( wxCommandEvent& aEvent ) override;
+    void updateColorButton( COLOR4D& aColor );
 };
 
 #endif // __dialog_edit_line_style__

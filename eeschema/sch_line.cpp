@@ -237,10 +237,14 @@ void SCH_LINE::SetLineColor( const double r, const double g, const double b, con
 {
     COLOR4D newColor(r, g, b, a);
 
-    if( newColor == GetDefaultColor() )
+    if( newColor == GetDefaultColor() || newColor == COLOR4D::UNSPECIFIED )
         m_color = COLOR4D::UNSPECIFIED;
     else
+    {
+        // Eeschema does not allow alpha channel in colors
+        newColor.a = 1.0;
         m_color = newColor;
+    }
 }
 
 
@@ -742,7 +746,7 @@ int SCH_EDIT_FRAME::EditLine( SCH_LINE* aLine, bool aRedraw )
     dlg.SetWidth( StringFromValue( g_UserUnit, old_width, false ) );
     dlg.SetStyle( old_style );
     dlg.SetLineWidthUnits( units );
-    dlg.SetColor( old_color );
+    dlg.SetColor( old_color, true );
 
     dlg.Layout();
     dlg.Fit();

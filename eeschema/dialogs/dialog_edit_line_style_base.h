@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  9 2017)
+// C++ code generated with wxFormBuilder (version Oct 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,10 +20,13 @@
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
-#include <wx/clrpicker.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/bmpbuttn.h>
+#include <wx/button.h>
 #include <wx/statbox.h>
 #include <wx/radiobox.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -37,15 +40,21 @@ class DIALOG_EDIT_LINE_STYLE_BASE : public DIALOG_SHIM
 	private:
 		
 		// Private event handlers
+		void _wxFB_onColorButtonClicked( wxCommandEvent& event ){ onColorButtonClicked( event ); }
 		void _wxFB_resetDefaults( wxCommandEvent& event ){ resetDefaults( event ); }
 		
 	
 	protected:
+		enum
+		{
+			idColorBtn = 1000
+		};
+		
 		wxStaticText* m_staticWidth1;
 		wxTextCtrl* m_lineWidth;
 		wxStaticText* m_staticWidthUnits;
 		wxStaticText* m_staticText5;
-		wxColourPickerCtrl* m_colorPicker;
+		wxBitmapButton* m_colorButton;
 		wxRadioBox* m_lineStyle;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
@@ -53,13 +62,14 @@ class DIALOG_EDIT_LINE_STYLE_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void onColorButtonClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void resetDefaults( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		bool m_isValid; 
 		
-		DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Line Style"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 399,230 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_EDIT_LINE_STYLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Line Style"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 410,230 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EDIT_LINE_STYLE_BASE();
 	
 };
