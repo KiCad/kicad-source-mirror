@@ -247,7 +247,7 @@ bool LIB_MANAGER_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsigned int aCo
             aAttr.SetItalic( !node->IsRoot );
 
             // mark current library with inverted colors
-            if( node->Name == m_libMgr->GetCurrentPart() )
+            if( node->LibId == m_libMgr->GetCurrentLibId() )
             {
                 aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
                 aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );

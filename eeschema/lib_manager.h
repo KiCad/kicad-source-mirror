@@ -255,6 +255,14 @@ public:
         m_currentPart = aPart;
     }
 
+    /**
+     * Returns the current library and part name as LIB_ID.
+     */
+    LIB_ID GetCurrentLibId() const
+    {
+        return LIB_ID( m_currentLib, m_currentPart );
+    }
+
 private:
     ///> Parent frame
     LIB_EDIT_FRAME& m_frame;
