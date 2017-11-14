@@ -49,10 +49,7 @@ void LIB_MANAGER_ADAPTER::RemoveLibrary( const wxString& aLibNickname )
             [&] ( std::unique_ptr<CMP_TREE_NODE>& node ) { return node->Name == aLibNickname; } );
 
     if( it != m_tree.Children.end() )
-    {
-        ItemDeleted( wxDataViewItem( nullptr ), ToItem( it->get() ) );
-        m_tree.Children.erase( it );
-    }
+        deleteLibrary( it );
 }
 
 
@@ -185,7 +182,9 @@ void LIB_MANAGER_ADAPTER::updateLibrary( CMP_TREE_NODE_LIB& aLibNode )
 CMP_TREE_NODE::PTR_VECTOR::iterator LIB_MANAGER_ADAPTER::deleteLibrary(
             CMP_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt )
 {
-    m_libHashes.erase( aLibNodeIt->get()->Name );
+    CMP_TREE_NODE* node = aLibNodeIt->get();
+    ItemDeleted( wxDataViewItem( nullptr ), ToItem( node ) );
+    m_libHashes.erase( node->Name );
     auto it = m_tree.Children.erase( aLibNodeIt );
     return it;
 }
