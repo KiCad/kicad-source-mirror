@@ -1555,11 +1555,11 @@ wxString LIB_EDIT_FRAME::getTargetLib() const
 SYMBOL_LIB_TABLE* LIB_EDIT_FRAME::SelectSymLibTable()
 {
     wxArrayString libTableNames;
-    libTableNames.Add( _( "Global Symbol Library Table" ) );
-    libTableNames.Add( _( "Project Symbol Library Table" ) );
+    libTableNames.Add( _( "Global" ) );
+    libTableNames.Add( _( "Project" ) );
 
-    switch( SelectSingleOption( this, _( "Select target symbol library table" ),
-                wxEmptyString, libTableNames ) )
+    switch( SelectSingleOption( this, _( "Select Symbol Library Table" ),
+                _( "Choose the Library Table to add the library:" ), libTableNames ) )
     {
         case 0: return &SYMBOL_LIB_TABLE::GetGlobalLibTable();
         case 1: return Prj().SchSymbolLibTable();
