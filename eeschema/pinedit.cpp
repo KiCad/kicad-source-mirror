@@ -286,7 +286,6 @@ void LIB_EDIT_FRAME::PlacePin()
         SaveCopyInUndoList( part );
 
     m_canvas->SetMouseCapture( NULL, NULL );
-    OnModify();
     cur_pin->Move( newpos );
 
     if( cur_pin->IsNew() )
@@ -314,6 +313,7 @@ void LIB_EDIT_FRAME::PlacePin()
 
     m_drawItem = NULL;
 
+    OnModify();
     m_canvas->Refresh();
 }
 
