@@ -432,7 +432,7 @@ void LIB_EDIT_FRAME::fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibr
 {
     wxString newName;
 
-    for( int i = 0; i < aPart->GetAliasCount(); ++i )
+    for( unsigned int i = 0; i < aPart->GetAliasCount(); ++i )
     {
         LIB_ALIAS* alias = aPart->GetAlias( i );
         int sfx = 0;

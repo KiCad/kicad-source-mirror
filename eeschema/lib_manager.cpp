@@ -283,7 +283,7 @@ std::list<LIB_ALIAS*> LIB_MANAGER::GetAliases( const wxString& aLibrary ) const
     {
         for( auto& partBuf : libIt->second.GetBuffers() )
         {
-            for( int i = 0; i < partBuf->GetPart()->GetAliasCount(); ++i )
+            for( unsigned int i = 0; i < partBuf->GetPart()->GetAliasCount(); ++i )
                 ret.push_back( partBuf->GetPart()->GetAlias( i ) );
         }
     }
@@ -719,7 +719,7 @@ bool LIB_MANAGER::LIB_BUFFER::addAliases( PART_BUFFER::PTR aPartBuf )
     wxCHECK( part, false );
     bool ret = true;        // Assume everything is ok
 
-    for( int i = 0; i < part->GetAliasCount(); ++i )
+    for( unsigned int i = 0; i < part->GetAliasCount(); ++i )
     {
         bool newAlias;
         std::tie( std::ignore, newAlias ) = m_aliases.emplace( part->GetAlias( i )->GetName(), aPartBuf );
@@ -741,7 +741,7 @@ bool LIB_MANAGER::LIB_BUFFER::removeAliases( PART_BUFFER::PTR aPartBuf )
     wxCHECK( part, false );
     bool ret = true;        // Assume everything is ok
 
-    for( int i = 0; i < part->GetAliasCount(); ++i )
+    for( unsigned int i = 0; i < part->GetAliasCount(); ++i )
     {
         auto aliasIt = m_aliases.find( part->GetAlias( i )->GetName() );
 
