@@ -519,9 +519,20 @@ void LIB_EDIT_FRAME::OnUpdatePartModified( wxUpdateUIEvent& aEvent )
     const wxString& partName = libId.GetLibItemName();
     const wxString& libName = libId.GetLibNickname();
 
-    aEvent.Enable( !partName.IsEmpty() && !libName.IsEmpty()
-            && m_libMgr->IsPartModified( partName, libName )
-            && ( aEvent.GetId() == ID_LIBEDIT_REVERT_PART || !m_libMgr->IsLibraryReadOnly( libName ) ) );
+    if( aEvent.GetId() == ID_LIBEDIT_SAVE_PART )
+    {
+        bool readOnly = libName.IsEmpty() || m_libMgr->IsLibraryReadOnly( libName );
+
+        aEvent.SetText( readOnly ? _( "Save part [Read Only]" ) : _( "Save part" ) );
+        aEvent.Enable( !readOnly && !partName.IsEmpty()
+                && m_libMgr->IsPartModified( partName, libName ) );
+    }
+    else if( aEvent.GetId() == ID_LIBEDIT_REVERT_PART )
+    {
+        aEvent.Enable( !partName.IsEmpty() && !libName.IsEmpty()
+                && m_libMgr->IsPartModified( partName, libName ) );
+    }
+    else wxFAIL;
 }
 
 
@@ -554,9 +565,10 @@ void LIB_EDIT_FRAME::OnUpdateRedo( wxUpdateUIEvent& event )
 void LIB_EDIT_FRAME::OnUpdateSaveLib( wxUpdateUIEvent& event )
 {
     wxString lib = getTargetLib();
+    bool readOnly = lib.IsEmpty() || m_libMgr->IsLibraryReadOnly( lib );
 
-    event.Enable( m_libMgr->LibraryExists( lib ) && !m_libMgr->IsLibraryReadOnly( lib ) &&
-                  m_libMgr->IsLibraryModified( lib ) );
+    event.SetText( readOnly ? _( "Save library [Read Only]" ) : _( "Save library" ) );
+    event.Enable( !readOnly && m_libMgr->IsLibraryModified( lib ) );
 }
 
 

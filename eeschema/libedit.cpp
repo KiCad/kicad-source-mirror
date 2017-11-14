@@ -67,7 +67,7 @@ void LIB_EDIT_FRAME::DisplayLibInfos()
 
         title += lib + " (" + fileName + ")";
 
-        if( !wxFileName::IsFileWritable( fileName ) )
+        if( wxFileName::FileExists( fileName ) && !wxFileName::IsFileWritable( fileName ) )
             title += " " + _( "[Read Only]" );
     }
     else

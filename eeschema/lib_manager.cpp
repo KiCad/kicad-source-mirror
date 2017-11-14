@@ -240,7 +240,7 @@ bool LIB_MANAGER::IsLibraryReadOnly( const wxString& aLibrary ) const
 {
     wxCHECK( LibraryExists( aLibrary ), true );
     wxFileName fn( m_symbolTable->GetFullURI( aLibrary ) );
-    return !fn.IsFileWritable();
+    return ( fn.FileExists() && !fn.IsFileWritable() ) || !fn.IsDirWritable();
 }
 
 
