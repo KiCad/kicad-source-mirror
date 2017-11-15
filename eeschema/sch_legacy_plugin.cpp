@@ -72,6 +72,11 @@
 // Token delimiters.
 const char* delims = " \t\r\n";
 
+// Tokens to read/save graphic lines style
+#define T_STYLE "style"
+#define T_COLOR "rgb"          // cannot be modifed (used by wxWidgets)
+#define T_COLORA "rgba"        // cannot be modifed (used by wxWidgets)
+#define T_WIDTH "width"
 
 /**
  * @ingroup trace_env_vars
@@ -105,7 +110,7 @@ static bool is_eol( char c )
  * @param aString - A pointer to the string to compare.
  * @param aLine - A pointer to string to begin the comparison.
  * @param aOutput - A pointer to a string pointer to the end of the comparison if not NULL.
- * @return True if \a aString was found starting at \a aLine.  Otherwise false.
+ * @return true if \a aString was found starting at \a aLine.  Otherwise false.
  */
 static bool strCompare( const char* aString, const char* aLine, const char** aOutput = NULL )
 {
@@ -1138,6 +1143,62 @@ SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( FILE_LINE_READER& aReader )
     if( !strCompare( "Line", line, &line ) )
         SCH_PARSE_ERROR( "invalid wire definition", aReader, line );
 
+    // Since Sept 15, 2017, a line style is alloved (width, style, color)
+    // Only non default values are stored
+    while( !is_eol( *line ) )
+    {
+        wxString buf;
+
+        parseUnquotedString( buf, aReader, line, &line );
+
+        if( buf == ")" )
+            continue;
+
+        else if( buf == T_WIDTH )
+        {
+            int size = parseInt( aReader, line, &line );
+            wire->SetLineWidth( size );
+        }
+        else if( buf == T_STYLE )
+        {
+            parseUnquotedString( buf, aReader, line, &line );
+            int style = SCH_LINE::GetLineStyleInternalId( buf );
+            wire->SetLineStyle( style );
+        }
+        else    // should be the color parameter.
+        {
+            // The color param is something like rgb(150, 40, 191)
+            // and because there is no space between ( and 150
+            // the first param is inside buf.
+            // So break keyword and the first param into 2 separate strings.
+            wxString prm, keyword;
+            keyword = buf.BeforeLast( '(', &prm );
+
+            if( ( keyword == T_COLOR ) || ( keyword == T_COLORA ) )
+            {
+                long color[4] = { 0 };
+
+                int ii = 0;
+
+                if( !prm.IsEmpty() )
+                {
+                    prm.ToLong( &color[ii] );
+                    ii++;
+                }
+
+                int prm_count = ( keyword == T_COLORA ) ? 4 : 3;
+                // fix opacity to 1.0 or 255, when not exists in file
+                color[3] = 255;
+
+                for(; ii < prm_count && !is_eol( *line ); ii++ )
+                    color[ii] = parseInt( aReader, line, &line );
+
+                wire->SetLineColor( color[0]/255.0, color[1]/255.0, color[2]/255.0,color[3]/255.0 );
+            }
+        }
+    }
+
+    // Read the segment en points coordinates:
     line = aReader.ReadLine();
 
     wxPoint begin, end;
@@ -1146,27 +1207,6 @@ SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( FILE_LINE_READER& aReader )
     begin.y = parseInt( aReader, line, &line );
     end.x = parseInt( aReader, line, &line );
     end.y = parseInt( aReader, line, &line );
-
-    if( !is_eol( *line ) )
-    {
-        int size = parseInt( aReader, line, &line );
-        wire->SetLineWidth( size );
-    }
-
-    if( !is_eol( *line ) )
-    {
-        int style = parseInt( aReader, line, &line );
-        wire->SetLineStyle( style );
-    }
-
-    if( !is_eol( *line ) )
-    {
-        double color[ 4 ] = { 0. };
-        for( int i = 0; i < 4 && !is_eol( *line ); i++ )
-            color[i] = parseDouble( aReader, line, &line );
-
-        wire->SetLineColor( color[0], color[1], color[2], color[3] );
-    }
 
     wire->SetStartPoint( begin );
     wire->SetEndPoint( end );
@@ -1979,23 +2019,33 @@ void SCH_LEGACY_PLUGIN::saveLine( SCH_LINE* aLine )
 
     const char* layer = "Notes";
     const char* width = "Line";
-    bool styled = aLine->GetPenSize() != aLine->GetDefaultWidth()
-            || aLine->GetLineStyle() != aLine->GetDefaultStyle()
-            || aLine->GetLineColor() != aLine->GetDefaultColor();
 
     if( aLine->GetLayer() == LAYER_WIRE )
         layer = "Wire";
     else if( aLine->GetLayer() == LAYER_BUS )
         layer = "Bus";
 
-    m_out->Print( 0, "Wire %s %s\n", layer, width );
-    m_out->Print( 0, "\t%-4d %-4d %-4d %-4d", aLine->GetStartPoint().x, aLine->GetStartPoint().y,
+    m_out->Print( 0, "Wire %s %s", layer, width );
+
+    // Write line style (width, type, color) only for non default values
+    if( aLine->GetLayer() == LAYER_NOTES )
+    {
+        if( aLine->GetPenSize() != aLine->GetDefaultWidth() )
+            m_out->Print( 0, " %s %d", T_WIDTH, aLine->GetLineSize() );
+
+        if( aLine->GetLineStyle() != aLine->GetDefaultStyle() )
+            m_out->Print( 0, " %s %s", T_STYLE, SCH_LINE::GetLineStyleName( aLine->GetLineStyle() ) );
+
+        if( aLine->GetLineColor() != aLine->GetDefaultColor() )
+            m_out->Print( 0, " %s",
+                TO_UTF8( aLine->GetLineColor().ToColour().GetAsString( wxC2S_CSS_SYNTAX ) ) );
+    }
+
+    m_out->Print( 0, "\n" );
+
+    m_out->Print( 0, "\t%-4d %-4d %-4d %-4d",
+                  aLine->GetStartPoint().x, aLine->GetStartPoint().y,
                   aLine->GetEndPoint().x, aLine->GetEndPoint().y );
-    if( styled )
-        m_out->Print( 0, " %-4d %-4d %-.4f %-.4f %-.4f %-.4f",
-                aLine->GetLineSize(), aLine->GetLineStyle(),
-                aLine->GetLineColor().r, aLine->GetLineColor().g,
-                aLine->GetLineColor().b, aLine->GetLineColor().a );
 
     m_out->Print( 0, "\n");
 }

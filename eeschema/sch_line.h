@@ -88,6 +88,14 @@ public:
 
     int GetLineStyle() const;
 
+    /// @return the style name from the style id
+    /// (mainly to write it in .sch file
+    static const char* GetLineStyleName( int aStyle );
+
+    /// @return the style id from the style  name
+    /// (mainly to read style from .sch file
+    static int GetLineStyleInternalId( const wxString& aStyleName );
+
     void SetLineColor( const COLOR4D aColor );
 
     void SetLineColor( const double r, const double g, const double b, const double a );

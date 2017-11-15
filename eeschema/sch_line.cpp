@@ -95,6 +95,55 @@ EDA_ITEM* SCH_LINE::Clone() const
     return new SCH_LINE( *this );
 }
 
+static const char* style_names[] =
+{
+    "solid", "dashed", "dotted", "dash_dot", nullptr
+};
+
+const char* SCH_LINE::GetLineStyleName( int aStyle )
+{
+    const char * styleName = style_names[1];
+
+    switch( aStyle )
+    {
+        case PLOTDASHTYPE_SOLID:
+            styleName = style_names[0];
+            break;
+
+        default:
+        case PLOTDASHTYPE_DASH:
+            styleName = style_names[1];
+            break;
+
+        case PLOTDASHTYPE_DOT:
+            styleName = style_names[2];
+            break;
+
+        case PLOTDASHTYPE_DASHDOT:
+            styleName = style_names[3];
+            break;
+    }
+
+    return styleName;
+}
+
+
+int SCH_LINE::GetLineStyleInternalId( const wxString& aStyleName )
+{
+    int id = -1;    // Default style id
+
+    for( int ii = 0; style_names[ii] != nullptr; ii++ )
+    {
+        if( aStyleName == style_names[ii] )
+        {
+            id = ii;
+            break;
+        }
+    }
+
+    return id;
+}
+
 
 void SCH_LINE::Move( const wxPoint& aOffset )
 {
