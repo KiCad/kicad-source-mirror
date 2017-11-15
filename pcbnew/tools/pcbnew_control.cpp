@@ -484,7 +484,7 @@ int PCBNEW_CONTROL::CursorControl( const TOOL_EVENT& aEvent )
     bool mirroredX = getView()->IsMirroredX();
 
     GRID_HELPER gridHelper( m_frame );
-    VECTOR2D cursor = getViewControls()->GetCursorPosition();
+    VECTOR2D cursor = getViewControls()->GetRawCursorPosition( true );
     VECTOR2I gridSize = gridHelper.GetGrid();
 
     if( fastMove )

@@ -411,6 +411,17 @@ VECTOR2D WX_VIEW_CONTROLS::GetMousePosition( bool aWorldCoordinates ) const
     return aWorldCoordinates ? m_view->ToWorld( screenPos ) : screenPos;
 }
 
+VECTOR2D WX_VIEW_CONTROLS::GetRawCursorPosition( bool aEnableSnapping ) const
+{
+    if( aEnableSnapping )
+    {
+        return m_view->GetGAL()->GetGridPoint( m_cursorPos );
+    }
+    else
+    {
+        return m_cursorPos;
+    }
+}
 
 VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition( bool aEnableSnapping ) const
 {
@@ -420,10 +431,7 @@ VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition( bool aEnableSnapping ) const
     }
     else
     {
-        if( aEnableSnapping )
-            return m_view->GetGAL()->GetGridPoint( m_cursorPos );
-        else
-            return m_cursorPos;
+        return GetRawCursorPosition( aEnableSnapping );
     }
 }
 

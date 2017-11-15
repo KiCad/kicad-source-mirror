@@ -184,6 +184,14 @@ public:
     }
 
     /**
+     * Returns the current cursor position in world coordinates - ingoring the cursorUp
+     * position force mode.
+     *
+     * @return The current cursor position in world coordinates.
+     */
+    virtual VECTOR2D GetRawCursorPosition( bool aSnappingEnabled = true ) const = 0;
+
+    /**
      * Returns the current cursor position in world coordinates. Note, that it may be
      * different from the mouse pointer position if snapping is enabled or cursor position
      * is forced to a specific point.
