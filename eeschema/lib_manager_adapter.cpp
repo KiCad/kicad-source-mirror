@@ -40,6 +40,7 @@ void LIB_MANAGER_ADAPTER::AddLibrary( const wxString& aLibNickname )
     auto& lib_node = m_tree.AddLib( aLibNickname );
     ItemAdded( wxDataViewItem( nullptr ), ToItem( &lib_node ) );
     updateLibrary( lib_node );
+    finishUpdate();
 }
 
 
@@ -61,7 +62,7 @@ void LIB_MANAGER_ADAPTER::UpdateLibrary( const wxString& aLibraryName )
         return;
 
     updateLibrary( *(CMP_TREE_NODE_LIB*) node );
-    Resort();
+    finishUpdate();
 }
 
 
@@ -81,6 +82,7 @@ bool LIB_MANAGER_ADAPTER::IsContainer( const wxDataViewItem& aItem ) const
 
 void LIB_MANAGER_ADAPTER::Sync( bool aForce )
 {
+    wxBusyCursor cursor;
     int libMgrHash = m_libMgr->GetHash();
 
     if( !aForce && m_lastSyncHash == libMgrHash )
@@ -113,8 +115,7 @@ void LIB_MANAGER_ADAPTER::Sync( bool aForce )
             AddLibrary( libName );
     }
 
-    m_tree.AssignIntrinsicRanks();
-    Resort();
+    finishUpdate();
 }
 
 
@@ -123,12 +124,17 @@ void LIB_MANAGER_ADAPTER::updateLibrary( CMP_TREE_NODE_LIB& aLibNode )
     if( m_libHashes.count( aLibNode.Name ) == 0 )
     {
         // add a new library
-        addAliases( aLibNode );
+        wxDataViewItem parent = ToItem( &aLibNode );
+
+        for( auto alias : m_libMgr->GetAliases( aLibNode.Name ) )
+        {
+            auto& aliasNode = aLibNode.AddAlias( alias );
+            ItemAdded( parent, ToItem( &aliasNode ) );
+        }
     }
     else
     {
         // update an existing libary
-#if 1
         std::list<LIB_ALIAS*> aliases = m_libMgr->GetAliases( aLibNode.Name );
         wxDataViewItem parent = ToItem( &aLibNode );
 
@@ -162,16 +168,6 @@ void LIB_MANAGER_ADAPTER::updateLibrary( CMP_TREE_NODE_LIB& aLibNode )
             auto& aliasNode = aLibNode.AddAlias( alias );
             ItemAdded( parent, ToItem( &aliasNode ) );
         }
-#else
-        // Bruteforce approach - remove everything and rebuild the branch
-        wxDataViewItem parent = ToItem( &aLibNode );
-
-        for( const auto& node : aLibNode.Children )
-            ItemDeleted( parent, ToItem( node.get() ) );
-
-        aLibNode.Children.clear();
-        addAliases( aLibNode );
-#endif
     }
 
     aLibNode.AssignIntrinsicRanks();
@@ -192,13 +188,19 @@ CMP_TREE_NODE::PTR_VECTOR::iterator LIB_MANAGER_ADAPTER::deleteLibrary(
 
 void LIB_MANAGER_ADAPTER::addAliases( CMP_TREE_NODE_LIB& aLibNode )
 {
-    wxDataViewItem parent = ToItem( &aLibNode );
+}
 
-    for( auto alias : m_libMgr->GetAliases( aLibNode.Name ) )
-    {
-        auto& aliasNode = aLibNode.AddAlias( alias );
-        ItemAdded( parent, ToItem( &aliasNode ) );
-    }
+
+void LIB_MANAGER_ADAPTER::finishUpdate()
+{
+    m_tree.AssignIntrinsicRanks();
+#ifdef __WINDOWS__
+    // Normally one would call Item{Added,Changed,Deleted}() to notify the view
+    // about changes, but ItemAdded() causes duplicate entries on Windows.
+    // The only sensible way is to call Cleared() that rebuilds the model.
+    Cleared();
+#endif /* __WINDOWS__ */
+    Resort();
 }
 
 

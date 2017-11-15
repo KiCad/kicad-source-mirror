@@ -55,6 +55,8 @@ protected:
 
     void addAliases( CMP_TREE_NODE_LIB& aLibNode );
 
+    void finishUpdate();
+
     CMP_TREE_NODE* findLibrary( const wxString& aLibNickName );
 
     bool GetAttr( wxDataViewItem const& aItem, unsigned int aCol,
