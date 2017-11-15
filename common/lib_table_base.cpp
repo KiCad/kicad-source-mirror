@@ -368,7 +368,10 @@ std::vector<wxString> LIB_TABLE::GetLogicalLibs()
     {
         for( LIB_TABLE_ROWS_CITER it = cur->rows.begin();  it!=cur->rows.end();  ++it )
         {
-            unique.insert( it->GetNickName() );
+            if( it->GetIsEnabled() )
+            {
+                unique.insert( it->GetNickName() );
+            }
         }
 
     } while( ( cur = cur->fallBack ) != 0 );
