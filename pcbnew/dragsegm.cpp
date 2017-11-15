@@ -41,7 +41,7 @@
 
 #include <class_module.h>
 #include <class_board.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 /* a list of DRAG_SEGM_PICKER items used to move or drag tracks */
 std::vector<DRAG_SEGM_PICKER> g_DragSegmentList;

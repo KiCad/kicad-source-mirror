@@ -52,7 +52,7 @@ using namespace std::placeholders;
 
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 #include "selection_tool.h"
 #include "pcb_bright_box.h"
@@ -870,7 +870,7 @@ void SELECTION_TOOL::selectAllItemsConnectedToItem( BOARD_CONNECTED_ITEM& aSourc
     constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
     auto connectivity = board()->GetConnectivity();
 
-    std::list<BOARD_CONNECTED_ITEM*> items;
+    std::vector<BOARD_CONNECTED_ITEM*> items;
     items = connectivity->GetConnectedItems( &aSourceItem, types );
 
     for( auto item : connectivity->GetConnectedItems( &aSourceItem, types ) )

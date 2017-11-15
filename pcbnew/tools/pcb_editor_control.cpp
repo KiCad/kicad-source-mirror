@@ -42,7 +42,7 @@
 #include <pcb_draw_panel_gal.h>
 #include <class_module.h>
 #include <class_pcb_target.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 #include <collectors.h>
 #include <zones_functions_for_undo_redo.h>
 #include <board_commit.h>

@@ -42,7 +42,7 @@
 #include <view/view_controls.h>
 #include <view/view.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 #include <confirm.h>
 #include <bitmaps.h>
 #include <hotkeys.h>

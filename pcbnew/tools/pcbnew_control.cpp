@@ -48,7 +48,7 @@
 #include <pcbnew_id.h>
 #include <wxPcbStruct.h>
 #include <pcb_draw_panel_gal.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 #include <tool/tool_manager.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view_controls.h>

@@ -40,7 +40,7 @@
 
 #include <pcbnew.h>
 
-#include <connectivity.h>
+#include <connectivity_data.h>
 #include <ratsnest_data.h>
 
 #include <wxPcbStruct.h>

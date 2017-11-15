@@ -41,7 +41,7 @@
 #include <class_zone.h>
 
 #include <pcb_netlist.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 #include <reporter.h>
 
 #include <board_netlist_updater.h>

@@ -58,7 +58,7 @@
 #include <class_pcb_text.h>
 #include <class_pcb_target.h>
 #include <class_dimension.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 
 /* This is an odd place for this, but CvPcb won't link if it is

@@ -43,7 +43,7 @@
 #include <drag.h>
 #include <dialog_get_footprint_by_name.h>
 
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 static void MoveFootprint( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                            const wxPoint& aPosition, bool aErase );

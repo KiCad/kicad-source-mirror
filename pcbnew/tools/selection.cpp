@@ -49,7 +49,7 @@ using namespace std::placeholders;
 
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 #include "selection_tool.h"
 #include "pcb_bright_box.h"

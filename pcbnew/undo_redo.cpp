@@ -45,7 +45,7 @@ using namespace std::placeholders;
 #include <class_zone.h>
 #include <class_edge_mod.h>
 
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 #include <tools/selection_tool.h>
 #include <tool/tool_manager.h>

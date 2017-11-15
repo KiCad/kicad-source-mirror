@@ -49,7 +49,7 @@
 #include <wx/wfstream.h>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <memory.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 using namespace PCB_KEYS_T;
 

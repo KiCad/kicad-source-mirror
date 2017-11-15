@@ -40,7 +40,7 @@
 #include <pcbnew.h>
 #include <protos.h>
 
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 static void ListSetState( EDA_ITEM* Start, int NbItem, STATUS_FLAGS State,
                           bool onoff );

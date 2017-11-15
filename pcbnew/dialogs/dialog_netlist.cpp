@@ -42,7 +42,7 @@
 #include <class_board_design_settings.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 #include <wildcards_and_files_ext.h>
 
 #include <dialog_netlist.h>

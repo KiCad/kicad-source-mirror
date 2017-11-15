@@ -33,7 +33,7 @@
 #include <confirm.h>
 #include <wxPcbStruct.h>
 #include <macros.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 #include <class_board.h>
 #include <class_track.h>

@@ -25,7 +25,7 @@
 #include <profile.h>
 #endif
 
-#include <connectivity.h>
+#include <connectivity_data.h>
 #include <connectivity_algo.h>
 #include <ratsnest_data.h>
 
@@ -324,11 +324,11 @@ void CONNECTIVITY_DATA::Clear()
 }
 
 
-const std::list<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems(
+const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems(
         const BOARD_CONNECTED_ITEM* aItem,
         const KICAD_T aTypes[] ) const
 {
-    std::list<BOARD_CONNECTED_ITEM*> rv;
+    std::vector<BOARD_CONNECTED_ITEM*> rv;
     const auto clusters = m_connAlgo->SearchClusters( CN_CONNECTIVITY_ALGO::CSM_CONNECTIVITY_CHECK,
             aTypes, aItem->GetNetCode() );
 
@@ -348,11 +348,11 @@ const std::list<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems(
 }
 
 
-const std::list<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetNetItems( int aNetCode,
+const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetNetItems( int aNetCode,
         const KICAD_T aTypes[] ) const
 {
     std::set<BOARD_CONNECTED_ITEM*> items;
-    std::list<BOARD_CONNECTED_ITEM*> rv;
+    std::vector<BOARD_CONNECTED_ITEM*> rv;
 
     m_connAlgo->ForEachItem( [&items, aNetCode, &aTypes] ( CN_ITEM* aItem )
     {
@@ -373,7 +373,7 @@ const std::list<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetNetItems( int aNetC
         }
     } );
 
-    std::copy( items.begin(), items.end(), std::front_inserter( rv ) );
+    std::copy( items.begin(), items.end(), std::back_inserter( rv ) );
 
     return rv;
 }

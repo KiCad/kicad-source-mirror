@@ -42,7 +42,7 @@
 #include <view/view.h>
 #include <geometry/seg.h>
 
-#include <connectivity.h>
+#include <connectivity_data.h>
 #include <connectivity_algo.h>
 
 #include <tool/tool_manager.h>

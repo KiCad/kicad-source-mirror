@@ -46,7 +46,7 @@
 #include <pcb_painter.h>
 #include <wxPcbStruct.h>
 
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 #include <io_mgr.h>
 #include <set>

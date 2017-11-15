@@ -34,7 +34,7 @@
 #include <class_board.h>
 #include <class_board_item.h>
 
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_ITEM( aParent, idtype ), m_netinfo( &NETINFO_LIST::ORPHANED_ITEM )

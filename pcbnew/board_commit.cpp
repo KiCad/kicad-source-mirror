@@ -30,7 +30,7 @@
 #include <view/view.h>
 #include <board_commit.h>
 #include <tools/pcb_tool.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 #include <functional>
 using namespace std::placeholders;

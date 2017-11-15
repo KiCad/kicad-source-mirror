@@ -44,7 +44,7 @@
 #include <class_track.h>
 #include <class_zone.h>
 #include <class_drawsegment.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 #include <view/view.h>
 
 #include <specctra.h>

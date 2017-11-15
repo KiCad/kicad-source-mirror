@@ -27,7 +27,7 @@
 
 #include <class_board.h>
 #include <class_zone.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 void ZONE_CONTAINER::TestForCopperIslandAndRemoveInsulatedIslands( BOARD* aPcb )
 {

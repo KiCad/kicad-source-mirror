@@ -54,7 +54,7 @@
 #include <dialog_global_edit_tracks_and_vias.h>
 #include <invoke_pcb_dialog.h>
 #include <array_creator.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 #include <dialog_move_exact.h>
 

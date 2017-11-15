@@ -29,7 +29,7 @@
 #include <worksheet_viewitem.h>
 #include <ratsnest_viewitem.h>
 #include <ratsnest_data.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 #include <class_colors_design_settings.h>
 #include <class_board.h>

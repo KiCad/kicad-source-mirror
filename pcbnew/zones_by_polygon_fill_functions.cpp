@@ -43,7 +43,7 @@
 #include <pcbnew.h>
 #include <zones.h>
 
-#include <connectivity.h>
+#include <connectivity_data.h>
 #include <board_commit.h>
 
 #define FORMAT_STRING _( "Filling zone %d out of %d (net %s)..." )

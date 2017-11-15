@@ -40,7 +40,7 @@
 #include <class_board.h>
 #include <class_track.h>
 #include <class_zone.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 
 static void Abort_Create_Track( EDA_DRAW_PANEL* panel, wxDC* DC );

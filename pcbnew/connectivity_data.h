@@ -23,14 +23,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __CONNECTIVITY_H
-#define __CONNECTIVITY_H
+#ifndef __CONNECTIVITY_DATA_H
+#define __CONNECTIVITY_DATA_H
 
 #include <core/typeinfo.h>
 
 #include <wx/string.h>
 #include <vector>
-#include <list>
 #include <memory>
 
 #include <math/vector2d.h>
@@ -192,7 +191,7 @@ public:
      * @param aItem is the reference item to find other connected items.
      * @param aTypes allows to filter by item types.
      */
-    const std::list<BOARD_CONNECTED_ITEM*> GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
+    const std::vector<BOARD_CONNECTED_ITEM*> GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
             const KICAD_T aTypes[] ) const;
 
     /**
@@ -201,7 +200,7 @@ public:
      * @param aNetCode is the net code.
      * @param aTypes allows to filter by item types.
      */
-    const std::list<BOARD_CONNECTED_ITEM*> GetNetItems( int aNetCode,
+    const std::vector<BOARD_CONNECTED_ITEM*> GetNetItems( int aNetCode,
             const KICAD_T aTypes[] ) const;
 
     const std::vector<VECTOR2I> NearestUnconnectedTargets( const BOARD_CONNECTED_ITEM* aRef,

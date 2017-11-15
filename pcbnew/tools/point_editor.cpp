@@ -43,7 +43,7 @@ using namespace std::placeholders;
 #include <class_zone.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 // Point editor
 TOOL_ACTION PCB_ACTIONS::pointEditorAddCorner( "pcbnew.PointEditor.addCorner",

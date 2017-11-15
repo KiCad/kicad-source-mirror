@@ -42,7 +42,7 @@
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <pcb_painter.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 #define COL_NETNAME 0
 #define COL_NETINFO 1

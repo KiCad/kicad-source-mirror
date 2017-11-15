@@ -37,7 +37,7 @@
 #include <class_track.h>
 #include <dialog_cleaning_options.h>
 #include <board_commit.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 #include <connectivity_algo.h>
 
 // Helper class used to clean tracks and vias

@@ -45,7 +45,7 @@
 #include <protos.h>
 #include <zones_functions_for_undo_redo.h>
 #include <drc_stuff.h>
-#include <connectivity.h>
+#include <connectivity_data.h>
 
 // Outline creation:
 static void Abort_Zone_Create_Outline( EDA_DRAW_PANEL* Panel, wxDC* DC );

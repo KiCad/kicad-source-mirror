@@ -390,7 +390,7 @@ set( PCB_COMMON_SRCS
     ../pcbnew/class_zone.cpp
     ../pcbnew/class_zone_settings.cpp
     ../pcbnew/classpcb.cpp
-    ../pcbnew/connectivity.cpp
+    ../pcbnew/connectivity_data.cpp
     ../pcbnew/connectivity_algo.cpp
     ../pcbnew/convert_drawsegment_list_to_polygon.cpp
     ../pcbnew/ratsnest_data.cpp
