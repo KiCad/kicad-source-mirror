@@ -3,9 +3,11 @@
 * under GNU General Public License (see copyright.txt)
 
 == Main Authors
-Jean-Pierre Charras <jean-pierre.charras[at]gipsa-lab-dot-inpg-dot-fr>
+Jean-Pierre Charras <jean-pierre.charras[at]wanadoo-dot-fr>
 Dick Hollenbeck <dick[at]softplc-dot-com>
 Wayne Stambaugh <stambaughw[at]gmail-dot-com>
+Maciej Sumiński <maciej.suminski[at]cern-dot-ch>
+Tomasz Wlostowski <tomasz.wlostowski[at]cern-dot-ch>
 
 
 == Contributors
@@ -22,8 +24,6 @@ Miguel Angel Ajo Pelayo <miguelangel[at]nbee-dot-es> (Python Scripting)
 Alexander Lunev <al.lunev[at]yahoo-dot-com>  (Pcad to Kicad converter)
 Jacobo Aragunde Perez <jaragunde[at]igalia-dot-com> for Igalia and the CERN
 Brian Sidebotham <brian.sidebotham[at]gmail-dot-com>
-Maciej Sumiński <maciej.suminski[at]cern-dot-ch>
-Tomasz Wlostowski <tomasz.wlostowski[at]cern-dot-ch>
 Henner Zeller <h.zeller[at]acm-dot-org>
 Mark Roszko <mark.roszko[at]gmail-dot-com>
 Daniel Majewski <lordblick[at]gmail-dot-com>
@@ -43,6 +43,7 @@ Kristoffer Ödmark <kristoffer.odmark90[at]gmail-dot-com>
 Oliver Walters <oliver.henry.walters[at]gmail-dot-com>
 Jon Evans <jon[at]craftyjon-dot-com>
 Russell Oliver <roliver8143[at]gmail-dot-com>
+Seth Hillbrand <hillbrand[at]ucdavis-dot-edu>
 
 See also CHANGELOG.txt for contributors.
 
