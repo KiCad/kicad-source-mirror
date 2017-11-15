@@ -109,10 +109,11 @@ void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
 
         // After (name), remaining (lib) elements are order independent, and in
         // some cases optional.
-        bool    sawType = false;
-        bool    sawOpts = false;
-        bool    sawDesc = false;
-        bool    sawUri  = false;
+        bool    sawType     = false;
+        bool    sawOpts     = false;
+        bool    sawDesc     = false;
+        bool    sawUri      = false;
+        bool    sawDisabled = false;
 
         while( ( tok = in->NextTok() ) != T_RIGHT )
         {
@@ -156,6 +157,13 @@ void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
                 sawDesc = true;
                 in->NeedSYMBOLorNUMBER();
                 row->SetDescr( in->FromUTF8() );
+                break;
+
+            case T_disabled:
+                if( sawDisabled )
+                    in->Duplicate( tok );
+                sawDisabled = true;
+                row->SetEnabled( false );
                 break;
 
             default:
