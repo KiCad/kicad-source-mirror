@@ -73,7 +73,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-15 08:28+0100\n"
-"PO-Revision-Date: 2017-11-15 08:37+0100\n"
+"PO-Revision-Date: 2017-11-15 08:45+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -9471,7 +9471,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:115
 msgid "Absolute"
-msgstr "Assolute"
+msgstr "Assoluta"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:115
 msgid "Auxiliary axis"
