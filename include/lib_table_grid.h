@@ -24,15 +24,18 @@
 
 #include <wx/grid.h>
 
+const wxColour COLOUR_ROW_ENABLED( 0, 0, 0 );
+const wxColour COLOUR_ROW_DISABLED( 100, 100, 100 );
+
 /// The library table grid column order is established by this sequence.
 enum COL_ORDER
 {
+    COL_ENABLED,
     COL_NICKNAME,
     COL_URI,
     COL_TYPE,
     COL_OPTIONS,
     COL_DESCR,
-    COL_ENABLED,
 
     COL_COUNT       // keep as last
 };
@@ -180,10 +183,51 @@ public:
         case COL_TYPE:      return _( "Plugin Type" );
         case COL_OPTIONS:   return _( "Options" );
         case COL_DESCR:     return _( "Description" );
-        case COL_ENABLED:   return _( "Enabled" );
+        case COL_ENABLED:   return _( "Active" );
 
         default:            return wxEmptyString;
         }
+    }
+
+    /**
+     * Customize the appearance of LIB_TABLE_ROW entries
+     * - If not enabled, greyed out and italic
+     */
+    virtual wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind) override
+    {
+        auto* attr = wxGridTableBase::GetAttr( aRow, aCol, aKind );
+
+        if( aRow < (int) size() )
+        {
+            if( !attr )
+            {
+                attr = new wxGridCellAttr();
+            }
+
+            wxFont font;
+
+            if( attr->HasFont() )
+            {
+                font = attr->GetFont();
+            }
+
+            LIB_TABLE_ROW* r = at( (size_t) aRow );
+
+            if( r && r->GetIsEnabled() )
+            {
+                font.SetStyle( wxFONTSTYLE_NORMAL );
+                attr->SetTextColour( COLOUR_ROW_ENABLED );
+            }
+            else
+            {
+                font.SetStyle( wxFONTSTYLE_ITALIC );
+                attr->SetTextColour( COLOUR_ROW_DISABLED );
+            }
+
+            attr->SetFont( font );
+        }
+
+        return attr;
     }
 
 protected:
