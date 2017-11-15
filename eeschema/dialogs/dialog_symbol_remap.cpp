@@ -136,6 +136,11 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
 
             for( auto& entry : envMap )
             {
+                // Don't bother normalizing paths that don't exist or the user cannot read.
+                if( !wxFileName::DirExists( entry.second.GetValue() )
+                  || !wxFileName::IsDirReadable( entry.second.GetValue() ) )
+                    continue;
+
                 envPath.SetPath( entry.second.GetValue() );
 
                 if( normalizeAbsolutePaths( envPath, fn, &tmp ) )
