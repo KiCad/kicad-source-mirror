@@ -832,10 +832,10 @@ void SCH_SCREEN::addConnectedItemsToBlock( const wxPoint& position )
 {
     SCH_ITEM* item;
     ITEM_PICKER picker;
-    bool addinlist = true;
 
     for( item = m_drawList.begin(); item; item = item->Next() )
     {
+        bool addinlist = true;
         picker.SetItem( item );
 
         if( !item->IsConnectable() || !item->IsConnected( position )
