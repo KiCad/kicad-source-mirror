@@ -73,7 +73,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-15 08:28+0100\n"
-"PO-Revision-Date: 2017-11-15 08:29+0100\n"
+"PO-Revision-Date: 2017-11-15 08:37+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -8226,8 +8226,7 @@ msgstr " - <b>Foratura via</b> (%f %s) &ge; <b>Diametro via</b> (%f %s)<br>"
 #: pcbnew/dialogs/dialog_design_rules.cpp:1053
 #, c-format
 msgid " - <b>Via Drill</b> (%f %s) &lt; <b>Min Via Drill</b> (%f %s)<br>"
-msgstr ""
-" - <b>Foratura Via</b> (%f %s) &lt; <b>Foratura minima via</b> (%f %s)<br>"
+msgstr " - <b>Foratura via</b> (%f %s) &lt; <b>Foratura minima via</b> (%f %s)<br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1066
 #, c-format
@@ -9429,7 +9428,7 @@ msgstr "Crea una mappa forature in PS, HPGL o altri formati"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:95
 msgid "Excellon Drill File Options:"
-msgstr "Opzioni file di foratura Excellon:"
+msgstr "Opzioni file forature Excellon:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:97
 msgid "Mirror y axis"
@@ -9707,7 +9706,7 @@ msgstr "Foratura ridotta"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:121
 msgid "Real drill"
-msgstr "Dimensioni reali"
+msgstr "Foratura reale"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:123
 msgid "Pads Drill Options"
@@ -9719,7 +9718,7 @@ msgstr "Opzioni foratura piazzole"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:98
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:83
 msgid "Color"
-msgstr "Colori "
+msgstr "Colore"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:127
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:34
@@ -15253,7 +15252,7 @@ msgstr "Esporta IDFv3"
 
 #: pcbnew/dialogs/dialog_gendrill_base.h:83
 msgid "Drill Files Generation"
-msgstr "Generazione file di forature"
+msgstr "Generazione file forature"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.h:53
 msgid "Pad enumeration settings"
@@ -25347,7 +25346,7 @@ msgstr "File Gerber"
 
 #: gerbview/files.cpp:68
 msgid "Drill files"
-msgstr "File di foratura"
+msgstr "File forature"
 
 #: gerbview/files.cpp:81
 msgid "Zip files"
