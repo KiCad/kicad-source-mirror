@@ -26,41 +26,37 @@
 #include <widgets/color4Dpickerdlg.h>
 #include <dialog_edit_line_style.h>
 
-const int BUTT_SIZE_X = 32;
-const int BUTT_SIZE_Y = 16;
+const int BUTT_COLOR_MINSIZE_X = 32;
+const int BUTT_COLOR_MINSIZE_Y = 20;
 
 DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE( wxWindow* parent ) :
     DIALOG_EDIT_LINE_STYLE_BASE( parent )
 {
-    m_sdbSizer1Apply->SetLabel( _( "Default" ) );
+    m_sdbSizerApply->SetLabel( _( "Default" ) );
     m_lineStyle->SetSelection( 0 );
     m_lineWidth->SetFocus();
 
-    defaultStyle = 0;
-    defaultWidth = "";
+    m_defaultStyle = 0;
 
-    wxBitmap   bitmap( BUTT_SIZE_X, BUTT_SIZE_Y );
+    wxBitmap bitmap( std::max( m_colorButton->GetSize().x, BUTT_COLOR_MINSIZE_X ),
+                     std::max( m_colorButton->GetSize().y, BUTT_COLOR_MINSIZE_Y ) );
     m_colorButton->SetBitmap( bitmap );
-    m_sdbSizer1OK->SetDefault();
+
+    m_sdbSizerOK->SetDefault();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
-
-    // On some windows manager (Unity, XFCE), this dialog is
-    // not always raised, depending on this dialog is run.
-    // Force it to be raised
-    Raise();
 }
 
 void DIALOG_EDIT_LINE_STYLE::onColorButtonClicked( wxCommandEvent& event )
 {
     COLOR4D newColor = COLOR4D::UNSPECIFIED;
-    COLOR4D_PICKER_DLG dialog( this, selectedColor, false );
+    COLOR4D_PICKER_DLG dialog( this, m_selectedColor, false );
 
     if( dialog.ShowModal() == wxID_OK )
         newColor = dialog.GetColor();
 
-    if( newColor == COLOR4D::UNSPECIFIED || selectedColor == newColor )
+    if( newColor == COLOR4D::UNSPECIFIED || m_selectedColor == newColor )
         return;
 
     SetColor( newColor, true );
@@ -75,12 +71,12 @@ void DIALOG_EDIT_LINE_STYLE::updateColorButton( COLOR4D& aColor )
     iconDC.SelectObject( bitmap );
     iconDC.SetPen( *wxBLACK_PEN );
 
-    wxBrush  brush;
-    brush.SetColour( aColor.ToColour() );
-    brush.SetStyle( wxBRUSHSTYLE_SOLID );
-
+    wxBrush  brush( aColor.ToColour() );
     iconDC.SetBrush( brush );
-    iconDC.DrawRectangle( 0, 0, BUTT_SIZE_X, BUTT_SIZE_Y );
+
+    // Paint the full bitmap in aColor:
+    iconDC.SetBackground( brush );
+    iconDC.Clear();
 
     m_colorButton->SetBitmapLabel( bitmap );
     m_colorButton->Refresh();
@@ -91,41 +87,31 @@ void DIALOG_EDIT_LINE_STYLE::updateColorButton( COLOR4D& aColor )
 
 void DIALOG_EDIT_LINE_STYLE::resetDefaults( wxCommandEvent& event )
 {
-    SetStyle( defaultStyle );
-    SetWidth( defaultWidth );
-    SetColor( defaultColor, true );
+    SetStyle( m_defaultStyle );
+    SetWidth( m_defaultWidth );
+    SetColor( m_defaultColor, true );
     Refresh();
 }
 
 
 void DIALOG_EDIT_LINE_STYLE::SetColor( const COLOR4D& aColor, bool aRefresh )
 {
-    assert( aColor.r >= 0.0 && aColor.r <= 1.0 );
-    assert( aColor.g >= 0.0 && aColor.g <= 1.0 );
-    assert( aColor.b >= 0.0 && aColor.b <= 1.0 );
-    assert( aColor.a >= 0.0 && aColor.a <= 1.0 );
-
-    selectedColor = aColor;
+    m_selectedColor = aColor;
 
     if( aRefresh )
-        updateColorButton( selectedColor );
+        updateColorButton( m_selectedColor );
 }
 
 
 void DIALOG_EDIT_LINE_STYLE::SetDefaultColor( const COLOR4D& aColor )
 {
-    assert( aColor.r >= 0.0 && aColor.r <= 1.0 );
-    assert( aColor.g >= 0.0 && aColor.g <= 1.0 );
-    assert( aColor.b >= 0.0 && aColor.b <= 1.0 );
-    assert( aColor.a >= 0.0 && aColor.a <= 1.0 );
-
-    defaultColor = aColor;
+    m_defaultColor = aColor;
 }
 
 
 void DIALOG_EDIT_LINE_STYLE::SetStyle( const int aStyle )
 {
-    assert( aStyle >= 0 && aStyle < 4 );
+    wxASSERT( aStyle >= 0 && aStyle < 4 );
 
     m_lineStyle->SetSelection( aStyle );
 }
