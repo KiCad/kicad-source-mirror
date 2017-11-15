@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -206,7 +206,7 @@ int ValueFromTextCtrl( const wxTextCtrl& aTextCtr );
  * @return The formatted units symbol.
  */
 wxString ReturnUnitSymbol( EDA_UNITS_T aUnits = g_UserUnit,
-                           const wxString& aFormatString = _( " (%s):" ) );
+                           const wxString& aFormatString = " (%s):" );
 
 /**
  * Get a human readable units string.
