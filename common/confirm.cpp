@@ -212,7 +212,7 @@ int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxStrin
 
     if( dlg->ShowModal() == wxID_OK )
     {
-        for( int i = 0; i < radioButtons.size(); ++i )
+        for( unsigned int i = 0; i < radioButtons.size(); ++i )
         {
             if( radioButtons[i]->GetValue() )
             {
@@ -280,7 +280,7 @@ public:
     {
         std::vector<int> ret;
 
-        for( int i = 0; i < m_checkBoxes.size(); ++i )
+        for( unsigned int i = 0; i < m_checkBoxes.size(); ++i )
         {
             if( m_checkBoxes[i]->IsChecked() )
                 ret.push_back( i );
