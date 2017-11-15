@@ -720,6 +720,14 @@ void SCH_SCREEN::GetHierarchicalItems( EDA_ITEMS& aItems )
 
 void SCH_SCREEN::SelectBlockItems()
 {
+    auto addConnections = [ this ]( SCH_ITEM* item ) -> void
+    {
+        std::vector< wxPoint > connections;
+        item->GetConnectionPoints( connections );
+        for( auto conn : connections )
+            addConnectedItemsToBlock( conn );
+    };
+
     PICKED_ITEMS_LIST* pickedlist = &m_BlockLocate.GetItems();
 
     if( pickedlist->GetCount() == 0 )
@@ -757,23 +765,27 @@ void SCH_SCREEN::SelectBlockItems()
                 // so we must keep it selected and select items connected to it
                 // Note: an other option could be: remove it from drag list
                 item->SetFlags( SELECTED | SKIP_STRUCT );
-                std::vector< wxPoint > connections;
-                item->GetConnectionPoints( connections );
-
-                for( size_t i = 0; i < connections.size(); i++ )
-                    addConnectedItemsToBlock( connections[i] );
+                addConnections( item );
             }
 
             pickedlist->SetPickerFlags( item->GetFlags(), ii );
         }
         else if( item->IsConnectable() )
         {
-            std::vector< wxPoint > connections;
+            addConnections( item );
+        }
+    }
 
-            item->GetConnectionPoints( connections );
+    // Select the items that are connected to a component that was added
+    // to our selection list in the last step.
+    for( unsigned ii = last_select_id; ii < pickedlist->GetCount(); ii++ )
+    {
+        SCH_ITEM* item = (SCH_ITEM*)pickedlist->GetPickedItem( ii );
 
-            for( size_t jj = 0; jj < connections.size(); jj++ )
-                addConnectedItemsToBlock( connections[jj] );
+        if( item->Type() == SCH_COMPONENT_T )
+        {
+            item->SetFlags( IS_DRAGGED );
+            addConnections( item );
         }
     }
 
