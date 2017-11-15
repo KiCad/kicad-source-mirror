@@ -363,8 +363,8 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
         if( !wxCopyFile( libFileName.GetFullPath(), backupFileName.GetFullPath() ) )
         {
             libFileName.MakeAbsolute();
-            msg = _( "Failed to rename old symbol library to file " ) +
-                  backupFileName.GetFullPath();
+            msg.Printf( _( "Failed to rename old symbol library to file '%s'" ),
+                  backupFileName.GetFullPath() );
             DisplayError( this, msg );
             return false;
         }
@@ -384,8 +384,8 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
 
         if( !wxCopyFile( docFileName.GetFullPath(), backupFileName.GetFullPath() ) )
         {
-            msg = _( "Failed to save old library document to file " ) +
-                  backupFileName.GetFullPath();
+            msg.Printf( _( "Failed to save old library document to file '%s'" ),
+                        backupFileName.GetFullPath() );
             DisplayError( this, msg );
             return false;
         }
@@ -398,7 +398,7 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
 
         if( !wxCopyFile( src.GetFullPath(), libFileName.GetFullPath() ) )
         {
-            msg.Printf( _( "Failed to copy symbol library file " ) + libFileName.GetFullPath() );
+            msg.Printf( _( "Failed to copy symbol library file '%s'" ), libFileName.GetFullPath() );
             DisplayError( this, msg );
             return false;
         }
@@ -407,7 +407,7 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
 
         if( !wxCopyFile( src.GetFullPath(), docFileName.GetFullPath() ) )
         {
-            msg.Printf( _( "Failed to copy symbol library document file " ) +
+            msg.Printf( _( "Failed to copy symbol library document file '%s'" ),
                         docFileName.GetFullPath() );
             DisplayError( this, msg );
             return false;
