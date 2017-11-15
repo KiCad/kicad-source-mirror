@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
  * Copyright (C) 2016 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,7 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 %include board_item_container.i
 %include board_connected_item.i
 %include board_design_settings.i
+%include connectivity.i
 %include pad.i
 %include track.i
 %include zone.i
