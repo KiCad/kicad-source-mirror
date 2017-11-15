@@ -211,7 +211,8 @@ bool LIB_TABLE_ROW::operator==( const LIB_TABLE_ROW& r ) const
     return nickName == r.nickName
         && uri_user == r.uri_user
         && options == r.options
-        && description == r.description;
+        && description == r.description
+        && enabled == r.enabled;
 }
 
 

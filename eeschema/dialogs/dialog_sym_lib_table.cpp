@@ -168,27 +168,30 @@ DIALOG_SYMBOL_LIB_TABLE::DIALOG_SYMBOL_LIB_TABLE( wxTopLevelWindow* aParent,
 //    pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_KICAD ) );
     pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) );
 
-    wxGridCellAttr* attr;
-
-    attr = new wxGridCellAttr;
-    attr->SetEditor( new wxGridCellChoiceEditor( pluginChoices ) );
-    m_project_grid->SetColAttr( COL_TYPE, attr );
-
-    attr = new wxGridCellAttr;
-    attr->SetEditor( new wxGridCellChoiceEditor( pluginChoices ) );
-    m_global_grid->SetColAttr( COL_TYPE, attr );
-
     populateEnvironReadOnlyTable();
 
     for( int i=0; i<2; ++i )
     {
         wxGrid* g = i==0 ? m_global_grid : m_project_grid;
 
+        // Set special attributes
+        wxGridCellAttr* attr;
+
+        attr = new wxGridCellAttr;
+        attr->SetEditor( new wxGridCellChoiceEditor( pluginChoices ) );
+        g->SetColAttr( COL_TYPE, attr );
+
+        attr = new wxGridCellAttr;
+        attr->SetEditor( new wxGridCellBoolEditor() );
+        attr->SetRenderer( new wxGridCellBoolRenderer() );
+        g->SetColAttr( COL_ENABLED, attr );
+
         // all but COL_OPTIONS, which is edited with Option Editor anyways.
         g->AutoSizeColumn( COL_NICKNAME, false );
         g->AutoSizeColumn( COL_TYPE, false );
         g->AutoSizeColumn( COL_URI, false );
         g->AutoSizeColumn( COL_DESCR, false );
+        g->AutoSizeColumn( COL_ENABLED, false );
 
         // would set this to width of title, if it was easily known.
         g->SetColSize( COL_OPTIONS, 80 );

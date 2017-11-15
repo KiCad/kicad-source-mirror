@@ -195,21 +195,22 @@ public:
         choices.Add( IO_MGR::ShowType( IO_MGR::GITHUB ) );
         */
 
-        wxGridCellAttr* attr;
-
-        attr = new wxGridCellAttr;
-        attr->SetEditor( new wxGridCellChoiceEditor( choices ) );
-        m_project_grid->SetColAttr( COL_TYPE, attr );
-
-        attr = new wxGridCellAttr;
-        attr->SetEditor( new wxGridCellChoiceEditor( choices ) );
-        m_global_grid->SetColAttr( COL_TYPE, attr );
-
         populateEnvironReadOnlyTable();
 
         for( int i=0; i<2; ++i )
         {
             wxGrid* g = i==0 ? m_global_grid : m_project_grid;
+
+            wxGridCellAttr* attr;
+
+            attr = new wxGridCellAttr;
+            attr->SetEditor( new wxGridCellChoiceEditor( choices ) );
+            g->SetColAttr( COL_TYPE, attr );
+
+            attr = new wxGridCellAttr;
+            attr->SetEditor( new wxGridCellBoolEditor() );
+            attr->SetRenderer( new wxGridCellBoolRenderer() );
+            g->SetColAttr( COL_ENABLED, attr );
 
             // all but COL_OPTIONS, which is edited with Option Editor anyways.
             g->AutoSizeColumn( COL_NICKNAME, false );

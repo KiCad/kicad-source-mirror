@@ -32,6 +32,8 @@ enum COL_ORDER
     COL_TYPE,
     COL_OPTIONS,
     COL_DESCR,
+    COL_ENABLED,
+
     COL_COUNT       // keep as last
 };
 
@@ -62,6 +64,8 @@ public:
             case COL_TYPE:      return r->GetType();
             case COL_OPTIONS:   return r->GetOptions();
             case COL_DESCR:     return r->GetDescr();
+            // Render a boolean value as its text equivalent
+            case COL_ENABLED:   return r->GetIsEnabled() ? "1" : "";
             default:
                 ;       // fall thru to wxEmptyString
             }
@@ -83,6 +87,10 @@ public:
             case COL_TYPE:      r->SetType( aValue  );       break;
             case COL_OPTIONS:   r->SetOptions( aValue );     break;
             case COL_DESCR:     r->SetDescr( aValue );       break;
+            case COL_ENABLED:
+                // Any non-empty string will set enabled to true
+                r->SetEnabled( !aValue.IsEmpty() );
+                break;
             }
         }
     }
@@ -172,6 +180,8 @@ public:
         case COL_TYPE:      return _( "Plugin Type" );
         case COL_OPTIONS:   return _( "Options" );
         case COL_DESCR:     return _( "Description" );
+        case COL_ENABLED:   return _( "Enabled" );
+
         default:            return wxEmptyString;
         }
     }
