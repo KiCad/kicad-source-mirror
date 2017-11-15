@@ -124,10 +124,11 @@ void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
 
         // After (name), remaining (lib) elements are order independent, and in
         // some cases optional.
-        bool    sawType = false;
-        bool    sawOpts = false;
-        bool    sawDesc = false;
-        bool    sawUri  = false;
+        bool    sawType     = false;
+        bool    sawOpts     = false;
+        bool    sawDesc     = false;
+        bool    sawUri      = false;
+        bool    sawDisabled = false;
 
         while( ( tok = in->NextTok() ) != T_RIGHT )
         {
@@ -171,6 +172,13 @@ void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
                 sawDesc = true;
                 in->NeedSYMBOLorNUMBER();
                 row->SetDescr( in->FromUTF8() );
+                break;
+
+            case T_disabled:
+                if( sawDisabled )
+                    in->Duplicate( tok );
+                sawDisabled = true;
+                row->SetEnabled( false );
                 break;
 
             default:
@@ -219,7 +227,9 @@ void SYMBOL_LIB_TABLE::Format( OUTPUTFORMATTER* aOutput, int aIndentLevel ) cons
     aOutput->Print( aIndentLevel, "(sym_lib_table\n" );
 
     for( LIB_TABLE_ROWS_CITER it = rows.begin();  it != rows.end();  ++it )
+    {
         it->Format( aOutput, aIndentLevel+1 );
+    }
 
     aOutput->Print( aIndentLevel, ")\n" );
 }

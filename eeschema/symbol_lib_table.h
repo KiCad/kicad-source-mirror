@@ -51,11 +51,13 @@ public:
         LIB_TABLE_ROW( aNick, aURI, aOptions, aDescr )
     {
         SetType( aType );
+        SetEnabled( true );
     }
 
     SYMBOL_LIB_TABLE_ROW() :
         type( SCH_IO_MGR::SCH_LEGACY )
     {
+        SetEnabled( true );
     }
 
     bool operator==( const SYMBOL_LIB_TABLE_ROW& aRow ) const;
@@ -77,6 +79,7 @@ protected:
         LIB_TABLE_ROW( aRow ),
         type( aRow.type )
     {
+        SetEnabled( aRow.GetIsEnabled() );
     }
 
 private:

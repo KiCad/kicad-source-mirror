@@ -78,7 +78,8 @@ public:
     LIB_TABLE_ROW( const wxString& aNick, const wxString& aURI, const wxString& aOptions,
                    const wxString& aDescr = wxEmptyString ) :
         nickName( aNick ),
-        description( aDescr )
+        description( aDescr ),
+        enabled( true )
     {
         properties.reset();
         SetOptions( aOptions );
@@ -98,6 +99,16 @@ public:
      * Change the logical name of this library, useful for an editor.
      */
     void SetNickName( const wxString& aNickName ) { nickName = aNickName; }
+
+    /**
+     * @return the enabled status of this library row
+     */
+    bool GetIsEnabled() const { return enabled; }
+
+    /**
+     * Change the enabled status of this library
+     */
+    void SetEnabled( bool aEnabled = true ) { enabled = aEnabled; }
 
     /**
      * Return the type of library represented by this row.
@@ -175,7 +186,8 @@ protected:
         uri_expanded( aRow.uri_expanded ),
 #endif
         options( aRow.options ),
-        description( aRow.description )
+        description( aRow.description ),
+        enabled( aRow.enabled )
     {
         if( aRow.properties )
             properties.reset( new PROPERTIES( *aRow.properties.get() ) );
@@ -199,6 +211,8 @@ private:
 
     wxString          options;
     wxString          description;
+
+    bool              enabled = true;     ///< Whether the LIB_TABLE_ROW is enabled
 
     std::unique_ptr< PROPERTIES > properties;
 };

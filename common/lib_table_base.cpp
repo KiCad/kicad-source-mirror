@@ -87,12 +87,20 @@ void LIB_TABLE_ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
     wxString uri = GetFullURI();
     uri.Replace( '\\', '/' );
 
-    out->Print( nestLevel, "(lib (name %s)(type %s)(uri %s)(options %s)(descr %s))\n",
+    wxString extraOptions;
+
+    if( !GetIsEnabled() )
+    {
+        extraOptions += "(disabled)";
+    }
+
+    out->Print( nestLevel, "(lib (name %s)(type %s)(uri %s)(options %s)(descr %s)%s)\n",
                 out->Quotew( GetNickName() ).c_str(),
                 out->Quotew( GetType() ).c_str(),
                 out->Quotew( uri ).c_str(),
                 out->Quotew( GetOptions() ).c_str(),
-                out->Quotew( GetDescr() ).c_str()
+                out->Quotew( GetDescr() ).c_str(),
+                extraOptions.ToStdString().c_str()
                 );
 }
 
