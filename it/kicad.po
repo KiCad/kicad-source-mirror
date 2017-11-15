@@ -64,7 +64,7 @@
 # mc: - Layout editor (norma UNI 8187, ISO 7200):
 # mc:   - (page) layout = disposizione (pagina)
 # mc:   - title block = secondo le norme UNI, riquadro (delle) iscrizioni, gergalmente detto cartiglio.
-# mc:   - frame references = squadratura
+# mc:   - frame/sheer references = squadratura
 # mc: - workbook = libretto di lavoro (simulazioni)
 # mc: - thermal relief = supporto termico
 # mc: - cutout zone = zona ritaglio
@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-13 08:40+0100\n"
-"PO-Revision-Date: 2017-11-13 08:40+0100\n"
+"POT-Creation-Date: 2017-11-15 08:28+0100\n"
+"PO-Revision-Date: 2017-11-15 08:29+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -2015,7 +2015,7 @@ msgstr "Stato"
 #: pcbnew/class_module.cpp:564
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:923
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
-#: gerbview/class_gerber_draw_item.cpp:631
+#: gerbview/class_gerber_draw_item.cpp:701
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:350
 msgid "Rotation"
 msgstr "Rotazione"
@@ -2037,7 +2037,7 @@ msgstr "Attributi"
 
 #: pcbnew/class_module.cpp:587 pcbnew/class_pad.cpp:693 pcbnew/loadcmp.cpp:445
 #: pcbnew/loadcmp.cpp:509 pcbnew/class_edge_mod.cpp:248
-#: pcbnew/class_text_mod.cpp:360 eeschema/sch_component.cpp:1796
+#: pcbnew/class_text_mod.cpp:353 eeschema/sch_component.cpp:1796
 #: eeschema/lib_field.cpp:627 eeschema/template_fieldnames.cpp:45
 #: eeschema/bom_table_column.h:35
 msgid "Footprint"
@@ -2344,10 +2344,10 @@ msgstr "Ribalta gli elementi selezionati"
 
 #: pcbnew/tools/edit_tool.cpp:137 pcbnew/tools/edit_tool.cpp:793
 #: pcbnew/modedit_onclick.cpp:296 pcbnew/class_pcb_text.cpp:138
-#: pcbnew/class_pcb_text.cpp:140 pcbnew/class_text_mod.cpp:383
+#: pcbnew/class_pcb_text.cpp:140 pcbnew/class_text_mod.cpp:376
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:115
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:77
-#: gerbview/class_gerber_draw_item.cpp:641
+#: gerbview/class_gerber_draw_item.cpp:711
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:77
 msgid "Mirror"
 msgstr "Capovolgi"
@@ -3156,7 +3156,7 @@ msgstr "Collegamento"
 #: pcbnew/class_pad.cpp:701 pcbnew/class_pcb_text.cpp:135
 #: pcbnew/class_pcb_layer_widget.cpp:364 pcbnew/class_zone.cpp:878
 #: pcbnew/class_drawsegment.cpp:383 pcbnew/layer_widget.cpp:461
-#: pcbnew/class_text_mod.cpp:376 pcbnew/class_track.cpp:1161
+#: pcbnew/class_text_mod.cpp:369 pcbnew/class_track.cpp:1161
 #: pcbnew/class_track.cpp:1188
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:111
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:140
@@ -3168,7 +3168,7 @@ msgid "Layer"
 msgstr "Strato"
 
 #: pcbnew/class_pad.cpp:707 pcbnew/class_pcb_text.cpp:149
-#: pcbnew/class_drawsegment.cpp:385 pcbnew/class_text_mod.cpp:392
+#: pcbnew/class_drawsegment.cpp:385 pcbnew/class_text_mod.cpp:385
 #: pcbnew/class_track.cpp:1166 pcbnew/class_track.cpp:1193
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:52
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:354 eeschema/lib_field.cpp:789
@@ -3176,7 +3176,7 @@ msgid "Width"
 msgstr "Larghezza"
 
 #: pcbnew/class_pad.cpp:710 pcbnew/class_pcb_text.cpp:152
-#: pcbnew/class_text_mod.cpp:395
+#: pcbnew/class_text_mod.cpp:388
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:59
 #: eeschema/lib_field.cpp:792
 msgid "Height"
@@ -3194,7 +3194,7 @@ msgstr "Foratura X / Y"
 
 #: pcbnew/class_pad.cpp:736 pcbnew/class_pcb_text.cpp:143
 #: pcbnew/class_drawsegment.cpp:354 pcbnew/class_drawsegment.cpp:372
-#: pcbnew/class_text_mod.cpp:386
+#: pcbnew/class_text_mod.cpp:379
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:821
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:100
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:945
@@ -3214,7 +3214,7 @@ msgstr "Lunghezza nel contenitore"
 #: pcbnew/class_pad.cpp:1134 pcbnew/class_drawsegment.cpp:348
 #: pcbnew/class_board_item.cpp:45
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:108
-#: eeschema/lib_circle.cpp:54 gerbview/class_gerber_draw_item.cpp:173
+#: eeschema/lib_circle.cpp:54 gerbview/class_gerber_draw_item.cpp:239
 msgid "Circle"
 msgstr "Cerchio"
 
@@ -3550,24 +3550,24 @@ msgstr "Quote"
 msgid "PCB Text"
 msgstr "Testo C.S."
 
-#: pcbnew/class_pcb_text.cpp:138 pcbnew/class_text_mod.cpp:369
+#: pcbnew/class_pcb_text.cpp:138 pcbnew/class_text_mod.cpp:362
 #: eeschema/lib_pin.cpp:2049
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1110
-#: gerbview/class_gerber_draw_item.cpp:639
-#: gerbview/class_gerber_draw_item.cpp:640
+#: gerbview/class_gerber_draw_item.cpp:709
+#: gerbview/class_gerber_draw_item.cpp:710
 msgid "No"
 msgstr "No"
 
-#: pcbnew/class_pcb_text.cpp:140 pcbnew/class_text_mod.cpp:371
+#: pcbnew/class_pcb_text.cpp:140 pcbnew/class_text_mod.cpp:364
 #: eeschema/lib_pin.cpp:2047
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1108
-#: gerbview/class_gerber_draw_item.cpp:639
-#: gerbview/class_gerber_draw_item.cpp:640
+#: gerbview/class_gerber_draw_item.cpp:709
+#: gerbview/class_gerber_draw_item.cpp:710
 msgid "Yes"
 msgstr "Sì"
 
-#: pcbnew/class_pcb_text.cpp:146 pcbnew/class_text_mod.cpp:389
+#: pcbnew/class_pcb_text.cpp:146 pcbnew/class_text_mod.cpp:382
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:66
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:841
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:325
@@ -4187,7 +4187,7 @@ msgid "Parameter"
 msgstr "Parametro"
 
 #: pcbnew/footprint_wizard_frame.cpp:294 pcbnew/class_edge_mod.cpp:249
-#: pcbnew/class_text_mod.cpp:356
+#: pcbnew/class_text_mod.cpp:349
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:31
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:56
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:40
@@ -4805,7 +4805,7 @@ msgid "(Cutout)"
 msgstr "(Ritaglio)"
 
 #: pcbnew/class_zone.cpp:832 pcbnew/class_drawsegment.cpp:341
-#: pcbnew/class_marker_pcb.cpp:98 pcbnew/class_text_mod.cpp:366
+#: pcbnew/class_marker_pcb.cpp:98 pcbnew/class_text_mod.cpp:359
 #: pcbnew/class_track.cpp:1151 pcbnew/class_track.cpp:1178
 #: pcbnew/class_track.cpp:1227 pcbnew/dialogs/dialog_layers_setup.cpp:342
 #: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:2038
@@ -4813,7 +4813,7 @@ msgstr "(Ritaglio)"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:30
 #: eeschema/dialogs/dialog_spice_model_base.cpp:233
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:189
-#: gerbview/class_gerber_draw_item.cpp:609
+#: gerbview/class_gerber_draw_item.cpp:679
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:163
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
@@ -4907,7 +4907,7 @@ msgstr "Testo non consentito su strato di taglio scheda"
 msgid "Dimension not allowed on Copper or Edge Cut layers"
 msgstr "Dimensioni non consentite sugli strati in rame o di taglio"
 
-#: pcbnew/onleftclick.cpp:444
+#: pcbnew/onleftclick.cpp:445
 msgid "This tool is not available in the legacy canvas"
 msgstr "Questo strumento non è disponibile con lo schermo in modalità classica"
 
@@ -5320,7 +5320,7 @@ msgstr "Forma "
 #: pcbnew/dialogs/dialog_pad_properties.cpp:743
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1832
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:93
-#: eeschema/lib_arc.cpp:96 gerbview/class_gerber_draw_item.cpp:170
+#: eeschema/lib_arc.cpp:96 gerbview/class_gerber_draw_item.cpp:236
 msgid "Arc"
 msgstr "Arco"
 
@@ -5570,7 +5570,7 @@ msgstr "Strato grafico:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:52
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:236 eeschema/pin_shape.cpp:38
-#: gerbview/class_gerber_draw_item.cpp:167
+#: gerbview/class_gerber_draw_item.cpp:233
 msgid "Line"
 msgstr "Linea"
 
@@ -6407,7 +6407,7 @@ msgstr "File forature (.&drl)"
 
 #: pcbnew/menubar_pcbframe.cpp:725
 msgid "Generate excellon2 drill file"
-msgstr "Genera file di foratura in Excellon2"
+msgstr "Genera file forature in Excellon2"
 
 #: pcbnew/menubar_pcbframe.cpp:729
 msgid "&Footprint (.rpt) Report.."
@@ -6662,11 +6662,11 @@ msgstr "Esploratore librerie"
 msgid "no library selected"
 msgstr "nessuna libreria selezionata"
 
-#: pcbnew/class_text_mod.cpp:356
+#: pcbnew/class_text_mod.cpp:349
 msgid "Ref."
 msgstr "Rif."
 
-#: pcbnew/class_text_mod.cpp:356 pcbnew/class_text_mod.cpp:363
+#: pcbnew/class_text_mod.cpp:349 pcbnew/class_text_mod.cpp:356
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:21
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:28 eeschema/lib_text.cpp:52
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:28
@@ -6675,32 +6675,32 @@ msgstr "Rif."
 msgid "Text"
 msgstr "Testo"
 
-#: pcbnew/class_text_mod.cpp:373
+#: pcbnew/class_text_mod.cpp:366
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:105
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:79
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:119
 msgid "Display"
 msgstr "Mostra"
 
-#: pcbnew/class_text_mod.cpp:379
+#: pcbnew/class_text_mod.cpp:372
 msgid " Yes"
 msgstr " Sì"
 
-#: pcbnew/class_text_mod.cpp:381
+#: pcbnew/class_text_mod.cpp:374
 msgid " No"
 msgstr " No"
 
-#: pcbnew/class_text_mod.cpp:407
+#: pcbnew/class_text_mod.cpp:400
 #, c-format
 msgid "Reference %s"
 msgstr "Riferimento %s"
 
-#: pcbnew/class_text_mod.cpp:411
+#: pcbnew/class_text_mod.cpp:404
 #, c-format
 msgid "Value %s of %s"
 msgstr "Valore %s di %s"
 
-#: pcbnew/class_text_mod.cpp:415
+#: pcbnew/class_text_mod.cpp:408
 #, c-format
 msgid "Text \"%s\" on %s of %s"
 msgstr "Testo \"%s\" su %s di %s"
@@ -8913,7 +8913,7 @@ msgid "No layer selected, Please select the text layer"
 msgstr "Nessuno strato selezionato. Selezionare uno strato di testo."
 
 #: pcbnew/dialogs/dialog_pcb_text_properties.cpp:268
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:262
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:263
 msgid "The text thickness is too large for the text size. It will be clamped"
 msgstr ""
 "Lo spessore del testo è troppo grande per le dimensioni del testo. Verrà "
@@ -12117,7 +12117,7 @@ msgstr "Valore:"
 msgid "Text:"
 msgstr "Testo:"
 
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:202
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:203
 msgid ""
 "This item has an illegal layer id.\n"
 "Now, forced on the front silk screen layer. Please, fix it"
@@ -12125,7 +12125,7 @@ msgstr ""
 "Questo elemento ha un id strato illegale.\n"
 "Verrà forzato sullo strato serigrafia frontale. Sistemarlo per favore!"
 
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:342
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:343
 msgid "Modify module text"
 msgstr "Modifica modulo testo"
 
@@ -12927,7 +12927,7 @@ msgstr "Tracciatura: \"%s\" OK."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:29
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:50
-#: gerbview/toolbars_gerber.cpp:158 gerbview/class_gerber_draw_item.cpp:657
+#: gerbview/toolbars_gerber.cpp:158 gerbview/class_gerber_draw_item.cpp:727
 msgid "Net:"
 msgstr "Collegamento:"
 
@@ -14179,7 +14179,7 @@ msgstr "Opzioni Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:226
 msgid "Use Protel filename extensions"
-msgstr "Usare le estensioni del nomefile Protel"
+msgstr "Usare le estensioni dei nomi file Protel"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:227
 msgid ""
@@ -14343,7 +14343,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:382
 msgid "Generate Drill File"
-msgstr "Genera file di foratura"
+msgstr "Genera file forature"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:388
 msgid "Run DRC"
@@ -24777,7 +24777,7 @@ msgstr "Imposta le dimensioni della pagina"
 msgid "Print layers"
 msgstr "Stampa strati "
 
-#: gerbview/toolbars_gerber.cpp:148 gerbview/class_gerber_draw_item.cpp:675
+#: gerbview/toolbars_gerber.cpp:148 gerbview/class_gerber_draw_item.cpp:745
 msgid "Cmp:"
 msgstr "Cmp:"
 
@@ -24980,42 +24980,42 @@ msgstr "Nome file scheda"
 msgid "Cannot create file '%s'"
 msgstr "Impossibile creare il file \"%s\""
 
-#: gerbview/class_gerber_draw_item.cpp:612
+#: gerbview/class_gerber_draw_item.cpp:682
 #, c-format
 msgid "D Code %d"
 msgstr "Codice D %d"
 
-#: gerbview/class_gerber_draw_item.cpp:616
+#: gerbview/class_gerber_draw_item.cpp:686
 msgid "No attribute"
 msgstr "Nessun attributo"
 
-#: gerbview/class_gerber_draw_item.cpp:624
+#: gerbview/class_gerber_draw_item.cpp:694
 msgid "Graphic Layer"
 msgstr "Strato grafico"
 
-#: gerbview/class_gerber_draw_item.cpp:634
+#: gerbview/class_gerber_draw_item.cpp:704
 msgid "Clear"
 msgstr "Chiaro"
 
-#: gerbview/class_gerber_draw_item.cpp:634
+#: gerbview/class_gerber_draw_item.cpp:704
 msgid "Dark"
 msgstr "Scuro"
 
-#: gerbview/class_gerber_draw_item.cpp:635
+#: gerbview/class_gerber_draw_item.cpp:705
 #: gerbview/class_gerber_file_image.cpp:354
 msgid "Polarity"
 msgstr "Polarità"
 
-#: gerbview/class_gerber_draw_item.cpp:645
+#: gerbview/class_gerber_draw_item.cpp:715
 msgid "AB axis"
 msgstr "Asse AB"
 
-#: gerbview/class_gerber_draw_item.cpp:668
+#: gerbview/class_gerber_draw_item.cpp:738
 #, c-format
 msgid "Cmp: %s;  Pad: %s"
 msgstr "Cmp: %s;  Pia: %s"
 
-#: gerbview/class_gerber_draw_item.cpp:813
+#: gerbview/class_gerber_draw_item.cpp:906
 #, c-format
 msgid "%s (D%d) on layer %d: %s"
 msgstr "%s (D%d) su strato %d: %s"
@@ -27164,10 +27164,10 @@ msgstr ""
 "La pagina di disposizione corrente è stata modificata.\n"
 "Scartare le modifiche?"
 
-#: pagelayout_editor/files.cpp:63
+#: pagelayout_editor/files.cpp:63 pagelayout_editor/files.cpp:151
 #, c-format
-msgid "File <%s> loaded "
-msgstr "File <%s> caricato"
+msgid "File <%s> loaded"
+msgstr "File \"%s\" caricato"
 
 #: pagelayout_editor/files.cpp:108
 msgid "Append Existing Page Layout File"
@@ -27182,11 +27182,6 @@ msgstr "Impossibile caricare il file %s"
 #, c-format
 msgid "File <%s> inserted"
 msgstr "File \"%s\" inserito"
-
-#: pagelayout_editor/files.cpp:151
-#, c-format
-msgid "File <%s> loaded"
-msgstr "File \"%s\" caricato"
 
 #: pagelayout_editor/files.cpp:160
 #, c-format
@@ -27407,6 +27402,9 @@ msgstr "Percorso libreria"
 #: include/lib_table_grid.h:172
 msgid "Plugin Type"
 msgstr "Tipo plugin"
+
+#~ msgid "File <%s> loaded "
+#~ msgstr "File <%s> caricato"
 
 #~ msgid "Rescue Symbolss"
 #~ msgstr "Recupera simboli"
