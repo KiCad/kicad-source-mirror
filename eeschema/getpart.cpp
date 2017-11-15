@@ -148,14 +148,11 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
         adapter->SetPreselectNode( aHistoryList[0].LibId, aHistoryList[0].Unit );
     }
 
-    std::vector< wxString > libNicknames = libs->GetLogicalLibs();
+    const std::vector< wxString > libNicknames = libs->GetLogicalLibs();
 
     if( !loaded )
     {
-        for( auto nickname : libNicknames )
-        {
-            adapter->AddLibrary( nickname );
-        }
+        adapter->AddLibrariesWithProgress( libNicknames, this );
     }
 
     if( aHighlight && aHighlight->IsValid() )

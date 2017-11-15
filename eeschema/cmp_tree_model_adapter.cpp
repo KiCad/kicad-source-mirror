@@ -24,7 +24,7 @@
 #include <eda_pattern_match.h>
 #include <wx/tokenzr.h>
 #include <symbol_lib_table.h>
-
+#include <wx/progdlg.h>
 
 CMP_TREE_MODEL_ADAPTER::WIDTH_CACHE CMP_TREE_MODEL_ADAPTER::m_width_cache;
 
@@ -132,6 +132,26 @@ void CMP_TREE_MODEL_ADAPTER::AddLibrary( wxString const& aLibNickname )
     AddAliasList( aLibNickname, aliases );
 
     m_tree.AssignIntrinsicRanks();
+}
+
+
+void CMP_TREE_MODEL_ADAPTER::AddLibrariesWithProgress( const std::vector<wxString>& aNicknames, EDA_DRAW_FRAME* aParent )
+{
+    auto* prg = new wxProgressDialog(
+            _( "Loading symbol libraries" ),
+            wxEmptyString,
+            aNicknames.size(),
+            aParent );
+
+    unsigned int ii = 0;
+
+    for( auto nickname : aNicknames )
+    {
+        prg->Update( ii++, wxString::Format( _( "Loading library '%s'" ), nickname ) );
+        AddLibrary( nickname );
+    }
+
+    prg->Destroy();
 }
 
 

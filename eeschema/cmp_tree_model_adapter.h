@@ -24,6 +24,7 @@
 
 #include <lib_id.h>
 
+#include <draw_frame.h>
 #include <cmp_tree_model.h>
 
 #include <wx/hashmap.h>
@@ -154,6 +155,17 @@ public:
      * @param aLibNickname reference to a symbol library nickname
      */
     void AddLibrary( wxString const& aLibNickname );
+
+
+    /**
+     * Add all the libraries in a SYMBOL_LIB_TABLE to the model,
+     * displaying a progress dialog attached to the parent frame
+     *
+     * @param aNicknames is the list of library nicknames
+     * @param aParent is the parent window to display the progress dialog
+     */
+    void AddLibrariesWithProgress( const std::vector<wxString>& aNicknames, EDA_DRAW_FRAME* aParent );
+
 
     /**
      * Add the given list of components, by name. To be called in the setup

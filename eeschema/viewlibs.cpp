@@ -44,7 +44,6 @@
 #include <cmp_tree_model_adapter.h>
 #include <symbol_lib_table.h>
 
-
 void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
 {
     wxString   dialogTitle;
@@ -53,14 +52,9 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
     // Container doing search-as-you-type.
     auto adapter( CMP_TREE_MODEL_ADAPTER::Create( libs ) );
 
-    std::vector< wxString > libNicknames;
+    const auto libNicknames = libs->GetLogicalLibs();
 
-    libNicknames = libs->GetLogicalLibs();
-
-    for( auto nickname : libNicknames )
-    {
-        adapter->AddLibrary( nickname );
-    }
+    adapter->AddLibrariesWithProgress( libNicknames, this );
 
     dialogTitle.Printf( _( "Choose Component (%d items loaded)" ),
                         adapter->GetComponentsCount() );
