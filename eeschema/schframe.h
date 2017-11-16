@@ -1161,11 +1161,13 @@ public:
      *
      * @param aItemToCopy = the schematic item modified by the command to undo
      * @param aTypeCommand = command type (see enum UNDO_REDO_T)
+     * @param aAppend = add the item to the previous undo list
      * @param aTransformPoint = the reference point of the transformation,
      *                          for commands like move
      */
     void SaveCopyInUndoList( SCH_ITEM* aItemToCopy,
                              UNDO_REDO_T aTypeCommand,
+                             bool aAppend = false,
                              const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
     /**
@@ -1173,11 +1175,13 @@ public:
      *
      * @param aItemsList = the list of items modified by the command to undo
      * @param aTypeCommand = command type (see enum UNDO_REDO_T)
+     * @param aAppend = add the item to the previous undo list
      * @param aTransformPoint = the reference point of the transformation,
      *                          for commands like move
      */
     void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
                              UNDO_REDO_T aTypeCommand,
+                             bool aAppend = false,
                              const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
 private:

@@ -161,7 +161,7 @@ void SCH_EDIT_FRAME::MoveImage( SCH_BITMAP* aImageItem, wxDC* aDC )
 void SCH_EDIT_FRAME::RotateImage( SCH_BITMAP* aItem )
 {
     if( aItem->GetFlags( ) == 0 )
-        SaveCopyInUndoList( aItem, UR_ROTATED, aItem->GetPosition() );
+        SaveCopyInUndoList( aItem, UR_ROTATED, false, aItem->GetPosition() );
 
     aItem->Rotate( aItem->GetPosition() );
     OnModify();

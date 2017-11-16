@@ -108,8 +108,11 @@
 
 void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
                                          UNDO_REDO_T    aCommandType,
+                                         bool           aAppend,
                                          const wxPoint& aTransformPoint )
 {
+     PICKED_ITEMS_LIST* commandToUndo = NULL;
+
     /* Does not save a null item or a UR_WIRE_IMAGE command type.  UR_WIRE_IMAGE commands
      * are handled by the overloaded version of SaveCopyInUndoList that takes a reference
      * to a PICKED_ITEMS_LIST.
@@ -117,8 +120,14 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
     if( aItem == NULL || aCommandType == UR_WIRE_IMAGE )
         return;
 
-    PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
-    commandToUndo->m_TransformPoint = aTransformPoint;
+    if( aAppend )
+        commandToUndo = GetScreen()->PopCommandFromUndoList();
+
+    if( !commandToUndo )
+    {
+        commandToUndo = new PICKED_ITEMS_LIST();
+        commandToUndo->m_TransformPoint = aTransformPoint;
+    }
 
     ITEM_PICKER itemWrapper( aItem, aCommandType );
     itemWrapper.SetFlags( aItem->GetFlags() );
@@ -160,15 +169,41 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
 
 void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
                                          UNDO_REDO_T        aTypeCommand,
+                                         bool               aAppend,
                                          const wxPoint&     aTransformPoint )
 {
-    PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
+    PICKED_ITEMS_LIST* commandToUndo = NULL;
 
-    commandToUndo->m_TransformPoint = aTransformPoint;
-    commandToUndo->m_Status = aTypeCommand;
+    if( !aItemsList.GetCount() )
+        return;
+
+    // Can't append a WIRE IMAGE, so fail to a new undo point
+    if( aAppend && ( aTypeCommand != UR_WIRE_IMAGE ) )
+    {
+        commandToUndo = GetScreen()->PopCommandFromUndoList();
+        if( commandToUndo && commandToUndo->m_Status == UR_WIRE_IMAGE )
+        {
+            GetScreen()->PushCommandToUndoList( commandToUndo );
+            commandToUndo = NULL;
+        }
+    }
+
+    if( !commandToUndo )
+    {
+        commandToUndo = new PICKED_ITEMS_LIST();
+        commandToUndo->m_TransformPoint = aTransformPoint;
+        commandToUndo->m_Status = aTypeCommand;
+    }
 
     // Copy picker list:
-    commandToUndo->CopyList( aItemsList );
+    if( !commandToUndo->GetCount() )
+        commandToUndo->CopyList( aItemsList );
+    else
+    {
+        // Unless we are appending, in which case, get the picker items
+        for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
+            commandToUndo->PushItem( aItemsList.GetItemWrapper( ii) );
+    }
 
     // Verify list, and creates data if needed
     for( unsigned ii = 0; ii < commandToUndo->GetCount(); ii++ )

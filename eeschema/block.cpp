@@ -127,7 +127,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         if( m_canvas->IsMouseCaptured() )
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
-        SaveCopyInUndoList( block->GetItems(), UR_MOVED, block->GetMoveVector() );
+        SaveCopyInUndoList( block->GetItems(), UR_MOVED, false, block->GetMoveVector() );
         MoveItemsInList( block->GetItems(), block->GetMoveVector() );
         block->ClearItemsList();
         break;
@@ -216,7 +216,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 wxPoint rotationPoint = block->Centre();
                 rotationPoint = GetNearestGridPosition( rotationPoint );
                 SetCrossHairPosition( rotationPoint );
-                SaveCopyInUndoList( block->GetItems(), UR_ROTATED, rotationPoint );
+                SaveCopyInUndoList( block->GetItems(), UR_ROTATED, false, rotationPoint );
                 RotateListOfItems( block->GetItems(), rotationPoint );
                 OnModify();
             }
@@ -330,7 +330,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 wxPoint mirrorPoint = block->Centre();
                 mirrorPoint = GetNearestGridPosition( mirrorPoint );
                 SetCrossHairPosition( mirrorPoint );
-                SaveCopyInUndoList( block->GetItems(), UR_MIRRORED_X, mirrorPoint );
+                SaveCopyInUndoList( block->GetItems(), UR_MIRRORED_X, false, mirrorPoint );
                 MirrorX( block->GetItems(), mirrorPoint );
                 OnModify();
             }
@@ -349,7 +349,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 wxPoint mirrorPoint = block->Centre();
                 mirrorPoint = GetNearestGridPosition( mirrorPoint );
                 SetCrossHairPosition( mirrorPoint );
-                SaveCopyInUndoList( block->GetItems(), UR_MIRRORED_Y, mirrorPoint );
+                SaveCopyInUndoList( block->GetItems(), UR_MIRRORED_Y, false, mirrorPoint );
                 MirrorY( block->GetItems(), mirrorPoint );
                 OnModify();
             }
