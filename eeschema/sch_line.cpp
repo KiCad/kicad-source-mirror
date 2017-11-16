@@ -783,7 +783,7 @@ int SCH_EDIT_FRAME::EditLine( SCH_LINE* aLine, bool aRedraw )
         return wxID_CANCEL;
 
     DIALOG_EDIT_LINE_STYLE dlg( this );
-    wxString units = GetUnitsLabel( g_UserUnit );
+    wxString units = GetAbbreviatedUnitsLabel( g_UserUnit );
     int old_style = aLine->GetLineStyle();
     int old_width = aLine->GetPenSize();
     COLOR4D old_color = aLine->GetLineColor();
