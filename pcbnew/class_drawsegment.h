@@ -57,8 +57,8 @@ protected:
     wxPoint     m_BezierC1;     ///< Bezier Control Point 1
     wxPoint     m_BezierC2;     ///< Bezier Control Point 2
 
-    std::vector<wxPoint>    m_BezierPoints;
-    SHAPE_POLY_SET    m_Poly;
+    std::vector<wxPoint> m_BezierPoints;
+    SHAPE_POLY_SET m_Poly;      ///< Stores the S_POLYGON shape
 
     // Computes the bounding box for an arc
     void computeArcBBox( EDA_RECT& aBBox ) const;

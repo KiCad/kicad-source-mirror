@@ -920,8 +920,7 @@ void PCB_IO::format( DRAWSEGMENT* aSegment, int aNestLevel ) const
 
     formatLayer( aSegment );
 
-    if( aSegment->GetWidth() != 0 )
-        m_out->Print( 0, " (width %s)", FMT_IU( aSegment->GetWidth() ).c_str() );
+    m_out->Print( 0, " (width %s)", FMT_IU( aSegment->GetWidth() ).c_str() );
 
     if( aSegment->GetTimeStamp() )
         m_out->Print( 0, " (tstamp %lX)", (unsigned long)aSegment->GetTimeStamp() );
@@ -1463,10 +1462,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
                     }
                 }
 
-                if( primitive.m_Thickness != 0 )
-                    m_out->Print( 0, ") (width %s))", FMT_IU( primitive.m_Thickness ).c_str() );
-                else
-                    m_out->Print( 0, "))");
+                m_out->Print( 0, ") (width %s))", FMT_IU( primitive.m_Thickness ).c_str() );
                 }
                 break;
 

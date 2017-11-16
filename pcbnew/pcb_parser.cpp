@@ -1438,6 +1438,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT()
     case T_gr_poly:
     {
         segment->SetShape( S_POLYGON );
+        segment->SetWidth( 0 ); // this is the default value. will be (perhaps) modified later
         NeedLEFT();
         token = NextTok();
 

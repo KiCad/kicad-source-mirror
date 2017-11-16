@@ -57,7 +57,8 @@ DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype ) :
     m_Angle = 0;
     m_Flags = 0;
     m_Shape = S_SEGMENT;
-    m_Width = Millimeter2iu( 0.15 );    // Gives a decent width
+    // Gives a decent pen size to draw shape:
+    m_Width = m_Shape == S_POLYGON ? 0 : Millimeter2iu( 0.15 );
 }
 
 
@@ -315,6 +316,23 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
             }
         }
 
+        break;
+
+    case S_POLYGON:
+        {
+            SHAPE_POLY_SET& outline = GetPolyShape();
+            // Draw the polygon: only one polygon is expected
+            // However we provide a multi polygon shape drawing
+            // ( for the future or to show a non expected shape )
+            for( int jj = 0; jj < outline.OutlineCount(); ++jj )
+            {
+                SHAPE_LINE_CHAIN& poly = outline.Outline( jj );
+
+                GRClosedPoly( panel->GetClipBox(), DC, poly.PointCount(),
+                        (wxPoint*)&poly.Point( 0 ), FILLED, GetWidth(),
+                        color, color );
+            }
+        }
         break;
 
     default:
