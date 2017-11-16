@@ -39,6 +39,7 @@
 #include <eda_text.h>       // FILL_T
 
 class SHAPE_POLY_SET;
+class SHAPE_LINE_CHAIN;
 class GBR_NETLIST_METADATA;
 
 /**
@@ -262,13 +263,24 @@ public:
     /**
      * Function PlotPoly
      * @brief Draw a polygon ( filled or not )
-     * @param aCornerList = corners list
+     * @param aCornerList = corners list (a std::vector< wxPoint >)
      * @param aFill = type of fill
      * @param aWidth = line width
      * @param aData an auxiliary info (mainly for gerber format)
      */
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aFill,
                int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = NULL ) = 0;
+
+    /**
+     * Function PlotPoly
+     * @brief Draw a polygon ( filled or not )
+     * @param aCornerList = corners list (a SHAPE_LINE_CHAIN)
+     * @param aFill = type of fill
+     * @param aWidth = line width
+     * @param aData an auxiliary info (mainly for gerber format)
+     */
+    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill,
+               int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = NULL );
 
     /**
      * Function PlotImage

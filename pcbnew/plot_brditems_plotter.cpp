@@ -768,6 +768,20 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
         }
         break;
 
+    case S_POLYGON:
+        {
+            m_plotter->SetCurrentLineWidth( thickness, &gbr_metadata );
+            // Draw the polygon: only one polygon is expected
+            // However we provide a multi polygon shape drawing
+            // ( for the future or to show a non expected shape )
+            for( int jj = 0; jj < aSeg->GetPolyShape().OutlineCount(); ++jj )
+            {
+                SHAPE_LINE_CHAIN& poly = aSeg->GetPolyShape().Outline( jj );
+                m_plotter->PlotPoly( poly, FILLED_SHAPE, thickness, &gbr_metadata );
+            }
+        }
+        break;
+
     default:
         m_plotter->ThickSegment( start, end, thickness, GetPlotMode(), &gbr_metadata );
     }

@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,6 +47,8 @@
 #include <macros.h>
 #include <class_base_screen.h>
 #include <drawtxt.h>
+#include <geometry/shape_line_chain.h>
+
 
 PLOTTER::PLOTTER( )
 {
@@ -507,7 +509,8 @@ void PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
 }
 
 
-void PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width, EDA_DRAW_MODE_T tracemode, void* aData )
+void PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width,
+                           EDA_DRAW_MODE_T tracemode, void* aData )
 {
     if( tracemode == FILLED )
         Circle( pos, diametre, NO_FILL, width );
@@ -517,6 +520,18 @@ void PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width, EDA_DRAW
         Circle( pos, diametre - width + currentPenWidth, NO_FILL, -1 );
         Circle( pos, diametre + width - currentPenWidth, NO_FILL, -1 );
     }
+}
+
+
+void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill,
+                       int aWidth, void * aData )
+{
+    std::vector< wxPoint > cornerList;
+
+    for( int ii = 0; ii < aCornerList.PointCount(); ii++ )
+        cornerList.push_back( wxPoint( aCornerList.CPoint( ii ) ) );
+
+    PlotPoly( cornerList , aFill, aWidth, aData );
 }
 
 
