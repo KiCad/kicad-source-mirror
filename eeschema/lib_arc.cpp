@@ -374,7 +374,7 @@ void LIB_ARC::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
         aPlotter->SetColor( GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
-        aPlotter->Arc( pos, -t2, -t1, m_Radius, FILLED_SHAPE, 0 );
+        aPlotter->Arc( pos, -t2, -t1, m_Radius, FILLED_WITH_BG_BODYCOLOR, 0 );
     }
 
     bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
