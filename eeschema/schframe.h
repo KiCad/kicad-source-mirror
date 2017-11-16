@@ -897,16 +897,15 @@ private:
     /**
      * Add no connect item to the current schematic sheet at \a aPosition.
      *
-     * @param aDC The device context to draw the no connect to.
      * @param aPosition The position in logical (drawing) units to add the no connect.
      * @return The no connect item added.
      */
-    SCH_NO_CONNECT* AddNoConnect( wxDC* aDC, const wxPoint& aPosition );
+    SCH_NO_CONNECT* AddNoConnect( const wxPoint& aPosition );
 
     /**
      * Add a new junction at \a aPosition.
      */
-    SCH_JUNCTION* AddJunction( wxDC* aDC, const wxPoint& aPosition, bool aPutInUndoList = false );
+    SCH_JUNCTION* AddJunction( const wxPoint& aPosition, bool aPutInUndoList = false );
 
     /**
      * Function SchematicCleanUp
@@ -950,7 +949,7 @@ private:
     /**
      * Terminate a bus, wire, or line creation.
      */
-    void EndSegment( wxDC* DC );
+    void EndSegment();
 
     /**
      * Erase the last segment at the current mouse position.

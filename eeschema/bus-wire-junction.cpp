@@ -248,7 +248,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
         // Terminate the command if the end point is on a pin, junction, or another wire or bus.
         if( GetScreen()->IsTerminalPoint( cursorpos, segment->GetLayer() ) )
         {
-            EndSegment( DC );
+            EndSegment();
             return;
         }
 
@@ -267,7 +267,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
 }
 
 
-void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
+void SCH_EDIT_FRAME::EndSegment()
 {
     SCH_SCREEN* screen = GetScreen();
     SCH_LINE* segment = (SCH_LINE*) screen->GetCurItem();
@@ -334,11 +334,11 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
 
     // A junction could be needed to connect the end point of the last created segment.
     if( screen->IsJunctionNeeded( endpoint ) )
-        screen->Append( AddJunction( DC, endpoint ) );
+        screen->Append( AddJunction( endpoint ) );
 
     // A junction could be needed to connect the start point of the set of new created wires
     if( screen->IsJunctionNeeded( startPoint ) )
-        screen->Append( AddJunction( DC, startPoint ) );
+        screen->Append( AddJunction( startPoint ) );
 
     m_canvas->Refresh();
 
@@ -466,16 +466,12 @@ bool SCH_EDIT_FRAME::SchematicCleanUp()
 }
 
 
-SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( wxDC* aDC, const wxPoint& aPosition,
+SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( const wxPoint& aPosition,
                                            bool aPutInUndoList )
 {
     SCH_JUNCTION* junction = new SCH_JUNCTION( aPosition );
 
     SetRepeatItem( junction );
-
-    m_canvas->CrossHairOff( aDC );     // Erase schematic cursor
-    junction->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    m_canvas->CrossHairOn( aDC );      // Display schematic cursor
 
     if( aPutInUndoList )
     {
@@ -488,7 +484,7 @@ SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( wxDC* aDC, const wxPoint& aPosition,
 }
 
 
-SCH_NO_CONNECT* SCH_EDIT_FRAME::AddNoConnect( wxDC* aDC, const wxPoint& aPosition )
+SCH_NO_CONNECT* SCH_EDIT_FRAME::AddNoConnect( const wxPoint& aPosition )
 {
     SCH_NO_CONNECT* no_connect = new SCH_NO_CONNECT( aPosition );
 

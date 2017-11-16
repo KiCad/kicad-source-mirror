@@ -120,7 +120,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             if( GetScreen()->GetItem( gridPosition, 0, SCH_NO_CONNECT_T ) == NULL )
             {
-                SCH_NO_CONNECT*  no_connect = AddNoConnect( aDC, gridPosition );
+                SCH_NO_CONNECT*  no_connect = AddNoConnect( gridPosition );
                 SetRepeatItem( no_connect );
                 GetScreen()->SetCurItem( no_connect );
                 m_canvas->SetAutoPanRequest( true );
@@ -137,7 +137,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             if( GetScreen()->GetItem( gridPosition, 0, SCH_JUNCTION_T ) == NULL )
             {
-                SCH_JUNCTION* junction = AddJunction( aDC, gridPosition, true );
+                SCH_JUNCTION* junction = AddJunction( gridPosition );
                 SetRepeatItem( junction );
                 GetScreen()->SetCurItem( junction );
                 m_canvas->SetAutoPanRequest( true );
@@ -442,7 +442,7 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_WIRE_BUTT:
     case ID_LINE_COMMENT_BUTT:
         if( item && item->IsNew() )
-            EndSegment( aDC );
+            EndSegment();
 
         break;
     }

@@ -169,7 +169,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_END_LINE:
         m_canvas->MoveCursorToCrossHair();
-        EndSegment( &dc );
+        EndSegment();
         break;
 
     case ID_POPUP_SCH_BEGIN_WIRE:
@@ -372,7 +372,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_ADD_JUNCTION:
         m_canvas->MoveCursorToCrossHair();
-        screen->SetCurItem( AddJunction( &dc, GetCrossHairPosition(), true ) );
+        screen->SetCurItem( AddJunction( GetCrossHairPosition() ) );
 
         if( screen->TestDanglingEnds() )
             m_canvas->Refresh();
