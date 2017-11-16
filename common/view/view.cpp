@@ -453,7 +453,7 @@ double VIEW::ToWorld( double aSize ) const
 {
     const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
 
-    return matrix.GetScale().x * aSize;
+    return fabs( matrix.GetScale().x * aSize );
 }
 
 
