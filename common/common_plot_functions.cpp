@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@
 
 #include <fctsys.h>
 #include <base_struct.h>
-#include <plot_common.h>
+#include <class_plotter.h>
 #include <worksheet.h>
 #include <class_base_screen.h>
 #include <drawtxt.h>

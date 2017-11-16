@@ -28,7 +28,7 @@
  */
 
 #include <fctsys.h>
-#include <plot_common.h>
+#include <class_plotter.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
 #include <pcbplot.h>

@@ -1,8 +1,7 @@
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +25,7 @@
 #include <pcb_plot_params_parser.h>
 #include <pcb_plot_params.h>
 #include <layers_id_colors_and_visibility.h>
-#include <plot_common.h>
+#include <class_plotter.h>
 #include <macros.h>
 #include <convert_to_biu.h>
 

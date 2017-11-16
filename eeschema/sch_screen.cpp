@@ -39,7 +39,7 @@
 #include <class_drawpanel.h>
 #include <sch_item_struct.h>
 #include <schframe.h>
-#include <plot_common.h>
+#include <class_plotter.h>
 
 #include <netlist.h>
 #include <class_netlist_object.h>

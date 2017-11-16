@@ -32,7 +32,7 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <wxstruct.h>
-#include <plot_common.h>
+#include <class_plotter.h>
 #include <class_drawpanel.h>
 #include <trigo.h>
 #include <confirm.h>

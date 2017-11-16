@@ -5,8 +5,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 2011-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017 jean-pierre.charras
+ * Copyright (C) 2011-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
 #include "trigo.h"
 #include "common.h"
 #include "richio.h"
-#include "plot_common.h"
+#include "class_plotter.h"
 
 #include "class_bitmap_base.h"
 

@@ -40,7 +40,7 @@
 #include <macros.h>
 #include <wxPcbStruct.h>
 #include <class_board_design_settings.h>
-#include <plot_common.h>
+#include <class_plotter.h>
 #include <worksheet.h>
 #include <dialog_hotkeys_editor.h>
 #include <fp_lib_table.h>

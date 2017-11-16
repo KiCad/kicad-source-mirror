@@ -96,7 +96,7 @@
 #include <class_eda_rect.h>
 #include <base_struct.h>
 #include <common.h>
-#include <plot_common.h>
+#include <class_plotter.h>
 #include <macros.h>
 #include <kicad_string.h>
 

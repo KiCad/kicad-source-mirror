@@ -34,7 +34,7 @@
 #include <drawtxt.h>
 #include <kicad_string.h>
 #include <class_drawpanel.h>
-#include <plot_common.h>
+#include <class_plotter.h>
 #include <trigo.h>
 #include <base_units.h>
 #include <msgpanel.h>

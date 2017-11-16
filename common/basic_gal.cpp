@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 
 /**
  * @brief Implement a very basic GAL used to draw, plot and convert texts in segments
- * for DRC funstions, using the common GAL functions.
+ * for DRC functions, using the common GAL functions.
  * Draw functions use wxDC.
  * Plot functions use a PLOTTER
  * Convert texts in segments use a callback function created by the caller
@@ -32,7 +32,7 @@
  */
 
 #include <gr_basic.h>
-#include <plot_common.h>
+#include <class_plotter.h>
 #include <trigo.h>
 
 #include <basic_gal.h>

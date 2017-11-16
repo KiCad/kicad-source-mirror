@@ -34,7 +34,7 @@
 #include <kicad_string.h>
 #include <richio.h>
 #include <schframe.h>
-#include <plot_common.h>
+#include <class_plotter.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
 

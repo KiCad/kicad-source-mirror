@@ -25,7 +25,7 @@
  */
 
 #include <fctsys.h>
-#include <plot_common.h>
+#include <class_plotter.h>
 #include <class_sch_screen.h>
 #include <schframe.h>
 #include <base_units.h>

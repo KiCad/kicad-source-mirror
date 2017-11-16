@@ -8,7 +8,7 @@
  * Copyright (C) 1992-2010 Lorenzo Marcantonio
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  *
- * Copyright (C) 1992-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,6 @@
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <worksheet.h>
-#include <plot_common.h>
 #include <class_sch_screen.h>
 #include <schframe.h>
 #include <base_units.h>
