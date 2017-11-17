@@ -133,10 +133,13 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
     checkPluginPath( testpath, searchpaths );
 
     // add subdirectories too
-    wxDir debugPluginDir( testpath );
+    wxDir debugPluginDir;
     wxString subdir;
 
-    if( debugPluginDir.GetFirst( &subdir, wxEmptyString, wxDIR_DIRS ) )
+    debugPluginDir.Open( testpath );
+
+    if( debugPluginDir.IsOpened() &&
+        debugPluginDir.GetFirst( &subdir, wxEmptyString, wxDIR_DIRS ) )
     {
         checkPluginPath( testpath + subdir, searchpaths );
 
