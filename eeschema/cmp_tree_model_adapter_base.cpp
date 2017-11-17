@@ -158,7 +158,6 @@ void CMP_TREE_MODEL_ADAPTER_BASE::UpdateSearchString( wxString const& aSearch )
 
     m_tree.SortNodes();
     Cleared();
-    AttachTo( m_widget );
 
     ShowResults() || ShowPreselect() || ShowSingleLibrary();
 }
@@ -289,7 +288,8 @@ unsigned int CMP_TREE_MODEL_ADAPTER_BASE::GetChildren(
 {
     auto node = ( aItem.IsOk() ? ToNode( aItem ) : &m_tree );
 
-    if( node->Type != CMP_TREE_NODE::TYPE::LIBID || m_show_units )
+    if( node->Type != CMP_TREE_NODE::TYPE::LIBID
+            || ( m_show_units && node->Type == CMP_TREE_NODE::TYPE::UNIT ) )
         return IntoArray( *node, aChildren );
     else
         return 0;

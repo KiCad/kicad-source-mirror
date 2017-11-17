@@ -76,7 +76,7 @@ void LIB_MANAGER_ADAPTER::AddAliasList( const wxString& aNodeName,
 bool LIB_MANAGER_ADAPTER::IsContainer( const wxDataViewItem& aItem ) const
 {
     const CMP_TREE_NODE* node = ToNode( aItem );
-    return node && node->Type == CMP_TREE_NODE::LIB;
+    return node ? node->Type == CMP_TREE_NODE::LIB : true;
 }
 
 
@@ -194,12 +194,7 @@ void LIB_MANAGER_ADAPTER::addAliases( CMP_TREE_NODE_LIB& aLibNode )
 void LIB_MANAGER_ADAPTER::finishUpdate()
 {
     m_tree.AssignIntrinsicRanks();
-#ifdef __WINDOWS__
-    // Normally one would call Item{Added,Changed,Deleted}() to notify the view
-    // about changes, but ItemAdded() causes duplicate entries on Windows.
-    // The only sensible way is to call Cleared() that rebuilds the model.
-    Cleared();
-#endif /* __WINDOWS__ */
+    m_tree.SortNodes();
     Resort();
 }
 
