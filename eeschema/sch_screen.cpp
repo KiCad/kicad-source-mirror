@@ -136,6 +136,20 @@ void SCH_SCREEN::DecRefCount()
 }
 
 
+void SCH_SCREEN::Append( SCH_SCREEN* aScreen )
+{
+    wxCHECK_RET( aScreen, "Invalid screen object." );
+
+    // No need to decend the hierarchy.  Once the top level screen is copied, all of it's
+    // children are copied as well.
+    m_drawList.Append( aScreen->m_drawList );
+
+    // This screen owns the objects now.  This prevents the object from being delete when
+    // aSheet is deleted.
+    aScreen->m_drawList.SetOwnership( false );
+}
+
+
 void SCH_SCREEN::Clear()
 {
     FreeDrawList();
@@ -1291,6 +1305,22 @@ int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aLis
 }
 
 
+#if defined(DEBUG)
+void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
+{
+    // for now, make it look like XML, expand on this later.
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
+
+    for( EDA_ITEM* item = m_drawList.begin();  item;  item = item->Next() )
+    {
+        item->Show( nestLevel+1, os );
+    }
+
+    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
+}
+#endif
+
+
 /******************************************************************/
 /* Class SCH_SCREENS to handle the list of screens in a hierarchy */
 /******************************************************************/
@@ -1314,10 +1344,10 @@ static bool SortByTimeStamp( const EDA_ITEM* item1, const EDA_ITEM* item2 )
 }
 
 
-SCH_SCREENS::SCH_SCREENS()
+SCH_SCREENS::SCH_SCREENS( SCH_SHEET* aSheet )
 {
     m_index = 0;
-    BuildScreenList( g_RootSheet );
+    buildScreenList( ( !aSheet ) ? g_RootSheet : aSheet );
 }
 
 
@@ -1355,7 +1385,7 @@ SCH_SCREEN* SCH_SCREENS::GetScreen( unsigned int aIndex ) const
 }
 
 
-void SCH_SCREENS::AddScreenToList( SCH_SCREEN* aScreen )
+void SCH_SCREENS::addScreenToList( SCH_SCREEN* aScreen )
 {
     if( aScreen == NULL )
         return;
@@ -1370,26 +1400,21 @@ void SCH_SCREENS::AddScreenToList( SCH_SCREEN* aScreen )
 }
 
 
-void SCH_SCREENS::BuildScreenList( EDA_ITEM* aItem )
+void SCH_SCREENS::buildScreenList( SCH_SHEET* aSheet )
 {
-    if( aItem && aItem->Type() == SCH_SHEET_T )
+    if( aSheet && aSheet->Type() == SCH_SHEET_T )
     {
-        SCH_SHEET* ds = (SCH_SHEET*) aItem;
-        aItem = ds->GetScreen();
-    }
+        SCH_SCREEN* screen = aSheet->GetScreen();
 
-    if( aItem && aItem->Type() == SCH_SCREEN_T )
-    {
-        SCH_SCREEN*     screen = (SCH_SCREEN*) aItem;
+        addScreenToList( screen );
 
-        AddScreenToList( screen );
         EDA_ITEM* strct = screen->GetDrawItems();
 
         while( strct )
         {
             if( strct->Type() == SCH_SHEET_T )
             {
-                BuildScreenList( strct );
+                buildScreenList( ( SCH_SHEET* )strct );
             }
 
             strct = strct->Next();
@@ -1561,17 +1586,65 @@ bool SCH_SCREENS::HasNoFullyDefinedLibIds()
 }
 
 
-#if defined(DEBUG)
-void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
+size_t SCH_SCREENS::GetLibNicknames( wxArrayString& aLibNicknames )
 {
-    // for now, make it look like XML, expand on this later.
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
+    SCH_COMPONENT* symbol;
+    SCH_ITEM* item;
+    SCH_ITEM* nextItem;
+    SCH_SCREEN* screen;
+    wxString nickname;
 
-    for( EDA_ITEM* item = m_drawList.begin();  item;  item = item->Next() )
+    for( screen = GetFirst(); screen; screen = GetNext() )
     {
-        item->Show( nestLevel+1, os );
+        for( item = screen->GetDrawItems(); item; item = nextItem )
+        {
+            nextItem = item->Next();
+
+            if( item->Type() != SCH_COMPONENT_T )
+                continue;
+
+            symbol = dynamic_cast< SCH_COMPONENT* >( item );
+
+            nickname = symbol->GetLibId().GetLibNickname();
+
+            if( !nickname.empty() && ( aLibNicknames.Index( nickname ) == wxNOT_FOUND ) )
+                aLibNicknames.Add( nickname );;
+        }
     }
 
-    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
+    return aLibNicknames.GetCount();
 }
-#endif
+
+
+int SCH_SCREENS::ChangeSymbolLibNickname( const wxString& aFrom, const wxString& aTo )
+{
+    SCH_COMPONENT* symbol;
+    SCH_ITEM* item;
+    SCH_ITEM* nextItem;
+    SCH_SCREEN* screen;
+    int cnt = 0;
+
+    for( screen = GetFirst(); screen; screen = GetNext() )
+    {
+        for( item = screen->GetDrawItems(); item; item = nextItem )
+        {
+            nextItem = item->Next();
+
+            if( item->Type() != SCH_COMPONENT_T )
+                continue;
+
+            symbol = dynamic_cast< SCH_COMPONENT* >( item );
+
+            if( symbol->GetLibId().GetLibNickname() != aFrom )
+                continue;
+
+            LIB_ID id = symbol->GetLibId();
+            id.SetLibNickname( aTo );
+            symbol->SetLibId( id );
+            cnt++;
+        }
+    }
+
+    return cnt;
+}
+

@@ -193,7 +193,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // This is for python:
     if( aFileSet.size() != 1 )
     {
-        UTF8 msg = StrPrintf( "Eeschema:%s() takes only a single filename", __func__ );
+        UTF8 msg = StrPrintf( "Eeschema:%s() takes only a single filename.", __func__ );
         DisplayError( this, msg );
         return false;
     }
@@ -372,8 +372,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 }
 
 
-bool SCH_EDIT_FRAME::AppendOneEEProject()
+bool SCH_EDIT_FRAME::AppendSchematic()
 {
+    wxString    msg;
     wxString    fullFileName;
 
     SCH_SCREEN* screen = GetScreen();
@@ -423,101 +424,216 @@ bool SCH_EDIT_FRAME::AppendOneEEProject()
 
     wxLogDebug( wxT( "Importing schematic " ) + fullFileName );
 
-    // Keep trace of the last item in list.
-    // New items will be loaded after this one.
-    SCH_ITEM* bs = screen->GetDrawItems();
+    // Load the schematic into a temporary sheet.
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+    std::unique_ptr< SCH_SHEET> newSheet( new SCH_SHEET );
 
-    if( bs )
+    newSheet->SetFileName( fullFileName );
+
+    try
     {
-        while( bs->Next() )
-            bs = bs->Next();
+        pi->Load( fullFileName, &Kiway(), newSheet.get() );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        msg.Printf( _( "Error occurred loading schematic file '%s'." ), fullFileName );
+        DisplayErrorMessage( this, msg, ioe.What() );
+
+        msg.Printf( _( "Failed to load schematic '%s'" ), fullFileName );
+        AppendMsgPanel( wxEmptyString, msg, CYAN );
+
+        return false;
     }
 
-    // load the project
-    bool success = LoadOneEEFile( screen, fullFileName, true );
+    // Make sure any new sheet changes do not cause any recursion issues.
+    SCH_SHEET_LIST hierarchy( g_RootSheet );          // This is the schematic sheet hierarchy.
+    SCH_SHEET_LIST sheetHierarchy( newSheet.get() );  // This is the hierarchy of the import.
 
-    if( success )
+    wxFileName destFile = screen->GetFileName();
+
+    if( destFile.IsRelative() )
+        destFile.MakeAbsolute( Prj().GetProjectPath() );
+
+    if( hierarchy.TestForRecursion( sheetHierarchy, destFile.GetFullPath( wxPATH_UNIX ) ) )
     {
-        // the new loaded items need cleaning to avoid duplicate parameters
-        // which should be unique (ref and time stamp).
-        // Clear ref and set a new time stamp for new items
-        if( bs == NULL )
-            bs = screen->GetDrawItems();
-        else
-            bs = bs->Next();
+        msg.Printf( _( "The sheet changes cannot be made because the destination sheet already "
+                       "has the sheet <%s> or one of it's subsheets as a parent somewhere in "
+                       "the schematic hierarchy." ),
+                    destFile.GetFullPath() );
+        DisplayError( this, msg );
+        return false;
+    }
 
-        while( bs )
+    wxArrayString names;
+
+    // Make sure the imported schematic has been remapped to the symbol library table.
+    SCH_SCREENS newScreens( newSheet.get() );         // All screens associated with the import.
+
+    if( newScreens.HasNoFullyDefinedLibIds() )
+    {
+        if( !IsOK( this,
+                   "This schematic has not been remapped to the symbol library table. "
+                   "Therefore, all of the library symbol links will be broken.  Do you "
+                   "want to continue?" ) )
+            return false;
+    }
+    else
+    {
+        // If there are symbol libraries in the imported schematic that are not in the
+        // symbol library table of this project, there could be a lot of broken symbol
+        // library links.  Attempt to add the missing libraries to the project symbol
+        // library table.
+        newScreens.GetLibNicknames( names );
+        wxArrayString newLibNames;
+
+        for( auto name : names )
         {
-            SCH_ITEM* nextbs = bs->Next();
+            if( !Prj().SchSymbolLibTable()->HasLibrary( name ) )
+                newLibNames.Add( name );
+        }
 
-            // To avoid issues with the current hieratchy,
-            // do not load included sheets files and give new filenames
-            // and new sheet names.
-            // There are many tricky cases (loops, creation of complex hierarchies
-            // with duplicate file names, duplicate sheet names...)
-            // So the included sheets names are renamed if existing,
-            // and filenames are just renamed to avoid loops and
-            // creation of complex hierarchies.
-            // If someone want to change it for a better append function, remember
-            // these cases need work to avoid issues.
-            if( bs->Type() == SCH_SHEET_T )
+        wxFileName symLibTableFn( fn.GetPath(), SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+
+        if( !newLibNames.IsEmpty() && symLibTableFn.Exists() && symLibTableFn.IsFileReadable() )
+        {
+            SYMBOL_LIB_TABLE table;
+
+            try
             {
-                SCH_SHEET * sheet = (SCH_SHEET *) bs;
-                time_t newtimestamp = GetNewTimeStamp();
-                sheet->SetTimeStamp( newtimestamp );
-
-                // Check for existing subsheet name in the current sheet
-                wxString tmp = sheet->GetName();
-                sheet->SetName( wxEmptyString );
-                const SCH_SHEET* subsheet = GetScreen()->GetSheet( tmp );
-
-                if( subsheet )
-                    sheet->SetName( wxString::Format( wxT( "Sheet%8.8lX" ), (long) newtimestamp ) );
-                else
-                    sheet->SetName( tmp );
-
-                sheet->SetFileName( wxString::Format( wxT( "file%8.8lX.sch" ),
-                                                      (long) newtimestamp ) );
-                SCH_SCREEN* new_screen = new SCH_SCREEN( &Kiway() );
-                new_screen->SetMaxUndoItems( m_UndoRedoCountMax );
-                sheet->SetScreen( new_screen );
-                sheet->GetScreen()->SetFileName( sheet->GetFileName() );
+                table.Load( symLibTableFn.GetFullPath() );
             }
-            // clear annotation and init new time stamp for the new components
-            else if( bs->Type() == SCH_COMPONENT_T )
+            catch( const IO_ERROR& ioe )
             {
-                ( (SCH_COMPONENT*) bs )->SetTimeStamp( GetNewTimeStamp() );
-                ( (SCH_COMPONENT*) bs )->ClearAnnotation( NULL );
-
-                // Clear flags, which are set by these previous modifications:
-                bs->ClearFlags();
+                msg.Printf( _( "An error occurred loading the symbol library table '%s'." ),
+                            symLibTableFn.GetFullPath() );
+                DisplayErrorMessage( NULL, msg, ioe.What() );
             }
 
-            bs = nextbs;
+            if( !table.IsEmpty() )
+            {
+                for( auto libName : newLibNames )
+                {
+                    if( !table.HasLibrary( libName ) )
+                        continue;
+
+                    // Don't expand environment variable because KIPRJMOD will not be correct
+                    // for a different project.
+                    wxString uri = table.GetFullURI( libName, false );
+
+                    wxFileName newLib;
+
+                    if( uri.Contains( "${KIPRJMOD}" ) )
+                    {
+                        newLib.SetPath( fn.GetPath() );
+                        newLib.SetFullName( uri.AfterLast( '}' ) );
+                        uri = newLib.GetFullPath();
+                    }
+                    else
+                    {
+                        uri = table.GetFullURI( libName );
+                    }
+
+                    // Add the library from the imported project to the current project
+                    // symbol library table.
+                    const SYMBOL_LIB_TABLE_ROW* row = table.FindRow( libName );
+
+                    wxCHECK2_MSG( row, continue, "Library '" + libName +
+                                  "' missing from symbol library table '" +
+                                  symLibTableFn.GetFullPath() + "'." );
+
+                    wxString newLibName = libName;
+                    int libNameCnt = 1;
+
+                    // Rename the imported symbol library if it already exists.
+                    while( Prj().SchSymbolLibTable()->HasLibrary( newLibName ) )
+                    {
+                        newLibName = wxString::Format( "%s%d", libName, libNameCnt );
+                    }
+
+                    SYMBOL_LIB_TABLE_ROW* newRow = new SYMBOL_LIB_TABLE_ROW( newLibName,
+                                                                             uri,
+                                                                             row->GetType(),
+                                                                             row->GetOptions(),
+                                                                             row->GetDescr() );
+                    Prj().SchSymbolLibTable()->InsertRow( newRow );
+
+                    if( libName != newLibName )
+                        newScreens.ChangeSymbolLibNickname( libName, newLibName );
+                }
+            }
         }
     }
+
+    // Check for duplicate sheet names in the current page.
+    wxArrayString duplicateSheetNames;
+    SCH_TYPE_COLLECTOR sheets;
+
+    sheets.Collect( screen->GetDrawItems(), SCH_COLLECTOR::SheetsOnly );
+
+    for( int i = 0;  i < sheets.GetCount();  ++i )
+    {
+        if( newSheet->GetScreen()->GetSheet( ( ( SCH_SHEET* ) sheets[i] )->GetName() ) )
+            duplicateSheetNames.Add( ( ( SCH_SHEET* ) sheets[i] )->GetName() );
+    }
+
+    if( !duplicateSheetNames.IsEmpty() )
+    {
+        msg.Printf( "Duplicate sheet names exist on the current page.  Do you want to "
+                    "automatically rename the duplicate sheet names?" );
+        if( !IsOK( this, msg ) )
+            return false;
+    }
+
+    SCH_SCREEN* newScreen = newSheet->GetScreen();
+    wxCHECK_MSG( newScreen, false, "No screen defined for imported sheet." );
+
+    for( auto duplicateName : duplicateSheetNames )
+    {
+        SCH_SHEET* renamedSheet = newScreen->GetSheet( duplicateName );
+
+        wxCHECK2_MSG( renamedSheet, continue,
+                      "Sheet " + duplicateName + " not found in imported schematic." );
+
+        time_t newtimestamp = GetNewTimeStamp();
+        renamedSheet->SetTimeStamp( newtimestamp );
+        renamedSheet->SetName( wxString::Format( "Sheet%8.8lX", (long) newtimestamp ) );
+    }
+
+    // Clear all annotation in the imported schematic to prevent clashes with existing annotation.
+    newScreens.ClearAnnotation();
+
+    // It is finally save to add the imported schematic.
+    screen->Append( newScreen );
+
+    SCH_SCREENS allScreens;
+    allScreens.ReplaceDuplicateTimeStamps();
 
     OnModify();
 
     // redraw base screen (ROOT) if necessary
+    SCH_SCREENS screens( GetCurrentSheet().Last() );
+
+    screens.UpdateSymbolLinks( true );
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
     Zoom_Automatique( false );
     SetSheetNumberAndCount();
     m_canvas->Refresh( true );
-    return success;
+    return true;
 }
 
 
 void SCH_EDIT_FRAME::OnAppendProject( wxCommandEvent& event )
 {
-    wxString msg = _( "This operation cannot be undone. "
-            "Besides, take into account that hierarchical sheets will not be appended.\n\n"
-            "Do you want to save the current document before proceeding?" );
+    if( GetScreen() && GetScreen()->IsModified() )
+    {
+        wxString msg = _( "This operation cannot be undone.\n\n"
+                          "Do you want to save the current document before proceeding?" );
 
-    if( IsOK( this, msg ) )
-        OnSaveProject( event );
+        if( IsOK( this, msg ) )
+            OnSaveProject( event );
+    }
 
-    AppendOneEEProject();
+    AppendSchematic();
 }
 
 
@@ -552,10 +668,7 @@ void SCH_EDIT_FRAME::OnSaveProject( wxCommandEvent& aEvent )
 
     if( !fn.IsDirWritable() )
     {
-        wxString msg = wxString::Format( _(
-                "Directory '%s' is not writable" ),
-                GetChars( fn.GetPath() )
-                );
+        wxString msg = wxString::Format( _( "Directory '%s' is not writable." ), fn.GetPath() );
 
         DisplayError( this, msg );
         return;
@@ -676,10 +789,10 @@ bool SCH_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
 
                 wxString msg;
                 msg.Printf( _( "Error loading schematic file '%s'.\n%s" ),
-                            GetChars( fullFileName ), GetChars( ioe.What() ) );
+                            fullFileName, ioe.What() );
                 DisplayError( this, msg );
 
-                msg.Printf( _( "Failed to load '%s'" ), GetChars( fullFileName ) );
+                msg.Printf( _( "Failed to load '%s'" ), fullFileName );
                 AppendMsgPanel( wxEmptyString, msg, CYAN );
 
                 return false;

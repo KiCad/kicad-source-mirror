@@ -189,22 +189,19 @@ protected:
     const wxSize &GetLastSheetPinTextSize();
 
     /**
-     * Function doAutoSave
-     * saves the schematic files that have been modified and not yet saved.
+     * Save the schematic files that have been modified and not yet saved.
      *
      * @return true if the auto save was successful otherwise false.
      */
     virtual bool doAutoSave() override;
 
     /**
-     * Function autoSaveRequired
-     * returns true if the schematic has been modified.
+     * Returns true if the schematic has been modified.
      */
     virtual bool isAutoSaveRequired() const override;
 
     /**
-     * Function addCurrentItemToList
-     * adds the item currently being edited to the schematic and adds the changes to
+     * Add the item currently being edited to the schematic and adds the changes to
      * the undo/redo container.
      *
      * @param aRedraw = true (default) to redrw -the screen after adding the item.
@@ -216,16 +213,15 @@ protected:
     void backAnnotateFootprints( const std::string& aChangedSetOfReferences );
 
     /**
-     * Function prepareForNetlist
-     * verifies that annotation is complete so that a proper netlist is even
+     * Verify that annotation is complete so that a proper netlist is even
      * possible.  If not, asks the user if annotation should be done.
+     *
      * @return bool - true if annotation is complete, else false.
      */
     bool prepareForNetlist();
 
     /**
-     * Function sendNetlist
-     * sends the kicad netlist over to CVPCB.
+     * Send the kicad netlist over to CVPCB.
      */
     void sendNetlist();
 
@@ -252,13 +248,6 @@ public:
 
     void SetSpiceAjustPassiveValues( bool aEnable ) { m_spiceAjustPassiveValues = aEnable; }
 
-    /* These are PROJECT specific, not schematic editor specific
-    wxString GetUserLibraryPath() const { return m_userLibraryPath; }
-    void SetUserLibraryPath( const wxString& aPath ) { m_userLibraryPath = aPath; }
-    const wxArrayString& GetComponentLibraries() const { return m_componentLibFiles; }
-    void SetComponentLibraries( const wxArrayString& aList ) { m_componentLibFiles = aList; }
-    */
-
     /// accessor to the destination directory to use when generating plot files.
     const wxString& GetPlotDirectoryName() const { return m_plotDirectoryName; }
     void SetPlotDirectoryName( const wxString& aDirName ) { m_plotDirectoryName = aDirName; }
@@ -270,8 +259,7 @@ public:
     bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
 
     /**
-     * Function GetProjectFileParametersList
-     * returns the project file parameter list for Eeschema.
+     * Return the project file parameter list for Eeschema.
      *
      *<p>
      * Populate the project file parameter array specific to Eeschema if it hasn't
@@ -281,33 +269,33 @@ public:
     PARAM_CFG_ARRAY& GetProjectFileParametersList();
 
     /**
-     * Function SaveProjectSettings
-     * saves changes to the project settings to the project (.pro) file.
+     * Save changes to the project settings to the project (.pro) file.
+     *
      * @param aAskForSave = true to open a dialog before saving the settings
      */
     void SaveProjectSettings( bool aAskForSave ) override;
 
     /**
-     * Function LoadProjectFile
-     * loads the KiCad project file (*.pro) settings specific to Eeschema.
+     * Loads the KiCad project file (*.pro) settings specific to Eeschema.
      *
      * @return True if the project file was loaded correctly.
      */
     bool LoadProjectFile();
 
     /**
-     * Function GetDefaultFieldName
-     * returns a default symbol field name for field \a aFieldNdx for all components.
+     * Return a default symbol field name for field \a aFieldNdx for all components.
+     *
      * These field names are not modifiable, but template field names are.
+     *
      * @param aFieldNdx The field number index
      */
     static wxString GetDefaultFieldName( int aFieldNdx );
 
     /**
-     * Function AddTemplateFieldName
-     * inserts or appends a wanted symbol field name into the field names
-     * template.  Should be used for any symbol property editor.  If the name
-     * already exists, it overwrites the same name.
+     * Insert or append a wanted symbol field name into the field names template.
+     *
+     * Should be used for any symbol property editor.  If the name already exists, it
+     * overwrites the same name.
      *
      * @param aFieldName is a full description of the wanted field, and it must not match
      *          any of the default field names.
@@ -321,8 +309,7 @@ public:
 
 
     /**
-     * Function GetTemplateFieldName
-     * returns a template field names list for read only access.
+     * Return a template field names list for read only access.
      */
     const TEMPLATE_FIELDNAMES& GetTemplateFieldNames()
     {
@@ -331,8 +318,7 @@ public:
 
 
     /**
-     * Function GetTemplates
-     * returns the field names template for read only access.
+     * Return the field names template for read only access.
      */
     const TEMPLATES& GetTemplates()
     {
@@ -340,8 +326,7 @@ public:
     }
 
     /**
-     * Function DeleteAllTemplateFieldNames
-     * removes all template field names.
+     * Remove all template field names.
      */
     void DeleteAllTemplateFieldNames()
     {
@@ -349,8 +334,7 @@ public:
     }
 
     /**
-     * Function GetConfigurationSettings
-     * returns the Eeschema applications settings.
+     * Return the Eeschema applications settings.
      * <p>
      * This replaces the old statically define list that had the project file settings and
      * the application settings mixed together.  This was confusing and caused some settings
@@ -379,10 +363,8 @@ public:
     bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL ) override;
 
     /**
-     * Function OnModify
-     * Must be called after a schematic change
-     * in order to set the "modify" flag of the current screen
-     * and update the date in frame reference
+     * Must be called after a schematic change in order to set the "modify" flag of the
+     * current screen* and update the date in frame reference.
      */
     void OnModify();
 
@@ -407,8 +389,7 @@ public:
     double BestZoom() override;
 
     /**
-     * Function LocateAndShowItem
-     * checks the schematic at \a aPosition in logical (drawing) units for a item
+     * Check the schematic at \a aPosition in logical (drawing) units for a item
      * matching the types in \a aFilterList.
      * <p>
      * The search is first performed at the nearest grid position to \a aPosition.  If no
@@ -416,6 +397,7 @@ public:
      * can be cross probed, a message is send to Pcbnew and the selected item is highlighted
      * in PCB editor.
      * </p>
+     *
      * @param aPosition The wxPoint on the schematic to search.
      * @param aFilterList A list of #KICAD_T types to to filter.
      * @param aHotKeyCommandId A hot key command ID for performing additional tests when
@@ -427,8 +409,7 @@ public:
                                  int aHotKeyCommandId = 0 );
 
     /**
-     * Function LocateItem
-     * checks for items at \a aPosition matching the types in \a aFilterList.
+     * Check for items at \a aPosition matching the types in \a aFilterList.
      * <p>
      * If multiple items are located at \a aPosition, a context menu is displayed to clarify
      * which item the user intended to select.  If the user aborts the context menu, NULL is
@@ -447,8 +428,7 @@ public:
                           int aHotKeyCommandId = 0 );
 
     /**
-     * Function DeleteItemAtCrossHair
-     * delete the item found under the cross hair.  If multiple items are found at the
+     * Delete the item found under the cross hair.  If multiple items are found at the
      * cross hair position, a context menu is displayed to clarify which item to delete.
      * See LocateItem() for more information on locating multiple items.
      *
@@ -459,19 +439,19 @@ public:
 
 
     /**
-     * Function HighlightConnectionAtPosition
      * Highlight the connection found at aPosition.
+     *
      * If no connection to highlight is found, clear the current highlighted connect (if any).
      *
      * @param aPosition is the location of the test point (usually cross hair position).
-     * @return true if ok, false if there was an issue to build the netlist
+     * @return true if OK, false if there was an issue to build the netlist
      * needed to highlight a connection.
      */
     bool HighlightConnectionAtPosition( wxPoint aPosition );
 
     /**
-     * Function FindComponentAndItem
-     * finds a component in the schematic and an item in this component.
+     * Finds a component in the schematic and an item in this component.
+     *
      * @param aReference The component reference designator to find.
      * @param aSearchHierarchy If false, search the current sheet only.  Otherwise,
      *                         the entire hierarchy
@@ -486,37 +466,34 @@ public:
                                     bool            aWarpMouse );
 
     /**
-     * Function SendMessageToPcbnew
-     * send a remote to Pcbnew via a socket connection.
+     * Send a message to Pcbnew via a socket connection.
+     *
+     * Commands are:
+     * - $PART: reference   put cursor on footprint anchor
+     * - $PIN: number $PART: reference put cursor on the footprint pad
+     * - $SHEET: time_stamp  select all footprints of components is the schematic sheet path
+     *
      * @param aObjectToSync = item to be located on board
      *      (footprint, pad, text or schematic sheet)
      * @param aPart = component if objectToSync is a sub item of a symbol (like a pin)
-     * <p>
-     * Commands are
-     * $PART: reference   put cursor on footprint anchor
-     * $PIN: number $PART: reference put cursor on the footprint pad
-     * $SHEET: time_stamp  select all footprints of components is the schematic sheet path
-     * </p>
      */
     void SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_COMPONENT* aPart );
 
     /**
-     * BuildNetListBase
-     * netlist generation:
-     * Creates a flat list which stores all connected objects, and mainly
-     * pins and labels.
-     * @param updateStatusText = decides if window StatusText should be modified
+     * Create a flat list which stores all connected objects.
+     *
+     * @param updateStatusText decides if window StatusText should be modified.
      * @return NETLIST_OBJECT_LIST* - caller owns the object.
      */
     NETLIST_OBJECT_LIST* BuildNetListBase( bool updateStatusText = true );
 
     /**
-     * Function CreateNetlist
-     * <ul>
-     * <li> test for some issues (missing or duplicate references and sheet names)
-     * <li> build netlist info
-     * <li> create the netlist file (different formats)
-     * </ul>
+     * Create a netlist for the current schematic.
+     *
+     * - Test for some issues (missing or duplicate references and sheet names)
+     * - Build netlist info
+     * - Create the netlist file (different formats)
+     *
      * @param aFormat = netlist format (NET_TYPE_PCBNEW ...)
      * @param aFullFileName = full netlist file name
      * @param aNetlistOptions = netlist options using OR'ed bits.
@@ -524,7 +501,7 @@ public:
      * For SPICE netlist only:
      *      if NET_USE_NETNAMES is set, use net names from labels in schematic
      *                             else use net numbers (net codes)
-     *      if NET_USE_X_PREFIX is set : change "U" and "IC" refernce prefix to "X"
+     *      if NET_USE_X_PREFIX is set : change "U" and "IC" reference prefix to "X"
      * </p>
      * @param aReporter = a REPORTER to report error messages,
      *          mainly if a command line must be run (can be NULL
@@ -537,9 +514,8 @@ public:
                         bool silent = false ) override;
 
     /**
-     * Function  WriteNetListFile
-     * Create the netlist file. Netlist info must be existing
-     * (BuildNetListBase() creates this info)
+     * Create a netlist file.
+     *
      * @param aConnectedItemsList = the initialized list of connected items, take ownership.
      * @param aFormat = netlist format (NET_TYPE_PCBNEW ...)
      * @param aFullFileName = full netlist file name
@@ -548,7 +524,7 @@ public:
      * For SPICE netlist only:
      *      if NET_USE_NETNAMES is set, use net names from labels in schematic
      *                             else use net numbers (net codes)
-     *      if NET_USE_X_PREFIX is set : change "U" and "IC" refernce prefix to "X"
+     *      if NET_USE_X_PREFIX is set : change "U" and "IC" reference prefix to "X"
      * </p>
      * @param aReporter = a REPORTER to report error messages,
      *          mainly if a command line must be run (can be NULL
@@ -561,17 +537,15 @@ public:
                            REPORTER*       aReporter = NULL );
 
     /**
-     * Function DeleteAnnotation
-     * clears the current component annotation.
+     * Clear the current component annotation.
+     *
      * @param aCurrentSheetOnly Clear only the annotation for the current sheet if true.
      *                          Otherwise clear the entire schematic annotation.
      */
     void DeleteAnnotation( bool aCurrentSheetOnly );
 
     /**
-     * Function AnnotateComponents
-     *
-     * annotates the components in the schematic that are not currently annotated.
+     * Annotate the components in the schematic that are not currently annotated.
      *
      * @param aAnnotateSchematic Annotate the entire schematic if true.  Otherwise annotate
      *                           the current sheet only.
@@ -601,20 +575,15 @@ public:
                              bool aRepairTimestamps, bool aLockUnits );
 
     /**
-     * Function CheckAnnotate
-     * checks for annotation errors.
+     * Check for annotation errors.
      *
-     * <p>
      * The following list of items are checked:
-     * <ul>
-     * <li> Components that are not annotated.
-     * <li> Duplicate component references.
-     * <li> Multiple part per package components where the part\n
-     *      number is greater number of parts in the package.
-     * <li> Multiple part per package components where the reference\n
-     *      designator is different between parts.
-     * </ul>
-     * </p>
+     * - Components that are not annotated.
+     * - Duplicate component references.
+     * - Multiple part per package components where the part number is greater number of parts
+     *   in the package.
+     * - Multiple part per package components where the reference designator is different
+     *   between parts.
      *
      * @return Number of annotation errors found.
      * @param aMessageList A wxArrayString to store error messages.
@@ -629,22 +598,20 @@ public:
     void SetCurrentSheet( const SCH_SHEET_PATH& aSheet );
 
     /**
-     * Function DisplayCurrentSheet
-     * draws the current sheet on the display.
+     * Draw the current sheet on the display.
      */
     void DisplayCurrentSheet();
 
     /**
-     * Function SetCurrentSheetHighlightFlags
-     * Set/reset the BRIGHTENED of connected objects inside the current sheet,
-     * according to the highligthed net name.
+     * Set or reset the BRIGHTENED of connected objects inside the current sheet,
+     * according to the highlighted net name.
+     *
      * @return true if the flags are correctly set, and false if something goes wrong
      * (duplicate sheet names)
      */
     bool SetCurrentSheetHighlightFlags();
 
     /**
-     * Function GetUniqueFilenameForCurrentSheet
      * @return a filename that can be used in plot and print functions
      * for the current screen and sheet path.
      * This filename is unique and must be used instead of the screen filename
@@ -657,15 +624,14 @@ public:
     wxString GetUniqueFilenameForCurrentSheet();
 
     /**
-     * Function SetSheetNumberAndCount
-     * Set the m_ScreenNumber and m_NumberOfScreens members for screens
-     * must be called after a delete or add sheet command, and when entering
-     * a sheet
+     * Set the m_ScreenNumber and m_NumberOfScreens members for screens.
+     *
+     * @note This must be called after deleting or adding a sheet and when entering a sheet.
      */
     void SetSheetNumberAndCount();
 
     /**
-     * Show the print dialog
+     * Show the print dialog.
      */
     void OnPrint( wxCommandEvent& event );
 
@@ -698,9 +664,7 @@ public:
     void Save_File( wxCommandEvent& event );
 
     /**
-     * Function OnSaveProject
-     * is the command event handler to save the entire project and create a component library
-     * archive.
+     * Command event handler to save the entire project and create a component library archive.
      *
      * The component library archive name is &ltroot_name&gt-cache.lib
      */
@@ -709,16 +673,38 @@ public:
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
     /**
-     * Function AppendOneEEProject
-     * read an entire project and loads it into the schematic editor *without*
-     * replacing the existing contents.
+     * Import a KiCad schematic into the current page.
+     *
+     * In order to import a schematic a lot of things have to happen to before the contents
+     * of the imported schematic can be appended to the current page.  The following list
+     * describes this process:
+     *
+     * - Load the schematic into a temporary SCH_SHEET object.
+     * - Make sure the imported schematic does not cause any hierarchy recursion issues.
+     * - Verify the imported schematic uses fully qualified #LIB_ID objects (symbol library table).
+     * - Check to see if any symbol libraries need to be added to the current project's symbol
+     *   library table.  This includes:
+     *   - Check if the symbol library already exists in the project or global symbol library
+     *     table.
+     *   - Convert symbol library URLS that use the ${KIPRJMOD} environment variable to absolute
+     *     paths.  ${KIPRJMOD} will not be the same for this project.
+     *   - Check for duplicate symbol library nicknames and change the new symbol library nickname
+     *     to prevent library name clashes.
+     *   - Update all schematic symbol LIB_ID object library nicknames when the library nickname
+     *     was changed to prevent clashes.
+     * - Check for duplicate sheet names which is illegal and automatically rename any duplicate
+     *   sheets in the imported schematic.
+     * - Clear all of the annotation in the imported schematic to prevent clashes.
+     * - Append the objects from the temporary sheet to the current page.
+     * - Replace any duplicate time stamps.
+     * - Refresh the symbol library links.
+     *
      * @return True if the project was imported properly.
      */
-    bool AppendOneEEProject();
+    bool AppendSchematic();
 
     /**
-     * Function LoadOneEEFile
-     * loads the schematic (.sch) file \a aFullFileName into \a aScreen.
+     * Load the schematic (.sch) file \a aFullFileName into \a aScreen.
      *
      * @param aScreen Pointer to the associated SCH_SCREEN object in which to load
      *                \a aFullFileName.
@@ -731,20 +717,18 @@ public:
     bool LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFileName, bool append = false );
 
     /**
-     * Function ReadCmpToFootprintLinkFile
-     * Loads a .cmp file from CvPcb and update the footprin field
-     * of components
-     * Prepares parameters and calls ProcessCmpToFootprintLinkFile
-     * to actually read the file and update Fp fields
+     * Loads a .cmp file from CvPcb and update the footprint field of components.
+     *
+     * Prepares parameters and calls ProcessCmpToFootprintLinkFileto actually read the file and
+     * update the footprint fields
      */
     bool LoadCmpToFootprintLinkFile();
 
     /**
-     * Function ProcessStuffFile
-     * gets footprint info from each line in the Stuff File by Ref Desg
+     * Read the footprint info from each line in the stuff file by reference designator.
      *
-     * Read a Cmp To Footprint Link file created by CvPcb (the .cmp file).
-     * That file has lines like:
+     * The footprint link file (.cmp) entries created by CvPcb:
+     *
      *  BeginCmp
      *  TimeStamp = /32307DE2/AA450F67;
      *  Reference = C1;
@@ -765,8 +749,7 @@ public:
                                         bool            aVisibilityState );
 
     /**
-     * Function SaveEEFile
-     * saves \a aScreen to a schematic file.
+     * Save \a aScreen to a schematic file.
      *
      * @param aScreen A pointer to the SCH_SCREEN object to save.  A NULL pointer saves
      *                the current screen.
@@ -787,65 +770,59 @@ public:
     bool IsSearchCacheObsolete( const SCH_FIND_REPLACE_DATA& aSearchCriteria );
 
     /**
-     * Function ImportFile
-     *  load the given filename but sets the path to the current project path.
+     *  Load the given filename but sets the path to the current project path.
+     *
      *  @param full filepath of file to be imported.
-     *  @param aFileType SCH_FILE_T value for filetype
+     *  @param aFileType SCH_FILE_T value for file type
      */
     bool ImportFile( const wxString& aFileName, int aFileType ) override;
 
     /**
-     * Checks whether any of the screens has unsaved changes and asks the user
-     * whether to save or drop them.
+     * Checks if any of the screens has unsaved changes and asks the user whether to save or
+     * drop them.
+     *
      * @return True if user decided to save or drop changes, false if the
-     * operation should be cancelled.
+     * operation should be canceled.
      */
     bool AskToSaveChanges();
 
 private:
 
     /**
-     * Function OnAutoplaceFields
-     * handles the #ID_AUTOPLACE_FIELDS event.
+     * Handle the #ID_AUTOPLACE_FIELDS event.
      */
     void OnAutoplaceFields( wxCommandEvent& aEvent );
 
     /**
-     * Function OnMoveItem
-     * handles the #ID_SCH_MOVE_ITEM event used to move schematic itams.
+     * Handle the #ID_SCH_MOVE_ITEM event used to move schematic items.
      */
     void OnMoveItem( wxCommandEvent& aEvent );
 
     /**
-     * Function OnRotate
-     * handles the #ID_SCH_ROTATE_CLOCKWISE and #ID_SCH_ROTATE_COUNTERCLOCKWISE events
-     * used to rotate schematic itams and blocks.
+     * Handle the #ID_SCH_ROTATE_CLOCKWISE and #ID_SCH_ROTATE_COUNTERCLOCKWISE events
+     * used to rotate schematic items and blocks.
      */
     void OnRotate( wxCommandEvent& aEvent );
 
     /**
-     * Function OnEditItem
-     * handles the #ID_SCH_EDIT_ITEM event used to edit schematic itams.
+     * Handle the #ID_SCH_EDIT_ITEM event used to edit schematic items.
      */
     void OnEditItem( wxCommandEvent& aEvent );
 
     /**
-     * Function SelectAllFromSheet
-     * handles the #ID_POPUP_SCH_SELECT_ON_PCB event used to select items in pcbnew
+     * Handle the #ID_POPUP_SCH_SELECT_ON_PCB event used to select items in Pcbnew
      * based on the sheet they are placed on.
      */
     void SelectAllFromSheet( wxCommandEvent& aEvent );
 
     /**
-     * Function OnDragItem
-     * handles the #ID_SCH_DRAG_ITEM event used to drag schematic itams.
+     * Handle the #ID_SCH_DRAG_ITEM event used to drag schematic items.
      */
     void OnDragItem( wxCommandEvent& aEvent );
 
     /**
-     * Function OnOrient
-     * handles the #ID_SCH_MIRROR_X, #ID_SCH_MIRROR_Y, and #ID_SCH_ORIENT_NORMAL events
-     * used to orient schematic itams and blocks.
+     * Handle the #ID_SCH_MIRROR_X, #ID_SCH_MIRROR_Y, and #ID_SCH_ORIENT_NORMAL events
+     * used to orient schematic items and blocks.
      */
     void OnOrient( wxCommandEvent& aEvent );
 
@@ -863,16 +840,14 @@ private:
     void OnFindCompnentInLib( wxFindDialogEvent& event );
 
     /**
-     * Function OnFindSchematicItem
-     * finds an item in the schematic matching the search criteria in \a aEvent.
+     * Find an item in the schematic matching the search criteria in \a aEvent.
      *
      * @param aEvent - Find dialog event containing the find parameters.
      */
     void OnFindSchematicItem( wxFindDialogEvent& aEvent );
 
     /**
-     * Function OnReplace
-     * performs a search and replace of text in an item in the schematic matching the
+     * Perform a search and replace of text in an item in the schematic matching the
      * search and replace criteria in \a aEvent.
      *
      * @param aEvent - Find dialog event containing the search and replace parameters.
@@ -898,8 +873,7 @@ private:
     void OnSelectItem( wxCommandEvent& aEvent );
 
     /**
-     * Function OnCopySchematicItemRequest
-     * is the command event handler for duplicating the item at the current location.
+     * Command event handler for duplicating the item at the current location.
      */
     void OnCopySchematicItemRequest( wxCommandEvent& event );
 
@@ -915,15 +889,13 @@ private:
     void OnUpdateRemapSymbols( wxUpdateUIEvent& aEvent );
 
     /**
-     * Function UpdateTitle
-     * sets the main window title bar text.
-     * <p>
+     * Set the main window title bar text.
+     *
      * If file name defined by SCH_SCREEN::m_FileName is not set, the title is set to the
      * application name appended with no file.
      * Otherwise, the title is set to the hierarchical sheet path and the full file name,
      * and read only is appended to the title if the user does not have write
      * access to the file.
-     * </p>
      */
     void UpdateTitle();
 
@@ -933,8 +905,8 @@ private:
     void SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY_BASE* BusEntry, char entry_shape );
 
     /**
-     * Function AddNoConnect
-     * add a no connect item to the current schematic sheet at \a aPosition.
+     * Add no connect item to the current schematic sheet at \a aPosition.
+     *
      * @param aDC The device context to draw the no connect to.
      * @param aPosition The position in logical (drawing) units to add the no connect.
      * @return The no connect item added.
@@ -942,14 +914,12 @@ private:
     SCH_NO_CONNECT* AddNoConnect( wxDC* aDC, const wxPoint& aPosition );
 
     /**
-     * Function AddJunction
-     * adds a new junction at \a aPosition.
+     * Add a new junction at \a aPosition.
      */
     SCH_JUNCTION* AddJunction( wxDC* aDC, const wxPoint& aPosition, bool aPutInUndoList = false );
 
     /**
-     * Function PrepareMoveItem
-     * start moving \a aItem using the mouse.
+     * Start moving \a aItem using the mouse.
      *
      * @param aItem A pointer to an SCH_ITEM to move.
      * @param aDC The device context to draw \a aItem.
@@ -962,16 +932,15 @@ private:
     void ChangeTextOrient( SCH_TEXT* aTextItem );
 
     /**
-     * Function OnCovertTextType
-     * is a command event handler to change a text type to an other one.  The new text,
-     * label, hierarchical label, or global label is created from the old text and the
-     * old text is deleted.
+     * Command event handler to change a text type to an other one.
+     *
+     * The new text, label, hierarchical label, or global label is created from the old text
+     * and the old text object is deleted.
      */
     void OnConvertTextType( wxCommandEvent& aEvent );
 
     /**
-     * Function BeginSegment
-     * creates a new segment ( WIRE, BUS ) or terminates the current segment in progress.
+     * Creates a new segment ( WIRE, BUS ) or terminates the current segment in progress.
      *
      * If the end of the current segment is on an other segment, place a junction if needed
      * and terminates the command.  If the end of the current segment is on a pin, terminate
@@ -980,14 +949,12 @@ private:
     void BeginSegment( wxDC* DC, int type );
 
     /**
-     * Function EndSegment
-     * called to terminate a bus, wire, or line creation
+     * Terminate a bus, wire, or line creation.
      */
     void EndSegment( wxDC* DC );
 
     /**
-     * Function DeleteCurrentSegment
-     * erases the last segment at the current mouse position.
+     * Erase the last segment at the current mouse position.
      */
     void DeleteCurrentSegment( wxDC* DC );
     void DeleteConnection( bool DeleteFullConnection );
@@ -1002,9 +969,10 @@ private:
     SCH_BITMAP* CreateNewImage( wxDC* aDC );
     void MoveImage( SCH_BITMAP* aItem, wxDC* aDC );
     void RotateImage( SCH_BITMAP* aItem );
+
     /**
-     * Function MirrorImage
-     * Mirror a bitmap
+     * Mirror a bitmap.
+     *
      * @param aItem = the SCH_BITMAP item to mirror
      * @param Is_X_axis = true to mirror relative to Horizontal axis
      *                      false to mirror relative to vertical axis
@@ -1018,18 +986,21 @@ private:
     void        ReSizeSheet( SCH_SHEET* Sheet, wxDC* DC );
 
     /**
-     * Rotate a sheet on itself. Sheets do not have a anchor point.
-     * Because rotating it from its origin or its end is not friendly,
-     * Rotation is made around its centre
+     * Rotate a sheet object.
+     *
+     * Sheets do not have a anchor point.  Because rotating it from its origin or its end is
+     * not friendly, the rotation is made around its center.
+     *
      * @param aSheet the hierarchical sheet to rotate
      * @param aRotCCW = true to rotate CCW, false to rotate CW
      */
     void        RotateHierarchicalSheet( SCH_SHEET* aSheet, bool aRotCCW );
 
     /**
-     * Function MirrorSheet
-     * Mirror a hierarchical sheet
-     * Mirroring is made around its centre
+     * Mirror a hierarchical sheet.
+     *
+     * Mirroring is performed around its center.
+     *
      * @param aSheet = the SCH_SHEET to mirror
      * @param aFromXaxis = true to mirror relative to Horizontal axis
      *                     false to mirror relative to vertical axis
@@ -1051,27 +1022,23 @@ private:
 
 public:
     /**
-     * Function EditSheet
-     * is used to edit an existing sheet or add a new sheet to the schematic.
-     * <p>
+     * Edit an existing sheet or add a new sheet to the schematic.
+     *
      * When \a aSheet is a new sheet:
-     * <ul>
-     * <li>and the file name already exists in the schematic hierarchy, the screen associated
-     * with the sheet found in the hierarchy is associated with \a aSheet.</li>
-     * <li>and the file name already exists on the system, then \a aSheet is loaded with the
-     * existing file.</li>
-     * <li>and the file name does not exist in the schematic hierarchy or on the file system,
-     * then a new screen is created and associated with \a aSheet.</li>
-     * </ul> </p> <p>
+     * - and the file name already exists in the schematic hierarchy, the screen associated
+     *   with the sheet found in the hierarchy is associated with \a aSheet.
+     * - and the file name already exists on the system, then \a aSheet is loaded with the
+     *   existing file.
+     * - and the file name does not exist in the schematic hierarchy or on the file system,
+     *   then a new screen is created and associated with \a aSheet.
+     *
      * When \a aSheet is an existing sheet:
-     * <ul>
-     * <li>and the file name already exists in the schematic hierarchy, the current associated
-     * screen is replace by the one found in the hierarchy.</li>
-     * <li>and the file name already exists on the system, the current associated screen file
-     * name is changed and the file is loaded.</li>
-     * <li>and the file name does not exist in the schematic hierarchy or on the file system,
-     * the current associated screen file name is changed and saved to disk.</li>
-     * </ul> </p>
+     * - and the file name already exists in the schematic hierarchy, the current associated
+     *   screen is replace by the one found in the hierarchy.
+     * - and the file name already exists on the system, the current associated screen file
+     *   name is changed and the file is loaded.
+     * - and the file name does not exist in the schematic hierarchy or on the file system,
+     *   the current associated screen file name is changed and saved to disk.
      *
      * Note: the screen is not refresh. The caller is responsible to do that
      */
@@ -1080,9 +1047,11 @@ public:
     wxPoint GetLastSheetPinPosition() const { return m_lastSheetPinPosition; }
 
 private:
+    bool validateSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy );
+
     /**
-     * Function CreateSheetPin
-     * creates a new SCH_SHEET_PIN object and add it to \a aSheet at the current cursor position.
+     * Create a new SCH_SHEET_PIN object and add it to \a aSheet at the current cursor position.
+     *
      * @param aSheet The sheet to add the new sheet pin to.
      * @param aDC The device context to draw on.
      * @return The new sheet pin object created or NULL if the task was aborted by the user.
@@ -1090,8 +1059,8 @@ private:
     SCH_SHEET_PIN* CreateSheetPin( SCH_SHEET* aSheet, wxDC* aDC );
 
     /**
-     * Function EditSheetPin
-     * displays the dialog for editing the parameters of \a aSheetPin.
+     * Display the dialog for editing the parameters of \a aSheetPin.
+     *
      * @param aSheetPin The sheet pin item to edit.
      * @param aRedraw = true to refresh the screen
      * @return The user response from the edit dialog.
@@ -1099,19 +1068,19 @@ private:
     int EditSheetPin( SCH_SHEET_PIN* aSheetPin, bool aRedraw );
 
     /**
-     * Function ImportSheetPin
-     * automatically creates a sheet pin from the hierarchical labels in the schematic
+     * Automatically create a sheet pin from the hierarchical labels in the schematic
      * referenced by \a aSheet.
+     *
      * @param aSheet The sheet to import the new sheet pin to.
      * @param aDC The device context to draw on.
-     * @return The new sheet pin object importd or NULL if the task was aborted by the user.
+     * @return The new sheet pin object imported or NULL if the task was aborted by the user.
      */
     SCH_SHEET_PIN* ImportSheetPin( SCH_SHEET* aSheet, wxDC* aDC );
 
 public:
     /**
-     * Function DeleteItem
-     * removes \a aItem from the current screen and saves it in the undo list.
+     * Remove \a aItem from the current screen and saves it in the undo list.
+     *
      * @param aItem The item to remove from the current screen.
      */
     void DeleteItem( SCH_ITEM* aItem );
@@ -1121,8 +1090,8 @@ public:
 private:
 
     /**
-     * Function Load_Component
-     * loads from a library and places a component.
+     * Load a symbol library and places it on the current schematic.
+     *.
      * if libname != "", search in lib "libname"
      * else search in all loaded libs
      *
@@ -1142,8 +1111,7 @@ private:
                                    bool                             aUseLibBrowser );
 
     /**
-     * Function EditComponent
-     * displays the edit component dialog to edit the parameters of \a aComponent.
+     * Display the edit component dialog to edit the parameters of \a aComponent.
      *
      * @param aComponent is a pointer to the SCH_COMPONENT object to be edited.
      */
@@ -1152,8 +1120,7 @@ private:
 public:
 
     /**
-     * Function OrientComponent
-     * rotates and mirrors a component.
+     * Rotate and mirror a component.
      */
     void OrientComponent( COMPONENT_ORIENTATION_T aOrientation = CMP_NORMAL );
 
@@ -1163,8 +1130,7 @@ private:
     void SetInitCmp( SCH_COMPONENT* DrawComponent, wxDC* DC );
 
     /**
-     * Function EditComponentFieldText
-     * displays the edit field dialog to edit the parameters of \a aField.
+     * Display the edit field dialog to edit the parameters of \a aField.
      *
      * @param aField is a pointer to the SCH_FIELD object to be edited.
      */
@@ -1173,8 +1139,7 @@ private:
     void RotateField( SCH_FIELD* aField );
 
     /**
-     * Function PastListOfItems
-     * pastes a list of items from the block stack.
+     * Paste a list of items from the block stack.
      */
     void PasteListOfItems( wxDC* DC );
 
@@ -1182,7 +1147,6 @@ private:
 public:
 
     /**
-     * Function SaveCopyInUndoList.
      * Create a copy of the current schematic item, and put it in the undo list.
      *
      *  flag_type_command =
@@ -1204,6 +1168,7 @@ public:
      * so flag_type_command is UR_WIRE_IMAGE: the struct ItemToCopy is a list of
      * wires saved in Undo List (for Undo or Redo commands, saved wires will be
      * exchanged with current wire list
+     *
      * @param aItemToCopy = the schematic item modified by the command to undo
      * @param aTypeCommand = command type (see enum UNDO_REDO_T)
      * @param aTransformPoint = the reference point of the transformation,
@@ -1214,9 +1179,8 @@ public:
                              const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
     /**
-     * Function SaveCopyInUndoList (overloaded).
-     * Creates a new entry in undo list of commands.
-     * add a list of pickers to handle a list of items
+     * Create a new entry in undo list of commands.
+     *
      * @param aItemsList = the list of items modified by the command to undo
      * @param aTypeCommand = command type (see enum UNDO_REDO_T)
      * @param aTransformPoint = the reference point of the transformation,
@@ -1229,42 +1193,42 @@ public:
 private:
 
     /**
-     * Function PutDataInPreviousState
-     * is used in undo or redo command to put data pointed by List in the previous state, i.e.
-     * the state stored in \a aList
+     * Restore an undo or redo command to put data pointed by \a aList in the previous state.
+     *
      * @param aList a PICKED_ITEMS_LIST pointer to the list of items to undo/redo
      * @param aRedoCommand  a bool: true for redo, false for undo
      */
     void PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand );
 
     /**
-     * Function GetSchematicFromRedoList
-     *  Redo the last edition:
+     *  Redo the last edition.
+     *
      *  - Save the current schematic in Undo list
      *  - Get an old version of the schematic from Redo list
+     *
      *  @return none
      */
     void GetSchematicFromRedoList( wxCommandEvent& event );
 
     /**
-     * Function GetSchematicFromUndoList
-     * performs an undo the last edition:
+     * Perform an undo the last edition.
+     *
      *  - Save the current schematic in Redo list
      *  - Get an old version of the schematic from Undo list
      */
     void GetSchematicFromUndoList( wxCommandEvent& event );
 
     /**
-     * Function copyBlockItems
-     * copies the list of block item.
+     * Copy the list of block item.
+     *
      * @sa m_blockItems
      * @param aItemsList List to copy the block select items into.
      */
     void copyBlockItems( PICKED_ITEMS_LIST& aItemsList );
 
     /**
-     * Function addJunctionMenuEntries
-     * adds the context menu items to \a aMenu for \a aJunction.
+     * Add the context menu items to \a aMenu for \a aJunction.
+     *
      * @param aMenu The menu to add the items to.
      * @param aJunction The SCH_JUNCTION object selected.
      */
@@ -1274,32 +1238,29 @@ public:
     void Key( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
 
     /**
-     * Function InitBlockPasteInfos
-     * initializes the parameters used by the block paste command.
+     * Initialize the parameters used by the block paste command.
      */
     void InitBlockPasteInfos() override;
 
     /**
-     * Function BlockCommand
-     * Returns the block command internat code (BLOCK_MOVE, BLOCK_DUPLICATE...)
+     * Return the block command internal code (BLOCK_MOVE, BLOCK_DUPLICATE...)
      * corresponding to the keys pressed (ALT, SHIFT, SHIFT ALT ..) when
      * block command is started by dragging the mouse.
+     *
      * @param aKey = the key modifiers (Alt, Shift ...)
      * @return the block command id (BLOCK_MOVE, BLOCK_DUPLICATE...)
      */
     virtual int BlockCommand( EDA_KEY aKey ) override;
 
     /**
-     * Function HandleBlockPlace
-     * Called after HandleBlockEnd, when a block command needs to be
-     * executed after the block is moved to its new place
-     * (bloc move, drag, copy .. )
+     * Call after HandleBlockEnd, when a block command needs to be executed after the block
+     * is moved to its new place.
+     *
      * Parameters must be initialized in GetScreen()->m_BlockLocate
      */
     virtual void HandleBlockPlace( wxDC* DC ) override;
 
     /**
-     * Function HandleBlockEnd
      * Handle the "end"  of a block command,
      * i.e. is called at the end of the definition of the area of a block.
      * depending on the current block command, this command is executed
@@ -1313,8 +1274,7 @@ public:
     virtual bool HandleBlockEnd( wxDC* aDC ) override;
 
     /**
-     * Function RepeatDrawItem
-     * repeats the last item placement if the last item was a bus, bus entry,
+     * Repeat the last item placement if the last item was a bus, bus entry,
      * label, or component.
      *
      * Labels that end with a number will be incremented.
@@ -1322,21 +1282,19 @@ public:
     void RepeatDrawItem( wxDC* DC );
 
     /**
-     * Function SetRepeatItem
-     * clones aItem and owns that clone in this container.
+     * Clone \a aItem and owns that clone in this container.
      */
     void SetRepeatItem( SCH_ITEM* aItem );
 
     /**
-     * Function GetRepeatItem
-     * returns the item which is to be repeated with the insert key.  Such object
-     * is owned by this container, and must be cloned.
+     * Return the item which is to be repeated with the insert key.
+     *
+     * Such object is owned by this container, and must be cloned.
      */
     SCH_ITEM* GetRepeatItem() const             { return m_item_to_repeat; }
 
     /**
-     * Function SetUndoItem
-     * clones \a aItem which can be used to restore the state of the item being edited
+     * Clone \a aItem which can be used to restore the state of the item being edited
      * when the user cancels the editing in progress.
      *
      * @param aItem The item to make a clone of for undoing the last change.  Set to
@@ -1347,29 +1305,29 @@ public:
     SCH_ITEM* GetUndoItem() const { return m_undoItem; }
 
     /**
-     * Function SaveUndoItemInUndoList
-     * swaps the cloned item in member variable m_undoItem with \a aItem and saves it to
-     * the undo list then swap the data back.  This swaps the internal structure of the
-     * item with the cloned item.  It does not swap the actual item pointers themselves.
+     * Swap the cloned item in member variable m_undoItem with \a aItem and saves it to
+     * the undo list then swap the data back.
+     *
+     * This swaps the internal structure of the item with the cloned item.  It does not
+     * swap the actual item pointers themselves.
      *
      * @param aItem The item to swap with the current undo item.
      */
     void SaveUndoItemInUndoList( SCH_ITEM* aItem );
 
     /**
-     * Function CreateArchiveLibraryCacheFile
-     * creates a library file with the name of the root document plus the '-cache' suffix,
-     * That file will contain all components used in the current schematic.
+     * Create a symbol library file with the name of the root document plus the '-cache' suffix,
      *
-     * @param aUseCurrentSheetFilename = false to use the root shhet filename
+     * This file will contain all components used in the current schematic.
+     *
+     * @param aUseCurrentSheetFilename = false to use the root sheet filename
      * (default) or true to use the currently opened sheet.
      * @return true if the file was written successfully.
      */
     bool CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilename = false );
 
     /**
-     * Function CreateArchiveLibrary
-     * creates a library \a aFileName that contains all components used in the current schematic.
+     * Create a library \a aFileName that contains all components used in the current schematic.
      *
      * @param aFileName The full path and file name of the archive library.
      * @return True if \a aFileName was written successfully.
@@ -1377,13 +1335,11 @@ public:
     bool CreateArchiveLibrary( const wxString& aFileName );
 
     /**
-     * Function RescueProject
-     * performs rescue operations to recover old projects from before certain
-     * changes were made.
+     * Perform rescue operations to recover old projects from before certain changes were made.
      *
-     * - Exports cached symbols that conflict with new symbols to a separate
-     *   library
-     * - Renames symbols named before libraries were case sensitive
+     * - Exports cached symbols that conflict with new symbols to a separate library.
+     * - Exports cached symbols not found in any symbol library.
+     * - Renames symbols named before libraries were case sensitive.
      *
      * @param aRunningOnDemand - indicates whether the tool has been called up by the user
      *      (as opposed to being run automatically). If true, an information dialog is
@@ -1396,8 +1352,8 @@ public:
     bool RescueSymbolLibTableProject( bool aRunningOnDemand );
 
     /**
-     * Function PrintPage
-     * plots or prints the current sheet to the clipboard.
+     * Plot or print the current sheet to the clipboard.
+     *
      * @param aDC = wxDC given by the calling print function
      * @param aPrintMask = not used here
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
@@ -1413,24 +1369,21 @@ public:
     void SetNetListerCommand( const wxString& aCommand ) { m_netListerCommand = aCommand; }
 
     /**
-     * Function DefaultExecFlags
-     * resets the execution flags to defaults for external netlist and
-     * bom generators.
+     * Reset the execution flags to defaults for external netlist and bom generators.
      */
     void DefaultExecFlags() { m_exec_flags = wxEXEC_SYNC; }
 
     /**
-     * Function SetExecFlags
-     * sets (adds) specified flags for next execution of external
-     * generator of the netlist or bom.
+     * Set (adds) specified flags for next execution of external generator of the netlist or bom.
+     *
      * @param aFlags = wxEXEC_* flags, see wxExecute docs.
      */
     void SetExecFlags( const int aFlags ) { m_exec_flags |= aFlags; }
 
     /**
-     * Function ClearExecFlags
-     * clears (removes) specified flags that not needed for next execution
-     * of external generator of the netlist or bom.
+     * Clear (removes) specified flags that not needed for next execution of external generator
+     * of the netlist or bom.
+     *
      * @param aFlags = wxEXEC_* flags, see wxExecute docs.
      */
     void ClearExecFlags( const int aFlags ) { m_exec_flags &= ~( aFlags ); }

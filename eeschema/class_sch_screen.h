@@ -77,7 +77,7 @@ private:
 
     TITLE_BLOCK m_titles;
 
-    /// Origin of the auxilliary axis, which is used in exports mostly, but not yet in EESCHEMA
+    /// Origin of the auxiliary axis, which is used in exports mostly, but not yet in EESCHEMA
     wxPoint     m_aux_origin;
 
     DLIST< SCH_ITEM > m_drawList;       ///< Object list for the screen.
@@ -86,10 +86,9 @@ private:
                                         ///< will trigger ResolveAll().
 
     /**
-     * Function addConnectedItemsToBlock
-     * add items connected at \a aPosition to the block pick list.
+     * Add items connected at \a aPosition to the block pick list.
      * <p>
-     * This method tests all connectible unselected items in the screen that are connected to
+     * This method tests all connectable unselected items in the screen that are connected to
      * \a aPosition and adds them to the block selection pick list.  This is used when a block
      * drag is being performed to ensure connections to items in the block are not lost.
      *</p>
@@ -132,8 +131,7 @@ public:
     int GetRefCount() const                                 { return m_refCount; }
 
     /**
-     * Function GetDrawItems().
-     * @return - A pointer to the first item in the linked list of draw items.
+     * @return A pointer to the first item in the linked list of draw items.
      */
     SCH_ITEM* GetDrawItems() const                          { return m_drawList.begin(); }
 
@@ -144,8 +142,19 @@ public:
     }
 
     /**
-     * Function Append
-     * adds \a aList of SCH_ITEM objects to the list for draw items for the sheet.
+     * Copy the contents of \a aScreen into this #SCH_SCREEN object.
+     *
+     * @warning The contents of \a Screen cannot contain any duplicate sheet names or any
+     *          hierarchy recursion issues or bad things will happen.
+     *
+     * @param aScreen is the screen to append to this one.
+     * @return false if there are any duplicate sheet names or any hierarchy recursion issues the
+     *         calling this method or KiCad will crash.
+     */
+    void Append( SCH_SCREEN* aScreen );
+
+    /**
+     * Add \a aList of SCH_ITEM objects to the list for draw items for the sheet.
      *
      * @param aList A reference to a #DLIST containing the #SCH_ITEM to add to the sheet.
      */
@@ -156,22 +165,21 @@ public:
     }
 
     /**
-     * Function GetCurItem
-     * returns the currently selected SCH_ITEM, overriding BASE_SCREEN::GetCurItem().
+     * Return the currently selected SCH_ITEM, overriding BASE_SCREEN::GetCurItem().
+     *
      * @return SCH_ITEM* - the one selected, or NULL.
      */
     SCH_ITEM* GetCurItem() const { return (SCH_ITEM*) BASE_SCREEN::GetCurItem(); }
 
     /**
-     * Function SetCurItem
-     * sets the currently selected object, m_CurrentItem.
+     * Sets the currently selected object, m_CurrentItem.
+     *
      * @param aItem Any object derived from SCH_ITEM
      */
     void SetCurItem( SCH_ITEM* aItem ) { BASE_SCREEN::SetCurItem( (EDA_ITEM*) aItem ); }
 
     /**
-     * Function Clear
-     * deletes all draw items and clears the project settings.
+     * Delete all draw items and clears the project settings.
      */
     void Clear();
 
@@ -183,8 +191,8 @@ public:
     void FreeDrawList();
 
     /**
-     * Function GetItem
-     * checks \a aPosition within a distance of \a aAccuracy for items of type \a aFilter.
+     * Check \a aPosition within a distance of \a aAccuracy for items of type \a aFilter.
+     *
      * @param aPosition Position in drawing units.
      * @param aAccuracy The maximum distance within \a Position to check for an item.
      * @param aType The type of item to find or #NOT_USED to find any item type.
@@ -210,11 +218,11 @@ public:
     void UpdateSymbolLinks( bool aForce = false );
 
     /**
-     * Function Draw
-     * draws all the items in the screen to \a aCanvas.
-     * note: this function is useful only for schematic.
-     * library editor and library viewer do not use a draw list, and therefore
-     * draws nothing
+     * Draw all the items in the screen to \a aCanvas.
+     *
+     * @note This function is useful only for schematic.  The library editor and library viewer
+     *       do not use a draw list and therefore draws nothing.
+     *
      * @param aCanvas The canvas item to draw on.
      * @param aDC The device context to draw on.
      * @param aDrawMode The drawing mode.
@@ -224,19 +232,17 @@ public:
                COLOR4D aColor = COLOR4D::UNSPECIFIED );
 
     /**
-     * Function Plot
-     * plots all the schematic objects to \a aPlotter.
-     * note: this function is useful only for schematic.
-     * library editor and library viewer do not use a draw list, and therefore
-     * plots nothing
+     * Plot all the schematic objects to \a aPlotter.
+     *
+     * @note This function is useful only for schematic. The library editor and library viewer
+     *       do not use a draw list and therefore plots nothing.
      *
      * @param aPlotter The plotter object to plot to.
      */
     void Plot( PLOTTER* aPlotter );
 
     /**
-     * Function Remove
-     * removes \a aItem from the schematic associated with this screen.
+     * Remove \a aItem from the schematic associated with this screen.
      *
      * @note The removed item is not deleted.  It is only unlinked from the item list.
      * @param aItem Item to be removed from schematic.
@@ -244,10 +250,11 @@ public:
     void Remove( SCH_ITEM* aItem );
 
     /**
-     * Function DeleteItem
-     * removes \a aItem from the linked list and deletes the object.  If \a aItem is
-     * is a schematic sheet label, it is removed from the screen associated with the
-     * sheet that contains the label to be deleted.
+     * Removes \a aItem from the linked list and deletes the object.
+     *
+     * If \a aItem is a schematic sheet label, it is removed from the screen associated with
+     * the sheet that contains the label to be deleted.
+     *
      * @param aItem The schematic object to be deleted from the screen.
      */
     void DeleteItem( SCH_ITEM* aItem );
@@ -255,8 +262,7 @@ public:
     bool CheckIfOnDrawList( SCH_ITEM* st );
 
     /**
-     * Function SchematicCleanUp
-     * performs routine schematic cleaning including breaking wire and buses and
+     * Perform routine schematic cleaning including breaking wire and buses and
      * deleting identical objects superimposed on top of each other.
      *
      * @return True if any schematic clean up was performed.
@@ -264,46 +270,44 @@ public:
     bool SchematicCleanUp();
 
     /**
-     * Function TestDanglingEnds
-     * tests all of the connectible objects in the schematic for unused connection points.
+     * Test all of the connectable objects in the schematic for unused connection points.
+     *
      * @return True if any connection state changes were made.
      */
     bool TestDanglingEnds();
 
     /**
-     * Function ExtractWires
-     * extracts the old wires, junctions and buses.  If \a aCreateCopy is true, replace
-     * extracted items with a copy of the original.  Old items are to be put in undo list,
-     * and the new ones can be modified by clean up safely.  If an abort draw segmat command
-     * is made, the old wires must be put back into #m_drawList, and the copies must be
-     * deleted.  This is because previously stored undo commands can handle pointers on wires
-     * or buses, and we do not delete wires or buses, we must put them in undo list.
+     * Extracts the old wires, junctions and buses.
      *
-     * Because cleanup deletes and/or modify bus and wires, it is easier is to put
+     *  If \a aCreateCopy is true, replace extracted items with a copy of the original.  Old
+     * items are to be put in undo list and the new ones can be modified by clean up safely.
+     * If an abort draw segment command is made, the old wires must be put back into #m_drawList,
+     * and the copies must be deleted.  This is because previously stored undo commands can
+     * handle pointers on wires or buses, and we do not delete wires or buses, we must put them
+     * in undo list.  Because cleanup deletes and/or modify bus and wires, it is easier is to put
      * all the existing  wires in undo list and use a new copy of wires for cleanup.
      */
     void ExtractWires( DLIST< SCH_ITEM >& aList, bool aCreateCopy );
 
     /**
-     * Function ReplaceWires
-     * replaces all of the wires, buses, and junctions in the screen with \a aWireList.
+     * Replace all of the wires, buses, and junctions in the screen with \a aWireList.
      *
      * @param aWireList List of wires to replace the existing wires with.
      */
     void ReplaceWires( DLIST< SCH_ITEM >& aWireList );
 
     /**
-     * Function MarkConnections
-     * add all wires and junctions connected to \a aSegment which are not connected any
+     * Add all wires and junctions connected to \a aSegment which are not connected any
      * component pin to \a aItemList.
+     *
      * @param aSegment The segment to test for connections.
      */
     void MarkConnections( SCH_LINE* aSegment );
 
     /**
-     * Functions GetConnection
-     * adds all of the wires and junctions to \a aList that make up a connection to the
+     * Adds all of the wires and junctions to \a aList that make up a connection to the
      * object at \a aPosition.
+     *
      * @param aPosition The position of the first connection object in drawing units.
      * @param aList The pick list to add the connect item to.
      * @param aFullConnection If true all the objects that make up this connection are
@@ -314,18 +318,18 @@ public:
     int GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aList, bool aFullConnection );
 
     /**
-     * Function BreakSegment
-     * checks every wire and bus for a intersection at \a aPoint and break into two segments
+     * Checks every wire and bus for a intersection at \a aPoint and break into two segments
      * at \a aPoint if an intersection is found.
+     *
      * @param aPoint Test this point for an intersection.
      * @return True if any wires or buses were broken.
      */
     bool BreakSegment( const wxPoint& aPoint );
 
     /**
-     * Function BreakSegmentsOnJunctions
-     * tests all junctions and bus entries in the schematic for intersections with wires and
+     * Tests all junctions and bus entries in the schematic for intersections with wires and
      * buses and breaks any intersections into multiple segments.
+     *
      * @return True if any wires or buses were broken.
      */
     bool BreakSegmentsOnJunctions();
@@ -335,11 +339,12 @@ public:
     // use BASE_SCREEN::PushCommandToRedoList( PICKED_ITEMS_LIST* aItem )
 
     /**
-     * Function ClearUndoORRedoList
-     * free the undo or redo list from List element
-     *  Wrappers are deleted.
-     *  data pointed by wrappers are deleted if not in use in schematic
-     *  i.e. when they are copy of a schematic item or they are no more in use (DELETED)
+     * Free the undo or redo list from \a aList element.
+     *
+     * - Wrappers are deleted.
+     * - data pointed by wrappers are deleted if not in use in schematic
+     *   i.e. when they are copy of a schematic item or they are no more in use (DELETED)
+     *
      * @param aList = the UNDO_REDO_CONTAINER to clear
      * @param aItemCount = the count of items to remove. < 0 for all items
      * items are removed from the beginning of the list.
@@ -348,8 +353,7 @@ public:
     virtual void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) override;
 
     /**
-     * Function Save
-     * writes the data structures for this object out to \a aFile in "*.sch" format.
+     * Writes the data structures for this object out to \a aFile in "*.sch" format.
      *
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
@@ -364,8 +368,7 @@ public:
     int CountConnectedItems( const wxPoint& aPos, bool aTestJunctions ) const;
 
     /**
-     * Function IsJunctionNeeded
-     * tests if a junction is required for the items at \a aPosition on the screen.
+     * Test if a junction is required for the items at \a aPosition on the screen.
      * <p>
      * A junction is required at \a aPosition if the following criteria are satisfied:
      * <ul>
@@ -382,8 +385,7 @@ public:
     bool IsJunctionNeeded( const wxPoint& aPosition );
 
     /**
-     * Function IsTerminalPoint
-     * tests if \a aPosition is a connection point on \a aLayer.
+     * Test if \a aPosition is a connection point on \a aLayer.
      *
      * @param aPosition Position to test.
      * @param aLayer The layer type to test against.  Valid layer types are #LAYER_NOTES,
@@ -393,8 +395,8 @@ public:
     bool IsTerminalPoint( const wxPoint& aPosition, int aLayer );
 
     /**
-     * Function GetPin
-     * test the screen for a component pin item at \a aPosition.
+     * Test the screen for a component pin item at \a aPosition.
+     *
      * @param aPosition Position to test.
      * @param aComponent The component if a pin was found, otherwise NULL.
      * @param aEndPointOnly Set to true to test if \a aPosition is the connection
@@ -405,41 +407,39 @@ public:
                      bool aEndPointOnly = false ) const;
 
     /**
-     * Function GetSheet
-     * returns a sheet object pointer that is named \a aName.
+     * Returns a sheet object pointer that is named \a aName.
      *
-     * @note The screen hierarchy is not descened.
+     * @note The screen hierarchy is not descend.
      * @param aName is the case insensitive name of the sheet.
      * @return A pointer to the SCH_SHEET object found or NULL.
      */
     SCH_SHEET* GetSheet( const wxString& aName );
 
     /**
-     * Function GetSheetLabel
-     * test the screen if \a aPosition is a sheet label object.
+     * Test the screen if \a aPosition is a sheet label object.
+     *
      * @param aPosition The position to test.
      * @return The sheet label object if found otherwise NULL.
      */
     SCH_SHEET_PIN* GetSheetLabel( const wxPoint& aPosition );
 
     /**
-     * Function ClearAnnotation
-     * clears the annotation for the components in \a aSheetPath on the screen.
+     * Clear the annotation for the components in \a aSheetPath on the screen.
+     *
      * @param aSheetPath The sheet path of the component annotation to clear.  If NULL then
      *                   the entire hierarchy is cleared.
      */
     void ClearAnnotation( SCH_SHEET_PATH* aSheetPath );
 
     /**
-     * Function GetHierarchicalItems
-     * adds all schematic sheet and component object in the screen to \a aItems.
+     * Add all schematic sheet and component objects in the screen to \a aItems.
+     *
      * @param aItems Hierarchical item list to fill.
      */
     void GetHierarchicalItems( EDA_ITEMS& aItems );
 
     /**
-     * Function GetNode
-     * returns all the items at \a aPosition that form a node.
+     * Return all the items at \a aPosition that form a node.
      *
      * @param aPosition The wxPoint to test for node items.
      * @param aList A #EDA_ITEMS container to place the items found.
@@ -448,8 +448,7 @@ public:
     int GetNode( const wxPoint& aPosition, EDA_ITEMS& aList );
 
     /**
-     * Function GetWireOrBus
-     * returns a wire or bus item located at \a aPosition.
+     * Return a wire or bus item located at \a aPosition.
      *
      * @param aPosition The wxPoint to test for node items.
      * @return The SCH_LINE* of the wire or bus item found at \a aPosition or NULL if item not
@@ -458,8 +457,7 @@ public:
     SCH_LINE* GetWireOrBus( const wxPoint& aPosition );
 
     /**
-     * Function GetLine
-     * returns a line item located at \a aPosition.
+     * Return a line item located at \a aPosition.
      *
      * @param aPosition The wxPoint to test for a line item.
      * @param aAccuracy Amount to inflate the item hit test bounding box.
@@ -484,8 +482,7 @@ public:
     }
 
     /**
-     * Function GetLabel
-     * returns a label item located at \a aPosition.
+     * Return a label item located at \a aPosition.
      *
      * @param aPosition The wxPoint to test for label items.
      * @param aAccuracy Amount to inflate the item hit test bounding box.
@@ -495,8 +492,7 @@ public:
     SCH_TEXT* GetLabel( const wxPoint& aPosition, int aAccuracy = 0 );
 
     /**
-     * Function SetFootprintField
-     * searches screen for a component with \a aReference and set the footprint field to
+     * Search this screen for a symbol with \a aReference and set the footprint field to
      * \a aFootPrint if found.
      *
      * @param aSheetPath The sheet path used to look up the reference designator.
@@ -509,16 +505,16 @@ public:
                                 const wxString& aFootPrint, bool aSetVisible );
 
     /**
-     * Function SelectBlockItems
-     * creates a list of items found when a block command is initiated.  The items selected
-     * depend on the block command.  If the drag block command is issued, than any items
-     * connected to items in the block are also selected.
+     * Create a list of items found when a block command is initiated.
+     *
+     * The items selected depend on the block command.  If the drag block command is issued,
+     * then any items connected to items in the block are also selected.
      */
     void SelectBlockItems();
 
     /**
-     * Function UpdatePickList
-     * adds all the items in the screen within the block selection rectangle to the pick list.
+     * Add all the items in the screen within the block selection rectangle to the pick list.
+     *
      * @return The number of items in the pick list.
      */
     int UpdatePickList();
@@ -541,7 +537,7 @@ private:
     unsigned int               m_index;
 
 public:
-    SCH_SCREENS();
+    SCH_SCREENS( SCH_SHEET* aSheet = NULL );
     ~SCH_SCREENS();
     int GetCount() const { return m_screens.size(); }
     SCH_SCREEN* GetFirst();
@@ -612,9 +608,26 @@ public:
      */
     bool HasNoFullyDefinedLibIds();
 
+    /**
+     * Fetch all of the symbol library nickames into \a aLibNicknames.
+     *
+     * @param aLibNicknames is the array to populate with all of the unique library nicknames.
+     * @return the number of symbol library nicknames found.
+     */
+    size_t GetLibNicknames( wxArrayString& aLibNicknames );
+
+    /**
+     * Change all of the symbol library nicknames.
+     *
+     * @param aFrom the current symbol library name to change.
+     * @param aTo the new symbol library name.
+     * @return the number of symbol library nicknames that were changed.
+     */
+    int ChangeSymbolLibNickname( const wxString& aFrom, const wxString& aTo );
+
 private:
-    void AddScreenToList( SCH_SCREEN* aScreen );
-    void BuildScreenList( EDA_ITEM* aItem );
+    void addScreenToList( SCH_SCREEN* aScreen );
+    void buildScreenList( SCH_SHEET* aSheet);
 };
 
 #endif /* CLASS_SCREEN_H */
