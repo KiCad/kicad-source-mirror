@@ -72,8 +72,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-15 23:04+0100\n"
-"PO-Revision-Date: 2017-11-16 00:07+0100\n"
+"POT-Creation-Date: 2017-11-17 11:57+0100\n"
+"PO-Revision-Date: 2017-11-17 11:57+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -1048,7 +1048,7 @@ msgid "Unable to create or write file '%s'"
 msgstr "Impossibile creare o scrivere il file \"%s\""
 
 #: pcbnew/librairi.cpp:550 pcbnew/gpcb_plugin.cpp:1049
-#: pcbnew/kicad_plugin.cpp:2038 pcbnew/kicad_plugin.cpp:2104
+#: pcbnew/kicad_plugin.cpp:2034 pcbnew/kicad_plugin.cpp:2100
 #, c-format
 msgid "Library '%s' is read only"
 msgstr "La libreria \"%s\" è in sola lettura"
@@ -1248,7 +1248,7 @@ msgid "Cannot convert \"%s\" to an integer"
 msgstr "Impossibile convertire \"%s\" come numero intero"
 
 #: pcbnew/gpcb_plugin.cpp:298 pcbnew/gpcb_plugin.cpp:984
-#: pcbnew/kicad_plugin.cpp:1968
+#: pcbnew/kicad_plugin.cpp:1964
 #, c-format
 msgid "footprint library path '%s' does not exist"
 msgstr "il percorso libreria impronte \"%s\" non esiste"
@@ -1269,22 +1269,22 @@ msgstr "token sconosciuto \"%s\""
 msgid "Element token contains %d parameters."
 msgstr "L'elemento token contiene i parameteri %d "
 
-#: pcbnew/gpcb_plugin.cpp:1068 pcbnew/kicad_plugin.cpp:2141
+#: pcbnew/gpcb_plugin.cpp:1068 pcbnew/kicad_plugin.cpp:2137
 #, c-format
 msgid "user does not have permission to delete directory '%s'"
 msgstr "l'utente non ha i permessi per cancellare la cartella \"%s\""
 
-#: pcbnew/gpcb_plugin.cpp:1076 pcbnew/kicad_plugin.cpp:2149
+#: pcbnew/gpcb_plugin.cpp:1076 pcbnew/kicad_plugin.cpp:2145
 #, c-format
 msgid "library directory '%s' has unexpected sub-directories"
 msgstr "la cartella libreria \"%s\" ha sottocartelle inattese"
 
-#: pcbnew/gpcb_plugin.cpp:1095 pcbnew/kicad_plugin.cpp:2168
+#: pcbnew/gpcb_plugin.cpp:1095 pcbnew/kicad_plugin.cpp:2164
 #, c-format
 msgid "unexpected file '%s' was found in library path '%s'"
 msgstr "file inatteso \"%s\" trovato nel percorso libreria \"%s\""
 
-#: pcbnew/gpcb_plugin.cpp:1113 pcbnew/kicad_plugin.cpp:2186
+#: pcbnew/gpcb_plugin.cpp:1113 pcbnew/kicad_plugin.cpp:2182
 #, c-format
 msgid "footprint library '%s' cannot be deleted"
 msgstr "la libreria impronte \"%s\" non può essere cancellata"
@@ -3155,7 +3155,7 @@ msgstr "Collegamento"
 
 #: pcbnew/class_pad.cpp:701 pcbnew/class_pcb_text.cpp:135
 #: pcbnew/class_pcb_layer_widget.cpp:364 pcbnew/class_zone.cpp:878
-#: pcbnew/class_drawsegment.cpp:383 pcbnew/layer_widget.cpp:461
+#: pcbnew/class_drawsegment.cpp:401 pcbnew/layer_widget.cpp:461
 #: pcbnew/class_text_mod.cpp:369 pcbnew/class_track.cpp:1161
 #: pcbnew/class_track.cpp:1188
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:111
@@ -3168,7 +3168,7 @@ msgid "Layer"
 msgstr "Strato"
 
 #: pcbnew/class_pad.cpp:707 pcbnew/class_pcb_text.cpp:149
-#: pcbnew/class_drawsegment.cpp:385 pcbnew/class_text_mod.cpp:385
+#: pcbnew/class_drawsegment.cpp:403 pcbnew/class_text_mod.cpp:385
 #: pcbnew/class_track.cpp:1166 pcbnew/class_track.cpp:1193
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:52
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:354 eeschema/lib_field.cpp:789
@@ -3193,7 +3193,7 @@ msgid "Drill X / Y"
 msgstr "Foratura X / Y"
 
 #: pcbnew/class_pad.cpp:736 pcbnew/class_pcb_text.cpp:143
-#: pcbnew/class_drawsegment.cpp:354 pcbnew/class_drawsegment.cpp:372
+#: pcbnew/class_drawsegment.cpp:372 pcbnew/class_drawsegment.cpp:390
 #: pcbnew/class_text_mod.cpp:379
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:821
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:100
@@ -3211,7 +3211,7 @@ msgstr "Posizione"
 msgid "Length in package"
 msgstr "Lunghezza nel contenitore"
 
-#: pcbnew/class_pad.cpp:1134 pcbnew/class_drawsegment.cpp:348
+#: pcbnew/class_pad.cpp:1134 pcbnew/class_drawsegment.cpp:366
 #: pcbnew/class_board_item.cpp:45
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:108
 #: eeschema/lib_circle.cpp:54 gerbview/class_gerber_draw_item.cpp:239
@@ -4752,7 +4752,7 @@ msgid "duplicate NETCLASS name '%s' in file <%s> at line %d, offset %d"
 msgstr ""
 "Nome NETCLASS \"%s\" duplicato nel file \"%s\" alla riga %d, scostamento %d"
 
-#: pcbnew/pcb_parser.cpp:1760 pcbnew/kicad_netlist_reader.cpp:369
+#: pcbnew/pcb_parser.cpp:1761 pcbnew/kicad_netlist_reader.cpp:369
 #, c-format
 msgid ""
 "invalid footprint ID in\n"
@@ -4765,14 +4765,14 @@ msgstr ""
 "linea: %d\n"
 "scostamento: %d"
 
-#: pcbnew/pcb_parser.cpp:2011
+#: pcbnew/pcb_parser.cpp:2012
 #, c-format
 msgid "cannot handle footprint text type %s"
 msgstr "impossibile gestire testo impronta tipo %s"
 
-#: pcbnew/pcb_parser.cpp:2429 pcbnew/pcb_parser.cpp:2435
-#: pcbnew/pcb_parser.cpp:2664 pcbnew/pcb_parser.cpp:2746
-#: pcbnew/pcb_parser.cpp:2810
+#: pcbnew/pcb_parser.cpp:2430 pcbnew/pcb_parser.cpp:2436
+#: pcbnew/pcb_parser.cpp:2665 pcbnew/pcb_parser.cpp:2747
+#: pcbnew/pcb_parser.cpp:2811
 #, c-format
 msgid ""
 "invalid net ID in\n"
@@ -4785,7 +4785,7 @@ msgstr ""
 "linea: %d\n"
 "scostamento: %d"
 
-#: pcbnew/pcb_parser.cpp:3136
+#: pcbnew/pcb_parser.cpp:3137
 #, c-format
 msgid ""
 "There is a zone that belongs to a not existing net\n"
@@ -4804,7 +4804,7 @@ msgstr "Contorno zona"
 msgid "(Cutout)"
 msgstr "(Ritaglio)"
 
-#: pcbnew/class_zone.cpp:832 pcbnew/class_drawsegment.cpp:341
+#: pcbnew/class_zone.cpp:832 pcbnew/class_drawsegment.cpp:359
 #: pcbnew/class_marker_pcb.cpp:98 pcbnew/class_text_mod.cpp:359
 #: pcbnew/class_track.cpp:1151 pcbnew/class_track.cpp:1178
 #: pcbnew/class_track.cpp:1227 pcbnew/dialogs/dialog_layers_setup.cpp:342
@@ -5308,15 +5308,15 @@ msgstr ""
 "Componente \"%s\" impronta \"%s\" non trovato in nessuna libreria della "
 "tabella librerie impronte.\n"
 
-#: pcbnew/class_drawsegment.cpp:339
+#: pcbnew/class_drawsegment.cpp:357
 msgid "Drawing"
 msgstr "Disegno"
 
-#: pcbnew/class_drawsegment.cpp:343
+#: pcbnew/class_drawsegment.cpp:361
 msgid "Shape"
 msgstr "Forma "
 
-#: pcbnew/class_drawsegment.cpp:352 pcbnew/class_board_item.cpp:44
+#: pcbnew/class_drawsegment.cpp:370 pcbnew/class_board_item.cpp:44
 #: pcbnew/dialogs/dialog_pad_properties.cpp:743
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1832
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:93
@@ -5324,11 +5324,11 @@ msgstr "Forma "
 msgid "Arc"
 msgstr "Arco"
 
-#: pcbnew/class_drawsegment.cpp:358
+#: pcbnew/class_drawsegment.cpp:376
 msgid "Curve"
 msgstr "Curva"
 
-#: pcbnew/class_drawsegment.cpp:363
+#: pcbnew/class_drawsegment.cpp:381
 #: pcbnew/dialogs/dialog_pad_properties.cpp:737
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1832
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:82
@@ -5336,12 +5336,12 @@ msgstr "Curva"
 msgid "Segment"
 msgstr "Segmento"
 
-#: pcbnew/class_drawsegment.cpp:366 pcbnew/class_track.cpp:1054
+#: pcbnew/class_drawsegment.cpp:384 pcbnew/class_track.cpp:1054
 #: eeschema/lib_pin.cpp:2055
 msgid "Length"
 msgstr "Lunghezza"
 
-#: pcbnew/class_drawsegment.cpp:627
+#: pcbnew/class_drawsegment.cpp:645
 #, c-format
 msgid "Pcb Graphic: %s, length %s on %s"
 msgstr "Elemento grafico: %s, lunghezza %s su %s"
@@ -5852,7 +5852,7 @@ msgstr "Apri l'editor delle regole di progettazione"
 
 #: pcbnew/menubar_pcbframe.cpp:187
 msgid "&Layers Setup"
-msgstr "&Configurazione strati"
+msgstr "&Impostazione strati"
 
 #: pcbnew/menubar_pcbframe.cpp:187
 msgid "Enable and set layer properties"
@@ -7103,12 +7103,12 @@ msgstr ""
 msgid "unknown graphic type: %d"
 msgstr "tipo di grafico sconosciuto: %d"
 
-#: pcbnew/legacy_plugin.cpp:97 pcbnew/kicad_plugin.cpp:1280
+#: pcbnew/legacy_plugin.cpp:97 pcbnew/kicad_plugin.cpp:1279
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "tipo piazzola sconosciuta: %d"
 
-#: pcbnew/legacy_plugin.cpp:98 pcbnew/kicad_plugin.cpp:1293
+#: pcbnew/legacy_plugin.cpp:98 pcbnew/kicad_plugin.cpp:1292
 #, c-format
 msgid "unknown pad attribute: %d"
 msgstr "attributo piazzola sconosciuto: %d"
@@ -7886,7 +7886,7 @@ msgstr "Crea file %s\n"
 #: pcbnew/exporters/gen_modules_placefile.cpp:610
 #: pcbnew/dialogs/dialog_plot.cpp:352 pcbnew/dialogs/dialog_SVG_print.cpp:214
 #: pcbnew/dialogs/dialog_gendrill.cpp:324
-#: eeschema/dialogs/dialog_plot_schematic.cpp:171
+#: eeschema/dialogs/dialog_plot_schematic.cpp:170
 msgid "Select Output Directory"
 msgstr "Seleziona percorso di uscita"
 
@@ -7902,8 +7902,8 @@ msgstr "Usare un percorso relativo?"
 #: pcbnew/dialogs/dialog_SVG_print.cpp:233
 #: pcbnew/dialogs/dialog_gendrill.cpp:336
 #: pcbnew/dialogs/dialog_gendrill.cpp:343
-#: eeschema/dialogs/dialog_plot_schematic.cpp:186
-#: eeschema/dialogs/dialog_plot_schematic.cpp:194
+#: eeschema/dialogs/dialog_plot_schematic.cpp:185
+#: eeschema/dialogs/dialog_plot_schematic.cpp:193
 msgid "Plot Output Directory"
 msgstr "Cartella risultati tracciature"
 
@@ -8054,31 +8054,31 @@ msgstr "Il percorso libreria impronte \"%s\" non esiste"
 msgid "library '%s' has no footprint '%s' to delete"
 msgstr "la libreria \"%s\" non ha impronte \"%s\" da cancellare"
 
-#: pcbnew/kicad_plugin.cpp:1597
+#: pcbnew/kicad_plugin.cpp:1593
 #, c-format
 msgid "unknown via type %d"
 msgstr "tipo via sconosciuto %d"
 
-#: pcbnew/kicad_plugin.cpp:1735
+#: pcbnew/kicad_plugin.cpp:1731
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "tipo arrotondamento vertici zona sconosciuto %d"
 
-#: pcbnew/kicad_plugin.cpp:1925
+#: pcbnew/kicad_plugin.cpp:1921
 msgid "this file does not contain a PCB"
 msgstr "questo file non contiene un circuito stampato"
 
-#: pcbnew/kicad_plugin.cpp:2055
+#: pcbnew/kicad_plugin.cpp:2051
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Il nome file impronta \"%s\" non è valido."
 
-#: pcbnew/kicad_plugin.cpp:2061
+#: pcbnew/kicad_plugin.cpp:2057
 #, c-format
 msgid "user does not have write permission to delete file '%s' "
 msgstr "Non si dispone dei permessi necessari per salvare il file '%s'."
 
-#: pcbnew/kicad_plugin.cpp:2116
+#: pcbnew/kicad_plugin.cpp:2112
 #, c-format
 msgid "cannot overwrite library path '%s'"
 msgstr "impossibile sovrascrivere il percorso libreria \"%s\""
@@ -12661,7 +12661,7 @@ msgid "Are you sure you want to overwrite the exiting file?"
 msgstr "Cancellare il file selezionato?"
 
 #: pcbnew/dialogs/dialog_plot.cpp:362 pcbnew/dialogs/dialog_gendrill.cpp:334
-#: eeschema/dialogs/dialog_plot_schematic.cpp:183
+#: eeschema/dialogs/dialog_plot_schematic.cpp:182
 #, c-format
 msgid ""
 "Do you want to use a path relative to\n"
@@ -12671,7 +12671,7 @@ msgstr ""
 "\"%s\"?"
 
 #: pcbnew/dialogs/dialog_plot.cpp:371 pcbnew/dialogs/dialog_gendrill.cpp:342
-#: eeschema/dialogs/dialog_plot_schematic.cpp:193
+#: eeschema/dialogs/dialog_plot_schematic.cpp:192
 msgid "Cannot make path relative (target volume different from file volume)!"
 msgstr ""
 "Impossibile rendere il percorso relativo (volume di destinazione diverso da "
@@ -12920,7 +12920,7 @@ msgid "Move vector Y:"
 msgstr "Sposta Y vettore:"
 
 #: pcbnew/dialogs/dialog_SVG_print.cpp:274
-#: eeschema/dialogs/dialog_plot_schematic.cpp:350
+#: eeschema/dialogs/dialog_plot_schematic.cpp:349
 #, c-format
 msgid "Could not write plot files to folder '%s'."
 msgstr "Impossibile scrivere i file di tracciatura nella cartella \"%s\"."
@@ -15238,7 +15238,7 @@ msgstr "Proprietà zone non in rame"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.h:417
 msgid "Layer Setup"
-msgstr "Configurazione strati"
+msgstr "Impostazione strati"
 
 #: pcbnew/dialogs/dialog_drc_base.h:116
 msgid "DRC Control"
@@ -20511,7 +20511,9 @@ msgstr "Fallita la rinomina della vecchia libreria di simboli nel file \"%s\""
 #: eeschema/libedit.cpp:387
 #, c-format
 msgid "Failed to save old library document to file '%s'"
-msgstr "Fallito il salvataggio della documentazione della vecchia libreria nel file \"%s\""
+msgstr ""
+"Fallito il salvataggio della documentazione della vecchia libreria nel file "
+"\"%s\""
 
 #: eeschema/libedit.cpp:401
 #, c-format
