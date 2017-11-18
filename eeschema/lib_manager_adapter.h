@@ -53,8 +53,6 @@ protected:
     CMP_TREE_NODE::PTR_VECTOR::iterator deleteLibrary(
             CMP_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt );
 
-    void addAliases( CMP_TREE_NODE_LIB& aLibNode );
-
     void finishUpdate();
 
     CMP_TREE_NODE* findLibrary( const wxString& aLibNickName );

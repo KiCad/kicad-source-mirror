@@ -186,16 +186,9 @@ CMP_TREE_NODE::PTR_VECTOR::iterator LIB_MANAGER_ADAPTER::deleteLibrary(
 }
 
 
-void LIB_MANAGER_ADAPTER::addAliases( CMP_TREE_NODE_LIB& aLibNode )
-{
-}
-
-
 void LIB_MANAGER_ADAPTER::finishUpdate()
 {
     m_tree.AssignIntrinsicRanks();
-    m_tree.SortNodes();
-    Resort();
 }
 
 

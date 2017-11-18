@@ -105,6 +105,7 @@ int CMP_TREE_NODE::Compare( CMP_TREE_NODE const& aNode1, CMP_TREE_NODE const& aN
 CMP_TREE_NODE::CMP_TREE_NODE()
     : Parent( nullptr ),
         Type( INVALID ),
+        InTree( false ),
         IntrinsicRank( 0 ),
         Score( kLowestDefaultScore ),
         Unit( 0 )
@@ -177,6 +178,7 @@ CMP_TREE_NODE_LIB_ID::CMP_TREE_NODE_LIB_ID( CMP_TREE_NODE* aParent, LIB_ALIAS* a
 CMP_TREE_NODE_UNIT& CMP_TREE_NODE_LIB_ID::AddUnit( int aUnit )
 {
     CMP_TREE_NODE_UNIT* unit = new CMP_TREE_NODE_UNIT( this, aUnit );
+    unit->InTree = true;
     Children.push_back( std::unique_ptr<CMP_TREE_NODE>( unit ) );
     return *unit;
 }
@@ -243,6 +245,7 @@ CMP_TREE_NODE_LIB::CMP_TREE_NODE_LIB( CMP_TREE_NODE* aParent, wxString const& aN
 CMP_TREE_NODE_LIB_ID& CMP_TREE_NODE_LIB::AddAlias( LIB_ALIAS* aAlias )
 {
     CMP_TREE_NODE_LIB_ID* alias = new CMP_TREE_NODE_LIB_ID( this, aAlias );
+    alias->InTree = true;
     Children.push_back( std::unique_ptr<CMP_TREE_NODE>( alias ) );
     return *alias;
 }
@@ -269,6 +272,7 @@ CMP_TREE_NODE_ROOT::CMP_TREE_NODE_ROOT()
 CMP_TREE_NODE_LIB& CMP_TREE_NODE_ROOT::AddLib( wxString const& aName )
 {
     CMP_TREE_NODE_LIB* lib = new CMP_TREE_NODE_LIB( this, aName );
+    lib->InTree = true;
     Children.push_back( std::unique_ptr<CMP_TREE_NODE>( lib ) );
     return *lib;
 }

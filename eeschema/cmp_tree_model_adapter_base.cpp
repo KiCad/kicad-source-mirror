@@ -61,7 +61,7 @@ unsigned int CMP_TREE_MODEL_ADAPTER_BASE::IntoArray(
 
     for( auto const& child: aNode.Children )
     {
-        if( child->Score > 0 )
+        if( child->Score > 0 && child->InTree )
         {
             aChildren.Add( ToItem( &*child ) );
             ++n;
@@ -156,9 +156,7 @@ void CMP_TREE_MODEL_ADAPTER_BASE::UpdateSearchString( wxString const& aSearch )
         m_tree.UpdateScore( matcher );
     }
 
-    m_tree.SortNodes();
-    Cleared();
-
+    filterContents();
     ShowResults() || ShowPreselect() || ShowSingleLibrary();
 }
 
@@ -289,7 +287,7 @@ unsigned int CMP_TREE_MODEL_ADAPTER_BASE::GetChildren(
     auto node = ( aItem.IsOk() ? ToNode( aItem ) : &m_tree );
 
     if( node->Type != CMP_TREE_NODE::TYPE::LIBID
-            || ( m_show_units && node->Type == CMP_TREE_NODE::TYPE::UNIT ) )
+            || ( m_show_units && node->Type == CMP_TREE_NODE::TYPE::LIBID ) )
         return IntoArray( *node, aChildren );
     else
         return 0;
@@ -463,4 +461,58 @@ bool CMP_TREE_MODEL_ADAPTER_BASE::ShowSingleLibrary()
                 return n->Type == CMP_TREE_NODE::TYPE::LIBID &&
                        n->Parent->Parent->Children.size() == 1;
             } );
+}
+
+
+void CMP_TREE_MODEL_ADAPTER_BASE::filterContents()
+{
+    // Rebuild the tree using only the filtered nodes
+    for( auto& lib : m_tree.Children )
+    {
+        lib->InTree = false;
+
+        for( auto& alias : lib->Children )
+        {
+            alias->InTree = false;
+
+            for( auto& unit : lib->Children )
+                unit->InTree = false;
+        }
+    }
+
+    m_tree.SortNodes();
+    Cleared();
+
+    for( auto& lib : m_tree.Children )
+    {
+        if( lib->Score <= 0 )
+            continue;
+
+        wxDataViewItem libItem = ToItem( lib.get() );
+
+        for( auto& alias : lib->Children )
+        {
+            if( !lib->InTree )
+            {
+                lib->InTree = true;
+                ItemAdded( wxDataViewItem( nullptr ), libItem );
+            }
+
+            if( alias->Score > 0 )
+            {
+                alias->InTree = true;
+                ItemAdded( libItem, ToItem( alias.get() ) );
+                wxDataViewItem aliasItem = ToItem( alias.get() );
+
+                if( !m_show_units )
+                    continue;
+
+                for( auto& unit : alias->Children )
+                {
+                    unit->InTree = true;
+                    ItemAdded( aliasItem, ToItem( unit.get() ) );
+                }
+            }
+        }
+    }
 }
