@@ -50,19 +50,6 @@ SCH_JUNCTION::SCH_JUNCTION( const wxPoint& pos ) :
 }
 
 
-bool SCH_JUNCTION::Save( FILE* aFile ) const
-{
-    bool success = true;
-
-    if( fprintf( aFile, "Connection ~ %-4d %-4d\n", m_pos.x, m_pos.y ) == EOF )
-    {
-        success = false;
-    }
-
-    return success;
-}
-
-
 EDA_ITEM* SCH_JUNCTION::Clone() const
 {
     return new SCH_JUNCTION( *this );
@@ -76,26 +63,6 @@ void SCH_JUNCTION::SwapData( SCH_ITEM* aItem )
 
     SCH_JUNCTION* item = (SCH_JUNCTION*) aItem;
     std::swap( m_pos, item->m_pos );
-}
-
-
-bool SCH_JUNCTION::Load( LINE_READER& aLine, wxString& aErrorMsg )
-{
-    char name[256];
-    char* line = (char*) aLine;
-
-    while( (*line != ' ' ) && *line )
-        line++;
-
-    if( sscanf( line, "%255s %d %d", name, &m_pos.x, &m_pos.y ) != 3 )
-    {
-        aErrorMsg.Printf( wxT( "Eeschema file connection load error at line %d, aborted" ),
-                          aLine.LineNumber() );
-        aErrorMsg << wxT( "\n" ) << FROM_UTF8( (char*) aLine );
-        return false;
-    }
-
-    return true;
 }
 
 
@@ -234,6 +201,7 @@ void SCH_JUNCTION::Plot( PLOTTER* aPlotter )
     aPlotter->SetColor( GetLayerColor( GetLayer() ) );
     aPlotter->Circle( m_pos, GetSymbolSize(), FILLED_SHAPE );
 }
+
 
 BITMAP_DEF SCH_JUNCTION::GetMenuImage() const
 {

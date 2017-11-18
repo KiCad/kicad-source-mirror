@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2015-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -237,10 +237,6 @@ public:
      * @return the number of units per package or zero if the library entry cannot be found.
      */
     int GetUnitCount() const;
-
-    bool Save( FILE* aFile ) const override;
-
-    bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
     /**
      * Compute the new transform matrix based on \a aOrientation for the symbol which is

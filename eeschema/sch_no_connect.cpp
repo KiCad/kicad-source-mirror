@@ -81,39 +81,6 @@ const EDA_RECT SCH_NO_CONNECT::GetBoundingBox() const
 }
 
 
-bool SCH_NO_CONNECT::Save( FILE* aFile ) const
-{
-    bool success = true;
-
-    if( fprintf( aFile, "NoConn ~ %-4d %-4d\n", m_pos.x, m_pos.y ) == EOF )
-    {
-        success = false;
-    }
-
-    return success;
-}
-
-
-bool SCH_NO_CONNECT::Load( LINE_READER& aLine, wxString& aErrorMsg )
-{
-    char name[256];
-    char* line = (char*) aLine;
-
-    while( (*line != ' ' ) && *line )
-        line++;
-
-    if( sscanf( line, "%255s %d %d", name, &m_pos.x, &m_pos.y ) != 3 )
-    {
-        aErrorMsg.Printf( wxT( "Eeschema file No Connect load error at line %d" ),
-                          aLine.LineNumber() );
-        aErrorMsg << wxT( "\n" ) << FROM_UTF8( ((char*)aLine) );
-        return false;
-    }
-
-    return true;
-}
-
-
 void SCH_NO_CONNECT::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList )
 {
     DANGLING_END_ITEM item( NO_CONNECT_END, this, m_pos );

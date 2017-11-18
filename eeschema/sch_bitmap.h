@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2011-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,10 @@
 #include <class_bitmap_base.h>
 
 
+/**
+ * Object to handle a bitmap image that can be inserted in a schematic.
+ */
+
 class SCH_BITMAP : public SCH_ITEM
 {
     wxPoint      m_pos;                 // XY coordinates of center of the bitmap
@@ -66,7 +70,6 @@ public:
     }
 
     /**
-     * Function GetScalingFactor
      * @return the scaling factor from pixel size to actual draw size
      * this scaling factor  depend on m_pixelScaleFactor and m_Scale
      * m_pixelScaleFactor gives the scaling factor between a pixel size and
@@ -89,8 +92,7 @@ public:
 
 
     /**
-     * Function GetSize
-     * @returns the actual size (in user units, not in pixels) of the image
+     * @return the actual size (in user units, not in pixels) of the image
      */
     wxSize GetSize() const;
 
@@ -102,17 +104,13 @@ public:
                GR_DRAWMODE aDrawMode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) override;
 
     /**
-     * Function ReadImageFile
      * Reads and stores an image file. Init the bitmap used to draw this item
      * format.
+     *
      * @param aFullFilename The full filename of the image file to read.
      * @return bool - true if success reading else false.
      */
     bool ReadImageFile( const wxString& aFullFilename );
-
-    bool Save( FILE* aFile ) const override;
-
-    bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
     void Move( const wxPoint& aMoveVector ) override
     {

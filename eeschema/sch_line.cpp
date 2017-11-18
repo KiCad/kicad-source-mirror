@@ -201,72 +201,6 @@ double SCH_LINE::GetLength() const
 }
 
 
-bool SCH_LINE::Save( FILE* aFile ) const
-{
-    bool        success = true;
-
-    const char* layer = "Notes";
-    const char* width = "Line";
-
-    if( GetLayer() == LAYER_WIRE )
-        layer = "Wire";
-
-    if( GetLayer() == LAYER_BUS )
-        layer = "Bus";
-
-    if( fprintf( aFile, "Wire %s %s\n", layer, width ) == EOF )
-    {
-        success = false;
-    }
-
-    if( fprintf( aFile, "\t%-4d %-4d %-4d %-4d\n", m_start.x, m_start.y,
-                 m_end.x, m_end.y ) == EOF )
-    {
-        success = false;
-    }
-
-    return success;
-}
-
-
-bool SCH_LINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
-{
-    char  Name1[256];
-    char  Name2[256];
-    char* line = (char*) aLine;
-
-    while( (*line != ' ' ) && *line )
-        line++;
-
-    if( sscanf( line, "%255s %255s", Name1, Name2 ) != 2  )
-    {
-        aErrorMsg.Printf( wxT( "Eeschema file segment error at line %d, aborted" ),
-                          aLine.LineNumber() );
-        aErrorMsg << wxT( "\n" ) << FROM_UTF8( (char*) aLine );
-        return false;
-    }
-
-    m_Layer = LAYER_NOTES;
-
-    if( Name1[0] == 'W' )
-        m_Layer = LAYER_WIRE;
-
-    if( Name1[0] == 'B' )
-        m_Layer = LAYER_BUS;
-
-    if( !aLine.ReadLine() || sscanf( (char*) aLine, "%d %d %d %d ",
-                                      &m_start.x, &m_start.y, &m_end.x, &m_end.y ) != 4 )
-    {
-        aErrorMsg.Printf( wxT( "Eeschema file Segment struct error at line %d, aborted" ),
-                          aLine.LineNumber() );
-        aErrorMsg << wxT( "\n" ) << FROM_UTF8( (char*) aLine );
-        return false;
-    }
-
-    return true;
-}
-
-
 COLOR4D SCH_LINE::GetDefaultColor() const
 {
     return GetLayerColor( m_Layer );
@@ -418,10 +352,6 @@ void SCH_LINE::Rotate( wxPoint aPosition )
 }
 
 
-/*
- * MergeOverlap try to merge 2 lines that are colinear.
- * this function expects these 2 lines have at least a common end
- */
 bool SCH_LINE::MergeOverlap( SCH_LINE* aLine )
 {
     auto less = []( const wxPoint& lhs, const wxPoint& rhs ) -> bool
@@ -618,9 +548,9 @@ wxString SCH_LINE::GetSelectMenuText() const
     wxString menuText, txtfmt, orient;
 
     if( m_start.x == m_end.x )
-        orient = _("Vert.");
+        orient = _( "Vert." );
     else if( m_start.y == m_end.y )
-        orient = _("Horiz.");
+        orient = _( "Horiz." );
 
     switch( m_Layer )
     {

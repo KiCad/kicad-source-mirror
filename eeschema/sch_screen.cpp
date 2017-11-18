@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -484,63 +484,6 @@ bool SCH_SCREEN::SchematicCleanUp()
 }
 
 
-bool SCH_SCREEN::Save( FILE* aFile ) const
-{
-    // Creates header
-    if( fprintf( aFile, "%s %s %d\n", EESCHEMA_FILE_STAMP,
-                 SCHEMATIC_HEAD_STRING, EESCHEMA_VERSION ) < 0 )
-        return false;
-
-    for( const PART_LIB& lib : *Prj().SchLibs() )
-    {
-        if( fprintf( aFile, "LIBS:%s\n", TO_UTF8( lib.GetName() ) ) < 0 )
-            return false;
-    }
-
-    // This section is not used, but written for file compatibility
-    if( fprintf( aFile, "EELAYER %d %d\n", SCH_LAYER_ID_COUNT, 0 ) < 0
-        || fprintf( aFile, "EELAYER END\n" ) < 0 )
-        return false;
-
-    /* Write page info, ScreenNumber and NumberOfScreen; not very meaningful for
-     * SheetNumber and Sheet Count in a complex hierarchy, but useful in
-     * simple hierarchy and flat hierarchy.  Used also to search the root
-     * sheet ( ScreenNumber = 1 ) within the files
-     */
-    const TITLE_BLOCK& tb = GetTitleBlock();
-
-    if( fprintf( aFile, "$Descr %s %d %d%s\n", TO_UTF8( m_paper.GetType() ),
-                 m_paper.GetWidthMils(),
-                 m_paper.GetHeightMils(),
-                 !m_paper.IsCustom() && m_paper.IsPortrait() ?
-                    " portrait" : ""
-                 ) < 0
-        || fprintf( aFile, "encoding utf-8\n") < 0
-        || fprintf( aFile, "Sheet %d %d\n", m_ScreenNumber, m_NumberOfScreens ) < 0
-        || fprintf( aFile, "Title %s\n",    EscapedUTF8( tb.GetTitle() ).c_str() ) < 0
-        || fprintf( aFile, "Date %s\n",     EscapedUTF8( tb.GetDate() ).c_str() ) < 0
-        || fprintf( aFile, "Rev %s\n",      EscapedUTF8( tb.GetRevision() ).c_str() ) < 0
-        || fprintf( aFile, "Comp %s\n",     EscapedUTF8( tb.GetCompany() ).c_str() ) < 0
-        || fprintf( aFile, "Comment1 %s\n", EscapedUTF8( tb.GetComment1() ).c_str() ) < 0
-        || fprintf( aFile, "Comment2 %s\n", EscapedUTF8( tb.GetComment2() ).c_str() ) < 0
-        || fprintf( aFile, "Comment3 %s\n", EscapedUTF8( tb.GetComment3() ).c_str() ) < 0
-        || fprintf( aFile, "Comment4 %s\n", EscapedUTF8( tb.GetComment4() ).c_str() ) < 0
-        || fprintf( aFile, "$EndDescr\n" ) < 0 )
-        return false;
-
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
-    {
-        if( !item->Save( aFile ) )
-            return false;
-    }
-
-    if( fprintf( aFile, "$EndSCHEMATC\n" ) < 0 )
-        return false;
-
-    return true;
-}
-
-
 void SCH_SCREEN::UpdateSymbolLinks( bool aForce )
 {
     // Initialize or reinitialize the pointer to the LIB_PART for each component
@@ -596,10 +539,6 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
 }
 
 
-/* note: SCH_SCREEN::Plot is useful only for schematic.
- * library editor and library viewer do not use a draw list, and therefore
- * SCH_SCREEN::Plot plots nothing
- */
 void SCH_SCREEN::Plot( PLOTTER* aPlotter )
 {
     // Ensure links are up to date, even if a library was reloaded for some reason:
@@ -1321,13 +1260,8 @@ void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-/******************************************************************/
-/* Class SCH_SCREENS to handle the list of screens in a hierarchy */
-/******************************************************************/
-
 /**
- * Function SortByTimeStamp
- * sorts a list of schematic items by time stamp and type.
+ * Sort a list of schematic items by time stamp and type.
  */
 static bool SortByTimeStamp( const EDA_ITEM* item1, const EDA_ITEM* item2 )
 {
@@ -1647,4 +1581,3 @@ int SCH_SCREENS::ChangeSymbolLibNickname( const wxString& aFrom, const wxString&
 
     return cnt;
 }
-

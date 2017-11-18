@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,8 +36,6 @@
 
 
 /**
- * Class SCH_BUS_ENTRY_BASE
- *
  * Base class for a bus or wire entry.
  */
 class SCH_BUS_ENTRY_BASE : public SCH_ITEM
@@ -85,8 +83,6 @@ public:
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                GR_DRAWMODE aDrawMode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) override;
 
-    static bool Load( LINE_READER& aLine, wxString& aErrorMsg, SCH_ITEM **out );
-
     const EDA_RECT GetBoundingBox() const override;
 
     void Move( const wxPoint& aMoveVector ) override
@@ -131,8 +127,6 @@ public:
 };
 
 /**
- * Class SCH_BUS_WIRE_ENTRY
- *
  * Class for a wire to bus entry.
  */
 class SCH_BUS_WIRE_ENTRY : public SCH_BUS_ENTRY_BASE
@@ -147,8 +141,6 @@ public:
         return wxT( "SCH_BUS_WIRE_ENTRY" );
     }
 
-    bool Save( FILE* aFile ) const override;
-
     int GetPenSize() const override;
 
     wxString GetSelectMenuText() const override;
@@ -157,8 +149,6 @@ public:
 };
 
 /**
- * Class SCH_BUS_WIRE_ENTRY
- *
  * Class for a bus to bus entry.
  */
 class SCH_BUS_BUS_ENTRY : public SCH_BUS_ENTRY_BASE
@@ -172,8 +162,6 @@ public:
     {
         return wxT( "SCH_BUS_BUS_ENTRY" );
     }
-
-    bool Save( FILE* aFile ) const override;
 
     int GetPenSize() const override;
 

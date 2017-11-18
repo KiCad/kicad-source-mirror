@@ -311,54 +311,6 @@ bool SCH_FIELD::IsHorizJustifyFlipped() const
 }
 
 
-bool SCH_FIELD::Save( FILE* aFile ) const
-{
-    char hjustify = 'C';
-
-    if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
-        hjustify = 'L';
-    else if( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
-        hjustify = 'R';
-
-    char vjustify = 'C';
-
-    if( GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
-        vjustify = 'B';
-    else if( GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
-        vjustify = 'T';
-
-    if( fprintf( aFile, "F %d %s %c %-3d %-3d %-3d %4.4X %c %c%c%c",
-                 m_id,
-                 EscapedUTF8( m_Text ).c_str(),     // wraps in quotes too
-                 GetTextAngle() == TEXT_ANGLE_HORIZ ? 'H' : 'V',
-                 GetTextPos().x, GetTextPos().y,
-                 GetTextWidth(),
-                 !IsVisible(),
-                 hjustify, vjustify,
-                 IsItalic() ? 'I' : 'N',
-                 IsBold() ? 'B' : 'N' ) == EOF )
-    {
-        return false;
-    }
-
-    // Save field name, if the name is user definable
-    if( m_id >= FIELD1 )
-    {
-        if( fprintf( aFile, " %s", EscapedUTF8( m_name ).c_str() ) == EOF )
-        {
-            return false;
-        }
-    }
-
-    if( fprintf( aFile, "\n" ) == EOF )
-    {
-        return false;
-    }
-
-    return true;
-}
-
-
 void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
     frame->GetCanvas()->SetMouseCapture( NULL, NULL );

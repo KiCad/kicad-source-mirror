@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,9 +35,8 @@
 class NETLIST_OBJECT_LIST;
 
 /**
- * Class SCH_LINE
- * is a segment description base class to describe items which have 2 end
- * points (track, wire, draw line ...)
+ * Segment description base class to describe items which have 2 end points (track, wire,
+ * draw line ...)
  */
 class SCH_LINE : public SCH_ITEM
 {
@@ -120,10 +119,6 @@ public:
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                GR_DRAWMODE aDrawMode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) override;
-
-    bool Save( FILE* aFile ) const override;
-
-    bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
     int GetPenSize() const override;
 

@@ -145,7 +145,6 @@ set( EESCHEMA_SRCS
     lib_rectangle.cpp
     lib_text.cpp
     libfield.cpp
-    load_one_schematic_file.cpp
     menubar.cpp
     menubar_libedit.cpp
     netform.cpp

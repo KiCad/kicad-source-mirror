@@ -353,14 +353,6 @@ public:
     virtual void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) override;
 
     /**
-     * Writes the data structures for this object out to \a aFile in "*.sch" format.
-     *
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
-    bool Save( FILE* aFile ) const;
-
-    /**
      * Clear the state flags of all the items in the screen.
      */
     void ClearDrawingState();

@@ -704,19 +704,6 @@ public:
     bool AppendSchematic();
 
     /**
-     * Load the schematic (.sch) file \a aFullFileName into \a aScreen.
-     *
-     * @param aScreen Pointer to the associated SCH_SCREEN object in which to load
-     *                \a aFullFileName.
-     * @param aFullFileName A reference to a wxString object containing the absolute path
-     *                      and file name to load.
-     * @param append True if loaded file is being appended to the currently open file instead
-     *               of replacing it.
-     * @return True if \a aFullFileName has been loaded (at least partially.)
-     */
-    bool LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFileName, bool append = false );
-
-    /**
      * Loads a .cmp file from CvPcb and update the footprint field of components.
      *
      * Prepares parameters and calls ProcessCmpToFootprintLinkFileto actually read the file and

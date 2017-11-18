@@ -223,14 +223,6 @@ public:
     virtual void Rotate( wxPoint aPosition ) = 0;
 
     /**
-     * Function Save
-     * writes the data structures for this object out to a FILE in "*.sch" format.
-     * @param aFile The FILE to write to.
-     * @return bool - true if success writing else false.
-     */
-    virtual bool Save( FILE* aFile ) const = 0;
-
-    /**
      * Function Load
      * reads a schematic item from \a aLine in a .sch file.
      *

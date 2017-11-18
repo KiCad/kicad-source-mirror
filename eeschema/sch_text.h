@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,8 +81,7 @@ public:
               KICAD_T aType = SCH_TEXT_T );
 
     /**
-     * Copy Constructor
-     * clones \a aText into a new object.  All members are copied as is except
+     * Clones \a aText into a new object.  All members are copied as is except
      * for the #m_isDangling member which is set to false.  This prevents newly
      * copied objects derived from #SCH_TEXT from having their connection state
      * improperly set.
@@ -97,17 +96,15 @@ public:
     }
 
     /**
-     * Function IncrementLabel
-     * increments the label text, if it ends with a number.
-     * @param aIncrement = the increment value to add to the number
-     * ending the text
+     * Increment the label text, if it ends with a number.
+     *
+     * @param aIncrement = the increment value to add to the number ending the text.
      */
     void IncrementLabel( int aIncrement );
 
     /**
-     * Function SetLabelSpinStyle
-     * sets a spin or rotation angle, along with specific horizontal and vertical
-     * justification styles with each angle.
+     * Set a spin or rotation angle, along with specific horizontal and vertical justification
+     * styles with each angle.
      *
      * @param aSpinStyle =
      *  0 = normal (horizontal, left justified).
@@ -123,7 +120,6 @@ public:
     void SetShape( PINSHEETLABEL_SHAPE aShape ) { m_shape = aShape; }
 
     /**
-     * Function GetSchematicTextOffset (virtual)
      * @return the offset between the SCH_TEXT position and the text itself position
      *
      * This offset depends on the orientation, the type of text, and the area required to
@@ -135,8 +131,8 @@ public:
                        GR_DRAWMODE draw_mode, COLOR4D Color = COLOR4D::UNSPECIFIED ) override;
 
     /**
-     * Function CreateGraphicShape
-     * Calculates the graphic shape (a polygon) associated to the text
+     * Calculate the graphic shape (a polygon) associated to the text.
+     *
      * @param aPoints A buffer to fill with polygon corners coordinates
      * @param Pos Position of the shape, for texts and labels: do nothing
      * Mainly for derived classes (SCH_SHEET_PIN and Hierarchical labels)
@@ -149,10 +145,6 @@ public:
     virtual void SwapData( SCH_ITEM* aItem ) override;
 
     virtual const EDA_RECT GetBoundingBox() const override;
-
-    virtual bool Save( FILE* aFile ) const override;
-
-    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
     virtual int GetPenSize() const override;
 
@@ -245,10 +237,6 @@ public:
 
     const EDA_RECT GetBoundingBox() const override;
 
-    bool Save( FILE* aFile ) const override;
-
-    bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
-
     bool IsConnectable() const override { return true; }
 
     wxString GetSelectMenuText() const override;
@@ -284,10 +272,6 @@ public:
     void SetLabelSpinStyle( int aSpinStyle ) override;
 
     wxPoint GetSchematicTextOffset() const override;
-
-    bool Save( FILE* aFile ) const override;
-
-    bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
     const EDA_RECT GetBoundingBox() const override;
 
@@ -336,10 +320,6 @@ public:
     wxPoint GetSchematicTextOffset() const override;
 
     void CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos ) override;
-
-    bool Save( FILE* aFile ) const override;
-
-    bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
     const EDA_RECT GetBoundingBox() const override;
 

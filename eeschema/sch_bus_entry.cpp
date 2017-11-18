@@ -94,67 +94,6 @@ void SCH_BUS_ENTRY_BASE::SwapData( SCH_ITEM* aItem )
 }
 
 
-bool SCH_BUS_WIRE_ENTRY::Save( FILE* aFile ) const
-{
-    if( fprintf( aFile, "Entry Wire Line\n\t%-4d %-4d %-4d %-4d\n",
-                 m_pos.x, m_pos.y, m_End().x, m_End().y ) == EOF )
-        return false;
-    return true;
-}
-
-
-bool SCH_BUS_BUS_ENTRY::Save( FILE* aFile ) const
-{
-    if( fprintf( aFile, "Entry Bus Bus\n\t%-4d %-4d %-4d %-4d\n",
-                 m_pos.x, m_pos.y, m_End().x, m_End().y ) == EOF )
-        return false;
-    return true;
-}
-
-
-bool SCH_BUS_ENTRY_BASE::Load( LINE_READER& aLine, wxString& aErrorMsg,
-                               SCH_ITEM **out )
-{
-    char Name1[256];
-    char Name2[256];
-    char* line = (char*) aLine;
-    *out = NULL;
-
-    while( (*line != ' ' ) && *line )
-        line++;
-
-    if( sscanf( line, "%255s %255s", Name1, Name2 ) != 2  )
-    {
-        aErrorMsg.Printf( wxT( "Eeschema file bus entry load error at line %d" ),
-                          aLine.LineNumber() );
-        aErrorMsg << wxT( "\n" ) << FROM_UTF8( (char*) aLine );
-        return false;
-    }
-
-    SCH_BUS_ENTRY_BASE *this_new;
-    if( Name1[0] == 'B' )
-        this_new = new SCH_BUS_BUS_ENTRY;
-    else
-        this_new = new SCH_BUS_WIRE_ENTRY;
-    *out = this_new;
-
-    if( !aLine.ReadLine() || sscanf( (char*) aLine, "%d %d %d %d ",
-                &this_new->m_pos.x, &this_new->m_pos.y,
-                &this_new->m_size.x, &this_new->m_size.y ) != 4 )
-    {
-        aErrorMsg.Printf( wxT( "Eeschema file bus entry load error at line %d" ),
-                          aLine.LineNumber() );
-        aErrorMsg << wxT( "\n" ) << FROM_UTF8( (char*) aLine );
-        return false;
-    }
-
-    this_new->m_size.x -= this_new->m_pos.x;
-    this_new->m_size.y -= this_new->m_pos.y;
-
-    return true;
-}
-
-
 const EDA_RECT SCH_BUS_ENTRY_BASE::GetBoundingBox() const
 {
     EDA_RECT box;
@@ -374,10 +313,7 @@ void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter )
     aPlotter->FinishTo( m_End() );
 }
 
-/* SetBusEntryShape:
- * Set the shape of the bus entry.
- * aShape = ascii code '/' or '\'
- */
+
 void SCH_BUS_ENTRY_BASE::SetBusEntryShape( char aShape )
 {
     switch( aShape )
@@ -395,9 +331,6 @@ void SCH_BUS_ENTRY_BASE::SetBusEntryShape( char aShape )
 }
 
 
-/* GetBusEntryShape:
- * return the shape of the bus entry, as an ascii code '/' or '\'
- */
 char SCH_BUS_ENTRY_BASE::GetBusEntryShape() const
 {
     if( GetSize().y < 0 )
@@ -405,4 +338,3 @@ char SCH_BUS_ENTRY_BASE::GetBusEntryShape() const
     else
         return '\\';
 }
-
