@@ -74,7 +74,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-18 19:01+0100\n"
-"PO-Revision-Date: 2017-11-18 20:05+0100\n"
+"PO-Revision-Date: 2017-11-18 20:17+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -14184,7 +14184,7 @@ msgstr "Opzioni Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:226
 msgid "Use Protel filename extensions"
-msgstr "Usare le estensioni dei nomi file Protel"
+msgstr "Usa le estensioni dei nomi file Protel"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:227
 msgid ""
