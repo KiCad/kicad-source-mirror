@@ -119,7 +119,7 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
     def GetTracks(self):              return self.m_Track
 
     def Save(self,filename):
-        return SaveBoard(filename,self,IO_MGR.KICAD)
+        return SaveBoard(filename,self)
 
     def GetNetClasses(self):
         return self.GetDesignSettings().m_NetClasses
