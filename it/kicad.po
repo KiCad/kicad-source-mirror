@@ -61,6 +61,7 @@
 # mc: - chamfer = smuss(o/amento)
 # mc: - fillet = stond(o/amento)
 # mc: - edge = spigolo
+# mc: - edge cut = bordo scheda (sarebbe il bordo di ritaglio della scheda)
 # mc: - Layout editor (norma UNI 8187, ISO 7200):
 # mc:   - (page) layout = disposizione (pagina)
 # mc:   - title block = secondo le norme UNI, riquadro (delle) iscrizioni, gergalmente detto cartiglio.
@@ -72,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-17 11:57+0100\n"
-"PO-Revision-Date: 2017-11-17 11:57+0100\n"
+"POT-Creation-Date: 2017-11-18 19:01+0100\n"
+"PO-Revision-Date: 2017-11-18 20:05+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -141,13 +142,13 @@ msgstr "%s chiuso [pid=%d]\n"
 msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s aperto [pid=%ld]\n"
 
-#: kicad/mainframe.cpp:316 kicad/import_project.cpp:146
+#: kicad/mainframe.cpp:316 kicad/import_project.cpp:147
 msgid "Eeschema failed to load:\n"
 msgstr "Eeschema ha fallito il caricamento:\n"
 
 #: kicad/mainframe.cpp:317 kicad/mainframe.cpp:359 kicad/mainframe.cpp:384
-#: kicad/mainframe.cpp:431 kicad/import_project.cpp:147
-#: kicad/import_project.cpp:180
+#: kicad/mainframe.cpp:431 kicad/import_project.cpp:148
+#: kicad/import_project.cpp:181
 msgid "KiCad Error"
 msgstr "Errore KiCad"
 
@@ -155,7 +156,7 @@ msgstr "Errore KiCad"
 msgid "Component library editor failed to load:\n"
 msgstr "Editor librerie componenti ha fallito il caricamento:\n"
 
-#: kicad/mainframe.cpp:384 kicad/import_project.cpp:180
+#: kicad/mainframe.cpp:384 kicad/import_project.cpp:181
 msgid "Pcbnew failed to load:\n"
 msgstr "Pcbnew ha fallito il caricamento:\n"
 
@@ -662,7 +663,7 @@ msgstr "Importa file progetto Eagle"
 msgid "KiCad Project Destination"
 msgstr "Destinazione progetto KiCad"
 
-#: kicad/import_project.cpp:101
+#: kicad/import_project.cpp:102
 msgid ""
 "The selected directory is not empty.  We recommend you create projects in "
 "their own clean directory.\n"
@@ -1091,7 +1092,7 @@ msgstr "Denominazione"
 
 #: pcbnew/librairi.cpp:850
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:44
-#: common/dialog_about/AboutDialog_main.cpp:115 eeschema/sch_component.cpp:1799
+#: common/dialog_about/AboutDialog_main.cpp:115 eeschema/sch_component.cpp:1363
 #: eeschema/viewlibs.cpp:247 eeschema/libedit.cpp:492
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
@@ -1179,7 +1180,7 @@ msgstr "Leggi file di descrizione della forma..."
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:71
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:99
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:77 common/eda_text.cpp:391
-#: eeschema/sch_text.cpp:781 eeschema/libedit.cpp:482
+#: eeschema/sch_text.cpp:663 eeschema/libedit.cpp:482
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:107
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:203
@@ -1204,7 +1205,7 @@ msgstr "Specchiato"
 msgid "Shape Option"
 msgstr "Opzioni forma"
 
-#: pcbnew/microwave.cpp:473 eeschema/sch_text.cpp:813
+#: pcbnew/microwave.cpp:473 eeschema/sch_text.cpp:695
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:151
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:52
 msgid "Size"
@@ -2037,7 +2038,7 @@ msgstr "Attributi"
 
 #: pcbnew/class_module.cpp:587 pcbnew/class_pad.cpp:693 pcbnew/loadcmp.cpp:445
 #: pcbnew/loadcmp.cpp:509 pcbnew/class_edge_mod.cpp:248
-#: pcbnew/class_text_mod.cpp:353 eeschema/sch_component.cpp:1796
+#: pcbnew/class_text_mod.cpp:353 eeschema/sch_component.cpp:1360
 #: eeschema/lib_field.cpp:627 eeschema/template_fieldnames.cpp:45
 #: eeschema/bom_table_column.h:35
 msgid "Footprint"
@@ -3296,9 +3297,9 @@ msgstr ""
 "configurato in modo che possa trovare le librerie di impronte."
 
 #: pcbnew/loadcmp.cpp:446 pcbnew/dialogs/wizard_add_fplib_base.cpp:185
-#: eeschema/sch_component.cpp:1783 eeschema/sch_component.cpp:1785
-#: eeschema/sch_component.cpp:1788 eeschema/sch_component.cpp:1818
-#: eeschema/sch_component.cpp:1824 eeschema/selpart.cpp:88
+#: eeschema/sch_component.cpp:1347 eeschema/sch_component.cpp:1349
+#: eeschema/sch_component.cpp:1352 eeschema/sch_component.cpp:1382
+#: eeschema/sch_component.cpp:1388 eeschema/selpart.cpp:88
 #: eeschema/dialogs/dialog_spice_model_base.cpp:210
 msgid "Library"
 msgstr "Libreria"
@@ -4194,7 +4195,7 @@ msgstr "Parametro"
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:42
 #: common/dialogs/dialog_env_var_config_base.cpp:128
 #: eeschema/widgets/widget_eeschema_color_config.cpp:77
-#: eeschema/sch_component.cpp:1771 eeschema/sch_component.cpp:1810
+#: eeschema/sch_component.cpp:1335 eeschema/sch_component.cpp:1374
 #: eeschema/lib_field.cpp:620 eeschema/lib_field.cpp:799
 #: eeschema/template_fieldnames.cpp:42
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45
@@ -4809,7 +4810,7 @@ msgstr "(Ritaglio)"
 #: pcbnew/class_track.cpp:1151 pcbnew/class_track.cpp:1178
 #: pcbnew/class_track.cpp:1227 pcbnew/dialogs/dialog_layers_setup.cpp:342
 #: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:2038
-#: eeschema/sch_text.cpp:808 eeschema/libedit.cpp:491
+#: eeschema/sch_text.cpp:690 eeschema/libedit.cpp:491
 #: eeschema/dialogs/dialog_spice_model_base.cpp:30
 #: eeschema/dialogs/dialog_spice_model_base.cpp:233
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:189
@@ -4901,7 +4902,7 @@ msgstr "Grafica non consentita sugli strati in rame"
 
 #: pcbnew/onleftclick.cpp:342
 msgid "Texts not allowed on Edge Cut layer"
-msgstr "Testo non consentito su strato di taglio scheda"
+msgstr "Testo non consentito sullo strato di ritaglio scheda"
 
 #: pcbnew/onleftclick.cpp:391
 msgid "Dimension not allowed on Copper or Edge Cut layers"
@@ -7651,11 +7652,11 @@ msgstr "Il file del C.S. \"%s\" è già aperto."
 msgid "The current board has been modified.  Do you wish to save the changes?"
 msgstr "La scheda corrente è stata modificata. Vuoi salvare le modifiche?"
 
-#: pcbnew/files.cpp:437 eeschema/files-io.cpp:710
+#: pcbnew/files.cpp:437 eeschema/files-io.cpp:823
 msgid "Save and Load"
 msgstr "Salva e carica"
 
-#: pcbnew/files.cpp:438 eeschema/files-io.cpp:711
+#: pcbnew/files.cpp:438 eeschema/files-io.cpp:824
 msgid "Load Without Saving"
 msgstr "Carica senza salvare"
 
@@ -8945,7 +8946,7 @@ msgstr "Parole chiave"
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
 #: eeschema/widgets/widget_eeschema_color_config.cpp:76
-#: eeschema/sch_component.cpp:1767 eeschema/sch_component.cpp:1807
+#: eeschema/sch_component.cpp:1331 eeschema/sch_component.cpp:1371
 #: eeschema/lib_field.cpp:613 eeschema/template_fieldnames.cpp:39
 #: eeschema/dialogs/dialog_rescue_each.cpp:110 eeschema/bom_table_column.h:33
 msgid "Reference"
@@ -9890,7 +9891,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:134
 #: pcbnew/dialogs/dialog_plot_base.cpp:126
 msgid "Use auxiliary axis as origin"
-msgstr "Usare asse ausiliario come origine"
+msgstr "Usa asse ausiliario come origine"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:135
 msgid "Save the origin coordinates in the file"
@@ -11003,7 +11004,7 @@ msgstr "Scostamento Y"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:109
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:99
-#: common/eda_text.cpp:392 eeschema/sch_text.cpp:781
+#: common/eda_text.cpp:392 eeschema/sch_text.cpp:663
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:107
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:203
@@ -11013,7 +11014,7 @@ msgid "Italic"
 msgstr "Corsivo"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:111
-#: eeschema/lib_pin.cpp:2044 eeschema/sch_text.cpp:790
+#: eeschema/lib_pin.cpp:2044 eeschema/sch_text.cpp:672
 #: eeschema/lib_field.cpp:786 eeschema/dialogs/dialog_lib_edit_text_base.cpp:97
 msgid "Style"
 msgstr "Stile"
@@ -11045,7 +11046,7 @@ msgstr "Altro"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:120
 #: eeschema/onrightclick.cpp:388 eeschema/onrightclick.cpp:796
-#: eeschema/lib_pin.cpp:2058 eeschema/sch_text.cpp:779
+#: eeschema/lib_pin.cpp:2058 eeschema/sch_text.cpp:661
 msgid "Orientation"
 msgstr "Orientamento"
 
@@ -11607,7 +11608,7 @@ msgstr "Delta trapezio:"
 msgid "Trapezoid direction:"
 msgstr "Direzione trapezio:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:208 eeschema/sch_text.cpp:759
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:208 eeschema/sch_text.cpp:641
 msgid "Horizontal"
 msgstr "Orizzontale"
 
@@ -14072,12 +14073,11 @@ msgstr "Rimuovi maschera di saldatura sui via"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:115
 msgid "Exclude PCB edge layer from other layers"
-msgstr "Escludere il contenuto dello strato Ingombro scheda dagli altri strati"
+msgstr "Escludi il contenuto dello strato di bordo scheda dagli altri strati"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:116
 msgid "Exclude contents of the pcb edge layer from all other layers"
-msgstr ""
-"Esclude il contenuto dello strato Ingombro scheda da tutti lgi altri strati"
+msgstr "Esclude il contenuto dello strato di bordo scheda da tutti gli altri strati"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:120
 msgid "Mirrored plot"
@@ -14089,7 +14089,7 @@ msgstr "Tracciatura in negativo"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:127
 msgid "Use auxiliary axis as coordinates origin in plot files"
-msgstr "Usare asse ausiliario come coordinate di origine nei file tracciati"
+msgstr "Usa asse ausiliario come coordinate di origine nei file tracciati"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:137
 msgid "Drill marks:"
@@ -16665,7 +16665,7 @@ msgstr "Stringa non ultimata"
 msgid "String delimiter must be a single character of ', \", or $"
 msgstr "Il limitatore di stringa deve essere un singolo carattere ', \", o $"
 
-#: common/eda_text.cpp:393 eeschema/sch_text.cpp:781
+#: common/eda_text.cpp:393 eeschema/sch_text.cpp:663
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:107
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:203
@@ -17431,7 +17431,7 @@ msgstr "Testo con soltanto %d parametri degli 8 richiesti"
 msgid "Line Width"
 msgstr "Larghezza conduttore"
 
-#: eeschema/lib_text.cpp:504 eeschema/sch_text.cpp:617
+#: eeschema/lib_text.cpp:504 eeschema/sch_text.cpp:499
 #, c-format
 msgid "Graphic Text %s"
 msgstr "Testo grafico %s"
@@ -17752,30 +17752,30 @@ msgstr "Cancella elemento bus"
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Valore SCH_FILE_T sconosciuto: %d"
 
-#: eeschema/sch_line.cpp:609
+#: eeschema/sch_line.cpp:551
 msgid "Vert."
 msgstr "Vert."
 
-#: eeschema/sch_line.cpp:611
+#: eeschema/sch_line.cpp:553
 msgid "Horiz."
 msgstr "Oriz."
 
-#: eeschema/sch_line.cpp:616
+#: eeschema/sch_line.cpp:558
 #, c-format
 msgid "%s Graphic Line from (%s,%s) to (%s,%s)"
 msgstr "%s Linea grafica da (%s,%s) a (%s,%s) "
 
-#: eeschema/sch_line.cpp:620
+#: eeschema/sch_line.cpp:562
 #, c-format
 msgid "%s Wire from (%s,%s) to (%s,%s)"
 msgstr "%s Filo da (%s,%s) a (%s,%s)"
 
-#: eeschema/sch_line.cpp:624
+#: eeschema/sch_line.cpp:566
 #, c-format
 msgid "%s Bus from (%s,%s) to (%s,%s)"
 msgstr "%s Bus da (%s,%s) a (%s,%s)"
 
-#: eeschema/sch_line.cpp:628
+#: eeschema/sch_line.cpp:570
 #, c-format
 msgid "%s Line on Unknown Layer from (%s,%s) to (%s,%s)"
 msgstr "%s Linea su strato sconosciuto da (%s,%s) a (%s,%s) "
@@ -17842,7 +17842,7 @@ msgstr "Informazioni sulla creazione schemi elettrici con Eeschema"
 msgid "No item to paste."
 msgstr "Nessun elemento da incollare."
 
-#: eeschema/block.cpp:503 eeschema/sheet.cpp:248
+#: eeschema/block.cpp:503 eeschema/files-io.cpp:459 eeschema/sheet.cpp:281
 #, c-format
 msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
@@ -17853,7 +17853,7 @@ msgstr ""
 "destinazione ha già il foglio <%s> o uno dei suoi sottofogli come genitore "
 "da qualche parte nella gerarchia dello schema."
 
-#: eeschema/sch_field.cpp:467
+#: eeschema/sch_field.cpp:419
 #, c-format
 msgid "Field %s"
 msgstr "Campo %s"
@@ -17923,67 +17923,6 @@ msgstr "Clock fronte di discesa"
 msgid "NonLogic"
 msgstr "NonLogico"
 
-#: eeschema/load_one_schematic_file.cpp:94
-#, c-format
-msgid "Failed to open '%s'"
-msgstr "Impossibile aprire \"%s\""
-
-#: eeschema/load_one_schematic_file.cpp:102
-#, c-format
-msgid "Loading '%s'"
-msgstr "Caricamento \"%s\""
-
-#: eeschema/load_one_schematic_file.cpp:109
-#, c-format
-msgid "'%s' is NOT an Eeschema file!"
-msgstr "\"%s\" non è un file di Eeschema!"
-
-#: eeschema/load_one_schematic_file.cpp:128
-#, c-format
-msgid ""
-"'%s' was created by a more recent version of Eeschema and may not load "
-"correctly. Please consider updating!"
-msgstr ""
-"\"%s\" è stato creato con una versione più recente di Eeschema e non può "
-"essere caricato correttamente. Si consiglia di aggiornare!"
-
-#: eeschema/load_one_schematic_file.cpp:139
-msgid ""
-" was created by an older version of Eeschema. It will be stored in the new "
-"file format when you save this file again."
-msgstr ""
-" è stato creato con la vecchia versione di Eeschema. Sarà memorizzato nel "
-"nuovo formato al prossimo salvataggio."
-
-#: eeschema/load_one_schematic_file.cpp:225
-#, c-format
-msgid "Eeschema file text load error at line %d"
-msgstr "Eeschema: errore nel file di testo alla riga %d"
-
-#: eeschema/load_one_schematic_file.cpp:241
-#, c-format
-msgid "Eeschema file undefined object at line %d, aborted"
-msgstr "Oggetto non definito nel file Eeschema alla riga %d, interrotto"
-
-#: eeschema/load_one_schematic_file.cpp:264
-#, c-format
-msgid "Eeschema file object not loaded at line %d, aborted"
-msgstr "Oggetto non caricato nel file Eeschema alla riga %d, interrotto"
-
-#: eeschema/load_one_schematic_file.cpp:281
-#, c-format
-msgid "Done Loading <%s>"
-msgstr "Caricamento di \"%s\" eseguito"
-
-#: eeschema/load_one_schematic_file.cpp:310
-#, c-format
-msgid ""
-"Eeschema file dimension definition error line %d,\n"
-"Abort reading file.\n"
-msgstr ""
-"Definizioni delle dimensioni errate alla linea %d.\n"
-"Il file verrà chiuso.\n"
-
 #: eeschema/widgets/component_tree.cpp:99
 msgid "Search"
 msgstr "Cerca"
@@ -18005,12 +17944,12 @@ msgid "Bus"
 msgstr "Bus"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:61
-#: eeschema/sch_junction.h:86
+#: eeschema/sch_junction.h:82
 msgid "Junction"
 msgstr "Giunzione"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:62
-#: eeschema/sch_text.cpp:735
+#: eeschema/sch_text.cpp:617
 msgid "Label"
 msgstr "Etichetta"
 
@@ -18077,7 +18016,7 @@ msgid "Brightened"
 msgstr "Illuminato"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:102
-#: eeschema/sch_component.cpp:1776
+#: eeschema/sch_component.cpp:1340
 msgid "Component"
 msgstr "Componente"
 
@@ -18100,40 +18039,40 @@ msgstr ""
 "e non sarà possibile vederli sullo schermo. Sicuri\n"
 "di voler usare questi colori?"
 
-#: eeschema/sch_component.cpp:1771
+#: eeschema/sch_component.cpp:1335
 msgid "Power symbol"
 msgstr "Simbolo di alimentazione"
 
-#: eeschema/sch_component.cpp:1780
+#: eeschema/sch_component.cpp:1344
 msgid "Alias of"
 msgstr "Alias di"
 
-#: eeschema/sch_component.cpp:1788
+#: eeschema/sch_component.cpp:1352
 msgid "Undefined!!!"
 msgstr "Indefinito!!!"
 
-#: eeschema/sch_component.cpp:1794
+#: eeschema/sch_component.cpp:1358
 msgid "<Unknown>"
 msgstr "<Sconosciuto>"
 
-#: eeschema/sch_component.cpp:1801
+#: eeschema/sch_component.cpp:1365
 msgid "Key Words"
 msgstr "Parole chiave"
 
-#: eeschema/sch_component.cpp:1812 eeschema/dialogs/dialog_rescue_each.cpp:108
+#: eeschema/sch_component.cpp:1376 eeschema/dialogs/dialog_rescue_each.cpp:108
 msgid "Symbol"
 msgstr "Simbolo"
 
-#: eeschema/sch_component.cpp:1819
+#: eeschema/sch_component.cpp:1383
 msgid "No library defined!!!"
 msgstr "Nessuna libreria definita!!!"
 
-#: eeschema/sch_component.cpp:1823
+#: eeschema/sch_component.cpp:1387
 #, c-format
 msgid "Symbol not found in %s!!!"
 msgstr "Simbolo non trovato in %s!!!"
 
-#: eeschema/sch_component.cpp:2075
+#: eeschema/sch_component.cpp:1639
 #, c-format
 msgid "Component %s, %s"
 msgstr "Componente %s, %s"
@@ -18146,19 +18085,19 @@ msgstr "Navigatore"
 msgid "Root"
 msgstr "Principale"
 
-#: eeschema/sch_sheet.cpp:888
+#: eeschema/sch_sheet.cpp:653
 msgid "Sheet Name"
 msgstr "Nome foglio"
 
-#: eeschema/sch_sheet.cpp:889
+#: eeschema/sch_sheet.cpp:654
 msgid "File Name"
 msgstr "Nome file"
 
-#: eeschema/sch_sheet.cpp:894
+#: eeschema/sch_sheet.cpp:659
 msgid "Time Stamp"
 msgstr "Marcatura temporale"
 
-#: eeschema/sch_sheet.cpp:1106
+#: eeschema/sch_sheet.cpp:871
 #, c-format
 msgid "Hierarchical Sheet %s"
 msgstr "Foglio gerarchico %s"
@@ -18177,7 +18116,7 @@ msgstr "Nome file:"
 msgid "Can't save file <%s>"
 msgstr "Impossibile salvare il file <%s>"
 
-#: eeschema/sch_marker.cpp:143
+#: eeschema/sch_marker.cpp:121
 msgid "Electronics Rule Check Error"
 msgstr "Errore controllo regole elettroniche"
 
@@ -18292,7 +18231,7 @@ msgstr ""
 msgid " [no file]"
 msgstr "[nessun file]"
 
-#: eeschema/sch_sheet_pin.cpp:502
+#: eeschema/sch_sheet_pin.cpp:346
 #, c-format
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Punto di connessione gerarchico %s"
@@ -18763,19 +18702,19 @@ msgstr "&Importa ed esporta"
 msgid "Import and export settings"
 msgstr "Impostazioni importa e esporta"
 
-#: eeschema/pin_type.cpp:38 eeschema/sch_text.cpp:800
+#: eeschema/pin_type.cpp:38 eeschema/sch_text.cpp:682
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:30
 #: eeschema/dialogs/dialog_edit_label_base.cpp:82
 msgid "Input"
 msgstr "Ingresso"
 
-#: eeschema/pin_type.cpp:41 eeschema/sch_text.cpp:801
+#: eeschema/pin_type.cpp:41 eeschema/sch_text.cpp:683
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:31
 #: eeschema/dialogs/dialog_edit_label_base.cpp:82
 msgid "Output"
 msgstr "Uscita"
 
-#: eeschema/pin_type.cpp:44 eeschema/sch_text.cpp:802
+#: eeschema/pin_type.cpp:44 eeschema/sch_text.cpp:684
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:32
 #: eeschema/dialogs/dialog_edit_label_base.cpp:82
 msgid "Bidirectional"
@@ -18785,7 +18724,7 @@ msgstr "Bidirezionale"
 msgid "Tri-state"
 msgstr "Tri-state"
 
-#: eeschema/pin_type.cpp:50 eeschema/sch_text.cpp:804
+#: eeschema/pin_type.cpp:50 eeschema/sch_text.cpp:686
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:34
 #: eeschema/dialogs/dialog_spice_model_base.cpp:199
 #: eeschema/dialogs/dialog_edit_label_base.cpp:82
@@ -18889,7 +18828,7 @@ msgstr "File %s salvato"
 msgid "File write operation failed."
 msgstr "Operazione di scrittura file fallita"
 
-#: eeschema/files-io.cpp:210 eeschema/files-io.cpp:637
+#: eeschema/files-io.cpp:210 eeschema/files-io.cpp:750
 #, c-format
 msgid "Schematic file '%s' is already open."
 msgstr "Il file schema \"%s\" è già aperto."
@@ -18899,7 +18838,7 @@ msgstr "Il file schema \"%s\" è già aperto."
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "Lo schema \"%s\" non esiste. Volete crearlo?"
 
-#: eeschema/files-io.cpp:305 eeschema/files-io.cpp:678
+#: eeschema/files-io.cpp:305 eeschema/files-io.cpp:791
 #, c-format
 msgid ""
 "Error loading schematic file '%s'.\n"
@@ -18908,7 +18847,7 @@ msgstr ""
 "Errore durante il caricamento del file schema \"%s\".\n"
 "%s"
 
-#: eeschema/files-io.cpp:309 eeschema/files-io.cpp:682
+#: eeschema/files-io.cpp:309 eeschema/files-io.cpp:795
 #, c-format
 msgid "Failed to load '%s'"
 msgstr "Impossibile caricare \"%s\""
@@ -18923,32 +18862,45 @@ msgstr ""
 "automaticamente. Salvare lo schema per riparare il file rovinato o potrebbe "
 "non essere usabile con altre versioni di KiCad."
 
-#: eeschema/files-io.cpp:390
+#: eeschema/files-io.cpp:391
 msgid "Append Schematic"
 msgstr "Accoda schema"
 
-#: eeschema/files-io.cpp:513
+#: eeschema/files-io.cpp:439 eeschema/sheet.cpp:252
+#, c-format
+msgid "Error occurred loading schematic file '%s'."
+msgstr "Errore durante il caricamento del file dello schema elettrico \"%s\"."
+
+#: eeschema/files-io.cpp:442 eeschema/sheet.cpp:255
+#, c-format
+msgid "Failed to load schematic '%s'"
+msgstr "Impossibile caricare lo schema elettrico \"%s\""
+
+#: eeschema/files-io.cpp:507
+#, c-format
+msgid "An error occurred loading the symbol library table '%s'."
+msgstr "Errore durante il caricamento della tabella librerie simboli \"%s\"."
+
+#: eeschema/files-io.cpp:629
 msgid ""
-"This operation cannot be undone. Besides, take into account that "
-"hierarchical sheets will not be appended.\n"
+"This operation cannot be undone.\n"
 "\n"
 "Do you want to save the current document before proceeding?"
 msgstr ""
-"Questa operazione non può esere annullata. Inoltre considerare che i fogli "
-"gerarchici non posso essere aggiunti.\n"
+"Questa operazione non può esere annullata.\n"
 "\n"
-"Si desidera salvare il documento prima di procedere?"
+"Salvare il documento corrente prima di procedere?"
 
-#: eeschema/files-io.cpp:531
+#: eeschema/files-io.cpp:647
 msgid "Import Schematic"
 msgstr "Importa schema"
 
-#: eeschema/files-io.cpp:556
+#: eeschema/files-io.cpp:671
 #, c-format
-msgid "Directory '%s' is not writable"
-msgstr "Cartella \"%s\" non scrivibile"
+msgid "Directory '%s' is not writable."
+msgstr "La cartella \"%s\" non è scrivibile."
 
-#: eeschema/files-io.cpp:708
+#: eeschema/files-io.cpp:821
 msgid ""
 "The current schematic has been modified.  Do you wish to save the changes?"
 msgstr "Lo schema corrente è stato modificato. Salvare le modifiche?"
@@ -19118,11 +19070,11 @@ msgid ""
 msgstr ""
 "Inserire il simbolo python che implementa le funzioni SCH_PLUGIN::Symbol*()."
 
-#: eeschema/sch_bus_entry.cpp:335
+#: eeschema/sch_bus_entry.cpp:274
 msgid "Bus to Wire Entry"
 msgstr "Elemento da bus a filo"
 
-#: eeschema/sch_bus_entry.cpp:341
+#: eeschema/sch_bus_entry.cpp:280
 msgid "Bus to Bus Entry"
 msgstr "Elemento da bus a bus "
 
@@ -19653,35 +19605,35 @@ msgstr "Mostra tabella pin"
 msgid "Show pins electrical type"
 msgstr "Mostra tipo elettrico dei pin"
 
-#: eeschema/sch_text.cpp:731
+#: eeschema/sch_text.cpp:613
 msgid "Graphic Text"
 msgstr "Testo grafico"
 
-#: eeschema/sch_text.cpp:739
+#: eeschema/sch_text.cpp:621
 msgid "Global Label"
 msgstr "Etichetta globale"
 
-#: eeschema/sch_text.cpp:743
+#: eeschema/sch_text.cpp:625
 msgid "Hierarchical Label"
 msgstr "Etichetta gerarchica"
 
-#: eeschema/sch_text.cpp:747
+#: eeschema/sch_text.cpp:629
 msgid "Hierarchical Sheet Pin"
 msgstr "Pin foglio gerarchico"
 
-#: eeschema/sch_text.cpp:763
+#: eeschema/sch_text.cpp:645
 msgid "Vertical up"
 msgstr "Verticale su"
 
-#: eeschema/sch_text.cpp:767
+#: eeschema/sch_text.cpp:649
 msgid "Horizontal invert"
 msgstr "Orizzontale invertito"
 
-#: eeschema/sch_text.cpp:771
+#: eeschema/sch_text.cpp:653
 msgid "Vertical down"
 msgstr "Verticale giù"
 
-#: eeschema/sch_text.cpp:781
+#: eeschema/sch_text.cpp:663
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:107
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:203
@@ -19689,21 +19641,21 @@ msgstr "Verticale giù"
 msgid "Bold Italic"
 msgstr "Grassetto corsivo"
 
-#: eeschema/sch_text.cpp:803 eeschema/dialogs/dialog_edit_label_base.cpp:82
+#: eeschema/sch_text.cpp:685 eeschema/dialogs/dialog_edit_label_base.cpp:82
 msgid "Tri-State"
 msgstr "Triplice stato"
 
-#: eeschema/sch_text.cpp:1015
+#: eeschema/sch_text.cpp:812
 #, c-format
 msgid "Label %s"
 msgstr "Etichetta %s"
 
-#: eeschema/sch_text.cpp:1478
+#: eeschema/sch_text.cpp:1181
 #, c-format
 msgid "Global Label %s"
 msgstr "Etichetta globale %s"
 
-#: eeschema/sch_text.cpp:1836
+#: eeschema/sch_text.cpp:1444
 #, c-format
 msgid "Hierarchical Label %s"
 msgstr "Etichetta gerarchica %s"
@@ -20681,26 +20633,26 @@ msgid ""
 msgstr ""
 "Si è tentato di rimuovere il campo %s del componente %s nella libreria %s."
 
-#: eeschema/sheet.cpp:84
+#: eeschema/sheet.cpp:85
 msgid "File name is not valid!"
 msgstr "Nome file non valido! Termina"
 
-#: eeschema/sheet.cpp:93
+#: eeschema/sheet.cpp:94
 #, c-format
 msgid "A sheet named \"%s\" already exists."
 msgstr "Un file nominato \"%s\" è già esistente"
 
-#: eeschema/sheet.cpp:125
+#: eeschema/sheet.cpp:128
 #, c-format
 msgid "A file named '%s' already exists in the current schematic hierarchy."
 msgstr "Il file \"%s\" è già esistente nella gerarchia dello schema corrente."
 
-#: eeschema/sheet.cpp:130
+#: eeschema/sheet.cpp:133
 #, c-format
 msgid "A file named '%s' already exists."
 msgstr "Il file con nome \"%s\" esiste già."
 
-#: eeschema/sheet.cpp:133
+#: eeschema/sheet.cpp:136
 msgid ""
 "\n"
 "\n"
@@ -20710,21 +20662,21 @@ msgstr ""
 "\n"
 "Si desidera creare un foglio con il contenuto di questo file?"
 
-#: eeschema/sheet.cpp:160
+#: eeschema/sheet.cpp:163
 msgid "Changing the sheet file name cannot be undone.  "
 msgstr "Impossibile cambiare il nome file del foglio."
 
-#: eeschema/sheet.cpp:168
+#: eeschema/sheet.cpp:171
 #, c-format
 msgid "A file named <%s> already exists in the current schematic hierarchy."
 msgstr " Il file <%s> è già esistente nella corrente gerarchia"
 
-#: eeschema/sheet.cpp:173
+#: eeschema/sheet.cpp:176
 #, c-format
 msgid "A file named <%s> already exists."
 msgstr "Il file nominato <%s> è già esistente"
 
-#: eeschema/sheet.cpp:178
+#: eeschema/sheet.cpp:180
 msgid ""
 "\n"
 "\n"
@@ -20734,7 +20686,7 @@ msgstr ""
 "\n"
 "Si desidera sostituire il foglio con il contenuto di questo file?"
 
-#: eeschema/sheet.cpp:190
+#: eeschema/sheet.cpp:192
 msgid ""
 "This sheet uses shared data in a complex hierarchy.\n"
 "\n"
@@ -20742,9 +20694,27 @@ msgstr ""
 "Questo foglio utilizza dati condivisi in una gerarchia complessa.\n"
 "\n"
 
-#: eeschema/sheet.cpp:191
+#: eeschema/sheet.cpp:193
 msgid "Do you wish to convert it to a simple hierarchical sheet?"
 msgstr "Desideri convertire in un foglio a gerarchia semplificata?"
+
+#: eeschema/sheet.cpp:218
+#, c-format
+msgid "Error occurred saving schematic file '%s'."
+msgstr "Errore durante il salvataggio del file dello schema elettrico \"%s\"."
+
+#: eeschema/sheet.cpp:221
+#, c-format
+msgid "Failed to save schematic '%s'"
+msgstr "Fallito il salvataggio dello schema elettrico \"%s\""
+
+#: eeschema/sheet.cpp:294
+#, c-format
+msgid ""
+"The schematic '%s' has not been remapped to the symbol library table. Most "
+"if not all of the symbol library links will be broken.  Do you want to "
+"continue?"
+msgstr "Lo schema \"%s\" non è stato rimappato alla tabella delle librerie di simboli. Molti se non tutti i collegamenti alle librerie di simboli saranno interrotti. Continuare?"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:46
 #: eeschema/dialogs/dialog_bom_base.cpp:58
@@ -21384,7 +21354,7 @@ msgid "Dash-Dot"
 msgstr "Tratto-punto"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:64
-#: eeschema/dialogs/dialog_edit_line_style_base.h:76
+#: eeschema/dialogs/dialog_edit_line_style_base.h:74
 msgid "Line Style"
 msgstr "Stile linea"
 
@@ -23403,7 +23373,7 @@ msgstr "Aggiungi archi al corpo del componente"
 msgid "Add lines and polygons to component body"
 msgstr "Aggiungi linee e poligoni al corpo del componente"
 
-#: eeschema/sch_marker.h:100
+#: eeschema/sch_marker.h:97
 msgid "ERC Marker"
 msgstr "Evidenziatore ERC"
 
@@ -23411,11 +23381,11 @@ msgstr "Evidenziatore ERC"
 msgid "Spice Simulator"
 msgstr "Simulatore Spice"
 
-#: eeschema/sch_bitmap.h:131
+#: eeschema/sch_bitmap.h:129
 msgid "Image"
 msgstr "Immagine"
 
-#: eeschema/sch_no_connect.h:88
+#: eeschema/sch_no_connect.h:84
 msgid "No Connect"
 msgstr "Non connesso"
 
@@ -27422,6 +27392,48 @@ msgstr "Percorso libreria"
 #: include/lib_table_grid.h:172
 msgid "Plugin Type"
 msgstr "Tipo plugin"
+
+#~ msgid "Failed to open '%s'"
+#~ msgstr "Impossibile aprire \"%s\""
+
+#~ msgid "Loading '%s'"
+#~ msgstr "Caricamento \"%s\""
+
+#~ msgid "'%s' is NOT an Eeschema file!"
+#~ msgstr "\"%s\" non è un file di Eeschema!"
+
+#~ msgid ""
+#~ "'%s' was created by a more recent version of Eeschema and may not load "
+#~ "correctly. Please consider updating!"
+#~ msgstr ""
+#~ "\"%s\" è stato creato con una versione più recente di Eeschema e non può "
+#~ "essere caricato correttamente. Si consiglia di aggiornare!"
+
+#~ msgid ""
+#~ " was created by an older version of Eeschema. It will be stored in the "
+#~ "new file format when you save this file again."
+#~ msgstr ""
+#~ " è stato creato con la vecchia versione di Eeschema. Sarà memorizzato nel "
+#~ "nuovo formato al prossimo salvataggio."
+
+#~ msgid "Eeschema file text load error at line %d"
+#~ msgstr "Eeschema: errore nel file di testo alla riga %d"
+
+#~ msgid "Eeschema file undefined object at line %d, aborted"
+#~ msgstr "Oggetto non definito nel file Eeschema alla riga %d, interrotto"
+
+#~ msgid "Eeschema file object not loaded at line %d, aborted"
+#~ msgstr "Oggetto non caricato nel file Eeschema alla riga %d, interrotto"
+
+#~ msgid "Done Loading <%s>"
+#~ msgstr "Caricamento di \"%s\" eseguito"
+
+#~ msgid ""
+#~ "Eeschema file dimension definition error line %d,\n"
+#~ "Abort reading file.\n"
+#~ msgstr ""
+#~ "Definizioni delle dimensioni errate alla linea %d.\n"
+#~ "Il file verrà chiuso.\n"
 
 #~ msgid "Unload the selected library"
 #~ msgstr "Non caricare la libreria selezionata"
