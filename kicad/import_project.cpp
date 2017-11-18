@@ -85,11 +85,12 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
     wxString protitle = _( "KiCad Project Destination" );
 
-    wxFileDialog prodlg( this, protitle, pro.GetPath(), pro.GetFullName(),
-                         ProjectFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    // Don't use wxFileDialog here.  On GTK builds, the default path is returned unless a
+    // file is actually selected.
+    wxDirDialog prodlg( this, protitle, pro.GetPath(), wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
     if( prodlg.ShowModal() == wxID_CANCEL )
-                return;
+        return;
 
     pro.SetPath( prodlg.GetPath() );
 
