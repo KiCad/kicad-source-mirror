@@ -36,8 +36,8 @@
 class NETLIST_EXPORTER_PSPICE_SIM : public NETLIST_EXPORTER_PSPICE
 {
 public:
-    NETLIST_EXPORTER_PSPICE_SIM( NETLIST_OBJECT_LIST* aMasterList ) :
-        NETLIST_EXPORTER_PSPICE( aMasterList )
+    NETLIST_EXPORTER_PSPICE_SIM( NETLIST_OBJECT_LIST* aMasterList, PROJECT* aProject = nullptr ) :
+        NETLIST_EXPORTER_PSPICE( aMasterList, aProject )
     {
     }
 

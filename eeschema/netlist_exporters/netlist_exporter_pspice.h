@@ -30,7 +30,7 @@
 #include <list>
 #include <map>
 
-class SEARCH_STACK;
+class PROJECT;
 
 /// Flags for Spice netlist generation (can be combined)
 enum SPICE_NETLIST_OPTIONS {
@@ -99,9 +99,9 @@ struct SPICE_ITEM
 class NETLIST_EXPORTER_PSPICE : public NETLIST_EXPORTER
 {
 public:
-    NETLIST_EXPORTER_PSPICE( NETLIST_OBJECT_LIST* aMasterList, SEARCH_STACK* aPaths = NULL ) :
+    NETLIST_EXPORTER_PSPICE( NETLIST_OBJECT_LIST* aMasterList, PROJECT* aProject = NULL ) :
         NETLIST_EXPORTER( aMasterList ),
-        m_paths( aPaths )
+        m_project( aProject )
     {
     }
 
@@ -228,8 +228,8 @@ private:
     ///> List of items representing schematic components in the Spice world
     SPICE_ITEM_LIST m_spiceItems;
 
-    ///> Paths to be searched for included Spice libraries
-    SEARCH_STACK* m_paths;
+    ///> Project object to fetch its settings (e.g. paths)
+    PROJECT* m_project;
 
     // Component fields that are processed during netlist export & simulation
     static const std::vector<wxString> m_spiceFields;

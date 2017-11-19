@@ -35,6 +35,7 @@
 #include <netlist.h>
 #include <sch_reference_list.h>
 #include <class_netlist_object.h>
+#include <env_paths.h>
 
 #include <wx/tokenzr.h>
 #include <wx/regex.h>
@@ -72,10 +73,10 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
     {
         wxString full_path;
 
-        if( ( aCtl & NET_ADJUST_INCLUDE_PATHS ) && m_paths )
+        if( ( aCtl & NET_ADJUST_INCLUDE_PATHS ) )
         {
             // Look for the library in known search locations
-            full_path = m_paths->FindValidPath( lib );
+            full_path = ResolveFile( lib, &Pgm().GetLocalEnvVariables(), m_project );
 
             if( full_path.IsEmpty() )
             {

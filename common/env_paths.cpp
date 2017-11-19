@@ -110,3 +110,43 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
 
     return normalizedFullPath;
 }
+
+
+// Create file path by appending path and file name. This approach allows the filename
+// to contain a relative path, whereas wxFileName::SetPath() would replace the
+// relative path
+static wxString createFilePath( const wxString& aPath, const wxString& aFileName )
+{
+    wxString path( aPath );
+
+    if( !path.EndsWith( wxFileName::GetPathSeparator() ) )
+        path.Append( wxFileName::GetPathSeparator() );
+
+    return path + aFileName;
+}
+
+
+wxString ResolveFile( const wxString& aFileName, const ENV_VAR_MAP* aEnvVars,
+        const PROJECT* aProject )
+{
+    if( aProject )
+    {
+        wxFileName fn( createFilePath( aProject->GetProjectPath(), aFileName ) );
+
+        if( fn.Exists() )
+            return fn.GetFullPath();
+    }
+
+    if( aEnvVars )
+    {
+        for( auto& entry : *aEnvVars )
+        {
+            wxFileName fn( createFilePath( entry.second.GetValue(), aFileName ) );
+
+            if( fn.Exists() )
+                return fn.GetFullPath();
+        }
+    }
+
+    return wxEmptyString;
+}

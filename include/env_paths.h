@@ -29,7 +29,7 @@
 
 /**
  * Normalizes a file path to an environmental variable, if possible.
- * 
+ *
  * @param aFilePath is the full file path (path and file name) to be normalized.
  * @param aEnvVars is an optional map of environmental variables to try substition with.
  * @param aProject is an optional project, to normalize the file path to the project path.
@@ -37,6 +37,18 @@
  *          path could not be normalized.
  */
 wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars,
+        const PROJECT* aProject );
+
+/**
+ * Searches the default paths trying to find one with the requested file.
+ *
+ * @param aFileName is the name of the searched file. It might be a relative path.
+ * @param aEnvVars is an optional map of environmental variables that can contain paths.
+ * @param aProject is an optional project, to check the project path.
+ * @return Full path (apth and file name) if the file was found in one of the paths, otherwise
+ *      an empty string.
+*/
+wxString ResolveFile( const wxString& aFileName, const ENV_VAR_MAP* aEnvVars,
         const PROJECT* aProject );
 
 #endif /* ENV_PATHS_H */
