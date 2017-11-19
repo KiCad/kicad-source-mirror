@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-18 19:01+0100\n"
-"PO-Revision-Date: 2017-11-18 20:17+0100\n"
+"POT-Creation-Date: 2017-11-19 16:13+0100\n"
+"PO-Revision-Date: 2017-11-19 16:15+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -408,10 +408,9 @@ msgstr "Preferenze visualizzatore PDF"
 msgid "Edit Schematic"
 msgstr "Modifica schema"
 
-#: kicad/menubar.cpp:406 eeschema/menubar.cpp:626
-#: eeschema/menubar_libedit.cpp:238
-msgid "Manage Symbol Libraries"
-msgstr "Gestione librerie simboli"
+#: kicad/menubar.cpp:406
+msgid "Edit Schematic Symbols"
+msgstr "Modifica simboli elettrici"
 
 #: kicad/menubar.cpp:410
 msgid "Edit PCB Layout"
@@ -1015,7 +1014,7 @@ msgstr "Impronta %s già esistente nella libreria \"%s\""
 msgid "No footprint name defined."
 msgstr "Nessun nome impronta definito."
 
-#: pcbnew/librairi.cpp:80
+#: pcbnew/librairi.cpp:80 eeschema/dialogs/dialog_sym_lib_table.cpp:347
 msgid "Select Library"
 msgstr "Seleziona libreria"
 
@@ -11077,7 +11076,7 @@ msgstr "Cancella la riga selezionata"
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:67
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:85
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:146
-#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:144
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:147
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:42
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:110
 msgid "Move Up"
@@ -11089,7 +11088,7 @@ msgstr "Sposta la riga selezionata in alto di una posizione"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:72
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:151
-#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:149
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:152
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:45
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:113
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:674
@@ -13749,32 +13748,32 @@ msgid "Append with Wizard"
 msgstr "Accoda con l'assistente"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:136
-#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:134
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:137
 msgid "Append Library"
 msgstr "Accoda libreria"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:137
-#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:135
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:138
 msgid "Add a PCB library row to this table"
 msgstr "Aggiungi una riga libreria PCB a questa tabella"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:141
-#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:139
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:142
 msgid "Remove Library"
 msgstr "Rimuovi libreria"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:142
-#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:140
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:143
 msgid "Remove a PCB library from this library table"
 msgstr "Rimuovi una libreria PCB da questa tabella librerie"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:147
-#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:145
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:148
 msgid "Move the currently selected row up one position"
 msgstr "Sposta la riga selezionata su di una posizione"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:152
-#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:150
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:153
 msgid "Move the currently selected row down one position"
 msgstr "Sposta la riga selezionata giù di una posizione"
 
@@ -13787,22 +13786,22 @@ msgid "Zoom into the options table for current row"
 msgstr "Entra nella tabella delle opzioni per la riga corrente"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:168
-#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:161
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:164
 msgid "Path Substitutions"
 msgstr "Sostituzioni percorsi"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:186
-#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:179
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:182
 msgid "Environment Variable"
 msgstr "Variabile d'ambiente"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:187
-#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:180
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:183
 msgid "Path Segment"
 msgstr "Segmento percorso"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:199
-#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:192
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:195
 msgid "This is a read-only table which shows pertinent environment variables."
 msgstr ""
 "Questa è una tabella in sola lettura che mostra le variabili ambiente "
@@ -14077,7 +14076,8 @@ msgstr "Escludi il contenuto dello strato di bordo scheda dagli altri strati"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:116
 msgid "Exclude contents of the pcb edge layer from all other layers"
-msgstr "Esclude il contenuto dello strato di bordo scheda da tutti gli altri strati"
+msgstr ""
+"Esclude il contenuto dello strato di bordo scheda da tutti gli altri strati"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:120
 msgid "Mirrored plot"
@@ -15120,24 +15120,24 @@ msgid "Fillet radius"
 msgstr "Raggio filetto"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:302
-#: eeschema/dialogs/dialog_sym_lib_table.cpp:265
+#: eeschema/dialogs/dialog_sym_lib_table.cpp:267
 #, c-format
 msgid "Illegal character '%s' found in Nickname: '%s' in row %d"
 msgstr "Carattere illegale \"%s\" trovato nella denominazione: \"%s\" riga %d"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:316
-#: eeschema/dialogs/dialog_sym_lib_table.cpp:279
+#: eeschema/dialogs/dialog_sym_lib_table.cpp:281
 msgid "No Colon in Nicknames"
 msgstr "No duepunti nella denominazione"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:346
-#: eeschema/dialogs/dialog_sym_lib_table.cpp:309
+#: eeschema/dialogs/dialog_sym_lib_table.cpp:311
 #, c-format
 msgid "Duplicate Nickname: '%s' in rows %d and %d"
 msgstr "Denominazioni duplicate: \"%s\" righe %d e %d"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:361
-#: eeschema/dialogs/dialog_sym_lib_table.cpp:324
+#: eeschema/dialogs/dialog_sym_lib_table.cpp:326
 msgid "Please Delete or Modify One"
 msgstr "Cancellare o modificare un elemento"
 
@@ -18288,7 +18288,7 @@ msgstr "Importa"
 msgid "Export"
 msgstr "Esporta"
 
-#: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:82
+#: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:83
 #, c-format
 msgid "Could not find library file %s"
 msgstr "Non trovato il file di libreria %s"
@@ -18682,9 +18682,14 @@ msgstr "Mostra l'elenco dei tasti correnti e dei comandi corrispondenti"
 msgid "Create hotkey configuration file with current hotkeys"
 msgstr "Crea file tasti per esportare la configurazione corrente"
 
-#: eeschema/menubar.cpp:627 eeschema/menubar_libedit.cpp:239
-msgid "Edit the global and project symbol library tables."
-msgstr "Modifica le tabelle librerie di simboli globale e del progetto."
+#: eeschema/menubar.cpp:626
+msgid "Manage Symbol Library Tables"
+msgstr "Gestione tabelle librerie di simboli"
+
+#: eeschema/menubar.cpp:627
+msgid ""
+"Edit the global and project symbol library tables (list of active libraries)."
+msgstr "Modifica le tabelle delle librerie di simboli globale e del progetto (elenco delle librerie attive)."
 
 #: eeschema/menubar.cpp:636 eeschema/menubar_libedit.cpp:245
 msgid "General &Options"
@@ -19724,6 +19729,14 @@ msgstr "&Testo grafico"
 msgid "&Rectangle"
 msgstr "&Rettangolo"
 
+#: eeschema/menubar_libedit.cpp:238
+msgid "Manage Symbol Libraries"
+msgstr "Gestione librerie simboli"
+
+#: eeschema/menubar_libedit.cpp:239
+msgid "Edit the global and project symbol library tables."
+msgstr "Modifica le tabelle librerie di simboli globale e del progetto."
+
 #: eeschema/menubar_libedit.cpp:246
 msgid "Set Component Editor default values and options"
 msgstr "Imposta i valori predefiniti e le opzioni dell'editor dei componenti"
@@ -20714,7 +20727,10 @@ msgid ""
 "The schematic '%s' has not been remapped to the symbol library table. Most "
 "if not all of the symbol library links will be broken.  Do you want to "
 "continue?"
-msgstr "Lo schema \"%s\" non è stato rimappato alla tabella delle librerie di simboli. Molti se non tutti i collegamenti alle librerie di simboli saranno interrotti. Continuare?"
+msgstr ""
+"Lo schema \"%s\" non è stato rimappato alla tabella delle librerie di "
+"simboli. Molti se non tutti i collegamenti alle librerie di simboli saranno "
+"interrotti. Continuare?"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:46
 #: eeschema/dialogs/dialog_bom_base.cpp:58
@@ -21915,19 +21931,19 @@ msgstr "Il filtro impronta \"%s\" è già stato definito."
 msgid "Edit footprint filter"
 msgstr "Modifica filtro impronte"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:183
+#: eeschema/dialogs/dialog_symbol_remap.cpp:144
 #, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
 msgstr ""
 "Aggiunta libreria \"%s\", file \"%s\" alla tabella librerie simboli del "
 "progetto."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:192
+#: eeschema/dialogs/dialog_symbol_remap.cpp:153
 #, c-format
 msgid "Library '%s' not found."
 msgstr "Libreria \"%s\" non trovata."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:209
+#: eeschema/dialogs/dialog_symbol_remap.cpp:170
 #, c-format
 msgid ""
 "Failed to write project symbol library table. Error:\n"
@@ -21936,21 +21952,21 @@ msgstr ""
 "Fallita scrittura file tabella librerie simboli progetto. Errore:\n"
 "  %s"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:214
+#: eeschema/dialogs/dialog_symbol_remap.cpp:175
 msgid "Created project symbol library table.\n"
 msgstr "Creata una tabella librerie simboli del progetto.\n"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:242
+#: eeschema/dialogs/dialog_symbol_remap.cpp:203
 #, c-format
 msgid "No symbol '%s' found in symbol library table."
 msgstr "Simbolo \"%s\" non trovato nella tabella librerie simboli."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:248
+#: eeschema/dialogs/dialog_symbol_remap.cpp:209
 #, c-format
 msgid "Symbol '%s' mapped to symbol library '%s'."
 msgstr "Symbolo \"%s\" mappato sulla libreria simboli \"%s\"."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:257
+#: eeschema/dialogs/dialog_symbol_remap.cpp:218
 msgid "Symbol library table mapping complete!"
 msgstr "Mappatura tabella librerie simboli completa!"
 
@@ -23086,6 +23102,10 @@ msgstr "Giustifica orizzontalmente"
 msgid "Vertical Justify"
 msgstr "Giustifica verticalmente"
 
+#: eeschema/dialogs/dialog_sym_lib_table_base.cpp:134
+msgid "Browse Libraries..."
+msgstr "Esplora librerie..."
+
 #: eeschema/dialogs/dialog_symbol_remap_base.cpp:24
 msgid ""
 "This schematic currently uses the symbol library look\n"
@@ -23406,7 +23426,7 @@ msgstr "Proprietà punto di connessione tra fogli"
 msgid "BOM editor"
 msgstr "Editor diba"
 
-#: eeschema/dialogs/dialog_sym_lib_table_base.h:73
+#: eeschema/dialogs/dialog_sym_lib_table_base.h:75
 msgid "Schematic Library Tables"
 msgstr "Tabelle di librerie di schemi elettrici"
 
