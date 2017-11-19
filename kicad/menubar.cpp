@@ -403,7 +403,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     msg = AddHotkeyName( _( "Edit Schematic" ), kicad_Manager_Hokeys_Descr, HK_RUN_EESCHEMA );
     AddMenuItem( toolsMenu, ID_TO_SCH, msg, KiBitmap( eeschema_xpm ) );
 
-    msg = AddHotkeyName( _( "Manage Symbol Libraries" ),
+    msg = AddHotkeyName( _( "Edit Schematic Symbols" ),
                          kicad_Manager_Hokeys_Descr, HK_RUN_LIBEDIT );
     AddMenuItem( toolsMenu, ID_TO_SCH_LIB_EDITOR, msg, KiBitmap( libedit_xpm ) );
 

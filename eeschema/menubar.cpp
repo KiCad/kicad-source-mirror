@@ -623,8 +623,8 @@ static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
     // Library
     AddMenuItem( aParentMenu,
                  ID_EDIT_SYM_LIB_TABLE,
-                 _( "Manage Symbol Libraries" ),
-                 _( "Edit the global and project symbol library tables." ),
+                 _( "Manage Symbol Library Tables" ),
+                 _( "Edit the global and project symbol library tables (list of active libraries)." ),
                  KiBitmap( library_table_xpm ) );
 
     // Options (Preferences on WXMAC)
