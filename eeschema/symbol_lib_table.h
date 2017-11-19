@@ -54,7 +54,7 @@ public:
     }
 
     SYMBOL_LIB_TABLE_ROW() :
-        type( SCH_IO_MGR::SCH_KICAD )
+        type( SCH_IO_MGR::SCH_LEGACY )
     {
     }
 

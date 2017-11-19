@@ -165,7 +165,7 @@ DIALOG_SYMBOL_LIB_TABLE::DIALOG_SYMBOL_LIB_TABLE( wxTopLevelWindow* aParent,
 
     wxArrayString pluginChoices;
 
-    pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_KICAD ) );
+//    pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_KICAD ) );
     pluginChoices.Add( SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) );
 
     wxGridCellAttr* attr;
@@ -399,8 +399,7 @@ void DIALOG_SYMBOL_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
     {
         int row = m_cur_grid->GetNumberRows() - 1;
         // Gives a default type (currently, only one type exists):
-        m_cur_grid->SetCellValue( row, COL_TYPE,
-                    SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) );
+        m_cur_grid->SetCellValue( row, COL_TYPE, SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) );
         scrollToRow( row );
     }
 }

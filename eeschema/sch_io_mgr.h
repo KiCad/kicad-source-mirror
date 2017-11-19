@@ -54,7 +54,7 @@ public:
     DEFINE_ENUM_VECTOR( SCH_FILE_T,
     {
         SCH_LEGACY,      ///< Legacy Eeschema file formats prior to s-expression.
-        SCH_KICAD,       ///< The s-expression version of the schematic file formats.
+//      SCH_KICAD,       ///< The s-expression version of the schematic file formats.
         SCH_EAGLE,       ///< Autodesk Eagle file format
         // Add your schematic type here.
 
