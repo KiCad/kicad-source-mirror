@@ -396,7 +396,13 @@ void DIALOG_SYMBOL_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 void DIALOG_SYMBOL_LIB_TABLE::appendRowHandler( wxCommandEvent& event )
 {
     if( m_cur_grid->AppendRows( 1 ) )
-        scrollToRow( m_cur_grid->GetNumberRows() - 1 );
+    {
+        int row = m_cur_grid->GetNumberRows() - 1;
+        // Gives a default type (currently, only one type exists):
+        m_cur_grid->SetCellValue( row, COL_TYPE,
+                    SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) );
+        scrollToRow( row );
+    }
 }
 
 
