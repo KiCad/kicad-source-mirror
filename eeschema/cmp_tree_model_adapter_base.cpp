@@ -144,6 +144,7 @@ void CMP_TREE_MODEL_ADAPTER_BASE::AddAliasList(
 
 void CMP_TREE_MODEL_ADAPTER_BASE::UpdateSearchString( wxString const& aSearch )
 {
+    m_widget->Freeze();
     m_tree.ResetScore();
 
     wxStringTokenizer tokenizer( aSearch );
@@ -158,6 +159,7 @@ void CMP_TREE_MODEL_ADAPTER_BASE::UpdateSearchString( wxString const& aSearch )
 
     filterContents();
     ShowResults() || ShowPreselect() || ShowSingleLibrary();
+    m_widget->Thaw();
 }
 
 
