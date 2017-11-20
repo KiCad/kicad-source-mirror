@@ -1267,7 +1267,7 @@ void ZONE_CONTAINER::Hatch()
             // Push only one line for diagonal hatch,
             // or for small lines < twice the line length
             // else push 2 small lines
-            if( m_hatchStyle == DIAGONAL_FULL || fabs( dx ) < 2 * hatch_line_len )
+            if( m_hatchStyle == DIAGONAL_FULL || std::abs( dx ) < 2 * hatch_line_len )
             {
                 m_HatchLines.push_back( SEG( pointbuffer[ip], pointbuffer[ip + 1] ) );
             }
