@@ -169,6 +169,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
                     LIB_EDIT_FRAME::OnOrient )
 
     // Update user interface elements.
+    EVT_UPDATE_UI( wxID_PASTE, LIB_EDIT_FRAME::OnUpdatePaste )
     EVT_UPDATE_UI( ID_LIBEDIT_REVERT_LIBRARY, LIB_EDIT_FRAME::OnUpdateLibModified )
     EVT_UPDATE_UI( ID_LIBEDIT_EXPORT_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE_PART, LIB_EDIT_FRAME::OnUpdatePartModified )
@@ -536,6 +537,12 @@ void LIB_EDIT_FRAME::OnUpdatePartModified( wxUpdateUIEvent& aEvent )
                 && m_libMgr->IsPartModified( partName, libName ) );
     }
     else wxFAIL;
+}
+
+
+void LIB_EDIT_FRAME::OnUpdatePaste( wxUpdateUIEvent& event )
+{
+    event.Enable( m_clipboard.GetCount() > 0 );
 }
 
 

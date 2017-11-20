@@ -130,13 +130,20 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                             _( "Export part" ) );
 
     m_mainToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "Undo last command" ), g_Libedit_Hokeys_Descr, HK_UNDO, IS_COMMENT );
+
+    m_mainToolBar->AddTool( wxID_PASTE, wxEmptyString, KiBitmap( paste_xpm ),
+                            _( "Paste" ) );
+
+    m_mainToolBar->AddSeparator();
+
+    msg = AddHotkeyName( HELP_UNDO, g_Libedit_Hokeys_Descr, HK_UNDO, IS_COMMENT );
     m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString, KiBitmap( undo_xpm ), msg );
-    msg = AddHotkeyName( _( "Redo last command" ), g_Libedit_Hokeys_Descr, HK_REDO,
-                         IS_COMMENT );
+
+    msg = AddHotkeyName( HELP_REDO, g_Libedit_Hokeys_Descr, HK_REDO, IS_COMMENT );
     m_mainToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ), msg );
 
     m_mainToolBar->AddSeparator();
+
     m_mainToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_PART, wxEmptyString,
                             KiBitmap( part_properties_xpm ), _( "Edit part properties" ) );
 

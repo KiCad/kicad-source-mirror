@@ -317,6 +317,7 @@ public:
 
     void OnOpenPinTable( wxCommandEvent& aEvent );
 
+    void OnUpdatePaste( wxUpdateUIEvent& event );
     void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
     void OnUpdateEditingPart( wxUpdateUIEvent& event );
     void OnUpdatePartModified( wxUpdateUIEvent& aEvent );
