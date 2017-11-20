@@ -450,8 +450,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
                     m_cursor = controls->GetCursorPosition();
 
-                    updateModificationPoint( selection );
-
                     if ( selection.HasReferencePoint() )
                     {
                         // start moving with the reference point attached to the cursor
@@ -469,11 +467,13 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                     {
                         // Set the current cursor position to the first dragged item origin, so the
                         // movement vector could be computed later
+                        updateModificationPoint( selection );
                         m_cursor = grid.BestDragOrigin( originalCursorPos, curr_item );
                         grid.SetAuxAxes( true, m_cursor );
                     }
                     else
                     {
+                        updateModificationPoint( selection );
                         m_cursor = grid.Align( m_cursor );
                     }
 
@@ -556,6 +556,8 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     controls->SetAutoPan( false );
 
     m_dragging = false;
+    // Discard reference point when selection is "dropped" onto the board (ie: not dragging anymore)
+    selection.ClearReferencePoint();
 
     if( unselect || restore )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
