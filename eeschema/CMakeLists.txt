@@ -42,6 +42,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_edit_line_style.cpp
     dialogs/dialog_edit_line_style_base.cpp
     dialogs/dialog_edit_one_field.cpp
+    dialogs/dialog_edit_components_libid.cpp
+    dialogs/dialog_edit_components_libid_base.cpp
     dialogs/dialog_eeschema_options_base.cpp
     dialogs/dialog_eeschema_options.cpp
     dialogs/dialog_erc.cpp

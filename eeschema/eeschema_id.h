@@ -66,6 +66,7 @@ enum id_eeschema_frm
     ID_RESCUE_CACHED,
     ID_EDIT_SYM_LIB_TABLE,
     ID_REMAP_SYMBOLS,
+    ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID,
 
     /* Schematic editor horizontal toolbar IDs */
     ID_HIERARCHY,

@@ -252,6 +252,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_TO_LIBVIEW, SCH_EDIT_FRAME::OnOpenLibraryViewer )
     EVT_TOOL( ID_RESCUE_CACHED, SCH_EDIT_FRAME::OnRescueProject )
     EVT_MENU( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnRemapSymbols )
+    EVT_MENU( ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID, SCH_EDIT_FRAME::OnEditComponentSymbolsId )
 
     EVT_TOOL( ID_RUN_PCB, SCH_EDIT_FRAME::OnOpenPcbnew )
     EVT_TOOL( ID_RUN_PCB_MODULE_EDITOR, SCH_EDIT_FRAME::OnOpenPcbModuleEditor )
@@ -1274,6 +1275,18 @@ void SCH_EDIT_FRAME::OnRemapSymbols( wxCommandEvent& event )
 
     dlgRemap.ShowQuasiModal();
 
+    m_canvas->Refresh( true );
+}
+
+
+// This method is not the same as OnRemapSymbols.
+// It allows renaming the lib id of groups of components when a symbol
+// has moved from a library to an other library.
+// For instance to rename libname1::mysymbol to libname2::mysymbol
+// or any other lib id name
+void SCH_EDIT_FRAME::OnEditComponentSymbolsId( wxCommandEvent& event )
+{
+    InvokeDialogEditComponentsLibId( this );
     m_canvas->Refresh( true );
 }
 

@@ -454,6 +454,13 @@ void prepareEditMenu( wxMenu* aParentMenu )
                  _( "Update Field Values" ),
                  _( "Sets component fields to original library values" ),
                  KiBitmap( update_fields_xpm ) );
+
+    // Edit components to symbols library links (change LIB_ID values)
+    aParentMenu->AppendSeparator();
+    AddMenuItem( aParentMenu, ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID,
+                 _( "Edit Components to Symbol Library Links" ),
+                 _( "Edit components to symbols library links to switch to an other library link (library IDs)" ),
+                 KiBitmap( update_fields_xpm ) );
 }
 
 

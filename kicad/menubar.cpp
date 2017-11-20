@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -411,7 +411,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                          kicad_Manager_Hokeys_Descr, HK_RUN_PCBNEW );
     AddMenuItem( toolsMenu, ID_TO_PCB, msg, KiBitmap( pcbnew_xpm ) );
 
-    msg = AddHotkeyName( _( "Edit PCB Footprint" ),
+    msg = AddHotkeyName( _( "Edit PCB Footprints" ),
                          kicad_Manager_Hokeys_Descr, HK_RUN_FPEDITOR );
     AddMenuItem( toolsMenu, ID_TO_PCB_FP_EDITOR, msg, KiBitmap( module_editor_xpm ) );
 

@@ -98,4 +98,11 @@ int InvokeDialogUpdateFields( SCH_EDIT_FRAME* aCaller,
 #define NET_PLUGIN_CHANGE   1
 int InvokeDialogNetList( SCH_EDIT_FRAME* aCaller );
 
+/**
+ * Run a dialog to modify the LIB_ID of components for instance when a symbol has
+ * moved from a symbol library to an other  symbol library
+ * @return true if changes are made, false if no change
+ */
+bool InvokeDialogEditComponentsLibId( SCH_EDIT_FRAME* aCaller );
+
 #endif  // INVOKE_SCH_DIALOG_H_

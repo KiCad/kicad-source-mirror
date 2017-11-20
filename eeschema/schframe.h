@@ -854,6 +854,10 @@ private:
     void OnOpenLibraryEditor( wxCommandEvent& event );
     void OnRescueProject( wxCommandEvent& event );
     void OnRemapSymbols( wxCommandEvent& aEvent );
+    // a helper function to run the dialog that allows to rename the symbol library Id of
+    // groups of components, for instance after a symbol has moved from a library to
+    // an other library
+    void OnEditComponentSymbolsId( wxCommandEvent& aEvent );
     void OnPreferencesOptions( wxCommandEvent& event );
     void OnCancelCurrentCommand( wxCommandEvent& aEvent );
 
