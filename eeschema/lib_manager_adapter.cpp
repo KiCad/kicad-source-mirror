@@ -222,10 +222,8 @@ bool LIB_MANAGER_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsigned int aCo
 
             // mark current library with inverted colors
             if( node->Name == m_libMgr->GetCurrentLib() )
-            {
                 aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
-                aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
-            }
+
             break;
 
         case CMP_TREE_NODE::LIBID:
@@ -237,10 +235,8 @@ bool LIB_MANAGER_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsigned int aCo
 
             // mark current library with inverted colors
             if( node->LibId == m_libMgr->GetCurrentLibId() )
-            {
                 aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
-                aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
-            }
+
             break;
 
         default:
