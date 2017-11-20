@@ -327,6 +327,9 @@ static EDA_HOTKEY* libEdit_Hotkey_List[] =
     &HkMoveLibItem,
     &HkMirrorX,
     &HkMirrorY,
+    &HkCopyBlock,
+    &HkPasteBlock,
+    &HkCutBlock,
     NULL
 };
 
@@ -703,6 +706,9 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ZOOM_REDRAW:
     case HK_ZOOM_CENTER:
     case HK_ZOOM_AUTO:
+    case HK_PASTE_BLOCK:
+    case HK_COPY_BLOCK:
+    case HK_CUT_BLOCK:
         cmd.SetId( hotKey->m_IdMenuEvent );
         GetEventHandler()->ProcessEvent( cmd );
         break;

@@ -147,6 +147,31 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         block->SetState( STATE_BLOCK_MOVE );
         break;
 
+    case BLOCK_COPY:    // Save a copy of items in the clipboard buffer
+    case BLOCK_CUT:
+        if( GetCurPart() )
+            ItemCount = GetCurPart()->SelectItems( *block, m_unit, m_convert,
+                                                  m_editPinsPerPartOrConvert );
+
+        if( ItemCount )
+        {
+            copySelectedItems();
+            auto cmd = block->GetCommand();
+
+            if( cmd == BLOCK_COPY )
+            {
+                GetCurPart()->ClearSelectedItems();
+                block->ClearItemsList();
+            }
+            else if( cmd == BLOCK_CUT )
+            {
+                SaveCopyInUndoList( GetCurPart() );
+                GetCurPart()->DeleteSelectedItems();
+                OnModify();
+            }
+        }
+        break;
+
     case BLOCK_DELETE:     // Delete
         if( GetCurPart() )
             ItemCount = GetCurPart()->SelectItems( *block,
@@ -162,8 +187,10 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         }
         break;
 
-    case BLOCK_COPY:     // Save
     case BLOCK_PASTE:
+        wxFAIL; // should not happen
+        break;
+
     case BLOCK_FLIP:
         break;
 
@@ -208,7 +235,6 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
 
     case BLOCK_DUPLICATE_AND_INCREMENT: // not used in Eeschema
     case BLOCK_MOVE_EXACT:              // not used in Eeschema
-    case BLOCK_CUT:                     // not used in libedit
         break;
     }
 
@@ -280,6 +306,14 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     case BLOCK_PASTE:       // Paste (recopy the last block saved)
         block->ClearItemsList();
+
+        if( GetCurPart() )
+            SaveCopyInUndoList( GetCurPart() );
+
+        pt = block->GetMoveVector();
+        pt.y = -pt.y;
+
+        pasteClipboard( pt );
         break;
 
     case BLOCK_ROTATE:      // Invert by popup menu, from block move
@@ -324,6 +358,73 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 }
 
 
+void LIB_EDIT_FRAME::InitBlockPasteInfos()
+{
+    BLOCK_SELECTOR& block = GetScreen()->m_BlockLocate;
+
+    // Copy the clipboard contents to the screen block selector
+    // (only the copy, the new instances will be appended to the part once the items are placed)
+    block.GetItems().CopyList( m_clipboard.GetItems() );
+
+    // Set the pate reference point
+    block.SetLastCursorPosition( m_clipboard.GetLastCursorPosition() );
+    m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
+}
+
+
+void LIB_EDIT_FRAME::copySelectedItems()
+{
+    LIB_PART* part = GetCurPart();
+
+    if( !part )
+        return;
+
+    m_clipboard.ClearListAndDeleteItems();   // delete previous saved list, if exists
+    m_clipboard.SetLastCursorPosition( GetScreen()->m_BlockLocate.GetEnd() );    // store the reference point
+
+    for( LIB_ITEM& item : part->GetDrawItems() )
+    {
+        // We *do not* copy fields because they are unique for the whole component
+        // so skip them (do not duplicate) if they are flagged selected.
+        if( item.Type() == LIB_FIELD_T )
+            item.ClearFlags( SELECTED );
+
+        if( !item.IsSelected() )
+            continue;
+
+        // Do not clear the 'selected' flag. It is required to have items drawn when they are pasted.
+        LIB_ITEM* copy = (LIB_ITEM*) item.Clone();
+
+        // In list the wrapper is owner of the schematic item, we can use the UR_DELETED
+        // status for the picker because pickers with this status are owner of the picked item
+        // (or TODO ?: create a new status like UR_DUPLICATE)
+        ITEM_PICKER picker( copy, UR_DELETED );
+        m_clipboard.PushItem( picker );
+    }
+}
+
+
+void LIB_EDIT_FRAME::pasteClipboard( const wxPoint& aOffset )
+{
+    LIB_PART* part = GetCurPart();
+
+    if( !part || m_clipboard.GetCount() == 0 )
+        return;
+
+    for( unsigned int i = 0; i < m_clipboard.GetCount(); i++ )
+    {
+        // Append a copy to the current part, so the clipboard buffer might be pasted multiple times
+        LIB_ITEM* item = (LIB_ITEM*) m_clipboard.GetItem( i )->Clone();
+        item->SetParent( part );
+        item->SetSelected();
+        part->AddDrawItem( item );
+    }
+
+    GetCurPart()->MoveSelectedItems( aOffset );
+    OnModify();
+}
+
+
 /*
  * Traces the outline of the search block structures
  * The entire block follows the cursor
@@ -353,6 +454,12 @@ void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     {
         block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );
         component->Draw( aPanel, aDC, block->GetMoveVector(), unit, convert, opts );
+
+        for( unsigned ii = 0; ii < block->GetCount(); ii++ )
+        {
+            LIB_ITEM* libItem = (LIB_ITEM*) block->GetItem( ii );
+            libItem->Draw( aPanel, aDC, block->GetMoveVector(), g_GhostColor, g_XorMode, nullptr, opts.transform );
+        }
     }
 
     // Repaint new view
@@ -360,6 +467,12 @@ void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 
     GRSetDrawMode( aDC, g_XorMode );
     block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );
+
+    for( unsigned ii = 0; ii < block->GetCount(); ii++ )
+    {
+        LIB_ITEM* libItem = (LIB_ITEM*) block->GetItem( ii );
+        libItem->Draw( aPanel, aDC, block->GetMoveVector(), g_GhostColor, g_XorMode, nullptr, opts.transform );
+    }
 
     component->Draw( aPanel, aDC, block->GetMoveVector(), unit, convert, opts );
 }

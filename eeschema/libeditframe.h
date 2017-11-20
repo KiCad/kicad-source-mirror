@@ -731,7 +731,23 @@ private:
     ///> Renames LIB_PART aliases to avoid conflicts before adding a component to a library
     void fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibrary );
 
-    // Copy/cut/paste buffer
+    void InitBlockPasteInfos() override;
+
+    /**
+     * Copies items selected in the current part to the internal clipboard.
+     */
+    void copySelectedItems();
+
+    /**
+     * Pastes items from the internal clipboard to the current part.
+     * @param aOffset is the offset where the pasted items should be located.
+     */
+    void pasteClipboard( const wxPoint& aOffset );
+
+    ///> Clipboard buffer storing LIB_ITEMs
+    BLOCK_SELECTOR m_clipboard;
+
+    // Copy/cut/paste buffer to move parts between libraries
     std::unique_ptr<LIB_PART> m_copiedPart;
 
     DECLARE_EVENT_TABLE()

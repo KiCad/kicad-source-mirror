@@ -110,6 +110,9 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
 
     // Main horizontal toolbar.
     EVT_TOOL( ID_TO_LIBVIEW, LIB_EDIT_FRAME::OnOpenLibraryViewer )
+    EVT_TOOL( wxID_COPY, LIB_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( wxID_PASTE, LIB_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( wxID_CUT, LIB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_UNDO, LIB_EDIT_FRAME::GetComponentFromUndoList )
     EVT_TOOL( wxID_REDO, LIB_EDIT_FRAME::GetComponentFromRedoList )
     EVT_TOOL( ID_LIBEDIT_GET_FRAME_EDIT_PART, LIB_EDIT_FRAME::OnEditComponentProperties )
@@ -747,6 +750,8 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     switch( id )   // Stop placement commands before handling new command.
     {
+    case wxID_COPY:
+    case wxID_CUT:
     case ID_POPUP_LIBEDIT_END_CREATE_ITEM:
     case ID_LIBEDIT_EDIT_PIN:
     case ID_POPUP_LIBEDIT_BODY_EDIT_ITEM:
@@ -963,6 +968,25 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->SetAutoPanRequest( false );
         m_canvas->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
+        break;
+
+    case wxID_COPY:
+        block.SetCommand( BLOCK_COPY );
+        block.SetMessageBlock( this );
+        HandleBlockEnd( &dc );
+        break;
+
+    case wxID_PASTE:
+        HandleBlockBegin( &dc, BLOCK_PASTE, GetCrossHairPosition() );
+        break;
+
+    case wxID_CUT:
+        if( block.GetCommand() != BLOCK_MOVE )
+            break;
+
+        block.SetCommand( BLOCK_CUT );
+        block.SetMessageBlock( this );
+        HandleBlockEnd( &dc );
         break;
 
     default:
