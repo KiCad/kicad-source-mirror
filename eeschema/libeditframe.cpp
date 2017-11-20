@@ -738,6 +738,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     int     id = event.GetId();
     wxPoint pos;
     SCH_SCREEN* screen = GetScreen();
+    BLOCK_SELECTOR& block = screen->m_BlockLocate;
 
     m_canvas->SetIgnoreMouseEvents( true );
 
@@ -912,48 +913,48 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_ZOOM_BLOCK:
         m_canvas->SetAutoPanRequest( false );
-        screen->m_BlockLocate.SetCommand( BLOCK_ZOOM );
+        block.SetCommand( BLOCK_ZOOM );
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_DELETE_BLOCK:
         m_canvas->SetAutoPanRequest( false );
-        screen->m_BlockLocate.SetCommand( BLOCK_DELETE );
+        block.SetCommand( BLOCK_DELETE );
         m_canvas->MoveCursorToCrossHair();
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_DUPLICATE_BLOCK:
         m_canvas->SetAutoPanRequest( false );
-        screen->m_BlockLocate.SetCommand( BLOCK_DUPLICATE );
+        block.SetCommand( BLOCK_DUPLICATE );
         m_canvas->MoveCursorToCrossHair();
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_SELECT_ITEMS_BLOCK:
         m_canvas->SetAutoPanRequest( false );
-        screen->m_BlockLocate.SetCommand( BLOCK_SELECT_ITEMS_ONLY );
+        block.SetCommand( BLOCK_SELECT_ITEMS_ONLY );
         m_canvas->MoveCursorToCrossHair();
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_MIRROR_Y_BLOCK:
         m_canvas->SetAutoPanRequest( false );
-        screen->m_BlockLocate.SetCommand( BLOCK_MIRROR_Y );
+        block.SetCommand( BLOCK_MIRROR_Y );
         m_canvas->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_MIRROR_X_BLOCK:
         m_canvas->SetAutoPanRequest( false );
-        screen->m_BlockLocate.SetCommand( BLOCK_MIRROR_X );
+        block.SetCommand( BLOCK_MIRROR_X );
         m_canvas->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_ROTATE_BLOCK:
         m_canvas->SetAutoPanRequest( false );
-        screen->m_BlockLocate.SetCommand( BLOCK_ROTATE );
+        block.SetCommand( BLOCK_ROTATE );
         m_canvas->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;
