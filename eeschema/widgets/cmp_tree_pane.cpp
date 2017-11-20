@@ -67,18 +67,12 @@ CMP_TREE_PANE::CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
     menuPart->Append( ID_LIBEDIT_SAVE_PART, _( "Save" ) );
     menuPart->Append( ID_LIBEDIT_REVERT_PART, _( "Revert" ) );
     menuPart->AppendSeparator();
-    menuPart->Append( ID_LIBEDIT_CUT_PART, _( "Cut part" ) );
-    menuPart->Append( ID_LIBEDIT_COPY_PART, _( "Copy part" ) );
-    menuPart->Append( ID_LIBEDIT_DUPLICATE_PART, _( "Duplicate part" ) );
+    menuPart->Append( ID_LIBEDIT_CUT_PART, _( "Cut" ) );
+    menuPart->Append( ID_LIBEDIT_COPY_PART, _( "Copy" ) );
+    menuPart->Append( ID_LIBEDIT_DUPLICATE_PART, _( "Duplicate" ) );
     menuPart->AppendSeparator();
 
-    // Append the library menu to the part menu
-    for( size_t i = 0; i < menuLibrary->GetMenuItemCount(); ++i )
-    {
-        wxMenuItem* menuItem = menuLibrary->FindItemByPosition( i );
-        menuPart->Append( menuItem->GetId(), menuItem->GetItemLabel() );
-    }
-
+    // Menu displayed when nothing is selected
     std::unique_ptr<wxMenu> menuNoSelection = std::make_unique<wxMenu>();
     menuNoSelection->Append( ID_LIBEDIT_NEW_LIBRARY, _( "New library..." ) );
     menuNoSelection->Append( ID_LIBEDIT_ADD_LIBRARY, _( "Add existing library..." ) );

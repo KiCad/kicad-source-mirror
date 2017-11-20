@@ -527,7 +527,7 @@ void LIB_EDIT_FRAME::OnUpdatePartModified( wxUpdateUIEvent& aEvent )
     {
         bool readOnly = libName.IsEmpty() || m_libMgr->IsLibraryReadOnly( libName );
 
-        aEvent.SetText( readOnly ? _( "Save part [Read Only]" ) : _( "Save part" ) );
+        aEvent.SetText( readOnly ? _( "Save [Read Only]" ) : _( "Save" ) );
         aEvent.Enable( !readOnly && !partName.IsEmpty()
                 && m_libMgr->IsPartModified( partName, libName ) );
     }
