@@ -429,18 +429,6 @@ public:
     int ComponentCount();
 
     /**
-     * Load sheet from file #m_fileName
-     *
-     * If a screen already exists, the file is already read and #m_screen points to the screen
-     * and its m_RefCount is incremented.  Otherwise creates a new associated screen and load
-     * the schematic file into this sheet.
-     *
-     *  @param aFrame = a SCH_EDIT_FRAME pointer to the maim schematic frame
-     *  @return true if OK
-     */
-    bool Load( SCH_EDIT_FRAME* aFrame );
-
-    /**
      * Search the existing hierarchy for an instance of screen loaded from \a aFileName.
      *
      * @param aFilename = the filename to find
