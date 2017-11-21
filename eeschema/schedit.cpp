@@ -40,7 +40,7 @@
 
 #include <general.h>
 #include <eeschema_id.h>
-#include <protos.h>
+#include <list_operations.h>
 #include <class_library.h>
 #include <sch_bus_entry.h>
 #include <sch_marker.h>

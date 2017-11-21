@@ -337,7 +337,14 @@ void AddMenusForBlock( wxMenu* PopMenu, LIB_EDIT_FRAME* frame )
     {
         AddMenuItem( PopMenu, ID_POPUP_SELECT_ITEMS_BLOCK, _( "Select Items" ),
                      KiBitmap( green_xpm ) );
-        AddMenuItem( PopMenu, ID_POPUP_DUPLICATE_BLOCK, _( "Duplicate Block" ), KiBitmap( duplicate_xpm ) );
+        msg = AddHotkeyName( _( "Cut Block" ), g_Schematic_Hokeys_Descr,
+                             HK_CUT_BLOCK );
+        AddMenuItem( PopMenu, wxID_CUT, msg, KiBitmap( cut_xpm ) );
+        msg = AddHotkeyName( _( "Copy Block" ), g_Schematic_Hokeys_Descr,
+                             HK_COPY_BLOCK );
+        AddMenuItem( PopMenu, wxID_COPY, msg, KiBitmap( copy_xpm ) );
+        AddMenuItem( PopMenu, ID_POPUP_DUPLICATE_BLOCK, _( "Duplicate Block" ),
+                     KiBitmap( duplicate_xpm ) );
         msg = AddHotkeyName( _( "Flip Block Horizonal" ), g_Libedit_Hokeys_Descr, HK_MIRROR_Y );
         AddMenuItem( PopMenu, ID_POPUP_MIRROR_Y_BLOCK, msg,
                      KiBitmap( mirror_h_xpm ) );

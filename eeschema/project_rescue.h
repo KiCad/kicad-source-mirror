@@ -309,7 +309,6 @@ class LEGACY_RESCUER : public RESCUER
 {
 private:
     std::unique_ptr<PART_LIB> m_rescue_lib;
-    PART_LIBS* m_libs;
 
 public:
     LEGACY_RESCUER( SCH_EDIT_FRAME& aEditFrame, PROJECT& aProject ) :

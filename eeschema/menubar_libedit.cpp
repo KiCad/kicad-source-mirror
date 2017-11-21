@@ -25,7 +25,7 @@
 
 /**
  * @file eeschema/menubar_libedit.cpp
- * @brief (Re)Create the main menubar for the component editor frame (LibEdit)
+ * @brief (Re)Create the main menubar for the part editor frame (LibEdit)
  */
 
 #include <menus_helpers.h>
@@ -37,11 +37,9 @@
 #include "hotkeys.h"
 #include "libeditframe.h"
 
-extern int CreateNewLibAndSavePartId;
-
 
 /**
- * @brief (Re)Create the menubar for the component editor frame
+ * @brief (Re)Create the menubar for the part editor frame
  */
 void LIB_EDIT_FRAME::ReCreateMenuBar()
 {
@@ -64,33 +62,40 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Menu File:
     wxMenu* fileMenu = new wxMenu;
 
-    // Select current library
+    // Creating/loading libraries
     AddMenuItem( fileMenu,
-                 ID_LIBEDIT_SELECT_CURRENT_LIB,
-                 _( "Select &Current Library" ),
-                 _( "Select working library" ),
-                 KiBitmap( library_xpm ) );
+                 ID_LIBEDIT_NEW_LIBRARY,
+                 _( "&Create New Library" ),
+                 _( "Creates an empty library" ),
+                 KiBitmap( new_library_xpm ) );
+
+    AddMenuItem( fileMenu,
+                 ID_LIBEDIT_ADD_LIBRARY,
+                 _( "&Add Existing Library" ),
+                 _( "Adds a previously created library" ),
+                 KiBitmap( add_library_xpm ) );
+
+    // Separator
     fileMenu->AppendSeparator();
 
-    // Save current library
-    text = AddHotkeyName( _( "&Save Current Library" ), g_Libedit_Hokeys_Descr, HK_SAVE_LIB );
+    // Save library variants
+    text = AddHotkeyName( _( "&Save Library" ), g_Libedit_Hokeys_Descr, HK_SAVE_LIB );
     AddMenuItem( fileMenu,
-                 ID_LIBEDIT_SAVE_CURRENT_LIB, text,
+                 ID_LIBEDIT_SAVE_LIBRARY, text,
                  _( "Save the current active library" ),
-                 KiBitmap( save_xpm ) );
+                 KiBitmap( save_library_xpm ) );
 
-    // Save current library as...
     AddMenuItem( fileMenu,
-                 ID_LIBEDIT_SAVE_CURRENT_LIB_AS,
-                 _( "Save Current Library &As..." ),
-                 _( "Save current active library as..." ),
+                 ID_LIBEDIT_SAVE_LIBRARY_AS,
+                 _( "&Save Library As.." ),
+                 _( "Save the current library to a new file" ),
                  KiBitmap( save_as_xpm ) );
 
     AddMenuItem( fileMenu,
-                 CreateNewLibAndSavePartId,
-                 _( "Create &New Library and Save Current Component" ),
-                 _( "Save current component to new library" ),
-                 KiBitmap( new_library_xpm ) );
+                 ID_LIBEDIT_SAVE_ALL_LIBS,
+                 _( "&Save All Libraries" ),
+                 _( "Save all library changes" ),
+                 KiBitmap( save_xpm ) );
 
     // Separator
     fileMenu->AppendSeparator();
@@ -99,14 +104,14 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_GEN_PNG_FILE,
                  _( "Create &PNG File from Screen..." ),
-                 _( "Create a PNG file from the component displayed on screen" ),
+                 _( "Create a PNG file from the part displayed on screen" ),
                  KiBitmap( plot_xpm ) );
 
     // Export as SVG file
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_GEN_SVG_FILE,
                  _( "Create S&VG File..." ),
-                 _( "Create a SVG file from the current loaded component" ),
+                 _( "Create a SVG file from the current loaded part" ),
                  KiBitmap( plot_svg_xpm ) );
 
     // Separator
@@ -139,16 +144,6 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Redo the last undo command" ),
                  KiBitmap( redo_xpm ) );
 
-    // Separator
-    editMenu->AppendSeparator();
-
-    // Delete
-    AddMenuItem( editMenu,
-                 ID_LIBEDIT_DELETE_ITEM_BUTT,
-                 _( "&Delete" ),
-                 HELP_DELETE_ITEMS,
-                 KiBitmap( delete_xpm ) );
-
     // Menu View:
     wxMenu* viewMenu = new wxMenu;
 
@@ -177,12 +172,76 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     text = AddHotkeyName( _( "&Fit on Screen" ), g_Libedit_Hokeys_Descr, HK_ZOOM_AUTO );
     AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT, KiBitmap( zoom_fit_in_page_xpm ) );
 
-    // Separator
-    viewMenu->AppendSeparator();
-
     // Redraw
     text = AddHotkeyName( _( "&Redraw" ), g_Libedit_Hokeys_Descr, HK_ZOOM_REDRAW );
     AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text, HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
+
+    // Separator
+    viewMenu->AppendSeparator();
+
+    AddMenuItem( viewMenu,
+                 ID_LIBEDIT_SHOW_HIDE_SEARCH_TREE,
+                 _( "&Search tree" ),
+                 _( "Toggles the search tree visibility" ),
+                 KiBitmap( search_tree_xpm ) );
+
+    // Menu Part:
+    wxMenu* partMenu = new wxMenu;
+
+    AddMenuItem( partMenu,
+                 ID_LIBEDIT_NEW_PART,
+                 _( "Create &New" ),
+                 _( "Create a new empty part" ),
+                 KiBitmap( new_component_xpm ) );
+
+    text = AddHotkeyName( _( "&Save Part" ), g_Libedit_Hokeys_Descr, HK_SAVE_PART );
+    AddMenuItem( partMenu,
+                 ID_LIBEDIT_SAVE_PART,
+                 text,
+                 _( "Saves the current part to the library" ),
+                 KiBitmap( save_part_xpm ) );
+
+    partMenu->AppendSeparator();
+
+    AddMenuItem( partMenu,
+                 ID_LIBEDIT_IMPORT_PART,
+                 _( "&Import" ),
+                 _( "Import a part to the current library" ),
+                 KiBitmap( import_part_xpm ) );
+
+    AddMenuItem( partMenu,
+                 ID_LIBEDIT_EXPORT_PART,
+                 _( "&Export" ),
+                 _( "Export the current part" ),
+                 KiBitmap( export_part_xpm ) );
+
+    partMenu->AppendSeparator();
+
+    AddMenuItem( partMenu,
+                 ID_LIBEDIT_GET_FRAME_EDIT_PART,
+                 _( "&Properties" ),
+                 _( "Edit part properties" ),
+                 KiBitmap( part_properties_xpm ) );
+
+    AddMenuItem( partMenu,
+                 ID_LIBEDIT_GET_FRAME_EDIT_FIELDS,
+                 _( "&Fields" ),
+                 _( "Edit field properties" ),
+                 KiBitmap( edit_text_xpm ) );
+
+    partMenu->AppendSeparator();
+
+    AddMenuItem( partMenu,
+                 ID_LIBEDIT_EDIT_PIN_BY_TABLE,
+                 _( "Pi&n Table" ),
+                 _( "Show pin table" ),
+                 KiBitmap( pin_table_xpm ) );
+
+    AddMenuItem( partMenu,
+                 ID_LIBEDIT_CHECK_PART,
+                 _( "ERC" ),
+                 _( "Check duplicate and off grid pins" ),
+                 KiBitmap( erc_xpm ) );
 
     // Menu Place:
     wxMenu* placeMenu = new wxMenu;
@@ -243,7 +302,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( preferencesMenu,
                  wxID_PREFERENCES,
                  _( "General &Options" ),
-                 _( "Set Component Editor default values and options" ),
+                 _( "Set Part Editor default values and options" ),
                  KiBitmap( preference_xpm ) );
 
     // Language submenu
@@ -293,6 +352,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
+    menuBar->Append( partMenu, _( "&Part" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( preferencesMenu, _( "P&references" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );

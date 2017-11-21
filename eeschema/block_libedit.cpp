@@ -91,26 +91,27 @@ int LIB_EDIT_FRAME::BlockCommand( EDA_KEY key )
 }
 
 
-bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
+bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
 {
     int ItemCount = 0;
     bool nextCmd = false;
+    BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
     wxPoint pt;
 
-    if( GetScreen()->m_BlockLocate.GetCount() )
+    if( block->GetCount() )
     {
-        BLOCK_STATE_T state     = GetScreen()->m_BlockLocate.GetState();
-        BLOCK_COMMAND_T command = GetScreen()->m_BlockLocate.GetCommand();
-        m_canvas->CallEndMouseCapture( DC );
-        GetScreen()->m_BlockLocate.SetState( state );
-        GetScreen()->m_BlockLocate.SetCommand( command );
+        BLOCK_STATE_T state     = block->GetState();
+        BLOCK_COMMAND_T command = block->GetCommand();
+        m_canvas->CallEndMouseCapture( aDC );
+        block->SetState( state );
+        block->SetCommand( command );
         m_canvas->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
-        SetCrossHairPosition( wxPoint( GetScreen()->m_BlockLocate.GetRight(),
-                                       GetScreen()->m_BlockLocate.GetBottom() ) );
+        SetCrossHairPosition( wxPoint( block->GetRight(),
+                                       block->GetBottom() ) );
         m_canvas->MoveCursorToCrossHair();
     }
 
-    switch( GetScreen()->m_BlockLocate.GetCommand() )
+    switch( block->GetCommand() )
     {
     case  BLOCK_IDLE:
         DisplayError( this, wxT( "Error in HandleBlockPLace" ) );
@@ -121,7 +122,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     case BLOCK_MOVE:        // Move
     case BLOCK_DUPLICATE:   // Duplicate
         if( GetCurPart() )
-            ItemCount = GetCurPart()->SelectItems( GetScreen()->m_BlockLocate,
+            ItemCount = GetCurPart()->SelectItems( *block,
                                                   m_unit, m_convert,
                                                   m_editPinsPerPartOrConvert );
         if( ItemCount )
@@ -130,12 +131,12 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
             if( m_canvas->IsMouseCaptured() )
             {
-                m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
+                m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
                 m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
-                m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
+                m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
             }
 
-            GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_MOVE );
+            block->SetState( STATE_BLOCK_MOVE );
             m_canvas->Refresh( true );
         }
         break;
@@ -143,12 +144,37 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     case BLOCK_PRESELECT_MOVE:     // Move with preselection list
         nextCmd = true;
         m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
-        GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_MOVE );
+        block->SetState( STATE_BLOCK_MOVE );
+        break;
+
+    case BLOCK_COPY:    // Save a copy of items in the clipboard buffer
+    case BLOCK_CUT:
+        if( GetCurPart() )
+            ItemCount = GetCurPart()->SelectItems( *block, m_unit, m_convert,
+                                                  m_editPinsPerPartOrConvert );
+
+        if( ItemCount )
+        {
+            copySelectedItems();
+            auto cmd = block->GetCommand();
+
+            if( cmd == BLOCK_COPY )
+            {
+                GetCurPart()->ClearSelectedItems();
+                block->ClearItemsList();
+            }
+            else if( cmd == BLOCK_CUT )
+            {
+                SaveCopyInUndoList( GetCurPart() );
+                GetCurPart()->DeleteSelectedItems();
+                OnModify();
+            }
+        }
         break;
 
     case BLOCK_DELETE:     // Delete
         if( GetCurPart() )
-            ItemCount = GetCurPart()->SelectItems( GetScreen()->m_BlockLocate,
+            ItemCount = GetCurPart()->SelectItems( *block,
                                                   m_unit, m_convert,
                                                   m_editPinsPerPartOrConvert );
         if( ItemCount )
@@ -161,8 +187,10 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         }
         break;
 
-    case BLOCK_COPY:     // Save
     case BLOCK_PASTE:
+        wxFAIL; // should not happen
+        break;
+
     case BLOCK_FLIP:
         break;
 
@@ -170,20 +198,20 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     case BLOCK_MIRROR_X:
     case BLOCK_MIRROR_Y:
         if( GetCurPart() )
-            ItemCount = GetCurPart()->SelectItems( GetScreen()->m_BlockLocate,
+            ItemCount = GetCurPart()->SelectItems( *block,
                                                   m_unit, m_convert,
                                                   m_editPinsPerPartOrConvert );
         if( ItemCount )
             SaveCopyInUndoList( GetCurPart() );
 
-        pt = GetScreen()->m_BlockLocate.Centre();
+        pt = block->Centre();
         pt = GetNearestGridPosition( pt );
         pt.y = -pt.y;
 
         if( GetCurPart() )
         {
             OnModify();
-            int block_cmd = GetScreen()->m_BlockLocate.GetCommand();
+            int block_cmd = block->GetCommand();
 
             if( block_cmd == BLOCK_MIRROR_Y)
                 GetCurPart()->MirrorSelectedItemsH( pt );
@@ -196,7 +224,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         break;
 
     case BLOCK_ZOOM:     // Window Zoom
-        Window_Zoom( GetScreen()->m_BlockLocate );
+        Window_Zoom( *block );
         break;
 
     case BLOCK_ABORT:
@@ -207,17 +235,16 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     case BLOCK_DUPLICATE_AND_INCREMENT: // not used in Eeschema
     case BLOCK_MOVE_EXACT:              // not used in Eeschema
-    case BLOCK_CUT:                     // not used in libedit
         break;
     }
 
     if( !nextCmd )
     {
-        if( GetScreen()->m_BlockLocate.GetCommand() != BLOCK_SELECT_ITEMS_ONLY &&  GetCurPart() )
+        if( block->GetCommand() != BLOCK_SELECT_ITEMS_ONLY &&  GetCurPart() )
             GetCurPart()->ClearSelectedItems();
 
-        GetScreen()->m_BlockLocate.SetState( STATE_NO_BLOCK );
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_IDLE );
+        block->SetState( STATE_NO_BLOCK );
+        block->SetCommand( BLOCK_IDLE );
         GetScreen()->SetCurItem( NULL );
         m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString,
                                    false );
@@ -230,6 +257,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
 void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 {
+    BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
     wxPoint pt;
 
     if( !m_canvas->IsMouseCaptured() )
@@ -237,9 +265,9 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         DisplayError( this, wxT( "HandleBlockPLace : m_mouseCaptureCallback = NULL" ) );
     }
 
-    GetScreen()->m_BlockLocate.SetState( STATE_BLOCK_STOP );
+    block->SetState( STATE_BLOCK_STOP );
 
-    switch( GetScreen()->m_BlockLocate.GetCommand() )
+    switch( block->GetCommand() )
     {
     case  BLOCK_IDLE:
         break;
@@ -248,12 +276,12 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_DRAG_ITEM:
     case BLOCK_MOVE:                // Move
     case BLOCK_PRESELECT_MOVE:      // Move with preselection list
-        GetScreen()->m_BlockLocate.ClearItemsList();
+        block->ClearItemsList();
 
         if( GetCurPart() )
             SaveCopyInUndoList( GetCurPart() );
 
-        pt = GetScreen()->m_BlockLocate.GetMoveVector();
+        pt = block->GetMoveVector();
         pt.y *= -1;
 
         if( GetCurPart() )
@@ -263,12 +291,12 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         break;
 
     case BLOCK_DUPLICATE:           // Duplicate
-        GetScreen()->m_BlockLocate.ClearItemsList();
+        block->ClearItemsList();
 
         if( GetCurPart() )
             SaveCopyInUndoList( GetCurPart() );
 
-        pt = GetScreen()->m_BlockLocate.GetMoveVector();
+        pt = block->GetMoveVector();
         pt.y = -pt.y;
 
         if( GetCurPart() )
@@ -277,7 +305,15 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         break;
 
     case BLOCK_PASTE:       // Paste (recopy the last block saved)
-        GetScreen()->m_BlockLocate.ClearItemsList();
+        block->ClearItemsList();
+
+        if( GetCurPart() )
+            SaveCopyInUndoList( GetCurPart() );
+
+        pt = block->GetMoveVector();
+        pt.y = -pt.y;
+
+        pasteClipboard( pt );
         break;
 
     case BLOCK_ROTATE:      // Invert by popup menu, from block move
@@ -286,13 +322,13 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         if( GetCurPart() )
             SaveCopyInUndoList( GetCurPart() );
 
-        pt = GetScreen()->m_BlockLocate.Centre();
+        pt = block->Centre();
         pt = GetNearestGridPosition( pt );
         pt.y = -pt.y;
 
         if( GetCurPart() )
         {
-            int block_cmd = GetScreen()->m_BlockLocate.GetCommand();
+            int block_cmd = block->GetCommand();
 
             if( block_cmd == BLOCK_MIRROR_Y)
                 GetCurPart()->MirrorSelectedItemsH( pt );
@@ -314,11 +350,78 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     OnModify();
 
-    GetScreen()->m_BlockLocate.SetState( STATE_NO_BLOCK );
-    GetScreen()->m_BlockLocate.SetCommand( BLOCK_IDLE );
+    block->SetState( STATE_NO_BLOCK );
+    block->SetCommand( BLOCK_IDLE );
     GetScreen()->SetCurItem( NULL );
     m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString, false );
     m_canvas->Refresh( true );
+}
+
+
+void LIB_EDIT_FRAME::InitBlockPasteInfos()
+{
+    BLOCK_SELECTOR& block = GetScreen()->m_BlockLocate;
+
+    // Copy the clipboard contents to the screen block selector
+    // (only the copy, the new instances will be appended to the part once the items are placed)
+    block.GetItems().CopyList( m_clipboard.GetItems() );
+
+    // Set the pate reference point
+    block.SetLastCursorPosition( m_clipboard.GetLastCursorPosition() );
+    m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
+}
+
+
+void LIB_EDIT_FRAME::copySelectedItems()
+{
+    LIB_PART* part = GetCurPart();
+
+    if( !part )
+        return;
+
+    m_clipboard.ClearListAndDeleteItems();   // delete previous saved list, if exists
+    m_clipboard.SetLastCursorPosition( GetScreen()->m_BlockLocate.GetEnd() );    // store the reference point
+
+    for( LIB_ITEM& item : part->GetDrawItems() )
+    {
+        // We *do not* copy fields because they are unique for the whole component
+        // so skip them (do not duplicate) if they are flagged selected.
+        if( item.Type() == LIB_FIELD_T )
+            item.ClearFlags( SELECTED );
+
+        if( !item.IsSelected() )
+            continue;
+
+        // Do not clear the 'selected' flag. It is required to have items drawn when they are pasted.
+        LIB_ITEM* copy = (LIB_ITEM*) item.Clone();
+
+        // In list the wrapper is owner of the schematic item, we can use the UR_DELETED
+        // status for the picker because pickers with this status are owner of the picked item
+        // (or TODO ?: create a new status like UR_DUPLICATE)
+        ITEM_PICKER picker( copy, UR_DELETED );
+        m_clipboard.PushItem( picker );
+    }
+}
+
+
+void LIB_EDIT_FRAME::pasteClipboard( const wxPoint& aOffset )
+{
+    LIB_PART* part = GetCurPart();
+
+    if( !part || m_clipboard.GetCount() == 0 )
+        return;
+
+    for( unsigned int i = 0; i < m_clipboard.GetCount(); i++ )
+    {
+        // Append a copy to the current part, so the clipboard buffer might be pasted multiple times
+        LIB_ITEM* item = (LIB_ITEM*) m_clipboard.GetItem( i )->Clone();
+        item->SetParent( part );
+        item->SetSelected();
+        part->AddDrawItem( item );
+    }
+
+    GetCurPart()->MoveSelectedItems( aOffset );
+    OnModify();
 }
 
 
@@ -329,9 +432,8 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                               bool aErase )
 {
-    BLOCK_SELECTOR* block;
     BASE_SCREEN* screen = aPanel->GetScreen();
-    block = &screen->m_BlockLocate;
+    BLOCK_SELECTOR* block = &screen->m_BlockLocate;
 
     LIB_EDIT_FRAME* parent = (LIB_EDIT_FRAME*) aPanel->GetParent();
     wxASSERT( parent != NULL );
@@ -352,6 +454,12 @@ void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     {
         block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );
         component->Draw( aPanel, aDC, block->GetMoveVector(), unit, convert, opts );
+
+        for( unsigned ii = 0; ii < block->GetCount(); ii++ )
+        {
+            LIB_ITEM* libItem = (LIB_ITEM*) block->GetItem( ii );
+            libItem->Draw( aPanel, aDC, block->GetMoveVector(), g_GhostColor, g_XorMode, nullptr, opts.transform );
+        }
     }
 
     // Repaint new view
@@ -359,6 +467,12 @@ void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 
     GRSetDrawMode( aDC, g_XorMode );
     block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );
+
+    for( unsigned ii = 0; ii < block->GetCount(); ii++ )
+    {
+        LIB_ITEM* libItem = (LIB_ITEM*) block->GetItem( ii );
+        libItem->Draw( aPanel, aDC, block->GetMoveVector(), g_GhostColor, g_XorMode, nullptr, opts.transform );
+    }
 
     component->Draw( aPanel, aDC, block->GetMoveVector(), unit, convert, opts );
 }

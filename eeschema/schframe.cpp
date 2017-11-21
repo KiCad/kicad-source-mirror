@@ -322,8 +322,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU_RANGE( ID_SELECT_ITEM_START, ID_SELECT_ITEM_END, SCH_EDIT_FRAME::OnSelectItem )
 
     /* Handle user interface update events. */
-    EVT_UPDATE_UI( wxID_CUT, SCH_EDIT_FRAME::OnUpdateBlockSelected )
-    EVT_UPDATE_UI( wxID_COPY, SCH_EDIT_FRAME::OnUpdateBlockSelected )
     EVT_UPDATE_UI( wxID_PASTE, SCH_EDIT_FRAME::OnUpdatePaste )
     EVT_UPDATE_UI( ID_TB_OPTIONS_HIDDEN_PINS, SCH_EDIT_FRAME::OnUpdateHiddenPins )
     EVT_UPDATE_UI( ID_TB_OPTIONS_BUS_WIRES_ORIENT, SCH_EDIT_FRAME::OnUpdateBusOrientation )
@@ -780,14 +778,6 @@ void SCH_EDIT_FRAME::OnModify()
     m_foundItems.SetForceSearch();
 
     m_canvas->Refresh();
-}
-
-
-void SCH_EDIT_FRAME::OnUpdateBlockSelected( wxUpdateUIEvent& event )
-{
-    bool enable = ( GetScreen() && GetScreen()->m_BlockLocate.GetCommand() == BLOCK_MOVE );
-
-    event.Enable( enable );
 }
 
 

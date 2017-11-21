@@ -47,7 +47,7 @@ public:
     enum WIDGETS { NONE = 0x00, SEARCH = 0x01, DETAILS = 0x02, ALL = 0xFF };
 
     COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTable,
-                    CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, WIDGETS aWidgets = ALL );
+                    CMP_TREE_MODEL_ADAPTER_BASE::PTR& aAdapter, WIDGETS aWidgets = ALL );
 
     /**
      * For multi-unit components, if the user selects the component itself
@@ -59,6 +59,32 @@ public:
      * @return the library id of the symbol that has been selected.
      */
     LIB_ID GetSelectedLibId( int* aUnit = nullptr ) const;
+
+    /**
+     * Select a part in the tree widget.
+     *
+     * @param aLibId is the identifier of part to be selected.
+     */
+    void SelectLibId( const LIB_ID& aLibId );
+
+    /**
+     * Associates a right click context menu for a specific node type.
+     * @param aType is the node type to have a menu associated.
+     * @param aMenu is the associated menu.
+     */
+    void SetMenu( CMP_TREE_NODE::TYPE aType, std::unique_ptr<wxMenu> aMenu )
+    {
+        m_menus[aType] = std::move( aMenu );
+    }
+
+    /**
+     * Returns the status of right-click context menu.
+     * @return True in case a right-click context menu is active.
+     */
+    bool IsMenuActive() const
+    {
+        return m_menuActive;
+    }
 
 protected:
     /**
@@ -86,12 +112,36 @@ protected:
 
     void onDetailsLink( wxHtmlLinkEvent& aEvent );
     void onPreselect( wxCommandEvent& aEvent );
+    void onContextMenu( wxDataViewEvent& aEvent );
+
+    /**
+     * Store the list of expanded nodes in the tree widget.
+     */
+    void saveExpandFlag();
+
+    /**
+     * Restore the expanded nodes in the tree widget.
+     */
+    void restoreExpandFlag();
 
     SYMBOL_LIB_TABLE* m_sym_lib_table;
-    CMP_TREE_MODEL_ADAPTER::PTR m_adapter;
+    CMP_TREE_MODEL_ADAPTER_BASE::PTR m_adapter;
+
     wxTextCtrl*     m_query_ctrl;
     wxDataViewCtrl* m_tree_ctrl;
     wxHtmlWindow*   m_details_ctrl;
+
+    ///> Right click context menus for each tree level
+    std::vector<std::unique_ptr<wxMenu>> m_menus;
+
+    ///> Flag indicating whether a right-click context menu is active
+    bool m_menuActive;
+
+    bool m_filtering;
+
+    ///> List of expanded nodes
+    std::vector<wxDataViewItem> m_expanded;
+    wxDataViewItem m_selection;
 };
 
 ///> Custom event sent when a new component is preselected

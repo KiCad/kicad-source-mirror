@@ -83,6 +83,7 @@ set( EESCHEMA_DLGS
     )
 
 set( EESCHEMA_WIDGETS
+    widgets/cmp_tree_pane.cpp
     widgets/component_tree.cpp
     widgets/widget_eeschema_color_config.cpp
     widgets/pin_shape_combobox.cpp
@@ -124,6 +125,7 @@ set( EESCHEMA_SRCS
     getpart.cpp
     cmp_tree_model.cpp
     cmp_tree_model_adapter.cpp
+    cmp_tree_model_adapter_base.cpp
     generate_alias_info.cpp
     hierarch.cpp
     highlight_connection.cpp
@@ -142,6 +144,8 @@ set( EESCHEMA_SRCS
     lib_draw_item.cpp
     lib_export.cpp
     lib_field.cpp
+    lib_manager.cpp
+    lib_manager_adapter.cpp
     lib_pin.cpp
     lib_polyline.cpp
     lib_rectangle.cpp

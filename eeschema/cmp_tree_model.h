@@ -80,9 +80,12 @@ public:
         ROOT, LIB, LIBID, UNIT, INVALID
     };
 
-    CMP_TREE_NODE*                              Parent;     ///< Parent node or null
-    std::vector<std::unique_ptr<CMP_TREE_NODE>> Children;   ///< List of child nodes
-    enum TYPE                                   Type;       ///< Node type
+    typedef std::vector<std::unique_ptr<CMP_TREE_NODE>> PTR_VECTOR;
+
+    CMP_TREE_NODE*  Parent;     ///< Parent node or null
+    PTR_VECTOR      Children;   ///< List of child nodes
+    enum TYPE       Type;       ///< Node type
+    bool            InTree;     ///< Flag indicating whether the node is added to the tree
 
     /**
      * The rank of the item before any search terms are applied. This is

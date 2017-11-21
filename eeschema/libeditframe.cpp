@@ -37,6 +37,7 @@
 #include <gr_basic.h>
 #include <schframe.h>
 #include <msgpanel.h>
+#include <confirm.h>
 
 #include <general.h>
 #include <eeschema_id.h>
@@ -44,6 +45,10 @@
 #include <class_library.h>
 #include <lib_polyline.h>
 #include <lib_pin.h>
+
+#include <lib_manager.h>
+#include <widgets/cmp_tree_pane.h>
+#include <widgets/component_tree.h>
 #include <symbol_lib_table.h>
 
 #include <kicad_device_context.h>
@@ -53,15 +58,9 @@
 #include <dialogs/dialog_edit_component_in_lib.h>
 #include <dialogs/dialog_lib_edit_pin_table.h>
 
+#include <wildcards_and_files_ext.h>
+
 #include <menus_helpers.h>
-
-
-/* This method guarantees unique IDs for the library this run of Eeschema
- * which prevents ID conflicts and eliminates the need to recompile every
- * source file in the project when adding IDs to include/id.h. */
-int ExportPartId = ::wxNewId();
-int ImportPartId = ::wxNewId();
-int CreateNewLibAndSavePartId = ::wxNewId();
 
 
 wxString LIB_EDIT_FRAME::      m_aliasName;
@@ -88,15 +87,32 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_SIZE( LIB_EDIT_FRAME::OnSize )
     EVT_ACTIVATE( LIB_EDIT_FRAME::OnActivate )
 
-    // Main horizontal toolbar.
-    EVT_TOOL( ID_LIBEDIT_SAVE_CURRENT_LIB, LIB_EDIT_FRAME::OnSaveActiveLibrary )
-    EVT_TOOL( ID_LIBEDIT_SELECT_CURRENT_LIB, LIB_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_LIBEDIT_DELETE_PART, LIB_EDIT_FRAME::DeleteOnePart )
-    EVT_TOOL( ID_TO_LIBVIEW, LIB_EDIT_FRAME::OnOpenLibraryViewer )
-    EVT_TOOL( ID_LIBEDIT_NEW_PART, LIB_EDIT_FRAME::CreateNewLibraryPart )
-    EVT_TOOL( ID_LIBEDIT_NEW_PART_FROM_EXISTING, LIB_EDIT_FRAME::OnCreateNewPartFromExisting )
+    // Library actions
+    EVT_TOOL( ID_LIBEDIT_NEW_LIBRARY, LIB_EDIT_FRAME::OnCreateNewLibrary )
+    EVT_TOOL( ID_LIBEDIT_ADD_LIBRARY, LIB_EDIT_FRAME::OnAddLibrary )
+    EVT_TOOL( ID_LIBEDIT_SAVE_LIBRARY, LIB_EDIT_FRAME::OnSaveLibrary )
+    EVT_MENU( ID_LIBEDIT_SAVE_LIBRARY_AS, LIB_EDIT_FRAME::OnSaveLibrary )
+    EVT_MENU( ID_LIBEDIT_SAVE_ALL_LIBS, LIB_EDIT_FRAME::OnSaveAllLibraries )
+    EVT_TOOL( ID_LIBEDIT_REVERT_LIBRARY, LIB_EDIT_FRAME::OnRevertLibrary )
 
-    EVT_TOOL( ID_LIBEDIT_SELECT_PART, LIB_EDIT_FRAME::LoadOneLibraryPart )
+    // Part actions
+    EVT_TOOL( ID_LIBEDIT_NEW_PART, LIB_EDIT_FRAME::OnCreateNewPart )
+    EVT_TOOL( ID_LIBEDIT_EDIT_PART, LIB_EDIT_FRAME::OnEditPart )
+    EVT_TOOL( ID_LIBEDIT_IMPORT_PART, LIB_EDIT_FRAME::OnImportPart )
+    EVT_TOOL( ID_LIBEDIT_EXPORT_PART, LIB_EDIT_FRAME::OnExportPart )
+    EVT_TOOL( ID_LIBEDIT_SAVE_PART, LIB_EDIT_FRAME::OnSavePart )
+    EVT_TOOL( ID_LIBEDIT_REVERT_PART, LIB_EDIT_FRAME::OnRevertPart )
+    EVT_TOOL( ID_LIBEDIT_REMOVE_PART, LIB_EDIT_FRAME::OnRemovePart )
+    EVT_TOOL( ID_LIBEDIT_CUT_PART, LIB_EDIT_FRAME::OnCopyCutPart )
+    EVT_TOOL( ID_LIBEDIT_COPY_PART, LIB_EDIT_FRAME::OnCopyCutPart )
+    EVT_TOOL( ID_LIBEDIT_PASTE_PART, LIB_EDIT_FRAME::OnPasteDuplicatePart )
+    EVT_TOOL( ID_LIBEDIT_DUPLICATE_PART, LIB_EDIT_FRAME::OnPasteDuplicatePart )
+
+    // Main horizontal toolbar.
+    EVT_TOOL( ID_TO_LIBVIEW, LIB_EDIT_FRAME::OnOpenLibraryViewer )
+    EVT_TOOL( wxID_COPY, LIB_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( wxID_PASTE, LIB_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( wxID_CUT, LIB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_UNDO, LIB_EDIT_FRAME::GetComponentFromUndoList )
     EVT_TOOL( wxID_REDO, LIB_EDIT_FRAME::GetComponentFromRedoList )
     EVT_TOOL( ID_LIBEDIT_GET_FRAME_EDIT_PART, LIB_EDIT_FRAME::OnEditComponentProperties )
@@ -107,10 +123,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_LIBEDIT_VIEW_DOC, LIB_EDIT_FRAME::OnViewEntryDoc )
     EVT_TOOL( ID_LIBEDIT_EDIT_PIN_BY_PIN, LIB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_LIBEDIT_EDIT_PIN_BY_TABLE, LIB_EDIT_FRAME::OnOpenPinTable )
-    EVT_TOOL( ExportPartId, LIB_EDIT_FRAME::OnExportPart )
-    EVT_TOOL( CreateNewLibAndSavePartId, LIB_EDIT_FRAME::OnExportPart )
-    EVT_TOOL( ImportPartId, LIB_EDIT_FRAME::OnImportPart )
-    EVT_TOOL( ID_LIBEDIT_SAVE_CURRENT_PART, LIB_EDIT_FRAME::OnSaveCurrentPart )
 
     EVT_COMBOBOX( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnSelectPart )
     EVT_COMBOBOX( ID_LIBEDIT_SELECT_ALIAS, LIB_EDIT_FRAME::OnSelectAlias )
@@ -123,10 +135,10 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
 
     // Left vertical toolbar (option toolbar).
     EVT_TOOL( ID_LIBEDIT_SHOW_ELECTRICAL_TYPE, LIB_EDIT_FRAME::OnShowElectricalType )
+    EVT_TOOL( ID_LIBEDIT_SHOW_HIDE_SEARCH_TREE, LIB_EDIT_FRAME::OnToggleSearchTree )
 
     // menubar commands
     EVT_MENU( wxID_EXIT, LIB_EDIT_FRAME::CloseWindow )
-    EVT_MENU( ID_LIBEDIT_SAVE_CURRENT_LIB_AS, LIB_EDIT_FRAME::OnSaveActiveLibrary )
     EVT_MENU( ID_LIBEDIT_GEN_PNG_FILE, LIB_EDIT_FRAME::OnPlotCurrentComponent )
     EVT_MENU( ID_LIBEDIT_GEN_SVG_FILE, LIB_EDIT_FRAME::OnPlotCurrentComponent )
     EVT_MENU( wxID_HELP, EDA_DRAW_FRAME::GetKicadHelp )
@@ -155,18 +167,21 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
 
     EVT_MENU_RANGE( ID_LIBEDIT_MIRROR_X, ID_LIBEDIT_ORIENT_NORMAL,
                     LIB_EDIT_FRAME::OnOrient )
+
     // Update user interface elements.
-    EVT_UPDATE_UI( ExportPartId, LIB_EDIT_FRAME::OnUpdateEditingPart )
-    EVT_UPDATE_UI( CreateNewLibAndSavePartId, LIB_EDIT_FRAME::OnUpdateEditingPart )
-    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_CURRENT_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
+    EVT_UPDATE_UI( wxID_PASTE, LIB_EDIT_FRAME::OnUpdatePaste )
+    EVT_UPDATE_UI( ID_LIBEDIT_REVERT_LIBRARY, LIB_EDIT_FRAME::OnUpdateLibModified )
+    EVT_UPDATE_UI( ID_LIBEDIT_EXPORT_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
+    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_PART, LIB_EDIT_FRAME::OnUpdatePartModified )
+    EVT_UPDATE_UI( ID_LIBEDIT_REVERT_PART, LIB_EDIT_FRAME::OnUpdatePartModified )
+    EVT_UPDATE_UI( ID_LIBEDIT_PASTE_PART, LIB_EDIT_FRAME::OnUpdateClipboardNotEmpty )
     EVT_UPDATE_UI( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( ID_LIBEDIT_CHECK_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( ID_LIBEDIT_GET_FRAME_EDIT_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
-    EVT_UPDATE_UI( ID_LIBEDIT_NEW_PART_FROM_EXISTING, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( wxID_UNDO, LIB_EDIT_FRAME::OnUpdateUndo )
     EVT_UPDATE_UI( wxID_REDO, LIB_EDIT_FRAME::OnUpdateRedo )
-    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_CURRENT_LIB, LIB_EDIT_FRAME::OnUpdateSaveCurrentLib )
-    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_CURRENT_LIB_AS, LIB_EDIT_FRAME::OnUpdateSaveCurrentLibAs )
+    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_LIBRARY, LIB_EDIT_FRAME::OnUpdateSaveLib )
+    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_LIBRARY_AS, LIB_EDIT_FRAME::OnUpdateSaveLibAs )
     EVT_UPDATE_UI( ID_LIBEDIT_VIEW_DOC, LIB_EDIT_FRAME::OnUpdateViewDoc )
     EVT_UPDATE_UI( ID_LIBEDIT_EDIT_PIN_BY_PIN, LIB_EDIT_FRAME::OnUpdatePinByPin )
     EVT_UPDATE_UI( ID_LIBEDIT_EDIT_PIN_BY_TABLE, LIB_EDIT_FRAME::OnUpdatePinTable )
@@ -199,6 +214,8 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_my_part = NULL;
     m_tempCopyComponent = NULL;
+    m_treePane = nullptr;
+    m_libMgr = nullptr;
 
     // Delayed initialization
     if( m_textSize == -1 )
@@ -213,7 +230,8 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     LoadSettings( config() );
 
-    SetScreen( new SCH_SCREEN( aKiway ) );
+    m_dummyScreen = new SCH_SCREEN( aKiway );
+    SetScreen( m_dummyScreen );
     GetScreen()->m_Center = true;
     GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
 
@@ -232,6 +250,9 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     if( m_canvas )
         m_canvas->SetEnableBlockCommands( true );
+
+    m_libMgr = new LIB_MANAGER( *this );
+    m_treePane = new CMP_TREE_PANE( this, m_libMgr );
 
     ReCreateMenuBar();
     ReCreateHToolbar();
@@ -280,13 +301,16 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       wxAuiPaneInfo( vert ).Name( "m_VToolBar" ).Right() );
 
     m_auimgr.AddPane( m_optionsToolBar,
-                      wxAuiPaneInfo( vert ).Name( "m_optionsToolBar" ).Left() );
+                      wxAuiPaneInfo( vert ).Name( "m_optionsToolBar" ).Left().Row( 0 ) );
 
     m_auimgr.AddPane( m_canvas,
                       wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
 
     m_auimgr.AddPane( m_messagePanel,
-                      wxAuiPaneInfo( mesg ).Name( "MsgPanel" ).Bottom().Layer(10) );
+                      wxAuiPaneInfo( mesg ).Name( "MsgPanel" ).Bottom().Layer( 10 ) );
+
+    m_auimgr.AddPane( m_treePane, wxAuiPaneInfo().Name( "ComponentTree" ).Left().Row( 1 )
+            .Resizable().MinSize( 250, 400 ).Dock().CloseButton( false ) );
 
     m_auimgr.Update();
 
@@ -306,12 +330,14 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
     Unbind( wxEVT_COMMAND_MENU_SELECTED, &LIB_EDIT_FRAME::OnEditSymbolLibTable, this,
             ID_EDIT_SYM_LIB_TABLE );
 
+    // current screen is destroyed in EDA_DRAW_FRAME
+    SetScreen( m_dummyScreen );
+
     m_drawItem = m_lastDrawItem = NULL;
 
     delete m_tempCopyComponent;
+    delete m_libMgr;
     delete m_my_part;
-    m_my_part = NULL;
-    m_tempCopyComponent = NULL;
 }
 
 
@@ -323,30 +349,15 @@ void LIB_EDIT_FRAME::SetDrawItem( LIB_ITEM* drawItem )
 
 void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    if( GetScreen()->IsModify() )
+    if( saveAllLibraries() )
     {
-        int ii = DisplayExitDialog( this, _( "Save the changes in the library before closing?" ) );
-
-        switch( ii )
-        {
-        case wxID_NO:
-            break;
-
-        case wxID_YES:
-            if( SaveActiveLibrary( false ) )
-                break;
-
-            // fall through: cancel the close because of an error
-
-        case wxID_CANCEL:
-            Event.Veto();
-            return;
-        }
-
-        GetScreen()->ClrModify();
+        saveSymbolLibTables( true, true );
+        Destroy();
     }
-
-    Destroy();
+    else
+    {
+        Event.Veto();
+    }
 }
 
 
@@ -461,6 +472,28 @@ void LIB_EDIT_FRAME::OnShowElectricalType( wxCommandEvent& event )
 }
 
 
+void LIB_EDIT_FRAME::OnToggleSearchTree( wxCommandEvent& event )
+{
+    auto& treePane = m_auimgr.GetPane( m_treePane );
+    treePane.Show( !IsSearchTreeShown() );
+    m_auimgr.Update();
+}
+
+
+void LIB_EDIT_FRAME::OnEditSymbolLibTable( wxCommandEvent& aEvent )
+{
+    SCH_BASE_FRAME::OnEditSymbolLibTable( aEvent );
+    m_libMgr->Sync( true );
+    m_treePane->Refresh();
+}
+
+
+bool LIB_EDIT_FRAME::IsSearchTreeShown()
+{
+    return m_auimgr.GetPane( m_treePane ).IsShown();
+}
+
+
 void LIB_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( GetToolId() == aEvent.GetId() );
@@ -475,7 +508,7 @@ void LIB_EDIT_FRAME::OnUpdateElectricalType( wxUpdateUIEvent& aEvent )
 
 void LIB_EDIT_FRAME::OnUpdateEditingPart( wxUpdateUIEvent& aEvent )
 {
-    LIB_PART*      part = GetCurPart();
+    LIB_PART* part = GetCurPart();
 
     aEvent.Enable( part != NULL );
 
@@ -484,9 +517,44 @@ void LIB_EDIT_FRAME::OnUpdateEditingPart( wxUpdateUIEvent& aEvent )
 }
 
 
-void LIB_EDIT_FRAME::OnUpdateNotEditingPart( wxUpdateUIEvent& event )
+void LIB_EDIT_FRAME::OnUpdatePartModified( wxUpdateUIEvent& aEvent )
 {
-    event.Enable( !GetCurPart() );
+    LIB_ID libId = getTargetLibId();
+    const wxString& partName = libId.GetLibItemName();
+    const wxString& libName = libId.GetLibNickname();
+
+    if( aEvent.GetId() == ID_LIBEDIT_SAVE_PART )
+    {
+        bool readOnly = libName.IsEmpty() || m_libMgr->IsLibraryReadOnly( libName );
+
+        aEvent.SetText( readOnly ? _( "Save [Read Only]" ) : _( "Save" ) );
+        aEvent.Enable( !readOnly && !partName.IsEmpty()
+                && m_libMgr->IsPartModified( partName, libName ) );
+    }
+    else if( aEvent.GetId() == ID_LIBEDIT_REVERT_PART )
+    {
+        aEvent.Enable( !partName.IsEmpty() && !libName.IsEmpty()
+                && m_libMgr->IsPartModified( partName, libName ) );
+    }
+    else wxFAIL;
+}
+
+
+void LIB_EDIT_FRAME::OnUpdatePaste( wxUpdateUIEvent& event )
+{
+    event.Enable( m_clipboard.GetCount() > 0 );
+}
+
+
+void LIB_EDIT_FRAME::OnUpdateLibModified( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( m_libMgr->IsLibraryModified( getTargetLib() ) );
+}
+
+
+void LIB_EDIT_FRAME::OnUpdateClipboardNotEmpty( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( !!m_copiedPart );
 }
 
 
@@ -504,22 +572,21 @@ void LIB_EDIT_FRAME::OnUpdateRedo( wxUpdateUIEvent& event )
 }
 
 
-void LIB_EDIT_FRAME::OnUpdateSaveCurrentLib( wxUpdateUIEvent& event )
+void LIB_EDIT_FRAME::OnUpdateSaveLib( wxUpdateUIEvent& event )
 {
-    wxString lib = GetCurLib();
-    SYMBOL_LIB_TABLE* table = Prj().SchSymbolLibTable();
+    wxString lib = getTargetLib();
+    bool readOnly = lib.IsEmpty() || m_libMgr->IsLibraryReadOnly( lib );
 
-    event.Enable( !lib.empty() && table->HasLibrary( lib ) && table->IsSymbolLibWritable( lib ) &&
-                  GetScreen()->IsModify() );
+    event.SetText( readOnly ? _( "Save library [Read Only]" ) : _( "Save library" ) );
+    event.Enable( !readOnly && m_libMgr->IsLibraryModified( lib ) );
 }
 
 
-void LIB_EDIT_FRAME::OnUpdateSaveCurrentLibAs( wxUpdateUIEvent& event )
+void LIB_EDIT_FRAME::OnUpdateSaveLibAs( wxUpdateUIEvent& event )
 {
-    wxString lib = GetCurLib();
-    SYMBOL_LIB_TABLE* table = Prj().SchSymbolLibTable();
+    wxString lib = getTargetLib();
 
-    event.Enable( !lib.empty() && table->HasLibrary( lib ) );
+    event.Enable( m_libMgr->LibraryExists( lib ) );
 }
 
 
@@ -676,50 +743,12 @@ void LIB_EDIT_FRAME::OnSelectBodyStyle( wxCommandEvent& event )
 }
 
 
-void LIB_EDIT_FRAME::OnSaveCurrentPart( wxCommandEvent& aEvent )
-{
-    LIB_PART* part = GetCurPart();
-
-    if( !part )
-    {
-        DisplayError( this, _( "No part to save." ) );
-        return;
-    }
-
-    wxString libNickname = GetCurLib();
-
-    if( libNickname.empty() )
-        SelectActiveLibrary();
-
-    libNickname = GetCurLib();
-
-    if( !libNickname )
-    {
-        DisplayError( this, _( "No valid library specified." ) );
-        return;
-    }
-
-    try
-    {
-        Prj().SchSymbolLibTable()->SaveSymbol( libNickname, new LIB_PART( *part ) );
-    }
-    catch( ... )
-    {
-        wxString msg;
-        msg.Printf( _( "Unexpected error occured saving symbol '%s' to symbol library '%s'." ),
-                    part->GetName(), libNickname );
-        DisplayError( this, msg );
-        return;
-    }
-
-    refreshSchematic();
-}
-
-
 void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
     int     id = event.GetId();
     wxPoint pos;
+    SCH_SCREEN* screen = GetScreen();
+    BLOCK_SELECTOR& block = screen->m_BlockLocate;
 
     m_canvas->SetIgnoreMouseEvents( true );
 
@@ -728,6 +757,8 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     switch( id )   // Stop placement commands before handling new command.
     {
+    case wxID_COPY:
+    case wxID_CUT:
     case ID_POPUP_LIBEDIT_END_CREATE_ITEM:
     case ID_LIBEDIT_EDIT_PIN:
     case ID_POPUP_LIBEDIT_BODY_EDIT_ITEM:
@@ -768,10 +799,6 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     switch( id )
     {
     case ID_POPUP_LIBEDIT_CANCEL_EDITING:
-        break;
-
-    case ID_LIBEDIT_SELECT_CURRENT_LIB:
-        SelectActiveLibrary();
         break;
 
     case ID_LIBEDIT_EDIT_PIN_BY_PIN:
@@ -898,48 +925,48 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_ZOOM_BLOCK:
         m_canvas->SetAutoPanRequest( false );
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_ZOOM );
+        block.SetCommand( BLOCK_ZOOM );
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_DELETE_BLOCK:
         m_canvas->SetAutoPanRequest( false );
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_DELETE );
+        block.SetCommand( BLOCK_DELETE );
         m_canvas->MoveCursorToCrossHair();
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_DUPLICATE_BLOCK:
         m_canvas->SetAutoPanRequest( false );
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_DUPLICATE );
+        block.SetCommand( BLOCK_DUPLICATE );
         m_canvas->MoveCursorToCrossHair();
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_SELECT_ITEMS_BLOCK:
         m_canvas->SetAutoPanRequest( false );
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_SELECT_ITEMS_ONLY );
+        block.SetCommand( BLOCK_SELECT_ITEMS_ONLY );
         m_canvas->MoveCursorToCrossHair();
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_MIRROR_Y_BLOCK:
         m_canvas->SetAutoPanRequest( false );
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_MIRROR_Y );
+        block.SetCommand( BLOCK_MIRROR_Y );
         m_canvas->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_MIRROR_X_BLOCK:
         m_canvas->SetAutoPanRequest( false );
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_MIRROR_X );
+        block.SetCommand( BLOCK_MIRROR_X );
         m_canvas->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_ROTATE_BLOCK:
         m_canvas->SetAutoPanRequest( false );
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_ROTATE );
+        block.SetCommand( BLOCK_ROTATE );
         m_canvas->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;
@@ -948,6 +975,25 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->SetAutoPanRequest( false );
         m_canvas->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
+        break;
+
+    case wxID_COPY:
+        block.SetCommand( BLOCK_COPY );
+        block.SetMessageBlock( this );
+        HandleBlockEnd( &dc );
+        break;
+
+    case wxID_PASTE:
+        HandleBlockBegin( &dc, BLOCK_PASTE, GetCrossHairPosition() );
+        break;
+
+    case wxID_CUT:
+        if( block.GetCommand() != BLOCK_MOVE )
+            break;
+
+        block.SetCommand( BLOCK_CUT );
+        block.SetMessageBlock( this );
+        HandleBlockEnd( &dc );
         break;
 
     default:
@@ -968,7 +1014,7 @@ void LIB_EDIT_FRAME::OnActivate( wxActivateEvent& event )
 }
 
 
-wxString LIB_EDIT_FRAME::GetCurLib()
+wxString LIB_EDIT_FRAME::GetCurLib() const
 {
     wxString libNickname = Prj().GetRString( PROJECT::SCH_LIBEDIT_CUR_LIB );
 
@@ -994,23 +1040,31 @@ wxString LIB_EDIT_FRAME::SetCurLib( const wxString& aLibNickname )
     else
         Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, aLibNickname );
 
+    m_libMgr->SetCurrentLib( aLibNickname );
+
     return old;
-}
-
-
-LIB_PART* LIB_EDIT_FRAME::GetCurPart()
-{
-    return m_my_part;
 }
 
 
 void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
 {
-    delete m_my_part;
-    m_my_part = aPart;      // take ownership here
+    wxASSERT( m_my_part != aPart );
+
+    if( m_my_part != aPart )
+    {
+        delete m_my_part;
+        m_my_part = aPart;
+    }
+
+    // select the current component in the tree widget
+    if( aPart )
+        m_treePane->GetCmpTree()->SelectLibId( aPart->GetLibId() );
+
+    wxString partName = aPart ? aPart->GetName() : wxString();
+    m_libMgr->SetCurrentPart( partName );
 
     // retain in case this wxFrame is re-opened later on the same PROJECT
-    Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_PART, aPart ? aPart->GetName() : wxString() );
+    Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_PART, partName );
 }
 
 
@@ -1070,6 +1124,7 @@ void LIB_EDIT_FRAME::EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem )
 void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
 {
     bool partLocked = GetCurPart()->UnitsLocked();
+    wxString oldName = GetCurPart()->GetName();
 
     DIALOG_EDIT_COMPONENT_IN_LIBRARY dlg( this );
 
@@ -1083,28 +1138,14 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
         m_editPinsPerPartOrConvert = GetCurPart()->UnitsLocked() ? true : false;
     }
 
+    m_libMgr->UpdatePart( GetCurPart(), GetCurLib(), oldName );
+
     UpdateAliasSelectList();
     UpdatePartSelectList();
     DisplayLibInfos();
     DisplayCmpDoc();
     OnModify();
     m_canvas->Refresh();
-}
-
-
-void LIB_EDIT_FRAME::OnCreateNewPartFromExisting( wxCommandEvent& event )
-{
-    LIB_PART*      part = GetCurPart();
-
-    wxCHECK_RET( part, "Cannot create new part from non-existent current part." );
-
-    INSTALL_UNBUFFERED_DC( dc, m_canvas );
-    m_canvas->CrossHairOff( &dc );
-
-    EditField( &part->GetValueField() );
-
-    m_canvas->MoveCursorToCrossHair();
-    m_canvas->CrossHairOn( &dc );
 }
 
 
@@ -1402,6 +1443,14 @@ void LIB_EDIT_FRAME::deleteItem( wxDC* aDC )
 }
 
 
+void LIB_EDIT_FRAME::OnModify()
+{
+    GetScreen()->SetModify();
+    storeCurrentPart();
+    m_treePane->GetCmpTree()->Refresh();
+}
+
+
 void LIB_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
 {
     int id = aEvent.GetId();
@@ -1453,4 +1502,160 @@ void LIB_EDIT_FRAME::refreshSchematic()
     // There may be no parent window so use KIWAY message to refresh the schematic editor
     // in case any symbols have changed.
     Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_REFRESH, std::string( "" ), this );
+}
+
+
+bool LIB_EDIT_FRAME::addLibraryFile( bool aCreateNew )
+{
+    wxFileName fileName = getLibraryFileName( !aCreateNew );
+    wxString libName = fileName.GetName();
+
+    if( libName.IsEmpty() )
+        return false;
+
+    if( m_libMgr->LibraryExists( libName ) )
+    {
+        DisplayError( this,
+                wxString::Format( _( "Library '%s' already exists" ), GetChars( libName ) ) );
+        return false;
+    }
+
+    m_libMgr->AddLibrary( fileName.GetFullPath() );
+
+    if( aCreateNew )
+        Prj().SchSymbolLibTable()->CreateSymbolLib( libName );
+
+    return true;
+}
+
+
+wxFileName LIB_EDIT_FRAME::getLibraryFileName( bool aExisting )
+{
+    wxFileName fn = m_libMgr->GetUniqueLibraryName();
+    fn.SetExt( SchematicLibraryFileExtension );
+
+    wxFileDialog dlg( this,
+            aExisting ? _( "Select Library" ) : _( "New Library" ),
+            Prj().GetProjectPath(),
+            aExisting ? wxString( wxEmptyString ) : fn.GetFullName() ,
+            SchematicLibraryFileWildcard(),
+            aExisting ? wxFD_OPEN | wxFD_FILE_MUST_EXIST :
+                         wxFD_SAVE | wxFD_CHANGE_DIR | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return wxFileName();
+
+    fn = dlg.GetPath();
+    fn.SetExt( SchematicLibraryFileExtension );
+
+    return fn;
+}
+
+
+LIB_PART* LIB_EDIT_FRAME::getTargetPart() const
+{
+    LIB_ALIAS* alias = nullptr;
+
+    if( m_treePane->GetCmpTree()->IsMenuActive() )
+    {
+        LIB_ID libId = m_treePane->GetCmpTree()->GetSelectedLibId();
+        alias = m_libMgr->GetAlias( libId.GetLibItemName(), libId.GetLibNickname() );
+    }
+    else if( LIB_PART* part = GetCurPart() )
+    {
+        alias = part->GetAlias( 0 );
+    }
+
+    return alias ? alias->GetPart() : nullptr;
+}
+
+
+LIB_ID LIB_EDIT_FRAME::getTargetLibId() const
+{
+    if( m_treePane->GetCmpTree()->IsMenuActive() )
+        return m_treePane->GetCmpTree()->GetSelectedLibId();
+
+    if( LIB_PART* part = GetCurPart() )
+        return part->GetLibId();
+
+    return LIB_ID();
+}
+
+
+wxString LIB_EDIT_FRAME::getTargetLib() const
+{
+    if( m_treePane->GetCmpTree()->IsMenuActive() )
+    {
+        LIB_ID libId = m_treePane->GetCmpTree()->GetSelectedLibId();
+        return libId.GetLibNickname();
+    }
+    else
+    {
+        return GetCurLib();
+    }
+}
+
+
+SYMBOL_LIB_TABLE* LIB_EDIT_FRAME::SelectSymLibTable()
+{
+    wxArrayString libTableNames;
+    libTableNames.Add( _( "Global" ) );
+    libTableNames.Add( _( "Project" ) );
+
+    switch( SelectSingleOption( this, _( "Select Symbol Library Table" ),
+                _( "Choose the Library Table to add the library:" ), libTableNames ) )
+    {
+        case 0: return &SYMBOL_LIB_TABLE::GetGlobalLibTable();
+        case 1: return Prj().SchSymbolLibTable();
+    }
+
+    return nullptr;
+}
+
+
+bool LIB_EDIT_FRAME::backupFile( const wxFileName& aOriginalFile, const wxString& aBackupExt )
+{
+    if( aOriginalFile.FileExists() )
+    {
+        wxFileName backupFileName( aOriginalFile );
+        backupFileName.SetExt( "bck" );
+
+        if( backupFileName.FileExists() )
+            wxRemoveFile( backupFileName.GetFullPath() );
+
+        if( !wxCopyFile( aOriginalFile.GetFullPath(), backupFileName.GetFullPath() ) )
+        {
+            DisplayError( this, _( "Failed to save backup document to file " ) +
+                  backupFileName.GetFullPath() );
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+void LIB_EDIT_FRAME::storeCurrentPart()
+{
+    if( m_my_part && !GetCurLib().IsEmpty() && GetScreen()->IsModify() )
+        m_libMgr->UpdatePart( m_my_part, GetCurLib() ); // UpdatePart() makes a copy
+}
+
+
+bool LIB_EDIT_FRAME::isCurrentPart( const LIB_ID& aLibId ) const
+{
+    return ( GetCurPart() && aLibId == GetCurPart()->GetLibId() );
+}
+
+
+void LIB_EDIT_FRAME::emptyScreen()
+{
+    SetCurLib( wxEmptyString );
+    SetCurPart( nullptr );
+    m_aliasName.Empty();
+    m_drawItem = m_lastDrawItem = nullptr;
+    SetScreen( m_dummyScreen );
+    m_dummyScreen->ClearUndoRedoList();
+    Zoom_Automatique( false );
+    Refresh();
 }

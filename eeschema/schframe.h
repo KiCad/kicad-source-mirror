@@ -869,7 +869,6 @@ private:
     void OnCopySchematicItemRequest( wxCommandEvent& event );
 
     /* User interface update event handlers. */
-    void OnUpdateBlockSelected( wxUpdateUIEvent& event );
     void OnUpdatePaste( wxUpdateUIEvent& event );
     void OnUpdateHiddenPins( wxUpdateUIEvent& event );
     void OnUpdateBusOrientation( wxUpdateUIEvent& event );

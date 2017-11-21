@@ -213,13 +213,13 @@ static EDA_HOTKEY HkFindNextDrcMarker( _HKI( "Find Next DRC Marker" ), HK_FIND_N
 static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTION, '@', ID_ZOOM_SELECTION );
 
 // Special keys for library editor:
-static EDA_HOTKEY HkLoadPart( _HKI( "Load Component" ), HK_LIBEDIT_LOAD_PART, 'L' + GR_KB_CTRL );
 static EDA_HOTKEY HkCreatePin( _HKI( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P' );
 static EDA_HOTKEY HkInsertPin( _HKI( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
 static EDA_HOTKEY HkMoveLibItem( _HKI( "Move Library Item" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
 
 // Load/save files
-static EDA_HOTKEY HkSaveLib( _HKI( "Save Library" ), HK_SAVE_LIB, 'S' + GR_KB_CTRL );
+static EDA_HOTKEY HkSaveLib( _HKI( "Save Library" ), HK_SAVE_LIB, 'S' + GR_KB_CTRL + GR_KB_ALT, ID_LIBEDIT_SAVE_LIBRARY );
+static EDA_HOTKEY HkSavePart( _HKI( "Save Part" ), HK_SAVE_PART, 'S' + GR_KB_CTRL, ID_LIBEDIT_SAVE_PART );
 static EDA_HOTKEY HkSaveSchematic( _HKI( "Save Schematic" ), HK_SAVE_SCH, 'S' + GR_KB_CTRL );
 static EDA_HOTKEY HkLoadSchematic( _HKI( "Load Schematic" ), HK_LOAD_SCH, 'L' + GR_KB_CTRL );
 
@@ -321,12 +321,15 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
 static EDA_HOTKEY* libEdit_Hotkey_List[] =
 {
     &HkSaveLib,
-    &HkLoadPart,
+    &HkSavePart,
     &HkCreatePin,
     &HkInsertPin,
     &HkMoveLibItem,
     &HkMirrorX,
     &HkMirrorY,
+    &HkCopyBlock,
+    &HkPasteBlock,
+    &HkCutBlock,
     NULL
 };
 
@@ -703,6 +706,9 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ZOOM_REDRAW:
     case HK_ZOOM_CENTER:
     case HK_ZOOM_AUTO:
+    case HK_PASTE_BLOCK:
+    case HK_COPY_BLOCK:
+    case HK_CUT_BLOCK:
         cmd.SetId( hotKey->m_IdMenuEvent );
         GetEventHandler()->ProcessEvent( cmd );
         break;
@@ -775,10 +781,6 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                 GetEventHandler()->ProcessEvent( cmd );
             }
         }
-        break;
-
-    case HK_LIBEDIT_LOAD_PART:
-        LoadOneLibraryPart( cmd );
         break;
 
     case HK_LIBEDIT_CREATE_PIN:

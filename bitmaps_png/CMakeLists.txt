@@ -123,6 +123,7 @@ set( BMAPS_MID
     add_hierarchical_subsheet
     add_junction
     add_keepout_area
+    add_library
     add_line2bus
     add_line_label
     add_line
@@ -227,6 +228,7 @@ set( BMAPS_MID
     export_idf
     export_footprint_names
     export_module
+    export_part
     export
     fabrication
     file_footprint
@@ -275,6 +277,7 @@ set( BMAPS_MID
     import_footprint_names
     import_hierarchical_label
     import_module
+    import_part
     import_setup
     import
     info
@@ -466,6 +469,7 @@ set( BMAPS_MID
     rotate_pos_z
     save_as
     save_library
+    save_part
     save_part_in_mem
     save_project
     save_setup
@@ -483,6 +487,7 @@ set( BMAPS_MID
     sim_probe
     sim_add_signal
     sim_settings
+    search_tree
     setcolor_3d_bg
     setcolor_silkscreen
     setcolor_soldermask

@@ -45,11 +45,6 @@
 #endif
 
 
-extern int ExportPartId;
-extern int ImportPartId;
-extern int CreateNewLibAndSavePartId;
-
-
 void LIB_EDIT_FRAME::ReCreateVToolbar()
 {
     if( m_drawToolBar != NULL )
@@ -108,55 +103,49 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                                       KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Set up toolbar
-    m_mainToolBar->AddTool( ID_LIBEDIT_SELECT_CURRENT_LIB, wxEmptyString, KiBitmap( library_xpm ),
-                            _( "Select working library" ) );
+    m_mainToolBar->AddTool( ID_LIBEDIT_NEW_LIBRARY, wxEmptyString,
+                            KiBitmap( new_library_xpm ),
+                            _( "Create a new library" ) );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_LIB, wxEmptyString,
+    m_mainToolBar->AddTool( ID_LIBEDIT_ADD_LIBRARY, wxEmptyString,
+                            KiBitmap( add_library_xpm ),
+                            _( "Add an existing library" ) );
+
+    m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_LIBRARY, wxEmptyString,
                             KiBitmap( save_library_xpm ),
-                            _( "Save into current library" ) );
-
-    m_mainToolBar->AddTool( CreateNewLibAndSavePartId, wxEmptyString, KiBitmap( new_library_xpm ),
-                            _( "Save current component to new library" ) );
-
-    m_mainToolBar->AddTool( ID_TO_LIBVIEW, wxEmptyString, KiBitmap( library_browse_xpm ),
-                            HELP_RUN_LIB_VIEWER );
-
-    m_mainToolBar->AddSeparator();
-    m_mainToolBar->AddTool( ID_LIBEDIT_DELETE_PART, wxEmptyString, KiBitmap( delete_xpm ),
-                            _( "Delete component in current library" ) );
+                            _( "Save current library" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString, KiBitmap( new_component_xpm ),
-                            _( "Create new component" ) );
+                            _( "Create new part" ) );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_SELECT_PART, wxEmptyString,
-                            KiBitmap( import_cmp_from_lib_xpm ),
-                            _( "Load component from current library" ) );
+    m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_PART, wxEmptyString,
+                            KiBitmap( save_part_xpm ),
+                            _( "Save current part" ) );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_NEW_PART_FROM_EXISTING, wxEmptyString,
-                            KiBitmap( copycomponent_xpm ),
-                            _( "Create new component from current component" ) );
+    m_mainToolBar->AddTool( ID_LIBEDIT_IMPORT_PART, wxEmptyString, KiBitmap( import_part_xpm ),
+                            _( "Import part" ) );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_PART, wxEmptyString,
-                            KiBitmap( save_part_in_mem_xpm ),
-                            _( "Update current component in current library" ) );
-
-    m_mainToolBar->AddTool( ImportPartId, wxEmptyString, KiBitmap( import_xpm ),
-                            _( "Import component" ) );
-
-    m_mainToolBar->AddTool( ExportPartId, wxEmptyString, KiBitmap( export_xpm ),
-                            _( "Export component" ) );
+    m_mainToolBar->AddTool( ID_LIBEDIT_EXPORT_PART, wxEmptyString, KiBitmap( export_part_xpm ),
+                            _( "Export part" ) );
 
     m_mainToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "Undo last command" ), g_Libedit_Hokeys_Descr, HK_UNDO, IS_COMMENT );
+
+    m_mainToolBar->AddTool( wxID_PASTE, wxEmptyString, KiBitmap( paste_xpm ),
+                            _( "Paste" ) );
+
+    m_mainToolBar->AddSeparator();
+
+    msg = AddHotkeyName( HELP_UNDO, g_Libedit_Hokeys_Descr, HK_UNDO, IS_COMMENT );
     m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString, KiBitmap( undo_xpm ), msg );
-    msg = AddHotkeyName( _( "Redo last command" ), g_Libedit_Hokeys_Descr, HK_REDO,
-                         IS_COMMENT );
+
+    msg = AddHotkeyName( HELP_REDO, g_Libedit_Hokeys_Descr, HK_REDO, IS_COMMENT );
     m_mainToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ), msg );
 
     m_mainToolBar->AddSeparator();
+
     m_mainToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_PART, wxEmptyString,
-                            KiBitmap( part_properties_xpm ), _( "Edit component properties" ) );
+                            KiBitmap( part_properties_xpm ), _( "Edit part properties" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, wxEmptyString,
                             KiBitmap( text_xpm ),
@@ -249,6 +238,10 @@ void LIB_EDIT_FRAME::CreateOptionToolbar()
     m_optionsToolBar->AddTool( ID_LIBEDIT_SHOW_ELECTRICAL_TYPE, wxEmptyString,
                                KiBitmap( pin_show_etype_xpm ),
                                _( "Show pins electrical type" ), wxITEM_CHECK );
+
+    m_optionsToolBar->AddTool( ID_LIBEDIT_SHOW_HIDE_SEARCH_TREE, wxEmptyString,
+                               KiBitmap( search_tree_xpm ),
+                               _( "Toggles the search tree" ), wxITEM_CHECK );
 
     m_optionsToolBar->Realize();
 }

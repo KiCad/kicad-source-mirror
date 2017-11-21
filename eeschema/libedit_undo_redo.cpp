@@ -107,6 +107,8 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
     delete lastcmd;
     part = (LIB_PART*) wrapper.GetItem();
 
+    printf("RestoreCopy [%p]\n", part);
+
     // Do not delete the previous part by calling SetCurPart( part ),
     // which calls delete <previous part>.
     // <previous part> is now put in redo list and is owned by this list.

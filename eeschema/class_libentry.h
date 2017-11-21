@@ -89,8 +89,6 @@ class LIB_ALIAS : public EDA_ITEM
      */
     LIB_PART*       shared;
 
-    friend class LIB_PART;
-
 protected:
     wxString        name;
     wxString        description;    ///< documentation for info
@@ -226,12 +224,7 @@ struct PART_DRAW_OPTIONS
  */
 class LIB_PART : public EDA_ITEM
 {
-    friend class PART_LIB;
-    friend class LIB_ALIAS;
-    friend class SCH_LEGACY_PLUGIN_CACHE;
-
     PART_SPTR           m_me;               ///< http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared
-    wxString            m_name;
     LIB_ID              m_libId;
     int                 m_pinNameOffset;    ///< The offset in mils to draw the pin name.  Set to 0
                                             ///< to draw the pin name above the pin.
@@ -258,7 +251,7 @@ class LIB_PART : public EDA_ITEM
 private:
     void deleteAllFields();
 
-    // LIB_PART()  { }     // not legal
+
 
 public:
 
@@ -280,16 +273,15 @@ public:
 
     virtual void SetName( const wxString& aName );
 
-    const wxString& GetName() const { return m_name; }
+    const wxString& GetName() const { return m_aliases[0]->GetName(); }
 
     const LIB_ID& GetLibId() const { return m_libId; }
-    void SetLibId( const LIB_ID& aLibId ) { m_libId = aLibId; }
 
     const wxString GetLibraryName();
 
     PART_LIB* GetLib()              { return m_library; }
 
-    void SetLib( PART_LIB* aLibrary ) { m_library = aLibrary; }
+    void SetLib( PART_LIB* aLibrary );
 
     wxArrayString GetAliasNames( bool aIncludeRoot = true ) const;
 

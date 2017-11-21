@@ -35,6 +35,7 @@
 #include <symbol_lib_table.h>
 #include <template_fieldnames.h>
 #include <dialog_edit_one_field.h>
+#include <lib_manager.h>
 
 
 void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
@@ -42,14 +43,12 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
     wxString newFieldValue;
     wxString title;
     wxString caption;
-    wxString oldName;
 
     if( aField == NULL )
         return;
 
     LIB_PART* parent = aField->GetParent();
-
-    wxASSERT( parent );
+    wxCHECK( parent, /* void */ );
 
     // Editing the component value field is equivalent to creating a new component based
     // on the current component.  Set the dialog message to inform the user.
@@ -75,17 +74,19 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
     newFieldValue = dlg.GetText();
     wxString fieldText = aField->GetFullText( m_unit );
 
+    bool creatingNewComponent =  aField->GetId() == VALUE && newFieldValue != aField->GetText();
+
     /* If the value field is changed, this is equivalent to creating a new component from
      * the old one.  Rename the component and remove any conflicting aliases to prevent name
      * errors when updating the library.
      */
-    if( aField->GetId() == VALUE && newFieldValue != aField->GetText() )
+    if( creatingNewComponent )
     {
         wxString msg;
         wxString lib = GetCurLib();
 
         // Test the current library for name conflicts.
-        if( !lib.empty() && Prj().SchSymbolLibTable()->LoadSymbol( lib, newFieldValue ) )
+        if( !lib.empty() && m_libMgr->PartExists( newFieldValue, lib ) )
         {
             msg.Printf( _(
                 "The name '%s' conflicts with an existing entry in the component library '%s'.\n\n"
@@ -124,7 +125,7 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
             bool conflicts = false;
             wxArrayString libAliasNames, symbolAliasNames;
 
-            Prj().SchSymbolLibTable()->EnumerateSymbolLib( lib, libAliasNames );
+            libAliasNames = m_libMgr->GetAliasNames( lib );
             symbolAliasNames = parent->GetAliasNames();
 
             for( size_t i = 0; i < symbolAliasNames.GetCount(); i++ )
@@ -156,7 +157,7 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
 
                 for( size_t i = 0;  i < aliases.GetCount();  i++ )
                 {
-                    if( Prj().SchSymbolLibTable()->LoadSymbol( lib, aliases[ i ] ) != NULL )
+                    if( m_libMgr->GetAlias( aliases[i], lib ) != NULL )
                         parent->RemoveAlias( aliases[ i ] );
                 }
             }
@@ -164,13 +165,18 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
 
         if( !parent->HasAlias( m_aliasName ) )
             m_aliasName = newFieldValue;
+
+        //m_libMgr->RemovePart( fieldText, lib );
+        m_libMgr->UpdatePart( parent, lib, fieldText );
+    }
+
+
+    if( !aField->InEditMode() && !creatingNewComponent )
+    {
+        SaveCopyInUndoList( parent );
     }
 
     dlg.UpdateField( aField );
-
-    if( !aField->InEditMode() )
-        SaveCopyInUndoList( parent );
-
     m_canvas->Refresh();
 
     OnModify();

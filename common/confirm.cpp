@@ -34,6 +34,8 @@
 #include <html_messagebox.h>
 #include <dialog_exit_base.h>
 
+#include <functional>
+
 
 class DIALOG_EXIT: public DIALOG_EXIT_BASE
 {
@@ -174,4 +176,169 @@ int YesNoCancelDialog( wxWindow*       aParent,
                               aYesButtonText, aNoButtonText, aCancelButtonText );
 
     return dlg.ShowModal();
+}
+
+
+int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxString& aMessage, const wxArrayString& aOptions )
+{
+    int ret = -1;
+    wxDialog* dlg = new wxDialog( aParent, wxID_ANY, aTitle );
+
+    wxBoxSizer* boxSizer = new wxBoxSizer( wxVERTICAL );
+
+    if( !aMessage.IsEmpty() )
+        boxSizer->Add( new wxStaticText( dlg, wxID_ANY, aMessage ), 0, wxEXPAND | wxALL, 5  );
+
+    std::vector<wxRadioButton*> radioButtons;
+    radioButtons.reserve( aOptions.Count() );
+
+    for( const wxString& option : aOptions )
+    {
+        radioButtons.emplace_back( new wxRadioButton( dlg, wxID_ANY, _( option ) ) );
+        boxSizer->Add( radioButtons.back(), 0, wxEXPAND | wxALL, 5 );
+    }
+
+    wxStdDialogButtonSizer* m_sdboxSizer = new wxStdDialogButtonSizer();
+    m_sdboxSizer->AddButton( new wxButton( dlg, wxID_OK ) );
+    m_sdboxSizer->AddButton( new wxButton( dlg, wxID_CANCEL ) );
+    m_sdboxSizer->Realize();
+    boxSizer->Add( m_sdboxSizer, 1, wxEXPAND | wxALL, 5 );
+
+    dlg->SetSizer( boxSizer );
+    dlg->Layout();
+    boxSizer->Fit( dlg );
+    boxSizer->SetSizeHints( dlg );
+    dlg->Centre( wxBOTH );
+
+    if( dlg->ShowModal() == wxID_OK )
+    {
+        for( unsigned int i = 0; i < radioButtons.size(); ++i )
+        {
+            if( radioButtons[i]->GetValue() )
+            {
+                ret = i;
+                break;
+            }
+        }
+    }
+    else
+    {
+        ret = -1;
+    }
+
+    dlg->Destroy();
+
+    return ret;
+}
+
+
+class DIALOG_MULTI_OPTIONS : public wxDialog
+{
+public:
+    DIALOG_MULTI_OPTIONS( wxWindow* aParent, const wxString& aTitle, const wxString& aMessage,
+            const wxArrayString& aOptions )
+        : wxDialog( aParent, wxID_ANY, aTitle )
+    {
+        SetSizeHints( wxDefaultSize, wxDefaultSize );
+
+        wxBoxSizer* boxSizer = new wxBoxSizer( wxVERTICAL );
+
+        if( !aMessage.IsEmpty() )
+            boxSizer->Add( new wxStaticText( this, wxID_ANY, aMessage ), 0, wxEXPAND | wxALL, 5 );
+
+        m_checklist = new wxCheckListBox( this, wxID_ANY );
+
+        for( const wxString& option : aOptions )
+            m_checklist->Append( option );
+
+        boxSizer->Add( m_checklist, 1, wxEXPAND | wxALL, 5 );
+
+        wxBoxSizer* btnSizer = new wxBoxSizer( wxHORIZONTAL );
+        wxButton* selectAll = new wxButton( this, wxID_ANY, _( "Select All" ) );
+        btnSizer->Add( selectAll, 1, wxEXPAND | wxALL, 5 );
+        wxButton* unselectAll = new wxButton( this, wxID_ANY, _( "Unselect All" ) );
+        btnSizer->Add( unselectAll, 1, wxEXPAND | wxALL, 5 );
+        boxSizer->Add( btnSizer, 0, wxEXPAND | wxALL, 5 );
+
+        wxStdDialogButtonSizer* m_sdboxSizer = new wxStdDialogButtonSizer();
+        m_sdboxSizer->AddButton( new wxButton( this, wxID_OK ) );
+        m_sdboxSizer->AddButton( new wxButton( this, wxID_CANCEL ) );
+        m_sdboxSizer->Realize();
+        boxSizer->Add( m_sdboxSizer, 0, wxEXPAND | wxALL, 5 );
+
+        SetSizer( boxSizer );
+        Layout();
+        boxSizer->Fit( this );
+        boxSizer->SetSizeHints( this );
+        Centre( wxBOTH );
+
+        selectAll->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_MULTI_OPTIONS::selectAll, this );
+        unselectAll->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_MULTI_OPTIONS::unselectAll, this );
+    }
+
+    std::vector<int> GetSelection() const
+    {
+        std::vector<int> ret;
+
+        for( unsigned int i = 0; i < m_checklist->GetCount(); ++i )
+        {
+            if( m_checklist->IsChecked( i ) )
+                ret.push_back( i );
+        }
+
+        return ret;
+    }
+
+    void SetCheckboxes( bool aValue )
+    {
+        for( unsigned int i = 0; i < m_checklist->GetCount(); ++i )
+            m_checklist->Check( i, aValue );
+    }
+
+protected:
+    wxCheckListBox* m_checklist;
+
+    void selectAll( wxCommandEvent& aEvent )
+    {
+        SetCheckboxes( true );
+    }
+
+    void unselectAll( wxCommandEvent& aEvent )
+    {
+        SetCheckboxes( false );
+    }
+};
+
+
+std::pair<bool, std::vector<int>> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
+        const wxString& aMessage, const wxArrayString& aOptions, bool aDefaultState )
+{
+    std::vector<int> ret;
+    bool clickedOk;
+    DIALOG_MULTI_OPTIONS dlg( aParent, aTitle, aMessage, aOptions );
+    dlg.SetCheckboxes( aDefaultState );
+
+    if( dlg.ShowModal() == wxID_OK )
+    {
+        ret = dlg.GetSelection();
+        clickedOk = true;
+    }
+    else
+    {
+        clickedOk = false;
+    }
+
+    return std::make_pair( clickedOk, ret );
+}
+
+
+std::pair<bool, std::vector<int>> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
+        const wxString& aMessage, const std::vector<std::string>& aOptions, bool aDefaultState )
+{
+    wxArrayString array;
+
+    for( const auto& option : aOptions )
+        array.Add( option );
+
+    return SelectMultipleOptions( aParent, aTitle, aMessage, array, aDefaultState );
 }

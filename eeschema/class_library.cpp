@@ -146,7 +146,7 @@ void PART_LIB::EnableBuffering( bool aEnable )
 }
 
 
-void PART_LIB::GetAliasNames( wxArrayString& aNames )
+void PART_LIB::GetAliasNames( wxArrayString& aNames ) const
 {
     m_plugin->EnumerateSymbolLib( aNames, fileName.GetFullPath(), m_properties.get() );
 
@@ -154,7 +154,7 @@ void PART_LIB::GetAliasNames( wxArrayString& aNames )
 }
 
 
-void PART_LIB::GetAliases( std::vector<LIB_ALIAS*>& aAliases )
+void PART_LIB::GetAliases( std::vector<LIB_ALIAS*>& aAliases ) const
 {
     m_plugin->EnumerateSymbolLib( aAliases, fileName.GetFullPath(), m_properties.get() );
 
@@ -164,7 +164,7 @@ void PART_LIB::GetAliases( std::vector<LIB_ALIAS*>& aAliases )
 }
 
 
-void PART_LIB::GetEntryTypePowerNames( wxArrayString& aNames )
+void PART_LIB::GetEntryTypePowerNames( wxArrayString& aNames ) const
 {
     std::vector<LIB_ALIAS*> aliases;
 
@@ -186,7 +186,7 @@ void PART_LIB::GetEntryTypePowerNames( wxArrayString& aNames )
 }
 
 
-LIB_ALIAS* PART_LIB::FindAlias( const wxString& aName )
+LIB_ALIAS* PART_LIB::FindAlias( const wxString& aName ) const
 {
     LIB_ALIAS* alias = m_plugin->LoadSymbol( fileName.GetFullPath(), aName, m_properties.get() );
 
@@ -194,13 +194,13 @@ LIB_ALIAS* PART_LIB::FindAlias( const wxString& aName )
     // symbols.  This allows the symbol library table conversion tool to determine the
     // correct library where the symbol was found.
     if( alias && alias->GetPart() && !alias->GetPart()->GetLib() )
-        alias->GetPart()->SetLib( this );
+        alias->GetPart()->SetLib( const_cast<PART_LIB*>( this ) );
 
     return alias;
 }
 
 
-LIB_PART* PART_LIB::FindPart( const wxString& aName )
+LIB_PART* PART_LIB::FindPart( const wxString& aName ) const
 {
     LIB_ALIAS* alias = FindAlias( aName );
 
@@ -211,7 +211,7 @@ LIB_PART* PART_LIB::FindPart( const wxString& aName )
 }
 
 
-bool PART_LIB::HasPowerParts()
+bool PART_LIB::HasPowerParts() const
 {
     // return true if at least one power part is found in lib
     std::vector<LIB_ALIAS*> aliases;

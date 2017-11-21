@@ -460,8 +460,6 @@ static const wxString RepeatStepYEntry =            "RepeatStepY";
 static const wxString RepeatLabelIncrementEntry =   "RepeatLabelIncrement";
 
 // Library editor wxConfig entry names.
-static const wxChar lastLibExportPathEntry[] =      wxT( "LastLibraryExportPath" );
-static const wxChar lastLibImportPathEntry[] =      wxT( "LastLibraryImportPath" );
 static const wxChar defaultPinNumSizeEntry[] =      wxT( "LibeditPinNumSize" );
 static const wxChar defaultPinNameSizeEntry[] =     wxT( "LibeditPinNameSize" );
 static const wxChar DefaultPinLengthEntry[] =       wxT( "DefaultPinLength" );

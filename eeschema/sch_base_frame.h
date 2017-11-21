@@ -201,7 +201,7 @@ public:
             const LIB_ID*                       aHighlight = nullptr,
             bool                                aAllowFields = true );
 
-    void OnEditSymbolLibTable( wxCommandEvent& aEvent );
+    virtual void OnEditSymbolLibTable( wxCommandEvent& aEvent );
 
     /**
      * Load symbol from symbol library table.
@@ -281,6 +281,15 @@ protected:
      *         false on cancel
      */
     bool SelectPartNameToLoad( wxString& aLibrary, wxString& aBufName );
+
+    /**
+     * Saves Symbol Library Tables to disk.
+     *
+     * @param aGlobal when true, the Global Table is saved.
+     * @param aProject when true, the Project Table is saved.
+     * @return True when all requested actions succeeded.
+     */
+    bool saveSymbolLibTables( bool aGlobal, bool aProject );
 };
 
 #endif // SCH_BASE_FRAME_H_

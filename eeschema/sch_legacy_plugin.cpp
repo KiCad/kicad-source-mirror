@@ -2476,29 +2476,21 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::loadPart( FILE_LINE_READER& aReader )
         part->SetUnitCount( 1 );
 
     // Copy part name and prefix.
-    LIB_FIELD& value = part->GetValueField();
 
     // The root alias is added to the alias list by SetName() which is called by SetText().
     if( name.IsEmpty() )
     {
-        part->m_name = "~";
-        value.SetText( "~" );
+        part->SetName( "~" );
     }
     else if( name[0] != '~' )
     {
-        part->m_name = name;
-        value.SetText( name );
+        part->SetName( name );
     }
     else
     {
-        name = name.Right( name.Length() - 1 );
-        part->m_name = name;
-        value.SetText( name );
-        value.SetVisible( false );
+        part->SetName( name.Right( name.Length() - 1 ) );
+        part->GetValueField().SetVisible( false );
     }
-
-    // Don't set the library alias, this is determined by the symbol library table.
-    part->SetLibId( LIB_ID( wxEmptyString, part->GetName() ) );
 
     // There are some code paths in SetText() that do not set the root alias to the
     // alias list so add it here if it didn't get added by SetText().
@@ -2766,7 +2758,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr< LIB_PART >& aPart,
         // Ensure the VALUE field = the part name (can be not the case
         // with malformed libraries: edited by hand, or converted from other tools)
         if( fixedField->GetId() == VALUE )
-            fixedField->m_Text = aPart->m_name;
+            fixedField->m_Text = aPart->GetName();
     }
     else
     {

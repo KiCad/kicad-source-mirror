@@ -36,13 +36,17 @@
 
 
 COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTable,
-        CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, WIDGETS aWidgets )
+        CMP_TREE_MODEL_ADAPTER_BASE::PTR& aAdapter, WIDGETS aWidgets )
     : wxPanel( aParent ),
       m_sym_lib_table( aSymLibTable ),
       m_adapter( aAdapter ),
       m_query_ctrl( nullptr ),
-      m_details_ctrl( nullptr )
+      m_details_ctrl( nullptr ),
+      m_filtering( false )
 {
+    // create space for context menu pointers, INVALID is the max value
+    m_menus.resize( CMP_TREE_NODE::TYPE::INVALID + 1 );
+
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
     // Search text control
@@ -89,6 +93,7 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTabl
 
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &COMPONENT_TREE::onTreeActivate, this );
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED, &COMPONENT_TREE::onTreeSelect, this );
+    m_tree_ctrl->Bind( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, &COMPONENT_TREE::onContextMenu, this );
 
     Bind( COMPONENT_PRESELECTED, &COMPONENT_TREE::onPreselect, this );
 
@@ -127,6 +132,12 @@ LIB_ID COMPONENT_TREE::GetSelectedLibId( int* aUnit ) const
 }
 
 
+void COMPONENT_TREE::SelectLibId( const LIB_ID& aLibId )
+{
+    selectIfValid( m_adapter->FindItem( aLibId ) );
+}
+
+
 void COMPONENT_TREE::selectIfValid( const wxDataViewItem& aTreeId )
 {
     if( aTreeId.IsOk() )
@@ -154,8 +165,23 @@ void COMPONENT_TREE::postSelectEvent()
 
 void COMPONENT_TREE::onQueryText( wxCommandEvent& aEvent )
 {
+    // Store the state
+    if( !m_filtering )
+    {
+        m_selection = m_tree_ctrl->GetSelection();
+        saveExpandFlag();
+    }
+
     m_adapter->UpdateSearchString( m_query_ctrl->GetLineText( 0 ) );
+    m_filtering = !m_query_ctrl->IsEmpty();
     postPreselectEvent();
+
+    // Restore the state
+    if( !m_filtering )
+    {
+        selectIfValid( m_selection );
+        restoreExpandFlag();
+    }
 
     // Required to avoid interaction with SetHint()
     // See documentation for wxTextEntry::SetHint
@@ -233,6 +259,47 @@ void COMPONENT_TREE::onPreselect( wxCommandEvent& aEvent )
     }
 
     aEvent.Skip();
+}
+
+
+void COMPONENT_TREE::onContextMenu( wxDataViewEvent& aEvent )
+{
+    auto const sel = m_tree_ctrl->GetSelection();
+    auto type = sel.IsOk() ? m_adapter->GetTypeFor( sel ) : CMP_TREE_NODE::INVALID;
+
+    if( m_menus[type] )
+    {
+        m_menuActive = true;
+        PopupMenu( m_menus[type].get() );
+        m_menuActive = false;
+    }
+}
+
+
+void COMPONENT_TREE::saveExpandFlag()
+{
+    wxDataViewItemArray items;
+    m_adapter->GetChildren( wxDataViewItem( nullptr ), items );
+    m_expanded.clear();
+
+    for( const auto& item : items )
+    {
+        if( m_tree_ctrl->IsExpanded( item ) )
+            m_expanded.push_back( item );
+    }
+}
+
+
+void COMPONENT_TREE::restoreExpandFlag()
+{
+    m_tree_ctrl->Freeze();
+
+    for( const auto& item : m_expanded )
+    {
+        m_tree_ctrl->Expand( item );
+    }
+
+    m_tree_ctrl->Thaw();
 }
 
 
