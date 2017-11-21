@@ -281,12 +281,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
 
     ii = aNetItemRef->m_ElectricalPinType;
 
-    wxString string_pinnum, cmp_ref;
-    char     ascii_buf[5];
-    ascii_buf[4] = 0;
-    memcpy( ascii_buf, &aNetItemRef->m_PinNum, 4 );
-    string_pinnum = FROM_UTF8( ascii_buf );
-    cmp_ref = wxT( "?" );
+    wxString cmp_ref( "?" );
 
     if( aNetItemRef->m_Type == NET_PIN && aNetItemRef->m_Link )
         cmp_ref = aNetItemRef->GetComponentParent()->GetRef( &aNetItemRef->m_SheetPath );
@@ -296,7 +291,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
         if( aMinConn == NOC )    /* Only 1 element in the net. */
         {
             msg.Printf( _( "Pin %s (%s) of component %s is unconnected." ),
-                        GetChars( string_pinnum ),
+                        aNetItemRef->m_PinNum,
                         GetChars( GetText( ii ) ),
                         GetChars( cmp_ref ) );
             marker->SetData( ERCE_PIN_NOT_CONNECTED,
@@ -313,7 +308,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
                     &aNetItemRef->m_SheetPath );
 
             msg.Printf( _( "Pin %s (%s) of component %s is not driven (Net %d)." ),
-                        GetChars( string_pinnum ),
+                        aNetItemRef->m_PinNum,
                         GetChars( GetText( ii ) ),
                         GetChars( cmp_ref ),
                         aNetItemRef->GetNet() );
@@ -346,21 +341,18 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
             errortype = ERCE_PIN_TO_PIN_ERROR;
         }
 
-        wxString alt_string_pinnum, alt_cmp;
-        memcpy( ascii_buf, &aNetItemTst->m_PinNum, 4 );
-        alt_string_pinnum = FROM_UTF8( ascii_buf );
-        alt_cmp = wxT( "?" );
+        wxString alt_cmp( "?" );
 
         if( aNetItemTst->m_Type == NET_PIN && aNetItemTst->m_Link )
             alt_cmp = aNetItemTst->GetComponentParent()->GetRef( &aNetItemTst->m_SheetPath );
 
         msg.Printf( _( "Pin %s (%s) of component %s is connected to " ),
-                    GetChars( string_pinnum ),
+                    aNetItemRef->m_PinNum,
                     GetChars( GetText( ii ) ),
                     GetChars( cmp_ref ) );
         marker->SetData( errortype, aNetItemRef->m_Start, msg, aNetItemRef->m_Start );
         msg.Printf( _( "pin %s (%s) of component %s (net %d)." ),
-                    GetChars( alt_string_pinnum ),
+                    aNetItemTst->m_PinNum,
                     GetChars( GetText( jj ) ),
                     GetChars( alt_cmp ),
                     aNetItemRef->GetNet() );
