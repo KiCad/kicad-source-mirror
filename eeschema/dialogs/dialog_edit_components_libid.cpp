@@ -48,12 +48,14 @@ public:
     SCH_SCREEN* m_Screen;       // the screen where m_Component lives
     wxString    m_Reference;    // the schematic reference, only to display it in list
     wxString    m_InitialLibId; // the Lib Id of the component before any change
+    bool        m_IsOrphan;     // true if a component has no corresponding symbol found in libs
 
     CMP_CANDIDATE( SCH_COMPONENT* aComponent )
     {
         m_Component = aComponent;
         m_InitialLibId = m_Component->GetLibId().Format();
         m_Row = -1;
+        m_IsOrphan = false;
     }
 
     // Returns a string like mylib:symbol_name from the LIB_ID of the component
@@ -175,7 +177,10 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
     // the list is larger and looks like it contains all components
     SCH_SHEET_LIST sheets( g_RootSheet );
     SCH_REFERENCE_LIST references;
-    sheets.GetComponents( references );
+    // build the full list of components including component having no symbol in loaded libs
+    // (orphan components)
+    sheets.GetComponents( references, /* include power symbols */true,
+                          /* include orphan components */true );
 
     for( unsigned ii = 0; ii < references.GetCount(); ii++ )
     {
@@ -191,6 +196,7 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
         // (can be 0 if the symbol is not found)
         int unit = candidate.m_Component->GetUnitSelection( &sheetpath );
         int unitcount = candidate.m_Component->GetUnitCount();
+        candidate.m_IsOrphan = unitcount == 0;
 
         if( unitcount > 1 || unit > 1 )
         {
@@ -211,6 +217,7 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
     wxString last_str_libid = m_components.front().GetStringLibId();
     int row = 0;
     wxString refs;
+    bool mark_cell = false;
 
     for( unsigned ii = 0; ii < m_components.size(); ii++ )
     {
@@ -220,6 +227,7 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
 
         if( last_str_libid != str_libid || ii == m_components.size()-1 )
         {
+
             if( ii == m_components.size()-1 )
             {
                 if( !refs.IsEmpty() )
@@ -227,6 +235,7 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
 
                 refs += cmp.GetSchematicReference();
                 cmp.m_Row = row;
+                mark_cell = cmp.m_IsOrphan;
 
                 last_str_libid = str_libid;
             }
@@ -240,10 +249,19 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
             m_grid->SetCellValue( row, COL_CURR_LIBID, last_str_libid );
             m_grid->SetReadOnly( row, COL_CURR_LIBID );
 
+            if( mark_cell ) // A symbol is not existing in libraries: mark the cell
+            {
+                wxFont font = m_grid->GetDefaultCellFont();
+                font.MakeBold();
+                font.MakeItalic();
+                m_grid->SetCellFont( row, COL_CURR_LIBID, font );
+            }
+
             m_grid->SetCellRenderer( row, COL_REFS, new wxGridCellAutoWrapStringRenderer);
             m_grid->AutoSizeRow( row, false );
 
             // prepare next entry
+            mark_cell = cmp.m_IsOrphan;
             last_str_libid = str_libid;
             refs.Empty();
             row++;

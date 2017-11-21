@@ -207,8 +207,12 @@ public:
      *
      * @param aReferences List of references to populate.
      * @param aIncludePowerSymbols : false to only get normal components.
+     * @param aForceIncludeOrphanComponents : true to include components having no symbol found in lib.
+     * ( orphan components)
+     * The normal option is false, and set to true only to build the full list of components.
      */
-    void GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true );
+    void GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true,
+                        bool aForceIncludeOrphanComponents = false );
 
     /**
      * Function GetMultiUnitComponents
@@ -373,8 +377,12 @@ public:
      *
      * @param aReferences List of references to populate.
      * @param aIncludePowerSymbols Set to false to only get normal components.
+     * @param aForceIncludeOrphanComponents : true to include components having no symbol found in lib.
+     * ( orphan components)
+     * The normal option is false, and set to true only to build the full list of components.
      */
-    void GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true );
+    void GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true,
+                        bool aForceIncludeOrphanComponents = false );
 
     /**
      * Function GetMultiUnitComponents

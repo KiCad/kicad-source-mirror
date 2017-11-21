@@ -182,7 +182,8 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
 
 
 
-void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols )
+void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols,
+                                    bool aForceIncludeOrphanComponents )
 {
     for( SCH_ITEM* item = LastDrawList(); item; item = item->Next() )
     {
@@ -197,7 +198,7 @@ void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aInclu
 
             LIB_PART* part = component->GetPartRef().lock().get();
 
-            if( part )
+            if( part || aForceIncludeOrphanComponents )
             {
                 SCH_REFERENCE reference( component, part, *this );
 
@@ -588,10 +589,11 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
 }
 
 
-void SCH_SHEET_LIST::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols )
+void SCH_SHEET_LIST::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols,
+                                    bool aForceIncludeOrphanComponents )
 {
     for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
-        (*it).GetComponents( aReferences, aIncludePowerSymbols );
+        (*it).GetComponents( aReferences, aIncludePowerSymbols, aForceIncludeOrphanComponents );
 }
 
 void SCH_SHEET_LIST::GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
