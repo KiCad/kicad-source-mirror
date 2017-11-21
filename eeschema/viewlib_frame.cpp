@@ -366,6 +366,7 @@ void LIB_VIEW_FRAME::OnUpdateElectricalType( wxUpdateUIEvent& aEvent )
     aEvent.Check( GetShowElectricalType() );
 }
 
+
 double LIB_VIEW_FRAME::BestZoom()
 {
     /* Please, note: wxMSW before version 2.9 seems have
@@ -377,7 +378,22 @@ double LIB_VIEW_FRAME::BestZoom()
 
     LIB_PART*   part = NULL;
     double      bestzoom = 16.0;      // default value for bestzoom
-    LIB_ALIAS*  alias = Prj().SchSymbolLibTable()->LoadSymbol( m_libraryName, m_entryName );
+
+    if( m_libraryName.IsEmpty() || m_entryName.IsEmpty() )
+    {
+        SetScrollCenterPosition( wxPoint( 0, 0 ) );
+        return bestzoom;
+    }
+
+    LIB_ALIAS* alias = nullptr;
+
+    try
+    {
+        alias = Prj().SchSymbolLibTable()->LoadSymbol( m_libraryName, m_entryName );
+    }
+    catch( ... )
+    {
+    }
 
     if( alias )
         part = alias->GetPart();
@@ -394,10 +410,8 @@ double LIB_VIEW_FRAME::BestZoom()
 
     // Reserve a 10% margin around component bounding box.
     double margin_scale_factor = 0.8;
-    double zx =(double) boundingBox.GetWidth() /
-               ( margin_scale_factor * (double)size.x );
-    double zy = (double) boundingBox.GetHeight() /
-                ( margin_scale_factor * (double)size.y);
+    double zx =(double) boundingBox.GetWidth() / ( margin_scale_factor * (double)size.x );
+    double zy = (double) boundingBox.GetHeight() / ( margin_scale_factor * (double)size.y);
 
     // Calculates the best zoom
     bestzoom = std::max( zx, zy );
@@ -497,7 +511,8 @@ bool LIB_VIEW_FRAME::ReCreateListCmp()
 
     try
     {
-        Prj().SchSymbolLibTable()->EnumerateSymbolLib( m_libraryName, aliasNames, m_listPowerCmpOnly );
+        Prj().SchSymbolLibTable()->EnumerateSymbolLib( m_libraryName, aliasNames,
+                                                       m_listPowerCmpOnly );
     }
     catch( const IO_ERROR& e ) {}   // ignore, it is handled below
 
