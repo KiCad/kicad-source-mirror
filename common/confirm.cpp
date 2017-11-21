@@ -182,7 +182,7 @@ int YesNoCancelDialog( wxWindow*       aParent,
 int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxString& aMessage, const wxArrayString& aOptions )
 {
     int ret = -1;
-    wxDialog* dlg = new DIALOG_SHIM( aParent, wxID_ANY, aTitle );
+    wxDialog* dlg = new wxDialog( aParent, wxID_ANY, aTitle );
 
     wxBoxSizer* boxSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -232,12 +232,12 @@ int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxStrin
 }
 
 
-class DIALOG_MULTI_OPTIONS : public DIALOG_SHIM
+class DIALOG_MULTI_OPTIONS : public wxDialog
 {
 public:
     DIALOG_MULTI_OPTIONS( wxWindow* aParent, const wxString& aTitle, const wxString& aMessage,
             const wxArrayString& aOptions )
-        : DIALOG_SHIM( aParent, wxID_ANY, aTitle )
+        : wxDialog( aParent, wxID_ANY, aTitle )
     {
         SetSizeHints( wxDefaultSize, wxDefaultSize );
 
@@ -251,13 +251,13 @@ public:
         for( const wxString& option : aOptions )
             m_checklist->Append( option );
 
-        boxSizer->Add( m_checklist, 0, wxEXPAND | wxALL, 5 );
+        boxSizer->Add( m_checklist, 1, wxEXPAND | wxALL, 5 );
 
         wxBoxSizer* btnSizer = new wxBoxSizer( wxHORIZONTAL );
         wxButton* selectAll = new wxButton( this, wxID_ANY, _( "Select All" ) );
-        btnSizer->Add( selectAll, 0, wxEXPAND | wxALL, 5 );
+        btnSizer->Add( selectAll, 1, wxEXPAND | wxALL, 5 );
         wxButton* unselectAll = new wxButton( this, wxID_ANY, _( "Unselect All" ) );
-        btnSizer->Add( unselectAll, 0, wxEXPAND | wxALL, 5 );
+        btnSizer->Add( unselectAll, 1, wxEXPAND | wxALL, 5 );
         boxSizer->Add( btnSizer, 0, wxEXPAND | wxALL, 5 );
 
         wxStdDialogButtonSizer* m_sdboxSizer = new wxStdDialogButtonSizer();
