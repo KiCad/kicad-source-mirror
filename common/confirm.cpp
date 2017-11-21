@@ -183,7 +183,6 @@ int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxStrin
 {
     int ret = -1;
     wxDialog* dlg = new DIALOG_SHIM( aParent, wxID_ANY, aTitle );
-    dlg->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
     wxBoxSizer* boxSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -208,6 +207,7 @@ int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxStrin
     dlg->SetSizer( boxSizer );
     dlg->Layout();
     boxSizer->Fit( dlg );
+    boxSizer->SetSizeHints( dlg );
     dlg->Centre( wxBOTH );
 
     if( dlg->ShowModal() == wxID_OK )
@@ -246,18 +246,17 @@ public:
         if( !aMessage.IsEmpty() )
             boxSizer->Add( new wxStaticText( this, wxID_ANY, aMessage ), 0, wxEXPAND | wxALL, 5 );
 
-        m_checkBoxes.reserve( aOptions.Count() );
+        m_checklist = new wxCheckListBox( this, wxID_ANY );
 
         for( const wxString& option : aOptions )
-        {
-            m_checkBoxes.emplace_back( new wxCheckBox( this, wxID_ANY, _( option ) ) );
-            boxSizer->Add( m_checkBoxes.back(), 0, wxEXPAND | wxALL, 5 );
-        }
+            m_checklist->Append( option );
+
+        boxSizer->Add( m_checklist, 0, wxEXPAND | wxALL, 5 );
 
         wxBoxSizer* btnSizer = new wxBoxSizer( wxHORIZONTAL );
-        wxButton* selectAll = new wxButton( this, wxID_ANY, "Select All" );
+        wxButton* selectAll = new wxButton( this, wxID_ANY, _( "Select All" ) );
         btnSizer->Add( selectAll, 0, wxEXPAND | wxALL, 5 );
-        wxButton* unselectAll = new wxButton( this, wxID_ANY, "Unselect All" );
+        wxButton* unselectAll = new wxButton( this, wxID_ANY, _( "Unselect All" ) );
         btnSizer->Add( unselectAll, 0, wxEXPAND | wxALL, 5 );
         boxSizer->Add( btnSizer, 0, wxEXPAND | wxALL, 5 );
 
@@ -270,6 +269,7 @@ public:
         SetSizer( boxSizer );
         Layout();
         boxSizer->Fit( this );
+        boxSizer->SetSizeHints( this );
         Centre( wxBOTH );
 
         selectAll->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_MULTI_OPTIONS::selectAll, this );
@@ -280,9 +280,9 @@ public:
     {
         std::vector<int> ret;
 
-        for( unsigned int i = 0; i < m_checkBoxes.size(); ++i )
+        for( unsigned int i = 0; i < m_checklist->GetCount(); ++i )
         {
-            if( m_checkBoxes[i]->IsChecked() )
+            if( m_checklist->IsChecked( i ) )
                 ret.push_back( i );
         }
 
@@ -291,12 +291,12 @@ public:
 
     void SetCheckboxes( bool aValue )
     {
-        for( auto& cb : m_checkBoxes )
-            cb->SetValue( aValue );
+        for( unsigned int i = 0; i < m_checklist->GetCount(); ++i )
+            m_checklist->Check( i, aValue );
     }
 
 protected:
-    std::vector<wxCheckBox*> m_checkBoxes;
+    wxCheckListBox* m_checklist;
 
     void selectAll( wxCommandEvent& aEvent )
     {
@@ -329,4 +329,16 @@ std::pair<bool, std::vector<int>> SelectMultipleOptions( wxWindow* aParent, cons
     }
 
     return std::make_pair( clickedOk, ret );
+}
+
+
+std::pair<bool, std::vector<int>> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
+        const wxString& aMessage, const std::vector<std::string>& aOptions, bool aDefaultState )
+{
+    wxArrayString array;
+
+    for( const auto& option : aOptions )
+        array.Add( option );
+
+    return SelectMultipleOptions( aParent, aTitle, aMessage, array, aDefaultState );
 }

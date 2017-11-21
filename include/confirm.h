@@ -145,4 +145,7 @@ int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxStrin
 std::pair<bool, std::vector<int>> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
         const wxString& aMessage, const wxArrayString& aOptions, bool aDefaultState = false );
 
+std::pair<bool, std::vector<int>> SelectMultipleOptions( wxWindow* aParent, const wxString& aTitle,
+        const wxString& aMessage, const std::vector<std::string>& aOptions, bool aDefaultState = false );
+
 #endif /* __INCLUDE__CONFIRM_H__ */
