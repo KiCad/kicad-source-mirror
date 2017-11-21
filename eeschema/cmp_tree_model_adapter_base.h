@@ -241,6 +241,15 @@ public:
      */
     wxDataViewItem FindItem( const LIB_ID& aLibId );
 
+    /**
+     * Populate a list of all the children of an item
+     *
+     * @return number of children
+     */
+    virtual unsigned int GetChildren(
+            wxDataViewItem const&   aItem,
+            wxDataViewItemArray&    aChildren ) const override;
+
 protected:
     static wxDataViewItem ToItem( CMP_TREE_NODE const* aNode );
     static CMP_TREE_NODE const* ToNode( wxDataViewItem aItem );
@@ -270,15 +279,6 @@ protected:
      * @return parent of aItem, or an invalid wxDataViewItem if parent is root
      */
     virtual wxDataViewItem GetParent( wxDataViewItem const& aItem ) const override;
-
-    /**
-     * Populate a list of all the children of an item
-     *
-     * @return number of children
-     */
-    virtual unsigned int GetChildren(
-            wxDataViewItem const&   aItem,
-            wxDataViewItemArray&    aChildren ) const override;
 
     /**
      * Return the number of columns in the model

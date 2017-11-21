@@ -41,7 +41,8 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTabl
       m_sym_lib_table( aSymLibTable ),
       m_adapter( aAdapter ),
       m_query_ctrl( nullptr ),
-      m_details_ctrl( nullptr )
+      m_details_ctrl( nullptr ),
+      m_filtering( false )
 {
     // create space for context menu pointers, INVALID is the max value
     m_menus.resize( CMP_TREE_NODE::TYPE::INVALID + 1 );
@@ -164,8 +165,23 @@ void COMPONENT_TREE::postSelectEvent()
 
 void COMPONENT_TREE::onQueryText( wxCommandEvent& aEvent )
 {
+    // Store the state
+    if( !m_filtering )
+    {
+        m_selection = m_tree_ctrl->GetSelection();
+        saveExpandFlag();
+    }
+
     m_adapter->UpdateSearchString( m_query_ctrl->GetLineText( 0 ) );
+    m_filtering = !m_query_ctrl->IsEmpty();
     postPreselectEvent();
+
+    // Restore the state
+    if( !m_filtering )
+    {
+        selectIfValid( m_selection );
+        restoreExpandFlag();
+    }
 
     // Required to avoid interaction with SetHint()
     // See documentation for wxTextEntry::SetHint
@@ -257,6 +273,33 @@ void COMPONENT_TREE::onContextMenu( wxDataViewEvent& aEvent )
         PopupMenu( m_menus[type].get() );
         m_menuActive = false;
     }
+}
+
+
+void COMPONENT_TREE::saveExpandFlag()
+{
+    wxDataViewItemArray items;
+    m_adapter->GetChildren( wxDataViewItem( nullptr ), items );
+    m_expanded.clear();
+
+    for( const auto& item : items )
+    {
+        if( m_tree_ctrl->IsExpanded( item ) )
+            m_expanded.push_back( item );
+    }
+}
+
+
+void COMPONENT_TREE::restoreExpandFlag()
+{
+    m_tree_ctrl->Freeze();
+
+    for( const auto& item : m_expanded )
+    {
+        m_tree_ctrl->Expand( item );
+    }
+
+    m_tree_ctrl->Thaw();
 }
 
 

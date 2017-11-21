@@ -114,8 +114,18 @@ protected:
     void onPreselect( wxCommandEvent& aEvent );
     void onContextMenu( wxDataViewEvent& aEvent );
 
+    /**
+     * Store the list of expanded nodes in the tree widget.
+     */
+    void saveExpandFlag();
+
+    /**
+     * Restore the expanded nodes in the tree widget.
+     */
+    void restoreExpandFlag();
+
     SYMBOL_LIB_TABLE* m_sym_lib_table;
-    CMP_TREE_MODEL_ADAPTER::PTR m_adapter;
+    CMP_TREE_MODEL_ADAPTER_BASE::PTR m_adapter;
 
     wxTextCtrl*     m_query_ctrl;
     wxDataViewCtrl* m_tree_ctrl;
@@ -126,6 +136,12 @@ protected:
 
     ///> Flag indicating whether a right-click context menu is active
     bool m_menuActive;
+
+    bool m_filtering;
+
+    ///> List of expanded nodes
+    std::vector<wxDataViewItem> m_expanded;
+    wxDataViewItem m_selection;
 };
 
 ///> Custom event sent when a new component is preselected

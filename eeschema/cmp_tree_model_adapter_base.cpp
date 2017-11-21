@@ -251,6 +251,20 @@ wxDataViewItem CMP_TREE_MODEL_ADAPTER_BASE::FindItem( const LIB_ID& aLibId )
 }
 
 
+unsigned int CMP_TREE_MODEL_ADAPTER_BASE::GetChildren(
+            wxDataViewItem const&   aItem,
+            wxDataViewItemArray&    aChildren ) const
+{
+    auto node = ( aItem.IsOk() ? ToNode( aItem ) : &m_tree );
+
+    if( node->Type != CMP_TREE_NODE::TYPE::LIBID
+            || ( m_show_units && node->Type == CMP_TREE_NODE::TYPE::LIBID ) )
+        return IntoArray( *node, aChildren );
+    else
+        return 0;
+}
+
+
 bool CMP_TREE_MODEL_ADAPTER_BASE::HasContainerColumns( wxDataViewItem const& aItem ) const
 {
     return IsContainer( aItem );
@@ -279,20 +293,6 @@ wxDataViewItem CMP_TREE_MODEL_ADAPTER_BASE::GetParent( wxDataViewItem const& aIt
     {
         return ToItem( parent );
     }
-}
-
-
-unsigned int CMP_TREE_MODEL_ADAPTER_BASE::GetChildren(
-            wxDataViewItem const&   aItem,
-            wxDataViewItemArray&    aChildren ) const
-{
-    auto node = ( aItem.IsOk() ? ToNode( aItem ) : &m_tree );
-
-    if( node->Type != CMP_TREE_NODE::TYPE::LIBID
-            || ( m_show_units && node->Type == CMP_TREE_NODE::TYPE::LIBID ) )
-        return IntoArray( *node, aChildren );
-    else
-        return 0;
 }
 
 
