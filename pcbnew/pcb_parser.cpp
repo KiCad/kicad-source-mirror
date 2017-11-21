@@ -372,7 +372,7 @@ MODULE_3D_SETTINGS* PCB_PARSER::parse3DModel()
             n3D->m_Offset.y = parseDouble( "y value" );
             n3D->m_Offset.z = parseDouble( "z value" );
 
-            if(m_requiredVersion < 20171114UL)
+            if(m_requiredVersion < 20171114L)
             {
                 n3D->m_Offset.x *= 25.4f;
                 n3D->m_Offset.y *= 25.4f;

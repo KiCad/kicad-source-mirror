@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -23,6 +23,7 @@ class DIALOG_SHIM;
 #include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/statline.h>
+#include <wx/stattext.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -40,6 +41,7 @@ class DIALOG_EDIT_COMPONENTS_LIBID_BASE : public DIALOG_SHIM
 		wxPanel* m_panelGrid;
 		wxGrid* m_grid;
 		wxStaticLine* m_staticline;
+		wxStaticText* m_staticTextWarning;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerApply;
@@ -55,7 +57,7 @@ class DIALOG_EDIT_COMPONENTS_LIBID_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_EDIT_COMPONENTS_LIBID_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Edit Components Links to Symbols in Libraries"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 797,311 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_EDIT_COMPONENTS_LIBID_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Edit Components Links to Symbols in Libraries"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 839,311 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EDIT_COMPONENTS_LIBID_BASE();
 	
 };
