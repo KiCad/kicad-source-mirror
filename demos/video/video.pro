@@ -1,4 +1,4 @@
-update=18/05/2015 09:11:22
+update=21/11/2017 21:17:04
 version=1
 last_client=kicad
 [general]
@@ -33,6 +33,3 @@ ModuleOutlineThickness=0.3048
 [eeschema]
 version=1
 LibDir=
-[eeschema/libraries]
-LibName1=libs/video_schlib
-LibName2=power

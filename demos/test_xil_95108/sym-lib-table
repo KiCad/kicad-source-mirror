@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name carte_test_schlib)(type Legacy)(uri ${KIPRJMOD}/carte_test_schlib.lib)(options "")(descr ""))
+)

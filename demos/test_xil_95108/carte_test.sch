@@ -1,9 +1,6 @@
-EESchema Schematic File Version 2
-LIBS:device
-LIBS:carte_test_schlib
-LIBS:power
+EESchema Schematic File Version 4
 LIBS:carte_test-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
@@ -18,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L DB9 J2
+L carte_test_schlib:DB9 J2
 U 1 1 3ECDEBEA
 P 4100 1650
 F 0 "J2" V 4100 2250 70  0000 C CNN
@@ -29,7 +26,7 @@ F 3 "" H 4100 1650 60  0001 C CNN
 	0    1    -1   0   
 $EndComp
 $Comp
-L PWR_FLAG #FLG01
+L carte_test_schlib:PWR_FLAG #FLG01
 U 1 1 3ECDDD9A
 P 2400 7750
 F 0 "#FLG01" H 2400 8020 30  0001 C CNN
@@ -40,7 +37,7 @@ F 3 "" H 2400 7750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODE D4
+L carte_test_schlib:DIODE D4
 U 1 1 3ECDDCDD
 P 2100 8000
 F 0 "D4" H 2000 8050 50  0000 C CNN
@@ -51,7 +48,7 @@ F 3 "" H 2100 8000 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L PWR_FLAG #FLG02
+L carte_test_schlib:PWR_FLAG #FLG02
 U 1 1 3ECDDCBE
 P 2300 8050
 F 0 "#FLG02" H 2300 8320 30  0001 C CNN
@@ -62,7 +59,7 @@ F 3 "" H 2300 8050 60  0001 C CNN
 	1    0    0    1   
 $EndComp
 $Comp
-L GND #PWR03
+L power:GND #PWR03
 U 1 1 3ECDDCB7
 P 2400 8650
 F 0 "#PWR03" H 2400 8650 40  0001 C CNN
@@ -73,7 +70,7 @@ F 3 "" H 2400 8650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CP C13
+L carte_test_schlib:CP C13
 U 1 1 3ECDDCAD
 P 2400 8500
 F 0 "C13" H 2450 8600 50  0000 L CNN
@@ -84,7 +81,7 @@ F 3 "" H 2400 8500 60  0001 C CNN
 	1    0    0    1   
 $EndComp
 $Comp
-L -12V #PWR139
+L power:-12V #PWR139
 U 1 1 3ECDDC9F
 P 2550 8050
 F 0 "#PWR139" H 2550 8250 40  0001 C CNN
@@ -98,7 +95,7 @@ NoConn ~ 13400 4200
 NoConn ~ 13400 4100
 NoConn ~ 13400 3900
 $Comp
-L -12V #PWR118
+L power:-12V #PWR118
 U 1 1 3ECDDC1A
 P 12800 3550
 F 0 "#PWR118" H 12800 3750 40  0001 C CNN
@@ -109,7 +106,7 @@ F 3 "" H 12800 3550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +12V #PWR04
+L power:+12V #PWR04
 U 1 1 3ECDDC05
 P 12800 4450
 F 0 "#PWR04" H 12800 4650 40  0001 C CNN
@@ -120,7 +117,7 @@ F 3 "" H 12800 4450 60  0001 C CNN
 	1    0    0    1   
 $EndComp
 $Comp
-L +12V #PWR05
+L power:+12V #PWR05
 U 1 1 3ECDDBF2
 P 2700 7750
 F 0 "#PWR05" H 2700 7950 40  0001 C CNN
@@ -131,7 +128,7 @@ F 3 "" H 2700 7750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR06
+L power:GND #PWR06
 U 1 1 3ECDDBE0
 P 12300 4650
 F 0 "#PWR06" H 12300 4650 40  0001 C CNN
@@ -142,7 +139,7 @@ F 3 "" H 12300 4650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L LM318N U6
+L carte_test_schlib:LM318N U6
 U 1 1 3ECDDB8B
 P 12900 4000
 F 0 "U6" H 13000 4300 60  0000 C CNN
@@ -153,7 +150,7 @@ F 3 "" H 12900 4000 60  0001 C CNN
 	1    0    0    1   
 $EndComp
 $Comp
-L R R10
+L carte_test_schlib:R R10
 U 1 1 3ECDDB6D
 P 13850 4000
 F 0 "R10" V 13930 4000 50  0000 C CNN
@@ -164,7 +161,7 @@ F 3 "" H 13850 4000 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R7
+L carte_test_schlib:R R7
 U 1 1 3ECDDB60
 P 12950 3300
 F 0 "R7" V 13030 3300 50  0000 C CNN
@@ -175,7 +172,7 @@ F 3 "" H 12950 3300 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R6
+L carte_test_schlib:R R6
 U 1 1 3ECDDB57
 P 12300 4500
 F 0 "R6" H 12150 4650 50  0000 C CNN
@@ -186,7 +183,7 @@ F 3 "" H 12300 4500 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R9
+L carte_test_schlib:R R9
 U 1 1 3ECDDB4B
 P 12000 4200
 F 0 "R9" V 12080 4200 50  0000 C CNN
@@ -197,7 +194,7 @@ F 3 "" H 12000 4200 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R8
+L carte_test_schlib:R R8
 U 1 1 3ECDDB43
 P 12000 3850
 F 0 "R8" V 12080 3850 50  0000 C CNN
@@ -208,7 +205,7 @@ F 3 "" H 12000 3850 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L CP C14
+L carte_test_schlib:CP C14
 U 1 1 3ECDDACB
 P 11400 3850
 F 0 "C14" V 11550 3850 50  0000 C CNN
@@ -223,7 +220,7 @@ PIN_TEST1
 Text Label 4150 2900 0    60   ~ 0
 PIN_TEST0
 $Comp
-L GND #PWR07
+L power:GND #PWR07
 U 1 1 3ECB3F8B
 P 13550 1650
 F 0 "#PWR07" H 13550 1650 40  0001 C CNN
@@ -238,7 +235,7 @@ PIN_TEST1
 Text Label 14450 1500 0    60   ~ 0
 PIN_TEST0
 $Comp
-L CONN_2X2 P4
+L carte_test_schlib:CONN_2X2 P4
 U 1 1 3ECB3F5E
 P 14000 1550
 F 0 "P4" H 14000 1700 50  0000 C CNN
@@ -251,7 +248,7 @@ $EndComp
 Text Label 3900 3400 0    60   ~ 0
 PAR_AUX7/INIT
 $Comp
-L GND #PWR08
+L power:GND #PWR08
 U 1 1 3ECB3A8F
 P 1950 5000
 F 0 "#PWR08" H 1950 5000 40  0001 C CNN
@@ -262,7 +259,7 @@ F 3 "" H 1950 5000 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #PWR09
+L power:GND #PWR09
 U 1 1 3ECB3A8D
 P 1950 4800
 F 0 "#PWR09" H 1950 4800 40  0001 C CNN
@@ -275,7 +272,7 @@ $EndComp
 Text Label 3800 3200 0    60   ~ 0
 PAR_AUX8/SELECT
 $Comp
-L GND #PWR010
+L power:GND #PWR010
 U 1 1 3ECB3A50
 P 1950 4400
 F 0 "#PWR010" H 1950 4400 40  0001 C CNN
@@ -286,7 +283,7 @@ F 3 "" H 1950 4400 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #PWR011
+L power:GND #PWR011
 U 1 1 3ECB3A4D
 P 1950 4200
 F 0 "#PWR011" H 1950 4200 40  0001 C CNN
@@ -297,7 +294,7 @@ F 3 "" H 1950 4200 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #PWR012
+L power:GND #PWR012
 U 1 1 3ECB3A4B
 P 1950 4000
 F 0 "#PWR012" H 1950 4000 40  0001 C CNN
@@ -308,7 +305,7 @@ F 3 "" H 1950 4000 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #PWR013
+L power:GND #PWR013
 U 1 1 3ECB3A48
 P 1950 3800
 F 0 "#PWR013" H 1950 3800 40  0001 C CNN
@@ -319,7 +316,7 @@ F 3 "" H 1950 3800 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L DB25 J1
+L carte_test_schlib:DB25 J1
 U 1 1 3EC4C60F
 P 1500 4700
 F 0 "J1" H 1550 6050 70  0000 C CNN
@@ -348,7 +345,7 @@ SW1
 Text Label 10600 1600 0    60   ~ 0
 SW0
 $Comp
-L VCC #PWR014
+L power:VCC #PWR014
 U 1 1 3EC8B981
 P 11200 1200
 F 0 "#PWR014" H 11200 1400 40  0001 C CNN
@@ -359,7 +356,7 @@ F 3 "" H 11200 1200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR015
+L power:VCC #PWR015
 U 1 1 3EC8B97E
 P 11000 1200
 F 0 "#PWR015" H 11000 1400 40  0001 C CNN
@@ -370,7 +367,7 @@ F 3 "" H 11000 1200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R5
+L carte_test_schlib:R R5
 U 1 1 3EC8B978
 P 11000 1350
 F 0 "R5" V 11080 1350 50  0000 C CNN
@@ -381,7 +378,7 @@ F 3 "" H 11000 1350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R4
+L carte_test_schlib:R R4
 U 1 1 3EC8B970
 P 11200 1350
 F 0 "R4" V 11280 1350 50  0000 C CNN
@@ -396,7 +393,7 @@ SW1
 Text Label 7150 3900 0    60   ~ 0
 SW0
 $Comp
-L GND #PWR016
+L power:GND #PWR016
 U 1 1 3EC8B890
 P 12350 1850
 F 0 "#PWR016" H 12350 1850 40  0001 C CNN
@@ -407,7 +404,7 @@ F 3 "" H 12350 1850 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #PWR017
+L power:GND #PWR017
 U 1 1 3EC8B88C
 P 12350 1600
 F 0 "#PWR017" H 12350 1600 40  0001 C CNN
@@ -418,7 +415,7 @@ F 3 "" H 12350 1600 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L SW_PUSH SW2
+L carte_test_schlib:SW_PUSH SW2
 U 1 1 3EC8B882
 P 12000 1850
 F 0 "SW2" H 12000 1700 50  0000 C CNN
@@ -429,7 +426,7 @@ F 3 "" H 12000 1850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW1
+L carte_test_schlib:SW_PUSH SW1
 U 1 1 3EC8B876
 P 12000 1600
 F 0 "SW1" H 12150 1750 50  0000 C CNN
@@ -450,7 +447,7 @@ PAR_AUX4/PE
 Text Label 7150 3700 0    60   ~ 0
 PAR_AUX3/SELECT*
 $Comp
-L GND #PWR018
+L power:GND #PWR018
 U 1 1 3EC4F034
 P 1950 4600
 F 0 "#PWR018" H 1950 4600 40  0001 C CNN
@@ -469,7 +466,7 @@ LED2
 Text Label 10750 2300 0    60   ~ 0
 LED1
 $Comp
-L GND #PWR019
+L power:GND #PWR019
 U 1 1 3EC4D095
 P 11950 2600
 F 0 "#PWR019" H 11950 2600 40  0001 C CNN
@@ -480,7 +477,7 @@ F 3 "" H 11950 2600 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L LED D3
+L carte_test_schlib:LED D3
 U 1 1 3EC4D08F
 P 11700 2600
 F 0 "D3" H 11700 2700 50  0000 C CNN
@@ -491,7 +488,7 @@ F 3 "" H 11700 2600 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L R R3
+L carte_test_schlib:R R3
 U 1 1 3EC4D082
 P 11250 2600
 F 0 "R3" V 11330 2600 50  0000 C CNN
@@ -502,7 +499,7 @@ F 3 "" H 11250 2600 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #PWR020
+L power:GND #PWR020
 U 1 1 52CEE1D5
 P 11950 2300
 F 0 "#PWR020" H 11950 2300 40  0001 C CNN
@@ -513,7 +510,7 @@ F 3 "" H 11950 2300 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L LED D2
+L carte_test_schlib:LED D2
 U 1 1 52CEE1D4
 P 11700 2300
 F 0 "D2" H 11700 2400 50  0000 C CNN
@@ -524,7 +521,7 @@ F 3 "" H 11700 2300 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L R R2
+L carte_test_schlib:R R2
 U 1 1 52CEE1D3
 P 11250 2300
 F 0 "R2" V 11330 2300 50  0000 C CNN
@@ -535,7 +532,7 @@ F 3 "" H 11250 2300 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #PWR021
+L power:GND #PWR021
 U 1 1 3EC4C7F6
 P 4700 9400
 F 0 "#PWR021" H 4700 9400 40  0001 C CNN
@@ -546,7 +543,7 @@ F 3 "" H 4700 9400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR022
+L power:VCC #PWR022
 U 1 1 3EC4C7EA
 P 4700 9100
 F 0 "#PWR022" H 4700 9300 40  0001 C CNN
@@ -557,7 +554,7 @@ F 3 "" H 4700 9100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C12
+L carte_test_schlib:C C12
 U 1 1 3EC4C7DB
 P 4700 9250
 F 0 "C12" H 4750 9350 50  0000 L CNN
@@ -568,7 +565,7 @@ F 3 "" H 4700 9250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR023
+L power:GND #PWR023
 U 1 1 52CEE1D2
 P 12300 7850
 F 0 "#PWR023" H 12300 7850 40  0001 C CNN
@@ -579,7 +576,7 @@ F 3 "" H 12300 7850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR024
+L power:VCC #PWR024
 U 1 1 52CEE1CE
 P 12300 7550
 F 0 "#PWR024" H 12300 7750 40  0001 C CNN
@@ -590,7 +587,7 @@ F 3 "" H 12300 7550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C7
+L carte_test_schlib:C C7
 U 1 1 52CEE1C8
 P 12300 7700
 F 0 "C7" H 12350 7800 50  0000 L CNN
@@ -601,7 +598,7 @@ F 3 "" H 12300 7700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR025
+L power:VCC #PWR025
 U 1 1 52CEE1CD
 P 8000 1700
 F 0 "#PWR025" H 8000 1900 40  0001 C CNN
@@ -612,7 +609,7 @@ F 3 "" H 8000 1700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C11
+L carte_test_schlib:C C11
 U 1 1 52CEE1C7
 P 8000 1900
 F 0 "C11" H 8050 2000 50  0000 L CNN
@@ -623,7 +620,7 @@ F 3 "" H 8000 1900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR026
+L power:VCC #PWR026
 U 1 1 52CEE1CC
 P 7600 1700
 F 0 "#PWR026" H 7600 1900 40  0001 C CNN
@@ -634,7 +631,7 @@ F 3 "" H 7600 1700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C10
+L carte_test_schlib:C C10
 U 1 1 52CEE1C9
 P 7600 1900
 F 0 "C10" H 7650 2000 50  0000 L CNN
@@ -645,7 +642,7 @@ F 3 "" H 7600 1900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR027
+L power:VCC #PWR027
 U 1 1 52CEE1CB
 P 7200 1700
 F 0 "#PWR027" H 7200 1900 40  0001 C CNN
@@ -656,7 +653,7 @@ F 3 "" H 7200 1700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C8
+L carte_test_schlib:C C8
 U 1 1 52CEE1CA
 P 7200 1900
 F 0 "C8" H 7250 2000 50  0000 L CNN
@@ -667,7 +664,7 @@ F 3 "" H 7200 1900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR028
+L power:GND #PWR028
 U 1 1 3EC4C76B
 P 1950 3600
 F 0 "#PWR028" H 1950 3600 40  0001 C CNN
@@ -832,7 +829,7 @@ MA1
 Text Label 12250 6000 0    60   ~ 0
 MA0
 $Comp
-L VCC #PWR029
+L power:VCC #PWR029
 U 1 1 3EC4C4B5
 P 9900 7600
 F 0 "#PWR029" H 9900 7800 40  0001 C CNN
@@ -843,7 +840,7 @@ F 3 "" H 9900 7600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_3 K1
+L carte_test_schlib:CONN_3 K1
 U 1 1 3EC4C49F
 P 9800 8000
 F 0 "K1" V 9750 8000 50  0000 C CNN
@@ -854,7 +851,7 @@ F 3 "" H 9800 8000 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L RAM_32KO U5
+L carte_test_schlib:RAM_32KO U5
 U 1 1 3EC4C463
 P 11400 6800
 F 0 "U5" H 11400 7700 70  0000 C CNN
@@ -871,7 +868,7 @@ NoConn ~ 2000 10800
 NoConn ~ 2000 10300
 NoConn ~ 2000 9750
 $Comp
-L GND #PWR030
+L power:GND #PWR030
 U 1 1 3EC4C328
 P 2200 10350
 F 0 "#PWR030" H 2200 10350 40  0001 C CNN
@@ -882,7 +879,7 @@ F 3 "" H 2200 10350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR031
+L power:GND #PWR031
 U 1 1 3EC4C322
 P 1050 10900
 F 0 "#PWR031" H 1050 10900 40  0001 C CNN
@@ -893,7 +890,7 @@ F 3 "" H 1050 10900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74HC04 U4
+L carte_test_schlib:74HC04 U4
 U 6 1 3EC4C318
 P 2650 10300
 F 0 "U4" H 2845 10415 60  0000 C CNN
@@ -904,7 +901,7 @@ F 3 "" H 2650 10300 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74HC04 U4
+L carte_test_schlib:74HC04 U4
 U 5 1 3EC4C311
 P 1550 10800
 F 0 "U4" H 1745 10915 60  0000 C CNN
@@ -915,7 +912,7 @@ F 3 "" H 1550 10800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74HC04 U4
+L carte_test_schlib:74HC04 U4
 U 4 1 3EC4C30C
 P 1550 10300
 F 0 "U4" H 1745 10415 60  0000 C CNN
@@ -926,7 +923,7 @@ F 3 "" H 1550 10300 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74HC04 U4
+L carte_test_schlib:74HC04 U4
 U 3 1 3EC4C30A
 P 1550 9750
 F 0 "U4" H 1745 9865 60  0000 C CNN
@@ -937,7 +934,7 @@ F 3 "" H 1550 9750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74HC04 U4
+L carte_test_schlib:74HC04 U4
 U 2 1 3EC4C300
 P 6850 8900
 F 0 "U4" H 7045 9015 60  0000 C CNN
@@ -948,7 +945,7 @@ F 3 "" H 6850 8900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74HC04 U4
+L carte_test_schlib:74HC04 U4
 U 1 1 3EC4C2F6
 P 5750 8900
 F 0 "U4" H 5945 9015 60  0000 C CNN
@@ -959,7 +956,7 @@ F 3 "" H 5750 8900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L PWR_FLAG #FLG032
+L carte_test_schlib:PWR_FLAG #FLG032
 U 1 1 3EC24491
 P 1850 8600
 F 0 "#FLG032" H 1850 8870 30  0001 C CNN
@@ -970,7 +967,7 @@ F 3 "" H 1850 8600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR033
+L power:GND #PWR033
 U 1 1 52CEE1C6
 P 1850 8650
 F 0 "#PWR033" H 1850 8650 40  0001 C CNN
@@ -981,7 +978,7 @@ F 3 "" H 1850 8650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR034
+L power:GND #PWR034
 U 1 1 52CEE1C4
 P 14200 4250
 F 0 "#PWR034" H 14200 4250 40  0001 C CNN
@@ -992,7 +989,7 @@ F 3 "" H 14200 4250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_2 P3
+L carte_test_schlib:CONN_2 P3
 U 1 1 3EC2446D
 P 14550 4100
 F 0 "P3" V 14500 4100 40  0000 C CNN
@@ -1003,7 +1000,7 @@ F 3 "" H 14550 4100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR035
+L power:GND #PWR035
 U 1 1 3EC243DC
 P 2800 8250
 F 0 "#PWR035" H 2800 8250 40  0001 C CNN
@@ -1014,7 +1011,7 @@ F 3 "" H 2800 8250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CP C6
+L carte_test_schlib:CP C6
 U 1 1 3EC243D6
 P 2800 8100
 F 0 "C6" H 2850 8200 50  0000 L CNN
@@ -1025,7 +1022,7 @@ F 3 "" H 2800 8100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODE D1
+L carte_test_schlib:DIODE D1
 U 1 1 3EC243C8
 P 2100 7800
 F 0 "D1" H 2100 7900 50  0000 C CNN
@@ -1036,7 +1033,7 @@ F 3 "" H 2100 7800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR036
+L power:GND #PWR036
 U 1 1 3EC243BD
 P 1500 7900
 F 0 "#PWR036" H 1500 7900 40  0001 C CNN
@@ -1047,7 +1044,7 @@ F 3 "" H 1500 7900 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L CONN_3 P2
+L carte_test_schlib:CONN_3 P2
 U 1 1 3EC243AC
 P 1150 7900
 F 0 "P2" V 1102 7900 40  0000 C CNN
@@ -1058,7 +1055,7 @@ F 3 "" H 1150 7900 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR037
+L power:VCC #PWR037
 U 1 1 3EC24382
 P 3900 7750
 F 0 "#PWR037" H 3900 7950 40  0001 C CNN
@@ -1069,7 +1066,7 @@ F 3 "" H 3900 7750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR038
+L power:GND #PWR038
 U 1 1 3EC2437A
 P 3400 8150
 F 0 "#PWR038" H 3400 8150 40  0001 C CNN
@@ -1080,7 +1077,7 @@ F 3 "" H 3400 8150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L LM7805 U3
+L carte_test_schlib:LM7805 U3
 U 1 1 3EC2436D
 P 3400 7850
 F 0 "U3" H 3400 8150 60  0000 C CNN
@@ -1093,7 +1090,7 @@ $EndComp
 Text Label 7400 8900 0    60   ~ 0
 XIN/CLK
 $Comp
-L GND #PWR039
+L power:GND #PWR039
 U 1 1 52CEE1C2
 P 6300 10250
 F 0 "#PWR039" H 6300 10250 40  0001 C CNN
@@ -1104,7 +1101,7 @@ F 3 "" H 6300 10250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C4
+L carte_test_schlib:C C4
 U 1 1 3EC242AD
 P 6300 10100
 F 0 "C4" H 6400 10200 50  0000 L CNN
@@ -1115,7 +1112,7 @@ F 3 "" H 6300 10100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R1
+L carte_test_schlib:R R1
 U 1 1 3EC242C1
 P 5750 9800
 F 0 "R1" V 5830 9800 50  0000 C CNN
@@ -1126,7 +1123,7 @@ F 3 "" H 5750 9800 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L C C5
+L carte_test_schlib:C C5
 U 1 1 52CEE1C5
 P 5200 10100
 F 0 "C5" H 5300 10200 50  0000 L CNN
@@ -1137,12 +1134,12 @@ F 3 "" H 5200 10100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CRYSTAL X1
+L carte_test_schlib:CRYSTAL X1
 U 1 1 3EC2428D
 P 5750 9400
 F 0 "X1" H 5750 9550 60  0000 C CNN
 F 1 "10MHz" H 5750 9250 60  0000 C CNN
-F 2 "Crystals:HC-18UH" H 5750 9400 60  0000 C CNN
+F 2 "Crystals:HC-18UH" H 5750 9600 30  0000 C CNN
 F 3 "" H 5750 9400 60  0001 C CNN
 	1    5750 9400
 	1    0    0    -1  
@@ -1156,7 +1153,7 @@ TCK
 Text Label 4550 2700 0    60   ~ 0
 TDO
 $Comp
-L GND #PWR040
+L power:GND #PWR040
 U 1 1 3EC23E6E
 P 3800 2200
 F 0 "#PWR040" H 3800 2200 40  0001 C CNN
@@ -1167,7 +1164,7 @@ F 3 "" H 3800 2200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR041
+L power:VCC #PWR041
 U 1 1 52CEE1C0
 P 3450 2000
 F 0 "#PWR041" H 3450 2200 40  0001 C CNN
@@ -1178,7 +1175,7 @@ F 3 "" H 3450 2000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR042
+L power:GND #PWR042
 U 1 1 3EC23DE5
 P 3900 8250
 F 0 "#PWR042" H 3900 8250 40  0001 C CNN
@@ -1189,7 +1186,7 @@ F 3 "" H 3900 8250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CP C3
+L carte_test_schlib:CP C3
 U 1 1 3EC23DCD
 P 3900 8100
 F 0 "C3" H 3950 8200 50  0000 L CNN
@@ -1200,7 +1197,7 @@ F 3 "" H 3900 8100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CP C2
+L carte_test_schlib:CP C2
 U 1 1 3EC23B98
 P 11400 4200
 F 0 "C2" V 11550 4200 50  0000 C BNN
@@ -1211,7 +1208,7 @@ F 3 "" H 11400 4200 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #PWR043
+L power:GND #PWR043
 U 1 1 3EC23ADD
 P 9500 5100
 F 0 "#PWR043" H 9500 5100 40  0001 C CNN
@@ -1222,7 +1219,7 @@ F 3 "" H 9500 5100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C1
+L carte_test_schlib:C C1
 U 1 1 3EC23ABA
 P 9500 4950
 F 0 "C1" H 9550 5050 50  0000 L CNN
@@ -1233,7 +1230,7 @@ F 3 "" H 9500 4950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR044
+L power:GND #PWR044
 U 1 1 3EC23A35
 P 10400 5000
 F 0 "#PWR044" H 10400 5000 40  0001 C CNN
@@ -1244,7 +1241,7 @@ F 3 "" H 10400 5000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR045
+L power:GND #PWR045
 U 1 1 52CEE1C3
 P 6200 7000
 F 0 "#PWR045" H 6200 7000 40  0001 C CNN
@@ -1255,7 +1252,7 @@ F 3 "" H 6200 7000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR046
+L power:VCC #PWR046
 U 1 1 3EC239FE
 P 10400 3050
 F 0 "#PWR046" H 10400 3250 40  0001 C CNN
@@ -1266,7 +1263,7 @@ F 3 "" H 10400 3050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR047
+L power:VCC #PWR047
 U 1 1 52CEE1C1
 P 6150 1900
 F 0 "#PWR047" H 6150 2100 40  0001 C CNN
@@ -1313,7 +1310,7 @@ DAT1
 Text Label 9300 3450 0    60   ~ 0
 DAT0
 $Comp
-L TDA8702 U1
+L carte_test_schlib:TDA8702 U1
 U 1 1 3EC238E5
 P 10400 4050
 F 0 "U1" H 10600 4850 60  0000 L CNN
@@ -1324,7 +1321,7 @@ F 3 "" H 10400 4050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR048
+L power:GND #PWR048
 U 1 1 3EC23A2D
 P 5200 10250
 F 0 "#PWR048" H 5200 10250 40  0001 C CNN
@@ -1788,7 +1785,7 @@ Wire Wire Line
 Wire Wire Line
 	11250 4200 11200 4200
 $Comp
-L GND #PWR049
+L power:GND #PWR049
 U 1 1 52CEE1D1
 P 7200 2050
 F 0 "#PWR049" H 7200 2050 40  0001 C CNN
@@ -1799,7 +1796,7 @@ F 3 "" H 7200 2050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR050
+L power:GND #PWR050
 U 1 1 52CEE1CF
 P 7600 2050
 F 0 "#PWR050" H 7600 2050 40  0001 C CNN
@@ -1810,7 +1807,7 @@ F 3 "" H 7600 2050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR051
+L power:GND #PWR051
 U 1 1 52CEE1D0
 P 8000 2050
 F 0 "#PWR051" H 8000 2050 40  0001 C CNN
@@ -1821,7 +1818,7 @@ F 3 "" H 8000 2050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L XC95108PC84 U2
+L carte_test_schlib:XC95108PC84 U2
 U 1 1 5633AE5A
 P 5950 4750
 F 0 "U2" H 6500 7300 60  0000 L CNN

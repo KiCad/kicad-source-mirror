@@ -1,7 +1,6 @@
-EESchema Schematic File Version 2
-LIBS:flat_hierarchy_schlib
+EESchema Schematic File Version 4
 LIBS:flat_hierarchy-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -144,7 +143,7 @@ Wire Wire Line
 	9000 1400 9000 1500
 Connection ~ 9000 1500
 $Comp
-L PWR_FLAG #FLG015
+L flat_hierarchy_schlib:PWR_FLAG #FLG015
 U 1 1 48553F47
 P 8700 3600
 F 0 "#FLG015" H 8700 3870 30  0001 C CNN
@@ -155,7 +154,7 @@ F 3 "" H 8700 3600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L PWR_FLAG #FLG016
+L flat_hierarchy_schlib:PWR_FLAG #FLG016
 U 1 1 48553F27
 P 9000 1400
 F 0 "#FLG016" H 9000 1670 30  0001 C CNN
@@ -174,7 +173,7 @@ VPP-MCLR
 Text GLabel 8900 3800 2    60   Output ~ 0
 VCC_PIC
 $Comp
-L C C9
+L flat_hierarchy_schlib:C C9
 U 1 1 464AD280
 P 6200 1150
 F 0 "C9" H 6250 1250 50  0000 L CNN
@@ -185,7 +184,7 @@ F 3 "" H 6200 1150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR017
+L flat_hierarchy_schlib:VCC #PWR017
 U 1 1 4639BB04
 P 8300 3100
 F 0 "#PWR017" H 8300 3200 30  0001 C CNN
@@ -196,7 +195,7 @@ F 3 "" H 8300 3100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L JUMPER JP1
+L flat_hierarchy_schlib:JUMPER JP1
 U 1 1 4639BAF8
 P 8300 3400
 F 0 "JP1" V 8100 3500 60  0000 C CNN
@@ -207,7 +206,7 @@ F 3 "" H 8300 3400 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L DIODESCH D11
+L flat_hierarchy_schlib:DIODESCH D11
 U 1 1 4639BA28
 P 7400 4300
 F 0 "D11" V 7350 4500 50  0000 C CNN
@@ -218,7 +217,7 @@ F 3 "" H 7400 4300 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L VCC #PWR018
+L flat_hierarchy_schlib:VCC #PWR018
 U 1 1 4639BA17
 P 7900 3200
 F 0 "#PWR018" H 7900 3300 30  0001 C CNN
@@ -229,7 +228,7 @@ F 3 "" H 7900 3200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR019
+L flat_hierarchy_schlib:GND #PWR019
 U 1 1 4639B9EB
 P 7900 4950
 F 0 "#PWR019" H 7900 4950 30  0001 C CNN
@@ -240,7 +239,7 @@ F 3 "" H 7900 4950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L LED D12
+L flat_hierarchy_schlib:LED D12
 U 1 1 4639B9EA
 P 7900 4700
 F 0 "D12" V 7800 4550 50  0000 C CNN
@@ -252,7 +251,7 @@ F 4 "YELLOW-LED" H 7900 4900 40  0000 C CNN "Champ4"
 	0    1    1    0   
 $EndComp
 $Comp
-L R R21
+L flat_hierarchy_schlib:R R21
 U 1 1 4639B9E9
 P 7900 4150
 F 0 "R21" H 7800 4350 50  0000 C CNN
@@ -263,7 +262,7 @@ F 3 "" H 7900 4150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R20
+L flat_hierarchy_schlib:R R20
 U 1 1 4639B9B3
 P 7400 3050
 F 0 "R20" H 7300 3250 50  0000 C CNN
@@ -274,7 +273,7 @@ F 3 "" H 7400 3050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R19
+L flat_hierarchy_schlib:R R19
 U 1 1 4639B9B0
 P 7400 3800
 F 0 "R19" H 7500 3600 50  0000 C CNN
@@ -285,7 +284,7 @@ F 3 "" H 7400 3800 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L PNP Q3
+L flat_hierarchy_schlib:PNP Q3
 U 1 1 4639B996
 P 7800 3400
 F 0 "Q3" H 7700 3150 50  0000 C CNN
@@ -296,7 +295,7 @@ F 3 "" H 7800 3400 60  0001 C CNN
 	1    0    0    1   
 $EndComp
 $Comp
-L VCC #PWR020
+L flat_hierarchy_schlib:VCC #PWR020
 U 1 1 4638AB33
 P 7400 2750
 F 0 "#PWR020" H 7400 2850 30  0001 C CNN
@@ -309,7 +308,7 @@ $EndComp
 Text Notes 2600 6900 0    50   ~ 0
 ADJUST for VPP = 13V
 $Comp
-L POT RV1
+L flat_hierarchy_schlib:POT RV1
 U 1 1 443D0101
 P 3600 6750
 F 0 "RV1" V 3750 6900 50  0000 C CNN
@@ -320,7 +319,7 @@ F 3 "" H 3600 6750 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L R R18
+L flat_hierarchy_schlib:R R18
 U 1 1 44369638
 P 8650 1500
 F 0 "R18" V 8730 1500 50  0000 C CNN
@@ -331,7 +330,7 @@ F 3 "" H 8650 1500 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #PWR021
+L flat_hierarchy_schlib:GND #PWR021
 U 1 1 442AABC2
 P 7900 2600
 F 0 "#PWR021" H 7900 2600 30  0001 C CNN
@@ -342,7 +341,7 @@ F 3 "" H 7900 2600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L PWR_FLAG #FLG022
+L flat_hierarchy_schlib:PWR_FLAG #FLG022
 U 1 1 442A8330
 P 8100 5550
 F 0 "#FLG022" H 8100 5820 30  0001 C CNN
@@ -364,7 +363,7 @@ Text Notes 7300 5150 0    60   ~ 0
 8 to 15V
 NoConn ~ 900  5850
 $Comp
-L DIODESCH D10
+L flat_hierarchy_schlib:DIODESCH D10
 U 1 1 442A6026
 P 3300 5850
 F 0 "D10" H 3300 5950 40  0000 C CNN
@@ -375,7 +374,7 @@ F 3 "" H 3300 5850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R10
+L flat_hierarchy_schlib:R R10
 U 1 1 442A5F83
 P 2150 7200
 F 0 "R10" V 2230 7200 50  0000 C CNN
@@ -386,7 +385,7 @@ F 3 "" H 2150 7200 60  0001 C CNN
 	0    1    -1   0   
 $EndComp
 $Comp
-L C C4
+L flat_hierarchy_schlib:C C4
 U 1 1 442A5F61
 P 1900 7450
 F 0 "C4" V 2050 7450 50  0000 C CNN
@@ -397,7 +396,7 @@ F 3 "" H 1900 7450 60  0001 C CNN
 	0    1    -1   0   
 $EndComp
 $Comp
-L LT1373 U4
+L flat_hierarchy_schlib:LT1373 U4
 U 1 1 442A5E20
 P 1900 6100
 F 0 "U4" H 2500 6600 60  0000 C CNN
@@ -410,7 +409,7 @@ $EndComp
 Text Notes 900  5350 0    60   ~ 0
 VPP (13V) power
 $Comp
-L R R16
+L flat_hierarchy_schlib:R R16
 U 1 1 442A58DC
 P 3600 6200
 F 0 "R16" H 3750 6050 50  0000 C CNN
@@ -421,7 +420,7 @@ F 3 "" H 3600 6200 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L R R15
+L flat_hierarchy_schlib:R R15
 U 1 1 442A58D7
 P 3600 7300
 F 0 "R15" H 3450 7450 50  0000 C CNN
@@ -433,7 +432,7 @@ F 3 "" H 3600 7300 60  0001 C CNN
 $EndComp
 NoConn ~ 900  6350
 $Comp
-L C C5
+L flat_hierarchy_schlib:C C5
 U 1 1 442A58B1
 P 1650 7200
 F 0 "C5" V 1800 7200 50  0000 C CNN
@@ -444,7 +443,7 @@ F 3 "" H 1650 7200 60  0001 C CNN
 	0    1    -1   0   
 $EndComp
 $Comp
-L PWR_FLAG #FLG023
+L flat_hierarchy_schlib:PWR_FLAG #FLG023
 U 1 1 442A5893
 P 3700 5800
 F 0 "#FLG023" H 3700 6070 30  0001 C CNN
@@ -455,7 +454,7 @@ F 3 "" H 3700 5800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CP C3
+L flat_hierarchy_schlib:CP C3
 U 1 1 442A584C
 P 3950 6200
 F 0 "C3" H 4100 6250 50  0000 L CNN
@@ -466,7 +465,7 @@ F 3 "" H 3950 6200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VPP #PWR34
+L flat_hierarchy_schlib:VPP #PWR34
 U 1 1 442A5846
 P 3950 5800
 F 0 "#PWR34" H 3950 6000 40  0001 C CNN
@@ -477,7 +476,7 @@ F 3 "" H 3950 5800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR024
+L flat_hierarchy_schlib:VCC #PWR024
 U 1 1 442A57CB
 P 1900 5300
 F 0 "#PWR024" H 1900 5400 30  0001 C CNN
@@ -488,7 +487,7 @@ F 3 "" H 1900 5300 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L INDUCTOR L1
+L flat_hierarchy_schlib:INDUCTOR L1
 U 1 1 442A57BE
 P 2550 5350
 F 0 "L1" V 2500 5350 40  0000 C CNN
@@ -503,7 +502,7 @@ NoConn ~ 1700 3400
 NoConn ~ 1700 3300
 NoConn ~ 1700 3200
 $Comp
-L GND #PWR025
+L flat_hierarchy_schlib:GND #PWR025
 U 1 1 442A50C2
 P 8300 2300
 F 0 "#PWR025" H 8300 2300 30  0001 C CNN
@@ -514,7 +513,7 @@ F 3 "" H 8300 2300 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R17
+L flat_hierarchy_schlib:R R17
 U 1 1 442A50BF
 P 8300 1950
 F 0 "R17" H 8200 2150 50  0000 C CNN
@@ -525,7 +524,7 @@ F 3 "" H 8300 1950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR026
+L flat_hierarchy_schlib:VCC #PWR026
 U 1 1 442A50B3
 P 10200 5250
 F 0 "#PWR026" H 10200 5350 30  0001 C CNN
@@ -536,7 +535,7 @@ F 3 "" H 10200 5250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR027
+L flat_hierarchy_schlib:GND #PWR027
 U 1 1 442A5095
 P 10200 6350
 F 0 "#PWR027" H 10200 6350 30  0001 C CNN
@@ -547,7 +546,7 @@ F 3 "" H 10200 6350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L LED D9
+L flat_hierarchy_schlib:LED D9
 U 1 1 442A5084
 P 10200 6150
 F 0 "D9" V 10100 6000 50  0000 C CNN
@@ -559,7 +558,7 @@ F 4 "GREEN LED" H 10200 6350 40  0000 C CNN "Champ4"
 	0    1    1    0   
 $EndComp
 $Comp
-L R R14
+L flat_hierarchy_schlib:R R14
 U 1 1 442A5083
 P 10200 5600
 F 0 "R14" H 10100 5800 50  0000 C CNN
@@ -570,7 +569,7 @@ F 3 "" H 10200 5600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR028
+L flat_hierarchy_schlib:GND #PWR028
 U 1 1 442A5057
 P 9650 5800
 F 0 "#PWR028" H 9650 5800 30  0001 C CNN
@@ -581,7 +580,7 @@ F 3 "" H 9650 5800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CP C1
+L flat_hierarchy_schlib:CP C1
 U 1 1 442A5056
 P 9650 5550
 F 0 "C1" H 9800 5600 50  0000 L CNN
@@ -592,7 +591,7 @@ F 3 "" H 9650 5550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR029
+L flat_hierarchy_schlib:GND #PWR029
 U 1 1 442A5050
 P 9150 5650
 F 0 "#PWR029" H 9150 5650 30  0001 C CNN
@@ -603,7 +602,7 @@ F 3 "" H 9150 5650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 7805 U3
+L flat_hierarchy_schlib:7805 U3
 U 1 1 442A504A
 P 9150 5350
 F 0 "U3" H 9150 5650 60  0000 C CNN
@@ -614,7 +613,7 @@ F 3 "" H 9150 5350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR030
+L flat_hierarchy_schlib:GND #PWR030
 U 1 1 442A5023
 P 8400 5800
 F 0 "#PWR030" H 8400 5800 30  0001 C CNN
@@ -625,7 +624,7 @@ F 3 "" H 8400 5800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CP C2
+L flat_hierarchy_schlib:CP C2
 U 1 1 442A501D
 P 8400 5550
 F 0 "C2" H 8550 5600 50  0000 L CNN
@@ -636,7 +635,7 @@ F 3 "" H 8400 5550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR031
+L flat_hierarchy_schlib:GND #PWR031
 U 1 1 442A500F
 P 7900 5600
 F 0 "#PWR031" H 7900 5600 30  0001 C CNN
@@ -647,7 +646,7 @@ F 3 "" H 7900 5600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODE D1
+L flat_hierarchy_schlib:DIODE D1
 U 1 1 442A500B
 P 8100 5300
 F 0 "D1" H 8100 5400 50  0000 C CNN
@@ -658,7 +657,7 @@ F 3 "" H 8100 5300 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_2 P1
+L flat_hierarchy_schlib:CONN_2 P1
 U 1 1 442A4FE7
 P 7450 5400
 F 0 "P1" V 7400 5400 40  0000 C CNN
@@ -669,7 +668,7 @@ F 3 "" H 7450 5400 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L LED D8
+L flat_hierarchy_schlib:LED D8
 U 1 1 442A4F5D
 P 7900 2350
 F 0 "D8" V 7800 2200 50  0000 C CNN
@@ -682,7 +681,7 @@ F 5 "RED LED" H 7900 2550 40  0000 C CNN "Champ5"
 	0    1    1    0   
 $EndComp
 $Comp
-L R R9
+L flat_hierarchy_schlib:R R9
 U 1 1 442A4F52
 P 7900 1850
 F 0 "R9" H 7800 2050 50  0000 C CNN
@@ -693,7 +692,7 @@ F 3 "" H 7900 1850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VPP #PWR23
+L flat_hierarchy_schlib:VPP #PWR23
 U 1 1 442A4F48
 P 7900 900
 F 0 "#PWR23" H 7900 1100 40  0001 C CNN
@@ -704,7 +703,7 @@ F 3 "" H 7900 900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VPP #PWR22
+L flat_hierarchy_schlib:VPP #PWR22
 U 1 1 442A4F44
 P 6700 700
 F 0 "#PWR22" H 6700 900 40  0001 C CNN
@@ -715,7 +714,7 @@ F 3 "" H 6700 700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L PNP Q2
+L flat_hierarchy_schlib:PNP Q2
 U 1 1 442A4F30
 P 7800 1200
 F 0 "Q2" H 7700 900 50  0000 C CNN
@@ -726,7 +725,7 @@ F 3 "" H 7800 1200 60  0001 C CNN
 	1    0    0    1   
 $EndComp
 $Comp
-L R R7
+L flat_hierarchy_schlib:R R7
 U 1 1 442A4F2A
 P 6700 1050
 F 0 "R7" H 6600 1200 50  0000 C CNN
@@ -737,7 +736,7 @@ F 3 "" H 6700 1050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R11
+L flat_hierarchy_schlib:R R11
 U 1 1 442A4F23
 P 6700 1950
 F 0 "R11" H 6800 1750 50  0000 C CNN
@@ -748,7 +747,7 @@ F 3 "" H 6700 1950 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L GND #PWR032
+L flat_hierarchy_schlib:GND #PWR032
 U 1 1 442A4F1C
 P 6700 2850
 F 0 "#PWR032" H 6700 2850 30  0001 C CNN
@@ -761,7 +760,7 @@ $EndComp
 Text Label 2500 1300 0    60   ~ 0
 VPP_ON
 $Comp
-L NPN Q1
+L flat_hierarchy_schlib:NPN Q1
 U 1 1 442A4EB9
 P 6600 2600
 F 0 "Q1" H 6500 2850 50  0000 C CNN
@@ -774,7 +773,7 @@ $EndComp
 Text Label 2350 4400 0    60   ~ 0
 PC-CLOCK-OUT
 $Comp
-L GND #PWR033
+L flat_hierarchy_schlib:GND #PWR033
 U 1 1 442A4E06
 P 1700 4050
 F 0 "#PWR033" H 1700 4050 30  0001 C CNN
@@ -789,7 +788,7 @@ PC-DATA-IN
 Text Label 2400 3250 0    60   ~ 0
 PC-DATA-OUT
 $Comp
-L GND #PWR034
+L flat_hierarchy_schlib:GND #PWR034
 U 1 1 442A4DB3
 P 2900 2000
 F 0 "#PWR034" H 2900 2000 30  0001 C CNN
@@ -800,7 +799,7 @@ F 3 "" H 2900 2000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR035
+L flat_hierarchy_schlib:GND #PWR035
 U 1 1 442A4DAE
 P 3200 5050
 F 0 "#PWR035" H 3200 5050 30  0001 C CNN
@@ -811,7 +810,7 @@ F 3 "" H 3200 5050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR036
+L flat_hierarchy_schlib:GND #PWR036
 U 1 1 442A4DAB
 P 3000 3900
 F 0 "#PWR036" H 3000 3900 30  0001 C CNN
@@ -822,7 +821,7 @@ F 3 "" H 3000 3900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R8
+L flat_hierarchy_schlib:R R8
 U 1 1 442A4D92
 P 5100 1200
 F 0 "R8" V 5180 1200 50  0000 C CNN
@@ -833,7 +832,7 @@ F 3 "" H 5100 1200 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L R R13
+L flat_hierarchy_schlib:R R13
 U 1 1 442A4D8D
 P 5350 4500
 F 0 "R13" V 5450 4500 50  0000 C CNN
@@ -844,7 +843,7 @@ F 3 "" H 5350 4500 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L R R12
+L flat_hierarchy_schlib:R R12
 U 1 1 442A4D85
 P 5150 3150
 F 0 "R12" V 5230 3150 50  0000 C CNN
@@ -855,7 +854,7 @@ F 3 "" H 5150 3150 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #PWR037
+L flat_hierarchy_schlib:GND #PWR037
 U 1 1 442A4D75
 P 4150 2550
 F 0 "#PWR037" H 4150 2550 30  0001 C CNN
@@ -866,7 +865,7 @@ F 3 "" H 4150 2550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74LS125 U2
+L flat_hierarchy_schlib:74LS125 U2
 U 4 1 442A4D6B
 P 4150 2200
 F 0 "U2" H 4150 2500 50  0000 C BNN
@@ -877,7 +876,7 @@ F 3 "" H 4150 2200 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR038
+L flat_hierarchy_schlib:VCC #PWR038
 U 1 1 442A4D68
 P 3900 3900
 F 0 "#PWR038" H 3900 4000 30  0001 C CNN
@@ -888,7 +887,7 @@ F 3 "" H 3900 3900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR039
+L flat_hierarchy_schlib:GND #PWR039
 U 1 1 442A4D67
 P 3900 5050
 F 0 "#PWR039" H 3900 5050 30  0001 C CNN
@@ -899,7 +898,7 @@ F 3 "" H 3900 5050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR040
+L flat_hierarchy_schlib:GND #PWR040
 U 1 1 442A4D66
 P 4550 4850
 F 0 "#PWR040" H 4550 4850 30  0001 C CNN
@@ -910,7 +909,7 @@ F 3 "" H 4550 4850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODESCH D7
+L flat_hierarchy_schlib:DIODESCH D7
 U 1 1 442A4D65
 P 3900 4800
 F 0 "D7" V 3950 4600 50  0000 C CNN
@@ -921,7 +920,7 @@ F 3 "" H 3900 4800 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L DIODESCH D6
+L flat_hierarchy_schlib:DIODESCH D6
 U 1 1 442A4D64
 P 3900 4100
 F 0 "D6" V 3950 3900 50  0000 C CNN
@@ -932,7 +931,7 @@ F 3 "" H 3900 4100 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L R R6
+L flat_hierarchy_schlib:R R6
 U 1 1 442A4D63
 P 3200 4750
 F 0 "R6" H 3100 4950 50  0000 C CNN
@@ -943,7 +942,7 @@ F 3 "" H 3200 4750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R5
+L flat_hierarchy_schlib:R R5
 U 1 1 442A4D62
 P 3550 4400
 F 0 "R5" V 3630 4400 50  0000 C CNN
@@ -954,7 +953,7 @@ F 3 "" H 3550 4400 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L 74LS125 U2
+L flat_hierarchy_schlib:74LS125 U2
 U 3 1 442A4D61
 P 4550 4500
 F 0 "U2" H 4550 4750 50  0000 C BNN
@@ -965,7 +964,7 @@ F 3 "" H 4550 4500 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR041
+L flat_hierarchy_schlib:VCC #PWR041
 U 1 1 442A4D60
 P 3700 2600
 F 0 "#PWR041" H 3700 2700 30  0001 C CNN
@@ -976,7 +975,7 @@ F 3 "" H 3700 2600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR042
+L flat_hierarchy_schlib:GND #PWR042
 U 1 1 442A4D5F
 P 3700 3800
 F 0 "#PWR042" H 3700 3800 30  0001 C CNN
@@ -987,7 +986,7 @@ F 3 "" H 3700 3800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR043
+L flat_hierarchy_schlib:GND #PWR043
 U 1 1 442A4D5E
 P 4350 3500
 F 0 "#PWR043" H 4350 3500 30  0001 C CNN
@@ -998,7 +997,7 @@ F 3 "" H 4350 3500 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODESCH D5
+L flat_hierarchy_schlib:DIODESCH D5
 U 1 1 442A4D5D
 P 3700 3550
 F 0 "D5" V 3750 3350 50  0000 C CNN
@@ -1009,7 +1008,7 @@ F 3 "" H 3700 3550 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L DIODESCH D4
+L flat_hierarchy_schlib:DIODESCH D4
 U 1 1 442A4D5C
 P 3700 2850
 F 0 "D4" V 3750 2650 50  0000 C CNN
@@ -1020,7 +1019,7 @@ F 3 "" H 3700 2850 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L R R4
+L flat_hierarchy_schlib:R R4
 U 1 1 442A4D5B
 P 3000 3600
 F 0 "R4" V 3080 3600 50  0000 C CNN
@@ -1031,7 +1030,7 @@ F 3 "" H 3000 3600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R3
+L flat_hierarchy_schlib:R R3
 U 1 1 442A4D5A
 P 3350 3250
 F 0 "R3" V 3430 3250 50  0000 C CNN
@@ -1042,7 +1041,7 @@ F 3 "" H 3350 3250 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L 74LS125 U2
+L flat_hierarchy_schlib:74LS125 U2
 U 2 1 442A4D59
 P 4350 3150
 F 0 "U2" H 4350 3400 50  0000 C BNN
@@ -1053,7 +1052,7 @@ F 3 "" H 4350 3150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR044
+L flat_hierarchy_schlib:VCC #PWR044
 U 1 1 442A4D41
 P 3750 700
 F 0 "#PWR044" H 3750 800 30  0001 C CNN
@@ -1064,7 +1063,7 @@ F 3 "" H 3750 700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR045
+L flat_hierarchy_schlib:GND #PWR045
 U 1 1 442A4D3B
 P 3750 1800
 F 0 "#PWR045" H 3750 1800 30  0001 C CNN
@@ -1075,7 +1074,7 @@ F 3 "" H 3750 1800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR046
+L flat_hierarchy_schlib:GND #PWR046
 U 1 1 442A4D38
 P 4300 1550
 F 0 "#PWR046" H 4300 1550 30  0001 C CNN
@@ -1086,7 +1085,7 @@ F 3 "" H 4300 1550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODESCH D3
+L flat_hierarchy_schlib:DIODESCH D3
 U 1 1 442A4D25
 P 3750 1600
 F 0 "D3" V 3800 1400 50  0000 C CNN
@@ -1097,7 +1096,7 @@ F 3 "" H 3750 1600 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L DIODESCH D2
+L flat_hierarchy_schlib:DIODESCH D2
 U 1 1 442A4D1B
 P 3750 900
 F 0 "D2" V 3800 700 50  0000 C CNN
@@ -1108,7 +1107,7 @@ F 3 "" H 3750 900 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L R R2
+L flat_hierarchy_schlib:R R2
 U 1 1 442A4CFB
 P 2900 1650
 F 0 "R2" H 2800 1850 50  0000 C CNN
@@ -1119,7 +1118,7 @@ F 3 "" H 2900 1650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R1
+L flat_hierarchy_schlib:R R1
 U 1 1 442A4CF4
 P 3400 1300
 F 0 "R1" V 3480 1300 50  0000 C CNN
@@ -1130,7 +1129,7 @@ F 3 "" H 3400 1300 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L 74LS125 U2
+L flat_hierarchy_schlib:74LS125 U2
 U 1 1 442A4CC8
 P 4300 1200
 F 0 "U2" H 4300 1500 50  0000 C BNN
@@ -1141,7 +1140,7 @@ F 3 "" H 4300 1200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DB9 J1
+L flat_hierarchy_schlib:DB9 J1
 U 1 1 442A4C93
 P 1250 3600
 F 0 "J1" H 1250 3000 70  0000 C CNN
@@ -1242,7 +1241,7 @@ Wire Wire Line
 	1750 6950 1400 6950
 Connection ~ 1400 7200
 $Comp
-L GND #PWR047
+L flat_hierarchy_schlib:GND #PWR047
 U 1 1 5510C3A9
 P 1600 6850
 F 0 "#PWR047" H 1600 6850 30  0001 C CNN
@@ -1255,7 +1254,7 @@ $EndComp
 Wire Wire Line
 	1600 6850 1600 6800
 $Comp
-L GND #PWR048
+L flat_hierarchy_schlib:GND #PWR048
 U 1 1 5510C540
 P 1400 7500
 F 0 "#PWR048" H 1400 7500 30  0001 C CNN
@@ -1287,7 +1286,7 @@ Wire Wire Line
 Wire Wire Line
 	3000 6750 3450 6750
 $Comp
-L GND #PWR049
+L flat_hierarchy_schlib:GND #PWR049
 U 1 1 5510EE04
 P 3600 7600
 F 0 "#PWR049" H 3600 7600 30  0001 C CNN
@@ -1308,7 +1307,7 @@ Wire Wire Line
 	3700 5800 3700 5850
 Connection ~ 3700 5850
 $Comp
-L GND #PWR050
+L flat_hierarchy_schlib:GND #PWR050
 U 1 1 5510F50D
 P 3950 6450
 F 0 "#PWR050" H 3950 6450 30  0001 C CNN

@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name test_pads_inside_pads_schlib)(type Legacy)(uri ${KIPRJMOD}/test_pads_inside_pads_schlib.lib)(options "")(descr ""))
+)

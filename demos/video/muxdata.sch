@@ -1,6 +1,4 @@
-EESchema Schematic File Version 2
-LIBS:video_schlib
-LIBS:power
+EESchema Schematic File Version 4
 LIBS:video-cache
 EELAYER 26 0
 EELAYER END
@@ -323,7 +321,7 @@ VRAM1
 Text Label 4100 1100 0    60   ~ 0
 VRAM0
 $Comp
-L 74LS245 U6
+L video_schlib:74LS245 U6
 U 1 1 4BF036D5
 P 3300 5200
 F 0 "U6" H 3300 5000 60  0000 C CNN
@@ -334,7 +332,7 @@ F 3 "" H 3300 5200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74LS245 U5
+L video_schlib:74LS245 U5
 U 1 1 4BF036D6
 P 3300 4000
 F 0 "U5" H 3300 3800 60  0000 C CNN
@@ -345,7 +343,7 @@ F 3 "" H 3300 4000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74LS245 U4
+L video_schlib:74LS245 U4
 U 1 1 4BF036D7
 P 3300 2800
 F 0 "U4" H 3300 2600 60  0000 C CNN
@@ -356,7 +354,7 @@ F 3 "" H 3300 2800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 74LS245 U3
+L video_schlib:74LS245 U3
 U 1 1 33A7E303
 P 3300 1600
 F 0 "U3" H 3300 1400 60  0000 C CNN
@@ -623,7 +621,7 @@ TVR[0..7]
 Text HLabel 9500 1000 2    60   BiDi ~ 0
 VRAM[0..31]
 $Comp
-L VCC #PWR06
+L video_schlib:VCC #PWR06
 U 1 1 33A567E7
 P 6100 1550
 F 0 "#PWR06" H 6100 1750 40  0001 C CNN
@@ -638,7 +636,7 @@ Connection ~ 6100 1600
 Wire Wire Line
 	6100 1800 6100 1550
 $Comp
-L XC4003-VQ100 U22
+L video_schlib:XC4003-VQ100 U22
 U 1 1 33A567B8
 P 7050 3850
 F 0 "U22" H 7050 3950 70  0000 C CNN

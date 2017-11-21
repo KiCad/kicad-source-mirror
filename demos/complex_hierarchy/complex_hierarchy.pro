@@ -1,4 +1,4 @@
-update=01/07/2015 12:40:16
+update=21/11/2017 21:19:54
 version=1
 last_client=kicad
 [cvpcb]
@@ -32,7 +32,4 @@ LibDir=
 version=1
 [eeschema]
 version=1
-LibDir=F:/kicad/share/library
-[eeschema/libraries]
-LibName1=power
-LibName2=complex_hierarchy_schlib
+LibDir=

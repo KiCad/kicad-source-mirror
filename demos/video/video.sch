@@ -1,6 +1,4 @@
-EESchema Schematic File Version 2
-LIBS:video_schlib
-LIBS:power
+EESchema Schematic File Version 4
 LIBS:video-cache
 EELAYER 26 0
 EELAYER END
@@ -232,7 +230,7 @@ Wire Wire Line
 Wire Wire Line
 	8850 2750 9500 2750
 $Comp
-L GND #GND01
+L video_schlib:GND #GND01
 U 1 1 84DFBB6C
 P 14800 4650
 F 0 "#GND01" H 14800 4750 60  0001 C CNN
@@ -243,7 +241,7 @@ F 3 "" H 14800 4650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DB9 J4
+L video_schlib:DB9 J4
 U 1 1 84DFBB8F
 P 15350 4050
 F 0 "J4" H 15350 4600 70  0000 C CNN
@@ -265,7 +263,7 @@ Wire Wire Line
 Wire Wire Line
 	14650 1900 15200 1900
 $Comp
-L GND #GND02
+L video_schlib:GND #GND02
 U 1 1 30705D34
 P 15350 2900
 F 0 "#GND02" H 15350 3000 60  0001 C CNN
@@ -276,7 +274,7 @@ F 3 "" H 15350 2900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BNC P8
+L video_schlib:BNC P8
 U 1 1 30705D02
 P 15350 2700
 F 0 "P8" H 15360 2820 60  0000 C CNN
@@ -380,7 +378,7 @@ GREEN_IN
 Text Label 11450 1800 0    60   ~ 0
 RED_IN
 $Comp
-L GND #GND03
+L video_schlib:GND #GND03
 U 1 1 32FA02CD
 P 12100 2800
 F 0 "#GND03" H 12100 2800 40  0001 C CNN
@@ -391,7 +389,7 @@ F 3 "" H 12100 2800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #GND04
+L video_schlib:GND #GND04
 U 1 1 32FA02C6
 P 12100 3600
 F 0 "#GND04" H 12100 3600 40  0001 C CNN
@@ -402,7 +400,7 @@ F 3 "" H 12100 3600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #GND05
+L video_schlib:GND #GND05
 U 1 1 32FA02C2
 P 12100 2000
 F 0 "#GND05" H 12100 2000 40  0001 C CNN
@@ -413,7 +411,7 @@ F 3 "" H 12100 2000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BNC P3
+L video_schlib:BNC P3
 U 1 1 32F9F1AD
 P 12100 3400
 F 0 "P3" H 12110 3520 60  0000 C CNN
@@ -424,7 +422,7 @@ F 3 "" H 12100 3400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BNC P2
+L video_schlib:BNC P2
 U 1 1 32F9F1A3
 P 12100 2600
 F 0 "P2" H 12110 2720 60  0000 C CNN
@@ -435,7 +433,7 @@ F 3 "" H 12100 2600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BNC P1
+L video_schlib:BNC P1
 U 1 1 32F9F198
 P 12100 1800
 F 0 "P1" H 12110 1920 60  0000 C CNN

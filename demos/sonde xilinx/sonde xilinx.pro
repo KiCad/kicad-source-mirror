@@ -1,4 +1,4 @@
-update=18/05/2015 09:07:49
+update=21/11/2017 20:57:10
 version=1
 last_client=kicad
 [cvpcb]
@@ -40,6 +40,3 @@ version=1
 [eeschema]
 version=1
 LibDir=
-[eeschema/libraries]
-LibName1=sonde xilinx_schlib
-LibName2=power

@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name complex_hierarchy_schlib)(type Legacy)(uri ${KIPRJMOD}/complex_hierarchy_schlib.lib)(options "")(descr ""))
+)

@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name video_schlib)(type Legacy)(uri F:/kicad-launchpad/git_testing/demos/video/libs/video_schlib.lib)(options "")(descr ""))
+)

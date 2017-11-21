@@ -1,6 +1,4 @@
-EESchema Schematic File Version 2
-LIBS:power
-LIBS:complex_hierarchy_schlib
+EESchema Schematic File Version 4
 LIBS:complex_hierarchy-cache
 EELAYER 26 0
 EELAYER END
@@ -122,7 +120,7 @@ Wire Wire Line
 	8900 5250 8900 6400
 Connection ~ 8900 5400
 $Comp
-L R R26
+L complex_hierarchy_schlib:R R26
 U 1 1 4B617B88
 P 9100 5100
 AR Path="/4B3A1333/4B617B88" Ref="R26"  Part="1" 
@@ -135,7 +133,7 @@ F 3 "" H 9100 5100 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L R R25
+L complex_hierarchy_schlib:R R25
 U 1 1 4B616B96
 P 9450 4450
 AR Path="/4B3A1333/4B616B96" Ref="R25"  Part="1" 
@@ -148,7 +146,7 @@ F 3 "" H 9450 4450 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L D_Small D8
+L complex_hierarchy_schlib:D_Small D8
 U 1 1 4B616AFA
 P 7900 4000
 AR Path="/4B3A1333/4B616AFA" Ref="D8"  Part="1" 
@@ -161,7 +159,7 @@ F 3 "" H 7900 4000 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #PWR019
+L complex_hierarchy_schlib:GND #PWR019
 U 1 1 4B6168A3
 P 8100 5950
 AR Path="/4B3A13A4/4B6168A3" Ref="#PWR019"  Part="1" 
@@ -174,7 +172,7 @@ F 3 "" H 8100 5950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R10
+L complex_hierarchy_schlib:R R10
 U 1 1 4B61688C
 P 8100 5250
 AR Path="/4B3A1333/4B61688C" Ref="R10"  Part="1" 
@@ -187,7 +185,7 @@ F 3 "" H 8100 5250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR036
+L complex_hierarchy_schlib:GND #PWR036
 U 1 1 4B4F364A
 P 2850 2450
 AR Path="/4B3A1333/4B4F364A" Ref="#PWR036"  Part="1" 
@@ -200,7 +198,7 @@ F 3 "" H 2850 2450 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C12
+L complex_hierarchy_schlib:C C12
 U 1 1 4B4F3641
 P 2850 2250
 AR Path="/4B3A1333/4B4F3641" Ref="C12"  Part="1" 
@@ -213,7 +211,7 @@ F 3 "" H 2850 2250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R23
+L complex_hierarchy_schlib:R R23
 U 1 1 4B4F363E
 P 2450 2000
 AR Path="/4B3A1333/4B4F363E" Ref="R23"  Part="1" 
@@ -226,7 +224,7 @@ F 3 "" H 2450 2000 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L -VAA #PWR021
+L complex_hierarchy_schlib:-VAA #PWR021
 U 1 1 4B4B1086
 P 6300 5850
 AR Path="/4B3A13A4/4B4B1086" Ref="#PWR021"  Part="1" 
@@ -239,7 +237,7 @@ F 3 "" H 6300 5850 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L -VAA #PWR022
+L complex_hierarchy_schlib:-VAA #PWR022
 U 1 1 4B4B1080
 P 4750 2850
 AR Path="/4B3A13A4/4B4B1080" Ref="#PWR022"  Part="1" 
@@ -258,7 +256,7 @@ PIEZO_OUT
 Text Label 5200 5300 0    60   ~ 0
 Vpil_0_3,3V
 $Comp
-L MPSA42 Q6
+L complex_hierarchy_schlib:MPSA42 Q6
 U 1 1 4B3A137D
 P 8500 3700
 AR Path="/4B3A13A4/4B3A137D" Ref="Q6"  Part="1" 
@@ -271,7 +269,7 @@ F 3 "" H 8500 3700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L MPSA92 Q7
+L complex_hierarchy_schlib:MPSA92 Q7
 U 1 1 4B3A137C
 P 8500 4800
 AR Path="/4B3A13A4/4B3A137C" Ref="Q7"  Part="1" 
@@ -284,7 +282,7 @@ F 3 "" H 8500 4800 60  0001 C CNN
 	1    0    0    1   
 $EndComp
 $Comp
-L D_Small D7
+L complex_hierarchy_schlib:D_Small D7
 U 1 1 4B3A137B
 P 7900 4500
 AR Path="/4B3A13A4/4B3A137B" Ref="D7"  Part="1" 
@@ -297,7 +295,7 @@ F 3 "" H 7900 4500 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #PWR023
+L complex_hierarchy_schlib:GND #PWR023
 U 1 1 4B3A137A
 P 8600 5300
 AR Path="/4B3A13A4/4B3A137A" Ref="#PWR023"  Part="1" 
@@ -310,7 +308,7 @@ F 3 "" H 8600 5300 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L MPSA42 Q8
+L complex_hierarchy_schlib:MPSA42 Q8
 U 1 1 4B3A1379
 P 7800 5100
 AR Path="/4B3A13A4/4B3A1379" Ref="Q8"  Part="1" 
@@ -323,7 +321,7 @@ F 3 "" H 7800 5100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR024
+L complex_hierarchy_schlib:GND #PWR024
 U 1 1 4B3A1378
 P 7000 5200
 AR Path="/4B3A13A4/4B3A1378" Ref="#PWR024"  Part="1" 
@@ -336,7 +334,7 @@ F 3 "" H 7000 5200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_Small D6
+L complex_hierarchy_schlib:D_Small D6
 U 1 1 4B3A1377
 P 7300 3100
 AR Path="/4B3A13A4/4B3A1377" Ref="D6"  Part="1" 
@@ -349,7 +347,7 @@ F 3 "" H 7300 3100 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L R R13
+L complex_hierarchy_schlib:R R13
 U 1 1 4B3A1376
 P 7900 2750
 AR Path="/4B3A13A4/4B3A1376" Ref="R13"  Part="1" 
@@ -362,7 +360,7 @@ F 3 "" H 7900 2750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_Small D5
+L complex_hierarchy_schlib:D_Small D5
 U 1 1 4B3A1375
 P 7300 2800
 AR Path="/4B3A13A4/4B3A1375" Ref="D5"  Part="1" 
@@ -375,7 +373,7 @@ F 3 "" H 7300 2800 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L R R14
+L complex_hierarchy_schlib:R R14
 U 1 1 4B3A1374
 P 7300 3600
 AR Path="/4B3A13A4/4B3A1374" Ref="R14"  Part="1" 
@@ -388,7 +386,7 @@ F 3 "" H 7300 3600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR025
+L complex_hierarchy_schlib:GND #PWR025
 U 1 1 4B3A1373
 P 7300 3850
 AR Path="/4B3A13A4/4B3A1373" Ref="#PWR025"  Part="1" 
@@ -401,7 +399,7 @@ F 3 "" H 7300 3850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R18
+L complex_hierarchy_schlib:R R18
 U 1 1 4B3A1371
 P 7250 5100
 AR Path="/4B3A13A4/4B3A1371" Ref="R18"  Part="1" 
@@ -414,7 +412,7 @@ F 3 "" H 7250 5100 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R22
+L complex_hierarchy_schlib:R R22
 U 1 1 4B3A1370
 P 8900 5100
 AR Path="/4B3A13A4/4B3A1370" Ref="R22"  Part="1" 
@@ -427,7 +425,7 @@ F 3 "" H 8900 5100 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L +12V #U026
+L complex_hierarchy_schlib:+12V #U026
 U 1 1 4B3A136F
 P 6300 4950
 AR Path="/4B3A13A4/4B3A136F" Ref="#U026"  Part="1" 
@@ -440,7 +438,7 @@ F 3 "" H 6300 4950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R19
+L complex_hierarchy_schlib:R R19
 U 1 1 4B3A136D
 P 7400 5400
 AR Path="/4B3A13A4/4B3A136D" Ref="R19"  Part="1" 
@@ -453,7 +451,7 @@ F 3 "" H 7400 5400 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L CONN_2 P5
+L complex_hierarchy_schlib:CONN_2 P5
 U 1 1 4B3A136C
 P 10750 4400
 AR Path="/4B3A13A4/4B3A136C" Ref="P5"  Part="1" 
@@ -468,7 +466,7 @@ $EndComp
 Text Label 7100 6400 0    60   ~ 0
 S_OUT+
 $Comp
-L R R16
+L complex_hierarchy_schlib:R R16
 U 1 1 4B3A136B
 P 3250 2000
 AR Path="/4B3A13A4/4B3A136B" Ref="R16"  Part="1" 
@@ -481,7 +479,7 @@ F 3 "" H 3250 2000 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #PWR027
+L complex_hierarchy_schlib:GND #PWR027
 U 1 1 4B3A136A
 P 1800 2250
 AR Path="/4B3A13A4/4B3A136A" Ref="#PWR027"  Part="1" 
@@ -494,7 +492,7 @@ F 3 "" H 1800 2250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR028
+L complex_hierarchy_schlib:GND #PWR028
 U 1 1 4B3A1369
 P 4000 2750
 AR Path="/4B3A13A4/4B3A1369" Ref="#PWR028"  Part="1" 
@@ -507,7 +505,7 @@ F 3 "" H 4000 2750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L LM358N U4
+L complex_hierarchy_schlib:LM358N U4
 U 1 1 4B3A1368
 P 6400 5400
 AR Path="/4B3A13A4/4B3A1368" Ref="U4"  Part="1" 
@@ -520,7 +518,7 @@ F 3 "" H 6400 5400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_2 P6
+L complex_hierarchy_schlib:CONN_2 P6
 U 1 1 4B3A1367
 P 1350 2100
 AR Path="/4B3A13A4/4B3A1367" Ref="P6"  Part="1" 
@@ -533,7 +531,7 @@ F 3 "" H 1350 2100 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L C C7
+L complex_hierarchy_schlib:C C7
 U 1 1 4B3A1366
 P 4000 2550
 AR Path="/4B3A13A4/4B3A1366" Ref="C7"  Part="1" 
@@ -546,7 +544,7 @@ F 3 "" H 4000 2550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C8
+L complex_hierarchy_schlib:C C8
 U 1 1 4B3A1365
 P 8100 5750
 AR Path="/4B3A13A4/4B3A1365" Ref="C8"  Part="1" 
@@ -559,7 +557,7 @@ F 3 "" H 8100 5750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R15
+L complex_hierarchy_schlib:R R15
 U 1 1 4B3A1364
 P 9450 4150
 AR Path="/4B3A13A4/4B3A1364" Ref="R15"  Part="1" 
@@ -572,7 +570,7 @@ F 3 "" H 9450 4150 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #PWR029
+L complex_hierarchy_schlib:GND #PWR029
 U 1 1 4B3A1363
 P 10250 4550
 AR Path="/4B3A13A4/4B3A1363" Ref="#PWR029"  Part="1" 
@@ -585,7 +583,7 @@ F 3 "" H 10250 4550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R21
+L complex_hierarchy_schlib:R R21
 U 1 1 4B3A1362
 P 5250 6400
 AR Path="/4B3A13A4/4B3A1362" Ref="R21"  Part="1" 
@@ -598,7 +596,7 @@ F 3 "" H 5250 6400 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #PWR030
+L complex_hierarchy_schlib:GND #PWR030
 U 1 1 4B3A1361
 P 5050 6400
 AR Path="/4B3A13A4/4B3A1361" Ref="#PWR030"  Part="1" 
@@ -611,7 +609,7 @@ F 3 "" H 5050 6400 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L MPSA92 Q5
+L complex_hierarchy_schlib:MPSA92 Q5
 U 1 1 4B3A1360
 P 7800 3300
 AR Path="/4B3A13A4/4B3A1360" Ref="Q5"  Part="1" 
@@ -624,7 +622,7 @@ F 3 "" H 7800 3300 60  0001 C CNN
 	1    0    0    1   
 $EndComp
 $Comp
-L HT #PWR031
+L complex_hierarchy_schlib:HT #PWR031
 U 1 1 4B3A135F
 P 7300 2650
 AR Path="/4B3A13A4/4B3A135F" Ref="#PWR031"  Part="1" 
@@ -637,7 +635,7 @@ F 3 "" H 7300 2650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L HT #PWR032
+L complex_hierarchy_schlib:HT #PWR032
 U 1 1 4B3A135E
 P 7900 2550
 AR Path="/4B3A13A4/4B3A135E" Ref="#PWR032"  Part="1" 
@@ -650,7 +648,7 @@ F 3 "" H 7900 2550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L HT #PWR033
+L complex_hierarchy_schlib:HT #PWR033
 U 1 1 4B3A135D
 P 8600 3300
 AR Path="/4B3A13A4/4B3A135D" Ref="#PWR033"  Part="1" 
@@ -663,7 +661,7 @@ F 3 "" H 8600 3300 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L LM358N U4
+L complex_hierarchy_schlib:LM358N U4
 U 2 1 4B3A135C
 P 4850 2400
 AR Path="/4B3A13A4/4B3A135C" Ref="U4"  Part="2" 
@@ -676,7 +674,7 @@ F 3 "" H 4850 2400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +12V #U034
+L complex_hierarchy_schlib:+12V #U034
 U 1 1 4B3A135B
 P 4750 1950
 AR Path="/4B3A13A4/4B3A135B" Ref="#U034"  Part="1" 
@@ -689,7 +687,7 @@ F 3 "" H 4750 1950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R17
+L complex_hierarchy_schlib:R R17
 U 1 1 4B3A1359
 P 3950 2000
 AR Path="/4B3A13A4/4B3A1359" Ref="R17"  Part="1" 
@@ -702,7 +700,7 @@ F 3 "" H 3950 2000 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L C C6
+L complex_hierarchy_schlib:C C6
 U 1 1 4B3A1358
 P 4350 1600
 AR Path="/4B3A13A4/4B3A1358" Ref="C6"  Part="1" 
@@ -717,7 +715,7 @@ $EndComp
 Text Notes 2600 2950 0    80   Italic 16
 Filter:\nFc =1000Hz
 $Comp
-L POT RV2
+L complex_hierarchy_schlib:POT RV2
 U 1 1 4B3A1357
 P 5850 6400
 AR Path="/4B3A13A4/4B3A1357" Ref="RV2"  Part="1" 

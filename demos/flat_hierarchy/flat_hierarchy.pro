@@ -1,4 +1,4 @@
-update=18/05/2015 09:02:06
+update=21/11/2017 21:18:56
 last_client=kicad
 [general]
 version=1
@@ -77,5 +77,3 @@ EquName1=devcms
 [eeschema]
 version=1
 LibDir=
-[eeschema/libraries]
-LibName1=flat_hierarchy_schlib

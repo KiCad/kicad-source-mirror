@@ -1,6 +1,4 @@
-EESchema Schematic File Version 2
-LIBS:power
-LIBS:complex_hierarchy_schlib
+EESchema Schematic File Version 4
 LIBS:complex_hierarchy-cache
 EELAYER 26 0
 EELAYER END
@@ -80,7 +78,7 @@ Wire Wire Line
 Wire Wire Line
 	8800 2750 9350 2750
 $Comp
-L CP C10
+L complex_hierarchy_schlib:CP C10
 U 1 1 4B4B15E7
 P 6650 2750
 F 0 "C10" H 6800 2800 50  0000 L CNN
@@ -91,7 +89,7 @@ F 3 "" H 6650 2750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR01
+L complex_hierarchy_schlib:GND #PWR01
 U 1 1 4B4B15DA
 P 9050 2300
 F 0 "#PWR01" H 9050 2300 30  0001 C CNN
@@ -102,7 +100,7 @@ F 3 "" H 9050 2300 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CP C11
+L complex_hierarchy_schlib:CP C11
 U 1 1 4B4B15D9
 P 9200 2500
 F 0 "C11" H 9350 2550 50  0000 L CNN
@@ -114,7 +112,7 @@ F 3 "" H 9200 2500 60  0001 C CNN
 $EndComp
 NoConn ~ 7100 3050
 $Comp
-L -VAA #PWR02
+L complex_hierarchy_schlib:-VAA #PWR02
 U 1 1 4B4B1578
 P 9350 2750
 F 0 "#PWR02" H 9350 2850 20  0001 C CNN
@@ -125,7 +123,7 @@ F 3 "" H 9350 2750 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L 7805 U2
+L complex_hierarchy_schlib:7805 U2
 U 1 1 4B4B1532
 P 7900 1350
 F 0 "U2" H 7900 1650 60  0000 C CNN
@@ -136,7 +134,7 @@ F 3 "" H 7900 1350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR03
+L complex_hierarchy_schlib:VCC #PWR03
 U 1 1 4B4B1253
 P 7900 2200
 F 0 "#PWR03" H 7900 2300 30  0001 C CNN
@@ -147,7 +145,7 @@ F 3 "" H 7900 2200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR04
+L complex_hierarchy_schlib:VCC #PWR04
 U 1 1 4B4B124E
 P 9200 1250
 F 0 "#PWR04" H 9200 1350 30  0001 C CNN
@@ -158,7 +156,7 @@ F 3 "" H 9200 1250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR05
+L complex_hierarchy_schlib:GND #PWR05
 U 1 1 4B4B1237
 P 7900 3600
 F 0 "#PWR05" H 7900 3600 30  0001 C CNN
@@ -169,7 +167,7 @@ F 3 "" H 7900 3600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L ICL7660 U1
+L complex_hierarchy_schlib:ICL7660 U1
 U 1 1 4B4B1230
 P 7950 2900
 F 0 "U1" H 7400 3300 70  0000 L CNN
@@ -182,7 +180,7 @@ $EndComp
 Text Label 2150 2500 0    60   ~ 0
 12Vext
 $Comp
-L CP C9
+L complex_hierarchy_schlib:CP C9
 U 1 1 4B3A1558
 P 2500 1500
 F 0 "C9" H 2650 1550 50  0000 L CNN
@@ -193,7 +191,7 @@ F 3 "" H 2500 1500 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR06
+L complex_hierarchy_schlib:GND #PWR06
 U 1 1 4B3A1557
 P 2500 1700
 F 0 "#PWR06" H 2500 1700 30  0001 C CNN
@@ -216,7 +214,7 @@ F0 "ampli_ht_vertical" 60
 F1 "ampli_ht.sch" 60
 $EndSheet
 $Comp
-L GND #PWR07
+L complex_hierarchy_schlib:GND #PWR07
 U 1 1 4B3A1302
 P 2200 1750
 F 0 "#PWR07" H 2200 1750 30  0001 C CNN
@@ -227,7 +225,7 @@ F 3 "" H 2200 1750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_2 P1
+L complex_hierarchy_schlib:CONN_2 P1
 U 1 1 4B3A12F4
 P 1650 1400
 F 0 "P1" V 1600 1400 40  0000 C CNN
@@ -238,7 +236,7 @@ F 3 "" H 1650 1400 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L HT #PWR08
+L complex_hierarchy_schlib:HT #PWR08
 U 1 1 4B0FA68B
 P 2500 1250
 F 0 "#PWR08" H 2500 1370 20  0001 C CNN
@@ -249,7 +247,7 @@ F 3 "" H 2500 1250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CP C1
+L complex_hierarchy_schlib:CP C1
 U 1 1 4B03CEC2
 P 9200 1600
 F 0 "C1" H 9350 1650 50  0000 L CNN
@@ -260,7 +258,7 @@ F 3 "" H 9200 1600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR09
+L complex_hierarchy_schlib:GND #PWR09
 U 1 1 4B03CEC1
 P 9200 1800
 F 0 "#PWR09" H 9200 1800 30  0001 C CNN
@@ -271,7 +269,7 @@ F 3 "" H 9200 1800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR010
+L complex_hierarchy_schlib:GND #PWR010
 U 1 1 4B03CE88
 P 7900 1650
 F 0 "#PWR010" H 7900 1650 30  0001 C CNN
@@ -282,7 +280,7 @@ F 3 "" H 7900 1650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +12C #PWR011
+L complex_hierarchy_schlib:+12C #PWR011
 U 1 1 4B03CE6C
 P 7400 1250
 F 0 "#PWR011" H 7400 1220 30  0001 C CNN
@@ -293,7 +291,7 @@ F 3 "" H 7400 1250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L PWR_FLAG #U012
+L complex_hierarchy_schlib:PWR_FLAG #U012
 U 1 1 4B03CAA3
 P 2200 1250
 F 0 "#U012" H 2200 1520 30  0001 C CNN
@@ -304,7 +302,7 @@ F 3 "" H 2200 1250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L PWR_FLAG #U013
+L complex_hierarchy_schlib:PWR_FLAG #U013
 U 1 1 4B03C9F9
 P 3000 2450
 F 0 "#U013" H 3000 2720 30  0001 C CNN
@@ -315,7 +313,7 @@ F 3 "" H 3000 2450 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +12C #PWR014
+L complex_hierarchy_schlib:+12C #PWR014
 U 1 1 4B03C68D
 P 3800 2450
 F 0 "#PWR014" H 3800 2420 30  0001 C CNN
@@ -326,7 +324,7 @@ F 3 "" H 3800 2450 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L PWR_FLAG #U015
+L complex_hierarchy_schlib:PWR_FLAG #U015
 U 1 1 4AE17C31
 P 2200 1650
 F 0 "#U015" H 2200 1920 30  0001 C CNN
@@ -337,7 +335,7 @@ F 3 "" H 2200 1650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +12V #U016
+L complex_hierarchy_schlib:+12V #U016
 U 1 1 4AE173EF
 P 3550 2450
 F 0 "#U016" H 3550 2400 20  0001 C CNN
@@ -348,7 +346,7 @@ F 3 "" H 3550 2450 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR017
+L complex_hierarchy_schlib:GND #PWR017
 U 1 1 4AE173D0
 P 3200 3000
 F 0 "#PWR017" H 3200 3000 30  0001 C CNN
@@ -359,7 +357,7 @@ F 3 "" H 3200 3000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CP C2
+L complex_hierarchy_schlib:CP C2
 U 1 1 4AE173CF
 P 3200 2750
 F 0 "C2" H 3350 2800 50  0000 L CNN
@@ -370,7 +368,7 @@ F 3 "" H 3200 2750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_Small D1
+L complex_hierarchy_schlib:D_Small D1
 U 1 1 4AE172F4
 P 2700 2500
 F 0 "D1" H 2700 2400 40  0000 C CNN
@@ -381,7 +379,7 @@ F 3 "" H 2700 2500 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L GND #PWR018
+L complex_hierarchy_schlib:GND #PWR018
 U 1 1 4AD71B8E
 P 2100 2800
 F 0 "#PWR018" H 2100 2800 30  0001 C CNN
@@ -392,7 +390,7 @@ F 3 "" H 2100 2800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CONN_2 P2
+L complex_hierarchy_schlib:CONN_2 P2
 U 1 1 4AD71B06
 P 1650 2600
 F 0 "P2" V 1600 2600 40  0000 C CNN

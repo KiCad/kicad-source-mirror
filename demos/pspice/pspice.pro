@@ -1,4 +1,4 @@
-update=29/05/2017 18:09:30
+update=21/11/2017 21:20:51
 last_client=kicad
 [general]
 version=1
@@ -37,6 +37,3 @@ LibName10=dip_sockets
 [eeschema]
 version=1
 LibDir=
-[eeschema/libraries]
-LibName1=schematic_libspice
-LibName2=power

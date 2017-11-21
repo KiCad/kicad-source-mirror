@@ -1,7 +1,6 @@
-EESchema Schematic File Version 2
-LIBS:flat_hierarchy_schlib
+EESchema Schematic File Version 4
 LIBS:flat_hierarchy-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -84,7 +83,7 @@ Wire Wire Line
 Wire Wire Line
 	2200 6500 2200 6600
 $Comp
-L GND #PWR01
+L flat_hierarchy_schlib:GND #PWR01
 U 1 1 4639BE2E
 P 2200 7050
 F 0 "#PWR01" H 2200 7050 30  0001 C CNN
@@ -95,7 +94,7 @@ F 3 "" H 2200 7050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C8
+L flat_hierarchy_schlib:C C8
 U 1 1 4639BE2C
 P 2200 6800
 F 0 "C8" H 2250 6900 50  0000 L CNN
@@ -112,7 +111,7 @@ VCC_PIC
 Text Label 9150 2950 0    60   ~ 0
 VCC_PIC
 $Comp
-L GND #PWR02
+L flat_hierarchy_schlib:GND #PWR02
 U 1 1 442A8794
 P 7700 5100
 F 0 "#PWR02" H 7700 5100 30  0001 C CNN
@@ -125,7 +124,7 @@ $EndComp
 Text Label 4300 4850 0    60   ~ 0
 VCC_PIC
 $Comp
-L GND #PWR03
+L flat_hierarchy_schlib:GND #PWR03
 U 1 1 443CCA5D
 P 7700 4700
 F 0 "#PWR03" H 7700 4700 30  0001 C CNN
@@ -158,7 +157,7 @@ NoConn ~ 7700 2450
 NoConn ~ 7700 2350
 NoConn ~ 7700 2250
 $Comp
-L GND #PWR04
+L flat_hierarchy_schlib:GND #PWR04
 U 1 1 443697C7
 P 8900 3050
 F 0 "#PWR04" H 8900 3050 30  0001 C CNN
@@ -169,7 +168,7 @@ F 3 "" H 8900 3050 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #PWR05
+L flat_hierarchy_schlib:GND #PWR05
 U 1 1 443697C3
 P 7700 2850
 F 0 "#PWR05" H 7700 2850 30  0001 C CNN
@@ -186,7 +185,7 @@ DATA-RB7
 Text Label 7050 2150 0    60   ~ 0
 VPP-MCLR
 $Comp
-L SUPP28 P2
+L flat_hierarchy_schlib:SUPP28 P2
 U 1 1 4436967E
 P 8300 2800
 F 0 "P2" H 8300 3600 70  0000 C CNN
@@ -197,7 +196,7 @@ F 3 "" H 8300 2800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR06
+L flat_hierarchy_schlib:GND #PWR06
 U 1 1 442AA147
 P 1650 7050
 F 0 "#PWR06" H 1650 7050 30  0001 C CNN
@@ -208,7 +207,7 @@ F 3 "" H 1650 7050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C7
+L flat_hierarchy_schlib:C C7
 U 1 1 442AA145
 P 1650 6800
 F 0 "C7" H 1700 6900 50  0000 L CNN
@@ -219,7 +218,7 @@ F 3 "" H 1650 6800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR07
+L flat_hierarchy_schlib:GND #PWR07
 U 1 1 442AA138
 P 2750 7050
 F 0 "#PWR07" H 2750 7050 30  0001 C CNN
@@ -230,7 +229,7 @@ F 3 "" H 2750 7050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR08
+L flat_hierarchy_schlib:VCC #PWR08
 U 1 1 442AA134
 P 2750 6600
 F 0 "#PWR08" H 2750 6700 30  0001 C CNN
@@ -241,7 +240,7 @@ F 3 "" H 2750 6600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C6
+L flat_hierarchy_schlib:C C6
 U 1 1 442AA12B
 P 2750 6800
 F 0 "C6" H 2800 6900 50  0000 L CNN
@@ -284,7 +283,7 @@ NoConn ~ 7700 4300
 NoConn ~ 7700 4200
 NoConn ~ 7700 4100
 $Comp
-L GND #PWR09
+L flat_hierarchy_schlib:GND #PWR09
 U 1 1 442A896A
 P 8900 4900
 F 0 "#PWR09" H 8900 4900 30  0001 C CNN
@@ -295,7 +294,7 @@ F 3 "" H 8900 4900 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L SUPP40 P3
+L flat_hierarchy_schlib:SUPP40 P3
 U 1 1 442A88ED
 P 8300 4950
 F 0 "P3" H 8300 6050 70  0000 C CNN
@@ -307,7 +306,7 @@ F 3 "" H 8300 4950 60  0001 C CNN
 $EndComp
 NoConn ~ 3950 1300
 $Comp
-L GND #PWR010
+L flat_hierarchy_schlib:GND #PWR010
 U 1 1 442A8838
 P 2350 1450
 F 0 "#PWR010" H 2350 1450 30  0001 C CNN
@@ -322,7 +321,7 @@ DATA-RB7
 Text Label 4100 1500 0    60   ~ 0
 CLOCK-RB6
 $Comp
-L 24C16 U1
+L flat_hierarchy_schlib:24C16 U1
 U 1 1 442A87F7
 P 3250 1400
 F 0 "U1" H 3400 1750 60  0000 C CNN
@@ -352,7 +351,7 @@ NoConn ~ 2500 5000
 NoConn ~ 2500 4550
 NoConn ~ 2500 4250
 $Comp
-L PIC16F54 U5
+L flat_hierarchy_schlib:PIC16F54 U5
 U 1 1 442A81A7
 P 3300 4850
 F 0 "U5" H 3300 5600 60  0000 C CNN
@@ -376,7 +375,7 @@ CLOCK-RB6
 Text Label 4150 2800 0    60   ~ 0
 DATA-RB7
 $Comp
-L GND #PWR011
+L flat_hierarchy_schlib:GND #PWR011
 U 1 1 442A820F
 P 2300 4900
 F 0 "#PWR011" H 2300 4900 30  0001 C CNN
@@ -387,7 +386,7 @@ F 3 "" H 2300 4900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR012
+L flat_hierarchy_schlib:GND #PWR012
 U 1 1 442A8205
 P 4000 2500
 F 0 "#PWR012" H 4000 2500 30  0001 C CNN
@@ -398,7 +397,7 @@ F 3 "" H 4000 2500 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L PIC12C508A U6
+L flat_hierarchy_schlib:PIC12C508A U6
 U 1 1 442A81A5
 P 3300 3000
 F 0 "U6" H 3250 3700 60  0000 C CNN
@@ -409,7 +408,7 @@ F 3 "" H 3300 3000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR013
+L flat_hierarchy_schlib:VCC #PWR013
 U 1 1 53B84749
 P 3250 900
 F 0 "#PWR013" H 3250 1000 30  0001 C CNN
@@ -420,7 +419,7 @@ F 3 "" H 3250 900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR014
+L flat_hierarchy_schlib:GND #PWR014
 U 1 1 53B847AC
 P 3250 1900
 F 0 "#PWR014" H 3250 1900 30  0001 C CNN

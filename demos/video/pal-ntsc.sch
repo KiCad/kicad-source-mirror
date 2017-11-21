@@ -1,6 +1,4 @@
-EESchema Schematic File Version 2
-LIBS:video_schlib
-LIBS:power
+EESchema Schematic File Version 4
 LIBS:video-cache
 EELAYER 26 0
 EELAYER END
@@ -95,7 +93,7 @@ BT812_WR-
 Text HLabel 5950 8500 0    60   Input ~ 0
 BT812_RD-
 $Comp
-L VCC #VCC034
+L video_schlib:VCC #VCC034
 U 1 1 4BF036C7
 P 6350 2300
 F 0 "#VCC034" H 6350 2500 40  0001 C CNN
@@ -213,7 +211,7 @@ NoConn ~ 5950 3500
 NoConn ~ 10050 7800
 NoConn ~ 10050 7700
 $Comp
-L INDUCTOR L4
+L video_schlib:INDUCTOR L4
 U 1 1 811D9080
 P 10150 1800
 F 0 "L4" V 10350 1800 50  0000 C CNN
@@ -224,7 +222,7 @@ F 3 "" H 10150 1800 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #GND035
+L video_schlib:GND #GND035
 U 1 1 821CDA95
 P 4000 7250
 F 0 "#GND035" H 4000 7350 60  0001 C CNN
@@ -235,7 +233,7 @@ F 3 "" H 4000 7250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #GND036
+L video_schlib:GND #GND036
 U 1 1 821CDAA4
 P 3200 7050
 F 0 "#GND036" H 3200 7150 60  0001 C CNN
@@ -246,7 +244,7 @@ F 3 "" H 3200 7050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R35
+L video_schlib:R R35
 U 1 1 821CDAB8
 P 2800 6500
 F 0 "R35" V 2880 6500 50  0000 C CNN
@@ -257,7 +255,7 @@ F 3 "" H 2800 6500 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L C C1
+L video_schlib:C C1
 U 1 1 821CDAC2
 P 3500 6500
 F 0 "C1" V 3550 6650 50  0000 C CNN
@@ -268,7 +266,7 @@ F 3 "" H 3500 6500 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #GND037
+L video_schlib:GND #GND037
 U 1 1 A9C8254A
 P 6350 9900
 F 0 "#GND037" H 6350 10000 60  0001 C CNN
@@ -279,7 +277,7 @@ F 3 "" H 6350 9900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #GND038
+L video_schlib:GND #GND038
 U 1 1 A9C8254F
 P 8950 9900
 F 0 "#GND038" H 8950 10000 60  0001 C CNN
@@ -290,7 +288,7 @@ F 3 "" H 8950 9900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #GND039
+L video_schlib:GND #GND039
 U 1 1 A9C82559
 P 5950 6200
 F 0 "#GND039" H 5950 6300 60  0001 C CNN
@@ -301,7 +299,7 @@ F 3 "" H 5950 6200 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #GND040
+L video_schlib:GND #GND040
 U 1 1 A9C8255E
 P 5950 6000
 F 0 "#GND040" H 5950 6100 60  0001 C CNN
@@ -312,7 +310,7 @@ F 3 "" H 5950 6000 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #GND041
+L video_schlib:GND #GND041
 U 1 1 A9C82563
 P 5950 6600
 F 0 "#GND041" H 5950 6700 60  0001 C CNN
@@ -323,7 +321,7 @@ F 3 "" H 5950 6600 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #GND042
+L video_schlib:GND #GND042
 U 1 1 A9CA7F70
 P 11950 3600
 F 0 "#GND042" H 11950 3700 60  0001 C CNN
@@ -334,7 +332,7 @@ F 3 "" H 11950 3600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C2
+L video_schlib:C C2
 U 1 1 A9CA7F6B
 P 11950 3250
 F 0 "C2" H 12000 3350 50  0000 L CNN
@@ -345,7 +343,7 @@ F 3 "" H 11950 3250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C3
+L video_schlib:C C3
 U 1 1 A9CA7F75
 P 3450 4200
 F 0 "C3" V 3300 4200 50  0000 C CNN
@@ -356,7 +354,7 @@ F 3 "" H 3450 4200 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L C C4
+L video_schlib:C C4
 U 1 1 A9CA7F7A
 P 3450 5100
 F 0 "C4" V 3300 5100 50  0000 C CNN
@@ -367,7 +365,7 @@ F 3 "" H 3450 5100 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R14
+L video_schlib:R R14
 U 1 1 821CDA9A
 P 4000 6950
 F 0 "R14" H 3900 7150 50  0000 C CNN
@@ -378,7 +376,7 @@ F 3 "" H 4000 6950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R3
+L video_schlib:R R3
 U 1 1 8116F4AA
 P 4100 4200
 F 0 "R3" V 4180 4200 50  0000 C CNN
@@ -389,7 +387,7 @@ F 3 "" H 4100 4200 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R2
+L video_schlib:R R2
 U 1 1 8116F4A5
 P 4100 5100
 F 0 "R2" V 4180 5100 50  0000 C CNN
@@ -400,7 +398,7 @@ F 3 "" H 4100 5100 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L DIODESCH D1
+L video_schlib:DIODESCH D1
 U 1 1 A9CA7F7F
 P 3850 3700
 F 0 "D1" H 3850 3800 50  0000 C CNN
@@ -411,7 +409,7 @@ F 3 "" H 3850 3700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODESCH D2
+L video_schlib:DIODESCH D2
 U 1 1 A9CA7F84
 P 3850 3300
 F 0 "D2" H 3850 3200 50  0000 C CNN
@@ -422,7 +420,7 @@ F 3 "" H 3850 3300 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L DIODESCH D3
+L video_schlib:DIODESCH D3
 U 1 1 A9CA7F8E
 P 4050 6000
 F 0 "D3" H 4050 6100 60  0000 C CNN
@@ -433,7 +431,7 @@ F 3 "" H 4050 6000 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L DIODESCH D4
+L video_schlib:DIODESCH D4
 U 1 1 A9CA7F93
 P 4050 5600
 F 0 "D4" H 4050 5700 60  0000 C CNN
@@ -444,7 +442,7 @@ F 3 "" H 4050 5600 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L GND #GND043
+L video_schlib:GND #GND043
 U 1 1 A9CA7F9D
 P 3850 6000
 F 0 "#GND043" H 3850 6100 60  0001 C CNN
@@ -455,7 +453,7 @@ F 3 "" H 3850 6000 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #GND044
+L video_schlib:GND #GND044
 U 1 1 A9CA7FA2
 P 3600 3700
 F 0 "#GND044" H 3600 3800 60  0001 C CNN
@@ -466,7 +464,7 @@ F 3 "" H 3600 3700 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #GND045
+L video_schlib:GND #GND045
 U 1 1 A9CA7FBB
 P 5200 6100
 F 0 "#GND045" H 5200 6200 60  0001 C CNN
@@ -477,7 +475,7 @@ F 3 "" H 5200 6100 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #GND046
+L video_schlib:GND #GND046
 U 1 1 A9CA7FC0
 P 4650 6400
 F 0 "#GND046" H 4650 6500 60  0001 C CNN
@@ -488,7 +486,7 @@ F 3 "" H 4650 6400 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R27
+L video_schlib:R R27
 U 1 1 A9CA7FC5
 P 5500 6800
 F 0 "R27" V 5580 6800 50  0000 C CNN
@@ -499,7 +497,7 @@ F 3 "" H 5500 6800 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R12
+L video_schlib:R R12
 U 1 1 A9CA7FCA
 P 5200 7100
 F 0 "R12" V 5280 7100 50  0000 C CNN
@@ -510,7 +508,7 @@ F 3 "" H 5200 7100 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L C C65
+L video_schlib:C C65
 U 1 1 B15DA8C5
 P 4850 1700
 F 0 "C65" H 5000 1800 50  0000 C CNN
@@ -521,7 +519,7 @@ F 3 "" H 4850 1700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C66
+L video_schlib:C C66
 U 1 1 B15DA8CA
 P 5650 1700
 F 0 "C66" H 5800 1800 50  0000 C CNN
@@ -532,7 +530,7 @@ F 3 "" H 5650 1700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #GND047
+L video_schlib:GND #GND047
 U 1 1 B15DA8CF
 P 4850 1450
 F 0 "#GND047" H 4850 1550 60  0001 C CNN
@@ -543,7 +541,7 @@ F 3 "" H 4850 1450 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L GND #GND048
+L video_schlib:GND #GND048
 U 1 1 B15DA8D4
 P 5650 1450
 F 0 "#GND048" H 5650 1550 60  0001 C CNN
@@ -554,7 +552,7 @@ F 3 "" H 5650 1450 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L GND #GND049
+L video_schlib:GND #GND049
 U 1 1 B175430E
 P 5800 4100
 F 0 "#GND049" H 5800 4200 60  0001 C CNN
@@ -565,7 +563,7 @@ F 3 "" H 5800 4100 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L CRYSTAL X2
+L video_schlib:CRYSTAL X2
 U 1 1 B15DA8C0
 P 5250 2100
 F 0 "X2" H 5250 2250 60  0000 C CNN
@@ -576,7 +574,7 @@ F 3 "" H 5250 2100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R19
+L video_schlib:R R19
 U 1 1 A9CA7FA7
 P 11050 6200
 F 0 "R19" V 11130 6200 50  0000 C CNN
@@ -587,7 +585,7 @@ F 3 "" H 11050 6200 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L C C5
+L video_schlib:C C5
 U 1 1 A9CA7FAC
 P 11650 6200
 F 0 "C5" V 11550 6050 50  0000 C CNN
@@ -598,7 +596,7 @@ F 3 "" H 11650 6200 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R20
+L video_schlib:R R20
 U 1 1 B176B9C3
 P 11100 5800
 F 0 "R20" V 11180 5800 50  0000 C CNN
@@ -609,7 +607,7 @@ F 3 "" H 11100 5800 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L C C8
+L video_schlib:C C8
 U 1 1 B176B9C8
 P 11650 5800
 F 0 "C8" V 11550 5650 50  0000 C CNN
@@ -620,7 +618,7 @@ F 3 "" H 11650 5800 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L C C6
+L video_schlib:C C6
 U 1 1 A9CA7FB1
 P 5450 6100
 F 0 "C6" V 5300 6100 50  0000 C CNN
@@ -631,7 +629,7 @@ F 3 "" H 5450 6100 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L C C7
+L video_schlib:C C7
 U 1 1 A9CA7FB6
 P 4900 6400
 F 0 "C7" V 4750 6400 50  0000 C CNN
@@ -642,7 +640,7 @@ F 3 "" H 4900 6400 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L C C47
+L video_schlib:C C47
 U 1 1 821CDABD
 P 3200 6800
 F 0 "C47" H 3350 6900 50  0000 C CNN
@@ -653,7 +651,7 @@ F 3 "" H 3200 6800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L BT812 U10
+L video_schlib:BT812 U10
 U 1 1 BECCB834
 P 8000 6100
 F 0 "U10" H 8000 6200 60  0000 C CNN
@@ -664,7 +662,7 @@ F 3 "" H 8000 6100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CP C62
+L video_schlib:CP C62
 U 1 1 811D9071
 P 10750 2300
 F 0 "C62" H 10800 2400 50  0000 L CNN
@@ -675,7 +673,7 @@ F 3 "" H 10750 2300 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #GND050
+L video_schlib:GND #GND050
 U 1 1 BF69A158
 P 10750 2550
 F 0 "#GND050" H 10750 2550 30  0001 C CNN
@@ -686,7 +684,7 @@ F 3 "" H 10750 2550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #GND051
+L video_schlib:GND #GND051
 U 1 1 BF69A16C
 P 13050 9200
 F 0 "#GND051" H 13050 9200 30  0001 C CNN
@@ -697,7 +695,7 @@ F 3 "" H 13050 9200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C9
+L video_schlib:C C9
 U 1 1 BF69A15D
 P 13050 8850
 F 0 "C9" H 13100 8950 50  0000 L CNN
@@ -708,7 +706,7 @@ F 3 "" H 13050 8850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C10
+L video_schlib:C C10
 U 1 1 BF69A162
 P 13750 8850
 F 0 "C10" H 13800 8950 50  0000 L CNN
@@ -719,7 +717,7 @@ F 3 "" H 13750 8850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C11
+L video_schlib:C C11
 U 1 1 BF69A167
 P 14450 8850
 F 0 "C11" H 14500 8950 50  0000 L CNN
@@ -730,7 +728,7 @@ F 3 "" H 14450 8850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C14
+L video_schlib:C C14
 U 1 1 BF69A17B
 P 14050 3250
 F 0 "C14" H 14100 3350 50  0000 L CNN
@@ -741,7 +739,7 @@ F 3 "" H 14050 3250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C13
+L video_schlib:C C13
 U 1 1 BF69A176
 P 13350 3250
 F 0 "C13" H 13400 3350 50  0000 L CNN
@@ -752,7 +750,7 @@ F 3 "" H 13350 3250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C12
+L video_schlib:C C12
 U 1 1 BF69A171
 P 12650 3250
 F 0 "C12" H 12700 3350 50  0000 L CNN
@@ -763,7 +761,7 @@ F 3 "" H 12650 3250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #GND052
+L video_schlib:GND #GND052
 U 1 1 0F47DCBD
 P 10250 9600
 F 0 "#GND052" H 10250 9700 60  0001 C CNN
@@ -774,7 +772,7 @@ F 3 "" H 10250 9600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C16
+L video_schlib:C C16
 U 1 1 0F47DCB8
 P 10250 9350
 F 0 "C16" H 10400 9450 50  0000 C CNN
@@ -785,7 +783,7 @@ F 3 "" H 10250 9350 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R25
+L video_schlib:R R25
 U 1 1 B1754313
 P 5300 2600
 F 0 "R25" V 5380 2600 50  0000 C CNN
@@ -852,7 +850,7 @@ PC_A0
 Text Label 5450 8300 0    60   ~ 0
 PC_A1
 $Comp
-L VCC #VCC053
+L video_schlib:VCC #VCC053
 U 1 1 4BF036C8
 P 13050 8500
 F 0 "#VCC053" H 13050 8600 30  0001 C CNN
@@ -863,7 +861,7 @@ F 3 "" H 13050 8500 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #VCC054
+L video_schlib:VCC #VCC054
 U 1 1 4BF036C9
 P 9750 1800
 F 0 "#VCC054" H 9750 1900 30  0001 C CNN
@@ -874,7 +872,7 @@ F 3 "" H 9750 1800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #VCC055
+L video_schlib:VCC #VCC055
 U 1 1 4BF036CA
 P 3850 5600
 F 0 "#VCC055" H 3850 5800 40  0001 C CNN
@@ -885,7 +883,7 @@ F 3 "" H 3850 5600 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #VCC056
+L video_schlib:VCC #VCC056
 U 1 1 00000000
 P 3600 3300
 F 0 "#VCC056" H 3600 3500 40  0001 C CNN
@@ -1290,7 +1288,7 @@ Wire Wire Line
 Connection ~ 14450 8600
 Connection ~ 14450 9100
 $Comp
-L C C15
+L video_schlib:C C15
 U 1 1 0939A342
 P 15150 8850
 F 0 "C15" H 15200 8950 50  0000 L CNN

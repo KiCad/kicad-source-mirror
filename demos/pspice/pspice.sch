@@ -1,5 +1,4 @@
-EESchema Schematic File Version 2
-LIBS:schematic_libspice
+EESchema Schematic File Version 4
 LIBS:pspice-cache
 EELAYER 26 0
 EELAYER END
@@ -68,7 +67,7 @@ Text Notes 1150 6500 0    60   ~ 0
 Text Notes 1100 6200 0    60   ~ 0
 Pspice directives using one multiline text:
 $Comp
-L R R2
+L schematic_libspice:R R2
 U 1 1 3E9D53DA
 P 8450 1800
 F 0 "R2" V 8530 1800 50  0000 C CNN
@@ -79,7 +78,7 @@ F 3 "" H 8450 1800 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R1
+L schematic_libspice:R R1
 U 1 1 3E9D4D47
 P 7800 1200
 F 0 "R1" H 7700 1400 50  0000 C CNN
@@ -90,7 +89,7 @@ F 3 "" H 7800 1200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L INDUCTOR L1
+L schematic_libspice:INDUCTOR L1
 U 1 1 3E9D4A5D
 P 8500 1500
 F 0 "L1" H 8500 1600 50  0000 C CNN
@@ -101,10 +100,10 @@ F 3 "" H 8500 1500 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 0 #GND3
+L schematic_libspice:0 #GND03
 U 1 1 3E9D3DE2
 P 9550 3500
-F 0 "#GND3" H 9550 3400 40  0001 C CNN
+F 0 "#GND03" H 9550 3400 40  0001 C CNN
 F 1 "0" H 9550 3430 40  0000 C CNN
 F 2 "" H 9550 3500 60  0001 C CNN
 F 3 "" H 9550 3500 60  0001 C CNN
@@ -112,7 +111,7 @@ F 3 "" H 9550 3500 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CAP C3
+L schematic_libspice:CAP C3
 U 1 1 3E9D3DD3
 P 9550 3200
 F 0 "C3" V 9650 3350 50  0000 C CNN
@@ -123,10 +122,10 @@ F 3 "" H 9550 3200 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 0 #GND2
+L schematic_libspice:0 #GND02
 U 1 1 3E9D1EFF
 P 7050 3150
-F 0 "#GND2" H 7050 3050 40  0001 C CNN
+F 0 "#GND02" H 7050 3050 40  0001 C CNN
 F 1 "0" H 7050 3080 40  0000 C CNN
 F 2 "" H 7050 3150 60  0001 C CNN
 F 3 "" H 7050 3150 60  0001 C CNN
@@ -134,7 +133,7 @@ F 3 "" H 7050 3150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C2
+L schematic_libspice:C C2
 U 1 1 3E9D1EF8
 P 7050 2850
 F 0 "C2" V 7150 3000 50  0000 C CNN
@@ -145,10 +144,10 @@ F 3 "" H 7050 2850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 0 #GND4
+L schematic_libspice:0 #GND04
 U 1 1 32E8B852
 P 7700 3550
-F 0 "#GND4" H 7700 3450 40  0001 C CNN
+F 0 "#GND04" H 7700 3450 40  0001 C CNN
 F 1 "0" H 7700 3480 40  0000 C CNN
 F 2 "" H 7700 3550 60  0001 C CNN
 F 3 "" H 7700 3550 60  0001 C CNN
@@ -156,10 +155,10 @@ F 3 "" H 7700 3550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +12V #+12V1
+L schematic_libspice:+12V #+12V01
 U 1 1 32E8B84A
 P 7800 900
-F 0 "#+12V1" H 7800 1100 40  0001 C CNN
+F 0 "#+12V01" H 7800 1100 40  0001 C CNN
 F 1 "+12V" H 7800 1050 40  0000 C CNN
 F 2 "" H 7800 900 60  0001 C CNN
 F 3 "" H 7800 900 60  0001 C CNN
@@ -167,7 +166,7 @@ F 3 "" H 7800 900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R8
+L schematic_libspice:R R8
 U 1 1 32E8B80E
 P 7700 3250
 F 0 "R8" V 7780 3250 50  0000 C CNN
@@ -178,7 +177,7 @@ F 3 "" H 7700 3250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L QNPN Q1
+L schematic_libspice:QNPN Q1
 U 1 1 32E8B7FC
 P 7550 2450
 F 0 "Q1" H 7450 2750 50  0000 C CNN
@@ -189,10 +188,10 @@ F 3 "" H 7550 2450 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 0 #GND8
+L schematic_libspice:0 #GND08
 U 1 1 32CFC469
 P 3850 4250
-F 0 "#GND8" H 3850 4150 40  0001 C CNN
+F 0 "#GND08" H 3850 4150 40  0001 C CNN
 F 1 "0" H 3850 4180 40  0000 C CNN
 F 2 "" H 3850 4250 60  0001 C CNN
 F 3 "" H 3850 4250 60  0001 C CNN
@@ -200,7 +199,7 @@ F 3 "" H 3850 4250 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VSOURCE V2
+L schematic_libspice:VSOURCE V2
 U 1 1 32CFC454
 P 3850 3500
 F 0 "V2" H 3850 3400 60  0000 C CNN
@@ -214,7 +213,7 @@ F 6 "Y" H 3850 3500 60  0001 C CNN "Spice_Netlist_Enabled"
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C1
+L schematic_libspice:C C1
 U 1 1 32CFC413
 P 4150 2800
 F 0 "C1" V 4250 2950 50  0000 C CNN
@@ -225,10 +224,10 @@ F 3 "" H 4150 2800 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L +12V #+12V2
+L schematic_libspice:+12V #+12V02
 U 1 1 32CFC34D
 P 2850 1500
-F 0 "#+12V2" H 2850 1700 40  0001 C CNN
+F 0 "#+12V02" H 2850 1700 40  0001 C CNN
 F 1 "+12V" H 2850 1650 40  0000 C CNN
 F 2 "" H 2850 1500 60  0001 C CNN
 F 3 "" H 2850 1500 60  0001 C CNN
@@ -236,10 +235,10 @@ F 3 "" H 2850 1500 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 0 #GND1
+L schematic_libspice:0 #GND01
 U 1 1 32CFC344
 P 2850 2950
-F 0 "#GND1" H 2850 2850 40  0001 C CNN
+F 0 "#GND01" H 2850 2850 40  0001 C CNN
 F 1 "0" H 2850 2880 40  0000 C CNN
 F 2 "" H 2850 2950 60  0001 C CNN
 F 3 "" H 2850 2950 60  0001 C CNN
@@ -247,7 +246,7 @@ F 3 "" H 2850 2950 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L VSOURCE V1
+L schematic_libspice:VSOURCE V1
 U 1 1 32CFC337
 P 2850 2200
 F 0 "V1" H 2850 2100 60  0000 C CNN
@@ -258,10 +257,10 @@ F 3 "" H 2850 2200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +12V #+12V6
+L schematic_libspice:+12V #+12V06
 U 1 1 32CFC303
 P 6700 1750
-F 0 "#+12V6" H 6700 1950 40  0001 C CNN
+F 0 "#+12V06" H 6700 1950 40  0001 C CNN
 F 1 "+12V" H 6700 1900 40  0000 C CNN
 F 2 "" H 6700 1750 60  0001 C CNN
 F 3 "" H 6700 1750 60  0001 C CNN
@@ -269,10 +268,10 @@ F 3 "" H 6700 1750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +12V #+12V5
+L schematic_libspice:+12V #+12V05
 U 1 1 32CFC2FF
 P 6100 1750
-F 0 "#+12V5" H 6100 1950 40  0001 C CNN
+F 0 "#+12V05" H 6100 1950 40  0001 C CNN
 F 1 "+12V" H 6100 1900 40  0000 C CNN
 F 2 "" H 6100 1750 60  0001 C CNN
 F 3 "" H 6100 1750 60  0001 C CNN
@@ -280,10 +279,10 @@ F 3 "" H 6100 1750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +12V #+12V4
+L schematic_libspice:+12V #+12V04
 U 1 1 32CFC2FD
 P 5750 1750
-F 0 "#+12V4" H 5750 1950 40  0001 C CNN
+F 0 "#+12V04" H 5750 1950 40  0001 C CNN
 F 1 "+12V" H 5750 1900 40  0000 C CNN
 F 2 "" H 5750 1750 60  0001 C CNN
 F 3 "" H 5750 1750 60  0001 C CNN
@@ -291,10 +290,10 @@ F 3 "" H 5750 1750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +12V #+12V3
+L schematic_libspice:+12V #+12V03
 U 1 1 32CFC2F7
 P 5100 1750
-F 0 "#+12V3" H 5100 1950 40  0001 C CNN
+F 0 "#+12V03" H 5100 1950 40  0001 C CNN
 F 1 "+12V" H 5100 1900 40  0000 C CNN
 F 2 "" H 5100 1750 60  0001 C CNN
 F 3 "" H 5100 1750 60  0001 C CNN
@@ -302,10 +301,10 @@ F 3 "" H 5100 1750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 0 #GND7
+L schematic_libspice:0 #GND07
 U 1 1 32CFC2B8
 P 6700 3850
-F 0 "#GND7" H 6700 3750 40  0001 C CNN
+F 0 "#GND07" H 6700 3750 40  0001 C CNN
 F 1 "0" H 6700 3780 40  0000 C CNN
 F 2 "" H 6700 3850 60  0001 C CNN
 F 3 "" H 6700 3850 60  0001 C CNN
@@ -313,10 +312,10 @@ F 3 "" H 6700 3850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 0 #GND5
+L schematic_libspice:0 #GND05
 U 1 1 32CFC2B5
 P 5100 3850
-F 0 "#GND5" H 5100 3750 40  0001 C CNN
+F 0 "#GND05" H 5100 3750 40  0001 C CNN
 F 1 "0" H 5100 3780 40  0000 C CNN
 F 2 "" H 5100 3850 60  0001 C CNN
 F 3 "" H 5100 3850 60  0001 C CNN
@@ -324,7 +323,7 @@ F 3 "" H 5100 3850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R9
+L schematic_libspice:R R9
 U 1 1 32CFC293
 P 5100 3550
 F 0 "R9" V 5180 3550 50  0000 C CNN
@@ -335,7 +334,7 @@ F 3 "" H 5100 3550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R3
+L schematic_libspice:R R3
 U 1 1 32CFC288
 P 5100 2050
 F 0 "R3" H 5000 2250 50  0000 C CNN
@@ -346,7 +345,7 @@ F 3 "" H 5100 2050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R6
+L schematic_libspice:R R6
 U 1 1 32CFC27F
 P 6700 2050
 F 0 "R6" H 6600 2250 50  0000 C CNN
@@ -357,7 +356,7 @@ F 3 "" H 6700 2050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R11
+L schematic_libspice:R R11
 U 1 1 32CFC277
 P 6700 3550
 F 0 "R11" V 6780 3550 50  0000 C CNN
@@ -368,10 +367,10 @@ F 3 "" H 6700 3550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 0 #GND6
+L schematic_libspice:0 #GND06
 U 1 1 32CFC26C
 P 5950 3850
-F 0 "#GND6" H 5950 3750 40  0001 C CNN
+F 0 "#GND06" H 5950 3750 40  0001 C CNN
 F 1 "0" H 5950 3780 40  0000 C CNN
 F 2 "" H 5950 3850 60  0001 C CNN
 F 3 "" H 5950 3850 60  0001 C CNN
@@ -379,7 +378,7 @@ F 3 "" H 5950 3850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R10
+L schematic_libspice:R R10
 U 1 1 32CFC25A
 P 5950 3550
 F 0 "R10" V 6030 3550 50  0000 C CNN
@@ -390,7 +389,7 @@ F 3 "" H 5950 3550 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R5
+L schematic_libspice:R R5
 U 1 1 32CFC254
 P 6100 2050
 F 0 "R5" H 6000 2250 50  0000 C CNN
@@ -401,7 +400,7 @@ F 3 "" H 6100 2050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R4
+L schematic_libspice:R R4
 U 1 1 32CFC24C
 P 5750 2050
 F 0 "R4" H 5650 2250 50  0000 C CNN
@@ -412,7 +411,7 @@ F 3 "" H 5750 2050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L QNPN Q3
+L schematic_libspice:QNPN Q3
 U 1 1 32CFC230
 P 6250 2800
 F 0 "Q3" H 6150 3100 50  0000 C CNN
@@ -423,7 +422,7 @@ F 3 "" H 6250 2800 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L QNPN Q2
+L schematic_libspice:QNPN Q2
 U 1 1 32CFC227
 P 5600 2800
 F 0 "Q2" H 5500 3100 50  0000 C CNN
@@ -480,7 +479,7 @@ Connection ~ 9200 2100
 Text Label 6250 2450 0    60   ~ 0
 VBASE
 $Comp
-L R R7
+L schematic_libspice:R R7
 U 1 1 592C1EB3
 P 9100 3050
 F 0 "R7" V 9180 3050 50  0000 C CNN
@@ -491,7 +490,7 @@ F 3 "" H 9100 3050 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L INDUCTOR L2
+L schematic_libspice:INDUCTOR L2
 U 1 1 592C1EB9
 P 9100 2800
 F 0 "L2" H 9100 2900 50  0000 C CNN
@@ -516,7 +515,7 @@ Wire Wire Line
 	9400 3050 9350 3050
 Connection ~ 9400 2950
 $Comp
-L CAP C4
+L schematic_libspice:CAP C4
 U 1 1 592C267C
 P 8500 1050
 F 0 "C4" V 8600 1200 50  0000 C CNN
@@ -535,10 +534,10 @@ Wire Wire Line
 	8050 1050 8050 1500
 Connection ~ 8050 1500
 $Comp
-L PWR_FLAG #FLG2
+L schematic_libspice:PWR_FLAG #FLG02
 U 1 1 592C3EA3
 P 3650 4250
-F 0 "#FLG2" H 3650 4325 50  0001 C CNN
+F 0 "#FLG02" H 3650 4325 50  0001 C CNN
 F 1 "PWR_FLAG" H 3650 4400 50  0000 C CNN
 F 2 "" H 3650 4250 50  0001 C CNN
 F 3 "" H 3650 4250 50  0001 C CNN
@@ -551,10 +550,10 @@ Wire Wire Line
 Wire Wire Line
 	3650 4200 3650 4250
 $Comp
-L PWR_FLAG #FLG1
+L schematic_libspice:PWR_FLAG #FLG01
 U 1 1 592C404D
 P 7500 850
-F 0 "#FLG1" H 7500 925 50  0001 C CNN
+F 0 "#FLG01" H 7500 925 50  0001 C CNN
 F 1 "PWR_FLAG" H 7500 1000 50  0000 C CNN
 F 2 "" H 7500 850 50  0001 C CNN
 F 3 "" H 7500 850 50  0001 C CNN
@@ -567,7 +566,7 @@ Wire Wire Line
 Wire Wire Line
 	7500 900  7500 850 
 $Comp
-L R R12
+L schematic_libspice:R R12
 U 1 1 592C449D
 P 8250 2900
 F 0 "R12" V 8330 2900 50  0000 C CNN

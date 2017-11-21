@@ -1,9 +1,6 @@
-EESchema Schematic File Version 2
-LIBS:device
-LIBS:pic_programmer_schlib
-LIBS:power
+EESchema Schematic File Version 4
 LIBS:pic_programmer-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -84,7 +81,7 @@ VCC_PIC
 Text Label 9450 2700 0    60   ~ 0
 VCC_PIC
 $Comp
-L GND #PWR036
+L pic_programmer_schlib:GND #PWR036
 U 1 1 442A8794
 P 8000 5000
 F 0 "#PWR036" H 8000 5000 30  0001 C CNN
@@ -92,12 +89,12 @@ F 1 "GND" H 8000 4930 30  0001 C CNN
 F 2 "" H 8000 5000 60  0001 C CNN
 F 3 "" H 8000 5000 60  0001 C CNN
 	1    8000 5000
-	0    1    1    0   
+	0    1    1    0
 $EndComp
 Text Label 4750 4600 0    60   ~ 0
 VCC_PIC
 $Comp
-L GND #PWR037
+L pic_programmer_schlib:GND #PWR037
 U 1 1 443CCA5D
 P 8000 4600
 F 0 "#PWR037" H 8000 4600 30  0001 C CNN
@@ -105,7 +102,7 @@ F 1 "GND" H 8000 4530 30  0001 C CNN
 F 2 "" H 8000 4600 60  0001 C CNN
 F 3 "" H 8000 4600 60  0001 C CNN
 	1    8000 4600
-	0    1    1    0   
+	0    1    1    0
 $EndComp
 NoConn ~ 8000 2900
 NoConn ~ 9200 3200
@@ -130,7 +127,7 @@ NoConn ~ 8000 2200
 NoConn ~ 8000 2100
 NoConn ~ 8000 2000
 $Comp
-L GND #PWR038
+L pic_programmer_schlib:GND #PWR038
 U 1 1 443697C7
 P 9200 2800
 F 0 "#PWR038" H 9200 2800 30  0001 C CNN
@@ -138,10 +135,10 @@ F 1 "GND" H 9200 2730 30  0001 C CNN
 F 2 "" H 9200 2800 60  0001 C CNN
 F 3 "" H 9200 2800 60  0001 C CNN
 	1    9200 2800
-	0    -1   -1   0   
+	0    -1   -1   0
 $EndComp
 $Comp
-L GND #PWR039
+L pic_programmer_schlib:GND #PWR039
 U 1 1 443697C3
 P 8000 2600
 F 0 "#PWR039" H 8000 2600 30  0001 C CNN
@@ -149,7 +146,7 @@ F 1 "GND" H 8000 2530 30  0001 C CNN
 F 2 "" H 8000 2600 60  0001 C CNN
 F 3 "" H 8000 2600 60  0001 C CNN
 	1    8000 2600
-	0    1    1    0   
+	0    1    1    0
 $EndComp
 Text Label 9350 2000 0    60   ~ 0
 CLOCK-RB6
@@ -158,7 +155,7 @@ DATA-RB7
 Text Label 7350 1900 0    60   ~ 0
 VPP-MCLR
 $Comp
-L SUPP28 P2
+L pic_programmer_schlib:SUPP28 P2
 U 1 1 4436967E
 P 8600 2550
 F 0 "P2" H 8600 3350 70  0000 C CNN
@@ -166,10 +163,10 @@ F 1 "SUPP28" H 8600 1700 70  0000 C CNN
 F 2 "dip_sockets:DIP-28__300_ELL" H 8600 1600 60  0000 C CNN
 F 3 "" H 8600 2550 60  0001 C CNN
 	1    8600 2550
-	1    0    0    -1  
+	1    0    0    -1
 $EndComp
 $Comp
-L GND #PWR040
+L pic_programmer_schlib:GND #PWR040
 U 1 1 442AA147
 P 3300 6950
 F 0 "#PWR040" H 3300 6950 30  0001 C CNN
@@ -177,10 +174,10 @@ F 1 "GND" H 3300 6880 30  0001 C CNN
 F 2 "" H 3300 6950 60  0001 C CNN
 F 3 "" H 3300 6950 60  0001 C CNN
 	1    3300 6950
-	1    0    0    -1  
+	1    0    0    -1
 $EndComp
 $Comp
-L C C7
+L pic_programmer_schlib:C C7
 U 1 1 442AA145
 P 3300 6750
 F 0 "C7" H 3350 6850 50  0000 L CNN
@@ -188,10 +185,10 @@ F 1 "100nF" H 3350 6650 50  0000 L CNN
 F 2 "Discret:C1-1" H 3500 6600 30  0000 C CNN
 F 3 "" H 3300 6750 60  0001 C CNN
 	1    3300 6750
-	1    0    0    -1  
+	1    0    0    -1
 $EndComp
 $Comp
-L GND #PWR041
+L pic_programmer_schlib:GND #PWR041
 U 1 1 442AA138
 P 2400 6950
 F 0 "#PWR041" H 2400 6950 30  0001 C CNN
@@ -199,7 +196,7 @@ F 1 "GND" H 2400 6880 30  0001 C CNN
 F 2 "" H 2400 6950 60  0001 C CNN
 F 3 "" H 2400 6950 60  0001 C CNN
 	1    2400 6950
-	1    0    0    -1  
+	1    0    0    -1
 $EndComp
 NoConn ~ 9200 5800
 NoConn ~ 9200 5700
@@ -234,7 +231,7 @@ NoConn ~ 8000 4200
 NoConn ~ 8000 4100
 NoConn ~ 8000 4000
 $Comp
-L GND #PWR042
+L pic_programmer_schlib:GND #PWR042
 U 1 1 442A896A
 P 9200 4800
 F 0 "#PWR042" H 9200 4800 30  0001 C CNN
@@ -242,10 +239,10 @@ F 1 "GND" H 9200 4730 30  0001 C CNN
 F 2 "" H 9200 4800 60  0001 C CNN
 F 3 "" H 9200 4800 60  0001 C CNN
 	1    9200 4800
-	0    -1   -1   0   
+	0    -1   -1   0
 $EndComp
 $Comp
-L SUPP40 P3
+L pic_programmer_schlib:SUPP40 P3
 U 1 1 442A88ED
 P 8600 4850
 F 0 "P3" H 8600 5950 70  0000 C CNN
@@ -253,11 +250,11 @@ F 1 "SUPP40" H 8600 3700 70  0000 C CNN
 F 2 "sockets:40tex-Ell600" H 8600 3600 60  0000 C CNN
 F 3 "" H 8600 4850 60  0001 C CNN
 	1    8600 4850
-	1    0    0    -1  
+	1    0    0    -1
 $EndComp
 NoConn ~ 4400 1200
 $Comp
-L GND #PWR043
+L pic_programmer_schlib:GND #PWR043
 U 1 1 442A8838
 P 2800 1350
 F 0 "#PWR043" H 2800 1350 30  0001 C CNN
@@ -265,14 +262,14 @@ F 1 "GND" H 2800 1280 30  0001 C CNN
 F 2 "" H 2800 1350 60  0001 C CNN
 F 3 "" H 2800 1350 60  0001 C CNN
 	1    2800 1350
-	1    0    0    -1  
+	1    0    0    -1
 $EndComp
 Text Label 4550 1500 0    60   ~ 0
 DATA-RB7
 Text Label 4550 1400 0    60   ~ 0
 CLOCK-RB6
 $Comp
-L 24C16 U1
+L pic_programmer_schlib:24C16 U1
 U 1 1 442A87F7
 P 3700 1300
 F 0 "U1" H 3850 1650 60  0000 C CNN
@@ -280,7 +277,7 @@ F 1 "24Cxx" H 3900 950 60  0000 C CNN
 F 2 "dip_sockets:DIP-8__300_ELL" H 4450 850 60  0000 C CNN
 F 3 "" H 3700 1300 60  0001 C CNN
 	1    3700 1300
-	1    0    0    -1  
+	1    0    0    -1
 $EndComp
 Text Label 9350 4000 0    60   ~ 0
 CLOCK-RB6
@@ -302,7 +299,7 @@ NoConn ~ 2950 4750
 NoConn ~ 2950 4300
 NoConn ~ 2950 4000
 $Comp
-L PIC16F54 U5
+L pic_programmer_schlib:PIC16F54 U5
 U 1 1 442A81A7
 P 3750 4600
 F 0 "U5" H 3750 5350 60  0000 C CNN
@@ -310,7 +307,7 @@ F 1 "PIC_18_PINS" H 3750 3800 60  0000 C CNN
 F 2 "dip_sockets:DIP-18__300_ELL" H 3800 3700 60  0000 C CNN
 F 3 "" H 3750 4600 60  0001 C CNN
 	1    3750 4600
-	1    0    0    -1  
+	1    0    0    -1
 $EndComp
 NoConn ~ 4450 3400
 NoConn ~ 3000 3100
@@ -334,7 +331,7 @@ CLOCK-RB6
 Text HLabel 1900 2100 0    60   Input ~ 0
 DATA-RB7
 $Comp
-L GND #PWR044
+L pic_programmer_schlib:GND #PWR044
 U 1 1 442A820F
 P 2750 4650
 F 0 "#PWR044" H 2750 4650 30  0001 C CNN
@@ -342,10 +339,10 @@ F 1 "GND" H 2750 4580 30  0001 C CNN
 F 2 "" H 2750 4650 60  0001 C CNN
 F 3 "" H 2750 4650 60  0001 C CNN
 	1    2750 4650
-	1    0    0    -1  
+	1    0    0    -1
 $EndComp
 $Comp
-L GND #PWR045
+L pic_programmer_schlib:GND #PWR045
 U 1 1 442A8205
 P 4450 2400
 F 0 "#PWR045" H 4450 2400 30  0001 C CNN
@@ -353,10 +350,10 @@ F 1 "GND" H 4450 2330 30  0001 C CNN
 F 2 "" H 4450 2400 60  0001 C CNN
 F 3 "" H 4450 2400 60  0001 C CNN
 	1    4450 2400
-	0    -1   -1   0   
+	0    -1   -1   0
 $EndComp
 $Comp
-L PIC12C508A U6
+L pic_programmer_schlib:PIC12C508A U6
 U 1 1 442A81A5
 P 3750 2900
 F 0 "U6" H 3700 3600 60  0000 C CNN
@@ -364,10 +361,10 @@ F 1 "PIC_8_PINS" H 3750 2200 60  0000 C CNN
 F 2 "dip_sockets:DIP-8__300_ELL" H 3750 2100 60  0000 C CNN
 F 3 "" H 3750 2900 60  0001 C CNN
 	1    3750 2900
-	1    0    0    -1  
+	1    0    0    -1
 $EndComp
 $Comp
-L GND #PWR046
+L pic_programmer_schlib:GND #PWR046
 U 1 1 52C92629
 P 3700 1850
 F 0 "#PWR046" H 3700 1850 30  0001 C CNN
@@ -375,12 +372,12 @@ F 1 "GND" H 3700 1780 30  0001 C CNN
 F 2 "" H 3700 1850 60  0001 C CNN
 F 3 "" H 3700 1850 60  0001 C CNN
 	1    3700 1850
-	1    0    0    -1  
+	1    0    0    -1
 $EndComp
 Text Label 3700 800  0    60   ~ 0
 VCC_PIC
 $Comp
-L C C6
+L pic_programmer_schlib:C C6
 U 1 1 442AA12B
 P 2400 6750
 F 0 "C6" H 2450 6850 50  0000 L CNN
@@ -388,7 +385,7 @@ F 1 "100nF" H 2450 6650 50  0000 L CNN
 F 2 "Discret:C1-1" H 2600 6600 30  0000 C CNN
 F 3 "" H 2400 6750 60  0001 C CNN
 	1    2400 6750
-	1    0    0    -1  
+	1    0    0    -1
 $EndComp
 Wire Wire Line
 	2400 6200 2400 6600
@@ -411,12 +408,12 @@ Connection ~ 5400 1400
 Wire Wire Line
 	10200 6200 10200 2700
 Wire Wire Line
-	5500 6200 5500 800 
+	5500 6200 5500 800
 Wire Wire Line
 	1900 6200 10200 6200
 Connection ~ 10200 4700
 Wire Wire Line
-	5500 800  3700 800 
+	5500 800  3700 800
 Connection ~ 5500 4600
 Wire Wire Line
 	2200 3400 2200 6300
@@ -449,7 +446,7 @@ Wire Wire Line
 Wire Wire Line
 	3300 6900 3300 6950
 $Comp
-L PWR_FLAG #FLG047
+L pic_programmer_schlib:PWR_FLAG #FLG047
 U 1 1 5558FA28
 P 3300 6500
 F 0 "#FLG047" H 3300 6595 30  0001 C CNN
@@ -457,6 +454,6 @@ F 1 "PWR_FLAG" H 3300 6680 30  0000 C CNN
 F 2 "" H 3300 6500 60  0000 C CNN
 F 3 "" H 3300 6500 60  0000 C CNN
 	1    3300 6500
-	0    1    1    0   
+	0    1    1    0
 $EndComp
 $EndSCHEMATC
