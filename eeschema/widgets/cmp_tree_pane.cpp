@@ -38,7 +38,6 @@ CMP_TREE_PANE::CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
     // Create widgets
     wxBoxSizer* boxSizer = new wxBoxSizer( wxVERTICAL );
 
-    m_libEditFrame->SyncLibraries();
     m_tree = new COMPONENT_TREE( this, &SYMBOL_LIB_TABLE::GetGlobalLibTable(),
             m_libMgr->GetAdapter(), COMPONENT_TREE::SEARCH );
 
