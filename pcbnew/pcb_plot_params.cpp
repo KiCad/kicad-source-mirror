@@ -147,11 +147,14 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberextensions ),
                        m_useGerberProtelExtensions ? trueStr : falseStr );
 
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberattributes ), trueStr );
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberattributes ),
+                       GetUseGerberAttributes() ? trueStr : falseStr );
 
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberadvancedattributes ), trueStr );
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberadvancedattributes ),
+                       GetIncludeGerberNetlistInfo() ? trueStr : falseStr );
 
-    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_creategerberjobfile ), trueStr );
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_creategerberjobfile ),
+                       GetCreateGerberJobFile() ? trueStr : falseStr );
 
     if( m_gerberPrecision != gbrDefaultPrecision ) // save this option only if it is not the default value,
                                                    // to avoid incompatibility with older Pcbnew version
