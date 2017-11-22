@@ -61,6 +61,7 @@
 #include <wildcards_and_files_ext.h>
 
 #include <menus_helpers.h>
+#include <wx/progdlg.h>
 
 
 wxString LIB_EDIT_FRAME::      m_aliasName;
@@ -483,7 +484,7 @@ void LIB_EDIT_FRAME::OnToggleSearchTree( wxCommandEvent& event )
 void LIB_EDIT_FRAME::OnEditSymbolLibTable( wxCommandEvent& aEvent )
 {
     SCH_BASE_FRAME::OnEditSymbolLibTable( aEvent );
-    m_libMgr->Sync( true );
+    SyncLibraries();
     m_treePane->Refresh();
 }
 
@@ -1610,6 +1611,19 @@ SYMBOL_LIB_TABLE* LIB_EDIT_FRAME::SelectSymLibTable()
     }
 
     return nullptr;
+}
+
+
+void LIB_EDIT_FRAME::SyncLibraries()
+{
+    wxBusyCursor cursor;
+
+    wxProgressDialog progressDlg( _( "Loading symbol libraries" ),
+            wxEmptyString, m_libMgr->GetAdapter()->GetLibrariesCount(), this );
+
+    m_libMgr->Sync( true, [&]( int progress, int max, const wxString& libName ) {
+        progressDlg.Update( progress, wxString::Format( _( "Loading library '%s'" ), libName ) );
+    } );
 }
 
 

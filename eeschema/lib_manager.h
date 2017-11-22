@@ -53,7 +53,8 @@ public:
     /**
      * Updates the LIB_MANAGER data to synchronize with Symbol Library Table.
      */
-    void Sync( bool aForce = false );
+    void Sync( bool aForce = false, std::function<void(int, int, const wxString&)> aProgressCallback
+            = [](int, int, const wxString&){} );
 
     int GetHash() const;
 

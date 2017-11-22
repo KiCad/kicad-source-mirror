@@ -46,7 +46,6 @@ public:
     }
 
 protected:
-    void onSymLibTableSelected( wxCommandEvent& aEvent );
     void onComponentSelected( wxCommandEvent& aEvent );
 
     LIB_EDIT_FRAME* m_libEditFrame;

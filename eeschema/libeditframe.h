@@ -692,6 +692,11 @@ public:
      */
     SYMBOL_LIB_TABLE* SelectSymLibTable();
 
+    /**
+     * Synchronize the library manager and the symbol library table. Displays a progress dialog.
+     */
+    void SyncLibraries();
+
 private:
     ///> Helper screen used when no part is loaded
     SCH_SCREEN* m_dummyScreen;

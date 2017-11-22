@@ -45,7 +45,10 @@ public:
 
     void UpdateLibrary( const wxString& aLibraryName );
 
-    void Sync( bool aForce = false );
+    void Sync( bool aForce = false, std::function<void(int, int, const wxString&)> aProgressCallback
+            = [](int, int, const wxString&){} );
+
+    int GetLibrariesCount() const override;
 
 protected:
     void updateLibrary( CMP_TREE_NODE_LIB& aLibNode );

@@ -80,20 +80,21 @@ bool LIB_MANAGER_ADAPTER::IsContainer( const wxDataViewItem& aItem ) const
 }
 
 
-void LIB_MANAGER_ADAPTER::Sync( bool aForce )
+void LIB_MANAGER_ADAPTER::Sync( bool aForce, std::function<void(int, int, const wxString&)> aProgressCallback )
 {
-    wxBusyCursor cursor;
     int libMgrHash = m_libMgr->GetHash();
 
     if( !aForce && m_lastSyncHash == libMgrHash )
         return;
 
     m_lastSyncHash = libMgrHash;
+    int i = 0, max = GetLibrariesCount();
 
     // Process already stored libraries
     for( auto it = m_tree.Children.begin(); it != m_tree.Children.end(); /* iteration inside */ )
     {
         const wxString& name = it->get()->Name;
+        aProgressCallback( i++, max, name );
 
         if( !m_libMgr->LibraryExists( name ) )
         {
@@ -112,10 +113,27 @@ void LIB_MANAGER_ADAPTER::Sync( bool aForce )
     for( const auto& libName : m_libMgr->GetLibraryNames() )
     {
         if( m_libHashes.count( libName ) == 0 )
+        {
+            aProgressCallback( i++, max, libName );
             AddLibrary( libName );
+        }
     }
 
     finishUpdate();
+}
+
+
+int LIB_MANAGER_ADAPTER::GetLibrariesCount() const
+{
+    int count = CMP_TREE_MODEL_ADAPTER_BASE::GetLibrariesCount();
+
+    for( const auto& libName : m_libMgr->GetLibraryNames() )
+    {
+        if( m_libHashes.count( libName ) == 0 )
+            ++count;
+    }
+
+    return count;
 }
 
 

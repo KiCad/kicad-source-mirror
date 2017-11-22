@@ -42,13 +42,13 @@ LIB_MANAGER::LIB_MANAGER( LIB_EDIT_FRAME& aFrame )
 }
 
 
-void LIB_MANAGER::Sync( bool aForce )
+void LIB_MANAGER::Sync( bool aForce, std::function<void(int, int, const wxString&)> aProgressCallback )
 {
     int libTableHash = m_symbolTable->GetModifyHash();
 
     if( aForce || m_syncHash != libTableHash )
     {
-        getAdapter()->Sync( aForce );
+        getAdapter()->Sync( aForce, aProgressCallback );
         m_syncHash = libTableHash;
     }
 }

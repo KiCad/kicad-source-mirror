@@ -234,6 +234,14 @@ public:
     int GetComponentsCount() const;
 
     /**
+     * Return the number of libraries loaded in the tree.
+     */
+    virtual int GetLibrariesCount() const
+    {
+        return m_tree.Children.size();
+    }
+
+    /**
      * Returns tree item corresponding to part.
      *
      * @param aLibId specifies the part and library name to be searched for.
