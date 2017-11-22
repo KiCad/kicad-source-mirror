@@ -687,12 +687,6 @@ public:
     void SVG_PlotComponent( const wxString& aFullFileName );
 
     /**
-     * Displays a dialog asking the user to select a symbol library table.
-     * @return Pointer to the selected symbol library table or nullptr if cancelled.
-     */
-    SYMBOL_LIB_TABLE* SelectSymLibTable();
-
-    /**
      * Synchronize the library manager and the symbol library table. Displays a progress dialog.
      */
     void SyncLibraries();
@@ -700,6 +694,12 @@ public:
 private:
     ///> Helper screen used when no part is loaded
     SCH_SCREEN* m_dummyScreen;
+
+    /**
+     * Displays a dialog asking the user to select a symbol library table.
+     * @return Pointer to the selected symbol library table or nullptr if cancelled.
+     */
+    SYMBOL_LIB_TABLE* selectSymLibTable();
 
     ///> Creates a backup copy of a file with requested extension
     bool backupFile( const wxFileName& aOriginalFile, const wxString& aBackupExt );

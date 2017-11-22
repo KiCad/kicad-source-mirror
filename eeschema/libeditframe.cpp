@@ -1522,16 +1522,22 @@ bool LIB_EDIT_FRAME::addLibraryFile( bool aCreateNew )
         return false;
     }
 
+    // Select the target library table (global/project)
+    SYMBOL_LIB_TABLE* libTable = selectSymLibTable();
+
+    if( !libTable )
+        return false;
+
     if( aCreateNew )
     {
-         res = m_libMgr->CreateLibrary( fileName.GetFullPath() );
+        res = m_libMgr->CreateLibrary( fileName.GetFullPath(), libTable );
 
-         if( !res )
+        if( !res )
             DisplayError( this, _( "Could not create the library file. Check write permission." ) );
     }
     else
     {
-        res = m_libMgr->AddLibrary( fileName.GetFullPath() );
+        res = m_libMgr->AddLibrary( fileName.GetFullPath(), libTable );
 
         if( !res )
             DisplayError( this, _( "Could not open the library file." ) );
@@ -1608,7 +1614,20 @@ wxString LIB_EDIT_FRAME::getTargetLib() const
 }
 
 
-SYMBOL_LIB_TABLE* LIB_EDIT_FRAME::SelectSymLibTable()
+void LIB_EDIT_FRAME::SyncLibraries()
+{
+    wxBusyCursor cursor;
+
+    wxProgressDialog progressDlg( _( "Loading symbol libraries" ),
+            wxEmptyString, m_libMgr->GetAdapter()->GetLibrariesCount(), this );
+
+    m_libMgr->Sync( true, [&]( int progress, int max, const wxString& libName ) {
+        progressDlg.Update( progress, wxString::Format( _( "Loading library '%s'" ), libName ) );
+    } );
+}
+
+
+SYMBOL_LIB_TABLE* LIB_EDIT_FRAME::selectSymLibTable()
 {
     wxArrayString libTableNames;
     libTableNames.Add( _( "Global" ) );
@@ -1622,19 +1641,6 @@ SYMBOL_LIB_TABLE* LIB_EDIT_FRAME::SelectSymLibTable()
     }
 
     return nullptr;
-}
-
-
-void LIB_EDIT_FRAME::SyncLibraries()
-{
-    wxBusyCursor cursor;
-
-    wxProgressDialog progressDlg( _( "Loading symbol libraries" ),
-            wxEmptyString, m_libMgr->GetAdapter()->GetLibrariesCount(), this );
-
-    m_libMgr->Sync( true, [&]( int progress, int max, const wxString& libName ) {
-        progressDlg.Update( progress, wxString::Format( _( "Loading library '%s'" ), libName ) );
-    } );
 }
 
 

@@ -527,18 +527,15 @@ wxString LIB_MANAGER::getLibraryName( const wxString& aFilePath )
 }
 
 
-bool LIB_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate )
+bool LIB_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate, SYMBOL_LIB_TABLE* aTable )
 {
+    wxCHECK( aTable, false );
     wxString libName = getLibraryName( aFilePath );
     wxCHECK( !LibraryExists( libName ), false );  // either create or add an existing one
 
-    // Select the target library table (global/project)
-    SYMBOL_LIB_TABLE* libTable = m_frame.SelectSymLibTable();
-    wxCHECK( libTable, false );
-
     SYMBOL_LIB_TABLE_ROW* libRow = new SYMBOL_LIB_TABLE_ROW( libName, aFilePath,
             SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) );
-    libTable->InsertRow( libRow );
+    aTable->InsertRow( libRow );
 
     if( aCreate )
     {
@@ -549,7 +546,7 @@ bool LIB_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate )
                 return false;
         }
 
-        libTable->CreateSymbolLib( libName );
+        aTable->CreateSymbolLib( libName );
     }
 
     getAdapter()->AddLibrary( libName );
