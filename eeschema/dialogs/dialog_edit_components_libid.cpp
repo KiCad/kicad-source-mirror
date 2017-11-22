@@ -95,6 +95,15 @@ private:
 
     void initDlg();
 
+    /**
+     * Add a new row (new entry) in m_grid.
+     * @param aRowId is the row index
+     * @param aMarkRow = true to use bold/italic font in column COL_CURR_LIBID
+     * @param aReferences is the value of cell( aRowId, COL_REFS)
+     * @param aStrLibId is the value of cell( aRowId, COL_CURR_LIBID)
+     */
+    void AddRowToGrid( int aRowId, bool aMarkRow, const wxString& aReferences, const wxString& aStrLibId );
+
     // returns true if all new lib id are valid
     bool validateLibIds();
 
@@ -218,50 +227,21 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
     int row = 0;
     wxString refs;
     bool mark_cell = false;
+    CMP_CANDIDATE* cmp = nullptr;
 
     for( unsigned ii = 0; ii < m_components.size(); ii++ )
     {
-        CMP_CANDIDATE& cmp = m_components[ii];
+        cmp = &m_components[ii];
 
-        wxString str_libid = cmp.GetStringLibId();
+        wxString str_libid = cmp->GetStringLibId();
 
-        if( last_str_libid != str_libid || ii == m_components.size()-1 )
+        if( last_str_libid != str_libid )
         {
-
-            if( ii == m_components.size()-1 )
-            {
-                if( !refs.IsEmpty() )
-                        refs += " ";
-
-                refs += cmp.GetSchematicReference();
-                cmp.m_Row = row;
-                mark_cell = cmp.m_IsOrphan;
-
-                last_str_libid = str_libid;
-            }
-
-            if( m_grid->GetNumberRows() <= row )
-                m_grid->AppendRows();
-
-            m_grid->SetCellValue( row, COL_REFS, refs );
-            m_grid->SetReadOnly( row, COL_REFS );
-
-            m_grid->SetCellValue( row, COL_CURR_LIBID, last_str_libid );
-            m_grid->SetReadOnly( row, COL_CURR_LIBID );
-
-            if( mark_cell ) // A symbol is not existing in libraries: mark the cell
-            {
-                wxFont font = m_grid->GetDefaultCellFont();
-                font.MakeBold();
-                font.MakeItalic();
-                m_grid->SetCellFont( row, COL_CURR_LIBID, font );
-            }
-
-            m_grid->SetCellRenderer( row, COL_REFS, new wxGridCellAutoWrapStringRenderer);
-            m_grid->AutoSizeRow( row, false );
+            // Add last group to grid
+            AddRowToGrid( row, mark_cell, refs, last_str_libid );
 
             // prepare next entry
-            mark_cell = cmp.m_IsOrphan;
+            mark_cell = cmp->m_IsOrphan;
             last_str_libid = str_libid;
             refs.Empty();
             row++;
@@ -270,15 +250,45 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
         if( !refs.IsEmpty() )
             refs += " ";
 
-        refs += cmp.GetSchematicReference();
-        cmp.m_Row = row;
+        refs += cmp->GetSchematicReference();
+        cmp->m_Row = row;
     }
+
+    // Add last component group:
+    AddRowToGrid( row, mark_cell, refs, last_str_libid );
 
     m_grid->AutoSizeColumn( COL_CURR_LIBID );
 
     // Gives a similar width to COL_NEW_LIBID because it can conatains similar strings
     if( m_grid->GetColSize( COL_CURR_LIBID ) > m_grid->GetColSize( COL_NEW_LIBID ) )
         m_grid->SetColSize( COL_NEW_LIBID, m_grid->GetColSize( COL_CURR_LIBID ) );
+}
+
+
+void DIALOG_EDIT_COMPONENTS_LIBID::AddRowToGrid( int aRowId, bool aMarkRow,
+                    const wxString& aReferences, const wxString& aStrLibId )
+{
+    int row = aRowId;
+
+    if( m_grid->GetNumberRows() <= row )
+        m_grid->AppendRows();
+
+    m_grid->SetCellValue( row, COL_REFS, aReferences );
+    m_grid->SetReadOnly( row, COL_REFS );
+
+    m_grid->SetCellValue( row, COL_CURR_LIBID, aStrLibId );
+    m_grid->SetReadOnly( row, COL_CURR_LIBID );
+
+    if( aMarkRow ) // A symbol is not existing in libraries: mark the cell
+    {
+        wxFont font = m_grid->GetDefaultCellFont();
+        font.MakeBold();
+        font.MakeItalic();
+        m_grid->SetCellFont( row, COL_CURR_LIBID, font );
+    }
+
+    m_grid->SetCellRenderer( row, COL_REFS, new wxGridCellAutoWrapStringRenderer);
+    m_grid->AutoSizeRow( row, false );
 }
 
 
