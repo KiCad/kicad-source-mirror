@@ -53,11 +53,12 @@ class DIALOG_EDIT_COMPONENTS_LIBID_BASE : public DIALOG_SHIM
 		virtual void onApplyButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCancel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onUndoChangesButton( wxCommandEvent& event ) { event.Skip(); }
+		virtual void updateUIChangesButton( wxUpdateUIEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_EDIT_COMPONENTS_LIBID_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Edit Components Links to Symbols in Libraries"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 839,311 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_EDIT_COMPONENTS_LIBID_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Edit Components Links to Symbols in Libraries"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 766,311 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EDIT_COMPONENTS_LIBID_BASE();
 	
 };

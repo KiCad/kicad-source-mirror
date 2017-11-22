@@ -89,7 +89,7 @@ public:
 
 private:
     SCH_EDIT_FRAME* m_parent;
-    bool m_isModified;      // set to true is the schemaic is modified
+    bool m_isModified;      // set to true if the schematic is modified
 
     std::vector<CMP_CANDIDATE> m_components;
 
@@ -102,19 +102,24 @@ private:
      * @param aReferences is the value of cell( aRowId, COL_REFS)
      * @param aStrLibId is the value of cell( aRowId, COL_CURR_LIBID)
      */
-    void AddRowToGrid( int aRowId, bool aMarkRow, const wxString& aReferences, const wxString& aStrLibId );
+    void AddRowToGrid( int aRowId, bool aMarkRow,
+                       const wxString& aReferences, const wxString& aStrLibId );
 
-    // returns true if all new lib id are valid
+    /// returns true if all new lib id are valid
     bool validateLibIds();
 
-    // Reverts all changes already made
+    /// Reverts all changes already made
     void revertChanges();
 
     // Events handlers
+
     // called on a right click or a left double click:
 	void onCellBrowseLib( wxGridEvent& event ) override;
+
+    // Apply changes, but do not close the dialog
 	void onApplyButton( wxCommandEvent& event ) override;
 
+    // Cancel all changes, and close the dialog
 	void onCancel( wxCommandEvent& event ) override
     {
         if( m_isModified )
@@ -122,8 +127,15 @@ private:
         event.Skip();
     }
 
+    // Undo all changes, and clear the list of new lib_ids
 	void onUndoChangesButton( wxCommandEvent& event ) override;
 
+	void updateUIChangesButton( wxUpdateUIEvent& event ) override
+    {
+        m_buttonUndo->Enable( m_isModified );
+    }
+
+    // Automatically called when click on OK button
     bool TransferDataFromWindow() override;
 };
 
@@ -159,6 +171,8 @@ static bool sort_by_libid( const CMP_CANDIDATE& cmp1, const CMP_CANDIDATE& cmp2 
 
 void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
 {
+    m_isModified = false;
+
     // Build the component list:
 #if 0
     // This option build a component list that works fine to edit LIB_ID fields, but does not display
@@ -258,10 +272,16 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
     AddRowToGrid( row, mark_cell, refs, last_str_libid );
 
     m_grid->AutoSizeColumn( COL_CURR_LIBID );
+    // ensure the column title is correctly displayed
+    // (the min size is already fixed by AutoSizeColumn() )
+    m_grid->AutoSizeColLabelSize( COL_CURR_LIBID );
 
-    // Gives a similar width to COL_NEW_LIBID because it can conatains similar strings
+    // Gives a similar width to COL_NEW_LIBID because it can contains similar strings
     if( m_grid->GetColSize( COL_CURR_LIBID ) > m_grid->GetColSize( COL_NEW_LIBID ) )
         m_grid->SetColSize( COL_NEW_LIBID, m_grid->GetColSize( COL_CURR_LIBID ) );
+    // ensure the column title is correctly displayed
+    m_grid->SetColMinimalWidth( COL_NEW_LIBID, m_grid->GetColSize( COL_NEW_LIBID ) );
+    m_grid->AutoSizeColLabelSize( COL_NEW_LIBID );
 }
 
 
