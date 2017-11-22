@@ -489,7 +489,8 @@ void KICAD_MANAGER_FRAME::OnOpenTextEditor( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::OnOpenFileInTextEditor( wxCommandEvent& event )
 {
-    wxString wildcard = TextFileWildcard() + "|" + AllFilesWildcard;
+    // show all files in file dialog (in Kicad all files are editable texts):
+    wxString wildcard = AllFilesWildcard;
 
     wxString default_dir = Prj().GetProjectPath();
 
