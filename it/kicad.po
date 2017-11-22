@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-22 12:37+0100\n"
-"PO-Revision-Date: 2017-11-22 14:14+0100\n"
+"POT-Creation-Date: 2017-11-22 18:22+0100\n"
+"PO-Revision-Date: 2017-11-22 18:24+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -1014,7 +1014,7 @@ msgstr "Impronta %s già esistente nella libreria \"%s\""
 msgid "No footprint name defined."
 msgstr "Nessun nome impronta definito."
 
-#: pcbnew/librairi.cpp:80 eeschema/libeditframe.cpp:1538
+#: pcbnew/librairi.cpp:80 eeschema/libeditframe.cpp:1556
 #: eeschema/dialogs/dialog_sym_lib_table.cpp:350
 msgid "Select Library"
 msgstr "Seleziona libreria"
@@ -1338,7 +1338,7 @@ msgstr "Sposta"
 #: pcbnew/modedit_onclick.cpp:366 pcbnew/modedit_onclick.cpp:409
 #: eeschema/onrightclick.cpp:394 eeschema/onrightclick.cpp:510
 #: eeschema/onrightclick.cpp:582 eeschema/onrightclick.cpp:616
-#: eeschema/widgets/cmp_tree_pane.cpp:72
+#: eeschema/widgets/cmp_tree_pane.cpp:71
 msgid "Duplicate"
 msgstr "Duplica"
 
@@ -1369,7 +1369,7 @@ msgstr "Crea array"
 #: eeschema/onrightclick.cpp:517 eeschema/onrightclick.cpp:553
 #: eeschema/onrightclick.cpp:589 eeschema/onrightclick.cpp:623
 #: eeschema/onrightclick.cpp:805 eeschema/onrightclick.cpp:836
-#: eeschema/widgets/cmp_tree_pane.cpp:64 eeschema/libedit_onrightclick.cpp:194
+#: eeschema/widgets/cmp_tree_pane.cpp:63 eeschema/libedit_onrightclick.cpp:194
 #: eeschema/libedit_onrightclick.cpp:258 eeschema/libedit_onrightclick.cpp:288
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:228
 msgid "Edit"
@@ -1793,7 +1793,7 @@ msgid "Automatically Route Net"
 msgstr "Collegamenti autosbrogliati"
 
 #: pcbnew/onrightclick.cpp:993 pcbnew/tools/edit_tool.cpp:169
-#: eeschema/onrightclick.cpp:546 eeschema/widgets/cmp_tree_pane.cpp:71
+#: eeschema/onrightclick.cpp:546 eeschema/widgets/cmp_tree_pane.cpp:70
 msgid "Copy"
 msgstr "Copia"
 
@@ -2393,7 +2393,7 @@ msgstr "Misura interattivamente distanze tra punti"
 msgid "Copy selected content to clipboard"
 msgstr "Copia il contenuto selezionato sugli appunti"
 
-#: pcbnew/tools/edit_tool.cpp:174 eeschema/widgets/cmp_tree_pane.cpp:70
+#: pcbnew/tools/edit_tool.cpp:174 eeschema/widgets/cmp_tree_pane.cpp:69
 msgid "Cut"
 msgstr "Taglia"
 
@@ -2582,7 +2582,7 @@ msgid "Add graphic arc"
 msgstr "Aggiungi arco grafico"
 
 #: pcbnew/tools/drawing_tool.cpp:331 pcbnew/edit.cpp:1502
-#: pcbnew/modedit.cpp:952 eeschema/libeditframe.cpp:1197
+#: pcbnew/modedit.cpp:952 eeschema/libeditframe.cpp:1198
 #: eeschema/schedit.cpp:569
 msgid "Add text"
 msgstr "Aggiungi testo "
@@ -2994,7 +2994,7 @@ msgid "Are you sure you want to delete item?"
 msgstr "Cancellare l'elemento selezionato?"
 
 #: pcbnew/tools/pcbnew_control.cpp:720 pcbnew/tool_modedit.cpp:195
-#: pcbnew/edit.cpp:1514 pcbnew/modedit.cpp:977 eeschema/libeditframe.cpp:1239
+#: pcbnew/edit.cpp:1514 pcbnew/modedit.cpp:977 eeschema/libeditframe.cpp:1240
 #: eeschema/schedit.cpp:605 eeschema/help_common_strings.h:48
 msgid "Delete item"
 msgstr "Cancella voce"
@@ -3882,7 +3882,7 @@ msgid "Dimension \"%s\" on %s"
 msgstr "Dimensioni \"%s\" su %s"
 
 #: pcbnew/controle.cpp:231 pcbnew/modedit.cpp:133
-#: eeschema/libeditframe.cpp:1354 eeschema/controle.cpp:177
+#: eeschema/libeditframe.cpp:1355 eeschema/controle.cpp:177
 msgid "Clarify Selection"
 msgstr "Disambigua selezione"
 
@@ -5683,7 +5683,7 @@ msgstr "Stampa impronta"
 #: pcbnew/tool_modedit.cpp:138 pcbnew/tool_pcb.cpp:266 pcbnew/edit.cpp:1444
 #: pcbnew/modedit.cpp:934 common/tool/zoom_tool.cpp:55
 #: common/block_commande.cpp:97 eeschema/tool_sch.cpp:121
-#: eeschema/libeditframe.cpp:1174 eeschema/tool_lib.cpp:172
+#: eeschema/libeditframe.cpp:1175 eeschema/tool_lib.cpp:172
 #: eeschema/schedit.cpp:531 gerbview/toolbars_gerber.cpp:92
 #: gerbview/events_called_functions.cpp:237
 #: pagelayout_editor/events_functions.cpp:136 pagelayout_editor/menubar.cpp:143
@@ -7581,15 +7581,15 @@ msgstr ""
 "\n"
 "Impossibile inserire questa impronta"
 
-#: pcbnew/modedit.cpp:940 eeschema/libeditframe.cpp:1213
+#: pcbnew/modedit.cpp:940 eeschema/libeditframe.cpp:1214
 msgid "Add line"
 msgstr "Aggiungi linea "
 
-#: pcbnew/modedit.cpp:944 eeschema/libeditframe.cpp:1209
+#: pcbnew/modedit.cpp:944 eeschema/libeditframe.cpp:1210
 msgid "Add arc"
 msgstr "Aggiungi arco"
 
-#: pcbnew/modedit.cpp:948 eeschema/libeditframe.cpp:1205
+#: pcbnew/modedit.cpp:948 eeschema/libeditframe.cpp:1206
 msgid "Add circle"
 msgstr "Aggiungi cerchio"
 
@@ -8455,7 +8455,7 @@ msgstr "Punto iniziale X:"
 #: eeschema/onrightclick.cpp:481 eeschema/lib_draw_item.cpp:72
 #: eeschema/cmp_tree_model.cpp:123 eeschema/libedit.cpp:651
 msgid "Unit"
-msgstr "Parti"
+msgstr "Parte"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:41
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:74
@@ -9912,7 +9912,8 @@ msgid ""
 "Components with this option are not put in the footprint position list file"
 msgstr ""
 "Usa questo attributo per la maggior parte dei componenti non SMD.\n"
-"I componenti con questa opzione non vengono inseriti nel file elenco posizioni impronte"
+"I componenti con questa opzione non vengono inseriti nel file elenco "
+"posizioni impronte"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:332
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:183
@@ -12184,7 +12185,7 @@ msgstr "Aggiungi un gruppo di collegamenti"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:80
 #: common/dialogs/dialog_env_var_config_base.cpp:44
-#: eeschema/widgets/cmp_tree_pane.cpp:65
+#: eeschema/widgets/cmp_tree_pane.cpp:64
 #: eeschema/dialogs/dialog_spice_model_base.cpp:527
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:39
 msgid "Remove"
@@ -17568,7 +17569,7 @@ msgstr "Modifica proprietà"
 msgid "Convert"
 msgstr "Convertito"
 
-#: eeschema/onrightclick.cpp:467 eeschema/libeditframe.cpp:454
+#: eeschema/onrightclick.cpp:467 eeschema/libeditframe.cpp:456
 #, c-format
 msgid "Unit %s"
 msgstr "Unità %s"
@@ -17928,49 +17929,49 @@ msgstr "Clock fronte di discesa"
 msgid "NonLogic"
 msgstr "NonLogico"
 
-#: eeschema/widgets/cmp_tree_pane.cpp:53 eeschema/widgets/cmp_tree_pane.cpp:77
+#: eeschema/widgets/cmp_tree_pane.cpp:52 eeschema/widgets/cmp_tree_pane.cpp:76
 msgid "New library..."
 msgstr "Nuova libreria..."
 
-#: eeschema/widgets/cmp_tree_pane.cpp:54 eeschema/widgets/cmp_tree_pane.cpp:78
+#: eeschema/widgets/cmp_tree_pane.cpp:53 eeschema/widgets/cmp_tree_pane.cpp:77
 msgid "Add existing library..."
 msgstr "Aggiungi una libreria esistente..."
 
-#: eeschema/widgets/cmp_tree_pane.cpp:55 eeschema/libeditframe.cpp:580
+#: eeschema/widgets/cmp_tree_pane.cpp:54 eeschema/libeditframe.cpp:581
 msgid "Save library"
 msgstr "Salva libreria"
 
-#: eeschema/widgets/cmp_tree_pane.cpp:56
+#: eeschema/widgets/cmp_tree_pane.cpp:55
 msgid "Save library as..."
 msgstr "Salva libreria con nome..."
 
-#: eeschema/widgets/cmp_tree_pane.cpp:57
+#: eeschema/widgets/cmp_tree_pane.cpp:56
 msgid "Revert library"
 msgstr "Ripristina libreria"
 
-#: eeschema/widgets/cmp_tree_pane.cpp:59
+#: eeschema/widgets/cmp_tree_pane.cpp:58
 msgid "New part..."
 msgstr "Nuova parte..."
 
-#: eeschema/widgets/cmp_tree_pane.cpp:60
+#: eeschema/widgets/cmp_tree_pane.cpp:59
 msgid "Import part..."
 msgstr "Importa parte..."
 
-#: eeschema/widgets/cmp_tree_pane.cpp:61
+#: eeschema/widgets/cmp_tree_pane.cpp:60
 msgid "Paste part"
 msgstr "Incolla parte"
 
-#: eeschema/widgets/cmp_tree_pane.cpp:66
+#: eeschema/widgets/cmp_tree_pane.cpp:65
 msgid "Export..."
 msgstr "Esporta..."
 
-#: eeschema/widgets/cmp_tree_pane.cpp:67
-#: eeschema/widgets/tuner_slider_base.cpp:66 eeschema/libeditframe.cpp:530
+#: eeschema/widgets/cmp_tree_pane.cpp:66
+#: eeschema/widgets/tuner_slider_base.cpp:66 eeschema/libeditframe.cpp:531
 #: pagelayout_editor/hotkeys.cpp:96
 msgid "Save"
 msgstr "Salva"
 
-#: eeschema/widgets/cmp_tree_pane.cpp:68
+#: eeschema/widgets/cmp_tree_pane.cpp:67
 msgid "Revert"
 msgstr "Ripristina"
 
@@ -18288,68 +18289,85 @@ msgstr "Punto di connessione gerarchico %s"
 msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d marcature temporali duplicate trovate e sostituite."
 
-#: eeschema/libeditframe.cpp:203 eeschema/hotkeys.cpp:350
+#: eeschema/libeditframe.cpp:204 eeschema/hotkeys.cpp:350
 msgid "Library Editor"
 msgstr "Editor delle librerie"
 
-#: eeschema/libeditframe.cpp:530
+#: eeschema/libeditframe.cpp:531
 msgid "Save [Read Only]"
 msgstr "Salva [sola lettura]"
 
-#: eeschema/libeditframe.cpp:580
+#: eeschema/libeditframe.cpp:581
 msgid "Save library [Read Only]"
 msgstr "Salva libreria [sola lettura]"
 
-#: eeschema/libeditframe.cpp:1182
+#: eeschema/libeditframe.cpp:1183
 msgid "Add pin"
 msgstr "Aggiungi piedino"
 
-#: eeschema/libeditframe.cpp:1186
+#: eeschema/libeditframe.cpp:1187
 msgid "Set pin options"
 msgstr "Imposta opzioni piedino"
 
-#: eeschema/libeditframe.cpp:1201
+#: eeschema/libeditframe.cpp:1202
 msgid "Add rectangle"
 msgstr "Aggiungi rettangolo"
 
-#: eeschema/libeditframe.cpp:1217
+#: eeschema/libeditframe.cpp:1218
 msgid "Set anchor position"
 msgstr "Imposta posizione ancoraggio"
 
-#: eeschema/libeditframe.cpp:1221
+#: eeschema/libeditframe.cpp:1222
 msgid "Import"
 msgstr "Importa"
 
-#: eeschema/libeditframe.cpp:1227 bitmap2component/bitmap2cmp_gui_base.cpp:124
+#: eeschema/libeditframe.cpp:1228 bitmap2component/bitmap2cmp_gui_base.cpp:124
 msgid "Export"
 msgstr "Esporta"
 
-#: eeschema/libeditframe.cpp:1519
+#: eeschema/libeditframe.cpp:1521
 #, c-format
 msgid "Library '%s' already exists"
 msgstr "La libreria \"%s\" esiste già."
 
-#: eeschema/libeditframe.cpp:1538
+#: eeschema/libeditframe.cpp:1536
+msgid "Could not create the library file. Check write permission."
+msgstr "Impossibile creare il file di libreria. Controllare i permessi di scrittura."
+
+#: eeschema/libeditframe.cpp:1543
+msgid "Could not open the library file."
+msgstr "Impossibile aprire il file di libreria."
+
+#: eeschema/libeditframe.cpp:1556
 msgid "New Library"
 msgstr "Nuova libreria"
 
-#: eeschema/libeditframe.cpp:1602 eeschema/libedit_onrightclick.cpp:303
+#: eeschema/libeditframe.cpp:1625 eeschema/cmp_tree_model_adapter_base.cpp:112
+msgid "Loading symbol libraries"
+msgstr "Caricamento librerie simboli"
+
+#: eeschema/libeditframe.cpp:1629 eeschema/cmp_tree_model_adapter_base.cpp:121
+#, c-format
+msgid "Loading library '%s'"
+msgstr "Caricamento libreria \"%s\""
+
+#: eeschema/libeditframe.cpp:1640 eeschema/libedit_onrightclick.cpp:303
 msgid "Global"
 msgstr "Globali"
 
-#: eeschema/libeditframe.cpp:1603
+#: eeschema/libeditframe.cpp:1641
 msgid "Project"
 msgstr "Progetto"
 
-#: eeschema/libeditframe.cpp:1605
+#: eeschema/libeditframe.cpp:1643
 msgid "Select Symbol Library Table"
 msgstr "Seleziona la tabella librerie di simboli"
 
-#: eeschema/libeditframe.cpp:1606
+#: eeschema/libeditframe.cpp:1644
 msgid "Choose the Library Table to add the library:"
 msgstr "Scegliere la tabella librerie per aggiungere la libreria:"
 
-#: eeschema/libeditframe.cpp:1628
+#: eeschema/libeditframe.cpp:1666
 msgid "Failed to save backup document to file "
 msgstr "Fallito il salvataggio della documentazione su file "
 
@@ -18667,7 +18685,9 @@ msgstr "Modifica i collegamenti tra componenti e librerie di simboli"
 msgid ""
 "Edit components to symbols library links to switch to an other library link "
 "(library IDs)"
-msgstr "Modifica i collegamenti tra componenti e librerie di simboli per commutare su un altro collegamento di libreria (ID di libreria)"
+msgstr ""
+"Modifica i collegamenti tra componenti e librerie di simboli per commutare "
+"su un altro collegamento di libreria (ID di libreria)"
 
 #: eeschema/menubar.cpp:475
 msgid "Updates PCB design with current schematic (forward annotation)."
@@ -20080,15 +20100,6 @@ msgstr "Nascondi puntatore"
 #: eeschema/sim/sim_plot_frame.cpp:1226
 msgid "Show cursor"
 msgstr "Mostra puntatore"
-
-#: eeschema/cmp_tree_model_adapter_base.cpp:112
-msgid "Loading symbol libraries"
-msgstr "Caricamento librerie simboli"
-
-#: eeschema/cmp_tree_model_adapter_base.cpp:121
-#, c-format
-msgid "Loading library '%s'"
-msgstr "Caricamento libreria \"%s\""
 
 #: eeschema/cmp_tree_model_adapter_base.cpp:175
 msgid "Desc"
@@ -21902,7 +21913,7 @@ msgstr "Cancella annotazione "
 msgid "Annotate"
 msgstr "Annota"
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:303
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:333
 #, c-format
 msgid "Symbol library identifier '%s' is not valid at row %d!"
 msgstr "Id di libreria di simboli \"%s\" non valido alla riga %d!"
@@ -22414,10 +22425,12 @@ msgstr "Simbolo corrente"
 msgid "New Symbol"
 msgstr "Nuovo simbolo"
 
-#: eeschema/dialogs/dialog_edit_components_libid_base.cpp:72
+#: eeschema/dialogs/dialog_edit_components_libid_base.cpp:69
 msgid ""
 "Warning: Changes made from this dialog cannot be undone, after closing it."
-msgstr "Attenzione: i cambiamenti effettuati da questa finestra di dialogo non possono essere annullati, dopo che questa verrà chiusa."
+msgstr ""
+"Attenzione: i cambiamenti effettuati da questa finestra di dialogo non "
+"possono essere annullati, dopo che questa verrà chiusa."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:38
 msgid "Plugins"
@@ -23569,7 +23582,7 @@ msgstr "Configura la tabella librerie simboli globale"
 msgid "Electrical Rules Checker"
 msgstr "Controllo Regole Elettriche (ERC)"
 
-#: eeschema/dialogs/dialog_edit_components_libid_base.h:60
+#: eeschema/dialogs/dialog_edit_components_libid_base.h:61
 msgid "Edit Components Links to Symbols in Libraries"
 msgstr "Modifica i collegamenti componenti - simboli nelle librerie"
 
