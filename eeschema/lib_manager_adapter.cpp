@@ -118,8 +118,6 @@ void LIB_MANAGER_ADAPTER::Sync( bool aForce, std::function<void(int, int, const 
             AddLibrary( libName );
         }
     }
-
-    finishUpdate();
 }
 
 

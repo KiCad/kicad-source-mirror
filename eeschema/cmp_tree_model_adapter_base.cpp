@@ -491,20 +491,16 @@ void CMP_TREE_MODEL_ADAPTER_BASE::filterContents()
             continue;
 
         wxDataViewItem libItem = ToItem( lib.get() );
+        lib->InTree = true;
+        ItemAdded( wxDataViewItem( nullptr ), libItem );
 
         for( auto& alias : lib->Children )
         {
-            if( !lib->InTree )
-            {
-                lib->InTree = true;
-                ItemAdded( wxDataViewItem( nullptr ), libItem );
-            }
-
             if( alias->Score > 0 )
             {
                 alias->InTree = true;
-                ItemAdded( libItem, ToItem( alias.get() ) );
                 wxDataViewItem aliasItem = ToItem( alias.get() );
+                ItemAdded( libItem, aliasItem );
 
                 if( !m_show_units )
                     continue;
