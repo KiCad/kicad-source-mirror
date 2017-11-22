@@ -1510,6 +1510,7 @@ bool LIB_EDIT_FRAME::addLibraryFile( bool aCreateNew )
 {
     wxFileName fileName = getLibraryFileName( !aCreateNew );
     wxString libName = fileName.GetName();
+    bool res = false;
 
     if( libName.IsEmpty() )
         return false;
@@ -1521,12 +1522,22 @@ bool LIB_EDIT_FRAME::addLibraryFile( bool aCreateNew )
         return false;
     }
 
-    m_libMgr->AddLibrary( fileName.GetFullPath() );
-
     if( aCreateNew )
-        Prj().SchSymbolLibTable()->CreateSymbolLib( libName );
+    {
+         res = m_libMgr->CreateLibrary( fileName.GetFullPath() );
 
-    return true;
+         if( !res )
+            DisplayError( this, _( "Could not create the library file. Check write permission." ) );
+    }
+    else
+    {
+        res = m_libMgr->AddLibrary( fileName.GetFullPath() );
+
+        if( !res )
+            DisplayError( this, _( "Could not open the library file." ) );
+    }
+
+    return res;
 }
 
 

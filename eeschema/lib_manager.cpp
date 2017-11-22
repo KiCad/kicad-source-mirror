@@ -541,7 +541,16 @@ bool LIB_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate )
     libTable->InsertRow( libRow );
 
     if( aCreate )
+    {
+        // CreateSymbolLib() fails if the file exists
+        if( wxFileName::Exists( aFilePath ) )
+        {
+            if( !wxRemoveFile( aFilePath ) )
+                return false;
+        }
+
         libTable->CreateSymbolLib( libName );
+    }
 
     getAdapter()->AddLibrary( libName );
 
