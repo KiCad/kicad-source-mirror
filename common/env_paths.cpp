@@ -23,8 +23,8 @@
 #include <env_paths.h>
 
 static bool normalizeAbsolutePaths( const wxFileName& aPathA,
-                                        const wxFileName& aPathB,
-                                        wxString*         aResultPath )
+                                    const wxFileName& aPathB,
+                                    wxString*         aResultPath )
 {
     wxCHECK_MSG( aPathA.IsAbsolute(), false, aPathA.GetPath() + " is not an absolute path." );
     wxCHECK_MSG( aPathB.IsAbsolute(), false, aPathB.GetPath() + " is not an absolute path." );
@@ -56,7 +56,7 @@ static bool normalizeAbsolutePaths( const wxFileName& aPathA,
     {
         while( i < bDirs.GetCount() )
         {
-            *aResultPath += bDirs[i] + wxT( "/" );
+            *aResultPath += bDirs[i] + "/";
             i++;
         }
     }
@@ -70,6 +70,7 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
 {
     wxFileName envPath;
     wxString tmp, varName, normalizedFullPath;
+    bool hasTrailingSeparator = false;
 
     if( aEnvVars )
     {
@@ -79,6 +80,12 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
             if( !wxFileName::DirExists( entry.second.GetValue() )
                 || !wxFileName::IsDirReadable( entry.second.GetValue() ) )
                 continue;
+
+            // Do not add separator to the end of environment variable if it already has one.
+            wxUniChar separator = entry.second.GetValue().Last();
+
+            if( separator == '\\' || separator == '/' )
+                hasTrailingSeparator = true;
 
             envPath.SetPath( entry.second.GetValue() );
 
@@ -100,7 +107,10 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
 
     if( !varName.IsEmpty() )
     {
-        normalizedFullPath = wxString::Format( "${%s}/", varName );
+        normalizedFullPath = wxString::Format( "${%s}", varName );
+
+        if( !hasTrailingSeparator )
+            normalizedFullPath += "/";
 
         if( !tmp.IsEmpty() )
             normalizedFullPath += tmp;
