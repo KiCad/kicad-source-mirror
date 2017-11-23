@@ -218,8 +218,6 @@ public:
     LIB_PART* GetLibPart( const LIB_ID& aLibId, bool aUseCacheLib = false,
                           bool aShowErrorMsg = false );
 
-protected:
-
     /**
      * Function SelectComponentFromLibBrowser
      * Calls the library viewer to select component to import into schematic.
@@ -236,6 +234,8 @@ protected:
             const SCHLIB_FILTER* aFilter,
             const LIB_ID& aPreselectedLibid,
             int aUnit, int aConvert );
+
+protected:
 
     /**
      * Open the library viewer only to browse library contents.

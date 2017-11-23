@@ -111,6 +111,12 @@ private:
     /// Reverts all changes already made
     void revertChanges();
 
+    /** run the lib browser and set the selected LIB_ID for row aRow
+     * @param aRow is the row to edit
+     * @return false if the command was aborted
+     */
+    bool setLibIdByBrowser( int aRow );
+
     // Events handlers
 
     // called on a right click or a left double click:
@@ -127,12 +133,21 @@ private:
         event.Skip();
     }
 
+	void onButtonBrowseLibraries( wxCommandEvent& event ) override;
+
     // Undo all changes, and clear the list of new lib_ids
 	void onUndoChangesButton( wxCommandEvent& event ) override;
 
+    // UI event, to enable/disable buttons
 	void updateUIChangesButton( wxUpdateUIEvent& event ) override
     {
         m_buttonUndo->Enable( m_isModified );
+    }
+
+	void updateUIBrowseButton( wxUpdateUIEvent& event ) override
+    {
+        wxArrayInt rows = m_grid->GetSelectedRows();
+        m_buttonBrowseLibs->Enable( rows.GetCount() == 1 );
     }
 
     // Automatically called when click on OK button
@@ -282,6 +297,9 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
     // ensure the column title is correctly displayed
     m_grid->SetColMinimalWidth( COL_NEW_LIBID, m_grid->GetColSize( COL_NEW_LIBID ) );
     m_grid->AutoSizeColLabelSize( COL_NEW_LIBID );
+
+    // Allows only the selection by row
+    m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
 }
 
 
@@ -365,19 +383,51 @@ void DIALOG_EDIT_COMPONENTS_LIBID::onUndoChangesButton( wxCommandEvent& event )
 void DIALOG_EDIT_COMPONENTS_LIBID::onCellBrowseLib( wxGridEvent& event )
 {
     int row = event.GetRow();
+    m_grid->SelectRow( row );   // only for user, to show the selected line
 
-    SCH_BASE_FRAME::HISTORY_LIST dummy;
+    setLibIdByBrowser( row );
 
-    auto sel = m_parent->SelectComponentFromLibrary( NULL, dummy, true, 0, 0 );
+}
 
-    if( !sel.LibId.IsValid() )
+
+void DIALOG_EDIT_COMPONENTS_LIBID::onButtonBrowseLibraries( wxCommandEvent& event )
+{
+    wxArrayInt rows = m_grid->GetSelectedRows();
+
+    if( rows.GetCount() != 1 )  // Should not occur, because the button is disabled
         return;
+
+    setLibIdByBrowser( rows[0] );
+}
+
+
+bool DIALOG_EDIT_COMPONENTS_LIBID::setLibIdByBrowser( int aRow )
+{
+#if 0
+    SCH_BASE_FRAME::HISTORY_LIST dummy;
+    SCH_BASE_FRAME::COMPONENT_SELECTION sel =
+                m_parent->SelectComponentFromLibrary( NULL, dummy, true, 0, 0 );
+#else
+    LIB_ID aPreselectedLibid;
+    SCH_BASE_FRAME::COMPONENT_SELECTION sel =
+            m_parent->SelectComponentFromLibBrowser( NULL, aPreselectedLibid, 0, 0 );
+#endif
+
+    if( sel.LibId.empty() )     // command aborted
+        return false;
+
+    if( !sel.LibId.IsValid() )  // Should not occur
+    {
+        wxMessageBox( _( "Invalid symbol library identifier" ) );
+        return false;
+    }
 
     wxString new_libid;
     new_libid = sel.LibId.Format();
 
-    m_grid->SetCellValue( row, COL_NEW_LIBID, new_libid );
+    m_grid->SetCellValue( aRow, COL_NEW_LIBID, new_libid );
 
+    return true;
 }
 
 

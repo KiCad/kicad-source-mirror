@@ -47,6 +47,7 @@ class DIALOG_EDIT_COMPONENTS_LIBID_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerApply;
 		wxButton* m_sdbSizerCancel;
 		wxButton* m_buttonUndo;
+		wxButton* m_buttonBrowseLibs;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void onCellBrowseLib( wxGridEvent& event ) { event.Skip(); }
@@ -54,6 +55,8 @@ class DIALOG_EDIT_COMPONENTS_LIBID_BASE : public DIALOG_SHIM
 		virtual void onCancel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onUndoChangesButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void updateUIChangesButton( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onButtonBrowseLibraries( wxCommandEvent& event ) { event.Skip(); }
+		virtual void updateUIBrowseButton( wxUpdateUIEvent& event ) { event.Skip(); }
 		
 	
 	public:
