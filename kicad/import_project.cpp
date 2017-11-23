@@ -214,4 +214,5 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
     }
 
     ReCreateTreePrj();
+    m_active_project = true;
 }
