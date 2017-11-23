@@ -648,7 +648,7 @@ void LIB_VIEW_FRAME::ExportToSchematicLibraryPart( wxCommandEvent& event )
 
     if( ii >= 0 )
     {
-        wxString part_name = m_cmpList->GetString( ii );
+        wxString part_name = m_libraryName + ':' + m_cmpList->GetString( ii );
 
         // a selection was made, pass true
         DismissModal( true, part_name );
