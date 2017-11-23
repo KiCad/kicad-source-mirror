@@ -798,7 +798,7 @@
                                         <property name="show">1</property>
                                         <property name="size"></property>
                                         <property name="style"></property>
-                                        <property name="subclass"></property>
+                                        <property name="subclass">TEXT_CTRL_EVAL; widgets/text_ctrl_eval.h</property>
                                         <property name="toolbar_pane">0</property>
                                         <property name="tooltip"></property>
                                         <property name="validator_data_type"></property>
@@ -1168,7 +1168,7 @@
                                         <property name="show">1</property>
                                         <property name="size"></property>
                                         <property name="style"></property>
-                                        <property name="subclass"></property>
+                                        <property name="subclass">TEXT_CTRL_EVAL; widgets/text_ctrl_eval.h</property>
                                         <property name="toolbar_pane">0</property>
                                         <property name="tooltip"></property>
                                         <property name="validator_data_type"></property>
@@ -1425,7 +1425,7 @@
                                         <property name="show">1</property>
                                         <property name="size"></property>
                                         <property name="style"></property>
-                                        <property name="subclass"></property>
+                                        <property name="subclass">TEXT_CTRL_EVAL; widgets/text_ctrl_eval.h</property>
                                         <property name="toolbar_pane">0</property>
                                         <property name="tooltip"></property>
                                         <property name="validator_data_type"></property>
@@ -1682,7 +1682,7 @@
                                         <property name="show">1</property>
                                         <property name="size"></property>
                                         <property name="style"></property>
-                                        <property name="subclass"></property>
+                                        <property name="subclass">TEXT_CTRL_EVAL; widgets/text_ctrl_eval.h</property>
                                         <property name="toolbar_pane">0</property>
                                         <property name="tooltip"></property>
                                         <property name="validator_data_type"></property>
@@ -1939,7 +1939,7 @@
                                         <property name="show">1</property>
                                         <property name="size"></property>
                                         <property name="style"></property>
-                                        <property name="subclass"></property>
+                                        <property name="subclass">TEXT_CTRL_EVAL; widgets/text_ctrl_eval.h</property>
                                         <property name="toolbar_pane">0</property>
                                         <property name="tooltip"></property>
                                         <property name="validator_data_type"></property>

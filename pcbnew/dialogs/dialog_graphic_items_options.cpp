@@ -31,6 +31,7 @@
 #include <pcbnew_id.h>
 #include <module_editor_frame.h>
 #include <class_board.h>
+#include <widgets/text_ctrl_eval.h>
 
 #include <dialog_graphic_items_options.h>
 

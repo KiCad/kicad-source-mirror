@@ -24,6 +24,7 @@
 #include <wxPcbStruct.h>
 #include <base_units.h>
 #include <macros.h>
+#include <widgets/text_ctrl_eval.h>
 
 #include <module_editor_frame.h>
 

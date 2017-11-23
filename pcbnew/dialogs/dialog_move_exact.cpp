@@ -28,6 +28,7 @@
 #include <macros.h>
 
 #include <module_editor_frame.h>
+#include <widgets/text_ctrl_eval.h>
 
 #include "dialog_move_exact.h"
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
+class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -52,9 +53,9 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText5;
 		wxChoice* m_STEP_OrgUnitChoice;
 		wxStaticText* m_staticText3;
-		wxTextCtrl* m_STEP_Xorg;
+		TEXT_CTRL_EVAL* m_STEP_Xorg;
 		wxStaticText* m_staticText4;
-		wxTextCtrl* m_STEP_Yorg;
+		TEXT_CTRL_EVAL* m_STEP_Yorg;
 		wxStaticText* m_staticText7;
 		wxCheckBox* m_cbRemoveVirtual;
 		wxStaticLine* m_staticline1;

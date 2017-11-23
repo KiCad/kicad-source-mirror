@@ -35,6 +35,7 @@
 #include <confirm.h>
 #include <base_units.h>
 #include <wx/valnum.h>
+#include <widgets/text_ctrl_eval.h>
 
 #include <class_board.h>
 #include <class_pcb_text.h>

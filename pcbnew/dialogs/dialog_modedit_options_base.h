@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May 10 2016)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
+class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -40,16 +41,16 @@ class DIALOG_MODEDIT_OPTIONS_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticText281;
 		wxStaticText* m_EdgeModEWidthTitle;
-		wxTextCtrl* m_OptModuleGrLineWidth;
+		TEXT_CTRL_EVAL* m_OptModuleGrLineWidth;
 		wxStaticText* m_staticTextGrLineUnit;
 		wxStaticText* m_TextModWidthTitle;
-		wxTextCtrl* m_OptModuleTextWidth;
+		TEXT_CTRL_EVAL* m_OptModuleTextWidth;
 		wxStaticText* m_staticTextTextWidthUnit;
 		wxStaticText* m_TextModSizeVTitle;
-		wxTextCtrl* m_OptModuleTextVSize;
+		TEXT_CTRL_EVAL* m_OptModuleTextVSize;
 		wxStaticText* m_staticTextTextVSizeUnit;
 		wxStaticText* m_TextModSizeHTitle;
-		wxTextCtrl* m_OptModuleTextHSize;
+		TEXT_CTRL_EVAL* m_OptModuleTextHSize;
 		wxStaticText* m_staticTextTextHSizeUnit;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_staticText28;

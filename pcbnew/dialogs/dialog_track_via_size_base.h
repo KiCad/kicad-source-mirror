@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May 21 2016)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
+class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -38,13 +39,13 @@ class DIALOG_TRACK_VIA_SIZE_BASE : public DIALOG_SHIM
 	
 	protected:
 		wxStaticText* m_staticText3;
-		wxTextCtrl* m_trackWidthText;
+		TEXT_CTRL_EVAL* m_trackWidthText;
 		wxStaticText* m_trackWidthLabel;
 		wxStaticText* m_staticText5;
-		wxTextCtrl* m_viaDiameterText;
+		TEXT_CTRL_EVAL* m_viaDiameterText;
 		wxStaticText* m_viaDiameterLabel;
 		wxStaticText* m_staticText7;
-		wxTextCtrl* m_viaDrillText;
+		TEXT_CTRL_EVAL* m_viaDrillText;
 		wxStaticText* m_viaDrillLabel;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_stdButtons;

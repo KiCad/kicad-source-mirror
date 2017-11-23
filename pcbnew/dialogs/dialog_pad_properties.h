@@ -45,6 +45,7 @@
 #include <origin_viewitem.h>
 
 #include <dialog_pad_properties_base.h>
+#include <widgets/text_ctrl_eval.h>
 #include <pcb_draw_panel_gal.h>
 
 

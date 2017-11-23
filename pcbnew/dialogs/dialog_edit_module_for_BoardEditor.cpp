@@ -47,6 +47,7 @@
 #include <class_module.h>
 #include <class_text_mod.h>
 #include <validators.h>
+#include <widgets/text_ctrl_eval.h>
 
 #include <dialog_edit_module_for_BoardEditor.h>
 #include <wildcards_and_files_ext.h>

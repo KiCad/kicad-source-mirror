@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
+class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -48,9 +49,9 @@ class DIALOG_EXPORT_IDF3_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText5;
 		wxChoice* m_IDF_RefUnitChoice;
 		wxStaticText* m_staticText3;
-		wxTextCtrl* m_IDF_Xref;
+		TEXT_CTRL_EVAL* m_IDF_Xref;
 		wxStaticText* m_staticText4;
-		wxTextCtrl* m_IDF_Yref;
+		TEXT_CTRL_EVAL* m_IDF_Yref;
 		wxRadioBox* m_rbUnitSelection;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
