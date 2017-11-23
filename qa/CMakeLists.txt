@@ -12,3 +12,4 @@ endif()
 
 add_subdirectory( geometry )
 add_subdirectory( pcb_test_window )
+add_subdirectory( polygon_triangulation )

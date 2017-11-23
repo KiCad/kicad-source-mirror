@@ -776,9 +776,52 @@ void OPENGL_GAL::DrawPolygon( const VECTOR2D aPointList[], int aListSize )
     drawPolygon( points.get(), aListSize );
 }
 
+void OPENGL_GAL::drawTriangulatedPolyset( const SHAPE_POLY_SET& aPolySet )
+{
+    currentManager->Shader( SHADER_NONE );
+    currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+
+
+    if ( isFillEnabled )
+    {
+        for( int j = 0; j < aPolySet.OutlineCount(); ++j )
+        {
+            auto triPoly = aPolySet.TriangulatedPolygon( j );
+
+            for ( int i = 0; i < triPoly->m_triangleCount; i++ )
+            {
+                VECTOR2I a, b, c;
+                triPoly->GetTriangle( i ,a,b,c);
+                currentManager->Vertex( a.x, a.y, layerDepth );
+                currentManager->Vertex( b.x, b.y, layerDepth );
+                currentManager->Vertex( c.x, c.y, layerDepth );
+            }
+        }
+    }
+
+    if( isStrokeEnabled )
+    {
+        for( int j = 0; j < aPolySet.OutlineCount(); ++j )
+        {
+            const auto& poly = aPolySet.Polygon( j );
+
+            for( const auto& lc : poly )
+            {
+                DrawPolyline( lc );
+            }
+        }
+    }
+}
+
 
 void OPENGL_GAL::DrawPolygon( const SHAPE_POLY_SET& aPolySet )
 {
+    if ( aPolySet.IsTriangulationUpToDate() )
+    {
+        drawTriangulatedPolyset( aPolySet );
+        return;
+    }
+
     for( int j = 0; j < aPolySet.OutlineCount(); ++j )
     {
         const SHAPE_LINE_CHAIN& outline = aPolySet.COutline( j );
@@ -1469,7 +1512,6 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
 
     Restore();
 }
-
 
 void OPENGL_GAL::drawPolygon( GLdouble* aPoints, int aPointCount )
 {

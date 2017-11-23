@@ -50,7 +50,7 @@ public:
      * adds all items from the current board to the VIEW, so they can be displayed by GAL.
      * @param aBoard is the PCB to be loaded.
      */
-    void DisplayBoard( const BOARD* aBoard );
+    void DisplayBoard( BOARD* aBoard );
 
     /**
      * Function SetWorksheet
@@ -106,7 +106,7 @@ public:
 protected:
 
     KIGFX::PCB_VIEW* view() const;
-    
+
     ///> Reassigns layer order to the initial settings.
     void setDefaultLayerOrder();
 

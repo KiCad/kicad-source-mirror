@@ -1312,3 +1312,8 @@ void ZONE_CONTAINER::SwapData( BOARD_ITEM* aImage )
 
     std::swap( *((ZONE_CONTAINER*) this), *((ZONE_CONTAINER*) aImage) );
 }
+
+void ZONE_CONTAINER::CacheTriangulation()
+{
+    m_FilledPolysList.CacheTriangulation();
+}

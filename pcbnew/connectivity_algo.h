@@ -53,6 +53,7 @@ class BOARD;
 class BOARD_CONNECTED_ITEM;
 class BOARD_ITEM;
 class ZONE_CONTAINER;
+class PROGRESS_REPORTER;
 
 class CN_ANCHOR
 {
@@ -439,6 +440,8 @@ public:
     ITER begin() { return m_items.begin(); };
     ITER end() { return m_items.end(); };
 
+    CN_ITEM* operator[] ( int aIndex ) { return m_items[aIndex]; }
+
     std::vector<CN_ANCHOR_PTR>& Anchors() { return m_anchors; }
 
     template <class T>
@@ -806,6 +809,7 @@ public:
     CLUSTERS m_connClusters;
     CLUSTERS m_ratsnestClusters;
     std::vector<bool> m_dirtyNets;
+    PROGRESS_REPORTER* m_progressReporter = nullptr;
 
     void    searchConnections( bool aIncludeZones = false );
 
@@ -883,6 +887,8 @@ public:
 
     void    PropagateNets();
     void    FindIsolatedCopperIslands( ZONE_CONTAINER* aZone, std::vector<int>& aIslands );
+    void    FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones );
+
     bool    CheckConnectivity( std::vector<CN_DISJOINT_NET_ENTRY>& aReport );
 
     const CLUSTERS& GetClusters();
@@ -894,6 +900,7 @@ public:
     void ForEachItem(  std::function<void(CN_ITEM*)> aFunc );
 
     void MarkNetAsDirty( int aNet );
+    void SetProgressReporter( PROGRESS_REPORTER* aReporter );
 
 };
 

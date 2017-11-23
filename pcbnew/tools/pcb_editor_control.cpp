@@ -23,6 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 #include <cstdint>
+#include <thread>
+#include <mutex>
 
 #include "pcb_editor_control.h"
 #include "pcb_actions.h"
@@ -55,6 +57,12 @@
 #include <origin_viewitem.h>
 #include <profile.h>
 
+#include <widgets/progress_reporter.h>
+
+#ifdef USE_OPENMP
+#include <omp.h>
+#endif /* USE_OPENMP */
+
 #include <tools/tool_event_utils.h>
 
 #include <functional>
@@ -81,24 +89,6 @@ TOOL_ACTION PCB_ACTIONS::viaSizeDec( "pcbnew.EditorControl.viaSizeDec",
 TOOL_ACTION PCB_ACTIONS::trackViaSizeChanged( "pcbnew.EditorControl.trackViaSizeChanged",
         AS_GLOBAL, 0,
         "", "", NULL, AF_NOTIFY );
-
-
-// Zone actions
-TOOL_ACTION PCB_ACTIONS::zoneFill( "pcbnew.EditorControl.zoneFill",
-        AS_GLOBAL, 0,
-        _( "Fill" ), _( "Fill zone(s)" ), fill_zone_xpm );
-
-TOOL_ACTION PCB_ACTIONS::zoneFillAll( "pcbnew.EditorControl.zoneFillAll",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZONE_FILL_OR_REFILL ),
-        _( "Fill All" ), _( "Fill all zones" ) );
-
-TOOL_ACTION PCB_ACTIONS::zoneUnfill( "pcbnew.EditorControl.zoneUnfill",
-        AS_GLOBAL, 0,
-        _( "Unfill" ), _( "Unfill zone(s)" ), zone_unfill_xpm );
-
-TOOL_ACTION PCB_ACTIONS::zoneUnfillAll( "pcbnew.EditorControl.zoneUnfillAll",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZONE_REMOVE_FILLED ),
-        _( "Unfill All" ), _( "Unfill all zones" ) );
 
 TOOL_ACTION PCB_ACTIONS::zoneMerge( "pcbnew.EditorControl.zoneMerge",
         AS_GLOBAL, 0,
@@ -174,6 +164,7 @@ public:
         Add( PCB_ACTIONS::drawZoneCutout );
         Add( PCB_ACTIONS::drawSimilarZone );
     }
+
 
 protected:
     CONTEXT_MENU* create() const override
@@ -655,139 +646,6 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-
-// Zone actions
-int PCB_EDITOR_CONTROL::ZoneFill( const TOOL_EVENT& aEvent )
-{
-    auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const auto& selection = selTool->GetSelection();
-    auto connectivity = getModel<BOARD>()->GetConnectivity();
-
-    BOARD_COMMIT commit( this );
-
-    for( auto item : selection )
-    {
-        assert( item->Type() == PCB_ZONE_AREA_T );
-
-        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*> ( item );
-
-        commit.Modify( zone );
-
-        m_frame->Fill_Zone( zone );
-        zone->SetIsFilled( true );
-    }
-
-    commit.Push( _( "Fill Zone" ) );
-
-    connectivity->RecalculateRatsnest();
-
-    return 0;
-}
-
-
-int PCB_EDITOR_CONTROL::ZoneFillAll( const TOOL_EVENT& aEvent )
-{
-    BOARD* board = getModel<BOARD>();
-    auto connectivity = getModel<BOARD>()->GetConnectivity();
-    int areaCount = board->GetAreaCount();
-    const wxString fmt = _( "Filling zone %d out of %d (net %s)..." );
-    wxString msg;
-    bool aborted = false;
-
-    // Create a message with a long net name, and build a wxProgressDialog
-    // with a correct size to show this long net name
-    msg.Printf( fmt, 000, areaCount, wxT("XXXXXXXXXXXXXXXXX" ) );
-
-    auto progressDialog = new wxProgressDialog( _( "Fill All Zones" ), msg,
-                                 areaCount, frame(),
-                                 wxPD_AUTO_HIDE | wxPD_CAN_ABORT |
-                                 wxPD_APP_MODAL | wxPD_ELAPSED_TIME );
-
-    BOARD_COMMIT commit( this );
-
-    for( int i = 0; i < areaCount; ++i )
-    {
-        ZONE_CONTAINER* zone = board->GetArea( i );
-
-        msg.Printf( fmt, i, areaCount, GetChars( zone->GetNetname() ) );
-
-        commit.Modify( zone );
-
-        if( !progressDialog->Update( i, msg ) )
-        {
-            aborted = true;
-            break;  // Aborted by user
-        }
-
-        m_frame->Fill_Zone( zone );
-        zone->SetIsFilled( true );
-    }
-
-    if( aborted )
-        commit.Revert();
-    else
-        commit.Push( _( "Fill All Zones" ) );
-
-    connectivity->RecalculateRatsnest();
-    progressDialog->Destroy();
-
-    return 0;
-}
-
-
-int PCB_EDITOR_CONTROL::ZoneUnfill( const TOOL_EVENT& aEvent )
-{
-    auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const auto& selection = selTool->GetSelection();
-    auto connectivity = getModel<BOARD>()->GetConnectivity();
-
-    BOARD_COMMIT commit( this );
-
-    for( auto item : selection )
-    {
-        assert( item->Type() == PCB_ZONE_AREA_T );
-
-        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
-
-        commit.Modify( zone );
-
-        zone->SetIsFilled( false );
-        zone->ClearFilledPolysList();
-    }
-
-    commit.Push( _( "Unfill Zone" ) );
-
-    connectivity->RecalculateRatsnest();
-
-    return 0;
-}
-
-
-int PCB_EDITOR_CONTROL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
-{
-    BOARD* board = getModel<BOARD>();
-    auto connectivity = getModel<BOARD>()->GetConnectivity();
-
-    BOARD_COMMIT commit( this );
-
-    for( int i = 0; i < board->GetAreaCount(); ++i )
-    {
-        ZONE_CONTAINER* zone = board->GetArea( i );
-
-        commit.Modify( zone );
-
-        zone->SetIsFilled( false );
-        zone->ClearFilledPolysList();
-    }
-
-    commit.Push( _( "Unfill All Zones" ) );
-
-    connectivity->RecalculateRatsnest();
-
-    return 0;
-}
-
-
 static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE_CONTAINER *>& aOriginZones,
         std::vector<ZONE_CONTAINER *>& aMergedZones )
 {
@@ -819,6 +677,7 @@ static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE_CONTAINER *>& aO
 
     aOriginZones[0]->SetLocalFlags( 1 );
     aOriginZones[0]->Hatch();
+    aOriginZones[0]->CacheTriangulation();
 
     return true;
 }
@@ -1250,10 +1109,6 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::ViaSizeDec,         PCB_ACTIONS::viaSizeDec.MakeEvent() );
 
     // Zone actions
-    Go( &PCB_EDITOR_CONTROL::ZoneFill,           PCB_ACTIONS::zoneFill.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ZoneFillAll,        PCB_ACTIONS::zoneFillAll.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ZoneUnfill,         PCB_ACTIONS::zoneUnfill.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ZoneUnfillAll,      PCB_ACTIONS::zoneUnfillAll.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ZoneMerge,          PCB_ACTIONS::zoneMerge.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ZoneDuplicate,      PCB_ACTIONS::zoneDuplicate.MakeEvent() );
 

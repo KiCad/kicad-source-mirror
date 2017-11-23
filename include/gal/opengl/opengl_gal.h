@@ -388,6 +388,12 @@ private:
     void drawPolygon( GLdouble* aPoints, int aPointCount );
 
     /**
+     * @brief Draws a set of polygons with a cached triangulation. Way faster than drawPolygon.
+     */
+    void drawTriangulatedPolyset( const SHAPE_POLY_SET& aPoly );
+
+
+    /**
      * @brief Draws a single character using bitmap font.
      * Its main purpose is to be used in BitmapText() function.
      *

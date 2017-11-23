@@ -136,13 +136,16 @@ PCB_DRAW_PANEL_GAL::~PCB_DRAW_PANEL_GAL()
 }
 
 
-void PCB_DRAW_PANEL_GAL::DisplayBoard( const BOARD* aBoard )
+void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
 {
     m_view->Clear();
 
     // Load zones
-    for( int i = 0; i < aBoard->GetAreaCount(); ++i )
-        m_view->Add( (KIGFX::VIEW_ITEM*) ( aBoard->GetArea( i ) ) );
+    for( auto zone : aBoard->Zones() )
+    {
+        zone->CacheTriangulation();
+        m_view->Add( zone );
+    }
 
     // Load drawings
     for( auto drawing : const_cast<BOARD*>(aBoard)->Drawings() )

@@ -170,11 +170,11 @@ public:
     int GetClearance( BOARD_CONNECTED_ITEM* aItem = NULL ) const override;
 
     /**
-     * Function TestForCopperIslandAndRemoveInsulatedIslands
+     * Function RemoveInsulatedCopperIslands
      * Remove insulated copper islands found in m_FilledPolysList.
      * @param aPcb = the board to analyze
      */
-    void TestForCopperIslandAndRemoveInsulatedIslands( BOARD* aPcb );
+    void RemoveInsulatedCopperIslands( BOARD* aPcb );
 
     /**
      * Function IsOnCopperLayer
@@ -329,7 +329,7 @@ public:
     bool BuildFilledSolidAreasPolygons( BOARD* aPcb, SHAPE_POLY_SET* aOutlineBuffer = NULL );
 
     /**
-     * Function AddClearanceAreasPolygonsToPolysList
+     * Function ComputeRawFilledAreas
      * Add non copper areas polygons (pads and tracks with clearance)
      * to a filled copper area
      * used in BuildFilledSolidAreasPolygons when calculating filled areas in a zone
@@ -340,8 +340,7 @@ public:
      * @param aPcb: the current board
      * _NG version uses SHAPE_POLY_SET instead of Boost.Polygon
      */
-    void AddClearanceAreasPolygonsToPolysList( BOARD* aPcb );
-    void AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb );
+    void ComputeRawFilledAreas( BOARD* aPcb );
 
 
      /**
@@ -602,6 +601,8 @@ public:
         return m_FilledPolysList;
     }
 
+    void CacheTriangulation();
+
    /**
      * Function AddFilledPolysList
      * sets the list of filled polygons.
@@ -728,7 +729,6 @@ public:
 
     const std::vector<SEG>& GetHatchLines() const { return m_HatchLines; }
 
-
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
@@ -809,6 +809,8 @@ private:
     HATCH_STYLE           m_hatchStyle;     // hatch style, see enum above
     int                   m_hatchPitch;     // for DIAGONAL_EDGE, distance between 2 hatch lines
     std::vector<SEG>      m_HatchLines;     // hatch lines
+
+    std::vector<int>      m_insulatedIslands;
 
     /**
      * Union to handle conversion between references to wxPoint and to VECTOR2I.

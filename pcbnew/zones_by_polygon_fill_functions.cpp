@@ -128,9 +128,15 @@ int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* aZone )
     //OnModify();
 
     return 0;
+
 }
 
+int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
+{
+    return 0;
+}
 
+/*
 int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
 {
     int errorLevel = 0;
@@ -197,3 +203,4 @@ int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
 
     return errorLevel;
 }
+*/

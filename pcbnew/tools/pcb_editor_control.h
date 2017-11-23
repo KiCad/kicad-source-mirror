@@ -57,10 +57,6 @@ public:
     int ViaSizeDec( const TOOL_EVENT& aEvent );
 
     // Zone actions
-    int ZoneFill( const TOOL_EVENT& aEvent );
-    int ZoneFillAll( const TOOL_EVENT& aEvent );
-    int ZoneUnfill( const TOOL_EVENT& aEvent );
-    int ZoneUnfillAll( const TOOL_EVENT& aEvent );
     int ZoneMerge( const TOOL_EVENT& aEvent );
 
     ///> Duplicates a zone onto a layer (prompts for new layer)

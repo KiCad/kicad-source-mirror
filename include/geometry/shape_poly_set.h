@@ -33,6 +33,8 @@
 
 #include "clipper.hpp"
 
+#include <md5_hash.h>
+
 
 /**
  * Class SHAPE_POLY_SET
@@ -56,6 +58,42 @@ class SHAPE_POLY_SET : public SHAPE
         ///> represents a single polygon outline with holes. The first entry is the outline,
         ///> the remaining (if any), are the holes
         typedef std::vector<SHAPE_LINE_CHAIN> POLYGON;
+
+        struct TRIANGULATED_POLYGON
+        {
+            ~TRIANGULATED_POLYGON();
+
+            struct TRI
+            {
+                TRI(){};
+
+                int a, b, c;
+            };
+
+            void Clear();
+
+            void AllocateVertices( int aSize );
+            void AllocateTriangles ( int aSize );
+
+            void GetTriangle( int index, VECTOR2I& a, VECTOR2I& b, VECTOR2I& c ) const
+            {
+                auto tri = &m_triangles[ index ];
+                a = m_vertices[ tri->a ];
+                b = m_vertices[ tri->b ];
+                c = m_vertices[ tri->c ];
+            }
+
+            int AddVertex( const VECTOR2I& aP )
+            {
+                m_vertices[ m_vertexCount ] = aP;
+                return (m_vertexCount++);
+            }
+
+            TRI* m_triangles = nullptr;
+            VECTOR2I* m_vertices = nullptr;
+            int m_vertexCount = 0;
+            int m_triangleCount = 0;
+        };
 
         /**
          * Struct VERTEX_INDEX
@@ -538,6 +576,17 @@ class SHAPE_POLY_SET : public SHAPE
             return m_polys[aIndex];
         }
 
+        const POLYGON& Polygon( int aIndex ) const
+        {
+            return m_polys[aIndex];
+        }
+
+        const TRIANGULATED_POLYGON* TriangulatedPolygon( int aIndex ) const
+        {
+            return m_triangulatedPolys[aIndex];
+        }
+
+
         const SHAPE_LINE_CHAIN& COutline( int aIndex ) const
         {
             return m_polys[aIndex][0];
@@ -760,6 +809,8 @@ class SHAPE_POLY_SET : public SHAPE
         ///> to the inner holes
         ///> For aFastMode meaning, see function booleanOp
         void Fracture( POLYGON_MODE aFastMode );
+
+        void Unfracture( POLYGON_MODE aFastMode );
 
         ///> Returns true if the polygon set has any holes.
         bool HasHoles() const;
@@ -990,6 +1041,7 @@ class SHAPE_POLY_SET : public SHAPE
 
 
         void fractureSingle( POLYGON& paths );
+        void unfractureSingle ( POLYGON& path );
         void importTree( ClipperLib::PolyTree* tree );
 
         /** Function booleanOp
@@ -1039,6 +1091,8 @@ class SHAPE_POLY_SET : public SHAPE
             FILLETED
         };
 
+
+
         /**
          * Function chamferFilletPolygon
          * Returns the camfered or filleted version of the aIndex-th polygon in the set, depending
@@ -1059,6 +1113,21 @@ class SHAPE_POLY_SET : public SHAPE
         typedef std::vector<POLYGON> POLYSET;
 
         POLYSET m_polys;
+
+    public:
+
+        void CacheTriangulation();
+        bool IsTriangulationUpToDate() const;
+
+    private:
+        void triangulateSingle( const POLYGON& aPoly, SHAPE_POLY_SET::TRIANGULATED_POLYGON& aResult );
+
+        MD5_HASH checksum() const;
+
+        std::vector<TRIANGULATED_POLYGON*> m_triangulatedPolys;
+        bool m_triangulationValid = false;
+        MD5_HASH m_hash;
+
 };
 
 #endif

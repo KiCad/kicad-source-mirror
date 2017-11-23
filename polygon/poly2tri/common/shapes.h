@@ -39,313 +39,287 @@
 #include <cmath>
 
 namespace p2t {
+
 struct Edge;
 
-struct Point
-{
-    double x, y;
+struct Point {
 
-    /// Default constructor does nothing (for performance).
-    Point()
-    {
-        x   = 0.0;
-        y   = 0.0;
-    }
+  double x, y;
 
-    /// The edges this point constitutes an upper ending point
-    std::vector<Edge*> edge_list;
+  /// Default constructor does nothing (for performance).
+  Point()
+  {
+    x = 0.0;
+    y = 0.0;
+  }
 
-    /// Construct using coordinates.
-    Point( double ax, double ay ) : x( ax ), y( ay ) {}
+  /// The edges this point constitutes an upper ending point
+  std::vector<Edge*> edge_list;
 
-    /// Set this point to all zeros.
-    void set_zero()
-    {
-        x   = 0.0;
-        y   = 0.0;
-    }
+  /// Construct using coordinates.
+  Point(double x, double y) : x(x), y(y) {}
 
-    /// Set this point to some specified coordinates.
-    void set( double x_, double y_ )
-    {
-        x   = x_;
-        y   = y_;
-    }
+  /// Set this point to all zeros.
+  void set_zero()
+  {
+    x = 0.0;
+    y = 0.0;
+  }
 
-    /// Negate this point.
-    Point operator -() const
-    {
-        Point v;
+  /// Set this point to some specified coordinates.
+  void set(double x_, double y_)
+  {
+    x = x_;
+    y = y_;
+  }
 
-        v.set( -x, -y );
-        return v;
-    }
+  /// Negate this point.
+  Point operator -() const
+  {
+    Point v;
+    v.set(-x, -y);
+    return v;
+  }
 
-    /// Add a point to this point.
-    void operator +=( const Point& v )
-    {
-        x   += v.x;
-        y   += v.y;
-    }
+  /// Add a point to this point.
+  void operator +=(const Point& v)
+  {
+    x += v.x;
+    y += v.y;
+  }
 
-    /// Subtract a point from this point.
-    void operator -=( const Point& v )
-    {
-        x   -= v.x;
-        y   -= v.y;
-    }
+  /// Subtract a point from this point.
+  void operator -=(const Point& v)
+  {
+    x -= v.x;
+    y -= v.y;
+  }
 
-    /// Multiply this point by a scalar.
-    void operator *=( double a )
-    {
-        x   *= a;
-        y   *= a;
-    }
+  /// Multiply this point by a scalar.
+  void operator *=(double a)
+  {
+    x *= a;
+    y *= a;
+  }
 
-    /// Get the length of this point (the norm).
-    double Length() const
-    {
-        return sqrt( x * x + y * y );
-    }
+  /// Get the length of this point (the norm).
+  double Length() const
+  {
+    return sqrt(x * x + y * y);
+  }
 
-    /// Convert this point into a unit point. Returns the Length.
-    double Normalize()
-    {
-        double len = Length();
+  /// Convert this point into a unit point. Returns the Length.
+  double Normalize()
+  {
+    double len = Length();
+    x /= len;
+    y /= len;
+    return len;
+  }
 
-        x   /= len;
-        y   /= len;
-        return len;
-    }
 };
 
 // Represents a simple polygon's edge
-struct Edge
-{
-    Point* p, * q;
+struct Edge {
 
-    /// Constructor
-    Edge( Point& p1, Point& p2 ) : p( &p1 ), q( &p2 )
-    {
-        if( p1.y > p2.y )
-        {
-            q   = &p1;
-            p   = &p2;
-        }
-        else if( p1.y == p2.y )
-        {
-            if( p1.x > p2.x )
-            {
-                q   = &p1;
-                p   = &p2;
-            }
-            else if( p1.x == p2.x )
-            {
-                // Repeat points
-                assert( false );
-            }
-        }
+  Point* p, *q;
 
-        q->edge_list.push_back( this );
+  /// Constructor
+  Edge(Point& p1, Point& p2) : p(&p1), q(&p2)
+  {
+    if (p1.y > p2.y) {
+      q = &p1;
+      p = &p2;
+    } else if (p1.y == p2.y) {
+      if (p1.x > p2.x) {
+        q = &p1;
+        p = &p2;
+      } else if (p1.x == p2.x) {
+        // Repeat points
+        assert(false);
+      }
     }
+
+    q->edge_list.push_back(this);
+  }
 };
 
 // Triangle-based data structures are know to have better performance than quad-edge structures
 // See: J. Shewchuk, "Triangle: Engineering a 2D Quality Mesh Generator and Delaunay Triangulator"
-// "Triangulations in CGAL"
-class Triangle
-{
+//      "Triangulations in CGAL"
+class Triangle {
 public:
 
 /// Constructor
-    Triangle( Point& a, Point& b, Point& c );
+Triangle(Point& a, Point& b, Point& c);
 
 /// Flags to determine if an edge is a Constrained edge
-    bool    constrained_edge[3];
+bool constrained_edge[3];
 /// Flags to determine if an edge is a Delauney edge
-    bool    delaunay_edge[3];
+bool delaunay_edge[3];
 
-    Point*      GetPoint( const int& index );
-    Point*      PointCW( Point& point );
-    Point*      PointCCW( Point& point );
-    Point*      OppositePoint( Triangle& t, Point& p );
+Point* GetPoint(const int& index);
+Point* PointCW(Point& point);
+Point* PointCCW(Point& point);
+Point* OppositePoint(Triangle& t, Point& p);
 
-    Triangle*   GetNeighbor( const int& index );
-    void        MarkNeighbor( Point* p1, Point* p2, Triangle* t );
-    void        MarkNeighbor( Triangle& t );
+Triangle* GetNeighbor(const int& index);
+void MarkNeighbor(Point* p1, Point* p2, Triangle* t);
+void MarkNeighbor(Triangle& t);
 
-    void        MarkConstrainedEdge( const int index );
-    void        MarkConstrainedEdge( Edge& edge );
-    void        MarkConstrainedEdge( Point* p, Point* q );
+void MarkConstrainedEdge(const int index);
+void MarkConstrainedEdge(Edge& edge);
+void MarkConstrainedEdge(Point* p, Point* q);
 
-    int         Index( const Point* p );
-    int         EdgeIndex( const Point* p1, const Point* p2 );
+int Index(const Point* p);
+int EdgeIndex(const Point* p1, const Point* p2);
 
-    Triangle*   NeighborCW( Point& point );
-    Triangle*   NeighborCCW( Point& point );
-    bool        GetConstrainedEdgeCCW( Point& p );
-    bool        GetConstrainedEdgeCW( Point& p );
-    void        SetConstrainedEdgeCCW( Point& p, bool ce );
-    void        SetConstrainedEdgeCW( Point& p, bool ce );
-    bool        GetDelunayEdgeCCW( Point& p );
-    bool        GetDelunayEdgeCW( Point& p );
-    void        SetDelunayEdgeCCW( Point& p, bool e );
-    void        SetDelunayEdgeCW( Point& p, bool e );
+Triangle* NeighborCW(Point& point);
+Triangle* NeighborCCW(Point& point);
+bool GetConstrainedEdgeCCW(Point& p);
+bool GetConstrainedEdgeCW(Point& p);
+void SetConstrainedEdgeCCW(Point& p, bool ce);
+void SetConstrainedEdgeCW(Point& p, bool ce);
+bool GetDelunayEdgeCCW(Point& p);
+bool GetDelunayEdgeCW(Point& p);
+void SetDelunayEdgeCCW(Point& p, bool e);
+void SetDelunayEdgeCW(Point& p, bool e);
 
-    bool        Contains( Point* p );
-    bool        Contains( const Edge& e );
-    bool        Contains( Point* p, Point* q );
-    void        Legalize( Point& point );
-    void        Legalize( Point& opoint, Point& npoint );
-
+bool Contains(Point* p);
+bool Contains(const Edge& e);
+bool Contains(Point* p, Point* q);
+void Legalize(Point& point);
+void Legalize(Point& opoint, Point& npoint);
 /**
  * Clears all references to all other triangles and points
  */
-    void        Clear();
-    void        ClearNeighbor( Triangle* triangle );
-    void        ClearNeighbors();
-    void        ClearDelunayEdges();
+void Clear();
+void ClearNeighbor(Triangle *triangle );
+void ClearNeighbors();
+void ClearDelunayEdges();
 
-    inline bool IsInterior();
-    inline void IsInterior( bool b );
+inline bool IsInterior();
+inline void IsInterior(bool b);
 
-    Triangle&   NeighborAcross( Point& opoint );
+Triangle& NeighborAcross(Point& opoint);
 
-    void        DebugPrint();
+void DebugPrint();
 
 private:
 
 /// Triangle points
-    Point*      points_[3];
+Point* points_[3];
 /// Neighbor list
-    Triangle*   neighbors_[3];
+Triangle* neighbors_[3];
 
 /// Has this triangle been marked as an interior triangle?
-    bool        interior_;
+bool interior_;
 };
 
-inline bool cmp( const Point* a, const Point* b )
+inline bool cmp(const Point* a, const Point* b)
 {
-    if( a->y < b->y )
-    {
-        return true;
+  if (a->y < b->y) {
+    return true;
+  } else if (a->y == b->y) {
+    // Make sure q is point with greater x value
+    if (a->x < b->x) {
+      return true;
     }
-    else if( a->y == b->y )
-    {
-        // Make sure q is point with greater x value
-        if( a->x < b->x )
-        {
-            return true;
-        }
-    }
-
-    return false;
+  }
+  return false;
 }
-
 
 /// Add two points_ component-wise.
-inline Point operator +( const Point& a, const Point& b )
+inline Point operator +(const Point& a, const Point& b)
 {
-    return Point( a.x + b.x, a.y + b.y );
+  return Point(a.x + b.x, a.y + b.y);
 }
-
 
 /// Subtract two points_ component-wise.
-inline Point operator -( const Point& a, const Point& b )
+inline Point operator -(const Point& a, const Point& b)
 {
-    return Point( a.x - b.x, a.y - b.y );
+  return Point(a.x - b.x, a.y - b.y);
 }
-
 
 /// Multiply point by scalar
-inline Point operator *( double s, const Point& a )
+inline Point operator *(double s, const Point& a)
 {
-    return Point( s * a.x, s * a.y );
+  return Point(s * a.x, s * a.y);
 }
 
-
-inline bool operator ==( const Point& a, const Point& b )
+inline bool operator ==(const Point& a, const Point& b)
 {
-    return a.x == b.x && a.y == b.y;
+  return a.x == b.x && a.y == b.y;
 }
 
-
-inline bool operator !=( const Point& a, const Point& b )
+inline bool operator !=(const Point& a, const Point& b)
 {
-    return !(a.x == b.x) && !(a.y == b.y);
+  return !(a.x == b.x) && !(a.y == b.y);
 }
-
 
 /// Peform the dot product on two vectors.
-inline double Dot( const Point& a, const Point& b )
+inline double Dot(const Point& a, const Point& b)
 {
-    return a.x * b.x + a.y * b.y;
+  return a.x * b.x + a.y * b.y;
 }
-
 
 /// Perform the cross product on two vectors. In 2D this produces a scalar.
-inline double Cross( const Point& a, const Point& b )
+inline double Cross(const Point& a, const Point& b)
 {
-    return a.x * b.y - a.y * b.x;
+  return a.x * b.y - a.y * b.x;
 }
-
 
 /// Perform the cross product on a point and a scalar. In 2D this produces
 /// a point.
-inline Point Cross( const Point& a, double s )
+inline Point Cross(const Point& a, double s)
 {
-    return Point( s * a.y, -s * a.x );
+  return Point(s * a.y, -s * a.x);
 }
-
 
 /// Perform the cross product on a scalar and a point. In 2D this produces
 /// a point.
-inline Point Cross( const double s, const Point& a )
+inline Point Cross(const double s, const Point& a)
 {
-    return Point( -s * a.y, s * a.x );
+  return Point(-s * a.y, s * a.x);
 }
 
-
-inline Point* Triangle::GetPoint( const int& index )
+inline Point* Triangle::GetPoint(const int& index)
 {
-    return points_[index];
+  return points_[index];
 }
 
-
-inline Triangle* Triangle::GetNeighbor( const int& index )
+inline Triangle* Triangle::GetNeighbor(const int& index)
 {
-    return neighbors_[index];
+  return neighbors_[index];
 }
 
-
-inline bool Triangle::Contains( Point* p )
+inline bool Triangle::Contains(Point* p)
 {
-    return p == points_[0] || p == points_[1] || p == points_[2];
+  return p == points_[0] || p == points_[1] || p == points_[2];
 }
 
-
-inline bool Triangle::Contains( const Edge& e )
+inline bool Triangle::Contains(const Edge& e)
 {
-    return Contains( e.p ) && Contains( e.q );
+  return Contains(e.p) && Contains(e.q);
 }
 
-
-inline bool Triangle::Contains( Point* p, Point* q )
+inline bool Triangle::Contains(Point* p, Point* q)
 {
-    return Contains( p ) && Contains( q );
+  return Contains(p) && Contains(q);
 }
-
 
 inline bool Triangle::IsInterior()
 {
-    return interior_;
+  return interior_;
 }
 
-
-inline void Triangle::IsInterior( bool b )
+inline void Triangle::IsInterior(bool b)
 {
-    interior_ = b;
+  interior_ = b;
 }
+
 }
 
 #endif
+
+

@@ -218,6 +218,10 @@ void CONNECTIVITY_DATA::FindIsolatedCopperIslands( ZONE_CONTAINER* aZone,
     m_connAlgo->FindIsolatedCopperIslands( aZone, aIslands );
 }
 
+void CONNECTIVITY_DATA::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_ISLAND_LIST>& aZones )
+{
+    m_connAlgo->FindIsolatedCopperIslands( aZones );
+}
 
 void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& aItems )
 {
@@ -616,4 +620,10 @@ void CONNECTIVITY_DATA::MarkItemNetAsDirty( BOARD_ITEM *aItem )
     {
         m_connAlgo->MarkNetAsDirty( static_cast<BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode() );
     }
+}
+
+void CONNECTIVITY_DATA::SetProgressReporter( PROGRESS_REPORTER* aReporter )
+{
+    m_progressReporter = aReporter;
+    m_connAlgo->SetProgressReporter( m_progressReporter );
 }

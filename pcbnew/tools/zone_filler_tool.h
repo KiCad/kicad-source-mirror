@@ -1,11 +1,8 @@
-/**
- * @file zones_polygons_insulated_copper_islands.cpp
- */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014 - 2017 CERN
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +22,37 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <class_board.h>
-#include <class_zone.h>
-#include <connectivity_data.h>
+#ifndef ZONE_FILLER_TOOL_H
+#define ZONE_FILLER_TOOL_H
+
+#include <tools/pcb_tool.h>
+
+
+class PCB_EDIT_FRAME;
+
+/**
+ * Class ZONE_FILLER_TOOL
+ *
+ * Handles actions specific to filling copper zones.
+ */
+class ZONE_FILLER_TOOL : public PCB_TOOL
+{
+public:
+    ZONE_FILLER_TOOL();
+    ~ZONE_FILLER_TOOL();
+
+    /// @copydoc TOOL_INTERACTIVE::Reset()
+    void Reset( RESET_REASON aReason ) override;
+
+    // Zone actions
+    int ZoneFill( const TOOL_EVENT& aEvent );
+    int ZoneFillAll( const TOOL_EVENT& aEvent );
+    int ZoneUnfill( const TOOL_EVENT& aEvent );
+    int ZoneUnfillAll( const TOOL_EVENT& aEvent );
+
+private:
+    ///> Sets up handlers for various events.
+    void setTransitions() override;
+};
+
+#endif

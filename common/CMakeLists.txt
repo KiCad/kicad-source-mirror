@@ -179,6 +179,7 @@ set( COMMON_WIDGET_SRCS
     widgets/indicator_icon.cpp
     widgets/text_ctrl_eval.cpp
     widgets/unit_binder.cpp
+    widgets/progress_reporter.cpp
     )
 
 set( COMMON_PAGE_LAYOUT_SRCS
@@ -273,6 +274,7 @@ set( COMMON_SRCS
     kiway_player.cpp
     lib_table_base.cpp
     lockfile.cpp
+    md5_hash.cpp
     msgpanel.cpp
     netlist_keywords.cpp
     observable.cpp

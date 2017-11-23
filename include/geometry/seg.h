@@ -102,6 +102,16 @@ public:
         return *this;
     }
 
+    bool operator==( const SEG& aSeg ) const
+    {
+        return (A == aSeg.A && B == aSeg.B) ;
+    }
+
+    bool operator!=( const SEG& aSeg ) const
+    {
+        return (A != aSeg.A || B != aSeg.B);
+    }
+
     /**
       * Function LineProject()
       *
