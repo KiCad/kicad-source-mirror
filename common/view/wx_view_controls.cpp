@@ -87,7 +87,7 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
     bool isAutoPanning = false;
     VECTOR2D mousePos( aEvent.GetX(), aEvent.GetY() );
 
-    if( m_settings.m_autoPanEnabled )
+    if( m_settings.m_autoPanEnabled && m_settings.m_autoPanSettingEnabled )
         isAutoPanning = handleAutoPanning( aEvent );
 
     if( !isAutoPanning && aEvent.Dragging() )

@@ -149,7 +149,7 @@ public:
 
     bool GetEnableAutoPan() const { return m_enableAutoPan; }
 
-    void SetEnableAutoPan( bool aEnable ) { m_enableAutoPan = aEnable; }
+    void SetEnableAutoPan( bool aEnable );
 
     void SetAutoPanRequest( bool aEnable ) { m_requestAutoPan = aEnable; }
 

@@ -652,6 +652,14 @@ void EDA_DRAW_PANEL::SetEnableMousewheelPan( bool aEnable )
         GetParent()->GetGalCanvas()->GetViewControls()->EnableMousewheelPan( aEnable );
 }
 
+void EDA_DRAW_PANEL::SetEnableAutoPan( bool aEnable )
+{
+    m_enableAutoPan = aEnable;
+
+    if( GetParent()->IsGalCanvasActive() )
+        GetParent()->GetGalCanvas()->GetViewControls()->EnableAutoPan( aEnable );
+}
+
 
 void EDA_DRAW_PANEL::SetEnableZoomNoCenter( bool aEnable )
 {

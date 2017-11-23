@@ -72,6 +72,9 @@ struct VC_SETTINGS
     ///> Flag for turning on autopanning
     bool m_autoPanEnabled;
 
+    ///> Flag for turning on autopanning
+    bool m_autoPanSettingEnabled;
+
     ///> Distance from cursor to VIEW edge when panning is active
     float m_autoPanMargin;
 
@@ -138,6 +141,16 @@ public:
     virtual void SetAutoPan( bool aEnabled )
     {
         m_settings.m_autoPanEnabled = aEnabled;
+    }
+
+    /**
+     * Function EnableAutoPan
+     * Turns on/off auto panning (user setting to disable it entirely).
+     * @param aEnabled tells if the autopanning should be enabled.
+     */
+    virtual void EnableAutoPan( bool aEnabled )
+    {
+        m_settings.m_autoPanSettingEnabled = aEnabled;
     }
 
     /**
