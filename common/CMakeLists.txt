@@ -178,6 +178,7 @@ set( COMMON_WIDGET_SRCS
     widgets/footprint_select_widget.cpp
     widgets/footprint_choice.cpp
     widgets/indicator_icon.cpp
+    widgets/text_ctrl_eval.cpp
     widgets/unit_binder.cpp
     )
 
