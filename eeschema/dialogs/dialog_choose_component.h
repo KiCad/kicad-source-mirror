@@ -180,7 +180,8 @@ protected:
     void PopulateFootprintSelector( LIB_ID const& aLibId );
 
     /**
-     * Display a given component into the schematic symbol preview.
+     * Display a given symbol into the schematic symbol preview.
+     * when no symbol selected, display a tooltip
      */
     void RenderPreview( LIB_PART* aComponent, int aUnit );
 

@@ -297,7 +297,11 @@ void DIALOG_CHOOSE_COMPONENT::OnSchViewPaint( wxPaintEvent& aEvent )
     LIB_ID id = m_tree->GetSelectedLibId( &unit );
 
     if( !id.IsValid() )
+    {
+        // No symbol to show, display a tooltip
+        RenderPreview( nullptr, unit );
         return;
+    }
 
     LIB_ALIAS* alias = nullptr;
 
@@ -319,10 +323,13 @@ void DIALOG_CHOOSE_COMPONENT::OnSchViewPaint( wxPaintEvent& aEvent )
 
     LIB_PART*  part = alias ? alias->GetPart() : nullptr;
 
-    // Don't draw anything (not even the background) if we don't have
-    // a part to show
+    // Don't draw if we don't have a part to show
+    // just display a tooltip
     if( !part )
+    {
+        RenderPreview( nullptr, unit );
         return;
+    }
 
     if( alias->IsRoot() )
     {
@@ -410,6 +417,16 @@ void DIALOG_CHOOSE_COMPONENT::RenderPreview( LIB_PART* aComponent, int aUnit )
     // Avoid rendering when either dimension is zero
     if( dc_size.x == 0 || dc_size.y == 0 )
         return;
+
+    if( !aComponent )   // display a tooltip
+    {
+        wxString tooltip = _( "Double click here to select a symbol\nfrom the library browser" );
+        wxSize tsize = dc.GetTextExtent( tooltip.BeforeLast( '\n' ) );
+        dc.DrawText( tooltip.BeforeLast( '\n' ), ( dc_size.x - tsize.x )/2, ( dc_size.y - tsize.y )/2 );
+        tsize = dc.GetTextExtent( tooltip.AfterLast( '\n' ) );
+        dc.DrawText( tooltip.AfterLast( '\n' ), ( dc_size.x - tsize.x )/2, ( dc_size.y + tsize.y )/2 );
+        return;
+    }
 
     GRResetPenAndBrush( &dc );
 
