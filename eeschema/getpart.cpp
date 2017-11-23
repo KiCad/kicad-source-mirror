@@ -165,9 +165,19 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
         return COMPONENT_SELECTION();
 
     COMPONENT_SELECTION sel;
-    LIB_ID id = dlg.GetSelectedLibId( &sel.Unit );
+    LIB_ID id;
 
-    if( !id.IsValid() )      // Dialog closed by OK button, but no symbol selected
+    if( dlg.IsExternalBrowserSelected() )   // User requested component browser.
+    {
+        sel = SelectComponentFromLibBrowser( aFilter, id, sel.Unit, sel.Convert );
+        id = sel.LibId;
+    }
+    else
+        id = dlg.GetSelectedLibId( &sel.Unit );
+
+    if( !id.IsValid() )     // Dialog closed by OK button,
+                            // or the selection by lib browser was requested,
+                            // but no symbol selected
         return COMPONENT_SELECTION();
 
     if( sel.Unit == 0 )
@@ -175,9 +185,6 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
 
     sel.Fields = dlg.GetFields();
     sel.LibId = id;
-
-    if( dlg.IsExternalBrowserSelected() )   // User requested component browser.
-        sel = SelectComponentFromLibBrowser( aFilter, id, sel.Unit, sel.Convert );
 
     if( sel.LibId.IsValid() )
     {
