@@ -117,7 +117,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     description << wxT( "<p>" )
                 << _( "The KiCad EDA Suite is a set of open source applications for the "
-                      "creation of electronic schematics and to design printed circuit boards." )
+                      "creation of electronic schematics and printed circuit boards." )
                 << wxT( "</p>" );
 
     description << wxT( "</p>" );
@@ -130,34 +130,17 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     // bullet-ed list with some http links
     description << wxT( "<ul>" );
     description << wxT( "<li>" )
-                << HtmlHyperlink( wxT( "http://www.kicad-pcb.org" ),
-                                  _( "The official KiCad website" ) )
+                << wxT( "The official KiCad website - " )
+                << HtmlHyperlink( "http://www.kicad-pcb.org" )
                 << wxT( "</li>" );
     description << wxT( "<li>" )
-                << HtmlHyperlink( wxT( "https://launchpad.net/kicad" ),
-                                  _( "Developer's website on Launchpad" ) )
+                << wxT( "Developer website on Launchpad - " )
+                << HtmlHyperlink( "https://launchpad.net/kicad" )
                 << wxT("</li>" );
 
     description << wxT( "<li>" )
-                << HtmlHyperlink( wxT( "https://github.com/KiCad/" ),
-                                  _( "Official repository for component and footprint libraries" ) )
-                << wxT( "</li>" );
-
-    description << wxT( "<li>" )
-                << HtmlHyperlink( wxT( "https://github.com/KiCad/Footprint_Wizards" ),
-                                  _( "Footprint wizards info on our official repository" ) )
-                << wxT( "</li>" );
-    description << wxT( "</ul></p>" );
-
-    description << wxT( "<p><b><u>" )
-                << _( "Non official repositories" )
-                << wxT( "</b></u>" );
-
-    description << wxT( "<ul>" );
-
-    description << wxT( "<li>" )
-                << HtmlHyperlink( wxT( "http://smisioto.no-ip.org/elettronica/kicad/kicad-en.htm" ),
-                                  _( "Additional component libraries repository (smisioto)" ) )
+                << wxT( "Official KiCad library repositories - " )
+                << HtmlHyperlink( "https://github.com/KiCad/" )
                 << wxT( "</li>" );
 
     description << wxT( "</ul></p>" );
@@ -169,8 +152,9 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     // bullet-ed list with some http links
     description << wxT( "<ul>" );
     description << wxT( "<li>" )
-                << HtmlHyperlink( wxT( "https://bugs.launchpad.net/kicad/+bugs?orderby=-id&start=0" ),
-                                  _( "Report or examine bugs" ) )
+                << wxT( "Report or examine bugs - " )
+                << HtmlHyperlink( "https://bugs.launchpad.net/kicad/+bugs?orderby=-id&start=0",
+                                  "https://bugs.launchpad.net/kicad" )
                 << wxT( "</li>" );
     description << wxT( "</ul></p>" );
 
@@ -180,13 +164,13 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     description << wxT( "<ul>" );
     description << wxT( "<li>" )
-                << HtmlHyperlink( wxT( "https://groups.yahoo.com/neo/groups/kicad-users/info" ),
-                                  _( "KiCad user's group" ) )
+                << wxT( "KiCad forum - " )
+                << HtmlHyperlink( wxT( "https://forum.kicad.info" ) )
                 << wxT( "</li>" );
 
     description << wxT( "<li>" )
-                << HtmlHyperlink( wxT( "https://forum.kicad.info" ),
-                                  _( "KiCad forum" ) )
+                << wxT( "KiCad user's group - " )
+                << HtmlHyperlink( "https://groups.yahoo.com/neo/groups/kicad-users/info" )
                 << wxT( "</li>" );
 
     description << wxT( "</ul></p>" );
