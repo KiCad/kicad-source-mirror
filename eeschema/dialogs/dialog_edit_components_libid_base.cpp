@@ -95,6 +95,11 @@ DIALOG_EDIT_COMPONENTS_LIBID_BASE::DIALOG_EDIT_COMPONENTS_LIBID_BASE( wxWindow* 
 	m_buttonBrowseLibs = new wxButton( this, wxID_ANY, _("Browse Libraries"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_buttonBrowseLibs, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
+	m_buttonOrphanItems = new wxButton( this, wxID_ANY, _("Map Orphans"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonOrphanItems->SetToolTip( _("If  some components are orphan (the linked symbol is found nowhere),\ntry to find a candidate having the same name in one of loaded symbol libraries") );
+	
+	bSizerButtons->Add( m_buttonOrphanItems, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
 	
 	bSizerMain->Add( bSizerButtons, 0, wxALIGN_RIGHT, 5 );
 	
@@ -115,6 +120,7 @@ DIALOG_EDIT_COMPONENTS_LIBID_BASE::DIALOG_EDIT_COMPONENTS_LIBID_BASE( wxWindow* 
 	m_buttonUndo->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::updateUIChangesButton ), NULL, this );
 	m_buttonBrowseLibs->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::onButtonBrowseLibraries ), NULL, this );
 	m_buttonBrowseLibs->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::updateUIBrowseButton ), NULL, this );
+	m_buttonOrphanItems->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::onClickOrphansButton ), NULL, this );
 }
 
 DIALOG_EDIT_COMPONENTS_LIBID_BASE::~DIALOG_EDIT_COMPONENTS_LIBID_BASE()
@@ -130,5 +136,6 @@ DIALOG_EDIT_COMPONENTS_LIBID_BASE::~DIALOG_EDIT_COMPONENTS_LIBID_BASE()
 	m_buttonUndo->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::updateUIChangesButton ), NULL, this );
 	m_buttonBrowseLibs->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::onButtonBrowseLibraries ), NULL, this );
 	m_buttonBrowseLibs->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::updateUIBrowseButton ), NULL, this );
+	m_buttonOrphanItems->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::onClickOrphansButton ), NULL, this );
 	
 }

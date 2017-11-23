@@ -34,6 +34,8 @@
 #include <class_drawpanel.h>
 #include <sch_component.h>
 #include <sch_reference_list.h>
+#include <pgm_base.h>
+#include <symbol_lib_table.h>
 
 #define COL_REFS 0
 #define COL_CURR_LIBID 1
@@ -85,11 +87,12 @@ class DIALOG_EDIT_COMPONENTS_LIBID : public DIALOG_EDIT_COMPONENTS_LIBID_BASE
 public:
     DIALOG_EDIT_COMPONENTS_LIBID( SCH_EDIT_FRAME* aParent );
 
-    bool IsSchelaticModified() { return m_isModified; }
+    bool IsSchematicModified() { return m_isModified; }
 
 private:
     SCH_EDIT_FRAME* m_parent;
     bool m_isModified;      // set to true if the schematic is modified
+    std::vector<int> m_OrphansRowIndexes;   // list of rows containing orphan lib_id
 
     std::vector<CMP_CANDIDATE> m_components;
 
@@ -137,6 +140,9 @@ private:
 
     // Undo all changes, and clear the list of new lib_ids
 	void onUndoChangesButton( wxCommandEvent& event ) override;
+
+    // Try to find a candidate for non existing symbols
+	void onClickOrphansButton( wxCommandEvent& event ) override;
 
     // UI event, to enable/disable buttons
 	void updateUIChangesButton( wxUpdateUIEvent& event ) override
@@ -234,7 +240,7 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
         // (can be 0 if the symbol is not found)
         int unit = candidate.m_Component->GetUnitSelection( &sheetpath );
         int unitcount = candidate.m_Component->GetUnitCount();
-        candidate.m_IsOrphan = unitcount == 0;
+        candidate.m_IsOrphan = ( unitcount == 0 );
 
         if( unitcount > 1 || unit > 1 )
         {
@@ -255,7 +261,7 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
     wxString last_str_libid = m_components.front().GetStringLibId();
     int row = 0;
     wxString refs;
-    bool mark_cell = false;
+    bool mark_cell = m_components.front().m_IsOrphan;
     CMP_CANDIDATE* cmp = nullptr;
 
     for( unsigned ii = 0; ii < m_components.size(); ii++ )
@@ -300,12 +306,17 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
 
     // Allows only the selection by row
     m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
+
+    m_buttonOrphanItems->Enable( m_OrphansRowIndexes.size() > 0 );
 }
 
 
 void DIALOG_EDIT_COMPONENTS_LIBID::AddRowToGrid( int aRowId, bool aMarkRow,
                     const wxString& aReferences, const wxString& aStrLibId )
 {
+    if( aMarkRow )      // a orphan component exists, set m_AsOrphanCmp as true
+        m_OrphansRowIndexes.push_back( aRowId );
+
     int row = aRowId;
 
     if( m_grid->GetNumberRows() <= row )
@@ -401,13 +412,68 @@ void DIALOG_EDIT_COMPONENTS_LIBID::onButtonBrowseLibraries( wxCommandEvent& even
 }
 
 
+void DIALOG_EDIT_COMPONENTS_LIBID::onClickOrphansButton( wxCommandEvent& event )
+{
+    std::vector< wxString > libs = Prj().SchSymbolLibTable()->GetLogicalLibs();
+    wxArrayString aliasNames;
+
+    unsigned fixesCount = 0;
+
+    // Try to find a candidate for non existing symbols in any loaded library
+    for( unsigned ii = 0; ii < m_OrphansRowIndexes.size(); ii++ )
+    {
+        wxString orphanLibid = m_grid->GetCellValue( m_OrphansRowIndexes[ii], COL_CURR_LIBID );
+
+        LIB_ID curr_libid( orphanLibid );
+        wxString symbName = curr_libid.GetLibItemName();
+
+        // now try to fin a candidate
+        for( auto &lib : libs )
+        {
+            aliasNames.Clear();
+
+            try
+            {
+                Prj().SchSymbolLibTable()->EnumerateSymbolLib( lib, aliasNames );
+            }
+            catch( const IO_ERROR& e ) {}   // ignore, it is handled below
+
+            if( aliasNames.IsEmpty() )
+                continue;
+
+            // Find a symbol name in symbols inside this library:
+            int index = aliasNames.Index( symbName );
+
+            if( index != wxNOT_FOUND )
+            {
+                // a candidate is found!
+                wxString newLibid = lib + ':' + symbName;
+                m_grid->SetCellValue( m_OrphansRowIndexes[ii], COL_NEW_LIBID, newLibid );
+                fixesCount++;
+                break;
+            }
+        }
+    }
+
+    if( fixesCount < m_OrphansRowIndexes.size() )   // Not all orphan components are fixed
+    {
+        wxMessageBox( wxString::Format( _( "%u link(s) mapped, %d not found" ),
+                      fixesCount, m_OrphansRowIndexes.size() - fixesCount ) );
+    }
+    else
+        wxMessageBox( wxString::Format( _( "All %u link(s) resolved" ), fixesCount ) );
+}
+
+
 bool DIALOG_EDIT_COMPONENTS_LIBID::setLibIdByBrowser( int aRow )
 {
 #if 0
+    // Use dialog symbol selector to choose a symbol
     SCH_BASE_FRAME::HISTORY_LIST dummy;
     SCH_BASE_FRAME::COMPONENT_SELECTION sel =
                 m_parent->SelectComponentFromLibrary( NULL, dummy, true, 0, 0 );
 #else
+    // Use library viewer to choose a symbol
     LIB_ID aPreselectedLibid;
     SCH_BASE_FRAME::COMPONENT_SELECTION sel =
             m_parent->SelectComponentFromLibBrowser( NULL, aPreselectedLibid, 0, 0 );
@@ -510,5 +576,5 @@ bool InvokeDialogEditComponentsLibId( SCH_EDIT_FRAME* aCaller )
     DIALOG_EDIT_COMPONENTS_LIBID dlg( aCaller );
     dlg.ShowModal();
 
-    return dlg.IsSchelaticModified();
+    return dlg.IsSchematicModified();
 }
