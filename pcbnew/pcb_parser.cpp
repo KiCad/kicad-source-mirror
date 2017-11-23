@@ -360,25 +360,30 @@ MODULE_3D_SETTINGS* PCB_PARSER::parse3DModel()
                 Expecting( T_xyz );
 
             /* Note:
-             * Prior to SEXPR_BOARD_FILE_VERSION 20171114,
-             * 3D model offset was read and written in inches
-             *
-             * Now, the offset is explicitly written in mm.
-             * If a board is read with an older version,
-             * the offset is converted from inches to mm
+             * Prior to KiCad v5, model offset was designated by "at",
+             * and the units were in inches.
+             * Now we use mm, but support reading of legacy files
              */
 
+            n3D->m_Offset.x = parseDouble( "x value" ) * 25.4f;
+            n3D->m_Offset.y = parseDouble( "y value" ) * 25.4f;
+            n3D->m_Offset.z = parseDouble( "z value" ) * 25.4f;
+            NeedRIGHT();
+            break;
+
+        case T_offset:
+            NeedLEFT();
+            token = NextTok();
+
+            if( token != T_xyz )
+                Expecting( T_xyz );
+
+            /*
+             * 3D model offset is in mm
+             */
             n3D->m_Offset.x = parseDouble( "x value" );
             n3D->m_Offset.y = parseDouble( "y value" );
             n3D->m_Offset.z = parseDouble( "z value" );
-
-            if(m_requiredVersion < 20171114L)
-            {
-                n3D->m_Offset.x *= 25.4f;
-                n3D->m_Offset.y *= 25.4f;
-                n3D->m_Offset.z *= 25.4f;
-            }
-
             NeedRIGHT();
             break;
 
@@ -409,7 +414,7 @@ MODULE_3D_SETTINGS* PCB_PARSER::parse3DModel()
             break;
 
         default:
-            Expecting( "at, scale, or rotate" );
+            Expecting( "at, offset, scale, or rotate" );
         }
 
         NeedRIGHT();

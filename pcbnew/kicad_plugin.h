@@ -46,7 +46,8 @@ class NETINFO_MAPPING;
 //#define SEXPR_BOARD_FILE_VERSION    20170920  // long pad names and custom pad shape
 //#define SEXPR_BOARD_FILE_VERSION    20170922  // Keepout zones can exist on multiple layers
 //#define SEXPR_BOARD_FILE_VERSION    20171114  // Save 3D model offset in mm, instead of inches
-#define SEXPR_BOARD_FILE_VERSION      20171125  // Locked/unlocked TEXTE_MODULE
+//#define SEXPR_BOARD_FILE_VERSION    20171125  // Locked/unlocked TEXTE_MODULE
+#define SEXPR_BOARD_FILE_VERSION      20171130  // 3D model offset written using "offset" parameter
 
 #define CTL_STD_LAYER_NAMES         (1 << 0)    ///< Use English Standard layer names
 #define CTL_OMIT_NETS               (1 << 1)    ///< Omit pads net names (useless in library)
