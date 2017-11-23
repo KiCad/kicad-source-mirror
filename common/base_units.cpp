@@ -39,6 +39,7 @@
 #include <class_title_block.h>
 #include <common.h>
 #include <base_units.h>
+#include "libeval/numeric_evaluator.h"
 
 
 #if defined( PCBNEW ) || defined( CVPCB ) || defined( EESCHEMA ) || defined( GERBVIEW ) || defined( PL_EDITOR )
@@ -383,8 +384,12 @@ int ValueFromString( const wxString& aTextValue )
 
 int ValueFromTextCtrl( const wxTextCtrl& aTextCtr )
 {
-    int      value;
+    int value;
     wxString msg = aTextCtr.GetValue();
+    NumericEvaluator eval;
+
+    if( eval.process( msg.mb_str() ) )
+        msg = wxString::FromUTF8( eval.result() );
 
     value = ValueFromString( g_UserUnit, msg );
 

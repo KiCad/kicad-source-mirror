@@ -348,6 +348,8 @@ set( COMMON_SRCS
     geometry/shape_collisions.cpp
     geometry/shape_file_io.cpp
     geometry/convex_hull.cpp
+
+    libeval/numeric_evaluator.cpp
     )
 add_library( common STATIC ${COMMON_SRCS} )
 add_dependencies( common lib-dependencies )
