@@ -1377,7 +1377,13 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
 
             LIB_ID libId;
 
-            libId.Parse( libName );
+            // Prior to schematic version 4, library IDs did not have a library nickname so
+            // parsing the symbol name with LIB_ID::Parse() would break symbol library links
+            // that contained '/' and ':' characters.
+            if( m_version > 3 )
+                libId.Parse( libName );
+            else
+                libId.SetLibItemName( libName, false );
 
             component->SetLibId( libId );
 

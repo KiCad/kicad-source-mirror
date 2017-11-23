@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2010-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -30,9 +30,8 @@
 #include <utf8.h>
 
 /**
- * Class LIB_ID
+ * A logical library item identifier and consists of various portions much like a URI.
  *
- * is a logical library item identifier and consists of various portions much like a URI.
  * It consists of of triad of the library nickname, the name of the item in the library,
  * and an optional revision of the item.  This is a generic library identifier that can be
  * used for any type of library that contains multiple named items such as footprint or
@@ -41,15 +40,11 @@
  * Example LIB_ID string:
  * "smt:R_0805/rev0".
  *
- * <p>
- * <ul>
- * <li> "smt" is the logical library name used to look up library information saved in the
- *      #LIB_TABLE.
- * <li> "R" is the name of the item within the library.
- * <li> "rev0" is the revision, which is optional.  If missing then its
- *      / delimiter should also not be present. A revision must begin with
- *      "rev" and be followed by at least one or more decimal digits.
- * </ul>
+ * - "smt" is the logical library name used to look up library information saved in the #LIB_TABLE.
+ * - "R" is the name of the item within the library.
+ * - "rev0" is the revision, which is optional.  If missing then its delimiter should also not
+ *    be present. A revision must begin with "rev" and be followed by at least one or more
+ *    decimal digits.
  *
  * @author Dick Hollenbeck
  */
@@ -60,10 +55,9 @@ public:
     LIB_ID() {}
 
     /**
-     * Constructor LIB_ID
+     * Takes \a aId string and parses it.
      *
-     * takes \a aId string and parses it.  A typical LIB_ID string consists of a
-     * library nickname followed by a library item name.
+     * A typical LIB_ID string consists of a library nickname followed by a library item name.
      * e.g.: "smt:R_0805", or
      * e.g.: "mylib:R_0805", or
      * e.g.: "ttl:7400"
@@ -88,9 +82,7 @@ public:
             const wxString& aRevision = wxEmptyString );
 
     /**
-     * Function Parse
-     *
-     * [re-]stuffs this LIB_ID with the information from @a aId.
+     * Parse LIB_ID with the information from @a aId.
      *
      * @param aId is the string to populate the #LIB_ID object.
      *
@@ -101,9 +93,7 @@ public:
 
 
     /**
-     * Function GetLibNickname
-     *
-     * returns the logical library name portion of a LIB_ID.
+     * Return the logical library name portion of a LIB_ID.
      */
     const UTF8& GetLibNickname() const
     {
@@ -111,9 +101,7 @@ public:
     }
 
     /**
-     * Function SetLibNickname
-     *
-     * overrides the logical library name portion of the LIB_ID to @a aNickname.
+     * Override the logical library name portion of the LIB_ID to @a aNickname.
      *
      * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the  character offset
      *               into the parameter at which an error was detected, usually because it
@@ -122,16 +110,12 @@ public:
     int SetLibNickname( const UTF8& aNickname );
 
     /**
-     * Function GetLibItemName
-     *
      * @return the library item name, i.e. footprintName.
      */
     const UTF8& GetLibItemName() const { return item_name; }
 
     /**
-     * Function SetLibItemName
-     *
-     * overrides the library item name portion of the LIB_ID to @a aLibItemName
+     * Override the library item name portion of the LIB_ID to @a aLibItemName
      *
      * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the  character offset
      *               into the parameter at which an error was detected, usually because it
@@ -146,15 +130,11 @@ public:
     UTF8 GetLibItemNameAndRev() const;
 
     /**
-     * Function Format
-     *
      * @return the fully formatted text of the LIB_ID.
      */
     UTF8 Format() const;
 
     /**
-     * Function Format
-     *
      * @return a string in the proper format as an LIB_ID for a combination of
      *         aLibNickname, aLibItemName, and aRevision.
      *
@@ -164,8 +144,6 @@ public:
                         const UTF8& aRevision = "" );
 
     /**
-     * Function IsValid
-     *
      * @return true is the #LIB_ID is valid.
      *
      * A valid #LIB_ID must have both the library nickname and the library item name defined.
@@ -177,22 +155,16 @@ public:
     bool IsValid() const { return !nickname.empty() && !item_name.empty(); }
 
     /**
-     * Function IsLegacy
-     *
      * @return true if the #LIB_ID only has the #item_name name defined.
      */
     bool IsLegacy() const { return nickname.empty() && !item_name.empty() && revision.empty(); }
 
     /**
-     * Function clear
-     *
-     * clears the contents of the library nickname, library entry name, and revision strings.
+     * Clear the contents of the library nickname, library entry name, and revision strings.
      */
     void clear();
 
     /**
-     * Function empty
-     *
      * @return a boolean true value if the LIB_ID is empty.  Otherwise return false.
      */
     bool empty() const { return nickname.empty() && item_name.empty() && revision.empty(); }
@@ -211,6 +183,22 @@ public:
     bool operator > ( const LIB_ID& aLibId ) const { return this->compare( aLibId ) > 0; }
     bool operator ==( const LIB_ID& aLibId ) const { return this->compare( aLibId ) == 0; }
     bool operator !=( const LIB_ID& aLibId ) const { return !(*this == aLibId); }
+
+    /**
+     * Examine \a aLibItemName for invalid #LIB_ID item name characters.
+     *
+     * @param aLibItemName is the #LIB_ID name to test for illegal characters.
+     * @return true if \a aLibItemName contain illegal characters otherwise false.
+     */
+    static bool HasIllegalChars( const UTF8& aLibItemName );
+
+    /**
+     * Replace illegal #LIB_ID item name characters with underscores '_'.
+     *
+     * @param aLibItemName is the #LIB_ID item name to replace illegal characters.
+     * @return the corrected version of \a aLibItemName.
+     */
+    static UTF8 FixIllegalChars( const UTF8& aLibItemName );
 
 #if defined(DEBUG)
     static void Test();

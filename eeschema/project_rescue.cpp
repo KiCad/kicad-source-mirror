@@ -258,14 +258,15 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer,
             if( !cache_match && !lib_match )
                 continue;
 
-            // Test whether there is a conflict or if the symbol can only be found in the cache.
-            if( ( cache_match && lib_match
-                && !cache_match->PinsConflictWith( *lib_match, true, true, true, true, false ) )
-              || (!cache_match && lib_match ) )
+            // Test whether there is a conflict or if the symbol can only be found in the cache
+            // and the symbol name does not have any illegal characters.
+            if( ( ( cache_match && lib_match
+                  && !cache_match->PinsConflictWith( *lib_match, true, true, true, true, false ) )
+                || (!cache_match && lib_match ) ) && !LIB_ID::HasIllegalChars( part_name ) )
                 continue;
 
             // Check if the symbol has already been rescued.
-            wxString new_name = part_name;
+            wxString new_name = LIB_ID::FixIllegalChars( part_name );
 
             if( new_name.Find( part_name_suffix ) == wxNOT_FOUND )
                 new_name += part_name_suffix;
@@ -371,13 +372,14 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
                 continue;
 
             // Test whether there is a conflict or if the symbol can only be found in the cache.
-            if( ( cache_match && lib_match
-                && !cache_match->PinsConflictWith( *lib_match, true, true, true, true, false ) )
-              || (!cache_match && lib_match ) )
+            if( ( ( cache_match && lib_match
+                  && !cache_match->PinsConflictWith( *lib_match, true, true, true, true, false ) )
+                || (!cache_match && lib_match ) )
+              && !LIB_ID::HasIllegalChars( part_id.GetLibItemName() ) )
                 continue;
 
             // May have been rescued already.
-            wxString new_name = part_id.GetLibItemName();
+            wxString new_name = LIB_ID::FixIllegalChars( part_id.GetLibItemName() );
 
             if( new_name.Find( part_name_suffix ) == wxNOT_FOUND )
                 new_name += part_name_suffix;

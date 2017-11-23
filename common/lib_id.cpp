@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2010-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2010-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -356,6 +356,62 @@ int LIB_ID::compare( const LIB_ID& aLibId ) const
         return retv;
 
     return revision.compare( aLibId.revision );
+}
+
+
+bool LIB_ID::HasIllegalChars( const UTF8& aLibItemName )
+{
+    for( auto ch : aLibItemName )
+    {
+        switch( ch )
+        {
+        case '\t':
+        case '\n':
+        case '\r':
+        case ':':
+        case '/':
+            return true;
+        }
+
+        if( !wxIsascii( ch ) )
+            return true;
+    }
+
+    return false;
+}
+
+
+UTF8 LIB_ID::FixIllegalChars( const UTF8& aLibItemName )
+{
+    UTF8 fixedName;
+
+    for( auto ch : aLibItemName )
+    {
+
+        if( !wxIsascii( ch ) )
+        {
+            fixedName += '_';
+        }
+        else
+        {
+            switch( ch )
+            {
+            case '\t':
+            case '\n':
+            case '\r':
+            case ':':
+            case '/':
+            case '\\':
+                fixedName += '_';
+                break;
+
+            default:
+                fixedName += ch;
+            }
+        }
+    }
+
+    return fixedName;
 }
 
 

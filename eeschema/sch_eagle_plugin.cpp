@@ -1055,10 +1055,10 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
         package = p->second;
     }
 
-    std::string kisymbolname = symbolname;
-    std::replace( kisymbolname.begin(), kisymbolname.end(), ':', '_' );
-    std::replace( kisymbolname.begin(), kisymbolname.end(), '/', '_' );
-    std::replace( kisymbolname.begin(), kisymbolname.end(), '"', '_' );
+    std::string kisymbolname = LIB_ID::FixIllegalChars( symbolname );
+    // std::replace( kisymbolname.begin(), kisymbolname.end(), ':', '_' );
+    // std::replace( kisymbolname.begin(), kisymbolname.end(), '/', '_' );
+    // std::replace( kisymbolname.begin(), kisymbolname.end(), '"', '_' );
 
     LIB_ALIAS* alias = m_pi->LoadSymbol( getLibFileName().GetFullPath(), kisymbolname,
                                          m_properties.get() );
@@ -1263,10 +1263,10 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
             if( gates_count == 1 && ispower )
                 kpart->SetPower();
 
-            string name = kpart->GetName().ToStdString();
-            std::replace( name.begin(), name.end(), ':', '_' );
-            std::replace( name.begin(), name.end(), '/', '_' );
-            std::replace( name.begin(), name.end(), '"', '_' );
+            string name = LIB_ID::FixIllegalChars( kpart->GetName().ToStdString() );
+            // std::replace( name.begin(), name.end(), ':', '_' );
+            // std::replace( name.begin(), name.end(), '/', '_' );
+            // std::replace( name.begin(), name.end(), '"', '_' );
             kpart->SetName( name );
             m_pi->SaveSymbol( getLibFileName().GetFullPath(), new LIB_PART( *kpart.get() ),
                               m_properties.get() );
