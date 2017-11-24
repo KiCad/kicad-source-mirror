@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "wx_html_report_panel.h"
@@ -21,9 +21,8 @@ DIALOG_SYMBOL_REMAP_BASE::DIALOG_SYMBOL_REMAP_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("This schematic currently uses the symbol library look\nup method for loading schematic symbols.  KiCad will\nattempt to map the existing symbols to use the new\nsymbol library table.  If you choose to skip\nthis step, you will be responsible for manually assigning\nsymbols."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1->Wrap( -1 );
-	bSizer2->Add( m_staticText1, 0, wxALL|wxEXPAND, 5 );
+	m_htmlCtrl = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO );
+	bSizer2->Add( m_htmlCtrl, 4, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
@@ -38,7 +37,7 @@ DIALOG_SYMBOL_REMAP_BASE::DIALOG_SYMBOL_REMAP_BASE( wxWindow* parent, wxWindowID
 	bSizer2->Add( bSizer3, 1, wxEXPAND, 5 );
 	
 	
-	bSizer1->Add( bSizer2, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizer1->Add( bSizer2, 3, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
@@ -49,7 +48,7 @@ DIALOG_SYMBOL_REMAP_BASE::DIALOG_SYMBOL_REMAP_BASE( wxWindow* parent, wxWindowID
 	bSizer4->Add( m_messagePanel, 1, wxEXPAND | wxALL, 5 );
 	
 	
-	bSizer1->Add( bSizer4, 1, wxEXPAND, 5 );
+	bSizer1->Add( bSizer4, 5, wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bSizer1 );

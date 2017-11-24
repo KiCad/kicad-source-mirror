@@ -63,6 +63,18 @@ private:
     void remapSymbolsToLibTable( REPORTER& aReporter );
 
     bool remapSymbolToLibTable( SCH_COMPONENT* aSymbol );
+
+    /**
+     * Backup all of the files that could be modified by the remapping with a .v4 file extension
+     * in case something goes wrong.
+     *
+     * Backup the following:
+     * - All schematic (*.sch -> *.sch.v4 ) files.
+     * - The project (*.pro) -> *.pro.v4) file.
+     * - The cache library (*-cache.lib -> *.-cache.lib.v4) file.
+     * - The rescue library (*-rescue.lib -> *.rescue.lib.v4) file.
+     */
+    void backupProject();
 };
 
 #endif  // _DIALOG_SYMBOL_REMAP_H_

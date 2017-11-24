@@ -28,6 +28,7 @@
 #include <project.h>
 #include <confirm.h>
 #include <reporter.h>
+#include <wildcards_and_files_ext.h>
 #include <wx_html_report_panel.h>
 
 #include <class_library.h>
@@ -45,12 +46,25 @@
 DIALOG_SYMBOL_REMAP::DIALOG_SYMBOL_REMAP( SCH_EDIT_FRAME* aParent ) :
     DIALOG_SYMBOL_REMAP_BASE( aParent )
 {
+    wxString text;
+
+    text = _( "This schematic currently uses the symbol library list look up method for "
+              "loading schematic symbols.  KiCad will attempt to map the existing symbols "
+              "to use the new symbol library table.  Remapping will change project files "
+              "and schematics will not be compatible with previous versions of KiCad.  "
+              "All files that are changed will be backed up with the .v4 extension should "
+              "you need to revert any changes.  If you choose to skip this step, you will "
+              "be responsible for manually remapping the symbols." );
+
+    m_htmlCtrl->AppendToPage( text );
 }
 
 
 void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
 {
     wxBusyCursor busy;
+
+    backupProject();
 
     // The schematic is fully loaded, any legacy library symbols have been rescued.  Now
     // check to see if the schematic has not been converted to the symbol library table
@@ -263,3 +277,99 @@ bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_COMPONENT* aSymbol )
 
     return false;
 }
+
+
+void DIALOG_SYMBOL_REMAP::backupProject()
+{
+    static wxString ext = "v4";
+
+    wxString errorMsg;
+    wxFileName destFileName;
+    SCH_SCREENS schematic;
+
+    // Back up the schematic files.
+    for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
+    {
+        destFileName = screen->GetFileName();
+        destFileName.SetName( destFileName.GetFullName() );
+        destFileName.SetExt( ext );
+
+        wxLogTrace( "KICAD_TRACE_PATHS", "Backing up file '%s' to file '%s'.",
+                    screen->GetFileName(), destFileName.GetFullPath() );
+
+        if( wxFileName::Exists( screen->GetFileName() )
+          && !wxCopyFile( screen->GetFileName(), destFileName.GetFullPath() ) )
+        {
+            errorMsg += wxPrintf( _( "Failed to back up file '%s'.\n" ), screen->GetFileName() );
+        }
+    }
+
+    // Back up the project file.
+    destFileName = Prj().GetProjectFullName();
+    destFileName.SetName( destFileName.GetFullName() );
+    destFileName.SetExt( ext );
+
+    wxLogTrace( "KICAD_TRACE_PATHS", "Backing up file '%s' to file '%s'.",
+                Prj().GetProjectFullName(), destFileName.GetFullPath() );
+
+    if( wxFileName::Exists( Prj().GetProjectFullName() )
+      && !wxCopyFile( Prj().GetProjectFullName(), destFileName.GetFullPath() ) )
+    {
+        errorMsg += wxPrintf( _( "Failed to back up file '%s'.\n" ), Prj().GetProjectFullName() );
+    }
+
+    wxFileName srcFileName;
+
+    // Back up the cache library.
+    srcFileName.SetPath( Prj().GetProjectPath() );
+    srcFileName.SetName( Prj().GetProjectName() + "-cache" );
+    srcFileName.SetExt( SchematicLibraryFileExtension );
+
+    destFileName = srcFileName;
+    destFileName.SetName( destFileName.GetFullName() );
+    destFileName.SetExt( ext );
+
+    wxLogTrace( "KICAD_TRACE_PATHS", "Backing up file '%s' to file '%s'.",
+                srcFileName.GetFullPath(), destFileName.GetFullPath() );
+
+    if( srcFileName.Exists()
+      && !wxCopyFile( srcFileName.GetFullPath(), destFileName.GetFullPath() ) )
+    {
+        errorMsg += wxPrintf( _( "Failed to back up file '%s'.\n" ), srcFileName.GetFullPath() );
+    }
+
+    // Back up the rescue library if it exists.
+    srcFileName.SetName( Prj().GetProjectName() + "-rescue" );
+    destFileName.SetName( srcFileName.GetFullName() );
+
+    wxLogTrace( "KICAD_TRACE_PATHS", "Backing up file '%s' to file '%s'.",
+                srcFileName.GetFullPath(), destFileName.GetFullPath() );
+
+    if( srcFileName.Exists()
+      && !wxCopyFile( srcFileName.GetFullPath(), destFileName.GetFullPath() ) )
+    {
+        errorMsg += wxPrintf( _( "Failed to back up file '%s'.\n" ), srcFileName.GetFullPath() );
+    }
+
+    // Back up the rescue library document file if it exists.
+    srcFileName.SetName( Prj().GetProjectName() + "-rescue" );
+    srcFileName.SetExt( "dcm" );
+    destFileName.SetName( srcFileName.GetFullName() );
+
+    wxLogTrace( "KICAD_TRACE_PATHS", "Backing up file '%s' to file '%s'.",
+                srcFileName.GetFullPath(), destFileName.GetFullPath() );
+
+    if( srcFileName.Exists()
+      && !wxCopyFile( srcFileName.GetFullPath(), destFileName.GetFullPath() ) )
+    {
+        errorMsg += wxPrintf( _( "Failed to back up file '%s'.\n" ), srcFileName.GetFullPath() );
+    }
+
+    if( !errorMsg.IsEmpty() )
+    {
+        errorMsg.Trim();
+        DisplayErrorMessage( this, _( "Some of the project files could not be backed up." ),
+                             errorMsg );
+    }
+}
+

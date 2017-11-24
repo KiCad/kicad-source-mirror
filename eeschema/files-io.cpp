@@ -339,10 +339,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // best remapping results.
             RescueLegacyProject( false );
 
-            // Make backups of current schematics just in case something goes wrong.
-            for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
-                SaveEEFile( screen, false, CREATE_BACKUP_FILE );
-
             DIALOG_SYMBOL_REMAP dlgRemap( this );
 
             dlgRemap.ShowQuasiModal();
