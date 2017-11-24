@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -13,6 +13,7 @@
 #include <wx/intl.h>
 class DIALOG_SHIM;
 class PCB_LAYER_BOX_SELECTOR;
+class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -43,15 +44,15 @@ class DIALOG_DIMENSION_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextDim;
 		wxTextCtrl* m_Name;
 		wxStaticText* m_staticTextSizeX;
-		wxTextCtrl* m_TxtSizeXCtrl;
+		TEXT_CTRL_EVAL* m_TxtSizeXCtrl;
 		wxStaticText* m_staticTextSizeY;
-		wxTextCtrl* m_TxtSizeYCtrl;
+		TEXT_CTRL_EVAL* m_TxtSizeYCtrl;
 		wxStaticText* m_staticTextWidth;
-		wxTextCtrl* m_TxtWidthCtrl;
+		TEXT_CTRL_EVAL* m_TxtWidthCtrl;
 		wxStaticText* m_staticTextPosX;
-		wxTextCtrl* m_textCtrlPosX;
+		TEXT_CTRL_EVAL* m_textCtrlPosX;
 		wxStaticText* m_staticTextPosY;
-		wxTextCtrl* m_textCtrlPosY;
+		TEXT_CTRL_EVAL* m_textCtrlPosY;
 		wxRadioBox* m_rbMirror;
 		wxStaticText* m_staticTextLayer;
 		PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;

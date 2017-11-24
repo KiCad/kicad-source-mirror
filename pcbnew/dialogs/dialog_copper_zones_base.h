@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
+class TEXT_CTRL_EVAL;
 class wxListView;
 
 #include "dialog_shim.h"
@@ -86,19 +87,19 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_ShowNetNameFilter;
 		wxButton* m_buttonRunFilter;
 		wxStaticText* m_ClearanceValueTitle;
-		wxTextCtrl* m_ZoneClearanceCtrl;
+		TEXT_CTRL_EVAL* m_ZoneClearanceCtrl;
 		wxStaticText* m_MinThicknessValueTitle;
-		wxTextCtrl* m_ZoneMinThicknessCtrl;
+		TEXT_CTRL_EVAL* m_ZoneMinThicknessCtrl;
 		wxStaticText* m_staticTextSmoothing;
 		wxChoice* m_cornerSmoothingChoice;
 		wxStaticText* m_cornerSmoothingValue;
-		wxTextCtrl* m_cornerSmoothingCtrl;
+		TEXT_CTRL_EVAL* m_cornerSmoothingCtrl;
 		wxStaticText* m_staticTextPadConnection;
 		wxChoice* m_PadInZoneOpt;
 		wxStaticText* m_AntipadSizeText;
-		wxTextCtrl* m_AntipadSizeValue;
+		TEXT_CTRL_EVAL* m_AntipadSizeValue;
 		wxStaticText* m_CopperBridgeWidthText;
-		wxTextCtrl* m_CopperWidthValue;
+		TEXT_CTRL_EVAL* m_CopperWidthValue;
 		wxStaticText* m_staticTextPriorityLevel;
 		wxSpinCtrl* m_PriorityLevelCtrl;
 		wxStaticText* m_staticTextFillMode;

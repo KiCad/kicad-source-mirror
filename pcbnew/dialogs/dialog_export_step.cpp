@@ -36,6 +36,7 @@
 #include "pcbnew.h"
 #include "class_board.h"
 #include "dialog_export_step_base.h"
+#include <widgets/text_ctrl_eval.h>
 
 #define OPTKEY_STEP_ORIGIN_OPT      "STEP_Origin_Opt"
 #define OPTKEY_STEP_UORG_UNITS      "STEP_UserOriginUnits"

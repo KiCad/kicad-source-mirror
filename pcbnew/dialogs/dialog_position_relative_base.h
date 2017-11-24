@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
+class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -40,21 +41,21 @@ class DIALOG_POSITION_RELATIVE_BASE : public DIALOG_SHIM
 	protected:
 		wxCheckBox* m_polarCoords;
 		wxStaticText* m_xLabel;
-		wxTextCtrl* m_xEntry;
+		TEXT_CTRL_EVAL* m_xEntry;
 		wxStaticText* m_xUnit;
 		wxButton* m_clearX;
 		wxStaticText* m_yLabel;
-		wxTextCtrl* m_yEntry;
+		TEXT_CTRL_EVAL* m_yEntry;
 		wxStaticText* m_yUnit;
 		wxButton* m_clearY;
 		wxStaticText* m_rotLabel;
-		wxTextCtrl* m_rotEntry;
+		TEXT_CTRL_EVAL* m_rotEntry;
 		wxStaticText* m_rotUnit;
 		wxButton* m_clearRot;
 		wxStaticText* m_anchor_xLabel;
-		wxTextCtrl* m_anchor_x;
+		TEXT_CTRL_EVAL* m_anchor_x;
 		wxStaticText* m_anchor_yLabel;
-		wxTextCtrl* m_anchor_y;
+		TEXT_CTRL_EVAL* m_anchor_y;
 		wxStaticLine* m_staticline1;
 		wxButton* m_select_anchor_button;
 		wxStdDialogButtonSizer* m_stdButtons;

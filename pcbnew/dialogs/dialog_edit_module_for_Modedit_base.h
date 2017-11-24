@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 19 2017)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
+class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -75,19 +76,19 @@ class DIALOG_MODULE_MODULE_EDITOR_BASE : public DIALOG_SHIM
 		wxSlider* m_CostRot180Ctrl;
 		wxStaticText* m_staticTextInfo;
 		wxStaticText* m_staticTextNetClearance;
-		wxTextCtrl* m_NetClearanceValueCtrl;
+		TEXT_CTRL_EVAL* m_NetClearanceValueCtrl;
 		wxStaticText* m_NetClearanceUnits;
 		wxStaticLine* m_staticline1;
 		wxStaticLine* m_staticline2;
 		wxStaticLine* m_staticline3;
 		wxStaticText* m_MaskClearanceTitle;
-		wxTextCtrl* m_SolderMaskMarginCtrl;
+		TEXT_CTRL_EVAL* m_SolderMaskMarginCtrl;
 		wxStaticText* m_SolderMaskMarginUnits;
 		wxStaticText* m_staticTextSolderPaste;
-		wxTextCtrl* m_SolderPasteMarginCtrl;
+		TEXT_CTRL_EVAL* m_SolderPasteMarginCtrl;
 		wxStaticText* m_SolderPasteMarginUnits;
 		wxStaticText* m_staticTextRatio;
-		wxTextCtrl* m_SolderPasteMarginRatioCtrl;
+		TEXT_CTRL_EVAL* m_SolderPasteMarginRatioCtrl;
 		wxStaticText* m_SolderPasteRatioMarginUnits;
 		wxPanel* m_Panel3D;
 		wxListBox* m_3D_ShapeNameListBox;

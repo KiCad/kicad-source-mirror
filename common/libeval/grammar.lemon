@@ -1,0 +1,68 @@
+/*
+    This file is part of libeval, a simple math expression evaluator
+
+    Copyright (C) 2017 Michael Geselbracht, mgeselbracht3@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+%token_type { numEval::TokenType }
+%extra_argument { NumericEvaluator* pEval }
+
+%nonassoc VAR ASSIGN UNIT SEMCOL.
+%left PLUS MINUS.
+%left DIVIDE MULT.
+
+%include {
+#include <assert.h>
+#include <math.h>
+#include <libeval/numeric_evaluator.h>
+}
+
+%syntax_error {
+  pEval->parseError("Syntax error");
+}
+
+%parse_accept {
+  pEval->parseOk();
+}
+
+main ::= in.
+
+/* Allow multiple statements in input string: x=1; y=2 */
+in ::= stmt.
+in ::= in stmt.
+
+/* A statement can be empty, an expr or an expr followed by ';' */
+stmt ::= ENDS.
+stmt ::= expr(A) ENDS.                    { pEval->parseSetResult(A.valid ? A.dValue : NAN); }
+stmt ::= expr SEMCOL.                     { pEval->parseSetResult(NAN); }
+
+expr(A) ::= VALUE(B).                     { A.dValue = B.dValue; A.valid=true; }
+expr(A) ::= VALUE(B) UNIT(C).             { A.dValue = B.dValue * C.dValue; A.valid=true; }
+expr(A) ::= MINUS expr(B).                { A.dValue = -B.dValue; A.valid=B.valid; }
+expr(A) ::= VAR(B).                       { A.dValue = pEval->getVar(B.text); A.valid=true; }
+expr(A) ::= VAR(B) ASSIGN expr(C).        { pEval->setVar(B.text, C.dValue); A.dValue = C.dValue; A.valid=false; }
+expr(A) ::= expr(B) PLUS expr(C).         { A.dValue = B.dValue + C.dValue; A.valid=C.valid; }
+expr(A) ::= expr(B) MINUS expr(C).        { A.dValue = B.dValue - C.dValue; A.valid=C.valid; }
+expr(A) ::= expr(B) MULT expr(C).         { A.dValue = B.dValue * C.dValue; A.valid=C.valid; }
+expr(A) ::= expr(B) DIVIDE expr(C).       {
+   if (C.dValue != 0.0) {
+      A.dValue = B.dValue / C.dValue;
+   }
+   else pEval->parseError("Div by zero");
+   A.valid=C.valid; 
+}
+expr(A) ::= PARENL expr(B) PARENR.        { A.dValue = B.dValue; A.valid=B.valid; }
+

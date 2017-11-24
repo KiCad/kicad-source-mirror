@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 19 2017)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
+class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -43,15 +44,15 @@ class DIALOG_MOVE_EXACT_BASE : public DIALOG_SHIM
 		wxBoxSizer* bMainSizer;
 		wxCheckBox* m_polarCoords;
 		wxStaticText* m_xLabel;
-		wxTextCtrl* m_xEntry;
+		TEXT_CTRL_EVAL* m_xEntry;
 		wxStaticText* m_xUnit;
 		wxButton* m_clearX;
 		wxStaticText* m_yLabel;
-		wxTextCtrl* m_yEntry;
+		TEXT_CTRL_EVAL* m_yEntry;
 		wxStaticText* m_yUnit;
 		wxButton* m_clearY;
 		wxStaticText* m_rotLabel;
-		wxTextCtrl* m_rotEntry;
+		TEXT_CTRL_EVAL* m_rotEntry;
 		wxStaticText* m_rotUnit;
 		wxButton* m_clearRot;
 		wxRadioBox* m_originChooser;

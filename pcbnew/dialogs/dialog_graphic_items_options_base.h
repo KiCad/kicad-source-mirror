@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
+class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -38,25 +39,25 @@ class DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE : public DIALOG_SHIM
 	
 	protected:
 		wxStaticText* m_GraphicSegmWidthTitle;
-		wxTextCtrl* m_OptPcbSegmWidth;
+		TEXT_CTRL_EVAL* m_OptPcbSegmWidth;
 		wxStaticText* m_BoardEdgesWidthTitle;
-		wxTextCtrl* m_OptPcbEdgesWidth;
+		TEXT_CTRL_EVAL* m_OptPcbEdgesWidth;
 		wxStaticText* m_CopperTextWidthTitle;
-		wxTextCtrl* m_OptPcbTextWidth;
+		TEXT_CTRL_EVAL* m_OptPcbTextWidth;
 		wxStaticText* m_TextSizeVTitle;
-		wxTextCtrl* m_OptPcbTextVSize;
+		TEXT_CTRL_EVAL* m_OptPcbTextVSize;
 		wxStaticText* m_TextSizeHTitle;
-		wxTextCtrl* m_OptPcbTextHSize;
+		TEXT_CTRL_EVAL* m_OptPcbTextHSize;
 		wxStaticText* m_EdgeModWidthTitle;
-		wxTextCtrl* m_OptModuleEdgesWidth;
+		TEXT_CTRL_EVAL* m_OptModuleEdgesWidth;
 		wxStaticText* m_TextModWidthTitle;
-		wxTextCtrl* m_OptModuleTextWidth;
+		TEXT_CTRL_EVAL* m_OptModuleTextWidth;
 		wxStaticText* m_TextModSizeVTitle;
-		wxTextCtrl* m_OptModuleTextVSize;
+		TEXT_CTRL_EVAL* m_OptModuleTextVSize;
 		wxStaticText* m_TextModSizeHTitle;
-		wxTextCtrl* m_OptModuleTextHSize;
+		TEXT_CTRL_EVAL* m_OptModuleTextHSize;
 		wxStaticText* m_DefaultPenSizeTitle;
-		wxTextCtrl* m_DefaultPenSizeCtrl;
+		TEXT_CTRL_EVAL* m_DefaultPenSizeCtrl;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

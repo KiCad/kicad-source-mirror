@@ -29,6 +29,7 @@
 #include <wxPcbStruct.h>
 #include <class_board_design_settings.h>
 #include <base_units.h>
+#include <widgets/text_ctrl_eval.h>
 
 #include <module_editor_frame.h>
 

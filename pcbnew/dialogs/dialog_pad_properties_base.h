@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
+class TEXT_CTRL_EVAL;
 class wxListView;
 
 #include "dialog_shim.h"
@@ -68,36 +69,36 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText45;
 		wxChoice* m_PadShape;
 		wxStaticText* m_staticText4;
-		wxTextCtrl* m_PadPosition_X_Ctrl;
+		TEXT_CTRL_EVAL* m_PadPosition_X_Ctrl;
 		wxStaticText* m_PadPosX_Unit;
 		wxStaticText* m_staticText41;
-		wxTextCtrl* m_PadPosition_Y_Ctrl;
+		TEXT_CTRL_EVAL* m_PadPosition_Y_Ctrl;
 		wxStaticText* m_PadPosY_Unit;
 		wxStaticText* m_staticText12;
-		wxTextCtrl* m_ShapeSize_X_Ctrl;
+		TEXT_CTRL_EVAL* m_ShapeSize_X_Ctrl;
 		wxStaticText* m_PadShapeSizeX_Unit;
 		wxStaticText* m_staticText15;
-		wxTextCtrl* m_ShapeSize_Y_Ctrl;
+		TEXT_CTRL_EVAL* m_ShapeSize_Y_Ctrl;
 		wxStaticText* m_PadShapeSizeY_Unit;
 		wxStaticText* m_PadOrientText;
 		wxChoice* m_PadOrient;
 		wxStaticText* m_staticText491;
-		wxTextCtrl* m_PadOrientCtrl;
+		TEXT_CTRL_EVAL* m_PadOrientCtrl;
 		wxStaticText* m_customOrientUnits;
 		wxStaticText* m_staticText17;
-		wxTextCtrl* m_ShapeOffset_X_Ctrl;
+		TEXT_CTRL_EVAL* m_ShapeOffset_X_Ctrl;
 		wxStaticText* m_PadShapeOffsetX_Unit;
 		wxStaticText* m_staticText19;
-		wxTextCtrl* m_ShapeOffset_Y_Ctrl;
+		TEXT_CTRL_EVAL* m_ShapeOffset_Y_Ctrl;
 		wxStaticText* m_PadShapeOffsetY_Unit;
 		wxStaticText* m_staticText38;
-		wxTextCtrl* m_LengthPadToDieCtrl;
+		TEXT_CTRL_EVAL* m_LengthPadToDieCtrl;
 		wxStaticText* m_PadLengthDie_Unit;
 		wxStaticLine* m_staticline4;
 		wxStaticLine* m_staticline5;
 		wxStaticLine* m_staticline6;
 		wxStaticText* m_staticText21;
-		wxTextCtrl* m_ShapeDelta_Ctrl;
+		TEXT_CTRL_EVAL* m_ShapeDelta_Ctrl;
 		wxStaticText* m_PadShapeDelta_Unit;
 		wxStaticText* m_staticText23;
 		wxChoice* m_trapDeltaDirChoice;
@@ -105,7 +106,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticLine* m_staticline8;
 		wxStaticLine* m_staticline9;
 		wxStaticText* m_staticTextCornerSizeRatio;
-		wxTextCtrl* m_tcCornerSizeRatio;
+		TEXT_CTRL_EVAL* m_tcCornerSizeRatio;
 		wxStaticText* m_staticTextCornerSizeRatioUnit;
 		wxStaticText* m_staticTextCornerRadius;
 		wxStaticText* m_staticTextCornerRadiusValue;
@@ -114,10 +115,10 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxChoice* m_DrillShapeCtrl;
 		wxStaticText* m_staticText51;
 		wxStaticText* m_textPadDrillX;
-		wxTextCtrl* m_PadDrill_X_Ctrl;
+		TEXT_CTRL_EVAL* m_PadDrill_X_Ctrl;
 		wxStaticText* m_PadDrill_X_Unit;
 		wxStaticText* m_textPadDrillY;
-		wxTextCtrl* m_PadDrill_Y_Ctrl;
+		TEXT_CTRL_EVAL* m_PadDrill_Y_Ctrl;
 		wxStaticText* m_PadDrill_Y_Unit;
 		wxStaticText* m_staticText511;
 		wxChoice* m_rbCopperLayersSel;
@@ -138,25 +139,25 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticModuleSideValue;
 		wxPanel* m_localSettingsPanel;
 		wxStaticText* m_staticTextNetClearance;
-		wxTextCtrl* m_NetClearanceValueCtrl;
+		TEXT_CTRL_EVAL* m_NetClearanceValueCtrl;
 		wxStaticText* m_NetClearanceUnits;
 		wxStaticText* m_MaskClearanceTitle;
-		wxTextCtrl* m_SolderMaskMarginCtrl;
+		TEXT_CTRL_EVAL* m_SolderMaskMarginCtrl;
 		wxStaticText* m_SolderMaskMarginUnits;
 		wxStaticText* m_staticTextSolderPaste;
-		wxTextCtrl* m_SolderPasteMarginCtrl;
+		TEXT_CTRL_EVAL* m_SolderPasteMarginCtrl;
 		wxStaticText* m_SolderPasteMarginUnits;
 		wxStaticText* m_staticTextRatio;
-		wxTextCtrl* m_SolderPasteMarginRatioCtrl;
+		TEXT_CTRL_EVAL* m_SolderPasteMarginRatioCtrl;
 		wxStaticText* m_SolderPasteRatioMarginUnits;
 		wxStaticBoxSizer* m_sbSizerZonesSettings;
 		wxStaticText* m_staticText40;
 		wxChoice* m_ZoneConnectionChoice;
 		wxStaticText* m_staticText49;
-		wxTextCtrl* m_ThermalWidthCtrl;
+		TEXT_CTRL_EVAL* m_ThermalWidthCtrl;
 		wxStaticText* m_ThermalWidthUnits;
 		wxStaticText* m_staticText52;
-		wxTextCtrl* m_ThermalGapCtrl;
+		TEXT_CTRL_EVAL* m_ThermalGapCtrl;
 		wxStaticText* m_ThermalGapUnits;
 		wxStaticText* m_staticTextcps;
 		wxChoice* m_ZoneCustomPadShape;
@@ -219,18 +220,18 @@ class DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextInfo;
 		wxStaticText* m_staticTextPosStart;
 		wxStaticText* m_staticTextStartX;
-		wxTextCtrl* m_textCtrPosX;
+		TEXT_CTRL_EVAL* m_textCtrPosX;
 		wxStaticText* m_staticTextStartY;
-		wxTextCtrl* m_textCtrPosY;
+		TEXT_CTRL_EVAL* m_textCtrPosY;
 		wxStaticText* m_staticTextPosUnit;
 		wxStaticText* m_staticTextPosEnd;
 		wxStaticText* m_staticTextEndX;
-		wxTextCtrl* m_textCtrEndX;
+		TEXT_CTRL_EVAL* m_textCtrEndX;
 		wxStaticText* m_staticTextEndY;
-		wxTextCtrl* m_textCtrEndY;
+		TEXT_CTRL_EVAL* m_textCtrEndY;
 		wxStaticText* m_staticTextEndUnit;
 		wxStaticText* m_staticTextAngle;
-		wxTextCtrl* m_textCtrAngle;
+		TEXT_CTRL_EVAL* m_textCtrAngle;
 		wxStaticText* m_staticTextAngleUnit;
 		wxStaticText* m_staticTextThickness;
 		wxTextCtrl* m_textCtrlThickness;
@@ -257,15 +258,15 @@ class DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticTextMove;
 		wxStaticText* m_staticTextMoveX;
-		wxTextCtrl* m_textCtrMoveX;
+		TEXT_CTRL_EVAL* m_textCtrMoveX;
 		wxStaticText* m_staticTextMoveY;
-		wxTextCtrl* m_textCtrMoveY;
+		TEXT_CTRL_EVAL* m_textCtrMoveY;
 		wxStaticText* m_staticTextMoveUnit;
 		wxStaticText* m_staticTextAngle;
-		wxTextCtrl* m_textCtrAngle;
+		TEXT_CTRL_EVAL* m_textCtrAngle;
 		wxStaticText* m_staticTextAngleUnit;
 		wxStaticText* m_staticTextSF;
-		wxTextCtrl* m_textCtrlScalingFactor;
+		TEXT_CTRL_EVAL* m_textCtrlScalingFactor;
 		wxStaticText* m_staticTextDupCnt;
 		wxSpinCtrl* m_spinCtrlDuplicateCount;
 		wxStaticLine* m_staticline1;
@@ -295,7 +296,7 @@ class DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE : public DIALOG_SHIM
 		wxButton* m_buttonDelete;
 		wxPanel* m_panelPoly;
 		wxStaticText* m_staticTextThickness;
-		wxTextCtrl* m_textCtrlThickness;
+		TEXT_CTRL_EVAL* m_textCtrlThickness;
 		wxStaticText* m_staticTextThicknessUnit;
 		wxStaticText* m_staticTextInfo;
 		wxStaticLine* m_staticline3;

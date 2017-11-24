@@ -28,6 +28,7 @@
 #include <class_track.h>
 #include <wxPcbStruct.h>
 #include <confirm.h>
+#include <widgets/text_ctrl_eval.h>
 
 #include <widgets/widget_net_selector.h>
 #include <board_commit.h>

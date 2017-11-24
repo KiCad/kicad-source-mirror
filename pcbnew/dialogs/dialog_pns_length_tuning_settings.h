@@ -28,7 +28,7 @@
 
 #include "dialog_pns_length_tuning_settings_base.h"
 
-#include <wx_unit_binder.h>
+#include <widgets/unit_binder.h>
 
 #include <router/pns_router.h>
 
@@ -46,10 +46,10 @@ public:
     virtual void OnOkClick( wxCommandEvent& aEvent ) override;
 
 private:
-    WX_UNIT_BINDER m_minAmpl;
-    WX_UNIT_BINDER m_maxAmpl;
-    WX_UNIT_BINDER m_spacing;
-    WX_UNIT_BINDER m_targetLength;
+    UNIT_BINDER m_minAmpl;
+    UNIT_BINDER m_maxAmpl;
+    UNIT_BINDER m_spacing;
+    UNIT_BINDER m_targetLength;
 
     PNS::MEANDER_SETTINGS& m_settings;
     PNS::ROUTER_MODE m_mode;

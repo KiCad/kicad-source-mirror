@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "widgets/text_ctrl_eval.h"
 
 #include "dialog_copper_zones_base.h"
 
@@ -107,7 +109,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_ClearanceValueTitle->Wrap( -1 );
 	bSizerSettings->Add( m_ClearanceValueTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_ZoneClearanceCtrl = new wxTextCtrl( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_ZoneClearanceCtrl = new TEXT_CTRL_EVAL( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerSettings->Add( m_ZoneClearanceCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_MinThicknessValueTitle = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Minimum width"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -116,7 +118,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	
 	bSizerSettings->Add( m_MinThicknessValueTitle, 0, wxRIGHT|wxLEFT, 5 );
 	
-	m_ZoneMinThicknessCtrl = new wxTextCtrl( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_ZoneMinThicknessCtrl = new TEXT_CTRL_EVAL( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerSettings->Add( m_ZoneMinThicknessCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticTextSmoothing = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Corner smoothing:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -133,7 +135,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_cornerSmoothingValue->Wrap( -1 );
 	bSizerSettings->Add( m_cornerSmoothingValue, 0, wxRIGHT|wxLEFT, 5 );
 	
-	m_cornerSmoothingCtrl = new wxTextCtrl( m_ExportableSetupSizer->GetStaticBox(), ID_M_CORNERSMOOTHINGCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_cornerSmoothingCtrl = new TEXT_CTRL_EVAL( m_ExportableSetupSizer->GetStaticBox(), ID_M_CORNERSMOOTHINGCTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerSettings->Add( m_cornerSmoothingCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
@@ -161,7 +163,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_AntipadSizeText->Wrap( -1 );
 	m_ThermalShapesParamsSizer->Add( m_AntipadSizeText, 0, wxTOP|wxRIGHT, 5 );
 	
-	m_AntipadSizeValue = new wxTextCtrl( m_ThermalShapesParamsSizer->GetStaticBox(), wxID_ANTIPAD_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_AntipadSizeValue = new TEXT_CTRL_EVAL( m_ThermalShapesParamsSizer->GetStaticBox(), wxID_ANTIPAD_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_AntipadSizeValue->SetToolTip( _("Clearance between pads in the same net and filled areas.") );
 	
 	m_ThermalShapesParamsSizer->Add( m_AntipadSizeValue, 0, wxEXPAND|wxBOTTOM, 5 );
@@ -170,7 +172,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	m_CopperBridgeWidthText->Wrap( -1 );
 	m_ThermalShapesParamsSizer->Add( m_CopperBridgeWidthText, 0, wxTOP|wxRIGHT, 5 );
 	
-	m_CopperWidthValue = new wxTextCtrl( m_ThermalShapesParamsSizer->GetStaticBox(), wxID_COPPER_BRIDGE_VALUE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_CopperWidthValue = new TEXT_CTRL_EVAL( m_ThermalShapesParamsSizer->GetStaticBox(), wxID_COPPER_BRIDGE_VALUE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_CopperWidthValue->SetToolTip( _("Width of copper in thermal reliefs.") );
 	
 	m_ThermalShapesParamsSizer->Add( m_CopperWidthValue, 0, wxEXPAND|wxBOTTOM, 5 );

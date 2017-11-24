@@ -178,6 +178,8 @@ set( COMMON_WIDGET_SRCS
     widgets/footprint_select_widget.cpp
     widgets/footprint_choice.cpp
     widgets/indicator_icon.cpp
+    widgets/text_ctrl_eval.cpp
+    widgets/unit_binder.cpp
     )
 
 set( COMMON_PAGE_LAYOUT_SRCS
@@ -293,7 +295,6 @@ set( COMMON_SRCS
     worksheet.cpp
     wxwineda.cpp
     wxdataviewctrl_helpers.cpp
-    wx_unit_binder.cpp
     wx_status_popup.cpp
     xnode.cpp
     zoom.cpp
@@ -348,6 +349,8 @@ set( COMMON_SRCS
     geometry/shape_collisions.cpp
     geometry/shape_file_io.cpp
     geometry/convex_hull.cpp
+
+    libeval/numeric_evaluator.cpp
     )
 add_library( common STATIC ${COMMON_SRCS} )
 add_dependencies( common lib-dependencies )

@@ -36,6 +36,7 @@
 #include <wxPcbStruct.h>
 #include <zones.h>
 #include <base_units.h>
+#include <widgets/text_ctrl_eval.h>
 
 #include <class_zone.h>
 #include <class_board.h>

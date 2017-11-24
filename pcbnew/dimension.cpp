@@ -38,6 +38,7 @@
 #include <macros.h>
 #include <base_units.h>
 #include <board_commit.h>
+#include <widgets/text_ctrl_eval.h>
 
 #include <class_board.h>
 #include <class_pcb_text.h>

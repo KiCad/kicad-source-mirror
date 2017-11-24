@@ -26,6 +26,7 @@
 #include <base_units.h>
 #include <macros.h>
 #include <boost/algorithm/string/join.hpp>
+#include <widgets/text_ctrl_eval.h>
 
 #include <class_drawpanel.h>
 #include <class_board.h>

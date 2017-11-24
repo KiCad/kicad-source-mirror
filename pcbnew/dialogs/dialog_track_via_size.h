@@ -25,7 +25,7 @@
 #ifndef __dialog_track_via_size__
 #define __dialog_track_via_size__
 
-#include <wx_unit_binder.h>
+#include <widgets/unit_binder.h>
 
 #include "dialog_track_via_size_base.h"
 
@@ -39,9 +39,9 @@ public:
     DIALOG_TRACK_VIA_SIZE( wxWindow* aParent, BOARD_DESIGN_SETTINGS& aSettings );
 
 protected:
-    WX_UNIT_BINDER m_trackWidth;
-    WX_UNIT_BINDER m_viaDiameter;
-    WX_UNIT_BINDER m_viaDrill;
+    UNIT_BINDER m_trackWidth;
+    UNIT_BINDER m_viaDiameter;
+    UNIT_BINDER m_viaDrill;
 
     // Routings settings that are modified by the dialog.
     BOARD_DESIGN_SETTINGS& m_settings;
