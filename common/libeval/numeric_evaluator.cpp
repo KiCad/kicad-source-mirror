@@ -56,7 +56,8 @@ namespace numEval
 
 NumericEvaluator :: NumericEvaluator() : pClParser(0)
 {
-   cClDecSep = '.';
+   struct lconv* lc = localeconv();
+   cClDecSep = *lc->decimal_point;
 
    bClTextInputStorage = true;
 
