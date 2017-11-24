@@ -125,7 +125,7 @@ NumericEvaluator :: parseOk()
 void
 NumericEvaluator :: parseSetResult(double val)
 {
-   snprintf(clToken.token, clToken.OutLen, "%g", val);
+   snprintf(clToken.token, clToken.OutLen, "%.10g", val);
 }
 
 const char*
