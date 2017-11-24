@@ -214,6 +214,7 @@ set( BMAPS_MID
     edit_comp_value
     edit_module
     editor
+    edit_cmp_symb_links
     edit_text
     edit
     eeschema

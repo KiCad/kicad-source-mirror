@@ -460,7 +460,7 @@ void prepareEditMenu( wxMenu* aParentMenu )
     AddMenuItem( aParentMenu, ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID,
                  _( "Edit Components to Symbol Library Links" ),
                  _( "Edit components to symbols library links to switch to an other library link (library IDs)" ),
-                 KiBitmap( update_fields_xpm ) );
+                 KiBitmap( edit_cmp_symb_links_xpm ) );
 }
 
 
