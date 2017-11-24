@@ -440,9 +440,7 @@ void LIB_EDIT_FRAME::fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibr
 
         while( m_libMgr->PartExists( newName, aLibrary ) )
         {
-            wxString suffix = ( sfx == 0 ) ? wxT( " (copy)" )
-                : wxString::Format( _( " (copy %d)" ), sfx );
-            newName = alias->GetName() + suffix;
+            newName = wxString::Format( "%s_%d", alias->GetName(), sfx );
             ++sfx;
         }
 
