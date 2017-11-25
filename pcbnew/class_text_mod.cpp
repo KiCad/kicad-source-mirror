@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,6 +57,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
     MODULE* module = static_cast<MODULE*>( m_Parent );
 
     m_Type = text_type;
+    m_unlocked = false;
 
     // Set text thickness to a default value
     SetThickness( Millimeter2iu( 0.15 ) );
@@ -328,7 +329,19 @@ double TEXTE_MODULE::GetDrawRotation() const
     if( module )
         rotation += module->GetOrientation();
 
-    NORMALIZE_ANGLE_POS( rotation );
+    if( m_unlocked )
+    {
+        NORMALIZE_ANGLE_POS( rotation );
+    }
+    else
+    {
+        // Keep angle between -90 .. 90 deg. Otherwise the text is not easy to read
+        while( rotation > 900 )
+            rotation -= 1800;
+
+        while( rotation < -900 )
+            rotation += 1800;
+    }
 
     return rotation;
 }

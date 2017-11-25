@@ -2048,15 +2048,22 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE()
     pt.x = parseBoardUnits( "X coordinate" );
     pt.y = parseBoardUnits( "Y coordinate" );
     text->SetPos0( pt );
-    token = NextTok();
 
-    // If there is no orientation defined, then it is the default value of 0 degrees.
-    if( token == T_NUMBER )
+    NextTok();
+
+    if( CurTok() == T_NUMBER )
     {
         text->SetTextAngle( parseDouble() * 10.0 );
-        NeedRIGHT();
+        NextTok();
     }
-    else if( token != T_RIGHT )
+
+    if( CurTok() == T_unlocked )
+    {
+        text->SetUnlocked( true );
+        NextTok();
+    }
+
+    if( CurTok() != T_RIGHT )
     {
         Unexpected( CurText() );
     }

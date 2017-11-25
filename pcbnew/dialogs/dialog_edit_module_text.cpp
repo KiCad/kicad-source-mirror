@@ -188,6 +188,8 @@ bool DialogEditModuleText::TransferDataToWindow()
     m_OrientValue = text_orient / 10.0;
     m_OrientValidator.TransferToWindow();
 
+    m_unlock->SetValue( m_currentText->IsUnlocked() );
+
     // Configure the layers list selector
     if( !m_parent->GetBoard()->IsLayerEnabled( m_currentText->GetLayer() ) )
         // Footprints are built outside the current board, so items cann be
@@ -326,6 +328,8 @@ bool DialogEditModuleText::TransferDataFromWindow()
     m_OrientValidator.TransferToWindow();
 
     m_currentText->SetDrawCoord();
+
+    m_currentText->SetUnlocked( m_unlock->GetValue() );
 
     LAYER_NUM layer = m_LayerSelectionCtrl->GetLayerSelection();
     m_currentText->SetLayer( ToLAYER_ID( layer ) );

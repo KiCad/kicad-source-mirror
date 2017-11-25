@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version Feb  6 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -24,7 +24,7 @@ DialogEditModuleText_base::DialogEditModuleText_base( wxWindow* parent, wxWindow
 	
 	m_ModuleInfoText = new wxStaticText( this, wxID_ANY, _("Footprint %s (%s) orientation %.1f"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ModuleInfoText->Wrap( -1 );
-	m_ModuleInfoText->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_ModuleInfoText->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bMainSizer->Add( m_ModuleInfoText, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
@@ -128,6 +128,11 @@ DialogEditModuleText_base::DialogEditModuleText_base( wxWindow* parent, wxWindow
 	
 	m_OrientValueCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer4->Add( m_OrientValueCtrl, 0, wxALL|wxEXPAND, 5 );
+	
+	m_unlock = new wxCheckBox( this, wxID_ANY, _("Unlock text orientation"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_unlock->SetToolTip( _("If orientation is locked, the text will always face near the bottom or right edge of the board.") );
+	
+	bSizer4->Add( m_unlock, 0, wxALL, 5 );
 	
 	
 	bSizer10->Add( bSizer4, 2, wxBOTTOM|wxEXPAND|wxRIGHT, 5 );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version Feb  6 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -27,6 +27,7 @@ class TEXT_CTRL_EVAL;
 #include <wx/bmpcbox.h>
 #include <wx/sizer.h>
 #include <wx/radiobox.h>
+#include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -61,6 +62,7 @@ class DialogEditModuleText_base : public DIALOG_SHIM
 		wxRadioBox* m_Orient;
 		wxStaticText* m_staticTextRotation;
 		wxTextCtrl* m_OrientValueCtrl;
+		wxCheckBox* m_unlock;
 		wxStaticLine* m_staticline2;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -74,7 +76,7 @@ class DialogEditModuleText_base : public DIALOG_SHIM
 	
 	public:
 		
-		DialogEditModuleText_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 589,351 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DialogEditModuleText_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 607,445 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DialogEditModuleText_base();
 	
 };

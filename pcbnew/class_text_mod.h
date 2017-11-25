@@ -87,6 +87,16 @@ public:
 
     void SetTextAngle( double aAngle );
 
+    bool IsUnlocked()
+    {
+        return m_unlocked;
+    }
+
+    void SetUnlocked( bool unlocked )
+    {
+        m_unlocked = unlocked;
+    }
+
     /// Rotate text, in footprint editor
     /// (for instance in footprint rotation transform)
     void Rotate( const wxPoint& aOffset, double aAngle ) override;
@@ -230,6 +240,8 @@ private:
 
     wxPoint   m_Pos0;       ///< text coordinates relative to the footprint anchor, orient 0.
                             ///< text coordinate ref point is the text center
+
+    bool      m_unlocked;
 };
 
 #endif // TEXT_MODULE_H_

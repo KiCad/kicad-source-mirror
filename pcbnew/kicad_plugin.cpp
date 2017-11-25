@@ -1547,6 +1547,9 @@ void PCB_IO::format( TEXTE_MODULE* aText, int aNestLevel ) const
     if( orient != 0.0 )
         m_out->Print( 0, " %s", FMT_ANGLE( orient ).c_str() );
 
+    if( aText->IsUnlocked() )
+        m_out->Print( 0, " unlocked" );
+
     m_out->Print( 0, ")" );
     formatLayer( aText );
 
