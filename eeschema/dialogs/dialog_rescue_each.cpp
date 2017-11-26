@@ -81,13 +81,44 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, RESCUER& aRescu
     m_stdButtonsOK->SetDefault();
 
     // Set the info message, customized to include the proper suffix.
-    wxString info_message =
-        _( "It looks like this project was made using older schematic symbol libraries.\n"
-           "Some parts may need to be relinked to a different symbol name, and some symbols\n"
-           "may need to be \"rescued\" (cloned and renamed) into a new library.\n"
-           "\n"
+    wxString info =
+        _( "This schematic was made using older symbol libraries which may break the "
+           "schematic.  Some symbols may need to be linked to a different symbol name.  "
+           "Some symbols may need to be \"rescued\" (copied and renamed) into a new library.\n\n"
            "The following changes are recommended to update the project." );
-    m_lblInfo->SetLabel( info_message );
+    m_htmlPrompt->AppendToPage( info );
+
+    // wxDataViewListCtrl seems to do a poor job of laying itself out so help it along here.
+    wxString header = _( "Accept" );
+    wxFont font = m_ListOfConflicts->GetFont();
+
+    font.MakeBold();
+
+    wxClientDC dc( this );
+
+    dc.SetFont( font );
+
+    int padding = 30;
+    int width = dc.GetTextExtent( header ).GetWidth();
+
+    m_ListOfConflicts->AppendToggleColumn( header, wxDATAVIEW_CELL_ACTIVATABLE, width,
+                                           wxALIGN_CENTER );
+
+    header = _( "Symbol Name" );
+    width = dc.GetTextExtent( header ).GetWidth() + padding;
+    m_ListOfConflicts->AppendTextColumn( header, wxDATAVIEW_CELL_INERT, width );
+
+    header = _( "Action Taken" );
+    width = dc.GetTextExtent( header ).GetWidth() + padding;
+    m_ListOfConflicts->AppendTextColumn( header, wxDATAVIEW_CELL_INERT, width );
+
+    header = _( "Reference" );
+    width = dc.GetTextExtent( header ).GetWidth() + padding;
+    m_ListOfInstances->AppendTextColumn( header, wxDATAVIEW_CELL_INERT, width );
+
+    header = _( "Value" );
+    width = dc.GetTextExtent( header ).GetWidth() + padding;
+    m_ListOfInstances->AppendTextColumn( header, wxDATAVIEW_CELL_INERT, width );
 
     m_componentViewOld->SetLayoutDirection( wxLayout_LeftToRight );
     m_componentViewNew->SetLayoutDirection( wxLayout_LeftToRight );
@@ -104,11 +135,6 @@ bool DIALOG_RESCUE_EACH::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    m_ListOfConflicts->AppendToggleColumn( _( "Accept" ) );
-    m_ListOfConflicts->AppendTextColumn( _( "Symbol" ) );
-    m_ListOfConflicts->AppendTextColumn( _( "Action" ) );
-    m_ListOfInstances->AppendTextColumn( _( "Reference" ) );
-    m_ListOfInstances->AppendTextColumn( _( "Value" ) );
     PopulateConflictList();
     PopulateInstanceList();
 
