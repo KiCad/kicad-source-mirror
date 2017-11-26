@@ -118,7 +118,7 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
                     continue;
 
                 // The last guy wins.  User should only set fields in any one unit.
-
+                // remark: IsVoid() returns true for empty strings or the "~" string (empty field value)
                 if( !comp2->GetField( VALUE )->IsVoid() )
                     fields.value = comp2->GetField( VALUE )->GetText();
 
@@ -140,7 +140,11 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
             }
         }
 
-        xcomp->AddChild( node( "value", fields.value ) );
+        // Do not output field values blank in netlist:
+        if( fields.value.size() )
+            xcomp->AddChild( node( "value", fields.value ) );
+        else    // value field always written in netlist
+            xcomp->AddChild( node( "value", "~" ) );
 
         if( fields.footprint.size() )
             xcomp->AddChild( node( "footprint", fields.footprint ) );
