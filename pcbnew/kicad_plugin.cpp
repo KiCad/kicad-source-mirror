@@ -1142,7 +1142,9 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
 
             /* Write 3D model offset in mm
              * 4.0.x wrote "at" which was actually in inches
+             * 5.0.x onwards, 3D model offset is written using "offset"
              */
+
             m_out->Print( aNestLevel+2, "(offset (xyz %s %s %s))\n",
                           Double2Str( bs3D->m_Offset.x ).c_str(),
                           Double2Str( bs3D->m_Offset.y ).c_str(),
