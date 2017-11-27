@@ -372,19 +372,6 @@ public:
      */
     bool Save( OUTPUTFORMATTER& aFormatter );
 
-    /**
-     * Load part definition from \a aReader.
-     *
-     * @param aReader A LINE_READER object to load file from.
-     * @param aErrorMsg - Description of error on load failure.
-     * @return True if the load was successful, false if there was an error.
-     */
-    bool Load( LINE_READER& aReader, wxString& aErrorMsg );
-    bool LoadField( LINE_READER& aReader, wxString& aErrorMsg );
-    bool LoadDrawEntries( LINE_READER& aReader, wxString& aErrorMsg );
-    bool LoadAliases( char* aLine, wxString& aErrorMsg );
-    bool LoadFootprints( LINE_READER& aReader, wxString& aErrorMsg );
-
     bool IsPower() const  { return m_options == ENTRY_POWER; }
     bool IsNormal() const { return m_options == ENTRY_NORMAL; }
 

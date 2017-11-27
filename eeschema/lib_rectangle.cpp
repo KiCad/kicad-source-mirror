@@ -65,31 +65,6 @@ bool LIB_RECTANGLE::Save( OUTPUTFORMATTER& aFormatter )
 }
 
 
-bool LIB_RECTANGLE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
-{
-    int  cnt;
-    char tmp[256] = "";
-    char* line = (char*)aLineReader;
-
-    cnt = sscanf( line + 2, "%d %d %d %d %d %d %d %255s", &m_Pos.x, &m_Pos.y,
-                  &m_End.x, &m_End.y, &m_Unit, &m_Convert, &m_Width, tmp );
-
-    if( cnt < 7 )
-    {
-        aErrorMsg.Printf( _( "Rectangle only had %d parameters of the required 7" ), cnt );
-        return false;
-    }
-
-    if( tmp[0] == 'F' )
-        m_Fill = FILLED_SHAPE;
-
-    if( tmp[0] == 'f' )
-        m_Fill = FILLED_WITH_BG_BODYCOLOR;
-
-    return true;
-}
-
-
 EDA_ITEM* LIB_RECTANGLE::Clone() const
 {
     return new LIB_RECTANGLE( *this );

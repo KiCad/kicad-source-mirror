@@ -123,58 +123,6 @@ bool LIB_ARC::Save( OUTPUTFORMATTER& aFormatter )
 }
 
 
-bool LIB_ARC::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
-{
-    int startx, starty, endx, endy, cnt;
-    char tmp[256] = "";
-    char* line = (char*) aLineReader;
-
-    cnt = sscanf( line + 2, "%d %d %d %d %d %d %d %d %255s %d %d %d %d",
-                  &m_Pos.x, &m_Pos.y, &m_Radius, &m_t1, &m_t2, &m_Unit,
-                  &m_Convert, &m_Width, tmp, &startx, &starty, &endx, &endy );
-    if( cnt < 8 )
-    {
-        aErrorMsg.Printf( _( "Arc only had %d parameters of the required 8" ), cnt );
-        return false;
-    }
-
-    if( tmp[0] == 'F' )
-        m_Fill = FILLED_SHAPE;
-
-    if( tmp[0] == 'f' )
-        m_Fill = FILLED_WITH_BG_BODYCOLOR;
-
-    NORMALIZE_ANGLE_POS( m_t1 );
-    NORMALIZE_ANGLE_POS( m_t2 );
-
-    // Actual Coordinates of arc ends are read from file
-    if( cnt >= 13 )
-    {
-        m_ArcStart.x = startx;
-        m_ArcStart.y = starty;
-        m_ArcEnd.x   = endx;
-        m_ArcEnd.y   = endy;
-    }
-    else
-    {
-        // Actual Coordinates of arc ends are not read from file
-        // (old library), calculate them
-        m_ArcStart.x = m_Radius;
-        m_ArcStart.y = 0;
-        m_ArcEnd.x   = m_Radius;
-        m_ArcEnd.y   = 0;
-        RotatePoint( &m_ArcStart.x, &m_ArcStart.y, -m_t1 );
-        m_ArcStart.x += m_Pos.x;
-        m_ArcStart.y += m_Pos.y;
-        RotatePoint( &m_ArcEnd.x, &m_ArcEnd.y, -m_t2 );
-        m_ArcEnd.x += m_Pos.x;
-        m_ArcEnd.y += m_Pos.y;
-    }
-
-    return true;
-}
-
-
 bool LIB_ARC::HitTest( const wxPoint& aRefPoint ) const
 {
     int mindist = GetPenSize() / 2;

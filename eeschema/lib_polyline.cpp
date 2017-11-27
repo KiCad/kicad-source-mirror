@@ -71,68 +71,6 @@ bool LIB_POLYLINE::Save( OUTPUTFORMATTER& aFormatter )
 }
 
 
-bool LIB_POLYLINE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
-{
-    char*   p;
-    int     i, ccount = 0;
-    wxPoint pt;
-    char*   line = (char*) aLineReader;
-
-    i = sscanf( line + 2, "%d %d %d %d", &ccount, &m_Unit, &m_Convert, &m_Width );
-
-    m_Fill = NO_FILL;
-
-    if( i < 4 )
-    {
-        aErrorMsg.Printf( _( "Polyline only had %d parameters of the required 4" ), i );
-        return false;
-    }
-
-    if( ccount <= 0 )
-    {
-        aErrorMsg.Printf( _( "Polyline count parameter %d is invalid" ), ccount );
-        return false;
-    }
-
-    strtok( line + 2, " \t\n" );     // Skip field
-    strtok( NULL, " \t\n" );         // Skip field
-    strtok( NULL, " \t\n" );         // Skip field
-    strtok( NULL, " \t\n" );
-
-    for( i = 0; i < ccount; i++ )
-    {
-        p = strtok( NULL, " \t\n" );
-
-        if( p == NULL || sscanf( p, "%d", &pt.x ) != 1 )
-        {
-            aErrorMsg.Printf( _( "Polyline point %d X position not defined" ), i );
-            return false;
-        }
-
-        p = strtok( NULL, " \t\n" );
-
-        if( p == NULL || sscanf( p, "%d", &pt.y ) != 1 )
-        {
-            aErrorMsg.Printf( _( "Polyline point %d Y position not defined" ), i );
-            return false;
-        }
-
-        AddPoint( pt );
-    }
-
-    if( ( p = strtok( NULL, " \t\n" ) ) != NULL )
-    {
-        if( p[0] == 'F' )
-            m_Fill = FILLED_SHAPE;
-
-        if( p[0] == 'f' )
-            m_Fill = FILLED_WITH_BG_BODYCOLOR;
-    }
-
-    return true;
-}
-
-
 EDA_ITEM* LIB_POLYLINE::Clone() const
 {
     return new LIB_POLYLINE( *this );

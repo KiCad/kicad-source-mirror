@@ -64,30 +64,6 @@ bool LIB_CIRCLE::Save( OUTPUTFORMATTER& aFormatter )
 }
 
 
-bool LIB_CIRCLE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
-{
-    char tmp[256];
-    char* line = (char*) aLineReader;
-
-    int  cnt = sscanf( line + 2, "%d %d %d %d %d %d %255s", &m_Pos.x, &m_Pos.y,
-                       &m_Radius, &m_Unit, &m_Convert, &m_Width, tmp );
-
-    if( cnt < 6 )
-    {
-        aErrorMsg.Printf( _( "Circle only had %d parameters of the required 6" ), cnt );
-        return false;
-    }
-
-    if( tmp[0] == 'F' )
-        m_Fill = FILLED_SHAPE;
-
-    if( tmp[0] == 'f' )
-        m_Fill = FILLED_WITH_BG_BODYCOLOR;
-
-    return true;
-}
-
-
 bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef ) const
 {
     int mindist = GetPenSize() / 2;

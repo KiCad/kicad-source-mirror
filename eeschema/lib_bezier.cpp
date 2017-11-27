@@ -66,68 +66,6 @@ bool LIB_BEZIER::Save( OUTPUTFORMATTER& aFormatter )
 }
 
 
-bool LIB_BEZIER::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
-{
-    char*   p;
-    int     i, ccount = 0;
-    wxPoint pt;
-    char*   line = (char*) aLineReader;
-
-    i = sscanf( line + 2, "%d %d %d %d", &ccount, &m_Unit, &m_Convert, &m_Width );
-
-    if( i !=4 )
-    {
-        aErrorMsg.Printf( _( "Bezier only had %d parameters of the required 4" ), i );
-        return false;
-    }
-
-    if( ccount <= 0 )
-    {
-        aErrorMsg.Printf( _( "Bezier count parameter %d is invalid" ), ccount );
-        return false;
-    }
-
-    strtok( line + 2, " \t\n" );     // Skip field
-    strtok( NULL, " \t\n" );         // Skip field
-    strtok( NULL, " \t\n" );         // Skip field
-    strtok( NULL, " \t\n" );
-
-    for( i = 0; i < ccount; i++ )
-    {
-        p = strtok( NULL, " \t\n" );
-
-        if( sscanf( p, "%d", &pt.x ) != 1 )
-        {
-            aErrorMsg.Printf( _( "Bezier point %d X position not defined" ), i );
-            return false;
-        }
-
-        p = strtok( NULL, " \t\n" );
-
-        if( sscanf( p, "%d", &pt.y ) != 1 )
-        {
-            aErrorMsg.Printf( _( "Bezier point %d Y position not defined" ), i );
-            return false;
-        }
-
-        m_BezierPoints.push_back( pt );
-    }
-
-    m_Fill = NO_FILL;
-
-    if( ( p = strtok( NULL, " \t\n" ) ) != NULL )
-    {
-        if( p[0] == 'F' )
-            m_Fill = FILLED_SHAPE;
-
-        if( p[0] == 'f' )
-            m_Fill = FILLED_WITH_BG_BODYCOLOR;
-    }
-
-    return true;
-}
-
-
 EDA_ITEM* LIB_BEZIER::Clone() const
 {
     return new LIB_BEZIER( *this );
