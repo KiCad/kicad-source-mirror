@@ -358,6 +358,9 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
 
     TOOL_ID id = aTool->GetId();
 
+    if( aTool->GetType() == INTERACTIVE )
+        static_cast<TOOL_INTERACTIVE*>( aTool )->resetTransitions();
+
     // If the tool is already active, bring it to the top of the active tools stack
     if( isActive( aTool ) )
     {
@@ -367,9 +370,6 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
     }
 
     aTool->Reset( TOOL_INTERACTIVE::RUN );
-
-    if( aTool->GetType() == INTERACTIVE )
-        static_cast<TOOL_INTERACTIVE*>( aTool )->resetTransitions();
 
     // Add the tool on the front of the processing queue (it gets events first)
     m_activeTools.push_front( id );
