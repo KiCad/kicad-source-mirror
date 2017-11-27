@@ -212,6 +212,16 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         GetImagesList()->SortImagesByZOrder();
         myframe->ReFillLayerWidget();
         myframe->syncLayerBox( true );
+
+        if( myframe->IsGalCanvasActive() )
+        {
+            for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
+            {
+                myframe->SetLayerColor( GERBER_DRAW_LAYER( layer ),
+                                        GetLayerColor( GERBER_DRAW_LAYER( layer ) ) );
+            }
+        }
+
         myframe->GetCanvas()->Refresh();
         break;
     }

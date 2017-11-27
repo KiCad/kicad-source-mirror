@@ -674,10 +674,10 @@ void LAYER_WIDGET::SetLayerColor( LAYER_NUM aLayer, COLOR4D aColor )
     if( row >= 0 )
     {
         int col = 1;    // bitmap button is column 1
-        auto bmb = static_cast<COLOR_SWATCH*>( getLayerComp( row, col ) );
-        wxASSERT( bmb );
+        auto swatch = static_cast<COLOR_SWATCH*>( getLayerComp( row, col ) );
+        wxASSERT( swatch );
 
-        bmb->SetSwatchColor( aColor, false );
+        swatch->SetSwatchColor( aColor, false );
     }
 }
 
@@ -688,11 +688,10 @@ COLOR4D LAYER_WIDGET::GetLayerColor( LAYER_NUM aLayer ) const
     if( row >= 0 )
     {
         int col = 1;    // bitmap button is column 1
-        wxBitmapButton* bmb = (wxBitmapButton*) getLayerComp( row, col );
-        wxASSERT( bmb );
+        auto swatch = static_cast<COLOR_SWATCH*>( getLayerComp( row, col ) );
+        wxASSERT( swatch );
 
-        wxString colorTxt = bmb->GetName();
-        return ColorFromInt( strtoul( TO_UTF8(colorTxt), NULL, 0 ) );
+        return swatch->GetSwatchColor();
     }
 
     return COLOR4D::UNSPECIFIED;   // it's caller fault, gave me a bad layer
