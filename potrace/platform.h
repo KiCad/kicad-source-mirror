@@ -1,4 +1,4 @@
-/* Copyright (C) 2001-2015 Peter Selinger.
+/* Copyright (C) 2001-2017 Peter Selinger.
  *  This file is part of Potrace. It is free software and it is covered
  *  by the GNU General Public License. See the file COPYING for details. */
 
@@ -8,7 +8,7 @@
 #define PLATFORM_H
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 /* in Windows, set all file i/o to binary */

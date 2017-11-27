@@ -1,4 +1,4 @@
-/* Copyright (C) 2001-2015 Peter Selinger.
+/* Copyright (C) 2001-2017 Peter Selinger.
  *  This file is part of Potrace. It is free software and it is covered
  *  by the GNU General Public License. See the file COPYING for details. */
 
@@ -12,12 +12,23 @@
 #include <stdio.h>
 
 #include "bitmap.h"
+#include "bitmap_io.h"
 #include "bitops.h"
 
-#define INTBITS ( 8 * sizeof(int) )
+#define INTBITS ( 8 * sizeof( int ) )
 
 static int  bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp );
 static int  bm_readbody_pnm( FILE* f, double threshold, potrace_bitmap_t** bmp, int magic );
+
+#define TRY( x ) \
+    if( x )      \
+        goto try_error
+#define TRY_EOF( x ) \
+    if( x )          \
+        goto eof
+#define TRY_STD( x ) \
+    if( x )          \
+        goto std_error
 
 /* ---------------------------------------------------------------------- */
 /* routines for reading pnm streams */
@@ -32,13 +43,13 @@ static int fgetc_ws( FILE* f )
     {
         c = fgetc( f );
 
-        if( c=='#' )
+        if( c == '#' )
         {
             while( 1 )
             {
                 c = fgetc( f );
 
-                if( c=='\n' || c==EOF )
+                if( c == '\n' || c == EOF )
                 {
                     break;
                 }
@@ -46,7 +57,7 @@ static int fgetc_ws( FILE* f )
         }
 
         /* space, tab, line feed, carriage return, form-feed */
-        if( c!=' ' && c!='\t' && c!='\r' && c!='\n' && c!=12 )
+        if( c != ' ' && c != '\t' && c != '\r' && c != '\n' && c != 12 )
         {
             return c;
         }
@@ -69,12 +80,12 @@ static int readnum( FILE* f )
     {
         c = fgetc_ws( f );
 
-        if( c==EOF )
+        if( c == EOF )
         {
             return -1;
         }
 
-        if( c>='0' && c<='9' )
+        if( c >= '0' && c <= '9' )
         {
             break;
         }
@@ -87,12 +98,12 @@ static int readnum( FILE* f )
     {
         c = fgetc( f );
 
-        if( c==EOF )
+        if( c == EOF )
         {
             break;
         }
 
-        if( c<'0' || c>'9' )
+        if( c < '0' || c > '9' )
         {
             ungetc( c, f );
             break;
@@ -118,12 +129,12 @@ static int readbit( FILE* f )
     {
         c = fgetc_ws( f );
 
-        if( c==EOF )
+        if( c == EOF )
         {
             return -1;
         }
 
-        if( c>='0' && c<='1' )
+        if( c >= '0' && c <= '1' )
         {
             break;
         }
@@ -185,21 +196,23 @@ static int bm_readbody_pnm( FILE* f, double threshold, potrace_bitmap_t** bmp, i
 {
     potrace_bitmap_t* bm;
     int x, y, i, b, b1, sum;
-    int bpr;    /* bytes per row (as opposed to 4*bm->c) */
+    int bpr;        /* bytes per row (as opposed to 4*bm->c) */
     int w, h, max;
+    int realheight; /* in case of incomplete file, keeps track of how
+                     *  many scan lines actually contain data */
 
     bm = NULL;
 
     w = readnum( f );
 
-    if( w<0 )
+    if( w < 0 )
     {
         goto format_error;
     }
 
     h = readnum( f );
 
-    if( h<0 )
+    if( h < 0 )
     {
         goto format_error;
     }
@@ -209,11 +222,10 @@ static int bm_readbody_pnm( FILE* f, double threshold, potrace_bitmap_t** bmp, i
 
     if( !bm )
     {
-        return -1;
+        goto std_error;
     }
 
-    /* zero it out */
-    bm_clear( bm, 0 );
+    realheight = 0;
 
     switch( magic )
     {
@@ -224,13 +236,15 @@ static int bm_readbody_pnm( FILE* f, double threshold, potrace_bitmap_t** bmp, i
     case '1':
         /* read P1 format: PBM ascii */
 
-        for( y = h - 1; y>=0; y-- )
+        for( y = 0; y < h; y++ )
         {
-            for( x = 0; x<w; x++ )
+            realheight = y + 1;
+
+            for( x = 0; x < w; x++ )
             {
                 b = readbit( f );
 
-                if( b<0 )
+                if( b < 0 )
                 {
                     goto eof;
                 }
@@ -246,18 +260,20 @@ static int bm_readbody_pnm( FILE* f, double threshold, potrace_bitmap_t** bmp, i
 
         max = readnum( f );
 
-        if( max<1 )
+        if( max < 1 )
         {
             goto format_error;
         }
 
-        for( y = h - 1; y>=0; y-- )
+        for( y = 0; y < h; y++ )
         {
-            for( x = 0; x<w; x++ )
+            realheight = y + 1;
+
+            for( x = 0; x < w; x++ )
             {
                 b = readnum( f );
 
-                if( b<0 )
+                if( b < 0 )
                 {
                     goto eof;
                 }
@@ -273,22 +289,24 @@ static int bm_readbody_pnm( FILE* f, double threshold, potrace_bitmap_t** bmp, i
 
         max = readnum( f );
 
-        if( max<1 )
+        if( max < 1 )
         {
             goto format_error;
         }
 
-        for( y = h - 1; y>=0; y-- )
+        for( y = 0; y < h; y++ )
         {
-            for( x = 0; x<w; x++ )
+            realheight = y + 1;
+
+            for( x = 0; x < w; x++ )
             {
                 sum = 0;
 
-                for( i = 0; i<3; i++ )
+                for( i = 0; i < 3; i++ )
                 {
                     b = readnum( f );
 
-                    if( b<0 )
+                    if( b < 0 )
                     {
                         goto eof;
                     }
@@ -307,27 +325,28 @@ static int bm_readbody_pnm( FILE* f, double threshold, potrace_bitmap_t** bmp, i
 
         b = fgetc( f );    /* read single white-space character after height */
 
-        if( b==EOF )
+        if( b == EOF )
         {
             goto format_error;
         }
 
-        bpr = (w + 7) / 8;
+        bpr = ( w + 7 ) / 8;
 
-        for( y = h - 1; y>=0; y-- )
+        for( y = 0; y < h; y++ )
         {
-            for( i = 0; i<bpr; i++ )
+            realheight = y + 1;
+
+            for( i = 0; i < bpr; i++ )
             {
                 b = fgetc( f );
 
-                if( b==EOF )
+                if( b == EOF )
                 {
                     goto eof;
                 }
 
-                *bm_index( bm, i * 8,
-                        y ) |= ( (potrace_word) b ) <<
-                               ( 8 * ( BM_WORDSIZE - 1 - (i % BM_WORDSIZE) ) );
+                *bm_index( bm, i * 8, y ) |= ( (potrace_word) b )
+                                             << ( 8 * ( BM_WORDSIZE - 1 - ( i % BM_WORDSIZE ) ) );
             }
         }
 
@@ -338,33 +357,35 @@ static int bm_readbody_pnm( FILE* f, double threshold, potrace_bitmap_t** bmp, i
 
         max = readnum( f );
 
-        if( max<1 )
+        if( max < 1 )
         {
             goto format_error;
         }
 
         b = fgetc( f );    /* read single white-space character after max */
 
-        if( b==EOF )
+        if( b == EOF )
         {
             goto format_error;
         }
 
-        for( y = h - 1; y>=0; y-- )
+        for( y = 0; y < h; y++ )
         {
-            for( x = 0; x<w; x++ )
+            realheight = y + 1;
+
+            for( x = 0; x < w; x++ )
             {
                 b = fgetc( f );
 
-                if( b==EOF )
+                if( b == EOF )
                     goto eof;
 
-                if( max>=256 )
+                if( max >= 256 )
                 {
                     b   <<= 8;
                     b1  = fgetc( f );
 
-                    if( b1==EOF )
+                    if( b1 == EOF )
                         goto eof;
 
                     b |= b1;
@@ -381,39 +402,41 @@ static int bm_readbody_pnm( FILE* f, double threshold, potrace_bitmap_t** bmp, i
 
         max = readnum( f );
 
-        if( max<1 )
+        if( max < 1 )
         {
             goto format_error;
         }
 
         b = fgetc( f );    /* read single white-space character after max */
 
-        if( b==EOF )
+        if( b == EOF )
         {
             goto format_error;
         }
 
-        for( y = h - 1; y>=0; y-- )
+        for( y = 0; y < h; y++ )
         {
-            for( x = 0; x<w; x++ )
+            realheight = y + 1;
+
+            for( x = 0; x < w; x++ )
             {
                 sum = 0;
 
-                for( i = 0; i<3; i++ )
+                for( i = 0; i < 3; i++ )
                 {
                     b = fgetc( f );
 
-                    if( b==EOF )
+                    if( b == EOF )
                     {
                         goto eof;
                     }
 
-                    if( max>=256 )
+                    if( max >= 256 )
                     {
                         b   <<= 8;
                         b1  = fgetc( f );
 
-                        if( b1==EOF )
+                        if( b1 == EOF )
                             goto eof;
 
                         b |= b1;
@@ -429,10 +452,13 @@ static int bm_readbody_pnm( FILE* f, double threshold, potrace_bitmap_t** bmp, i
         break;
     }
 
+    bm_flip( bm );
     *bmp = bm;
     return 0;
 
 eof:
+    TRY_STD( bm_resize( bm, realheight ) );
+    bm_flip( bm );
     *bmp = bm;
     return 1;
 
@@ -453,6 +479,10 @@ format_error:
     }
 
     return -2;
+
+std_error:
+    bm_free( bm );
+    return -1;
 }
 
 
@@ -465,22 +495,22 @@ struct bmp_info_s
     unsigned int    reserved;
     unsigned int    DataOffset;
     unsigned int    InfoSize;
-    unsigned int    w;          /* width */
-    unsigned int    h;          /* height */
+    unsigned int    w;      /* width */
+    unsigned int    h;      /* height */
     unsigned int    Planes;
-    unsigned int    bits;       /* bits per sample */
-    unsigned int    comp;       /* compression mode */
+    unsigned int    bits;   /* bits per sample */
+    unsigned int    comp;   /* compression mode */
     unsigned int    ImageSize;
     unsigned int    XpixelsPerM;
     unsigned int    YpixelsPerM;
-    unsigned int    ncolors;   /* number of colors in palette */
+    unsigned int    ncolors; /* number of colors in palette */
     unsigned int    ColorsImportant;
     unsigned int    RedMask;
     unsigned int    GreenMask;
     unsigned int    BlueMask;
     unsigned int    AlphaMask;
-    unsigned int    ctbits;     /* sample size for color table */
-    int topdown;                /* top-down mode? */
+    unsigned int    ctbits; /* sample size for color table */
+    int topdown;            /* top-down mode? */
 };
 typedef struct bmp_info_s bmp_info_t;
 
@@ -497,16 +527,16 @@ static int bmp_readint( FILE* f, int n, unsigned int* p )
     unsigned int sum = 0;
     int b;
 
-    for( i = 0; i<n; i++ )
+    for( i = 0; i < n; i++ )
     {
         b = fgetc( f );
 
-        if( b==EOF )
+        if( b == EOF )
         {
             return 1;
         }
 
-        sum += b << (8 * i);
+        sum += (unsigned) b << ( 8 * i );
     }
 
     bmp_count += n;
@@ -529,13 +559,13 @@ static int bmp_pad( FILE* f )
 {
     int c, i, b;
 
-    c = (-bmp_count) & 3;
+    c = ( -bmp_count ) & 3;
 
-    for( i = 0; i<c; i++ )
+    for( i = 0; i < c; i++ )
     {
         b = fgetc( f );
 
-        if( b==EOF )
+        if( b == EOF )
         {
             return 1;
         }
@@ -556,7 +586,7 @@ static int bmp_forward( FILE* f, int pos )
     {
         b = fgetc( f );
 
-        if( b==EOF )
+        if( b == EOF )
         {
             return 1;
         }
@@ -569,16 +599,8 @@ static int bmp_forward( FILE* f, int pos )
 }
 
 
-#define TRY( x )        if( x ) \
-        goto try_error
-#define TRY_EOF( x )    if( x ) \
-        goto eof
-
-/* correct y-coordinate for top-down format */
-#define ycorr( y ) (bmpinfo.topdown ? bmpinfo.h - 1 - y : y)
-
 /* safe colortable access */
-#define COLTABLE( c ) ( (c) < bmpinfo.ncolors ? coltable[(c)] : 0 )
+#define COLTABLE( c ) ( ( c ) < bmpinfo.ncolors ? coltable[( c )] : 0 )
 
 /* read BMP stream after magic number. Return values as for bm_read.
  *  We choose to be as permissive as possible, since there are many
@@ -601,6 +623,8 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
     unsigned int    n;
     unsigned int    redshift, greenshift, blueshift;
     int col1[2];
+    int realheight;    /* in case of incomplete file, keeps track of how
+                        *  many scan lines actually contain data */
 
     bm_read_error = NULL;
     bm = NULL;
@@ -616,8 +640,8 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
     /* info header */
     TRY( bmp_readint( f, 4, &bmpinfo.InfoSize ) );
 
-    if( bmpinfo.InfoSize == 40 || bmpinfo.InfoSize == 64
-        || bmpinfo.InfoSize == 108 || bmpinfo.InfoSize == 124 )
+    if( bmpinfo.InfoSize == 40 || bmpinfo.InfoSize == 64 || bmpinfo.InfoSize == 108
+        || bmpinfo.InfoSize == 124 )
     {
         /* Windows or new OS/2 format */
         bmpinfo.ctbits = 32;    /* sample size in color table */
@@ -632,8 +656,9 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
         TRY( bmp_readint( f, 4, &bmpinfo.ncolors ) );
         TRY( bmp_readint( f, 4, &bmpinfo.ColorsImportant ) );
 
-        if( bmpinfo.InfoSize >= 108 )    /* V4 and V5 bitmaps */
+        if( bmpinfo.InfoSize >= 108 )
         {
+            /* V4 and V5 bitmaps */
             TRY( bmp_readint( f, 4, &bmpinfo.RedMask ) );
             TRY( bmp_readint( f, 4, &bmpinfo.GreenMask ) );
             TRY( bmp_readint( f, 4, &bmpinfo.BlueMask ) );
@@ -647,7 +672,7 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
 
         if( bmpinfo.h > 0x7fffffff )
         {
-            bmpinfo.h = (-bmpinfo.h) & 0xffffffff;
+            bmpinfo.h = ( -bmpinfo.h ) & 0xffffffff;
             bmpinfo.topdown = 1;
         }
         else
@@ -697,7 +722,7 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
         goto format_error;    /* can't handle planes */
     }
 
-    if( bmpinfo.ncolors == 0 )
+    if( bmpinfo.ncolors == 0 && bmpinfo.bits <= 8 )
     {
         bmpinfo.ncolors = 1 << bmpinfo.bits;
     }
@@ -705,7 +730,7 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
     /* color table, present only if bmpinfo.bits <= 8. */
     if( bmpinfo.bits <= 8 )
     {
-        coltable = (int*) calloc( bmpinfo.ncolors, sizeof(int) );
+        coltable = (int*) calloc( bmpinfo.ncolors, sizeof( int ) );
 
         if( !coltable )
         {
@@ -714,13 +739,13 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
 
         /* NOTE: since we are reading a bitmap, we can immediately convert
          *  the color table entries to bits. */
-        for( i = 0; i<bmpinfo.ncolors; i++ )
+        for( i = 0; i < bmpinfo.ncolors; i++ )
         {
             TRY( bmp_readint( f, bmpinfo.ctbits / 8, &c ) );
-            c = ( (c >> 16) & 0xff ) + ( (c >> 8) & 0xff ) + (c & 0xff);
-            coltable[i] = (c > 3 * threshold * 255 ? 0 : 1);
+            c = ( ( c >> 16 ) & 0xff ) + ( ( c >> 8 ) & 0xff ) + ( c & 0xff );
+            coltable[i] = ( c > 3 * threshold * 255 ? 0 : 1 );
 
-            if( i<2 )
+            if( i < 2 )
             {
                 col1[i] = c;
             }
@@ -728,8 +753,9 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
     }
 
     /* forward to data */
-    if( bmpinfo.InfoSize != 12 )    /* not old OS/2 format */
+    if( bmpinfo.InfoSize != 12 )
     {
+        /* not old OS/2 format */
         TRY( bmp_forward( f, bmpinfo.DataOffset ) );
     }
 
@@ -741,19 +767,18 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
         goto std_error;
     }
 
-    /* zero it out */
-    bm_clear( bm, 0 );
+    realheight = 0;
 
     switch( bmpinfo.bits + 0x100 * bmpinfo.comp )
     {
     default:
-        goto format_error;
-        break;
+        goto format_error; break;
 
-    case 0x001:                 /* monochrome palette */
+    case 0x001:    /* monochrome palette */
 
-        if( col1[0] < col1[1] ) /* make the darker color black */
+        if( col1[0] < col1[1] )
         {
+            /* make the darker color black */
             mask = 0xff;
         }
         else
@@ -762,17 +787,17 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
         }
 
         /* raster data */
-        for( y = 0; y<bmpinfo.h; y++ )
+        for( y = 0; y < bmpinfo.h; y++ )
         {
+            realheight = y + 1;
             bmp_pad_reset();
 
-            for( i = 0; 8 * i<bmpinfo.w; i++ )
+            for( i = 0; 8 * i < bmpinfo.w; i++ )
             {
                 TRY_EOF( bmp_readint( f, 1, &b ) );
                 b ^= mask;
-                *bm_index( bm, i * 8,
-                        ycorr( y ) ) |= ( (potrace_word) b ) <<
-                                        ( 8 * ( BM_WORDSIZE - 1 - (i % BM_WORDSIZE) ) );
+                *bm_index( bm, i * 8, y ) |= ( (potrace_word) b )
+                                             << ( 8 * ( BM_WORDSIZE - 1 - ( i % BM_WORDSIZE ) ) );
             }
 
             TRY( bmp_pad( f ) );
@@ -788,25 +813,26 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
     case 0x007:
     case 0x008:
 
-        for( y = 0; y<bmpinfo.h; y++ )
+        for( y = 0; y < bmpinfo.h; y++ )
         {
+            realheight = y + 1;
             bmp_pad_reset();
             bitbuf = 0; /* bit buffer: bits in buffer are high-aligned */
             n = 0;      /* number of bits currently in bitbuffer */
 
-            for( x = 0; x<bmpinfo.w; x++ )
+            for( x = 0; x < bmpinfo.w; x++ )
             {
                 if( n < bmpinfo.bits )
                 {
                     TRY_EOF( bmp_readint( f, 1, &b ) );
-                    bitbuf |= b << (INTBITS - 8 - n);
+                    bitbuf |= b << ( INTBITS - 8 - n );
                     n += 8;
                 }
 
-                b = bitbuf >> (INTBITS - bmpinfo.bits);
+                b = bitbuf >> ( INTBITS - bmpinfo.bits );
                 bitbuf <<= bmpinfo.bits;
                 n -= bmpinfo.bits;
-                BM_UPUT( bm, x, ycorr( y ), COLTABLE( b ) );
+                BM_UPUT( bm, x, y, COLTABLE( b ) );
             }
 
             TRY( bmp_pad( f ) );
@@ -824,15 +850,16 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
     case 0x018:     /* 24-bit encoding */
     case 0x020:     /* 32-bit encoding */
 
-        for( y = 0; y<bmpinfo.h; y++ )
+        for( y = 0; y < bmpinfo.h; y++ )
         {
+            realheight = y + 1;
             bmp_pad_reset();
 
-            for( x = 0; x<bmpinfo.w; x++ )
+            for( x = 0; x < bmpinfo.w; x++ )
             {
                 TRY_EOF( bmp_readint( f, bmpinfo.bits / 8, &c ) );
-                c = ( (c >> 16) & 0xff ) + ( (c >> 8) & 0xff ) + (c & 0xff);
-                BM_UPUT( bm, x, ycorr( y ), c > 3 * threshold * 255 ? 0 : 1 );
+                c = ( ( c >> 16 ) & 0xff ) + ( ( c >> 8 ) & 0xff ) + ( c & 0xff );
+                BM_UPUT( bm, x, y, c > 3 * threshold * 255 ? 0 : 1 );
             }
 
             TRY( bmp_pad( f ) );
@@ -841,21 +868,28 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
         break;
 
     case 0x320:    /* 32-bit encoding with bitfields */
+
+        if( bmpinfo.RedMask == 0 || bmpinfo.GreenMask == 0 || bmpinfo.BlueMask == 0 )
+        {
+            goto format_error;
+        }
+
         redshift = lobit( bmpinfo.RedMask );
         greenshift  = lobit( bmpinfo.GreenMask );
         blueshift   = lobit( bmpinfo.BlueMask );
 
-        for( y = 0; y<bmpinfo.h; y++ )
+        for( y = 0; y < bmpinfo.h; y++ )
         {
+            realheight = y + 1;
             bmp_pad_reset();
 
-            for( x = 0; x<bmpinfo.w; x++ )
+            for( x = 0; x < bmpinfo.w; x++ )
             {
                 TRY_EOF( bmp_readint( f, bmpinfo.bits / 8, &c ) );
-                c = ( (c & bmpinfo.RedMask) >> redshift ) +
-                    ( (c & bmpinfo.GreenMask) >> greenshift ) +
-                    ( (c & bmpinfo.BlueMask) >> blueshift );
-                BM_UPUT( bm, x, ycorr( y ), c > 3 * threshold * 255 ? 0 : 1 );
+                c = ( ( c & bmpinfo.RedMask ) >> redshift )
+                    + ( ( c & bmpinfo.GreenMask ) >> greenshift )
+                    + ( ( c & bmpinfo.BlueMask ) >> blueshift );
+                BM_UPUT( bm, x, y, c > 3 * threshold * 255 ? 0 : 1 );
             }
 
             TRY( bmp_pad( f ) );
@@ -872,26 +906,27 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
             TRY_EOF( bmp_readint( f, 1, &b ) );     /* opcode */
             TRY_EOF( bmp_readint( f, 1, &c ) );     /* argument */
 
-            if( b>0 )
+            if( b > 0 )
             {
                 /* repeat count */
-                col[0]  = COLTABLE( (c >> 4) & 0xf );
+                col[0]  = COLTABLE( ( c >> 4 ) & 0xf );
                 col[1]  = COLTABLE( c & 0xf );
 
-                for( i = 0; i<b && x<bmpinfo.w; i++ )
+                for( i = 0; i < b && x < bmpinfo.w; i++ )
                 {
-                    if( x>=bmpinfo.w )
+                    if( x >= bmpinfo.w )
                     {
                         x = 0;
                         y++;
                     }
 
-                    if( y>=bmpinfo.h )
+                    if( x >= bmpinfo.w || y >= bmpinfo.h )
                     {
                         break;
                     }
 
-                    BM_UPUT( bm, x, ycorr( y ), col[i & 1] );
+                    realheight = y + 1;
+                    BM_PUT( bm, x, y, col[i & 1] );
                     x++;
                 }
             }
@@ -917,29 +952,30 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
             else
             {
                 /* verbatim segment */
-                for( i = 0; i<c; i++ )
+                for( i = 0; i < c; i++ )
                 {
-                    if( (i & 1)==0 )
+                    if( ( i & 1 ) == 0 )
                     {
                         TRY_EOF( bmp_readint( f, 1, &b ) );
                     }
 
-                    if( x>=bmpinfo.w )
+                    if( x >= bmpinfo.w )
                     {
                         x = 0;
                         y++;
                     }
 
-                    if( y>=bmpinfo.h )
+                    if( x >= bmpinfo.w || y >= bmpinfo.h )
                     {
                         break;
                     }
 
-                    BM_PUT( bm, x, ycorr( y ), COLTABLE( ( b >> ( 4 - 4 * (i & 1) ) ) & 0xf ) );
+                    realheight = y + 1;
+                    BM_PUT( bm, x, y, COLTABLE( ( b >> ( 4 - 4 * ( i & 1 ) ) ) & 0xf ) );
                     x++;
                 }
 
-                if( (c + 1) & 2 )
+                if( ( c + 1 ) & 2 )
                 {
                     /* pad to 16-bit boundary */
                     TRY_EOF( bmp_readint( f, 1, &b ) );
@@ -958,23 +994,24 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
             TRY_EOF( bmp_readint( f, 1, &b ) );     /* opcode */
             TRY_EOF( bmp_readint( f, 1, &c ) );     /* argument */
 
-            if( b>0 )
+            if( b > 0 )
             {
                 /* repeat count */
-                for( i = 0; i<b; i++ )
+                for( i = 0; i < b; i++ )
                 {
-                    if( x>=bmpinfo.w )
+                    if( x >= bmpinfo.w )
                     {
                         x = 0;
                         y++;
                     }
 
-                    if( y>=bmpinfo.h )
+                    if( x >= bmpinfo.w || y >= bmpinfo.h )
                     {
                         break;
                     }
 
-                    BM_UPUT( bm, x, ycorr( y ), COLTABLE( c ) );
+                    realheight = y + 1;
+                    BM_PUT( bm, x, y, COLTABLE( c ) );
                     x++;
                 }
             }
@@ -1000,22 +1037,23 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
             else
             {
                 /* verbatim segment */
-                for( i = 0; i<c; i++ )
+                for( i = 0; i < c; i++ )
                 {
                     TRY_EOF( bmp_readint( f, 1, &b ) );
 
-                    if( x>=bmpinfo.w )
+                    if( x >= bmpinfo.w )
                     {
                         x = 0;
                         y++;
                     }
 
-                    if( y>=bmpinfo.h )
+                    if( x >= bmpinfo.w || y >= bmpinfo.h )
                     {
                         break;
                     }
 
-                    BM_PUT( bm, x, ycorr( y ), COLTABLE( b ) );
+                    realheight = y + 1;
+                    BM_PUT( bm, x, y, COLTABLE( b ) );
                     x++;
                 }
 
@@ -1035,11 +1073,24 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
     bmp_forward( f, bmpinfo.FileSize );
 
     free( coltable );
+
+    if( bmpinfo.topdown )
+    {
+        bm_flip( bm );
+    }
+
     *bmp = bm;
     return 0;
 
 eof:
+    TRY_STD( bm_resize( bm, realheight ) );
     free( coltable );
+
+    if( bmpinfo.topdown )
+    {
+        bm_flip( bm );
+    }
+
     *bmp = bm;
     return 1;
 
@@ -1072,17 +1123,16 @@ void bm_writepbm( FILE* f, potrace_bitmap_t* bm )
     w   = bm->w;
     h   = bm->h;
 
-    bpr = (w + 7) / 8;
+    bpr = ( w + 7 ) / 8;
 
     fprintf( f, "P4\n%d %d\n", w, h );
 
-    for( y = h - 1; y>=0; y-- )
+    for( y = h - 1; y >= 0; y-- )
     {
-        for( i = 0; i<bpr; i++ )
+        for( i = 0; i < bpr; i++ )
         {
-            c =
-                ( *bm_index( bm, i * 8,
-                          y ) >> ( 8 * ( BM_WORDSIZE - 1 - (i % BM_WORDSIZE) ) ) ) & 0xff;
+            c = ( *bm_index( bm, i * 8, y ) >> ( 8 * ( BM_WORDSIZE - 1 - ( i % BM_WORDSIZE ) ) ) )
+                & 0xff;
             fputc( c, f );
         }
     }
@@ -1101,17 +1151,17 @@ int bm_print( FILE* f, potrace_bitmap_t* bm )
     int sw, sh;
 
     sw  = bm->w < 79 ? bm->w : 79;
-    sh  = bm->w < 79 ? bm->h : bm->h * sw * 44 / (79 * bm->w);
+    sh  = bm->w < 79 ? bm->h : bm->h * sw * 44 / ( 79 * bm->w );
 
-    for( yy = sh - 1; yy>=0; yy-- )
+    for( yy = sh - 1; yy >= 0; yy-- )
     {
-        for( xx = 0; xx<sw; xx++ )
+        for( xx = 0; xx < sw; xx++ )
         {
             d = 0;
 
-            for( x = xx * bm->w / sw; x<(xx + 1) * bm->w / sw; x++ )
+            for( x = xx * bm->w / sw; x < ( xx + 1 ) * bm->w / sw; x++ )
             {
-                for( y = yy * bm->h / sh; y<(yy + 1) * bm->h / sh; y++ )
+                for( y = yy * bm->h / sh; y < ( yy + 1 ) * bm->h / sh; y++ )
                 {
                     if( BM_GET( bm, x, y ) )
                     {

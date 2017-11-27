@@ -1,4 +1,4 @@
-/* Copyright (C) 2001-2015 Peter Selinger.
+/* Copyright (C) 2001-2017 Peter Selinger.
  *  This file is part of Potrace. It is free software and it is covered
  *  by the GNU General Public License. See the file COPYING for details. */
 
@@ -12,12 +12,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "potracelib.h"
-#include "lists.h"
 #include "curve.h"
+#include "lists.h"
+#include "potracelib.h"
 
-#define SAFE_CALLOC( var, n, typ ) \
-    if( ( var = (typ*) calloc( n, sizeof(typ) ) ) == NULL ) \
+#define SAFE_CALLOC( var, n, typ )                            \
+    if( ( var = (typ*) calloc( n, sizeof( typ ) ) ) == NULL ) \
         goto calloc_error
 
 /* ---------------------------------------------------------------------- */
@@ -29,9 +29,9 @@ path_t* path_new( void )
     privpath_t* priv = NULL;
 
     SAFE_CALLOC( p, 1, path_t );
-    memset( p, 0, sizeof(path_t) );
+    memset( p, 0, sizeof( path_t ) );
     SAFE_CALLOC( priv, 1, privpath_t );
-    memset( priv, 0, sizeof(privpath_t) );
+    memset( priv, 0, sizeof( privpath_t ) );
     p->priv = priv;
     return p;
 
@@ -97,7 +97,7 @@ typedef dpoint_t dpoint3_t[3];
  *  Return 0 on success, 1 on error with errno set. */
 int privcurve_init( privcurve_t* curve, int n )
 {
-    memset( curve, 0, sizeof(privcurve_t) );
+    memset( curve, 0, sizeof( privcurve_t ) );
     curve->n = n;
     SAFE_CALLOC( curve->tag, n, int );
     SAFE_CALLOC( curve->c, n, dpoint3_t );

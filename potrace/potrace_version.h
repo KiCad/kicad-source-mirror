@@ -1,1 +1,1 @@
-#define POTRACELIB_VERSION "potracelib 1.13"
+#define POTRACELIB_VERSION "potracelib 1.15"

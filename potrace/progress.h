@@ -1,4 +1,4 @@
-/* Copyright (C) 2001-2015 Peter Selinger.
+/* Copyright (C) 2001-2017 Peter Selinger.
  *  This file is part of Potrace. It is free software and it is covered
  *  by the GNU General Public License. See the file COPYING for details. */
 
@@ -14,12 +14,12 @@
 /* structure to hold progress bar callback data */
 struct progress_s
 {
-    void (* callback)( double progress, void* privdata );   /* callback fn */
+    void ( * callback )( double progress, void* privdata ); /* callback fn */
     void* data;                                             /* callback function's private data */
-    double  min, max;                                       /* desired range of progress, e.g. 0.0 to 1.0 */
-    double  epsilon;                                        /* granularity: can skip smaller increments */
-    double  b;                                              /* upper limit of subrange in superrange units */
-    double  d_prev;                                         /* previous value of d */
+    double min, max;                                        /* desired range of progress, e.g. 0.0 to 1.0 */
+    double epsilon;                                         /* granularity: can skip smaller increments */
+    double b;                                               /* upper limit of subrange in superrange units */
+    double d_prev;                                          /* previous value of d */
 };
 typedef struct progress_s progress_t;
 
@@ -32,11 +32,11 @@ static inline void progress_update( double d, progress_t* prog )
 
     if( prog != NULL && prog->callback != NULL )
     {
-        d_scaled = prog->min * (1 - d) + prog->max * d;
+        d_scaled = prog->min * ( 1 - d ) + prog->max * d;
 
         if( d == 1.0 || d_scaled >= prog->d_prev + prog->epsilon )
         {
-            prog->callback( prog->min * (1 - d) + prog->max * d, prog->data );
+            prog->callback( prog->min * ( 1 - d ) + prog->max * d, prog->data );
             prog->d_prev = d_scaled;
         }
     }
@@ -59,8 +59,8 @@ static inline void progress_subrange_start( double a,
         return;
     }
 
-    min = prog->min * (1 - a) + prog->max * a;
-    max = prog->min * (1 - b) + prog->max * b;
+    min = prog->min * ( 1 - a ) + prog->max * a;
+    max = prog->min * ( 1 - b ) + prog->max * b;
 
     if( max - min < prog->epsilon )
     {
@@ -71,7 +71,7 @@ static inline void progress_subrange_start( double a,
 
     sub->callback = prog->callback;
     sub->data = prog->data;
-    sub->epsilon = prog->epsilon;
+    sub->epsilon    = prog->epsilon;
     sub->min    = min;
     sub->max    = max;
     sub->d_prev = prog->d_prev;

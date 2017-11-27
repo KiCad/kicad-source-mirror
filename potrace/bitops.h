@@ -1,7 +1,6 @@
-/* Copyright (C) 2001-2015 Peter Selinger.
+/* Copyright (C) 2001-2017 Peter Selinger.
  *  This file is part of Potrace. It is free software and it is covered
  *  by the GNU General Public License. See the file COPYING for details. */
-
 
 /* bits.h: this file defines some macros for bit manipulations. We
  *  provide a generic implementation, as well as machine- and
@@ -22,19 +21,19 @@
 /* ---------------------------------------------------------------------- */
 /* machine specific macros */
 
-#if defined(HAVE_I386)
+#if defined( HAVE_I386 )
 
 static inline unsigned int lobit( unsigned int x )
 {
     unsigned int res;
 
-    asm ("bsf	%1,%0\n\t"
-         "jnz	0f\n\t"
-         "movl	$32,%0\n"
-         "0:"
-         : "=r" (res)
-         : "r" (x)
-         : "cc");
+    asm ( "bsf	%1,%0\n\t"
+          "jnz	0f\n\t"
+          "movl	$32,%0\n"
+          "0:"
+          : "=r" ( res )
+          : "r" ( x )
+          : "cc" );
     return res;
 }
 
@@ -43,13 +42,13 @@ static inline unsigned int hibit( unsigned int x )
 {
     unsigned int res;
 
-    asm ("bsr	%1,%0\n\t"
-         "jnz	0f\n\t"
-         "movl	$-1,%0\n"
-         "0:"
-         : "=r" (res)
-         : "r" (x)
-         : "cc");
+    asm ( "bsr	%1,%0\n\t"
+          "jnz	0f\n\t"
+          "movl	$-1,%0\n"
+          "0:"
+          : "=r" ( res )
+          : "r" ( x )
+          : "cc" );
     return res + 1;
 }
 

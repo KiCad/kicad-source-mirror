@@ -1,4 +1,4 @@
-/* Copyright (C) 2001-2015 Peter Selinger.
+/* Copyright (C) 2001-2017 Peter Selinger.
  *  This file is part of Potrace. It is free software and it is covered
  *  by the GNU General Public License. See the file COPYING for details. */
 
@@ -7,8 +7,8 @@
 #ifndef BITMAP_IO_H
 #define BITMAP_IO_H
 
-#include <stdio.h>
 #include "bitmap.h"
+#include <stdio.h>
 
 /* Note that bitmaps are stored bottom to top, i.e., the first
  *  scanline is the bottom-most one */

@@ -1,4 +1,4 @@
-/* Copyright (C) 2001-2015 Peter Selinger.
+/* Copyright (C) 2001-2017 Peter Selinger.
  *  This file is part of Potrace. It is free software and it is covered
  *  by the GNU General Public License. See the file COPYING for details. */
 
@@ -9,12 +9,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "potracelib.h"
 #include "curve.h"
 #include "decompose.h"
-#include "trace.h"
+#include "potracelib.h"
 #include "progress.h"
-#include <potrace_version.h>
+#include "trace.h"
 
 /* default parameters */
 static const potrace_param_t param_default =
@@ -38,14 +37,14 @@ potrace_param_t* potrace_param_default( void )
 {
     potrace_param_t* p;
 
-    p = (potrace_param_t*) malloc( sizeof(potrace_param_t) );
+    p = (potrace_param_t*) malloc( sizeof( potrace_param_t ) );
 
     if( !p )
     {
         return NULL;
     }
 
-    memcpy( p, &param_default, sizeof(potrace_param_t) );
+    memcpy( p, &param_default, sizeof( potrace_param_t ) );
     return p;
 }
 
@@ -73,7 +72,7 @@ potrace_state_t* potrace_trace( const potrace_param_t* param, const potrace_bitm
     prog.d_prev     = param->progress.min;
 
     /* allocate state object */
-    st = (potrace_state_t*) malloc( sizeof(potrace_state_t) );
+    st = (potrace_state_t*) malloc( sizeof( potrace_state_t ) );
 
     if( !st )
     {
@@ -128,6 +127,7 @@ void potrace_param_free( potrace_param_t* p )
 }
 
 
+#include "potrace_version.h"
 const char* potrace_version( void )
 {
     return POTRACELIB_VERSION;

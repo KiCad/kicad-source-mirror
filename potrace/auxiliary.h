@@ -1,4 +1,4 @@
-/* Copyright (C) 2001-2015 Peter Selinger.
+/* Copyright (C) 2001-2017 Peter Selinger.
  *  This file is part of Potrace. It is free software and it is covered
  *  by the GNU General Public License. See the file COPYING for details. */
 
@@ -44,8 +44,8 @@ static inline dpoint_t interval( double lambda, dpoint_t a, dpoint_t b )
 {
     dpoint_t res;
 
-    res.x   = a.x + lambda * (b.x - a.x);
-    res.y   = a.y + lambda * (b.y - a.y);
+    res.x   = a.x + lambda * ( b.x - a.x );
+    res.y   = a.y + lambda * ( b.y - a.y );
     return res;
 }
 
@@ -63,13 +63,13 @@ static inline dpoint_t interval( double lambda, dpoint_t a, dpoint_t b )
 
 static inline int mod( int a, int n )
 {
-    return a>=n ? a % n : a>=0 ? a : n - 1 - (-1 - a) % n;
+    return a >= n ? a % n : a >= 0 ? a : n - 1 - ( -1 - a ) % n;
 }
 
 
 static inline int floordiv( int a, int n )
 {
-    return a>=0 ? a / n : -1 - (-1 - a) / n;
+    return a >= 0 ? a / n : -1 - ( -1 - a ) / n;
 }
 
 
@@ -80,11 +80,11 @@ static inline int floordiv( int a, int n )
 #undef max
 #undef sq
 #undef cu
-#define sign( x )   ( (x)>0 ? 1 : (x)<0 ? -1 : 0 )
-#define abs( a )    ( (a)>0 ? (a) : -(a) )
-#define min( a, b ) ( (a)<(b) ? (a) : (b) )
-#define max( a, b ) ( (a)>(b) ? (a) : (b) )
-#define sq( a )     ( (a) * (a) )
-#define cu( a )     ( (a) * (a) * (a) )
+#define sign( x )   ( ( x ) > 0 ? 1 : ( x ) < 0 ? -1 : 0 )
+#define abs( a )    ( ( a ) > 0 ? ( a ) : -( a ) )
+#define min( a, b ) ( ( a ) < ( b ) ? ( a ) : ( b ) )
+#define max( a, b ) ( ( a ) > ( b ) ? ( a ) : ( b ) )
+#define sq( a )     ( ( a ) * ( a ) )
+#define cu( a )     ( ( a ) * ( a ) * ( a ) )
 
 #endif /* AUXILIARY_H */

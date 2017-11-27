@@ -1,4 +1,4 @@
-/* Copyright (C) 2001-2015 Peter Selinger.
+/* Copyright (C) 2001-2017 Peter Selinger.
  *  This file is part of Potrace. It is free software and it is covered
  *  by the GNU General Public License. See the file COPYING for details. */
 
@@ -6,14 +6,14 @@
 #include <config.h>
 #endif
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <string.h>
 
-#include "render.h"
-#include "greymap.h"
 #include "auxiliary.h"
+#include "greymap.h"
+#include "render.h"
 
 /* ---------------------------------------------------------------------- */
 /* routines for anti-aliased rendering of curves */
@@ -50,16 +50,16 @@ render_t* render_new( greymap_t* gm )
 {
     render_t* rm;
 
-    rm = (render_t*) malloc( sizeof(render_t) );
+    rm = (render_t*) malloc( sizeof( render_t ) );
 
     if( !rm )
     {
         return NULL;
     }
 
-    memset( rm, 0, sizeof(render_t) );
+    memset( rm, 0, sizeof( render_t ) );
     rm->gm = gm;
-    rm->incrow_buf = (int*) calloc( gm->h, sizeof(int) );
+    rm->incrow_buf = (int*) calloc( gm->h, sizeof( int ) );
 
     if( !rm->incrow_buf )
     {
@@ -67,7 +67,6 @@ render_t* render_new( greymap_t* gm )
         return NULL;
     }
 
-    memset( rm->incrow_buf, 0, gm->h * sizeof(int) );
     return rm;
 }
 
@@ -89,7 +88,7 @@ void render_close( render_t* rm )
         render_lineto( rm, rm->x0, rm->y0 );
     }
 
-    GM_INC( rm->gm, rm->x0i, rm->y0i, (rm->a0 + rm->a1) * 255 );
+    GM_INC( rm->gm, rm->x0i, rm->y0i, ( rm->a0 + rm->a1 ) * 255 );
 
     /* assert (rm->x0i != rm->x1i || rm->y0i != rm->y1i); */
 
@@ -144,14 +143,14 @@ static void incrow( render_t* rm, int x, int y, int b )
 
     if( x0 < x )
     {
-        for( i = x0; i<x; i++ )
+        for( i = x0; i < x; i++ )
         {
             GM_INC( rm->gm, i, y, -b );
         }
     }
     else
     {
-        for( i = x; i<x0; i++ )
+        for( i = x; i < x0; i++ )
         {
             GM_INC( rm->gm, i, y, b );
         }
@@ -165,8 +164,8 @@ void render_lineto( render_t* rm, double x2, double y2 )
     int x2i, y2i;
     double t0 = 2, s0 = 2;
     int sn, tn;
-    double  ss = 2, ts = 2;
-    double  r0, r1;
+    double ss = 2, ts = 2;
+    double r0, r1;
     int i, j;
     int rxi, ryi;
     int s;
@@ -179,27 +178,27 @@ void render_lineto( render_t* rm, double x2, double y2 )
 
     if( sn )
     {
-        s0  = ( (x2>rm->x1 ? rm->x1i + 1 : rm->x1i) - rm->x1 ) / (x2 - rm->x1);
-        ss  = fabs( 1.0 / (x2 - rm->x1) );
+        s0  = ( ( x2 > rm->x1 ? rm->x1i + 1 : rm->x1i ) - rm->x1 ) / ( x2 - rm->x1 );
+        ss  = fabs( 1.0 / ( x2 - rm->x1 ) );
     }
 
     if( tn )
     {
-        t0  = ( (y2>rm->y1 ? rm->y1i + 1 : rm->y1i) - rm->y1 ) / (y2 - rm->y1);
-        ts  = fabs( 1.0 / (y2 - rm->y1) );
+        t0  = ( ( y2 > rm->y1 ? rm->y1i + 1 : rm->y1i ) - rm->y1 ) / ( y2 - rm->y1 );
+        ts  = fabs( 1.0 / ( y2 - rm->y1 ) );
     }
 
     r0 = 0;
 
-    i   = 0;
-    j   = 0;
+    i = 0;
+    j = 0;
 
     rxi = rm->x1i;
     ryi = rm->y1i;
 
-    while( i<sn || j<tn )
+    while( i < sn || j < tn )
     {
-        if( j>=tn || (i<sn && s0 + i * ss < t0 + j * ts) )
+        if( j >= tn || ( i < sn && s0 + i * ss < t0 + j * ts ) )
         {
             r1 = s0 + i * ss;
             i++;
@@ -215,32 +214,32 @@ void render_lineto( render_t* rm, double x2, double y2 )
         /* render line from r0 to r1 segment of (rm->x1,rm->y1)..(x2,y2) */
 
         /* move point to r1 */
-        rm->a1 += (r1 - r0) * (y2 - rm->y1) *
-                  ( rxi + 1 - ( (r0 + r1) / 2.0 * (x2 - rm->x1) + rm->x1 ) );
+        rm->a1 += ( r1 - r0 ) * ( y2 - rm->y1 )
+                  * ( rxi + 1 - ( ( r0 + r1 ) / 2.0 * ( x2 - rm->x1 ) + rm->x1 ) );
 
         /* move point across pixel boundary */
-        if( s && x2>rm->x1 )
+        if( s && x2 > rm->x1 )
         {
             GM_INC( rm->gm, rxi, ryi, rm->a1 * 255 );
             rm->a1 = 0;
             rxi++;
-            rm->a1 += rm->y1 + r1 * (y2 - rm->y1) - ryi;
+            rm->a1 += rm->y1 + r1 * ( y2 - rm->y1 ) - ryi;
         }
-        else if( !s && y2>rm->y1 )
+        else if( !s && y2 > rm->y1 )
         {
             GM_INC( rm->gm, rxi, ryi, rm->a1 * 255 );
             rm->a1 = 0;
             incrow( rm, rxi + 1, ryi, 255 );
             ryi++;
         }
-        else if( s && x2<=rm->x1 )
+        else if( s && x2 <= rm->x1 )
         {
-            rm->a1 -= rm->y1 + r1 * (y2 - rm->y1) - ryi;
+            rm->a1 -= rm->y1 + r1 * ( y2 - rm->y1 ) - ryi;
             GM_INC( rm->gm, rxi, ryi, rm->a1 * 255 );
             rm->a1 = 0;
             rxi--;
         }
-        else if( !s && y2<=rm->y1 )
+        else if( !s && y2 <= rm->y1 )
         {
             GM_INC( rm->gm, rxi, ryi, rm->a1 * 255 );
             rm->a1 = 0;
@@ -254,8 +253,8 @@ void render_lineto( render_t* rm, double x2, double y2 )
     /* move point to (x2,y2) */
 
     r1 = 1;
-    rm->a1 += (r1 - r0) * (y2 - rm->y1) *
-              ( rxi + 1 - ( (r0 + r1) / 2.0 * (x2 - rm->x1) + rm->x1 ) );
+    rm->a1 += ( r1 - r0 ) * ( y2 - rm->y1 )
+              * ( rxi + 1 - ( ( r0 + r1 ) / 2.0 * ( x2 - rm->x1 ) + rm->x1 ) );
 
     rm->x1i = x2i;
     rm->y1i = y2i;
@@ -290,12 +289,12 @@ void render_curveto( render_t* rm, double x2, double y2, double x3, double y3, d
     e2  = 8 * delta <= dd ? 8 * delta / dd : 1;
     epsilon = sqrt( e2 );    /* necessary interval size */
 
-    for( t = epsilon; t<1; t += epsilon )
+    for( t = epsilon; t < 1; t += epsilon )
     {
-        render_lineto( rm, x1 * cu( 1 - t ) + 3 * x2 * sq( 1 - t ) * t + 3 * x3 * (1 - t) * sq(
-                        t ) + x4 * cu( t ),
-                y1 * cu( 1 - t ) + 3 * y2 * sq( 1 - t ) * t + 3 * y3 * (1 - t) * sq( t ) + y4 *
-                cu( t ) );
+        render_lineto( rm, x1 * cu( 1 - t ) + 3 * x2 * sq( 1 - t ) * t
+                + 3 * x3 * ( 1 - t ) * sq( t ) + x4 * cu( t ),
+                y1 * cu( 1 - t ) + 3 * y2 * sq( 1 - t ) * t + 3 * y3 * ( 1 - t ) * sq( t )
+                + y4 * cu( t ) );
     }
 
     render_lineto( rm, x4, y4 );
