@@ -96,7 +96,7 @@ public:
      */
     bool Contains( const EDA_RECT& aRect ) const;
 
-    const wxSize& GetSize() const { return m_Size; }
+    const wxSize GetSize() const { return m_Size; }
 
     /**
      * @brief GetSizeMax
@@ -107,8 +107,8 @@ public:
     int GetX() const { return m_Pos.x; }
     int GetY() const { return m_Pos.y; }
 
-    const wxPoint& GetOrigin() const { return m_Pos; }
-    const wxPoint& GetPosition() const { return m_Pos; }
+    const wxPoint GetOrigin() const { return m_Pos; }
+    const wxPoint GetPosition() const { return m_Pos; }
     const wxPoint GetEnd() const { return wxPoint( m_Pos.x + m_Size.x, m_Pos.y + m_Size.y ); }
     const wxPoint GetCenter() const { return wxPoint( m_Pos.x + ( m_Size.x / 2 ), m_Pos.y + ( m_Size.y / 2 ) ); }
 
@@ -124,8 +124,7 @@ public:
     void SetSize( const wxSize& size ) { m_Size = size; }
     void SetSize( int w, int h ) { m_Size.x = w; m_Size.y = h; }
     void Offset( int dx, int dy ) { m_Pos.x += dx; m_Pos.y += dy; }
-    void Offset( const wxPoint& offset ) { m_Pos.x += offset.x; m_Pos.y +=
-                                               offset.y; }
+    void Offset( const wxPoint& offset ) { m_Pos += offset; }
     void SetX( int val ) { m_Pos.x = val; }
     void SetY( int val ) { m_Pos.y = val; }
     void SetWidth( int val ) { m_Size.x = val; }
@@ -228,7 +227,7 @@ public:
     {
         EDA_RECT rect( m_Pos, m_Size );
         rect.Normalize();
-        return BOX2I( rect.GetPosition(), rect.GetEnd() );
+        return BOX2I( rect.GetOrigin(), rect.GetEnd() );
     }
 
     /**
