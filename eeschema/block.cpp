@@ -127,9 +127,8 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         if( m_canvas->IsMouseCaptured() )
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
-        SaveCopyInUndoList( block->GetItems(), UR_MOVED, false, block->GetMoveVector() );
+        SaveCopyInUndoList( block->GetItems(), UR_CHANGED, false, block->GetMoveVector() );
         MoveItemsInList( block->GetItems(), block->GetMoveVector() );
-        block->ClearItemsList();
         break;
 
     case BLOCK_DUPLICATE:           /* Duplicate */
@@ -141,8 +140,6 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
         SaveCopyInUndoList( block->GetItems(),
                             ( block->GetCommand() == BLOCK_PRESELECT_MOVE ) ? UR_CHANGED : UR_NEW );
-
-        block->ClearItemsList();
         break;
 
     case BLOCK_PASTE:
@@ -150,13 +147,15 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         PasteListOfItems( DC );
-        block->ClearItemsList();
         break;
 
     default:        // others are handled by HandleBlockEnd()
        break;
     }
 
+    CheckJunctionsInList( block->GetItems(), true );
+    block->ClearItemsList();
+    SchematicCleanUp( true );
     OnModify();
 
     // clear dome flags and pointers
@@ -218,6 +217,8 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 SetCrossHairPosition( rotationPoint );
                 SaveCopyInUndoList( block->GetItems(), UR_ROTATED, false, rotationPoint );
                 RotateListOfItems( block->GetItems(), rotationPoint );
+                CheckJunctionsInList( block->GetItems(), true );
+                SchematicCleanUp( true );
                 OnModify();
             }
 
@@ -270,6 +271,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             if( block->GetCount() )
             {
                 DeleteItemsInList( block->GetItems() );
+                SchematicCleanUp( true );
                 OnModify();
             }
             block->ClearItemsList();
@@ -301,6 +303,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 copyBlockItems( block->GetItems() );
                 MoveItemsInList( m_blockItems.GetItems(), move_vector );
                 DeleteItemsInList( block->GetItems() );
+                SchematicCleanUp( true );
                 OnModify();
             }
 
@@ -329,6 +332,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 SetCrossHairPosition( mirrorPoint );
                 SaveCopyInUndoList( block->GetItems(), UR_MIRRORED_X, false, mirrorPoint );
                 MirrorX( block->GetItems(), mirrorPoint );
+                SchematicCleanUp( true );
                 OnModify();
             }
 
@@ -348,6 +352,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 SetCrossHairPosition( mirrorPoint );
                 SaveCopyInUndoList( block->GetItems(), UR_MIRRORED_Y, false, mirrorPoint );
                 MirrorY( block->GetItems(), mirrorPoint );
+                SchematicCleanUp( true );
                 OnModify();
             }
 

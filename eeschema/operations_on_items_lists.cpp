@@ -115,6 +115,42 @@ void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMoveVector 
 }
 
 
+void SCH_EDIT_FRAME::CheckJunctionsInList( PICKED_ITEMS_LIST& aItemsList, bool aAppend )
+{
+    std::vector< wxPoint > pts;
+    std::vector< wxPoint > connections;
+
+    GetSchematicConnections( connections );
+    for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
+    {
+        SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
+        item->GetConnectionPoints( pts );
+        if( item->Type() == SCH_LINE_T )
+        {
+            SCH_LINE* line = (SCH_LINE*) item;
+            for( auto i : connections )
+                if( IsPointOnSegment( line->GetStartPoint(), line->GetEndPoint(), i ) )
+                    pts.push_back( i );
+        }
+    }
+
+    // We always have some overlapping connection points.  Drop duplicates here
+    std::sort( pts.begin(), pts.end(),
+            []( wxPoint& a, wxPoint& b ) -> bool
+            { return a.x < b.x || (a.x == b.x && a.y < b.y); } );
+    pts.erase( unique( pts.begin(), pts.end() ), pts.end() );
+
+    for( auto point : pts )
+    {
+        if( GetScreen()->IsJunctionNeeded( point, true ) )
+        {
+            AddJunction( point, aAppend );
+            aAppend = true;
+        }
+    }
+}
+
+
 void SCH_EDIT_FRAME::DeleteItemsInList( PICKED_ITEMS_LIST& aItemsList, bool aAppend )
 {
     PICKED_ITEMS_LIST  itemsList;

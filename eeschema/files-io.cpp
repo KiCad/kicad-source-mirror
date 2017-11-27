@@ -356,6 +356,11 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
 
         schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
+
+        // Ensure the schematic is fully segmented on first display
+        BreakSegmentsOnJunctions();
+        SchematicCleanUp( true );
+        GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
         GetScreen()->TestDanglingEnds();    // Only perform the dangling end test on root sheet.
     }
 
@@ -768,6 +773,11 @@ bool SCH_EDIT_FRAME::ImportFile( const wxString& aFileName, int aFileType )
 
                 UpdateFileHistory( fullFileName );
                 schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
+
+                // Ensure the schematic is fully segmented on first display
+                BreakSegmentsOnJunctions();
+                SchematicCleanUp( true );
+                GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
                 GetScreen()->TestDanglingEnds();    // Only perform the dangling end test on root sheet.
 
                 GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );

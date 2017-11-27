@@ -299,7 +299,13 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
         screen->m_FirstRedraw = false;
         SetCrossHairPosition( GetScrollCenterPosition() );
         m_canvas->MoveCursorToCrossHair();
-        SchematicCleanUp();
+
+        // Ensure the schematic is fully segmented on first display
+        BreakSegmentsOnJunctions();
+        SchematicCleanUp( true );
+        screen->ClearUndoORRedoList( screen->m_UndoList, 1 );
+
+        screen->TestDanglingEnds();
     }
     else
     {

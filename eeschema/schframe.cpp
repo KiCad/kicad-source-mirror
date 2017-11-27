@@ -1443,7 +1443,16 @@ void SCH_EDIT_FRAME::addCurrentItemToList( bool aRedraw )
     m_canvas->EndMouseCapture();
 
     if( item->IsConnectable() )
+    {
+        std::vector< wxPoint > pts;
+        item->GetConnectionPoints( pts );
+        for( auto i : pts )
+        {
+            if( screen->IsJunctionNeeded( i, true ) )
+                AddJunction( i, true );
+        }
         screen->TestDanglingEnds();
+    }
 
     if( aRedraw )
         GetCanvas()->Refresh();

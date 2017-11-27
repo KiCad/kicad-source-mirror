@@ -55,6 +55,7 @@
 #include <lib_pin.h>
 #include <symbol_lib_table.h>
 
+#include <boost/foreach.hpp>
 
 #define EESCHEMA_FILE_STAMP   "EESchema"
 
@@ -346,19 +347,59 @@ void SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
 }
 
 
-bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition )
+bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
 {
-    if( GetItem( aPosition, 0, SCH_JUNCTION_T ) )
-        return false;
+    bool has_line = false;
+    bool has_nonparallel = false;
+    int end_count = 0;
 
-    if( GetWire( aPosition, 0, EXCLUDE_END_POINTS_T ) )
+    std::vector< SCH_LINE* > lines;
+
+    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
     {
-        if( GetWire( aPosition, 0, END_POINTS_ONLY_T ) )
-            return true;
+        if( item->GetFlags() & STRUCT_DELETED )
+            continue;
+        if( aNew && ( item->Type() == SCH_JUNCTION_T ) && ( item->HitTest( aPosition ) ) )
+            return false;
 
-        if( GetPin( aPosition, NULL, true ) )
-            return true;
+        if( item->Type() != SCH_LINE_T )
+            continue;
+
+        if( item->GetLayer() != LAYER_WIRE )
+            continue;
+
+        if( item->HitTest( aPosition, 0 ) )
+            lines.push_back( (SCH_LINE*) item );
     }
+
+    BOOST_FOREACH( SCH_LINE* line, lines)
+    {
+        if( !line->IsEndPoint( aPosition ) )
+            has_line = true;
+        else
+            end_count++;
+        BOOST_REVERSE_FOREACH( SCH_LINE* second_line, lines )
+        {
+            if( line == second_line )
+                break;
+            if( line->IsEndPoint( second_line->GetStartPoint() )
+                    && line->IsEndPoint( second_line->GetEndPoint() ) )
+                end_count--;
+            if( !line->IsParallel( second_line ) )
+                has_nonparallel = true;
+        }
+    }
+
+    int has_pin = !!( GetPin( aPosition, NULL, true ) );
+
+    // If there is line intersecting a pin or non-parallel end
+    if( has_pin && ( has_line || end_count > 1 ) )
+        return true;
+
+    // If there is at least one segment that ends on a non-parallel line or
+    // junction of two other lines
+    if( has_nonparallel && (has_line || end_count > 2 ) )
+        return true;
 
     return false;
 }
@@ -1098,30 +1139,6 @@ int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aLis
             }
         }
 
-        // Get redundant junctions (junctions which connect < 3 end wires
-        // and no pin)
-        for( item = m_drawList.begin(); item; item = item->Next() )
-        {
-            if( item->GetFlags() & STRUCT_DELETED )
-                continue;
-
-            if( !(item->GetFlags() & CANDIDATE) )
-                continue;
-
-            if( item->Type() != SCH_JUNCTION_T )
-                continue;
-
-            SCH_JUNCTION* junction = (SCH_JUNCTION*) item;
-
-            if( CountConnectedItems( junction->GetPosition(), false ) <= 2 )
-            {
-                item->SetFlags( STRUCT_DELETED );
-
-                ITEM_PICKER picker( item, UR_DELETED );
-                aList.PushItem( picker );
-            }
-        }
-
         for( item = m_drawList.begin(); item;  item = item->Next() )
         {
             if( item->GetFlags() & STRUCT_DELETED )
@@ -1132,7 +1149,7 @@ int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aLis
 
             tmp = GetWireOrBus( ( (SCH_TEXT*) item )->GetPosition() );
 
-            if( tmp && tmp->GetFlags() & STRUCT_DELETED )
+            if( tmp && ( tmp->GetFlags() & STRUCT_DELETED ) )
             {
                 item->SetFlags( STRUCT_DELETED );
 

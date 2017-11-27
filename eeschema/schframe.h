@@ -937,19 +937,25 @@ private:
     SCH_JUNCTION* AddJunction( const wxPoint& aPosition, bool aPutInUndoList = false );
 
     /**
-     * Function SaveWireImage
-     * saves a copy of the current wire image in the undo list
+     * Save a copy of the current wire image in the undo list.
      */
     void SaveWireImage();
 
     /**
-     * Function SchematicCleanUp
-     * performs routine schematic cleaning including breaking wire and buses and
+     * Collects a unique list of all possible connection points in the schematic.
+     *
+     * @param aConnections vector of connections
+     */
+    void GetSchematicConnections( std::vector< wxPoint >& aConnections );
+
+    /**
+     * Performs routine schematic cleaning including breaking wire and buses and
      * deleting identical objects superimposed on top of each other.
      *
+     * @param aAppend The changes to the schematic should be appended to the previous undo
      * @return True if any schematic clean up was performed.
      */
-    bool SchematicCleanUp();
+    bool SchematicCleanUp( bool aAppend = false );
 
     /**
      * Start moving \a aItem using the mouse.
@@ -1127,6 +1133,15 @@ public:
      * @param aAppend True if we are updating a previous commit
      */
     void DeleteItemsInList( PICKED_ITEMS_LIST& aItemsList, bool aAppend = false );
+
+    /**
+     * Adds junctions if needed to each item in the list after they have been
+     * moved.
+     *
+     * @param aItemsList The list of items to check
+     * @param aAppend True if we are updating a previous commit
+     */
+    void CheckJunctionsInList( PICKED_ITEMS_LIST& aItemsList, bool aAppend = false );
 
     int GetLabelIncrement() const { return m_repeatLabelDelta; }
 

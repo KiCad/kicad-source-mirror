@@ -190,6 +190,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_DELETE_CONNECTION:
         m_canvas->MoveCursorToCrossHair();
         DeleteConnection( id == ID_POPUP_SCH_DELETE_CONNECTION );
+        SchematicCleanUp( true );
         screen->SetCurItem( NULL );
         SetRepeatItem( NULL );
 
@@ -214,6 +215,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
 
         DeleteItem( item );
+        SchematicCleanUp( true );
         screen->SetCurItem( NULL );
         SetRepeatItem( NULL );
         screen->TestDanglingEnds();
@@ -630,6 +632,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool aFullConnection )
     if( screen->GetConnection( pos, pickList, aFullConnection ) != 0 )
     {
         DeleteItemsInList( pickList );
+        SchematicCleanUp( true );
         OnModify();
     }
 }

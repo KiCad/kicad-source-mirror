@@ -336,19 +336,19 @@ public:
     /**
      * Test if a junction is required for the items at \a aPosition on the screen.
      * <p>
-     * A junction is required at \a aPosition if the following criteria are satisfied:
+     * A junction is required at \a aPosition if one of the following criteria is satisfied:
      * <ul>
-     * <li>one wire midpoint, one or more wire endpoints and no junction.</li>
-     * <li>three or more wire endpoints and no junction.</li>
-     * <li>two wire midpoints and no junction</li>
-     * <li>one wire midpoint, a component pin, and no junction.</li>
-     * <li>three wire endpoints, a component pin, and no junction.</li>
+     * <li>one wire midpoint and one or more wire endpoints;</li>
+     * <li>three or more wire endpoints;</li>
+     * <li>one wire midpoint and a component pin;</li>
+     * <li>two or more wire endpoints and a component pin.</li>
      * </ul>
      * </p>
      * @param aPosition The position to test.
+     * @param aNew Checks if a _new_ junction is needed, i.e. there isn't one already
      * @return True if a junction is required at \a aPosition.
      */
-    bool IsJunctionNeeded( const wxPoint& aPosition );
+    bool IsJunctionNeeded( const wxPoint& aPosition, bool aNew = false );
 
     /**
      * Test if \a aPosition is a connection point on \a aLayer.
