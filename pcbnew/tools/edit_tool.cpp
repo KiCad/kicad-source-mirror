@@ -612,7 +612,8 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
-    const auto& selection = m_selectionTool->RequestSelection( SELECTION_EDITABLE | SELECTION_DELETABLE );
+    const auto& selection = m_selectionTool->RequestSelection(
+            SELECTION_EDITABLE | SELECTION_DELETABLE | SELECTION_FORCE_UNLOCK );
 
     if( selection.Empty() )
         return 0;

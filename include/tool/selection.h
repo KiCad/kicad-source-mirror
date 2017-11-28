@@ -222,6 +222,9 @@ enum SELECTION_TYPE_FLAGS
     SELECTION_SANITIZE_PADS = 4,
     // Request a hover-only selection
     SELECTION_HOVER = 8,
+    // Select locked parts without asking the user
+    SELECTION_FORCE_UNLOCK = 16,
+
     SELECTION_DEFAULT = 0x7
 };
 

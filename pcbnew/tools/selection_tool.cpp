@@ -356,6 +356,9 @@ SELECTION& SELECTION_TOOL::RequestSelection( int aFlags )
 {
     if( m_selection.Empty() )
     {
+        if( aFlags & SELECTION_FORCE_UNLOCK )
+            m_locked = false;
+
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, 0 );
         m_selection.SetIsHover( true );
         m_selection.ClearReferencePoint();
