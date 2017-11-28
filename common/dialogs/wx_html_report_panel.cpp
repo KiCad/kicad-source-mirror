@@ -128,22 +128,33 @@ wxString WX_HTML_REPORT_PANEL::addHeader( const wxString& aBody )
 
 wxString WX_HTML_REPORT_PANEL::generateHtml( const REPORT_LINE& aLine )
 {
+    wxString retv;
+
     if( !m_showAll && ! ( m_severities & aLine.severity ) )
-        return wxEmptyString;
+        return retv;
 
     switch( aLine.severity )
     {
     case REPORTER::RPT_ERROR:
-        return wxString( "<font color=\"red\" size=2>" ) + _( "<b>Error: </b></font><font size=2>" ) + aLine.message + wxString( "</font><br>" );
+        retv = "<font color=\"red\" size=2><b>" + _( "Error: " ) + "</b></font><font size=2>" +
+               aLine.message + "</font><br>";
+        break;
     case REPORTER::RPT_WARNING:
-        return wxString( "<font color=\"orange\" size=2>" ) + _( "<b>Warning: </b></font><font size=2>" ) + aLine.message + wxString( "</font><br>" );
+        retv = "<font color=\"orange\" size=2><b>" + _( "Warning: " ) +
+               "</b></font><font size=2>" + aLine.message + "</font><br>";
+        break;
     case REPORTER::RPT_INFO:
-        return wxString( "<font color=\"gray\" size=2>" ) + _( "<b>Info: </b>" ) + aLine.message + wxString( "</font><br>" );
+        retv = "<font color=\"dark gray\" size=2><b>" + _( "Info: " ) + "</b>" + aLine.message +
+               "</font><br>";
+        break;
     case REPORTER::RPT_ACTION:
-        return wxString( "<font color=\"darkgreen\" size=2>" ) + aLine.message + wxString( "</font><br>" );
+        retv = "<font color=\"dark green\" size=2>" + aLine.message + "</font><br>";
+        break;
     default:
-        return wxString( "<font size=2>" ) + aLine.message + wxString( "</font><br>" );
+        retv = "<font size=2>" + aLine.message + "</font><br>";
     }
+
+    return retv;
 }
 
 
@@ -246,7 +257,7 @@ void WX_HTML_REPORT_PANEL::onBtnSaveToFile( wxCommandEvent& event )
     fn = dlg.GetPath();
 
     if( fn.GetExt().IsEmpty() )
-        fn.SetExt( wxT( "txt" ) );
+        fn.SetExt( "txt" );
 
     wxFile f( fn.GetFullPath(), wxFile::write );
 
