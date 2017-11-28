@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-28 01:18+0100\n"
-"PO-Revision-Date: 2017-11-28 01:32+0100\n"
+"POT-Creation-Date: 2017-11-28 10:02+0100\n"
+"PO-Revision-Date: 2017-11-28 10:05+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -1049,7 +1049,7 @@ msgid "Unable to create or write file '%s'"
 msgstr "Impossibile creare o scrivere il file \"%s\""
 
 #: pcbnew/librairi.cpp:550 pcbnew/gpcb_plugin.cpp:1049
-#: pcbnew/kicad_plugin.cpp:2035 pcbnew/kicad_plugin.cpp:2101
+#: pcbnew/kicad_plugin.cpp:2038 pcbnew/kicad_plugin.cpp:2104
 #, c-format
 msgid "Library '%s' is read only"
 msgstr "La libreria \"%s\" è in sola lettura"
@@ -1249,7 +1249,7 @@ msgid "Cannot convert \"%s\" to an integer"
 msgstr "Impossibile convertire \"%s\" come numero intero"
 
 #: pcbnew/gpcb_plugin.cpp:298 pcbnew/gpcb_plugin.cpp:984
-#: pcbnew/kicad_plugin.cpp:1965
+#: pcbnew/kicad_plugin.cpp:1968
 #, c-format
 msgid "footprint library path '%s' does not exist"
 msgstr "il percorso libreria impronte \"%s\" non esiste"
@@ -1270,22 +1270,22 @@ msgstr "token sconosciuto \"%s\""
 msgid "Element token contains %d parameters."
 msgstr "L'elemento token contiene i parameteri %d "
 
-#: pcbnew/gpcb_plugin.cpp:1068 pcbnew/kicad_plugin.cpp:2138
+#: pcbnew/gpcb_plugin.cpp:1068 pcbnew/kicad_plugin.cpp:2141
 #, c-format
 msgid "user does not have permission to delete directory '%s'"
 msgstr "l'utente non ha i permessi per cancellare la cartella \"%s\""
 
-#: pcbnew/gpcb_plugin.cpp:1076 pcbnew/kicad_plugin.cpp:2146
+#: pcbnew/gpcb_plugin.cpp:1076 pcbnew/kicad_plugin.cpp:2149
 #, c-format
 msgid "library directory '%s' has unexpected sub-directories"
 msgstr "la cartella libreria \"%s\" ha sottocartelle inattese"
 
-#: pcbnew/gpcb_plugin.cpp:1095 pcbnew/kicad_plugin.cpp:2165
+#: pcbnew/gpcb_plugin.cpp:1095 pcbnew/kicad_plugin.cpp:2168
 #, c-format
 msgid "unexpected file '%s' was found in library path '%s'"
 msgstr "file inatteso \"%s\" trovato nel percorso libreria \"%s\""
 
-#: pcbnew/gpcb_plugin.cpp:1113 pcbnew/kicad_plugin.cpp:2183
+#: pcbnew/gpcb_plugin.cpp:1113 pcbnew/kicad_plugin.cpp:2186
 #, c-format
 msgid "footprint library '%s' cannot be deleted"
 msgstr "la libreria impronte \"%s\" non può essere cancellata"
@@ -2039,7 +2039,7 @@ msgstr "Attributi"
 
 #: pcbnew/class_module.cpp:587 pcbnew/class_pad.cpp:693 pcbnew/loadcmp.cpp:445
 #: pcbnew/loadcmp.cpp:509 pcbnew/class_edge_mod.cpp:248
-#: pcbnew/class_text_mod.cpp:353 eeschema/sch_component.cpp:1360
+#: pcbnew/class_text_mod.cpp:366 eeschema/sch_component.cpp:1360
 #: eeschema/lib_field.cpp:501 eeschema/template_fieldnames.cpp:45
 #: eeschema/bom_table_column.h:35
 msgid "Footprint"
@@ -2346,7 +2346,7 @@ msgstr "Ribalta gli elementi selezionati"
 
 #: pcbnew/tools/edit_tool.cpp:137 pcbnew/tools/edit_tool.cpp:795
 #: pcbnew/modedit_onclick.cpp:296 pcbnew/class_pcb_text.cpp:138
-#: pcbnew/class_pcb_text.cpp:140 pcbnew/class_text_mod.cpp:376
+#: pcbnew/class_pcb_text.cpp:140 pcbnew/class_text_mod.cpp:389
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:115
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:78
 #: gerbview/class_gerber_draw_item.cpp:711
@@ -2864,12 +2864,12 @@ msgstr "Duplica zona"
 msgid "Adjust zero"
 msgstr "Regola zero"
 
-#: pcbnew/tools/pcb_editor_control.cpp:1107 pcbnew/tool_pcb.cpp:431
+#: pcbnew/tools/pcb_editor_control.cpp:1121 pcbnew/tool_pcb.cpp:431
 #: pcbnew/edit.cpp:1518 eeschema/tool_sch.cpp:196
 msgid "Highlight net"
 msgstr "Evidenzia collegamento"
 
-#: pcbnew/tools/pcb_editor_control.cpp:1151
+#: pcbnew/tools/pcb_editor_control.cpp:1165
 msgid "Pick Components for Local Ratsnest"
 msgstr "Preleva componenti per le ratsnest locali"
 
@@ -3159,7 +3159,7 @@ msgstr "Collegamento"
 #: pcbnew/class_pad.cpp:701 pcbnew/class_pcb_text.cpp:135
 #: pcbnew/class_pcb_layer_widget.cpp:364 pcbnew/class_zone.cpp:878
 #: pcbnew/class_drawsegment.cpp:401 pcbnew/layer_widget.cpp:461
-#: pcbnew/class_text_mod.cpp:369 pcbnew/class_track.cpp:1161
+#: pcbnew/class_text_mod.cpp:382 pcbnew/class_track.cpp:1161
 #: pcbnew/class_track.cpp:1188
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:113
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:142
@@ -3171,7 +3171,7 @@ msgid "Layer"
 msgstr "Strato"
 
 #: pcbnew/class_pad.cpp:707 pcbnew/class_pcb_text.cpp:149
-#: pcbnew/class_drawsegment.cpp:403 pcbnew/class_text_mod.cpp:385
+#: pcbnew/class_drawsegment.cpp:403 pcbnew/class_text_mod.cpp:398
 #: pcbnew/class_track.cpp:1166 pcbnew/class_track.cpp:1193
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:53
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:354 eeschema/lib_field.cpp:663
@@ -3179,7 +3179,7 @@ msgid "Width"
 msgstr "Larghezza"
 
 #: pcbnew/class_pad.cpp:710 pcbnew/class_pcb_text.cpp:152
-#: pcbnew/class_text_mod.cpp:388
+#: pcbnew/class_text_mod.cpp:401
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:60
 #: eeschema/lib_field.cpp:666
 msgid "Height"
@@ -3197,7 +3197,7 @@ msgstr "Foratura X / Y"
 
 #: pcbnew/class_pad.cpp:736 pcbnew/class_pcb_text.cpp:143
 #: pcbnew/class_drawsegment.cpp:372 pcbnew/class_drawsegment.cpp:390
-#: pcbnew/class_text_mod.cpp:379
+#: pcbnew/class_text_mod.cpp:392
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:823
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:100
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:945
@@ -3553,7 +3553,7 @@ msgstr "Quote"
 msgid "PCB Text"
 msgstr "Testo C.S."
 
-#: pcbnew/class_pcb_text.cpp:138 pcbnew/class_text_mod.cpp:362
+#: pcbnew/class_pcb_text.cpp:138 pcbnew/class_text_mod.cpp:375
 #: eeschema/lib_pin.cpp:1836
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1110
 #: gerbview/class_gerber_draw_item.cpp:709
@@ -3561,7 +3561,7 @@ msgstr "Testo C.S."
 msgid "No"
 msgstr "No"
 
-#: pcbnew/class_pcb_text.cpp:140 pcbnew/class_text_mod.cpp:364
+#: pcbnew/class_pcb_text.cpp:140 pcbnew/class_text_mod.cpp:377
 #: eeschema/lib_pin.cpp:1834
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1108
@@ -3570,7 +3570,7 @@ msgstr "No"
 msgid "Yes"
 msgstr "Sì"
 
-#: pcbnew/class_pcb_text.cpp:146 pcbnew/class_text_mod.cpp:382
+#: pcbnew/class_pcb_text.cpp:146 pcbnew/class_text_mod.cpp:395
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:843
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:325
@@ -4190,7 +4190,7 @@ msgid "Parameter"
 msgstr "Parametro"
 
 #: pcbnew/footprint_wizard_frame.cpp:294 pcbnew/class_edge_mod.cpp:249
-#: pcbnew/class_text_mod.cpp:349
+#: pcbnew/class_text_mod.cpp:362
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:31
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:58
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:40
@@ -4773,9 +4773,9 @@ msgstr ""
 msgid "cannot handle footprint text type %s"
 msgstr "impossibile gestire testo impronta tipo %s"
 
-#: pcbnew/pcb_parser.cpp:2451 pcbnew/pcb_parser.cpp:2457
-#: pcbnew/pcb_parser.cpp:2686 pcbnew/pcb_parser.cpp:2768
-#: pcbnew/pcb_parser.cpp:2832
+#: pcbnew/pcb_parser.cpp:2458 pcbnew/pcb_parser.cpp:2464
+#: pcbnew/pcb_parser.cpp:2693 pcbnew/pcb_parser.cpp:2775
+#: pcbnew/pcb_parser.cpp:2839
 #, c-format
 msgid ""
 "invalid net ID in\n"
@@ -4788,7 +4788,7 @@ msgstr ""
 "linea: %d\n"
 "scostamento: %d"
 
-#: pcbnew/pcb_parser.cpp:3158
+#: pcbnew/pcb_parser.cpp:3165
 #, c-format
 msgid ""
 "There is a zone that belongs to a not existing net\n"
@@ -4808,7 +4808,7 @@ msgid "(Cutout)"
 msgstr "(Ritaglio)"
 
 #: pcbnew/class_zone.cpp:832 pcbnew/class_drawsegment.cpp:359
-#: pcbnew/class_marker_pcb.cpp:98 pcbnew/class_text_mod.cpp:359
+#: pcbnew/class_marker_pcb.cpp:98 pcbnew/class_text_mod.cpp:372
 #: pcbnew/class_track.cpp:1151 pcbnew/class_track.cpp:1178
 #: pcbnew/class_track.cpp:1227 pcbnew/dialogs/dialog_layers_setup.cpp:342
 #: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:1825
@@ -6668,11 +6668,11 @@ msgstr "Esploratore librerie"
 msgid "no library selected"
 msgstr "nessuna libreria selezionata"
 
-#: pcbnew/class_text_mod.cpp:349
+#: pcbnew/class_text_mod.cpp:362
 msgid "Ref."
 msgstr "Rif."
 
-#: pcbnew/class_text_mod.cpp:349 pcbnew/class_text_mod.cpp:356
+#: pcbnew/class_text_mod.cpp:362 pcbnew/class_text_mod.cpp:369
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:22
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:28 eeschema/lib_text.cpp:52
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:28
@@ -6681,32 +6681,32 @@ msgstr "Rif."
 msgid "Text"
 msgstr "Testo"
 
-#: pcbnew/class_text_mod.cpp:366
+#: pcbnew/class_text_mod.cpp:379
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:106
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:80
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:119
 msgid "Display"
 msgstr "Mostra"
 
-#: pcbnew/class_text_mod.cpp:372
+#: pcbnew/class_text_mod.cpp:385
 msgid " Yes"
 msgstr " Sì"
 
-#: pcbnew/class_text_mod.cpp:374
+#: pcbnew/class_text_mod.cpp:387
 msgid " No"
 msgstr " No"
 
-#: pcbnew/class_text_mod.cpp:400
+#: pcbnew/class_text_mod.cpp:413
 #, c-format
 msgid "Reference %s"
 msgstr "Riferimento %s"
 
-#: pcbnew/class_text_mod.cpp:404
+#: pcbnew/class_text_mod.cpp:417
 #, c-format
 msgid "Value %s of %s"
 msgstr "Valore %s di %s"
 
-#: pcbnew/class_text_mod.cpp:408
+#: pcbnew/class_text_mod.cpp:421
 #, c-format
 msgid "Text \"%s\" on %s of %s"
 msgstr "Testo \"%s\" su %s di %s"
@@ -8060,31 +8060,31 @@ msgstr "Il percorso libreria impronte \"%s\" non esiste"
 msgid "library '%s' has no footprint '%s' to delete"
 msgstr "la libreria \"%s\" non ha impronte \"%s\" da cancellare"
 
-#: pcbnew/kicad_plugin.cpp:1594
+#: pcbnew/kicad_plugin.cpp:1597
 #, c-format
 msgid "unknown via type %d"
 msgstr "tipo via sconosciuto %d"
 
-#: pcbnew/kicad_plugin.cpp:1732
+#: pcbnew/kicad_plugin.cpp:1735
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "tipo arrotondamento vertici zona sconosciuto %d"
 
-#: pcbnew/kicad_plugin.cpp:1922
+#: pcbnew/kicad_plugin.cpp:1925
 msgid "this file does not contain a PCB"
 msgstr "questo file non contiene un circuito stampato"
 
-#: pcbnew/kicad_plugin.cpp:2052
+#: pcbnew/kicad_plugin.cpp:2055
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Il nome file impronta \"%s\" non è valido."
 
-#: pcbnew/kicad_plugin.cpp:2058
+#: pcbnew/kicad_plugin.cpp:2061
 #, c-format
 msgid "user does not have write permission to delete file '%s' "
 msgstr "Non si dispone dei permessi necessari per salvare il file '%s'."
 
-#: pcbnew/kicad_plugin.cpp:2113
+#: pcbnew/kicad_plugin.cpp:2116
 #, c-format
 msgid "cannot overwrite library path '%s'"
 msgstr "impossibile sovrascrivere il percorso libreria \"%s\""
@@ -8921,7 +8921,7 @@ msgid "No layer selected, Please select the text layer"
 msgstr "Nessuno strato selezionato. Selezionare uno strato di testo."
 
 #: pcbnew/dialogs/dialog_pcb_text_properties.cpp:269
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:264
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:266
 msgid "The text thickness is too large for the text size. It will be clamped"
 msgstr ""
 "Lo spessore del testo è troppo grande per le dimensioni del testo. Verrà "
@@ -11059,6 +11059,16 @@ msgstr "Orientamento"
 msgid "Rotation (-180.0 to 180.0)"
 msgstr "Rotazione (da -180.0 a 180.0)"
 
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:132
+msgid "Unlock text orientation"
+msgstr "Sblocca orientamento del testo"
+
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:133
+msgid ""
+"If orientation is locked, the text will always face near the bottom or right "
+"edge of the board."
+msgstr "Se l'orientamento è bloccato, il testo sarà rivolto sempre verso il fondo o il bordo destro della scheda."
+
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:23
 msgid "Plugin Options:"
 msgstr "Opzioni plugin:"
@@ -12128,7 +12138,7 @@ msgstr "Valore:"
 msgid "Text:"
 msgstr "Testo:"
 
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:204
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:206
 msgid ""
 "This item has an illegal layer id.\n"
 "Now, forced on the front silk screen layer. Please, fix it"
@@ -12136,7 +12146,7 @@ msgstr ""
 "Questo elemento ha un id strato illegale.\n"
 "Verrà forzato sullo strato serigrafia frontale. Sistemarlo per favore!"
 
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:344
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:348
 msgid "Modify module text"
 msgstr "Modifica modulo testo"
 
@@ -15210,7 +15220,7 @@ msgstr "Proprietà obiettivo"
 msgid "Footprint Properties"
 msgstr "Proprietà impronta"
 
-#: pcbnew/dialogs/dialog_edit_module_text_base.h:77
+#: pcbnew/dialogs/dialog_edit_module_text_base.h:79
 msgid "Footprint Text Properties"
 msgstr "Proprietà testo impronta"
 
@@ -15745,7 +15755,9 @@ msgstr "Copiate..."
 msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
-msgstr "La suite EDA KiCad è un insieme di applicazioni open source per la creazione di schemi elettrici e circuiti stampati."
+msgstr ""
+"La suite EDA KiCad è un insieme di applicazioni open source per la creazione "
+"di schemi elettrici e circuiti stampati."
 
 #: common/dialog_about/AboutDialog_main.cpp:127
 msgid "KiCad on the web"
@@ -21986,8 +21998,10 @@ msgstr ""
 "librerie di simboli per caricare i simboli dello schema elettrico.\n"
 "KiCad cercherà di mappare i simboli esistenti usando le nuove\n"
 "tabelle di librerie di simboli. La rimappatura cambierà i file del progetto\n"
-"e lo schema elettrico non sarà più compatibile con le precedenti versioni di\n"
-"KiCad. Tutti i file cambiati verrano salvati con estensione .v4 nel caso fosse\n"
+"e lo schema elettrico non sarà più compatibile con le precedenti versioni "
+"di\n"
+"KiCad. Tutti i file cambiati verrano salvati con estensione .v4 nel caso "
+"fosse\n"
 "necessario invertire i cambiamenti. Se si sceglie di saltare questo passo,\n"
 "si dovrà assegnare manualmente i simboli."
 
@@ -22402,8 +22416,10 @@ msgid ""
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries"
 msgstr ""
-"Se alcuni componenti sono orfani (il simbolo collegato non si trova da nessuna parte),\n"
-"provare a trovare un candidato con lo stesso nome in una delle librerie di simboli caricate"
+"Se alcuni componenti sono orfani (il simbolo collegato non si trova da "
+"nessuna parte),\n"
+"provare a trovare un candidato con lo stesso nome in una delle librerie di "
+"simboli caricate"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:38
 msgid "Plugins"
@@ -23014,9 +23030,12 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
-"Sembra che questo progetto sia stato fatto usando vecchie librerie di simboli.\n"
-"Alcune parti potrebbero necessitare di essere ricollegate ad un simbolo con nome diverso, \n"
-"e potrebbe essere necessario \"recuperare\" (clonare e rinominare) alcuni simboli in una nuova libreria.\n"
+"Sembra che questo progetto sia stato fatto usando vecchie librerie di "
+"simboli.\n"
+"Alcune parti potrebbero necessitare di essere ricollegate ad un simbolo con "
+"nome diverso, \n"
+"e potrebbe essere necessario \"recuperare\" (clonare e rinominare) alcuni "
+"simboli in una nuova libreria.\n"
 "\n"
 "I seguenti cambiamenti sono raccomandati per aggiornare il progetto."
 
