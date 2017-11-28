@@ -161,6 +161,7 @@ void LIB_PIN::SetName( const wxString& aName, bool aTestOtherPins )
 {
     wxString tmp = ( aName.IsEmpty() ) ? wxT( "~" ) : aName;
 
+    // pin name string does not support spaces
     tmp.Replace( wxT( " " ), wxT( "_" ) );
 
     if( m_name != tmp )
@@ -212,6 +213,25 @@ void LIB_PIN::SetNameTextSize( int size, bool aTestOtherPins )
             continue;
 
         pinList[i]->m_nameTextSize = size;
+        SetModified();
+    }
+}
+
+
+void LIB_PIN::SetNumber( const wxString& aNumber )
+{
+    // Unlike SetName, others pin numbers marked by EnableEditMode() are
+    // not modified because each pin has its own number, so set number
+    // only for this.
+
+    wxString tmp = ( aNumber.IsEmpty() ) ? wxT( "~" ) : aNumber;
+
+    // pin number string does not support spaces
+    tmp.Replace( wxT( " " ), wxT( "_" ) );
+
+    if( m_number != tmp )
+    {
+        m_number = tmp;
         SetModified();
     }
 }

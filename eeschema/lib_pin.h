@@ -198,10 +198,7 @@ public:
      * because each pin has its own number
      * @param aNumber New pin number.
      */
-    void SetNumber( const wxString& aNumber )
-    {
-        m_number = aNumber;
-    }
+    void SetNumber( const wxString& aNumber );
 
     /**
      * Set the size of the pin number text.
