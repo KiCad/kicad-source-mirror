@@ -63,6 +63,7 @@ const LAYER_WIDGET::ROW PCB_LAYER_WIDGET::s_render_rows[] = {
     RR( _( "Bl/Buried Via" ),   LAYER_VIA_BBLIND,     WHITE,    _( "Show blind or buried vias" )  ),
     RR( _( "Micro Via" ),       LAYER_VIA_MICROVIA,   WHITE,    _( "Show micro vias") ),
     RR( _( "Non Plated Holes" ),LAYER_NON_PLATED,     WHITE,    _( "Show non plated holes in specific color") ),
+    RR( _( "Plated Holes" ),    LAYER_PADS,           YELLOW,   _( "Show plated holes in specific color") ),
     RR( _( "Ratsnest" ),        LAYER_RATSNEST,       WHITE,    _( "Show unconnected nets as a ratsnest") ),
 
     RR( _( "No-Connects" ),     LAYER_NO_CONNECTS,    BLUE,     _( "Show a marker on pads which have no net connected" ) ),
