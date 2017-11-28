@@ -1,5 +1,15 @@
 EESchema-DOCLIB  Version 2.0
 #
+$CMP +12V
+D power-flag symbol
+K Power Flag Symbol
+$ENDCMP
+#
+$CMP -12V
+D power-flag symbol
+K Power Flag Symbol
+$ENDCMP
+#
 $CMP C
 D Unpolarized capacitor
 K cap capacitor
@@ -10,9 +20,19 @@ D Polarised capacitor
 K cap capacitor
 $ENDCMP
 #
+$CMP GND
+D GROUND power-flag symbol
+K Power Flag Symbol
+$ENDCMP
+#
 $CMP R
 D Resistor
 K r res resistor
+$ENDCMP
+#
+$CMP VCC
+D power-flag symbol
+K Power Flag Symbol
 $ENDCMP
 #
 #End Doc Library
