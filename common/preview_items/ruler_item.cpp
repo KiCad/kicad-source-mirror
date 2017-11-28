@@ -252,12 +252,12 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     VECTOR2D rulerVec( end - origin );
 
     // constant text size on screen
-    SetConstantGlyphHeight( gal, 12.0 );
+    SetConstantGlyphHeight( gal, 14.0 );
 
     drawCursorStrings( aView, end, rulerVec );
 
     // tick label size
-    SetConstantGlyphHeight( gal, 10.0 );
+    SetConstantGlyphHeight( gal, 12.0 );
 
     // basic tick size
     const double minorTickLen = 5.0 / gal.GetWorldScale();
