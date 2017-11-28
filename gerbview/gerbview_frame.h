@@ -173,9 +173,6 @@ protected:
     /// The last filename chosen to be proposed to the user
     wxString                m_lastFileName;
 
-    ///> @copydoc EDA_DRAW_FRAME::forceColorsToLegacy()
-    virtual void forceColorsToLegacy() override;
-
 public:
     wxChoice* m_SelComponentBox;                // a choice box to display and highlight component graphic items
     wxChoice* m_SelNetnameBox;                  // a choice box to display and highlight netlist graphic items

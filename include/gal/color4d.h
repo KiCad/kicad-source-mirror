@@ -121,6 +121,11 @@ public:
      */
     COLOR4D& SetToNearestLegacyColor();
 
+    COLOR4D AsLegacyColor() const
+    {
+        return COLOR4D( COLOR4D::GetNearestLegacyColor( *this ) );
+    }
+
     /**
      * Packs the color into an unsigned int for compatibility with legacy canvas.
      * Note that this is a lossy downsampling and also that the alpha channel is lost.
@@ -135,7 +140,7 @@ public:
     /**
      * Determines the "nearest" EDA_COLOR_T according to ColorFindNearest
      */
-    static EDA_COLOR_T GetNearestLegacyColor( COLOR4D &aColor );
+    static EDA_COLOR_T GetNearestLegacyColor( const COLOR4D &aColor );
 #endif /* WX_COMPATIBLITY */
 
     /**

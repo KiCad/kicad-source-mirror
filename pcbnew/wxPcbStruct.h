@@ -123,9 +123,6 @@ protected:
      */
     virtual void SwitchCanvas( wxCommandEvent& aEvent ) override;
 
-    ///> @copydoc EDA_DRAW_FRAME::forceColorsToLegacy()
-    virtual void forceColorsToLegacy() override;
-
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     /**
      * Function RebuildActionPluginMenus

@@ -221,7 +221,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     }
     else
     {
-        forceColorsToLegacy();
+        m_colorsSettings->SetLegacyMode( true );
         m_canvas->Refresh();
     }
 
@@ -1039,17 +1039,6 @@ void GERBVIEW_FRAME::unitsChangeRefresh()
 }
 
 
-void GERBVIEW_FRAME::forceColorsToLegacy()
-{
-    for( int i = 0; i < LAYER_ID_COUNT; i++ )
-    {
-        COLOR4D c = m_colorsSettings->GetLayerColor( i );
-        c.SetToNearestLegacyColor();
-        m_colorsSettings->SetLayerColor( i, c );
-    }
-}
-
-
 void GERBVIEW_FRAME::UseGalCanvas( bool aEnable )
 {
     EDA_DRAW_FRAME::UseGalCanvas( aEnable );
@@ -1064,6 +1053,8 @@ void GERBVIEW_FRAME::UseGalCanvas( bool aEnable )
     {
         if( m_toolManager )
             m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
+
+        m_colorsSettings->SetLegacyMode( false );
 
         galCanvas->GetGAL()->SetGridColor( GetLayerColor( LAYER_GERBVIEW_GRID ) );
 
@@ -1081,7 +1072,7 @@ void GERBVIEW_FRAME::UseGalCanvas( bool aEnable )
         // Redirect all events to the legacy canvas
         galCanvas->SetEventDispatcher( NULL );
 
-        forceColorsToLegacy();
+        m_colorsSettings->SetLegacyMode( true );
         m_canvas->Refresh();
     }
 

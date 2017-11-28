@@ -144,7 +144,7 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
     }
 
 
-    EDA_COLOR_T COLOR4D::GetNearestLegacyColor( COLOR4D &aColor )
+    EDA_COLOR_T COLOR4D::GetNearestLegacyColor( const COLOR4D &aColor )
     {
         // Cache layer implemented here, because all callers are using wxColour
         static std::map< unsigned int, unsigned int > nearestCache;

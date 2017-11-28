@@ -150,12 +150,6 @@ protected:
     virtual void unitsChangeRefresh();
 
     /**
-     * Helper function to coerce all colors to legacy-compatible when
-     * switching from GAL to legacy canvas
-     */
-    virtual void forceColorsToLegacy() {}
-
-    /**
      * Function GeneralControlKeyMovement
      * Handle the common part of GeneralControl dedicated to global
      * cursor keys (i.e. cursor movement by keyboard)

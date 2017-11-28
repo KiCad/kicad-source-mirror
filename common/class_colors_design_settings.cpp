@@ -96,6 +96,7 @@ static const EDA_COLOR_T default_items_color[] = {
 COLORS_DESIGN_SETTINGS::COLORS_DESIGN_SETTINGS( FRAME_T aFrameType )
 {
     m_frameType = aFrameType;
+    m_legacyMode = false;
 
     for( unsigned src = 0, dst = 0; dst < DIM( m_LayersColors ); ++dst )
     {
@@ -124,7 +125,8 @@ COLOR4D COLORS_DESIGN_SETTINGS::GetLayerColor( LAYER_NUM aLayer ) const
 {
     if( (unsigned) aLayer < DIM( m_LayersColors ) )
     {
-        return m_LayersColors[aLayer];
+        return m_legacyMode ? m_LayersColors[aLayer].AsLegacyColor()
+                            : m_LayersColors[aLayer];
     }
     return COLOR4D::UNSPECIFIED;
 }
@@ -143,7 +145,8 @@ COLOR4D COLORS_DESIGN_SETTINGS::GetItemColor( int aItemIdx ) const
 {
     if( (unsigned) aItemIdx < DIM( m_LayersColors ) )
     {
-        return m_LayersColors[aItemIdx];
+        return m_legacyMode ? m_LayersColors[aItemIdx].AsLegacyColor()
+                            : m_LayersColors[aItemIdx];
     }
 
     return COLOR4D::UNSPECIFIED;

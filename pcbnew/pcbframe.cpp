@@ -713,11 +713,15 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
         Compile_Ratsnest( NULL, true );
 
     PCB_BASE_EDIT_FRAME::UseGalCanvas( aEnable );
+    COLORS_DESIGN_SETTINGS& cds = Settings().Colors();
 
     if( aEnable )
     {
-        COLORS_DESIGN_SETTINGS& cds = Settings().Colors();
+        cds.SetLegacyMode( false );
         GetGalCanvas()->GetGAL()->SetGridColor( cds.GetLayerColor( LAYER_GRID ) );
+        auto view = GetGalCanvas()->GetView();
+        view->GetPainter()->GetSettings()->ImportLegacyColors( &cds );
+        GetGalCanvas()->Refresh();
     }
 
     enableGALSpecificMenus();
@@ -725,27 +729,12 @@ void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
     // Force colors to be legacy-compatible in case they were changed in GAL
     if( !aEnable )
     {
-        forceColorsToLegacy();
+        cds.SetLegacyMode( true );
         Refresh();
     }
 
     // Re-create the layer manager to allow arbitrary colors when GAL is enabled
     UpdateUserInterface();
-}
-
-
-void PCB_EDIT_FRAME::forceColorsToLegacy()
-{
-    COLORS_DESIGN_SETTINGS& cds = Settings().Colors();
-
-    for( unsigned i = 0; i < DIM( cds.m_LayersColors ); i++ )
-    {
-        COLOR4D c = cds.GetLayerColor( i );
-        c.SetToNearestLegacyColor();
-        // Note the alpha chanel is not modified. Therefore the value
-        // is the previous value used in GAL canvas.
-        cds.SetLayerColor( i, c );
-    }
 }
 
 

@@ -92,8 +92,24 @@ public:
      */
     void SetAllColorsAs( COLOR4D aColor );
 
+    /**
+     * Enables or disables legacy color mode.  When enabled, all colors will be
+     * quantized to the legacy color palette when returned from GetItemColor and
+     * GetLayerColor (but the underlying color will not be changed, and can
+     * still be set to arbitrary colors).
+     */
+    void SetLegacyMode( bool aMode )
+    {
+        m_legacyMode = aMode;
+    }
+
 private:
     FRAME_T m_frameType;
+
+    /**
+     * @see SetLegacyMode()
+     */
+    bool m_legacyMode;
 
     void setupConfigParams();
 
