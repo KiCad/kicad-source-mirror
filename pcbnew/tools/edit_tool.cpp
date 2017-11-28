@@ -382,6 +382,9 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
     bool unselect = selection.IsHover();
 
+    if( m_dragging )
+        return 0;
+
     Activate();
 
     m_dragging = false;         // Are selected items being dragged?
