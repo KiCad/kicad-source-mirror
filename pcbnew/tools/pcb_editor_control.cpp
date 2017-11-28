@@ -1069,9 +1069,23 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
     // Store the highlighted netcode in the current board (for dialogs for instance)
     if( enableHighlight && net >= 0 )
+    {
         board->SetHighLightNet( net );
+
+        NETINFO_ITEM* netinfo = board->FindNet( net );
+
+        if( netinfo )
+        {
+            MSG_PANEL_ITEMS items;
+            netinfo->GetMsgPanelInfo( items );
+            frame->SetMsgPanel( items );
+        }
+    }
     else
+    {
         board->ResetHighLight();
+        frame->SetMsgPanel( board );
+    }
 
     return true;
 }
