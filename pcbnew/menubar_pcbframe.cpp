@@ -210,7 +210,7 @@ void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
 #endif
 
     AddMenuItem( aParentMenu, ID_PCB_DISPLAY_OPTIONS_SETUP,
-                 _( "&Display and Hide" ),
+                 _( "&Display Settings" ),
                  _( "Select how items (pads, tracks, texts) are displayed" ),
                  KiBitmap( display_options_xpm ) );
 

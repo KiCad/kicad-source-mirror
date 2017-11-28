@@ -342,7 +342,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( preference_xpm ) );
 
     AddMenuItem( prefs_menu, ID_PCB_DISPLAY_OPTIONS_SETUP,
-                 _( "&Display and Hide" ),
+                 _( "&Display Settings" ),
                  _( "Change footprint editor display settings" ),
                  KiBitmap( display_options_xpm ) );
 
