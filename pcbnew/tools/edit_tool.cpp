@@ -389,7 +389,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
     m_dragging = false;         // Are selected items being dragged?
     bool restore = false;       // Should items' state be restored when finishing the tool?
-    bool lockOverride = false;
 
     controls->ShowCursor( true );
     controls->SetSnapping( true );
@@ -444,8 +443,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
                     if( lockFlags == SELECTION_LOCKED )
                         break;
-                    else if( lockFlags == SELECTION_LOCK_OVERRIDE )
-                        lockOverride = true;
 
                     // Save items, so changes can be undone
                     for( auto item : selection )
@@ -546,10 +543,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
         {
-            if( !lockOverride )
-                break; // Finish
-
-            lockOverride = false;
+            break; // Finish
         }
     } while( ( evt = Wait() ) ); //Should be assignment not equality test
 
