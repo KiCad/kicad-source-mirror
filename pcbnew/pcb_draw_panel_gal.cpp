@@ -35,6 +35,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
+#include <class_marker_pcb.h>
 #include <wxBasePcbFrame.h>
 
 #include <gal/graphics_abstraction_layer.h>
@@ -158,6 +159,12 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( const BOARD* aBoard )
     // Segzones (equivalent of ZONE_CONTAINER for legacy boards)
     for( SEGZONE* zone = aBoard->m_Zone; zone; zone = zone->Next() )
         m_view->Add( zone );
+
+    // DRC markers
+    for( int marker_idx = 0; marker_idx < aBoard->GetMARKERCount(); ++marker_idx )
+    {
+        m_view->Add( aBoard->GetMARKER( marker_idx ) );
+    }
 
     // Ratsnest
     m_ratsnest.reset( new KIGFX::RATSNEST_VIEWITEM( aBoard->GetConnectivity() ) );

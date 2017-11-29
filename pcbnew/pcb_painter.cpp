@@ -1249,21 +1249,15 @@ void PCB_PAINTER::draw( const MARKER_PCB* aMarker )
         VECTOR2D(  9 * scale,   9 * scale ),
         VECTOR2D(  8 * scale,  13 * scale ),
         VECTOR2D(  3 * scale,   4 * scale ),
-        VECTOR2D(  1 * scale,   8 * scale )
+        VECTOR2D(  1 * scale,   8 * scale ),
+        VECTOR2D(  0 * scale,   0 * scale )
     };
+
+    auto strokeColor = m_pcbSettings.GetColor( aMarker, LAYER_DRC );
 
     m_gal->Save();
     m_gal->Translate( aMarker->GetPosition() );
-
-    if( aMarker->IsSelected() )
-    {
-        m_gal->SetFillColor( COLOR4D( 1.0, 0.5, 0.5, 1.0 ) );
-    }
-    else
-    {
-        m_gal->SetFillColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
-    }
-
+    m_gal->SetFillColor( strokeColor );
     m_gal->SetIsFill( true );
     m_gal->SetIsStroke( false );
     m_gal->DrawPolygon( arrow, sizeof( arrow ) / sizeof( VECTOR2D ) );
