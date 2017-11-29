@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-28 10:02+0100\n"
-"PO-Revision-Date: 2017-11-28 10:05+0100\n"
+"POT-Creation-Date: 2017-11-29 11:55+0100\n"
+"PO-Revision-Date: 2017-11-29 11:57+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -781,7 +781,7 @@ msgstr "File eseguibili ("
 msgid "Select Preferred PDF Browser"
 msgstr "Seleziona visualizzatore PDF preferito"
 
-#: kicad/prjconfig.cpp:87 pcbnew/moduleframe.cpp:824 pcbnew/pcbframe.cpp:1042
+#: kicad/prjconfig.cpp:87 pcbnew/moduleframe.cpp:824 pcbnew/pcbframe.cpp:1031
 #: eeschema/schframe.cpp:1474 cvpcb/cvpcb_mainframe.cpp:756
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
@@ -1380,7 +1380,7 @@ msgstr "Modifica"
 #: pcbnew/onrightclick.cpp:642 pcbnew/onrightclick.cpp:724
 #: pcbnew/onrightclick.cpp:831 pcbnew/onrightclick.cpp:901
 #: pcbnew/onrightclick.cpp:958 pcbnew/onrightclick.cpp:1010
-#: pcbnew/tools/edit_tool.cpp:141 pcbnew/tools/edit_tool.cpp:869
+#: pcbnew/tools/edit_tool.cpp:141 pcbnew/tools/edit_tool.cpp:867
 #: pcbnew/modedit_onclick.cpp:389 pcbnew/modedit_onclick.cpp:426
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:62
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1072
@@ -1519,7 +1519,7 @@ msgstr "Posiziona blocco"
 
 #: pcbnew/onrightclick.cpp:493 pcbnew/onrightclick.cpp:813
 #: pcbnew/onrightclick.cpp:1000 pcbnew/tools/edit_tool.cpp:133
-#: pcbnew/tools/edit_tool.cpp:826
+#: pcbnew/tools/edit_tool.cpp:824
 msgid "Flip"
 msgstr "Ribalta"
 
@@ -1715,7 +1715,7 @@ msgstr "Elimina ritaglio"
 msgid "Delete Zone Outline"
 msgstr "Cancella contorno zona"
 
-#: pcbnew/onrightclick.cpp:803 pcbnew/tools/edit_tool.cpp:568
+#: pcbnew/onrightclick.cpp:803 pcbnew/tools/edit_tool.cpp:565
 #: eeschema/onrightclick.cpp:371 eeschema/onrightclick.cpp:507
 #: eeschema/onrightclick.cpp:544 eeschema/onrightclick.cpp:580
 #: eeschema/onrightclick.cpp:775
@@ -1797,7 +1797,7 @@ msgstr "Collegamenti autosbrogliati"
 msgid "Copy"
 msgstr "Copia"
 
-#: pcbnew/onrightclick.cpp:998 pcbnew/tools/edit_tool.cpp:686
+#: pcbnew/onrightclick.cpp:998 pcbnew/tools/edit_tool.cpp:684
 #: common/dialogs/dialog_image_editor_base.cpp:39
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:99
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:195
@@ -2344,7 +2344,7 @@ msgstr "Ruota gli elementi selezionati in senso antiorario"
 msgid "Flips selected item(s)"
 msgstr "Ribalta gli elementi selezionati"
 
-#: pcbnew/tools/edit_tool.cpp:137 pcbnew/tools/edit_tool.cpp:795
+#: pcbnew/tools/edit_tool.cpp:137 pcbnew/tools/edit_tool.cpp:793
 #: pcbnew/modedit_onclick.cpp:296 pcbnew/class_pcb_text.cpp:138
 #: pcbnew/class_pcb_text.cpp:140 pcbnew/class_text_mod.cpp:389
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:115
@@ -2401,29 +2401,29 @@ msgstr "Taglia"
 msgid "Cut selected content to clipboard"
 msgstr "Taglia in contenuto selezionato sugli appunti"
 
-#: pcbnew/tools/edit_tool.cpp:607
+#: pcbnew/tools/edit_tool.cpp:604
 msgid "Edit track width/via size"
 msgstr "Larghezza piste/dimensioni via"
 
-#: pcbnew/tools/edit_tool.cpp:633
+#: pcbnew/tools/edit_tool.cpp:631
 msgid "Edit track/via properties"
 msgstr "Modifica le proprietà pista/via"
 
-#: pcbnew/tools/edit_tool.cpp:915
+#: pcbnew/tools/edit_tool.cpp:913
 msgid "Move exact"
 msgstr "Sposta esattamente"
 
-#: pcbnew/tools/edit_tool.cpp:990
+#: pcbnew/tools/edit_tool.cpp:988
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "%d elementi duplicati"
 
-#: pcbnew/tools/edit_tool.cpp:1130 pcbnew/tool_modedit.cpp:204
+#: pcbnew/tools/edit_tool.cpp:1128 pcbnew/tool_modedit.cpp:204
 #: pcbnew/tool_pcb.cpp:495
 msgid "Measure distance"
 msgstr "Misura la distanza"
 
-#: pcbnew/tools/edit_tool.cpp:1328
+#: pcbnew/tools/edit_tool.cpp:1326
 msgid "Select reference point for the block being copied..."
 msgstr "Selezionare il punto di riferimento per il blocco da copiare..."
 
@@ -2716,15 +2716,15 @@ msgstr "Filtra i tipi di elementi nella selezione"
 msgid "Select..."
 msgstr "Seleziona..."
 
-#: pcbnew/tools/selection_tool.cpp:682
+#: pcbnew/tools/selection_tool.cpp:685
 msgid "Selection contains locked items. Do you want to continue?"
 msgstr "Le selezione contiene elementi bloccati. Continuare?"
 
-#: pcbnew/tools/selection_tool.cpp:1253
+#: pcbnew/tools/selection_tool.cpp:1256
 msgid "Filter selection"
 msgstr "Filtra selezione"
 
-#: pcbnew/tools/selection_tool.cpp:1330 gerbview/tools/selection_tool.cpp:661
+#: pcbnew/tools/selection_tool.cpp:1333 gerbview/tools/selection_tool.cpp:661
 msgid "Clarify selection"
 msgstr "Chiarisci selezione"
 
@@ -3157,7 +3157,7 @@ msgid "Net"
 msgstr "Collegamento"
 
 #: pcbnew/class_pad.cpp:701 pcbnew/class_pcb_text.cpp:135
-#: pcbnew/class_pcb_layer_widget.cpp:364 pcbnew/class_zone.cpp:878
+#: pcbnew/class_pcb_layer_widget.cpp:365 pcbnew/class_zone.cpp:878
 #: pcbnew/class_drawsegment.cpp:401 pcbnew/layer_widget.cpp:461
 #: pcbnew/class_text_mod.cpp:382 pcbnew/class_track.cpp:1161
 #: pcbnew/class_track.cpp:1188
@@ -3267,15 +3267,15 @@ msgstr "Piazzola su %s di %s"
 msgid "Pad %s on %s of %s"
 msgstr "Piazzola %s su %s di %s"
 
-#: pcbnew/class_pad.cpp:1307
+#: pcbnew/class_pad.cpp:1310
 msgid "No layers"
 msgstr "Nessuno strato"
 
-#: pcbnew/class_pad.cpp:1327
+#: pcbnew/class_pad.cpp:1330
 msgid "Internal"
 msgstr "Interno "
 
-#: pcbnew/class_pad.cpp:1330
+#: pcbnew/class_pad.cpp:1333
 msgid "Non-copper"
 msgstr "Non in rame"
 
@@ -3488,7 +3488,7 @@ msgstr "Errore DRC: chiudere quest'area crea un errore DRC con un'altra area"
 msgid "Modify zone properties"
 msgstr "Modifica proprietà della zona"
 
-#: pcbnew/moduleframe.cpp:313 pcbnew/pcbframe.cpp:413 pcbnew/pcbframe.cpp:967
+#: pcbnew/moduleframe.cpp:313 pcbnew/pcbframe.cpp:413 pcbnew/pcbframe.cpp:956
 #: gerbview/gerbview_frame.cpp:166 gerbview/events_called_functions.cpp:442
 msgid "Visibles"
 msgstr "Visibili"
@@ -3554,7 +3554,7 @@ msgid "PCB Text"
 msgstr "Testo C.S."
 
 #: pcbnew/class_pcb_text.cpp:138 pcbnew/class_text_mod.cpp:375
-#: eeschema/lib_pin.cpp:1836
+#: eeschema/lib_pin.cpp:1856
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1110
 #: gerbview/class_gerber_draw_item.cpp:709
 #: gerbview/class_gerber_draw_item.cpp:710
@@ -3562,7 +3562,7 @@ msgid "No"
 msgstr "No"
 
 #: pcbnew/class_pcb_text.cpp:140 pcbnew/class_text_mod.cpp:377
-#: eeschema/lib_pin.cpp:1834
+#: eeschema/lib_pin.cpp:1854
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1108
 #: gerbview/class_gerber_draw_item.cpp:709
@@ -3943,245 +3943,253 @@ msgid "Show footprint pads on board's front"
 msgstr "Mostra piazzole impronte sul fronte della scheda"
 
 #: pcbnew/class_pcb_layer_widget.cpp:70
+msgid "Through Hole Pads"
+msgstr "Piazzole a fori passanti"
+
+#: pcbnew/class_pcb_layer_widget.cpp:70
+msgid "Show through hole pads in specific color"
+msgstr "Mostra le piazzole a fori passanti con uno specifico colore"
+
+#: pcbnew/class_pcb_layer_widget.cpp:71
 msgid "Pads Back"
 msgstr "Piazzole retro"
 
-#: pcbnew/class_pcb_layer_widget.cpp:70
+#: pcbnew/class_pcb_layer_widget.cpp:71
 msgid "Show footprint pads on board's back"
 msgstr "Mostra piazzole impronte sul retro della scheda"
 
-#: pcbnew/class_pcb_layer_widget.cpp:72
+#: pcbnew/class_pcb_layer_widget.cpp:73
 msgid "Text Front"
 msgstr "Testo fronte"
 
-#: pcbnew/class_pcb_layer_widget.cpp:72
+#: pcbnew/class_pcb_layer_widget.cpp:73
 msgid "Show footprint text on board's front"
 msgstr "Mostra testo impronte sul fronte della scheda"
 
-#: pcbnew/class_pcb_layer_widget.cpp:73
+#: pcbnew/class_pcb_layer_widget.cpp:74
 msgid "Text Back"
 msgstr "Testo retro"
 
-#: pcbnew/class_pcb_layer_widget.cpp:73
+#: pcbnew/class_pcb_layer_widget.cpp:74
 msgid "Show footprint text on board's back"
 msgstr "Mostra testo impronte sul retro della scheda"
 
-#: pcbnew/class_pcb_layer_widget.cpp:74
+#: pcbnew/class_pcb_layer_widget.cpp:75
 msgid "Hidden Text"
 msgstr "Testo nascosto"
 
-#: pcbnew/class_pcb_layer_widget.cpp:74
+#: pcbnew/class_pcb_layer_widget.cpp:75
 msgid "Show footprint text marked as invisible"
 msgstr "Mostra testo impronte marcato come invisibile"
 
-#: pcbnew/class_pcb_layer_widget.cpp:76
+#: pcbnew/class_pcb_layer_widget.cpp:77
 msgid "Anchors"
 msgstr "Ancoraggi"
 
-#: pcbnew/class_pcb_layer_widget.cpp:76
+#: pcbnew/class_pcb_layer_widget.cpp:77
 msgid "Show footprint and text origins as a cross"
 msgstr "Mostra origine impronte e testi con una crocetta"
 
-#: pcbnew/class_pcb_layer_widget.cpp:77 common/tool/grid_menu.cpp:40
+#: pcbnew/class_pcb_layer_widget.cpp:78 common/tool/grid_menu.cpp:40
 #: eeschema/widgets/widget_eeschema_color_config.cpp:94
 #: gerbview/class_gerbview_layer_widget.cpp:116
 msgid "Grid"
 msgstr "Griglia"
 
-#: pcbnew/class_pcb_layer_widget.cpp:77
+#: pcbnew/class_pcb_layer_widget.cpp:78
 #: gerbview/class_gerbview_layer_widget.cpp:116
 msgid "Show the (x,y) grid dots"
 msgstr "Mostra i punti (x,y) della griglia"
 
-#: pcbnew/class_pcb_layer_widget.cpp:78
+#: pcbnew/class_pcb_layer_widget.cpp:79
 msgid "Footprints Front"
 msgstr "Impronte fronte"
 
-#: pcbnew/class_pcb_layer_widget.cpp:78
+#: pcbnew/class_pcb_layer_widget.cpp:79
 msgid "Show footprints that are on board's front"
 msgstr "Mostra impronte presenti sul fronte della scheda"
 
-#: pcbnew/class_pcb_layer_widget.cpp:79
+#: pcbnew/class_pcb_layer_widget.cpp:80
 msgid "Footprints Back"
 msgstr "Impronte retro"
 
-#: pcbnew/class_pcb_layer_widget.cpp:79
+#: pcbnew/class_pcb_layer_widget.cpp:80
 msgid "Show footprints that are on board's back"
 msgstr "Mostra le impronte presenti sul retro della scheda"
 
-#: pcbnew/class_pcb_layer_widget.cpp:80
+#: pcbnew/class_pcb_layer_widget.cpp:81
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1125
 msgid "Values"
 msgstr "Valori"
 
-#: pcbnew/class_pcb_layer_widget.cpp:80
+#: pcbnew/class_pcb_layer_widget.cpp:81
 msgid "Show footprint's values"
 msgstr "Mostra i valori delle impronte"
 
-#: pcbnew/class_pcb_layer_widget.cpp:81
+#: pcbnew/class_pcb_layer_widget.cpp:82
 msgid "References"
 msgstr "Riferimenti"
 
-#: pcbnew/class_pcb_layer_widget.cpp:81
+#: pcbnew/class_pcb_layer_widget.cpp:82
 msgid "Show footprint's references"
 msgstr "Mostra i riferimenti delle impronte"
 
-#: pcbnew/class_pcb_layer_widget.cpp:82
+#: pcbnew/class_pcb_layer_widget.cpp:83
 msgid "Worksheet"
 msgstr "Foglio di lavoro"
 
-#: pcbnew/class_pcb_layer_widget.cpp:82
+#: pcbnew/class_pcb_layer_widget.cpp:83
 msgid "Show worksheet"
 msgstr "Mostra foglio di lavoro"
 
-#: pcbnew/class_pcb_layer_widget.cpp:83
+#: pcbnew/class_pcb_layer_widget.cpp:84
 msgid "Cursor"
 msgstr "Puntatore"
 
-#: pcbnew/class_pcb_layer_widget.cpp:83
+#: pcbnew/class_pcb_layer_widget.cpp:84
 msgid "PCB Cursor"
 msgstr "Puntatore C.S."
 
-#: pcbnew/class_pcb_layer_widget.cpp:84
+#: pcbnew/class_pcb_layer_widget.cpp:85
 msgid "Aux items"
 msgstr "Elementi ausiliari"
 
-#: pcbnew/class_pcb_layer_widget.cpp:84
+#: pcbnew/class_pcb_layer_widget.cpp:85
 msgid "Auxillary items (rulers, assistants, axes, etc.)"
 msgstr "Elementi ausiliari (righelli, assistenti, assi, ecc.)"
 
-#: pcbnew/class_pcb_layer_widget.cpp:85
+#: pcbnew/class_pcb_layer_widget.cpp:86
 msgid "Background"
 msgstr "Sfondo"
 
-#: pcbnew/class_pcb_layer_widget.cpp:85
+#: pcbnew/class_pcb_layer_widget.cpp:86
 msgid "PCB Background"
 msgstr "Sfondo del C.S."
 
-#: pcbnew/class_pcb_layer_widget.cpp:152
+#: pcbnew/class_pcb_layer_widget.cpp:153
 msgid "Show All Copper Layers"
 msgstr "Mostra tutti gli strati in rame"
 
-#: pcbnew/class_pcb_layer_widget.cpp:155
+#: pcbnew/class_pcb_layer_widget.cpp:156
 msgid "Hide All Copper Layers But Active"
 msgstr "Nascondi tutti gli strati in rame escluso quello attivo"
 
-#: pcbnew/class_pcb_layer_widget.cpp:158
+#: pcbnew/class_pcb_layer_widget.cpp:159
 msgid "Always Hide All Copper Layers But Active"
 msgstr "Nascondi sempre tutti gli strati in rame escluso quello attivo"
 
-#: pcbnew/class_pcb_layer_widget.cpp:161
+#: pcbnew/class_pcb_layer_widget.cpp:162
 msgid "Hide All Copper Layers"
 msgstr "Nascondi tutti gli strati in rame"
 
-#: pcbnew/class_pcb_layer_widget.cpp:167
+#: pcbnew/class_pcb_layer_widget.cpp:168
 msgid "Show All Non Copper Layers"
 msgstr "Mostra tutti gli strati non in rame"
 
-#: pcbnew/class_pcb_layer_widget.cpp:170
+#: pcbnew/class_pcb_layer_widget.cpp:171
 msgid "Hide All Non Copper Layers"
 msgstr "Nascondi tutti gli strati non in rame"
 
-#: pcbnew/class_pcb_layer_widget.cpp:175
+#: pcbnew/class_pcb_layer_widget.cpp:176
 #: gerbview/class_gerbview_layer_widget.cpp:150
 msgid "Hide All Layers"
 msgstr "Nascondi tutti gli strati "
 
-#: pcbnew/class_pcb_layer_widget.cpp:177
+#: pcbnew/class_pcb_layer_widget.cpp:178
 #: gerbview/class_gerbview_layer_widget.cpp:141
 msgid "Show All Layers"
 msgstr "Mostra tutti gli strati "
 
-#: pcbnew/class_pcb_layer_widget.cpp:182
+#: pcbnew/class_pcb_layer_widget.cpp:183
 msgid "Show All Front Layers"
 msgstr "Mostra tutti gli strati frontali"
 
-#: pcbnew/class_pcb_layer_widget.cpp:185
+#: pcbnew/class_pcb_layer_widget.cpp:186
 msgid "Show All Back Layers"
 msgstr "Mostra tutti gli strati retrostanti"
 
-#: pcbnew/class_pcb_layer_widget.cpp:365 pcbnew/layer_widget.cpp:481
+#: pcbnew/class_pcb_layer_widget.cpp:366 pcbnew/layer_widget.cpp:481
 #: gerbview/class_gerbview_layer_widget.cpp:96
 msgid "Render"
 msgstr "Render"
 
-#: pcbnew/class_pcb_layer_widget.cpp:455
+#: pcbnew/class_pcb_layer_widget.cpp:456
 msgid "Front copper layer"
 msgstr "Strato in rame fronte"
 
-#: pcbnew/class_pcb_layer_widget.cpp:459
+#: pcbnew/class_pcb_layer_widget.cpp:460
 msgid "Back copper layer"
 msgstr "Strato in rame retro"
 
-#: pcbnew/class_pcb_layer_widget.cpp:463
+#: pcbnew/class_pcb_layer_widget.cpp:464
 msgid "Inner copper layer"
 msgstr "Strato in rame interno"
 
-#: pcbnew/class_pcb_layer_widget.cpp:487
+#: pcbnew/class_pcb_layer_widget.cpp:488
 msgid "Adhesive on board's front"
 msgstr "Adesivo fronte scheda"
 
-#: pcbnew/class_pcb_layer_widget.cpp:488
+#: pcbnew/class_pcb_layer_widget.cpp:489
 msgid "Adhesive on board's back"
 msgstr "Adesivo retro scheda"
 
-#: pcbnew/class_pcb_layer_widget.cpp:489
+#: pcbnew/class_pcb_layer_widget.cpp:490
 msgid "Solder paste on board's front"
 msgstr "Pasta salda fronte scheda"
 
-#: pcbnew/class_pcb_layer_widget.cpp:490
+#: pcbnew/class_pcb_layer_widget.cpp:491
 msgid "Solder paste on board's back"
 msgstr "Pasta salda retro scheda"
 
-#: pcbnew/class_pcb_layer_widget.cpp:491
+#: pcbnew/class_pcb_layer_widget.cpp:492
 msgid "Silkscreen on board's front"
 msgstr "Serigrafia fronte scheda"
 
-#: pcbnew/class_pcb_layer_widget.cpp:492
+#: pcbnew/class_pcb_layer_widget.cpp:493
 msgid "Silkscreen on board's back"
 msgstr "Serigrafia retro scheda"
 
-#: pcbnew/class_pcb_layer_widget.cpp:493
+#: pcbnew/class_pcb_layer_widget.cpp:494
 msgid "Solder mask on board's front"
 msgstr "Maschera per saldatura fronte scheda"
 
-#: pcbnew/class_pcb_layer_widget.cpp:494
+#: pcbnew/class_pcb_layer_widget.cpp:495
 msgid "Solder mask on board's back"
 msgstr "Maschera per saldatura retro scheda"
 
-#: pcbnew/class_pcb_layer_widget.cpp:495
+#: pcbnew/class_pcb_layer_widget.cpp:496
 msgid "Explanatory drawings"
 msgstr "Grafiche illustrative"
 
-#: pcbnew/class_pcb_layer_widget.cpp:496
+#: pcbnew/class_pcb_layer_widget.cpp:497
 msgid "Explanatory comments"
 msgstr "Commenti illustrativi"
 
-#: pcbnew/class_pcb_layer_widget.cpp:497 pcbnew/class_pcb_layer_widget.cpp:498
+#: pcbnew/class_pcb_layer_widget.cpp:498 pcbnew/class_pcb_layer_widget.cpp:499
 msgid "User defined meaning"
 msgstr "Per uso personalizzato"
 
-#: pcbnew/class_pcb_layer_widget.cpp:499
+#: pcbnew/class_pcb_layer_widget.cpp:500
 msgid "Board's perimeter definition"
 msgstr "Definizione del contorno della scheda"
 
-#: pcbnew/class_pcb_layer_widget.cpp:500
+#: pcbnew/class_pcb_layer_widget.cpp:501
 msgid "Board's edge setback outline"
 msgstr "Limite assoluto sporgenza scheda"
 
-#: pcbnew/class_pcb_layer_widget.cpp:501
+#: pcbnew/class_pcb_layer_widget.cpp:502
 msgid "Footprint courtyards on board's front"
 msgstr "Courtyard impronte sul fronte della scheda"
 
-#: pcbnew/class_pcb_layer_widget.cpp:502
+#: pcbnew/class_pcb_layer_widget.cpp:503
 msgid "Footprint courtyards on board's back"
 msgstr "Courtyard impronte sul retro della scheda"
 
-#: pcbnew/class_pcb_layer_widget.cpp:503
+#: pcbnew/class_pcb_layer_widget.cpp:504
 msgid "Footprint assembly on board's front"
 msgstr "Assembly impronte sul fronte scheda"
 
-#: pcbnew/class_pcb_layer_widget.cpp:504
+#: pcbnew/class_pcb_layer_widget.cpp:505
 msgid "Footprint assembly on board's back"
 msgstr "Assembly impronte sul retro scheda"
 
@@ -4811,7 +4819,7 @@ msgstr "(Ritaglio)"
 #: pcbnew/class_marker_pcb.cpp:98 pcbnew/class_text_mod.cpp:372
 #: pcbnew/class_track.cpp:1151 pcbnew/class_track.cpp:1178
 #: pcbnew/class_track.cpp:1227 pcbnew/dialogs/dialog_layers_setup.cpp:342
-#: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:1825
+#: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:1845
 #: eeschema/sch_text.cpp:690 eeschema/libedit.cpp:663
 #: eeschema/dialogs/dialog_spice_model_base.cpp:30
 #: eeschema/dialogs/dialog_spice_model_base.cpp:233
@@ -5341,7 +5349,7 @@ msgid "Segment"
 msgstr "Segmento"
 
 #: pcbnew/class_drawsegment.cpp:384 pcbnew/class_track.cpp:1054
-#: eeschema/lib_pin.cpp:1842
+#: eeschema/lib_pin.cpp:1862
 msgid "Length"
 msgstr "Lunghezza"
 
@@ -5873,8 +5881,8 @@ msgid "Select general options for Pcbnew"
 msgstr "Seleziona le opzioni generali per Pcbnew"
 
 #: pcbnew/menubar_pcbframe.cpp:213 pcbnew/menubar_modedit.cpp:345
-msgid "&Display and Hide"
-msgstr "Mostra e nascon&di"
+msgid "&Display Settings"
+msgstr "Impostazioni &di visualizzazione"
 
 #: pcbnew/menubar_pcbframe.cpp:214
 msgid "Select how items (pads, tracks, texts) are displayed"
@@ -6615,11 +6623,11 @@ msgstr ""
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Il file di salvataggio automatico \"%s\" non può essere rimosso!"
 
-#: pcbnew/pcbframe.cpp:1046
+#: pcbnew/pcbframe.cpp:1035
 msgid " [new file]"
 msgstr " [nuovo file]"
 
-#: pcbnew/pcbframe.cpp:1186
+#: pcbnew/pcbframe.cpp:1175
 msgid ""
 "Cannot update the PCB, because Pcbnew is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you need to launch the KiCad "
@@ -9258,7 +9266,7 @@ msgstr "Visibilità"
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:127
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:156
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:104
-#: eeschema/lib_pin.cpp:1838
+#: eeschema/lib_pin.cpp:1858
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:320
 msgid "Visible"
 msgstr "Visibile"
@@ -10079,7 +10087,7 @@ msgstr "arco"
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
 #: common/dialogs/dialog_env_var_config.cpp:132
 #: common/dialogs/dialog_env_var_config_base.cpp:118
-#: eeschema/widgets/tuner_slider_base.cpp:20 eeschema/lib_pin.cpp:1821
+#: eeschema/widgets/tuner_slider_base.cpp:20 eeschema/lib_pin.cpp:1841
 #: eeschema/libedit.cpp:633
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:203
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:318
@@ -11019,7 +11027,7 @@ msgid "Italic"
 msgstr "Corsivo"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:112
-#: eeschema/lib_pin.cpp:1831 eeschema/sch_text.cpp:672
+#: eeschema/lib_pin.cpp:1851 eeschema/sch_text.cpp:672
 #: eeschema/lib_field.cpp:660 eeschema/dialogs/dialog_lib_edit_text_base.cpp:97
 msgid "Style"
 msgstr "Stile"
@@ -11051,7 +11059,7 @@ msgstr "Altro"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:121
 #: eeschema/onrightclick.cpp:388 eeschema/onrightclick.cpp:796
-#: eeschema/lib_pin.cpp:1845 eeschema/sch_text.cpp:661
+#: eeschema/lib_pin.cpp:1865 eeschema/sch_text.cpp:661
 msgid "Orientation"
 msgstr "Orientamento"
 
@@ -11067,7 +11075,9 @@ msgstr "Sblocca orientamento del testo"
 msgid ""
 "If orientation is locked, the text will always face near the bottom or right "
 "edge of the board."
-msgstr "Se l'orientamento è bloccato, il testo sarà rivolto sempre verso il fondo o il bordo destro della scheda."
+msgstr ""
+"Se l'orientamento è bloccato, il testo sarà rivolto sempre verso il fondo o "
+"il bordo destro della scheda."
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:23
 msgid "Plugin Options:"
@@ -12019,13 +12029,13 @@ msgstr "Duplica conteggio"
 msgid "Incorrect polygon"
 msgstr "Poligono errato"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1050 eeschema/lib_pin.cpp:1858
-#: eeschema/lib_pin.cpp:1877
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1050 eeschema/lib_pin.cpp:1878
+#: eeschema/lib_pin.cpp:1897
 msgid "Pos X"
 msgstr "Pos X"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1051 eeschema/lib_pin.cpp:1861
-#: eeschema/lib_pin.cpp:1880
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1051 eeschema/lib_pin.cpp:1881
+#: eeschema/lib_pin.cpp:1900
 msgid "Pos Y"
 msgstr "Pos Y"
 
@@ -17032,40 +17042,31 @@ msgstr "Rimuovi prefisso percorso selezionato"
 msgid "Help"
 msgstr "Aiuto"
 
-#: common/dialogs/wx_html_report_panel.cpp:137
-msgid "<b>Error: </b></font><font size=2>"
-msgstr "<b>Errore: </b></font><font size=2>"
-
 #: common/dialogs/wx_html_report_panel.cpp:139
-msgid "<b>Warning: </b></font><font size=2>"
-msgstr "<b>Attenzione: </b></font><font size=2>"
-
-#: common/dialogs/wx_html_report_panel.cpp:141
-msgid "<b>Info: </b>"
-msgstr "<b>Info: </b>"
-
-#: common/dialogs/wx_html_report_panel.cpp:155
+#: common/dialogs/wx_html_report_panel.cpp:166
 msgid "Error: "
 msgstr "Errore: "
 
-#: common/dialogs/wx_html_report_panel.cpp:157
+#: common/dialogs/wx_html_report_panel.cpp:143
+#: common/dialogs/wx_html_report_panel.cpp:168
 msgid "Warning: "
 msgstr "Attenzione: "
 
-#: common/dialogs/wx_html_report_panel.cpp:159
+#: common/dialogs/wx_html_report_panel.cpp:147
+#: common/dialogs/wx_html_report_panel.cpp:170
 msgid "Info: "
 msgstr "Info: "
 
-#: common/dialogs/wx_html_report_panel.cpp:240
+#: common/dialogs/wx_html_report_panel.cpp:251
 msgid "Save Report to File"
 msgstr "Salva il file rapporto"
 
-#: common/dialogs/wx_html_report_panel.cpp:257
+#: common/dialogs/wx_html_report_panel.cpp:268
 #, c-format
 msgid "Cannot write report to file '%s'."
 msgstr "Impossibile scrivere rapporto nel file \"%s\"."
 
-#: common/dialogs/wx_html_report_panel.cpp:259
+#: common/dialogs/wx_html_report_panel.cpp:270
 msgid "File save error"
 msgstr "Errore salvataggio file"
 
@@ -18373,11 +18374,11 @@ msgstr "Sopra"
 msgid "Down"
 msgstr "Sotto"
 
-#: eeschema/lib_pin.cpp:1823 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:175
+#: eeschema/lib_pin.cpp:1843 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:175
 msgid "Number"
 msgstr "Numero"
 
-#: eeschema/lib_pin.cpp:2081
+#: eeschema/lib_pin.cpp:2101
 #, c-format
 msgid "Pin %s, %s, %s"
 msgstr "Pin %s, %s, %s"
@@ -27544,6 +27545,18 @@ msgstr "Tipo plugin"
 #: include/lib_table_grid.h:186
 msgid "Active"
 msgstr "Attiva"
+
+#~ msgid "&Display and Hide"
+#~ msgstr "Mostra e nascon&di"
+
+#~ msgid "<b>Error: </b></font><font size=2>"
+#~ msgstr "<b>Errore: </b></font><font size=2>"
+
+#~ msgid "<b>Warning: </b></font><font size=2>"
+#~ msgstr "<b>Attenzione: </b></font><font size=2>"
+
+#~ msgid "<b>Info: </b>"
+#~ msgstr "<b>Info: </b>"
 
 #~ msgid "The official KiCad website"
 #~ msgstr "Il sito web ufficiale di KiCad"
