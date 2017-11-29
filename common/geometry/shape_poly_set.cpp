@@ -1917,6 +1917,7 @@ void SHAPE_POLY_SET::TRIANGULATED_POLYGON::AllocateVertices( int aSize )
 void SHAPE_POLY_SET::TRIANGULATED_POLYGON::AllocateTriangles( int aSize )
 {
     m_triangles = new TRI[aSize];
+    m_triangleCount = aSize;
 }
 
 
