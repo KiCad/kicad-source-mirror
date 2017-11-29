@@ -127,9 +127,9 @@ private:
  *
  * A contributor consists of the following mandatory information:
  * - Name
- * - EMail address
  *
  * Each contributor can have optional information assigned like:
+ * - EMail address
  * - A category
  * - A category specific icon
  */
@@ -137,7 +137,7 @@ class CONTRIBUTOR
 {
 public:
     CONTRIBUTOR( const wxString& aName,
-                 const wxString& aEmail,
+                 const wxString& aEmail = wxEmptyString,
                  const wxString& aCategory = wxEmptyString,
                  wxBitmap*       aIcon = NULL )
     {
