@@ -1018,7 +1018,7 @@ void C3D_RENDER_RAYTRACING::insert3DPadHole( const D_PAD* aPad )
     if( m_settings.GetFlag( FL_USE_REALISTIC_MODE ) )
         objColor = (SFVEC3F)m_settings.m_CopperColor;
     else
-        objColor = m_settings.GetItemColor( LAYER_PADS );
+        objColor = m_settings.GetItemColor( LAYER_PADS_TH );
 
     const wxSize  drillsize   = aPad->GetDrillSize();
     const bool    hasHole     = drillsize.x && drillsize.y;

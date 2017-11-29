@@ -53,9 +53,9 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
     LAYER_MOD_REFERENCES, LAYER_MOD_VALUES,
 
     LAYER_RATSNEST, LAYER_ANCHOR,
-    LAYER_VIAS_HOLES, LAYER_PADS_HOLES, LAYER_NON_PLATED,
+    LAYER_VIAS_HOLES, LAYER_PADS_PLATEDHOLES, LAYER_NON_PLATEDHOLES,
     LAYER_VIA_THROUGH, LAYER_VIA_BBLIND,
-    LAYER_VIA_MICROVIA, LAYER_PADS,
+    LAYER_VIA_MICROVIA, LAYER_PADS_TH,
 
     LAYER_PAD_FR_NETNAMES, LAYER_PAD_FR,
     NETNAMES_LAYER_INDEX( F_Cu ), F_Cu, F_Mask, F_SilkS, F_Paste, F_Adhes,
@@ -199,8 +199,8 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
         LAYER_NUM layers[] = {
                 GetNetnameLayer( aLayer ),
                 LAYER_VIA_THROUGH, LAYER_VIAS_HOLES, LAYER_VIAS_NETNAMES,
-                LAYER_PADS, LAYER_PADS_HOLES, LAYER_PADS_NETNAMES,
-                LAYER_NON_PLATED, LAYER_GP_OVERLAY, LAYER_RATSNEST
+                LAYER_PADS_TH, LAYER_PADS_PLATEDHOLES, LAYER_PADS_NETNAMES,
+                LAYER_NON_PLATEDHOLES, LAYER_GP_OVERLAY, LAYER_RATSNEST
         };
 
         for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
@@ -234,8 +234,8 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
     // Layers that should always have on-top attribute enabled
     const LAYER_NUM layers[] = {
             LAYER_VIA_THROUGH, LAYER_VIAS_HOLES, LAYER_VIAS_NETNAMES,
-            LAYER_PADS, LAYER_PADS_HOLES, LAYER_PADS_NETNAMES,
-            LAYER_NON_PLATED, LAYER_GP_OVERLAY, LAYER_RATSNEST,
+            LAYER_PADS_TH, LAYER_PADS_PLATEDHOLES, LAYER_PADS_NETNAMES,
+            LAYER_NON_PLATEDHOLES, LAYER_GP_OVERLAY, LAYER_RATSNEST,
             LAYER_DRC
     };
 
@@ -300,7 +300,7 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
     }
 
     // Enable some layers that are GAL specific
-    m_view->SetLayerVisible( LAYER_PADS_HOLES, true );
+    m_view->SetLayerVisible( LAYER_PADS_PLATEDHOLES, true );
     m_view->SetLayerVisible( LAYER_VIAS_HOLES, true );
     m_view->SetLayerVisible( LAYER_WORKSHEET, true );
     m_view->SetLayerVisible( LAYER_GP_OVERLAY, true );
@@ -411,9 +411,9 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     // Some more required layers settings
     m_view->SetRequired( LAYER_VIAS_HOLES, LAYER_VIA_THROUGH );
     m_view->SetRequired( LAYER_VIAS_NETNAMES, LAYER_VIA_THROUGH );
-    m_view->SetRequired( LAYER_PADS_HOLES, LAYER_PADS );
-    m_view->SetRequired( LAYER_NON_PLATED, LAYER_PADS );
-    m_view->SetRequired( LAYER_PADS_NETNAMES, LAYER_PADS );
+    m_view->SetRequired( LAYER_PADS_PLATEDHOLES, LAYER_PADS_TH );
+    m_view->SetRequired( LAYER_NON_PLATEDHOLES, LAYER_PADS_TH );
+    m_view->SetRequired( LAYER_PADS_NETNAMES, LAYER_PADS_TH );
 
     // Front modules
     m_view->SetRequired( LAYER_PAD_FR, LAYER_MOD_FR );

@@ -278,10 +278,10 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
         DisplayIsol = false;
 
     if( ( GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED ) &&
-        brd->IsElementVisible( LAYER_NON_PLATED ) )
+        brd->IsElementVisible( LAYER_NON_PLATEDHOLES ) )
     {
         drawInfo.m_ShowNotPlatedHole = true;
-        drawInfo.m_NPHoleColor = cds.GetItemColor( LAYER_NON_PLATED );
+        drawInfo.m_NPHoleColor = cds.GetItemColor( LAYER_NON_PLATEDHOLES );
     }
 
     drawInfo.m_DrawMode    = aDraw_mode;

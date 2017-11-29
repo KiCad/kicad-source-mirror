@@ -89,13 +89,13 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSet
 
     // Default colors for specific layers (not really board layers).
     m_layerColors[LAYER_VIAS_HOLES]         = COLOR4D( 0.5, 0.4, 0.0, 0.8 );
-    m_layerColors[LAYER_PADS_HOLES]         = COLOR4D( 0.0, 0.0, 0.0, 1.0 );
+    m_layerColors[LAYER_PADS_PLATEDHOLES]   = COLOR4D( 0.0, 0.0, 0.0, 1.0 );
     m_layerColors[LAYER_PADS_NETNAMES]      = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
     m_layerColors[LAYER_PAD_FR_NETNAMES]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
     m_layerColors[LAYER_PAD_BK_NETNAMES]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
     m_layerColors[LAYER_DRC]                = COLOR4D( 1.0, 0.0, 0.0, 0.8 );
 
-    // LAYER_PADS, LAYER_NON_PLATED, LAYER_ANCHOR],LAYER_RATSNEST,
+    // LAYER_PADS_TH, LAYER_NON_PLATEDHOLES, LAYER_ANCHOR],LAYER_RATSNEST,
     // LAYER_VIA_THROUGH], LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA
     // are initialized from aSettings
 
@@ -133,7 +133,7 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS* aOption
     m_sketchFpGfx       = !aOptions->m_DisplayModEdgeFill;
 
     // Whether to draw tracks, vias & pads filled or as outlines
-    m_sketchMode[LAYER_PADS]         = !aOptions->m_DisplayPadFill;
+    m_sketchMode[LAYER_PADS_TH]         = !aOptions->m_DisplayPadFill;
     m_sketchMode[LAYER_VIA_THROUGH]  = !aOptions->m_DisplayViaFill;
     m_sketchMode[LAYER_VIA_BBLIND]   = !aOptions->m_DisplayViaFill;
     m_sketchMode[LAYER_VIA_MICROVIA] = !aOptions->m_DisplayViaFill;
@@ -657,20 +657,20 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     COLOR4D color = m_pcbSettings.GetColor( aPad, aLayer );
 
     // Pad holes color is specific
-    if( aLayer == LAYER_PADS_HOLES || aLayer == LAYER_NON_PLATED )
+    if( aLayer == LAYER_PADS_PLATEDHOLES || aLayer == LAYER_NON_PLATEDHOLES )
     {
         // Hole color is the background color for plated holes, but a specific color
-        // for not plated holes (LAYER_NON_PLATED color layer )
+        // for not plated holes (LAYER_NON_PLATEDHOLES color layer )
         if( aPad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED /*&&
-            brd->IsElementVisible( LAYER_NON_PLATED )*/ )
-            color = m_pcbSettings.GetColor( nullptr, LAYER_NON_PLATED );
+            brd->IsElementVisible( LAYER_NON_PLATEDHOLES )*/ )
+            color = m_pcbSettings.GetColor( nullptr, LAYER_NON_PLATEDHOLES );
         else
             color = m_pcbSettings.GetBackgroundColor();
     }
 
     VECTOR2D size;
 
-    if( m_pcbSettings.m_sketchMode[LAYER_PADS] )
+    if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
     {
         // Outline mode
         m_gal->SetIsFill( false );
@@ -693,7 +693,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     int custom_margin = 0;     // a clearance/margin for custom shape, for solder paste/mask
 
     // Choose drawing settings depending on if we are drawing a pad itself or a hole
-    if( aLayer == LAYER_PADS_HOLES || aLayer == LAYER_NON_PLATED )
+    if( aLayer == LAYER_PADS_PLATEDHOLES || aLayer == LAYER_NON_PLATEDHOLES )
     {
         // Drawing hole: has same shape as PAD_CIRCLE or PAD_OVAL
         size  = VECTOR2D( aPad->GetDrillSize() ) / 2.0;
@@ -738,7 +738,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             m = ( size.y - size.x );
             n = size.x;
 
-            if( m_pcbSettings.m_sketchMode[LAYER_PADS] )
+            if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
             {
                 // Outline mode
                 m_gal->DrawArc( VECTOR2D( 0, -m ), n, -M_PI, 0 );
@@ -759,7 +759,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             m = ( size.x - size.y );
             n = size.y;
 
-            if( m_pcbSettings.m_sketchMode[LAYER_PADS] )
+            if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
             {
                 // Outline mode
                 m_gal->DrawArc( VECTOR2D( -m, 0 ), n, M_PI / 2, 3 * M_PI / 2 );
@@ -790,7 +790,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         TransformRoundRectToPolygon( polySet, wxPoint( 0, 0 ), prsize,
                 0.0, corner_radius, segmentToCircleCount );
 
-        if( m_pcbSettings.m_sketchMode[LAYER_PADS] )
+        if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
         {
             if( polySet.OutlineCount() > 0 )
                 m_gal->DrawPolyline( polySet.Outline( 0 ) );
@@ -840,7 +840,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             }
         }
 
-        if( m_pcbSettings.m_sketchMode[LAYER_PADS] )
+        if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
         {
             // Add the beginning point to close the outline
             pointList.push_back( pointList.front() );
@@ -867,7 +867,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         polySet.Append( VECTOR2I( corners[2] ) );
         polySet.Append( VECTOR2I( corners[3] ) );
 
-        if( m_pcbSettings.m_sketchMode[LAYER_PADS] )
+        if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
             m_gal->DrawPolyline( polySet.COutline( 0 ) );
         else
             m_gal->DrawPolygon( polySet );
@@ -889,7 +889,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags
             && ( aLayer == LAYER_PAD_FR
                 || aLayer == LAYER_PAD_BK
-                || aLayer == LAYER_PADS ) )
+                || aLayer == LAYER_PADS_TH ) )
     {
         SHAPE_POLY_SET polySet;
         constexpr int SEGCOUNT = 64;

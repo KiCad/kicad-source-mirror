@@ -1215,14 +1215,17 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 0;
 
-    // These types of pads contain a hole
-    if( m_Attribute == PAD_ATTRIB_STANDARD || m_Attribute == PAD_ATTRIB_HOLE_NOT_PLATED )
-        aLayers[aCount++] = LAYER_PADS_HOLES;
+    // These 2 types of pads contain a hole
+    if( m_Attribute == PAD_ATTRIB_STANDARD )
+        aLayers[aCount++] = LAYER_PADS_PLATEDHOLES;
+
+    if( m_Attribute == PAD_ATTRIB_HOLE_NOT_PLATED )
+        aLayers[aCount++] = LAYER_NON_PLATEDHOLES;
 
     if( IsOnLayer( F_Cu ) && IsOnLayer( B_Cu ) )
     {
         // Multi layer pad
-        aLayers[aCount++] = LAYER_PADS;
+        aLayers[aCount++] = LAYER_PADS_TH;
         aLayers[aCount++] = LAYER_PADS_NETNAMES;
     }
     else if( IsOnLayer( F_Cu ) )

@@ -171,7 +171,7 @@ enum GAL_LAYER_ID: int
     LAYER_VIA_MICROVIA,         ///< to draw micro vias
     LAYER_VIA_BBLIND,           ///< to draw blind/buried vias
     LAYER_VIA_THROUGH,          ///< to draw usual through hole vias
-    LAYER_NON_PLATED,           ///< handle color for not plated holes
+    LAYER_NON_PLATEDHOLES,      ///< handle color for not plated holes (holes, not pads)
     LAYER_MOD_TEXT_FR,
     LAYER_MOD_TEXT_BK,
     LAYER_MOD_TEXT_INVISIBLE,   ///< text marked as invisible
@@ -187,8 +187,8 @@ enum GAL_LAYER_ID: int
     LAYER_MOD_VALUES,           ///< show modules values (when texts are visibles)
     LAYER_MOD_REFERENCES,       ///< show modules references (when texts are visibles)
     LAYER_TRACKS,
-    LAYER_PADS,                 ///< multilayer pads, usually with holes
-    LAYER_PADS_HOLES,           ///< to draw pad holes (plated or not plated)
+    LAYER_PADS_TH,              ///< multilayer pads, usually with holes
+    LAYER_PADS_PLATEDHOLES,     ///< to draw pad holes (plated)
     LAYER_VIAS_HOLES,           ///< to draw via holes (pad holes do not use this layer)
     LAYER_DRC,                  ///< drc markers
     LAYER_WORKSHEET,            ///< worksheet frame
@@ -303,8 +303,9 @@ enum GERBVIEW_LAYER_ID: int
 // Here is a mask to set them visible, to be sure they are displayed
 // after loading a board for instance
 #define MIN_VISIBILITY_MASK int( (1 << GAL_LAYER_INDEX( LAYER_TRACKS ) ) +\
-                 ( 1 << GAL_LAYER_INDEX( LAYER_PADS ) ) +\
-                 ( 1 << GAL_LAYER_INDEX( LAYER_PADS_HOLES ) ) +\
+                 ( 1 << GAL_LAYER_INDEX( LAYER_PADS_TH ) ) +\
+                 ( 1 << GAL_LAYER_INDEX( LAYER_PADS_PLATEDHOLES ) ) +\
+                 ( 1 << GAL_LAYER_INDEX( LAYER_NON_PLATEDHOLES ) ) +\
                  ( 1 << GAL_LAYER_INDEX( LAYER_VIAS_HOLES ) ) +\
                  ( 1 << GAL_LAYER_INDEX( LAYER_DRC ) ) +\
                  ( 1 << GAL_LAYER_INDEX( LAYER_WORKSHEET ) ) +\
@@ -755,7 +756,7 @@ inline int GetNetnameLayer( int aLayer )
 {
     if( IsCopperLayer( aLayer ) )
         return NETNAMES_LAYER_INDEX( aLayer );
-    else if( aLayer == LAYER_PADS )
+    else if( aLayer == LAYER_PADS_TH )
         return LAYER_PADS_NETNAMES;
     else if( aLayer == LAYER_PAD_FR )
         return LAYER_PAD_FR_NETNAMES;

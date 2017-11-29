@@ -217,7 +217,7 @@ void COLORS_DESIGN_SETTINGS::setupConfigParams()
     Add( "Color4DPadBackEx", ITEM_COLOR( LAYER_PAD_BK ), GREEN );
     Add( "Color4DAnchorEx", ITEM_COLOR( LAYER_ANCHOR ), BLUE );
     Add( "Color4DPadFrontEx", ITEM_COLOR( LAYER_PAD_FR ), RED );
-    Add( "Color4DNonPlatedEx", ITEM_COLOR( LAYER_NON_PLATED ), YELLOW );
+    Add( "Color4DNonPlatedEx", ITEM_COLOR( LAYER_NON_PLATEDHOLES ), YELLOW );
     Add( "Color4DPCBBackground", ITEM_COLOR( LAYER_PCB_BACKGROUND ), BLACK );
     Add( "Color4DPCBCursor", ITEM_COLOR( LAYER_CURSOR ), WHITE );
     Add( "Color4DAuxItems", ITEM_COLOR( LAYER_AUX_ITEMS ), WHITE );
