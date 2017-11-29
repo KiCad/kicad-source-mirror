@@ -32,7 +32,10 @@ changelog tags:
 - `REMOVED` to inform about removal of an existing feature
 
 There is no need to add changelog tags for commits that do not modify the way
-the users interact with the software, such as code refactoring.
+the users interact with the software, such as code refactoring or a bugfix for
+unexpected behavior. The main purpose of the changelog tags is to generate the
+release notes and notify the documentation maintainers about changes. Keep that
+in mind when deciding whether to add a changelog tag.
 
 When a commit with changelog tags is pushed, the committer should create a new
 issue in the [documentation
