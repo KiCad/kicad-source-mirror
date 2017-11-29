@@ -45,6 +45,7 @@ class SHAPE_FILE_IO
             IOM_WRITE
         };
 
+        SHAPE_FILE_IO();
         SHAPE_FILE_IO( const std::string& aFilename, IO_MODE aMode = IOM_READ );
         ~SHAPE_FILE_IO();
 

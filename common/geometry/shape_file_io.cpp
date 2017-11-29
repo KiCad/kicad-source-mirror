@@ -28,6 +28,13 @@
 #include <geometry/shape.h>
 #include <geometry/shape_file_io.h>
 
+SHAPE_FILE_IO::SHAPE_FILE_IO()
+{
+    m_groupActive = false;
+    m_mode = IOM_WRITE;
+    m_file = stdout;
+}
+
 SHAPE_FILE_IO::SHAPE_FILE_IO( const std::string& aFilename, SHAPE_FILE_IO::IO_MODE aMode )
 {
     m_groupActive = false;
@@ -61,7 +68,10 @@ SHAPE_FILE_IO::~SHAPE_FILE_IO()
     if( m_groupActive && m_mode != IOM_READ )
         fprintf( m_file, "endgroup\n" );
 
-    fclose( m_file );
+    if ( m_file != stdout )
+    {
+        fclose( m_file );
+    }
 }
 
 
