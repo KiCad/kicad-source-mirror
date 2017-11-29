@@ -19,17 +19,7 @@ to the commit once it is merged.
     Fixes: lp:1234567
     https://bugs.launchpad.net/kicad/+bug/1234567
 
-## Helper alias for linking to bugs # {#commit_link_helper}
-
-There is a helper alias located at `helpers/git/fixes_alias` to simplify adding
-these links. To install it, run in the source repository:
-
-    git config --add include.path $(pwd)/helpers/git/fixes_alias
-
-Once the alias is installed, it may be used to amend the most recent commit to
-include the bug report link:
-
-    git fixes 1234567
+There is an [alias](#commit_bug_report_links) to simplify this step.
 
 # Changelog tags {#commit_changelog_tag}
 
@@ -50,6 +40,17 @@ repository](http://github.com/KiCad/kicad-doc/issues) to notify the
 documentation maintainers. You should include a link to the commit containing
 the reported changes.
 
+## Extracting changelog {#commit_extract_changelog}
+
+Thanks to the changelog tags, it is easy to extract the changelog using git
+commands:
+
+    git log -E --grep="ADD:|NEW:|REMOVE[D]?:|CHANGE[D]?:" --since="1 Jan 2017"
+    git log -E --grep="ADD:|NEW:|REMOVE[D]?:|CHANGE[D]?:" <commit hash>
+
+KiCad provides an [alias](#commit_changelog_extraction) to shorten the
+changelog extraction commands.
+
 # Example # {#commit_example}
 
 Following is an example of a properly formatted commit message:
@@ -67,3 +68,29 @@ Following is an example of a properly formatted commit message:
     
     Fixes: lp:1405026
     * https://bugs.launchpad.net/kicad/+bug/1405026
+
+# Git aliases file # {#commit_git_aliases}
+
+There is a file containing helpful git aliases located at
+`helpers/git/fixes_alias`. To install it, run in the source repository:
+
+    git config --add include.path $(pwd)/helpers/git/fixes_alias
+
+## Bug report links # {#commit_bug_report_links}
+
+Once the alias is installed, it may be used to amend the most recent commit to
+include the bug report link:
+
+    git fixes 1234567
+
+The example command would add the following lines to the last commit message:
+
+    Fixes: lp:1234567
+    * https://bugs.launchpad.net/kicad/+bug/1234567
+
+## Changelog extraction # {#commit_changelog_extraction}
+
+With the helper alias file installed, you get an alias to extract the changelog:
+
+    git changelog --since="1 Jan 2017"
+    git changelog <commit hash>
