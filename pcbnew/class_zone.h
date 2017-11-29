@@ -360,6 +360,12 @@ public:
     void TransformOutlinesShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                         int aMinClearanceValue,
                                                         bool aUseNetClearance );
+
+    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                               int aClearanceValue,
+                                               int aCircleToSegmentsCount,
+                                               double aCorrectionFactor ) const override;
+
     /**
      * Function HitTestForCorner
      * tests if the given wxPoint is near a corner.

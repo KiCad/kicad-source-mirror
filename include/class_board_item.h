@@ -39,7 +39,7 @@
 class BOARD;
 class BOARD_ITEM_CONTAINER;
 class EDA_DRAW_PANEL;
-
+class SHAPE_POLY_SET;
 
 /**
  * Enum STROKE_T
@@ -334,6 +334,11 @@ public:
     static std::string FormatInternalUnits( const wxSize& aSize );
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
+    virtual void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                               int aClearanceValue,
+                                               int aCircleToSegmentsCount,
+                                               double aCorrectionFactor ) const;
 };
 
 #endif /* BOARD_ITEM_STRUCT_H */

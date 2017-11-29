@@ -194,7 +194,7 @@ public:
     void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                int             aClearanceValue,
                                                int             aCircleToSegmentsCount,
-                                               double          aCorrectionFactor ) const;
+                                               double          aCorrectionFactor ) const override;
     /**
      * Function IsPointOnEnds
      * returns STARTPOINT if point if near (dist = min_dist) start point, ENDPOINT if

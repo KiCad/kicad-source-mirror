@@ -1251,3 +1251,12 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
         ;
     }
 }
+
+void ZONE_CONTAINER::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                        int             aClearanceValue,
+                                                        int             aCircleToSegmentsCount,
+                                                        double          aCorrectionFactor ) const
+{
+    aCornerBuffer = m_FilledPolysList;
+    aCornerBuffer.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+}

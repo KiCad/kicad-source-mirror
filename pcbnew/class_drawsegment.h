@@ -230,7 +230,7 @@ public:
     void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                int             aClearanceValue,
                                                int             aCircleToSegmentsCount,
-                                               double          aCorrectionFactor ) const;
+                                               double          aCorrectionFactor ) const override;
 
     virtual wxString GetSelectMenuText() const override;
 
