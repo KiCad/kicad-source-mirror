@@ -19,7 +19,7 @@ to the commit once it is merged.
     Fixes: lp:1234567
     https://bugs.launchpad.net/kicad/+bug/1234567
 
-There is an [alias](#commit_bug_report_links) to simplify this step.
+There is an [alias](#commit_fixes_alias) to simplify this step.
 
 # Changelog tags {#commit_changelog_tag}
 
@@ -48,7 +48,7 @@ commands:
     git log -E --grep="ADD:|NEW:|REMOVE[D]?:|CHANGE[D]?:" --since="1 Jan 2017"
     git log -E --grep="ADD:|NEW:|REMOVE[D]?:|CHANGE[D]?:" <commit hash>
 
-KiCad provides an [alias](#commit_changelog_extraction) to shorten the
+KiCad provides an [alias](#commit_changelog_alias) to shorten the
 changelog extraction commands.
 
 # Example # {#commit_example}
@@ -76,10 +76,10 @@ There is a file containing helpful git aliases located at
 
     git config --add include.path $(pwd)/helpers/git/fixes_alias
 
-## Bug report links # {#commit_bug_report_links}
+## 'fixes' alias # {#commit_fixes_alias}
 
-Once the alias is installed, it may be used to amend the most recent commit to
-include the bug report link:
+Once the alias configuration file is installed, it may be used to amend the
+most recent commit to include the bug report link:
 
     git fixes 1234567
 
@@ -88,9 +88,9 @@ The example command would add the following lines to the last commit message:
     Fixes: lp:1234567
     * https://bugs.launchpad.net/kicad/+bug/1234567
 
-## Changelog extraction # {#commit_changelog_extraction}
+## 'changelog' alias # {#commit_changelog_alias}
 
-With the helper alias file installed, you get an alias to extract the changelog:
+With the alias configuration file installed, you get an alias to extract the changelog:
 
     git changelog --since="1 Jan 2017"
     git changelog <commit hash>
