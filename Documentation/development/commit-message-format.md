@@ -31,15 +31,39 @@ include the bug report link:
 
     git fixes 1234567
 
+# Changelog tags {#commit_changelog_tag}
+
+To facilitate following the code changes, you should include a changelog tag to
+indicate modifications noticable by the users. There are three types of
+changelog tags:
+
+- `NEW` to denote a new feature
+- `CHANGED` to indicate a modification of an existing feature
+- `REMOVED` to inform about removal of an existing feature
+
+There is no need to add changelog tags for commits that do not modify the way
+the users interact with the software, such as code refactoring.
+
+When a commit with changelog tags is pushed, the committer should create a new
+issue in the [documentation
+repository](http://github.com/KiCad/kicad-doc/issues) to notify the
+documentation maintainers. You should include a link to the commit containing
+the reported changes.
+
 # Example # {#commit_example}
 
 Following is an example of a properly formatted commit message:
 
-    Allow editing locked modules in modedit
+    Eeschema: Adding line styling options
     
-    Since you have to explicitly enter the module editor with the menu or
-    hotkey, allowing editing of module sub-parts once in should not cause
-    any unexpected changes.
+    NEW: Adds support in eeschema for changing the default line style,
+    width and color on a case-by-case basis.
     
-    Fixes: lp:1591625
-    * https://bugs.launchpad.net/kicad/+bug/1591625
+    CHANGED: "Wire" lines now optionally include data on the line style,
+    width and color if they differ from the default.
+    
+    Fixes: lp:594059
+    * https://bugs.launchpad.net/kicad/+bug/594059
+    
+    Fixes: lp:1405026
+    * https://bugs.launchpad.net/kicad/+bug/1405026
