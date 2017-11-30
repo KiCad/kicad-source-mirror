@@ -286,7 +286,6 @@ set( PCBNEW_CLASS_SRCS
     zones_by_polygon_fill_functions.cpp
     zone_filling_algorithm.cpp
     zones_functions_for_undo_redo.cpp
-    zones_polygons_insulated_copper_islands.cpp
     zones_test_and_combine_areas.cpp
     class_footprint_wizard.cpp
     class_action_plugin.cpp
