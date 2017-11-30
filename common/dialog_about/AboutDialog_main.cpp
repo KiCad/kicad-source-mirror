@@ -213,7 +213,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( "Jonas Diemer" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Jon Evans" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Seth Hillbrand" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Torsten Hüter" ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Torsten Hüter" ) ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Jerry Jacobs" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Mario Luzeiro" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Daniel Majewski" ) );
@@ -227,18 +227,18 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( "Mark Roszko" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Marco Serantoni" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Brian Sidebotham" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Mateusz Skowroński" ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mateusz Skowroński" ) ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Rafael Sokolowski" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Vesa Solonen" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Bernhard Stegmaier" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Orson (Maciej Sumiński)" ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Orson (Maciej Sumiński)" ) ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Oliver Walters" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Tomasz Wlostowski" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Adam Wolf" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Alexander Zakamaldin" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Henner Zeller" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Andrew Zonenberg" ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( "Nick Østergaard" ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Nick Østergaard" ) ) );
 
     // The document writers
     aInfo.AddDocWriter( new CONTRIBUTOR( "Jean-Pierre Charras" ) );
@@ -256,7 +256,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           "Catalan (CA)",
                                           KiBitmapNew( lang_catalan_xpm ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( "Martin Kratoška",
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Martin Kratoška" ),
                                           wxEmptyString,
                                           "Czech (CZ)",
                                           KiBitmapNew( lang_cs_xpm ) ) );
@@ -272,7 +272,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           "French (FR)",
                                           KiBitmapNew( lang_fr_xpm ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( "Mateusz Skowroński",
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Mateusz Skowroński" ),
                                           wxEmptyString,
                                           "Polish (PL)",
                                           KiBitmapNew( lang_pl_xpm ) ) );
@@ -300,11 +300,11 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           "Spanish (ES)",
                                           KiBitmapNew( lang_es_xpm ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( "Iñigo Zuluaga",
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Iñigo Zuluaga" ),
                                           wxEmptyString,
                                           "Spanish (ES)",
                                           KiBitmapNew( lang_es_xpm ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( "Iñigo Figuero",
+    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Iñigo Figuero" ),
                                           wxEmptyString,
                                           "Spanish (ES)",
                                           KiBitmapNew( lang_es_xpm ) ) );
@@ -362,7 +362,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     // Programm credits for icons
     #define ICON_CONTRIBUTION _( "Icons by" )
-    aInfo.AddArtist( new CONTRIBUTOR( "Iñigo Zuluaga",
+    aInfo.AddArtist( new CONTRIBUTOR( wxT( "Iñigo Zuluaga" ),
                                       wxEmptyString,
                                       ICON_CONTRIBUTION,
                                       KiBitmapNew( svg_file_xpm ) ) );
@@ -402,7 +402,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddPackager( new CONTRIBUTOR( "Jean-Samuel Reynaud" ) );
     aInfo.AddPackager( new CONTRIBUTOR( "Bernhard Stegmaier" ) );
     aInfo.AddPackager( new CONTRIBUTOR( "Adam Wolf" ) );
-    aInfo.AddPackager( new CONTRIBUTOR( "Nick Østergaard" ) );
+    aInfo.AddPackager( new CONTRIBUTOR( wxT( "Nick Østergaard" ) ) );
 }
 
 
