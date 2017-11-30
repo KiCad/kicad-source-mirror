@@ -766,6 +766,10 @@ void PCB_EDIT_FRAME::enableGALSpecificMenus()
             if( GetMenuBar()->FindItem( id_list[ii] ) )
                 GetMenuBar()->FindItem( id_list[ii] )->Enable( enbl );
         }
+
+        // Update settings for GAL menus
+        auto view = GetGalCanvas()->GetView();
+        GetMenuBar()->FindItem( ID_MENU_PCB_FLIP_VIEW )->Check( view->IsMirroredX() );
     }
 }
 
