@@ -87,8 +87,9 @@ void PARSE_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
 }
 
 
-FUTURE_FORMAT_ERROR::FUTURE_FORMAT_ERROR( const PARSE_ERROR& aParseError, const wxString& aRequiredVersion ) :
-    PARSE_ERROR(), requiredVersion( aRequiredVersion )
+FUTURE_FORMAT_ERROR::FUTURE_FORMAT_ERROR( const PARSE_ERROR& aParseError,
+                                          const wxString& aRequiredVersion ) :
+        PARSE_ERROR(), requiredVersion( aRequiredVersion )
 {
     // Avoid double-printing the error message
     bool wrapped_same_type = !!( dynamic_cast<const FUTURE_FORMAT_ERROR *>( &aParseError ) );
@@ -100,9 +101,9 @@ FUTURE_FORMAT_ERROR::FUTURE_FORMAT_ERROR( const PARSE_ERROR& aParseError, const 
     else
     {
         problem.Printf( _(
-            "KiCad was unable to open this file, as it was created with a more "
-            "recent version than the one you are running. To open it, you'll need "
-            "to upgrade KiCad to a more recent version.\n\n"
+            "KiCad was unable to open this file, as it was created with\n"
+            "a more recent version than the one you are running.\n"
+            "To open it, you'll need  to upgrade KiCad to a more recent version.\n\n"
             "Date of KiCad version required (or newer): %s\n\n"
             "Full error text:\n%s" ),
                 requiredVersion, aParseError.Problem() );
