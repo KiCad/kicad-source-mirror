@@ -38,7 +38,7 @@ class SELECTION_TOOL;
  *
  * Tool that displays edit points allowing to modify items by dragging the points.
  */
-class POINT_EDITOR : public TOOL_INTERACTIVE
+class POINT_EDITOR : public PCB_TOOL
 {
 public:
     POINT_EDITOR();
@@ -82,7 +82,7 @@ private:
     void updateItem() const;
 
     ///> Applies the last changes to the edited item.
-    void finishItem() const;
+    void finishItem();
 
     ///> Updates edit points with item's points.
     void updatePoints();

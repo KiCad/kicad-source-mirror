@@ -45,6 +45,8 @@ using namespace std::placeholders;
 #include <class_module.h>
 #include <connectivity_data.h>
 
+#include "zone_filler.h"
+
 // Point editor
 TOOL_ACTION PCB_ACTIONS::pointEditorAddCorner( "pcbnew.PointEditor.addCorner",
         AS_GLOBAL, 0,
@@ -215,7 +217,7 @@ private:
 
 
 POINT_EDITOR::POINT_EDITOR() :
-    TOOL_INTERACTIVE( "pcbnew.PointEditor" ), m_selectionTool( NULL ), m_editedPoint( NULL ),
+    PCB_TOOL( "pcbnew.PointEditor" ), m_selectionTool( NULL ), m_editedPoint( NULL ),
     m_original( VECTOR2I( 0, 0 ) ), m_altConstrainer( VECTOR2I( 0, 0 ) )
 {
 }
@@ -559,21 +561,20 @@ void POINT_EDITOR::updateItem() const
 }
 
 
-void POINT_EDITOR::finishItem() const
+void POINT_EDITOR::finishItem()
 {
-    EDA_ITEM* item = m_editPoints->GetParent();
-
+    auto item = m_editPoints->GetParent();
     if( !item )
         return;
 
     if( item->Type() == PCB_ZONE_AREA_T )
     {
-        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
+        auto zone = static_cast<ZONE_CONTAINER*>( item );
 
         if( zone->IsFilled() )
         {
-            getEditFrame<PCB_EDIT_FRAME>()->Fill_Zone( zone );
-//            zone->GetBoard()->GetRatsnest()->Recalculate( zone->GetNetCode() );
+            ZONE_FILLER filler( board() );
+            filler.Fill( { zone } );
         }
     }
 }
