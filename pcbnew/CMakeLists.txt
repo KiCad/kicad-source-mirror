@@ -280,7 +280,7 @@ set( PCBNEW_CLASS_SRCS
     tracepcb.cpp
     tr_modif.cpp
     undo_redo.cpp
-    zones_convert_brd_items_to_polygons_with_Boost.cpp
+    zone_filler.cpp
     zones_convert_to_polygons_aux_functions.cpp
     zones_by_polygon.cpp
     zones_by_polygon_fill_functions.cpp

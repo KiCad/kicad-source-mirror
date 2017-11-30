@@ -34,6 +34,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
 
+#include <zone_filler.h>
 
 ZONE_CREATE_HELPER::ZONE_CREATE_HELPER( DRAWING_TOOL& aTool,
                    const PARAMS& aParams ):
@@ -133,8 +134,8 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aExistingZone,
     // Re-fill if needed
     if( aExistingZone.IsFilled() )
     {
-        PCB_EDIT_FRAME* frame = m_tool.getEditFrame<PCB_EDIT_FRAME>();
-        frame->Fill_Zone( &aExistingZone );
+        ZONE_FILLER filler( board );
+        filler.Fill( { &aExistingZone } );
     }
 }
 
@@ -142,6 +143,7 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aExistingZone,
 void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
 {
     auto& frame = *m_tool.getEditFrame<PCB_EDIT_FRAME>();
+    auto board = m_tool.getModel<BOARD>();
 
     BOARD_COMMIT bCommit( &m_tool );
 
@@ -160,7 +162,10 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
             aZone->Hatch();
 
             if( !m_params.m_keepout )
-                frame.Fill_Zone( aZone.get() );
+            {
+                ZONE_FILLER filler( board );
+                filler.Fill( { aZone.get() } );
+            }
 
             bCommit.Add( aZone.release() );
             bCommit.Push( _( "Add a zone" ) );

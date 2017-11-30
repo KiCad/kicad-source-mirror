@@ -26,13 +26,7 @@
 #include <thread>
 #include <mutex>
 
-#include <painter.h>
-#include <project.h>
-#include <pcbnew_id.h>
-#include <wxPcbStruct.h>
-#include <class_board.h>
 #include <class_zone.h>
-#include <pcb_draw_panel_gal.h>
 #include <class_module.h>
 #include <connectivity_data.h>
 #include <board_commit.h>
@@ -45,10 +39,7 @@
 #include "pcb_actions.h"
 #include "selection_tool.h"
 #include "zone_filler_tool.h"
-
-#ifdef USE_OPENMP
-#include <omp.h>
-#endif /* USE_OPENMP */
+#include "zone_filler.h"
 
 // Zone actions
 TOOL_ACTION PCB_ACTIONS::zoneFill( "pcbnew.ZoneFiller.zoneFill",
@@ -66,135 +57,6 @@ TOOL_ACTION PCB_ACTIONS::zoneUnfill( "pcbnew.ZoneFiller.zoneUnfill",
 TOOL_ACTION PCB_ACTIONS::zoneUnfillAll( "pcbnew.ZoneFiller.zoneUnfillAll",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZONE_REMOVE_FILLED ),
         _( "Unfill All" ), _( "Unfill all zones" ) );
-
-
-class ZONE_FILLER
-{
-public:
-    ZONE_FILLER( BOARD* aBoard, COMMIT* aCommit );
-    ~ZONE_FILLER();
-
-    void    SetProgressReporter( PROGRESS_REPORTER* aReporter );
-    void    Fill( std::vector<ZONE_CONTAINER*> aZones );
-    void    Unfill( std::vector<ZONE_CONTAINER*> aZones );
-
-private:
-    COMMIT* m_commit;
-    PROGRESS_REPORTER* m_progressReporter;
-    BOARD* m_board;
-};
-
-ZONE_FILLER::ZONE_FILLER(  BOARD* aBoard, COMMIT* aCommit ) :
-    m_commit( aCommit ),
-    m_board( aBoard )
-{
-}
-
-
-ZONE_FILLER::~ZONE_FILLER()
-{
-}
-
-
-void ZONE_FILLER::SetProgressReporter( PROGRESS_REPORTER* aReporter )
-{
-    m_progressReporter = aReporter;
-}
-
-
-void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
-{
-    std::vector<CN_ZONE_ISOLATED_ISLAND_LIST> toFill;
-
-    assert( m_commit );
-
-    // Remove segment zones
-    m_board->m_Zone.DeleteAll();
-
-    int ii;
-
-    for( auto zone : aZones )
-    {
-        // Keepout zones are not filled
-        if( zone->GetIsKeepout() )
-            continue;
-
-        CN_ZONE_ISOLATED_ISLAND_LIST l;
-
-        l.m_zone = zone;
-
-        toFill.push_back( l );
-    }
-
-    int zoneCount = m_board->GetAreaCount();
-
-    for( int i = 0; i < toFill.size(); i++ )
-    {
-        m_commit->Modify( toFill[i].m_zone );
-    }
-
-    if( m_progressReporter )
-    {
-        m_progressReporter->Report( _( "Calculating zone fills..." ) );
-        m_progressReporter->SetMaxProgress( toFill.size() );
-    }
-
-    #ifdef USE_OPENMP
-        #pragma omp parallel for schedule(dynamic)
-    #endif
-    for( int i = 0; i < toFill.size(); i++ )
-    {
-        toFill[i].m_zone->BuildFilledSolidAreasPolygons( m_board );
-
-        m_progressReporter->AdvanceProgress();
-    }
-
-    if( m_progressReporter )
-    {
-        m_progressReporter->AdvancePhase();
-        m_progressReporter->Report( _( "Removing insulated copper islands..." ) );
-    }
-
-    m_board->GetConnectivity()->SetProgressReporter( m_progressReporter );
-    m_board->GetConnectivity()->FindIsolatedCopperIslands( toFill );
-
-    for( auto& zone : toFill )
-    {
-        std::sort( zone.m_islands.begin(), zone.m_islands.end(), std::greater<int>() );
-        SHAPE_POLY_SET poly = zone.m_zone->GetFilledPolysList();
-
-        for( auto idx : zone.m_islands )
-        {
-            poly.DeletePolygon( idx );
-        }
-
-        zone.m_zone->AddFilledPolysList( poly );
-    }
-
-    if( m_progressReporter )
-    {
-        m_progressReporter->AdvancePhase();
-        m_progressReporter->Report( _( "Caching polygon triangulations..." ) );
-        m_progressReporter->SetMaxProgress( toFill.size() );
-    }
-
-    #ifdef USE_OPENMP
-        #pragma omp parallel for schedule(dynamic)
-    #endif
-    for( int i = 0; i < toFill.size(); i++ )
-    {
-        m_progressReporter->AdvanceProgress();
-        toFill[i].m_zone->CacheTriangulation();
-    }
-
-    m_progressReporter->AdvancePhase();
-    m_progressReporter->Report( _( "Committing changes..." ) );
-
-    m_commit->Push( _( "Fill Zones" ), false );
-}
-
-
-
 
 ZONE_FILLER_TOOL::ZONE_FILLER_TOOL() :
     PCB_TOOL( "pcbnew.ZoneFiller" )
@@ -214,13 +76,11 @@ void ZONE_FILLER_TOOL::Reset( RESET_REASON aReason )
 // Zone actions
 int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
 {
-    auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const auto& selection = selTool->GetSelection();
     std::vector<ZONE_CONTAINER*> toFill;
 
     BOARD_COMMIT commit( this );
 
-    for( auto item : selection )
+    for( auto item : selection() )
     {
         assert( item->Type() == PCB_ZONE_AREA_T );
 
@@ -230,7 +90,7 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
     }
 
     std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
-            new WX_PROGRESS_REPORTER( frame(), _( "Fill Zones" ), 3 )
+            new WX_PROGRESS_REPORTER( frame(), _( "Fill Zone" ), 3 )
             );
 
     ZONE_FILLER filler( board(), &commit );
@@ -266,13 +126,9 @@ int ZONE_FILLER_TOOL::ZoneFillAll( const TOOL_EVENT& aEvent )
 
 int ZONE_FILLER_TOOL::ZoneUnfill( const TOOL_EVENT& aEvent )
 {
-    auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const auto& selection = selTool->GetSelection();
-    auto connectivity = getModel<BOARD>()->GetConnectivity();
-
     BOARD_COMMIT commit( this );
 
-    for( auto item : selection )
+    for( auto item : selection() )
     {
         assert( item->Type() == PCB_ZONE_AREA_T );
 
@@ -286,23 +142,16 @@ int ZONE_FILLER_TOOL::ZoneUnfill( const TOOL_EVENT& aEvent )
 
     commit.Push( _( "Unfill Zone" ) );
 
-    connectivity->RecalculateRatsnest();
-
     return 0;
 }
 
 
 int ZONE_FILLER_TOOL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
 {
-    BOARD*  board = getModel<BOARD>();
-    auto    connectivity = getModel<BOARD>()->GetConnectivity();
-
     BOARD_COMMIT commit( this );
 
-    for( int i = 0; i < board->GetAreaCount(); ++i )
+    for ( auto zone : board()->Zones() )
     {
-        ZONE_CONTAINER* zone = board->GetArea( i );
-
         commit.Modify( zone );
 
         zone->SetIsFilled( false );
@@ -310,8 +159,6 @@ int ZONE_FILLER_TOOL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
     }
 
     commit.Push( _( "Unfill All Zones" ) );
-
-    connectivity->RecalculateRatsnest();
 
     return 0;
 }

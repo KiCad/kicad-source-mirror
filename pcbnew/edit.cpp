@@ -56,6 +56,8 @@
 #include <array_creator.h>
 #include <connectivity_data.h>
 
+#include <zone_filler.h>
+
 #include <dialog_move_exact.h>
 
 #include <tool/tool_manager.h>
@@ -674,11 +676,14 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_FILL_ZONE:
+    {
         m_canvas->MoveCursorToCrossHair();
-        Fill_Zone( (ZONE_CONTAINER*) GetCurItem() );
+        ZONE_FILLER filler( GetBoard() );
+        filler.Fill( { (ZONE_CONTAINER*) GetCurItem() } );
         SetMsgPanel( GetBoard() );
         m_canvas->Refresh();
         break;
+    }
 
     case ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST:
         StartMoveTextePcb( (TEXTE_PCB*) GetCurItem(), &dc );

@@ -46,7 +46,8 @@
 #include <connectivity_data.h>
 #include <board_commit.h>
 
-#define FORMAT_STRING _( "Filling zone %d out of %d (net %s)..." )
+#include <widgets/progress_reporter.h>
+#include <zone_filler.h>
 
 
 /**
@@ -89,118 +90,24 @@ void PCB_EDIT_FRAME::Delete_OldZone_Fill( SEGZONE* aZone, time_t aTimestamp )
     }
 }
 
-
-int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* aZone )
+int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
 {
-    aZone->ClearFilledPolysList();
-    aZone->UnFill();
-
-    // Cannot fill keepout zones:
-    if( aZone->GetIsKeepout() )
-        return 1;
-
-    wxString msg;
-
-    ClearMsgPanel();
-
-    // Shows the net
-    ZONE_SETTINGS zoneInfo = GetZoneSettings();
-    zoneInfo.m_NetcodeSelection = aZone->GetNetCode();
-    SetZoneSettings( zoneInfo );
-
-    msg = aZone->GetNetname();
-
-    if( msg.IsEmpty() )
-        msg = wxT( "No net" );
-
-    AppendMsgPanel( _( "NetName" ), msg, RED );
-
-    wxBusyCursor dummy;     // Shows an hourglass cursor (removed by its destructor)
+    std::vector<ZONE_CONTAINER*> toFill;
 
     BOARD_COMMIT commit( this );
-    commit.Modify( aZone );
-    aZone->BuildFilledSolidAreasPolygons( GetBoard() );
-    commit.Push( _( "Fill Zone" ), false );
 
-    //GetGalCanvas()->GetView()->Update( aZone, KIGFX::ALL );
-    //GetBoard()->GetConnectivity()->Update( aZone );
-
-    //OnModify();
-
-    return 0;
-
-}
-
-int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
-{
-    return 0;
-}
-
-/*
-int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
-{
-    int errorLevel = 0;
-    int areaCount = GetBoard()->GetAreaCount();
-    wxBusyCursor dummyCursor;
-    wxString msg;
-    wxProgressDialog * progressDialog = NULL;
-
-    // Create a message with a long net name, and build a wxProgressDialog
-    // with a correct size to show this long net name
-    msg.Printf( FORMAT_STRING, 000, areaCount, wxT("XXXXXXXXXXXXXXXXX" ) );
-
-    if( aActiveWindow )
-        progressDialog = new wxProgressDialog( _( "Fill All Zones" ), msg,
-                                     areaCount+2, aActiveWindow,
-                                     wxPD_AUTO_HIDE | wxPD_CAN_ABORT |
-                                     wxPD_APP_MODAL | wxPD_ELAPSED_TIME );
-    // Display the actual message
-    if( progressDialog )
-        progressDialog->Update( 0, _( "Starting zone fill..." ) );
-
-    // Remove segment zones
-    GetBoard()->m_Zone.DeleteAll();
-
-    int ii;
-
-    for( ii = 0; ii < areaCount; ii++ )
+    for( auto zone : GetBoard()->Zones() )
     {
-        ZONE_CONTAINER* zoneContainer = GetBoard()->GetArea( ii );
-
-        // Keepout zones are not filled
-        if( zoneContainer->GetIsKeepout() )
-            continue;
-
-        msg.Printf( FORMAT_STRING, ii + 1, areaCount, GetChars( zoneContainer->GetNetname() ) );
-
-        if( progressDialog )
-        {
-            if( !progressDialog->Update( ii+1, msg ) )
-                break;  // Aborted by user
-        }
-
-        errorLevel = Fill_Zone( zoneContainer );
-
-        if( errorLevel && !aVerbose )
-            break;
+        toFill.push_back(zone);
     }
 
-    if( progressDialog )
-    {
-        progressDialog->Update( ii+2, _( "Updating ratsnest..." ) );
-#ifdef __WXMAC__
-        // Work around a dialog z-order issue on OS X
-        aActiveWindow->Raise();
-#endif
-    }
-    //TestConnections();
+    std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
+            new WX_PROGRESS_REPORTER( aActiveWindow, _( "Fill All Zones" ), 3 )
+            );
 
-    // Recalculate the active ratsnest, i.e. the unconnected links
-    //TestForActiveLinksInRatsnest( 0 );
+    ZONE_FILLER filler( GetBoard() );
+    filler.SetProgressReporter( progressReporter.get() );
+    filler.Fill( toFill );
 
-    if( progressDialog )
-        progressDialog->Destroy();
-
-    return errorLevel;
+    return 0;
 }
-*/

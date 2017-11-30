@@ -47,6 +47,8 @@
 #include <drc_stuff.h>
 #include <connectivity_data.h>
 
+#include <zone_filler.h>
+
 // Outline creation:
 static void Abort_Zone_Create_Outline( EDA_DRAW_PANEL* Panel, wxDC* DC );
 static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
@@ -954,7 +956,8 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
 
         if( zone->IsFilled() )
         {
-            Fill_Zone( zone );
+            ZONE_FILLER filler ( GetBoard() );
+            filler.Fill( { zone } );
         }
     }
 
