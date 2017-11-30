@@ -214,3 +214,17 @@ PCB_DRAW_PANEL_GAL* PCB_TOOL::canvas() const
 {
     return static_cast<PCB_DRAW_PANEL_GAL*>( frame()->GetGalCanvas() );
 }
+
+const SELECTION& PCB_TOOL::selection() const
+{
+    auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const auto& selection = selTool->GetSelection();
+    return selection;
+}
+
+SELECTION& PCB_TOOL::selection()
+{
+    auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    auto& selection = selTool->GetSelection();
+    return selection;
+}
