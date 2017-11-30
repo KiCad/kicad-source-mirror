@@ -689,7 +689,7 @@ public:
     /**
      * Synchronize the library manager and the symbol library table. Displays a progress dialog.
      */
-    void SyncLibraries();
+    void SyncLibraries( bool aLoad );
 
 private:
     ///> Helper screen used when no part is loaded

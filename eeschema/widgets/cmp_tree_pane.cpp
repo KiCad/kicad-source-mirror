@@ -30,20 +30,18 @@
 #include <libeditframe.h>
 #include <symbol_lib_table.h>
 
+
 CMP_TREE_PANE::CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
         : wxPanel( aParent ),
-          m_libEditFrame( aParent ),
-          m_libMgr( aLibMgr )
+          m_libEditFrame( aParent ), m_tree( nullptr ), m_libMgr( aLibMgr )
 {
     // Create widgets
     wxBoxSizer* boxSizer = new wxBoxSizer( wxVERTICAL );
-
     m_tree = new COMPONENT_TREE( this, &SYMBOL_LIB_TABLE::GetGlobalLibTable(),
             m_libMgr->GetAdapter(), COMPONENT_TREE::SEARCH );
-
     boxSizer->Add( m_tree, 1, wxEXPAND | wxALL, 5 );
 
-    SetSizer( boxSizer );
+    SetSizer( boxSizer );      // should remove the previous sizer according to wxWidgets docs
     Layout();
     boxSizer->Fit( this );
 
@@ -87,7 +85,14 @@ CMP_TREE_PANE::CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
 
 CMP_TREE_PANE::~CMP_TREE_PANE()
 {
-    delete m_tree;
+    m_tree->Destroy();
+}
+
+
+void CMP_TREE_PANE::Regenerate()
+{
+    if( m_tree )
+        m_tree->Regenerate();
 }
 
 

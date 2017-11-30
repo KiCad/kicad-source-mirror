@@ -37,32 +37,6 @@ CMP_TREE_MODEL_ADAPTER_BASE::PTR LIB_MANAGER_ADAPTER::Create( LIB_MANAGER* aLibM
 
 void LIB_MANAGER_ADAPTER::AddLibrary( const wxString& aLibNickname )
 {
-    auto& lib_node = m_tree.AddLib( aLibNickname );
-    ItemAdded( wxDataViewItem( nullptr ), ToItem( &lib_node ) );
-    updateLibrary( lib_node );
-    finishUpdate();
-}
-
-
-void LIB_MANAGER_ADAPTER::RemoveLibrary( const wxString& aLibNickname )
-{
-    auto it = std::find_if( m_tree.Children.begin(), m_tree.Children.end(),
-            [&] ( std::unique_ptr<CMP_TREE_NODE>& node ) { return node->Name == aLibNickname; } );
-
-    if( it != m_tree.Children.end() )
-        deleteLibrary( it );
-}
-
-
-void LIB_MANAGER_ADAPTER::UpdateLibrary( const wxString& aLibraryName )
-{
-    CMP_TREE_NODE* node = findLibrary( aLibraryName );
-
-    if( !node )
-        return;
-
-    updateLibrary( *(CMP_TREE_NODE_LIB*) node );
-    finishUpdate();
 }
 
 
@@ -115,7 +89,9 @@ void LIB_MANAGER_ADAPTER::Sync( bool aForce, std::function<void(int, int, const 
         if( m_libHashes.count( libName ) == 0 )
         {
             aProgressCallback( i++, max, libName );
-            AddLibrary( libName );
+            auto& lib_node = m_tree.AddLib( libName );
+            updateLibrary( lib_node );
+            m_tree.AssignIntrinsicRanks();
         }
     }
 }
@@ -140,22 +116,15 @@ void LIB_MANAGER_ADAPTER::updateLibrary( CMP_TREE_NODE_LIB& aLibNode )
     if( m_libHashes.count( aLibNode.Name ) == 0 )
     {
         // add a new library
-        wxDataViewItem parent = ToItem( &aLibNode );
-
         for( auto alias : m_libMgr->GetAliases( aLibNode.Name ) )
-        {
-            auto& aliasNode = aLibNode.AddAlias( alias );
-            ItemAdded( parent, ToItem( &aliasNode ) );
-        }
+            aLibNode.AddAlias( alias );
     }
     else
     {
         // update an existing libary
         std::list<LIB_ALIAS*> aliases = m_libMgr->GetAliases( aLibNode.Name );
-        wxDataViewItem parent = ToItem( &aLibNode );
 
         // remove the common part from the aliases list
-        //for( const auto& node : aLibNode.Children )
         for( auto nodeIt = aLibNode.Children.begin(); nodeIt != aLibNode.Children.end(); /**/ )
         {
             auto aliasIt = std::find_if( aliases.begin(), aliases.end(),
@@ -173,17 +142,13 @@ void LIB_MANAGER_ADAPTER::updateLibrary( CMP_TREE_NODE_LIB& aLibNode )
             else
             {
                 // node does not exist in the library manager, remove the corresponding node
-                ItemDeleted( parent, ToItem( nodeIt->get() ) );
                 nodeIt = aLibNode.Children.erase( nodeIt );
             }
         }
 
         // now the aliases list contains only new aliases that need to be added to the tree
         for( auto alias : aliases )
-        {
-            auto& aliasNode = aLibNode.AddAlias( alias );
-            ItemAdded( parent, ToItem( &aliasNode ) );
-        }
+            aLibNode.AddAlias( alias );
     }
 
     aLibNode.AssignIntrinsicRanks();
@@ -195,16 +160,9 @@ CMP_TREE_NODE::PTR_VECTOR::iterator LIB_MANAGER_ADAPTER::deleteLibrary(
             CMP_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt )
 {
     CMP_TREE_NODE* node = aLibNodeIt->get();
-    ItemDeleted( wxDataViewItem( nullptr ), ToItem( node ) );
     m_libHashes.erase( node->Name );
     auto it = m_tree.Children.erase( aLibNodeIt );
     return it;
-}
-
-
-void LIB_MANAGER_ADAPTER::finishUpdate()
-{
-    m_tree.AssignIntrinsicRanks();
 }
 
 

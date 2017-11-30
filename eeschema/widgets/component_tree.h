@@ -86,6 +86,11 @@ public:
         return m_menuActive;
     }
 
+    /**
+     * Regenerates the tree.
+     */
+    void Regenerate();
+
 protected:
     /**
      * If a wxDataViewitem is valid, select it and post a selection event.
@@ -103,6 +108,28 @@ protected:
      */
     void postSelectEvent();
 
+    /**
+     * Structure storing state of the component tree widget.
+     */
+    struct STATE
+    {
+        ///> List of expanded nodes
+        std::vector<wxDataViewItem> expanded;
+
+        ///> Current selection, might be not valid if nothing was selected
+        wxDataViewItem selection;
+    };
+
+    /**
+     * Returns the component tree widget state.
+     */
+    STATE getState() const;
+
+    /**
+     * Restores the component tree widget state from an object.
+     */
+    void setState( const STATE& aState );
+
     void onQueryText( wxCommandEvent& aEvent );
     void onQueryEnter( wxCommandEvent& aEvent );
     void onQueryCharHook( wxKeyEvent& aEvent );
@@ -113,16 +140,6 @@ protected:
     void onDetailsLink( wxHtmlLinkEvent& aEvent );
     void onPreselect( wxCommandEvent& aEvent );
     void onContextMenu( wxDataViewEvent& aEvent );
-
-    /**
-     * Store the list of expanded nodes in the tree widget.
-     */
-    void saveExpandFlag();
-
-    /**
-     * Restore the expanded nodes in the tree widget.
-     */
-    void restoreExpandFlag();
 
     SYMBOL_LIB_TABLE* m_sym_lib_table;
     CMP_TREE_MODEL_ADAPTER_BASE::PTR m_adapter;
@@ -137,11 +154,11 @@ protected:
     ///> Flag indicating whether a right-click context menu is active
     bool m_menuActive;
 
+    ///> Flag indicating whether the results are filtered using the search query
     bool m_filtering;
 
-    ///> List of expanded nodes
-    std::vector<wxDataViewItem> m_expanded;
-    wxDataViewItem m_selection;
+    ///> State of the widget before any filters applied
+    STATE m_unfilteredState;
 };
 
 ///> Custom event sent when a new component is preselected

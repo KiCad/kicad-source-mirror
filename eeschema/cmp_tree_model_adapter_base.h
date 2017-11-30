@@ -395,11 +395,6 @@ private:
      * Find and expand a library if there is only one
      */
     bool ShowSingleLibrary();
-
-    /**
-     * Filters the items shown in the view according to the score.
-     */
-    void filterContents();
 };
 
 #endif // _CMP_TREE_MODEL_ADAPTER_BASE_H

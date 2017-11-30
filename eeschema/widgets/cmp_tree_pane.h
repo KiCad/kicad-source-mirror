@@ -26,10 +26,13 @@
 #define CMP_TREE_PANE_H
 
 #include <wx/panel.h>
+#include <wx/dataview.h>
+#include <vector>
 
 class COMPONENT_TREE;
 class LIB_EDIT_FRAME;
 class LIB_MANAGER;
+class wxBoxSizer;
 
 /**
  * Library Editor pane with component tree and symbol library table selector.
@@ -44,6 +47,9 @@ public:
     {
         return m_tree;
     }
+
+    ///> Updates the component tree
+    void Regenerate();
 
 protected:
     void onComponentSelected( wxCommandEvent& aEvent );

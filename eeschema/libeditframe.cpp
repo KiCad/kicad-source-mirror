@@ -253,7 +253,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_canvas->SetEnableBlockCommands( true );
 
     m_libMgr = new LIB_MANAGER( *this );
-    SyncLibraries();
+    SyncLibraries( true );
     m_treePane = new CMP_TREE_PANE( this, m_libMgr );
 
     ReCreateMenuBar();
@@ -485,7 +485,7 @@ void LIB_EDIT_FRAME::OnToggleSearchTree( wxCommandEvent& event )
 void LIB_EDIT_FRAME::OnEditSymbolLibTable( wxCommandEvent& aEvent )
 {
     SCH_BASE_FRAME::OnEditSymbolLibTable( aEvent );
-    SyncLibraries();
+    SyncLibraries( true );
 }
 
 
@@ -1614,23 +1614,24 @@ wxString LIB_EDIT_FRAME::getTargetLib() const
 }
 
 
-void LIB_EDIT_FRAME::SyncLibraries()
+void LIB_EDIT_FRAME::SyncLibraries( bool aProgress )
 {
-    auto tree = m_treePane ? m_treePane->GetCmpTree() : nullptr;
-    wxBusyCursor cursor;
+    if( aProgress )
+    {
+        wxProgressDialog progressDlg( _( "Loading symbol libraries" ),
+                wxEmptyString, m_libMgr->GetAdapter()->GetLibrariesCount(), this );
 
-    if( tree )
-        tree->Freeze();
+        m_libMgr->Sync( true, [&]( int progress, int max, const wxString& libName ) {
+            progressDlg.Update( progress, wxString::Format( _( "Loading library '%s'" ), libName ) );
+        } );
+    }
+    else
+    {
+        m_libMgr->Sync( true );
+    }
 
-    wxProgressDialog progressDlg( _( "Loading symbol libraries" ),
-            wxEmptyString, m_libMgr->GetAdapter()->GetLibrariesCount(), this );
-
-    m_libMgr->Sync( true, [&]( int progress, int max, const wxString& libName ) {
-        progressDlg.Update( progress, wxString::Format( _( "Loading library '%s'" ), libName ) );
-    } );
-
-    if( tree )
-        tree->Thaw();
+    if( m_treePane )
+        m_treePane->Regenerate();
 }
 
 

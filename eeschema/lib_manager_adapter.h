@@ -37,13 +37,9 @@ public:
 
     void AddLibrary( const wxString& aLibNickname ) override;
 
-    void RemoveLibrary( const wxString& aLibNickname );
-
     void AddAliasList( const wxString& aNodeName, const wxArrayString& aAliasNameList ) override;
 
     bool IsContainer( const wxDataViewItem& aItem ) const override;
-
-    void UpdateLibrary( const wxString& aLibraryName );
 
     void Sync( bool aForce = false, std::function<void(int, int, const wxString&)> aProgressCallback
             = [](int, int, const wxString&){} );
@@ -55,8 +51,6 @@ protected:
 
     CMP_TREE_NODE::PTR_VECTOR::iterator deleteLibrary(
             CMP_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt );
-
-    void finishUpdate();
 
     CMP_TREE_NODE* findLibrary( const wxString& aLibNickName );
 

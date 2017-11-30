@@ -25,6 +25,7 @@
 
 #include <wx/progdlg.h>
 #include <wx/tokenzr.h>
+#include <wx/wupdlock.h>
 
 
 CMP_TREE_MODEL_ADAPTER_BASE::WIDTH_CACHE CMP_TREE_MODEL_ADAPTER_BASE::m_width_cache;
@@ -61,7 +62,7 @@ unsigned int CMP_TREE_MODEL_ADAPTER_BASE::IntoArray(
 
     for( auto const& child: aNode.Children )
     {
-        if( child->Score > 0 && child->InTree )
+        if( child->Score > 0 )
         {
             aChildren.Add( ToItem( &*child ) );
             ++n;
@@ -144,7 +145,7 @@ void CMP_TREE_MODEL_ADAPTER_BASE::AddAliasList(
 
 void CMP_TREE_MODEL_ADAPTER_BASE::UpdateSearchString( wxString const& aSearch )
 {
-    m_widget->Freeze();
+    wxWindowUpdateLocker updateLock( m_widget );
     m_tree.ResetScore();
 
     wxStringTokenizer tokenizer( aSearch );
@@ -157,16 +158,23 @@ void CMP_TREE_MODEL_ADAPTER_BASE::UpdateSearchString( wxString const& aSearch )
         m_tree.UpdateScore( matcher );
     }
 
-    filterContents();
+    m_tree.SortNodes();
+    Cleared();
+#ifndef __WINDOWS__
+    // The fastest method to update wxDataViewCtrl is to rebuild from scratch by calling Cleared().
+    // Linux requires to reassociate model to display data, but Windows will create multiple
+    // associations.
+    AttachTo( m_widget );
+#endif
+
     ShowResults() || ShowPreselect() || ShowSingleLibrary();
-    m_widget->Thaw();
 }
 
 
 void CMP_TREE_MODEL_ADAPTER_BASE::AttachTo( wxDataViewCtrl* aDataViewCtrl )
 {
+    wxWindowUpdateLocker updateLock( aDataViewCtrl );
     m_widget = aDataViewCtrl;
-    aDataViewCtrl->Freeze();
     aDataViewCtrl->SetIndent( kDataViewIndent );
     aDataViewCtrl->AssociateModel( this );
     aDataViewCtrl->ClearColumns();
@@ -179,7 +187,6 @@ void CMP_TREE_MODEL_ADAPTER_BASE::AttachTo( wxDataViewCtrl* aDataViewCtrl )
     m_col_desc = aDataViewCtrl->AppendTextColumn( desc_head, 1, wxDATAVIEW_CELL_INERT,
                 ColWidth( m_tree, 1, desc_head ) );
     m_col_part->SetSortOrder( 0 );
-    aDataViewCtrl->Thaw();
 }
 
 
@@ -463,54 +470,4 @@ bool CMP_TREE_MODEL_ADAPTER_BASE::ShowSingleLibrary()
                 return n->Type == CMP_TREE_NODE::TYPE::LIBID &&
                        n->Parent->Parent->Children.size() == 1;
             } );
-}
-
-
-void CMP_TREE_MODEL_ADAPTER_BASE::filterContents()
-{
-    // Rebuild the tree using only the filtered nodes
-    for( auto& lib : m_tree.Children )
-    {
-        lib->InTree = false;
-
-        for( auto& alias : lib->Children )
-        {
-            alias->InTree = false;
-
-            for( auto& unit : lib->Children )
-                unit->InTree = false;
-        }
-    }
-
-    m_tree.SortNodes();
-    Cleared();
-
-    for( auto& lib : m_tree.Children )
-    {
-        if( lib->Score <= 0 )
-            continue;
-
-        wxDataViewItem libItem = ToItem( lib.get() );
-        lib->InTree = true;
-        ItemAdded( wxDataViewItem( nullptr ), libItem );
-
-        for( auto& alias : lib->Children )
-        {
-            if( alias->Score > 0 )
-            {
-                alias->InTree = true;
-                wxDataViewItem aliasItem = ToItem( alias.get() );
-                ItemAdded( libItem, aliasItem );
-
-                if( !m_show_units )
-                    continue;
-
-                for( auto& unit : alias->Children )
-                {
-                    unit->InTree = true;
-                    ItemAdded( aliasItem, ToItem( unit.get() ) );
-                }
-            }
-        }
-    }
 }

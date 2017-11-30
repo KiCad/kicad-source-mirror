@@ -358,7 +358,7 @@ bool LIB_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibrary, wxStrin
         screen->SetModify();
     }
 
-    getAdapter()->UpdateLibrary( aLibrary );
+    m_frame.SyncLibraries( false );
 
     return true;
 }
@@ -401,7 +401,7 @@ bool LIB_MANAGER::RevertLibrary( const wxString& aLibrary )
         return false;
 
     m_libs.erase( it );
-    getAdapter()->UpdateLibrary( aLibrary );
+    m_frame.SyncLibraries( false );
 
     return true;
 }
@@ -414,7 +414,7 @@ bool LIB_MANAGER::RemovePart( const wxString& aAlias, const wxString& aLibrary )
     wxCHECK( partBuf, false );
 
     bool res = libBuf.DeleteBuffer( partBuf );
-    getAdapter()->UpdateLibrary( aLibrary );
+    m_frame.SyncLibraries( false );
 
     return res;
 }
@@ -549,7 +549,7 @@ bool LIB_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate, SYMBOL_LI
         aTable->CreateSymbolLib( libName );
     }
 
-    getAdapter()->AddLibrary( libName );
+    m_frame.SyncLibraries( false );
 
     return true;
 }

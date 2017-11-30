@@ -31,6 +31,7 @@
 #include <wx/sizer.h>
 #include <wx/statbmp.h>
 #include <wx/html/htmlwin.h>
+#include <wx/wupdlock.h>
 
 #include <symbol_lib_table.h>
 
@@ -138,6 +139,25 @@ void COMPONENT_TREE::SelectLibId( const LIB_ID& aLibId )
 }
 
 
+void COMPONENT_TREE::Regenerate()
+{
+    STATE current;
+
+    // Store the state
+    if( !m_filtering )
+        m_unfilteredState = getState();
+    else
+        current = getState();
+
+    m_adapter->UpdateSearchString( m_query_ctrl->GetLineText( 0 ) );
+    m_filtering = !m_query_ctrl->IsEmpty();
+    postPreselectEvent();
+
+    // Restore the state
+    setState( m_filtering ? current : m_unfilteredState );
+}
+
+
 void COMPONENT_TREE::selectIfValid( const wxDataViewItem& aTreeId )
 {
     if( aTreeId.IsOk() )
@@ -163,25 +183,42 @@ void COMPONENT_TREE::postSelectEvent()
 }
 
 
+COMPONENT_TREE::STATE COMPONENT_TREE::getState() const
+{
+    STATE state;
+    wxDataViewItemArray items;
+    m_adapter->GetChildren( wxDataViewItem( nullptr ), items );
+
+    for( const auto& item : items )
+    {
+        if( m_tree_ctrl->IsExpanded( item ) )
+            state.expanded.push_back( item );
+    }
+
+    state.selection = m_tree_ctrl->GetSelection();
+
+    return state;
+}
+
+
+void COMPONENT_TREE::setState( const STATE& aState )
+{
+    wxWindowUpdateLocker updateLock( m_tree_ctrl );
+
+    for( const auto& item : aState.expanded )
+        m_tree_ctrl->Expand( item );
+
+    if( aState.selection.IsOk() )
+    {
+        m_tree_ctrl->ExpandAncestors( aState.selection );
+        m_tree_ctrl->SetCurrentItem( aState.selection );
+    }
+}
+
+
 void COMPONENT_TREE::onQueryText( wxCommandEvent& aEvent )
 {
-    // Store the state
-    if( !m_filtering )
-    {
-        m_selection = m_tree_ctrl->GetSelection();
-        saveExpandFlag();
-    }
-
-    m_adapter->UpdateSearchString( m_query_ctrl->GetLineText( 0 ) );
-    m_filtering = !m_query_ctrl->IsEmpty();
-    postPreselectEvent();
-
-    // Restore the state
-    if( !m_filtering )
-    {
-        selectIfValid( m_selection );
-        restoreExpandFlag();
-    }
+    Regenerate();
 
     // Required to avoid interaction with SetHint()
     // See documentation for wxTextEntry::SetHint
@@ -273,33 +310,6 @@ void COMPONENT_TREE::onContextMenu( wxDataViewEvent& aEvent )
         PopupMenu( m_menus[type].get() );
         m_menuActive = false;
     }
-}
-
-
-void COMPONENT_TREE::saveExpandFlag()
-{
-    wxDataViewItemArray items;
-    m_adapter->GetChildren( wxDataViewItem( nullptr ), items );
-    m_expanded.clear();
-
-    for( const auto& item : items )
-    {
-        if( m_tree_ctrl->IsExpanded( item ) )
-            m_expanded.push_back( item );
-    }
-}
-
-
-void COMPONENT_TREE::restoreExpandFlag()
-{
-    m_tree_ctrl->Freeze();
-
-    for( const auto& item : m_expanded )
-    {
-        m_tree_ctrl->Expand( item );
-    }
-
-    m_tree_ctrl->Thaw();
 }
 
 
