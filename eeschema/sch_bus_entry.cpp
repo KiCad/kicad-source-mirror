@@ -280,9 +280,16 @@ wxString SCH_BUS_BUS_ENTRY::GetSelectMenuText() const
     return wxString( _( "Bus to Bus Entry" ) );
 }
 
-BITMAP_DEF SCH_BUS_ENTRY_BASE::GetMenuImage() const
+
+BITMAP_DEF SCH_BUS_WIRE_ENTRY::GetMenuImage() const
 {
-    return add_entry_xpm;
+    return add_line2bus_xpm;
+}
+
+
+BITMAP_DEF SCH_BUS_BUS_ENTRY::GetMenuImage() const
+{
+    return add_bus2bus_xpm;
 }
 
 
