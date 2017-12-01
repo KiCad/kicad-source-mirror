@@ -513,16 +513,6 @@ include( ${wxWidgets_USE_FILE} )
 #
 find_package( OpenGL REQUIRED )
 
-# Dick 5-Feb-2014:
-# Marco: We cannot use both ExternalProject_Add() add and find_package()
-# in the same CMake tree and have them both reference the same package:
-# http://stackoverflow.com/questions/6351609/cmake-linking-to-library-downloaded-from-externalproject-add
-# https://www.mail-archive.com/cmake@cmake.org/msg47501.html
-
-# Handle target used to specify if a target needs wx-widgets or other libraries
-# Always defined, empty if no libraries are to be built
-add_custom_target( lib-dependencies )
-
 #
 # Find GLEW library, required
 #

@@ -574,7 +574,6 @@ add_subdirectory( pcad2kicadpcb_plugin )
 
 if( BUILD_GITHUB_PLUGIN )
     add_subdirectory( github )
-    add_dependencies( github_plugin lib-dependencies )
     # github_plugin depends on make_lexer outputs in common
     add_dependencies( github_plugin pcbcommon )
 endif()
@@ -714,9 +713,6 @@ else()
         COMPONENT binary
         )
 endif()
-
-add_dependencies( pcbnew lib-dependencies )
-
 
 if( KICAD_SCRIPTING )
     if( NOT APPLE )

@@ -17,5 +17,3 @@ set(POLYGON_SRCS
 
 add_library(polygon STATIC ${POLYGON_SRCS})
 
-add_dependencies( polygon lib-dependencies )
-

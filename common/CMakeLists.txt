@@ -64,7 +64,6 @@ set( GAL_SRCS
     )
 
 add_library( gal STATIC ${GAL_SRCS} )
-add_dependencies( gal lib-dependencies )
 
 target_link_libraries( gal
     ${GLEW_LIBRARIES}
@@ -353,7 +352,6 @@ set( COMMON_SRCS
     libeval/numeric_evaluator.cpp
     )
 add_library( common STATIC ${COMMON_SRCS} )
-add_dependencies( common lib-dependencies )
 add_dependencies( common version_header )
 target_link_libraries( common
     gal
@@ -436,8 +434,6 @@ set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
     )
 
 add_library( pcbcommon STATIC ${PCB_COMMON_SRCS} )
-add_dependencies( pcbcommon lib-dependencies )
-
 
 # auto-generate netlist_lexer.h and netlist_keywords.cpp
 make_lexer(
@@ -540,8 +536,6 @@ add_dependencies( common page_layout_lexer_source_files )
 # to build it, first enable #define STAND_ALONE at top of dsnlexer.cpp
 add_executable( dsntest EXCLUDE_FROM_ALL dsnlexer.cpp )
 target_link_libraries( dsntest common ${wxWidgets_LIBRARIES} rt )
-
-add_dependencies( dsntest lib-dependencies )
 
 target_link_libraries( pcbcommon )
 
