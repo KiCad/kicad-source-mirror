@@ -509,7 +509,10 @@ bool SCH_LINE::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
             if( item.GetItem() == this )
                 continue;
 
-            if( item.GetType() == NO_CONNECT_END )
+            if(     item.GetType() == NO_CONNECT_END ||
+                    item.GetType() == BUS_START_END ||
+                    item.GetType() == BUS_END_END  ||
+                    item.GetType() == BUS_ENTRY_END )
                 continue;
 
             if( m_start == item.GetPosition() )

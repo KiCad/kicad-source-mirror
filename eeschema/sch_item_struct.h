@@ -63,7 +63,8 @@ enum DANGLING_END_T {
     JUNCTION_END,
     PIN_END,
     LABEL_END,
-    ENTRY_END,
+    BUS_ENTRY_END,
+    WIRE_ENTRY_END,
     SHEET_LABEL_END,
     NO_CONNECT_END,
 };
@@ -252,6 +253,8 @@ public:
     virtual bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList ) { return false; }
 
     virtual bool IsDangling() const { return false; }
+
+    virtual bool IsUnconnected() const { return false; }
 
     /**
      * Function IsSelectStateChanged

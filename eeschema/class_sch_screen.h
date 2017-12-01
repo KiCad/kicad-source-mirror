@@ -92,9 +92,10 @@ private:
      * \a aPosition and adds them to the block selection pick list.  This is used when a block
      * drag is being performed to ensure connections to items in the block are not lost.
      *</p>
+     * @param aItem = The item we are connecting from
      * @param aPosition = The connection point to test.
      */
-    void addConnectedItemsToBlock( const wxPoint& aPosition );
+    void addConnectedItemsToBlock( const SCH_ITEM* aItem, const wxPoint& aPosition );
 
 public:
 

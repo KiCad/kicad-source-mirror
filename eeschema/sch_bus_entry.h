@@ -97,11 +97,11 @@ public:
 
     void Rotate( wxPoint aPosition ) override;
 
-    void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList ) override;
-
     bool IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 
     bool IsDangling() const override;
+
+    bool IsUnconnected() const override { return m_isDanglingEnd && m_isDanglingStart; }
 
     bool IsSelectStateChanged( const wxRect& aRect ) override;
 
@@ -122,6 +122,9 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
+
+private:
+    bool doIsConnected( const wxPoint& aPosition ) const override;
 };
 
 /**
@@ -140,6 +143,8 @@ public:
     }
 
     int GetPenSize() const override;
+
+    void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 
     wxString GetSelectMenuText() const override;
 
@@ -164,6 +169,8 @@ public:
     }
 
     int GetPenSize() const override;
+
+    void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 
     wxString GetSelectMenuText() const override;
 

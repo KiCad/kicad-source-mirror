@@ -717,7 +717,7 @@ void SCH_SCREEN::SelectBlockItems()
         std::vector< wxPoint > connections;
         item->GetConnectionPoints( connections );
         for( auto conn : connections )
-            addConnectedItemsToBlock( conn );
+            addConnectedItemsToBlock( item, conn );
     };
 
     PICKED_ITEMS_LIST* pickedlist = &m_BlockLocate.GetItems();
@@ -785,10 +785,13 @@ void SCH_SCREEN::SelectBlockItems()
 }
 
 
-void SCH_SCREEN::addConnectedItemsToBlock( const wxPoint& position )
+void SCH_SCREEN::addConnectedItemsToBlock( const SCH_ITEM* aItem, const wxPoint& position )
 {
     SCH_ITEM* item;
     ITEM_PICKER picker;
+
+    if( aItem->IsUnconnected() )
+        return;
 
     for( item = m_drawList.begin(); item; item = item->Next() )
     {
@@ -796,10 +799,13 @@ void SCH_SCREEN::addConnectedItemsToBlock( const wxPoint& position )
         picker.SetItem( item );
 
         if( !item->IsConnectable() || !item->IsConnected( position )
-            || (item->GetFlags() & SKIP_STRUCT) )
+            || (item->GetFlags() & SKIP_STRUCT) || item->IsUnconnected() )
             continue;
 
         if( item->IsSelected() && item->Type() != SCH_LINE_T )
+            continue;
+
+        if( item->GetLayer() != aItem->GetLayer() )
             continue;
 
         // A line having 2 ends, it can be tested twice: one time per end

@@ -78,6 +78,12 @@ EDA_ITEM* SCH_BUS_BUS_ENTRY::Clone() const
 }
 
 
+bool SCH_BUS_ENTRY_BASE::doIsConnected( const wxPoint& aPosition ) const
+{
+    return ( m_pos == aPosition || m_End() == aPosition );
+}
+
+
 wxPoint SCH_BUS_ENTRY_BASE::m_End() const
 {
     return wxPoint( m_pos.x + m_size.x, m_pos.y + m_size.y );
@@ -117,6 +123,26 @@ int SCH_BUS_WIRE_ENTRY::GetPenSize() const
 int SCH_BUS_BUS_ENTRY::GetPenSize() const
 {
     return GetDefaultBusThickness();
+}
+
+
+void SCH_BUS_WIRE_ENTRY::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList )
+{
+    DANGLING_END_ITEM item( WIRE_ENTRY_END, this, m_pos );
+    aItemList.push_back( item );
+
+    DANGLING_END_ITEM item1( WIRE_ENTRY_END, this, m_End() );
+    aItemList.push_back( item1 );
+}
+
+
+void SCH_BUS_BUS_ENTRY::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList )
+{
+    DANGLING_END_ITEM item( BUS_ENTRY_END, this, m_pos );
+    aItemList.push_back( item );
+
+    DANGLING_END_ITEM item1( BUS_ENTRY_END, this, m_End() );
+    aItemList.push_back( item1 );
 }
 
 
@@ -172,16 +198,6 @@ void SCH_BUS_ENTRY_BASE::Rotate( wxPoint aPosition )
 {
     RotatePoint( &m_pos, aPosition, 900 );
     RotatePoint( &m_size.x, &m_size.y, 900 );
-}
-
-
-void SCH_BUS_ENTRY_BASE::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList )
-{
-    DANGLING_END_ITEM item( ENTRY_END, this, m_pos );
-    aItemList.push_back( item );
-
-    DANGLING_END_ITEM item1( ENTRY_END, this, m_End() );
-    aItemList.push_back( item1 );
 }
 
 
