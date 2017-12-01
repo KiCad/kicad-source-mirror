@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-29 11:55+0100\n"
-"PO-Revision-Date: 2017-11-29 11:57+0100\n"
+"POT-Creation-Date: 2017-12-01 08:46+0100\n"
+"PO-Revision-Date: 2017-12-01 08:46+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -781,8 +781,8 @@ msgstr "File eseguibili ("
 msgid "Select Preferred PDF Browser"
 msgstr "Seleziona visualizzatore PDF preferito"
 
-#: kicad/prjconfig.cpp:87 pcbnew/moduleframe.cpp:824 pcbnew/pcbframe.cpp:1031
-#: eeschema/schframe.cpp:1474 cvpcb/cvpcb_mainframe.cpp:756
+#: kicad/prjconfig.cpp:87 pcbnew/moduleframe.cpp:824 pcbnew/pcbframe.cpp:1035
+#: eeschema/schframe.cpp:1483 cvpcb/cvpcb_mainframe.cpp:756
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
 
@@ -1092,7 +1092,7 @@ msgstr "Denominazione"
 
 #: pcbnew/librairi.cpp:850
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:44
-#: common/dialog_about/AboutDialog_main.cpp:115 eeschema/sch_component.cpp:1363
+#: common/dialog_about/AboutDialog_main.cpp:114 eeschema/sch_component.cpp:1363
 #: eeschema/viewlibs.cpp:241 eeschema/libedit.cpp:664
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
@@ -2003,7 +2003,7 @@ msgid "Front"
 msgstr "Fronte"
 
 #: pcbnew/class_module.cpp:551 pcbnew/tools/pad_tool.cpp:77
-#: pcbnew/class_board.cpp:1106 pcbnew/pcb_draw_panel_gal.cpp:326
+#: pcbnew/class_board.cpp:1106 pcbnew/pcb_draw_panel_gal.cpp:333
 #: pcbnew/class_netinfo_item.cpp:120
 msgid "Pads"
 msgstr "Piazzole"
@@ -2583,7 +2583,7 @@ msgstr "Aggiungi arco grafico"
 
 #: pcbnew/tools/drawing_tool.cpp:331 pcbnew/edit.cpp:1502
 #: pcbnew/modedit.cpp:952 eeschema/libeditframe.cpp:1198
-#: eeschema/schedit.cpp:569
+#: eeschema/schedit.cpp:552
 msgid "Add text"
 msgstr "Aggiungi testo "
 
@@ -2995,7 +2995,7 @@ msgstr "Cancellare l'elemento selezionato?"
 
 #: pcbnew/tools/pcbnew_control.cpp:720 pcbnew/tool_modedit.cpp:195
 #: pcbnew/edit.cpp:1514 pcbnew/modedit.cpp:977 eeschema/libeditframe.cpp:1240
-#: eeschema/schedit.cpp:605 eeschema/help_common_strings.h:48
+#: eeschema/schedit.cpp:588 eeschema/help_common_strings.h:48
 msgid "Delete item"
 msgstr "Cancella voce"
 
@@ -3355,27 +3355,27 @@ msgstr "Cancellare tutti gli elementi dello strato %s?"
 msgid "This is the default net class."
 msgstr "Questo è il gruppo di collegamenti predefinito"
 
-#: pcbnew/class_board.cpp:1109 pcbnew/pcb_draw_panel_gal.cpp:329
+#: pcbnew/class_board.cpp:1109 pcbnew/pcb_draw_panel_gal.cpp:336
 #: pcbnew/class_netinfo_item.cpp:140
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:154
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 msgid "Vias"
 msgstr "Via"
 
-#: pcbnew/class_board.cpp:1112 pcbnew/pcb_draw_panel_gal.cpp:332
+#: pcbnew/class_board.cpp:1112 pcbnew/pcb_draw_panel_gal.cpp:339
 msgid "Track Segments"
 msgstr "Segmenti di pista"
 
-#: pcbnew/class_board.cpp:1115 pcbnew/pcb_draw_panel_gal.cpp:335
+#: pcbnew/class_board.cpp:1115 pcbnew/pcb_draw_panel_gal.cpp:342
 msgid "Nodes"
 msgstr "Nodi"
 
-#: pcbnew/class_board.cpp:1118 pcbnew/pcb_draw_panel_gal.cpp:338
+#: pcbnew/class_board.cpp:1118 pcbnew/pcb_draw_panel_gal.cpp:345
 #: pcbnew/dialogs/dialog_select_net_from_list_base.h:58
 msgid "Nets"
 msgstr "Piste"
 
-#: pcbnew/class_board.cpp:1121 pcbnew/pcb_draw_panel_gal.cpp:341
+#: pcbnew/class_board.cpp:1121 pcbnew/pcb_draw_panel_gal.cpp:348
 #: pcbnew/dialogs/dialog_drc_base.cpp:266
 msgid "Unconnected"
 msgstr "Disconnessi"
@@ -3488,7 +3488,7 @@ msgstr "Errore DRC: chiudere quest'area crea un errore DRC con un'altra area"
 msgid "Modify zone properties"
 msgstr "Modifica proprietà della zona"
 
-#: pcbnew/moduleframe.cpp:313 pcbnew/pcbframe.cpp:413 pcbnew/pcbframe.cpp:956
+#: pcbnew/moduleframe.cpp:313 pcbnew/pcbframe.cpp:413 pcbnew/pcbframe.cpp:960
 #: gerbview/gerbview_frame.cpp:166 gerbview/events_called_functions.cpp:442
 msgid "Visibles"
 msgstr "Visibili"
@@ -5692,7 +5692,7 @@ msgstr "Stampa impronta"
 #: pcbnew/modedit.cpp:934 common/tool/zoom_tool.cpp:55
 #: common/block_commande.cpp:97 eeschema/tool_sch.cpp:121
 #: eeschema/libeditframe.cpp:1175 eeschema/tool_lib.cpp:172
-#: eeschema/schedit.cpp:531 gerbview/toolbars_gerber.cpp:92
+#: eeschema/schedit.cpp:514 gerbview/toolbars_gerber.cpp:92
 #: gerbview/events_called_functions.cpp:237
 #: pagelayout_editor/events_functions.cpp:136 pagelayout_editor/menubar.cpp:143
 #: pagelayout_editor/toolbars_pl_editor.cpp:97
@@ -6623,11 +6623,11 @@ msgstr ""
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Il file di salvataggio automatico \"%s\" non può essere rimosso!"
 
-#: pcbnew/pcbframe.cpp:1035
+#: pcbnew/pcbframe.cpp:1039
 msgid " [new file]"
 msgstr " [nuovo file]"
 
-#: pcbnew/pcbframe.cpp:1175
+#: pcbnew/pcbframe.cpp:1179
 msgid ""
 "Cannot update the PCB, because Pcbnew is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you need to launch the KiCad "
@@ -7037,7 +7037,7 @@ msgstr "Verifica testi...\n"
 msgid "Courtyard areas...\n"
 msgstr "Zone courtyard ...\n"
 
-#: pcbnew/drc.cpp:310 eeschema/dialogs/dialog_erc.cpp:592
+#: pcbnew/drc.cpp:310 eeschema/dialogs/dialog_erc.cpp:583
 msgid "Finished"
 msgstr "Terminato"
 
@@ -7665,11 +7665,11 @@ msgstr "Il file del C.S. \"%s\" è già aperto."
 msgid "The current board has been modified.  Do you wish to save the changes?"
 msgstr "La scheda corrente è stata modificata. Vuoi salvare le modifiche?"
 
-#: pcbnew/files.cpp:437 eeschema/files-io.cpp:819
+#: pcbnew/files.cpp:437 eeschema/files-io.cpp:829
 msgid "Save and Load"
 msgstr "Salva e carica"
 
-#: pcbnew/files.cpp:438 eeschema/files-io.cpp:820
+#: pcbnew/files.cpp:438 eeschema/files-io.cpp:830
 msgid "Load Without Saving"
 msgstr "Carica senza salvare"
 
@@ -15761,7 +15761,7 @@ msgstr "Errore degli appunti"
 msgid "Copied..."
 msgstr "Copiate..."
 
-#: common/dialog_about/AboutDialog_main.cpp:119
+#: common/dialog_about/AboutDialog_main.cpp:118
 msgid ""
 "The KiCad EDA Suite is a set of open source applications for the creation of "
 "electronic schematics and printed circuit boards."
@@ -15769,37 +15769,45 @@ msgstr ""
 "La suite EDA KiCad è un insieme di applicazioni open source per la creazione "
 "di schemi elettrici e circuiti stampati."
 
-#: common/dialog_about/AboutDialog_main.cpp:127
+#: common/dialog_about/AboutDialog_main.cpp:126
 msgid "KiCad on the web"
 msgstr "KiCad sul Web"
 
-#: common/dialog_about/AboutDialog_main.cpp:149
+#: common/dialog_about/AboutDialog_main.cpp:148
 msgid "Bug tracker"
 msgstr "Bug tracker"
 
-#: common/dialog_about/AboutDialog_main.cpp:162
+#: common/dialog_about/AboutDialog_main.cpp:161
 msgid "KiCad user's groups and community"
 msgstr "Comunità e gruppi di utenti KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:186
+#: common/dialog_about/AboutDialog_main.cpp:185
 msgid "The complete KiCad EDA Suite is released under the"
 msgstr "La suite EDA di KiCad è realizzata secondo la"
 
-#: common/dialog_about/AboutDialog_main.cpp:188
+#: common/dialog_about/AboutDialog_main.cpp:187
 msgid "GNU General Public License (GPL) version 3 or any later version"
 msgstr "GNU General Public License (GPL) versione 3 o successive"
 
-#: common/dialog_about/AboutDialog_main.cpp:382
+#: common/dialog_about/AboutDialog_main.cpp:349
 msgid "Others"
 msgstr "Altri"
 
-#: common/dialog_about/AboutDialog_main.cpp:397
+#: common/dialog_about/AboutDialog_main.cpp:364
 msgid "Icons by"
 msgstr "Autori icone"
 
-#: common/dialog_about/AboutDialog_main.cpp:412
+#: common/dialog_about/AboutDialog_main.cpp:379
 msgid "3D models by"
 msgstr "Autori modelli 3D"
+
+#: common/dialog_about/AboutDialog_main.cpp:389
+msgid "Symbols by"
+msgstr "Simboli per"
+
+#: common/dialog_about/AboutDialog_main.cpp:395
+msgid "Footprints by"
+msgstr "Impronte per"
 
 #: common/class_marker_base.cpp:203
 msgid "Marker Info"
@@ -17293,17 +17301,17 @@ msgstr "Assistente recupero progetto"
 msgid "No symbols were rescued."
 msgstr "Nessun simbolo recuperato."
 
-#: eeschema/project_rescue.cpp:653
+#: eeschema/project_rescue.cpp:654
 #, c-format
 msgid "Failed to create symbol library file '%s'"
 msgstr "Fallita creazione file libreria simboli \"%s\""
 
-#: eeschema/project_rescue.cpp:777
+#: eeschema/project_rescue.cpp:778
 #, c-format
 msgid "Failed to save rescue library %s."
 msgstr "Fallito il salvataggio della libreria \"%s\"."
 
-#: eeschema/project_rescue.cpp:795
+#: eeschema/project_rescue.cpp:796
 msgid "Error occurred saving project specific symbol library table."
 msgstr ""
 "Errore durante il salvataggio della tabella librerie simboli specifica del "
@@ -17728,30 +17736,30 @@ msgstr "Cancella elemento bus"
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Valore SCH_FILE_T sconosciuto: %d"
 
-#: eeschema/sch_line.cpp:551
+#: eeschema/sch_line.cpp:584
 msgid "Vert."
 msgstr "Vert."
 
-#: eeschema/sch_line.cpp:553
+#: eeschema/sch_line.cpp:586
 msgid "Horiz."
 msgstr "Oriz."
 
-#: eeschema/sch_line.cpp:558
+#: eeschema/sch_line.cpp:591
 #, c-format
 msgid "%s Graphic Line from (%s,%s) to (%s,%s)"
 msgstr "%s Linea grafica da (%s,%s) a (%s,%s) "
 
-#: eeschema/sch_line.cpp:562
+#: eeschema/sch_line.cpp:595
 #, c-format
 msgid "%s Wire from (%s,%s) to (%s,%s)"
 msgstr "%s Filo da (%s,%s) a (%s,%s)"
 
-#: eeschema/sch_line.cpp:566
+#: eeschema/sch_line.cpp:599
 #, c-format
 msgid "%s Bus from (%s,%s) to (%s,%s)"
 msgstr "%s Bus da (%s,%s) a (%s,%s)"
 
-#: eeschema/sch_line.cpp:570
+#: eeschema/sch_line.cpp:603
 #, c-format
 msgid "%s Line on Unknown Layer from (%s,%s) to (%s,%s)"
 msgstr "%s Linea su strato sconosciuto da (%s,%s) a (%s,%s) "
@@ -17814,11 +17822,11 @@ msgstr "Inform&azioni su Eeschema"
 msgid "About Eeschema schematic designer"
 msgstr "Informazioni sulla creazione schemi elettrici con Eeschema"
 
-#: eeschema/block.cpp:463
+#: eeschema/block.cpp:465
 msgid "No item to paste."
 msgstr "Nessun elemento da incollare."
 
-#: eeschema/block.cpp:493 eeschema/files-io.cpp:455 eeschema/sheet.cpp:281
+#: eeschema/block.cpp:495 eeschema/files-io.cpp:460 eeschema/sheet.cpp:281
 #, c-format
 msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
@@ -18249,7 +18257,7 @@ msgid "Error occurred loading symbol '%s' from library '%s'."
 msgstr ""
 "Errore durante il caricamento del simbolo \"%s\" dalla libreria \"%s\"."
 
-#: eeschema/schframe.cpp:1477
+#: eeschema/schframe.cpp:1486
 msgid " [no file]"
 msgstr "[nessun file]"
 
@@ -18885,7 +18893,7 @@ msgstr "File %s salvato"
 msgid "File write operation failed."
 msgstr "Operazione di scrittura file fallita"
 
-#: eeschema/files-io.cpp:210 eeschema/files-io.cpp:746
+#: eeschema/files-io.cpp:210 eeschema/files-io.cpp:751
 #, c-format
 msgid "Schematic file '%s' is already open."
 msgstr "Il file schema \"%s\" è già aperto."
@@ -18895,7 +18903,7 @@ msgstr "Il file schema \"%s\" è già aperto."
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "Lo schema \"%s\" non esiste. Volete crearlo?"
 
-#: eeschema/files-io.cpp:305 eeschema/files-io.cpp:787
+#: eeschema/files-io.cpp:305 eeschema/files-io.cpp:797
 #, c-format
 msgid ""
 "Error loading schematic file '%s'.\n"
@@ -18904,7 +18912,7 @@ msgstr ""
 "Errore durante il caricamento del file schema \"%s\".\n"
 "%s"
 
-#: eeschema/files-io.cpp:309 eeschema/files-io.cpp:791
+#: eeschema/files-io.cpp:309 eeschema/files-io.cpp:801
 #, c-format
 msgid "Failed to load '%s'"
 msgstr "Impossibile caricare \"%s\""
@@ -18919,26 +18927,26 @@ msgstr ""
 "automaticamente. Salvare lo schema per riparare il file rovinato o potrebbe "
 "non essere usabile con altre versioni di KiCad."
 
-#: eeschema/files-io.cpp:387
+#: eeschema/files-io.cpp:392
 msgid "Append Schematic"
 msgstr "Accoda schema"
 
-#: eeschema/files-io.cpp:435 eeschema/sheet.cpp:252
+#: eeschema/files-io.cpp:440 eeschema/sheet.cpp:252
 #, c-format
 msgid "Error occurred loading schematic file '%s'."
 msgstr "Errore durante il caricamento del file dello schema elettrico \"%s\"."
 
-#: eeschema/files-io.cpp:438 eeschema/sheet.cpp:255
+#: eeschema/files-io.cpp:443 eeschema/sheet.cpp:255
 #, c-format
 msgid "Failed to load schematic '%s'"
 msgstr "Impossibile caricare lo schema elettrico \"%s\""
 
-#: eeschema/files-io.cpp:503
+#: eeschema/files-io.cpp:508
 #, c-format
 msgid "An error occurred loading the symbol library table '%s'."
 msgstr "Errore durante il caricamento della tabella librerie simboli \"%s\"."
 
-#: eeschema/files-io.cpp:625
+#: eeschema/files-io.cpp:630
 msgid ""
 "This operation cannot be undone.\n"
 "\n"
@@ -18948,16 +18956,16 @@ msgstr ""
 "\n"
 "Salvare il documento corrente prima di procedere?"
 
-#: eeschema/files-io.cpp:643
+#: eeschema/files-io.cpp:648
 msgid "Import Schematic"
 msgstr "Importa schema"
 
-#: eeschema/files-io.cpp:667
+#: eeschema/files-io.cpp:672
 #, c-format
 msgid "Directory '%s' is not writable."
 msgstr "La cartella \"%s\" non è scrivibile."
 
-#: eeschema/files-io.cpp:817
+#: eeschema/files-io.cpp:827
 msgid ""
 "The current schematic has been modified.  Do you wish to save the changes?"
 msgstr "Lo schema corrente è stato modificato. Salvare le modifiche?"
@@ -19163,11 +19171,11 @@ msgstr ""
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Errore: Nome foglio duplicato. Continuare?"
 
-#: eeschema/netlist.cpp:186
+#: eeschema/netlist.cpp:182
 msgid "No Objects"
 msgstr "Nessun oggetto"
 
-#: eeschema/netlist.cpp:190
+#: eeschema/netlist.cpp:186
 #, c-format
 msgid "Net count = %d"
 msgstr "Numero collegamenti = %d"
@@ -20219,87 +20227,87 @@ msgstr "Errore durante la creazione della libreria simboli \"%s\""
 msgid "Symbol '%s' saved in library '%s'"
 msgstr "Simbolo \"%s\" salvato nella libreria \"%s\""
 
-#: eeschema/schedit.cpp:270
+#: eeschema/schedit.cpp:253
 msgid "There are no undefined labels in this sheet to clean up."
 msgstr "Non ci sono etichette indefinite da eliminare nel foglio."
 
-#: eeschema/schedit.cpp:274
+#: eeschema/schedit.cpp:257
 msgid "Do you wish to cleanup this sheet?"
 msgstr "Desideri ripulire questo foglio?"
 
-#: eeschema/schedit.cpp:525
+#: eeschema/schedit.cpp:508
 msgid "Highlight specific net"
 msgstr "Evidenzia collegamento specifico"
 
-#: eeschema/schedit.cpp:537
+#: eeschema/schedit.cpp:520
 msgid "Add no connect"
 msgstr "Aggiungi non connesso"
 
-#: eeschema/schedit.cpp:541
+#: eeschema/schedit.cpp:524
 msgid "Add wire"
 msgstr "Aggiungi filo"
 
-#: eeschema/schedit.cpp:545
+#: eeschema/schedit.cpp:528
 msgid "Add bus"
 msgstr "Aggiungi Bus"
 
-#: eeschema/schedit.cpp:549
+#: eeschema/schedit.cpp:532
 msgid "Add lines"
 msgstr "Aggiungi linee"
 
-#: eeschema/schedit.cpp:553
+#: eeschema/schedit.cpp:536
 msgid "Add junction"
 msgstr "Aggiungi giunzione"
 
-#: eeschema/schedit.cpp:557
+#: eeschema/schedit.cpp:540
 msgid "Add label"
 msgstr "Aggiungi etichetta"
 
-#: eeschema/schedit.cpp:561
+#: eeschema/schedit.cpp:544
 msgid "Add global label"
 msgstr "Aggiungi etichetta globale"
 
-#: eeschema/schedit.cpp:565
+#: eeschema/schedit.cpp:548
 msgid "Add hierarchical label"
 msgstr "Aggiungi etichetta gerarchica"
 
-#: eeschema/schedit.cpp:573
+#: eeschema/schedit.cpp:556
 msgid "Add image"
 msgstr "Aggiungi immagine"
 
-#: eeschema/schedit.cpp:577
+#: eeschema/schedit.cpp:560
 msgid "Add wire to bus entry"
 msgstr "Aggiungi elemento da filo a bus"
 
-#: eeschema/schedit.cpp:581
+#: eeschema/schedit.cpp:564
 msgid "Add bus to bus entry"
 msgstr "Aggiungi elemento da bus a bus"
 
-#: eeschema/schedit.cpp:585
+#: eeschema/schedit.cpp:568
 msgid "Add sheet"
 msgstr "Aggiungi foglio"
 
-#: eeschema/schedit.cpp:589
+#: eeschema/schedit.cpp:572
 msgid "Add sheet pins"
 msgstr "Aggiungi pin foglio"
 
-#: eeschema/schedit.cpp:593
+#: eeschema/schedit.cpp:576
 msgid "Import sheet pins"
 msgstr "Importa punto di connessione"
 
-#: eeschema/schedit.cpp:597
+#: eeschema/schedit.cpp:580
 msgid "Add component"
 msgstr "Aggiungi componente"
 
-#: eeschema/schedit.cpp:601
+#: eeschema/schedit.cpp:584
 msgid "Add power"
 msgstr "Aggiungi alimentazione"
 
-#: eeschema/schedit.cpp:610
+#: eeschema/schedit.cpp:593
 msgid "Add a simulator probe"
 msgstr "Aggiungi una sonda simulatore"
 
-#: eeschema/schedit.cpp:615
+#: eeschema/schedit.cpp:598
 msgid "Select a value to be tuned"
 msgstr "Seleziona un parametro da regolare"
 
@@ -22525,7 +22533,7 @@ msgstr "Genera errori"
 msgid "Annotation required!"
 msgstr "Annotazione necessaria!"
 
-#: eeschema/dialogs/dialog_erc.cpp:601
+#: eeschema/dialogs/dialog_erc.cpp:592
 msgid "ERC File"
 msgstr "File ERC"
 
