@@ -1144,33 +1144,6 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone, int aLayer )
         }
 
         m_gal->DrawPolygon( polySet );
-
-#if 0
-        for( int i = 0; i < polySet.OutlineCount(); i++ )
-        {
-            const SHAPE_LINE_CHAIN& outline = polySet.COutline( i );
-            // fixme: GAL drawing API that accepts SHAPEs directly (this fiddling with double<>int conversion
-            // is just a performance hog)
-
-            for( int j = 0; j < outline.PointCount(); j++ )
-                corners.push_back ( (VECTOR2D) outline.CPoint( j ) );
-
-            corners.push_back( (VECTOR2D) outline.CPoint( 0 ) );
-
-            if( displayMode == PCB_RENDER_SETTINGS::DZ_SHOW_FILLED )
-            {
-                m_gal->DrawPolygon( corners );
-                m_gal->DrawPolyline( corners );
-            }
-            else if( displayMode == PCB_RENDER_SETTINGS::DZ_SHOW_OUTLINED )
-            {
-                m_gal->DrawPolyline( corners );
-            }
-
-
-            corners.clear();
-        }
-#endif
     }
 
 }

@@ -293,11 +293,11 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
     return true;
 }
 
+
 void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
 {
     std::mutex cnListLock;
 
-    //PROF_COUNTER cnt("search");
     int totalDirtyCount = 0;
 
     if( m_lastSearchWithZones != aIncludeZones )
@@ -627,7 +627,6 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
     CN_ITEM* head = nullptr;
     CLUSTERS clusters;
 
-
     if( isDirty() )
         searchConnections( includeZones );
 
@@ -836,6 +835,7 @@ void CN_CONNECTIVITY_ALGO::PropagateNets()
     m_connClusters = SearchClusters( CSM_PROPAGATE );
     propagateConnections();
 }
+
 
 void CN_CONNECTIVITY_ALGO::FindIsolatedCopperIslands( ZONE_CONTAINER* aZone, std::vector<int>& aIslands )
 {

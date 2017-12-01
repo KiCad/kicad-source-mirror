@@ -1513,6 +1513,7 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
     Restore();
 }
 
+
 void OPENGL_GAL::drawPolygon( GLdouble* aPoints, int aPointCount )
 {
     currentManager->Shader( SHADER_NONE );

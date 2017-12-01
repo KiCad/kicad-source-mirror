@@ -659,8 +659,6 @@ void SHAPE_POLY_SET::importTree( PolyTree* tree )
 }
 
 
-// Polygon fracturing code. Work in progress.
-
 struct FractureEdge
 {
     FractureEdge( bool connected, SHAPE_LINE_CHAIN* owner, int index ) :

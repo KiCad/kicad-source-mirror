@@ -65,7 +65,9 @@ class SHAPE_POLY_SET : public SHAPE
 
             struct TRI
             {
-                TRI(){};
+                TRI()
+                {
+                }
 
                 int a, b, c;
             };
@@ -810,6 +812,8 @@ class SHAPE_POLY_SET : public SHAPE
         ///> For aFastMode meaning, see function booleanOp
         void Fracture( POLYGON_MODE aFastMode );
 
+        ///> Converts a single outline slitted ("fractured") polygon into a set ouf outlines
+        ///> with holes.
         void Unfracture( POLYGON_MODE aFastMode );
 
         ///> Returns true if the polygon set has any holes.

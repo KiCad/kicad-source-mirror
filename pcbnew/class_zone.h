@@ -735,6 +735,7 @@ public:
 
     const std::vector<SEG>& GetHatchLines() const { return m_HatchLines; }
 
+
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
@@ -815,7 +816,6 @@ private:
     HATCH_STYLE           m_hatchStyle;     // hatch style, see enum above
     int                   m_hatchPitch;     // for DIAGONAL_EDGE, distance between 2 hatch lines
     std::vector<SEG>      m_HatchLines;     // hatch lines
-
     std::vector<int>      m_insulatedIslands;
 
     /**
