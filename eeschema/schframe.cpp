@@ -1446,10 +1446,13 @@ void SCH_EDIT_FRAME::addCurrentItemToList( bool aRedraw )
     {
         std::vector< wxPoint > pts;
         item->GetConnectionPoints( pts );
-        for( auto i : pts )
+        for( auto i = pts.begin(); i != pts.end(); i++ )
         {
-            if( screen->IsJunctionNeeded( i, true ) )
-                AddJunction( i, true );
+            for( auto j = i + 1; j != pts.end(); j++ )
+                TrimWire( *i, *j, true );
+
+            if( screen->IsJunctionNeeded( *i, true ) )
+                AddJunction( *i, true );
         }
         screen->TestDanglingEnds();
     }

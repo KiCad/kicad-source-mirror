@@ -471,9 +471,11 @@ public:
      * @param aSegment Line segment to break
      * @param aPoint Point at which to break the segment
      * @param aAppend Add the changes to the previous undo state
+     * @param aNewSegment Pointer to the newly created segment (if given and created)
      * @return True if any wires or buses were broken.
      */
-    bool BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint, bool aAppend = false );
+    bool BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint, bool aAppend = false,
+            SCH_LINE** aNewSegment = NULL );
 
     /**
      * Checks every wire and bus for a intersection at \a aPoint and break into two segments
@@ -956,6 +958,16 @@ private:
      * @return True if any schematic clean up was performed.
      */
     bool SchematicCleanUp( bool aAppend = false );
+
+    /**
+     * If any single wire passes through _both points_, remove the portion between the two points,
+     * potentially splitting the wire into two.
+     *
+     * @param aStart The starting point for trimmming
+     * @param aEnd The ending point for trimming
+     * @param aAppend Should the line changes be appended to a previous undo state
+     */
+    void TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool aAppend = true );
 
     /**
      * Start moving \a aItem using the mouse.

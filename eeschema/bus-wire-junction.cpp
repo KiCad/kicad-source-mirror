@@ -437,6 +437,45 @@ void SCH_EDIT_FRAME::SaveWireImage()
 }
 
 
+void SCH_EDIT_FRAME::TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool aAppend )
+{
+    SCH_LINE* line;
+
+    if( aStart == aEnd )
+        return;
+
+    for( SCH_ITEM* item = GetScreen()->GetDrawItems(); item; item = item->Next() )
+    {
+        if( item->GetFlags() & STRUCT_DELETED )
+            continue;
+
+        if( item->Type() != SCH_LINE_T || item->GetLayer() != LAYER_WIRE )
+            continue;
+
+        line = (SCH_LINE*) item;
+        if( !IsPointOnSegment( line->GetStartPoint(), line->GetEndPoint(), aStart ) ||
+                !IsPointOnSegment( line->GetStartPoint(), line->GetEndPoint(), aEnd ) )
+            continue;
+
+        // Step 1: break the segment on one end.  return_line remains line if not broken.
+        // Ensure that *line points to the segment containing aEnd
+        SCH_LINE* return_line = line;
+        aAppend |= BreakSegment( line, aStart, aAppend, &return_line );
+        if( IsPointOnSegment( return_line->GetStartPoint(), return_line->GetEndPoint(), aEnd ) )
+            line = return_line;
+
+        // Step 2: break the remaining segment.  return_line remains line if not broken.
+        // Ensure that *line _also_ contains aStart.  This is our overlapping segment
+        aAppend |= BreakSegment( line, aEnd, aAppend, &return_line );
+        if( IsPointOnSegment( return_line->GetStartPoint(), return_line->GetEndPoint(), aStart ) )
+            line = return_line;
+
+        SaveCopyInUndoList( (SCH_ITEM*)line, UR_DELETED, aAppend );
+        GetScreen()->Remove( (SCH_ITEM*)line );
+    }
+}
+
+
 bool SCH_EDIT_FRAME::SchematicCleanUp( bool aAppend )
 {
     SCH_ITEM*           item = NULL;
@@ -531,7 +570,8 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( bool aAppend )
 }
 
 
-bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE *aSegment, const wxPoint& aPoint, bool aAppend )
+bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint, bool aAppend,
+        SCH_LINE** aNewSegment )
 {
     if( !IsPointOnSegment( aSegment->GetStartPoint(), aSegment->GetEndPoint(), aPoint )
             || aSegment->IsEndPoint( aPoint ) )
@@ -544,6 +584,9 @@ bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE *aSegment, const wxPoint& aPoint, bo
     newSegment->SetStartPoint( aPoint );
     aSegment->SetEndPoint( aPoint );
     GetScreen()->Append( newSegment );
+
+    if( aNewSegment )
+        *aNewSegment = newSegment;
 
     return true;
 }
