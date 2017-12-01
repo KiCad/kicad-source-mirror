@@ -278,7 +278,7 @@ void DIALOG_CHOOSE_COMPONENT::PopulateFootprintSelector( LIB_ID const& aLibId )
         alias->GetPart()->GetPins( temp_pins );
 
         m_fp_sel_ctrl->FilterByPinCount( temp_pins.size() );
-        m_fp_sel_ctrl->FilterByFootprintFilters( alias->GetPart()->GetFootPrints(), true );
+        m_fp_sel_ctrl->FilterByFootprintFilters( alias->GetPart()->GetFootprints(), true );
         m_fp_sel_ctrl->SetDefaultFootprint( fp_name );
         m_fp_sel_ctrl->UpdateList();
         m_fp_sel_ctrl->Enable();

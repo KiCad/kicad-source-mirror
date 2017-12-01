@@ -34,8 +34,6 @@
 #include <class_base_screen.h>
 #include <general.h>
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 class SCH_ITEM;
 class SCH_SHEET_PATH;
 class LINE_READER;
@@ -44,13 +42,6 @@ class wxFindReplaceData;
 class PLOTTER;
 class NETLIST_OBJECT;
 class NETLIST_OBJECT_LIST;
-
-
-typedef boost::ptr_vector< SCH_ITEM > SCH_ITEMS;
-typedef SCH_ITEMS::iterator SCH_ITEMS_ITR;
-typedef std::vector< SCH_ITEMS_ITR > SCH_ITEMS_ITRS;
-
-
 
 
 /**

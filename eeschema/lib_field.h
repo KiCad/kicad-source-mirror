@@ -37,8 +37,7 @@ class SCH_LEGACY_PLUGIN_CACHE;
 
 
 /**
- * Class LIB_FIELD
- * is used in symbol libraries.  At least MANDATORY_FIELDS are always present
+ * Field object used in symbol libraries.  At least MANDATORY_FIELDS are always present
  * in a ram resident library symbol.  All constructors must ensure this because
  * the component property editor assumes it.
  * <p>
@@ -121,9 +120,7 @@ public:
     wxString GetName( bool aTranslate = true ) const;
 
     /**
-     * Function SetName
-     *
-     * Sets a user definable field name to \a aName.
+     * Set a user definable field name to \a aName.
      *
      * Reserved fields such as value and reference are not renamed.  If the field name is
      * changed, the field modified flag is set.  If the field is the child of a component,
@@ -139,8 +136,6 @@ public:
 
     int GetPenSize( ) const override;
 
-    bool Save( OUTPUTFORMATTER& aFormatter ) override;
-
     /**
      * Copy parameters of this field to another field. Pointers are not copied.
      *
@@ -151,7 +146,6 @@ public:
     void SetFields( const std::vector <LIB_FIELD> aFields );
 
     /**
-     * Function IsVoid
      * @return true if the field value is void (no text in this field)
      */
     bool IsVoid() const
@@ -160,7 +154,6 @@ public:
     }
 
     /**
-     * Function IsVisible
      * @return true is this field is visible, false if flagged invisible
      */
     bool IsVisible() const { return EDA_TEXT::IsVisible(); }  // why needed?

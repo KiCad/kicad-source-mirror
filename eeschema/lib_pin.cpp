@@ -27,6 +27,8 @@
  * @file lib_pin.cpp
  */
 
+#include <wx/tokenzr.h>
+
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <gr_basic.h>
@@ -36,7 +38,6 @@
 #include <drawtxt.h>
 #include <class_plotter.h>
 #include <schframe.h>
-#include <richio.h>
 #include <base_units.h>
 #include <msgpanel.h>
 
@@ -559,145 +560,6 @@ bool LIB_PIN::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM
     return rect.Contains( aPosition );
 }
 
-
-bool LIB_PIN::Save( OUTPUTFORMATTER& aFormatter )
-{
-    int      Etype;
-
-    switch( m_type )
-    {
-    default:
-    case PIN_INPUT:
-        Etype = 'I';
-        break;
-
-    case PIN_OUTPUT:
-        Etype = 'O';
-        break;
-
-    case PIN_BIDI:
-        Etype = 'B';
-        break;
-
-    case PIN_TRISTATE:
-        Etype = 'T';
-        break;
-
-    case PIN_PASSIVE:
-        Etype = 'P';
-        break;
-
-    case PIN_UNSPECIFIED:
-        Etype = 'U';
-        break;
-
-    case PIN_POWER_IN:
-        Etype = 'W';
-        break;
-
-    case PIN_POWER_OUT:
-        Etype = 'w';
-        break;
-
-    case PIN_OPENCOLLECTOR:
-        Etype = 'C';
-        break;
-
-    case PIN_OPENEMITTER:
-        Etype = 'E';
-        break;
-
-    case PIN_NC:
-        Etype = 'N';
-        break;
-    }
-
-    if( !m_name.IsEmpty() )
-    {
-        if( aFormatter.Print( 0, "X %s", TO_UTF8( m_name ) ) < 0 )
-            return false;
-    }
-    else
-    {
-        if( aFormatter.Print( 0, "X ~" ) < 0 )
-            return false;
-    }
-
-    if( aFormatter.Print( 0, " %s %d %d %d %c %d %d %d %d %c",
-                          m_number.IsEmpty() ? "~" : TO_UTF8( m_number ),
-                          m_position.x, m_position.y,
-                          (int) m_length, (int) m_orientation, m_numTextSize, m_nameTextSize,
-                          m_Unit, m_Convert, Etype ) < 0 )
-        return false;
-
-    if( m_shape || !IsVisible() )
-    {
-        if( aFormatter.Print( 0, " " ) < 0 )
-            return false;
-    }
-
-    if( !IsVisible() && aFormatter.Print( 0, "N" ) < 0 )
-        return false;
-
-    switch( m_shape )
-    {
-    case PINSHAPE_LINE:
-        break;
-
-    case PINSHAPE_INVERTED:
-        if( aFormatter.Print( 0, "I" ) < 0 )
-            return false;
-        break;
-
-    case PINSHAPE_CLOCK:
-        if( aFormatter.Print( 0, "C" ) < 0 )
-            return false;
-        break;
-
-    case PINSHAPE_INVERTED_CLOCK:
-        if( aFormatter.Print( 0, "IC" ) < 0 )
-            return false;
-        break;
-
-    case PINSHAPE_INPUT_LOW:
-        if( aFormatter.Print( 0, "L" ) < 0 )
-            return false;
-        break;
-
-    case PINSHAPE_CLOCK_LOW:
-        if( aFormatter.Print( 0, "CL" ) < 0 )
-            return false;
-        break;
-
-    case PINSHAPE_OUTPUT_LOW:
-        if( aFormatter.Print( 0, "V" ) < 0 )
-            return false;
-        break;
-
-    case PINSHAPE_FALLING_EDGE_CLOCK:
-        if( aFormatter.Print( 0, "F" ) < 0 )
-            return false;
-        break;
-
-    case PINSHAPE_NONLOGIC:
-        if( aFormatter.Print( 0, "X" ) < 0 )
-            return false;
-        break;
-
-    default:
-        assert( !"Invalid pin shape" );
-        return false;
-    }
-
-    if( aFormatter.Print( 0, "\n" ) < 0 )
-        return false;
-
-    ClearFlags( IS_CHANGED );
-
-    return true;
-}
-
-#include <wx/tokenzr.h>
 
 int LIB_PIN::GetPenSize() const
 {

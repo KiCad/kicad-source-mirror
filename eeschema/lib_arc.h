@@ -91,9 +91,6 @@ public:
         return wxT( "LIB_ARC" );
     }
 
-
-    bool Save( OUTPUTFORMATTER& aFormatter ) override;
-
     bool HitTest( const wxPoint& aPosition ) const override;
 
     bool HitTest( const wxPoint& aPosition, int aThreshold, const TRANSFORM& aTransform ) const override;
@@ -143,7 +140,11 @@ public:
 
     int GetSecondRadiusAngle() const { return m_t2; }
 
+    wxPoint GetStart() const { return m_ArcStart; }
+
     void SetStart( const wxPoint& aPoint ) { m_ArcStart = aPoint; }
+
+    wxPoint GetEnd() const { return m_ArcEnd; }
 
     void SetEnd( const wxPoint& aPoint ) { m_ArcEnd = aPoint; }
 

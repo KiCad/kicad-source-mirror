@@ -34,11 +34,10 @@
 
 
 /**
- * Class LIB_TEXT
- * defines a component library graphical text item.
+ * Define a symbol library graphical text item.
  * <p>
  * This is only a graphical text item.  Field text like the reference designator,
- * component value, etc. are not LIB_TEXT items.  See the #LIB_FIELD class for the
+ * symbol value, etc. are not LIB_TEXT items.  See the #LIB_FIELD class for the
  * field item definition.
  * </p>
  */
@@ -77,8 +76,6 @@ public:
      * @param aText - New text value.
      */
     void SetText( const wxString& aText ) override;
-
-    bool Save( OUTPUTFORMATTER& aFormatter ) override;
 
     bool HitTest( const wxPoint& aPosition ) const override;
 

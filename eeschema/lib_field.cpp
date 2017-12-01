@@ -109,51 +109,6 @@ void LIB_FIELD::Init( int id )
 }
 
 
-bool LIB_FIELD::Save( OUTPUTFORMATTER& aFormatter )
-{
-    int      hjustify, vjustify;
-    wxString text = m_Text;
-
-    hjustify = 'C';
-
-    if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
-        hjustify = 'L';
-    else if( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
-        hjustify = 'R';
-
-    vjustify = 'C';
-
-    if( GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
-        vjustify = 'B';
-    else if( GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
-        vjustify = 'T';
-
-    aFormatter.Print( 0, "F%d %s %d %d %d %c %c %c %c%c%c",
-                      m_id,
-                      EscapedUTF8( text ).c_str(),       // wraps in quotes
-                      GetTextPos().x, GetTextPos().y, GetTextWidth(),
-                      GetTextAngle() == 0 ? 'H' : 'V',
-                      IsVisible() ? 'V' : 'I',
-                      hjustify, vjustify,
-                      IsItalic() ? 'I' : 'N',
-                      IsBold() ? 'B' : 'N' );
-
-    /* Save field name, if necessary
-     * Field name is saved only if it is not the default name.
-     * Just because default name depends on the language and can change from
-     * a country to an other
-     */
-    wxString defName = TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
-
-    if( m_id >= FIELD1 && !m_name.IsEmpty() && m_name != defName )
-        aFormatter.Print( 0, " %s", EscapedUTF8( m_name ).c_str() );
-
-    aFormatter.Print( 0, "\n" );
-
-    return true;
-}
-
-
 int LIB_FIELD::GetPenSize() const
 {
     return GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();

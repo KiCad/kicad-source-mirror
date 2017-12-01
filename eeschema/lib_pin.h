@@ -114,8 +114,6 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 
-    bool Save( OUTPUTFORMATTER& aFormatter ) override;
-
     bool HitTest( const wxPoint& aPosition ) const override;
 
     bool HitTest( const wxPoint &aPosRef, int aThreshold, const TRANSFORM& aTransform ) const override;
@@ -136,23 +134,19 @@ public:
     const EDA_RECT GetBoundingBox() const override { return GetBoundingBox( false ); }
 
     /**
-     * Function GetBoundingBox
      * @param aIncludeInvisibles - if false, do not include labels for invisible pins
      *      in the calculation.
      */
     const EDA_RECT GetBoundingBox( bool aIncludeInvisibles ) const;
 
     /**
-     * Function PinEndPoint
-     *
      * @return The pin end position for a component in the normal orientation.
      */
     wxPoint PinEndPoint() const;
 
     /**
-     * Function PinDrawOrient
-     * returns the pin real orientation (PIN_UP, PIN_DOWN, PIN_RIGHT, PIN_LEFT),
-     * according to its orientation and the matrix transform (rot, mirror) \a aTransform
+     * Return the pin real orientation (PIN_UP, PIN_DOWN, PIN_RIGHT, PIN_LEFT),
+     * according to its orientation and the matrix transform (rot, mirror) \a aTransform.
      *
      * @param aTransform Transform matrix
      */
@@ -369,7 +363,6 @@ public:
     int GetPenSize() const override;
 
     /**
-     * Function DrawPinSymbol
      * Draw the pin symbol without text.
      * If \a aColor != 0, draw with \a aColor, else with the normal pin color.
      */
@@ -380,8 +373,7 @@ public:
                         bool aOnlyTarget = false );
 
     /**
-     * Function DrawPinTexts
-     * puts the pin number and pin text info, given the pin line coordinates.
+     * Put the pin number and pin text info, given the pin line coordinates.
      * The line must be vertical or horizontal.
      * If DrawPinName == false the pin name is not printed.
      * If DrawPinNum = false the pin number is not printed.
@@ -394,16 +386,14 @@ public:
                        COLOR4D aColor, GR_DRAWMODE aDrawMode );
 
     /**
-     * Function DrawPinElectricalTypeName
-     * draws the electrical type text of the pin (only for the footprint editor)
+     * Draw the electrical type text of the pin (only for the footprint editor)
      * aDrawMode = GR_OR, XOR ...
      */
     void DrawPinElectricalTypeName( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint& aPosition,
                        int aOrientation, COLOR4D aColor, GR_DRAWMODE aDrawMode );
 
     /**
-     * Function PlotPinTexts
-     * plots the pin number and pin text info, given the pin line coordinates.
+     * Plot the pin number and pin text info, given the pin line coordinates.
      * Same as DrawPinTexts((), but output is the plotter
      * The line must be vertical or horizontal.
      * If TextInside then the text is been put inside (moving from x1, y1 in

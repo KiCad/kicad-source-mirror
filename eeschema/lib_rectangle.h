@@ -61,8 +61,6 @@ public:
 
     void SetEndPosition( const wxPoint& aPosition ) { m_End = aPosition; }
 
-    bool Save( OUTPUTFORMATTER& aFormatter ) override;
-
     bool HitTest( const wxPoint& aPosition ) const override;
 
     bool HitTest( const wxPoint &aPosRef, int aThreshold, const TRANSFORM& aTransform ) const override;

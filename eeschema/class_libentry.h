@@ -107,8 +107,7 @@ public:
     }
 
     /**
-     * Function GetPart
-     * gets the shared LIB_PART.
+     * Get the shared LIB_PART.
      *
      * @return LIB_PART* - the LIB_PART shared by
      * this LIB_ALIAS with possibly other LIB_ALIASes.
@@ -148,15 +147,6 @@ public:
     }
 
     wxString GetDocFileName() const { return docFileName; }
-
-    /**
-     * Function SaveDocs
-     * write the entry document information to \a aFormatter in "*.dcm" format.
-     *
-     * @param aFormatter The #OUTPUTFORMATTER to write the alias documents to.
-     * @return True if success writing else false.
-     */
-    bool SaveDoc( OUTPUTFORMATTER& aFormatter );
 
     /**
      * KEEPCASE sensitive comparison of the part entry name.
@@ -216,11 +206,10 @@ struct PART_DRAW_OPTIONS
 
 
 /**
- * Class LIB_PART
- * defines a library part object.
+ * Define a library symbol object.
  *
- * A library part object is typically saved and loaded in a part library file (.lib).
- * Library parts are different from schematic components.
+ * A library symbol object is typically saved and loaded in a part library file (.lib).
+ * Library symbols are different from schematic symbols.
  */
 class LIB_PART : public EDA_ITEM
 {
@@ -291,9 +280,9 @@ public:
 
     LIB_ALIAS* GetAlias( const wxString& aName );
 
+    long GetDateModified() const { return m_dateModified; }
+
     /**
-     * Function AddAlias
-     *
      * Add an alias \a aName to the part.
      *
      * Duplicate alias names are not added to the alias list.  Debug builds will raise an
@@ -320,10 +309,11 @@ public:
 
     void RemoveAllAliases();
 
-    wxArrayString& GetFootPrints() { return m_FootprintList; }
+    wxArrayString& GetFootprints() { return m_FootprintList; }
 
     /**
-     * Function GetBoundingBox
+     * Get the bounding box for the symbol.
+     *
      * @return the part bounding box ( in user coordinates )
      * @param aUnit = unit selection = 0, or 1..n
      * @param aConvert = 0, 1 or 2
@@ -334,7 +324,8 @@ public:
     const EDA_RECT GetUnitBoundingBox( int aUnit, int aConvert ) const;
 
     /**
-     * Function GetBodyBoundingBox
+     * Get the symbol bounding box excluding fields.
+     *
      * @return the part bounding box ( in user coordinates ) without fields
      * @param aUnit = unit selection = 0, or 1..n
      * @param aConvert = 0, 1 or 2
@@ -350,8 +341,7 @@ public:
     }
 
     /**
-     * Function SaveDateAndTime
-     * write the date and time of part to \a aFile in the format:
+     * Write the date and time of part to \a aFile in the format:
      * "Ti yy/mm/jj hh:mm:ss"
      *
      * @param aFormatter A reference to an #OUTPUTFORMATTER object containing the
@@ -363,9 +353,7 @@ public:
     bool LoadDateAndTime( char* aLine );
 
     /**
-     * Function Save
-     * writes the data structures out to \a aFormatter in the part library "*.lib"
-     * format.
+     * Write the data structures out to \a aFormatter in the part library "*.lib" format.
      *
      * @param aFormatter A reference to an OUTPUTFORMATTER to write to.
      * @return True if success writing else false.
@@ -382,18 +370,18 @@ public:
     bool UnitsLocked() const { return m_unitsLocked; }
 
     /**
-     * Function SetFields
-     * overwrites all the existing in this part with fields supplied
-     * in \a aFieldsList.  The only known caller of this function is the
-     * library part field editor, and it establishes needed behavior.
+     * Overwrite all the existing fields in this symbol with fields supplied
+     * in \a aFieldsList.
      *
-`     * @param aFieldsList is a set of fields to import, removing all previous fields.
+     * The only known caller of this function is the library part field editor, and it
+     * establishes needed behavior.
+     *
+     * @param aFieldsList is a set of fields to import, removing all previous fields.
      */
     void SetFields( const std::vector <LIB_FIELD>& aFieldsList );
 
     /**
-     * Function GetFields
-     * returns a list of fields withing this part. The only known caller of
+     * Return a list of fields withing this part. The only known caller of
      * this function is the library part field editor, and it establishes
      * needed behavior.
      *
@@ -402,9 +390,7 @@ public:
     void GetFields( LIB_FIELDS& aList );
 
     /**
-     * Function FindField
-     * finds a field within this part matching \a aFieldName and returns
-     * it or NULL if not found.
+     * Findd a field within this part matching \a aFieldName and returns it or NULL if not found.
      */
     LIB_FIELD* FindField( const wxString& aFieldName );
 
@@ -536,8 +522,7 @@ public:
     LIB_PIN* GetPin( const wxString& aNumber, int aUnit = 0, int aConvert = 0 );
 
     /**
-     * Function PinsConflictWith
-     * returns true if this part's pins do not match another part's pins. This
+     * Return true if this part's pins do not match another part's pins. This
      * is used to detect whether the project cache is out of sync with the
      * system libs.
      *
@@ -689,14 +674,12 @@ public:
     int GetUnitCount() const { return m_unitCount; }
 
     /**
-     * Function IsMulti
      * @return true if the part has multiple units per part.
      * When happens, the reference has a sub reference ti identify part
      */
     bool IsMulti() const { return m_unitCount > 1; }
 
     /**
-     * Function SubReference
      * @return the sub reference for part having multiple units per part.
      * The sub reference identify the part (or unit)
      * @param aUnit = the part identifier ( 1 to max count)
@@ -720,7 +703,8 @@ public:
      */
     static int* SubpartFirstIdPtr() { return &m_subpartFirstId; }
 
-    /** Set the separator char between the subpart id and the reference
+    /**
+     * Set the separator char between the subpart id and the reference
      * 0 (no separator) or '.' , '-' and '_'
      * and the ascii char value to calculate the subpart symbol id from the part number:
      * 'A' or '1' only are allowed. (to print U1.A or U1.1)

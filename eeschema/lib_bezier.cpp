@@ -33,7 +33,6 @@
 #include <trigo.h>
 #include <wxstruct.h>
 #include <bezier_curves.h>
-#include <richio.h>
 #include <base_units.h>
 #include <msgpanel.h>
 
@@ -49,20 +48,6 @@ LIB_BEZIER::LIB_BEZIER( LIB_PART* aParent ) :
     m_Width      = 0;
     m_isFillable = true;
     m_typeName   = _( "Bezier" );
-}
-
-
-bool LIB_BEZIER::Save( OUTPUTFORMATTER& aFormatter )
-{
-    aFormatter.Print( 0, "B %lu %d %d %d", (long unsigned)m_BezierPoints.size(),
-                      m_Unit, m_Convert, m_Width );
-
-    for( const auto& pt : m_BezierPoints )
-        aFormatter.Print( 0, " %d %d", pt.x, pt.y );
-
-    aFormatter.Print( 0, " %c\n", fill_tab[m_Fill] );
-
-    return true;
 }
 
 

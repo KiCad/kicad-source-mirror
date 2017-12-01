@@ -407,14 +407,14 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
             xlibpart->AddChild( node( "docs",  lcomp->GetAlias( 0 )->GetDocFileName() ) );
 
         // Write the footprint list
-        if( lcomp->GetFootPrints().GetCount() )
+        if( lcomp->GetFootprints().GetCount() )
         {
             XNODE*  xfootprints;
             xlibpart->AddChild( xfootprints = node( "footprints" ) );
 
-            for( unsigned i=0; i<lcomp->GetFootPrints().GetCount(); ++i )
+            for( unsigned i=0; i<lcomp->GetFootprints().GetCount(); ++i )
             {
-                xfootprints->AddChild( node( "fp", lcomp->GetFootPrints()[i] ) );
+                xfootprints->AddChild( node( "fp", lcomp->GetFootprints()[i] ) );
             }
         }
 

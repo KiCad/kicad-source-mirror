@@ -59,8 +59,6 @@ public:
     }
 
 
-    bool Save( OUTPUTFORMATTER& aFormatter ) override;
-
     void AddPoint( const wxPoint& aPoint ) { m_BezierPoints.push_back( aPoint ); }
 
     void SetOffset( const wxPoint& aOffset ) override;
@@ -69,6 +67,11 @@ public:
      * @return the number of corners
      */
     unsigned GetCornerCount() const { return m_PolyPoints.size(); }
+
+    const std::vector< wxPoint >& GetPoints() const
+    {
+        return m_BezierPoints;
+    }
 
     bool HitTest( const wxPoint& aPosition ) const override;
 

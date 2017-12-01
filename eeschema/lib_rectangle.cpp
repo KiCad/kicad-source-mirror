@@ -33,7 +33,6 @@
 #include <class_plotter.h>
 #include <trigo.h>
 #include <wxstruct.h>
-#include <richio.h>
 #include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
@@ -53,15 +52,6 @@ LIB_RECTANGLE::LIB_RECTANGLE( LIB_PART*      aParent ) :
     m_isHeightLocked       = false;
     m_isWidthLocked        = false;
     m_isStartPointSelected = false;
-}
-
-
-bool LIB_RECTANGLE::Save( OUTPUTFORMATTER& aFormatter )
-{
-    aFormatter.Print( 0, "S %d %d %d %d %d %d %d %c\n", m_Pos.x, m_Pos.y,
-                      m_End.x, m_End.y, m_Unit, m_Convert, m_Width, fill_tab[m_Fill] );
-
-    return true;
 }
 
 

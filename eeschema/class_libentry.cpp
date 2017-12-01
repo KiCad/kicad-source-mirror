@@ -120,35 +120,6 @@ PART_LIB* LIB_ALIAS::GetLib()
 }
 
 
-bool LIB_ALIAS::SaveDoc( OUTPUTFORMATTER& aFormatter )
-{
-    if( description.IsEmpty() && keyWords.IsEmpty() && docFileName.IsEmpty() )
-        return true;
-
-    try
-    {
-        aFormatter.Print( 0, "#\n$CMP %s\n", TO_UTF8( name ) );
-
-        if( !description.IsEmpty() )
-            aFormatter.Print( 0, "D %s\n", TO_UTF8( description ) );
-
-        if( !keyWords.IsEmpty() )
-            aFormatter.Print( 0, "K %s\n", TO_UTF8( keyWords ) );
-
-        if( !docFileName.IsEmpty() )
-            aFormatter.Print( 0, "F %s\n", TO_UTF8( docFileName ) );
-
-        aFormatter.Print( 0, "$ENDCMP\n" );
-    }
-    catch( const IO_ERROR& )
-    {
-        return false;
-    }
-
-    return true;
-}
-
-
 bool LIB_ALIAS::operator==( const wxChar* aName ) const
 {
     return name == aName;
@@ -174,6 +145,7 @@ struct null_deleter
     {
     }
 };
+
 
 LIB_PART::LIB_PART( const wxString& aName, PART_LIB* aLibrary ) :
     EDA_ITEM( LIB_PART_T ),
@@ -454,7 +426,7 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
 
 
 void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
-                          const wxPoint& aOffset, const TRANSFORM& aTransform )
+                     const wxPoint& aOffset, const TRANSFORM& aTransform )
 {
     wxASSERT( aPlotter != NULL );
 
@@ -498,8 +470,9 @@ void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
     }
 }
 
+
 void LIB_PART::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
-                                  const wxPoint& aOffset, const TRANSFORM& aTransform )
+                              const wxPoint& aOffset, const TRANSFORM& aTransform )
 {
     wxASSERT( aPlotter != NULL );
 
@@ -703,133 +676,6 @@ bool LIB_PART::PinsConflictWith( LIB_PART& aOtherPart, bool aTestNums, bool aTes
 
     // The loop never gave up, so no conflicts were found.
     return false;
-}
-
-
-bool LIB_PART::Save( OUTPUTFORMATTER& aFormatter )
-{
-    LIB_FIELD&  value = GetValueField();
-
-    // First line: it s a comment (component name for readers)
-    aFormatter.Print( 0, "#\n# %s\n#\n", TO_UTF8( value.GetText() ) );
-
-    // Save data
-    aFormatter.Print( 0, "DEF" );
-
-    if( value.IsVisible() )
-    {
-        aFormatter.Print( 0, " %s", TO_UTF8( value.GetText() ) );
-    }
-    else
-    {
-        aFormatter.Print( 0, " ~%s", TO_UTF8( value.GetText() ) );
-    }
-
-    LIB_FIELD& reference = GetReferenceField();
-
-    if( !reference.GetText().IsEmpty() )
-    {
-        aFormatter.Print( 0, " %s", TO_UTF8( reference.GetText() ) );
-    }
-    else
-    {
-        aFormatter.Print( 0, " ~" );
-    }
-
-    aFormatter.Print( 0, " %d %d %c %c %d %c %c\n",
-                      0, m_pinNameOffset,
-                      m_showPinNumbers ? 'Y' : 'N',
-                      m_showPinNames ? 'Y' : 'N',
-                      m_unitCount, m_unitsLocked ? 'L' : 'F',
-                      m_options == ENTRY_POWER ? 'P' : 'N' );
-
-    if( !SaveDateAndTime( aFormatter ) )
-        return false;
-
-    LIB_FIELDS fields;
-    GetFields( fields );
-
-    // Mandatory fields:
-    // may have their own save policy so there is a separate loop for them.
-    // Empty fields are saved, because the user may have set visibility,
-    // size and orientation
-    for( int i = 0;  i < MANDATORY_FIELDS;  ++i )
-    {
-        if( !fields[i].Save( aFormatter ) )
-            return false;
-    }
-
-    // User defined fields:
-    // may have their own save policy so there is a separate loop for them.
-
-    int fieldId = MANDATORY_FIELDS;     // really wish this would go away.
-
-    for( unsigned i = MANDATORY_FIELDS; i < fields.size(); ++i )
-    {
-        // There is no need to save empty fields, i.e. no reason to preserve field
-        // names now that fields names come in dynamically through the template
-        // fieldnames.
-        if( !fields[i].GetText().IsEmpty() )
-        {
-            fields[i].SetId( fieldId++ );
-
-            if( !fields[i].Save( aFormatter ) )
-                return false;
-        }
-    }
-
-    // Save the alias list: a line starting by "ALIAS".  The first alias is the root
-    // and has the same name as the component.  In the old library file format this
-    // alias does not get added to the alias list.
-    if( m_aliases.size() > 1 )
-    {
-        aFormatter.Print( 0, "ALIAS" );
-
-        for( unsigned i = 1; i < m_aliases.size(); i++ )
-        {
-            aFormatter.Print( 0, " %s", TO_UTF8( m_aliases[i]->GetName() ) );
-        }
-
-        aFormatter.Print( 0, "\n" );
-    }
-
-    // Write the footprint filter list
-    if( m_FootprintList.GetCount() != 0 )
-    {
-        aFormatter.Print( 0, "$FPLIST\n" );
-
-        for( unsigned i = 0; i < m_FootprintList.GetCount(); i++ )
-        {
-            aFormatter.Print( 0, " %s\n", TO_UTF8( m_FootprintList[i] ) );
-        }
-
-        aFormatter.Print( 0, "$ENDFPLIST\n" );
-    }
-
-    // Save graphics items (including pins)
-    if( !m_drawings.empty() )
-    {
-        /* we sort the draw items, in order to have an edition more easy,
-         *  when a file editing "by hand" is made */
-        m_drawings.sort();
-
-        aFormatter.Print( 0, "DRAW\n" );
-
-        for( LIB_ITEM& item : m_drawings )
-        {
-            if( item.Type() == LIB_FIELD_T )
-                continue;
-
-            if( !item.Save( aFormatter ) )
-                return false;
-        }
-
-        aFormatter.Print( 0, "ENDDRAW\n" );
-    }
-
-    aFormatter.Print( 0, "ENDDEF\n" );
-
-    return true;
 }
 
 
@@ -1137,13 +983,7 @@ void LIB_PART::DeleteSelectedItems()
     {
         if( item->Type() == LIB_FIELD_T )
         {
-#if 0   // Set to 1 to allows fields deletion on block delete or other global command
-            LIB_FIELD& field = ( LIB_FIELD& ) *item;
-
-            if( (field.GetId() == REFERENCE) || (field.m_FieldId == VALUE) ||
-                (field.m_Attributs & TEXT_NO_VISIBLE) )
-#endif
-                item->ClearFlags( SELECTED );
+            item->ClearFlags( SELECTED );
         }
 
         if( !item->IsSelected() )
@@ -1430,27 +1270,6 @@ void LIB_PART::SetAliases( const wxArrayString& aAliasList )
 }
 
 
-#if 0   // this version looked suspect to me, it did not rename a deleted root
-
-void LIB_PART::RemoveAlias( const wxString& aName )
-{
-    wxCHECK_RET( m_library == NULL,
-                 wxT( "Part aliases cannot be changed when they are owned by a library." ) );
-    wxCHECK_RET( !aName.IsEmpty(), wxT( "Cannot get alias with an empty name." ) );
-
-    LIB_ALIASES::iterator it;
-
-    for( it = m_aliases.begin(); it != m_aliases.end(); it++ )
-    {
-        if( aName == (*it)->GetName() )
-        {
-            m_aliases.erase( it );
-            break;
-        }
-    }
-}
-
-#else
 void LIB_PART::RemoveAlias( const wxString& aName )
 {
     LIB_ALIAS* a = GetAlias( aName );
@@ -1458,7 +1277,6 @@ void LIB_PART::RemoveAlias( const wxString& aName )
     if( a )
         RemoveAlias( a );
 }
-#endif
 
 
 LIB_ALIAS* LIB_PART::RemoveAlias( LIB_ALIAS* aAlias )

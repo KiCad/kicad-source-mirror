@@ -58,9 +58,9 @@ public:
     }
 
 
-    bool Save( OUTPUTFORMATTER& aFormatter ) override;
-
     void AddPoint( const wxPoint& aPoint );
+
+    const std::vector< wxPoint >& GetPolyPoints() const { return m_PolyPoints; }
 
     /**
      * Delete the segment at \a aPosition.

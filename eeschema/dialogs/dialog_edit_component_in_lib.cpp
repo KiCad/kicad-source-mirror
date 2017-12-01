@@ -103,9 +103,9 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::initDlg()
     }
 
     /* Read the Footprint Filter list */
-    m_FootprintFilterListBox->Append( component->GetFootPrints() );
+    m_FootprintFilterListBox->Append( component->GetFootprints() );
 
-    if( component->GetFootPrints().GetCount() == 0 )
+    if( component->GetFootprints().GetCount() == 0 )
     {
         m_ButtonDeleteAllFootprintFilter->Enable( false );
         m_ButtonDeleteOneFootprintFilter->Enable( false );
@@ -261,8 +261,8 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
         component->LockUnits( false );
 
     /* Update the footprint filter list */
-    component->GetFootPrints().Clear();
-    component->GetFootPrints() = m_FootprintFilterListBox->GetStrings();
+    component->GetFootprints().Clear();
+    component->GetFootprints() = m_FootprintFilterListBox->GetStrings();
 
     EndModal( wxID_OK );
 }

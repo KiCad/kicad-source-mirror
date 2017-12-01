@@ -33,7 +33,6 @@
 #include <drawtxt.h>
 #include <trigo.h>
 #include <wxstruct.h>
-#include <richio.h>
 #include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
@@ -52,49 +51,6 @@ LIB_TEXT::LIB_TEXT( LIB_PART * aParent ) :
     m_typeName   = _( "Text" );
     m_rotate     = false;
     m_updateText = false;
-}
-
-
-bool LIB_TEXT::Save( OUTPUTFORMATTER& aFormatter )
-{
-    wxString text = m_Text;
-
-    if( text.Contains( wxT( "~" ) ) || text.Contains( wxT( "\"" ) ) )
-    {
-        // convert double quote to similar-looking two apostrophes
-        text.Replace( wxT( "\"" ), wxT( "''" ) );
-        text = wxT( "\"" ) + text + wxT( "\"" );
-    }
-    else
-    {
-        // Spaces are not allowed in text because it is not double quoted:
-        // changed to '~'
-        text.Replace( wxT( " " ), wxT( "~" ) );
-    }
-
-    aFormatter.Print( 0, "T %g %d %d %d %d %d %d %s", GetTextAngle(),
-                      GetTextPos().x, GetTextPos().y,
-                      GetTextWidth(), !IsVisible(), m_Unit, m_Convert, TO_UTF8( text ) );
-
-    aFormatter.Print( 0, " %s %d", IsItalic() ? "Italic" : "Normal", IsBold() );
-
-    char hjustify = 'C';
-
-    if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
-        hjustify = 'L';
-    else if( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
-        hjustify = 'R';
-
-    char vjustify = 'C';
-
-    if( GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
-        vjustify = 'B';
-    else if( GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
-        vjustify = 'T';
-
-    aFormatter.Print( 0, " %c %c\n", hjustify, vjustify );
-
-    return true;
 }
 
 

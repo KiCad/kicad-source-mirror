@@ -34,7 +34,6 @@
 #include <class_plotter.h>
 #include <trigo.h>
 #include <wxstruct.h>
-#include <richio.h>
 #include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
@@ -52,15 +51,6 @@ LIB_CIRCLE::LIB_CIRCLE( LIB_PART*      aParent ) :
     m_Fill       = NO_FILL;
     m_isFillable = true;
     m_typeName   = _( "Circle" );
-}
-
-
-bool LIB_CIRCLE::Save( OUTPUTFORMATTER& aFormatter )
-{
-    aFormatter.Print( 0, "C %d %d %d %d %d %d %c\n", m_Pos.x, m_Pos.y,
-                      m_Radius, m_Unit, m_Convert, m_Width, fill_tab[m_Fill] );
-
-    return true;
 }
 
 

@@ -33,7 +33,6 @@
 #include <class_plotter.h>
 #include <trigo.h>
 #include <wxstruct.h>
-#include <richio.h>
 #include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
@@ -51,23 +50,6 @@ LIB_POLYLINE::LIB_POLYLINE( LIB_PART*      aParent ) :
     m_isFillable = true;
     m_typeName   = _( "PolyLine" );
     m_ModifyIndex = 0;
-}
-
-
-bool LIB_POLYLINE::Save( OUTPUTFORMATTER& aFormatter )
-{
-    int ccount = GetCornerCount();
-
-    aFormatter.Print( 0, "P %d %d %d %d", ccount, m_Unit, m_Convert, m_Width );
-
-    for( unsigned i = 0; i < GetCornerCount(); i++ )
-    {
-        aFormatter.Print( 0, " %d %d", m_PolyPoints[i].x, m_PolyPoints[i].y );
-    }
-
-    aFormatter.Print( 0, " %c\n", fill_tab[m_Fill] );
-
-    return true;
 }
 
 

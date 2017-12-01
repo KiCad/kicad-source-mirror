@@ -33,7 +33,6 @@
 #include <class_plotter.h>
 #include <trigo.h>
 #include <wxstruct.h>
-#include <richio.h>
 #include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
@@ -99,27 +98,6 @@ LIB_ARC::LIB_ARC( LIB_PART*      aParent ) : LIB_ITEM( LIB_ARC_T, aParent )
     m_editCenterDistance = 0.0;
     m_editSelectPoint = ARC_STATUS_START;
     m_editDirection = 0;
-}
-
-
-bool LIB_ARC::Save( OUTPUTFORMATTER& aFormatter )
-{
-    int x1 = m_t1;
-
-    if( x1 > 1800 )
-        x1 -= 3600;
-
-    int x2 = m_t2;
-
-    if( x2 > 1800 )
-        x2 -= 3600;
-
-    aFormatter.Print( 0, "A %d %d %d %d %d %d %d %d %c %d %d %d %d\n",
-                      m_Pos.x, m_Pos.y, m_Radius, x1, x2, m_Unit, m_Convert, m_Width,
-                      fill_tab[m_Fill], m_ArcStart.x, m_ArcStart.y, m_ArcEnd.x,
-                      m_ArcEnd.y );
-
-    return true;
 }
 
 

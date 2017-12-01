@@ -61,15 +61,12 @@ typedef std::vector< LIB_PIN* > LIB_PINS;
 
 
 /**
- * Class LIB_ITEM
- * is the base class for drawable items used by schematic library components.
+ * The base class for drawable items used by schematic library components.
  */
 class LIB_ITEM : public EDA_ITEM
 {
     /**
-     * Function drawGraphic
-     *
-     * draws the item on \a aPanel.
+     * Draw the item on \a aPanel.
      *
      * @param aPanel A pointer to the panel to draw the object upon.
      * @param aDC A pointer to the device context used to draw the object.
@@ -211,21 +208,9 @@ public:
                        const TRANSFORM& aTransform );
 
     /**
-     * Function GetPenSize
-     *
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize() const = 0;
-
-    /**
-     * Function Save
-     * writes draw item object to \a aFormatter in component library "*.lib" format.
-     *
-     * @param aFormatter A reference to an #OUTPUTFORMATTER object to write the
-     *                   component library item to.
-     * @return True if success writing else false.
-     */
-    virtual bool Save( OUTPUTFORMATTER& aFormatter ) = 0;
 
     LIB_PART*      GetParent() const
     {
@@ -253,9 +238,7 @@ public:
     virtual const EDA_RECT GetBoundingBox() const override { return EDA_ITEM::GetBoundingBox(); }
 
     /**
-     * Function GetMsgPanelInfo
-     * displays basic info (type, part and convert) about the current item
-     * in message panel.
+     * Display basic info (type, part and convert) about the current item in message panel.
      * <p>
      * This base function is used to display the information common to the
      * all library items.  Call the base class from the derived class or the
@@ -286,16 +269,14 @@ public:
     bool operator<( const LIB_ITEM& aOther) const;
 
     /**
-     * Function Offset
-     * sets the drawing object by \a aOffset from the current position.
+     * Set the drawing object by \a aOffset from the current position.
      *
      * @param aOffset Coordinates to offset the item position.
      */
     virtual void SetOffset( const wxPoint& aOffset ) = 0;
 
     /**
-     * Function Inside
-     * tests if any part of the draw object is inside rectangle bounds of \a aRect.
+     * Test if any part of the draw object is inside rectangle bounds of \a aRect.
      *
      * @param aRect Rectangle to check against.
      * @return True if object is inside rectangle.
@@ -303,16 +284,14 @@ public:
     virtual bool Inside( EDA_RECT& aRect ) const = 0;
 
     /**
-     * Function Move
-     * moves a draw object to \a aPosition.
+     * Move a draw object to \a aPosition.
      *
      * @param aPosition Position to move draw item to.
      */
     virtual void Move( const wxPoint& aPosition ) = 0;
 
     /**
-     * Function GetPosition
-     * returns the current draw object position.
+     * Return the current draw object position.
      *
      * @return A wxPoint object containing the position of the object.
      */
@@ -321,24 +300,21 @@ public:
     void SetPosition( const wxPoint& aPosition ) { Move( aPosition ); }
 
     /**
-     * Function MirrorHorizontal
-     * mirrors the draw object along the horizontal (X) axis about \a aCenter point.
+     * Mirror the draw object along the horizontal (X) axis about \a aCenter point.
      *
      * @param aCenter Point to mirror around.
      */
     virtual void MirrorHorizontal( const wxPoint& aCenter ) = 0;
 
     /**
-     * Function MirrorVertical
-     * mirrors the draw object along the MirrorVertical (Y) axis about \a aCenter point.
+     * Mirror the draw object along the MirrorVertical (Y) axis about \a aCenter point.
      *
      * @param aCenter Point to mirror around.
      */
     virtual void MirrorVertical( const wxPoint& aCenter ) = 0;
 
     /**
-     * Function Rotate
-     * rotates the object about \a aCenter point.
+     * Rotate the object about \a aCenter point.
      *
      * @param aCenter Point to rotate around.
      * @param aRotateCCW True to rotate counter clockwise.  False to rotate clockwise.
@@ -362,16 +338,14 @@ public:
                        const TRANSFORM& aTransform ) = 0;
 
     /**
-     * Function GetWidth
-     * return the width of the draw item.
+     * Return the width of the draw item.
      *
      * @return Width of draw object.
      */
     virtual int GetWidth() const = 0;
 
     /**
-     * Function SetWidth
-     * sets the width of the draw item to \a aWidth.
+     * Set the width of the draw item to \a aWidth.
      */
     virtual void SetWidth( int aWidth ) = 0;
 
@@ -415,8 +389,7 @@ public:
 private:
 
     /**
-     * Function compare
-     * provides the draw object specific comparison called by the == and < operators.
+     * Provide the draw object specific comparison called by the == and < operators.
      *
      * The base object sort order which always proceeds the derived object sort order
      * is as follows:

@@ -25,7 +25,7 @@
 
 /**
  * @file symbedit.cpp
- * @brief Functions to load from and save to file component libraries and symbols.
+ * @brief Functions to load and save individual symbols.
  */
 
 #include <fctsys.h>
@@ -35,12 +35,13 @@
 #include <confirm.h>
 #include <kicad_string.h>
 #include <gestfich.h>
-#include <class_sch_screen.h>
 
+#include <class_sch_screen.h>
 #include <general.h>
 #include <libeditframe.h>
-#include <class_library.h>
+#include <class_libentry.h>
 #include <wildcards_and_files_ext.h>
+#include <sch_legacy_plugin.h>
 
 
 void LIB_EDIT_FRAME::LoadOneSymbol()
@@ -61,7 +62,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     if( !default_path )
         default_path = search->LastVisitedPath();
 
-    wxFileDialog dlg( this, _( "Import Symbol Drawings" ), default_path,
+    wxFileDialog dlg( this, _( "Import Symbol" ), default_path,
                       wxEmptyString, SchematicSymbolFileWildcard(),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
@@ -76,41 +77,50 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
 
     prj.SetRString( PROJECT::SCH_LIB_PATH, filename );
 
-    std::unique_ptr<PART_LIB> lib( new PART_LIB( LIBRARY_TYPE_SYMBOL, filename ) );
+    wxArrayString symbols;
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
 
     wxString msg;
 
     try
     {
-        if( lib->IsEmpty() )
-        {
-            msg.Printf( _( "No parts found in part file '%s'." ), GetChars( filename ) );
-            DisplayError( this, msg );
-            return;
-        }
+        pi->EnumerateSymbolLib( symbols, filename );
     }
-    catch( const IO_ERROR& exc )
+    catch( const IO_ERROR& ioe )
     {
-        msg.Printf( _( "Error '%s' occurred loading part file '%s'." ),
-                    GetChars( exc.Problem() ), GetChars( filename ) );
-        DisplayError( this, msg );
+        msg.Printf( _( "Cannot import symbol library '%s'." ), filename );
+        DisplayErrorMessage( this, msg, ioe.What() );
         return;
     }
 
-    if( lib->GetCount() > 1 )
+    if( symbols.empty() )
     {
-        msg.Printf( _( "More than one part in part file '%s'." ), GetChars( filename ) );
+        msg.Printf( _( "Symbol library file '%s' is empty." ), filename );
+        DisplayError( this,  msg );
+        return;
+    }
+
+    if( symbols.GetCount() > 1 )
+    {
+        msg.Printf( _( "More than one symbol found in symbol file '%s'." ), filename );
         wxMessageBox( msg, _( "Warning" ), wxOK | wxICON_EXCLAMATION, this );
     }
 
-    wxArrayString aliasNames;
+    LIB_ALIAS* alias = nullptr;
 
-    lib->GetAliasNames( aliasNames );
+    try
+    {
+        alias = pi->LoadSymbol( filename, symbols[0] );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        return;
+    }
 
-    wxCHECK_RET( !aliasNames.IsEmpty(), "No aliases found in library " + filename );
+    wxCHECK_RET( alias && alias->GetPart(), "Invalid symbol." );
 
-    LIB_PART*   first = lib->FindAlias( aliasNames[0] )->GetPart();
-    LIB_ITEMS_CONTAINER&  drawList = first->GetDrawItems();
+    LIB_PART* first = alias->GetPart();
+    LIB_ITEMS_CONTAINER& drawList = first->GetDrawItems();
 
     for( LIB_ITEM& item : drawList )
     {
@@ -154,7 +164,7 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
     if( !default_path )
         default_path = search->LastVisitedPath();
 
-    wxFileDialog dlg( this, _( "Export Symbol Drawings" ), default_path,
+    wxFileDialog dlg( this, _( "Export Symbol" ), default_path,
                       part->GetName() + "." + SchematicSymbolFileExtension,
                       SchematicSymbolFileWildcard(),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
@@ -174,78 +184,17 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
     msg.Printf( _( "Saving symbol in '%s'" ), GetChars( fn.GetPath() ) );
     SetStatusText( msg );
 
-    wxString line;
-
-    // File header
-    line << wxT( LIBFILE_IDENT ) << wxT( " " ) << LIB_VERSION_MAJOR
-         << wxT( "." ) << LIB_VERSION_MINOR << wxT( "  SYMBOL  " )
-         << wxT( "Date: " ) << DateAndTime() << wxT( "\n" );
-
-    // Component name comment and definition.
-    line << wxT( "# SYMBOL " ) << part->GetName() << wxT( "\n#\nDEF " )
-         << part->GetName() << wxT( " " );
-
-    if( !part->GetReferenceField().GetText().IsEmpty() )
-        line << part->GetReferenceField().GetText() << wxT( " " );
-    else
-        line << wxT( "~ " );
-
-    line << 0 << wxT( " " ) << part->GetPinNameOffset() << wxT( " " );
-
-    if( part->ShowPinNumbers() )
-        line << wxT( "Y " );
-    else
-        line << wxT( "N " );
-
-    if( part->ShowPinNames() )
-        line << wxT( "Y " );
-    else
-        line << wxT( "N " );
-
-    line << wxT( "1 0 N\n" );
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
 
     try
     {
-        FILE_OUTPUTFORMATTER    formatter( fn.GetFullPath() );
-
-        try
-        {
-            formatter.Print( 0, "%s", TO_UTF8( line ) );
-            part->GetReferenceField().Save( formatter );
-            part->GetValueField().Save( formatter );
-            formatter.Print( 0, "DRAW\n" );
-
-            LIB_ITEMS_CONTAINER& drawList = part->GetDrawItems();
-
-            for( LIB_ITEM& item : drawList )
-            {
-                if( item.Type() == LIB_FIELD_T )
-                    continue;
-
-                // Don't save unused parts or alternate body styles.
-                if( m_unit && item.GetUnit() && ( item.GetUnit() != m_unit ) )
-                    continue;
-
-                if( m_convert && item.GetConvert() && ( item.GetConvert() != m_convert ) )
-                    continue;
-
-                item.Save( formatter );
-            }
-
-            formatter.Print( 0, "ENDDRAW\n" );
-            formatter.Print( 0, "ENDDEF\n" );
-        }
-        catch( const IO_ERROR& )
-        {
-            msg.Printf( _( "An error occurred attempting to save symbol file '%s'" ),
-                        GetChars( fn.GetFullPath() ) );
-            DisplayError( this, msg );
-        }
+        pi->SaveSymbol( fn.GetFullPath(), part );
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this, ioe.What() );
-        return;
+        msg.Printf( _( "An error occurred attempting to save symbol file '%s'" ),
+                    fn.GetFullPath() );
+        DisplayErrorMessage( this, msg, ioe.What() );
     }
 }
 
