@@ -136,7 +136,7 @@ void SCH_EDIT_FRAME::CheckJunctionsInList( PICKED_ITEMS_LIST& aItemsList, bool a
 
     // We always have some overlapping connection points.  Drop duplicates here
     std::sort( pts.begin(), pts.end(),
-            []( wxPoint& a, wxPoint& b ) -> bool
+            []( const wxPoint& a, const wxPoint& b ) -> bool
             { return a.x < b.x || (a.x == b.x && a.y < b.y); } );
     pts.erase( unique( pts.begin(), pts.end() ), pts.end() );
 

@@ -274,7 +274,7 @@ void SCH_EDIT_FRAME::GetSchematicConnections( std::vector< wxPoint >& aConnectio
 
     // We always have some overlapping connection points.  Drop duplicates here
     std::sort( aConnections.begin(), aConnections.end(),
-            []( wxPoint& a, wxPoint& b ) -> bool
+            []( const wxPoint& a, const wxPoint& b ) -> bool
             { return a.x < b.x || (a.x == b.x && a.y < b.y); } );
     aConnections.erase( unique( aConnections.begin(), aConnections.end() ), aConnections.end() );
 }
