@@ -39,6 +39,7 @@
 #include <io_mgr.h>
 #include <macros.h>
 #include <stdlib.h>
+#include <pcb_draw_panel_gal.h>
 
 static PCB_EDIT_FRAME* s_PcbEditFrame = NULL;
 
@@ -103,8 +104,15 @@ void Refresh()
 {
     if( s_PcbEditFrame )
     {
+        auto board = s_PcbEditFrame->GetBoard();
+        board->BuildConnectivity();
+
         if( s_PcbEditFrame->IsGalCanvasActive() )
+        {
+            auto panel = static_cast<PCB_DRAW_PANEL_GAL*>( s_PcbEditFrame->GetGalCanvas() );
+            panel->DisplayBoard(board);
             s_PcbEditFrame->GetGalCanvas()->Refresh();
+        }
         else
             // first argument is erase background, second is a wxRect that
             // defines a reftresh area (all canvas if null)
