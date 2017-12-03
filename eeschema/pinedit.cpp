@@ -568,8 +568,6 @@ void LIB_EDIT_FRAME::GlobalSetPins( LIB_PIN* aMasterPin, int aId )
     if( aMasterPin->Type() != LIB_PIN_T )
         return;
 
-    OnModify( );
-
     bool selected = aMasterPin->IsSelected();
 
     for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
@@ -600,6 +598,10 @@ void LIB_EDIT_FRAME::GlobalSetPins( LIB_PIN* aMasterPin, int aId )
         // but not used here.
         pin->ClearFlags( IS_CHANGED );
     }
+
+    // Now changes are made, call OnModify() to validate thes changes and set
+    // the global change for UI
+    OnModify();
 }
 
 
