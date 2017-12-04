@@ -186,7 +186,7 @@ void CMP_TREE_MODEL_ADAPTER_BASE::AttachTo( wxDataViewCtrl* aDataViewCtrl )
                 ColWidth( m_tree, 0, part_head ) );
     m_col_desc = aDataViewCtrl->AppendTextColumn( desc_head, 1, wxDATAVIEW_CELL_INERT,
                 ColWidth( m_tree, 1, desc_head ) );
-    m_col_part->SetSortOrder( 0 );
+    m_col_part->SetSortOrder( true );
 }
 
 
