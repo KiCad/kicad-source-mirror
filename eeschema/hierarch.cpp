@@ -121,8 +121,7 @@ public:
     int             m_nbsheets;
 
 private:
-    wxSize m_TreeSize;
-    int    maxposx;
+    SCH_SHEET_PATH m_currSheet;     // The currently opened scheet in hierarchy
 
 public:
     HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent, const wxPoint& aPos );
@@ -132,18 +131,17 @@ public:
     /**
      * Create the hierarchical tree of the schematic.
      *
-     * This routine is re-entrant!
+     * This routine is reentrant!
+     * @param aList = the SCH_SHEET_PATH* list to explore
+     * @param aPreviousmenu = the wxTreeItemId used as parent to add sub items
      */
-    void BuildTree( SCH_SHEET_PATH* list, wxTreeItemId* previousmenu );
+    void BuildTree( SCH_SHEET_PATH* aList, wxTreeItemId* aPreviousmenu );
 
     /**
      * Open the selected sheet and display the corresponding screen when a tree item is
      * selected.
      */
     void OnSelect( wxTreeEvent& event );
-
-private:
-    void OnQuit( wxCommandEvent& event );
 };
 
 
@@ -162,6 +160,8 @@ HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent, const wxPoint
 {
     wxASSERT( dynamic_cast< SCH_EDIT_FRAME* >( aParent ) );
 
+    m_currSheet = aParent->GetCurrentSheet();
+
     wxTreeItemId root;
 
     m_Tree = new HIERARCHY_TREE( this );
@@ -178,25 +178,31 @@ HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent, const wxPoint
     if( dynamic_cast< SCH_EDIT_FRAME* >( aParent )->GetCurrentSheet().Last() == g_RootSheet )
         m_Tree->SelectItem( root ); //root.
 
-    maxposx = 15;
     BuildTree( &list, &root );
 
-    m_Tree->Expand( root );
+    m_Tree->ExpandAll();
 
+#if 1
     wxRect itemrect;
+    wxSize tree_size;
+
     m_Tree->GetBoundingRect( root, itemrect );
 
     // Set dialog window size to be large enough
-    m_TreeSize.x = itemrect.GetWidth() + 20;
-    m_TreeSize.x = std::max( m_TreeSize.x, 250 );
+    tree_size.x = itemrect.GetWidth() + 20;
+    tree_size.x = std::max( tree_size.x, 250 );
 
     // Readjust the size of the frame to an optimal value.
-    m_TreeSize.y = m_nbsheets * itemrect.GetHeight();
-    m_TreeSize.y += 10;
+    tree_size.y = m_nbsheets * itemrect.GetHeight();
+    tree_size.y += 10;
 
-    SetClientSize( m_TreeSize );
+    SetClientSize( tree_size );
+#endif
 
+    // Manage double click on a selection:
     Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_DLG::OnSelect, this );
+    // Manage a simple click on a selection, if the selection changes
+    Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_DLG::OnSelect, this );
 }
 
 
@@ -206,22 +212,15 @@ HIERARCHY_NAVIG_DLG::~HIERARCHY_NAVIG_DLG()
 }
 
 
-void HIERARCHY_NAVIG_DLG::OnQuit( wxCommandEvent& event )
-{
-    // true is to force the frame to close
-    Close( true );
-}
-
-
-void HIERARCHY_NAVIG_DLG::BuildTree( SCH_SHEET_PATH* list, wxTreeItemId*  previousmenu )
-
+void HIERARCHY_NAVIG_DLG::BuildTree( SCH_SHEET_PATH* aList, wxTreeItemId* aPreviousmenu )
 {
     wxTreeItemId menu;
 
     wxCHECK_RET( m_nbsheets < NB_MAX_SHEET, "Maximum number of sheets exceeded." );
 
-    maxposx += m_Tree->GetIndent();
-    SCH_ITEM* schitem = list->LastDrawList();
+    SCH_ITEM* schitem = aList->LastDrawList();
+
+    wxClientDC currdc( this );  // usefull to calculate the width of texts to display
 
     while( schitem && m_nbsheets < NB_MAX_SHEET )
     {
@@ -229,37 +228,23 @@ void HIERARCHY_NAVIG_DLG::BuildTree( SCH_SHEET_PATH* list, wxTreeItemId*  previo
         {
             SCH_SHEET* sheet = (SCH_SHEET*) schitem;
             m_nbsheets++;
-            menu = m_Tree->AppendItem( *previousmenu, sheet->GetName(), 0, 1 );
-            list->push_back( sheet );
-            m_Tree->SetItemData( menu, new TreeItemData( *list ) );
-            int ll = m_Tree->GetItemText( menu ).Len();
+            menu = m_Tree->AppendItem( *aPreviousmenu, sheet->GetName(), 0, 1 );
+            aList->push_back( sheet );
+            m_Tree->SetItemData( menu, new TreeItemData( *aList ) );
 
-#ifdef __WINDOWS__
-            ll *= 9;    //  * char width
-#else
-            ll *= 12;   //  * char width
-#endif
-            ll += maxposx + 20;
-            m_TreeSize.x  = std::max( m_TreeSize.x, ll );
-            m_TreeSize.y += 1;
-
-            SCH_EDIT_FRAME* parent = dynamic_cast< SCH_EDIT_FRAME* >( GetParent() );
-
-            if( parent && *list == parent->GetCurrentSheet() )
+            if( *aList == m_currSheet )
             {
                 m_Tree->EnsureVisible( menu );
                 m_Tree->SelectItem( menu );
             }
 
-            BuildTree( list, &menu );
-            m_Tree->Expand( menu );
-            list->pop_back();
+            BuildTree( aList, &menu );
+
+            aList->pop_back();
         }
 
         schitem = schitem->Next();
     }
-
-    maxposx -= m_Tree->GetIndent();
 }
 
 
@@ -267,10 +252,7 @@ void HIERARCHY_NAVIG_DLG::OnSelect( wxTreeEvent& event )
 
 {
     wxTreeItemId ItemSel = m_Tree->GetSelection();
-    SCH_EDIT_FRAME* parent = dynamic_cast< SCH_EDIT_FRAME* >( GetParent() );
-
-    wxCHECK2_MSG( parent, Close( true ),
-                  "Parent window of hierarchy dialog is not SCH_EDIT_FRAME." );
+    SCH_EDIT_FRAME* parent = static_cast< SCH_EDIT_FRAME* >( GetParent() );
 
     parent->SetCurrentSheet(( (TreeItemData*) m_Tree->GetItemData( ItemSel ) )->m_SheetPath );
     parent->DisplayCurrentSheet();
