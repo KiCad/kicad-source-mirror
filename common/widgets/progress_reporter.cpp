@@ -29,8 +29,8 @@
 PROGRESS_REPORTER::PROGRESS_REPORTER( int aNumPhases ) :
     m_phase( 0 ),
     m_progress( 0 ),
-    m_maxProgress( 1 ),
-    m_numPhases( aNumPhases )
+    m_numPhases( aNumPhases ),
+    m_maxProgress( 1 )
 {
 };
 
@@ -97,6 +97,10 @@ WX_PROGRESS_REPORTER::~WX_PROGRESS_REPORTER()
 void WX_PROGRESS_REPORTER::updateUI()
 {
     int cur = currentProgress();
+
+    if( cur < 0 || cur > 1000 )
+        cur = 0;
+
     SetRange( 1000 );
     Update( cur, m_message );
 }
