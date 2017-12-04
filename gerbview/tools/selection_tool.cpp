@@ -144,6 +144,8 @@ GERBVIEW_SELECTION_TOOL::GERBVIEW_SELECTION_TOOL() :
         m_multiple( false ),
         m_menu( *this )
 {
+    // these members are initialized to avoid warnings about non initialized vars
+    m_preliminary = true;
 }
 
 

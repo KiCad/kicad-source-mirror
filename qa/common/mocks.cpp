@@ -198,9 +198,12 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
 wxString DIALOG_FIND::prevSearchString;
 bool DIALOG_FIND::warpMouse = true;
 
-
 DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aParent ) : DIALOG_FIND_BASE( aParent )
 {
+    // these members are initialized to avoid warnings about non initialized vars
+    parent = aParent;
+    itemCount = markerCount = 0;
+    foundItem = nullptr;
 }
 
 
@@ -241,6 +244,13 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent,
         const wxSize& size,
         long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
+    // these members are initialized only to avoid warnings about non initialized vars
+    m_staticText1 = nullptr;
+    m_SearchTextCtrl = nullptr;
+    m_NoMouseWarpCheckBox = nullptr;
+    m_button1 = nullptr;
+    m_button2 = nullptr;
+    m_button3 = nullptr;
 }
 
 
@@ -280,6 +290,20 @@ DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent,
         const wxSize& size,
         long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
+    // these members are initialized only to avoid warnings about non initialized vars
+    m_Include_Modules = nullptr;
+    m_Include_PcbTextes = nullptr;
+    m_IncludeLockedModules = nullptr;
+    m_Include_Draw_Items = nullptr;
+    m_Include_Tracks = nullptr;
+    m_Include_Edges_Items = nullptr;
+    m_Include_Zones = nullptr;
+    m_DrawBlockItems = nullptr;
+    m_staticline1 = nullptr;
+    m_checkBoxIncludeInvisible = nullptr;
+    m_sdbSizer1 = nullptr;
+    m_sdbSizer1OK = nullptr;
+    m_sdbSizer1Cancel = nullptr;
 }
 
 

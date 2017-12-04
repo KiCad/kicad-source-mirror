@@ -58,6 +58,7 @@ public:
         m_InitialLibId = m_Component->GetLibId().Format();
         m_Row = -1;
         m_IsOrphan = false;
+        m_Screen = nullptr;
     }
 
     // Returns a string like mylib:symbol_name from the LIB_ID of the component

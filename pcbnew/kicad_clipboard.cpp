@@ -308,7 +308,7 @@ BOARD* CLIPBOARD_IO::Load( const wxString& aFileName,
     }
 
     // Give the filename to the board if it's new
-    if( !aAppendToMe )
+    if( board && !aAppendToMe )
         board->SetFileName( aFileName );
 
     return board;

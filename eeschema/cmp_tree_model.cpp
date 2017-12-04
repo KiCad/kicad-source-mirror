@@ -164,7 +164,7 @@ CMP_TREE_NODE_LIB_ID::CMP_TREE_NODE_LIB_ID( CMP_TREE_NODE* aParent, LIB_ALIAS* a
         SearchText += footprint.Lower();
     }
 
-    if( part->IsMulti() )
+    if( part && part->IsMulti() )
     {
         for( int u = 1; u <= part->GetUnitCount(); ++u )
         {

@@ -66,6 +66,8 @@ DIALOG_DXF_IMPORT::DIALOG_DXF_IMPORT( PCB_BASE_FRAME* aParent, bool aImportAsFoo
     m_PcbImportUnits = 0;
     m_PcbImportOffsetX = 0.0;   // always in mm
     m_PcbImportOffsetY = 0.0;   // always in mm
+    m_PCBdefaultLineWidth = 0.2; // in mm
+    m_PCBLineWidthUnits = 0;
 
     if( m_config )
     {

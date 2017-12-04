@@ -243,7 +243,9 @@ void HIERARCHY_NAVIG_DLG::BuildTree( SCH_SHEET_PATH* list, wxTreeItemId*  previo
             m_TreeSize.x  = std::max( m_TreeSize.x, ll );
             m_TreeSize.y += 1;
 
-            if( *list == dynamic_cast< SCH_EDIT_FRAME* >( GetParent() )->GetCurrentSheet() )
+            SCH_EDIT_FRAME* parent = dynamic_cast< SCH_EDIT_FRAME* >( GetParent() );
+
+            if( parent && *list == parent->GetCurrentSheet() )
             {
                 m_Tree->EnsureVisible( menu );
                 m_Tree->SelectItem( menu );
