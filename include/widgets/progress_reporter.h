@@ -47,9 +47,11 @@ class PROGRESS_REPORTER
         int currentProgress() const;
         virtual void updateUI() = 0;
 
-        wxString m_message;
-        int m_phase, m_numPhases;
-        int m_progress, m_maxProgress;
+        wxString m_rptMessage;
+        int m_phase;
+        int m_numPhases;
+        int m_progress;
+        int m_maxProgress;
 
         std::mutex m_lock;
 };

@@ -53,7 +53,7 @@ void PROGRESS_REPORTER::AdvancePhase( )
 void PROGRESS_REPORTER::Report( const wxString& aMessage )
 {
     std::lock_guard<std::mutex> guard( m_lock );
-    m_message   = aMessage;
+    m_rptMessage   = aMessage;
     updateUI();
 }
 
@@ -102,5 +102,5 @@ void WX_PROGRESS_REPORTER::updateUI()
         cur = 0;
 
     SetRange( 1000 );
-    Update( cur, m_message );
+    Update( cur, m_rptMessage );
 }
