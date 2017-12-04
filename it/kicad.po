@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-01 22:51+0100\n"
-"PO-Revision-Date: 2017-12-01 22:52+0100\n"
+"POT-Creation-Date: 2017-12-04 10:24+0100\n"
+"PO-Revision-Date: 2017-12-04 10:26+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -2856,21 +2856,21 @@ msgstr ""
 "\"%s\"\n"
 "linea %d, offset %d"
 
-#: common/exceptions.cpp:103
+#: common/exceptions.cpp:104
 #, c-format
 msgid ""
-"KiCad was unable to open this file, as it was created with a more recent "
-"version than the one you are running. To open it, you'll need to upgrade "
-"KiCad to a more recent version.\n"
+"KiCad was unable to open this file, as it was created with\n"
+"a more recent version than the one you are running.\n"
+"To open it, you'll need  to upgrade KiCad to a more recent version.\n"
 "\n"
 "Date of KiCad version required (or newer): %s\n"
 "\n"
 "Full error text:\n"
 "%s"
 msgstr ""
-"KiCad non è stato in grado di aprire questo file, dato che è stato creato "
-"con una versione più recente di quella correntemente in esecuzione. Per "
-"aprirlo, è necessario aggiornare KiCad ad una versione più recente.\n"
+"KiCad non è stato in grado di aprire questo file, dato che è stato creato con\n"
+"una versione più recente di quella correntemente in esecuzione.\n"
+"Per aprirlo, è necessario aggiornare KiCad ad una versione più recente.\n"
 "\n"
 "Data della versione di KiCad richiesta (o più recente): %s\n"
 "\n"
@@ -3775,7 +3775,7 @@ msgstr ""
 msgid "Configuration Error"
 msgstr "Errore di configurazione"
 
-#: cvpcb/cvpcb_mainframe.cpp:756 eeschema/schframe.cpp:1483
+#: cvpcb/cvpcb_mainframe.cpp:756 eeschema/schframe.cpp:1486
 #: kicad/prjconfig.cpp:87 pcbnew/moduleframe.cpp:824 pcbnew/pcbframe.cpp:1035
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
@@ -5424,7 +5424,7 @@ msgid "Error occurred loading symbol '%s' from library '%s'."
 msgstr ""
 "Errore durante il caricamento del simbolo \"%s\" dalla libreria \"%s\"."
 
-#: eeschema/schframe.cpp:1486
+#: eeschema/schframe.cpp:1489
 msgid " [no file]"
 msgstr "[nessun file]"
 
@@ -11321,15 +11321,15 @@ msgstr ""
 msgid "This position is already occupied by another pin. Continue?"
 msgstr "Questa posizione risulta già occupata da un'altro piedino. Continuare?"
 
-#: eeschema/pinedit.cpp:710
+#: eeschema/pinedit.cpp:712
 msgid "No pins!"
 msgstr "Nessun pin!"
 
-#: eeschema/pinedit.cpp:720
+#: eeschema/pinedit.cpp:722
 msgid "Marker Information"
 msgstr "Informazioni marcatore"
 
-#: eeschema/pinedit.cpp:742
+#: eeschema/pinedit.cpp:744
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts "
@@ -11338,26 +11338,26 @@ msgstr ""
 "<b>Piedino duplicato %s</b> \"%s\" nella posizione <b>(%.3f, %.3f)</b> in "
 "conflitto con il piedino %s \"%s\" nella posizione <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:756 eeschema/pinedit.cpp:796
+#: eeschema/pinedit.cpp:758 eeschema/pinedit.cpp:798
 #, c-format
 msgid " in part %c"
 msgstr " nel componente %c"
 
-#: eeschema/pinedit.cpp:762 eeschema/pinedit.cpp:802
+#: eeschema/pinedit.cpp:764 eeschema/pinedit.cpp:804
 msgid "  of converted"
 msgstr " di convertito"
 
-#: eeschema/pinedit.cpp:764 eeschema/pinedit.cpp:804
+#: eeschema/pinedit.cpp:766 eeschema/pinedit.cpp:806
 msgid "  of normal"
 msgstr " di normale"
 
-#: eeschema/pinedit.cpp:787
+#: eeschema/pinedit.cpp:789
 #, c-format
 msgid "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr ""
 "<b>Piedino fuori griglia %s</b> \"%s\" nella posizione <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:813
+#: eeschema/pinedit.cpp:815
 msgid "No off grid or duplicate pins were found."
 msgstr "Non è stato trovato nessun piedino duplicato o fuori griglia "
 
@@ -26906,11 +26906,11 @@ msgstr "Verticale, poi orizzontale"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:109
 msgid "Pad Numbering Direction"
-msgstr "Direzione numerazione piazzola"
+msgstr "Direzione numerazione piazzole"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:113
 msgid "Reverse pad numbering on alternate rows or columns"
-msgstr "Numerazione inversa piazzola su righe o colonne alternate"
+msgstr "Numerazione inversa piazzole su righe o colonne alternate"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:116
 #: pcbnew/dialogs/dialog_create_array_base.cpp:250
