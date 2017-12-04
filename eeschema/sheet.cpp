@@ -143,6 +143,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
         else                                                   // New file.
         {
             aSheet->SetScreen( new SCH_SCREEN( &Kiway() ) );
+            aSheet->GetScreen()->SetModify();
             aSheet->GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
             aSheet->GetScreen()->SetFileName( newFilename );
         }
