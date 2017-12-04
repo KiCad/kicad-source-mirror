@@ -49,25 +49,7 @@ class BOARD;
 class ZONE_CONTAINER;
 class MSG_PANEL_ITEM;
 
-
-/**
- * Struct SEGMENT
- * is a simple container used when filling areas with segments
- */
-struct SEGMENT
-{
-    wxPoint m_Start;        // starting point of a segment
-    wxPoint m_End;          // ending point of a segment
-
-    SEGMENT() {}
-
-    SEGMENT( const wxPoint& aStart, const wxPoint& aEnd )
-    {
-        m_Start = aStart;
-        m_End = aEnd;
-    }
-};
-
+typedef std::vector<SEG> ZONE_SEGMENT_FILL;
 
 /**
  * Class ZONE_CONTAINER
@@ -196,9 +178,8 @@ public:
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    /// How to fill areas: 0 = use filled polygons, 1 => fill with segments.
-    void SetFillMode( int aFillMode )                   { m_FillMode = aFillMode; }
-    int GetFillMode() const                             { return m_FillMode; }
+    void SetFillMode( ZONE_FILL_MODE aFillMode )                   { m_FillMode = aFillMode; }
+    ZONE_FILL_MODE GetFillMode() const                             { return m_FillMode; }
 
     void SetThermalReliefGap( int aThermalReliefGap )   { m_ThermalReliefGap = aThermalReliefGap; }
     int GetThermalReliefGap( D_PAD* aPad = NULL ) const;
@@ -256,8 +237,8 @@ public:
     int GetLocalFlags() const { return m_localFlgs; }
     void SetLocalFlags( int aFlags ) { m_localFlgs = aFlags; }
 
-    std::vector <SEGMENT>& FillSegments() { return m_FillSegmList; }
-    const std::vector <SEGMENT>& FillSegments() const { return m_FillSegmList; }
+    ZONE_SEGMENT_FILL& FillSegments() { return m_FillSegmList; }
+    const ZONE_SEGMENT_FILL& FillSegments() const { return m_FillSegmList; }
 
     SHAPE_POLY_SET* Outline() { return m_Poly; }
     const SHAPE_POLY_SET* Outline() const { return const_cast< SHAPE_POLY_SET* >( m_Poly ); }
@@ -306,42 +287,6 @@ public:
     void TransformSolidAreasShapesToPolygonSet( SHAPE_POLY_SET& aCornerBuffer,
                                                 int             aCircleToSegmentsCount,
                                                 double          aCorrectionFactor ) const;
-    /**
-     * Build the filled solid areas polygons from zone outlines (stored in m_Poly)
-     * The solid areas can be more than one on copper layers, and do not have holes
-      ( holes are linked by overlapping segments to the main outline)
-     * in order to have drawable (and plottable) filled polygons.
-     * @return true if OK, false if the solid polygons cannot be built
-     * @param aPcb: the current board (can be NULL for non copper zones)
-     * @param aOutlineBuffer: A reference to a SHAPE_POLY_SET buffer to store polygons, or NULL.
-     * if NULL (default):
-     * - m_FilledPolysList is used to store solid areas polygons.
-     * - on copper layers, tracks and other items shapes of other nets are
-     * removed from solid areas
-     * if not null:
-     * Only the zone outline (with holes, if any) is stored in aOutlineBuffer
-     * with holes linked. Therefore only one polygon is created
-     *
-     * When aOutlineBuffer is not null, his function calls
-     * AddClearanceAreasPolygonsToPolysList() to add holes for pads and tracks
-     * and other items not in net.
-     */
-    bool BuildFilledSolidAreasPolygons( BOARD* aPcb, SHAPE_POLY_SET* aOutlineBuffer = NULL );
-
-    /**
-     * Function ComputeRawFilledAreas
-     * Add non copper areas polygons (pads and tracks with clearance)
-     * to a filled copper area
-     * used in BuildFilledSolidAreasPolygons when calculating filled areas in a zone
-     * Non copper areas are pads and track and their clearance area
-     * The filled copper area must be computed before
-     * BuildFilledSolidAreasPolygons() call this function just after creating the
-     *  filled copper area polygon (without clearance areas
-     * @param aPcb: the current board
-     * _NG version uses SHAPE_POLY_SET instead of Boost.Polygon
-     */
-    void ComputeRawFilledAreas( BOARD* aPcb );
-
 
      /**
      * Function TransformOutlinesShapeWithClearanceToPolygon
@@ -359,7 +304,7 @@ public:
      */
     void TransformOutlinesShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                         int aMinClearanceValue,
-                                                        bool aUseNetClearance );
+                                                        bool aUseNetClearance ) const;
 
     void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                int aClearanceValue,
@@ -409,15 +354,6 @@ public:
      */
     bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
 
-    /**
-     * Function FillZoneAreasWithSegments
-     *  Fill sub areas in a zone with segments with m_ZoneMinThickness width
-     * A scan is made line per line, on the whole filled areas, with a step of m_ZoneMinThickness.
-     * all intersecting points with the horizontal infinite line and polygons to fill are calculated
-     * a list of SEGZONE items is built, line per line
-     * @return true if success, false on error
-     */
-    bool FillZoneAreasWithSegments();
 
     /**
      * Function UnFill
@@ -610,13 +546,23 @@ public:
     void CacheTriangulation();
 
    /**
-     * Function AddFilledPolysList
+     * Function SetFilledPolysList
      * sets the list of filled polygons.
      */
-    void AddFilledPolysList( SHAPE_POLY_SET& aPolysList )
+    void SetFilledPolysList( SHAPE_POLY_SET& aPolysList )
     {
         m_FilledPolysList = aPolysList;
     }
+
+    /**
+      * Function SetFilledPolysList
+      * sets the list of filled polygons.
+      */
+     void SetRawPolysList( SHAPE_POLY_SET& aPolysList )
+     {
+         m_RawPolysList = aPolysList;
+     }
+
 
     /**
      * Function GetSmoothedPoly
@@ -624,13 +570,7 @@ public:
      * m_Poly if it exists, otherwise it returns m_Poly.
      * @return SHAPE_POLY_SET* - pointer to the polygon.
      */
-    SHAPE_POLY_SET* GetSmoothedPoly() const
-    {
-        if( m_smoothedPoly )
-            return m_smoothedPoly;
-        else
-            return m_Poly;
-    };
+    bool BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly ) const;
 
     void SetCornerSmoothingType( int aType ) { m_cornerSmoothingType = aType; };
 
@@ -647,19 +587,9 @@ public:
      */
     void AddPolygon( std::vector< wxPoint >& aPolygon );
 
-    /**
-     * add a polygon to the zone filled areas list.
-     * these polygons have no hole, therefore any added polygon is a new
-     * filled area
-     */
-    void AddFilledPolygon( SHAPE_POLY_SET& aPolygon )
+    void SetFillSegments( const ZONE_SEGMENT_FILL& aSegments )
     {
-        m_FilledPolysList.Append( aPolygon );
-    }
-
-    void AddFillSegments( std::vector< SEGMENT >& aSegments )
-    {
-        m_FillSegmList.insert( m_FillSegmList.end(), aSegments.begin(), aSegments.end() );
+        m_FillSegmList = aSegments;
     }
 
     SHAPE_POLY_SET& RawPolysList()
@@ -743,10 +673,8 @@ public:
     virtual void SwapData( BOARD_ITEM* aImage ) override;
 
 private:
-    void buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeatures );
 
     SHAPE_POLY_SET*       m_Poly;                ///< Outline of the zone.
-    SHAPE_POLY_SET*       m_smoothedPoly;        // Corner-smoothed version of m_Poly
     int                   m_cornerSmoothingType;
     unsigned int          m_cornerRadius;
 
@@ -788,8 +716,8 @@ private:
     int                   m_ThermalReliefCopperBridge;
 
 
-    /// How to fill areas: 0 => use filled polygons, 1 => fill with segments.
-    int                   m_FillMode;
+    /// How to fill areas: ZFM_POLYGONS => use filled polygons, ZFM_SEGMENTS => fill with segments.
+    ZONE_FILL_MODE        m_FillMode;
 
     /// The index of the corner being moved or nullptr if no corner is selected.
     SHAPE_POLY_SET::VERTEX_INDEX* m_CornerSelection;
@@ -800,7 +728,7 @@ private:
     /** Segments used to fill the zone (#m_FillMode ==1 ), when fill zone by segment is used.
      *  In this case the segments have #m_ZoneMinThickness width.
      */
-    std::vector <SEGMENT> m_FillSegmList;
+    ZONE_SEGMENT_FILL          m_FillSegmList;
 
     /* set of filled polygons used to draw a zone as a filled area.
      * from outlines (m_Poly) but unlike m_Poly these filled polygons have no hole

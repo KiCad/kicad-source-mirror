@@ -172,7 +172,7 @@ void DIALOG_COPPER_ZONE::initDialog()
     if( m_settings.m_Zone_45_Only )
         m_OrientEdgesOpt->SetSelection( 1 );
 
-    m_FillModeCtrl->SetSelection( m_settings.m_FillMode ? 1 : 0 );
+    m_FillModeCtrl->SetSelection( m_settings.m_FillMode == ZFM_SEGMENTS ? 1 : 0 );
 
     AddUnitSymbol( *m_ClearanceValueTitle, g_UserUnit );
     msg = StringFromValue( g_UserUnit, m_settings.m_ZoneClearance );
@@ -381,7 +381,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     }
 
     m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
-    m_settings.m_FillMode = (m_FillModeCtrl->GetSelection() == 0) ? 0 : 1;
+    m_settings.m_FillMode = (m_FillModeCtrl->GetSelection() == 0) ? ZFM_POLYGONS : ZFM_SEGMENTS;
 
     wxString txtvalue = m_ZoneClearanceCtrl->GetValue();
     m_settings.m_ZoneClearance = ValueFromString( g_UserUnit, txtvalue );

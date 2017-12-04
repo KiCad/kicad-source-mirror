@@ -1869,17 +1869,17 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     }
 
     // Save the filling segments list
-    const std::vector< SEGMENT >& segs = aZone->FillSegments();
+    const auto& segs = aZone->FillSegments();
 
     if( segs.size() )
     {
         m_out->Print( aNestLevel+1, "(fill_segments\n" );
 
-        for( std::vector< SEGMENT >::const_iterator it = segs.begin();  it != segs.end();  ++it )
+        for( ZONE_SEGMENT_FILL::const_iterator it = segs.begin();  it != segs.end();  ++it )
         {
             m_out->Print( aNestLevel+2, "(pts (xy %s) (xy %s))\n",
-                          FMT_IU( it->m_Start ).c_str(),
-                          FMT_IU( it->m_End ).c_str() );
+                          FMT_IU( wxPoint( it->A ) ).c_str(),
+                          FMT_IU( wxPoint( it->B ) ).c_str() );
         }
 
         m_out->Print( aNestLevel+1, ")\n" );

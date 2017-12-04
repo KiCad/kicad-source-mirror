@@ -27,11 +27,13 @@
 #define __ZONE_FILLER_H
 
 #include <vector>
+#include <class_zone.h>
 
 class PROGRESS_REPORTER;
 class BOARD;
 class COMMIT;
-class ZONE_CONTAINER;
+class SHAPE_POLY_SET;
+class SHAPE_LINE_CHAIN;
 
 class ZONE_FILLER
 {
@@ -44,9 +46,70 @@ public:
     void    Unfill( std::vector<ZONE_CONTAINER*> aZones );
 
 private:
+
+    void buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
+            SHAPE_POLY_SET& aFeatures ) const;
+
+    /**
+     * Function computeRawFilledAreas
+     * Add non copper areas polygons (pads and tracks with clearance)
+     * to a filled copper area
+     * used in BuildFilledSolidAreasPolygons when calculating filled areas in a zone
+     * Non copper areas are pads and track and their clearance area
+     * The filled copper area must be computed before
+     * BuildFilledSolidAreasPolygons() call this function just after creating the
+     *  filled copper area polygon (without clearance areas
+     * @param aPcb: the current board
+     * _NG version uses SHAPE_POLY_SET instead of Boost.Polygon
+     */
+    void computeRawFilledAreas( const ZONE_CONTAINER* aZone,
+            const SHAPE_POLY_SET& aSmoothedOutline,
+            SHAPE_POLY_SET& aRawPolys,
+            SHAPE_POLY_SET& aFinalPolys ) const;
+
+    bool fillPolygonWithHorizontalSegments( const SHAPE_LINE_CHAIN& aPolygon,
+            ZONE_SEGMENT_FILL& aFillSegmList, int aStep ) const;
+
+    /**
+     * Function fillZoneWithSegments
+     *  Fill sub areas in a zone with segments with m_ZoneMinThickness width
+     * A scan is made line per line, on the whole filled areas, with a step of m_ZoneMinThickness.
+     * all intersecting points with the horizontal infinite line and polygons to fill are calculated
+     * a list of SEGZONE items is built, line per line
+     * @return true if success, false on error
+     */
+    bool fillZoneWithSegments( const ZONE_CONTAINER* aZone,
+            const SHAPE_POLY_SET& aFilledPolys,
+            ZONE_SEGMENT_FILL& aFillSegs ) const;
+
+    /**
+     * Build the filled solid areas polygons from zone outlines (stored in m_Poly)
+     * The solid areas can be more than one on copper layers, and do not have holes
+     *  ( holes are linked by overlapping segments to the main outline)
+     * in order to have drawable (and plottable) filled polygons.
+     * @return true if OK, false if the solid polygons cannot be built
+     * @param aPcb: the current board (can be NULL for non copper zones)
+     * @param aOutlineBuffer: A reference to a SHAPE_POLY_SET buffer to store polygons, or NULL.
+     * if NULL (default):
+     * - m_FilledPolysList is used to store solid areas polygons.
+     * - on copper layers, tracks and other items shapes of other nets are
+     * removed from solid areas
+     * if not null:
+     * Only the zone outline (with holes, if any) is stored in aOutlineBuffer
+     * with holes linked. Therefore only one polygon is created
+     *
+     * When aOutlineBuffer is not null, his function calls
+     * AddClearanceAreasPolygonsToPolysList() to add holes for pads and tracks
+     * and other items not in net.
+     */
+    bool fillSingleZone( const ZONE_CONTAINER* aZone,
+            SHAPE_POLY_SET& aRawPolys,
+            SHAPE_POLY_SET& aFinalPolys,
+            ZONE_SEGMENT_FILL& aSegmentFill ) const;
+
+    BOARD* m_board;
     COMMIT* m_commit;
     PROGRESS_REPORTER* m_progressReporter;
-    BOARD* m_board;
 };
 
 #endif

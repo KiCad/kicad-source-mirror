@@ -875,7 +875,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     areas.BooleanAdd( initialPolys, SHAPE_POLY_SET::PM_FAST );
     areas.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-    zone.AddFilledPolysList( areas );
+    zone.SetFilledPolysList( areas );
 
     itemplotter.PlotFilledAreas( &zone );
 }

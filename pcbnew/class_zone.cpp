@@ -55,9 +55,8 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
 {
     m_CornerSelection = nullptr;                // no corner is selected
     m_IsFilled = false;                         // fill status : true when the zone is filled
-    m_FillMode = 0;                             // How to fill areas: 0 = use filled polygons, != 0 fill with segments
+    m_FillMode = ZFM_POLYGONS;
     m_priority = 0;
-    m_smoothedPoly = NULL;
     m_cornerSmoothingType = ZONE_SETTINGS::SMOOTHING_NONE;
     SetIsKeepout( false );
     SetDoNotAllowCopperPour( false );           // has meaning only if m_isKeepout == true
@@ -73,8 +72,6 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
 ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     BOARD_CONNECTED_ITEM( aZone )
 {
-    m_smoothedPoly = NULL;
-
     // Should the copy be on the same net?
     SetNetCode( aZone.GetNetCode() );
     m_Poly = new SHAPE_POLY_SET( *aZone.m_Poly );
@@ -143,7 +140,6 @@ ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
 ZONE_CONTAINER::~ZONE_CONTAINER()
 {
     delete m_Poly;
-    delete m_smoothedPoly;
     delete m_CornerSelection;
 }
 
@@ -499,7 +495,7 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
         }
 
         // Draw areas:
-        if( m_FillMode == 0 && !outline_mode )
+        if( m_FillMode == ZFM_POLYGONS && !outline_mode )
             GRPoly( panel->GetClipBox(), DC, CornersBuffer.size(), &CornersBuffer[0],
                     true, 0, color, color );
     }
@@ -508,8 +504,8 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
     {
         for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
         {
-            wxPoint start = m_FillSegmList[ic].m_Start + offset;
-            wxPoint end   = m_FillSegmList[ic].m_End + offset;
+            wxPoint start = (wxPoint) ( m_FillSegmList[ic].A + VECTOR2I(offset) );
+            wxPoint end   = (wxPoint) ( m_FillSegmList[ic].B + VECTOR2I(offset) );
 
             if( !displ_opts->m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
                 GRCSegm( panel->GetClipBox(), DC, start.x, start.y, end.x, end.y,
@@ -912,8 +908,8 @@ void ZONE_CONTAINER::Move( const wxPoint& offset )
 
     for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
     {
-        m_FillSegmList[ic].m_Start += offset;
-        m_FillSegmList[ic].m_End   += offset;
+        m_FillSegmList[ic].A += VECTOR2I(offset);
+        m_FillSegmList[ic].B += VECTOR2I(offset);
     }
 }
 
@@ -951,8 +947,12 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
 
     for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
     {
-        RotatePoint( &m_FillSegmList[ic].m_Start, centre, angle );
-        RotatePoint( &m_FillSegmList[ic].m_End, centre, angle );
+        wxPoint a ( m_FillSegmList[ic].A );
+        RotatePoint( &a, centre, angle );
+        m_FillSegmList[ic].A = a;
+        wxPoint b ( m_FillSegmList[ic].B );
+        RotatePoint( &b, centre, angle );
+        m_FillSegmList[ic].B = a;
     }
 }
 
@@ -991,8 +991,8 @@ void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
 
     for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
     {
-        MIRROR( m_FillSegmList[ic].m_Start.y, mirror_ref.y );
-        MIRROR( m_FillSegmList[ic].m_End.y,   mirror_ref.y );
+        MIRROR( m_FillSegmList[ic].A.y, mirror_ref.y );
+        MIRROR( m_FillSegmList[ic].B.y,   mirror_ref.y );
     }
 }
 
@@ -1317,3 +1317,32 @@ void ZONE_CONTAINER::CacheTriangulation()
 {
     m_FilledPolysList.CacheTriangulation();
 }
+
+bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly ) const
+{
+    if( GetNumCorners() <= 2 )  // malformed zone. polygon calculations do not like it ...
+        return false;
+
+    // Make a smoothed polygon out of the user-drawn polygon if required
+    switch( m_cornerSmoothingType )
+    {
+    case ZONE_SETTINGS::SMOOTHING_CHAMFER:
+        aSmoothedPoly = m_Poly->Chamfer( m_cornerRadius );
+        break;
+
+    case ZONE_SETTINGS::SMOOTHING_FILLET:
+        aSmoothedPoly = m_Poly->Fillet( m_cornerRadius, m_ArcToSegmentsCount );
+        break;
+
+    default:
+        // Acute angles between adjacent edges can create issues in calculations,
+        // in inflate/deflate outlines transforms, especially when the angle is very small.
+        // We can avoid issues by creating a very small chamfer which remove acute angles,
+        // or left it without chamfer and use only CPOLYGONS_LIST::InflateOutline to create
+        // clearance areas
+        aSmoothedPoly = m_Poly->Chamfer( Millimeter2iu( 0.0 ) );
+        break;
+    }
+
+    return true;
+};

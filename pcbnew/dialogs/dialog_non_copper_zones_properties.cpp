@@ -198,7 +198,7 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::OnOkClick( wxCommandEvent& event )
         return;
     }
 
-    m_settings.m_FillMode = 0;  // Use always polygon fill mode
+    m_settings.m_FillMode = ZFM_POLYGONS;  // Use always polygon fill mode
 
     switch( m_OutlineAppearanceCtrl->GetSelection() )
     {

@@ -62,12 +62,18 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
         CombineAllAreasInNet( aModifiedZonesList, modified_area->GetNetCode(), true );
     }
 
+    /*
+
+    FIXME : do we really need this?
+
     if( !IsCopperLayer( layer ) )       // Refill non copper zones on this layer
     {
         for( unsigned ia = 0; ia < m_ZoneDescriptorList.size(); ia++ )
             if( m_ZoneDescriptorList[ia]->GetLayer() == layer )
                 m_ZoneDescriptorList[ia]->BuildFilledSolidAreasPolygons( this );
     }
+
+    */
 
     // Test for bad areas: all zones must have more than 2 corners:
     // Note: should not happen, but just in case.
@@ -284,7 +290,9 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
     for( int ia = 0; ia < GetAreaCount(); ia++ )
     {
         ZONE_CONTAINER* Area_Ref = GetArea( ia );
-        SHAPE_POLY_SET* refSmoothedPoly = Area_Ref->GetSmoothedPoly();
+        SHAPE_POLY_SET refSmoothedPoly;
+
+        Area_Ref->BuildSmoothedPoly( refSmoothedPoly );
 
         if( !Area_Ref->IsOnCopperLayer() )
             continue;
@@ -296,7 +304,9 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
         for( int ia2 = 0; ia2 < GetAreaCount(); ia2++ )
         {
             ZONE_CONTAINER* area_to_test = GetArea( ia2 );
-            SHAPE_POLY_SET* testSmoothedPoly = area_to_test->GetSmoothedPoly();
+            SHAPE_POLY_SET testSmoothedPoly;
+
+            area_to_test->BuildSmoothedPoly( testSmoothedPoly );
 
             if( Area_Ref == area_to_test )
                 continue;
@@ -330,11 +340,11 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                 zone2zoneClearance = 1;
 
             // test for some corners of Area_Ref inside area_to_test
-            for( auto iterator = refSmoothedPoly->IterateWithHoles(); iterator; iterator++ )
+            for( auto iterator = refSmoothedPoly.IterateWithHoles(); iterator; iterator++ )
             {
                 VECTOR2I currentVertex = *iterator;
 
-                if( testSmoothedPoly->Contains( currentVertex ) )
+                if( testSmoothedPoly.Contains( currentVertex ) )
                 {
                     // COPPERAREA_COPPERAREA error: copper area ref corner inside copper area
                     if( aCreate_Markers )
@@ -356,11 +366,11 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
             }
 
             // test for some corners of area_to_test inside Area_Ref
-            for( auto iterator = testSmoothedPoly->IterateWithHoles(); iterator; iterator++ )
+            for( auto iterator = testSmoothedPoly.IterateWithHoles(); iterator; iterator++ )
             {
                 VECTOR2I currentVertex = *iterator;
 
-                if( refSmoothedPoly->Contains( currentVertex ) )
+                if( refSmoothedPoly.Contains( currentVertex ) )
                 {
                     // COPPERAREA_COPPERAREA error: copper area corner inside copper area ref
                     if( aCreate_Markers )
@@ -383,13 +393,13 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
 
 
             // Iterate through all the segments of refSmoothedPoly
-            for( auto refIt = refSmoothedPoly->IterateSegmentsWithHoles(); refIt; refIt++ )
+            for( auto refIt = refSmoothedPoly.IterateSegmentsWithHoles(); refIt; refIt++ )
             {
                 // Build ref segment
                 SEG refSegment = *refIt;
 
                 // Iterate through all the segments in testSmoothedPoly
-                for( auto testIt = testSmoothedPoly->IterateSegmentsWithHoles(); testIt; testIt++ )
+                for( auto testIt = testSmoothedPoly.IterateSegmentsWithHoles(); testIt; testIt++ )
                 {
                     // Build test segment
                     SEG testSegment = *testIt;

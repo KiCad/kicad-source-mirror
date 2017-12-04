@@ -32,12 +32,13 @@
 
 #include "zones.h"
 
-
-class ZONE_CONTAINER;
-
-
 #define MAX_ZONE_CORNER_RADIUS_MILS 400
 
+enum ZONE_FILL_MODE
+{
+    ZFM_POLYGONS = 0, // fill zone with polygons
+    ZFM_SEGMENTS = 1  // fill zone with segments (legacy)
+};
 
 /**
  * Class ZONE_SETTINGS
@@ -55,8 +56,7 @@ public:
         SMOOTHING_LAST
     };
 
-    /// Mode for filling zone : 1 use segments, 0 use polygons
-    int  m_FillMode;
+    ZONE_FILL_MODE  m_FillMode;
 
     int  m_ZonePriority;                ///< Priority (0 ... N) of the zone
 

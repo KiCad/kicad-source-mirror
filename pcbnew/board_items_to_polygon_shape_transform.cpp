@@ -826,7 +826,7 @@ bool D_PAD::BuildPadDrillShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
  *      change the shape by creating stubs and destroy their properties.
  */
 void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                       D_PAD&          aPad,
+                                       const D_PAD&          aPad,
                                        int             aThermalGap,
                                        int             aCopperThickness,
                                        int             aMinThicknessValue,

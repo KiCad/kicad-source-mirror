@@ -2613,7 +2613,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             BIU     thermalReliefGap = biuParse( data += 2 , &data );  // +=2 for " F"
             BIU     thermalReliefCopperBridge = biuParse( data );
 
-            zc->SetFillMode( fillmode ? 1 : 0 );
+            zc->SetFillMode( fillmode ? ZFM_SEGMENTS : ZFM_POLYGONS );
 
             // @todo ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF: don't really want pcbnew.h
             // in here, after all, its a PLUGIN and global data is evil.
@@ -2690,7 +2690,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 makeNewOutline = end_contour;
             }
 
-            zc->AddFilledPolysList( polysList );
+            zc->SetFilledPolysList( polysList );
         }
 
         else if( TESTLINE( "$FILLSEGMENTS" ) )
@@ -2706,7 +2706,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
                 BIU ex = biuParse( data, &data );
                 BIU ey = biuParse( data );
 
-                zc->FillSegments().push_back( SEGMENT( wxPoint( sx, sy ), wxPoint( ex, ey ) ) );
+                zc->FillSegments().push_back( SEG( VECTOR2I( sx, sy ), VECTOR2I( ex, ey ) ) );
             }
         }
 
@@ -2724,7 +2724,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             {
                 if( !zc->IsOnCopperLayer() )
                 {
-                    zc->SetFillMode( 0 );
+                    zc->SetFillMode( ZFM_POLYGONS );
                     zc->SetNetCode( NETINFO_LIST::UNCONNECTED );
                 }
 

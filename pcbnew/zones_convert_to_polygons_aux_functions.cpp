@@ -47,11 +47,11 @@
   *                      false to create the outline polygon.
   */
 void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
-        SHAPE_POLY_SET& aCornerBuffer, int aMinClearanceValue, bool aUseNetClearance )
+        SHAPE_POLY_SET& aCornerBuffer, int aMinClearanceValue, bool aUseNetClearance ) const
 {
     // Creates the zone outline polygon (with holes if any)
     SHAPE_POLY_SET polybuffer;
-    BuildFilledSolidAreasPolygons( NULL, &polybuffer );
+    BuildSmoothedPoly( polybuffer );
 
     // add clearance to outline
     int clearance = aMinClearanceValue;
@@ -86,8 +86,8 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
  */
 
 void BuildUnconnectedThermalStubsPolygonList( SHAPE_POLY_SET& aCornerBuffer,
-                                              BOARD*                aPcb,
-                                              ZONE_CONTAINER*       aZone,
+                                              const BOARD*                aPcb,
+                                              const ZONE_CONTAINER*       aZone,
                                               double                aArcCorrection,
                                               double                aRoundPadThermalRotation )
 {

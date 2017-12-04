@@ -687,8 +687,8 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
                 {
                     for( unsigned iseg = 0; iseg < aZone->FillSegments().size(); iseg++ )
                     {
-                        wxPoint start = aZone->FillSegments()[iseg].m_Start;
-                        wxPoint end   = aZone->FillSegments()[iseg].m_End;
+                        wxPoint start = (wxPoint) aZone->FillSegments()[iseg].A;
+                        wxPoint end   = (wxPoint) aZone->FillSegments()[iseg].B;
                         m_plotter->ThickSegment( start, end,
                                                  aZone->GetMinThickness(),
                                                  GetPlotMode(), &gbr_metadata );

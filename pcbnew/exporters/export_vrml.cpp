@@ -49,6 +49,8 @@
 #include "wxPcbStruct.h"
 #include "../../kicad/kicad.h"
 
+#include <zone_filler.h>
+
 // minimum width (mm) of a VRML line
 #define MIN_VRML_LINEWIDTH 0.12
 
@@ -951,10 +953,13 @@ static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb )
         if( !GetLayer( aModel, zone->GetLayer(), &vl ) )
             continue;
 
+        // fixme: this modifies the board where it shouldn't, but I don't have the time
+        // to clean this up - TW
         if( !zone->IsFilled() )
         {
-            zone->SetFillMode( 0 ); // use filled polygons
-            zone->BuildFilledSolidAreasPolygons( aPcb );
+            ZONE_FILLER filler( aPcb );
+            zone->SetFillMode( ZFM_POLYGONS ); // use filled polygons
+            filler.Fill( { zone } );
         }
 
         const SHAPE_POLY_SET& poly = zone->GetFilledPolysList();
