@@ -54,9 +54,6 @@ DIALOG_BOM_EDITOR::DIALOG_BOM_EDITOR( SCH_EDIT_FRAME* parent ) :
 {
     m_bom = BOM_TABLE_MODEL::Create();
 
-    m_columnListCtrl->DeleteAllItems();
-    m_columnListCtrl->ClearColumns();
-
     auto nameColumn = m_columnListCtrl->AppendTextColumn( _( "Field" ) );
 
     auto showColumn = m_columnListCtrl->AppendToggleColumn(
@@ -70,23 +67,6 @@ DIALOG_BOM_EDITOR::DIALOG_BOM_EDITOR( SCH_EDIT_FRAME* parent ) :
                                         100 );
 
 
-    // Resize the columns appropriately
-    m_columnListCtrl->Update();
-
-    showColumn->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-    showColumn->SetMinWidth( showColumn->GetWidth() );
-    showColumn->SetResizeable( false );
-
-    m_columnListCtrl->Update();
-
-    nameColumn->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-    nameColumn->SetResizeable( true );
-
-    sortColumn->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-    sortColumn->SetResizeable( true );
-
-    m_columnListCtrl->Update();
-
     // Read all components
     LoadComponents();
 
@@ -95,11 +75,17 @@ DIALOG_BOM_EDITOR::DIALOG_BOM_EDITOR( SCH_EDIT_FRAME* parent ) :
 
     m_bom->ReloadTable();
 
-    Update();
+    // Set default column widths for fields table
+    showColumn->SetWidth( wxCOL_WIDTH_AUTOSIZE );
+    showColumn->SetResizeable( false );
 
-    m_bomView->Update();
+    nameColumn->SetWidth( wxCOL_WIDTH_AUTOSIZE );
+    nameColumn->SetResizeable( true );
 
-    // Set default column widths
+    sortColumn->SetWidth( wxCOL_WIDTH_AUTOSIZE );
+    sortColumn->SetResizeable( false );
+
+    // Set default column widths for BOM table
     for( unsigned int ii = 0; ii < m_bomView->GetColumnCount(); ii++ )
     {
         auto col = m_bomView->GetColumn( ii );
@@ -112,8 +98,6 @@ DIALOG_BOM_EDITOR::DIALOG_BOM_EDITOR( SCH_EDIT_FRAME* parent ) :
     }
 
     Layout();
-    GetSizer()->SetSizeHints( this );
-    Centre();
 }
 
 
