@@ -126,24 +126,39 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
         m_progressReporter->SetMaxProgress( toFill.size() );
     }
 
+
     #ifdef USE_OPENMP
-        #pragma omp parallel for schedule(dynamic)
+        #pragma omp parallel
     #endif
-    for( int i = 0; i < toFill.size(); i++ )
     {
-        SHAPE_POLY_SET rawPolys, finalPolys;
-        ZONE_SEGMENT_FILL segFill;
-        fillSingleZone ( toFill[i].m_zone, rawPolys, finalPolys, segFill );
-
-        toFill[i].m_zone->SetRawPolysList( rawPolys );
-        toFill[i].m_zone->SetFilledPolysList( finalPolys );
-        toFill[i].m_zone->SetFillSegments( segFill );
-        toFill[i].m_zone->SetIsFilled( true );
-
+        #ifdef USE_OPENMP
+            #pragma omp master
+        #endif
         if( m_progressReporter )
         {
-            m_progressReporter->AdvanceProgress();
+            m_progressReporter->KeepRefreshing();
         }
+
+        #ifdef USE_OPENMP
+            #pragma omp for schedule(dynamic)
+        #endif
+        for( int i = 0; i < toFill.size(); i++ )
+        {
+            SHAPE_POLY_SET rawPolys, finalPolys;
+            ZONE_SEGMENT_FILL segFill;
+            fillSingleZone ( toFill[i].m_zone, rawPolys, finalPolys, segFill );
+
+            toFill[i].m_zone->SetRawPolysList( rawPolys );
+            toFill[i].m_zone->SetFilledPolysList( finalPolys );
+            toFill[i].m_zone->SetFillSegments( segFill );
+            toFill[i].m_zone->SetIsFilled( true );
+
+            if( m_progressReporter )
+            {
+                m_progressReporter->AdvanceProgress();
+            }
+        }
+
     }
 
     if( m_progressReporter )
@@ -174,21 +189,31 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
         m_progressReporter->Report( _( "Caching polygon triangulations..." ) );
         m_progressReporter->SetMaxProgress( toFill.size() );
     }
-
     #ifdef USE_OPENMP
-        #pragma omp parallel for schedule(dynamic)
+        #pragma omp parallel
     #endif
-
-    for( int i = 0; i < toFill.size(); i++ )
     {
+        #ifdef USE_OPENMP
+            #pragma omp master
+        #endif
         if( m_progressReporter )
         {
-            m_progressReporter->AdvanceProgress();
+            m_progressReporter->KeepRefreshing();
         }
 
-        toFill[i].m_zone->CacheTriangulation();
-    }
+        #ifdef USE_OPENMP
+            #pragma omp for schedule(dynamic)
+        #endif
+        for( int i = 0; i < toFill.size(); i++ )
+        {
+            if( m_progressReporter )
+            {
+                m_progressReporter->AdvanceProgress();
+            }
 
+            toFill[i].m_zone->CacheTriangulation();
+        }
+    }
     if( m_progressReporter )
     {
         m_progressReporter->AdvancePhase();

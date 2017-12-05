@@ -521,30 +521,43 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
         }
 
         #ifdef USE_OPENMP
-            #pragma omp parallel for schedule(dynamic)
+            #pragma omp parallel
         #endif
-        for(int i = 0; i < m_zoneList.Size(); i++ )
         {
-            auto item = m_zoneList[i];
-            auto zoneItem = static_cast<CN_ZONE *> (item);
-            auto searchZones = std::bind( checkForConnection, _1, zoneItem );
-
-            if( zoneItem->Dirty() || m_padList.IsDirty() || m_trackList.IsDirty() || m_viaList.IsDirty() )
+            #ifdef USE_OPENMP
+                #pragma omp master
+            #endif
+            if (m_progressReporter)
             {
-                totalDirtyCount++;
-                m_viaList.FindNearby( zoneItem->BBox(), searchZones );
-                m_trackList.FindNearby( zoneItem->BBox(), searchZones );
-                m_padList.FindNearby( zoneItem->BBox(), searchZones );
-                m_zoneList.FindNearbyZones( zoneItem->BBox(), std::bind( checkInterZoneConnection, _1, zoneItem ) );
+                m_progressReporter->KeepRefreshing();
             }
 
+            #ifdef USE_OPENMP
+                #pragma omp for schedule(dynamic)
+            #endif
+            for(int i = 0; i < m_zoneList.Size(); i++ )
             {
-                std::lock_guard<std::mutex> lock( cnListLock );
-                cnt++;
+                auto item = m_zoneList[i];
+                auto zoneItem = static_cast<CN_ZONE *> (item);
+                auto searchZones = std::bind( checkForConnection, _1, zoneItem );
 
-                if (m_progressReporter)
+                if( zoneItem->Dirty() || m_padList.IsDirty() || m_trackList.IsDirty() || m_viaList.IsDirty() )
                 {
-                    m_progressReporter->AdvanceProgress();
+                    totalDirtyCount++;
+                    m_viaList.FindNearby( zoneItem->BBox(), searchZones );
+                    m_trackList.FindNearby( zoneItem->BBox(), searchZones );
+                    m_padList.FindNearby( zoneItem->BBox(), searchZones );
+                    m_zoneList.FindNearbyZones( zoneItem->BBox(), std::bind( checkInterZoneConnection, _1, zoneItem ) );
+                }
+
+                {
+                    std::lock_guard<std::mutex> lock( cnListLock );
+                    cnt++;
+
+                    if (m_progressReporter)
+                    {
+                        m_progressReporter->AdvanceProgress();
+                    }
                 }
             }
         }

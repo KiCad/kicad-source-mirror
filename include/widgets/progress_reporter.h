@@ -26,6 +26,7 @@
 #define __PROGRESS_REPORTER
 
 #include <mutex>
+#include <atomic>
 
 #include <wx/progdlg.h>
 
@@ -42,6 +43,8 @@ class PROGRESS_REPORTER
         void SetMaxProgress ( int aMaxProgress );
         void AdvanceProgress( );
 
+        void KeepRefreshing();
+
     protected:
 
         int currentProgress() const;
@@ -50,10 +53,8 @@ class PROGRESS_REPORTER
         wxString m_rptMessage;
         int m_phase;
         int m_numPhases;
-        int m_progress;
+        std::atomic_int m_progress;
         int m_maxProgress;
-
-        std::mutex m_lock;
 };
 
 class WX_PROGRESS_REPORTER : public PROGRESS_REPORTER, public wxProgressDialog

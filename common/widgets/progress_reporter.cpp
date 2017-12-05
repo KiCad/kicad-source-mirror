@@ -28,15 +28,14 @@
 
 PROGRESS_REPORTER::PROGRESS_REPORTER( int aNumPhases ) :
     m_phase( 0 ),
-    m_progress( 0 ),
     m_numPhases( aNumPhases ),
+    m_progress( 0 ),
     m_maxProgress( 1 )
 {
 };
 
 void PROGRESS_REPORTER::BeginPhase( int aPhase )
 {
-    std::lock_guard<std::mutex> guard( m_lock );
     m_phase = aPhase;
     m_progress = 0;
     updateUI();
@@ -44,7 +43,6 @@ void PROGRESS_REPORTER::BeginPhase( int aPhase )
 
 void PROGRESS_REPORTER::AdvancePhase( )
 {
-    std::lock_guard<std::mutex> guard( m_lock );
     m_phase++;
     m_progress = 0;
     updateUI();
@@ -52,28 +50,24 @@ void PROGRESS_REPORTER::AdvancePhase( )
 
 void PROGRESS_REPORTER::Report( const wxString& aMessage )
 {
-    std::lock_guard<std::mutex> guard( m_lock );
     m_rptMessage   = aMessage;
     updateUI();
 }
 
 void PROGRESS_REPORTER::SetMaxProgress ( int aMaxProgress )
 {
-    std::lock_guard<std::mutex> guard( m_lock );
     m_maxProgress = aMaxProgress;
     updateUI();
 }
 
 void PROGRESS_REPORTER::AdvanceProgress( )
 {
-    std::lock_guard<std::mutex> guard( m_lock );
     m_progress++;
-    updateUI();
 }
 
 int PROGRESS_REPORTER::currentProgress() const
 {
-    double current = (1.0 / (double)m_numPhases) * ( (double) m_phase + ( (double) m_progress / (double) m_maxProgress ) );
+    double current = (1.0 / (double)m_numPhases) * ( (double) m_phase + ( (double) m_progress.load() / (double) m_maxProgress ) );
 
     return (int)(current * 1000);
 }
@@ -102,5 +96,16 @@ void WX_PROGRESS_REPORTER::updateUI()
         cur = 0;
 
     SetRange( 1000 );
-    Update( cur, m_rptMessage );
+    wxProgressDialog::Update( cur, m_rptMessage );
+}
+
+void PROGRESS_REPORTER::KeepRefreshing()
+{
+    while ( m_progress < m_maxProgress && m_maxProgress > 0)
+    {
+        updateUI();
+        #ifdef USE_OPENMP
+            wxMilliSleep(10);
+        #endif
+    }
 }
