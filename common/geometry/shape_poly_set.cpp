@@ -1946,7 +1946,7 @@ void SHAPE_POLY_SET::triangulateSingle( const POLYGON& aPoly,
 
     std::unique_ptr<p2t::CDT> cdt( new p2t::CDT( outline ) );
 
-    for( int i = 1; i < aPoly.size(); i++ )
+    for( unsigned i = 1; i < aPoly.size(); i++ )
     {
         std::vector<p2t::Point*> hole;
 

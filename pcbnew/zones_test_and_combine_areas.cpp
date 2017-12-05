@@ -53,7 +53,10 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList,
     bool modified = NormalizeAreaPolygon( aModifiedZonesList, modified_area );
 
     // now see if we need to clip against other areas
+    /*
     LAYER_NUM layer = modified_area->GetLayer();
+    */
+
     bool bCheckAllAreas = TestAreaIntersections( modified_area );
 
     if( bCheckAllAreas )

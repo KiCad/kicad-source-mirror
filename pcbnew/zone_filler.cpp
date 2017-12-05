@@ -97,8 +97,6 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
     // Remove segment zones
     m_board->m_Zone.DeleteAll();
 
-    int ii;
-
     for( auto zone : aZones )
     {
         // Keepout zones are not filled
@@ -110,9 +108,7 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
         toFill.push_back( l );
     }
 
-    int zoneCount = m_board->GetAreaCount();
-
-    for( int i = 0; i < toFill.size(); i++ )
+    for( unsigned i = 0; i < toFill.size(); i++ )
     {
         if( m_commit )
         {
@@ -142,7 +138,7 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
         #ifdef USE_OPENMP
             #pragma omp for schedule(dynamic)
         #endif
-        for( int i = 0; i < toFill.size(); i++ )
+        for( unsigned i = 0; i < toFill.size(); i++ )
         {
             SHAPE_POLY_SET rawPolys, finalPolys;
             ZONE_SEGMENT_FILL segFill;
@@ -204,7 +200,7 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
         #ifdef USE_OPENMP
             #pragma omp for schedule(dynamic)
         #endif
-        for( int i = 0; i < toFill.size(); i++ )
+        for( unsigned i = 0; i < toFill.size(); i++ )
         {
             if( m_progressReporter )
             {
@@ -228,7 +224,7 @@ void ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones )
     }
     else
     {
-        for( int i = 0; i < toFill.size(); i++ )
+        for( unsigned i = 0; i < toFill.size(); i++ )
         {
             connectivity->Update( toFill[i].m_zone );
         }

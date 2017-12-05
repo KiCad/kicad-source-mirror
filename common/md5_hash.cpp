@@ -194,7 +194,7 @@ void MD5_HASH::md5_init(MD5_CTX *ctx)
 
 void MD5_HASH::md5_update(MD5_CTX *ctx, uint8_t data[], uint32_t len)
 {
-   uint32_t t,i;
+   uint32_t i;
 
    for (i=0; i < len; ++i) {
       ctx->data[ctx->datalen] = data[i];

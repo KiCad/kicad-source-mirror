@@ -217,27 +217,27 @@ BOARD* loadBoard( const std::string& filename )
     return brd;
 }
 
-int main(int argc, char *argv[])
+int main( int argc, char *argv[] )
 {
-  auto brd = loadBoard( argc > 1 ? argv[1] : "../../../../tests/dp.kicad_pcb");
+    auto brd = loadBoard( argc > 1 ? argv[1] : "../../../../tests/dp.kicad_pcb" );
 
-  if(!brd)
-    return -1;
+    if( !brd )
+        return -1;
 
 
-    PROF_COUNTER cnt("allBoard");
+    PROF_COUNTER cnt( "allBoard" );
 
 
     #pragma omp parallel for schedule(dynamic)
-    for( int z = 0; z<brd->GetAreaCount(); z++)
+    for( int z = 0; z<brd->GetAreaCount(); z++ )
     {
-        auto zone = brd->GetArea(z);
+        auto zone = brd->GetArea( z );
         SHAPE_POLY_SET poly = zone->GetFilledPolysList();
 
         poly.CacheTriangulation();
 
         (void) poly;
-        printf("zone %d/%d\n", (z+1), brd->GetAreaCount() );
+        printf("zone %d/%d\n", ( z+1 ), brd->GetAreaCount() );
 #if 0
         PROF_COUNTER unfrac("unfrac");
         poly.Unfracture( SHAPE_POLY_SET::PM_FAST );
