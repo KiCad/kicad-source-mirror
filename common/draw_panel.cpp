@@ -996,25 +996,31 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
                 cmd.SetId( ID_POPUP_ZOOM_OUT );
         }
         // MousewheelPAN + Shift = horizontal scrolling
-        else if( event.ShiftDown() && !event.ControlDown() )
-        {
-            if( wheelRotation > 0 )
-                cmd.SetId( ID_PAN_LEFT );
-            else if( wheelRotation < 0)
-                cmd.SetId( ID_PAN_RIGHT );
-        }
         // Without modifiers MousewheelPAN - just pan
         else
         {
-            wxPoint newStart = GetViewStart();
-            if( axis == wxMOUSE_WHEEL_HORIZONTAL )
-                newStart.x += wheelRotation;
-            else
-                newStart.y -= wheelRotation;
+            if( event.ShiftDown() && !event.ControlDown() )
+                axis = wxMOUSE_WHEEL_HORIZONTAL;
 
-            wxPoint center = GetScreenCenterLogicalPosition();
-            GetParent()->SetScrollCenterPosition( center );
+            wxPoint newStart = GetViewStart();
+            wxPoint center = GetParent()->GetScrollCenterPosition();
+            double scale = GetParent()->GetScreen()->GetScalingFactor();
+
+            if( axis == wxMOUSE_WHEEL_HORIZONTAL )
+            {
+                newStart.x += wheelRotation;
+                center.x += KiROUND( (double) wheelRotation / scale );
+            }
+            else
+            {
+                newStart.y -= wheelRotation;
+                center.y -= KiROUND( (double) wheelRotation / scale );
+            }
             Scroll( newStart );
+
+            GetParent()->SetScrollCenterPosition( center );
+            GetParent()->SetCrossHairPosition( center, true );
+            GetParent()->RedrawScreen( center, false );
         }
     }
     else if( wheelRotation > 0 )
