@@ -152,13 +152,6 @@ public:
     int GetClearance( BOARD_CONNECTED_ITEM* aItem = NULL ) const override;
 
     /**
-     * Function RemoveInsulatedCopperIslands
-     * Remove insulated copper islands found in m_FilledPolysList.
-     * @param aPcb = the board to analyze
-     */
-    void RemoveInsulatedCopperIslands( BOARD* aPcb );
-
-    /**
      * Function IsOnCopperLayer
      * @return true if this zone is on a copper layer, false if on a technical layer
      */
