@@ -52,8 +52,8 @@ void Sweep::SweepPoints(SweepContext& tcx)
   for (int i = 1; i < tcx.point_count(); i++) {
     Point& point = *tcx.GetPoint(i);
     Node* node = &PointEvent(tcx, point);
-    for (unsigned int i = 0; i < point.edge_list.size(); i++) {
-      EdgeEvent(tcx, point.edge_list[i], node);
+    for (unsigned int j = 0; j < point.edge_list.size(); j++) {
+      EdgeEvent(tcx, point.edge_list[j], node);
     }
   }
 }
@@ -702,13 +702,6 @@ void Sweep::FlipEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* t, 
   Triangle& ot = t->NeighborAcross(p);
   Point& op = *ot.OppositePoint(*t, p);
 
-  if (&ot == NULL) {
-    // If we want to integrate the fillEdgeEvent do it here
-    // With current implementation we should never get here
-    //throw new RuntimeException( "[BUG:FIXME] FLIP failed due to missing triangle");
-    assert(0);
-  }
-
   if (InScanArea(p, *t->PointCCW(p), *t->PointCW(p), op)) {
     // Lets rotate shared edge one vertex CW
     RotateTrianglePair(*t, p, ot, op);
@@ -776,13 +769,6 @@ void Sweep::FlipScanEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle&
 {
   Triangle& ot = t.NeighborAcross(p);
   Point& op = *ot.OppositePoint(t, p);
-
-  if (&t.NeighborAcross(p) == NULL) {
-    // If we want to integrate the fillEdgeEvent do it here
-    // With current implementation we should never get here
-    //throw new RuntimeException( "[BUG:FIXME] FLIP failed due to missing triangle");
-    assert(0);
-  }
 
   if (InScanArea(eq, *flip_triangle.PointCCW(eq), *flip_triangle.PointCW(eq), op)) {
     // flip with new edge op->eq
