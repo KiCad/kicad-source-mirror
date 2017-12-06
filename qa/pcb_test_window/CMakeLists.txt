@@ -33,7 +33,7 @@ endif()
 
 add_dependencies( pnsrouter pcbcommon pcad2kicadpcb ${GITHUB_PLUGIN_LIBRARIES} )
 
-add_executable(test_window
+add_executable(test_window WIN32
   test.cpp
   ../common/pcb_test_frame.cpp
   ../common/mocks.cpp
