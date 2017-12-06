@@ -942,7 +942,7 @@ void SHAPE_POLY_SET::unfractureSingle( SHAPE_POLY_SET::POLYGON& aPoly )
     auto lc = aPoly[0];
     lc.Simplify();
 
-    EDGE_LIST_ENTRY edgeList[ lc.SegmentCount() ];
+    auto edgeList = std::make_unique<EDGE_LIST_ENTRY []>( lc.SegmentCount() );
 
     for( int i = 0; i < lc.SegmentCount(); i++ )
     {
@@ -1004,7 +1004,7 @@ void SHAPE_POLY_SET::unfractureSingle( SHAPE_POLY_SET::POLYGON& aPoly )
             queue.insert( &edgeList[i] );
     }
 
-    EDGE_LIST_ENTRY* edgeBuf[ lc.SegmentCount() ];
+    auto edgeBuf = std::make_unique<EDGE_LIST_ENTRY* []>( lc.SegmentCount() );
 
     int n = 0;
     int outline = -1;

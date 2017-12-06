@@ -33,7 +33,7 @@
 #include <profile.h>
 
 #include <unordered_set>
-
+#include <utility>
 
 
 void unfracture( SHAPE_POLY_SET::POLYGON* aPoly, SHAPE_POLY_SET::POLYGON* aResult )
@@ -88,7 +88,7 @@ void unfracture( SHAPE_POLY_SET::POLYGON* aPoly, SHAPE_POLY_SET::POLYGON* aResul
     auto lc = (*aPoly)[0];
     lc.Simplify();
 
-    EDGE_LIST_ENTRY edgeList[ lc.SegmentCount() ];
+    auto edgeList = std::make_unique<EDGE_LIST_ENTRY []>( lc.SegmentCount() );
 
     for(int i = 0; i < lc.SegmentCount(); i++)
     {
@@ -149,7 +149,7 @@ void unfracture( SHAPE_POLY_SET::POLYGON* aPoly, SHAPE_POLY_SET::POLYGON* aResul
         //printf("Skip %d\n", i);
     }
 
-    EDGE_LIST_ENTRY* edgeBuf[ lc.SegmentCount() ];
+    auto edgeBuf = std::make_unique<EDGE_LIST_ENTRY* []>( lc.SegmentCount() );
 
     int n = 0;
     int outline = -1;
