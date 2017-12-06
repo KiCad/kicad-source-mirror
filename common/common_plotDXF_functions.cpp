@@ -94,18 +94,20 @@ static const struct
     { "YELLOW4",    2 }
 };
 
-/**
- * Line types in the boilerplate DXF header.  The
- * element indices correspond to the eeschema line
- * types.
- */
-static const char *dxf_lines[] =
+
+static const char* getDXFLineType( PlotDashType aType )
 {
-    [ PLOTDASHTYPE_SOLID ]   = "CONTINUOUS",
-    [ PLOTDASHTYPE_DASH ]    = "DASHED",
-    [ PLOTDASHTYPE_DOT ]     = "DOTTED",
-    [ PLOTDASHTYPE_DASHDOT ] = "DASHDOT"
-};
+    switch( aType )
+    {
+    case PLOTDASHTYPE_SOLID:    return "CONTINUOUS";
+    case PLOTDASHTYPE_DASH:     return "DASHED";
+    case PLOTDASHTYPE_DOT:      return "DOTTED";
+    case PLOTDASHTYPE_DASHDOT:  return "DASHDOT";
+    }
+
+    wxFAIL_MSG( "Unhandled PlotDashType" );
+    return "CONTINUOUS";
+}
 
 
 // A helper function to create a color name acceptable in DXF files
@@ -565,7 +567,7 @@ void DXF_PLOTTER::PenTo( const wxPoint& pos, char plume )
         wxASSERT( m_currentLineType >= 0 && m_currentLineType < 4 );
         // DXF LINE
         wxString cname = getDXFColorName( m_currentColor );
-        const char *lname = dxf_lines[ m_currentLineType ];
+        const char *lname = getDXFLineType( (PlotDashType) m_currentLineType );
         fprintf( outputFile, "0\nLINE\n8\n%s\n6\n%s\n10\n%g\n20\n%g\n11\n%g\n21\n%g\n",
                  TO_UTF8( cname ), lname,
                  pen_lastpos_dev.x, pen_lastpos_dev.y, pos_dev.x, pos_dev.y );

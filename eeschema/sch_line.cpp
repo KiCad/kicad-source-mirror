@@ -42,13 +42,20 @@
 
 #include <dialogs/dialog_edit_line_style.h>
 
-const enum wxPenStyle SCH_LINE::PenStyle[] =
+
+static wxPenStyle getwxPenStyle( PlotDashType aType )
 {
-        [PLOTDASHTYPE_SOLID] = wxPENSTYLE_SOLID,
-        [PLOTDASHTYPE_DASH] = wxPENSTYLE_SHORT_DASH,
-        [PLOTDASHTYPE_DOT] = wxPENSTYLE_DOT,
-        [PLOTDASHTYPE_DASHDOT] = wxPENSTYLE_DOT_DASH
-};
+    switch( aType )
+    {
+    case PLOTDASHTYPE_SOLID:    return wxPENSTYLE_SOLID;
+    case PLOTDASHTYPE_DASH:     return wxPENSTYLE_SHORT_DASH;
+    case PLOTDASHTYPE_DOT:      return wxPENSTYLE_DOT;
+    case PLOTDASHTYPE_DASHDOT:  return wxPENSTYLE_DOT_DASH;
+    }
+
+    wxFAIL_MSG( "Unhandled PlotDashType" );
+    return wxPENSTYLE_SOLID;
+}
 
 
 SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
@@ -321,7 +328,7 @@ void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
         end += offset;
 
     GRLine( panel->GetClipBox(), DC, start.x, start.y, end.x, end.y, width, color,
-            PenStyle[ GetLineStyle() ] );
+            getwxPenStyle( (PlotDashType) GetLineStyle() ) );
 
     if( m_startIsDangling )
         DrawDanglingSymbol( panel, DC, start, color );
