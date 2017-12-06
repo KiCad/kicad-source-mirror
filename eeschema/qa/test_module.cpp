@@ -26,7 +26,6 @@
  * Main file for the schematic eagle plugin tests to be compiled
  */
 
-#define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE "Schematic Eagle plugin"
 
 #include <boost/test/unit_test.hpp>

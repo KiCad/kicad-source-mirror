@@ -34,6 +34,9 @@ add_executable( qa_eagle_plugin
     test_basic.cpp
     )
 
+target_compile_definitions( qa_eagle_plugin
+    PRIVATE -DBOOST_TEST_DYN_LINK )
+
 add_dependencies( qa_eagle_plugin common eeschema_kiface )
 
 target_link_libraries( qa_eagle_plugin
