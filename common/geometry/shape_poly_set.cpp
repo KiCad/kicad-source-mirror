@@ -33,6 +33,7 @@
 #include <list>
 #include <algorithm>
 #include <unordered_set>
+#include <memory>
 
 #include <common.h>
 #include <md5_hash.h>
