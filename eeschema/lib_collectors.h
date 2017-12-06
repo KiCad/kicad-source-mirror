@@ -75,6 +75,11 @@ public:
     static const KICAD_T RotatableItems[];
 
     /**
+     * A scan list for all double-clickable library items.
+     */
+    static const KICAD_T DoubleClickItems[];
+
+    /**
      * A scan list for all schematic items except pins.
      */
     static const KICAD_T AllItemsButPins[];

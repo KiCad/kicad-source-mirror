@@ -210,6 +210,20 @@ const KICAD_T SCH_COLLECTOR::CopyableItems[] = {
 };
 
 
+const KICAD_T SCH_COLLECTOR::DoubleClickItems[] = {
+    SCH_TEXT_T,
+    SCH_LABEL_T,
+    SCH_GLOBAL_LABEL_T,
+    SCH_HIERARCHICAL_LABEL_T,
+    SCH_COMPONENT_T,
+    SCH_SHEET_T,
+    SCH_BITMAP_T,
+    SCH_FIELD_T,
+    SCH_MARKER_T,
+    EOT
+};
+
+
 SEARCH_RESULT SCH_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 {
     if( aItem->Type() != LIB_PIN_T && !aItem->HitTest( m_RefPos ) )

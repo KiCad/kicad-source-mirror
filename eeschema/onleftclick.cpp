@@ -389,7 +389,7 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_NO_TOOL_SELECTED:
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
-            item = LocateAndShowItem( aPosition );
+            item = LocateAndShowItem( aPosition, SCH_COLLECTOR::DoubleClickItems );
         }
 
         if( ( item == NULL ) || ( item->GetFlags() != 0 ) )

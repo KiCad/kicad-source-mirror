@@ -28,6 +28,7 @@
  */
 
 #include <fctsys.h>
+#include <wx/timer.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <gr_basic.h>
@@ -87,6 +88,7 @@ BEGIN_EVENT_TABLE( EDA_DRAW_PANEL, wxScrolledWindow )
     EVT_ERASE_BACKGROUND( EDA_DRAW_PANEL::OnEraseBackground )
     EVT_SCROLLWIN( EDA_DRAW_PANEL::OnScroll )
     EVT_ACTIVATE( EDA_DRAW_PANEL::OnActivate )
+    EVT_TIMER( ID_MOUSE_DOUBLECLICK, EDA_DRAW_PANEL::OnTimer )
     EVT_MENU_RANGE( ID_PAN_UP, ID_PAN_RIGHT, EDA_DRAW_PANEL::OnPan )
 END_EVENT_TABLE()
 
@@ -155,6 +157,9 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
 
     m_cursorLevel = 0;
     m_PrintIsMirrored = false;
+
+    m_ClickTimer = (wxTimer*) NULL;
+    m_doubleClickInterval = 250;
 }
 
 
@@ -168,6 +173,8 @@ EDA_DRAW_PANEL::~EDA_DRAW_PANEL()
         cfg->Write( ENBL_ZOOM_NO_CENTER_KEY, m_enableZoomNoCenter );
         cfg->Write( ENBL_AUTO_PAN_KEY, m_enableAutoPan );
     }
+
+    wxDELETE( m_ClickTimer );
 }
 
 
@@ -401,6 +408,14 @@ void EDA_DRAW_PANEL::OnActivate( wxActivateEvent& event )
 {
     m_canStartBlock = -1;   // Block Command can't start
     event.Skip();
+}
+
+
+void EDA_DRAW_PANEL::OnTimer( wxTimerEvent& event )
+{
+    INSTALL_UNBUFFERED_DC( DC, this );
+    DC.SetBackground( *wxBLACK_BRUSH );
+    GetParent()->OnLeftClick( &DC, m_CursorClickPos );
 }
 
 
@@ -1145,6 +1160,11 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     // Calling Double Click and Click functions :
     if( localbutt == (int) ( GR_M_LEFT_DOWN | GR_M_DCLICK ) )
     {
+        if( m_ClickTimer )
+        {
+            m_ClickTimer->Stop();
+            wxDELETE( m_ClickTimer );
+        }
         GetParent()->OnLeftDClick( &DC, GetParent()->RefPos( true ) );
 
         // inhibit a response to the mouse left button release,
@@ -1162,7 +1182,21 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         m_ignoreNextLeftButtonRelease = false;
 
         if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK && !ignoreEvt )
-            GetParent()->OnLeftClick( &DC, GetParent()->RefPos( true ) );
+        {
+            EDA_ITEM* item = screen->GetCurItem();
+            m_CursorClickPos = GetParent()->RefPos( true );
+
+            // If we have an item already selected, or we are using a tool,
+            // we won't use the disambiguation menu so process the click immediately
+            if( ( item && item->GetFlags() ) || GetParent()->GetToolId() != ID_NO_TOOL_SELECTED )
+                GetParent()->OnLeftClick( &DC, m_CursorClickPos );
+            else
+            {
+                wxDELETE( m_ClickTimer );
+                m_ClickTimer = new wxTimer(this, ID_MOUSE_DOUBLECLICK);
+                m_ClickTimer->StartOnce( m_doubleClickInterval );
+            }
+        }
 
     }
     else if( !event.LeftIsDown() )

@@ -118,6 +118,11 @@ public:
     static const KICAD_T CopyableItems[];
 
     /**
+     * A scan list for schematic items that react to a double-click.
+     */
+    static const KICAD_T DoubleClickItems[];
+
+    /**
      * Constructor SCH_COLLECTOR
      */
     SCH_COLLECTOR( const KICAD_T* aScanTypes = SCH_COLLECTOR::AllItems )

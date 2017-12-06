@@ -66,6 +66,9 @@ private:
     wxPoint m_PanStartCenter;               ///< Initial scroll center position when pan started
     wxPoint m_PanStartEventPosition;        ///< Initial position of mouse event when pan started
 
+    wxPoint m_CursorClickPos;               ///< Used for maintaining click position
+    wxTimer *m_ClickTimer;
+
     /// The drawing area used to redraw the screen which is usually the visible area
     /// of the drawing in internal units.
     EDA_RECT    m_ClipBox;
@@ -112,6 +115,8 @@ private:
     /// (like switch from a sheet to an other sheet
     /// >= 0 (or >= n) if a block can start
     int     m_canStartBlock;
+
+    int     m_doubleClickInterval;
 
 public:
 
@@ -215,6 +220,17 @@ public:
      *</p>
      */
     void OnActivate( wxActivateEvent& event );
+
+    /**
+     * Function OnTimer
+     * handle timer events
+     * <p>
+     * The class will start a timer when a mouse-up event is handled.  If a
+     * double-click event is not handled inside of a specified interval,
+     * the timer event will fire, causing the single-click event to be handled.
+     * Otherwise, the system will process the double-click.
+     */
+    void OnTimer( wxTimerEvent& event );
 
     /**
      * Function DoPrepareDC

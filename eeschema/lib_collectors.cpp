@@ -92,6 +92,18 @@ const KICAD_T LIB_COLLECTOR::RotatableItems[] = {
 };
 
 
+const KICAD_T LIB_COLLECTOR::DoubleClickItems[] = {
+    LIB_PIN_T,
+    LIB_ARC_T,
+    LIB_CIRCLE_T,
+    LIB_RECTANGLE_T,
+    LIB_POLYLINE_T,
+    LIB_TEXT_T,
+    LIB_FIELD_T,
+    EOT
+};
+
+
 SEARCH_RESULT LIB_COLLECTOR::Inspect( EDA_ITEM* aItem, void* testData )
 {
     LIB_ITEM* item = (LIB_ITEM*) aItem;

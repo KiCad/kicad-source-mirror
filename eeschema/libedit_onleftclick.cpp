@@ -156,7 +156,7 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
 
     if( !m_drawItem || !m_drawItem->InEditMode() )
     {   // We can locate an item
-        m_drawItem = LocateItemUsingCursor( aPosition );
+        m_drawItem = LocateItemUsingCursor( aPosition, LIB_COLLECTOR::DoubleClickItems );
 
         if( m_drawItem == NULL )
         {
