@@ -914,16 +914,6 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
         {
             m_toolMgr->RunAction( PCB_ACTIONS::layerToggle, true );
         }
-        else if( evt->IsAction( &PCB_ACTIONS::remove ) )
-        {
-            updateStartItem( *evt );
-            deleteTraces( m_startItem, false );
-        }
-        else if( evt->IsAction( &PCB_ACTIONS::removeAlt ) )
-        {
-            updateStartItem( *evt );
-            deleteTraces( m_startItem, true );
-        }
     }
 
     frame->SetNoToolSelected();
