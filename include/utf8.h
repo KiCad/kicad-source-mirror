@@ -145,7 +145,9 @@ public:
         return (UTF8&) *this;
     }
 
-    static const std::string::size_type npos = std::string::npos;
+    // std::string::npos is not constexpr, so we can't use it in an
+    // initializer.
+    static constexpr std::string::size_type npos = -1;
 
     UTF8& operator=( const wxString& o );
 
