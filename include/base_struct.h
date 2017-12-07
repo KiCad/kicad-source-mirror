@@ -36,6 +36,7 @@
 
 #include <bitmap_types.h>
 #include <view/view_item.h>
+#include <common.h>
 
 #if defined(DEBUG)
 #include <iostream>         // needed for Show()
@@ -180,7 +181,7 @@ protected:
     DHEAD*        m_List;         ///< which DLIST I am on.
 
     EDA_ITEM*     m_Parent;       ///< Linked list: Link (parent struct)
-    time_t        m_TimeStamp;    ///< Time stamp used for logical links
+    timestamp_t   m_TimeStamp;    ///< Time stamp used for logical links
 
     /// Set to true to override the visibility setting of the item.
     bool          m_forceVisible;
@@ -214,8 +215,8 @@ public:
         return m_StructType;
     }
 
-    void SetTimeStamp( time_t aNewTimeStamp ) { m_TimeStamp = aNewTimeStamp; }
-    time_t GetTimeStamp() const { return m_TimeStamp; }
+    void SetTimeStamp( timestamp_t aNewTimeStamp ) { m_TimeStamp = aNewTimeStamp; }
+    timestamp_t GetTimeStamp() const { return m_TimeStamp; }
 
     EDA_ITEM* Next() const { return Pnext; }
     EDA_ITEM* Back() const { return Pback; }

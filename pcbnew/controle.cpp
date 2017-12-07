@@ -165,7 +165,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
      * because zones can be filled by overlapping segments (this is a fill option)
      * Trigger the selection of the current edge for new-style zones
      */
-    time_t timestampzone = 0;
+    timestamp_t timestampzone = 0;
 
     for( int ii = 0;  ii < m_Collector->GetCount(); ii++ )
     {

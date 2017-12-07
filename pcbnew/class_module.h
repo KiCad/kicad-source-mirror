@@ -544,8 +544,8 @@ public:
 
     double GetArea() const { return m_Surface; }
 
-    time_t GetLink() const { return m_Link; }
-    void SetLink( time_t aLink )            { m_Link = aLink; }
+    timestamp_t GetLink() const { return m_Link; }
+    void SetLink( timestamp_t aLink )            { m_Link = aLink; }
 
     int GetPlacementCost180() const { return m_CntRot180; }
     void SetPlacementCost180( int aCost )   { m_CntRot180 = aCost; }
@@ -711,7 +711,7 @@ private:
     time_t m_LastEditTime;
     int m_arflag;           ///< Use to trace ratsnest and auto routing.
     double m_Surface;       ///< Bounding box area
-    time_t m_Link;          ///< Temporary logical link used in edition
+    timestamp_t m_Link;     ///< Temporary logical link used in edition
     int m_CntRot90;         ///< Horizontal automatic placement cost ( 0..10 ).
     int m_CntRot180;        ///< Vertical automatic placement cost ( 0..10 ).
 

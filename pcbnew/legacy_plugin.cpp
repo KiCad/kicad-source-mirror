@@ -1218,7 +1218,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
             PCB_LAYER_ID layer_id  = leg_layer2new( m_cu_count,  layer_num );
 
             long edittime  = hexParse( data, &data );
-            time_t timestamp = hexParse( data, &data );
+            timestamp_t timestamp = hexParse( data, &data );
 
             data = strtok_r( (char*) data+1, delims, &saveptr );
 
@@ -1248,7 +1248,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
 
         else if( TESTLINE( "Sc" ) )         // timestamp
         {
-            time_t timestamp = hexParse( line + SZ( "Sc" ) );
+            timestamp_t timestamp = hexParse( line + SZ( "Sc" ) );
             aModule->SetTimeStamp( timestamp );
         }
 
@@ -1984,7 +1984,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                     dseg->SetAngle( angle );    // m_Angle
                     break;
                 case 3:
-                    time_t timestamp;
+                    timestamp_t timestamp;
                     timestamp = hexParse( data );
                     dseg->SetTimeStamp( timestamp );
                     break;
@@ -2183,12 +2183,12 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
             // e.g. "De 21 1 0 Normal C\r\n"
             // sscanf( line + 2, " %d %d %lX %s %c\n", &m_Layer, &normal_display, &m_TimeStamp, style, &hJustify );
 
-            LAYER_NUM layer_num = layerParse( line + SZ( "De" ), &data );
-            int     notMirrored = intParse( data, &data );
-            time_t  timestamp   = hexParse( data, &data );
-            char*   style       = strtok_r( (char*) data, delims, &saveptr );
-            char*   hJustify    = strtok_r( NULL, delims, &saveptr );
-            char*   vJustify    = strtok_r( NULL, delims, &saveptr );
+            LAYER_NUM layer_num    = layerParse( line + SZ( "De" ), &data );
+            int     notMirrored    = intParse( data, &data );
+            timestamp_t  timestamp = hexParse( data, &data );
+            char*   style          = strtok_r( (char*) data, delims, &saveptr );
+            char*   hJustify       = strtok_r( NULL, delims, &saveptr );
+            char*   vJustify       = strtok_r( NULL, delims, &saveptr );
 
             pcbtxt->SetMirrored( !notMirrored );
             pcbtxt->SetTimeStamp( timestamp );
@@ -2319,7 +2319,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
             break;
         }
 
-        newTrack->SetTimeStamp( (time_t)timeStamp );
+        newTrack->SetTimeStamp( (timestamp_t)timeStamp );
         newTrack->SetPosition( wxPoint( start_x, start_y ) );
         newTrack->SetEnd( wxPoint( end_x, end_y ) );
 
@@ -2511,7 +2511,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         else if( TESTLINE( "ZInfo" ) )      // general info found
         {
             // e.g. 'ZInfo 479194B1 310 "COMMON"'
-            time_t  timestamp = hexParse( line + SZ( "ZInfo" ), &data );
+            timestamp_t  timestamp = hexParse( line + SZ( "ZInfo" ), &data );
             int     netcode   = intParse( data, &data );
 
             if( ReadDelimitedText( buf, data, sizeof(buf) ) > (int) sizeof(buf) )
@@ -2784,7 +2784,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
                 layer_num = ilayer;
 
             dim->SetLayer( leg_layer2new( m_cu_count,  layer_num ) );
-            dim->SetTimeStamp( (time_t) timestamp );
+            dim->SetTimeStamp( (timestamp_t) timestamp );
             dim->SetShape( shape );
         }
 
@@ -2960,7 +2960,7 @@ void LEGACY_PLUGIN::loadPCB_TARGET()
             BIU pos_y = biuParse( data, &data );
             BIU size  = biuParse( data, &data );
             BIU width = biuParse( data, &data );
-            time_t timestamp = hexParse( data );
+            timestamp_t timestamp = hexParse( data );
 
             if( layer_num < FIRST_NON_COPPER_LAYER )
                 layer_num = FIRST_NON_COPPER_LAYER;

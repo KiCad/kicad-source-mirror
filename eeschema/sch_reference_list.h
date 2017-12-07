@@ -65,7 +65,7 @@ class SCH_REFERENCE
     SCH_SHEET_PATH m_SheetPath;         ///< The sheet path for this reference.
     bool           m_IsNew;             ///< True if not yet annotated.
     int            m_SheetNum;          ///< The sheet number for the reference.
-    time_t         m_TimeStamp;         ///< The time stamp for the reference.
+    timestamp_t    m_TimeStamp;         ///< The time stamp for the reference.
     EDA_TEXT*      m_Value;             ///< The component value of the reference.  It is the
                                         ///< same for all instances.
     int            m_NumRef;            ///< The numeric part of the reference designator.

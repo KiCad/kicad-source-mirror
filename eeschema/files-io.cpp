@@ -613,7 +613,7 @@ bool SCH_EDIT_FRAME::AppendSchematic()
         wxCHECK2_MSG( renamedSheet, continue,
                       "Sheet " + duplicateName + " not found in imported schematic." );
 
-        time_t newtimestamp = GetNewTimeStamp();
+        timestamp_t newtimestamp = GetNewTimeStamp();
         renamedSheet->SetTimeStamp( newtimestamp );
         renamedSheet->SetName( wxString::Format( "Sheet%8.8lX", (long) newtimestamp ) );
     }

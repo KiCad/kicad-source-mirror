@@ -505,7 +505,7 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
             unsigned long timeStamp = (unsigned long)GetNewTimeStamp();
 
             sheet->SetName( wxString::Format( wxT( "sheet%8.8lX" ), timeStamp ) );
-            sheet->SetTimeStamp( (time_t)timeStamp );
+            sheet->SetTimeStamp( (timestamp_t)timeStamp );
         }
     }
 

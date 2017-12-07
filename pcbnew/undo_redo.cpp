@@ -183,7 +183,7 @@ static void SwapItemData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     EDA_ITEM* pnext = aItem->Next();
     EDA_ITEM* pback = aItem->Back();
     DHEAD* mylist    = aItem->GetList();
-    time_t timestamp = aItem->GetTimeStamp();
+    timestamp_t timestamp = aItem->GetTimeStamp();
     EDA_ITEM* parent = aItem->GetParent();
 
     aItem->SwapData( aImage );

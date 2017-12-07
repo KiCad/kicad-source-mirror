@@ -1372,7 +1372,7 @@ public:
      * @param aTimestamp = Timestamp for the zone to delete, used if aZone ==
      *                     NULL
      */
-    void Delete_OldZone_Fill( SEGZONE* aZone, time_t aTimestamp = 0 );
+    void Delete_OldZone_Fill( SEGZONE* aZone, timestamp_t aTimestamp = 0 );
 
     /**
      * Function Delete_LastCreatedCorner

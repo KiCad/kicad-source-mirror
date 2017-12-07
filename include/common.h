@@ -223,9 +223,22 @@ int ProcessExecute( const wxString& aCommandLine, int aFlags = wxEXEC_ASYNC,
 /**************/
 
 /**
+ * timestamp_t is our type to represent unique IDs for all kinds of elements;
+ * historically simply the timestamp when they were created.
+ *
+ * Long term, this type might be renamed to something like unique_id_t
+ * (and then rename all the methods from {Get,Set}TimeStamp()
+ * to {Get,Set}Id()) ?
+ *
+ * The type should be at least 32 bit and simple to map via swig; swig does
+ * have issues with types such as 'int32_t', so we choose 'long'.
+ */
+typedef long timestamp_t;
+
+/**
  * @return an unique time stamp that changes after each call
  */
-time_t GetNewTimeStamp();
+timestamp_t GetNewTimeStamp();
 
 int GetCommandOptions( const int argc, const char** argv,
                        const char* stringtst, const char** optarg,

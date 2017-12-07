@@ -163,10 +163,10 @@ int ProcessExecute( const wxString& aCommandLine, int aFlags, wxProcess *callbac
 }
 
 
-time_t GetNewTimeStamp()
+timestamp_t GetNewTimeStamp()
 {
-    static time_t oldTimeStamp;
-    time_t newTimeStamp;
+    static timestamp_t oldTimeStamp;
+    timestamp_t newTimeStamp;
 
     newTimeStamp = time( NULL );
 

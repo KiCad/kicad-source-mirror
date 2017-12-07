@@ -293,7 +293,7 @@ public:
      *
      * @param aNewTimeStamp = new time stamp
      */
-    void SetTimeStamp( time_t aNewTimeStamp );
+    void SetTimeStamp( timestamp_t aNewTimeStamp );
 
     const EDA_RECT GetBoundingBox() const override;
 
