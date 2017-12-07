@@ -250,7 +250,7 @@ bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_COMPONENT* aSymbol )
         if( it->IsCache() )
             continue;
 
-        LIB_ALIAS* alias = it->FindAlias( aSymbol->GetLibId().GetLibItemName() );
+        LIB_ALIAS* alias = it->FindAlias( aSymbol->GetLibId().GetLibItemName().wx_str() );
 
         // Found in the same library as the old look up method assuming the user didn't
         // change the libraries or library ordering since the last time the schematic was

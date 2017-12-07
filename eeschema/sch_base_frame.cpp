@@ -50,7 +50,7 @@ LIB_ALIAS* SchGetLibAlias( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PA
         alias = aLibTable->LoadSymbol( aLibId );
 
         if( !alias && aCacheLib )
-            alias = aCacheLib->FindAlias( aLibId.GetLibItemName() );
+            alias = aCacheLib->FindAlias( aLibId );
     }
     catch( const IO_ERROR& ioe )
     {

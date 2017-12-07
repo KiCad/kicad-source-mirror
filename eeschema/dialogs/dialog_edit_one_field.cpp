@@ -277,9 +277,9 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
     wxASSERT_MSG( component != NULL && component->Type() == SCH_COMPONENT_T,
                   wxT( "Invalid schematic field parent item." ) );
 
-    const LIB_PART* part = GetParent()->GetLibPart( component->GetLibId() );
+    const LIB_PART* part = GetParent()->GetLibPart( component->GetLibId(), true );
 
-    wxASSERT_MSG( part, wxT( "Library part for component <" ) +
+    wxASSERT_MSG( part, wxT( "Library symbol for schematic symbol <" ) +
                   component->GetLibId().Format() + wxT( "> could not be found." ) );
 
     m_isPower = part->IsPower();

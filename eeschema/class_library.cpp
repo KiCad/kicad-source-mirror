@@ -200,6 +200,12 @@ LIB_ALIAS* PART_LIB::FindAlias( const wxString& aName ) const
 }
 
 
+LIB_ALIAS* PART_LIB::FindAlias( const LIB_ID& aLibId ) const
+{
+    return FindAlias( aLibId.Format().wx_str() );
+}
+
+
 LIB_PART* PART_LIB::FindPart( const wxString& aName ) const
 {
     LIB_ALIAS* alias = FindAlias( aName );
@@ -208,6 +214,12 @@ LIB_PART* PART_LIB::FindPart( const wxString& aName ) const
         return alias->GetPart();
 
     return NULL;
+}
+
+
+LIB_PART* PART_LIB::FindPart( const LIB_ID& aLibId ) const
+{
+    return FindPart( aLibId.Format().wx_str() );
 }
 
 
@@ -415,7 +427,7 @@ LIB_PART* PART_LIBS::FindLibPart( const LIB_ID& aLibId, const wxString& aLibrary
         if( !aLibraryName.IsEmpty() && lib.GetName() != aLibraryName )
             continue;
 
-        part = lib.FindPart( aLibId.GetLibItemName() );
+        part = lib.FindPart( aLibId.GetLibItemName().wx_str() );
 
         if( part )
             break;
@@ -434,7 +446,7 @@ LIB_ALIAS* PART_LIBS::FindLibraryAlias( const LIB_ID& aLibId, const wxString& aL
         if( !aLibraryName.IsEmpty() && lib.GetName() != aLibraryName )
             continue;
 
-        entry = lib.FindAlias( aLibId.GetLibItemName() );
+        entry = lib.FindAlias( aLibId.GetLibItemName().wx_str() );
 
         if( entry )
             break;

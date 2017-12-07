@@ -53,22 +53,22 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
     wxCHECK_RET( component != NULL && component->Type() == SCH_COMPONENT_T,
                  wxT( "Invalid schematic field parent item." ) );
 
-    LIB_ID id = component->GetLibId();
-    LIB_ALIAS* alias = NULL;
+    // LIB_ID id = component->GetLibId();
+    // LIB_ALIAS* alias = NULL;
 
-    try
-    {
-        alias = Prj().SchSymbolLibTable()->LoadSymbol( id );
-    }
-    catch( ... )
-    {
-    }
+    // try
+    // {
+    //     alias = Prj().SchSymbolLibTable()->LoadSymbol( id );
+    // }
+    // catch( ... )
+    // {
+    // }
 
-    LIB_PART* part = ( alias ) ? alias->GetPart() : NULL;
+    // LIB_PART* part = ( alias ) ? alias->GetPart() : NULL;
 
-    wxCHECK_RET( part, wxString::Format( "Symbol '%s' not found in library '%s'",
-                                         id.GetLibItemName().wx_str(),
-                                         id.GetLibNickname().wx_str() ) );
+    // wxCHECK_RET( part, wxString::Format( "Symbol '%s' not found in library '%s'",
+    //                                      id.GetLibItemName().wx_str(),
+    //                                      id.GetLibNickname().wx_str() ) );
 
     // Save old component in undo list if not already in edit, or moving.
     if( aField->GetFlags() == 0 )

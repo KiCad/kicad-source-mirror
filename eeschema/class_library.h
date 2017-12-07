@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -132,20 +132,17 @@ public:
     // Accessors
 
     /**
-     * Function GetFilterPowerParts
      * @return true if the filtering of power parts is on
      */
     bool GetFilterPowerParts() const { return m_filterPowerParts; }
 
 
     /**
-     * Function GetAllowedLibList
      * @return am wxArrayString of the names of allowed libs
      */
     const wxArrayString& GetAllowedLibList() const { return m_allowedLibs; }
 
     /**
-     * Function GetLibSource
      * @return the name of the lib to use to load a part, or an a empty string
      * Useful to load (in lib editor or lib viewer) a part from a given library
      */
@@ -184,10 +181,10 @@ typedef boost::ptr_vector< PART_LIB >                   PART_LIBS_BASE;
 
 
 /**
- * Class PART_LIBS
- * is a collection of PART_LIBs.  It extends from PROJECT::_ELEM so it can be
- * hung in the PROJECT.  It does not use any UI calls, but rather simply throws
- * an IO_ERROR when there is a problem.
+ * A collection of #PART_LIB objects.
+ *
+ * It extends from PROJECT::_ELEM so it can be hung in the PROJECT.  It does not use any
+ * UI calls, but rather simply throws an IO_ERROR when there is a problem.
  */
 class PART_LIBS : public PART_LIBS_BASE, public PROJECT::_ELEM
 {
@@ -205,8 +202,7 @@ public:
     int GetModifyHash();
 
     /**
-     * Function AddLibrary
-     * allocates and adds a part library to the library list.
+     * Allocate and adds a part library to the library list.
      *
      * @param aFileName - File name object of part library.
      * @throw IO_ERROR if there's any problem loading.
@@ -214,8 +210,7 @@ public:
     PART_LIB* AddLibrary( const wxString& aFileName );
 
     /**
-     * Function AddLibrary
-     * inserts a part library into the library list.
+     * Insert a part library into the library list.
      *
      * @param aFileName - File name object of part library.
      * @param aIterator - Iterator to insert library in front of.
@@ -225,31 +220,30 @@ public:
     PART_LIB* AddLibrary( const wxString& aFileName, PART_LIBS::iterator& aIterator );
 
     /**
-     * Function LoadAllLibraries
-     * loads all of the project's libraries into this container, which should
+     * Load all of the project's libraries into this container, which should
      * be cleared before calling it.
+     *
+     * @note This method is only to be used when loading legacy projects.  All further symbol
+     *       library access should be done via the symbol library table.
      */
     void LoadAllLibraries( PROJECT* aProject, bool aShowProgress=true );
 
     /**
-     * Function LibNamesAndPaths
-     * either saves or loads the names of the currently configured part libraries
-     * (without paths).
+     * Save or load the names of the currently configured part libraries (without paths).
      */
     static void LibNamesAndPaths( PROJECT* aProject, bool doSave,
                                   wxString* aPaths, wxArrayString* aNames=NULL );
 
     /**
-     * Function cacheName
-     * returns the name of the cache library after potentially fixing it from
+     * Return the name of the cache library after potentially fixing it from
      * an older naming scheme.  That is, the old file is renamed if needed.
+     *
      * @param aFullProjectFilename - the *.pro filename with absolute path.
      */
     static const wxString CacheName( const wxString& aFullProjectFilename );
 
     /**
-     * Function FindLibrary
-     * finds a part library by \a aName.
+     * Find a part library by \a aName.
      *
      * @param aName - Library file name without path or extension to find.
      * @return Part library if found, otherwise NULL.
@@ -261,18 +255,15 @@ public:
     PART_LIB* GetCacheLibrary();
 
     /**
-     * Function GetLibraryNames
-     * returns the list of part library file names without path and extension.
+     * Return the list of part library file names without path and extension.
      *
-     * @param aSorted - Sort the list of name if true.  Otherwise use the
-     *                  library load order.
+     * @param aSorted - Sort the list of name if true.  Otherwise use the library load order.
      * @return The list of library names.
      */
     wxArrayString GetLibraryNames( bool aSorted = true );
 
     /**
-     * Function FindLibPart
-     * searches all libraries in the list for a part.
+     * Search all libraries in the list for a part.
      *
      * A part object will always be returned.  If the entry found
      * is an alias.  The root part will be found and returned.
@@ -317,9 +308,7 @@ public:
 
 
 /**
- * Class PART_LIB
- * is used to load, save, search, and otherwise manipulate
- * part library files.
+ * Object used to load, save, search, and otherwise manipulate symbol library files.
  */
 class PART_LIB
 {
@@ -365,8 +354,7 @@ public:
     }
 
     /**
-     * Function GetCount
-     * returns the number of entries in the library.
+     * Return the number of entries in the library.
      *
      * @return The number of part and alias entries.
      */
@@ -391,7 +379,6 @@ public:
     void Save( bool aSaveDocFile = true );
 
     /**
-     * Function IsReadOnly
      * @return true if current user does not have write access to the library file.
      */
     bool IsReadOnly() const { return !fileName.IsFileWritable(); }
@@ -425,6 +412,8 @@ public:
      */
     LIB_ALIAS* FindAlias( const wxString& aName ) const;
 
+    LIB_ALIAS* FindAlias( const LIB_ID& aLibId ) const;
+
     /**
      * Find part by \a aName.
      *
@@ -435,6 +424,8 @@ public:
      * @return LIB_PART* - part if found, else NULL.
      */
     LIB_PART* FindPart( const wxString& aName ) const;
+
+    LIB_PART* FindPart( const LIB_ID& aLibId ) const;
 
     /**
      * Add \a aPart entry to library.
@@ -476,16 +467,15 @@ public:
     const wxString GetName() const            { return fileName.GetName(); }
 
     /**
-     * Function GetFullFileName
-     * returns the full file library name with path and extension.
+     * Return the full file library name with path and extension.
      *
      * @return wxString - Full library file name with path and extension.
      */
     wxString GetFullFileName() const          { return fileName.GetFullPath(); }
 
     /**
-     * Function GetLogicalName
-     * returns the logical name of the library.
+     * Return the logical name of the library.
+     *
      * @return wxString - The logical name of this library.
      */
     const wxString GetLogicalName() const
@@ -503,18 +493,15 @@ public:
 
 
     /**
-     * Function LoadLibrary
-     * allocates and loads a part library file.
+     * Allocate and load a symbol library file.
      *
      * @param aFileName - File name of the part library to load.
-     * @return PART_LIB* - the allocated and loaded PART_LIB, which is owned by
-     *   the caller.
+     * @return PART_LIB* - the allocated and loaded PART_LIB, which is owned by the caller.
      * @throw IO_ERROR if there's any problem loading the library.
      */
     static PART_LIB* LoadLibrary( const wxString& aFileName );
 
     /**
-     * Function HasPowerParts
      * @return true if at least one power part is found in lib
      * Useful to select or list only libs containing power parts
      */

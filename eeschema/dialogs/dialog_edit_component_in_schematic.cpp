@@ -741,7 +741,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
         which came from the component.
     */
 
-    m_part = GetParent()->GetLibPart( m_cmp->GetLibId() );
+    m_part = GetParent()->GetLibPart( m_cmp->GetLibId(), true );
 
 #if 0 && defined(DEBUG)
     for( int i = 0;  i<aComponent->GetFieldCount();  ++i )
@@ -1158,7 +1158,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     if( !m_cmp )
         return;
 
-    if( LIB_PART* part = GetParent()->GetLibPart( m_cmp->GetLibId() ) )
+    if( LIB_PART* part = GetParent()->GetLibPart( m_cmp->GetLibId()  ) )
     {
         // save old cmp in undo list if not already in edit, or moving ...
         if( m_cmp->GetFlags() == 0 )

@@ -256,7 +256,7 @@ void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aSymLibTab
         alias = aSymLibTable->LoadSymbol( m_lib_id.GetLibNickname(), m_lib_id.GetLibItemName() );
 
     if( !alias && aCacheLib )
-        alias = aCacheLib->FindAlias( m_lib_id.GetLibItemName() );
+        alias = aCacheLib->FindAlias( m_lib_id.Format().wx_str() );
 
     if( alias && alias->GetPart() )
         m_part = alias->GetPart()->SharedPtr();
@@ -323,7 +323,7 @@ bool SCH_COMPONENT::Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib )
         // Fall back to cache library.  This is temporary until the new schematic file
         // format is implemented.
         if( !alias && aCacheLib )
-            alias = aCacheLib->FindAlias( m_lib_id.GetLibItemName() );
+            alias = aCacheLib->FindAlias( m_lib_id.Format().wx_str() );
 
         if( alias && alias->GetPart() )
         {
@@ -1322,7 +1322,12 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     {
         if( part.get() != dummy() )
         {
-            LIB_ALIAS* alias = part->GetAlias( GetLibId().GetLibItemName() );
+            LIB_ALIAS* alias = nullptr;
+
+            if( part->GetLib() && part->GetLib()->IsCache() )
+                alias = part->GetAlias( GetLibId().Format() );
+            else
+                alias = part->GetAlias( GetLibId().GetLibItemName() );
 
             if( !alias )
                 return;
@@ -1343,7 +1348,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
             if( alias->GetName() != part->GetName() )
                 aList.push_back( MSG_PANEL_ITEM( _( "Alias of" ), part->GetName(), BROWN ) );
 
-            if( m_lib_id.GetLibNickname().empty() && alias->GetLib() && alias->GetLib()->IsCache() )
+            if( alias->GetLib() && alias->GetLib()->IsCache() )
                 aList.push_back( MSG_PANEL_ITEM( _( "Library" ), alias->GetLibraryName(), RED ) );
             else if( !m_lib_id.GetLibNickname().empty() )
                 aList.push_back( MSG_PANEL_ITEM( _( "Library" ), m_lib_id.GetLibNickname(),

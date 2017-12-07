@@ -93,7 +93,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 
             try
             {
-                if( archLib->FindAlias( component->GetLibId().GetLibItemName() ) )
+                if( archLib->FindAlias( component->GetLibId() ) )
                     continue;
 
                 part = GetLibPart( component->GetLibId(), true );
@@ -114,8 +114,13 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 
             if( part )
             {
+                // Use the full LIB_ID as the symbol name to prevent symbol name collisions.
+                wxString oldName = part->GetName();
+                part->SetName( component->GetLibId().Format() );
+
                 // AddPart() does first clone the part before adding.
                 archLib->AddPart( part );
+                part->SetName( oldName );
             }
             else
             {
