@@ -31,6 +31,7 @@
 #include <gal/definitions.h>
 #include <gl_context_mgr.h>
 #include <geometry/shape_poly_set.h>
+#include <text_utils.h>
 
 #include <macros.h>
 
@@ -879,13 +880,16 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
 {
     wxASSERT_MSG( !IsTextMirrored(), "No support for mirrored text using bitmap fonts." );
 
+    auto processedText = ProcessOverbars( aText );
+    const auto& text = processedText.first;
+    const auto& overbars = processedText.second;
+
     // Compute text size, so it can be properly justified
     VECTOR2D textSize;
     float commonOffset;
-    std::tie( textSize, commonOffset ) = computeBitmapTextSize( aText );
+    std::tie( textSize, commonOffset ) = computeBitmapTextSize( text );
 
     const double SCALE = GetGlyphSize().y / textSize.y;
-    int tildas = 0;
     bool overbar = false;
 
     int overbarLength = 0;
@@ -936,46 +940,39 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
         break;
     }
 
-    for( unsigned int ii = 0; ii < aText.length(); ++ii )
+    int i = 0;
+
+    for( UTF8::uni_iter chIt = text.ubegin(), end = text.uend(); chIt < end; ++chIt )
     {
-        unsigned int c = aText[ii];
+        unsigned int c = *chIt;
 
         wxASSERT_MSG( LookupGlyph(c) != nullptr, wxT( "Missing character in bitmap font atlas." ) );
         wxASSERT_MSG( c != '\n' && c != '\r', wxT( "No support for multiline bitmap text yet" ) );
 
         // Handle overbar
-        if( c == '~' )
+        if( overbars[i] && !overbar )
         {
-            overbar = !overbar;
-            ++tildas;
-            continue;
+            overbar = true;     // beginning of an overbar
         }
-        else if( tildas > 0 )
+        else if( overbar && !overbars[i] )
         {
-            if( tildas % 2 == 1 )
-            {
-                if( overbar )                   // Overbar begins
-                    overbarLength = 0;
-                else if( overbarLength > 0 )    // Overbar finishes
-                    drawBitmapOverbar( overbarLength, overbarHeight );
-
-                --tildas;
-            }
-
-            // Draw tilda characters if there are any remaining
-            for( int jj = 0; jj < tildas / 2; ++jj )
-                overbarLength += drawBitmapChar( '~' );
-
-            tildas = 0;
+            overbar = false;    // end of an overbar
+            drawBitmapOverbar( overbarLength, overbarHeight );
+            overbarLength = 0;
         }
 
-        overbarLength += drawBitmapChar( c );
+        if( overbar )
+            overbarLength += drawBitmapChar( c );
+        else
+            drawBitmapChar( c );
+
+        ++i;
     }
 
     // Handle the case when overbar is active till the end of the drawn text
     currentManager->Translate( 0, commonOffset, 0 );
 
-    if( overbar )
+    if( overbar && overbarLength > 0 )
         drawBitmapOverbar( overbarLength, overbarHeight );
 
     Restore();
@@ -1664,32 +1661,15 @@ void OPENGL_GAL::drawBitmapOverbar( double aLength, double aHeight )
     Restore();
 }
 
-std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const wxString& aText ) const
+
+std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const UTF8& aText ) const
 {
     VECTOR2D textSize( 0, 0 );
     float commonOffset = std::numeric_limits<float>::max();
-    bool wasTilda = false;
 
-    for( unsigned int i = 0; i < aText.length(); ++i )
+    for( UTF8::uni_iter chIt = aText.ubegin(), end = aText.uend(); chIt < end; ++chIt )
     {
-        // Remove overbar control characters
-        if( aText[i] == '~' )
-        {
-            if( !wasTilda )
-            {
-                // Only double tildas are counted as characters, so skip it as it might
-                // be an overbar control character
-                wasTilda = true;
-                continue;
-            }
-            else
-            {
-                // Double tilda detected, reset the state and process as a normal character
-                wasTilda = false;
-            }
-        }
-
-        unsigned int c = aText[i];
+        unsigned int c = *chIt;
 
         const FONT_GLYPH_TYPE* glyph = LookupGlyph( c );
         wxASSERT( glyph );
@@ -1701,7 +1681,6 @@ std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const wxString& aT
             c = 'x';    // For calculation of the char size, replace by a medium sized char
             glyph = LookupGlyph( c );
         }
-
 
         if( glyph )
         {

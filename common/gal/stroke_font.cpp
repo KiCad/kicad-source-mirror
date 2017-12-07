@@ -28,7 +28,9 @@
 
 #include <gal/stroke_font.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <text_utils.h>
 #include <wx/string.h>
+
 
 using namespace KIGFX;
 
@@ -241,9 +243,6 @@ void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRo
 
 void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 {
-    // By default the overbar is turned off
-    bool overbar = false;
-
     double      xOffset;
     VECTOR2D    glyphSize( m_gal->GetGlyphSize() );
     double      overbar_italic_comp = computeOverbarVerticalPosition() * ITALIC_TILT;
@@ -303,21 +302,13 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
     // must not be indented on subsequent letters to ensure that the bar segments
     // overlap.
     bool last_had_overbar = false;
+    auto processedText = ProcessOverbars( aText );
+    const auto& text = processedText.first;
+    const auto& overbars = processedText.second;
+    int i = 0;
 
-    for( UTF8::uni_iter chIt = aText.ubegin(), end = aText.uend(); chIt < end; ++chIt )
+    for( UTF8::uni_iter chIt = text.ubegin(), end = text.uend(); chIt < end; ++chIt )
     {
-        // Toggle overbar
-        if( *chIt == '~' )
-        {
-            if( ++chIt >= end )
-                break;
-
-            if( *chIt != '~' )      // It was a single tilda, it toggles overbar
-                overbar = !overbar;
-
-            // If it is a double tilda, just process the second one
-        }
-
         int dd = *chIt - ' ';
 
         if( dd >= (int) m_glyphBoundingBoxes.size() || dd < 0 )
@@ -326,7 +317,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
         GLYPH& glyph = m_glyphs[dd];
         BOX2D& bbox  = m_glyphBoundingBoxes[dd];
 
-        if( overbar )
+        if( overbars[i] )
         {
             double overbar_start_x = xOffset;
             double overbar_start_y = - computeOverbarVerticalPosition();
@@ -376,6 +367,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
         }
 
         xOffset += glyphSize.x * bbox.GetEnd().x;
+        ++i;
     }
 
     m_gal->Restore();

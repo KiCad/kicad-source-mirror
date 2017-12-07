@@ -420,7 +420,7 @@ private:
      * @return Pair containing text bounding box and common Y axis offset. The values are expressed
      * as a number of pixels on the bitmap font texture and need to be scaled before drawing.
      */
-    std::pair<VECTOR2D, float> computeBitmapTextSize( const wxString& aText ) const;
+    std::pair<VECTOR2D, float> computeBitmapTextSize( const UTF8& aText ) const;
 
     // Event handling
     /**

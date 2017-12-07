@@ -289,6 +289,7 @@ set( COMMON_SRCS
     selcolor.cpp
     settings.cpp
     systemdirsappend.cpp
+    text_utils.cpp
     trigo.cpp
     utf8.cpp
     validators.cpp
