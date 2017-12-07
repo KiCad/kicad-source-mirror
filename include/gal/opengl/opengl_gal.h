@@ -38,8 +38,7 @@
 #include <gal/opengl/cached_container.h>
 #include <gal/opengl/noncached_container.h>
 #include <gal/opengl/opengl_compositor.h>
-
-#include <wx/glcanvas.h>
+#include <gal/hidpi_gl_canvas.h>
 
 #include <unordered_map>
 #include <boost/smart_ptr/shared_array.hpp>
@@ -62,7 +61,7 @@ class SHADER;
  * and quads. The purpose is to provide a fast graphics interface, that takes advantage of modern
  * graphics card GPUs. All methods here benefit thus from the hardware acceleration.
  */
-class OPENGL_GAL : public GAL, public wxGLCanvas
+class OPENGL_GAL : public GAL, public HIDPI_GL_CANVAS
 {
 public:
     /**

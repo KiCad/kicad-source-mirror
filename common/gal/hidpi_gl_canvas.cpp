@@ -37,10 +37,7 @@ HIDPI_GL_CANVAS::HIDPI_GL_CANVAS( wxWindow *parent,
            const wxPalette& palette ) :
     wxGLCanvas( parent, dispAttrs, id, pos, size, style, name, palette )
 {
-#ifdef RETINA_OPENGL_PATCH
-    SetViewWantsBestResolution( true );
-    scaleFactor = GetBackingScaleFactor();
-#endif
+    initialize();
 }
 
 HIDPI_GL_CANVAS::HIDPI_GL_CANVAS( wxWindow *parent,
@@ -53,10 +50,7 @@ HIDPI_GL_CANVAS::HIDPI_GL_CANVAS( wxWindow *parent,
            const wxPalette& palette ) :
     wxGLCanvas( parent, id, attribList, pos, size, style, name, palette )
 {
-#ifdef RETINA_OPENGL_PATCH
-    SetViewWantsBestResolution( true );
-    scaleFactor = GetBackingScaleFactor();
-#endif
+    initialize();
 }
 
 
@@ -65,9 +59,29 @@ wxSize HIDPI_GL_CANVAS::GetClientSize() const
     wxSize size = wxGLCanvas::GetClientSize();
 
 #ifdef RETINA_OPENGL_PATCH
+    const float scaleFactor = GetBackingScaleFactor();
     size.x *= scaleFactor;
     size.y *= scaleFactor;
 #endif
 
     return size;
+}
+
+float HIDPI_GL_CANVAS::GetBackingScaleFactor() const
+{
+#ifdef RETINA_OPENGL_PATCH
+    // this is ugly, but original method isn't marked const although it doesn't modify anything
+    // => clean up when it officially has arrived in wxWidgets
+    return static_cast< wxGLCanvas* >( const_cast< HIDPI_GL_CANVAS* >( this ))->GetBackingScaleFactor();
+#else
+    return 1.0f;
+#endif
+}
+
+
+void HIDPI_GL_CANVAS::initialize()
+{
+#ifdef RETINA_OPENGL_PATCH
+    SetViewWantsBestResolution( true );
+#endif
 }

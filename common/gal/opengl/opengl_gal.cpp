@@ -68,7 +68,7 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
                         wxEvtHandler* aMouseListener, wxEvtHandler* aPaintListener,
                         const wxString& aName ) :
     GAL( aDisplayOptions ),
-    wxGLCanvas( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
+    HIDPI_GL_CANVAS( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
                 wxEXPAND, aName ),
     mouseListener( aMouseListener ), paintListener( aPaintListener ), currentManager( nullptr ),
     cachedManager( nullptr ), nonCachedManager( nullptr ), overlayManager( nullptr )
@@ -95,10 +95,6 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     isInitialized            = false;
     isGrouping               = false;
     groupCounter             = 0;
-
-#ifdef RETINA_OPENGL_PATCH
-    SetViewWantsBestResolution( true );
-#endif
 
     // Connecting the event handlers
     Connect( wxEVT_PAINT,           wxPaintEventHandler( OPENGL_GAL::onPaint ) );
@@ -1155,13 +1151,8 @@ void OPENGL_GAL::ResizeScreen( int aWidth, int aHeight )
 {
     screenSize = VECTOR2I( aWidth, aHeight );
 
-#ifdef RETINA_OPENGL_PATCH
-    const float scaleFactor = GetBackingScaleFactor();
-#else
-    const float scaleFactor = 1.0f;
-#endif
-
     // Resize framebuffers
+    const float scaleFactor = GetBackingScaleFactor();
     compositor->Resize( aWidth * scaleFactor, aHeight * scaleFactor );
     isFramebufferInitialized = false;
 
