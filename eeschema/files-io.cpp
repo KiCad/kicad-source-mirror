@@ -615,7 +615,7 @@ bool SCH_EDIT_FRAME::AppendSchematic()
 
         timestamp_t newtimestamp = GetNewTimeStamp();
         renamedSheet->SetTimeStamp( newtimestamp );
-        renamedSheet->SetName( wxString::Format( "Sheet%8.8lX", (long) newtimestamp ) );
+        renamedSheet->SetName( wxString::Format( "Sheet%8.8lX", (unsigned long) newtimestamp ) );
     }
 
     // Clear all annotation in the imported schematic to prevent clashes with existing annotation.

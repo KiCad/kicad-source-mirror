@@ -502,10 +502,10 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
 
             // Duplicate sheet names and sheet time stamps are not valid.  Use a time stamp
             // based sheet name and update the time stamp for each sheet in the block.
-            unsigned long timeStamp = (unsigned long)GetNewTimeStamp();
+            timestamp_t timeStamp = GetNewTimeStamp();
 
-            sheet->SetName( wxString::Format( wxT( "sheet%8.8lX" ), timeStamp ) );
-            sheet->SetTimeStamp( (timestamp_t)timeStamp );
+            sheet->SetName( wxString::Format( wxT( "sheet%8.8lX" ), (unsigned long)timeStamp ) );
+            sheet->SetTimeStamp( timeStamp );
         }
     }
 

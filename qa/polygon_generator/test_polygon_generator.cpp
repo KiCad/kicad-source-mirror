@@ -91,7 +91,7 @@ int main( int argc, char* argv[] )
     if( !brd )
         return -1;
 
-    for( int net = 0; net < brd->GetNetCount(); net++ )
+    for( unsigned net = 0; net < brd->GetNetCount(); net++ )
     {
         printf( "net %d\n", net );
 

@@ -36,7 +36,6 @@
 
 #include <bitmap_types.h>
 #include <view/view_item.h>
-#include <common.h>
 
 #if defined(DEBUG)
 #include <iostream>         // needed for Show()
@@ -157,6 +156,19 @@ typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested u
 #define EDA_ITEM_ALL_FLAGS -1
 
 typedef unsigned STATUS_FLAGS;
+
+/**
+ * timestamp_t is our type to represent unique IDs for all kinds of elements;
+ * historically simply the timestamp when they were created.
+ *
+ * Long term, this type might be renamed to something like unique_id_t
+ * (and then rename all the methods from {Get,Set}TimeStamp()
+ * to {Get,Set}Id()) ?
+ *
+ * The type should be at least 32 bit and simple to map via swig; swig does
+ * have issues with types such as 'int32_t', so we choose 'long'.
+ */
+typedef long timestamp_t;
 
 /**
  * Class EDA_ITEM
