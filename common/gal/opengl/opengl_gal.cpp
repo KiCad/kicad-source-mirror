@@ -945,8 +945,6 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
     for( UTF8::uni_iter chIt = text.ubegin(), end = text.uend(); chIt < end; ++chIt )
     {
         unsigned int c = *chIt;
-
-        wxASSERT_MSG( LookupGlyph(c) != nullptr, wxT( "Missing character in bitmap font atlas." ) );
         wxASSERT_MSG( c != '\n' && c != '\r', wxT( "No support for multiline bitmap text yet" ) );
 
         // Handle overbar
@@ -1577,10 +1575,19 @@ int OPENGL_GAL::drawBitmapChar( unsigned long aChar )
     const float TEX_X = font_image.width;
     const float TEX_Y = font_image.height;
 
-    const FONT_GLYPH_TYPE* glyph = LookupGlyph(aChar);
+    // handle space
+    if( aChar == ' ' )
+    {
+        const FONT_GLYPH_TYPE* g = LookupGlyph( 'x' );
+        Translate( VECTOR2D( g->advance, 0 ) );
+        return g->advance;
+    }
+
+    const FONT_GLYPH_TYPE* glyph = LookupGlyph( aChar );
     wxASSERT( glyph );
 
-    if( !glyph ) return 0;
+    if( !glyph )
+        return 0;
 
     const float X = glyph->atlas_x + font_information.smooth_pixels;
     const float Y = glyph->atlas_y + font_information.smooth_pixels;
@@ -1634,10 +1641,7 @@ void OPENGL_GAL::drawBitmapOverbar( double aLength, double aHeight )
 {
     // To draw an overbar, simply draw an overbar
     const FONT_GLYPH_TYPE* glyph = LookupGlyph( '_' );
-    wxASSERT( glyph );
-
-    if( !glyph )
-        return;
+    wxCHECK( glyph, /* void */ );
 
     const float H = glyph->maxy - glyph->miny;
 
@@ -1672,7 +1676,7 @@ std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const UTF8& aText 
         unsigned int c = *chIt;
 
         const FONT_GLYPH_TYPE* glyph = LookupGlyph( c );
-        wxASSERT( glyph );
+        wxASSERT( c == ' ' || glyph );      // space is not in the atlas
 
         // a few chars
         if( !glyph || // Not coded in font
