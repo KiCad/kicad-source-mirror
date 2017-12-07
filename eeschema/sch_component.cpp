@@ -1481,7 +1481,7 @@ void SCH_COMPONENT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
             if( pin->GetConvert() && m_convert && ( m_convert != pin->GetConvert() ) )
                 continue;
 
-            DANGLING_END_ITEM item( PIN_END, pin, GetPinPhysicalPosition( pin ) );
+            DANGLING_END_ITEM item( PIN_END, pin, GetPinPhysicalPosition( pin ), this );
             aItemList.push_back( item );
         }
     }
@@ -1512,14 +1512,7 @@ bool SCH_COMPONENT::IsPinDanglingStateChanged( std::vector<DANGLING_END_ITEM> &a
         // internal connection. While technically connected, it is not particularly useful
         // to display them that way, so skip any pins that are in the same symbol as this
         // one.
-        //
-        // Do not make this exception for hidden pins, because those actually make internal
-        // connections to a power net.
-        const LIB_PIN* item_pin = dynamic_cast<const LIB_PIN*>( each_item.GetItem() );
-
-        if( item_pin
-          && ( !item_pin->IsPowerConnection() || !IsInNetlist() )
-          && std::find( aLibPins.begin(), aLibPins.end(), item_pin) != aLibPins.end() )
+        if( each_item.GetParent() == this )
             continue;
 
         switch( each_item.GetType() )
