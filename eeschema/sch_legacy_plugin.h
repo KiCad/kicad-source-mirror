@@ -125,6 +125,8 @@ public:
     bool CheckHeader( const wxString& aFileName ) override;
     bool IsSymbolLibWritable( const wxString& aLibraryPath ) override;
 
+    const wxString& GetError() const override { return m_error; }
+
 private:
     void loadHierarchy( SCH_SHEET* aSheet );
     void loadHeader( FILE_LINE_READER& aReader, SCH_SCREEN* aScreen );
@@ -155,7 +157,10 @@ private:
 
 protected:
     int               m_version;    ///< Version of file being loaded.
-    wxString          m_error;      ///< For throwing exceptions
+
+    /** For throwing exceptions or errors on partial schematic loads. */
+    wxString          m_error;
+
     wxString          m_path;       ///< Root project path for loading child sheets.
     const PROPERTIES* m_props;      ///< Passed via Save() or Load(), no ownership, may be NULL.
     KIWAY*            m_kiway;      ///< Required for path to legacy component libraries.

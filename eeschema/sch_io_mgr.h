@@ -486,12 +486,22 @@ public:
     virtual void SymbolLibOptions( PROPERTIES* aListToAppendTo ) const;
 
     /**
-     * Function CheckHeader
-     * returns true if the first line in @a aFileName begins with the expected header
+     * Return true if the first line in @a aFileName begins with the expected header.
+     *
      * @param aFileName is the name of the file to use as input
      *
      */
     virtual bool CheckHeader( const wxString& aFileName );
+
+    /**
+     * Return an error string to the caller.
+     *
+     * This is useful for schematic loaders that can load partial schematics where throwing
+     * an exception would be problematic such as the KiCad legacy plugin.
+     *
+     * @return an unformatted string containing errors if any.
+     */
+    virtual const wxString& GetError() const;
 
     //-----</PUBLIC SCH_PLUGIN API>------------------------------------------------
 

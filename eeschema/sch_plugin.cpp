@@ -188,3 +188,12 @@ bool SCH_PLUGIN::CheckHeader( const wxString& aFileName )
     not_implemented( this, __FUNCTION__ );
     return false;
 }
+
+
+const wxString& SCH_PLUGIN::GetError() const
+{
+    // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
+    not_implemented( this, __FUNCTION__ );
+    static wxString error;
+    return error;
+}

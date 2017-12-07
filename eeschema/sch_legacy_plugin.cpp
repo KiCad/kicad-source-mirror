@@ -652,28 +652,44 @@ void SCH_LEGACY_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
         {
             aSheet->SetScreen( new SCH_SCREEN( m_kiway ) );
             aSheet->GetScreen()->SetFileName( fileName.GetFullPath() );
-            loadFile( fileName.GetFullPath(), aSheet->GetScreen() );
 
-            EDA_ITEM* item = aSheet->GetScreen()->GetDrawItems();
-
-            while( item )
+            try
             {
-                if( item->Type() == SCH_SHEET_T )
+                loadFile( fileName.GetFullPath(), aSheet->GetScreen() );
+
+                EDA_ITEM* item = aSheet->GetScreen()->GetDrawItems();
+
+                while( item )
                 {
-                    SCH_SHEET* sheet = (SCH_SHEET*) item;
+                    if( item->Type() == SCH_SHEET_T )
+                    {
+                        SCH_SHEET* sheet = (SCH_SHEET*) item;
 
-                    // Set the parent to aSheet.  This effectively creates a method to find
-                    // the root sheet from any sheet so a pointer to the root sheet does not
-                    // need to be stored globally.  Note: this is not the same as a hierarchy.
-                    // Complex hierarchies can have multiple copies of a sheet.  This only
-                    // provides a simple tree to find the root sheet.
-                    sheet->SetParent( aSheet );
+                        // Set the parent to aSheet.  This effectively creates a method to find
+                        // the root sheet from any sheet so a pointer to the root sheet does not
+                        // need to be stored globally.  Note: this is not the same as a hierarchy.
+                        // Complex hierarchies can have multiple copies of a sheet.  This only
+                        // provides a simple tree to find the root sheet.
+                        sheet->SetParent( aSheet );
 
-                    // Recursion starts here.
-                    loadHierarchy( sheet );
+                        // Recursion starts here.
+                        loadHierarchy( sheet );
+                    }
+
+                    item = item->Next();
                 }
+            }
+            catch( const IO_ERROR& ioe )
+            {
+                // If there is a problem loading the root sheet, there is no recovery.
+                if( aSheet == m_rootSheet )
+                    throw( ioe );
 
-                item = item->Next();
+                // For all subsheets, queue up the error message for the caller.
+                if( !m_error.IsEmpty() )
+                    m_error += "\n";
+
+                m_error += ioe.What();
             }
         }
     }

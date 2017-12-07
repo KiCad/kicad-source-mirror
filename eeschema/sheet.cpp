@@ -247,6 +247,15 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
         try
         {
             aSheet = pi->Load( newFilename, &Kiway(), aSheet );
+
+            if( !pi->GetError().IsEmpty() )
+            {
+                DisplayErrorMessage( this,
+                                     _( "The entire schematic could not be load.  Errors "
+                                        "occurred attempting to load hierarchical sheet "
+                                        "schematics." ),
+                                     pi->GetError() );
+            }
         }
         catch( const IO_ERROR& ioe )
         {

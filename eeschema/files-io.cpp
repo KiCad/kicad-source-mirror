@@ -293,6 +293,15 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             g_RootSheet = pi->Load( fullFileName, &Kiway() );
             m_CurrentSheet->clear();
             m_CurrentSheet->push_back( g_RootSheet );
+
+            if( !pi->GetError().IsEmpty() )
+            {
+                DisplayErrorMessage( this,
+                                     _( "The entire schematic could not be load.  Errors "
+                                        "occurred attempting to load hierarchical sheet "
+                                        "schematics." ),
+                                     pi->GetError() );
+            }
         }
         catch( const IO_ERROR& ioe )
         {
@@ -434,6 +443,15 @@ bool SCH_EDIT_FRAME::AppendSchematic()
     try
     {
         pi->Load( fullFileName, &Kiway(), newSheet.get() );
+
+        if( !pi->GetError().IsEmpty() )
+        {
+            DisplayErrorMessage( this,
+                                 _( "The entire schematic could not be load.  Errors "
+                                    "occurred attempting to load hierarchical sheet "
+                                    "schematics." ),
+                                 pi->GetError() );
+        }
     }
     catch( const IO_ERROR& ioe )
     {
