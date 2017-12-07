@@ -74,20 +74,16 @@ static const double safetyMargin = 0.1;
 // see wxPcbStruct.h
 void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
 {
-    wxString    fullFileName = GetBoard()->GetFileName();
-    wxString    path;
-    wxString    name;
-    wxString    ext;
+    wxString    fullFileName;
     wxString    dsn_ext = SpecctraDsnFileExtension;
     wxString    mask    = SpecctraDsnFileWildcard();
+    wxFileName  fn( GetBoard()->GetFileName() );
 
-    wxFileName::SplitPath( fullFileName, &path, &name, &ext );
+    fn.SetExt( dsn_ext );
 
-    name += dsn_ext;
-
-    fullFileName = EDA_FILE_SELECTOR( _( "Specctra DSN file:" ),
-                                      path,
-                                      name,      // name.ext without path!
+    fullFileName = EDA_FILE_SELECTOR( _( "Specctra DSN File" ),
+                                      fn.GetPath(),
+                                      fn.GetFullName(),
                                       dsn_ext,
                                       mask,
                                       this,
