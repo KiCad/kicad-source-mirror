@@ -41,6 +41,7 @@ set( GAL_SRCS
     view/view_controls.cpp
     view/wx_view_controls.cpp
     geometry/hetriang.cpp
+    gal/hidpi_gl_canvas.cpp
 
     # OpenGL GAL
     gal/opengl/opengl_gal.cpp

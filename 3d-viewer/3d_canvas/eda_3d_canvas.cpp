@@ -90,7 +90,7 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow *aParent,
                               BOARD *aBoard,
                               CINFO3D_VISU &aSettings , S3D_CACHE *a3DCachePointer ) :
 
-                  wxGLCanvas( aParent,
+                  HIDPI_GL_CANVAS( aParent,
                               wxID_ANY,
                               aAttribList,
                               wxDefaultPosition,
@@ -516,8 +516,7 @@ void EDA_3D_CANVAS::OnMagnify( wxMouseEvent& event )
     DisplayStatus();
     Request_refresh();
 
-    // Please someone test if this is need
-    //m_settings.CameraGet().SetCurMousePosition( event.GetPosition() );
+    m_settings.CameraGet().SetCurMousePosition( event.GetPosition() );
 }
 #endif
 

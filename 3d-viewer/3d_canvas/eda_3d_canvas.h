@@ -36,9 +36,9 @@
 #include "3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.h"
 #include "3d_rendering/3d_render_raytracing/c3d_render_raytracing.h"
 #include "3d_cache/3d_cache.h"
+#include <gal/hidpi_gl_canvas.h>
 #include <wx/clipbrd.h>
 #include <wx/dataobj.h>
-#include <wx/glcanvas.h>
 #include <wx/image.h>
 #include <wx/wupdlock.h>
 #include <wx/timer.h>
@@ -50,7 +50,7 @@
  *  Class EDA_3D_CANVAS
  *  Implement a canvas based on a wxGLCanvas
  */
-class EDA_3D_CANVAS : public wxGLCanvas
+class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
 {
 
  public:

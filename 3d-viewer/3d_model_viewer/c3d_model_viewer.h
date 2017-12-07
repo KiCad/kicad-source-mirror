@@ -33,7 +33,7 @@
 #define _C3D_MODEL_VIEWER_H_
 
 #include "3d_rendering/ctrack_ball.h"
-#include <wx/glcanvas.h>
+#include <gal/hidpi_gl_canvas.h>
 
 class S3D_CACHE;
 class C_OGL_3DMODEL;
@@ -42,7 +42,7 @@ class C_OGL_3DMODEL;
  *  Class C3D_MODEL_VIEWER
  *  Implement a canvas based on a wxGLCanvas
  */
-class C3D_MODEL_VIEWER : public wxGLCanvas
+class C3D_MODEL_VIEWER : public HIDPI_GL_CANVAS
 {
 
 public:

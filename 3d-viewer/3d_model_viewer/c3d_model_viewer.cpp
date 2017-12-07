@@ -83,7 +83,7 @@ END_EVENT_TABLE()
 C3D_MODEL_VIEWER::C3D_MODEL_VIEWER(wxWindow *aParent,
                                     const int *aAttribList , S3D_CACHE *aCacheManager) :
 
-                  wxGLCanvas( aParent,
+                  HIDPI_GL_CANVAS( aParent,
                               wxID_ANY,
                               aAttribList,
                               wxDefaultPosition,
