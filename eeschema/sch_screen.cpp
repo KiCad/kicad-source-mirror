@@ -352,24 +352,25 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
     bool has_line = false;
     bool has_nonparallel = false;
     int end_count = 0;
-
+    int pin_count = 0;
     std::vector< SCH_LINE* > lines;
 
     for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
     {
         if( item->GetFlags() & STRUCT_DELETED )
             continue;
+
         if( aNew && ( item->Type() == SCH_JUNCTION_T ) && ( item->HitTest( aPosition ) ) )
             return false;
 
-        if( item->Type() != SCH_LINE_T )
-            continue;
-
-        if( item->GetLayer() != LAYER_WIRE )
-            continue;
-
-        if( item->HitTest( aPosition, 0 ) )
+        if( ( item->Type() == SCH_LINE_T )
+                && ( item->GetLayer() == LAYER_WIRE )
+                && ( item->HitTest( aPosition, 0 ) ) )
             lines.push_back( (SCH_LINE*) item );
+
+        if( ( item->Type() == SCH_COMPONENT_T )
+                && ( item->IsConnected( aPosition ) ) )
+            pin_count++;
     }
 
     BOOST_FOREACH( SCH_LINE* line, lines)
@@ -390,10 +391,12 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
         }
     }
 
-    int has_pin = !!( GetPin( aPosition, NULL, true ) );
+    // If there is line intersecting a pin
+    if( pin_count && has_line )
+        return true;
 
-    // If there is line intersecting a pin or non-parallel end
-    if( has_pin && ( has_line || end_count > 1 ) )
+    // If there are three or more endpoints
+    if( pin_count + end_count > 2 )
         return true;
 
     // If there is at least one segment that ends on a non-parallel line or
