@@ -1,6 +1,4 @@
 (sym_lib_table
-  (lib (name device1)(type Legacy)(uri ${KICAD_SYMBOL_DIR}/device.lib)(options "")(descr ""))
   (lib (name pic_programmer_schlib)(type Legacy)(uri ${KIPRJMOD}/libs/pic_programmer_schlib.lib)(options "")(descr ""))
-  (lib (name power1)(type Legacy)(uri ${KICAD_SYMBOL_DIR}/power.lib)(options "")(descr ""))
-  (lib (name pic_programmer-rescue)(type Legacy)(uri ${KIPRJMOD}/pic_programmer-rescue.lib)(options "")(descr ""))
+  (lib (name Logic_74xx)(type Legacy)(uri ${KICAD_SYMBOL_DIR}/Logic_74xx.lib)(options "")(descr ""))
 )

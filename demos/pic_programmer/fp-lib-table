@@ -1,4 +1,8 @@
 (fp_lib_table
   (lib (name footprints)(type KiCad)(uri ${KIPRJMOD}/libs/pic_programmer_fp.pretty)(options "")(descr "project specific"))
   (lib (name sockets)(type KiCad)(uri ${KISYSMOD}/Sockets.pretty)(options "")(descr ""))
+  (lib (name Package_DIP)(type KiCad)(uri "$(KISYSMOD)/Package_DIP.pretty")(options "")(descr ""))
+  (lib (name Connector_Dsub)(type KiCad)(uri "$(KISYSMOD)/Connector_Dsub.pretty")(options "")(descr ""))
+  (lib (name LED_THT)(type KiCad)(uri "$(KISYSMOD)/LED_THT.pretty")(options "")(descr ""))
+  (lib (name TerminalBlock_Phoenix)(type KiCad)(uri "$(KISYSMOD)/TerminalBlock_Phoenix.pretty")(options "")(descr ""))
 )

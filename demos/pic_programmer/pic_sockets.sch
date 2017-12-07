@@ -29,15 +29,15 @@ Wire Wire Line
 	2800 1200 3000 1200
 Connection ~ 2800 1300
 Wire Wire Line
-	2800 1100 2800 1350
+	2800 1100 2800 1200
 Wire Wire Line
 	2800 1100 3000 1100
 Wire Wire Line
 	3000 1300 2800 1300
 Wire Wire Line
-	4400 1500 10000 1500
+	4400 1500 5300 1500
 Wire Wire Line
-	4400 1400 10100 1400
+	4400 1400 5400 1400
 Wire Wire Line
 	10100 4000 9200 4000
 Wire Wire Line
@@ -89,7 +89,7 @@ F 1 "GND" H 8000 4930 30  0001 C CNN
 F 2 "" H 8000 5000 60  0001 C CNN
 F 3 "" H 8000 5000 60  0001 C CNN
 	1    8000 5000
-	0    1    1    0
+	0    1    1    0   
 $EndComp
 Text Label 4750 4600 0    60   ~ 0
 VCC_PIC
@@ -102,7 +102,7 @@ F 1 "GND" H 8000 4530 30  0001 C CNN
 F 2 "" H 8000 4600 60  0001 C CNN
 F 3 "" H 8000 4600 60  0001 C CNN
 	1    8000 4600
-	0    1    1    0
+	0    1    1    0   
 $EndComp
 NoConn ~ 8000 2900
 NoConn ~ 9200 3200
@@ -135,7 +135,7 @@ F 1 "GND" H 9200 2730 30  0001 C CNN
 F 2 "" H 9200 2800 60  0001 C CNN
 F 3 "" H 9200 2800 60  0001 C CNN
 	1    9200 2800
-	0    -1   -1   0
+	0    -1   -1   0   
 $EndComp
 $Comp
 L pic_programmer_schlib:GND #PWR039
@@ -146,7 +146,7 @@ F 1 "GND" H 8000 2530 30  0001 C CNN
 F 2 "" H 8000 2600 60  0001 C CNN
 F 3 "" H 8000 2600 60  0001 C CNN
 	1    8000 2600
-	0    1    1    0
+	0    1    1    0   
 $EndComp
 Text Label 9350 2000 0    60   ~ 0
 CLOCK-RB6
@@ -160,10 +160,10 @@ U 1 1 4436967E
 P 8600 2550
 F 0 "P2" H 8600 3350 70  0000 C CNN
 F 1 "SUPP28" H 8600 1700 70  0000 C CNN
-F 2 "dip_sockets:DIP-28__300_ELL" H 8600 1600 60  0000 C CNN
+F 2 "Package_DIP:DIP-28_W7.62mm_Socket_LongPads" H 8600 1600 15  0000 C CNN
 F 3 "" H 8600 2550 60  0001 C CNN
 	1    8600 2550
-	1    0    0    -1
+	1    0    0    -1  
 $EndComp
 $Comp
 L pic_programmer_schlib:GND #PWR040
@@ -174,7 +174,7 @@ F 1 "GND" H 3300 6880 30  0001 C CNN
 F 2 "" H 3300 6950 60  0001 C CNN
 F 3 "" H 3300 6950 60  0001 C CNN
 	1    3300 6950
-	1    0    0    -1
+	1    0    0    -1  
 $EndComp
 $Comp
 L pic_programmer_schlib:C C7
@@ -182,10 +182,10 @@ U 1 1 442AA145
 P 3300 6750
 F 0 "C7" H 3350 6850 50  0000 L CNN
 F 1 "100nF" H 3350 6650 50  0000 L CNN
-F 2 "Discret:C1-1" H 3500 6600 30  0000 C CNN
+F 2 "C_Disc_D5.1mm_W3.2mm_P5.00mm" H 3500 6600 10  0000 C CNN
 F 3 "" H 3300 6750 60  0001 C CNN
 	1    3300 6750
-	1    0    0    -1
+	1    0    0    -1  
 $EndComp
 $Comp
 L pic_programmer_schlib:GND #PWR041
@@ -196,7 +196,7 @@ F 1 "GND" H 2400 6880 30  0001 C CNN
 F 2 "" H 2400 6950 60  0001 C CNN
 F 3 "" H 2400 6950 60  0001 C CNN
 	1    2400 6950
-	1    0    0    -1
+	1    0    0    -1  
 $EndComp
 NoConn ~ 9200 5800
 NoConn ~ 9200 5700
@@ -239,7 +239,7 @@ F 1 "GND" H 9200 4730 30  0001 C CNN
 F 2 "" H 9200 4800 60  0001 C CNN
 F 3 "" H 9200 4800 60  0001 C CNN
 	1    9200 4800
-	0    -1   -1   0
+	0    -1   -1   0   
 $EndComp
 $Comp
 L pic_programmer_schlib:SUPP40 P3
@@ -247,10 +247,10 @@ U 1 1 442A88ED
 P 8600 4850
 F 0 "P3" H 8600 5950 70  0000 C CNN
 F 1 "SUPP40" H 8600 3700 70  0000 C CNN
-F 2 "sockets:40tex-Ell600" H 8600 3600 60  0000 C CNN
+F 2 "sockets:40tex-Ell600" H 8600 3600 15  0000 C CNN
 F 3 "" H 8600 4850 60  0001 C CNN
 	1    8600 4850
-	1    0    0    -1
+	1    0    0    -1  
 $EndComp
 NoConn ~ 4400 1200
 $Comp
@@ -262,7 +262,7 @@ F 1 "GND" H 2800 1280 30  0001 C CNN
 F 2 "" H 2800 1350 60  0001 C CNN
 F 3 "" H 2800 1350 60  0001 C CNN
 	1    2800 1350
-	1    0    0    -1
+	1    0    0    -1  
 $EndComp
 Text Label 4550 1500 0    60   ~ 0
 DATA-RB7
@@ -274,10 +274,10 @@ U 1 1 442A87F7
 P 3700 1300
 F 0 "U1" H 3850 1650 60  0000 C CNN
 F 1 "24Cxx" H 3900 950 60  0000 C CNN
-F 2 "dip_sockets:DIP-8__300_ELL" H 4450 850 60  0000 C CNN
+F 2 "Package_DIP:DIP-8_W7.62mm_Socket_LongPads" H 3900 900 10  0000 C CNN
 F 3 "" H 3700 1300 60  0001 C CNN
 	1    3700 1300
-	1    0    0    -1
+	1    0    0    -1  
 $EndComp
 Text Label 9350 4000 0    60   ~ 0
 CLOCK-RB6
@@ -304,10 +304,10 @@ U 1 1 442A81A7
 P 3750 4600
 F 0 "U5" H 3750 5350 60  0000 C CNN
 F 1 "PIC_18_PINS" H 3750 3800 60  0000 C CNN
-F 2 "dip_sockets:DIP-18__300_ELL" H 3800 3700 60  0000 C CNN
+F 2 "Package_DIP:DIP-18_W7.62mm_Socket_LongPads" H 3800 3700 15  0000 C CNN
 F 3 "" H 3750 4600 60  0001 C CNN
 	1    3750 4600
-	1    0    0    -1
+	1    0    0    -1  
 $EndComp
 NoConn ~ 4450 3400
 NoConn ~ 3000 3100
@@ -339,7 +339,7 @@ F 1 "GND" H 2750 4580 30  0001 C CNN
 F 2 "" H 2750 4650 60  0001 C CNN
 F 3 "" H 2750 4650 60  0001 C CNN
 	1    2750 4650
-	1    0    0    -1
+	1    0    0    -1  
 $EndComp
 $Comp
 L pic_programmer_schlib:GND #PWR045
@@ -350,18 +350,18 @@ F 1 "GND" H 4450 2330 30  0001 C CNN
 F 2 "" H 4450 2400 60  0001 C CNN
 F 3 "" H 4450 2400 60  0001 C CNN
 	1    4450 2400
-	0    -1   -1   0
+	0    -1   -1   0   
 $EndComp
 $Comp
 L pic_programmer_schlib:PIC12C508A U6
 U 1 1 442A81A5
 P 3750 2900
 F 0 "U6" H 3700 3600 60  0000 C CNN
-F 1 "PIC_8_PINS" H 3750 2200 60  0000 C CNN
-F 2 "dip_sockets:DIP-8__300_ELL" H 3750 2100 60  0000 C CNN
+F 1 "PIC_8_PINS" H 3750 2250 60  0000 C CNN
+F 2 "Package_DIP:DIP-8_W7.62mm_Socket_LongPads" H 3750 2150 15  0000 C CNN
 F 3 "" H 3750 2900 60  0001 C CNN
 	1    3750 2900
-	1    0    0    -1
+	1    0    0    -1  
 $EndComp
 $Comp
 L pic_programmer_schlib:GND #PWR046
@@ -372,7 +372,7 @@ F 1 "GND" H 3700 1780 30  0001 C CNN
 F 2 "" H 3700 1850 60  0001 C CNN
 F 3 "" H 3700 1850 60  0001 C CNN
 	1    3700 1850
-	1    0    0    -1
+	1    0    0    -1  
 $EndComp
 Text Label 3700 800  0    60   ~ 0
 VCC_PIC
@@ -382,45 +382,45 @@ U 1 1 442AA12B
 P 2400 6750
 F 0 "C6" H 2450 6850 50  0000 L CNN
 F 1 "100nF" H 2450 6650 50  0000 L CNN
-F 2 "Discret:C1-1" H 2600 6600 30  0000 C CNN
+F 2 "C_Disc_D5.1mm_W3.2mm_P5.00mm" H 2600 6600 10  0000 C CNN
 F 3 "" H 2400 6750 60  0001 C CNN
 	1    2400 6750
-	1    0    0    -1
+	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2400 6200 2400 6600
+	2400 6200 2400 6500
 Text Label 2750 6500 0    60   ~ 0
 VCC_PIC
 Wire Wire Line
-	5300 1500 5300 4750
+	5300 1500 5300 2100
 Connection ~ 5300 2700
 Wire Wire Line
-	5400 1400 5400 4900
+	5400 1400 5400 2000
 Connection ~ 5400 3100
 Wire Wire Line
-	10000 1500 10000 3900
+	10000 1500 10000 1900
 Connection ~ 5300 1500
 Connection ~ 10000 1900
 Wire Wire Line
-	10100 1400 10100 4000
+	10100 1400 10100 2000
 Connection ~ 10100 2000
 Connection ~ 5400 1400
 Wire Wire Line
-	10200 6200 10200 2700
+	10200 6200 10200 4700
 Wire Wire Line
-	5500 6200 5500 800
+	5500 6200 5500 4600
 Wire Wire Line
-	1900 6200 10200 6200
+	1900 6200 2100 6200
 Connection ~ 10200 4700
 Wire Wire Line
-	5500 800  3700 800
+	5500 800  3700 800 
 Connection ~ 5500 4600
 Wire Wire Line
-	2200 3400 2200 6300
+	2200 3400 2200 4450
 Wire Wire Line
-	7100 6300 1900 6300
+	7100 6300 2200 6300
 Wire Wire Line
-	7100 1900 7100 6300
+	7100 1900 7100 3900
 Connection ~ 2200 4450
 Connection ~ 7100 3900
 Wire Wire Line
@@ -454,6 +454,46 @@ F 1 "PWR_FLAG" H 3300 6680 30  0000 C CNN
 F 2 "" H 3300 6500 60  0000 C CNN
 F 3 "" H 3300 6500 60  0000 C CNN
 	1    3300 6500
-	0    1    1    0
+	0    1    1    0   
 $EndComp
+Wire Wire Line
+	2800 1200 2800 1300
+Wire Wire Line
+	2800 1300 2800 1350
+Wire Wire Line
+	5300 2700 5300 4750
+Wire Wire Line
+	5400 3100 5400 4900
+Wire Wire Line
+	5300 1500 10000 1500
+Wire Wire Line
+	10000 1900 10000 3900
+Wire Wire Line
+	10100 2000 10100 4000
+Wire Wire Line
+	5400 1400 10100 1400
+Wire Wire Line
+	10200 4700 10200 2700
+Wire Wire Line
+	5500 4600 5500 800 
+Wire Wire Line
+	2200 4450 2200 6300
+Wire Wire Line
+	7100 3900 7100 6300
+Wire Wire Line
+	7200 6200 10200 6200
+Wire Wire Line
+	5500 6200 7200 6200
+Wire Wire Line
+	2200 6300 1900 6300
+Wire Wire Line
+	2100 6200 2400 6200
+Wire Wire Line
+	5400 2000 5400 3100
+Wire Wire Line
+	5300 2100 5300 2700
+Wire Wire Line
+	2400 6500 2400 6600
+Wire Wire Line
+	2400 6200 5500 6200
 $EndSCHEMATC
