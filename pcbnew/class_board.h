@@ -1122,21 +1122,6 @@ public:
                        ZONE_CONTAINER*    area_to_combine );
 
     /**
-     * Function Test_Drc_Areas_Outlines_To_Areas_Outlines
-     * tests area outlines for DRC:
-     *      Tests areas inside other areas.
-     *      Tests areas too close.
-     *
-     * @param aArea_To_Examine: area to compare with other areas, or if NULL then
-     *          all areas are compared to all others.
-     * @param aCreate_Markers: if true create DRC markers. False: do not creates anything
-     * @return errors count
-     */
-    int Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_Examine,
-                                                   bool            aCreate_Markers );
-
-
-    /**
      * Function GetViaByPosition
      * finds the first via at \a aPosition on \a aLayer.
      * <p>

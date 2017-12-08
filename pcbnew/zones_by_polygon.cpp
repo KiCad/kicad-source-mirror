@@ -167,8 +167,10 @@ void PCB_EDIT_FRAME::duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone )
         GetBoard()->RedrawAreasOutlines( m_canvas, aDC, GR_OR, newZone->GetLayer() );
         GetBoard()->RedrawFilledAreas( m_canvas, aDC, GR_OR, newZone->GetLayer() );
 
+        DRC drc( this );
+
         if( GetBoard()->GetAreaIndex( newZone ) >= 0
-           && GetBoard()->Test_Drc_Areas_Outlines_To_Areas_Outlines( newZone, true ) )
+           && drc.TestZoneToZoneOutline( newZone, true ) )
         {
             DisplayInfoMessage( this, _( "Warning: The new zone fails DRC" ) );
         }
@@ -367,7 +369,8 @@ void PCB_EDIT_FRAME::End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER*
     SaveCopyInUndoList(s_PickedList, UR_UNSPECIFIED);
     s_PickedList.ClearItemsList(); // s_ItemsListPicker is no more owner of picked items
 
-    int error_count = GetBoard()->Test_Drc_Areas_Outlines_To_Areas_Outlines( aZone, true );
+    DRC drc( this );
+    int error_count = drc.TestZoneToZoneOutline( aZone, true );
 
     if( error_count )
     {
@@ -425,7 +428,8 @@ void PCB_EDIT_FRAME::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* aZone )
     if( ii < 0 )
         aZone = NULL;   // aZone does not exist anymore, after combining zones
 
-    int error_count = GetBoard()->Test_Drc_Areas_Outlines_To_Areas_Outlines( aZone, true );
+    DRC drc( this );
+    int error_count = drc.TestZoneToZoneOutline( aZone, true );
 
     if( error_count )
     {
@@ -811,7 +815,8 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
     if( ii < 0 )
         zone = NULL;                        // was removed by combining zones
 
-    int error_count = GetBoard()->Test_Drc_Areas_Outlines_To_Areas_Outlines( zone, true );
+    DRC drc( this );
+    int error_count = drc.TestZoneToZoneOutline( zone, true );
 
     if( error_count )
     {

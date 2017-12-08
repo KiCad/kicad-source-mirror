@@ -41,6 +41,7 @@
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <geometry/seg.h>
+#include <math_for_graphics.h>
 
 #include <connectivity_data.h>
 #include <connectivity_algo.h>
@@ -89,12 +90,14 @@ void DRC::ShowDRCDialog( wxWindow* aParent )
     }
 }
 
+
 void DRC::addMarkerToPcb( MARKER_PCB* aMarker )
 {
-    BOARD_COMMIT commit ( m_pcbEditorFrame );
+    BOARD_COMMIT commit( m_pcbEditorFrame );
     commit.Add( aMarker );
     commit.Push( wxEmptyString, false );
 }
+
 
 void DRC::DestroyDRCDialog( int aReason )
 {
@@ -173,6 +176,168 @@ int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
     }
 
     return OK_DRC;
+}
+
+
+int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
+{
+    BOARD* board = m_pcbEditorFrame->GetBoard();
+    BOARD_COMMIT commit( m_pcbEditorFrame );
+    int nerrors = 0;
+
+    // iterate through all areas
+    for( int ia = 0; ia < board->GetAreaCount(); ia++ )
+    {
+        ZONE_CONTAINER* zoneRef = board->GetArea( ia );
+        SHAPE_POLY_SET refSmoothedPoly;
+
+        zoneRef->BuildSmoothedPoly( refSmoothedPoly );
+
+        if( !zoneRef->IsOnCopperLayer() )
+            continue;
+
+        // When testing only a single area, skip all others
+        if( aZone && ( aZone != zoneRef) )
+            continue;
+
+        for( int ia2 = 0; ia2 < board->GetAreaCount(); ia2++ )
+        {
+            ZONE_CONTAINER* zoneToTest = board->GetArea( ia2 );
+            SHAPE_POLY_SET testSmoothedPoly;
+
+            zoneToTest->BuildSmoothedPoly( testSmoothedPoly );
+
+            if( zoneRef == zoneToTest )
+                continue;
+
+            // test for same layer
+            if( zoneRef->GetLayer() != zoneToTest->GetLayer() )
+                continue;
+
+            // Test for same net
+            if( zoneRef->GetNetCode() == zoneToTest->GetNetCode() && zoneRef->GetNetCode() >= 0 )
+                continue;
+
+            // test for different priorities
+            if( zoneRef->GetPriority() != zoneToTest->GetPriority() )
+                continue;
+
+            // test for different types
+            if( zoneRef->GetIsKeepout() != zoneToTest->GetIsKeepout() )
+                continue;
+
+            // Examine a candidate zone: compare zoneToTest to zoneRef
+
+            // Get clearance used in zone to zone test.  The policy used to
+            // obtain that value is now part of the zone object itself by way of
+            // ZONE_CONTAINER::GetClearance().
+            int zone2zoneClearance = zoneRef->GetClearance( zoneToTest );
+
+            // Keepout areas have no clearance, so set zone2zoneClearance to 1
+            // ( zone2zoneClearance = 0  can create problems in test functions)
+            if( zoneRef->GetIsKeepout() )
+                zone2zoneClearance = 1;
+
+            // test for some corners of zoneRef inside zoneToTest
+            for( auto iterator = refSmoothedPoly.IterateWithHoles(); iterator; iterator++ )
+            {
+                VECTOR2I currentVertex = *iterator;
+
+                if( testSmoothedPoly.Contains( currentVertex ) )
+                {
+                    // COPPERAREA_COPPERAREA error: copper area ref corner inside copper area
+                    if( aCreateMarkers )
+                    {
+                        wxPoint pt( currentVertex.x, currentVertex.y );
+                        wxString msg1 = zoneRef->GetSelectMenuText();
+                        wxString msg2 = zoneToTest->GetSelectMenuText();
+                        MARKER_PCB* marker = new MARKER_PCB( COPPERAREA_INSIDE_COPPERAREA,
+                                                              pt, msg1, pt, msg2, pt );
+                        commit.Add( marker );
+                    }
+
+                    nerrors++;
+                }
+            }
+
+            // test for some corners of zoneToTest inside zoneRef
+            for( auto iterator = testSmoothedPoly.IterateWithHoles(); iterator; iterator++ )
+            {
+                VECTOR2I currentVertex = *iterator;
+
+                if( refSmoothedPoly.Contains( currentVertex ) )
+                {
+                    // COPPERAREA_COPPERAREA error: copper area corner inside copper area ref
+                    if( aCreateMarkers )
+                    {
+                        wxPoint pt( currentVertex.x, currentVertex.y );
+                        wxString msg1 = zoneToTest->GetSelectMenuText();
+                        wxString msg2 = zoneRef->GetSelectMenuText();
+                        MARKER_PCB* marker = new MARKER_PCB( COPPERAREA_INSIDE_COPPERAREA,
+                                                              pt, msg1, pt, msg2, pt );
+                        commit.Add( marker );
+                    }
+
+                    nerrors++;
+                }
+            }
+
+
+            // Iterate through all the segments of refSmoothedPoly
+            for( auto refIt = refSmoothedPoly.IterateSegmentsWithHoles(); refIt; refIt++ )
+            {
+                // Build ref segment
+                SEG refSegment = *refIt;
+
+                // Iterate through all the segments in testSmoothedPoly
+                for( auto testIt = testSmoothedPoly.IterateSegmentsWithHoles(); testIt; testIt++ )
+                {
+                    // Build test segment
+                    SEG testSegment = *testIt;
+                    wxPoint pt;
+
+                    int ax1, ay1, ax2, ay2;
+                    ax1 = refSegment.A.x;
+                    ay1 = refSegment.A.y;
+                    ax2 = refSegment.B.x;
+                    ay2 = refSegment.B.y;
+
+                    int bx1, by1, bx2, by2;
+                    bx1 = testSegment.A.x;
+                    by1 = testSegment.A.y;
+                    bx2 = testSegment.B.x;
+                    by2 = testSegment.B.y;
+
+                    int d = GetClearanceBetweenSegments( bx1, by1, bx2, by2,
+                                                         0,
+                                                         ax1, ay1, ax2, ay2,
+                                                         0,
+                                                         zone2zoneClearance,
+                                                         &pt.x, &pt.y );
+
+                    if( d < zone2zoneClearance )
+                    {
+                        // COPPERAREA_COPPERAREA error : intersect or too close
+                        if( aCreateMarkers )
+                        {
+                            wxString msg1 = zoneRef->GetSelectMenuText();
+                            wxString msg2 = zoneToTest->GetSelectMenuText();
+                            MARKER_PCB* marker = new MARKER_PCB( COPPERAREA_CLOSE_TO_COPPERAREA,
+                                                              pt, msg1, pt, msg2, pt );
+                            commit.Add( marker );
+                        }
+
+                        nerrors++;
+                    }
+                }
+            }
+        }
+    }
+
+    if( aCreateMarkers )
+        commit.Push( wxEmptyString, false );
+
+    return nerrors;
 }
 
 
@@ -609,7 +774,7 @@ void DRC::testZones()
     }
 
     // Test copper areas outlines, and create markers when needed
-    m_pcb->Test_Drc_Areas_Outlines_To_Areas_Outlines( NULL, true );
+    TestZoneToZoneOutline( NULL, true );
 }
 
 

@@ -458,6 +458,15 @@ public:
         return doTrackKeepoutDrc( aRefSeg ) ? OK_DRC : BAD_DRC;
     }
 
+    /*
+     * Tests whether distance between zones complies with the DRC rules.
+     *
+     * @param aZone: zone to compare with other zones, or if NULL then
+     *          all zones are compared to all others.
+     * @param aCreateMarkers: if true create DRC markers. False: do not creates anything
+     * @return Errors count
+     */
+    int TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers );
 
     /**
      * Function ShowDRCDialog
