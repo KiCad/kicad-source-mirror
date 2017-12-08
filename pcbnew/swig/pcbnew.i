@@ -35,6 +35,8 @@
 %include "docstrings.i"
 #endif
 
+// support for wchar_t
+%include "cwstring.i"
 
 %include kicad.i
 
