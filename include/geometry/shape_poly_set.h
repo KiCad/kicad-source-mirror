@@ -28,6 +28,7 @@
 
 #include <vector>
 #include <cstdio>
+#include <memory>
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
 
@@ -406,8 +407,6 @@ class SHAPE_POLY_SET : public SHAPE
          */
         SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther );
 
-        ~SHAPE_POLY_SET();
-
         /**
          * Function GetRelativeIndices
          *
@@ -585,7 +584,7 @@ class SHAPE_POLY_SET : public SHAPE
 
         const TRIANGULATED_POLYGON* TriangulatedPolygon( int aIndex ) const
         {
-            return m_triangulatedPolys[aIndex];
+            return m_triangulatedPolys[aIndex].get();
         }
 
 
@@ -1120,6 +1119,8 @@ class SHAPE_POLY_SET : public SHAPE
 
     public:
 
+        SHAPE_POLY_SET& operator=( const SHAPE_POLY_SET& );
+
         void CacheTriangulation();
         bool IsTriangulationUpToDate() const;
 
@@ -1128,7 +1129,7 @@ class SHAPE_POLY_SET : public SHAPE
 
         MD5_HASH checksum() const;
 
-        std::vector<TRIANGULATED_POLYGON*> m_triangulatedPolys;
+        std::vector<std::unique_ptr<TRIANGULATED_POLYGON>> m_triangulatedPolys;
         bool m_triangulationValid = false;
         MD5_HASH m_hash;
 
