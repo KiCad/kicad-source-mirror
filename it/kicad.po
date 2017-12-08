@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-08 16:26+0100\n"
-"PO-Revision-Date: 2017-12-08 16:37+0100\n"
+"POT-Creation-Date: 2017-12-08 23:39+0100\n"
+"PO-Revision-Date: 2017-12-08 23:39+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -201,7 +201,7 @@ msgid "Alias"
 msgstr "Alias"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:83
-#: common/dialog_about/AboutDialog_main.cpp:114 eeschema/sch_component.cpp:1363
+#: common/dialog_about/AboutDialog_main.cpp:114 eeschema/sch_component.cpp:1368
 #: eeschema/viewlibs.cpp:241 eeschema/libedit.cpp:664
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
@@ -3301,7 +3301,7 @@ msgstr "Aiuto"
 #: common/dialogs/dialog_env_var_config_base.cpp:128
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:81
 #: eeschema/widgets/widget_eeschema_color_config.cpp:77
-#: eeschema/sch_component.cpp:1335 eeschema/sch_component.cpp:1374
+#: eeschema/sch_component.cpp:1340 eeschema/sch_component.cpp:1379
 #: eeschema/lib_field.cpp:449 eeschema/lib_field.cpp:628
 #: eeschema/template_fieldnames.cpp:42
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45
@@ -5109,7 +5109,7 @@ msgid "Pin name"
 msgstr "Nome piedino"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:76
-#: eeschema/sch_component.cpp:1331 eeschema/sch_component.cpp:1371
+#: eeschema/sch_component.cpp:1336 eeschema/sch_component.cpp:1376
 #: eeschema/lib_field.cpp:442 eeschema/template_fieldnames.cpp:39
 #: eeschema/dialogs/dialog_rescue_each.cpp:115 eeschema/bom_table_column.h:33
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:42
@@ -5168,7 +5168,7 @@ msgid "General"
 msgstr "Generale"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:102
-#: eeschema/sch_component.cpp:1340
+#: eeschema/sch_component.cpp:1345
 msgid "Component"
 msgstr "Componente"
 
@@ -5186,31 +5186,31 @@ msgstr ""
 "e non sarà possibile vederli sullo schermo. Sicuri\n"
 "di voler usare questi colori?"
 
-#: eeschema/sch_component.cpp:1335
+#: eeschema/sch_component.cpp:1340
 msgid "Power symbol"
 msgstr "Simbolo di alimentazione"
 
-#: eeschema/sch_component.cpp:1344
+#: eeschema/sch_component.cpp:1349
 msgid "Alias of"
 msgstr "Alias di"
 
-#: eeschema/sch_component.cpp:1347 eeschema/sch_component.cpp:1349
-#: eeschema/sch_component.cpp:1352 eeschema/sch_component.cpp:1382
-#: eeschema/sch_component.cpp:1388 eeschema/selpart.cpp:88
+#: eeschema/sch_component.cpp:1352 eeschema/sch_component.cpp:1354
+#: eeschema/sch_component.cpp:1357 eeschema/sch_component.cpp:1387
+#: eeschema/sch_component.cpp:1393 eeschema/selpart.cpp:88
 #: eeschema/dialogs/dialog_spice_model_base.cpp:210 pcbnew/loadcmp.cpp:446
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:185
 msgid "Library"
 msgstr "Libreria"
 
-#: eeschema/sch_component.cpp:1352
+#: eeschema/sch_component.cpp:1357
 msgid "Undefined!!!"
 msgstr "Indefinito!!!"
 
-#: eeschema/sch_component.cpp:1358
+#: eeschema/sch_component.cpp:1363
 msgid "<Unknown>"
 msgstr "<Sconosciuto>"
 
-#: eeschema/sch_component.cpp:1360 eeschema/lib_field.cpp:456
+#: eeschema/sch_component.cpp:1365 eeschema/lib_field.cpp:456
 #: eeschema/template_fieldnames.cpp:45 eeschema/bom_table_column.h:35
 #: pcbnew/class_module.cpp:587 pcbnew/class_pad.cpp:693 pcbnew/loadcmp.cpp:445
 #: pcbnew/loadcmp.cpp:509 pcbnew/class_edge_mod.cpp:248
@@ -5218,24 +5218,24 @@ msgstr "<Sconosciuto>"
 msgid "Footprint"
 msgstr "Impronta"
 
-#: eeschema/sch_component.cpp:1365
+#: eeschema/sch_component.cpp:1370
 msgid "Key Words"
 msgstr "Parole chiave"
 
-#: eeschema/sch_component.cpp:1376
+#: eeschema/sch_component.cpp:1381
 msgid "Symbol"
 msgstr "Simbolo"
 
-#: eeschema/sch_component.cpp:1383
+#: eeschema/sch_component.cpp:1388
 msgid "No library defined!!!"
 msgstr "Nessuna libreria definita!!!"
 
-#: eeschema/sch_component.cpp:1387
+#: eeschema/sch_component.cpp:1392
 #, c-format
 msgid "Symbol not found in %s!!!"
 msgstr "Simbolo non trovato in %s!!!"
 
-#: eeschema/sch_component.cpp:1639
+#: eeschema/sch_component.cpp:1644
 #, c-format
 msgid "Component %s, %s"
 msgstr "Componente %s, %s"
@@ -6250,7 +6250,9 @@ msgstr "Lo schema \"%s\" non esiste. Volete crearlo?"
 msgid ""
 "The entire schematic could not be load.  Errors occurred attempting to load "
 "hierarchical sheet schematics."
-msgstr "Impossibile caricare lo schema elettrico completo. Si sono verificati degli errori nel tentativo di caricare la gerarchia degli schemi elettrici."
+msgstr ""
+"Impossibile caricare lo schema elettrico completo. Si sono verificati degli "
+"errori nel tentativo di caricare la gerarchia degli schemi elettrici."
 
 #: eeschema/files-io.cpp:314 eeschema/files-io.cpp:815
 #, c-format
@@ -7804,17 +7806,17 @@ msgstr "Fallito l'inserimento del simbolo %s al file libreria."
 msgid "Unexpected exception occurred."
 msgstr "Si è verificata un'eccezione non prevista."
 
-#: eeschema/libarch.cpp:122
+#: eeschema/libarch.cpp:127
 #, c-format
 msgid "Symbol %s not found in any library or cache."
 msgstr "Simbolo \"%s\" non trovato in nessuna libreria o cache."
 
-#: eeschema/libarch.cpp:138
+#: eeschema/libarch.cpp:143
 #, c-format
 msgid "Errors occurred creating symbol library %s."
 msgstr "Errore durante la creazione della libreria simboli \"%s\"."
 
-#: eeschema/libarch.cpp:150
+#: eeschema/libarch.cpp:155
 #, c-format
 msgid "Failed to save symbol library file '%s'"
 msgstr "Fallito salvataggio file libreria simboli \"%s\""
@@ -7931,20 +7933,20 @@ msgstr ""
 "Questo potrebbe causare un comportamento imprevisto all'inserimento in uno "
 "schema del componente."
 
-#: eeschema/class_library.cpp:525
+#: eeschema/class_library.cpp:537
 #, c-format
 msgid "Unable to load project's '%s' file"
 msgstr "Impossibile caricare il file progetto \"%s\""
 
-#: eeschema/class_library.cpp:580
+#: eeschema/class_library.cpp:592
 msgid "Loading Symbol Libraries"
 msgstr "Caricamento librerie simboli"
 
-#: eeschema/class_library.cpp:597
+#: eeschema/class_library.cpp:609
 msgid "Loading "
 msgstr "Caricamento "
 
-#: eeschema/class_library.cpp:640
+#: eeschema/class_library.cpp:652
 #, c-format
 msgid ""
 "Part library '%s' failed to load. Error:\n"
@@ -7953,7 +7955,7 @@ msgstr ""
 "Fallito il caricamento della libreria componenti \"%s\". Errore:\n"
 "%s"
 
-#: eeschema/class_library.cpp:664
+#: eeschema/class_library.cpp:676
 #, c-format
 msgid ""
 "Part library '%s' failed to load.\n"
@@ -10270,7 +10272,7 @@ msgstr "Genera errori"
 msgid "Annotation required!"
 msgstr "Annotazione necessaria!"
 
-#: eeschema/dialogs/dialog_erc.cpp:583 pcbnew/drc.cpp:310
+#: eeschema/dialogs/dialog_erc.cpp:583 pcbnew/drc.cpp:475
 msgid "Finished"
 msgstr "Terminato"
 
@@ -17392,29 +17394,29 @@ msgid "The duplicated zone cannot be on the same layers as the original zone."
 msgstr ""
 "La zona duplicata non può stare sullo stesso strato della zona originale."
 
-#: pcbnew/zones_by_polygon.cpp:173
+#: pcbnew/zones_by_polygon.cpp:175
 msgid "Warning: The new zone fails DRC"
 msgstr "Attenzione: la nuova zona non passa i DRC"
 
-#: pcbnew/zones_by_polygon.cpp:374 pcbnew/zones_by_polygon.cpp:432
-#: pcbnew/zones_by_polygon.cpp:818
+#: pcbnew/zones_by_polygon.cpp:377 pcbnew/zones_by_polygon.cpp:436
+#: pcbnew/zones_by_polygon.cpp:823
 msgid "Area: DRC outline error"
 msgstr "Area: errore DRC nei bordi"
 
-#: pcbnew/zones_by_polygon.cpp:547
+#: pcbnew/zones_by_polygon.cpp:551
 msgid "Error: a keepout area is allowed only on copper layers"
 msgstr "Errore: le aree proibite sono consentite solo sugli strati in rame"
 
-#: pcbnew/zones_by_polygon.cpp:692
+#: pcbnew/zones_by_polygon.cpp:696
 msgid "DRC error: this start point is inside or too close an other area"
 msgstr ""
 "Errore DRC: questo punto iniziale è dentro o troppo vicino ad un'altra zona"
 
-#: pcbnew/zones_by_polygon.cpp:757
+#: pcbnew/zones_by_polygon.cpp:761
 msgid "DRC error: closing this area creates a DRC error with an other area"
 msgstr "Errore DRC: chiudere quest'area crea un errore DRC con un'altra area"
 
-#: pcbnew/zones_by_polygon.cpp:914 pcbnew/zones_by_polygon.cpp:965
+#: pcbnew/zones_by_polygon.cpp:919 pcbnew/zones_by_polygon.cpp:970
 msgid "Modify zone properties"
 msgstr "Modifica proprietà della zona"
 
@@ -20293,97 +20295,97 @@ msgstr ""
 "L'impronta corrente verrà persa e l'operazione non potrà essere "
 "ripristinata. Continuare?"
 
-#: pcbnew/drc.cpp:209
+#: pcbnew/drc.cpp:374
 msgid "Aborting\n"
 msgstr "Terminato\n"
 
-#: pcbnew/drc.cpp:222
+#: pcbnew/drc.cpp:387
 msgid "Pad clearances...\n"
 msgstr "Isolamento piazzole...\n"
 
-#: pcbnew/drc.cpp:232
+#: pcbnew/drc.cpp:397
 msgid "Track clearances...\n"
 msgstr "Isolamento piste...\n"
 
-#: pcbnew/drc.cpp:242
+#: pcbnew/drc.cpp:407
 msgid "Fill zones...\n"
 msgstr "Riempimento zone...\n"
 
-#: pcbnew/drc.cpp:252
+#: pcbnew/drc.cpp:417
 msgid "Test zones...\n"
 msgstr "Verifica zone...\n"
 
-#: pcbnew/drc.cpp:263
+#: pcbnew/drc.cpp:428
 msgid "Unconnected pads...\n"
 msgstr "Piazzole non collegate...\n"
 
-#: pcbnew/drc.cpp:275
+#: pcbnew/drc.cpp:440
 msgid "Keepout areas ...\n"
 msgstr "Zone proibite ...\n"
 
-#: pcbnew/drc.cpp:285
+#: pcbnew/drc.cpp:450
 msgid "Test texts...\n"
 msgstr "Verifica testi...\n"
 
-#: pcbnew/drc.cpp:296
+#: pcbnew/drc.cpp:461
 msgid "Courtyard areas...\n"
 msgstr "Zone courtyard ...\n"
 
-#: pcbnew/drc.cpp:350
+#: pcbnew/drc.cpp:515
 #, c-format
 msgid "NETCLASS: '%s' has Clearance:%s which is less than global:%s"
 msgstr "NETCLASS: \"%s\" ha isolamento: %s minore di quello globale: %s"
 
-#: pcbnew/drc.cpp:364
+#: pcbnew/drc.cpp:529
 #, c-format
 msgid "NETCLASS: '%s' has TrackWidth:%s which is less than global:%s"
 msgstr ""
 "NETCLASS: \"%s\" ha la larghezza pista: %s minore di quella globale: %s"
 
-#: pcbnew/drc.cpp:377
+#: pcbnew/drc.cpp:542
 #, c-format
 msgid "NETCLASS: '%s' has Via Dia:%s which is less than global:%s"
 msgstr "NETCLASS: \"%s\" ha il diametro via: %s minore di quello globale: %s"
 
-#: pcbnew/drc.cpp:390
+#: pcbnew/drc.cpp:555
 #, c-format
 msgid "NETCLASS: '%s' has Via Drill:%s which is less than global:%s"
 msgstr ""
 "NETCLASS: \"%s\" ha la foratura dei via: %s minore di quella globale: %s"
 
-#: pcbnew/drc.cpp:403
+#: pcbnew/drc.cpp:568
 #, c-format
 msgid "NETCLASS: '%s' has uVia Dia:%s which is less than global:%s"
 msgstr ""
 "NETCLASS: \"%s\" ha il diametro microvia: %s minore di quello globale: %s"
 
-#: pcbnew/drc.cpp:416
+#: pcbnew/drc.cpp:581
 #, c-format
 msgid "NETCLASS: '%s' has uVia Drill:%s which is less than global:%s"
 msgstr ""
 "NETCLASS: \"%s\" ha la foratura dei microvia: %s minore di quella globale: %s"
 
-#: pcbnew/drc.cpp:506
+#: pcbnew/drc.cpp:671
 msgid "Track clearances"
 msgstr "Isolamento piste"
 
-#: pcbnew/drc.cpp:991
+#: pcbnew/drc.cpp:1156
 #, c-format
 msgid "footprint '%s' has malformed courtyard"
 msgstr "l'impronta \"%s\" ha courdyard incorrette"
 
-#: pcbnew/drc.cpp:1008
+#: pcbnew/drc.cpp:1173
 #, c-format
 msgid "footprint '%s' has no courtyard defined"
 msgstr "l'impronta \"%s\" non ha courtyard definite"
 
-#: pcbnew/drc.cpp:1046
+#: pcbnew/drc.cpp:1211
 #, c-format
 msgid "footprints '%s' and '%s' overlap on front (top) layer"
 msgstr ""
 "le impronte \"%s\" e \"%s\" si sovrappongono sullo strato (in cima) fronte"
 
-#: pcbnew/drc.cpp:1081
+#: pcbnew/drc.cpp:1246
 #, c-format
 msgid "footprints '%s' and '%s' overlap on back (bottom) layer"
 msgstr ""
@@ -26960,7 +26962,7 @@ msgstr "Avvio numerazione piazzole:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:173
 msgid "Grid Array"
-msgstr "Schieramento a griglia"
+msgstr "Schiere a griglia"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:183
 msgid "Horizontal center:"
@@ -27014,7 +27016,7 @@ msgstr "Valore di inizio numerazione piazzole:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:276
 msgid "Circular Array"
-msgstr "Schieramento circolare"
+msgstr "Schiere circolari"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:63
 msgid "Net Filtering"
