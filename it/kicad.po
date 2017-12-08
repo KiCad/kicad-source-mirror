@@ -74,7 +74,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-08 23:39+0100\n"
-"PO-Revision-Date: 2017-12-08 23:39+0100\n"
+"PO-Revision-Date: 2017-12-08 23:43+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -15593,7 +15593,7 @@ msgstr "Sposta esattamente"
 #: pcbnew/modedit_onclick.cpp:415 pcbnew/hotkeys.cpp:123
 #: pcbnew/dialogs/dialog_create_array_base.h:116
 msgid "Create Array"
-msgstr "Crea array"
+msgstr "Crea schiera"
 
 #: pcbnew/onrightclick.cpp:225
 msgid "Delete All Drawings on Layer"
@@ -15719,7 +15719,7 @@ msgstr "Sposta segmento"
 
 #: pcbnew/onrightclick.cpp:555
 msgid "Create Track Array"
-msgstr "Crea array di tracce"
+msgstr "Crea schiera di tracce"
 
 #: pcbnew/onrightclick.cpp:561 pcbnew/router/router_tool.cpp:119
 msgid "Break Track"
@@ -16463,7 +16463,7 @@ msgstr "Sposta gli elementi selezionati di un valore esatto"
 
 #: pcbnew/tools/edit_tool.cpp:119
 msgid "Create array"
-msgstr "Crea array"
+msgstr "Crea schiera"
 
 #: pcbnew/tools/edit_tool.cpp:123
 msgid "Rotates selected item(s) clockwise"
@@ -17068,7 +17068,7 @@ msgstr "Sposta piazzola esattamente"
 
 #: pcbnew/modedit_onclick.cpp:331
 msgid "Create Pad Array"
-msgstr "Crea array di piazzole"
+msgstr "Crea schiera di piazzole"
 
 #: pcbnew/modedit_onclick.cpp:400
 msgid "End edge"
