@@ -45,8 +45,8 @@ std::pair<UTF8, std::vector<bool>> ProcessOverbars( const UTF8& aText )
         }
 
         // remember: *chIt is not necessary a ASCII7 char.
-        // it is an unsigned ( wchar_t ) giving a multibyte char in UTF8 strings
-        text += wchar_t( *chIt );
+        // it is an unsigned giving a multibyte char in UTF8 strings
+        text += *chIt;
 
         flags.push_back( overbar );
     }

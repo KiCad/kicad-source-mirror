@@ -709,7 +709,7 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibPart,
 void SCH_REFERENCE::Annotate()
 {
     if( m_NumRef < 0 )
-        m_Ref += wxChar( '?' );
+        m_Ref += '?';
     else
     {
         // To avoid a risk of duplicate, for power components

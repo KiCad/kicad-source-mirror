@@ -146,8 +146,9 @@ public:
     }
 
     /// Append a wide (unicode) char to the UTF8 string.
-    /// if this char is not a ASCII7 char, it will be added as a UTF8 multibyte seqence
-    UTF8& operator+=( wchar_t ch );
+    /// if this wide char is not a ASCII7 char, it will be added as a UTF8 multibyte seqence
+    /// @param w_ch is a UTF-16 value (can be a UTF-32 on Linux)
+    UTF8& operator+=( unsigned w_ch );
 
     // std::string::npos is not constexpr, so we can't use it in an
     // initializer.
