@@ -33,6 +33,7 @@ set( GAL_SRCS
     worksheet_viewitem.cpp
     origin_viewitem.cpp
     gl_context_mgr.cpp
+    text_utils.cpp
     gal/gal_display_options.cpp
     gal/graphics_abstraction_layer.cpp
     gal/stroke_font.cpp
@@ -289,7 +290,6 @@ set( COMMON_SRCS
     selcolor.cpp
     settings.cpp
     systemdirsappend.cpp
-    text_utils.cpp
     trigo.cpp
     utf8.cpp
     validators.cpp
