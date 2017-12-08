@@ -44,7 +44,10 @@ std::pair<UTF8, std::vector<bool>> ProcessOverbars( const UTF8& aText )
             // If it is a double tilda, just process the second one
         }
 
-        text += *chIt;
+        // remember: *chIt is not necessary a ASCII7 char.
+        // it is an unsigned ( wchar_t ) giving a multibyte char in UTF8 strings
+        text += wchar_t( *chIt );
+
         flags.push_back( overbar );
     }
 

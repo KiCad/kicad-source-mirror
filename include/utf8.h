@@ -145,6 +145,10 @@ public:
         return (UTF8&) *this;
     }
 
+    /// Append a wide (unicode) char to the UTF8 string.
+    /// if this char is not a ASCII7 char, it will be added as a UTF8 multibyte seqence
+    UTF8& operator+=( wchar_t ch );
+
     // std::string::npos is not constexpr, so we can't use it in an
     // initializer.
     static constexpr std::string::size_type npos = -1;
