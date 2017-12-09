@@ -13936,7 +13936,7 @@ msgstr "Iadj"
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:67
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:156
 msgid "uA"
-msgstr "uA"
+msgstr "µA"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:62
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1183
@@ -13956,7 +13956,7 @@ msgstr "R1"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:110
 #: pcb_calculator/UnitSelector.cpp:159
 msgid "KOhm"
-msgstr "KOhm"
+msgstr "kΩ"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:103
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1144
@@ -14122,7 +14122,7 @@ msgstr "dummy"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:379
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:468
 msgid "mm ^ 2"
-msgstr "mm ^ 2"
+msgstr "mm²"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:383
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:472
@@ -14133,7 +14133,7 @@ msgstr "Resistance"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:480
 #: pcb_calculator/UnitSelector.cpp:158
 msgid "Ohm"
-msgstr "Ohm"
+msgstr "Ω"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:395
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:484
@@ -14490,7 +14490,7 @@ msgstr "Zin"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1151
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1162
 msgid "Ohms"
-msgstr "Ohms"
+msgstr "Ω"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1095
 msgid "Zout"
@@ -14612,7 +14612,7 @@ msgid ""
 "(Ohm*meter)"
 msgstr ""
 "Electrical resistivity or specific electrical resistance of conductor "
-"(Ohm*meter)"
+"(Ωm)"
 
 #: pcb_calculator/transline_ident.cpp:156
 #: pcb_calculator/transline_ident.cpp:171
@@ -16781,12 +16781,12 @@ msgstr "Via drill"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:85
 msgid "uVia size"
-msgstr "uVia size"
+msgstr "µVia size"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:86
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:53
 msgid "uVia Drill"
-msgstr "uVia Drill"
+msgstr "µVia Drill"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:93
 msgid "Netclass value"
@@ -19910,7 +19910,7 @@ msgstr "Via Drill"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:52
 msgid "uVia Dia"
-msgstr "uVia Dia"
+msgstr "µVia Dia"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:54
 msgid "Diff Pair Width"
@@ -19986,15 +19986,15 @@ msgstr "Allow blind/buried vias"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:236
 msgid "Allow micro vias (uVias)"
-msgstr "Allow micro vias (uVias)"
+msgstr "Allow micro vias (µVias)"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:242
 msgid "Minimum uVia diameter"
-msgstr "Minimum uVia diameter"
+msgstr "Minimum µVia diameter"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:255
 msgid "Minimum uVia drill"
-msgstr "Minimum uVia drill"
+msgstr "Minimum µVia drill"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:277
 msgid ""
@@ -20608,7 +20608,7 @@ msgstr "Enter the minimum acceptable diameter for a standard via"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:90
 msgid "Min uVia size"
-msgstr "Min uVia size"
+msgstr "Min µVia size"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:92 pcbnew/dialogs/dialog_drc_base.cpp:101
 msgid "Enter the minimum acceptable diameter for a micro via"
@@ -22728,12 +22728,12 @@ msgstr "NETCLASS: \"%s\" has Via Drill:%s which is less than global:%s"
 #: pcbnew/drc.cpp:568
 #, c-format
 msgid "NETCLASS: \"%s\" has uVia Dia:%s which is less than global:%s"
-msgstr "NETCLASS: \"%s\" has uVia Dia:%s which is less than global:%s"
+msgstr "NETCLASS: \"%s\" has µVia Dia:%s which is less than global:%s"
 
 #: pcbnew/drc.cpp:581
 #, c-format
 msgid "NETCLASS: \"%s\" has uVia Drill:%s which is less than global:%s"
-msgstr "NETCLASS: \"%s\" has uVia Drill:%s which is less than global:%s"
+msgstr "NETCLASS: \"%s\" has µVia Drill:%s which is less than global:%s"
 
 #: pcbnew/drc.cpp:671
 msgid "Track clearances"
@@ -25479,11 +25479,11 @@ msgstr "NetClass Via Drill &lt; global limit"
 
 #: pcbnew/class_drc_item.cpp:107
 msgid "NetClass uVia Dia &lt; global limit"
-msgstr "NetClass uVia Dia &lt; global limit"
+msgstr "NetClass µVia Dia &lt; global limit"
 
 #: pcbnew/class_drc_item.cpp:109
 msgid "NetClass uVia Drill &lt; global limit"
-msgstr "NetClass uVia Drill &lt; global limit"
+msgstr "NetClass µVia Drill &lt; global limit"
 
 #: pcbnew/class_drc_item.cpp:112
 msgid "Via inside a keepout area"
