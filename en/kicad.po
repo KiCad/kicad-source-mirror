@@ -14201,39 +14201,39 @@ msgstr "A7"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:585
 msgid "0 ... 15V"
-msgstr "0 ... 15V"
+msgstr "0–15V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:586
 msgid "16 ... 30V"
-msgstr "16 ... 30V"
+msgstr "16–30V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:587
 msgid "31 ... 50V"
-msgstr "31 ... 50V"
+msgstr "31–50V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:588
 msgid "51 ... 100V"
-msgstr "51 ... 100V"
+msgstr "51–100V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:589
 msgid "101 ... 150V"
-msgstr "101 ... 150V"
+msgstr "101–150V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:590
 msgid "151 ... 170V"
-msgstr "151 ... 170V"
+msgstr "151–170V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:591
 msgid "171 ... 250V"
-msgstr "171 ... 250V"
+msgstr "171–250V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:592
 msgid "251 ... 300V"
-msgstr "251 ... 300V"
+msgstr "251–300V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:593
 msgid "301 ... 500V"
-msgstr "301 ... 500V"
+msgstr "301–500V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:594
 msgid " > 500V"
