@@ -72,7 +72,7 @@ BEGIN_EVENT_TABLE( EDA_3D_CANVAS, wxGLCanvas )
     EVT_MOUSEWHEEL(  EDA_3D_CANVAS::OnMouseWheel )
     EVT_MOTION(      EDA_3D_CANVAS::OnMouseMove )
 
-#ifdef USE_OSX_MAGNIFY_EVENT
+#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
     EVT_MAGNIFY(     EDA_3D_CANVAS::OnMagnify )
 #endif
 
@@ -515,8 +515,6 @@ void EDA_3D_CANVAS::OnMagnify( wxMouseEvent& event )
 
     DisplayStatus();
     Request_refresh();
-
-    m_settings.CameraGet().SetCurMousePosition( event.GetPosition() );
 }
 #endif
 
