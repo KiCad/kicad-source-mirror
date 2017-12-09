@@ -1196,12 +1196,12 @@ static EDA_HOTKEY Hk3D_MoveDown( _HKI( "Move board Down" ), ID_POPUP_MOVE3D_DOWN
 static EDA_HOTKEY Hk3D_HomeView( _HKI( "Home view" ), 0, WXK_HOME );
 static EDA_HOTKEY Hk3D_ResetView( _HKI( "Reset view" ), 0, 'R' );
 
-static EDA_HOTKEY Hk3D_ViewFront( _HKI( "View Front" ), ID_POPUP_VIEW_YPOS, 'y' );
-static EDA_HOTKEY Hk3D_ViewBack( _HKI( "View Back" ), ID_POPUP_VIEW_YNEG, 'Y' );
-static EDA_HOTKEY Hk3D_ViewLeft( _HKI( "View Left" ), ID_POPUP_VIEW_XNEG, 'X' );
-static EDA_HOTKEY Hk3D_ViewRight( _HKI( "View Right" ), ID_POPUP_VIEW_XPOS, 'x' );
-static EDA_HOTKEY Hk3D_ViewTop( _HKI( "View Top" ), ID_POPUP_VIEW_ZPOS, 'z' );
-static EDA_HOTKEY Hk3D_ViewBot( _HKI( "View Bot" ), ID_POPUP_VIEW_ZNEG, 'Z' );
+static EDA_HOTKEY Hk3D_ViewFront( _HKI( "View Front" ), ID_POPUP_VIEW_YPOS, 'Y' );
+static EDA_HOTKEY Hk3D_ViewBack( _HKI( "View Back" ), ID_POPUP_VIEW_YNEG, GR_KB_SHIFT + 'Y' );
+static EDA_HOTKEY Hk3D_ViewLeft( _HKI( "View Left" ), ID_POPUP_VIEW_XNEG, GR_KB_SHIFT + 'X' );
+static EDA_HOTKEY Hk3D_ViewRight( _HKI( "View Right" ), ID_POPUP_VIEW_XPOS, 'X' );
+static EDA_HOTKEY Hk3D_ViewTop( _HKI( "View Top" ), ID_POPUP_VIEW_ZPOS, 'Z' );
+static EDA_HOTKEY Hk3D_ViewBot( _HKI( "View Bot" ), ID_POPUP_VIEW_ZNEG, GR_KB_SHIFT + 'Z' );
 
 static EDA_HOTKEY Hk3D_Rotate45axisZ( _HKI( "Rotate 45 degrees over Z axis" ), 0, WXK_TAB );
 static EDA_HOTKEY Hk3D_ZoomIn( _HKI( "Zoom in " ), ID_POPUP_ZOOMIN, WXK_F1 );
