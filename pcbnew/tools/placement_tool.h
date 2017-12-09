@@ -81,6 +81,23 @@ public:
     void setTransitions() override;
 
 private:
+
+    /**
+     * Sets X coordinate of the selected items to the value of the left-most selected item X coordinate.
+     *
+     * NOTE: Uses the bounding box of items, which do not get mirrored even when
+     * the view is mirrored!
+     */
+    int doAlignLeft();
+
+    /**
+     * Aligns selected items using the right edge of their bounding boxes to the right-most item
+     *
+     * NOTE: Uses the bounding box of items, which do not get mirrored even when
+     * the view is mirrored!
+     */
+    int doAlignRight();
+
     SELECTION_TOOL* m_selectionTool;
 
     CONTEXT_MENU* m_placementMenu;

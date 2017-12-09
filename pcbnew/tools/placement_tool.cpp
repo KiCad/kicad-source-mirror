@@ -187,6 +187,21 @@ int ALIGN_DISTRIBUTE_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
 
 int ALIGN_DISTRIBUTE_TOOL::AlignLeft( const TOOL_EVENT& aEvent )
 {
+    // Because this tool uses bounding boxes and they aren't mirrored even when
+    // the view is mirrored, we need to call the other one if mirrored.
+    if( getView()->IsMirroredX() )
+    {
+        return doAlignRight();
+    }
+    else
+    {
+        return doAlignLeft();
+    }
+}
+
+
+int ALIGN_DISTRIBUTE_TOOL::doAlignLeft()
+{
     const SELECTION& selection = m_selectionTool->GetSelection();
 
     if( selection.Size() <= 1 )
@@ -223,6 +238,21 @@ int ALIGN_DISTRIBUTE_TOOL::AlignLeft( const TOOL_EVENT& aEvent )
 
 
 int ALIGN_DISTRIBUTE_TOOL::AlignRight( const TOOL_EVENT& aEvent )
+{
+    // Because this tool uses bounding boxes and they aren't mirrored even when
+    // the view is mirrored, we need to call the other one if mirrored.
+    if( getView()->IsMirroredX() )
+    {
+        return doAlignLeft();
+    }
+    else
+    {
+        return doAlignRight();
+    }
+}
+
+
+int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
