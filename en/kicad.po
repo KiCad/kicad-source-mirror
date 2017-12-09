@@ -1006,7 +1006,7 @@ msgstr "Build Tech layers"
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.cpp:477
 #: common/widgets/footprint_preview_widget.cpp:100
 msgid "Loading..."
-msgstr "Loading..."
+msgstr "Loading…"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:356
 #, c-format
@@ -2284,7 +2284,7 @@ msgstr "Clipboard Error"
 
 #: common/dialog_about/dialog_about.cpp:596
 msgid "Copied..."
-msgstr "Copied..."
+msgstr "Copied…"
 
 #: common/dialog_about/AboutDialog_main.cpp:118
 msgid ""
@@ -2802,7 +2802,7 @@ msgstr "Block Mirror"
 
 #: common/widgets/widget_hotkey_list.cpp:104
 msgid "Press a new hotkey, or press Esc to cancel..."
-msgstr "Press a new hotkey, or press Esc to cancel..."
+msgstr "Press a new hotkey, or press Esc to cancel…"
 
 #: common/widgets/widget_hotkey_list.cpp:111
 msgid "Command:"
@@ -2818,7 +2818,7 @@ msgstr "Set Hotkey"
 
 #: common/widgets/widget_hotkey_list.cpp:379
 msgid "Edit..."
-msgstr "Edit..."
+msgstr "Edit…"
 
 #: common/widgets/widget_hotkey_list.cpp:380
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:92
@@ -2956,7 +2956,7 @@ msgstr "No default footprint"
 #: common/widgets/footprint_select_widget.cpp:279
 #: common/widgets/footprint_select_widget.cpp:280
 msgid "Other..."
-msgstr "Other..."
+msgstr "Other…"
 
 #: common/widgets/mathplot.cpp:1765
 msgid "Center plot view to this position"
@@ -5427,7 +5427,7 @@ msgstr "Library"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:220
 msgid "Select file..."
-msgstr "Select file..."
+msgstr "Select file…"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:226
 #: eeschema/dialogs/dialog_spice_model_base.cpp:256
@@ -6867,7 +6867,7 @@ msgstr "Project Specific Libraries"
 
 #: eeschema/dialogs/dialog_sym_lib_table_base.cpp:134
 msgid "Browse Libraries..."
-msgstr "Browse Libraries..."
+msgstr "Browse Libraries…"
 
 #: eeschema/dialogs/dialog_sym_lib_table_base.cpp:137
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:136
@@ -8697,7 +8697,7 @@ msgstr "Save all library changes"
 
 #: eeschema/menubar_libedit.cpp:106
 msgid "Create &PNG File from Screen..."
-msgstr "Create &PNG File from Screen..."
+msgstr "Create &PNG File from Screen…"
 
 #: eeschema/menubar_libedit.cpp:107
 msgid "Create a PNG file from the part displayed on screen"
@@ -8705,7 +8705,7 @@ msgstr "Create a PNG file from the part displayed on screen"
 
 #: eeschema/menubar_libedit.cpp:113
 msgid "Create S&VG File..."
-msgstr "Create S&VG File..."
+msgstr "Create S&VG File…"
 
 #: eeschema/menubar_libedit.cpp:114
 msgid "Create a SVG file from the current loaded part"
@@ -9110,7 +9110,7 @@ msgstr "Run Simulation"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:56
 msgid "Add signals..."
-msgstr "Add signals..."
+msgstr "Add signals…"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:59
 msgid "Probe from schematics"
@@ -9122,7 +9122,7 @@ msgstr "Tune component value"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:67
 msgid "Settings..."
-msgstr "Settings..."
+msgstr "Settings…"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:70
 msgid "Simulation"
@@ -10211,7 +10211,7 @@ msgstr "No library specified."
 #: eeschema/libedit.cpp:521
 #, c-format
 msgid "Save Library \"%s\" As..."
-msgstr "Save Library \"%s\" As..."
+msgstr "Save Library \"%s\" As…"
 
 #: eeschema/libedit.cpp:559
 #, c-format
@@ -10720,11 +10720,11 @@ msgstr "Height"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:50 eeschema/widgets/cmp_tree_pane.cpp:74
 msgid "New library..."
-msgstr "New library..."
+msgstr "New library…"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:51 eeschema/widgets/cmp_tree_pane.cpp:75
 msgid "Add existing library..."
-msgstr "Add existing library..."
+msgstr "Add existing library…"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:52 eeschema/libeditframe.cpp:581
 msgid "Save library"
@@ -10732,7 +10732,7 @@ msgstr "Save library"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:53
 msgid "Save library as..."
-msgstr "Save library as..."
+msgstr "Save library as…"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:54
 msgid "Revert library"
@@ -10740,11 +10740,11 @@ msgstr "Revert library"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:56
 msgid "New part..."
-msgstr "New part..."
+msgstr "New part…"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:57
 msgid "Import part..."
-msgstr "Import part..."
+msgstr "Import part…"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:58
 msgid "Paste part"
@@ -10752,7 +10752,7 @@ msgstr "Paste part"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:63
 msgid "Export..."
-msgstr "Export..."
+msgstr "Export…"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:64
 #: eeschema/widgets/tuner_slider_base.cpp:66 eeschema/libeditframe.cpp:531
@@ -12162,7 +12162,7 @@ msgstr "Interactively measure distance between points"
 
 #: gerbview/tools/selection_tool.cpp:84
 msgid "Highlight..."
-msgstr "Highlight..."
+msgstr "Highlight…"
 
 #: gerbview/tools/selection_tool.cpp:104 gerbview/onrightclick.cpp:106
 #, c-format
@@ -12747,7 +12747,7 @@ msgstr "Kicad Manager Hotkeys"
 
 #: kicad/menubar.cpp:228
 msgid "&Project..."
-msgstr "&Project..."
+msgstr "&Project…"
 
 #: kicad/menubar.cpp:230
 msgid "Create new blank project"
@@ -12755,7 +12755,7 @@ msgstr "Create new blank project"
 
 #: kicad/menubar.cpp:232
 msgid "Project from &Template..."
-msgstr "Project from &Template..."
+msgstr "Project from &Template…"
 
 #: kicad/menubar.cpp:235 kicad/menubar.cpp:523
 msgid "Create new project from template"
@@ -12771,7 +12771,7 @@ msgstr "Create new project"
 
 #: kicad/menubar.cpp:244
 msgid "&Open Project..."
-msgstr "&Open Project..."
+msgstr "&Open Project…"
 
 #: kicad/menubar.cpp:246
 msgid "Open an existing project"
@@ -12803,7 +12803,7 @@ msgstr "Import project files from other software"
 
 #: kicad/menubar.cpp:289
 msgid "&Archive Project..."
-msgstr "&Archive Project..."
+msgstr "&Archive Project…"
 
 #: kicad/menubar.cpp:290
 msgid "Archive all needed project files into zip archive"
@@ -12811,7 +12811,7 @@ msgstr "Archive all needed project files into zip archive"
 
 #: kicad/menubar.cpp:296
 msgid "&Unarchive Project..."
-msgstr "&Unarchive Project..."
+msgstr "&Unarchive Project…"
 
 #: kicad/menubar.cpp:297 kicad/menubar.cpp:550
 msgid "Unarchive project files from zip archive"
@@ -13123,7 +13123,7 @@ msgstr "Rename File"
 
 #: kicad/class_treeproject_item.cpp:118
 msgid "Unable to rename file ... "
-msgstr "Unable to rename file ... "
+msgstr "Unable to rename file … "
 
 #: kicad/class_treeproject_item.cpp:119
 msgid "Permission error ?"
@@ -13379,7 +13379,7 @@ msgstr "Create new page layout design"
 
 #: pagelayout_editor/menubar.cpp:76
 msgid "&Open..."
-msgstr "&Open..."
+msgstr "&Open…"
 
 #: pagelayout_editor/menubar.cpp:78 pagelayout_editor/toolbars_pl_editor.cpp:55
 msgid "Open an existing page layout design file"
@@ -13403,11 +13403,11 @@ msgstr "Save current page layout design file with a different name"
 
 #: pagelayout_editor/menubar.cpp:104
 msgid "&Print..."
-msgstr "&Print..."
+msgstr "&Print…"
 
 #: pagelayout_editor/menubar.cpp:108
 msgid "Print Pre&view..."
-msgstr "Print Pre&view..."
+msgstr "Print Pre&view…"
 
 #: pagelayout_editor/menubar.cpp:114
 msgid "Close Page Layout Editor"
@@ -13419,23 +13419,23 @@ msgstr "Zoom all"
 
 #: pagelayout_editor/menubar.cpp:155
 msgid "&Line..."
-msgstr "&Line..."
+msgstr "&Line…"
 
 #: pagelayout_editor/menubar.cpp:158
 msgid "&Rectangle..."
-msgstr "&Rectangle..."
+msgstr "&Rectangle…"
 
 #: pagelayout_editor/menubar.cpp:161
 msgid "&Text..."
-msgstr "&Text..."
+msgstr "&Text…"
 
 #: pagelayout_editor/menubar.cpp:164
 msgid "&Bitmap..."
-msgstr "&Bitmap..."
+msgstr "&Bitmap…"
 
 #: pagelayout_editor/menubar.cpp:169
 msgid "&Append Existing Page Layout Design File..."
-msgstr "&Append Existing Page Layout Design File..."
+msgstr "&Append Existing Page Layout Design File…"
 
 #: pagelayout_editor/menubar.cpp:170
 msgid "Append an existing page layout design file to current file"
@@ -14315,7 +14315,7 @@ msgstr "Er"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:678
 #: pcbnew/dialogs/dialog_drc_base.cpp:152
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:659
 #: pcb_calculator/transline_ident.cpp:145
@@ -16592,7 +16592,7 @@ msgstr "Switches posture of the currently routed track."
 
 #: pcbnew/router/router_tool.cpp:195
 msgid "Differential Pair Dimensions..."
-msgstr "Differential Pair Dimensions..."
+msgstr "Differential Pair Dimensions…"
 
 #: pcbnew/router/router_tool.cpp:196
 msgid "Sets the width and gap of the currently routed differential pair."
@@ -16664,7 +16664,7 @@ msgstr "The item is locked. Do you want to continue?"
 
 #: pcbnew/router/pns_tool_base.cpp:66
 msgid "Routing Options..."
-msgstr "Routing Options..."
+msgstr "Routing Options…"
 
 #: pcbnew/router/pns_tool_base.cpp:67
 msgid "Shows a dialog containing router options."
@@ -17152,11 +17152,11 @@ msgstr "Initial pad number"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:122
 msgid "Continuous (1, 2, 3...)"
-msgstr "Continuous (1, 2, 3...)"
+msgstr "Continuous (1, 2, 3…)"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:122
 msgid "Coordinate (A1, A2, ... B1, ...)"
-msgstr "Coordinate (A1, A2, ... B1, ...)"
+msgstr "Coordinate (A1, A2, … B1, …)"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:124
 msgid "Pad Numbering Scheme"
@@ -17588,7 +17588,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:39
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:34
 msgid "Browse..."
-msgstr "Browse..."
+msgstr "Browse…"
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:54
 msgid "Ascii"
@@ -18850,7 +18850,7 @@ msgid ""
 "Use Protel Gerber extensions (.GBL, .GTL, etc...)\n"
 "No longer recommended. The official extension is .gbr"
 msgstr ""
-"Use Protel Gerber extensions (.GBL, .GTL, etc...)\n"
+"Use Protel Gerber extensions (.GBL, .GTL, etc…)\n"
 "No longer recommended. The official extension is .gbr"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:231
@@ -21259,7 +21259,7 @@ msgid ""
 "or their time stamp (special setting after a full schematic reannotation)"
 msgstr ""
 "Select how footprints are recognized:\n"
-"by their reference (U1, R3...) (normal setting)\n"
+"by their reference (U1, R3…) (normal setting)\n"
 "or their time stamp (special setting after a full schematic reannotation)"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:41
@@ -22310,11 +22310,11 @@ msgstr "Error list"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:57
 msgid "Numerals (0,1,2,...,9,10)"
-msgstr "Numerals (0,1,2,...,9,10)"
+msgstr "Numerals (0,1,2,…,9,10)"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:58
 msgid "Hexadecimal (0,1,...,F,10,...)"
-msgstr "Hexadecimal (0,1,...,F,10,...)"
+msgstr "Hexadecimal (0,1,…,F,10,…)"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:59
 msgid "Alphabet, minus IOSQXZ"
@@ -22634,7 +22634,7 @@ msgstr ""
 
 #: pcbnew/dialogs/wizard_add_fplib.cpp:815
 msgid "Please wait..."
-msgstr "Please wait..."
+msgstr "Please wait…"
 
 #: pcbnew/dialogs/wizard_add_fplib.cpp:815
 msgid "Validating libraries"
@@ -22675,35 +22675,35 @@ msgstr "Aborting\n"
 
 #: pcbnew/drc.cpp:387
 msgid "Pad clearances...\n"
-msgstr "Pad clearances...\n"
+msgstr "Pad clearances…\n"
 
 #: pcbnew/drc.cpp:397
 msgid "Track clearances...\n"
-msgstr "Track clearances...\n"
+msgstr "Track clearances…\n"
 
 #: pcbnew/drc.cpp:407
 msgid "Fill zones...\n"
-msgstr "Fill zones...\n"
+msgstr "Fill zones…\n"
 
 #: pcbnew/drc.cpp:417
 msgid "Test zones...\n"
-msgstr "Test zones...\n"
+msgstr "Test zones…\n"
 
 #: pcbnew/drc.cpp:428
 msgid "Unconnected pads...\n"
-msgstr "Unconnected pads...\n"
+msgstr "Unconnected pads…\n"
 
 #: pcbnew/drc.cpp:440
 msgid "Keepout areas ...\n"
-msgstr "Keepout areas ...\n"
+msgstr "Keepout areas …\n"
 
 #: pcbnew/drc.cpp:450
 msgid "Test texts...\n"
-msgstr "Test texts...\n"
+msgstr "Test texts…\n"
 
 #: pcbnew/drc.cpp:461
 msgid "Courtyard areas...\n"
-msgstr "Courtyard areas...\n"
+msgstr "Courtyard areas…\n"
 
 #: pcbnew/drc.cpp:515
 #, c-format
@@ -23027,7 +23027,7 @@ msgstr "Filter the types of items in the selection"
 
 #: pcbnew/tools/selection_tool.cpp:130
 msgid "Select..."
-msgstr "Select..."
+msgstr "Select…"
 
 #: pcbnew/tools/selection_tool.cpp:685
 msgid "Selection contains locked items. Do you want to continue?"
@@ -23302,7 +23302,7 @@ msgstr "Measure distance"
 
 #: pcbnew/tools/edit_tool.cpp:1326
 msgid "Select reference point for the block being copied..."
-msgstr "Select reference point for the block being copied..."
+msgstr "Select reference point for the block being copied…"
 
 #: pcbnew/tools/zone_filler_tool.cpp:47
 msgid "Fill"
@@ -23705,7 +23705,7 @@ msgstr "Place via"
 
 #: pcbnew/tools/position_relative_tool.cpp:44
 msgid "Position Relative to..."
-msgstr "Position Relative to..."
+msgstr "Position Relative to…"
 
 #: pcbnew/tools/position_relative_tool.cpp:45
 msgid "Positions the selected item(s) by an exact amount relative to another"
@@ -24102,7 +24102,7 @@ msgstr "Load footprint"
 
 #: pcbnew/menubar_modedit.cpp:107
 msgid "Save &Current Library As..."
-msgstr "Save &Current Library As..."
+msgstr "Save &Current Library As…"
 
 #: pcbnew/menubar_modedit.cpp:108
 msgid "Save entire current library under a new name"
@@ -24726,7 +24726,7 @@ msgstr "Complex shape"
 
 #: pcbnew/microwave.cpp:459
 msgid "Read Shape Description File..."
-msgstr "Read Shape Description File..."
+msgstr "Read Shape Description File…"
 
 #: pcbnew/microwave.cpp:464
 msgid "Symmetrical"
@@ -26231,19 +26231,19 @@ msgstr "Create Gerber job file \"%s\""
 
 #: pcbnew/zone_filler.cpp:115
 msgid "Calculating zone fills..."
-msgstr "Calculating zone fills..."
+msgstr "Calculating zone fills…"
 
 #: pcbnew/zone_filler.cpp:157
 msgid "Removing insulated copper islands..."
-msgstr "Removing insulated copper islands..."
+msgstr "Removing insulated copper islands…"
 
 #: pcbnew/zone_filler.cpp:179
 msgid "Caching polygon triangulations..."
-msgstr "Caching polygon triangulations..."
+msgstr "Caching polygon triangulations…"
 
 #: pcbnew/zone_filler.cpp:210
 msgid "Committing changes..."
-msgstr "Committing changes..."
+msgstr "Committing changes…"
 
 #: pcbnew/zone_filler.cpp:217
 msgid "Fill Zone(s)"
