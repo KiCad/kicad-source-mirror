@@ -308,7 +308,6 @@ enum GERBVIEW_LAYER_ID: int
                  ( 1 << GAL_LAYER_INDEX( LAYER_NON_PLATEDHOLES ) ) +\
                  ( 1 << GAL_LAYER_INDEX( LAYER_VIAS_HOLES ) ) +\
                  ( 1 << GAL_LAYER_INDEX( LAYER_DRC ) ) +\
-                 ( 1 << GAL_LAYER_INDEX( LAYER_WORKSHEET ) ) +\
                  ( 1 << GAL_LAYER_INDEX( LAYER_GP_OVERLAY ) ) )
 
 

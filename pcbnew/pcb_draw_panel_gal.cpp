@@ -312,7 +312,6 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
     // Enable some layers that are GAL specific
     m_view->SetLayerVisible( LAYER_PADS_PLATEDHOLES, true );
     m_view->SetLayerVisible( LAYER_VIAS_HOLES, true );
-    m_view->SetLayerVisible( LAYER_WORKSHEET, true );
     m_view->SetLayerVisible( LAYER_GP_OVERLAY, true );
 }
 
