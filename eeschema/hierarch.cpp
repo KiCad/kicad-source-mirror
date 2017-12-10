@@ -46,12 +46,6 @@
 #include <sch_sheet_path.h>
 
 
-enum
-{
-    ID_TREECTRL_HIERARCHY = 1600
-};
-
-
 class HIERARCHY_NAVIG_DLG;
 
 
@@ -76,30 +70,22 @@ public:
 class HIERARCHY_TREE : public wxTreeCtrl
 {
 private:
-    HIERARCHY_NAVIG_DLG* m_Parent;
+    HIERARCHY_NAVIG_DLG* m_parent;
     wxImageList*      imageList;
 
 public:
-    HIERARCHY_TREE()
-    {
-        m_Parent = NULL;
-        imageList = NULL;
-    }
-
     HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent );
 
-    DECLARE_DYNAMIC_CLASS( HIERARCHY_TREE )
+    // Closes the dialog on escape key
+    void onChar( wxKeyEvent& event );
 };
 
 
-IMPLEMENT_DYNAMIC_CLASS( HIERARCHY_TREE, wxTreeCtrl )
-
-
 HIERARCHY_TREE::HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent ) :
-    wxTreeCtrl( (wxWindow*)parent, ID_TREECTRL_HIERARCHY, wxDefaultPosition, wxDefaultSize,
+    wxTreeCtrl( (wxWindow*) parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                 wxTR_HAS_BUTTONS, wxDefaultValidator, wxT( "HierachyTreeCtrl" ) )
 {
-    m_Parent = parent;
+    m_parent = parent;
 
     // Make an image list containing small icons
     // All icons are expected having the same size.
@@ -117,6 +103,7 @@ HIERARCHY_TREE::HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent ) :
 class HIERARCHY_NAVIG_DLG : public DIALOG_SHIM
 {
 public:
+    SCH_EDIT_FRAME* m_SchFrameEditor;
     HIERARCHY_TREE* m_Tree;
     int             m_nbsheets;
 
@@ -128,6 +115,10 @@ public:
 
     ~HIERARCHY_NAVIG_DLG();
 
+    // Select the sheet currently selected in the tree, and close the dialog
+    void SelectNewSheetAndQuit();
+
+private:
     /**
      * Create the hierarchical tree of the schematic.
      *
@@ -135,13 +126,13 @@ public:
      * @param aList = the SCH_SHEET_PATH* list to explore
      * @param aPreviousmenu = the wxTreeItemId used as parent to add sub items
      */
-    void BuildTree( SCH_SHEET_PATH* aList, wxTreeItemId* aPreviousmenu );
+    void buildHierarchyTree( SCH_SHEET_PATH* aList, wxTreeItemId* aPreviousmenu );
 
     /**
      * Open the selected sheet and display the corresponding screen when a tree item is
      * selected.
      */
-    void OnSelect( wxTreeEvent& event );
+    void onSelectSheetPath( wxTreeEvent& event );
 };
 
 
@@ -160,14 +151,13 @@ HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent, const wxPoint
 {
     wxASSERT( dynamic_cast< SCH_EDIT_FRAME* >( aParent ) );
 
+    m_SchFrameEditor = aParent;
     m_currSheet = aParent->GetCurrentSheet();
-
-    wxTreeItemId root;
-
     m_Tree = new HIERARCHY_TREE( this );
-
     m_nbsheets = 1;
 
+    // root is the link to the main sheet.
+    wxTreeItemId root;
     root = m_Tree->AddRoot( _( "Root" ), 0, 1 );
     m_Tree->SetItemBold( root, true );
 
@@ -175,14 +165,15 @@ HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent, const wxPoint
     list.push_back( g_RootSheet );
     m_Tree->SetItemData( root, new TreeItemData( list ) );
 
-    if( dynamic_cast< SCH_EDIT_FRAME* >( aParent )->GetCurrentSheet().Last() == g_RootSheet )
-        m_Tree->SelectItem( root ); //root.
+    if( m_SchFrameEditor->GetCurrentSheet().Last() == g_RootSheet )
+        m_Tree->SelectItem( root );
 
-    BuildTree( &list, &root );
+    buildHierarchyTree( &list, &root );
 
     m_Tree->ExpandAll();
 
-#if 1
+    // This bloc gives a good size to the dialog, better than the default "best" size,
+    // the first time the dialog is opened, during a session
     wxRect itemrect;
     wxSize tree_size;
 
@@ -194,33 +185,45 @@ HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent, const wxPoint
 
     // Readjust the size of the frame to an optimal value.
     tree_size.y = m_nbsheets * itemrect.GetHeight();
-    tree_size.y += 10;
+
+    if( m_nbsheets < 2 )
+        tree_size.y += 10;  // gives a better look for small trees
 
     SetClientSize( tree_size );
-#endif
 
-    // Manage double click on a selection:
-    Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_DLG::OnSelect, this );
+    // manage the ESC key to close the dialog, because thre is no Cancel button
+    // in dialog
+    m_Tree->Connect( wxEVT_CHAR, wxKeyEventHandler( HIERARCHY_TREE::onChar ) );
+
+    // Manage double click on a selection, or the enter key:
+    Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_DLG::onSelectSheetPath, this );
     // Manage a simple click on a selection, if the selection changes
-    Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_DLG::OnSelect, this );
+    Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_DLG::onSelectSheetPath, this );
 }
 
 
 HIERARCHY_NAVIG_DLG::~HIERARCHY_NAVIG_DLG()
 {
-    Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_DLG::OnSelect, this );
+    Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_DLG::onSelectSheetPath, this );
+    Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_DLG::onSelectSheetPath, this );
+    m_Tree->Disconnect( wxEVT_CHAR, wxKeyEventHandler( HIERARCHY_TREE::onChar ) );
 }
 
 
-void HIERARCHY_NAVIG_DLG::BuildTree( SCH_SHEET_PATH* aList, wxTreeItemId* aPreviousmenu )
+void HIERARCHY_TREE::onChar( wxKeyEvent& event )
 {
-    wxTreeItemId menu;
+    if( event.GetKeyCode() == WXK_ESCAPE )
+        m_parent->Close( true );
+    else
+        event.Skip();
+}
 
+
+void HIERARCHY_NAVIG_DLG::buildHierarchyTree( SCH_SHEET_PATH* aList, wxTreeItemId* aPreviousmenu )
+{
     wxCHECK_RET( m_nbsheets < NB_MAX_SHEET, "Maximum number of sheets exceeded." );
 
     SCH_ITEM* schitem = aList->LastDrawList();
-
-    wxClientDC currdc( this );  // usefull to calculate the width of texts to display
 
     while( schitem && m_nbsheets < NB_MAX_SHEET )
     {
@@ -228,6 +231,7 @@ void HIERARCHY_NAVIG_DLG::BuildTree( SCH_SHEET_PATH* aList, wxTreeItemId* aPrevi
         {
             SCH_SHEET* sheet = (SCH_SHEET*) schitem;
             m_nbsheets++;
+            wxTreeItemId menu;
             menu = m_Tree->AppendItem( *aPreviousmenu, sheet->GetName(), 0, 1 );
             aList->push_back( sheet );
             m_Tree->SetItemData( menu, new TreeItemData( *aList ) );
@@ -238,7 +242,7 @@ void HIERARCHY_NAVIG_DLG::BuildTree( SCH_SHEET_PATH* aList, wxTreeItemId* aPrevi
                 m_Tree->SelectItem( menu );
             }
 
-            BuildTree( aList, &menu );
+            buildHierarchyTree( aList, &menu );
 
             aList->pop_back();
         }
@@ -248,14 +252,11 @@ void HIERARCHY_NAVIG_DLG::BuildTree( SCH_SHEET_PATH* aList, wxTreeItemId* aPrevi
 }
 
 
-void HIERARCHY_NAVIG_DLG::OnSelect( wxTreeEvent& event )
-
+void HIERARCHY_NAVIG_DLG::onSelectSheetPath( wxTreeEvent& event )
 {
     wxTreeItemId ItemSel = m_Tree->GetSelection();
-    SCH_EDIT_FRAME* parent = static_cast< SCH_EDIT_FRAME* >( GetParent() );
-
-    parent->SetCurrentSheet(( (TreeItemData*) m_Tree->GetItemData( ItemSel ) )->m_SheetPath );
-    parent->DisplayCurrentSheet();
+    m_SchFrameEditor->SetCurrentSheet(( (TreeItemData*) m_Tree->GetItemData( ItemSel ) )->m_SheetPath );
+    m_SchFrameEditor->DisplayCurrentSheet();
     Close( true );
 }
 
