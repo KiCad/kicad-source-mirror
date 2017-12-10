@@ -535,6 +535,7 @@ void PCB_MODULE::AddToBoard()
     r = m_name.textRotation - m_rotation;
     ref_text->SetTextAngle( r );
 
+    ref_text->SetItalic( m_name.isItalic );
     ref_text->SetThickness( m_name.textstrokeWidth );
 
     ref_text->SetMirrored( m_name.mirror );
@@ -557,6 +558,7 @@ void PCB_MODULE::AddToBoard()
     r = m_value.textRotation - m_rotation;
     val_text->SetTextAngle( r );
 
+    val_text->SetItalic( m_value.isItalic );
     val_text->SetThickness( m_value.textstrokeWidth );
 
     val_text->SetMirrored( m_value.mirror );

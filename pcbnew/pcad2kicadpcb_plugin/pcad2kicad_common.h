@@ -56,12 +56,14 @@ enum TTEXT_JUSTIFY
 
 typedef struct _TTEXTVALUE
 {
-    wxString    text;
-    int         textPositionX, textPositionY,
-                textRotation, textHeight, textstrokeWidth;
-    int textIsVisible, mirror, textUnit;
-    int correctedPositionX, correctedPositionY;
+    wxString      text;
+    int           textPositionX, textPositionY,
+                  textRotation, textHeight, textstrokeWidth;
+    int           textIsVisible, mirror, textUnit;
+    int           correctedPositionX, correctedPositionY;
     TTEXT_JUSTIFY justify;
+    bool          isBold;
+    bool          isItalic;
 } TTEXTVALUE;
 
 extern wxString     GetWord( wxString* aStr );

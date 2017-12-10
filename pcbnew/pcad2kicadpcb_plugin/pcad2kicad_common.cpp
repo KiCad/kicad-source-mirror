@@ -43,6 +43,10 @@ const double TEXT_WIDTH_TO_SIZE_AVERAGE = 0.79;
 // PCAD proportions of stroke font
 const double TEXT_HEIGHT_TO_SIZE = 0.656;
 const double TEXT_WIDTH_TO_SIZE = 0.656;
+// True type font
+const double TRUETYPE_WIDTH_PER_HEIGHT = 0.073;
+const double TRUETYPE_BOLD_WIDTH_MUL = 1.6;
+const long TRUETYPE_BOLD_MIN_WEIGHT = 700;
 
 wxString GetWord( wxString* aStr )
 {
@@ -289,6 +293,7 @@ void SetDoublePrecisionPosition( wxString   aStr,
                                      aActualConversion );
 }
 
+
 TTEXT_JUSTIFY GetJustifyIdentificator( wxString aJustify )
 {
     TTEXT_JUSTIFY id;
@@ -314,6 +319,7 @@ TTEXT_JUSTIFY GetJustifyIdentificator( wxString aJustify )
 
     return id;
 }
+
 
 void SetTextParameters( XNODE*      aNode,
                         TTEXTVALUE* aTextValue,
@@ -382,48 +388,76 @@ void SetFontProperty( XNODE*        aNode,
         aNode = aNode->GetParent();
 
     aNode = FindNode( aNode, wxT( "library" ) );
-
     if( aNode )
         aNode = FindNode( aNode, wxT( "textStyleDef" ) );
 
+    while( aNode )
+    {
+        aNode->GetAttribute( wxT( "Name" ), &propValue );
+        propValue.Trim( false );
+        propValue.Trim( true );
+
+        if( propValue == n )
+            break;
+
+        aNode = aNode->GetNext();
+    }
+
     if( aNode )
     {
-        while( true )
-        {
-            aNode->GetAttribute( wxT( "Name" ), &propValue );
-            propValue.Trim( false );
-            propValue.Trim( true );
+        bool isTrueType;
+        wxString fontType;
 
-            if( propValue == n )
-                break;
+        propValue = FindNodeGetContent( aNode, wxT( "textStyleDisplayTType" ) );
+        isTrueType = ( propValue == wxT( "True" ) );
 
+        aNode = FindNode( aNode, wxT( "font" ) );
+        fontType = FindNodeGetContent( aNode, wxT( "fontType" ) );
+        if( ( isTrueType && ( fontType != wxT( "TrueType" ) ) ) ||
+            ( !isTrueType && ( fontType != wxT( "Stroke" ) ) ) )
             aNode = aNode->GetNext();
-        }
 
         if( aNode )
         {
-            aNode = FindNode( aNode, wxT( "font" ) );
-
-            if( aNode )
+            if( isTrueType )
             {
-                if( FindNode( aNode, wxT( "fontHeight" ) ) )
-                    // // SetWidth(iNode.ChildNodes.FindNode('fontHeight').Text,
-                    // //          DefaultMeasurementUnit,tv.TextHeight);
-                    // Fixed By Lubo, 02/2008
-                    SetHeight( FindNode( aNode, wxT(
-                                             "fontHeight" ) )->GetNodeContent(),
-                               aDefaultMeasurementUnit, &aTextValue->textHeight,
-                               aActualConversion );
+                propValue = FindNodeGetContent( aNode, wxT( "fontItalic" ) );
+                aTextValue->isItalic = ( propValue == wxT( "True" ) );
 
-                if( FindNode( aNode, wxT( "strokeWidth" ) ) )
-                    SetWidth( FindNode( aNode, wxT(
-                                            "strokeWidth" ) )->GetNodeContent(),
-                              aDefaultMeasurementUnit, &aTextValue->textstrokeWidth,
-                              aActualConversion );
+                propValue = FindNodeGetContent( aNode, wxT( "fontWeight" ) );
+                if( propValue != wxEmptyString )
+                {
+                    long fontWeight;
+
+                    propValue.ToLong( &fontWeight );
+                    aTextValue->isBold = ( fontWeight >= TRUETYPE_BOLD_MIN_WEIGHT );
+                }
+            }
+
+            XNODE* lNode;
+
+            lNode = FindNode( aNode, wxT( "fontHeight" ) );
+            if( lNode )
+                SetHeight( lNode->GetNodeContent(), aDefaultMeasurementUnit,
+                           &aTextValue->textHeight, aActualConversion );
+
+            if( isTrueType )
+            {
+                aTextValue->textstrokeWidth = TRUETYPE_WIDTH_PER_HEIGHT * aTextValue->textHeight;
+                if( aTextValue->isBold )
+                    aTextValue->textstrokeWidth *= TRUETYPE_BOLD_WIDTH_MUL;
+            }
+            else
+            {
+                lNode = FindNode( aNode, wxT( "strokeWidth" ) );
+                if( lNode )
+                    SetWidth( lNode->GetNodeContent(), aDefaultMeasurementUnit,
+                              &aTextValue->textstrokeWidth, aActualConversion );
             }
         }
     }
 }
+
 
 void SetTextJustify( EDA_TEXT* aText, TTEXT_JUSTIFY aJustify )
 {
@@ -468,11 +502,13 @@ void SetTextJustify( EDA_TEXT* aText, TTEXT_JUSTIFY aJustify )
     }
 }
 
+
 int CalculateTextLengthSize( TTEXTVALUE* aText )
 {
     return KiROUND( (double) aText->text.Len() *
                     (double) aText->textHeight * TEXT_WIDTH_TO_SIZE_AVERAGE );
 }
+
 
 void CorrectTextPosition( TTEXTVALUE* aValue )
 {
@@ -620,6 +656,8 @@ void InitTTextValue( TTEXTVALUE* aTextValue )
     aTextValue->correctedPositionX  = 0;
     aTextValue->correctedPositionY  = 0;
     aTextValue->justify = LowerLeft;
+    aTextValue->isBold = false;
+    aTextValue->isItalic = false;
 }
 
 } // namespace PCAD2KICAD
