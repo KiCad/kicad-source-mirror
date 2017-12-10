@@ -300,7 +300,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
         // GAL fills in direction of increasing angle, so we have to convert
         // the angle from the -PI to PI domain of atan2() to ensure that
         // the arc goes in the right direction
-        if( ( startAngle > endAngle ) && ( endAngle < 0 ) )
+        if( startAngle > endAngle )
             endAngle += (2 * M_PI);
 
         // 360-degree arcs are stored in the file with start equal to end
