@@ -54,6 +54,9 @@ public:
     virtual void    Flip() override;
     void            AddToModule( MODULE* aModule ) override;
     void            AddToBoard() override;
+
+private:
+    bool            IsCircle();
 };
 
 } // namespace PCAD2KICAD
