@@ -227,7 +227,7 @@ public:
     {
         EDA_RECT rect( m_Pos, m_Size );
         rect.Normalize();
-        return BOX2I( rect.GetOrigin(), rect.GetEnd() );
+        return BOX2I( rect.GetOrigin(), rect.GetSize() );
     }
 
     /**
