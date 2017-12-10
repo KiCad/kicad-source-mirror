@@ -74,7 +74,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-08 23:39+0100\n"
-"PO-Revision-Date: 2017-12-08 23:43+0100\n"
+"PO-Revision-Date: 2017-12-10 13:18+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -10604,7 +10604,7 @@ msgstr "Controlli"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:294
 msgid "User defined field names for schematic components. "
-msgstr "Campi nomi definiti dall'utente per i componenti dello schema."
+msgstr "Campi nomi personalizzati per i componenti dello schema."
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:319
 msgid "Default Value"
@@ -19665,11 +19665,11 @@ msgstr "Seleziona la modalità schermo Cairo"
 
 #: pcbnew/menubar_pcbframe.cpp:592
 msgid "User Defined G&rid"
-msgstr "G&riglia definita dall'utente"
+msgstr "G&riglia personalizzata"
 
 #: pcbnew/menubar_pcbframe.cpp:592
 msgid "Adjust custom user-defined grid dimensions"
-msgstr "Imposta dimensioni griglia personalizzata"
+msgstr "Imposta una griglia con dimensioni personalizzate"
 
 #: pcbnew/menubar_pcbframe.cpp:596
 msgid "Te&xts and Drawings"
@@ -25056,7 +25056,7 @@ msgstr "Nr di piazzole"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:23
 msgid "User Defined Grid"
-msgstr "Griglia definita dall'utente"
+msgstr "Griglia personalizzata"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:101
 msgid "Fast Switching"
