@@ -526,7 +526,7 @@ void PCB_MODULE::AddToBoard()
     // reference text
     TEXTE_MODULE* ref_text = &module->Reference();
 
-    ref_text->SetText( m_name.text );
+    ref_text->SetText( ValidateReference( m_name.text ) );
     ref_text->SetType( TEXTE_MODULE::TEXT_is_REFERENCE );
 
     ref_text->SetPos0( wxPoint( m_name.correctedPositionX, m_name.correctedPositionY ) );

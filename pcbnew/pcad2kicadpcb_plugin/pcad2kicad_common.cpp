@@ -29,6 +29,7 @@
 
 #include <wx/wx.h>
 #include <wx/config.h>
+#include <wx/regex.h>
 
 #include <common.h>
 #include <convert_to_biu.h>
@@ -222,6 +223,18 @@ wxString ValidateName( wxString aName )
     aName.Replace( wxT( " " ), wxT( "_" ) );
 
     return aName;
+}
+
+
+wxString ValidateReference( wxString aRef )
+{
+    wxRegEx reRef;
+    reRef.Compile( wxT( "^[[:digit:]][[:digit:]]*$" ) );
+
+    if( reRef.Matches( aRef ) )
+        aRef.Prepend( wxT( '.' ) );
+
+    return aRef;
 }
 
 

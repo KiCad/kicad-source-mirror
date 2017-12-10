@@ -71,6 +71,7 @@ extern wxString     GetAndCutWordWithMeasureUnits( wxString*    aStr,
                                                    wxString     aDefaultMeasurementUnit );
 extern int          StrToInt1Units( wxString aStr );
 extern wxString     ValidateName( wxString aName );
+extern wxString     ValidateReference( wxString aRef );
 extern void         SetWidth( wxString  aStr,
                               wxString  aDefaultMeasurementUnit,
                               int*      aWidth,
