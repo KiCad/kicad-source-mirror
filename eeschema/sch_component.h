@@ -93,6 +93,7 @@ private:
     PART_REF    m_part;         ///< points into the PROJECT's libraries to the LIB_PART for this component
 
     std::vector<bool> m_isDangling; ///< One isDangling per pin
+    std::vector<wxPoint> m_Pins;
 
     AUTOPLACED  m_fieldsAutoplaced; ///< indicates status of field autoplacement
 
@@ -197,6 +198,18 @@ public:
                             PART_LIB* aCacheLib = NULL );
 
     int GetUnit() const { return m_unit; }
+
+    /**
+     * Updates the local cache of pin positions
+     */
+    void UpdatePinCache();
+
+    /**
+     * Update the pin cache for all components in \a aComponents
+     *
+     * @param aComponents collector of components in screen
+     */
+    static void UpdateAllPinCaches( const SCH_COLLECTOR& aComponents );
 
     /**
      * Change the unit number to \a aUnit
@@ -528,19 +541,6 @@ public:
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
 
     void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList ) override;
-
-    /**
-     * Test if the symbol's dangling state has changed for one given pin index.
-     *
-     * As a side effect, it actually updates the dangling status for that pin.
-     *
-     * @param aItemList is list of all #DANGLING_END_ITEM items to be tested.
-     * @param aLibPins is list of all the #LIB_PIN items in this symbol
-     * @param aPin is the index into \a aLibPins that identifies the pin to test
-     * @return true if the pin's state has changed.
-     */
-    bool IsPinDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList,
-            LIB_PINS& aLibPins, unsigned aPin );
 
     /**
      * Test if the component's dangling state has changed for all pins.

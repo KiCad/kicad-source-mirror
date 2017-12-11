@@ -484,23 +484,25 @@ void SCH_SCREEN::UpdateSymbolLinks( bool aForce )
     // Initialize or reinitialize the pointer to the LIB_PART for each component
     // found in m_drawList, but only if needed (change in lib or schematic)
     // therefore the calculation time is usually very low.
-
     if( m_drawList.GetCount() )
     {
         SYMBOL_LIB_TABLE* libs = Prj().SchSymbolLibTable();
         int mod_hash = libs->GetModifyHash();
+        SCH_TYPE_COLLECTOR c;
+
+        c.Collect( GetDrawItems(), SCH_COLLECTOR::ComponentsOnly );
 
         // Must we resolve?
         if( (m_modification_sync != mod_hash) || aForce )
         {
-            SCH_TYPE_COLLECTOR c;
-
-            c.Collect( GetDrawItems(), SCH_COLLECTOR::ComponentsOnly );
-
             SCH_COMPONENT::ResolveAll( c, *libs, Prj().SchLibs()->GetCacheLibrary() );
 
             m_modification_sync = mod_hash;     // note the last mod_hash
         }
+        // Resolving will update the pin caches but we must ensure that this happens
+        // even if the libraries don't change.
+        else
+            SCH_COMPONENT::UpdateAllPinCaches( c );
     }
 }
 
