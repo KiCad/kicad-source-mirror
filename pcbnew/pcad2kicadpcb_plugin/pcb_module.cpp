@@ -542,7 +542,7 @@ void PCB_MODULE::AddToBoard()
     ref_text->SetMirrored( m_name.mirror );
     ref_text->SetVisible( m_name.textIsVisible );
 
-    ref_text->SetLayer( m_KiCadLayer );
+    ref_text->SetLayer( m_name.mirror ? FlipLayer( m_KiCadLayer ) : m_KiCadLayer );
 
     // Calculate the actual position.
     ref_text->SetDrawCoord();
@@ -566,7 +566,7 @@ void PCB_MODULE::AddToBoard()
     val_text->SetMirrored( m_value.mirror );
     val_text->SetVisible( m_value.textIsVisible );
 
-    val_text->SetLayer( m_KiCadLayer );
+    val_text->SetLayer( m_value.mirror ? FlipLayer( m_KiCadLayer ) : m_KiCadLayer );
 
     // Calculate the actual position.
     val_text->SetDrawCoord();
@@ -619,9 +619,7 @@ void PCB_MODULE::Flip()
 
     if( m_mirror == 1 )
     {
-        // Flipped
-        m_KiCadLayer    = FlipLayer( m_KiCadLayer );
-        m_rotation      = -m_rotation;
+        m_rotation = -m_rotation;
 
         for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
         {
