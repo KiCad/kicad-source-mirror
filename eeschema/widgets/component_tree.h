@@ -117,7 +117,7 @@ protected:
         std::vector<wxDataViewItem> expanded;
 
         ///> Current selection, might be not valid if nothing was selected
-        wxDataViewItem selection;
+        LIB_ID selection;
     };
 
     /**

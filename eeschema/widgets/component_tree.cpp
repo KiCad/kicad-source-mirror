@@ -195,7 +195,7 @@ COMPONENT_TREE::STATE COMPONENT_TREE::getState() const
             state.expanded.push_back( item );
     }
 
-    state.selection = m_tree_ctrl->GetSelection();
+    state.selection = GetSelectedLibId();
 
     return state;
 }
@@ -208,11 +208,8 @@ void COMPONENT_TREE::setState( const STATE& aState )
     for( const auto& item : aState.expanded )
         m_tree_ctrl->Expand( item );
 
-    if( aState.selection.IsOk() )
-    {
-        m_tree_ctrl->ExpandAncestors( aState.selection );
-        m_tree_ctrl->SetCurrentItem( aState.selection );
-    }
+    if( aState.selection.IsValid() )
+        SelectLibId( aState.selection );
 }
 
 
