@@ -241,21 +241,21 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
     switch( shape_type )
     {
     case 0:
-        msg = _( "Gap" );
-        cmp_name = wxT( "muwave_gap" );
+        msg = _( "Gap Size:" );
+        cmp_name = "muwave_gap";
         text_size = gap_size;
         break;
 
     case 1:
-        msg = _( "Stub" );
-        cmp_name  = wxT( "muwave_stub" );
+        msg = _( "Stub Size:" );
+        cmp_name  = "muwave_stub";
         text_size = gap_size;
         pad_count = 2;
         break;
 
     case 2:
-        msg = _( "Arc Stub" );
-        cmp_name  = wxT( "muwave_arcstub" );
+        msg = _( "Arc Stub Radius Value:" );
+        cmp_name  = "muwave_arcstub";
         pad_count = 1;
         break;
 
@@ -579,7 +579,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     int          pad_count = 2;
     EDGE_MODULE* edge;
 
-    MWAVE_POLYGONAL_SHAPE_DLG dlg( this, wxPoint( -1, -1 ) );
+    MWAVE_POLYGONAL_SHAPE_DLG dlg( this, wxDefaultPosition );
 
     int ret = dlg.ShowModal();
 
@@ -671,6 +671,9 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     }
 
     edge->SetPolyPoints( polyPoints );
+    // Set the polygon outline thickness to 0, only the polygonal shape is filled
+    // without extra thickness
+    edge->SetWidth( 0 );
     PolyEdges.clear();
     module->CalculateBoundingBox();
     GetBoard()->m_Status_Pcb = 0;
