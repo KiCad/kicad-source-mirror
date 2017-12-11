@@ -138,11 +138,13 @@ class CONTRIBUTOR
 public:
     CONTRIBUTOR( const wxString& aName,
                  const wxString& aEmail = wxEmptyString,
+                 const wxString& aUrl = wxEmptyString,
                  const wxString& aCategory = wxEmptyString,
                  wxBitmap*       aIcon = NULL )
     {
         m_checked = false;
         m_name = aName;
+        m_url = aUrl,
         m_email = aEmail;
         m_category = aCategory;
         m_icon = aIcon;
@@ -152,6 +154,7 @@ public:
 
     wxString& GetName()     { return m_name; }
     wxString& GetEMail()    { return m_email; }
+    wxString& GetUrl()      { return m_url; }
     wxString& GetCategory() { return m_category; }
     wxBitmap* GetIcon()     { return m_icon; }
     void SetChecked( bool status ) { m_checked = status; }
@@ -160,6 +163,7 @@ public:
 private:
     wxString  m_name;
     wxString  m_email;
+    wxString  m_url;
     wxString  m_category;
     wxBitmap* m_icon;
     bool      m_checked;

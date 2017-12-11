@@ -39,6 +39,7 @@ extern std::string GetCurlLibVersion();
 #include <boost/version.hpp>
 #include <wx/clipbrd.h>
 #include <wx/msgdlg.h>
+#include <wx/hyperlink.h>
 
 /* All KiCad icons are linked into shared library 'libbitmaps.a'.
  *  Icons:
@@ -251,13 +252,29 @@ void DIALOG_ABOUT::createNotebookPageByCategory(wxAuiNotebook* aParent, const wx
                     // First column is empty
                     fgSizer1->AddSpacer(5);
 
-                    // Name of contributor at second column
-                    wxStaticText* m_staticText2 = new wxStaticText( m_scrolledWindow1, wxID_ANY,
-                                                                    wxT(" • ") + sub_contributor->GetName(),
-                                                                    wxDefaultPosition,
-                                                                    wxDefaultSize, 0 );
+                    wxControl* ctrl;
+
+                    // No URL supplied, display normal text control
+                    if( sub_contributor->GetUrl().IsEmpty() )
+                    {
+                        ctrl = new wxStaticText( m_scrolledWindow1, wxID_ANY,
+                                                 wxT( "  • " ) + sub_contributor->GetName(),
+                                                 wxDefaultPosition,
+                                                 wxDefaultSize, 0 );
+                    }
+                    else
+                    {
+                        // Display a hyperlink control instead
+                        ctrl = new wxHyperlinkCtrl( m_scrolledWindow1, wxID_ANY,
+                                                    wxT( "• " ) + sub_contributor->GetName(),
+                                                    sub_contributor->GetUrl(),
+                                                    wxDefaultPosition,
+                                                    wxDefaultSize, wxHL_ALIGN_LEFT );
+                    }
+
                     m_staticText1->Wrap( -1 );
-                    fgSizer1->Add( m_staticText2, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
+
+                    fgSizer1->Add( ctrl, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
 
                     // Email address of contributor at third column
                     if( sub_contributor->GetEMail() != wxEmptyString )
