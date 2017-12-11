@@ -85,7 +85,11 @@ ZONE_FILLER::~ZONE_FILLER()
 
 void ZONE_FILLER::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 {
+// TODO OSX currently does not handle the reporter well
+// https://lists.launchpad.net/kicad-developers/msg32306.html
+#ifndef __WXMAC__
     m_progressReporter = aReporter;
+#endif
 }
 
 
