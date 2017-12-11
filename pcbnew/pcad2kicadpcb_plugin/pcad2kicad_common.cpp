@@ -513,94 +513,33 @@ int CalculateTextLengthSize( TTEXTVALUE* aText )
 void CorrectTextPosition( TTEXTVALUE* aValue )
 {
     int cm = aValue->mirror ? -1 : 1;
-    // sizes of justify correction
     int cl = KiROUND( (double) CalculateTextLengthSize( aValue ) / 2.0 );
     int ch = KiROUND( (double) aValue->textHeight / 2.0 );
+    int posX = 0;
+    int posY = 0;
 
-    aValue->correctedPositionX = aValue->textPositionX;
-    aValue->correctedPositionY = aValue->textPositionY;
+    if( aValue->justify == LowerLeft ||
+        aValue->justify == Left ||
+        aValue->justify == UpperLeft )
+        posX += cl * cm;
+    else if( aValue->justify == LowerRight ||
+             aValue->justify == Right ||
+             aValue->justify == UpperRight )
+        posX -= cl * cm;
 
-    switch( aValue->textRotation )
-    {
-    case 0:
-        if( aValue->justify == LowerLeft ||
-            aValue->justify == Left ||
-            aValue->justify == UpperLeft )
-            aValue->correctedPositionX += cl * cm;
-        else if( aValue->justify == LowerRight ||
-                 aValue->justify == Right ||
-                 aValue->justify == UpperRight )
-            aValue->correctedPositionX -= cl * cm;
+    if( aValue->justify == LowerLeft ||
+        aValue->justify == LowerCenter ||
+        aValue->justify == LowerRight )
+        posY -= ch;
+    else if( aValue->justify == UpperLeft ||
+             aValue->justify == UpperCenter ||
+             aValue->justify == UpperRight )
+        posY += ch;
 
-        if( aValue->justify == LowerLeft ||
-            aValue->justify == LowerCenter ||
-            aValue->justify == LowerRight )
-            aValue->correctedPositionY -= ch;
-        else if( aValue->justify == UpperLeft ||
-                 aValue->justify == UpperCenter ||
-                 aValue->justify == UpperRight )
-            aValue->correctedPositionY += ch;
-        break;
-    case 900:
-        if( aValue->justify == LowerLeft ||
-            aValue->justify == LowerCenter ||
-            aValue->justify == LowerRight )
-            aValue->correctedPositionX -= ch * cm;
-        else if( aValue->justify == UpperLeft ||
-                 aValue->justify == UpperCenter ||
-                 aValue->justify == UpperRight )
-            aValue->correctedPositionX += ch * cm;
+    RotatePoint( &posX, &posY, aValue->textRotation );
 
-        if( aValue->justify == LowerLeft ||
-            aValue->justify == Left ||
-            aValue->justify == UpperLeft )
-            aValue->correctedPositionY -= cl;
-        else if( aValue->justify == LowerRight ||
-                 aValue->justify == Right ||
-                 aValue->justify == UpperRight )
-            aValue->correctedPositionY += cl;
-        break;
-    case 1800:
-        if( aValue->justify == LowerLeft ||
-            aValue->justify == Left ||
-            aValue->justify == UpperLeft )
-            aValue->correctedPositionX -= cl * cm;
-        else if( aValue->justify == LowerRight ||
-                 aValue->justify == Right ||
-                 aValue->justify == UpperRight )
-            aValue->correctedPositionX += cl * cm;
-
-        if( aValue->justify == LowerLeft ||
-            aValue->justify == LowerCenter ||
-            aValue->justify == LowerRight )
-            aValue->correctedPositionY += ch;
-        else if( aValue->justify == UpperLeft ||
-                 aValue->justify == UpperCenter ||
-                 aValue->justify == UpperRight )
-            aValue->correctedPositionY -= ch;
-        break;
-    case 2700:
-        if( aValue->justify == LowerLeft ||
-            aValue->justify == LowerCenter ||
-            aValue->justify == LowerRight )
-            aValue->correctedPositionX += ch * cm;
-        else if( aValue->justify == UpperLeft ||
-                 aValue->justify == UpperCenter ||
-                 aValue->justify == UpperRight )
-            aValue->correctedPositionX -= ch * cm;
-
-        if( aValue->justify == LowerLeft ||
-            aValue->justify == Left ||
-            aValue->justify == UpperLeft )
-            aValue->correctedPositionY += cl;
-        else if( aValue->justify == LowerRight ||
-                 aValue->justify == Right ||
-                 aValue->justify == UpperRight )
-            aValue->correctedPositionY -= cl;
-        break;
-    default:
-        break;
-    }
+    aValue->correctedPositionX = aValue->textPositionX + posX;
+    aValue->correctedPositionY = aValue->textPositionY + posY;
 }
 
 
