@@ -614,6 +614,10 @@ void DIALOG_DESIGN_RULES::CopyDimensionsListsToBoard()
 {
     wxString msg;
 
+    // Commit any pending in-place edits from grid controls
+    m_gridTrackWidthList->SaveEditControlValue();
+    m_gridViaSizeList->SaveEditControlValue();
+
     // Reinitialize m_TrackWidthList
     m_TracksWidthList.clear();
 
@@ -631,7 +635,7 @@ void DIALOG_DESIGN_RULES::CopyDimensionsListsToBoard()
     // Sort new list by by increasing value
     sort( m_TracksWidthList.begin(), m_TracksWidthList.end() );
 
-    // Reinitialize m_TrackWidthList
+    // Reinitialize m_ViasDimensionsList
     m_ViasDimensionsList.clear();
 
     for( int row = 0; row < m_gridViaSizeList->GetNumberRows();  ++row )
