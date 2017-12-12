@@ -90,13 +90,31 @@ static int countChildren( wxXmlNode* aCurrentNode, const std::string& aName )
 }
 
 
-wxString SCH_EAGLE_PLUGIN::getLibName() const
+wxString SCH_EAGLE_PLUGIN::getLibName()
 {
-    return m_kiway->Prj().GetProjectName() + "-eagle-import";
+    if( m_libName.IsEmpty() )
+    {
+        // Try to come up with a meaningful name
+        m_libName = m_kiway->Prj().GetProjectName();
+
+        if( m_libName.IsEmpty() )
+        {
+            wxFileName fn( m_rootSheet->GetFileName() );
+            m_libName = fn.GetName();
+        }
+
+        if( m_libName.IsEmpty() )
+            m_libName = "noname";
+
+        m_libName += "-eagle-import";
+        m_libName = LIB_ID::FixIllegalChars( m_libName );
+    }
+
+    return m_libName;
 }
 
 
-wxFileName SCH_EAGLE_PLUGIN::getLibFileName() const
+wxFileName SCH_EAGLE_PLUGIN::getLibFileName()
 {
     wxFileName fn( m_kiway->Prj().GetProjectPath(), getLibName(), SchematicLibraryFileExtension );
 

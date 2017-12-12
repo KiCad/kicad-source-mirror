@@ -172,14 +172,15 @@ private:
     void            loadTextAttributes( EDA_TEXT* aText, const ETEXT& aAttribs ) const;
     void            loadFieldAttributes( LIB_FIELD* aField, const LIB_TEXT* aText ) const;
 
-    wxString        getLibName() const;
-    wxFileName      getLibFileName() const;
+    wxString        getLibName();
+    wxFileName      getLibFileName();
 
     KIWAY* m_kiway;      ///< For creating sub sheets.
     SCH_SHEET* m_rootSheet; ///< The root sheet of the schematic being loaded..
     SCH_SHEET* m_currentSheet; ///< The current sheet of the schematic being loaded..
     wxString m_version; ///< Eagle file version.
     wxFileName m_filename;
+    wxString m_libName; ///< Library name to save symbols
 
     EPART_MAP m_partlist;
     std::map<std::string, EAGLE_LIBRARY> m_eagleLibs;
