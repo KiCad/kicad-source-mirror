@@ -169,7 +169,8 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
         // in the dragging mode even if the mouse button is not held anymore
         if( st->pressed && !state )
             up = true;
-        else if( !st->pressed && state )
+        // Don't apply same logic to down events as it kills touchpad tapping
+        else if( !st->pressed && type == st->downEvent )
             down = true;
     }
 
