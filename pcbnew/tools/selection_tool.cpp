@@ -1364,6 +1364,14 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
         }
         else if( evt->Action() == TA_CONTEXT_MENU_CHOICE )
         {
+            if( current )
+            {
+                current->ClearBrightened();
+                getView()->Hide( current, false );
+                highlightGroup.Remove( current );
+                getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+            }
+
             OPT<int> id = evt->GetCommandId();
 
             // User has selected an item, so this one will be returned
@@ -1375,14 +1383,6 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
             break;
         }
     }
-
-    if( current && current->IsBrightened() )
-    {
-        current->ClearBrightened();
-        getView()->Hide( current, false );
-        getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
-    }
-
     getView()->Remove( &highlightGroup );
 
 
