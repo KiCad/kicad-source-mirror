@@ -39,13 +39,15 @@
 namespace PCAD2KICAD {
 
 // PCAD stroke font average ratio of width to size
-const double TEXT_WIDTH_TO_SIZE_AVERAGE = 0.79;
+const double TEXT_WIDTH_TO_SIZE_AVERAGE = 0.5;
 // PCAD proportions of stroke font
-const double TEXT_HEIGHT_TO_SIZE = 0.656;
-const double TEXT_WIDTH_TO_SIZE = 0.656;
-// True type font
-const double TRUETYPE_WIDTH_PER_HEIGHT = 0.073;
-const double TRUETYPE_BOLD_WIDTH_MUL = 1.6;
+const double STROKE_HEIGHT_TO_SIZE = 0.656;
+const double STROKE_WIDTH_TO_SIZE = 0.69;
+// TrueType font
+const double TRUETYPE_HEIGHT_TO_SIZE = 0.585;
+const double TRUETYPE_WIDTH_TO_SIZE = 0.585;
+const double TRUETYPE_THICK_PER_HEIGHT = 0.073;
+const double TRUETYPE_BOLD_THICK_MUL = 1.6;
 const long TRUETYPE_BOLD_MIN_WEIGHT = 700;
 
 wxString GetWord( wxString* aStr )
@@ -405,21 +407,20 @@ void SetFontProperty( XNODE*        aNode,
 
     if( aNode )
     {
-        bool isTrueType;
         wxString fontType;
 
         propValue = FindNodeGetContent( aNode, wxT( "textStyleDisplayTType" ) );
-        isTrueType = ( propValue == wxT( "True" ) );
+        aTextValue->isTrueType = ( propValue == wxT( "True" ) );
 
         aNode = FindNode( aNode, wxT( "font" ) );
         fontType = FindNodeGetContent( aNode, wxT( "fontType" ) );
-        if( ( isTrueType && ( fontType != wxT( "TrueType" ) ) ) ||
-            ( !isTrueType && ( fontType != wxT( "Stroke" ) ) ) )
+        if( ( aTextValue->isTrueType && ( fontType != wxT( "TrueType" ) ) ) ||
+            ( !aTextValue->isTrueType && ( fontType != wxT( "Stroke" ) ) ) )
             aNode = aNode->GetNext();
 
         if( aNode )
         {
-            if( isTrueType )
+            if( aTextValue->isTrueType )
             {
                 propValue = FindNodeGetContent( aNode, wxT( "fontItalic" ) );
                 aTextValue->isItalic = ( propValue == wxT( "True" ) );
@@ -441,11 +442,11 @@ void SetFontProperty( XNODE*        aNode,
                 SetHeight( lNode->GetNodeContent(), aDefaultMeasurementUnit,
                            &aTextValue->textHeight, aActualConversion );
 
-            if( isTrueType )
+            if( aTextValue->isTrueType )
             {
-                aTextValue->textstrokeWidth = TRUETYPE_WIDTH_PER_HEIGHT * aTextValue->textHeight;
+                aTextValue->textstrokeWidth = TRUETYPE_THICK_PER_HEIGHT * aTextValue->textHeight;
                 if( aTextValue->isBold )
-                    aTextValue->textstrokeWidth *= TRUETYPE_BOLD_WIDTH_MUL;
+                    aTextValue->textstrokeWidth *= TRUETYPE_BOLD_THICK_MUL;
             }
             else
             {
@@ -545,8 +546,15 @@ void CorrectTextPosition( TTEXTVALUE* aValue )
 
 void SetTextSizeFromStrokeFontHeight( EDA_TEXT* aText, int aTextHeight )
 {
-    aText->SetTextSize( wxSize( KiROUND( aTextHeight * TEXT_WIDTH_TO_SIZE ),
-                                KiROUND( aTextHeight * TEXT_HEIGHT_TO_SIZE ) ) );
+    aText->SetTextSize( wxSize( KiROUND( aTextHeight * STROKE_WIDTH_TO_SIZE ),
+                                KiROUND( aTextHeight * STROKE_HEIGHT_TO_SIZE ) ) );
+}
+
+
+void SetTextSizeFromTrueTypeFontHeight( EDA_TEXT* aText, int aTextHeight )
+{
+    aText->SetTextSize( wxSize( KiROUND( aTextHeight * TRUETYPE_WIDTH_TO_SIZE ),
+                                KiROUND( aTextHeight * TRUETYPE_HEIGHT_TO_SIZE ) ) );
 }
 
 
@@ -597,6 +605,7 @@ void InitTTextValue( TTEXTVALUE* aTextValue )
     aTextValue->justify = LowerLeft;
     aTextValue->isBold = false;
     aTextValue->isItalic = false;
+    aTextValue->isTrueType = false;
 }
 
 } // namespace PCAD2KICAD

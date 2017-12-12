@@ -64,6 +64,7 @@ typedef struct _TTEXTVALUE
     TTEXT_JUSTIFY justify;
     bool          isBold;
     bool          isItalic;
+    bool          isTrueType;
 } TTEXTVALUE;
 
 extern wxString     GetWord( wxString* aStr );
@@ -102,7 +103,7 @@ extern int          CalculateTextLengthSize( TTEXTVALUE* aText );
 extern void         CorrectTextPosition( TTEXTVALUE* aValue );
 extern void         SetTextSizeFromStrokeFontHeight( EDA_TEXT* aText,
                                                      int aTextHeight );
-
+extern void         SetTextSizeFromTrueTypeFontHeight( EDA_TEXT* aText, int aTextHeight );
 extern XNODE*       FindNode( XNODE* aChild, wxString aTag );
 extern wxString     FindNodeGetContent( XNODE* aChild, wxString aTag );
 extern void         InitTTextValue( TTEXTVALUE* aTextValue );

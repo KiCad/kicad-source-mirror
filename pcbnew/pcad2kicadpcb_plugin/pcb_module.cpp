@@ -530,7 +530,10 @@ void PCB_MODULE::AddToBoard()
     ref_text->SetType( TEXTE_MODULE::TEXT_is_REFERENCE );
 
     ref_text->SetPos0( wxPoint( m_name.correctedPositionX, m_name.correctedPositionY ) );
-    SetTextSizeFromStrokeFontHeight( ref_text, m_name.textHeight );
+    if( m_name.isTrueType )
+        SetTextSizeFromTrueTypeFontHeight( ref_text, m_name.textHeight );
+    else
+        SetTextSizeFromStrokeFontHeight( ref_text, m_name.textHeight );
 
     r = m_name.textRotation - m_rotation;
     ref_text->SetTextAngle( r );
@@ -554,7 +557,10 @@ void PCB_MODULE::AddToBoard()
     val_text->SetType( TEXTE_MODULE::TEXT_is_VALUE );
 
     val_text->SetPos0( wxPoint( m_value.correctedPositionX, m_value.correctedPositionY ) );
-    SetTextSizeFromStrokeFontHeight( val_text, m_value.textHeight );
+    if( m_value.isTrueType )
+        SetTextSizeFromTrueTypeFontHeight( val_text, m_value.textHeight );
+    else
+        SetTextSizeFromStrokeFontHeight( val_text, m_value.textHeight );
 
     r = m_value.textRotation - m_rotation;
     val_text->SetTextAngle( r );
