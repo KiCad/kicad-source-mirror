@@ -526,11 +526,11 @@ void CN_CONNECTIVITY_ALGO::searchConnections( bool aIncludeZones )
         {
             #ifdef USE_OPENMP
                 #pragma omp master
+                if (m_progressReporter)
+                {
+                    m_progressReporter->KeepRefreshing( true );
+                }
             #endif
-            if (m_progressReporter)
-            {
-                m_progressReporter->KeepRefreshing();
-            }
 
             #ifdef USE_OPENMP
                 #pragma omp for schedule(dynamic)

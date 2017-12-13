@@ -281,7 +281,6 @@ set( PCBNEW_CLASS_SRCS
     tr_modif.cpp
     undo_redo.cpp
     zone_filler.cpp
-    zones_convert_to_polygons_aux_functions.cpp
     zones_by_polygon.cpp
     zones_by_polygon_fill_functions.cpp
     zones_functions_for_undo_redo.cpp

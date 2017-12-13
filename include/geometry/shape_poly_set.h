@@ -60,10 +60,11 @@ class SHAPE_POLY_SET : public SHAPE
         ///> the remaining (if any), are the holes
         typedef std::vector<SHAPE_LINE_CHAIN> POLYGON;
 
-        struct TRIANGULATED_POLYGON
-        {
-            ~TRIANGULATED_POLYGON();
+        class TRIANGULATION_CONTEXT;
 
+        class TRIANGULATED_POLYGON
+        {
+        public:
             struct TRI
             {
                 TRI()
@@ -72,6 +73,8 @@ class SHAPE_POLY_SET : public SHAPE
 
                 int a, b, c;
             };
+
+            ~TRIANGULATED_POLYGON();
 
             void Clear();
 
@@ -86,11 +89,28 @@ class SHAPE_POLY_SET : public SHAPE
                 c = m_vertices[ tri->c ];
             }
 
+            void SetTriangle( int aIndex, const TRI& aTri )
+            {
+                m_triangles[aIndex] = aTri;
+            }
+
             int AddVertex( const VECTOR2I& aP )
             {
                 m_vertices[ m_vertexCount ] = aP;
                 return (m_vertexCount++);
             }
+
+            int VertexCount() const
+            {
+                return m_vertexCount;
+            }
+
+            int TriangleCount() const
+            {
+                return m_triangleCount;
+            }
+
+        private:
 
             TRI* m_triangles = nullptr;
             VECTOR2I* m_vertices = nullptr;
@@ -818,6 +838,10 @@ class SHAPE_POLY_SET : public SHAPE
         ///> Returns true if the polygon set has any holes.
         bool HasHoles() const;
 
+        ///> Returns true if the polygon set has any holes tha share a vertex.
+        bool HasTouchingHoles() const;
+
+
         ///> Simplifies the polyset (merges overlapping polys, eliminates degeneracy/self-intersections)
         ///> For aFastMode meaning, see function booleanOp
         void Simplify( POLYGON_MODE aFastMode );
@@ -1112,6 +1136,9 @@ class SHAPE_POLY_SET : public SHAPE
          */
         POLYGON chamferFilletPolygon( CORNER_MODE aMode, unsigned int aDistance,
                                       int aIndex, int aSegments = -1 );
+
+        ///> Returns true if the polygon set has any holes that touch share a vertex.
+        bool hasTouchingHoles( const POLYGON& aPoly ) const;
 
         typedef std::vector<POLYGON> POLYSET;
 

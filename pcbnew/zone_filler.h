@@ -83,6 +83,22 @@ private:
             ZONE_SEGMENT_FILL& aFillSegs ) const;
 
     /**
+     * Function buildUnconnectedThermalStubsPolygonList
+     * Creates a set of polygons corresponding to stubs created by thermal shapes on pads
+     * which are not connected to a zone (dangling bridges)
+     * @param aCornerBuffer = a SHAPE_POLY_SET where to store polygons
+     * @param aPcb = the board.
+     * @param aZone = a pointer to the ZONE_CONTAINER  to examine.
+     * @param aArcCorrection = a pointer to the ZONE_CONTAINER  to examine.
+     * @param aRoundPadThermalRotation = the rotation in 1.0 degree for thermal stubs in round pads
+     */
+    void buildUnconnectedThermalStubsPolygonList( SHAPE_POLY_SET& aCornerBuffer,
+            const ZONE_CONTAINER* aZone,
+            const SHAPE_POLY_SET&       aRawFilledArea,
+            double aArcCorrection,
+            double aRoundPadThermalRotation ) const;
+
+    /**
      * Build the filled solid areas polygons from zone outlines (stored in m_Poly)
      * The solid areas can be more than one on copper layers, and do not have holes
      *  ( holes are linked by overlapping segments to the main outline)

@@ -1875,25 +1875,105 @@ SHAPE_POLY_SET &SHAPE_POLY_SET::operator=(const SHAPE_POLY_SET & aOther)
 }
 
 
-typedef std::map<p2t::Point*, int>  P2T_MAP;
-typedef std::vector<p2t::Point*>    P2T_VEC;
 
-static void convert( const SHAPE_LINE_CHAIN& outl,
-        P2T_VEC& buffer,
-        P2T_MAP& pointMap,
-        SHAPE_POLY_SET::TRIANGULATED_POLYGON& aPoly )
+
+
+class SHAPE_POLY_SET::TRIANGULATION_CONTEXT
 {
-    buffer.clear();
+public:
 
-    for( int i = 0; i < outl.PointCount(); i++ )
+    TRIANGULATION_CONTEXT( TRIANGULATED_POLYGON* aResultPoly ) :
+        m_triPoly( aResultPoly )
+        {
+        }
+
+    void AddOutline( const SHAPE_LINE_CHAIN& outl, bool aIsHole = false )
     {
-        const auto& p = outl.CPoint( i );
-        auto p2 = new p2t::Point( p.x, p.y );
-        pointMap[p2] = aPoly.AddVertex( p );
-        buffer.push_back( p2 );
-    }
-}
+        m_points.reserve( outl.PointCount() );
+        m_points.clear();
 
+        for( int i = 0; i < outl.PointCount(); i++ )
+        {
+            m_points.push_back( addPoint( outl.CPoint( i ) ) );
+        }
+
+        if ( aIsHole )
+            m_cdt->AddHole( m_points );
+        else
+        {
+            m_cdt.reset( new p2t::CDT( m_points ) );
+        }
+    }
+
+    void Triangulate()
+    {
+        m_cdt->Triangulate();
+
+        m_triPoly->AllocateTriangles( m_cdt->GetTriangles().size() );
+
+        int i = 0;
+
+        for( auto tri : m_cdt->GetTriangles() )
+        {
+            TRIANGULATED_POLYGON::TRI t;
+
+            t.a = tri->GetPoint( 0 )->id;
+            t.b = tri->GetPoint( 1 )->id;
+            t.c = tri->GetPoint( 2 )->id;
+
+            m_triPoly->SetTriangle(i, t);
+            i++;
+        }
+
+        for( auto p : m_uniquePoints )
+            delete p;
+    }
+
+private:
+
+	class comparePoints
+	{
+	public:
+	    bool operator()( p2t::Point* a, p2t::Point* b ) const
+	    {
+		if (a->x < b->x)
+		    return true;
+
+		if( a->x == b->x )
+		    return ( a->y > b->y );
+
+		return false;
+	    }
+	};
+
+
+    p2t::Point* addPoint( const VECTOR2I& aP )
+    {
+        p2t::Point check( aP.x, aP.y );
+        auto it = m_uniquePoints.find( &check );
+
+        if( it != m_uniquePoints.end() )
+        {
+            return *it;
+        }
+        else
+        {
+            auto lastId = m_triPoly->VertexCount();
+            auto p = new p2t::Point( aP.x, aP.y, lastId );
+            m_triPoly->AddVertex( aP );
+            m_uniquePoints.insert ( p );
+            return p;
+        }
+    }
+
+    typedef std::set<p2t::Point*, comparePoints>  P2T_SET;
+    typedef std::vector<p2t::Point*>    P2T_VEC;
+
+    P2T_VEC m_points;
+    P2T_SET m_uniquePoints;
+    TRIANGULATED_POLYGON *m_triPoly;
+    std::unique_ptr<p2t::CDT> m_cdt;
+};
 
 SHAPE_POLY_SET::TRIANGULATED_POLYGON::~TRIANGULATED_POLYGON()
 {
@@ -1940,48 +2020,20 @@ static int totalVertexCount( const SHAPE_POLY_SET::POLYGON& aPoly )
 void SHAPE_POLY_SET::triangulateSingle( const POLYGON& aPoly,
         SHAPE_POLY_SET::TRIANGULATED_POLYGON& aResult )
 {
-    assert( aPoly.size() >= 1 );
+    if( aPoly.size() == 0 )
+        return;
 
-    P2T_MAP pointMap;
-    P2T_VEC outline;
+    TRIANGULATION_CONTEXT ctx ( &aResult );
 
     aResult.AllocateVertices( totalVertexCount( aPoly ) );
-
-    convert( aPoly[0], outline, pointMap, aResult );
-
-    std::unique_ptr<p2t::CDT> cdt( new p2t::CDT( outline ) );
-
+    ctx.AddOutline( aPoly[0], false );
     for( unsigned i = 1; i < aPoly.size(); i++ )
     {
-        std::vector<p2t::Point*> hole;
-
-        convert( aPoly[i], hole, pointMap, aResult );
-
-        cdt->AddHole( hole );
+        ctx.AddOutline( aPoly[i], true ); // add holes
     }
 
-    cdt->Triangulate();
-
-    aResult.AllocateTriangles( cdt->GetTriangles().size() );
-
-    int i = 0;
-
-    for( auto tri : cdt->GetTriangles() )
-    {
-        TRIANGULATED_POLYGON::TRI t;
-
-        t.a = pointMap[ tri->GetPoint( 0 ) ];
-        t.b = pointMap[ tri->GetPoint( 1 ) ];
-        t.c = pointMap[ tri->GetPoint( 2 ) ];
-
-        aResult.m_triangles[ i ] = t;
-        i++;
-    }
-
-    for( auto iter = pointMap.begin(); iter!=pointMap.end(); ++iter )
-        delete iter->first;
+    ctx.Triangulate();
 }
-
 
 bool SHAPE_POLY_SET::IsTriangulationUpToDate() const
 {
@@ -2020,9 +2072,18 @@ void SHAPE_POLY_SET::CacheTriangulation()
         return;
 
     SHAPE_POLY_SET tmpSet = *this;
-    tmpSet.Unfracture( PM_FAST );
+
+    if( !tmpSet.HasHoles() )
+	tmpSet.Unfracture( PM_FAST );
 
     m_triangulatedPolys.clear();
+
+    if ( tmpSet.HasTouchingHoles() )
+    {
+        // temporary workaround for overlapping hole vertices that poly2tri doesn't handle
+        m_triangulationValid = false;
+        return;
+    }
 
     for( int i = 0; i < tmpSet.OutlineCount(); i++ )
     {
@@ -2060,4 +2121,39 @@ MD5_HASH SHAPE_POLY_SET::checksum() const
     hash.Finalize();
 
     return hash;
+}
+
+bool SHAPE_POLY_SET::HasTouchingHoles() const
+{
+    for( int i = 0; i < OutlineCount(); i++ )
+    {
+        if( hasTouchingHoles( CPolygon( i ) ) )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool SHAPE_POLY_SET::hasTouchingHoles( const POLYGON& aPoly ) const
+{
+    std::vector< VECTOR2I > pts;
+
+    for ( const auto& lc : aPoly )
+    {
+        for( int i = 0; i < lc.PointCount(); i++ )
+        {
+            const auto p = lc.CPoint( i );
+
+            if ( std::find( pts.begin(), pts.end(), p) != pts.end() )
+            {
+                return true;
+            }
+
+            pts.push_back( p );
+        }
+    }
+
+    return false;
 }
