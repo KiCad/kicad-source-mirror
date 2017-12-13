@@ -219,7 +219,7 @@ wxString VIA::GetSelectMenuText() const
 
 BITMAP_DEF VIA::GetMenuImage() const
 {
-    return via_sketch_xpm;
+    return via_xpm;
 }
 
 
@@ -1610,7 +1610,7 @@ wxString TRACK::GetSelectMenuText() const
 
 BITMAP_DEF TRACK::GetMenuImage() const
 {
-    return showtrack_xpm;
+    return add_tracks_xpm;
 }
 
 void TRACK::SwapData( BOARD_ITEM* aImage )

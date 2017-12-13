@@ -121,6 +121,10 @@ void CONTEXT_MENU::DisplayTitle( bool aDisplay )
             // Add a separator and a menu entry to display the title
             InsertSeparator( 0 );
             Insert( 0, new wxMenuItem( this, wxID_NONE, m_title, wxEmptyString, wxITEM_NORMAL ) );
+
+            if( m_icon )
+                set_wxMenuIcon( FindItemByPosition( 0 ), m_icon );
+
             m_titleDisplayed = true;
         }
     }
