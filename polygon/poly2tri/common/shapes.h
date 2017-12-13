@@ -45,19 +45,21 @@ struct Edge;
 struct Point {
 
   double x, y;
+  int id;
 
   /// Default constructor does nothing (for performance).
   Point()
   {
     x = 0.0;
     y = 0.0;
+    id = 0;
   }
 
   /// The edges this point constitutes an upper ending point
   std::vector<Edge*> edge_list;
 
   /// Construct using coordinates.
-  Point(double ax, double ay) : x(ax), y(ay) {}
+  Point(double ax, double ay, int aid = 0) : x(ax), y(ay), id(aid) {}
 
   /// Set this point to all zeros.
   void set_zero()
@@ -201,7 +203,7 @@ void ClearDelunayEdges();
 inline bool IsInterior();
 inline void IsInterior(bool b);
 
-Triangle& NeighborAcross(Point& opoint);
+Triangle* NeighborAcross(Point& opoint);
 
 void DebugPrint();
 
@@ -321,5 +323,3 @@ inline void Triangle::IsInterior(bool b)
 }
 
 #endif
-
-

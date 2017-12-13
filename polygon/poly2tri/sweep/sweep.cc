@@ -118,11 +118,10 @@ void Sweep::EdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* triangl
       // We are modifying the constraint maybe it would be better to
       // not change the given constraint and just keep a variable for the new constraint
       tcx.edge_event.constrained_edge->q = p1;
-      triangle = &triangle->NeighborAcross(point);
+      triangle = triangle->NeighborAcross(point);
       EdgeEvent( tcx, ep, *p1, triangle, *p1 );
     } else {
       std::runtime_error("EdgeEvent - collinear points not supported");
-      assert(0);
     }
     return;
   }
@@ -135,11 +134,10 @@ void Sweep::EdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* triangl
       // We are modifying the constraint maybe it would be better to
       // not change the given constraint and just keep a variable for the new constraint
       tcx.edge_event.constrained_edge->q = p2;
-      triangle = &triangle->NeighborAcross(point);
+      triangle = triangle->NeighborAcross(point);
       EdgeEvent( tcx, ep, *p2, triangle, *p2 );
     } else {
       std::runtime_error("EdgeEvent - collinear points not supported");
-      assert(0);
     }
     return;
   }
@@ -699,32 +697,36 @@ void Sweep::FillLeftConcaveEdgeEvent(SweepContext& tcx, Edge* edge, Node& node)
 
 void Sweep::FlipEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* t, Point& p)
 {
-  Triangle& ot = t->NeighborAcross(p);
-  Point& op = *ot.OppositePoint(*t, p);
+  Triangle* ot = t->NeighborAcross(p);
+  Point& op = *ot->OppositePoint(*t, p);
+
+  if (ot == nullptr) {
+    throw std::invalid_argument("Polygon contains overlapping hole vertices.");
+  }
 
   if (InScanArea(p, *t->PointCCW(p), *t->PointCW(p), op)) {
     // Lets rotate shared edge one vertex CW
-    RotateTrianglePair(*t, p, ot, op);
+    RotateTrianglePair(*t, p, *ot, op);
     tcx.MapTriangleToNodes(*t);
-    tcx.MapTriangleToNodes(ot);
+    tcx.MapTriangleToNodes(*ot);
 
     if (p == eq && op == ep) {
       if (eq == *tcx.edge_event.constrained_edge->q && ep == *tcx.edge_event.constrained_edge->p) {
         t->MarkConstrainedEdge(&ep, &eq);
-        ot.MarkConstrainedEdge(&ep, &eq);
+        ot->MarkConstrainedEdge(&ep, &eq);
         Legalize(tcx, *t);
-        Legalize(tcx, ot);
+        Legalize(tcx, *ot);
       } else {
         // XXX: I think one of the triangles should be legalized here?
       }
     } else {
       Orientation o = Orient2d(eq, op, ep);
-      t = &NextFlipTriangle(tcx, (int)o, *t, ot, p, op);
+      t = &NextFlipTriangle(tcx, (int)o, *t, *ot, p, op);
       FlipEdgeEvent(tcx, ep, eq, t, p);
     }
   } else {
-    Point& newP = NextFlipPoint(ep, eq, ot, op);
-    FlipScanEdgeEvent(tcx, ep, eq, *t, ot, newP);
+    Point& newP = NextFlipPoint(ep, eq, *ot, op);
+    FlipScanEdgeEvent(tcx, ep, eq, *t, *ot, newP);
     EdgeEvent(tcx, ep, eq, t, p);
   }
 }
@@ -759,20 +761,24 @@ Point& Sweep::NextFlipPoint(Point& ep, Point& eq, Triangle& ot, Point& op)
     // Left
     return *ot.PointCW(op);
   } else{
-    //throw new RuntimeException("[Unsupported] Opposing point on constrained edge");
-    assert(0);
+    throw std::invalid_argument("Polygon contains overlapping hole vertices.");
+    return ep;     // Arbitrary return val -- fixes warning
   }
 }
 
 void Sweep::FlipScanEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle& flip_triangle,
                               Triangle& t, Point& p)
 {
-  Triangle& ot = t.NeighborAcross(p);
-  Point& op = *ot.OppositePoint(t, p);
+  Triangle* ot = t.NeighborAcross(p);
+  Point& op = *ot->OppositePoint(t, p);
+
+  if (ot == NULL) {
+      throw std::invalid_argument("Polygon contains overlapping hole vertices.");
+  }
 
   if (InScanArea(eq, *flip_triangle.PointCCW(eq), *flip_triangle.PointCW(eq), op)) {
     // flip with new edge op->eq
-    FlipEdgeEvent(tcx, eq, op, &ot, op);
+    FlipEdgeEvent(tcx, eq, op, ot, op);
     // TODO: Actually I just figured out that it should be possible to
     //       improve this by getting the next ot and op before the the above
     //       flip and continue the flipScanEdgeEvent here
@@ -781,8 +787,8 @@ void Sweep::FlipScanEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle&
     // Turns out at first glance that this is somewhat complicated
     // so it will have to wait.
   } else{
-    Point& newP = NextFlipPoint(ep, eq, ot, op);
-    FlipScanEdgeEvent(tcx, ep, eq, flip_triangle, ot, newP);
+    Point& newP = NextFlipPoint(ep, eq, *ot, op);
+    FlipScanEdgeEvent(tcx, ep, eq, flip_triangle, *ot, newP);
   }
 }
 

@@ -30,6 +30,7 @@
  */
 #include "shapes.h"
 #include <iostream>
+#include <exception>
 
 namespace p2t {
 
@@ -52,7 +53,7 @@ void Triangle::MarkNeighbor(Point* p1, Point* p2, Triangle* t)
   else if ((p1 == points_[0] && p2 == points_[1]) || (p1 == points_[1] && p2 == points_[0]))
     neighbors_[2] = t;
   else
-    assert(0);
+    throw std::invalid_argument("Polygon contains overlapping hole vertices.");
 }
 
 // Exhaustive search to update neighbor pointers
@@ -150,7 +151,7 @@ void Triangle::Legalize(Point& opoint, Point& npoint)
     points_[2] = points_[1];
     points_[1] = &npoint;
   } else {
-    assert(0);
+      throw std::invalid_argument("Polygon contains overlapping hole vertices.");
   }
 }
 
@@ -163,7 +164,8 @@ int Triangle::Index(const Point* p)
   } else if (p == points_[2]) {
     return 2;
   }
-  assert(0);
+  throw std::invalid_argument("Polygon contains overlapping hole vertices.");
+  return 0;
 }
 
 int Triangle::EdgeIndex(const Point* p1, const Point* p2)
@@ -222,7 +224,8 @@ Point* Triangle::PointCW(Point& point)
   } else if (&point == points_[2]) {
     return points_[1];
   }
-  assert(0);
+  throw std::invalid_argument("Polygon contains overlapping hole vertices.");
+  return NULL;
 }
 
 // The point counter-clockwise to given point
@@ -235,7 +238,8 @@ Point* Triangle::PointCCW(Point& point)
   } else if (&point == points_[2]) {
     return points_[0];
   }
-  assert(0);
+  throw std::invalid_argument("Polygon contains overlapping hole vertices.");
+  return NULL;
 }
 
 // The neighbor clockwise to given point
@@ -345,14 +349,14 @@ void Triangle::SetDelunayEdgeCW(Point& p, bool e)
 }
 
 // The neighbor across to given point
-Triangle& Triangle::NeighborAcross(Point& opoint)
+Triangle* Triangle::NeighborAcross(Point& opoint)
 {
   if (&opoint == points_[0]) {
-    return *neighbors_[0];
+    return neighbors_[0];
   } else if (&opoint == points_[1]) {
-    return *neighbors_[1];
+    return neighbors_[1];
   }
-  return *neighbors_[2];
+  return neighbors_[2];
 }
 
 void Triangle::DebugPrint()
