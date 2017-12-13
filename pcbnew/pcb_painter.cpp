@@ -789,22 +789,12 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         const int corner_radius = aPad->GetRoundRectCornerRadius( prsize );
         TransformRoundRectToPolygon( polySet, wxPoint( 0, 0 ), prsize,
                 0.0, corner_radius, segmentToCircleCount );
-
-        if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
-        {
-            if( polySet.OutlineCount() > 0 )
-                m_gal->DrawPolyline( polySet.Outline( 0 ) );
-        }
-        else
-        {
-            m_gal->DrawPolygon( polySet );
-        }
+        m_gal->DrawPolygon( polySet );
         break;
     }
 
     case PAD_SHAPE_CUSTOM:
     {   // Draw the complex custom shape
-        std::deque<VECTOR2D> pointList;
 
         // Use solder[Paste/Mask]size or pad size to build pad shape
         // however, solder[Paste/Mask] size has no actual meaning for a
@@ -817,37 +807,15 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             outline.Append( aPad->GetCustomShapeAsPolygon() );
             const int segmentToCircleCount = 32;
             outline.Inflate( custom_margin, segmentToCircleCount );
-
-            // Draw the polygon: only one polygon is expected
-            SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
-
-            for( int ii = 0; ii < poly.PointCount(); ii++ )
-                pointList.push_back( poly.Point( ii ) );
+            m_gal->DrawPolygon( outline );
         }
         else
         {
             // Draw the polygon: only one polygon is expected
             // However we provide a multi polygon shape drawing
             // ( for the future or  to show even an incorrect shape
-            const SHAPE_POLY_SET& outline = aPad->GetCustomShapeAsPolygon();
-
-            for( int jj = 0; jj < outline.OutlineCount(); ++jj )
-            {
-                const SHAPE_LINE_CHAIN& poly = outline.COutline( jj );
-
-                for( int ii = 0; ii < poly.PointCount(); ii++ )
-                    pointList.push_back( poly.CPoint( ii ) );
-            }
+            m_gal->DrawPolygon( aPad->GetCustomShapeAsPolygon() );
         }
-
-        if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
-        {
-            // Add the beginning point to close the outline
-            pointList.push_back( pointList.front() );
-            m_gal->DrawPolyline( pointList );
-        }
-        else
-            m_gal->DrawPolygon( pointList );
     }
         break;
 
@@ -867,10 +835,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         polySet.Append( VECTOR2I( corners[2] ) );
         polySet.Append( VECTOR2I( corners[3] ) );
 
-        if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
-            m_gal->DrawPolyline( polySet.COutline( 0 ) );
-        else
-            m_gal->DrawPolygon( polySet );
+        m_gal->DrawPolygon( polySet );
     }
     break;
 
@@ -894,15 +859,11 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         SHAPE_POLY_SET polySet;
         constexpr int SEGCOUNT = 64;
         aPad->TransformShapeWithClearanceToPolygon( polySet, aPad->GetClearance(), SEGCOUNT, 1.0 );
-
-        if( polySet.OutlineCount() > 0 )
-        {
-            m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-            m_gal->SetIsStroke( true );
-            m_gal->SetIsFill( false );
-            m_gal->SetStrokeColor( color );
-            m_gal->DrawPolyline( polySet.COutline( 0 ) );
-        }
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+        m_gal->SetIsStroke( true );
+        m_gal->SetIsFill( false );
+        m_gal->SetStrokeColor( color );
+        m_gal->DrawPolygon( polySet );
     }
 }
 
@@ -981,7 +942,7 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
         pointsList.push_back( points[0] );
 
         m_gal->SetLineWidth( aSegment->GetWidth() );
-        m_gal->SetIsFill( true );       // draw polygons the legacy way
+        m_gal->SetIsFill( true );
         m_gal->SetIsStroke( true );
         m_gal->DrawPolygon( pointsList );
 
@@ -1088,33 +1049,23 @@ void PCB_PAINTER::draw( const MODULE* aModule, int aLayer )
 
 void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone, int aLayer )
 {
-
     if( !aZone->IsOnLayer( (PCB_LAYER_ID) aLayer ) )
-    {
         return;
-    }
 
     const COLOR4D& color = m_pcbSettings.GetColor( aZone, aLayer );
     std::deque<VECTOR2D> corners;
     PCB_RENDER_SETTINGS::DISPLAY_ZONE_MODE displayMode = m_pcbSettings.m_displayZone;
 
     // Draw the outline
-    m_gal->SetStrokeColor( color );
-    m_gal->SetIsFill( false );
-    m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+    const SHAPE_POLY_SET* outline = aZone->Outline();
 
-    for( auto iterator = aZone->CIterateWithHoles(); iterator; iterator++ )
+    if( outline )
     {
-        corners.push_back( VECTOR2D( *iterator ) );
-
-        if( iterator.IsEndContour() )
-        {
-            // The last point for closing the polyline
-            corners.push_back( corners[0] );
-            m_gal->DrawPolyline( corners );
-            corners.clear();
-        }
+        m_gal->SetStrokeColor( color );
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+        m_gal->DrawPolygon( *outline );
 
         for( const SEG& hatchLine : aZone->GetHatchLines() )
             m_gal->DrawLine( hatchLine.A, hatchLine.B );
