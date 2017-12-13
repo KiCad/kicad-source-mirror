@@ -99,13 +99,17 @@ void WX_PROGRESS_REPORTER::updateUI()
     wxProgressDialog::Update( cur, m_rptMessage );
 }
 
-void PROGRESS_REPORTER::KeepRefreshing()
+void PROGRESS_REPORTER::KeepRefreshing( bool aWait )
 {
-    while ( m_progress < m_maxProgress && m_maxProgress > 0)
-    {
-        updateUI();
-        #ifdef USE_OPENMP
+    #ifdef USE_OPENMP
+        while ( m_progress < m_maxProgress && m_maxProgress > 0)
+        {
+            updateUI();
             wxMilliSleep(10);
-        #endif
-    }
+            if ( !aWait )
+                return;
+        }
+    #else
+        updateUI();
+    #endif
 }

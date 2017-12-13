@@ -43,7 +43,7 @@ class PROGRESS_REPORTER
         void SetMaxProgress ( int aMaxProgress );
         void AdvanceProgress( );
 
-        void KeepRefreshing();
+        void KeepRefreshing( bool aWait = false );
 
     protected:
 
