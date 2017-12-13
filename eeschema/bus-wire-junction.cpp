@@ -483,7 +483,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( bool aAppend )
     PICKED_ITEMS_LIST   itemList;
     SCH_SCREEN*         screen = GetScreen();
 
-    auto remove_item = [ &itemList, screen ]( SCH_ITEM* aItem ) -> void
+    auto remove_item = [ &itemList ]( SCH_ITEM* aItem ) -> void
     {
         aItem->SetFlags( STRUCT_DELETED );
         itemList.PushItem( ITEM_PICKER( aItem, UR_DELETED ) );
@@ -493,9 +493,9 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( bool aAppend )
 
     for( item = screen->GetDrawItems(); item; item = item->Next() )
     {
-        if( ( item->Type() != SCH_LINE_T ) &&
-            ( item->Type() != SCH_JUNCTION_T ) &&
-            ( item->Type() != SCH_NO_CONNECT_T ))
+        if( ( item->Type() != SCH_LINE_T )
+            && ( item->Type() != SCH_JUNCTION_T )
+            && ( item->Type() != SCH_NO_CONNECT_T ) )
             continue;
 
         if( item->GetFlags() & STRUCT_DELETED )
@@ -503,14 +503,15 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( bool aAppend )
 
         // Remove unneeded junctions
         if( ( item->Type() == SCH_JUNCTION_T )
-                && ( !screen->IsJunctionNeeded( item->GetPosition() ) ) )
+            && ( !screen->IsJunctionNeeded( item->GetPosition() ) ) )
         {
             remove_item( item );
             continue;
         }
+
         // Remove zero-length lines
         if( item->Type() == SCH_LINE_T
-                && ( (SCH_LINE*) item )->IsNull() )
+            && ( (SCH_LINE*) item )->IsNull() )
         {
             remove_item( item );
             continue;
@@ -524,24 +525,26 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( bool aAppend )
             // Merge overlapping lines
             if( item->Type() == SCH_LINE_T )
             {
-                SCH_LINE* firstLine = (SCH_LINE*) item;
-                SCH_LINE* secondLine = (SCH_LINE*) secondItem;
-                SCH_LINE* line = NULL;
+                SCH_LINE*   firstLine   = (SCH_LINE*) item;
+                SCH_LINE*   secondLine  = (SCH_LINE*) secondItem;
+                SCH_LINE*   line = NULL;
                 bool needed = false;
 
                 if( !secondLine->IsParallel( firstLine ) )
                     continue;
 
-                // Check if a junction needs to be kept
-                // This can only happen if:
-                //   1) the endpoints overlap,
-                //   2) the lines are not pointing in the same direction AND
-                //   3) IsJunction Needed is false
-                if( secondLine->IsEndPoint( firstLine->GetStartPoint() )
-                        && !secondLine->IsSameQuadrant( firstLine, firstLine->GetStartPoint() ) )
+                // Remove identical lines
+                if( firstLine->IsEndPoint( secondLine->GetStartPoint() )
+                    && firstLine->IsEndPoint( secondLine->GetEndPoint() ) )
+                {
+                    remove_item( secondItem );
+                    continue;
+                }
+
+                // If the end points overlap, check if we still need the junction
+                if( secondLine->IsEndPoint( firstLine->GetStartPoint() ) )
                     needed = screen->IsJunctionNeeded( firstLine->GetStartPoint() );
-                else if( secondLine->IsEndPoint( firstLine->GetEndPoint() )
-                        && !secondLine->IsSameQuadrant( firstLine, firstLine->GetEndPoint() ) )
+                else if( secondLine->IsEndPoint( firstLine->GetEndPoint() ) )
                     needed = screen->IsJunctionNeeded( firstLine->GetEndPoint() );
 
                 if( !needed && ( line = (SCH_LINE*) secondLine->MergeOverlap( firstLine ) ) )
@@ -558,12 +561,15 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( bool aAppend )
                 remove_item( secondItem );
         }
     }
+
     for( item = screen->GetDrawItems(); item; item = secondItem )
     {
         secondItem = item->Next();
+
         if( item->GetFlags() & STRUCT_DELETED )
             screen->Remove( item );
     }
+
     SaveCopyInUndoList( itemList, UR_CHANGED, aAppend );
 
     return !!( itemList.GetCount() );

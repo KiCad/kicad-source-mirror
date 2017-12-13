@@ -55,8 +55,6 @@
 #include <lib_pin.h>
 #include <symbol_lib_table.h>
 
-#include <boost/foreach.hpp>
-
 #define EESCHEMA_FILE_STAMP   "EESchema"
 
 /* Default zoom values. Limited to these values to keep a decent size
@@ -349,11 +347,11 @@ void SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
 
 bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
 {
-    bool has_line = false;
-    bool has_nonparallel = false;
-    int end_count = 0;
-    int pin_count = 0;
-    std::vector< SCH_LINE* > lines;
+    bool    has_nonparallel[2] = { false };
+    int     end_count[2] = { 0 };
+    int     pin_count = 0;
+
+    std::vector<SCH_LINE*> lines[2];
 
     for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
     {
@@ -364,44 +362,63 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
             return false;
 
         if( ( item->Type() == SCH_LINE_T )
-                && ( item->GetLayer() == LAYER_WIRE )
-                && ( item->HitTest( aPosition, 0 ) ) )
-            lines.push_back( (SCH_LINE*) item );
+            && ( item->HitTest( aPosition, 0 ) ) )
+        {
+            if( item->GetLayer() == LAYER_WIRE )
+                lines[0].push_back( (SCH_LINE*) item );
+            else if( item->GetLayer() == LAYER_BUS )
+                lines[1].push_back( (SCH_LINE*) item );
+        }
 
         if( ( item->Type() == SCH_COMPONENT_T )
                 && ( item->IsConnected( aPosition ) ) )
             pin_count++;
     }
 
-    BOOST_FOREACH( SCH_LINE* line, lines)
+    for( int i = 0; i < 2; i++ )
     {
-        if( !line->IsEndPoint( aPosition ) )
-            has_line = true;
-        else
-            end_count++;
-        BOOST_REVERSE_FOREACH( SCH_LINE* second_line, lines )
+        bool removed_overlapping = false;
+        end_count[i] = lines[i].size();
+
+        for( auto line = lines[i].begin(); line < lines[i].end(); line++ )
         {
-            if( line == second_line )
-                break;
-            if( line->IsEndPoint( second_line->GetStartPoint() )
-                    && line->IsEndPoint( second_line->GetEndPoint() ) )
-                end_count--;
-            if( !line->IsParallel( second_line ) )
-                has_nonparallel = true;
+            // Consider ending on a line to be equivalent to two endpoints because
+            // we will want to split the line if anything else connects
+            if( !(*line)->IsEndPoint( aPosition ) )
+                end_count[i]++;
+
+            for( auto second_line = lines[i].end() - 1; second_line > line; second_line-- )
+            {
+                if( !(*line)->IsParallel( *second_line ) )
+                    has_nonparallel[i] = true;
+                else if( !removed_overlapping
+                         && (*line)->IsSameQuadrant( *second_line, aPosition ) )
+                {
+                    /**
+                     * Overlapping lines that point in the same direction should not be counted
+                     * as extra end_points.  We remove the overlapping lines, being careful to only
+                     * remove them once.
+                     */
+                    removed_overlapping = true;
+                    end_count[i]--;
+                }
+            }
         }
     }
 
-    // If there is line intersecting a pin
-    if( pin_count && has_line )
-        return true;
+    //
 
     // If there are three or more endpoints
-    if( pin_count + end_count > 2 )
+    if( pin_count + end_count[0] > 2 )
         return true;
 
     // If there is at least one segment that ends on a non-parallel line or
     // junction of two other lines
-    if( has_nonparallel && (has_line || end_count > 2 ) )
+    if( has_nonparallel[0] && end_count[0] > 2 )
+        return true;
+
+    // Check for bus - bus junction requirements
+    if( has_nonparallel[1] && end_count[1] > 2 )
         return true;
 
     return false;
