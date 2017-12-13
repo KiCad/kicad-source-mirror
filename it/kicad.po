@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-08 23:39+0100\n"
-"PO-Revision-Date: 2017-12-10 13:18+0100\n"
+"POT-Creation-Date: 2017-12-13 08:29+0100\n"
+"PO-Revision-Date: 2017-12-13 08:32+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -201,7 +201,7 @@ msgid "Alias"
 msgstr "Alias"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:83
-#: common/dialog_about/AboutDialog_main.cpp:114 eeschema/sch_component.cpp:1368
+#: common/dialog_about/AboutDialog_main.cpp:114 eeschema/sch_component.cpp:1443
 #: eeschema/viewlibs.cpp:241 eeschema/libedit.cpp:664
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
@@ -1786,48 +1786,48 @@ msgstr "Copia info di versione"
 msgid "Copy KiCad version info to the clipboard"
 msgstr "Copia le info di versione di KiCad negli appunti"
 
-#: common/dialog_about/dialog_about.cpp:120
+#: common/dialog_about/dialog_about.cpp:121
 msgid "Information"
 msgstr "Info"
 
-#: common/dialog_about/dialog_about.cpp:123
+#: common/dialog_about/dialog_about.cpp:124
 msgid "Developers"
 msgstr "Sviluppo"
 
-#: common/dialog_about/dialog_about.cpp:124
+#: common/dialog_about/dialog_about.cpp:125
 msgid "Doc Writers"
 msgstr "Manuali"
 
-#: common/dialog_about/dialog_about.cpp:126
+#: common/dialog_about/dialog_about.cpp:127
 msgid "Artists"
 msgstr "Artisti"
 
-#: common/dialog_about/dialog_about.cpp:127
+#: common/dialog_about/dialog_about.cpp:128
 msgid "Translators"
 msgstr "Traduttori"
 
-#: common/dialog_about/dialog_about.cpp:129
+#: common/dialog_about/dialog_about.cpp:130
 msgid "Packagers"
 msgstr "Pacchetti"
 
-#: common/dialog_about/dialog_about.cpp:132
+#: common/dialog_about/dialog_about.cpp:133
 msgid "License"
 msgstr "Licenza"
 
-#: common/dialog_about/dialog_about.cpp:557
+#: common/dialog_about/dialog_about.cpp:574
 msgid "Version Info"
 msgstr "Info di versione"
 
-#: common/dialog_about/dialog_about.cpp:569
+#: common/dialog_about/dialog_about.cpp:586
 msgid "Could not open clipboard to write version information."
 msgstr ""
 "Impossibile aprire gli appunti per scrivere le informazioni sulla versione."
 
-#: common/dialog_about/dialog_about.cpp:570
+#: common/dialog_about/dialog_about.cpp:587
 msgid "Clipboard Error"
 msgstr "Errore degli appunti"
 
-#: common/dialog_about/dialog_about.cpp:579
+#: common/dialog_about/dialog_about.cpp:596
 msgid "Copied..."
 msgstr "Copiate..."
 
@@ -1859,23 +1859,23 @@ msgstr "La suite EDA di KiCad è realizzata secondo la"
 msgid "GNU General Public License (GPL) version 3 or any later version"
 msgstr "GNU General Public License (GPL) versione 3 o successive"
 
-#: common/dialog_about/AboutDialog_main.cpp:349
+#: common/dialog_about/AboutDialog_main.cpp:372
 msgid "Others"
 msgstr "Altri"
 
-#: common/dialog_about/AboutDialog_main.cpp:364
+#: common/dialog_about/AboutDialog_main.cpp:391
 msgid "Icons by"
 msgstr "Autori icone"
 
-#: common/dialog_about/AboutDialog_main.cpp:379
+#: common/dialog_about/AboutDialog_main.cpp:409
 msgid "3D models by"
 msgstr "Autori modelli 3D"
 
-#: common/dialog_about/AboutDialog_main.cpp:389
+#: common/dialog_about/AboutDialog_main.cpp:426
 msgid "Symbols by"
 msgstr "Simboli per"
 
-#: common/dialog_about/AboutDialog_main.cpp:395
+#: common/dialog_about/AboutDialog_main.cpp:433
 msgid "Footprints by"
 msgstr "Impronte per"
 
@@ -3301,7 +3301,7 @@ msgstr "Aiuto"
 #: common/dialogs/dialog_env_var_config_base.cpp:128
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:81
 #: eeschema/widgets/widget_eeschema_color_config.cpp:77
-#: eeschema/sch_component.cpp:1340 eeschema/sch_component.cpp:1379
+#: eeschema/sch_component.cpp:1415 eeschema/sch_component.cpp:1454
 #: eeschema/lib_field.cpp:449 eeschema/lib_field.cpp:628
 #: eeschema/template_fieldnames.cpp:42
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45
@@ -5109,7 +5109,7 @@ msgid "Pin name"
 msgstr "Nome piedino"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:76
-#: eeschema/sch_component.cpp:1336 eeschema/sch_component.cpp:1376
+#: eeschema/sch_component.cpp:1411 eeschema/sch_component.cpp:1451
 #: eeschema/lib_field.cpp:442 eeschema/template_fieldnames.cpp:39
 #: eeschema/dialogs/dialog_rescue_each.cpp:115 eeschema/bom_table_column.h:33
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:42
@@ -5168,7 +5168,7 @@ msgid "General"
 msgstr "Generale"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:102
-#: eeschema/sch_component.cpp:1345
+#: eeschema/sch_component.cpp:1420
 msgid "Component"
 msgstr "Componente"
 
@@ -5186,31 +5186,31 @@ msgstr ""
 "e non sarà possibile vederli sullo schermo. Sicuri\n"
 "di voler usare questi colori?"
 
-#: eeschema/sch_component.cpp:1340
+#: eeschema/sch_component.cpp:1415
 msgid "Power symbol"
 msgstr "Simbolo di alimentazione"
 
-#: eeschema/sch_component.cpp:1349
+#: eeschema/sch_component.cpp:1424
 msgid "Alias of"
 msgstr "Alias di"
 
-#: eeschema/sch_component.cpp:1352 eeschema/sch_component.cpp:1354
-#: eeschema/sch_component.cpp:1357 eeschema/sch_component.cpp:1387
-#: eeschema/sch_component.cpp:1393 eeschema/selpart.cpp:88
+#: eeschema/sch_component.cpp:1427 eeschema/sch_component.cpp:1429
+#: eeschema/sch_component.cpp:1432 eeschema/sch_component.cpp:1462
+#: eeschema/sch_component.cpp:1468 eeschema/selpart.cpp:88
 #: eeschema/dialogs/dialog_spice_model_base.cpp:210 pcbnew/loadcmp.cpp:446
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:185
 msgid "Library"
 msgstr "Libreria"
 
-#: eeschema/sch_component.cpp:1357
+#: eeschema/sch_component.cpp:1432
 msgid "Undefined!!!"
 msgstr "Indefinito!!!"
 
-#: eeschema/sch_component.cpp:1363
+#: eeschema/sch_component.cpp:1438
 msgid "<Unknown>"
 msgstr "<Sconosciuto>"
 
-#: eeschema/sch_component.cpp:1365 eeschema/lib_field.cpp:456
+#: eeschema/sch_component.cpp:1440 eeschema/lib_field.cpp:456
 #: eeschema/template_fieldnames.cpp:45 eeschema/bom_table_column.h:35
 #: pcbnew/class_module.cpp:587 pcbnew/class_pad.cpp:693 pcbnew/loadcmp.cpp:445
 #: pcbnew/loadcmp.cpp:509 pcbnew/class_edge_mod.cpp:248
@@ -5218,33 +5218,33 @@ msgstr "<Sconosciuto>"
 msgid "Footprint"
 msgstr "Impronta"
 
-#: eeschema/sch_component.cpp:1370
+#: eeschema/sch_component.cpp:1445
 msgid "Key Words"
 msgstr "Parole chiave"
 
-#: eeschema/sch_component.cpp:1381
+#: eeschema/sch_component.cpp:1456
 msgid "Symbol"
 msgstr "Simbolo"
 
-#: eeschema/sch_component.cpp:1388
+#: eeschema/sch_component.cpp:1463
 msgid "No library defined!!!"
 msgstr "Nessuna libreria definita!!!"
 
-#: eeschema/sch_component.cpp:1392
+#: eeschema/sch_component.cpp:1467
 #, c-format
 msgid "Symbol not found in %s!!!"
 msgstr "Simbolo non trovato in %s!!!"
 
-#: eeschema/sch_component.cpp:1644
+#: eeschema/sch_component.cpp:1703
 #, c-format
 msgid "Component %s, %s"
 msgstr "Componente %s, %s"
 
-#: eeschema/hierarch.cpp:158
+#: eeschema/hierarch.cpp:149
 msgid "Navigator"
 msgstr "Navigatore"
 
-#: eeschema/hierarch.cpp:171
+#: eeschema/hierarch.cpp:161
 msgid "Root"
 msgstr "Principale"
 
@@ -7355,7 +7355,7 @@ msgstr "Alias di"
 msgid "Keywords:"
 msgstr "Parole chiave:"
 
-#: eeschema/generate_alias_info.cpp:81 eeschema/cmp_tree_model_adapter.cpp:85
+#: eeschema/generate_alias_info.cpp:81 eeschema/cmp_tree_model_adapter.cpp:87
 #: eeschema/dialogs/dialog_choose_component.cpp:204
 #: eeschema/dialogs/dialog_choose_component.cpp:264
 #: eeschema/dialogs/dialog_choose_component.cpp:314
@@ -15441,16 +15441,16 @@ msgid "Edge Width"
 msgstr "Imposta larghezza"
 
 #: pcbnew/microwave.cpp:244
-msgid "Gap"
-msgstr "Spazio"
+msgid "Gap Size:"
+msgstr "Dimensione spazio:"
 
 #: pcbnew/microwave.cpp:250
-msgid "Stub"
-msgstr "Segmento"
+msgid "Stub Size:"
+msgstr "Dimensione tronco:"
 
 #: pcbnew/microwave.cpp:257
-msgid "Arc Stub"
-msgstr "Spezzone di arco"
+msgid "Arc Stub Radius Value:"
+msgstr "Valore del raggio dell'arco di tronco:"
 
 #: pcbnew/microwave.cpp:268 pcbnew/microwave.cpp:286
 msgid "Create microwave module"
@@ -15501,19 +15501,19 @@ msgstr "La froma ha dimensione zero!"
 msgid "Shape has no points!"
 msgstr "La forma non ha punti!"
 
-#: pcbnew/microwave.cpp:701
+#: pcbnew/microwave.cpp:704
 msgid "No pad for this footprint"
 msgstr "L'impronta non ha piazzole"
 
-#: pcbnew/microwave.cpp:709
+#: pcbnew/microwave.cpp:712
 msgid "Only one pad for this footprint"
 msgstr "L'impronta ha soltanto una piazzola"
 
-#: pcbnew/microwave.cpp:720
+#: pcbnew/microwave.cpp:723
 msgid "Gap:"
 msgstr "Spazio:"
 
-#: pcbnew/microwave.cpp:720
+#: pcbnew/microwave.cpp:723
 msgid "Create Microwave Gap"
 msgstr "Crea spazio Microonde"
 
@@ -16114,7 +16114,7 @@ msgid "Front"
 msgstr "Fronte"
 
 #: pcbnew/class_module.cpp:551 pcbnew/tools/pad_tool.cpp:77
-#: pcbnew/class_board.cpp:1106 pcbnew/pcb_draw_panel_gal.cpp:336
+#: pcbnew/class_board.cpp:1106 pcbnew/pcb_draw_panel_gal.cpp:335
 #: pcbnew/class_netinfo_item.cpp:120
 msgid "Pads"
 msgstr "Piazzole"
@@ -16985,19 +16985,19 @@ msgstr "Allinea in alto"
 msgid "Align to bottom"
 msgstr "Allinea in basso"
 
-#: pcbnew/tools/placement_tool.cpp:219
+#: pcbnew/tools/placement_tool.cpp:234
 msgid "Align to left"
 msgstr "Allinea a sinistra"
 
-#: pcbnew/tools/placement_tool.cpp:256
+#: pcbnew/tools/placement_tool.cpp:286
 msgid "Align to right"
 msgstr "Allinea a destra"
 
-#: pcbnew/tools/placement_tool.cpp:311
+#: pcbnew/tools/placement_tool.cpp:341
 msgid "Distribute horizontally"
 msgstr "Distribuisci orizzontalmente"
 
-#: pcbnew/tools/placement_tool.cpp:354
+#: pcbnew/tools/placement_tool.cpp:384
 msgid "Distribute vertically"
 msgstr "Distribuisci verticalmente"
 
@@ -17287,27 +17287,27 @@ msgstr "Cancellare tutti gli elementi dello strato %s?"
 msgid "This is the default net class."
 msgstr "Questo è il gruppo di collegamenti predefinito"
 
-#: pcbnew/class_board.cpp:1109 pcbnew/pcb_draw_panel_gal.cpp:339
+#: pcbnew/class_board.cpp:1109 pcbnew/pcb_draw_panel_gal.cpp:338
 #: pcbnew/class_netinfo_item.cpp:140
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:154
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 msgid "Vias"
 msgstr "Via"
 
-#: pcbnew/class_board.cpp:1112 pcbnew/pcb_draw_panel_gal.cpp:342
+#: pcbnew/class_board.cpp:1112 pcbnew/pcb_draw_panel_gal.cpp:341
 msgid "Track Segments"
 msgstr "Segmenti di pista"
 
-#: pcbnew/class_board.cpp:1115 pcbnew/pcb_draw_panel_gal.cpp:345
+#: pcbnew/class_board.cpp:1115 pcbnew/pcb_draw_panel_gal.cpp:344
 msgid "Nodes"
 msgstr "Nodi"
 
-#: pcbnew/class_board.cpp:1118 pcbnew/pcb_draw_panel_gal.cpp:348
+#: pcbnew/class_board.cpp:1118 pcbnew/pcb_draw_panel_gal.cpp:347
 #: pcbnew/dialogs/dialog_select_net_from_list_base.h:58
 msgid "Nets"
 msgstr "Piste"
 
-#: pcbnew/class_board.cpp:1121 pcbnew/pcb_draw_panel_gal.cpp:351
+#: pcbnew/class_board.cpp:1121 pcbnew/pcb_draw_panel_gal.cpp:350
 #: pcbnew/dialogs/dialog_drc_base.cpp:266
 msgid "Unconnected"
 msgstr "Disconnessi"
@@ -20861,23 +20861,23 @@ msgstr "Impostazioni piazzola"
 msgid "Modified alignment target"
 msgstr "Obiettivo di allineamento modificato"
 
-#: pcbnew/zone_filler.cpp:121
+#: pcbnew/zone_filler.cpp:125
 msgid "Calculating zone fills..."
 msgstr "Calcolo riempimento zone..."
 
-#: pcbnew/zone_filler.cpp:163
+#: pcbnew/zone_filler.cpp:167
 msgid "Removing insulated copper islands..."
 msgstr "Rimozione isole di rame isolate..."
 
-#: pcbnew/zone_filler.cpp:185
+#: pcbnew/zone_filler.cpp:189
 msgid "Caching polygon triangulations..."
 msgstr "Rilevamento triangolazione poligoni..."
 
-#: pcbnew/zone_filler.cpp:216
+#: pcbnew/zone_filler.cpp:220
 msgid "Committing changes..."
 msgstr "Inserimeno cambiamenti..."
 
-#: pcbnew/zone_filler.cpp:223
+#: pcbnew/zone_filler.cpp:227
 msgid "Fill Zone(s)"
 msgstr "Riempimento zone"
 
@@ -27542,6 +27542,15 @@ msgstr "Opzioni di esportazione VRML"
 #: pcbnew/dialogs/dialog_cleaning_options_base.h:50
 msgid "Cleaning Options"
 msgstr "Opzioni di cancellazione"
+
+#~ msgid "Gap"
+#~ msgstr "Spazio"
+
+#~ msgid "Stub"
+#~ msgstr "Segmento"
+
+#~ msgid "Arc Stub"
+#~ msgstr "Spezzone di arco"
 
 #~ msgid "Filling zone %d out of %d (net %s)..."
 #~ msgstr "Riempimento zona %d fuori di %d (collegamento %s)..."
