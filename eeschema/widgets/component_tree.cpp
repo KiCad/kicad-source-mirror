@@ -149,8 +149,9 @@ void COMPONENT_TREE::Regenerate()
     else
         current = getState();
 
-    m_adapter->UpdateSearchString( m_query_ctrl->GetLineText( 0 ) );
-    m_filtering = !m_query_ctrl->IsEmpty();
+    wxString filter = m_query_ctrl->GetValue();
+    m_adapter->UpdateSearchString( filter );
+    m_filtering = !filter.IsEmpty();
     postPreselectEvent();
 
     // Restore the state
