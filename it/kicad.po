@@ -74,7 +74,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-13 08:29+0100\n"
-"PO-Revision-Date: 2017-12-13 08:32+0100\n"
+"PO-Revision-Date: 2017-12-13 08:37+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -1873,11 +1873,11 @@ msgstr "Autori modelli 3D"
 
 #: common/dialog_about/AboutDialog_main.cpp:426
 msgid "Symbols by"
-msgstr "Simboli per"
+msgstr "Autori simboli"
 
 #: common/dialog_about/AboutDialog_main.cpp:433
 msgid "Footprints by"
-msgstr "Impronte per"
+msgstr "Autori impronte"
 
 #: common/class_marker_base.cpp:203
 msgid "Marker Info"
