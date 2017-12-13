@@ -601,6 +601,13 @@ void PCB_MODULE::AddToBoard()
             m_moduleObjects[i]->AddToModule( module );
     }
 
+    // MODULE POLYGONS
+    for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
+    {
+        if( m_moduleObjects[i]->m_objType == wxT( 'Z' ) )
+            m_moduleObjects[i]->AddToModule( module );
+    }
+
     // PADS
     for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
     {
@@ -631,6 +638,7 @@ void PCB_MODULE::Flip()
         {
             if( m_moduleObjects[i]->m_objType == wxT( 'L' ) || // lines
                 m_moduleObjects[i]->m_objType == wxT( 'A' ) || // arcs
+                m_moduleObjects[i]->m_objType == wxT( 'Z' ) || // polygons
                 m_moduleObjects[i]->m_objType == wxT( 'P' ) || // pads
                 m_moduleObjects[i]->m_objType == wxT( 'V' ) )  // vias
             {
