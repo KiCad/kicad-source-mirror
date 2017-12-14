@@ -52,11 +52,6 @@ public:
     virtual void Update( VIEW_ITEM* aItem ) override;
 
     void UpdateDisplayOptions( PCB_DISPLAY_OPTIONS* aOptions );
-private:
-
-    PCB_LAYER_ID m_activeLayer;
-    PCB_LAYER_ID m_routeLayerTop;
-    PCB_LAYER_ID m_routeLayerBottom;
 };
 
 }
