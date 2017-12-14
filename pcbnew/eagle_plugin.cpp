@@ -96,9 +96,9 @@ static int parseEagle( const wxString& aDistance )
 
 /// Assemble a two part key as a simple concatenation of aFirst and aSecond parts,
 /// using a separator.
-static string makeKey( const string& aFirst, const string& aSecond )
+static wxString makeKey( const wxString& aFirst, const wxString& aSecond )
 {
-    string key = aFirst + '\x02' +  aSecond;
+    wxString key = aFirst + '\x02' +  aSecond;
     return key;
 }
 
@@ -237,7 +237,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
     // Catch all exceptions thrown from the parser.
     catch( const XML_PARSER_ERROR &exc )
     {
-        string errmsg = exc.what();
+        wxString errmsg = exc.what();
 
         errmsg += "\n@ ";
         errmsg += m_xpath->Contents();
@@ -746,7 +746,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 }
 
 
-void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const string* aLibName )
+void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
 {
     m_xpath->push( "packages" );
 
@@ -766,14 +766,12 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const string* aLibName )
         m_xpath->push( "package", "name" );
 
         const wxString& pack_ref = package->GetAttribute( "name" );
-
-        string pack_name( pack_ref.ToStdString() );
-
+        std::string pack_name( pack_ref );
         ReplaceIllegalFileNameChars( &pack_name );
 
         m_xpath->Value( pack_name.c_str() );
 
-        string key = aLibName ? makeKey( *aLibName, pack_name ) : pack_name;
+        wxString key = aLibName ? makeKey( *aLibName, pack_name ) : pack_name;
 
         MODULE* m = makeModule( package, pack_name );
 
@@ -813,12 +811,10 @@ void EAGLE_PLUGIN::loadLibraries( wxXmlNode* aLibs )
 
     while( library )
     {
-        const string& lib_name = library->GetAttribute( "name" ).ToStdString();
+        const wxString& lib_name = library->GetAttribute( "name" );
 
         m_xpath->Value( lib_name.c_str() );
-
         loadLibrary( library, &lib_name );
-
         library = library->GetNext();
     }
 
@@ -856,7 +852,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 
         m_xpath->Value( e.name.c_str() );
 
-        string pkg_key = makeKey( e.library, e.package );
+        wxString pkg_key = makeKey( e.library, e.package );
 
         MODULE_CITER mi = m_templates.find( pkg_key );
 
@@ -875,7 +871,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
         // update the nets within the pads of the clone
         for( D_PAD* pad = m->PadsList();  pad;  pad = pad->Next() )
         {
-            string pn_key  = makeKey( e.name, TO_UTF8( pad->GetName() ) );
+            wxString pn_key = makeKey( e.name, pad->GetName() );
 
             NET_MAP_CITER ni = m_pads_to_nets.find( pn_key );
             if( ni != m_pads_to_nets.end() )
@@ -1001,7 +997,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
                         switch( *a.display )
                         {
                         case EATTR::VALUE :
-                            valueAttr->value = e.value;
+                            valueAttr->value = opt_wxString( e.value );
                             m->SetValue( e.value );
                             if( valueNamePresetInPackageLayout )
                                 m->Value().SetVisible( true );
@@ -1016,7 +1012,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
                         case EATTR::BOTH :
                             if( valueNamePresetInPackageLayout )
                                 m->Value().SetVisible( true );
-                            valueAttr->value = "VALUE = " + e.value;
+                            valueAttr->value = opt_wxString( "VALUE = " + e.value );
                             m->SetValue( "VALUE = " + e.value );
                             break;
 
@@ -1025,7 +1021,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
                             break;
 
                         default:
-                            valueAttr->value =  e.value;
+                            valueAttr->value = opt_wxString( e.value );
                             if( valueNamePresetInPackageLayout )
                                 m->Value().SetVisible( true );
                         }
@@ -1182,7 +1178,7 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
 }
 
 
-MODULE* EAGLE_PLUGIN::makeModule( wxXmlNode* aPackage, const string& aPkgName ) const
+MODULE* EAGLE_PLUGIN::makeModule( wxXmlNode* aPackage, const wxString& aPkgName ) const
 {
     std::unique_ptr<MODULE> m( new MODULE( m_board ) );
 
@@ -1722,11 +1718,10 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
 
         zones.clear();
 
-        const string& nname = net->GetAttribute( "name" ).ToStdString();
-        wxString netName = FROM_UTF8( nname.c_str() );
+        const wxString& netName = net->GetAttribute( "name" );
         m_board->Add( new NETINFO_ITEM( m_board, netName, netCode ) );
 
-        m_xpath->Value( nname.c_str() );
+        m_xpath->Value( netName );
 
         // Get the first net item and iterate
         wxXmlNode* netItem = net->GetChildren();
@@ -1735,6 +1730,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
         while( netItem )
         {
             const wxString& itemName = netItem->GetName();
+
             if( itemName == "wire" )
             {
                 m_xpath->push( "wire" );
@@ -1842,14 +1838,13 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                 m_xpath->push( "contactref" );
                 // <contactref element="RN1" pad="7"/>
 
-                const string& reference = netItem->GetAttribute( "element" ).ToStdString();
-                const string& pad       = netItem->GetAttribute( "pad" ).ToStdString();
+                const wxString& reference = netItem->GetAttribute( "element" );
+                const wxString& pad       = netItem->GetAttribute( "pad" );
+                wxString key = makeKey( reference, pad ) ;
 
-                string key = makeKey( reference, pad ) ;
+                // D(printf( "adding refname:'%s' pad:'%s' netcode:%d netname:'%s'\n", reference.c_str(), pad.c_str(), netCode, netName.c_str() );)
 
-                // D(printf( "adding refname:'%s' pad:'%s' netcode:%d netname:'%s'\n", reference.c_str(), pad.c_str(), netCode, nname.c_str() );)
-
-                m_pads_to_nets[ key ] = ENET( netCode, nname );
+                m_pads_to_nets[ key ] = ENET( netCode, netName );
 
                 m_xpath->pop();
 
@@ -2030,9 +2025,9 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
 }
 
 
-const string& EAGLE_PLUGIN::eagle_layer_name( int aLayer ) const
+const wxString& EAGLE_PLUGIN::eagle_layer_name( int aLayer ) const
 {
-    static const string unknown( "unknown" );
+    static const wxString unknown( "unknown" );
     auto it = m_eagleLayers.find( aLayer );
     return it == m_eagleLayers.end() ? unknown : it->second.name;
 }
@@ -2193,12 +2188,8 @@ MODULE* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxStrin
         const PROPERTIES* aProperties )
 {
     init( aProperties );
-
     cacheLib( aLibraryPath );
-
-    string key = TO_UTF8( aFootprintName );
-
-    MODULE_CITER mi = m_templates.find( key );
+    MODULE_CITER mi = m_templates.find( aFootprintName );
 
     if( mi == m_templates.end() )
         return NULL;
