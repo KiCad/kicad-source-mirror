@@ -381,13 +381,10 @@ int PCB_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
 int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 {
     MODULE* module = aEvent.Parameter<MODULE*>();
-    KIGFX::VIEW* view = getView();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    BOARD* board = getModel<BOARD>();
-
-    // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( view );
-    view->Add( &preview );
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    SELECTION& selection = selTool->GetSelection();
+    BOARD_COMMIT commit( m_frame );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     controls->ShowCursor( true );
@@ -398,12 +395,11 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 
     // Add all the drawable parts to preview
     VECTOR2I cursorPos = controls->GetCursorPosition();
+
     if( module )
     {
         module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-        preview.Add( module );
-        module->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Add, &preview, _1 ) );
-        view->Update( &preview );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, module );
     }
 
     // Main loop: keep receiving events
@@ -415,33 +411,15 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         {
             if( module )
             {
-                delete module;
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+                commit.Revert();
                 module = NULL;
-
-                preview.Clear();
-                controls->ShowCursor( true );
             }
-            else
+            else    // let's have another chance placing a module
                 break;
 
             if( evt->IsActivate() )  // now finish unconditionally
                 break;
-        }
-
-        else if( module && evt->Category() == TC_COMMAND )
-        {
-            if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) )
-            {
-                const auto rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle(
-                        *m_frame, *evt );
-                module->Rotate( module->GetPosition(), rotationAngle );
-                view->Update( &preview );
-            }
-            else if( evt->IsAction( &PCB_ACTIONS::flip ) )
-            {
-                module->Flip( module->GetPosition() );
-                view->Update( &preview );
-            }
         }
 
         else if( evt->IsClick( BUT_LEFT ) )
@@ -456,24 +434,16 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
                 if( module == NULL )
                     continue;
 
-                // Module has been added in LoadModuleFromLibrary(),
-                // so we have to remove it before committing the change     @todo LEGACY
-                board->Remove( module );
+                // NOTE: Module has been already added in LoadModuleFromLibrary(),
+                commit.Added( module );
                 module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-
-                // Add all the drawable parts to preview
-                preview.Add( module );
-                module->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Add, &preview, _1 ) );
+                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, module );
+                controls->SetCursorPosition( cursorPos, false );
             }
             else
             {
-                BOARD_COMMIT commit( m_frame );
-                commit.Add( module );
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
                 commit.Push( _( "Place a module" ) );
-
-                // Remove from preview
-                preview.Remove( module );
-                module->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Remove, &preview, _1 ) );
                 module = NULL;  // to indicate that there is no module that we currently modify
             }
 
@@ -481,22 +451,16 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 
             controls->SetAutoPan( placing );
             controls->CaptureCursor( placing );
-            controls->ShowCursor( !placing );
         }
 
         else if( module && evt->IsMotion() )
         {
             module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-            view->Update( &preview );
+            selection.SetReferencePoint( cursorPos );
+            getView()->Update( &selection );
         }
     }
 
-    controls->ShowCursor( false );
-    controls->SetSnapping( false );
-    controls->SetAutoPan( false );
-    controls->CaptureCursor( false );
-
-    view->Remove( &preview );
     m_frame->SetNoToolSelected();
 
     return 0;
