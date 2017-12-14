@@ -3457,18 +3457,16 @@ void SCH_LEGACY_PLUGIN_CACHE::saveSymbol( LIB_PART* aSymbol,
                        aSymbol->GetUnitCount(), aSymbol->UnitsLocked() ? 'L' : 'F',
                        aSymbol->IsPower() ? 'P' : 'N' );
 
-    long dateModified = aSymbol->GetDateModified();
+    timestamp_t dateModified = aSymbol->GetDateLastEdition();
 
     if( dateModified != 0 )
     {
-        int year, mon, day, hour, min, sec;
-
-        sec  = dateModified & 63;
-        min  = ( dateModified >> 6 ) & 63;
-        hour = ( dateModified >> 12 ) & 31;
-        day  = ( dateModified >> 17 ) & 31;
-        mon  = ( dateModified >> 22 ) & 15;
-        year = ( dateModified >> 26 ) + 1990;
+        int sec  = dateModified & 63;
+        int min  = ( dateModified >> 6 ) & 63;
+        int hour = ( dateModified >> 12 ) & 31;
+        int day  = ( dateModified >> 17 ) & 31;
+        int mon  = ( dateModified >> 22 ) & 15;
+        int year = ( dateModified >> 26 ) + 1990;
 
         aFormatter->Print( 0, "Ti %d/%d/%d %d:%d:%d\n", year, mon, day, hour, min, sec );
     }

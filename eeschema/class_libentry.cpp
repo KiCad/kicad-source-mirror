@@ -151,7 +151,7 @@ LIB_PART::LIB_PART( const wxString& aName, PART_LIB* aLibrary ) :
     EDA_ITEM( LIB_PART_T ),
     m_me( this, null_deleter() )
 {
-    m_dateModified        = 0;
+    m_dateLastEdition     = 0;
     m_unitCount           = 1;
     m_pinNameOffset       = 40;
     m_options             = ENTRY_NORMAL;
@@ -184,7 +184,7 @@ LIB_PART::LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary ) :
     m_pinNameOffset       = aPart.m_pinNameOffset;
     m_showPinNumbers      = aPart.m_showPinNumbers;
     m_showPinNames        = aPart.m_showPinNames;
-    m_dateModified        = aPart.m_dateModified;
+    m_dateLastEdition     = aPart.m_dateLastEdition;
     m_options             = aPart.m_options;
     m_libId               = aPart.m_libId;
 
@@ -848,15 +848,15 @@ bool LIB_PART::SaveDateAndTime( OUTPUTFORMATTER& aFormatter )
 {
     int year, mon, day, hour, min, sec;
 
-    if( m_dateModified == 0 )
+    if( m_dateLastEdition == 0 )
         return true;
 
-    sec  = m_dateModified & 63;
-    min  = ( m_dateModified >> 6 ) & 63;
-    hour = ( m_dateModified >> 12 ) & 31;
-    day  = ( m_dateModified >> 17 ) & 31;
-    mon  = ( m_dateModified >> 22 ) & 15;
-    year = ( m_dateModified >> 26 ) + 1990;
+    sec  = m_dateLastEdition & 63;
+    min  = ( m_dateLastEdition >> 6 ) & 63;
+    hour = ( m_dateLastEdition >> 12 ) & 31;
+    day  = ( m_dateLastEdition >> 17 ) & 31;
+    mon  = ( m_dateLastEdition >> 22 ) & 15;
+    year = ( m_dateLastEdition >> 26 ) + 1990;
 
     aFormatter.Print( 0, "Ti %d/%d/%d %d:%d:%d\n", year, mon, day, hour, min, sec );
 
@@ -875,7 +875,7 @@ bool LIB_PART::LoadDateAndTime( char* aLine )
     if( sscanf( aLine, "%d/%d/%d %d:%d:%d", &year, &mon, &day, &hour, &min, &sec ) != 6 )
         return false;
 
-    m_dateModified = ( sec & 63 ) + ( ( min & 63 ) << 6 ) +
+    m_dateLastEdition = ( sec & 63 ) + ( ( min & 63 ) << 6 ) +
                      ( ( hour & 31 ) << 12 ) + ( ( day & 31 ) << 17 ) +
                      ( ( mon & 15 ) << 22 ) + ( ( year - 1990 ) << 26 );
 

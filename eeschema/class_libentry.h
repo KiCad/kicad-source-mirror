@@ -221,7 +221,7 @@ class LIB_PART : public EDA_ITEM
                                             ///< one unit does not automatically change another unit.
     bool                m_showPinNames;     ///< Determines if part pin names are visible.
     bool                m_showPinNumbers;   ///< Determines if part pin numbers are visible.
-    long                m_dateModified;     ///< Date the part was last modified.
+    timestamp_t         m_dateLastEdition;  ///< Date of the last modification.
     LIBRENTRYOPTIONS    m_options;          ///< Special part features such as POWER or NORMAL.)
     int                 m_unitCount;        ///< Number of units (parts) per package.
     LIB_ITEMS_CONTAINER m_drawings;         ///< Drawing items of this part.
@@ -280,7 +280,7 @@ public:
 
     LIB_ALIAS* GetAlias( const wxString& aName );
 
-    long GetDateModified() const { return m_dateModified; }
+    timestamp_t GetDateLastEdition() const { return m_dateLastEdition; }
 
     /**
      * Add an alias \a aName to the part.
