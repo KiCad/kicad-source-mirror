@@ -30,7 +30,7 @@
  */
 #include "shapes.h"
 #include <iostream>
-#include <exception>
+#include <stdexcept>
 
 namespace p2t {
 
