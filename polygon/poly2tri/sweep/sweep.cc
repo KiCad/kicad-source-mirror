@@ -701,7 +701,7 @@ void Sweep::FlipEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle* t, 
   Point& op = *ot->OppositePoint(*t, p);
 
   if (ot == nullptr) {
-    throw std::invalid_argument("Polygon contains overlapping hole vertices.");
+    throw std::runtime_error("Polygon contains overlapping hole vertices.");
   }
 
   if (InScanArea(p, *t->PointCCW(p), *t->PointCW(p), op)) {
@@ -761,7 +761,7 @@ Point& Sweep::NextFlipPoint(Point& ep, Point& eq, Triangle& ot, Point& op)
     // Left
     return *ot.PointCW(op);
   } else{
-    throw std::invalid_argument("Polygon contains overlapping hole vertices.");
+    throw std::runtime_error("Polygon contains overlapping hole vertices.");
     return ep;     // Arbitrary return val -- fixes warning
   }
 }
@@ -773,7 +773,7 @@ void Sweep::FlipScanEdgeEvent(SweepContext& tcx, Point& ep, Point& eq, Triangle&
   Point& op = *ot->OppositePoint(t, p);
 
   if (ot == NULL) {
-      throw std::invalid_argument("Polygon contains overlapping hole vertices.");
+      throw std::runtime_error("Polygon contains overlapping hole vertices.");
   }
 
   if (InScanArea(eq, *flip_triangle.PointCCW(eq), *flip_triangle.PointCW(eq), op)) {

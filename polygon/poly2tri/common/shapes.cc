@@ -53,7 +53,7 @@ void Triangle::MarkNeighbor(Point* p1, Point* p2, Triangle* t)
   else if ((p1 == points_[0] && p2 == points_[1]) || (p1 == points_[1] && p2 == points_[0]))
     neighbors_[2] = t;
   else
-    throw std::invalid_argument("Polygon contains overlapping hole vertices.");
+    throw std::runtime_error("Polygon contains overlapping hole vertices.");
 }
 
 // Exhaustive search to update neighbor pointers
@@ -151,7 +151,7 @@ void Triangle::Legalize(Point& opoint, Point& npoint)
     points_[2] = points_[1];
     points_[1] = &npoint;
   } else {
-      throw std::invalid_argument("Polygon contains overlapping hole vertices.");
+      throw std::runtime_error("Polygon contains overlapping hole vertices.");
   }
 }
 
@@ -164,7 +164,7 @@ int Triangle::Index(const Point* p)
   } else if (p == points_[2]) {
     return 2;
   }
-  throw std::invalid_argument("Polygon contains overlapping hole vertices.");
+  throw std::runtime_error("Polygon contains overlapping hole vertices.");
   return 0;
 }
 
@@ -224,7 +224,7 @@ Point* Triangle::PointCW(Point& point)
   } else if (&point == points_[2]) {
     return points_[1];
   }
-  throw std::invalid_argument("Polygon contains overlapping hole vertices.");
+  throw std::runtime_error("Polygon contains overlapping hole vertices.");
   return NULL;
 }
 
@@ -238,7 +238,7 @@ Point* Triangle::PointCCW(Point& point)
   } else if (&point == points_[2]) {
     return points_[0];
   }
-  throw std::invalid_argument("Polygon contains overlapping hole vertices.");
+  throw std::runtime_error("Polygon contains overlapping hole vertices.");
   return NULL;
 }
 
