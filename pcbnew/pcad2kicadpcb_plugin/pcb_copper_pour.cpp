@@ -52,18 +52,11 @@ PCB_COPPER_POUR::~PCB_COPPER_POUR()
 
 bool PCB_COPPER_POUR::Parse( XNODE*         aNode,
                              wxString       aDefaultMeasurementUnit,
-                             wxString       aActualConversion,
-                             wxStatusBar*   aStatusBar )
+                             wxString       aActualConversion )
 {
     XNODE*          lNode;
     wxString        pourType, str, propValue;
     int             pourSpacing, thermalWidth;
-
-    // aStatusBar->SetStatusText( aStatusBar->GetStatusText() + wxT( " CooperPour..." ) );
-
-    //str = FindNode( aNode, wxT( "pourType" ) )->GetNodeContent();
-    //str.Trim( false );
-    //pourType = str.MakeUpper();
 
     lNode = FindNode( aNode, wxT( "netNameRef" ) );
 

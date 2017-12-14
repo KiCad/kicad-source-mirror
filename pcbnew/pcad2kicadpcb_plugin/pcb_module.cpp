@@ -327,8 +327,7 @@ void PCB_MODULE::DoLayerContentsObjects( XNODE*                 aNode,
                 polygon = new PCB_POLYGON( m_callbacks, m_board, PCadLayer );
                 if( polygon->Parse( lNode,
                                     aDefaultMeasurementUnit,
-                                    aActualConversion,
-                                    aStatusBar ) )
+                                    aActualConversion ) )
                     aList->Add( polygon );
                 else
                     delete polygon;
@@ -339,8 +338,7 @@ void PCB_MODULE::DoLayerContentsObjects( XNODE*                 aNode,
         {
             copperPour = new PCB_COPPER_POUR( m_callbacks, m_board, PCadLayer );
 
-            if( copperPour->Parse( lNode, aDefaultMeasurementUnit, aActualConversion,
-                                   aStatusBar ) )
+            if( copperPour->Parse( lNode, aDefaultMeasurementUnit, aActualConversion ) )
                 aList->Add( copperPour );
             else
                 delete copperPour;
@@ -360,8 +358,7 @@ void PCB_MODULE::DoLayerContentsObjects( XNODE*                 aNode,
         {
             plane = new PCB_PLANE( m_callbacks, m_board, PCadLayer );
 
-            if( plane->Parse( lNode, aDefaultMeasurementUnit, aActualConversion,
-                              aStatusBar ) )
+            if( plane->Parse( lNode, aDefaultMeasurementUnit, aActualConversion ) )
                 aList->Add( plane );
             else
                 delete plane;

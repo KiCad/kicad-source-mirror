@@ -59,9 +59,9 @@ public:
     int             GetNewTimestamp() override;
     int             GetNetCode( wxString aNetName ) override;
 
-    void            Parse( wxStatusBar* aStatusBar,
+    void            ParseBoard( wxStatusBar* aStatusBar,
                            wxXmlDocument* aXmlDoc,
-                           wxString     aActualConversion );
+                           wxString aActualConversion );
 
     void            AddToBoard() override;
 

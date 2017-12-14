@@ -125,13 +125,10 @@ void PCB_POLYGON::FormPolygon( XNODE*   aNode, VERTICES_ARRAY* aPolygon,
 
 bool PCB_POLYGON::Parse( XNODE*         aNode,
                          wxString       aDefaultMeasurementUnit,
-                         wxString       aActualConversion,
-                         wxStatusBar*   aStatusBar )
+                         wxString       aActualConversion )
 {
     XNODE*      lNode;
     wxString    propValue;
-
-    // aStatusBar->SetStatusText( aStatusBar->GetStatusText() + wxT( " Polygon..." ) );
 
     lNode = FindNode( aNode, wxT( "netNameRef" ) );
 

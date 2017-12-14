@@ -53,8 +53,7 @@ public:
 
     virtual bool Parse( XNODE*          aNode,
                         wxString        aDefaultMeasurementUnit,
-                        wxString        aActualConversion,
-                        wxStatusBar*    aStatusBar );
+                        wxString        aActualConversion );
 
     virtual void    SetPosOffset( int aX_offs, int aY_offs ) override;
     void            AddToModule( MODULE* aModule ) override;
