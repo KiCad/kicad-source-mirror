@@ -317,16 +317,24 @@ void BOARD_COMMIT::Revert()
         COMMIT_LINE& ent = *it;
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( ent.m_item );
         BOARD_ITEM* copy = static_cast<BOARD_ITEM*>( ent.m_copy );
+        int changeType = ent.m_type & CHT_TYPE;
+        int changeFlags = ent.m_type & CHT_FLAGS;
 
-        switch( ent.m_type )
+        switch( changeType )
         {
         case CHT_ADD:
+            if( !( changeFlags & CHT_DONE ) )
+                break;
 
             view->Remove( item );
             connectivity->Remove( item );
+            board->Remove( item );
             break;
 
         case CHT_REMOVE:
+            if( !( changeFlags & CHT_DONE ) )
+                break;
+
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* newModule = static_cast<MODULE*>( item );
@@ -335,6 +343,7 @@ void BOARD_COMMIT::Revert()
 
             view->Add( item );
             connectivity->Add( item );
+            board->Add( item );
             break;
 
         case CHT_MODIFY:
@@ -343,7 +352,6 @@ void BOARD_COMMIT::Revert()
             connectivity->Remove( item );
 
             item->SwapData( copy );
-
             item->ClearFlags( SELECTED );
 
             // Update all pads/drawings/texts, as they become invalid
