@@ -94,8 +94,6 @@ int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
 {
     std::vector<ZONE_CONTAINER*> toFill;
 
-    BOARD_COMMIT commit( this );
-
     for( auto zone : GetBoard()->Zones() )
     {
         toFill.push_back(zone);

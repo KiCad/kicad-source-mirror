@@ -57,6 +57,9 @@ const BOX2I RATSNEST_VIEWITEM::ViewBBox() const
 
 void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
+    if( !m_data->TryLock() )
+        return;
+
     constexpr int CROSS_SIZE = 200000;
 
     auto gal = aView->GetGAL();
@@ -120,6 +123,8 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             }
         }
     }
+
+    m_data->Unlock();
 }
 
 

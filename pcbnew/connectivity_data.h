@@ -27,6 +27,7 @@
 #define __CONNECTIVITY_DATA_H
 
 #include <core/typeinfo.h>
+#include <core/lockable.h>
 
 #include <wx/string.h>
 #include <vector>
@@ -67,7 +68,7 @@ struct RN_DYNAMIC_LINE
 };
 
 // a wrapper class encompassing the connectivity computation algorithm and the
-class CONNECTIVITY_DATA
+class CONNECTIVITY_DATA : public LOCKABLE
 {
 public:
     CONNECTIVITY_DATA();
