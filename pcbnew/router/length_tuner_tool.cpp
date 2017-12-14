@@ -41,6 +41,7 @@
 #include "pns_tune_status_popup.h"
 
 #include "length_tuner_tool.h"
+#include <bitmaps.h>
 
 using namespace KIGFX;
 
@@ -51,19 +52,24 @@ static TOOL_ACTION ACT_EndTuning( "pcbnew.LengthTuner.EndTuning", AS_CONTEXT, WX
     _( "End Track" ), _( "Stops laying the current meander." ) );
 
 static TOOL_ACTION ACT_Settings( "pcbnew.LengthTuner.Settings", AS_CONTEXT, 'L',
-    _( "Length Tuning Settings" ), _( "Sets the length tuning parameters for currently routed item." ) );
+    _( "Length Tuning Settings" ), _( "Sets the length tuning parameters for currently routed item." ),
+    router_len_tuner_setup_xpm );
 
 static TOOL_ACTION ACT_SpacingIncrease( "pcbnew.LengthTuner.SpacingIncrease", AS_CONTEXT, '1',
-    _( "Increase spacing" ), _( "Increase meander spacing by one step." ) );
+    _( "Increase spacing" ), _( "Increase meander spacing by one step." ),
+    router_len_tuner_dist_incr_xpm );
 
 static TOOL_ACTION ACT_SpacingDecrease( "pcbnew.LengthTuner.SpacingDecrease", AS_CONTEXT, '2',
-    _( "Decrease spacing" ), _( "Decrease meander spacing by one step." ) );
+    _( "Decrease spacing" ), _( "Decrease meander spacing by one step." ),
+    router_len_tuner_dist_decr_xpm );
 
 static TOOL_ACTION ACT_AmplIncrease( "pcbnew.LengthTuner.AmplIncrease", AS_CONTEXT, '3',
-    _( "Increase amplitude" ), _( "Increase meander amplitude by one step." ) );
+    _( "Increase amplitude" ), _( "Increase meander amplitude by one step." ),
+    router_len_tuner_amplitude_incr_xpm );
 
 static TOOL_ACTION ACT_AmplDecrease( "pcbnew.LengthTuner.AmplDecrease", AS_CONTEXT, '4',
-    _( "Decrease amplitude" ), _( "Decrease meander amplitude by one step." ) );
+    _( "Decrease amplitude" ), _( "Decrease meander amplitude by one step." ),
+    router_len_tuner_amplitude_decr_xpm );
 
 
 LENGTH_TUNER_TOOL::LENGTH_TUNER_TOOL() :
@@ -78,6 +84,7 @@ public:
     TUNER_TOOL_MENU()
     {
         SetTitle( _( "Length Tuner" ) );
+        SetIcon( router_len_tuner_xpm );
         DisplayTitle( true );
 
         //Add( ACT_StartTuning );

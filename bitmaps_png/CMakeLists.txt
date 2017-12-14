@@ -460,6 +460,12 @@ set( BMAPS_MID
     resize_sheet
     rescue
     right
+    router_len_tuner
+    router_len_tuner_setup
+    router_len_tuner_amplitude_decr
+    router_len_tuner_amplitude_incr
+    router_len_tuner_dist_decr
+    router_len_tuner_dist_incr
     rotate_ccw
     rotate_cw
     rotate_neg_x
