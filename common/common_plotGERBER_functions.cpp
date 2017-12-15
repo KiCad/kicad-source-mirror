@@ -854,7 +854,7 @@ void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
     // However, because the anchor pad can be circle or rect, we use only
     // a circle not bigger than the rect.
     // the main purpose is to print a flashed DCode as pad anchor
-    FlashPadCircle( aPadPos, std::min( aSize.x, aSize.x ), aTraceMode, aData );
+    FlashPadCircle( aPadPos, std::min( aSize.x, aSize.y ), aTraceMode, aData );
     GBR_METADATA gbr_metadata;
 
     if( aData )
