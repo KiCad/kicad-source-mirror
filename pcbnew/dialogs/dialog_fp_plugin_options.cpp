@@ -61,7 +61,7 @@ public:
         m_initial_help( INITIAL_HELP )
     {
         wxString title = wxString::Format(
-                _( "Options for Library '%s'" ), GetChars( aNickname ) );
+                _( "Options for Library \"%s\"" ), GetChars( aNickname ) );
 
         SetTitle( title );
 

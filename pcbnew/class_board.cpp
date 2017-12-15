@@ -2737,7 +2737,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                 {
                     if( aReporter )
                     {
-                        msg.Printf( _( "Remove single pad net \"%s\" on \"%s\" pad '%s'\n" ),
+                        msg.Printf( _( "Remove single pad net \"%s\" on \"%s\" pad \"%s\"\n" ),
                                     GetChars( pad->GetNetname() ),
                                     GetChars( pad->GetParent()->GetReference() ),
                                     GetChars( pad->GetName() ) );
@@ -2781,7 +2781,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     continue;   // OK, pad found
 
                 // not found: bad footprint, report error
-                msg.Printf( _( "Component '%s' pad '%s' not found in footprint '%s'\n" ),
+                msg.Printf( _( "Component \"%s\" pad \"%s\" not found in footprint \"%s\"\n" ),
                             GetChars( component->GetReference() ),
                             GetChars( padname ),
                             GetChars( footprint->GetFPID().Format() ) );
@@ -2799,7 +2799,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
 
             if( m_connectivity->GetPadCount( zone->GetNetCode() ) == 0 )
             {
-                msg.Printf( _( "Copper zone (net name '%s'): net has no pads connected." ),
+                msg.Printf( _( "Copper zone (net name \"%s\"): net has no pads connected." ),
                            GetChars( zone->GetNet()->GetNetname() ) );
                 aReporter->Report( msg, REPORTER::RPT_WARNING );
             }

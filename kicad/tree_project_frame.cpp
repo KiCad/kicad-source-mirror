@@ -755,7 +755,7 @@ void TREE_PROJECT_FRAME::OnRenameFile( wxCommandEvent& )
 
     wxString buffer = m_TreeProject->GetItemText( curr_item );
     wxString msg = wxString::Format(
-                    _( "Change filename: '%s'" ),
+                    _( "Change filename: \"%s\"" ),
                     GetChars( tree_data->GetFileName() ) );
 
     wxTextEntryDialog   dlg( this, msg, _( "Change filename" ), buffer );

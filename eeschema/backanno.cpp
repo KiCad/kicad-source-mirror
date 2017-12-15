@@ -245,7 +245,7 @@ bool SCH_EDIT_FRAME::LoadCmpToFootprintLinkFile()
 
     if( !ProcessCmpToFootprintLinkFile( filename, forceVisibility, visibilityState ) )
     {
-        wxString msg = wxString::Format( _( "Failed to open component-footprint link file '%s'" ),
+        wxString msg = wxString::Format( _( "Failed to open component-footprint link file \"%s\"" ),
                                          filename.GetData() );
 
         DisplayError( this, msg );

@@ -202,7 +202,7 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
 
                     wxString msg;
 
-                    msg.Printf( _( "Cannot create folder '%s'." ), destpath );
+                    msg.Printf( _( "Cannot create folder \"%s\"." ), destpath );
                     *aErrorMsg += msg;
                 }
 
@@ -224,7 +224,7 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
 
                 wxString msg;
 
-                msg.Printf( _( "Cannot copy file '%s'." ), dstFile );
+                msg.Printf( _( "Cannot copy file \"%s\"." ), dstFile );
                 *aErrorMsg += msg;
             }
 

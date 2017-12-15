@@ -227,7 +227,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
     LIB_ID fpid;
 
     wxCHECK_MSG( fpid.Parse( moduleName ) < 0, NULL,
-                 wxString::Format( wxT( "Could not parse LIB_ID string '%s'." ),
+                 wxString::Format( wxT( "Could not parse LIB_ID string \"%s\"." ),
                                    GetChars( moduleName ) ) );
 
     try
@@ -257,7 +257,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         else
         {
             wxCHECK_MSG( fpid.Parse( moduleName ) < 0, NULL,
-                         wxString::Format( wxT( "Could not parse LIB_ID string '%s'." ),
+                         wxString::Format( wxT( "Could not parse LIB_ID string \"%s\"." ),
                                            GetChars( moduleName ) ) );
 
             try
@@ -568,7 +568,7 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
             std::unique_ptr<MODULE> m( cur->FootprintLoad( curLibPath, mods[i] ) );
             dst->FootprintSave( dstLibPath, m.get() );
 
-            msg = wxString::Format( _( "Footprint '%s' saved" ),
+            msg = wxString::Format( _( "Footprint \"%s\" saved" ),
                                     GetChars( mods[i] ) );
             SetStatusText( msg );
 
@@ -582,7 +582,7 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
     }
 
     msg = wxString::Format(
-                    _( "Footprint library '%s' saved as '%s'." ),
+                    _( "Footprint library \"%s\" saved as \"%s\"." ),
                     GetChars( curLibPath ), GetChars( dstLibPath ) );
 
     DisplayInfoMessage( this, msg );

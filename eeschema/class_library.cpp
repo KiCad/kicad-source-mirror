@@ -51,7 +51,7 @@
 #include <wx/regex.h>
 
 #define DUPLICATE_NAME_MSG  \
-    _(  "Library '%s' has duplicate entry name '%s'.\n" \
+    _(  "Library \"%s\" has duplicate entry name \"%s\".\n" \
         "This may cause some unexpected behavior when loading components into a schematic." )
 
 
@@ -522,7 +522,7 @@ void PART_LIBS::LibNamesAndPaths( PROJECT* aProject, bool doSave,
         /*
         {
             wxString msg = wxString::Format( _(
-                "Unable save project's '%s' file" ),
+                "Unable save project's \"%s\" file" ),
                 GetChars( pro )
                 );
             THROW_IO_ERROR( msg );
@@ -534,7 +534,7 @@ void PART_LIBS::LibNamesAndPaths( PROJECT* aProject, bool doSave,
         if( !aProject->ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH, ca ) )
         {
             wxString msg = wxString::Format( _(
-                "Unable to load project's '%s' file" ),
+                "Unable to load project's \"%s\" file" ),
                 GetChars( pro )
                 );
             THROW_IO_ERROR( msg );
@@ -649,7 +649,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
             catch( const IO_ERROR& ioe )
             {
                 wxString msg;
-                msg.Printf( _( "Part library '%s' failed to load. Error:\n %s" ),
+                msg.Printf( _( "Part library \"%s\" failed to load. Error:\n %s" ),
                             GetChars( filename ), GetChars( ioe.What() ) );
 
                 wxLogError( msg );
@@ -673,7 +673,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
         catch( const IO_ERROR& ioe )
         {
             wxString msg = wxString::Format( _(
-                    "Part library '%s' failed to load.\nError: %s" ),
+                    "Part library \"%s\" failed to load.\nError: %s" ),
                     GetChars( cache_name ),
                     GetChars( ioe.What() )
                     );

@@ -141,7 +141,7 @@ const wxString GITHUB_PLUGIN::GetFileExtension() const
 void GITHUB_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames,
         const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
-    //D(printf("%s: this:%p  aLibraryPath:'%s'\n", __func__, this, TO_UTF8(aLibraryPath) );)
+    //D(printf("%s: this:%p  aLibraryPath:\"%s\"\n", __func__, this, TO_UTF8(aLibraryPath) );)
     cacheLib( aLibraryPath, aProperties );
 
     typedef std::set<wxString>      MYSET;
@@ -185,7 +185,7 @@ void GITHUB_PLUGIN::PrefetchLib(
 MODULE* GITHUB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
         const wxString& aFootprintName, const PROPERTIES* aProperties )
 {
-    // D(printf("%s: this:%p  aLibraryPath:'%s'\n", __func__, this, TO_UTF8(aLibraryPath) );)
+    // D(printf("%s: this:%p  aLibraryPath:\"%s\"\n", __func__, this, TO_UTF8(aLibraryPath) );)
 
     // clear or set to valid the variable m_pretty_dir
     cacheLib( aLibraryPath, aProperties );
@@ -267,7 +267,7 @@ void GITHUB_PLUGIN::FootprintSave( const wxString& aLibraryPath,
         // IsFootprintLibWritable() to determine if calling FootprintSave() is
         // even legal, so I spend no time on internationalization here:
 
-        string msg = StrPrintf( "Github library\n'%s'\nis only writable if you set option '%s' in Library Tables dialog.",
+        string msg = StrPrintf( "Github library\n\"%s\"\nis only writable if you set option \"%s\" in Library Tables dialog.",
                 TO_UTF8( aLibraryPath ), PRETTY_DIR );
 
         THROW_IO_ERROR( msg );
@@ -297,7 +297,7 @@ void GITHUB_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxStrin
         else
         {
             wxString msg = wxString::Format(
-                    _( "Footprint\n'%s'\nis not in the writable portion of this Github library\n'%s'" ),
+                    _( "Footprint\n\"%s\"\nis not in the writable portion of this Github library\n\"%s\"" ),
                     GetChars( aFootprintName ),
                     GetChars( aLibraryPath )
                     );
@@ -311,7 +311,7 @@ void GITHUB_PLUGIN::FootprintDelete( const wxString& aLibraryPath, const wxStrin
         // IsFootprintLibWritable() to determine if calling FootprintSave() is
         // even legal, so I spend no time on internationalization here:
 
-        string msg = StrPrintf( "Github library\n'%s'\nis only writable if you set option '%s' in Library Tables dialog.",
+        string msg = StrPrintf( "Github library\n\"%s\"\nis only writable if you set option \"%s\" in Library Tables dialog.",
                 TO_UTF8( aLibraryPath ), PRETTY_DIR );
 
         THROW_IO_ERROR( msg );
@@ -413,7 +413,7 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
                   )
                 {
                     wxString msg = wxString::Format(
-                            _( "option '%s' for Github library '%s' must point to a writable directory ending with '.pretty'." ),
+                            _( "option \"%s\" for Github library \"%s\" must point to a writable directory ending with '.pretty'." ),
                             GetChars( FROM_UTF8( PRETTY_DIR ) ),
                             GetChars( aLibraryPath )
                             );
@@ -546,7 +546,7 @@ void GITHUB_PLUGIN::remoteGetZip( const wxString& aRepoURL )
 
     if( !repoURL_zipURL( aRepoURL, &zip_url ) )
     {
-        wxString msg = wxString::Format( _( "Unable to parse URL:\n'%s'" ), GetChars( aRepoURL ) );
+        wxString msg = wxString::Format( _( "Unable to parse URL:\n\"%s\"" ), GetChars( aRepoURL ) );
         THROW_IO_ERROR( msg );
     }
 
@@ -570,7 +570,7 @@ void GITHUB_PLUGIN::remoteGetZip( const wxString& aRepoURL )
         // Note: kcurl.Perform() does not return an error if the file to download is not found
         static const char errorcmd[] = "http GET command failed";  // Do not translate this message
 
-        UTF8 fmt( _( "%s\nCannot get/download Zip archive: '%s'\nfor library path: '%s'.\nReason: '%s'" ) );
+        UTF8 fmt( _( "%s\nCannot get/download Zip archive: \"%s\"\nfor library path: \"%s\".\nReason: \"%s\"" ) );
 
         std::string msg = StrPrintf( fmt.c_str(),
                                      errorcmd,
@@ -587,7 +587,7 @@ void GITHUB_PLUGIN::remoteGetZip( const wxString& aRepoURL )
     if( ( m_zip_image.compare( 0, 9, "Not Found", 9 ) == 0 ) ||
         ( m_zip_image.compare( 0, 14, "404: Not Found", 14 ) == 0 ) )
     {
-        UTF8 fmt( _( "Cannot download library '%s'.\nThe library does not exist on the server" ) );
+        UTF8 fmt( _( "Cannot download library \"%s\".\nThe library does not exist on the server" ) );
         std::string msg = StrPrintf( fmt.c_str(), TO_UTF8( aRepoURL ) );
 
         THROW_IO_ERROR( msg );

@@ -230,7 +230,7 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
 #endif
 
     wxString msg;
-    msg.Printf( _( "Command <%s> could not found" ), GetChars( fullFileName ) );
+    msg.Printf( _( "Command \"%s\" could not found" ), GetChars( fullFileName ) );
     DisplayError( frame, msg, 20 );
     return -1;
 }
@@ -374,14 +374,14 @@ bool OpenPDF( const wxString& file )
         else
         {
             wxString msg;
-            msg.Printf( _( "Problem while running the PDF viewer\nCommand is '%s'" ), command );
+            msg.Printf( _( "Problem while running the PDF viewer\nCommand is \"%s\"" ), command );
             DisplayError( NULL, msg );
         }
     }
     else
     {
         wxString msg;
-        msg.Printf( _( "Unable to find a PDF viewer for '%s'" ), file );
+        msg.Printf( _( "Unable to find a PDF viewer for \"%s\"" ), file );
         DisplayError( NULL, msg );
     }
 

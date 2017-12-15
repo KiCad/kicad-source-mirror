@@ -247,7 +247,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
         {
             if( aReporter )
             {
-                msg.Printf( _( "No footprint defined for component '%s'.\n" ),
+                msg.Printf( _( "No footprint defined for component \"%s\".\n" ),
                             GetChars( component->GetReference() ) );
                 aReporter->Report( msg, REPORTER::RPT_ERROR );
             }
@@ -269,7 +269,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
         {
             if( aReporter )
             {
-                msg.Printf( _( "Footprint of component '%s' changed: board footprint '%s', netlist footprint '%s'\n" ),
+                msg.Printf( _( "Footprint of component \"%s\" changed: board footprint \"%s\", netlist footprint \"%s\"\n" ),
                             GetChars( component->GetReference() ),
                             GetChars( fpOnBoard->GetFPID().Format() ),
                             GetChars( component->GetFPID().Format() ) );
@@ -299,7 +299,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
             {
                 if( aReporter )
                 {
-                    msg.Printf( _( "Component '%s' footprint ID '%s' is not "
+                    msg.Printf( _( "Component \"%s\" footprint ID \"%s\" is not "
                                    "valid.\n" ),
                                 GetChars( component->GetReference() ),
                                 GetChars( component->GetFPID().Format() ) );
@@ -320,7 +320,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
             {
                 if( aReporter )
                 {
-                    msg.Printf( _( "Component '%s' footprint '%s' was not found in "
+                    msg.Printf( _( "Component \"%s\" footprint \"%s\" was not found in "
                                    "any libraries in the footprint library table.\n" ),
                                 GetChars( component->GetReference() ),
                                 GetChars( component->GetFPID().GetLibItemName() ) );

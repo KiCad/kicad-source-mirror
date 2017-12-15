@@ -424,7 +424,7 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
         catch( const IO_ERROR& ioe )
         {
             wxString msg = wxString::Format(
-                    _( "Error occurred saving the global footprint library table:\n'%s'\n%s" ),
+                    _( "Error occurred saving the global footprint library table:\n\"%s\"\n%s" ),
                     GetChars( fileName ),
                     GetChars( ioe.What() )
                     );
@@ -444,7 +444,7 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
         catch( const IO_ERROR& ioe )
         {
             wxString msg = wxString::Format(
-                    _( "Error occurred saving the project footprint library table:\n'%s'\n%s" ),
+                    _( "Error occurred saving the project footprint library table:\n\"%s\"\n%s" ),
                     GetChars( fileName ),
                     GetChars( ioe.What() )
                     );

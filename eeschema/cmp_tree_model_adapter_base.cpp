@@ -119,7 +119,7 @@ void CMP_TREE_MODEL_ADAPTER_BASE::AddLibrariesWithProgress(
 
     for( auto nickname : aNicknames )
     {
-        prg->Update( ii++, wxString::Format( _( "Loading library '%s'" ), nickname ) );
+        prg->Update( ii++, wxString::Format( _( "Loading library \"%s\"" ), nickname ) );
         AddLibrary( nickname );
     }
 

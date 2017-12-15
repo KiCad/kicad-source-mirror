@@ -408,7 +408,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
     {
         if( aReporter )
         {
-            msg.Printf( _( "Zip file '%s' cannot be opened" ), GetChars( aFullFileName ) );
+            msg.Printf( _( "Zip file \"%s\" cannot be opened" ), GetChars( aFullFileName ) );
             aReporter->Report( msg, REPORTER::RPT_ERROR );
         }
 
@@ -450,7 +450,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
         {
             if( aReporter )
             {
-                msg.Printf( _( "Info: skip file <i>'%s'</i> (unknown type)\n" ),
+                msg.Printf( _( "Info: skip file <i>\"%s\"</i> (unknown type)\n" ),
                             GetChars( entry->GetName() ) );
                 aReporter->Report( msg, REPORTER::RPT_WARNING );
             }
@@ -492,7 +492,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
 
                 if( aReporter )
                 {
-                    msg.Printf( _( "<b>Unable to create temporary file '%s'</b>\n"),
+                    msg.Printf( _( "<b>Unable to create temporary file \"%s\"</b>\n"),
                                 GetChars( unzipped_tempfile ) );
                     aReporter->Report( msg, REPORTER::RPT_ERROR );
                 }

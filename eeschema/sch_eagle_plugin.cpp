@@ -336,7 +336,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
     m_kiway = aKiway;
 
     if( !xmlDocument.Load( m_filename.GetFullPath() ) )
-        THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'" ),
+        THROW_IO_ERROR( wxString::Format( _( "Unable to read file \"%s\"" ),
                         m_filename.GetFullPath() ) );
 
     // Delete on exception, if I own m_rootSheet, according to aAppendToMe
@@ -778,7 +778,7 @@ void SCH_EAGLE_PLUGIN::loadSegments( wxXmlNode* aSegmentsNode, const wxString& n
             }
             else    // DEFAULT
             {
-                // THROW_IO_ERROR( wxString::Format( _( "XML node '%s' unknown" ), nodeName ) );
+                // THROW_IO_ERROR( wxString::Format( _( "XML node \"%s\" unknown" ), nodeName ) );
             }
 
             // Get next segment attribute

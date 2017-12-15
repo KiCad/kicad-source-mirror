@@ -60,7 +60,7 @@ void PL_EDITOR_FRAME::OnFileHistory( wxCommandEvent& event )
          if( LoadPageLayoutDescrFile( filename ) )
          {
              wxString msg;
-             msg.Printf( _( "File <%s> loaded"), GetChars( filename ) );
+             msg.Printf( _( "File \"%s\" loaded"), GetChars( filename ) );
              SetStatusText( msg );
          }
 
@@ -124,7 +124,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
             GetScreen()->SetModify();
             RebuildDesignTree();
             m_canvas->Refresh();
-            msg.Printf( _( "File <%s> inserted" ), GetChars( filename ) );
+            msg.Printf( _( "File \"%s\" inserted" ), GetChars( filename ) );
             SetStatusText( msg );
         }
     }
@@ -148,7 +148,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         else
         {
             OnNewPageLayout();
-            msg.Printf( _( "File <%s> loaded" ), GetChars( filename ) );
+            msg.Printf( _( "File \"%s\" loaded" ), GetChars( filename ) );
             SetStatusText( msg );
         }
     }
@@ -157,12 +157,12 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
     case wxID_SAVE:
         if( !SavePageLayoutDescrFile( filename ) )
         {
-            msg.Printf( _( "Unable to write <%s>" ), GetChars( filename ) );
+            msg.Printf( _( "Unable to write \"%s\"" ), GetChars( filename ) );
             wxMessageBox( msg );
         }
         else
         {
-            msg.Printf( _("File <%s> written"), GetChars( filename ) );
+            msg.Printf( _("File \"%s\" written"), GetChars( filename ) );
             SetStatusText( msg );
         }
         break;
@@ -187,13 +187,13 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
         if( !SavePageLayoutDescrFile( filename ) )
         {
-            msg.Printf( _("Unable to create <%s>"), GetChars( filename ) );
+            msg.Printf( _("Unable to create \"%s\""), GetChars( filename ) );
             wxMessageBox( msg );
         }
 
         else
         {
-            msg.Printf( _("File <%s> written"), GetChars( filename ) );
+            msg.Printf( _("File \"%s\" written"), GetChars( filename ) );
             SetStatusText( msg );
 
             if( GetCurrFileName().IsEmpty() )

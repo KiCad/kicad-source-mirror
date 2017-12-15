@@ -297,7 +297,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAllAliasOfPart( wxCommandEvent& eve
     if( m_PartAliasListCtrl->FindString( m_Parent->GetAliasName() ) != wxNOT_FOUND )
     {
         wxString msg;
-        msg.Printf( _( "Alias <%s> cannot be removed while it is being edited!" ),
+        msg.Printf( _( "Alias \"%s\" cannot be removed while it is being edited!" ),
                     GetChars( m_Parent->GetAliasName() ) );
         DisplayError( this, msg );
         return;
@@ -339,7 +339,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& event )
     if( m_PartAliasListCtrl->FindString( aliasname ) != wxNOT_FOUND )
     {
         wxString msg;
-        msg.Printf( _( "Alias or component name <%s> already in use." ),
+        msg.Printf( _( "Alias or component name \"%s\" already in use." ),
                     GetChars( aliasname ) );
         DisplayError( this, msg );
         return;
@@ -348,7 +348,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& event )
     if( !library.empty() && Prj().SchSymbolLibTable()->LoadSymbol( library, aliasname ) != NULL )
     {
         wxString msg;
-        msg.Printf( _( "Symbol name '%s' already exists in library '%s'." ), aliasname, library );
+        msg.Printf( _( "Symbol name \"%s\" already exists in library \"%s\"." ), aliasname, library );
         DisplayError( this, msg );
         return;
     }
@@ -372,7 +372,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::DeleteAliasOfPart( wxCommandEvent& event 
     if( aliasname.CmpNoCase( m_Parent->GetAliasName() ) == 0 )
     {
         wxString msg;
-        msg.Printf( _( "Alias <%s> cannot be removed while it is being edited!" ),
+        msg.Printf( _( "Alias \"%s\" cannot be removed while it is being edited!" ),
                     GetChars( aliasname ) );
         DisplayError( this, msg );
         return;
@@ -527,7 +527,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddFootprintFilter( wxCommandEvent& event
     {
         wxString msg;
 
-        msg.Printf( _( "Foot print filter <%s> is already defined." ), GetChars( Line ) );
+        msg.Printf( _( "Foot print filter \"%s\" is already defined." ), GetChars( Line ) );
         DisplayError( this, msg );
         return;
     }

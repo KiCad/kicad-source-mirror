@@ -49,7 +49,7 @@ DIALOG_CONFIG_EQUFILES::DIALOG_CONFIG_EQUFILES( CVPCB_MAINFRAME* aParent ) :
     m_Config = Pgm().CommonSettings();
 
     PROJECT&    prj = Prj();
-    SetTitle( wxString::Format( _( "Project file: '%s'" ), GetChars( prj.GetProjectFullName() ) ) );
+    SetTitle( wxString::Format( _( "Project file: \"%s\"" ), GetChars( prj.GetProjectFullName() ) ) );
 
     Init( );
 
@@ -290,7 +290,7 @@ void DIALOG_CONFIG_EQUFILES::OnAddFiles( wxCommandEvent& event )
         else
         {
             wxString msg;
-            msg.Printf( _( "File '%s' already exists in list" ), equFilename.GetData() );
+            msg.Printf( _( "File \"%s\" already exists in list" ), equFilename.GetData() );
             DisplayError( this, msg );
         }
     }

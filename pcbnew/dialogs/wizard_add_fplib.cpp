@@ -670,7 +670,7 @@ bool WIZARD_FPLIB_TABLE::downloadGithubLibsFromList( wxArrayString& aUrlList,
         catch( const IO_ERROR& ioe )
         {
             if( aErrorMessage )
-                aErrorMessage->Printf( _( "Error:\n'%s'\nwhile downloading library:\n'%s'" ),
+                aErrorMessage->Printf( _( "Error:\n\"%s\"\nwhile downloading library:\n\"%s\"" ),
                                        GetChars( ioe.What() ), GetChars( libsrc_name ) );
             return false;
         }

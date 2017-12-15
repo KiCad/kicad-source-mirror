@@ -353,7 +353,7 @@ bool DSNLEXER::IsSymbol( int aTok )
 void DSNLEXER::Expecting( int aTok )
 {
     wxString errText = wxString::Format(
-        _("Expecting '%s'"), GetChars( GetTokenString( aTok ) ) );
+        _( "Expecting \"%s\"" ), GetChars( GetTokenString( aTok ) ) );
     THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 
@@ -361,7 +361,7 @@ void DSNLEXER::Expecting( int aTok )
 void DSNLEXER::Expecting( const char* text )
 {
     wxString errText = wxString::Format(
-        _("Expecting '%s'"), GetChars( wxString::FromUTF8( text ) ) );
+        _( "Expecting \"%s\"" ), GetChars( wxString::FromUTF8( text ) ) );
     THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 
@@ -369,7 +369,7 @@ void DSNLEXER::Expecting( const char* text )
 void DSNLEXER::Unexpected( int aTok )
 {
     wxString errText = wxString::Format(
-        _("Unexpected '%s'"), GetChars( GetTokenString( aTok ) ) );
+        _( "Unexpected \"%s\"" ), GetChars( GetTokenString( aTok ) ) );
     THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 
@@ -385,7 +385,7 @@ void DSNLEXER::Duplicate( int aTok )
 void DSNLEXER::Unexpected( const char* text )
 {
     wxString errText = wxString::Format(
-        _("Unexpected '%s'"), GetChars( wxString::FromUTF8( text ) ) );
+        _( "Unexpected \"%s\"" ), GetChars( wxString::FromUTF8( text ) ) );
     THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
 }
 
@@ -430,7 +430,7 @@ int DSNLEXER::NeedNUMBER( const char* aExpectation )
     if( tok != DSN_NUMBER )
     {
         wxString errText = wxString::Format(
-            _("need a NUMBER for '%s'"), wxString::FromUTF8( aExpectation ).GetData() );
+            _( "need a NUMBER for \"%s\"" ), wxString::FromUTF8( aExpectation ).GetData() );
         THROW_PARSE_ERROR( errText, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
     }
     return tok;

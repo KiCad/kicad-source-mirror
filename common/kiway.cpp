@@ -183,7 +183,7 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
             // here and catching it in the KiCad launcher resolves the crash issue.  See bug
             // report https://bugs.launchpad.net/kicad/+bug/1577786.
 
-            msg.Printf( _( "Failed to load kiface library '%s'." ), GetChars( dname ) );
+            msg.Printf( _( "Failed to load kiface library \"%s\"." ), GetChars( dname ) );
             THROW_IO_ERROR( msg );
         }
         else if( ( addr = dso.GetSymbol( wxT( KIFACE_INSTANCE_NAME_AND_VERSION ) ) ) == NULL )
@@ -192,7 +192,7 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
             // No further reporting required here.  Assume the same thing applies here as
             // above with the Load() call.  This has not been tested.
             msg.Printf(
-                _( "Could not read instance name and version symbol form kiface library '%s'." ),
+                _( "Could not read instance name and version symbol form kiface library \"%s\"." ),
                 GetChars( dname ) );
             THROW_IO_ERROR( msg );
         }
@@ -227,7 +227,7 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
 
         msg = wxString::Format( _(
             "Fatal Installation Bug. File:\n"
-            "'%s'\ncould not be loaded\n" ), GetChars( dname ) );
+            "\"%s\"\ncould not be loaded\n" ), GetChars( dname ) );
 
         if( ! wxFileExists( dname ) )
             msg << _( "It is missing.\n" );

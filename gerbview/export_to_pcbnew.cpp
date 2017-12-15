@@ -211,7 +211,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( LAYER_NUM* aLayerLookUpTable, int aCopperLa
     if( m_fp == NULL )
     {
         wxString msg;
-        msg.Printf( _( "Cannot create file '%s'" ), GetChars( m_pcb_file_name ) );
+        msg.Printf( _( "Cannot create file \"%s\"" ), GetChars( m_pcb_file_name ) );
         DisplayError( m_gerbview_frame, msg );
         return false;
     }

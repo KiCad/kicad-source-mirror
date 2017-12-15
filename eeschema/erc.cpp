@@ -814,8 +814,8 @@ static void SimilarLabelsDiagnose( NETLIST_OBJECT* aItemA, NETLIST_OBJECT* aItem
     screen->Append( marker );
 
     wxString fmt = aItemA->IsLabelGlobal() ?
-                            _( "Global label '%s' (sheet '%s') looks like:" ) :
-                            _( "Local label '%s' (sheet '%s') looks like:" );
+                            _( "Global label \"%s\" (sheet \"%s\") looks like:" ) :
+                            _( "Local label \"%s\" (sheet \"%s\") looks like:" );
     wxString msg;
 
     msg.Printf( fmt, GetChars( aItemA->m_Label ), GetChars( aItemA->m_SheetPath.PathHumanReadable() ) );
@@ -823,8 +823,8 @@ static void SimilarLabelsDiagnose( NETLIST_OBJECT* aItemA, NETLIST_OBJECT* aItem
                             ERCE_SIMILAR_GLBL_LABELS : ERCE_SIMILAR_LABELS,
                      aItemA->m_Start, msg, aItemA->m_Start );
 
-    fmt = aItemB->IsLabelGlobal() ? _( "Global label '%s' (sheet '%s')" ) :
-                                    _( "Local label '%s' (sheet '%s')" );
+    fmt = aItemB->IsLabelGlobal() ? _( "Global label \"%s\" (sheet \"%s\")" ) :
+                                    _( "Local label \"%s\" (sheet \"%s\")" );
     msg.Printf( fmt, GetChars( aItemB->m_Label ), GetChars( aItemB->m_SheetPath.PathHumanReadable() ) );
     marker->SetAuxiliaryData( msg, aItemB->m_Start );
 }

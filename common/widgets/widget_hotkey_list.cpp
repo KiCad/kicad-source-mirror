@@ -481,7 +481,7 @@ bool WIDGET_HOTKEY_LIST::ResolveKeyConflicts( long aKey, const wxString& aSectio
     {
         wxString    info    = wxGetTranslation( conflicting_key->m_InfoMsg );
         wxString    msg     = wxString::Format(
-                _( "<%s> is already assigned to \"%s\" in section \"%s\". Are you sure you want "
+                _( "\"%s\" is already assigned to \"%s\" in section \"%s\". Are you sure you want "
                    "to change its assignment?" ),
                 KeyNameFromKeyCode( aKey ), GetChars( info ),
                 *(conflicting_section->m_Title) );

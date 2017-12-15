@@ -125,12 +125,12 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
         {
             if( useScreen != NULL )
             {
-                msg.Printf( _( "A file named '%s' already exists in the current schematic "
+                msg.Printf( _( "A file named \"%s\" already exists in the current schematic "
                                "hierarchy." ), newFilename );
             }
             else
             {
-                msg.Printf( _( "A file named '%s' already exists." ), newFilename );
+                msg.Printf( _( "A file named \"%s\" already exists." ), newFilename );
             }
 
             msg += _( "\n\nDo you want to create a sheet with the contents of this file?" );
@@ -169,12 +169,12 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
 
                 if( useScreen != NULL )
                 {
-                    tmp.Printf( _( "A file named <%s> already exists in the current schematic "
+                    tmp.Printf( _( "A file named \"%s\" already exists in the current schematic "
                                    "hierarchy." ), newFilename );
                 }
                 else
                 {
-                    tmp.Printf( _( "A file named <%s> already exists." ), newFilename );
+                    tmp.Printf( _( "A file named \"%s\" already exists." ), newFilename );
                 }
 
                 msg += tmp;
@@ -216,10 +216,10 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
             }
             catch( const IO_ERROR& ioe )
             {
-                msg.Printf( _( "Error occurred saving schematic file '%s'." ), newFilename );
+                msg.Printf( _( "Error occurred saving schematic file \"%s\"." ), newFilename );
                 DisplayErrorMessage( this, msg, ioe.What() );
 
-                msg.Printf( _( "Failed to save schematic '%s'" ), newFilename );
+                msg.Printf( _( "Failed to save schematic \"%s\"" ), newFilename );
                 AppendMsgPanel( wxEmptyString, msg, CYAN );
 
                 return false;
@@ -259,10 +259,10 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
         }
         catch( const IO_ERROR& ioe )
         {
-            msg.Printf( _( "Error occurred loading schematic file '%s'." ), newFilename );
+            msg.Printf( _( "Error occurred loading schematic file \"%s\"." ), newFilename );
             DisplayErrorMessage( this, msg, ioe.What() );
 
-            msg.Printf( _( "Failed to load schematic '%s'" ), newFilename );
+            msg.Printf( _( "Failed to load schematic \"%s\"" ), newFilename );
             AppendMsgPanel( wxEmptyString, msg, CYAN );
 
             return false;
@@ -289,7 +289,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
     if( hierarchy.TestForRecursion( sheetHierarchy, destFn.GetFullPath( wxPATH_UNIX ) ) )
     {
         msg.Printf( _( "The sheet changes cannot be made because the destination sheet already "
-                       "has the sheet <%s> or one of it's subsheets as a parent somewhere in "
+                       "has the sheet \"%s\" or one of it's subsheets as a parent somewhere in "
                        "the schematic hierarchy." ),
                     newFilename );
         DisplayError( this, msg );
@@ -301,7 +301,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy )
 
     if( newScreens.HasNoFullyDefinedLibIds() )
     {
-        msg.Printf(_( "The schematic '%s' has not been remapped to the symbol library table. "
+        msg.Printf(_( "The schematic \"%s\" has not been remapped to the symbol library table. "
                       "Most if not all of the symbol library links will be broken.  Do you "
                       "want to continue?" ), fileName.GetFullName() );
 

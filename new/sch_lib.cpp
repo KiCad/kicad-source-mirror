@@ -234,7 +234,7 @@ PART* LIB::LookupPart( const LPID& aLPID, LIB_TABLE* aLibTable )
 
     if( !part )     // part does not exist in this lib
     {
-        wxString msg = wxString::Format( _("part '%s' not found in lib %s" ),
+        wxString msg = wxString::Format( _("part \"%s\" not found in lib %s" ),
                             wxString::FromUTF8( aLPID.GetPartNameAndRev().c_str() ).GetData(),
                             wxString::FromUTF8( logicalName.c_str() ).GetData() );
         THROW_IO_ERROR( msg );

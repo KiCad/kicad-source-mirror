@@ -353,7 +353,7 @@ void DIALOG_BOM::pluginInit()
     if( pluginFile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "Failed to open file '%s'" ), GetChars( pluginName ) );
+        msg.Printf( _( "Failed to open file \"%s\"" ), GetChars( pluginName ) );
         DisplayError( this, msg );
         return;
     }

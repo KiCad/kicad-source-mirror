@@ -366,7 +366,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
     if( !footprint.IsEmpty() && fpid.Parse( footprint ) >= 0 )
     {
         wxString error;
-        error.Printf( _( "invalid footprint ID in\nfile: <%s>\nline: %d\noffset: %d" ),
+        error.Printf( _( "invalid footprint ID in\nfile: \"%s\"\nline: %d\noffset: %d" ),
                       GetChars( CurSource() ), CurLineNumber(), CurOffset() );
 
         THROW_IO_ERROR( error );

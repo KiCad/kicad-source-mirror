@@ -179,7 +179,7 @@ void DIALOG_PLOT_SCHEMATIC::OnOutputDirectoryBrowseClicked( wxCommandEvent& even
     fn = Prj().AbsolutePath( g_RootSheet->GetFileName() );
     wxString defaultPath = fn.GetPathWithSep();
     wxString msg;
-    msg.Printf( _( "Do you want to use a path relative to\n'%s'" ),
+    msg.Printf( _( "Do you want to use a path relative to\n\"%s\"" ),
                 GetChars( defaultPath ) );
 
     wxMessageDialog dialog( this, msg, _( "Plot Output Directory" ),
@@ -346,7 +346,7 @@ wxFileName DIALOG_PLOT_SCHEMATIC::createPlotFileName( wxTextCtrl* aOutputDirecto
     if( !EnsureFileDirectoryExists( &outputDir, plotFileName, aReporter ) )
     {
         wxString msg;
-        msg.Printf( _( "Could not write plot files to folder '%s'." ),
+        msg.Printf( _( "Could not write plot files to folder \"%s\"." ),
                     GetChars( outputDir.GetPath() ) );
         aReporter->Report( msg, REPORTER::RPT_ERROR );
     }

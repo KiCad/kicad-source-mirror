@@ -104,13 +104,13 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef )
             if( plotOneSheetPS( plotFileName.GetFullPath(), screen, plotPage, plot_offset,
                                 scale, aPlotFrameRef ) )
             {
-                msg.Printf( _( "Plot: '%s' OK.\n" ), GetChars( plotFileName.GetFullPath() ) );
+                msg.Printf( _( "Plot: \"%s\" OK.\n" ), GetChars( plotFileName.GetFullPath() ) );
                 reporter.Report( msg, REPORTER::RPT_ACTION );
             }
             else
             {
                 // Error
-                msg.Printf( _( "Unable to create file '%s'.\n" ),
+                msg.Printf( _( "Unable to create file \"%s\".\n" ),
                             GetChars( plotFileName.GetFullPath() ) );
                 reporter.Report( msg, REPORTER::RPT_ERROR );
             }

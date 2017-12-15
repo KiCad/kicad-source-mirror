@@ -152,7 +152,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     }
     catch( ... /* IO_ERROR ioe */ )
     {
-        errorMsg.Printf( _( "Failed to save symbol library file '%s'" ), aFileName );
+        errorMsg.Printf( _( "Failed to save symbol library file \"%s\"" ), aFileName );
         DisplayError( this, errorMsg );
         return false;
     }

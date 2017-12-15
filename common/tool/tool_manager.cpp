@@ -434,7 +434,7 @@ void TOOL_MANAGER::InitTools()
         if( !tool->Init() )
         {
             wxMessageBox(
-                    wxString::Format( "Initialization of tool '%s' failed", tool->GetName() ) );
+                    wxString::Format( "Initialization of tool \"%s\" failed", tool->GetName() ) );
 
             // Unregister the tool
             m_toolState.erase( tool );

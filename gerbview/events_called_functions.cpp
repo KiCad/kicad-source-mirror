@@ -381,7 +381,7 @@ void GERBVIEW_FRAME::OnShowGerberSourceFile( wxCommandEvent& event )
             if( !fn.FileExists() )
             {
                 wxString msg;
-                msg.Printf( _( "Source file '%s' is not available" ),
+                msg.Printf( _( "Source file \"%s\" is not available" ),
                             GetChars( fn.GetFullPath() ) );
                 wxMessageBox( msg );
             }

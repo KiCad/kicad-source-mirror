@@ -157,7 +157,7 @@ bool GetAssociatedDocument( wxWindow* aParent,
 
     if( !wxFileExists( fullfilename ) )
     {
-        msg.Printf( _( "Doc File '%s' not found" ), GetChars( aDocName ) );
+        msg.Printf( _( "Doc File \"%s\" not found" ), GetChars( aDocName ) );
         DisplayError( aParent, msg );
         return false;
     }
@@ -200,7 +200,7 @@ bool GetAssociatedDocument( wxWindow* aParent,
 
     if( !success )
     {
-        msg.Printf( _( "Unknown MIME type for doc file <%s>" ), GetChars( fullfilename ) );
+        msg.Printf( _( "Unknown MIME type for doc file \"%s\"" ), GetChars( fullfilename ) );
         DisplayError( aParent, msg );
     }
 

@@ -199,7 +199,7 @@ bool PL_EDITOR_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, i
     if( !LoadPageLayoutDescrFile( fn ) )
     {
         wxString msg = wxString::Format(
-            _( "Error when loading file '%s'" ),
+            _( "Error when loading file \"%s\"" ),
             GetChars( fn )
             );
 
@@ -224,7 +224,7 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
         if( filename.IsEmpty() )
             msg = _( "Save changes in a new file before closing?" );
         else
-            msg.Printf( _( "Save the changes in\n<%s>\nbefore closing?" ),
+            msg.Printf( _( "Save the changes in\n\"%s\"\nbefore closing?" ),
                         GetChars( filename ) );
 
         int ii = DisplayExitDialog( this, msg );
@@ -254,7 +254,7 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
             if( !SavePageLayoutDescrFile( filename ) )
             {
-                msg.Printf( _( "Unable to create <%s>" ), GetChars( filename ) );
+                msg.Printf( _( "Unable to create \"%s\"" ), GetChars( filename ) );
                 wxMessageBox( msg );
             }
         }
@@ -642,7 +642,7 @@ WORKSHEET_DATAITEM * PL_EDITOR_FRAME::AddPageLayoutItem( int aType, int aIdx )
 
         if( !wxFileExists( fullFilename ) )
         {
-            wxMessageBox( _( "Couldn't load image from <%s>" ), GetChars( fullFilename ) );
+            wxMessageBox( _( "Couldn't load image from \"%s\"" ), GetChars( fullFilename ) );
             break;
         }
 
@@ -650,7 +650,7 @@ WORKSHEET_DATAITEM * PL_EDITOR_FRAME::AddPageLayoutItem( int aType, int aIdx )
 
         if( !image->ReadImageFile( fullFilename ) )
         {
-            wxMessageBox( _( "Couldn't load image from <%s>" ),
+            wxMessageBox( _( "Couldn't load image from \"%s\"" ),
                           GetChars( fullFilename ) );
             delete image;
             break;

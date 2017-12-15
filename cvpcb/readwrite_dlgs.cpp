@@ -105,7 +105,7 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName, int aIndex )
     if( !aFootprintName.IsEmpty() )
     {
         wxCHECK_RET( fpid.Parse( aFootprintName ) < 0,
-                     wxString::Format( wxT( "<%s> is not a valid LIB_ID." ),
+                     wxString::Format( wxT( "\"%s\" is not a valid LIB_ID." ),
                                        GetChars( aFootprintName ) ) );
     }
 
@@ -246,7 +246,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
 
                         case 1:
                             msg += wxString::Format( _(
-                                    "Component '%s' footprint '%s' was <b>not found</b> in any library.\n" ),
+                                    "Component \"%s\" footprint \"%s\" was <b>not found</b> in any library.\n" ),
                                     GetChars( component->GetReference() ),
                                     GetChars( component->GetFPID().GetLibItemName() )
                                     );
@@ -254,7 +254,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
 
                         case 2:
                             msg += wxString::Format( _(
-                                    "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n" ),
+                                    "Component \"%s\" footprint \"%s\" was found in <b>multiple</b> libraries.\n" ),
                                     GetChars( component->GetReference() ),
                                     GetChars( component->GetFPID().GetLibItemName() )
                                     );

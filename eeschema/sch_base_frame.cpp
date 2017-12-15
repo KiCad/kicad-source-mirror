@@ -58,7 +58,7 @@ LIB_ALIAS* SchGetLibAlias( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PA
         {
             wxString msg;
 
-            msg.Printf( _( "Could not load symbol '%s' from library '%s'." ),
+            msg.Printf( _( "Could not load symbol \"%s\" from library \"%s\"." ),
                         aLibId.GetLibItemName().wx_str(), aLibId.GetLibNickname().wx_str() );
             DisplayErrorMessage( aParent, msg, ioe.What() );
         }

@@ -101,7 +101,7 @@ private:
                 ( net_attr.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_CMP ) )
             {
                 auto menuEntry = Add( GERBVIEW_ACTIONS::highlightComponent );
-                menuEntry->SetItemLabel( wxString::Format( _( "Highlight items of component '%s'" ),
+                menuEntry->SetItemLabel( wxString::Format( _( "Highlight items of component \"%s\"" ),
                                          GetChars( net_attr.m_Cmpref ) ) );
                 addSeparator = true;
             }
@@ -109,7 +109,7 @@ private:
             if( ( net_attr.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_NET ) )
             {
                 auto menuEntry = Add( GERBVIEW_ACTIONS::highlightNet );
-                menuEntry->SetItemLabel( wxString::Format( _( "Highlight items of net '%s'" ),
+                menuEntry->SetItemLabel( wxString::Format( _( "Highlight items of net \"%s\"" ),
                                          GetChars( net_attr.m_Netname ) ) );
                 addSeparator = true;
             }
@@ -119,7 +119,7 @@ private:
             if( apertDescr && !apertDescr->m_AperFunction.IsEmpty() )
             {
                 auto menuEntry = Add( GERBVIEW_ACTIONS::highlightAttribute );
-                menuEntry->SetItemLabel( wxString::Format( _( "Highlight aperture type '%s'" ),
+                menuEntry->SetItemLabel( wxString::Format( _( "Highlight aperture type \"%s\"" ),
                                          GetChars( apertDescr->m_AperFunction ) ) );
                 addSeparator = true;
             }

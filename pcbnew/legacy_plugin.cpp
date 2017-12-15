@@ -92,7 +92,7 @@
 typedef LEGACY_PLUGIN::BIU      BIU;
 
 
-#define VERSION_ERROR_FORMAT    _( "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file." )
+#define VERSION_ERROR_FORMAT    _( "File \"%s\" is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file." )
 #define UNKNOWN_GRAPHIC_FORMAT  _( "unknown graphic type: %d")
 #define UNKNOWN_PAD_FORMAT      _( "unknown pad type: %d")
 #define UNKNOWN_PAD_ATTRIBUTE   _( "unknown pad attribute: %d" )
@@ -550,7 +550,7 @@ void LEGACY_PLUGIN::checkVersion()
 #if !defined(DEBUG)
     if( ver > LEGACY_BOARD_FILE_VERSION )
     {
-        // "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file."
+        // "File \"%s\" is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file."
         m_error.Printf( VERSION_ERROR_FORMAT,
             m_reader->GetSource().GetData(), ver, LEGACY_BOARD_FILE_VERSION );
         THROW_IO_ERROR( m_error );
@@ -728,7 +728,7 @@ void LEGACY_PLUGIN::loadSHEET()
                 wxString wname = FROM_UTF8( sname );
                 if( !page.SetType( wname ) )
                 {
-                    m_error.Printf( _( "Unknown sheet type '%s' on line:%d" ),
+                    m_error.Printf( _( "Unknown sheet type \"%s\" on line:%d" ),
                                 wname.GetData(), m_reader->LineNumber() );
                     THROW_IO_ERROR( m_error );
                 }
@@ -1372,7 +1372,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
     }
 
     wxString msg = wxString::Format(
-        wxT( "Missing '$EndMODULE' for MODULE '%s'" ),
+        _( "Missing '$EndMODULE' for MODULE \"%s\"" ),
         GetChars( aModule->GetFPID().GetLibItemName() ) );
 
     THROW_IO_ERROR( msg );
@@ -1424,7 +1424,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
             case 'O':   padshape = PAD_SHAPE_OVAL;        break;
             case 'T':   padshape = PAD_SHAPE_TRAPEZOID;   break;
             default:
-                m_error.Printf( _( "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'" ),
+                m_error.Printf( _( "Unknown padshape '%c=0x%02x' on line: %d of footprint: \"%s\"" ),
                                 padchar,
                                 padchar,
                                 m_reader->LineNumber(),
@@ -1630,7 +1630,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
     case 'A':   shape = S_ARC;       break;
     case 'P':   shape = S_POLYGON;   break;
     default:
-        m_error.Printf( wxT( "Unknown EDGE_MODULE type:'%c=0x%02x' on line:%d of module:'%s'" ),
+        m_error.Printf( _( "Unknown EDGE_MODULE type:'%c=0x%02x' on line:%d of module:\"%s\"" ),
                         (unsigned char) line[1],
                         (unsigned char) line[1],
                         m_reader->LineNumber(),
@@ -2458,7 +2458,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
 
                 // unique_ptr will delete nc on this code path
 
-                m_error.Printf( _( "duplicate NETCLASS name '%s'" ), nc->GetName().GetData() );
+                m_error.Printf( _( "duplicate NETCLASS name \"%s\"" ), nc->GetName().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2540,7 +2540,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
             if( !hopt )
             {
-                m_error.Printf( wxT( "Bad ZAux for CZONE_CONTAINER '%s'" ), zc->GetNetname().GetData() );
+                m_error.Printf( _( "Bad ZAux for CZONE_CONTAINER \"%s\"" ), zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2551,7 +2551,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             case 'F':   outline_hatch = ZONE_CONTAINER::DIAGONAL_FULL;   break;
 
             default:
-                m_error.Printf( wxT( "Bad ZAux for CZONE_CONTAINER '%s'" ), zc->GetNetname().GetData() );
+                m_error.Printf( _( "Bad ZAux for CZONE_CONTAINER \"%s\"" ), zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2568,7 +2568,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
             if( smoothing >= ZONE_SETTINGS::SMOOTHING_LAST || smoothing < 0 )
             {
-                m_error.Printf( wxT( "Bad ZSmoothing for CZONE_CONTAINER '%s'" ), zc->GetNetname().GetData() );
+                m_error.Printf( _( "Bad ZSmoothing for CZONE_CONTAINER \"%s\"" ), zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -2642,7 +2642,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             case 'X': popt = PAD_ZONE_CONN_NONE;        break;
 
             default:
-                m_error.Printf( wxT( "Bad ZClearance padoption for CZONE_CONTAINER '%s'" ),
+                m_error.Printf( _( "Bad ZClearance padoption for CZONE_CONTAINER \"%s\"" ),
                     zc->GetNetname().GetData() );
                 THROW_IO_ERROR( m_error );
             }
@@ -2990,7 +2990,7 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
 
     if( errno )
     {
-        m_error.Printf( _( "invalid float number in file: '%s'\nline: %d, offset: %d" ),
+        m_error.Printf( _( "invalid float number in file: \"%s\"\nline: %d, offset: %d" ),
             m_reader->GetSource().GetData(),
             m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
@@ -2999,7 +2999,7 @@ BIU LEGACY_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
 
     if( aValue == nptr )
     {
-        m_error.Printf( _( "missing float number in file: '%s'\nline: %d, offset: %d" ),
+        m_error.Printf( _( "missing float number in file: \"%s\"\nline: %d, offset: %d" ),
             m_reader->GetSource().GetData(),
             m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
@@ -3027,7 +3027,7 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
     if( errno )
     {
-        m_error.Printf( _( "invalid float number in file: '%s'\nline: %d, offset: %d" ),
+        m_error.Printf( _( "invalid float number in file: \"%s\"\nline: %d, offset: %d" ),
             m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
@@ -3035,7 +3035,7 @@ double LEGACY_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
     if( aValue == nptr )
     {
-        m_error.Printf( _( "missing float number in file: '%s'\nline: %d, offset: %d" ),
+        m_error.Printf( _( "missing float number in file: \"%s\"\nline: %d, offset: %d" ),
             m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
@@ -3261,7 +3261,7 @@ void LP_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
     }
 
 L_bad_library:
-    THROW_IO_ERROR( wxString::Format( _( "File '%s' is empty or is not a legacy library" ),
+    THROW_IO_ERROR( wxString::Format( _( "File \"%s\" is empty or is not a legacy library" ),
         m_lib_path.GetData() ) );
 }
 
@@ -3433,7 +3433,7 @@ MODULE* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
     if( it == mods.end() )
     {
         /*
-        THROW_IO_ERROR( wxString::Format( _( "No '%s' footprint in library '%s'" ),
+        THROW_IO_ERROR( wxString::Format( _( "No \"%s\" footprint in library \"%s\"" ),
             aFootprintName.GetData(), aLibraryPath.GetData() ) );
         */
 
@@ -3457,7 +3457,7 @@ bool LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROP
     if( wxRemove( aLibraryPath ) )
     {
         THROW_IO_ERROR( wxString::Format(
-            _( "library '%s' cannot be deleted" ),
+            _( "library \"%s\" cannot be deleted" ),
             aLibraryPath.GetData() ) );
     }
 

@@ -288,16 +288,16 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
                                                      ForceAllSmd(), side, useCSVfmt );
     if( fpcount < 0 )
     {
-        msg.Printf( _( "Unable to create '%s'." ), GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Unable to create \"%s\"." ), GetChars( fn.GetFullPath() ) );
         wxMessageBox( msg );
         m_reporter->Report( msg, REPORTER::RPT_ERROR );
         return false;
     }
 
     if( singleFile  )
-        msg.Printf( _( "Place file: '%s'." ), GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Place file: \"%s\"." ), GetChars( fn.GetFullPath() ) );
     else
-        msg.Printf( _( "Front side (top side) place file: '%s'." ),
+        msg.Printf( _( "Front side (top side) place file: \"%s\"." ),
                     GetChars( fn.GetFullPath() ) );
     m_reporter->Report( msg, REPORTER::RPT_INFO );
 
@@ -330,7 +330,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
 
     if( fpcount < 0 )
     {
-        msg.Printf( _( "Unable to create file '%s'." ), GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Unable to create file \"%s\"." ), GetChars( fn.GetFullPath() ) );
         m_reporter->Report( msg, REPORTER::RPT_ERROR );
         wxMessageBox( msg );
         return false;
@@ -339,7 +339,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     // Display results
     if( !singleFile )
     {
-        msg.Printf( _( "Back side (bottom side) place file: '%s'." ), GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Back side (bottom side) place file: \"%s\"." ), GetChars( fn.GetFullPath() ) );
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
         msg.Printf( _( "Component count: %d." ), fpcount );
@@ -622,14 +622,14 @@ void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
     wxString msg;
     if( success )
     {
-        msg.Printf( _( "Footprint report file created:\n'%s'" ),
+        msg.Printf( _( "Footprint report file created:\n\"%s\"" ),
                     GetChars( fn.GetFullPath() ) );
         wxMessageBox( msg, _( "Footprint Report" ), wxICON_INFORMATION );
     }
 
     else
     {
-        msg.Printf( _( "Unable to create '%s'" ), GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Unable to create \"%s\"" ), GetChars( fn.GetFullPath() ) );
         DisplayError( this, msg );
     }
 }

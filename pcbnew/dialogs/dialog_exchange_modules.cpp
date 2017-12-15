@@ -79,7 +79,7 @@ void DIALOG_EXCHANGE_MODULE::init()
     m_CmpValue->AppendText( m_currentModule->GetValue() );
     m_CmpReference->AppendText( m_currentModule->GetReference() );
     m_Selection->SetString( 0, wxString::Format(
-                            _( "Change footprint of '%s'" ),
+                            _( "Change footprint of \"%s\"" ),
                             GetChars( m_currentModule->GetReference() ) ) );
     wxString fpname = m_CurrentFootprintFPID->GetValue().AfterLast( ':' );
 
@@ -87,7 +87,7 @@ void DIALOG_EXCHANGE_MODULE::init()
         fpname = m_CurrentFootprintFPID->GetValue();
 
     m_Selection->SetString( 1, wxString::Format(
-                            _( "Change footprints '%s'" ),
+                            _( "Change footprints \"%s\"" ),
                             GetChars( fpname.Left( 12 ) ) ) );
 
     m_Selection->SetSelection( m_selectionMode );
@@ -171,12 +171,12 @@ void DIALOG_EXCHANGE_MODULE::RebuildCmpList( wxCommandEvent& event )
 
     if( RecreateCmpFile( m_parent->GetBoard(), fn.GetFullPath() ) )
     {
-        msg.Printf( _( "File '%s' created\n" ), GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "File \"%s\" created\n" ), GetChars( fn.GetFullPath() ) );
         reporter.Report( msg, REPORTER::RPT_INFO );
     }
     else
     {
-        msg.Printf( _( "** Could not create file '%s' ***\n" ),
+        msg.Printf( _( "** Could not create file \"%s\" ***\n" ),
                     GetChars( fn.GetFullPath() ) );
         reporter.Report( msg, REPORTER::RPT_ERROR );
     }
@@ -315,7 +315,7 @@ bool DIALOG_EXCHANGE_MODULE::change_1_Module( MODULE*            aModule,
     LIB_ID oldFootprintFPID = aModule->GetFPID();
 
     // Load module.
-    msg.Printf( _( "Change footprint '%s' (from '%s') to '%s'" ),
+    msg.Printf( _( "Change footprint \"%s\" (from \"%s\") to \"%s\"" ),
                  GetChars( aModule->GetReference() ),
                  oldFootprintFPID.Format().c_str(),
                  aNewFootprintFPID.Format().c_str() );
@@ -441,7 +441,7 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
 
     if( ! RecreateCmpFile( GetBoard(), fn.GetFullPath() ) )
     {
-        msg.Printf( _( "Could not create file '%s'" ), GetChars(fn.GetFullPath() ) );
+        msg.Printf( _( "Could not create file \"%s\"" ), GetChars(fn.GetFullPath() ) );
         DisplayError( this, msg );
         return;
     }

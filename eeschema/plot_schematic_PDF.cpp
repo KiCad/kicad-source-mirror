@@ -88,7 +88,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
 
                 if( !plotter->OpenFile( plotFileName.GetFullPath() ) )
                 {
-                    msg.Printf( _( "Unable to create file '%s'.\n" ),
+                    msg.Printf( _( "Unable to create file \"%s\".\n" ),
                                 GetChars( plotFileName.GetFullPath() ) );
                     reporter.Report( msg, REPORTER::RPT_ERROR );
                     delete plotter;
@@ -123,7 +123,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
     }
 
     // Everything done, close the plot and restore the environment
-    msg.Printf( _( "Plot: '%s' OK.\n" ), GetChars( plotFileName.GetFullPath() ) );
+    msg.Printf( _( "Plot: \"%s\" OK.\n" ), GetChars( plotFileName.GetFullPath() ) );
     reporter.Report( msg, REPORTER::RPT_ACTION );
 
     restoreEnvironment( plotter, oldsheetpath );

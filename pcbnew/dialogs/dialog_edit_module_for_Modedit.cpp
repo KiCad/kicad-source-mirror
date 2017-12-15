@@ -449,7 +449,7 @@ bool DIALOG_MODULE_MODULE_EDITOR::TransferDataFromWindow()
         if( ! MODULE::IsLibNameValid( footprintName ) )
         {
             msg.Printf( _( "Error:\n"
-                           "one of invalid chars <%s> found\nin <%s>" ),
+                           "one of invalid chars \"%s\" found\nin \"%s\"" ),
                         MODULE::StringLibNameInvalidChars( true ),
                         GetChars( footprintName ) );
 

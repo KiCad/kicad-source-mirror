@@ -200,7 +200,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
         wxFileName fn = aFileName;
 
         if( !xmlDocument.Load( fn.GetFullPath() ) )
-            THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'" ),
+            THROW_IO_ERROR( wxString::Format( _( "Unable to read file \"%s\"" ),
                                               fn.GetFullPath() ) );
 
         doc = xmlDocument.GetRoot();
@@ -788,7 +788,7 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const string* aLibName )
             wxString pkg = FROM_UTF8( pack_name.c_str() );
 
             wxString emsg = wxString::Format(
-                _( "<package> name: '%s' duplicated in eagle <library>: '%s'" ),
+                _( "<package> name: \"%s\" duplicated in eagle <library>: \"%s\"" ),
                 GetChars( pkg ),
                 GetChars( lib )
                 );
@@ -862,7 +862,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 
         if( mi == m_templates.end() )
         {
-            wxString emsg = wxString::Format( _( "No '%s' package in library '%s'" ),
+            wxString emsg = wxString::Format( _( "No \"%s\" package in library \"%s\"" ),
                                               GetChars( FROM_UTF8( e.package.c_str() ) ),
                                               GetChars( FROM_UTF8( e.library.c_str() ) ) );
             THROW_IO_ERROR( emsg );
@@ -2075,7 +2075,7 @@ wxDateTime EAGLE_PLUGIN::getModificationTime( const wxString& aPath )
     if( !fn.IsFileReadable() )
     {
         wxString msg = wxString::Format(
-            _( "File '%s' is not readable." ),
+            _( "File \"%s\" is not readable." ),
             GetChars( aPath ) );
 
         THROW_IO_ERROR( msg );
@@ -2130,7 +2130,7 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
             wxFileName fn( filename );
 
             if( !xmlDocument.Load( fn.GetFullPath() ) )
-                THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'" ),
+                THROW_IO_ERROR( wxString::Format( _( "Unable to read file \"%s\"" ),
                                                   fn.GetFullPath() ) );
 
             doc = xmlDocument.GetRoot();

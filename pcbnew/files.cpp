@@ -281,13 +281,13 @@ void PCB_EDIT_FRAME::Files_io_from_id( int id )
 
             if( !fn.FileExists() )
             {
-                msg.Printf( _( "Recovery file '%s' not found." ),
+                msg.Printf( _( "Recovery file \"%s\" not found." ),
                             GetChars( fn.GetFullPath() ) );
                 DisplayInfoMessage( this, msg );
                 break;
             }
 
-            msg.Printf( _( "OK to load recovery or backup file '%s'" ),
+            msg.Printf( _( "OK to load recovery or backup file \"%s\"" ),
                             GetChars(fn.GetFullPath() ) );
 
             if( !IsOK( this, msg ) )
@@ -422,7 +422,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( !LockFile( fullFileName ) )
     {
         wxString msg = wxString::Format( _(
-                "PCB file '%s' is already open." ),
+                "PCB file \"%s\" is already open." ),
                 GetChars( fullFileName )
                 );
         DisplayError( this, msg );
@@ -458,7 +458,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     {
         // notify user that fullFileName does not exist, ask if user wants to create it.
         wxString ask = wxString::Format( _(
-                "Board '%s' does not exist.  Do you wish to create it?" ),
+                "Board \"%s\" does not exist.  Do you wish to create it?" ),
                 GetChars( fullFileName )
                 );
         if( !IsOK( this, ask ) )
@@ -654,7 +654,7 @@ static wxString create_backup_file( const wxString& aFileName )
         if( !wxRenameFile( fn.GetFullPath(), backupFileName.GetFullPath() ) )
         {
             wxString msg = wxString::Format( _(
-                    "Warning: unable to create backup file '%s'" ),
+                    "Warning: unable to create backup file \"%s\"" ),
                     GetChars( backupFileName.GetFullPath() )
                     );
             DisplayError( NULL, msg );
@@ -681,7 +681,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     if( !IsWritable( pcbFileName ) )
     {
         wxString msg = wxString::Format( _(
-            "No access rights to write to file '%s'" ),
+            "No access rights to write to file \"%s\"" ),
             GetChars( pcbFileName.GetFullPath() )
             );
 
@@ -720,13 +720,13 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     catch( const IO_ERROR& ioe )
     {
         wxString msg = wxString::Format( _(
-                "Error saving board file '%s'.\n%s" ),
+                "Error saving board file \"%s\".\n%s" ),
                 GetChars( pcbFileName.GetFullPath() ),
                 GetChars( ioe.What() )
                 );
         DisplayError( this, msg );
 
-        lowerTxt.Printf( _( "Failed to create '%s'" ), GetChars( pcbFileName.GetFullPath() ) );
+        lowerTxt.Printf( _( "Failed to create \"%s\"" ), GetChars( pcbFileName.GetFullPath() ) );
 
         AppendMsgPanel( upperTxt, lowerTxt, CYAN );
 
@@ -752,9 +752,9 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         wxRemoveFile( autoSaveFileName.GetFullPath() );
 
     if( !!backupFileName )
-        upperTxt.Printf( _( "Backup file: '%s'" ), GetChars( backupFileName ) );
+        upperTxt.Printf( _( "Backup file: \"%s\"" ), GetChars( backupFileName ) );
 
-    lowerTxt.Printf( _( "Wrote board file: '%s'" ), GetChars( pcbFileName.GetFullPath() ) );
+    lowerTxt.Printf( _( "Wrote board file: \"%s\"" ), GetChars( pcbFileName.GetFullPath() ) );
 
     AppendMsgPanel( upperTxt, lowerTxt, CYAN );
 
@@ -774,7 +774,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName )
     if( !IsWritable( pcbFileName ) )
     {
         wxString msg = wxString::Format( _(
-            "No access rights to write to file '%s'" ),
+            "No access rights to write to file \"%s\"" ),
             GetChars( pcbFileName.GetFullPath() )
             );
 
@@ -799,7 +799,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName )
     catch( const IO_ERROR& ioe )
     {
         wxString msg = wxString::Format( _(
-                "Error saving board file '%s'.\n%s" ),
+                "Error saving board file \"%s\".\n%s" ),
                 GetChars( pcbFileName.GetFullPath() ),
                 GetChars( ioe.What() )
                 );
@@ -808,7 +808,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName )
         return false;
     }
 
-    DisplayInfoMessage( this, wxString::Format( _( "Board copied to:\n'%s'" ),
+    DisplayInfoMessage( this, wxString::Format( _( "Board copied to:\n\"%s\"" ),
                                                 GetChars( pcbFileName.GetFullPath() ) ) );
 
     return true;

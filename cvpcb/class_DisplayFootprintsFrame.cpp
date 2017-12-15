@@ -450,7 +450,7 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
 
         if( fpid.Parse( aFootprintName ) >= 0 )
         {
-            DisplayInfoMessage( this, wxString::Format( wxT( "Footprint ID <%s> is not valid." ),
+            DisplayInfoMessage( this, wxString::Format( wxT( "Footprint ID \"%s\" is not valid." ),
                                                         GetChars( aFootprintName ) ) );
             return NULL;
         }
@@ -458,7 +458,7 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
         std::string nickname = fpid.GetLibNickname();
         std::string fpname   = fpid.GetLibItemName();
 
-        wxLogDebug( wxT( "Load footprint <%s> from library <%s>." ),
+        wxLogDebug( wxT( "Load footprint \"%s\" from library \"%s\"." ),
                     fpname.c_str(), nickname.c_str()  );
 
         footprint = Prj().PcbFootprintLibs( Kiway() )->FootprintLoad(
@@ -477,7 +477,7 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
         return footprint;
     }
 
-    wxString msg = wxString::Format( _( "Footprint '%s' not found" ), aFootprintName.GetData() );
+    wxString msg = wxString::Format( _( "Footprint \"%s\" not found" ), aFootprintName.GetData() );
     DisplayError( this, msg );
     return NULL;
 }

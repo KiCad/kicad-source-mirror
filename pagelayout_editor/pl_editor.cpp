@@ -183,7 +183,7 @@ bool MYFACE::OnKifaceStart( PGM_BASE* aProgram )
             if( !success )
             {
                 wxString msg;
-                msg.Printf( _("Error when loading file <%s>"),
+                msg.Printf( _("Error when loading file \"%s\""),
                             fn.GetFullPath().GetData() );
                 wxMessageBox( msg );
             }

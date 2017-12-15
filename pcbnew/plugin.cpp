@@ -26,7 +26,7 @@
 #include <properties.h>
 
 
-#define FMT_UNIMPLEMENTED   _( "Plugin '%s' does not implement the '%s' function." )
+#define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
 
 /**
  * Function not_implemented

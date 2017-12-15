@@ -67,7 +67,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     if( zipfiledlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxString msg = wxString::Format( _( "\nOpen '%s'\n" ), GetChars( zipfiledlg.GetPath() ) );
+    wxString msg = wxString::Format( _( "\nOpen \"%s\"\n" ), GetChars( zipfiledlg.GetPath() ) );
     PrintMsg( msg );
 
     wxDirDialog dirDlg( this, _( "Target Directory" ), fn.GetPath(),
@@ -77,7 +77,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
         return;
 
     wxString unzipDir = dirDlg.GetPath() + wxT( "/" );
-    msg.Printf( _( "Unzipping project in '%s'\n" ), GetChars( unzipDir ) );
+    msg.Printf( _( "Unzipping project in \"%s\"\n" ), GetChars( unzipDir ) );
     PrintMsg( msg );
 
     wxFileSystem zipfilesys;
@@ -101,7 +101,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
         uzfn.MakeAbsolute( unzipDir );
         wxString unzipfilename = uzfn.GetFullPath();
 
-        msg.Printf( _( "Extract file '%s'" ), GetChars( unzipfilename ) );
+        msg.Printf( _( "Extract file \"%s\"" ), GetChars( unzipfilename ) );
         PrintMsg( msg );
 
         wxInputStream* stream = zipfile->GetStream();
@@ -165,7 +165,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 
     if( !ostream.IsOk() )   // issue to create the file. Perhaps not writable dir
     {
-        wxMessageBox( wxString::Format( _( "Unable to create zip archive file '%s'" ),
+        wxMessageBox( wxString::Format( _( "Unable to create zip archive file \"%s\"" ),
                                         zipfilename ) );
         return;
     }
@@ -192,7 +192,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
         curr_fn.MakeRelativeTo( currdirname );
         currFilename = curr_fn.GetFullPath();
 
-        msg.Printf( _( "Archive file <%s>" ), GetChars( currFilename ) );
+        msg.Printf( _( "Archive file \"%s\"" ), GetChars( currFilename ) );
         PrintMsg( msg );
 
         // Read input file and add it to the zip file:
@@ -219,14 +219,14 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 
     if( zipstream.Close() )
     {
-        msg.Printf( _( "\nZip archive <%s> created (%d bytes)" ),
+        msg.Printf( _( "\nZip archive \"%s\" created (%d bytes)" ),
                     GetChars( zipfilename ), zipBytesCnt );
         PrintMsg( msg );
         PrintMsg( wxT( "\n** end **\n" ) );
     }
     else
     {
-        msg.Printf( wxT( "Unable to create archive <%s>, abort\n" ),
+        msg.Printf( wxT( "Unable to create archive \"%s\", abort\n" ),
                     GetChars( zipfilename ) );
         PrintMsg( msg );
     }

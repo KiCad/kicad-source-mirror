@@ -51,7 +51,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
     if( ( f = wxFopen( aOutFileName, wxT( "wt" ) ) ) == NULL )
     {
         wxString msg;
-        msg.Printf( _( "Failed to create file '%s'" ),
+        msg.Printf( _( "Failed to create file \"%s\"" ),
                     GetChars( aOutFileName ) );
         DisplayError( NULL, msg );
         return false;

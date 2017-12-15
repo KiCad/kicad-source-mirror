@@ -112,7 +112,7 @@ SCH_BITMAP* SCH_EDIT_FRAME::CreateNewImage( wxDC* aDC )
 
     if( !wxFileExists( fullFilename ) )
     {
-        wxMessageBox( _( "Couldn't load image from <%s>" ), GetChars( fullFilename ) );
+        wxMessageBox( _( "Couldn't load image from \"%s\"" ), GetChars( fullFilename ) );
         return NULL;
     }
 
@@ -122,7 +122,7 @@ SCH_BITMAP* SCH_EDIT_FRAME::CreateNewImage( wxDC* aDC )
 
     if( !image->ReadImageFile( fullFilename ) )
     {
-        wxMessageBox( _( "Couldn't load image from <%s>" ), GetChars( fullFilename ) );
+        wxMessageBox( _( "Couldn't load image from \"%s\"" ), GetChars( fullFilename ) );
         delete image;
         return NULL;
     }

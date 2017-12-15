@@ -74,7 +74,7 @@ void CVPCB_MAINFRAME::SaveProjectFile()
 
     if( !IsWritable( fn ) )
     {
-        wxMessageBox( _( "Project file '%s' is not writable" ), fn.GetFullPath() );
+        wxMessageBox( _( "Project file \"%s\" is not writable" ), fn.GetFullPath() );
         return;
     }
 

@@ -132,7 +132,7 @@ double PCB_PARSER::parseDouble()
     if( errno )
     {
         wxString error;
-        error.Printf( _( "invalid floating point number in\nfile: <%s>\nline: %d\noffset: %d" ),
+        error.Printf( _( "invalid floating point number in\nfile: \"%s\"\nline: %d\noffset: %d" ),
                       GetChars( CurSource() ), CurLineNumber(), CurOffset() );
 
         THROW_IO_ERROR( error );
@@ -141,7 +141,7 @@ double PCB_PARSER::parseDouble()
     if( CurText() == tmp )
     {
         wxString error;
-        error.Printf( _( "missing floating point number in\nfile: <%s>\nline: %d\noffset: %d" ),
+        error.Printf( _( "missing floating point number in\nfile: \"%s\"\nline: %d\noffset: %d" ),
                       GetChars( CurSource() ), CurLineNumber(), CurOffset() );
 
         THROW_IO_ERROR( error );
@@ -898,7 +898,7 @@ void PCB_PARSER::parseLayers()
         if( it == m_layerIndices.end() )
         {
             wxString error = wxString::Format(
-                _( "Layer '%s' in file '%s' at line %d, is not in fixed layer hash" ),
+                _( "Layer \"%s\" in file \"%s\" at line %d, is not in fixed layer hash" ),
                 GetChars( layer.m_name ),
                 GetChars( CurSource() ),
                 CurLineNumber(),
@@ -962,8 +962,8 @@ T PCB_PARSER::lookUpLayer( const M& aMap )
 #endif
 
         wxString error = wxString::Format( _(
-                "Layer '%s' in file\n"
-                "'%s'\n"
+                "Layer \"%s\" in file\n"
+                "\"%s\"\n"
                 "at line %d, position %d\n"
                 "was not defined in the layers section"
                 ),
@@ -1348,7 +1348,7 @@ void PCB_PARSER::parseNETCLASS()
         // unique_ptr will delete nc on this code path
 
         wxString error;
-        error.Printf( _( "duplicate NETCLASS name '%s' in file <%s> at line %d, offset %d" ),
+        error.Printf( _( "duplicate NETCLASS name \"%s\" in file \"%s\" at line %d, offset %d" ),
                       nc->GetName().GetData(), CurSource().GetData(), CurLineNumber(), CurOffset() );
         THROW_IO_ERROR( error );
     }
@@ -1784,7 +1784,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
     if( !name.IsEmpty() && fpid.Parse( FromUTF8() ) >= 0 )
     {
         wxString error;
-        error.Printf( _( "invalid footprint ID in\nfile: <%s>\nline: %d\noffset: %d" ),
+        error.Printf( _( "invalid footprint ID in\nfile: \"%s\"\nline: %d\noffset: %d" ),
                       GetChars( CurSource() ), CurLineNumber(), CurOffset() );
         THROW_IO_ERROR( error );
     }
@@ -2460,13 +2460,13 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
         case T_net:
             if( ! pad->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
                 THROW_IO_ERROR(
-                    wxString::Format( _( "invalid net ID in\nfile: <%s>\nline: %d\noffset: %d" ),
+                    wxString::Format( _( "invalid net ID in\nfile: \"%s\"\nline: %d\noffset: %d" ),
                                       GetChars( CurSource() ), CurLineNumber(), CurOffset() )
                     );
             NeedSYMBOLorNUMBER();
             if( m_board && FromUTF8() != m_board->FindNet( pad->GetNetCode() )->GetNetname() )
                 THROW_IO_ERROR(
-                    wxString::Format( _( "invalid net ID in\nfile: <%s>\nline: %d\noffset: %d" ),
+                    wxString::Format( _( "invalid net ID in\nfile: \"%s\"\nline: %d\noffset: %d" ),
                         GetChars( CurSource() ), CurLineNumber(), CurOffset() )
                     );
             NeedRIGHT();
@@ -2695,7 +2695,7 @@ TRACK* PCB_PARSER::parseTRACK()
         case T_net:
             if( ! track->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
                 THROW_IO_ERROR(
-                    wxString::Format( _( "invalid net ID in\nfile: <%s>\nline: %d\noffset: %d" ),
+                    wxString::Format( _( "invalid net ID in\nfile: \"%s\"\nline: %d\noffset: %d" ),
                                       GetChars( CurSource() ), CurLineNumber(), CurOffset() )
                     );
             break;
@@ -2777,7 +2777,7 @@ VIA* PCB_PARSER::parseVIA()
         case T_net:
             if(! via->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true))
                 THROW_IO_ERROR(
-                    wxString::Format( _( "invalid net ID in\nfile: <%s>\nline: %d\noffset: %d" ),
+                    wxString::Format( _( "invalid net ID in\nfile: \"%s\"\nline: %d\noffset: %d" ),
                                       GetChars( CurSource() ), CurLineNumber(), CurOffset() )
                     );
             NeedRIGHT();
@@ -2841,7 +2841,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
 
             if( ! zone->SetNetCode( tmp, /* aNoAssert */ true ) )
                 THROW_IO_ERROR(
-                    wxString::Format( _( "invalid net ID in\nfile: <%s>\nline: %d\noffset: %d" ),
+                    wxString::Format( _( "invalid net ID in\nfile: \"%s\"\nline: %d\noffset: %d" ),
                                       GetChars( CurSource() ), CurLineNumber(), CurOffset() )
                     );
 

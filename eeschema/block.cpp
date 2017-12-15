@@ -493,7 +493,7 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
                 wxString msg;
 
                 msg.Printf( _( "The sheet changes cannot be made because the destination "
-                               "sheet already has the sheet <%s> or one of it's subsheets "
+                               "sheet already has the sheet \"%s\" or one of it's subsheets "
                                "as a parent somewhere in the schematic hierarchy." ),
                             GetChars( sheet->GetFileName() ) );
                 DisplayError( this, msg );

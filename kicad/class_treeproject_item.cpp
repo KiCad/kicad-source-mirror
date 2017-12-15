@@ -129,7 +129,7 @@ bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
 bool TREEPROJECT_ITEM::Delete( bool check )
 {
     wxString    msg = wxString::Format( _(
-                    "Do you really want to delete '%s'" ),
+                    "Do you really want to delete \"%s\"" ),
                     GetChars( GetFileName() )
                     );
 

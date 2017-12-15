@@ -164,7 +164,7 @@ FILE_LINE_READER::FILE_LINE_READER( const wxString& aFileName,
     if( !m_fp )
     {
         wxString msg = wxString::Format(
-            _( "Unable to open filename '%s' for reading" ), aFileName.GetData() );
+            _( "Unable to open filename \"%s\" for reading" ), aFileName.GetData() );
         THROW_IO_ERROR( msg );
     }
 
@@ -524,7 +524,7 @@ FILE_OUTPUTFORMATTER::FILE_OUTPUTFORMATTER( const wxString& aFileName,
     if( !m_fp )
     {
         wxString msg = wxString::Format(
-                            _( "cannot open or save file '%s'" ),
+                            _( "cannot open or save file \"%s\"" ),
                             m_filename.GetData() );
         THROW_IO_ERROR( msg );
     }
@@ -543,7 +543,7 @@ void FILE_OUTPUTFORMATTER::write( const char* aOutBuf, int aCount )
     if( 1 != fwrite( aOutBuf, aCount, 1, m_fp ) )
     {
         wxString msg = wxString::Format(
-                            _( "error writing to file '%s'" ),
+                            _( "error writing to file \"%s\"" ),
                             m_filename.GetData() );
         THROW_IO_ERROR( msg );
     }

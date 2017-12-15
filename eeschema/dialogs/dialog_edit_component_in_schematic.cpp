@@ -255,7 +255,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnTestChipName( wxCommandEvent& event )
 
     if( id.Parse( partname ) != -1 || !id.IsValid() )
     {
-        msg.Printf( _( "'%s' is not a valid library symbol indentifier." ), partname );
+        msg.Printf( _( "\"%s\" is not a valid library symbol indentifier." ), partname );
         DisplayError( this, msg );
         return;
     }
@@ -272,13 +272,13 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnTestChipName( wxCommandEvent& event )
 
     if( !alias )
     {
-        msg.Printf( _( "Symbol '%s' not found in library '%s'" ),
+        msg.Printf( _( "Symbol \"%s\" not found in library \"%s\"" ),
                     id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
         DisplayError( this, msg );
         return;
     }
 
-    msg.Printf( _( "Symbol '%s' found in library '%s'" ),
+    msg.Printf( _( "Symbol \"%s\" found in library \"%s\"" ),
                 id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
 
     DisplayInfoMessage( this, msg );
@@ -352,7 +352,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
 
     if( !id.IsValid() )
     {
-        msg.Printf( _( "Symbol library identifier '%s' is not valid!" ), tmp );
+        msg.Printf( _( "Symbol library identifier \"%s\" is not valid!" ), tmp );
         DisplayError( this, msg );
     }
     else if( id != m_cmp->GetLibId() )
@@ -369,7 +369,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
 
         if( !alias )
         {
-            msg.Printf( _( "Symbol '%s' not found in library '%s'!" ),
+            msg.Printf( _( "Symbol \"%s\" not found in library \"%s\"!" ),
                         id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
             DisplayError( this, msg );
         }
@@ -470,7 +470,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
               && !removeRemainingFields )
             {
                 wxString msg = wxString::Format(
-                    _( "The field name <%s> does not have a value and is not defined in "
+                    _( "The field name \"%s\" does not have a value and is not defined in "
                        "the field template list.  Empty field values are invalid an will "
                        "be removed from the component.  Do you wish to remove this and "
                        "all remaining undefined fields?" ),

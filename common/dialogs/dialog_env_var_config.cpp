@@ -248,7 +248,7 @@ void DIALOG_ENV_VAR_CONFIG::EditSelectedEntry()
                 if( IsEnvVarImmutable( envName ) )
                 {
                     DisplayErrorMessage( this,
-                                         wxString::Format( _( "Environment variable '%s' cannot be renamed" ),
+                                         wxString::Format( _( "Environment variable \"%s\" cannot be renamed" ),
                                          envName.ToStdString() ),
                                          _( "The selected environment variable name "
                                             "is required for KiCad functionality and "

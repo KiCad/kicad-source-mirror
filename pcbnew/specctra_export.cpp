@@ -803,7 +803,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
             if( module->GetReference() == wxEmptyString )
             {
-                THROW_IO_ERROR( wxString::Format( _( "Component with value of '%s' has empty reference id." ),
+                THROW_IO_ERROR( wxString::Format( _( "Component with value of \"%s\" has empty reference id." ),
                                                   GetChars( module->GetValue() ) ) );
             }
 
@@ -811,7 +811,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             STRINGSET_PAIR refpair = refs.insert( TO_UTF8( module->GetReference() ) );
             if( !refpair.second )      // insert failed
             {
-                THROW_IO_ERROR( wxString::Format( _( "Multiple components have identical reference IDs of '%s'." ),
+                THROW_IO_ERROR( wxString::Format( _( "Multiple components have identical reference IDs of \"%s\"." ),
                                                   GetChars( module->GetReference() ) ) );
             }
         }

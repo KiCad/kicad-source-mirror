@@ -331,7 +331,7 @@ void DIALOG_GENDRILL::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
     fn = Prj().AbsolutePath( m_parent->GetBoard()->GetFileName() );
     wxString defaultPath = fn.GetPathWithSep();
     wxString msg;
-    msg.Printf( _( "Do you want to use a path relative to\n'%s'" ), GetChars( defaultPath ) );
+    msg.Printf( _( "Do you want to use a path relative to\n\"%s\"" ), GetChars( defaultPath ) );
 
     wxMessageDialog dialog( this, msg, _( "Plot Output Directory" ),
                             wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );

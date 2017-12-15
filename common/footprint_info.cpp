@@ -61,7 +61,7 @@ FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aFootprintName )
 
         wxCHECK_MSG( fpid.Parse( aFootprintName ) < 0, NULL,
                 wxString::Format(
-                        wxT( "'%s' is not a valid LIB_ID." ), GetChars( aFootprintName ) ) );
+                        wxT( "\"%s\" is not a valid LIB_ID." ), GetChars( aFootprintName ) ) );
 
         wxString libNickname = fpid.GetLibNickname();
         wxString footprintName = fpid.GetLibItemName();

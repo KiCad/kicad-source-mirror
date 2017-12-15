@@ -52,7 +52,7 @@ int main( int argc, char** argv )
     FILE*   fp = fopen( argv[1], "r" );
     if( !fp )
     {
-        fprintf( stderr, "Unable to open '%s'\n", argv[1] );
+        fprintf( stderr, "Unable to open \"%s\"\n", argv[1] );
         usage();
     }
 

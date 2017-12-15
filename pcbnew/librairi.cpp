@@ -57,25 +57,25 @@
 
 // unique, "file local" translations:
 
-#define FMT_OK_OVERWRITE    _( "Library '%s' exists, OK to replace ?" )
+#define FMT_OK_OVERWRITE    _( "Library \"%s\" exists, OK to replace ?" )
 #define FMT_CREATE_LIB      _( "Create New Library Folder (the .pretty folder is the library)" )
-#define FMT_OK_DELETE       _( "OK to delete footprint %s in library '%s'" )
+#define FMT_OK_DELETE       _( "OK to delete footprint \"%s\" in library \"%s\"" )
 #define FMT_IMPORT_MODULE   _( "Import Footprint" )
-#define FMT_FILE_NOT_FOUND  _( "File '%s' not found" )
+#define FMT_FILE_NOT_FOUND  _( "File \"%s\" not found" )
 #define FMT_NOT_MODULE      _( "Not a footprint file" )
-#define FMT_MOD_NOT_FOUND   _( "Unable to find or load footprint %s from lib path '%s'" )
-#define FMT_BAD_PATH        _( "Unable to find or load footprint from path '%s'" )
-#define FMT_BAD_PATHS       _( "The footprint library '%s' could not be found in any of the search paths." )
-#define FMT_LIB_READ_ONLY   _( "Library '%s' is read only, not writable" )
+#define FMT_MOD_NOT_FOUND   _( "Unable to find or load footprint %s from lib path \"%s\"" )
+#define FMT_BAD_PATH        _( "Unable to find or load footprint from path \"%s\"" )
+#define FMT_BAD_PATHS       _( "The footprint library \"%s\" could not be found in any of the search paths." )
+#define FMT_LIB_READ_ONLY   _( "Library \"%s\" is read only, not writable" )
 
 #define FMT_EXPORT_MODULE   _( "Export Footprint" )
 #define FMT_SAVE_MODULE     _( "Save Footprint" )
 #define FMT_MOD_REF         _( "Enter footprint name:" )
-#define FMT_EXPORTED        _( "Footprint exported to file '%s'" )
-#define FMT_MOD_DELETED     _( "Footprint %s deleted from library '%s'" )
+#define FMT_EXPORTED        _( "Footprint exported to file \"%s\"" )
+#define FMT_MOD_DELETED     _( "Footprint \"%s\" deleted from library \"%s\"" )
 #define FMT_MOD_CREATE      _( "New Footprint" )
 
-#define FMT_MOD_EXISTS      _( "Footprint %s already exists in library '%s'" )
+#define FMT_MOD_EXISTS      _( "Footprint \"%s\" already exists in library \"%s\"" )
 #define FMT_NO_REF_ABORTED  _( "No footprint name defined." )
 #define FMT_SELECT_LIB      _( "Select Library" )
 
@@ -394,7 +394,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
         if( fp == NULL )
         {
             wxMessageBox( wxString::Format(
-                          _( "Unable to create or write file '%s'" ),
+                          _( "Unable to create or write file \"%s\"" ),
                          GetChars( dlg.GetPath() ) ) );
             return;
         }
@@ -547,7 +547,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
     if( !Prj().PcbFootprintLibs()->IsFootprintLibWritable( nickname ) )
     {
         wxString msg = wxString::Format(
-                _( "Library '%s' is read only" ),
+                _( "Library \"%s\" is read only" ),
                 GetChars( nickname )
                 );
 
@@ -695,7 +695,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( const wxString& aLibrary,
         if( ! MODULE::IsLibNameValid( footprintName ) )
         {
             wxString msg = wxString::Format(
-                    _("Error:\none of invalid chars '%s' found\nin '%s'" ),
+                    _( "Error:\none of invalid chars \"%s\" found\nin \"%s\"" ),
                     MODULE::StringLibNameInvalidChars( true ),
                     GetChars( footprintName ) );
 
@@ -756,8 +756,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( const wxString& aLibrary,
     if( aDisplayDialog )
     {
         wxString fmt = module_exists ?
-            _( "Component [%s] replaced in '%s'" ) :
-            _( "Component [%s] added in  '%s'" );
+            _( "Component \"%s\" replaced in \"%s\"" ) :
+            _( "Component \"%s\" added in  \"%s\"" );
 
         wxString msg = wxString::Format( fmt, footprintName.GetData(), aLibrary.GetData() );
         SetStatusText( msg );
@@ -871,7 +871,7 @@ wxString PCB_BASE_FRAME::SelectLibrary( const wxString& aNicknameExisting )
 
     wxString nickname = dlg.GetTextSelection();
 
-    wxLogDebug( wxT( "Chose footprint library '%s'." ), GetChars( nickname ) );
+    wxLogDebug( wxT( "Chose footprint library \"%s\"." ), GetChars( nickname ) );
 
     return nickname;
 }

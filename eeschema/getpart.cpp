@@ -392,7 +392,7 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aComponent, wxDC* DC )
 
         if( !part->HasConversion() )
         {
-            msg.Printf( _( "No alternate body style found for symbol '%s' in library '%s'." ),
+            msg.Printf( _( "No alternate body style found for symbol \"%s\" in library \"%s\"." ),
                         id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
             DisplayError( this,  msg );
             return;

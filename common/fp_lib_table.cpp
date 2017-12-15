@@ -192,7 +192,7 @@ void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
             delete tmp;     // The table did not take ownership of the row.
 
             wxString msg = wxString::Format(
-                                _( "Duplicate library nickname '%s' found in footprint library "
+                                _( "Duplicate library nickname \"%s\" found in footprint library "
                                    "table file line %d" ), GetChars( nickname ), lineNum );
 
             if( !errMsg.IsEmpty() )
@@ -259,7 +259,7 @@ const FP_LIB_TABLE_ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname )
     if( !row )
     {
         wxString msg = wxString::Format(
-            _( "fp-lib-table files contain no library with nickname '%s'" ),
+            _( "fp-lib-table files contain no library with nickname \"%s\"" ),
             GetChars( aNickname ) );
 
         THROW_IO_ERROR( msg );
@@ -413,7 +413,7 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable )
 
         if( !fn.DirExists() && !fn.Mkdir( 0x777, wxPATH_MKDIR_FULL ) )
         {
-            THROW_IO_ERROR( wxString::Format( _( "Cannot create global library table path '%s'." ),
+            THROW_IO_ERROR( wxString::Format( _( "Cannot create global library table path \"%s\"." ),
                                               GetChars( fn.GetPath() ) ) );
         }
 

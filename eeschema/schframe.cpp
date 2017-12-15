@@ -649,7 +649,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     {
         wxString fileName = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
         wxString msg = wxString::Format( _(
-                "Save the changes in\n'%s'\nbefore closing?"),
+                "Save the changes in\n\"%s\"\nbefore closing?"),
                 GetChars( fileName )
                 );
 
@@ -1044,7 +1044,7 @@ void SCH_EDIT_FRAME::OnNewProject( wxCommandEvent& event )
         if( create_me.FileExists() )
         {
             wxString msg = wxString::Format( _(
-                    "Schematic file '%s' already exists, use Open instead" ),
+                    "Schematic file \"%s\" already exists, use Open instead" ),
                     GetChars( create_me.GetFullName() )
                     );
             DisplayError( this, msg );
@@ -1237,7 +1237,7 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
         {
             wxString msg;
 
-            msg.Printf( _( "Error occurred loading symbol '%s' from library '%s'." ),
+            msg.Printf( _( "Error occurred loading symbol \"%s\" from library \"%s\"." ),
                         id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
             DisplayErrorMessage( this, msg, ioe.What() );
             return;

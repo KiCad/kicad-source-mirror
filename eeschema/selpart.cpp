@@ -60,7 +60,7 @@ static void DisplayCmpDocAndKeywords( wxString& aSelection, void* aData )
     }
     catch( const IO_ERROR& ioe )
     {
-        aSelection.Printf( _( "Error occurred loading symbol '%s' from library '%s'." ),
+        aSelection.Printf( _( "Error occurred loading symbol \"%s\" from library \"%s\"." ),
                            id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
         return;
     }
@@ -141,7 +141,7 @@ bool SCH_BASE_FRAME::DisplayListComponentsInLib( wxString& aLibrary, wxString& a
     {
         wxString msg;
 
-        msg.Printf( _( "Error occurred loading symbol library '%s'." ), aLibrary );
+        msg.Printf( _( "Error occurred loading symbol library \"%s\"." ), aLibrary );
         DisplayErrorMessage( this, msg, ioe.What() );
         return false;
     }

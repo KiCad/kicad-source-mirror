@@ -103,7 +103,7 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
             ( net_attr.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_CMP ) )
         {
             AddMenuItem( aPopMenu, ID_HIGHLIGHT_CMP_ITEMS,
-                         wxString::Format( _( "Highlight items of component '%s'" ),
+                         wxString::Format( _( "Highlight items of component \"%s\"" ),
                                             GetChars( net_attr.m_Cmpref ) ),
                          KiBitmap( file_footprint_xpm ) );
             add_separator = true;
@@ -112,7 +112,7 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
         if( ( net_attr.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_NET ) )
         {
             AddMenuItem( aPopMenu, ID_HIGHLIGHT_NET_ITEMS,
-                         wxString::Format( _( "Highlight items of net '%s'" ),
+                         wxString::Format( _( "Highlight items of net \"%s\"" ),
                                             GetChars( net_attr.m_Netname ) ),
                          KiBitmap( general_ratsnest_xpm ) );
             add_separator = true;
@@ -123,7 +123,7 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
         if( apertDescr && !apertDescr->m_AperFunction.IsEmpty() )
         {
             AddMenuItem( aPopMenu, ID_HIGHLIGHT_APER_ATTRIBUTE_ITEMS,
-                         wxString::Format( _( "Highlight aperture type '%s'" ),
+                         wxString::Format( _( "Highlight aperture type \"%s\"" ),
                                             GetChars( apertDescr->m_AperFunction ) ),
                          KiBitmap( flag_xpm ) );
             add_separator = true;

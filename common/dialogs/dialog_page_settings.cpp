@@ -433,7 +433,7 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
             if( !wxFileExists( fullFileName ) )
             {
                 wxString msg;
-                msg.Printf( _("Page layout description file <%s> not found. Abort"),
+                msg.Printf( _("Page layout description file \"%s\" not found. Abort"),
                             GetChars( fullFileName ) );
                 wxMessageBox( msg );
                 return false;
@@ -823,9 +823,9 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
         wxString msg = wxString::Format( _(
                 "The page layout descr filename has changed.\n"
                 "Do you want to use the relative path:\n"
-                "'%s'\n"
+                "\"%s\"\n"
                 "instead of\n"
-                "'%s'" ), GetChars( shortFileName ), GetChars( fileName ) );
+                "\"%s\"" ), GetChars( shortFileName ), GetChars( fileName ) );
 
         if( !IsOK( this, msg ) )
             shortFileName = fileName;

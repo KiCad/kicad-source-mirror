@@ -102,7 +102,7 @@ bool GITHUB_GETLIBLIST::GetFootprintLibraryList( wxArrayString& aList )
 
     if( !repoURL2listURL( m_repoURL, &fullURLCommand, itemCountMax, page ) )
     {
-        wxString msg = wxString::Format( _( "malformed URL:\n'%s'" ), GetChars( m_repoURL ) );
+        wxString msg = wxString::Format( _( "malformed URL:\n\"%s\"" ), GetChars( m_repoURL ) );
         wxMessageBox( msg );
         return false;
     }
@@ -231,7 +231,7 @@ bool GITHUB_GETLIBLIST::remoteGetJSON( const std::string& aFullURLCommand, wxStr
     {
         if( aMsgError )
         {
-            UTF8 fmt( _( "Error fetching JSON data from URL '%s'.\nReason: '%s'" ) );
+            UTF8 fmt( _( "Error fetching JSON data from URL \"%s\".\nReason: \"%s\"" ) );
 
             std::string msg = StrPrintf( fmt.c_str(),
                                          aFullURLCommand.c_str(),

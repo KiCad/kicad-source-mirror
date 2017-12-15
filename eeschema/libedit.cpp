@@ -115,7 +115,7 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, in
     {
         wxString msg;
 
-        msg.Printf( _( "Error occurred loading symbol '%s' from library '%s'." ),
+        msg.Printf( _( "Error occurred loading symbol \"%s\" from library \"%s\"." ),
                     aAliasName, GetCurLib() );
         DisplayErrorMessage( this, msg, ioe.What() );
         return false;
@@ -152,7 +152,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& a
 
     if( aEntry->GetName().IsEmpty() )
     {
-        wxLogWarning( "Symbol in library '%s' has empty name field.", aLibrary );
+        wxLogWarning( "Symbol in library \"%s\" has empty name field.", aLibrary );
         return false;
     }
 
@@ -299,7 +299,7 @@ void LIB_EDIT_FRAME::OnCreateNewPart( wxCommandEvent& event )
     // Test if there is a component with this name already.
     if( !lib.empty() && m_libMgr->PartExists( name, lib ) )
     {
-        wxString msg = wxString::Format( _( "Symbol '%s' already exists in library '%s'" ),
+        wxString msg = wxString::Format( _( "Symbol \"%s\" already exists in library \"%s\"" ),
                                          name, lib );
         DisplayError( this, msg );
         return;
@@ -477,7 +477,7 @@ void LIB_EDIT_FRAME::loadPart( const wxString& aAlias, const wxString& aLibrary,
 
     if( !alias )
     {
-        wxString msg = wxString::Format( _( "Part name '%s' not found in library '%s'" ),
+        wxString msg = wxString::Format( _( "Part name \"%s\" not found in library \"%s\"" ),
             GetChars( aAlias ), GetChars( aLibrary ) );
         DisplayError( this, msg );
         return;
@@ -518,7 +518,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
         fn.SetName( aLibrary );
         fn.SetExt( SchematicLibraryFileExtension );
 
-        wxFileDialog dlg( this, wxString::Format( _( "Save Library '%s' As..." ), aLibrary ),
+        wxFileDialog dlg( this, wxString::Format( _( "Save Library \"%s\" As..." ), aLibrary ),
                           default_path, fn.GetFullName(), SchematicLibraryFileWildcard(),
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
@@ -556,7 +556,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
     if( !m_libMgr->SaveLibrary( aLibrary, fn.GetFullPath() ) )
     {
-        msg.Printf( _( "Failed to save changes to symbol library file '%s'" ),
+        msg.Printf( _( "Failed to save changes to symbol library file \"%s\"" ),
                     fn.GetFullPath() );
         DisplayErrorMessage( this, _( "Error saving library" ), msg );
         return false;
@@ -565,9 +565,9 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     if( !aNewFile )
         m_libMgr->ClearLibraryModified( aLibrary );
 
-    msg.Printf( _( "Symbol library file '%s' saved" ), fn.GetFullPath() );
+    msg.Printf( _( "Symbol library file \"%s\" saved" ), fn.GetFullPath() );
     wxString msg1;
-    msg1.Printf( _( "Symbol library documentation file '%s' saved" ), docFileName.GetFullPath() );
+    msg1.Printf( _( "Symbol library documentation file \"%s\" saved" ), docFileName.GetFullPath() );
     AppendMsgPanel( msg, msg1, BLUE );
     UpdateAliasSelectList();
     UpdatePartSelectList();

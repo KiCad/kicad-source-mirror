@@ -360,7 +360,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::validateLibIds()
         if( !id.IsValid() )
         {
             wxString msg;
-            msg.Printf( _( "Symbol library identifier '%s' is not valid at row %d!" ), new_libid, row+1 );
+            msg.Printf( _( "Symbol library identifier \"%s\" is not valid at row %d!" ), new_libid, row+1 );
             wxMessageBox( msg );
             return false;
         }

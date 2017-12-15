@@ -267,7 +267,7 @@ bool DIALOG_SYMBOL_LIB_TABLE::verifyTables()
             else if( nick.find( ':' ) != size_t( -1 ) )
             {
                 wxString msg = wxString::Format(
-                    _( "Illegal character '%s' found in Nickname: '%s' in row %d" ),
+                    _( "Illegal character \"%s\" found in Nickname: \"%s\" in row %d" ),
                     ":", GetChars( nick ), r );
 
                 // show the tabbed panel holding the grid we have flunked:
@@ -311,7 +311,7 @@ bool DIALOG_SYMBOL_LIB_TABLE::verifyTables()
                 if( nick1 == nick2 )
                 {
                     wxString msg = wxString::Format(
-                        _( "Duplicate Nickname: '%s' in rows %d and %d" ),
+                        _( "Duplicate Nickname: \"%s\" in rows %d and %d" ),
                         GetChars( nick1 ), r1+1, r2+1
                         );
 

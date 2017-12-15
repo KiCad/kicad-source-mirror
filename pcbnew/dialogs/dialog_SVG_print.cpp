@@ -271,7 +271,7 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
     if( !EnsureFileDirectoryExists( &outputDir, boardFilename, &reporter ) )
     {
         wxString msg = wxString::Format(
-                _( "Could not write plot files to folder '%s'." ),
+                _( "Could not write plot files to folder \"%s\"." ),
                 GetChars( outputDir.GetPath() )
                 );
         DisplayError( this, msg );
@@ -302,13 +302,13 @@ void DIALOG_SVG_PRINT::ExportSVGFile( bool aOnlyOneFile )
         if( CreateSVGFile( fn.GetFullPath(), aOnlyOneFile ) )
         {
             reporter.Report (
-                    wxString::Format( _( "Plot: '%s' OK." ), GetChars( fn.GetFullPath() ) ),
+                    wxString::Format( _( "Plot: \"%s\" OK." ), GetChars( fn.GetFullPath() ) ),
                     REPORTER::RPT_ACTION );
         }
         else    // Error
         {
             reporter.Report (
-                    wxString::Format( _( "Unable to create file '%s'." ), GetChars( fn.GetFullPath() ) ),
+                    wxString::Format( _( "Unable to create file \"%s\"." ), GetChars( fn.GetFullPath() ) ),
                     REPORTER::RPT_ERROR );
         }
 

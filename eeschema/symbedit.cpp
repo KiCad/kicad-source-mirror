@@ -89,21 +89,21 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     }
     catch( const IO_ERROR& ioe )
     {
-        msg.Printf( _( "Cannot import symbol library '%s'." ), filename );
+        msg.Printf( _( "Cannot import symbol library \"%s\"." ), filename );
         DisplayErrorMessage( this, msg, ioe.What() );
         return;
     }
 
     if( symbols.empty() )
     {
-        msg.Printf( _( "Symbol library file '%s' is empty." ), filename );
+        msg.Printf( _( "Symbol library file \"%s\" is empty." ), filename );
         DisplayError( this,  msg );
         return;
     }
 
     if( symbols.GetCount() > 1 )
     {
-        msg.Printf( _( "More than one symbol found in symbol file '%s'." ), filename );
+        msg.Printf( _( "More than one symbol found in symbol file \"%s\"." ), filename );
         wxMessageBox( msg, _( "Warning" ), wxOK | wxICON_EXCLAMATION, this );
     }
 
@@ -191,7 +191,7 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
     }
 
     wxString        msg;
-    msg.Printf( _( "Saving symbol in '%s'" ), fn.GetPath() );
+    msg.Printf( _( "Saving symbol in \"%s\"" ), fn.GetPath() );
     SetStatusText( msg );
 
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
@@ -208,7 +208,7 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
     }
     catch( const IO_ERROR& ioe )
     {
-        msg.Printf( _( "An error occurred attempting to save symbol file '%s'" ),
+        msg.Printf( _( "An error occurred attempting to save symbol file \"%s\"" ),
                     fn.GetFullPath() );
         DisplayErrorMessage( this, msg, ioe.What() );
     }

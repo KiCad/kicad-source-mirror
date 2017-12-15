@@ -155,7 +155,7 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
             // Don't add symbol libraries that do not exist.
             if( tmpFn.Normalize() && tmpFn.FileExists() )
             {
-                msg.Printf( _( "Adding library '%s', file '%s' to project symbol library table." ),
+                msg.Printf( _( "Adding library \"%s\", file \"%s\" to project symbol library table." ),
                             libName, fullFileName );
                 aReporter.Report( msg, REPORTER::RPT_INFO );
 
@@ -164,7 +164,7 @@ void DIALOG_SYMBOL_REMAP::createProjectSymbolLibTable( REPORTER& aReporter )
             }
             else
             {
-                msg.Printf( _( "Library '%s' not found." ), fullFileName );
+                msg.Printf( _( "Library \"%s\" not found." ), fullFileName );
                 aReporter.Report( msg, REPORTER::RPT_WARNING );
             }
         }
@@ -214,13 +214,13 @@ void DIALOG_SYMBOL_REMAP::remapSymbolsToLibTable( REPORTER& aReporter )
 
             if( !remapSymbolToLibTable( symbol ) )
             {
-                msg.Printf( _( "No symbol '%s' found in symbol library table." ),
+                msg.Printf( _( "No symbol \"%s\" found in symbol library table." ),
                             symbol->GetLibId().GetLibItemName().wx_str() );
                 aReporter.Report( msg, REPORTER::RPT_WARNING );
             }
             else
             {
-                msg.Printf( _( "Symbol '%s' mapped to symbol library '%s'." ),
+                msg.Printf( _( "Symbol \"%s\" mapped to symbol library \"%s\"." ),
                             symbol->GetLibId().GetLibItemName().wx_str(),
                             symbol->GetLibId().GetLibNickname().wx_str() );
                 aReporter.Report( msg, REPORTER::RPT_ACTION );
@@ -300,7 +300,7 @@ void DIALOG_SYMBOL_REMAP::backupProject()
         if( wxFileName::Exists( screen->GetFileName() )
           && !wxCopyFile( screen->GetFileName(), destFileName.GetFullPath() ) )
         {
-            errorMsg += wxPrintf( _( "Failed to back up file '%s'.\n" ), screen->GetFileName() );
+            errorMsg += wxPrintf( _( "Failed to back up file \"%s\".\n" ), screen->GetFileName() );
         }
     }
 
@@ -309,13 +309,13 @@ void DIALOG_SYMBOL_REMAP::backupProject()
     destFileName.SetName( destFileName.GetFullName() );
     destFileName.SetExt( ext );
 
-    wxLogTrace( "KICAD_TRACE_PATHS", "Backing up file '%s' to file '%s'.",
+    wxLogTrace( "KICAD_TRACE_PATHS", "Backing up file \"%s\" to file \"%s\".",
                 Prj().GetProjectFullName(), destFileName.GetFullPath() );
 
     if( wxFileName::Exists( Prj().GetProjectFullName() )
       && !wxCopyFile( Prj().GetProjectFullName(), destFileName.GetFullPath() ) )
     {
-        errorMsg += wxPrintf( _( "Failed to back up file '%s'.\n" ), Prj().GetProjectFullName() );
+        errorMsg += wxPrintf( _( "Failed to back up file \"%s\".\n" ), Prj().GetProjectFullName() );
     }
 
     wxFileName srcFileName;
@@ -329,26 +329,26 @@ void DIALOG_SYMBOL_REMAP::backupProject()
     destFileName.SetName( destFileName.GetFullName() );
     destFileName.SetExt( ext );
 
-    wxLogTrace( "KICAD_TRACE_PATHS", "Backing up file '%s' to file '%s'.",
+    wxLogTrace( "KICAD_TRACE_PATHS", "Backing up file \"%s\" to file \"%s\".",
                 srcFileName.GetFullPath(), destFileName.GetFullPath() );
 
     if( srcFileName.Exists()
       && !wxCopyFile( srcFileName.GetFullPath(), destFileName.GetFullPath() ) )
     {
-        errorMsg += wxPrintf( _( "Failed to back up file '%s'.\n" ), srcFileName.GetFullPath() );
+        errorMsg += wxPrintf( _( "Failed to back up file \"%s\".\n" ), srcFileName.GetFullPath() );
     }
 
     // Back up the rescue library if it exists.
     srcFileName.SetName( Prj().GetProjectName() + "-rescue" );
     destFileName.SetName( srcFileName.GetFullName() );
 
-    wxLogTrace( "KICAD_TRACE_PATHS", "Backing up file '%s' to file '%s'.",
+    wxLogTrace( "KICAD_TRACE_PATHS", "Backing up file \"%s\" to file \"%s\".",
                 srcFileName.GetFullPath(), destFileName.GetFullPath() );
 
     if( srcFileName.Exists()
       && !wxCopyFile( srcFileName.GetFullPath(), destFileName.GetFullPath() ) )
     {
-        errorMsg += wxPrintf( _( "Failed to back up file '%s'.\n" ), srcFileName.GetFullPath() );
+        errorMsg += wxPrintf( _( "Failed to back up file \"%s\".\n" ), srcFileName.GetFullPath() );
     }
 
     // Back up the rescue library document file if it exists.
@@ -356,13 +356,13 @@ void DIALOG_SYMBOL_REMAP::backupProject()
     srcFileName.SetExt( "dcm" );
     destFileName.SetName( srcFileName.GetFullName() );
 
-    wxLogTrace( "KICAD_TRACE_PATHS", "Backing up file '%s' to file '%s'.",
+    wxLogTrace( "KICAD_TRACE_PATHS", "Backing up file \"%s\" to file \"%s\".",
                 srcFileName.GetFullPath(), destFileName.GetFullPath() );
 
     if( srcFileName.Exists()
       && !wxCopyFile( srcFileName.GetFullPath(), destFileName.GetFullPath() ) )
     {
-        errorMsg += wxPrintf( _( "Failed to back up file '%s'.\n" ), srcFileName.GetFullPath() );
+        errorMsg += wxPrintf( _( "Failed to back up file \"%s\".\n" ), srcFileName.GetFullPath() );
     }
 
     if( !errorMsg.IsEmpty() )

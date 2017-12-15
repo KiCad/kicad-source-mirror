@@ -77,14 +77,14 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
     }
     catch( const IO_ERROR& ioe )
     {
-        msg.Printf( _( "Cannot import symbol library '%s'." ), fn.GetFullPath() );
+        msg.Printf( _( "Cannot import symbol library \"%s\"." ), fn.GetFullPath() );
         DisplayErrorMessage( this, msg, ioe.What() );
         return;
     }
 
     if( symbols.empty() )
     {
-        msg.Printf( _( "Symbol library file '%s' is empty." ), fn.GetFullPath() );
+        msg.Printf( _( "Symbol library file \"%s\" is empty." ), fn.GetFullPath() );
         DisplayError( this,  msg );
         return;
     }
@@ -94,7 +94,7 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
 
     if( m_libMgr->PartExists( symbols[0], libName ) )
     {
-        msg.Printf( _( "Symbol '%s' already exists in library '%s'." ), symbolName, libName );
+        msg.Printf( _( "Symbol \"%s\" already exists in library \"%s\"." ), symbolName, libName );
         DisplayError( this,  msg );
         return;
     }
@@ -144,7 +144,7 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
         }
         catch( const IO_ERROR& ioe )
         {
-            msg.Printf( _( "Error occurred attempting to load symbol library file '%s'" ),
+            msg.Printf( _( "Error occurred attempting to load symbol library file \"%s\"" ),
                         fn.GetFullPath() );
             DisplayErrorMessage( this, msg, ioe.What() );
             return;
@@ -152,7 +152,7 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
 
         if( old_part )
         {
-            msg.Printf( _( "Symbol '%s' already exists. Overwrite it?" ), part->GetName() );
+            msg.Printf( _( "Symbol \"%s\" already exists. Overwrite it?" ), part->GetName() );
 
             if( !IsOK( this, msg ) )
                 return;
@@ -161,7 +161,7 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
 
     if( fn.Exists() && !fn.IsDirWritable() )
     {
-        msg.Printf( _( "Write permissions are required to save library '%s'." ), fn.GetFullPath() );
+        msg.Printf( _( "Write permissions are required to save library \"%s\"." ), fn.GetFullPath() );
         DisplayError( this, msg );
         return;
     }
@@ -177,7 +177,7 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
     {
         msg = _( "Failed to create symbol library file " ) + fn.GetFullPath();
         DisplayErrorMessage( this, msg, ioe.What() );
-        msg.Printf( _( "Error creating symbol library '%s'" ), fn.GetFullName() );
+        msg.Printf( _( "Error creating symbol library \"%s\"" ), fn.GetFullName() );
         SetStatusText( msg );
         return;
     }
@@ -185,6 +185,6 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
     m_mruPath = fn.GetPath();
     m_drawItem = m_lastDrawItem = NULL;
 
-    msg.Printf( _( "Symbol '%s' saved in library '%s'" ), part->GetName(), fn.GetFullPath() );
+    msg.Printf( _( "Symbol \"%s\" saved in library \"%s\"" ), part->GetName(), fn.GetFullPath() );
     SetStatusText( msg );
 }

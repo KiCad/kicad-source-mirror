@@ -359,7 +359,7 @@ void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
     fn = Prj().AbsolutePath( m_parent->GetBoard()->GetFileName() );
     wxString defaultPath = fn.GetPathWithSep();
     wxString msg;
-    msg.Printf( _( "Do you want to use a path relative to\n'%s'" ),
+    msg.Printf( _( "Do you want to use a path relative to\n\"%s\"" ),
                    GetChars( defaultPath ) );
 
     wxMessageDialog dialog( this, msg, _( "Plot Output Directory" ),
@@ -868,12 +868,12 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             plotter->EndPlot();
             delete plotter;
 
-            msg.Printf( _( "Plot file '%s' created." ), GetChars( fn.GetFullPath() ) );
+            msg.Printf( _( "Plot file \"%s\" created." ), GetChars( fn.GetFullPath() ) );
             reporter.Report( msg, REPORTER::RPT_ACTION );
         }
         else
         {
-            msg.Printf( _( "Unable to create file '%s'." ), GetChars( fn.GetFullPath() ) );
+            msg.Printf( _( "Unable to create file \"%s\"." ), GetChars( fn.GetFullPath() ) );
             reporter.Report( msg, REPORTER::RPT_ERROR );
         }
     }

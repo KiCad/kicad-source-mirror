@@ -210,7 +210,7 @@ void KICAD_MANAGER_FRAME::OnNewProject( wxCommandEvent& aEvent )
         if( !pro.Mkdir() )
         {
             wxString msg;
-            msg.Printf( _( "Directory '%s' could not be created.\n\n"
+            msg.Printf( _( "Directory \"%s\" could not be created.\n\n"
                            "Please make sure you have write permissions and try again." ),
                         pro.GetPath() );
             DisplayErrorMessage( this, msg );
@@ -336,7 +336,7 @@ void KICAD_MANAGER_FRAME::OnCreateProjectFromTemplate( wxCommandEvent& event )
     {
         wxString msg;
 
-        msg.Printf( _( "Cannot write to folder '%s'." ), prjPath.GetPath() );
+        msg.Printf( _( "Cannot write to folder \"%s\"." ), prjPath.GetPath() );
         wxMessageDialog msgDlg( this, msg, _( "Error!" ), wxICON_ERROR | wxOK | wxCENTER );
         msgDlg.SetExtendedMessage( _( "Plese check your access permissions to this folder "
                                       "and try again." ) );

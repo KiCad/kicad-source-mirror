@@ -74,13 +74,13 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
 
             if( !success )
             {
-                msg.Printf( _( "Cannot create file '%s'.\n" ),
+                msg.Printf( _( "Cannot create file \"%s\".\n" ),
                             GetChars( plotFileName.GetFullPath() ) );
                 reporter.Report( msg, REPORTER::RPT_ERROR );
             }
             else
             {
-                msg.Printf( _( "Plot: '%s' OK.\n" ),
+                msg.Printf( _( "Plot: \"%s\" OK.\n" ),
                             GetChars( plotFileName.GetFullPath() ) );
                 reporter.Report( msg, REPORTER::RPT_ACTION );
             }

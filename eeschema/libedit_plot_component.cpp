@@ -134,7 +134,7 @@ void LIB_EDIT_FRAME::CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_j
     if( !image.SaveFile( aFileName, aFmt_jpeg ? wxBITMAP_TYPE_JPEG : wxBITMAP_TYPE_PNG ) )
     {
         wxString msg;
-        msg.Printf( _( "Can't save file <%s>" ), GetChars( aFileName ) );
+        msg.Printf( _( "Can't save file \"%s\"" ), GetChars( aFileName ) );
         wxMessageBox( msg );
     }
 

@@ -512,7 +512,7 @@ bool DRC::doNetClass( NETCLASSPTR nc, wxString& msg )
 #if 0   // set to 1 when (if...) BOARD_DESIGN_SETTINGS has a m_MinClearance value
     if( nc->GetClearance() < g.m_MinClearance )
     {
-        msg.Printf( _( "NETCLASS: '%s' has Clearance:%s which is less than global:%s" ),
+        msg.Printf( _( "NETCLASS: \"%s\" has Clearance:%s which is less than global:%s" ),
                     GetChars( nc->GetName() ),
                     FmtVal( nc->GetClearance() ),
                     FmtVal( g.m_TrackClearance )
@@ -526,7 +526,7 @@ bool DRC::doNetClass( NETCLASSPTR nc, wxString& msg )
 
     if( nc->GetTrackWidth() < g.m_TrackMinWidth )
     {
-        msg.Printf( _( "NETCLASS: '%s' has TrackWidth:%s which is less than global:%s" ),
+        msg.Printf( _( "NETCLASS: \"%s\" has TrackWidth:%s which is less than global:%s" ),
                     GetChars( nc->GetName() ),
                     FmtVal( nc->GetTrackWidth() ),
                     FmtVal( g.m_TrackMinWidth )
@@ -539,7 +539,7 @@ bool DRC::doNetClass( NETCLASSPTR nc, wxString& msg )
 
     if( nc->GetViaDiameter() < g.m_ViasMinSize )
     {
-        msg.Printf( _( "NETCLASS: '%s' has Via Dia:%s which is less than global:%s" ),
+        msg.Printf( _( "NETCLASS: \"%s\" has Via Dia:%s which is less than global:%s" ),
                     GetChars( nc->GetName() ),
                     FmtVal( nc->GetViaDiameter() ),
                     FmtVal( g.m_ViasMinSize )
@@ -552,7 +552,7 @@ bool DRC::doNetClass( NETCLASSPTR nc, wxString& msg )
 
     if( nc->GetViaDrill() < g.m_ViasMinDrill )
     {
-        msg.Printf( _( "NETCLASS: '%s' has Via Drill:%s which is less than global:%s" ),
+        msg.Printf( _( "NETCLASS: \"%s\" has Via Drill:%s which is less than global:%s" ),
                     GetChars( nc->GetName() ),
                     FmtVal( nc->GetViaDrill() ),
                     FmtVal( g.m_ViasMinDrill )
@@ -565,7 +565,7 @@ bool DRC::doNetClass( NETCLASSPTR nc, wxString& msg )
 
     if( nc->GetuViaDiameter() < g.m_MicroViasMinSize )
     {
-        msg.Printf( _( "NETCLASS: '%s' has uVia Dia:%s which is less than global:%s" ),
+        msg.Printf( _( "NETCLASS: \"%s\" has uVia Dia:%s which is less than global:%s" ),
                     GetChars( nc->GetName() ),
                     FmtVal( nc->GetuViaDiameter() ),
                     FmtVal( g.m_MicroViasMinSize )
@@ -578,7 +578,7 @@ bool DRC::doNetClass( NETCLASSPTR nc, wxString& msg )
 
     if( nc->GetuViaDrill() < g.m_MicroViasMinDrill )
     {
-        msg.Printf( _( "NETCLASS: '%s' has uVia Drill:%s which is less than global:%s" ),
+        msg.Printf( _( "NETCLASS: \"%s\" has uVia Drill:%s which is less than global:%s" ),
                     GetChars( nc->GetName() ),
                     FmtVal( nc->GetuViaDrill() ),
                     FmtVal( g.m_MicroViasMinDrill )
@@ -1153,7 +1153,7 @@ bool DRC::doFootprintOverlappingDrc()
 
         if( !is_ok && m_doFootprintOverlapping )
         {
-            msg.Printf( _( "footprint '%s' has malformed courtyard" ),
+            msg.Printf( _( "footprint \"%s\" has malformed courtyard" ),
                         footprint->GetReference().GetData() );
             m_currentMarker = fillMarker( footprint->GetPosition(),
                                           DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT,
@@ -1170,7 +1170,7 @@ bool DRC::doFootprintOverlappingDrc()
             footprint->GetPolyCourtyardBack().OutlineCount() == 0 &&
             is_ok )
         {
-            msg.Printf( _( "footprint '%s' has no courtyard defined" ),
+            msg.Printf( _( "footprint \"%s\" has no courtyard defined" ),
                         footprint->GetReference().GetData() );
             m_currentMarker = fillMarker( footprint->GetPosition(),
                                           DRCE_MISSING_COURTYARD_IN_FOOTPRINT,
@@ -1208,7 +1208,7 @@ bool DRC::doFootprintOverlappingDrc()
             if( courtyard.OutlineCount() )
             {
                 //Overlap between footprint and candidate
-                msg.Printf( _( "footprints '%s' and '%s' overlap on front (top) layer" ),
+                msg.Printf( _( "footprints \"%s\" and \"%s\" overlap on front (top) layer" ),
                             footprint->GetReference().GetData(),
                             candidate->GetReference().GetData() );
                 VECTOR2I& pos = courtyard.Vertex( 0, 0, -1 );
@@ -1243,7 +1243,7 @@ bool DRC::doFootprintOverlappingDrc()
             if( courtyard.OutlineCount() )
             {
                 //Overlap between footprint and candidate
-                msg.Printf( _( "footprints '%s' and '%s' overlap on back (bottom) layer" ),
+                msg.Printf( _( "footprints \"%s\" and \"%s\" overlap on back (bottom) layer" ),
                             footprint->GetReference().GetData(),
                             candidate->GetReference().GetData() );
                 VECTOR2I& pos = courtyard.Vertex( 0, 0, -1 );

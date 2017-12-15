@@ -89,7 +89,7 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
         if( !lib.empty() && m_libMgr->PartExists( newFieldValue, lib ) )
         {
             msg.Printf( _(
-                "The name '%s' conflicts with an existing entry in the component library '%s'.\n\n"
+                "The name \"%s\" conflicts with an existing entry in the component library \"%s\".\n\n"
                 "Do you wish to replace the current component in the library with this one?" ),
                 newFieldValue,
                 lib
@@ -105,7 +105,7 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
         // Test the current component for name conflicts.
         if( parent->HasAlias( newFieldValue ) )
         {
-            msg.Printf( _( "The current component already has an alias named '%s'.\n\n"
+            msg.Printf( _( "The current component already has an alias named \"%s\".\n\n"
                            "Do you wish to remove this alias from the component?" ),
                         GetChars( newFieldValue ) );
 
@@ -140,7 +140,7 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
             if( conflicts )
             {
                 msg.Printf( _( "The new symbol contains alias names that conflict with "
-                               "entries in the library '%s'.\n\n"
+                               "entries in the library \"%s\".\n\n"
                                "Do you wish to remove all of the conflicting aliases from "
                                "this symbol?" ),
                             lib );

@@ -602,7 +602,7 @@ void LIB_EDIT_FRAME::OnUpdateViewDoc( wxUpdateUIEvent& event )
         LIB_ALIAS* alias = part->GetAlias( m_aliasName );
 
         wxCHECK_RET( alias != NULL,
-                     wxString::Format( "Alias '%s' not found in symbol '%s'.",
+                     wxString::Format( "Alias \"%s\" not found in symbol \"%s\".",
                                        m_aliasName, part->GetName() ) );
 
         enable = !alias->GetDocFileName().IsEmpty();
@@ -1518,7 +1518,7 @@ bool LIB_EDIT_FRAME::addLibraryFile( bool aCreateNew )
     if( m_libMgr->LibraryExists( libName ) )
     {
         DisplayError( this,
-                wxString::Format( _( "Library '%s' already exists" ), GetChars( libName ) ) );
+                wxString::Format( _( "Library \"%s\" already exists" ), GetChars( libName ) ) );
         return false;
     }
 
@@ -1622,7 +1622,7 @@ void LIB_EDIT_FRAME::SyncLibraries( bool aProgress )
                 wxEmptyString, m_libMgr->GetAdapter()->GetLibrariesCount(), this );
 
         m_libMgr->Sync( true, [&]( int progress, int max, const wxString& libName ) {
-            progressDlg.Update( progress, wxString::Format( _( "Loading library '%s'" ), libName ) );
+            progressDlg.Update( progress, wxString::Format( _( "Loading library \"%s\"" ), libName ) );
         } );
     }
     else

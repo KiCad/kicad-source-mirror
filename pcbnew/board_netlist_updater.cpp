@@ -518,7 +518,7 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
                                 GetChars( previouspad->GetNetname() ) );
                     m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
-                    msg.Printf( _( "Remove single pad net \"%s\" on \"%s\" pad '%s'\n" ),
+                    msg.Printf( _( "Remove single pad net \"%s\" on \"%s\" pad \"%s\"\n" ),
                                 GetChars( previouspad->GetNetname() ),
                                 GetChars( previouspad->GetParent()->GetReference() ),
                                 GetChars( previouspad->GetName() ) );

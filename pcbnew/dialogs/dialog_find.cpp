@@ -128,7 +128,7 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
     if( foundItem )
     {
         parent->SetCurItem( foundItem );
-        msg.Printf( _( "<%s> found" ), GetChars( searchString ) );
+        msg.Printf( _( "\"%s\" found" ), GetChars( searchString ) );
         parent->SetStatusText( msg );
 
         parent->CursorGoto( pos, !m_NoMouseWarpCheckBox->IsChecked() );
@@ -136,7 +136,7 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
     else
     {
         parent->SetStatusText( wxEmptyString );
-        msg.Printf( _( "<%s> not found" ), GetChars( searchString ) );
+        msg.Printf( _( "\"%s\" not found" ), GetChars( searchString ) );
         DisplayError( this, msg, 10 );
         itemCount = 0;
     }
