@@ -201,7 +201,7 @@ void SCH_BUS_ENTRY_BASE::Rotate( wxPoint aPosition )
 }
 
 
-bool SCH_BUS_ENTRY_BASE::IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList )
+bool SCH_BUS_WIRE_ENTRY::IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList )
 {
     bool previousStateStart = m_isDanglingStart;
     bool previousStateEnd = m_isDanglingEnd;
@@ -213,11 +213,9 @@ bool SCH_BUS_ENTRY_BASE::IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>&
     // when the end position is found.
     wxPoint seg_start;
 
-    // Special case: if both items are wires, show as dangling. This is because
-    // a bus entry between two wires will look like a connection, but does NOT
-    // actually represent one. We need to clarify this for the user.
-    bool start_is_wire = false;
-    bool end_is_wire = false;
+    // Store the connection type and state for the start (0) and end (1)
+    bool has_wire[2] = { false };
+    bool has_bus[2] = { false };
 
     for( DANGLING_END_ITEM& each_item : aItemList )
     {
@@ -233,11 +231,64 @@ bool SCH_BUS_ENTRY_BASE::IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>&
 
         case WIRE_END_END:
             if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_pos ) )
-                start_is_wire = true;
-            if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_End() ) )
-                end_is_wire = true;
-            // Fall through
+                has_wire[0] = true;
 
+            if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_End() ) )
+                has_wire[1] = true;
+
+            break;
+
+        case BUS_END_END:
+            if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_pos ) )
+                has_bus[0] = true;
+
+            if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_End() ) )
+                has_bus[1] = true;
+
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    /**
+     * A bus-wire entry is connected at both ends if it has a bus and a wire on its
+     * ends.  Otherwise, we connect only one end (in the case of a wire-wire or bus-bus)
+     */
+    if( ( has_wire[0] && has_bus[1] ) || ( has_wire[1] && has_bus[0] ) )
+        m_isDanglingEnd = m_isDanglingStart = false;
+    else if( has_wire[0] || has_bus[0] )
+        m_isDanglingStart = false;
+    else if( has_wire[1] || has_bus[1] )
+        m_isDanglingEnd = false;
+
+    return (previousStateStart != m_isDanglingStart) || (previousStateEnd != m_isDanglingEnd);
+}
+
+
+bool SCH_BUS_BUS_ENTRY::IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList )
+{
+    bool previousStateStart = m_isDanglingStart;
+    bool previousStateEnd = m_isDanglingEnd;
+
+    m_isDanglingStart = m_isDanglingEnd = true;
+
+    // Wires and buses are stored in the list as a pair, start and end. This
+    // variable holds the start position from one iteration so it can be used
+    // when the end position is found.
+    wxPoint seg_start;
+
+    for( DANGLING_END_ITEM& each_item : aItemList )
+    {
+        if( each_item.GetItem() == this )
+            continue;
+
+        switch( each_item.GetType() )
+        {
+        case BUS_START_END:
+            seg_start = each_item.GetPosition();
+            break;
         case BUS_END_END:
             if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_pos ) )
                 m_isDanglingStart = false;
@@ -248,10 +299,6 @@ bool SCH_BUS_ENTRY_BASE::IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>&
             break;
         }
     }
-
-    // See above: show as dangling if joining two wires
-    if( start_is_wire && end_is_wire )
-        m_isDanglingStart = m_isDanglingEnd = true;
 
     return (previousStateStart != m_isDanglingStart) || (previousStateEnd != m_isDanglingEnd);
 }
