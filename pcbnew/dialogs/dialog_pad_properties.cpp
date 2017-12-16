@@ -1027,9 +1027,26 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         error_msgs.Add( _( "Pad local clearance must be zero or greater than zero" ) );
     }
 
+    // Some pads need a negative solder mask clearance (mainly for BGA with small pads)
+    // However the negative solder mask clearance must not create negative mask size
+    // Therefore test for minimal acceptable negative value
+    // Hovewer, a negative value can give strange result with custom shapes, so it is not
+    // allowed for custom pad shape
     if( m_dummyPad->GetLocalSolderMaskMargin() < 0 )
     {
-        error_msgs.Add( _( "Pad local solder mask clearance must be zero or greater than zero" ) );
+        if( m_dummyPad->GetShape() == PAD_SHAPE_CUSTOM )
+            error_msgs.Add( _( "Pad local solder mask clearance must be zero or greater than zero" ) );
+        else
+            {
+            int min_smClearance = -std::min( m_dummyPad->GetSize().x, m_dummyPad->GetSize().y )/2;
+
+            if( m_dummyPad->GetLocalSolderMaskMargin() <= min_smClearance )
+            {
+                error_msgs.Add( wxString::Format(
+                                _( "Pad local solder mask clearance must be greater than %s" ),
+                                StringFromValue( g_UserUnit, min_smClearance, true ) ) );
+            }
+        }
     }
 
     if( m_dummyPad->GetLocalSolderPasteMargin() > 0 )
