@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-15 15:07+0100\n"
-"PO-Revision-Date: 2017-12-15 21:40+0100\n"
+"POT-Creation-Date: 2017-12-16 23:52+0100\n"
+"PO-Revision-Date: 2017-12-16 23:56+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -2512,7 +2512,9 @@ msgstr "Specchia blocco"
 msgid ""
 "Duplicate library nickname \"%s\" found in footprint library table file line "
 "%d"
-msgstr "Denominatore librerie \"%s\" duplicato nel file tabella librerie impronte alla riga %d."
+msgstr ""
+"Denominatore librerie \"%s\" duplicato nel file tabella librerie impronte "
+"alla riga %d."
 
 #: common/fp_lib_table.cpp:262
 #, c-format
@@ -2643,7 +2645,9 @@ msgstr "Non hai i permessi di scrittura per la cartella \"%s\"."
 #: common/basicframe.cpp:578
 #, c-format
 msgid "You do not have write permissions to save file \"%s\" to folder \"%s\"."
-msgstr "Non hai i permessi di scrittura per salvare il file \"%s\" nella cartella \"%s\"."
+msgstr ""
+"Non hai i permessi di scrittura per salvare il file \"%s\" nella cartella "
+"\"%s\"."
 
 #: common/basicframe.cpp:583
 #, c-format
@@ -3722,7 +3726,8 @@ msgid ""
 "\"%s\"\n"
 "%s"
 msgstr ""
-"Errore durante il salvataggio della tabella librerie di impronte del progetto:\n"
+"Errore durante il salvataggio della tabella librerie di impronte del "
+"progetto:\n"
 "\"%s\"\n"
 "%s"
 
@@ -4908,7 +4913,10 @@ msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
 "the sheet \"%s\" or one of it's subsheets as a parent somewhere in the "
 "schematic hierarchy."
-msgstr "I cambiamenti di foglio non possono essere eseguiti dato che il foglio di destinazione ha già il foglio \"%s\" o uno dei suoi sottofogli come genitore da qualche parte nella gerarchia dello schema."
+msgstr ""
+"I cambiamenti di foglio non possono essere eseguiti dato che il foglio di "
+"destinazione ha già il foglio \"%s\" o uno dei suoi sottofogli come genitore "
+"da qualche parte nella gerarchia dello schema."
 
 #: eeschema/sch_field.cpp:419
 #, c-format
@@ -5654,12 +5662,12 @@ msgstr "Pos Y"
 msgid "Pin %s, %s, %s"
 msgstr "Pin %s, %s, %s"
 
-#: eeschema/sch_collectors.cpp:443
+#: eeschema/sch_collectors.cpp:457
 #, c-format
 msgid "Child item %s of parent item %s found in sheet %s"
 msgstr "Elemento figlio %s dell'elemento genitore %s trovato nel foglio %s"
 
-#: eeschema/sch_collectors.cpp:450
+#: eeschema/sch_collectors.cpp:464
 #, c-format
 msgid "Item %s found in sheet %s"
 msgstr "Elemento %s trovato nel foglio %s"
@@ -6009,7 +6017,8 @@ msgstr "Rimappa simboli"
 
 #: eeschema/menubar.cpp:506
 msgid "Remap legacy library symbols to symbol library table"
-msgstr "Rimappa i simboli di una vecchia libreria nella tabella librerie di simboli"
+msgstr ""
+"Rimappa i simboli di una vecchia libreria nella tabella librerie di simboli"
 
 #: eeschema/menubar.cpp:513
 msgid "&Annotate Schematic"
@@ -6297,7 +6306,8 @@ msgstr "Impossibile caricare lo schema elettrico \"%s\""
 #: eeschema/files-io.cpp:526
 #, c-format
 msgid "An error occurred loading the symbol library table \"%s\"."
-msgstr "Errore durante il caricamento della tabella librerie di simboli \"%s\"."
+msgstr ""
+"Errore durante il caricamento della tabella librerie di simboli \"%s\"."
 
 #: eeschema/files-io.cpp:648
 msgid ""
@@ -6583,11 +6593,11 @@ msgid ""
 msgstr ""
 "Inserire il simbolo python che implementa le funzioni SCH_PLUGIN::Symbol*()."
 
-#: eeschema/sch_bus_entry.cpp:290
+#: eeschema/sch_bus_entry.cpp:337
 msgid "Bus to Wire Entry"
 msgstr "Elemento da bus a filo"
 
-#: eeschema/sch_bus_entry.cpp:296
+#: eeschema/sch_bus_entry.cpp:343
 msgid "Bus to Bus Entry"
 msgstr "Elemento da bus a bus "
 
@@ -6603,7 +6613,9 @@ msgstr "Scegli simbolo (%d elementi caricati)"
 #: eeschema/getpart.cpp:395
 #, c-format
 msgid "No alternate body style found for symbol \"%s\" in library \"%s\"."
-msgstr "Nessun stile corpo alternativo trovato per il simbolo \"%s\" nella libreria \"%s\"."
+msgstr ""
+"Nessun stile corpo alternativo trovato per il simbolo \"%s\" nella libreria "
+"\"%s\"."
 
 #: eeschema/netlist.cpp:72
 msgid ""
@@ -7930,7 +7942,8 @@ msgid ""
 "schematic."
 msgstr ""
 "La libreria \"%s\" ha un nome elemento duplicato \"%s\".\n"
-"Questo potrebbe causare un comportamento imprevisto all'inserimento di un componente in uno schema elettrico."
+"Questo potrebbe causare un comportamento imprevisto all'inserimento di un "
+"componente in uno schema elettrico."
 
 #: eeschema/class_library.cpp:537
 #, c-format
@@ -8168,7 +8181,7 @@ msgstr "Polilinea a (%s, %s) con %d punti"
 #: eeschema/lib_arc.cpp:95 gerbview/class_gerber_draw_item.cpp:236
 #: pcbnew/class_drawsegment.cpp:370 pcbnew/class_board_item.cpp:45
 #: pcbnew/dialogs/dialog_pad_properties.cpp:743
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1832
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1849
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:93
 msgid "Arc"
 msgstr "Arco"
@@ -8221,7 +8234,8 @@ msgstr "Un file nominato \"%s\" è già esistente"
 #: eeschema/sheet.cpp:128 eeschema/sheet.cpp:172
 #, c-format
 msgid "A file named \"%s\" already exists in the current schematic hierarchy."
-msgstr "Il file \"%s\" esiste già nella gerarchia dello schema elettrico corrente."
+msgstr ""
+"Il file \"%s\" esiste già nella gerarchia dello schema elettrico corrente."
 
 #: eeschema/sheet.cpp:133 eeschema/sheet.cpp:177
 #, c-format
@@ -9545,22 +9559,32 @@ msgstr "Cancella annotazione "
 msgid "Annotate"
 msgstr "Annota"
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:363
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:365
 #, c-format
 msgid "Symbol library identifier \"%s\" is not valid at row %d!"
 msgstr "Id di libreria di simboli \"%s\" non valido alla riga %d!"
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:461
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:485
+#, c-format
+msgid "Available Candidates for %s "
+msgstr "Candidati disponibili per %s "
+
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:489
+#, c-format
+msgid "Candidates count %d "
+msgstr "Conteggio candidati %d "
+
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:499
 #, c-format
 msgid "%u link(s) mapped, %d not found"
 msgstr "%u collegamenti mappati, %d non trovati"
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:465
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:503
 #, c-format
 msgid "All %u link(s) resolved"
 msgstr "Tutti e %u i collegamenti risolti"
 
-#: eeschema/dialogs/dialog_edit_components_libid.cpp:488
+#: eeschema/dialogs/dialog_edit_components_libid.cpp:526
 msgid "Invalid symbol library identifier"
 msgstr "Identificatore di libreria di simboli non valido"
 
@@ -11237,7 +11261,10 @@ msgid ""
 "The field name \"%s\" does not have a value and is not defined in the field "
 "template list.  Empty field values are invalid an will be removed from the "
 "component.  Do you wish to remove this and all remaining undefined fields?"
-msgstr "Il campo \"%s\" non contiene valore. I campi lasciati vuoti non saranno validi e saranno rimossi dal componente. Si desidera rimuovere questo e gli altri campi vuoti?"
+msgstr ""
+"Il campo \"%s\" non contiene valore. I campi lasciati vuoti non saranno "
+"validi e saranno rimossi dal componente. Si desidera rimuovere questo e gli "
+"altri campi vuoti?"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:480
 msgid "Remove Fields"
@@ -13205,7 +13232,9 @@ msgstr "Decomprimi progetto"
 msgid ""
 "\n"
 "Open \"%s\"\n"
-msgstr "\nApri \"%s\"\n"
+msgstr ""
+"\n"
+"Apri \"%s\"\n"
 
 #: kicad/files-io.cpp:73
 msgid "Target Directory"
@@ -15273,9 +15302,8 @@ msgstr "Non è un file impronta"
 
 #: pcbnew/librairi.cpp:66
 #, c-format
-msgid "Unable to find or load footprint %s from lib path \"%s\""
-msgstr ""
-"Impossibile trovare o caricare l'impronta %s dal percorso di libreria \"%s\""
+msgid "Unable to find or load footprint \"%s\" from lib path \"%s\""
+msgstr "Impossibile trovare o caricare l'impronta \"%s\" dal percorso di libreria \"%s\""
 
 #: pcbnew/librairi.cpp:67
 #, c-format
@@ -17348,12 +17376,14 @@ msgstr ""
 #: pcbnew/class_board.cpp:2784
 #, c-format
 msgid "Component \"%s\" pad \"%s\" not found in footprint \"%s\"\n"
-msgstr "Piazzola \"%s\" del componente \"%s\" non trovata nell'impronta \"%s\"\n"
+msgstr ""
+"Piazzola \"%s\" del componente \"%s\" non trovata nell'impronta \"%s\"\n"
 
 #: pcbnew/class_board.cpp:2802
 #, c-format
 msgid "Copper zone (net name \"%s\"): net has no pads connected."
-msgstr "Zona rame (nome connessione \"%s\"): la connessione non ha piazzole connesse."
+msgstr ""
+"Zona rame (nome connessione \"%s\"): la connessione non ha piazzole connesse."
 
 #: pcbnew/zones_by_polygon.cpp:137
 msgid "The duplicated zone cannot be on the same layers as the original zone."
@@ -18462,7 +18492,9 @@ msgstr "tipo pagina \"%s\" non valida"
 #: pcbnew/pcb_parser.cpp:901
 #, c-format
 msgid "Layer \"%s\" in file \"%s\" at line %d, is not in fixed layer hash"
-msgstr "Lo strato \"%s\" nel file \"%s\" alla riga %d, non presente nell'hash strati fisso"
+msgstr ""
+"Lo strato \"%s\" nel file \"%s\" alla riga %d, non presente nell'hash strati "
+"fisso"
 
 #: pcbnew/pcb_parser.cpp:934
 #, c-format
@@ -18909,7 +18941,7 @@ msgstr "Curva"
 
 #: pcbnew/class_drawsegment.cpp:381
 #: pcbnew/dialogs/dialog_pad_properties.cpp:737
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1832
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1849
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:82
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:202
 msgid "Segment"
@@ -18957,7 +18989,7 @@ msgstr ""
 
 #: pcbnew/legacy_netlist_reader.cpp:248
 #, c-format
-msgid "Cannot find component '%s' in footprint filter section of netlist."
+msgid "Cannot find component \"%s\" in footprint filter section of netlist."
 msgstr ""
 "Impossibile trovare il componente \"%s\" nella sezione filtro impronte della "
 "netlist."
@@ -20396,12 +20428,13 @@ msgstr "Manca '$EndMODULE' nel MODULO \"%s\""
 #: pcbnew/legacy_plugin.cpp:1427
 #, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: \"%s\""
-msgstr "Forma piazzola \"%c=0x%02x\" sconosciuta alla riga: %d dell'impronta: \"%s\""
+msgstr ""
+"Forma piazzola \"%c=0x%02x\" sconosciuta alla riga: %d dell'impronta: \"%s\""
 
 #: pcbnew/legacy_plugin.cpp:1633
 #, c-format
-msgid "Unknown EDGE_MODULE type:'%c=0x%02x' on line:%d of module:\"%s\""
-msgstr "EDGE_MODULE \"%c=0x%02x\" sconosciuto alla riga: %d del modulo: \"%s\""
+msgid "Unknown EDGE_MODULE type:'%c=0x%02x' on line:%d of footprint:\"%s\""
+msgstr "EDGE_MODULE \"%c=0x%02x\" sconosciuto alla riga: %d dell'impronta: \"%s\""
 
 #: pcbnew/legacy_plugin.cpp:2461
 #, c-format
@@ -23104,7 +23137,8 @@ msgstr "Fab_Front_later"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:160
 msgid "If you want a fabrication layer for the front side of the board"
-msgstr "Se si desidera uno strato per la fabbricazione per il fronte della scheda"
+msgstr ""
+"Se si desidera uno strato per la fabbricazione per il fronte della scheda"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:170
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1553
@@ -23152,7 +23186,9 @@ msgstr "Mask_Front_later"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:260
 msgid "If you want a solder mask layer for the front of the board"
-msgstr "Se si desidera uno strato di mascheratura per saldatura sullo strato frontale della scheda"
+msgstr ""
+"Se si desidera uno strato di mascheratura per saldatura sullo strato "
+"frontale della scheda"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:274
 msgid "Front_later"
@@ -23484,7 +23520,8 @@ msgstr "Mask_Back_later"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1443
 msgid "If you want a solder mask layer for the back side of the board"
-msgstr "Se si desidera uno strato maschera di saldatura per il retro della scheda"
+msgstr ""
+"Se si desidera uno strato maschera di saldatura per il retro della scheda"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1457
 msgid "SilkS_Back_later"
@@ -23516,7 +23553,8 @@ msgstr "Fab_Back_later"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1543
 msgid "If you want a fabrication layer for the back side of the board"
-msgstr "Se si desidera uno strato per la fabbricazione per il retro della scheda"
+msgstr ""
+"Se si desidera uno strato per la fabbricazione per il retro della scheda"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1557
 msgid "CrtYd_Back_later"
@@ -25210,27 +25248,32 @@ msgstr ""
 msgid "Pad local clearance must be zero or greater than zero"
 msgstr "L'isolamento locale della piazzola deve essere zero o maggiore di zero"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1032
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1038
 msgid "Pad local solder mask clearance must be zero or greater than zero"
 msgstr ""
 "L'isolamento della mascheda di saldatura locale deve essere zero o maggiore "
 "di zero"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1037
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1046
+#, c-format
+msgid "Pad local solder mask clearance must be greater than %s"
+msgstr "La distanza della maschera di saldatura locale deve essere maggiore di %s"
+
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1054
 msgid "Pad local solder paste clearance must be zero or less than zero"
 msgstr ""
 "L'isolamento della pasta di saldatura locale deve essere zero o maggiore di "
 "zero"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1043
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1060
 msgid "Error: pad has no layer"
 msgstr "Errore: la piazzola non ha strati"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1050
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1067
 msgid "Error: the pad is not on a copper layer and has a hole"
 msgstr "Errore: la piazzola non è su uno strato in rame ed ha un foro"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1055
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1072
 msgid ""
 "For NPTH pad, set pad size value to pad drill value, if you do not want this "
 "pad plotted in gerber files"
@@ -25239,19 +25282,19 @@ msgstr ""
 "foratura identiche a quelle della piazzola, se non si desidera tracciare "
 "questa piazzola nei file Gerber"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1075
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1092
 msgid "Incorrect value for pad offset"
 msgstr "Valore sbagliato per scarto piazzola"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1081
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1098
 msgid "Too large value for pad delta size"
 msgstr "Valore eccessivo per scarto piazzola "
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1089
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1106
 msgid "Error: Through hole pad: drill diameter set to 0"
 msgstr "Errore: piazzola con foro passante: diametro foro impostato a 0"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1094
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1111
 msgid ""
 "Error: Connector pads are not on the solder paste layer\n"
 "Use SMD pads instead"
@@ -25259,56 +25302,56 @@ msgstr ""
 "Errore: le piazzole del connettore non sono sullo strato pasta salda\n"
 "Usare piazzole SMD"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1103
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1120
 msgid "Error: only one external copper layer allowed for SMD or Connector pads"
 msgstr ""
 "Errore: solo uno strato esterno in rame è consentito per SMD o piazzole "
 "connettori"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1115
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1132
 msgid "Incorrect corner size value"
 msgstr "Valore dimensione angolo errato"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1119
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1136
 msgid "Incorrect (negative) corner size value"
 msgstr "Errato (negativo) valore dimensione angolo"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1121
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1138
 msgid "Corner size value must be smaller than 50%"
 msgstr "Il valore dimensione angolo deve essere inferiore al 50%"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1129
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1146
 msgid "Incorrect pad shape: the shape must be equivalent to only one polygon"
 msgstr ""
 "Forma piazzola errata: la forma deve essere equivalente ad un poligono solo"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1135
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1152
 msgid "Pad setup errors list"
 msgstr "Elenco errori impostazioni piazzole"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1372
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1389
 msgid "Unknown netname, netname not changed"
 msgstr "Collegamento sconosciuto"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1409
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1426
 msgid "Modify pad"
 msgstr "Modifica piazzola"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1741
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1884
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1925
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1758
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1901
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1942
 msgid "No shape selected"
 msgstr "Nessuna forma selezionata"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1832
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1849
 msgid "ring/circle"
 msgstr "anello/cerchio"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1832
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1849
 msgid "polygon"
 msgstr "poligono"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1835
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1852
 msgid "Select shape type:"
 msgstr "Seleziona il tipo di forma:"
 
