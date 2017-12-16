@@ -1630,7 +1630,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
     case 'A':   shape = S_ARC;       break;
     case 'P':   shape = S_POLYGON;   break;
     default:
-        m_error.Printf( _( "Unknown EDGE_MODULE type:'%c=0x%02x' on line:%d of module:\"%s\"" ),
+        m_error.Printf( _( "Unknown EDGE_MODULE type:'%c=0x%02x' on line:%d of footprint:\"%s\"" ),
                         (unsigned char) line[1],
                         (unsigned char) line[1],
                         m_reader->LineNumber(),

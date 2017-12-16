@@ -63,7 +63,7 @@
 #define FMT_IMPORT_MODULE   _( "Import Footprint" )
 #define FMT_FILE_NOT_FOUND  _( "File \"%s\" not found" )
 #define FMT_NOT_MODULE      _( "Not a footprint file" )
-#define FMT_MOD_NOT_FOUND   _( "Unable to find or load footprint %s from lib path \"%s\"" )
+#define FMT_MOD_NOT_FOUND   _( "Unable to find or load footprint \"%s\" from lib path \"%s\"" )
 #define FMT_BAD_PATH        _( "Unable to find or load footprint from path \"%s\"" )
 #define FMT_BAD_PATHS       _( "The footprint library \"%s\" could not be found in any of the search paths." )
 #define FMT_LIB_READ_ONLY   _( "Library \"%s\" is read only, not writable" )

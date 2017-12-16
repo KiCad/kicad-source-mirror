@@ -245,7 +245,7 @@ void LEGACY_NETLIST_READER::loadFootprintFilters()
             if( component == NULL )
             {
                 wxString msg;
-                msg.Printf( _( "Cannot find component \'%s\' in footprint filter section "
+                msg.Printf( _( "Cannot find component \"%s\" in footprint filter section "
                                "of netlist." ), GetChars( cmpRef ) );
                 THROW_PARSE_ERROR( msg, m_lineReader->GetSource(), line, m_lineReader->LineNumber(),
                                    m_lineReader->Length() );
