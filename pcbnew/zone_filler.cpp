@@ -1083,7 +1083,7 @@ void ZONE_FILLER::buildUnconnectedThermalStubsPolygonList( SHAPE_POLY_SET& aCorn
                 aCornerBuffer.NewOutline();
 
                 // add computed polygon to list
-                for( unsigned ic = 0; ic < spokes.PointCount(); ic++ )
+                for( int ic = 0; ic < spokes.PointCount(); ic++ )
                 {
                     auto cpos = spokes.CPoint( i );
                     RotatePoint( cpos, fAngle );                               // Rotate according to module orientation

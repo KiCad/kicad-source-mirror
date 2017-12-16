@@ -37,6 +37,8 @@
 #include <pgm_base.h>
 #include <symbol_lib_table.h>
 
+#include <wx/choicdlg.h>
+
 #define COL_REFS 0
 #define COL_CURR_LIBID 1
 #define COL_NEW_LIBID 2
@@ -417,6 +419,7 @@ void DIALOG_EDIT_COMPONENTS_LIBID::onClickOrphansButton( wxCommandEvent& event )
 {
     std::vector< wxString > libs = Prj().SchSymbolLibTable()->GetLogicalLibs();
     wxArrayString aliasNames;
+    wxArrayString candidateSymbNames;
 
     unsigned fixesCount = 0;
 
@@ -424,9 +427,15 @@ void DIALOG_EDIT_COMPONENTS_LIBID::onClickOrphansButton( wxCommandEvent& event )
     for( unsigned ii = 0; ii < m_OrphansRowIndexes.size(); ii++ )
     {
         wxString orphanLibid = m_grid->GetCellValue( m_OrphansRowIndexes[ii], COL_CURR_LIBID );
+        int grid_row_idx = m_OrphansRowIndexes[ii]; //row index in m_grid for the current item
 
         LIB_ID curr_libid( orphanLibid );
         wxString symbName = curr_libid.GetLibItemName();
+        // number of full LIB_ID candidates (because we search for a symbol name
+        // inside all avaiable libraries, perhaps the same symbol name can be found
+        // in more than one library, giving ambiguity
+        int libIdCandidateCount = 0;
+        candidateSymbNames.Clear();
 
         // now try to fin a candidate
         for( auto &lib : libs )
@@ -448,11 +457,40 @@ void DIALOG_EDIT_COMPONENTS_LIBID::onClickOrphansButton( wxCommandEvent& event )
             if( index != wxNOT_FOUND )
             {
                 // a candidate is found!
+                libIdCandidateCount++;
                 wxString newLibid = lib + ':' + symbName;
-                m_grid->SetCellValue( m_OrphansRowIndexes[ii], COL_NEW_LIBID, newLibid );
-                fixesCount++;
-                break;
+
+                // Uses the first found. Most of time, it is alone.
+                // Others will be stored in a candidate list
+                if( libIdCandidateCount <= 1 )
+                {
+                    m_grid->SetCellValue( grid_row_idx, COL_NEW_LIBID, newLibid );
+                    candidateSymbNames.Add( m_grid->GetCellValue( grid_row_idx, COL_NEW_LIBID ) );
+                    fixesCount++;
+                }
+                else    // Store other candidates for later selection
+                {
+                    candidateSymbNames.Add( newLibid );
+                }
             }
+        }
+
+        // If more than one LIB_ID candidate, ask for selection between candidates:
+        if( libIdCandidateCount > 1 )
+        {
+            // Mainly for user: select the row being edited
+            m_grid->SelectRow( grid_row_idx );
+
+            wxString msg;
+            msg.Printf( _( "Available Candidates for %s " ),
+                        m_grid->GetCellValue( grid_row_idx, COL_CURR_LIBID ) );
+
+            wxSingleChoiceDialog dlg ( this, msg,
+                wxString::Format( _( "Candidates count %d " ), libIdCandidateCount ),
+                candidateSymbNames );
+
+            if( dlg.ShowModal() == wxID_OK )
+                m_grid->SetCellValue( grid_row_idx, COL_NEW_LIBID, dlg.GetStringSelection() );
         }
     }
 
