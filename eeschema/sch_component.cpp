@@ -146,6 +146,9 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit,
     // Import user defined fields from the library component
     UpdateFields( true, true );
 
+    // Update the pin locations
+    UpdatePinCache();
+
     wxString msg = aPart.GetReferenceField().GetText();
 
     if( msg.IsEmpty() )
@@ -345,6 +348,14 @@ bool SCH_COMPONENT::Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib )
 // sch component by lib_id
 static bool sort_by_libid( const SCH_COMPONENT* ref, SCH_COMPONENT* cmp )
 {
+    if( ref->GetLibId() == cmp->GetLibId() )
+    {
+        if( ref->GetUnit() == cmp->GetUnit() )
+            return ref->GetConvert() < cmp->GetConvert();
+
+        return ref->GetUnit() < cmp->GetUnit();
+    }
+
     return ref->GetLibId() < cmp->GetLibId();
 }
 
@@ -389,8 +400,12 @@ void SCH_COMPONENT::ResolveAll( const SCH_COLLECTOR& aComponents, PART_LIBS* aLi
 
             next_cmp->m_part = cmp->m_part;
 
-            // Propagate the pin cache vector as well
-            next_cmp->m_Pins = cmp->m_Pins;
+            if( ( cmp->m_unit == next_cmp->m_unit ) && ( cmp->m_convert == next_cmp->m_convert ) )
+                // Propagate the pin cache vector as well
+                next_cmp->m_Pins = cmp->m_Pins;
+            else
+                next_cmp->UpdatePinCache();
+
             ii = jj;
         }
     }
@@ -433,8 +448,12 @@ void SCH_COMPONENT::ResolveAll( const SCH_COLLECTOR& aComponents, SYMBOL_LIB_TAB
 
             next_cmp->m_part = cmp->m_part;
 
-            // Propagate the pin cache vector as well
-            next_cmp->m_Pins = cmp->m_Pins;
+            if( ( cmp->m_unit == next_cmp->m_unit ) && ( cmp->m_convert == next_cmp->m_convert ) )
+                // Propagate the pin cache vector as well
+                next_cmp->m_Pins = cmp->m_Pins;
+            else
+                next_cmp->UpdatePinCache();
+
             ii = jj;
         }
     }
@@ -496,7 +515,9 @@ void SCH_COMPONENT::UpdateAllPinCaches( const SCH_COLLECTOR& aComponents )
         {
             SCH_COMPONENT* next_cmp = cmp_list[jj];
 
-            if( curr_libid != next_cmp->m_lib_id )
+            if( ( curr_libid != next_cmp->m_lib_id )
+                || ( cmp->m_unit != next_cmp->m_unit )
+                || ( cmp->m_convert != next_cmp->m_convert ) )
                 break;
 
             // Propagate the pin cache vector as well
