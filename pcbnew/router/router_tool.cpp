@@ -487,8 +487,6 @@ static VIATYPE_T getViaTypeFromFlags( int aFlags )
         wxASSERT_MSG( false, "Unhandled via type" );
     }
 
-    wxLogDebug("via type %d", viaType );
-
     return viaType;
 }
 

@@ -220,8 +220,6 @@ public:
      */
     bool ProcessEvent( wxEvent& aEvent ) override;
 
-    bool Enable( bool enable ) override;
-
     void SetAutoSaveInterval( int aInterval );
 
     int GetAutoSaveInterval() const { return m_autoSaveInterval; }

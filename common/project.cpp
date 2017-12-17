@@ -45,8 +45,6 @@ PROJECT::PROJECT()
 
 void PROJECT::ElemsClear()
 {
-    DBG( printf( "%s: clearing all _ELEMS for project %s\n", __func__, TO_UTF8( GetProjectFullName() ) );)
-
     // careful here, this should work, but the virtual destructor may not
     // be in the same link image as PROJECT.
     for( unsigned i = 0;  i < DIM( m_elems );  ++i )
