@@ -28,19 +28,6 @@
 
 
 HIDPI_GL_CANVAS::HIDPI_GL_CANVAS( wxWindow *parent,
-           const wxGLAttributes& dispAttrs,
-           wxWindowID id,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style,
-           const wxString& name,
-           const wxPalette& palette ) :
-    wxGLCanvas( parent, dispAttrs, id, pos, size, style, name, palette )
-{
-    initialize();
-}
-
-HIDPI_GL_CANVAS::HIDPI_GL_CANVAS( wxWindow *parent,
            wxWindowID id,
            const int *attribList,
            const wxPoint& pos,
@@ -50,7 +37,9 @@ HIDPI_GL_CANVAS::HIDPI_GL_CANVAS( wxWindow *parent,
            const wxPalette& palette ) :
     wxGLCanvas( parent, id, attribList, pos, size, style, name, palette )
 {
-    initialize();
+#ifdef RETINA_OPENGL_PATCH
+    SetViewWantsBestResolution( true );
+#endif
 }
 
 
@@ -75,13 +64,5 @@ float HIDPI_GL_CANVAS::GetBackingScaleFactor() const
     return static_cast< wxGLCanvas* >( const_cast< HIDPI_GL_CANVAS* >( this ))->GetBackingScaleFactor();
 #else
     return 1.0f;
-#endif
-}
-
-
-void HIDPI_GL_CANVAS::initialize()
-{
-#ifdef RETINA_OPENGL_PATCH
-    SetViewWantsBestResolution( true );
 #endif
 }

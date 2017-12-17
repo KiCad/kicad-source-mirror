@@ -42,16 +42,6 @@ class HIDPI_GL_CANVAS : public wxGLCanvas
 public:
     // wxGLCanvas constructor
     HIDPI_GL_CANVAS( wxWindow *parent,
-               const wxGLAttributes& dispAttrs,
-               wxWindowID id = wxID_ANY,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = 0,
-               const wxString& name = wxGLCanvasName,
-               const wxPalette& palette = wxNullPalette );
-
-    // wxGLCanvas constructor
-    HIDPI_GL_CANVAS( wxWindow *parent,
                wxWindowID id = wxID_ANY,
                const int *attribList = NULL,
                const wxPoint& pos = wxDefaultPosition,
@@ -66,13 +56,6 @@ public:
 
     // wxGLCanvas override (with patch applied) or default value of 1.0
     virtual float GetBackingScaleFactor() const;
-
-
-private:
-    /**
-     * @brief Common initialization
-     */
-    void initialize();
 };
 
 #endif // HIDPI_GL_CANVAS_H
