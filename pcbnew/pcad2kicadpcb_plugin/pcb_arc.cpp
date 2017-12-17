@@ -160,7 +160,7 @@ void PCB_ARC::AddToModule( MODULE* aModule )
 {
     if( IsNonCopperLayer( m_KiCadLayer ) )
     {
-        EDGE_MODULE* arc = new EDGE_MODULE( aModule, S_ARC );
+        EDGE_MODULE* arc = new EDGE_MODULE( aModule, ( IsCircle() ? S_CIRCLE : S_ARC ) );
         aModule->GraphicalItemsList().PushBack( arc );
 
         arc->SetAngle( -m_angle );
@@ -181,13 +181,19 @@ void PCB_ARC::AddToBoard()
 
     m_board->Add( dseg, ADD_APPEND );
 
-    dseg->SetShape( S_ARC );
+    dseg->SetShape( IsCircle() ? S_CIRCLE : S_ARC );
     dseg->SetTimeStamp( m_timestamp );
     dseg->SetLayer( m_KiCadLayer );
     dseg->SetStart( wxPoint( m_positionX, m_positionY ) );
     dseg->SetEnd( wxPoint( m_startX, m_startY ) );
     dseg->SetAngle( -m_angle );
     dseg->SetWidth( m_width );
+}
+
+
+bool PCB_ARC::IsCircle()
+{
+    return ( m_angle == 3600 );
 }
 
 } // namespace PCAD2KICAD

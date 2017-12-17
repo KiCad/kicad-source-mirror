@@ -526,21 +526,26 @@ void PCB_MODULE::AddToBoard()
     // reference text
     TEXTE_MODULE* ref_text = &module->Reference();
 
-    ref_text->SetText( m_name.text );
+    ref_text->SetText( ValidateReference( m_name.text ) );
     ref_text->SetType( TEXTE_MODULE::TEXT_is_REFERENCE );
 
     ref_text->SetPos0( wxPoint( m_name.correctedPositionX, m_name.correctedPositionY ) );
-    SetTextSizeFromStrokeFontHeight( ref_text, m_name.textHeight );
+    if( m_name.isTrueType )
+        SetTextSizeFromTrueTypeFontHeight( ref_text, m_name.textHeight );
+    else
+        SetTextSizeFromStrokeFontHeight( ref_text, m_name.textHeight );
 
     r = m_name.textRotation - m_rotation;
     ref_text->SetTextAngle( r );
+    ref_text->SetUnlocked( true );
 
+    ref_text->SetItalic( m_name.isItalic );
     ref_text->SetThickness( m_name.textstrokeWidth );
 
     ref_text->SetMirrored( m_name.mirror );
     ref_text->SetVisible( m_name.textIsVisible );
 
-    ref_text->SetLayer( m_KiCadLayer );
+    ref_text->SetLayer( m_name.mirror ? FlipLayer( m_KiCadLayer ) : m_KiCadLayer );
 
     // Calculate the actual position.
     ref_text->SetDrawCoord();
@@ -552,17 +557,22 @@ void PCB_MODULE::AddToBoard()
     val_text->SetType( TEXTE_MODULE::TEXT_is_VALUE );
 
     val_text->SetPos0( wxPoint( m_value.correctedPositionX, m_value.correctedPositionY ) );
-    SetTextSizeFromStrokeFontHeight( val_text, m_value.textHeight );
+    if( m_value.isTrueType )
+        SetTextSizeFromTrueTypeFontHeight( val_text, m_value.textHeight );
+    else
+        SetTextSizeFromStrokeFontHeight( val_text, m_value.textHeight );
 
     r = m_value.textRotation - m_rotation;
     val_text->SetTextAngle( r );
+    val_text->SetUnlocked( true );
 
+    val_text->SetItalic( m_value.isItalic );
     val_text->SetThickness( m_value.textstrokeWidth );
 
     val_text->SetMirrored( m_value.mirror );
     val_text->SetVisible( m_value.textIsVisible );
 
-    val_text->SetLayer( m_KiCadLayer );
+    val_text->SetLayer( m_value.mirror ? FlipLayer( m_KiCadLayer ) : m_KiCadLayer );
 
     // Calculate the actual position.
     val_text->SetDrawCoord();
@@ -591,6 +601,13 @@ void PCB_MODULE::AddToBoard()
             m_moduleObjects[i]->AddToModule( module );
     }
 
+    // MODULE POLYGONS
+    for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
+    {
+        if( m_moduleObjects[i]->m_objType == wxT( 'Z' ) )
+            m_moduleObjects[i]->AddToModule( module );
+    }
+
     // PADS
     for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
     {
@@ -615,14 +632,13 @@ void PCB_MODULE::Flip()
 
     if( m_mirror == 1 )
     {
-        // Flipped
-        m_KiCadLayer    = FlipLayer( m_KiCadLayer );
-        m_rotation      = -m_rotation;
+        m_rotation = -m_rotation;
 
         for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
         {
             if( m_moduleObjects[i]->m_objType == wxT( 'L' ) || // lines
                 m_moduleObjects[i]->m_objType == wxT( 'A' ) || // arcs
+                m_moduleObjects[i]->m_objType == wxT( 'Z' ) || // polygons
                 m_moduleObjects[i]->m_objType == wxT( 'P' ) || // pads
                 m_moduleObjects[i]->m_objType == wxT( 'V' ) )  // vias
             {

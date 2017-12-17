@@ -110,8 +110,12 @@ void PCB_TEXT::AddToBoard()
 
     pcbtxt->SetText( m_name.text );
 
-    SetTextSizeFromStrokeFontHeight( pcbtxt, m_name.textHeight );
+    if( m_name.isTrueType )
+        SetTextSizeFromTrueTypeFontHeight( pcbtxt, m_name.textHeight );
+    else
+        SetTextSizeFromStrokeFontHeight( pcbtxt, m_name.textHeight );
 
+    pcbtxt->SetItalic( m_name.isItalic );
     pcbtxt->SetThickness( m_name.textstrokeWidth );
     pcbtxt->SetTextAngle( m_name.textRotation );
 

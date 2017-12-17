@@ -56,12 +56,15 @@ enum TTEXT_JUSTIFY
 
 typedef struct _TTEXTVALUE
 {
-    wxString    text;
-    int         textPositionX, textPositionY,
-                textRotation, textHeight, textstrokeWidth;
-    int textIsVisible, mirror, textUnit;
-    int correctedPositionX, correctedPositionY;
+    wxString      text;
+    int           textPositionX, textPositionY,
+                  textRotation, textHeight, textstrokeWidth;
+    int           textIsVisible, mirror, textUnit;
+    int           correctedPositionX, correctedPositionY;
     TTEXT_JUSTIFY justify;
+    bool          isBold;
+    bool          isItalic;
+    bool          isTrueType;
 } TTEXTVALUE;
 
 extern wxString     GetWord( wxString* aStr );
@@ -71,6 +74,7 @@ extern wxString     GetAndCutWordWithMeasureUnits( wxString*    aStr,
                                                    wxString     aDefaultMeasurementUnit );
 extern int          StrToInt1Units( wxString aStr );
 extern wxString     ValidateName( wxString aName );
+extern wxString     ValidateReference( wxString aRef );
 extern void         SetWidth( wxString  aStr,
                               wxString  aDefaultMeasurementUnit,
                               int*      aWidth,
@@ -99,7 +103,7 @@ extern int          CalculateTextLengthSize( TTEXTVALUE* aText );
 extern void         CorrectTextPosition( TTEXTVALUE* aValue );
 extern void         SetTextSizeFromStrokeFontHeight( EDA_TEXT* aText,
                                                      int aTextHeight );
-
+extern void         SetTextSizeFromTrueTypeFontHeight( EDA_TEXT* aText, int aTextHeight );
 extern XNODE*       FindNode( XNODE* aChild, wxString aTag );
 extern wxString     FindNodeGetContent( XNODE* aChild, wxString aTag );
 extern void         InitTTextValue( TTEXTVALUE* aTextValue );

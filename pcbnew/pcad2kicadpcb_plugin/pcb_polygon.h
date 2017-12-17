@@ -56,6 +56,7 @@ public:
                         wxString        aActualConversion );
 
     virtual void    SetPosOffset( int aX_offs, int aY_offs ) override;
+    virtual void    Flip() override;
     void            AddToModule( MODULE* aModule ) override;
     void            AddToBoard() override;
 

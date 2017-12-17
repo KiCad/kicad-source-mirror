@@ -157,6 +157,25 @@ bool PCB_POLYGON::Parse( XNODE*         aNode,
 
 void PCB_POLYGON::AddToModule( MODULE* aModule )
 {
+    if( IsNonCopperLayer( m_KiCadLayer ) )
+    {
+        EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
+        aModule->GraphicalItemsList().PushBack( dwg );
+
+        dwg->SetWidth( 0 );
+        dwg->SetLayer( m_KiCadLayer );
+
+        auto outline = new std::vector<wxPoint>;
+        for( auto point : m_outline )
+            outline->push_back( wxPoint( point->x, point->y ) );
+
+        dwg->SetPolyPoints( *outline );
+        dwg->SetStart0( *outline->begin() );
+        dwg->SetEnd0( outline->back() );
+        dwg->SetDrawCoord();
+
+        delete( outline );
+    }
 }
 
 
@@ -205,6 +224,14 @@ void PCB_POLYGON::AddToBoard()
         //if( m_filled )
         //    zone->BuildFilledPolysListData( m_board );
     }
+}
+
+
+void PCB_POLYGON::Flip()
+{
+    PCB_COMPONENT::Flip();
+
+    m_KiCadLayer = FlipLayer( m_KiCadLayer );
 }
 
 
