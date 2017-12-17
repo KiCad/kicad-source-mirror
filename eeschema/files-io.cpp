@@ -661,6 +661,8 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     if( !AskToSaveChanges() )
         return;
 
+    // Set the project location if none is set
+    bool setProject = Prj().GetProjectFullName().IsEmpty();
     wxString path = wxPathOnly( Prj().GetProjectFullName() );
 
     wxFileDialog dlg( this, _( "Import Schematic" ), path,
@@ -669,6 +671,13 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
+
+    if( setProject )
+    {
+        wxFileName projectFn( dlg.GetPath() );
+        projectFn.SetExt( ProjectFileExtension );
+        Prj().SetProjectFullName( projectFn.GetFullPath() );
+    }
 
     // For now there is only one import plugin
     ImportFile( dlg.GetPath(), SCH_IO_MGR::SCH_EAGLE );

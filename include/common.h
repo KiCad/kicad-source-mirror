@@ -337,4 +337,13 @@ wxString GetOSXKicadMachineDataDir();
 wxString GetOSXKicadDataDir();
 #endif
 
+///> Template specialization to enable wxStrings for certain containers (e.g. unordered_map)
+namespace std
+{
+    template<> struct hash<wxString>
+    {
+        size_t operator()( const wxString& s ) const;
+    };
+}
+
 #endif  // INCLUDE__COMMON_H_

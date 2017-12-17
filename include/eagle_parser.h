@@ -40,20 +40,19 @@
 #include <macros.h>
 #include <trigo.h>
 #include <kicad_string.h>
-
-using std::string;
+#include <common.h>
 
 class MODULE;
 struct EINSTANCE;
 struct EPART;
 struct ETEXT;
 
-typedef std::unordered_map<string, wxXmlNode*> NODE_MAP;
-typedef std::map<string, MODULE*> MODULE_MAP;
-typedef std::map<string, EINSTANCE*> EINSTANCE_MAP;
-typedef std::map<string, std::unique_ptr<EPART>> EPART_MAP;
+typedef std::unordered_map<wxString, wxXmlNode*> NODE_MAP;
+typedef std::map<wxString, MODULE*> MODULE_MAP;
+typedef std::map<wxString, EINSTANCE*> EINSTANCE_MAP;
+typedef std::map<wxString, std::unique_ptr<EPART>> EPART_MAP;
 
-static inline wxXmlNode* getChildrenNodes( NODE_MAP& aMap, const string& aName )
+static inline wxXmlNode* getChildrenNodes( NODE_MAP& aMap, const wxString& aName )
 {
     auto it = aMap.find( aName );
     return it == aMap.end() ? nullptr : it->second->GetChildren();
@@ -73,7 +72,7 @@ struct XML_PARSER_ERROR : std::runtime_error
      * the passed message.
      * @param aMessage is an explanatory error message.
      */
-    XML_PARSER_ERROR( const string& aMessage ) noexcept :
+    XML_PARSER_ERROR( const wxString& aMessage ) noexcept :
         std::runtime_error( "XML parser failed - " + aMessage )
     {}
 };
@@ -134,11 +133,11 @@ public:
     }
 
     /// return the contents of the XPATH as a single string
-    string Contents()
+    wxString Contents()
     {
         typedef std::vector<TRIPLET>::const_iterator CITER_TRIPLET;
 
-        string ret;
+        wxString ret;
 
         for( CITER_TRIPLET it = p.begin();  it != p.end();  ++it )
         {
@@ -182,7 +181,7 @@ T Convert( const wxString& aValue )
  * This was implemented as an alternative to OPT. This class should be replaced with a
  * simple typedef per type using std::optional when C++17 is published.
  */
-template <class T>
+template <typename T>
 class OPTIONAL_XML_ATTRIBUTE
 {
 private:
@@ -220,6 +219,7 @@ public:
      * @param  aData is the value of the XML attribute. If this constructor is called, the
      *               attribute is available.
      */
+    template<typename V = T>
     OPTIONAL_XML_ATTRIBUTE( T aData ) :
         m_isAvailable( true ),
         m_data( aData )
@@ -361,7 +361,7 @@ NODE_MAP MapChildren( wxXmlNode* aCurrentNode );
 unsigned long EagleTimeStamp( wxXmlNode* aTree );
 
 /// Computes module timestamp basing on its name, value and unit
-time_t EagleModuleTstamp( const string& aName, const string& aValue, int aUnit );
+time_t EagleModuleTstamp( const wxString& aName, const wxString& aValue, int aUnit );
 
 /// Convert an Eagle curve end to a KiCad center for S_ARC
 wxPoint ConvertArcCenter( const wxPoint& aStart, const wxPoint& aEnd, double aAngle );
@@ -369,7 +369,7 @@ wxPoint ConvertArcCenter( const wxPoint& aStart, const wxPoint& aEnd, double aAn
 // Pre-declare for typedefs
 struct EROT;
 struct ECOORD;
-typedef OPTIONAL_XML_ATTRIBUTE<string>  opt_string;
+typedef OPTIONAL_XML_ATTRIBUTE<wxString> opt_wxString;
 typedef OPTIONAL_XML_ATTRIBUTE<int>     opt_int;
 typedef OPTIONAL_XML_ATTRIBUTE<double>  opt_double;
 typedef OPTIONAL_XML_ATTRIBUTE<bool>    opt_bool;
@@ -452,9 +452,9 @@ struct ECOORD
 struct ENET
 {
     int     netcode;
-    string  netname;
+    wxString netname;
 
-    ENET( int aNetCode, const string& aNetName ) :
+    ENET( int aNetCode, const wxString& aNetName ) :
         netcode( aNetCode ),
         netname( aNetName )
     {}
@@ -535,7 +535,7 @@ struct ELABEL
     ECOORD     size;
     LAYER_NUM  layer;
     opt_erot rot;
-    opt_string xref;
+    opt_wxString xref;
     wxString netname;
 
     ELABEL( wxXmlNode* aLabel, const wxString& aNetName );
@@ -551,7 +551,7 @@ struct EVIA
     int        layer_back_most;    /// < inclusive
     ECOORD     drill;
     opt_ecoord diam;
-    opt_string shape;
+    opt_wxString shape;
 
     EVIA( wxXmlNode* aVia );
 };
@@ -592,8 +592,8 @@ struct ERECT
  */
 struct EATTR
 {
-    string     name;
-    opt_string value;
+    wxString   name;
+    opt_wxString value;
     opt_ecoord x;
     opt_ecoord y;
     opt_ecoord size;
@@ -626,7 +626,7 @@ struct EDIMENSION
     ECOORD y3;
     int    layer;
 
-    opt_string dimensionType;
+    opt_wxString dimensionType;
 
     EDIMENSION( wxXmlNode* aDimension );
 };
@@ -635,12 +635,12 @@ struct EDIMENSION
 /// Eagle text element
 struct ETEXT
 {
-    string     text;
+    wxString   text;
     ECOORD     x;
     ECOORD     y;
     ECOORD     size;
     int        layer;
-    opt_string font;
+    opt_wxString font;
     opt_double ratio;
     opt_erot   rot;
 
@@ -670,7 +670,7 @@ struct ETEXT
 /// Eagle thru hol pad
 struct EPAD
 {
-    string     name;
+    wxString   name;
     ECOORD     x;
     ECOORD     y;
     ECOORD     drill;
@@ -697,7 +697,7 @@ struct EPAD
 /// Eagle SMD pad
 struct ESMD
 {
-    string   name;
+    wxString name;
     ECOORD   x;
     ECOORD   y;
     ECOORD   dx;
@@ -716,14 +716,14 @@ struct ESMD
 /// Eagle pin element
 struct EPIN
 {
-    string   name;
+    wxString name;
     ECOORD   x;
     ECOORD   y;
 
-    opt_string visible;
-    opt_string length;
-    opt_string direction;
-    opt_string function;
+    opt_wxString visible;
+    opt_wxString length;
+    opt_wxString direction;
+    opt_wxString function;
     opt_int swaplevel;
     opt_erot rot;
 
@@ -784,10 +784,10 @@ struct EHOLE
 /// Eagle element element
 struct EELEMENT
 {
-    string   name;
-    string   library;
-    string   package;
-    string   value;
+    wxString name;
+    wxString library;
+    wxString package;
+    wxString value;
     ECOORD   x;
     ECOORD   y;
     opt_bool locked;
@@ -801,7 +801,7 @@ struct EELEMENT
 struct ELAYER
 {
     int      number;
-    string   name;
+    wxString name;
     int      color;
     int      fill;
     opt_bool visible;
@@ -895,12 +895,12 @@ struct EPART
      *  >
      */
 
-    string name;
-    string library;
-    string deviceset;
-    string device;
-    opt_string technology;
-    opt_string value;
+    wxString name;
+    wxString library;
+    wxString deviceset;
+    wxString device;
+    opt_wxString technology;
+    opt_wxString value;
 
     EPART( wxXmlNode* aPart );
 };
@@ -920,8 +920,8 @@ struct EINSTANCE
      *     >
      */
 
-    string  part;
-    string  gate;
+    wxString part;
+    wxString gate;
     ECOORD  x;
     ECOORD  y;
     opt_bool    smashed;
@@ -945,8 +945,8 @@ struct EGATE
      *   >
      */
 
-    string  name;
-    string  symbol;
+    wxString name;
+    wxString symbol;
 
     ECOORD  x;
     ECOORD  y;
@@ -978,9 +978,9 @@ struct ECONNECT
      *         route         %ContactRoute; "all"
      *         >
      */
-    string  gate;
-    string  pin;
-    string  pad;
+    wxString gate;
+    wxString pin;
+    wxString pad;
     //int contactroute; // TODO
 
     ECONNECT( wxXmlNode* aConnect );
@@ -996,8 +996,8 @@ struct EDEVICE
               package       %String;       #IMPLIED
               >
 */
-    string      name;
-    opt_string  package;
+    wxString    name;
+    opt_wxString package;
 
     std::vector<ECONNECT> connects;
 
@@ -1016,8 +1016,8 @@ struct EDEVICE_SET
               >
     */
 
-    string name;
-    opt_string prefix;
+    wxString name;
+    opt_wxString prefix;
     opt_bool uservalue;
     //std::vector<EDEVICE> devices;
     //std::vector<EGATE> gates;

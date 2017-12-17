@@ -25,7 +25,6 @@
 
 #include <wx/filename.h>
 #include <memory>
-#include <string>
 #include <unordered_map>
 
 #include <sch_junction.h>
@@ -55,8 +54,6 @@
 #include <sch_eagle_plugin.h>
 
 
-using std::string;
-
 
 // Eagle schematic axes are aligned with x increasing left to right and Y increasing bottom to top
 // Kicad schematic axes are aligned with x increasing left to right and Y increasing top to bottom.
@@ -69,7 +66,7 @@ using namespace std;
  * @param aName the name of the specific child names to be counted.
  * @return number of children with the give node name.
  */
-static int countChildren( wxXmlNode* aCurrentNode, const std::string& aName )
+static int countChildren( wxXmlNode* aCurrentNode, const wxString& aName )
 {
     // Map node_name -> node_pointer
     int count = 0;
@@ -79,7 +76,7 @@ static int countChildren( wxXmlNode* aCurrentNode, const std::string& aName )
 
     while( aCurrentNode )
     {
-        if( aCurrentNode->GetName().ToStdString() == aName )
+        if( aCurrentNode->GetName() == aName )
             count++;
 
         // Get next child
@@ -90,13 +87,31 @@ static int countChildren( wxXmlNode* aCurrentNode, const std::string& aName )
 }
 
 
-wxString SCH_EAGLE_PLUGIN::getLibName() const
+wxString SCH_EAGLE_PLUGIN::getLibName()
 {
-    return m_kiway->Prj().GetProjectName() + "-eagle-import";
+    if( m_libName.IsEmpty() )
+    {
+        // Try to come up with a meaningful name
+        m_libName = m_kiway->Prj().GetProjectName();
+
+        if( m_libName.IsEmpty() )
+        {
+            wxFileName fn( m_rootSheet->GetFileName() );
+            m_libName = fn.GetName();
+        }
+
+        if( m_libName.IsEmpty() )
+            m_libName = "noname";
+
+        m_libName += "-eagle-import";
+        m_libName = LIB_ID::FixIllegalChars( m_libName );
+    }
+
+    return m_libName;
 }
 
 
-wxFileName SCH_EAGLE_PLUGIN::getLibFileName() const
+wxFileName SCH_EAGLE_PLUGIN::getLibFileName()
 {
     wxFileName fn( m_kiway->Prj().GetProjectPath(), getLibName(), SchematicLibraryFileExtension );
 
@@ -307,13 +322,13 @@ SCH_EAGLE_PLUGIN::~SCH_EAGLE_PLUGIN()
 
 const wxString SCH_EAGLE_PLUGIN::GetName() const
 {
-    return wxT( "EAGLE" );
+    return "EAGLE";
 }
 
 
 const wxString SCH_EAGLE_PLUGIN::GetFileExtension() const
 {
-    return wxT( "sch" );
+    return "sch";
 }
 
 
@@ -373,8 +388,8 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
     {
         // Create a new empty symbol library.
         m_pi->CreateSymbolLib( getLibFileName().GetFullPath() );
-
         wxString libTableUri = "${KIPRJMOD}/" + getLibFileName().GetFullName();
+
         // Add the new library to the project symbol library table.
         libTable->InsertRow( new SYMBOL_LIB_TABLE_ROW( getLibName(), libTableUri,
                                                        wxString( "Legacy" ) ) );
@@ -453,7 +468,7 @@ void SCH_EAGLE_PLUGIN::countNets( wxXmlNode* aSchematicNode )
 
         while( netNode )
         {
-            std::string netName = netNode->GetAttribute( "name" ).ToStdString();
+            wxString netName = netNode->GetAttribute( "name" );
 
             if( m_netCounts.count( netName ) )
                 m_netCounts[netName] = m_netCounts[netName] + 1;
@@ -479,8 +494,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
     while( partNode )
     {
         std::unique_ptr<EPART> epart( new EPART( partNode ) );
-        string name = epart->name;
-        m_partlist[name] = std::move( epart );
+        m_partlist[epart->name] = std::move( epart );
         partNode = partNode->GetNext();
     }
 
@@ -493,10 +507,10 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
         // Read the library name
         wxString libName = libraryNode->GetAttribute( "name" );
 
-        EAGLE_LIBRARY* elib = &m_eagleLibs[libName.ToStdString()];
-        elib->name = libName.ToStdString();
+        EAGLE_LIBRARY* elib = &m_eagleLibs[libName];
+        elib->name = libName;
 
-        loadLibrary( libraryNode, &m_eagleLibs[libName.ToStdString()] );
+        loadLibrary( libraryNode, &m_eagleLibs[libName] );
 
         libraryNode = libraryNode->GetNext();
     }
@@ -576,7 +590,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     }
     else
     {
-        filename = m_filename.GetName().ToStdString() + "_" + std::to_string( aSheetIndex );
+        filename = wxString::Format( "%s_%d", m_filename.GetName(), aSheetIndex );
         m_currentSheet->SetName( filename );
     }
 
@@ -613,8 +627,8 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     while( netNode )
     {
         // Get the net name and class
-        wxString    netName     = netNode->GetAttribute( "name" );
-        wxString    netClass    = netNode->GetAttribute( "class" );
+        wxString netName  = netNode->GetAttribute( "name" );
+        wxString netClass = netNode->GetAttribute( "class" );
 
         // Load segments of this net
         loadSegments( netNode, netName, netClass );
@@ -876,7 +890,7 @@ SCH_TEXT* SCH_EAGLE_PLUGIN::loadLabel( wxXmlNode* aLabelNode,
 
 
     // Determine if the Label is a local and global label based on the number of sheets the net appears on.
-    if( m_netCounts[aNetName.ToStdString()] > 1 )
+    if( m_netCounts[aNetName] > 1 )
     {
         std::unique_ptr<SCH_GLOBALLABEL> glabel( new SCH_GLOBALLABEL );
         glabel->SetPosition( elabelpos );
@@ -1036,16 +1050,14 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     EPART* epart = m_partlist[einstance.part].get();
 
-    std::string libraryname = epart->library;
-    std::string gatename = epart->deviceset + epart->device + einstance.gate;
-
-    wxString sntemp = wxString( epart->deviceset + epart->device );
-    sntemp.Replace( "*", "" );
-    std::string symbolname = sntemp.ToStdString();
+    wxString libraryname = epart->library;
+    wxString gatename = epart->deviceset + epart->device + einstance.gate;
+    wxString symbolname = wxString( epart->deviceset + epart->device );
+    symbolname.Replace( "*", "" );
 
     int unit = m_eagleLibs[libraryname].GateUnit[gatename];
 
-    std::string package;
+    wxString package;
     EAGLE_LIBRARY* elib = &m_eagleLibs[libraryname];
 
     auto p = elib->package.find( symbolname );
@@ -1055,10 +1067,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
         package = p->second;
     }
 
-    std::string kisymbolname = LIB_ID::FixIllegalChars( symbolname );
-    // std::replace( kisymbolname.begin(), kisymbolname.end(), ':', '_' );
-    // std::replace( kisymbolname.begin(), kisymbolname.end(), '/', '_' );
-    // std::replace( kisymbolname.begin(), kisymbolname.end(), '"', '_' );
+    wxString kisymbolname = LIB_ID::FixIllegalChars( symbolname );
 
     LIB_ALIAS* alias = m_pi->LoadSymbol( getLibFileName().GetFullPath(), kisymbolname,
                                          m_properties.get() );
@@ -1072,7 +1081,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     component->SetLibId( libId );
     component->SetUnit( unit );
     component->SetPosition( wxPoint( einstance.x.ToSchUnits(), -einstance.y.ToSchUnits() ) );
-    component->GetField( FOOTPRINT )->SetText( wxString( package ) );
+    component->GetField( FOOTPRINT )->SetText( package );
     component->SetTimeStamp( EagleModuleTstamp( einstance.part, epart->value ? *epart->value : "",
                     unit ) );
 
@@ -1110,7 +1119,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     component->AddHierarchicalReference( current_sheetpath, wxString( einstance.part ), unit );
 
     if( epart->value )
-        component->GetField( VALUE )->SetText( wxString::FromUTF8( epart->value->c_str() ) );
+        component->GetField( VALUE )->SetText( *epart->value );
     else
         component->GetField( VALUE )->SetText( symbolname );
 
@@ -1196,7 +1205,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
 
     while( symbolNode )
     {
-        string symbolName = symbolNode->GetAttribute( "name" ).ToStdString();
+        wxString symbolName = symbolNode->GetAttribute( "name" );
         aEagleLibrary->SymbolNodes[symbolName] = symbolNode;
         symbolNode = symbolNode->GetNext();
     }
@@ -1221,11 +1230,12 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
             EDEVICE edevice = EDEVICE( deviceNode );
 
             // Create symbol name from deviceset and device names.
-            wxString symbolName = wxString( edeviceset.name + edevice.name );
+            wxString symbolName = edeviceset.name + edevice.name;
             symbolName.Replace( "*", "" );
+            wxASSERT( !symbolName.IsEmpty() );
 
             if( edevice.package )
-                aEagleLibrary->package[symbolName.ToStdString()] = edevice.package.Get();
+                aEagleLibrary->package[symbolName] = edevice.package.Get();
 
             // Create KiCad symbol.
             unique_ptr<LIB_PART> kpart( new LIB_PART( symbolName ) );
@@ -1263,10 +1273,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
             if( gates_count == 1 && ispower )
                 kpart->SetPower();
 
-            string name = LIB_ID::FixIllegalChars( kpart->GetName().ToStdString() );
-            // std::replace( name.begin(), name.end(), ':', '_' );
-            // std::replace( name.begin(), name.end(), '/', '_' );
-            // std::replace( name.begin(), name.end(), '"', '_' );
+            wxString name = LIB_ID::FixIllegalChars( kpart->GetName() );
             kpart->SetName( name );
             m_pi->SaveSymbol( getLibFileName().GetFullPath(), new LIB_PART( *kpart.get() ),
                               m_properties.get() );
@@ -1282,11 +1289,8 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
 }
 
 
-bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
-        std::unique_ptr<LIB_PART>& aPart,
-        EDEVICE* aDevice,
-        int aGateNumber,
-        string aGateName )
+bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_PART>& aPart,
+        EDEVICE* aDevice, int aGateNumber, const wxString& aGateName )
 {
     wxString symbolName = aSymbolNode->GetAttribute( "name" );
     std::vector<LIB_ITEM*> items;
@@ -1358,7 +1362,7 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
             {
                 for( auto connect : aDevice->connects )
                 {
-                    if( connect.gate == aGateName and pin->GetName().ToStdString() == connect.pin )
+                    if( connect.gate == aGateName && pin->GetName() == connect.pin )
                     {
                         wxArrayString pads = wxSplit( wxString( connect.pad ), ' ');
 
@@ -1387,8 +1391,7 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode,
             {
                 pin->SetPartNumber( aGateNumber );
                 pin->SetUnit( aGateNumber );
-                wxString stringPinNum = wxString::Format( wxT( "%i" ), pincount );
-                pin->SetNumber( stringPinNum );
+                pin->SetNumber( wxString::Format( "%i", pincount ) );
                 aPart->AddDrawItem( pin.release() );
             }
         }

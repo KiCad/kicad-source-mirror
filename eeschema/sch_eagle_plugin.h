@@ -62,14 +62,14 @@ class LIB_TEXT;
 
 typedef struct EAGLE_LIBRARY
 {
-    std::string name;
-    boost::ptr_map<std::string, LIB_PART> KiCadSymbols;
-    std::unordered_map<std::string, wxXmlNode*> SymbolNodes;
-    std::unordered_map<std::string, int> GateUnit;
-    std::unordered_map<std::string, std::string> package;
+    wxString name;
+    boost::ptr_map<wxString, LIB_PART> KiCadSymbols;
+    std::unordered_map<wxString, wxXmlNode*> SymbolNodes;
+    std::unordered_map<wxString, int> GateUnit;
+    std::unordered_map<wxString, wxString> package;
 } EAGLE_LIBRARY;
 
-typedef boost::ptr_map<std::string, EPART> EPART_LIST;
+typedef boost::ptr_map<wxString, EPART> EPART_LIST;
 
 
 /**
@@ -161,7 +161,7 @@ private:
     SCH_JUNCTION*       loadJunction( wxXmlNode* aJunction );
     SCH_TEXT*           loadPlainText( wxXmlNode* aSchText );
 
-    bool            loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_PART>& aPart, EDEVICE* aDevice, int aGateNumber, string aGateName );
+    bool            loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_PART>& aPart, EDEVICE* aDevice, int aGateNumber, const wxString& aGateName );
     LIB_CIRCLE*     loadSymbolCircle( std::unique_ptr<LIB_PART>& aPart, wxXmlNode* aCircleNode, int aGateNumber );
     LIB_RECTANGLE*  loadSymbolRectangle( std::unique_ptr<LIB_PART>& aPart, wxXmlNode* aRectNode, int aGateNumber );
     LIB_POLYLINE*   loadSymbolPolyLine( std::unique_ptr<LIB_PART>& aPart, wxXmlNode* aPolygonNode, int aGateNumber );
@@ -172,22 +172,23 @@ private:
     void            loadTextAttributes( EDA_TEXT* aText, const ETEXT& aAttribs ) const;
     void            loadFieldAttributes( LIB_FIELD* aField, const LIB_TEXT* aText ) const;
 
-    wxString        getLibName() const;
-    wxFileName      getLibFileName() const;
+    wxString        getLibName();
+    wxFileName      getLibFileName();
 
     KIWAY* m_kiway;      ///< For creating sub sheets.
     SCH_SHEET* m_rootSheet; ///< The root sheet of the schematic being loaded..
     SCH_SHEET* m_currentSheet; ///< The current sheet of the schematic being loaded..
     wxString m_version; ///< Eagle file version.
     wxFileName m_filename;
+    wxString m_libName; ///< Library name to save symbols
 
     EPART_MAP m_partlist;
-    std::map<std::string, EAGLE_LIBRARY> m_eagleLibs;
+    std::map<wxString, EAGLE_LIBRARY> m_eagleLibs;
 
     SCH_PLUGIN::SCH_PLUGIN_RELEASER m_pi;         ///< Plugin to create the KiCad symbol library.
     std::unique_ptr< PROPERTIES > m_properties;   ///< Library plugin properties.
 
-    std::map<std::string, int> m_netCounts;
+    std::map<wxString, int> m_netCounts;
     std::map<int, SCH_LAYER_ID> m_layerMap;
 };
 

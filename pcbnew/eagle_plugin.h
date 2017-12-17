@@ -33,9 +33,9 @@
 #include <wx/xml/xml.h>
 
 
-typedef std::map< std::string, MODULE* > MODULE_MAP;
-typedef std::map< std::string, ENET >    NET_MAP;
-typedef NET_MAP::const_iterator          NET_MAP_CITER;
+typedef std::map<wxString, MODULE*>  MODULE_MAP;
+typedef std::map<wxString, ENET>     NET_MAP;
+typedef NET_MAP::const_iterator      NET_MAP_CITER;
 
 
 /// subset of eagle.drawing.board.designrules in the XML document
@@ -170,7 +170,7 @@ private:
     PCB_LAYER_ID kicad_layer( int aLayer ) const;
 
     /// Get Eagle layer name by its number
-    const std::string& eagle_layer_name( int aLayer ) const;
+    const wxString& eagle_layer_name( int aLayer ) const;
 
     /// This PLUGIN only caches one footprint library, this determines which one.
     void    cacheLib( const wxString& aLibraryPath );
@@ -197,7 +197,7 @@ private:
      *   we are loading a *.lbr not a *.brd file and the key used in m_templates is to exclude
      *   the library name.
      */
-    void loadLibrary( wxXmlNode* aLib, const std::string* aLibName );
+    void loadLibrary( wxXmlNode* aLib, const wxString* aLibName );
 
     void loadLibraries( wxXmlNode* aLibs );
     void loadElements( wxXmlNode* aElements );
@@ -215,13 +215,13 @@ private:
      * is the opposite or complement of degParse().  One has to know what the
      * other is doing.
      */
-    std::string fmtDEG( double aAngle ) const;
+    wxString fmtDEG( double aAngle ) const;
 
     /**
      * Function makeModule
      * creates a MODULE from an Eagle package.
      */
-    MODULE* makeModule( wxXmlNode* aPackage, const std::string& aPkgName ) const;
+    MODULE* makeModule( wxXmlNode* aPackage, const wxString& aPkgName ) const;
 
     void packageWire( MODULE* aModule, wxXmlNode* aTree ) const;
     void packagePad( MODULE* aModule, wxXmlNode* aTree ) const;

@@ -363,3 +363,9 @@ wxString GetOSXKicadDataDir()
     return ddir.GetPath();
 }
 #endif
+
+
+size_t std::hash<wxString>::operator()( const wxString& s ) const
+{
+    return std::hash<std::wstring>{}( s.ToStdWstring() );
+}

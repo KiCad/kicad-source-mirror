@@ -385,8 +385,9 @@ UTF8 LIB_ID::FixIllegalChars( const UTF8& aLibItemName )
 {
     UTF8 fixedName;
 
-    for( auto ch : aLibItemName )
+    for( UTF8::uni_iter chIt = aLibItemName.ubegin(); chIt < aLibItemName.uend(); ++chIt )
     {
+        auto ch = *chIt;
 
         if( !wxIsascii( ch ) )
         {
