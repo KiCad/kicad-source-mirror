@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-16 23:52+0100\n"
-"PO-Revision-Date: 2017-12-16 23:56+0100\n"
+"POT-Creation-Date: 2017-12-17 17:27+0100\n"
+"PO-Revision-Date: 2017-12-17 17:28+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -15303,7 +15303,9 @@ msgstr "Non è un file impronta"
 #: pcbnew/librairi.cpp:66
 #, c-format
 msgid "Unable to find or load footprint \"%s\" from lib path \"%s\""
-msgstr "Impossibile trovare o caricare l'impronta \"%s\" dal percorso di libreria \"%s\""
+msgstr ""
+"Impossibile trovare o caricare l'impronta \"%s\" dal percorso di libreria "
+"\"%s\""
 
 #: pcbnew/librairi.cpp:67
 #, c-format
@@ -20434,7 +20436,8 @@ msgstr ""
 #: pcbnew/legacy_plugin.cpp:1633
 #, c-format
 msgid "Unknown EDGE_MODULE type:'%c=0x%02x' on line:%d of footprint:\"%s\""
-msgstr "EDGE_MODULE \"%c=0x%02x\" sconosciuto alla riga: %d dell'impronta: \"%s\""
+msgstr ""
+"EDGE_MODULE \"%c=0x%02x\" sconosciuto alla riga: %d dell'impronta: \"%s\""
 
 #: pcbnew/legacy_plugin.cpp:2461
 #, c-format
@@ -23801,7 +23804,7 @@ msgstr "Opzioni selezionabili:"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:94
 msgid "Options supported by current plugin"
-msgstr "Opzioni non supportate dal plugin corrente"
+msgstr "Opzioni supportate dal plugin corrente"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:98
 msgid "<< Append Selected Option"
@@ -25257,7 +25260,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1046
 #, c-format
 msgid "Pad local solder mask clearance must be greater than %s"
-msgstr "La distanza della maschera di saldatura locale deve essere maggiore di %s"
+msgstr ""
+"La distanza della maschera di saldatura locale deve essere maggiore di %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1054
 msgid "Pad local solder paste clearance must be zero or less than zero"
