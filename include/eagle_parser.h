@@ -73,7 +73,7 @@ struct XML_PARSER_ERROR : std::runtime_error
      * @param aMessage is an explanatory error message.
      */
     XML_PARSER_ERROR( const wxString& aMessage ) noexcept :
-        std::runtime_error( "XML parser failed - " + aMessage )
+        std::runtime_error( "XML parser failed - " + aMessage.ToStdString() )
     {}
 };
 
