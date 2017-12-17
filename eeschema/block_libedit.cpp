@@ -417,6 +417,7 @@ void LIB_EDIT_FRAME::pasteClipboard( const wxPoint& aOffset )
         LIB_ITEM* item = (LIB_ITEM*) m_clipboard.GetItem( i )->Clone();
         item->SetParent( part );
         item->SetSelected();
+        item->SetUnit( GetUnit() );
         part->AddDrawItem( item );
     }
 
