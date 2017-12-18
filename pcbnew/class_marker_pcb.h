@@ -85,7 +85,7 @@ public:
         DrawMarker( aPanel, aDC, aDrawMode, aOffset );
     }
 
-    const wxPoint& GetPosition() const override { return m_Pos; }
+    const wxPoint GetPosition() const override { return m_Pos; }
     void SetPosition( const wxPoint& aPos ) override { m_Pos = aPos; }
 
     void SetItem( const BOARD_ITEM* aItem )

@@ -55,7 +55,7 @@ public:
         return aItem && PCB_TEXT_T == aItem->Type();
     }
 
-    virtual const wxPoint& GetPosition() const override
+    virtual const wxPoint GetPosition() const override
     {
         return EDA_TEXT::GetTextPos();
     }

@@ -111,7 +111,7 @@ public:
     virtual void Flip( const wxPoint& aCentre ) override;
 
     void SetPosition( const wxPoint& aPos ) override { m_Start = aPos; }
-    const wxPoint& GetPosition() const override { return m_Start; }
+    const wxPoint GetPosition() const override { return m_Start; }
 
     void SetWidth( int aWidth )                 { m_Width = aWidth; }
     int GetWidth() const                        { return m_Width; }
@@ -412,7 +412,7 @@ public:
      */
     void LayerPair( PCB_LAYER_ID* top_layer, PCB_LAYER_ID* bottom_layer ) const;
 
-    const wxPoint& GetPosition() const override {  return m_Start; }
+    const wxPoint GetPosition() const override {  return m_Start; }
     void SetPosition( const wxPoint& aPoint ) override { m_Start = aPoint;  m_End = aPoint; }
 
     virtual bool HitTest( const wxPoint& aPosition ) const override;

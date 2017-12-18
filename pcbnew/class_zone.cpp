@@ -163,15 +163,9 @@ bool ZONE_CONTAINER::UnFill()
 }
 
 
-const wxPoint& ZONE_CONTAINER::GetPosition() const
+const wxPoint ZONE_CONTAINER::GetPosition() const
 {
-    const WX_VECTOR_CONVERTER* pos;
-
-    // The retrieved vertex is a VECTOR2I. Casting it to a union WX_VECTOR_CONVERTER, we can later
-    // return the object shaped as a wxPoint. See the definition of the union in class_zone.h for
-    // more information on this hack.
-    pos = reinterpret_cast<const WX_VECTOR_CONVERTER*>( &GetCornerPosition( 0 ) );
-    return pos->wx;
+    return (wxPoint) GetCornerPosition( 0 );
 }
 
 

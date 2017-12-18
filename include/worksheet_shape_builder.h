@@ -211,7 +211,7 @@ public:
     // Accessors:
     int GetPenWidth() const { return m_penWidth; }
     bool IsFilled() const { return m_fill; }
-    const wxPoint& GetPosition() const { return m_pos; }
+    const wxPoint GetPosition() const { return m_pos; }
 
     /** The function to draw a WS_DRAW_ITEM_POLYGON
      */
@@ -361,7 +361,7 @@ public:
      */
     virtual bool HitTestStartPoint( const wxPoint& aPosition) override;
 
-    const wxPoint& GetPosition() { return m_pos; }
+    const wxPoint GetPosition() { return m_pos; }
 };
 
 /*

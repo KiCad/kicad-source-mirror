@@ -66,6 +66,37 @@ DRAWSEGMENT::~DRAWSEGMENT()
 {
 }
 
+void DRAWSEGMENT::SetPosition( const wxPoint& aPos )
+{
+    m_Start = aPos;
+}
+
+const wxPoint DRAWSEGMENT::GetPosition() const
+{
+    if( m_Shape == S_POLYGON )
+        return (wxPoint) m_Poly.CVertex( 0 );
+    else
+        return m_Start;
+}
+
+void DRAWSEGMENT::Move( const wxPoint& aMoveVector )
+{
+    m_Start += aMoveVector;
+    m_End   += aMoveVector;
+
+    switch ( m_Shape )
+    {
+    case S_POLYGON:
+        for( auto iter = m_Poly.Iterate(); iter; iter++ )
+        {
+            (*iter) += VECTOR2I( aMoveVector );
+        }
+        break;
+    default:
+        break;
+    }
+}
+
 
 void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
@@ -110,8 +141,20 @@ void DRAWSEGMENT::Flip( const wxPoint& aCentre )
     m_Start.y  = aCentre.y - (m_Start.y - aCentre.y);
     m_End.y  = aCentre.y - (m_End.y - aCentre.y);
 
-    if( m_Shape == S_ARC )
+    switch ( m_Shape )
+    {
+    case S_ARC:
         m_Angle = -m_Angle;
+        break;
+    case S_POLYGON:
+        for( auto iter = m_Poly.Iterate(); iter; iter++ )
+        {
+            iter->y  = aCentre.y - (iter->y - aCentre.y);
+        }
+        break;
+    default:
+        break;
+    }
 
     // DRAWSEGMENT items are not allowed on copper layers, so
     // copper layers count is not taken in accoun in Flip transform
@@ -164,7 +207,7 @@ const wxPoint DRAWSEGMENT::GetArcEnd() const
         break;
 
     default:
-        ;
+        break;
     }
 
     return endPoint;   // after rotation, the end of the arc.

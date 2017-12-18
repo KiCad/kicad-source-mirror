@@ -103,7 +103,7 @@ public:
     }
 #endif
 
-    const wxPoint& GetPosition() const override
+    const wxPoint GetPosition() const override
     {
         static wxPoint dummy(0, 0);
         return dummy;

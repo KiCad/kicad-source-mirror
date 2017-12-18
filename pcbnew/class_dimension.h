@@ -87,7 +87,7 @@ public:
 
     int GetValue() const { return m_Value; }
 
-    const wxPoint&  GetPosition() const override;
+    const wxPoint GetPosition() const override;
 
     void            SetPosition( const wxPoint& aPos ) override;
 

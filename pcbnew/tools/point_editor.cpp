@@ -615,6 +615,15 @@ void POINT_EDITOR::updatePoints()
                 m_editPoints->Point( CIRC_END ).SetPosition( segment->GetEnd() );
                 break;
 
+            case S_POLYGON:
+            {
+                const auto& points = segment->GetPolyPoints();
+                for( int i = 0; i < points.size(); i++ )
+                {
+                    m_editPoints->Point( i ).SetPosition( points[i] );
+                }
+                break;
+            }
             default:        // suppress warnings
                 break;
             }

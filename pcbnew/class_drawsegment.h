@@ -99,8 +99,8 @@ public:
     void SetBezControl2( const wxPoint& aPoint )    { m_BezierC2 = aPoint; }
     const wxPoint& GetBezControl2() const           { return m_BezierC2; }
 
-    void SetPosition( const wxPoint& aPos ) override { m_Start = aPos; }
-    const wxPoint& GetPosition() const override     { return m_Start; }
+    void SetPosition( const wxPoint& aPos ) override;
+    const wxPoint GetPosition() const override;
 
     /**
      * Function GetStart
@@ -205,11 +205,7 @@ public:
         return GetLineLength( GetStart(), GetEnd() );
     }
 
-    virtual void Move( const wxPoint& aMoveVector ) override
-    {
-        m_Start += aMoveVector;
-        m_End   += aMoveVector;
-    }
+    virtual void Move( const wxPoint& aMoveVector ) override;
 
     virtual void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
 

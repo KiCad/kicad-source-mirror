@@ -217,7 +217,7 @@ public:
     void SetShape( PAD_SHAPE_T aShape )         { m_padShape = aShape; m_boundingRadius = -1; }
 
     void SetPosition( const wxPoint& aPos ) override { m_Pos = aPos; }
-    const wxPoint& GetPosition() const override { return m_Pos; }
+    const wxPoint GetPosition() const override { return m_Pos; }
 
     /**
      * Function GetAnchorPadShape

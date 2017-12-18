@@ -932,12 +932,7 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
             m_gal->Translate( module->GetPosition() );
             m_gal->Rotate( -module->GetOrientationRadians() );
         }
-        else
-        {
-            m_gal->Translate( aSegment->GetPosition() );
-            m_gal->Rotate( DECIDEG2RAD( -aSegment->GetAngle() ) );
-        }
-
+        
         std::copy( points.begin(), points.end(), std::back_inserter( pointsList ) );
         pointsList.push_back( points[0] );
 

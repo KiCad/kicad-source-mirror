@@ -65,7 +65,7 @@ void DIMENSION::SetPosition( const wxPoint& aPos )
 }
 
 
-const wxPoint& DIMENSION::GetPosition() const
+const wxPoint DIMENSION::GetPosition() const
 {
     return m_Text.GetTextPos();
 }

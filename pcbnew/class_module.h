@@ -172,7 +172,7 @@ public:
 
     void SetPosition( const wxPoint& aPos ) override;
 
-    const wxPoint& GetPosition() const override { return m_Pos; }
+    const wxPoint GetPosition() const override { return m_Pos; }
 
     void SetOrientation( double newangle );
 

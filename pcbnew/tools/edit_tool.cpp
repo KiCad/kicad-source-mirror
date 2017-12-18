@@ -427,7 +427,9 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 // Drag items to the current cursor position
                 for( auto item : selection )
+                {
                     static_cast<BOARD_ITEM*>( item )->Move( movement );
+                }
             }
             else if( !m_dragging )    // Prepare to start dragging
             {
