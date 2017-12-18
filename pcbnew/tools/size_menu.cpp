@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 CERN
+ * Copyright (C) 2015-2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -27,7 +27,7 @@
 
 
 TRACK_VIA_SIZE_MENU::TRACK_VIA_SIZE_MENU( bool aTrackSizes, bool aViaSizes ) :
-    m_tracks( aTrackSizes ), m_vias( aViaSizes )
+    m_designSettings( nullptr ), m_tracks( aTrackSizes ), m_vias( aViaSizes )
 {
     SetIcon( width_track_via_xpm );
 }
@@ -35,24 +35,14 @@ TRACK_VIA_SIZE_MENU::TRACK_VIA_SIZE_MENU( bool aTrackSizes, bool aViaSizes ) :
 
 void TRACK_VIA_SIZE_MENU::AppendSizes( const BOARD* aBoard )
 {
-    wxString msg;
+    wxCHECK( aBoard, /* void */ );
 
-    const BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
+    m_designSettings = &aBoard->GetDesignSettings();
 
     if( m_tracks )
     {
-        for( unsigned i = 0; i < bds.m_TrackWidthList.size(); i++ )
-        {
-            if( m_vias )        // == if( m_tracks && m_vias )
-                msg = _( "Track ");
-
-            if( i == 0 )
-                msg << _( "net class width" );
-            else
-                msg << StringFromValue( g_UserUnit, bds.m_TrackWidthList[i], true );
-
-            Append( ID_POPUP_PCB_SELECT_WIDTH1 + i, msg, wxEmptyString, wxITEM_CHECK );
-        }
+        for( unsigned i = 0; i < m_designSettings->m_TrackWidthList.size(); i++ )
+            Append( ID_POPUP_PCB_SELECT_WIDTH1 + i, getTrackDescription( i ), wxEmptyString, wxITEM_CHECK );
     }
 
     if( m_tracks && m_vias )
@@ -60,28 +50,120 @@ void TRACK_VIA_SIZE_MENU::AppendSizes( const BOARD* aBoard )
 
     if( m_vias )
     {
-        for( unsigned i = 0; i < bds.m_ViasDimensionsList.size(); i++ )
+        for( unsigned i = 0; i < m_designSettings->m_ViasDimensionsList.size(); i++ )
+            Append( ID_POPUP_PCB_SELECT_VIASIZE1 + i, getViaDescription( i ), wxEmptyString, wxITEM_CHECK );
+    }
+}
+
+
+void TRACK_VIA_SIZE_MENU::update()
+{
+    if( m_tracks )
+    {
+        size_t pos;
+        unsigned int i;
+        wxMenuItem* lastEntry = FindChildItem( ID_POPUP_PCB_SELECT_WIDTH1, &pos );
+        wxCHECK( lastEntry, /* void */ );
+
+        // Start update with index 1, as 0 is reserved for the 'net class' size
+        for( i = 1; i < m_designSettings->m_TrackWidthList.size(); i++ )
         {
-            if( m_tracks )      // == if( m_tracks && m_vias )
-                msg = _( "Via " );
+            wxMenuItem* menuItem = FindItem( ID_POPUP_PCB_SELECT_WIDTH1 + i );
 
-            if( i == 0 )
+            if( menuItem )      // Update an existing entry
             {
-                msg << _( "net class size" );
+                menuItem->SetItemLabel( getTrackDescription( i ) );
             }
-            else
+            else                // Add a missing entry
             {
-                msg << StringFromValue( g_UserUnit, bds.m_ViasDimensionsList[i].m_Diameter, true );
-                wxString drill = StringFromValue( g_UserUnit,
-                                                    bds.m_ViasDimensionsList[i].m_Drill, true );
-
-                if( bds.m_ViasDimensionsList[i].m_Drill <= 0 )
-                    msg << _( ", drill: default" );
-                else
-                    msg << _( ", drill: " ) << drill;
+                Insert( pos + i, ID_POPUP_PCB_SELECT_WIDTH1 + i, getTrackDescription( i ),
+                        wxEmptyString, wxITEM_CHECK );
             }
+        }
 
-            Append( ID_POPUP_PCB_SELECT_VIASIZE1 + i, msg, wxEmptyString, wxITEM_CHECK );
+        // Remove entries that have been removed from the design settings
+        while( ( lastEntry = FindItem( ID_POPUP_PCB_SELECT_WIDTH1 + i ) ) )
+        {
+            Destroy( lastEntry );
+            ++i;
         }
     }
+
+    if( m_vias )
+    {
+        size_t pos;
+        unsigned int i;
+        wxMenuItem* lastEntry = FindChildItem( ID_POPUP_PCB_SELECT_VIASIZE1, &pos );
+        wxCHECK( lastEntry, /* void */ );
+
+        // Start update with index 1, as 0 is reserved for the 'net class' size
+        for( i = 1; i < m_designSettings->m_ViasDimensionsList.size(); i++ )
+        {
+            wxMenuItem* menuItem = FindItem( ID_POPUP_PCB_SELECT_VIASIZE1 + i );
+
+            if( menuItem )      // Update an existing entry
+            {
+                menuItem->SetItemLabel( getViaDescription( i ) );
+            }
+            else                // Add a missing entry
+            {
+                Insert( pos + i, ID_POPUP_PCB_SELECT_VIASIZE1 + i, getViaDescription( i ),
+                        wxEmptyString, wxITEM_CHECK );
+            }
+        }
+
+        // Remove entries that have been removed from the design settings
+        while( ( lastEntry = FindItem( ID_POPUP_PCB_SELECT_VIASIZE1 + i ) ) )
+        {
+            Destroy( lastEntry );
+            ++i;
+        }
+    }
+}
+
+
+wxString TRACK_VIA_SIZE_MENU::getTrackDescription( unsigned int aIndex ) const
+{
+    wxString desc;
+
+    if( m_vias )        // == if( m_tracks && m_vias )
+        desc = _( "Track ");
+
+    if( aIndex == 0 )
+        desc << _( "net class width" );
+    else
+        desc << StringFromValue( g_UserUnit, m_designSettings->m_TrackWidthList[aIndex], true );
+
+    return desc;
+}
+
+
+wxString TRACK_VIA_SIZE_MENU::getViaDescription( unsigned int aIndex ) const
+{
+    wxString desc;
+
+    if( m_tracks )      // == if( m_tracks && m_vias )
+        desc = _( "Via " );
+
+    if( aIndex == 0 )
+    {
+        desc << _( "net class size" );
+    }
+    else
+    {
+        desc << StringFromValue( g_UserUnit,
+                m_designSettings->m_ViasDimensionsList[aIndex].m_Diameter, true );
+
+        if( m_designSettings->m_ViasDimensionsList[aIndex].m_Drill <= 0 )
+        {
+            desc << _( ", drill: default" );
+        }
+        else
+        {
+            desc << _( ", drill: " ) << StringFromValue( g_UserUnit,
+                    m_designSettings->m_ViasDimensionsList[aIndex].m_Drill, true );
+        }
+    }
+
+    return desc;
 }

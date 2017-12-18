@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 CERN
+ * Copyright (C) 2015-2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -22,6 +22,7 @@
 #include <tool/context_menu.h>
 
 class BOARD;
+class BOARD_DESIGN_SETTINGS;
 
 /**
  * @brief Context menu that displays track and/or via sizes basing on the board design settings
@@ -52,6 +53,17 @@ public:
     }
 
 protected:
+    virtual void update() override;
+
+    ///> Generates a description string for track size from BOARD_DESIGN_SETTINGS list
+    wxString getTrackDescription( unsigned int aIndex ) const;
+
+    ///> Generates a description string for via size from BOARD_DESIGN_SETTINGS list
+    wxString getViaDescription( unsigned int aIndex ) const;
+
+    ///> Source of information about track/via sizes
+    const BOARD_DESIGN_SETTINGS* m_designSettings;
+
     ///> Whether the generated menu should contain track sizes.
     bool m_tracks;
 
