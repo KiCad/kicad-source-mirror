@@ -9773,11 +9773,11 @@ msgstr "Move Bus Entry"
 
 #: eeschema/onrightclick.cpp:946
 msgid "Set Bus Entry Shape /"
-msgstr "Set Bus Entry Shape /"
+msgstr "Set Bus Entry Shape ╱"
 
 #: eeschema/onrightclick.cpp:949
 msgid "Set Bus Entry Shape \\"
-msgstr "Set Bus Entry Shape \\"
+msgstr "Set Bus Entry Shape ╲"
 
 #: eeschema/onrightclick.cpp:951
 msgid "Delete Bus Entry"
