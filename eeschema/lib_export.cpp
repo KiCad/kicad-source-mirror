@@ -183,7 +183,8 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
     }
 
     m_mruPath = fn.GetPath();
-    m_drawItem = m_lastDrawItem = NULL;
+    m_lastDrawItem = NULL;
+    SetDrawItem( NULL );
 
     msg.Printf( _( "Symbol \"%s\" saved in library \"%s\"" ), part->GetName(), fn.GetFullPath() );
     SetStatusText( msg );

@@ -102,7 +102,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         return true;
     }
 
-    m_drawItem = item;
+    SetDrawItem( item );
     bool not_edited = !item->InEditMode();
     wxString msg;
 
@@ -263,7 +263,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     default:
         wxFAIL_MSG( wxString::Format( wxT( "Unknown library item type %d" ),
                                       item->Type() ) );
-        m_drawItem = NULL;
+        SetDrawItem( NULL );
         break;
     }
 

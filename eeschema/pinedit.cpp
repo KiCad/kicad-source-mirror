@@ -94,11 +94,11 @@ static int GetLastPinNumSize()
 
 void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
 {
-    if( m_drawItem == NULL || m_drawItem->Type() != LIB_PIN_T )
+    if( GetDrawItem() == NULL || GetDrawItem()->Type() != LIB_PIN_T )
         return;
 
-    STATUS_FLAGS item_flags = m_drawItem->GetFlags(); // save flags to restore them after editing
-    LIB_PIN* pin = (LIB_PIN*) m_drawItem;
+    STATUS_FLAGS item_flags = GetDrawItem()->GetFlags(); // save flags to restore them after editing
+    LIB_PIN* pin = (LIB_PIN*) GetDrawItem();
 
     DIALOG_LIB_EDIT_PIN dlg( this, pin );
 
@@ -240,7 +240,7 @@ static void AbortPinMove( EDA_DRAW_PANEL* Panel, wxDC* DC )
  */
 void LIB_EDIT_FRAME::PlacePin()
 {
-    LIB_PIN* cur_pin  = (LIB_PIN*) m_drawItem;
+    LIB_PIN* cur_pin  = (LIB_PIN*) GetDrawItem();
     bool     ask_for_pin = true;
     wxPoint  newpos;
     bool     status;
@@ -298,7 +298,7 @@ void LIB_EDIT_FRAME::PlacePin()
             CreateImagePins( cur_pin, m_unit, m_convert, m_showDeMorgan );
 
         m_lastDrawItem = cur_pin;
-        part->AddDrawItem( m_drawItem );
+        part->AddDrawItem( GetDrawItem() );
     }
 
     // Put linked pins in new position, and clear flags
@@ -311,7 +311,7 @@ void LIB_EDIT_FRAME::PlacePin()
         pin->ClearFlags();
     }
 
-    m_drawItem = NULL;
+    SetDrawItem( NULL );
 
     OnModify();
     m_canvas->Refresh();
@@ -326,7 +326,7 @@ void LIB_EDIT_FRAME::PlacePin()
  */
 void LIB_EDIT_FRAME::StartMovePin( wxDC* DC )
 {
-    LIB_PIN* cur_pin = (LIB_PIN*) m_drawItem;
+    LIB_PIN* cur_pin = (LIB_PIN*) GetDrawItem();
     wxPoint  startPos;
 
     TempCopyComponent();
@@ -432,7 +432,7 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
 
     LIB_PIN* pin = new LIB_PIN( part );
 
-    m_drawItem = pin;
+    SetDrawItem( pin );
 
     pin->SetFlags( IS_NEW );
     pin->SetUnit( m_unit );
@@ -649,7 +649,7 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
     IncrementLabelMember( msg, GetRepeatDeltaLabel() );
     pin->SetNumber( msg );
 
-    m_drawItem = pin;
+    SetDrawItem( pin );
 
     if( SynchronizePins() )
         pin->SetFlags( IS_LINKED );
@@ -660,7 +660,7 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
     SetCrossHairPosition( wxPoint( pin->GetPosition().x, -pin->GetPosition().y ) );
 
     // Add this new pin in list, and creates pins for others parts if needed
-    m_drawItem = pin;
+    SetDrawItem( pin );
     ClearTempCopyComponent();
     PlacePin();
     m_lastDrawItem = pin;

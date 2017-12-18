@@ -100,6 +100,7 @@ const KICAD_T LIB_COLLECTOR::DoubleClickItems[] = {
     LIB_POLYLINE_T,
     LIB_TEXT_T,
     LIB_FIELD_T,
+    LIB_BEZIER_T,
     EOT
 };
 

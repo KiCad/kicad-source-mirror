@@ -50,7 +50,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     LIB_PART*       part = GetCurPart();
 
     // Exit if no library entry is selected or a command is in progress.
-    if( !part || ( m_drawItem && m_drawItem->GetFlags() ) )
+    if( !part || ( GetDrawItem() && GetDrawItem()->GetFlags() ) )
         return;
 
     PROJECT&        prj = Prj();

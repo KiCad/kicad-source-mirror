@@ -270,7 +270,7 @@ void LIB_EDIT_FRAME::OnRevertLibrary( wxCommandEvent& aEvent )
 void LIB_EDIT_FRAME::OnCreateNewPart( wxCommandEvent& event )
 {
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
-    m_drawItem = NULL;
+    SetDrawItem( NULL );
     wxString lib = getTargetLib();
 
     if( !m_libMgr->LibraryExists( lib ) )
@@ -491,7 +491,8 @@ void LIB_EDIT_FRAME::loadPart( const wxString& aAlias, const wxString& aLibrary,
         return;
     }
 
-    m_lastDrawItem = m_drawItem = nullptr;
+    m_lastDrawItem = nullptr;
+    SetDrawItem( NULL );
     m_aliasName = aAlias;
     m_unit = ( aUnit <= part->GetUnitCount() ? aUnit : 1 );
 

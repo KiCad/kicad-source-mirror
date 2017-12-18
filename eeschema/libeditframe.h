@@ -34,6 +34,7 @@
 #define LIBEDITFRM_H_
 
 #include <sch_base_frame.h>
+#include <class_base_screen.h>
 #include <class_sch_screen.h>
 
 #include <lib_draw_item.h>
@@ -97,7 +98,6 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     static int m_drawLineWidth;
 
     static LIB_ITEM*    m_lastDrawItem;
-    static LIB_ITEM*    m_drawItem;
     static wxString     m_aliasName;
 
     // The unit number to edit and show
@@ -426,9 +426,9 @@ public:
         m_lastDrawItem = drawItem;
     }
 
-    LIB_ITEM* GetDrawItem() { return m_drawItem; }
+    LIB_ITEM* GetDrawItem() const { return GetScreen()->GetCurLibItem(); }
 
-    void SetDrawItem( LIB_ITEM* drawItem );
+    void SetDrawItem( LIB_ITEM* drawItem ) { GetScreen()->SetCurLibItem( drawItem ); }
 
     bool GetShowDeMorgan() { return m_showDeMorgan; }
 
@@ -463,7 +463,7 @@ public:
      */
     void ClearTempCopyComponent();
 
-    bool IsEditingDrawItem() { return m_drawItem && m_drawItem->InEditMode(); }
+    bool IsEditingDrawItem() { return GetDrawItem() && GetDrawItem()->InEditMode(); }
 
 private:
     void loadPart( const wxString& aLibrary, const wxString& aPart, int Unit );

@@ -147,6 +147,7 @@ static void AbortSymbolTraceOn( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
 LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_PART* LibEntry, wxDC* DC )
 {
+    LIB_ITEM* item = GetDrawItem();
     m_canvas->SetMouseCapture( SymbolDisplayDraw, AbortSymbolTraceOn );
     wxPoint drawPos = GetCrossHairPosition( true );
 
@@ -157,19 +158,19 @@ LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_PART* LibEntry, wxDC* DC )
     switch( GetToolId() )
     {
     case ID_LIBEDIT_BODY_ARC_BUTT:
-        m_drawItem = new LIB_ARC( LibEntry );
+        item = new LIB_ARC( LibEntry );
         break;
 
     case ID_LIBEDIT_BODY_CIRCLE_BUTT:
-        m_drawItem = new LIB_CIRCLE( LibEntry );
+        item = new LIB_CIRCLE( LibEntry );
         break;
 
     case ID_LIBEDIT_BODY_RECT_BUTT:
-        m_drawItem = new LIB_RECTANGLE( LibEntry );
+        item = new LIB_RECTANGLE( LibEntry );
         break;
 
     case ID_LIBEDIT_BODY_LINE_BUTT:
-        m_drawItem = new LIB_POLYLINE( LibEntry );
+        item = new LIB_POLYLINE( LibEntry );
         break;
 
     case ID_LIBEDIT_BODY_TEXT_BUTT:
@@ -188,11 +189,11 @@ LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_PART* LibEntry, wxDC* DC )
             if( text->GetText().IsEmpty() )
             {
                 delete text;
-                m_drawItem = NULL;
+                item = NULL;
             }
             else
             {
-                m_drawItem = text;
+                item = text;
             }
         }
         break;
@@ -202,22 +203,22 @@ LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_PART* LibEntry, wxDC* DC )
         return NULL;
     }
 
-    if( m_drawItem )
+    if( item )
     {
-        m_drawItem->BeginEdit( IS_NEW, drawPos );
+        item->BeginEdit( IS_NEW, drawPos );
 
         // Don't set line parameters for text objects.
-        if( m_drawItem->Type() != LIB_TEXT_T )
+        if( item->Type() != LIB_TEXT_T )
         {
-            m_drawItem->SetWidth( m_drawLineWidth );
-            m_drawItem->SetFillMode( m_drawFillStyle );
+            item->SetWidth( m_drawLineWidth );
+            item->SetFillMode( m_drawFillStyle );
         }
 
         if( m_drawSpecificUnit )
-            m_drawItem->SetUnit( m_unit );
+            item->SetUnit( m_unit );
 
         if( m_drawSpecificConvert )
-            m_drawItem->SetConvert( m_convert );
+            item->SetConvert( m_convert );
 
         // Draw initial symbol:
         m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
@@ -230,21 +231,22 @@ LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_PART* LibEntry, wxDC* DC )
 
     m_canvas->MoveCursorToCrossHair();
     m_canvas->SetIgnoreMouseEvents( false );
+    SetDrawItem( item );
 
-    return m_drawItem;
+    return item;
 }
 
 
 void LIB_EDIT_FRAME::GraphicItemBeginDraw( wxDC* DC )
 {
-    if( m_drawItem == NULL )
+    if( GetDrawItem() == NULL )
         return;
 
     wxPoint pos = GetCrossHairPosition( true );
 
-    if( m_drawItem->ContinueEdit( pos ) )
+    if( GetDrawItem()->ContinueEdit( pos ) )
     {
-        m_drawItem->Draw( m_canvas, DC, pos, COLOR4D::UNSPECIFIED, g_XorMode, NULL,
+        GetDrawItem()->Draw( m_canvas, DC, pos, COLOR4D::UNSPECIFIED, g_XorMode, NULL,
                           DefaultTransform );
         return;
     }
@@ -287,7 +289,9 @@ static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
 void LIB_EDIT_FRAME::StartMoveDrawSymbol( wxDC* DC )
 {
-    if( m_drawItem == NULL )
+    LIB_ITEM* item = GetDrawItem();
+
+    if( item == NULL )
         return;
 
     SetCursor( wxCURSOR_HAND );
@@ -296,10 +300,10 @@ void LIB_EDIT_FRAME::StartMoveDrawSymbol( wxDC* DC )
 
     // For fields only, move the anchor point of the field
     // to the cursor position to allow user to see the text justification
-    if( m_drawItem->Type() == LIB_FIELD_T )
-        m_drawItem->BeginEdit( IS_MOVED, m_drawItem->GetPosition() );
+    if( item->Type() == LIB_FIELD_T )
+        item->BeginEdit( IS_MOVED, item->GetPosition() );
     else
-        m_drawItem->BeginEdit( IS_MOVED, GetCrossHairPosition( true ) );
+        item->BeginEdit( IS_MOVED, GetCrossHairPosition( true ) );
 
     m_canvas->SetMouseCapture( RedrawWhileMovingCursor, AbortSymbolTraceOn );
     m_canvas->CallMouseCapture( DC, wxDefaultPosition, true );
@@ -308,11 +312,13 @@ void LIB_EDIT_FRAME::StartMoveDrawSymbol( wxDC* DC )
 
 void LIB_EDIT_FRAME::StartModifyDrawSymbol( wxDC* DC )
 {
-    if( m_drawItem == NULL )
+    LIB_ITEM* item = GetDrawItem();
+
+    if( item == NULL )
         return;
 
     TempCopyComponent();
-    m_drawItem->BeginEdit( IS_RESIZED, GetCrossHairPosition( true ) );
+    item->BeginEdit( IS_RESIZED, GetCrossHairPosition( true ) );
     m_canvas->SetMouseCapture( SymbolDisplayDraw, AbortSymbolTraceOn );
     m_canvas->CallMouseCapture( DC, wxDefaultPosition, true );
 }
@@ -335,11 +341,13 @@ static void SymbolDisplayDraw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
 
 void LIB_EDIT_FRAME::EndDrawGraphicItem( wxDC* DC )
 {
+    LIB_ITEM* item = GetDrawItem();
+
+    if( item == NULL )
+        return;
+
     if( LIB_PART* part = GetCurPart() )
     {
-        if( !m_drawItem )
-            return;
-
         if( GetToolId() != ID_NO_TOOL_SELECTED )
             SetCursor( wxCURSOR_PENCIL );
         else
@@ -354,12 +362,12 @@ void LIB_EDIT_FRAME::EndDrawGraphicItem( wxDC* DC )
             SaveCopyInUndoList( part );
         }
 
-        if( m_drawItem->IsNew() )
-            part->AddDrawItem( m_drawItem );
+        if( item->IsNew() )
+            part->AddDrawItem( item );
 
-        m_drawItem->EndEdit( GetCrossHairPosition( true ) );
+        item->EndEdit( GetCrossHairPosition( true ) );
 
-        m_drawItem = NULL;
+        SetDrawItem( NULL );
 
         OnModify();
 

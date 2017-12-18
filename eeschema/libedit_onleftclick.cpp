@@ -40,7 +40,7 @@
 
 void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 {
-    LIB_ITEM*   item = m_drawItem;
+    LIB_ITEM*   item = GetDrawItem();
     bool        item_in_edit = item && item->InEditMode();
     bool        no_item_edited = !item_in_edit;
 
@@ -104,10 +104,10 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
     case ID_LIBEDIT_BODY_RECT_BUTT:
     case ID_LIBEDIT_BODY_TEXT_BUTT:
         if( no_item_edited )
-            m_drawItem = CreateGraphicItem( part, DC );
-        else if( m_drawItem )
+            SetDrawItem( CreateGraphicItem( part, DC ) );
+        else if( item )
         {
-            if( m_drawItem->IsNew() )
+            if( item->IsNew() )
                 GraphicItemBeginDraw( DC );
             else
                 EndDrawGraphicItem( DC );
@@ -115,10 +115,13 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         break;
 
     case ID_LIBEDIT_DELETE_ITEM_BUTT:
-        m_drawItem = LocateItemUsingCursor( aPosition );
+        item = LocateItemUsingCursor( aPosition );
 
-        if( m_drawItem )
+        if( item )
+        {
+            SetDrawItem( item );
             deleteItem( DC );
+        }
         else
         {
             DisplayCmpDoc();
@@ -150,39 +153,45 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
 {
     LIB_PART*      part = GetCurPart();
+    LIB_ITEM*      item = GetDrawItem();
 
     if( !part )
         return;
 
-    if( !m_drawItem || !m_drawItem->InEditMode() )
+    if( !item || !item->InEditMode() )
     {   // We can locate an item
-        m_drawItem = LocateItemUsingCursor( aPosition, LIB_COLLECTOR::DoubleClickItems );
+        item = LocateItemUsingCursor( aPosition, LIB_COLLECTOR::DoubleClickItems );
 
-        if( m_drawItem == NULL )
+        if( item == NULL )
         {
+            // The user canceled the disambiguation menu
             if( m_canvas->GetAbortRequest() )
                 m_canvas->SetAbortRequest( false );
+            else
+            {
+                // If there is only a random double-click, we allow the use to edit the part
+                wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
 
-            wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
-
-            cmd.SetId( ID_LIBEDIT_GET_FRAME_EDIT_PART );
-            GetEventHandler()->ProcessEvent( cmd );
+                cmd.SetId( ID_LIBEDIT_GET_FRAME_EDIT_PART );
+                GetEventHandler()->ProcessEvent( cmd );
+            }
         }
     }
 
-    if( m_drawItem )
-        SetMsgPanel( m_drawItem );
+    if( item )
+        SetMsgPanel( item );
     else
         return;
 
     m_canvas->SetIgnoreMouseEvents( true );
-    bool not_edited = !m_drawItem->InEditMode();
+    bool not_edited = !item->InEditMode();
 
-    switch( m_drawItem->Type() )
+    switch( item->Type() )
     {
     case LIB_PIN_T:
         if( not_edited )
         {
+            SetDrawItem( item );
             wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
 
             cmd.SetId( ID_LIBEDIT_EDIT_PIN );
@@ -194,28 +203,28 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
     case LIB_CIRCLE_T:
     case LIB_RECTANGLE_T:
         if( not_edited )
-            EditGraphicSymbol( DC, m_drawItem );
+            EditGraphicSymbol( DC, item );
         break;
 
     case LIB_POLYLINE_T:
         if( not_edited )
-            EditGraphicSymbol( DC, m_drawItem );
-        else if( m_drawItem->IsNew() )
+            EditGraphicSymbol( DC, item );
+        else if( item->IsNew() )
             EndDrawGraphicItem( DC );
         break;
 
     case LIB_TEXT_T:
         if( not_edited )
-            EditSymbolText( DC, m_drawItem );
+            EditSymbolText( DC, item );
         break;
 
     case LIB_FIELD_T:
         if( not_edited )
-            EditField( (LIB_FIELD*) m_drawItem );
+            EditField( (LIB_FIELD*) item );
         break;
 
     default:
-        wxFAIL_MSG( wxT( "Unhandled item <" ) + m_drawItem->GetClass() + wxT( ">" ) );
+        wxFAIL_MSG( wxT( "Unhandled item <" ) + item->GetClass() + wxT( ">" ) );
         break;
     }
 
