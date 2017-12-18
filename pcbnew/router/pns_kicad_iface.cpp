@@ -821,24 +821,29 @@ void PNS_KICAD_IFACE::SetBoard( BOARD* aBoard )
 
 void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
 {
+    int worstPadClearance = 0;
+
     if( !m_board )
     {
         wxLogTrace( "PNS", "No board attached, aborting sync." );
         return;
     }
 
-    for( MODULE* module = m_board->m_Modules; module; module = module->Next() )
+    for( auto module : m_board->Modules() )
     {
-        for( D_PAD* pad = module->PadsList(); pad; pad = pad->Next() )
+        for( auto pad : module->Pads() )
         {
             std::unique_ptr< PNS::SOLID > solid = syncPad( pad );
 
             if( solid )
                 aWorld->Add( std::move( solid ) );
+
+
+            worstPadClearance = std::max( worstPadClearance, pad->GetLocalClearance() );
         }
     }
 
-    for( TRACK* t = m_board->m_Track; t; t = t->Next() )
+    for( auto t : m_board->Tracks() )
     {
         KICAD_T type = t->Type();
 
@@ -855,13 +860,13 @@ void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
         }
     }
 
-    int worstClearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
+    int worstRuleClearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
 
     delete m_ruleResolver;
     m_ruleResolver = new PNS_PCBNEW_RULE_RESOLVER( m_board, m_router );
 
     aWorld->SetRuleResolver( m_ruleResolver );
-    aWorld->SetMaxClearance( 4 * worstClearance );
+    aWorld->SetMaxClearance( 4 * std::max(worstPadClearance, worstRuleClearance ) );
 }
 
 
