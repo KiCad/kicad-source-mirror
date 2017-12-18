@@ -596,40 +596,40 @@ void POINT_EDITOR::updatePoints()
     case PCB_MODULE_EDGE_T:
     {
         const DRAWSEGMENT* segment = static_cast<const DRAWSEGMENT*>( item );
+
+        switch( segment->GetShape() )
         {
-            switch( segment->GetShape() )
+        case S_SEGMENT:
+            m_editPoints->Point( SEG_START ).SetPosition( segment->GetStart() );
+            m_editPoints->Point( SEG_END ).SetPosition( segment->GetEnd() );
+            break;
+
+        case S_ARC:
+            m_editPoints->Point( ARC_CENTER ).SetPosition( segment->GetCenter() );
+            m_editPoints->Point( ARC_START).SetPosition( segment->GetArcStart() );
+            m_editPoints->Point( ARC_END ).SetPosition( segment->GetArcEnd() );
+            break;
+
+        case S_CIRCLE:
+            m_editPoints->Point( CIRC_CENTER ).SetPosition( segment->GetCenter() );
+            m_editPoints->Point( CIRC_END ).SetPosition( segment->GetEnd() );
+            break;
+
+        case S_POLYGON:
+        {
+            const auto& points = segment->GetPolyPoints();
+            for( unsigned i = 0; i < points.size(); i++ )
             {
-            case S_SEGMENT:
-                m_editPoints->Point( SEG_START ).SetPosition( segment->GetStart() );
-                m_editPoints->Point( SEG_END ).SetPosition( segment->GetEnd() );
-                break;
-
-            case S_ARC:
-                m_editPoints->Point( ARC_CENTER ).SetPosition( segment->GetCenter() );
-                m_editPoints->Point( ARC_START).SetPosition( segment->GetArcStart() );
-                m_editPoints->Point( ARC_END ).SetPosition( segment->GetArcEnd() );
-                break;
-
-            case S_CIRCLE:
-                m_editPoints->Point( CIRC_CENTER ).SetPosition( segment->GetCenter() );
-                m_editPoints->Point( CIRC_END ).SetPosition( segment->GetEnd() );
-                break;
-
-            case S_POLYGON:
-            {
-                const auto& points = segment->GetPolyPoints();
-                for( int i = 0; i < points.size(); i++ )
-                {
-                    m_editPoints->Point( i ).SetPosition( points[i] );
-                }
-                break;
+                m_editPoints->Point( i ).SetPosition( points[i] );
             }
-            default:        // suppress warnings
-                break;
-            }
-
             break;
         }
+
+        default:        // suppress warnings
+            break;
+        }
+
+        break;
     }
 
     case PCB_ZONE_AREA_T:

@@ -108,13 +108,13 @@ PAGE_INFO::PAGE_INFO( const wxSize& aSizeMils, const wxString& aType, wxPaperSiz
 }
 
 
-PAGE_INFO::PAGE_INFO( const wxString& aType, bool IsPortrait )
+PAGE_INFO::PAGE_INFO( const wxString& aType, bool aIsPortrait )
 {
-    SetType( aType, IsPortrait );
+    SetType( aType, aIsPortrait );
 }
 
 
-bool PAGE_INFO::SetType( const wxString& aType, bool IsPortrait )
+bool PAGE_INFO::SetType( const wxString& aType, bool aIsPortrait )
 {
     bool rc = true;
 
@@ -162,7 +162,7 @@ bool PAGE_INFO::SetType( const wxString& aType, bool IsPortrait )
     else
         rc = false;
 
-    if( IsPortrait )
+    if( aIsPortrait )
     {
         // all private PAGE_INFOs are landscape, must swap x and y
         m_size = wxSize( m_size.y, m_size.x );
@@ -179,14 +179,14 @@ bool PAGE_INFO::IsCustom() const
 }
 
 
-void PAGE_INFO::SetPortrait( bool isPortrait )
+void PAGE_INFO::SetPortrait( bool aIsPortrait )
 {
-    if( m_portrait != isPortrait )
+    if( m_portrait != aIsPortrait )
     {
         // swap x and y in m_size
         m_size = wxSize( m_size.y, m_size.x );
 
-        m_portrait = isPortrait;
+        m_portrait = aIsPortrait;
 
         // margins are not touched, do that if you want
     }

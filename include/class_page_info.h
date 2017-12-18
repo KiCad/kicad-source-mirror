@@ -84,11 +84,11 @@ public:
      * and will be set according to <b>previous</b> calls to
      * static PAGE_INFO::SetUserWidthMils() and
      * static PAGE_INFO::SetUserHeightMils();
-     * @param IsPortrait Set to true to set page orientation to portrait mode.
+     * @param aIsPortrait Set to true to set page orientation to portrait mode.
      *
      * @return bool - true if @a aStandarePageDescription was a recognized type.
      */
-    bool SetType( const wxString& aStandardPageDescriptionName, bool IsPortrait = false );
+    bool SetType( const wxString& aStandardPageDescriptionName, bool aIsPortrait = false );
     const wxString& GetType() const { return m_type; }
 
     /**
@@ -108,11 +108,11 @@ public:
      * will rotate the paper page 90 degrees.  This PAGE_INFO may either be in
      * portrait or landscape mode.  Use this function to change from one to the
      * other mode.
-     * @param isPortrait if true and not already in portrait mode, will change
+     * @param aIsPortrait if true and not already in portrait mode, will change
      *  this PAGE_INFO to portrait mode.  Or if false and not already in landscape mode,
      *  will change this PAGE_INFO to landscape mode.
      */
-    void SetPortrait( bool isPortrait );
+    void SetPortrait( bool aIsPortrait );
     bool IsPortrait() const { return m_portrait; }
 
     /**
