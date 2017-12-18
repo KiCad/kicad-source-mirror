@@ -174,6 +174,8 @@ T Convert( const wxString& aValue )
     throw XML_PARSER_ERROR( "Conversion failed. Unknown type." );
 }
 
+template <>
+wxString Convert<wxString>( const wxString& aValue );
 
 /**
  * Class OPTIONAL_XML_ATTRIBUTE
