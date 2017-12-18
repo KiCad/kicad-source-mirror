@@ -836,7 +836,7 @@ void WORKSHEET_LAYOUT::SetPageLayout( const wxString& aFullFileName, bool Append
     char * buffer = new char[filelen+10];
 
     if( wksFile.Read( buffer, filelen ) != filelen )
-        wxLogMessage( _("The file <%s> was not fully read"),
+        wxLogMessage( _("The file \"%s\" was not fully read"),
                       fullFileName.GetData() );
     else
     {
