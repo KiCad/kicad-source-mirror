@@ -3624,7 +3624,7 @@ msgstr "&Getting Started in KiCad"
 #: cvpcb/menubar.cpp:122 eeschema/menubar.cpp:575 kicad/menubar.cpp:450
 #: pagelayout_editor/menubar.cpp:217 pcbnew/menubar_pcbframe.cpp:438
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr "Open \"Getting Started in KiCad\" guide for beginners"
+msgstr "Open “Getting Started in KiCad” guide for beginners"
 
 #: cvpcb/menubar.cpp:127 gerbview/menubar.cpp:297
 #: pagelayout_editor/menubar.cpp:237
@@ -3921,7 +3921,7 @@ msgstr ""
 "method for finding footprints.  CvPcb has either copied the default table or "
 "created an empty table in your home folder.  You must first configure the "
 "library table to include all footprint libraries not included with KiCad.  "
-"See the \"Footprint Library Table\" section of the CvPcb documentation for "
+"See the “Footprint Library Table” section of the CvPcb documentation for "
 "more information."
 
 #: cvpcb/cvpcb.cpp:176
@@ -7137,7 +7137,7 @@ msgid ""
 "For gates, this is the \"De Morgan\" conversion"
 msgstr ""
 "Use the alternate shape of this component.\n"
-"For gates, this is the \"De Morgan\" conversion"
+"For gates, this is the “De Morgan” conversion"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:70
 msgid "Component Name:"
@@ -7327,7 +7327,7 @@ msgid ""
 "Set this option to show the window of the running command."
 msgstr ""
 "By default, command line runs with hidden console window and output is "
-"redirected to \"Plugin info\" field.\n"
+"redirected to “Plugin info” field.\n"
 "Set this option to show the window of the running command."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:107
@@ -7696,7 +7696,7 @@ msgid ""
 msgstr ""
 "This schematic was made using older symbol libraries which may break the "
 "schematic.  Some symbols may need to be linked to a different symbol name.  "
-"Some symbols may need to be \"rescued\" (copied and renamed) into a new "
+"Some symbols may need to be “rescued” (copied and renamed) into a new "
 "library.\n"
 "\n"
 "The following changes are recommended to update the project."
@@ -7743,8 +7743,8 @@ msgstr ""
 "Stop showing this tool?\n"
 "No changes will be made.\n"
 "\n"
-"This setting can be changed from the \"Symbol Libraries\" dialog,\n"
-"and the tool can be activated manually from the \"Tools\" menu."
+"This setting can be changed from the “Symbol Libraries” dialog,\n"
+"and the tool can be activated manually from the “Tools” menu."
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:323
 msgid "Rescue Symbols"
@@ -8846,7 +8846,7 @@ msgstr "Open the Eeschema Manual"
 #: eeschema/menubar_libedit.cpp:327 eeschema/tool_viewlib.cpp:224
 #: pcbnew/menubar_modedit.cpp:366 pcbnew/tool_modview.cpp:192
 msgid "Open the \"Getting Started in KiCad\" guide for beginners"
-msgstr "Open the \"Getting Started in KiCad\" guide for beginners"
+msgstr "Open the “Getting Started in KiCad” guide for beginners"
 
 #: eeschema/menubar_libedit.cpp:339 eeschema/tool_viewlib.cpp:230
 #: gerbview/menubar.cpp:290 kicad/menubar.cpp:465
@@ -10588,11 +10588,11 @@ msgstr "Export part"
 
 #: eeschema/tool_lib.cpp:176 eeschema/tool_viewlib.cpp:92
 msgid "Show as \"De Morgan\" normal part"
-msgstr "Show as \"De Morgan\" normal part"
+msgstr "Show as “De Morgan” normal part"
 
 #: eeschema/tool_lib.cpp:178 eeschema/tool_viewlib.cpp:97
 msgid "Show as \"De Morgan\" convert part"
-msgstr "Show as \"De Morgan\" convert part"
+msgstr "Show as “De Morgan” convert part"
 
 #: eeschema/tool_lib.cpp:182
 msgid "Show associated datasheet or document"
@@ -11726,16 +11726,16 @@ msgstr "&Miscellaneous"
 #: gerbview/rs274x.cpp:277
 #, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: \"%s\""
-msgstr "RS274X: Invalid GERBER format command '%c' at line %d: \"%s\""
+msgstr "RS274X: Invalid GERBER format command ‘%c’ at line %d: “%s”"
 
 #: gerbview/rs274x.cpp:280
 #, c-format
 msgid "GERBER file \"%s\" may not display as intended."
-msgstr "GERBER file \"%s\" may not display as intended."
+msgstr "GERBER file “%s” may not display as intended."
 
 #: gerbview/rs274x.cpp:555
 msgid "RS274X: Command \"IR\" rotation value not allowed"
-msgstr "RS274X: Command \"IR\" rotation value not allowed"
+msgstr "RS274X: Command “IR” rotation value not allowed"
 
 #: gerbview/rs274x.cpp:646
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
@@ -12479,7 +12479,7 @@ msgstr ""
 #: gerbview/readgerb.cpp:59 pcbnew/librairi.cpp:64
 #, c-format
 msgid "File \"%s\" not found"
-msgstr "File %s not found"
+msgstr "File “%s” not found"
 
 #: gerbview/readgerb.cpp:77
 msgid ""
@@ -15727,7 +15727,7 @@ msgstr "&Specctra Session"
 
 #: pcbnew/menubar_pcbframe.cpp:753
 msgid "Import routed \"Specctra Session\" (*.ses) file"
-msgstr "Import routed \"Specctra Session\" (*.ses) file"
+msgstr "Import routed “Specctra Session” (*.ses) file"
 
 #: pcbnew/menubar_pcbframe.cpp:757
 msgid "&DXF File"
@@ -15815,7 +15815,7 @@ msgstr "&Specctra DSN"
 
 #: pcbnew/menubar_pcbframe.cpp:828
 msgid "Export current board to \"Specctra DSN\" file"
-msgstr "Export current board to \"Specctra DSN\" file"
+msgstr "Export current board to “Specctra DSN” file"
 
 #: pcbnew/menubar_pcbframe.cpp:832
 msgid "&GenCAD"
@@ -16855,7 +16855,7 @@ msgid ""
 "You have chosen the \"not connected\" option. This will create insulated "
 "copper islands. Are you sure ?"
 msgstr ""
-"You have chosen the \"not connected\" option. This will create insulated "
+"You have chosen the “not connected” option. This will create insulated "
 "copper islands. Are you sure ?"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:513
@@ -17211,7 +17211,7 @@ msgid ""
 "produce a full circle divided evenly into \"Count\" portions."
 msgstr ""
 "Positive angles represent an anti-clockwise rotation. An angle of 0 will "
-"produce a full circle divided evenly into \"Count\" portions."
+"produce a full circle divided evenly into “Count” portions."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:226
 msgid "Count:"
@@ -20171,12 +20171,12 @@ msgstr "DRC violation: walk around obstacles"
 #: pcbnew/dialogs/dialog_find.cpp:131
 #, c-format
 msgid "\"%s\" found"
-msgstr "%s found"
+msgstr "“%s” found"
 
 #: pcbnew/dialogs/dialog_find.cpp:139
 #, c-format
 msgid "\"%s\" not found"
-msgstr "%s not found"
+msgstr "“%s” not found"
 
 #: pcbnew/dialogs/dialog_find.cpp:169
 msgid "Marker found"
@@ -21181,7 +21181,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_netlist.cpp:188
 #, c-format
 msgid "Reading netlist file \"%s\".\n"
-msgstr "Reading netlist file \"%s\".\n"
+msgstr "Reading netlist file “%s”.\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:192
 msgid "Using time stamps to match components and footprints.\n"
@@ -21234,7 +21234,7 @@ msgstr "Save Contents of Message Window"
 #: pcbnew/dialogs/dialog_netlist.cpp:378
 #, c-format
 msgid "Cannot write message contents to file \"%s\"."
-msgstr "Cannot write message contents to file \"%s\"."
+msgstr "Cannot write message contents to file “%s”."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:380
 msgid "File Write Error"
@@ -21243,7 +21243,7 @@ msgstr "File Write Error"
 #: pcbnew/dialogs/dialog_netlist.cpp:419 pcbnew/netlist.cpp:89
 #, c-format
 msgid "Cannot open netlist file \"%s\"."
-msgstr "Cannot open netlist file \"%s\"."
+msgstr "Cannot open netlist file “%s”."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:420 pcbnew/netlist.cpp:90
 msgid "Netlist Load Error."
@@ -21462,7 +21462,7 @@ msgid ""
 "Use this attribute for \"virtual\" components drawn on board\n"
 "like an edge connector (old ISA PC bus for instance)"
 msgstr ""
-"Use this attribute for \"virtual\" components drawn on board\n"
+"Use this attribute for “virtual” components drawn on board\n"
 "like an edge connector (old ISA PC bus for instance)"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:367
@@ -21577,7 +21577,7 @@ msgid ""
 "Show or hide the track and via clearance area. If \"New track\" is selected, "
 "track clearance area is shown only when creating the track."
 msgstr ""
-"Show or hide the track and via clearance area. If \"New track\" is selected, "
+"Show or hide the track and via clearance area. If “New track” is selected, "
 "track clearance area is shown only when creating the track."
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:53
@@ -21703,7 +21703,7 @@ msgstr "3D Shape Name"
 #: pcbnew/dialogs/dialog_drc.cpp:217 pcbnew/dialogs/dialog_drc.cpp:287
 #, c-format
 msgid "Report file \"%s\" created"
-msgstr "Report file \"%s\" created"
+msgstr "Report file “%s” created"
 
 #: pcbnew/dialogs/dialog_drc.cpp:219 pcbnew/dialogs/dialog_drc.cpp:288
 msgid "Disk File Report Completed"
@@ -21910,7 +21910,7 @@ msgstr "Use Netclass values"
 #: pcbnew/dialogs/dialog_gendrill.cpp:410
 #, c-format
 msgid "Could not write drill and/or map files to folder \"%s\"."
-msgstr "Could not write drill and/or map files to folder \"%s\"."
+msgstr "Could not write drill and/or map files to folder “%s”."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:457
 msgid "Save Drill Report File"
@@ -22003,7 +22003,7 @@ msgid ""
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
 msgstr ""
 "When enabled, the router tries to move colliding traces behind solid "
-"obstacles (e.g. pads) instead of \"reflecting\" back the collision"
+"obstacles (e.g. pads) instead of “reflecting” back the collision"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:61
 msgid "Remove redundant tracks"
@@ -22345,8 +22345,8 @@ msgid ""
 "Could not determine numbering start from \"%s\": expected value consistent "
 "with alphabet \"%s\""
 msgstr ""
-"Could not determine numbering start from \"%s\": expected value consistent "
-"with alphabet \"%s\""
+"Could not determine numbering start from “%s”: expected value consistent "
+"with alphabet “%s”"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:276
 #, c-format
@@ -22827,7 +22827,7 @@ msgstr "Footprint library “%s” saved as “%s”."
 #: pcbnew/kicad_netlist_reader.cpp:253
 #, c-format
 msgid "Cannot find component with reference \"%s\" in netlist."
-msgstr "Cannot find component with reference \"%s\" in netlist."
+msgstr "Cannot find component with reference “%s” in netlist."
 
 #: pcbnew/kicad_netlist_reader.cpp:369 pcbnew/pcb_parser.cpp:1787
 #, c-format
@@ -23788,7 +23788,7 @@ msgstr "Add Microwave Inductor"
 #: pcbnew/board_netlist_updater.cpp:108 pcbnew/class_board.cpp:2429
 #, c-format
 msgid "Adding new component \"%s:%s\" footprint \"%s\".\n"
-msgstr "Adding new component \"%s:%s\" footprint \"%s\".\n"
+msgstr "Adding new component “%s:%s” footprint “%s”.\n"
 
 #: pcbnew/board_netlist_updater.cpp:114
 #, c-format
@@ -23803,7 +23803,7 @@ msgstr "Cannot add component %s due to missing footprint %s.\n"
 #: pcbnew/board_netlist_updater.cpp:142 pcbnew/class_board.cpp:2438
 #, c-format
 msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
-msgstr "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
+msgstr "Cannot add new component “%s:%s” due to missing footprint “%s”.\n"
 
 #: pcbnew/board_netlist_updater.cpp:169
 #, c-format
@@ -23813,7 +23813,7 @@ msgstr "Change component %s footprint from %s to %s.\n"
 #: pcbnew/board_netlist_updater.cpp:176 pcbnew/class_board.cpp:2472
 #, c-format
 msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
-msgstr "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
+msgstr "Replacing component “%s:%s” footprint “%s” with “%s”.\n"
 
 #: pcbnew/board_netlist_updater.cpp:206
 #, c-format
@@ -23823,7 +23823,7 @@ msgstr "Cannot change component %s footprint due to missing footprint %s.\n"
 #: pcbnew/board_netlist_updater.cpp:213 pcbnew/class_board.cpp:2483
 #, c-format
 msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
-msgstr "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
+msgstr "Cannot replace component “%s:%s” due to missing footprint “%s”.\n"
 
 #: pcbnew/board_netlist_updater.cpp:242
 #, c-format
@@ -23833,7 +23833,7 @@ msgstr "Change component %s reference to %s.\n"
 #: pcbnew/board_netlist_updater.cpp:248 pcbnew/class_board.cpp:2536
 #, c-format
 msgid "Changing component \"%s:%s\" reference to \"%s\".\n"
-msgstr "Changing component \"%s:%s\" reference to \"%s\".\n"
+msgstr "Changing component “%s:%s” reference to “%s”.\n"
 
 #: pcbnew/board_netlist_updater.cpp:265
 #, c-format
@@ -23843,12 +23843,12 @@ msgstr "Change component %s value from %s to %s.\n"
 #: pcbnew/board_netlist_updater.cpp:272 pcbnew/class_board.cpp:2552
 #, c-format
 msgid "Changing component \"%s:%s\" value from \"%s\" to \"%s\".\n"
-msgstr "Changing component \"%s:%s\" value from \"%s\" to \"%s\".\n"
+msgstr "Changing component “%s:%s” value from “%s” to “%s”.\n"
 
 #: pcbnew/board_netlist_updater.cpp:290 pcbnew/class_board.cpp:2569
 #, c-format
 msgid "Changing component path \"%s:%s\" to \"%s\".\n"
-msgstr "Changing component path \"%s:%s\" to \"%s\".\n"
+msgstr "Changing component path “%s:%s” to “%s”.\n"
 
 #: pcbnew/board_netlist_updater.cpp:330
 #, c-format
@@ -23858,7 +23858,7 @@ msgstr "Disconnect component %s pin %s.\n"
 #: pcbnew/board_netlist_updater.cpp:335 pcbnew/class_board.cpp:2593
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
-msgstr "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
+msgstr "Clearing component “%s:%s” pin “%s” net name.\n"
 
 #: pcbnew/board_netlist_updater.cpp:375
 #, c-format
@@ -23880,7 +23880,7 @@ msgstr "Connect component %s pin %s to net %s.\n"
 msgid ""
 "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
 msgstr ""
-"Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
+"Changing component “%s:%s” pin “%s” net name from “%s” to “%s”.\n"
 
 #: pcbnew/board_netlist_updater.cpp:442
 #, c-format
@@ -23895,7 +23895,7 @@ msgstr "Remove component %s."
 #: pcbnew/board_netlist_updater.cpp:452 pcbnew/class_board.cpp:2664
 #, c-format
 msgid "Removing unused component \"%s:%s\".\n"
-msgstr "Removing unused component \"%s:%s\".\n"
+msgstr "Removing unused component “%s:%s”.\n"
 
 #: pcbnew/board_netlist_updater.cpp:517
 #, c-format
@@ -23905,7 +23905,7 @@ msgstr "Remove single pad net %s."
 #: pcbnew/board_netlist_updater.cpp:521 pcbnew/class_board.cpp:2727
 #, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad \"%s\"\n"
-msgstr "Remove single pad net \"%s\" on \"%s\" pad “%s”\n"
+msgstr "Remove single pad net “%s” on “%s” pad “%s”\n"
 
 #: pcbnew/board_netlist_updater.cpp:583
 #, c-format
@@ -23920,7 +23920,7 @@ msgstr "Copper zone (net name %s): net has no pads connected."
 #: pcbnew/board_netlist_updater.cpp:631
 #, c-format
 msgid "Processing component \"%s:%s:%s\".\n"
-msgstr "Processing component \"%s:%s:%s\".\n"
+msgstr "Processing component “%s:%s:%s”.\n"
 
 #: pcbnew/board_netlist_updater.cpp:671
 msgid "Update netlist"
@@ -23963,7 +23963,7 @@ msgid ""
 "\n"
 "Error %s."
 msgstr ""
-"Could not load footprint \"%s\" from library \"%s\".\n"
+"Could not load footprint “%s” from library “%s”.\n"
 "\n"
 "Error %s."
 
@@ -23978,7 +23978,7 @@ msgstr "PCB Text"
 #: pcbnew/class_pcb_text.cpp:192
 #, c-format
 msgid "Pcb Text \"%s\" on %s"
-msgstr "Pcb Text \"%s\" on %s"
+msgstr "Pcb Text “%s” on %s"
 
 #: pcbnew/class_pad.cpp:694
 msgid "Pad"
@@ -24830,7 +24830,7 @@ msgstr "Nets"
 #: pcbnew/class_board.cpp:2411
 #, c-format
 msgid "Checking netlist component footprint \"%s:%s:%s\".\n"
-msgstr "Checking netlist component footprint \"%s:%s:%s\".\n"
+msgstr "Checking netlist component footprint “%s:%s:%s”.\n"
 
 #: pcbnew/class_board.cpp:2771
 #, c-format
@@ -24859,7 +24859,7 @@ msgstr ""
 "kicad configuration folder.\n"
 "You must first configure the library table to include all footprint "
 "libraries you want to use.\n"
-"See the \"Footprint Library Table\" section of the CvPcb or Pcbnew "
+"See the “Footprint Library Table” section of the CvPcb or Pcbnew "
 "documentation for more information."
 
 #: pcbnew/pcbnew.cpp:352
@@ -25738,12 +25738,12 @@ msgstr "cannot interpret date code %d"
 #: pcbnew/gpcb_plugin.cpp:458
 #, c-format
 msgid "unknown token \"%s\""
-msgstr "unknown token \"%s\""
+msgstr "unknown token “%s”"
 
 #: pcbnew/pcb_parser.cpp:669
 #, c-format
 msgid "page type \"%s\" is not valid "
-msgstr "page type \"%s\" is not valid "
+msgstr "page type “%s” is not valid "
 
 #: pcbnew/pcb_parser.cpp:901
 #, c-format
@@ -25801,7 +25801,7 @@ msgid ""
 "you should verify and edit it (run DRC test)."
 msgstr ""
 "There is a zone that belongs to a not existing net\n"
-"\"%s\"\n"
+"“%s”\n"
 "you should verify and edit it (run DRC test)."
 
 #: pcbnew/kicad_clipboard.cpp:301
@@ -25811,7 +25811,7 @@ msgstr "Clipboard content is not Kicad compatible"
 #: pcbnew/gpcb_plugin.cpp:113
 #, c-format
 msgid "Cannot convert \"%s\" to an integer"
-msgstr "Cannot convert \"%s\" to an integer"
+msgstr "Cannot convert “%s” to an integer"
 
 #: pcbnew/gpcb_plugin.cpp:465
 #, c-format
@@ -25885,7 +25885,7 @@ msgstr "Session file imported and merged OK."
 #: pcbnew/specctra_import.cpp:212 pcbnew/specctra_import.cpp:323
 #, c-format
 msgid "Session file uses invalid layer id \"%s\""
-msgstr "Session file uses invalid layer id \"%s\""
+msgstr "Session file uses invalid layer id “%s”"
 
 #: pcbnew/specctra_import.cpp:264
 msgid "Session via padstack has no shapes"
@@ -25899,25 +25899,25 @@ msgstr "Unsupported via shape: %s"
 
 #: pcbnew/specctra_import.cpp:370
 msgid "Session file is missing the \"session\" section"
-msgstr "Session file is missing the \"session\" section"
+msgstr "Session file is missing the “session” section"
 
 #: pcbnew/specctra_import.cpp:378
 msgid "Session file is missing the \"routes\" section"
-msgstr "Session file is missing the \"routes\" section"
+msgstr "Session file is missing the “routes” section"
 
 #: pcbnew/specctra_import.cpp:381
 msgid "Session file is missing the \"library_out\" section"
-msgstr "Session file is missing the \"library_out\" section"
+msgstr "Session file is missing the “library_out” section"
 
 #: pcbnew/specctra_import.cpp:407
 #, c-format
 msgid "Session file has 'reference' to non-existent component \"%s\""
-msgstr "Session file has 'reference' to non-existent component \"%s\""
+msgstr "Session file has 'reference' to non-existent component “%s”"
 
 #: pcbnew/specctra_import.cpp:546
 #, c-format
 msgid "A wire_via references a missing padstack \"%s\""
-msgstr "A wire_via references a missing padstack \"%s\""
+msgstr "A wire_via references a missing padstack “%s”"
 
 #: pcbnew/class_edge_mod.cpp:251
 msgid "TimeStamp"
@@ -26647,7 +26647,7 @@ msgstr "Value %s of %s"
 #: pcbnew/class_text_mod.cpp:421
 #, c-format
 msgid "Text \"%s\" on %s of %s"
-msgstr "Text \"%s\" on %s of %s"
+msgstr "Text “%s” on %s of %s"
 
 #: pcbnew/legacy_plugin.cpp:95
 #, c-format
@@ -26673,7 +26673,7 @@ msgstr "Unknown sheet type “%s” on line:%d"
 #: pcbnew/legacy_plugin.cpp:1375
 #, c-format
 msgid "Missing '$EndMODULE' for MODULE \"%s\""
-msgstr "Missing '$EndMODULE' for MODULE \"%s\""
+msgstr "Missing '$EndMODULE' for MODULE “%s”"
 
 #: pcbnew/legacy_plugin.cpp:1427
 #, c-format
@@ -26693,17 +26693,17 @@ msgstr "duplicate NETCLASS name “%s”"
 #: pcbnew/legacy_plugin.cpp:2543 pcbnew/legacy_plugin.cpp:2554
 #, c-format
 msgid "Bad ZAux for CZONE_CONTAINER \"%s\""
-msgstr "Bad ZAux for CZONE_CONTAINER \"%s\""
+msgstr "Bad ZAux for CZONE_CONTAINER “%s”"
 
 #: pcbnew/legacy_plugin.cpp:2571
 #, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
-msgstr "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
+msgstr "Bad ZSmoothing for CZONE_CONTAINER “%s”"
 
 #: pcbnew/legacy_plugin.cpp:2645
 #, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
-msgstr "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
+msgstr "Bad ZClearance padoption for CZONE_CONTAINER “%s”"
 
 #: pcbnew/legacy_plugin.cpp:2993 pcbnew/legacy_plugin.cpp:3030
 #, c-format
@@ -26853,12 +26853,12 @@ msgstr "No footprints to archive!"
 #: pcbnew/librairi.cpp:759
 #, c-format
 msgid "Component \"%s\" replaced in \"%s\""
-msgstr "Component [%s] replaced in “%s”"
+msgstr "Component “%s” replaced in “%s”"
 
 #: pcbnew/librairi.cpp:760
 #, c-format
 msgid "Component \"%s\" added in  \"%s\""
-msgstr "Component [%s] added in  “%s”"
+msgstr "Component “%s” added in  “%s”"
 
 #: pcbnew/array_creator.cpp:113
 msgid "Create an array"
@@ -26958,7 +26958,7 @@ msgstr "Bezier Curve"
 #: pcbnew/class_dimension.cpp:481
 #, c-format
 msgid "Dimension \"%s\" on %s"
-msgstr "Dimension \"%s\" on %s"
+msgstr "Dimension “%s” on %s"
 
 #: pcbnew/pad_edition_functions.cpp:171
 #, c-format
