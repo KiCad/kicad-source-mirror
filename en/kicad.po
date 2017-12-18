@@ -2172,7 +2172,7 @@ msgstr " mm"
 
 #: common/base_units.cpp:246
 msgid " \""
-msgstr " \""
+msgstr " ″"
 
 #: common/base_units.cpp:254
 msgid " deg"
@@ -2180,7 +2180,7 @@ msgstr " deg"
 
 #: common/base_units.cpp:433 common/preview_items/preview_utils.cpp:41
 msgid "\""
-msgstr "\""
+msgstr "″"
 
 #: common/base_units.cpp:468
 msgid "millimeters"
@@ -16830,12 +16830,12 @@ msgstr "Set all tracks (no via) to their Netclass value"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:396
 #, c-format
 msgid "Clearance must be smaller than %f\" / %f mm."
-msgstr "Clearance must be smaller than %f\" / %f mm."
+msgstr "Clearance must be smaller than %f″ / %f mm."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:408
 #, c-format
 msgid "Minimum width must be larger than %f\" / %f mm."
-msgstr "Minimum width must be larger than %f\" / %f mm."
+msgstr "Minimum width must be larger than %f″ / %f mm."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:448
 msgid "Thermal relief spoke must be greater than the minimum width."
