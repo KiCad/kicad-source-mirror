@@ -15067,10 +15067,10 @@ msgstr "Regulator list change"
 #: pcb_calculator/pcb_calculator_frame.cpp:157
 #, c-format
 msgid ""
-"Unable to write file\"%s\"\n"
+"Unable to write file \"%s\"\n"
 "Do you want to exit and abandon your change?"
 msgstr ""
-"Unable to write file“%s”\n"
+"Unable to write file “%s”\n"
 "Do you want to exit and abandon your change?"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:161
