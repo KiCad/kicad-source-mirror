@@ -46,6 +46,8 @@
 DIALOG_SYMBOL_REMAP::DIALOG_SYMBOL_REMAP( SCH_EDIT_FRAME* aParent ) :
     DIALOG_SYMBOL_REMAP_BASE( aParent )
 {
+    m_remapped = false;
+
     wxString text;
 
     text = _( "This schematic currently uses the symbol library list look up method for "
@@ -90,6 +92,8 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
     // Reload the the cache symbol library.
     Prj().SetElem( PROJECT::ELEM_SCH_PART_LIBS, NULL );
     Prj().SchLibs();
+
+    m_remapped = true;
 }
 
 
@@ -373,3 +377,8 @@ void DIALOG_SYMBOL_REMAP::backupProject()
     }
 }
 
+
+void DIALOG_SYMBOL_REMAP::OnUpdateUIRemapButton( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( !m_remapped );
+}

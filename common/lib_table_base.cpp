@@ -25,6 +25,7 @@
 
 
 #include <wx/filename.h>
+#include <wx/uri.h>
 
 #include <set>
 
@@ -335,15 +336,24 @@ const LIB_TABLE_ROW* LIB_TABLE::FindRowByURI( const wxString& aURI )
 
         for( unsigned i = 0;  i < cur->rows.size();  i++ )
         {
-            wxString uri = cur->rows[i].GetFullURI( true );
+            wxString tmp = cur->rows[i].GetFullURI( true );
 
-            if( wxFileName::GetPathSeparator() == wxChar( '\\' ) && uri.Find( wxChar( '/' ) ) >= 0 )
-                uri.Replace( "/", "\\" );
+            wxURI uri( tmp );
 
-            if( (wxFileName::IsCaseSensitive() && uri == aURI)
-              || (!wxFileName::IsCaseSensitive() && uri.Upper() == aURI.Upper() ) )
+            if( uri.HasScheme() )
             {
-                return &cur->rows[i];  // found
+                if( tmp == aURI )
+                    return &cur->rows[i];  // found as URI
+            }
+            else
+            {
+                wxFileName fn = aURI;
+
+                // This will also test if the file is a symlink so if we are comparing
+                // a symlink to the same real file, the comparison will be true.  See
+                // wxFileName::SameAs() in the wxWidgets source.
+                if( fn == wxFileName( tmp ) )
+                    return &cur->rows[i];  // found as full path and file name
             }
         }
 

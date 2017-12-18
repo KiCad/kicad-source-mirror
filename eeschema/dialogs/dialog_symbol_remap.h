@@ -41,6 +41,9 @@ public:
 
     void OnRemapSymbols( wxCommandEvent& aEvent ) override;
 
+protected:
+    void OnUpdateUIRemapButton( wxUpdateUIEvent& aEvent ) override;
+
 private:
     /**
      * Add libraries found in the legacy library list to \a aLibs that are not found in
@@ -75,6 +78,8 @@ private:
      * - The rescue library (*-rescue.lib -> *.rescue.lib.v4) file.
      */
     void backupProject();
+
+    bool m_remapped;
 };
 
 #endif  // _DIALOG_SYMBOL_REMAP_H_

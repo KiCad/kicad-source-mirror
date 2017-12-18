@@ -27,8 +27,8 @@ DIALOG_SYMBOL_REMAP_BASE::DIALOG_SYMBOL_REMAP_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
 	
-	m_buttonRemp = new wxButton( this, wxID_ANY, _("Remap Symbols"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3->Add( m_buttonRemp, 0, wxALL|wxEXPAND, 5 );
+	m_buttonRemap = new wxButton( this, wxID_ANY, _("Remap Symbols"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3->Add( m_buttonRemap, 0, wxALL|wxEXPAND, 5 );
 	
 	m_buttonClose = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer3->Add( m_buttonClose, 0, wxALL|wxEXPAND, 5 );
@@ -58,12 +58,14 @@ DIALOG_SYMBOL_REMAP_BASE::DIALOG_SYMBOL_REMAP_BASE( wxWindow* parent, wxWindowID
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	m_buttonRemp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_REMAP_BASE::OnRemapSymbols ), NULL, this );
+	m_buttonRemap->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_REMAP_BASE::OnRemapSymbols ), NULL, this );
+	m_buttonRemap->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SYMBOL_REMAP_BASE::OnUpdateUIRemapButton ), NULL, this );
 }
 
 DIALOG_SYMBOL_REMAP_BASE::~DIALOG_SYMBOL_REMAP_BASE()
 {
 	// Disconnect Events
-	m_buttonRemp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_REMAP_BASE::OnRemapSymbols ), NULL, this );
+	m_buttonRemap->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYMBOL_REMAP_BASE::OnRemapSymbols ), NULL, this );
+	m_buttonRemap->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SYMBOL_REMAP_BASE::OnUpdateUIRemapButton ), NULL, this );
 	
 }
