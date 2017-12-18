@@ -576,7 +576,7 @@ void LIB_EDIT_FRAME::OnUpdateRedo( wxUpdateUIEvent& event )
 void LIB_EDIT_FRAME::OnUpdateSaveLib( wxUpdateUIEvent& event )
 {
     wxString lib = getTargetLib();
-    bool readOnly = lib.IsEmpty() || m_libMgr->IsLibraryReadOnly( lib );
+    bool readOnly = m_libMgr->IsLibraryReadOnly( lib );
 
     event.SetText( readOnly ? _( "Save library [Read Only]" ) : _( "Save library" ) );
     event.Enable( !readOnly && m_libMgr->IsLibraryModified( lib ) );
