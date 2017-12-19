@@ -79,6 +79,12 @@ public:
 
     void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
 
+    bool CanConnect( const SCH_ITEM* aItem ) const override
+    {
+        return aItem->Type() == SCH_LINE_T &&
+                ( aItem->GetLayer() == LAYER_WIRE || aItem->GetLayer() == LAYER_BUS );
+    }
+
     wxString GetSelectMenuText() const override { return wxString( _( "Junction" ) ); }
 
     BITMAP_DEF GetMenuImage() const override;

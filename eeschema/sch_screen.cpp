@@ -773,13 +773,17 @@ void SCH_SCREEN::SelectBlockItems()
         }
     }
 
-    // Select the items that are connected to a component that was added
+    // Select the items that are connected to a block object that was added
     // to our selection list in the last step.
     for( unsigned ii = last_select_id; ii < pickedlist->GetCount(); ii++ )
     {
         SCH_ITEM* item = (SCH_ITEM*)pickedlist->GetPickedItem( ii );
 
-        if( item->Type() == SCH_COMPONENT_T )
+        if( item->Type() == SCH_COMPONENT_T ||
+                item->Type() == SCH_BUS_BUS_ENTRY_T ||
+                item->Type() == SCH_BUS_WIRE_ENTRY_T ||
+                item->Type() == SCH_SHEET_T ||
+                ( item->Type() == SCH_LINE_T && !( item->GetFlags() & ( ENDPOINT | STARTPOINT ) ) ) )
         {
             item->SetFlags( IS_DRAGGED );
             addConnections( item );
@@ -795,44 +799,59 @@ void SCH_SCREEN::addConnectedItemsToBlock( const SCH_ITEM* aItem, const wxPoint&
     SCH_ITEM* item;
     ITEM_PICKER picker;
 
-    if( aItem->IsUnconnected() )
-        return;
-
     for( item = m_drawList.begin(); item; item = item->Next() )
     {
-        bool addinlist = true;
-        picker.SetItem( item );
 
-        if( !item->IsConnectable() || !item->IsConnected( position )
-            || (item->GetFlags() & SKIP_STRUCT) || item->IsUnconnected() )
-            continue;
-
-        if( item->IsSelected() && item->Type() != SCH_LINE_T )
-            continue;
-
-        if( item->GetLayer() != aItem->GetLayer() )
+        if( !item->IsConnectable() || ( item->GetFlags() & SKIP_STRUCT )
+                || !item->CanConnect( aItem ) || item == aItem )
             continue;
 
         // A line having 2 ends, it can be tested twice: one time per end
         if( item->Type() == SCH_LINE_T )
         {
-            if( ! item->IsSelected() )      // First time this line is tested
-                item->SetFlags( SELECTED | STARTPOINT | ENDPOINT );
-            else      // second time (or more) this line is tested
-                addinlist = false;
-
             SCH_LINE* line = (SCH_LINE*) item;
+
+            if( !item->HitTest( position ) )
+                continue;
+
+            // First time through.  Flags set to denote an end that is not moving
+            if( !item->IsSelected() )
+                item->SetFlags( CANDIDATE | STARTPOINT | ENDPOINT );
 
             if( line->GetStartPoint() == position )
                 item->ClearFlags( STARTPOINT );
             else if( line->GetEndPoint() == position )
                 item->ClearFlags( ENDPOINT );
+            else
+                // This picks up items such as labels that can connect to the middle of a line
+                item->ClearFlags( STARTPOINT | ENDPOINT );
         }
-        else
-            item->SetFlags( SELECTED );
-
-        if( addinlist )
+        // We want to move a mid-connected label or bus entry when the full line is being moved
+        else if( !item->IsSelected()
+                && aItem->Type() == SCH_LINE_T
+                && !( aItem->GetFlags() & ( ENDPOINT | STARTPOINT ) ) )
         {
+            std::vector< wxPoint > connections;
+            item->GetConnectionPoints( connections );
+
+            for( auto conn : connections )
+            {
+                if( aItem->HitTest( conn ) )
+                {
+                    item->SetFlags( CANDIDATE );
+                    break;
+                }
+            }
+        }
+
+        if( item->IsSelected() )
+            continue;
+
+        if( ( item->GetFlags() & CANDIDATE ) || item->IsConnected( position ) ) // Deal with all non-line items
+        {
+            item->ClearFlags( CANDIDATE );
+            item->SetFlags( SELECTED );
+            picker.SetItem( item );
             picker.SetFlags( item->GetFlags() );
             m_BlockLocate.GetItems().PushItem( picker );
         }

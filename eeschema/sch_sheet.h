@@ -524,6 +524,13 @@ public:
 
     bool IsConnectable() const override { return true; }
 
+    bool CanConnect( const SCH_ITEM* aItem ) const override
+    {
+        return ( aItem->Type() == SCH_LINE_T && aItem->GetLayer() == LAYER_WIRE ) ||
+                ( aItem->Type() == SCH_LINE_T && aItem->GetLayer() == LAYER_BUS ) ||
+                ( aItem->Type() == SCH_NO_CONNECT_T );
+    }
+
     void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
 
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;

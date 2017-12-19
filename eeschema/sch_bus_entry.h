@@ -99,8 +99,6 @@ public:
 
     bool IsDangling() const override;
 
-    bool IsUnconnected() const override { return m_isDanglingEnd && m_isDanglingStart; }
-
     bool IsSelectStateChanged( const wxRect& aRect ) override;
 
     bool IsConnectable() const override { return true; }
@@ -144,6 +142,12 @@ public:
 
     void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 
+    bool CanConnect( const SCH_ITEM* aItem ) const override
+    {
+        return aItem->Type() == SCH_LINE_T &&
+                ( aItem->GetLayer() == LAYER_WIRE || aItem->GetLayer() == LAYER_BUS );
+    }
+
     wxString GetSelectMenuText() const override;
 
     EDA_ITEM* Clone() const override;
@@ -171,6 +175,11 @@ public:
     int GetPenSize() const override;
 
     void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
+
+    bool CanConnect( const SCH_ITEM* aItem ) const override
+    {
+        return aItem->Type() == SCH_LINE_T && aItem->GetLayer() == LAYER_BUS;
+    }
 
     wxString GetSelectMenuText() const override;
 

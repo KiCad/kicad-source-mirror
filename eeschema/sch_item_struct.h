@@ -268,7 +268,7 @@ public:
 
     virtual bool IsDangling() const { return false; }
 
-    virtual bool IsUnconnected() const { return false; }
+    virtual bool CanConnect( const SCH_ITEM* aItem ) const { return m_Layer == aItem->GetLayer(); }
 
     /**
      * Function IsSelectStateChanged

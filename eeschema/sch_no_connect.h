@@ -79,6 +79,12 @@ public:
 
     bool IsConnectable() const override { return true; }
 
+    bool CanConnect( const SCH_ITEM* aItem ) const override
+    {
+        return ( aItem->Type() == SCH_LINE_T && aItem->GetLayer() == LAYER_WIRE ) ||
+                aItem->Type() == SCH_COMPONENT_T;
+    }
+
     void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
 
     wxString GetSelectMenuText() const override { return wxString( _( "No Connect" ) ); }

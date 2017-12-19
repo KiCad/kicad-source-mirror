@@ -579,6 +579,27 @@ bool SCH_LINE::IsConnectable() const
 }
 
 
+bool SCH_LINE::CanConnect( const SCH_ITEM* aItem ) const
+{
+    switch( aItem->Type() )
+    {
+    case SCH_JUNCTION_T:
+    case SCH_NO_CONNECT_T:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_BUS_WIRE_ENTRY_T:
+    case SCH_COMPONENT_T:
+    case SCH_SHEET_T:
+    case SCH_SHEET_PIN_T:
+        return true;
+
+    default:
+        return aItem->GetLayer() == m_Layer;
+    }
+}
+
+
 void SCH_LINE::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
     aPoints.push_back( m_start );

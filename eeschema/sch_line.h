@@ -166,6 +166,8 @@ public:
 
     void GetConnectionPoints(std::vector< wxPoint >& aPoints ) const override;
 
+    bool CanConnect( const SCH_ITEM* aItem ) const override;
+
     wxString GetSelectMenuText() const override;
 
     BITMAP_DEF GetMenuImage() const override;
