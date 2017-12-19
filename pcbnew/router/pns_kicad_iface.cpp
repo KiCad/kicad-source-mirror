@@ -561,6 +561,24 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
     {
         solid->SetShape( new SHAPE_CIRCLE( c, sz.x / 2 ) );
     }
+    else if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
+    {
+        SHAPE_POLY_SET outline;
+        outline.Append( aPad->GetCustomShapeAsPolygon() );
+        aPad->CustomShapeAsPolygonToBoardPosition( &outline, wx_c, aPad->GetOrientation() );
+
+        SHAPE_CONVEX* shape = new SHAPE_CONVEX();
+
+        // We use the convex hull of the pad shape, because PnS knows
+        // only convex shapes.
+        std::vector<wxPoint> convex_hull;
+        BuildConvexHull( convex_hull, outline );
+
+        for( unsigned ii = 0; ii < convex_hull.size(); ii++ )
+            shape->Append( convex_hull[ii] );
+
+        solid->SetShape( shape );
+    }
     else
     {
         if( orient == 0.0 || orient == 90.0 || orient == 180.0 || orient == 270.0 )
@@ -627,26 +645,6 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
             }
                 break;
 
-            case PAD_SHAPE_CUSTOM:
-            {
-                SHAPE_POLY_SET outline;
-                outline.Append( aPad->GetCustomShapeAsPolygon() );
-                aPad->CustomShapeAsPolygonToBoardPosition( &outline, wx_c, aPad->GetOrientation() );
-
-                for( int jj = 0; jj < outline.OutlineCount(); ++jj )
-                {
-                    SHAPE_CONVEX* shape = new SHAPE_CONVEX();
-                    const SHAPE_LINE_CHAIN& poly = outline.COutline( jj );
-
-                    for( int ii = 0; ii < poly.PointCount(); ii++ )
-                        shape->Append( wxPoint( poly.CPoint( ii ).x, poly.CPoint( ii ).y ) );
-
-                    solid->SetShape( shape );
-                }
-
-                break;
-            }
-
             default:
                 wxLogTrace( "PNS", "unsupported pad shape" );
                 return nullptr;
@@ -656,7 +654,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
         {
             switch( aPad->GetShape() )
             {
-            // PAD_SHAPE_CIRCLE already handled above
+            // PAD_SHAPE_CIRCLE and PAD_SHAPE_CUSTOM already handled above
 
             case PAD_SHAPE_OVAL:
                 if( sz.x == sz.y )
@@ -740,26 +738,6 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
                 }
 
                 solid->SetShape( shape );
-                break;
-            }
-
-            case PAD_SHAPE_CUSTOM:
-            {
-                SHAPE_POLY_SET outline;
-                outline.Append( aPad->GetCustomShapeAsPolygon() );
-                aPad->CustomShapeAsPolygonToBoardPosition( &outline, wx_c, aPad->GetOrientation() );
-
-                for( int jj = 0; jj < outline.OutlineCount(); ++jj )
-                {
-                    SHAPE_CONVEX* shape = new SHAPE_CONVEX();
-                    const SHAPE_LINE_CHAIN& poly = outline.COutline( jj );
-
-                    for( int ii = 0; ii < poly.PointCount(); ii++ )
-                        shape->Append( wxPoint( poly.CPoint( ii ).x, poly.CPoint( ii ).y ) );
-
-                    solid->SetShape( shape );
-                }
-
                 break;
             }
 
