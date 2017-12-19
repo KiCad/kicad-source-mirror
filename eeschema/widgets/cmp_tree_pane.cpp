@@ -47,32 +47,32 @@ CMP_TREE_PANE::CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
 
     // Setup right click-context menus
     std::unique_ptr<wxMenu> menuLibrary = std::make_unique<wxMenu>();
-    menuLibrary->Append( ID_LIBEDIT_NEW_LIBRARY, _( "New library..." ) );
-    menuLibrary->Append( ID_LIBEDIT_ADD_LIBRARY, _( "Add existing library..." ) );
-    menuLibrary->Append( ID_LIBEDIT_SAVE_LIBRARY, _( "Save library" ) );
-    menuLibrary->Append( ID_LIBEDIT_SAVE_LIBRARY_AS, _( "Save library as..." ) );
-    menuLibrary->Append( ID_LIBEDIT_REVERT_LIBRARY, _( "Revert library" ) );
+    menuLibrary->Append( ID_LIBEDIT_NEW_LIBRARY, _( "&New Library..." ) );
+    menuLibrary->Append( ID_LIBEDIT_ADD_LIBRARY, _( "&Add Library..." ) );
+    menuLibrary->Append( ID_LIBEDIT_SAVE_LIBRARY, _( "&Save Library" ) );
+    menuLibrary->Append( ID_LIBEDIT_SAVE_LIBRARY_AS, _( "Save Library As..." ) );
+    menuLibrary->Append( ID_LIBEDIT_REVERT_LIBRARY, _( "&Revert Library" ) );
     menuLibrary->AppendSeparator();
-    menuLibrary->Append( ID_LIBEDIT_NEW_PART, _( "New part..." ) );
-    menuLibrary->Append( ID_LIBEDIT_IMPORT_PART, _( "Import part..." ) );
-    menuLibrary->Append( ID_LIBEDIT_PASTE_PART, _( "Paste part" ) );
+    menuLibrary->Append( ID_LIBEDIT_NEW_PART, _( "New &Part..." ) );
+    menuLibrary->Append( ID_LIBEDIT_IMPORT_PART, _( "Import Part..." ) );
+    menuLibrary->Append( ID_LIBEDIT_PASTE_PART, _( "Paste Part" ) );
 
     std::unique_ptr<wxMenu> menuPart = std::make_unique<wxMenu>();
-    menuPart->Append( ID_LIBEDIT_EDIT_PART, _( "Edit" ) );
-    menuPart->Append( ID_LIBEDIT_REMOVE_PART, _( "Remove" ) );
-    menuPart->Append( ID_LIBEDIT_EXPORT_PART, _( "Export..." ) );
-    menuPart->Append( ID_LIBEDIT_SAVE_PART, _( "Save" ) );
-    menuPart->Append( ID_LIBEDIT_REVERT_PART, _( "Revert" ) );
+    menuPart->Append( ID_LIBEDIT_EDIT_PART, _( "Edit Part" ) );
+    menuPart->Append( ID_LIBEDIT_REMOVE_PART, _( "Remove Part" ) );
+    menuPart->Append( ID_LIBEDIT_EXPORT_PART, _( "Export Part..." ) );
+    menuPart->Append( ID_LIBEDIT_SAVE_PART, _( "&Save Part" ) );
+    menuPart->Append( ID_LIBEDIT_REVERT_PART, _( "&Revert Part" ) );
     menuPart->AppendSeparator();
-    menuPart->Append( ID_LIBEDIT_CUT_PART, _( "Cut" ) );
-    menuPart->Append( ID_LIBEDIT_COPY_PART, _( "Copy" ) );
-    menuPart->Append( ID_LIBEDIT_DUPLICATE_PART, _( "Duplicate" ) );
+    menuPart->Append( ID_LIBEDIT_CUT_PART, _( "Cut Part" ) );
+    menuPart->Append( ID_LIBEDIT_COPY_PART, _( "Copy Part" ) );
+    menuPart->Append( ID_LIBEDIT_DUPLICATE_PART, _( "Duplicate Part" ) );
     menuPart->AppendSeparator();
 
     // Menu displayed when nothing is selected
     std::unique_ptr<wxMenu> menuNoSelection = std::make_unique<wxMenu>();
-    menuNoSelection->Append( ID_LIBEDIT_NEW_LIBRARY, _( "New library..." ) );
-    menuNoSelection->Append( ID_LIBEDIT_ADD_LIBRARY, _( "Add existing library..." ) );
+    menuNoSelection->Append( ID_LIBEDIT_NEW_LIBRARY, _( "&New Library..." ) );
+    menuNoSelection->Append( ID_LIBEDIT_ADD_LIBRARY, _( "&Add Library..." ) );
 
     m_tree->SetMenu( CMP_TREE_NODE::LIBID, std::move( menuPart ) );
     m_tree->SetMenu( CMP_TREE_NODE::LIB, std::move( menuLibrary ) );

@@ -65,13 +65,13 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Creating/loading libraries
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_NEW_LIBRARY,
-                 _( "&Create New Library" ),
+                 _( "&New Library" ),
                  _( "Creates an empty library" ),
                  KiBitmap( new_library_xpm ) );
 
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_ADD_LIBRARY,
-                 _( "&Add Existing Library" ),
+                 _( "&Add Library" ),
                  _( "Adds a previously created library" ),
                  KiBitmap( add_library_xpm ) );
 
@@ -87,13 +87,13 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_SAVE_LIBRARY_AS,
-                 _( "&Save Library As.." ),
+                 _( "Save Library As.." ),
                  _( "Save the current library to a new file" ),
                  KiBitmap( save_as_xpm ) );
 
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_SAVE_ALL_LIBS,
-                 _( "&Save All Libraries" ),
+                 _( "Save All &Libraries" ),
                  _( "Save all library changes" ),
                  KiBitmap( save_xpm ) );
 
@@ -190,7 +190,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( partMenu,
                  ID_LIBEDIT_NEW_PART,
-                 _( "Create &New" ),
+                 _( "&New Part" ),
                  _( "Create a new empty part" ),
                  KiBitmap( new_component_xpm ) );
 
@@ -205,13 +205,13 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( partMenu,
                  ID_LIBEDIT_IMPORT_PART,
-                 _( "&Import" ),
+                 _( "&Import Part" ),
                  _( "Import a part to the current library" ),
                  KiBitmap( import_part_xpm ) );
 
     AddMenuItem( partMenu,
                  ID_LIBEDIT_EXPORT_PART,
-                 _( "&Export" ),
+                 _( "&Export Part" ),
                  _( "Export the current part" ),
                  KiBitmap( export_part_xpm ) );
 
@@ -352,7 +352,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
-    menuBar->Append( partMenu, _( "&Part" ) );
+    menuBar->Append( partMenu, _( "P&art" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( preferencesMenu, _( "P&references" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
