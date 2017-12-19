@@ -527,8 +527,10 @@ void LIB_EDIT_FRAME::OnUpdatePartModified( wxUpdateUIEvent& aEvent )
     if( aEvent.GetId() == ID_LIBEDIT_SAVE_PART )
     {
         bool readOnly = libName.IsEmpty() || m_libMgr->IsLibraryReadOnly( libName );
+        wxString text = AddHotkeyName( readOnly ? _( "&Save Part [Read Only]" ) : _( "&Save Part" ),
+                g_Libedit_Hokeys_Descr, HK_SAVE_PART );
 
-        aEvent.SetText( readOnly ? _( "Save [Read Only]" ) : _( "Save" ) );
+        aEvent.SetText( text );
         aEvent.Enable( !readOnly && !partName.IsEmpty()
                 && m_libMgr->IsPartModified( partName, libName ) );
     }
@@ -576,9 +578,12 @@ void LIB_EDIT_FRAME::OnUpdateRedo( wxUpdateUIEvent& event )
 void LIB_EDIT_FRAME::OnUpdateSaveLib( wxUpdateUIEvent& event )
 {
     wxString lib = getTargetLib();
-    bool readOnly = m_libMgr->IsLibraryReadOnly( lib );
+    bool readOnly = lib.IsEmpty() || m_libMgr->IsLibraryReadOnly( lib );
 
-    event.SetText( readOnly ? _( "Save library [Read Only]" ) : _( "Save library" ) );
+    wxString text = AddHotkeyName( readOnly ? _( "&Save Library [Read Only]" )
+            : _( "&Save Library" ) , g_Libedit_Hokeys_Descr, HK_SAVE_PART );
+
+    event.SetText( text );
     event.Enable( !readOnly && m_libMgr->IsLibraryModified( lib ) );
 }
 
