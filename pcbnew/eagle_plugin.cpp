@@ -771,7 +771,7 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
 
         m_xpath->Value( pack_name.c_str() );
 
-        wxString key = aLibName ? makeKey( *aLibName, pack_name ) : pack_name;
+        wxString key = aLibName ? makeKey( *aLibName, pack_name ) : wxString( pack_name );
 
         MODULE* m = makeModule( package, pack_name );
 
@@ -1721,7 +1721,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
         const wxString& netName = net->GetAttribute( "name" );
         m_board->Add( new NETINFO_ITEM( m_board, netName, netCode ) );
 
-        m_xpath->Value( netName );
+        m_xpath->Value( netName.c_str() );
 
         // Get the first net item and iterate
         wxXmlNode* netItem = net->GetChildren();
