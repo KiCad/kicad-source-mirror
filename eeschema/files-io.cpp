@@ -377,6 +377,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     Zoom_Automatique( false );
     SetSheetNumberAndCount();
     m_canvas->Refresh( true );
+    GetScreen()->ClearDrawingState();
 
     return true;
 }
