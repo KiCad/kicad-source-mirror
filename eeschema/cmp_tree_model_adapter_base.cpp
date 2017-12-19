@@ -145,7 +145,6 @@ void CMP_TREE_MODEL_ADAPTER_BASE::AddAliasList(
 
 void CMP_TREE_MODEL_ADAPTER_BASE::UpdateSearchString( wxString const& aSearch )
 {
-    wxWindowUpdateLocker updateLock( m_widget );
     m_tree.ResetScore();
 
     wxStringTokenizer tokenizer( aSearch );
@@ -159,13 +158,18 @@ void CMP_TREE_MODEL_ADAPTER_BASE::UpdateSearchString( wxString const& aSearch )
     }
 
     m_tree.SortNodes();
-    Cleared();
+
+    {
+        wxWindowUpdateLocker updateLock( m_widget );
+
+        Cleared();
 #ifndef __WINDOWS__
-    // The fastest method to update wxDataViewCtrl is to rebuild from scratch by calling Cleared().
-    // Linux requires to reassociate model to display data, but Windows will create multiple
-    // associations.
-    AttachTo( m_widget );
+        // The fastest method to update wxDataViewCtrl is to rebuild from
+        // scratch by calling Cleared(). Linux requires to reassociate model to
+        // display data, but Windows will create multiple associations.
+        AttachTo( m_widget );
 #endif
+    }
 
     ShowResults() || ShowPreselect() || ShowSingleLibrary();
 }
@@ -173,7 +177,6 @@ void CMP_TREE_MODEL_ADAPTER_BASE::UpdateSearchString( wxString const& aSearch )
 
 void CMP_TREE_MODEL_ADAPTER_BASE::AttachTo( wxDataViewCtrl* aDataViewCtrl )
 {
-    wxWindowUpdateLocker updateLock( aDataViewCtrl );
     m_widget = aDataViewCtrl;
     aDataViewCtrl->SetIndent( kDataViewIndent );
     aDataViewCtrl->AssociateModel( this );
@@ -186,7 +189,7 @@ void CMP_TREE_MODEL_ADAPTER_BASE::AttachTo( wxDataViewCtrl* aDataViewCtrl )
                 ColWidth( m_tree, 0, part_head ) );
     m_col_desc = aDataViewCtrl->AppendTextColumn( desc_head, 1, wxDATAVIEW_CELL_INERT,
                 ColWidth( m_tree, 1, desc_head ) );
-    m_col_part->SetSortOrder( true );
+    m_col_part->SetSortOrder( 0 );
 }
 
 
