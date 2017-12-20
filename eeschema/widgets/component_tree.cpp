@@ -253,19 +253,11 @@ void COMPONENT_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
 
     switch( aKeyStroke.GetKeyCode() )
     {
-#ifndef __WINDOWS__
     case WXK_UP:
-#else
-    case WXK_DOWN:
-#endif
         selectIfValid( GetPrevItem( *m_tree_ctrl, sel ) );
         break;
 
-#ifndef __WINDOWS__
     case WXK_DOWN:
-#else
-    case WXK_UP:
-#endif
         selectIfValid( GetNextItem( *m_tree_ctrl, sel ) );
         break;
 

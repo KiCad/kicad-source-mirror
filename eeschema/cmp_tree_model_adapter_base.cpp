@@ -189,10 +189,6 @@ void CMP_TREE_MODEL_ADAPTER_BASE::AttachTo( wxDataViewCtrl* aDataViewCtrl )
                 ColWidth( m_tree, 0, part_head ) );
     m_col_desc = aDataViewCtrl->AppendTextColumn( desc_head, 1, wxDATAVIEW_CELL_INERT,
                 ColWidth( m_tree, 1, desc_head ) );
-
-    // Enabling sort order breaks node selection on Windows, so unfortunately the list
-    // stays sorted in inverted lexical order. On Linux it does not change anything.
-    m_col_part->SetSortOrder( 0 );
 }
 
 
