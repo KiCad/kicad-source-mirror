@@ -599,7 +599,6 @@ bool SELECTION_TOOL::selectMultiple()
                         else
                             select( item );
                     }
-
                 }
             }
 
@@ -1496,13 +1495,19 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         break;
 
     case PCB_MODULE_T:
-
+    {
         // In the module editor, we do not want to select the module itself
         // rather, the module sub-components should be selected individually
         if( m_editModules )
-        {
             return false;
-        }
+
+        float viewArea = getView()->GetViewport().GetArea();
+        float modArea = aItem->ViewBBox().GetArea();
+
+        // Do not select modules that cover more than 90% of the view area
+        // (most likely footprints representing shield connectors)
+        if( viewArea > 0.0 && modArea / viewArea > 0.9 )
+            return false;
 
         if( aItem->IsOnLayer( F_Cu ) && board()->IsElementVisible( LAYER_MOD_FR ) )
             return !m_editModules;
@@ -1513,6 +1518,7 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         return false;
 
         break;
+    }
 
     case PCB_MODULE_TEXT_T:
         if( m_multiple && !m_editModules )
