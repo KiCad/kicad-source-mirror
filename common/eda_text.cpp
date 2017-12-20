@@ -400,9 +400,7 @@ wxString EDA_TEXT::GetTextStyleName()
 
 bool EDA_TEXT::IsDefaultFormatting() const
 {
-    return (  GetTextWidth()  == Mils2iu( DEFAULT_SIZE_TEXT )
-           && GetTextHeight() == Mils2iu( DEFAULT_SIZE_TEXT )
-           && IsVisible()
+    return (  IsVisible()
            && !IsMirrored()
            && GetHorizJustify() == GR_TEXT_HJUSTIFY_CENTER
            && GetVertJustify() == GR_TEXT_VJUSTIFY_CENTER
@@ -419,61 +417,49 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 #ifndef GERBVIEW        // Gerbview does not use EDA_TEXT::Format
                         // and does not define FMT_IU, used here
                         // however this function should exist
-    if( !IsDefaultFormatting() )
-    {
-        aFormatter->Print( aNestLevel+1, "(effects" );
 
-        if( ( GetTextWidth() != Mils2iu( DEFAULT_SIZE_TEXT ) )
-          || ( GetTextHeight() != Mils2iu( DEFAULT_SIZE_TEXT ) )
-          || ( GetThickness() != 0 ) || IsBold() || IsItalic() )
-        {
-            aFormatter->Print( 0, " (font" );
+	aFormatter->Print( aNestLevel + 1, "(effects" );
 
-            // Add font support here at some point in the future.
+	// Text size
+	aFormatter->Print( 0, " (font" );
 
-            if(  GetTextWidth()  != Mils2iu( DEFAULT_SIZE_TEXT )
-              || GetTextHeight() != Mils2iu( DEFAULT_SIZE_TEXT ) )
-            {
-                aFormatter->Print( 0, " (size %s %s)",
-                        FMT_IU( GetTextHeight() ).c_str(),
-                        FMT_IU( GetTextWidth() ).c_str()
-                        );
-            }
+	aFormatter->Print( 0, " (size %s %s)",
+					   FMT_IU( GetTextHeight() ).c_str(),
+					   FMT_IU( GetTextWidth() ).c_str() );
 
-            if( GetThickness() )
-                aFormatter->Print( 0, " (thickness %s)", FMT_IU( GetThickness() ).c_str() );
+	if( GetThickness() )
+		aFormatter->Print( 0, " (thickness %s)", FMT_IU( GetThickness() ).c_str() );
 
-            if( IsBold() )
-                aFormatter->Print( 0, " bold" );
+	if( IsBold() )
+		aFormatter->Print( 0, " bold" );
 
-            if( IsItalic() )
-                aFormatter->Print( 0, " italic" );
+	if( IsItalic() )
+		aFormatter->Print( 0, " italic" );
 
-            aFormatter->Print( 0, ")");
-        }
+	aFormatter->Print( 0, ")"); // (font
 
-        if( IsMirrored() || ( GetHorizJustify() != GR_TEXT_HJUSTIFY_CENTER )
-          || ( GetVertJustify() != GR_TEXT_VJUSTIFY_CENTER ) )
-        {
-            aFormatter->Print( 0, " (justify");
+	if( IsMirrored() ||
+	    GetHorizJustify() != GR_TEXT_HJUSTIFY_CENTER ||
+	    GetVertJustify() != GR_TEXT_VJUSTIFY_CENTER )
+	{
+		aFormatter->Print( 0, " (justify");
 
-            if( GetHorizJustify() != GR_TEXT_HJUSTIFY_CENTER )
-                aFormatter->Print( 0, (GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT) ? " left" : " right" );
+		if( GetHorizJustify() != GR_TEXT_HJUSTIFY_CENTER )
+			aFormatter->Print( 0, (GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT) ? " left" : " right" );
 
-            if( GetVertJustify() != GR_TEXT_VJUSTIFY_CENTER )
-                aFormatter->Print( 0, (GetVertJustify() == GR_TEXT_VJUSTIFY_TOP) ? " top" : " bottom" );
+		if( GetVertJustify() != GR_TEXT_VJUSTIFY_CENTER )
+			aFormatter->Print( 0, (GetVertJustify() == GR_TEXT_VJUSTIFY_TOP) ? " top" : " bottom" );
 
-            if( IsMirrored() )
-                aFormatter->Print( 0, " mirror" );
+		if( IsMirrored() )
+			aFormatter->Print( 0, " mirror" );
+		aFormatter->Print( 0, ")" ); // (justify
+	}
 
-            aFormatter->Print( 0, ")" );
-        }
+	if( !(aControlBits & CTL_OMIT_HIDE) && !IsVisible() )
+		aFormatter->Print( 0, " hide" );
 
-        if( !(aControlBits & CTL_OMIT_HIDE) && !IsVisible() )
-            aFormatter->Print( 0, " hide" );
+	aFormatter->Print( 0, ")\n" ); // (justify
 
-        aFormatter->Print( 0, ")\n" );
-    }
 #endif
 }
 

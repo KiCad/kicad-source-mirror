@@ -242,6 +242,10 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
 
     T token;
 
+    // Prior to v5.0 text size was omitted from file format if equal to 60mils
+    // Now, it is always explicitly written to file
+    bool foundTextSize = false;
+
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
         if( token == T_LEFT )
@@ -264,6 +268,8 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
                         sz.SetWidth( parseBoardUnits( "text width" ) );
                         aText->SetTextSize( sz );
                         NeedRIGHT();
+
+                        foundTextSize = true;
                     }
                     break;
 
@@ -328,6 +334,15 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
         default:
             Expecting( "font, justify, or hide" );
         }
+    }
+
+    // Text size was not specified in file, force legacy default units
+    // 60mils is 1.524mm
+    if( !foundTextSize )
+    {
+    	const float defaultTextSize = 1.524f * IU_PER_MM;
+
+    	aText->SetTextSize( wxSize( defaultTextSize, defaultTextSize ) );
     }
 }
 
