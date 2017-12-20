@@ -172,7 +172,10 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile )
         }
 #endif
 
-        fprintf( m_file, "T%dC%.3f\n", ii + 1, tool_descr.m_Diameter * m_conversionUnits );
+        if( m_unitsMetric )    // if units are mm, the resolution is 0.001 mm (3 digits in mantissa)
+            fprintf( m_file, "T%dC%.3f\n", ii + 1, tool_descr.m_Diameter * m_conversionUnits );
+        else                    // if units are inches, the resolution is 0.1 mil (4 digits in mantissa)
+            fprintf( m_file, "T%dC%.4f\n", ii + 1, tool_descr.m_Diameter * m_conversionUnits );
     }
 
     fputs( "%\n", m_file );                         // End of header info
@@ -182,7 +185,7 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile )
     // Units :
     if( !m_minimalHeader )
     {
-        if( m_unitsDecimal  )
+        if( m_unitsMetric  )
             fputs( "M71\n", m_file );       /* M71 = metric mode */
         else
             fputs( "M72\n", m_file );       /* M72 = inch mode */
@@ -303,11 +306,11 @@ void EXCELLON_WRITER::SetFormat( bool      aMetric,
                                  int       aLeftDigits,
                                  int       aRightDigits )
 {
-    m_unitsDecimal = aMetric;
+    m_unitsMetric = aMetric;
     m_zeroFormat   = aZerosFmt;
 
     /* Set conversion scale depending on drill file units */
-    if( m_unitsDecimal )
+    if( m_unitsMetric )
         m_conversionUnits = 1.0 / IU_PER_MM;        // EXCELLON units = mm
     else
         m_conversionUnits = 0.001 / IU_PER_MILS;    // EXCELLON units = INCHES
@@ -315,10 +318,10 @@ void EXCELLON_WRITER::SetFormat( bool      aMetric,
     // Set the zero counts. if aZerosFmt == DECIMAL_FORMAT, these values
     // will be set, but not used.
     if( aLeftDigits <= 0 )
-        aLeftDigits = m_unitsDecimal ? 3 : 2;
+        aLeftDigits = m_unitsMetric ? 3 : 2;
 
     if( aRightDigits <= 0 )
-        aRightDigits = m_unitsDecimal ? 3 : 4;
+        aRightDigits = m_unitsMetric ? 3 : 4;
 
     m_precision.m_lhs = aLeftDigits;
     m_precision.m_rhs = aRightDigits;
@@ -342,7 +345,7 @@ void EXCELLON_WRITER::writeCoordinates( char* aLine, double aCoordX, double aCoo
          * Decimal format just prohibit useless leading 0:
          * 0.45 or .45 is right, but 00.54 is incorrect.
          */
-        if( m_unitsDecimal )
+        if( m_unitsMetric )
         {
             // resolution is 1/1000 mm
             xs.Printf( wxT( "%.3f" ), aCoordX );
@@ -445,7 +448,7 @@ void EXCELLON_WRITER::writeEXCELLONHeader()
             msg << wxT( "-:-" );  // in decimal format the precision is irrelevant
 
         msg << wxT( "/ absolute / " );
-        msg << ( m_unitsDecimal ? wxT( "metric" ) :  wxT( "inch" ) );
+        msg << ( m_unitsMetric ? wxT( "metric" ) :  wxT( "inch" ) );
 
         /* Adding numbers notation format.
          * this is same as m_Choice_Zeros_Format strings, but NOT translated
@@ -470,7 +473,7 @@ void EXCELLON_WRITER::writeEXCELLONHeader()
         fputs( "FMAT,2\n", m_file );     // Use Format 2 commands (version used since 1979)
     }
 
-    fputs( m_unitsDecimal ? "METRIC" : "INCH", m_file );
+    fputs( m_unitsMetric ? "METRIC" : "INCH", m_file );
 
     switch( m_zeroFormat )
     {

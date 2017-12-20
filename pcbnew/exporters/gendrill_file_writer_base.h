@@ -136,7 +136,7 @@ public:
 protected:
     BOARD*                   m_pcb;
     wxString                 m_drillFileExtension;      // .drl or .gbr, depending on format
-    bool                     m_unitsDecimal;            // true = decimal, false = inches
+    bool                     m_unitsMetric;             // true = mm, false = inches
     ZEROS_FMT                m_zeroFormat;              // the zero format option for output file
     DRILL_PRECISION          m_precision;               // The current coordinate precision (not used in decimal format)
     double                   m_conversionUnits;         // scaling factor to convert the board unites to
@@ -156,7 +156,7 @@ protected:
     {
         m_pcb  = aPcb;
         m_conversionUnits = 1.0;
-        m_unitsDecimal    = true;
+        m_unitsMetric    = true;
         m_mapFileFmt = PLOT_FORMAT_PDF;
         m_pageInfo = NULL;
         m_merge_PTH_NPTH = false;

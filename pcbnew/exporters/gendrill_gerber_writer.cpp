@@ -53,7 +53,7 @@ GERBER_WRITER::GERBER_WRITER( BOARD* aPcb )
 {
     m_zeroFormat      = SUPPRESS_LEADING;
     m_conversionUnits = 1.0;
-    m_unitsDecimal    = true;
+    m_unitsMetric    = true;
     m_drillFileExtension = "gbr";
     m_merge_PTH_NPTH = false;
 }
