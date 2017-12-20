@@ -240,9 +240,21 @@ void COMPONENT_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
 
     switch( aKeyStroke.GetKeyCode() )
     {
-    case WXK_UP: selectIfValid( GetPrevItem( *m_tree_ctrl, sel ) ); break;
+#ifndef __WINDOWS__
+    case WXK_UP:
+#else
+    case WXK_DOWN:
+#endif
+        selectIfValid( GetPrevItem( *m_tree_ctrl, sel ) );
+        break;
 
-    case WXK_DOWN: selectIfValid( GetNextItem( *m_tree_ctrl, sel ) ); break;
+#ifndef __WINDOWS__
+    case WXK_DOWN:
+#else
+    case WXK_UP:
+#endif
+        selectIfValid( GetNextItem( *m_tree_ctrl, sel ) );
+        break;
 
     default:
         aKeyStroke.Skip(); // Any other key: pass on to search box directly.
