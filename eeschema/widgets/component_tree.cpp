@@ -158,6 +158,18 @@ void COMPONENT_TREE::Regenerate()
 }
 
 
+void COMPONENT_TREE::toggleExpand( const wxDataViewItem& aTreeId )
+{
+    if( !aTreeId.IsOk() )
+        return;
+
+    if( m_tree_ctrl->IsExpanded( aTreeId ) )
+        m_tree_ctrl->Collapse( aTreeId );
+    else
+        m_tree_ctrl->Expand( aTreeId );
+}
+
+
 void COMPONENT_TREE::selectIfValid( const wxDataViewItem& aTreeId )
 {
     if( aTreeId.IsOk() )
@@ -237,6 +249,7 @@ void COMPONENT_TREE::onQueryEnter( wxCommandEvent& aEvent )
 void COMPONENT_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
 {
     auto const sel = m_tree_ctrl->GetSelection();
+    auto type = sel.IsOk() ? m_adapter->GetTypeFor( sel ) : CMP_TREE_NODE::INVALID;
 
     switch( aKeyStroke.GetKeyCode() )
     {
@@ -256,6 +269,14 @@ void COMPONENT_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
         selectIfValid( GetNextItem( *m_tree_ctrl, sel ) );
         break;
 
+    case WXK_RETURN:
+        if( type == CMP_TREE_NODE::LIB )
+        {
+            toggleExpand( sel );
+            break;
+        }
+        /* fall through, so the selected component will be treated as the selected one */
+
     default:
         aKeyStroke.Skip(); // Any other key: pass on to search box directly.
         break;
@@ -274,12 +295,7 @@ void COMPONENT_TREE::onTreeActivate( wxDataViewEvent& aEvent )
     if( !GetSelectedLibId().IsValid() )
     {
         // Expand library/part units subtree
-        auto const sel = m_tree_ctrl->GetSelection();
-
-        if( m_tree_ctrl->IsExpanded( sel ) )
-            m_tree_ctrl->Collapse( sel );
-        else
-            m_tree_ctrl->Expand( sel );
+        toggleExpand( m_tree_ctrl->GetSelection() );
     }
     else
     {

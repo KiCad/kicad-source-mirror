@@ -93,6 +93,11 @@ public:
 
 protected:
     /**
+     * Expands or collapses a node, switching it to the opposite state.
+     */
+    void toggleExpand( const wxDataViewItem& aTreeId );
+
+    /**
      * If a wxDataViewitem is valid, select it and post a selection event.
      */
     void selectIfValid( const wxDataViewItem& aTreeId );
