@@ -31,7 +31,6 @@
 #include <wx/sizer.h>
 #include <wx/statbmp.h>
 #include <wx/html/htmlwin.h>
-#include <wx/wupdlock.h>
 
 #include <symbol_lib_table.h>
 
@@ -204,10 +203,14 @@ COMPONENT_TREE::STATE COMPONENT_TREE::getState() const
 
 void COMPONENT_TREE::setState( const STATE& aState )
 {
-    wxWindowUpdateLocker updateLock( m_tree_ctrl );
+    m_tree_ctrl->Freeze();
 
     for( const auto& item : aState.expanded )
         m_tree_ctrl->Expand( item );
+
+    // wxDataViewCtrl cannot be frozen when a selection
+    // command is issued, otherwise it selects a random item (Windows)
+    m_tree_ctrl->Thaw();
 
     if( aState.selection.IsValid() )
         SelectLibId( aState.selection );
