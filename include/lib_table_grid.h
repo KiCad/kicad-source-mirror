@@ -189,47 +189,6 @@ public:
         }
     }
 
-    /**
-     * Customize the appearance of LIB_TABLE_ROW entries
-     * - If not enabled, greyed out and italic
-     */
-    virtual wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind) override
-    {
-        auto* attr = wxGridTableBase::GetAttr( aRow, aCol, aKind );
-
-        if( aRow < (int) size() )
-        {
-            if( !attr )
-            {
-                attr = new wxGridCellAttr();
-            }
-
-            wxFont font;
-
-            if( attr->HasFont() )
-            {
-                font = attr->GetFont();
-            }
-
-            LIB_TABLE_ROW* r = at( (size_t) aRow );
-
-            if( r && r->GetIsEnabled() )
-            {
-                font.SetStyle( wxFONTSTYLE_NORMAL );
-                attr->SetTextColour( COLOUR_ROW_ENABLED );
-            }
-            else
-            {
-                font.SetStyle( wxFONTSTYLE_ITALIC );
-                attr->SetTextColour( COLOUR_ROW_DISABLED );
-            }
-
-            attr->SetFont( font );
-        }
-
-        return attr;
-    }
-
 protected:
     virtual LIB_TABLE_ROW* at( size_t aIndex ) = 0;
 
