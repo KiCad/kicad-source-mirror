@@ -65,28 +65,28 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         polygon.SetWidth( 0 )
         polygon.SetLayer(layer)
         halfsize = size/2
-        pos = pcbnew.wxPoint(xposition, yposition)
-        polygon.GetPolyPoints().push_back( pcbnew.wxPoint( halfsize, halfsize  ) + pos )
-        polygon.GetPolyPoints().push_back( pcbnew.wxPoint( halfsize, -halfsize ) + pos )
-        polygon.GetPolyPoints().push_back( pcbnew.wxPoint( -halfsize, -halfsize ) + pos )
-        polygon.GetPolyPoints().push_back( pcbnew.wxPoint( -halfsize, halfsize ) + pos )
+        polygon.GetPolyShape().NewOutline();
+        polygon.GetPolyShape().Append( halfsize+xposition, halfsize+yposition )
+        polygon.GetPolyShape().Append( halfsize+xposition, -halfsize+yposition )
+        polygon.GetPolyShape().Append( -halfsize+xposition, -halfsize+yposition )
+        polygon.GetPolyShape().Append( -halfsize+xposition, halfsize+yposition )
         return polygon
 
 
     def _drawPixel(self, xposition, yposition):
         # build a rectangular pad as a dot on copper layer,
         # and a polygon (a square) on silkscreen
-        pad = pcbnew.D_PAD(self.module)
-        pad.SetSize(pcbnew.wxSize(self.X, self.X))
-        pad.SetShape(pcbnew.PAD_SHAPE_RECT)
-        pad.SetAttribute(pcbnew.PAD_ATTRIB_SMD)
-        layerset = pcbnew.LSET()
         if self.UseCu:
+            pad = pcbnew.D_PAD(self.module)
+            pad.SetSize(pcbnew.wxSize(self.X, self.X))
+            pad.SetPosition(pcbnew.wxPoint(xposition,yposition))
+            pad.SetShape(pcbnew.PAD_SHAPE_RECT)
+            pad.SetAttribute(pcbnew.PAD_ATTRIB_SMD)
+            pad.SetName("")
+            layerset = pcbnew.LSET()
             layerset.AddLayer(pcbnew.F_Cu)
             layerset.AddLayer(pcbnew.F_Mask)
             pad.SetLayerSet( layerset )
-            pad.SetPosition(pcbnew.wxPoint(xposition,yposition))
-            pad.SetName("1")
             self.module.Add(pad)
         if self.UseSilkS:
             polygon=self.drawSquareArea(pcbnew.F_SilkS, self.X, xposition, yposition)
