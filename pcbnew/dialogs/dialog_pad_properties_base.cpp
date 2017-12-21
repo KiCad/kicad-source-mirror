@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -421,6 +421,12 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizerClearance;
 	bSizerClearance = new wxBoxSizer( wxVERTICAL );
 	
+	m_staticTextWarning = new wxStaticText( m_localSettingsPanel, wxID_ANY, _("Set fields to 0 to use parent or global values"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextWarning->Wrap( -1 );
+	m_staticTextWarning->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	
+	bSizerClearance->Add( m_staticTextWarning, 0, wxALL, 5 );
+	
 	wxStaticBoxSizer* sbClearancesSizer;
 	sbClearancesSizer = new wxStaticBoxSizer( new wxStaticBox( m_localSettingsPanel, wxID_ANY, _("Clearances") ), wxVERTICAL );
 	
@@ -488,7 +494,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	bSizerClearance->Add( sbClearancesSizer, 0, wxALL|wxEXPAND, 5 );
 	
-	m_sbSizerZonesSettings = new wxStaticBoxSizer( new wxStaticBox( m_localSettingsPanel, wxID_ANY, _("Copper Zones") ), wxVERTICAL );
+	m_sbSizerZonesSettings = new wxStaticBoxSizer( new wxStaticBox( m_localSettingsPanel, wxID_ANY, _("Connection to Copper Zones") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizerCopperZonesOpts;
 	fgSizerCopperZonesOpts = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -531,30 +537,42 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_ThermalGapUnits->Wrap( -1 );
 	fgSizerCopperZonesOpts->Add( m_ThermalGapUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_staticTextcps = new wxStaticText( m_sbSizerZonesSettings->GetStaticBox(), wxID_ANY, _("Custom pad shape in zone:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextcps->Wrap( -1 );
-	fgSizerCopperZonesOpts->Add( m_staticTextcps, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-	
-	wxString m_ZoneCustomPadShapeChoices[] = { _("Use pad shape"), _("Use pad convex hull") };
-	int m_ZoneCustomPadShapeNChoices = sizeof( m_ZoneCustomPadShapeChoices ) / sizeof( wxString );
-	m_ZoneCustomPadShape = new wxChoice( m_sbSizerZonesSettings->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ZoneCustomPadShapeNChoices, m_ZoneCustomPadShapeChoices, 0 );
-	m_ZoneCustomPadShape->SetSelection( 0 );
-	fgSizerCopperZonesOpts->Add( m_ZoneCustomPadShape, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
-	
-	
-	fgSizerCopperZonesOpts->Add( 0, 0, 1, wxEXPAND, 5 );
-	
 	
 	m_sbSizerZonesSettings->Add( fgSizerCopperZonesOpts, 0, wxEXPAND, 5 );
 	
 	
 	bSizerClearance->Add( m_sbSizerZonesSettings, 0, wxALL|wxEXPAND, 5 );
 	
-	m_staticTextWarning = new wxStaticText( m_localSettingsPanel, wxID_ANY, _("Set fields to 0 to use parent or global values"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextWarning->Wrap( -1 );
-	m_staticTextWarning->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_sbSizerCustomShapedZonesSettings = new wxStaticBoxSizer( new wxStaticBox( m_localSettingsPanel, wxID_ANY, _("Connection to Copper Zones") ), wxVERTICAL );
 	
-	bSizerClearance->Add( m_staticTextWarning, 0, wxALL, 5 );
+	wxFlexGridSizer* fgSizerCustomShapedCopperZonesOpts;
+	fgSizerCustomShapedCopperZonesOpts = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizerCustomShapedCopperZonesOpts->AddGrowableCol( 1 );
+	fgSizerCustomShapedCopperZonesOpts->SetFlexibleDirection( wxBOTH );
+	fgSizerCustomShapedCopperZonesOpts->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticTextCsZconnTitle = new wxStaticText( m_sbSizerCustomShapedZonesSettings->GetStaticBox(), wxID_ANY, _("Pad connection:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextCsZconnTitle->Wrap( -1 );
+	fgSizerCustomShapedCopperZonesOpts->Add( m_staticTextCsZconnTitle, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP, 5 );
+	
+	m_textCtrlNone = new wxTextCtrl( m_sbSizerCustomShapedZonesSettings->GetStaticBox(), wxID_ANY, _("None"), wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	fgSizerCustomShapedCopperZonesOpts->Add( m_textCtrlNone, 0, wxALL|wxEXPAND, 5 );
+	
+	m_staticTextcps = new wxStaticText( m_sbSizerCustomShapedZonesSettings->GetStaticBox(), wxID_ANY, _("Custom pad shape in zone:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextcps->Wrap( -1 );
+	fgSizerCustomShapedCopperZonesOpts->Add( m_staticTextcps, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	wxString m_ZoneCustomPadShapeChoices[] = { _("Use pad shape"), _("Use pad convex hull") };
+	int m_ZoneCustomPadShapeNChoices = sizeof( m_ZoneCustomPadShapeChoices ) / sizeof( wxString );
+	m_ZoneCustomPadShape = new wxChoice( m_sbSizerCustomShapedZonesSettings->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ZoneCustomPadShapeNChoices, m_ZoneCustomPadShapeChoices, 0 );
+	m_ZoneCustomPadShape->SetSelection( 0 );
+	fgSizerCustomShapedCopperZonesOpts->Add( m_ZoneCustomPadShape, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	
+	
+	m_sbSizerCustomShapedZonesSettings->Add( fgSizerCustomShapedCopperZonesOpts, 0, wxEXPAND, 5 );
+	
+	
+	bSizerClearance->Add( m_sbSizerCustomShapedZonesSettings, 1, wxEXPAND, 5 );
 	
 	
 	bSizerPanelClearance->Add( bSizerClearance, 0, wxALL|wxEXPAND, 5 );

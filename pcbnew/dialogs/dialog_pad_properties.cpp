@@ -856,11 +856,13 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 
     // PAD_SHAPE_CUSTOM type has constraints for zone connection and thermal shape:
     // only not connected is allowed to avoid destroying the shape.
-    // Enable/disable options
+    // Enable/disable options only available for custom shaped pads
     m_ZoneConnectionChoice->Enable( !is_custom );
     m_ThermalWidthCtrl->Enable( !is_custom );
     m_ThermalGapCtrl->Enable( !is_custom );
-    m_ZoneCustomPadShape->Enable( is_custom );
+
+    m_sbSizerZonesSettings->Show( !is_custom );
+    m_sbSizerCustomShapedZonesSettings->Show( is_custom );
 
     transferDataToPad( m_dummyPad );
 
@@ -1399,10 +1401,15 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_currentPad->SetLocalSolderMaskMargin( m_padMaster->GetLocalSolderMaskMargin() );
     m_currentPad->SetLocalSolderPasteMargin( m_padMaster->GetLocalSolderPasteMargin() );
     m_currentPad->SetLocalSolderPasteMarginRatio( m_padMaster->GetLocalSolderPasteMarginRatio() );
-    m_currentPad->SetZoneConnection( m_padMaster->GetZoneConnection() );
     m_currentPad->SetThermalWidth( m_padMaster->GetThermalWidth() );
     m_currentPad->SetThermalGap( m_padMaster->GetThermalGap() );
     m_currentPad->SetRoundRectRadiusRatio( m_padMaster->GetRoundRectRadiusRatio() );
+
+    if( m_currentPad->GetShape() == PAD_SHAPE_CUSTOM )
+        m_currentPad->SetZoneConnection( PAD_ZONE_CONN_NONE );
+    else
+        m_currentPad->SetZoneConnection( m_padMaster->GetZoneConnection() );
+
 
     // rounded rect pads with radius ratio = 0 are in fact rect pads.
     // So set the right shape (and perhaps issues with a radius = 0)
@@ -1412,7 +1419,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
         m_currentPad->SetShape( PAD_SHAPE_RECT );
     }
 
-    // define the way the clearnce area is defined in zones
+    // define the way the clearance area is defined in zones
     m_currentPad->SetCustomShapeInZoneOpt( m_padMaster->GetCustomShapeInZoneOpt() );
 
     if( footprint )

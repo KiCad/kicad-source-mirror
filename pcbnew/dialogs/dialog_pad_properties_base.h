@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -138,6 +138,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTitleModuleSide;
 		wxStaticText* m_staticModuleSideValue;
 		wxPanel* m_localSettingsPanel;
+		wxStaticText* m_staticTextWarning;
 		wxStaticText* m_staticTextNetClearance;
 		TEXT_CTRL_EVAL* m_NetClearanceValueCtrl;
 		wxStaticText* m_NetClearanceUnits;
@@ -159,9 +160,11 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText52;
 		TEXT_CTRL_EVAL* m_ThermalGapCtrl;
 		wxStaticText* m_ThermalGapUnits;
+		wxStaticBoxSizer* m_sbSizerCustomShapedZonesSettings;
+		wxStaticText* m_staticTextCsZconnTitle;
+		wxTextCtrl* m_textCtrlNone;
 		wxStaticText* m_staticTextcps;
 		wxChoice* m_ZoneCustomPadShape;
-		wxStaticText* m_staticTextWarning;
 		wxPanel* m_panelCustomShapePrimitives;
 		wxBoxSizer* m_bSizerPanelPrimitives;
 		wxStaticText* m_staticTextPrimitivesList;
