@@ -87,7 +87,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_SAVE_LIBRARY_AS,
-                 _( "Save Library As.." ),
+                 _( "Save Library As..." ),
                  _( "Save the current library to a new file" ),
                  KiBitmap( save_as_xpm ) );
 
