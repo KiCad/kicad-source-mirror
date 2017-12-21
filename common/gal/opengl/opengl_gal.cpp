@@ -822,6 +822,10 @@ void OPENGL_GAL::DrawPolygon( const SHAPE_POLY_SET& aPolySet )
     for( int j = 0; j < aPolySet.OutlineCount(); ++j )
     {
         const SHAPE_LINE_CHAIN& outline = aPolySet.COutline( j );
+
+        if( outline.SegmentCount() == 0 )
+            continue;
+
         const int pointCount = outline.SegmentCount() + 1;
         std::unique_ptr<GLdouble[]> points( new GLdouble[3 * pointCount] );
         GLdouble* ptr = points.get();
