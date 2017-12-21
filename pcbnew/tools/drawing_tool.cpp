@@ -939,6 +939,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
     bool    direction45 = false;    // 45 degrees only mode
     bool    started = false;
+    bool    IsOCurseurSet = ( m_frame->GetScreen()->m_O_Curseur != wxPoint( 0, 0 ) );
     VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
     if( aStartingPoint )
@@ -956,6 +957,9 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         preview.Add( aGraphic );
         m_controls->SetAutoPan( true );
         m_controls->CaptureCursor( true );
+
+        if( !IsOCurseurSet )
+            m_frame->GetScreen()->m_O_Curseur = wxPoint( aStartingPoint->x, aStartingPoint->y );
 
         started = true;
     }
@@ -992,6 +996,8 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             m_view->Update( &preview );
             delete aGraphic;
             aGraphic = NULL;
+            if( !IsOCurseurSet )
+                m_frame->GetScreen()->m_O_Curseur = wxPoint( 0, 0 );
             break;
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
@@ -1013,6 +1019,9 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
                 aGraphic->SetStart( wxPoint( cursorPos.x, cursorPos.y ) );
                 aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
                 aGraphic->SetLayer( getDrawingLayer() );
+
+                if( !IsOCurseurSet )
+                    m_frame->GetScreen()->m_O_Curseur = wxPoint( cursorPos.x, cursorPos.y );
 
                 if( aShape == S_SEGMENT )
                     line45 = *aGraphic; // used only for direction 45 mode with lines
@@ -1078,7 +1087,14 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             line45.SetWidth( m_lineWidth );
             m_view->Update( &preview );
         }
+        else if( evt->IsAction( &PCB_ACTIONS::resetCoords ) )
+        {
+            IsOCurseurSet = true;
+        }
     }
+
+    if( !IsOCurseurSet ) // reset the relative coordinte if it was not set before
+        m_frame->GetScreen()->m_O_Curseur = wxPoint( 0, 0 );
 
     m_view->Remove( &preview );
     m_controls->SetAutoPan( false );
