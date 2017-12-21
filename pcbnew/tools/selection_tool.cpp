@@ -1763,6 +1763,8 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
     std::set<BOARD_ITEM*> rejected;
     std::set<BOARD_ITEM*> forced;
 
+    // footprints which are below this percentage of the largest footprint will be considered
+    // for selection; all others will not
     constexpr double footprintAreaRatio = 0.2;
     // footprints containing pads with pad-to-footprint area ratio smaller than this will be dropped
     constexpr double modulePadMinCoverRatio = 0.45;
@@ -1886,14 +1888,14 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
                 if( forced.count( mod ) )
                     continue;
 
-                double normalizedArea = calcRatio( calcArea( mod ), maxArea );
-
-                if( normalizedArea > footprintAreaRatio
-                        // filter out components larger than the viewport
-                        || mod->ViewBBox().Contains( viewport ) )
-                {
+                // filter out components larger than the viewport
+                if( mod->ViewBBox().Contains( viewport ) )
                     rejected.insert( mod );
-                }
+                // if a module is much less than the area of the largest module
+                // then it should be considered for selection; reject all other
+                // modules
+                else if( calcRatio( calcArea( mod ), maxArea ) > footprintAreaRatio )
+                    rejected.insert( mod );
             }
         }
     }
