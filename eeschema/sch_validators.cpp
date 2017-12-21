@@ -44,7 +44,7 @@ SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR(  bool aIsCmplibEditor,
     if( aFieldId == REFERENCE )
         excludes += " ";
     else if( aFieldId == VALUE && m_isLibEditor )
-        excludes += " ";
+        excludes += " :/\\";
 
     long style = GetStyle();
 
