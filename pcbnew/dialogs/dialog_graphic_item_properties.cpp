@@ -30,6 +30,7 @@
  * Lines
  * Circles
  * Arcs
+ * polygon (only layer and contour thickness)
  * used as graphic elements found on non copper layers in boards
  * items on edge layers are considered as graphic items
  * Pcb texts are not always graphic items and are not handled here
@@ -53,6 +54,7 @@
 #include <dialog_graphic_item_properties_base.h>
 #include <class_pcb_layer_box_selector.h>
 #include <html_messagebox.h>
+#include <widgets/text_ctrl_eval.h>
 
 
 class DIALOG_GRAPHIC_ITEM_PROPERTIES : public DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE
@@ -137,6 +139,14 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         texts_unit[ii]->SetLabel( GetAbbreviatedUnitsLabel() );
     }
 
+    // Only an arc has a angle parameter. So do not show this parameter for other shapes
+    if( m_item->GetShape() != S_ARC )
+    {
+        m_AngleText->Show( false );
+        m_AngleCtrl->Show( false );
+        m_AngleUnit->Show( false );
+    }
+
     wxString msg;
 
     // Change texts according to the segment shape:
@@ -148,9 +158,6 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         m_StartPointYLabel->SetLabel( _( "Center Y:" ) );
         m_EndPointXLabel->SetLabel( _( "Point X:" ) );
         m_EndPointYLabel->SetLabel( _( "Point Y:" ) );
-        m_AngleText->Show( false );
-        m_AngleCtrl->Show( false );
-        m_AngleUnit->Show( false );
         break;
 
     case S_ARC:
@@ -163,14 +170,16 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         m_AngleValue = m_item->GetAngle() / 10.0;
         break;
 
+    case S_POLYGON:
+        SetTitle( _( "Polygon Properties" ) );
+        m_fgUpperLeftGridSizer->Show( false );
+        break;
+
     case S_SEGMENT:
         SetTitle( _( "Line Segment Properties" ) );
+        break;
 
-        // Fall through.
     default:
-        m_AngleText->Show( false );
-        m_AngleCtrl->Show( false );
-        m_AngleUnit->Show( false );
         break;
     }
 
@@ -304,7 +313,6 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
 
         // Fall through.
     case S_CIRCLE:
-
         // Check radius.
         if( (startx == endx) && (starty == endy) )
         {
@@ -317,7 +325,6 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::Validate()
         break;
 
     default:
-
         // Check start and end are not the same.
         if( (startx == endx) && (starty == endy) )
         {

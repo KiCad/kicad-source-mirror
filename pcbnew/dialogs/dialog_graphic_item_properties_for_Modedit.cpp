@@ -52,6 +52,7 @@
 #include <dialog_graphic_item_properties_base.h>
 #include <class_pcb_layer_box_selector.h>
 #include <html_messagebox.h>
+#include <widgets/text_ctrl_eval.h>
 
 class DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES : public DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE
 {
@@ -140,6 +141,14 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::TransferDataToWindow()
         texts_unit[ii]->SetLabel( GetAbbreviatedUnitsLabel() );
     }
 
+    // Only an arc has a angle parameter. So do not show this parameter for other shapes
+    if( m_item->GetShape() != S_ARC )
+    {
+        m_AngleText->Show( false );
+        m_AngleCtrl->Show( false );
+        m_AngleUnit->Show( false );
+    }
+
     wxString msg;
 
     // Change texts according to the segment shape:
@@ -151,9 +160,6 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::TransferDataToWindow()
         m_StartPointYLabel->SetLabel( _( "Center Y" ) );
         m_EndPointXLabel->SetLabel( _( "Point X" ) );
         m_EndPointYLabel->SetLabel( _( "Point Y" ) );
-        m_AngleText->Show( false );
-        m_AngleCtrl->Show( false );
-        m_AngleUnit->Show( false );
         break;
 
     case S_ARC:
@@ -166,14 +172,16 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::TransferDataToWindow()
         m_AngleValue = m_item->GetAngle() / 10.0;
         break;
 
+    case S_POLYGON:
+        SetTitle( _( "Polygon Properties" ) );
+        m_fgUpperLeftGridSizer->Show( false );
+        break;
+
     case S_SEGMENT:
         SetTitle( _( "Line Segment Properties" ) );
+        break;
 
-        // Fall through.
     default:
-        m_AngleText->Show( false );
-        m_AngleCtrl->Show( false );
-        m_AngleUnit->Show( false );
         break;
     }
 
@@ -223,10 +231,14 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::TransferDataFromWindow()
 
     if( IsCopperLayer( layer ) )
     {
-        /* an edge is put on a copper layer: this it is very dangerous. a
-         * confirmation is requested */
+        // An graphic item is put on a copper layer.
+        // This is sometimes useful, for instance for microwave applications ans net tees.
+        // Because the DRC does not handle graphic items, it can break boards.
+        // Therefore a confirmation is requested
         if( !IsOK( NULL,
-                   _( "The graphic item will be on a copper layer. This is very dangerous. Are you sure?" ) ) )
+                   _( "The graphic item will be on a copper layer.\n"
+                      "This is very dangerous because DRC does not handle it.\n"
+                      "Are you sure?" ) ) )
             return false;
     }
 
@@ -262,7 +274,7 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::TransferDataFromWindow()
         m_item->SetAngle( m_AngleValue * 10.0 );
     }
 
-    commit.Push( _( "Modify module graphic item" ) );
+    commit.Push( "Modify footprint graphic item" );
 
     m_parent->SetMsgPanel( m_item );
 
@@ -304,6 +316,9 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::Validate()
         if( (startx == endx) && (starty == endy) )
             error_msgs.Add( _( "The radius must be greater than zero." ) );
 
+        break;
+
+    case S_POLYGON:
         break;
 
     default:
