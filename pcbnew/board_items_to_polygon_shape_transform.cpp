@@ -522,6 +522,10 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
         // not self intersecting, no hole.
         MODULE* module = GetParentModule();     // NULL for items not in footprints
         double orientation = module ? module->GetOrientation() : 0.0;
+        wxPoint offset;
+
+        if( module )
+            offset = module->GetPosition();
 
         // Build the polygon with the actual position and orientation:
         std::vector< wxPoint> poly;
@@ -530,7 +534,7 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
         for( unsigned ii = 0; ii < poly.size(); ii++ )
         {
             RotatePoint( &poly[ii], orientation );
-            poly[ii] += GetPosition();
+            poly[ii] += offset;
         }
 
         // Generate polygons for the outline + clearance

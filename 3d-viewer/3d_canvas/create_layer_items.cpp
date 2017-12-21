@@ -821,89 +821,23 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSeg
 
     case S_POLYGON:
     {
-         // Check for malformed polygon.
-        if( aDrawSegment->GetPolyPoints().size() > 2 )
-        {
-            // The polygon is expected to be a simple polygon
-            // not self intersecting, no hole.
-            MODULE* module = aDrawSegment->GetParentModule(); // NULL for items not in footprints
-            const double orientation = module ? module->GetOrientation() : 0.0;
+        const int segcountforcircle = 16;
+        const double correctionFactor = GetCircleCorrectionFactor( segcountforcircle );
+        SHAPE_POLY_SET polyList;
 
-            // Build the polygon with the actual position and orientation:
-            std::vector< wxPoint> poly;
-            poly = aDrawSegment->GetPolyPoints();
+        aDrawSegment->TransformShapeWithClearanceToPolygon( polyList, aClearanceValue,
+                                                        segcountforcircle, correctionFactor );
+        // This convert the poly in outline and holes
+        // Note: This two sequencial calls are need in order to get
+        // the triangulation function to work properly.
+        polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
+        polyList.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-            for( unsigned ii = 0; ii < poly.size(); ++ii )
-            {
-                RotatePoint( &poly[ii], orientation );
-                poly[ii] += aDrawSegment->GetPosition();
-            }
+        if( polyList.IsEmpty() ) // Just for caution
+            break;
 
-            // Generate polygons for the outline + clearance
-
-            if( linewidth ) // Add thick outlines
-            {
-                CPolyPt corner1( poly[poly.size()-1] );
-
-                for( unsigned ii = 0; ii < poly.size(); ++ii )
-                {
-                    CPolyPt corner2( poly[ii] );
-
-                    if( corner2 != corner1 )
-                    {
-                        const SFVEC2F start3DU(  corner1.x * m_biuTo3Dunits,
-                                                -corner1.y * m_biuTo3Dunits );
-
-                        const SFVEC2F end3DU(    corner2.x * m_biuTo3Dunits,
-                                                -corner2.y * m_biuTo3Dunits );
-
-                        if( Is_segment_a_circle( start3DU, end3DU ) )
-                        {
-                            aDstContainer->Add(
-                                        new CFILLEDCIRCLE2D( start3DU,
-                                                             (linewidth / 2) * m_biuTo3Dunits,
-                                                             *aDrawSegment ) );
-                        }
-                        else
-                        {
-                            aDstContainer->Add( new CROUNDSEGMENT2D( start3DU,
-                                                                     end3DU,
-                                                                     linewidth * m_biuTo3Dunits,
-                                                                     *aDrawSegment ) );
-                        }
-                    }
-
-                    corner1 = corner2;
-                }
-            }
-
-            // Polygon for the inside
-            SHAPE_LINE_CHAIN path;
-
-            for( unsigned ii = 0; ii < poly.size(); ++ii )
-            {
-                wxPoint corner = poly[ii];
-                path.Append( corner.x, corner.y );
-            }
-
-            path.SetClosed( true );
-
-            SHAPE_POLY_SET polyList;
-
-            polyList.AddOutline( path );
-
-            // This convert the poly in outline and holes
-            polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
-            polyList.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-
-            if( polyList.IsEmpty() ) // Just for caution
-                break;
-
-            Convert_shape_line_polygon_to_triangles( polyList,
-                                                     *aDstContainer,
-                                                     m_biuTo3Dunits,
-                                                     *aDrawSegment );
-        }
+        Convert_shape_line_polygon_to_triangles( polyList, *aDstContainer,
+                                                 m_biuTo3Dunits, *aDrawSegment );
     }
     break;
 
