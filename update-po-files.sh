@@ -67,7 +67,7 @@ do
 done
 
 #Generate/update template pot file
-xgettext -f $LOCALDIR/POTFILES -k_ -k_HKI --force-po --from-code utf-8 -o $LOCALDIR/kicad.pot
+xgettext -f $LOCALDIR/POTFILES -k_ -k_HKI -kwxPLURAL:1,2 --force-po --from-code utf-8 -o $LOCALDIR/kicad.pot
 
 rm $LOCALDIR/POTFILES
 
