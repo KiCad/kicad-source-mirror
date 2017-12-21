@@ -1761,18 +1761,23 @@ double calcRatio( double a, double b )
 void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) const
 {
     std::set<BOARD_ITEM*> rejected;
+    std::set<BOARD_ITEM*> forced;
 
-    const double footprintAreaRatio = 0.2;
-    const double modulePadMinCoverRatio = 0.45;
-    const double padViaAreaRatio = 0.5;
-    const double trackViaLengthRatio = 2.0;
-    const double trackTrackLengthRatio = 0.3;
-    const double textToFeatureMinRatio = 0.2;
-    const double textToFootprintMinRatio = 0.4;
+    constexpr double footprintAreaRatio = 0.2;
+    // footprints containing pads with pad-to-footprint area ratio smaller than this will be dropped
+    constexpr double modulePadMinCoverRatio = 0.45;
+    // footprints containing pads with pad-to-footprint area ratio higher than this will be
+    // forced to stay on the list
+    constexpr double modulePadMaxCoverRatio = 0.80;
+    constexpr double padViaAreaRatio = 0.5;
+    constexpr double trackViaLengthRatio = 2.0;
+    constexpr double trackTrackLengthRatio = 0.3;
+    constexpr double textToFeatureMinRatio = 0.2;
+    constexpr double textToFootprintMinRatio = 0.4;
     // If the common area of two compared items is above the following threshold, they cannot
     // be rejected (it means they overlap and it might be hard to pick one by selecting
     // its unique area).
-    const double commonAreaRatio = 0.6;
+    constexpr double commonAreaRatio = 0.6;
 
     PCB_LAYER_ID actLayer = (PCB_LAYER_ID) view()->GetTopLayer();
 
@@ -1846,6 +1851,27 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
         }
     }
 
+    if( aCollector.CountType( PCB_PAD_T ) > 0 )
+    {
+        for( int i = 0; i < aCollector.GetCount(); ++i )
+        {
+            if( D_PAD* pad = dyn_cast<D_PAD*>( aCollector[i] ) )
+            {
+                double ratio = pad->GetParent()->PadCoverageRatio();
+
+                // when pad area is small compared to the parent footprint,
+                // then it is a clear sign the pad is the selection target
+                if( ratio < modulePadMinCoverRatio )
+                    rejected.insert( pad->GetParent() );
+                // for pads covering most of the footprint area the parent footprint
+                // should be kept in the disambiguation menu, otherwise it is very hard
+                // to select the footprint
+                else if( ratio > modulePadMaxCoverRatio )
+                    forced.insert( pad->GetParent() );
+            }
+        }
+    }
+
     if( aCollector.CountType( PCB_MODULE_T ) > 0 )
     {
         double maxArea = calcMaxArea( aCollector, PCB_MODULE_T );
@@ -1856,6 +1882,10 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
         {
             if( MODULE* mod = dyn_cast<MODULE*>( aCollector[i] ) )
             {
+                // do not check the module if it is forced on the list
+                if( forced.count( mod ) )
+                    continue;
+
                 double normalizedArea = calcRatio( calcArea( mod ), maxArea );
 
                 if( normalizedArea > footprintAreaRatio
@@ -1864,20 +1894,6 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
                 {
                     rejected.insert( mod );
                 }
-            }
-        }
-    }
-
-    if( aCollector.CountType( PCB_PAD_T ) > 0 )
-    {
-        for( int i = 0; i < aCollector.GetCount(); ++i )
-        {
-            if( D_PAD* pad = dyn_cast<D_PAD*>( aCollector[i] ) )
-            {
-                double ratio = pad->GetParent()->PadCoverageRatio();
-
-                if( ratio < modulePadMinCoverRatio )
-                    rejected.insert( pad->GetParent() );
             }
         }
     }
