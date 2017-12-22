@@ -229,6 +229,9 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
         // Try to obtain the netcode for the item
         if( const BOARD_CONNECTED_ITEM* conItem = dyn_cast<const BOARD_CONNECTED_ITEM*> ( item ) )
             netCode = conItem->GetNetCode();
+
+        if( item->Type() == PCB_MARKER_T )
+            return m_layerColors[aLayer];
     }
 
     // Single net highlight mode
@@ -932,7 +935,7 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
             m_gal->Translate( module->GetPosition() );
             m_gal->Rotate( -module->GetOrientationRadians() );
         }
-        
+
         std::copy( points.begin(), points.end(), std::back_inserter( pointsList ) );
         pointsList.push_back( points[0] );
 
