@@ -1240,21 +1240,38 @@ wxString MODULE::GetReferencePrefix() const
 }
 
 
-double MODULE::PadCoverageRatio() const
+double CalcArea( wxRegion aRegion )
 {
-    double padArea = 0.0;
+    double area = 0.0;
+    for( wxRegionIterator iterator( aRegion ); iterator.HaveRects(); iterator++ )
+    {
+        wxRect aRect = iterator.GetRect();
+        area += static_cast<double>( aRect.GetWidth() ) * aRect.GetHeight();
+    }
+    return area;
+}
+
+
+
+double MODULE::CoverageRatio() const
+{
     double moduleArea = GetFootprintRect().GetArea();
+    wxRegion uncoveredRegion( GetFootprintRect() );
 
     for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
-        padArea += pad->GetBoundingBox().GetArea();
+        uncoveredRegion.Subtract( pad->GetBoundingBox() );
 
-    if( moduleArea == 0.0 )
-        return 1.0;
+    for( BOARD_ITEM* item = m_Drawings; item; item = item->Next() )
+        uncoveredRegion.Subtract( item->GetBoundingBox() );
 
-    double ratio = padArea / moduleArea;
+    uncoveredRegion.Subtract( m_Reference->GetBoundingBox() );
+    uncoveredRegion.Subtract( m_Value->GetBoundingBox() );
 
+    double coveredArea = moduleArea - CalcArea( uncoveredRegion );
+    double ratio = ( coveredArea / moduleArea );
     return std::min( ratio, 1.0 );
 }
+
 
 // see convert_drawsegment_list_to_polygon.cpp:
 extern bool ConvertOutlineToPolygon( std::vector< DRAWSEGMENT* >& aSegList,

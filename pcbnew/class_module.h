@@ -657,12 +657,12 @@ public:
     }
 
     /**
-     * Function PadCoverageRatio
-     * Calculates the ratio of total area of the footprint pads to the area of the
-     * footprint. Used by selection tool heuristics.
+     * Function CoverageRatio
+     * Calculates the ratio of total area of the footprint pads and graphical items
+     * to the area of the footprint. Used by selection tool heuristics.
      * @return the ratio
      */
-    double PadCoverageRatio() const;
+    double CoverageRatio() const;
 
     /// Return the initial comments block or NULL if none, without transfer of ownership.
     const wxArrayString* GetInitialComments() const { return m_initial_comments; }

@@ -1765,13 +1765,13 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
 
     // footprints which are below this percentage of the largest footprint will be considered
     // for selection; all others will not
-    constexpr double footprintAreaRatio = 0.2;
-    // footprints containing pads with pad-to-footprint area ratio smaller than this will be dropped
-    constexpr double modulePadMinCoverRatio = 0.45;
-    // footprints containing pads with pad-to-footprint area ratio higher than this will be
+    constexpr double footprintToFootprintMinRatio = 0.20;
+    // pads which are below this percentage of their parent's area will exclude their parent
+    constexpr double padToFootprintMinRatio = 0.45;
+    // footprints containing items with items-to-footprint area ratio higher than this will be
     // forced to stay on the list
-    constexpr double modulePadMaxCoverRatio = 0.80;
-    constexpr double padViaAreaRatio = 0.5;
+    constexpr double footprintMaxCoverRatio = 0.80;
+    constexpr double viaToPadMinRatio = 0.50;
     constexpr double trackViaLengthRatio = 2.0;
     constexpr double trackTrackLengthRatio = 0.3;
     constexpr double textToFeatureMinRatio = 0.2;
@@ -1831,9 +1831,13 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
                     double itemCommonRatio = calcRatio( commonArea, itemArea );
                     double txtCommonRatio = calcRatio( commonArea, textArea );
 
-                    if( item->Type() == PCB_MODULE_T && areaRatio < textToFootprintMinRatio &&
-                            itemCommonRatio < commonAreaRatio )
-                        rejected.insert( item );
+                    if( item->Type() == PCB_MODULE_T )
+                    {
+                        // when text area is small compared to an overlapping footprint,
+                        // then it's a clear sign the text is the selection target
+                        if( areaRatio < textToFootprintMinRatio && itemCommonRatio < commonAreaRatio )
+                            rejected.insert( item );
+                    }
 
                     switch( item->Type() )
                     {
@@ -1859,17 +1863,13 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
         {
             if( D_PAD* pad = dyn_cast<D_PAD*>( aCollector[i] ) )
             {
-                double ratio = pad->GetParent()->PadCoverageRatio();
+                MODULE* parent = pad->GetParent();
+                double ratio = calcRatio( calcArea( pad ), calcArea( parent ) );
 
                 // when pad area is small compared to the parent footprint,
                 // then it is a clear sign the pad is the selection target
-                if( ratio < modulePadMinCoverRatio )
+                if( ratio < padToFootprintMinRatio )
                     rejected.insert( pad->GetParent() );
-                // for pads covering most of the footprint area the parent footprint
-                // should be kept in the disambiguation menu, otherwise it is very hard
-                // to select the footprint
-                else if( ratio > modulePadMaxCoverRatio )
-                    forced.insert( pad->GetParent() );
             }
         }
     }
@@ -1884,17 +1884,17 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
         {
             if( MODULE* mod = dyn_cast<MODULE*>( aCollector[i] ) )
             {
-                // do not check the module if it is forced on the list
-                if( forced.count( mod ) )
-                    continue;
-
                 // filter out components larger than the viewport
                 if( mod->ViewBBox().Contains( viewport ) )
                     rejected.insert( mod );
-                // if a module is much less than the area of the largest module
-                // then it should be considered for selection; reject all other
-                // modules
-                else if( calcRatio( calcArea( mod ), maxArea ) > footprintAreaRatio )
+                // footprints completely covered with other features have no other
+                // means of selection, so must be kept
+                else if ( mod->CoverageRatio() > footprintMaxCoverRatio )
+                    rejected.erase( mod );
+                // if a footprint is much smaller than the largest overlapping
+                // footprint then it should be considered for selection; reject
+                // all other footprints
+                else if( calcRatio( calcArea( mod ), maxArea ) > footprintToFootprintMinRatio )
                     rejected.insert( mod );
             }
         }
@@ -1916,10 +1916,10 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
                     BOARD_ITEM* item = aCollector[j];
                     double areaRatio = calcRatio( viaArea, calcArea( item ) );
 
-                    if( item->Type() == PCB_MODULE_T && areaRatio < modulePadMinCoverRatio )
+                    if( item->Type() == PCB_MODULE_T && areaRatio < padToFootprintMinRatio )
                         rejected.insert( item );
 
-                    if( item->Type() == PCB_PAD_T && areaRatio < padViaAreaRatio )
+                    if( item->Type() == PCB_PAD_T && areaRatio < viaToPadMinRatio )
                         rejected.insert( item );
 
                     if( TRACK* track = dyn_cast<TRACK*>( item ) )
@@ -1986,7 +1986,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
             {
                 double ratio = calcRatio( maxArea, mod->GetFootprintRect().GetArea() );
 
-                if( ratio < modulePadMinCoverRatio && calcCommonArea( maxTrack, mod ) < commonAreaRatio )
+                if( ratio < padToFootprintMinRatio && calcCommonArea( maxTrack, mod ) < commonAreaRatio )
                     rejected.insert( mod );
             }
         }
