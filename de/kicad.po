@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-22 22:31+0100\n"
-"PO-Revision-Date: 2017-12-22 22:31+0100\n"
+"PO-Revision-Date: 2017-12-22 23:14+0100\n"
 "Last-Translator: Carsten Schoenert <c.schoenert@t-online.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -2777,7 +2777,7 @@ msgstr "Unzulässiges Zeichen in der Revision gefunden."
 #: common/page_layout/page_layout_reader.cpp:839
 #, c-format
 msgid "The file \"%s\" was not fully read"
-msgstr ""
+msgstr "Die Datei \"%s\" wurde nicht vollständig gelesen"
 
 #: common/pgm_base.cpp:112 common/widgets/footprint_select_widget.cpp:275
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
@@ -4082,6 +4082,9 @@ msgid ""
 "the sheet \"%s\" or one of it's subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
+"Die Änderungen am Blatt konnten nicht durchgeführt werden, da das Zielblatt "
+"bereits das Batt \"%s\" (oder eines seiner Unterblätter) in seiner "
+"Hierarchie enthält."
 
 #: eeschema/class_drc_erc_item.cpp:40
 msgid "ERC err unspecified"
@@ -4151,11 +4154,14 @@ msgid ""
 "This may cause some unexpected behavior when loading components into a "
 "schematic."
 msgstr ""
+"Bauteilbibliothek \"%s\" has einen doppelten Eintrag \"%s\".\n"
+"Dies könnte zu unerwartetem Verhalten beim Laden von Komponenten im "
+"Schaltplan führen."
 
 #: eeschema/class_library.cpp:537
 #, c-format
 msgid "Unable to load project's \"%s\" file"
-msgstr ""
+msgstr "Kann die Datei \"%s\" des Projektes nicht laden."
 
 #: eeschema/class_library.cpp:592
 msgid "Loading Symbol Libraries"
@@ -4171,6 +4177,8 @@ msgid ""
 "Part library \"%s\" failed to load. Error:\n"
 " %s"
 msgstr ""
+"Bauteilbibliothek \"%s\" konnte nicht geladen werden. Fehler:\n"
+"%s"
 
 #: eeschema/class_library.cpp:676
 #, c-format
@@ -4178,6 +4186,8 @@ msgid ""
 "Part library \"%s\" failed to load.\n"
 "Error: %s"
 msgstr ""
+"Bauteilbibliothek \"%s\" konnte nicht geladen werden. Fehler:\n"
+"%s"
 
 #: eeschema/cmp_tree_model.cpp:122 eeschema/lib_draw_item.cpp:72
 #: eeschema/libedit.cpp:657 eeschema/onrightclick.cpp:481
@@ -4231,12 +4241,12 @@ msgstr ""
 
 #: eeschema/cmp_tree_model_adapter_base.cpp:113 eeschema/libeditframe.cpp:1626
 msgid "Loading symbol libraries"
-msgstr ""
+msgstr "Lade Bauteilsymbolbibliotheken"
 
 #: eeschema/cmp_tree_model_adapter_base.cpp:122 eeschema/libeditframe.cpp:1630
 #, c-format
 msgid "Loading library \"%s\""
-msgstr ""
+msgstr "Lade Bibliothek \"%s\""
 
 #: eeschema/cmp_tree_model_adapter_base.cpp:185 eeschema/libedit.cpp:669
 #: eeschema/viewlibs.cpp:239
@@ -4421,7 +4431,7 @@ msgstr "Annotation"
 #: eeschema/dialogs/dialog_bom.cpp:356
 #, c-format
 msgid "Failed to open file \"%s\""
-msgstr ""
+msgstr "Konnte Datei %s\" nicht öffnen\t"
 
 #: eeschema/dialogs/dialog_bom.cpp:489
 msgid "Plugin name in plugin list"
@@ -4574,7 +4584,7 @@ msgstr "Kein gültiger Footprint angegeben"
 msgid ""
 "Double click here to select a symbol\n"
 "from the library browser"
-msgstr ""
+msgstr "Hier doppelklicken, um ein Schaltplansymbol auszuwählen."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:73
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.h:115
@@ -4601,6 +4611,7 @@ msgstr "Anzahl der Einheiten (max. %d erlaubt)"
 #, c-format
 msgid "Alias \"%s\" cannot be removed while it is being edited!"
 msgstr ""
+"Alias \"%s\" kann nicht entfernt werden während dieser bearbeitet wird."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:306
 msgid "Remove all aliases from list?"
@@ -4617,12 +4628,12 @@ msgstr "Symbol Alias:"
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:342
 #, c-format
 msgid "Alias or component name \"%s\" already in use."
-msgstr ""
+msgstr "Alias oder Bauteilname \"%s\" wird bereits verwendet."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:351
 #, c-format
 msgid "Symbol name \"%s\" already exists in library \"%s\"."
-msgstr ""
+msgstr "Bauteilsymbolname \"%s\" existiert bereits in Bibliothek \"%s\"."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:406
 msgid "Delete extra parts from component?"
@@ -4655,7 +4666,7 @@ msgstr "Footprint-Filter"
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:530
 #, c-format
 msgid "Foot print filter \"%s\" is already defined."
-msgstr ""
+msgstr "Footprintfilter \"%s\" ist bereits definiert."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:566
 msgid "Edit footprint filter"
@@ -4861,27 +4872,28 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:258
 #, c-format
 msgid "\"%s\" is not a valid library symbol indentifier."
-msgstr ""
+msgstr "\"%s\" ist keine gültige Bezeichnung für ein Bauteilsymbol."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:275
 #, c-format
 msgid "Symbol \"%s\" not found in library \"%s\""
-msgstr ""
+msgstr "Bauteilsymbol \"%s\" wurde in Bibliothek \"%s\" nicht gefunden."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:281
 #, c-format
 msgid "Symbol \"%s\" found in library \"%s\""
-msgstr ""
+msgstr "Bauteilsymbol \"%s\" wurde in Bibliothek \"%s\" gefunden."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:355
 #, c-format
 msgid "Symbol library identifier \"%s\" is not valid!"
 msgstr ""
+"Bezeichner \"%s\" ist für eine Schaltplansymbolbibliothek nicht zulässig."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:372
 #, c-format
 msgid "Symbol \"%s\" not found in library \"%s\"!"
-msgstr ""
+msgstr "Bauteilsymbol \"%s\" wurde in Bibliothek \"%s\" nicht gefunden."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:447
 msgid "Illegal reference. A reference must start with a letter"
@@ -4895,6 +4907,10 @@ msgid ""
 "template list.  Empty field values are invalid an will be removed from the "
 "component.  Do you wish to remove this and all remaining undefined fields?"
 msgstr ""
+"Das Feld \"%s\" hat keinen gültigen Wert und wird auch nicht in der Vorlage "
+"definiert. Felder mit leeren Werten sind ungültig und werden vom "
+"Bauteilsymbol entfernt. Soll dieses und alle weiteren undefinierten Felder "
+"entfernt werden?"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:480
 msgid "Remove Fields"
@@ -5121,7 +5137,7 @@ msgstr "Links ausrichten"
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:101
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:107
 msgid "Align Center"
-msgstr ""
+msgstr "Zentrieren"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:169
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:101
@@ -5267,30 +5283,32 @@ msgstr "Position Y:"
 #, c-format
 msgid "Symbol library identifier \"%s\" is not valid at row %d!"
 msgstr ""
+"Bezeichner \"%s\" in Zeile \"%d\" ist für eine Schaltplansymbolbibliothek "
+"nicht zulässig."
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:485
 #, c-format
 msgid "Available Candidates for %s "
-msgstr ""
+msgstr "Verfügbare Kandidaten für %s "
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:489
 #, c-format
 msgid "Candidates count %d "
-msgstr ""
+msgstr "Anzahl Kandidaten %d "
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:499
 #, c-format
 msgid "%u link(s) mapped, %d not found"
-msgstr ""
+msgstr "%u Verbindungen zugeordnet, %d wurden nicht gefunden"
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:503
 #, c-format
 msgid "All %u link(s) resolved"
-msgstr ""
+msgstr "Alle %u Verbindungen wurden aufgelöst"
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:526
 msgid "Invalid symbol library identifier"
-msgstr ""
+msgstr "Ungültige Bezeichnung für ein Bibliothekssymbol"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:39
 #: pcbnew/netlist.cpp:204
@@ -5299,16 +5317,18 @@ msgstr "Bauteile"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:40
 msgid "Current Symbol"
-msgstr ""
+msgstr "Aktuelles Symbol"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:41
 msgid "New Symbol"
-msgstr ""
+msgstr "Neues Symbol"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:69
 msgid ""
 "Warning: Changes made from this dialog cannot be undone, after closing it."
 msgstr ""
+"Achtung: Änderungen, die in diesem Dialog gemacht werden, können nach dem "
+"Schließen nicht rückgängig gemacht werden."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:95
 msgid "Browse Libraries"
@@ -5901,7 +5921,7 @@ msgstr "Wähle bitte eine Symbolbibliotheksdatei."
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:110
 #, c-format
 msgid "File \"%s\" not found."
-msgstr ""
+msgstr "Datei %s nicht gefunden."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:124
 #, c-format
@@ -5910,6 +5930,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Datei \"%s\" ist keine gültige Symbolbibliothekstabelle.\n"
+"\n"
+"%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:144
 #, c-format
@@ -5922,6 +5945,13 @@ msgid ""
 "\n"
 "\"%s\"."
 msgstr ""
+"Konnte die globale Symbolbibliothekstabelle nicht kopieren:\n"
+"\n"
+"\"%s\"\n"
+"\n"
+"to:\n"
+"\n"
+"\"%s\"."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:161
 #, c-format
@@ -6343,7 +6373,7 @@ msgstr "Wähle das Ausgabeverzeichnis"
 msgid ""
 "Do you want to use a path relative to\n"
 "\"%s\""
-msgstr ""
+msgstr "Soll ein Pfad relativ zu \"%s\" verwendet werden"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:185
 #: eeschema/dialogs/dialog_plot_schematic.cpp:193
@@ -7385,7 +7415,7 @@ msgstr "Projektspezifische Bibliotheken"
 
 #: eeschema/dialogs/dialog_sym_lib_table_base.cpp:134
 msgid "Browse Libraries..."
-msgstr ""
+msgstr "Bibliotheken ansehen..."
 
 #: eeschema/dialogs/dialog_sym_lib_table_base.cpp:137
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:136
@@ -7454,11 +7484,13 @@ msgstr ""
 #, c-format
 msgid "Adding library \"%s\", file \"%s\" to project symbol library table."
 msgstr ""
+"Füge Bibliothek \"%s\", Datei \"%s\" der Symbolbibliothekstabelle des "
+"Projektes hinzu."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:171
 #, c-format
 msgid "Library \"%s\" not found."
-msgstr ""
+msgstr "Bibliothek \"%s\" wurde nicht gefunden."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:188
 #, c-format
@@ -7477,11 +7509,12 @@ msgstr "Erstellt eine leere projektspezifische Symbolbibliothekstabelle.\n"
 #, c-format
 msgid "No symbol \"%s\" found in symbol library table."
 msgstr ""
+"Bauteilsymbol \"%s\" wurde in der Symbolbibliothekstabelle nicht gefunden."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:227
 #, c-format
 msgid "Symbol \"%s\" mapped to symbol library \"%s\"."
-msgstr ""
+msgstr "Bauteilsymbol \"%s\" wurde der Bibliothek \"%s\" zugeordnet."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:236
 msgid "Symbol library table mapping complete!"
@@ -7494,11 +7527,12 @@ msgstr "Kartierung der Symbolbibliothekstabelle ist fertig gestellt!"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:369
 #, c-format
 msgid "Failed to back up file \"%s\".\n"
-msgstr ""
+msgstr "Konnte kein Backup der Datei \"%s\" erstellen.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:375
 msgid "Some of the project files could not be backed up."
 msgstr ""
+"Für einige der Dateien des Projektes konnte kein Backup angelegt werden."
 
 #: eeschema/dialogs/dialog_symbol_remap_base.cpp:30 eeschema/menubar.cpp:505
 #: eeschema/dialogs/dialog_symbol_remap_base.h:51
@@ -7533,7 +7567,7 @@ msgstr ""
 #: pagelayout_editor/pl_editor_frame.cpp:653
 #, c-format
 msgid "Couldn't load image from \"%s\""
-msgstr ""
+msgstr "Konnte keine Bilddatei von \"%s\" laden."
 
 #: eeschema/edit_component_in_schematic.cpp:65
 #, c-format
@@ -7734,22 +7768,22 @@ msgstr ""
 #: eeschema/erc.cpp:817
 #, c-format
 msgid "Global label \"%s\" (sheet \"%s\") looks like:"
-msgstr ""
+msgstr "Globales Label \"%s\" (Schaltplanblatt \"%s\") sieht wie folgt aus:"
 
 #: eeschema/erc.cpp:818
 #, c-format
 msgid "Local label \"%s\" (sheet \"%s\") looks like:"
-msgstr ""
+msgstr "Lokales Label \"%s\" (Schaltplanblatt \"%s\") sieht wie folgt aus:"
 
 #: eeschema/erc.cpp:826
 #, c-format
 msgid "Global label \"%s\" (sheet \"%s\")"
-msgstr ""
+msgstr "Globales Label \"%s\" (Schaltplanblatt \"%s\")"
 
 #: eeschema/erc.cpp:827
 #, c-format
 msgid "Local label \"%s\" (sheet \"%s\")"
-msgstr ""
+msgstr "Lokales Label \"%s\" (Schaltplanblatt \"%s\")"
 
 #: eeschema/files-io.cpp:74
 msgid "Schematic Files"
@@ -7758,7 +7792,7 @@ msgstr "Schaltplan Dateien"
 #: eeschema/files-io.cpp:104
 #, c-format
 msgid "Could not save backup of file \"%s\""
-msgstr ""
+msgstr "Konnte die Sicherungskopie der Datei '%s' nicht erstellen."
 
 #: eeschema/files-io.cpp:123
 #, c-format
@@ -7766,11 +7800,13 @@ msgid ""
 "Error saving schematic file \"%s\".\n"
 "%s"
 msgstr ""
+"Beim Schreiben der Schaltplandatei \"%s\" ist folgender Fehler aufgetreten:\n"
+"%s"
 
 #: eeschema/files-io.cpp:127
 #, c-format
 msgid "Failed to save \"%s\""
-msgstr ""
+msgstr "Fehler beim Speichern von \"%s\""
 
 #: eeschema/files-io.cpp:155
 #, c-format
@@ -7784,18 +7820,20 @@ msgstr "Konnte Datei nicht schreiben."
 #: eeschema/files-io.cpp:210 eeschema/files-io.cpp:779
 #, c-format
 msgid "Schematic file \"%s\" is already open."
-msgstr ""
+msgstr "Die Schaltplandatei \"%s\" ist bereits geöffnet."
 
 #: eeschema/files-io.cpp:230
 #, c-format
 msgid "Schematic \"%s\" does not exist.  Do you wish to create it?"
-msgstr ""
+msgstr "Schaltplan \"%s\" existiert nicht. Soll er angelegt werden?"
 
 #: eeschema/files-io.cpp:300 eeschema/files-io.cpp:451 eeschema/sheet.cpp:254
 msgid ""
 "The entire schematic could not be load.  Errors occurred attempting to load "
 "hierarchical sheet schematics."
 msgstr ""
+"Der gesamte Schaltplan konnte nicht geladen werden. Beim Laden der "
+"hierarchischen Schaltplanblätter sind Fehler aufgetreten."
 
 #: eeschema/files-io.cpp:314 eeschema/files-io.cpp:825
 #, c-format
@@ -7803,11 +7841,13 @@ msgid ""
 "Error loading schematic file \"%s\".\n"
 "%s"
 msgstr ""
+"Fehler beim Laden der Schaltplandatei \"%s\".\n"
+"%s"
 
 #: eeschema/files-io.cpp:318 eeschema/files-io.cpp:829
 #, c-format
 msgid "Failed to load \"%s\""
-msgstr ""
+msgstr "Fehler beim Laden von \"%s\""
 
 #: eeschema/files-io.cpp:333
 msgid ""
@@ -7827,17 +7867,19 @@ msgstr "Schaltplan hinzufügen"
 #: eeschema/files-io.cpp:459 eeschema/sheet.cpp:262
 #, c-format
 msgid "Error occurred loading schematic file \"%s\"."
-msgstr ""
+msgstr "Fehler beim Laden der Schaltplandatei \"%s\"."
 
 #: eeschema/files-io.cpp:462 eeschema/sheet.cpp:265
 #, c-format
 msgid "Failed to load schematic \"%s\""
-msgstr ""
+msgstr "Konnte Schaltplan \"%s\" nicht laden"
 
 #: eeschema/files-io.cpp:527
 #, c-format
 msgid "An error occurred loading the symbol library table \"%s\"."
 msgstr ""
+"Bei dem Versuch die Symbolbibliothekstabelle \"%s\" zu laden ist ein Fehler "
+"aufgetreten."
 
 #: eeschema/files-io.cpp:649
 msgid ""
@@ -7845,6 +7887,9 @@ msgid ""
 "\n"
 "Do you want to save the current document before proceeding?"
 msgstr ""
+"Der Vorgang kann nicht rückgängig gemacht werden.\n"
+"\n"
+"Soll das aktuelle Dokument vorher gespeichert werden?"
 
 #: eeschema/files-io.cpp:669
 msgid "Import Schematic"
@@ -7853,7 +7898,7 @@ msgstr "Schaltplanimport"
 #: eeschema/files-io.cpp:700
 #, c-format
 msgid "Directory \"%s\" is not writable."
-msgstr ""
+msgstr "Das Verzeichnis \"%s\" ist nicht schreibbar."
 
 #: eeschema/files-io.cpp:855
 msgid ""
@@ -8179,7 +8224,7 @@ msgstr "Bibliothek speichern"
 
 #: eeschema/hotkeys.cpp:222
 msgid "Save Part"
-msgstr ""
+msgstr "Bauteil speichern"
 
 #: eeschema/hotkeys.cpp:223
 msgid "Save Schematic"
@@ -8294,17 +8339,17 @@ msgstr "Symbol importieren"
 #: eeschema/lib_export.cpp:80 eeschema/symbedit.cpp:92
 #, c-format
 msgid "Cannot import symbol library \"%s\"."
-msgstr ""
+msgstr "Kann Schaltplansymboltabelle \"%s\" nicht importieren."
 
 #: eeschema/lib_export.cpp:87 eeschema/symbedit.cpp:99
 #, c-format
 msgid "Symbol library file \"%s\" is empty."
-msgstr ""
+msgstr "Die Symbolbibliothek \"%s\" ist leer."
 
 #: eeschema/lib_export.cpp:97
 #, c-format
 msgid "Symbol \"%s\" already exists in library \"%s\"."
-msgstr ""
+msgstr "Bauteilsymbol \"%s\" existiert bereits in Bibliothek \"%s\"."
 
 #: eeschema/lib_export.cpp:114
 msgid "There is no symbol selected to save."
@@ -8318,16 +8363,17 @@ msgstr "Symbol exportieren"
 #, c-format
 msgid "Error occurred attempting to load symbol library file \"%s\""
 msgstr ""
+"Beim Laden der Schaltplansymboltabelle \"%s\" ist ein Fehler aufgetreten"
 
 #: eeschema/lib_export.cpp:155
 #, c-format
 msgid "Symbol \"%s\" already exists. Overwrite it?"
-msgstr ""
+msgstr "Bauteilsymbol \"%s\" existiert bereits. Soll es überschrieben werden?"
 
 #: eeschema/lib_export.cpp:164
 #, c-format
 msgid "Write permissions are required to save library \"%s\"."
-msgstr ""
+msgstr "Keine Schreibrechte zum Speichern der Bibliothek '%s'."
 
 #: eeschema/lib_export.cpp:178
 msgid "Failed to create symbol library file "
@@ -8336,12 +8382,12 @@ msgstr "Konnte die Symbolbibliothek nicht erstellen"
 #: eeschema/lib_export.cpp:180
 #, c-format
 msgid "Error creating symbol library \"%s\""
-msgstr ""
+msgstr "Ein Fehler ist aufgetreten beim Erstellen der Symbolbibliothek '%s'."
 
 #: eeschema/lib_export.cpp:188
 #, c-format
 msgid "Symbol \"%s\" saved in library \"%s\""
-msgstr ""
+msgstr "Bauteilsymbol \"%s\" wurde in der Bibliothek \"%s\" gespeichert"
 
 #: eeschema/lib_field.cpp:456 eeschema/sch_component.cpp:1461
 #: eeschema/template_fieldnames.cpp:45 pcbnew/class_edge_mod.cpp:248
@@ -8457,7 +8503,7 @@ msgstr "Ein Fehler ist aufgetreten beim Erstellen der Symbolbibliothek '%s'."
 #: eeschema/libarch.cpp:155
 #, c-format
 msgid "Failed to save symbol library file \"%s\""
-msgstr ""
+msgstr "Fehler beim Speichern der Symbolbibliothek \"%s\""
 
 #: eeschema/libedit.cpp:62
 msgid "Symbol Library Editor - "
@@ -8485,6 +8531,8 @@ msgstr ""
 #, c-format
 msgid "Error occurred loading symbol \"%s\" from library \"%s\"."
 msgstr ""
+"Bei dem Versuch das Symbol %s aus der Bibliothek %s zu laden ist ein Fehler "
+"aufgetreten."
 
 #: eeschema/libedit.cpp:257
 msgid ""
@@ -8501,12 +8549,12 @@ msgstr ""
 #: eeschema/libedit.cpp:302
 #, c-format
 msgid "Symbol \"%s\" already exists in library \"%s\""
-msgstr ""
+msgstr "Bauteilsymbol \"%s\" existiert bereits in Bibliothek \"%s\"."
 
 #: eeschema/libedit.cpp:488
 #, c-format
 msgid "Part name \"%s\" not found in library \"%s\""
-msgstr ""
+msgstr "Bauteil \"%s\" wurde in Bibliothek \"%s\" nicht gefunden."
 
 #: eeschema/libedit.cpp:512
 msgid "No library specified."
@@ -8515,12 +8563,12 @@ msgstr "Keine Bibliothek angegeben."
 #: eeschema/libedit.cpp:529
 #, c-format
 msgid "Save Library \"%s\" As..."
-msgstr ""
+msgstr "Bibliothek \"%s\" speichern als..."
 
 #: eeschema/libedit.cpp:567
 #, c-format
 msgid "Failed to save changes to symbol library file \"%s\""
-msgstr ""
+msgstr "Fehler beim Speichern der Symbolbibliothekstabelle \"%s\""
 
 #: eeschema/libedit.cpp:569
 msgid "Error saving library"
