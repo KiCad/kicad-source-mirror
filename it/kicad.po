@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-21 15:20+0100\n"
-"PO-Revision-Date: 2017-12-21 15:22+0100\n"
+"POT-Creation-Date: 2017-12-22 08:15+0100\n"
+"PO-Revision-Date: 2017-12-22 08:17+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -490,28 +490,28 @@ msgstr "Sposta a destra ->"
 msgid "Move Up ^"
 msgstr "Sposta in alto"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1264
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1198
 msgid "Create tracks and vias"
 msgstr "Crea piste e via"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1805
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1739
 msgid "Create zones"
 msgstr "Crea zone"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1814
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1748
 #, c-format
 msgid "Create zones of layer %s"
 msgstr "Crea zone dello strato %s"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1881
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1815
 msgid "Simplifying polygons"
 msgstr "Semplifica i poligoni"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1912
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1846
 msgid "Simplify holes contours"
 msgstr "Semplifica i contorni dei fori"
 
-#: 3d-viewer/3d_canvas/create_layer_items.cpp:1959
+#: 3d-viewer/3d_canvas/create_layer_items.cpp:1893
 msgid "Build Tech layers"
 msgstr "Costruisci gli strati tecnici"
 
@@ -5013,7 +5013,7 @@ msgstr "&Aggiungi libreria..."
 msgid "&Save Library"
 msgstr "&Salva libreria"
 
-#: eeschema/widgets/cmp_tree_pane.cpp:53
+#: eeschema/widgets/cmp_tree_pane.cpp:53 eeschema/menubar_libedit.cpp:90
 msgid "Save Library As..."
 msgstr "Salva libreria con nome..."
 
@@ -5680,12 +5680,12 @@ msgstr "Pos Y"
 msgid "Pin %s, %s, %s"
 msgstr "Pin %s, %s, %s"
 
-#: eeschema/sch_collectors.cpp:457
+#: eeschema/sch_collectors.cpp:426
 #, c-format
 msgid "Child item %s of parent item %s found in sheet %s"
 msgstr "Elemento figlio %s dell'elemento genitore %s trovato nel foglio %s"
 
-#: eeschema/sch_collectors.cpp:464
+#: eeschema/sch_collectors.cpp:433
 #, c-format
 msgid "Item %s found in sheet %s"
 msgstr "Elemento %s trovato nel foglio %s"
@@ -7223,10 +7223,6 @@ msgstr "Aggiungi una libreria creata in precedenza"
 #: eeschema/menubar_libedit.cpp:85
 msgid "Save the current active library"
 msgstr "Salva la libreria attiva corrente"
-
-#: eeschema/menubar_libedit.cpp:90
-msgid "Save Library As.."
-msgstr "Salva libreria con nome..."
 
 #: eeschema/menubar_libedit.cpp:91
 msgid "Save the current library to a new file"
@@ -15541,8 +15537,8 @@ msgstr "il percorso libreria impronte \"%s\" non esiste"
 msgid "library \"%s\" has no footprint \"%s\" to delete"
 msgstr "La libreria \"%s\" non ha impronta \"%s\" da cancellare"
 
-#: pcbnew/gpcb_plugin.cpp:458 pcbnew/pcb_parser.cpp:458
-#: pcbnew/pcb_parser.cpp:563
+#: pcbnew/gpcb_plugin.cpp:458 pcbnew/pcb_parser.cpp:473
+#: pcbnew/pcb_parser.cpp:578
 #, c-format
 msgid "unknown token \"%s\""
 msgstr "token sconosciuto \"%s\""
@@ -18501,24 +18497,24 @@ msgstr ""
 msgid "cannot interpret date code %d"
 msgstr "impossibile interpretare il codice data %d"
 
-#: pcbnew/pcb_parser.cpp:669
+#: pcbnew/pcb_parser.cpp:684
 #, c-format
 msgid "page type \"%s\" is not valid "
 msgstr "tipo pagina \"%s\" non valida"
 
-#: pcbnew/pcb_parser.cpp:901
+#: pcbnew/pcb_parser.cpp:916
 #, c-format
 msgid "Layer \"%s\" in file \"%s\" at line %d, is not in fixed layer hash"
 msgstr ""
 "Lo strato \"%s\" nel file \"%s\" alla riga %d, non presente nell'hash strati "
 "fisso"
 
-#: pcbnew/pcb_parser.cpp:934
+#: pcbnew/pcb_parser.cpp:949
 #, c-format
 msgid "%d is not a valid layer count"
 msgstr "%d non è un conteggio di strato valido "
 
-#: pcbnew/pcb_parser.cpp:965
+#: pcbnew/pcb_parser.cpp:980
 #, c-format
 msgid ""
 "Layer \"%s\" in file\n"
@@ -18531,13 +18527,13 @@ msgstr ""
 "alla riga %d, posizione %d\n"
 "non è stato definito nella sezione strati"
 
-#: pcbnew/pcb_parser.cpp:1351
+#: pcbnew/pcb_parser.cpp:1366
 #, c-format
 msgid "duplicate NETCLASS name \"%s\" in file \"%s\" at line %d, offset %d"
 msgstr ""
 "Nome NETCLASS \"%s\" duplicato nel file \"%s\" alla riga %d, scostamento %d"
 
-#: pcbnew/pcb_parser.cpp:1787 pcbnew/kicad_netlist_reader.cpp:369
+#: pcbnew/pcb_parser.cpp:1802 pcbnew/kicad_netlist_reader.cpp:369
 #, c-format
 msgid ""
 "invalid footprint ID in\n"
@@ -18550,14 +18546,14 @@ msgstr ""
 "linea: %d\n"
 "scostamento: %d"
 
-#: pcbnew/pcb_parser.cpp:2038
+#: pcbnew/pcb_parser.cpp:2053
 #, c-format
 msgid "cannot handle footprint text type %s"
 msgstr "impossibile gestire testo impronta tipo %s"
 
-#: pcbnew/pcb_parser.cpp:2463 pcbnew/pcb_parser.cpp:2469
-#: pcbnew/pcb_parser.cpp:2698 pcbnew/pcb_parser.cpp:2780
-#: pcbnew/pcb_parser.cpp:2844
+#: pcbnew/pcb_parser.cpp:2478 pcbnew/pcb_parser.cpp:2484
+#: pcbnew/pcb_parser.cpp:2713 pcbnew/pcb_parser.cpp:2795
+#: pcbnew/pcb_parser.cpp:2859
 #, c-format
 msgid ""
 "invalid net ID in\n"
@@ -18570,7 +18566,7 @@ msgstr ""
 "linea: %d\n"
 "scostamento: %d"
 
-#: pcbnew/pcb_parser.cpp:3170
+#: pcbnew/pcb_parser.cpp:3185
 #, c-format
 msgid ""
 "There is a zone that belongs to a not existing net\n"
@@ -23906,48 +23902,53 @@ msgstr "Scaricamento librerie 3D"
 msgid "Aborted by user"
 msgstr "Interrotto dall'utente"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:149
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:146
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:158
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:156
 msgid "Circle Properties"
 msgstr "Proprietà cerchio"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:150
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:161
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:159
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:167
 msgid "Center X"
 msgstr "Centra X"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:151
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:162
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:160
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:168
 msgid "Center Y"
 msgstr "Centra Y"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:152
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:161
 msgid "Point X"
 msgstr "Punto X"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:153
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:162
 msgid "Point Y"
 msgstr "Punto Y"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:160
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:157
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:166
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:164
 msgid "Arc Properties"
 msgstr "Proprietà arco"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:163
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:169
 msgid "Start Point X"
 msgstr "Punto iniziale X"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:164
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:170
 msgid "Start Point Y"
 msgstr "Punto iniziale Y"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:170
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:167
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:176
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:174
+msgid "Polygon Properties"
+msgstr "Proprietà poligono"
+
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:181
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:179
 msgid "Line Segment Properties"
 msgstr "Proprietà segmento di linea"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:200
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:208
 msgid ""
 "This item was on an unknown layer.\n"
 "It has been moved to the front silk screen layer. Please fix it."
@@ -23955,42 +23956,41 @@ msgstr ""
 "Questo elemento ha uno strato sconosciuto.\n"
 "È stato spostato sullo strato di serigrafia frontale. Sistemarlo per favore!"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:229
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:239
 msgid ""
-"The graphic item will be on a copper layer. This is very dangerous. Are you "
-"sure?"
+"The graphic item will be on a copper layer.\n"
+"This is very dangerous because DRC does not handle it.\n"
+"Are you sure?"
 msgstr ""
-"L'elemento grafico apparirà su uno strato in rame. Si desidera conservarlo?"
+"L'elemento grafico apparirà su uno strato in rame.\n"
+"Questo è molto pericoloso perché il controllo regole elettriche\n"
+"non è in grado di gestirlo. Siete veramente sicuri?"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:265
-msgid "Modify module graphic item"
-msgstr "Modifica l'elemento grafico del modulo"
-
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:297
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:309
 msgid "The arc angle cannot be zero."
 msgstr "L'angolo dell'arco non può essere zero."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:305
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:311
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:317
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:319
 msgid "The radius must be greater than zero."
 msgstr "Il raggio deve essere maggiore di zero."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:313
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:324
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:328
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:331
 msgid "The start and end points cannot be the same."
 msgstr "I punti di inizio e di fine non possono essere uguali."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:322
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:334
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:337
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:341
 msgid "The item thickness must be greater than zero."
 msgstr "La dimensione dell'elemento deve essere maggiore di zero."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:328
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:340
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:343
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:347
 msgid "The default thickness must be greater than zero."
 msgstr "La dimensione predefinita deve essere maggiore di zero."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:332
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:347
 msgid "Error list"
 msgstr "Elenco errori"
 
@@ -25831,33 +25831,33 @@ msgstr "Non valida"
 msgid "Validating libraries %d/%d"
 msgstr "Validazione librerie %d/%d"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:147
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:158
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:157
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:165
 msgid "Center X:"
 msgstr "Centra X:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:148
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:159
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:158
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:166
 msgid "Center Y:"
 msgstr "Centra Y:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:149
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:159
 msgid "Point X:"
 msgstr "Punto X:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:150
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:160
 msgid "Point Y:"
 msgstr "Punto Y:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:160
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:167
 msgid "Start Point X:"
 msgstr "Punto iniziale X:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:161
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:168
 msgid "Start Point Y:"
 msgstr "Punto iniziale Y:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:204
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:213
 msgid ""
 "This item was on an unknown layer.\n"
 "It has been moved to the drawings layer. Please fix it."
@@ -25865,15 +25865,15 @@ msgstr ""
 "Questo elemento era su uno strato sconosciuto.\n"
 "È stato spostato sullo strato grafico. Sistemarlo per favore!"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:269
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:278
 msgid "Modify drawing properties"
 msgstr "Modifica proprietà grafiche"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:302
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:311
 msgid "The arc angle must be greater than zero."
 msgstr "L'angolo dell'arco deve essere maggiore di zero."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:344
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:351
 msgid "Error List"
 msgstr "Elenco errori"
 
@@ -27544,7 +27544,7 @@ msgstr "Trasformazione geometria piazzola di forma personalizzata"
 msgid "Basic Shape Polygon"
 msgstr "Poligono di forma base"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.h:78
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.h:80
 msgid "Graphic Item Properties"
 msgstr "Proprietà elemento grafico"
 
