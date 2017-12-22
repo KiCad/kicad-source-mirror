@@ -1536,6 +1536,18 @@ void SHAPE_POLY_SET::Move( const VECTOR2I& aVector )
 }
 
 
+void SHAPE_POLY_SET::Rotate( double aAngle, const VECTOR2I& aCenter )
+{
+    for( POLYGON& poly : m_polys )
+    {
+        for( SHAPE_LINE_CHAIN& path : poly )
+        {
+            path.Rotate( aAngle, aCenter );
+        }
+    }
+}
+
+
 int SHAPE_POLY_SET::TotalVertices() const
 {
     int c = 0;

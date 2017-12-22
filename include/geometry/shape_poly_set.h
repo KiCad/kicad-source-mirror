@@ -864,6 +864,14 @@ class SHAPE_POLY_SET : public SHAPE
         /// @copydoc SHAPE::Move()
         void Move( const VECTOR2I& aVector ) override;
 
+        /**
+         * Function Rotate
+         * rotates all vertices by a given angle
+         * @param aCenter is the rotation center
+         * @param aAngle rotation angle in radians
+         */
+        void Rotate( double aAngle, const VECTOR2I& aCenter );
+
         /// @copydoc SHAPE::IsSolid()
         bool IsSolid() const override
         {

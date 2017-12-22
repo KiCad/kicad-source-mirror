@@ -595,6 +595,14 @@ public:
             (*i) += aVector;
     }
 
+    /**
+     * Function Rotate
+     * rotates all vertices by a given angle
+     * @param aCenter is the rotation center
+     * @param aAngle rotation angle in radians
+     */
+    void Rotate( double aAngle, const VECTOR2I& aCenter );
+
     bool IsSolid() const override
     {
         return false;

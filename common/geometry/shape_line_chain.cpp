@@ -35,6 +35,17 @@ bool SHAPE_LINE_CHAIN::Collide( const VECTOR2I& aP, int aClearance ) const
 }
 
 
+void SHAPE_LINE_CHAIN::Rotate( double aAngle, const VECTOR2I& aCenter )
+{
+    for( std::vector<VECTOR2I>::iterator i = m_points.begin(); i != m_points.end(); ++i )
+    {
+        (*i) -= aCenter;
+        (*i) = (*i).Rotate( aAngle );
+        (*i) += aCenter;
+    }
+}
+
+
 bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance ) const
 {
     BOX2I box_a( aSeg.A, aSeg.B - aSeg.A );
