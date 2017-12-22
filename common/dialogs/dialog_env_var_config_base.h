@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_ENV_VAR_CONFIG_BASE_H__
@@ -11,8 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
-
 #include "dialog_shim.h"
 #include <wx/listctrl.h>
 #include <wx/gdicmn.h>
@@ -22,7 +20,6 @@ class DIALOG_SHIM;
 #include <wx/string.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
-#include <wx/statbox.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
 #include <wx/stattext.h>
@@ -63,7 +60,7 @@ class DIALOG_ENV_VAR_CONFIG_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_ENV_VAR_CONFIG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Path Configuration"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 582,283 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_ENV_VAR_CONFIG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Environment Variable Configuration"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_ENV_VAR_CONFIG_BASE();
 	
 };
@@ -94,7 +91,7 @@ class DIALOG_ENV_VAR_SINGLE_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_ENV_VAR_SINGLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Edit Environment Value Variable"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 439,141 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_ENV_VAR_SINGLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Edit Environment Variable"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_ENV_VAR_SINGLE_BASE();
 	
 };

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2015-2017 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -129,8 +129,8 @@ void DIALOG_ENV_VAR_CONFIG::PopulatePathList()
 
     m_pathList->ClearAll();
 
-    m_pathList->AppendColumn( _( "Name" ) );
-    m_pathList->AppendColumn( _( "Path" ) );
+    m_pathList->AppendColumn( _( "Name:" ) );
+    m_pathList->AppendColumn( _( "Path:" ) );
 
     int row = 0;
 
@@ -140,7 +140,12 @@ void DIALOG_ENV_VAR_CONFIG::PopulatePathList()
 
         m_pathList->SetItem( index, 1, it->second.GetValue() );
 
-        //TODO - Indicate via background colour if the path is defined external to KiCad
+        if( it->second.GetDefinedExternally() )
+        {
+            wxColour color = wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
+
+            m_pathList->SetItemBackgroundColour( index, color );
+        }
 
         row++;
     }
@@ -154,7 +159,8 @@ void DIALOG_ENV_VAR_CONFIG::PopulatePathList()
 }
 
 
-bool DIALOG_ENV_VAR_CONFIG::GetPathAtIndex( unsigned int aIndex, wxString& aEnvVar, wxString& aEnvPath )
+bool DIALOG_ENV_VAR_CONFIG::GetPathAtIndex( unsigned int aIndex, wxString& aEnvVar,
+                                            wxString& aEnvPath )
 {
     if( aIndex > m_envVarMap.size() )
     {
@@ -180,7 +186,6 @@ bool DIALOG_ENV_VAR_CONFIG::GetPathAtIndex( unsigned int aIndex, wxString& aEnvV
 }
 
 
-
 void DIALOG_ENV_VAR_CONFIG::OnAddButton( wxCommandEvent& event )
 {
     DIALOG_ENV_VAR_SINGLE dlg( this, wxEmptyString, wxEmptyString );
@@ -194,7 +199,7 @@ void DIALOG_ENV_VAR_CONFIG::OnAddButton( wxCommandEvent& event )
         if( m_envVarMap.count( newName ) > 0 )
         {
             //TODO - Improve this message, use DisplayErrorMessage instead
-            DisplayError( this, _( "Path already exists" ) );
+            DisplayError( this, _( "Path already exists." ) );
         }
         else
         {
@@ -248,8 +253,9 @@ void DIALOG_ENV_VAR_CONFIG::EditSelectedEntry()
                 if( IsEnvVarImmutable( envName ) )
                 {
                     DisplayErrorMessage( this,
-                                         wxString::Format( _( "Environment variable \"%s\" cannot be renamed" ),
-                                         envName.ToStdString() ),
+                                         wxString::Format( _( "Environment variable \"%s\" cannot "
+                                                              "be renamed." ),
+                                                           envName.ToStdString() ),
                                          _( "The selected environment variable name "
                                             "is required for KiCad functionality and "
                                             "can not be renamed." ) );
@@ -276,7 +282,7 @@ void DIALOG_ENV_VAR_CONFIG::EditSelectedEntry()
 
 void DIALOG_ENV_VAR_CONFIG::OnHelpButton( wxCommandEvent& event )
 {
-    wxString msg = _( "Enter the name and path for each environment variable.  Grey entries "
+    wxString msg = _( "Enter the name and value for each environment variable.  Grey entries "
                       "are names that have been defined externally at the system or user "
                       "level.  Environment variables defined at the system or user level "
                       "take precedence over the ones defined in this table.  This means the "
@@ -288,7 +294,7 @@ void DIALOG_ENV_VAR_CONFIG::OnHelpButton( wxCommandEvent& event )
     msg << _( "<b>KICAD_SYMBOL_DIR</b> is the base path of the locally installed symbol libraries." );
     msg << wxT( "<br><br>" );
     msg << _( "<b>KIGITHUB</b> is used by KiCad to define the URL of the repository "
-              "of the official KiCad libraries." );
+              "of the official KiCad footprint libraries." );
     msg << wxT( "<br><br>" );
     msg << _( "<b>KISYS3DMOD</b> is the base path of system footprint 3D "
               "shapes (.3Dshapes folders)." );
@@ -407,7 +413,7 @@ DIALOG_ENV_VAR_SINGLE::DIALOG_ENV_VAR_SINGLE( wxWindow* parent,
 
 void DIALOG_ENV_VAR_SINGLE::OnSelectPath( wxCommandEvent& event )
 {
-    wxString title = _( "Set path for environment variable" );
+    wxString title = _( "Select Path for Environment Variable" );
     wxString path;  // Currently the first opened path is not initialized
 
     wxDirDialog dlg( nullptr, title, path, wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
@@ -441,7 +447,7 @@ bool DIALOG_ENV_VAR_SINGLE::TransferDataFromWindow()
     // Name cannot start with a number
     if( name.Left( 1 ).IsNumber() )
     {
-        DisplayError( this, _( "Environment variable name cannot start with a digit (0-9)." ) );
+        DisplayError( this, _( "Environment variable names cannot start with a digit (0-9)." ) );
         //  Veto:
         return false;
     }
@@ -453,16 +459,18 @@ bool DIALOG_ENV_VAR_SINGLE::TransferDataFromWindow()
 
 void DIALOG_ENV_VAR_SINGLE::onHelpClick( wxCommandEvent& event )
 {
-    wxString msg = _( "An environment variable is as an equivalence of a string.<br>"
-                      "It is used mainly in paths to make them portable between installs<br><br>"
-                      "For instance, if an environment variable is defined as<br>"
-                      "<b>MYLIBPATH</b> with a value like <b>e:/kicad_libs</b>, "
-                      "if a library name is <br><b>${MYLIBPATH}/mylib.lib</b>, the actual path is"
-                      "<br><b>e:/kicad_libs/mylib.lib</b>"
+    wxString msg = _( "An environment variable is used for string substitutions.<br>"
+                      "Environment variables are primarily used for paths to make KiCad portable "
+                      "between platforms.<br><br>"
+                      "If an environment variable is defined as <b>MYLIBPATH</b> with a "
+                      "value <b>e:/kicad_libs</b>, then a library name "
+                      "<b>${MYLIBPATH}/mylib.lib</b> gets expanded to "
+                      "<b>e:/kicad_libs/mylib.lib</b>"
                       "<br><br>"
                       "<b>Note:</b><br>"
-                      "Only chars <b>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_</b> are allowed in environment variable names<br>"
-                      "and the environment variable name cannot start with a digit (0-9)"
+                      "Only characters <b>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_</b> are "
+                      "allowed in environment variable names and the environment variable name "
+                      "cannot start with a digit (0-9)."
                     );
 
     DisplayHtmlInfoMessage( GetParent(), _( "Environment Variable Help" ), msg );
