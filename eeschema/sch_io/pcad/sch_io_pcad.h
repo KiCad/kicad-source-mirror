@@ -23,10 +23,18 @@
 #include <sch_io/sch_io.h>
 #include <sch_io/sch_io_mgr.h>
 
+#include <map>
+
 class SCH_SCREEN;
 class SCH_SHEET;
 class SCHEMATIC;
 class LIB_SYMBOL;
+
+namespace PCAD_SCH
+{
+struct SHEET;
+struct SCHEMATIC;
+}
 
 /**
  * A SCH_IO derivation for loading P-CAD 2006 ASCII schematic files (.SCH).
@@ -70,6 +78,14 @@ public:
                             const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
+
+private:
+    static wxString getLibName( const ::SCHEMATIC* aSchematic, const wxString& aFileName );
+
+    void populateScreen( SCH_SCREEN* aScreen, const PCAD_SCH::SHEET& aSheet,
+                         const PCAD_SCH::SCHEMATIC& aPcad, double aPageH,
+                         const std::map<wxString, LIB_SYMBOL*>& aLibSymbols,
+                         const wxString& aLibName );
 };
 
 #endif // SCH_IO_PCAD_H

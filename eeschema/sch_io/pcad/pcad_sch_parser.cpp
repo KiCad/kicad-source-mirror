@@ -1,6 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
+ * Copyright (C) 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
+ * Copyright (C) 2017 Eldar Khayrullin <eldar.khayrullin@mail.ru>
  * Copyright (C) 2025 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -20,22 +23,18 @@
 #include <sch_io/pcad/pcad_sch_parser.h>
 
 #include <io/pcad/s_expr_loader.h>
+#include <ki_exception.h>
 #include <xnode.h>
-#include <macros.h>
 
 #include <wx/xml/xml.h>
 #include <wx/string.h>
+#include <wx/tokenzr.h>
 
 
 namespace PCAD_SCH
 {
 
-
-// ---------------------------------------------------------------------------
-// XML tree helpers
-// ---------------------------------------------------------------------------
-
-XNODE* PCAD_SCH_PARSER::findChild( XNODE* aNode, const wxString& aTag )
+XNODE* PCAD_SCH_PARSER::FindChild( XNODE* aNode, const wxString& aTag )
 {
     if( !aNode )
         return nullptr;
@@ -50,84 +49,171 @@ XNODE* PCAD_SCH_PARSER::findChild( XNODE* aNode, const wxString& aTag )
 }
 
 
-double PCAD_SCH_PARSER::parseDouble( const wxString& aStr )
+// A node's value can land in two places depending on how the writer quoted it:
+// quoted strings are concatenated into the "Name" attribute, unquoted tokens
+// into the node text content.
+wxString PCAD_SCH_PARSER::NodeText( XNODE* aNode )
 {
-    double val = 0.0;
-    aStr.ToCDouble( &val );
-    return val;
-}
+    if( !aNode )
+        return wxEmptyString;
 
-
-double PCAD_SCH_PARSER::nodeChildDouble( XNODE* aNode, const wxString& aTag, double aDefault )
-{
-    XNODE* child = findChild( aNode, aTag );
-
-    if( !child )
-        return aDefault;
-
-    wxString content = child->GetNodeContent().Trim( true ).Trim( false );
-
-    if( content.IsEmpty() )
-    {
-        wxString name = child->GetAttribute( wxT( "Name" ) );
-        content = name.BeforeFirst( ' ' );
-    }
-
-    return parseDouble( content );
-}
-
-
-wxString PCAD_SCH_PARSER::nodeChildStr( XNODE* aNode, const wxString& aTag,
-                                        const wxString& aDefault )
-{
-    XNODE* child = findChild( aNode, aTag );
-
-    if( !child )
-        return aDefault;
-
-    wxString name = child->GetAttribute( wxT( "Name" ) );
+    wxString name = aNode->GetAttribute( wxT( "Name" ) );
 
     if( !name.IsEmpty() )
         return name;
 
-    return child->GetNodeContent().Trim( true ).Trim( false );
+    return aNode->GetNodeContent().Trim( true ).Trim( false );
+}
+
+
+wxString PCAD_SCH_PARSER::childStr( XNODE* aNode, const wxString& aTag,
+                                    const wxString& aDefault )
+{
+    XNODE* child = FindChild( aNode, aTag );
+
+    if( !child )
+        return aDefault;
+
+    return NodeText( child );
+}
+
+
+bool PCAD_SCH_PARSER::childFlag( XNODE* aNode, const wxString& aTag )
+{
+    return childStr( aNode, aTag ).CmpNoCase( wxT( "True" ) ) == 0;
 }
 
 
 // ---------------------------------------------------------------------------
-// Parse a (pt X Y) child node and return (x, y) in mils
+// Measurement handling.  Values are stored as mils.  A value token may carry
+// its unit attached ("31.115mm") or as the following token ("0.19843 mm");
+// bare numbers use the file default from (fileUnits ...).
 // ---------------------------------------------------------------------------
 
-static bool parsePt( XNODE* aNode, double& aX, double& aY )
+double PCAD_SCH_PARSER::toMils( const wxString& aValue ) const
 {
-    XNODE* ptNode = PCAD_SCH_PARSER::findChild( aNode, wxT( "pt" ) );
+    wxString str = aValue;
+    str.Trim( true ).Trim( false );
 
-    if( !ptNode )
-        return false;
+    if( str.IsEmpty() )
+        return 0.0;
 
-    wxString content = ptNode->GetNodeContent().Trim( true ).Trim( false );
+    bool isMm = m_isMetric;
 
-    // content looks like " 400.0 200.0"
-    wxString xs = content.BeforeFirst( ' ' ).Trim( true ).Trim( false );
-    wxString ys = content.AfterFirst( ' ' ).Trim( true ).Trim( false );
-
-    if( xs.IsEmpty() )
+    if( str.EndsWith( wxT( "mm" ) ) )
     {
-        // may be in Name attribute: "400.0 200.0"
-        wxString name = ptNode->GetAttribute( wxT( "Name" ) );
-        xs = name.BeforeFirst( ' ' ).Trim( true ).Trim( false );
-        ys = name.AfterFirst( ' ' ).Trim( true ).Trim( false );
+        isMm = true;
+        str.RemoveLast( 2 );
+    }
+    else if( str.EndsWith( wxT( "mil" ) ) || str.EndsWith( wxT( "Mil" ) ) )
+    {
+        isMm = false;
+        str.RemoveLast( 3 );
     }
 
-    aX = PCAD_SCH_PARSER::parseDouble( xs );
-    aY = PCAD_SCH_PARSER::parseDouble( ys );
+    str.Trim( true );
+
+    double val = 0.0;
+    str.ToCDouble( &val );
+
+    if( isMm )
+        val /= 0.0254;
+
+    return val;
+}
+
+
+// Split a node value into measurement tokens, re-attaching separated unit
+// suffixes ("0.19843 mm" is one value).
+static std::vector<wxString> splitMeasureTokens( const wxString& aContent )
+{
+    std::vector<wxString>  result;
+    wxStringTokenizer      tokenizer( aContent, wxT( " \t\r\n" ), wxTOKEN_STRTOK );
+
+    while( tokenizer.HasMoreTokens() )
+    {
+        wxString tok = tokenizer.GetNextToken();
+
+        if( !result.empty() && ( tok == wxT( "mm" ) || tok.CmpNoCase( wxT( "mil" ) ) == 0 ) )
+            result.back() += tok;
+        else
+            result.push_back( tok );
+    }
+
+    return result;
+}
+
+
+bool PCAD_SCH_PARSER::parsePtNode( XNODE* aPtNode, double& aX, double& aY ) const
+{
+    if( !aPtNode )
+        return false;
+
+    std::vector<wxString> tokens = splitMeasureTokens( NodeText( aPtNode ) );
+
+    if( tokens.size() < 2 )
+        return false;
+
+    aX = toMils( tokens[0] );
+    aY = toMils( tokens[1] );
     return true;
 }
 
 
+bool PCAD_SCH_PARSER::parsePt( XNODE* aNode, double& aX, double& aY ) const
+{
+    return parsePtNode( FindChild( aNode, wxT( "pt" ) ), aX, aY );
+}
+
+
+double PCAD_SCH_PARSER::childDouble( XNODE* aNode, const wxString& aTag, double aDefault ) const
+{
+    XNODE* child = FindChild( aNode, aTag );
+
+    if( !child )
+        return aDefault;
+
+    std::vector<wxString> tokens = splitMeasureTokens( NodeText( child ) );
+
+    if( tokens.empty() )
+        return aDefault;
+
+    return toMils( tokens[0] );
+}
+
+
+// Rotations and angles are plain decimal degrees, never measurements.
+static double childAngle( XNODE* aNode, const wxString& aTag, double aDefault = 0.0 )
+{
+    XNODE* child = PCAD_SCH_PARSER::FindChild( aNode, aTag );
+
+    if( !child )
+        return aDefault;
+
+    double val = aDefault;
+    PCAD_SCH_PARSER::NodeText( child ).ToCDouble( &val );
+    return val;
+}
+
+
+JUSTIFY PCAD_SCH_PARSER::parseJustify( const wxString& aValue )
+{
+    if( aValue == wxT( "LowerLeft" ) )   return JUSTIFY::LOWER_LEFT;
+    if( aValue == wxT( "LowerCenter" ) ) return JUSTIFY::LOWER_CENTER;
+    if( aValue == wxT( "LowerRight" ) )  return JUSTIFY::LOWER_RIGHT;
+    if( aValue == wxT( "UpperLeft" ) )   return JUSTIFY::UPPER_LEFT;
+    if( aValue == wxT( "UpperCenter" ) ) return JUSTIFY::UPPER_CENTER;
+    if( aValue == wxT( "UpperRight" ) )  return JUSTIFY::UPPER_RIGHT;
+    if( aValue == wxT( "Center" ) )      return JUSTIFY::CENTER;
+    if( aValue == wxT( "Right" ) )       return JUSTIFY::RIGHT;
+    if( aValue == wxT( "Left" ) )        return JUSTIFY::LEFT;
+
+    return JUSTIFY::LOWER_LEFT;
+}
+
 
 // ---------------------------------------------------------------------------
-// Top-level parse
+// Top level
 // ---------------------------------------------------------------------------
 
 void PCAD_SCH_PARSER::LoadFromFile( const wxString& aFilename, SCHEMATIC& aSchematic )
@@ -139,6 +225,12 @@ void PCAD_SCH_PARSER::LoadFromFile( const wxString& aFilename, SCHEMATIC& aSchem
 
     if( !root )
         THROW_IO_ERROR( _( "Empty P-CAD document" ) );
+
+    // fileUnits must be known before any measurement is parsed.
+    if( XNODE* header = FindChild( root, wxT( "asciiHeader" ) ) )
+        parseHeader( header, aSchematic );
+
+    m_isMetric = aSchematic.isMetric;
 
     for( XNODE* node = root->GetChildren(); node; node = node->GetNext() )
     {
@@ -152,12 +244,25 @@ void PCAD_SCH_PARSER::LoadFromFile( const wxString& aFilename, SCHEMATIC& aSchem
             parseSchematicDesign( node, aSchematic );
     }
 
-    // Build fast-lookup maps
+    for( const TEXT_STYLE& ts : aSchematic.textStyles )
+        aSchematic.textStylesByName[ts.name] = &ts;
+
     for( const SYMBOL_DEF& sd : aSchematic.symbolDefs )
         aSchematic.symbolDefsByName[sd.name] = &sd;
 
+    for( const COMP_DEF& cd : aSchematic.compDefs )
+        aSchematic.compDefsByName[cd.name] = &cd;
+
     for( const COMP_INST& ci : aSchematic.compInsts )
         aSchematic.compInstsByRef[ci.refDes] = &ci;
+}
+
+
+void PCAD_SCH_PARSER::parseHeader( XNODE* aNode, SCHEMATIC& aSchematic )
+{
+    wxString units = childStr( aNode, wxT( "fileUnits" ) );
+
+    aSchematic.isMetric = ( units.CmpNoCase( wxT( "mm" ) ) == 0 );
 }
 
 
@@ -169,13 +274,74 @@ void PCAD_SCH_PARSER::parseLibrary( XNODE* aNode, SCHEMATIC& aSchematic )
 {
     for( XNODE* child = aNode->GetChildren(); child; child = child->GetNext() )
     {
-        if( child->GetName() == wxT( "symbolDef" ) )
+        const wxString& tag = child->GetName();
+
+        if( tag == wxT( "textStyleDef" ) )
+        {
+            parseTextStyleDef( child, aSchematic );
+        }
+        else if( tag == wxT( "symbolDef" ) )
         {
             SYMBOL_DEF sd;
             parseSymbolDef( child, sd );
             aSchematic.symbolDefs.push_back( std::move( sd ) );
         }
+        else if( tag == wxT( "compDef" ) )
+        {
+            COMP_DEF cd;
+            parseCompDef( child, cd );
+            aSchematic.compDefs.push_back( std::move( cd ) );
+        }
+        else if( tag == wxT( "compAlias" ) )
+        {
+            // (compAlias "ALIAS ORIGINAL") - first word aliases the rest
+            wxString both = child->GetAttribute( wxT( "Name" ) );
+            wxString alias = both.BeforeFirst( ' ' );
+            wxString original = both.AfterFirst( ' ' );
+            original.Trim( true ).Trim( false );
+
+            if( !alias.IsEmpty() && !original.IsEmpty() )
+                aSchematic.compAliases[alias] = original;
+        }
     }
+}
+
+
+void PCAD_SCH_PARSER::parseTextStyleDef( XNODE* aNode, SCHEMATIC& aSchematic )
+{
+    TEXT_STYLE style;
+    style.name = aNode->GetAttribute( wxT( "Name" ) );
+    style.displayTType = childFlag( aNode, wxT( "textStyleDisplayTType" ) );
+
+    for( XNODE* child = aNode->GetChildren(); child; child = child->GetNext() )
+    {
+        if( child->GetName() != wxT( "font" ) )
+            continue;
+
+        FONT font;
+        font.isTrueType = ( childStr( child, wxT( "fontType" ) ) == wxT( "TrueType" ) );
+        font.height = childDouble( child, wxT( "fontHeight" ), 100.0 );
+        font.strokeWidth = childDouble( child, wxT( "strokeWidth" ), 10.0 );
+        font.isItalic = childFlag( child, wxT( "fontItalic" ) );
+
+        wxString weight = childStr( child, wxT( "fontWeight" ) );
+        long     weightVal = 0;
+
+        if( weight.ToLong( &weightVal ) )
+            font.isBold = ( weightVal >= 700 );
+
+        if( font.isTrueType )
+        {
+            style.ttfFont = font;
+            style.hasTtfFont = true;
+        }
+        else
+        {
+            style.strokeFont = font;
+        }
+    }
+
+    aSchematic.textStyles.push_back( std::move( style ) );
 }
 
 
@@ -186,7 +352,7 @@ void PCAD_SCH_PARSER::parseLibrary( XNODE* aNode, SCHEMATIC& aSchematic )
 void PCAD_SCH_PARSER::parseSymbolDef( XNODE* aNode, SYMBOL_DEF& aSymDef )
 {
     aSymDef.name = aNode->GetAttribute( wxT( "Name" ) );
-    aSymDef.originalName = nodeChildStr( aNode, wxT( "originalName" ) );
+    aSymDef.originalName = childStr( aNode, wxT( "originalName" ) );
 
     for( XNODE* child = aNode->GetChildren(); child; child = child->GetNext() )
     {
@@ -198,6 +364,14 @@ void PCAD_SCH_PARSER::parseSymbolDef( XNODE* aNode, SYMBOL_DEF& aSymDef )
             aSymDef.lines.push_back( parseLine( child ) );
         else if( tag == wxT( "arc" ) )
             aSymDef.arcs.push_back( parseArc( child ) );
+        else if( tag == wxT( "triplePointArc" ) )
+            aSymDef.arcs.push_back( parseTriplePointArc( child ) );
+        else if( tag == wxT( "poly" ) )
+            aSymDef.polys.push_back( parsePoly( child ) );
+        else if( tag == wxT( "text" ) )
+            aSymDef.texts.push_back( parseText( child ) );
+        else if( tag == wxT( "ieeeSymbol" ) )
+            aSymDef.ieeeSymbols.push_back( parseIeeeSymbol( child ) );
         else if( tag == wxT( "attr" ) )
             aSymDef.attrs.push_back( parseAttr( child ) );
     }
@@ -205,97 +379,124 @@ void PCAD_SCH_PARSER::parseSymbolDef( XNODE* aNode, SYMBOL_DEF& aSymDef )
 
 
 // ---------------------------------------------------------------------------
-// (pin (pinNum N) (pt X Y) (rotation R) [(isFlipped True)] [(pinLength L)] ...)
+// (compDef "name" (compHeader ...) (compPin ...)... (attachedSymbol ...)...)
+// ---------------------------------------------------------------------------
+
+void PCAD_SCH_PARSER::parseCompDef( XNODE* aNode, COMP_DEF& aCompDef )
+{
+    aCompDef.name = aNode->GetAttribute( wxT( "Name" ) );
+    aCompDef.originalName = childStr( aNode, wxT( "originalName" ) );
+
+    if( XNODE* header = FindChild( aNode, wxT( "compHeader" ) ) )
+    {
+        aCompDef.refDesPrefix = childStr( header, wxT( "refDesPrefix" ) );
+
+        long num = 1;
+
+        if( childStr( header, wxT( "numParts" ) ).ToLong( &num ) && num > 0 )
+            aCompDef.numParts = static_cast<int>( num );
+
+        aCompDef.isPower = ( childStr( header, wxT( "compType" ) ) == wxT( "Power" ) );
+    }
+
+    aCompDef.attachedSymbols.resize( aCompDef.numParts + 1 );
+
+    for( XNODE* child = aNode->GetChildren(); child; child = child->GetNext() )
+    {
+        const wxString& tag = child->GetName();
+
+        if( tag == wxT( "compPin" ) )
+        {
+            COMP_PIN pin;
+            pin.padDes = child->GetAttribute( wxT( "Name" ) );
+            pin.pinName = childStr( child, wxT( "pinName" ) );
+            pin.symPinNum = childStr( child, wxT( "symPinNum" ) );
+            pin.pinType = childStr( child, wxT( "pinType" ) );
+
+            long part = 1;
+
+            if( childStr( child, wxT( "partNum" ) ).ToLong( &part ) && part > 0 )
+                pin.partNum = static_cast<int>( part );
+
+            aCompDef.compPins.push_back( std::move( pin ) );
+        }
+        else if( tag == wxT( "attachedSymbol" ) )
+        {
+            // Only the Normal alternate maps to the base KiCad body style.
+            if( childStr( child, wxT( "altType" ) ) != wxT( "Normal" ) )
+                continue;
+
+            long part = 1;
+            childStr( child, wxT( "partNum" ) ).ToLong( &part );
+
+            wxString symName = childStr( child, wxT( "symbolName" ) );
+
+            if( part >= 1 && !symName.IsEmpty() )
+            {
+                if( part >= static_cast<long>( aCompDef.attachedSymbols.size() ) )
+                    aCompDef.attachedSymbols.resize( part + 1 );
+
+                aCompDef.attachedSymbols[part] = symName;
+            }
+        }
+        else if( tag == wxT( "attachedPattern" ) )
+        {
+            aCompDef.attachedPattern = childStr( child, wxT( "patternName" ) );
+        }
+        else if( tag == wxT( "attr" ) )
+        {
+            // (attr "Description <text>")
+            wxString name = child->GetAttribute( wxT( "Name" ) );
+
+            if( name.StartsWith( wxT( "Description " ) ) )
+                aCompDef.description = name.AfterFirst( ' ' ).Trim( true ).Trim( false );
+        }
+    }
+}
+
+
+// ---------------------------------------------------------------------------
+// (pin (pinNum N) (pt X Y) (rotation R) [(isFlipped True)] [(pinLength L)]
+//      [(outsideEdgeStyle Dot)] [(pinDisplay ...)] (pinDes (text ...))
+//      (pinName (text ...)) [(defaultPinDes "D")])
 // ---------------------------------------------------------------------------
 
 PIN PCAD_SCH_PARSER::parsePin( XNODE* aNode )
 {
     PIN pin;
 
-    // pinNum → number string
-    XNODE* pinNumNode = findChild( aNode, wxT( "pinNum" ) );
-
-    if( pinNumNode )
-    {
-        wxString content = pinNumNode->GetNodeContent().Trim( true ).Trim( false );
-
-        if( content.IsEmpty() )
-            content = pinNumNode->GetAttribute( wxT( "Name" ) );
-
-        pin.number = content;
-    }
-
-    // pt → connection endpoint
+    pin.pinNum = childStr( aNode, wxT( "pinNum" ) );
+    pin.defaultPinDes = childStr( aNode, wxT( "defaultPinDes" ) );
     parsePt( aNode, pin.x, pin.y );
+    pin.rotation = childAngle( aNode, wxT( "rotation" ) );
+    pin.isFlipped = childFlag( aNode, wxT( "isFlipped" ) );
+    pin.pinLength = childDouble( aNode, wxT( "pinLength" ), 300.0 );
+    pin.outsideEdgeStyle = childStr( aNode, wxT( "outsideEdgeStyle" ) );
+    pin.insideEdgeStyle = childStr( aNode, wxT( "insideEdgeStyle" ) );
 
-    // rotation
-    XNODE* rotNode = findChild( aNode, wxT( "rotation" ) );
-
-    if( rotNode )
+    if( XNODE* disp = FindChild( aNode, wxT( "pinDisplay" ) ) )
     {
-        wxString content = rotNode->GetNodeContent().Trim( true ).Trim( false );
+        wxString des = childStr( disp, wxT( "dispPinDes" ) );
 
-        if( content.IsEmpty() )
-            content = rotNode->GetAttribute( wxT( "Name" ) );
+        if( !des.IsEmpty() )
+            pin.showPinDes = ( des.CmpNoCase( wxT( "True" ) ) == 0 );
 
-        pin.rotation = parseDouble( content );
+        wxString name = childStr( disp, wxT( "dispPinName" ) );
+
+        if( !name.IsEmpty() )
+            pin.showPinName = ( name.CmpNoCase( wxT( "True" ) ) == 0 );
     }
 
-    // isFlipped
-    XNODE* flippedNode = findChild( aNode, wxT( "isFlipped" ) );
-
-    if( flippedNode )
+    if( XNODE* pinDes = FindChild( aNode, wxT( "pinDes" ) ) )
     {
-        wxString val = flippedNode->GetNodeContent().Trim( true ).Trim( false );
-
-        if( val.IsEmpty() )
-            val = flippedNode->GetAttribute( wxT( "Name" ) );
-
-        pin.isFlipped = ( val.CmpNoCase( wxT( "True" ) ) == 0 );
+        if( XNODE* textNode = FindChild( pinDes, wxT( "text" ) ) )
+            pin.pinDesText = parseText( textNode );
     }
 
-    // pinLength
-    XNODE* lenNode = findChild( aNode, wxT( "pinLength" ) );
-
-    if( lenNode )
+    if( XNODE* pinName = FindChild( aNode, wxT( "pinName" ) ) )
     {
-        wxString content = lenNode->GetNodeContent().Trim( true ).Trim( false );
-
-        if( content.IsEmpty() )
-            content = lenNode->GetAttribute( wxT( "Name" ) );
-
-        if( !content.IsEmpty() )
-            pin.pinLength = parseDouble( content );
-    }
-
-    // pinDes → pin number display text (fall back if pinNum not set)
-    if( pin.number.IsEmpty() )
-    {
-        XNODE* pinDesNode = findChild( aNode, wxT( "pinDes" ) );
-
-        if( pinDesNode )
-        {
-            XNODE* textNode = findChild( pinDesNode, wxT( "text" ) );
-
-            if( textNode )
-                pin.number = textNode->GetAttribute( wxT( "Name" ) );
-        }
-    }
-
-    // pinName → pin name
-    XNODE* pinNameNode = findChild( aNode, wxT( "pinName" ) );
-
-    if( pinNameNode )
-    {
-        XNODE* textNode = findChild( pinNameNode, wxT( "text" ) );
-
-        if( textNode )
-        {
-            wxString nameAttr = textNode->GetAttribute( wxT( "Name" ) );
-
-            if( !nameAttr.IsEmpty() )
-                pin.name = nameAttr;
-        }
+        if( XNODE* textNode = FindChild( pinName, wxT( "text" ) ) )
+            pin.pinNameText = parseText( textNode );
     }
 
     return pin;
@@ -303,67 +504,184 @@ PIN PCAD_SCH_PARSER::parsePin( XNODE* aNode )
 
 
 // ---------------------------------------------------------------------------
-// (line (pt X1 Y1) (pt X2 Y2) ...)
-// The format can have inline pts or nested pt children.
-// In symbolDef: (line (pt X1 Y1) (pt X2 Y2))
+// (line (pt X1 Y1) (pt X2 Y2)... [(width W)] [(style DashedLine)])
 // ---------------------------------------------------------------------------
 
 LINE PCAD_SCH_PARSER::parseLine( XNODE* aNode )
 {
-    LINE line{};
-
-    // Collect all (pt ...) children
-    std::vector<std::pair<double, double>> pts;
+    LINE line;
 
     for( XNODE* child = aNode->GetChildren(); child; child = child->GetNext() )
     {
         if( child->GetName() == wxT( "pt" ) )
         {
-            wxString content = child->GetNodeContent().Trim( true ).Trim( false );
-
-            if( content.IsEmpty() )
-                content = child->GetAttribute( wxT( "Name" ) );
-
             double x = 0, y = 0;
-            wxString xs = content.BeforeFirst( ' ' );
-            wxString ys = content.AfterFirst( ' ' ).Trim( true ).Trim( false );
-            x = parseDouble( xs );
-            y = parseDouble( ys );
-            pts.push_back( { x, y } );
+
+            if( parsePtNode( child, x, y ) )
+                line.pts.emplace_back( x, y );
         }
     }
 
-    if( pts.size() >= 2 )
-    {
-        line.x1 = pts[0].first;
-        line.y1 = pts[0].second;
-        line.x2 = pts[1].first;
-        line.y2 = pts[1].second;
-    }
+    line.width = childDouble( aNode, wxT( "width" ), 10.0 );
+
+    wxString style = childStr( aNode, wxT( "style" ) );
+
+    if( style == wxT( "DashedLine" ) )
+        line.style = LINE_KIND::DASHED;
+    else if( style == wxT( "DottedLine" ) )
+        line.style = LINE_KIND::DOTTED;
 
     return line;
 }
 
 
 // ---------------------------------------------------------------------------
-// (arc ...) — simplified; P-Cad arcs use center/radius/angles
+// (arc (pt CX CY) (radius R) (startAngle A) (sweepAngle S) [(width W)])
 // ---------------------------------------------------------------------------
 
 ARC PCAD_SCH_PARSER::parseArc( XNODE* aNode )
 {
-    ARC arc{};
+    ARC arc;
 
     parsePt( aNode, arc.x, arc.y );
-    arc.radius = nodeChildDouble( aNode, wxT( "radius" ) );
-    arc.startAngle = nodeChildDouble( aNode, wxT( "startAngle" ) );
-    arc.sweepAngle = nodeChildDouble( aNode, wxT( "sweepAngle" ) );
+    arc.radius = childDouble( aNode, wxT( "radius" ) );
+    arc.startAngle = childAngle( aNode, wxT( "startAngle" ) );
+    arc.sweepAngle = childAngle( aNode, wxT( "sweepAngle" ) );
+    arc.width = childDouble( aNode, wxT( "width" ), 10.0 );
 
     return arc;
 }
 
 
 // ---------------------------------------------------------------------------
-// (attr "Name" "Value" (pt X Y) (isVisible True/False) ...)
+// (triplePointArc (pt CX CY) (pt X1 Y1) (pt X2 Y2) [(width W)])
+// Three points: center, start and end.  Equal start/end means a full circle.
+// ---------------------------------------------------------------------------
+
+ARC PCAD_SCH_PARSER::parseTriplePointArc( XNODE* aNode )
+{
+    ARC arc;
+
+    std::vector<std::pair<double, double>> pts;
+
+    for( XNODE* child = aNode->GetChildren(); child; child = child->GetNext() )
+    {
+        if( child->GetName() == wxT( "pt" ) )
+        {
+            double x = 0, y = 0;
+
+            if( parsePtNode( child, x, y ) )
+                pts.emplace_back( x, y );
+        }
+    }
+
+    arc.width = childDouble( aNode, wxT( "width" ), 10.0 );
+
+    if( pts.size() < 3 )
+        return arc;
+
+    arc.x = pts[0].first;
+    arc.y = pts[0].second;
+
+    double dx1 = pts[1].first - arc.x;
+    double dy1 = pts[1].second - arc.y;
+    double dx2 = pts[2].first - arc.x;
+    double dy2 = pts[2].second - arc.y;
+
+    arc.radius = std::sqrt( dx1 * dx1 + dy1 * dy1 );
+    arc.startAngle = atan2( dy1, dx1 ) * 180.0 / M_PI;
+
+    if( pts[1] == pts[2] )
+    {
+        arc.sweepAngle = 360.0;
+    }
+    else
+    {
+        double endAngle = atan2( dy2, dx2 ) * 180.0 / M_PI;
+        arc.sweepAngle = endAngle - arc.startAngle;
+
+        // P-CAD arcs sweep counterclockwise from start to end
+        if( arc.sweepAngle <= 0 )
+            arc.sweepAngle += 360.0;
+    }
+
+    return arc;
+}
+
+
+POLY PCAD_SCH_PARSER::parsePoly( XNODE* aNode )
+{
+    POLY poly;
+
+    for( XNODE* child = aNode->GetChildren(); child; child = child->GetNext() )
+    {
+        if( child->GetName() == wxT( "pt" ) )
+        {
+            double x = 0, y = 0;
+
+            if( parsePtNode( child, x, y ) )
+                poly.pts.emplace_back( x, y );
+        }
+    }
+
+    return poly;
+}
+
+
+// ---------------------------------------------------------------------------
+// (text (pt X Y) "string" (textStyleRef "style") [(rotation R)]
+//       [(isFlipped True)] [(justify J)] [(isVisible ...)])
+// ---------------------------------------------------------------------------
+
+TEXT_ITEM PCAD_SCH_PARSER::parseText( XNODE* aNode )
+{
+    TEXT_ITEM item;
+
+    item.text = aNode->GetAttribute( wxT( "Name" ) );
+    parsePt( aNode, item.x, item.y );
+    item.rotation = childAngle( aNode, wxT( "rotation" ) );
+    item.isFlipped = childFlag( aNode, wxT( "isFlipped" ) );
+    item.justify = parseJustify( childStr( aNode, wxT( "justify" ) ) );
+    item.styleRef = childStr( aNode, wxT( "textStyleRef" ) );
+
+    wxString visible = childStr( aNode, wxT( "isVisible" ) );
+
+    if( !visible.IsEmpty() )
+        item.isVisible = ( visible.CmpNoCase( wxT( "True" ) ) == 0 );
+
+    return item;
+}
+
+
+IEEE_SYMBOL PCAD_SCH_PARSER::parseIeeeSymbol( XNODE* aNode )
+{
+    IEEE_SYMBOL sym;
+
+    wxString kind = aNode->GetNodeContent().Trim( true ).Trim( false );
+
+    if( kind.IsEmpty() )
+        kind = aNode->GetAttribute( wxT( "Name" ) );
+
+    if( kind == wxT( "Adder" ) )           sym.kind = IEEE_KIND::ADDER;
+    else if( kind == wxT( "Amplifier" ) )  sym.kind = IEEE_KIND::AMPLIFIER;
+    else if( kind == wxT( "Astable" ) )    sym.kind = IEEE_KIND::ASTABLE;
+    else if( kind == wxT( "Complex" ) )    sym.kind = IEEE_KIND::COMPLEX;
+    else if( kind == wxT( "Generator" ) )  sym.kind = IEEE_KIND::GENERATOR;
+    else if( kind == wxT( "Hysteresis" ) ) sym.kind = IEEE_KIND::HYSTERESIS;
+    else if( kind == wxT( "Multiplier" ) ) sym.kind = IEEE_KIND::MULTIPLIER;
+
+    parsePt( aNode, sym.x, sym.y );
+    sym.height = childDouble( aNode, wxT( "height" ) );
+    sym.rotation = childAngle( aNode, wxT( "rotation" ) );
+    sym.isFlipped = childFlag( aNode, wxT( "isFlipped" ) );
+
+    return sym;
+}
+
+
+// ---------------------------------------------------------------------------
+// (attr "Name Value" (pt X Y) (isVisible ...) (justify ...) (rotation ...)
+//       (textStyleRef "..."))
 // ---------------------------------------------------------------------------
 
 ATTR PCAD_SCH_PARSER::parseAttr( XNODE* aNode )
@@ -372,43 +690,14 @@ ATTR PCAD_SCH_PARSER::parseAttr( XNODE* aNode )
 
     wxString nameAttr = aNode->GetAttribute( wxT( "Name" ) );
 
-    // Name attribute may be "AttrName AttrValue" or just "AttrName"
-    attr.name  = nameAttr.BeforeFirst( ' ' );
-    attr.value = nameAttr.AfterFirst( ' ' ).Trim( true ).Trim( false );
+    // The quoted attribute name and quoted value are concatenated by the
+    // loader; the name is the first word, the value everything after it.
+    attr.name = nameAttr.BeforeFirst( ' ' );
+    attr.value = nameAttr.AfterFirst( ' ' );
+    attr.value.Trim( true ).Trim( false );
 
-    parsePt( aNode, attr.x, attr.y );
-
-    XNODE* visNode = findChild( aNode, wxT( "isVisible" ) );
-
-    if( visNode )
-    {
-        wxString val = visNode->GetNodeContent().Trim( true ).Trim( false );
-
-        if( val.IsEmpty() )
-            val = visNode->GetAttribute( wxT( "Name" ) );
-
-        attr.isVisible = ( val.CmpNoCase( wxT( "True" ) ) == 0 );
-    }
-
-    XNODE* justNode = findChild( aNode, wxT( "justify" ) );
-
-    if( justNode )
-    {
-        wxString val = justNode->GetNodeContent().Trim( true ).Trim( false );
-
-        if( val.IsEmpty() )
-            val = justNode->GetAttribute( wxT( "Name" ) );
-
-        if(      val == wxT("LowerLeft")   ) attr.justify = JUSTIFY::LOWER_LEFT;
-        else if( val == wxT("LowerCenter") ) attr.justify = JUSTIFY::LOWER_CENTER;
-        else if( val == wxT("LowerRight")  ) attr.justify = JUSTIFY::LOWER_RIGHT;
-        else if( val == wxT("UpperLeft")   ) attr.justify = JUSTIFY::UPPER_LEFT;
-        else if( val == wxT("UpperCenter") ) attr.justify = JUSTIFY::UPPER_CENTER;
-        else if( val == wxT("UpperRight")  ) attr.justify = JUSTIFY::UPPER_RIGHT;
-        else if( val == wxT("Center")      ) attr.justify = JUSTIFY::CENTER;
-        else if( val == wxT("Right")       ) attr.justify = JUSTIFY::RIGHT;
-        else                                 attr.justify = JUSTIFY::LEFT;
-    }
+    attr.placement = parseText( aNode );
+    attr.placement.text = attr.value;
 
     return attr;
 }
@@ -426,10 +715,10 @@ void PCAD_SCH_PARSER::parseNetlist( XNODE* aNode, SCHEMATIC& aSchematic )
             continue;
 
         COMP_INST ci;
-        ci.refDes      = child->GetAttribute( wxT( "Name" ) );
-        ci.compRef     = nodeChildStr( child, wxT( "compRef" ) );
-        ci.originalName = nodeChildStr( child, wxT( "originalName" ) );
-        ci.value       = nodeChildStr( child, wxT( "compValue" ) );
+        ci.refDes = child->GetAttribute( wxT( "Name" ) );
+        ci.compRef = childStr( child, wxT( "compRef" ) );
+        ci.originalName = childStr( child, wxT( "originalName" ) );
+        ci.value = childStr( child, wxT( "compValue" ) );
 
         aSchematic.compInsts.push_back( std::move( ci ) );
     }
@@ -437,36 +726,29 @@ void PCAD_SCH_PARSER::parseNetlist( XNODE* aNode, SCHEMATIC& aSchematic )
 
 
 // ---------------------------------------------------------------------------
-// (schematicDesign "name" (schDesignHeader ...) (sheet ...) ...)
+// (schematicDesign "name" (schDesignHeader ...) (titleSheet ...) (sheet ...)...)
 // ---------------------------------------------------------------------------
 
 void PCAD_SCH_PARSER::parseSchematicDesign( XNODE* aNode, SCHEMATIC& aSchematic )
 {
-    // Extract workspace size from schDesignHeader
-    XNODE* header = findChild( aNode, wxT( "schDesignHeader" ) );
-
-    if( header )
+    if( XNODE* header = FindChild( aNode, wxT( "schDesignHeader" ) ) )
     {
-        XNODE* wsNode = findChild( header, wxT( "workspaceSize" ) );
-
-        if( wsNode )
+        if( XNODE* wsNode = FindChild( header, wxT( "workspaceSize" ) ) )
         {
-            wxString content = wsNode->GetNodeContent().Trim( true ).Trim( false );
+            double w = 0, h = 0;
 
-            if( content.IsEmpty() )
-                content = wsNode->GetAttribute( wxT( "Name" ) );
+            if( parsePtNode( wsNode, w, h ) )
+            {
+                if( w > 0 )
+                    aSchematic.workspaceWidth = w;
 
-            wxString ws = content.BeforeFirst( ' ' );
-            wxString hs = content.AfterFirst( ' ' ).Trim( true ).Trim( false );
-            double w = parseDouble( ws );
-            double h = parseDouble( hs );
-
-            if( w > 0 )
-                aSchematic.workspaceWidth = w;
-
-            if( h > 0 )
-                aSchematic.workspaceHeight = h;
+                if( h > 0 )
+                    aSchematic.workspaceHeight = h;
+            }
         }
+
+        if( XNODE* titleSheet = FindChild( header, wxT( "titleSheet" ) ) )
+            parseTitleSheet( titleSheet, aSchematic );
     }
 
     for( XNODE* child = aNode->GetChildren(); child; child = child->GetNext() )
@@ -476,19 +758,9 @@ void PCAD_SCH_PARSER::parseSchematicDesign( XNODE* aNode, SCHEMATIC& aSchematic 
             SHEET sheet;
             sheet.name = child->GetAttribute( wxT( "Name" ) );
 
-            XNODE* numNode = findChild( child, wxT( "sheetNum" ) );
-
-            if( numNode )
-            {
-                wxString val = numNode->GetNodeContent().Trim( true ).Trim( false );
-
-                if( val.IsEmpty() )
-                    val = numNode->GetAttribute( wxT( "Name" ) );
-
-                long num = 1;
-                val.ToLong( &num );
-                sheet.sheetNum = static_cast<int>( num );
-            }
+            long num = static_cast<long>( aSchematic.sheets.size() ) + 1;
+            childStr( child, wxT( "sheetNum" ) ).ToLong( &num );
+            sheet.sheetNum = static_cast<int>( num );
 
             parseSheet( child, sheet );
             aSchematic.sheets.push_back( std::move( sheet ) );
@@ -498,7 +770,124 @@ void PCAD_SCH_PARSER::parseSchematicDesign( XNODE* aNode, SCHEMATIC& aSchematic 
 
 
 // ---------------------------------------------------------------------------
-// (sheet "name" (sheetNum N) (junction ...) (wire ...) (symbol ...) ...)
+// (titleSheet "name" scale ... (fieldSetRef ...))  Field values come from the
+// design-level (fieldSet (fieldDef "Name" "Value") ...) definitions.
+// ---------------------------------------------------------------------------
+
+void PCAD_SCH_PARSER::parseTitleSheet( XNODE* aNode, SCHEMATIC& aSchematic )
+{
+    // fieldDef name/value pairs live under the titleSheet's design node siblings
+    // (fieldSet ...); walk up to the design header parent and scan.
+    XNODE* design = aNode->GetParent();
+
+    while( design && design->GetName() != wxT( "schematicDesign" ) )
+        design = design->GetParent();
+
+    if( !design )
+        return;
+
+    for( XNODE* child = design->GetChildren(); child; child = child->GetNext() )
+    {
+        if( child->GetName() != wxT( "fieldSet" ) )
+            continue;
+
+        for( XNODE* field = child->GetChildren(); field; field = field->GetNext() )
+        {
+            if( field->GetName() != wxT( "fieldDef" ) )
+                continue;
+
+            // (fieldDef "Name" "Value") - loader concatenates to "Name Value"
+            wxString both = field->GetAttribute( wxT( "Name" ) );
+            wxString name = both.BeforeFirst( ' ' );
+            wxString value = both.AfterFirst( ' ' );
+            value.Trim( true ).Trim( false );
+
+            if( !name.IsEmpty() && !value.IsEmpty() )
+                aSchematic.titleSheet.fields[name] = value;
+        }
+    }
+}
+
+
+// ---------------------------------------------------------------------------
+// (wire (line (pt ...) (pt ...) [(endStyle ...)] (width W) (netNameRef "N"))
+//       [(dispName True)] [(text ...)])
+// ---------------------------------------------------------------------------
+
+WIRE PCAD_SCH_PARSER::parseWire( XNODE* aNode )
+{
+    WIRE wire;
+
+    if( XNODE* lineNode = FindChild( aNode, wxT( "line" ) ) )
+    {
+        for( XNODE* lc = lineNode->GetChildren(); lc; lc = lc->GetNext() )
+        {
+            if( lc->GetName() == wxT( "pt" ) )
+            {
+                double x = 0, y = 0;
+
+                if( parsePtNode( lc, x, y ) )
+                    wire.pts.emplace_back( x, y );
+            }
+        }
+
+        wire.width = childDouble( lineNode, wxT( "width" ), 10.0 );
+
+        if( XNODE* netRef = FindChild( lineNode, wxT( "netNameRef" ) ) )
+            wire.netName = NodeText( netRef );
+    }
+
+    wire.dispName = childFlag( aNode, wxT( "dispName" ) );
+
+    if( XNODE* textNode = FindChild( aNode, wxT( "text" ) ) )
+    {
+        wire.label = parseText( textNode );
+
+        if( wire.label.text.IsEmpty() )
+            wire.label.text = wire.netName;
+    }
+
+    return wire;
+}
+
+
+// ---------------------------------------------------------------------------
+// (bus "name" (pt ...) (pt ...) [(dispName True)] [(text ...)])
+// ---------------------------------------------------------------------------
+
+BUS PCAD_SCH_PARSER::parseBus( XNODE* aNode )
+{
+    BUS bus;
+
+    bus.name = aNode->GetAttribute( wxT( "Name" ) );
+
+    for( XNODE* child = aNode->GetChildren(); child; child = child->GetNext() )
+    {
+        if( child->GetName() == wxT( "pt" ) )
+        {
+            double x = 0, y = 0;
+
+            if( parsePtNode( child, x, y ) )
+                bus.pts.emplace_back( x, y );
+        }
+    }
+
+    bus.dispName = childFlag( aNode, wxT( "dispName" ) );
+
+    if( XNODE* textNode = FindChild( aNode, wxT( "text" ) ) )
+    {
+        bus.label = parseText( textNode );
+
+        if( bus.label.text.IsEmpty() )
+            bus.label.text = bus.name;
+    }
+
+    return bus;
+}
+
+
+// ---------------------------------------------------------------------------
+// (sheet "name" (sheetNum N) ...)
 // ---------------------------------------------------------------------------
 
 void PCAD_SCH_PARSER::parseSheet( XNODE* aNode, SHEET& aSheet )
@@ -509,115 +898,103 @@ void PCAD_SCH_PARSER::parseSheet( XNODE* aNode, SHEET& aSheet )
 
         if( tag == wxT( "wire" ) )
         {
-            // (wire (line (pt X1 Y1) (pt X2 Y2) (width W) (netNameRef "name") ...) ...)
-            XNODE* lineNode = findChild( child, wxT( "line" ) );
+            WIRE wire = parseWire( child );
 
-            if( lineNode )
-            {
-                std::vector<std::pair<double, double>> pts;
+            if( wire.pts.size() >= 2 )
+                aSheet.wires.push_back( std::move( wire ) );
+        }
+        else if( tag == wxT( "bus" ) )
+        {
+            BUS bus = parseBus( child );
 
-                for( XNODE* lc = lineNode->GetChildren(); lc; lc = lc->GetNext() )
-                {
-                    if( lc->GetName() == wxT( "pt" ) )
-                    {
-                        wxString content = lc->GetNodeContent().Trim( true ).Trim( false );
+            if( bus.pts.size() >= 2 )
+                aSheet.buses.push_back( std::move( bus ) );
+        }
+        else if( tag == wxT( "busEntry" ) )
+        {
+            BUS_ENTRY entry;
+            entry.busNameRef = childStr( child, wxT( "busNameRef" ) );
+            parsePt( child, entry.x, entry.y );
+            entry.orient = childStr( child, wxT( "orient" ) );
 
-                        if( content.IsEmpty() )
-                            content = lc->GetAttribute( wxT( "Name" ) );
+            aSheet.busEntries.push_back( std::move( entry ) );
+        }
+        else if( tag == wxT( "port" ) )
+        {
+            PORT port;
+            parsePt( child, port.x, port.y );
 
-                        double x = parseDouble( content.BeforeFirst( ' ' ) );
-                        double y = parseDouble( content.AfterFirst( ' ' ).Trim( true ).Trim( false ) );
-                        pts.push_back( { x, y } );
-                    }
-                }
+            if( XNODE* netRef = FindChild( child, wxT( "netNameRef" ) ) )
+                port.netNameRef = NodeText( netRef );
 
-                if( pts.size() >= 2 )
-                {
-                    WIRE wire;
-                    wire.x1 = pts[0].first;
-                    wire.y1 = pts[0].second;
-                    wire.x2 = pts[1].first;
-                    wire.y2 = pts[1].second;
+            port.portType = childStr( child, wxT( "portType" ) );
+            port.rotation = childAngle( child, wxT( "rotation" ) );
+            port.isFlipped = childFlag( child, wxT( "isFlipped" ) );
 
-                    XNODE* netRef = findChild( lineNode, wxT( "netNameRef" ) );
-
-                    if( netRef )
-                    {
-                        wire.netName = netRef->GetAttribute( wxT( "Name" ) );
-
-                        if( wire.netName.IsEmpty() )
-                            wire.netName = netRef->GetNodeContent().Trim( true ).Trim( false );
-                    }
-
-                    aSheet.wires.push_back( std::move( wire ) );
-                }
-            }
+            aSheet.ports.push_back( std::move( port ) );
         }
         else if( tag == wxT( "junction" ) )
         {
             JUNCTION junc;
             parsePt( child, junc.x, junc.y );
 
-            XNODE* netRef = findChild( child, wxT( "netNameRef" ) );
-
-            if( netRef )
-            {
-                junc.netName = netRef->GetAttribute( wxT( "Name" ) );
-
-                if( junc.netName.IsEmpty() )
-                    junc.netName = netRef->GetNodeContent().Trim( true ).Trim( false );
-            }
+            if( XNODE* netRef = FindChild( child, wxT( "netNameRef" ) ) )
+                junc.netName = NodeText( netRef );
 
             aSheet.junctions.push_back( std::move( junc ) );
         }
         else if( tag == wxT( "symbol" ) )
         {
-            // (symbol (symbolRef "RES_1") (refDesRef "R17") (partNum 1) (pt X Y) (rotation R) ...)
             SYMBOL_INST inst;
-            inst.symbolRef = nodeChildStr( child, wxT( "symbolRef" ) );
-            inst.refDesRef = nodeChildStr( child, wxT( "refDesRef" ) );
+            inst.symbolRef = childStr( child, wxT( "symbolRef" ) );
+            inst.refDesRef = childStr( child, wxT( "refDesRef" ) );
 
-            XNODE* partNode = findChild( child, wxT( "partNum" ) );
+            long part = 1;
 
-            if( partNode )
-            {
-                wxString val = partNode->GetNodeContent().Trim( true ).Trim( false );
-
-                if( val.IsEmpty() )
-                    val = partNode->GetAttribute( wxT( "Name" ) );
-
-                long pn = 1;
-                val.ToLong( &pn );
-                inst.partNum = static_cast<int>( pn );
-            }
+            if( childStr( child, wxT( "partNum" ) ).ToLong( &part ) && part > 0 )
+                inst.partNum = static_cast<int>( part );
 
             parsePt( child, inst.x, inst.y );
+            inst.rotation = childAngle( child, wxT( "rotation" ) );
+            inst.isFlipped = childFlag( child, wxT( "isFlipped" ) );
 
-            XNODE* rotNode = findChild( child, wxT( "rotation" ) );
-
-            if( rotNode )
+            for( XNODE* sub = child->GetChildren(); sub; sub = sub->GetNext() )
             {
-                wxString val = rotNode->GetNodeContent().Trim( true ).Trim( false );
-
-                if( val.IsEmpty() )
-                    val = rotNode->GetAttribute( wxT( "Name" ) );
-
-                inst.rotation = parseDouble( val );
-            }
-
-            XNODE* flipNode = findChild( child, wxT( "isFlipped" ) );
-
-            if( flipNode )
-            {
-                wxString val = flipNode->GetNodeContent().Trim( true ).Trim( false );
-
-                if( val.IsEmpty() )
-                    val = flipNode->GetAttribute( wxT( "Name" ) );
-
-                inst.isFlipped = ( val.CmpNoCase( wxT( "True" ) ) == 0 );
+                if( sub->GetName() == wxT( "attr" ) )
+                    inst.attrs.push_back( parseAttr( sub ) );
             }
 
             aSheet.symbols.push_back( std::move( inst ) );
+        }
+        else if( tag == wxT( "text" ) )
+        {
+            aSheet.texts.push_back( parseText( child ) );
+        }
+        else if( tag == wxT( "line" ) )
+        {
+            LINE line = parseLine( child );
+
+            if( line.pts.size() >= 2 )
+                aSheet.lines.push_back( std::move( line ) );
+        }
+        else if( tag == wxT( "arc" ) )
+        {
+            aSheet.arcs.push_back( parseArc( child ) );
+        }
+        else if( tag == wxT( "triplePointArc" ) )
+        {
+            aSheet.arcs.push_back( parseTriplePointArc( child ) );
+        }
+        else if( tag == wxT( "poly" ) )
+        {
+            POLY poly = parsePoly( child );
+
+            if( poly.pts.size() >= 3 )
+                aSheet.polys.push_back( std::move( poly ) );
+        }
+        else if( tag == wxT( "ieeeSymbol" ) )
+        {
+            aSheet.ieeeSymbols.push_back( parseIeeeSymbol( child ) );
         }
     }
 }
