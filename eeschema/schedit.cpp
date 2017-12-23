@@ -124,6 +124,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case wxID_CUT: // save and delete block
+    case ID_POPUP_CUT_BLOCK:
 
         if( screen->m_BlockLocate.GetCommand() != BLOCK_MOVE )
             break;
@@ -135,6 +136,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case wxID_COPY:         // really this is a Save block for paste
+    case ID_POPUP_COPY_BLOCK:
         screen->m_BlockLocate.SetCommand( BLOCK_COPY );
         screen->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
