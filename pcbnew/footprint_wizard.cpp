@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2012 Miguel Angel Ajo Pelayo, miguelangel@nbee.es
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file footprint_wizard.cpp
  */
@@ -7,7 +32,6 @@
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
 #include <dialog_helpers.h>
-//#include <3d_viewer/eda_3d_viewer.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -222,18 +246,16 @@ void FOOTPRINT_WIZARD_FRAME::DefaultParameters( wxCommandEvent& event )
 
 void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
 {
-    int page = m_pageList->GetSelection();
-
     FOOTPRINT_WIZARD* footprintWizard = GetMyWizard();
 
     if( !footprintWizard )
         return;
 
-    if( page < 0 )
+    if( m_parameterGridPage < 0 )
         return;
 
-    wxArrayString   prmValues = footprintWizard->GetParameterValues( page );
-    wxArrayString   ptList = footprintWizard->GetParameterTypes( page );
+    wxArrayString   prmValues = footprintWizard->GetParameterValues( m_parameterGridPage );
+    wxArrayString   ptList = footprintWizard->GetParameterTypes( m_parameterGridPage );
 
     bool            has_changed = false;
     int             count = m_parameterGrid->GetNumberRows();
@@ -255,7 +277,7 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
 
     if( has_changed )
     {
-        wxString res = footprintWizard->SetParameterValues( page, prmValues );
+        wxString res = footprintWizard->SetParameterValues( m_parameterGridPage, prmValues );
 
         if( !res.IsEmpty() )
             wxMessageBox( res );

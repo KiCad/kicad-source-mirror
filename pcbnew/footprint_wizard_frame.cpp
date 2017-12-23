@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2015 Miguel Angel Ajo Pelayo <miguelangel@nbee.es>
- * Copyright (C) 2012-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2012-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
@@ -159,7 +159,8 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
                                 wxDefaultPosition, wxDefaultSize,
                                 0, NULL, wxLB_HSCROLL );
 
-    // Creates the The list of parameters for the current parameter page
+    // Creates the list of parameters for the current parameter page
+    m_parameterGridPage = -1;
     initParameterGrid();
 
     ReCreatePageList();
@@ -347,19 +348,18 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     if( footprintWizard == NULL )
         return;
 
-    int page = m_pageList->GetSelection();
-
-    if( page<0 )
-        return;
-
+    m_parameterGridPage = m_pageList->GetSelection();
     m_parameterGrid->ClearGrid();
 
+    if( m_parameterGridPage < 0 )   // Should not happen
+        return;
+
     // Get the list of names, values, types, hints and designators
-    wxArrayString designatorsList    = footprintWizard->GetParameterDesignators( page );
-    wxArrayString namesList          = footprintWizard->GetParameterNames( page );
-    wxArrayString valuesList         = footprintWizard->GetParameterValues( page );
-    wxArrayString typesList          = footprintWizard->GetParameterTypes( page );
-    wxArrayString hintsList          = footprintWizard->GetParameterHints( page );
+    wxArrayString designatorsList    = footprintWizard->GetParameterDesignators( m_parameterGridPage );
+    wxArrayString namesList          = footprintWizard->GetParameterNames( m_parameterGridPage );
+    wxArrayString valuesList         = footprintWizard->GetParameterValues( m_parameterGridPage );
+    wxArrayString typesList          = footprintWizard->GetParameterTypes( m_parameterGridPage );
+    wxArrayString hintsList          = footprintWizard->GetParameterHints( m_parameterGridPage );
 
     // Dimension the wxGrid
     if( m_parameterGrid->GetNumberRows() > 0 )
@@ -386,7 +386,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
 
         // Set the editor type of the
 
-        // Boolean parameters can be displayed using a checkbox
+        // Boolean parameters are displayed using a checkbox
         if( units == WIZARD_PARAM_UNITS_BOOL )
         {
             wxGridCellBoolEditor *boolEditor = new wxGridCellBoolEditor;
