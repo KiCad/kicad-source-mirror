@@ -73,8 +73,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-22 08:15+0100\n"
-"PO-Revision-Date: 2017-12-22 08:17+0100\n"
+"POT-Creation-Date: 2017-12-23 19:55+0100\n"
+"PO-Revision-Date: 2017-12-23 21:54+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -186,7 +186,6 @@ msgstr "Var amb"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:36
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:82
-#: common/dialogs/dialog_env_var_config.cpp:133
 msgid "Path"
 msgstr "Percorso"
 
@@ -331,10 +330,10 @@ msgid "Alias names may not contain any of the characters "
 msgstr "I nomi alias non possono contenere nessuno dei caratteri "
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:379
-#: common/dialogs/dialog_env_var_config.cpp:308
-#: common/dialogs/dialog_env_var_config.cpp:468
+#: common/dialogs/dialog_env_var_config.cpp:314
+#: common/dialogs/dialog_env_var_config.cpp:476
 msgid "Environment Variable Help"
-msgstr "Aiuto variabile d'ambiente"
+msgstr "Aiuto variabile ambiente"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:51
 msgid "Select 3D Model"
@@ -1752,7 +1751,7 @@ msgstr "Mostra griglia"
 
 #: common/draw_frame.cpp:529
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:32
-#: pcbnew/footprint_wizard_frame.cpp:295
+#: pcbnew/footprint_wizard_frame.cpp:296
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:35
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:27
 msgid "Units"
@@ -2461,7 +2460,7 @@ msgstr ""
 "già stato definito e ogni impostazione definita nella finestra\n"
 "di configurazione percorsi verrà ignorata. Se non si desidera tale\n"
 "comportamento, rinominare ogni voce in conflitto o rimuovere \n"
-"dal sistema le definizioni delle variabili d'ambiente esterne."
+"dal sistema le definizioni delle variabili ambiente esterne."
 
 #: common/pgm_base.cpp:935
 msgid "Do not show this message again."
@@ -3007,7 +3006,7 @@ msgid "Page layout description file"
 msgstr "File di disposizione pagina"
 
 #: common/dialogs/dialog_page_settings_base.cpp:356
-#: common/dialogs/dialog_env_var_config_base.cpp:135
+#: common/dialogs/dialog_env_var_config_base.cpp:126
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:33
 #: kicad/dialogs/dialog_template_selector_base.cpp:36
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:204
@@ -3022,6 +3021,8 @@ msgid "Browse"
 msgstr "Esplora"
 
 #: common/dialogs/dialog_get_component_base.cpp:25
+#: common/dialogs/dialog_env_var_config.cpp:132
+#: common/dialogs/dialog_env_var_config_base.cpp:107
 #: eeschema/dialogs/dialog_netlist_base.cpp:113
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:28
 #: eeschema/dialogs/dialog_bom_base.cpp:45 pcbnew/librairi.cpp:683
@@ -3064,64 +3065,42 @@ msgstr "Reimposta"
 msgid "Defaults"
 msgstr "Predefiniti"
 
-#: common/dialogs/dialog_env_var_config.cpp:132
-#: common/dialogs/dialog_env_var_config_base.cpp:118
-#: cvpcb/dialogs/dialog_config_equfiles_base.cpp:80
-#: eeschema/widgets/tuner_slider_base.cpp:20 eeschema/lib_pin.cpp:1703
-#: eeschema/libedit.cpp:641
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:203
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:318
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:321
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:218
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:182
-#: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
-#: pcbnew/dialogs/dialog_layers_setup.cpp:336
-#: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
-msgid "Name"
-msgstr "Nome"
+#: common/dialogs/dialog_env_var_config.cpp:133
+msgid "Path:"
+msgstr "Percorso:"
 
-#: common/dialogs/dialog_env_var_config.cpp:197
-msgid "Path already exists"
-msgstr "Percorso già esistente"
+#: common/dialogs/dialog_env_var_config.cpp:202
+msgid "Path already exists."
+msgstr "Percorso già esistente."
 
-#: common/dialogs/dialog_env_var_config.cpp:251
+#: common/dialogs/dialog_env_var_config.cpp:256
 #, c-format
-msgid "Environment variable \"%s\" cannot be renamed"
-msgstr "La variabile d'ambiente \"%s\" non può essere rinominata"
+msgid "Environment variable \"%s\" cannot be renamed."
+msgstr "La variabile ambiente \"%s\" non può essere rinominata."
 
-#: common/dialogs/dialog_env_var_config.cpp:253
+#: common/dialogs/dialog_env_var_config.cpp:259
 msgid ""
 "The selected environment variable name is required for KiCad functionality "
 "and can not be renamed."
-msgstr ""
-"Il nome della variabile d'ambiente selezionata è richiesto per il "
-"funzionamento di KiCad e non può essere rinominato."
+msgstr "Il nome della variabile ambiente selezionata è richiesto per il funzionamento di KiCad e non può essere rinominato."
 
-#: common/dialogs/dialog_env_var_config.cpp:279
+#: common/dialogs/dialog_env_var_config.cpp:285
 msgid ""
-"Enter the name and path for each environment variable.  Grey entries are "
+"Enter the name and value for each environment variable.  Grey entries are "
 "names that have been defined externally at the system or user level.  "
 "Environment variables defined at the system or user level take precedence "
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
-msgstr ""
-"Inserire nome e percorso per ogni variabile ambiente.  Gli elementi in "
-"grigio sono nomi che sono stati definiti esternamente a livello di sistema o "
-"di utente. Le variabili d'ambiente definite a livello di sistema o di utente "
-"hanno la precedenza su quelle definite in questa tabella.  Perciò (N.d.T. in "
-"caso di corrispondenza) i valori in questa tabella vengono ignorati."
+msgstr "Inserire nome e valore ad ogni variabile ambiente.  Gli elementi in grigio sono nomi che sono stati definiti esternamente a livello di sistema o di utente. Le variabili ambiente definite a livello di sistema o di utente hanno la precedenza su quelle definite in questa tabella.  Perciò (N.d.T. in caso di corrispondenza) i valori in questa tabella vengono ignorati."
 
-#: common/dialogs/dialog_env_var_config.cpp:285
+#: common/dialogs/dialog_env_var_config.cpp:291
 msgid ""
 "To ensure environment variable names are valid on all platforms, the name "
 "field will only accept upper case letters, digits, and the underscore "
 "characters."
-msgstr ""
-"Per assicurarsi che i nomi delle variabili d'ambiente siano validi su tutte "
-"le piattaforme, il campo nome accetterà solo lettere maiuscole, numeri, e "
-"caratteri di sottolineatura."
+msgstr "Per assicurarsi che i nomi delle variabili ambiente siano validi su tutte le piattaforme, il campo nome accetterà solo lettere maiuscole, numeri, e caratteri di sottolineatura."
 
-#: common/dialogs/dialog_env_var_config.cpp:288
+#: common/dialogs/dialog_env_var_config.cpp:294
 msgid ""
 "<b>KICAD_SYMBOL_DIR</b> is the base path of the locally installed symbol "
 "libraries."
@@ -3129,15 +3108,13 @@ msgstr ""
 "<b>KICAD_SYMBOL_DIR</b> è il percorso base delle librerie di simboli "
 "installate localmente."
 
-#: common/dialogs/dialog_env_var_config.cpp:290
+#: common/dialogs/dialog_env_var_config.cpp:296
 msgid ""
 "<b>KIGITHUB</b> is used by KiCad to define the URL of the repository of the "
-"official KiCad libraries."
-msgstr ""
-"<b>KIGITHUB</b> viene usato da KiCad per definire l'URL del repository delle "
-"librerie ufficiali KiCad."
+"official KiCad footprint libraries."
+msgstr "<b>KIGITHUB</b> viene usato da KiCad per definire l'URL del repository delle librerie ufficiali di KiCad."
 
-#: common/dialogs/dialog_env_var_config.cpp:293
+#: common/dialogs/dialog_env_var_config.cpp:299
 msgid ""
 "<b>KISYS3DMOD</b> is the base path of system footprint 3D shapes (.3Dshapes "
 "folders)."
@@ -3145,7 +3122,7 @@ msgstr ""
 "<b>KISYS3DMOD</b> è il percorso base delle forme 3D delle impronte di "
 "sistema (cartelle .3Dshapes)."
 
-#: common/dialogs/dialog_env_var_config.cpp:296
+#: common/dialogs/dialog_env_var_config.cpp:302
 msgid ""
 "<b>KISYSMOD</b> is the base path of locally installed system footprint "
 "libraries (.pretty folders)."
@@ -3153,7 +3130,7 @@ msgstr ""
 "<b>KISYSMOD</b> è il percorso base delle librerie di impronte di sistema "
 "installate localmente (cartelle .pretty)."
 
-#: common/dialogs/dialog_env_var_config.cpp:299
+#: common/dialogs/dialog_env_var_config.cpp:305
 msgid ""
 "<b>KIPRJMOD</b> is internally defined by KiCad (cannot be edited) and is set "
 "to the absolute path of the currently loaded project file.  This environment "
@@ -3170,7 +3147,7 @@ msgstr ""
 "contenente una libreria impronte specifica del progetto di nome footprints."
 "pretty."
 
-#: common/dialogs/dialog_env_var_config.cpp:305
+#: common/dialogs/dialog_env_var_config.cpp:311
 msgid ""
 "<b>KICAD_PTEMPLATES</b> is optional and can be defined if you want to create "
 "your own project templates folder."
@@ -3178,43 +3155,33 @@ msgstr ""
 "<b>KICAD_PTEMPLATES</b> è opzionale e può essere definita se si desidera "
 "creare  una propria cartella di modelli di progetto."
 
-#: common/dialogs/dialog_env_var_config.cpp:410
-msgid "Set path for environment variable"
-msgstr "Imposta percorso per la variabile d'ambiente"
+#: common/dialogs/dialog_env_var_config.cpp:416
+msgid "Select Path for Environment Variable"
+msgstr "Seleziona il percorso per la variabile ambiente"
 
-#: common/dialogs/dialog_env_var_config.cpp:429
+#: common/dialogs/dialog_env_var_config.cpp:435
 msgid "Environment variable name cannot be empty."
-msgstr "Il nome della variabile d'ambiente non può essere vuoto."
+msgstr "Il nome della variabile ambiente non può essere vuoto."
 
-#: common/dialogs/dialog_env_var_config.cpp:436
+#: common/dialogs/dialog_env_var_config.cpp:442
 msgid "Environment variable value cannot be empty."
-msgstr "Il valore della variabile d'ambiente non può essere vuoto."
+msgstr "Il valore della variabile ambiente non può essere vuoto."
 
-#: common/dialogs/dialog_env_var_config.cpp:444
-msgid "Environment variable name cannot start with a digit (0-9)."
-msgstr ""
-"Il nome di una variabile d'ambiente non può cominciare con una cifra (0-9)."
+#: common/dialogs/dialog_env_var_config.cpp:450
+msgid "Environment variable names cannot start with a digit (0-9)."
+msgstr "Il nome delle variabili ambiente non può cominciare con una cifra (0-9)."
 
-#: common/dialogs/dialog_env_var_config.cpp:456
+#: common/dialogs/dialog_env_var_config.cpp:462
 msgid ""
-"An environment variable is as an equivalence of a string.<br>It is used "
-"mainly in paths to make them portable between installs<br><br>For instance, "
-"if an environment variable is defined as<br><b>MYLIBPATH</b> with a value "
-"like <b>e:/kicad_libs</b>, if a library name is <br><b>${MYLIBPATH}/mylib."
-"lib</b>, the actual path is<br><b>e:/kicad_libs/mylib.lib</b><br><br><b>Note:"
-"</b><br>Only chars <b>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_</b> are allowed "
-"in environment variable names<br>and the environment variable name cannot "
-"start with a digit (0-9)"
-msgstr ""
-"Una variabile d'ambiente è una equivalenza di una stringa.<br>Viene usata "
-"principalmente nei percorsi per renderli portabili tra "
-"installazioni<br><br>Per esemipo, se una variabile d'ambiente viene definita "
-"come<br><b>MYLIBPATH</b> con un valore come <b>e:/kicad_libs</b>, se un nome "
-"libreria è <br><b>${MYLIBPATH}/mylib.lib</b>, il percorso effettivo "
-"sarà<br><b>e:/kicad_libs/mylib.lib</b><br><br><b>Nota:</b><br>Sono permessi "
-"solo i caratteri <b>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_</b> nei nomi delle "
-"variabili d'ambiente<br>e il nome delle variabili d'ambiente non può "
-"cominciare con una cifra (0-9)"
+"An environment variable is used for string substitutions.<br>Environment "
+"variables are primarily used for paths to make KiCad portable between "
+"platforms.<br><br>If an environment variable is defined as <b>MYLIBPATH</b> "
+"with a value <b>e:/kicad_libs</b>, then a library name <b>${MYLIBPATH}/mylib."
+"lib</b> gets expanded to <b>e:/kicad_libs/mylib.lib</b><br><br><b>Note:</"
+"b><br>Only characters <b>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_</b> are "
+"allowed in environment variable names and the environment variable name "
+"cannot start with a digit (0-9)."
+msgstr "Una variabile ambiente viene usata per la sostituzione di stringhe.<br>Questa serve principalmente nei percorsi, per renderli portabili tra installazioni<br><br>Per esemipo, se una variabile ambiente viene definita come<br><b>MYLIBPATH</b> con un valore come <b>e:/kicad_libs</b>, se un nome libreria è<br><b>${MYLIBPATH}/mylib.lib</b>, il percorso effettivo sarà<br><b>e:/kicad_libs/mylib.lib</b><br><br><b>Nota:</b><br>Sono permessi solo i caratteri <b>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_</b> nei nomi delle variabili ambiente<br>e il nome della variabile non può cominciare con una cifra (0-9)."
 
 #: common/dialogs/dialog_image_editor_base.cpp:33 eeschema/hotkeys.cpp:168
 msgid "Mirror X"
@@ -3247,11 +3214,7 @@ msgstr "Annulla l'ultimo"
 msgid "Image Scale:"
 msgstr "Scala immagine:"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:23
-msgid "KiCad Environment Paths"
-msgstr "Percorsi d'ambiente KiCad"
-
-#: common/dialogs/dialog_env_var_config_base.cpp:34
+#: common/dialogs/dialog_env_var_config_base.cpp:28
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_spice_model_base.cpp:519
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:186
@@ -3261,11 +3224,11 @@ msgstr "Percorsi d'ambiente KiCad"
 msgid "Add"
 msgstr "Aggiungi"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:35
+#: common/dialogs/dialog_env_var_config_base.cpp:29
 msgid "Add path prefix"
 msgstr "Aggiungi prefisso percorso"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:39
+#: common/dialogs/dialog_env_var_config_base.cpp:33
 #: eeschema/onrightclick.cpp:517 eeschema/onrightclick.cpp:553
 #: eeschema/onrightclick.cpp:589 eeschema/onrightclick.cpp:623
 #: eeschema/onrightclick.cpp:805 eeschema/onrightclick.cpp:836
@@ -3283,44 +3246,30 @@ msgstr "Aggiungi prefisso percorso"
 msgid "Edit"
 msgstr "Modifica"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:40
+#: common/dialogs/dialog_env_var_config_base.cpp:34
 msgid "Edit selected path prefix"
 msgstr "Modifica prefisso percorso selezionato"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:44
+#: common/dialogs/dialog_env_var_config_base.cpp:38
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:39
 #: eeschema/dialogs/dialog_spice_model_base.cpp:527
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:80
 msgid "Remove"
 msgstr "Rimuovi"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:45
+#: common/dialogs/dialog_env_var_config_base.cpp:39
 msgid "Remove selected path prefix"
 msgstr "Rimuovi prefisso percorso selezionato"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:125
+#: common/dialogs/dialog_env_var_config_base.cpp:114
 #: eeschema/dialogs/dialog_bom_base.cpp:65
 msgid "Help"
 msgstr "Aiuto"
 
-#: common/dialogs/dialog_env_var_config_base.cpp:128
-#: cvpcb/dialogs/dialog_config_equfiles_base.cpp:81
-#: eeschema/widgets/widget_eeschema_color_config.cpp:77
-#: eeschema/sch_component.cpp:1436 eeschema/sch_component.cpp:1475
-#: eeschema/lib_field.cpp:449 eeschema/lib_field.cpp:628
-#: eeschema/template_fieldnames.cpp:42
-#: eeschema/dialogs/dialog_spice_model_base.cpp:45
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:206
-#: eeschema/dialogs/dialog_rescue_each.cpp:119
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:221
-#: eeschema/bom_table_column.h:36 pcbnew/footprint_wizard_frame.cpp:294
-#: pcbnew/class_edge_mod.cpp:249 pcbnew/class_text_mod.cpp:362
-#: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:31
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:58
-#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:40
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:44
-msgid "Value"
-msgstr "Valore"
+#: common/dialogs/dialog_env_var_config_base.cpp:117
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:122
+msgid "Value:"
+msgstr "Valore:"
 
 #: common/dialogs/wx_html_report_panel.cpp:139
 #: common/dialogs/wx_html_report_panel.cpp:166
@@ -3549,13 +3498,13 @@ msgstr "Editor immagine"
 msgid "Hotkeys Editor"
 msgstr "Modifica tasti"
 
-#: common/dialogs/dialog_env_var_config_base.h:66
-msgid "Path Configuration"
-msgstr "Configurazione percorsi"
+#: common/dialogs/dialog_env_var_config_base.h:63
+msgid "Environment Variable Configuration"
+msgstr "Configurazione della variabile ambiente"
 
-#: common/dialogs/dialog_env_var_config_base.h:97
-msgid "Edit Environment Value Variable"
-msgstr "Modifica valore variabile d'ambiente"
+#: common/dialogs/dialog_env_var_config_base.h:94
+msgid "Edit Environment Variable"
+msgstr "Modifica la variabile ambiente"
 
 #: cvpcb/autosel.cpp:107
 #, c-format
@@ -3623,7 +3572,7 @@ msgstr "Configura &percorsi"
 #: cvpcb/menubar.cpp:88 kicad/menubar.cpp:343 pcbnew/menubar_pcbframe.cpp:293
 #: pcbnew/menubar_modedit.cpp:336
 msgid "Edit path configuration environment variables"
-msgstr "Modifica le variabili d'ambiente dei percorsi"
+msgstr "Modifica i percorsi delle variabili ambiente"
 
 #: cvpcb/menubar.cpp:93
 msgid "Footprint &Association Files"
@@ -4049,7 +3998,39 @@ msgstr "Modifica file equivalenze"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:63
 msgid "Available environment variables for relative paths:"
-msgstr "Variabili d'ambiente disponibili per percorsi relativi:"
+msgstr "Variabili ambiente disponibili per percorsi relativi:"
+
+#: cvpcb/dialogs/dialog_config_equfiles_base.cpp:80
+#: eeschema/widgets/tuner_slider_base.cpp:20 eeschema/lib_pin.cpp:1703
+#: eeschema/libedit.cpp:641
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:203
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:318
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:321
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:218
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:182
+#: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
+#: pcbnew/dialogs/dialog_layers_setup.cpp:336
+#: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
+msgid "Name"
+msgstr "Nome"
+
+#: cvpcb/dialogs/dialog_config_equfiles_base.cpp:81
+#: eeschema/widgets/widget_eeschema_color_config.cpp:77
+#: eeschema/sch_component.cpp:1436 eeschema/sch_component.cpp:1475
+#: eeschema/lib_field.cpp:449 eeschema/lib_field.cpp:628
+#: eeschema/template_fieldnames.cpp:42
+#: eeschema/dialogs/dialog_spice_model_base.cpp:45
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:206
+#: eeschema/dialogs/dialog_rescue_each.cpp:119
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:221
+#: eeschema/bom_table_column.h:36 pcbnew/footprint_wizard_frame.cpp:295
+#: pcbnew/class_edge_mod.cpp:249 pcbnew/class_text_mod.cpp:362
+#: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:31
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:58
+#: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:40
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:44
+msgid "Value"
+msgstr "Valore"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:99
 msgid "Absolute path"
@@ -4921,7 +4902,7 @@ msgstr ""
 msgid "Field %s"
 msgstr "Campo %s"
 
-#: eeschema/edit_component_in_schematic.cpp:82
+#: eeschema/edit_component_in_schematic.cpp:65
 #, c-format
 msgid "Edit %s Field"
 msgstr "Modifica campo %s"
@@ -6029,7 +6010,7 @@ msgid "Find old symbols in project and rename/rescue them"
 msgstr "Trova vecchi i simboli nel progetto e li rinomina/recupera"
 
 #: eeschema/menubar.cpp:505 eeschema/dialogs/dialog_symbol_remap_base.cpp:30
-#: eeschema/dialogs/dialog_symbol_remap_base.h:50
+#: eeschema/dialogs/dialog_symbol_remap_base.h:51
 msgid "Remap Symbols"
 msgstr "Rimappa simboli"
 
@@ -9725,7 +9706,7 @@ msgstr "Il filtro impronta \"%s\" è già stato definito."
 msgid "Edit footprint filter"
 msgstr "Modifica filtro impronte"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:51
+#: eeschema/dialogs/dialog_symbol_remap.cpp:53
 msgid ""
 "This schematic currently uses the symbol library list look up method for "
 "loading schematic symbols.  KiCad will attempt to map the existing symbols "
@@ -9746,19 +9727,19 @@ msgstr ""
 "necessario invertire i cambiamenti. Se si sceglie di saltare questo passo,\n"
 "si dovrà assegnare manualmente i simboli."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:158
+#: eeschema/dialogs/dialog_symbol_remap.cpp:162
 #, c-format
 msgid "Adding library \"%s\", file \"%s\" to project symbol library table."
 msgstr ""
 "Aggiunta libreria \"%s\", file \"%s\" alla tabella librerie simboli del "
 "progetto."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:167
+#: eeschema/dialogs/dialog_symbol_remap.cpp:171
 #, c-format
 msgid "Library \"%s\" not found."
 msgstr "Libreria \"%s\" non trovata."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:184
+#: eeschema/dialogs/dialog_symbol_remap.cpp:188
 #, c-format
 msgid ""
 "Failed to write project symbol library table. Error:\n"
@@ -9767,34 +9748,34 @@ msgstr ""
 "Fallita scrittura file tabella librerie simboli progetto. Errore:\n"
 "  %s"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:189
+#: eeschema/dialogs/dialog_symbol_remap.cpp:193
 msgid "Created project symbol library table.\n"
 msgstr "Creata una tabella librerie simboli del progetto.\n"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:217
+#: eeschema/dialogs/dialog_symbol_remap.cpp:221
 #, c-format
 msgid "No symbol \"%s\" found in symbol library table."
 msgstr "Simbolo \"%s\" non trovato nella tabella librerie di simboli."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:223
+#: eeschema/dialogs/dialog_symbol_remap.cpp:227
 #, c-format
 msgid "Symbol \"%s\" mapped to symbol library \"%s\"."
 msgstr "Symbolo \"%s\" mappato nella libreria di simboli \"%s\"."
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:232
+#: eeschema/dialogs/dialog_symbol_remap.cpp:236
 msgid "Symbol library table mapping complete!"
 msgstr "Mappatura tabella librerie simboli completa!"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:303
-#: eeschema/dialogs/dialog_symbol_remap.cpp:318
-#: eeschema/dialogs/dialog_symbol_remap.cpp:338
-#: eeschema/dialogs/dialog_symbol_remap.cpp:351
-#: eeschema/dialogs/dialog_symbol_remap.cpp:365
+#: eeschema/dialogs/dialog_symbol_remap.cpp:307
+#: eeschema/dialogs/dialog_symbol_remap.cpp:322
+#: eeschema/dialogs/dialog_symbol_remap.cpp:342
+#: eeschema/dialogs/dialog_symbol_remap.cpp:355
+#: eeschema/dialogs/dialog_symbol_remap.cpp:369
 #, c-format
 msgid "Failed to back up file \"%s\".\n"
 msgstr "Impossibile fare il salvataggio del file \"%s\".\n"
 
-#: eeschema/dialogs/dialog_symbol_remap.cpp:371
+#: eeschema/dialogs/dialog_symbol_remap.cpp:375
 msgid "Some of the project files could not be backed up."
 msgstr "Alcuni file del progetto potrebbero non essere stati salvati."
 
@@ -11219,7 +11200,7 @@ msgstr "Sostituzioni percorsi"
 #: eeschema/dialogs/dialog_sym_lib_table_base.cpp:182
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:186
 msgid "Environment Variable"
-msgstr "Variabile d'ambiente"
+msgstr "Variabile ambiente"
 
 #: eeschema/dialogs/dialog_sym_lib_table_base.cpp:183
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:187
@@ -16079,15 +16060,15 @@ msgstr ""
 "Un collegamento ad un Via si riferisce al gruppo di piazzole \"%s\" "
 "inesistenti"
 
-#: pcbnew/footprint_wizard.cpp:78 pcbnew/footprint_wizard_frame.cpp:111
+#: pcbnew/footprint_wizard.cpp:102 pcbnew/footprint_wizard_frame.cpp:111
 msgid "Footprint Wizard"
 msgstr "Assistente impronte"
 
-#: pcbnew/footprint_wizard.cpp:84
+#: pcbnew/footprint_wizard.cpp:108
 msgid "no wizard selected"
 msgstr "nessun assistente selezionato"
 
-#: pcbnew/footprint_wizard.cpp:148
+#: pcbnew/footprint_wizard.cpp:172
 msgid "Couldn't reload footprint wizard"
 msgstr "Impossibile ricaricare l'assistente impronte"
 
@@ -18038,7 +18019,7 @@ msgstr "Assemblaggio impronte sul fronte scheda"
 msgid "Footprint assembly on board's back"
 msgstr "Assemblaggio impronte sul retro scheda"
 
-#: pcbnew/footprint_wizard_frame.cpp:293
+#: pcbnew/footprint_wizard_frame.cpp:294
 msgid "Parameter"
 msgstr "Parametro"
 
@@ -24678,10 +24659,6 @@ msgstr "Alla configurazione librerie globale (visibile da tutti i progetti)"
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:207
 msgid "To the current project only"
 msgstr "Solo al progetto corrente"
-
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:122
-msgid "Value:"
-msgstr "Valore:"
 
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:126
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:25
