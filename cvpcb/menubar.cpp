@@ -63,7 +63,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Save the footprints back into eeschema
     AddMenuItem( filesMenu, wxID_SAVE,
                  _( "&Save Footprint Associations\tCtrl+S" ),
-                 _( "Save footprint association in schematic component footprint fields" ),
+                 _( "Save footprint association in schematic symbol footprint fields" ),
                  KiBitmap( save_xpm ) );
 
     // Separator
@@ -93,7 +93,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
                  _( "Footprint &Association Files" ),
                  _( "Configure footprint association file (.equ) list."
                     "These files are used to automatically assign "
-                    "the footprint name (FPID) from the component value" ),
+                    "the footprint name from the symbol value" ),
                  KiBitmap( library_table_xpm ) );
     preferencesMenu->AppendSeparator();
 

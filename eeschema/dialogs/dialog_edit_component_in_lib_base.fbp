@@ -47,7 +47,7 @@
             <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
-            <property name="title">Library Component Properties</property>
+            <property name="title">Library Symbol Properties</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
@@ -277,6 +277,7 @@
                                                     <property name="minimum_size"></property>
                                                     <property name="name">m_OptionsBoxSizer</property>
                                                     <property name="orient">wxVERTICAL</property>
+                                                    <property name="parent">1</property>
                                                     <property name="permission">none</property>
                                                     <event name="OnUpdateUI"></event>
                                                     <object class="sizeritem" expanded="1">
@@ -333,7 +334,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass"></property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">Check this option if the component has an alternate body style (De Morgan)</property>
+                                                            <property name="tooltip">Check this option if the symbol has an alternate body style (De Morgan)</property>
                                                             <property name="validator_data_type"></property>
                                                             <property name="validator_style">wxFILTER_NONE</property>
                                                             <property name="validator_type">wxDefaultValidator</property>
@@ -785,7 +786,7 @@
                                                                     <property name="style"></property>
                                                                     <property name="subclass"></property>
                                                                     <property name="toolbar_pane">0</property>
-                                                                    <property name="tooltip">Enter the number of units for a component that contains more than one unit</property>
+                                                                    <property name="tooltip">Enter the number of units for a symbol that contains more than one unit</property>
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
@@ -1224,7 +1225,7 @@
                                                     <property name="style"></property>
                                                     <property name="subclass"></property>
                                                     <property name="toolbar_pane">0</property>
-                                                    <property name="tooltip">Check this option when the component is a power symbol</property>
+                                                    <property name="tooltip">Check this option when the symbol is a power symbol</property>
                                                     <property name="validator_data_type"></property>
                                                     <property name="validator_style">wxFILTER_NONE</property>
                                                     <property name="validator_type">wxDefaultValidator</property>
@@ -1312,7 +1313,7 @@
                                                     <property name="style"></property>
                                                     <property name="subclass"></property>
                                                     <property name="toolbar_pane">0</property>
-                                                    <property name="tooltip">Check this option when creating multiple unit components and all units are not interchangeable</property>
+                                                    <property name="tooltip">Check this option when creating multiple unit symbols and all units are not interchangeable</property>
                                                     <property name="validator_data_type"></property>
                                                     <property name="validator_style">wxFILTER_NONE</property>
                                                     <property name="validator_type">wxDefaultValidator</property>
@@ -1659,7 +1660,7 @@
                                                     <property name="style"></property>
                                                     <property name="subclass"></property>
                                                     <property name="toolbar_pane">0</property>
-                                                    <property name="tooltip">Enter key words that can be used to select this component.&#x0A;Key words cannot have spaces and are separated by a space.</property>
+                                                    <property name="tooltip">Enter key words that can be used to select this symbol.&#x0A;Key words cannot have spaces and are separated by a space.</property>
                                                     <property name="window_extra_style"></property>
                                                     <property name="window_name"></property>
                                                     <property name="window_style"></property>
@@ -1833,7 +1834,7 @@
                                                     <property name="style"></property>
                                                     <property name="subclass"></property>
                                                     <property name="toolbar_pane">0</property>
-                                                    <property name="tooltip">Enter the documentation file (a .pdf document) associated to the component.</property>
+                                                    <property name="tooltip">Enter the documentation file (a .pdf document) associated with the symbol.</property>
                                                     <property name="window_extra_style"></property>
                                                     <property name="window_name"></property>
                                                     <property name="window_style"></property>
@@ -2289,7 +2290,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass"></property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">An alias is a component that uses the body of its root component.&#x0A;It has its own documentation and keywords.&#x0A;A fast way to extend a library with similar components</property>
+                                                            <property name="tooltip">An alias is a symbol that uses the body of its root symbol.&#x0A;It has its own documentation and keywords.&#x0A;A fast way to extend a library with similar symbols.</property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
@@ -2832,7 +2833,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass"></property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">A list of footprints names that can be used for this component.&#x0A;Footprints names can used jockers.&#x0A;(like sm* to allow all footprints names starting by sm).</property>
+                                                            <property name="tooltip">A list of footprints names that can be used for this symbol.&#x0A;Footprints names can used wildcards like sm* to allow all footprints names starting by sm.</property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>

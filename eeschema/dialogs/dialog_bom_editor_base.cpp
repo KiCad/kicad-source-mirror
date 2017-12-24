@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 19 2017)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_bom_editor_base.h"
@@ -34,13 +34,13 @@ DIALOG_BOM_EDITOR_BASE::DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id,
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( m_leftPanel, wxID_ANY, _("Options") ), wxVERTICAL );
 	
-	m_groupComponentsBox = new wxCheckBox( sbSizer1->GetStaticBox(), OPT_GROUP_COMPONENTS, _("Group components"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_groupComponentsBox = new wxCheckBox( sbSizer1->GetStaticBox(), OPT_GROUP_COMPONENTS, _("Group symbols"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_groupComponentsBox->SetValue(true); 
 	m_groupComponentsBox->SetToolTip( _("Group components together based on common properties") );
 	
 	sbSizer1->Add( m_groupComponentsBox, 0, wxALL|wxEXPAND, 5 );
 	
-	m_regroupComponentsButton = new wxButton( sbSizer1->GetStaticBox(), wxID_ANY, _("Regroup components"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_regroupComponentsButton = new wxButton( sbSizer1->GetStaticBox(), wxID_ANY, _("Regroup symbols"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_regroupComponentsButton, 0, wxALL|wxEXPAND, 5 );
 	
 	

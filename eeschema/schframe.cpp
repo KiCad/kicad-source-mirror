@@ -1201,7 +1201,7 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
 
         if( !item || (item->GetFlags() != 0) || ( item->Type() != SCH_COMPONENT_T ) )
         {
-            wxMessageBox( _( "Error: not a component or no component" ) );
+            wxMessageBox( _( "Error: not a symbol or no symbol." ) );
             return;
         }
 

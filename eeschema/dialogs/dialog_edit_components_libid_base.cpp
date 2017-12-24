@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_edit_components_libid_base.h"
@@ -23,25 +23,26 @@ DIALOG_EDIT_COMPONENTS_LIBID_BASE::DIALOG_EDIT_COMPONENTS_LIBID_BASE( wxWindow* 
 	m_grid = new wxGrid( m_panelGrid, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
-	m_grid->CreateGrid( 1, 3 );
+	m_grid->CreateGrid( 5, 3 );
 	m_grid->EnableEditing( true );
 	m_grid->EnableGridLines( true );
 	m_grid->EnableDragGridSize( false );
 	m_grid->SetMargins( 0, 0 );
 	
 	// Columns
-	m_grid->SetColSize( 0, 500 );
-	m_grid->SetColSize( 1, 100 );
-	m_grid->SetColSize( 2, 100 );
+	m_grid->SetColSize( 0, 300 );
+	m_grid->SetColSize( 1, 200 );
+	m_grid->SetColSize( 2, 200 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
 	m_grid->SetColLabelSize( 30 );
-	m_grid->SetColLabelValue( 0, _("Components") );
+	m_grid->SetColLabelValue( 0, _("Symbols") );
 	m_grid->SetColLabelValue( 1, _("Current Symbol") );
 	m_grid->SetColLabelValue( 2, _("New Symbol") );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows
+	m_grid->AutoSizeRows();
 	m_grid->EnableDragRowSize( true );
 	m_grid->SetRowLabelSize( 30 );
 	m_grid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
@@ -106,6 +107,7 @@ DIALOG_EDIT_COMPONENTS_LIBID_BASE::DIALOG_EDIT_COMPONENTS_LIBID_BASE( wxWindow* 
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

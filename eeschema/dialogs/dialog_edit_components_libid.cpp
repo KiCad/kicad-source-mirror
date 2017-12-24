@@ -311,6 +311,7 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
     m_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     m_buttonOrphanItems->Enable( m_OrphansRowIndexes.size() > 0 );
+    Layout();
 }
 
 

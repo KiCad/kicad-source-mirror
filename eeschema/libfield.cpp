@@ -89,8 +89,8 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
         if( !lib.empty() && m_libMgr->PartExists( newFieldValue, lib ) )
         {
             msg.Printf( _(
-                "The name \"%s\" conflicts with an existing entry in the component library \"%s\".\n\n"
-                "Do you wish to replace the current component in the library with this one?" ),
+                "The name \"%s\" conflicts with an existing entry in the symbol library \"%s\".\n\n"
+                "Do you wish to replace the current symbol in the library with this one?" ),
                 newFieldValue,
                 lib
                 );

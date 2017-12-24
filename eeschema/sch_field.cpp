@@ -345,8 +345,7 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
     {
         SCH_COMPONENT* component = (SCH_COMPONENT*) m_Parent;
 
-        wxCHECK_MSG( component != NULL, false,
-                     wxT( "No component associated with field" ) + text );
+        wxCHECK_MSG( component != NULL, false, wxT( "No symbol associated with field" ) + text );
 
         text = component->GetRef( (SCH_SHEET_PATH*) aAuxData );
 
@@ -379,12 +378,12 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
                      wxT( "Cannot replace reference designator without valid sheet path." ) );
 
         wxCHECK_MSG( aSearchData.GetFlags() & FR_REPLACE_REFERENCES, false,
-                     wxT( "Invalid replace component reference field call." ) ) ;
+                     wxT( "Invalid replace symbol reference field call." ) ) ;
 
         SCH_COMPONENT* component = (SCH_COMPONENT*) m_Parent;
 
         wxCHECK_MSG( component != NULL, false,
-                     wxT( "No component associated with field" ) + text );
+                     wxT( "No symbol associated with field" ) + text );
 
         text = component->GetRef( (SCH_SHEET_PATH*) aAuxData );
 

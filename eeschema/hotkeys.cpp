@@ -147,7 +147,7 @@ static EDA_HOTKEY HkAddHierarchicalLabel( _HKI( "Add Hierarchical Label" ), HK_A
 static EDA_HOTKEY HkAddGlobalLabel( _HKI( "Add Global Label" ), HK_ADD_GLABEL, GR_KB_CTRL + 'H',
                                     ID_GLABEL_BUTT );
 static EDA_HOTKEY HkAddJunction( _HKI( "Add Junction" ), HK_ADD_JUNCTION, 'J', ID_JUNCTION_BUTT );
-static EDA_HOTKEY HkAddComponent( _HKI( "Add Component" ), HK_ADD_NEW_COMPONENT, 'A',
+static EDA_HOTKEY HkAddComponent( _HKI( "Add Symbol" ), HK_ADD_NEW_COMPONENT, 'A',
                                   ID_SCH_PLACE_COMPONENT );
 static EDA_HOTKEY HkAddPower( _HKI( "Add Power" ), HK_ADD_NEW_POWER, 'P',
                               ID_PLACE_POWER_BUTT );
@@ -171,16 +171,16 @@ static EDA_HOTKEY HkOrientNormalComponent( _HKI( "Orient Normal Component" ),
                                            HK_ORIENT_NORMAL_COMPONENT, 'N', ID_SCH_ORIENT_NORMAL );
 static EDA_HOTKEY HkRotate( _HKI( "Rotate Item" ), HK_ROTATE, 'R', ID_SCH_ROTATE_CLOCKWISE );
 static EDA_HOTKEY HkEdit( _HKI( "Edit Item" ), HK_EDIT, 'E', ID_SCH_EDIT_ITEM );
-static EDA_HOTKEY HkEditComponentValue( _HKI( "Edit Component Value" ),
+static EDA_HOTKEY HkEditComponentValue( _HKI( "Edit Symbol Value" ),
                                         HK_EDIT_COMPONENT_VALUE, 'V',
                                         ID_SCH_EDIT_COMPONENT_VALUE );
-static EDA_HOTKEY HkEditComponentReference( _HKI( "Edit Component Reference" ),
+static EDA_HOTKEY HkEditComponentReference( _HKI( "Edit Symbol Reference" ),
                                         HK_EDIT_COMPONENT_REFERENCE, 'U',
                                         ID_SCH_EDIT_COMPONENT_REFERENCE );
-static EDA_HOTKEY HkEditComponentFootprint( _HKI( "Edit Component Footprint" ),
+static EDA_HOTKEY HkEditComponentFootprint( _HKI( "Edit Symbol Footprint" ),
                                             HK_EDIT_COMPONENT_FOOTPRINT, 'F',
                                             ID_SCH_EDIT_COMPONENT_FOOTPRINT );
-static EDA_HOTKEY HkEditComponentWithLibedit( _HKI( "Edit with Component Editor" ),
+static EDA_HOTKEY HkEditComponentWithLibedit( _HKI( "Edit with Symbol Editor" ),
                                               HK_EDIT_COMPONENT_WITH_LIBEDIT,
                                               'E' + GR_KB_CTRL,
                                               ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP );
@@ -188,7 +188,7 @@ static EDA_HOTKEY HkMove( _HKI( "Move Schematic Item" ),
                           HK_MOVE_COMPONENT_OR_ITEM, 'M',
                           ID_SCH_MOVE_ITEM );
 
-static EDA_HOTKEY HkDuplicateItem( _HKI( "Duplicate Component or Label" ),
+static EDA_HOTKEY HkDuplicateItem( _HKI( "Duplicate Symbol or Label" ),
                                          HK_DUPLICATE_ITEM, 'C',
                                          ID_POPUP_SCH_DUPLICATE_ITEM );
 

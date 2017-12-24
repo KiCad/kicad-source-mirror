@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_edit_component_in_schematic_fbp.h"
@@ -49,7 +49,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	int orientationRadioBoxNChoices = sizeof( orientationRadioBoxChoices ) / sizeof( wxString );
 	orientationRadioBox = new wxRadioBox( optionsSizer->GetStaticBox(), wxID_ANY, _("Orientation (degrees):"), wxDefaultPosition, wxDefaultSize, orientationRadioBoxNChoices, orientationRadioBoxChoices, 1, wxRA_SPECIFY_COLS );
 	orientationRadioBox->SetSelection( 0 );
-	orientationRadioBox->SetToolTip( _("Select if the component is to be rotated when drawn") );
+	orientationRadioBox->SetToolTip( _("Select if the symbol is to be rotated when drawn") );
 	
 	optionsSizer->Add( orientationRadioBox, 0, wxEXPAND|wxALL, 5 );
 	
@@ -57,12 +57,12 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	int mirrorRadioBoxNChoices = sizeof( mirrorRadioBoxChoices ) / sizeof( wxString );
 	mirrorRadioBox = new wxRadioBox( optionsSizer->GetStaticBox(), wxID_ANY, _("Position:"), wxDefaultPosition, wxDefaultSize, mirrorRadioBoxNChoices, mirrorRadioBoxChoices, 1, wxRA_SPECIFY_COLS );
 	mirrorRadioBox->SetSelection( 0 );
-	mirrorRadioBox->SetToolTip( _("Pick the graphical transformation to be used when displaying the component, if any") );
+	mirrorRadioBox->SetToolTip( _("Pick the graphical transformation to be used when displaying the symbol") );
 	
 	optionsSizer->Add( mirrorRadioBox, 0, wxALL|wxEXPAND, 5 );
 	
 	convertCheckBox = new wxCheckBox( optionsSizer->GetStaticBox(), wxID_ANY, _("Convert Shape"), wxDefaultPosition, wxDefaultSize, 0 );
-	convertCheckBox->SetToolTip( _("Use the alternate shape of this component.\nFor gates, this is the \"De Morgan\" conversion") );
+	convertCheckBox->SetToolTip( _("Use the alternate shape of this symbol.\nFor gates, this is the \"De Morgan\" conversion") );
 	
 	optionsSizer->Add( convertCheckBox, 0, wxALL, 5 );
 	
@@ -70,7 +70,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	sbSizerChipName = new wxStaticBoxSizer( new wxStaticBox( optionsSizer->GetStaticBox(), wxID_ANY, _("Component Name:") ), wxVERTICAL );
 	
 	chipnameTextCtrl = new wxTextCtrl( sbSizerChipName->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	chipnameTextCtrl->SetToolTip( _("Name of the symbol in the library from which this component come from") );
+	chipnameTextCtrl->SetToolTip( _("Name of the symbol in the library to which this symbol is linked") );
 	
 	sbSizerChipName->Add( chipnameTextCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
@@ -94,7 +94,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	optionsSizer->Add( m_staticTextTimeStamp, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_textCtrlTimeStamp = new wxTextCtrl( optionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	m_textCtrlTimeStamp->SetToolTip( _("Unique ID that identifies the component") );
+	m_textCtrlTimeStamp->SetToolTip( _("Unique ID that identifies the symbol") );
 	
 	optionsSizer->Add( m_textCtrlTimeStamp, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
@@ -105,7 +105,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	optionsSizer->Add( spiceFieldsButton, 0, wxALL|wxEXPAND, 5 );
 	
 	resetFieldsStyleButton = new wxButton( optionsSizer->GetStaticBox(), wxID_ANY, _("Reset Field Properties"), wxDefaultPosition, wxDefaultSize, 0 );
-	resetFieldsStyleButton->SetToolTip( _("Set position and style of fields and component orientation to default library value.\nField values are not modified.") );
+	resetFieldsStyleButton->SetToolTip( _("Set position and style of fields and symbol orientation to default library value.\nField values are not modified.") );
 	
 	optionsSizer->Add( resetFieldsStyleButton, 0, wxALL|wxEXPAND, 5 );
 	
@@ -307,6 +307,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	
 	this->SetSizer( mainSizer );
 	this->Layout();
+	mainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::OnCloseDialog ) );

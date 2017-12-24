@@ -44,7 +44,7 @@
             <property name="minimum_size">-1,-1</property>
             <property name="name">DIALOG_MOVE_EXACT_BASE</property>
             <property name="pos"></property>
-            <property name="size">509,277</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Move Item</property>
@@ -1377,7 +1377,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Override default component anchor with:</property>
+                                <property name="label">Override default footprint anchor with:</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>

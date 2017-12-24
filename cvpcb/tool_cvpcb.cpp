@@ -62,11 +62,11 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_CVPCB_GOTO_PREVIOUSNA, wxEmptyString,
                             KiBitmap( left_xpm ),
-                            _( "Select previous unlinked component" ) );
+                            _( "Select previous unlinked symbol" ) );
 
     m_mainToolBar->AddTool( ID_CVPCB_GOTO_FIRSTNA, wxEmptyString,
                             KiBitmap( right_xpm ),
-                            _( "Select next unlinked component" ) );
+                            _( "Select next unlinked symbol" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_CVPCB_AUTO_ASSOCIE, wxEmptyString,
@@ -82,7 +82,7 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
                             KiBitmap( module_filtered_list_xpm ),
                             wxNullBitmap,
                             true, NULL,
-                            _( "Filter footprint list by schematic components keywords" ),
+                            _( "Filter footprint list by schematic symbol keywords" ),
                             wxEmptyString );
 
     m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST,

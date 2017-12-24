@@ -44,10 +44,10 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP</property>
             <property name="pos"></property>
-            <property name="size">928,794</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
-            <property name="title">Component Properties</property>
+            <property name="title">Symbol Properties</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
@@ -519,7 +519,7 @@
                                         <property name="style">wxRA_SPECIFY_COLS</property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Select if the component is to be rotated when drawn</property>
+                                        <property name="tooltip">Select if the symbol is to be rotated when drawn</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
@@ -609,7 +609,7 @@
                                         <property name="style">wxRA_SPECIFY_COLS</property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Pick the graphical transformation to be used when displaying the component, if any</property>
+                                        <property name="tooltip">Pick the graphical transformation to be used when displaying the symbol</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
@@ -697,7 +697,7 @@
                                         <property name="style"></property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Use the alternate shape of this component.&#x0A;For gates, this is the &quot;De Morgan&quot; conversion</property>
+                                        <property name="tooltip">Use the alternate shape of this symbol.&#x0A;For gates, this is the &quot;De Morgan&quot; conversion</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
@@ -797,7 +797,7 @@
                                                 <property name="style"></property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Name of the symbol in the library from which this component come from</property>
+                                                <property name="tooltip">Name of the symbol in the library to which this symbol is linked</property>
                                                 <property name="validator_data_type"></property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxDefaultValidator</property>
@@ -1160,7 +1160,7 @@
                                         <property name="style">wxTE_READONLY</property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Unique ID that identifies the component</property>
+                                        <property name="tooltip">Unique ID that identifies the symbol</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
@@ -1421,7 +1421,7 @@
                                         <property name="style"></property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Set position and style of fields and component orientation to default library value.&#x0A;Field values are not modified.</property>
+                                        <property name="tooltip">Set position and style of fields and symbol orientation to default library value.&#x0A;Field values are not modified.</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>

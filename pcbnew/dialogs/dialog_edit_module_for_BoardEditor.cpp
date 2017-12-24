@@ -327,14 +327,14 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
     m_textCtrlSheetPath->SetValue( m_CurrentModule->GetPath() );
 
     m_AttributsCtrl->SetItemToolTip( 0,
-        _( "Use this attribute for most non SMD components\n"
-           "Components with this option are not put in the footprint position list file" ) );
+        _( "Use this attribute for most non SMD footprints\n"
+           "Footprints with this option are not put in the footprint position list file" ) );
     m_AttributsCtrl->SetItemToolTip( 1,
-         _( "Use this attribute for SMD components.\n"
-            "Only components with this option are put in the footprint position list file" ) );
+         _( "Use this attribute for SMD footprints.\n"
+            "Only footprints with this option are put in the footprint position list file" ) );
     m_AttributsCtrl->SetItemToolTip( 2,
-        _( "Use this attribute for \"virtual\" components drawn on board\n"
-           "like an edge connector (old ISA PC bus for instance)" ) );
+        _( "Use this attribute for \"virtual\" footprints drawn on board\n"
+           "such as an edge connector (old ISA PC bus for instance)" ) );
 
     // Controls on right side of the dialog
     switch( m_CurrentModule->GetAttributes() & 255 )

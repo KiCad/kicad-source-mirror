@@ -247,7 +247,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
         {
             if( aReporter )
             {
-                msg.Printf( _( "No footprint defined for component \"%s\".\n" ),
+                msg.Printf( _( "No footprint defined for symbol \"%s\".\n" ),
                             GetChars( component->GetReference() ) );
                 aReporter->Report( msg, REPORTER::RPT_ERROR );
             }
@@ -269,7 +269,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
         {
             if( aReporter )
             {
-                msg.Printf( _( "Footprint of component \"%s\" changed: board footprint \"%s\", netlist footprint \"%s\"\n" ),
+                msg.Printf( _( "Footprint of symbol \"%s\" changed: board footprint \"%s\", netlist footprint \"%s\"\n" ),
                             GetChars( component->GetReference() ),
                             GetChars( fpOnBoard->GetFPID().Format() ),
                             GetChars( component->GetFPID().Format() ) );

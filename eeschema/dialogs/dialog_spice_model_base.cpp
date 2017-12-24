@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 17 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_spice_model_base.h"
@@ -40,7 +40,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	
 	m_staticText62 = new wxStaticText( m_passive, wxID_ANY, _("Passive type"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText62->Wrap( -1 );
-	fgSizer1->Add( m_staticText62, 0, wxALL, 5 );
+	fgSizer1->Add( m_staticText62, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_staticText3 = new wxStaticText( m_passive, wxID_ANY, _("Value"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
@@ -53,7 +53,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	
 	m_staticText63 = new wxStaticText( m_passive, wxID_ANY, _("Spice value in simulation"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText63->Wrap( -1 );
-	fgSizer1->Add( m_staticText63, 0, wxALL, 5 );
+	fgSizer1->Add( m_staticText63, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
 	bSizer41->Add( fgSizer1, 0, wxEXPAND|wxALL, 5 );
@@ -253,7 +253,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_model->SetSizer( bSizer6 );
 	m_model->Layout();
 	bSizer6->Fit( m_model );
-	m_notebook->AddPage( m_model, _("Model"), true );
+	m_notebook->AddPage( m_model, _("Model"), false );
 	m_power = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_power->SetMinSize( wxSize( 650,-1 ) );
 	
@@ -568,14 +568,14 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_power->SetSizer( bSizer4 );
 	m_power->Layout();
 	bSizer4->Fit( m_power );
-	m_notebook->AddPage( m_power, _("Source"), false );
+	m_notebook->AddPage( m_power, _("Source"), true );
 	
 	bSizer1->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 	
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer1->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
 	
-	m_disabled = new wxCheckBox( this, wxID_ANY, _("Disable component for simulation"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_disabled = new wxCheckBox( this, wxID_ANY, _("Disable symbol for simulation"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer1->Add( m_disabled, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	wxBoxSizer* bSizer2;
@@ -607,6 +607,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	
 	this->SetSizer( bSizer1 );
 	this->Layout();
+	bSizer1->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

@@ -838,7 +838,7 @@ void prepareExportMenu( wxMenu* aParentMenu )
                  KiBitmap( three_d_xpm ) );
 
     AddMenuItem( aParentMenu, ID_GEN_EXPORT_FILE_IDF3,
-                 _( "I&DFv3" ), _( "IDFv3 board and component export" ),
+                 _( "I&DFv3" ), _( "IDFv3 board and symbol export" ),
                  KiBitmap( export_idf_xpm ) );
 
     AddMenuItem( aParentMenu, ID_GEN_EXPORT_FILE_STEP,
@@ -846,7 +846,7 @@ void prepareExportMenu( wxMenu* aParentMenu )
                  KiBitmap( export_idf_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_GEN_CMP_FILE,
-                 _( "&Component (.cmp) File" ),
-                 _( "Export component file (*.cmp) for Eeschema footprint field back-annotation" ),
+                 _( "&Footprint Association (.cmp) File" ),
+                 _( "Export footprint association file (*.cmp) for schematic back annotation" ),
                  KiBitmap( create_cmp_file_xpm ) );
 }

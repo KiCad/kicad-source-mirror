@@ -191,17 +191,17 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     if( GetResetItems() )
     {
         if( GetLevel() )
-            message += _( "Clear and annotate all of the components on the entire schematic?" );
+            message += _( "Clear and annotate all of the symbols on the entire schematic?" );
         else
-            message += _( "Clear and annotate all of the components on the current sheet?" );
+            message += _( "Clear and annotate all of the symbols on the current sheet?" );
         promptUser = true;
     }
     else
     {
         if( GetLevel() )
-            message += _( "Annotate only the unannotated components on the entire schematic?" );
+            message += _( "Annotate only the unannotated symbols on the entire schematic?" );
         else
-            message += _( "Annotate only the unannotated components on the current sheet?" );
+            message += _( "Annotate only the unannotated symbols on the current sheet?" );
     }
 
     message += _( "\n\nThis operation will change the current annotation and cannot be undone." );

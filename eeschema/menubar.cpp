@@ -190,7 +190,7 @@ void preparePlaceMenu( wxMenu* aParentMenu )
 {
     wxString text;
 
-    text = AddHotkeyName( _( "&Component" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "&Symbol" ), g_Schematic_Hokeys_Descr,
                           HK_ADD_NEW_COMPONENT, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( aParentMenu, ID_SCH_PLACE_COMPONENT, text,
                  HELP_PLACE_COMPONENTS,
@@ -257,7 +257,7 @@ void preparePlaceMenu( wxMenu* aParentMenu )
                  KiBitmap( add_hierarchical_label_xpm ) );
 
 
-    text = AddHotkeyName( _( "Hierarchical &Sheet" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Hierar&chical Sheet" ), g_Schematic_Hokeys_Descr,
                           HK_ADD_HIER_SHEET, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( aParentMenu, ID_SHEET_SYMBOL_BUTT, text,
                  HELP_PLACE_SHEET,
@@ -452,14 +452,14 @@ void prepareEditMenu( wxMenu* aParentMenu )
     // Update field values
     AddMenuItem( aParentMenu, ID_UPDATE_FIELDS,
                  _( "Update Field Values" ),
-                 _( "Sets component fields to original library values" ),
+                 _( "Sets symbol fields to original library values" ),
                  KiBitmap( update_fields_xpm ) );
 
     // Edit components to symbols library links (change LIB_ID values)
     aParentMenu->AppendSeparator();
     AddMenuItem( aParentMenu, ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID,
-                 _( "Edit Components to Symbol Library Links" ),
-                 _( "Edit components to symbols library links to switch to an other library link (library IDs)" ),
+                 _( "Edit Symbol Library Links" ),
+                 _( "Edit schematic symbol's symbol library links" ),
                  KiBitmap( edit_cmp_symb_links_xpm ) );
 }
 
@@ -468,7 +468,8 @@ void prepareToolsMenu( wxMenu* aParentMenu )
 {
     wxString text;
 
-    text = AddHotkeyName( _( "Update PCB from Schematic" ), g_Schematic_Hokeys_Descr, HK_UPDATE_PCB_FROM_SCH );
+    text = AddHotkeyName( _( "Update PCB from Schematic" ), g_Schematic_Hokeys_Descr,
+                          HK_UPDATE_PCB_FROM_SCH );
 
     AddMenuItem( aParentMenu,
                  ID_UPDATE_PCB_FROM_SCH,
@@ -523,12 +524,12 @@ void prepareToolsMenu( wxMenu* aParentMenu )
     AddMenuItem( aParentMenu,
                  ID_GET_NETLIST,
                  _( "Generate &Netlist File" ),
-                 _( "Generate component netlist file" ),
+                 _( "Generate netlist file" ),
                  KiBitmap( netlist_xpm ) );
 
     AddMenuItem( aParentMenu,
                  ID_OPEN_CMP_TABLE,
-                 _( "Component Table &View" ),
+                 _( "Symbol Table &View" ),
                  KiBitmap( spreadsheet_xpm ) );
 
     AddMenuItem( aParentMenu,

@@ -2408,7 +2408,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
         if( aReporter )
         {
 
-            msg.Printf( _( "Checking netlist component footprint \"%s:%s:%s\".\n" ),
+            msg.Printf( _( "Checking netlist symbol footprint \"%s:%s:%s\".\n" ),
                         GetChars( component->GetReference() ),
                         GetChars( component->GetTimeStamp() ),
                         GetChars( component->GetFPID().Format() ) );
@@ -2426,7 +2426,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             {
                 if( component->GetModule() != NULL )
                 {
-                    msg.Printf( _( "Adding new component \"%s:%s\" footprint \"%s\".\n" ),
+                    msg.Printf( _( "Adding new symbol \"%s:%s\" footprint \"%s\".\n" ),
                                 GetChars( component->GetReference() ),
                                 GetChars( component->GetTimeStamp() ),
                                 GetChars( component->GetFPID().Format() ) );
@@ -2435,7 +2435,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                 }
                 else
                 {
-                    msg.Printf( _( "Cannot add new component \"%s:%s\" due to missing "
+                    msg.Printf( _( "Cannot add new symbol \"%s:%s\" due to missing "
                                    "footprint \"%s\".\n" ),
                                 GetChars( component->GetReference() ),
                                 GetChars( component->GetTimeStamp() ),
@@ -2469,7 +2469,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     {
                         if( component->GetModule() != NULL )
                         {
-                            msg.Printf( _( "Replacing component \"%s:%s\" footprint \"%s\" with "
+                            msg.Printf( _( "Replacing symbol \"%s:%s\" footprint \"%s\" with "
                                            "\"%s\".\n" ),
                                         GetChars( footprint->GetReference() ),
                                         GetChars( footprint->GetPath() ),
@@ -2480,7 +2480,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                         }
                         else
                         {
-                            msg.Printf( _( "Cannot replace component \"%s:%s\" due to missing "
+                            msg.Printf( _( "Cannot replace symbol \"%s:%s\" due to missing "
                                            "footprint \"%s\".\n" ),
                                         GetChars( footprint->GetReference() ),
                                         GetChars( footprint->GetPath() ),
@@ -2533,7 +2533,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             {
                 if( aReporter )
                 {
-                    msg.Printf( _( "Changing component \"%s:%s\" reference to \"%s\".\n" ),
+                    msg.Printf( _( "Changing footprint \"%s:%s\" reference to \"%s\".\n" ),
                                 GetChars( footprint->GetReference() ),
                                 GetChars( footprint->GetPath() ),
                                 GetChars( component->GetReference() ) );
@@ -2549,7 +2549,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             {
                 if( aReporter )
                 {
-                    msg.Printf( _( "Changing component \"%s:%s\" value from \"%s\" to \"%s\".\n" ),
+                    msg.Printf( _( "Changing footprint \"%s:%s\" value from \"%s\" to \"%s\".\n" ),
                                 GetChars( footprint->GetReference() ),
                                 GetChars( footprint->GetPath() ),
                                 GetChars( footprint->GetValue() ),
@@ -2609,7 +2609,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                 {
                     if( aReporter )
                     {
-                        msg.Printf( _( "Changing component \"%s:%s\" pin \"%s\" net name from "
+                        msg.Printf( _( "Changing footprint \"%s:%s\" pad \"%s\" net name from "
                                        "\"%s\" to \"%s\".\n" ),
                                     GetChars( footprint->GetReference() ),
                                     GetChars( footprint->GetPath() ),
@@ -2661,7 +2661,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             {
                 if( aReporter )
                 {
-                    msg.Printf( _( "Removing unused component \"%s:%s\".\n" ),
+                    msg.Printf( _( "Removing unused footprint \"%s:%s\".\n" ),
                                 GetChars( module->GetReference() ),
                                 GetChars( module->GetPath() ) );
                     aReporter->Report( msg, REPORTER::RPT_ACTION );

@@ -179,12 +179,12 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
     m_FootprintNameCtrl->SetValue( m_currentFPID.GetLibItemName() );
     m_LibraryNicknameCtrl->SetValue( m_currentFPID.GetLibNickname() );
 
-    m_AttributsCtrl->SetItemToolTip( 0, _( "Use this attribute for most non SMD components" ) );
+    m_AttributsCtrl->SetItemToolTip( 0, _( "Use this attribute for most non SMD footprints" ) );
     m_AttributsCtrl->SetItemToolTip( 1,
-                                    _( "Use this attribute for SMD components.\n"
-                                       "Only components with this option are put in the footprint position list file" ) );
+                                    _( "Use this attribute for SMD footprints.\n"
+                                       "Only footprints with this option are put in the footprint position list file" ) );
     m_AttributsCtrl->SetItemToolTip( 2,
-                                    _( "Use this attribute for \"virtual\" components drawn on board\n"
+                                    _( "Use this attribute for \"virtual\" footprints drawn on board\n"
                                        "like an edge connector (old ISA PC bus for instance)" ) );
 
     // Controls on right side of the dialog

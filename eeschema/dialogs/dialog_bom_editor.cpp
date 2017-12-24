@@ -259,12 +259,12 @@ void DIALOG_BOM_EDITOR::UpdateTitle()
 
     if( m_bom->GetColumnGrouping() )
     {
-        title.Printf ( _( "Component table - %u components in %u groups" ),
+        title.Printf ( _( "Symbo Table - %u symbols in %u groups" ),
                        m_bom->ComponentCount(),
                        (unsigned int) m_bom->Groups.size() );
     }
     else
-        title.Printf ( _( "Component table - %u components" ),
+        title.Printf ( _( "Symbol Table - %u components" ),
                        m_bom->ComponentCount() );
 
     unsigned int count = m_bom->CountChangedComponents();
@@ -426,7 +426,7 @@ void DIALOG_BOM_EDITOR::OnRevertFieldChanges( wxCommandEvent& event )
 {
     if( m_bom->HaveFieldsChanged() )
     {
-        if( IsOK( this, _( "Revert all component table changes?" ) ) )
+        if( IsOK( this, _( "Revert all symbol table changes?" ) ) )
         {
             m_bom->RevertFieldChanges();
             Update();

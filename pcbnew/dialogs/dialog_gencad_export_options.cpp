@@ -128,9 +128,9 @@ void DIALOG_GENCAD_EXPORT_OPTIONS::createOptCheckboxes()
 {
     std::map<GENCAD_EXPORT_OPT, wxString> opts =
     {
-        { FLIP_BOTTOM_PADS,         _( "Flip bottom components padstacks" ) },
+        { FLIP_BOTTOM_PADS,         _( "Flip bottom footprint padstacks" ) },
         { UNIQUE_PIN_NAMES,         _( "Generate unique pin names" ) },
-        { INDIVIDUAL_SHAPES,        _( "Generate a new shape for each component instance (do not reuse shapes)" ) },
+        { INDIVIDUAL_SHAPES,        _( "Generate a new shape for each footprint instance (do not reuse shapes)" ) },
         { USE_AUX_ORIGIN,           _( "Use auxiliary axis as origin" ) },
         { STORE_ORIGIN_COORDS,      _( "Save the origin coordinates in the file" ) }
     };

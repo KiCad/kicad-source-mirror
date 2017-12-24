@@ -404,7 +404,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                 MODULE* module = aBoard->FindModuleByReference( reference );
                 if( !module )
                 {
-                    THROW_IO_ERROR( wxString::Format( _("Session file has 'reference' to non-existent component \"%s\""),
+                    THROW_IO_ERROR( wxString::Format( _("Session file has 'reference' to non-existent symbol \"%s\""),
                                                       GetChars( reference ) ) );
                 }
 

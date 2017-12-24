@@ -206,7 +206,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnOkClick( wxCommandEvent& event )
     alias = component->GetAlias( m_Parent->GetAliasName() );
 
     wxCHECK_RET( alias != NULL,
-                 wxT( "Alias \"" ) + m_Parent->GetAliasName() + wxT( "\" of component \"" ) +
+                 wxT( "Alias \"" ) + m_Parent->GetAliasName() + wxT( "\" of symbol \"" ) +
                  component->GetName() + wxT( "\" does not exist." ) );
 
     alias->SetDescription( m_DocCtrl->GetValue() );

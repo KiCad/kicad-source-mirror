@@ -395,9 +395,9 @@ void NETLIST_DIALOG::InstallPageSpice()
         new NETLIST_PAGE_DIALOG( m_NoteBook, title, NET_TYPE_SPICE );
 
     page->m_SpiceAjustPassiveValues = new wxCheckBox( page, ID_USE_NETCODE_AS_NETNAME,
-                                           _( "Reformat passive component values" ) );
+                                           _( "Reformat passive symbol values" ) );
     page->m_SpiceAjustPassiveValues->SetToolTip(
-                     _( "Reformat passive component values e.g. 1M -> 1Meg" ) );
+                     _( "Reformat passive symbol values e.g. 1M -> 1Meg" ) );
     page->m_SpiceAjustPassiveValues->SetValue( m_Parent->GetSpiceAjustPassiveValues() );
     page->m_LeftBoxSizer->Add( page->m_SpiceAjustPassiveValues, 0, wxGROW | wxALL, 5 );
 

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_lib_new_component_base.h"
@@ -31,55 +31,52 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	fgSizer31->SetFlexibleDirection( wxBOTH );
 	fgSizer31->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Component &name:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Symbol &name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
-	m_staticText2->SetToolTip( _("This is the component name in library,\nand also the default component value when loaded in the schematic.") );
+	m_staticText2->SetToolTip( _("This is the symbol name in library,\nand also the default component value when loaded in the schematic.") );
 	
 	fgSizer31->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_textName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 100,-1 ), 0 );
-	fgSizer31->Add( m_textName, 1, wxALL|wxEXPAND, 3 );
+	fgSizer31->Add( m_textName, 1, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 	
 	m_staticText9 = new wxStaticText( this, wxID_ANY, _("Default reference designator:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
-	fgSizer31->Add( m_staticText9, 0, wxALL, 5 );
+	fgSizer31->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_textReference = new wxTextCtrl( this, wxID_ANY, _("U"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer31->Add( m_textReference, 0, wxALL|wxEXPAND, 5 );
+	fgSizer31->Add( m_textReference, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 	
 	m_staticText10 = new wxStaticText( this, wxID_ANY, _("Number of units per package:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText10->Wrap( -1 );
-	fgSizer31->Add( m_staticText10, 0, wxALL, 5 );
+	fgSizer31->Add( m_staticText10, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_spinPartCount = new wxSpinCtrl( this, wxID_ANY, wxT("1"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 26, 0 );
-	fgSizer31->Add( m_spinPartCount, 0, wxALL, 5 );
+	fgSizer31->Add( m_spinPartCount, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	
-	bSizer16->Add( fgSizer31, 1, wxEXPAND|wxLEFT|wxRIGHT, 20 );
+	bSizer16->Add( fgSizer31, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	wxBoxSizer* bSizer17;
 	bSizer17 = new wxBoxSizer( wxVERTICAL );
 	
-	m_checkHasConversion = new wxCheckBox( this, wxID_ANY, _("Create component with alternate body style (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkHasConversion = new wxCheckBox( this, wxID_ANY, _("Create symbol with alternate body style (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer17->Add( m_checkHasConversion, 0, wxALL, 5 );
 	
-	m_checkIsPowerSymbol = new wxCheckBox( this, wxID_ANY, _("Create component as power symbol"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkIsPowerSymbol = new wxCheckBox( this, wxID_ANY, _("Create symbol as power symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer17->Add( m_checkIsPowerSymbol, 0, wxALL, 5 );
 	
 	m_checkLockItems = new wxCheckBox( this, wxID_ANY, _("Units are not interchangeable"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer17->Add( m_checkLockItems, 0, wxALL, 5 );
 	
 	
-	bSizer16->Add( bSizer17, 1, wxEXPAND|wxLEFT|wxRIGHT, 15 );
+	bSizer16->Add( bSizer17, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	bSizer7->Add( bSizer16, 0, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer18;
 	bSizer18 = new wxBoxSizer( wxVERTICAL );
-	
-	
-	bSizer18->Add( 0, 10, 0, wxEXPAND, 5 );
 	
 	m_staticText11 = new wxStaticText( this, wxID_ANY, _("General Pin Settings"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
@@ -94,13 +91,13 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	m_staticText12 = new wxStaticText( this, wxID_ANY, _("Pin text position offset:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
-	fgSizer4->Add( m_staticText12, 0, wxALL, 5 );
+	fgSizer4->Add( m_staticText12, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_spinPinTextPosition = new wxSpinCtrl( this, wxID_ANY, wxT("40"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 100, 40 );
-	fgSizer4->Add( m_spinPinTextPosition, 0, wxALL, 5 );
+	fgSizer4->Add( m_spinPinTextPosition, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 	
 	
-	bSizer18->Add( fgSizer4, 0, wxLEFT|wxRIGHT, 20 );
+	bSizer18->Add( fgSizer4, 0, wxLEFT|wxRIGHT, 5 );
 	
 	wxBoxSizer* bSizer19;
 	bSizer19 = new wxBoxSizer( wxVERTICAL );
@@ -111,14 +108,17 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	m_checkShowPinName = new wxCheckBox( this, wxID_ANY, _("Show pin name text"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkShowPinName->SetValue(true); 
-	bSizer19->Add( m_checkShowPinName, 0, wxALL, 5 );
+	bSizer19->Add( m_checkShowPinName, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_checkShowPinNameInside = new wxCheckBox( this, wxID_ANY, _("Pin name inside"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkShowPinNameInside->SetValue(true); 
-	bSizer19->Add( m_checkShowPinNameInside, 0, wxALL, 5 );
+	bSizer19->Add( m_checkShowPinNameInside, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
-	bSizer18->Add( bSizer19, 0, wxEXPAND|wxLEFT|wxRIGHT, 15 );
+	bSizer18->Add( bSizer19, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	
+	
+	bSizer18->Add( 0, 10, 0, wxEXPAND, 5 );
 	
 	
 	bSizer7->Add( bSizer18, 1, wxALL|wxEXPAND, 5 );
@@ -130,7 +130,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bSizer7->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 10 );
+	bSizer7->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bSizer7 );

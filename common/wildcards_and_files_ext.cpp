@@ -283,7 +283,7 @@ wxString Shapes3DFileWildcard()
 
 wxString IDF3DFileWildcard()
 {
-    return _( "IDFv3 component files (*.idf)|*." ) + FormatWildcardExt( "idf" );
+    return _( "IDFv3 footprint files (*.idf)|*." ) + FormatWildcardExt( "idf" );
 }
 
 

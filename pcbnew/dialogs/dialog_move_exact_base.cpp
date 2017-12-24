@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/text_ctrl_eval.h"
@@ -85,7 +85,7 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	
 	bAnchorSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_cbOverride = new wxCheckBox( this, wxID_ANY, _("Override default component anchor with:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbOverride = new wxCheckBox( this, wxID_ANY, _("Override default footprint anchor with:"), wxDefaultPosition, wxDefaultSize, 0 );
 	bAnchorSizer->Add( m_cbOverride, 1, wxALL, 5 );
 	
 	wxString m_anchorChoiceChoices[] = { _("Top left pad"), _("Footprint center") };
@@ -112,6 +112,7 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_MOVE_EXACT_BASE::OnClose ) );

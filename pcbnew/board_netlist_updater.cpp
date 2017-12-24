@@ -105,13 +105,13 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
 
     if( aComponent->GetModule() != NULL )
     {
-        msg.Printf( _( "Adding new component \"%s:%s\" footprint \"%s\".\n" ),
+        msg.Printf( _( "Adding new symbol \"%s:%s\" footprint \"%s\".\n" ),
                     GetChars( aComponent->GetReference() ),
                     GetChars( aComponent->GetTimeStamp() ),
                     GetChars( aComponent->GetFPID().Format() ) );
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
-        msg.Printf( _( "Add component %s, footprint: %s.\n" ),
+        msg.Printf( _( "Add symbol %s, footprint: %s.\n" ),
                     GetChars( aComponent->GetReference() ),
                     GetChars( aComponent->GetFPID().Format() ) );
         m_reporter->Report( msg, REPORTER::RPT_ACTION );
@@ -133,13 +133,13 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
     }
     else
     {
-        msg.Printf( _( "Cannot add component %s due to missing footprint %s.\n" ),
+        msg.Printf( _( "Cannot add symbol %s due to missing footprint %s.\n" ),
                     GetChars( aComponent->GetReference() ),
                     GetChars( aComponent->GetFPID().Format() ) );
 
         m_reporter->Report( msg, REPORTER::RPT_ERROR );
 
-        msg.Printf( _( "Cannot add new component \"%s:%s\" due to missing "
+        msg.Printf( _( "Cannot add new symbol \"%s:%s\" due to missing "
                        "footprint \"%s\".\n" ),
                     GetChars( aComponent->GetReference() ),
                     GetChars( aComponent->GetTimeStamp() ),
@@ -166,14 +166,14 @@ MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE* aPcb
 
     if( aNewComponent->GetModule() != NULL )
     {
-        msg.Printf( _( "Change component %s footprint from %s to %s.\n"),
+        msg.Printf( _( "Change symbol %s footprint from %s to %s.\n"),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aPcbComponent->GetFPID().Format() ),
                     GetChars( aNewComponent->GetFPID().Format() ) );
 
         m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
-        msg.Printf( _( "Replacing component \"%s:%s\" footprint \"%s\" with "
+        msg.Printf( _( "Replacing symbol \"%s:%s\" footprint \"%s\" with "
                        "\"%s\".\n" ),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aPcbComponent->GetPath() ),
@@ -203,14 +203,14 @@ MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE* aPcb
     }
     else
     {
-        msg.Printf( _( "Cannot change component %s footprint due to missing "
+        msg.Printf( _( "Cannot change symbol %s footprint due to missing "
                        "footprint %s.\n" ),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aNewComponent->GetFPID().Format() ) );
 
         m_reporter->Report( msg, REPORTER::RPT_ERROR );
 
-        msg.Printf( _( "Cannot replace component \"%s:%s\" due to missing "
+        msg.Printf( _( "Cannot replace symbol \"%s:%s\" due to missing "
                        "footprint \"%s\".\n" ),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aPcbComponent->GetPath() ),
@@ -239,13 +239,13 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent, CO
     // Test for reference designator field change.
     if( aPcbComponent->GetReference() != aNewComponent->GetReference() )
     {
-        msg.Printf( _( "Change component %s reference to %s.\n" ),
+        msg.Printf( _( "Change symbol %s reference to %s.\n" ),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aNewComponent->GetReference() ) );
 
         m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
-        msg.Printf( _( "Changing component \"%s:%s\" reference to \"%s\".\n" ),
+        msg.Printf( _( "Changing symbol \"%s:%s\" reference to \"%s\".\n" ),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aPcbComponent->GetPath() ),
                     GetChars( aNewComponent->GetReference() ) );
@@ -262,14 +262,14 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent, CO
     // Test for value field change.
     if( aPcbComponent->GetValue() != aNewComponent->GetValue() )
     {
-        msg.Printf( _( "Change component %s value from %s to %s.\n" ),
+        msg.Printf( _( "Change symbol %s value from %s to %s.\n" ),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aPcbComponent->GetValue() ),
                     GetChars( aNewComponent->GetValue() ) );
 
         m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
-        msg.Printf( _( "Changing component \"%s:%s\" value from \"%s\" to \"%s\".\n" ),
+        msg.Printf( _( "Changing symbol \"%s:%s\" value from \"%s\" to \"%s\".\n" ),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aPcbComponent->GetPath() ),
                     GetChars( aPcbComponent->GetValue() ),
@@ -287,7 +287,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent, CO
     // Test for time stamp change.
     if( aPcbComponent->GetPath() != aNewComponent->GetTimeStamp() )
     {
-        msg.Printf( _( "Changing component path \"%s:%s\" to \"%s\".\n" ),
+        msg.Printf( _( "Changing symbol path \"%s:%s\" to \"%s\".\n" ),
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aPcbComponent->GetPath() ),
                     GetChars( aNewComponent->GetTimeStamp() ) );
@@ -327,12 +327,12 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
         {
             if( !pad->GetNetname().IsEmpty() )
             {
-                msg.Printf( _( "Disconnect component %s pin %s.\n" ),
+                msg.Printf( _( "Disconnect symbol %s pin %s.\n" ),
                             GetChars( aPcbComponent->GetReference() ),
                             GetChars( pad->GetName() ) );
                 m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
-                msg.Printf( _( "Clearing component \"%s:%s\" pin \"%s\" net name.\n" ),
+                msg.Printf( _( "Clearing symbol \"%s:%s\" pin \"%s\" net name.\n" ),
                             GetChars( aPcbComponent->GetReference() ),
                             GetChars( aPcbComponent->GetPath() ),
                             GetChars( pad->GetName() ) );
@@ -378,14 +378,14 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
 
                 if( !pad->GetNetname().IsEmpty() )
                 {
-                    msg.Printf( _( "Reconnect component %s pin %s from net %s to net %s.\n"),
+                    msg.Printf( _( "Reconnect symbol %s pin %s from net %s to net %s.\n"),
                             GetChars( aPcbComponent->GetReference() ),
                             GetChars( pad->GetName() ),
                             GetChars( pad->GetNetname() ),
                             GetChars( netName ) );
 
                 } else {
-                    msg.Printf( _( "Connect component %s pin %s to net %s.\n"),
+                    msg.Printf( _( "Connect symbol %s pin %s to net %s.\n"),
                             GetChars( aPcbComponent->GetReference() ),
                             GetChars( pad->GetName() ),
                             GetChars( netName ) );
@@ -393,7 +393,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
 
                 m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
-                msg.Printf( _( "Changing component \"%s:%s\" pin \"%s\" net name from "
+                msg.Printf( _( "Changing symbol \"%s:%s\" pin \"%s\" net name from "
                                "\"%s\" to \"%s\".\n" ),
                             GetChars( aPcbComponent->GetReference() ),
                             GetChars( aPcbComponent->GetPath() ),
@@ -439,17 +439,17 @@ bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
         {
             if( module->IsLocked() )
             {
-                msg.Printf( _( "Component %s is locked, skipping removal.\n" ),
+                msg.Printf( _( "Footprint %s is locked, skipping removal.\n" ),
                             GetChars( module->GetReference() ) );
                 m_reporter->Report( msg, REPORTER::RPT_INFO );
                 continue;
             }
 
-            msg.Printf( _( "Remove component %s." ),
+            msg.Printf( _( "Remove footprint %s." ),
                         GetChars( module->GetReference() ) );
             m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
-            msg.Printf( _( "Removing unused component \"%s:%s\".\n" ),
+            msg.Printf( _( "Removing unused footprint \"%s:%s\".\n" ),
                         GetChars( module->GetReference() ),
                         GetChars( module->GetPath() ) );
             m_reporter->Report( msg, REPORTER::RPT_INFO );

@@ -152,13 +152,13 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
                             _( "Perform electrical rules check" ) );
 
     m_mainToolBar->AddTool( ID_RUN_CVPCB, wxEmptyString, KiBitmap( cvpcb_xpm ),
-                            _( "Run CvPcb to associate footprints to components" ) );
+                            _( "Run CvPcb to associate footprints to symbols" ) );
 
     m_mainToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, KiBitmap( netlist_xpm ),
                             _( "Generate netlist" ) );
 
     m_mainToolBar->AddTool( ID_OPEN_CMP_TABLE, wxEmptyString, KiBitmap( spreadsheet_xpm ),
-                            _( "Edit Components Fields"  ) );
+                            _( "Edit symbol fields"  ) );
 
 
     m_mainToolBar->AddTool( ID_GET_TOOLS, wxEmptyString, KiBitmap( bom_xpm ),
