@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 28 2015)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -30,7 +30,6 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	fgSizer1->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_textFileName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textFileName->SetMaxLength( 0 ); 
 	m_textFileName->SetMinSize( wxSize( 200,-1 ) );
 	
 	fgSizer1->Add( m_textFileName, 5, wxEXPAND|wxTOP|wxBOTTOM, 3 );
@@ -43,7 +42,6 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	fgSizer1->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_textFileNameSize = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textFileNameSize->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_textFileNameSize, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 3 );
 	
 	m_staticFileNameSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -55,7 +53,6 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	fgSizer1->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_textSheetName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textSheetName->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_textSheetName, 5, wxEXPAND|wxTOP|wxBOTTOM, 3 );
 	
 	
@@ -66,7 +63,6 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	fgSizer1->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_textSheetNameSize = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textSheetNameSize->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_textSheetNameSize, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 3 );
 	
 	m_staticSheetNameSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -105,7 +101,7 @@ DIALOG_SCH_SHEET_PROPS_BASE::DIALOG_SCH_SHEET_PROPS_BASE( wxWindow* parent, wxWi
 	mainSizer->Add( bupperSizer, 0, wxEXPAND, 5 );
 	
 	
-	mainSizer->Add( 0, 0, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	mainSizer->Add( 0, 0, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	mainSizer->Add( m_staticline1, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );

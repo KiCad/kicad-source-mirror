@@ -122,6 +122,9 @@ bool DIALOG_UPDATE_FIELDS::TransferDataToWindow()
             m_fieldsBox->Check( idx, true );
     }
 
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
+
     return true;
 }
 

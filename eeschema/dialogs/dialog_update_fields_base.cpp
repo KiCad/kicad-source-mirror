@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -18,7 +18,7 @@ DIALOG_UPDATE_FIELDS_BASE::DIALOG_UPDATE_FIELDS_BASE( wxWindow* parent, wxWindow
 	
 	m_infoLabel = new wxStaticText( this, wxID_ANY, _("Select fields to update:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_infoLabel->Wrap( -1 );
-	m_mainSizer->Add( m_infoLabel, 0, wxALL, 5 );
+	m_mainSizer->Add( m_infoLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxArrayString m_fieldsBoxChoices;
 	m_fieldsBox = new wxCheckListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_fieldsBoxChoices, 0 );
@@ -27,10 +27,10 @@ DIALOG_UPDATE_FIELDS_BASE::DIALOG_UPDATE_FIELDS_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* m_selBtnSizer;
 	m_selBtnSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_selAllBtn = new wxButton( this, wxID_ANY, _("Select all"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_selAllBtn = new wxButton( this, wxID_ANY, _("Select All"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_selBtnSizer->Add( m_selAllBtn, 1, wxALL|wxEXPAND, 5 );
 	
-	m_selNoneBtn = new wxButton( this, wxID_ANY, _("Select none"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_selNoneBtn = new wxButton( this, wxID_ANY, _("Select None"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_selBtnSizer->Add( m_selNoneBtn, 1, wxALL|wxEXPAND, 5 );
 	
 	
@@ -41,8 +41,8 @@ DIALOG_UPDATE_FIELDS_BASE::DIALOG_UPDATE_FIELDS_BASE( wxWindow* parent, wxWindow
 	
 	m_mainSizer->Add( m_removeExtraBox, 0, wxALL, 5 );
 	
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_mainSizer->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_mainSizer->Add( m_staticline, 0, wxEXPAND | wxALL, 5 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -51,7 +51,7 @@ DIALOG_UPDATE_FIELDS_BASE::DIALOG_UPDATE_FIELDS_BASE( wxWindow* parent, wxWindow
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	m_mainSizer->Add( m_sdbSizer, 0, wxEXPAND, 5 );
+	m_mainSizer->Add( m_sdbSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
 	this->SetSizer( m_mainSizer );

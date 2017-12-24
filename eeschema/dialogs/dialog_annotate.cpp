@@ -107,8 +107,9 @@ DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent, wxString message )
 
     InitValues();
     Layout();
-    GetSizer()->SetSizeHints( this );
-    Centre();
+
+    // When all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 

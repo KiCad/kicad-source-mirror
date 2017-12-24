@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -43,7 +43,7 @@ class DIALOG_UPDATE_FIELDS_BASE : public DIALOG_SHIM
 		wxButton* m_selAllBtn;
 		wxButton* m_selNoneBtn;
 		wxCheckBox* m_removeExtraBox;
-		wxStaticLine* m_staticline1;
+		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -55,7 +55,7 @@ class DIALOG_UPDATE_FIELDS_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_UPDATE_FIELDS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Update symbol fields"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 300,600 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		DIALOG_UPDATE_FIELDS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Update symbol fields"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 313,429 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_UPDATE_FIELDS_BASE();
 	
 };
