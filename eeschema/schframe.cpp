@@ -246,6 +246,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
                     SCH_EDIT_FRAME::Process_Config )
 
     EVT_TOOL( wxID_PREFERENCES, SCH_EDIT_FRAME::OnPreferencesOptions )
+    EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, SCH_EDIT_FRAME::OnConfigurePaths )
 
     EVT_TOOL( ID_RUN_LIBRARY, SCH_EDIT_FRAME::OnOpenLibraryEditor )
     EVT_TOOL( ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP, SCH_EDIT_FRAME::OnOpenLibraryEditor )
@@ -1490,4 +1491,10 @@ void SCH_EDIT_FRAME::UpdateTitle()
     }
 
     SetTitle( title );
+}
+
+
+void SCH_EDIT_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
+{
+    Pgm().ConfigurePaths( this );
 }

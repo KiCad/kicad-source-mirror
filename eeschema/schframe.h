@@ -27,8 +27,8 @@
  * @file schframe.h
  */
 
-#ifndef  WX_EESCHEMA_STRUCT_H
-#define  WX_EESCHEMA_STRUCT_H
+#ifndef  _SCHFRAME_H_
+#define  _SCHFRAME_H_
 
 #include <sch_base_frame.h>
 #include <config_params.h>
@@ -885,11 +885,13 @@ private:
     void OnOpenLibraryEditor( wxCommandEvent& event );
     void OnRescueProject( wxCommandEvent& event );
     void OnRemapSymbols( wxCommandEvent& aEvent );
+
     // a helper function to run the dialog that allows to rename the symbol library Id of
     // groups of components, for instance after a symbol has moved from a library to
     // an other library
     void OnEditComponentSymbolsId( wxCommandEvent& aEvent );
     void OnPreferencesOptions( wxCommandEvent& event );
+    void OnConfigurePaths( wxCommandEvent& aEvent );
     void OnCancelCurrentCommand( wxCommandEvent& aEvent );
 
     void OnSelectItem( wxCommandEvent& aEvent );
@@ -1474,4 +1476,4 @@ public:
 };
 
 
-#endif  // WX_EESCHEMA_STRUCT_H
+#endif  // _SCHFRAME_H_

@@ -646,6 +646,13 @@ static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
                  KiBitmap( preference_xpm ) );
 #endif // __WXMAC__
 
+    // Path configuration edit dialog.
+    AddMenuItem( aParentMenu,
+                 ID_PREFERENCES_CONFIGURE_PATHS,
+                 _( "Configure &Paths" ),
+                 _( "Edit path configuration environment variables" ),
+                 KiBitmap( editor_xpm ) );
+
     // Language submenu
     aParentMenu->AppendSeparator();
     Pgm().AddMenuLanguageList( aParentMenu );
