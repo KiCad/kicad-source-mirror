@@ -635,6 +635,13 @@ static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
                  _( "Edit the global and project symbol library tables (list of active libraries)." ),
                  KiBitmap( library_table_xpm ) );
 
+    // Path configuration edit dialog.
+    AddMenuItem( aParentMenu,
+                 ID_PREFERENCES_CONFIGURE_PATHS,
+                 _( "Configure &Paths" ),
+                 _( "Edit path configuration environment variables" ),
+                 KiBitmap( path_xpm ) );
+
     // Options (Preferences on WXMAC)
 #ifdef __WXMAC__
     aParentMenu->Append( wxID_PREFERENCES );
@@ -645,13 +652,6 @@ static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
                  _( "Edit Eeschema preferences" ),
                  KiBitmap( preference_xpm ) );
 #endif // __WXMAC__
-
-    // Path configuration edit dialog.
-    AddMenuItem( aParentMenu,
-                 ID_PREFERENCES_CONFIGURE_PATHS,
-                 _( "Configure &Paths" ),
-                 _( "Edit path configuration environment variables" ),
-                 KiBitmap( editor_xpm ) );
 
     // Language submenu
     aParentMenu->AppendSeparator();
