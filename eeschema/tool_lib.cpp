@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -76,7 +76,7 @@ void LIB_EDIT_FRAME::ReCreateVToolbar()
                             HELP_ADD_BODYPOLYGON, wxITEM_CHECK  );
 
     m_drawToolBar->AddTool( ID_LIBEDIT_ANCHOR_ITEM_BUTT, wxEmptyString, KiBitmap( anchor_xpm ),
-                            _( "Move part anchor" ), wxITEM_CHECK  );
+                            _( "Move symbol anchor" ), wxITEM_CHECK  );
 
     m_drawToolBar->AddTool( ID_LIBEDIT_IMPORT_BODY_BUTT, wxEmptyString, KiBitmap( import_xpm ),
                             _( "Import existing drawings" ), wxITEM_CHECK  );
@@ -117,17 +117,17 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString, KiBitmap( new_component_xpm ),
-                            _( "Create new part" ) );
+                            _( "Create new symbol" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_PART, wxEmptyString,
                             KiBitmap( save_part_xpm ),
-                            _( "Save current part" ) );
+                            _( "Save current symbol" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_IMPORT_PART, wxEmptyString, KiBitmap( import_part_xpm ),
-                            _( "Import part" ) );
+                            _( "Import symbol" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_EXPORT_PART, wxEmptyString, KiBitmap( export_part_xpm ),
-                            _( "Export part" ) );
+                            _( "Export symbol" ) );
 
     m_mainToolBar->AddSeparator();
 
@@ -145,7 +145,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddSeparator();
 
     m_mainToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_PART, wxEmptyString,
-                            KiBitmap( part_properties_xpm ), _( "Edit part properties" ) );
+                            KiBitmap( part_properties_xpm ), _( "Edit symbol properties" ) );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_FIELDS, wxEmptyString,
                             KiBitmap( text_xpm ),
@@ -173,9 +173,9 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_DE_MORGAN_NORMAL_BUTT, wxEmptyString, KiBitmap( morgan1_xpm ),
-                            _( "Show as \"De Morgan\" normal part" ), wxITEM_CHECK );
+                            _( "Show as \"De Morgan\" normal symbol" ), wxITEM_CHECK );
     m_mainToolBar->AddTool( ID_DE_MORGAN_CONVERT_BUTT, wxEmptyString, KiBitmap( morgan2_xpm ),
-                            _( "Show as \"De Morgan\" convert part" ), wxITEM_CHECK );
+                            _( "Show as \"De Morgan\" convert symbol" ), wxITEM_CHECK );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_LIBEDIT_VIEW_DOC, wxEmptyString, KiBitmap( datasheet_xpm ),
@@ -199,7 +199,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddControl( m_aliasSelectBox );
 
     m_mainToolBar->AddSeparator();
-    msg = _( "Edit pins per part or body style (Use carefully!)" );
+    msg = _( "Edit pins per symbol or body style (Use carefully!)" );
     m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, wxEmptyString, KiBitmap( pin2pin_xpm ),
                             msg, wxITEM_CHECK );
     m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_TABLE, wxEmptyString, KiBitmap( pin_table_xpm ),

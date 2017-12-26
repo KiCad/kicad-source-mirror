@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May 21 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dlg_3d_pathconfig_base.h"
@@ -11,28 +11,30 @@
 
 DLG_3D_PATH_CONFIG_BASE::DLG_3D_PATH_CONFIG_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 600,150 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 	
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 	
 	wxBoxSizer* bSizer5;
-	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
+	bSizer5 = new wxBoxSizer( wxVERTICAL );
 	
 	m_EnvVars = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
-	m_EnvVars->CreateGrid( 0, 2 );
+	m_EnvVars->CreateGrid( 1, 2 );
 	m_EnvVars->EnableEditing( true );
 	m_EnvVars->EnableGridLines( true );
 	m_EnvVars->EnableDragGridSize( false );
 	m_EnvVars->SetMargins( 0, 0 );
 	
 	// Columns
+	m_EnvVars->SetColSize( 0, 150 );
+	m_EnvVars->SetColSize( 1, 300 );
 	m_EnvVars->EnableDragColMove( false );
 	m_EnvVars->EnableDragColSize( true );
 	m_EnvVars->SetColLabelSize( 30 );
-	m_EnvVars->SetColLabelValue( 0, _("Env Var") );
+	m_EnvVars->SetColLabelValue( 0, _("Name") );
 	m_EnvVars->SetColLabelValue( 1, _("Path") );
 	m_EnvVars->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
@@ -45,13 +47,12 @@ DLG_3D_PATH_CONFIG_BASE::DLG_3D_PATH_CONFIG_BASE( wxWindow* parent, wxWindowID i
 	
 	// Cell Defaults
 	m_EnvVars->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer5->Add( m_EnvVars, 0, wxALL, 5 );
+	m_EnvVars->SetMinSize( wxSize( 250,100 ) );
 	
+	bSizer5->Add( m_EnvVars, 1, wxALL|wxEXPAND, 5 );
 	
-	bSizer5->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	m_btnEnvCfg = new wxButton( this, wxID_ANY, _("Config Env"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer5->Add( m_btnEnvCfg, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_btnEnvCfg = new wxButton( this, wxID_ANY, _("Configure Environment Variables"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer5->Add( m_btnEnvCfg, 0, wxALIGN_CENTER|wxALL, 5 );
 	
 	
 	bSizerMain->Add( bSizer5, 0, wxEXPAND, 5 );
@@ -93,6 +94,8 @@ DLG_3D_PATH_CONFIG_BASE::DLG_3D_PATH_CONFIG_BASE( wxWindow* parent, wxWindowID i
 	
 	// Cell Defaults
 	m_Aliases->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_Aliases->SetMinSize( wxSize( -1,150 ) );
+	
 	bSizerGrid->Add( m_Aliases, 1, wxALL|wxEXPAND, 5 );
 	
 	
@@ -128,11 +131,12 @@ DLG_3D_PATH_CONFIG_BASE::DLG_3D_PATH_CONFIG_BASE( wxWindow* parent, wxWindowID i
 	m_sdbSizer2->AddButton( m_sdbSizer2Help );
 	m_sdbSizer2->Realize();
 	
-	bSizerMain->Add( m_sdbSizer2, 0, wxALIGN_CENTER|wxALIGN_RIGHT|wxALL, 5 );
+	bSizerMain->Add( m_sdbSizer2, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

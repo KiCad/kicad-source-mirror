@@ -34,7 +34,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	wxBoxSizer* bSizerUnitsInterchangeable;
 	bSizerUnitsInterchangeable = new wxBoxSizer( wxHORIZONTAL );
 	
-	unitsInterchageableText = new wxStaticText( optionsSizer->GetStaticBox(), wxID_ANY, _("Interchangeable Unit:"), wxDefaultPosition, wxDefaultSize, 0 );
+	unitsInterchageableText = new wxStaticText( optionsSizer->GetStaticBox(), wxID_ANY, _("Interchangeable units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	unitsInterchageableText->Wrap( -1 );
 	bSizerUnitsInterchangeable->Add( unitsInterchageableText, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
@@ -53,21 +53,21 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	
 	optionsSizer->Add( orientationRadioBox, 0, wxEXPAND|wxALL, 5 );
 	
-	wxString mirrorRadioBoxChoices[] = { _("Default"), _("Mirror Horizontally"), _("Mirror Vertically") };
+	wxString mirrorRadioBoxChoices[] = { _("Default"), _("Mirror horizontally"), _("Mirror vertically") };
 	int mirrorRadioBoxNChoices = sizeof( mirrorRadioBoxChoices ) / sizeof( wxString );
 	mirrorRadioBox = new wxRadioBox( optionsSizer->GetStaticBox(), wxID_ANY, _("Position:"), wxDefaultPosition, wxDefaultSize, mirrorRadioBoxNChoices, mirrorRadioBoxChoices, 1, wxRA_SPECIFY_COLS );
-	mirrorRadioBox->SetSelection( 0 );
+	mirrorRadioBox->SetSelection( 2 );
 	mirrorRadioBox->SetToolTip( _("Pick the graphical transformation to be used when displaying the symbol") );
 	
 	optionsSizer->Add( mirrorRadioBox, 0, wxALL|wxEXPAND, 5 );
 	
-	convertCheckBox = new wxCheckBox( optionsSizer->GetStaticBox(), wxID_ANY, _("Convert Shape"), wxDefaultPosition, wxDefaultSize, 0 );
+	convertCheckBox = new wxCheckBox( optionsSizer->GetStaticBox(), wxID_ANY, _("Convert shape"), wxDefaultPosition, wxDefaultSize, 0 );
 	convertCheckBox->SetToolTip( _("Use the alternate shape of this symbol.\nFor gates, this is the \"De Morgan\" conversion") );
 	
 	optionsSizer->Add( convertCheckBox, 0, wxALL, 5 );
 	
 	wxStaticBoxSizer* sbSizerChipName;
-	sbSizerChipName = new wxStaticBoxSizer( new wxStaticBox( optionsSizer->GetStaticBox(), wxID_ANY, _("Component Name:") ), wxVERTICAL );
+	sbSizerChipName = new wxStaticBoxSizer( new wxStaticBox( optionsSizer->GetStaticBox(), wxID_ANY, _("Library Symbol:") ), wxVERTICAL );
 	
 	chipnameTextCtrl = new wxTextCtrl( sbSizerChipName->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	chipnameTextCtrl->SetToolTip( _("Name of the symbol in the library to which this symbol is linked") );
@@ -89,7 +89,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	
 	optionsSizer->Add( sbSizerChipName, 0, wxEXPAND|wxALL, 5 );
 	
-	m_staticTextTimeStamp = new wxStaticText( optionsSizer->GetStaticBox(), wxID_ANY, _("Component ID:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTimeStamp = new wxStaticText( optionsSizer->GetStaticBox(), wxID_ANY, _("Symbol ID:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTimeStamp->Wrap( -1 );
 	optionsSizer->Add( m_staticTextTimeStamp, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -126,7 +126,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	fieldListCtrl = new wxListCtrl( gridStaticBoxSizer->GetStaticBox(), wxID_ANY, wxPoint( -1,-1 ), wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
 	fieldListCtrl->SetMinSize( wxSize( 220,-1 ) );
 	
-	gridStaticBoxSizer->Add( fieldListCtrl, 1, wxALL|wxEXPAND, 8 );
+	gridStaticBoxSizer->Add( fieldListCtrl, 1, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
@@ -166,13 +166,13 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	wxBoxSizer* bSizerJustification;
 	bSizerJustification = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxString m_FieldHJustifyCtrlChoices[] = { _("Align Left"), _("Align Center"), _("Align Right") };
+	wxString m_FieldHJustifyCtrlChoices[] = { _("Align left"), _("Align center"), _("Align right") };
 	int m_FieldHJustifyCtrlNChoices = sizeof( m_FieldHJustifyCtrlChoices ) / sizeof( wxString );
 	m_FieldHJustifyCtrl = new wxRadioBox( fieldsSizer->GetStaticBox(), wxID_ANY, _("Horizontal Position:"), wxDefaultPosition, wxDefaultSize, m_FieldHJustifyCtrlNChoices, m_FieldHJustifyCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_FieldHJustifyCtrl->SetSelection( 0 );
 	bSizerJustification->Add( m_FieldHJustifyCtrl, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	wxString m_FieldVJustifyCtrlChoices[] = { _("Align Top"), _("Align Center"), _("Align Bottom") };
+	wxString m_FieldVJustifyCtrlChoices[] = { _("Align top"), _("Align center"), _("Align bottom") };
 	int m_FieldVJustifyCtrlNChoices = sizeof( m_FieldVJustifyCtrlChoices ) / sizeof( wxString );
 	m_FieldVJustifyCtrl = new wxRadioBox( fieldsSizer->GetStaticBox(), wxID_ANY, _("Vertical Position:"), wxDefaultPosition, wxDefaultSize, m_FieldVJustifyCtrlNChoices, m_FieldVJustifyCtrlChoices, 1, wxRA_SPECIFY_COLS );
 	m_FieldVJustifyCtrl->SetSelection( 0 );
@@ -195,15 +195,15 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	rotateCheckBox = new wxCheckBox( visibilitySizer->GetStaticBox(), wxID_ANY, _("Rotate"), wxDefaultPosition, wxDefaultSize, 0 );
 	rotateCheckBox->SetToolTip( _("Rotated 90 degrees the selected field") );
 	
-	visibilitySizer->Add( rotateCheckBox, 0, wxALL, 5 );
+	visibilitySizer->Add( rotateCheckBox, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
 	bSizerStyle->Add( visibilitySizer, 1, wxEXPAND|wxALL, 5 );
 	
-	wxString m_StyleRadioBoxChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold Italic") };
+	wxString m_StyleRadioBoxChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold and italic") };
 	int m_StyleRadioBoxNChoices = sizeof( m_StyleRadioBoxChoices ) / sizeof( wxString );
 	m_StyleRadioBox = new wxRadioBox( fieldsSizer->GetStaticBox(), wxID_ANY, _("Font Style:"), wxDefaultPosition, wxDefaultSize, m_StyleRadioBoxNChoices, m_StyleRadioBoxChoices, 1, wxRA_SPECIFY_COLS );
-	m_StyleRadioBox->SetSelection( 0 );
+	m_StyleRadioBox->SetSelection( 3 );
 	bSizerStyle->Add( m_StyleRadioBox, 1, wxEXPAND|wxALL, 5 );
 	
 	
@@ -244,7 +244,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	fgSizerPosSize->SetFlexibleDirection( wxBOTH );
 	fgSizerPosSize->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	textSizeLabel = new wxStaticText( fieldsSizer->GetStaticBox(), wxID_ANY, _("Font Size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	textSizeLabel = new wxStaticText( fieldsSizer->GetStaticBox(), wxID_ANY, _("Font size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	textSizeLabel->Wrap( -1 );
 	fgSizerPosSize->Add( textSizeLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -287,13 +287,13 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	fieldEditBoxSizer->Add( fgSizerPosSize, 1, wxEXPAND|wxTOP, 5 );
 	
 	
-	fieldsSizer->Add( fieldEditBoxSizer, 2, wxEXPAND, 5 );
+	fieldsSizer->Add( fieldEditBoxSizer, 0, wxEXPAND, 5 );
 	
 	
 	upperSizer->Add( fieldsSizer, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	mainSizer->Add( upperSizer, 1, wxEXPAND, 5 );
+	mainSizer->Add( upperSizer, 0, wxEXPAND, 5 );
 	
 	stdDialogButtonSizer = new wxStdDialogButtonSizer();
 	stdDialogButtonSizerOK = new wxButton( this, wxID_OK );

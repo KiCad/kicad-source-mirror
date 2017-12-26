@@ -41,10 +41,10 @@
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
-            <property name="minimum_size">600,150</property>
+            <property name="minimum_size">-1,-1</property>
             <property name="name">DLG_3D_PATH_CONFIG_BASE</property>
             <property name="pos"></property>
-            <property name="size">619,319</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">3D Search Path Configuration</property>
@@ -100,12 +100,12 @@
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
                         <property name="name">bSizer5</property>
-                        <property name="orient">wxHORIZONTAL</property>
+                        <property name="orient">wxVERTICAL</property>
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALL</property>
-                            <property name="proportion">0</property>
+                            <property name="flag">wxALL|wxEXPAND</property>
+                            <property name="proportion">1</property>
                             <object class="wxGrid" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -130,10 +130,10 @@
                                 <property name="close_button">1</property>
                                 <property name="col_label_horiz_alignment">wxALIGN_CENTRE</property>
                                 <property name="col_label_size">30</property>
-                                <property name="col_label_values">&quot;Env Var&quot; &quot;Path&quot;</property>
+                                <property name="col_label_values">&quot;Name&quot; &quot;Path&quot;</property>
                                 <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
                                 <property name="cols">2</property>
-                                <property name="column_sizes"></property>
+                                <property name="column_sizes">150,300</property>
                                 <property name="context_help"></property>
                                 <property name="context_menu">1</property>
                                 <property name="default_pane">0</property>
@@ -164,7 +164,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size"></property>
+                                <property name="minimum_size">250,100</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_EnvVars</property>
                                 <property name="pane_border">1</property>
@@ -179,7 +179,7 @@
                                 <property name="row_label_values"></property>
                                 <property name="row_label_vert_alignment">wxALIGN_CENTRE</property>
                                 <property name="row_sizes"></property>
-                                <property name="rows">0</property>
+                                <property name="rows">1</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
                                 <property name="subclass"></property>
@@ -247,17 +247,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxEXPAND</property>
-                            <property name="proportion">1</property>
-                            <object class="spacer" expanded="1">
-                                <property name="height">0</property>
-                                <property name="permission">protected</property>
-                                <property name="width">0</property>
-                            </object>
-                        </object>
-                        <object class="sizeritem" expanded="1">
-                            <property name="border">5</property>
-                            <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+                            <property name="flag">wxALIGN_CENTER|wxALL</property>
                             <property name="proportion">0</property>
                             <object class="wxButton" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -288,7 +278,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Config Env</property>
+                                <property name="label">Configure Environment Variables</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -497,7 +487,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size">-1,-1</property>
+                                <property name="minimum_size">-1,150</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_Aliases</property>
                                 <property name="pane_border">1</property>
@@ -1026,7 +1016,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxALIGN_CENTER|wxALIGN_RIGHT|wxALL</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">0</property>
                     <object class="wxStdDialogButtonSizer" expanded="1">
                         <property name="Apply">0</property>

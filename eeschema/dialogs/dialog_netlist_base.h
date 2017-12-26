@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_NETLIST_BASE_H__
@@ -11,8 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
-
 #include "dialog_shim.h"
 #include <wx/gdicmn.h>
 #include <wx/notebook.h>
@@ -75,7 +73,7 @@ class NETLIST_DIALOG_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		NETLIST_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Netlist"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 404,334 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		NETLIST_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Netlist"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~NETLIST_DIALOG_BASE();
 	
 };
@@ -116,7 +114,7 @@ class NETLIST_DIALOG_ADD_PLUGIN_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		NETLIST_DIALOG_ADD_PLUGIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plugins:"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 312,144 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		NETLIST_DIALOG_ADD_PLUGIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Plugin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~NETLIST_DIALOG_ADD_PLUGIN_BASE();
 	
 };

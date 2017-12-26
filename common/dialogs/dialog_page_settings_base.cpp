@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_page_settings_base.h"
@@ -64,7 +64,14 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizercustHeight->Add( m_staticTextHeight, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_TextUserSizeY = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_LEFT );
-	m_TextUserSizeY->SetMaxLength( 6 ); 
+	#ifdef __WXGTK__
+	if ( !m_TextUserSizeY->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_TextUserSizeY->SetMaxLength( 6 );
+	}
+	#else
+	m_TextUserSizeY->SetMaxLength( 6 );
+	#endif
 	m_TextUserSizeY->SetToolTip( _("Custom paper height.") );
 	
 	bSizercustHeight->Add( m_TextUserSizeY, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -80,7 +87,14 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizercustWidth->Add( m_staticTextWidth, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_TextUserSizeX = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_LEFT );
-	m_TextUserSizeX->SetMaxLength( 6 ); 
+	#ifdef __WXGTK__
+	if ( !m_TextUserSizeX->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_TextUserSizeX->SetMaxLength( 6 );
+	}
+	#else
+	m_TextUserSizeX->SetMaxLength( 6 );
+	#endif
 	m_TextUserSizeX->SetToolTip( _("Custom paper width.") );
 	
 	bSizercustWidth->Add( m_TextUserSizeX, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -145,7 +159,6 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizerissuedate = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_TextDate = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_TextDate->SetMaxLength( 0 ); 
 	m_TextDate->SetMinSize( wxSize( 100,-1 ) );
 	
 	bSizerissuedate->Add( m_TextDate, 3, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
@@ -176,7 +189,6 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_TextRevision = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_TextRevision->SetMaxLength( 0 ); 
 	m_TextRevision->SetMinSize( wxSize( 100,-1 ) );
 	
 	bSizer9->Add( m_TextRevision, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
@@ -201,7 +213,6 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizer12 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_TextTitle = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_TextTitle->SetMaxLength( 0 ); 
 	m_TextTitle->SetMinSize( wxSize( 360,-1 ) );
 	
 	bSizer12->Add( m_TextTitle, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
@@ -226,7 +237,6 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_TextCompany = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_TextCompany->SetMaxLength( 0 ); 
 	m_TextCompany->SetMinSize( wxSize( 360,-1 ) );
 	
 	bSizer14->Add( m_TextCompany, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
@@ -251,7 +261,6 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizercmt1 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_TextComment1 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_TextComment1->SetMaxLength( 0 ); 
 	m_TextComment1->SetMinSize( wxSize( 360,-1 ) );
 	
 	bSizercmt1->Add( m_TextComment1, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
@@ -276,7 +285,6 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizercmt2 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_TextComment2 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_TextComment2->SetMaxLength( 0 ); 
 	m_TextComment2->SetMinSize( wxSize( 360,-1 ) );
 	
 	bSizercmt2->Add( m_TextComment2, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
@@ -301,7 +309,6 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizercmt3 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_TextComment3 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_TextComment3->SetMaxLength( 0 ); 
 	m_TextComment3->SetMinSize( wxSize( 360,-1 ) );
 	
 	bSizercmt3->Add( m_TextComment3, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
@@ -326,7 +333,6 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizercmt4 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_TextComment4 = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_TextComment4->SetMaxLength( 0 ); 
 	m_TextComment4->SetMinSize( wxSize( 360,-1 ) );
 	
 	bSizercmt4->Add( m_TextComment4, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
@@ -380,6 +386,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	// Connect Events
 	m_paperSizeComboBox->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnPaperSizeChoice ), NULL, this );

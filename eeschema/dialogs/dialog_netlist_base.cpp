@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_netlist_base.h"
@@ -35,7 +35,7 @@ NETLIST_DIALOG_BASE::NETLIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, const
 	bRightSizer->Add( m_NoteBook, 1, wxEXPAND | wxALL, 5 );
 	
 	
-	bUpperSizer->Add( bRightSizer, 1, wxEXPAND, 5 );
+	bUpperSizer->Add( bRightSizer, 2, wxEXPAND, 5 );
 	
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
@@ -62,7 +62,7 @@ NETLIST_DIALOG_BASE::NETLIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, const
 	bLeftSizer->Add( m_cbUseDefaultNetlistName, 0, wxALL, 5 );
 	
 	
-	bUpperSizer->Add( bLeftSizer, 0, wxEXPAND, 5 );
+	bUpperSizer->Add( bLeftSizer, 1, wxEXPAND, 5 );
 	
 	
 	bMainSizer->Add( bUpperSizer, 1, wxEXPAND, 5 );
@@ -77,6 +77,7 @@ NETLIST_DIALOG_BASE::NETLIST_DIALOG_BASE( wxWindow* parent, wxWindowID id, const
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 }
@@ -139,6 +140,7 @@ NETLIST_DIALOG_ADD_PLUGIN_BASE::NETLIST_DIALOG_ADD_PLUGIN_BASE( wxWindow* parent
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 }

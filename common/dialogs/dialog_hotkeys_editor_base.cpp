@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_hotkeys_editor_base.h"
@@ -20,6 +20,8 @@ HOTKEYS_EDITOR_DIALOG_BASE::HOTKEYS_EDITOR_DIALOG_BASE( wxWindow* parent, wxWind
 	m_mainSizer->Add( m_staticText1, 0, wxALL|wxEXPAND, 5 );
 	
 	m_panelHotkeys = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_panelHotkeys->SetMinSize( wxSize( -1,350 ) );
+	
 	m_mainSizer->Add( m_panelHotkeys, 1, wxEXPAND | wxALL, 5 );
 	
 	wxBoxSizer* b_buttonsSizer;
@@ -49,6 +51,7 @@ HOTKEYS_EDITOR_DIALOG_BASE::HOTKEYS_EDITOR_DIALOG_BASE( wxWindow* parent, wxWind
 	
 	this->SetSizer( m_mainSizer );
 	this->Layout();
+	m_mainSizer->Fit( this );
 	
 	// Connect Events
 	m_resetButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( HOTKEYS_EDITOR_DIALOG_BASE::ResetClicked ), NULL, this );

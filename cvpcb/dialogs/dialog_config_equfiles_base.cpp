@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  1 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_config_equfiles_base.h"
@@ -17,7 +17,7 @@ DIALOG_CONFIG_EQUFILES_BASE::DIALOG_CONFIG_EQUFILES_BASE( wxWindow* parent, wxWi
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbEquivChoiceSizer;
-	sbEquivChoiceSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Footprint/Component equ files (.equ files)") ), wxHORIZONTAL );
+	sbEquivChoiceSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Symbol Footprint Association Files (.equ)") ), wxHORIZONTAL );
 	
 	wxBoxSizer* bSizerFlist;
 	bSizerFlist = new wxBoxSizer( wxVERTICAL );
@@ -25,7 +25,7 @@ DIALOG_CONFIG_EQUFILES_BASE::DIALOG_CONFIG_EQUFILES_BASE( wxWindow* parent, wxWi
 	m_ListEquiv = new wxListBox( sbEquivChoiceSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_HSCROLL|wxLB_NEEDED_SB|wxLB_SINGLE ); 
 	m_ListEquiv->SetMinSize( wxSize( 350,-1 ) );
 	
-	bSizerFlist->Add( m_ListEquiv, 1, wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bSizerFlist->Add( m_ListEquiv, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	sbEquivChoiceSizer->Add( bSizerFlist, 1, wxEXPAND, 5 );
@@ -45,8 +45,8 @@ DIALOG_CONFIG_EQUFILES_BASE::DIALOG_CONFIG_EQUFILES_BASE( wxWindow* parent, wxWi
 	m_buttonMoveDown = new wxButton( sbEquivChoiceSizer->GetStaticBox(), ID_EQU_DOWN, _("Move Down"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_buttonMoveDown, 0, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_buttonEdit = new wxButton( sbEquivChoiceSizer->GetStaticBox(), wxID_ANY, _("Edit Equ File"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_buttonEdit, 0, wxALL|wxEXPAND, 5 );
+	m_buttonEdit = new wxButton( sbEquivChoiceSizer->GetStaticBox(), wxID_ANY, _("Edit File"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerButtons->Add( m_buttonEdit, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	sbEquivChoiceSizer->Add( bSizerButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -120,6 +120,7 @@ DIALOG_CONFIG_EQUFILES_BASE::DIALOG_CONFIG_EQUFILES_BASE( wxWindow* parent, wxWi
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

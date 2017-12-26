@@ -181,7 +181,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( viewMenu,
                  ID_LIBEDIT_SHOW_HIDE_SEARCH_TREE,
-                 _( "&Search tree" ),
+                 _( "&Search Tree" ),
                  _( "Toggles the search tree visibility" ),
                  KiBitmap( search_tree_xpm ) );
 
@@ -190,29 +190,29 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( partMenu,
                  ID_LIBEDIT_NEW_PART,
-                 _( "&New Part" ),
-                 _( "Create a new empty part" ),
+                 _( "&New Symbol" ),
+                 _( "Create a new empty symbol" ),
                  KiBitmap( new_component_xpm ) );
 
-    text = AddHotkeyName( _( "&Save Part" ), g_Libedit_Hokeys_Descr, HK_SAVE_PART );
+    text = AddHotkeyName( _( "&Save Symbol" ), g_Libedit_Hokeys_Descr, HK_SAVE_PART );
     AddMenuItem( partMenu,
                  ID_LIBEDIT_SAVE_PART,
                  text,
-                 _( "Saves the current part to the library" ),
+                 _( "Saves the current symbol to the library" ),
                  KiBitmap( save_part_xpm ) );
 
     partMenu->AppendSeparator();
 
     AddMenuItem( partMenu,
                  ID_LIBEDIT_IMPORT_PART,
-                 _( "&Import Part" ),
-                 _( "Import a part to the current library" ),
+                 _( "&Import Symbol" ),
+                 _( "Import a symbol to the current library" ),
                  KiBitmap( import_part_xpm ) );
 
     AddMenuItem( partMenu,
                  ID_LIBEDIT_EXPORT_PART,
-                 _( "&Export Part" ),
-                 _( "Export the current part" ),
+                 _( "&Export Symbol" ),
+                 _( "Export the current symbol" ),
                  KiBitmap( export_part_xpm ) );
 
     partMenu->AppendSeparator();
@@ -220,7 +220,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( partMenu,
                  ID_LIBEDIT_GET_FRAME_EDIT_PART,
                  _( "&Properties" ),
-                 _( "Edit part properties" ),
+                 _( "Edit symbol properties" ),
                  KiBitmap( part_properties_xpm ) );
 
     AddMenuItem( partMenu,
@@ -302,7 +302,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( preferencesMenu,
                  wxID_PREFERENCES,
                  _( "General &Options" ),
-                 _( "Set Part Editor default values and options" ),
+                 _( "Set Symbol Editor default values and options" ),
                  KiBitmap( preference_xpm ) );
 
     // Language submenu
@@ -352,7 +352,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
-    menuBar->Append( partMenu, _( "P&art" ) );
+    menuBar->Append( partMenu, _( "&Symbol" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( preferencesMenu, _( "P&references" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );

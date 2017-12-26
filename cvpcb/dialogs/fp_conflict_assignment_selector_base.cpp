@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "fp_conflict_assignment_selector_base.h"
@@ -16,7 +16,7 @@ DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR_BASE::DIALOG_FP_CONFLICT_ASSIGNMENT_SELEC
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextInfo = new wxStaticText( this, wxID_ANY, wxT("Footprint assignments from schematic netlist and from .cmp file are conflicting\nPlease choose the assignment."), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
+	m_staticTextInfo = new wxStaticText( this, wxID_ANY, wxT("Footprint assignments from schematic netlist and symbol footprint association file (.cmp) are conflicting.\n\nPlease choose the assignment."), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_staticTextInfo->Wrap( -1 );
 	bSizerMain->Add( m_staticTextInfo, 0, wxALL|wxEXPAND, 5 );
 	
@@ -30,11 +30,12 @@ DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR_BASE::DIALOG_FP_CONFLICT_ASSIGNMENT_SELEC
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bSizerMain->Add( m_sdbSizer, 0, wxALIGN_RIGHT, 5 );
+	bSizerMain->Add( m_sdbSizer, 0, wxALIGN_RIGHT|wxALL, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

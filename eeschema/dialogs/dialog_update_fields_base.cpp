@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_update_fields_base.h"
@@ -21,7 +21,7 @@ DIALOG_UPDATE_FIELDS_BASE::DIALOG_UPDATE_FIELDS_BASE( wxWindow* parent, wxWindow
 	m_mainSizer->Add( m_infoLabel, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxArrayString m_fieldsBoxChoices;
-	m_fieldsBox = new wxCheckListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_fieldsBoxChoices, 0 );
+	m_fieldsBox = new wxCheckListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_fieldsBoxChoices, wxLB_NEEDED_SB );
 	m_mainSizer->Add( m_fieldsBox, 1, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* m_selBtnSizer;
@@ -51,11 +51,12 @@ DIALOG_UPDATE_FIELDS_BASE::DIALOG_UPDATE_FIELDS_BASE( wxWindow* parent, wxWindow
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	m_mainSizer->Add( m_sdbSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_mainSizer->Add( m_sdbSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	this->SetSizer( m_mainSizer );
 	this->Layout();
+	m_mainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

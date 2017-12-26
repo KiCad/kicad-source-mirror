@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_3D_view_option_base.h"
@@ -91,10 +91,10 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
 	
 	m_buttonShowAll = new wxButton( this, wxID_ANY, _("Show All"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_buttonShowAll, 0, wxALL, 5 );
+	bSizerRight->Add( m_buttonShowAll, 0, wxALL|wxEXPAND, 5 );
 	
 	m_buttonShowNone = new wxButton( this, wxID_ANY, _("Show None"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_buttonShowNone, 0, wxALL, 5 );
+	bSizerRight->Add( m_buttonShowNone, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizerLeft->Add( bSizerRight, 0, wxALIGN_CENTER_VERTICAL, 5 );

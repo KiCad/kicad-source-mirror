@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 28 2015)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_lib_edit_pin_table_base.h"
@@ -17,7 +17,7 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	top_sizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_Pins = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxDV_HORIZ_RULES|wxDV_MULTIPLE|wxDV_ROW_LINES|wxDV_VERT_RULES );
-	m_Pins->SetMinSize( wxSize( 400,400 ) );
+	m_Pins->SetMinSize( wxSize( 400,300 ) );
 	
 	top_sizer->Add( m_Pins, 1, wxALL|wxEXPAND, 5 );
 	
@@ -34,16 +34,17 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	
 	this->SetSizer( top_sizer );
 	this->Layout();
+	top_sizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	this->Connect( wxID_ANY, wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, wxDataViewEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnColumnHeaderRightClicked ) );
+	m_Pins->Connect( wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, wxDataViewEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnColumnHeaderRightClicked ), NULL, this );
 }
 
 DIALOG_LIB_EDIT_PIN_TABLE_BASE::~DIALOG_LIB_EDIT_PIN_TABLE_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, wxDataViewEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnColumnHeaderRightClicked ) );
+	m_Pins->Disconnect( wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, wxDataViewEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnColumnHeaderRightClicked ), NULL, this );
 	
 }

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_edit_label_base.h"
@@ -26,7 +26,7 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	m_staticText1->Wrap( -1 );
 	m_staticText1->SetToolTip( _("Enter the text to be used within the schematic") );
 	
-	m_textControlSizer->Add( m_staticText1, 0, wxRIGHT, 3 );
+	m_textControlSizer->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
 	
 	wxBoxSizer* bSizeText;
 	bSizeText = new wxBoxSizer( wxVERTICAL );
@@ -52,7 +52,7 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	bSizeCtrlSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_TextSize = new wxTextCtrl( this, wxID_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizeCtrlSizer->Add( m_TextSize, 0, wxEXPAND|wxLEFT|wxRIGHT, 3 );
+	bSizeCtrlSizer->Add( m_TextSize, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 3 );
 	
 	m_staticSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticSizeUnits->Wrap( -1 );
@@ -73,10 +73,10 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	m_TextOrient->SetSelection( 0 );
 	m_OptionsSizer->Add( m_TextOrient, 1, wxRIGHT|wxTOP, 3 );
 	
-	wxString m_TextStyleChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold Italic") };
+	wxString m_TextStyleChoices[] = { _("Normal"), _("Italic"), _("Bold"), _("Bold and italic") };
 	int m_TextStyleNChoices = sizeof( m_TextStyleChoices ) / sizeof( wxString );
 	m_TextStyle = new wxRadioBox( this, wxID_ANY, _("St&yle"), wxDefaultPosition, wxDefaultSize, m_TextStyleNChoices, m_TextStyleChoices, 1, wxRA_SPECIFY_COLS );
-	m_TextStyle->SetSelection( 0 );
+	m_TextStyle->SetSelection( 3 );
 	m_OptionsSizer->Add( m_TextStyle, 1, wxLEFT|wxRIGHT|wxTOP, 3 );
 	
 	wxString m_TextShapeChoices[] = { _("Input"), _("Output"), _("Bidirectional"), _("Tri-State"), _("Passive") };
@@ -95,7 +95,7 @@ DIALOG_LABEL_EDITOR_BASE::DIALOG_LABEL_EDITOR_BASE( wxWindow* parent, wxWindowID
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 	
-	bMainSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 12 );
+	bMainSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bMainSizer );

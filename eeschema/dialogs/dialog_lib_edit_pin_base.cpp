@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "pin_shape_combobox.h"
@@ -80,7 +80,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	wxStaticBoxSizer* sbSizerPinSharing;
 	sbSizerPinSharing = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Sharing") ), wxVERTICAL );
 	
-	m_checkApplyToAllParts = new wxCheckBox( sbSizerPinSharing->GetStaticBox(), wxID_ANY, _("Common to all &units in component"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkApplyToAllParts = new wxCheckBox( sbSizerPinSharing->GetStaticBox(), wxID_ANY, _("Common to all &units in symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerPinSharing->Add( m_checkApplyToAllParts, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_checkApplyToAllConversions = new wxCheckBox( sbSizerPinSharing->GetStaticBox(), wxID_ANY, _("Common to all body &styles (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -198,6 +198,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	
 	this->SetSizer( mainSizer );
 	this->Layout();
+	mainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May 10 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_display_options_base.h"
@@ -20,19 +20,19 @@ DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( 
 	bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxStaticBoxSizer* sbSizerDrawMode;
-	sbSizerDrawMode = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Draw options") ), wxVERTICAL );
+	sbSizerDrawMode = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Draw Options") ), wxVERTICAL );
 	
 	m_EdgesDisplayOption = new wxCheckBox( sbSizerDrawMode->GetStaticBox(), wxID_ANY, _("Graphic items sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerDrawMode->Add( m_EdgesDisplayOption, 0, wxALL, 5 );
 	
 	m_TextDisplayOption = new wxCheckBox( sbSizerDrawMode->GetStaticBox(), wxID_ANY, _("Texts sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerDrawMode->Add( m_TextDisplayOption, 0, wxALL, 5 );
+	sbSizerDrawMode->Add( m_TextDisplayOption, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_ShowPadSketch = new wxCheckBox( sbSizerDrawMode->GetStaticBox(), ID_PADFILL_OPT, _("Pad sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerDrawMode->Add( m_ShowPadSketch, 0, wxEXPAND|wxALL, 5 );
+	sbSizerDrawMode->Add( m_ShowPadSketch, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_ShowPadNum = new wxCheckBox( sbSizerDrawMode->GetStaticBox(), wxID_ANY, _("Show pad &number"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerDrawMode->Add( m_ShowPadNum, 0, wxALL|wxEXPAND, 5 );
+	sbSizerDrawMode->Add( m_ShowPadNum, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	bUpperSizer->Add( sbSizerDrawMode, 1, wxEXPAND|wxALL, 5 );
@@ -46,7 +46,7 @@ DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( 
 	sbSizerViewOpt->Add( m_IsZoomNoCenter, 0, wxEXPAND|wxALL, 5 );
 	
 	
-	bUpperSizer->Add( sbSizerViewOpt, 1, wxALL|wxEXPAND, 5 );
+	bUpperSizer->Add( sbSizerViewOpt, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizerMain->Add( bUpperSizer, 1, wxEXPAND, 5 );
@@ -68,6 +68,7 @@ DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( 
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	// Connect Events
 	m_sdbSizer1Apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE::OnApplyClick ), NULL, this );

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_get_component_base.h"
@@ -27,7 +27,6 @@ DIALOG_GET_COMPONENT_BASE::DIALOG_GET_COMPONENT_BASE( wxWindow* parent, wxWindow
 	bSizerLeft->Add( m_staticTextName, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_textCmpNameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textCmpNameCtrl->SetMaxLength( 0 ); 
 	bSizerLeft->Add( m_textCmpNameCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticTextHistory = new wxStaticText( this, wxID_ANY, _("History list:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -75,6 +74,7 @@ DIALOG_GET_COMPONENT_BASE::DIALOG_GET_COMPONENT_BASE( wxWindow* parent, wxWindow
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

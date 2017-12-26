@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 22 2017)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "panel_prev_3d_base.h"
@@ -56,10 +56,10 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	fgSizerScale->Add( m_spinZscale, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 	
 	
-	vbScale->Add( fgSizerScale, 1, wxEXPAND, 5 );
+	vbScale->Add( fgSizerScale, 0, wxEXPAND, 5 );
 	
 	
-	bSizerLeft->Add( vbScale, 0, wxEXPAND, 5 );
+	bSizerLeft->Add( vbScale, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* vbRotate;
 	vbRotate = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Rotation (degrees)") ), wxVERTICAL );
@@ -124,10 +124,10 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	fgSizerRotate->Add( m_spinZrot, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 	
 	
-	vbRotate->Add( fgSizerRotate, 1, wxEXPAND, 5 );
+	vbRotate->Add( fgSizerRotate, 0, wxEXPAND, 5 );
 	
 	
-	bSizerLeft->Add( vbRotate, 0, wxEXPAND, 5 );
+	bSizerLeft->Add( vbRotate, 0, wxALL|wxEXPAND, 5 );
 	
 	vbOffset = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Offset") ), wxVERTICAL );
 	
@@ -167,10 +167,10 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	fgSizerOffset->Add( m_spinZoffset, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 	
 	
-	vbOffset->Add( fgSizerOffset, 1, wxEXPAND, 5 );
+	vbOffset->Add( fgSizerOffset, 0, wxEXPAND, 5 );
 	
 	
-	bSizerLeft->Add( vbOffset, 0, wxEXPAND, 5 );
+	bSizerLeft->Add( vbOffset, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizermain->Add( bSizerLeft, 0, wxEXPAND, 5 );
@@ -232,7 +232,7 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	bSizer3DButtons->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	
-	bSizerRight->Add( bSizer3DButtons, 0, wxEXPAND, 5 );
+	bSizerRight->Add( bSizer3DButtons, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizermain->Add( bSizerRight, 1, wxEXPAND, 5 );
@@ -240,6 +240,7 @@ PANEL_PREV_3D_BASE::PANEL_PREV_3D_BASE( wxWindow* parent, wxWindowID id, const w
 	
 	this->SetSizer( bSizermain );
 	this->Layout();
+	bSizermain->Fit( this );
 	
 	// Connect Events
 	xscale->Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( PANEL_PREV_3D_BASE::onMouseWheelScale ), NULL, this );

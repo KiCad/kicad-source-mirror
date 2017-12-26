@@ -295,11 +295,10 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
     UpperBoxSizer->Add( m_RightOptionsBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
     wxStaticText* text = new wxStaticText( this, -1, _( "Options:" ) );
-    m_LeftBoxSizer->Add( text, 0, wxGROW | wxALL, 5 );
+    m_LeftBoxSizer->Add( text, 0, wxGROW | wxBOTTOM | wxRIGHT, 5 );
 
-    m_IsCurrentFormat = new wxCheckBox( this, ID_CURRENT_FORMAT_IS_DEFAULT,
-                                        _( "Default format" ) );
-    m_LeftBoxSizer->Add( m_IsCurrentFormat, 0, wxGROW | wxALL, 5 );
+    m_IsCurrentFormat = new wxCheckBox( this, ID_CURRENT_FORMAT_IS_DEFAULT, _( "Default format" ) );
+    m_LeftBoxSizer->Add( m_IsCurrentFormat, 0, wxGROW | wxBOTTOM | wxRIGHT, 5 );
     m_IsCurrentFormat->SetValue( selected );
 
     if( selected )
@@ -399,10 +398,11 @@ void NETLIST_DIALOG::InstallPageSpice()
     page->m_SpiceAjustPassiveValues->SetToolTip(
                      _( "Reformat passive symbol values e.g. 1M -> 1Meg" ) );
     page->m_SpiceAjustPassiveValues->SetValue( m_Parent->GetSpiceAjustPassiveValues() );
-    page->m_LeftBoxSizer->Add( page->m_SpiceAjustPassiveValues, 0, wxGROW | wxALL, 5 );
+    page->m_LeftBoxSizer->Add( page->m_SpiceAjustPassiveValues, 0,
+                               wxGROW | wxBOTTOM | wxRIGHT, 5 );
 
     page->m_LowBoxSizer->Add( new wxStaticText( page, -1, _( "Simulator command:" ) ), 0,
-                              wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
+                              wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
     page->m_CommandStringCtrl = new wxTextCtrl( page, -1, m_Parent->GetSimulatorCommand(),
                                                 wxDefaultPosition, wxDefaultSize );
@@ -415,7 +415,7 @@ void NETLIST_DIALOG::InstallPageSpice()
 
     // Add buttons
     Button = new wxButton( page, ID_RUN_SIMULATOR, _( "&Run Simulator" ) );
-    page->m_RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
+    page->m_LowBoxSizer->Add( Button, 0, wxGROW | wxBOTTOM | wxLEFT | wxRIGHT, 5 );
 }
 
 
