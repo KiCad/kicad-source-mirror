@@ -58,6 +58,7 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
         const wxPoint& pos, const wxSize& size, long style, const wxString& name ) :
     wxDialog( aParent, id, title, pos, size, style, name ),
     KIWAY_HOLDER( 0 ),
+    m_fixupsRun( false ),
     m_qmodal_loop( 0 ),
     m_qmodal_showing( false ),
     m_qmodal_parent_disabler( 0 )
@@ -85,9 +86,7 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
         Pgm().App().SetTopWindow( parent_kiwayplayer );
 #endif
 
-#if DLGSHIM_USE_SETFOCUS
-    Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SHIM::onInit ) );
-#endif
+    Connect( wxEVT_PAINT, wxPaintEventHandler( DIALOG_SHIM::OnPaint ) );
 }
 
 
@@ -112,20 +111,6 @@ void DIALOG_SHIM::FinishDialogSettings()
 
     // the default position, when calling the first time the dlg
     Center();
-}
-
-void DIALOG_SHIM::FixOSXCancelButtonIssue()
-{
-#ifdef  __WXMAC__
-    // A ugly hack to fix an issue on OSX: ctrl+c closes the dialog instead of
-    // copying a text if a  button with wxID_CANCEL is used in a wxStdDialogButtonSizer
-    // created by wxFormBuilder: the label is &Cancel, and this accelerator key has priority
-    // to copy text standard accelerator, and the dlg is closed when trying to copy text
-    wxButton* button = dynamic_cast< wxButton* > ( wxWindow::FindWindowById( wxID_CANCEL, this ) );
-
-    if( button )
-        button->SetLabel( _( "Cancel" ) );
-#endif
 }
 
 
@@ -175,8 +160,6 @@ bool DIALOG_SHIM::Show( bool show )
         ret = wxDialog::Show( show );
     }
 
-    FixOSXCancelButtonIssue();
-
     return ret;
 }
 
@@ -194,56 +177,91 @@ bool DIALOG_SHIM::Enable( bool enable )
 }
 
 
-#if DLGSHIM_USE_SETFOCUS
-
-static bool findWindowRecursively( const wxWindowList& children, const wxWindow* wanted )
+// Traverse all items in the dialog.  If selectTextInTextCtrls, do a SelectAll()
+// in each so that tab followed by typing will replace the existing value.
+// Also collects the firstTextCtrl and the item with focus (if any).
+static void recursiveDescent( wxWindowList& children, const bool selectTextInTextCtrls,
+                              wxWindow* & firstTextCtrl, wxWindow* & windowWithFocus )
 {
-    for( wxWindowList::const_iterator it = children.begin();  it != children.end();  ++it )
+    for( wxWindowList::iterator it = children.begin();  it != children.end();  ++it )
     {
-        const wxWindow* child = *it;
+        wxWindow* child = *it;
 
-        if( wanted == child )
-            return true;
-        else
+        if( child->HasFocus() )
+            windowWithFocus = child;
+
+        wxTextCtrl* childTextCtrl = dynamic_cast<wxTextCtrl*>( child );
+        if( childTextCtrl )
         {
-            if( findWindowRecursively( child->GetChildren(), wanted ) )
-                return true;
+            if( !firstTextCtrl && childTextCtrl->IsEnabled() && childTextCtrl->IsEditable() )
+                firstTextCtrl = childTextCtrl;
+
+            if( selectTextInTextCtrls )
+            {
+                wxTextEntry* asTextEntry = dynamic_cast<wxTextEntry*>( childTextCtrl );
+                // Respect an existing selection
+                if( asTextEntry->GetStringSelection().IsEmpty() )
+                    asTextEntry->SelectAll();
+            }
         }
-    }
 
-    return false;
+        recursiveDescent( child->GetChildren(), selectTextInTextCtrls, firstTextCtrl,
+                          windowWithFocus );
+    }
 }
 
-
-static bool findWindowRecursively( const wxWindow* topmost, const wxWindow* wanted )
+#ifdef  __WXMAC__
+static void fixOSXCancelButtonIssue( wxWindow *aWindow )
 {
-    // wanted may be NULL and that is ok.
+    // A ugly hack to fix an issue on OSX: cmd+c closes the dialog instead of
+    // copying the text if a button with wxID_CANCEL is used in a
+    // wxStdDialogButtonSizer created by wxFormBuilder: the label is &Cancel, and
+    // this accelerator key has priority over the standard copy accelerator.
+    wxButton* button = dynamic_cast<wxButton*>( wxWindow::FindWindowById( wxID_CANCEL, aWindow ) );
 
-    if( wanted == topmost )
-        return true;
-
-    return findWindowRecursively( topmost->GetChildren(), wanted );
-}
-
-
-/// Set the focus if it is not already set in a derived constructor to a specific control.
-void DIALOG_SHIM::onInit( wxInitDialogEvent& aEvent )
-{
-    wxWindow* focusWnd = wxWindow::FindFocus();
-
-    // If focusWnd is not already this window or a child of it, then SetFocus().
-    // Otherwise the derived class's constructor SetFocus() already to a specific
-    // child control.
-
-    if( !findWindowRecursively( this, focusWnd ) )
-    {
-        // Linux wxGTK needs this to allow the ESCAPE key to close a wxDialog window.
-        SetFocus();
-    }
-
-    aEvent.Skip();     // derived class's handler should be called too
+    if( button )
+        button->SetLabel( _( "Cancel" ) );
 }
 #endif
+
+
+void DIALOG_SHIM::OnPaint( wxPaintEvent &event )
+{
+    if( !m_fixupsRun )
+    {
+#if DLGSHIM_SELECT_ALL_IN_TEXT_CONTROLS
+        const bool selectAllInTextCtrls = true;
+#else
+        const bool selectAllInTextCtrls = false;
+#endif
+        wxWindow* firstTextCtrl = NULL;
+        wxWindow* windowWithFocus = NULL;
+
+        recursiveDescent( GetChildren(), selectAllInTextCtrls, firstTextCtrl,
+                          windowWithFocus );
+
+#if DLGSHIM_USE_SETFOCUS
+        // While it would be nice to honour any focus already set (which was
+        // recorded in windowWithFocus), the reality is that it's currently wrong
+        // far more often than it's right.
+        // So just focus on the first text control if we have one; otherwise the
+        // focus on the dialog itself, which will at least allow esc, return, etc.
+        // to function.
+        if( firstTextCtrl )
+            firstTextCtrl->SetFocus();
+        else
+            SetFocus();
+#endif
+
+#ifdef  __WXMAC__
+        fixOSXCancelButtonIssue( this );
+#endif
+
+        m_fixupsRun = true;
+    }
+
+    event.Skip();
+}
 
 
 /*
