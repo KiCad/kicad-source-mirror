@@ -1050,15 +1050,15 @@ msgstr "Hinein zoomen"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1209
 msgid "Toggle 3D models with type Through Hole"
-msgstr "Anzeige 3D-Modelle vom Typ 'durch eine Bohrung'"
+msgstr "3D-Modelle für Bauteile in Durchsteckmontage"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1210
 msgid "Toggle 3D models with type Surface Mount"
-msgstr "Anzeige 3D-Modelle vom Typ 'Surface Mount'"
+msgstr "3D-Modelle für Bauteile in Oberflächenmontage"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1211
 msgid "Toggle 3D models with type Virtual"
-msgstr "Anzeige 3D-Modelle vom Typ 'Virtuell'"
+msgstr "3D-Modelle für Bauteile als Platinenbestandteile"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1213
 msgid "Viewer 3D"
