@@ -150,6 +150,10 @@ void DIALOG_PAD_PROPERTIES::OnInitDialog( wxInitDialogEvent& event )
 {
     m_PadNumCtrl->SetFocus();
     m_PadNumCtrl->SetSelection( -1, -1 );
+
+    // Needed on some WM to be sure the pad is redrawn according to the final size
+    // of the canvas, with the right zoom factor
+    redraw();
 }
 
 
