@@ -1,5 +1,7 @@
 (fp_lib_table
   (lib (name LEDs)(type KiCad)(uri "$(KISYSMOD)/LEDs.pretty")(options "")(descr ""))
   (lib (name Housings_DIP)(type KiCad)(uri "$(KISYSMOD)/Housings_DIP.pretty")(options "")(descr ""))
-  (lib (name Crystals)(type KiCad)(uri "$(KISYSMOD)/Crystals.pretty")(options "")(descr ""))
+  (lib (name Crystal)(type KiCad)(uri "$(KISYSMOD)/Crystal.pretty")(options "")(descr ""))
+  (lib (name Connector_Dsub)(type KiCad)(uri "$(KISYSMOD)/Connector_Dsub.pretty")(options "")(descr ""))
+  (lib (name interf_u)(type KiCad)(uri "$(KIPRJMOD)/interf_u.pretty")(options "")(descr ""))
 )

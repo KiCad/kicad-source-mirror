@@ -1,5 +1,6 @@
 install( DIRECTORY
     complex_hierarchy
+    custom_pads_test
     ecc83
     electric
     flat_hierarchy
