@@ -28,20 +28,20 @@ set( GAL_SRCS
     # Common part
     basic_gal.cpp
     draw_panel_gal.cpp
-    painter.cpp
-    newstroke_font.cpp
-    worksheet_viewitem.cpp
-    origin_viewitem.cpp
     gl_context_mgr.cpp
+    newstroke_font.cpp
+    origin_viewitem.cpp
+    painter.cpp
     text_utils.cpp
+    worksheet_viewitem.cpp
+    gal/color4d.cpp
     gal/gal_display_options.cpp
     gal/graphics_abstraction_layer.cpp
+    gal/hidpi_gl_canvas.cpp
     gal/stroke_font.cpp
-    gal/color4d.cpp
+    geometry/hetriang.cpp
     view/view_controls.cpp
     view/wx_view_controls.cpp
-    geometry/hetriang.cpp
-    gal/hidpi_gl_canvas.cpp
 
     # OpenGL GAL
     gal/opengl/opengl_gal.cpp
@@ -152,36 +152,36 @@ set( COMMON_ABOUT_DLG_SRCS
 
 set( COMMON_DLG_SRCS
     dialogs/dialog_display_info_HTML_base.cpp
+    dialogs/dialog_env_var_config.cpp
+    dialogs/dialog_env_var_config_base.cpp
     dialogs/dialog_exit_base.cpp
-    dialogs/dialog_image_editor.cpp
-    dialogs/dialog_image_editor_base.cpp
     dialogs/dialog_get_component.cpp
     dialogs/dialog_get_component_base.cpp
     dialogs/dialog_hotkeys_editor.cpp
     dialogs/dialog_hotkeys_editor_base.cpp
+    dialogs/dialog_image_editor.cpp
+    dialogs/dialog_image_editor_base.cpp
     dialogs/dialog_list_selector_base.cpp
     dialogs/dialog_page_settings_base.cpp
-    dialogs/dialog_env_var_config_base.cpp
-    dialogs/dialog_env_var_config.cpp
-    dialogs/wx_html_report_panel_base.cpp
     dialogs/wx_html_report_panel.cpp
+    dialogs/wx_html_report_panel_base.cpp
     )
 
 set( COMMON_WIDGET_SRCS
-    widgets/color_swatch.cpp
-    widgets/color4Dpickerdlg_base.cpp
     widgets/color4Dpickerdlg.cpp
-    widgets/gal_options_panel.cpp
-    widgets/mathplot.cpp
-    widgets/widget_hotkey_list.cpp
-    widgets/two_column_tree_list.cpp
+    widgets/color4Dpickerdlg_base.cpp
+    widgets/color_swatch.cpp
+    widgets/footprint_choice.cpp
     widgets/footprint_preview_widget.cpp
     widgets/footprint_select_widget.cpp
-    widgets/footprint_choice.cpp
+    widgets/gal_options_panel.cpp
     widgets/indicator_icon.cpp
-    widgets/text_ctrl_eval.cpp
-    widgets/unit_binder.cpp
+    widgets/mathplot.cpp
     widgets/progress_reporter.cpp
+    widgets/text_ctrl_eval.cpp
+    widgets/two_column_tree_list.cpp
+    widgets/unit_binder.cpp
+    widgets/widget_hotkey_list.cpp
     )
 
 set( COMMON_PAGE_LAYOUT_SRCS
@@ -197,14 +197,14 @@ set( COMMON_PAGE_LAYOUT_SRCS
 set( COMMON_PREVIEW_ITEMS_SRCS
     preview_items/arc_assistant.cpp
     preview_items/arc_geom_manager.cpp
-    preview_items/centreline_rect_item.cpp
-    preview_items/preview_utils.cpp
-    preview_items/ruler_item.cpp
-    preview_items/simple_overlay_item.cpp
-    preview_items/selection_area.cpp
     preview_items/bright_box.cpp
+    preview_items/centreline_rect_item.cpp
     preview_items/polygon_geom_manager.cpp
     preview_items/polygon_item.cpp
+    preview_items/preview_utils.cpp
+    preview_items/ruler_item.cpp
+    preview_items/selection_area.cpp
+    preview_items/simple_overlay_item.cpp
     )
 
 set( COMMON_SRCS
@@ -230,17 +230,17 @@ set( COMMON_SRCS
     colors.cpp
     commit.cpp
     common.cpp
-    common_plot_functions.cpp
-    common_plotHPGL_functions.cpp
-    common_plotPS_functions.cpp
-    common_plotPDF_functions.cpp
-    common_plotGERBER_functions.cpp
     common_plotDXF_functions.cpp
+    common_plotGERBER_functions.cpp
+    common_plotHPGL_functions.cpp
+    common_plotPDF_functions.cpp
+    common_plotPS_functions.cpp
     common_plotSVG_functions.cpp
+    common_plot_functions.cpp
     config_params.cpp
     confirm.cpp
-    copy_to_clipboard.cpp
     convert_basic_shapes_to_polygon.cpp
+    copy_to_clipboard.cpp
     dialog_shim.cpp
     displlst.cpp
     draw_frame.cpp
@@ -255,17 +255,15 @@ set( COMMON_SRCS
     exceptions.cpp
     executable_names.cpp
     filter_reader.cpp
-    footprint_info.cpp
-    footprint_filter.cpp
-    hash_eda.cpp
-    lib_id.cpp
-    lib_table_keywords.cpp
 #    findkicadhelppath.cpp.notused      deprecated, use searchhelpfilefullpath.cpp
+    footprint_filter.cpp
+    footprint_info.cpp
     gbr_metadata.cpp
     gestfich.cpp
     getrunningmicrosecs.cpp
-    grid_tricks.cpp
     gr_basic.cpp
+    grid_tricks.cpp
+    hash_eda.cpp
     hotkeys_basic.cpp
     html_messagebox.cpp
     incremental_text_ctrl.cpp
@@ -274,7 +272,9 @@ set( COMMON_SRCS
     kiway_express.cpp
     kiway_holder.cpp
     kiway_player.cpp
+    lib_id.cpp
     lib_table_base.cpp
+    lib_table_keywords.cpp
     lockfile.cpp
     md5_hash.cpp
     msgpanel.cpp
@@ -286,8 +286,8 @@ set( COMMON_SRCS
     ptree.cpp
     reporter.cpp
     richio.cpp
-    searchhelpfilefullpath.cpp
     search_stack.cpp
+    searchhelpfilefullpath.cpp
     selcolor.cpp
     settings.cpp
     systemdirsappend.cpp
@@ -296,9 +296,9 @@ set( COMMON_SRCS
     validators.cpp
     wildcards_and_files_ext.cpp
     worksheet.cpp
-    wxwineda.cpp
-    wxdataviewctrl_helpers.cpp
     wx_status_popup.cpp
+    wxdataviewctrl_helpers.cpp
+    wxwineda.cpp
     xnode.cpp
     zoom.cpp
     )
@@ -328,30 +328,30 @@ set( COMMON_SRCS
 
     math/math_util.cpp
 
+    tool/action_manager.cpp
+    tool/actions.cpp
+    tool/common_tools.cpp
+    tool/conditional_menu.cpp
+    tool/context_menu.cpp
+    tool/grid_menu.cpp
+    tool/selection_conditions.cpp
     tool/tool_action.cpp
     tool/tool_base.cpp
-    tool/tool_manager.cpp
     tool/tool_dispatcher.cpp
     tool/tool_event.cpp
     tool/tool_interactive.cpp
-    tool/action_manager.cpp
-    tool/context_menu.cpp
-    tool/actions.cpp
-    tool/common_tools.cpp
-    tool/grid_menu.cpp
-    tool/zoom_menu.cpp
+    tool/tool_manager.cpp
     tool/tool_menu.cpp
-    tool/conditional_menu.cpp
-    tool/selection_conditions.cpp
+    tool/zoom_menu.cpp
     tool/zoom_tool.cpp
 
+    geometry/convex_hull.cpp
     geometry/seg.cpp
     geometry/shape.cpp
-    geometry/shape_line_chain.cpp
-    geometry/shape_poly_set.cpp
     geometry/shape_collisions.cpp
     geometry/shape_file_io.cpp
-    geometry/convex_hull.cpp
+    geometry/shape_line_chain.cpp
+    geometry/shape_poly_set.cpp
 
     libeval/numeric_evaluator.cpp
     )
@@ -367,12 +367,15 @@ target_link_libraries( common
 
 set( PCB_COMMON_SRCS
     base_screen.cpp
-    eda_text.cpp
     class_page_info.cpp
+    eda_text.cpp
+    fp_lib_table.cpp
     lset.cpp
+    pcb_keywords.cpp
+    pcb_plot_params_keywords.cpp
     ../pcbnew/basepcbframe.cpp
-    ../pcbnew/board_items_to_polygon_shape_transform.cpp
     ../pcbnew/board_commit.cpp
+    ../pcbnew/board_items_to_polygon_shape_transform.cpp
     ../pcbnew/class_board.cpp
     ../pcbnew/class_board_connected_item.cpp
     ../pcbnew/class_board_design_settings.cpp
@@ -381,50 +384,47 @@ set( PCB_COMMON_SRCS
     ../pcbnew/class_drawsegment.cpp
     ../pcbnew/class_drc_item.cpp
     ../pcbnew/class_edge_mod.cpp
+    ../pcbnew/class_marker_pcb.cpp
+    ../pcbnew/class_module.cpp
     ../pcbnew/class_netclass.cpp
     ../pcbnew/class_netinfo_item.cpp
     ../pcbnew/class_netinfolist.cpp
-    ../pcbnew/class_marker_pcb.cpp
-    ../pcbnew/class_pcb_target.cpp
-    ../pcbnew/class_module.cpp
     ../pcbnew/class_pad.cpp
     ../pcbnew/class_pad_custom_shape_functions.cpp
     ../pcbnew/class_pad_draw_functions.cpp
+    ../pcbnew/class_pcb_target.cpp
     ../pcbnew/class_pcb_text.cpp
     ../pcbnew/class_text_mod.cpp
     ../pcbnew/class_track.cpp
     ../pcbnew/class_zone.cpp
     ../pcbnew/class_zone_settings.cpp
     ../pcbnew/classpcb.cpp
-    ../pcbnew/connectivity_data.cpp
-    ../pcbnew/connectivity_algo.cpp
-    ../pcbnew/convert_drawsegment_list_to_polygon.cpp
-    ../pcbnew/ratsnest_data.cpp
-    ../pcbnew/ratsnest_viewitem.cpp
-    ../pcbnew/pcb_general_settings.cpp
     ../pcbnew/collectors.cpp
-    ../pcbnew/netlist_reader.cpp
-    ../pcbnew/legacy_netlist_reader.cpp
-    ../pcbnew/kicad_netlist_reader.cpp
-    ../pcbnew/sel_layer.cpp
-    ../pcbnew/pcb_plot_params.cpp
-    ../pcbnew/io_mgr.cpp
-    ../pcbnew/plugin.cpp
+    ../pcbnew/connectivity_algo.cpp
+    ../pcbnew/connectivity_data.cpp
+    ../pcbnew/convert_drawsegment_list_to_polygon.cpp
     ../pcbnew/eagle_plugin.cpp
-    ../pcbnew/legacy_plugin.cpp
-    ../pcbnew/kicad_plugin.cpp
-    ../pcbnew/kicad_clipboard.cpp
     ../pcbnew/gpcb_plugin.cpp
-    ../pcbnew/pcb_netlist.cpp
+    ../pcbnew/io_mgr.cpp
+    ../pcbnew/kicad_clipboard.cpp
+    ../pcbnew/kicad_netlist_reader.cpp
+    ../pcbnew/kicad_plugin.cpp
+    ../pcbnew/legacy_netlist_reader.cpp
+    ../pcbnew/legacy_plugin.cpp
+    ../pcbnew/netlist_reader.cpp
     ../pcbnew/pcb_display_options.cpp
     ../pcbnew/pcb_draw_panel_gal.cpp
-    ../pcbnew/pcb_view.cpp
+    ../pcbnew/pcb_general_settings.cpp
+    ../pcbnew/pcb_netlist.cpp
     ../pcbnew/pcb_painter.cpp
-    widgets/widget_net_selector.cpp
-    pcb_plot_params_keywords.cpp
-    pcb_keywords.cpp
     ../pcbnew/pcb_parser.cpp
-    fp_lib_table.cpp
+    ../pcbnew/pcb_plot_params.cpp
+    ../pcbnew/pcb_view.cpp
+    ../pcbnew/plugin.cpp
+    ../pcbnew/ratsnest_data.cpp
+    ../pcbnew/ratsnest_viewitem.cpp
+    ../pcbnew/sel_layer.cpp
+    widgets/widget_net_selector.cpp
 )
 
 set( PCB_COMMON_SRCS

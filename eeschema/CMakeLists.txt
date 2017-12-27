@@ -25,16 +25,16 @@ set( EESCHEMA_DLGS
     dialogs/dialog_annotate_base.cpp
     dialogs/dialog_bom.cpp
     dialogs/dialog_bom_base.cpp
+    dialogs/dialog_bom_cfg_keywords.cpp
     dialogs/dialog_bom_editor.cpp
     dialogs/dialog_bom_editor_base.cpp
-    dialogs/dialog_bom_cfg_keywords.cpp
     dialogs/dialog_choose_component.cpp
-    dialogs/dialog_lib_edit_text.cpp
-    dialogs/dialog_lib_edit_text_base.cpp
     dialogs/dialog_edit_component_in_lib.cpp
     dialogs/dialog_edit_component_in_lib_base.cpp
-    dialogs/dialog_edit_component_in_schematic_fbp.cpp
     dialogs/dialog_edit_component_in_schematic.cpp
+    dialogs/dialog_edit_component_in_schematic_fbp.cpp
+    dialogs/dialog_edit_components_libid.cpp
+    dialogs/dialog_edit_components_libid_base.cpp
     dialogs/dialog_edit_label.cpp
     dialogs/dialog_edit_label_base.cpp
     dialogs/dialog_edit_libentry_fields_in_lib.cpp
@@ -42,30 +42,30 @@ set( EESCHEMA_DLGS
     dialogs/dialog_edit_line_style.cpp
     dialogs/dialog_edit_line_style_base.cpp
     dialogs/dialog_edit_one_field.cpp
-    dialogs/dialog_edit_components_libid.cpp
-    dialogs/dialog_edit_components_libid_base.cpp
-    dialogs/dialog_eeschema_options_base.cpp
     dialogs/dialog_eeschema_options.cpp
+    dialogs/dialog_eeschema_options_base.cpp
     dialogs/dialog_erc.cpp
     dialogs/dialog_erc_base.cpp
     dialogs/dialog_global_sym_lib_table_config.cpp
     dialogs/dialog_global_sym_lib_table_config_base.cpp
     dialogs/dialog_lib_edit_draw_item.cpp
     dialogs/dialog_lib_edit_draw_item_base.cpp
-    dialogs/dialog_libedit_options_base.cpp
-    dialogs/dialog_libedit_options.cpp
     dialogs/dialog_lib_edit_pin.cpp
     dialogs/dialog_lib_edit_pin_base.cpp
     dialogs/dialog_lib_edit_pin_table.cpp
     dialogs/dialog_lib_edit_pin_table_base.cpp
+    dialogs/dialog_lib_edit_text.cpp
+    dialogs/dialog_lib_edit_text_base.cpp
     dialogs/dialog_lib_new_component.cpp
     dialogs/dialog_lib_new_component_base.cpp
+    dialogs/dialog_libedit_options.cpp
+    dialogs/dialog_libedit_options_base.cpp
     dialogs/dialog_netlist.cpp
     dialogs/dialog_netlist_base.cpp
-    dialogs/dialog_plot_schematic_base.cpp
     dialogs/dialog_plot_schematic.cpp
-    dialogs/dialog_print_using_printer_base.cpp
+    dialogs/dialog_plot_schematic_base.cpp
     dialogs/dialog_print_using_printer.cpp
+    dialogs/dialog_print_using_printer_base.cpp
     dialogs/dialog_rescue_each.cpp
     dialogs/dialog_rescue_each_base.cpp
     dialogs/dialog_sch_edit_sheet_pin.cpp
@@ -85,35 +85,38 @@ set( EESCHEMA_DLGS
 set( EESCHEMA_WIDGETS
     widgets/cmp_tree_pane.cpp
     widgets/component_tree.cpp
-    widgets/widget_eeschema_color_config.cpp
     widgets/pin_shape_combobox.cpp
     widgets/pin_type_combobox.cpp
+    widgets/widget_eeschema_color_config.cpp
     )
 
 
 set( EESCHEMA_SRCS
-    autoplace_fields.cpp
+    ${EESCHEMA_DLGS}
+    ${EESCHEMA_WIDGETS}
     annotate.cpp
+    autoplace_fields.cpp
     backanno.cpp
     block.cpp
     block_libedit.cpp
-    bom_table_model.cpp
     bom_table_column.cpp
-    busentry.cpp
+    bom_table_model.cpp
     bus-wire-junction.cpp
+    busentry.cpp
     class_drc_erc_item.cpp
     class_libentry.cpp
     class_library.cpp
     class_netlist_object.cpp
     cmp_library_keywords.cpp
     cmp_library_lexer.cpp
+    cmp_tree_model.cpp
+    cmp_tree_model_adapter.cpp
+    cmp_tree_model_adapter_base.cpp
     component_references_lister.cpp
     controle.cpp
     cross-probing.cpp
-    ${EESCHEMA_DLGS}
-    ${EESCHEMA_WIDGETS}
-    edit_component_in_schematic.cpp
     edit_bitmap.cpp
+    edit_component_in_schematic.cpp
     edit_label.cpp
     eeredraw.cpp
     eeschema.cpp
@@ -122,21 +125,11 @@ set( EESCHEMA_SRCS
     events_called_functions_for_edit.cpp
     files-io.cpp
     find.cpp
-    getpart.cpp
-    cmp_tree_model.cpp
-    cmp_tree_model_adapter.cpp
-    cmp_tree_model_adapter_base.cpp
     generate_alias_info.cpp
+    getpart.cpp
     hierarch.cpp
     highlight_connection.cpp
     hotkeys.cpp
-    libarch.cpp
-    libedit.cpp
-    libeditframe.cpp
-    libedit_onleftclick.cpp
-    libedit_onrightclick.cpp
-    libedit_plot_component.cpp
-    libedit_undo_redo.cpp
     lib_arc.cpp
     lib_bezier.cpp
     lib_circle.cpp
@@ -150,6 +143,13 @@ set( EESCHEMA_SRCS
     lib_polyline.cpp
     lib_rectangle.cpp
     lib_text.cpp
+    libarch.cpp
+    libedit.cpp
+    libedit_onleftclick.cpp
+    libedit_onrightclick.cpp
+    libedit_plot_component.cpp
+    libedit_undo_redo.cpp
+    libeditframe.cpp
     libfield.cpp
     menubar.cpp
     menubar_libedit.cpp
@@ -158,14 +158,14 @@ set( EESCHEMA_SRCS
     onleftclick.cpp
     onrightclick.cpp
     operations_on_items_lists.cpp
-    pinedit.cpp
     pin_number.cpp
     pin_shape.cpp
     pin_type.cpp
+    pinedit.cpp
     plot_schematic_DXF.cpp
     plot_schematic_HPGL.cpp
-    plot_schematic_PS.cpp
     plot_schematic_PDF.cpp
+    plot_schematic_PS.cpp
     plot_schematic_SVG.cpp
     project_rescue.cpp
     sch_base_frame.cpp
@@ -198,8 +198,8 @@ set( EESCHEMA_SRCS
     symbdraw.cpp
     symbedit.cpp
     symbol_lib_table.cpp
-    template_fieldnames_keywords.cpp
     template_fieldnames.cpp
+    template_fieldnames_keywords.cpp
     tool_lib.cpp
     tool_sch.cpp
     tool_viewlib.cpp
@@ -219,23 +219,23 @@ set( EESCHEMA_SRCS
 set( EESCHEMA_COMMON_SRCS
     ../common/dialogs/dialog_page_settings.cpp
     ../common/base_screen.cpp
-    ../common/eda_text.cpp
-    ../common/class_page_info.cpp
     ../common/base_units.cpp
+    ../common/class_page_info.cpp
+    ../common/eda_text.cpp
     )
 
 
 if( KICAD_SPICE )
     set( EESCHEMA_SRCS
         ${EESCHEMA_SRCS}
-        sim/simulate.cpp
-        sim/sim_plot_frame_base.cpp
+        sim/netlist_exporter_pspice_sim.cpp
+        sim/ngspice.cpp
         sim/sim_plot_frame.cpp
+        sim/sim_plot_frame_base.cpp
         sim/sim_plot_panel.cpp
+        sim/simulate.cpp
         sim/spice_simulator.cpp
         sim/spice_value.cpp
-        sim/ngspice.cpp
-        sim/netlist_exporter_pspice_sim.cpp
         dialogs/dialog_signal_list.cpp
         dialogs/dialog_signal_list_base.cpp
         dialogs/dialog_sim_settings.cpp

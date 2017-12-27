@@ -50,10 +50,12 @@ include_directories(
     )
 
 set( PCBNEW_DIALOGS
-    dialogs/dialog_block_options_base.cpp
+    dialogs/dialog_SVG_print.cpp
+    dialogs/dialog_SVG_print_base.cpp
     dialogs/dialog_block_options.cpp
-    dialogs/dialog_cleaning_options_base.cpp
+    dialogs/dialog_block_options_base.cpp
     dialogs/dialog_cleaning_options.cpp
+    dialogs/dialog_cleaning_options_base.cpp
     dialogs/dialog_copper_zones.cpp
     dialogs/dialog_copper_zones_base.cpp
     dialogs/dialog_create_array.cpp
@@ -63,92 +65,92 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_dimension_editor_base.cpp
     dialogs/dialog_display_options.cpp
     dialogs/dialog_display_options_base.cpp
-    dialogs/dialog_drc_base.cpp
     dialogs/dialog_drc.cpp
+    dialogs/dialog_drc_base.cpp
     dialogs/dialog_edit_module_for_BoardEditor.cpp
     dialogs/dialog_edit_module_for_BoardEditor_base.cpp
-    dialogs/dialog_edit_module_for_Modedit_base.cpp
     dialogs/dialog_edit_module_for_Modedit.cpp
+    dialogs/dialog_edit_module_for_Modedit_base.cpp
     dialogs/dialog_edit_module_text.cpp
     dialogs/dialog_edit_module_text_base.cpp
     dialogs/dialog_enum_pads.cpp
     dialogs/dialog_enum_pads_base.cpp
-    dialogs/dialog_exchange_modules_base.cpp
     dialogs/dialog_exchange_modules.cpp
+    dialogs/dialog_exchange_modules_base.cpp
     dialogs/dialog_export_idf.cpp
     dialogs/dialog_export_idf_base.cpp
-    dialogs/dialog_export_vrml_base.cpp
-    dialogs/dialog_export_vrml.cpp
-    dialogs/dialog_export_step_base.cpp
     dialogs/dialog_export_step.cpp
-    dialogs/dialog_find_base.cpp
+    dialogs/dialog_export_step_base.cpp
+    dialogs/dialog_export_vrml.cpp
+    dialogs/dialog_export_vrml_base.cpp
     dialogs/dialog_find.cpp
-    dialogs/dialog_fp_lib_table_base.cpp
+    dialogs/dialog_find_base.cpp
+    dialogs/dialog_footprint_wizard_list.cpp
+    dialogs/dialog_footprint_wizard_list_base.cpp
     dialogs/dialog_fp_lib_table.cpp
-    dialogs/dialog_fp_plugin_options_base.cpp
+    dialogs/dialog_fp_lib_table_base.cpp
     dialogs/dialog_fp_plugin_options.cpp
+    dialogs/dialog_fp_plugin_options_base.cpp
     dialogs/dialog_freeroute_exchange.cpp
     dialogs/dialog_freeroute_exchange_base.cpp
+    dialogs/dialog_gen_module_position_file_base.cpp
     dialogs/dialog_gencad_export_options.cpp
     dialogs/dialog_gendrill.cpp
     dialogs/dialog_gendrill_base.cpp
-    dialogs/dialog_gen_module_position_file_base.cpp
     dialogs/dialog_general_options.cpp
     dialogs/dialog_general_options_BoardEditor_base.cpp
     dialogs/dialog_get_footprint_by_name_base.cpp
+    dialogs/dialog_global_deletion.cpp
+    dialogs/dialog_global_deletion_base.cpp
     dialogs/dialog_global_edit_tracks_and_vias.cpp
     dialogs/dialog_global_edit_tracks_and_vias_base.cpp
     dialogs/dialog_global_modules_fields_edition.cpp
     dialogs/dialog_global_modules_fields_edition_base.cpp
-    dialogs/dialog_global_pads_edition_base.cpp
     dialogs/dialog_global_pads_edition.cpp
-    dialogs/dialog_graphic_items_options.cpp
-    dialogs/dialog_graphic_items_options_base.cpp
+    dialogs/dialog_global_pads_edition_base.cpp
     dialogs/dialog_graphic_item_properties.cpp
     dialogs/dialog_graphic_item_properties_base.cpp
     dialogs/dialog_graphic_item_properties_for_Modedit.cpp
-    dialogs/dialog_global_deletion.cpp
-    dialogs/dialog_global_deletion_base.cpp
+    dialogs/dialog_graphic_items_options.cpp
+    dialogs/dialog_graphic_items_options_base.cpp
     dialogs/dialog_keepout_area_properties.cpp
     dialogs/dialog_keepout_area_properties_base.cpp
     dialogs/dialog_layer_selection_base.cpp
     dialogs/dialog_layers_setup.cpp
     dialogs/dialog_layers_setup_base.cpp
+    dialogs/dialog_mask_clearance.cpp
+    dialogs/dialog_mask_clearance_base.cpp
     dialogs/dialog_modedit_display_options.cpp
     dialogs/dialog_modedit_options.cpp
     dialogs/dialog_modedit_options_base.cpp
-    dialogs/dialog_netlist.cpp
-    dialogs/dialog_netlist_fbp.cpp
-    dialogs/dialog_pcb_text_properties.cpp
-    dialogs/dialog_pcb_text_properties_base.cpp
-    dialogs/dialog_pns_settings.cpp
-    dialogs/dialog_pns_settings_base.cpp
     dialogs/dialog_move_exact.cpp
     dialogs/dialog_move_exact_base.cpp
+    dialogs/dialog_netlist.cpp
+    dialogs/dialog_netlist_fbp.cpp
+    dialogs/dialog_non_copper_zones_properties.cpp
+    dialogs/dialog_non_copper_zones_properties_base.cpp
+    dialogs/dialog_pad_basicshapes_properties.cpp
+    dialogs/dialog_pad_properties.cpp
+    dialogs/dialog_pad_properties_base.cpp
+    dialogs/dialog_pcb_text_properties.cpp
+    dialogs/dialog_pcb_text_properties_base.cpp
+    dialogs/dialog_plot.cpp
+    dialogs/dialog_plot_base.cpp
     dialogs/dialog_pns_diff_pair_dimensions.cpp
     dialogs/dialog_pns_diff_pair_dimensions_base.cpp
     dialogs/dialog_pns_length_tuning_settings.cpp
     dialogs/dialog_pns_length_tuning_settings_base.cpp
-    dialogs/dialog_non_copper_zones_properties.cpp
-    dialogs/dialog_non_copper_zones_properties_base.cpp
-    dialogs/dialog_pad_properties.cpp
-    dialogs/dialog_pad_properties_base.cpp
-    dialogs/dialog_pad_basicshapes_properties.cpp
-    dialogs/dialog_plot_base.cpp
-    dialogs/dialog_plot.cpp
+    dialogs/dialog_pns_settings.cpp
+    dialogs/dialog_pns_settings_base.cpp
     dialogs/dialog_position_relative.cpp
     dialogs/dialog_position_relative_base.cpp
     dialogs/dialog_print_for_modedit.cpp
     dialogs/dialog_print_for_modedit_base.cpp
     dialogs/dialog_print_using_printer.cpp
     dialogs/dialog_print_using_printer_base.cpp
-    dialogs/dialog_mask_clearance.cpp
-    dialogs/dialog_mask_clearance_base.cpp
-    dialogs/dialog_SVG_print.cpp
-    dialogs/dialog_SVG_print_base.cpp
-    dialogs/dialog_select_pretty_lib.cpp
-    dialogs/dialog_select_net_from_list_base.cpp
     dialogs/dialog_select_net_from_list.cpp
+    dialogs/dialog_select_net_from_list_base.cpp
+    dialogs/dialog_select_pretty_lib.cpp
     dialogs/dialog_select_pretty_lib_base.cpp
     dialogs/dialog_set_grid.cpp
     dialogs/dialog_set_grid_base.cpp
@@ -157,20 +159,18 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_track_via_properties_base.cpp
     dialogs/dialog_track_via_size.cpp
     dialogs/dialog_track_via_size_base.cpp
-    dialogs/dialog_update_pcb_base.cpp
     dialogs/dialog_update_pcb.cpp
+    dialogs/dialog_update_pcb_base.cpp
+    dialogs/wizard_add_fplib.cpp
+    dialogs/wizard_add_fplib_base.cpp
     footprint_wizard.cpp
     footprint_wizard_frame.cpp
-    dialogs/dialog_footprint_wizard_list_base.cpp
-    dialogs/dialog_footprint_wizard_list.cpp
-    dialogs/wizard_add_fplib_base.cpp
-    dialogs/wizard_add_fplib.cpp
     ${GITHUB_3DLIBRARIES_WIZARD}
     )
 
 set( PCBNEW_IMPORT_DXF
-    import_dxf/dialog_dxf_import_base.cpp
     import_dxf/dialog_dxf_import.cpp
+    import_dxf/dialog_dxf_import_base.cpp
     import_dxf/dxf2brd_items.cpp
     )
 
@@ -192,42 +192,42 @@ set( PCBNEW_MICROWAVE_SRCS
     )
 
 set( PCBNEW_CLASS_SRCS
+    ${PCBNEW_DIALOGS}
+    ${PCBNEW_EXPORTERS}
+    ${PCBNEW_IMPORT_DXF}
+
     autorouter/rect_placement/rect_placement.cpp
     autorouter/spread_footprints.cpp
-    tool_modview.cpp
-    modview_frame.cpp
-    pcbframe.cpp
-    pcb_base_edit_frame.cpp
+
     append_board_to_current.cpp
     array_creator.cpp
     attribut.cpp
-    board_netlist_updater.cpp
     block.cpp
     block_module_editor.cpp
+    board_netlist_updater.cpp
     build_BOM_from_board.cpp
-    class_pcb_layer_widget.cpp
+    class_action_plugin.cpp
+    class_footprint_wizard.cpp
     class_pcb_layer_box_selector.cpp
+    class_pcb_layer_widget.cpp
     clean.cpp
     connect.cpp
     controle.cpp
-    dimension.cpp
     cross-probing.cpp
     deltrack.cpp
-    ${PCBNEW_DIALOGS}
-    ${PCBNEW_IMPORT_DXF}
-    ${PCBNEW_EXPORTERS}
+    dimension.cpp
     dragsegm.cpp
     drc.cpp
     drc_clearance_test_functions.cpp
     drc_marker_functions.cpp
     edgemod.cpp
     edit.cpp
-    editedge.cpp
-    editmod.cpp
-    editrack.cpp
-    editrack-part2.cpp
     edit_pcb_text.cpp
     edit_track_width.cpp
+    editedge.cpp
+    editmod.cpp
+    editrack-part2.cpp
+    editrack.cpp
     edtxtmod.cpp
     event_handlers_tracks_vias_sizes.cpp
     files.cpp
@@ -244,24 +244,27 @@ set( PCBNEW_CLASS_SRCS
     magnetic_tracks_functions.cpp
     menubar_modedit.cpp
     menubar_pcbframe.cpp
+    microwave.cpp
     minimun_spanning_tree.cpp
     modedit.cpp
     modedit_onclick.cpp
     modeditoptions.cpp
     moduleframe.cpp
     modules.cpp
+    modview_frame.cpp
     move-drag_pads.cpp
     move_or_drag_track.cpp
-    microwave.cpp
     muwave_command.cpp
     netlist.cpp
     onleftclick.cpp
     onrightclick.cpp
     pad_edition_functions.cpp
-    pcbnew_config.cpp
-    pcbplot.cpp
+    pcb_base_edit_frame.cpp
 #    pcb_draw_panel_gal.cpp
 #    pcb_view.cpp
+    pcbframe.cpp
+    pcbnew_config.cpp
+    pcbplot.cpp
     plot_board_layers.cpp
     plot_brditems_plotter.cpp
     print_board_functions.cpp
@@ -269,49 +272,48 @@ set( PCBNEW_CLASS_SRCS
     ratsnest.cpp
     specctra.cpp
     specctra_export.cpp
-    specctra_keywords.cpp
     specctra_import.cpp
+    specctra_keywords.cpp
     swap_layers.cpp
     target_edit.cpp
     tool_modedit.cpp
+    tool_modview.cpp
     tool_onrightclick.cpp
     tool_pcb.cpp
     toolbars_update_user_interface.cpp
-    tracepcb.cpp
     tr_modif.cpp
+    tracepcb.cpp
     undo_redo.cpp
     zone_filler.cpp
     zones_by_polygon.cpp
     zones_by_polygon_fill_functions.cpp
     zones_functions_for_undo_redo.cpp
     zones_test_and_combine_areas.cpp
-    class_footprint_wizard.cpp
-    class_action_plugin.cpp
 
-    tools/pcb_tool.cpp
-    tools/selection_tool.cpp
-    tools/pcb_selection_conditions.cpp
-    tools/pcb_bright_box.cpp
-    tools/edit_points.cpp
-    tools/edit_constraints.cpp
-    tools/point_editor.cpp
     tools/drawing_tool.cpp
+    tools/edit_constraints.cpp
+    tools/edit_points.cpp
     tools/edit_tool.cpp
-    tools/position_relative_tool.cpp
-    tools/pcbnew_control.cpp
-    tools/pcb_editor_control.cpp
+    tools/grid_helper.cpp
     tools/microwave_tool.cpp
     tools/module_editor_tools.cpp
-    tools/placement_tool.cpp
-    tools/pcb_actions.cpp
-    tools/grid_helper.cpp
     tools/pad_tool.cpp
+    tools/pcb_actions.cpp
+    tools/pcb_bright_box.cpp
+    tools/pcb_editor_control.cpp
+    tools/pcb_selection_conditions.cpp
+    tools/pcb_tool.cpp
+    tools/pcbnew_control.cpp
     tools/picker_tool.cpp
-    tools/zone_create_helper.cpp
-    tools/tools_common.cpp
-    tools/tool_event_utils.cpp
-    tools/size_menu.cpp
+    tools/placement_tool.cpp
+    tools/point_editor.cpp
+    tools/position_relative_tool.cpp
     tools/selection.cpp
+    tools/selection_tool.cpp
+    tools/size_menu.cpp
+    tools/tool_event_utils.cpp
+    tools/tools_common.cpp
+    tools/zone_create_helper.cpp
     tools/zone_filler_tool.cpp
 
     footprint_preview_panel.cpp
@@ -330,16 +332,16 @@ set( PCBNEW_COMMON_SRCS
     )
 
 set( PCBNEW_SCRIPTING_DIALOGS
-    dialogs/dialog_scripting_base.cpp
     dialogs/dialog_scripting.cpp
+    dialogs/dialog_scripting_base.cpp
     )
 
 set( PCBNEW_SCRIPTING_PYTHON_HELPERS
     ../common/swig/wx_python_helpers.cpp
-    swig/python_scripting.cpp
-    swig/pcbnew_scripting_helpers.cpp
-    swig/pcbnew_footprint_wizards.cpp
     swig/pcbnew_action_plugins.cpp
+    swig/pcbnew_footprint_wizards.cpp
+    swig/pcbnew_scripting_helpers.cpp
+    swig/python_scripting.cpp
     )
 
 
