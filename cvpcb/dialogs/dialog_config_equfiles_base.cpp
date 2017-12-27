@@ -96,9 +96,9 @@ DIALOG_CONFIG_EQUFILES_BASE::DIALOG_CONFIG_EQUFILES_BASE( wxWindow* parent, wxWi
 	
 	bSizerLower->Add( bSizerEnvVar, 1, wxEXPAND, 5 );
 	
-	wxString m_rbPathOptionChoiceChoices[] = { _("Absolute path"), _("Relative path") };
+	wxString m_rbPathOptionChoiceChoices[] = { _("Absolute"), _("Relative") };
 	int m_rbPathOptionChoiceNChoices = sizeof( m_rbPathOptionChoiceChoices ) / sizeof( wxString );
-	m_rbPathOptionChoice = new wxRadioBox( this, wxID_ANY, _("Path option:"), wxDefaultPosition, wxDefaultSize, m_rbPathOptionChoiceNChoices, m_rbPathOptionChoiceChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbPathOptionChoice = new wxRadioBox( this, wxID_ANY, _("Path Type:"), wxDefaultPosition, wxDefaultSize, m_rbPathOptionChoiceNChoices, m_rbPathOptionChoiceChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbPathOptionChoice->SetSelection( 1 );
 	bSizerLower->Add( m_rbPathOptionChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
