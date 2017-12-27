@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_drclistbox.h"
@@ -57,7 +57,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	fgMinValuesSizer->Add( 0, 0, 0, 0, 5 );
 	
-	m_TrackMinWidthTitle = new wxStaticText( this, wxID_ANY, _("Min track width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TrackMinWidthTitle = new wxStaticText( this, wxID_ANY, _("Minimum track width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackMinWidthTitle->Wrap( -1 );
 	m_TrackMinWidthTitle->SetToolTip( _("Enter the minimum acceptable value for a track width") );
 	
@@ -72,7 +72,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	fgMinValuesSizer->Add( m_TrackMinWidthUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
-	m_ViaMinTitle = new wxStaticText( this, wxID_ANY, _("Min via size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ViaMinTitle = new wxStaticText( this, wxID_ANY, _("Minimum via size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaMinTitle->Wrap( -1 );
 	m_ViaMinTitle->SetHelpText( _("Enter the minimum acceptable diameter for a standard via") );
 	
@@ -87,7 +87,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	fgMinValuesSizer->Add( m_ViaMinUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
-	m_MicroViaMinTitle = new wxStaticText( this, wxID_ANY, _("Min uVia size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MicroViaMinTitle = new wxStaticText( this, wxID_ANY, _("Minimum uVia size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MicroViaMinTitle->Wrap( -1 );
 	m_MicroViaMinTitle->SetToolTip( _("Enter the minimum acceptable diameter for a micro via") );
 	
@@ -249,7 +249,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	m_panelClearanceListBox->SetSizer( bSizeClearanceBox );
 	m_panelClearanceListBox->Layout();
 	bSizeClearanceBox->Fit( m_panelClearanceListBox );
-	m_Notebook->AddPage( m_panelClearanceListBox, _("Problems / Markers"), true );
+	m_Notebook->AddPage( m_panelClearanceListBox, _("Problems / Markers"), false );
 	m_panelUnconnectedBox = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerUnconnectedBox;
 	bSizerUnconnectedBox = new wxBoxSizer( wxVERTICAL );
@@ -263,7 +263,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	m_panelUnconnectedBox->SetSizer( bSizerUnconnectedBox );
 	m_panelUnconnectedBox->Layout();
 	bSizerUnconnectedBox->Fit( m_panelUnconnectedBox );
-	m_Notebook->AddPage( m_panelUnconnectedBox, _("Unconnected"), false );
+	m_Notebook->AddPage( m_panelUnconnectedBox, _("Unconnected"), true );
 	
 	m_ErrorMsgs->Add( m_Notebook, 1, wxEXPAND | wxALL, 5 );
 	
@@ -282,6 +282,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	this->SetSizer( m_MainSizer );
 	this->Layout();
+	m_MainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_ACTIVATE, wxActivateEventHandler( DIALOG_DRC_CONTROL_BASE::OnActivateDlg ) );

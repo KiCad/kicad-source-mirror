@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/text_ctrl_eval.h"
@@ -115,7 +115,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	
 	wxString m_rbGridStartNumberingOptChoices[] = { _("Use first free number"), _("From start value") };
 	int m_rbGridStartNumberingOptNChoices = sizeof( m_rbGridStartNumberingOptChoices ) / sizeof( wxString );
-	m_rbGridStartNumberingOpt = new wxRadioBox( m_gridPanel, wxID_ANY, _("Initial pad number"), wxDefaultPosition, wxDefaultSize, m_rbGridStartNumberingOptNChoices, m_rbGridStartNumberingOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbGridStartNumberingOpt = new wxRadioBox( m_gridPanel, wxID_ANY, _("Initial Pad Number"), wxDefaultPosition, wxDefaultSize, m_rbGridStartNumberingOptNChoices, m_rbGridStartNumberingOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbGridStartNumberingOpt->SetSelection( 1 );
 	m_gridPadNumberingSizer->Add( m_rbGridStartNumberingOpt, 0, wxALL|wxEXPAND, 5 );
 	
@@ -249,7 +249,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	
 	wxString m_rbCircStartNumberingOptChoices[] = { _("Use first free number"), _("From start value") };
 	int m_rbCircStartNumberingOptNChoices = sizeof( m_rbCircStartNumberingOptChoices ) / sizeof( wxString );
-	m_rbCircStartNumberingOpt = new wxRadioBox( m_circPadNumberingSizer->GetStaticBox(), wxID_ANY, _("Initial pad number"), wxDefaultPosition, wxDefaultSize, m_rbCircStartNumberingOptNChoices, m_rbCircStartNumberingOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbCircStartNumberingOpt = new wxRadioBox( m_circPadNumberingSizer->GetStaticBox(), wxID_ANY, _("Initial Pad Number"), wxDefaultPosition, wxDefaultSize, m_rbCircStartNumberingOptNChoices, m_rbCircStartNumberingOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbCircStartNumberingOpt->SetSelection( 0 );
 	m_circPadNumberingSizer->Add( m_rbCircStartNumberingOpt, 0, wxALL|wxEXPAND, 5 );
 	
@@ -289,6 +289,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_CREATE_ARRAY_BASE::OnClose ) );

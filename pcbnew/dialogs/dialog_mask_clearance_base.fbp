@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_PADS_MASK_CLEARANCE_BASE</property>
             <property name="pos"></property>
-            <property name="size">361,304</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Pads Mask Clearance</property>
@@ -134,7 +134,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Note: For clearance values:&#x0A;- a positive value means a mask bigger than a pad&#x0A;- a negative value means a mask smaller than a pad&#x0A;</property>
+                                <property name="label">Note: for clearance values:&#x0A;- a positive value means a mask bigger than a pad&#x0A;- a negative value means a mask smaller than a pad&#x0A;</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
@@ -1640,7 +1640,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxALIGN_RIGHT|wxTOP|wxBOTTOM</property>
+                    <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT</property>
                     <property name="proportion">0</property>
                     <object class="wxStdDialogButtonSizer" expanded="1">
                         <property name="Apply">0</property>

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_SCRIPTING_BASE_H__
@@ -40,7 +40,7 @@ class DIALOG_SCRIPTING_BASE : public wxFrame
 	
 	public:
 		
-		DIALOG_SCRIPTING_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Scripting Test Window"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,468 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		DIALOG_SCRIPTING_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Scripting Test Window"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		
 		~DIALOG_SCRIPTING_BASE();
 	

@@ -44,10 +44,10 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_ENUM_PADS_BASE</property>
             <property name="pos"></property>
-            <property name="size">340,187</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
-            <property name="title">Pad enumeration settings</property>
+            <property name="title">Pad Enumeration Settings</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>

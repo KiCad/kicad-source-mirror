@@ -204,9 +204,11 @@ bool DialogEditModuleText::TransferDataToWindow()
     if( m_LayerSelectionCtrl->SetLayerSelection( m_currentText->GetLayer() ) < 0 )
     {
         wxMessageBox( _( "This item has an illegal layer id.\n"
-                        "Now, forced on the front silk screen layer. Please, fix it" ) );
+                         "Now, forced on the front silk screen layer. Please, fix it" ) );
         m_LayerSelectionCtrl->SetLayerSelection( F_SilkS );
     }
+
+    Layout();
 
     return true;
 }

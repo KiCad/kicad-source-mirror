@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 30 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "gerbview_dialog_display_options_frame_base.h"
@@ -56,7 +56,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	bLeftSizer->Add( m_OptDisplayDCodes, 0, wxALL, 5 );
 	
 	
-	m_UpperSizer->Add( bLeftSizer, 1, wxALL|wxEXPAND, 5 );
+	m_UpperSizer->Add( bLeftSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -84,7 +84,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	bRightSizer->Add( bLeftBottomSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
-	m_UpperSizer->Add( bRightSizer, 2, wxALL|wxEXPAND, 5 );
+	m_UpperSizer->Add( bRightSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bDialogSizer->Add( m_UpperSizer, 1, wxEXPAND, 5 );

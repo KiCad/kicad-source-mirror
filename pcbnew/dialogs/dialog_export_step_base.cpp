@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/text_ctrl_eval.h"
@@ -36,7 +36,7 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	
 	m_staticText6 = new wxStaticText( this, wxID_ANY, _("Coordinate origin options:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText6->Wrap( -1 );
-	m_staticText6->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText6->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizer7->Add( m_staticText6, 0, wxALL, 5 );
 	
@@ -81,14 +81,14 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	bSizer7->Add( fgSizer2, 1, wxEXPAND, 5 );
 	
 	
-	bSizer2->Add( bSizer7, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer2->Add( bSizer7, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticText2 = new wxStaticText( this, wxID_ANY, _("User defined origin:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
-	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizer3->Add( m_staticText2, 0, wxALL, 5 );
 	
@@ -150,14 +150,14 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	bSizer3->Add( fgSizer1, 1, wxEXPAND, 5 );
 	
 	
-	bSizer2->Add( bSizer3, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer2->Add( bSizer3, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticText7 = new wxStaticText( this, wxID_ANY, _("Other options:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7->Wrap( -1 );
-	m_staticText7->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText7->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizer8->Add( m_staticText7, 0, wxALL, 5 );
 	
@@ -176,7 +176,7 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	bSizer8->Add( fgSizer3, 1, wxEXPAND, 5 );
 	
 	
-	bSizer2->Add( bSizer8, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer2->Add( bSizer8, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
 	bSizerSTEPFile->Add( bSizer2, 1, wxEXPAND, 5 );

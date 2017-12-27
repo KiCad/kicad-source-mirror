@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_NEW_DATAITEM_BASE_H__
@@ -11,8 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
-
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -68,7 +66,7 @@ class DIALOG_NEW_DATAITEM_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_NEW_DATAITEM_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("New Item"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 328,335 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_NEW_DATAITEM_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("New Item"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_NEW_DATAITEM_BASE();
 	
 };

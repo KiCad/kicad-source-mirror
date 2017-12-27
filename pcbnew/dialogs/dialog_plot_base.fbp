@@ -44,7 +44,7 @@
             <property name="minimum_size">-1,-1</property>
             <property name="name">DIALOG_PLOT_BASE</property>
             <property name="pos"></property>
-            <property name="size">733,809</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Plot</property>
@@ -579,13 +579,13 @@
                         <property name="name">bmiddleSizer</property>
                         <property name="orient">wxHORIZONTAL</property>
                         <property name="permission">none</property>
-                        <object class="sizeritem" expanded="0">
+                        <object class="sizeritem" expanded="1">
                             <property name="border">3</property>
                             <property name="flag">wxALL|wxEXPAND</property>
                             <property name="proportion">1</property>
-                            <object class="wxStaticBoxSizer" expanded="0">
+                            <object class="wxStaticBoxSizer" expanded="1">
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Included layers:</property>
+                                <property name="label">Included Layers:</property>
                                 <property name="minimum_size"></property>
                                 <property name="name">m_LayersSizer</property>
                                 <property name="orient">wxHORIZONTAL</property>
@@ -630,7 +630,7 @@
                                         <property name="maximum_size"></property>
                                         <property name="min_size"></property>
                                         <property name="minimize_button">0</property>
-                                        <property name="minimum_size"></property>
+                                        <property name="minimum_size">150,-1</property>
                                         <property name="moveable">1</property>
                                         <property name="name">m_layerCheckListBox</property>
                                         <property name="pane_border">1</property>

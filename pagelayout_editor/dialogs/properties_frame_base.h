@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __PROPERTIES_FRAME_BASE_H__
@@ -36,10 +36,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_PROPERTIES_BASE : public wxPanel
+class PANEL_PROPERTIES_BASE : public wxPanel 
 {
 	private:
-
+	
 	protected:
 		wxNotebook* m_notebook;
 		wxScrolledWindow* m_swItemProperties;
@@ -129,17 +129,17 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_staticTextBottomMargin;
 		wxTextCtrl* m_textCtrlDefaultBottomMargin;
 		wxButton* m_buttonGeneralOptsOK;
-
+		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnAcceptPrms( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetDefaultValues( wxCommandEvent& event ) { event.Skip(); }
-
-
+		
+	
 	public:
-
-		PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 324,782 ), long style = wxTAB_TRAVERSAL );
+		
+		PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL ); 
 		~PANEL_PROPERTIES_BASE();
-
+	
 };
 
 #endif //__PROPERTIES_FRAME_BASE_H__

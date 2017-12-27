@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "class_pcb_layer_box_selector.h"
@@ -139,7 +139,7 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	bMainSizer->Add( fgSizerSetup, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline, 0, wxEXPAND | wxALL, 5 );
+	bMainSizer->Add( m_staticline, 0, wxEXPAND, 5 );
 	
 	m_StandardSizer = new wxStdDialogButtonSizer();
 	m_StandardSizerOK = new wxButton( this, wxID_OK );
@@ -153,6 +153,7 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

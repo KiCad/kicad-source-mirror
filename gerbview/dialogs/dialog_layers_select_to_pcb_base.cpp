@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_layers_select_to_pcb_base.h"
@@ -27,7 +27,7 @@ LAYERS_MAP_DIALOG_BASE::LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* sbUpperSizer;
 	sbUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	sbSizerLayersTable = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Layers selection:") ), wxHORIZONTAL );
+	sbSizerLayersTable = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Layer selection:") ), wxHORIZONTAL );
 	
 	m_flexLeftColumnBoxSizer = new wxFlexGridSizer( 16, 4, 0, 0 );
 	m_flexLeftColumnBoxSizer->AddGrowableCol( 0 );
@@ -44,7 +44,7 @@ LAYERS_MAP_DIALOG_BASE::LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id,
 	sbSizerLayersTable->Add( m_staticlineSep, 0, wxEXPAND | wxALL, 5 );
 	
 	
-	sbUpperSizer->Add( sbSizerLayersTable, 1, wxEXPAND, 5 );
+	sbUpperSizer->Add( sbSizerLayersTable, 1, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -104,11 +104,12 @@ LAYERS_MAP_DIALOG_BASE::LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id,
 	m_sdbSizerButtons->AddButton( m_sdbSizerButtonsCancel );
 	m_sdbSizerButtons->Realize();
 	
-	bSizerMain->Add( m_sdbSizerButtons, 0, wxALIGN_RIGHT|wxALL, 5 );
+	bSizerMain->Add( m_sdbSizerButtons, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 }

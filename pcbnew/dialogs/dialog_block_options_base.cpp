@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 13 2015)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_block_options_base.h"
@@ -20,41 +20,40 @@ DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent, wxWindow
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
 	
 	wxGridSizer* gSizer1;
-	gSizer1 = new wxGridSizer( 4, 2, 0, 0 );
+	gSizer1 = new wxGridSizer( 4, 2, 3, 3 );
 	
-	m_Include_Modules = new wxCheckBox( this, wxID_ANY, _("Include &footprints"), wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_Include_Modules, 0, wxALL, 5 );
+	m_Include_Modules = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Include &footprints"), wxDefaultPosition, wxDefaultSize, 0 );
+	gSizer1->Add( m_Include_Modules, 0, 0, 5 );
 	
-	m_Include_PcbTextes = new wxCheckBox( this, wxID_ANY, _("Include t&ext items"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Include_PcbTextes->SetValue(true); 
-	gSizer1->Add( m_Include_PcbTextes, 0, wxALL, 5 );
+	m_Include_PcbTextes = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Include t&ext items"), wxDefaultPosition, wxDefaultSize, 0 );
+	gSizer1->Add( m_Include_PcbTextes, 0, 0, 5 );
 	
-	m_IncludeLockedModules = new wxCheckBox( this, wxID_ANY, _("Include &locked footprints"), wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_IncludeLockedModules, 0, wxALL, 5 );
+	m_IncludeLockedModules = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Include &locked footprints"), wxDefaultPosition, wxDefaultSize, 0 );
+	gSizer1->Add( m_IncludeLockedModules, 0, 0, 5 );
 	
-	m_Include_Draw_Items = new wxCheckBox( this, wxID_ANY, _("Include &drawings"), wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_Include_Draw_Items, 0, wxALL, 5 );
+	m_Include_Draw_Items = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Include &drawings"), wxDefaultPosition, wxDefaultSize, 0 );
+	gSizer1->Add( m_Include_Draw_Items, 0, 0, 5 );
 	
-	m_Include_Tracks = new wxCheckBox( this, wxID_ANY, _("Include &tracks"), wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_Include_Tracks, 0, wxALL, 5 );
+	m_Include_Tracks = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Include &tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+	gSizer1->Add( m_Include_Tracks, 0, 0, 5 );
 	
-	m_Include_Edges_Items = new wxCheckBox( this, wxID_ANY, _("Include &board outline layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_Include_Edges_Items, 0, wxALL, 5 );
+	m_Include_Edges_Items = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Include &board outline layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	gSizer1->Add( m_Include_Edges_Items, 0, 0, 5 );
 	
-	m_Include_Zones = new wxCheckBox( this, wxID_ANY, _("Include &zones"), wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_Include_Zones, 0, wxALL, 5 );
+	m_Include_Zones = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Include &zones"), wxDefaultPosition, wxDefaultSize, 0 );
+	gSizer1->Add( m_Include_Zones, 0, 0, 5 );
 	
-	m_DrawBlockItems = new wxCheckBox( this, wxID_ANY, _("Draw &selected items while moving"), wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer1->Add( m_DrawBlockItems, 0, wxALL, 5 );
+	m_DrawBlockItems = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Draw &selected items while moving"), wxDefaultPosition, wxDefaultSize, 0 );
+	gSizer1->Add( m_DrawBlockItems, 0, 0, 5 );
 	
 	
-	sbSizer1->Add( gSizer1, 1, wxEXPAND, 5 );
+	sbSizer1->Add( gSizer1, 1, wxALL|wxEXPAND, 5 );
 	
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_staticline1 = new wxStaticLine( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	sbSizer1->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
-	m_checkBoxIncludeInvisible = new wxCheckBox( this, wxID_ANY, _("Include &items on invisible layers"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer1->Add( m_checkBoxIncludeInvisible, 0, wxALL, 5 );
+	m_checkBoxIncludeInvisible = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Include &items on invisible layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer1->Add( m_checkBoxIncludeInvisible, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
 	bSizerMain->Add( sbSizer1, 1, wxALL|wxEXPAND, 5 );
@@ -66,11 +65,12 @@ DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent, wxWindow
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
 	
-	bSizerMain->Add( m_sdbSizer1, 0, wxALIGN_RIGHT|wxALL, 5 );
+	bSizerMain->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

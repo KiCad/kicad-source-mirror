@@ -29,7 +29,7 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	fgInputSizer->SetFlexibleDirection( wxBOTH );
 	fgInputSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_xLabel = new wxStaticText( this, wxID_ANY, _("x:"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_xLabel = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_xLabel->Wrap( -1 );
 	fgInputSizer->Add( m_xLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
@@ -43,7 +43,7 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	m_clearX = new wxButton( this, wxID_ANY, _("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	fgInputSizer->Add( m_clearX, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_yLabel = new wxStaticText( this, wxID_ANY, _("y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_yLabel = new wxStaticText( this, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_yLabel->Wrap( -1 );
 	fgInputSizer->Add( m_yLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
@@ -74,9 +74,9 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	
 	bMiddleSizer->Add( fgInputSizer, 1, wxALL|wxBOTTOM|wxEXPAND|wxTOP, 5 );
 	
-	wxString m_originChooserChoices[] = { _("Current Position"), _("User Origin"), _("Grid Origin"), _("Drill/Place Origin"), _("Sheet Origin") };
+	wxString m_originChooserChoices[] = { _("Current position"), _("User origin"), _("Grid origin"), _("Drill/Place origin"), _("Sheet origin") };
 	int m_originChooserNChoices = sizeof( m_originChooserChoices ) / sizeof( wxString );
-	m_originChooser = new wxRadioBox( this, wxID_ANY, _("Move relative to:"), wxDefaultPosition, wxDefaultSize, m_originChooserNChoices, m_originChooserChoices, 1, wxRA_SPECIFY_COLS );
+	m_originChooser = new wxRadioBox( this, wxID_ANY, _("Move Relative To:"), wxDefaultPosition, wxDefaultSize, m_originChooserNChoices, m_originChooserChoices, 1, wxRA_SPECIFY_COLS );
 	m_originChooser->SetSelection( 0 );
 	bMiddleSizer->Add( m_originChooser, 0, wxALL, 5 );
 	

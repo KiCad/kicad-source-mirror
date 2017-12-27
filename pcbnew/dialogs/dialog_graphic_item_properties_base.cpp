@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "class_pcb_layer_box_selector.h"
@@ -72,7 +72,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	m_fgUpperLeftGridSizer->Add( m_EndPointYUnit, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	
-	bUpperSizer->Add( m_fgUpperLeftGridSizer, 1, wxEXPAND, 5 );
+	bUpperSizer->Add( m_fgUpperLeftGridSizer, 0, wxEXPAND, 5 );
 	
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bUpperSizer->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
@@ -133,7 +133,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWind
 	bUpperRightSizer->Add( fgUpperRightGridSizer, 0, wxEXPAND, 5 );
 	
 	
-	bUpperSizer->Add( bUpperRightSizer, 1, wxEXPAND, 5 );
+	bUpperSizer->Add( bUpperRightSizer, 0, wxEXPAND, 5 );
 	
 	
 	bMainSizer->Add( bUpperSizer, 1, wxALL|wxEXPAND, 5 );

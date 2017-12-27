@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug 29 2017)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_layers_setup_base.h"
@@ -11,7 +11,7 @@
 
 DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 550,600 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( -1,500 ), wxSize( -1,550 ) );
 	
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
@@ -341,7 +341,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	wxString m_In1ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
 	int m_In1ChoiceNChoices = sizeof( m_In1ChoiceChoices ) / sizeof( wxString );
 	m_In1Choice = new wxChoice( m_LayersListPanel, ID_IN1CHOICE, wxDefaultPosition, wxDefaultSize, m_In1ChoiceNChoices, m_In1ChoiceChoices, 0 );
-	m_In1Choice->SetSelection( 0 );
+	m_In1Choice->SetSelection( 3 );
 	m_In1Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In1Choice, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
@@ -1744,6 +1744,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_LAYERS_SETUP_BASE::OnInitDialog ) );

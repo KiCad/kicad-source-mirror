@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_show_page_borders_base.h"
@@ -22,7 +22,7 @@ DIALOG_PAGE_SHOW_PAGE_BORDERS_BASE::DIALOG_PAGE_SHOW_PAGE_BORDERS_BASE( wxWindow
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
 	
-	wxString m_ShowPageLimitsChoices[] = { _("Full size. Do not show page limits"), _("Full size"), _("Size A4"), _("Size A3"), _("Size A2"), _("Size A"), _("Size B"), _("Size C") };
+	wxString m_ShowPageLimitsChoices[] = { _("Full size without page limits"), _("Full size"), _("Size A4"), _("Size A3"), _("Size A2"), _("Size A"), _("Size B"), _("Size C") };
 	int m_ShowPageLimitsNChoices = sizeof( m_ShowPageLimitsChoices ) / sizeof( wxString );
 	m_ShowPageLimits = new wxRadioBox( this, wxID_ANY, _("Show Page Limits:"), wxDefaultPosition, wxDefaultSize, m_ShowPageLimitsNChoices, m_ShowPageLimitsChoices, 1, wxRA_SPECIFY_COLS );
 	m_ShowPageLimits->SetSelection( 0 );
@@ -49,6 +49,7 @@ DIALOG_PAGE_SHOW_PAGE_BORDERS_BASE::DIALOG_PAGE_SHOW_PAGE_BORDERS_BASE( wxWindow
 	
 	this->SetSizer( bDialogSizer );
 	this->Layout();
+	bDialogSizer->Fit( this );
 	
 	// Connect Events
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAGE_SHOW_PAGE_BORDERS_BASE::OnCancelButtonClick ), NULL, this );

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_general_options_BoardEditor_base.h"
@@ -82,12 +82,12 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	m_Segments_45_Only_Ctrl = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_SEGMENTS45, _("L&imit graphic lines to 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Segments_45_Only_Ctrl->SetToolTip( _("Force line segment directions to H, V or 45 degrees when drawing on technical layers.") );
 	
-	bOptionsSizer->Add( m_Segments_45_Only_Ctrl, 0, wxALL, 5 );
+	bOptionsSizer->Add( m_Segments_45_Only_Ctrl, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_UseEditKeyForWidth = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Edit action changes track width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_UseEditKeyForWidth->SetToolTip( _("When active, hitting Edit hotkey or double-clicking on a track or via changes its width/diameter to the one selected in the main toolbar. ") );
 	
-	bOptionsSizer->Add( m_UseEditKeyForWidth, 0, wxALL, 5 );
+	bOptionsSizer->Add( m_UseEditKeyForWidth, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
 	bMiddleLeftSizer->Add( bOptionsSizer, 1, wxEXPAND|wxALL, 5 );
@@ -105,19 +105,19 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	m_TrackAutodel->SetValue(true); 
 	m_TrackAutodel->SetToolTip( _("Enable automatic track deletion when redrawing a track.") );
 	
-	bLegacyOptionsSizer->Add( m_TrackAutodel, 0, wxALL, 5 );
+	bLegacyOptionsSizer->Add( m_TrackAutodel, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_Track_45_Only_Ctrl = new wxCheckBox( bLegacyOptionsSizer->GetStaticBox(), wxID_TRACKS45, _("&Limit tracks to 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Track_45_Only_Ctrl->SetValue(true); 
 	m_Track_45_Only_Ctrl->SetToolTip( _("Force track directions to H, V or 45 degrees when drawing a track.") );
 	
-	bLegacyOptionsSizer->Add( m_Track_45_Only_Ctrl, 0, wxALL, 5 );
+	bLegacyOptionsSizer->Add( m_Track_45_Only_Ctrl, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_Track_DoubleSegm_Ctrl = new wxCheckBox( bLegacyOptionsSizer->GetStaticBox(), wxID_ANY, _("&Use double segmented tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Track_DoubleSegm_Ctrl->SetValue(true); 
 	m_Track_DoubleSegm_Ctrl->SetToolTip( _("Use two track segments, with 45 degrees angle between them, when drawing a new track ") );
 	
-	bLegacyOptionsSizer->Add( m_Track_DoubleSegm_Ctrl, 0, wxALL, 5 );
+	bLegacyOptionsSizer->Add( m_Track_DoubleSegm_Ctrl, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
 	bMiddleLeftSizer->Add( bLegacyOptionsSizer, 0, wxEXPAND|wxALL, 5 );

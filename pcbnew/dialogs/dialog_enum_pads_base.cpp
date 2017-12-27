@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_enum_pads_base.h"
@@ -34,7 +34,14 @@ DIALOG_ENUM_PADS_BASE::DIALOG_ENUM_PADS_BASE( wxWindow* parent, wxWindowID id, c
 	fgSizer->Add( m_lblPadPrefix, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_padPrefix = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_padPrefix->SetMaxLength( 4 ); 
+	#ifdef __WXGTK__
+	if ( !m_padPrefix->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_padPrefix->SetMaxLength( 4 );
+	}
+	#else
+	m_padPrefix->SetMaxLength( 4 );
+	#endif
 	fgSizer->Add( m_padPrefix, 0, wxALL|wxEXPAND, 5 );
 	
 	m_lblPadStartNum = new wxStaticText( this, wxID_ANY, _("First pad number:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -62,6 +69,7 @@ DIALOG_ENUM_PADS_BASE::DIALOG_ENUM_PADS_BASE( wxWindow* parent, wxWindowID id, c
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 }

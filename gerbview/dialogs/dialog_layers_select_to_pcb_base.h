@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_LAYERS_SELECT_TO_PCB_BASE_H__
@@ -11,8 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
-
 #include "dialog_shim.h"
 #include <wx/sizer.h>
 #include <wx/gdicmn.h>
@@ -80,7 +78,7 @@ class LAYERS_MAP_DIALOG_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id = ID_LAYERS_MAP_DIALOG_BASE, const wxString& title = _("Layer selection:"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 400,286 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id = ID_LAYERS_MAP_DIALOG_BASE, const wxString& title = _("Layer Selection"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~LAYERS_MAP_DIALOG_BASE();
 	
 };

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_get_footprint_by_name_base.h"
@@ -29,7 +29,6 @@ DIALOG_GET_FOOTPRINT_BY_NAME_BASE::DIALOG_GET_FOOTPRINT_BY_NAME_BASE( wxWindow* 
 	fgSizer1->Add( m_staticTextRef, 0, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_SearchTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 200,-1 ), 0 );
-	m_SearchTextCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_SearchTextCtrl, 0, wxEXPAND|wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_staticTextRef1 = new wxStaticText( this, wxID_ANY, _("Available:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -62,6 +61,7 @@ DIALOG_GET_FOOTPRINT_BY_NAME_BASE::DIALOG_GET_FOOTPRINT_BY_NAME_BASE( wxWindow* 
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_footprint_wizard_list_base.h"
@@ -62,7 +62,7 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	m_panelGenerators->SetSizer( bSizerpanelGen );
 	m_panelGenerators->Layout();
 	bSizerpanelGen->Fit( m_panelGenerators );
-	m_notebook->AddPage( m_panelGenerators, _("Available footprint generators"), true );
+	m_notebook->AddPage( m_panelGenerators, _("Available Footprint Generators"), false );
 	m_panelInfo = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_bsizerPanelInfo;
 	m_bsizerPanelInfo = new wxBoxSizer( wxVERTICAL );
@@ -88,7 +88,7 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	m_panelInfo->SetSizer( m_bsizerPanelInfo );
 	m_panelInfo->Layout();
 	m_bsizerPanelInfo->Fit( m_panelInfo );
-	m_notebook->AddPage( m_panelInfo, _("Messages"), false );
+	m_notebook->AddPage( m_panelInfo, _("Messages"), true );
 	
 	bSizerMain->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 	
@@ -119,6 +119,7 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

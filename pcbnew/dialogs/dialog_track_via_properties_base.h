@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug 20 2017)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_TRACK_VIA_PROPERTIES_BASE_H__
@@ -11,8 +11,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
 class PCB_LAYER_BOX_SELECTOR;
+class TEXT_CTRL_EVAL;
 class WIDGET_NET_SELECTOR;
 
 #include "dialog_shim.h"
@@ -52,16 +52,16 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_lockedCbox;
 		wxStaticBoxSizer* m_sbTrackSizer;
 		wxStaticText* m_TrackStartXLabel;
-		wxTextCtrl* m_TrackStartXCtrl;
+		TEXT_CTRL_EVAL* m_TrackStartXCtrl;
 		wxStaticText* m_TrackStartXUnit;
 		wxStaticText* m_TrackStartYLabel;
-		wxTextCtrl* m_TrackStartYCtrl;
+		TEXT_CTRL_EVAL* m_TrackStartYCtrl;
 		wxStaticText* m_TrackStartYUnit;
 		wxStaticText* m_TrackEndXLabel;
-		wxTextCtrl* m_TrackEndXCtrl;
+		TEXT_CTRL_EVAL* m_TrackEndXCtrl;
 		wxStaticText* m_TrackEndXUnit;
 		wxStaticText* m_TrackEndYLabel;
-		wxTextCtrl* m_TrackEndYCtrl;
+		TEXT_CTRL_EVAL* m_TrackEndYCtrl;
 		wxStaticText* m_TrackEndYUnit;
 		wxStaticLine* m_trackStaticLine;
 		wxStaticText* m_TrackWidthLabel;
@@ -72,20 +72,20 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		PCB_LAYER_BOX_SELECTOR* m_TrackLayerCtrl;
 		wxStaticBoxSizer* m_sbViaSizer;
 		wxStaticText* m_ViaXLabel;
-		wxTextCtrl* m_ViaXCtrl;
+		TEXT_CTRL_EVAL* m_ViaXCtrl;
 		wxStaticText* m_ViaXUnit;
 		wxStaticText* m_ViaYLabel;
-		wxTextCtrl* m_ViaYCtrl;
+		TEXT_CTRL_EVAL* m_ViaYCtrl;
 		wxStaticText* m_ViaYUnit;
 		wxStaticLine* m_viaStaticLine;
 		wxStaticText* m_DesignRuleVias;
 		wxChoice* m_DesignRuleViasCtrl;
 		wxStaticText* m_DesignRuleViasUnit;
 		wxStaticText* m_ViaDiameterLabel;
-		wxTextCtrl* m_ViaDiameterCtrl;
+		TEXT_CTRL_EVAL* m_ViaDiameterCtrl;
 		wxStaticText* m_ViaDiameterUnit;
 		wxStaticText* m_ViaDrillLabel;
-		wxTextCtrl* m_ViaDrillCtrl;
+		TEXT_CTRL_EVAL* m_ViaDrillCtrl;
 		wxStaticText* m_ViaDrillUnit;
 		wxStaticText* m_ViaTypeLabel;
 		wxChoice* m_ViaTypeChoice;
@@ -109,7 +109,7 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Track & Via Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 573,437 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
+		DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Track & Via Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
 		~DIALOG_TRACK_VIA_PROPERTIES_BASE();
 	
 };

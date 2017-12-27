@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 19 2017)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_gendrill_base.h"
@@ -94,7 +94,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	wxStaticBoxSizer* sbExcellonOptSizer;
 	sbExcellonOptSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Excellon Drill File Options:") ), wxVERTICAL );
 	
-	m_Check_Mirror = new wxCheckBox( sbExcellonOptSizer->GetStaticBox(), wxID_ANY, _("Mirror y axis"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Check_Mirror = new wxCheckBox( sbExcellonOptSizer->GetStaticBox(), wxID_ANY, _("Mirror Y axis"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Check_Mirror->SetToolTip( _("Not recommended.\nUsed mostly by users who make the boards themselves.") );
 	
 	sbExcellonOptSizer->Add( m_Check_Mirror, 0, wxRIGHT|wxLEFT, 5 );
@@ -127,51 +127,51 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	bRightBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbSizerInfo;
-	sbSizerInfo = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Info:") ), wxVERTICAL );
+	sbSizerInfo = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Information:") ), wxVERTICAL );
 	
-	m_DefaultViasDrillSizer = new wxStaticBoxSizer( new wxStaticBox( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Default Vias Drill:") ), wxVERTICAL );
+	m_DefaultViasDrillSizer = new wxStaticBoxSizer( new wxStaticBox( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Default Via Drill:") ), wxVERTICAL );
 	
 	m_ViaDrillValue = new wxStaticText( m_DefaultViasDrillSizer->GetStaticBox(), wxID_ANY, _("Via Drill Value"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaDrillValue->Wrap( -1 );
 	m_DefaultViasDrillSizer->Add( m_ViaDrillValue, 0, wxALL, 5 );
 	
 	
-	sbSizerInfo->Add( m_DefaultViasDrillSizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	sbSizerInfo->Add( m_DefaultViasDrillSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	m_MicroViasDrillSizer = new wxStaticBoxSizer( new wxStaticBox( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Micro Vias Drill:") ), wxVERTICAL );
 	
-	m_MicroViaDrillValue = new wxStaticText( m_MicroViasDrillSizer->GetStaticBox(), wxID_ANY, _("Micro Via Drill Value"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MicroViaDrillValue = new wxStaticText( m_MicroViasDrillSizer->GetStaticBox(), wxID_ANY, _("Micro via drill size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MicroViaDrillValue->Wrap( -1 );
 	m_MicroViasDrillSizer->Add( m_MicroViaDrillValue, 0, wxALL, 5 );
 	
 	
-	sbSizerInfo->Add( m_MicroViasDrillSizer, 0, wxEXPAND|wxBOTTOM, 5 );
+	sbSizerInfo->Add( m_MicroViasDrillSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	wxStaticBoxSizer* sbSizerHoles;
 	sbSizerHoles = new wxStaticBoxSizer( new wxStaticBox( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Holes Count:") ), wxVERTICAL );
 	
-	m_PlatedPadsCountInfoMsg = new wxStaticText( sbSizerHoles->GetStaticBox(), wxID_ANY, _("Plated Pads:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PlatedPadsCountInfoMsg = new wxStaticText( sbSizerHoles->GetStaticBox(), wxID_ANY, _("Plated pads:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PlatedPadsCountInfoMsg->Wrap( -1 );
 	sbSizerHoles->Add( m_PlatedPadsCountInfoMsg, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_NotPlatedPadsCountInfoMsg = new wxStaticText( sbSizerHoles->GetStaticBox(), wxID_ANY, _("Not Plated Pads:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_NotPlatedPadsCountInfoMsg = new wxStaticText( sbSizerHoles->GetStaticBox(), wxID_ANY, _("Not plated pads:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_NotPlatedPadsCountInfoMsg->Wrap( -1 );
 	sbSizerHoles->Add( m_NotPlatedPadsCountInfoMsg, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_ThroughViasInfoMsg = new wxStaticText( sbSizerHoles->GetStaticBox(), wxID_ANY, _("Through Vias:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ThroughViasInfoMsg = new wxStaticText( sbSizerHoles->GetStaticBox(), wxID_ANY, _("Through vias:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThroughViasInfoMsg->Wrap( -1 );
 	sbSizerHoles->Add( m_ThroughViasInfoMsg, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_MicroViasInfoMsg = new wxStaticText( sbSizerHoles->GetStaticBox(), wxID_ANY, _("Micro Vias:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MicroViasInfoMsg = new wxStaticText( sbSizerHoles->GetStaticBox(), wxID_ANY, _("Micro vias:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MicroViasInfoMsg->Wrap( -1 );
 	sbSizerHoles->Add( m_MicroViasInfoMsg, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_BuriedViasInfoMsg = new wxStaticText( sbSizerHoles->GetStaticBox(), wxID_ANY, _("Buried Vias:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_BuriedViasInfoMsg = new wxStaticText( sbSizerHoles->GetStaticBox(), wxID_ANY, _("Buried vias:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_BuriedViasInfoMsg->Wrap( -1 );
 	sbSizerHoles->Add( m_BuriedViasInfoMsg, 0, wxALL, 5 );
 	
 	
-	sbSizerInfo->Add( sbSizerHoles, 1, wxEXPAND|wxBOTTOM, 5 );
+	sbSizerInfo->Add( sbSizerHoles, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	bRightBoxSizer->Add( sbSizerInfo, 0, wxEXPAND|wxTOP, 5 );
@@ -218,6 +218,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

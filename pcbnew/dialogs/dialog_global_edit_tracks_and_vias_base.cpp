@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_global_edit_tracks_and_vias_base.h"
@@ -138,16 +138,16 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	bSizerRadioButtons->Add( m_Net2CurrValueButton, 0, wxALL, 5 );
 	
 	m_NetUseNetclassValueButton = new wxRadioButton( this, ID_NETCLASS_VALUES_TO_CURRENT_NET, _("Set tracks and vias of the current Net to the Netclass value"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRadioButtons->Add( m_NetUseNetclassValueButton, 0, wxALL, 5 );
+	bSizerRadioButtons->Add( m_NetUseNetclassValueButton, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_radioBtnAll = new wxRadioButton( this, ID_ALL_TRACKS_VIAS, _("Set all tracks and vias to their Netclass value"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRadioButtons->Add( m_radioBtnAll, 0, wxALL, 5 );
+	bSizerRadioButtons->Add( m_radioBtnAll, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_radioAllVias = new wxRadioButton( this, ID_ALL_VIAS, _("Set all vias (no track) to their Netclass value"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRadioButtons->Add( m_radioAllVias, 0, wxALL, 5 );
+	bSizerRadioButtons->Add( m_radioAllVias, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_radioAllTracks = new wxRadioButton( this, ID_ALL_TRACKS, _("Set all tracks (no via) to their Netclass value"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRadioButtons->Add( m_radioAllTracks, 0, wxALL, 5 );
+	bSizerRadioButtons->Add( m_radioAllTracks, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
 	bSizerOptions->Add( bSizerRadioButtons, 1, wxEXPAND, 5 );
@@ -165,11 +165,12 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bMainSizer->Add( m_sdbSizer, 0, wxEXPAND|wxALL, 5 );
+	bMainSizer->Add( m_sdbSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	// Connect Events
 	m_choiceNetName->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::onNetSelection ), NULL, this );

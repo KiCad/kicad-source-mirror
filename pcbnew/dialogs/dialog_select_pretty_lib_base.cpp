@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  2 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_select_pretty_lib_base.h"
@@ -42,7 +42,7 @@ DIALOG_SELECT_PRETTY_LIB_BASE::DIALOG_SELECT_PRETTY_LIB_BASE( wxWindow* parent, 
 	bSizerMain->Add( m_SizerNewLibName, 0, wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	bSizerMain->Add( m_staticline1, 0, wxEXPAND, 5 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -56,6 +56,7 @@ DIALOG_SELECT_PRETTY_LIB_BASE::DIALOG_SELECT_PRETTY_LIB_BASE( wxWindow* parent, 
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

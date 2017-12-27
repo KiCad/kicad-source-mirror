@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_DXF_IMPORT_BASE_H__
@@ -11,7 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
 class PCB_LAYER_BOX_SELECTOR;
 
 #include "dialog_shim.h"
@@ -27,8 +26,8 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/radiobox.h>
 #include <wx/valtext.h>
 #include <wx/choice.h>
-#include <wx/statline.h>
 #include <wx/bmpcbox.h>
+#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -54,7 +53,6 @@ class DIALOG_DXF_IMPORT_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_DxfPcbYCoord;
 		wxStaticText* m_staticTextUnits;
 		wxChoice* m_DxfPcbPositionUnits;
-		wxStaticLine* m_staticline2;
 		wxStaticText* m_staticTextPrms;
 		wxStaticText* m_staticTextLineWidth;
 		wxTextCtrl* m_textCtrlLineWidth;
@@ -75,7 +73,7 @@ class DIALOG_DXF_IMPORT_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_DXF_IMPORT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import DXF File"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 475,388 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_DXF_IMPORT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import DXF File"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_DXF_IMPORT_BASE();
 	
 };

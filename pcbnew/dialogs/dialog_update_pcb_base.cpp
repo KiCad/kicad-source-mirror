@@ -13,7 +13,7 @@
 
 DIALOG_UPDATE_PCB_BASE::DIALOG_UPDATE_PCB_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 800,700 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 	
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
@@ -40,7 +40,7 @@ DIALOG_UPDATE_PCB_BASE::DIALOG_UPDATE_PCB_BASE( wxWindow* parent, wxWindowID id,
 	bLowerSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_messagePanel = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_messagePanel->SetMinSize( wxSize( -300,150 ) );
+	m_messagePanel->SetMinSize( wxSize( 350,200 ) );
 	
 	bLowerSizer->Add( m_messagePanel, 1, wxEXPAND | wxALL, 5 );
 	

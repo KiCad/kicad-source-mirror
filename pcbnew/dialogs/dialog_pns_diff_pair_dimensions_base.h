@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE_H__
@@ -11,7 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
 class TEXT_CTRL_EVAL;
 
 #include "dialog_shim.h"
@@ -62,7 +61,7 @@ class DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Differential Pair Dimensions"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 400,216 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Differential Pair Dimensions"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE();
 	
 };

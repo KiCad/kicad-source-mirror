@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_fp_plugin_options_base.h"
@@ -23,7 +23,7 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	m_grid_sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Plugin Options:") ), wxVERTICAL );
 	
 	m_grid_sizer->SetMinSize( wxSize( -1,300 ) ); 
-	m_grid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
+	m_grid = new wxGrid( m_grid_sizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
 	
 	// Grid
 	m_grid->CreateGrid( 1, 2 );
@@ -54,22 +54,22 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	wxBoxSizer* m_button_sizer;
 	m_button_sizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_add_row = new wxButton( this, wxID_ANY, _("Append"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_add_row = new wxButton( m_grid_sizer->GetStaticBox(), wxID_ANY, _("Append"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_add_row->SetToolTip( _("Append a blank row") );
 	
 	m_button_sizer->Add( m_add_row, 0, wxALL, 5 );
 	
-	m_delete_row = new wxButton( this, wxID_ANY, _("Delete"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_delete_row = new wxButton( m_grid_sizer->GetStaticBox(), wxID_ANY, _("Delete"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_delete_row->SetToolTip( _("Delete the selected row") );
 	
 	m_button_sizer->Add( m_delete_row, 0, wxALL, 5 );
 	
-	m_move_up = new wxButton( this, wxID_ANY, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_move_up = new wxButton( m_grid_sizer->GetStaticBox(), wxID_ANY, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_move_up->SetToolTip( _("Move the selected row up one position") );
 	
 	m_button_sizer->Add( m_move_up, 0, wxALL, 5 );
 	
-	m_move_down = new wxButton( this, wxID_ANY, _("Move Down"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_move_down = new wxButton( m_grid_sizer->GetStaticBox(), wxID_ANY, _("Move Down"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_move_down->SetToolTip( _("Move the selected row down one position") );
 	
 	m_button_sizer->Add( m_move_down, 0, wxALL, 5 );
@@ -90,19 +90,19 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	m_options_sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Option Choices:") ), wxVERTICAL );
 	
 	m_options_sizer->SetMinSize( wxSize( 200,-1 ) ); 
-	m_listbox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_ALWAYS_SB|wxLB_SINGLE ); 
+	m_listbox = new wxListBox( m_options_sizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_ALWAYS_SB|wxLB_SINGLE ); 
 	m_listbox->SetToolTip( _("Options supported by current plugin") );
 	
 	m_options_sizer->Add( m_listbox, 2, wxALL|wxEXPAND, 5 );
 	
-	m_append_choice_button = new wxButton( this, wxID_ANY, _("<< Append Selected Option"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_append_choice_button = new wxButton( m_options_sizer->GetStaticBox(), wxID_ANY, _("<< Append Selected Option"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_options_sizer->Add( m_append_choice_button, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Option Specific Help:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1 = new wxStaticText( m_options_sizer->GetStaticBox(), wxID_ANY, _("Option Specific Help:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
 	m_options_sizer->Add( m_staticText1, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	m_html = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO|wxVSCROLL );
+	m_html = new wxHtmlWindow( m_options_sizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_SCROLLBAR_AUTO|wxVSCROLL );
 	m_html->SetMinSize( wxSize( 300,300 ) );
 	
 	m_options_sizer->Add( m_html, 3, wxALL|wxEXPAND, 5 );
@@ -125,6 +125,7 @@ DIALOG_FP_PLUGIN_OPTIONS_BASE::DIALOG_FP_PLUGIN_OPTIONS_BASE( wxWindow* parent, 
 	
 	this->SetSizer( bSizer4 );
 	this->Layout();
+	bSizer4->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

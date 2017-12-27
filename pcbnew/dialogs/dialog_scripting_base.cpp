@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_scripting_base.h"
@@ -17,7 +17,6 @@ DIALOG_SCRIPTING_BASE::DIALOG_SCRIPTING_BASE( wxWindow* parent, wxWindowID id, c
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 	
 	m_txScript = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTE_MULTILINE );
-	m_txScript->SetMaxLength( 0 ); 
 	m_txScript->SetMinSize( wxSize( 480,500 ) );
 	
 	bSizerMain->Add( m_txScript, 1, wxALL|wxEXPAND, 5 );
@@ -28,6 +27,7 @@ DIALOG_SCRIPTING_BASE::DIALOG_SCRIPTING_BASE( wxWindow* parent, wxWindowID id, c
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

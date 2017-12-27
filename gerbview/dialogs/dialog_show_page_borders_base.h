@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_SHOW_PAGE_BORDERS_BASE_H__
@@ -47,7 +47,7 @@ class DIALOG_PAGE_SHOW_PAGE_BORDERS_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PAGE_SHOW_PAGE_BORDERS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Page Borders"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 263,254 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_PAGE_SHOW_PAGE_BORDERS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Page Borders"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PAGE_SHOW_PAGE_BORDERS_BASE();
 	
 };

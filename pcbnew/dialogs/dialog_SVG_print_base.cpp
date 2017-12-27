@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "wx_html_report_panel.h"
@@ -46,7 +46,7 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizerCopper;
 	bSizerCopper = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextCopperLayers = new wxStaticText( sbLayersSizer->GetStaticBox(), wxID_ANY, _("Copper Layers:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextCopperLayers = new wxStaticText( sbLayersSizer->GetStaticBox(), wxID_ANY, _("Copper layers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextCopperLayers->Wrap( -1 );
 	bSizerCopper->Add( m_staticTextCopperLayers, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -60,7 +60,7 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizerTech;
 	bSizerTech = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextTechLayers = new wxStaticText( sbLayersSizer->GetStaticBox(), wxID_ANY, _("Technical Layers:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTechLayers = new wxStaticText( sbLayersSizer->GetStaticBox(), wxID_ANY, _("Technical layers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTechLayers->Wrap( -1 );
 	bSizerTech->Add( m_staticTextTechLayers, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -72,10 +72,10 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	sbLayersSizer->Add( bSizerTech, 1, wxEXPAND, 5 );
 	
 	
-	bUpperSizer->Add( sbLayersSizer, 1, wxEXPAND, 5 );
+	bUpperSizer->Add( sbLayersSizer, 1, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbOptionsSizer;
-	sbOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Print SVG options:") ), wxVERTICAL );
+	sbOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Print SVG Options:") ), wxVERTICAL );
 	
 	m_TextPenWidth = new wxStaticText( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Default pen size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextPenWidth->Wrap( -1 );
@@ -88,7 +88,7 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	
 	wxString m_ModeColorOptionChoices[] = { _("Color"), _("Black and white") };
 	int m_ModeColorOptionNChoices = sizeof( m_ModeColorOptionChoices ) / sizeof( wxString );
-	m_ModeColorOption = new wxRadioBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Print mode"), wxDefaultPosition, wxDefaultSize, m_ModeColorOptionNChoices, m_ModeColorOptionChoices, 1, wxRA_SPECIFY_COLS );
+	m_ModeColorOption = new wxRadioBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Print Mode"), wxDefaultPosition, wxDefaultSize, m_ModeColorOptionNChoices, m_ModeColorOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_ModeColorOption->SetSelection( 1 );
 	m_ModeColorOption->SetToolTip( _("Choose if you want to draw the sheet like it appears on screen,\nor in black and white mode, better to print it when using  black and white printers") );
 	
@@ -109,17 +109,17 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	m_printMirrorOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Print mirrored"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_printMirrorOpt->SetToolTip( _("Print the layer(s) horizontally mirrored") );
 	
-	sbOptionsSizer->Add( m_printMirrorOpt, 0, wxALL, 5 );
+	sbOptionsSizer->Add( m_printMirrorOpt, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	
-	bUpperSizer->Add( sbOptionsSizer, 0, wxEXPAND, 5 );
+	bUpperSizer->Add( sbOptionsSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxString m_rbFileOptChoices[] = { _("One file per layer"), _("All in one file") };
 	int m_rbFileOptNChoices = sizeof( m_rbFileOptChoices ) / sizeof( wxString );
-	m_rbFileOpt = new wxRadioBox( this, wxID_ANY, _("File option:"), wxDefaultPosition, wxDefaultSize, m_rbFileOptNChoices, m_rbFileOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbFileOpt = new wxRadioBox( this, wxID_ANY, _("File Option:"), wxDefaultPosition, wxDefaultSize, m_rbFileOptNChoices, m_rbFileOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbFileOpt->SetSelection( 0 );
 	bButtonsSizer->Add( m_rbFileOpt, 0, wxALL, 5 );
 	
@@ -149,6 +149,7 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_SVG_PRINT_base::OnCloseWindow ) );

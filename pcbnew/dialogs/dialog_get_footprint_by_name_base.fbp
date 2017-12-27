@@ -44,10 +44,10 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_GET_FOOTPRINT_BY_NAME_BASE</property>
             <property name="pos"></property>
-            <property name="size">341,176</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
-            <property name="title">Search for footprint</property>
+            <property name="title">Search for Footprint</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>

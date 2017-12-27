@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "wizard_3DShape_Libs_downloader_base.h"
@@ -148,7 +148,7 @@ WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE( wxWind
 	m_searchCtrl3Dlibs->ShowSearchButton( true );
 	#endif
 	m_searchCtrl3Dlibs->ShowCancelButton( false );
-	bSizer7->Add( m_searchCtrl3Dlibs, 2, wxALL, 5 );
+	bSizer7->Add( m_searchCtrl3Dlibs, 2, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
 	bSizer111->Add( bSizer7, 0, wxEXPAND, 5 );
@@ -185,6 +185,8 @@ WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE::WIZARD_3DSHAPE_LIBS_DOWNLOADER_BASE( wxWind
 	m_gridLibReview->SetMargins( 5, 0 );
 	
 	// Columns
+	m_gridLibReview->SetColSize( 0, 150 );
+	m_gridLibReview->SetColSize( 1, 300 );
 	m_gridLibReview->EnableDragColMove( false );
 	m_gridLibReview->EnableDragColSize( true );
 	m_gridLibReview->SetColLabelSize( 30 );

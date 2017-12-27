@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version Nov 22 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "class_pcb_layer_box_selector.h"
@@ -34,35 +34,35 @@ DIALOG_DIMENSION_EDITOR_BASE::DIALOG_DIMENSION_EDITOR_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizerLeft;
 	bSizerLeft = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextSizeX = new wxStaticText( this, wxID_ANY, _("Text Width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSizeX = new wxStaticText( this, wxID_ANY, _("Text width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSizeX->Wrap( -1 );
 	bSizerLeft->Add( m_staticTextSizeX, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_TxtSizeXCtrl = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLeft->Add( m_TxtSizeXCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_staticTextSizeY = new wxStaticText( this, wxID_ANY, _("Text Height"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSizeY = new wxStaticText( this, wxID_ANY, _("Text height"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSizeY->Wrap( -1 );
 	bSizerLeft->Add( m_staticTextSizeY, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_TxtSizeYCtrl = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLeft->Add( m_TxtSizeYCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_staticTextWidth = new wxStaticText( this, wxID_ANY, _("Text Thickness"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextWidth = new wxStaticText( this, wxID_ANY, _("Text thickness"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextWidth->Wrap( -1 );
 	bSizerLeft->Add( m_staticTextWidth, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_TxtWidthCtrl = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLeft->Add( m_TxtWidthCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_staticTextPosX = new wxStaticText( this, wxID_ANY, _("Text Position X"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPosX = new wxStaticText( this, wxID_ANY, _("Text position X"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPosX->Wrap( -1 );
 	bSizerLeft->Add( m_staticTextPosX, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_textCtrlPosX = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLeft->Add( m_textCtrlPosX, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_staticTextPosY = new wxStaticText( this, wxID_ANY, _("Text Position Y"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPosY = new wxStaticText( this, wxID_ANY, _("Text position Y"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPosY->Wrap( -1 );
 	bSizerLeft->Add( m_staticTextPosY, 0, wxRIGHT|wxLEFT, 5 );
 	
@@ -89,7 +89,7 @@ DIALOG_DIMENSION_EDITOR_BASE::DIALOG_DIMENSION_EDITOR_BASE( wxWindow* parent, wx
 	bSizerRight->Add( m_SelLayerBox, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizerUpper->Add( bSizerRight, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerUpper->Add( bSizerRight, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
 	bSizerMain->Add( bSizerUpper, 1, wxEXPAND, 5 );
