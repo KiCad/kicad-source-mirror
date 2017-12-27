@@ -1,0 +1,39 @@
+From 05c5d6676056f4f6689cabf701d4ea69f419fa0f Mon Sep 17 00:00:00 2001
+From: Jeff Young <jeff@rokeby.ie>
+Date: Wed, 27 Dec 2017 19:13:34 +0000
+Subject: [PATCH] Inherit from StaticBoxBase so that tabbing works.
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="------------2.14.3 (Apple Git-98)"
+
+This is a multi-part message in MIME format.
+--------------2.14.3 (Apple Git-98)
+Content-Type: text/plain; charset=UTF-8; format=fixed
+Content-Transfer-Encoding: 8bit
+
+---
+ include/wx/osx/statbox.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+
+--------------2.14.3 (Apple Git-98)
+Content-Type: text/x-patch; name="0001-Inherit-from-StaticBoxBase-so-that-tabbing-works.patch"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: attachment; filename="0001-Inherit-from-StaticBoxBase-so-that-tabbing-works.patch"
+
+diff --git a/include/wx/osx/statbox.h b/include/wx/osx/statbox.h
+index 5b5f049c58..2428f401fb 100644
+--- a/include/wx/osx/statbox.h
++++ b/include/wx/osx/statbox.h
+@@ -14,7 +14,7 @@
+ #include "wx/control.h"
+ 
+ // Group box
+-class WXDLLIMPEXP_CORE wxStaticBox: public wxControl
++class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
+ {
+   DECLARE_DYNAMIC_CLASS(wxStaticBox)
+ 
+
+--------------2.14.3 (Apple Git-98)--
+
+
