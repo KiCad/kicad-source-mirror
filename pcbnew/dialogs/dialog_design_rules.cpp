@@ -551,6 +551,9 @@ static void gridRow2class( wxGrid* grid, int row, NETCLASSPTR nc )
 
 void DIALOG_DESIGN_RULES::CopyRulesListToBoard()
 {
+    // Commit any pending in-place edits first
+    m_grid->SaveEditControlValue();
+
     NETCLASSES& netclasses = m_BrdSettings->m_NetClasses;
 
     // Remove all netclasses from board. We'll copy new list after
