@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +55,7 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
     m_model( aModelItem ), m_cache( aCacheManager ), m_previousDir( prevModelSelectDir ),
     m_previousFilterIndex( prevModelWildcard )
 {
-    this->SetSizeHints( wxSize( 500,200 ), wxDefaultSize );
+    SetSizeHints( wxSize( 500,200 ), wxDefaultSize );
 
     if( NULL != m_cache )
         m_resolver = m_cache->GetResolver();
@@ -155,9 +156,9 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
 
     updateDirChoiceList();
 
-    this->SetSizerAndFit( bSizer0 );
-    this->Layout();
-    this->Centre( wxBOTH );
+    SetSizerAndFit( bSizer0 );
+    Layout();
+    Centre( wxBOTH );
 
     m_modelViewer->Refresh();
     m_modelViewer->SetFocus();

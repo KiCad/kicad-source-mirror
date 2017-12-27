@@ -9,8 +9,8 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -132,6 +132,7 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
     // Display the default path, given by environment variable KISYS3DMOD
     wxString default_path;
     wxGetEnv( KISYS3DMOD, &default_path );
+
 #ifdef __WINDOWS__
     default_path.Replace( wxT( "/" ), wxT( "\\" ) );
 #endif
@@ -143,7 +144,6 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
     auto sM = m_currentModule->Models().begin();
     auto eM = m_currentModule->Models().end();
     m_shapes3D_list.clear();
-
 
     wxString origPath;
     wxString alias;
@@ -274,6 +274,7 @@ void DIALOG_MODULE_MODULE_EDITOR::On3DShapeNameSelected(wxCommandEvent& event)
     {
         if( m_PreviewPane )
             m_PreviewPane->ResetModelData();
+
         return;
     }
 
@@ -292,7 +293,7 @@ void DIALOG_MODULE_MODULE_EDITOR::On3DShapeNameSelected(wxCommandEvent& event)
 }
 
 
-void DIALOG_MODULE_MODULE_EDITOR::Remove3DShape(wxCommandEvent& event)
+void DIALOG_MODULE_MODULE_EDITOR::Remove3DShape( wxCommandEvent& event )
 {
     int ii = m_3D_ShapeNameListBox->GetSelection();
 
@@ -390,6 +391,14 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DShapeFile()
     wxString sidx = prj.GetRString( PROJECT::VIEWER_3D_FILTER_INDEX );
     int filter = 0;
 
+    // If the PROJECT::VIEWER_3D_PATH hasn't been set yet, use the KISYS3DMOD environment
+    // varaible and fall back to the project path if necessary.
+    if( initialpath.IsEmpty() )
+    {
+        if( !wxGetEnv( "KISYS3DMOD", &initialpath ) || initialpath.IsEmpty() )
+            initialpath = prj.GetProjectPath();
+    }
+
     if( !sidx.empty() )
     {
         long tmp;
@@ -422,10 +431,10 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DShapeFile()
 
     m_3D_ShapeNameListBox->Append( origPath );
 
-    #ifdef __WINDOWS__
+#ifdef __WINDOWS__
     // In Kicad files, filenames and paths are stored using Unix notation
     model.m_Filename.Replace( wxT( "\\" ), wxT( "/" ) );
-    #endif
+#endif
 
     m_shapes3D_list.push_back( model );
     m_lastSelected3DShapeIndex = m_3D_ShapeNameListBox->GetCount() - 1;
@@ -533,7 +542,7 @@ bool DIALOG_MODULE_MODULE_EDITOR::TransferDataFromWindow()
 }
 
 
-void DIALOG_MODULE_MODULE_EDITOR::OnEditReference(wxCommandEvent& event)
+void DIALOG_MODULE_MODULE_EDITOR::OnEditReference( wxCommandEvent& event )
 {
     wxPoint tmp = m_parent->GetCrossHairPosition();
     m_parent->SetCrossHairPosition( m_referenceCopy->GetTextPos() );
@@ -543,7 +552,7 @@ void DIALOG_MODULE_MODULE_EDITOR::OnEditReference(wxCommandEvent& event)
 }
 
 
-void DIALOG_MODULE_MODULE_EDITOR::OnEditValue(wxCommandEvent& event)
+void DIALOG_MODULE_MODULE_EDITOR::OnEditValue( wxCommandEvent& event )
 {
     wxPoint tmp = m_parent->GetCrossHairPosition();
     m_parent->SetCrossHairPosition( m_valueCopy->GetTextPos() );

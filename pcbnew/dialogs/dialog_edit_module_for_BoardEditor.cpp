@@ -532,6 +532,14 @@ void DIALOG_MODULE_BOARD_EDITOR::BrowseAndAdd3DShapeFile()
     wxString sidx = prj.GetRString( PROJECT::VIEWER_3D_FILTER_INDEX );
     int filter = 0;
 
+    // If the PROJECT::VIEWER_3D_PATH hasn't been set yet, use the KISYS3DMOD environment
+    // varaible and fall back to the project path if necessary.
+    if( initialpath.IsEmpty() )
+    {
+        if( !wxGetEnv( "KISYS3DMOD", &initialpath ) || initialpath.IsEmpty() )
+            initialpath = prj.GetProjectPath();
+    }
+
     if( !sidx.empty() )
     {
         long tmp;
