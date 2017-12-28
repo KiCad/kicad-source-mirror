@@ -62,6 +62,11 @@ void EDA_3D_VIEWER::ReCreateMainToolbar()
 
     m_mainToolBar->AddSeparator();
 
+    m_mainToolBar->AddTool( ID_TOOL_SET_VISIBLE_ITEMS, wxEmptyString,
+                         KiBitmap( read_setup_xpm ),
+                         _( "Set display options, and some layers visibility" ) );
+    m_mainToolBar->AddSeparator();
+
     m_mainToolBar->AddTool( ID_RENDER_CURRENT_VIEW, wxEmptyString,
                             KiBitmap( render_mode_xpm ),
                             _( "Render current view using Raytracing" ) );
@@ -229,7 +234,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
 
     AddMenuItem( renderOptionsMenu_OPENGL, ID_MENU3D_FL_OPENGL_RENDER_SHOW_MODEL_BBOX,
                 _( "Show Model Bounding Boxes" ),
-                KiBitmap( green_xpm ), wxITEM_CHECK );
+                KiBitmap( ortho_xpm ), wxITEM_CHECK );
 
 
     // Add specific preferences for Raytracing

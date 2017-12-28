@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,14 +34,15 @@ public:
 
 private:
     EDA_3D_VIEWER* m_parent;
-    CINFO3D_VISU & m_3Dprms;
+    CINFO3D_VISU&  m_3Dprms;
 
     void initDialog();
 
-    // Event functions:
-    void OnShowAllClick( wxCommandEvent& event ) override;
-    void OnShowNoneClick( wxCommandEvent& event ) override;
-    void OnOKClick( wxCommandEvent& event ) override;
+    /// Automatically called when clicking on the OK button
+    bool TransferDataFromWindow() override;
+
+    /// Automatically called after creating the dialog
+    bool TransferDataToWindow() override;
 };
 
 
@@ -52,7 +53,10 @@ void EDA_3D_VIEWER::Install3DViewOptionDialog( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_OK )
     {
         SetMenuBarOptionsState();
-        NewDisplay();
+
+        // Force immediate display redraw:
+        ReloadRequest();
+        m_canvas->Request_refresh();
     }
 }
 
@@ -64,17 +68,21 @@ DIALOG_3D_VIEW_OPTIONS::DIALOG_3D_VIEW_OPTIONS( EDA_3D_VIEWER* parent )
 
     initDialog();
 
-    SetDefaultItem( m_sdbSizerOK );
-	Layout();
-    GetSizer()->SetSizeHints( this );
-	Centre();
+    m_sdbSizerOK->SetDefault();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 
 void DIALOG_3D_VIEW_OPTIONS::initDialog()
 {
+    m_bitmapRealisticMode->SetBitmap( KiBitmap( use_3D_copper_thickness_xpm ) );
     m_bitmapCuThickness->SetBitmap( KiBitmap( use_3D_copper_thickness_xpm ) );
-    m_bitmap3Dshapes->SetBitmap( KiBitmap( shape_3d_xpm ) );
+    m_bitmap3DshapesTH->SetBitmap( KiBitmap( shape_3d_xpm ) );
+    m_bitmap3DshapesSMD->SetBitmap( KiBitmap( shape_3d_xpm ) );
+    m_bitmap3DshapesVirtual->SetBitmap( KiBitmap( shape_3d_xpm ) );
+    m_bitmapBoundingBoxes->SetBitmap( KiBitmap( ortho_xpm ) );
     m_bitmapAreas->SetBitmap( KiBitmap( add_zone_xpm ) );
     m_bitmapSilkscreen->SetBitmap( KiBitmap( text_xpm ) );
     m_bitmapSolderMask->SetBitmap( KiBitmap( pads_mask_layers_xpm ) );
@@ -82,51 +90,48 @@ void DIALOG_3D_VIEW_OPTIONS::initDialog()
     m_bitmapAdhesive->SetBitmap( KiBitmap( tools_xpm ) );
     m_bitmapComments->SetBitmap( KiBitmap( editor_xpm ) );
     m_bitmapECO->SetBitmap( KiBitmap( editor_xpm ) );
+}
 
+
+bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
+{
     // Check/uncheck checkboxes
+    m_checkBoxRealisticMode->SetValue( m_3Dprms.GetFlag( FL_USE_REALISTIC_MODE ) );
+    m_checkBoxCuThickness->SetValue(  m_3Dprms.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) );
     m_checkBoxAreas->SetValue( m_3Dprms.GetFlag( FL_ZONE ) );
+    m_checkBoxBoundingBoxes->SetValue( m_3Dprms.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
+
+    m_checkBox3DshapesTH->SetValue( m_3Dprms.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL ) );
+    m_checkBox3DshapesSMD->SetValue( m_3Dprms.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT ) );
+    m_checkBox3DshapesVirtual->SetValue( m_3Dprms.GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL ) );
+
     m_checkBoxSilkscreen->SetValue( m_3Dprms.GetFlag( FL_SILKSCREEN ) );
     m_checkBoxSolderMask->SetValue( m_3Dprms.GetFlag( FL_SOLDERMASK ) );
     m_checkBoxSolderpaste->SetValue( m_3Dprms.GetFlag( FL_SOLDERPASTE ) );
     m_checkBoxAdhesive->SetValue( m_3Dprms.GetFlag( FL_ADHESIVE ) );
     m_checkBoxComments->SetValue( m_3Dprms.GetFlag( FL_COMMENTS ) );
     m_checkBoxECO->SetValue( m_3Dprms.GetFlag( FL_ECO ) );
+
+    return true;
 }
 
 
-void DIALOG_3D_VIEW_OPTIONS::OnShowAllClick( wxCommandEvent& event )
+bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
 {
-    bool state = true;
-    m_checkBoxCuThickness->SetValue( state );
-    //m_checkBox3Dshapes->SetValue( state );
-    m_checkBoxAreas->SetValue( state );
-    m_checkBoxSilkscreen->SetValue( state );
-    m_checkBoxSolderMask->SetValue( state );
-    m_checkBoxSolderpaste->SetValue( state );
-    m_checkBoxAdhesive->SetValue( state );
-    m_checkBoxComments->SetValue( state );
-    m_checkBoxECO->SetValue( state );
-}
+    // Set render mode
+    m_3Dprms.SetFlag( FL_USE_REALISTIC_MODE, m_checkBoxRealisticMode->GetValue() );
 
-
-void DIALOG_3D_VIEW_OPTIONS::OnShowNoneClick( wxCommandEvent& event )
-{
-    bool state = false;
-    m_checkBoxCuThickness->SetValue( state );
-    //m_checkBox3Dshapes->SetValue( state );
-    m_checkBoxAreas->SetValue( state );
-    m_checkBoxSilkscreen->SetValue( state );
-    m_checkBoxSolderMask->SetValue( state );
-    m_checkBoxSolderpaste->SetValue( state );
-    m_checkBoxAdhesive->SetValue( state );
-    m_checkBoxComments->SetValue( state );
-    m_checkBoxECO->SetValue( state );
-}
-
-
-void DIALOG_3D_VIEW_OPTIONS::OnOKClick( wxCommandEvent& event )
-{
+    // Set visibility of items
+    m_3Dprms.SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, m_checkBoxCuThickness->GetValue() );
     m_3Dprms.SetFlag( FL_ZONE, m_checkBoxAreas->GetValue() );
+    m_3Dprms.SetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX, m_checkBoxBoundingBoxes->GetValue() );
+
+    // Set 3D shapes visibility
+    m_3Dprms.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL, m_checkBox3DshapesTH->GetValue() );
+    m_3Dprms.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT, m_checkBox3DshapesSMD->GetValue() );
+    m_3Dprms.SetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL, m_checkBox3DshapesVirtual->GetValue() );
+
+    // Set Layer visibility
     m_3Dprms.SetFlag( FL_SILKSCREEN, m_checkBoxSilkscreen->GetValue() );
     m_3Dprms.SetFlag( FL_SOLDERMASK, m_checkBoxSolderMask->GetValue() );
     m_3Dprms.SetFlag( FL_SOLDERPASTE, m_checkBoxSolderpaste->GetValue() );
@@ -134,5 +139,5 @@ void DIALOG_3D_VIEW_OPTIONS::OnOKClick( wxCommandEvent& event )
     m_3Dprms.SetFlag( FL_COMMENTS, m_checkBoxComments->GetValue() );
     m_3Dprms.SetFlag( FL_ECO, m_checkBoxECO->GetValue( ) );
 
-    EndModal( wxID_OK );
+    return true;
 }
