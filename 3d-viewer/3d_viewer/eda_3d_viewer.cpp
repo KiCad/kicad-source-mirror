@@ -82,7 +82,6 @@ static const wxChar keyMousewheelPanning[]      = wxT( "MousewheelPAN3D" );
 
 static const wxChar keyShowRealisticMode[]      = wxT( "ShowRealisticMode" );
 static const wxChar keyRenderEngine[]           = wxT( "RenderEngine" );
-static const wxChar keyRenderRemoveHoles[]      = wxT( "Render_RemoveHoles" );
 //static const wxChar keyRenderTextures[]         = wxT( "Render_Textures" );
 static const wxChar keyRenderMaterial[]         = wxT( "Render_Material" );
 
@@ -394,11 +393,6 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
         m_settings.SetFlag( FL_USE_REALISTIC_MODE, isChecked );
         SetMenuBarOptionsState();
         ReloadRequest( );
-        return;
-
-    case ID_MENU3D_FL_RENDER_SHOW_HOLES_IN_ZONES:
-        m_settings.SetFlag( FL_RENDER_SHOW_HOLES_IN_ZONES, isChecked );
-        ReloadRequest();
         return;
 
     case ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL:
@@ -747,9 +741,6 @@ void EDA_3D_VIEWER::LoadSettings( wxConfigBase *aCfg )
     aCfg->Read( keyShowRealisticMode, &tmp, true );
     m_settings.SetFlag( FL_USE_REALISTIC_MODE, tmp );
 
-    aCfg->Read( keyRenderRemoveHoles, &tmp, true );
-    m_settings.SetFlag( FL_RENDER_SHOW_HOLES_IN_ZONES, tmp );
-
     // OpenGL options
     aCfg->Read( keyRenderOGL_ShowCopperTck, &tmp, true );
     m_settings.SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, tmp );
@@ -866,8 +857,6 @@ void EDA_3D_VIEWER::SaveSettings( wxConfigBase *aCfg )
     aCfg->Write( keyMousewheelPanning,      m_settings.GetFlag( FL_MOUSEWHEEL_PANNING ) );
 
     aCfg->Write( keyRenderEngine,           (int)m_settings.RenderEngineGet() );
-
-    aCfg->Write( keyRenderRemoveHoles,      m_settings.GetFlag( FL_RENDER_SHOW_HOLES_IN_ZONES ) );
 
     aCfg->Write( keyRenderMaterial,         (int)m_settings.MaterialModeGet() );
 

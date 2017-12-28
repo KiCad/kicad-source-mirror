@@ -167,6 +167,7 @@ bool C3D_RENDER_RAYTRACING::Redraw( bool aIsMoving, REPORTER *aStatusTextReporte
         initialize_block_positions();
     }
 
+    wxBusyCursor dummy;
 
     // Reload board if it was requested
     // /////////////////////////////////////////////////////////////////////////

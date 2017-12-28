@@ -473,6 +473,8 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving,
 
     if( m_reloadRequested )
     {
+        wxBusyCursor dummy;
+
         if( aStatusTextReporter )
             aStatusTextReporter->Report( _( "Loading..." ) );
 

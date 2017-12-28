@@ -517,7 +517,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
 
             std::vector<const COBJECT2D *> *object2d_B = CSGITEM_EMPTY;
 
-            if( m_settings.GetFlag( FL_RENDER_SHOW_HOLES_IN_ZONES ) )
+            if( true )  // previously, was a option, now holes are always drawn in zones
             {
                 object2d_B = new std::vector<const COBJECT2D *>();
 

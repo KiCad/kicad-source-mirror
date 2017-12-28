@@ -198,12 +198,6 @@ void EDA_3D_VIEWER::CreateMenuBar()
     AddMenuItem( prefsMenu, renderOptionsMenu, ID_MENU3D_FL,
                 _( "Render Options" ), KiBitmap( options_3drender_xpm ) );
 
-    AddMenuItem( renderOptionsMenu, ID_MENU3D_FL_RENDER_SHOW_HOLES_IN_ZONES,
-                _( "Show Holes in Zones" ),
-                _( "Holes inside a copper layer copper zones are shown, "
-                   "but the calculation time is longer" ),
-                KiBitmap( green_xpm ), wxITEM_CHECK );
-
     wxMenu * materialsList = new wxMenu;
     AddMenuItem( renderOptionsMenu, materialsList, ID_MENU3D_FL_RENDER_MATERIAL,
                 _( "Material Properties" ), KiBitmap( color_materials_xpm ) );
@@ -447,9 +441,6 @@ void EDA_3D_VIEWER::SetMenuBarOptionsState()
     item->Enable( !m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
     item = menuBar->FindItem( ID_MENU3D_ECO_ONOFF );
     item->Enable( !m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
-
-    item = menuBar->FindItem( ID_MENU3D_FL_RENDER_SHOW_HOLES_IN_ZONES );
-    item->Check( m_settings.GetFlag( FL_RENDER_SHOW_HOLES_IN_ZONES ) );
 
     item = menuBar->FindItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL );
     item->Check( m_settings.MaterialModeGet() == MATERIAL_MODE_NORMAL );
