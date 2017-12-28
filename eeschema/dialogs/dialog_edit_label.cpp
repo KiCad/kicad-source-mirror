@@ -51,6 +51,7 @@ class DIALOG_LABEL_EDITOR : public DIALOG_LABEL_EDITOR_BASE
 {
 public:
     DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* parent, SCH_TEXT* aTextItem );
+    ~DIALOG_LABEL_EDITOR();
 
     void SetTitle( const wxString& aTitle ) override
     {
@@ -81,6 +82,7 @@ private:
     virtual void OnEnterKey( wxCommandEvent& aEvent ) override;
     virtual void OnOkClick( wxCommandEvent& aEvent ) override;
     virtual void OnCancelClick( wxCommandEvent& aEvent ) override;
+    void OnCharHook( wxKeyEvent& aEvent );
     void TextPropertiesAccept( wxCommandEvent& aEvent );
 
     SCH_EDIT_FRAME* m_Parent;
@@ -123,8 +125,22 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
 
     m_TextSize->SetValidator( textSizeValidator );
 
+    // wxTextCtrls fail to generate wxEVT_CHAR events when the wxTE_MULTILINE flag is set,
+    // so we have to listen to wxEVT_CHAR_HOOK events instead.
+    m_textLabelMultiLine->Connect( wxEVT_CHAR_HOOK,
+                                   wxKeyEventHandler( DIALOG_LABEL_EDITOR::OnCharHook ),
+                                   NULL, this );
+
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
+}
+
+
+DIALOG_LABEL_EDITOR::~DIALOG_LABEL_EDITOR()
+{
+    m_textLabelMultiLine->Disconnect( wxEVT_CHAR_HOOK,
+                                      wxKeyEventHandler( DIALOG_LABEL_EDITOR::OnCharHook ),
+                                      NULL, this );
 }
 
 
@@ -248,12 +264,39 @@ void DIALOG_LABEL_EDITOR::InitDialog()
 
 
 /*!
- * wxTE_PROCESS_ENTER  event handler for m_textLabel
+ * wxEVT_COMMAND_ENTER event handler for m_textLabel
  */
 
 void DIALOG_LABEL_EDITOR::OnEnterKey( wxCommandEvent& aEvent )
 {
     TextPropertiesAccept( aEvent );
+}
+
+
+/*!
+ * wxEVT_CHAR_HOOK event handler for m_textLabel
+ */
+
+void DIALOG_LABEL_EDITOR::OnCharHook( wxKeyEvent& aEvent )
+{
+    if( aEvent.GetKeyCode() == WXK_TAB )
+    {
+        int flags = 0;
+        if( !aEvent.ShiftDown() )
+            flags |= wxNavigationKeyEvent::IsForward;
+        if( aEvent.ControlDown() )
+            flags |= wxNavigationKeyEvent::WinChange;
+        NavigateIn( flags );
+    }
+    else if( aEvent.GetKeyCode() == WXK_RETURN && aEvent.ShiftDown() )
+    {
+        wxCommandEvent cmdEvent( wxEVT_COMMAND_ENTER );
+        TextPropertiesAccept( cmdEvent );
+    }
+    else
+    {
+        aEvent.Skip();
+    }
 }
 
 

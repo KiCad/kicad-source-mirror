@@ -55,6 +55,7 @@ class DIALOG_PCB_TEXT_PROPERTIES : public DIALOG_PCB_TEXT_PROPERTIES_BASE
 {
 public:
     DIALOG_PCB_TEXT_PROPERTIES( PCB_EDIT_FRAME* parent, TEXTE_PCB* passedTextPCB, wxDC* DC = nullptr );
+    ~DIALOG_PCB_TEXT_PROPERTIES();
 
 private:
     PCB_EDIT_FRAME*     m_Parent;
@@ -76,6 +77,8 @@ private:
         // Now all widgets have the size fixed, call FinishDialogSettings
         FinishDialogSettings();
     }
+
+    void OnCharHook( wxKeyEvent& aEvent );
 };
 
 
@@ -102,6 +105,19 @@ DIALOG_PCB_TEXT_PROPERTIES::DIALOG_PCB_TEXT_PROPERTIES( PCB_EDIT_FRAME* parent,
 
     m_StandardSizerOK->SetDefault();
 
+    // wxTextCtrls fail to generate wxEVT_CHAR events when the wxTE_MULTILINE flag is set,
+    // so we have to listen to wxEVT_CHAR_HOOK events instead.
+    m_TextContentCtrl->Connect( wxEVT_CHAR_HOOK,
+                                wxKeyEventHandler( DIALOG_PCB_TEXT_PROPERTIES::OnCharHook ),
+                                NULL, this );
+}
+
+
+DIALOG_PCB_TEXT_PROPERTIES::~DIALOG_PCB_TEXT_PROPERTIES()
+{
+    m_TextContentCtrl->Disconnect( wxEVT_CHAR_HOOK,
+                                   wxKeyEventHandler( DIALOG_PCB_TEXT_PROPERTIES::OnCharHook ),
+                                   NULL, this );
 }
 
 
@@ -121,6 +137,29 @@ void PCB_EDIT_FRAME::InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB, wxDC* DC )
     dlg.ShowModal();
     m_canvas->MoveCursorToCrossHair();
     m_canvas->SetIgnoreMouseEvents( false );
+}
+
+
+void DIALOG_PCB_TEXT_PROPERTIES::OnCharHook( wxKeyEvent& aEvent )
+{
+    if( aEvent.GetKeyCode() == WXK_TAB )
+    {
+        int flags = 0;
+        if( !aEvent.ShiftDown() )
+            flags |= wxNavigationKeyEvent::IsForward;
+        if( aEvent.ControlDown() )
+            flags |= wxNavigationKeyEvent::WinChange;
+        NavigateIn( flags );
+    }
+    else if( aEvent.GetKeyCode() == WXK_RETURN && aEvent.ShiftDown() )
+    {
+        TransferDataFromWindow();
+        EndModal( 1 );
+    }
+    else
+    {
+        aEvent.Skip();
+    }
 }
 
 
