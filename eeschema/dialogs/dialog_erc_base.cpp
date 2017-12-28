@@ -108,7 +108,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_PanelERC->SetSizer( bercSizer );
 	m_PanelERC->Layout();
 	bercSizer->Fit( m_PanelERC );
-	m_NoteBook->AddPage( m_PanelERC, _("ERC"), false );
+	m_NoteBook->AddPage( m_PanelERC, _("ERC"), true );
 	m_PanelERCOptions = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_panelMatrixSizer;
 	m_panelMatrixSizer = new wxBoxSizer( wxVERTICAL );
@@ -144,7 +144,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_PanelERCOptions->SetSizer( m_panelMatrixSizer );
 	m_PanelERCOptions->Layout();
 	m_panelMatrixSizer->Fit( m_PanelERCOptions );
-	m_NoteBook->AddPage( m_PanelERCOptions, _("Options"), true );
+	m_NoteBook->AddPage( m_PanelERCOptions, _("Options"), false );
 	
 	bSizer1->Add( m_NoteBook, 1, wxEXPAND | wxALL, 5 );
 	
