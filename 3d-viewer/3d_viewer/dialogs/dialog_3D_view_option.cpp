@@ -78,11 +78,12 @@ DIALOG_3D_VIEW_OPTIONS::DIALOG_3D_VIEW_OPTIONS( EDA_3D_VIEWER* parent )
 void DIALOG_3D_VIEW_OPTIONS::initDialog()
 {
     m_bitmapRealisticMode->SetBitmap( KiBitmap( use_3D_copper_thickness_xpm ) );
+    m_bitmapBoardBody->SetBitmap( KiBitmap( ortho_xpm ) );
     m_bitmapCuThickness->SetBitmap( KiBitmap( use_3D_copper_thickness_xpm ) );
     m_bitmap3DshapesTH->SetBitmap( KiBitmap( shape_3d_xpm ) );
     m_bitmap3DshapesSMD->SetBitmap( KiBitmap( shape_3d_xpm ) );
     m_bitmap3DshapesVirtual->SetBitmap( KiBitmap( shape_3d_xpm ) );
-    m_bitmapBoundingBoxes->SetBitmap( KiBitmap( ortho_xpm ) );
+    m_bitmapBoundingBoxes->SetBitmap( KiBitmap( axis3d_xpm ) );
     m_bitmapAreas->SetBitmap( KiBitmap( add_zone_xpm ) );
     m_bitmapSilkscreen->SetBitmap( KiBitmap( text_xpm ) );
     m_bitmapSolderMask->SetBitmap( KiBitmap( pads_mask_layers_xpm ) );
@@ -97,6 +98,7 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
 {
     // Check/uncheck checkboxes
     m_checkBoxRealisticMode->SetValue( m_3Dprms.GetFlag( FL_USE_REALISTIC_MODE ) );
+    m_checkBoxBoardBody->SetValue(  m_3Dprms.GetFlag( FL_SHOW_BOARD_BODY ) );
     m_checkBoxCuThickness->SetValue(  m_3Dprms.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) );
     m_checkBoxAreas->SetValue( m_3Dprms.GetFlag( FL_ZONE ) );
     m_checkBoxBoundingBoxes->SetValue( m_3Dprms.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
@@ -122,6 +124,7 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
     m_3Dprms.SetFlag( FL_USE_REALISTIC_MODE, m_checkBoxRealisticMode->GetValue() );
 
     // Set visibility of items
+    m_3Dprms.SetFlag( FL_SHOW_BOARD_BODY, m_checkBoxBoardBody->GetValue() );
     m_3Dprms.SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, m_checkBoxCuThickness->GetValue() );
     m_3Dprms.SetFlag( FL_ZONE, m_checkBoxAreas->GetValue() );
     m_3Dprms.SetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX, m_checkBoxBoundingBoxes->GetValue() );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -44,6 +44,15 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	
 	fgSizerRenderOptions->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
+	
+	m_bitmapBoardBody = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRenderOptions->Add( m_bitmapBoardBody, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_checkBoxBoardBody = new wxCheckBox( this, wxID_ANY, _("Show board body"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRenderOptions->Add( m_checkBoxBoardBody, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	
+	fgSizerRenderOptions->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_bitmapCuThickness = new wxStaticBitmap( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerRenderOptions->Add( m_bitmapCuThickness, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
