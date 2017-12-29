@@ -349,6 +349,11 @@ private:
     static WIDTH_CACHE m_width_cache;
 
     /**
+     * Flag to only show the symbol library table load progress dialog the first time.
+     */
+    static bool        m_show_progress;
+
+    /**
      * Compute the width required for the given column of a node and its
      * children.
      *

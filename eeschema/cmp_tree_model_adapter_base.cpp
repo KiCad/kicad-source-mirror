@@ -30,6 +30,7 @@
 
 CMP_TREE_MODEL_ADAPTER_BASE::WIDTH_CACHE CMP_TREE_MODEL_ADAPTER_BASE::m_width_cache;
 
+bool CMP_TREE_MODEL_ADAPTER_BASE::m_show_progress = true;
 
 static const int kDataViewIndent = 20;
 
@@ -109,21 +110,29 @@ void CMP_TREE_MODEL_ADAPTER_BASE::SetPreselectNode( LIB_ID const& aLibId, int aU
 void CMP_TREE_MODEL_ADAPTER_BASE::AddLibrariesWithProgress(
         const std::vector<wxString>& aNicknames, wxWindow* aParent )
 {
-    auto* prg = new wxProgressDialog(
-            _( "Loading symbol libraries" ),
-            wxEmptyString,
-            aNicknames.size(),
-            aParent );
+    wxProgressDialog* prg = nullptr;
+
+    if( m_show_progress )
+        prg = new wxProgressDialog( _( "Loading Symbol Libraries" ),
+                                    wxEmptyString,
+                                    aNicknames.size(),
+                                    aParent );
 
     unsigned int ii = 0;
 
     for( auto nickname : aNicknames )
     {
-        prg->Update( ii++, wxString::Format( _( "Loading library \"%s\"" ), nickname ) );
+        if( prg )
+            prg->Update( ii++, wxString::Format( _( "Loading library \"%s\"" ), nickname ) );
+
         AddLibrary( nickname );
     }
 
-    prg->Destroy();
+    if( prg )
+    {
+        prg->Destroy();
+        m_show_progress = false;
+    }
 }
 
 
