@@ -265,6 +265,16 @@ wxString LIB_PART::SubReference( int aUnit, bool aAddSeparator )
 }
 
 
+const wxString& LIB_PART::GetName() const
+{
+    static wxString dummy;
+
+    wxCHECK_MSG( m_aliases.size(), dummy, "no aliases defined for symbol" );
+
+    return m_aliases[0]->GetName();
+}
+
+
 void LIB_PART::SetName( const wxString& aName )
 {
     m_libId.SetLibItemName( aName, false );

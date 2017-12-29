@@ -262,7 +262,7 @@ public:
 
     virtual void SetName( const wxString& aName );
 
-    const wxString& GetName() const { return m_aliases[0]->GetName(); }
+    const wxString& GetName() const;
 
     const LIB_ID& GetLibId() const { return m_libId; }
 
