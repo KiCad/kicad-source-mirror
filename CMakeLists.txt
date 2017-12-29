@@ -55,15 +55,15 @@ option( USE_WX_OVERLAY
 
 option( KICAD_SCRIPTING
     "Build the Python scripting support inside KiCad binaries (default OFF)."
-    )
+    ON )
 
 option( KICAD_SCRIPTING_MODULES
     "Build native portion of the pcbnew Python module: _pcbnew.{pyd,so} for OS command line use of Python."
-    )
+    ON )
 
 option( KICAD_SCRIPTING_WXPYTHON
     "Build wxPython implementation for wx interface building in Python and py.shell (default OFF)."
-    )
+    ON )
 
 option( KICAD_SCRIPTING_ACTION_MENU
     "Build a tools menu with registred python plugins: actions plugins (default OFF)."
@@ -71,7 +71,7 @@ option( KICAD_SCRIPTING_ACTION_MENU
 
 option( KICAD_USE_OCE
     "Build tools and plugins related to OpenCascade Community Edition (default OFF)"
-    )
+    ON )
 
 option( KICAD_INSTALL_DEMOS
     "Install kicad demos and examples (default ON)"
@@ -97,7 +97,7 @@ endif()
 
 option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." ON )
 
-option( KICAD_SPICE "Build Kicad with internal Spice simulator." OFF )
+option( KICAD_SPICE "Build Kicad with internal Spice simulator." ON )
 
 # Global setting: exports are explicit
 set( CMAKE_CXX_VISIBILITY_PRESET "hidden" )

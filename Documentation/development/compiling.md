@@ -132,17 +132,17 @@ on macOS.  This is enabled on macOS by default and disabled on all other platfor
 ## Scripting Support ## {#scripting_opt}
 
 The KICAD_SCRIPTING option is used to enable building the Python scripting support into Pcbnew.
-This options is disabled by default.
+This options is enabled by default.
 
 ## Scripting Module Support ## {#scripting_mod_opt}
 
 The KICAD_SCRIPTING_MODULES option is used to enable building and installing the Python modules
-supplied by KiCad.  This option is disabled by default.
+supplied by KiCad.  This option is enabled by default.
 
 ## wxPython Scripting Support ## {#wxpython_opt}
 
 The KICAD_SCRIPTING_WXPYTHON option is used to enable building the wxPython interface into
-Pcbnew including the wxPython console.  This option is disabled by default.
+Pcbnew including the wxPython console.  This option is enabled by default.
 
 ## GitHub Plugin ## {#github_opt}
 
@@ -151,16 +151,16 @@ enabled by default.
 
 ## Integrated Spice simulator ## {#spice_opt}
 
-The KICAD_SPICE option is used to control if the Spice simulator interface for Eeschema is built.  When
-this option is enabled, it requires [ngspice][] to be available as a shared library.  This option is
-disabled by default.
+The KICAD_SPICE option is used to control if the Spice simulator interface for Eeschema is
+built.  When this option is enabled, it requires [ngspice][] to be available as a shared
+library.  This option is enabled by default.
 
 ## STEP/IGES support for the 3D viewer ## {#oce_opt}
 
 The KICAD_USE_OCE is used for the 3D viewer plugin to support STEP and IGES 3D models. Build tools
 and plugins related to OpenCascade Community Edition (OCE) are enabled with this option. When
 enabled it requires [OCE][] to be available, and the location of the installed OCE library to be
-passed via the OCE_DIR flag. This option is disabled by default.
+passed via the OCE_DIR flag.  This option is enabled by default.
 
 ## Demos and Examples ## {#demo_install_opt}
 
