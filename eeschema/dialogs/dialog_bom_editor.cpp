@@ -40,6 +40,7 @@
 
 /* BOM Table Colours */
 
+
 // Create and show BOM editor
 void InvokeDialogCreateBOMEditor( SCH_EDIT_FRAME* aCaller )
 {
@@ -167,21 +168,22 @@ typedef struct
     PICKED_ITEMS_LIST items;
 } SheetUndoList;
 
+
 void DIALOG_BOM_EDITOR::ApplyAllChanges()
 {
     if( !m_bom->HaveFieldsChanged() )
         return;
 
      /**
-     * As we may be saving changes across multiple sheets,
-     * we need to first determine which changes need to be made to which sheet.
-     * To this end, we perform the following:
-     * 1. Save the "path" of the currently displayed sheet
-     * 2. Create a MAP of <SheetPath:ChangeList> changes that need to be made
-     * 3. Push UNDO actions to appropriate sheets
-     * 4. Perform all the update actions
-     * 5. Reset the view to the current sheet
-     */
+      * As we may be saving changes across multiple sheets,
+      * we need to first determine which changes need to be made to which sheet.
+      * To this end, we perform the following:
+      * 1. Save the "path" of the currently displayed sheet
+      * 2. Create a MAP of <SheetPath:ChangeList> changes that need to be made
+      * 3. Push UNDO actions to appropriate sheets
+      * 4. Perform all the update actions
+      * 5. Reset the view to the current sheet
+      */
 
     auto currentSheet = m_parent->GetCurrentSheet();
 
@@ -249,9 +251,6 @@ void DIALOG_BOM_EDITOR::ApplyAllChanges()
 }
 
 
-/**
- * Update the window title to reflect the contents of the table
- */
 void DIALOG_BOM_EDITOR::UpdateTitle()
 {
     wxString title;
@@ -259,7 +258,7 @@ void DIALOG_BOM_EDITOR::UpdateTitle()
 
     if( m_bom->GetColumnGrouping() )
     {
-        title.Printf ( _( "Symbo Table - %u symbols in %u groups" ),
+        title.Printf ( _( "Symbol Table - %u symbols in %u groups" ),
                        m_bom->ComponentCount(),
                        (unsigned int) m_bom->Groups.size() );
     }
@@ -280,9 +279,6 @@ void DIALOG_BOM_EDITOR::UpdateTitle()
 }
 
 
-/**
- * Load component data from the entire schematic set
- */
 void DIALOG_BOM_EDITOR::LoadComponents()
 {
     if( !m_parent ) return;
@@ -299,9 +295,6 @@ void DIALOG_BOM_EDITOR::LoadComponents()
 }
 
 
-/**
- * Display list of columns (fields)
- */
 void DIALOG_BOM_EDITOR::LoadColumnNames()
 {
     m_columnListCtrl->DeleteAllItems();
@@ -375,9 +368,6 @@ void DIALOG_BOM_EDITOR::OnColumnItemToggled( wxDataViewEvent& event )
 }
 
 
-/**
- * Called when the "Group Components" toggle is pressed
- */
 void DIALOG_BOM_EDITOR::OnGroupComponentsToggled( wxCommandEvent& event )
 {
     bool group = m_groupComponentsBox->GetValue();
@@ -435,7 +425,6 @@ void DIALOG_BOM_EDITOR::OnRevertFieldChanges( wxCommandEvent& event )
 }
 
 
-// Called when a cell is left-clicked
 void DIALOG_BOM_EDITOR::OnTableItemActivated( wxDataViewEvent& event )
 {
     /* TODO
@@ -446,7 +435,6 @@ void DIALOG_BOM_EDITOR::OnTableItemActivated( wxDataViewEvent& event )
 }
 
 
-// Called when a cell is right-clicked
 void DIALOG_BOM_EDITOR::OnTableItemContextMenu( wxDataViewEvent& event )
 {
     /* TODO
