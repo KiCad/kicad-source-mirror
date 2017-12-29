@@ -115,7 +115,7 @@ void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMoveVector 
 }
 
 
-void SCH_EDIT_FRAME::CheckJunctionsInList( PICKED_ITEMS_LIST& aItemsList, bool aAppend )
+void SCH_EDIT_FRAME::CheckListConnections( PICKED_ITEMS_LIST& aItemsList, bool aAppend )
 {
     std::vector< wxPoint > pts;
     std::vector< wxPoint > connections;
@@ -124,13 +124,33 @@ void SCH_EDIT_FRAME::CheckJunctionsInList( PICKED_ITEMS_LIST& aItemsList, bool a
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
         SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
-        item->GetConnectionPoints( pts );
+        std::vector< wxPoint > new_pts;
+
+        if( !item->IsConnectable() )
+            continue;
+
+        item->GetConnectionPoints( new_pts );
+        pts.insert( pts.end(), new_pts.begin(), new_pts.end() );
+
+        // If the item is a line, we also add any connection points from the rest of the schematic
+        // that terminate on the line after it is moved.
         if( item->Type() == SCH_LINE_T )
         {
             SCH_LINE* line = (SCH_LINE*) item;
             for( auto i : connections )
                 if( IsPointOnSegment( line->GetStartPoint(), line->GetEndPoint(), i ) )
                     pts.push_back( i );
+        }
+        else
+        {
+            // Clean up any wires that short non-wire connections in the list
+            for( auto point = new_pts.begin(); point != new_pts.end(); point++ )
+            {
+                for( auto second_point = point + 1; second_point != new_pts.end(); second_point++ )
+                {
+                    aAppend |= TrimWire( *point, *second_point, aAppend );
+                }
+            }
         }
     }
 

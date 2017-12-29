@@ -437,15 +437,19 @@ void SCH_EDIT_FRAME::SaveWireImage()
 }
 
 
-void SCH_EDIT_FRAME::TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool aAppend )
+bool SCH_EDIT_FRAME::TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool aAppend )
 {
     SCH_LINE* line;
+    SCH_ITEM* next_item = NULL;
+    bool retval = false;
 
     if( aStart == aEnd )
-        return;
+        return retval;
 
-    for( SCH_ITEM* item = GetScreen()->GetDrawItems(); item; item = item->Next() )
+    for( SCH_ITEM* item = GetScreen()->GetDrawItems(); item; item = next_item )
     {
+        next_item = item->Next();
+
         if( item->GetFlags() & STRUCT_DELETED )
             continue;
 
@@ -472,7 +476,11 @@ void SCH_EDIT_FRAME::TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool 
 
         SaveCopyInUndoList( (SCH_ITEM*)line, UR_DELETED, aAppend );
         GetScreen()->Remove( (SCH_ITEM*)line );
+        aAppend = true;
+        retval = true;
     }
+
+    return retval;
 }
 
 

@@ -153,7 +153,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
        break;
     }
 
-    CheckJunctionsInList( block->GetItems(), true );
+    CheckListConnections( block->GetItems(), true );
     block->ClearItemsList();
     SchematicCleanUp( true );
     OnModify();
@@ -217,7 +217,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 SetCrossHairPosition( rotationPoint );
                 SaveCopyInUndoList( block->GetItems(), UR_ROTATED, false, rotationPoint );
                 RotateListOfItems( block->GetItems(), rotationPoint );
-                CheckJunctionsInList( block->GetItems(), true );
+                CheckListConnections( block->GetItems(), true );
                 SchematicCleanUp( true );
                 OnModify();
             }

@@ -300,17 +300,20 @@ void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
 
     m_canvas->MoveCursorToCrossHair();
 
-    if( component->GetFlags() == 0 )
-    {
-        SaveCopyInUndoList( item, UR_CHANGED );
-        GetScreen()->SetCurItem( NULL );
-    }
+    if( item->GetFlags() == 0 )
+        SetUndoItem( item );
 
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
     component->SetOrientation( aOrientation );
 
     m_canvas->CrossHairOn( &dc );
+
+    if( item->GetFlags() == 0 )
+    {
+        addCurrentItemToList();
+        SchematicCleanUp( true );
+    }
 
     if( GetScreen()->TestDanglingEnds() )
         m_canvas->Refresh();

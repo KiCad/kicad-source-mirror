@@ -968,8 +968,9 @@ private:
      * @param aStart The starting point for trimmming
      * @param aEnd The ending point for trimming
      * @param aAppend Should the line changes be appended to a previous undo state
+     * @return True if any wires were changed by this operation
      */
-    void TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool aAppend = true );
+    bool TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool aAppend = true );
 
     /**
      * Start moving \a aItem using the mouse.
@@ -1155,7 +1156,7 @@ public:
      * @param aItemsList The list of items to check
      * @param aAppend True if we are updating a previous commit
      */
-    void CheckJunctionsInList( PICKED_ITEMS_LIST& aItemsList, bool aAppend = false );
+    void CheckListConnections( PICKED_ITEMS_LIST& aItemsList, bool aAppend = false );
 
     int GetLabelIncrement() const { return m_repeatLabelDelta; }
 
