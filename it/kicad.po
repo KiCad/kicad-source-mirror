@@ -75,7 +75,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-29 18:56+0100\n"
-"PO-Revision-Date: 2017-12-30 16:57+0100\n"
+"PO-Revision-Date: 2017-12-30 16:59+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -20834,7 +20834,7 @@ msgstr "Aggiungi pista"
 
 #: pcbnew/edit.cpp:1471
 msgid "Warning: zone display is OFF!!!"
-msgstr "Attenzione: La visulizzazione delle zone è disabilitata!"
+msgstr "Attenzione: la visulizzazione delle zone è disabilitata!"
 
 #: pcbnew/edit.cpp:1527
 msgid "Select rats nest"
