@@ -75,7 +75,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-29 18:56+0100\n"
-"PO-Revision-Date: 2017-12-30 16:59+0100\n"
+"PO-Revision-Date: 2017-12-30 19:08+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -15158,11 +15158,11 @@ msgstr "Accoppiatore resistivo"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1051
 msgid "Attenuators:"
-msgstr "Attenuatori"
+msgstr "Attenuatori:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1065
 msgid "Parameters:"
-msgstr "Parametri"
+msgstr "Parametri:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1073
 msgid "Attenuation"
@@ -15631,7 +15631,7 @@ msgstr "Rimuovi contorni zona"
 
 #: pcbnew/onrightclick.cpp:241
 msgid "Delete Last Corner"
-msgstr "Cancella ultimo angolo"
+msgstr "Cancella ultimo vertice"
 
 #: pcbnew/onrightclick.cpp:350 pcbnew/hotkeys.cpp:126
 msgid "Get and Move Footprint"
@@ -15847,7 +15847,7 @@ msgstr "Piazza contorno"
 
 #: pcbnew/onrightclick.cpp:706
 msgid "Place Corner"
-msgstr "Piazza angolo"
+msgstr "Piazza vertice"
 
 #: pcbnew/onrightclick.cpp:709
 msgid "Place Zone"
@@ -15864,7 +15864,7 @@ msgstr "Zone"
 
 #: pcbnew/onrightclick.cpp:729 pcbnew/tools/point_editor.cpp:53
 msgid "Create Corner"
-msgstr "Crea angolo"
+msgstr "Crea vertice"
 
 #: pcbnew/onrightclick.cpp:730
 msgid "Drag Outline Segment"
@@ -16293,15 +16293,15 @@ msgstr ""
 
 #: pcbnew/tools/point_editor.cpp:53
 msgid "Create a corner"
-msgstr "Crea un angolo"
+msgstr "Crea un vertice"
 
 #: pcbnew/tools/point_editor.cpp:57
 msgid "Remove Corner"
-msgstr "Elimina angolo"
+msgstr "Elimina vertice"
 
 #: pcbnew/tools/point_editor.cpp:57
 msgid "Remove corner"
-msgstr "Elimina angolo"
+msgstr "Elimina vertice"
 
 #: pcbnew/tools/point_editor.cpp:349
 msgid "Drag a line ending"
@@ -20527,7 +20527,7 @@ msgstr "Valore componente:"
 
 #: pcbnew/sel_layer.cpp:303
 msgid "Warning: The Top Layer and Bottom Layer are same."
-msgstr "Attenzione: lo strato superiore e quello inferiore sono identici"
+msgstr "Attenzione: lo strato superiore e quello inferiore sono identici."
 
 #: pcbnew/clean.cpp:163 pcbnew/clean.cpp:736
 msgid "Board cleanup"
@@ -20998,7 +20998,7 @@ msgstr ""
 #: pcbnew/files.cpp:657
 #, c-format
 msgid "Warning: unable to create backup file \"%s\""
-msgstr "Attenzione: Impossibile creare il file di salvataggio \"%s\""
+msgstr "Attenzione: impossibile creare il file di salvataggio \"%s\""
 
 #: pcbnew/files.cpp:684 pcbnew/files.cpp:777
 #, c-format
