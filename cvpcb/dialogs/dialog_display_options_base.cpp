@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,10 +40,20 @@ DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( 
 	wxStaticBoxSizer* sbSizerViewOpt;
 	sbSizerViewOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan and Zoom") ), wxVERTICAL );
 	
-	m_IsZoomNoCenter = new wxCheckBox( sbSizerViewOpt->GetStaticBox(), wxID_ANY, _("Do not center and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_IsZoomNoCenter->SetToolTip( _("Keep the cursor at its current location when zooming") );
+	m_enableZoomNoCenter = new wxCheckBox( sbSizerViewOpt->GetStaticBox(), wxID_ANY, _("Center and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_enableZoomNoCenter->SetToolTip( _("Center the cursor on screen when zooming.") );
 	
-	sbSizerViewOpt->Add( m_IsZoomNoCenter, 0, wxEXPAND|wxALL, 5 );
+	sbSizerViewOpt->Add( m_enableZoomNoCenter, 0, wxEXPAND|wxALL, 5 );
+	
+	m_enableMousewheelPan = new wxCheckBox( sbSizerViewOpt->GetStaticBox(), wxID_ANY, _("Use touchpad to pan"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_enableMousewheelPan->SetToolTip( _("Enable touchpad-friendly controls (pan with scroll action, zoom with Ctrl+scroll).") );
+	
+	sbSizerViewOpt->Add( m_enableMousewheelPan, 0, wxALL, 5 );
+	
+	m_enableAutoPan = new wxCheckBox( sbSizerViewOpt->GetStaticBox(), wxID_ANY, _("Pan while moving object"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_enableAutoPan->SetToolTip( _("When drawing a track or moving an item, pan when approaching the edge of the display.") );
+	
+	sbSizerViewOpt->Add( m_enableAutoPan, 0, wxALL, 5 );
 	
 	
 	bUpperSizer->Add( sbSizerViewOpt, 0, wxALL|wxEXPAND, 5 );

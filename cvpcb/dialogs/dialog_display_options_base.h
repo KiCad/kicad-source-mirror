@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,7 +40,9 @@ class DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_TextDisplayOption;
 		wxCheckBox* m_ShowPadSketch;
 		wxCheckBox* m_ShowPadNum;
-		wxCheckBox* m_IsZoomNoCenter;
+		wxCheckBox* m_enableZoomNoCenter;
+		wxCheckBox* m_enableMousewheelPan;
+		wxCheckBox* m_enableAutoPan;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
