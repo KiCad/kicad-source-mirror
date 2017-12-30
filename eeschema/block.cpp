@@ -336,6 +336,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 OnModify();
             }
 
+            block->ClearItemsList();
             GetScreen()->TestDanglingEnds();
             m_canvas->Refresh();
             break;
@@ -356,6 +357,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 OnModify();
             }
 
+            block->ClearItemsList();
             GetScreen()->TestDanglingEnds();
             m_canvas->Refresh();
             break;
