@@ -97,7 +97,7 @@ do
   if [ "$i" = "en" ] ; then
     msgen $LOCALDIR/$i/kicad.po -o $LOCALDIR/$i/kicad.po.tmp && mv $LOCALDIR/$i/kicad.po.tmp $LOCALDIR/$i/kicad.po
   fi
-  msgfmt --statistics $LOCALDIR/$i/kicad.po 2>&1 >>/dev/null |
+  msgfmt --statistics $LOCALDIR/$i/kicad.po -o $LOCALDIR/messages.mo 2>&1 >>/dev/null |
     while IFS=",." read A B C D ; do
       echo $A
       echo $B
@@ -126,6 +126,7 @@ do
       done
       echo "$i;${TRANSLATED};${FUZZY};${UNTRANSLATED}">>"${CSVFILE}"
     done
+    rm $LOCALDIR/messages.mo
 done
 
 if [ "$PLOT" = "1" ]; then
