@@ -75,7 +75,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-29 18:56+0100\n"
-"PO-Revision-Date: 2017-12-29 18:56+0100\n"
+"PO-Revision-Date: 2017-12-30 16:57+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -20527,7 +20527,7 @@ msgstr "Valore componente:"
 
 #: pcbnew/sel_layer.cpp:303
 msgid "Warning: The Top Layer and Bottom Layer are same."
-msgstr "Attenzione: Lo strato superiore e quello inferiore sono identici"
+msgstr "Attenzione: lo strato superiore e quello inferiore sono identici"
 
 #: pcbnew/clean.cpp:163 pcbnew/clean.cpp:736
 msgid "Board cleanup"
@@ -22840,7 +22840,7 @@ msgstr "Modifica le proprietà del componente"
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:486
 #: pcbnew/dialogs/dialog_copper_zones.cpp:461
 msgid "No layer selected."
-msgstr "Nessuno starto selezionato"
+msgstr "Nessuno strato selezionato"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:22
 msgid "Length/skew"
