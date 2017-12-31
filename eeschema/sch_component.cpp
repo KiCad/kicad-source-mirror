@@ -321,7 +321,10 @@ bool SCH_COMPONENT::Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib )
 
     try
     {
-        if( m_lib_id.IsValid() )
+        // LIB_TABLE_BASE::LoadSymbol() throws an IO_ERROR if the the library nickname
+        // is not found in the table so check if the library still exists in the table
+        // before attempting to load the symbol.
+        if( m_lib_id.IsValid() && aLibTable.HasLibrary( m_lib_id.GetLibNickname() ) )
             alias = aLibTable.LoadSymbol( m_lib_id );
 
         // Fall back to cache library.  This is temporary until the new schematic file
