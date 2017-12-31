@@ -1240,35 +1240,60 @@ wxString MODULE::GetReferencePrefix() const
 }
 
 
-double CalcArea( wxRegion aRegion )
+// Calculate the area of aPolySet, after fracturation, because
+// polygons with no hole are expected.
+static double polygonArea( SHAPE_POLY_SET& aPolySet )
 {
     double area = 0.0;
-    for( wxRegionIterator iterator( aRegion ); iterator.HaveRects(); iterator++ )
+    for( int ii = 0; ii < aPolySet.OutlineCount(); ii++ )
     {
-        wxRect aRect = iterator.GetRect();
-        area += static_cast<double>( aRect.GetWidth() ) * aRect.GetHeight();
-    }
+        SHAPE_LINE_CHAIN& outline = aPolySet.Outline( ii );
+        // Ensure the curr outline is closed, to calculate area
+        outline.SetClosed( true );
+
+        area += outline.Area();
+     }
+
     return area;
 }
 
+// a helper function to add a rectangular polygon aRect to aPolySet
+static void addRect( SHAPE_POLY_SET& aPolySet, wxRect aRect )
+{
+    aPolySet.NewOutline();
 
+    aPolySet.Append( aRect.GetX(), aRect.GetY() );
+    aPolySet.Append( aRect.GetX()+aRect.width, aRect.GetY() );
+    aPolySet.Append( aRect.GetX()+aRect.width, aRect.GetY()+aRect.height );
+    aPolySet.Append( aRect.GetX(), aRect.GetY()+aRect.height );
+}
 
 double MODULE::CoverageRatio() const
 {
     double moduleArea = GetFootprintRect().GetArea();
-    wxRegion uncoveredRegion( GetFootprintRect() );
+    SHAPE_POLY_SET coveredRegion;
+    addRect(coveredRegion, GetFootprintRect() );
 
+    // build hole list if full area
+    SHAPE_POLY_SET holes;
     for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
-        uncoveredRegion.Subtract( pad->GetBoundingBox() );
+        addRect( holes, pad->GetBoundingBox() );
 
     for( BOARD_ITEM* item = m_Drawings; item; item = item->Next() )
-        uncoveredRegion.Subtract( item->GetBoundingBox() );
+        addRect( holes, item->GetBoundingBox() );
 
-    uncoveredRegion.Subtract( m_Reference->GetBoundingBox() );
-    uncoveredRegion.Subtract( m_Value->GetBoundingBox() );
+    addRect( holes, m_Reference->GetBoundingBox() );
+    addRect( holes, m_Value->GetBoundingBox() );
 
-    double coveredArea = moduleArea - CalcArea( uncoveredRegion );
+    SHAPE_POLY_SET uncoveredRegion;
+    uncoveredRegion.BooleanSubtract( coveredRegion, holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    uncoveredRegion.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    uncoveredRegion.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+    double uncoveredRegionArea = polygonArea( uncoveredRegion );
+    double coveredArea = moduleArea - uncoveredRegionArea;
     double ratio = ( coveredArea / moduleArea );
+
     return std::min( ratio, 1.0 );
 }
 

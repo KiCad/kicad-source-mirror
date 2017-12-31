@@ -626,6 +626,8 @@ const VECTOR2I SHAPE_LINE_CHAIN::PointAlong( int aPathLength ) const
 
 double SHAPE_LINE_CHAIN::Area() const
 {
+    // see https://www.mathopenref.com/coordpolygonarea2.html
+
     if( !m_closed )
         return 0.0;
 
