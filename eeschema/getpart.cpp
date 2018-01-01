@@ -82,7 +82,7 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowse
 
     wxString symbol = sel.LibId.Format();
 
-    if( viewlibFrame->ShowModal( &symbol, this ) )
+    if( viewlibFrame->ShowModal( &symbol, aParent ) )
     {
         LIB_ID id;
 

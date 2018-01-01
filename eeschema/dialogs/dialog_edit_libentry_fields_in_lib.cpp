@@ -3,7 +3,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2007-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -509,7 +509,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::showButtonHandler( wxCommandEvent& even
         // pick a footprint using the footprint picker.
         wxString fpid;
 
-        KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true );
+        KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true, this );
 
         if( frame->ShowModal( &fpid, this ) )
         {
