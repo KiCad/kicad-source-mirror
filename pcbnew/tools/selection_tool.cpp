@@ -271,13 +271,16 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // right click? if there is any object - show the context menu
         else if( evt->IsClick( BUT_RIGHT ) )
         {
+            bool selectionCancelled = false;
+
             if( m_selection.Empty() )
             {
-                selectPoint( evt->Position() );
+                selectPoint( evt->Position(), false, &selectionCancelled );
                 m_selection.SetIsHover( true );
             }
 
-            m_menu.ShowContextMenu( m_selection );
+            if( !selectionCancelled )
+                m_menu.ShowContextMenu( m_selection );
         }
 
         // double click? Display the properties window
@@ -432,7 +435,9 @@ const GENERAL_COLLECTORS_GUIDE SELECTION_TOOL::getCollectorsGuide() const
     return guide;
 }
 
-bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag )
+
+bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
+                                  bool* aSelectionCancelledFlag )
 {
     BOARD_ITEM* item;
     auto guide = getCollectorsGuide();
@@ -460,12 +465,10 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag )
         {
             clearSelection();
         }
-
         return false;
 
     case 1:
         toggleSelection( collector[0] );
-
         return true;
 
     default:
@@ -476,7 +479,6 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag )
         if( collector.GetCount() == 1 )
         {
             toggleSelection( collector[0] );
-
             return true;
         }
         else if( collector.GetCount() > 1 )
@@ -491,8 +493,13 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag )
             if( item )
             {
                 toggleSelection( item );
-
                 return true;
+            }
+            else
+            {
+                if( aSelectionCancelledFlag )
+                    *aSelectionCancelledFlag = true;
+                return false;
             }
         }
         break;

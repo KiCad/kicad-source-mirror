@@ -674,10 +674,11 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
 
         m_menuActive = false;
 
-        m_viewControls->WarpCursor( cursor, true, false );
-
-        // If nothing was chosen from the context menu, we must notify the tool as well
-        if( menu->GetSelected() < 0 )
+        // Warp the cursor as long as the menu wasn't clicked out of
+        if( menu->GetSelected() >= 0 )
+            m_viewControls->WarpCursor( cursor, true, false );
+        // Otherwise notify the tool of a cancelled menu
+        else
         {
             TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CHOICE, -1 );
             evt.SetParameter( m );

@@ -145,11 +145,13 @@ private:
      * place, there is a menu displayed that allows to choose the item.
      *
      * @param aWhere is the place where the item should be selected.
-     * @param aAllowDisambiguation decides what to do in case of disambiguation. If true, then
-     * a menu is shown, otherise function finishes without selecting anything.
+     * @param aOnDrag indicates whether a drag operation is being performed.
+     * @param aSelectionCancelledFlag allows the function to inform its caller that a selection
+     * was cancelled (for instance, by clicking outside of the disambiguation menu).
      * @return True if an item was selected, false otherwise.
      */
-    bool selectPoint( const VECTOR2I& aWhere, bool aOnDrag = false );
+    bool selectPoint( const VECTOR2I& aWhere, bool aOnDrag = false,
+                      bool* aSelectionCancelledFlag = NULL );
 
     /**
      * Function selectCursor()
