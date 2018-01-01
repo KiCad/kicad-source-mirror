@@ -283,6 +283,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     m_parent->SetMsgPanel( m_item );
 
     m_parent->SetDesignSettings( m_brdSettings );
+    m_parent->OnModify();
 
     return true;
 }

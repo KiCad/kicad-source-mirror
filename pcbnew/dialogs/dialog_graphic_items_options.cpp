@@ -134,6 +134,7 @@ void DIALOG_GRAPHIC_ITEMS_OPTIONS::OnOkClick( wxCommandEvent& event )
         g_DrawDefaultLineThickness = 0;
 
     m_parent->SetDesignSettings( m_brdSettings );
+    m_parent->OnModify();
 
     EndModal( wxID_OK );
 }

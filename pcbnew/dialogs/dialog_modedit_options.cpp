@@ -132,6 +132,7 @@ void DIALOG_MODEDIT_OPTIONS::OnOkClick( wxCommandEvent& event )
     m_brdSettings.m_ValueDefaultVisibility = sel != 1;
 
     m_parent->SetDesignSettings( m_brdSettings );
+    m_parent->OnModify();
 
     EndModal( wxID_OK );
 }

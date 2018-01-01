@@ -636,6 +636,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
             // Switch active layer to the selected zone layer
             SetActiveLayer( zoneInfo.m_CurrentZone_Layer );
             SetZoneSettings( zoneInfo );
+            OnModify();
         }
         else
         {
@@ -648,6 +649,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
             zoneInfo << *s_CurrentZone;
 
             SetZoneSettings( zoneInfo );
+            OnModify();
         }
 
         // Show the Net for zones on copper layers
@@ -911,6 +913,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     }
 
     SetZoneSettings( zoneInfo );
+    OnModify();
 
     if( edited == ZONE_EXPORT_VALUES )
     {

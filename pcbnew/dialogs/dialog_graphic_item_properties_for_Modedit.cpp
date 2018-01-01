@@ -266,6 +266,7 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::TransferDataFromWindow()
     int thickness = ValueFromString( g_UserUnit, msg );
     m_brdSettings.m_ModuleSegmentWidth = thickness;
     m_parent->SetDesignSettings( m_brdSettings );
+    m_parent->OnModify();
 
     m_item->SetLayer( ToLAYER_ID( layer ) );
 
