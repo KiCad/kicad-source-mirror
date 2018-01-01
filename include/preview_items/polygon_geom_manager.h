@@ -78,7 +78,7 @@ public:
     /**
      * Lock in a polygon point.
      */
-    void AddPoint( const VECTOR2I& aPt );
+    bool AddPoint( const VECTOR2I& aPt );
 
     /**
      * Mark the polygon finished and update the client

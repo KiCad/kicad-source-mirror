@@ -32,12 +32,12 @@ POLYGON_GEOM_MANAGER::POLYGON_GEOM_MANAGER( CLIENT& aClient ):
 {}
 
 
-void POLYGON_GEOM_MANAGER::AddPoint( const VECTOR2I& aPt )
+bool POLYGON_GEOM_MANAGER::AddPoint( const VECTOR2I& aPt )
 {
     // if this is the first point, make sure the client is happy
     // for us to continue
     if( !IsPolygonInProgress() && !m_client.OnFirstPoint() )
-        return;
+        return false;
 
     if( m_leaderPts.size() > 1 )
     {
@@ -53,6 +53,7 @@ void POLYGON_GEOM_MANAGER::AddPoint( const VECTOR2I& aPt )
     }
 
     m_client.OnGeometryChange( *this );
+    return true;
 }
 
 

@@ -1309,10 +1309,9 @@ void DRAWING_TOOL::runPolygonEventLoop( POLYGON_GEOM_MANAGER& polyGeomMgr )
                 controls.SetAutoPan( false );
                 controls.CaptureCursor( false );
             }
-            else    // adding a corner
+            // adding a corner
+            else if( polyGeomMgr.AddPoint( cursorPos ) )
             {
-                polyGeomMgr.AddPoint( cursorPos );
-
                 if( !started )
                 {
                     started = true;
