@@ -674,8 +674,6 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     if( hotKey == NULL )
         return false;
 
-    SCH_SCREEN* screen = GetScreen();
-
     // itemInEdit == false means no item currently edited. We can ask for editing a new item
     bool itemInEdit = IsEditingDrawItem();
 
