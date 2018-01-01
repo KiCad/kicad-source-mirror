@@ -223,6 +223,7 @@ public:
      * Calls the library viewer to select component to import into schematic.
      * if the library viewer is currently running, it is closed and reopened
      * in modal mode.
+     * @param aParent is the caller
      * @param aFilter is a filter to pass the allowed library names
      *          and/or some other filter
      * @param aPreselectedLibId Preselected component LIB_ID. Not valid if none selected.
@@ -231,6 +232,7 @@ public:
      * @return the selected component
      */
     COMPONENT_SELECTION SelectComponentFromLibBrowser(
+            wxTopLevelWindow* aParent,
             const SCHLIB_FILTER* aFilter,
             const LIB_ID& aPreselectedLibid,
             int aUnit, int aConvert );

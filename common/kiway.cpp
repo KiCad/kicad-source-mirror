@@ -42,9 +42,7 @@ int     KIWAY::m_kiface_version[KIWAY_FACE_COUNT];
 
 
 KIWAY::KIWAY( PGM_BASE* aProgram, int aCtlBits, wxFrame* aTop ):
-    m_program( aProgram ),
-    m_ctl( aCtlBits ),
-    m_top( 0 )
+    m_program( aProgram ), m_ctl( aCtlBits ), m_top( 0 )
 {
     SetTop( aTop );     // hook player_destroy_handler() into aTop.
 
@@ -299,7 +297,7 @@ KIWAY_PLAYER* KIWAY::GetPlayerFrame( FRAME_T aFrameType )
 }
 
 
-KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, KIWAY_PLAYER* aParent )
+KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow* aParent )
 {
     // Since this will be called from python, cannot assume that code will
     // not pass a bad aFrameType.
@@ -329,10 +327,11 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, KIWAY_PLAYER* aP
         if( kiface )
         {
             frame = (KIWAY_PLAYER*) kiface->CreateWindow(
-                    aParent,    // Parent window of frame, NULL in non modal mode
+                    aParent,    // Parent window of frame in modal mode, NULL in non modal mode
                     aFrameType,
                     this,
-                    m_ctl       // questionable need, these same flags where passed to the KIFACE::OnKifaceStart()
+                    m_ctl       // questionable need, these same flags where passed
+                                // to the KIFACE::OnKifaceStart()
                     );
             wxASSERT( frame );
 

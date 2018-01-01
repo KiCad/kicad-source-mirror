@@ -516,7 +516,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::setLibIdByBrowser( int aRow )
     // Use library viewer to choose a symbol
     LIB_ID aPreselectedLibid;
     SCH_BASE_FRAME::COMPONENT_SELECTION sel =
-            m_parent->SelectComponentFromLibBrowser( NULL, aPreselectedLibid, 0, 0 );
+            m_parent->SelectComponentFromLibBrowser( this, NULL, aPreselectedLibid, 0, 0 );
 #endif
 
     if( sel.LibId.empty() )     // command aborted

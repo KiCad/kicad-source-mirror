@@ -53,8 +53,8 @@
 
 
 SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowser(
-        const SCHLIB_FILTER* aFilter,
-        const LIB_ID& aPreselectedLibId,
+        wxTopLevelWindow* aParent,
+        const SCHLIB_FILTER* aFilter, const LIB_ID& aPreselectedLibId,
         int aUnit, int aConvert )
 {
     // Close any open non-modal Lib browser, and open a new one, in "modal" mode:
@@ -63,7 +63,7 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowse
     if( viewlibFrame )
         viewlibFrame->Destroy();
 
-    viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER_MODAL, true, this );
+    viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER_MODAL, true, aParent );
 
     if( aFilter )
         viewlibFrame->SetFilter( aFilter );
@@ -169,7 +169,7 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
 
     if( dlg.IsExternalBrowserSelected() )   // User requested component browser.
     {
-        sel = SelectComponentFromLibBrowser( aFilter, id, sel.Unit, sel.Convert );
+        sel = SelectComponentFromLibBrowser( this, aFilter, id, sel.Unit, sel.Convert );
         id = sel.LibId;
     }
     else

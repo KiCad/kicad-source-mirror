@@ -133,6 +133,7 @@ class wxConfigBase;
 class PGM_BASE;
 class KIWAY;
 class KIWAY_PLAYER;
+class wxTopLevelWindow;
 
 
 /**
@@ -304,14 +305,16 @@ public:
      * @param doCreate when true asks that the player be created if it is not
      *   already created, false means do not create and maybe return NULL.
      * @param aParent is a parent for modal KIWAY_PLAYER frames, otherwise NULL
-     *  used only when doCreate = true
+     *  used only when doCreate = true and by KIWAY_PLAYER frames created in modal form
+     * because the are using the wxFLOAT_ON_PARENT style
      *
      * @return KIWAY_PLAYER* - a valid opened KIWAY_PLAYER or NULL if there
      *  is something wrong or doCreate was false and the player has yet to be created.
      *
      * @throw IO_ERROR if the *.kiface file could not be found, filled with text saying what.
      */
-    VTBL_ENTRY KIWAY_PLAYER* Player( FRAME_T aFrameType, bool doCreate = true, KIWAY_PLAYER* aParent = NULL );
+    VTBL_ENTRY KIWAY_PLAYER* Player( FRAME_T aFrameType, bool doCreate = true,
+                                     wxTopLevelWindow* aParent = NULL );
 
     /**
      * Function PlayerClose
