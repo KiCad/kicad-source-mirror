@@ -896,7 +896,7 @@ void SHAPE_POLY_SET::unfractureSingle( SHAPE_POLY_SET::POLYGON& aPoly )
 
         bool compareSegs( const SEG& s1, const SEG& s2 ) const
         {
-            return (s1.A == s2.A && s1.B == s2.B) || (s1.A == s2.B && s1.B == s2.A);
+            return (s1.A == s2.B && s1.B == s2.A);
         }
 
         bool operator==( const EDGE& aOther ) const
@@ -1011,7 +1011,7 @@ void SHAPE_POLY_SET::unfractureSingle( SHAPE_POLY_SET::POLYGON& aPoly )
         do {
             edgeBuf[cnt++] = e;
             e = e->next;
-        } while( e != e_first );
+        } while( e && e != e_first );
 
         SHAPE_LINE_CHAIN outl;
 
