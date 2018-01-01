@@ -117,7 +117,7 @@ bool ROUTER::RoutingInProgress() const
 
 const ITEM_SET ROUTER::QueryHoverItems( const VECTOR2I& aP )
 {
-    if( m_state == IDLE )
+    if( m_state == IDLE || m_placer == nullptr )
         return m_world->HitTest( aP );
     else
         return m_placer->CurrentNode()->HitTest( aP );
