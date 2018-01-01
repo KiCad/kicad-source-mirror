@@ -613,8 +613,14 @@ void DIALOG_EDIT_COMPONENTS_LIBID::revertChanges()
 
 bool InvokeDialogEditComponentsLibId( SCH_EDIT_FRAME* aCaller )
 {
+    // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
+    // frame. Therefore this dialog as a modal frame parent, MUST be run under
+    // quasimodal mode for the quasimodal frame support to work.  So don't use
+    // the QUASIMODAL macros here.
     DIALOG_EDIT_COMPONENTS_LIBID dlg( aCaller );
-    dlg.ShowModal();
+    // DO NOT use ShowModal() here, otherwise the library browser will not work
+    // properly.
+    dlg.ShowQuasiModal();
 
     return dlg.IsSchematicModified();
 }
