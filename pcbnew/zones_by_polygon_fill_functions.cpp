@@ -99,12 +99,16 @@ int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
         toFill.push_back(zone);
     }
 
-    std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
-            new WX_PROGRESS_REPORTER( aActiveWindow, _( "Fill All Zones" ), 3 )
-            );
-
     ZONE_FILLER filler( GetBoard() );
-    filler.SetProgressReporter( progressReporter.get() );
+
+    if( aVerbose )
+    {
+        std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
+                new WX_PROGRESS_REPORTER( aActiveWindow, _( "Fill All Zones" ), 3 )
+                );
+        filler.SetProgressReporter( progressReporter.get() );
+    }
+
     filler.Fill( toFill );
 
     return 0;
