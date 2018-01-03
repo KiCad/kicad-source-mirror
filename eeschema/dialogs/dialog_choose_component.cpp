@@ -2,8 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,21 +49,37 @@ FOOTPRINT_ASYNC_LOADER          DIALOG_CHOOSE_COMPONENT::m_fp_loader;
 std::unique_ptr<FOOTPRINT_LIST> DIALOG_CHOOSE_COMPONENT::m_fp_list;
 
 DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-        CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, int aDeMorganConvert, bool aAllowFieldEdits )
+        CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, int aDeMorganConvert, bool aAllowFieldEdits,
+        bool aShowFootprints )
         : DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxSize( 800, 650 ),
                   wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
+          m_fp_sel_ctrl( nullptr ),
+          m_fp_view_ctrl( nullptr ),
           m_parent( aParent ),
           m_deMorganConvert( aDeMorganConvert >= 0 ? aDeMorganConvert : 0 ),
           m_allow_field_edits( aAllowFieldEdits ),
+          m_show_footprints( aShowFootprints ),
           m_external_browser_requested( false )
 {
     wxBusyCursor busy_while_loading;
 
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
+    // Use a slightly different layout, with a details pane spanning the entire window,
+    // if we're not showing footprints.
+    auto vsplitter = aShowFootprints ? nullptr : new wxSplitterWindow(
+        this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE );
+
     auto splitter = new wxSplitterWindow(
-            this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE );
-    m_tree = new COMPONENT_TREE( splitter, Prj().SchSymbolLibTable(), aAdapter );
+        vsplitter ? static_cast<wxWindow *>( vsplitter ) : static_cast<wxWindow *>( this ),
+        wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE );
+
+    auto details = aShowFootprints ? nullptr : new wxHtmlWindow(
+        vsplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+        wxHW_SCROLLBAR_AUTO | wxSUNKEN_BORDER );
+
+    m_tree = new COMPONENT_TREE( splitter, Prj().SchSymbolLibTable(), aAdapter,
+                                 COMPONENT_TREE::WIDGETS::ALL, details );
     auto right_panel = ConstructRightPanel( splitter );
     auto buttons = new wxStdDialogButtonSizer();
     m_dbl_click_timer = new wxTimer( this );
@@ -73,11 +88,22 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     splitter->SetMinimumPaneSize( 1 );
     splitter->SplitVertically( m_tree, right_panel, -300 );
 
+    if( vsplitter )
+    {
+        vsplitter->SetSashGravity( 0.5 );
+        vsplitter->SetMinimumPaneSize( 1 );
+        vsplitter->SplitHorizontally( splitter, details, -200 );
+        sizer->Add( vsplitter, 1, wxEXPAND | wxALL, 5 );
+    }
+    else
+    {
+        sizer->Add( splitter, 1, wxEXPAND | wxALL, 5 );
+    }
+
     buttons->AddButton( new wxButton( this, wxID_OK ) );
     buttons->AddButton( new wxButton( this, wxID_CANCEL ) );
     buttons->Realize();
 
-    sizer->Add( splitter, 1, wxEXPAND | wxALL, 5 );
     sizer->Add( buttons, 0, wxEXPAND | wxBOTTOM, 10 );
     SetSizer( sizer );
 
@@ -117,21 +143,25 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
             wxFULL_REPAINT_ON_RESIZE | wxSUNKEN_BORDER | wxTAB_TRAVERSAL );
     m_sch_view_ctrl->SetLayoutDirection( wxLayout_LeftToRight );
 
-    if( m_allow_field_edits )
-        m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( panel, m_fp_loader, m_fp_list, true );
+    if( m_show_footprints )
+    {
+        if( m_allow_field_edits )
+            m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( panel, m_fp_loader, m_fp_list, true );
+
+        m_fp_view_ctrl = new FOOTPRINT_PREVIEW_WIDGET( panel, Kiway() );
+
+
+        sizer->Add( m_sch_view_ctrl, 1, wxEXPAND | wxALL, 5 );
+
+        if( m_fp_sel_ctrl )
+            sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxALL, 5 );
+
+        sizer->Add( m_fp_view_ctrl, 1, wxEXPAND | wxALL, 5 );
+    }
     else
-        m_fp_sel_ctrl = nullptr;
-
-    m_fp_view_ctrl = new FOOTPRINT_PREVIEW_WIDGET( panel, Kiway() );
-
-
-    sizer->Add( m_sch_view_ctrl, 1, wxEXPAND | wxALL, 5 );
-
-    if( m_fp_sel_ctrl )
-        sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxALL, 5 );
-
-    sizer->Add( m_fp_view_ctrl, 1, wxEXPAND | wxALL, 5 );
-
+    {
+        sizer->Add( m_sch_view_ctrl, 1, wxEXPAND | wxALL, 5 );
+    }
 
     panel->SetSizer( sizer );
     panel->Layout();
@@ -143,7 +173,7 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
 
 void DIALOG_CHOOSE_COMPONENT::OnInitDialog( wxInitDialogEvent& aEvent )
 {
-    if( m_fp_view_ctrl->IsInitialized() )
+    if( m_fp_view_ctrl && m_fp_view_ctrl->IsInitialized() )
     {
         // This hides the GAL panel and shows the status label
         m_fp_view_ctrl->SetStatusText( wxEmptyString );
@@ -190,7 +220,7 @@ void DIALOG_CHOOSE_COMPONENT::OnSchViewDClick( wxMouseEvent& aEvent )
 
 void DIALOG_CHOOSE_COMPONENT::ShowFootprintFor( LIB_ID const& aLibId )
 {
-    if( !m_fp_view_ctrl->IsInitialized() )
+    if( !m_fp_view_ctrl || !m_fp_view_ctrl->IsInitialized() )
         return;
 
     LIB_ALIAS* alias = nullptr;
@@ -222,6 +252,11 @@ void DIALOG_CHOOSE_COMPONENT::ShowFootprintFor( LIB_ID const& aLibId )
 
 void DIALOG_CHOOSE_COMPONENT::ShowFootprint( wxString const& aName )
 {
+    if( !m_fp_view_ctrl )
+    {
+        return;
+    }
+
     if( aName == wxEmptyString )
     {
         m_fp_view_ctrl->SetStatusText( _( "No footprint specified" ) );
@@ -379,7 +414,7 @@ void DIALOG_CHOOSE_COMPONENT::OnComponentPreselected( wxCommandEvent& aEvent )
     }
     else
     {
-        if( m_fp_view_ctrl->IsInitialized() )
+        if( m_fp_view_ctrl && m_fp_view_ctrl->IsInitialized() )
             m_fp_view_ctrl->SetStatusText( wxEmptyString );
 
         PopulateFootprintSelector( id );

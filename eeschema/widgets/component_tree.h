@@ -2,8 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,8 +45,19 @@ public:
     ///> Flags to select extra widgets
     enum WIDGETS { NONE = 0x00, SEARCH = 0x01, DETAILS = 0x02, ALL = 0xFF };
 
+    /**
+     * Construct a component tree.
+     *
+     * @param aParent parent window containing this tree widget
+     * @param aSymLibTable table containing symbols to display
+     * @param aAdapter a CMP_TREE_MODEL_ADAPTER instance to use
+     * @param aWidgets selection of sub-widgets to include
+     * @param aDetails if not null, a custom wxHtmlWindow to hold symbol details. If null this will
+     *        be created inside the COMPONENT_TREE.
+     */
     COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTable,
-                    CMP_TREE_MODEL_ADAPTER_BASE::PTR& aAdapter, WIDGETS aWidgets = ALL );
+                    CMP_TREE_MODEL_ADAPTER_BASE::PTR& aAdapter, WIDGETS aWidgets = ALL,
+                    wxHtmlWindow *aDetails = nullptr );
 
     /**
      * For multi-unit components, if the user selects the component itself

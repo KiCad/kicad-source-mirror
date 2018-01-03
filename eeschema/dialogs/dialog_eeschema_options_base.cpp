@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jan  2 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -108,6 +108,9 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_checkPageLimits = new wxCheckBox( m_panel5, wxID_ANY, _("Show page limi&ts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkPageLimits->SetValue(true); 
 	bSizer92->Add( m_checkPageLimits, 0, wxEXPAND|wxLEFT|wxTOP|wxRIGHT, 3 );
+	
+	m_footprintPreview = new wxCheckBox( m_panel5, wxID_ANY, _("Footprint previews in symbol chooser (experimental)"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer92->Add( m_footprintPreview, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 3 );
 	
 	
 	bSizer82->Add( bSizer92, 0, wxALL|wxEXPAND, 5 );

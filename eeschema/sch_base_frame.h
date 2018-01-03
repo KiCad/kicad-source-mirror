@@ -1,10 +1,8 @@
-#ifndef SCH_BASE_FRAME_H_
-#define SCH_BASE_FRAME_H_
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +21,9 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#ifndef SCH_BASE_FRAME_H_
+#define SCH_BASE_FRAME_H_
 
 #include <lib_id.h>
 #include <draw_frame.h>
@@ -188,6 +189,7 @@ public:
      * @param aConvert           preselected De Morgan shape
      * @param aHighlight         name of component to highlight in the list.
      *                           highlights none if there isn't one by that name
+     * @param aShowFootprints    whether to show footprints in the dialog
      * @param aAllowFields       whether to allow field editing in the dialog
      *
      * @return the selected component
@@ -198,6 +200,7 @@ public:
             bool                                aUseLibBrowser,
             int                                 aUnit,
             int                                 aConvert,
+            bool                                aShowFootprints,
             const LIB_ID*                       aHighlight = nullptr,
             bool                                aAllowFields = true );
 

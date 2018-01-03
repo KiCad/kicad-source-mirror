@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2017 Jean-Pierre Charras, jp.charras@wanadoo.fr
- * Copyright 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -511,7 +511,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::setLibIdByBrowser( int aRow )
     // Use dialog symbol selector to choose a symbol
     SCH_BASE_FRAME::HISTORY_LIST dummy;
     SCH_BASE_FRAME::COMPONENT_SELECTION sel =
-                m_parent->SelectComponentFromLibrary( NULL, dummy, true, 0, 0 );
+                m_parent->SelectComponentFromLibrary( NULL, dummy, true, 0, 0, false );
 #else
     // Use library viewer to choose a symbol
     LIB_ID aPreselectedLibid;

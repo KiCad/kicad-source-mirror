@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -155,6 +155,7 @@ private:
     bool                    m_autoplaceFields;    ///< automatically place component fields
     bool                    m_autoplaceJustify;   ///< allow autoplace to change justification
     bool                    m_autoplaceAlign;     ///< align autoplaced fields to the grid
+    bool                    m_footprintPreview;   ///< whether to show footprint previews
 
     /// An index to the last find item in the found items list #m_foundItems.
     int         m_foundItemIndex;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jan  2 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -76,6 +76,7 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkHVOrientation;
 		wxCheckBox* m_checkShowHiddenPins;
 		wxCheckBox* m_checkPageLimits;
+		wxCheckBox* m_footprintPreview;
 		wxPanel* m_panel3;
 		wxStaticText* m_staticText2;
 		wxChoice* m_choiceUnits;

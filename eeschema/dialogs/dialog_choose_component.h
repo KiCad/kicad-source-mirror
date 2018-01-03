@@ -2,8 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,9 +99,12 @@ public:
      *                          (TODO: should happen in dialog)
      * @param aAllowFieldEdits  if false, all functions that allow the user to edit
      *      fields (currently just footprint selection) will not be available.
+     * @param aShowFootprints   if false, all footprint preview and selection features
+     *      are disabled. This forces aAllowFieldEdits false too.
      */
     DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-            CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, int aDeMorganConvert, bool aAllowFieldEdits );
+            CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, int aDeMorganConvert, bool aAllowFieldEdits,
+            bool aShowFootprints );
 
     ~DIALOG_CHOOSE_COMPONENT();
 
@@ -195,6 +197,7 @@ protected:
     SCH_BASE_FRAME*             m_parent;
     int                         m_deMorganConvert;
     bool                        m_allow_field_edits;
+    bool                        m_show_footprints;
     bool                        m_external_browser_requested;
     wxString                    m_fp_override;
 

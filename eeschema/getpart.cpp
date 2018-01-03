@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,6 +105,7 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
         bool                                aUseLibBrowser,
         int                                 aUnit,
         int                                 aConvert,
+        bool                                aShowFootprints,
         const LIB_ID*                       aHighlight,
         bool                                aAllowFields )
 {
@@ -159,7 +160,7 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibrary(
         adapter->SetPreselectNode( *aHighlight, /* aUnit */ 0 );
 
     dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), adapter->GetComponentsCount() );
-    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, aConvert, aAllowFields );
+    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, aConvert, aAllowFields, aShowFootprints );
 
     if( dlg.ShowQuasiModal() == wxID_CANCEL )
         return COMPONENT_SELECTION();
@@ -212,7 +213,8 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*                          aD
     SetRepeatItem( NULL );
     m_canvas->SetIgnoreMouseEvents( true );
 
-    auto sel = SelectComponentFromLibrary( aFilter, aHistoryList, aUseLibBrowser, 1, 1 );
+    auto sel = SelectComponentFromLibrary( aFilter, aHistoryList, aUseLibBrowser, 1, 1,
+                                           m_footprintPreview );
 
     if( !sel.LibId.IsValid() )
     {

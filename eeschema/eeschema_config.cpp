@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -250,6 +250,7 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     dlg.SetEnableAutoPan( m_canvas->GetEnableAutoPan() );
     dlg.SetEnableHVBusOrientation( GetForceHVLines() );
     dlg.SetShowPageLimits( m_showPageLimits );
+    dlg.SetFootprintPreview( m_footprintPreview );
     dlg.SetAutoplaceFields( m_autoplaceFields );
     dlg.SetAutoplaceJustify( m_autoplaceJustify );
     dlg.SetAutoplaceAlign( m_autoplaceAlign );
@@ -302,6 +303,7 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     m_autoplaceFields = dlg.GetAutoplaceFields();
     m_autoplaceJustify = dlg.GetAutoplaceJustify();
     m_autoplaceAlign = dlg.GetAutoplaceAlign();
+    m_footprintPreview = dlg.GetFootprintPreview();
 
     // Delete all template fieldnames and then restore them using the template field data from
     // the options dialog
@@ -428,6 +430,7 @@ const wxChar RescueNeverShowEntry[] =               wxT( "RescueNeverShow" );
 const wxChar AutoplaceFieldsEntry[] =               wxT( "AutoplaceFields" );
 const wxChar AutoplaceJustifyEntry[] =              wxT( "AutoplaceJustify" );
 const wxChar AutoplaceAlignEntry[] =                wxT( "AutoplaceAlign" );
+static const wxChar FootprintPreviewEntry[] =       wxT( "FootprintPreview" );
 static const wxChar DefaultBusWidthEntry[] =        wxT( "DefaultBusWidth" );
 static const wxChar DefaultDrawLineWidthEntry[] =   wxT( "DefaultDrawLineWidth" );
 static const wxChar ShowHiddenPinsEntry[] =         wxT( "ShowHiddenPins" );
@@ -521,6 +524,7 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( AutoplaceFieldsEntry, &m_autoplaceFields, true );
     aCfg->Read( AutoplaceJustifyEntry, &m_autoplaceJustify, true );
     aCfg->Read( AutoplaceAlignEntry, &m_autoplaceAlign, false );
+    aCfg->Read( FootprintPreviewEntry, &m_footprintPreview, false );
 
     // Load print preview window session settings.
     aCfg->Read( PreviewFramePositionXEntry, &tmp, -1 );
@@ -614,6 +618,7 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( AutoplaceFieldsEntry, m_autoplaceFields );
     aCfg->Write( AutoplaceJustifyEntry, m_autoplaceJustify );
     aCfg->Write( AutoplaceAlignEntry, m_autoplaceAlign );
+    aCfg->Write( FootprintPreviewEntry, m_footprintPreview );
 
     // Save print preview window session settings.
     aCfg->Write( PreviewFramePositionXEntry, m_previewPosition.x );

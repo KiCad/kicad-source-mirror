@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -335,6 +335,18 @@ public:
      * Return the current ShowPageLimits setting from the dialog
      */
     bool GetShowPageLimits( void ) { return m_checkPageLimits->GetValue(); }
+
+    /**
+     * Function
+     * Set the FootprintPreview setting in the dialog.
+     */
+    void SetFootprintPreview( bool show ) { m_footprintPreview->SetValue( show ); }
+
+    /**
+     * Function
+     * Return the current FootprintPreview setting from the dialog
+     */
+    bool GetFootprintPreview( void ) { return m_footprintPreview->GetValue(); }
 
     /**
      * Function

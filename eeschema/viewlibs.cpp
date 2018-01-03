@@ -58,7 +58,7 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
 
     dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ),
                         adapter->GetComponentsCount() );
-    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, m_convert, false );
+    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, m_convert, false, false );
 
     if( dlg.ShowQuasiModal() == wxID_CANCEL )
         return;

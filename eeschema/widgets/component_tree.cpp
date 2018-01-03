@@ -2,8 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +35,7 @@
 
 
 COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTable,
-        CMP_TREE_MODEL_ADAPTER_BASE::PTR& aAdapter, WIDGETS aWidgets )
+        CMP_TREE_MODEL_ADAPTER_BASE::PTR& aAdapter, WIDGETS aWidgets, wxHtmlWindow* aDetails )
     : wxPanel( aParent ),
       m_sym_lib_table( aSymLibTable ),
       m_adapter( aAdapter ),
@@ -82,10 +81,17 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTabl
     // Description panel
     if( aWidgets & DETAILS )
     {
-        m_details_ctrl = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxSize( 320, 240 ),
-                wxHW_SCROLLBAR_AUTO | wxSUNKEN_BORDER );
+        if( !aDetails )
+        {
+            m_details_ctrl = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxSize( 320, 240 ),
+                                               wxHW_SCROLLBAR_AUTO | wxSUNKEN_BORDER );
 
-        sizer->Add( m_details_ctrl, 1, wxALL | wxEXPAND, 5 );
+            sizer->Add( m_details_ctrl, 1, wxALL | wxEXPAND, 5 );
+        }
+        else
+        {
+            m_details_ctrl = aDetails;
+        }
         m_details_ctrl->Bind( wxEVT_HTML_LINK_CLICKED, &COMPONENT_TREE::onDetailsLink, this );
     }
 
