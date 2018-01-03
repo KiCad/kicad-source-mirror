@@ -136,6 +136,12 @@ protected:
     virtual bool AreArbitraryColorsAllowed() { return false; }
 
     /**
+     * Subclasses can override this to provide accurate representation
+     * of transparent colour swatches.
+     */
+    virtual COLOR4D getBackgroundLayerColor() { return COLOR4D::BLACK; }
+
+    /**
      * Function encodeId
      * is here to allow saving a layer index within a control as its wxControl id,
      * but to do so in a way that all child wxControl ids within a wxWindow are unique,

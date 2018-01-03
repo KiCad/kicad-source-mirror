@@ -125,6 +125,12 @@ bool PCB_LAYER_WIDGET::AreArbitraryColorsAllowed()
 }
 
 
+COLOR4D PCB_LAYER_WIDGET::getBackgroundLayerColor()
+{
+    return myframe->Settings().Colors().GetLayerColor( LAYER_PCB_BACKGROUND );
+}
+
+
 bool PCB_LAYER_WIDGET::isAllowedInFpMode( int aId )
 {
     for( unsigned ii = 0; ii < DIM( s_allowed_in_FpEditor ); ii++ )
@@ -634,6 +640,11 @@ void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
         view->GetPainter()->GetSettings()->ImportLegacyColors( &myframe->Settings().Colors() );
         view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );   // useful to update rastnest
         view->UpdateLayerColor( aId );
+
+        // plated-through-holes don't have their own color; they use the background color
+        if( aId == LAYER_PCB_BACKGROUND )
+            view->UpdateLayerColor( LAYER_PADS_PLATEDHOLES );
+
         galCanvas->Refresh();
     }
 

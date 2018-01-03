@@ -89,14 +89,14 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSet
 
     // Default colors for specific layers (not really board layers).
     m_layerColors[LAYER_VIAS_HOLES]         = COLOR4D( 0.5, 0.4, 0.0, 0.8 );
-    m_layerColors[LAYER_PADS_PLATEDHOLES]   = COLOR4D( 0.0, 0.0, 0.0, 1.0 );
+    m_layerColors[LAYER_PADS_PLATEDHOLES]   = aSettings->GetItemColor( LAYER_PCB_BACKGROUND );
     m_layerColors[LAYER_PADS_NETNAMES]      = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
     m_layerColors[LAYER_PAD_FR_NETNAMES]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
     m_layerColors[LAYER_PAD_BK_NETNAMES]    = COLOR4D( 1.0, 1.0, 1.0, 0.9 );
     m_layerColors[LAYER_DRC]                = COLOR4D( 1.0, 0.0, 0.0, 0.8 );
 
-    // LAYER_PADS_TH, LAYER_NON_PLATEDHOLES, LAYER_ANCHOR],LAYER_RATSNEST,
-    // LAYER_VIA_THROUGH], LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA
+    // LAYER_PADS_TH, LAYER_NON_PLATEDHOLES, LAYER_ANCHOR ,LAYER_RATSNEST,
+    // LAYER_VIA_THROUGH, LAYER_VIA_BBLIND, LAYER_VIA_MICROVIA
     // are initialized from aSettings
 
     // These colors are not actually used. Set just in case...

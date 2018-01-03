@@ -143,6 +143,8 @@ protected:
 
     virtual bool AreArbitraryColorsAllowed() override;
 
+    virtual COLOR4D getBackgroundLayerColor() override;
+
     /**
      * Function isAllowedInFpMode
      * @return true if item aId has meaning in footprint editor mode.

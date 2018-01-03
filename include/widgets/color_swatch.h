@@ -49,12 +49,17 @@ public:
      * and false to allow a selection from a set of colors accepted by the legacy canvas.
      */
     COLOR_SWATCH( wxWindow* aParent, KIGFX::COLOR4D aColor, int aID,
-                  bool aArbitraryColors );
+                  bool aArbitraryColors, KIGFX::COLOR4D aBackground );
 
     /**
      * Set the current swatch color directly.
      */
     void SetSwatchColor( KIGFX::COLOR4D aColor, bool sendEvent );
+
+    /**
+     * Set the swatch background color.
+     */
+    void SetSwatchBackground( KIGFX::COLOR4D aBackground );
 
     /**
      * @return the current swatch color
@@ -80,6 +85,9 @@ private:
 
     ///> The current colour of the swatch
     KIGFX::COLOR4D m_color;
+
+    ///> The background colour to show the swatch over
+    KIGFX::COLOR4D m_background;
 
     ///> Handle of the actual swatch shown
     wxStaticBitmap* m_swatch;

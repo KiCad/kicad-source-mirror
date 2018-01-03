@@ -208,6 +208,29 @@ void LAYER_WIDGET::OnRenderSwatchChanged( wxCommandEvent& aEvent )
 
     LAYER_NUM id = getDecodedId( eventSource->GetId() );
 
+    if( id == LAYER_PCB_BACKGROUND )
+    {
+        // Update all swatch backgrounds
+        int count = GetLayerRowCount();
+        int row;
+        int col = 1;    // bitmap button is column 1 in layers tab
+        for( row = 0; row < count; ++row )
+        {
+            COLOR_SWATCH* swatch = dynamic_cast<COLOR_SWATCH*>( getLayerComp( row, col ) );
+            if( swatch )
+                swatch->SetSwatchBackground( newColor );
+        }
+
+        count = GetRenderRowCount();
+        col = 0;    // bitmap button is column 0 in render tab
+        for( row = 0; row < count; ++row )
+        {
+            COLOR_SWATCH* swatch = dynamic_cast<COLOR_SWATCH*>( getRenderComp( row, col ) );
+            if( swatch )
+                swatch->SetSwatchBackground( newColor );
+        }
+    }
+
     // tell the client code.
     OnRenderColorChange( id, newColor );
 
@@ -313,7 +336,7 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     col = COLUMN_COLORBM;
 
     auto bmb = new COLOR_SWATCH( m_LayerScrolledWindow, aSpec.color, encodeId( col, aSpec.id ),
-                                 AreArbitraryColorsAllowed() );
+                                 AreArbitraryColorsAllowed(), getBackgroundLayerColor() );
     bmb->Bind( wxEVT_LEFT_DOWN, &LAYER_WIDGET::OnLeftDownLayers, this );
     bmb->Bind( COLOR_SWATCH_CHANGED, &LAYER_WIDGET::OnLayerSwatchChanged, this );
     bmb->SetToolTip( _("Left double click or middle click for color change, right click for menu" ) );
@@ -378,7 +401,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
     if( aSpec.color != COLOR4D::UNSPECIFIED )
     {
         auto bmb = new COLOR_SWATCH( m_RenderScrolledWindow, aSpec.color, encodeId( col, aSpec.id ),
-                                     AreArbitraryColorsAllowed() );
+                                     AreArbitraryColorsAllowed(), getBackgroundLayerColor() );
         bmb->Bind( COLOR_SWATCH_CHANGED, &LAYER_WIDGET::OnRenderSwatchChanged, this );
         bmb->SetToolTip( _( "Left double click or middle click for color change" ) );
         m_RenderFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );

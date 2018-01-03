@@ -41,7 +41,7 @@ extern COLOR4D DisplayColorFrame( wxWindow* aParent, COLOR4D aOldColor );
 /**
  * Make a simple color swatch bitmap
  */
-static wxBitmap makeBitmap( COLOR4D aColor )
+static wxBitmap makeBitmap( COLOR4D aColor, COLOR4D aBackground )
 {
     wxBitmap    bitmap( SWATCH_SIZE_X, SWATCH_SIZE_Y );
     wxBrush     brush;
@@ -49,11 +49,13 @@ static wxBitmap makeBitmap( COLOR4D aColor )
 
     iconDC.SelectObject( bitmap );
 
-    brush.SetColour( aColor.ToColour() );
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
-
+    brush.SetColour( aBackground.WithAlpha(1.0).ToColour() );
     iconDC.SetBrush( brush );
+    iconDC.DrawRectangle( 0, 0, SWATCH_SIZE_X, SWATCH_SIZE_Y );
 
+    brush.SetColour( aColor.ToColour() );
+    iconDC.SetBrush( brush );
     iconDC.DrawRectangle( 0, 0, SWATCH_SIZE_X, SWATCH_SIZE_Y );
 
     return bitmap;
@@ -65,10 +67,10 @@ static wxBitmap makeBitmap( COLOR4D aColor )
  * creates a wxStaticBitmap and assigns it a solid color and a control ID
  */
 static std::unique_ptr<wxStaticBitmap> makeColorSwatch(
-        wxWindow* aParent, COLOR4D aColor, int aID )
+        wxWindow* aParent, COLOR4D aColor, COLOR4D aBackground, int aID )
 {
     // construct a bitmap of the right color and make the swatch from it
-    wxBitmap bitmap = makeBitmap( aColor );
+    wxBitmap bitmap = makeBitmap( aColor, aBackground );
     auto ret = std::make_unique<wxStaticBitmap>( aParent, aID, bitmap );
 
     return ret;
@@ -76,15 +78,16 @@ static std::unique_ptr<wxStaticBitmap> makeColorSwatch(
 
 
 COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, COLOR4D aColor, int aID,
-                            bool aArbitraryColors ):
+                            bool aArbitraryColors, COLOR4D aBackground ):
         wxPanel( aParent, aID ),
         m_arbitraryColors( aArbitraryColors ),
-        m_color( aColor )
+        m_color( aColor ),
+        m_background( aBackground )
 {
     auto sizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( sizer );
 
-    auto swatch = makeColorSwatch( this, m_color, aID );
+    auto swatch = makeColorSwatch( this, m_color, m_background, aID );
     m_swatch = swatch.release(); // hold a handle
 
     sizer->Add( m_swatch, 0, 0 );
@@ -126,13 +129,21 @@ void COLOR_SWATCH::SetSwatchColor( COLOR4D aColor, bool sendEvent )
 {
     m_color = aColor;
 
-    wxBitmap bm = makeBitmap( aColor );
+    wxBitmap bm = makeBitmap( m_color, m_background );
     m_swatch->SetBitmap( bm );
 
     if( sendEvent )
     {
         sendSwatchChangeEvent( *this );
     }
+}
+
+
+void COLOR_SWATCH::SetSwatchBackground( COLOR4D aBackground )
+{
+    m_background = aBackground;
+    wxBitmap bm = makeBitmap( m_color, m_background );
+    m_swatch->SetBitmap( bm );
 }
 
 
@@ -160,7 +171,7 @@ void COLOR_SWATCH::GetNewSwatchColor()
     {
         m_color = newColor;
 
-        wxBitmap bm = makeBitmap( newColor );
+        wxBitmap bm = makeBitmap( newColor, m_background );
         m_swatch->SetBitmap( bm );
 
         sendSwatchChangeEvent( *this );
