@@ -68,16 +68,22 @@ private:
     bool remapSymbolToLibTable( SCH_COMPONENT* aSymbol );
 
     /**
-     * Backup all of the files that could be modified by the remapping with a .v4 file extension
-     * in case something goes wrong.
+     * Backup all of the files that could be modified by the remapping with a time stamp
+     * appended to the file name into the "remap_backup" folder in case something goes wrong.
      *
      * Backup the following:
-     * - All schematic (*.sch -> *.sch.v4 ) files.
-     * - The project (*.pro) -> *.pro.v4) file.
-     * - The cache library (*-cache.lib -> *.-cache.lib.v4) file.
-     * - The rescue library (*-rescue.lib -> *.rescue.lib.v4) file.
+     * - All schematic (prj-name.sch -> remap_backup/prj-name-time-stamp.sch ) files.
+     * - The project (prj-name.pro) -> remap_backup/prj-name-time-stamp.pro) file.
+     * - The cache library (prj-name-cache.lib -> remap_backup/prj-name.-cache-time-stamp.lib)
+     *   file.
+     * - The rescue library (prj-name-rescue.lib -> remap_backup/prj-name.rescue-time-stamp.lib)
+     *   file.
+     * - The rescue library (prj-name-rescue.dcm -> remap_backup/prj-name.rescue-time-stamp.dcm)
+     *   file.
+     *
+     * @param aReporter is the #REPORTER object in which to write information messages.
      */
-    void backupProject();
+    void backupProject( REPORTER& aReporter );
 
     bool m_remapped;
 };

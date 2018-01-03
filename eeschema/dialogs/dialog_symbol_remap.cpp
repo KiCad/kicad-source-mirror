@@ -48,15 +48,24 @@ DIALOG_SYMBOL_REMAP::DIALOG_SYMBOL_REMAP( SCH_EDIT_FRAME* aParent ) :
 {
     m_remapped = false;
 
+    if( !wxFileName::IsDirWritable( Prj().GetProjectPath() ) )
+    {
+        DisplayInfoMessage( this, _( "Remapping is not possible because you do not have "
+                                     "write privileges to the project folder \"%s\"." ) );
+
+        // Disable the remap button.
+        m_remapped = true;
+    }
+
     wxString text;
 
-    text = _( "This schematic currently uses the symbol library list look up method for "
-              "loading schematic symbols.  KiCad will attempt to map the existing symbols "
-              "to use the new symbol library table.  Remapping will change project files "
-              "and schematics will not be compatible with previous versions of KiCad.  "
-              "All files that are changed will be backed up with the .v4 extension should "
-              "you need to revert any changes.  If you choose to skip this step, you will "
-              "be responsible for manually remapping the symbols." );
+    text = _( "This schematic currently uses the project symbol library list look up method "
+              "for loading library symbols.  KiCad will attempt to map the existing symbols "
+              "to use the new symbol library table.  Remapping will change some project files "
+              "and schematics may not be compatible with older versions of KiCad.  All files "
+              "that are changed will be backed up to the \"remap_backup\" folder in the project "
+              "folder should you need to revert any changes.  If you choose to skip this step, "
+              "you will be responsible for manually remapping the symbols." );
 
     m_htmlCtrl->AppendToPage( text );
 }
@@ -70,7 +79,7 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
 
     wxBusyCursor busy;
 
-    backupProject();
+    backupProject( m_messagePanel->Reporter() );
 
     // Ignore the never show rescue setting for one last rescue of legacy symbol
     // libraries before remapping to the symbol library table.  This ensures the
@@ -292,43 +301,66 @@ bool DIALOG_SYMBOL_REMAP::remapSymbolToLibTable( SCH_COMPONENT* aSymbol )
 }
 
 
-void DIALOG_SYMBOL_REMAP::backupProject()
+void DIALOG_SYMBOL_REMAP::backupProject( REPORTER& aReporter )
 {
-    static wxString ext = "v4";
+    static wxString backupPath = "rescue-backup";
 
+    wxString tmp;
     wxString errorMsg;
     wxFileName destFileName;
     SCH_SCREENS schematic;
+
+    // Copy backup files to different folder so as not to pollute the project folder.
+    destFileName.SetPath( Prj().GetProjectPath() );
+    destFileName.AppendDir( backupPath );
+
+    if( !destFileName.DirExists() )
+    {
+        if( !destFileName.Mkdir() )
+        {
+            errorMsg.Printf( _( "Cannot create project remap back up folder \"%s\"." ),
+                             destFileName.GetPath() );
+            DisplayError( this, errorMsg );
+            return;
+        }
+    }
+
+    // Time stamp to append to file name in case multiple remappings are performed.
+    wxString timeStamp = wxDateTime::Now().Format( "-%Y-%m-%d-%H-%M-%S" );
 
     // Back up the schematic files.
     for( SCH_SCREEN* screen = schematic.GetFirst(); screen; screen = schematic.GetNext() )
     {
         destFileName = screen->GetFileName();
-        destFileName.SetName( destFileName.GetFullName() );
-        destFileName.SetExt( ext );
+        destFileName.SetName( destFileName.GetName() + timeStamp );
+        destFileName.AppendDir( backupPath );
 
-        wxLogTrace( "KICAD_TRACE_PATHS", "Backing up file '%s' to file '%s'.",
+        tmp.Printf( _( "Backing up file \"%s\" to file \"%s\"." ),
                     screen->GetFileName(), destFileName.GetFullPath() );
+        aReporter.Report( tmp, REPORTER::RPT_INFO );
 
         if( wxFileName::Exists( screen->GetFileName() )
           && !wxCopyFile( screen->GetFileName(), destFileName.GetFullPath() ) )
         {
-            errorMsg += wxPrintf( _( "Failed to back up file \"%s\".\n" ), screen->GetFileName() );
+            tmp.Printf( _( "Failed to back up file \"%s\".\n" ), screen->GetFileName() );
+            errorMsg += tmp;
         }
     }
 
     // Back up the project file.
     destFileName = Prj().GetProjectFullName();
-    destFileName.SetName( destFileName.GetFullName() );
-    destFileName.SetExt( ext );
+    destFileName.SetName( destFileName.GetName() + timeStamp );
+    destFileName.AppendDir( backupPath );
 
-    wxLogTrace( "KICAD_TRACE_PATHS", "Backing up file \"%s\" to file \"%s\".",
-                Prj().GetProjectFullName(), destFileName.GetFullPath() );
+    tmp.Printf( _( "Backing up file \"%s\" to file \"%s\"." ),
+                   Prj().GetProjectFullName(), destFileName.GetFullPath() );
+    aReporter.Report( tmp, REPORTER::RPT_INFO );
 
     if( wxFileName::Exists( Prj().GetProjectFullName() )
       && !wxCopyFile( Prj().GetProjectFullName(), destFileName.GetFullPath() ) )
     {
-        errorMsg += wxPrintf( _( "Failed to back up file \"%s\".\n" ), Prj().GetProjectFullName() );
+        tmp.Printf( _( "Failed to back up file \"%s\".\n" ), Prj().GetProjectFullName() );
+        errorMsg += tmp;
     }
 
     wxFileName srcFileName;
@@ -339,43 +371,48 @@ void DIALOG_SYMBOL_REMAP::backupProject()
     srcFileName.SetExt( SchematicLibraryFileExtension );
 
     destFileName = srcFileName;
-    destFileName.SetName( destFileName.GetFullName() );
-    destFileName.SetExt( ext );
+    destFileName.SetName( destFileName.GetName() + timeStamp );
+    destFileName.AppendDir( backupPath );
 
-    wxLogTrace( "KICAD_TRACE_PATHS", "Backing up file \"%s\" to file \"%s\".",
+    tmp.Printf( _( "Backing up file \"%s\" to file \"%s\"." ),
                 srcFileName.GetFullPath(), destFileName.GetFullPath() );
+    aReporter.Report( tmp, REPORTER::RPT_INFO );
 
     if( srcFileName.Exists()
       && !wxCopyFile( srcFileName.GetFullPath(), destFileName.GetFullPath() ) )
     {
-        errorMsg += wxPrintf( _( "Failed to back up file \"%s\".\n" ), srcFileName.GetFullPath() );
+        tmp.Printf( _( "Failed to back up file \"%s\".\n" ), srcFileName.GetFullPath() );
+        errorMsg += tmp;
     }
 
     // Back up the rescue library if it exists.
     srcFileName.SetName( Prj().GetProjectName() + "-rescue" );
-    destFileName.SetName( srcFileName.GetFullName() );
+    destFileName.SetName( srcFileName.GetName() + timeStamp );
 
-    wxLogTrace( "KICAD_TRACE_PATHS", "Backing up file \"%s\" to file \"%s\".",
+    tmp.Printf( _( "Backing up file \"%s\" to file \"%s\"." ),
                 srcFileName.GetFullPath(), destFileName.GetFullPath() );
+    aReporter.Report( tmp, REPORTER::RPT_INFO );
 
     if( srcFileName.Exists()
       && !wxCopyFile( srcFileName.GetFullPath(), destFileName.GetFullPath() ) )
     {
-        errorMsg += wxPrintf( _( "Failed to back up file \"%s\".\n" ), srcFileName.GetFullPath() );
+        tmp.Printf( _( "Failed to back up file \"%s\".\n" ), srcFileName.GetFullPath() );
+        errorMsg += tmp;
     }
 
     // Back up the rescue library document file if it exists.
-    srcFileName.SetName( Prj().GetProjectName() + "-rescue" );
     srcFileName.SetExt( "dcm" );
-    destFileName.SetName( srcFileName.GetFullName() );
+    destFileName.SetExt( srcFileName.GetExt() );
 
-    wxLogTrace( "KICAD_TRACE_PATHS", "Backing up file \"%s\" to file \"%s\".",
+    tmp.Printf( _( "Backing up file \"%s\" to file \"%s\"." ),
                 srcFileName.GetFullPath(), destFileName.GetFullPath() );
+    aReporter.Report( tmp, REPORTER::RPT_INFO );
 
     if( srcFileName.Exists()
       && !wxCopyFile( srcFileName.GetFullPath(), destFileName.GetFullPath() ) )
     {
-        errorMsg += wxPrintf( _( "Failed to back up file \"%s\".\n" ), srcFileName.GetFullPath() );
+        tmp.Printf( _( "Failed to back up file \"%s\".\n" ), srcFileName.GetFullPath() );
+        errorMsg += tmp;
     }
 
     if( !errorMsg.IsEmpty() )
