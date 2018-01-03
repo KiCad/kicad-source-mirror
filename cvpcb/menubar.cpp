@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,7 +63,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Save the footprints back into eeschema
     AddMenuItem( filesMenu, wxID_SAVE,
                  _( "&Save Footprint Associations\tCtrl+S" ),
-                 _( "Save footprint association in schematic symbol footprint fields" ),
+                 SAVE_HLP_MSG,
                  KiBitmap( save_xpm ) );
 
     // Separator

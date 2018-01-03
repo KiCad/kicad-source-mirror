@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,14 +104,14 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_GEN_PNG_FILE,
                  _( "Create &PNG File from Screen..." ),
-                 _( "Create a PNG file from the part displayed on screen" ),
+                 _( "Create a PNG file from the current symbol" ),
                  KiBitmap( plot_xpm ) );
 
     // Export as SVG file
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_GEN_SVG_FILE,
                  _( "Create S&VG File..." ),
-                 _( "Create a SVG file from the current loaded part" ),
+                 _( "Create a SVG file from the current symbol" ),
                  KiBitmap( plot_svg_xpm ) );
 
     // Separator

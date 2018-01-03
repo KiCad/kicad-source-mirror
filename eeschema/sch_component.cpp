@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1441,7 +1441,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
             aList.push_back( MSG_PANEL_ITEM( msg, GetField( VALUE )->GetShownText(), DARKCYAN ) );
 
             // Display component reference in library and library
-            aList.push_back( MSG_PANEL_ITEM( _( "Component" ), GetLibId().GetLibItemName(),
+            aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetLibId().GetLibItemName(),
                                              BROWN ) );
 
             if( alias->GetName() != part->GetName() )
@@ -1477,7 +1477,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
         aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetField( VALUE )->GetShownText(),
                                          DARKCYAN ) );
-        aList.push_back( MSG_PANEL_ITEM( _( "Symbol" ), GetLibId().GetLibItemName(), BROWN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetLibId().GetLibItemName(), BROWN ) );
 
         wxString libNickname = GetLibId().GetLibNickname();
 
@@ -1724,7 +1724,7 @@ LIB_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
 wxString SCH_COMPONENT::GetSelectMenuText() const
 {
     wxString tmp;
-    tmp.Printf( _( "Component %s, %s" ),
+    tmp.Printf( _( "Symbol %s, %s" ),
                 GetChars( GetLibId().GetLibItemName() ),
                 GetChars( GetField( REFERENCE )->GetShownText() ) );
     return tmp;

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,12 +89,12 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
         m_mainToolBar->AddSeparator();
         m_mainToolBar->AddTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, wxEmptyString,
                                 KiBitmap( morgan1_xpm ),
-                                _( "Show as \"De Morgan\" normal part" ),
+                                _( "Show as \"De Morgan\" normal symbol" ),
                                 wxITEM_CHECK );
 
         m_mainToolBar->AddTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, wxEmptyString,
                                 KiBitmap( morgan2_xpm ),
-                                _( "Show as \"De Morgan\" convert part" ),
+                                _( "Show as \"De Morgan\" convert symbol" ),
                                 wxITEM_CHECK );
 
         m_mainToolBar->AddSeparator();

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
 
     adapter->AddLibrariesWithProgress( libNicknames, this );
 
-    dialogTitle.Printf( _( "Choose Component (%d items loaded)" ),
+    dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ),
                         adapter->GetComponentsCount() );
     DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, m_convert, false );
 
@@ -177,8 +177,8 @@ void LIB_VIEW_FRAME::DisplayLibInfos()
     {
         const SYMBOL_LIB_TABLE_ROW* row = Prj().SchSymbolLibTable()->FindRow( m_libraryName );
 
-        wxString title = wxString::Format( L"Symbol Library Browser \u2014 %s",
-            row ? row->GetFullURI() : "no library selected" );
+        wxString title = wxString::Format( _( "Symbol Library Browser \u2014 %s" ),
+                                           row ? row->GetFullURI() : _( "no library selected" ) );
         SetTitle( title );
     }
 }
@@ -236,7 +236,7 @@ void LIB_VIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         part->SetName( tmp );
 
     ClearMsgPanel();
-    AppendMsgPanel( _( "Part" ), part->GetName(), BLUE, 6 );
+    AppendMsgPanel( _( "Name" ), part->GetName(), BLUE, 6 );
     AppendMsgPanel( _( "Alias" ), msg, RED, 6 );
     AppendMsgPanel( _( "Description" ), entry->GetDescription(), CYAN, 6 );
     AppendMsgPanel( _( "Key words" ), entry->GetKeyWords(), DARKDARKGRAY );
