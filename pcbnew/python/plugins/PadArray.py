@@ -228,7 +228,7 @@ class PadLineArray(PadGridArray):
 class PadCircleArray(PadArray):
 
     def __init__(self, pad, n, r, angle_offset=0, centre=pcbnew.wxPoint(0, 0),
-                 clockwise=True):
+                 clockwise=True, padRotationEnable=False, padRotationOffset =0):
         PadArray.__init__(self)
         # this pad is more of a "context", we will use it as a source of
         # pad data, but not actually add it
@@ -238,6 +238,8 @@ class PadCircleArray(PadArray):
         self.angle_offset = angle_offset
         self.centre = centre
         self.clockwise = clockwise
+        self.padRotationEnable = padRotationEnable
+        self.padRotationOffset = padRotationOffset
 
     # around the circle, CW or CCW according to the flag
     def NamingFunction(self, n):
@@ -255,6 +257,10 @@ class PadCircleArray(PadArray):
             pos_y = -math.cos(angle  * math.pi / 180) * self.r
             pos = dc.TransformPoint(pos_x, pos_y)
             pad = self.GetPad(pin == 0, pos)
+            padAngle = self.padRotationOffset
+            if self.padRotationEnable:
+                padAngle -=angle
+            pad.SetOrientation(padAngle*10)
             pad.SetName(self.GetName(pin))
             self.AddPad(pad)
 
