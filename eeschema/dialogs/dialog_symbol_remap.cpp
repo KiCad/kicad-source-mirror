@@ -64,9 +64,18 @@ DIALOG_SYMBOL_REMAP::DIALOG_SYMBOL_REMAP( SCH_EDIT_FRAME* aParent ) :
 
 void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
 {
+    SCH_EDIT_FRAME* parent = dynamic_cast< SCH_EDIT_FRAME* >( GetParent() );
+
+    wxCHECK_RET( parent != nullptr, "Parent window is not type SCH_EDIT_FRAME." );
+
     wxBusyCursor busy;
 
     backupProject();
+
+    // Ignore the never show rescue setting for one last rescue of legacy symbol
+    // libraries before remapping to the symbol library table.  This ensures the
+    // best remapping results.
+    parent->RescueLegacyProject( false );
 
     // The schematic is fully loaded, any legacy library symbols have been rescued.  Now
     // check to see if the schematic has not been converted to the symbol library table

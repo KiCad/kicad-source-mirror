@@ -338,9 +338,7 @@ const LIB_TABLE_ROW* LIB_TABLE::FindRowByURI( const wxString& aURI )
         {
             wxString tmp = cur->rows[i].GetFullURI( true );
 
-            wxURI uri( tmp );
-
-            if( uri.HasScheme() )
+            if( tmp.Find( "://" ) != wxNOT_FOUND )
             {
                 if( tmp == aURI )
                     return &cur->rows[i];  // found as URI

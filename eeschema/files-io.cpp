@@ -343,11 +343,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // Convert old projects over to use symbol library table.
         if( schematic.HasNoFullyDefinedLibIds() )
         {
-            // Ignore the never show rescue setting for one last rescue of legacy symbol
-            // libraries before remapping to the symbol library table.  This ensures the
-            // best remapping results.
-            RescueLegacyProject( false );
-
             DIALOG_SYMBOL_REMAP dlgRemap( this );
 
             dlgRemap.ShowQuasiModal();
