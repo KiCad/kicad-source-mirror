@@ -1,3 +1,24 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /********************************/
 /* Low level graphics routines  */
 /********************************/
@@ -13,6 +34,7 @@
 #include <bezier_curves.h>
 #include <math_for_graphics.h>
 #include <wx/graphics.h>
+#include <wx/tokenzr.h>
 #if defined(__WXMAC__) && defined(USE_WX_GRAPHICS_CONTEXT)
 #include <wx/dcgraph.h>
 #endif
@@ -1274,4 +1296,53 @@ void GRDrawAnchor( EDA_RECT *aClipBox, wxDC *aDC, int x, int y,
         GRLine( aClipBox, aDC,
                 x, y - anchor_size,
                 x, y + anchor_size, 0, aColor );
+}
+
+
+void GRDrawWrappedText( wxDC& aDC, wxString const& aText )
+{
+    wxStringTokenizer tokenizer( aText, " " );
+    wxSize const dc_size = aDC.GetSize();
+    wxSize const margin = aDC.GetTextExtent( " " );
+    std::vector<wxString> lines;
+    wxString line_accumulator;
+    int total_height = 0;
+
+    while( tokenizer.HasMoreTokens() )
+    {
+        wxString word = tokenizer.GetNextToken();
+        wxSize linesize = aDC.GetTextExtent( line_accumulator + " " + word );
+
+        if( linesize.x >= dc_size.x - margin.x && !line_accumulator.IsEmpty() )
+        {
+            lines.push_back( line_accumulator );
+            line_accumulator = word;
+        }
+        else
+        {
+            line_accumulator += " ";
+            line_accumulator += word;
+        }
+    }
+
+    if( !line_accumulator.IsEmpty() )
+    {
+        lines.push_back( line_accumulator );
+    }
+
+    for( auto const& line: lines )
+    {
+        wxSize linesize = aDC.GetTextExtent( line );
+        total_height += linesize.y;
+    }
+
+    int top = ( dc_size.y - total_height ) / 2;
+    int pos = top;
+
+    for( auto const& line: lines )
+    {
+        wxSize linesize = aDC.GetTextExtent( line );
+        aDC.DrawText( line, ( dc_size.x - linesize.x ) / 2, pos );
+        pos += linesize.y;
+    }
 }

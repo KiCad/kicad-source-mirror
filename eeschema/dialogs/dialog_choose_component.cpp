@@ -464,11 +464,8 @@ void DIALOG_CHOOSE_COMPONENT::RenderPreview( LIB_PART* aComponent, int aUnit )
 
     if( !aComponent )   // display a tooltip
     {
-        wxString tooltip = _( "Double click here to select a symbol\nfrom the library browser" );
-        wxSize tsize = dc.GetTextExtent( tooltip.BeforeLast( '\n' ) );
-        dc.DrawText( tooltip.BeforeLast( '\n' ), ( dc_size.x - tsize.x )/2, ( dc_size.y - tsize.y )/2 );
-        tsize = dc.GetTextExtent( tooltip.AfterLast( '\n' ) );
-        dc.DrawText( tooltip.AfterLast( '\n' ), ( dc_size.x - tsize.x )/2, ( dc_size.y + tsize.y )/2 );
+        wxString tooltip = _( "Double-click here to select a symbol from the library browser" );
+        GRDrawWrappedText( dc, tooltip );
         return;
     }
 
