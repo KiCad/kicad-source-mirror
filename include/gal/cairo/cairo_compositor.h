@@ -32,6 +32,7 @@
 #define CAIRO_COMPOSITOR_H_
 
 #include <gal/compositor.h>
+#include <gal/gal_display_options.h>
 #include <cairo.h>
 #include <boost/smart_ptr/shared_array.hpp>
 #include <deque>
@@ -74,6 +75,22 @@ public:
     /// @copydoc COMPOSITOR::Present()
     virtual void Present() override;
 
+    void SetAntialiasingMode( CAIRO_ANTIALIASING_MODE aMode ); // clears all buffers
+    CAIRO_ANTIALIASING_MODE GetAntialiasingMode() const
+    {
+        switch( m_currentAntialiasingMode )
+        {
+        case CAIRO_ANTIALIAS_FAST:
+            return CAIRO_ANTIALIASING_MODE::FAST;
+        case CAIRO_ANTIALIAS_GOOD:
+            return CAIRO_ANTIALIASING_MODE::GOOD;
+        case CAIRO_ANTIALIAS_BEST:
+            return CAIRO_ANTIALIASING_MODE::BEST;
+        default:
+            return CAIRO_ANTIALIASING_MODE::NONE;
+        }
+    }
+
     /**
      * Function SetMainContext()
      * Sets a context to be treated as the main context (ie. as a target of buffers rendering and
@@ -115,6 +132,8 @@ protected:
 
     unsigned int m_stride;              ///< Stride to use given the desired format and width
     unsigned int m_bufferSize;          ///< Amount of memory needed to store a buffer
+
+    cairo_antialias_t       m_currentAntialiasingMode;
 
     /**
      * Function clean()

@@ -604,7 +604,7 @@ endif()
 #
 # Find Cairo library, required
 #
-find_package( Cairo 1.8.8 REQUIRED )
+find_package( Cairo 1.12 REQUIRED )
 find_package( Pixman 0.30 REQUIRED )
 
 #

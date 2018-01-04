@@ -390,6 +390,9 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
 
         commonCfg->Read( GAL_ANTIALIASING_MODE_KEY, &itemp, (int) KIGFX::OPENGL_ANTIALIASING_MODE::NONE );
         gal_opts.gl_antialiasing_mode = (KIGFX::OPENGL_ANTIALIASING_MODE) itemp;
+
+        commonCfg->Read( CAIRO_ANTIALIASING_MODE_KEY, &itemp, (int) KIGFX::CAIRO_ANTIALIASING_MODE::NONE );
+        gal_opts.cairo_antialiasing_mode = (KIGFX::CAIRO_ANTIALIASING_MODE) itemp;
     }
 
 #ifdef __WXMAC__

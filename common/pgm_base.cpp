@@ -553,7 +553,8 @@ void PGM_BASE::loadCommonSettings()
         m_common_settings->Write( USE_ICONS_IN_MENUS_KEY, defaultUseIconsInMenus );
 
     if( !m_common_settings->HasEntry( ICON_SCALE_KEY )
-        || !m_common_settings->HasEntry( GAL_ANTIALIASING_MODE_KEY ) )
+        || !m_common_settings->HasEntry( GAL_ANTIALIASING_MODE_KEY )
+        || !m_common_settings->HasEntry( CAIRO_ANTIALIASING_MODE_KEY )  )
     {
         // 5.0 and earlier saved common settings in each app, and saved hardware antialiasing
         // options only in pcbnew (which was the only canvas to support them).  Since there's
@@ -587,6 +588,14 @@ void PGM_BASE::loadCommonSettings()
             pcbnewConfig->Read( pcbFrameKey + GAL_DISPLAY_OPTIONS_KEY + GAL_ANTIALIASING_MODE_KEY,
                                 &temp, (int) KIGFX::OPENGL_ANTIALIASING_MODE::NONE );
             m_common_settings->Write( GAL_ANTIALIASING_MODE_KEY, temp );
+        }
+
+        if( !m_common_settings->HasEntry( CAIRO_ANTIALIASING_MODE_KEY ) )
+        {
+            int temp;
+            pcbnewConfig->Read( pcbFrameKey + GAL_DISPLAY_OPTIONS_KEY + CAIRO_ANTIALIASING_MODE_KEY,
+                                &temp, (int) KIGFX::CAIRO_ANTIALIASING_MODE::NONE );
+            m_common_settings->Write( CAIRO_ANTIALIASING_MODE_KEY, temp );
         }
     }
 

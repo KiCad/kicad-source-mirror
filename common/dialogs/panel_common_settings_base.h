@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Nov 23 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __PANEL_COMMON_SETTINGS_BASE_H__
-#define __PANEL_COMMON_SETTINGS_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -39,21 +38,22 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_COMMON_SETTINGS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_COMMON_SETTINGS_BASE : public wxPanel 
+class PANEL_COMMON_SETTINGS_BASE : public wxPanel
 {
 	private:
-	
+
 	protected:
 		enum
 		{
 			wxID_AUTOPAN = 1000
 		};
-		
+
 		wxStaticText* m_staticTextautosave;
 		wxSpinCtrl* m_SaveTime;
 		wxStaticText* m_staticTextFileHistorySize;
 		wxSpinCtrl* m_fileHistorySize;
 		wxChoice* m_antialiasing;
+		wxChoice* m_antialiasingFallback;
 		wxTextCtrl* m_textEditorPath;
 		wxBitmapButton* m_textEditorBtn;
 		wxRadioButton* m_defaultPDFViewer;
@@ -68,20 +68,19 @@ class PANEL_COMMON_SETTINGS_BASE : public wxPanel
 		wxCheckBox* m_ZoomCenterOpt;
 		wxCheckBox* m_MousewheelPANOpt;
 		wxCheckBox* m_AutoPANOpt;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnTextEditorClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onUpdateUIPdfPath( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnPDFViewerClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnScaleSlider( wxScrollEvent& event ) { event.Skip(); }
 		virtual void OnScaleAuto( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL ); 
+
+		PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_COMMON_SETTINGS_BASE();
-	
+
 };
 
-#endif //__PANEL_COMMON_SETTINGS_BASE_H__

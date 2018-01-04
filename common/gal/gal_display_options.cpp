@@ -49,6 +49,7 @@ static const UTIL::CFG_MAP<KIGFX::GRID_STYLE> gridStyleConfigVals =
 
 GAL_DISPLAY_OPTIONS::GAL_DISPLAY_OPTIONS()
     : gl_antialiasing_mode( OPENGL_ANTIALIASING_MODE::NONE ),
+      cairo_antialiasing_mode( CAIRO_ANTIALIASING_MODE::NONE ),
       m_gridStyle( GRID_STYLE::DOTS ),
       m_gridLineWidth( 0.5 ),
       m_gridMinSpacing( 10.0 ),

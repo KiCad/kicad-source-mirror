@@ -60,6 +60,9 @@ bool PANEL_COMMON_SETTINGS::TransferDataToWindow()
     commonSettings->Read( GAL_ANTIALIASING_MODE_KEY, &antialiasingMode, 0 );
     m_antialiasing->SetSelection( antialiasingMode );
 
+    commonSettings->Read( CAIRO_ANTIALIASING_MODE_KEY, &antialiasingMode, 0 );
+    m_antialiasingFallback->SetSelection( antialiasingMode );
+
     int scale_fourths;
     commonSettings->Read( ICON_SCALE_KEY, &scale_fourths );
 
@@ -105,6 +108,8 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     commonSettings->Write( FILE_HISTORY_SIZE_KEY, m_fileHistorySize->GetValue() );
 
     commonSettings->Write( GAL_ANTIALIASING_MODE_KEY, m_antialiasing->GetSelection() );
+
+    commonSettings->Write( CAIRO_ANTIALIASING_MODE_KEY, m_antialiasingFallback->GetSelection() );
 
     const int scale_fourths = m_scaleAuto->GetValue() ? -1 : m_scaleSlider->GetValue() / 25;
     commonSettings->Write( ICON_SCALE_KEY, scale_fourths );

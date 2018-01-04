@@ -50,6 +50,14 @@ namespace KIGFX
         SUPERSAMPLING_X4,
     };
 
+    enum class CAIRO_ANTIALIASING_MODE
+    {
+        NONE,
+        FAST,
+        GOOD,
+        BEST,
+    };
+
     class GAL_DISPLAY_OPTIONS;
 
     class GAL_DISPLAY_OPTIONS_OBSERVER
@@ -72,6 +80,8 @@ namespace KIGFX
         void NotifyChanged();
 
         OPENGL_ANTIALIASING_MODE gl_antialiasing_mode;
+
+        CAIRO_ANTIALIASING_MODE cairo_antialiasing_mode;
 
         ///> The grid style to draw the grid in
         KIGFX::GRID_STYLE m_gridStyle;
