@@ -395,6 +395,9 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, const LSET& aLayerSet, TRACK
     if( !m_Track )      // no tracks at all in board
         return;
 
+    D_PAD*  pad = NULL;
+    double  distanceToPadCenter;
+
     /* Set the BUSY flag of all connected segments, first search starting at
      * aPosition.  The search ends when a pad is found (end of a track), a
      * segment end has more than one other segment end connected, or when no
@@ -411,9 +414,10 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, const LSET& aLayerSet, TRACK
     for( ; ; )
     {
 
-
-        if( GetPad( aPosition, layer_set ) != NULL )
-            return;
+        if( !pad )
+            pad = GetPad( aPosition, layer_set );
+        if( pad )
+            distanceToPadCenter = GetLineLength( aPosition, pad->GetCenter() );
 
         /* Test for a via: a via changes the layer mask and can connect a lot
          * of segments at location aPosition. When found, the via is just
@@ -479,6 +483,17 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, const LSET& aLayerSet, TRACK
             else
             {
                 aPosition = candidate->GetStart();
+            }
+
+            /* If we are in a pad, only candidates approaching the pad center
+             * are accepted.
+             */
+            if( pad )
+            {
+                if( GetPad( aPosition, layer_set ) != pad )
+                    return;
+                if( GetLineLength( aPosition, pad->GetCenter() ) > distanceToPadCenter )
+                    return;
             }
 
             layer_set = candidate->GetLayerSet();
