@@ -706,7 +706,16 @@ bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
 
 bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
 {
-    wxTextFile file( aPath );
+    
+    wxString savePath = aPath;
+    
+    if( !savePath.Lower().EndsWith(".wbk"))
+    {
+        savePath += ".wbk";
+    };
+    
+    
+    wxTextFile file( savePath );
 
     if( file.Exists() )
     {
