@@ -347,8 +347,13 @@ void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
         VECTOR2D center = m_view->GetCenter();
         const BOX2I& boundary = m_view->GetBoundary();
 
+        // Flip scroll direction in flipped view
+        const double xstart = ( m_view->IsMirroredX() ?
+                                boundary.GetRight() : boundary.GetLeft() );
+        const double xdelta = ( m_view->IsMirroredX() ? -1 : 1 );
+
         if( dir == wxHORIZONTAL )
-            center.x = boundary.GetLeft() + aEvent.GetPosition() / m_scrollScale.x;
+            center.x = xstart + xdelta * ( aEvent.GetPosition() / m_scrollScale.x );
         else
             center.y = boundary.GetTop() + aEvent.GetPosition() / m_scrollScale.y;
 
@@ -579,6 +584,10 @@ void WX_VIEW_CONTROLS::UpdateScrollbars()
     m_scrollScale.y = 2e3 / viewport.GetHeight();
     VECTOR2I newScroll( ( viewport.Centre().x - boundary.GetLeft() ) * m_scrollScale.x,
                 ( viewport.Centre().y - boundary.GetTop() ) * m_scrollScale.y );
+
+    // Flip scroll direction in flipped view
+    if( m_view->IsMirroredX() )
+        newScroll.x = ( boundary.GetRight() - viewport.Centre().x ) * m_scrollScale.x;
 
     // Adjust scrollbars only if it is needed. Otherwise there are cases when canvas is continuosly
     // refreshed (Windows)
