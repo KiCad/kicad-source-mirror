@@ -559,28 +559,28 @@ void prepareViewMenu( wxMenu* aParentMenu )
 
     aParentMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "Legacy Canva&s" ), g_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "Legacy graphic&s" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_CANVAS_LEGACY );
 
     aParentMenu->Append(
         new wxMenuItem( aParentMenu, ID_MENU_CANVAS_LEGACY,
-                        text, _( "Switch canvas implementation to Legacy" ),
+                        text, _( "Use legacy graphics mode (not all features will be available" ),
                         wxITEM_RADIO ) );
 
-    text = AddHotkeyName( _( "Open&GL Canvas" ), g_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "Modern (&Accelerated)" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_CANVAS_OPENGL );
 
     aParentMenu->Append(
         new wxMenuItem( aParentMenu, ID_MENU_CANVAS_OPENGL,
-                        text, _( "Switch canvas implementation to OpenGL" ),
+                        text, _( "Use modern hardware-accelerated (OpenGL) graphics mode (recommended)" ),
                         wxITEM_RADIO ) );
 
-    text = AddHotkeyName( _( "&Cairo Canvas" ), g_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "Modern (Fallba&ck)" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_CANVAS_CAIRO );
 
     aParentMenu->Append(
         new wxMenuItem( aParentMenu, ID_MENU_CANVAS_CAIRO,
-                        text, _( "Switch canvas implementation to Cairo" ),
+                        text, _( "Use modern fallback (Cairo) graphics mode" ),
                         wxITEM_RADIO ) );
 }
 

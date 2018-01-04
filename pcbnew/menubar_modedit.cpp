@@ -254,28 +254,28 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Add canvas selection
     viewMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "Legacy Canva&s" ), m_hotkeysDescrList,
+    text = AddHotkeyName( _( "Legacy graphic&s" ), m_hotkeysDescrList,
                           HK_CANVAS_LEGACY );
 
     viewMenu->Append(
         new wxMenuItem( viewMenu, ID_MENU_CANVAS_LEGACY,
-                        text, _( "Switch the canvas implementation to Legacy" ),
+                        text, _( "Use legacy graphics mode (not all features will be available" ),
                         wxITEM_RADIO ) );
 
-    text = AddHotkeyName( _( "Open&GL Canvas" ), m_hotkeysDescrList,
+    text = AddHotkeyName( _( "Modern (&Accelerated)" ), m_hotkeysDescrList,
                           HK_CANVAS_OPENGL );
 
     viewMenu->Append(
         new wxMenuItem( viewMenu, ID_MENU_CANVAS_OPENGL,
-                        text, _( "Switch the canvas implementation to OpenGL" ),
+                        text, _( "Use modern hardware-accelerated (OpenGL) graphics mode (recommended)" ),
                         wxITEM_RADIO ) );
 
-    text = AddHotkeyName( _( "&Cairo Canvas" ), m_hotkeysDescrList,
+    text = AddHotkeyName( _( "Modern (Fallba&ck)" ), m_hotkeysDescrList,
                           HK_CANVAS_CAIRO );
 
     viewMenu->Append(
         new wxMenuItem( viewMenu, ID_MENU_CANVAS_CAIRO,
-                        text, _( "Switch the canvas implementation to Cairo" ),
+                        text, _( "Use modern fallback (Cairo) graphics mode" ),
                         wxITEM_RADIO ) );
 
     //-------- Place menu --------------------

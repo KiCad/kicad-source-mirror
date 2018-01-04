@@ -112,6 +112,9 @@ protected:
     /// True shows the drawing border and title block.
     bool    m_showBorderAndTitleBlock;
 
+    /// Key to control whether first run dialog is shown on startup
+    long    m_firstRunDialogSetting;
+
     /// Choice box to choose the grid size.
     wxChoice*       m_gridSelectBox;
 

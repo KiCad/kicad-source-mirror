@@ -211,28 +211,28 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // Canvas selection
     configMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "Legacy Canva&s" ), GerbviewHokeysDescr,
+    text = AddHotkeyName( _( "Legacy graphic&s" ), GerbviewHokeysDescr,
                           HK_CANVAS_LEGACY );
 
     configMenu->Append(
         new wxMenuItem( configMenu, ID_MENU_CANVAS_LEGACY,
-                        text, _( "Switch the canvas implementation to Legacy" ),
+                        text, _( "Use legacy graphics mode (not all features will be available" ),
                         wxITEM_RADIO ) );
 
-    text = AddHotkeyName( _( "Open&GL Canvas" ), GerbviewHokeysDescr,
+    text = AddHotkeyName( _( "Modern (&Accelerated)" ), GerbviewHokeysDescr,
                           HK_CANVAS_OPENGL );
 
     configMenu->Append(
         new wxMenuItem( configMenu, ID_MENU_CANVAS_OPENGL,
-                        text, _( "Switch the canvas implementation to OpenGL" ),
+                        text, _( "Use modern hardware-accelerated (OpenGL) graphics mode (recommended)" ),
                         wxITEM_RADIO ) );
 
-    text = AddHotkeyName( _( "&Cairo Canvas" ), GerbviewHokeysDescr,
+    text = AddHotkeyName( _( "Modern (Fallba&ck)" ), GerbviewHokeysDescr,
                           HK_CANVAS_CAIRO );
 
     configMenu->Append(
         new wxMenuItem( configMenu, ID_MENU_CANVAS_CAIRO,
-                        text, _( "Switch the canvas implementation to Cairo" ),
+                        text, _( "Use modern fallback (Cairo) graphics mode" ),
                         wxITEM_RADIO ) );
 
     // Menu miscellaneous

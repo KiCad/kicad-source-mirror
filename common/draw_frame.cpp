@@ -76,6 +76,7 @@ static const wxString GalDisplayOptionsKeyword( wxT( "GalDisplayOptions" ) );
 
 const wxChar EDA_DRAW_FRAME::CANVAS_TYPE_KEY[] = wxT( "canvas_type" );
 
+static const wxString FirstRunShownKeyword( wxT( "FirstRunShown" ) );
 
 ///@}
 
@@ -739,6 +740,8 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
     m_UndoRedoCountMax = aCfg->Read( baseCfgName + MaxUndoItemsEntry,
             long( DEFAULT_MAX_UNDO_ITEMS ) );
 
+    aCfg->Read( baseCfgName + FirstRunShownKeyword, &m_firstRunDialogSetting, 0L );
+
     m_galDisplayOptions->ReadConfig( aCfg, baseCfgName + GalDisplayOptionsKeyword );
 }
 
@@ -753,6 +756,7 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( baseCfgName + GridColorEntryKeyword,
                  GetGridColor().ToColour().GetAsString( wxC2S_CSS_SYNTAX ) );
     aCfg->Write( baseCfgName + LastGridSizeIdKeyword, ( long ) m_LastGridSizeId );
+    aCfg->Write( baseCfgName + FirstRunShownKeyword, m_firstRunDialogSetting );
 
     if( GetScreen() )
         aCfg->Write( baseCfgName + MaxUndoItemsEntry, long( GetScreen()->GetMaxUndoItems() ) );

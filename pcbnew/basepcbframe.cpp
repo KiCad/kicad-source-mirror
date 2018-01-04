@@ -957,8 +957,8 @@ void PCB_BASE_FRAME::SwitchCanvas( wxCommandEvent& aEvent )
         break;
     }
 
-    saveCanvasTypeSetting( canvasType );
     UseGalCanvas( use_gal );
+    saveCanvasTypeSetting( canvasType );
 }
 
 

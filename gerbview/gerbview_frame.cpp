@@ -211,6 +211,53 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = loadCanvasTypeSetting();
 
+    // Nudge user to switch to OpenGL if they are on legacy or Cairo
+    if( m_firstRunDialogSetting < 1 )
+    {
+        if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
+        {
+            wxString msg = _( "KiCad can use your graphics card to give you a smoother "
+                              "and faster experience. This option is turned off by "
+                              "default since it is not compatible with all computers.\n\n"
+                              "Would you like to try enabling graphics acceleration?\n\n"
+                              "If you'd like to choose later, select the Modern "
+                              "(Accelerated) graphics mode in the View menu." );
+
+            wxMessageDialog dlg( this, msg, _( "Enable Graphics Acceleration" ),
+                                 wxYES_NO );
+
+            dlg.SetYesNoLabels( _( "&Enable Acceleration" ), _( "&No Thanks" ) );
+
+            if( dlg.ShowModal() == wxID_YES )
+            {
+                // Save Cairo as default in case OpenGL crashes
+                saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
+
+                // Switch to OpenGL, which will save the new setting if successful
+                wxCommandEvent evt( wxEVT_MENU, ID_MENU_CANVAS_OPENGL );
+                auto handler = GetEventHandler();
+                handler->ProcessEvent( evt );
+            }
+            else
+            {
+                // If they were on legacy, switch them to Cairo
+
+                if( canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
+                {
+                    wxCommandEvent evt( wxEVT_MENU, ID_MENU_CANVAS_CAIRO );
+                    auto handler = GetEventHandler();
+                    handler->ProcessEvent( evt );
+                }
+            }
+        }
+
+        m_firstRunDialogSetting = 1;
+        SaveSettings( config() );
+    }
+
+    // Canvas may have been updated by the dialog
+    canvasType = loadCanvasTypeSetting();
+
     if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
     {
         if( GetGalCanvas()->SwitchBackend( canvasType ) )
