@@ -888,6 +888,30 @@ void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
         aLayers[1] = LAYER_MOD_BK;
         break;
     }
+
+    // If there are no pads, and only drawings on a silkscreen layer, then
+    // report the silkscreen layer as well so that the component can be edited
+    // with the silkscreen layer
+    bool f_silk = false, b_silk = false, non_silk = false;
+
+    for( BOARD_ITEM* item = m_Drawings; item; item = item->Next() )
+    {
+        if( item->GetLayer() == F_SilkS )
+            f_silk = true;
+        else if( item->GetLayer() == B_SilkS )
+            b_silk = true;
+        else
+            non_silk = true;
+    }
+
+    if( ( f_silk || b_silk ) && !non_silk && m_Pads.GetCount() == 0 )
+    {
+        if( f_silk )
+            aLayers[ aCount++ ] = F_SilkS;
+
+        if( b_silk )
+            aLayers[ aCount++ ] = B_SilkS;
+    }
 }
 
 
