@@ -31,6 +31,7 @@
 #include <tool/tool_manager.h>
 #include <wx/progdlg.h>
 
+#include "edit_tool.h"
 #include "selection_tool.h"
 #include "drawing_tool.h"
 #include "picker_tool.h"
@@ -958,7 +959,7 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition
     auto selectionTool = aToolMgr->GetTool<SELECTION_TOOL>();
 
     aToolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    aToolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
+    aToolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, EDIT_TOOL::FootprintFilter );
 
     const SELECTION& selection = selectionTool->GetSelection();
 

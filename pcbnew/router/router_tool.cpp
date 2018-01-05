@@ -42,6 +42,7 @@ using namespace std::placeholders;
 #include <hotkeys.h>
 #include <confirm.h>
 #include <bitmaps.h>
+#include <collectors.h>
 
 #include <tool/context_menu.h>
 #include <tool/tool_manager.h>
@@ -980,10 +981,87 @@ void ROUTER_TOOL::performDragging( int aMode )
 }
 
 
+void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+{
+    /* If the collection contains a trivial line corner (two connected segments)
+     * or a non-fanout-via (a via with no more than two connected segments), then
+     * trim the collection down to a single item (which one won't matter since
+     * they're all connected).
+     */
+
+    // First make sure we've got something that *might* match.
+    int vias = aCollector.CountType( PCB_VIA_T );
+    int traces = aCollector.CountType( PCB_TRACE_T );
+
+    if( vias > 1 || traces > 2 || vias + traces < 1 )
+        return;
+
+    // Fetch first TRACK (via or trace) as our reference
+    TRACK* reference = nullptr;
+
+    for( int i = 0; !reference && i < aCollector.GetCount(); i++ )
+        reference = dynamic_cast<TRACK*>( aCollector[i] );
+
+    int refNet = reference->GetNetCode();
+
+    wxPoint refPoint;
+    STATUS_FLAGS flags = reference->IsPointOnEnds( wxPoint( aPt.x, aPt.y ), -1 );
+
+    if( flags & STARTPOINT )
+        refPoint = reference->GetStart();
+    else if( flags & ENDPOINT )
+        refPoint = reference->GetEnd();
+    else
+        return;
+
+    // Check all items to ensure that they are TRACKs which are co-terminus
+    // with the reference, and on the same net.  Ignore markers.
+    for( int i = 0; i < aCollector.GetCount(); i++ )
+    {
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aCollector[i] );
+
+        if( item->Type() == PCB_MARKER_T )
+            continue;
+
+        TRACK* neighbor = dynamic_cast<TRACK*>( item );
+
+        if( !neighbor || neighbor->GetNetCode() != refNet )
+            return;
+
+        if( neighbor->GetStart() != refPoint && neighbor->GetEnd() != refPoint )
+            return;
+    }
+
+    // Selection meets criteria; trim it to the reference item.
+    for( int i = aCollector.GetCount()-1; i >= 0; i-- )
+    {
+        if( dynamic_cast<TRACK*>( aCollector[i] ) != reference )
+            aCollector.Remove( i );
+    }
+}
+
+
+bool ROUTER_TOOL::CanInlineDrag()
+{
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, NeighboringSegmentFilter );
+    const auto& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+
+    if( selection.Size() == 1 )
+    {
+        const BOARD_CONNECTED_ITEM* item = static_cast<const BOARD_CONNECTED_ITEM*>( selection.Front() );
+        if( item->Type() == PCB_TRACE_T || item->Type() == PCB_VIA_T )
+            return true;
+    }
+
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor ); // restore selection to unfiltered state
+    return false;
+}
+
+
 int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 {
     // Get the item under the cursor
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, NeighboringSegmentFilter );
     const auto& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
 
     if( selection.Size() != 1 )

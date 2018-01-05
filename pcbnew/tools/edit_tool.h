@@ -136,6 +136,14 @@ public:
     ///> Launches a tool to measure between points
     int MeasureTool( const TOOL_EVENT& aEvent );
 
+    /**
+     * Function FootprintFilter()
+     *
+     * A selection filter which prunes the selection to contain only items
+     * of type PCB_MODULE_T
+     */
+    static void FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector );
+
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
@@ -197,38 +205,6 @@ private:
      */
     bool hoverSelection( bool aSanitize = true );
 
-    /**
-     * Function uniqueSelected()
-     *
-     * Get a single selected item of a certain type
-     *
-     * @tparam T type of item to select
-     * @return pointer to the item (of type T), or nullptr if there isn't
-     * a single selected item, or it's not of the right type.
-     */
-    template<class T> T* uniqueSelected();
-
-    /**
-     * Function uniqueHoverSelection()
-     *
-     * Get a single unique selection of an item, either from the
-     * current selection, or from the items under cursor via
-     * hoverSelection()
-     *
-     * @tparam T type of item to select
-     * @return pointer to a selected item, or nullptr if none could
-     * be found.
-     */
-    template<class T>
-    T* uniqueHoverSelection( bool aSanitize = true )
-    {
-        if( !hoverSelection( aSanitize ) )
-            return nullptr;
-
-        T* item = uniqueSelected<T>();
-
-        return item;
-    }
 
     std::unique_ptr<BOARD_COMMIT> m_commit;
 };

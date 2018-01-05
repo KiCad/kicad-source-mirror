@@ -47,6 +47,8 @@ namespace KIGFX
 }
 
 
+typedef void (*CLIENT_SELECTION_FILTER)( const VECTOR2I&, GENERAL_COLLECTOR& );
+
 /**
  * Class SELECTION_TOOL
  *
@@ -87,10 +89,12 @@ public:
     /**
      * Function RequestSelection()
      *
-     * Returns the current selection set, filtered according to aFlags.
+     * Returns the current selection set, filtered according to aFlags
+     * and aClientFilter.
      * If the set is empty, performs the legacy-style hover selection.
      */
-    SELECTION& RequestSelection( int aFlags = SELECTION_DEFAULT );
+    SELECTION& RequestSelection( int aFlags = SELECTION_DEFAULT,
+                                 CLIENT_SELECTION_FILTER aClientFilter = NULL );
 
 
     inline TOOL_MENU& GetToolMenu()
@@ -148,19 +152,23 @@ private:
      * @param aOnDrag indicates whether a drag operation is being performed.
      * @param aSelectionCancelledFlag allows the function to inform its caller that a selection
      * was cancelled (for instance, by clicking outside of the disambiguation menu).
+     * @param aClientFilter allows the client to perform tool- or action-specific filtering.
      * @return True if an item was selected, false otherwise.
      */
     bool selectPoint( const VECTOR2I& aWhere, bool aOnDrag = false,
-                      bool* aSelectionCancelledFlag = NULL );
+                      bool* aSelectionCancelledFlag = NULL,
+                      CLIENT_SELECTION_FILTER aClientFilter = NULL );
 
     /**
      * Function selectCursor()
      * Selects an item under the cursor unless there is something already selected or aSelectAlways
      * is true.
      * @param aSelectAlways forces to select an item even if there is an item already selected.
+     * @param aClientFilter allows the client to perform tool- or action-specific filtering.
      * @return true if eventually there is an item selected, false otherwise.
      */
-    bool selectCursor( bool aSelectAlways = false );
+    bool selectCursor( bool aSelectAlways = false,
+                       CLIENT_SELECTION_FILTER aClientFilter = NULL );
 
     /**
      * Function selectMultiple()

@@ -36,6 +36,7 @@ public:
 
     int RouteSingleTrace( const TOOL_EVENT& aEvent );
     int RouteDiffPair( const TOOL_EVENT& aEvent );
+    bool CanInlineDrag();
     int InlineDrag( const TOOL_EVENT& aEvent );
 
     // TODO make this private?
@@ -44,6 +45,10 @@ public:
     int CustomTrackWidthDialog( const TOOL_EVENT& aEvent );
 
     void setTransitions() override;
+
+    // A filter for narrowing a collection representing a simple corner
+    // or a non-fanout-via to a single TRACK item.
+    static void NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector );
 
 private:
     int mainLoop( PNS::ROUTER_MODE aMode );

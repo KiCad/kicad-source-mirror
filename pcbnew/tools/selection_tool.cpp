@@ -52,6 +52,7 @@ using namespace std::placeholders;
 
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
+#include <router/router_tool.h>
 #include <connectivity_data.h>
 
 #include "selection_tool.h"
@@ -175,9 +176,12 @@ public:
 
 SELECTION_TOOL::SELECTION_TOOL() :
         PCB_TOOL( "pcbnew.InteractiveSelection" ),
-        m_frame( NULL ), m_additive( false ), m_subtractive( false ),
+        m_frame( NULL ),
+        m_additive( false ),
+        m_subtractive( false ),
         m_multiple( false ),
-        m_locked( true ), m_menu( *this ),
+        m_locked( true ),
+        m_menu( *this ),
         m_priv( std::make_unique<PRIV>() )
 {
 
@@ -355,14 +359,13 @@ SELECTION& SELECTION_TOOL::GetSelection()
 }
 
 
-SELECTION& SELECTION_TOOL::RequestSelection( int aFlags )
+SELECTION& SELECTION_TOOL::RequestSelection( int aFlags, CLIENT_SELECTION_FILTER aClientFilter )
 {
     if( m_selection.Empty() )
     {
         if( aFlags & SELECTION_FORCE_UNLOCK )
             m_locked = false;
-
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, 0 );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, aClientFilter );
         m_selection.SetIsHover( true );
         m_selection.ClearReferencePoint();
     }
@@ -437,9 +440,9 @@ const GENERAL_COLLECTORS_GUIDE SELECTION_TOOL::getCollectorsGuide() const
 
 
 bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
-                                  bool* aSelectionCancelledFlag )
+                                  bool* aSelectionCancelledFlag,
+                                  CLIENT_SELECTION_FILTER aClientFilter )
 {
-    BOARD_ITEM* item;
     auto guide = getCollectorsGuide();
     GENERAL_COLLECTOR collector;
 
@@ -458,63 +461,66 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
 
     m_selection.ClearReferencePoint();
 
-    switch( collector.GetCount() )
+    // Allow the client to do tool- or action-specific filtering to see if we
+    // can get down to a single item
+    if( aClientFilter )
+        aClientFilter( aWhere, collector );
+
+    if( collector.GetCount() == 0 )
     {
-    case 0:
         if( !m_additive && anyCollected )
         {
             clearSelection();
         }
         return false;
+    }
 
-    case 1:
+    if( collector.GetCount() == 1 )
+    {
         toggleSelection( collector[0] );
         return true;
+    }
 
-    default:
-        // Apply some ugly heuristics to avoid disambiguation menus whenever possible
-        guessSelectionCandidates( collector );
+    // Apply some ugly heuristics to avoid disambiguation menus whenever possible
+    guessSelectionCandidates( collector );
 
-        // Let's see if there is still disambiguation in selection..
-        if( collector.GetCount() == 1 )
-        {
-            toggleSelection( collector[0] );
-            return true;
-        }
-        else if( collector.GetCount() > 1 )
-        {
-            if( aOnDrag )
-            {
-                Wait( TOOL_EVENT( TC_ANY, TA_MOUSE_UP, BUT_LEFT ) );
-            }
+    if( collector.GetCount() == 1 )
+    {
+        toggleSelection( collector[0] );
+        return true;
+    }
 
-            item = disambiguationMenu( &collector );
+    // Still more than one item.  We're going to have to ask the user.
+    if( aOnDrag )
+    {
+        Wait( TOOL_EVENT( TC_ANY, TA_MOUSE_UP, BUT_LEFT ) );
+    }
 
-            if( item )
-            {
-                toggleSelection( item );
-                return true;
-            }
-            else
-            {
-                if( aSelectionCancelledFlag )
-                    *aSelectionCancelledFlag = true;
-                return false;
-            }
-        }
-        break;
+    BOARD_ITEM* item = disambiguationMenu( &collector );
+
+    if( item )
+    {
+        toggleSelection( item );
+        return true;
+    }
+    else
+    {
+        if( aSelectionCancelledFlag )
+            *aSelectionCancelledFlag = true;
+
+        return false;
     }
 
     return false;
 }
 
 
-bool SELECTION_TOOL::selectCursor( bool aSelectAlways )
+bool SELECTION_TOOL::selectCursor( bool aSelectAlways, CLIENT_SELECTION_FILTER aClientFilter )
 {
     if( aSelectAlways || m_selection.Empty() )
     {
         clearSelection();
-        selectPoint( getViewControls()->GetCursorPosition( false ) );
+        selectPoint( getViewControls()->GetCursorPosition( false ), false, NULL, aClientFilter );
     }
 
     return !m_selection.Empty();
@@ -703,11 +709,11 @@ SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
 
 int SELECTION_TOOL::CursorSelection( const TOOL_EVENT& aEvent )
 {
-    bool sanitize = (bool) aEvent.Parameter<intptr_t>();
+    CLIENT_SELECTION_FILTER aClientFilter = aEvent.Parameter<CLIENT_SELECTION_FILTER>();
 
     if( m_selection.Empty() )                        // Try to find an item that could be modified
     {
-        selectCursor( true );
+        selectCursor( true, aClientFilter );
 
         if( CheckLock() == SELECTION_LOCKED )
         {
@@ -715,9 +721,6 @@ int SELECTION_TOOL::CursorSelection( const TOOL_EVENT& aEvent )
             return 0;
         }
     }
-
-    if( sanitize )
-        SanitizeSelection();
 
     return 0;
 }
@@ -805,9 +808,24 @@ int SELECTION_TOOL::UnselectItem( const TOOL_EVENT& aEvent )
 }
 
 
+void connectedTrackFilter( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+{
+    /* Narrow the collection down to a single TRACK item for a trivial
+     * connection, or multiple TRACK items for non-trivial connections.
+     */
+    for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
+    {
+        if( !dynamic_cast<TRACK*>( aCollector[i] ) )
+            aCollector.Remove( i );
+    }
+
+    ROUTER_TOOL::NeighboringSegmentFilter( aPt, aCollector );
+}
+
+
 int SELECTION_TOOL::selectConnection( const TOOL_EVENT& aEvent )
 {
-    if( !selectCursor() )
+    if( !selectCursor( true, connectedTrackFilter ) )
         return 0;
 
     // copy the selection, since we're going to iterate and modify
@@ -815,12 +833,10 @@ int SELECTION_TOOL::selectConnection( const TOOL_EVENT& aEvent )
 
     for( auto item : selection )
     {
-        // only TRACK items can be checked for trivial connections
-        if( item->Type() == PCB_TRACE_T || item->Type() == PCB_VIA_T )
-        {
-            TRACK& trackItem = static_cast<TRACK&>( *item );
-            selectAllItemsConnectedToTrack( trackItem );
-        }
+        TRACK* trackItem = dynamic_cast<TRACK*>( item );
+
+        if( trackItem )
+            selectAllItemsConnectedToTrack( *trackItem );
     }
 
     // Inform other potentially interested tools
@@ -831,25 +847,40 @@ int SELECTION_TOOL::selectConnection( const TOOL_EVENT& aEvent )
 }
 
 
+void connectedItemFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
+{
+    /* Narrow the collection down to a single BOARD_CONNECTED_ITEM for each
+     * represented net.  All other items types are removed.
+     */
+    std::set<int> representedNets;
+
+    for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
+    {
+        BOARD_CONNECTED_ITEM* item = dynamic_cast<BOARD_CONNECTED_ITEM*>( aCollector[i] );
+        if( !item )
+            aCollector.Remove( i );
+        else if ( representedNets.count( item->GetNetCode() ) )
+            aCollector.Remove( i );
+        else
+            representedNets.insert( item->GetNetCode() );
+    }
+}
+
+
 int SELECTION_TOOL::selectCopper( const TOOL_EVENT& aEvent )
 {
-    if( !selectCursor() )
+    if( !selectCursor( true, connectedItemFilter ) )
         return 0;
 
     // copy the selection, since we're going to iterate and modify
     auto selection = m_selection.GetItems();
 
-    for( auto i : selection )
+    for( auto item : selection )
     {
-        auto item = static_cast<BOARD_ITEM*>( i );
+        BOARD_CONNECTED_ITEM* connItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( item );
 
-        // only connected items can be traversed in the ratsnest
-        if( item->IsConnected() )
-        {
-            auto& connItem = static_cast<BOARD_CONNECTED_ITEM&>( *item );
-
-            selectAllItemsConnectedToItem( connItem );
-        }
+        if( connItem )
+            selectAllItemsConnectedToItem( *connItem );
     }
 
     // Inform other potentially interested tools

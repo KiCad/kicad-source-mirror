@@ -65,6 +65,7 @@
 #include <class_edge_mod.h>
 
 #include <tools/pcb_actions.h>
+#include <router/router_tool.h>
 
 #include "pcb_tool.h"
 #include <dialog_find.h>
@@ -342,5 +343,10 @@ void DIALOG_BLOCK_OPTIONS::ExecuteCommand( wxCommandEvent& event )
 
 
 void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount )
+{
+}
+
+
+void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I&, GENERAL_COLLECTOR& )
 {
 }

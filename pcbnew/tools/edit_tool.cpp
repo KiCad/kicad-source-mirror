@@ -330,13 +330,10 @@ bool EDIT_TOOL::invokeInlineRouter( int aDragMode )
         return false;
 
 	// make sure we don't accidentally invoke inline routing mode while the router is already active!
-    if ( theRouter->IsToolActive() )
+    if( theRouter->IsToolActive() )
         return false;
 
-    TRACK* track = uniqueSelected<TRACK>();
-    VIA* via = uniqueSelected<VIA>();
-
-    if( track || via )
+    if( theRouter->CanInlineDrag() )
     {
         m_toolMgr->RunAction( PCB_ACTIONS::routerInlineDrag, true, aDragMode );
         return true;
@@ -1087,9 +1084,21 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
 }
 
 
+void EDIT_TOOL::FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
+{
+    for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
+    {
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aCollector[i] );
+
+        if( item->Type() != PCB_MODULE_T )
+            aCollector.Remove( i );
+    }
+}
+
+
 int EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 {
-    const auto& selection = m_selectionTool->RequestSelection();
+    const auto& selection = m_selectionTool->RequestSelection( 0, FootprintFilter );
 
     if( selection.Empty() )
         return 0;
@@ -1265,7 +1274,7 @@ bool EDIT_TOOL::updateModificationPoint( SELECTION& aSelection )
 
 int EDIT_TOOL::editFootprintInFpEditor( const TOOL_EVENT& aEvent )
 {
-    const auto& selection = m_selectionTool->RequestSelection();
+    const auto& selection = m_selectionTool->RequestSelection( 0, FootprintFilter );
 
     if( selection.Empty() )
         return 0;
@@ -1357,15 +1366,3 @@ int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-
-template<class T>
-T* EDIT_TOOL::uniqueSelected()
-{
-    auto& selection = m_selectionTool->RequestSelection( SELECTION_DEFAULT );
-
-    if( selection.Size() != 1 )
-        return nullptr;
-
-    auto item = selection[0];
-    return dyn_cast<T*>( item );
-}
