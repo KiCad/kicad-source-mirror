@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2011-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2011-2018 Jean-Pierre Charras  jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,8 +41,6 @@ private:
     GERBVIEW_FRAME* m_Parent;
     int m_gerberActiveLayersCount;                  // Number of initialized gerber layers
     static int m_exportBoardCopperLayersCount;
-    wxFlexGridSizer* m_flexRightColumnBoxSizer;     // An extra wxFlexGridSizer used
-                                                    // when we have more than 16 gerber files loaded
     LAYER_NUM m_layersLookUpTable[GERBER_DRAWLAYERS_COUNT]; // Indexes Gerber layers to PCB file layers
                                                     // the last value in table is the number of copper layers
     int    m_buttonTable[int(GERBER_DRAWLAYERS_COUNT)+1];       // Indexes buttons to Gerber layers

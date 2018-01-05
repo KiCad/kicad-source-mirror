@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_LAYERS_SELECT_TO_PCB_BASE_H__
@@ -11,21 +11,30 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
 #include "dialog_shim.h"
-#include <wx/sizer.h>
+#include <wx/string.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
-#include <wx/statline.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/string.h>
-#include <wx/statbox.h>
-#include <wx/stattext.h>
+#include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/combobox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
+
+#define ID_LAYERS_MAP_DIALOG_BASE 1000
+#define ID_M_STATICLINESEP 1001
+#define ID_M_STATICTEXTCOPPERLAYERCOUNT 1002
+#define ID_M_COMBOCOPPERLAYERSCOUNT 1003
+#define ID_STORE_CHOICE 1004
+#define ID_GET_PREVIOUS_CHOICE 1005
+#define ID_RESET_CHOICE 1006
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class LAYERS_MAP_DIALOG_BASE
@@ -44,20 +53,11 @@ class LAYERS_MAP_DIALOG_BASE : public DIALOG_SHIM
 		
 	
 	protected:
-		enum
-		{
-			ID_LAYERS_MAP_DIALOG_BASE = 1000,
-			ID_M_STATICLINESEP,
-			ID_M_STATICTEXTCOPPERLAYERCOUNT,
-			ID_M_COMBOCOPPERLAYERSCOUNT,
-			ID_STORE_CHOICE,
-			ID_GET_PREVIOUS_CHOICE,
-			ID_RESET_CHOICE
-		};
-		
-		wxStaticBoxSizer* sbSizerLayersTable;
+		wxStaticText* m_staticTextLayerSel;
+		wxBoxSizer* m_bSizerLayerList;
 		wxFlexGridSizer* m_flexLeftColumnBoxSizer;
 		wxStaticLine* m_staticlineSep;
+		wxFlexGridSizer* m_flexRightColumnBoxSizer;
 		wxStaticText* m_staticTextCopperlayerCount;
 		wxComboBox* m_comboCopperLayersCount;
 		wxButton* m_buttonStore;
@@ -78,7 +78,7 @@ class LAYERS_MAP_DIALOG_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id = ID_LAYERS_MAP_DIALOG_BASE, const wxString& title = _("Layer Selection"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id = ID_LAYERS_MAP_DIALOG_BASE, const wxString& title = _("Layer Selection"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 386,333 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~LAYERS_MAP_DIALOG_BASE();
 	
 };

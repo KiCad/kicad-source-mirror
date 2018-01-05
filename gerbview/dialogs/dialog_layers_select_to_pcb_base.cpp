@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_layers_select_to_pcb_base.h"
@@ -27,7 +27,17 @@ LAYERS_MAP_DIALOG_BASE::LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* sbUpperSizer;
 	sbUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	sbSizerLayersTable = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Layer selection:") ), wxHORIZONTAL );
+	wxBoxSizer* bSizerLayerSelection;
+	bSizerLayerSelection = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticTextLayerSel = new wxStaticText( this, wxID_ANY, _("Layer selection:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextLayerSel->Wrap( -1 );
+	bSizerLayerSelection->Add( m_staticTextLayerSel, 0, wxALL, 5 );
+	
+	m_bSizerLayerList = new wxBoxSizer( wxHORIZONTAL );
+	
+	
+	m_bSizerLayerList->Add( 0, 0, 0, wxRIGHT|wxLEFT, 10 );
 	
 	m_flexLeftColumnBoxSizer = new wxFlexGridSizer( 16, 4, 0, 0 );
 	m_flexLeftColumnBoxSizer->AddGrowableCol( 0 );
@@ -38,13 +48,27 @@ LAYERS_MAP_DIALOG_BASE::LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id,
 	m_flexLeftColumnBoxSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	
-	sbSizerLayersTable->Add( m_flexLeftColumnBoxSizer, 1, wxEXPAND, 5 );
+	m_bSizerLayerList->Add( m_flexLeftColumnBoxSizer, 1, wxEXPAND, 5 );
 	
-	m_staticlineSep = new wxStaticLine( sbSizerLayersTable->GetStaticBox(), ID_M_STATICLINESEP, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
-	sbSizerLayersTable->Add( m_staticlineSep, 0, wxEXPAND | wxALL, 5 );
+	m_staticlineSep = new wxStaticLine( this, ID_M_STATICLINESEP, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	m_bSizerLayerList->Add( m_staticlineSep, 0, wxEXPAND | wxALL, 5 );
+	
+	m_flexRightColumnBoxSizer = new wxFlexGridSizer( 16, 4, 0, 0 );
+	m_flexRightColumnBoxSizer->AddGrowableCol( 0 );
+	m_flexRightColumnBoxSizer->AddGrowableCol( 1 );
+	m_flexRightColumnBoxSizer->AddGrowableCol( 2 );
+	m_flexRightColumnBoxSizer->AddGrowableCol( 3 );
+	m_flexRightColumnBoxSizer->SetFlexibleDirection( wxBOTH );
+	m_flexRightColumnBoxSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	
-	sbUpperSizer->Add( sbSizerLayersTable, 1, wxALL|wxEXPAND, 5 );
+	m_bSizerLayerList->Add( m_flexRightColumnBoxSizer, 1, wxEXPAND, 5 );
+	
+	
+	bSizerLayerSelection->Add( m_bSizerLayerList, 1, wxEXPAND, 5 );
+	
+	
+	sbUpperSizer->Add( bSizerLayerSelection, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -109,7 +133,6 @@ LAYERS_MAP_DIALOG_BASE::LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id,
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
-	bSizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 }
