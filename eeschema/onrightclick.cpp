@@ -377,9 +377,11 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, SYMBOL_LIB
     AddMenuItem( orientmenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_cw_xpm ) );
     AddMenuItem( orientmenu, ID_SCH_ROTATE_COUNTERCLOCKWISE, _( "Rotate Counterclockwise" ),
                  KiBitmap( rotate_ccw_xpm ) );
-    msg = AddHotkeyName( _( "Flip Vertical" ), g_Schematic_Hokeys_Descr, HK_MIRROR_X );
+    msg = AddHotkeyName( _( "Mirror Around Horizontal(X) Axis" ), g_Schematic_Hokeys_Descr,
+                         HK_MIRROR_X );
     AddMenuItem( orientmenu, ID_SCH_MIRROR_X, msg, KiBitmap( mirror_v_xpm ) );
-    msg = AddHotkeyName( _( "Flip Horizontal" ), g_Schematic_Hokeys_Descr, HK_MIRROR_Y );
+    msg = AddHotkeyName( _( "Mirror Around Vertical(Y) Axis" ), g_Schematic_Hokeys_Descr,
+                         HK_MIRROR_Y );
     AddMenuItem( orientmenu, ID_SCH_MIRROR_Y, msg, KiBitmap( mirror_h_xpm ) );
     msg = AddHotkeyName( _( "Reset to Default" ), g_Schematic_Hokeys_Descr,
                          HK_ORIENT_NORMAL_COMPONENT );
@@ -776,7 +778,8 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
         AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( drag_xpm ) );
 
         PopMenu->AppendSeparator();
-        msg = AddHotkeyName( _( "Select Items On PCB" ), g_Schematic_Hokeys_Descr, HK_SELECT_ITEMS_ON_PCB );
+        msg = AddHotkeyName( _( "Select Items On PCB" ), g_Schematic_Hokeys_Descr,
+                             HK_SELECT_ITEMS_ON_PCB );
         AddMenuItem( PopMenu, ID_POPUP_SCH_SELECT_ON_PCB, msg, KiBitmap( select_same_sheet_xpm ) );
         PopMenu->AppendSeparator();
 
@@ -787,9 +790,11 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
         AddMenuItem( orientmenu, ID_SCH_ROTATE_COUNTERCLOCKWISE, _( "Rotate Counterclockwise" ),
                      KiBitmap( rotate_ccw_xpm ) );
 
-        msg = AddHotkeyName( _( "Flip Vertical" ), g_Schematic_Hokeys_Descr, HK_MIRROR_X );
+        msg = AddHotkeyName( _( "Mirror Around Horizontal(X) Axis" ), g_Schematic_Hokeys_Descr,
+                             HK_MIRROR_X );
         AddMenuItem( orientmenu, ID_SCH_MIRROR_X, msg, KiBitmap( mirror_v_xpm ) );
-        msg = AddHotkeyName( _( "Flip Horizontal" ), g_Schematic_Hokeys_Descr, HK_MIRROR_Y );
+        msg = AddHotkeyName( _( "Mirror Around Vertical(Y) Axis" ), g_Schematic_Hokeys_Descr,
+                             HK_MIRROR_Y );
         AddMenuItem( orientmenu, ID_SCH_MIRROR_Y, msg, KiBitmap( mirror_h_xpm ) );
 
         AddMenuItem( PopMenu, orientmenu, ID_POPUP_SCH_GENERIC_ORIENT_CMP,
@@ -872,11 +877,11 @@ void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame )
         AddMenuItem( PopMenu, ID_POPUP_DRAG_BLOCK, msg, KiBitmap( drag_xpm ) );
         msg = AddHotkeyName( _( "Delete Block" ), g_Schematic_Hokeys_Descr, HK_DELETE );
         AddMenuItem( PopMenu, ID_POPUP_DELETE_BLOCK, msg, KiBitmap( delete_xpm ) );
-        msg = AddHotkeyName( _( "Flip Block Vertical" ), g_Schematic_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Mirror Block Around Vertical(Y) Axis" ), g_Schematic_Hokeys_Descr,
                              HK_MIRROR_Y );
         AddMenuItem( PopMenu, ID_SCH_MIRROR_Y, msg, KiBitmap( mirror_h_xpm ) );
-        msg = AddHotkeyName( _( "Flip Block Horizontal" ), g_Schematic_Hokeys_Descr,
-                             HK_MIRROR_X );
+        msg = AddHotkeyName( _( "Mirror Block Around Horizontal(X) Axis" ),
+                             g_Schematic_Hokeys_Descr, HK_MIRROR_X );
         AddMenuItem( PopMenu, ID_SCH_MIRROR_X, msg, KiBitmap( mirror_v_xpm ) );
         msg = AddHotkeyName( _( "Rotate Block CCW" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
         AddMenuItem( PopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_ccw_xpm ) );
@@ -912,10 +917,10 @@ void AddMenusForBitmap( wxMenu* aPopMenu, SCH_BITMAP * aBitmap )
 
     msg = AddHotkeyName( _( "Rotate Counterclockwise" ), g_Schematic_Hokeys_Descr, HK_ROTATE );
     AddMenuItem( aPopMenu, ID_SCH_ROTATE_CLOCKWISE, msg, KiBitmap( rotate_ccw_xpm ) );
-    msg = AddHotkeyName( _( "Flip Vertical" ), g_Schematic_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Mirror Around Horizontal(X) Axis" ), g_Schematic_Hokeys_Descr,
                          HK_MIRROR_X );
     AddMenuItem( aPopMenu, ID_SCH_MIRROR_X, msg, KiBitmap( mirror_v_xpm ) );
-    msg = AddHotkeyName( _( "Flip Horizontal" ), g_Schematic_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Mirror Around Vertical(Y) Axis" ), g_Schematic_Hokeys_Descr,
                          HK_MIRROR_Y );
     AddMenuItem( aPopMenu, ID_SCH_MIRROR_Y, msg, KiBitmap( mirror_h_xpm ) );
     msg = AddHotkeyName( _( "Edit Image" ), g_Schematic_Hokeys_Descr, HK_EDIT );
