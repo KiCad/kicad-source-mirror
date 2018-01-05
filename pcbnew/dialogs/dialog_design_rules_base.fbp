@@ -268,7 +268,7 @@
                                             <property name="minimum_size"></property>
                                             <property name="name">sbSizerUpper</property>
                                             <property name="orient">wxVERTICAL</property>
-                                            <property name="parent">1</property>
+                                            <property name="parent">0</property>
                                             <property name="permission">none</property>
                                             <event name="OnUpdateUI"></event>
                                             <object class="sizeritem" expanded="0">
@@ -701,7 +701,7 @@
                                             <property name="minimum_size"></property>
                                             <property name="name">sbSizerNetSelectMain</property>
                                             <property name="orient">wxHORIZONTAL</property>
-                                            <property name="parent">1</property>
+                                            <property name="parent">0</property>
                                             <property name="permission">none</property>
                                             <event name="OnUpdateUI"></event>
                                             <object class="sizeritem" expanded="1">
@@ -1776,7 +1776,7 @@
                                                     <property name="minimum_size"></property>
                                                     <property name="name">sbViasOptionSizer</property>
                                                     <property name="orient">wxVERTICAL</property>
-                                                    <property name="parent">1</property>
+                                                    <property name="parent">0</property>
                                                     <property name="permission">none</property>
                                                     <event name="OnUpdateUI"></event>
                                                     <object class="sizeritem" expanded="0">
@@ -3404,7 +3404,7 @@
                                                     <property name="minimum_size"></property>
                                                     <property name="name">sViaSizeBox</property>
                                                     <property name="orient">wxVERTICAL</property>
-                                                    <property name="parent">1</property>
+                                                    <property name="parent">0</property>
                                                     <property name="permission">none</property>
                                                     <event name="OnUpdateUI"></event>
                                                     <object class="sizeritem" expanded="0">
@@ -3645,7 +3645,7 @@
                                                     <property name="minimum_size"></property>
                                                     <property name="name">sbTracksListSizer</property>
                                                     <property name="orient">wxVERTICAL</property>
-                                                    <property name="parent">1</property>
+                                                    <property name="parent">0</property>
                                                     <property name="permission">none</property>
                                                     <event name="OnUpdateUI"></event>
                                                     <object class="sizeritem" expanded="0">
