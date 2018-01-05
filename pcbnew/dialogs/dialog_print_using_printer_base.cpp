@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jan  2 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -53,7 +53,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	
 	sbLayersSizer->Add( bleftSizer, 1, wxEXPAND, 5 );
 	
-	m_Exclude_Edges_Pcb = new wxCheckBox( sbLayersSizer->GetStaticBox(), wxID_ANY, _("Exclude Edges_Pcb layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Exclude_Edges_Pcb = new wxCheckBox( sbLayersSizer->GetStaticBox(), wxID_ANY, _("Exclude PCB edge layer"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Exclude_Edges_Pcb->SetToolTip( _("Exclude contents of Edges_Pcb layer from all other layers") );
 	
 	sbLayersSizer->Add( m_Exclude_Edges_Pcb, 0, wxALL|wxEXPAND, 5 );
