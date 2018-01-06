@@ -117,23 +117,21 @@ void DIALOG_SHIM::FinishDialogSettings()
 
 void DIALOG_SHIM::SetSizeInDU( int x, int y )
 {
-    wxPoint sz( x, y );
-    auto pixels_as_point = ConvertDialogToPixels( sz );
-    wxSize pixels_as_size( pixels_as_point.x, pixels_as_point.y );
-    SetSize( pixels_as_size );
+    wxSize sz( x, y );
+    SetSize( ConvertDialogToPixels( sz ) );
 }
 
 
 int DIALOG_SHIM::HorizPixelsFromDU( int x )
 {
-    wxPoint sz( x, 0 );
+    wxSize sz( x, 0 );
     return ConvertDialogToPixels( sz ).x;
 }
 
 
 int DIALOG_SHIM::VertPixelsFromDU( int y )
 {
-    wxPoint sz( 0, y );
+    wxSize sz( 0, y );
     return ConvertDialogToPixels( sz ).y;
 }
 
