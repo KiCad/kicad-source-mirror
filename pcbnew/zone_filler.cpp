@@ -1085,7 +1085,7 @@ void ZONE_FILLER::buildUnconnectedThermalStubsPolygonList( SHAPE_POLY_SET& aCorn
                 // add computed polygon to list
                 for( int ic = 0; ic < spokes.PointCount(); ic++ )
                 {
-                    auto cpos = spokes.CPoint( i );
+                    auto cpos = spokes.CPoint( ic );
                     RotatePoint( cpos, fAngle );                               // Rotate according to module orientation
                     cpos += pad->ShapePos();                              // Shift origin to position
                     aCornerBuffer.Append( cpos );
