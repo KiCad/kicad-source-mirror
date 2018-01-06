@@ -71,6 +71,10 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _( "Via hole > diameter" ) );
     case DRCE_MICRO_VIA_INCORRECT_LAYER_PAIR:
         return wxString( _( "Micro Via: incorrect layer pairs (not adjacent)" ) );
+    case DRCE_MICRO_VIA_NOT_ALLOWED:
+        return wxString( _( "Micro Via: not allowed" ) );
+    case DRCE_BURIED_VIA_NOT_ALLOWED:
+        return wxString( _( "Buried Via: not allowed" ) );
     case COPPERAREA_INSIDE_COPPERAREA:
         return wxString( _( "Copper area inside copper area" ) );
     case COPPERAREA_CLOSE_TO_COPPERAREA:

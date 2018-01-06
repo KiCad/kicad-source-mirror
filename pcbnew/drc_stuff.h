@@ -36,6 +36,10 @@
 #define BAD_DRC 1
 
 
+// DRC error codes could be defined by an enum.
+// however a #define is used because error code value is displayed in DRC messages,
+// and using #define that shows each numerical value helps for debug.
+
 /// DRC error codes:
 #define DRCE_                                  1    // not used yet
 #define DRCE_UNCONNECTED_ITEMS                 2    ///< items are unconnected
@@ -83,7 +87,9 @@
 #define DRCE_OVERLAPPING_FOOTPRINTS            44   ///< footprint courtyards overlap
 #define DRCE_MISSING_COURTYARD_IN_FOOTPRINT    45   ///< footprint has no courtyard defined
 #define DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT  46   ///< footprint has a courtyard but malformed
-                                                    ///< (not convetrible to polygon)
+                                                    ///< (not convertible to a closed polygon with holes)
+#define DRCE_MICRO_VIA_NOT_ALLOWED             47   ///< micro vias are not allowed
+#define DRCE_BURIED_VIA_NOT_ALLOWED            48   ///< buried vias are not allowed
 
 
 class EDA_DRAW_PANEL;

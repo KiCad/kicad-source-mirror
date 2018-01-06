@@ -202,11 +202,31 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             return false;
         }
 
+        // test if the type of via is allowed due to design rules
+        if( ( refvia->GetViaType() == VIA_MICROVIA ) &&
+            ( m_pcb->GetDesignSettings().m_MicroViasAllowed == false ) )
+        {
+            m_currentMarker = fillMarker( refvia, NULL,
+                    DRCE_MICRO_VIA_NOT_ALLOWED, m_currentMarker );
+            return false;
+        }
+
+        // test if the type of via is allowed due to design rules
+        if( ( refvia->GetViaType() == VIA_BLIND_BURIED ) &&
+            ( m_pcb->GetDesignSettings().m_BlindBuriedViaAllowed == false ) )
+        {
+            m_currentMarker = fillMarker( refvia, NULL,
+                    DRCE_BURIED_VIA_NOT_ALLOWED, m_currentMarker );
+            return false;
+        }
+
         // For microvias: test if they are blind vias and only between 2 layers
         // because they are used for very small drill size and are drill by laser
         // and **only one layer** can be drilled
         if( refvia->GetViaType() == VIA_MICROVIA )
         {
+
+
             PCB_LAYER_ID    layer1, layer2;
             bool        err = true;
 
@@ -227,6 +247,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 return false;
             }
         }
+
     }
     else    // This is a track segment
     {
