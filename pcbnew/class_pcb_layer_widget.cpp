@@ -645,7 +645,7 @@ void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
         if( aId == LAYER_PCB_BACKGROUND )
             view->UpdateLayerColor( LAYER_PADS_PLATEDHOLES );
 
-        galCanvas->Refresh();
+        galCanvas->ForceRefresh();
     }
 
     myframe->GetCanvas()->Refresh();
