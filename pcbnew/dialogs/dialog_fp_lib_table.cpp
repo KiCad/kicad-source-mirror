@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 CERN
- * Copyright (C) 2012-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -242,6 +242,8 @@ public:
 
         // for ALT+A handling, we want the initial focus to be on the first selected grid.
         m_cur_grid->SetFocus();
+
+        SetSizeInDU( 360, 240 );
 
         // On some windows manager (Unity, XFCE), this dialog is
         // not always raised, depending on this dialog is run.

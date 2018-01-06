@@ -83,8 +83,10 @@ COMPONENT_TREE::COMPONENT_TREE( wxWindow* aParent, SYMBOL_LIB_TABLE* aSymLibTabl
     {
         if( !aDetails )
         {
-            m_details_ctrl = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition, wxSize( 320, 240 ),
-                                               wxHW_SCROLLBAR_AUTO | wxSUNKEN_BORDER );
+            auto html_sz = ConvertDialogToPixels( wxPoint( 80, 80 ) );
+            m_details_ctrl = new wxHtmlWindow(
+                    this, wxID_ANY, wxDefaultPosition, wxSize( html_sz.x, html_sz.y ),
+                    wxHW_SCROLLBAR_AUTO | wxSUNKEN_BORDER );
 
             sizer->Add( m_details_ctrl, 1, wxALL | wxEXPAND, 5 );
         }

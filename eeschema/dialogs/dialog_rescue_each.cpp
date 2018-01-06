@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,7 +64,6 @@ private:
     void OnCancelClick( wxCommandEvent& event ) override;
     void OnHandleCachePreviewRepaint( wxPaintEvent& aRepaintEvent ) override;
     void OnHandleLibraryPreviewRepaint( wxPaintEvent& aRepaintEvent ) override;
-    void OnDialogResize( wxSizeEvent& aSizeEvent ) override;
     void renderPreview( LIB_PART* aComponent, int aUnit, wxPanel* panel );
 };
 
@@ -122,6 +120,21 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, RESCUER& aRescu
 
     m_componentViewOld->SetLayoutDirection( wxLayout_LeftToRight );
     m_componentViewNew->SetLayoutDirection( wxLayout_LeftToRight );
+
+    Layout();
+    SetSizeInDU( 280, 240 );
+
+    // Make sure the HTML window is large enough. Some fun size juggling and
+    // fudge factors here but it does seem to work pretty reliably.
+    auto info_size = m_htmlPrompt->GetTextExtent( info );
+    auto prompt_size = m_htmlPrompt->GetSize();
+    auto font_size = m_htmlPrompt->GetTextExtent( "X" );
+    auto approx_info_height = ( 2 * info_size.x / prompt_size.x ) * font_size.y;
+    m_htmlPrompt->SetSizeHints( 2 * prompt_size.x / 3, approx_info_height );
+    Layout();
+    GetSizer()->SetSizeHints( this );
+    SetSizeInDU( 280, 240 );
+    Center();
 }
 
 
@@ -140,11 +153,6 @@ bool DIALOG_RESCUE_EACH::TransferDataToWindow()
 
     if( !m_AskShowAgain )
         m_btnNeverShowAgain->Hide();
-
-    GetSizer()->Layout();
-    GetSizer()->Fit( this );
-    GetSizer()->SetSizeHints( this );
-    Centre();
 
     return true;
 }
@@ -229,13 +237,6 @@ void DIALOG_RESCUE_EACH::OnHandleLibraryPreviewRepaint( wxPaintEvent& aRepaintEv
 
     if( selected_part.GetLibCandidate() )
         renderPreview( selected_part.GetLibCandidate(), 0, m_componentViewNew );
-}
-
-
-void DIALOG_RESCUE_EACH::OnDialogResize( wxSizeEvent& aSizeEvent )
-{
-    // Placeholder - I was previously doing some extra reflow here.
-    DIALOG_RESCUE_EACH_BASE::OnDialogResize( aSizeEvent );
 }
 
 

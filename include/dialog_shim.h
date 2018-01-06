@@ -128,13 +128,23 @@ protected:
     void FinishDialogSettings();
 
     /**
-     * Set the dialog to given dimensions in character widths and heights.
-     * This is useful for dialogs with highly flexible sizes, like the symbol chooser,
-     * where standard methods of computing default dialog sizes are a bit useless.
-     *
-     * This should be called at the end of the constructor.
+     * Set the dialog to the given dimensions in "dialog units". These are units equivalent
+     * to 4* the average character width and 8* the average character height, allowing a dialog
+     * to be sized in a way that scales it with the system font.
      */
-    void SetSizeInChars( int x, int y );
+    void SetSizeInDU( int x, int y );
+
+    /**
+     * Convert an integer number of dialog units to pixels, horizontally. See SetSizeInDU or
+     * wxDialog documentation for more information.
+     */
+    int HorizPixelsFromDU( int x );
+
+    /**
+     * Convert an integer number of dialog units to pixels, vertically. See SetSizeInDU or
+     * wxDialog documentation for more information.
+     */
+    int VertPixelsFromDU( int y );
 
     bool m_fixupsRun;
 

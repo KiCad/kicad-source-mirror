@@ -70,11 +70,11 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     // Use a slightly different layout, with a details pane spanning the entire window,
     // if we're not showing footprints.
     auto vsplitter = aShowFootprints ? nullptr : new wxSplitterWindow(
-        this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE );
+        this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE | wxSP_3DSASH );
 
     auto splitter = new wxSplitterWindow(
         vsplitter ? static_cast<wxWindow *>( vsplitter ) : static_cast<wxWindow *>( this ),
-        wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE );
+        wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE | wxSP_3DSASH );
 
     auto details = aShowFootprints ? nullptr : new wxHtmlWindow(
         vsplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize,
@@ -86,21 +86,10 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     auto buttons = new wxStdDialogButtonSizer();
     m_dbl_click_timer = new wxTimer( this );
 
-    splitter->SetSashGravity( 0.9 );
-    splitter->SetMinimumPaneSize( 1 );
-    splitter->SplitVertically( m_tree, right_panel, -300 );
-
     if( vsplitter )
-    {
-        vsplitter->SetSashGravity( 0.5 );
-        vsplitter->SetMinimumPaneSize( 1 );
-        vsplitter->SplitHorizontally( splitter, details, -200 );
         sizer->Add( vsplitter, 1, wxEXPAND | wxALL, 5 );
-    }
     else
-    {
         sizer->Add( splitter, 1, wxEXPAND | wxALL, 5 );
-    }
 
     buttons->AddButton( new wxButton( this, wxID_OK ) );
     buttons->AddButton( new wxButton( this, wxID_CANCEL ) );
@@ -124,16 +113,19 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     Layout();
 
     if( m_default_size == wxSize( -1, -1 ) )
-    {
-#ifdef __WXMAC__
-        SetSizeInChars( 60, 32 );
-#else
-        SetSizeInChars( 80, 32 );
-#endif
-    }
+        SetSizeInDU( 320, 256 );
     else
-    {
         SetSize( m_default_size );
+
+    splitter->SetSashGravity( 0.9 );
+    splitter->SetMinimumPaneSize( 1 );
+    splitter->SplitVertically( m_tree, right_panel, HorizPixelsFromDU( -100 ) );
+
+    if( vsplitter )
+    {
+        vsplitter->SetSashGravity( 0.5 );
+        vsplitter->SetMinimumPaneSize( 1 );
+        vsplitter->SplitHorizontally( splitter, details, VertPixelsFromDU( -80 ) );
     }
 }
 
