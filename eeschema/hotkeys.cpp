@@ -796,7 +796,7 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         if ( !itemInEdit )
             SetDrawItem( LocateItemUsingCursor( aPosition ) );
 
-        if( IsEditingDrawItem() )
+        if( GetDrawItem() )
         {
             cmd.SetId( ID_POPUP_LIBEDIT_DELETE_ITEM );
             Process_Special_Functions( cmd );
@@ -821,7 +821,7 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         {
             SetDrawItem( LocateItemUsingCursor( aPosition ) );
 
-            if( IsEditingDrawItem() )
+            if( GetDrawItem() )
             {
                 cmd.SetId( ID_POPUP_LIBEDIT_MODIFY_ITEM );
                 Process_Special_Functions( cmd );
