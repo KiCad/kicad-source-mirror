@@ -59,6 +59,10 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     OPT<int> viaDiameter = NULLOPT;
     OPT<int> viaDrill = NULLOPT;
 
+    VIATYPE_T viaType = VIA_NOT_DEFINED;
+    PCB_LAYER_ID viaStartLayer = UNDEFINED_LAYER;
+    PCB_LAYER_ID viaEndLayer = UNDEFINED_LAYER;
+
     m_haveUniqueNet = true;
     int prevNet = -1;
 
@@ -90,6 +94,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     {
         m_NetComboBox->SetMultiple( true );
     }
+
 
     // Look for values that are common for every item that is selected
     for( auto& item : m_items )
@@ -150,6 +155,9 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     viaDiameter = v->GetWidth();
                     viaDrill = v->GetDrillValue();
                     m_vias = true;
+                    viaType = v->GetViaType();
+                    viaStartLayer = v->TopLayer();
+                    viaEndLayer = v->BottomLayer();
                 }
                 else        // check if values are the same for every selected via
                 {
@@ -164,6 +172,15 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
                     if( viaDrill && ( *viaDrill != v->GetDrillValue() ) )
                         viaDrill = NULLOPT;
+
+                    if( viaType != v->GetViaType() )
+                        viaType = VIA_NOT_DEFINED;
+
+                    if( viaStartLayer != v->TopLayer() )
+                        viaStartLayer = UNDEFINED_LAYER;
+
+                    if( viaEndLayer != v->BottomLayer() )
+                        viaEndLayer = UNDEFINED_LAYER;
                 }
 
                 if( v->IsLocked() )
@@ -175,8 +192,10 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
             }
 
             default:
+            {
                 wxASSERT( false );
                 break;
+            }
         }
     }
 
@@ -188,6 +207,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         setCommonVal( viaY, m_ViaYCtrl, m_viaY );
         setCommonVal( viaDiameter, m_ViaDiameterCtrl, m_viaDiameter );
         setCommonVal( viaDrill, m_ViaDrillCtrl, m_viaDrill );
+
         m_DesignRuleViasUnit->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
 
         int viaSelection = wxNOT_FOUND;
@@ -211,8 +231,44 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         m_DesignRuleViasCtrl->Connect( wxEVT_CHOICE, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onViaSelect ), NULL, this );
         m_ViaDiameterCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onViaEdit ), NULL, this );
         m_ViaDrillCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onViaEdit ), NULL, this );
+        m_ViaTypeChoice->Connect( wxEVT_CHOICE, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onViaEdit ), NULL, this );
 
         m_ViaDiameterCtrl->SetFocus();
+
+        m_ViaTypeChoice->Enable();
+
+        if( viaType == VIA_THROUGH )
+            m_ViaTypeChoice->SetSelection( 0 );
+        else if( viaType == VIA_MICROVIA )
+            m_ViaTypeChoice->SetSelection( 1 );
+        else if ( viaType == VIA_BLIND_BURIED )
+            m_ViaTypeChoice->SetSelection( 2 );
+        else if( viaType == VIA_NOT_DEFINED )
+            m_ViaTypeChoice->SetSelection( 3 );
+
+
+        m_ViaStartLayer->SetLayersHotkeys( false );
+        m_ViaStartLayer->SetLayerSet( LSET::AllNonCuMask() );
+        m_ViaStartLayer->SetBoardFrame( aParent );
+        m_ViaStartLayer->Resync();
+        m_ViaEndLayer->SetLayersHotkeys( false );
+        m_ViaEndLayer->SetLayerSet( LSET::AllNonCuMask() );
+        m_ViaEndLayer->SetBoardFrame( aParent );
+        m_ViaEndLayer->Resync();
+
+
+        m_ViaStartLayer->SetLayerSelection( viaStartLayer );
+        m_ViaEndLayer->SetLayerSelection( viaEndLayer );
+
+        m_ViaStartLayer->Enable( false );
+        m_ViaEndLayer->Enable( false );
+
+        if( viaType != VIA_THROUGH ) // check if selected type isnt through.
+        {
+            m_ViaStartLayer->Enable();
+            m_ViaEndLayer->Enable();
+        }
+
     }
     else
     {
@@ -261,6 +317,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     {
         m_lockedCbox->Set3StateValue( wxCHK_UNCHECKED );
     }
+
 
     m_StdButtonsOK->SetDefault();
 
@@ -361,6 +418,37 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply( COMMIT& aCommit )
                     v->SetPosition( pos );
                 }
 
+                if( m_ViaTypeChoice->GetSelection() != 3)
+                {
+                    switch( m_ViaTypeChoice->GetSelection() )
+                    {
+                        case 0:
+                            v->SetViaType( VIA_THROUGH );
+                            v->SanitizeLayers();
+                            break;
+                        case 1:
+                            v->SetViaType( VIA_MICROVIA );
+                            break;
+                        case 2:
+                            v->SetViaType( VIA_BLIND_BURIED );
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+
+                auto startLayer = static_cast<PCB_LAYER_ID>( m_ViaStartLayer->GetLayerSelection() );
+                auto endLayer = static_cast<PCB_LAYER_ID>( m_ViaEndLayer->GetLayerSelection() );
+
+                if (startLayer != UNDEFINED_LAYER )
+                    v->SetTopLayer( startLayer );
+
+                if (endLayer != UNDEFINED_LAYER )
+                    v->SetBottomLayer( endLayer );
+
+                v->SanitizeLayers();
+
                 if( m_viaNetclass->IsChecked() )
                 {
                     switch( v->GetViaType() )
@@ -378,6 +466,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply( COMMIT& aCommit )
                     case VIA_MICROVIA:
                         v->SetWidth( v->GetNetClass()->GetuViaDiameter() );
                         v->SetDrill( v->GetNetClass()->GetuViaDrill() );
+
                         break;
                     }
                 }
@@ -475,6 +564,24 @@ void DIALOG_TRACK_VIA_PROPERTIES::onViaSelect( wxCommandEvent& aEvent )
 void DIALOG_TRACK_VIA_PROPERTIES::onViaEdit( wxCommandEvent& aEvent )
 {
     m_DesignRuleViasCtrl->SetSelection( wxNOT_FOUND );
+
+    if( m_vias )
+    {
+        if( m_ViaTypeChoice->GetSelection() != 0 ) // check if selected type isnt through.
+        {
+            m_ViaStartLayer->Enable();
+            m_ViaEndLayer->Enable();
+        }
+        else
+        {
+            m_ViaStartLayer->SetLayerSelection( F_Cu );
+            m_ViaEndLayer->SetLayerSelection( B_Cu );
+
+            m_ViaStartLayer->Enable( false );
+            m_ViaEndLayer->Enable( false );
+        }
+    }
+
 }
 
 
@@ -510,6 +617,16 @@ bool DIALOG_TRACK_VIA_PROPERTIES::check() const
         {
             DisplayError( GetParent(), _( "Via drill size has to be smaller than via diameter" ) );
             m_ViaDrillCtrl->SetFocus();
+            return false;
+        }
+
+    }
+
+    if( m_vias)
+    {
+        if( m_ViaStartLayer->GetLayerSelection() == m_ViaEndLayer->GetLayerSelection() )
+        {
+            DisplayError( GetParent(), _( "Via start layer and end layer cannot be the same" ) );
             return false;
         }
     }

@@ -403,6 +403,9 @@ public:
      */
     void SetLayerPair( PCB_LAYER_ID aTopLayer, PCB_LAYER_ID aBottomLayer );
 
+    void SetBottomLayer( PCB_LAYER_ID aLayer );
+    void SetTopLayer( PCB_LAYER_ID aLayer );
+
     /**
      * Function LayerPair
      * Return the 2 layers used by  the via (the via actually uses
@@ -411,6 +414,16 @@ public:
      *  @param bottom_layer = pointer to the last layer (can be null)
      */
     void LayerPair( PCB_LAYER_ID* top_layer, PCB_LAYER_ID* bottom_layer ) const;
+
+    PCB_LAYER_ID TopLayer() const;
+    PCB_LAYER_ID BottomLayer() const;
+
+    /**
+     * Function SanitizeLayers
+     * Check so that the layers are correct dependin on the type of via, and
+     * so that the top actually is on top.
+     */
+    void SanitizeLayers();
 
     const wxPoint GetPosition() const override {  return m_Start; }
     void SetPosition( const wxPoint& aPoint ) override { m_Start = aPoint;  m_End = aPoint; }

@@ -428,17 +428,22 @@ LSET VIA::GetLayerSet() const
 
 void VIA::SetLayerPair( PCB_LAYER_ID aTopLayer, PCB_LAYER_ID aBottomLayer )
 {
-    if( GetViaType() == VIA_THROUGH )
-    {
-        aTopLayer    = F_Cu;
-        aBottomLayer = B_Cu;
-    }
-
-    if( aBottomLayer < aTopLayer )
-        std::swap( aBottomLayer, aTopLayer );
 
     m_Layer = aTopLayer;
     m_BottomLayer = aBottomLayer;
+    SanitizeLayers();
+}
+
+
+void VIA::SetTopLayer( PCB_LAYER_ID aLayer )
+{
+    m_Layer = aLayer;
+}
+
+
+void VIA::SetBottomLayer( PCB_LAYER_ID aLayer )
+{
+    m_BottomLayer = aLayer;
 }
 
 
@@ -461,6 +466,31 @@ void VIA::LayerPair( PCB_LAYER_ID* top_layer, PCB_LAYER_ID* bottom_layer ) const
 
     if( bottom_layer )
         *bottom_layer = b_layer;
+}
+
+
+PCB_LAYER_ID VIA::TopLayer() const
+{
+    return m_Layer;
+}
+
+
+PCB_LAYER_ID VIA::BottomLayer() const
+{
+    return m_BottomLayer;
+}
+
+
+void VIA::SanitizeLayers()
+{
+    if( GetViaType() == VIA_THROUGH )
+    {
+        m_Layer    = F_Cu;
+        m_BottomLayer = B_Cu;
+    }
+
+    if( m_BottomLayer < m_Layer )
+        std::swap( m_BottomLayer, m_Layer );
 }
 
 
