@@ -564,7 +564,7 @@ void prepareViewMenu( wxMenu* aParentMenu )
 
     aParentMenu->Append(
         new wxMenuItem( aParentMenu, ID_MENU_CANVAS_LEGACY,
-                        text, _( "Use legacy graphics mode (not all features will be available" ),
+                        text, _( "Use legacy graphics mode (not all features will be available)" ),
                         wxITEM_RADIO ) );
 
     text = AddHotkeyName( _( "Modern (&Accelerated)" ), g_Pcbnew_Editor_Hokeys_Descr,

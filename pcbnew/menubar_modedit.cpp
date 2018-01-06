@@ -259,7 +259,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     viewMenu->Append(
         new wxMenuItem( viewMenu, ID_MENU_CANVAS_LEGACY,
-                        text, _( "Use legacy graphics mode (not all features will be available" ),
+                        text, _( "Use legacy graphics mode (not all features will be available)" ),
                         wxITEM_RADIO ) );
 
     text = AddHotkeyName( _( "Modern (&Accelerated)" ), m_hotkeysDescrList,

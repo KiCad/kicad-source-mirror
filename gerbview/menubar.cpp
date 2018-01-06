@@ -216,7 +216,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     configMenu->Append(
         new wxMenuItem( configMenu, ID_MENU_CANVAS_LEGACY,
-                        text, _( "Use legacy graphics mode (not all features will be available" ),
+                        text, _( "Use legacy graphics mode (not all features will be available)" ),
                         wxITEM_RADIO ) );
 
     text = AddHotkeyName( _( "Modern (&Accelerated)" ), GerbviewHokeysDescr,
