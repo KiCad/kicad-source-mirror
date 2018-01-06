@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-05 20:11+0100\n"
-"PO-Revision-Date: 2018-01-01 13:03+0100\n"
+"PO-Revision-Date: 2018-01-06 01:18+0100\n"
 "Last-Translator: Carsten Schoenert <c.schoenert@t-online.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: /mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.0.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Bookmarks: -1,2168,-1,-1,-1,-1,-1,-1,-1,-1\n"
@@ -509,9 +509,10 @@ msgstr "Kopiere 3D-Grafik in die Zwischenablage"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:67
 msgid "Set display options, and some layers visibility"
-msgstr ""
+msgstr "Anzeigeoptionen und Sichtbarkeit von Lagengruppen ändern"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
+#, fuzzy
 msgid "Render current view using Raytracing"
 msgstr "Wiedergabe der aktuellen Ansicht unter Benutzung von Raytracing"
 
@@ -827,7 +828,7 @@ msgstr "&Flächenfüllung einblenden"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:350
 msgid "Show 3D M&odels"
-msgstr "3D-M&odell einblenden"
+msgstr "3D-M&odelle einblenden"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:352
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:102
@@ -919,14 +920,13 @@ msgstr "Zeige aktuelle Tastaturbelegung und zugeordnete Befehle"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:25
 #, fuzzy
 msgid "Render options:"
-msgstr "Render Optionen"
+msgstr "Renderoptionen:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:42
 msgid "Realistic mode"
 msgstr "Realistischer Modus"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:51
-#, fuzzy
 msgid "Show board body"
 msgstr "Platinenkörper einblen&den"
 
@@ -946,33 +946,32 @@ msgid "Show filled areas in zones"
 msgstr "Ausgefüllte Flächenbereiche einblenden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:92
-#, fuzzy
 msgid "3D model visibility:"
-msgstr "3D-Modelle von"
+msgstr "Sichtbarkeit von 3D-Modellen:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:109
 #, fuzzy
 msgid "Show 3D through hole models"
-msgstr "Durchgehende DuKo anzeigen"
+msgstr "Modelle von Durchsteck-Bauteilen einblenden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:118
-#, fuzzy
 msgid "Show 3D SMD models"
-msgstr "3D-Modell einblenden"
+msgstr "Modelle von SMD-Bauteilen einblenden"
 
+# Ist die Bezeichnung "virtuell" hier sinnvoll? "Sonstige" oder "Andere" könnte auch sinnvoll sein...
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:127
 #, fuzzy
 msgid "Show 3D virtual models"
-msgstr "3D-Modell einblenden"
+msgstr "Modelle von virtuellen Bauteilen einblenden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:145
 #, fuzzy
 msgid "Board layers:"
-msgstr "Boardklassen"
+msgstr "Platinenebenen:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:162
 msgid "Show silkscreen layers"
-msgstr "Siebdrucklagen einblenden"
+msgstr "Bestückungsdrucklagen einblenden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:171
 msgid "Show solder mask layers"
@@ -989,7 +988,7 @@ msgstr "Kleberlagen einblenden"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:195
 #, fuzzy
 msgid "User layers:"
-msgstr "Kupferlagen:"
+msgstr "Sonderlagen:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:212
 msgid "Show comments and drawings layers"
@@ -1001,11 +1000,11 @@ msgstr "E.C.O.-Lagen einblenden"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:349
 msgid "Background Color, Bottom"
-msgstr "Farbe Hintergrund (Bottom)"
+msgstr "Hintergrundfarbe (unten)"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:359
 msgid "Background Color, Top"
-msgstr "Farbe Hintergrund (Top)"
+msgstr "Hintergrundfarbe (oben)"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:936
 msgid "3D Image File Name:"
@@ -1028,6 +1027,7 @@ msgid "Copper Color"
 msgstr "Farbe Kupfer"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1177
+#, fuzzy
 msgid "Center pivot rotation (Middle mouse click)"
 msgstr "Zentriere auf den Drehpunkt der Rotation (Mittlerer Maustastenklick)"
 
@@ -1048,6 +1048,7 @@ msgid "Move board Down"
 msgstr "Platine nach unten bewegen"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1182
+#, fuzzy
 msgid "Home view"
 msgstr "Home-Ansicht"
 
@@ -1280,13 +1281,13 @@ msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
 msgstr ""
-"Verändert den Level um eine Grauskalierte Datei in ein Schwarz/Weiß Datei "
-"umzuwandeln."
+"Verändert den Schwellwert um eine Grauskalierte Datei in ein Schwarz/Weiß "
+"Datei umzuwandeln."
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:150
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:351
 msgid "Front silk screen"
-msgstr "Vorderseitiger Siebdruck"
+msgstr "Vorderseitiger Bestückungsdruck"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:150
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:357
@@ -19415,8 +19416,9 @@ msgid "Trapezoid direction:"
 msgstr "Trapez Ausrichtung:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:228
+#, fuzzy
 msgid "Corner size:"
-msgstr "Eckwert:"
+msgstr "Abrundung der Ecken:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:230
 msgid ""
@@ -19424,8 +19426,8 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
-"Der Eckenradius in Prozent zur Breite des Pads.\n"
-"Die Weite ist der kleinere Wert zwischen der Größe X und Größe Y.\n"
+"Der Eckenradius in Prozent der Padbreite.\n"
+"Die Breite ist der kleinere Wert zwischen der Größe X und Größe Y.\n"
 "Der Maximalwert beträgt 50%."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:241
@@ -19440,9 +19442,9 @@ msgid ""
 "Note: IPC norm gives a max value = 0.25mm."
 msgstr ""
 "Kurvenradius.\n"
-"Kann nicht größer sein wie die Hälfte der Pad Breite.\n"
+"Kann nicht größer sein als die Hälfte der Padbreite.\n"
 "Die Breite ist der kleinere Wert zwischen Größe X und Größe Y.\n"
-"Hinweis: Die IPC Norm setzt einen Maximalwert von 0,25mm."
+"Hinweis: Die IPC Norm nennt einen Maximalwert von 0,25mm."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:249
 msgid ""
@@ -19502,7 +19504,7 @@ msgstr "Rückseitige Lötpaste"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:354
 msgid "Back silk screen"
-msgstr "Rückseitiger Siebdruck"
+msgstr "Rückseitiger Bestückungsdruck"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:360
 msgid "Back solder mask"
@@ -19604,7 +19606,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:88
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:269
 msgid "Solder paste ratio clearance:"
-msgstr "Abstandsverhältnis der Lötstoppmaske:"
+msgstr "Abstandsverhältnis des Lötpastenauftrags:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:480
 msgid ""
@@ -19629,12 +19631,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:497
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:546
 msgid "Connection to Copper Zones"
-msgstr ""
+msgstr "Verbindung zu Kupferflächen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:505
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:554
 msgid "Pad connection:"
-msgstr "Padverbindung:"
+msgstr "Art der Verbindung:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:509
 msgid "From parent footprint"
@@ -19671,6 +19673,7 @@ msgid "Local Clearance and Settings"
 msgstr "Lokale Abstände und Einstellungen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:588
+#, fuzzy
 msgid "Primitives list"
 msgstr "Primitives Liste"
 
@@ -19680,18 +19683,22 @@ msgid "Coordinates are relative to anchor pad, orientation 0"
 msgstr " Koordinaten sind relativ zum Ankerpad, Ausrichtung 0"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:609
+#, fuzzy
 msgid "Delete Primitive"
 msgstr "Primitive entfernen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:612
+#, fuzzy
 msgid "Edit Primitive"
 msgstr "Primitive editieren"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:615
+#, fuzzy
 msgid "Add Primitive"
 msgstr "Primitive hinzufügen"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:618
+#, fuzzy
 msgid "Duplicate Primitive"
 msgstr "Primitive duplizieren"
 
@@ -19700,10 +19707,12 @@ msgid "Geometry Transform"
 msgstr "Geometrische Transformation"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:630
+#, fuzzy
 msgid "Import Primitives"
 msgstr "Primitives importieren"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:643
+#, fuzzy
 msgid "Custom Shape Primitives"
 msgstr "Individuelle Primitives Formen"
 
@@ -19770,12 +19779,12 @@ msgstr "(Konturstärke ist üblicher Weise auf 0 gesetzt)"
 #: pcbnew/dialogs/dialog_find.cpp:131
 #, c-format
 msgid "\"%s\" found"
-msgstr ""
+msgstr "\"%s\" gefunden"
 
 #: pcbnew/dialogs/dialog_find.cpp:139
 #, c-format
 msgid "\"%s\" not found"
-msgstr ""
+msgstr "\"%s\" nicht gefunden"
 
 #: pcbnew/dialogs/dialog_find.cpp:169
 msgid "Marker found"
@@ -19874,7 +19883,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:37
 msgid "Set units used to display dimensions and positions."
 msgstr ""
-"Auswahl von Einheiten für die Anzeige von Dimensionen und Positionen von "
+"Einstellung der Einheiten für die Anzeige von Abmessungen und Positionen von "
 "Elementen."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:52
@@ -19940,6 +19949,7 @@ msgid "&Enforce design rules when routing"
 msgstr "Design Rules beim Routen &erzwingen"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:100
+#, fuzzy
 msgid ""
 "Enable DRC control. When DRC control is disabled, all connections are "
 "allowed."
@@ -19952,6 +19962,7 @@ msgid "&Delete unconnected tracks"
 msgstr "&Entferne nicht verbundene Leiterbahnen"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:106
+#, fuzzy
 msgid "Enable automatic track deletion when redrawing a track."
 msgstr ""
 "Das automatische Löschen von Leiterbahnen aktivieren/deaktivieren, wenn "
@@ -19968,6 +19979,7 @@ msgstr ""
 "erzwungen, wenn eine Leiterbahn erstellt wird."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:116
+#, fuzzy
 msgid "&Use double segmented tracks"
 msgstr "Zwei&fach geteilte Leiterbahnen verwenden"
 
@@ -19989,7 +20001,7 @@ msgstr "Niemals"
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:131
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:139
 msgid "When creating tracks"
-msgstr "Beim Erstellen der Leiterbahnen"
+msgstr "Beim Erstellen von Leiterbahnen"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:131
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:139
@@ -20042,12 +20054,12 @@ msgstr "Erstellung der Protokolldatei durchgeführt"
 #: pcbnew/dialogs/dialog_drc.cpp:224
 #, c-format
 msgid "Unable to create report file \"%s\" "
-msgstr ""
+msgstr "Protokolldatei \"%s\" konnte nicht erstellt werden."
 
 #: pcbnew/dialogs/dialog_drc.cpp:293
 #, c-format
 msgid "Unable to create report file \"%s\""
-msgstr ""
+msgstr "Protokolldatei \"%s\" konnte nicht erstellt werden."
 
 #: pcbnew/dialogs/dialog_drc.cpp:313
 msgid "Save DRC Report File"
@@ -20058,7 +20070,7 @@ msgid "Enabled"
 msgstr "Aktiviert"
 
 #: pcbnew/dialogs/dialog_layers_setup.cpp:624
-#, c-format
+#, fuzzy, c-format
 msgid "Board thickness %s is out of range."
 msgstr "Board Stärke %s ist außerhalb des Bereiches."
 
@@ -20067,13 +20079,13 @@ msgid ""
 "Items have been found on removed layers. This operation will delete all "
 "items from removed layers and cannot be undone. Do you wish to continue?"
 msgstr ""
-"Elemente worden auf den entfernten Lagen gefunden. Diese Aktion wird all "
+"Elemente wurden auf den entfernten Lagen gefunden. Diese Aktion wird all "
 "diese Elemente von den entfernten Lagen entfernen und kann nicht rückgängig "
 "gemacht werden. Wollen Sie fortfahren?"
 
 #: pcbnew/dialogs/dialog_layers_setup.cpp:756
 msgid "Layer name may not be empty."
-msgstr "Ein Lagename sollte vergeben sein."
+msgstr "Ein Lagename muss vergeben sein."
 
 #: pcbnew/dialogs/dialog_layers_setup.cpp:763
 msgid "Layer name has an illegal character, one of: '"
@@ -20086,7 +20098,7 @@ msgstr "'signal' ist ein reservierter Lagenname."
 
 #: pcbnew/dialogs/dialog_layers_setup.cpp:780
 msgid "Duplicate layer names are not permitted."
-msgstr "Doppelte Netzklassennamen sind nicht zulässig."
+msgstr "Doppelte Verwendung von Lagennamen ist nicht möglich."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:26
 msgid "Plot format:"
@@ -20117,7 +20129,7 @@ msgstr "Plotte Schaltplanreferenz auf allen Lagen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:94
 msgid "Plot pads on silkscreen"
-msgstr "Drucke Pads des Siebdruckes"
+msgstr "Drucke Pads des Bestückungsdruckes"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:95
 msgid ""
@@ -20147,6 +20159,7 @@ msgid "Force plot invisible values and/or references"
 msgstr "Erzwinge das Plotten unsichtbarer Werte und/oder Referenzen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:112
+#, fuzzy
 msgid "Do not tent vias"
 msgstr "Durchkontaktierungen nicht umschließen"
 
@@ -20156,11 +20169,11 @@ msgstr "Entferne Lötstoppmaske an Durchkontaktierungen."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:117
 msgid "Exclude PCB edge layer from other layers"
-msgstr "Schließe Platinenumrisslage von allen anderen Lagen aus"
+msgstr "Platinenumrisslage nicht in andere Lagen plotten"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:118
 msgid "Exclude contents of the pcb edge layer from all other layers"
-msgstr "Schließe Inhalt von Platinen-Umriss-Lage von allen anderen Lagen aus"
+msgstr "Den Inhalt der Platinenumriss-Lage nicht in alle anderen Lagen plotten"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:122
 msgid "Mirrored plot"
@@ -20189,7 +20202,7 @@ msgstr "Klein"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:143
 msgid "Actual size"
-msgstr "Gegenwärtige Größe"
+msgstr "Tatsächliche Größe"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:149
 msgid "Scaling:"
@@ -20485,7 +20498,7 @@ msgstr ""
 #: pcbnew/exporters/gen_modules_placefile.cpp:333
 #, c-format
 msgid "Unable to create file \"%s\"."
-msgstr ""
+msgstr "Konnte Datei \"%s\" nicht erstellen."
 
 #: pcbnew/dialogs/dialog_select_pretty_lib_base.cpp:19
 msgid ""
@@ -20600,16 +20613,15 @@ msgstr "Technische Lagen:"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:56
 msgid "Exclude Edges_Pcb layer"
-msgstr "Ausschluss Edges_Pcb Lage"
+msgstr "Platinenumriss nicht in alle Lagen drucken"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:57
 msgid "Exclude contents of Edges_Pcb layer from all other layers"
-msgstr "Schließe Inhalt von Platinen-Umriss Lage von allen anderen Lagen aus"
+msgstr "Den Inhalt der Platinenumriss-Lage nicht in alle anderen Layer drucken"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
-#, fuzzy
 msgid "Approx. scale 1"
-msgstr "1 fach angenährt"
+msgstr "Ca. 1:1 skaliert"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:69
 msgid "Approximate Scale"
@@ -20653,6 +20665,7 @@ msgid "Real drill"
 msgstr "Realer Bohrdurchmesser"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:123
+#, fuzzy
 msgid "Pads Drill Options"
 msgstr "Optionen Pad Bohrungen"
 
@@ -20686,7 +20699,7 @@ msgstr "Ungültiger DoKu Bohrdurchmesser"
 #: pcbnew/dialogs/dialog_track_via_size.cpp:82
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:511
 msgid "Via drill size has to be smaller than via diameter"
-msgstr "DoKu Bohrdurchmesser muss kleiner dem DoKu Durchmesser sein"
+msgstr "DoKu Bohrdurchmesser muss kleiner als der DoKu Durchmesser sein"
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:39
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:34
@@ -20812,17 +20825,19 @@ msgstr "Andere"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:125
 msgid "Rotation (-180.0 to 180.0)"
-msgstr ""
+msgstr "Drehung (-180 bis 180)"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:132
 msgid "Unlock text orientation"
-msgstr ""
+msgstr "Ausrichtung entsperren"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:133
 msgid ""
 "If orientation is locked, the text will always face near the bottom or right "
 "edge of the board."
 msgstr ""
+"So lange die Ausrichtung gesperrt ist, ist der Text immer aufrecht oder nach "
+"links gekippt."
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:197
 msgid ""
@@ -21014,9 +21029,8 @@ msgstr ""
 "Zeige keine Warnmeldungen vor dem Einlesen der Netzliste."
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:142
-#, fuzzy
 msgid "Netlist file:"
-msgstr "Datei für Netzliste:"
+msgstr "Netzlisten-Datei:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:156
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:158
@@ -21057,7 +21071,7 @@ msgstr "Startpunkt Y:"
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:174
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:176
 msgid "Polygon Properties"
-msgstr ""
+msgstr "Polygon-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:179
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:181
@@ -21075,7 +21089,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:278
 msgid "Modify drawing properties"
-msgstr "Darstellungs Eigenschaften"
+msgstr "Darstellungs-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:312
 msgid "The arc angle must be greater than zero."
@@ -21446,9 +21460,8 @@ msgid "Ignore virtual components"
 msgstr "Virtuelle Bauteile ignorieren"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:28
-#, fuzzy
 msgid "Document link"
-msgstr "Dokumentation öffnen"
+msgstr "Link zur Dokumentation"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:77
 msgid "Footprint name in library"
