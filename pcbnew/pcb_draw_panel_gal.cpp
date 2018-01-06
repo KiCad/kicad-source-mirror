@@ -210,7 +210,8 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
                 GetNetnameLayer( aLayer ),
                 LAYER_VIA_THROUGH, LAYER_VIAS_HOLES, LAYER_VIAS_NETNAMES,
                 LAYER_PADS_TH, LAYER_PADS_PLATEDHOLES, LAYER_PADS_NETNAMES,
-                LAYER_NON_PLATEDHOLES, LAYER_GP_OVERLAY, LAYER_RATSNEST
+                LAYER_NON_PLATEDHOLES, LAYER_GP_OVERLAY, LAYER_RATSNEST,
+                LAYER_CURSOR
         };
 
         for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
