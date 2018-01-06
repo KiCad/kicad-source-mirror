@@ -75,8 +75,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-05 19:40+0100\n"
-"PO-Revision-Date: 2018-01-05 19:44+0100\n"
+"POT-Creation-Date: 2018-01-06 10:56+0100\n"
+"PO-Revision-Date: 2018-01-06 10:58+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -377,7 +377,7 @@ msgstr "OK"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:146
 #: common/selcolor.cpp:180 common/tool/actions.cpp:10
-#: common/dialog_shim.cpp:223 common/dialogs/dialog_exit_base.cpp:69
+#: common/dialog_shim.cpp:231 common/dialogs/dialog_exit_base.cpp:69
 #: eeschema/onrightclick.cpp:157 eeschema/onrightclick.cpp:190
 #: eeschema/libedit_onrightclick.cpp:70
 #: eeschema/dialogs/dialog_netlist_base.cpp:49
@@ -4553,7 +4553,7 @@ msgid "Unit %s"
 msgstr "Unità %s"
 
 #: eeschema/onrightclick.cpp:483 eeschema/lib_draw_item.cpp:72
-#: eeschema/cmp_tree_model.cpp:122 eeschema/libedit.cpp:658
+#: eeschema/cmp_tree_model.cpp:123 eeschema/libedit.cpp:658
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:37
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:48
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:59
@@ -7413,9 +7413,9 @@ msgid "Keywords:"
 msgstr "Parole chiave:"
 
 #: eeschema/generate_alias_info.cpp:81 eeschema/cmp_tree_model_adapter.cpp:87
-#: eeschema/dialogs/dialog_choose_component.cpp:234
-#: eeschema/dialogs/dialog_choose_component.cpp:299
-#: eeschema/dialogs/dialog_choose_component.cpp:349
+#: eeschema/dialogs/dialog_choose_component.cpp:251
+#: eeschema/dialogs/dialog_choose_component.cpp:316
+#: eeschema/dialogs/dialog_choose_component.cpp:366
 #, c-format
 msgid ""
 "Error occurred loading symbol %s from library %s.\n"
@@ -7561,7 +7561,7 @@ msgstr "Impostazioni simulazione"
 msgid "Welcome!"
 msgstr "Benvenuti!"
 
-#: eeschema/sim/sim_plot_frame.cpp:278 eeschema/sim/sim_plot_frame.cpp:1000
+#: eeschema/sim/sim_plot_frame.cpp:278 eeschema/sim/sim_plot_frame.cpp:999
 msgid "There were errors during netlist export, aborted."
 msgstr ""
 "Si sono verificati degli errori durante l'esportazione della netlist, "
@@ -7571,7 +7571,7 @@ msgstr ""
 msgid "You need to select the simulation settings first."
 msgstr "Bisogna prima selezionare le impostazioni di simulazione."
 
-#: eeschema/sim/sim_plot_frame.cpp:548 eeschema/sim/sim_plot_frame.cpp:1087
+#: eeschema/sim/sim_plot_frame.cpp:548 eeschema/sim/sim_plot_frame.cpp:1086
 msgid "Signal"
 msgstr "Segnale"
 
@@ -7600,23 +7600,23 @@ msgstr "Salva il grafico come immagine"
 msgid "Save Plot Data"
 msgstr "Salva i dati del grafico"
 
-#: eeschema/sim/sim_plot_frame.cpp:1034
+#: eeschema/sim/sim_plot_frame.cpp:1033
 msgid "You need to run simulation first."
 msgstr "È necessario prima eseguire la simulazione."
 
-#: eeschema/sim/sim_plot_frame.cpp:1216
+#: eeschema/sim/sim_plot_frame.cpp:1215
 msgid "Hide signal"
 msgstr "Nascondi segnale"
 
-#: eeschema/sim/sim_plot_frame.cpp:1217
+#: eeschema/sim/sim_plot_frame.cpp:1216
 msgid "Erase the signal from plot screen"
 msgstr "Cancella il segnale dallo schermo"
 
-#: eeschema/sim/sim_plot_frame.cpp:1223
+#: eeschema/sim/sim_plot_frame.cpp:1222
 msgid "Hide cursor"
 msgstr "Nascondi puntatore"
 
-#: eeschema/sim/sim_plot_frame.cpp:1226
+#: eeschema/sim/sim_plot_frame.cpp:1225
 msgid "Show cursor"
 msgstr "Mostra puntatore"
 
@@ -8377,15 +8377,15 @@ msgstr "Esplora plugin"
 msgid "Illegal reference field value!"
 msgstr "Valore campo riferimento errato!"
 
-#: eeschema/dialogs/dialog_choose_component.cpp:262
+#: eeschema/dialogs/dialog_choose_component.cpp:279
 msgid "No footprint specified"
 msgstr "Nessuna impronta specificata"
 
-#: eeschema/dialogs/dialog_choose_component.cpp:276
+#: eeschema/dialogs/dialog_choose_component.cpp:293
 msgid "Invalid footprint specified"
 msgstr "Impronta specificata non valida"
 
-#: eeschema/dialogs/dialog_choose_component.cpp:458
+#: eeschema/dialogs/dialog_choose_component.cpp:475
 msgid ""
 "Double click here to select a symbol\n"
 "from the library browser"
@@ -22622,8 +22622,8 @@ msgid "Technical layers:"
 msgstr "Strati tecnici:"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:56
-msgid "Exclude Edges_Pcb layer"
-msgstr "Escludi strato Edges_Pcb"
+msgid "Exclude PCB edge layer"
+msgstr "Escludi lo strato di bordo del C.S."
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:57
 msgid "Exclude contents of Edges_Pcb layer from all other layers"
