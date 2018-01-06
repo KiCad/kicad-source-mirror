@@ -158,7 +158,7 @@ static struct hotkey_name_descr hotkeyNameList[] =
  * Only some wxWidgets key values are handled for function key ( see
  * hotkeyNameList[] )
  * @param aKeycode = key code (ascii value, or wxWidgets value for function keys)
- * @param aIsFound = a pointer to a bool to return true if found, or false. an be NULL default)
+ * @param aIsFound = a pointer to a bool to return true if found, or false. an be nullptr default)
  * @return the key name in a wxString
  */
 wxString KeyNameFromKeyCode( int aKeycode, bool* aIsFound )
@@ -303,7 +303,7 @@ wxString AddHotkeyName( const wxString&           aText,
 
     if( aDescList )
     {
-        for( ; aDescList->m_HK_InfoList != NULL; aDescList++ )
+        for( ; aDescList->m_HK_InfoList != nullptr; aDescList++ )
         {
             list    = aDescList->m_HK_InfoList;
             keyname = KeyNameFromCommandId( list, aCommandId );
@@ -351,7 +351,7 @@ wxString KeyNameFromCommandId( EDA_HOTKEY** aList, int aCommandId )
 {
     wxString keyname;
 
-    for( ; *aList != NULL; aList++ )
+    for( ; *aList != nullptr; aList++ )
     {
         EDA_HOTKEY* hk_decr = *aList;
 
@@ -424,11 +424,9 @@ int KeyCodeFromKeyName( const wxString& keyname )
         return keycode;
     }
 
-    for( ii = 0; ; ii++ )
+    for( ii = 0; hotkeyNameList[ii].m_KeyCode !=0 ; ii++ )
     {
-        if( hotkeyNameList[ii].m_KeyCode == 0 )  // End of list reached
-            break;
-
+        
         if( key.CmpNoCase( hotkeyNameList[ii].m_Name ) == 0 )
         {
             keycode = hotkeyNameList[ii].m_KeyCode + modifier;
@@ -458,11 +456,11 @@ void DisplayHotkeyList( EDA_BASE_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aDescL
     msg += _( "Hotkeys List" );
     msg += wxT( "</H3> <table cellpadding=\"0\">" );
 
-    for( ; aDescList->m_HK_InfoList != NULL; aDescList++ )
+    for( ; aDescList->m_HK_InfoList != nullptr; aDescList++ )
     {
         list = aDescList->m_HK_InfoList;
 
-        for( ; *list != NULL; list++ )
+        for( ; *list != nullptr; list++ )
         {
             EDA_HOTKEY* hk_decr = *list;
 
@@ -483,16 +481,12 @@ void DisplayHotkeyList( EDA_BASE_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aDescL
 
     msg += wxT( "</table></html></body>" );
 
-#if 0   // Set to 1 to create a modal dialog (blocking)
-    DisplayHtmlInfoMessage( aFrame, _( "Hotkeys List" ), msg, wxSize( 340, 750 ) );
-#else
     // Create a non modal dialog, which shows the list of hotkeys until dismissed
     // but does not block the parent window
     HTML_MESSAGE_BOX *dlg = new HTML_MESSAGE_BOX( aFrame, _( "Hotkeys List" ),
                                         wxDefaultPosition, wxSize( 340, 750 ) );
     dlg->AddHTML_Text( msg );
     dlg->Show( true );
-#endif
 }
 
 
@@ -505,7 +499,7 @@ void DisplayHotkeyList( EDA_BASE_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aDescL
  */
 EDA_HOTKEY* GetDescriptorFromHotkey( int aKey, EDA_HOTKEY** aList )
 {
-    for( ; *aList != NULL; aList++ )
+    for( ; *aList != nullptr; aList++ )
     {
         EDA_HOTKEY* hk_decr = *aList;
 
@@ -513,13 +507,13 @@ EDA_HOTKEY* GetDescriptorFromHotkey( int aKey, EDA_HOTKEY** aList )
             return hk_decr;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
 EDA_HOTKEY* GetDescriptorFromCommand( int aCommand, EDA_HOTKEY** aList )
 {
-    for( ; *aList != NULL; aList++ )
+    for( ; *aList != nullptr; aList++ )
     {
         EDA_HOTKEY* hk_decr = *aList;
 
@@ -527,7 +521,7 @@ EDA_HOTKEY* GetDescriptorFromCommand( int aCommand, EDA_HOTKEY** aList )
             return hk_decr;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -542,7 +536,7 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
     // Print the current hotkey list
     EDA_HOTKEY** list;
 
-    for( ; aDescList->m_HK_InfoList != NULL; aDescList++ )
+    for( ; aDescList->m_HK_InfoList != nullptr; aDescList++ )
     {
         if( aDescList->m_Title )
         {
@@ -556,7 +550,7 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
 
         list = aDescList->m_HK_InfoList;
 
-        for( ; *list != NULL; list++ )
+        for( ; *list != nullptr; list++ )
         {
             EDA_HOTKEY* hk_decr = *list;
             msg    += wxT( "shortcut   " );
@@ -589,9 +583,9 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
     {
         wxFileName fn( GetName() );
         fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
-        wxConfigBase* config = GetNewConfig( fn.GetFullPath() );
+        std::unique_ptr<wxConfigBase> config( GetNewConfig( fn.GetFullPath() ) );
         config->Write( HOTKEYS_CONFIG_KEY, msg );
-        delete config;
+        
     }
 
     return 1;
@@ -615,16 +609,15 @@ int EDA_BASE_FRAME::ReadHotkeyConfigFile( const wxString&           aFilename,
     cfgfile.Seek( 0 );
 
     // read data
-    char*    buffer = new char[size];
-    cfgfile.Read( buffer, size );
-
-    wxString data( buffer, wxConvUTF8 );
+    std::vector<char> buffer(size);
+    
+    cfgfile.Read( buffer.data(), size );
+    wxString data( buffer.data(), wxConvUTF8 );
 
     // parse
     ParseHotkeyConfig( data, aDescList );
 
     // cleanup
-    delete[] buffer;
     cfgfile.Close();
     return 1;
 }
@@ -672,7 +665,7 @@ void ParseHotkeyConfig( const wxString&           data,
 {
     // Read the config
     wxStringTokenizer tokenizer( data, L"\r\n", wxTOKEN_STRTOK );
-    EDA_HOTKEY**      CurrentHotkeyList = 0;
+    EDA_HOTKEY**      CurrentHotkeyList = nullptr;
 
     while( tokenizer.HasMoreTokens() )
     {
@@ -686,7 +679,7 @@ void ParseHotkeyConfig( const wxString&           data,
 
         if( line_type[0]  == '[' ) // A tag is found. search infos in list
         {
-            CurrentHotkeyList = 0;
+            CurrentHotkeyList = nullptr;
             EDA_HOTKEY_CONFIG* DList = aDescList;
 
             for( ; DList->m_HK_InfoList; DList++ )
@@ -707,7 +700,7 @@ void ParseHotkeyConfig( const wxString&           data,
         if( line_type != wxT( "shortcut" ) )
             continue;
 
-        if( CurrentHotkeyList == NULL )
+        if( CurrentHotkeyList == nullptr )
             continue;
 
         // Get the key name
@@ -720,7 +713,7 @@ void ParseHotkeyConfig( const wxString&           data,
         wxString fctname = remainder.AfterFirst( '\"' ).BeforeFirst( '\"' );
 
         // search the hotkey in current hotkey list
-        for( EDA_HOTKEY** list = CurrentHotkeyList; *list != NULL; list++ )
+        for( EDA_HOTKEY** list = CurrentHotkeyList; *list != nullptr; list++ )
         {
             EDA_HOTKEY* hk_decr = *list;
 
@@ -740,11 +733,8 @@ void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList,
     wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
     wxString mask = wxT( "*." ) + ext;
 
-#if 0   // pass in the project dir as an argument
-    wxString path = wxPathOnly( Prj().GetProjectFullName() );
-#else
+
     wxString path = GetMruPath();
-#endif
     wxFileName fn( aDefaultShortname );
     fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
 
@@ -761,6 +751,9 @@ void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList,
         return;
 
     ReadHotkeyConfigFile( filename, aDescList );
+    
+    WriteHotkeyConfig(aDescList);
+    
     SetMruPath( wxFileName( filename ).GetPath() );
 }
 
@@ -800,9 +793,10 @@ void EDA_BASE_FRAME::ExportHotkeyConfigToFile( EDA_HOTKEY_CONFIG* aDescList,
  */
 void AddHotkeyConfigMenu( wxMenu* aMenu )
 {
-    if( aMenu == NULL )
+    if( aMenu == nullptr )
         return;
 
+    
     wxMenu*     HotkeySubmenu = new wxMenu();
 
     // Call hotkeys editor
