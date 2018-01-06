@@ -38,6 +38,7 @@
 
 #include <general.h>
 #include <sch_base_frame.h>
+#include <sch_reference_list.h>
 #include <class_library.h>
 #include <sch_component.h>
 #include <dialog_helpers.h>
@@ -508,6 +509,32 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     // because for a given component, in a complex hierarchy, there are more than one
     // reference.
     m_cmp->SetRef( &GetParent()->GetCurrentSheet(), m_FieldsBuf[REFERENCE].GetText() );
+
+    // The value, footprint and datasheet fields should be kept in sync in multi-unit
+    // parts.
+    if( m_cmp->GetUnitCount() > 1 )
+    {
+        const LIB_ID   thisLibId = m_cmp->GetLibId();
+        const wxString thisRef   = m_cmp->GetRef( &( GetParent()->GetCurrentSheet() ) );
+        int            thisUnit  = m_cmp->GetUnit();
+
+        SCH_REFERENCE_LIST components;
+        GetParent()->GetCurrentSheet().GetComponents( components );
+        for( int i = 0; i < components.GetCount(); i++ )
+        {
+            SCH_REFERENCE component = components[i];
+            if( component.GetLibPart()->GetLibId() == thisLibId
+                    && component.GetRef() == thisRef
+                    && component.GetUnit() != thisUnit )
+            {
+                SCH_COMPONENT* otherUnit = component.GetComp();
+                GetParent()->SaveCopyInUndoList( otherUnit, UR_CHANGED, true /* append */);
+                otherUnit->GetField( VALUE )->SetText( m_FieldsBuf[VALUE].GetText() );
+                otherUnit->GetField( FOOTPRINT )->SetText( m_FieldsBuf[FOOTPRINT].GetText() );
+                otherUnit->GetField( DATASHEET )->SetText( m_FieldsBuf[DATASHEET].GetText() );
+            }
+        }
+    }
 
     GetParent()->OnModify();
     GetParent()->GetScreen()->TestDanglingEnds();
