@@ -76,7 +76,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-06 19:42+0100\n"
-"PO-Revision-Date: 2018-01-06 19:50+0100\n"
+"PO-Revision-Date: 2018-01-06 19:54+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -9538,7 +9538,7 @@ msgstr "&Reimposta l'annotazione esistente "
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:52
 msgid "R&eset, but do not swap any annotated multi-unit parts"
-msgstr "R&eimposta ma non scambiare nessun componente multiplo annotato"
+msgstr "R&eimposta, ma non scambiare nessuna parte multipla annotata"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:61
 msgid "Annotation Order"
