@@ -902,12 +902,14 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
             MSG_PANEL_ITEMS items;
             netinfo->GetMsgPanelInfo( items );
             frame->SetMsgPanel( items );
+            frame->SendCrossProbeNetName( netinfo->GetNetname() );
         }
     }
     else
     {
         board->ResetHighLight();
         frame->SetMsgPanel( board );
+        frame->SendCrossProbeNetName( "" );
     }
 
     return true;

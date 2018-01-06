@@ -56,6 +56,7 @@
  * \li \c \$PART: \c "reference" \c \$REF: \c "ref" Put cursor on component reference.
  * \li \c \$PART: \c "reference" \c \$VAL: \c "value" Put cursor on component value.
  * \li \c \$PART: \c "reference" \c \$PAD: \c "pin name" Put cursor on the component pin.
+ * \li \c \$NET: \c "netname" Highlight a specified net
  * <p>
  * @param cmdline = received command from Pcbnew
  */
@@ -69,7 +70,24 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     char* idcmd = strtok( line, " \n\r" );
     char* text  = strtok( NULL, "\"\n\r" );
 
-    if( (idcmd == NULL) || (text == NULL) )
+    if( idcmd == NULL )
+        return;
+
+    if( strcmp( idcmd, "$NET:" ) == 0 )
+    {
+        if( GetToolId() == ID_HIGHLIGHT )
+        {
+            m_SelectedNetName = FROM_UTF8( text );
+
+            SetStatusText( _( "Selected net: " ) + m_SelectedNetName );
+            SetCurrentSheetHighlightFlags();
+            m_canvas->Refresh();
+        }
+
+        return;
+    }
+
+    if( text == NULL )
         return;
 
     if( strcmp( idcmd, "$PART:" ) != 0 )
@@ -169,6 +187,25 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_COMPONENT
         return;
 
     std::string packet = FormatProbeItem( aObjectToSync, aLibItem );
+
+    if( packet.size() )
+    {
+        if( Kiface().IsSingle() )
+            SendCommand( MSG_TO_PCB, packet.c_str() );
+        else
+        {
+            // Typically ExpressMail is going to be s-expression packets, but since
+            // we have existing interpreter of the cross probe packet on the other
+            // side in place, we use that here.
+            Kiway().ExpressMail( FRAME_PCB, MAIL_CROSS_PROBE, packet, this );
+        }
+    }
+}
+
+
+void SCH_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
+{
+    std::string packet = StrPrintf( "$NET: %s", TO_UTF8( aNetName ) );
 
     if( packet.size() )
     {

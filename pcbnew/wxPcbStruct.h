@@ -1668,6 +1668,13 @@ public:
     void SendMessageToEESCHEMA( BOARD_ITEM* objectToSync );
 
     /**
+     * Sends a net name to eeschema for highlighting
+     *
+     * @param aNetName is the name of a net, or empty string to clear highlight
+     */
+    void SendCrossProbeNetName( const wxString& aNetName );
+
+    /**
      * Function Edit_Gap
      * edits the GAP module if it has changed the position and/or size of the pads that
      * form the gap get a new value.

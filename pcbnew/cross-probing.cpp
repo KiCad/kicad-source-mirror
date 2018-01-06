@@ -32,6 +32,7 @@
 #include <tool/tool_manager.h>
 #include <tools/selection_tool.h>
 #include <pcb_draw_panel_gal.h>
+#include <pcb_painter.h>
 
 /* Execute a remote command send by Eeschema via a socket,
  * port KICAD_PCB_PORT_SERVICE_NUMBER
@@ -39,6 +40,7 @@
  * Commands are
  * $PART: "reference"   put cursor on component
  * $PIN: "pin name"  $PART: "reference" put cursor on the footprint pin
+ * $NET: "net name" highlight the given net (if highlight tool is active)
  */
 void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 {
@@ -58,7 +60,46 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     idcmd = strtok( line, " \n\r" );
     text  = strtok( NULL, " \n\r" );
 
-    if( !idcmd || !text )
+    if( idcmd == NULL )
+        return;
+
+    if( strcmp( idcmd, "$NET:" ) == 0 )
+    {
+        if( GetToolId() == ID_PCB_HIGHLIGHT_BUTT )
+        {
+            wxString net_name = FROM_UTF8( text );
+            NETINFO_ITEM* netinfo = pcb->FindNet( net_name );
+            int netcode = 0;
+
+            if( netinfo )
+                netcode = netinfo->GetNet();
+
+            if( IsGalCanvasActive() )
+            {
+                auto rs = m_toolManager->GetView()->GetPainter()->GetSettings();
+                rs->SetHighlight( true, netcode );
+                m_toolManager->GetView()->UpdateAllLayersColor();
+                GetGalCanvas()->Refresh();
+            }
+            else
+            {
+                if( netcode > 0 )
+                {
+                    pcb->HighLightON();
+                    pcb->SetHighLightNet( netcode );
+                }
+                else
+                {
+                    pcb->HighLightOFF();
+                    pcb->SetHighLightNet( -1 );
+                }
+            }
+        }
+
+        return;
+    }
+
+    if( text == NULL )
         return;
 
     if( strcmp( idcmd, "$PART:" ) == 0 )
@@ -230,6 +271,25 @@ void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* aSyncItem )
 #endif
 
     std::string packet = FormatProbeItem( aSyncItem );
+
+    if( packet.size() )
+    {
+        if( Kiface().IsSingle() )
+            SendCommand( MSG_TO_SCH, packet.c_str() );
+        else
+        {
+            // Typically ExpressMail is going to be s-expression packets, but since
+            // we have existing interpreter of the cross probe packet on the other
+            // side in place, we use that here.
+            Kiway().ExpressMail( FRAME_SCH, MAIL_CROSS_PROBE, packet, this );
+        }
+    }
+}
+
+
+void PCB_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
+{
+    std::string packet = StrPrintf( "$NET: \"%s\"", TO_UTF8( aNetName ) );
 
     if( packet.size() )
     {

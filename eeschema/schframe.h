@@ -512,6 +512,13 @@ public:
     void SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_COMPONENT* aPart );
 
     /**
+     * Sends a net name to eeschema for highlighting
+     *
+     * @param aNetName is the name of a net, or empty string to clear highlight
+     */
+    void SendCrossProbeNetName( const wxString& aNetName );
+
+    /**
      * Create a flat list which stores all connected objects.
      *
      * @param updateStatusText decides if window StatusText should be modified.
