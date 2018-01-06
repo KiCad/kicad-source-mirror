@@ -107,7 +107,8 @@ CMP_TREE_NODE::CMP_TREE_NODE()
         Type( INVALID ),
         IntrinsicRank( 0 ),
         Score( kLowestDefaultScore ),
-        Unit( 0 )
+        Unit( 0 ),
+        IsRoot( false )
 {}
 
 

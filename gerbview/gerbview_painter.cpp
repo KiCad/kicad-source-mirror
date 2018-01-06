@@ -383,7 +383,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
 
 
 void GERBVIEW_PAINTER::drawPolygon( GERBER_DRAW_ITEM* aParent,
-                                    SHAPE_POLY_SET aPolygon,
+                                    SHAPE_POLY_SET& aPolygon,
                                     bool aFilled )
 {
     for( auto it = aPolygon.Iterate( 0 ); it; ++it )

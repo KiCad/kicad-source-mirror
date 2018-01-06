@@ -35,7 +35,7 @@
 
 
 LIB_MANAGER::LIB_MANAGER( LIB_EDIT_FRAME& aFrame )
-    : m_frame( aFrame ), m_symbolTable( aFrame.Prj().SchSymbolLibTable() )
+    : m_frame( aFrame ), m_symbolTable( aFrame.Prj().SchSymbolLibTable() ), m_syncHash( 0 )
 {
     m_adapter = LIB_MANAGER_ADAPTER::Create( this );
     m_adapter->ShowUnits( false );

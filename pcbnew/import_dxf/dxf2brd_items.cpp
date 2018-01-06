@@ -60,6 +60,7 @@ DXF2BRD_CONVERTER::DXF2BRD_CONVERTER() : DRW_Interface()
     m_yOffset   = 0.0;          // Y coord offset for conversion (in mm)
     m_DXF2mm    = 1.0;          // The scale factor to convert DXF units to mm
     m_version   = 0;            // the dxf version, not yet used
+    m_defaultThickness = 0.2;   // default thickness (in mm)
     m_brdLayer = Dwgs_User;     // The default import layer
     m_importAsfootprintGraphicItems = true;
 }

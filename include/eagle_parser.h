@@ -199,7 +199,8 @@ public:
      * construct a default OPTIONAL_XML_ATTRIBUTE, whose data is not available.
      */
     OPTIONAL_XML_ATTRIBUTE() :
-	   m_isAvailable( false )
+        m_isAvailable( false ),
+        m_data( T() )
     {}
 
     /**

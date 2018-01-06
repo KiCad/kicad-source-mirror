@@ -905,8 +905,7 @@ void SIM_PLOT_FRAME::menuShowGridUpdate( wxUpdateUIEvent& event )
 {
     SIM_PLOT_PANEL* plot = CurrentPlot();
 
-    if( plot )
-        event.Check( plot ? plot->IsGridShown() : false );
+    event.Check( plot ? plot->IsGridShown() : false );
 }
 
 

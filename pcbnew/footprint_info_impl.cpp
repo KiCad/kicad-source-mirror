@@ -244,7 +244,7 @@ size_t FOOTPRINT_LIST_IMPL::CountFinished()
 }
 
 
-FOOTPRINT_LIST_IMPL::FOOTPRINT_LIST_IMPL() : m_loader( nullptr )
+FOOTPRINT_LIST_IMPL::FOOTPRINT_LIST_IMPL() : m_loader( nullptr ), m_first_to_finish( false ), m_count_finished( 0 )
 {
 }
 

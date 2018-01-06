@@ -36,6 +36,7 @@
 CONNECTIVITY_DATA::CONNECTIVITY_DATA()
 {
     m_connAlgo.reset( new CN_CONNECTIVITY_ALGO );
+    m_progressReporter = nullptr;
 }
 
 

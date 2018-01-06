@@ -181,7 +181,7 @@ protected:
     void draw( /*const*/ GERBER_DRAW_ITEM* aVia, int aLayer );
 
     /// Helper routine to draw a polygon
-    void drawPolygon( GERBER_DRAW_ITEM* aParent, SHAPE_POLY_SET aPolygon, bool aFilled );
+    void drawPolygon( GERBER_DRAW_ITEM* aParent, SHAPE_POLY_SET& aPolygon, bool aFilled );
 
     /// Helper to draw a flashed shape (aka spot)
     void drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled );
