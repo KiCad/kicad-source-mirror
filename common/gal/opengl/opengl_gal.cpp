@@ -1189,7 +1189,8 @@ void OPENGL_GAL::ClearScreen( )
 {
     // Clear screen
     compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
-    glClearColor( m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a );
+    // NOTE: Black used here instead of m_clearColor; it will be composited later
+    glClearColor( 0, 0, 0, 1 );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
 }
 
