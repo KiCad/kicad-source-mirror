@@ -48,10 +48,12 @@
 FOOTPRINT_ASYNC_LOADER          DIALOG_CHOOSE_COMPONENT::m_fp_loader;
 std::unique_ptr<FOOTPRINT_LIST> DIALOG_CHOOSE_COMPONENT::m_fp_list;
 
+wxSize DIALOG_CHOOSE_COMPONENT::m_default_size( -1, -1 );
+
 DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
         CMP_TREE_MODEL_ADAPTER::PTR& aAdapter, int aDeMorganConvert, bool aAllowFieldEdits,
         bool aShowFootprints )
-        : DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxSize( 800, 650 ),
+        : DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxDefaultSize,
                   wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
           m_fp_sel_ctrl( nullptr ),
           m_fp_view_ctrl( nullptr ),
@@ -120,6 +122,19 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
                 EVT_FOOTPRINT_SELECTED, &DIALOG_CHOOSE_COMPONENT::OnFootprintSelected, this );
 
     Layout();
+
+    if( m_default_size == wxSize( -1, -1 ) )
+    {
+#ifdef __WXMAC__
+        SetSizeInChars( 60, 32 );
+#else
+        SetSizeInChars( 80, 32 );
+#endif
+    }
+    else
+    {
+        SetSize( m_default_size );
+    }
 }
 
 
@@ -131,6 +146,8 @@ DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
     Unbind( wxEVT_TIMER, &DIALOG_CHOOSE_COMPONENT::OnCloseTimer, this );
 
     delete m_dbl_click_timer;
+
+    m_default_size = GetSize();
 }
 
 

@@ -204,6 +204,8 @@ protected:
     static FOOTPRINT_ASYNC_LOADER          m_fp_loader;
     static std::unique_ptr<FOOTPRINT_LIST> m_fp_list;
     std::vector<std::pair<int, wxString>> m_field_edits;
+
+    static wxSize m_default_size;
 };
 
 #endif /* DIALOG_CHOOSE_COMPONENT_H */

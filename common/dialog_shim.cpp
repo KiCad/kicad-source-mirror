@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,6 +100,7 @@ DIALOG_SHIM::~DIALOG_SHIM()
         delete m_qmodal_parent_disabler;    // usually NULL by now
 }
 
+
 void DIALOG_SHIM::FinishDialogSettings()
 {
     // must be called from the constructor of derived classes,
@@ -111,6 +112,13 @@ void DIALOG_SHIM::FinishDialogSettings()
 
     // the default position, when calling the first time the dlg
     Center();
+}
+
+
+void DIALOG_SHIM::SetSizeInChars( int x, int y )
+{
+    auto text_sz = GetTextExtent( "X" );
+    SetSize( x * text_sz.x, y * text_sz.y );
 }
 
 

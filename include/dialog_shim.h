@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,6 +126,15 @@ protected:
      * wxInitDialogEvent handler wxDialog
      */
     void FinishDialogSettings();
+
+    /**
+     * Set the dialog to given dimensions in character widths and heights.
+     * This is useful for dialogs with highly flexible sizes, like the symbol chooser,
+     * where standard methods of computing default dialog sizes are a bit useless.
+     *
+     * This should be called at the end of the constructor.
+     */
+    void SetSizeInChars( int x, int y );
 
     bool m_fixupsRun;
 
