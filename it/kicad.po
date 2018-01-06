@@ -75,8 +75,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-06 10:56+0100\n"
-"PO-Revision-Date: 2018-01-06 10:58+0100\n"
+"POT-Creation-Date: 2018-01-06 19:42+0100\n"
+"PO-Revision-Date: 2018-01-06 19:50+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -6250,8 +6250,8 @@ msgstr "Scegli simbolo (%d elementi caricati)"
 
 #: eeschema/viewlibs.cpp:180
 #, c-format
-msgid "Symbol Library Browser — %s"
-msgstr "Esploratore di librerie di simboli - %s"
+msgid "Symbol Library Browser -- %s"
+msgstr "Esploratore di librerie di simboli -- %s"
 
 #: eeschema/viewlibs.cpp:181 eeschema/libedit.cpp:74
 #: pcbnew/modview_frame.cpp:747
@@ -7561,7 +7561,7 @@ msgstr "Impostazioni simulazione"
 msgid "Welcome!"
 msgstr "Benvenuti!"
 
-#: eeschema/sim/sim_plot_frame.cpp:278 eeschema/sim/sim_plot_frame.cpp:999
+#: eeschema/sim/sim_plot_frame.cpp:278 eeschema/sim/sim_plot_frame.cpp:1008
 msgid "There were errors during netlist export, aborted."
 msgstr ""
 "Si sono verificati degli errori durante l'esportazione della netlist, "
@@ -7571,52 +7571,52 @@ msgstr ""
 msgid "You need to select the simulation settings first."
 msgstr "Bisogna prima selezionare le impostazioni di simulazione."
 
-#: eeschema/sim/sim_plot_frame.cpp:548 eeschema/sim/sim_plot_frame.cpp:1086
+#: eeschema/sim/sim_plot_frame.cpp:548 eeschema/sim/sim_plot_frame.cpp:1095
 msgid "Signal"
 msgstr "Segnale"
 
-#: eeschema/sim/sim_plot_frame.cpp:785
+#: eeschema/sim/sim_plot_frame.cpp:794
 msgid "Open simulation workbook"
 msgstr "Apri il libretto di lavoro della simulazione"
 
-#: eeschema/sim/sim_plot_frame.cpp:794
+#: eeschema/sim/sim_plot_frame.cpp:803
 msgid "There was an error while opening the workbook file"
 msgstr "Errore durante l'apertura del file libretto di lavoro"
 
-#: eeschema/sim/sim_plot_frame.cpp:803
+#: eeschema/sim/sim_plot_frame.cpp:812
 msgid "Save Simulation Workbook"
 msgstr "Salva libretto di lavoro della simulazione"
 
-#: eeschema/sim/sim_plot_frame.cpp:812
+#: eeschema/sim/sim_plot_frame.cpp:821
 msgid "There was an error while saving the workbook file"
 msgstr ""
 "Si è verificato un errore durante il salvataggio del file libretto di lavoro"
 
-#: eeschema/sim/sim_plot_frame.cpp:821
+#: eeschema/sim/sim_plot_frame.cpp:830
 msgid "Save Plot as Image"
 msgstr "Salva il grafico come immagine"
 
-#: eeschema/sim/sim_plot_frame.cpp:838
+#: eeschema/sim/sim_plot_frame.cpp:847
 msgid "Save Plot Data"
 msgstr "Salva i dati del grafico"
 
-#: eeschema/sim/sim_plot_frame.cpp:1033
+#: eeschema/sim/sim_plot_frame.cpp:1042
 msgid "You need to run simulation first."
 msgstr "È necessario prima eseguire la simulazione."
 
-#: eeschema/sim/sim_plot_frame.cpp:1215
+#: eeschema/sim/sim_plot_frame.cpp:1224
 msgid "Hide signal"
 msgstr "Nascondi segnale"
 
-#: eeschema/sim/sim_plot_frame.cpp:1216
+#: eeschema/sim/sim_plot_frame.cpp:1225
 msgid "Erase the signal from plot screen"
 msgstr "Cancella il segnale dallo schermo"
 
-#: eeschema/sim/sim_plot_frame.cpp:1222
+#: eeschema/sim/sim_plot_frame.cpp:1231
 msgid "Hide cursor"
 msgstr "Nascondi puntatore"
 
-#: eeschema/sim/sim_plot_frame.cpp:1225
+#: eeschema/sim/sim_plot_frame.cpp:1234
 msgid "Show cursor"
 msgstr "Mostra puntatore"
 
@@ -12198,10 +12198,8 @@ msgstr "Grafica cla&ssica"
 
 #: gerbview/menubar.cpp:219 pcbnew/menubar_pcbframe.cpp:567
 #: pcbnew/menubar_modedit.cpp:262
-msgid "Use legacy graphics mode (not all features will be available"
-msgstr ""
-"Usa la modalità grafica classica (non tutte le caratteristiche saranno "
-"disponibili)"
+msgid "Use legacy graphics mode (not all features will be available)"
+msgstr "Usa la modalità grafica classica (non tutte le caratteristiche saranno disponibili)"
 
 #: gerbview/menubar.cpp:222 pcbnew/menubar_pcbframe.cpp:570
 #: pcbnew/menubar_modedit.cpp:265
@@ -16214,7 +16212,7 @@ msgid "Front"
 msgstr "Fronte"
 
 #: pcbnew/class_module.cpp:551 pcbnew/tools/pad_tool.cpp:77
-#: pcbnew/class_board.cpp:1122 pcbnew/pcb_draw_panel_gal.cpp:335
+#: pcbnew/class_board.cpp:1122 pcbnew/pcb_draw_panel_gal.cpp:336
 #: pcbnew/class_netinfo_item.cpp:120
 msgid "Pads"
 msgstr "Piazzole"
@@ -17395,27 +17393,27 @@ msgstr "Cancellare tutti gli elementi dello strato %s?"
 msgid "This is the default net class."
 msgstr "Questo è il gruppo di collegamenti predefinito"
 
-#: pcbnew/class_board.cpp:1125 pcbnew/pcb_draw_panel_gal.cpp:338
+#: pcbnew/class_board.cpp:1125 pcbnew/pcb_draw_panel_gal.cpp:339
 #: pcbnew/class_netinfo_item.cpp:140
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:155
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 msgid "Vias"
 msgstr "Via"
 
-#: pcbnew/class_board.cpp:1128 pcbnew/pcb_draw_panel_gal.cpp:341
+#: pcbnew/class_board.cpp:1128 pcbnew/pcb_draw_panel_gal.cpp:342
 msgid "Track Segments"
 msgstr "Segmenti di pista"
 
-#: pcbnew/class_board.cpp:1131 pcbnew/pcb_draw_panel_gal.cpp:344
+#: pcbnew/class_board.cpp:1131 pcbnew/pcb_draw_panel_gal.cpp:345
 msgid "Nodes"
 msgstr "Nodi"
 
-#: pcbnew/class_board.cpp:1134 pcbnew/pcb_draw_panel_gal.cpp:347
+#: pcbnew/class_board.cpp:1134 pcbnew/pcb_draw_panel_gal.cpp:348
 #: pcbnew/dialogs/dialog_select_net_from_list_base.h:56
 msgid "Nets"
 msgstr "Piste"
 
-#: pcbnew/class_board.cpp:1137 pcbnew/pcb_draw_panel_gal.cpp:350
+#: pcbnew/class_board.cpp:1137 pcbnew/pcb_draw_panel_gal.cpp:351
 #: pcbnew/dialogs/dialog_drc_base.cpp:266
 msgid "Unconnected"
 msgstr "Disconnessi"
@@ -19267,7 +19265,7 @@ msgstr "Apri visualizzatore impronte"
 
 #: pcbnew/tool_modedit.cpp:70
 msgid "Delete part from active library"
-msgstr "Cancella componente dalla libreria attiva"
+msgstr "Cancella unità dalla libreria attiva"
 
 #: pcbnew/tool_modedit.cpp:74
 msgid "New footprint"
@@ -21328,7 +21326,7 @@ msgstr "File posizionamento lato fronte (in cima): \"%s\"."
 #: pcbnew/exporters/gen_modules_placefile.cpp:345
 #, c-format
 msgid "Component count: %d."
-msgstr "Conteggio componente: %d."
+msgstr "Conteggio componenti: %d."
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:309
 #: pcbnew/exporters/gen_modules_placefile.cpp:357
@@ -21773,15 +21771,10 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "The final clearance value is the sum of this value and the clearance value"
 msgstr ""
-"Imposta il rapporto in percentuale dell'isolamento tra le piazzole e la "
-"pasta salda per questo componente\n"
-"Esso può essere sostituito dall'impostazione della singola piazzola\n"
-"Il valore 10 indica che l'isolamento è il 10% delle dimensioni della "
-"piazzola\n"
-"L'isolamento finale sarà dato dalla somma di questo valore e il valore "
-"dell'isolamento.\n"
-"Un valore negativo indica una dimensione minore dalla maschera rispetto alla "
-"piazzola"
+"Rapporto globale in percentuale dell'isolamento tra piazzole e pasta salda.\n"
+"Un valore di 10 indica che l'isolamento è il 10% delle dimensioni della piazzola.\n"
+"Può essere superato dai valori locali dell'impronta o della singola piazzola.\n"
+"L'isolamento finale è dato dalla somma di questo valore e il valore dell'isolamento."
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:97
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:219
