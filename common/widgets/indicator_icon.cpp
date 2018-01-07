@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
 
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,10 +35,11 @@ INDICATOR_ICON::INDICATOR_ICON( wxWindow* aParent,
     SetSizer( sizer );
 
     const wxBitmap& initBitmap = m_iconProvider.GetIndicatorIcon( m_currentId );
+    wxBitmap scaled = ScaledIcon( initBitmap );
 
     m_bitmap = new wxStaticBitmap( this, aID,
-                                   initBitmap, wxDefaultPosition,
-                                   initBitmap.GetSize() );
+                                   scaled, wxDefaultPosition,
+                                   scaled.GetSize() );
 
     sizer->Add( m_bitmap, 0, 0 );
 
@@ -57,13 +58,33 @@ void INDICATOR_ICON::SetIndicatorState( ICON_ID aIconId )
 
     m_currentId = aIconId;
 
-    m_bitmap->SetBitmap( m_iconProvider.GetIndicatorIcon( m_currentId ) );
+    m_bitmap->SetBitmap( ScaledIcon( m_iconProvider.GetIndicatorIcon( m_currentId ) ) );
 }
 
 
 INDICATOR_ICON::ICON_ID INDICATOR_ICON::GetIndicatorState() const
 {
     return m_currentId;
+}
+
+
+// Uses wxImage::Rescale to provide a bitmap scaled to a fixed size relative to
+// the system font.  This doesn't work particularly well in the general case
+// and so is not an answer to DPI-independent scaling of e.g. toolbar icons,
+// but it gives perfectly acceptable results for the simple icons embedded in
+// this file.
+wxBitmap INDICATOR_ICON::ScaledIcon( wxBitmap const& aSource ) const
+{
+    int dest_height = ConvertDialogToPixels( wxSize( 0, 4 ) ).y;
+    wxSize source_size = aSource.GetSize();
+    double scale = (double) dest_height / (double) source_size.y;
+
+    wxImage source = aSource.ConvertToImage();
+    source.Rescale( scale * source_size.x, scale * source_size.y, wxIMAGE_QUALITY_HIGH );
+
+    wxBitmap dest( source );
+
+    return dest;
 }
 
 // ====================================================================

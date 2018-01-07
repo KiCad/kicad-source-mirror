@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,6 +96,11 @@ public:
     ICON_ID GetIndicatorState() const;
 
 private:
+
+    /**
+     * Scale an icon to one character width.
+     */
+    wxBitmap ScaledIcon( wxBitmap const& aSource ) const;
 
     ///> An class that delivers icons for the indictor (currently just
     ///> uses a default implementation).

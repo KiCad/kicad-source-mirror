@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
 
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,8 +31,7 @@ wxDEFINE_EVENT(COLOR_SWATCH_CHANGED, wxCommandEvent);
 using KIGFX::COLOR4D;
 
 
-const static int SWATCH_SIZE_X = 14;
-const static int SWATCH_SIZE_Y = 12;
+const static wxSize SWATCH_SIZE_DU( 8, 6 );
 
 // See selcolor.cpp:
 extern COLOR4D DisplayColorFrame( wxWindow* aParent, COLOR4D aOldColor );
@@ -40,10 +39,13 @@ extern COLOR4D DisplayColorFrame( wxWindow* aParent, COLOR4D aOldColor );
 
 /**
  * Make a simple color swatch bitmap
+ *
+ * @param aWindow - window used as context for device-independent size
  */
-static wxBitmap makeBitmap( COLOR4D aColor, COLOR4D aBackground )
+static wxBitmap makeBitmap( COLOR4D aColor, COLOR4D aBackground, wxWindow *aWindow )
 {
-    wxBitmap    bitmap( SWATCH_SIZE_X, SWATCH_SIZE_Y );
+    wxSize      size( aWindow->ConvertDialogToPixels( SWATCH_SIZE_DU ) );
+    wxBitmap    bitmap( size );
     wxBrush     brush;
     wxMemoryDC  iconDC;
 
@@ -52,11 +54,11 @@ static wxBitmap makeBitmap( COLOR4D aColor, COLOR4D aBackground )
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
     brush.SetColour( aBackground.WithAlpha(1.0).ToColour() );
     iconDC.SetBrush( brush );
-    iconDC.DrawRectangle( 0, 0, SWATCH_SIZE_X, SWATCH_SIZE_Y );
+    iconDC.DrawRectangle( 0, 0, size.x, size.y );
 
     brush.SetColour( aColor.ToColour() );
     iconDC.SetBrush( brush );
-    iconDC.DrawRectangle( 0, 0, SWATCH_SIZE_X, SWATCH_SIZE_Y );
+    iconDC.DrawRectangle( 0, 0, size.x, size.y );
 
     return bitmap;
 }
@@ -69,8 +71,7 @@ static wxBitmap makeBitmap( COLOR4D aColor, COLOR4D aBackground )
 static std::unique_ptr<wxStaticBitmap> makeColorSwatch(
         wxWindow* aParent, COLOR4D aColor, COLOR4D aBackground, int aID )
 {
-    // construct a bitmap of the right color and make the swatch from it
-    wxBitmap bitmap = makeBitmap( aColor, aBackground );
+    wxBitmap bitmap = makeBitmap( aColor, aBackground, aParent );
     auto ret = std::make_unique<wxStaticBitmap>( aParent, aID, bitmap );
 
     return ret;
@@ -129,7 +130,7 @@ void COLOR_SWATCH::SetSwatchColor( COLOR4D aColor, bool sendEvent )
 {
     m_color = aColor;
 
-    wxBitmap bm = makeBitmap( m_color, m_background );
+    wxBitmap bm = makeBitmap( m_color, m_background, GetParent() );
     m_swatch->SetBitmap( bm );
 
     if( sendEvent )
@@ -142,7 +143,7 @@ void COLOR_SWATCH::SetSwatchColor( COLOR4D aColor, bool sendEvent )
 void COLOR_SWATCH::SetSwatchBackground( COLOR4D aBackground )
 {
     m_background = aBackground;
-    wxBitmap bm = makeBitmap( m_color, m_background );
+    wxBitmap bm = makeBitmap( m_color, m_background, (wxWindow*) this );
     m_swatch->SetBitmap( bm );
 }
 
@@ -171,7 +172,7 @@ void COLOR_SWATCH::GetNewSwatchColor()
     {
         m_color = newColor;
 
-        wxBitmap bm = makeBitmap( newColor, m_background );
+        wxBitmap bm = makeBitmap( newColor, m_background, (wxWindow*) this );
         m_swatch->SetBitmap( bm );
 
         sendSwatchChangeEvent( *this );
