@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jan  2 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,7 +11,7 @@
 
 DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( -1,500 ), wxSize( -1,550 ) );
+	this->SetSizeHints( wxSize( 200,200 ), wxSize( -1,-1 ) );
 	
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
@@ -98,7 +98,7 @@ DIALOG_LAYERS_SETUP_BASE::DIALOG_LAYERS_SETUP_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bCaptionsSizer;
 	bCaptionsSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_TitlePanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxRAISED_BORDER|wxTAB_TRAVERSAL );
+	m_TitlePanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_TitlePanel->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_CAPTIONTEXT ) );
 	m_TitlePanel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVECAPTION ) );
 	m_TitlePanel->SetMinSize( wxSize( -1,15 ) );

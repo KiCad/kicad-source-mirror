@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 Isaac Marino Bavaresco, isaacbavaresco@yahoo.com.br
  * Copyright (C) 2009 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2009-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2009-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -207,16 +207,19 @@ private:
         int offset = 0;
         wxSize txtz;
 
+        wxSize panel_sz = m_TitlePanel->GetSize();
+        int voffset = panel_sz.y/2 - VertPixelsFromDU( 4 );
+
         txtz = m_nameStaticText->GetSize();
-        m_nameStaticText->Move( offset + (widths[0] - txtz.x)/2, 5 );
+        m_nameStaticText->Move( offset + (widths[0] - txtz.x)/2, voffset );
         offset += widths[0];
 
         txtz = m_enabledStaticText->GetSize();
-        m_enabledStaticText->Move( offset + (widths[1] - txtz.x)/2, 5 );
+        m_enabledStaticText->Move( offset + (widths[1] - txtz.x)/2, voffset );
         offset += widths[1];
 
         txtz = m_typeStaticText->GetSize();
-        m_typeStaticText->Move( offset + (widths[2] - txtz.x)/2, 5 );
+        m_typeStaticText->Move( offset + (widths[2] - txtz.x)/2, voffset );
     }
 
     void OnSize( wxSizeEvent& event ) override;
@@ -348,14 +351,12 @@ void DIALOG_LAYERS_SETUP::OnInitDialog( wxInitDialogEvent& aEvent )
 {
     wxWindowBase::OnInitDialog( aEvent );
 
-    // set the height of the title panel to be the size of any wxStaticText object
-    // plus 10 so we can have a border of 5 on both top and bottom.
-    m_TitlePanel->SetMinSize( wxSize( -1, m_AdhesFrontName->GetSize().y+10 ) );
+    m_TitlePanel->SetMinSize( wxSize( -1, VertPixelsFromDU( 10 ) ) );
 
     m_LayersListPanel->ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
 
     Layout();
-    Fit();
+    SetSizeInDU( 240, 240 );
     Center();
 
     m_sdbSizerOK->SetFocus();
