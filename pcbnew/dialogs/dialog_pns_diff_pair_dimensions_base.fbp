@@ -575,7 +575,7 @@
                                 <property name="label">u</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
-                                <property name="maximum_size">40,-1</property>
+                                <property name="maximum_size">-1,-1</property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
                                 <property name="minimum_size"></property>
@@ -832,7 +832,7 @@
                                 <property name="label">u</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
-                                <property name="maximum_size">40,-1</property>
+                                <property name="maximum_size">-1,-1</property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
                                 <property name="minimum_size"></property>
@@ -968,6 +968,16 @@
                         <event name="OnSetFocus"></event>
                         <event name="OnSize"></event>
                         <event name="OnUpdateUI"></event>
+                    </object>
+                </object>
+                <object class="sizeritem" expanded="1">
+                    <property name="border">5</property>
+                    <property name="flag">wxEXPAND</property>
+                    <property name="proportion">1</property>
+                    <object class="spacer" expanded="1">
+                        <property name="height">0</property>
+                        <property name="permission">protected</property>
+                        <property name="width">0</property>
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jan  2 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -44,8 +44,6 @@ DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( wxWi
 	
 	m_traceGapUnit = new wxStaticText( this, wxID_ANY, _("u"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_traceGapUnit->Wrap( -1 );
-	m_traceGapUnit->SetMaxSize( wxSize( 40,-1 ) );
-	
 	fgSizer1->Add( m_traceGapUnit, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_viaGapLabel = new wxStaticText( this, wxID_ANY, _("Via gap:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -62,7 +60,6 @@ DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( wxWi
 	m_viaGapUnit = new wxStaticText( this, wxID_ANY, _("u"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaGapUnit->Wrap( -1 );
 	m_viaGapUnit->Enable( false );
-	m_viaGapUnit->SetMaxSize( wxSize( 40,-1 ) );
 	
 	fgSizer1->Add( m_viaGapUnit, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
@@ -72,6 +69,9 @@ DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( wxWi
 	m_viaTraceGapEqual = new wxCheckBox( this, wxID_ANY, _("Via gap same as trace gap"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaTraceGapEqual->SetValue(true); 
 	bSizer7->Add( m_viaTraceGapEqual, 0, wxALL|wxEXPAND, 10 );
+	
+	
+	bSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer7->Add( m_staticline1, 0, wxEXPAND, 5 );
