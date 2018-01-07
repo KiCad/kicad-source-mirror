@@ -29,6 +29,7 @@
 #include <lib_manager.h>
 #include <libeditframe.h>
 #include <symbol_lib_table.h>
+#include <menus_helpers.h>
 
 
 CMP_TREE_PANE::CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
@@ -47,32 +48,53 @@ CMP_TREE_PANE::CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
 
     // Setup right click-context menus
     std::unique_ptr<wxMenu> menuLibrary = std::make_unique<wxMenu>();
-    menuLibrary->Append( ID_LIBEDIT_NEW_LIBRARY, _( "&New Library..." ) );
-    menuLibrary->Append( ID_LIBEDIT_ADD_LIBRARY, _( "&Add Library..." ) );
-    menuLibrary->Append( ID_LIBEDIT_SAVE_LIBRARY, _( "&Save Library" ) );
-    menuLibrary->Append( ID_LIBEDIT_SAVE_LIBRARY_AS, _( "Save Library As..." ) );
-    menuLibrary->Append( ID_LIBEDIT_REVERT_LIBRARY, _( "&Revert Library" ) );
+
+    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_NEW_LIBRARY, _( "&New Library..." ),
+                 KiBitmap( new_library_xpm ) );
+    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_ADD_LIBRARY, _( "&Add Library..." ),
+                 KiBitmap( add_library_xpm ) );
+    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_SAVE_LIBRARY, _( "&Save Library..." ),
+                 KiBitmap( save_library_xpm ) );
+    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_SAVE_LIBRARY_AS, _( "Save Library As..." ),
+                 KiBitmap( save_library_xpm ) );
+    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_REVERT_LIBRARY, _( "&Revert Library" ),
+                 KiBitmap( undo_xpm ) );
+
     menuLibrary->AppendSeparator();
-    menuLibrary->Append( ID_LIBEDIT_NEW_PART, _( "New &Part..." ) );
-    menuLibrary->Append( ID_LIBEDIT_IMPORT_PART, _( "Import Part..." ) );
-    menuLibrary->Append( ID_LIBEDIT_PASTE_PART, _( "Paste Part" ) );
+    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_NEW_PART, _( "New &Part..." ),
+                 KiBitmap( new_component_xpm ) );
+    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_IMPORT_PART, _( "Import Part..." ),
+                 KiBitmap( import_part_xpm ) );
+    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_PASTE_PART, _( "Paste Part" ),
+                 KiBitmap( paste_xpm ) );
 
     std::unique_ptr<wxMenu> menuPart = std::make_unique<wxMenu>();
-    menuPart->Append( ID_LIBEDIT_EDIT_PART, _( "Edit Part" ) );
-    menuPart->Append( ID_LIBEDIT_REMOVE_PART, _( "Remove Part" ) );
-    menuPart->Append( ID_LIBEDIT_EXPORT_PART, _( "Export Part..." ) );
-    menuPart->Append( ID_LIBEDIT_SAVE_PART, _( "&Save Part" ) );
-    menuPart->Append( ID_LIBEDIT_REVERT_PART, _( "&Revert Part" ) );
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_EDIT_PART, _( "Edit Part" ),
+                 KiBitmap( edit_xpm ) );
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_REMOVE_PART, _( "Remove Part" ),
+                 KiBitmap( delete_xpm ) );
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_EXPORT_PART, _( "Export Part..." ),
+                 KiBitmap( export_part_xpm ) );
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_SAVE_PART, _( "&Save Part" ),
+                 KiBitmap( save_part_xpm ) );
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_REVERT_PART, _( "&Revert Part" ),
+                 KiBitmap( undo_xpm ) );
+
     menuPart->AppendSeparator();
-    menuPart->Append( ID_LIBEDIT_CUT_PART, _( "Cut Part" ) );
-    menuPart->Append( ID_LIBEDIT_COPY_PART, _( "Copy Part" ) );
-    menuPart->Append( ID_LIBEDIT_DUPLICATE_PART, _( "Duplicate Part" ) );
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_CUT_PART, _( "Cut Part" ),
+                 KiBitmap( cut_xpm ) );
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_COPY_PART, _( "Copy Part" ),
+                 KiBitmap( copy_xpm ) );
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_DUPLICATE_PART, _( "Duplicate Part" ),
+                 KiBitmap( duplicate_xpm ) );
     menuPart->AppendSeparator();
 
     // Menu displayed when nothing is selected
     std::unique_ptr<wxMenu> menuNoSelection = std::make_unique<wxMenu>();
-    menuNoSelection->Append( ID_LIBEDIT_NEW_LIBRARY, _( "&New Library..." ) );
-    menuNoSelection->Append( ID_LIBEDIT_ADD_LIBRARY, _( "&Add Library..." ) );
+    AddMenuItem( menuNoSelection.get(), ID_LIBEDIT_NEW_LIBRARY, _( "&New Library..." ),
+                 KiBitmap( new_library_xpm ) );
+    AddMenuItem( menuNoSelection.get(), ID_LIBEDIT_ADD_LIBRARY, _( "&Add Library..." ),
+                 KiBitmap( add_library_xpm ) );
 
     m_tree->SetMenu( CMP_TREE_NODE::LIBID, std::move( menuPart ) );
     m_tree->SetMenu( CMP_TREE_NODE::LIB, std::move( menuLibrary ) );
