@@ -30,3 +30,9 @@ build, you can add `cmake` option for example use:
 
 If you occurred some problems, use `cmake --trace -DCMAKE_VERBOSE_MAKEFILE=ON` instead `cmake` to
 make build log more verbose, when you fill issue report.
+
+== Why are we not using transifex or similar service
+We would like to make it easier for people to help translate, but I
+don't really know how to make transifex work in synergy with a
+workflow where people can also update by working with the po files
+here directly.
