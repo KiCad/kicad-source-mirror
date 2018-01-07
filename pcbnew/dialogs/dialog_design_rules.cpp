@@ -47,6 +47,9 @@
 #include <wx/generic/gridctrl.h>
 #include <dialog_design_rules_aux_helper_class.h>
 
+#include <tool/tool_event.h>
+#include <tool/tool_manager.h>
+
 // Column labels for net lists
 #define NET_TITLE       _( "Net" )
 #define CLASS_TITLE     _( "Class" )
@@ -708,6 +711,13 @@ bool DIALOG_DESIGN_RULES::TransferDataFromWindow()
     CopyGlobalRulesToBoard();
     CopyDimensionsListsToBoard();
     m_BrdSettings->SetCurrentNetClass( NETCLASS::Default );
+
+    //this event causes the routing tool to reload its design rules information
+    TOOL_MANAGER* toolManager = m_Parent->GetToolManager();
+    TOOL_EVENT event( TC_COMMAND, TA_MODEL_CHANGE, AS_ACTIVE );
+    toolManager->ProcessEvent( event );
+
+
     return true;
 }
 
@@ -1198,3 +1208,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity( wxString* aErrorMsg )
 
     return result;
 }
+
+
+
+
