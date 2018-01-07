@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 Kicad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2018 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +49,7 @@ HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_BASE_FRAME* aParent,
     m_sdbSizerOK->SetDefault();
 
     Layout();
+    SetSizeInDU( 240, 120 );
     Center();
 }
 
