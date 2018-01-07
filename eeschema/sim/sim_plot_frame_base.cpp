@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2016)
+// C++ code generated with wxFormBuilder (version Jan  2 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "sim_plot_frame_base.h"
@@ -11,7 +11,7 @@
 
 SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : KIWAY_PLAYER( parent, id, title, pos, size, style, name )
 {
-	this->SetSizeHints( wxSize( 600,500 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( 200,200 ), wxDefaultSize );
 	
 	m_mainMenu = new wxMenuBar( 0 );
 	m_fileMenu = new wxMenu();
@@ -266,6 +266,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	
 	this->SetSizer( m_sizerMain );
 	this->Layout();
+	m_sizerMain->Fit( this );
 	
 	this->Centre( wxBOTH );
 	
