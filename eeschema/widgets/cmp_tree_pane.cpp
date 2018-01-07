@@ -53,7 +53,7 @@ CMP_TREE_PANE::CMP_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
                  KiBitmap( new_library_xpm ) );
     AddMenuItem( menuLibrary.get(), ID_LIBEDIT_ADD_LIBRARY, _( "&Add Library..." ),
                  KiBitmap( add_library_xpm ) );
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_SAVE_LIBRARY, _( "&Save Library..." ),
+    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_SAVE_LIBRARY, _( "&Save Library" ),
                  KiBitmap( save_library_xpm ) );
     AddMenuItem( menuLibrary.get(), ID_LIBEDIT_SAVE_LIBRARY_AS, _( "Save Library As..." ),
                  KiBitmap( save_library_xpm ) );
