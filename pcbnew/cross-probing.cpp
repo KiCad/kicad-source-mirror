@@ -21,6 +21,8 @@
 #include <pcbnew_id.h>
 #include <class_board.h>
 #include <class_module.h>
+#include <class_track.h>
+#include <class_zone.h>
 
 #include <collectors.h>
 #include <pcbnew.h>
@@ -76,9 +78,52 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
             if( IsGalCanvasActive() )
             {
-                auto rs = m_toolManager->GetView()->GetPainter()->GetSettings();
+                auto view = m_toolManager->GetView();
+                auto rs = view->GetPainter()->GetSettings();
                 rs->SetHighlight( true, netcode );
-                m_toolManager->GetView()->UpdateAllLayersColor();
+                view->UpdateAllLayersColor();
+
+                BOX2I bbox;
+                bool first = true;
+
+                auto merge_area = [netcode, &bbox, &first]( BOARD_CONNECTED_ITEM* aItem )
+                {
+                    if( aItem->GetNetCode() == netcode )
+                    {
+                        if( first )
+                        {
+                            bbox = aItem->GetBoundingBox();
+                            first = false;
+                        }
+                        else
+                        {
+                            bbox.Merge( aItem->GetBoundingBox() );
+                        }
+                    }
+                };
+
+                for( auto zone : pcb->Zones() )
+                    merge_area( zone );
+
+                for( auto track : pcb->Tracks() )
+                    merge_area( track );
+
+                for( auto mod : pcb->Modules() )
+                    for ( auto mod_pad : mod->Pads() )
+                        merge_area( mod_pad );
+
+                if( netcode > 0 && bbox.GetWidth() > 0 && bbox.GetHeight() > 0 )
+                {
+                    auto bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
+                    auto screenSize = view->ToWorld( GetGalCanvas()->GetClientSize(), false );
+                    double ratio = std::max( fabs( bbSize.x / screenSize.x ),
+                                             fabs( bbSize.y / screenSize.y ) );
+                    double scale = view->GetScale() / ratio;
+
+                    view->SetScale( scale );
+                    view->SetCenter( bbox.Centre() );
+                }
+
                 GetGalCanvas()->Refresh();
             }
             else
