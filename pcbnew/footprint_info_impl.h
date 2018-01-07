@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2011 Jean-Pierre Charras, <jp.charras@wanadoo.fr>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -61,8 +60,8 @@ class FOOTPRINT_LIST_IMPL : public FOOTPRINT_LIST
     std::vector<std::thread> m_threads;
     SYNC_QUEUE<wxString>     m_queue_in;
     SYNC_QUEUE<wxString>     m_queue_out;
-    std::atomic_size_t       m_count_finished;
     std::atomic_bool         m_first_to_finish;
+    std::atomic_size_t       m_count_finished;
 
     /**
      * Call aFunc, pushing any IO_ERRORs and std::exceptions it throws onto m_errors.
