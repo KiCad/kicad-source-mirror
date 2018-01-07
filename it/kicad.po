@@ -76,7 +76,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-07 16:39+0100\n"
-"PO-Revision-Date: 2018-01-07 16:40+0100\n"
+"PO-Revision-Date: 2018-01-07 16:49+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -24903,8 +24903,7 @@ msgstr "Dimensioni via personalizzate"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:287
 msgid "Drill value: a blank or 0 => default Netclass value"
-msgstr ""
-"Diametro foratura: vuoto oppure 0 uguale al volore del gruppo predefinito"
+msgstr "Diametro foratura: vuoto oppure 0 => valore della netclass predefinita"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:311
 msgid "Via 1"
