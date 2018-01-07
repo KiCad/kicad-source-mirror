@@ -177,8 +177,8 @@ DIALOG_EDIT_COMPONENTS_LIBID::DIALOG_EDIT_COMPONENTS_LIBID( SCH_EDIT_FRAME* aPar
     m_panelGrid->SetMinSize( wxSize( minwidth, -1) );
     Layout();
 
-    // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
+    SetSizeInDU( 360, 300 );
+    Center();
 }
 
 
