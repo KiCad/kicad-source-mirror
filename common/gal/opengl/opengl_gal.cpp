@@ -1676,6 +1676,7 @@ std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const UTF8& aText 
 {
     VECTOR2D textSize( 0, 0 );
     float commonOffset = std::numeric_limits<float>::max();
+    static const auto defaultGlyph = LookupGlyph( '(' ); // for strange chars
 
     for( UTF8::uni_iter chIt = aText.ubegin(), end = aText.uend(); chIt < end; ++chIt )
     {
@@ -1688,18 +1689,17 @@ std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const UTF8& aText 
         if( !glyph || // Not coded in font
             c == '-' || c == '_' )     // Strange size of these 2 chars
         {
-            c = 'x';    // For calculation of the char size, replace by a medium sized char
-            glyph = LookupGlyph( c );
+            glyph = defaultGlyph;
         }
 
         if( glyph )
         {
             textSize.x  += glyph->advance;
-            textSize.y   = std::max<float>( textSize.y, font_information.max_y - glyph->miny );
-            commonOffset = std::min<float>( font_information.max_y - glyph->maxy, commonOffset );
         }
     }
 
+    textSize.y   = std::max<float>( textSize.y, font_information.max_y - defaultGlyph->miny );
+    commonOffset = std::min<float>( font_information.max_y - defaultGlyph->maxy, commonOffset );
     textSize.y -= commonOffset;
 
     return std::make_pair( textSize, commonOffset );

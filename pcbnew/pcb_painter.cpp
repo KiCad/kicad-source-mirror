@@ -352,7 +352,16 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
 
             const wxString& netName = aTrack->GetShortNetname();
             VECTOR2D textPosition = start + line / 2.0;     // center of the track
-            double textOrientation = -atan( line.y / line.x );
+
+            double textOrientation;
+
+            if( end.y == start.y ) // horizontal
+                textOrientation = 0;
+            else if( end.x == start.x ) // vertical
+                textOrientation = M_PI / 2;
+            else
+                textOrientation = -atan( line.y / line.x );
+
             double textSize = width;
 
             m_gal->SetIsStroke( true );
