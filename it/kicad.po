@@ -75,8 +75,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-07 16:39+0100\n"
-"PO-Revision-Date: 2018-01-07 16:49+0100\n"
+"POT-Creation-Date: 2018-01-08 00:23+0100\n"
+"PO-Revision-Date: 2018-01-08 00:24+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -4282,7 +4282,7 @@ msgstr "Modifica i campi del simbolo"
 msgid "Run Pcbnew to layout printed circuit board"
 msgstr "Avvia PcbNew per la creazione del circuito stampato"
 
-#: eeschema/tool_sch.cpp:196 pcbnew/tools/pcb_editor_control.cpp:944
+#: eeschema/tool_sch.cpp:196 pcbnew/tools/pcb_editor_control.cpp:946
 #: pcbnew/tool_pcb.cpp:431 pcbnew/edit.cpp:1523
 msgid "Highlight net"
 msgstr "Evidenzia collegamento"
@@ -5015,6 +5015,10 @@ msgstr ""
 msgid "Unable to read file \"%s\""
 msgstr "Impossibile leggere il file \"%s\""
 
+#: eeschema/cross-probing.cpp:82
+msgid "Selected net: "
+msgstr "Collegamento selezionato:"
+
 #: eeschema/pin_shape.cpp:38 gerbview/class_gerber_draw_item.cpp:233
 #: pcbnew/class_board_item.cpp:43
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
@@ -5063,9 +5067,10 @@ msgstr "&Nuova libreria..."
 msgid "&Add Library..."
 msgstr "&Aggiungi libreria..."
 
-#: eeschema/widgets/cmp_tree_pane.cpp:56
-msgid "&Save Library..."
-msgstr "&Salva libreria..."
+#: eeschema/widgets/cmp_tree_pane.cpp:56 eeschema/libeditframe.cpp:580
+#: eeschema/menubar_libedit.cpp:82
+msgid "&Save Library"
+msgstr "&Salva libreria"
 
 #: eeschema/widgets/cmp_tree_pane.cpp:58 eeschema/menubar_libedit.cpp:90
 msgid "Save Library As..."
@@ -5525,10 +5530,6 @@ msgstr "&Salva parte [sola lettura]"
 #: eeschema/libeditframe.cpp:579
 msgid "&Save Library [Read Only]"
 msgstr "&Salva libreria [sola lettura]"
-
-#: eeschema/libeditframe.cpp:580 eeschema/menubar_libedit.cpp:82
-msgid "&Save Library"
-msgstr "&Salva libreria"
 
 #: eeschema/libeditframe.cpp:1185
 msgid "Add pin"
@@ -17005,7 +17006,7 @@ msgstr "Duplica zona"
 msgid "Adjust zero"
 msgstr "Regola zero"
 
-#: pcbnew/tools/pcb_editor_control.cpp:988
+#: pcbnew/tools/pcb_editor_control.cpp:990
 msgid "Pick Components for Local Ratsnest"
 msgstr "Preleva componenti per le ratsnest locali"
 
@@ -17205,32 +17206,32 @@ msgstr "Cambia strato corpo elementi"
 msgid "Set Line Width"
 msgstr "Imposta spessore linea"
 
-#: pcbnew/cross-probing.cpp:71
+#: pcbnew/cross-probing.cpp:157
 #, c-format
 msgid "%s found"
 msgstr "%s trovato"
 
-#: pcbnew/cross-probing.cpp:73 pcbnew/cross-probing.cpp:128
+#: pcbnew/cross-probing.cpp:159 pcbnew/cross-probing.cpp:214
 #, c-format
 msgid "%s not found"
 msgstr "%s non trovato"
 
-#: pcbnew/cross-probing.cpp:82
+#: pcbnew/cross-probing.cpp:168
 #, c-format
 msgid "Selecting all from sheet \"%s\""
 msgstr "Seleziona tutto nel foglio \"%s\""
 
-#: pcbnew/cross-probing.cpp:132
+#: pcbnew/cross-probing.cpp:218
 #, c-format
 msgid "%s pin %s not found"
 msgstr "%s pin %s non trovato"
 
-#: pcbnew/cross-probing.cpp:137
+#: pcbnew/cross-probing.cpp:223
 #, c-format
 msgid "%s pin %s found"
 msgstr "%s pin %s trovato"
 
-#: pcbnew/cross-probing.cpp:265
+#: pcbnew/cross-probing.cpp:370
 msgid "EEschema netlist"
 msgstr "Netlist Eeschema"
 
@@ -27632,3 +27633,6 @@ msgstr "Opzioni di esportazione VRML"
 #: pcbnew/dialogs/dialog_cleaning_options_base.h:48
 msgid "Cleaning Options"
 msgstr "Opzioni di cancellazione"
+
+#~ msgid "&Save Library..."
+#~ msgstr "&Salva libreria..."
