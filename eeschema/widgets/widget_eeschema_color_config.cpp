@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,10 +34,9 @@
 #include "widget_eeschema_color_config.h"
 #include <../common/widgets/color4Dpickerdlg.h>
 
-// Specify the width and height of every (color-displaying / bitmap) button
-const int BUTT_SIZE_X = 16;
-const int BUTT_SIZE_Y = 16;
-
+// Width and height of every (color-displaying / bitmap) button in dialog units
+const wxSize BUTT_SIZE( 10, 6 );
+const wxSize BUTT_BORDER( 4, 4 );
 
 /********************/
 /* Layer menu list. */
@@ -113,6 +112,9 @@ static COLOR4D currentColors[ SCH_LAYER_ID_COUNT ];
 WIDGET_EESCHEMA_COLOR_CONFIG::WIDGET_EESCHEMA_COLOR_CONFIG( wxWindow* aParent, EDA_DRAW_FRAME* aDrawFrame ) :
     wxPanel( aParent ), m_drawFrame( aDrawFrame )
 {
+    m_butt_size_pix = ConvertDialogToPixels( BUTT_SIZE );
+    m_butt_border_pix = ConvertDialogToPixels( BUTT_BORDER );
+
     CreateControls();
 }
 
@@ -156,7 +158,7 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
             currentColors[ SCH_LAYER_INDEX( buttons->m_Layer ) ] = color;
 
             wxMemoryDC iconDC;
-            wxBitmap   bitmap( BUTT_SIZE_X, BUTT_SIZE_Y );
+            wxBitmap   bitmap( m_butt_size_pix );
 
             iconDC.SelectObject( bitmap );
             iconDC.SetPen( *wxBLACK_PEN );
@@ -165,11 +167,11 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
             brush.SetColour( color.ToColour() );
             brush.SetStyle( wxBRUSHSTYLE_SOLID );
             iconDC.SetBrush( brush );
-            iconDC.DrawRectangle( 0, 0, BUTT_SIZE_X, BUTT_SIZE_Y );
+            iconDC.DrawRectangle( 0, 0, m_butt_size_pix.x, m_butt_size_pix.y );
 
             wxBitmapButton* bitmapButton = new wxBitmapButton(
                                     this, buttonId, bitmap, wxDefaultPosition,
-                                    wxSize( BUTT_SIZE_X+8, BUTT_SIZE_Y+6 ) );
+                                    m_butt_size_pix + m_butt_border_pix + wxSize( 1, 1 ) );
             bitmapButton->SetClientData( (void*) buttons );
 
             rowBoxSizer->Add( bitmapButton, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 5 );
@@ -185,7 +187,7 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
 
     COLOR4D bgColor = GetDrawFrame()->GetDrawBgColor();
     wxMemoryDC iconDC;
-    wxBitmap   bitmap( BUTT_SIZE_X, BUTT_SIZE_Y );
+    wxBitmap   bitmap( m_butt_size_pix );
 
     iconDC.SelectObject( bitmap );
     iconDC.SetPen( *wxBLACK_PEN );
@@ -194,12 +196,12 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
     brush.SetColour( bgColor.ToColour() );
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
     iconDC.SetBrush( brush );
-    iconDC.DrawRectangle( 0, 0, BUTT_SIZE_X, BUTT_SIZE_Y );
+    iconDC.DrawRectangle( 0, 0, m_butt_size_pix.x, m_butt_size_pix.y );
 
     buttonId++;
     wxBitmapButton* selBgColorBtn = new wxBitmapButton(
                             this, buttonId, bitmap, wxDefaultPosition,
-                            wxSize( BUTT_SIZE_X + 8, BUTT_SIZE_Y + 6 ) );
+                            m_butt_size_pix + m_butt_border_pix + wxSize( 1, 1 ) );
     selBgColorBtn->SetClientData( (void*) &bgColorButton );
 
     Connect( 1800, buttonId, wxEVT_COMMAND_BUTTON_CLICKED,
@@ -258,7 +260,7 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::SetColor( wxCommandEvent& event )
     brush.SetStyle( wxBRUSHSTYLE_SOLID );
 
     iconDC.SetBrush( brush );
-    iconDC.DrawRectangle( 0, 0, BUTT_SIZE_X, BUTT_SIZE_Y );
+    iconDC.DrawRectangle( 0, 0, m_butt_size_pix.x, m_butt_size_pix.y );
     button->SetBitmapLabel( bitmap );
     button->Refresh();
 

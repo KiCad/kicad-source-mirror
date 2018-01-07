@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 G. Harland
- * Copyright (C) 1992-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,8 @@ class WIDGET_EESCHEMA_COLOR_CONFIG : public wxPanel
 private:
     EDA_DRAW_FRAME*         m_drawFrame;
     wxBoxSizer*             m_mainBoxSizer;
+    wxSize                  m_butt_size_pix;
+    wxSize                  m_butt_border_pix;
 
     // Creates the controls and sizers
     void CreateControls();
