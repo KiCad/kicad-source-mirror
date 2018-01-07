@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,9 +51,8 @@
 #include <cvpcb_id.h>
 
 
-#define FRAME_MIN_SIZE_X 450
-#define FRAME_MIN_SIZE_Y 300
-
+wxSize const FRAME_MIN_SIZE_DU( 300, 120 );
+wxSize const FRAME_DEFAULT_SIZE_DU( 500, 250 );
 
 ///@{
 /// \ingroup config
@@ -145,17 +144,11 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     LoadSettings( config() );
 
-    if( m_FrameSize.x < FRAME_MIN_SIZE_X )
-        m_FrameSize.x = FRAME_MIN_SIZE_X;
+    wxSize const frame_min( ConvertDialogToPixels( FRAME_MIN_SIZE_DU ) );
+    wxSize const frame_default( ConvertDialogToPixels( FRAME_DEFAULT_SIZE_DU ) );
 
-    if( m_FrameSize.y < FRAME_MIN_SIZE_Y )
-        m_FrameSize.y = FRAME_MIN_SIZE_Y;
-
-    // Set minimal frame width and height
-    SetSizeHints( FRAME_MIN_SIZE_X, FRAME_MIN_SIZE_Y, -1, -1, -1, -1 );
-
-    // Frame size and position
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+    m_FrameSize = frame_default;
+    SetSizeHints( frame_min );
 
     // create the status bar
     static const int dims[3] = { -1, -1, 250 };
@@ -199,6 +192,9 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_auimgr.AddPane( m_footprintListBox,
                           wxAuiPaneInfo( info ).Name( wxT( "m_footprintListBox" ) ).
                           Right().BestSize( (int) ( m_FrameSize.x * 0.30 ), m_FrameSize.y ) );
+
+    // Frame size and position
+    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     m_auimgr.Update();
 }
