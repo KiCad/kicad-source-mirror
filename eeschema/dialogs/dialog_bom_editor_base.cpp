@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jan  2 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -113,6 +113,7 @@ DIALOG_BOM_EDITOR_BASE::DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id,
 	
 	this->SetSizer( bHorizontalSizer );
 	this->Layout();
+	bHorizontalSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

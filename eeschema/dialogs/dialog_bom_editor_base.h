@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 22 2017)
+// C++ code generated with wxFormBuilder (version Jan  2 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -69,7 +69,7 @@ class DIALOG_BOM_EDITOR_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("BOM editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 775,654 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER ); 
+		DIALOG_BOM_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("BOM editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER ); 
 		~DIALOG_BOM_EDITOR_BASE();
 		
 		void m_splitter1OnIdle( wxIdleEvent& )
