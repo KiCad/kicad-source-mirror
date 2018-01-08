@@ -79,12 +79,20 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
 
     /**
      * Set to true to not synchronize pins at the same position when editing
-     * components with multiple parts or multiple body styles.  Setting this
-     * to false allows editing each pin per part or body style individually.
+     * symbols with multiple units or multiple body styles.
+     * Therefore deleting, moving pins are made for all pins at the same location
+     * When units are interchangeable, synchronizing edition of pins is usually
+     * the best way, because if units are interchangeable, it imply all similar
+     * pins are on the same location
+     * When units are non interchangeable, do not synchronize edition of pins, because
+     * each part is specific, and there are no similar pins between units
+     *
+     * Setting this to false allows editing each pin per part or body style
+     * regardless other pins at the same location.
      * This requires the user to open each part or body style to make changes
-     * to the pin at the same location.
+     * to the other pins at the same location.
      */
-    bool m_editPinsPerPartOrConvert;
+    bool m_editPinsSeparately;
 
     /**
      * the option to show the pin electrical name in the component editor

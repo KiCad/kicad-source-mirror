@@ -199,7 +199,12 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddControl( m_aliasSelectBox );
 
     m_mainToolBar->AddSeparator();
-    msg = _( "Edit pins per symbol or body style (Use carefully!)" );
+    msg = _( "Allows disabling pin edition coupling between units or body styles\n"
+             "When not disabled, adding, deleting and moving pins are synchronized\n"
+             "between units and body styles for pins at the same location\n"
+             "For instance, adding a pin to a unit also add a similar pin to other units at the same location\n"
+             "However, pins can have a different number or size because they are specific to a unit\n"
+             "Usually synchronization is enabled when units are interchangeable and disabled if not" );
     m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, wxEmptyString, KiBitmap( pin2pin_xpm ),
                             msg, wxITEM_CHECK );
     m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_TABLE, wxEmptyString, KiBitmap( pin_table_xpm ),

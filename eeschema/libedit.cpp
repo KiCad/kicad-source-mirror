@@ -130,7 +130,7 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, in
     if( aConvert > 0 )
         m_convert = aConvert;
 
-    m_editPinsPerPartOrConvert = GetCurPart()->UnitsLocked() ? true : false;
+    m_editPinsSeparately = GetCurPart()->UnitsLocked() ? true : false;
 
     GetScreen()->ClearUndoRedoList();
     Zoom_Automatique( false );
@@ -313,8 +313,6 @@ void LIB_EDIT_FRAME::OnCreateNewPart( wxCommandEvent& event )
     // Initialize new_part.m_TextInside member:
     // if 0, pin text is outside the body (on the pin)
     // if > 0, pin text is inside the body
-    new_part.SetConversion( dlg.GetAlternateBodyStyle() );
-    SetShowDeMorgan( dlg.GetAlternateBodyStyle() );
 
     if( dlg.GetPinNameInside() )
     {
@@ -338,6 +336,12 @@ void LIB_EDIT_FRAME::OnCreateNewPart( wxCommandEvent& event )
 
     m_libMgr->UpdatePart( &new_part, lib );
     loadPart( name, lib, 1 );
+
+    new_part.SetConversion( dlg.GetAlternateBodyStyle() );
+    // must be called after loadPart, that calls SetShowDeMorgan, but
+    // because the symbol is empty,it looks like it has no alternate body
+    SetShowDeMorgan( dlg.GetAlternateBodyStyle() );
+
 }
 
 
@@ -495,6 +499,11 @@ void LIB_EDIT_FRAME::loadPart( const wxString& aAlias, const wxString& aLibrary,
     SetDrawItem( NULL );
     m_aliasName = aAlias;
     m_unit = ( aUnit <= part->GetUnitCount() ? aUnit : 1 );
+
+    // Optimize default edit options for this symbol
+    // Usually if units are locked, graphic items are specific to each unit
+    // and if units are interchangeable, graphic items are common to units
+    m_drawSpecificUnit = part->UnitsLocked() ? true : false;
 
     LoadOneLibraryPartAux( alias, aLibrary );
 }

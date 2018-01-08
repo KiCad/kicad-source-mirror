@@ -210,7 +210,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_drawSpecificConvert = true;
     m_drawSpecificUnit    = false;
     m_hotkeysDescrList    = g_Libedit_Hokeys_Descr;
-    m_editPinsPerPartOrConvert = false;
+    m_editPinsSeparately = false;
     m_repeatPinStep = DEFAULT_REPEAT_OFFSET_PIN;
     SetShowElectricalType( true );
 
@@ -619,7 +619,7 @@ void LIB_EDIT_FRAME::OnUpdatePinByPin( wxUpdateUIEvent& event )
 
     event.Enable( part && ( part->GetUnitCount() > 1 || m_showDeMorgan ) );
 
-    event.Check( m_editPinsPerPartOrConvert );
+    event.Check( m_editPinsSeparately );
 }
 
 
@@ -805,7 +805,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_LIBEDIT_EDIT_PIN_BY_PIN:
-        m_editPinsPerPartOrConvert = m_mainToolBar->GetToolToggled( ID_LIBEDIT_EDIT_PIN_BY_PIN );
+        m_editPinsSeparately = m_mainToolBar->GetToolToggled( ID_LIBEDIT_EDIT_PIN_BY_PIN );
         break;
 
     case ID_POPUP_LIBEDIT_END_CREATE_ITEM:
@@ -1134,11 +1134,16 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
+    // if m_UnitSelectionLocked has changed, set some edit options or defaults
+    // to the best value
     if( partLocked != GetCurPart()->UnitsLocked() )
     {
-        // m_editPinsPerPartOrConvert is set to the better value, if m_UnitSelectionLocked
-        // has changed
-        m_editPinsPerPartOrConvert = GetCurPart()->UnitsLocked() ? true : false;
+        // m_editPinsSeparately is set to the better value
+        m_editPinsSeparately = GetCurPart()->UnitsLocked() ? true : false;
+        // also set default edit options to the better value
+        // Usually if units are locked, graphic items are specific to each unit
+        // and if units are interchangeable, graphic items are common to units
+        m_drawSpecificUnit = GetCurPart()->UnitsLocked() ? true : false;
     }
 
     m_libMgr->UpdatePart( GetCurPart(), GetCurLib(), oldName );
@@ -1490,7 +1495,7 @@ bool LIB_EDIT_FRAME::SynchronizePins()
 {
     LIB_PART*      part = GetCurPart();
 
-    return !m_editPinsPerPartOrConvert && ( part &&
+    return !m_editPinsSeparately && ( part &&
         ( part->HasConversion() || part->IsMulti() ) );
 }
 

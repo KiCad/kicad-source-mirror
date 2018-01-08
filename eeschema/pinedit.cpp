@@ -171,7 +171,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     LastPinCommonUnit = dlg.GetAddToAllParts();
     LastPinVisible = dlg.GetVisible();
 
-    pin->EnableEditMode( true, m_editPinsPerPartOrConvert );
+    pin->EnableEditMode( true, m_editPinsSeparately );
     pin->SetName( dlg.GetPinName() );
     pin->SetNameTextSize( GetLastPinNameSize() );
     pin->SetNumber( dlg.GetPadName() );
@@ -199,7 +199,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
         m_canvas->Refresh();
     }
 
-    pin->EnableEditMode( false, m_editPinsPerPartOrConvert );
+    pin->EnableEditMode( false, m_editPinsSeparately );
 
     // Restore pin flags, that can be changed by the dialog editor
     pin->ClearFlags();
@@ -265,8 +265,11 @@ void LIB_EDIT_FRAME::PlacePin()
         if( ask_for_pin && SynchronizePins() )
         {
             m_canvas->SetIgnoreMouseEvents( true );
+            wxString msg;
+            msg.Printf( _( "This position is already occupied by another pin, in unit %d.\n"
+                           "Continue?" ), pin->GetUnit() );
 
-            status = IsOK( this, _( "This position is already occupied by another pin. Continue?" ) );
+            status = IsOK( this, msg );
 
             m_canvas->MoveCursorToCrossHair();
             m_canvas->SetIgnoreMouseEvents( false );
@@ -354,7 +357,6 @@ void LIB_EDIT_FRAME::StartMovePin( wxDC* DC )
     startPos.x = OldPos.x;
     startPos.y = -OldPos.y;
 
-//    m_canvas->CrossHairOff( DC );
     SetCrossHairPosition( startPos );
     m_canvas->MoveCursorToCrossHair();
 
@@ -363,7 +365,6 @@ void LIB_EDIT_FRAME::StartMovePin( wxDC* DC )
     cur_pin->GetMsgPanelInfo( items );
     SetMsgPanel( items );
     m_canvas->SetMouseCapture( DrawMovePin, AbortPinMove );
-//    m_canvas->CrossHairOn( DC );
 
     // Refresh the screen to avoid color artifacts when drawing
     // the pin in Edit mode and moving it from its start position
@@ -491,56 +492,66 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
 void LIB_EDIT_FRAME::CreateImagePins( LIB_PIN* aPin, int aUnit, int aConvert, bool aDeMorgan )
 {
     int      ii;
-    LIB_PIN* NewPin;
+    LIB_PIN* newPin;
 
+    // if "synchronize pins edition" option is off, do not create any similar pin for other
+    // units and/or shapes: each unit is edited regardless other units or body
     if( !SynchronizePins() )
         return;
 
-    // Create "convert" pin at the current position.
+    // When units are interchangeable, all units are expected to have similar pins
+    // at the same position
+    // to facilitate pin edition, create pins for all other units and all other shapes
+    // at the same position as aPin
+
+    // For the current unit, provide a pin for the "convert" body style,
+    // at the current position, if the pin is not common to all body styles.
     if( aDeMorgan && ( aPin->GetConvert() != 0 ) )
     {
-        NewPin = (LIB_PIN*) aPin->Clone();
+        newPin = (LIB_PIN*) aPin->Clone();
 
         if( aPin->GetConvert() > 1 )
-            NewPin->SetConvert( 1 );
+            newPin->SetConvert( 1 );
         else
-            NewPin->SetConvert( 2 );
+            newPin->SetConvert( 2 );
 
-        aPin->GetParent()->AddDrawItem( NewPin );
+        aPin->GetParent()->AddDrawItem( newPin );
     }
+
+    // to facilitate pin edition, create similar pins for all other units at
+    // the same position as aPin
+    if( aPin->GetUnit() == 0 )  // Pin common to all units: no need to create similar pins.
+        return;
 
     for( ii = 1; ii <= aPin->GetParent()->GetUnitCount(); ii++ )
     {
-        if( ii == aUnit || aPin->GetUnit() != 0 )
-            continue;                       // Pin common to all units.
+        if( ii == aUnit )
+            continue;
 
-        NewPin = (LIB_PIN*) aPin->Clone();
+        newPin = (LIB_PIN*) aPin->Clone();
 
         // To avoid mistakes, gives this pin a new pin number because
         // it does no have the save pin number as the master pin
-        // Because we do not know the actual number, give it '??'
-        wxString unknownNum( wxT( "??" ) );
-        NewPin->SetNumber( unknownNum );
+        // Because we do not know the actual number, give it a temporary number
+        wxString unknownNum;
+        unknownNum.Printf( "%s-U%c", aPin->GetNumber(), wxChar( 'A' + ii - 1 ) );
+        newPin->SetNumber( unknownNum );
 
         if( aConvert != 0 )
-            NewPin->SetConvert( 1 );
+            newPin->SetConvert( 1 );
 
-        NewPin->SetUnit( ii );
-        aPin->GetParent()->AddDrawItem( NewPin );
+        newPin->SetUnit( ii );
+        aPin->GetParent()->AddDrawItem( newPin );
 
+        // If this new pin is common to shapes, no need to create a similar pin for other body style
         if( !( aDeMorgan && ( aPin->GetConvert() != 0 ) ) )
             continue;
 
-        NewPin = (LIB_PIN*) aPin->Clone();
-        NewPin->SetConvert( 2 );
-        // Gives this pin a new pin number
-        // Because we do not know the actual number, give it '??'
-        NewPin->SetNumber( unknownNum );
+        // add a similar pin to the other body style
+        newPin = (LIB_PIN*) newPin->Clone();
+        newPin->SetConvert( 2 );
 
-        if( aPin->GetUnit() != 0 )
-            NewPin->SetUnit( ii );
-
-        aPin->GetParent()->AddDrawItem( NewPin );
+        aPin->GetParent()->AddDrawItem( newPin );
     }
 }
 
