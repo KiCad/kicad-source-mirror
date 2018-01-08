@@ -424,9 +424,8 @@ int KeyCodeFromKeyName( const wxString& keyname )
         return keycode;
     }
 
-    for( ii = 0; hotkeyNameList[ii].m_KeyCode !=0 ; ii++ )
+    for( ii = 0; hotkeyNameList[ii].m_KeyCode != 0; ii++ )
     {
-        
         if( key.CmpNoCase( hotkeyNameList[ii].m_Name ) == 0 )
         {
             keycode = hotkeyNameList[ii].m_KeyCode + modifier;
@@ -585,7 +584,6 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
         fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
         std::unique_ptr<wxConfigBase> config( GetNewConfig( fn.GetFullPath() ) );
         config->Write( HOTKEYS_CONFIG_KEY, msg );
-        
     }
 
     return 1;
@@ -609,8 +607,7 @@ int EDA_BASE_FRAME::ReadHotkeyConfigFile( const wxString&           aFilename,
     cfgfile.Seek( 0 );
 
     // read data
-    std::vector<char> buffer(size);
-    
+    std::vector<char> buffer( size );
     cfgfile.Read( buffer.data(), size );
     wxString data( buffer.data(), wxConvUTF8 );
 
@@ -751,9 +748,7 @@ void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList,
         return;
 
     ReadHotkeyConfigFile( filename, aDescList );
-    
-    WriteHotkeyConfig(aDescList);
-    
+    WriteHotkeyConfig( aDescList );
     SetMruPath( wxFileName( filename ).GetPath() );
 }
 
@@ -796,8 +791,7 @@ void AddHotkeyConfigMenu( wxMenu* aMenu )
     if( aMenu == nullptr )
         return;
 
-    
-    wxMenu*     HotkeySubmenu = new wxMenu();
+    wxMenu* HotkeySubmenu = new wxMenu();
 
     // Call hotkeys editor
     AddMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_SHOW_EDITOR,
