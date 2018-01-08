@@ -35,7 +35,7 @@
 
 
 LIB_MANAGER::LIB_MANAGER( LIB_EDIT_FRAME& aFrame )
-    : m_frame( aFrame ), m_symbolTable( aFrame.Prj().SchSymbolLibTable() ), m_syncHash( 0 )
+    : m_frame( aFrame ), m_syncHash( 0 )
 {
     m_adapter = LIB_MANAGER_ADAPTER::Create( this );
     m_adapter->ShowUnits( false );
@@ -44,7 +44,7 @@ LIB_MANAGER::LIB_MANAGER( LIB_EDIT_FRAME& aFrame )
 
 void LIB_MANAGER::Sync( bool aForce, std::function<void(int, int, const wxString&)> aProgressCallback )
 {
-    int libTableHash = m_symbolTable->GetModifyHash();
+    int libTableHash = symTable()->GetModifyHash();
 
     if( aForce || m_syncHash != libTableHash )
     {
@@ -56,7 +56,7 @@ void LIB_MANAGER::Sync( bool aForce, std::function<void(int, int, const wxString
 
 int LIB_MANAGER::GetHash() const
 {
-    int hash = m_symbolTable->GetModifyHash();
+    int hash = symTable()->GetModifyHash();
 
     for( const auto& libBuf : m_libs )
         hash += libBuf.second.GetHash();
@@ -72,7 +72,7 @@ int LIB_MANAGER::GetLibraryHash( const wxString& aLibrary ) const
     if( libBufIt != m_libs.end() )
         return libBufIt->second.GetHash();
 
-    auto row = m_symbolTable->FindRow( aLibrary );
+    auto row = symTable()->FindRow( aLibrary );
 
     // return -1 if library does not exist or 0 if not modified
     return row ? std::hash<std::string>{}( aLibrary.ToStdString() + row->GetFullURI( true ).ToStdString() ) : -1;
@@ -83,7 +83,7 @@ wxArrayString LIB_MANAGER::GetLibraryNames() const
 {
     wxArrayString res;
 
-    for( const auto& libName : m_symbolTable->GetLogicalLibs() )
+    for( const auto& libName : symTable()->GetLogicalLibs() )
         res.Add( libName );
 
     return res;
@@ -112,11 +112,11 @@ bool LIB_MANAGER::FlushLibrary( const wxString& aLibrary )
     wxArrayString aliases;
 
     try {
-        m_symbolTable->EnumerateSymbolLib( aLibrary, aliases );
+        symTable()->EnumerateSymbolLib( aLibrary, aliases );
 
         // TODO probably this could be implemented more efficiently
         for( const auto& alias : aliases )
-            m_symbolTable->DeleteAlias( aLibrary, alias );
+            symTable()->DeleteAlias( aLibrary, alias );
     } catch( IO_ERROR& e) {}
 
     // Assume all libraries are successfully saved
@@ -124,7 +124,7 @@ bool LIB_MANAGER::FlushLibrary( const wxString& aLibrary )
 
     for( const auto& partBuf : libBuf.GetBuffers() )
     {
-        if( !libBuf.SaveBuffer( partBuf, m_symbolTable ) )
+        if( !libBuf.SaveBuffer( partBuf, symTable() ) )
         {
             // Something went wrong but try to save other libraries
             res = false;
@@ -165,7 +165,7 @@ bool LIB_MANAGER::SaveLibrary( const wxString& aLibrary, const wxString& aFileNa
         }
 
         // clear the deleted parts buffer only if data is saved to the original file
-        auto row = m_symbolTable->FindRow( aLibrary );
+        auto row = symTable()->FindRow( aLibrary );
 
         if( res && row && row->GetFullURI( true ) == aFileName )
             libBuf.ClearDeletedBuffer();
@@ -244,7 +244,7 @@ bool LIB_MANAGER::ClearPartModified( const wxString& aAlias, const wxString& aLi
 bool LIB_MANAGER::IsLibraryReadOnly( const wxString& aLibrary ) const
 {
     wxCHECK( LibraryExists( aLibrary ), true );
-    wxFileName fn( m_symbolTable->GetFullURI( aLibrary ) );
+    wxFileName fn( symTable()->GetFullURI( aLibrary ) );
     return ( fn.FileExists() && !fn.IsFileWritable() ) || !fn.IsDirWritable();
 }
 
@@ -259,7 +259,7 @@ wxArrayString LIB_MANAGER::GetAliasNames( const wxString& aLibrary ) const
     if( it == m_libs.end() )
     {
         try {
-            m_symbolTable->EnumerateSymbolLib( aLibrary, names );
+            symTable()->EnumerateSymbolLib( aLibrary, names );
         } catch( IO_ERROR& e ) {}
     }
     else
@@ -291,10 +291,10 @@ std::list<LIB_ALIAS*> LIB_MANAGER::GetAliases( const wxString& aLibrary ) const
         wxArrayString symbols;
 
         try {
-            m_symbolTable->EnumerateSymbolLib( aLibrary, symbols );
+            symTable()->EnumerateSymbolLib( aLibrary, symbols );
 
             for( const auto& symbol : symbols )
-                ret.push_back( m_symbolTable->LoadSymbol( aLibrary, symbol ) );
+                ret.push_back( symTable()->LoadSymbol( aLibrary, symbol ) );
         } catch( IO_ERROR& e ) {}
     }
 
@@ -314,7 +314,7 @@ LIB_PART* LIB_MANAGER::GetBufferedPart( const wxString& aAlias, const wxString& 
     {
         // create a copy of the part
         try {
-            LIB_ALIAS* alias = m_symbolTable->LoadSymbol( aLibrary, aAlias );
+            LIB_ALIAS* alias = symTable()->LoadSymbol( aLibrary, aAlias );
             wxCHECK( alias, nullptr );
             bufferedPart = new LIB_PART( *alias->GetPart(), nullptr );
             libBuf.CreateBuffer( bufferedPart, new SCH_SCREEN( &m_frame.Kiway() ) );
@@ -374,7 +374,7 @@ bool LIB_MANAGER::FlushPart( const wxString& aAlias, const wxString& aLibrary )
     auto partBuf = it->second.GetBuffer( aAlias );
     wxCHECK( partBuf, false );
 
-    return it->second.SaveBuffer( partBuf, m_symbolTable );
+    return it->second.SaveBuffer( partBuf, symTable() );
 }
 
 
@@ -437,7 +437,7 @@ LIB_ALIAS* LIB_MANAGER::GetAlias( const wxString& aAlias, const wxString& aLibra
     LIB_ALIAS* alias = nullptr;
 
     try {
-        alias = m_symbolTable->LoadSymbol( aLibrary, aAlias );
+        alias = symTable()->LoadSymbol( aLibrary, aAlias );
     } catch( IO_ERROR& e ) {}
 
     return alias;
@@ -453,7 +453,7 @@ bool LIB_MANAGER::PartExists( const wxString& aAlias, const wxString& aLibrary )
         return !!libBufIt->second.GetBuffer( aAlias );
 
     try {
-        alias = m_symbolTable->LoadSymbol( aLibrary, aAlias );
+        alias = symTable()->LoadSymbol( aLibrary, aAlias );
     } catch( IO_ERROR& e ) {}
 
     return alias != nullptr;
@@ -468,7 +468,7 @@ bool LIB_MANAGER::LibraryExists( const wxString& aLibrary ) const
     if( m_libs.count( aLibrary ) > 0 )
         return true;
 
-    return m_symbolTable->HasLibrary( aLibrary );
+    return symTable()->HasLibrary( aLibrary );
 }
 
 
@@ -555,6 +555,12 @@ bool LIB_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate, SYMBOL_LI
 }
 
 
+SYMBOL_LIB_TABLE* LIB_MANAGER::symTable() const
+{
+    return m_frame.Prj().SchSymbolLibTable();
+}
+
+
 std::set<LIB_PART*> LIB_MANAGER::getOriginalParts( const wxString& aLibrary )
 {
     std::set<LIB_PART*> parts;
@@ -562,11 +568,11 @@ std::set<LIB_PART*> LIB_MANAGER::getOriginalParts( const wxString& aLibrary )
 
     try {
         wxArrayString aliases;
-        m_symbolTable->EnumerateSymbolLib( aLibrary, aliases );
+        symTable()->EnumerateSymbolLib( aLibrary, aliases );
 
         for( const auto& aliasName : aliases )
         {
-            LIB_ALIAS* alias = m_symbolTable->LoadSymbol( aLibrary, aliasName );
+            LIB_ALIAS* alias = symTable()->LoadSymbol( aLibrary, aliasName );
             parts.insert( alias->GetPart() );
         }
     } catch( IO_ERROR& e ) {}

@@ -274,7 +274,8 @@ private:
     ///> Helper function to add either existing or create new library
     bool addLibrary( const wxString& aFilePath, bool aCreate, SYMBOL_LIB_TABLE* aTable );
 
-    SYMBOL_LIB_TABLE* m_symbolTable;
+    ///> Returns the current Symbol Library Table
+    SYMBOL_LIB_TABLE* symTable() const;
 
     ///> Class to store a working copy of a LIB_PART object and editor context.
     class PART_BUFFER
