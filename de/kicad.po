@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-07 22:10+0100\n"
-"PO-Revision-Date: 2018-01-08 01:06+0100\n"
+"PO-Revision-Date: 2018-01-08 01:41+0100\n"
 "Last-Translator: Carsten Schoenert <c.schoenert@t-online.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -918,7 +918,6 @@ msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Zeige aktuelle Tastaturbelegung und zugeordnete Befehle"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:25
-#, fuzzy
 msgid "Render options:"
 msgstr "Renderoptionen:"
 
@@ -950,7 +949,6 @@ msgid "3D model visibility:"
 msgstr "Sichtbarkeit von 3D-Modellen:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:109
-#, fuzzy
 msgid "Show 3D through hole models"
 msgstr "Modelle von Durchsteck-Bauteilen einblenden"
 
@@ -960,7 +958,6 @@ msgstr "Modelle von SMD-Bauteilen einblenden"
 
 # Ist die Bezeichnung "virtuell" hier sinnvoll? "Sonstige" oder "Andere" könnte auch sinnvoll sein...
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:127
-#, fuzzy
 msgid "Show 3D virtual models"
 msgstr "Modelle von virtuellen Bauteilen einblenden"
 
@@ -985,7 +982,6 @@ msgid "Show adhesive layers"
 msgstr "Kleberlagen einblenden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:195
-#, fuzzy
 msgid "User layers:"
 msgstr "Sonderlagen:"
 
@@ -4153,10 +4149,10 @@ msgid "Display Options"
 msgstr "Anzeigeoptionen"
 
 #: cvpcb/common_help_msg.h:28
-#, fuzzy
 msgid "Save footprint associations in schematic symbol footprint fields"
 msgstr ""
-"Speichere Footprints Assoziierung in den Schaltplan Bauteil Footprintfeldern."
+"Speichere die Footprintzuweisung in den Footprint-Feldern der Bauteile im "
+"Schaltplan"
 
 #: eeschema/sch_collectors.cpp:426
 #, c-format
@@ -5101,14 +5097,12 @@ msgid "Edit Item"
 msgstr "Element bearbeiten"
 
 #: eeschema/hotkeys.cpp:174
-#, fuzzy
 msgid "Edit Symbol Value"
-msgstr "Wert editieren"
+msgstr "Bauteilwert bearbeiten"
 
 #: eeschema/hotkeys.cpp:177
-#, fuzzy
 msgid "Edit Symbol Reference"
-msgstr "Referenz editieren"
+msgstr "Bauteilreferenz bearbeiten"
 
 #: eeschema/hotkeys.cpp:180
 msgid "Edit Symbol Footprint"
@@ -5361,16 +5355,14 @@ msgid "Create &PNG File from Screen..."
 msgstr "&PNG Datei vom aktuellen Bildschirm erstellen"
 
 #: eeschema/menubar_libedit.cpp:107
-#, fuzzy
 msgid "Create a PNG file from the current symbol"
-msgstr "Eine SVG-Datei vom gegenwärtigen Bauteil erstellen"
+msgstr "Eine PNG-Datei vom gegenwärtigen Bauteil erstellen"
 
 #: eeschema/menubar_libedit.cpp:113
 msgid "Create S&VG File..."
 msgstr "S&VG Datei erstellen"
 
 #: eeschema/menubar_libedit.cpp:114
-#, fuzzy
 msgid "Create a SVG file from the current symbol"
 msgstr "Eine SVG-Datei vom gegenwärtigen Bauteil erstellen"
 
@@ -5443,14 +5435,12 @@ msgid "Create a new empty symbol"
 msgstr "Erstellt eine leere globale Symbolbibliotheksdatei"
 
 #: eeschema/menubar_libedit.cpp:197
-#, fuzzy
 msgid "&Save Symbol"
-msgstr "Neues Symbol"
+msgstr "Bauteil &speichern"
 
 #: eeschema/menubar_libedit.cpp:201
-#, fuzzy
 msgid "Saves the current symbol to the library"
-msgstr "Momentan aktive Bauteilbibliothek speichern"
+msgstr "Aktuelles Bauteil in die Bibliothek speichern"
 
 #: eeschema/menubar_libedit.cpp:208
 #, fuzzy
@@ -5536,7 +5526,7 @@ msgstr "Verwalten Symbolbibliotheken"
 #: eeschema/menubar_libedit.cpp:298
 msgid "Edit the global and project symbol library tables."
 msgstr ""
-"Bearbeiten der globalen und der Projekt spezifischen Bibliothekstabellen."
+"Bearbeiten der globalen und der projektspezifischen Bibliothekstabellen."
 
 #: eeschema/menubar_libedit.cpp:304 eeschema/menubar.cpp:651
 msgid "General &Options"
@@ -7157,9 +7147,8 @@ msgid "Y Position"
 msgstr "Y Position"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:180
-#, fuzzy
 msgid "The Y coordinate of the text relative to the symbol anchor position"
-msgstr "Die Y-Koordinate des Textes relativ zum Bauteil"
+msgstr "Die Y-Koordinate des Textes relativ zum Bauteilanker"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:723
 msgid "Select library"
@@ -7582,9 +7571,8 @@ msgid "Select"
 msgstr "Wähle"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:65
-#, fuzzy
 msgid "Power symbol value text cannot be modified!"
-msgstr "Text von Stromkomponenten kann nicht verändert werden!"
+msgstr "Der Wert von Spannungsquellen kann nicht verändert werden!"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:77
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:210
@@ -8323,7 +8311,6 @@ msgstr ""
 "ihrem Browser angezeigt werden."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:247
-#, fuzzy
 msgid "Font size:"
 msgstr "Schriftgröße:"
 
@@ -8438,7 +8425,6 @@ msgstr ""
 "Kommando zu sehen."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:107
-#, fuzzy
 msgid "Plugin Information:"
 msgstr "Plugin Info:"
 
@@ -9129,7 +9115,6 @@ msgid "Select fields to update:"
 msgstr "Auswahl der Felder zum aktualisieren:"
 
 #: eeschema/dialogs/dialog_update_fields_base.cpp:33
-#, fuzzy
 msgid "Select None"
 msgstr "Nichts auswählen"
 
@@ -9993,9 +9978,8 @@ msgid "Create new symbol"
 msgstr "Neues Bauteil erstellen"
 
 #: eeschema/tool_lib.cpp:124
-#, fuzzy
 msgid "Save current symbol"
-msgstr "Aktuelle Platine speichern"
+msgstr "Aktuelles Bauteil speichern"
 
 #: eeschema/tool_lib.cpp:127
 #, fuzzy
@@ -10409,7 +10393,7 @@ msgstr "Datei mit den gegenwärtigen Tastaturbefehlen erstellen"
 
 #: eeschema/menubar.cpp:634
 msgid "Manage Symbol Library Tables"
-msgstr "Tabellen der Schaltplansymbol-Bibliotheken bearbeiten"
+msgstr "Bauteilibliotheken verwalten"
 
 #: eeschema/menubar.cpp:635
 msgid ""
@@ -10914,10 +10898,8 @@ msgid "Footprint Editor - Create/edit footprints"
 msgstr "Bibliothekseditor - Bauteile erstellen oder bearbeiten"
 
 #: eeschema/tool_sch.cpp:155
-#, fuzzy
 msgid "Run CvPcb to associate footprints to symbols"
-msgstr ""
-"Starte CvPcb für eine Zuordnung von Schaltplansymbolen zu Footprintlayouts"
+msgstr "Starte CvPcb, um den Bauteilen footprints zuzuweisen"
 
 #: eeschema/tool_sch.cpp:158
 msgid "Generate netlist"
@@ -10967,7 +10949,6 @@ msgid "Display next symbol"
 msgstr "Nächstes Bauteil anzeigen"
 
 #: eeschema/tool_viewlib.cpp:110
-#, fuzzy
 msgid "View symbol documents"
 msgstr "Zeige Bauteil-Datenblatt"
 
@@ -11577,9 +11558,8 @@ msgid "Find and replace text in schematic items"
 msgstr "Suchen und Ersetzen von Text in Schaltplanelementen"
 
 #: eeschema/help_common_strings.h:53
-#, fuzzy
 msgid "Place symbol"
-msgstr "Spannungsquelle Symbol"
+msgstr "Bauteil einfügen"
 
 #: eeschema/help_common_strings.h:54
 msgid "Place power port"
@@ -11734,9 +11714,8 @@ msgid "Netlist"
 msgstr "Netzliste"
 
 #: eeschema/dialogs/dialog_netlist_base.h:117
-#, fuzzy
 msgid "Plugin Properties"
-msgstr "Pin Eigenschaften"
+msgstr "Plugineigenschaften"
 
 #: eeschema/dialogs/dialog_bom_base.h:95
 msgid "Bill of Material"
@@ -12399,14 +12378,12 @@ msgid "Scale 4"
 msgstr "4 fach"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:46
-#, fuzzy
 msgid "Scale:"
-msgstr "Skalierung"
+msgstr "Maßstab:"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:50
-#, fuzzy
 msgid "X scale adjust"
-msgstr "X-Skalierung anpassen:"
+msgstr "X-Skalierung anpassen"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:55
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:78
@@ -12414,9 +12391,8 @@ msgid "Set X scale adjust for exact scale plotting"
 msgstr "Setze X-Skalierung für exaktes Plotten"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:59
-#, fuzzy
 msgid "Y scale adjust"
-msgstr "Y-Skalierung anpassen:"
+msgstr "Y-Skalierung anpassen"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:64
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:87
@@ -13028,9 +13004,8 @@ msgid "Page Borders"
 msgstr "Seitenbegrenzung"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.h:81
-#, fuzzy
 msgid "Layer Selection"
-msgstr "Lagenauswahl:"
+msgstr "Lagenauswahl"
 
 #: include/kiway_player.h:316
 msgid "This file is already open."
@@ -13987,13 +13962,11 @@ msgstr "V-Ausrichtung"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:124
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:468
-#, fuzzy
 msgid "Text width (mm)"
 msgstr "Textbreite (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:137
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:481
-#, fuzzy
 msgid "Text height (mm)"
 msgstr "Texthöhe (mm)"
 
@@ -14002,9 +13975,8 @@ msgid "Constraints:"
 msgstr "Beschränkungen:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:160
-#, fuzzy
 msgid "Maximum width (mm)"
-msgstr "Minimalbreite"
+msgstr "Mindestbreite (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:173
 #, fuzzy
@@ -14130,17 +14102,14 @@ msgid "Page Margins"
 msgstr "Abstände vom Seitenrand"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:548
-#, fuzzy
 msgid "Left margin (mm)"
 msgstr "Linker Rand (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:561
-#, fuzzy
 msgid "Right margin (mm)"
 msgstr "Rechter Rand (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:580
-#, fuzzy
 msgid "Top margin (mm)"
 msgstr "Oberer Rand (mm)"
 
@@ -16408,14 +16377,14 @@ msgid "Footprint %s is locked, skipping removal.\n"
 msgstr "Bauteil %s ist gesperrt, überspringe das Entfernen.\n"
 
 #: pcbnew/board_netlist_updater.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "Remove footprint %s."
-msgstr "Entferne Bauteil %s."
+msgstr "Entferne Footprint %s."
 
 #: pcbnew/board_netlist_updater.cpp:452 pcbnew/class_board.cpp:2679
-#, fuzzy, c-format
+#, c-format
 msgid "Removing unused footprint \"%s:%s\".\n"
-msgstr "Entferne unbenutztes Baueteil \"%s:%s\".\n"
+msgstr "Entferne unbenutzten Footprint \"%s:%s\".\n"
 
 #: pcbnew/board_netlist_updater.cpp:517
 #, c-format
@@ -19820,27 +19789,22 @@ msgstr ""
 "Modelle."
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:37
-#, fuzzy
 msgid "Text width"
-msgstr "Textbreite:"
+msgstr "Schriftbreite"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:44
-#, fuzzy
 msgid "Text height"
-msgstr "Texthöhe:"
+msgstr "Texthöhe"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:51
-#, fuzzy
 msgid "Text thickness"
-msgstr "Schrift Stärke:"
+msgstr "Schrift Stärke"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:58
-#, fuzzy
 msgid "Text position X"
 msgstr "Textposition X"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:65
-#, fuzzy
 msgid "Text position Y"
 msgstr "Textposition Y"
 
@@ -20788,14 +20752,12 @@ msgid "Footprint %s (%s) orientation %.1f"
 msgstr "Footprint %s (%s) Ausrichtung %.1f"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:74
-#, fuzzy
 msgid "Offset X:"
-msgstr "Offset X"
+msgstr "Offset X:"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:81
-#, fuzzy
 msgid "Offset Y:"
-msgstr "Offset Y"
+msgstr "Offset Y:"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:119
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
@@ -21138,7 +21100,6 @@ msgid "Enter the minimum acceptable value for a track width"
 msgstr "Eingabe zulässiger Minimalwert für eine Leiterbahnbreite"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:75
-#, fuzzy
 msgid "Minimum via size"
 msgstr "Mindestgröße DuKo"
 
@@ -21147,9 +21108,8 @@ msgid "Enter the minimum acceptable diameter for a standard via"
 msgstr "Eingabe zulässiger Minimaldurchmesser für Standard-Durchkontaktierung"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:90
-#, fuzzy
 msgid "Minimum uVia size"
-msgstr "Mindestgröße MicroDuKo"
+msgstr "Mindestgröße Mikro-DuKo"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:92 pcbnew/dialogs/dialog_drc_base.cpp:101
 msgid "Enter the minimum acceptable diameter for a micro via"
@@ -22729,9 +22689,8 @@ msgid "User defined"
 msgstr "Benutzerspezifisch"
 
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:40
-#, fuzzy
 msgid "Footprint filter:"
-msgstr "Footprint-Filter"
+msgstr "Footprint-Filter:"
 
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:42
 msgid ""
@@ -23446,9 +23405,8 @@ msgid "Current position"
 msgstr "Aktuelle Position"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:77
-#, fuzzy
 msgid "User origin"
-msgstr "Ursprungspunkt (benutzerdefiniert)"
+msgstr "Nullpunkt (benutzerdefiniert)"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:77
 #, fuzzy
@@ -24995,9 +24953,8 @@ msgid "Micro Vias Drill:"
 msgstr "Micro DuKo-Bohrdurchmesser:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:143
-#, fuzzy
 msgid "Micro via drill size"
-msgstr "Ungültiger DoKu Bohrdurchmesser"
+msgstr "Mikro-DoKu Bohrdurchmesser"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:151
 msgid "Holes Count:"
@@ -25014,14 +24971,12 @@ msgid "Not plated pads:"
 msgstr "Nicht beschichtete Pads (NPTH):"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:161
-#, fuzzy
 msgid "Through vias:"
 msgstr "Durchgehende Durchkontaktierungen:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:165
-#, fuzzy
 msgid "Micro vias:"
-msgstr "Micro-Durchkontaktierungen:"
+msgstr "Mikro-Durchkontaktierungen:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:169
 msgid "Buried vias:"
@@ -27722,7 +27677,6 @@ msgid "Target Properties"
 msgstr "Objekt Eigenschaften"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.h:55
-#, fuzzy
 msgid "Search for Footprint"
 msgstr "Suche Footprint"
 
@@ -27792,7 +27746,6 @@ msgid "Global Edition of Tracks and Vias"
 msgstr "Globale Einstellung für Leiterbahnen und Durchkontaktierungen"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:62
-#, fuzzy
 msgid "Track Width and Via Size"
 msgstr "Leiterbahnbreite und Durchkontaktierungsgröße"
 
@@ -27814,9 +27767,8 @@ msgid "Set Text Size"
 msgstr "Einstellungen der Textgröße"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:50
-#, fuzzy
 msgid "Select Layer"
-msgstr "Wähle Arbeitslage:"
+msgstr "Lage wählen"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:81
 msgid "Select Copper Layer Pair:"
